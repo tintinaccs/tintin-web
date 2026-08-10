@@ -1,4 +1,4 @@
-const GLOBAL_RUNTIME_VERSION = 'tintin-20260810-global-studio-1';
+const GLOBAL_RUNTIME_VERSION = 'tintin-20260810-global-studio-3';
 const PAGE_BY_FILE = Object.freeze({
   '': 'index', 'index.html': 'index', 'about.html': 'nosotros', 'nosotros.html': 'nosotros',
   'catalogo.html': 'catalogo', 'collections.html': 'collections', 'product.html': 'product', 'checkout.html': 'checkout',
@@ -138,7 +138,7 @@ function showPopup(popup) {
   if (popup.image) { const image = make('img', 'tt-global-popup-image'); image.src = popup.image; image.alt = popup.imageAlt || ''; image.loading = 'lazy'; image.decoding = 'async'; panel.appendChild(image); }
   if (popup.title) panel.appendChild(make('h2', '', popup.title));
   if (popup.text) panel.appendChild(make('p', '', popup.text));
-  if (popup.buttonLabel) { const action = make('a', 'tt-global-popup-action', popup.buttonLabel); action.href = popup.href || 'catalogo.html'; panel.appendChild(action); }
+  if (popup.buttonLabel && popup.href) { const action = make('a', 'tt-global-popup-action', popup.buttonLabel); action.href = popup.href; panel.appendChild(action); }
   backdrop.appendChild(panel); document.body.appendChild(backdrop);
 
   const previousFocus = document.activeElement; const previousOverflow = document.documentElement.style.overflow;

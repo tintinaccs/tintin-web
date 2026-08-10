@@ -56,7 +56,7 @@ function checksField(label, options, selected, onChange, allLabel='Todo el sitio
   return field(label,wrap,true);
 }
 
-function defaultCampaign(preset={}) { return { id:`campaign-${crypto.randomUUID().slice(0,8)}`,name:preset.name||'Nueva campaña',enabled:false,priority:50,startAt:'',endAt:'',effect:preset.effect||'none',intensity:'medium',announcement:preset.announcement||'',href:'catalogo.html',closable:true,background:preset.background||'',textColor:preset.textColor||'',accentColor:preset.accentColor||'' }; }
+function defaultCampaign(preset={}) { return { id:`campaign-${crypto.randomUUID().slice(0,8)}`,name:preset.name||'Nueva campaña',enabled:false,priority:50,startAt:'',endAt:'',effect:preset.effect||'none',intensity:'medium',announcement:preset.announcement||'',href:'',closable:true,background:preset.background||'',textColor:preset.textColor||'',accentColor:preset.accentColor||'' }; }
 function defaultPopup() { return { id:`popup-${crypto.randomUUID().slice(0,8)}`,name:'Nuevo pop-up',enabled:false,priority:50,kind:'center',title:'',text:'',image:'',imageAlt:'',buttonLabel:'Ver más',href:'catalogo.html',trigger:'delay',triggerValue:3,frequency:'session',pages:['*'],devices:['desktop','tablet','mobile'],productIds:[],categories:[],startAt:'',endAt:'',background:'',textColor:'',accentColor:'',animation:'fade' }; }
 function currentList() { return tab==='campaigns'?config.campaigns:tab==='popups'?config.popups:[]; }
 function selectedItem() { return currentList().find(item=>item.id===selectedId)||null; }
@@ -85,7 +85,7 @@ function renderCampaignEditor(root) {
   const enabled=input('','checkbox');enabled.checked=Boolean(item.enabled);bind(enabled,v=>item.enabled=v,'change');form.append(field('Campaña activa',enabled));
   form.append(field('Nombre interno',bind(input(item.name),v=>item.name=v),true),field('Prioridad',bind(input(item.priority??50,'number'),v=>item.priority=Math.max(0,Math.min(100,Number(v)||0)),'change'),false,'0 a 100. Si dos campañas coinciden, gana la más alta.'));
   const start=input(toLocal(item.startAt),'datetime-local');bind(start,v=>item.startAt=toIso(v),'change');const end=input(toLocal(item.endAt),'datetime-local');bind(end,v=>item.endAt=toIso(v),'change');form.append(field('Empieza',start),field('Termina',end));
-  form.append(field('Barra de anuncio',bind(textarea(item.announcement),v=>item.announcement=v),true),field('Enlace',bind(input(item.href,'url'),v=>item.href=v),true));
+  form.append(field('Barra de anuncio',bind(textarea(item.announcement),v=>item.announcement=v),true),field('Enlace',bind(input(item.href,'url'),v=>item.href=v),true,'Opcional. Si lo dejás vacío, el aviso se muestra sin enlace.'));
   const closable=input('','checkbox');closable.checked=item.closable!==false;bind(closable,v=>item.closable=v,'change');form.append(field('La clienta puede cerrar la barra',closable));
   form.append(field('Efecto',bind(select(item.effect,[['none','Sin efecto'],['hearts','Corazones'],['snow','Nieve'],['sparkles','Destellos'],['confetti','Confetti']]),v=>item.effect=v,'change')),field('Intensidad',bind(select(item.intensity,[['low','Baja'],['medium','Media'],['high','Alta']]),v=>item.intensity=v,'change')));
   form.append(colorField('Fondo',item,'background'),colorField('Texto',item,'textColor'),colorField('Acento',item,'accentColor'));root.appendChild(form);appendDelete(root,'campaigns',item.id);

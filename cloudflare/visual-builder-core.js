@@ -71,11 +71,11 @@ export function safeVisualColor(value) {
   return /^#[0-9a-f]{6}$/i.test(color) ? color.toLowerCase() : '';
 }
 
-export function safeVisualHref(value) {
+export function safeVisualHref(value, fallback = 'catalogo.html') {
   const href = String(value || '').trim();
   if (SAFE_HREF.test(href)) return href;
   if (/^https:\/\/[A-Za-z0-9.-]+(?::\d+)?(?:\/[A-Za-z0-9_~:/?#\[\]@!$&'()*+,;=%.-]*)?$/i.test(href)) return href;
-  return 'catalogo.html';
+  return fallback;
 }
 
 export function safeVisualImage(value) {

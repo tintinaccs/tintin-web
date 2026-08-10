@@ -23,9 +23,16 @@ test('pop-ups globales solo conservan formatos, triggers, páginas y dispositivo
   assert.equal(popup.frequency, 'session');
   assert.deepEqual(popup.pages, ['product', 'checkout']);
   assert.deepEqual(popup.devices, ['mobile']);
-  assert.equal(popup.href, 'catalogo.html');
+  assert.equal(popup.href, '');
   assert.deepEqual(popup.productIds, ['abc-1']);
   assert.deepEqual(popup.categories, ['relojes']);
+});
+
+test('enlaces opcionales no inventan destinos', () => {
+  assert.equal(sanitizeGlobalCampaign({ href: '' }).href, '');
+  assert.equal(sanitizeGlobalPopup({ href: '' }).href, '');
+  assert.equal(sanitizeGlobalCampaign({ href: 'catalogo.html' }).href, 'catalogo.html');
+  assert.equal(sanitizeGlobalPopup({ href: 'https://tintinaccs.com' }).href, 'https://tintinaccs.com');
 });
 
 test('segmentación global reconoce páginas comerciales además de páginas de contenido', () => {
@@ -44,7 +51,7 @@ test('campañas saneadas no aceptan efectos ni colores arbitrarios', () => {
   assert.equal(campaign.intensity, 'medium');
   assert.equal(campaign.background, '');
   assert.equal(campaign.textColor, '#aabbcc');
-  assert.equal(campaign.href, 'catalogo.html');
+  assert.equal(campaign.href, '');
   assert.equal(campaign.closable, false);
 });
 
