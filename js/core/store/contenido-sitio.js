@@ -16,7 +16,7 @@ import {
   normalizeContentValue,
   detectContentPageId,
 } from './esquema-contenido.js?v=tintin-20260810-visual-studio-v2-3';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260810-visual-studio-v2-5';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260810-visual-studio-v2-10';
 
 const subscriptions = new Map();
 const latestData = new Map();
