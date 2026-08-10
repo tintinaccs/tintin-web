@@ -61,7 +61,7 @@ function fixtureHtml() {
       --admin-color-success-background:#e0f5e6; --admin-color-success-text:#166534; --admin-color-warning-background:#fff3e0;
       --admin-color-warning-text:#bf360c; --admin-color-error-background:#fde3e1; --admin-color-error-text:#b8341f;
     }
-    *{box-sizing:border-box} body{margin:0;padding:24px;background:var(--admin-color-background-page);font-family:Arial,sans-serif}
+    *{box-sizing:border-box} body{margin:0;padding:24px;background:var(--admin-color-background-page);font-family:Montserrat}
     .adm-section{display:block}.adm-card{background:#fff}.adm-card-body{padding:12px}
   </style></head><body>
     <div id="adm-toast"></div>
