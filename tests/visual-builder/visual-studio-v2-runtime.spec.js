@@ -88,9 +88,14 @@ test('Visual Studio v2 renderiza beneficios, marquee, contador y spacer y aplica
   await expect(frame.locator('[data-tt-visual-block="spacer-v2"]')).toHaveCSS('height', '48px');
 });
 
-test('el shell público carga el runtime global en una página real y falla de forma segura sin API', async ({ page }) => {
+test('el shell público carga el runtime global y en localhost cae a fallback sin llamar la API', async ({ page }) => {
+  const apiRequests = [];
+  page.on('request', request => {
+    if (new URL(request.url()).pathname === '/api/visual-studio-global-public') apiRequests.push(request.url());
+  });
   await page.goto(`${baseUrl}/index.html`);
   await expect(page.locator('html')).toHaveAttribute('data-tt-global-studio', /ready|fallback/, { timeout: 30000 });
+  expect(apiRequests).toEqual([]);
 });
 
 test('campaña prioritaria y pop-up global se aplican sobre la tienda y Escape restaura la interacción', async ({ page }) => {
