@@ -16,7 +16,7 @@
   if (window.TintinPublicShellBootstrapStarted) return;
   window.TintinPublicShellBootstrapStarted = true;
 
-  const MODULE_VERSION = 'tintin-20260810-global-studio-2';
+  const MODULE_VERSION = 'tintin-20260810-global-studio-3';
   const scriptUrl = document.currentScript?.src || new URL('js/inicio-navegacion-publica.js', window.location.href).href;
   const entryUrl = new URL('./components/navigation/entrada-navegacion-publica.js', scriptUrl);
   entryUrl.searchParams.set('v', MODULE_VERSION);

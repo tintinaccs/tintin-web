@@ -30,7 +30,7 @@ function $(id) { return document.getElementById(id); }
 function make(tag, className = '', text = '') { const node=document.createElement(tag); if(className)node.className=className; if(text!=='')node.textContent=text; return node; }
 function ensureCss() {
   if (document.getElementById('visual-studio-global-admin-css')) return;
-  const link=document.createElement('link'); link.id='visual-studio-global-admin-css'; link.rel='stylesheet'; link.href='css/admin/visual-studio-global-admin.css?v=tintin-20260810-global-studio-1'; document.head.appendChild(link);
+  const link=document.createElement('link'); link.id='visual-studio-global-admin-css'; link.rel='stylesheet'; link.href='css/admin/visual-studio-global-admin.css?v=tintin-20260810-global-studio-3'; document.head.appendChild(link);
 }
 function setStatus(message, kind='') { const node=$('visual-global-status'); if(!node)return; node.textContent=message; node.className=`visual-global-status${kind?` is-${kind}`:''}`; }
 function setDirty(value=true) { dirty=Boolean(value); updateActions(); window.AdminUnsaved?.notify?.(); }
