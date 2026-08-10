@@ -50,6 +50,12 @@ on:
 permissions:
   contents: write
 
+# Comparte el grupo con la auditoría de seguridad porque ambos jobs pueden
+# regenerar y consolidar los mismos artefactos sobre una PR interna.
+concurrency:
+  group: tintin-generated-files-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
 jobs:
   audit:
     name: Auditar catálogo, sincronización y carrito
@@ -107,16 +113,44 @@ jobs:
 
       - name: Consolidar cambios generados en PR interna
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        shell: bash
         run: |
-          if git diff --quiet; then
-            echo 'No hay cambios pendientes.'
-            exit 0
-          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "feat: completar catálogo y sincronización de la Fase 7"
-          git push origin HEAD:${GITHUB_HEAD_REF}
+          branch="${GITHUB_HEAD_REF}"
+
+          for attempt in 1 2 3; do
+            echo "Intento de consolidación ${attempt}/3 sobre ${branch}"
+            git fetch origin "${branch}"
+            git reset --hard "origin/${branch}"
+
+            shopt -s nullglob
+            scripts=(scripts/apply-phase7-*.mjs)
+            if [ ${#scripts[@]} -gt 0 ]; then
+              for script in "${scripts[@]}"; do
+                node "$script"
+              done
+            fi
+            npm run build:pages
+
+            if git diff --quiet; then
+              echo 'La consolidación ya fue incorporada por otra ejecución.'
+              exit 0
+            fi
+
+            git add -A
+            git commit -m "feat: completar catálogo y sincronización de la Fase 7"
+            if git push origin HEAD:"${branch}"; then
+              echo 'Consolidación publicada correctamente.'
+              exit 0
+            fi
+
+            echo 'La rama avanzó durante el push; se recalculará sobre el nuevo head.'
+            sleep $((attempt * 2))
+          done
+
+          echo 'No se pudo consolidar después de 3 intentos por cambios concurrentes.' >&2
+          exit 1
 
       - name: Verificar manifiesto reproducible
         run: |
