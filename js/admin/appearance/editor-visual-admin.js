@@ -4,7 +4,7 @@ import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260716-cloudina
 import {
   CONTENT_PAGE_IDS, SITE_CONTENT_SCHEMA, getNested, getPageDefaults, getPageSchema,
   mergeContent, sanitizeContentHref, setNested,
-} from '../../core/store/esquema-contenido.js?v=tintin-20260809-visual-builder-1';
+} from '../../core/store/esquema-contenido.js?v=tintin-20260810-visual-studio-v2-3';
 
 const $ = id => document.getElementById(id);
 const clone = value => JSON.parse(JSON.stringify(value));
@@ -145,10 +145,10 @@ function renderLibrary() {
 }
 
 function renderPages() {
-  const select=$('visual-page'); if(select){select.replaceChildren();CONTENT_PAGE_IDS.forEach(id=>{const option=make('option','',SITE_CONTENT_SCHEMA[id].label);option.value=id;select.appendChild(option);});select.value=pageId;}
+  const select=$('visual-page'); if(select){select.replaceChildren();CONTENT_PAGE_IDS.forEach(id=>{const option=make('option','',(getPageSchema(id)?.label || id));option.value=id;select.appendChild(option);});select.value=pageId;}
   const tree=$('visual-page-tree'); if(!tree)return; const list=sectionListNode;
   tree.replaceChildren();
-  CONTENT_PAGE_IDS.forEach(id=>{const group=make('div',`visual-page-group${id===pageId?' active':''}`);const button=make('button','visual-page-button');button.type='button';button.append(make('span','visual-page-chevron',id===pageId?'⌄':'›'),make('span','',SITE_CONTENT_SCHEMA[id].label));button.addEventListener('click',()=>{if(id!==pageId)switchPage(id);});group.appendChild(button);if(id===pageId){const slot=make('div','visual-page-sections-slot');slot.id='visual-page-sections-slot';group.appendChild(slot);}tree.appendChild(group);});
+  CONTENT_PAGE_IDS.forEach(id=>{const group=make('div',`visual-page-group${id===pageId?' active':''}`);const button=make('button','visual-page-button');button.type='button';button.append(make('span','visual-page-chevron',id===pageId?'⌄':'›'),make('span','',(getPageSchema(id)?.label || id)));button.addEventListener('click',()=>{if(id!==pageId)switchPage(id);});group.appendChild(button);if(id===pageId){const slot=make('div','visual-page-sections-slot');slot.id='visual-page-sections-slot';group.appendChild(slot);}tree.appendChild(group);});
   const slot=$('visual-page-sections-slot'); if(slot&&list)slot.appendChild(list);
 }
 function renderBlockTypeOptions(){const select=$('visual-new-block');if(!select||select.childElementCount)return;Object.entries(BLOCK_LABELS).forEach(([type,label])=>{const option=make('option','',label);option.value=type;select.appendChild(option);});}

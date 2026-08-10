@@ -8,8 +8,8 @@
 
 export const CONTENT_MAX_LENGTH = 4000;
 export const CONTENT_PAGE_IDS = [
-  'index', 'nosotros', 'catalogo', 'collections',
-  'contact', 'envios', 'faq', 'cambios'
+  'index', 'nosotros', 'catalogo', 'collections', 'product',
+  'contact', 'envios', 'faq', 'cambios', 'terminos', 'privacidad', '404'
 ];
 
 export const PAGE_PATH_TO_ID = Object.freeze({
@@ -20,10 +20,14 @@ export const PAGE_PATH_TO_ID = Object.freeze({
   'nosotros.html': 'nosotros',
   'catalogo.html': 'catalogo',
   'collections.html': 'collections',
+  'product.html': 'product',
   'contact.html': 'contact',
   'envios.html': 'envios',
   'preguntas-frecuentes.html': 'faq',
   'cambios-devoluciones.html': 'cambios',
+  'terminos.html': 'terminos',
+  'privacidad.html': 'privacidad',
+  '404.html': '404',
 });
 
 const field = (key, label, selector, defaultValue, options = {}) => ({
@@ -348,8 +352,15 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
   },
 });
 
+const VISUAL_ONLY_PAGE_SCHEMA = Object.freeze({
+  product: { label: 'Producto', path: 'product.html', sections: {} },
+  terminos: { label: 'Términos', path: 'terminos.html', sections: {} },
+  privacidad: { label: 'Privacidad', path: 'privacidad.html', sections: {} },
+  '404': { label: '404', path: '404.html', sections: {} },
+});
+
 export function getPageSchema(pageId) {
-  return SITE_CONTENT_SCHEMA[pageId] || null;
+  return SITE_CONTENT_SCHEMA[pageId] || VISUAL_ONLY_PAGE_SCHEMA[pageId] || null;
 }
 
 export function getSectionSchema(pageId, sectionId) {

@@ -1,7 +1,7 @@
 import {
   detectContentPageId, getNested, getPageSchema, normalizeContentValue,
   sanitizeContentHref, sanitizeContentText,
-} from './esquema-contenido.js?v=tintin-20260809-visual-builder-1';
+} from './esquema-contenido.js?v=tintin-20260810-visual-studio-v2-3';
 
 const DEVICES = ['desktop', 'tablet', 'mobile'];
 const OPTIONS = Object.freeze({

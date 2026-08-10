@@ -31,6 +31,7 @@ const connectOrigins = "https://*.googleapis.com https://*.google.com https://*.
 const VISUAL_BUILDER_PREVIEWABLE_PAGES = new Set([
   'index.html', 'about.html', 'catalogo.html', 'collections.html',
   'contact.html', 'envios.html', 'preguntas-frecuentes.html', 'cambios-devoluciones.html',
+  'product.html', 'terminos.html', 'privacidad.html', '404.html',
 ]);
 
 function inlineHashes(file) {
