@@ -40,7 +40,7 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Servir la aplicación
         run: |
-          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/tintin-header-http.log 2>&1 &
+          node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-header-http.log 2>&1 &
           for attempt in {1..20}; do
             curl --fail --silent http://127.0.0.1:4173/index.html > /dev/null && exit 0
             sleep 1

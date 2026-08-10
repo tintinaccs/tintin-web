@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-10T20:43:38.901Z",
-  "sourceFingerprint": "e92b935944fca1cb975af7b690a8d0e1a887d712fdc229f7165192c26b3003f1",
+  "generatedAt": "2026-08-10T21:02:41.413Z",
+  "sourceFingerprint": "20e1e308806e3552387cb684ab353f2f4469191a8dc5ca0248e39e3b26c15f38",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 585,
     "textFiles": 553,
-    "totalBytes": 6194741,
+    "totalBytes": 6191106,
     "pages": 18,
     "modules": 354
   },
@@ -23894,8 +23894,8 @@
     },
     {
       "path": "scripts/servidor-local-pruebas.mjs",
-      "bytes": 2276,
-      "sha256": "73a9572494783bb5a7e63080732a2cc5bb8ef6761e18d1da2c828da9aa5d182a",
+      "bytes": 2549,
+      "sha256": "f481f580336a5d9f9ac0c4242f64bd0cbcb566c9ed33dfff73b928764f07f1f3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24980,14 +24980,14 @@
     {
       "path": ".github/workflows/auditar-calidad-nivel-3.yml",
       "extension": ".yml",
-      "bytes": 4052,
-      "sha256": "f007a2523a24eddbbc17a7997f3c7ec2535ab841308ba69d4f79f984175dd0c3"
+      "bytes": 4069,
+      "sha256": "2da1b361ca737e4e4f6d34604ef661325d754c23a88a902e1c3190a8ddee62d2"
     },
     {
       "path": ".github/workflows/auditar-carrito-fase-7.yml",
       "extension": ".yml",
-      "bytes": 5493,
-      "sha256": "90d6282d16529c257486649a2de17b6867691375ac6b7d6e91027f989dc6815b"
+      "bytes": 3255,
+      "sha256": "97e8ff6d93473667734e0ed740d65a2c46abfabd600833191ef8551274ac12df"
     },
     {
       "path": ".github/workflows/auditar-colecciones-fase-4.yml",
@@ -25076,8 +25076,8 @@
     {
       "path": ".github/workflows/auditar-seguridad-fase-8.yml",
       "extension": ".yml",
-      "bytes": 4842,
-      "sha256": "12c672bb2da0688b5995040c0c7317c69322314f91deb8006b856901477dd710"
+      "bytes": 3155,
+      "sha256": "b0c9cae73c8c89ba684a32e931e6604039077ee1b8ef1629f89fe846aed64310"
     },
     {
       "path": ".github/workflows/auditar-sistema-especial-parte-2g.yml",
@@ -25119,7 +25119,7 @@
       "path": ".github/workflows/entrega-final-fase-12.yml",
       "extension": ".yml",
       "bytes": 4337,
-      "sha256": "b8c6142f811c67dff350946330100a044c9523bf896c1e7049342f3c9257d19b"
+      "sha256": "da2d3e9a894c160810646c6a626b55b5376ffb65ed778c0d125f151ed4bf5a3b"
     },
     {
       "path": ".github/workflows/entrega-final-fase-9.yml",
@@ -25149,7 +25149,7 @@
       "path": ".github/workflows/validar-header-responsive.yml",
       "extension": ".yml",
       "bytes": 1581,
-      "sha256": "951f11633fc9f524b652df6eb25df03a025a02c2e2ee731f37497344960c192c"
+      "sha256": "e53c79a10f017ffad616ffbf3cf012e698de96cd380c01b121ca12b74fccac1b"
     },
     {
       "path": ".github/workflows/validar-tienda-unificada-final.yml",
@@ -28214,8 +28214,8 @@
     {
       "path": "scripts/servidor-local-pruebas.mjs",
       "extension": ".mjs",
-      "bytes": 2276,
-      "sha256": "73a9572494783bb5a7e63080732a2cc5bb8ef6761e18d1da2c828da9aa5d182a"
+      "bytes": 2549,
+      "sha256": "f481f580336a5d9f9ac0c4242f64bd0cbcb566c9ed33dfff73b928764f07f1f3"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",

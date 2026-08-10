@@ -15,7 +15,6 @@ on:
       - 'js/quality/calidad-interfaz.js'
       - 'js/orders/pedido-checkout-seguro.js'
       - 'functions/api/sheets-product-sync.js'
-      - 'scripts/apply-phase7-*.mjs'
       - 'scripts/auditar-fase-7-catalogo.js'
       - 'scripts/auditar-carrito-fase-7.js'
       - 'scripts/auditar-sitio-confiabilidad.js'
@@ -29,13 +28,6 @@ on:
       # El job ejecuta `npm run audit:final`, que audita todo el repositorio.
       # Por eso el filtro de push cubre js/** y scripts/** completos: un cambio
       # en cualquier superficie o script de auditoría puede romperlo.
-      #
-      # auditar-seguridad-fase-8.yml comparte el problema pero conserva su filtro
-      # estrecho a propósito: ese workflow hace
-      #   git checkout origin/main -- .github/workflows/auditar-seguridad-fase-8.yml
-      # antes de auditar, así que restaura su propia definición desde main y
-      # ninguna PR puede modificarla. Para revalidarlo sobre main hay que
-      # lanzarlo con workflow_dispatch.
       - 'catalogo.html'
       - 'admin.html'
       - 'tienda.js'
@@ -48,11 +40,11 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
-# Evita solapar dos ejecuciones de Catálogo sobre la misma PR. Las carreras
-# con otros workflows se resuelven al consolidar mediante relectura del head y
-# reintento, sin compartir un grupo que pueda cancelar otros checks.
+# Evita solapar dos ejecuciones de Catálogo sobre la misma PR. El workflow ya
+# no escribe en la rama (ver "Verificar manifiesto reproducible" más abajo),
+# así que no hay push concurrente que serializar entre workflows.
 concurrency:
   group: tintin-catalog-generated-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
@@ -73,18 +65,6 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-
-      - name: Aplicar consolidación de la Fase 7
-        run: |
-          shopt -s nullglob
-          scripts=(scripts/apply-phase7-*.mjs)
-          if [ ${#scripts[@]} -eq 0 ]; then
-            echo 'La consolidación ya fue aplicada.'
-          else
-            for script in "${scripts[@]}"; do
-              node "$script"
-            done
-          fi
 
       - name: Instalar dependencias
         run: npm ci
@@ -109,51 +89,10 @@ jobs:
       - name: Ejecutar auditoría integral
         run: npm run audit:final
 
-      - name: Regenerar manifiesto de diagnóstico
-        run: npm run build:pages
-
-      - name: Consolidar cambios generados en PR interna
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          branch="${GITHUB_HEAD_REF}"
-
-          for attempt in 1 2 3; do
-            echo "Intento de consolidación ${attempt}/3 sobre ${branch}"
-            git fetch origin "${branch}"
-            git reset --hard "origin/${branch}"
-
-            shopt -s nullglob
-            scripts=(scripts/apply-phase7-*.mjs)
-            if [ ${#scripts[@]} -gt 0 ]; then
-              for script in "${scripts[@]}"; do
-                node "$script"
-              done
-            fi
-            npm run build:pages
-
-            if git diff --quiet; then
-              echo 'La consolidación ya fue incorporada por otra ejecución.'
-              exit 0
-            fi
-
-            git add -A
-            git commit -m "feat: completar catálogo y sincronización de la Fase 7"
-            if git push origin HEAD:"${branch}"; then
-              echo 'Consolidación publicada correctamente.'
-              exit 0
-            fi
-
-            echo 'La rama avanzó durante el push; se recalculará sobre el nuevo head.'
-            sleep $((attempt * 2))
-          done
-
-          echo 'No se pudo consolidar después de 3 intentos por cambios concurrentes.' >&2
-          exit 1
-
       - name: Verificar manifiesto reproducible
         run: |
           npm run build:pages
-          git diff --exit-code -- diagnostic-manifest.json
+          if ! git diff --exit-code -- diagnostic-manifest.json; then
+            echo '::error::diagnostic-manifest.json está desactualizado. Ejecutá "npm run build:pages" localmente y commiteá el resultado.'
+            exit 1
+          fi

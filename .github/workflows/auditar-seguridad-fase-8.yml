@@ -15,7 +15,6 @@ on:
       - 'scripts/auditar-control-tienda.js'
       - 'scripts/auditar-fase-6-seguridad.js'
       - 'scripts/probar-firestore-critico.mjs'
-      - 'scripts/apply-phase7-phase11-*.mjs'
       - 'package.json'
       - '.github/workflows/auditar-seguridad-fase-8.yml'
   push:
@@ -37,11 +36,11 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
-# Evita solapar dos ejecuciones de Seguridad sobre la misma PR. Las carreras
-# con otros workflows se resuelven en el paso de consolidación mediante
-# fetch/reset/rebuild/retry, sin cancelar checks distintos entre sí.
+# Evita solapar dos ejecuciones de Seguridad sobre la misma PR. El workflow ya
+# no escribe en la rama (ver "Verificar manifiesto reproducible" más abajo),
+# así que no hay push concurrente que serializar entre workflows.
 concurrency:
   group: tintin-security-generated-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
@@ -52,13 +51,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar rama evaluada
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ github.head_ref || github.ref_name }}
           fetch-depth: 0
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '22'
           cache: npm
@@ -68,15 +67,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-
-      - name: Aplicar consolidación temporal de Fase 11
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
-        shell: bash
-        run: |
-          shopt -s nullglob
-          for applicator in scripts/apply-phase7-phase11-*.mjs; do
-            node "$applicator"
-          done
 
       - name: Instalar dependencias
         run: npm ci
@@ -100,46 +90,10 @@ jobs:
       - name: Ejecutar auditoría integral
         run: npm run audit:final
 
-      - name: Regenerar manifiesto de diagnóstico
-        run: npm run build:pages
-
-      - name: Consolidar Fase 11 y manifiesto en PR interna
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          branch="${GITHUB_HEAD_REF}"
-
-          for attempt in 1 2 3; do
-            echo "Intento de consolidación ${attempt}/3 sobre ${branch}"
-            git fetch origin "${branch}"
-            git reset --hard "origin/${branch}"
-
-            shopt -s nullglob
-            for applicator in scripts/apply-phase7-phase11-*.mjs; do
-              node "$applicator"
-            done
-            npm run build:pages
-
-            if git diff --quiet; then
-              echo 'La consolidación ya fue incorporada por otra ejecución.'
-              exit 0
-            fi
-
-            git add -A
-            git commit -m "seo: consolidar publicación y monitoreo de la Fase 11"
-            if git push origin HEAD:"${branch}"; then
-              echo 'Consolidación publicada correctamente.'
-              exit 0
-            fi
-
-            echo 'La rama avanzó durante el push; se recalculará sobre el nuevo head.'
-            sleep $((attempt * 2))
-          done
-
-          echo 'No se pudo consolidar después de 3 intentos por cambios concurrentes.' >&2
-          exit 1
-
       - name: Verificar manifiesto reproducible
-        run: git diff --exit-code -- diagnostic-manifest.json
+        run: |
+          npm run build:pages
+          if ! git diff --exit-code -- diagnostic-manifest.json; then
+            echo '::error::diagnostic-manifest.json está desactualizado. Ejecutá "npm run build:pages" localmente y commiteá el resultado.'
+            exit 1
+          fi
