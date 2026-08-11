@@ -22,7 +22,13 @@ function url(page) { return `${BASE_URL}/${page.replace(/^\//, '')}`; }
 
 async function installVitalsObserver(page) {
   await page.addInitScript(() => {
-    window.__ttVitals = { lcp: null, cls: 0, inp: null };
+    window.__ttVitals = { lcp: null, cls: 0, inp: null, shifts: [] };
+    const describeNode = node => {
+      if (!(node instanceof Element)) return String(node?.nodeName || 'unknown');
+      const id = node.id ? `#${node.id}` : '';
+      const classes = [...node.classList].slice(0, 3).map(name => `.${name}`).join('');
+      return `${node.tagName.toLowerCase()}${id}${classes}`;
+    };
     try {
       new PerformanceObserver(list => {
         const entries = list.getEntries();
@@ -30,7 +36,28 @@ async function installVitalsObserver(page) {
       }).observe({ type: 'largest-contentful-paint', buffered: true });
       new PerformanceObserver(list => {
         for (const entry of list.getEntries()) {
-          if (!entry.hadRecentInput) window.__ttVitals.cls += entry.value;
+          if (entry.hadRecentInput) continue;
+          window.__ttVitals.cls += entry.value;
+          const sources = (entry.sources || []).map(source => ({
+            node: describeNode(source.node),
+            previous: source.previousRect ? {
+              x: Math.round(source.previousRect.x),
+              y: Math.round(source.previousRect.y),
+              width: Math.round(source.previousRect.width),
+              height: Math.round(source.previousRect.height),
+            } : null,
+            current: source.currentRect ? {
+              x: Math.round(source.currentRect.x),
+              y: Math.round(source.currentRect.y),
+              width: Math.round(source.currentRect.width),
+              height: Math.round(source.currentRect.height),
+            } : null,
+          }));
+          window.__ttVitals.shifts.push({
+            value: Math.round(entry.value * 100000) / 100000,
+            startTime: Math.round(entry.startTime),
+            sources,
+          });
         }
       }).observe({ type: 'layout-shift', buffered: true });
       new PerformanceObserver(list => {
@@ -71,7 +98,7 @@ async function collectVitals(page) {
       fcp: null, lcp: window.__ttVitals?.lcp ?? null, cls: window.__ttVitals?.cls || 0,
       inp: window.__ttVitals?.inp ?? null, ttfb: null, dcl: null, load: null,
       requests: 0, transferKB: 0, duplicateRequests: 0, duplicateUrls: [], firestoreReads: 0,
-      firestoreSources: {}
+      firestoreSources: {}, shifts: window.__ttVitals?.shifts || []
     };
     try {
       const nav = performance.getEntriesByType('navigation')[0] || {};
@@ -95,6 +122,7 @@ async function collectVitals(page) {
       out.lcp = window.__ttVitals?.lcp ?? out.lcp;
       out.cls = Math.round((window.__ttVitals?.cls || out.cls) * 1000) / 1000;
       out.inp = window.__ttVitals?.inp ?? out.inp;
+      out.shifts = window.__ttVitals?.shifts || out.shifts;
       resolve(out);
     }, 350);
   }));
