@@ -1,0 +1,61 @@
+name: One-shot — preview Apariencia abajo
+
+on:
+  push:
+    branches:
+      - fix/apariencia-preview-abajo
+    paths:
+      - .github/workflows/one-shot-apariencia-preview-abajo.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: fix/apariencia-preview-abajo
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Colocar preview de colores debajo de la configuración
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('admin.html')
+          text = p.read_text(encoding='utf-8')
+          old_grid = 'class="apar-main-grid" style="display:grid;grid-template-columns:minmax(280px,1.3fr) minmax(260px,1fr);gap:20px;align-items:start"'
+          new_grid = 'class="apar-main-grid" style="display:grid;grid-template-columns:minmax(0,1fr);gap:20px;align-items:start"'
+          old_preview = 'class="apar-preview-column" style="position:sticky;top:12px"'
+          new_preview = 'class="apar-preview-column" style="position:static"'
+          if text.count(old_grid) != 1:
+              raise SystemExit(f'Contrato grid inesperado: {text.count(old_grid)} coincidencias')
+          if text.count(old_preview) != 1:
+              raise SystemExit(f'Contrato preview inesperado: {text.count(old_preview)} coincidencias')
+          text = text.replace(old_grid, new_grid).replace(old_preview, new_preview)
+          p.write_text(text, encoding='utf-8')
+          PY
+      - name: Retirar one-shot y regenerar diagnóstico
+        run: |
+          rm -f .github/workflows/one-shot-apariencia-preview-abajo.yml
+          npm run build:pages
+          git diff --check
+      - name: Validar layout de Apariencia
+        run: |
+          npx playwright install --with-deps chromium
+          npx playwright test tests/visual-builder/apariencia-preview-abajo.spec.js --project=chromium
+          npm run audit:final
+      - name: Commit y push
+        run: |
+          git fetch origin fix/apariencia-preview-abajo
+          test "$(git rev-parse origin/fix/apariencia-preview-abajo)" = "$(git rev-parse HEAD)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix(apariencia): mover vista previa de colores debajo"
+          git push origin HEAD:fix/apariencia-preview-abajo
