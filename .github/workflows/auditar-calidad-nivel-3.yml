@@ -80,7 +80,17 @@ jobs:
         continue-on-error: true
         env:
           PERF_BASE_URL: http://127.0.0.1:4173
-        run: npx playwright test tests/performance/public-pages.performance.spec.js --project=chromium > phase5-performance.log 2>&1
+        run: |
+          set +e
+          npx playwright test tests/performance/public-pages.performance.spec.js --project=chromium > phase5-performance.log 2>&1
+          status=$?
+          while IFS= read -r line; do
+            message=${line//'%'/'%25'}
+            message=${message//$'\r'/'%0D'}
+            message=${message//$'\n'/'%0A'}
+            echo "::notice title=Phase 5 Web Vitals::$message"
+          done < <(grep -E '^\[[^]]+\.html\] DCL=' phase5-performance.log || true)
+          exit "$status"
 
       - name: Upload Level 3 reports and generated manifest
         if: always()
