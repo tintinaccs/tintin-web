@@ -50,6 +50,7 @@ const publicPages = [
 const productsStore = read('js/core/store/estado-productos.js');
 const collectionsStore = read('js/pages/collections/estado-colecciones.js');
 const readCache = read('js/core/firebase/cache-lecturas-firestore.js');
+const instantColor = read('js/components/color/esquema-color-instantaneo.js');
 
 check(
   'Tipografía sin FOIT',
@@ -60,8 +61,38 @@ check(
 check(
   'El loader tiene salida garantizada',
   /STORE_GATE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/cargador-pagina.js')) &&
-    /RELEASE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/components/color/esquema-color-instantaneo.js')),
+    /RELEASE_TIMEOUT_MS\s*=\s*\d{2,}/.test(instantColor),
   'Los loaders deben tener tiempo máximo de espera.'
+);
+
+const fastReleaseMatch = instantColor.match(/RELEASE_TIMEOUT_MS\s*=\s*(\d+)/);
+const fastRevealMatch = instantColor.match(/FAST_REVEAL_TIMEOUT_MS\s*=\s*(\d+)/);
+const fastReleaseMs = Number(fastReleaseMatch?.[1] || Infinity);
+const fastRevealMs = Number(fastRevealMatch?.[1] || Infinity);
+
+check(
+  'La primera pintura no espera a Firestore',
+  instantColor.includes("release(usedCachedScheme ? 'cache-first-paint' : 'fallback-first-paint')") &&
+    fastReleaseMs <= 250 &&
+    fastRevealMs <= 250,
+  `La interfaz debe liberarse con caché/fallback local en <=250 ms. Detectado: release=${fastReleaseMs} ms, reveal=${fastRevealMs} ms.`
+);
+
+check(
+  'El estado pendiente de tienda no tapa la navegación',
+  instantColor.includes('tt-fast-navigation.tt-store-gate-pending') &&
+    instantColor.includes('visibility:visible!important') &&
+    !instantColor.includes('tt-color-scheme-pending body>*:not(#tt-loader):not(#tt-store-closed-overlay){visibility:hidden!important}'),
+  'Comprobar la tienda puede mantener compras pendientes, pero nunca ocultar toda la página.'
+);
+
+check(
+  'La navegación interna se adelanta por intención',
+  instantColor.includes("link.rel = 'prefetch'") &&
+    instantColor.includes("document.addEventListener('pointerover'") &&
+    instantColor.includes("document.addEventListener('touchstart'") &&
+    instantColor.includes('url.origin !== window.location.origin'),
+  'Hover, foco o touch deben precargar solamente destinos internos y respetar ahorro de datos.'
 );
 
 check(
