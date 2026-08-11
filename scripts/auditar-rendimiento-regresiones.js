@@ -37,7 +37,8 @@ check(
     instantColor.includes('tt-fast-navigation.tt-store-gate-pending') &&
     instantColor.includes('visibility:visible!important') &&
     liveColor.includes('onSnapshot') &&
-    liveColor.includes("window.dispatchEvent(new CustomEvent('tintin:color-scheme-ready'"),
+    liveColor.includes("markColorSchemeReady('firestore')") &&
+    liveColor.includes("markColorSchemeReady('scheme-read-error')"),
   `La primera pintura debe usar caché/fallback validado en <=250 ms y luego hidratar el esquema remoto. release=${fastReleaseMs} ms; reveal=${fastRevealMs} ms.`
 );
 check(
