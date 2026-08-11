@@ -1,0 +1,39 @@
+name: One-shot — sincronizar diagnóstico final
+
+on:
+  push:
+    branches:
+      - fix/cls-y-smoke-producto
+    paths:
+      - .github/workflows/one-shot-sync-diagnostics.yml
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: fix/cls-y-smoke-producto
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Regenerar árbol final sin el one-shot
+        run: |
+          rm -f .github/workflows/one-shot-sync-diagnostics.yml
+          npm run build:pages
+          git diff --check
+      - name: Commit y push
+        run: |
+          git fetch origin fix/cls-y-smoke-producto
+          test "$(git rev-parse origin/fix/cls-y-smoke-producto)" = "$(git rev-parse HEAD)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: sincronizar diagnóstico tras fix de CI"
+          git push origin HEAD:fix/cls-y-smoke-producto
