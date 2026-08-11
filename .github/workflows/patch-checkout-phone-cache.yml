@@ -1,0 +1,40 @@
+name: Temporary patch checkout phone cache
+
+on:
+  push:
+    branches:
+      - fix/checkout-phone-format
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: fix/checkout-phone-format
+      - name: Bump create-order-client cache tag
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('js/orders/pedido-checkout-seguro.js')
+          text = path.read_text(encoding='utf-8')
+          old = "../create-order-client.js?v=tintin-20260728-phase4-order-2"
+          new = "../create-order-client.js?v=tintin-20260811-phone-order-1"
+          if old in text:
+              path.write_text(text.replace(old, new), encoding='utf-8')
+          elif new not in text:
+              raise SystemExit('No se encontró la referencia esperada de create-order-client.js')
+          PY
+          if git diff --quiet -- js/orders/pedido-checkout-seguro.js; then
+            echo "Cache tag already updated"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add js/orders/pedido-checkout-seguro.js
+          git commit -m "Bump checkout order client cache tag"
+          git push origin HEAD:fix/checkout-phone-format
