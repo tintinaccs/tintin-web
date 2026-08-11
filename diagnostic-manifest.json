@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-11T01:06:40.729Z",
-  "sourceFingerprint": "d8c0ba69eb7349e3abca9be86105876cc9f32d59fc5539904c4653cad75d3661",
+  "generatedAt": "2026-08-11T01:09:34.081Z",
+  "sourceFingerprint": "2c3e0bf7d16ad6e6adb11e5b81807c2e9b48a6a29a6bb9fdd630a17f1ac0a550",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 577,
-    "textFiles": 545,
-    "totalBytes": 6135000,
+    "files": 578,
+    "textFiles": 546,
+    "totalBytes": 6136328,
     "pages": 18,
-    "modules": 348
+    "modules": 349
   },
   "viewports": [
     {
@@ -24450,6 +24450,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/performance/navegacion-inmediata.test.mjs",
+      "bytes": 2206,
+      "sha256": "0237e8c3f996d1147e40cefcdff25b3253cb7dddb8d3670931e2359af787bd61",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/performance/offline-recovery.spec.js",
       "bytes": 2169,
       "sha256": "dd49381acf5a6948909c66aad4cfb6b320f4d7aab4c3123154975f12947eaf76",
@@ -24989,12 +25019,6 @@
       "sha256": "c1b27b5f43a11fc47dcebdc74bbe35de3bec91448bda75b878a5bd78655fbe0f"
     },
     {
-      "path": ".github/workflows/migrar-cache-fast-nav-temporal.yml",
-      "extension": ".yml",
-      "bytes": 2035,
-      "sha256": "aa72ac7f5caa8df707e0d632f6a5a303b4d94df0f7d52ca5405252e96d81a0fc"
-    },
-    {
       "path": ".github/workflows/respaldo-repositorio.yml",
       "extension": ".yml",
       "bytes": 1741,
@@ -25017,6 +25041,12 @@
       "extension": ".yml",
       "bytes": 1581,
       "sha256": "951f11633fc9f524b652df6eb25df03a025a02c2e2ee731f37497344960c192c"
+    },
+    {
+      "path": ".github/workflows/validar-navegacion-inmediata.yml",
+      "extension": ".yml",
+      "bytes": 1157,
+      "sha256": "7b0719a295d8678abe2abf86fd9781e272ff8322b0cd63119bc32f64a61e9573"
     },
     {
       "path": ".github/workflows/validar-tienda-unificada-final.yml",
@@ -28191,6 +28221,12 @@
       "extension": ".js",
       "bytes": 1874,
       "sha256": "9fce8f980069379398f6513a97302d7112b5aa7bfdbb1b60fa204e870e4af796"
+    },
+    {
+      "path": "tests/performance/navegacion-inmediata.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2206,
+      "sha256": "0237e8c3f996d1147e40cefcdff25b3253cb7dddb8d3670931e2359af787bd61"
     },
     {
       "path": "tests/performance/offline-recovery.spec.js",
