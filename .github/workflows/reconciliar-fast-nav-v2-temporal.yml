@@ -32,6 +32,7 @@ jobs:
             mkdir -p "$(dirname "$file")"
             git show "origin/perf/navegacion-inmediata-20260810:$file" > "$file"
           done
+          sed -i 's/tintin-20260810-fast-nav-1/tintin-20260810-fast-nav-2/g' tests/performance/navegacion-inmediata.test.mjs
 
       - name: Eliminar esperas artificiales del loader y versionar el shell actual
         run: |
