@@ -44,6 +44,7 @@ jobs:
       - name: Instalar dependencias y regenerar derivados
         run: |
           npm ci
+          npm run cache-versioning:write
           npm run build:pages
 
       - name: Retirar migración temporal y guardar resultado
