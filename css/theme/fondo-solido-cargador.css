@@ -121,22 +121,13 @@ html body:has(.login-page).tt-public-shell-mounted {
   padding-bottom: 0 !important;
 }
 
-/* Reserva del espacio del header público antes de que el shell real se
-   monte. entrada-navegacion-publica.js inserta el header (escritorio) o
-   activa su posición fija (tableta) de forma asíncrona; el CSS que define
-   esos componentes (encabezado-escritorio.css, paneles.css) solo se activa
-   como hoja de estilos real cuando ese mismo mount corre — antes de eso son
-   apenas un <link rel="preload">, así que cualquier reserva puesta ahí no
-   sirve durante la ventana en la que más importa. Esta hoja, en cambio, se
-   carga de forma síncrona en <head> desde el primer render, así que la
-   reserva ya está activa cuando el shell se monta y desaparece (escritorio)
-   o permanece igual (tableta, header fixed) sin salto neto de layout. */
-@media (min-width: 1025px) {
-  html body:not(.tt-public-shell-mounted):not(:has(.login-page)):not(:has(.adm-main)) {
-    padding-top: 88px !important;
-  }
-}
-
+/* En escritorio el header público permanece fixed antes y después del mount,
+   y las páginas ya reservan su offset mediante --header-h en sus propios
+   heroes/breadcrumbs. Agregar 88px al body solo antes del mount introducía
+   una geometría transitoria que desaparecía al añadir
+   .tt-public-shell-mounted y se contabilizaba como CLS. En tableta sí se
+   conserva la reserva estable de 84px porque forma parte del layout fijo de
+   ese breakpoint y no cambia durante el montaje. */
 @media (min-width: 768px) and (max-width: 1024px) {
   html body:not(:has(.login-page)):not(:has(.adm-main)) {
     padding-top: 84px !important;
