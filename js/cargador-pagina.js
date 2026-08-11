@@ -83,7 +83,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260810-fast-nav-2';
+  const TT_CACHE_VERSION = 'tintin-20260811-cls-runtime-stable-1';
   const MIN_SHOW_MS = 120;
   // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
   // emergencia "No pudimos comprobar el estado de la tienda" en un equipo
@@ -110,6 +110,14 @@
   let hideGen = 0;
   let gateResolved = !storeGateRequired;
   let gateEmergencyShown = false;
+  // Cuenta tareas asíncronas que deben terminar antes de ocultar el loader,
+  // además de contentReady/gate. La usa entrada-navegacion-publica.js para
+  // que el header/nav real (que se monta en el DOM de forma asíncrona) esté
+  // insertado antes de revelar la página — si no, el contenido se corre
+  // visiblemente apenas termina de montarse (layout shift real, medido en
+  // producción tras acortar MIN_SHOW_MS). No agrega demora artificial: solo
+  // bloquea mientras esa tarea puntual sigue en curso.
+  let pendingWaits = 0;
   let runtimeBooted = false;
 
   function versionUrl(url) {
@@ -540,6 +548,7 @@
   function tryHideElegant() {
     if (hidden) return;
     if (storeGateRequired && !gateResolved) return;
+    if (pendingWaits > 0) return;
     const enough = Date.now() - START >= MIN_SHOW_MS;
     if (!enough) {
       const wait = Math.max(0, MIN_SHOW_MS - (Date.now() - START));
@@ -922,13 +931,23 @@
     else bootPublicRuntime();
   }, SAFETY_MS);
 
+  function beginWait() {
+    pendingWaits += 1;
+  }
+  function endWait() {
+    pendingWaits = Math.max(0, pendingWaits - 1);
+    if (pendingWaits === 0 && contentReady) tryHideElegant();
+  }
+
   window.TintinLoader = {
     ready,
     hide: hideNow,
     show,
     setText,
     lockScroll,
-    unlockScroll
+    unlockScroll,
+    beginWait,
+    endWait
   };
   window.ttPageReady = ready;
 })();

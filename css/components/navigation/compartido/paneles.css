@@ -236,7 +236,13 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
 .tt-tablet-cats-title { display: none; }
 
 @media (min-width: 768px) and (max-width: 1024px) {
-  body.tt-public-shell-mounted:not(:has(.login-page)):not(:has(.adm-main)) { padding-top: 84px !important; }
+  /* El header de tablet es position:fixed (fuera del flujo): el espacio de
+     84px que reserva para el contenido no depende de si el header ya
+     terminó de montarse, así que se reserva desde el primer render — si
+     quedara condicionado a .tt-public-shell-mounted, el contenido saltaría
+     84px hacia abajo justo cuando el shell termina de montarse (CLS real,
+     medido en producción, aunque el loader ya estuviera oculto o no). */
+  body:not(:has(.login-page)):not(:has(.adm-main)) { padding-top: 84px !important; }
   .tt-cart-drawer,
   .tt-account-drawer { width: min(72vw, 640px); }
 

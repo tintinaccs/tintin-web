@@ -121,6 +121,19 @@ html body:has(.login-page).tt-public-shell-mounted {
   padding-bottom: 0 !important;
 }
 
+/* En escritorio el header público permanece fixed antes y después del mount,
+   y las páginas ya reservan su offset mediante --header-h en sus propios
+   heroes/breadcrumbs. Agregar 88px al body solo antes del mount introducía
+   una geometría transitoria que desaparecía al añadir
+   .tt-public-shell-mounted y se contabilizaba como CLS. En tableta sí se
+   conserva la reserva estable de 84px porque forma parte del layout fijo de
+   ese breakpoint y no cambia durante el montaje. */
+@media (min-width: 768px) and (max-width: 1024px) {
+  html body:not(:has(.login-page)):not(:has(.adm-main)) {
+    padding-top: 84px !important;
+  }
+}
+
 /* La pantalla normal de Login usa el mismo loader oficial que el resto del
    sitio. Esta regla final anula únicamente la excepción visual antigua; el
    estado interno tt-auth-silent-transition conserva su comportamiento. */

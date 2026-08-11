@@ -137,26 +137,20 @@ export function applyGlobalLayout(layout = {}) {
   window.dispatchEvent(new CustomEvent('tintin:global-layout-ready'));
 }
 
-async function loadGlobalLayout() {
-  if (loaded) return;
+// Se pide en paralelo con los assets del shell (ver entrada-navegacion-publica.js)
+// y se aplica ANTES de insertar el header/footer reales en el DOM: si en cambio
+// se aplicara después (como hacía loadGlobalLayout antes), el texto/colores/logo
+// por defecto ya pintados se reemplazan en un segundo paso — un salto visual
+// real que el navegador cuenta como CLS aunque el loader de página lo tape.
+export async function fetchGlobalLayoutConfig() {
+  if (loaded) return null;
   loaded = true;
+  ensureCss();
   try {
     const response = await fetch('/api/visual-studio-global-public', { headers: { accept: 'application/json' } });
     const data = response.ok ? await response.json() : null;
-    if (data?.config?.layout) applyGlobalLayout(data.config.layout);
-    else document.documentElement.dataset.ttGlobalLayout = 'fallback';
+    return data?.config?.layout || null;
   } catch {
-    document.documentElement.dataset.ttGlobalLayout = 'fallback';
+    return null;
   }
 }
-
-export function initGlobalNavigationAppearance() {
-  ensureCss();
-  if (document.body?.classList.contains('tt-public-shell-mounted')) {
-    void loadGlobalLayout();
-    return;
-  }
-  document.addEventListener('tintin:public-shell-ready', () => { void loadGlobalLayout(); }, { once: true });
-}
-
-initGlobalNavigationAppearance();

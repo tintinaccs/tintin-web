@@ -6,13 +6,14 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260810-fast-nav-2';
+const LOADER_VERSION = 'tintin-20260811-cls-runtime-stable-1';
 const PUBLIC_SHELL_VERSION = 'tintin-20260810-global-studio-7';
-const NAV_ENTRY_VERSION = 'tintin-20260810-global-studio-10';
+const NAV_ENTRY_VERSION = 'tintin-20260811-cls-header-reserve-1';
 // Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
 // esa constante decide la URL exacta (con ?v=) que entrada-navegacion-publica.js y
 // ensureNavigationAssets() piden en tiempo de ejecución. Si difieren, el preload no
 // acierta la cache key exacta y el navegador vuelve a pedir el recurso igual.
-const NAV_SHELL_VERSION = 'tintin-20260809-responsive-header-2';
+const NAV_SHELL_VERSION = 'tintin-20260811-cls-header-reserve-1';
 const NAVIGATION_PRELOAD_STYLES = [
   'css/components/navigation/escritorio/encabezado-escritorio.css',
   'css/components/navigation/tableta/encabezado-tableta.css',
@@ -149,9 +150,14 @@ function centralizeRuntime(html) {
 }
 
 function versionRuntimeLoader(html) {
+  // Tag propio, separado de VERSION: cargador-pagina.js cambia con más
+  // frecuencia que tienda.js/inicio-control-paneles.js (ver ensureShellScript
+  // y centralizeRuntime más arriba, que sí usan VERSION), y forzar el mismo
+  // tag en los tres cada vez que solo uno cambia haría descargar de nuevo
+  // archivos idénticos para todas las visitantes sin necesidad.
   return html.replace(
     /(<script\b[^>]*src=["']js\/cargador-pagina\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi,
-    `$1?v=${VERSION}$2`
+    `$1?v=${LOADER_VERSION}$2`
   );
 }
 

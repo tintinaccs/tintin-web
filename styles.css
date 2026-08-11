@@ -3111,6 +3111,20 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 ═══════════════════════════════════════════════ */
 .tt-product-page { background: var(--bg); padding: 32px 0 44px; }
 
+/* #product-loading, #product-not-found y #product-load-error son estados
+   transitorios que se muestran antes de que #product-grid (con la galería
+   en aspect-ratio 3/4) se revele. Sin una altura mínima cercana a la de la
+   grilla final, el salto entre "spinner corto" y "grilla alta" es un CLS
+   real y grande — se midió hasta 0.96 en product.html. La medida es
+   aproximada a propósito (no exacta): alcanza con que el salto quede chico,
+   no con clavar el pixel exacto. */
+#product-loading,
+#product-not-found,
+#product-load-error {
+  min-height: 70vh;
+  box-sizing: border-box;
+}
+
 .tt-product-detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
