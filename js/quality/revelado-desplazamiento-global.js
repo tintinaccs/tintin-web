@@ -101,12 +101,26 @@
     const roots = pendingRoots.size ? [...pendingRoots] : [document];
     pendingRoots.clear();
     const candidates = roots.flatMap(elementsInside).filter(canReveal);
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+    const toObserve = [];
     candidates.forEach((element, index) => {
       if (element.matches(hoverSelectors)) element.classList.add('tt-premium-hover');
+      // Lo que ya está a la vista al cargar no necesita "aparecer": animarlo
+      // igual desde el estado oculto (opacity:0 + translateY) es exactamente
+      // el patrón que produce Cumulative Layout Shift real, aunque el salto
+      // sea intencional y dure poco — el navegador lo cuenta igual. Se marca
+      // visible en el mismo turno síncrono en que se agrega .tt-auto-reveal,
+      // así nunca pasa por el estado desplazado y no hay salto que medir.
+      const alreadyInViewport = element.getBoundingClientRect().top < viewportHeight;
       element.classList.add('tt-auto-reveal', variantFor(element, index));
       element.style.setProperty('--tt-r-delay', `${Math.min(index % 5, 4) * 28}ms`);
+      if (alreadyInViewport) {
+        element.classList.add('tt-visible', 'tt-reveal-settled');
+      } else {
+        toObserve.push(element);
+      }
     });
-    observe(candidates);
+    observe(toObserve);
   }
 
   function scheduleScan(root = document) {

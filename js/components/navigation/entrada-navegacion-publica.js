@@ -11,7 +11,7 @@ import { ensureNavigationAssets } from './compartido/recursos-navegacion.js';
 import { loadSharedRuntime } from './compartido/carga-navegacion.js';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
-import './compartido/apariencia-global.js?v=tintin-20260810-global-layout-3';
+import { fetchGlobalLayoutConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260811-cls-header-reserve-1';
 import { initGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20260810-global-studio-9';
 
 const LEGACY_SHELL_IDS = Object.freeze([
@@ -67,12 +67,17 @@ function mountPublicShell() {
   // beginWait/endWait bloquean el ocultamiento del loader únicamente
   // mientras esta tarea puntual sigue en curso, sin agregar demora fija.
   window.TintinLoader?.beginWait?.();
-  mountPromise = ensureNavigationAssets().then(async () => {
+  mountPromise = Promise.all([
+    ensureNavigationAssets(),
+    fetchGlobalLayoutConfig(),
+  ]).then(async ([, layoutConfig]) => {
     if (document.body.classList.contains('tt-public-shell-mounted')) return;
 
     removeLegacyShell();
     document.body.insertAdjacentHTML('afterbegin', renderTopShell());
     document.body.insertAdjacentHTML('beforeend', renderBottomShell());
+    if (layoutConfig) applyGlobalLayout(layoutConfig);
+    else document.documentElement.dataset.ttGlobalLayout = 'fallback';
     document.body.classList.add('tt-public-shell-mounted');
     document.body.classList.toggle('tt-public-shell-home', currentPage() === 'home');
 
