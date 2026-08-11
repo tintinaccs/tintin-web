@@ -22,10 +22,32 @@ function check(name, condition, problem) {
 const montserrat = read('css/core/montserrat.css');
 const products = read('js/core/store/estado-productos.js');
 const collections = read('js/pages/collections/estado-colecciones.js');
+const instantColor = read('js/components/color/esquema-color-instantaneo.js');
+const liveColor = read('js/components/color/esquema-color.js');
+const fastReleaseMs = Number(instantColor.match(/RELEASE_TIMEOUT_MS\s*=\s*(\d+)/)?.[1] || Infinity);
+const fastRevealMs = Number(instantColor.match(/FAST_REVEAL_TIMEOUT_MS\s*=\s*(\d+)/)?.[1] || Infinity);
 
 check('Montserrat mantiene swap sin FOIT', /font-display:\s*swap/.test(montserrat) && !/font-display:\s*block/.test(montserrat), 'La fuente volvió a bloquear el texto.');
-check('La primera pintura sigue protegida', read('js/components/color/esquema-color-instantaneo.js').includes('tt-color-scheme-pending') && /visibility:\s*hidden/.test(read('js/components/color/esquema-color-instantaneo.js')), 'El contenido puede aparecer antes del esquema.');
-check('El loader conserva salida de emergencia', /STORE_GATE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/cargador-pagina.js')) && /RELEASE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/components/color/esquema-color-instantaneo.js')), 'El loader puede quedar infinito.');
+check(
+  'La primera pintura es inmediata, estable y segura',
+  instantColor.includes('function isSafeColorValue(value)') &&
+    instantColor.includes("release(usedCachedScheme ? 'cache-first-paint' : 'fallback-first-paint')") &&
+    fastReleaseMs <= 250 &&
+    fastRevealMs <= 250 &&
+    instantColor.includes('tt-fast-navigation.tt-store-gate-pending') &&
+    instantColor.includes('visibility:visible!important') &&
+    liveColor.includes('onSnapshot') &&
+    liveColor.includes("window.dispatchEvent(new CustomEvent('tintin:color-scheme-ready'"),
+  `La primera pintura debe usar caché/fallback validado en <=250 ms y luego hidratar el esquema remoto. release=${fastReleaseMs} ms; reveal=${fastRevealMs} ms.`
+);
+check(
+  'La espera remota de color no vuelve a ocultar toda la página',
+  !instantColor.includes('tt-color-scheme-pending body>*:not(#tt-loader):not(#tt-store-closed-overlay){visibility:hidden!important}') &&
+    !instantColor.includes('tt-color-scheme-pending body>*:not(#tt-loader):not(#tt-store-closed-overlay) { visibility: hidden') &&
+    instantColor.includes('tt-fast-navigation'),
+  'Una lectura de Firestore/App Check volvió a convertirse en bloqueo visual global.'
+);
+check('El loader conserva salida de emergencia', /STORE_GATE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/cargador-pagina.js')) && /RELEASE_TIMEOUT_MS\s*=\s*\d{2,}/.test(instantColor), 'El loader puede quedar infinito.');
 check('Autenticación pública y administrativa siguen activas', read('js/core/store-gate/control-tienda.js').includes('onAuthStateChanged') && read('js/admin/admin-app.js').includes('onAuthStateChanged'), 'La sesión dejó de controlar el acceso.');
 check('Super Admin conserva acceso total', read('js/admin/admin-app.js').includes("currentRole === 'superadmin' || canDo(currentRole, moduleKey, actionKey)"), 'El bypass total se perdió.');
 check('Panel Admin mantiene arranque protegido', read('admin.html').includes('js/admin/admin-app.js') && read('js/admin/admin-app.js').includes("role === 'superadmin' && user.email === SUPER_ADMIN"), 'El panel perdió su gate.');
