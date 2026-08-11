@@ -1,0 +1,57 @@
+name: Normalizar fast-nav version temporal
+
+on:
+  push:
+    branches:
+      - perf/navegacion-inmediata-v2-20260810
+    paths:
+      - '.github/workflows/normalizar-fast-nav-version-temporal.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  normalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: perf/navegacion-inmediata-v2-20260810
+          fetch-depth: 0
+
+      - name: Normalizar consumidores del versionado vigente
+        run: |
+          OLD='tintin-20260809-loader-lifecycle-fix-1'
+          NEW='tintin-20260810-fast-nav-2'
+          for file in \
+            scripts/auditar-fase-8-ui-ux.js \
+            scripts/auditar-fase-10-accessibility.js \
+            scripts/sincronizar-inicio-navegacion-publica.js \
+            js/quality/correccion-auditoria-pagina.js; do
+            sed -i "s/${OLD}/${NEW}/g" "$file"
+          done
+          grep -F "$NEW" scripts/auditar-fase-8-ui-ux.js
+          grep -F "$NEW" scripts/auditar-fase-10-accessibility.js
+          grep -F "const VERSION = '$NEW'" scripts/sincronizar-inicio-navegacion-publica.js
+          grep -F "var VERSION='$NEW'" js/quality/correccion-auditoria-pagina.js
+
+      - name: Ejecutar barrido estático completo
+        run: |
+          npm ci
+          npm run audit:final
+          node scripts/auditar-app-check-arranque.js
+          node scripts/auditar-sitio-confiabilidad.js
+          node --test tests/performance/navegacion-inmediata.test.mjs
+
+      - name: Registrar cache, retirar temporal y regenerar derivados
+        run: |
+          npm run cache-versioning:write
+          rm .github/workflows/normalizar-fast-nav-version-temporal.yml
+          npm run build:pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "perf: normalizar versionado fast-nav en auditorías y runtime"
+          git push origin HEAD:perf/navegacion-inmediata-v2-20260810
