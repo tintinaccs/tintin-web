@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-11T01:09:34.081Z",
-  "sourceFingerprint": "2c3e0bf7d16ad6e6adb11e5b81807c2e9b48a6a29a6bb9fdd630a17f1ac0a550",
+  "generatedAt": "2026-08-11T01:20:18.989Z",
+  "sourceFingerprint": "e9942c6c1cb7942d5829e87366e59394982dc03d2ea610a7f95fe859836e922c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 578,
     "textFiles": 546,
-    "totalBytes": 6136328,
+    "totalBytes": 6138576,
     "pages": 18,
     "modules": 349
   },
@@ -21910,8 +21910,8 @@
     },
     {
       "path": "scripts/auditar-esquema-color.js",
-      "bytes": 9573,
-      "sha256": "8d01502651ad050a0a0545f65317cd04bbbe3562da3a9b7b9f659bee740576ec",
+      "bytes": 10392,
+      "sha256": "f21651abfa665ae90f729b429d364f1e34de195f62cfed9792cfd9e8a233017d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22937,8 +22937,8 @@
     },
     {
       "path": "scripts/auditar-rendimiento-regresiones.js",
-      "bytes": 8228,
-      "sha256": "81a460beea63998329558827af2483dd2d4a1052a771ae2208ac0015a13ac1dd",
+      "bytes": 9490,
+      "sha256": "053e4e5ebf5f0a1a9fa1e23207bc9a3928ca81300ae660b572e398acfa0bdc33",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22948,13 +22948,13 @@
           "raw": "../../email/notificacion-pedido-resend.js",
           "target": null,
           "dynamic": false,
-          "line": 57
+          "line": 80
         },
         {
           "raw": "./nucleo-control-tienda.js",
           "target": "scripts/nucleo-control-tienda.js",
           "dynamic": false,
-          "line": 63
+          "line": 86
         }
       ],
       "endpoints": []
@@ -25045,8 +25045,8 @@
     {
       "path": ".github/workflows/validar-navegacion-inmediata.yml",
       "extension": ".yml",
-      "bytes": 1157,
-      "sha256": "7b0719a295d8678abe2abf86fd9781e272ff8322b0cd63119bc32f64a61e9573"
+      "bytes": 1324,
+      "sha256": "cbaa93e3cb5261be1dc82b89b1d7959f7f470ca14a0299aa4367f57e209884e0"
     },
     {
       "path": ".github/workflows/validar-tienda-unificada-final.yml",
@@ -27619,8 +27619,8 @@
     {
       "path": "scripts/auditar-esquema-color.js",
       "extension": ".js",
-      "bytes": 9573,
-      "sha256": "8d01502651ad050a0a0545f65317cd04bbbe3562da3a9b7b9f659bee740576ec"
+      "bytes": 10392,
+      "sha256": "f21651abfa665ae90f729b429d364f1e34de195f62cfed9792cfd9e8a233017d"
     },
     {
       "path": "scripts/auditar-faq-interaccion-parte-2e.mjs",
@@ -27877,8 +27877,8 @@
     {
       "path": "scripts/auditar-rendimiento-regresiones.js",
       "extension": ".js",
-      "bytes": 8228,
-      "sha256": "81a460beea63998329558827af2483dd2d4a1052a771ae2208ac0015a13ac1dd"
+      "bytes": 9490,
+      "sha256": "053e4e5ebf5f0a1a9fa1e23207bc9a3928ca81300ae660b572e398acfa0bdc33"
     },
     {
       "path": "scripts/auditar-rendimiento-tiempo-real.js",
@@ -32516,12 +32516,12 @@
           },
           {
             "file": "scripts/auditar-rendimiento-regresiones.js",
-            "line": 61,
+            "line": 84,
             "operation": "doc"
           },
           {
             "file": "scripts/auditar-rendimiento-regresiones.js",
-            "line": 63,
+            "line": 86,
             "operation": "doc"
           }
         ]
