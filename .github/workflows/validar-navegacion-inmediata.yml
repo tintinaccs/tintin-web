@@ -7,6 +7,7 @@ on:
     paths:
       - 'js/components/color/esquema-color-instantaneo.js'
       - 'scripts/auditar-rendimiento-tiempo-real.js'
+      - 'scripts/auditar-rendimiento-regresiones.js'
       - 'scripts/cache-version-baseline.json'
       - 'tests/performance/navegacion-inmediata.test.mjs'
       - '*.html'
@@ -30,6 +31,8 @@ jobs:
         run: node --test tests/performance/navegacion-inmediata.test.mjs
       - name: Auditoría de rendimiento existente
         run: node scripts/auditar-rendimiento-tiempo-real.js
+      - name: Tripwire de regresiones de rendimiento
+        run: node scripts/auditar-rendimiento-regresiones.js
       - name: Versionado y manifiesto reproducibles
         run: |
           npm run audit:cache-versioning
