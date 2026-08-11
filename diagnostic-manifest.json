@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-11T15:38:04.538Z",
-  "sourceFingerprint": "028c9a80bd76cf4204ebeed6f189d3eb0f88f24f507f9d72afdd88047b96b4fd",
+  "generatedAt": "2026-08-11T17:16:00.313Z",
+  "sourceFingerprint": "98782bb43efd3fa2b6b89959f290ba71cbe0ced4048598eb63348df016fe7ea9",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 595,
-    "textFiles": 563,
-    "totalBytes": 6323141,
+    "files": 596,
+    "textFiles": 564,
+    "totalBytes": 6325117,
     "pages": 18,
-    "modules": 362
+    "modules": 363
   },
   "viewports": [
     {
@@ -1785,8 +1785,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 165826,
-      "sha256": "718bbd20f76f2e7a1c004d34041d10d2202e64a63034199d37a23a7e0eab95fe",
+      "bytes": 165793,
+      "sha256": "0d80a2f0fb7c20a7b63c5353832eb4a02fcaaa796635ac7c2277d654b89d42bf",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -24985,6 +24985,17 @@
       "endpoints": []
     },
     {
+      "path": "tests/visual-builder/apariencia-preview-abajo.spec.js",
+      "bytes": 2009,
+      "sha256": "af554785a210350f0bf66072d5edb3ee9b977a643707beb2113109f6d97310aa",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/visual-builder/visual-builder-contract.test.mjs",
       "bytes": 2936,
       "sha256": "3b3f4b8969a8e1a57df4bf5ae56f746600003ec25ade7e1e943bf013c77f8578",
@@ -25497,8 +25508,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 165826,
-      "sha256": "718bbd20f76f2e7a1c004d34041d10d2202e64a63034199d37a23a7e0eab95fe"
+      "bytes": 165793,
+      "sha256": "0d80a2f0fb7c20a7b63c5353832eb4a02fcaaa796635ac7c2277d654b89d42bf"
     },
     {
       "path": "apple-touch-icon.png",
@@ -28769,6 +28780,12 @@
       "extension": ".js",
       "bytes": 4588,
       "sha256": "1d5cc640e41eef1b7245900e9669b7f1738551ad45a08ef93451747a1ec640c6"
+    },
+    {
+      "path": "tests/visual-builder/apariencia-preview-abajo.spec.js",
+      "extension": ".js",
+      "bytes": 2009,
+      "sha256": "af554785a210350f0bf66072d5edb3ee9b977a643707beb2113109f6d97310aa"
     },
     {
       "path": "tests/visual-builder/visual-builder-contract.test.mjs",
