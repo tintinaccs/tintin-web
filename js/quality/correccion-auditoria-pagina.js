@@ -130,7 +130,14 @@ function mark(){
  if(document.documentElement.classList.contains('tt-page-audit-ready'))return;
  document.documentElement.classList.add('tt-page-audit-ready');
 }
-function run(){versionLocalCssLinks();cleanHomeSplash();bootWhatsAppOverlapGuard();mark();}
+function run(){
+ // Las URLs versionadas de CSS quedan definidas estáticamente en cada HTML.
+ // Reescribir todos los href al montar el runtime invalida hojas ya aplicadas,
+ // fuerza una segunda carga/reaplicación y puede producir CLS durante el arranque.
+ cleanHomeSplash();
+ bootWhatsAppOverlapGuard();
+ mark();
+}
 function boot(){addStyle();run();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
