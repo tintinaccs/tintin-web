@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-11T01:05:00.625Z",
-  "sourceFingerprint": "a8207d86b93ec0019a5554dc37c924d13f1f1b13235b7783f1aaa368791a976c",
+  "generatedAt": "2026-08-11T01:27:43.202Z",
+  "sourceFingerprint": "c65944919e751dae44c4be036437e51a02598d377a14836dc57676f5d8bd60b9",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 592,
-    "textFiles": 560,
-    "totalBytes": 6301628,
+    "files": 594,
+    "textFiles": 562,
+    "totalBytes": 6311385,
     "pages": 18,
-    "modules": 360
+    "modules": 361
   },
   "viewports": [
     {
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 9116,
-      "sha256": "cab1222a3af3015c42a227d813dde6c1a131321bcee8c6556f7bc942272b1865",
+      "bytes": 9098,
+      "sha256": "7d2afe44d7ae84ba53b5d08e32be6f462850f0e4919b20c23f5387db7b3249f2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -99,12 +99,12 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -316,13 +316,13 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -529,8 +529,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20657,
-      "sha256": "18d63233b831711b48b79d2533a60d18f011b3b0c684bfc1fe0199227ddb1b1e",
+      "bytes": 20639,
+      "sha256": "41fccd15e78190e54eefe97c57c6caa2c191838682ed562fa8e60d45344861b8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -560,12 +560,12 @@
       "ids": 1,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -939,13 +939,13 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -1238,8 +1238,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 36662,
-      "sha256": "c2e34fb82f6909bc04624bb373a3abc7f7af71035264fcc3d233221c642cf9e9",
+      "bytes": 36650,
+      "sha256": "5c1772bb5e3791b9c3c5863ae2324432996e15099ba2e926a97be333d629e5e1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1269,7 +1269,7 @@
       "ids": 17,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -1376,7 +1376,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -1785,8 +1785,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 165771,
-      "sha256": "1ea6d5e238324fec9816d524d1c1bdc2dceea6267c5c699b81b37eb944d91660",
+      "bytes": 165759,
+      "sha256": "e99ef8dd1668dbba2009761dc888eb80cd87632e77e7d5f49c7ffbe03c529111",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1810,7 +1810,7 @@
       "ids": 497,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -2032,7 +2032,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -6845,8 +6845,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14011,
-      "sha256": "6ccbb3a088a58dd18200648198a324060a8d0d2bc1a6e0a78189ff1fc8124fc3",
+      "bytes": 13993,
+      "sha256": "f1e8de1b160927b47b1fa98c6e347a613355f5a3e243998ea6e2fa96e200f559",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -6870,12 +6870,12 @@
       "ids": 1,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -7211,13 +7211,13 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -7472,8 +7472,8 @@
         "guest",
         "client"
       ],
-      "bytes": 52141,
-      "sha256": "044825b5f254fe46439faabff47e59c482997f633235f7cca68c8c61fcba6b7b",
+      "bytes": 52123,
+      "sha256": "05f567291f8960964c589423b7f9ce97d6cbaaca64b34e3896ab7f14dcbf5837",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7509,12 +7509,12 @@
       "ids": 17,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -7820,13 +7820,13 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -8195,8 +8195,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 90240,
-      "sha256": "78e3db8e10d060d65349fb194304dfea5a243d6f9adf33b33251e42dafedbadd",
+      "bytes": 90222,
+      "sha256": "0be1cea6c4be506237208b2bbdc7a7a53c97cdae3af85511e639d814b39d424a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8226,12 +8226,12 @@
       "ids": 73,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -8388,13 +8388,13 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -8887,8 +8887,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15869,
-      "sha256": "7b77286e525c8a709811cfa5760cb196b151a897f5681dd71da95ea6e5661eaf",
+      "bytes": 15851,
+      "sha256": "f8687d331ff02e599a4ce34675c02cb70b4f5aaea17c25b71078f1112cc5b461",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8918,12 +8918,12 @@
       "ids": 8,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -9259,13 +9259,13 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -9526,8 +9526,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18685,
-      "sha256": "93b28581e85342282c965fa79196550f2ae834aaf5480d7ff81a1f221aec2f5b",
+      "bytes": 18667,
+      "sha256": "c48382b47529006bc6447607f83def338dd038cb3fa612afeaf28c5333d1a9ed",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9557,12 +9557,12 @@
       "ids": 8,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -9898,13 +9898,13 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -10195,8 +10195,8 @@
         "guest",
         "client"
       ],
-      "bytes": 17356,
-      "sha256": "d988fb2884506f9c402826235253e7d628e6facc5ec53958de48a0c61c3b77a8",
+      "bytes": 17338,
+      "sha256": "896c5bbcd7334c2670e3f5b7f7cac5306bb478aa883a57e50399ee7a6286381c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10226,12 +10226,12 @@
       "ids": 3,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -10567,13 +10567,13 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -10828,8 +10828,8 @@
         "guest",
         "client"
       ],
-      "bytes": 44157,
-      "sha256": "b7d43a3ca24a8bd42aeca247408d72727feba39d99b2c41d145ece8c15ec22a4",
+      "bytes": 44139,
+      "sha256": "3da007967cc3afe7985ecd8cd7e46c3958cb7fe1d871a835e58a2aaa919b0cc1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10871,12 +10871,12 @@
       "ids": 13,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -11571,13 +11571,13 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -12112,8 +12112,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 48013,
-      "sha256": "f03732c94c307a79f47ddc22e6d362773a7881f6ee8daf0e73d767e64c7f07d9",
+      "bytes": 47995,
+      "sha256": "22c096e62f0fc9892e6d0ad7144b272c2146b182e3278be64525caab7a40d571",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12143,12 +12143,12 @@
       "ids": 46,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -12300,13 +12300,13 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -12698,8 +12698,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1747,
-      "sha256": "ef58a376927c2df2498953e356fa7b23131505ac33818a428f18f61aa34cdf30",
+      "bytes": 1735,
+      "sha256": "ab2e61171b70de2cd2e92a425c6f97991ce34210048fc917fa2bf79a5933c9fd",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12716,7 +12716,7 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 22
         }
@@ -12758,7 +12758,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 22,
           "exists": true
@@ -12818,8 +12818,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 31059,
-      "sha256": "0af049998fa7c2cdeaf73450b7c259e8292e01e6852ba40d2e9f8a3b4d50b667",
+      "bytes": 31041,
+      "sha256": "7ade8feedf2a73422df96e4896741ed60476c75029fd3e727c01fec7438e4bf5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12849,12 +12849,12 @@
       "ids": 28,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -13036,13 +13036,13 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -13343,8 +13343,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15860,
-      "sha256": "a5655533c9dd4d8ee38a349e46bc3c1987375de5ca9e36a8a09185a5e9afb80c",
+      "bytes": 15842,
+      "sha256": "8254ffc705606fecb6f620d320804ab00215df3de96f4c9e045206c1ba0945fb",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13368,12 +13368,12 @@
       "ids": 1,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -13709,13 +13709,13 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -13970,8 +13970,8 @@
         "guest",
         "client"
       ],
-      "bytes": 17660,
-      "sha256": "81d1abbd093061480cdd8a876f12f054f1f6a5a1e3769d3ec999e2e4a8b7f6cf",
+      "bytes": 17642,
+      "sha256": "5389e3d73508256c7fc23fb25bee6e53b490d9f37c546af5a6f8b193af69faeb",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13995,12 +13995,12 @@
       "ids": 2,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -14361,13 +14361,13 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -14633,8 +14633,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20414,
-      "sha256": "948cddb6ffd736f541c00760d2ed92f1581f4b74126ba6dbd5d71ae706b0cd6e",
+      "bytes": 20396,
+      "sha256": "a4903bc4592752948ffb427448ae45d4e28a5e408c95dfd90fa599647e26ee3a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14658,12 +14658,12 @@
       "ids": 53,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -15009,13 +15009,13 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -15472,8 +15472,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15528,
-      "sha256": "efb0e43fe6ebecc5d5f0058fc20508b8ce159b5d7506de16a689882ffe063edb",
+      "bytes": 15510,
+      "sha256": "a382742c53a76afa8f69ef9e45080404aebac2e68fd6b12d1420a3fe249e8904",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15490,12 +15490,12 @@
       "ids": 1,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -15866,13 +15866,13 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1",
+          "raw": "js/cargador-pagina.js?v=tintin-20260810-fast-nav-2",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -18135,8 +18135,8 @@
     },
     {
       "path": "js/cargador-pagina.js",
-      "bytes": 38281,
-      "sha256": "e7ec1c9b34c369061afa499dec44a7a8c3205f64e51ea43a2970aa8824289ada",
+      "bytes": 38254,
+      "sha256": "8fa77cd97d214abc24a8700fe6721fcb668794e1798a85578480d00d6b480e2f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18264,8 +18264,8 @@
     },
     {
       "path": "js/components/color/esquema-color-instantaneo.js",
-      "bytes": 9318,
-      "sha256": "647b205c96bc866811b64962ca92a83c6e69024b488f3f7aa8b22a9f6863481e",
+      "bytes": 12283,
+      "sha256": "fcab3746d5d6fe6cb302a8b13ae2b8ade81acc2dc3b32b2364782e193eb56024",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22196,8 +22196,8 @@
     },
     {
       "path": "scripts/auditar-esquema-color.js",
-      "bytes": 9573,
-      "sha256": "8d01502651ad050a0a0545f65317cd04bbbe3562da3a9b7b9f659bee740576ec",
+      "bytes": 10392,
+      "sha256": "f21651abfa665ae90f729b429d364f1e34de195f62cfed9792cfd9e8a233017d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23223,8 +23223,8 @@
     },
     {
       "path": "scripts/auditar-rendimiento-regresiones.js",
-      "bytes": 8228,
-      "sha256": "81a460beea63998329558827af2483dd2d4a1052a771ae2208ac0015a13ac1dd",
+      "bytes": 9490,
+      "sha256": "053e4e5ebf5f0a1a9fa1e23207bc9a3928ca81300ae660b572e398acfa0bdc33",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23234,21 +23234,21 @@
           "raw": "../../email/notificacion-pedido-resend.js",
           "target": null,
           "dynamic": false,
-          "line": 57
+          "line": 80
         },
         {
           "raw": "./nucleo-control-tienda.js",
           "target": "scripts/nucleo-control-tienda.js",
           "dynamic": false,
-          "line": 63
+          "line": 86
         }
       ],
       "endpoints": []
     },
     {
       "path": "scripts/auditar-rendimiento-tiempo-real.js",
-      "bytes": 8421,
-      "sha256": "919108ee184b721918b7900f5b98c037b59c3af9a7f1d2f0fe56f7df35e24d83",
+      "bytes": 9953,
+      "sha256": "9da8b889ccb049fc21ea0ab1d5538a5f3981db2519cfa1f19dd5c20bb3841121",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23257,7 +23257,7 @@
       "endpoints": [
         {
           "url": "https://res.cloudinary.com/",
-          "line": 144
+          "line": 175
         }
       ]
     },
@@ -24752,6 +24752,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/performance/navegacion-inmediata.test.mjs",
+      "bytes": 2206,
+      "sha256": "612adbd896becdd0f664662e7d2fc6bf44c5e3371116c24d16b4929497c76ad4",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/performance/offline-recovery.spec.js",
       "bytes": 2169,
       "sha256": "dd49381acf5a6948909c66aad4cfb6b320f4d7aab4c3123154975f12947eaf76",
@@ -25406,6 +25436,12 @@
       "sha256": "e53c79a10f017ffad616ffbf3cf012e698de96cd380c01b121ca12b74fccac1b"
     },
     {
+      "path": ".github/workflows/validar-navegacion-inmediata.yml",
+      "extension": ".yml",
+      "bytes": 1324,
+      "sha256": "cbaa93e3cb5261be1dc82b89b1d7959f7f470ca14a0299aa4367f57e209884e0"
+    },
+    {
       "path": ".github/workflows/validar-tienda-unificada-final.yml",
       "extension": ".yml",
       "bytes": 2472,
@@ -25414,8 +25450,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 9116,
-      "sha256": "cab1222a3af3015c42a227d813dde6c1a131321bcee8c6556f7bc942272b1865"
+      "bytes": 9098,
+      "sha256": "7d2afe44d7ae84ba53b5d08e32be6f462850f0e4919b20c23f5387db7b3249f2"
     },
     {
       "path": "AGENTS.md",
@@ -25438,20 +25474,20 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 20657,
-      "sha256": "18d63233b831711b48b79d2533a60d18f011b3b0c684bfc1fe0199227ddb1b1e"
+      "bytes": 20639,
+      "sha256": "41fccd15e78190e54eefe97c57c6caa2c191838682ed562fa8e60d45344861b8"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 36662,
-      "sha256": "c2e34fb82f6909bc04624bb373a3abc7f7af71035264fcc3d233221c642cf9e9"
+      "bytes": 36650,
+      "sha256": "5c1772bb5e3791b9c3c5863ae2324432996e15099ba2e926a97be333d629e5e1"
     },
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 165771,
-      "sha256": "1ea6d5e238324fec9816d524d1c1bdc2dceea6267c5c699b81b37eb944d91660"
+      "bytes": 165759,
+      "sha256": "e99ef8dd1668dbba2009761dc888eb80cd87632e77e7d5f49c7ffbe03c529111"
     },
     {
       "path": "apple-touch-icon.png",
@@ -25642,20 +25678,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 14011,
-      "sha256": "6ccbb3a088a58dd18200648198a324060a8d0d2bc1a6e0a78189ff1fc8124fc3"
+      "bytes": 13993,
+      "sha256": "f1e8de1b160927b47b1fa98c6e347a613355f5a3e243998ea6e2fa96e200f559"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 52141,
-      "sha256": "044825b5f254fe46439faabff47e59c482997f633235f7cca68c8c61fcba6b7b"
+      "bytes": 52123,
+      "sha256": "05f567291f8960964c589423b7f9ce97d6cbaaca64b34e3896ab7f14dcbf5837"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 90240,
-      "sha256": "78e3db8e10d060d65349fb194304dfea5a243d6f9adf33b33251e42dafedbadd"
+      "bytes": 90222,
+      "sha256": "0be1cea6c4be506237208b2bbdc7a7a53c97cdae3af85511e639d814b39d424a"
     },
     {
       "path": "cloudflare/ai-builder-core.js",
@@ -25708,8 +25744,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 15869,
-      "sha256": "7b77286e525c8a709811cfa5760cb196b151a897f5681dd71da95ea6e5661eaf"
+      "bytes": 15851,
+      "sha256": "f8687d331ff02e599a4ce34675c02cb70b4f5aaea17c25b71078f1112cc5b461"
     },
     {
       "path": "configuracion-cloudinary.md",
@@ -25720,8 +25756,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 18685,
-      "sha256": "93b28581e85342282c965fa79196550f2ae834aaf5480d7ff81a1f221aec2f5b"
+      "bytes": 18667,
+      "sha256": "c48382b47529006bc6447607f83def338dd038cb3fa612afeaf28c5333d1a9ed"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -26272,8 +26308,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 17356,
-      "sha256": "d988fb2884506f9c402826235253e7d628e6facc5ec53958de48a0c61c3b77a8"
+      "bytes": 17338,
+      "sha256": "896c5bbcd7334c2670e3f5b7f7cac5306bb478aa883a57e50399ee7a6286381c"
     },
     {
       "path": "favicon-16x16.png",
@@ -26530,8 +26566,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 44157,
-      "sha256": "b7d43a3ca24a8bd42aeca247408d72727feba39d99b2c41d145ece8c15ec22a4"
+      "bytes": 44139,
+      "sha256": "3da007967cc3afe7985ecd8cd7e46c3958cb7fe1d871a835e58a2aaa919b0cc1"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -26710,8 +26746,8 @@
     {
       "path": "js/cargador-pagina.js",
       "extension": ".js",
-      "bytes": 38281,
-      "sha256": "e7ec1c9b34c369061afa499dec44a7a8c3205f64e51ea43a2970aa8824289ada"
+      "bytes": 38254,
+      "sha256": "8fa77cd97d214abc24a8700fe6721fcb668794e1798a85578480d00d6b480e2f"
     },
     {
       "path": "js/components/cart/politica-persistencia-carrito.js",
@@ -26740,8 +26776,8 @@
     {
       "path": "js/components/color/esquema-color-instantaneo.js",
       "extension": ".js",
-      "bytes": 9318,
-      "sha256": "647b205c96bc866811b64962ca92a83c6e69024b488f3f7aa8b22a9f6863481e"
+      "bytes": 12283,
+      "sha256": "fcab3746d5d6fe6cb302a8b13ae2b8ade81acc2dc3b32b2364782e193eb56024"
     },
     {
       "path": "js/components/color/esquema-color.js",
@@ -27574,8 +27610,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 48013,
-      "sha256": "f03732c94c307a79f47ddc22e6d362773a7881f6ee8daf0e73d767e64c7f07d9"
+      "bytes": 47995,
+      "sha256": "22c096e62f0fc9892e6d0ad7144b272c2146b182e3278be64525caab7a40d571"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -27760,8 +27796,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1747,
-      "sha256": "ef58a376927c2df2498953e356fa7b23131505ac33818a428f18f61aa34cdf30"
+      "bytes": 1735,
+      "sha256": "ab2e61171b70de2cd2e92a425c6f97991ce34210048fc917fa2bf79a5933c9fd"
     },
     {
       "path": "package-lock.json",
@@ -27778,8 +27814,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 31059,
-      "sha256": "0af049998fa7c2cdeaf73450b7c259e8292e01e6852ba40d2e9f8a3b4d50b667"
+      "bytes": 31041,
+      "sha256": "7ade8feedf2a73422df96e4896741ed60476c75029fd3e727c01fec7438e4bf5"
     },
     {
       "path": "playwright.config.js",
@@ -27790,20 +27826,20 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 15860,
-      "sha256": "a5655533c9dd4d8ee38a349e46bc3c1987375de5ca9e36a8a09185a5e9afb80c"
+      "bytes": 15842,
+      "sha256": "8254ffc705606fecb6f620d320804ab00215df3de96f4c9e045206c1ba0945fb"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 17660,
-      "sha256": "81d1abbd093061480cdd8a876f12f054f1f6a5a1e3769d3ec999e2e4a8b7f6cf"
+      "bytes": 17642,
+      "sha256": "5389e3d73508256c7fc23fb25bee6e53b490d9f37c546af5a6f8b193af69faeb"
     },
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 20414,
-      "sha256": "948cddb6ffd736f541c00760d2ed92f1581f4b74126ba6dbd5d71ae706b0cd6e"
+      "bytes": 20396,
+      "sha256": "a4903bc4592752948ffb427448ae45d4e28a5e408c95dfd90fa599647e26ee3a"
     },
     {
       "path": "robots.txt",
@@ -28054,8 +28090,8 @@
     {
       "path": "scripts/auditar-esquema-color.js",
       "extension": ".js",
-      "bytes": 9573,
-      "sha256": "8d01502651ad050a0a0545f65317cd04bbbe3562da3a9b7b9f659bee740576ec"
+      "bytes": 10392,
+      "sha256": "f21651abfa665ae90f729b429d364f1e34de195f62cfed9792cfd9e8a233017d"
     },
     {
       "path": "scripts/auditar-faq-interaccion-parte-2e.mjs",
@@ -28312,14 +28348,14 @@
     {
       "path": "scripts/auditar-rendimiento-regresiones.js",
       "extension": ".js",
-      "bytes": 8228,
-      "sha256": "81a460beea63998329558827af2483dd2d4a1052a771ae2208ac0015a13ac1dd"
+      "bytes": 9490,
+      "sha256": "053e4e5ebf5f0a1a9fa1e23207bc9a3928ca81300ae660b572e398acfa0bdc33"
     },
     {
       "path": "scripts/auditar-rendimiento-tiempo-real.js",
       "extension": ".js",
-      "bytes": 8421,
-      "sha256": "919108ee184b721918b7900f5b98c037b59c3af9a7f1d2f0fe56f7df35e24d83"
+      "bytes": 9953,
+      "sha256": "9da8b889ccb049fc21ea0ab1d5538a5f3981db2519cfa1f19dd5c20bb3841121"
     },
     {
       "path": "scripts/auditar-responsive-navegacion.mjs",
@@ -28408,8 +28444,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 27391,
-      "sha256": "da77a690409b4587d0e4a84178786d0e3f26c9fe72407fa215492611a35ae026"
+      "bytes": 27373,
+      "sha256": "984dc1c24aa5ec1735cb9faf9799d6fa3b13de66feb73a4f6983ee8676edbcc0"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -28540,8 +28576,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 15528,
-      "sha256": "efb0e43fe6ebecc5d5f0058fc20508b8ce159b5d7506de16a689882ffe063edb"
+      "bytes": 15510,
+      "sha256": "a382742c53a76afa8f69ef9e45080404aebac2e68fd6b12d1420a3fe249e8904"
     },
     {
       "path": "tests/ai-builder/ai-builder-contract.test.mjs",
@@ -28656,6 +28692,12 @@
       "extension": ".js",
       "bytes": 1874,
       "sha256": "9fce8f980069379398f6513a97302d7112b5aa7bfdbb1b60fa204e870e4af796"
+    },
+    {
+      "path": "tests/performance/navegacion-inmediata.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2206,
+      "sha256": "612adbd896becdd0f664662e7d2fc6bf44c5e3371116c24d16b4929497c76ad4"
     },
     {
       "path": "tests/performance/offline-recovery.spec.js",
@@ -30072,7 +30114,7 @@
     },
     {
       "file": "js/components/color/esquema-color-instantaneo.js",
-      "line": 73,
+      "line": 166,
       "raw": "/checkout.html",
       "target": "checkout.html",
       "exists": true
@@ -33162,12 +33204,12 @@
           },
           {
             "file": "scripts/auditar-rendimiento-regresiones.js",
-            "line": 61,
+            "line": 84,
             "operation": "doc"
           },
           {
             "file": "scripts/auditar-rendimiento-regresiones.js",
-            "line": 63,
+            "line": 86,
             "operation": "doc"
           }
         ]

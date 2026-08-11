@@ -117,17 +117,27 @@ check('El runtime público escucha Firestore en tiempo real', globalRuntime.incl
 check('El runtime administrativo escucha Firestore en tiempo real', adminRuntime.includes('onSnapshot') && adminRuntime.includes("doc(db, 'colorSchemes'"));
 check('Los cambios publicados se aplican como variables CSS reales', globalRuntime.includes('root.style.setProperty') && adminRuntime.includes('root.style.setProperty'));
 check('El runtime conserva caché para evitar parpadeos', globalRuntime.includes('localStorage.setItem') && adminRuntime.includes('localStorage.setItem'));
-check('La primera pintura bloquea el contenido hasta resolver el esquema definitivo', [
+
+const instantReleaseMs = Number(instantRuntime.match(/RELEASE_TIMEOUT_MS\s*=\s*(\d+)/)?.[1] || Infinity);
+const instantRevealMs = Number(instantRuntime.match(/FAST_REVEAL_TIMEOUT_MS\s*=\s*(\d+)/)?.[1] || Infinity);
+check('La primera pintura usa caché o respaldo seguro sin esperar el esquema remoto', [
   'tt-color-scheme-pending',
   'tt-first-paint-style',
-  'html.tt-color-scheme-pending #tt-loader',
-  'RELEASE_TIMEOUT_MS',
-].every(fragment => instantRuntime.includes(fragment)));
-check('El runtime libera la primera pintura al aplicar o fallar la lectura', [
+  'function isSafeColorValue(value)',
+  "release(usedCachedScheme ? 'cache-first-paint' : 'fallback-first-paint')",
+  'tt-fast-navigation.tt-store-gate-pending',
+  'visibility:visible!important',
+].every(fragment => instantRuntime.includes(fragment)) && instantReleaseMs <= 250 && instantRevealMs <= 250,
+`release=${instantReleaseMs} ms; reveal=${instantRevealMs} ms`);
+check('El esquema definitivo sigue hidratándose después en tiempo real', [
   'function markColorSchemeReady',
   "markColorSchemeReady('firestore')",
   "markColorSchemeReady('scheme-read-error')",
+  'onSnapshot',
 ].every(fragment => globalRuntime.includes(fragment)));
+check('La espera remota del esquema no vuelve a ocultar todo el contenido',
+  !instantRuntime.includes('tt-color-scheme-pending body>*:not(#tt-loader):not(#tt-store-closed-overlay){visibility:hidden!important}') &&
+  !instantRuntime.includes('tt-color-scheme-pending body>*:not(#tt-loader):not(#tt-store-closed-overlay) { visibility: hidden'));
 
 const htmlFiles = fs.readdirSync(ROOT).filter(file => file.endsWith('.html'));
 const publicPages = htmlFiles.filter(file => !['admin.html', 'admin-images.html', 'nosotros.html'].includes(file));
