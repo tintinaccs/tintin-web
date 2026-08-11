@@ -17,7 +17,7 @@ const pkg = JSON.parse(read('package.json'));
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 
 check('La Fase 10 se inicia desde el runtime compartido', /accesibilidad-global\.js/.test(loader) && /TintinPhase10ImportStarted/.test(loader), 'Debe cargarse una sola vez en todas las páginas que usan page-loader.');
-check('Todas las páginas usan la versión de caché de Fase 10', htmlFiles.every(file => !read(file).includes('js/cargador-pagina.js') || read(file).includes('js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1')), 'No debe quedar una página con el loader anterior.');
+check('Todas las páginas usan la versión de caché de Fase 10', htmlFiles.every(file => !read(file).includes('js/cargador-pagina.js') || read(file).includes('js/cargador-pagina.js?v=tintin-20260810-fast-nav-2')), 'No debe quedar una página con el loader anterior.');
 check('Existe enlace para saltar al contenido', /ensureSkipLink/.test(runtime) && /Saltar al contenido principal/.test(runtime) && /tt-skip-link/.test(css), 'La navegación por teclado debe poder evitar cabeceras repetidas.');
 check(
   'Los controles personalizados funcionan con teclado',

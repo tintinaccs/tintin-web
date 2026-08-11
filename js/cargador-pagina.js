@@ -83,8 +83,8 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260809-loader-lifecycle-fix-1';
-  const MIN_SHOW_MS = 900;
+  const TT_CACHE_VERSION = 'tintin-20260810-fast-nav-2';
+  const MIN_SHOW_MS = 120;
   // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
   // emergencia "No pudimos comprobar el estado de la tienda" en un equipo
   // donde el propio loader ya llevaba ~6s arriba antes de que este tope se
@@ -541,9 +541,9 @@
     if (hidden) return;
     if (storeGateRequired && !gateResolved) return;
     const enough = Date.now() - START >= MIN_SHOW_MS;
-    if (!enough || !logoReady) {
+    if (!enough) {
       const wait = Math.max(0, MIN_SHOW_MS - (Date.now() - START));
-      window.setTimeout(tryHideElegant, Math.max(wait, 140));
+      window.setTimeout(tryHideElegant, Math.max(wait, 32));
       return;
     }
     loader.dataset.state = 'ready';

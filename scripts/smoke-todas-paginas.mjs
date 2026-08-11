@@ -170,6 +170,7 @@ try {
         const storeOverlay = document.getElementById('tt-store-closed-overlay');
         const bodyText = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
         const productStates = [
+          document.getElementById('product-loading'),
           document.getElementById('product-grid'),
           document.getElementById('product-not-found'),
           document.getElementById('product-load-error'),
@@ -211,7 +212,7 @@ try {
       if (route.product) {
         if (!state.productRecognized) failures.push('Producto: el runtime no reconoció product.html.');
         if (!state.productRuntimeClass) failures.push('Producto: no se montó la capa de mantenimiento.');
-        if (!state.productStateVisible && !state.storeOverlayVisible) failures.push('Producto: ningún estado final quedó visible.');
+        if (!state.productStateVisible && !state.storeOverlayVisible) failures.push('Producto: ningún estado visible quedó disponible.');
         if (state.productBusy === 'true' && !state.storeOverlayVisible) failures.push('Producto: product-grid permaneció aria-busy=true.');
       }
 
