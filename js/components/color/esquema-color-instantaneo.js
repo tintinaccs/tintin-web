@@ -2,10 +2,10 @@
  * TINTIN — Primera pintura estable del esquema global.
  *
  * Este script clásico se ejecuta de forma síncrona antes de las hojas CSS y
- * del loader. Aplica la última caché conocida, pero mantiene el contenido
- * cubierto por el loader hasta que js/components/color/esquema-color.js confirma el esquema
- * publicado en Firestore. Así nunca queda visible el salto entre un fondo
- * anterior/cacheado y el fondo definitivo de la página.
+ * del loader. Aplica la última caché conocida de color (o el respaldo estable)
+ * y libera la interfaz sin esperar a Firestore. El esquema publicado sigue
+ * sincronizándose después en vivo, pero una lectura remota lenta nunca vuelve
+ * a bloquear una navegación, un redirect o el inicio de sesión.
  */
 (function () {
   'use strict';
@@ -13,8 +13,10 @@
   var root = document.documentElement;
   var CACHE_KEY = 'tt_color_scheme_global';
   var FALLBACK_PAGE_BG = '#FFF6FA';
-  var RELEASE_TIMEOUT_MS = 6500;
+  var RELEASE_TIMEOUT_MS = 180;
+  var FAST_REVEAL_TIMEOUT_MS = 220;
   var released = false;
+  var initialLoaderReleased = false;
   var scriptUrl = document.currentScript && document.currentScript.src;
 
   // Mismo enforcement que js/components/color/esquema-color.js: en la primera pintura solo se
@@ -66,6 +68,111 @@
     } catch (error) {
       /* CustomEvent no disponible: la clase CSS ya liberó la página. */
     }
+  }
+
+  function releaseInitialLoader() {
+    if (initialLoaderReleased) return true;
+    if (!document.body || document.body.childElementCount < 1) return false;
+
+    if (window.TintinLoader && typeof window.TintinLoader.hide === 'function') {
+      initialLoaderReleased = true;
+      window.TintinLoader.hide();
+    } else {
+      var loader = document.getElementById('tt-loader');
+      if (!loader) return false;
+      initialLoaderReleased = true;
+      loader.dataset.state = 'out';
+      loader.classList.add('tt-out');
+      loader.style.pointerEvents = 'none';
+      loader.style.visibility = 'hidden';
+      loader.style.opacity = '0';
+      loader.style.display = 'none';
+    }
+
+    root.classList.remove('tt-initializing', 'tt-parity-guard');
+    root.classList.add('tt-ui-ready', 'tt-parity-safe');
+    return true;
+  }
+
+  // El loader continúa existiendo para operaciones reales (por ejemplo, una
+  // autenticación en curso), pero la instancia inicial de una página no puede
+  // convertirse en una espera artificial. Se libera apenas existe contenido
+  // renderizable. Este flujo es one-shot: un TintinLoader.show() posterior no
+  // será ocultado por este acelerador.
+  function scheduleFastInitialReveal() {
+    var deadline = Date.now() + FAST_REVEAL_TIMEOUT_MS;
+
+    function tick() {
+      if (releaseInitialLoader()) return;
+      if (Date.now() < deadline || !document.body) {
+        window.requestAnimationFrame(tick);
+        return;
+      }
+      // Último intento sin ampliar el tiempo de espera. Si todavía no existe el
+      // loader, el HTML sigue visible por las reglas de tt-fast-navigation.
+      releaseInitialLoader();
+    }
+
+    window.requestAnimationFrame(tick);
+  }
+
+  function installNavigationPrefetch() {
+    if (window.__TintinNavigationPrefetchInstalled) return;
+    window.__TintinNavigationPrefetchInstalled = true;
+
+    var prefetched = Object.create(null);
+    var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+
+    function shouldAvoidPrefetch() {
+      if (!connection) return false;
+      if (connection.saveData) return true;
+      return /(^|-)2g$/.test(String(connection.effectiveType || ''));
+    }
+
+    function prefetchAnchor(anchor) {
+      if (!anchor || shouldAvoidPrefetch()) return;
+      if (anchor.hasAttribute('download')) return;
+      if (anchor.target && anchor.target !== '_self') return;
+
+      var raw = anchor.getAttribute('href') || '';
+      if (!raw || raw.charAt(0) === '#') return;
+      if (/^(?:mailto:|tel:|javascript:|data:)/i.test(raw)) return;
+
+      var url;
+      try {
+        url = new URL(anchor.href, window.location.href);
+      } catch (error) {
+        return;
+      }
+
+      if (url.origin !== window.location.origin) return;
+      if (!/^https?:$/.test(url.protocol)) return;
+
+      var current = new URL(window.location.href);
+      current.hash = '';
+      var target = new URL(url.href);
+      target.hash = '';
+      if (target.href === current.href || prefetched[target.href]) return;
+
+      prefetched[target.href] = true;
+      var link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = target.href;
+      link.setAttribute('fetchpriority', 'low');
+      document.head.appendChild(link);
+    }
+
+    function warmFromEvent(event) {
+      var target = event.target;
+      var anchor = target && target.closest ? target.closest('a[href]') : null;
+      if (anchor) prefetchAnchor(anchor);
+    }
+
+    // Desktop: el recurso empieza a bajar cuando el puntero demuestra intención.
+    // Móvil: touchstart gana el intervalo entre apoyar el dedo y finalizar tap.
+    document.addEventListener('pointerover', warmFromEvent, { capture: true, passive: true });
+    document.addEventListener('touchstart', warmFromEvent, { capture: true, passive: true });
+    document.addEventListener('focusin', warmFromEvent, true);
   }
 
   function installCheckoutNameGuard() {
@@ -215,15 +322,18 @@
     }
   }
 
-  root.classList.add('tt-first-paint-bg', 'tt-color-scheme-pending');
+  root.classList.add('tt-first-paint-bg', 'tt-color-scheme-pending', 'tt-fast-navigation');
   installCheckoutNameGuard();
+  installNavigationPrefetch();
 
+  var usedCachedScheme = false;
   try {
     var raw = localStorage.getItem(CACHE_KEY);
     if (raw) {
       var data = JSON.parse(raw);
       if (data && typeof data.tokens === 'object') {
         applyMap(data.tokens);
+        usedCachedScheme = true;
         if (data.deviceOverrideEnabled && data.deviceOverrides) {
           applyMap(data.deviceOverrides[currentBreakpoint()]);
         }
@@ -238,7 +348,7 @@
     .trim();
   if (!cachedPageBackground) cachedPageBackground = FALLBACK_PAGE_BG;
   root.style.setProperty('--tt-first-paint-bg', cachedPageBackground);
-  root.style.backgroundColor = FALLBACK_PAGE_BG;
+  root.style.backgroundColor = cachedPageBackground;
 
   if (!document.getElementById('tt-first-paint-style')) {
     var style = document.createElement('style');
@@ -246,9 +356,13 @@
     style.textContent = [
       'html.tt-first-paint-bg,html.tt-first-paint-bg body{background:var(--color-background-page,var(--tt-first-paint-bg,#FFF6FA))!important;background-color:var(--color-background-page,var(--tt-first-paint-bg,#FFF6FA))!important}',
       'html.tt-first-paint-bg,html.tt-first-paint-bg body{transition:none!important}',
-      'html.tt-color-scheme-pending,html.tt-color-scheme-pending body,html.tt-color-scheme-pending.tt-store-gate-pending,html.tt-color-scheme-pending.tt-store-gate-blocked{background:#FFF6FA!important;background-color:#FFF6FA!important}',
-      'html.tt-color-scheme-pending body>*:not(#tt-loader):not(#tt-store-closed-overlay){visibility:hidden!important}',
-      'html.tt-color-scheme-pending #tt-loader,html.tt-color-scheme-pending #tt-loader.tt-out{display:flex!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;background:#FFF6FA!important;background-color:#FFF6FA!important}'
+      // Mientras el store gate todavía consulta Firebase, la tienda es de solo
+      // lectura pero NO queda tapada. Si después llega estado closed, la clase
+      // cambia a tt-store-gate-blocked y el overlay de cierre conserva el
+      // bloqueo fuerte de siempre.
+      'html.tt-fast-navigation.tt-store-gate-pending body>*:not(#tt-loader):not(#tt-store-closed-overlay){visibility:visible!important;pointer-events:auto!important;user-select:auto!important}',
+      'html.tt-fast-navigation.tt-store-gate-pending body{overflow:auto!important;overscroll-behavior:auto!important}',
+      'html.tt-fast-navigation.tt-store-gate-pending{background:var(--color-background-page,var(--tt-first-paint-bg,#FFF6FA))!important}'
     ].join('');
     document.head.appendChild(style);
   }
@@ -258,7 +372,17 @@
     fallbackBackground: FALLBACK_PAGE_BG
   };
 
+  // La caché local ya contiene exactamente las variables que el esquema remoto
+  // publicó en la navegación anterior. Si no existe, el fallback de diseño es
+  // seguro y el listener remoto corregirá después. Ninguno de los dos casos
+  // justifica tapar la página esperando red.
+  release(usedCachedScheme ? 'cache-first-paint' : 'fallback-first-paint');
+  scheduleFastInitialReveal();
+
+  // Respaldo extremadamente corto para navegadores que suspenden rAF durante
+  // el parse inicial. No reintroduce una espera: solo garantiza la liberación.
   window.setTimeout(function () {
     release('safety-timeout');
+    releaseInitialLoader();
   }, RELEASE_TIMEOUT_MS);
 })();
