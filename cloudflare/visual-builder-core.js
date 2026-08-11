@@ -5,47 +5,47 @@ import {
   mergeContent,
   sanitizeSection,
 } from '../js/core/store/esquema-contenido.js';
+import {
+  VISUAL_BLOCK_TYPES,
+  VISUAL_STYLE_OPTIONS,
+} from '../js/core/store/contratos-visual-builder.js';
+
+export { VISUAL_BLOCK_TYPES, VISUAL_STYLE_OPTIONS };
 
 export const VISUAL_BUILDER_LIMITS = Object.freeze({
-  bodyBytes: 128_000,
-  maxCustomBlocks: 24,
+  bodyBytes: 256_000,
+  maxCustomBlocks: 40,
   maxHistory: 100,
   maxText: 4000,
-  maxImages: 8,
-  maxFaqItems: 8,
+  maxImages: 12,
+  maxFaqItems: 16,
+  maxFeatureItems: 12,
 });
 
-export const VISUAL_BLOCK_TYPES = Object.freeze([
-  'banner', 'text', 'products', 'gallery', 'promotion', 'button', 'section', 'collections',
-  'testimonial', 'video', 'faq', 'columns', 'divider',
-]);
-
-// Ancla especial: un bloque con esta ubicación se inserta antes de la
-// primera sección de la página en vez de después de una sección existente.
 export const VISUAL_TOP_ANCHOR = '__top__';
-
-export const VISUAL_STYLE_OPTIONS = Object.freeze({
-  spacing: ['compact', 'normal', 'roomy'],
-  width: ['contained', 'wide', 'full'],
-  align: ['left', 'center', 'right'],
-  radius: ['none', 'small', 'medium', 'large'],
-  shadow: ['none', 'soft', 'medium', 'large'],
-  animation: ['none', 'fade', 'slide-up', 'slide-down', 'slide-left', 'slide-right', 'scale', 'pop'],
-});
+export const VISUAL_DEVICES = Object.freeze(['desktop', 'tablet', 'mobile']);
 
 const SAFE_PAGE_IDS = new Set(CONTENT_PAGE_IDS);
-const SAFE_HREF = /^(?:index|about|nosotros|catalogo|collections|contact|envios|preguntas-frecuentes|cambios-devoluciones)\.html(?:[?#][A-Za-z0-9_=&%.-]*)?$/i;
+const SAFE_HREF = /^(?:index|about|nosotros|catalogo|collections|product|checkout|login|perfil|contact|envios|preguntas-frecuentes|cambios-devoluciones|terminos|privacidad)\.html(?:[?#][A-Za-z0-9_=&%.-]*)?$/i;
 const SAFE_ASSET = /^assets-tintin\/[A-Za-z0-9_./-]+$/;
-// Embeds de video: solo se acepta un puñado de orígenes de confianza (nunca
-// una URL arbitraria) para que el iframe nunca pueda apuntar a un sitio
-// ajeno — la misma lógica de "lista blanca, nunca lista negra" que ya usa
-// safeVisualHref/safeVisualImage.
 const SAFE_YOUTUBE_EMBED = /^https:\/\/www\.youtube(?:-nocookie)?\.com\/embed\/[A-Za-z0-9_-]{6,20}(?:\?[A-Za-z0-9_=&.-]*)?$/i;
 const SAFE_VIMEO_EMBED = /^https:\/\/player\.vimeo\.com\/video\/\d{4,12}(?:\?[A-Za-z0-9_=&.-]*)?$/i;
 const SAFE_CLOUDINARY_VIDEO = /^https:\/\/res\.cloudinary\.com\/[A-Za-z0-9_./,%~-]+\/video\/upload\/[A-Za-z0-9_./,%~-]+$/i;
 
 function text(value, max = VISUAL_BUILDER_LIMITS.maxText) {
   return String(value ?? '').replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max);
+}
+
+function option(group, value, fallback) {
+  return VISUAL_STYLE_OPTIONS[group].includes(value) ? value : fallback;
+}
+
+function safeIsoDate(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  const date = new Date(raw);
+  if (!Number.isFinite(date.getTime())) return '';
+  return date.toISOString();
 }
 
 export function requireVisualPageId(value) {
@@ -59,11 +59,11 @@ export function safeVisualColor(value) {
   return /^#[0-9a-f]{6}$/i.test(color) ? color.toLowerCase() : '';
 }
 
-export function safeVisualHref(value) {
+export function safeVisualHref(value, fallback = 'catalogo.html') {
   const href = String(value || '').trim();
   if (SAFE_HREF.test(href)) return href;
   if (/^https:\/\/[A-Za-z0-9.-]+(?::\d+)?(?:\/[A-Za-z0-9_~:/?#\[\]@!$&'()*+,;=%.-]*)?$/i.test(href)) return href;
-  return 'catalogo.html';
+  return fallback;
 }
 
 export function safeVisualImage(value) {
@@ -79,8 +79,15 @@ export function safeVisualVideoUrl(value) {
   return '';
 }
 
-function option(group, value, fallback) {
-  return VISUAL_STYLE_OPTIONS[group].includes(value) ? value : fallback;
+function sanitizeResponsiveOverride(raw = {}) {
+  return {
+    visibility: option('visibility', raw.visibility, 'inherit'),
+    spacing: raw.spacing === 'inherit' ? 'inherit' : option('spacing', raw.spacing, 'inherit'),
+    width: raw.width === 'inherit' ? 'inherit' : option('width', raw.width, 'inherit'),
+    align: raw.align === 'inherit' ? 'inherit' : option('align', raw.align, 'inherit'),
+    columns: option('columns', String(raw.columns ?? 'inherit'), 'inherit'),
+    imageFit: raw.imageFit === 'inherit' ? 'inherit' : option('imageFit', raw.imageFit, 'inherit'),
+  };
 }
 
 export function sanitizeVisualStyle(raw = {}) {
@@ -94,7 +101,17 @@ export function sanitizeVisualStyle(raw = {}) {
     radius: option('radius', raw.radius, 'none'),
     shadow: option('shadow', raw.shadow, 'none'),
     animation: option('animation', raw.animation, 'none'),
+    variant: option('variant', raw.variant, 'default'),
+    imageFit: option('imageFit', raw.imageFit, 'cover'),
+    responsive: Object.fromEntries(VISUAL_DEVICES.map(device => [device, sanitizeResponsiveOverride(raw?.responsive?.[device])])),
   };
+}
+
+function sanitizeBlockItems(raw, max = VISUAL_BUILDER_LIMITS.maxFeatureItems) {
+  return (Array.isArray(raw) ? raw : [])
+    .slice(0, max)
+    .map(item => ({ q: text(item?.q || item?.title || '', 180), a: text(item?.a || item?.text || '', 1200) }))
+    .filter(item => item.q || item.a);
 }
 
 function sanitizeBlock(raw, index, pageSchema) {
@@ -105,6 +122,7 @@ function sanitizeBlock(raw, index, pageSchema) {
   const block = {
     id,
     type,
+    label: text(raw?.label || '', 80),
     afterSection: validAnchor ? raw.afterSection : (sectionIds[0] || VISUAL_TOP_ANCHOR),
     eyebrow: text(raw?.eyebrow || 'TINTÍN', 80),
     title: text(raw?.title || 'Nueva sección', 180),
@@ -113,11 +131,15 @@ function sanitizeBlock(raw, index, pageSchema) {
     href: safeVisualHref(raw?.href),
     image: safeVisualImage(raw?.image),
     imageAlt: text(raw?.imageAlt || '', 140),
-    count: Math.max(1, Math.min(8, Number(raw?.count) || 4)),
+    count: Math.max(1, Math.min(12, Number(raw?.count) || 4)),
     category: text(raw?.category || '', 120),
     videoUrl: safeVisualVideoUrl(raw?.videoUrl),
     imageSide: raw?.imageSide === 'right' ? 'right' : 'left',
     style: sanitizeVisualStyle(raw?.style),
+    endAt: safeIsoDate(raw?.endAt),
+    expiredText: text(raw?.expiredText || 'Finalizado', 120),
+    marqueeSpeed: ['slow', 'normal', 'fast'].includes(raw?.marqueeSpeed) ? raw.marqueeSpeed : 'normal',
+    spacerSize: ['small', 'medium', 'large', 'xlarge'].includes(raw?.spacerSize) ? raw.spacerSize : 'medium',
   };
   if (type === 'gallery') {
     block.images = (Array.isArray(raw?.images) ? raw.images : [])
@@ -125,12 +147,8 @@ function sanitizeBlock(raw, index, pageSchema) {
       .map(item => ({ src: safeVisualImage(item?.src), alt: text(item?.alt || '', 140) }))
       .filter(item => item.src);
   }
-  if (type === 'faq') {
-    block.items = (Array.isArray(raw?.items) ? raw.items : [])
-      .slice(0, VISUAL_BUILDER_LIMITS.maxFaqItems)
-      .map(item => ({ q: text(item?.q || '', 180), a: text(item?.a || '', 1200) }))
-      .filter(item => item.q && item.a);
-  }
+  if (type === 'faq') block.items = sanitizeBlockItems(raw?.items, VISUAL_BUILDER_LIMITS.maxFaqItems).filter(item => item.q && item.a);
+  if (type === 'features') block.items = sanitizeBlockItems(raw?.items, VISUAL_BUILDER_LIMITS.maxFeatureItems);
   return block;
 }
 
@@ -138,12 +156,6 @@ function reorderableSectionIds(pageSchema) {
   return Object.entries(pageSchema.sections || {}).filter(([, schema]) => !schema.global).map(([id]) => id);
 }
 
-// Nunca confía en el orden que manda el cliente a ciegas: descarta ids
-// inventados/duplicados y, si falta alguna sección real de la página, la
-// agrega al final — así una sección nunca puede "desaparecer" del sitio por
-// un sectionOrder incompleto o corrupto. Las secciones "global" (el pie de
-// página compartido por todo el sitio) nunca entran acá: siempre quedan
-// ancladas al final, reordenarlas rompería la consistencia entre páginas.
 function sanitizeSectionOrder(raw, pageSchema) {
   const reorderable = reorderableSectionIds(pageSchema);
   const seen = new Set();

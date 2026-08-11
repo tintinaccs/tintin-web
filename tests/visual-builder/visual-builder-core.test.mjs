@@ -14,14 +14,22 @@ test('solo admite páginas registradas', () => {
 test('sanea estilos y nunca conserva CSS arbitrario', () => {
   const clean = sanitizeVisualConfig('index', { sections: { hero: {
     background: 'url(https://evil.test)', textColor: '#AABBCC', accentColor: '#fff;display:none',
-    spacing: '999px', width: 'expression(alert(1))', align: 'justify', animation: 'spin',
+    spacing: '999px', width: 'expression(alert(1))', align: 'justify', animation: 'spin', variant: '<style>',
+    responsive: { mobile: { visibility: 'hide', columns: '2', spacing: 'roomy' }, tablet: { visibility: 'javascript:1', columns: '999' } },
   } } });
   assert.equal(clean.sections.hero.background, '');
   assert.equal(clean.sections.hero.textColor, '#aabbcc');
   assert.equal(clean.sections.hero.accentColor, '');
-  assert.deepEqual({ spacing: clean.sections.hero.spacing, width: clean.sections.hero.width, align: clean.sections.hero.align, animation: clean.sections.hero.animation }, {
-    spacing: 'normal', width: 'contained', align: 'center', animation: 'none',
+  assert.deepEqual({ spacing: clean.sections.hero.spacing, width: clean.sections.hero.width, align: clean.sections.hero.align, animation: clean.sections.hero.animation, variant: clean.sections.hero.variant }, {
+    spacing: 'normal', width: 'contained', align: 'center', animation: 'none', variant: 'default',
   });
+  assert.deepEqual(clean.sections.hero.responsive.mobile, {
+    visibility: 'hide', spacing: 'roomy', width: 'inherit', align: 'inherit', columns: '2', imageFit: 'inherit',
+  });
+  assert.equal(clean.sections.hero.responsive.tablet.visibility, 'inherit');
+  assert.equal(clean.sections.hero.responsive.tablet.columns, 'inherit');
+  assert.equal(clean.sections.hero.css, undefined);
+  assert.equal(clean.sections.hero.style, undefined);
 });
 
 test('bloques están limitados, deduplicados y conectados a secciones reales', () => {
@@ -36,7 +44,7 @@ test('bloques están limitados, deduplicados y conectados a secciones reales', (
   assert.equal(blocks[0].href, 'catalogo.html');
   assert.equal(blocks[0].image, '');
   assert.equal(blocks.filter(item => item.id === 'duplicado').length, 1);
-  assert.equal(blocks.at(-1).count, 8);
+  assert.equal(blocks.at(-1).count, 12);
 });
 
 test('imágenes y enlaces usan listas permitidas', () => {
@@ -65,25 +73,48 @@ test('los embeds de video solo admiten YouTube, Vimeo o Cloudinary', () => {
   assert.equal(safeVisualVideoUrl('data:text/html,<script>alert(1)</script>'), '');
 });
 
-test('un bloque nuevo admite tipos ampliados y el ancla especial de "arriba de todo"', () => {
+test('bloques creativos nuevos permanecen dentro de listas blancas', () => {
   const clean = sanitizeVisualConfig('index', { customBlocks: [
     { id: 'faq-1', type: 'faq', afterSection: VISUAL_TOP_ANCHOR, items: [{ q: 'A', a: 'B' }, { q: '', a: 'sin pregunta' }] },
     { id: 'video-1', type: 'video', afterSection: 'not-a-real-section', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
     { id: 'columns-1', type: 'columns', imageSide: 'weird-value' },
+    { id: 'features-1', type: 'features', items: [{ title: 'Envíos', text: 'A todo el país' }, { q: '<b>Seguro</b>', a: 'Sin HTML ejecutable' }] },
+    { id: 'countdown-1', type: 'countdown', endAt: 'not-a-date', expiredText: '<script>x</script>' },
+    { id: 'marquee-1', type: 'marquee', marqueeSpeed: 'turbo' },
+    { id: 'spacer-1', type: 'spacer', spacerSize: 'giant' },
   ] });
   assert.equal(clean.customBlocks[0].afterSection, VISUAL_TOP_ANCHOR);
   assert.deepEqual(clean.customBlocks[0].items, [{ q: 'A', a: 'B' }]);
   assert.equal(clean.customBlocks[1].afterSection, 'hero');
   assert.equal(clean.customBlocks[1].videoUrl, 'https://www.youtube.com/embed/dQw4w9WgXcQ');
   assert.equal(clean.customBlocks[2].imageSide, 'left');
+  assert.deepEqual(clean.customBlocks[3].items[0], { q: 'Envíos', a: 'A todo el país' });
+  assert.equal(clean.customBlocks[4].endAt, '');
+  assert.equal(clean.customBlocks[5].marqueeSpeed, 'normal');
+  assert.equal(clean.customBlocks[6].spacerSize, 'medium');
+});
+
+test('variantes de layout válidas sobreviven y las inválidas vuelven al default', () => {
+  const clean = sanitizeVisualConfig('index', { customBlocks: [
+    { id: 'gallery-1', type: 'gallery', style: { variant: 'mosaic', imageFit: 'contain', radius: 'pill', shadow: 'floating', animation: 'reveal' } },
+    { id: 'gallery-2', type: 'gallery', style: { variant: 'url(evil)', imageFit: 'expression()', radius: '100vw' } },
+  ] });
+  assert.deepEqual({
+    variant: clean.customBlocks[0].style.variant,
+    imageFit: clean.customBlocks[0].style.imageFit,
+    radius: clean.customBlocks[0].style.radius,
+    shadow: clean.customBlocks[0].style.shadow,
+    animation: clean.customBlocks[0].style.animation,
+  }, { variant: 'mosaic', imageFit: 'contain', radius: 'pill', shadow: 'floating', animation: 'reveal' });
+  assert.equal(clean.customBlocks[1].style.variant, 'default');
+  assert.equal(clean.customBlocks[1].style.imageFit, 'cover');
+  assert.equal(clean.customBlocks[1].style.radius, 'none');
 });
 
 test('el orden de secciones se sanea: solo ids reales, sin duplicados, nunca pierde una sección, y el pie de página nunca se reordena', () => {
   const clean = sanitizeVisualConfig('index', { sectionOrder: ['reviews', 'reviews', 'not-a-real-section', 'hero', 'footer'] });
-  // "reviews" duplicado se queda con la primera aparición; "not-a-real-section" y "footer" se descartan de la lista reordenable.
   assert.deepEqual(clean.sectionOrder.slice(0, 2), ['reviews', 'hero']);
-  // Las secciones que faltaban en el pedido (trust, editorial_bag, etc.) se agregan al final, nunca desaparecen.
-  assert.equal(clean.sectionOrder.length, Object.keys(clean.sections).length - 1); // -1 porque "footer" es global y no entra acá
+  assert.equal(clean.sectionOrder.length, Object.keys(clean.sections).length - 1);
   assert.ok(!clean.sectionOrder.includes('footer'));
   assert.ok(new Set(clean.sectionOrder).size === clean.sectionOrder.length);
 

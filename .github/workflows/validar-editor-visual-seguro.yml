@@ -10,11 +10,18 @@ on:
     paths:
       - admin.html
       - css/admin/**
-      - js/admin/visual-builder-admin.js
+      - css/components/editor-visual-runtime.css
+      - css/components/visual-studio-global-runtime.css
+      - js/admin/appearance/**
       - js/core/store/editor-visual-**
+      - js/core/store/visual-studio-**
       - js/visual-builder-bootstrap.js
+      - js/inicio-navegacion-publica.js
+      - js/components/navigation/entrada-navegacion-publica.js
       - cloudflare/visual-builder-core.js
+      - cloudflare/visual-studio-global-core.js
       - functions/api/visual-builder*.js
+      - functions/api/visual-studio-global*.js
       - firestore.rules
       - tests/visual-builder/**
       - package.json
@@ -58,6 +65,7 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm run test:visual-builder-ui
+      - run: npx playwright test tests/visual-builder/visual-studio-v2-runtime.spec.js --project=chromium
       - run: npm run test:ai-builder-ui
       - run: npm run test:phase10-a11y
       - run: npm run test:performance

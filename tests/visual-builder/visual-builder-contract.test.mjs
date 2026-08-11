@@ -9,6 +9,14 @@ const runtime = read('js/core/store/editor-visual-runtime.js');
 const content = read('js/core/store/contenido-sitio.js');
 const admin = read('js/admin/appearance/editor-visual-admin.js');
 const rules = read('firestore.rules');
+const coreServer = read('cloudflare/visual-builder-core.js');
+
+test('whitelist de tipos de bloque y opciones de estilo tiene una única fuente compartida', () => {
+  assert.ok(coreServer.includes('contratos-visual-builder.js'), 'el servidor debe importar el contrato compartido');
+  assert.ok(runtime.includes('contratos-visual-builder.js'), 'el runtime debe importar el contrato compartido');
+  assert.doesNotMatch(coreServer, /VISUAL_BLOCK_TYPES = Object\.freeze\(\[\s*\n\s*'banner'/);
+  assert.doesNotMatch(runtime, /BLOCK_TYPES = new Set\(\[\s*\n\s*'banner'/);
+});
 
 test('backend exige Super Admin, origen y tope de body', () => {
   assert.match(api, /originIsAllowed/); assert.match(api, /requireSuperAdmin/); assert.match(api, /VISUAL_BUILDER_LIMITS\.bodyBytes/);

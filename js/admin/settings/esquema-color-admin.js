@@ -66,3 +66,10 @@ onSnapshot(
     subscribeToScheme(DEFAULT_SCHEME_ID);
   }
 );
+
+// El Centro de campañas pertenece al constructor Apariencia de admin.html.
+// admin-images.html comparte este motor de colores, pero no debe cargar ese
+// editor ni dejar observadores esperando una interfaz que allí no existe.
+if (document.getElementById('visual-editor')) {
+  import('../appearance/visual-studio-global-admin.js?v=tintin-20260810-global-studio-4');
+}

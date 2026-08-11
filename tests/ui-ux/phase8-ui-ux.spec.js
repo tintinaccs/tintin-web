@@ -10,6 +10,17 @@ function isExpectedExternalBrowserWarning(text) {
 
 test.describe('Fase 8 — UI/UX global', () => {
   test.beforeEach(async ({ page }) => {
+    // La Fase 12 sirve el árbol de la PR con un servidor HTTP estático. La API
+    // global existe en Cloudflare/producción, por lo que acá la simulamos con
+    // una configuración publicada vacía para que la prueba mida UI/UX y no la
+    // ausencia esperada de Functions en python -m http.server.
+    await page.route('**/api/visual-studio-global-public', async route => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json; charset=utf-8',
+        body: JSON.stringify({ config: { campaigns: [], popups: [] } }),
+      });
+    });
     await page.addInitScript(() => {
       window.TT_DISABLE_STORE_GATE = true;
     });

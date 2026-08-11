@@ -20,7 +20,7 @@ const endMarker = '# CSP_ROUTE_POLICIES_END';
 // repetirlo acá.
 const globalPolicy = "object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests";
 const scriptOrigins = "https://*.gstatic.com https://*.google.com https://unpkg.com https://www.googletagmanager.com";
-const connectOrigins = "https://*.googleapis.com https://*.google.com https://*.gstatic.com https://unpkg.com https://*.googleusercontent.com https://res.cloudinary.com https://api.imgbb.com https://*.google-analytics.com https://*.analytics.google.com";
+const connectOrigins = "https://*.googleapis.com https://*.google.com https://*.gstatic.com https://unpkg.com https://*.googleusercontent.com https://res.cloudinary.com https://api.cloudinary.com https://api.imgbb.com https://*.google-analytics.com https://*.analytics.google.com";
 // El editor visual (Apariencia) previsualiza estas páginas dentro de un
 // <iframe> en admin.html — mismo origen, sesión de Super Admin ya validada.
 // frame-ancestors 'none' se lo bloqueaba también a sí mismo: el navegador no
@@ -31,6 +31,7 @@ const connectOrigins = "https://*.googleapis.com https://*.google.com https://*.
 const VISUAL_BUILDER_PREVIEWABLE_PAGES = new Set([
   'index.html', 'about.html', 'catalogo.html', 'collections.html',
   'contact.html', 'envios.html', 'preguntas-frecuentes.html', 'cambios-devoluciones.html',
+  'product.html', 'terminos.html', 'privacidad.html', '404.html',
 ]);
 
 function inlineHashes(file) {
@@ -53,7 +54,7 @@ function pagePolicy(file) {
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
     `connect-src 'self' ${connectOrigins}`,
-    "frame-src 'self' https://tintinaccesorios.pages.dev https://*.google.com https://*.gstatic.com",
+    "frame-src 'self' https://tintinaccesorios.pages.dev https://*.google.com https://*.gstatic.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",

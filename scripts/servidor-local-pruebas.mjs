@@ -28,6 +28,11 @@ const server = http.createServer((request, response) => {
     response.end('{"ok":true,"config":null,"version":0}');
     return;
   }
+  if (url.pathname === '/api/visual-studio-global-public') {
+    response.writeHead(200, { 'cache-control': 'no-store', 'content-type': 'application/json; charset=utf-8' });
+    response.end('{"ok":true,"version":0,"config":{"popups":[],"campaigns":[]}}');
+    return;
+  }
   const requested = url.pathname === '/' ? '/index.html' : decodeURIComponent(url.pathname);
   const file = path.resolve(root, `.${requested}`);
   if (file !== root && !file.startsWith(`${root}${path.sep}`)) {
