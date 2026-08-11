@@ -60,6 +60,13 @@ function mountPublicShell() {
   if (mountPromise) return mountPromise;
 
   document.body.classList.add('tt-public-shell-mounting');
+  // El header/nav real se inserta en el DOM de forma asíncrona (fetch de
+  // assets + registro de paneles). Si el loader de página ya se ocultó
+  // antes de que esto termine, el contenido bajo el header se corre
+  // visiblemente en cuanto se inserta — layout shift real, no solo teórico.
+  // beginWait/endWait bloquean el ocultamiento del loader únicamente
+  // mientras esta tarea puntual sigue en curso, sin agregar demora fija.
+  window.TintinLoader?.beginWait?.();
   mountPromise = ensureNavigationAssets().then(async () => {
     if (document.body.classList.contains('tt-public-shell-mounted')) return;
 
@@ -83,6 +90,7 @@ function mountPublicShell() {
     throw error;
   }).finally(() => {
     document.body?.classList.remove('tt-public-shell-mounting');
+    window.TintinLoader?.endWait?.();
   });
 
   return mountPromise;

@@ -157,6 +157,20 @@ try {
         return !visible(loader);
       }, null, { timeout: 15_000 }).catch(() => {});
 
+      if (route.product) {
+        // mantenimiento-producto.js llega vía import() dinámico, disparado
+        // por cargador-mantenimiento-pagina.js según el pathname — es una
+        // cadena async separada del cierre del loader. Con MIN_SHOW_MS bajo,
+        // el loader ya puede estar oculto antes de que termine; se espera la
+        // señal real (con timeout) en vez de sumar una demora fija que
+        // penalizaría también al camino feliz.
+        await page.waitForFunction(
+          () => window.TintinProductPageRecognized === true,
+          null,
+          { timeout: 8_000 }
+        ).catch(() => {});
+      }
+
       await page.waitForTimeout(350);
 
       const state = await page.evaluate(() => {
