@@ -5,20 +5,16 @@ on:
     branches:
       - main
     paths:
+      # `npm run audit:final` y `npm run build:pages` inspeccionan superficies
+      # amplias del repositorio. La PR debe cubrir el mismo alcance que push para
+      # regenerar diagnostic-manifest.json antes del merge y no descubrir el
+      # desfase recién en main.
       - 'catalogo.html'
+      - 'admin.html'
       - 'tienda.js'
-      - 'js/core/store/estado-productos.js'
-      - 'js/pages/catalog/politica-visibilidad-catalogo.js'
-      - 'js/cargador-mantenimiento-pagina.js'
-      - 'js/admin/admin-app.js'
-      - 'js/components/cart/sincronizacion-carrito.js'
-      - 'js/quality/calidad-interfaz.js'
-      - 'js/orders/pedido-checkout-seguro.js'
+      - 'js/**'
       - 'functions/api/sheets-product-sync.js'
-      - 'scripts/apply-phase7-*.mjs'
-      - 'scripts/auditar-fase-7-catalogo.js'
-      - 'scripts/auditar-carrito-fase-7.js'
-      - 'scripts/auditar-sitio-confiabilidad.js'
+      - 'scripts/**'
       - 'package.json'
       - 'diagnostic-manifest.json'
       - '.github/workflows/auditar-carrito-fase-7.yml'

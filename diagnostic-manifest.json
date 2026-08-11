@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-10T15:52:47.727Z",
-  "sourceFingerprint": "fcf443a0fe51dabfc5405f6fd1391624fb43f867206f2ee2c6818967645527c8",
+  "generatedAt": "2026-08-11T00:15:09.076Z",
+  "sourceFingerprint": "6c02c44f7aba317d565e3a1e5e4e60f753c43c9dcdd62b1ca9392d398acbe0e9",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 572,
-    "textFiles": 540,
-    "totalBytes": 6027093,
+    "files": 576,
+    "textFiles": 544,
+    "totalBytes": 6126748,
     "pages": 18,
-    "modules": 345
+    "modules": 348
   },
   "viewports": [
     {
@@ -1774,8 +1774,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 165543,
-      "sha256": "6a1f5596df781f41a0c4c12efe16cb654bac25875765c430dff146aa6ecc3be1",
+      "bytes": 165649,
+      "sha256": "39795c160a19b0438b3a35678ba5a95b3b6e1b03a539d0f7d6c4c542c5282512",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1814,24 +1814,29 @@
           "line": 1945
         },
         {
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260810-shopify-core-1",
+          "target": "js/admin/shopify-commerce-admin.js",
+          "line": 1946
+        },
+        {
           "raw": "js/admin/ai-builder-admin.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/admin/ai-builder-admin.js",
-          "line": 1946
+          "line": 1947
         },
         {
           "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260810-section-reorder-1",
           "target": "js/admin/appearance/editor-visual-admin.js",
-          "line": 1947
+          "line": 1948
         },
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 2144
+          "line": 2145
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260726-session-guard-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 2145
+          "line": 2146
         }
       ],
       "styles": [
@@ -2029,27 +2034,33 @@
           "exists": true
         },
         {
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260810-shopify-core-1",
+          "target": "js/admin/shopify-commerce-admin.js",
+          "line": 1946,
+          "exists": true
+        },
+        {
           "raw": "js/admin/ai-builder-admin.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/admin/ai-builder-admin.js",
-          "line": 1946,
+          "line": 1947,
           "exists": true
         },
         {
           "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260810-section-reorder-1",
           "target": "js/admin/appearance/editor-visual-admin.js",
-          "line": 1947,
+          "line": 1948,
           "exists": true
         },
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 2144,
+          "line": 2145,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260726-session-guard-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 2145,
+          "line": 2146,
           "exists": true
         },
         {
@@ -2266,31 +2277,31 @@
           "id": "unsaved-modal",
           "role": "dialog",
           "classes": "",
-          "line": 1953
+          "line": 1954
         },
         {
           "id": "order-edit-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 1969
+          "line": 1970
         },
         {
           "id": "tpl-edit-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2071
+          "line": 2072
         },
         {
           "id": "tpl-preview-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2117
+          "line": 2118
         },
         {
           "id": "promo-confirm-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2130
+          "line": 2131
         }
       ],
       "tabs": [
@@ -5162,7 +5173,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1959
+          "line": 1960
         },
         {
           "id": "unsaved-modal-discard",
@@ -5177,7 +5188,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1960
+          "line": 1961
         },
         {
           "id": "unsaved-modal-stay",
@@ -5192,7 +5203,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1961
+          "line": 1962
         },
         {
           "id": "",
@@ -5206,7 +5217,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 1973
+          "line": 1974
         },
         {
           "id": "",
@@ -5220,7 +5231,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2062
+          "line": 2063
         },
         {
           "id": "oe-save-btn",
@@ -5235,7 +5246,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2063
+          "line": 2064
         },
         {
           "id": "",
@@ -5249,7 +5260,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 2075
+          "line": 2076
         },
         {
           "id": "tpl-edit-restore-btn",
@@ -5265,7 +5276,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2106
+          "line": 2107
         },
         {
           "id": "tpl-edit-preview-btn",
@@ -5281,7 +5292,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2107
+          "line": 2108
         },
         {
           "id": "",
@@ -5295,7 +5306,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2110
+          "line": 2111
         },
         {
           "id": "tpl-edit-save-btn",
@@ -5310,7 +5321,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2111
+          "line": 2112
         },
         {
           "id": "",
@@ -5324,7 +5335,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 2121
+          "line": 2122
         },
         {
           "id": "",
@@ -5338,7 +5349,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2138
+          "line": 2139
         },
         {
           "id": "promo-confirm-send-btn",
@@ -5353,7 +5364,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2139
+          "line": 2140
         }
       ],
       "controls": [
@@ -6569,7 +6580,7 @@
           "name": "",
           "type": "hidden",
           "ariaLabel": "",
-          "line": 1976,
+          "line": 1977,
           "labeled": true
         },
         {
@@ -6578,7 +6589,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1980,
+          "line": 1981,
           "labeled": true
         },
         {
@@ -6587,7 +6598,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1984,
+          "line": 1985,
           "labeled": true
         },
         {
@@ -6596,7 +6607,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 1988,
+          "line": 1989,
           "labeled": true
         },
         {
@@ -6605,7 +6616,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1993,
+          "line": 1994,
           "labeled": true
         },
         {
@@ -6614,7 +6625,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1997,
+          "line": 1998,
           "labeled": true
         },
         {
@@ -6623,7 +6634,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2005,
+          "line": 2006,
           "labeled": true
         },
         {
@@ -6632,7 +6643,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2009,
+          "line": 2010,
           "labeled": true
         },
         {
@@ -6641,7 +6652,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2018,
+          "line": 2019,
           "labeled": true
         },
         {
@@ -6650,7 +6661,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2025,
+          "line": 2026,
           "labeled": true
         },
         {
@@ -6659,7 +6670,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2035,
+          "line": 2036,
           "labeled": true
         },
         {
@@ -6668,7 +6679,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2048,
+          "line": 2049,
           "labeled": true
         },
         {
@@ -6677,7 +6688,7 @@
           "name": "",
           "type": "hidden",
           "ariaLabel": "",
-          "line": 2078,
+          "line": 2079,
           "labeled": true
         },
         {
@@ -6686,7 +6697,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2081,
+          "line": 2082,
           "labeled": true
         },
         {
@@ -6695,7 +6706,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2083,
+          "line": 2084,
           "labeled": true
         },
         {
@@ -6704,7 +6715,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2084,
+          "line": 2085,
           "labeled": true
         },
         {
@@ -6713,7 +6724,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2085,
+          "line": 2086,
           "labeled": true
         },
         {
@@ -6722,7 +6733,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2086,
+          "line": 2087,
           "labeled": true
         },
         {
@@ -6731,7 +6742,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2087,
+          "line": 2088,
           "labeled": true
         },
         {
@@ -6740,7 +6751,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2088,
+          "line": 2089,
           "labeled": true
         },
         {
@@ -6749,7 +6760,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2090,
+          "line": 2091,
           "labeled": true
         },
         {
@@ -6758,7 +6769,7 @@
           "name": "",
           "type": "url",
           "ariaLabel": "",
-          "line": 2091,
+          "line": 2092,
           "labeled": true
         },
         {
@@ -6767,7 +6778,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2093,
+          "line": 2094,
           "labeled": true
         },
         {
@@ -6776,7 +6787,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2094,
+          "line": 2095,
           "labeled": true
         },
         {
@@ -6785,7 +6796,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 2096,
+          "line": 2097,
           "labeled": true
         },
         {
@@ -6794,7 +6805,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2136,
+          "line": 2137,
           "labeled": true
         }
       ]
@@ -17643,6 +17654,73 @@
       ]
     },
     {
+      "path": "js/admin/shopify-commerce-admin.js",
+      "bytes": 63640,
+      "sha256": "6c442e090314a94c9ac16a7c42ab596fa2f110df137865173ecd5834123d3067",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/core/firebase/firebase.js",
+          "dynamic": false,
+          "line": 14
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
+          "target": null,
+          "dynamic": false,
+          "line": 15
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 19
+        },
+        {
+          "raw": "../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/core/auth/roles.js",
+          "dynamic": false,
+          "line": 20
+        },
+        {
+          "raw": "../core/auth/permisos-roles.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/core/auth/permisos-roles.js",
+          "dynamic": false,
+          "line": 21
+        },
+        {
+          "raw": "../pages/collections/estado-colecciones.js?v=tintin-20260726-browser-fallback-1",
+          "target": "js/pages/collections/estado-colecciones.js",
+          "dynamic": false,
+          "line": 22
+        },
+        {
+          "raw": "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/components/images/utilidades-imagenes.js",
+          "dynamic": false,
+          "line": 23
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
+          "line": 15
+        },
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
+          "line": 19
+        },
+        {
+          "url": "https://wa.me/$%7Bnormalized%7D",
+          "line": 881
+        }
+      ]
+    },
+    {
       "path": "js/admin/users/gestion-usuarios-admin.js",
       "bytes": 19604,
       "sha256": "350befb15550d66bc4ff81a9a29f1df5a86fbf476a31c555c8973f0655a329c8",
@@ -20983,6 +21061,17 @@
           "line": 198
         }
       ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/auditar-admin-commerce-shopify.js",
+      "bytes": 3150,
+      "sha256": "feafcab085ed68e34dfcb9815de190bfd2a88bcb7dcf4b8236285e82bc1f0c18",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
       "endpoints": []
     },
     {
@@ -24433,6 +24522,74 @@
       ]
     },
     {
+      "path": "tests/ui-ux/admin-commerce-shopify.spec.js",
+      "bytes": 12764,
+      "sha256": "7e24072810ca0d88142fd047713a35c76ddda6f61d53d535b6ca12e500713b9f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://img.test/reloj.webp",
+          "line": 20
+        },
+        {
+          "url": "https://img.test/pulsera.webp",
+          "line": 21
+        },
+        {
+          "url": "https://img.test/relojes.webp",
+          "line": 25
+        },
+        {
+          "url": "http://tintin.test/admin-commerce-fixture",
+          "line": 94
+        },
+        {
+          "url": "http://tintin.test/js/admin/shopify-commerce-admin.js*",
+          "line": 95
+        },
+        {
+          "url": "http://tintin.test/css/admin/shopify-commerce-admin.css*",
+          "line": 96
+        },
+        {
+          "url": "http://tintin.test/js/core/firebase/firebase.js*",
+          "line": 97
+        },
+        {
+          "url": "http://tintin.test/js/core/auth/roles.js*",
+          "line": 98
+        },
+        {
+          "url": "http://tintin.test/js/core/auth/permisos-roles.js*",
+          "line": 99
+        },
+        {
+          "url": "http://tintin.test/js/pages/collections/estado-colecciones.js*",
+          "line": 100
+        },
+        {
+          "url": "http://tintin.test/js/components/images/utilidades-imagenes.js*",
+          "line": 101
+        },
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
+          "line": 102
+        },
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
+          "line": 103
+        },
+        {
+          "url": "https://img.test/**",
+          "line": 104
+        }
+      ]
+    },
+    {
       "path": "tests/ui-ux/phase10-accessibility.spec.js",
       "bytes": 5393,
       "sha256": "9690abbbf78bed951519b826f7878dc3f88e352e9b75baabc50bb93f611dd188",
@@ -24690,8 +24847,8 @@
     {
       "path": ".github/workflows/auditar-carrito-fase-7.yml",
       "extension": ".yml",
-      "bytes": 4214,
-      "sha256": "216266ebac99a185bbd214baf036763ca109df1384bf23d601259a8a4cbde028"
+      "bytes": 4044,
+      "sha256": "94d19af9658e0f6b8f50d9e1c31599ae5e3b7788613c9aab967591ad190a5073"
     },
     {
       "path": ".github/workflows/auditar-colecciones-fase-4.yml",
@@ -24900,8 +25057,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 165543,
-      "sha256": "6a1f5596df781f41a0c4c12efe16cb654bac25875765c430dff146aa6ecc3be1"
+      "bytes": 165649,
+      "sha256": "39795c160a19b0438b3a35678ba5a95b3b6e1b03a539d0f7d6c4c542c5282512"
     },
     {
       "path": "apple-touch-icon.png",
@@ -25190,6 +25347,12 @@
       "extension": ".css",
       "bytes": 5288,
       "sha256": "ff667d1c34d3ae4f9f1182099ece518ee9fca692443f7df435177eb4bfa53c45"
+    },
+    {
+      "path": "css/admin/shopify-commerce-admin.css",
+      "extension": ".css",
+      "bytes": 19988,
+      "sha256": "c2a8cbfb146146c0fad5f8fbcd0c049f37cbb5ed6bd4535597beb2b2f8b3929b"
     },
     {
       "path": "css/components/ai-builder-public.css",
@@ -26054,6 +26217,12 @@
       "extension": ".js",
       "bytes": 13213,
       "sha256": "3234a5e3f2c79a5061c039b9e57cc511d40fa7fb42ad91594ba985e9df4639b1"
+    },
+    {
+      "path": "js/admin/shopify-commerce-admin.js",
+      "extension": ".js",
+      "bytes": 63640,
+      "sha256": "6c442e090314a94c9ac16a7c42ab596fa2f110df137865173ecd5834123d3067"
     },
     {
       "path": "js/admin/users/gestion-usuarios-admin.js",
@@ -27196,6 +27365,12 @@
       "sha256": "66a8b31301ab31e5249beaa2b4d8c568d96c214c70db5356dc75e9e8e86458e6"
     },
     {
+      "path": "scripts/auditar-admin-commerce-shopify.js",
+      "extension": ".js",
+      "bytes": 3150,
+      "sha256": "feafcab085ed68e34dfcb9815de190bfd2a88bcb7dcf4b8236285e82bc1f0c18"
+    },
+    {
       "path": "scripts/auditar-admin-contenido-apariencia.js",
       "extension": ".js",
       "bytes": 9593,
@@ -27762,8 +27937,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 25695,
-      "sha256": "314655659809232cbdfbd4ff3c848ef71011fdf13e255b10d22430b25bada5d7"
+      "bytes": 25872,
+      "sha256": "aab46f44244b7a839ce8aefdce97f6635e607559d86bf2f41a4bd1ddb062d50f"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -28040,6 +28215,12 @@
       "extension": ".js",
       "bytes": 4089,
       "sha256": "3ec1c1fba6bdedbe844a5f02cf5fb822a1e69a2460c95bdb26884279d1206e18"
+    },
+    {
+      "path": "tests/ui-ux/admin-commerce-shopify.spec.js",
+      "extension": ".js",
+      "bytes": 12764,
+      "sha256": "7e24072810ca0d88142fd047713a35c76ddda6f61d53d535b6ca12e500713b9f"
     },
     {
       "path": "tests/ui-ux/phase10-accessibility.spec.js",
@@ -31482,6 +31663,11 @@
             "operation": "collection"
           },
           {
+            "file": "js/admin/shopify-commerce-admin.js",
+            "line": 1084,
+            "operation": "collection"
+          },
+          {
             "file": "js/components/images/biblioteca-multimedia.js",
             "line": 253,
             "operation": "collection"
@@ -31817,6 +32003,11 @@
             "operation": "doc"
           },
           {
+            "file": "js/admin/shopify-commerce-admin.js",
+            "line": 1096,
+            "operation": "collection"
+          },
+          {
             "file": "js/core/store/estadisticas-pedidos.js",
             "line": 74,
             "operation": "collection"
@@ -31985,6 +32176,11 @@
             "file": "js/admin/products/integridad-inventario-admin.js",
             "line": 24,
             "operation": "doc"
+          },
+          {
+            "file": "js/admin/shopify-commerce-admin.js",
+            "line": 1072,
+            "operation": "collection"
           },
           {
             "file": "js/components/images/biblioteca-multimedia.js",
