@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-11T00:52:37.916Z",
-  "sourceFingerprint": "8e5226c4f7584f10a7890e932db3960fafb229f0ef4cc258c413b99e3ac30c80",
+  "generatedAt": "2026-08-11T01:05:00.625Z",
+  "sourceFingerprint": "a8207d86b93ec0019a5554dc37c924d13f1f1b13235b7783f1aaa368791a976c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 591,
-    "textFiles": 559,
-    "totalBytes": 6300080,
+    "files": 592,
+    "textFiles": 560,
+    "totalBytes": 6301628,
     "pages": 18,
-    "modules": 359
+    "modules": 360
   },
   "viewports": [
     {
@@ -23821,8 +23821,8 @@
     },
     {
       "path": "scripts/generar-csp-cloudflare.js",
-      "bytes": 5134,
-      "sha256": "6a6246192c62c200fe6db5665936f097a730422c606bb45bbab6e3c57e1f9c2b",
+      "bytes": 5161,
+      "sha256": "6f67728e5260c903ab7eef3662bc6e868c87feebc3d3984e054099063d9e105b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23855,6 +23855,10 @@
         },
         {
           "url": "https://res.cloudinary.com/",
+          "line": 23
+        },
+        {
+          "url": "https://api.cloudinary.com/",
           "line": 23
         },
         {
@@ -24789,6 +24793,36 @@
         "error": ""
       },
       "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "tests/security/csp-cloudinary-upload.test.mjs",
+      "bytes": 1521,
+      "sha256": "d64dbd67e7ca5a0a653984298b2317316d6cdccd4a221db98eda9b022ba884ef",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
       "endpoints": []
     },
     {
@@ -28422,8 +28456,8 @@
     {
       "path": "scripts/generar-csp-cloudflare.js",
       "extension": ".js",
-      "bytes": 5134,
-      "sha256": "6a6246192c62c200fe6db5665936f097a730422c606bb45bbab6e3c57e1f9c2b"
+      "bytes": 5161,
+      "sha256": "6f67728e5260c903ab7eef3662bc6e868c87feebc3d3984e054099063d9e105b"
     },
     {
       "path": "scripts/preparar-hosting.js",
@@ -28646,6 +28680,12 @@
       "extension": ".js",
       "bytes": 1561,
       "sha256": "f952d54a623413dca31482a04a549fab78d7affef5d37fde615419fe00698f40"
+    },
+    {
+      "path": "tests/security/csp-cloudinary-upload.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1521,
+      "sha256": "d64dbd67e7ca5a0a653984298b2317316d6cdccd4a221db98eda9b022ba884ef"
     },
     {
       "path": "tests/seo/phase11-seo.spec.js",

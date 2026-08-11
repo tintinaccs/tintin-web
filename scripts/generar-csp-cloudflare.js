@@ -20,7 +20,7 @@ const endMarker = '# CSP_ROUTE_POLICIES_END';
 // repetirlo acá.
 const globalPolicy = "object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests";
 const scriptOrigins = "https://*.gstatic.com https://*.google.com https://unpkg.com https://www.googletagmanager.com";
-const connectOrigins = "https://*.googleapis.com https://*.google.com https://*.gstatic.com https://unpkg.com https://*.googleusercontent.com https://res.cloudinary.com https://api.imgbb.com https://*.google-analytics.com https://*.analytics.google.com";
+const connectOrigins = "https://*.googleapis.com https://*.google.com https://*.gstatic.com https://unpkg.com https://*.googleusercontent.com https://res.cloudinary.com https://api.cloudinary.com https://api.imgbb.com https://*.google-analytics.com https://*.analytics.google.com";
 // El editor visual (Apariencia) previsualiza estas páginas dentro de un
 // <iframe> en admin.html — mismo origen, sesión de Super Admin ya validada.
 // frame-ancestors 'none' se lo bloqueaba también a sí mismo: el navegador no
