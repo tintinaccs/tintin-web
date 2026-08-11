@@ -1,0 +1,65 @@
+name: Corregir reliability fast navigation temporal
+
+on:
+  push:
+    branches:
+      - perf/navegacion-inmediata-v2-20260810
+    paths:
+      - '.github/workflows/corregir-reliability-fast-nav-temporal.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: perf/navegacion-inmediata-v2-20260810
+          fetch-depth: 0
+
+      - name: Actualizar contrato de versionado crítico
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/auditar-sitio-confiabilidad.js')
+          text = path.read_text(encoding='utf-8')
+          old = '''check('Los recursos críticos usan una sola versión de caché',
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260809-loader-lifecycle-fix-1'"));'''
+          new = '''const criticalVersionPages = ['index.html', 'catalogo.html', 'collections.html', 'product.html', 'checkout.html'];
+          const activeLoaderRef = 'js/cargador-pagina.js?v=tintin-20260810-fast-nav-2';
+          const staleLoaderRef = 'js/cargador-pagina.js?v=tintin-20260809-loader-lifecycle-fix-1';
+          check('Los recursos críticos usan versiones explícitas y vigentes de caché',
+            staleVersions.length === 0 &&
+            loader.includes("const TT_CACHE_VERSION = 'tintin-20260810-fast-nav-2'") &&
+            criticalVersionPages.every(page => {
+              const html = read(page);
+              return html.includes(activeLoaderRef) && !html.includes(staleLoaderRef);
+            }));'''
+          if old not in text:
+              raise SystemExit('No se encontró el invariant de cache esperado; no se modifica nada.')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+
+      - name: Validar confiabilidad y navegación
+        run: |
+          npm ci
+          node scripts/auditar-sitio-confiabilidad.js
+          node scripts/auditar-rendimiento-tiempo-real.js
+          node scripts/auditar-rendimiento-regresiones.js
+          node scripts/auditar-esquema-color.js
+          node --test tests/performance/navegacion-inmediata.test.mjs
+
+      - name: Retirar temporal, regenerar y guardar
+        run: |
+          rm .github/workflows/corregir-reliability-fast-nav-temporal.yml
+          npm run build:pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "test(perf): aceptar versionado crítico independiente"
+          git push origin HEAD:perf/navegacion-inmediata-v2-20260810
