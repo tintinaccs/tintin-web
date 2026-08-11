@@ -6,7 +6,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260810-fast-nav-2';
-const LOADER_VERSION = 'tintin-20260811-cls-reveal-fix-1';
+const LOADER_VERSION = 'tintin-20260811-cls-runtime-stable-1';
 const PUBLIC_SHELL_VERSION = 'tintin-20260810-global-studio-7';
 const NAV_ENTRY_VERSION = 'tintin-20260811-cls-header-reserve-1';
 // Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
