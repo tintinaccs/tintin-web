@@ -36,7 +36,7 @@ import { contrastRatio, passesWcag } from "../components/color/utilidades-contra
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260716-cloudinary-fix-1";
 import { createOrderViaServer } from "../create-order-client.js?v=tintin-20260811-phone-order-1";
 import './products/integridad-inventario-admin.js?v=tintin-20260722-order-delete-2';
-import './orders/pedidos-superadmin-crud.js?v=tintin-20260812-tinped-crud-1';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20260812-tinped-crud-2';
 
 // ---- GLOBALS ----
 let currentUser = null;

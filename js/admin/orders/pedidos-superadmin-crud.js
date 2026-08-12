@@ -6,6 +6,8 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
+  query,
   runTransaction,
   serverTimestamp,
   setDoc
@@ -205,7 +207,7 @@ async function deleteTrashPermanently(orderId) {
 }
 
 async function loadCatalog_() {
-  const snap = await getDocs(collection(db, 'products'));
+  const snap = await getDocs(query(collection(db, 'products'), limit(1000)));
   catalogCache = snap.docs.map(item => ({ id: item.id, ...item.data() }))
     .filter(product => product.active !== false)
     .sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'es', { sensitivity: 'base' }));
