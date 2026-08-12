@@ -8,8 +8,8 @@ const root = path.resolve(__dirname, '../..');
 const baseCss = fs.readFileSync(path.join(root, 'css/admin/editor-visual.css'), 'utf8');
 const studioCss = fs.readFileSync(path.join(root, 'css/admin/visual-studio-v2.css'), 'utf8');
 
-// Contrato responsive: Constructor + Página real arriba cuando entran;
-// inspector/propiedades abajo a todo el ancho. En pantallas angostas se apilan.
+// Contrato responsive: Página real arriba a todo el ancho;
+// Constructor + inspector abajo, lado a lado cuando entra el ancho. En pantallas angostas se apilan.
 const html = `<!doctype html>
 <html lang="es">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -89,14 +89,14 @@ for (const viewport of viewports) {
     expect(geometry.iframe.width).toBeLessThanOrEqual(geometry.stage.width + 1);
 
     if (viewport.twoColumns) {
-      expect(Math.abs(geometry.sidebar.top - geometry.preview.top)).toBeLessThanOrEqual(2);
-      expect(geometry.preview.left).toBeGreaterThan(geometry.sidebar.right);
-      expect(geometry.properties.top).toBeGreaterThanOrEqual(Math.max(geometry.sidebar.bottom, geometry.preview.bottom) + 8);
-      expect(geometry.properties.left).toBeLessThanOrEqual(geometry.sidebar.left + 2);
-      expect(geometry.properties.right).toBeGreaterThanOrEqual(geometry.preview.right - 2);
+      expect(geometry.sidebar.top).toBeGreaterThanOrEqual(geometry.preview.bottom + 8);
+      expect(Math.abs(geometry.sidebar.top - geometry.properties.top)).toBeLessThanOrEqual(2);
+      expect(geometry.properties.left).toBeGreaterThan(geometry.sidebar.right);
+      expect(geometry.preview.left).toBeLessThanOrEqual(geometry.sidebar.left + 2);
+      expect(geometry.preview.right).toBeGreaterThanOrEqual(geometry.properties.right - 2);
     } else {
-      expect(geometry.preview.top).toBeGreaterThanOrEqual(geometry.sidebar.bottom + 8);
-      expect(geometry.properties.top).toBeGreaterThanOrEqual(geometry.preview.bottom + 8);
+      expect(geometry.sidebar.top).toBeGreaterThanOrEqual(geometry.preview.bottom + 8);
+      expect(geometry.properties.top).toBeGreaterThanOrEqual(geometry.sidebar.bottom + 8);
       expect(Math.abs(geometry.preview.width - geometry.sidebar.width)).toBeLessThanOrEqual(2);
       expect(Math.abs(geometry.properties.width - geometry.sidebar.width)).toBeLessThanOrEqual(2);
     }
