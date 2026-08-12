@@ -13,6 +13,8 @@ const files = {
   quality: read('js/quality/calidad-interfaz.js'),
   rules: read('firestore.rules'),
   packageJson: read('package.json'),
+  panel: read('admin.html'),
+  adminApp: read('js/admin/admin-app.js'),
 };
 
 let failures = 0;
@@ -77,11 +79,15 @@ check(
 );
 
 check(
-  'El editor de Contenido existe realmente',
-  files.admin.includes("section.id = 'section-contenido'") &&
-    files.admin.includes("document.querySelector('.adm-content')") &&
-    files.admin.includes("[data-section=\"contenido\"]"),
-  'El botón Contenido no puede abrir una sección inexistente'
+  'Contenido está integrado en Apariencia sin crear un módulo superior duplicado',
+  files.admin.includes("section.id = 'appearance-content-phase6'") &&
+    files.admin.includes("document.getElementById('appearance-content-phase6-host')") &&
+    files.panel.includes('id="section-apariencia"') &&
+    files.panel.includes('id="appearance-content-phase6-host"') &&
+    !files.panel.includes('id="section-contenido"') &&
+    !files.panel.includes('data-section="contenido"') &&
+    !files.adminApp.includes('// ======== CONTENIDO DEL SITIO ========'),
+  'Debe existir una sola superficie Apariencia y contenido, sin el editor legado duplicado.'
 );
 
 check(
