@@ -14,7 +14,7 @@ import {
   defaultWelcomeSteps,
   normalizeWelcomeConfig,
   normalizeWelcomeStep
-} from '../../components/welcome/configuracion-bienvenida.js?v=tintin-20260716-cloudinary-fix-1';
+} from '../../components/welcome/configuracion-bienvenida.js?v=tintin-20260812-welcome-media-1';
 
 const REF = doc(db, 'settings', 'welcomeTutorial');
 
@@ -66,7 +66,7 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
     if (document.getElementById('tt-admin-welcome-style')) return;
     const st = document.createElement('style');
     st.id = 'tt-admin-welcome-style';
-    st.textContent = `#section-welcome{display:none}.adm-section.active#section-welcome{display:block}.tt-welcome-admin-grid{display:grid;grid-template-columns:1fr;gap:18px}.tt-welcome-admin-card{background:#fff;border:1px solid rgba(184,76,114,.12);border-radius:22px;box-shadow:0 14px 38px rgba(139,38,66,.08);padding:20px}.tt-welcome-admin-title{font-size:20px;font-weight:900;color:#2B2B2B;margin:0}.tt-welcome-admin-sub{font-size:13px;color:#2B2B2B;margin:6px 0 0;line-height:1.55}.tt-welcome-admin-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.tt-welcome-admin-field{display:flex;flex-direction:column;gap:7px}.tt-welcome-admin-field label{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#2B2B2B}.tt-welcome-admin-field input,.tt-welcome-admin-field textarea{width:100%;border:1.5px solid rgba(184,76,114,.18);border-radius:14px;padding:11px 12px;font-family:Montserrat;font-size:13px;outline:none;background:#fffdfd;color:#2B2B2B;box-sizing:border-box}.tt-welcome-admin-field textarea{min-height:86px;resize:vertical}.tt-welcome-admin-field input:focus,.tt-welcome-admin-field textarea:focus{border-color:#AD3F67;box-shadow:0 0 0 3px rgba(212,106,138,.10)}.tt-welcome-admin-switches{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.tt-welcome-pill{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;background:#fff3f7;border:1px solid rgba(184,76,114,.15);font-size:12px;font-weight:800;color:#2B2B2B}.tt-welcome-pill input{accent-color:#AD3F67}.tt-welcome-step-card{border:1px solid rgba(184,76,114,.13);border-radius:18px;padding:14px;background:linear-gradient(180deg,#fff,#fff8fb);display:grid;gap:12px}.tt-welcome-step-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.tt-welcome-step-badge{font-size:11px;font-weight:900;color:#2B2B2B;text-transform:uppercase;letter-spacing:.08em}.tt-welcome-step-actions{display:flex;gap:8px;flex-wrap:wrap}.tt-welcome-btn{min-height:44px;border:0;border-radius:999px;padding:10px 14px;font-family:Montserrat;font-size:12px;font-weight:900;cursor:pointer;background:#f8e8ef;color:#2B2B2B}.tt-welcome-btn.primary{background:#AD3F67;color:#fff;box-shadow:0 10px 24px rgba(212,106,138,.20)}.tt-welcome-btn.danger{background:#fff0f0;color:#2B2B2B}.tt-welcome-btn.dark{background:#2B2B2B;color:#fff}.tt-welcome-btn:disabled{opacity:.55;cursor:not-allowed}.tt-welcome-admin-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px}.tt-welcome-empty{text-align:center;color:#2B2B2B;padding:22px;border:1px dashed rgba(184,76,114,.25);border-radius:18px;background:#fff8fb}.tt-welcome-preview-note{font-size:12px;line-height:1.6;color:#2B2B2B;background:#fff6f9;border-left:4px solid #AD3F67;padding:12px 14px;border-radius:14px;margin-top:12px}@media(max-width:820px){.tt-welcome-admin-row{grid-template-columns:1fr}.tt-welcome-admin-card{padding:16px;border-radius:18px}.tt-welcome-step-head{align-items:flex-start;flex-direction:column}.tt-welcome-admin-actions{flex-direction:column}.tt-welcome-btn{width:100%}}`;
+    st.textContent = `#section-welcome{display:none}.adm-section.active#section-welcome{display:block}.tt-welcome-admin-grid{display:grid;grid-template-columns:1fr;gap:18px;align-items:start}.tt-welcome-admin-main,.tt-welcome-admin-side{display:grid;gap:18px;min-width:0}.tt-welcome-admin-card{background:#fff;border:1px solid rgba(184,76,114,.12);border-radius:22px;box-shadow:0 14px 38px rgba(139,38,66,.08);padding:20px}.tt-welcome-admin-title{font-size:20px;font-weight:900;color:#2B2B2B;margin:0}.tt-welcome-admin-sub{font-size:13px;color:#2B2B2B;margin:6px 0 0;line-height:1.55}.tt-welcome-admin-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.tt-welcome-admin-field{display:flex;flex-direction:column;gap:7px;position:relative}.tt-welcome-admin-field label{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#2B2B2B}.tt-welcome-admin-field input,.tt-welcome-admin-field textarea{width:100%;border:1.5px solid rgba(184,76,114,.18);border-radius:14px;padding:11px 12px;font-family:Montserrat;font-size:13px;outline:none;background:#fffdfd;color:#2B2B2B;box-sizing:border-box}.tt-welcome-admin-field textarea{min-height:86px;resize:vertical}.tt-welcome-admin-field input:focus,.tt-welcome-admin-field textarea:focus{border-color:#AD3F67;box-shadow:0 0 0 3px rgba(212,106,138,.10)}.tt-welcome-counter{align-self:flex-end;font-size:10px;font-weight:700;color:#a98b95}.tt-welcome-image-row{display:flex;align-items:center;gap:10px}.tt-welcome-image-row input{flex:1}.tt-welcome-image-thumb{width:40px;height:40px;border-radius:10px;object-fit:cover;border:1.5px solid rgba(184,76,114,.18);flex-shrink:0}.tt-welcome-admin-switches{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.tt-welcome-pill{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;background:#fff3f7;border:1px solid rgba(184,76,114,.15);font-size:12px;font-weight:800;color:#2B2B2B}.tt-welcome-pill input{accent-color:#AD3F67}.tt-welcome-step-card{border:1px solid rgba(184,76,114,.13);border-radius:18px;padding:14px;background:linear-gradient(180deg,#fff,#fff8fb);display:grid;gap:12px;transition:opacity .15s ease,border-color .15s ease}.tt-welcome-step-card.dragging{opacity:.4}.tt-welcome-step-card.drag-over{border-color:#AD3F67;box-shadow:0 0 0 2px rgba(173,63,103,.2) inset}.tt-welcome-step-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.tt-welcome-step-drag{cursor:grab;font-size:16px;color:#c07d94;padding:4px 6px;line-height:1;user-select:none}.tt-welcome-step-badge{font-size:11px;font-weight:900;color:#2B2B2B;text-transform:uppercase;letter-spacing:.08em;margin-right:auto}.tt-welcome-step-actions{display:flex;gap:8px;flex-wrap:wrap}.tt-welcome-btn{min-height:44px;border:0;border-radius:999px;padding:10px 14px;font-family:Montserrat;font-size:12px;font-weight:900;cursor:pointer;background:#f8e8ef;color:#2B2B2B}.tt-welcome-btn.primary{background:#AD3F67;color:#fff;box-shadow:0 10px 24px rgba(212,106,138,.20)}.tt-welcome-btn.danger{background:#fff0f0;color:#2B2B2B}.tt-welcome-btn.dark{background:#2B2B2B;color:#fff}.tt-welcome-btn:disabled{opacity:.55;cursor:not-allowed}.tt-welcome-admin-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px}.tt-welcome-empty{text-align:center;color:#2B2B2B;padding:22px;border:1px dashed rgba(184,76,114,.25);border-radius:18px;background:#fff8fb}.tt-welcome-preview-note{font-size:12px;line-height:1.6;color:#2B2B2B;background:#fff6f9;border-left:4px solid #AD3F67;padding:12px 14px;border-radius:14px;margin-top:12px}.tt-welcome-preview-card{position:sticky;top:20px}.tt-welcome-mini-card{border-radius:22px;overflow:hidden;border:1.5px solid rgba(255,182,200,.8);box-shadow:0 14px 40px rgba(139,38,66,.16)}.tt-welcome-mini-top{background:linear-gradient(135deg,#F6B7C8,#FDECF2);padding:20px 18px 14px;text-align:center}.tt-welcome-mini-icon{width:56px;height:56px;border-radius:50%;background:#fff;display:grid;place-items:center;margin:0 auto 10px;font-size:28px;box-shadow:0 8px 22px rgba(212,106,138,.18);overflow:hidden}.tt-welcome-mini-icon.has-image{font-size:0}.tt-welcome-mini-icon-img{width:100%;height:100%;object-fit:cover;border-radius:50%}.tt-welcome-mini-icon-fallback{width:100%;height:100%;display:grid;place-items:center;font-size:28px}.tt-welcome-mini-title{font-family:Montserrat;font-size:22px;line-height:1.1;margin:0;color:#2B2B2B;font-weight:800}.tt-welcome-mini-sub{margin:6px auto 0;color:#2B2B2B;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}.tt-welcome-mini-body{padding:18px;background:#fff}.tt-welcome-mini-steptitle{font-size:15px;font-weight:900;color:#2B2B2B;margin:0 0 6px;text-align:center}.tt-welcome-mini-text{font-size:13px;line-height:1.6;color:#7B6F72;text-align:center;margin:0}.tt-welcome-mini-dots{display:flex;justify-content:center;gap:6px;margin:16px 0 0}.tt-welcome-mini-dot{width:6px;height:6px;border-radius:999px;background:#FAD6DF}.tt-welcome-mini-dot.active{width:18px;background:#AD3F67}.tt-welcome-mini-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}.tt-welcome-mini-btn{min-height:36px;border:0;border-radius:999px;padding:8px 14px;font-family:Montserrat;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;background:#FDECF2;color:#2B2B2B}.tt-welcome-mini-btn-primary{background:#AD3F67;color:#fff}.tt-welcome-mini-btn:disabled{opacity:.4;cursor:not-allowed}.tt-welcome-mini-caption{font-size:11px;color:#a98b95;text-align:center;margin:10px 0 0}@media(min-width:1100px){.tt-welcome-admin-grid{grid-template-columns:1fr 380px}}@media(max-width:820px){.tt-welcome-admin-row{grid-template-columns:1fr}.tt-welcome-admin-card{padding:16px;border-radius:18px}.tt-welcome-step-head{align-items:flex-start;flex-direction:column}.tt-welcome-admin-actions{flex-direction:column}.tt-welcome-btn{width:100%}}`;
     document.head.appendChild(st);
   }
 
@@ -151,6 +151,7 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
     state.steps = [...document.querySelectorAll('.tt-welcome-step-card')].map((card, index) => cleanStep({
       id: card.dataset.id,
       icon: card.querySelector('[data-field="icon"]')?.value,
+      image: card.querySelector('[data-field="image"]')?.value,
       title: card.querySelector('[data-field="title"]')?.value,
       text: card.querySelector('[data-field="text"]')?.value,
       cta: card.querySelector('[data-field="cta"]')?.value,
@@ -195,14 +196,62 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
     toast(`Bienvenida reactivada para ${clients.length} clienta${clients.length === 1 ? '' : 's'}`);
   }
 
+  function counter(value, max) {
+    return `<span class="tt-welcome-counter" data-counter-for="${max}">${String(value || '').length}/${max}</span>`;
+  }
+
   function renderStep(step, index) {
-    return `<div class="tt-welcome-step-card" data-id="${escapeHtml(step.id)}"><div class="tt-welcome-step-head"><div class="tt-welcome-step-badge">Mensaje ${index + 1}</div><div class="tt-welcome-step-actions"><button type="button" class="tt-welcome-btn" data-action="up" ${index === 0 ? 'disabled' : ''}>Subir</button><button type="button" class="tt-welcome-btn" data-action="down" ${index === state.steps.length - 1 ? 'disabled' : ''}>Bajar</button><button type="button" class="tt-welcome-btn danger" data-action="delete">Eliminar</button></div></div><div class="tt-welcome-admin-row"><div class="tt-welcome-admin-field"><label>Icono</label><input data-field="icon" value="${escapeHtml(step.icon)}" maxlength="8"></div><div class="tt-welcome-admin-field"><label>Botón</label><input data-field="cta" value="${escapeHtml(step.cta)}" maxlength="40"></div></div><div class="tt-welcome-admin-field"><label>Título</label><input data-field="title" value="${escapeHtml(step.title)}" maxlength="90"></div><div class="tt-welcome-admin-field"><label>Texto</label><textarea data-field="text" maxlength="420">${escapeHtml(step.text)}</textarea></div><label class="tt-welcome-pill"><input type="checkbox" data-field="active" ${step.active !== false ? 'checked' : ''}> Mostrar este mensaje</label></div>`;
+    const thumbVisible = step.image ? 'block' : 'none';
+    return `<div class="tt-welcome-step-card" data-id="${escapeHtml(step.id)}" draggable="true"><div class="tt-welcome-step-head"><div class="tt-welcome-step-drag" draggable="true" title="Arrastrá para reordenar" aria-hidden="true">⠿</div><div class="tt-welcome-step-badge">Mensaje ${index + 1}</div><div class="tt-welcome-step-actions"><button type="button" class="tt-welcome-btn" data-action="up" ${index === 0 ? 'disabled' : ''} aria-label="Subir mensaje">Subir</button><button type="button" class="tt-welcome-btn" data-action="down" ${index === state.steps.length - 1 ? 'disabled' : ''} aria-label="Bajar mensaje">Bajar</button><button type="button" class="tt-welcome-btn" data-action="duplicate" aria-label="Duplicar mensaje">Duplicar</button><button type="button" class="tt-welcome-btn danger" data-action="delete" aria-label="Eliminar mensaje">Eliminar</button></div></div><div class="tt-welcome-admin-row"><div class="tt-welcome-admin-field"><label>Icono (emoji)</label><input data-field="icon" value="${escapeHtml(step.icon)}" maxlength="8">${counter(step.icon, 8)}</div><div class="tt-welcome-admin-field"><label>Botón</label><input data-field="cta" value="${escapeHtml(step.cta)}" maxlength="40">${counter(step.cta, 40)}</div></div><div class="tt-welcome-admin-field"><label>Imagen del paso (opcional, reemplaza el emoji)</label><div class="tt-welcome-image-row"><input data-field="image" value="${escapeHtml(step.image || '')}" placeholder="https://..." inputmode="url"><img class="tt-welcome-image-thumb" data-thumb style="display:${thumbVisible}" src="${escapeHtml(step.image || '')}" alt="" onerror="this.style.display='none'"></div></div><div class="tt-welcome-admin-field"><label>Título</label><input data-field="title" value="${escapeHtml(step.title)}" maxlength="90">${counter(step.title, 90)}</div><div class="tt-welcome-admin-field"><label>Texto</label><textarea data-field="text" maxlength="420">${escapeHtml(step.text)}</textarea>${counter(step.text, 420)}</div><label class="tt-welcome-pill"><input type="checkbox" data-field="active" ${step.active !== false ? 'checked' : ''}> Mostrar este mensaje</label></div>`;
+  }
+
+  let previewIndex = 0;
+
+  function escapeAttr(value) {
+    return escapeHtml(value).replace(/"/g, '&quot;');
+  }
+
+  function renderMiniPreview() {
+    const activeSteps = state.steps.filter(s => s.active !== false);
+    if (!activeSteps.length) {
+      return '<div class="tt-welcome-empty">Activá al menos un mensaje para ver la vista previa.</div>';
+    }
+    if (previewIndex >= activeSteps.length) previewIndex = 0;
+    const step = activeSteps[previewIndex];
+    const last = previewIndex === activeSteps.length - 1;
+    const iconHtml = step.image
+      ? `<img src="${escapeAttr(step.image)}" alt="" class="tt-welcome-mini-icon-img" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span class="tt-welcome-mini-icon-fallback" style="display:none">${escapeHtml(step.icon || '🌸')}</span>`
+      : escapeHtml(step.icon || '🌸');
+    return `
+      <div class="tt-welcome-mini-card">
+        <div class="tt-welcome-mini-top">
+          <div class="tt-welcome-mini-icon${step.image ? ' has-image' : ''}">${iconHtml}</div>
+          <h4 class="tt-welcome-mini-title">${escapeHtml(state.title)}</h4>
+          <div class="tt-welcome-mini-sub">${escapeHtml(state.subtitle)}</div>
+        </div>
+        <div class="tt-welcome-mini-body">
+          <h5 class="tt-welcome-mini-steptitle">${escapeHtml(step.title)}</h5>
+          <p class="tt-welcome-mini-text">${escapeHtml(step.text)}</p>
+          <div class="tt-welcome-mini-dots">${activeSteps.map((_, i) => `<span class="tt-welcome-mini-dot${i === previewIndex ? ' active' : ''}"></span>`).join('')}</div>
+          <div class="tt-welcome-mini-actions">
+            <button type="button" class="tt-welcome-mini-btn" data-preview-nav="prev" ${previewIndex === 0 ? 'disabled' : ''}>Atrás</button>
+            <button type="button" class="tt-welcome-mini-btn tt-welcome-mini-btn-primary" data-preview-nav="next">${last ? 'Finalizar' : (escapeHtml(step.cta) || 'Siguiente')}</button>
+          </div>
+        </div>
+      </div>
+      <p class="tt-welcome-mini-caption">Paso ${previewIndex + 1} de ${activeSteps.length} — así lo ve una clienta nueva. Se actualiza mientras escribís.</p>`;
+  }
+
+  function updateLivePreview() {
+    const holder = document.getElementById('welcome-live-preview');
+    if (holder) holder.innerHTML = renderMiniPreview();
   }
 
   function render() {
     const section = document.getElementById('section-welcome');
     if (!section) return;
-    section.innerHTML = `<div class="tt-welcome-admin-grid"><div class="tt-welcome-admin-card"><h2 class="tt-welcome-admin-title">Mensaje de bienvenida</h2><p class="tt-welcome-admin-sub">Configurá los mensajes que ve una clienta nueva cuando inicia sesión por primera vez y llega a la página principal.</p><div class="tt-welcome-preview-note">La prueba se abre como Super Admin, pero muestra exactamente la experiencia de bienvenida como si fueras una usuaria nueva.</div><div class="tt-welcome-admin-row" style="margin-top:16px"><div class="tt-welcome-admin-field"><label>Título general</label><input id="welcome-title" value="${escapeHtml(state.title)}"></div><div class="tt-welcome-admin-field"><label>Subtítulo</label><input id="welcome-subtitle" value="${escapeHtml(state.subtitle)}"></div></div><div class="tt-welcome-admin-switches"><label class="tt-welcome-pill"><input type="checkbox" id="welcome-enabled" ${state.enabled ? 'checked' : ''}> Activar bienvenida para usuarios nuevos</label><label class="tt-welcome-pill"><input type="checkbox" id="welcome-preview-enabled" ${state.previewEnabled ? 'checked' : ''}> Permitir prueba Super Admin</label></div></div><div class="tt-welcome-admin-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px"><div><h3 class="tt-welcome-admin-title" style="font-size:17px">Mensajes</h3><p class="tt-welcome-admin-sub">Podés agregar, editar, ordenar o eliminar mensajes.</p></div><button type="button" class="tt-welcome-btn primary" id="welcome-add">+ Agregar mensaje</button></div><div id="welcome-steps">${state.steps.length ? state.steps.map(renderStep).join('') : '<div class="tt-welcome-empty">Todavía no hay mensajes. Agregá el primero.</div>'}</div><div class="tt-welcome-admin-actions"><div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="tt-welcome-btn" id="welcome-reset">Restaurar mensajes base</button><button type="button" class="tt-welcome-btn danger" id="welcome-reset-users">Reactivar para clientas</button></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="tt-welcome-btn dark" id="welcome-test">Probar como nuevo usuario</button><button type="button" class="tt-welcome-btn primary" id="welcome-save">Guardar cambios</button></div></div></div></div>`;
+    previewIndex = 0;
+    section.innerHTML = `<div class="tt-welcome-admin-grid"><div class="tt-welcome-admin-main"><div class="tt-welcome-admin-card"><h2 class="tt-welcome-admin-title">Mensaje de bienvenida</h2><p class="tt-welcome-admin-sub">Configurá los mensajes que ve una clienta nueva cuando inicia sesión por primera vez y llega a la página principal.</p><div class="tt-welcome-preview-note">La prueba de "Probar como nuevo usuario" abre el sitio real como Super Admin y muestra exactamente la experiencia de bienvenida. La vista previa de la derecha es una simulación rápida para editar sin salir de esta página.</div><div class="tt-welcome-admin-row" style="margin-top:16px"><div class="tt-welcome-admin-field"><label>Título general</label><input id="welcome-title" value="${escapeHtml(state.title)}" maxlength="90">${counter(state.title, 90)}</div><div class="tt-welcome-admin-field"><label>Subtítulo</label><input id="welcome-subtitle" value="${escapeHtml(state.subtitle)}" maxlength="90">${counter(state.subtitle, 90)}</div></div><div class="tt-welcome-admin-switches"><label class="tt-welcome-pill"><input type="checkbox" id="welcome-enabled" ${state.enabled ? 'checked' : ''}> Activar bienvenida para usuarios nuevos</label><label class="tt-welcome-pill"><input type="checkbox" id="welcome-preview-enabled" ${state.previewEnabled ? 'checked' : ''}> Permitir prueba Super Admin</label></div></div><div class="tt-welcome-admin-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px"><div><h3 class="tt-welcome-admin-title" style="font-size:17px">Mensajes</h3><p class="tt-welcome-admin-sub">Agregá, editá, duplicá, arrastrá para reordenar o eliminá mensajes.</p></div><button type="button" class="tt-welcome-btn primary" id="welcome-add">+ Agregar mensaje</button></div><div id="welcome-steps">${state.steps.length ? state.steps.map(renderStep).join('') : '<div class="tt-welcome-empty">Todavía no hay mensajes. Agregá el primero.</div>'}</div><div class="tt-welcome-admin-actions"><div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="tt-welcome-btn" id="welcome-reset">Restaurar mensajes base</button><button type="button" class="tt-welcome-btn danger" id="welcome-reset-users">Reactivar para clientas</button></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="tt-welcome-btn dark" id="welcome-test">Probar como nuevo usuario</button><button type="button" class="tt-welcome-btn primary" id="welcome-save">Guardar cambios</button></div></div></div></div><div class="tt-welcome-admin-side"><div class="tt-welcome-admin-card tt-welcome-preview-card"><h3 class="tt-welcome-admin-title" style="font-size:15px;margin-bottom:12px">Vista previa en vivo</h3><div id="welcome-live-preview">${renderMiniPreview()}</div></div></div></div>`;
     wireCrud();
     if (!window.AdminUnsaved?.has('welcome-config')) {
       window.AdminUnsaved?.register('welcome-config', {
@@ -218,6 +267,7 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
     state.steps = [...document.querySelectorAll('.tt-welcome-step-card')].map((card, index) => cleanStep({
       id: card.dataset.id,
       icon: card.querySelector('[data-field="icon"]')?.value,
+      image: card.querySelector('[data-field="image"]')?.value,
       title: card.querySelector('[data-field="title"]')?.value,
       text: card.querySelector('[data-field="text"]')?.value,
       cta: card.querySelector('[data-field="cta"]')?.value,
@@ -263,9 +313,84 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
         const card = btn.closest('.tt-welcome-step-card');
         const idx = state.steps.findIndex(s => s.id === card?.dataset.id);
         const action = btn.dataset.action;
+        if (idx < 0) return;
         if (action === 'delete') { if (!confirm('¿Eliminar este mensaje?')) return; state.steps.splice(idx, 1); }
         if (action === 'up' && idx > 0) [state.steps[idx - 1], state.steps[idx]] = [state.steps[idx], state.steps[idx - 1]];
         if (action === 'down' && idx < state.steps.length - 1) [state.steps[idx + 1], state.steps[idx]] = [state.steps[idx], state.steps[idx + 1]];
+        if (action === 'duplicate') {
+          const copy = cleanStep({ ...state.steps[idx], id: uid(), title: `${state.steps[idx].title} (copia)` }, idx + 1);
+          state.steps.splice(idx + 1, 0, copy);
+        }
+        render();
+      });
+    });
+
+    const section = document.getElementById('section-welcome');
+
+    // Vista previa en vivo: se actualiza leyendo el DOM directamente
+    // (syncStateFromDom no toca inputs), así que nunca pierde el foco ni la
+    // posición del cursor mientras escribís, a diferencia de llamar render().
+    section?.addEventListener('input', event => {
+      const field = event.target;
+      if (field.matches('.tt-welcome-step-card [data-field="image"]')) {
+        const thumb = field.parentElement?.querySelector('[data-thumb]');
+        if (thumb) {
+          const url = field.value.trim();
+          thumb.src = url;
+          thumb.style.display = url ? 'block' : 'none';
+        }
+      }
+      const counterEl = field.parentElement?.querySelector('.tt-welcome-counter');
+      if (counterEl && field.hasAttribute('maxlength')) {
+        counterEl.textContent = `${field.value.length}/${field.getAttribute('maxlength')}`;
+      }
+      syncStateFromDom();
+      updateLivePreview();
+    });
+    section?.addEventListener('change', event => {
+      if (event.target.matches('.tt-welcome-step-card [data-field="active"]')) {
+        syncStateFromDom();
+        updateLivePreview();
+      }
+    });
+
+    document.getElementById('welcome-live-preview')?.addEventListener('click', event => {
+      const nav = event.target.closest('[data-preview-nav]');
+      if (!nav) return;
+      const activeCount = state.steps.filter(s => s.active !== false).length;
+      if (!activeCount) return;
+      if (nav.dataset.previewNav === 'prev') previewIndex = Math.max(0, previewIndex - 1);
+      else previewIndex = (previewIndex + 1) % activeCount;
+      updateLivePreview();
+    });
+
+    // Reordenar arrastrando la manija ⠿ (o cualquier parte de la cabecera de
+    // la tarjeta). Subir/Bajar quedan como alternativa accesible por teclado
+    // y para quien no pueda usar drag-and-drop.
+    let dragId = null;
+    document.querySelectorAll('.tt-welcome-step-card').forEach(card => {
+      card.addEventListener('dragstart', event => {
+        dragId = card.dataset.id;
+        card.classList.add('dragging');
+        event.dataTransfer.effectAllowed = 'move';
+      });
+      card.addEventListener('dragend', () => { card.classList.remove('dragging'); dragId = null; });
+      card.addEventListener('dragover', event => {
+        event.preventDefault();
+        if (!dragId || dragId === card.dataset.id) return;
+        card.classList.add('drag-over');
+      });
+      card.addEventListener('dragleave', () => card.classList.remove('drag-over'));
+      card.addEventListener('drop', event => {
+        event.preventDefault();
+        card.classList.remove('drag-over');
+        if (!dragId || dragId === card.dataset.id) return;
+        syncStateFromDom();
+        const from = state.steps.findIndex(s => s.id === dragId);
+        const to = state.steps.findIndex(s => s.id === card.dataset.id);
+        if (from < 0 || to < 0) return;
+        const [moved] = state.steps.splice(from, 1);
+        state.steps.splice(to, 0, moved);
         render();
       });
     });
