@@ -13,6 +13,7 @@ check('No existe módulo superior Contenido duplicado', navContent === 0 && !htm
 check('Apariencia sigue presente en desktop y mobile', navAppearance >= 2 && html.includes('id="section-apariencia"'));
 check('El editor seguro vive dentro de Apariencia', html.includes('id="appearance-content-phase6-host"') && content.includes("section.id = 'appearance-content-phase6'"));
 check('No queda el editor legado de Contenido en admin-app', !app.includes('// ======== CONTENIDO DEL SITIO ========') && !app.includes('loadContenido()'));
+check('No queda llamada al deep-link legado eliminado', !app.includes('handleContentDeepLink('));
 check('Los enlaces viejos Contenido se redirigen a Apariencia', app.includes("if (target === 'contenido') target = 'apariencia'") && app.includes("fromHash === 'contenido'"));
 check('Permisos de contenido permiten entrar sin abrir colores sensibles', app.includes('canAccessUnifiedAppearance') && html.includes('data-appearance-sensitive="true"'));
 check('Contenido conserva una sola suscripción por página', (content.match(/onSnapshot\(/g) || []).length === 1 && content.includes('pageUnsubscribe?.()'));
