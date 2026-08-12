@@ -1,0 +1,38 @@
+name: Temporary align collections audit cache tag
+
+on:
+  push:
+    branches:
+      - fix/checkout-phone-csp-hashes
+
+permissions:
+  contents: write
+
+jobs:
+  align:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: fix/checkout-phone-csp-hashes
+      - name: Align audit with current cart cache tag
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/auditar-colecciones-fase-4.js')
+          text = p.read_text(encoding='utf-8')
+          old = 'tintin-20260808-product-cart-1'
+          new = 'tintin-20260811-phonefix-sincronizacion-carrito-1'
+          if old not in text and new not in text:
+              raise SystemExit('No se encontró el tag esperado del carrito en la auditoría de colecciones')
+          if old in text:
+              p.write_text(text.replace(old, new), encoding='utf-8')
+          PY
+          node scripts/auditar-colecciones-fase-4.js
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/temporary-align-collections-audit.yml
+          git add scripts/auditar-colecciones-fase-4.js
+          git commit -m "Align collections audit with current cart cache tag"
+          git push origin HEAD:fix/checkout-phone-csp-hashes
