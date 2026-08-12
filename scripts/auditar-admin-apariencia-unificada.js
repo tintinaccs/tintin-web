@@ -1,4 +1,5 @@
 'use strict';
+// Contrato permanente: Apariencia y Contenido comparten una sola superficie, fuente y guard de navegación.
 const fs = require('fs');
 const read = file => fs.readFileSync(file, 'utf8');
 const html = read('admin.html');
