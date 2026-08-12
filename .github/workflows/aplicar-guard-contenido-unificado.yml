@@ -1,0 +1,76 @@
+name: Aplicar guard único de Contenido
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: content-unsaved-guard-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  apply:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'refactor/admin-apariencia-contenido-unificado' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout rama real
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Integrar editor de Contenido al guard compartido
+        run: node scripts/apply-content-unsaved-integration.mjs
+
+      - name: Retirar herramientas temporales
+        run: |
+          rm scripts/apply-content-unsaved-integration.mjs
+          rm .github/workflows/aplicar-guard-contenido-unificado.yml
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Validar guard, arquitectura y sintaxis
+        run: |
+          node --check js/admin/content/gestion-contenido-admin.js
+          node --check scripts/auditar-contenido-fase-6.js
+          node --check scripts/auditar-integral-plataforma.js
+          npm run audit:content
+          npm run audit:appearance-unified
+          npm run audit:admin-foundation
+          npm run audit:integral
+
+      - name: Registrar baseline de caché
+        run: npm run cache-versioning:write
+
+      - name: Regenerar CSP y manifiesto diagnóstico
+        run: npm run build:pages
+
+      - name: Verificar artefactos y cierre global
+        run: |
+          npm run verify:csp
+          npm run verify:diagnostics
+          npm run audit:cache-versioning
+          npm run audit:final
+
+      - name: Guardar integración limpia
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Sin cambios pendientes."
+            exit 0
+          fi
+          git commit -m "fix(admin): usar un solo guard para cambios de contenido"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
