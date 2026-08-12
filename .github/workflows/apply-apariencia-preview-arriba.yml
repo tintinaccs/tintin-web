@@ -1,0 +1,233 @@
+name: Aplicar preview arriba en Apariencia
+
+on:
+  push:
+    branches:
+      - fix/apariencia-preview-arriba
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v5
+        with:
+          ref: fix/apariencia-preview-arriba
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Aplicar layout solicitado
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          css_path = Path('css/admin/visual-studio-v2.css')
+          css = css_path.read_text(encoding='utf-8')
+          marker = '/* TINTIN layout unificado:'
+          pos = css.find(marker)
+          if pos < 0:
+              raise SystemExit('No se encontró el bloque de layout unificado')
+          override = r'''/* TINTIN layout unificado: preview arriba, editores abajo */
+          .apar-unified-content-intro{display:none!important}
+          .visual-studio-v2 .visual-editor-layout{
+            display:grid;
+            grid-template-columns:minmax(230px,.72fr) minmax(360px,1.28fr);
+            grid-template-areas:"preview preview" "sidebar properties";
+            grid-template-rows:minmax(560px,68vh) auto;
+            gap:16px;
+            height:auto;
+            min-height:0;
+            padding:16px;
+            align-items:start;
+          }
+          .visual-studio-v2 .visual-editor-preview{
+            grid-area:preview;
+            width:100%;
+            height:100%;
+            min-width:0;
+            min-height:0;
+            overflow:hidden;
+            border:1px solid var(--vs-border);
+            border-radius:12px;
+          }
+          .visual-studio-v2 .visual-editor-sidebar{
+            grid-area:sidebar;
+            width:100%;
+            height:auto;
+            min-width:0;
+            min-height:0;
+            max-height:720px;
+            overflow:auto;
+            border:1px solid var(--vs-border);
+            border-radius:12px;
+          }
+          .visual-studio-v2 .visual-editor-properties{
+            grid-area:properties;
+            width:100%;
+            height:auto;
+            min-width:0;
+            max-height:none;
+            overflow:visible;
+            border:1px solid var(--vs-border);
+            border-radius:12px;
+          }
+          .visual-studio-v2 .visual-editor-properties>h3,
+          .visual-studio-v2 .visual-inspector-tabs{position:static}
+          .visual-studio-v2 #visual-properties{padding-bottom:24px}
+          @media(min-width:1180px){
+            .visual-studio-v2 .visual-property-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+          }
+          @media(min-width:821px) and (max-width:1179px){
+            .visual-studio-v2 .visual-editor-layout{grid-template-columns:minmax(210px,.62fr) minmax(0,1.38fr)}
+            .visual-studio-v2 .visual-property-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+          }
+          @media(max-width:820px){
+            .visual-studio-v2 .visual-editor-layout{
+              display:grid;
+              grid-template-columns:minmax(0,1fr);
+              grid-template-areas:"preview" "sidebar" "properties";
+              grid-template-rows:auto auto auto;
+              gap:12px;
+              padding:12px;
+            }
+            .visual-studio-v2 .visual-editor-preview{
+              height:auto;
+              min-height:560px;
+              order:initial;
+            }
+            .visual-studio-v2 .visual-editor-sidebar{
+              height:auto;
+              min-height:0;
+              max-height:360px;
+              overflow:auto;
+              border-right:1px solid var(--vs-border);
+              border-bottom:1px solid var(--vs-border);
+            }
+            .visual-studio-v2 .visual-editor-properties{
+              order:initial;
+              max-height:none;
+            }
+            .visual-studio-v2 .visual-property-grid{grid-template-columns:minmax(0,1fr)}
+          }
+          @media(max-width:560px){
+            .visual-studio-v2 .visual-editor-layout{gap:10px;padding:8px}
+            .visual-studio-v2 .visual-editor-preview{min-height:500px}
+            .visual-studio-v2 .visual-editor-sidebar{max-height:320px}
+            .visual-studio-v2 .visual-preview-stage{padding:6px}
+            .visual-studio-v2 .visual-preview-stage[data-device=mobile] iframe{width:min(390px,100%);max-width:100%}
+          }
+          '''
+          css_path.write_text(css[:pos] + override, encoding='utf-8')
+
+          js_path = Path('js/admin/appearance/editor-visual-admin.js')
+          js = js_path.read_text(encoding='utf-8')
+          old_css = 'css/admin/visual-studio-v2.css?v=tintin-20260812-layout-unificado-1'
+          new_css = 'css/admin/visual-studio-v2.css?v=tintin-20260812-preview-arriba-1'
+          if old_css not in js:
+              raise SystemExit('No se encontró la versión CSS esperada en editor-visual-admin.js')
+          js_path.write_text(js.replace(old_css, new_css, 1), encoding='utf-8')
+
+          html_path = Path('admin.html')
+          html = html_path.read_text(encoding='utf-8')
+          old_module = 'js/admin/appearance/editor-visual-admin.js?v=tintin-20260810-visual-studio-v2-9'
+          new_module = 'js/admin/appearance/editor-visual-admin.js?v=tintin-20260812-preview-arriba-1'
+          if old_module not in html:
+              raise SystemExit('No se encontró la versión esperada de editor-visual-admin.js en admin.html')
+          html_path.write_text(html.replace(old_module, new_module, 1), encoding='utf-8')
+
+          test_path = Path('tests/visual-builder/apariencia-preview-abajo.spec.js')
+          test = test_path.read_text(encoding='utf-8')
+          test = test.replace(
+              '// Contrato responsive: Constructor + Página real arriba cuando entran;\n// inspector/propiedades abajo a todo el ancho. En pantallas angostas se apilan.',
+              '// Contrato responsive: Página real arriba a todo el ancho;\n// Constructor + inspector abajo, lado a lado cuando entra el ancho. En pantallas angostas se apilan.'
+          )
+          old_assert = '''    if (viewport.twoColumns) {
+              expect(Math.abs(geometry.sidebar.top - geometry.preview.top)).toBeLessThanOrEqual(2);
+              expect(geometry.preview.left).toBeGreaterThan(geometry.sidebar.right);
+              expect(geometry.properties.top).toBeGreaterThanOrEqual(Math.max(geometry.sidebar.bottom, geometry.preview.bottom) + 8);
+              expect(geometry.properties.left).toBeLessThanOrEqual(geometry.sidebar.left + 2);
+              expect(geometry.properties.right).toBeGreaterThanOrEqual(geometry.preview.right - 2);
+            } else {
+              expect(geometry.preview.top).toBeGreaterThanOrEqual(geometry.sidebar.bottom + 8);
+              expect(geometry.properties.top).toBeGreaterThanOrEqual(geometry.preview.bottom + 8);
+              expect(Math.abs(geometry.preview.width - geometry.sidebar.width)).toBeLessThanOrEqual(2);
+              expect(Math.abs(geometry.properties.width - geometry.sidebar.width)).toBeLessThanOrEqual(2);
+            }'''
+          new_assert = '''    if (viewport.twoColumns) {
+              expect(geometry.sidebar.top).toBeGreaterThanOrEqual(geometry.preview.bottom + 8);
+              expect(Math.abs(geometry.sidebar.top - geometry.properties.top)).toBeLessThanOrEqual(2);
+              expect(geometry.properties.left).toBeGreaterThan(geometry.sidebar.right);
+              expect(geometry.preview.left).toBeLessThanOrEqual(geometry.sidebar.left + 2);
+              expect(geometry.preview.right).toBeGreaterThanOrEqual(geometry.properties.right - 2);
+            } else {
+              expect(geometry.sidebar.top).toBeGreaterThanOrEqual(geometry.preview.bottom + 8);
+              expect(geometry.properties.top).toBeGreaterThanOrEqual(geometry.sidebar.bottom + 8);
+              expect(Math.abs(geometry.preview.width - geometry.sidebar.width)).toBeLessThanOrEqual(2);
+              expect(Math.abs(geometry.properties.width - geometry.sidebar.width)).toBeLessThanOrEqual(2);
+            }'''
+          if old_assert not in test:
+              raise SystemExit('No se encontró el bloque de assertions responsive esperado')
+          test_path.write_text(test.replace(old_assert, new_assert, 1), encoding='utf-8')
+
+          audit_path = Path('scripts/auditar-admin-apariencia-unificada.js')
+          audit = audit_path.read_text(encoding='utf-8')
+          if "const studio = read('css/admin/visual-studio-v2.css');" not in audit:
+              audit = audit.replace("const firebase = read('js/core/firebase/firebase.js');", "const firebase = read('js/core/firebase/firebase.js');\nconst studio = read('css/admin/visual-studio-v2.css');")
+          anchor = "check('No existe un beforeunload duplicado dentro de Contenido', !content.includes(\"window.addEventListener('beforeunload'\"));"
+          layout_check = "check('Apariencia pone preview arriba y los dos editores abajo', studio.includes('/* TINTIN layout unificado: preview arriba, editores abajo */') && studio.includes('grid-template-areas:\\"preview preview\\" \\"sidebar properties\\"'));"
+          if layout_check not in audit:
+              if anchor not in audit:
+                  raise SystemExit('No se encontró el ancla del auditor de Apariencia')
+              audit = audit.replace(anchor, anchor + '\n' + layout_check)
+          audit_path.write_text(audit, encoding='utf-8')
+          PY
+
+      - name: Retirar workflow temporal antes de generar artefactos
+        run: git rm .github/workflows/apply-apariencia-preview-arriba.yml
+
+      - name: Regenerar versionado y artefactos
+        run: |
+          npm run cache-versioning:write
+          npm run build:csp
+          npm run build:diagnostics
+          npm run verify:csp
+          npm run verify:diagnostics
+          npm run audit:cache-versioning
+
+      - name: Verificar arquitectura de Apariencia
+        run: |
+          node --check js/admin/appearance/editor-visual-admin.js
+          npm run audit:appearance-unified
+          npm run audit:content-appearance
+
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Probar preview arriba y responsive
+        run: npx playwright test tests/visual-builder/apariencia-preview-abajo.spec.js --project=chromium
+
+      - name: Auditoría final
+        run: npm run audit:final
+
+      - name: Commit clean tree
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "fix(admin): preview arriba y editores abajo"
+          git push origin HEAD:fix/apariencia-preview-arriba
