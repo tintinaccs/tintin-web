@@ -17,6 +17,7 @@ check('No queda llamada al deep-link legado eliminado', !app.includes('handleCon
 check('Los enlaces viejos Contenido se redirigen a Apariencia', app.includes("if (target === 'contenido') target = 'apariencia'") && app.includes("fromHash === 'contenido'"));
 check('Permisos de contenido permiten entrar sin abrir colores sensibles', app.includes('canAccessUnifiedAppearance') && html.includes('data-appearance-sensitive="true"'));
 check('Contenido conserva una sola suscripción por página', (content.match(/onSnapshot\(/g) || []).length === 1 && content.includes('pageUnsubscribe?.()'));
+check('Super Admin no monta el editor directo ni abre una segunda suscripción', content.includes('if (isSuperAdmin)') && content.includes('unifiedHost.replaceChildren()') && content.includes('ui = null') && content.indexOf('if (isSuperAdmin)') < content.indexOf('subscribePage(currentPageId)'));
 check('Contenido conserva site_content como única fuente', content.includes("doc(db, 'site_content', pageId)") && content.includes("doc(db, 'site_content', currentPageId)"));
 check('Firebase sigue centralizado', firebase.includes('initializeApp') && !content.includes('initializeApp(') && !app.includes('initializeApp('));
 check('Contenido usa el guard global de cambios pendientes', content.includes('window.AdminUnsaved.register(nextId') && content.includes('window.AdminUnsaved?.markDirty(activeUnsavedScopeId)') && content.includes('window.AdminUnsaved?.markClean(activeUnsavedScopeId)'));

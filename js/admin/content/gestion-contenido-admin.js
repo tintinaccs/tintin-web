@@ -453,8 +453,22 @@ if (!window.TintinAdminContentPhase6Booted) {
 
   async function startForUser(user) {
     currentUser = user;
-    await resolvePermissions(user);
     const unifiedHost = document.getElementById('appearance-content-phase6-host');
+    const isSuperAdmin = String(user?.email || '').trim().toLowerCase() === String(SUPER_ADMIN).trim().toLowerCase();
+
+    // El Super Admin edita contenido exclusivamente desde el Constructor visual.
+    // No montamos este editor ni abrimos un segundo onSnapshot a site_content.
+    // Los roles delegados conservan este editor acotado a sus permisos de Contenido.
+    if (isSuperAdmin) {
+      if (unifiedHost) {
+        unifiedHost.replaceChildren();
+        unifiedHost.hidden = true;
+      }
+      ui = null;
+      return;
+    }
+
+    await resolvePermissions(user);
     if (unifiedHost) unifiedHost.hidden = !permissions.view;
     if (!permissions.view) return;
 

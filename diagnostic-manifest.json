@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-12T17:40:04.904Z",
-  "sourceFingerprint": "18b6e04bf9420c1ad126c3512f8e655bdd4f70b41f7a2329488041b0daed8a51",
+  "generatedAt": "2026-08-12T18:11:40.269Z",
+  "sourceFingerprint": "d4962f048c3c13cb9634dd67d2fbf3d94efae58b3c9eefbd3e690d393dd083f5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 599,
     "textFiles": 567,
-    "totalBytes": 6350702,
+    "totalBytes": 6354498,
     "pages": 18,
     "modules": 366
   },
@@ -17038,7 +17038,7 @@
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
       "bytes": 44251,
-      "sha256": "8096a109c3b48813b992fb451de327683844f74d70c9d6b8929e57e3ce8363ee",
+      "sha256": "3a93c91935c3407ca70d559ca9f4630c201c6579e86e9b0ab82483a1ae6642f1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17240,8 +17240,8 @@
     },
     {
       "path": "js/admin/content/gestion-contenido-admin.js",
-      "bytes": 21192,
-      "sha256": "e5bb3da0f3771eb0add390d43c2371e8435b1799c4f03de97b71a02e440bd044",
+      "bytes": 21728,
+      "sha256": "9279c4199c62f455f75e3e2f3a7320d944d7adc83c8118c3a9d88c7a502caaab",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21262,8 +21262,8 @@
     },
     {
       "path": "scripts/auditar-admin-apariencia-unificada.js",
-      "bytes": 2756,
-      "sha256": "910fa34767d5cc459c4ba9f8bc349218f40cb3f9d69fa3d6abbfd3244b1148b8",
+      "bytes": 3053,
+      "sha256": "34a3757fd66d75d156a296c392cff79d153f2cf475a807cf482ef0268d3ffbec",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24919,8 +24919,8 @@
     },
     {
       "path": "tests/visual-builder/apariencia-preview-abajo.spec.js",
-      "bytes": 4984,
-      "sha256": "3cdbb37a733fef30cee5fc801efa4cae07895ad04a59ed26f3e8436f446a65d1",
+      "bytes": 5408,
+      "sha256": "8a866bc4156bff91bbaf700e5fdd91385b286d8bd330b63eb256012f6a57f89b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25753,8 +25753,8 @@
     {
       "path": "css/admin/visual-studio-v2.css",
       "extension": ".css",
-      "bytes": 12092,
-      "sha256": "f2ad72e85cd46260d9b5e163aeb5fc6cf65f53be41a67d5136412676998a34a8"
+      "bytes": 14631,
+      "sha256": "97e462b16bd0718fdc3d04970f799e9b5cd10f2119ab0f8583aa9f2884b44032"
     },
     {
       "path": "css/components/ai-builder-public.css",
@@ -26546,7 +26546,7 @@
       "path": "js/admin/appearance/editor-visual-admin.js",
       "extension": ".js",
       "bytes": 44251,
-      "sha256": "8096a109c3b48813b992fb451de327683844f74d70c9d6b8929e57e3ce8363ee"
+      "sha256": "3a93c91935c3407ca70d559ca9f4630c201c6579e86e9b0ab82483a1ae6642f1"
     },
     {
       "path": "js/admin/appearance/visual-studio-global-admin.js",
@@ -26575,8 +26575,8 @@
     {
       "path": "js/admin/content/gestion-contenido-admin.js",
       "extension": ".js",
-      "bytes": 21192,
-      "sha256": "e5bb3da0f3771eb0add390d43c2371e8435b1799c4f03de97b71a02e440bd044"
+      "bytes": 21728,
+      "sha256": "9279c4199c62f455f75e3e2f3a7320d944d7adc83c8118c3a9d88c7a502caaab"
     },
     {
       "path": "js/admin/diagnostics/diagnostico-sitio-admin.js",
@@ -27835,8 +27835,8 @@
     {
       "path": "scripts/auditar-admin-apariencia-unificada.js",
       "extension": ".js",
-      "bytes": 2756,
-      "sha256": "910fa34767d5cc459c4ba9f8bc349218f40cb3f9d69fa3d6abbfd3244b1148b8"
+      "bytes": 3053,
+      "sha256": "34a3757fd66d75d156a296c392cff79d153f2cf475a807cf482ef0268d3ffbec"
     },
     {
       "path": "scripts/auditar-admin-commerce-shopify.js",
@@ -28418,7 +28418,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 27697,
-      "sha256": "d4b1f810fb4d33db0febd4bef04b9daf2f1e7b8a3774da7bb1bbd95524a380fb"
+      "sha256": "aeae0d9ba1e0466ac3f9d2a1aa035dc9bc8939c1f1f66df45bba3a9d8b2ed14e"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -28735,8 +28735,8 @@
     {
       "path": "tests/visual-builder/apariencia-preview-abajo.spec.js",
       "extension": ".js",
-      "bytes": 4984,
-      "sha256": "3cdbb37a733fef30cee5fc801efa4cae07895ad04a59ed26f3e8436f446a65d1"
+      "bytes": 5408,
+      "sha256": "8a866bc4156bff91bbaf700e5fdd91385b286d8bd330b63eb256012f6a57f89b"
     },
     {
       "path": "tests/visual-builder/visual-builder-contract.test.mjs",
@@ -33142,12 +33142,12 @@
           },
           {
             "file": "scripts/auditar-admin-apariencia-unificada.js",
-            "line": 20,
+            "line": 21,
             "operation": "doc"
           },
           {
             "file": "scripts/auditar-admin-apariencia-unificada.js",
-            "line": 20,
+            "line": 21,
             "operation": "doc"
           }
         ]
