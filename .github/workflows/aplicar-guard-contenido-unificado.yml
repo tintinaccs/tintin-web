@@ -30,12 +30,32 @@ jobs:
           node-version: 22
 
       - name: Integrar editor de Contenido al guard compartido
-        run: node scripts/apply-content-unsaved-integration.mjs
+        id: integrate
+        continue-on-error: true
+        run: |
+          set +e
+          node scripts/apply-content-unsaved-integration.mjs > guard-integration.log 2>&1
+          code=$?
+          cat guard-integration.log
+          exit $code
+
+      - name: Subir diagnóstico de integración
+        if: ${{ steps.integrate.outcome == 'failure' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: guard-integration-log
+          path: guard-integration.log
+          if-no-files-found: error
+
+      - name: Detener si la integración falló
+        if: ${{ steps.integrate.outcome == 'failure' }}
+        run: exit 1
 
       - name: Retirar herramientas temporales
         run: |
           rm scripts/apply-content-unsaved-integration.mjs
           rm .github/workflows/aplicar-guard-contenido-unificado.yml
+          rm -f guard-integration.log
 
       - name: Instalar dependencias
         run: npm ci
