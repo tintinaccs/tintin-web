@@ -36,6 +36,7 @@ import { contrastRatio, passesWcag } from "../components/color/utilidades-contra
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260716-cloudinary-fix-1";
 import { createOrderViaServer } from "../create-order-client.js?v=tintin-20260811-phone-order-1";
 import './products/integridad-inventario-admin.js?v=tintin-20260722-order-delete-2';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20260812-tinped-crud-1';
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -2036,7 +2037,7 @@ function renderOrdersTable(orders) {
     return `
       <tr class="adm-order-row" style="cursor:pointer" onclick="window.toggleOrderDetail(${detailArg})">
         <td class="col-select" data-label="Seleccionar" onclick="event.stopPropagation()"><input type="checkbox" class="order-row-check" data-id="${safeOrderId}" onclick="toggleOrderSelect(this)" ${_selectedOrders.has(o.id) ? 'checked' : ''}></td>
-        <td data-label="Pedido" style="font-size:11px;color:#777;font-weight:700">#${escapeHtmlAdmin(o.id.slice(-6).toUpperCase())}</td>
+        <td data-label="Pedido" style="font-size:11px;color:#777;font-weight:700">#${escapeHtmlAdmin(o.orderNumber || o.shortId || o.id)}</td>
         <td data-label="Cliente">
           <strong>${escapeHtmlAdmin(o.userName || '—')}</strong><br>
           <small style="color:#777">${escapeHtmlAdmin(o.userPhone || '')}</small><br>
@@ -2133,27 +2134,22 @@ window.updateOrderStatus = async (orderId, status) => {
   const o = allOrders.find(o => o.id === orderId);
   const prevStatus = o?.status || 'pendiente';
   try {
+    if (currentRole === 'superadmin' && status === 'cancelado') {
+      await window.TintinOrderAdmin.trashOrder(orderId, 'Cancelado por Super Admin');
+      allOrders = allOrders.filter(item => item.id !== orderId);
+      logAudit('mover_pedido_borrados', 'pedido', orderId, o?.orderNumber || o?.shortId || orderId, `Cancelado y movido a Borrados desde ${ORDER_STATUS_LABELS[prevStatus] || prevStatus}`);
+      toast(`Pedido ${o?.orderNumber || o?.shortId || ''} movido a Borrados`);
+      applyOrderFilters();
+      return;
+    }
     await window.TintinInventoryIntegrity.transitionStatus(orderId, status);
     if (o) o.status = status;
-    logAudit('cambiar_estado_pedido', 'pedido', orderId, o?.shortId || orderId,
-      `Estado: ${ORDER_STATUS_LABELS[prevStatus] || prevStatus} → ${ORDER_STATUS_LABELS[status] || status}`);
+    logAudit('cambiar_estado_pedido', 'pedido', orderId, o?.orderNumber || o?.shortId || orderId, `Estado: ${ORDER_STATUS_LABELS[prevStatus] || prevStatus} → ${ORDER_STATUS_LABELS[status] || status}`);
     toast(`Estado actualizado: ${ORDER_STATUS_LABELS[status] || status}`);
-    // El <select> ya se actualiza solo (comportamiento nativo del navegador),
-    // pero el badge de arriba es un <span> aparte que solo se actualiza si
-    // se vuelve a renderizar la fila — sin esto quedaba desactualizado hasta
-    // la próxima carga de la sección. applyOrderFilters() en vez de
-    // renderOrdersTable(allOrders) directo para no perder un filtro activo.
     applyOrderFilters();
-    // Correo automático opcional (Super Admin → Correos → Correos de
-    // pedidos) — desactivado por defecto para cada estado nuevo, así que no
-    // cambia nada hasta que se active a propósito. Nunca bloquea ni revierte
-    // el cambio de estado si el envío falla (fire-and-forget, con su propio
-    // try/catch interno).
     if (o) maybeSendOrderStatusEmail_(o, 'status', status);
   } catch(e) {
-    // El <select> ya muestra el valor nuevo por su cuenta (comportamiento
-    // nativo del navegador) aunque el guardado haya fallado — como allOrders
-    // no se tocó, volver a renderizar la tabla lo repone al valor real.
+    console.error('[orders] No se pudo cambiar el estado:', e);
     toast('No se pudo guardar el estado. Probá de nuevo.');
     applyOrderFilters();
   }
@@ -2248,26 +2244,24 @@ function orderDeleteErrorMessage_(error) {
 }
 
 window.deleteOrder = async (orderId) => {
-  if (!can(currentRole, 'manageOrdersFull') || !roleCanDo('pedidos', 'eliminar')) { toast('No tenés permiso para eliminar pedidos'); return { deleted: false }; }
-  if (!confirm('¿Eliminar este pedido? Esta acción no se puede deshacer.')) return { deleted: false, cancelled: true };
+  if (!can(currentRole, 'manageOrdersFull') || !roleCanDo('pedidos', 'eliminar')) { toast('No tenés permiso para eliminar pedidos'); return { moved: false }; }
+  if (currentRole !== 'superadmin') { toast('Solo Super Admin puede mover pedidos a Borrados'); return { moved: false }; }
+  if (!confirm('¿Mover este pedido a Borrados? Podrás restaurarlo después.')) return { moved: false, cancelled: true };
   const orderBefore = allOrders.find(x => x.id === orderId) || null;
+  const reason = window.prompt('Motivo (opcional):', '') ?? '';
   try {
-    const result = await window.TintinInventoryIntegrity.deleteOrder(orderId);
+    const result = await window.TintinOrderAdmin.trashOrder(orderId, reason);
     allOrders = allOrders.filter(o => o.id !== orderId);
-    if (result.deleted) {
-      logAudit('eliminar_pedido', 'pedido', orderId, orderBefore?.shortId || orderId, `Cliente: ${orderBefore?.userName || orderBefore?.userEmail || '—'}`);
-      toast(result.missingProducts?.length
-        ? 'Pedido eliminado. Algunos productos antiguos ya no estaban en el catálogo.'
-        : 'Pedido eliminado');
-    } else {
-      toast('El pedido ya no existía; la lista fue actualizada.');
-    }
+    if (result.moved) {
+      logAudit('mover_pedido_borrados', 'pedido', orderId, orderBefore?.orderNumber || orderBefore?.shortId || orderId, `Cliente: ${orderBefore?.userName || orderBefore?.userEmail || '—'}${reason ? ` · ${reason}` : ''}`);
+      toast(`Pedido ${orderBefore?.orderNumber || orderBefore?.shortId || ''} movido a Borrados`);
+    } else toast('El pedido ya no estaba en la lista activa.');
     applyOrderFilters();
     return { ...result, orderBefore };
   } catch(e) {
-    console.error('[orders] No se pudo eliminar el pedido:', e);
+    console.error('[orders] No se pudo mover el pedido a Borrados:', e);
     toast(orderDeleteErrorMessage_(e), 6500);
-    return { deleted: false, error: e, orderBefore };
+    return { moved: false, error: e, orderBefore };
   }
 };
 
@@ -2283,7 +2277,8 @@ function applyOrderFilters() {
     (o.userName||'').toLowerCase().includes(search) ||
     (o.userEmail||'').toLowerCase().includes(search) ||
     (o.userPhone||'').toLowerCase().includes(search) ||
-    (o.id||'').toLowerCase().includes(search)
+    (o.id||'').toLowerCase().includes(search) ||
+    (o.orderNumber||o.shortId||'').toLowerCase().includes(search)
   );
   _lastFilteredOrders = filtered;
   // Una selección deja de tener sentido si el pedido seleccionado ya no
@@ -2462,60 +2457,35 @@ window.bulkResendOrderEmails = async function() {
 };
 
 window.bulkDeleteOrders = async function() {
-  if (!_selectedOrders.size) return { deletedOrders: [], failed: [] };
-  if (currentRole !== 'superadmin') { toast('Solo Super Admin puede eliminar pedidos en lote'); return { deletedOrders: [], failed: [] }; }
+  if (!_selectedOrders.size) return { movedOrders: [], failed: [] };
+  if (currentRole !== 'superadmin') { toast('Solo Super Admin puede mover pedidos a Borrados en lote'); return { movedOrders: [], failed: [] }; }
   const n = _selectedOrders.size;
-  if (!confirm(`¿ELIMINAR DEFINITIVAMENTE ${n} pedido(s)? Esta acción NO se puede deshacer.`)) return { deletedOrders: [], failed: [], cancelled: true };
-  const typed = prompt(`Para confirmar, escribí CONFIRMAR (${n} pedidos serán eliminados):`);
-  if (typed !== 'CONFIRMAR') { toast('Cancelado — no se escribió CONFIRMAR'); return { deletedOrders: [], failed: [], cancelled: true }; }
-
+  if (!confirm(`¿Mover ${n} pedido(s) a Borrados? Se podrán restaurar después.`)) return { movedOrders: [], failed: [], cancelled: true };
   const ids = [..._selectedOrders];
   const ordersById = new Map(allOrders.map(order => [order.id, order]));
-  const deletedOrders = [];
-  const removedIds = new Set();
-  const failed = [];
-  toast(`Eliminando 0 de ${n}…`, 60000);
-
+  const movedOrders = [], removedIds = new Set(), failed = [];
+  toast(`Moviendo 0 de ${n} a Borrados…`, 60000);
   for (let index = 0; index < ids.length; index++) {
     const id = ids[index];
     try {
-      const result = await window.TintinInventoryIntegrity.deleteOrder(id);
-      removedIds.add(id);
-      if (result.deleted) deletedOrders.push(ordersById.get(id) || { id });
-    } catch (error) {
-      console.error(`[orders] No se pudo eliminar el pedido ${id}:`, error);
-      failed.push({ id, error });
-    }
-    toast(`Eliminando ${index + 1} de ${n}…`, 60000);
+      const result = await window.TintinOrderAdmin.trashOrder(id, 'Eliminación masiva por Super Admin');
+      if (result.moved) { removedIds.add(id); movedOrders.push(ordersById.get(id) || { id }); }
+    } catch (error) { console.error(`[orders] No se pudo mover el pedido ${id}:`, error); failed.push({ id, error }); }
+    toast(`Moviendo ${index + 1} de ${n} a Borrados…`, 60000);
   }
-
   allOrders = allOrders.filter(order => !removedIds.has(order.id));
   _selectedOrders.clear();
   failed.forEach(item => _selectedOrders.add(item.id));
-
-  if (deletedOrders.length) {
-    logAudit('eliminar_pedido', 'pedido', '', '', `${deletedOrders.length} pedidos eliminados`, {
-      bulk: true,
-      count: deletedOrders.length,
-      failed: failed.length
-    });
-  }
-
+  if (movedOrders.length) logAudit('mover_pedido_borrados', 'pedido', '', '', `${movedOrders.length} pedidos movidos a Borrados`, { bulk: true, count: movedOrders.length, failed: failed.length });
   applyOrderFilters();
-  if (failed.length) {
-    const firstMessage = orderDeleteErrorMessage_(failed[0].error);
-    toast(`${deletedOrders.length} eliminado(s); ${failed.length} no pudieron eliminarse. ${firstMessage}`, 8000);
-  } else {
-    toast(`${deletedOrders.length} pedido(s) eliminados definitivamente`);
-  }
-
-  return { deletedOrders, failed };
+  toast(failed.length ? `${movedOrders.length} movidos; ${failed.length} fallaron.` : `${movedOrders.length} pedido(s) movidos a Borrados`, 7000);
+  return { movedOrders, failed };
 };
 
 function orderRowsToCsv_(orders) {
   const header = ['ID', 'Cliente', 'Email', 'Teléfono', 'Ciudad', 'Productos', 'Total', 'Estado', 'Estado de pago', 'Fecha'];
   const rows = orders.map(o => [
-    o.id,
+    o.orderNumber || o.shortId || o.id,
     o.userName || '',
     o.userEmail || '',
     o.userPhone || '',

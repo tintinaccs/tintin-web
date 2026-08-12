@@ -142,36 +142,24 @@ check(
   'El cambio de estado de pago debe validar permiso, auditar y reponer si falla.'
 );
 check(
-  'Eliminar pedido: permiso + confirmación destructiva + auditoría',
-  /roleCanDo\('pedidos', 'eliminar'\)/.test(adminApp) &&
-    /confirm\('¿Eliminar este pedido\? Esta acción no se puede deshacer\.'\)/.test(adminApp) &&
-    /logAudit\('eliminar_pedido'/.test(adminApp),
-  'La eliminación debe pedir confirmación, respetar el permiso y auditar.'
+  'Eliminar pedido: permiso + confirmación + papelera auditable',
+  /roleCanDo\('pedidos', 'eliminar'\)/.test(adminApp) && /¿Mover este pedido a Borrados\?/.test(adminApp) && /TintinOrderAdmin\.trashOrder/.test(adminApp) && /logAudit\('mover_pedido_borrados'/.test(adminApp),
+  'Eliminar desde la lista activa debe mover a Borrados y dejar auditoría.'
 );
 check(
-  'Eliminar pedido libera inventario antes de borrar y no depende de reglas nuevas',
-  /lastInventoryAction:\s*'release'/.test(inventoryIntegrity) &&
-    !/lastInventoryAction:\s*'delete-release'/.test(inventoryIntegrity) &&
-    /const releaseResult = await runTransaction/.test(inventoryIntegrity) &&
-    /inventoryState:\s*'released'/.test(inventoryIntegrity) &&
-    /if \(orderReservesInventory\(orderSnapshot\.data\(\) \|\| \{\}\)\)/.test(inventoryIntegrity) &&
-    !/isSuperAdmin\(\) && !orderExistsAfter/.test(rules),
-  'La devolución debe quedar confirmada antes de borrar para funcionar con las reglas ya publicadas y soportar reintentos.'
+  'Mover a Borrados libera inventario antes de retirar el pedido activo',
+  /TintinInventoryIntegrity\.transitionStatus\(safeId, 'cancelado'\)/.test(read('js/admin/orders/pedidos-superadmin-crud.js')) && /inventoryState: 'released'/.test(read('js/admin/orders/pedidos-superadmin-crud.js')) && /match \/orderTrash\/\{orderId\}/.test(rules),
+  'La papelera debe conservar recuperación sin dejar stock reservado.'
 );
 check(
-  'La eliminación individual informa el motivo real y expone el resultado al sincronizador',
-  /function orderDeleteErrorMessage_/.test(adminApp) &&
-    /return \{ \.\.\.result, orderBefore \}/.test(adminApp) &&
-    /if \(result\?\.deleted\) await syncDeletedOrder/.test(deleteFix),
-  'No debe ocultarse toda falla detrás de un mensaje genérico ni releerse el pedido solo para comprobar si se borró.'
+  'La eliminación individual expone el resultado recuperable',
+  /function orderDeleteErrorMessage_/.test(adminApp) && /return \{ \.\.\.result, orderBefore \}/.test(adminApp) && /trashOrder/.test(read('js/admin/orders/pedidos-superadmin-crud.js')),
+  'La UI debe conservar contexto del pedido al moverlo a Borrados.'
 );
 check(
-  'La eliminación masiva conserva los fallos y recalcula solo cuentas afectadas',
-  /const deletedOrders = \[\]/.test(adminApp) &&
-    /const failed = \[\]/.test(adminApp) &&
-    /failed\.forEach\(item => _selectedOrders\.add\(item\.id\)\)/.test(adminApp) &&
-    !/recalculateAllUserOrderStats/.test(deleteFix),
-  'Un fallo intermedio no debe ocultar los pedidos ya eliminados ni disparar una lectura global de usuarios y pedidos.'
+  'La eliminación masiva conserva fallos y usa la misma papelera',
+  /movedOrders\s*=\s*\[\]/.test(adminApp) && /failed\s*=\s*\[\]/.test(adminApp) && /failed\.forEach\(item => _selectedOrders\.add\(item\.id\)\)/.test(adminApp) && /TintinOrderAdmin\.trashOrder/.test(adminApp),
+  'Un fallo intermedio no debe ocultar lo ya movido a Borrados.'
 );
 // La comprobación de que el navegador no sirve una versión vieja en caché ya
 // la cubre de forma general `auditar-versionado-cache.mjs` (compara hash de

@@ -421,6 +421,7 @@ function phase4CreateOrder_(payload, idToken) {
       'orders/' + orderId,
       'settings/general',
       'settings/shippingRates',
+      'settings/orderSequence',
       'users/' + uid,
       'checkoutGuards/' + uid
     ];
@@ -563,13 +564,20 @@ function phase4CreateOrder_(payload, idToken) {
       };
     }
 
-    var shortId = requestId.replace(/[^A-Za-z0-9]/g, '').slice(-8).toUpperCase();
+    var sequenceData = docs['settings/orderSequence'] || {};
+    var nextOrderSequence = Math.max(0, Math.floor(Number(sequenceData.lastNumber || 0))) + 1;
+    var sequenceDigits = String(nextOrderSequence);
+    while (sequenceDigits.length < 2) sequenceDigits = '0' + sequenceDigits;
+    var publicOrderNumber = 'TINPED' + sequenceDigits;
+    var shortId = publicOrderNumber;
     var nowIso = new Date().toISOString();
     var keepsAddress = shipping.method === 'delivery' || (shipping.method === 'encomienda' && encomiendaMode === 'puerta');
     var orderData = {
       requestId: requestId,
       source: 'spark-checkout-v1',
       shortId: shortId,
+      orderNumber: publicOrderNumber,
+      orderSequenceNumber: nextOrderSequence,
       userId: uid,
       userEmail: email,
       contactEmail: contactEmail,
@@ -607,6 +615,8 @@ function phase4CreateOrder_(payload, idToken) {
     };
 
     var writes = [phase4CreateWrite_('orders/' + orderId, orderData)];
+    var sequencePatch = { lastNumber: nextOrderSequence, lastCode: publicOrderNumber, updatedAt: nowIso, updatedBy: email };
+    writes.push(docs['settings/orderSequence'] ? phase4UpdateWrite_('settings/orderSequence', sequencePatch, ['lastNumber', 'lastCode', 'updatedAt', 'updatedBy']) : phase4CreateWrite_('settings/orderSequence', sequencePatch));
     resolvedItems.forEach(function (item) {
       var stock = phase4ParseStock_(docs['products/' + item.id].stock);
       if (stock !== null) {
