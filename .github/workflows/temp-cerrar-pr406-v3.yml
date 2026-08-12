@@ -1,0 +1,82 @@
+name: TEMP cerrar PR406 TINPED v3
+
+on:
+  push:
+    branches:
+      - feat/pedidos-tinped-papelera
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: feat/pedidos-tinped-papelera
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Aplicar parche v2 y corregir contrato cancelado/rechazado
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import textwrap
+
+          source = Path('.github/workflows/temp-cerrar-pr406-v2.yml').read_text(encoding='utf-8')
+          start = "          python - <<'PY'\n"
+          end = "\n          PY"
+          if start not in source or end not in source:
+              raise SystemExit('No se encontró el parche v2.')
+          code = textwrap.dedent(source.split(start,1)[1].split(end,1)[0])
+          exec(compile(code, 'tinped-v2.py', 'exec'), {'__name__':'__main__'})
+
+          p = Path('scripts/auditar-tinped-pedidos.js')
+          s = p.read_text(encoding='utf-8')
+          old = "['Cancelación a Borrados',/status === 'cancelado'/.test(admin)&&/TintinOrderAdmin\\.trashOrder/.test(admin)]"
+          new = "['Cancelación a Borrados',/\\['cancelado', 'rechazado'\\]\\.includes\\(status\\)/.test(admin)&&/TintinOrderAdmin\\.trashOrder/.test(admin)]"
+          if old not in s:
+              raise SystemExit('No se encontró el contrato antiguo de cancelación.')
+          s = s.replace(old, new, 1)
+          p.write_text(s, encoding='utf-8')
+
+          for temp in ['.github/workflows/temp-cerrar-pr406-v3.yml']:
+              Path(temp).unlink(missing_ok=True)
+          PY
+
+      - name: Sintaxis y contratos
+        run: |
+          node --check js/admin/orders/pedidos-superadmin-crud.js
+          node --check js/admin/admin-app.js
+          node --check js/admin/shopify-commerce-admin.js
+          node scripts/auditar-tinped-pedidos.js
+          node scripts/auditar-nivel-2-comercio.js
+          node scripts/auditar-critico-recuperacion.js
+          node scripts/auditar-fase-6-seguridad.js
+          npm run test:checkout-contract
+
+      - name: Firestore emulator
+        run: npm run test:rules-critical
+
+      - name: Pages y barrido final
+        run: |
+          npm run cache-versioning:write
+          npm run build:pages
+          npm run audit:final
+
+      - name: Commit verificado
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'fix(pedidos): validar papelera, CRUD responsive y contratos TINPED'
+          git push origin HEAD:feat/pedidos-tinped-papelera
