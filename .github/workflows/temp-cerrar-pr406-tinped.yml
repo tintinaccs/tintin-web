@@ -1,0 +1,278 @@
+name: TEMP cerrar PR406 TINPED
+
+on:
+  push:
+    branches:
+      - feat/pedidos-tinped-papelera
+
+permissions:
+  contents: write
+
+jobs:
+  fix-and-verify:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: feat/pedidos-tinped-papelera
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Alinear contratos y cerrar responsive/Cancelados
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def read(p): return Path(p).read_text(encoding='utf-8')
+          def write(p,s): Path(p).write_text(s, encoding='utf-8')
+          def repl(s, old, new, label, count=1):
+              n=s.count(old)
+              if n != count: raise SystemExit(f'{label}: esperaba {count}, encontré {n}')
+              return s.replace(old,new,count)
+
+          # Level 2: papelera recuperable reemplaza borrado definitivo + resincronización global.
+          p='scripts/auditar-nivel-2-comercio.js'; s=read(p)
+          s=repl(s, "const admin = read('js/admin/admin-app.js');\n", "const admin = read('js/admin/admin-app.js');\nconst orderCrud = read('js/admin/orders/pedidos-superadmin-crud.js');\n", 'level2 import')
+          old="""check(
+            'El borrado masivo conserva fallos y solo sincroniza pedidos eliminados',
+            admin.includes('const deletedOrders = []') && admin.includes('const failed = []') &&
+              admin.includes('failed.forEach(item => _selectedOrders.add(item.id))') &&
+              deleteFix.includes('if (result?.deleted) await syncDeletedOrder')
+          );"""
+          new="""check(
+            'La papelera masiva conserva fallos y solo mueve pedidos confirmados',
+            admin.includes('movedOrders = []') && admin.includes('failed = []') &&
+              admin.includes('failed.forEach(item => _selectedOrders.add(item.id))') &&
+              admin.includes('TintinOrderAdmin.trashOrder') &&
+              orderCrud.includes("TintinInventoryIntegrity.transitionStatus(safeId, 'cancelado')"),
+            'Cada pedido debe liberar inventario de forma atómica antes de salir de la lista activa.'
+          );"""
+          s=repl(s,old,new,'level2 bulk'); write(p,s)
+
+          # Recuperación crítica: reconciliación ahora cruza admin-app + módulo CRUD/papelera.
+          p='scripts/auditar-critico-recuperacion.js'; s=read(p)
+          s=repl(s, "const admin = read('js/admin/admin-app.js');\n", "const admin = read('js/admin/admin-app.js');\nconst orderCrud = read('js/admin/orders/pedidos-superadmin-crud.js');\n", 'critical import')
+          old="""check(
+            'El panel reconcilia inventario de forma transaccional',
+            inventory.includes('runTransaction') &&
+              inventory.includes('computeInventoryDeltas') &&
+              admin.includes('TintinInventoryIntegrity.updateEditedOrder') &&
+              admin.includes('TintinInventoryIntegrity.transitionStatus') &&
+              admin.includes('TintinInventoryIntegrity.deleteOrder'),
+            'Edición, estados y eliminación deben usar el reconciliador atómico.'
+          );"""
+          new="""check(
+            'El panel reconcilia inventario de forma transaccional',
+            inventory.includes('runTransaction') &&
+              inventory.includes('computeInventoryDeltas') &&
+              orderCrud.includes('TintinInventoryIntegrity.updateEditedOrder') &&
+              admin.includes('TintinInventoryIntegrity.transitionStatus') &&
+              admin.includes('TintinOrderAdmin.trashOrder') &&
+              orderCrud.includes("TintinInventoryIntegrity.transitionStatus(safeId, 'cancelado')"),
+            'Edición, estados y papelera deben usar el reconciliador atómico.'
+          );"""
+          s=repl(s,old,new,'critical inventory')
+          old="""check(
+            'La eliminación masiva no recalcula toda la base ni oculta fallos parciales',
+            !deleteFix.includes('recalculateAllUserOrderStats') &&
+              deleteFix.includes('recalculateOrderOwnerStats') &&
+              admin.includes('const deletedOrders = []') &&
+              admin.includes('const failed = []') &&
+              admin.includes('failed.forEach(item => _selectedOrders.add(item.id))'),
+            'Solo deben recalcularse las cuentas afectadas y los pedidos fallidos deben quedar seleccionados.'
+          );"""
+          new="""check(
+            'La papelera masiva no recalcula toda la base ni oculta fallos parciales',
+            !deleteFix.includes('recalculateAllUserOrderStats') &&
+              admin.includes('movedOrders = []') &&
+              admin.includes('failed = []') &&
+              admin.includes('failed.forEach(item => _selectedOrders.add(item.id))') &&
+              admin.includes('TintinOrderAdmin.trashOrder') &&
+              !/window\\.bulkDeleteOrders[\\s\\S]*syncInventorySnapshot_\\(\\)/.test(admin),
+            'Cada pedido se mueve de forma acotada y los fallidos deben quedar seleccionados.'
+          );"""
+          s=repl(s,old,new,'critical bulk'); write(p,s)
+
+          # Fase 6: checkout sigue server-side; únicamente Super Admin obtiene create manual.
+          p='scripts/auditar-fase-6-seguridad.js'; s=read(p)
+          old="""check(
+            'Los pedidos no se crean desde el SDK del navegador',
+            rules.includes('match /orders/{orderId}') && rules.includes('allow create: if false;'),
+            'La creación vigente es server-side'
+          );"""
+          new="""check(
+            'El checkout no crea pedidos desde el SDK; solo Super Admin puede crear manualmente',
+            rules.includes('match /orders/{orderId}') &&
+              rules.includes('allow create: if isSuperAdmin();') &&
+              orderClient.includes("action: 'createOrder'") &&
+              !orderClient.includes('setDoc('),
+            'Clientes y staff deben pasar por el endpoint; la excepción de navegador es solo el CRUD de Super Admin.'
+          );"""
+          s=repl(s,old,new,'phase6 orders'); write(p,s)
+
+          # Emulador: Super Admin puede crear manualmente y administrar orderTrash; otros roles no.
+          p='scripts/probar-firestore-critico.mjs'; s=read(p)
+          old="""  await fails(setDoc(doc(superDb, 'orders', 'manual_order'), directOrderPayload));
+            await succeeds(deleteDoc(doc(superDb, 'orders', 'client2_order1')));
+            await fails(deleteDoc(doc(superDb, 'users', 'super1')));"""
+          new="""  await succeeds(setDoc(doc(superDb, 'orders', 'manual_order'), { ...directOrderPayload, source: 'superadmin-manual-v1' }));
+            await fails(setDoc(doc(admin, 'orders', 'manual_admin_denied'), directOrderPayload));
+            await fails(setDoc(doc(admin, 'orderTrash', 'admin_denied'), { orderNumber: 'TINPED99' }));
+            await fails(getDoc(doc(admin, 'orderTrash', 'super_trash_test')));
+            await succeeds(setDoc(doc(superDb, 'orderTrash', 'super_trash_test'), { orderNumber: 'TINPED99', status: 'cancelado' }));
+            await succeeds(getDoc(doc(superDb, 'orderTrash', 'super_trash_test')));
+            await succeeds(deleteDoc(doc(superDb, 'orderTrash', 'super_trash_test')));
+            await succeeds(deleteDoc(doc(superDb, 'orders', 'client2_order1')));
+            await fails(deleteDoc(doc(superDb, 'users', 'super1')));"""
+          s=repl(s,old,new,'rules superadmin tests'); write(p,s)
+
+          # Contrato checkout: pedido + contador + producto = 3 writes, y TINPED se prueba explícitamente.
+          p='tests/checkout/order-contract.test.mjs'; s=read(p)
+          old="""    'settings/shippingRates': {},
+            'users/admin-uid': { role: 'superadmin' },
+            'checkoutGuards/admin-uid': null,
+            'products/p1': { name: 'Aro', price: 10000, stock: 10, active: true, variants: { Color: ['Dorado', 'Plateado'], Talla: ['M'] } }"""
+          new="""    'settings/shippingRates': {},
+            'settings/orderSequence': { lastNumber: 41, lastCode: 'TINPED41' },
+            'users/admin-uid': { role: 'superadmin' },
+            'checkoutGuards/admin-uid': null,
+            'products/p1': { name: 'Aro', price: 10000, stock: 10, active: true, variants: { Color: ['Dorado', 'Plateado'], Talla: ['M'] } }"""
+          s=repl(s,old,new,'checkout sequence mock')
+          old="""  assert.equal(committedWrites.length, 2);
+            assert.equal(committedWrites[1].update.name.endsWith('/products/p1'), true);
+            assert.equal(committedWrites[1].update.fields.stock.integerValue, '5');"""
+          new="""  assert.equal(result.order.orderNumber, 'TINPED42');
+            assert.equal(result.order.shortId, 'TINPED42');
+            assert.equal(committedWrites.length, 3);
+            assert.equal(committedWrites[1].update.name.endsWith('/settings/orderSequence'), true);
+            assert.equal(committedWrites[1].update.fields.lastNumber.integerValue, '42');
+            assert.equal(committedWrites[1].update.fields.lastCode.stringValue, 'TINPED42');
+            assert.equal(committedWrites[2].update.name.endsWith('/products/p1'), true);
+            assert.equal(committedWrites[2].update.fields.stock.integerValue, '5');"""
+          s=repl(s,old,new,'checkout writes'); write(p,s)
+
+          # CRUD: responsive real + toda cancelación/rechazo del Super Admin cae en Borrados.
+          p='js/admin/orders/pedidos-superadmin-crud.js'; s=read(p)
+          old="""function ensureModal_() {
+            let overlay = document.getElementById('tinped-crud-overlay');
+            if (overlay) return overlay;
+            overlay = document.createElement('div');"""
+          new="""function ensureModal_() {
+            let overlay = document.getElementById('tinped-crud-overlay');
+            if (overlay) return overlay;
+            if (!document.getElementById('tinped-crud-responsive-style')) {
+              const style = document.createElement('style');
+              style.id = 'tinped-crud-responsive-style';
+              style.textContent = `
+                #tinped-crud-overlay,#tinped-crud-dialog,#tinped-crud-form,#tinped-items,.tinped-item-row{min-width:0;max-width:100%}
+                #tinped-crud-dialog{width:min(980px,100%)}
+                #tinped-crud-form>*{min-width:0}
+                .tinped-modal-head{flex-wrap:wrap}
+                .tinped-item-row>*{min-width:0}
+                @media (max-width:760px){
+                  #tinped-crud-overlay{padding:8px!important}
+                  #tinped-crud-form{grid-template-columns:minmax(0,1fr)!important;padding:14px!important}
+                  #tinped-crud-form>[style*="grid-column"]{grid-column:1!important}
+                  .tinped-item-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
+                  .tinped-item-row>.adm-field:nth-child(1),.tinped-item-row>.adm-field:nth-child(2){grid-column:1/-1}
+                  .tinped-item-row>button{grid-column:1/-1;width:100%}
+                }
+                @media (max-width:430px){
+                  .tinped-item-row{grid-template-columns:minmax(0,1fr)!important}
+                  .tinped-item-row>*{grid-column:1!important}
+                  #tinped-add-product,#tinped-save,#tinped-modal-close{width:100%}
+                }
+              `;
+              document.head.appendChild(style);
+            }
+            overlay = document.createElement('div');"""
+          s=repl(s,old,new,'crud responsive style')
+          s=repl(s, '<div style="background:#fff;border-radius:16px;max-width:980px;margin:auto;box-shadow:0 18px 60px rgba(0,0,0,.22);overflow:hidden">', '<div id="tinped-crud-dialog" style="background:#fff;border-radius:16px;max-width:980px;margin:auto;box-shadow:0 18px 60px rgba(0,0,0,.22);overflow:hidden">', 'crud dialog id')
+          s=repl(s, '<div style="display:flex;gap:12px;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #eadde2">', '<div class="tinped-modal-head" style="display:flex;gap:12px;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #eadde2">', 'crud header class')
+          s=repl(s, '<div data-item-row="${index}" style="display:grid;grid-template-columns:minmax(150px,1.5fr) minmax(90px,.7fr) 80px 120px 38px;gap:8px;align-items:end;padding:9px 0;border-bottom:1px solid #f2e8ec">', '<div class="tinped-item-row" data-item-row="${index}" style="display:grid;grid-template-columns:minmax(150px,1.5fr) minmax(90px,.7fr) 80px 120px 38px;gap:8px;align-items:end;padding:9px 0;border-bottom:1px solid #f2e8ec">', 'crud item class')
+          old="""    if (modalState.mode === 'create') {
+                const result = await createManualOrder_(patch);
+                toast(`Pedido ${result.orderNumber} creado manualmente.`);
+              } else {
+                const orderId = modalState.orderId;
+                if (!window.TintinInventoryIntegrity?.updateEditedOrder) throw new Error('El reconciliador de inventario no está disponible.');
+                await window.TintinInventoryIntegrity.updateEditedOrder(orderId, patch);
+                toast(`Pedido ${patch.orderNumber || orderNumberOf(modalState.baseOrder)} actualizado.`);
+              }"""
+          new="""    if (modalState.mode === 'create') {
+                const result = await createManualOrder_(patch);
+                if (CANCELLED_STATUSES.has(patch.status)) {
+                  await trashOrder(result.orderId, 'Creado como cancelado/rechazado por Super Admin');
+                  toast(`Pedido ${result.orderNumber} creado y movido a Borrados.`);
+                } else {
+                  toast(`Pedido ${result.orderNumber} creado manualmente.`);
+                }
+              } else {
+                const orderId = modalState.orderId;
+                if (!window.TintinInventoryIntegrity?.updateEditedOrder) throw new Error('El reconciliador de inventario no está disponible.');
+                await window.TintinInventoryIntegrity.updateEditedOrder(orderId, patch);
+                if (CANCELLED_STATUSES.has(patch.status)) {
+                  await trashOrder(orderId, 'Cancelado/rechazado desde CRUD completo por Super Admin');
+                  toast(`Pedido ${patch.orderNumber || orderNumberOf(modalState.baseOrder)} movido a Borrados.`);
+                } else {
+                  toast(`Pedido ${patch.orderNumber || orderNumberOf(modalState.baseOrder)} actualizado.`);
+                }
+              }"""
+          s=repl(s,old,new,'crud cancellation'); write(p,s)
+
+          # Cancelar/rechazar desde controles comunes también va a Borrados.
+          p='js/admin/admin-app.js'; s=read(p)
+          s=repl(s, "if (currentRole === 'superadmin' && status === 'cancelado') {", "if (currentRole === 'superadmin' && ['cancelado', 'rechazado'].includes(status)) {", 'admin cancel statuses')
+          s=repl(s, "import './orders/pedidos-superadmin-crud.js?v=tintin-20260812-tinped-crud-1';", "import './orders/pedidos-superadmin-crud.js?v=tintin-20260812-tinped-crud-2';", 'crud import version')
+          write(p,s)
+
+          # Auditoría dedicada: agrega cancelación CRUD y fit mobile/tablet.
+          p='scripts/auditar-tinped-pedidos.js'; s=read(p)
+          old="""['ID técnico conservado',/originalOrderId/.test(crud)&&/ID técnico/.test(crud)]];"""
+          new="""['ID técnico conservado',/originalOrderId/.test(crud)&&/ID técnico/.test(crud)],['Cancelar desde CRUD termina en Borrados',/CANCELLED_STATUSES\\.has\\(patch\\.status\\)/.test(crud)&&/await trashOrder\\(orderId/.test(crud)],['CRUD responsive mobile y tablet',/@media \\(max-width:760px\\)/.test(crud)&&/@media \\(max-width:430px\\)/.test(crud)&&/tinped-item-row/.test(crud)]];"""
+          s=repl(s,old,new,'tinped extra audits'); write(p,s)
+
+          # admin-app cambió por versión/import y lógica; su URL HTML debe cambiar.
+          p='admin.html'; s=read(p)
+          s=repl(s, 'js/admin/admin-app.js?v=tintin-20260812-tinped-crud-1', 'js/admin/admin-app.js?v=tintin-20260812-tinped-crud-2', 'admin app html version')
+          write(p,s)
+
+          # El workflow temporal no es parte del artefacto final.
+          Path('.github/workflows/temp-cerrar-pr406-tinped.yml').unlink(missing_ok=True)
+          PY
+
+      - name: Sintaxis y contratos TINPED
+        run: |
+          node --check js/admin/orders/pedidos-superadmin-crud.js
+          node --check js/admin/admin-app.js
+          node --check js/admin/shopify-commerce-admin.js
+          node scripts/auditar-tinped-pedidos.js
+          node scripts/auditar-nivel-2-comercio.js
+          node scripts/auditar-critico-recuperacion.js
+          node scripts/auditar-fase-6-seguridad.js
+          npm run test:checkout-contract
+
+      - name: Reglas Firestore en emulador
+        run: npm run test:rules-critical
+
+      - name: Versionado, Pages y auditoría final
+        run: |
+          npm run cache-versioning:write
+          npm run build:pages
+          npm run audit:final
+
+      - name: Guardar cambios verificados
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'fix(pedidos): validar papelera, CRUD responsive y contratos TINPED'
+          git push origin HEAD:feat/pedidos-tinped-papelera
