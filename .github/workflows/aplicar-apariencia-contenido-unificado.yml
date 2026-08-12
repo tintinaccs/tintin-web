@@ -29,6 +29,18 @@ jobs:
         with:
           node-version: 22
 
+      - name: Ajustar límite seguro del bloque legado
+        shell: python
+        run: |
+          from pathlib import Path
+          path = Path('scripts/apply-admin-apariencia-contenido-unificado.mjs')
+          text = path.read_text()
+          old = "const legacyEnd = app.indexOf('// ======== IMPORT / EXPORT ========', legacyStart);"
+          new = "const productsMarker = app.indexOf('// PRODUCTS: SELECTION & BULK ACTIONS', legacyStart);\nconst legacyEnd = productsMarker > legacyStart ? app.lastIndexOf('\\n//', productsMarker - 1) : -1;"
+          if old not in text:
+              raise SystemExit('No se encontró el delimitador anterior del bloque legado.')
+          path.write_text(text.replace(old, new))
+
       - name: Aplicar unificación
         run: node scripts/apply-admin-apariencia-contenido-unificado.mjs
 
