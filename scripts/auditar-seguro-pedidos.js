@@ -58,6 +58,11 @@ check(
   'La misma solicitud (mismo requestId) debe devolver el pedido ya creado en vez de duplicarlo.'
 );
 check(
+  'TINPED se asigna dentro de la misma transacción que crea el pedido',
+  phase4.includes("'settings/orderSequence'") && phase4.includes("publicOrderNumber = 'TINPED'") && phase4.includes('orderNumber: publicOrderNumber') && phase4.includes('lastNumber: nextOrderSequence'),
+  'El correlativo comercial debe ser atómico y no reutilizarse por borrar/cancelar.'
+);
+check(
   'El servidor exige tienda abierta, cuenta activa y turno de compra vigente',
   phase4.includes("settings.storeOpen !== true") &&
     phase4.includes("userData.blocked === true") &&
@@ -78,15 +83,9 @@ check(
   'El checkout debe ajustar el carrito cuando cambia el stock.'
 );
 check(
-  'Las reglas de Firestore bloquean todo pedido directo desde el navegador',
-  // El checkout real ya no escribe pedidos directo a Firestore (ver arriba),
-  // pero las reglas se dejan intactas como defensa en profundidad: si algo
-  // alguna vez volviera a escribir directo (o alguien intentara un pedido
-  // manual desde la consola), sigue topeado en 4 productos por el límite de
-  // 1000 expresiones de Firestore — ver el comentario en sparkOrderCreateValid.
-  rules.includes('allow create: if false;') &&
-    !rules.includes('allow create: if sparkOrderCreateValid(orderId);'),
-  'Toda creación debe pasar por el endpoint server-side, que opera con credenciales del servidor.'
+  'El navegador solo puede crear pedidos manuales siendo Super Admin',
+  /match \/orders\/\{orderId\}[\s\S]*?allow create: if isSuperAdmin\(\);/.test(rules) && !rules.includes('allow create: if sparkOrderCreateValid(orderId);'),
+  'Clientes y staff deben seguir pasando por el endpoint server-side; solo Super Admin tiene CRUD manual.'
 );
 check(
   'El servidor valida tienda, cuenta y correo antes de crear el pedido',

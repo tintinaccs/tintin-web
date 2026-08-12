@@ -266,10 +266,10 @@ check(
   'el carrito remoto debe quedar bloqueado'
 );
 check(
-  'Pedidos cerrados y exclusivos del servidor',
-  rules.includes('allow create: if false;') &&
+  'Pedidos cerrados para público y staff; alta manual exclusiva de Super Admin',
+  /match\s+\/orders\/\{orderId\}[\s\S]*?allow create:\s*if isSuperAdmin\(\);/.test(rules) &&
     !rules.includes('allow create: if sparkOrderCreateValid(orderId);'),
-  'Firestore debe rechazar cualquier creación directa; el servidor valida tienda y cuenta'
+  'El checkout sigue server-side; solo Super Admin puede crear manualmente desde el panel privado'
 );
 check(
   'Sin lectura pública vieja',

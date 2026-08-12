@@ -54,9 +54,11 @@ const state = {
   productsReady: false,
   collectionsReady: false,
   ordersReady: false,
+  trashReady: false,
   products: [],
   collections: [],
   orders: [],
+  trashOrders: [],
   productTab: 'all',
   collectionTab: 'all',
   orderTab: 'all',
@@ -220,6 +222,10 @@ function orderItems(order) {
   return Array.isArray(order?.items) ? order.items.filter(Boolean) : [];
 }
 
+function orderDisplayId(order) {
+  return String(order?.orderNumber || order?.shortId || order?.id || '—');
+}
+
 function productVariantsCount(product) {
   if (Array.isArray(product?.variants)) return product.variants.length;
   if (product?.variants && typeof product.variants === 'object') return Object.keys(product.variants).length;
@@ -242,14 +248,7 @@ function productTabCounts() {
 }
 
 function orderTabCounts() {
-  return {
-    all: state.orders.length,
-    unpaid: state.orders.filter(o => payStatus(o) !== 'pagado').length,
-    unfulfilled: state.orders.filter(o => !['entregado', 'cancelado', 'rechazado'].includes(orderStatus(o))).length,
-    delivered: state.orders.filter(o => orderStatus(o) === 'entregado').length,
-    canceled: state.orders.filter(o => ['cancelado', 'rechazado'].includes(orderStatus(o))).length,
-    refunded: state.orders.filter(o => payStatus(o) === 'reembolsado').length
-  };
+  return { all: state.orders.length, unpaid: state.orders.filter(o => payStatus(o) !== 'pagado').length, unfulfilled: state.orders.filter(o => !['entregado', 'cancelado', 'rechazado'].includes(orderStatus(o))).length, delivered: state.orders.filter(o => orderStatus(o) === 'entregado').length, canceled: state.orders.filter(o => ['cancelado', 'rechazado'].includes(orderStatus(o))).length, refunded: state.orders.filter(o => payStatus(o) === 'reembolsado').length, deleted: state.trashOrders.length };
 }
 
 function collectionTabCounts() {
@@ -310,15 +309,9 @@ function filteredCollections() {
 }
 
 function filteredOrders() {
-  let list = [...state.orders];
+  let list = state.orderTab === 'deleted' ? [...state.trashOrders] : [...state.orders];
   const q = normalizeText(state.orderSearch);
-  if (q) {
-    list = list.filter(order => {
-      const customer = orderCustomer(order);
-      const items = orderItems(order).map(item => item?.name || item?.title || '').join(' ');
-      return [order?.id, customer.name, customer.email, customer.phone, items].some(v => normalizeText(v).includes(q));
-    });
-  }
+  if (q) list = list.filter(order => { const customer = orderCustomer(order); const items = orderItems(order).map(item => item?.name || item?.title || '').join(' '); return [orderDisplayId(order), order?.id, customer.name, customer.email, customer.phone, items].some(v => normalizeText(v).includes(q)); });
   if (state.orderTab === 'unpaid') list = list.filter(o => payStatus(o) !== 'pagado');
   if (state.orderTab === 'unfulfilled') list = list.filter(o => !['entregado', 'cancelado', 'rechazado'].includes(orderStatus(o)));
   if (state.orderTab === 'delivered') list = list.filter(o => orderStatus(o) === 'entregado');
@@ -326,10 +319,8 @@ function filteredOrders() {
   if (state.orderTab === 'refunded') list = list.filter(o => payStatus(o) === 'reembolsado');
   if (state.orderStatus) list = list.filter(o => orderStatus(o) === state.orderStatus);
   if (state.orderPay) list = list.filter(o => payStatus(o) === state.orderPay);
-
-  const [, direction] = state.orderSort.split('-');
-  const factor = direction === 'asc' ? 1 : -1;
-  list.sort((a, b) => (timestampMillis(a?.createdAt) - timestampMillis(b?.createdAt)) * factor);
+  const [, direction] = state.orderSort.split('-'); const factor = direction === 'asc' ? 1 : -1;
+  list.sort((a, b) => (timestampMillis(a?.createdAt || a?.trashMeta?.trashedAt) - timestampMillis(b?.createdAt || b?.trashMeta?.trashedAt)) * factor);
   return list;
 }
 
@@ -511,78 +502,17 @@ function payStatusBadge(status) {
 }
 
 function renderOrders() {
-  const root = document.getElementById('tt-commerce-orders');
-  if (!root) return;
-  const counts = orderTabCounts();
-  const list = filteredOrders();
-  const selectedVisible = list.filter(o => state.orderSelected.has(o.id)).length;
-  const allVisibleSelected = list.length > 0 && selectedVisible === list.length;
-  const canBulk = perm('pedidos', 'accionesMasivas', 'manageOrders');
+  const root = document.getElementById('tt-commerce-orders'); if (!root) return;
+  const counts = orderTabCounts(), list = filteredOrders(), showingTrash = state.orderTab === 'deleted';
+  const sourceTotal = showingTrash ? state.trashOrders.length : state.orders.length;
+  const selectedVisible = showingTrash ? 0 : list.filter(o => state.orderSelected.has(o.id)).length;
+  const allVisibleSelected = !showingTrash && list.length > 0 && selectedVisible === list.length;
+  const canBulk = !showingTrash && perm('pedidos', 'accionesMasivas', 'manageOrders');
   const canExport = perm('pedidos', 'exportar', 'manageOrders') || state.role === 'viewer';
-  const canUpdate = perm('pedidos', 'cambiarEstado', 'manageOrders');
-  const canUpdatePay = perm('pedidos', 'cambiarPago', 'manageOrders');
-
-  root.innerHTML = `
-    <div class="tt-commerce-pagehead">
-      <div class="tt-commerce-titlegroup">
-        <h1 class="tt-commerce-title">Pedidos <span class="tt-commerce-count">${state.orders.length}</span></h1>
-        <div class="tt-commerce-subtitle">Pago, preparación, entrega y datos del pedido en una sola vista.</div>
-      </div>
-      <div class="tt-commerce-actions">${canExport ? button('Exportar', 'orders-export') : ''}</div>
-    </div>
-    <div class="tt-commerce-card">
-      <div class="tt-commerce-tabs">
-        ${tabButton('orders', 'all', 'Todos', counts.all, state.orderTab)}
-        ${tabButton('orders', 'unpaid', 'Sin pagar', counts.unpaid, state.orderTab)}
-        ${tabButton('orders', 'unfulfilled', 'Sin entregar', counts.unfulfilled, state.orderTab)}
-        ${tabButton('orders', 'delivered', 'Entregados', counts.delivered, state.orderTab)}
-        ${tabButton('orders', 'canceled', 'Cancelados', counts.canceled, state.orderTab)}
-        ${tabButton('orders', 'refunded', 'Reembolsados', counts.refunded, state.orderTab)}
-      </div>
-      <div class="tt-commerce-toolbar">
-        <label class="tt-commerce-search"><input class="tt-commerce-input" data-filter="order-search" type="search" value="${esc(state.orderSearch)}" placeholder="Pedido, cliente, email o producto"></label>
-        <select class="tt-commerce-select" data-filter="order-status" aria-label="Filtrar estado">
-          <option value="">Todos los estados</option>${ORDER_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderStatus === v ? 'selected' : ''}>${esc(ORDER_STATUS_LABELS[v])}</option>`).join('')}
-        </select>
-        <select class="tt-commerce-select" data-filter="order-pay" aria-label="Filtrar pago">
-          <option value="">Todos los pagos</option>${PAY_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderPay === v ? 'selected' : ''}>${esc(PAY_STATUS_LABELS[v])}</option>`).join('')}
-        </select>
-        <select class="tt-commerce-select" data-filter="order-sort" aria-label="Ordenar pedidos"><option value="date-desc" ${state.orderSort === 'date-desc' ? 'selected' : ''}>Más recientes</option><option value="date-asc" ${state.orderSort === 'date-asc' ? 'selected' : ''}>Más antiguos</option></select>
-      </div>
-      <div class="tt-commerce-bulkbar" ${state.orderSelected.size && canBulk ? '' : 'hidden'}>
-        <span class="tt-commerce-bulkcount">${state.orderSelected.size} seleccionado${state.orderSelected.size === 1 ? '' : 's'}</span>
-        ${canUpdate ? button('En preparación', 'orders-bulk-preparing') : ''}
-        ${canUpdate ? button('En camino', 'orders-bulk-way') : ''}
-        ${canUpdate ? button('Entregado', 'orders-bulk-delivered') : ''}
-        ${canUpdatePay ? button('Marcar pagado', 'orders-bulk-paid') : ''}
-        ${canExport ? button('Exportar selección', 'orders-export-selected') : ''}
-        ${button('Limpiar', 'orders-clear-selection')}
-      </div>
-      ${!state.ordersReady ? '<div class="tt-commerce-loading">Cargando pedidos…</div>' : list.length ? `
-      <div class="tt-commerce-tablewrap">
-        <table class="tt-commerce-table">
-          <thead><tr><th class="checkcol"><input type="checkbox" data-check-all="orders" ${allVisibleSelected ? 'checked' : ''}></th><th>Pedido</th><th>Fecha</th><th>Cliente</th><th>Pago</th><th>Entrega</th><th>Total</th><th></th></tr></thead>
-          <tbody>${list.map(order => {
-            const customer = orderCustomer(order);
-            const status = orderStatus(order);
-            const pay = payStatus(order);
-            const items = orderItems(order);
-            const selected = state.orderSelected.has(order.id);
-            return `<tr data-open="order" data-id="${esc(order.id)}" class="${selected ? 'is-selected' : ''}">
-              <td class="checkcol" data-stop><input type="checkbox" data-select-order="${esc(order.id)}" ${selected ? 'checked' : ''}></td>
-              <td><div class="tt-commerce-maintext">#${esc(order.id)}</div><div class="tt-commerce-subtext">${items.length} producto${items.length === 1 ? '' : 's'}</div></td>
-              <td>${esc(formatDate(order.createdAt))}</td>
-              <td><div class="tt-commerce-customercell"><div style="min-width:0"><div class="tt-commerce-maintext">${esc(customer.name)}</div><div class="tt-commerce-subtext">${esc(customer.email || customer.phone || 'Sin contacto')}</div></div></div></td>
-              <td><span class="tt-commerce-badge ${payStatusBadge(pay)}">${esc(PAY_STATUS_LABELS[pay] || pay)}</span></td>
-              <td><span class="tt-commerce-badge ${orderStatusBadge(status)}">${esc(ORDER_STATUS_LABELS[status] || status)}</span></td>
-              <td><span class="tt-commerce-money">${formatMoney(order.total)}</span></td>
-              <td data-stop><button type="button" class="tt-commerce-iconbtn" data-menu="order" data-id="${esc(order.id)}" aria-label="Acciones">⋯</button></td>
-            </tr>`;
-          }).join('')}</tbody>
-        </table>
-      </div>` : '<div class="tt-commerce-empty">No hay pedidos que coincidan con esta vista.</div>'}
-      <div class="tt-commerce-footer"><span>Mostrando ${list.length} de ${state.orders.length} pedidos</span><span>Estados de pago y entrega se gestionan por separado.</span></div>
-    </div>`;
+  const canUpdate = !showingTrash && perm('pedidos', 'cambiarEstado', 'manageOrders');
+  const canUpdatePay = !showingTrash && perm('pedidos', 'cambiarPago', 'manageOrders');
+  const isSuper = state.role === 'superadmin';
+  root.innerHTML = `<div class="tt-commerce-pagehead"><div class="tt-commerce-titlegroup"><h1 class="tt-commerce-title">Pedidos <span class="tt-commerce-count">${sourceTotal}</span></h1><div class="tt-commerce-subtitle">${showingTrash ? 'Pedidos retirados de la lista activa. Podés restaurarlos o eliminarlos definitivamente.' : 'Pago, preparación, entrega y datos del pedido en una sola vista.'}</div></div><div class="tt-commerce-actions">${isSuper ? button('Reiniciar TINPED', 'orders-reset-sequence') + button('+ Nuevo pedido', 'orders-manual-new', { primary: true }) : ''}${canExport ? button('Exportar', 'orders-export') : ''}</div></div><div class="tt-commerce-card"><div class="tt-commerce-tabs">${tabButton('orders', 'all', 'Todos', counts.all, state.orderTab)}${tabButton('orders', 'unpaid', 'Sin pagar', counts.unpaid, state.orderTab)}${tabButton('orders', 'unfulfilled', 'Sin entregar', counts.unfulfilled, state.orderTab)}${tabButton('orders', 'delivered', 'Entregados', counts.delivered, state.orderTab)}${tabButton('orders', 'canceled', 'Cancelados', counts.canceled, state.orderTab)}${tabButton('orders', 'refunded', 'Reembolsados', counts.refunded, state.orderTab)}${isSuper ? tabButton('orders', 'deleted', 'Borrados', counts.deleted, state.orderTab) : ''}</div><div class="tt-commerce-toolbar"><label class="tt-commerce-search"><input class="tt-commerce-input" data-filter="order-search" type="search" value="${esc(state.orderSearch)}" placeholder="TINPED, cliente, email o producto"></label><select class="tt-commerce-select" data-filter="order-status"><option value="">Todos los estados</option>${ORDER_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderStatus === v ? 'selected' : ''}>${esc(ORDER_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-pay"><option value="">Todos los pagos</option>${PAY_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderPay === v ? 'selected' : ''}>${esc(PAY_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-sort"><option value="date-desc" ${state.orderSort === 'date-desc' ? 'selected' : ''}>Más recientes</option><option value="date-asc" ${state.orderSort === 'date-asc' ? 'selected' : ''}>Más antiguos</option></select></div><div class="tt-commerce-bulkbar" ${state.orderSelected.size && canBulk ? '' : 'hidden'}><span class="tt-commerce-bulkcount">${state.orderSelected.size} seleccionado${state.orderSelected.size === 1 ? '' : 's'}</span>${canUpdate ? button('En preparación', 'orders-bulk-preparing') + button('En camino', 'orders-bulk-way') + button('Entregado', 'orders-bulk-delivered') : ''}${canUpdatePay ? button('Marcar pagado', 'orders-bulk-paid') : ''}${canExport ? button('Exportar selección', 'orders-export-selected') : ''}${button('Limpiar', 'orders-clear-selection')}</div>${showingTrash && !state.trashReady ? '<div class="tt-commerce-loading">Cargando Borrados…</div>' : !showingTrash && !state.ordersReady ? '<div class="tt-commerce-loading">Cargando pedidos…</div>' : list.length ? `<div class="tt-commerce-tablewrap"><table class="tt-commerce-table"><thead><tr><th class="checkcol">${showingTrash ? '' : `<input type="checkbox" data-check-all="orders" ${allVisibleSelected ? 'checked' : ''}>`}</th><th>Pedido</th><th>Fecha</th><th>Cliente</th><th>Pago</th><th>Entrega</th><th>Total</th><th></th></tr></thead><tbody>${list.map(order => { const customer=orderCustomer(order), status=orderStatus(order), pay=payStatus(order), items=orderItems(order), selected=!showingTrash&&state.orderSelected.has(order.id); return `<tr ${showingTrash ? '' : 'data-open="order"'} data-id="${esc(order.id)}" class="${selected ? 'is-selected' : ''}"><td class="checkcol" data-stop>${showingTrash ? '' : `<input type="checkbox" data-select-order="${esc(order.id)}" ${selected ? 'checked' : ''}>`}</td><td><div class="tt-commerce-maintext">#${esc(orderDisplayId(order))}</div><div class="tt-commerce-subtext">${items.length} producto${items.length===1?'':'s'}${showingTrash?' · recuperable':''}</div></td><td>${esc(formatDate(showingTrash ? (order.trashMeta?.trashedAt || order.updatedAt || order.createdAt) : order.createdAt))}</td><td><div class="tt-commerce-maintext">${esc(customer.name)}</div><div class="tt-commerce-subtext">${esc(customer.email || customer.phone || 'Sin contacto')}</div></td><td><span class="tt-commerce-badge ${payStatusBadge(pay)}">${esc(PAY_STATUS_LABELS[pay] || pay)}</span></td><td><span class="tt-commerce-badge ${orderStatusBadge(status)}">${esc(ORDER_STATUS_LABELS[status] || status)}</span></td><td><span class="tt-commerce-money">${formatMoney(order.total)}</span></td><td data-stop><button type="button" class="tt-commerce-iconbtn" data-menu="${showingTrash ? 'trash-order' : 'order'}" data-id="${esc(order.id)}">⋯</button></td></tr>`; }).join('')}</tbody></table></div>` : `<div class="tt-commerce-empty">${showingTrash ? 'No hay pedidos en Borrados.' : 'No hay pedidos que coincidan con esta vista.'}</div>`}<div class="tt-commerce-footer"><span>Mostrando ${list.length} de ${sourceTotal} pedidos</span><span>${showingTrash ? 'Restaurar no reutiliza ni altera el contador TINPED.' : 'El código TINPED es correlativo y no se reutiliza al borrar.'}</span></div></div>`;
 }
 
 function renderAll() {
@@ -628,14 +558,7 @@ function exportCollections(selectedOnly = false) {
 
 function exportOrders(selectedOnly = false) {
   const source = selectedOnly ? state.orders.filter(o => state.orderSelected.has(o.id)) : filteredOrders();
-  downloadCsv('tintin-pedidos.csv', [
-    ['Pedido', 'Fecha', 'Cliente', 'Email', 'Teléfono', 'Estado', 'Pago', 'Método entrega', 'Ciudad', 'Total'],
-    ...source.map(o => {
-      const customer = orderCustomer(o);
-      const shipping = orderShipping(o);
-      return [o.id, formatDate(o.createdAt), customer.name, customer.email, customer.phone, ORDER_STATUS_LABELS[orderStatus(o)] || orderStatus(o), PAY_STATUS_LABELS[payStatus(o)] || payStatus(o), shipping.method, shipping.city, o.total ?? 0];
-    })
-  ]);
+  downloadCsv('tintin-pedidos.csv', [['Pedido','ID técnico','Fecha','Cliente','Email','Teléfono','Estado','Pago','Método entrega','Ciudad','Total'], ...source.map(o => { const customer=orderCustomer(o), shipping=orderShipping(o); return [orderDisplayId(o),o.id,formatDate(o.createdAt),customer.name,customer.email,customer.phone,ORDER_STATUS_LABELS[orderStatus(o)]||orderStatus(o),PAY_STATUS_LABELS[payStatus(o)]||payStatus(o),shipping.method,shipping.city,o.total??0]; })]);
 }
 
 function closeMenu() {
@@ -644,30 +567,10 @@ function closeMenu() {
 }
 
 function menuItems(type, id) {
-  if (type === 'product') {
-    const product = state.products.find(p => p._docId === id);
-    if (!product) return [];
-    const out = [{ label: 'Ver detalles', action: 'drawer-product' }];
-    if (perm('productos', 'editar', 'editProducts')) out.push({ label: 'Editar producto', action: 'product-edit' });
-    if (perm('productos', 'activarDesactivar', 'editProducts')) out.push({ label: product.active === false ? 'Activar producto' : 'Desactivar producto', action: 'product-toggle' });
-    if (perm('productos', 'eliminar', 'deleteProducts')) out.push({ sep: true }, { label: 'Eliminar producto', action: 'product-delete', danger: true });
-    return out;
-  }
-  if (type === 'collection') {
-    const c = state.collections.find(x => x.slug === id);
-    if (!c) return [];
-    const out = [{ label: 'Ver detalles', action: 'drawer-collection' }, { label: 'Ver sus productos', action: 'collection-products' }];
-    if (perm('colecciones', 'editar', 'manageContent')) out.push({ label: 'Editar colección', action: 'collection-edit' });
-    if (perm('colecciones', 'eliminar', 'deleteCollections')) out.push({ sep: true }, { label: 'Eliminar colección', action: 'collection-delete', danger: true });
-    return out;
-  }
-  if (type === 'order') {
-    const out = [{ label: 'Ver detalles', action: 'drawer-order' }];
-    if (perm('pedidos', 'editarCompleto', 'manageOrdersFull')) out.push({ label: 'Editar pedido completo', action: 'order-edit' });
-    if (perm('pedidos', 'reenviarCorreo', 'manageOrders')) out.push({ label: 'Reenviar correo', action: 'order-resend' });
-    if (perm('pedidos', 'eliminar', 'deleteOrders')) out.push({ sep: true }, { label: 'Eliminar pedido', action: 'order-delete', danger: true });
-    return out;
-  }
+  if (type === 'product') { const product=state.products.find(p=>p._docId===id); if(!product)return[]; const out=[{label:'Ver detalles',action:'drawer-product'}]; if(perm('productos','editar','editProducts'))out.push({label:'Editar producto',action:'product-edit'}); if(perm('productos','activarDesactivar','editProducts'))out.push({label:product.active===false?'Activar producto':'Desactivar producto',action:'product-toggle'}); if(perm('productos','eliminar','deleteProducts'))out.push({sep:true},{label:'Eliminar producto',action:'product-delete',danger:true}); return out; }
+  if (type === 'collection') { const c=state.collections.find(x=>x.slug===id); if(!c)return[]; const out=[{label:'Ver detalles',action:'drawer-collection'},{label:'Ver sus productos',action:'collection-products'}]; if(perm('colecciones','editar','manageContent'))out.push({label:'Editar colección',action:'collection-edit'}); if(perm('colecciones','eliminar','deleteCollections'))out.push({sep:true},{label:'Eliminar colección',action:'collection-delete',danger:true}); return out; }
+  if (type === 'trash-order') return state.role==='superadmin' ? [{label:'Restaurar a Pedidos',action:'order-restore'},{sep:true},{label:'Eliminar definitivamente',action:'order-delete-permanent',danger:true}] : [];
+  if (type === 'order') { const out=[{label:'Ver detalles',action:'drawer-order'}]; if(state.role==='superadmin')out.push({label:'CRUD completo',action:'order-edit-advanced'}); else if(perm('pedidos','editarCompleto','manageOrdersFull'))out.push({label:'Editar pedido completo',action:'order-edit'}); if(perm('pedidos','reenviarCorreo','manageOrders'))out.push({label:'Reenviar correo',action:'order-resend'}); if(perm('pedidos','eliminar','deleteOrders'))out.push({sep:true},{label:'Mover a Borrados',action:'order-delete',danger:true}); return out; }
   return [];
 }
 
@@ -772,7 +675,7 @@ function orderDrawer(order) {
   const canSensitive = state.role === 'superadmin' || canDo(state.role, 'pedidos', 'verDatosSensibles');
   const canAddress = state.role === 'superadmin' || canDo(state.role, 'pedidos', 'verDireccion');
   return {
-    title: `#${order.id}`,
+    title: `#${orderDisplayId(order)}`,
     kicker: formatDate(order.createdAt),
     body: `
       <div class="tt-commerce-drawer-section"><div style="display:flex;gap:7px;flex-wrap:wrap"><span class="tt-commerce-badge ${payStatusBadge(pay)}">${esc(PAY_STATUS_LABELS[pay] || pay)}</span><span class="tt-commerce-badge ${orderStatusBadge(status)}">${esc(ORDER_STATUS_LABELS[status] || status)}</span></div></div>
@@ -909,6 +812,11 @@ async function handleAction(action, element) {
   }
   if (action === 'drawer-collection') return openDrawer('collection', id);
 
+  if (action === 'orders-manual-new') return window.TintinOrderAdmin?.openManualOrder();
+  if (action === 'orders-reset-sequence') return window.TintinOrderAdmin?.resetOrderSequence();
+  if (action === 'order-edit-advanced') { closeDrawer(); return window.TintinOrderAdmin?.openAdvancedOrderEditor(id); }
+  if (action === 'order-restore') return window.TintinOrderAdmin?.restoreOrder(id).then(() => toast('Pedido restaurado en estado Cancelado; podés reactivarlo desde CRUD completo.'));
+  if (action === 'order-delete-permanent') return window.TintinOrderAdmin?.deleteTrashPermanently(id);
   if (action === 'orders-export') return exportOrders(false);
   if (action === 'orders-export-selected') return exportOrders(true);
   if (action === 'orders-clear-selection') { state.orderSelected.clear(); return renderOrders(); }
@@ -1097,6 +1005,7 @@ function subscribeData() {
     state.orders = snapshot.docs.map(snap => ({ id: snap.id, ...snap.data() }));
     state.ordersReady = true;
     state.orderSelected = new Set([...state.orderSelected].filter(id => state.orders.some(o => o.id === id)));
+    if (state.role === 'superadmin') window.TintinOrderAdmin?.ensureMissingOrderNumbers(state.orders);
     renderOrders(); renderDrawer();
   }, error => {
     state.ordersReady = true;
@@ -1104,6 +1013,19 @@ function subscribeData() {
     toast('No se pudieron actualizar los pedidos en tiempo real.', 5000);
     renderOrders();
   }));
+
+  if (state.role === 'superadmin') {
+    state.unsubscribers.push(onSnapshot(collection(db, 'orderTrash'), snapshot => {
+      state.trashOrders = snapshot.docs.map(snap => ({ id: snap.id, ...snap.data() }));
+      state.trashReady = true;
+      renderOrders();
+    }, error => {
+      state.trashReady = true;
+      console.error('[shopify-commerce] orderTrash:', error);
+      toast('No se pudo actualizar la sección Borrados.', 5000);
+      renderOrders();
+    }));
+  } else { state.trashOrders = []; state.trashReady = true; }
 }
 
 async function bootForUser(user) {

@@ -24,9 +24,12 @@ function check(label, condition, detail = '') {
 }
 
 check(
-  'Los pedidos no se crean desde el SDK del navegador',
-  rules.includes('match /orders/{orderId}') && rules.includes('allow create: if false;'),
-  'La creación vigente es server-side'
+  'El checkout no crea pedidos desde el SDK; solo Super Admin puede crear manualmente',
+  rules.includes('match /orders/{orderId}') &&
+    rules.includes('allow create: if isSuperAdmin();') &&
+    orderClient.includes("action: 'createOrder'") &&
+    !orderClient.includes('setDoc('),
+  'Clientes y staff pasan por el endpoint; la excepción de navegador es solo Super Admin.'
 );
 check(
   'El cliente no reserva stock por reglas heredadas',

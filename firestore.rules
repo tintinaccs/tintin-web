@@ -1237,10 +1237,9 @@ service cloud.firestore {
        ============================================================ */
 
     match /orders/{orderId} {
-      // Los pedidos se crean exclusivamente en apps-script/Phase4CreateOrder.gs.
-      // Ese proceso verifica el idToken, vuelve a leer precio/stock y usa una
-      // transacción privilegiada. Ningún SDK del navegador puede crear pedidos.
-      allow create: if false;
+      // Checkout: crea exclusivamente el servidor. La única excepción de navegador
+      // es Super Admin para el CRUD manual solicitado desde el panel privado.
+      allow create: if isSuperAdmin();
 
       allow read: if isSuperAdmin() ||
         (
@@ -1282,6 +1281,10 @@ service cloud.firestore {
         );
 
       allow delete: if isSuperAdmin();
+    }
+
+    match /orderTrash/{orderId} {
+      allow read, create, update, delete: if isSuperAdmin();
     }
 
     /* ============================================================

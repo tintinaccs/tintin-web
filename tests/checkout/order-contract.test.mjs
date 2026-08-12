@@ -158,6 +158,7 @@ test('pedido manipulado con productId repetido descuenta stock agregado una sola
     'orders/admin-uid_request_123456789': null,
     'settings/general': { paymentMethods: { transferencia: true }, whatsappNumber: '595981299331' },
     'settings/shippingRates': {},
+    'settings/orderSequence': { lastNumber: 41, lastCode: 'TINPED41' },
     'users/admin-uid': { role: 'superadmin' },
     'checkoutGuards/admin-uid': null,
     'products/p1': { name: 'Aro', price: 10000, stock: 10, active: true, variants: { Color: ['Dorado', 'Plateado'], Talla: ['M'] } }
@@ -179,9 +180,14 @@ test('pedido manipulado con productId repetido descuenta stock agregado una sola
   assert.equal(result.ok, true);
   assert.equal(result.order.items.length, 1);
   assert.equal(result.order.items[0].qty, 5);
-  assert.equal(committedWrites.length, 2);
-  assert.equal(committedWrites[1].update.name.endsWith('/products/p1'), true);
-  assert.equal(committedWrites[1].update.fields.stock.integerValue, '5');
+  assert.equal(result.order.orderNumber, 'TINPED42');
+  assert.equal(result.order.shortId, 'TINPED42');
+  assert.equal(committedWrites.length, 3);
+  assert.equal(committedWrites[1].update.name.endsWith('/settings/orderSequence'), true);
+  assert.equal(committedWrites[1].update.fields.lastNumber.integerValue, '42');
+  assert.equal(committedWrites[1].update.fields.lastCode.stringValue, 'TINPED42');
+  assert.equal(committedWrites[2].update.name.endsWith('/products/p1'), true);
+  assert.equal(committedWrites[2].update.fields.stock.integerValue, '5');
 
   committedWrites = null;
   const invalidVariant = server.phase4CreateOrder_({
