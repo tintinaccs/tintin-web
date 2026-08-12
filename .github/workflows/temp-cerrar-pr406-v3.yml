@@ -22,6 +22,11 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - name: Setup Java 21 para Firebase Emulator
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
       - run: npm ci
 
       - name: Aplicar parche v2 y corregir contrato cancelado/rechazado
@@ -48,8 +53,7 @@ jobs:
           s = s.replace(old, new, 1)
           p.write_text(s, encoding='utf-8')
 
-          for temp in ['.github/workflows/temp-cerrar-pr406-v3.yml']:
-              Path(temp).unlink(missing_ok=True)
+          Path('.github/workflows/temp-cerrar-pr406-v3.yml').unlink(missing_ok=True)
           PY
 
       - name: Sintaxis y contratos
