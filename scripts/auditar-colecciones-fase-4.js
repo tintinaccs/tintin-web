@@ -158,7 +158,7 @@ check(
 
 check(
   'Colecciones usa el carrito compartido y valida stock',
-  files.collectionsPageRuntime.includes("import('../../components/cart/sincronizacion-carrito.js?v=tintin-20260808-product-cart-1") &&
+  files.collectionsPageRuntime.includes("import('../../components/cart/sincronizacion-carrito.js?v=tintin-20260811-phonefix-sincronizacion-carrito-1") &&
     files.collectionsPageRuntime.includes('cartSync.addToCart') &&
     files.collectionsPageRuntime.includes('Number(product.stock) <= 0'),
   'los CTA destacados deben usar la misma sincronización y disponibilidad que el resto de la tienda'
