@@ -7,6 +7,7 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '../..');
 const css = fs.readFileSync(path.join(root, 'css/admin/editor-visual.css'), 'utf8');
 
+// Contrato responsive: dos editores arriba cuando entran y preview siempre debajo.
 const html = `<!doctype html>
 <html lang="es">
 <meta name="viewport" content="width=device-width,initial-scale=1">
