@@ -17,6 +17,7 @@ const files = {
   admin: `${read('admin.html')}\n${read('js/admin/admin-app.js')}`,
   adminImages: read('admin-images.html'),
   adminGuard: read('js/admin/proteccion-cambios-pendientes-admin.js'),
+  contentAdmin: read('js/admin/content/gestion-contenido-admin.js'),
   welcome: read('js/admin/content/control-bienvenida-admin.js'),
 };
 
@@ -148,9 +149,11 @@ check(
     "'permissions'",
     "'order-editor'",
     "'email-template-editor'",
-    '`content:${pageId}:${sectionId}`',
     "'primary-editor'",
   ].every(token => files.admin.includes(token)) &&
+    files.contentAdmin.includes('`content:${currentPageId}:${currentSectionId}`') &&
+    files.contentAdmin.includes('window.AdminUnsaved.register(nextId') &&
+    files.contentAdmin.includes('window.AdminUnsaved?.markDirty(activeUnsavedScopeId)') &&
     files.welcome.includes("'welcome-config'"),
   'productos, colecciones, configuración, permisos, contenido, pedidos, correos y bienvenida deben quedar protegidos'
 );

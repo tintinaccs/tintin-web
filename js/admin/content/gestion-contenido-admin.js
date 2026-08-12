@@ -45,6 +45,7 @@ if (!window.TintinAdminContentPhase6Booted) {
   let remotePending = false;
   let permissions = { view: false, edit: false, toggle: false, restore: false };
   let ui = null;
+  let activeUnsavedScopeId = null;
 
   function effectiveFields(sectionSchema) {
     const targets = new Map();
@@ -94,6 +95,40 @@ if (!window.TintinAdminContentPhase6Booted) {
   function confirmDiscard() {
     if (!dirty) return true;
     return window.confirm('Hay cambios sin guardar. ¿Querés descartarlos y continuar?');
+  }
+
+  function contentUnsavedId() {
+    return `content:${currentPageId}:${currentSectionId}`;
+  }
+
+  function unregisterUnsavedScope() {
+    if (!activeUnsavedScopeId) return;
+    window.AdminUnsaved?.unregister(activeUnsavedScopeId);
+    activeUnsavedScopeId = null;
+  }
+
+  function markContentDirty() {
+    dirty = true;
+    if (activeUnsavedScopeId) window.AdminUnsaved?.markDirty(activeUnsavedScopeId);
+  }
+
+  function registerUnsavedScope() {
+    if (!window.AdminUnsaved || !ui?.fields || !currentSectionId) return;
+    const nextId = contentUnsavedId();
+    if (activeUnsavedScopeId && activeUnsavedScopeId !== nextId) {
+      window.AdminUnsaved.unregister(activeUnsavedScopeId);
+    }
+    activeUnsavedScopeId = nextId;
+    const pageLabel = getPageSchema(currentPageId)?.label || currentPageId;
+    const sectionLabel = getSectionSchema(currentPageId, currentSectionId)?.label || currentSectionId;
+    window.AdminUnsaved.register(nextId, {
+      root: ui.fields,
+      label: `Contenido: ${pageLabel} / ${sectionLabel}`,
+      active: () => document.getElementById('section-apariencia')?.classList.contains('active') && ui?.section?.isConnected,
+      serialize: () => JSON.stringify(collectFormValues()),
+      save: () => handleSave(),
+    });
+    window.AdminUnsaved.markClean(nextId);
   }
 
   function sectionIdsForPage(pageId) {
@@ -165,7 +200,7 @@ if (!window.TintinAdminContentPhase6Booted) {
         'content-phase6-invalid',
         item.type === 'href' && Boolean(control.value.trim() && !sanitizeContentHref(control.value, ''))
       );
-      dirty = true;
+      markContentDirty();
       remotePending = false;
       setNotice('Tenés cambios sin guardar.', 'warning');
     });
@@ -198,7 +233,7 @@ if (!window.TintinAdminContentPhase6Booted) {
       checkbox.checked = values.visible !== false;
       checkbox.disabled = !permissions.toggle;
       checkbox.addEventListener('change', () => {
-        dirty = true;
+        markContentDirty();
         setNotice('Tenés cambios sin guardar.', 'warning');
       });
       visibility.append(checkbox, text);
@@ -218,6 +253,7 @@ if (!window.TintinAdminContentPhase6Booted) {
     ui.save.disabled = !permissions.edit;
     dirty = false;
     remotePending = false;
+    registerUnsavedScope();
     setNotice('Los cambios se sincronizan en tiempo real después de guardar.', 'info');
   }
 
@@ -234,7 +270,7 @@ if (!window.TintinAdminContentPhase6Booted) {
   }
 
   async function saveSection(values, successMessage) {
-    if (!permissions.edit || !currentUser) return;
+    if (!permissions.edit || !currentUser) return false;
     ui.save.disabled = true;
     ui.restore.disabled = true;
     setNotice('Guardando…', 'info');
@@ -250,12 +286,15 @@ if (!window.TintinAdminContentPhase6Booted) {
       }, { merge: true });
       dirty = false;
       remotePending = false;
+      if (activeUnsavedScopeId) window.AdminUnsaved?.markClean(activeUnsavedScopeId);
       setNotice('Guardado y sincronizado.', 'success');
       toast(successMessage);
+      return true;
     } catch (error) {
       console.error('[admin-content-phase6] save failed:', error);
       setNotice('No se pudo guardar. Revisá tus permisos o la conexión.', 'error');
       toast('No se pudo guardar el contenido.', true);
+      return false;
     } finally {
       ui.save.disabled = false;
       ui.restore.disabled = false;
@@ -267,9 +306,9 @@ if (!window.TintinAdminContentPhase6Booted) {
     if (invalid) {
       invalid.focus();
       toast('Corregí el enlace marcado antes de guardar.', true);
-      return;
+      return false;
     }
-    await saveSection(collectFormValues(), '✅ Contenido guardado');
+    return saveSection(collectFormValues(), '✅ Contenido guardado');
   }
 
   async function handleRestore() {
@@ -302,6 +341,7 @@ if (!window.TintinAdminContentPhase6Booted) {
 
   function selectPage(pageId) {
     if (pageId === currentPageId || !confirmDiscard()) return;
+    unregisterUnsavedScope();
     currentPageId = pageId;
     currentSectionId = sectionIdsForPage(pageId)[0] || '';
     currentPageData = {};
@@ -315,6 +355,7 @@ if (!window.TintinAdminContentPhase6Booted) {
       ui.sectionSelect.value = currentSectionId;
       return;
     }
+    unregisterUnsavedScope();
     currentSectionId = sectionId;
     dirty = false;
     renderForm();
@@ -380,12 +421,6 @@ if (!window.TintinAdminContentPhase6Booted) {
     host.appendChild(section);
 
     ui = { section, preview, notice, readOnly, pages, pageTitle, sectionSelect, sectionTitle, fields, save, restore };
-
-    window.addEventListener('beforeunload', event => {
-      if (!dirty) return;
-      event.preventDefault();
-      event.returnValue = '';
-    });
   }
 
   function injectStyles() {
@@ -438,6 +473,7 @@ if (!window.TintinAdminContentPhase6Booted) {
     onAuthStateChanged(auth, user => {
       pageUnsubscribe?.();
       pageUnsubscribe = null;
+      unregisterUnsavedScope();
       if (!user || user.isAnonymous) return;
       startForUser(user).catch(error => {
         console.error('[admin-content-phase6] boot failed:', error);

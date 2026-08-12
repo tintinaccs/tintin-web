@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-12T15:59:09.583Z",
-  "sourceFingerprint": "e7f9fe615b801d0a4a6cb0f2db3498575ff4b669a6449cd5fd87935bc73dee8c",
+  "generatedAt": "2026-08-12T16:44:56.386Z",
+  "sourceFingerprint": "f2a87af1dfb66e87078b94c05da271b8967ebcc2246128da7542fbdf5b1a26a5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 599,
     "textFiles": 567,
-    "totalBytes": 6347994,
+    "totalBytes": 6350633,
     "pages": 18,
     "modules": 366
   },
@@ -17240,8 +17240,8 @@
     },
     {
       "path": "js/admin/content/gestion-contenido-admin.js",
-      "bytes": 19735,
-      "sha256": "fd703a75d59114ce20fad1e36ceed6e4429978b7011e8cf089b0bffd8061ea48",
+      "bytes": 21192,
+      "sha256": "e5bb3da0f3771eb0add390d43c2371e8435b1799c4f03de97b71a02e440bd044",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21262,8 +21262,8 @@
     },
     {
       "path": "scripts/auditar-admin-apariencia-unificada.js",
-      "bytes": 2260,
-      "sha256": "fdb202be5b0adf06a01f2840e3baddab70a0cab88e39efd0f0a3dbfd85193859",
+      "bytes": 2658,
+      "sha256": "654a9b06a7f1ba57b9f77355ff1ca873fd212bae0bdb8c250174f8947c479e52",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21352,8 +21352,8 @@
     },
     {
       "path": "scripts/auditar-admin-productos-multimedia.js",
-      "bytes": 15502,
-      "sha256": "5ed4c2bcdf8fa36abaae1e0b09c1ef1caea36d55a8fe999cf135e5ff44417304",
+      "bytes": 15732,
+      "sha256": "56f8c196a7286b7f94cdc1a7ae0da1d430d4f19f9247dd89a48665f5fe136dda",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21704,8 +21704,8 @@
     },
     {
       "path": "scripts/auditar-contenido-fase-6.js",
-      "bytes": 6016,
-      "sha256": "12c2242dd74809bff1859c56ee4dd25941b1d65d26da6fab69f3a801d1ae755f",
+      "bytes": 6291,
+      "sha256": "2deb1975b74bb958855fb0e667d2d664c2d0cce0a6cd6e280062ede4e1215a69",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22668,8 +22668,8 @@
     },
     {
       "path": "scripts/auditar-integral-plataforma.js",
-      "bytes": 7266,
-      "sha256": "f1dc85ee10c22da592842dacc9c4ccb3b906267ed55ee71ffb04c7add3e47740",
+      "bytes": 7545,
+      "sha256": "b04e95f4ef46c0a2e862774c5d07ec026290beeeb04cce1f68cb0e8b3fda8fae",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22679,13 +22679,13 @@
           "raw": "./js/pages/collections/estado-colecciones.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "scripts/js/pages/collections/estado-colecciones.js",
           "dynamic": false,
-          "line": 35
+          "line": 36
         },
         {
           "raw": "./js/components/images/imagenes.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "scripts/js/components/images/imagenes.js",
           "dynamic": false,
-          "line": 36
+          "line": 37
         }
       ],
       "endpoints": []
@@ -26575,8 +26575,8 @@
     {
       "path": "js/admin/content/gestion-contenido-admin.js",
       "extension": ".js",
-      "bytes": 19735,
-      "sha256": "fd703a75d59114ce20fad1e36ceed6e4429978b7011e8cf089b0bffd8061ea48"
+      "bytes": 21192,
+      "sha256": "e5bb3da0f3771eb0add390d43c2371e8435b1799c4f03de97b71a02e440bd044"
     },
     {
       "path": "js/admin/diagnostics/diagnostico-sitio-admin.js",
@@ -27835,8 +27835,8 @@
     {
       "path": "scripts/auditar-admin-apariencia-unificada.js",
       "extension": ".js",
-      "bytes": 2260,
-      "sha256": "fdb202be5b0adf06a01f2840e3baddab70a0cab88e39efd0f0a3dbfd85193859"
+      "bytes": 2658,
+      "sha256": "654a9b06a7f1ba57b9f77355ff1ca873fd212bae0bdb8c250174f8947c479e52"
     },
     {
       "path": "scripts/auditar-admin-commerce-shopify.js",
@@ -27871,8 +27871,8 @@
     {
       "path": "scripts/auditar-admin-productos-multimedia.js",
       "extension": ".js",
-      "bytes": 15502,
-      "sha256": "5ed4c2bcdf8fa36abaae1e0b09c1ef1caea36d55a8fe999cf135e5ff44417304"
+      "bytes": 15732,
+      "sha256": "56f8c196a7286b7f94cdc1a7ae0da1d430d4f19f9247dd89a48665f5fe136dda"
     },
     {
       "path": "scripts/auditar-admin-publico-sincronizar.js",
@@ -27973,8 +27973,8 @@
     {
       "path": "scripts/auditar-contenido-fase-6.js",
       "extension": ".js",
-      "bytes": 6016,
-      "sha256": "12c2242dd74809bff1859c56ee4dd25941b1d65d26da6fab69f3a801d1ae755f"
+      "bytes": 6291,
+      "sha256": "2deb1975b74bb958855fb0e667d2d664c2d0cce0a6cd6e280062ede4e1215a69"
     },
     {
       "path": "scripts/auditar-contraste.mjs",
@@ -28189,8 +28189,8 @@
     {
       "path": "scripts/auditar-integral-plataforma.js",
       "extension": ".js",
-      "bytes": 7266,
-      "sha256": "f1dc85ee10c22da592842dacc9c4ccb3b906267ed55ee71ffb04c7add3e47740"
+      "bytes": 7545,
+      "sha256": "b04e95f4ef46c0a2e862774c5d07ec026290beeeb04cce1f68cb0e8b3fda8fae"
     },
     {
       "path": "scripts/auditar-interaccion-latencia.mjs",
@@ -29798,7 +29798,7 @@
     },
     {
       "file": "js/admin/content/gestion-contenido-admin.js",
-      "line": 188,
+      "line": 223,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -33127,12 +33127,12 @@
         "references": [
           {
             "file": "js/admin/content/gestion-contenido-admin.js",
-            "line": 242,
+            "line": 278,
             "operation": "doc"
           },
           {
             "file": "js/admin/content/gestion-contenido-admin.js",
-            "line": 284,
+            "line": 323,
             "operation": "doc"
           },
           {

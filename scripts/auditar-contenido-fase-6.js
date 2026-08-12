@@ -115,11 +115,14 @@ check(
 );
 
 check(
-  'Los cambios sin guardar están protegidos',
-  files.admin.includes("window.addEventListener('beforeunload'") &&
+  'Los cambios sin guardar usan el guard global sin listener duplicado',
+  files.admin.includes('window.AdminUnsaved.register(nextId') &&
+    files.admin.includes('window.AdminUnsaved?.markDirty(activeUnsavedScopeId)') &&
+    files.admin.includes('window.AdminUnsaved?.markClean(activeUnsavedScopeId)') &&
     files.admin.includes('confirmDiscard()') &&
-    files.admin.includes('Hay cambios sin guardar'),
-  'Cambiar de página o cerrar no debe perder texto en silencio'
+    files.admin.includes('Hay cambios sin guardar') &&
+    !files.admin.includes("window.addEventListener('beforeunload'"),
+  'Contenido debe integrarse al guard compartido; no crear otro beforeunload'
 );
 
 check(
