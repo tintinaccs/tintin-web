@@ -5,6 +5,7 @@ const html = read('admin.html');
 const app = read('js/admin/admin-app.js');
 const content = read('js/admin/content/gestion-contenido-admin.js');
 const firebase = read('js/core/firebase/firebase.js');
+const studio = read('css/admin/visual-studio-v2.css');
 const checks = [];
 const check = (name, ok) => checks.push({ name, ok: Boolean(ok) });
 const navContent = (html.match(/data-section="contenido"/g) || []).length;
@@ -22,6 +23,7 @@ check('Contenido conserva site_content como única fuente', content.includes("do
 check('Firebase sigue centralizado', firebase.includes('initializeApp') && !content.includes('initializeApp(') && !app.includes('initializeApp('));
 check('Contenido usa el guard global de cambios pendientes', content.includes('window.AdminUnsaved.register(nextId') && content.includes('window.AdminUnsaved?.markDirty(activeUnsavedScopeId)') && content.includes('window.AdminUnsaved?.markClean(activeUnsavedScopeId)'));
 check('No existe un beforeunload duplicado dentro de Contenido', !content.includes("window.addEventListener('beforeunload'"));
+check('Apariencia pone preview arriba y los dos editores abajo', studio.includes('/* TINTIN layout unificado: preview arriba, editores abajo */') && studio.includes('grid-template-areas:"preview preview" "sidebar properties"'));
 const failed = checks.filter(item => !item.ok);
 for (const item of checks) console.log(`${item.ok ? 'OK' : 'ERROR'} — ${item.name}`);
 if (failed.length) { console.error(`\nApariencia unificada: ${failed.length} fallo(s).`); process.exit(1); }
