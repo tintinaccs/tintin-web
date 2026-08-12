@@ -1,0 +1,65 @@
+name: TEMP regenerar Apariencia responsive
+
+on:
+  push:
+    branches:
+      - fix/apariencia-preview-responsive
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout rama
+        uses: actions/checkout@v5
+        with:
+          ref: fix/apariencia-preview-responsive
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Actualizar version del CSS del editor visual
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('admin.html')
+          s = p.read_text(encoding='utf-8')
+          old = 'css/admin/editor-visual.css?v=tintin-20260811-cls-desktop-stable-2'
+          new = 'css/admin/editor-visual.css?v=tintin-20260812-apariencia-responsive-1'
+          count = s.count(old)
+          if count != 1:
+              raise SystemExit(f'Esperaba exactamente 1 referencia antigua y encontre {count}')
+          p.write_text(s.replace(old, new), encoding='utf-8')
+          PY
+
+      - name: Regenerar baseline de cache
+        run: npm run cache-versioning:write
+
+      - name: Regenerar manifiesto diagnostico
+        run: npm run build:diagnostics
+
+      - name: Auditar editor visual
+        run: npm run audit:visual-builder
+
+      - name: Quitar workflow temporal y guardar artefactos finales
+        shell: bash
+        run: |
+          rm -f .github/workflows/temp-regenerar-apariencia-responsive.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(apariencia): actualizar version y manifiestos'
+            git push origin HEAD:fix/apariencia-preview-responsive
+          fi
