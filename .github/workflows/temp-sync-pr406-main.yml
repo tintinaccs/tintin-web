@@ -1,0 +1,114 @@
+name: TEMP sync PR406 main
+
+on:
+  push:
+    branches:
+      - feat/pedidos-tinped-papelera
+    paths:
+      - '.github/workflows/temp-sync-pr406-main.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v5
+        with:
+          ref: feat/pedidos-tinped-papelera
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Integrar main sin pisar cambios
+        shell: bash
+        run: |
+          git config user.name tintinaccs
+          git config user.email tintinaccs@gmail.com
+          git fetch origin main
+          set +e
+          git merge --no-commit --no-ff origin/main
+          merge_status=$?
+          set -e
+
+          conflicts="$(git diff --name-only --diff-filter=U || true)"
+          if [ -n "$conflicts" ]; then
+            echo "Conflictos detectados:"
+            echo "$conflicts"
+            while IFS= read -r file; do
+              [ -z "$file" ] && continue
+              case "$file" in
+                admin.html|diagnostic-manifest.json|scripts/cache-version-baseline.json)
+                  git checkout --ours -- "$file"
+                  git add "$file"
+                  ;;
+                *)
+                  echo "Conflicto no previsto: $file"
+                  exit 1
+                  ;;
+              esac
+            done <<< "$conflicts"
+          elif [ "$merge_status" -ne 0 ]; then
+            echo "El merge falló sin conflictos listables."
+            exit 1
+          fi
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          admin = Path('admin.html')
+          text = admin.read_text(encoding='utf-8')
+          text, count = re.subn(
+              r'js/admin/admin-app\.js\?v=[A-Za-z0-9._-]+',
+              'js/admin/admin-app.js?v=tintin-20260812-pr405-tinped-1',
+              text,
+              count=1,
+          )
+          if count != 1:
+              raise SystemExit(f'No se encontró referencia única a admin-app.js: {count}')
+          admin.write_text(text, encoding='utf-8')
+          PY
+
+          # Garantías explícitas: deben coexistir PR405 y TINPED.
+          grep -q "function tokenizarCSV" js/admin/admin-app.js
+          grep -q "window.setCsvRowCategory" js/admin/admin-app.js
+          grep -q "sanitizeImageUrl(item.imageUrl" js/admin/admin-app.js
+          grep -q "pedidos-superadmin-crud.js?v=tintin-20260812-tinped-crud-2" js/admin/admin-app.js
+          grep -q "TintinOrderAdmin" js/admin/admin-app.js
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Regenerar artefactos del árbol combinado
+        run: |
+          npm run build:csp
+          npm run build:diagnostics
+          npm run cache-versioning:write
+
+      - name: Auditorías críticas del árbol combinado
+        run: |
+          npm run verify:csp
+          npm run verify:diagnostics
+          npm run audit:diagnostic-findings
+          npm run audit:cache-versioning
+          node scripts/auditar-tinped-pedidos.js
+          npm run audit:final
+
+      - name: Guardar merge limpio y retirar workflow temporal
+        shell: bash
+        run: |
+          rm -f .github/workflows/temp-sync-pr406-main.yml
+          git add -A
+          if git diff --cached --quiet && ! git rev-parse -q --verify MERGE_HEAD >/dev/null; then
+            echo 'No hay cambios para guardar.'
+            exit 0
+          fi
+          git commit -m 'merge: sincronizar TINPED con main actual'
+          git push origin HEAD:feat/pedidos-tinped-papelera
