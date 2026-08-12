@@ -224,6 +224,13 @@ if (!window.TintinAdminContentPhase6Booted) {
     ui.preview.textContent = `Ver ${pageSchema?.label || 'página'} →`;
     ui.fields.replaceChildren();
 
+    if (!sectionSchema) {
+      ui.save.disabled = true;
+      ui.restore.disabled = true;
+      setNotice('La sección solicitada no existe. Elegí una sección disponible.', 'error');
+      return;
+    }
+
     if (sectionSchema?.allowVisibility) {
       const visibility = create('label', 'content-phase6-visibility');
       const checkbox = document.createElement('input');
@@ -260,7 +267,7 @@ if (!window.TintinAdminContentPhase6Booted) {
   function collectFormValues() {
     const sectionSchema = getSectionSchema(currentPageId, currentSectionId);
     const values = {};
-    if (sectionSchema.allowVisibility) {
+    if (sectionSchema?.allowVisibility) {
       values.visible = document.getElementById('content-phase6-visible')?.checked !== false;
     }
     ui.fields.querySelectorAll('[data-content-key]').forEach(control => {

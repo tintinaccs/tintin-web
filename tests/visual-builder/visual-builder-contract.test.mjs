@@ -44,6 +44,14 @@ test('preview solo acepta postMessage same-origin del padre', () => {
   assert.match(runtime, /event\.source !== window\.parent/); assert.match(admin, /postMessage\([\s\S]*location\.origin/);
 });
 
+test('inspector ignora selecciones atrasadas o inexistentes de la vista previa', () => {
+  assert.match(runtime, /type: 'tintin:visual-select', pageId/);
+  assert.match(admin, /event\.source!==\$\('visual-preview-frame'\)\?\.contentWindow/);
+  assert.match(admin, /event\.data\.pageId!==pageId/);
+  assert.match(admin, /if\(!selectionExists\(next\)\)return/);
+  assert.match(admin, /schema\?\.fields\|\|\[\]/);
+});
+
 test('API pública devuelve configuración nuevamente saneada y sin secretos', () => {
   assert.match(publicApi, /sanitizeVisualConfig/); assert.match(publicApi, /cache-control/);
   assert.doesNotMatch(publicApi + runtime + admin, /OPENAI_API_KEY|FIREBASE_SERVICE_ACCOUNT_KEY\s*=/);
