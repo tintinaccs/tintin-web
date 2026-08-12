@@ -1,0 +1,138 @@
+name: Temporary complete checkout phone fix
+
+on:
+  push:
+    branches:
+      - fix/checkout-phone-format
+
+permissions:
+  contents: write
+
+jobs:
+  complete-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: fix/checkout-phone-format
+          fetch-depth: 0
+
+      - name: Propagate immutable cache versions and refresh baseline
+        shell: bash
+        run: |
+          git fetch origin main --no-tags
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          import json
+          import re
+          import subprocess
+
+          ROOT = Path('.').resolve()
+          baseline = json.loads(subprocess.check_output(
+              ['git', 'show', 'origin/main:scripts/cache-version-baseline.json'],
+              text=True,
+          ))
+          literal_re = re.compile(r'''(["'])([^"'?]+\.(?:css|js|mjs))\?v=([A-Za-z0-9._-]+)(["'])''')
+          generated = {}
+
+          def scan_sources():
+              return [*sorted(ROOT.glob('*.html')), *sorted((ROOT / 'js').rglob('*.js')), *sorted((ROOT / 'js').rglob('*.mjs'))]
+
+          def rel(path):
+              return path.relative_to(ROOT).as_posix()
+
+          def resolve_target(source, ref):
+              if ref.startswith(('http://', 'https://')):
+                  return None
+              if source.suffix == '.html':
+                  target = (ROOT / ref.lstrip('./')).resolve()
+              elif ref.startswith('.'):
+                  target = (source.parent / ref).resolve()
+              else:
+                  target = (ROOT / ref.lstrip('./')).resolve()
+              try:
+                  return target.relative_to(ROOT).as_posix()
+              except ValueError:
+                  return None
+
+          def references():
+              by_target = {}
+              for source in scan_sources():
+                  text = source.read_text(encoding='utf-8')
+                  for match in literal_re.finditer(text):
+                      target = resolve_target(source, match.group(2))
+                      if not target:
+                          continue
+                      by_target.setdefault(target, []).append({
+                          'source': source,
+                          'ref': match.group(2),
+                          'tag': match.group(3),
+                      })
+              return by_target
+
+          def sha256(path):
+              return hashlib.sha256((ROOT / path).read_bytes()).hexdigest()
+
+          def new_tag(target):
+              if target in generated:
+                  return generated[target]
+              stem = Path(target).stem.lower()
+              slug = re.sub(r'[^a-z0-9]+', '-', stem).strip('-')[:36] or 'asset'
+              base = f'tintin-20260811-phonefix-{slug}-1'
+              used = {entry['version'] for entry in baseline.values()} | set(generated.values())
+              tag = base
+              n = 2
+              while tag in used:
+                  tag = f'tintin-20260811-phonefix-{slug}-{n}'
+                  n += 1
+              generated[target] = tag
+              return tag
+
+          for iteration in range(30):
+              refs = references()
+              bumped_any = False
+              for target, entries in refs.items():
+                  before = baseline.get(target)
+                  if not before or not (ROOT / target).is_file():
+                      continue
+                  if sha256(target) == before.get('sha256'):
+                      continue
+                  tags = {item['tag'] for item in entries}
+                  old = before.get('version')
+                  if tags == {old}:
+                      fresh = new_tag(target)
+                      touched = set()
+                      for item in entries:
+                          source = item['source']
+                          if source in touched:
+                              continue
+                          text = source.read_text(encoding='utf-8')
+                          pattern = f"{item['ref']}?v={old}"
+                          replacement = f"{item['ref']}?v={fresh}"
+                          if pattern in text:
+                              source.write_text(text.replace(pattern, replacement), encoding='utf-8')
+                          touched.add(source)
+                      print(f'Bump: {target}: {old} -> {fresh}')
+                      bumped_any = True
+                  elif len(tags) > 1:
+                      raise SystemExit(f'Tags inconsistentes para {target}: {sorted(tags)}')
+              if not bumped_any:
+                  break
+          else:
+              raise SystemExit('La propagación de versiones no convergió en 30 iteraciones')
+          PY
+
+          npm run cache-versioning:write
+          npm run audit:cache-versioning
+
+          if git diff --quiet; then
+            echo "No additional cache changes needed"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Complete checkout phone cache versioning"
+          git push origin HEAD:fix/checkout-phone-format
