@@ -1,0 +1,248 @@
+from pathlib import Path
+import re
+
+root = Path('.')
+
+# 1) El editor directo de Contenido queda solo como fallback para roles delegados.
+# El Super Admin usa exclusivamente el Constructor visual, evitando una segunda
+# suscripción a site_content y el cuadro duplicado.
+content_path = root / 'js/admin/content/gestion-contenido-admin.js'
+text = content_path.read_text(encoding='utf-8')
+old = """  async function startForUser(user) {\n    currentUser = user;\n    await resolvePermissions(user);\n    const unifiedHost = document.getElementById('appearance-content-phase6-host');\n    if (unifiedHost) unifiedHost.hidden = !permissions.view;\n    if (!permissions.view) return;\n\n    buildUI();\n"""
+new = """  async function startForUser(user) {\n    currentUser = user;\n    const unifiedHost = document.getElementById('appearance-content-phase6-host');\n    const isSuperAdmin = String(user?.email || '').trim().toLowerCase() === String(SUPER_ADMIN).trim().toLowerCase();\n\n    // El Super Admin edita contenido exclusivamente desde el Constructor visual.\n    // No montamos este editor ni abrimos un segundo onSnapshot a site_content.\n    // Los roles delegados conservan este editor acotado a sus permisos de Contenido.\n    if (isSuperAdmin) {\n      if (unifiedHost) {\n        unifiedHost.replaceChildren();\n        unifiedHost.hidden = true;\n      }\n      ui = null;\n      return;\n    }\n\n    await resolvePermissions(user);\n    if (unifiedHost) unifiedHost.hidden = !permissions.view;\n    if (!permissions.view) return;\n\n    buildUI();\n"""
+if old not in text:
+    raise SystemExit('No se encontró startForUser esperado en gestion-contenido-admin.js')
+text = text.replace(old, new, 1)
+content_path.write_text(text, encoding='utf-8')
+
+# 2) Layout único: Constructor + preview arriba; inspector abajo full width.
+css_path = root / 'css/admin/visual-studio-v2.css'
+css = css_path.read_text(encoding='utf-8')
+marker = '/* TINTIN layout unificado: navegador + preview arriba, inspector abajo */'
+if marker in css:
+    css = css.split(marker, 1)[0].rstrip() + '\n'
+css += r'''
+
+/* TINTIN layout unificado: navegador + preview arriba, inspector abajo */
+.apar-unified-content-intro{display:none!important}
+.visual-studio-v2 .visual-editor-layout{
+  display:grid;
+  grid-template-columns:minmax(210px,.58fr) minmax(0,1.42fr);
+  grid-template-areas:"sidebar preview" "properties properties";
+  grid-template-rows:minmax(560px,68vh) auto;
+  gap:16px;
+  height:auto;
+  min-height:0;
+  padding:16px;
+  align-items:stretch;
+}
+.visual-studio-v2 .visual-editor-sidebar{
+  grid-area:sidebar;
+  height:100%;
+  min-height:0;
+  max-height:none;
+  overflow:auto;
+  border:1px solid var(--vs-border);
+  border-radius:12px;
+}
+.visual-studio-v2 .visual-editor-preview{
+  grid-area:preview;
+  height:100%;
+  min-height:0;
+  overflow:hidden;
+  border:1px solid var(--vs-border);
+  border-radius:12px;
+}
+.visual-studio-v2 .visual-editor-properties{
+  grid-area:properties;
+  width:100%;
+  max-height:none;
+  overflow:visible;
+  border:1px solid var(--vs-border);
+  border-radius:12px;
+}
+.visual-studio-v2 .visual-editor-properties>h3,
+.visual-studio-v2 .visual-inspector-tabs{position:static}
+.visual-studio-v2 #visual-properties{padding-bottom:24px}
+@media(min-width:1180px){
+  .visual-studio-v2 .visual-property-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(min-width:821px) and (max-width:1179px){
+  .visual-studio-v2 .visual-property-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:820px){
+  .visual-studio-v2 .visual-editor-layout{
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    grid-template-areas:"sidebar" "preview" "properties";
+    grid-template-rows:auto auto auto;
+    gap:12px;
+    padding:12px;
+  }
+  .visual-studio-v2 .visual-editor-sidebar{
+    height:auto;
+    min-height:0;
+    max-height:360px;
+    overflow:auto;
+    border-right:1px solid var(--vs-border);
+    border-bottom:1px solid var(--vs-border);
+  }
+  .visual-studio-v2 .visual-editor-preview{
+    height:auto;
+    min-height:560px;
+    order:initial;
+  }
+  .visual-studio-v2 .visual-editor-properties{
+    order:initial;
+    max-height:none;
+  }
+  .visual-studio-v2 .visual-property-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:560px){
+  .visual-studio-v2 .visual-editor-layout{gap:10px;padding:8px}
+  .visual-studio-v2 .visual-editor-sidebar{max-height:320px}
+  .visual-studio-v2 .visual-editor-preview{min-height:500px}
+  .visual-studio-v2 .visual-preview-stage{padding:6px}
+  .visual-studio-v2 .visual-preview-stage[data-device=mobile] iframe{width:min(390px,100%);max-width:100%}
+}
+'''
+css_path.write_text(css, encoding='utf-8')
+
+# 3) Contrato visual responsive solicitado.
+test_path = root / 'tests/visual-builder/apariencia-preview-abajo.spec.js'
+test_path.write_text("""'use strict';
+
+const { test, expect } = require('@playwright/test');
+const fs = require('node:fs');
+const path = require('node:path');
+
+const root = path.resolve(__dirname, '../..');
+const baseCss = fs.readFileSync(path.join(root, 'css/admin/editor-visual.css'), 'utf8');
+const studioCss = fs.readFileSync(path.join(root, 'css/admin/visual-studio-v2.css'), 'utf8');
+
+// Contrato responsive: Constructor + Página real arriba cuando entran;
+// inspector/propiedades abajo a todo el ancho. En pantallas angostas se apilan.
+const html = `<!doctype html>
+<html lang="es">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--adm-border:#eadde2;--adm-bg:#fff7fa;--adm-card:#fff;--adm-text:#30242a;--adm-muted:#766a70;--adm-accent:#ad3f67;--shadow-sm:0 2px 10px rgba(0,0,0,.05)}
+*{box-sizing:border-box}html,body{margin:0;max-width:100%;overflow-x:hidden}body{padding:16px;background:#fff}
+${baseCss}
+${studioCss}
+</style>
+<body>
+  <main style="width:100%;max-width:1400px;margin:0 auto">
+    <section class="visual-editor visual-studio-v2">
+      <div class="visual-editor-layout">
+        <aside class="visual-editor-sidebar">
+          <div class="visual-studio-brand"><strong>Tintin</strong><span>Constructor visual</span></div>
+          <div class="visual-section-list">
+            <button class="visual-section-select">Banner principal</button>
+            <button class="visual-section-select">Productos destacados</button>
+          </div>
+        </aside>
+        <section class="visual-editor-properties">
+          <h3>Banner principal</h3>
+          <div class="visual-inspector-tabs"><button>Contenido</button><button>Diseño</button><button>Responsive</button><button>Avanzado</button></div>
+          <div id="visual-properties">
+            <div class="visual-property-grid">
+              <div class="visual-property"><label>Título</label><input style="width:100%"></div>
+              <div class="visual-property"><label>Subtítulo</label><input style="width:100%"></div>
+            </div>
+          </div>
+        </section>
+        <section class="visual-editor-preview">
+          <div class="visual-preview-head">
+            <div><h3>Página real</h3><small>Versión publicada</small></div>
+            <div class="visual-devices"><button>Celular</button><button>Tablet</button><button>Escritorio</button></div>
+          </div>
+          <div class="visual-preview-stage" data-device="desktop"><iframe title="Vista previa"></iframe></div>
+        </section>
+      </div>
+    </section>
+  </main>
+</body></html>`;
+
+const viewports = [
+  { name: 'desktop grande', width: 1440, height: 1000, twoColumns: true },
+  { name: 'desktop compacto', width: 1180, height: 900, twoColumns: true },
+  { name: 'tablet horizontal', width: 900, height: 800, twoColumns: true },
+  { name: 'tablet vertical', width: 768, height: 1024, twoColumns: false },
+  { name: 'mobile', width: 430, height: 900, twoColumns: false },
+  { name: 'mobile angosto', width: 360, height: 800, twoColumns: false },
+];
+
+for (const viewport of viewports) {
+  test(`Apariencia unificada fit en ${viewport.name}`, async ({ page }) => {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    await page.setContent(html);
+
+    const geometry = await page.evaluate(() => {
+      const grid = document.querySelector('.visual-editor-layout');
+      const sidebar = document.querySelector('.visual-editor-sidebar');
+      const properties = document.querySelector('.visual-editor-properties');
+      const preview = document.querySelector('.visual-editor-preview');
+      const stage = document.querySelector('.visual-preview-stage');
+      const iframe = document.querySelector('.visual-preview-stage iframe');
+      const rect = element => element.getBoundingClientRect();
+      return {
+        grid: rect(grid), sidebar: rect(sidebar), properties: rect(properties), preview: rect(preview),
+        stage: rect(stage), iframe: rect(iframe),
+        bodyOverflow: document.documentElement.scrollWidth - window.innerWidth,
+        gridOverflow: grid.scrollWidth - grid.clientWidth,
+      };
+    });
+
+    expect(geometry.bodyOverflow).toBeLessThanOrEqual(1);
+    expect(geometry.gridOverflow).toBeLessThanOrEqual(1);
+    expect(geometry.preview.width).toBeLessThanOrEqual(geometry.grid.width + 1);
+    expect(geometry.properties.width).toBeLessThanOrEqual(geometry.grid.width + 1);
+    expect(geometry.iframe.width).toBeLessThanOrEqual(geometry.stage.width + 1);
+
+    if (viewport.twoColumns) {
+      expect(Math.abs(geometry.sidebar.top - geometry.preview.top)).toBeLessThanOrEqual(2);
+      expect(geometry.preview.left).toBeGreaterThan(geometry.sidebar.right);
+      expect(geometry.properties.top).toBeGreaterThanOrEqual(Math.max(geometry.sidebar.bottom, geometry.preview.bottom) + 8);
+      expect(geometry.properties.left).toBeLessThanOrEqual(geometry.sidebar.left + 2);
+      expect(geometry.properties.right).toBeGreaterThanOrEqual(geometry.preview.right - 2);
+    } else {
+      expect(geometry.preview.top).toBeGreaterThanOrEqual(geometry.sidebar.bottom + 8);
+      expect(geometry.properties.top).toBeGreaterThanOrEqual(geometry.preview.bottom + 8);
+      expect(Math.abs(geometry.preview.width - geometry.sidebar.width)).toBeLessThanOrEqual(2);
+      expect(Math.abs(geometry.properties.width - geometry.sidebar.width)).toBeLessThanOrEqual(2);
+    }
+  });
+}
+""", encoding='utf-8')
+
+# 4) Blindaje estático: Super Admin no debe montar el editor duplicado.
+audit_path = root / 'scripts/auditar-admin-apariencia-unificada.js'
+audit = audit_path.read_text(encoding='utf-8')
+anchor = "check('Contenido conserva una sola suscripción por página', (content.match(/onSnapshot\\(/g) || []).length === 1 && content.includes('pageUnsubscribe?.()'));"
+insertion = anchor + "\ncheck('Super Admin no monta el editor directo ni abre una segunda suscripción', content.includes('if (isSuperAdmin)') && content.includes('unifiedHost.replaceChildren()') && content.includes('ui = null') && content.indexOf('if (isSuperAdmin)') < content.indexOf('subscribePage(currentPageId)'));"
+if anchor not in audit:
+    raise SystemExit('No se encontró ancla en auditoría de Apariencia unificada')
+audit = audit.replace(anchor, insertion, 1)
+audit_path.write_text(audit, encoding='utf-8')
+
+# 5) Versionado de los dos assets modificados que se cargan en runtime.
+replacements = {
+    r'visual-studio-v2\.css\?v=[A-Za-z0-9._-]+': 'visual-studio-v2.css?v=tintin-20260812-layout-unificado-1',
+    r'gestion-contenido-admin\.js\?v=[A-Za-z0-9._-]+': 'gestion-contenido-admin.js?v=tintin-20260812-layout-unificado-1',
+}
+allowed_suffixes = {'.html', '.js', '.mjs', '.cjs', '.json', '.md', '.txt', '.yml', '.yaml'}
+for path in root.rglob('*'):
+    if not path.is_file() or path.suffix.lower() not in allowed_suffixes:
+        continue
+    if '.git' in path.parts or path.name == 'diagnostic-manifest.json' or path.name.startswith('tmp-apply-apariencia-layout'):
+        continue
+    try:
+        original = path.read_text(encoding='utf-8')
+    except UnicodeDecodeError:
+        continue
+    updated = original
+    for pattern, repl in replacements.items():
+        updated = re.sub(pattern, repl, updated)
+    if updated != original:
+        path.write_text(updated, encoding='utf-8')
