@@ -79,6 +79,9 @@ jobs:
           npm run audit:phase6
           npm run audit:phase7-catalog
 
+      - name: Registrar nueva versión inmutable
+        run: npm run cache-versioning:write
+
       - name: Regenerar CSP y manifiesto diagnóstico después de limpiar temporales
         run: npm run build:pages
 
