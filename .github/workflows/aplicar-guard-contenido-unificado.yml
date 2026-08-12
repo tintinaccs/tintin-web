@@ -96,10 +96,30 @@ jobs:
         run: npm run audit:cache-versioning
 
       - name: Ejecutar auditoría final
-        run: npm run audit:final
+        id: final_audit
+        continue-on-error: true
+        run: |
+          set +e
+          npm run audit:final > final-audit.log 2>&1
+          code=$?
+          tail -n 180 final-audit.log
+          exit $code
+
+      - name: Subir diagnóstico de auditoría final
+        if: ${{ steps.final_audit.outcome == 'failure' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-audit-log
+          path: final-audit.log
+          if-no-files-found: error
+
+      - name: Detener si la auditoría final falló
+        if: ${{ steps.final_audit.outcome == 'failure' }}
+        run: exit 1
 
       - name: Guardar integración limpia
         run: |
+          rm -f final-audit.log
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
