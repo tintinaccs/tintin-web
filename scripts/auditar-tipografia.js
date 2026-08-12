@@ -135,11 +135,20 @@ for (const page of rootPages) {
   check(italicPreloadCount === expectedPreloadCount, `${page}: cantidad incorrecta de preload de Montserrat italic.`);
   check(!/fonts\.(?:googleapis|gstatic)\.com/i.test(source), `${page}: todavía carga una fuente externa de Google Fonts.`);
 
+  // La auditoría tipográfica solo debe garantizar que cada stylesheet local
+  // esté versionado y que Montserrat conserve su versión contractual. Los
+  // demás CSS pueden (y deben) subir su ?v= de forma independiente cuando
+  // cambian; la inmutabilidad exacta ruta+tag+bytes la valida
+  // auditar-versionado-cache.mjs.
   for (const match of source.matchAll(/<link\b[^>]*rel=["']stylesheet["'][^>]*href=["']([^"']+\.css)(?:\?v=([^"']+))?["'][^>]*>/gi)) {
     const href = match[1];
     const cacheVersion = match[2] || '';
     if (/^(?:https?:)?\/\//i.test(href)) continue;
-    check(cacheVersion === VERSION, `${page}: ${href} conserva una versión de caché distinta de ${VERSION}.`);
+    if (href === 'css/core/montserrat.css') {
+      check(cacheVersion === VERSION, `${page}: Montserrat debe conservar la versión ${VERSION}.`);
+    } else {
+      check(Boolean(cacheVersion), `${page}: ${href} debe incluir una versión de caché ?v=.`);
+    }
   }
 }
 
