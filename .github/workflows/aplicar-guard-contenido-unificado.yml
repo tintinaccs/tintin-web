@@ -86,12 +86,17 @@ jobs:
       - name: Regenerar CSP y manifiesto diagnóstico
         run: npm run build:pages
 
-      - name: Verificar artefactos y cierre global
-        run: |
-          npm run verify:csp
-          npm run verify:diagnostics
-          npm run audit:cache-versioning
-          npm run audit:final
+      - name: Verificar CSP
+        run: npm run verify:csp
+
+      - name: Verificar manifiesto diagnóstico
+        run: npm run verify:diagnostics
+
+      - name: Verificar versionado de caché
+        run: npm run audit:cache-versioning
+
+      - name: Ejecutar auditoría final
+        run: npm run audit:final
 
       - name: Guardar integración limpia
         run: |
