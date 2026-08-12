@@ -33,6 +33,16 @@ jobs:
         id: integrate
         continue-on-error: true
         run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/apply-content-unsaved-integration.mjs')
+          text = path.read_text()
+          old = r"    \`content:\${pageId}:\${sectionId}\`,"
+          new = r"    '\`content:\${pageId}:\${sectionId}\`',"
+          if old in text:
+              text = text.replace(old, new, 1)
+              path.write_text(text)
+          PY
           set +e
           node scripts/apply-content-unsaved-integration.mjs > guard-integration.log 2>&1
           code=$?
