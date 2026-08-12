@@ -1,0 +1,103 @@
+name: TEMP fix PR406 final
+
+on:
+  push:
+    branches:
+      - feat/pedidos-tinped-papelera
+    paths:
+      - '.github/workflows/temp-fix-pr406-final.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v5
+        with:
+          ref: feat/pedidos-tinped-papelera
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Corregir lectura acotada y versionado
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          crud = Path('js/admin/orders/pedidos-superadmin-crud.js')
+          text = crud.read_text(encoding='utf-8')
+          if "getDocs(query(collection(db, 'products'), limit(1000)))" not in text:
+              text = text.replace(
+                  "  getDocs,\n  runTransaction,",
+                  "  getDocs,\n  limit,\n  query,\n  runTransaction,",
+                  1,
+              )
+              text = text.replace(
+                  "getDocs(collection(db, 'products'))",
+                  "getDocs(query(collection(db, 'products'), limit(1000)))",
+                  1,
+              )
+          crud.write_text(text, encoding='utf-8')
+
+          app = Path('js/admin/admin-app.js')
+          text = app.read_text(encoding='utf-8')
+          text = text.replace(
+              "./orders/pedidos-superadmin-crud.js?v=tintin-20260812-tinped-crud-1",
+              "./orders/pedidos-superadmin-crud.js?v=tintin-20260812-tinped-crud-2",
+              1,
+          )
+          app.write_text(text, encoding='utf-8')
+
+          admin = Path('admin.html')
+          text = admin.read_text(encoding='utf-8')
+          text, count = re.subn(
+              r'js/admin/admin-app\.js\?v=[A-Za-z0-9._-]+',
+              'js/admin/admin-app.js?v=tintin-20260812-tinped-final-2',
+              text,
+              count=1,
+          )
+          if count != 1:
+              raise SystemExit(f'No se pudo versionar admin-app.js: coincidencias={count}')
+          admin.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Regenerar artefactos reproducibles
+        run: |
+          npm run build:csp
+          npm run build:diagnostics
+          npm run cache-versioning:write
+
+      - name: Verificar cierre afectado
+        run: |
+          npm run verify:csp
+          npm run verify:diagnostics
+          npm run audit:diagnostic-findings
+          npm run audit:cache-versioning
+          node scripts/auditar-tinped-pedidos.js
+
+      - name: Retirar workflow temporal y guardar cambios
+        shell: bash
+        run: |
+          rm -f .github/workflows/temp-fix-pr406-final.yml
+          git config user.name tintinaccs
+          git config user.email tintinaccs@gmail.com
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No hay cambios para guardar.'
+            exit 0
+          fi
+          git commit -m 'fix(pedidos): acotar catálogo del CRUD TINPED'
+          git push origin HEAD:feat/pedidos-tinped-papelera
