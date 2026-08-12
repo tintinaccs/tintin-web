@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-12T17:37:23.366Z",
-  "sourceFingerprint": "8b9823e8010c7f526c9173cee7ea5afc4bf13095814f79a53c575f04a1994f2d",
+  "generatedAt": "2026-08-12T17:40:04.904Z",
+  "sourceFingerprint": "18b6e04bf9420c1ad126c3512f8e655bdd4f70b41f7a2329488041b0daed8a51",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 600,
-    "textFiles": 568,
-    "totalBytes": 6353565,
+    "files": 599,
+    "textFiles": 567,
+    "totalBytes": 6350702,
     "pages": 18,
     "modules": 366
   },
@@ -25365,12 +25365,6 @@
       "extension": ".yml",
       "bytes": 2521,
       "sha256": "c1b27b5f43a11fc47dcebdc74bbe35de3bec91448bda75b878a5bd78655fbe0f"
-    },
-    {
-      "path": ".github/workflows/hotfix-admin-auth-loop.yml",
-      "extension": ".yml",
-      "bytes": 2863,
-      "sha256": "a3ad04a89e7bf07920d0bd3d0f58d0b45afeaaeaf84805399201d6267d8b22f8"
     },
     {
       "path": ".github/workflows/respaldo-repositorio.yml",
