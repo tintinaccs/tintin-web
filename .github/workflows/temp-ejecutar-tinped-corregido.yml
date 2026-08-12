@@ -52,6 +52,26 @@ jobs:
           exec(compile(code, 'tinped-integration.py', 'exec'), {'__name__': '__main__'})
           PY
 
+      - name: Alinear contratos de auditoría con safeId y declaraciones agrupadas
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/auditar-admin-pedidos.js')
+          s = p.read_text(encoding='utf-8')
+          old_safe = "/TintinInventoryIntegrity\\.transitionStatus\\(orderId, 'cancelado'\\)/.test(read('js/admin/orders/pedidos-superadmin-crud.js'))"
+          new_safe = "/TintinInventoryIntegrity\\.transitionStatus\\(safeId, 'cancelado'\\)/.test(read('js/admin/orders/pedidos-superadmin-crud.js'))"
+          if old_safe not in s:
+              raise SystemExit('No se encontró la expectativa antigua de orderId.')
+          s = s.replace(old_safe, new_safe, 1)
+          old_bulk = "/const movedOrders = \\[\\]/.test(adminApp) && /const failed = \\[\\]/.test(adminApp)"
+          new_bulk = "/movedOrders\\s*=\\s*\\[\\]/.test(adminApp) && /failed\\s*=\\s*\\[\\]/.test(adminApp)"
+          if old_bulk not in s:
+              raise SystemExit('No se encontró la expectativa antigua de declaraciones masivas.')
+          s = s.replace(old_bulk, new_bulk, 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+
       - name: Retirar workflows temporales antes de generar manifiestos
         run: |
           rm -f .github/workflows/temp-debug-tinped.yml
