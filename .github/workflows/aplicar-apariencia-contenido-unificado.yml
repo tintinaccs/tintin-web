@@ -44,6 +44,23 @@ jobs:
       - name: Aplicar unificación
         run: node scripts/apply-admin-apariencia-contenido-unificado.mjs
 
+      - name: Alinear auditoría de permisos del panel unificado
+        shell: python
+        run: |
+          from pathlib import Path
+          path = Path('scripts/auditar-admin-fundamentos.js')
+          text = path.read_text()
+          old = """  /const requiredPerm = SECTION_PERMISSION\\[target\\]/.test(adminApp) &&
+    /if \\(requiredPerm && !can\\(currentRole, requiredPerm\\)\\)/.test(adminApp),"""
+          new = """  /const requiredPerm = SECTION_PERMISSION\\[target\\]/.test(adminApp) &&
+    ( /if \\(requiredPerm && !can\\(currentRole, requiredPerm\\)\\)/.test(adminApp) ||
+      ( /function canAccessUnifiedAppearance/.test(adminApp) &&
+        /const allowedByPermission = target === 'apariencia'/.test(adminApp) &&
+        /if \\(requiredPerm && !allowedByPermission\\)/.test(adminApp) ) ),"""
+          if old not in text:
+              raise SystemExit('No se encontró la comprobación anterior de switchSection.')
+          path.write_text(text.replace(old, new))
+
       - name: Retirar herramientas temporales antes de generar manifiestos
         run: |
           rm scripts/apply-admin-apariencia-contenido-unificado.mjs
