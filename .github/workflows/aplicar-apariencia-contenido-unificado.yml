@@ -1,0 +1,73 @@
+name: Aplicar Apariencia y Contenido unificados
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: unify-appearance-content-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  apply:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'refactor/admin-apariencia-contenido-unificado' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch real
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Aplicar unificación
+        run: node scripts/apply-admin-apariencia-contenido-unificado.mjs
+
+      - name: Retirar herramientas temporales antes de generar manifiestos
+        run: |
+          rm scripts/apply-admin-apariencia-contenido-unificado.mjs
+          rm .github/workflows/aplicar-apariencia-contenido-unificado.yml
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Validar arquitectura unificada
+        run: |
+          node --check js/admin/admin-app.js
+          node --check js/admin/content/gestion-contenido-admin.js
+          npm run audit:admin-foundation
+          npm run audit:content
+          npm run audit:content-appearance
+          npm run audit:appearance-unified
+          npm run audit:phase6
+          npm run audit:phase7-catalog
+
+      - name: Regenerar CSP y manifiesto diagnóstico después de limpiar temporales
+        run: npm run build:pages
+
+      - name: Confirmar que el manifiesto generado es reproducible
+        run: |
+          npm run verify:csp
+          npm run verify:diagnostics
+          npm run audit:cache-versioning
+
+      - name: Guardar refactor limpio en la rama
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Sin cambios pendientes."
+            exit 0
+          fi
+          git commit -m "refactor(admin): unificar Apariencia y Contenido sin redundancias"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
