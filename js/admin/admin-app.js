@@ -400,7 +400,14 @@ function formatDate(ts) {
 // Excel en Windows necesita el BOM UTF-8 al principio del archivo para no
 // mostrar los acentos rotos (mojibake) — de ahí el '﻿'.
 function toCsvValue(v) {
-  const s = String(v ?? '');
+  let s = String(v ?? '');
+  // Excel/Sheets interpretan una celda que empieza con =, +, -, @ (o tab/CR)
+  // como fórmula. Estos CSV incluyen datos escritos por clientas (nombre,
+  // email, ciudad) sin controlar su contenido, así que un valor como
+  // "=HYPERLINK(...)" en un campo de nombre se ejecutaría al abrir el
+  // archivo en un admin. Se neutraliza con un apóstrofe inicial, igual que
+  // hace Google Sheets al pegar texto "peligroso".
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
   return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
 }
 function downloadCsv(filename, rows) {
@@ -6133,30 +6140,47 @@ function loadImportar() {
     try {
       const items = JSON.parse(raw);
       if (!Array.isArray(items)) throw new Error('Debe ser un array JSON');
+      if (!items.length) throw new Error('El array está vacío');
       let ok = 0;
       const importedIds = [];
-      for (const item of items) {
-        if (!item.name || !item.category || !item.price) continue;
-        const importedRef = await addDoc(collection(db, 'products'), {
-          name:        String(item.name).trim().slice(0, 180),
-          category:    item.category,
-          price:       Math.max(0, Math.round(Number(item.price) || 0)),
-          imageUrl:    item.imageUrl || '',
-          // Igual que el formulario manual: sin stock especificado = null
-          // (ilimitado/no controlado), nunca 0 (agotado de verdad) por
-          // defecto silencioso.
-          stock:       item.stock == null || item.stock === '' ? null : (Number(item.stock) || 0),
-          active:      item.active !== false,
-          description: item.description || '',
-          createdAt:   serverTimestamp(),
-          createdBy:   currentUser?.email || 'import',
-        });
-        importedIds.push(importedRef.id);
-        ok++;
+      const skipped = [];
+      for (let idx = 0; idx < items.length; idx++) {
+        const item = items[idx] || {};
+        const label = item.name ? `"${item.name}"` : `fila ${idx + 1}`;
+        // price se valida por separado de !item.price para no descartar
+        // productos legítimos de precio 0 (promos/regalos).
+        const priceNum = Number(item.price);
+        if (!item.name || typeof item.name !== 'string' || !item.name.trim()) { skipped.push(`${label}: falta "name"`); continue; }
+        if (!item.category || typeof item.category !== 'string') { skipped.push(`${label}: falta "category"`); continue; }
+        if (item.price == null || Number.isNaN(priceNum) || priceNum < 0) { skipped.push(`${label}: "price" inválido`); continue; }
+        try {
+          const importedRef = await addDoc(collection(db, 'products'), {
+            name:        String(item.name).trim().slice(0, 180),
+            category:    item.category,
+            price:       Math.max(0, Math.round(priceNum)),
+            imageUrl:    sanitizeImageUrl(item.imageUrl || ''),
+            // Igual que el formulario manual: sin stock especificado = null
+            // (ilimitado/no controlado), nunca 0 (agotado de verdad) por
+            // defecto silencioso.
+            stock:       item.stock == null || item.stock === '' ? null : (Number(item.stock) || 0),
+            active:      item.active !== false,
+            description: item.description || '',
+            createdAt:   serverTimestamp(),
+            createdBy:   currentUser?.email || 'import',
+          });
+          importedIds.push(importedRef.id);
+          ok++;
+        } catch (writeError) {
+          console.error('Error importando', label, writeError);
+          skipped.push(`${label}: error al guardar (${writeError.message})`);
+        }
       }
       await pushProductsToSheets(importedIds);
-      result.innerHTML = `<span style="color:green">${ok} productos importados correctamente</span>`;
-      toast(`${ok} productos importados`);
+      const skippedHtml = skipped.length
+        ? `<br><span style="color:#b45309">${skipped.length} omitido${skipped.length === 1 ? '' : 's'}: ${skipped.map(escapeHtmlAdmin).join(' · ')}</span>`
+        : '';
+      result.innerHTML = `<span style="color:${ok > 0 ? 'green' : '#e57'}">${ok} producto${ok === 1 ? '' : 's'} importado${ok === 1 ? '' : 's'} correctamente</span>${skippedHtml}`;
+      toast(ok > 0 ? `${ok} productos importados${skipped.length ? `, ${skipped.length} omitidos` : ''}` : 'No se importó ningún producto — revisá los detalles');
     } catch(e) {
       result.innerHTML = `<span style="color:#e57">Error: ${escapeHtmlAdmin(e.message)}</span>`;
     }
@@ -6205,10 +6229,41 @@ function loadImportar() {
     return isNaN(num) ? 0 : Math.round(num);
   }
 
+  // Tokeniza el CSV completo respetando RFC4180: campos entre comillas pueden
+  // contener comas, comillas escapadas ("") y saltos de línea reales — algo
+  // habitual en el "Body (HTML)" de exports de Shopify. Partir primero por
+  // '\n' (como hacía la versión anterior) corta esas descripciones a la
+  // mitad y desalinea todas las columnas siguientes de esa fila.
+  function tokenizarCSV(texto) {
+    const filas = [];
+    let fila = [];
+    let celda = '';
+    let inQuote = false;
+    const text = texto.replace(/\r\n?/g, '\n');
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (inQuote) {
+        if (ch === '"') {
+          if (text[i + 1] === '"') { celda += '"'; i++; }
+          else inQuote = false;
+        } else {
+          celda += ch;
+        }
+        continue;
+      }
+      if (ch === '"') { inQuote = true; continue; }
+      if (ch === ',') { fila.push(celda.trim()); celda = ''; continue; }
+      if (ch === '\n') { fila.push(celda.trim()); filas.push(fila); fila = []; celda = ''; continue; }
+      celda += ch;
+    }
+    if (celda !== '' || fila.length) { fila.push(celda.trim()); filas.push(fila); }
+    return filas.filter(f => f.some(c => c !== ''));
+  }
+
   function parsearCSV(texto) {
-    const lineas = texto.split('\n');
+    const lineas = tokenizarCSV(texto);
     if (lineas.length < 2) return [];
-    const headers = lineas[0].split(',').map(h => h.trim().replace(/^"|"$/g, '').toLowerCase());
+    const headers = lineas[0].map(h => h.trim().replace(/^"|"$/g, '').toLowerCase());
     const col = name => headers.indexOf(name);
     const iHandle=col('handle'),iTitle=col('title'),iType=col('type'),iTags=col('tags'),
           iStatus=col('status'),iPrice=col('variant price'),iCompare=col('variant compare at price'),
@@ -6224,17 +6279,8 @@ function loadImportar() {
     function stripHtml(html) { return (html||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim(); }
     const productos = new Map();
     for (let i = 1; i < lineas.length; i++) {
-      const linea = lineas[i];
-      if (!linea.trim()) continue;
-      const cols = [];
-      let inQuote = false, cell = '';
-      for (let c = 0; c < linea.length; c++) {
-        const ch = linea[c];
-        if (ch === '"') { inQuote = !inQuote; continue; }
-        if (ch === ',' && !inQuote) { cols.push(cell.trim()); cell = ''; continue; }
-        cell += ch;
-      }
-      cols.push(cell.trim());
+      const cols = lineas[i];
+      if (!cols || !cols.some(c => c !== '')) continue;
       const handle = cols[iHandle] || '';
       if (!handle) continue;
       const stockRaw = iStock >= 0 ? cols[iStock] : undefined;
@@ -6339,7 +6385,7 @@ function loadImportar() {
         <td style="font-weight:700;max-width:200px;word-break:break-word">${escapeHtmlAdmin(p.name)}</td>
         <td>
           <select class="adm-select" style="padding:4px 8px;font-size:12px;border-radius:20px;width:auto"
-                  onchange="csvProductos[${i}].category = this.value">
+                  onchange="window.setCsvRowCategory(${i}, this.value)">
             ${['relojes','bolsos','aros','collares','pulseras','anillos','tobilleras','brazaletes','earcuff','armcuff','gafas','joyeros','otros'].map(c =>
               `<option value="${c}" ${p.category===c?'selected':''}>${c}</option>`
             ).join('')}
@@ -6384,8 +6430,8 @@ function loadImportar() {
           price:       Math.max(0, Math.round(Number(p.price) || 0)),
           priceBefore: p.priceBefore||null,
           stock:       p.stock,
-          imageUrl:    p.imageUrl,
-          imagesExtra: p.imagesExtra||[],
+          imageUrl:    sanitizeImageUrl(p.imageUrl || ''),
+          imagesExtra: (p.imagesExtra||[]).map(u => sanitizeImageUrl(u)).filter(Boolean),
           description: p.description||'',
           variants:    p.variants?.length ? p.variants : [],
           tags:        p.tags||[],
@@ -6443,6 +6489,9 @@ window.toggleCsvRowSelect = function(cb) {
   const idx = Number(cb.dataset.idx);
   if (cb.checked) _selectedCsvRows.add(idx); else _selectedCsvRows.delete(idx);
   updateCsvBulkCount();
+};
+window.setCsvRowCategory = function(idx, value) {
+  if (csvProductos[idx]) csvProductos[idx].category = value;
 };
 function updateCsvBulkCount() {
   const el = document.getElementById('csv-bulk-count');
