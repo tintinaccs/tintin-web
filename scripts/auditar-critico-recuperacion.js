@@ -8,6 +8,7 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\
 const rules = read('firestore.rules');
 const checkout = read('js/orders/pedido-checkout-seguro.js');
 const admin = read('js/admin/admin-app.js');
+const orderCrud = read('js/admin/orders/pedidos-superadmin-crud.js');
 const activity = read('js/analytics/actividad-sitio.js');
 const loader = read('js/cargador-pagina.js');
 const products = read('js/core/store/estado-productos.js');
@@ -89,10 +90,11 @@ check(
   'El panel reconcilia inventario de forma transaccional',
   inventory.includes('runTransaction') &&
     inventory.includes('computeInventoryDeltas') &&
-    admin.includes('TintinInventoryIntegrity.updateEditedOrder') &&
+    orderCrud.includes('TintinInventoryIntegrity.updateEditedOrder') &&
     admin.includes('TintinInventoryIntegrity.transitionStatus') &&
-    admin.includes('TintinInventoryIntegrity.deleteOrder'),
-  'Edición, estados y eliminación deben usar el reconciliador atómico.'
+    admin.includes('TintinOrderAdmin.trashOrder') &&
+    orderCrud.includes("TintinInventoryIntegrity.transitionStatus(safeId, 'cancelado')"),
+  'Edición, estados y papelera deben usar el reconciliador atómico.'
 );
 check(
   'Cancelar dos veces no devuelve stock dos veces',
@@ -111,13 +113,13 @@ check(
   'La devolución debe confirmarse primero para que un fallo o reintento no duplique stock y no requiera reglas nuevas.'
 );
 check(
-  'La eliminación masiva no recalcula toda la base ni oculta fallos parciales',
+  'La papelera masiva no recalcula toda la base ni oculta fallos parciales',
   !deleteFix.includes('recalculateAllUserOrderStats') &&
-    deleteFix.includes('recalculateOrderOwnerStats') &&
-    admin.includes('const deletedOrders = []') &&
-    admin.includes('const failed = []') &&
-    admin.includes('failed.forEach(item => _selectedOrders.add(item.id))'),
-  'Solo deben recalcularse las cuentas afectadas y los pedidos fallidos deben quedar seleccionados.'
+    admin.includes('movedOrders = []') &&
+    admin.includes('failed = []') &&
+    admin.includes('failed.forEach(item => _selectedOrders.add(item.id))') &&
+    admin.includes('TintinOrderAdmin.trashOrder'),
+  'Cada pedido se procesa de forma acotada y los fallidos deben quedar seleccionados.'
 );
 check(
   'Las consultas públicas tienen límites explícitos',
