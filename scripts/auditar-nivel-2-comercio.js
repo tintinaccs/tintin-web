@@ -27,6 +27,7 @@ const phase4 = read('apps-script/CrearPedido.gs');
 const inventory = read('js/admin/products/integridad-inventario-admin.js');
 const deleteFix = read('js/admin/orders/eliminacion-pedidos-admin.js');
 const admin = read('js/admin/admin-app.js');
+const orderCrud = read('js/admin/orders/pedidos-superadmin-crud.js');
 const emailClient = read('js/email/notificacion-pedido-resend.js');
 const emailBridge = read('js/pages/checkout/checkout-puente-correo.js');
 const emailServer = read('functions/api/order-email.js');
@@ -103,8 +104,8 @@ check(
 );
 check(
   'Creación del pedido y descuento de stock ocurren en una sola transacción, sin tope bajo de ítems',
-  phase4.includes('phase4CreateWrite_(\'orders/\' + orderId, orderData)') &&
-    phase4.includes('phase4UpdateWrite_(\'products/\' + item.id') &&
+  phase4.includes("phase4CreateWrite_('orders/' + orderId, orderData)") &&
+    phase4.includes("phase4UpdateWrite_('products/' + item.id") &&
     phase4.includes('phase4Commit_(writes, transactionId)') &&
     !/cartLines\.length\s*>\s*4\b/.test(phase4)
 );
@@ -137,10 +138,12 @@ check(
   inventory.includes('missingProducts.push(id)') && inventory.includes('continue;')
 );
 check(
-  'El borrado masivo conserva fallos y solo sincroniza pedidos eliminados',
-  admin.includes('const deletedOrders = []') && admin.includes('const failed = []') &&
+  'La papelera masiva conserva fallos y mueve solo pedidos confirmados',
+  admin.includes('movedOrders = []') && admin.includes('failed = []') &&
     admin.includes('failed.forEach(item => _selectedOrders.add(item.id))') &&
-    deleteFix.includes('if (result?.deleted) await syncDeletedOrder')
+    admin.includes('TintinOrderAdmin.trashOrder') &&
+    orderCrud.includes("TintinInventoryIntegrity.transitionStatus(safeId, 'cancelado')"),
+  'Cada pedido debe liberar inventario antes de salir de la lista activa.'
 );
 
 // Administración
