@@ -1,0 +1,26 @@
+'use strict';
+const fs = require('fs');
+const read = file => fs.readFileSync(file, 'utf8');
+const html = read('admin.html');
+const app = read('js/admin/admin-app.js');
+const content = read('js/admin/content/gestion-contenido-admin.js');
+const firebase = read('js/core/firebase/firebase.js');
+const checks = [];
+const check = (name, ok) => checks.push({ name, ok: Boolean(ok) });
+const navContent = (html.match(/data-section="contenido"/g) || []).length;
+const navAppearance = (html.match(/data-section="apariencia"/g) || []).length;
+check('No existe módulo superior Contenido duplicado', navContent === 0 && !html.includes('id="section-contenido"'));
+check('Apariencia sigue presente en desktop y mobile', navAppearance >= 2 && html.includes('id="section-apariencia"'));
+check('El editor seguro vive dentro de Apariencia', html.includes('id="appearance-content-phase6-host"') && content.includes("section.id = 'appearance-content-phase6'"));
+check('No queda el editor legado de Contenido en admin-app', !app.includes('// ======== CONTENIDO DEL SITIO ========') && !app.includes('loadContenido()'));
+check('Los enlaces viejos Contenido se redirigen a Apariencia', app.includes("if (target === 'contenido') target = 'apariencia'") && app.includes("fromHash === 'contenido'"));
+check('Permisos de contenido permiten entrar sin abrir colores sensibles', app.includes('canAccessUnifiedAppearance') && html.includes('data-appearance-sensitive="true"'));
+check('Contenido conserva una sola suscripción por página', (content.match(/onSnapshot\(/g) || []).length === 1 && content.includes('pageUnsubscribe?.()'));
+check('Contenido conserva site_content como única fuente', content.includes("doc(db, 'site_content', pageId)") && content.includes("doc(db, 'site_content', currentPageId)"));
+check('Firebase sigue centralizado', firebase.includes('initializeApp') && !content.includes('initializeApp(') && !app.includes('initializeApp('));
+check('Contenido usa el guard global de cambios pendientes', content.includes('window.AdminUnsaved.register(nextId') && content.includes('window.AdminUnsaved?.markDirty(activeUnsavedScopeId)') && content.includes('window.AdminUnsaved?.markClean(activeUnsavedScopeId)'));
+check('No existe un beforeunload duplicado dentro de Contenido', !content.includes("window.addEventListener('beforeunload'"));
+const failed = checks.filter(item => !item.ok);
+for (const item of checks) console.log(`${item.ok ? 'OK' : 'ERROR'} — ${item.name}`);
+if (failed.length) { console.error(`\nApariencia unificada: ${failed.length} fallo(s).`); process.exit(1); }
+console.log(`\nApariencia unificada: ${checks.length} comprobaciones correctas.`);

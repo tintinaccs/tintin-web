@@ -45,6 +45,7 @@ if (!window.TintinAdminContentPhase6Booted) {
   let remotePending = false;
   let permissions = { view: false, edit: false, toggle: false, restore: false };
   let ui = null;
+  let activeUnsavedScopeId = null;
 
   function effectiveFields(sectionSchema) {
     const targets = new Map();
@@ -94,6 +95,40 @@ if (!window.TintinAdminContentPhase6Booted) {
   function confirmDiscard() {
     if (!dirty) return true;
     return window.confirm('Hay cambios sin guardar. ¿Querés descartarlos y continuar?');
+  }
+
+  function contentUnsavedId() {
+    return `content:${currentPageId}:${currentSectionId}`;
+  }
+
+  function unregisterUnsavedScope() {
+    if (!activeUnsavedScopeId) return;
+    window.AdminUnsaved?.unregister(activeUnsavedScopeId);
+    activeUnsavedScopeId = null;
+  }
+
+  function markContentDirty() {
+    dirty = true;
+    if (activeUnsavedScopeId) window.AdminUnsaved?.markDirty(activeUnsavedScopeId);
+  }
+
+  function registerUnsavedScope() {
+    if (!window.AdminUnsaved || !ui?.fields || !currentSectionId) return;
+    const nextId = contentUnsavedId();
+    if (activeUnsavedScopeId && activeUnsavedScopeId !== nextId) {
+      window.AdminUnsaved.unregister(activeUnsavedScopeId);
+    }
+    activeUnsavedScopeId = nextId;
+    const pageLabel = getPageSchema(currentPageId)?.label || currentPageId;
+    const sectionLabel = getSectionSchema(currentPageId, currentSectionId)?.label || currentSectionId;
+    window.AdminUnsaved.register(nextId, {
+      root: ui.fields,
+      label: `Contenido: ${pageLabel} / ${sectionLabel}`,
+      active: () => document.getElementById('section-apariencia')?.classList.contains('active') && ui?.section?.isConnected,
+      serialize: () => JSON.stringify(collectFormValues()),
+      save: () => handleSave(),
+    });
+    window.AdminUnsaved.markClean(nextId);
   }
 
   function sectionIdsForPage(pageId) {
@@ -165,7 +200,7 @@ if (!window.TintinAdminContentPhase6Booted) {
         'content-phase6-invalid',
         item.type === 'href' && Boolean(control.value.trim() && !sanitizeContentHref(control.value, ''))
       );
-      dirty = true;
+      markContentDirty();
       remotePending = false;
       setNotice('Tenés cambios sin guardar.', 'warning');
     });
@@ -198,7 +233,7 @@ if (!window.TintinAdminContentPhase6Booted) {
       checkbox.checked = values.visible !== false;
       checkbox.disabled = !permissions.toggle;
       checkbox.addEventListener('change', () => {
-        dirty = true;
+        markContentDirty();
         setNotice('Tenés cambios sin guardar.', 'warning');
       });
       visibility.append(checkbox, text);
@@ -218,6 +253,7 @@ if (!window.TintinAdminContentPhase6Booted) {
     ui.save.disabled = !permissions.edit;
     dirty = false;
     remotePending = false;
+    registerUnsavedScope();
     setNotice('Los cambios se sincronizan en tiempo real después de guardar.', 'info');
   }
 
@@ -234,7 +270,7 @@ if (!window.TintinAdminContentPhase6Booted) {
   }
 
   async function saveSection(values, successMessage) {
-    if (!permissions.edit || !currentUser) return;
+    if (!permissions.edit || !currentUser) return false;
     ui.save.disabled = true;
     ui.restore.disabled = true;
     setNotice('Guardando…', 'info');
@@ -250,12 +286,15 @@ if (!window.TintinAdminContentPhase6Booted) {
       }, { merge: true });
       dirty = false;
       remotePending = false;
+      if (activeUnsavedScopeId) window.AdminUnsaved?.markClean(activeUnsavedScopeId);
       setNotice('Guardado y sincronizado.', 'success');
       toast(successMessage);
+      return true;
     } catch (error) {
       console.error('[admin-content-phase6] save failed:', error);
       setNotice('No se pudo guardar. Revisá tus permisos o la conexión.', 'error');
       toast('No se pudo guardar el contenido.', true);
+      return false;
     } finally {
       ui.save.disabled = false;
       ui.restore.disabled = false;
@@ -267,9 +306,9 @@ if (!window.TintinAdminContentPhase6Booted) {
     if (invalid) {
       invalid.focus();
       toast('Corregí el enlace marcado antes de guardar.', true);
-      return;
+      return false;
     }
-    await saveSection(collectFormValues(), '✅ Contenido guardado');
+    return saveSection(collectFormValues(), '✅ Contenido guardado');
   }
 
   async function handleRestore() {
@@ -302,6 +341,7 @@ if (!window.TintinAdminContentPhase6Booted) {
 
   function selectPage(pageId) {
     if (pageId === currentPageId || !confirmDiscard()) return;
+    unregisterUnsavedScope();
     currentPageId = pageId;
     currentSectionId = sectionIdsForPage(pageId)[0] || '';
     currentPageData = {};
@@ -315,29 +355,30 @@ if (!window.TintinAdminContentPhase6Booted) {
       ui.sectionSelect.value = currentSectionId;
       return;
     }
+    unregisterUnsavedScope();
     currentSectionId = sectionId;
     dirty = false;
     renderForm();
   }
 
   function activateContentSection() {
-    if (!ui?.section) return;
-    document.querySelectorAll('.adm-section').forEach(section => section.classList.remove('active'));
-    ui.section.classList.add('active');
-    document.querySelectorAll('[data-section]').forEach(button => {
-      button.classList.toggle('active', button.dataset.section === 'contenido');
+    const appearanceSection = document.getElementById('section-apariencia');
+    if (!appearanceSection?.classList.contains('active')) {
+      document.querySelector('[data-section="apariencia"]')?.click();
+    }
+    document.querySelector('[data-apar-main-tab="diseno"]')?.click();
+    window.requestAnimationFrame(() => {
+      ui?.section?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
     });
-    const topbar = document.getElementById('adm-topbar-title');
-    if (topbar) topbar.textContent = 'Contenido';
   }
 
   function buildUI() {
-    if (document.getElementById('section-contenido')) return;
-    const host = document.querySelector('.adm-content');
+    if (document.getElementById('appearance-content-phase6')) return;
+    const host = document.getElementById('appearance-content-phase6-host');
     if (!host) return;
 
-    const section = create('div', 'adm-section content-phase6-section');
-    section.id = 'section-contenido';
+    const section = create('div', 'content-phase6-section');
+    section.id = 'appearance-content-phase6';
 
     const card = create('div', 'adm-card');
     const head = create('div', 'adm-card-head content-phase6-head');
@@ -380,15 +421,6 @@ if (!window.TintinAdminContentPhase6Booted) {
     host.appendChild(section);
 
     ui = { section, preview, notice, readOnly, pages, pageTitle, sectionSelect, sectionTitle, fields, save, restore };
-
-    document.querySelectorAll('[data-section="contenido"]').forEach(button => {
-      button.addEventListener('click', activateContentSection);
-    });
-    window.addEventListener('beforeunload', event => {
-      if (!dirty) return;
-      event.preventDefault();
-      event.returnValue = '';
-    });
   }
 
   function injectStyles() {
@@ -396,7 +428,7 @@ if (!window.TintinAdminContentPhase6Booted) {
     const style = document.createElement('style');
     style.id = 'content-phase6-styles';
     style.textContent = `
-      .content-phase6-head{align-items:flex-start;gap:16px}.content-phase6-subtitle{font-size:12px;color:var(--adm-muted);margin-top:5px;line-height:1.5}
+      .apar-unified-content-intro{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:16px 18px;margin:14px 0;background:linear-gradient(135deg,#fff,#fff7fa);border:1px solid var(--adm-border);border-radius:14px}.apar-unified-content-intro strong{display:block;font-size:14px;color:var(--adm-text);margin-bottom:4px}.apar-unified-content-intro span{display:block;font-size:12px;line-height:1.55;color:var(--adm-muted)}.apar-unified-content-host{margin:0 0 24px}.apar-unified-content-host:empty{display:none}.content-phase6-section{margin:0}.content-phase6-head{align-items:flex-start;gap:16px}.content-phase6-subtitle{font-size:12px;color:var(--adm-muted);margin-top:5px;line-height:1.5}
       .content-phase6-pages{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.content-phase6-page{border:1px solid var(--adm-border);background:#fff;border-radius:999px;padding:8px 13px;font:600 12px Montserrat;cursor:pointer}.content-phase6-page.active{background:var(--adm-primary);border-color:var(--adm-primary);color:#fff}
       .content-phase6-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;background:#fafafa;border:1px solid var(--adm-border);border-radius:10px;margin-bottom:18px}.content-phase6-toolbar select{max-width:320px}
       .content-phase6-section-title{font-size:16px;margin:4px 0 16px}.content-phase6-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.content-phase6-field{display:flex;flex-direction:column;gap:6px}.content-phase6-field:has(textarea){grid-column:1/-1}.content-phase6-label{font-size:12px;font-weight:700}.content-phase6-field-meta{display:flex;justify-content:space-between;gap:8px;color:var(--adm-muted);font-size:10px}.content-phase6-counter{white-space:nowrap}.content-phase6-invalid{border-color:#c0392b!important;background:#fff5f5!important}
@@ -422,8 +454,8 @@ if (!window.TintinAdminContentPhase6Booted) {
   async function startForUser(user) {
     currentUser = user;
     await resolvePermissions(user);
-    const navs = document.querySelectorAll('[data-section="contenido"]');
-    navs.forEach(nav => { nav.style.display = permissions.view ? '' : 'none'; });
+    const unifiedHost = document.getElementById('appearance-content-phase6-host');
+    if (unifiedHost) unifiedHost.hidden = !permissions.view;
     if (!permissions.view) return;
 
     buildUI();
@@ -441,6 +473,7 @@ if (!window.TintinAdminContentPhase6Booted) {
     onAuthStateChanged(auth, user => {
       pageUnsubscribe?.();
       pageUnsubscribe = null;
+      unregisterUnsavedScope();
       if (!user || user.isAnonymous) return;
       startForUser(user).catch(error => {
         console.error('[admin-content-phase6] boot failed:', error);

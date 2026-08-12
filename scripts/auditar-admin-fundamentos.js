@@ -187,7 +187,10 @@ check(
 check(
   'switchSection valida el permiso antes de abrir una sección sensible',
   /const requiredPerm = SECTION_PERMISSION\[target\]/.test(adminApp) &&
-    /if \(requiredPerm && !can\(currentRole, requiredPerm\)\)/.test(adminApp),
+    ( /if \(requiredPerm && !can\(currentRole, requiredPerm\)\)/.test(adminApp) ||
+      ( /function canAccessUnifiedAppearance/.test(adminApp) &&
+        /const allowedByPermission = target === 'apariencia'/.test(adminApp) &&
+        /if \(requiredPerm && !allowedByPermission\)/.test(adminApp) ) ),
   'El acceso directo por hash/consola debe bloquearse aunque el botón esté oculto.'
 );
 check(

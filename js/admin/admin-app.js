@@ -497,11 +497,10 @@ const SECTION_LABELS = {
   correos: 'Correos',
   configuracion: 'Configuración',
   importar: 'Import / Export',
-  contenido: 'Contenido del Sitio',
   // Sin esta entrada el topbar mostraba la clave cruda "permisos" en lugar de
   // un título legible al entrar a Roles y Permisos.
   permisos: 'Roles y Permisos',
-  apariencia: 'Apariencia y esquemas de colores',
+  apariencia: 'Apariencia y contenido',
   'ai-builder': 'TINTÍN AI Builder'
 };
 
@@ -543,9 +542,17 @@ const SECTION_PERMISSION = {
 // Evita el bucle switchSection → replaceState(#x) → hashchange → switchSection.
 let admSuppressHashSync = false;
 
+function canAccessUnifiedAppearance(role = currentRole) {
+  return can(role, 'manageSettings') || role === 'superadmin' || canDo(role, 'contenido', 'ver');
+}
+
 function switchSection(target) {
+  if (target === 'contenido') target = 'apariencia';
   const requiredPerm = SECTION_PERMISSION[target];
-  if (requiredPerm && !can(currentRole, requiredPerm)) {
+  const allowedByPermission = target === 'apariencia'
+    ? canAccessUnifiedAppearance()
+    : (!requiredPerm || can(currentRole, requiredPerm));
+  if (requiredPerm && !allowedByPermission) {
     toast('No tenés permiso para ver esta sección');
     target = 'dashboard';
   }
@@ -606,7 +613,6 @@ function switchSection(target) {
   if (target === 'correos') loadCorreos();
   if (target === 'configuracion') loadConfig();
   if (target === 'importar') loadImportar();
-  if (target === 'contenido') loadContenido();
   if (target === 'permisos') loadPermisosSection();
   if (target === 'apariencia') loadApariencia();
 }
@@ -638,15 +644,20 @@ function isKnownSection(name) {
 function sectionFromUrl() {
   const params = new URLSearchParams(location.search);
   const fromQuery = params.get('section');
+  if (fromQuery === 'contenido') return 'apariencia';
   if (isKnownSection(fromQuery)) return fromQuery;
   const fromHash = (location.hash || '').replace(/^#/, '');
+  if (fromHash === 'contenido') return 'apariencia';
   if (isKnownSection(fromHash)) return fromHash;
   return null;
 }
 function applyInitialSectionFromUrl() {
-  // El deep-link de Contenido (?tab=contenido&page=…&section=…) tiene su propio
-  // manejador (handleContentDeepLink) — no se pisa acá.
-  if (new URLSearchParams(location.search).get('tab') === 'contenido') return;
+  // Compatibilidad: los enlaces viejos del editor de Contenido abren ahora la
+  // única superficie Apariencia y contenido. El módulo Fase 6 conserva page/section.
+  if (new URLSearchParams(location.search).get('tab') === 'contenido') {
+    switchSection('apariencia');
+    return;
+  }
   const target = sectionFromUrl();
   if (target && target !== 'dashboard') switchSection(target);
 }
@@ -883,11 +894,17 @@ function setupPermissions(role) {
   // pantalla (antes esto solo ocultaba el ID de escritorio, dejando visibles
   // en mobile pestañas que en desktop ya estaban ocultas).
   Object.entries(SECTION_PERMISSION).forEach(([section, perm]) => {
-    if (!can(role, perm)) {
-      document.querySelectorAll(`[data-section="${section}"]`).forEach(el => {
-        el.style.display = 'none';
-      });
-    }
+    const allowed = section === 'apariencia'
+      ? canAccessUnifiedAppearance(role)
+      : can(role, perm);
+    document.querySelectorAll(`[data-section="${section}"]`).forEach(el => {
+      el.style.display = allowed ? '' : 'none';
+    });
+  });
+
+  const canManageAppearance = can(role, 'manageSettings');
+  document.querySelectorAll('[data-appearance-sensitive="true"]').forEach(el => {
+    el.hidden = !canManageAppearance;
   });
 
   if (role !== 'superadmin' || currentUser?.email !== SUPER_ADMIN) {
@@ -6651,604 +6668,7 @@ async function savePermisosChanges() {
   }
 }
 
-// ======== CONTENIDO DEL SITIO ========
-let contCurrentPage = 'index';
-let contSavedData = {};
-let contExtraPages = [];
-let _contenidoInited = false;
 
-const CONT_SCHEMA = {
-  index: {
-    label: 'Página Principal', url: 'index.html',
-    sections: {
-      hero: {
-        label: 'Hero Principal', icon: 'hero',
-        fields: [
-          { key:'eyebrow', label:'Texto eyebrow', type:'text', def:'Bienvenidas a TINTIN' },
-          { key:'title', label:'Título grande (H1)', type:'text', def:'TINTIN' },
-          { key:'subtitle', label:'Subtítulo', type:'text', def:'Brillo, estilo y mucha personalidad' },
-          { key:'btnText', label:'Texto del botón', type:'text', def:'¿Quiénes somos? →' },
-          { key:'btnHref', label:'URL del botón', type:'url', def:'about.html' },
-          { key:'_note', label:'Las imágenes del Hero se administran en Contenido → Imágenes / Banners (admin-images.html), no acá.', type:'note' },
-        ]
-      },
-      trust: {
-        label: 'Barra de Confianza', icon: 'trust',
-        fields: [
-          { key:'visible', label:'Mostrar esta sección en el sitio', type:'checkbox', def:true },
-          { key:'items', label:'Ítems (4 bloques)', type:'array',
-            itemFields: [
-              { key:'label', label:'Título', type:'text' },
-              { key:'desc', label:'Descripción', type:'text' },
-            ],
-            def: [
-              { label:'Envío mismo día', desc:'Pedidos antes de las 11 hs, Zona Central' },
-              { label:'Acero inoxidable', desc:'No se oxida ni decolora' },
-              { label:'Pago seguro', desc:'Transferencia o efectivo' },
-              { label:'Atención personalizada', desc:'Te ayudamos por WhatsApp' },
-            ]
-          }
-        ]
-      },
-      editorial_bag: {
-        label: 'Editorial — Bags', icon: 'bags',
-        fields: [
-          { key:'visible', label:'Mostrar esta sección en el sitio', type:'checkbox', def:true },
-          { key:'eyebrow', label:'Eyebrow', type:'text', def:'Colección BAG' },
-          { key:'title', label:'Título', type:'text', def:'El complemento\nque lo cambia todo' },
-          { key:'body', label:'Texto', type:'textarea', def:'' },
-          { key:'btnText', label:'Texto botón', type:'text', def:'¡Lo quiero ya!' },
-          { key:'btnHref', label:'URL botón', type:'url', def:'catalogo.html?cat=bolsos' },
-          { key:'_note', label:'La imagen de esta sección se administra en Contenido → Imágenes / Banners (admin-images.html), no acá.', type:'note' },
-        ]
-      },
-      editorial_relojes: {
-        label: 'Editorial — Relojes', icon: '⌚',
-        fields: [
-          { key:'visible', label:'Mostrar esta sección en el sitio', type:'checkbox', def:true },
-          { key:'eyebrow', label:'Eyebrow', type:'text', def:'Nueva colección' },
-          { key:'title', label:'Título', type:'text', def:'El reloj del que\ntodas se enamoran' },
-          { key:'body', label:'Texto', type:'textarea', def:'' },
-          { key:'btnText', label:'Texto botón', type:'text', def:'Ver relojes' },
-          { key:'btnHref', label:'URL botón', type:'url', def:'catalogo.html?cat=relojes' },
-          { key:'_note', label:'La imagen de esta sección se administra en Contenido → Imágenes / Banners (admin-images.html), no acá.', type:'note' },
-        ]
-      },
-      footer: {
-        label: 'Footer', icon: 'footer',
-        fields: [
-          { key:'copy', label:'Texto copyright', type:'text', def:'© 2024–2026 TINTIN ACCESORIOS' },
-          { key:'waText', label:'Botón WhatsApp texto', type:'text', def:'Contactanos por WhatsApp' },
-          // El número de WhatsApp se configura en Configuración → WhatsApp,
-          // única fuente para todo el sitio — ya no se edita por página. El
-          // logo del footer es texto (wordmark "TINTIN"), no imagen — es
-          // así a propósito, distinto del logo del header.
-        ]
-      }
-    }
-  },
-  nosotros: {
-    label: 'Nosotros', url: 'about.html',
-    sections: {
-      hero: {
-        label: 'Hero Nosotros', icon: 'hero',
-        fields: [
-          { key:'title', label:'Título principal', type:'text', def:'Somos más que accesorios' },
-          { key:'desc', label:'Descripción', type:'textarea', def:'' },
-        ]
-      },
-      historia: {
-        label: 'Nuestra Historia', icon: 'story',
-        fields: [
-          { key:'eyebrow', label:'Eyebrow', type:'text', def:'Desde San Lorenzo' },
-          { key:'title', label:'Título', type:'text', def:'Nuestra historia' },
-        ]
-      }
-    }
-  },
-  catalogo: {
-    label: 'Catálogo', url: 'catalogo.html',
-    sections: {
-      header: {
-        label: 'Encabezado del catálogo', icon: 'catalog',
-        fields: [
-          { key:'title', label:'Título', type:'text', def:'Nuestro Catálogo' },
-          { key:'eyebrow', label:'Eyebrow', type:'text', def:'Toda la colección' },
-          { key:'desc', label:'Descripción', type:'textarea', def:'' },
-        ]
-      }
-    }
-  },
-  collections: {
-    label: 'Colecciones', url: 'collections.html',
-    sections: {
-      header: {
-        label: 'Encabezado de Colecciones', icon: 'catalog',
-        fields: [
-          { key:'title', label:'Título', type:'text', def:'NUESTRAS COLECCIONES' },
-          { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
-        ]
-      }
-    }
-  },
-  contact: {
-    label: 'Contacto', url: 'contact.html',
-    sections: {
-      header: {
-        label: 'Encabezado de Contacto', icon: 'page',
-        fields: [
-          { key:'title', label:'Título', type:'text', def:'¿Dudas o consultas?' },
-          { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
-        ]
-      }
-    }
-  },
-  faq: {
-    label: 'Preguntas Frecuentes', url: 'preguntas-frecuentes.html',
-    sections: {
-      header: {
-        label: 'Encabezado de FAQ', icon: 'page',
-        fields: [
-          { key:'title', label:'Título', type:'text', def:'Preguntas Frecuentes 💬' },
-          { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
-        ]
-      }
-    }
-  },
-  cambios: {
-    label: 'Cambios y Devoluciones', url: 'cambios-devoluciones.html',
-    sections: {
-      header: {
-        label: 'Encabezado de Cambios y Devoluciones', icon: 'page',
-        fields: [
-          { key:'title', label:'Título', type:'text', def:'Cambios y Devoluciones 🔄' },
-          { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
-        ]
-      }
-    }
-  },
-  envios: {
-    label: 'Política de Envíos', url: 'envios.html',
-    sections: {
-      header: {
-        label: 'Encabezado de Envíos', icon: 'page',
-        fields: [
-          { key:'title', label:'Título', type:'text', def:'Política de Envíos 🚚' },
-          { key:'desc', label:'Subtítulo', type:'textarea', def:'' },
-          { key:'_note', label:'Las ciudades y costos de envío se administran en Configuración → Envíos, no acá.', type:'note' },
-        ]
-      }
-    }
-  }
-};
-
-async function contLoadPage(pageId) {
-  try {
-    const snap = await getDoc(doc(db, 'site_content', pageId));
-    contSavedData[pageId] = snap.exists() ? snap.data() : {};
-  } catch(e) {
-    contSavedData[pageId] = {};
-  }
-  // Migración puntual: el eyebrow del Hero de home dejó de incluir "· Paraguay".
-  // Si el valor guardado es exactamente el texto viejo, se corrige acá (una
-  // sola vez, valor exacto → valor exacto) sin tocar ningún otro campo.
-  if (pageId === 'index' && contSavedData[pageId]?.hero?.eyebrow === 'Bienvenidas a TINTIN · Paraguay') {
-    const migratedHero = { ...contSavedData[pageId].hero, eyebrow: 'Bienvenidas a TINTIN' };
-    contSavedData[pageId].hero = migratedHero;
-    contSaveSection(pageId, 'hero', migratedHero).catch(() => {});
-  }
-}
-
-async function contSaveSection(pageId, sectionId, data) {
-  const docRef = doc(db, 'site_content', pageId);
-  try {
-    await setDoc(docRef, { [sectionId]: data }, { merge: true });
-    if (!contSavedData[pageId]) contSavedData[pageId] = {};
-    contSavedData[pageId][sectionId] = data;
-    return true;
-  } catch(e) {
-    console.error('Error guardando:', e);
-    return false;
-  }
-}
-
-function contRenderField(field, value) {
-  if (field.type === 'note') {
-    return `<div class="cont-field-note" style="background:#fef5f8;border:1px solid #f0d8e0;border-radius:10px;padding:10px 14px;font-size:12px;color:#b84c72;margin-bottom:12px">${field.label}</div>`;
-  }
-  const id = `cont-f-${field.key}-${Math.random().toString(36).slice(2,8)}`;
-  let html = `<div class="cont-field" data-fkey="${field.key}">`;
-  html += `<label class="cont-label" for="${id}">${field.label}</label>`;
-  if (field.type === 'text' || field.type === 'url') {
-    html += `<input id="${id}" class="cont-input" type="text" value="${(value ?? field.def ?? '').replace(/"/g,'&quot;')}" placeholder="${field.def||''}" data-fkey="${field.key}" />`;
-  } else if (field.type === 'textarea') {
-    html += `<textarea id="${id}" class="cont-textarea" placeholder="${field.def||''}" data-fkey="${field.key}">${value ?? field.def ?? ''}</textarea>`;
-  } else if (field.type === 'image') {
-    const imgVal = value ?? field.def ?? '';
-    const uid = id + '-upload';
-    html += `
-      <div class="cont-img-wrap">
-        <input id="${id}" class="cont-input" type="text" value="${imgVal.replace(/"/g,'&quot;')}" placeholder="https://... o subí una imagen" data-fkey="${field.key}" />
-        <label class="adm-btn adm-btn-primary adm-btn-sm" title="Subir imagen" style="cursor:pointer;white-space:nowrap;position:relative;overflow:hidden">
-          Subir
-          <input type="file" accept="image/*" style="position:absolute;opacity:0;width:0;height:0;overflow:hidden" onchange="contUploadImage(this, '${id}')" />
-        </label>
-        <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" onclick="document.getElementById('${id}').value='';document.getElementById('${id}').dispatchEvent(new Event('input'))" title="Borrar URL">✕</button>
-      </div>
-      <div class="cont-upload-progress" id="${uid}-progress" style="display:none">
-        <div class="cont-upload-bar-wrap"><div class="cont-upload-bar" id="${uid}-bar"></div></div>
-        <span class="cont-upload-pct" id="${uid}-pct">0%</span>
-      </div>
-      <img class="cont-img-preview ${imgVal ? 'show' : ''}" src="${imgVal||''}" alt="preview" data-preview-for="${id}" id="${uid}-preview" />
-    `;
-  } else if (field.type === 'array') {
-    html += contRenderArrayField(field, value ?? field.def ?? [], id);
-  } else if (field.type === 'checkbox') {
-    const checked = (value ?? field.def) !== false;
-    html = `<div class="cont-field" data-fkey="${field.key}">
-      <label class="cont-label" style="display:flex;align-items:center;gap:8px;cursor:pointer" for="${id}">
-        <input id="${id}" type="checkbox" class="tt-mini-switch" role="switch" data-fkey="${field.key}" data-fcheckbox="1" ${checked ? 'checked' : ''} />
-        ${field.label}
-      </label>
-    </div>`;
-    return html;
-  }
-  html += `</div>`;
-  return html;
-}
-
-function contRenderArrayField(field, items, baseId) {
-  let html = `<div class="cont-array-container" data-fkey="${field.key}" data-array-field>`;
-  items.forEach((item, i) => { html += contRenderArrayItem(field, item, i); });
-  html += `<button type="button" class="adm-btn adm-btn-outline adm-btn-sm" style="margin-top:8px" onclick="contAddArrayItem(this, '${JSON.stringify(field.itemFields).replace(/'/g,'&#39;').replace(/"/g,'&quot;')}')">+ Agregar ítem</button>`;
-  html += `</div>`;
-  return html;
-}
-
-function contRenderArrayItem(field, item, index) {
-  let html = `<div class="cont-array-item">
-    <div class="cont-array-item-head">
-      <span class="cont-array-item-label">Ítem ${index + 1}</span>
-      <button type="button" class="cont-array-del" onclick="this.closest('.cont-array-item').remove();this.closest('.cont-section').classList.add('dirty')" title="Eliminar">×</button>
-    </div>`;
-  field.itemFields.forEach(subf => {
-    html += `<div class="cont-field" data-fkey="${subf.key}">
-      <label class="cont-label">${subf.label}</label>
-      <input class="cont-input" type="text" value="${(item[subf.key]??'').replace(/"/g,'&quot;')}" placeholder="${subf.def||''}" data-fkey="${subf.key}" />
-    </div>`;
-  });
-  html += `</div>`;
-  return html;
-}
-
-window.contAddArrayItem = function(btn, fieldJson) {
-  const container = btn.closest('.cont-array-container');
-  const itemFields = JSON.parse(fieldJson.replace(/&quot;/g,'"'));
-  const existing = container.querySelectorAll('.cont-array-item').length;
-  const html = contRenderArrayItem({ itemFields }, {}, existing);
-  btn.insertAdjacentHTML('beforebegin', html);
-  container.closest('.cont-section').classList.add('dirty');
-};
-
-function contExtractFieldValue(fieldEl, field) {
-  if (field.type === 'array') {
-    const container = fieldEl.querySelector('[data-array-field]');
-    if (!container) return field.def ?? [];
-    const items = [];
-    container.querySelectorAll('.cont-array-item').forEach(itemEl => {
-      const obj = {};
-      field.itemFields.forEach(sf => {
-        const inp = itemEl.querySelector(`[data-fkey="${sf.key}"]`);
-        if (inp) obj[sf.key] = inp.value;
-      });
-      items.push(obj);
-    });
-    return items;
-  }
-  if (field.type === 'checkbox') {
-    const inp = fieldEl.querySelector(`[data-fkey="${field.key}"]`);
-    return inp ? inp.checked : (field.def !== false);
-  }
-  const inp = fieldEl.querySelector(`[data-fkey="${field.key}"]`);
-  return inp ? inp.value : (field.def ?? '');
-}
-
-function contRenderSection(pageId, sectionId, schema, savedValues) {
-  const sv = savedValues?.[sectionId] ?? {};
-  const flist = Array.isArray(schema.fields) ? schema.fields : Object.values(schema.fields ?? {});
-  let html = `<div class="cont-section" data-section="${sectionId}" data-page="${pageId}">
-    <div class="cont-section-head" onclick="contToggleSection(this)">
-      <div class="cont-section-title">
-        <span class="cont-section-icon">${schema.icon || 'page'}</span>
-        ${schema.label}
-        <span class="cont-dirty-dot"></span>
-      </div>
-      <span class="cont-section-chevron">▼</span>
-    </div>
-    <div class="cont-section-body">`;
-  flist.forEach(field => { html += contRenderField(field, sv[field.key]); });
-  const pageUrl = CONT_SCHEMA[pageId]?.url || contExtraPages.find(p=>p.id===pageId)?.url || '#';
-  const canEditCont = can(currentRole, 'manageContent') && (roleCanDo('contenido', 'editarTextos') || roleCanDo('contenido', 'activarDesactivarSecciones'));
-  html += `
-      <div class="cont-section-actions">
-        ${canEditCont ? `<button type="button" class="adm-btn adm-btn-primary adm-btn-sm" onclick="contSaveSectionBtn(this, '${pageId}', '${sectionId}')">Guardar sección</button>
-        <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" onclick="contRestoreSection(this, '${pageId}', '${sectionId}')">↩ Restaurar defaults</button>` : ''}
-        <a href="${pageUrl}" target="_blank" rel="noopener noreferrer" class="adm-btn adm-btn-outline adm-btn-sm">Ver en sitio</a>
-      </div>
-    </div>
-  </div>`;
-  return html;
-}
-
-async function contRenderPage(pageId) {
-  const loadingEl  = document.getElementById('cont-loading');
-  const sectionsEl = document.getElementById('cont-sections');
-  loadingEl.style.display = 'block';
-  sectionsEl.style.display = 'none';
-  if (!contSavedData[pageId]) await contLoadPage(pageId);
-  let pageSchema = CONT_SCHEMA[pageId] || contExtraPages.find(p=>p.id===pageId);
-  sectionsEl.innerHTML = '';
-  if (pageSchema) {
-    Object.entries(pageSchema.sections).forEach(([sectionId, sSchema]) => {
-      sectionsEl.innerHTML += contRenderSection(pageId, sectionId, sSchema, contSavedData[pageId]);
-    });
-  } else {
-    sectionsEl.innerHTML = `<div style="text-align:center;padding:40px;color:var(--adm-muted)">No hay secciones configuradas para esta página.</div>`;
-  }
-  sectionsEl.querySelectorAll('.cont-input, .cont-textarea').forEach(inp => {
-    inp.addEventListener('input', () => {
-      const section = inp.closest('.cont-section');
-      if (section) {
-        section.classList.add('dirty');
-        section.querySelector('.cont-dirty-dot').style.display = 'inline-block';
-      }
-      const prevImg = document.querySelector(`[data-preview-for="${inp.id}"]`);
-      if (prevImg) { prevImg.src = inp.value; prevImg.classList.toggle('show', !!inp.value); }
-    });
-  });
-  sectionsEl.querySelectorAll('[data-fcheckbox]').forEach(inp => {
-    inp.addEventListener('change', () => {
-      const section = inp.closest('.cont-section');
-      if (section) {
-        section.classList.add('dirty');
-        section.querySelector('.cont-dirty-dot').style.display = 'inline-block';
-      }
-    });
-  });
-  loadingEl.style.display = 'none';
-  sectionsEl.style.display = 'block';
-  sectionsEl.querySelectorAll('.cont-section').forEach(sectionEl => {
-    const sectionId = sectionEl.dataset.section;
-    const scopeId = `content:${pageId}:${sectionId}`;
-    window.AdminUnsaved?.register(scopeId, {
-      root: sectionEl,
-      active: () => contCurrentPage === pageId && document.getElementById('section-contenido')?.classList.contains('active'),
-      label: `Contenido · ${pageSchema?.label || pageId} · ${sectionId}`,
-      save: async () => {
-        const button = sectionEl.querySelector('.cont-section-actions .adm-btn-primary');
-        return button ? window.contSaveSectionBtn(button, pageId, sectionId) : false;
-      },
-    });
-  });
-}
-
-window.contUploadImage = async function(fileInput, inputId) {
-  const file = fileInput.files[0];
-  if (!file) return;
-  const apiKey = localStorage.getItem('tt_imgbb_key');
-  if (!apiKey) {
-    const banner = document.getElementById('imgbb-banner');
-    banner.style.display = 'flex';
-    banner.scrollIntoView({ behavior:'smooth', block:'center' });
-    toast('Primero ingresá tu API key de ImgBB (ver banner amarillo)');
-    return;
-  }
-  const uid = inputId + '-upload';
-  const progressWrap = document.getElementById(uid+'-progress');
-  const bar = document.getElementById(uid+'-bar');
-  const pct = document.getElementById(uid+'-pct');
-  const urlInput = document.getElementById(inputId);
-  const preview  = document.getElementById(uid+'-preview');
-  progressWrap.style.display = 'flex'; bar.style.width='10%'; pct.textContent='Leyendo…';
-  try {
-    const base64 = await new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result.split(',')[1]);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-    bar.style.width='30%'; pct.textContent='Subiendo…';
-    const form = new FormData();
-    form.append('key', apiKey);
-    form.append('image', base64);
-    form.append('name', file.name.replace(/[^a-zA-Z0-9._-]/g,'_'));
-    const res = await fetch('https://api.imgbb.com/1/upload', { method:'POST', body:form });
-    bar.style.width='85%';
-    const json = await res.json();
-    if (!json.success) throw new Error(json.error?.message ?? 'ImgBB rechazó la imagen');
-    const url = json.data.url;
-    bar.style.width='100%'; pct.textContent='100%';
-    urlInput.value = url;
-    if (preview) { preview.src=url; preview.classList.add('show'); }
-    urlInput.dispatchEvent(new Event('input'));
-    setTimeout(() => { progressWrap.style.display='none'; }, 700);
-    toast('Imagen subida correctamente');
-  } catch(err) {
-    progressWrap.style.display='none';
-    let msg = err.message ?? String(err);
-    if (msg.includes('Failed to fetch')) msg = 'Sin conexión o API key inválida.';
-    toast('Error al subir: ' + msg);
-  }
-};
-
-window.contToggleSection = function(head) {
-  head.classList.toggle('open');
-  head.nextElementSibling.classList.toggle('open');
-};
-
-window.contSaveSectionBtn = async function(btn, pageId, sectionId) {
-  // Contenido guarda texto y checkboxes de sección (ej. "mostrar banner") con
-  // la MISMA función — el código no separa "editar textos" de "activar/
-  // desactivar secciones" en dos acciones distintas, así que el gate cubre
-  // ambos permisos del catálogo (con cualquiera de los dos habilitado alcanza).
-  if (!can(currentRole, 'manageContent') || !(roleCanDo('contenido', 'editarTextos') || roleCanDo('contenido', 'activarDesactivarSecciones'))) {
-    toast('No tenés permiso para editar contenido');
-    return;
-  }
-  const sectionEl = btn.closest('.cont-section');
-  const schema = CONT_SCHEMA[pageId]?.sections?.[sectionId] || contExtraPages.find(p=>p.id===pageId)?.sections?.[sectionId];
-  if (!schema) return;
-  const flist = Array.isArray(schema.fields) ? schema.fields : Object.values(schema.fields ?? {});
-  const data = {};
-  flist.forEach(field => {
-    const fieldEl = sectionEl.querySelector(`.cont-field[data-fkey="${field.key}"]`);
-    if (!fieldEl) return;
-    data[field.key] = contExtractFieldValue(fieldEl, field);
-  });
-  btn.textContent='⏳ Guardando...'; btn.disabled=true;
-  const ok = await contSaveSection(pageId, sectionId, data);
-  btn.disabled=false; btn.textContent='Guardar sección';
-  if (ok) {
-    sectionEl.classList.remove('dirty'); sectionEl.classList.add('saved');
-    sectionEl.querySelector('.cont-dirty-dot').style.display='none';
-    setTimeout(()=>sectionEl.classList.remove('saved'), 2000);
-    window.AdminUnsaved?.markClean(`content:${pageId}:${sectionId}`);
-    toast('Sección guardada — los cambios ya son visibles en el sitio');
-  } else {
-    toast('Error al guardar la sección');
-  }
-  return Boolean(ok);
-};
-
-window.contRestoreSection = function(btn, pageId, sectionId) {
-  if (!confirm('¿Restaurar los valores por defecto de esta sección? Se perderán los cambios no guardados.')) return;
-  const sectionEl = btn.closest('.cont-section');
-  const schema = CONT_SCHEMA[pageId]?.sections?.[sectionId];
-  if (!schema) return;
-  const flist = Array.isArray(schema.fields) ? schema.fields : Object.values(schema.fields ?? {});
-  flist.forEach(field => {
-    if (field.type === 'array') return;
-    const inp = sectionEl.querySelector(`[data-fkey="${field.key}"]`);
-    if (inp && (inp.tagName==='INPUT'||inp.tagName==='TEXTAREA')) {
-      inp.value = field.def ?? '';
-      inp.dispatchEvent(new Event('input'));
-    }
-  });
-};
-
-document.addEventListener('click', async e => {
-  if (e.target && e.target.id === 'cont-save-all') {
-    const pageId = contCurrentPage;
-    const schema = CONT_SCHEMA[pageId];
-    if (!schema) return;
-    e.target.textContent='⏳ Guardando...'; e.target.disabled=true;
-    let saved=0;
-    for (const [sectionId] of Object.entries(schema.sections)) {
-      const btn = document.querySelector(`.cont-section[data-section="${sectionId}"] .cont-section-actions button`);
-      if (btn) { await contSaveSectionBtn(btn, pageId, sectionId); saved++; }
-    }
-    e.target.textContent='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar todo'; e.target.disabled=false;
-    toast(`${saved} secciones guardadas`);
-  }
-});
-
-async function contRenderTabs() {
-  const tabsEl = document.getElementById('cont-page-tabs');
-  try {
-    const snap = await getDoc(doc(db,'site_content','_registry'));
-    if (snap.exists() && snap.data().extraPages) contExtraPages = snap.data().extraPages;
-  } catch(e) {}
-  const allPages = [
-    ...Object.entries(CONT_SCHEMA).map(([id,s])=>({ id, label:s.label })),
-    ...contExtraPages.map(p=>({ id:p.id, label:p.label })),
-  ];
-  tabsEl.innerHTML = allPages.map(p => `
-    <button type="button" class="cont-page-tab ${p.id===contCurrentPage?'active':''}" data-pageid="${p.id}" onclick="contSwitchPage('${p.id}')">${p.label}</button>
-  `).join('');
-}
-
-window.contSwitchPage = async function(pageId) {
-  const switchNow = async () => {
-    contCurrentPage = pageId;
-    document.querySelectorAll('.cont-page-tab').forEach(t => {
-      t.classList.toggle('active', t.dataset.pageid === pageId);
-    });
-    await contRenderPage(pageId);
-  };
-  const currentScopes = window.AdminUnsaved?.dirtyScopes().filter(id => id.startsWith(`content:${contCurrentPage}:`)) || [];
-  if (currentScopes.length) {
-    window.AdminUnsaved.requestNavigation(switchNow, { scopeIds: currentScopes });
-  } else {
-    await switchNow();
-  }
-};
-
-document.addEventListener('click', async e => {
-  if (e.target && e.target.id === 'cont-add-page') {
-    const label = prompt('Nombre de la nueva página (ej: Blog, Contacto):');
-    if (!label) return;
-    const id = label.toLowerCase().replace(/[^a-z0-9]/g,'-').replace(/-+/g,'-');
-    const url = prompt(`URL del archivo HTML (ej: ${id}.html):`, `${id}.html`) || `${id}.html`;
-    contExtraPages.push({
-      id, label:label, url,
-      sections: { general: { label:'Contenido general', icon:'page', fields:[
-        { key:'image1', label:'Imagen 1', type:'image', def:'' },
-        { key:'image2', label:'Imagen 2', type:'image', def:'' },
-        { key:'title', label:'Título', type:'text', def:'' },
-        { key:'desc', label:'Texto', type:'textarea', def:'' },
-      ]}}
-    });
-    try {
-      await setDoc(doc(db,'site_content','_registry'), { extraPages:contExtraPages }, { merge:true });
-      toast(`Página "${label}" agregada`);
-      await contRenderTabs();
-      await contSwitchPage(id);
-    } catch(e) {
-      toast('Error al guardar la página: '+e.message);
-    }
-  }
-});
-
-async function loadContenido() {
-  if (!_contenidoInited) {
-    _contenidoInited = true;
-    contCurrentPage = 'index';
-    contSavedData = {};
-    const banner = document.getElementById('imgbb-banner');
-    if (banner) {
-      const hasKey = !!localStorage.getItem('tt_imgbb_key');
-      banner.style.display = hasKey ? 'none' : 'flex';
-    }
-  }
-  await contRenderTabs();
-  await contRenderPage(contCurrentPage);
-}
-
-// Deep link from the public site's "✏️ editar" badge (js/core/auth/insignia-edicion.js):
-// admin.html?tab=contenido&page=<id>&section=<id> — jumps straight to that
-// page/section in Contenido and highlights it.
-async function handleContentDeepLink() {
-  const params = new URLSearchParams(location.search);
-  if (params.get('tab') !== 'contenido') return;
-  const targetPage = params.get('page');
-  const targetSection = params.get('section');
-  switchSection('contenido');
-  if (!targetPage) return;
-  await loadContenido();
-  if (targetPage !== contCurrentPage) await contSwitchPage(targetPage);
-  if (!targetSection) return;
-  const el = document.querySelector(`.cont-section[data-section="${targetSection}"]`);
-  if (!el) return;
-  const head = el.querySelector('.cont-section-head');
-  const body = el.querySelector('.cont-section-body');
-  if (head && body && !body.classList.contains('open')) { head.classList.add('open'); body.classList.add('open'); }
-  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  el.classList.add('cont-section-highlight');
-  setTimeout(() => el.classList.remove('cont-section-highlight'), 2200);
-}
-
-
-// ══════════════════════════════════════════════
 // PRODUCTS: SELECTION & BULK ACTIONS
 // ══════════════════════════════════════════════
 let _selectedProducts = new Set();

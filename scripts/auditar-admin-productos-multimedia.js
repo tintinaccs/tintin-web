@@ -19,8 +19,8 @@
    - Imágenes: subida firmada a Cloudinary (sin secretos en el cliente),
      validación por magic bytes, redimensión/WebP, limpieza de huérfanas,
      timeouts y sanitización de URLs de imagen en el render.
-   - Proveedores: Cloudinary activo; ImgBB solo con clave del usuario; sin
-     claves compartidas expuestas.
+   - Proveedores: multimedia centralizada en Cloudinary; el editor de Contenido
+     unificado no abre una segunda conexión ImgBB ni expone claves compartidas.
 
    No abre navegador: comprobaciones estáticas sobre el código publicado.
    ============================================================= */
@@ -42,6 +42,7 @@ function check(name, condition, problem) {
 
 const adminApp    = read('js/admin/admin-app.js');
 const adminHtml   = read('admin.html');
+const contentAdmin = read('js/admin/content/gestion-contenido-admin.js');
 const importJs    = read('js/admin/importacion-admin.js');
 const mediaLib    = read('js/components/images/biblioteca-multimedia.js');
 const imageProc   = read('js/components/images/procesamiento-imagenes.js');
@@ -287,10 +288,12 @@ check(
 // 6. PROVEEDORES DE IMAGEN / SECRETOS
 // ===========================================================================
 check(
-  'ImgBB (módulo Contenido) usa la clave del usuario, no una compartida embebida',
-  /localStorage\.getItem\('tt_imgbb_key'\)/.test(adminApp) &&
+  'Contenido unificado no abre una segunda conexión ImgBB ni expone claves compartidas',
+  !/api\.imgbb\.com/i.test(contentAdmin) &&
+    !/tt_imgbb_key/.test(contentAdmin) &&
+    !/api_key\s*[:=]\s*['"][0-9a-f]{20,}/i.test(contentAdmin) &&
     !/api_key\s*[:=]\s*['"][0-9a-f]{20,}/i.test(adminApp),
-  'La subida por ImgBB debe depender de una clave que ingresa el usuario, sin claves embebidas.'
+  'Contenido debe reutilizar la arquitectura central del panel y no depender de una API key ImgBB propia.'
 );
 check(
   'No hay tokens/keys de Cloudinary embebidos en el cliente',
