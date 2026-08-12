@@ -29,7 +29,7 @@ jobs:
           java-version: '21'
       - run: npm ci
 
-      - name: Aplicar parche v2 y corregir contrato cancelado/rechazado
+      - name: Aplicar parche v2 y corregir contratos finales
         shell: bash
         run: |
           python - <<'PY'
@@ -53,6 +53,25 @@ jobs:
           s = s.replace(old, new, 1)
           p.write_text(s, encoding='utf-8')
 
+          p = Path('scripts/auditar-control-tienda.js')
+          s = p.read_text(encoding='utf-8')
+          old = """check(
+            'Pedidos cerrados y exclusivos del servidor',
+            rules.includes('allow create: if false;') &&
+              !rules.includes('allow create: if sparkOrderCreateValid(orderId);'),
+            'Firestore debe rechazar cualquier creación directa; el servidor valida tienda y cuenta'
+          );"""
+          new = """check(
+            'Pedidos cerrados para público y staff; alta manual exclusiva de Super Admin',
+            /match\\s+\\/orders\\/\\{orderId\\}[\\s\\S]*?allow create:\\s*if isSuperAdmin\\(\\);/.test(rules) &&
+              !rules.includes('allow create: if sparkOrderCreateValid(orderId);'),
+            'El checkout sigue server-side; solo Super Admin puede crear manualmente desde el panel privado'
+          );"""
+          if old not in s:
+              raise SystemExit('No se encontró el contrato antiguo de store-gate para pedidos.')
+          s = s.replace(old, new, 1)
+          p.write_text(s, encoding='utf-8')
+
           Path('.github/workflows/temp-cerrar-pr406-v3.yml').unlink(missing_ok=True)
           PY
 
@@ -65,6 +84,7 @@ jobs:
           node scripts/auditar-nivel-2-comercio.js
           node scripts/auditar-critico-recuperacion.js
           node scripts/auditar-fase-6-seguridad.js
+          node scripts/auditar-control-tienda.js
           npm run test:checkout-contract
 
       - name: Firestore emulator
