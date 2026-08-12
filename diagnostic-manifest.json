@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-12T12:43:43.102Z",
-  "sourceFingerprint": "bb7628586ab4be7d2330d58e34eda7ee05f2bff6e5dfb6f514f3ae4d259ec185",
+  "generatedAt": "2026-08-12T12:55:30.957Z",
+  "sourceFingerprint": "ffa3c660e463dc79f59eb5d2aa379fdfed01fef9db43c47fd8b8b4bd89040a3e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 597,
     "textFiles": 565,
-    "totalBytes": 6333834,
+    "totalBytes": 6331720,
     "pages": 18,
     "modules": 363
   },
@@ -23485,8 +23485,8 @@
     },
     {
       "path": "scripts/auditar-tipografia.js",
-      "bytes": 12225,
-      "sha256": "4edb42d1bd1546e4e62708a8b7b15ac6122dc5fcca41e6937953778879653f7d",
+      "bytes": 12705,
+      "sha256": "8adc0f3f419b3c50e929711067c68a4994486dc0d88ee0ca609864974bc5aac7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25406,8 +25406,8 @@
     {
       "path": ".github/workflows/auditar-versionado-cache.yml",
       "extension": ".yml",
-      "bytes": 2659,
-      "sha256": "d327896136eeb26de2e4a592605fd050a20f4e2471d274fc12f4568742eb9068"
+      "bytes": 712,
+      "sha256": "256bbbe40d8c21020608d572fcd1a0a267e2dbc445097d058f584a72c8d14d59"
     },
     {
       "path": ".github/workflows/corregir-esquema-checkout.yml",
@@ -25446,10 +25446,10 @@
       "sha256": "ade7ca9990d83639dd4b24f33e12f8da3b435108452db43532b4605b6b417342"
     },
     {
-      "path": ".github/workflows/temp-regenerar-apariencia-responsive.yml",
+      "path": ".github/workflows/temp-finalizar-apariencia-responsive.yml",
       "extension": ".yml",
-      "bytes": 2087,
-      "sha256": "f73dbaccdc930c199c5bb3dcb02f6eb1c4d3532f0ea53956371845f38e04b1e0"
+      "bytes": 1440,
+      "sha256": "d83c03798acea64322f2cd38ccacee052d07a487f777eaeca1c44c73bc5d4300"
     },
     {
       "path": ".github/workflows/validar-editor-visual-seguro.yml",
@@ -28430,8 +28430,8 @@
     {
       "path": "scripts/auditar-tipografia.js",
       "extension": ".js",
-      "bytes": 12225,
-      "sha256": "4edb42d1bd1546e4e62708a8b7b15ac6122dc5fcca41e6937953778879653f7d"
+      "bytes": 12705,
+      "sha256": "8adc0f3f419b3c50e929711067c68a4994486dc0d88ee0ca609864974bc5aac7"
     },
     {
       "path": "scripts/auditar-todas-navegacion-superficies-ci.mjs",
