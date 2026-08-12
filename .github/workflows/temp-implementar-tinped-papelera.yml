@@ -1,0 +1,494 @@
+name: TEMP implementar TINPED y papelera
+
+on:
+  push:
+    branches:
+      - feat/pedidos-tinped-papelera
+
+permissions:
+  contents: write
+
+jobs:
+  implement:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: feat/pedidos-tinped-papelera
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Aplicar integración TINPED
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          def read(path): return Path(path).read_text(encoding='utf-8')
+          def write(path, text): Path(path).write_text(text, encoding='utf-8')
+          def repl(text, old, new, label, count=1):
+              found = text.count(old)
+              if found != count:
+                  raise SystemExit(f'{label}: esperaba {count}, encontré {found}')
+              return text.replace(old, new, count)
+          def sub(text, pattern, replacement, label, count=1):
+              result, n = re.subn(pattern, replacement, text, count=count, flags=re.S)
+              if n != count:
+                  raise SystemExit(f'{label}: esperaba {count}, encontré {n}')
+              return result
+
+          # ── admin-app: carga del módulo + semántica Papelera ──
+          p = 'js/admin/admin-app.js'
+          s = read(p)
+          s = repl(s,
+              "import './products/integridad-inventario-admin.js?v=tintin-20260722-order-delete-2';",
+              "import './products/integridad-inventario-admin.js?v=tintin-20260722-order-delete-2';\nimport './orders/pedidos-superadmin-crud.js?v=tintin-20260812-tinped-crud-1';",
+              'import CRUD')
+
+          new_status = r'''window.updateOrderStatus = async (orderId, status) => {
+            if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'cambiarEstado')) { toast('No tenés permiso para cambiar el estado de pedidos'); return; }
+            const o = allOrders.find(o => o.id === orderId);
+            const prevStatus = o?.status || 'pendiente';
+            try {
+              // En Super Admin, cancelar equivale a retirar el pedido de la lista activa
+              // y conservarlo recuperable en Borrados. El módulo primero libera stock.
+              if (currentRole === 'superadmin' && status === 'cancelado') {
+                await window.TintinOrderAdmin.trashOrder(orderId, 'Cancelado por Super Admin');
+                allOrders = allOrders.filter(item => item.id !== orderId);
+                logAudit('mover_pedido_borrados', 'pedido', orderId, o?.orderNumber || o?.shortId || orderId,
+                  `Cancelado y movido a Borrados desde ${ORDER_STATUS_LABELS[prevStatus] || prevStatus}`);
+                toast(`Pedido ${o?.orderNumber || o?.shortId || ''} movido a Borrados`);
+                applyOrderFilters();
+                return;
+              }
+              await window.TintinInventoryIntegrity.transitionStatus(orderId, status);
+              if (o) o.status = status;
+              logAudit('cambiar_estado_pedido', 'pedido', orderId, o?.orderNumber || o?.shortId || orderId,
+                `Estado: ${ORDER_STATUS_LABELS[prevStatus] || prevStatus} → ${ORDER_STATUS_LABELS[status] || status}`);
+              toast(`Estado actualizado: ${ORDER_STATUS_LABELS[status] || status}`);
+              applyOrderFilters();
+              if (o) maybeSendOrderStatusEmail_(o, 'status', status);
+            } catch(e) {
+              console.error('[orders] No se pudo cambiar el estado:', e);
+              toast('No se pudo guardar el estado. Probá de nuevo.');
+              applyOrderFilters();
+            }
+          };'''
+          s = sub(s, r"window\.updateOrderStatus = async \(orderId, status\) => \{.*?\n\};\n\n// Protección anti-spam", new_status + "\n\n// Protección anti-spam", 'updateOrderStatus')
+
+          new_delete = r'''window.deleteOrder = async (orderId) => {
+            if (!can(currentRole, 'manageOrdersFull') || !roleCanDo('pedidos', 'eliminar')) { toast('No tenés permiso para eliminar pedidos'); return { moved: false }; }
+            if (currentRole !== 'superadmin') { toast('Solo Super Admin puede mover pedidos a Borrados'); return { moved: false }; }
+            if (!confirm('¿Mover este pedido a Borrados? Podrás restaurarlo después.')) return { moved: false, cancelled: true };
+            const orderBefore = allOrders.find(x => x.id === orderId) || null;
+            const reason = window.prompt('Motivo (opcional):', '') ?? '';
+            try {
+              const result = await window.TintinOrderAdmin.trashOrder(orderId, reason);
+              allOrders = allOrders.filter(o => o.id !== orderId);
+              if (result.moved) {
+                logAudit('mover_pedido_borrados', 'pedido', orderId, orderBefore?.orderNumber || orderBefore?.shortId || orderId,
+                  `Cliente: ${orderBefore?.userName || orderBefore?.userEmail || '—'}${reason ? ` · ${reason}` : ''}`);
+                toast(`Pedido ${orderBefore?.orderNumber || orderBefore?.shortId || ''} movido a Borrados`);
+              } else {
+                toast('El pedido ya no estaba en la lista activa.');
+              }
+              applyOrderFilters();
+              return { ...result, orderBefore };
+            } catch(e) {
+              console.error('[orders] No se pudo mover el pedido a Borrados:', e);
+              toast(orderDeleteErrorMessage_(e), 6500);
+              return { moved: false, error: e, orderBefore };
+            }
+          };'''
+          s = sub(s, r"window\.deleteOrder = async \(orderId\) => \{.*?\n\};\n\nlet _lastFilteredOrders", new_delete + "\n\nlet _lastFilteredOrders", 'deleteOrder')
+
+          s = repl(s,
+              "    (o.id||'').toLowerCase().includes(search)\n",
+              "    (o.id||'').toLowerCase().includes(search) ||\n    (o.orderNumber||o.shortId||'').toLowerCase().includes(search)\n",
+              'buscar TINPED')
+
+          new_bulk_delete = r'''window.bulkDeleteOrders = async function() {
+            if (!_selectedOrders.size) return { movedOrders: [], failed: [] };
+            if (currentRole !== 'superadmin') { toast('Solo Super Admin puede mover pedidos a Borrados en lote'); return { movedOrders: [], failed: [] }; }
+            const n = _selectedOrders.size;
+            if (!confirm(`¿Mover ${n} pedido(s) a Borrados? Se podrán restaurar después.`)) return { movedOrders: [], failed: [], cancelled: true };
+            const ids = [..._selectedOrders];
+            const ordersById = new Map(allOrders.map(order => [order.id, order]));
+            const movedOrders = [];
+            const removedIds = new Set();
+            const failed = [];
+            toast(`Moviendo 0 de ${n} a Borrados…`, 60000);
+            for (let index = 0; index < ids.length; index++) {
+              const id = ids[index];
+              try {
+                const result = await window.TintinOrderAdmin.trashOrder(id, 'Eliminación masiva por Super Admin');
+                if (result.moved) {
+                  removedIds.add(id);
+                  movedOrders.push(ordersById.get(id) || { id });
+                }
+              } catch (error) {
+                console.error(`[orders] No se pudo mover el pedido ${id}:`, error);
+                failed.push({ id, error });
+              }
+              toast(`Moviendo ${index + 1} de ${n} a Borrados…`, 60000);
+            }
+            allOrders = allOrders.filter(order => !removedIds.has(order.id));
+            _selectedOrders.clear();
+            failed.forEach(item => _selectedOrders.add(item.id));
+            if (movedOrders.length) {
+              logAudit('mover_pedido_borrados', 'pedido', '', '', `${movedOrders.length} pedidos movidos a Borrados`, { bulk: true, count: movedOrders.length, failed: failed.length });
+            }
+            applyOrderFilters();
+            toast(failed.length ? `${movedOrders.length} movidos; ${failed.length} fallaron.` : `${movedOrders.length} pedido(s) movidos a Borrados`, 7000);
+            return { movedOrders, failed };
+          };'''
+          s = sub(s, r"window\.bulkDeleteOrders = async function\(\) \{.*?\n\};\n\nfunction orderRowsToCsv_", new_bulk_delete + "\n\nfunction orderRowsToCsv_", 'bulk delete')
+          s = repl(s, "    o.id,\n    o.userName || '',", "    o.orderNumber || o.shortId || o.id,\n    o.userName || '',", 'CSV visible code')
+          s = repl(s,
+              "        <td data-label=\"Pedido\" style=\"font-size:11px;color:#777;font-weight:700\">#${escapeHtmlAdmin(o.id.slice(-6).toUpperCase())}</td>",
+              "        <td data-label=\"Pedido\" style=\"font-size:11px;color:#777;font-weight:700\">#${escapeHtmlAdmin(o.orderNumber || o.shortId || o.id)}</td>",
+              'legacy code display')
+          write(p, s)
+
+          # ── Shopify commerce: TINPED visible + Borrados + controles Super Admin ──
+          p = 'js/admin/shopify-commerce-admin.js'
+          s = read(p)
+          s = repl(s, "  ordersReady: false,\n", "  ordersReady: false,\n  trashReady: false,\n", 'trash ready')
+          s = repl(s, "  orders: [],\n", "  orders: [],\n  trashOrders: [],\n", 'trash state')
+          s = repl(s, "function orderItems(order) {\n  return Array.isArray(order?.items) ? order.items.filter(Boolean) : [];\n}\n",
+              "function orderItems(order) {\n  return Array.isArray(order?.items) ? order.items.filter(Boolean) : [];\n}\n\nfunction orderDisplayId(order) {\n  return String(order?.orderNumber || order?.shortId || order?.id || '—');\n}\n", 'display helper')
+
+          new_counts = r'''function orderTabCounts() {
+            return {
+              all: state.orders.length,
+              unpaid: state.orders.filter(o => payStatus(o) !== 'pagado').length,
+              unfulfilled: state.orders.filter(o => !['entregado', 'cancelado', 'rechazado'].includes(orderStatus(o))).length,
+              delivered: state.orders.filter(o => orderStatus(o) === 'entregado').length,
+              canceled: state.orders.filter(o => ['cancelado', 'rechazado'].includes(orderStatus(o))).length,
+              refunded: state.orders.filter(o => payStatus(o) === 'reembolsado').length,
+              deleted: state.trashOrders.length
+            };
+          }'''
+          s = sub(s, r"function orderTabCounts\(\) \{.*?\n\}\n\nfunction collectionTabCounts", new_counts + "\n\nfunction collectionTabCounts", 'order counts')
+
+          new_filtered = r'''function filteredOrders() {
+            let list = state.orderTab === 'deleted' ? [...state.trashOrders] : [...state.orders];
+            const q = normalizeText(state.orderSearch);
+            if (q) {
+              list = list.filter(order => {
+                const customer = orderCustomer(order);
+                const items = orderItems(order).map(item => item?.name || item?.title || '').join(' ');
+                return [orderDisplayId(order), order?.id, customer.name, customer.email, customer.phone, items].some(v => normalizeText(v).includes(q));
+              });
+            }
+            if (state.orderTab === 'unpaid') list = list.filter(o => payStatus(o) !== 'pagado');
+            if (state.orderTab === 'unfulfilled') list = list.filter(o => !['entregado', 'cancelado', 'rechazado'].includes(orderStatus(o)));
+            if (state.orderTab === 'delivered') list = list.filter(o => orderStatus(o) === 'entregado');
+            if (state.orderTab === 'canceled') list = list.filter(o => ['cancelado', 'rechazado'].includes(orderStatus(o)));
+            if (state.orderTab === 'refunded') list = list.filter(o => payStatus(o) === 'reembolsado');
+            if (state.orderStatus) list = list.filter(o => orderStatus(o) === state.orderStatus);
+            if (state.orderPay) list = list.filter(o => payStatus(o) === state.orderPay);
+            const [, direction] = state.orderSort.split('-');
+            const factor = direction === 'asc' ? 1 : -1;
+            list.sort((a, b) => (timestampMillis(a?.createdAt || a?.trashMeta?.trashedAt) - timestampMillis(b?.createdAt || b?.trashMeta?.trashedAt)) * factor);
+            return list;
+          }'''
+          s = sub(s, r"function filteredOrders\(\) \{.*?\n\}\n\nfunction tabButton", new_filtered + "\n\nfunction tabButton", 'filtered orders')
+
+          new_render = r'''function renderOrders() {
+            const root = document.getElementById('tt-commerce-orders');
+            if (!root) return;
+            const counts = orderTabCounts();
+            const list = filteredOrders();
+            const showingTrash = state.orderTab === 'deleted';
+            const sourceTotal = showingTrash ? state.trashOrders.length : state.orders.length;
+            const selectedVisible = showingTrash ? 0 : list.filter(o => state.orderSelected.has(o.id)).length;
+            const allVisibleSelected = !showingTrash && list.length > 0 && selectedVisible === list.length;
+            const canBulk = !showingTrash && perm('pedidos', 'accionesMasivas', 'manageOrders');
+            const canExport = perm('pedidos', 'exportar', 'manageOrders') || state.role === 'viewer';
+            const canUpdate = !showingTrash && perm('pedidos', 'cambiarEstado', 'manageOrders');
+            const canUpdatePay = !showingTrash && perm('pedidos', 'cambiarPago', 'manageOrders');
+            const isSuper = state.role === 'superadmin';
+
+            root.innerHTML = `
+              <div class="tt-commerce-pagehead">
+                <div class="tt-commerce-titlegroup">
+                  <h1 class="tt-commerce-title">Pedidos <span class="tt-commerce-count">${sourceTotal}</span></h1>
+                  <div class="tt-commerce-subtitle">${showingTrash ? 'Pedidos retirados de la lista activa. Podés restaurarlos o eliminarlos definitivamente.' : 'Pago, preparación, entrega y datos del pedido en una sola vista.'}</div>
+                </div>
+                <div class="tt-commerce-actions">${isSuper ? button('Reiniciar TINPED', 'orders-reset-sequence') + button('+ Nuevo pedido', 'orders-manual-new', { primary: true }) : ''}${canExport ? button('Exportar', 'orders-export') : ''}</div>
+              </div>
+              <div class="tt-commerce-card">
+                <div class="tt-commerce-tabs">
+                  ${tabButton('orders', 'all', 'Todos', counts.all, state.orderTab)}
+                  ${tabButton('orders', 'unpaid', 'Sin pagar', counts.unpaid, state.orderTab)}
+                  ${tabButton('orders', 'unfulfilled', 'Sin entregar', counts.unfulfilled, state.orderTab)}
+                  ${tabButton('orders', 'delivered', 'Entregados', counts.delivered, state.orderTab)}
+                  ${tabButton('orders', 'canceled', 'Cancelados', counts.canceled, state.orderTab)}
+                  ${tabButton('orders', 'refunded', 'Reembolsados', counts.refunded, state.orderTab)}
+                  ${isSuper ? tabButton('orders', 'deleted', 'Borrados', counts.deleted, state.orderTab) : ''}
+                </div>
+                <div class="tt-commerce-toolbar">
+                  <label class="tt-commerce-search"><input class="tt-commerce-input" data-filter="order-search" type="search" value="${esc(state.orderSearch)}" placeholder="TINPED, cliente, email o producto"></label>
+                  <select class="tt-commerce-select" data-filter="order-status" aria-label="Filtrar estado"><option value="">Todos los estados</option>${ORDER_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderStatus === v ? 'selected' : ''}>${esc(ORDER_STATUS_LABELS[v])}</option>`).join('')}</select>
+                  <select class="tt-commerce-select" data-filter="order-pay" aria-label="Filtrar pago"><option value="">Todos los pagos</option>${PAY_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderPay === v ? 'selected' : ''}>${esc(PAY_STATUS_LABELS[v])}</option>`).join('')}</select>
+                  <select class="tt-commerce-select" data-filter="order-sort" aria-label="Ordenar pedidos"><option value="date-desc" ${state.orderSort === 'date-desc' ? 'selected' : ''}>Más recientes</option><option value="date-asc" ${state.orderSort === 'date-asc' ? 'selected' : ''}>Más antiguos</option></select>
+                </div>
+                <div class="tt-commerce-bulkbar" ${state.orderSelected.size && canBulk ? '' : 'hidden'}><span class="tt-commerce-bulkcount">${state.orderSelected.size} seleccionado${state.orderSelected.size === 1 ? '' : 's'}</span>${canUpdate ? button('En preparación', 'orders-bulk-preparing') + button('En camino', 'orders-bulk-way') + button('Entregado', 'orders-bulk-delivered') : ''}${canUpdatePay ? button('Marcar pagado', 'orders-bulk-paid') : ''}${canExport ? button('Exportar selección', 'orders-export-selected') : ''}${button('Limpiar', 'orders-clear-selection')}</div>
+                ${showingTrash && !state.trashReady ? '<div class="tt-commerce-loading">Cargando Borrados…</div>' : !showingTrash && !state.ordersReady ? '<div class="tt-commerce-loading">Cargando pedidos…</div>' : list.length ? `
+                <div class="tt-commerce-tablewrap"><table class="tt-commerce-table"><thead><tr><th class="checkcol">${showingTrash ? '' : `<input type="checkbox" data-check-all="orders" ${allVisibleSelected ? 'checked' : ''}>`}</th><th>Pedido</th><th>Fecha</th><th>Cliente</th><th>Pago</th><th>Entrega</th><th>Total</th><th></th></tr></thead><tbody>${list.map(order => {
+                  const customer = orderCustomer(order); const status = orderStatus(order); const pay = payStatus(order); const items = orderItems(order); const selected = !showingTrash && state.orderSelected.has(order.id);
+                  return `<tr ${showingTrash ? '' : `data-open="order"`} data-id="${esc(order.id)}" class="${selected ? 'is-selected' : ''}"><td class="checkcol" data-stop>${showingTrash ? '' : `<input type="checkbox" data-select-order="${esc(order.id)}" ${selected ? 'checked' : ''}>`}</td><td><div class="tt-commerce-maintext">#${esc(orderDisplayId(order))}</div><div class="tt-commerce-subtext">${items.length} producto${items.length === 1 ? '' : 's'}${showingTrash ? ' · recuperable' : ''}</div></td><td>${esc(formatDate(showingTrash ? (order.trashMeta?.trashedAt || order.updatedAt || order.createdAt) : order.createdAt))}</td><td><div class="tt-commerce-maintext">${esc(customer.name)}</div><div class="tt-commerce-subtext">${esc(customer.email || customer.phone || 'Sin contacto')}</div></td><td><span class="tt-commerce-badge ${payStatusBadge(pay)}">${esc(PAY_STATUS_LABELS[pay] || pay)}</span></td><td><span class="tt-commerce-badge ${orderStatusBadge(status)}">${esc(ORDER_STATUS_LABELS[status] || status)}</span></td><td><span class="tt-commerce-money">${formatMoney(order.total)}</span></td><td data-stop><button type="button" class="tt-commerce-iconbtn" data-menu="${showingTrash ? 'trash-order' : 'order'}" data-id="${esc(order.id)}" aria-label="Acciones">⋯</button></td></tr>`;
+                }).join('')}</tbody></table></div>` : `<div class="tt-commerce-empty">${showingTrash ? 'No hay pedidos en Borrados.' : 'No hay pedidos que coincidan con esta vista.'}</div>`}
+                <div class="tt-commerce-footer"><span>Mostrando ${list.length} de ${sourceTotal} pedidos</span><span>${showingTrash ? 'Restaurar no reutiliza ni altera el contador TINPED.' : 'El código TINPED es correlativo y no se reutiliza al borrar.'}</span></div>
+              </div>`;
+          }'''
+          s = sub(s, r"function renderOrders\(\) \{.*?\n\}\n\nfunction renderAll", new_render + "\n\nfunction renderAll", 'render orders')
+
+          new_export = r'''function exportOrders(selectedOnly = false) {
+            const source = selectedOnly ? state.orders.filter(o => state.orderSelected.has(o.id)) : filteredOrders();
+            downloadCsv('tintin-pedidos.csv', [
+              ['Pedido', 'ID técnico', 'Fecha', 'Cliente', 'Email', 'Teléfono', 'Estado', 'Pago', 'Método entrega', 'Ciudad', 'Total'],
+              ...source.map(o => {
+                const customer = orderCustomer(o); const shipping = orderShipping(o);
+                return [orderDisplayId(o), o.id, formatDate(o.createdAt), customer.name, customer.email, customer.phone, ORDER_STATUS_LABELS[orderStatus(o)] || orderStatus(o), PAY_STATUS_LABELS[payStatus(o)] || payStatus(o), shipping.method, shipping.city, o.total ?? 0];
+              })
+            ]);
+          }'''
+          s = sub(s, r"function exportOrders\(selectedOnly = false\) \{.*?\n\}\n\nfunction closeMenu", new_export + "\n\nfunction closeMenu", 'export orders')
+
+          new_menu = r'''function menuItems(type, id) {
+            if (type === 'product') {
+              const product = state.products.find(p => p._docId === id); if (!product) return [];
+              const out = [{ label: 'Ver detalles', action: 'drawer-product' }];
+              if (perm('productos', 'editar', 'editProducts')) out.push({ label: 'Editar producto', action: 'product-edit' });
+              if (perm('productos', 'activarDesactivar', 'editProducts')) out.push({ label: product.active === false ? 'Activar producto' : 'Desactivar producto', action: 'product-toggle' });
+              if (perm('productos', 'eliminar', 'deleteProducts')) out.push({ sep: true }, { label: 'Eliminar producto', action: 'product-delete', danger: true });
+              return out;
+            }
+            if (type === 'collection') {
+              const c = state.collections.find(x => x.slug === id); if (!c) return [];
+              const out = [{ label: 'Ver detalles', action: 'drawer-collection' }, { label: 'Ver sus productos', action: 'collection-products' }];
+              if (perm('colecciones', 'editar', 'manageContent')) out.push({ label: 'Editar colección', action: 'collection-edit' });
+              if (perm('colecciones', 'eliminar', 'deleteCollections')) out.push({ sep: true }, { label: 'Eliminar colección', action: 'collection-delete', danger: true });
+              return out;
+            }
+            if (type === 'trash-order') return state.role === 'superadmin' ? [{ label: 'Restaurar a Pedidos', action: 'order-restore' }, { sep: true }, { label: 'Eliminar definitivamente', action: 'order-delete-permanent', danger: true }] : [];
+            if (type === 'order') {
+              const out = [{ label: 'Ver detalles', action: 'drawer-order' }];
+              if (state.role === 'superadmin') out.push({ label: 'CRUD completo', action: 'order-edit-advanced' });
+              else if (perm('pedidos', 'editarCompleto', 'manageOrdersFull')) out.push({ label: 'Editar pedido completo', action: 'order-edit' });
+              if (perm('pedidos', 'reenviarCorreo', 'manageOrders')) out.push({ label: 'Reenviar correo', action: 'order-resend' });
+              if (perm('pedidos', 'eliminar', 'deleteOrders')) out.push({ sep: true }, { label: 'Mover a Borrados', action: 'order-delete', danger: true });
+              return out;
+            }
+            return [];
+          }'''
+          s = sub(s, r"function menuItems\(type, id\) \{.*?\n\}\n\nfunction openMenu", new_menu + "\n\nfunction openMenu", 'menu items')
+          s = repl(s, "    title: `#${order.id}`,", "    title: `#${orderDisplayId(order)}`,", 'drawer code')
+
+          s = repl(s,
+              "  if (action === 'orders-export') return exportOrders(false);",
+              "  if (action === 'orders-manual-new') return window.TintinOrderAdmin?.openManualOrder();\n  if (action === 'orders-reset-sequence') return window.TintinOrderAdmin?.resetOrderSequence();\n  if (action === 'order-edit-advanced') { closeDrawer(); return window.TintinOrderAdmin?.openAdvancedOrderEditor(id); }\n  if (action === 'order-restore') return window.TintinOrderAdmin?.restoreOrder(id).then(() => toast('Pedido restaurado en estado Cancelado; podés reactivarlo desde CRUD completo.'));\n  if (action === 'order-delete-permanent') return window.TintinOrderAdmin?.deleteTrashPermanently(id);\n  if (action === 'orders-export') return exportOrders(false);",
+              'actions superadmin')
+
+          orders_sub_old = r'''  state.unsubscribers.push(onSnapshot(collection(db, 'orders'), snapshot => {
+            state.orders = snapshot.docs.map(snap => ({ id: snap.id, ...snap.data() }));
+            state.ordersReady = true;
+            state.orderSelected = new Set([...state.orderSelected].filter(id => state.orders.some(o => o.id === id)));
+            renderOrders(); renderDrawer();
+          }, error => {
+            state.ordersReady = true;
+            console.error('[shopify-commerce] orders:', error);
+            toast('No se pudieron actualizar los pedidos en tiempo real.', 5000);
+            renderOrders();
+          }));'''
+          orders_sub_new = r'''  state.unsubscribers.push(onSnapshot(collection(db, 'orders'), snapshot => {
+            state.orders = snapshot.docs.map(snap => ({ id: snap.id, ...snap.data() }));
+            state.ordersReady = true;
+            state.orderSelected = new Set([...state.orderSelected].filter(id => state.orders.some(o => o.id === id)));
+            if (state.role === 'superadmin') window.TintinOrderAdmin?.ensureMissingOrderNumbers(state.orders);
+            renderOrders(); renderDrawer();
+          }, error => {
+            state.ordersReady = true;
+            console.error('[shopify-commerce] orders:', error);
+            toast('No se pudieron actualizar los pedidos en tiempo real.', 5000);
+            renderOrders();
+          }));
+
+          if (state.role === 'superadmin') {
+            state.unsubscribers.push(onSnapshot(collection(db, 'orderTrash'), snapshot => {
+              state.trashOrders = snapshot.docs.map(snap => ({ id: snap.id, ...snap.data() }));
+              state.trashReady = true;
+              renderOrders();
+            }, error => {
+              state.trashReady = true;
+              console.error('[shopify-commerce] orderTrash:', error);
+              toast('No se pudo actualizar la sección Borrados.', 5000);
+              renderOrders();
+            }));
+          } else {
+            state.trashOrders = [];
+            state.trashReady = true;
+          }'''
+          s = repl(s, orders_sub_old, orders_sub_new, 'subscriptions')
+          write(p, s)
+
+          # ── Firestore: creación manual solo Super Admin + papelera privada ──
+          p = 'firestore.rules'
+          s = read(p)
+          s = repl(s,
+              "      // Los pedidos se crean exclusivamente en apps-script/Phase4CreateOrder.gs.\n      // Ese proceso verifica el idToken, vuelve a leer precio/stock y usa una\n      // transacción privilegiada. Ningún SDK del navegador puede crear pedidos.\n      allow create: if false;",
+              "      // Checkout: crea exclusivamente el servidor. La única excepción de navegador\n      // es Super Admin para el CRUD manual solicitado desde el panel privado.\n      allow create: if isSuperAdmin();",
+              'rules create order')
+          marker = "    /* ============================================================\n       AUDIT / PERMISSIONS\n       ============================================================ */"
+          trash_rules = """    // Papelera de pedidos: copia recuperable y administración completa exclusiva\n    // de Super Admin. Nunca es visible para clientes, agentes ni viewers.\n    match /orderTrash/{orderId} {\n      allow read, create, update, delete: if isSuperAdmin();\n    }\n\n"""
+          s = repl(s, marker, trash_rules + marker, 'trash rules')
+          write(p, s)
+
+          # ── Apps Script: TINPED atómico dentro de la transacción de checkout ──
+          p = 'apps-script/CrearPedido.gs'
+          s = read(p)
+          # Añadir settings/orderSequence a las lecturas del transaction snapshot.
+          s = repl(s,
+              "      'settings/general',\n      'settings/shippingRates',",
+              "      'settings/general',\n      'settings/shippingRates',\n      'settings/orderSequence',",
+              'sequence read path')
+          # El shortId aleatorio se reemplaza por el correlativo comercial.
+          s = repl(s,
+              "    var shortId = requestId.replace(/[^A-Za-z0-9]/g, '').slice(-8).toUpperCase();\n    var nowIso = new Date().toISOString();",
+              "    var sequenceData = docs['settings/orderSequence'] || {};\n    var nextOrderSequence = Math.max(0, Math.floor(Number(sequenceData.lastNumber || 0))) + 1;\n    var sequenceDigits = String(nextOrderSequence);\n    while (sequenceDigits.length < 2) sequenceDigits = '0' + sequenceDigits;\n    var publicOrderNumber = 'TINPED' + sequenceDigits;\n    var shortId = publicOrderNumber;\n    var nowIso = new Date().toISOString();",
+              'sequence allocate')
+          s = repl(s,
+              "      shortId: shortId,\n      userId: uid,",
+              "      shortId: shortId,\n      orderNumber: publicOrderNumber,\n      orderSequenceNumber: nextOrderSequence,\n      userId: uid,",
+              'order fields')
+          s = repl(s,
+              "    var writes = [phase4CreateWrite_('orders/' + orderId, orderData)];",
+              "    var writes = [phase4CreateWrite_('orders/' + orderId, orderData)];\n    var sequencePatch = { lastNumber: nextOrderSequence, lastCode: publicOrderNumber, updatedAt: nowIso, updatedBy: email };\n    writes.push(docs['settings/orderSequence']\n      ? phase4UpdateWrite_('settings/orderSequence', sequencePatch, ['lastNumber', 'lastCode', 'updatedAt', 'updatedBy'])\n      : phase4CreateWrite_('settings/orderSequence', sequencePatch));",
+              'sequence write')
+          write(p, s)
+
+          # ── Auditoría de seguridad: excepción Super Admin explícita, no clientes ──
+          p = 'scripts/auditar-seguro-pedidos.js'
+          s = read(p)
+          old = r'''check(
+            'Las reglas de Firestore bloquean todo pedido directo desde el navegador',
+            // El checkout real ya no escribe pedidos directo a Firestore (ver arriba),
+            // pero las reglas se dejan intactas como defensa en profundidad: si algo
+            // alguna vez volviera a escribir directo (o alguien intentara un pedido
+            // manual desde la consola), sigue topeado en 4 productos por el límite de
+            // 1000 expresiones de Firestore — ver el comentario en sparkOrderCreateValid.
+            rules.includes('allow create: if false;') &&
+              !rules.includes('allow create: if sparkOrderCreateValid(orderId);'),
+            'Toda creación debe pasar por el endpoint server-side, que opera con credenciales del servidor.'
+          );'''
+          new = r'''check(
+            'El navegador solo puede crear pedidos manuales siendo Super Admin',
+            /match \/orders\/\{orderId\}[\s\S]*?allow create: if isSuperAdmin\(\);/.test(rules) &&
+              !rules.includes('allow create: if sparkOrderCreateValid(orderId);'),
+            'Clientes y staff deben seguir pasando por el endpoint server-side; solo Super Admin tiene CRUD manual.'
+          );'''
+          s = repl(s, old, new, 'secure audit create')
+          s = repl(s,
+              "  'Reintentos con el mismo pedido no lo duplican',",
+              "  'Reintentos con el mismo pedido no lo duplican ni consumen otro TINPED',",
+              'audit retry title')
+          # Añadir chequeo del correlativo server-side.
+          anchor = "check(\n  'El servidor exige tienda abierta, cuenta activa y turno de compra vigente',"
+          extra = """check(\n  'TINPED se asigna dentro de la misma transacción que crea el pedido',\n  phase4.includes(\"'settings/orderSequence'\") &&\n    phase4.includes(\"publicOrderNumber = 'TINPED'\") &&\n    phase4.includes('orderNumber: publicOrderNumber') &&\n    phase4.includes('lastNumber: nextOrderSequence'),\n  'El correlativo comercial debe ser atómico y no reutilizarse por borrar/cancelar.'\n);\n"""
+          s = repl(s, anchor, extra + anchor, 'sequence audit')
+          write(p, s)
+
+          # ── Auditoría admin: ahora eliminar = papelera recuperable ──
+          p = 'scripts/auditar-admin-pedidos.js'
+          s = read(p)
+          s = sub(s,
+              r"check\(\n  'Eliminar pedido: permiso \+ confirmación destructiva \+ auditoría',.*?\n\);",
+              """check(\n  'Eliminar pedido: permiso + confirmación + papelera auditable',\n  /roleCanDo\\('pedidos', 'eliminar'\\)/.test(adminApp) &&\n    /¿Mover este pedido a Borrados\\?/.test(adminApp) &&\n    /TintinOrderAdmin\\.trashOrder/.test(adminApp) &&\n    /logAudit\\('mover_pedido_borrados'/.test(adminApp),\n  'Eliminar desde la lista activa debe mover a Borrados y dejar auditoría.'\n);""",
+              'admin audit delete')
+          s = sub(s,
+              r"check\(\n  'Eliminar pedido libera inventario antes de borrar y no depende de reglas nuevas',.*?\n\);",
+              """check(\n  'Mover a Borrados libera inventario antes de retirar el pedido activo',\n  /TintinInventoryIntegrity\\.transitionStatus\\(orderId, 'cancelado'\\)/.test(read('js/admin/orders/pedidos-superadmin-crud.js')) &&\n    /inventoryState: 'released'/.test(read('js/admin/orders/pedidos-superadmin-crud.js')) &&\n    /match \\/orderTrash\\/\\{orderId\\}/.test(rules),\n  'La papelera debe conservar recuperación sin dejar stock reservado.'\n);""",
+              'admin audit inventory trash')
+          s = sub(s,
+              r"check\(\n  'La eliminación individual informa el motivo real y expone el resultado al sincronizador',.*?\n\);",
+              """check(\n  'La eliminación individual expone el resultado recuperable',\n  /function orderDeleteErrorMessage_/.test(adminApp) &&\n    /return \\{ \\.\\.\\.result, orderBefore \\}/.test(adminApp) &&\n    /trashOrder/.test(read('js/admin/orders/pedidos-superadmin-crud.js')),\n  'La UI debe conservar contexto del pedido al moverlo a Borrados.'\n);""",
+              'admin audit delete result')
+          s = sub(s,
+              r"check\(\n  'La eliminación masiva conserva los fallos y recalcula solo cuentas afectadas',.*?\n\);",
+              """check(\n  'La eliminación masiva conserva fallos y usa la misma papelera',\n  /const movedOrders = \\[\\]/.test(adminApp) &&\n    /const failed = \\[\\]/.test(adminApp) &&\n    /failed\\.forEach\\(item => _selectedOrders\\.add\\(item\\.id\\)\\)/.test(adminApp) &&\n    /TintinOrderAdmin\\.trashOrder/.test(adminApp),\n  'Un fallo intermedio no debe ocultar lo ya movido a Borrados.'\n);""",
+              'admin audit bulk')
+          write(p, s)
+
+          # ── Contrato específico TINPED/CRUD/papelera ──
+          Path('scripts/auditar-tinped-pedidos.js').write_text(r'''\
+          'use strict';
+          const fs = require('fs');
+          const read = p => fs.readFileSync(p, 'utf8');
+          const crud = read('js/admin/orders/pedidos-superadmin-crud.js');
+          const shop = read('js/admin/shopify-commerce-admin.js');
+          const rules = read('firestore.rules');
+          const phase4 = read('apps-script/CrearPedido.gs');
+          const admin = read('js/admin/admin-app.js');
+          const checks = [
+            ['Formato infinito TINPED', /TINPED\$\{String\(n\)\.padStart\(2, '0'\)\}/.test(crud)],
+            ['Contador persistente', /settings', 'orderSequence/.test(crud) && /lastNumber: next/.test(crud)],
+            ['Checkout asigna TINPED atómico', phase4.includes("'settings/orderSequence'") && phase4.includes("publicOrderNumber = 'TINPED'")],
+            ['Borrar no decrementa contador', /trashOrder/.test(crud) && !/lastNumber:\s*[^,]*-/.test(crud)],
+            ['Papelera Super Admin', /match \/orderTrash\/\{orderId\}/.test(rules) && /allow read, create, update, delete: if isSuperAdmin\(\)/.test(rules)],
+            ['Restauración disponible', /async function restoreOrder/.test(crud) && /order-restore/.test(shop)],
+            ['Borrado definitivo desde papelera', /deleteTrashPermanently/.test(crud) && /ELIMINAR/.test(crud)],
+            ['Reinicio explícito a 01', /lastNumber: 0/.test(crud) && /REINICIAR TINPED/.test(crud)],
+            ['Creación manual Super Admin', /createManualOrder_/.test(crud) && /source: 'superadmin-manual-v1'/.test(crud)],
+            ['CRUD avanzado', /openAdvancedOrderEditor/.test(crud) && /CRUD completo/.test(shop)],
+            ['Cancelación Super Admin va a Borrados', /status === 'cancelado'/.test(admin) && /TintinOrderAdmin\.trashOrder/.test(admin)],
+            ['Listado muestra código comercial', /orderDisplayId\(order\)/.test(shop) && /orderNumber/.test(shop)],
+            ['ID técnico se conserva', /originalOrderId/.test(crud) && /ID técnico/.test(crud)]
+          ];
+          const failed = checks.filter(([, ok]) => !ok);
+          for (const [name, ok] of checks) console.log(`${ok ? 'OK' : 'ERROR'} — ${name}`);
+          if (failed.length) { console.error(`Auditoría TINPED fallida: ${failed.length}`); process.exit(1); }
+          console.log(`Auditoría TINPED correcta: ${checks.length} comprobaciones.`);
+          ''', encoding='utf-8')
+
+          # Versionado de assets modificados en admin.html (la auditoría de cache
+          # exige que los bytes nuevos no conserven el mismo ?v=).
+          p = 'admin.html'
+          s = read(p)
+          s = re.sub(r'js/admin/admin-app\.js\?v=[^"\']+', 'js/admin/admin-app.js?v=tintin-20260812-tinped-crud-1', s)
+          s = re.sub(r'js/admin/shopify-commerce-admin\.js\?v=[^"\']+', 'js/admin/shopify-commerce-admin.js?v=tintin-20260812-tinped-crud-1', s)
+          write(p, s)
+
+          # El workflow temporal no forma parte del producto final ni del manifiesto.
+          Path('.github/workflows/temp-implementar-tinped-papelera.yml').unlink(missing_ok=True)
+          PY
+
+      - name: Actualizar baseline de cache
+        run: npm run cache-versioning:write
+      - name: Auditorías de pedidos
+        run: |
+          node scripts/auditar-tinped-pedidos.js
+          node scripts/auditar-seguro-pedidos.js
+          node scripts/auditar-admin-pedidos.js
+          npm run audit:cache-versioning
+      - name: Regenerar Pages y manifiesto diagnóstico
+        run: npm run build:pages
+      - name: Revalidar después del build
+        run: |
+          node scripts/auditar-tinped-pedidos.js
+          npm run audit:cache-versioning
+      - name: Commit final
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'feat(pedidos): TINPED, papelera y CRUD Super Admin'
+          git push origin HEAD:feat/pedidos-tinped-papelera
