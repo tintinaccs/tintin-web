@@ -246,7 +246,13 @@ try {
   await succeeds(updateDoc(doc(superDb, 'users', 'client1'), { role: 'admin' }));
   await fails(updateDoc(doc(superDb, 'users', 'client1'), { role: 'superadmin' }));
   await fails(updateDoc(doc(superDb, 'users', 'super1'), { role: 'client' }));
-  await fails(setDoc(doc(superDb, 'orders', 'manual_order'), directOrderPayload));
+  await succeeds(setDoc(doc(superDb, 'orders', 'manual_order'), { ...directOrderPayload, source: 'superadmin-manual-v1' }));
+  await fails(setDoc(doc(admin, 'orders', 'manual_admin_denied'), directOrderPayload));
+  await fails(setDoc(doc(admin, 'orderTrash', 'admin_denied'), { orderNumber: 'TINPED99' }));
+  await fails(getDoc(doc(admin, 'orderTrash', 'super_trash_test')));
+  await succeeds(setDoc(doc(superDb, 'orderTrash', 'super_trash_test'), { orderNumber: 'TINPED99', status: 'cancelado' }));
+  await succeeds(getDoc(doc(superDb, 'orderTrash', 'super_trash_test')));
+  await succeeds(deleteDoc(doc(superDb, 'orderTrash', 'super_trash_test')));
   await succeeds(deleteDoc(doc(superDb, 'orders', 'client2_order1')));
   await fails(deleteDoc(doc(superDb, 'users', 'super1')));
 
