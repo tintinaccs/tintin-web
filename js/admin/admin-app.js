@@ -856,7 +856,6 @@ onAuthStateChanged(auth, async user => {
     // Productos stay correct even if the admin never opens Colecciones first.
     loadProductos();
     loadColecciones();
-    handleContentDeepLink();
     applyInitialSectionFromUrl();
     document.documentElement.classList.add('adm-auth-ready');
     hideOverlay();
