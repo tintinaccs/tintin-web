@@ -370,7 +370,7 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart
-} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260808-product-cart-1";
+} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260811-phonefix-sincronizacion-carrito-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260716-cloudinary-fix-1";
 import {
@@ -802,7 +802,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260808-product-cart-1');
+        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260811-phonefix-sincronizacion-carrito-1');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);

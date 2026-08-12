@@ -11,14 +11,27 @@
 import { EMAIL_WEBHOOK_URL } from './email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1';
 import { auth } from './core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 
+function phoneForOrderServer(value) {
+  // El checkout normaliza el teléfono a formato internacional con "+"
+  // (ej. +595981299331), pero el Apps Script desplegado valida actualmente
+  // sólo dígitos (8–20). Adaptamos únicamente el payload de transporte para
+  // mantener la UI y el perfil en formato internacional sin bloquear pedidos.
+  return String(value == null ? '' : value).replace(/\D/g, '');
+}
+
 export async function createOrderViaServer(draft) {
   const idToken = await auth.currentUser?.getIdToken(true);
   if (!idToken) return { ok: false, error: 'missing_id_token' };
 
+  const serverDraft = {
+    ...draft,
+    phone: phoneForOrderServer(draft?.phone)
+  };
+
   const response = await fetch(EMAIL_WEBHOOK_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ action: 'createOrder', idToken, ...draft })
+    body: JSON.stringify({ action: 'createOrder', idToken, ...serverDraft })
   });
 
   const body = await response.text();
