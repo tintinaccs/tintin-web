@@ -1172,8 +1172,12 @@ function _renderProductDetail(product) {
     const specs = [
       ['Material', product.material],
       ['Medidas', product.measurements],
+      ['Color / acabado', product.colorFinish],
       ['Cuidados', product.care],
+      ['Resistencia al agua', product.waterResistance],
       ['Garantía', product.warranty],
+      ['Talle / ajuste', product.sizeFit],
+      ['Contenido del paquete', product.packageContents],
     ].filter(([, value]) => value && String(value).trim());
     specsEl.hidden = specs.length === 0;
     specsEl.innerHTML = specs.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(sanitizePlainText(value, 500))}</dd></div>`).join('');
