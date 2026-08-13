@@ -156,7 +156,7 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
       const itemLines = items.map(item => `<div class="tt-profile-order-line"><span>${Math.max(1,Number(item.qty)||1)}x ${escapeHtml(item.name || 'Producto')}</span><strong>${formatPrice((Number(item.price)||0) * Math.max(1,Number(item.qty)||1))}</strong></div>`).join('');
       const payment = escapeHtml(order.paymentMethod || order.payment || 'A confirmar');
       const delivery = escapeHtml(order.shippingMethod || order.deliveryMethod || 'A coordinar');
-      const address = escapeHtml(order.address || order.deliveryAddress || order.city || 'Sin direcci&oacute;n registrada');
+      const address = escapeHtml(order.address || order.deliveryAddress || order.city || 'Sin direccion registrada');
       return `<article class="perfil-order-row">
         <div class="tt-profile-order-head"><span class="tt-profile-order-meta">#${shortId} · ${dateText}</span><span class="tt-profile-status tt-profile-status--${status}">${escapeHtml(order.status || 'pendiente')}</span></div>
         <div class="tt-profile-order-items">${itemsText || 'Sin detalle de productos'}${more}</div>
