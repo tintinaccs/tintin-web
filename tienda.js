@@ -1167,6 +1167,17 @@ function _renderProductDetail(product) {
       descEl.style.display = 'none';
     }
   }
+  const specsEl = document.getElementById('product-specifications');
+  if (specsEl) {
+    const specs = [
+      ['Material', product.material],
+      ['Medidas', product.measurements],
+      ['Cuidados', product.care],
+      ['Garantía', product.warranty],
+    ].filter(([, value]) => value && String(value).trim());
+    specsEl.hidden = specs.length === 0;
+    specsEl.innerHTML = specs.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(sanitizePlainText(value, 500))}</dd></div>`).join('');
+  }
   if (badgeEl) {
     if (product.badge) { badgeEl.textContent = product.badge; badgeEl.style.display = 'inline-block'; }
     else badgeEl.style.display = 'none';

@@ -350,3 +350,8 @@
   .tinsel-item-name{ font-size:11.5px; }
   .tinsel-qbtn{ font-size:16px; }
 }
+.tt-product-specifications{margin:18px 0 0;border-top:1px solid var(--border,#eadde2)}
+.tt-product-specifications[hidden]{display:none}
+.tt-product-specifications>div{display:grid;grid-template-columns:minmax(90px,130px) 1fr;gap:14px;padding:10px 0;border-bottom:1px solid var(--border,#eadde2)}
+.tt-product-specifications dt{font-size:12px;font-weight:800;text-transform:uppercase;color:var(--text-muted,#725f66)}
+.tt-product-specifications dd{margin:0;font-size:13px;line-height:1.5;color:var(--text,#30272a)}

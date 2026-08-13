@@ -55,6 +55,9 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
       .tt-profile-order-meta { font-size:11px;color:var(--text-muted,#755f67);font-weight:750; }
       .tt-profile-order-items { font-size:13px;color:var(--text,#382d31);line-height:1.55; }
       .tt-profile-order-total { font-size:14px;font-weight:850;color:var(--pink-dark,#ad3f67);margin-top:4px; }
+      .tt-profile-order-details{margin-top:10px;border-top:1px solid var(--border,#ecd5de);padding-top:10px}.tt-profile-order-details summary{cursor:pointer;font-size:12px;font-weight:800;color:var(--pink-dark,#ad3f67)}
+      .tt-profile-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:14px 0}.tt-profile-step{font-size:10px;text-align:center;color:var(--text-muted,#755f67);border-top:3px solid var(--border,#ecd5de);padding-top:7px}.tt-profile-step.is-done{border-color:var(--success,#267a41);color:var(--success,#267a41);font-weight:800}
+      .tt-profile-order-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;line-height:1.55}.tt-profile-order-grid strong{display:block}.tt-profile-order-lines{grid-column:1/-1;border-top:1px solid var(--border,#ecd5de);padding-top:8px}.tt-profile-order-line{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
       .tt-profile-status { display:inline-flex;align-items:center;min-height:26px;padding:3px 10px;border-radius:999px;font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.04em;border:1px solid currentColor; }
       .tt-profile-status--pendiente { color:var(--warning,#946200);background:var(--warning-soft,#fff4cf); }
       .tt-profile-status--confirmado { color:var(--info,#245b98);background:var(--info-soft,#eaf3ff); }
@@ -72,7 +75,7 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
       @media (min-width:1024px) and (max-width:1439px) { .perfil-wrap { width:min(100% - 48px,760px)!important; } }
       @media (min-width:769px) and (max-width:1023px) { .perfil-wrap { width:min(100% - 40px,720px)!important;padding-top:94px!important; } }
       @media (min-width:601px) and (max-width:768px) { .perfil-wrap { width:min(100% - 32px,680px)!important;padding-top:88px!important; } }
-      @media (max-width:600px) { .perfil-wrap { width:calc(100% - 24px)!important;padding:82px 0 108px!important; } .perfil-card{border-radius:16px!important;} .perfil-header{align-items:flex-start!important;} .perfil-btn{width:100%;} }
+      @media (max-width:600px) { .perfil-wrap { width:calc(100% - 24px)!important;padding:82px 0 108px!important; } .perfil-card{border-radius:16px!important;} .perfil-header{align-items:flex-start!important;} .perfil-btn{width:100%;}.tt-profile-order-grid{grid-template-columns:1fr}.tt-profile-order-lines{grid-column:1}.tt-profile-timeline{grid-template-columns:repeat(2,1fr)} }
       @media (max-width:360px) { .perfil-wrap { width:calc(100% - 16px)!important; } .perfil-header,.perfil-body{padding:14px!important;} .perfil-avatar{width:58px!important;height:58px!important;font-size:22px!important;} .perfil-name{font-size:16px!important;} }
       @media (prefers-reduced-motion:reduce) { .perfil-btn,.perfil-card,.perfil-toast{transition:none!important;} }
     `;
@@ -147,10 +150,22 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
       const more = items.length > 3 ? ` +${items.length - 3} más` : '';
       const status = statusClass(order.status);
       const shortId = escapeHtml(String(order.id || '').slice(-6).toUpperCase() || 'PEDIDO');
+      const stages = ['pendiente','confirmado','enviado','entregado'];
+      const currentIndex = order.status === 'cancelado' ? -1 : Math.max(0, stages.indexOf(status));
+      const timeline = stages.map((stage,index) => `<span class="tt-profile-step ${index <= currentIndex ? 'is-done' : ''}">${stage}</span>`).join('');
+      const itemLines = items.map(item => `<div class="tt-profile-order-line"><span>${Math.max(1,Number(item.qty)||1)}x ${escapeHtml(item.name || 'Producto')}</span><strong>${formatPrice((Number(item.price)||0) * Math.max(1,Number(item.qty)||1))}</strong></div>`).join('');
+      const payment = escapeHtml(order.paymentMethod || order.payment || 'A confirmar');
+      const delivery = escapeHtml(order.shippingMethod || order.deliveryMethod || 'A coordinar');
+      const address = escapeHtml(order.address || order.deliveryAddress || order.city || 'Sin direcci&oacute;n registrada');
       return `<article class="perfil-order-row">
         <div class="tt-profile-order-head"><span class="tt-profile-order-meta">#${shortId} · ${dateText}</span><span class="tt-profile-status tt-profile-status--${status}">${escapeHtml(order.status || 'pendiente')}</span></div>
         <div class="tt-profile-order-items">${itemsText || 'Sin detalle de productos'}${more}</div>
         <div class="tt-profile-order-total">Total: ${formatPrice(order.total)}</div>
+        <details class="tt-profile-order-details"><summary>Ver seguimiento y detalle</summary>
+          <div class="tt-profile-timeline" aria-label="Seguimiento del pedido">${timeline}</div>
+          ${status === 'cancelado' ? '<p class="tt-profile-status tt-profile-status--cancelado">Pedido cancelado</p>' : ''}
+          <div class="tt-profile-order-grid"><div><strong>Pago</strong>${payment}</div><div><strong>Entrega</strong>${delivery}</div><div><strong>Direcci&oacute;n</strong>${address}</div><div><strong>N&uacute;mero de pedido</strong>${escapeHtml(order.id)}</div><div class="tt-profile-order-lines"><strong>Productos</strong>${itemLines || 'Sin detalle de productos'}<div class="tt-profile-order-line"><span>Total</span><strong>${formatPrice(order.total)}</strong></div></div></div>
+        </details>
       </article>`;
     }).join('') + (sorted.length > visible.length ? `<div class="tt-profile-state">Mostrando los 10 pedidos más recientes de ${sorted.length}.</div>` : '');
   }
