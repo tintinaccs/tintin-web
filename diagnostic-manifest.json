@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-13T11:52:03.139Z",
-  "sourceFingerprint": "c320bce551e2f451e2b173c8f40d7f7ea2301dbdf0b338d4734d5449211af57a",
+  "generatedAt": "2026-08-13T13:31:10.779Z",
+  "sourceFingerprint": "55adc3865509c486e3731270e29841c3e09f8f4c5e005c0440574d39c0758ca7",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 620,
     "textFiles": 588,
-    "totalBytes": 6467705,
+    "totalBytes": 6468775,
     "pages": 18,
     "modules": 382
   },
@@ -17092,7 +17092,7 @@
     {
       "path": "functions/api/sheets-product-sync.js",
       "bytes": 2714,
-      "sha256": "6dff7292061cdb709cdc5585be45846c34f7294d7f171ce30b01bc33d15b2c48",
+      "sha256": "268e0dc29994c3ae589abfbd5e02035a81cc04307ee3d92b96f822ab96d37512",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17107,7 +17107,7 @@
       ],
       "endpoints": [
         {
-          "url": "https://script.google.com/macros/s/AKfycbwiBvdkkEeWMHLnj57st2nBKwx9Xci88J0hAMlkkJ1j7vkpzn0A0f4DhPDqh8KkL947/exec",
+          "url": "https://script.google.com/macros/s/AKfycbyh9I5aPp9d3lMSnYRNfrHcSCCobCoDOif9CqtXmMe4FgwSjzlKf4kjQZqvKDRmEY6S/exec",
           "line": 8
         }
       ]
@@ -26241,8 +26241,8 @@
     {
       "path": "apps-script/ProductosUnificados.gs",
       "extension": ".gs",
-      "bytes": 7926,
-      "sha256": "e30065f2fbb88c573cb2287e593a1126f52b89a5bbbe3dfb6f279ca2925cf07b"
+      "bytes": 8996,
+      "sha256": "6cc9823cf93535d2d9fece7bafca19435469f8eb0d13894f7abf4d4e122efdc9"
     },
     {
       "path": "apps-script/Seguridad.gs",
@@ -27280,7 +27280,7 @@
       "path": "functions/api/sheets-product-sync.js",
       "extension": ".js",
       "bytes": 2714,
-      "sha256": "6dff7292061cdb709cdc5585be45846c34f7294d7f171ce30b01bc33d15b2c48"
+      "sha256": "268e0dc29994c3ae589abfbd5e02035a81cc04307ee3d92b96f822ab96d37512"
     },
     {
       "path": "functions/api/sheets-products-webhook.js",
