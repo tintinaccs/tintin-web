@@ -88,7 +88,8 @@ async function toggle(raw) {
 
 function subscribe(user) {
   unsubscribe?.();
-  unsubscribe = onSnapshot(collection(db, 'users', user.uid, 'favorites'), snapshot => {
+  if (!currentUser || currentUser.uid !== user.uid) return;
+  unsubscribe = onSnapshot(collection(db, 'users', currentUser.uid, 'favorites'), snapshot => {
     items = snapshot.docs.map(document => normalize({ id: document.id, ...document.data() })).filter(Boolean).slice(0, MAX_FAVORITES);
     publish();
   }, error => {
