@@ -1,4 +1,4 @@
-import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20260730-stock-visibility-1';
+import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20260813-products-unified-1';
 import './pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1';
 
 function pathName() {
