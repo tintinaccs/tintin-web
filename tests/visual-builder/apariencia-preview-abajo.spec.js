@@ -8,8 +8,8 @@ const root = path.resolve(__dirname, '../..');
 const baseCss = fs.readFileSync(path.join(root, 'css/admin/editor-visual.css'), 'utf8');
 const studioCss = fs.readFileSync(path.join(root, 'css/admin/visual-studio-v2.css'), 'utf8');
 
-// Contrato responsive: Página real arriba a todo el ancho;
-// Constructor + inspector abajo, lado a lado cuando entra el ancho. En pantallas angostas se apilan.
+// Contrato responsive: en escritorio se ven constructor, página real e inspector
+// en paralelo. En anchos intermedios y móviles se reorganizan sin desbordar.
 const html = `<!doctype html>
 <html lang="es">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -22,6 +22,8 @@ ${studioCss}
 <body>
   <main style="width:100%;max-width:1400px;margin:0 auto">
     <section class="visual-editor visual-studio-v2">
+      <header class="visual-editor-topbar"><h2>Editor visual seguro</h2><div class="visual-editor-actions"><button>Guardar</button></div></header>
+      <div class="visual-editor-status">Borrador sincronizado</div>
       <div class="visual-editor-layout">
         <aside class="visual-editor-sidebar">
           <div class="visual-studio-brand"><strong>Tintin</strong><span>Constructor visual</span></div>
@@ -53,12 +55,12 @@ ${studioCss}
 </body></html>`;
 
 const viewports = [
-  { name: 'desktop grande', width: 1440, height: 1000, twoColumns: true },
-  { name: 'desktop compacto', width: 1180, height: 900, twoColumns: true },
-  { name: 'tablet horizontal', width: 900, height: 800, twoColumns: true },
-  { name: 'tablet vertical', width: 768, height: 1024, twoColumns: false },
-  { name: 'mobile', width: 430, height: 900, twoColumns: false },
-  { name: 'mobile angosto', width: 360, height: 800, twoColumns: false },
+  { name: 'desktop grande', width: 1440, height: 1000, mode: 'three' },
+  { name: 'desktop compacto', width: 1180, height: 900, mode: 'three' },
+  { name: 'tablet horizontal', width: 900, height: 800, mode: 'two' },
+  { name: 'tablet vertical', width: 768, height: 1024, mode: 'two' },
+  { name: 'mobile', width: 430, height: 900, mode: 'stacked' },
+  { name: 'mobile angosto', width: 360, height: 800, mode: 'stacked' },
 ];
 
 for (const viewport of viewports) {
@@ -71,11 +73,14 @@ for (const viewport of viewports) {
       const sidebar = document.querySelector('.visual-editor-sidebar');
       const properties = document.querySelector('.visual-editor-properties');
       const preview = document.querySelector('.visual-editor-preview');
+      const topbar = document.querySelector('.visual-editor-topbar');
+      const status = document.querySelector('.visual-editor-status');
       const stage = document.querySelector('.visual-preview-stage');
       const iframe = document.querySelector('.visual-preview-stage iframe');
       const rect = element => element.getBoundingClientRect();
       return {
         grid: rect(grid), sidebar: rect(sidebar), properties: rect(properties), preview: rect(preview),
+        topbar: rect(topbar), status: rect(status),
         stage: rect(stage), iframe: rect(iframe),
         bodyOverflow: document.documentElement.scrollWidth - window.innerWidth,
         gridOverflow: grid.scrollWidth - grid.clientWidth,
@@ -87,16 +92,23 @@ for (const viewport of viewports) {
     expect(geometry.preview.width).toBeLessThanOrEqual(geometry.grid.width + 1);
     expect(geometry.properties.width).toBeLessThanOrEqual(geometry.grid.width + 1);
     expect(geometry.iframe.width).toBeLessThanOrEqual(geometry.stage.width + 1);
+    expect(geometry.topbar.height).toBeGreaterThan(0);
+    expect(geometry.status.height).toBeGreaterThan(0);
+    expect(geometry.grid.top).toBeGreaterThanOrEqual(geometry.status.bottom - 1);
 
-    if (viewport.twoColumns) {
-      expect(geometry.sidebar.top).toBeGreaterThanOrEqual(geometry.preview.bottom + 8);
+    if (viewport.mode === 'three') {
+      expect(Math.abs(geometry.sidebar.top - geometry.preview.top)).toBeLessThanOrEqual(2);
       expect(Math.abs(geometry.sidebar.top - geometry.properties.top)).toBeLessThanOrEqual(2);
+      expect(geometry.preview.left).toBeGreaterThanOrEqual(geometry.sidebar.right - 1);
       expect(geometry.properties.left).toBeGreaterThan(geometry.sidebar.right);
-      expect(geometry.preview.left).toBeLessThanOrEqual(geometry.sidebar.left + 2);
-      expect(geometry.preview.right).toBeGreaterThanOrEqual(geometry.properties.right - 2);
+      expect(geometry.properties.left).toBeGreaterThanOrEqual(geometry.preview.right - 1);
+    } else if (viewport.mode === 'two') {
+      expect(Math.abs(geometry.sidebar.top - geometry.preview.top)).toBeLessThanOrEqual(2);
+      expect(geometry.preview.left).toBeGreaterThanOrEqual(geometry.sidebar.right - 1);
+      expect(geometry.properties.top).toBeGreaterThanOrEqual(Math.max(geometry.sidebar.bottom, geometry.preview.bottom) - 1);
     } else {
-      expect(geometry.sidebar.top).toBeGreaterThanOrEqual(geometry.preview.bottom + 8);
-      expect(geometry.properties.top).toBeGreaterThanOrEqual(geometry.sidebar.bottom + 8);
+      expect(geometry.preview.top).toBeGreaterThanOrEqual(geometry.sidebar.bottom - 1);
+      expect(geometry.properties.top).toBeGreaterThanOrEqual(geometry.preview.bottom - 1);
       expect(Math.abs(geometry.preview.width - geometry.sidebar.width)).toBeLessThanOrEqual(2);
       expect(Math.abs(geometry.properties.width - geometry.sidebar.width)).toBeLessThanOrEqual(2);
     }

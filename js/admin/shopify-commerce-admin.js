@@ -78,7 +78,8 @@ const state = {
   orderSelected: new Set(),
   drawer: null,
   busy: false,
-  unsubscribers: []
+  unsubscribers: [],
+  trashUnsubscribe: null
 };
 
 function ensureCss() {
@@ -859,7 +860,12 @@ function onClick(event) {
     const module = tab.dataset.tabModule;
     if (module === 'products') { state.productTab = tab.dataset.tab; state.productSelected.clear(); renderProducts(); }
     if (module === 'collections') { state.collectionTab = tab.dataset.tab; state.collectionSelected.clear(); renderCollections(); }
-    if (module === 'orders') { state.orderTab = tab.dataset.tab; state.orderSelected.clear(); renderOrders(); }
+    if (module === 'orders') {
+      state.orderTab = tab.dataset.tab;
+      state.orderSelected.clear();
+      if (state.orderTab === 'deleted') ensureTrashSubscription();
+      renderOrders();
+    }
     return;
   }
 
@@ -976,6 +982,10 @@ function observeLegacyForms() {
 function subscribeData() {
   state.unsubscribers.forEach(unsub => { try { unsub(); } catch {} });
   state.unsubscribers = [];
+  if (state.trashUnsubscribe) {
+    try { state.trashUnsubscribe(); } catch {}
+    state.trashUnsubscribe = null;
+  }
 
   state.unsubscribers.push(onSnapshot(collection(db, 'products'), snapshot => {
     state.products = snapshot.docs.map(snap => ({ _docId: snap.id, ...snap.data() }));
@@ -1014,18 +1024,29 @@ function subscribeData() {
     renderOrders();
   }));
 
-  if (state.role === 'superadmin') {
-    state.unsubscribers.push(onSnapshot(collection(db, 'orderTrash'), snapshot => {
-      state.trashOrders = snapshot.docs.map(snap => ({ id: snap.id, ...snap.data() }));
-      state.trashReady = true;
-      renderOrders();
-    }, error => {
-      state.trashReady = true;
-      console.error('[shopify-commerce] orderTrash:', error);
+  state.trashOrders = [];
+  state.trashReady = state.role !== 'superadmin';
+  if (state.orderTab === 'deleted') ensureTrashSubscription();
+}
+
+function ensureTrashSubscription() {
+  if (state.role !== 'superadmin' || state.trashUnsubscribe) return;
+  state.trashReady = false;
+  state.trashUnsubscribe = onSnapshot(collection(db, 'orderTrash'), snapshot => {
+    state.trashOrders = snapshot.docs.map(snap => ({ id: snap.id, ...snap.data() }));
+    state.trashReady = true;
+    renderOrders();
+  }, error => {
+    state.trashReady = true;
+    console.error('[shopify-commerce] orderTrash:', error);
+    try { state.trashUnsubscribe?.(); } catch {}
+    state.trashUnsubscribe = null;
+    const ordersVisible = document.getElementById('section-pedidos')?.classList.contains('active');
+    if (ordersVisible && state.orderTab === 'deleted') {
       toast('No se pudo actualizar la sección Borrados.', 5000);
-      renderOrders();
-    }));
-  } else { state.trashOrders = []; state.trashReady = true; }
+    }
+    renderOrders();
+  });
 }
 
 async function bootForUser(user) {
