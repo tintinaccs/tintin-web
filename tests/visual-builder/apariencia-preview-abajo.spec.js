@@ -77,6 +77,7 @@ for (const viewport of viewports) {
       return {
         grid: rect(grid), sidebar: rect(sidebar), properties: rect(properties), preview: rect(preview),
         stage: rect(stage), iframe: rect(iframe),
+        stageScrollWidth: stage.scrollWidth, stageClientWidth: stage.clientWidth,
         bodyOverflow: document.documentElement.scrollWidth - window.innerWidth,
         gridOverflow: grid.scrollWidth - grid.clientWidth,
       };
@@ -86,7 +87,8 @@ for (const viewport of viewports) {
     expect(geometry.gridOverflow).toBeLessThanOrEqual(1);
     expect(geometry.preview.width).toBeLessThanOrEqual(geometry.grid.width + 1);
     expect(geometry.properties.width).toBeLessThanOrEqual(geometry.grid.width + 1);
-    expect(geometry.iframe.width).toBeLessThanOrEqual(geometry.stage.width + 1);
+    expect(geometry.iframe.width).toBeGreaterThanOrEqual(1024);
+    expect(geometry.stageScrollWidth).toBeGreaterThanOrEqual(Math.floor(geometry.iframe.width));
 
     if (viewport.twoColumns) {
       expect(geometry.sidebar.top).toBeGreaterThanOrEqual(geometry.preview.bottom + 8);
@@ -102,3 +104,38 @@ for (const viewport of viewports) {
     }
   });
 }
+
+
+test('Preview usa breakpoints reales de celular, tablet y escritorio', async ({ page }) => {
+  await page.setViewportSize({ width: 640, height: 900 });
+  await page.setContent(html);
+  const stage = page.locator('.visual-preview-stage');
+  const iframe = page.locator('.visual-preview-stage iframe');
+  await iframe.evaluate(node => { node.style.transition = 'none'; });
+  const previewFrame = page.frames().find(frame => frame.parentFrame() === page.mainFrame());
+  expect(previewFrame).toBeTruthy();
+  const measure = async device => {
+    await stage.evaluate((node, value) => { node.dataset.device = value; }, device);
+    await page.waitForTimeout(20);
+    return previewFrame.evaluate(() => ({
+      width: window.innerWidth,
+      mobile: window.matchMedia('(max-width: 767px)').matches,
+      tablet: window.matchMedia('(min-width: 768px) and (max-width: 1024px)').matches,
+      desktop: window.matchMedia('(min-width: 1025px)').matches,
+    }));
+  };
+  const mobile = await measure('mobile');
+  expect(mobile.width).toBe(390);
+  expect(mobile.mobile).toBe(true);
+  const tablet = await measure('tablet');
+  expect(tablet.width).toBe(768);
+  expect(tablet.tablet).toBe(true);
+  expect(tablet.mobile).toBe(false);
+  expect(tablet.desktop).toBe(false);
+  const tabletScroll = await stage.evaluate(node => ({ scrollWidth: node.scrollWidth, clientWidth: node.clientWidth }));
+  expect(tabletScroll.scrollWidth).toBeGreaterThan(tabletScroll.clientWidth);
+  const desktop = await measure('desktop');
+  expect(desktop.width).toBeGreaterThanOrEqual(1025);
+  expect(desktop.desktop).toBe(true);
+  expect(desktop.tablet).toBe(false);
+});

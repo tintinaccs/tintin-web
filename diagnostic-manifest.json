@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-13T00:04:21.115Z",
-  "sourceFingerprint": "b54bf1d7c4075b3db7a3d42ee7e677ee2d6ef2df6534d8c72e91f45098e00da5",
+  "generatedAt": "2026-08-13T00:18:37.360Z",
+  "sourceFingerprint": "3704104ebcb377d3bbcfafab1cee7b05ebf9fad72642be24a5c5f0ed8b301a66",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 599,
     "textFiles": 567,
-    "totalBytes": 6356867,
+    "totalBytes": 6358858,
     "pages": 18,
     "modules": 366
   },
@@ -1785,8 +1785,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 161845,
-      "sha256": "ec815d9d39817332a7b5b5dbf5a819aced5f42b75b855a703e526395dae1d49b",
+      "bytes": 161852,
+      "sha256": "e7cd99abc7c02d071ce3e4fe19b3582b977aaf0bc06a54dc259b6806a3ab34b0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1835,7 +1835,7 @@
           "line": 1910
         },
         {
-          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260812-apariencia-seleccion-1",
+          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260812-preview-dispositivos-reales-2",
           "target": "js/admin/appearance/editor-visual-admin.js",
           "line": 1911
         },
@@ -2042,7 +2042,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260812-apariencia-seleccion-1",
+          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260812-preview-dispositivos-reales-2",
           "target": "js/admin/appearance/editor-visual-admin.js",
           "line": 1911,
           "exists": true
@@ -17037,8 +17037,8 @@
     },
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
-      "bytes": 45207,
-      "sha256": "b739582de5fb34f3c170e941280d12f3730bde1d53ade5bf00977dc4b66d1b5e",
+      "bytes": 45220,
+      "sha256": "81bfedb52a9d762739a3f12a559f747290337d618be19cf14107acc5d83270d6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24919,8 +24919,8 @@
     },
     {
       "path": "tests/visual-builder/apariencia-preview-abajo.spec.js",
-      "bytes": 5382,
-      "sha256": "a5900949d1bddf11de22514e75d9af40aab2a83a833499439a5eaca48b9e0079",
+      "bytes": 7183,
+      "sha256": "6007c9ccd2fc6d3337200696d52a1daaba3ecb52e7e20e0c85a62be312bdd7e5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25441,8 +25441,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 161845,
-      "sha256": "ec815d9d39817332a7b5b5dbf5a819aced5f42b75b855a703e526395dae1d49b"
+      "bytes": 161852,
+      "sha256": "e7cd99abc7c02d071ce3e4fe19b3582b977aaf0bc06a54dc259b6806a3ab34b0"
     },
     {
       "path": "apple-touch-icon.png",
@@ -25753,8 +25753,8 @@
     {
       "path": "css/admin/visual-studio-v2.css",
       "extension": ".css",
-      "bytes": 14741,
-      "sha256": "ae478f69f792546405971cd2f77c3c5662dea5407c7c5cbbaaeee1e90ebdef82"
+      "bytes": 14857,
+      "sha256": "42d5f25c58a3e6a3f46338fc948683bfd6bc43c2d3120017e9914278fa718e73"
     },
     {
       "path": "css/components/ai-builder-public.css",
@@ -26545,8 +26545,8 @@
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
       "extension": ".js",
-      "bytes": 45207,
-      "sha256": "b739582de5fb34f3c170e941280d12f3730bde1d53ade5bf00977dc4b66d1b5e"
+      "bytes": 45220,
+      "sha256": "81bfedb52a9d762739a3f12a559f747290337d618be19cf14107acc5d83270d6"
     },
     {
       "path": "js/admin/appearance/visual-studio-global-admin.js",
@@ -27769,8 +27769,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 9881,
-      "sha256": "8a63319d890e6e30b0685f1adf726c493898bde774a059530c83ab203b710e2c"
+      "bytes": 9935,
+      "sha256": "22ca4abd2ca17f15e6fe6f455355ea289662f5a9fbc9e11d0764f452c31ab01a"
     },
     {
       "path": "perfil.html",
@@ -28735,8 +28735,8 @@
     {
       "path": "tests/visual-builder/apariencia-preview-abajo.spec.js",
       "extension": ".js",
-      "bytes": 5382,
-      "sha256": "a5900949d1bddf11de22514e75d9af40aab2a83a833499439a5eaca48b9e0079"
+      "bytes": 7183,
+      "sha256": "6007c9ccd2fc6d3337200696d52a1daaba3ecb52e7e20e0c85a62be312bdd7e5"
     },
     {
       "path": "tests/visual-builder/visual-builder-contract.test.mjs",
