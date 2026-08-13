@@ -9,10 +9,12 @@ function render() {
     const host = card.querySelector('[data-review-rating]');
     if (!host) return;
     const value = ratings.get(id);
-    host.hidden = !value?.count;
-    host.textContent = value?.count
-      ? `★ ${Number(value.average).toFixed(1).replace('.', ',')} (${value.count})`
+    const nextHidden = !value?.count;
+    const nextText = value?.count
+      ? `\u2605 ${Number(value.average).toFixed(1).replace('.', ',')} (${value.count})`
       : '';
+    if (host.hidden !== nextHidden) host.hidden = nextHidden;
+    if (host.textContent !== nextText) host.textContent = nextText;
   });
 }
 
@@ -23,4 +25,12 @@ appCheckReady.then(() => onSnapshot(collection(db, 'productReviewStats'), snapsh
 
 window.addEventListener('tintin:products-loaded', render);
 window.addEventListener('tintin:product-rendered', render);
-new MutationObserver(render).observe(document.body, { childList: true, subtree: true });
+let renderQueued = false;
+new MutationObserver(() => {
+  if (renderQueued) return;
+  renderQueued = true;
+  requestAnimationFrame(() => {
+    renderQueued = false;
+    render();
+  });
+}).observe(document.body, { childList: true, subtree: true });
