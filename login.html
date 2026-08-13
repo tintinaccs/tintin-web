@@ -279,7 +279,7 @@ function errMsg(code) {
 // destino por defecto en vez de redirigir a un sitio ajeno tras un login real.
 function safeLocalRedirect(value) {
   const v = String(value || '');
-  return /^[a-zA-Z0-9_-]+\.html$/.test(v) ? v : '';
+  return /^[a-zA-Z0-9_-]+\.html(?:\?[a-zA-Z0-9_=&%.-]*)?$/.test(v) ? v : '';
 }
 
 async function redirectByRole(role, email, options = {}) {
