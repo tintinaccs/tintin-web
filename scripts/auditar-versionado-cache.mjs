@@ -122,10 +122,13 @@ if (inconsistencies.length) {
 
 const expected = {};
 for (const [localPath, ref] of [...byPath.entries()].sort(([a], [b]) => a.localeCompare(b))) {
-  const bytes = fs.readFileSync(path.join(ROOT, localPath));
+  // Git conserva estos recursos como texto LF, pero core.autocrlf puede
+  // materializarlos como CRLF en Windows. El baseline debe representar el
+  // contenido canónico del repositorio para ser reproducible en CI/Linux.
+  const canonicalText = fs.readFileSync(path.join(ROOT, localPath), 'utf8').replace(/\r\n/g, '\n');
   expected[localPath] = {
     version: ref.tag,
-    sha256: crypto.createHash('sha256').update(bytes).digest('hex'),
+    sha256: crypto.createHash('sha256').update(canonicalText, 'utf8').digest('hex'),
   };
 }
 
