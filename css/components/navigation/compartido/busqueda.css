@@ -6,6 +6,15 @@
   align-items: center !important;
 }
 
+/* .tt-search-results usa overflow:auto, así que su tamaño mínimo automático
+   colapsa a 0 (regla de CSS Sizing) y la fila 1fr se queda sin espacio salvo
+   que el panel tenga una altura definida en vez de auto. Solo se fuerza
+   cuando hay contenido real (carga, resultados o error) para no mostrar un
+   recuadro vacío mientras el usuario todavía no escribió nada. */
+#search-panel.tt-search-panel.open.tt-has-results {
+  height: min(82dvh, 780px) !important;
+}
+
 #search-panel.tt-search-panel > svg {
   position: relative !important;
   inset: auto !important;
@@ -46,6 +55,7 @@
   left: auto !important;
   grid-column: 1 / -1 !important;
   grid-row: 2 !important;
+  align-self: start !important;
   z-index: 1 !important;
   width: 100% !important;
   min-width: 0 !important;

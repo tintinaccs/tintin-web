@@ -2087,10 +2087,11 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   border-radius: var(--radius-pill);
   box-shadow: 0 4px 32px rgba(0,0,0,0.15), 0 0 0 1px var(--border);
   padding: 8px 20px;
-  /* Por encima de .tt-collections-sheet (960) y su backdrop (959): el
-     dropup de colecciones cubre esta zona de la pantalla, y sin esto
-     tabbar-tienda queda tapado y no se puede volver a tocar para cerrarlo. */
-  z-index: 970;
+  /* Por encima de los paneles/drawers compartidos (backdrop 1450, morph 1455,
+     dropdown/search/cart/account/collections 1460, header con superficie
+     abierta 1470 — ver paneles.css): sin esto la tabbar queda tapada por
+     cualquier panel abierto y no se puede volver a tocar para cerrarlo. */
+  z-index: 1480;
   gap: 4px;
   align-items: center;
 }
