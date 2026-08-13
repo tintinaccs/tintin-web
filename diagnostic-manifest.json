@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-13T01:10:46.358Z",
-  "sourceFingerprint": "da8ed6397070aa95a517b1475d737529191719f769b00b05672c817adac7574d",
+  "generatedAt": "2026-08-13T01:30:55.050Z",
+  "sourceFingerprint": "97542c79890d05e7c9bd16f07353c434660d802c537dcbb3d0703f012b5880e8",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 601,
-    "textFiles": 569,
-    "totalBytes": 6361368,
+    "files": 603,
+    "textFiles": 571,
+    "totalBytes": 6371195,
     "pages": 18,
-    "modules": 368
+    "modules": 370
   },
   "viewports": [
     {
@@ -1785,8 +1785,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 161843,
-      "sha256": "950c92c55233cb08ca5bf7476d06fcb13e84a0ef90a182f015aa06be38468822",
+      "bytes": 161848,
+      "sha256": "e16d5bd9b3992c0e0380bffba9d2aa35e61a361f887acd7026a521c747423dd7",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1835,7 +1835,7 @@
           "line": 1910
         },
         {
-          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260812-preview-producto-1",
+          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260813-apariencia-horizontal-1",
           "target": "js/admin/appearance/editor-visual-admin.js",
           "line": 1911
         },
@@ -2042,7 +2042,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260812-preview-producto-1",
+          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260813-apariencia-horizontal-1",
           "target": "js/admin/appearance/editor-visual-admin.js",
           "line": 1911,
           "exists": true
@@ -17037,8 +17037,8 @@
     },
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
-      "bytes": 46849,
-      "sha256": "310b5d314b6bbc532c11baa50aeec2ad62dc4014e549c9f28c11eaa772681c8e",
+      "bytes": 46999,
+      "sha256": "84ae76c056b8c1890265150447623e504c066b1bb1e1527d6f64ddc9f190a004",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17079,6 +17079,12 @@
           "target": "js/admin/appearance/preview-dynamic-targets.js",
           "dynamic": false,
           "line": 9
+        },
+        {
+          "raw": "./workspace-splitters.js?v=tintin-20260813-apariencia-splitters-1",
+          "target": "js/admin/appearance/workspace-splitters.js",
+          "dynamic": false,
+          "line": 10
         }
       ],
       "endpoints": [
@@ -17172,6 +17178,17 @@
           "line": 2
         }
       ]
+    },
+    {
+      "path": "js/admin/appearance/workspace-splitters.js",
+      "bytes": 5881,
+      "sha256": "482f5dbc943a2aba11a1926e54670a155c3a7db732b5f2f385def7829e18ebfd",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
     },
     {
       "path": "js/admin/collections/gestion-colecciones-admin.js",
@@ -21289,8 +21306,8 @@
     },
     {
       "path": "scripts/auditar-admin-apariencia-unificada.js",
-      "bytes": 3358,
-      "sha256": "b7bd5b50dae263f9735d481a660d9dc8cc421ab9a5de86afaf5327601a58f57a",
+      "bytes": 3694,
+      "sha256": "3a534de53bdb161b5c869b8f0c51bb0935dda8da5abe510df032f5ee07130773",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24946,8 +24963,8 @@
     },
     {
       "path": "tests/visual-builder/apariencia-preview-abajo.spec.js",
-      "bytes": 6320,
-      "sha256": "ccfede808c340a74744a56603d33778a5f2b3f4f5691cc3a40129a3aa11e1906",
+      "bytes": 6881,
+      "sha256": "aa3ee592152776f98a9e7ee40254290141356b79e31dca71d09753420f23a4e3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25173,6 +25190,36 @@
           "line": 17
         }
       ]
+    },
+    {
+      "path": "tests/visual-builder/workspace-splitters.test.mjs",
+      "bytes": 842,
+      "sha256": "c3e398c4588b3e5967c5e9f7214e5730395a2e8425702809d7ad9017997612ac",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../js/admin/appearance/workspace-splitters.js",
+          "target": "js/admin/appearance/workspace-splitters.js",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "tienda.js",
@@ -25498,8 +25545,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 161843,
-      "sha256": "950c92c55233cb08ca5bf7476d06fcb13e84a0ef90a182f015aa06be38468822"
+      "bytes": 161848,
+      "sha256": "e16d5bd9b3992c0e0380bffba9d2aa35e61a361f887acd7026a521c747423dd7"
     },
     {
       "path": "apple-touch-icon.png",
@@ -25810,8 +25857,8 @@
     {
       "path": "css/admin/visual-studio-v2.css",
       "extension": ".css",
-      "bytes": 12361,
-      "sha256": "4237f857f34926652b8c281da2e08015d3279d4d897c431f7fcb8e1e997c9199"
+      "bytes": 14213,
+      "sha256": "befd11efc7d873cd0a05f12aa67298d70f8a682e905a531bbd437aac69317caa"
     },
     {
       "path": "css/components/ai-builder-public.css",
@@ -26602,8 +26649,8 @@
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
       "extension": ".js",
-      "bytes": 46849,
-      "sha256": "310b5d314b6bbc532c11baa50aeec2ad62dc4014e549c9f28c11eaa772681c8e"
+      "bytes": 46999,
+      "sha256": "84ae76c056b8c1890265150447623e504c066b1bb1e1527d6f64ddc9f190a004"
     },
     {
       "path": "js/admin/appearance/preview-dynamic-targets.js",
@@ -26622,6 +26669,12 @@
       "extension": ".js",
       "bytes": 16959,
       "sha256": "1ab46a4364bee4d9ca87e9b38cf8bfc9cb5b5ff779d7a7372dd431e3bcf0c57f"
+    },
+    {
+      "path": "js/admin/appearance/workspace-splitters.js",
+      "extension": ".js",
+      "bytes": 5881,
+      "sha256": "482f5dbc943a2aba11a1926e54670a155c3a7db732b5f2f385def7829e18ebfd"
     },
     {
       "path": "js/admin/collections/gestion-colecciones-admin.js",
@@ -27898,8 +27951,8 @@
     {
       "path": "scripts/auditar-admin-apariencia-unificada.js",
       "extension": ".js",
-      "bytes": 3358,
-      "sha256": "b7bd5b50dae263f9735d481a660d9dc8cc421ab9a5de86afaf5327601a58f57a"
+      "bytes": 3694,
+      "sha256": "3a534de53bdb161b5c869b8f0c51bb0935dda8da5abe510df032f5ee07130773"
     },
     {
       "path": "scripts/auditar-admin-commerce-shopify.js",
@@ -28480,8 +28533,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 27906,
-      "sha256": "0be108797ce1e459080dc56bdce4e391c34dafb75edbcd59c85be26bbf49e828"
+      "bytes": 28106,
+      "sha256": "216f7e9ee9b58145cb1e783e9e66787be07692b76dfd0b5e73d580898fab9c02"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -28798,8 +28851,8 @@
     {
       "path": "tests/visual-builder/apariencia-preview-abajo.spec.js",
       "extension": ".js",
-      "bytes": 6320,
-      "sha256": "ccfede808c340a74744a56603d33778a5f2b3f4f5691cc3a40129a3aa11e1906"
+      "bytes": 6881,
+      "sha256": "aa3ee592152776f98a9e7ee40254290141356b79e31dca71d09753420f23a4e3"
     },
     {
       "path": "tests/visual-builder/preview-dynamic-targets.test.mjs",
@@ -28842,6 +28895,12 @@
       "extension": ".js",
       "bytes": 14701,
       "sha256": "6095c8d101e3f4b1b1f13c70179e70307586c82cc43c00aeaefac7563091fbce"
+    },
+    {
+      "path": "tests/visual-builder/workspace-splitters.test.mjs",
+      "extension": ".mjs",
+      "bytes": 842,
+      "sha256": "c3e398c4588b3e5967c5e9f7214e5730395a2e8425702809d7ad9017997612ac"
     },
     {
       "path": "tienda.js",
@@ -29839,14 +29898,14 @@
     },
     {
       "file": "js/admin/appearance/editor-visual-admin.js",
-      "line": 219,
+      "line": 221,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "js/admin/appearance/editor-visual-admin.js",
-      "line": 243,
+      "line": 245,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
@@ -32861,7 +32920,7 @@
           },
           {
             "file": "js/admin/appearance/editor-visual-admin.js",
-            "line": 212,
+            "line": 214,
             "operation": "collection"
           },
           {
@@ -33221,12 +33280,12 @@
           },
           {
             "file": "scripts/auditar-admin-apariencia-unificada.js",
-            "line": 22,
+            "line": 23,
             "operation": "doc"
           },
           {
             "file": "scripts/auditar-admin-apariencia-unificada.js",
-            "line": 22,
+            "line": 23,
             "operation": "doc"
           }
         ]

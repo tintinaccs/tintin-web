@@ -6,6 +6,7 @@ const app = read('js/admin/admin-app.js');
 const content = read('js/admin/content/gestion-contenido-admin.js');
 const firebase = read('js/core/firebase/firebase.js');
 const studio = read('css/admin/visual-studio-v2.css');
+const splitters = read('js/admin/appearance/workspace-splitters.js');
 const checks = [];
 const check = (name, ok) => checks.push({ name, ok: Boolean(ok) });
 const navContent = (html.match(/data-section="contenido"/g) || []).length;
@@ -23,7 +24,8 @@ check('Contenido conserva site_content como única fuente', content.includes("do
 check('Firebase sigue centralizado', firebase.includes('initializeApp') && !content.includes('initializeApp(') && !app.includes('initializeApp('));
 check('Contenido usa el guard global de cambios pendientes', content.includes('window.AdminUnsaved.register(nextId') && content.includes('window.AdminUnsaved?.markDirty(activeUnsavedScopeId)') && content.includes('window.AdminUnsaved?.markClean(activeUnsavedScopeId)'));
 check('No existe un beforeunload duplicado dentro de Contenido', !content.includes("window.addEventListener('beforeunload'"));
-check('Apariencia mantiene constructor, preview e inspector visibles juntos', studio.includes('/* TINTIN layout unificado: constructor, preview e inspector visibles juntos */') && studio.includes('grid-template-areas:"sidebar preview properties"'));
+check('Apariencia mantiene la vista previa arriba y los dos editores abajo', studio.includes('grid-template-rows:minmax(300px,var(--vs-preview-ratio,56%))') && studio.includes('.visual-editor-workbench{display:grid'));
+check('Los tres paneles de Apariencia son redimensionables, accesibles y persistentes', splitters.includes("role', 'separator'") && splitters.includes("localStorage.setItem(STORAGE_KEY") && splitters.includes("addEventListener('pointerdown'") && splitters.includes("addEventListener('keydown'"));
 const failed = checks.filter(item => !item.ok);
 for (const item of checks) console.log(`${item.ok ? 'OK' : 'ERROR'} — ${item.name}`);
 if (failed.length) { console.error(`\nApariencia unificada: ${failed.length} fallo(s).`); process.exit(1); }
