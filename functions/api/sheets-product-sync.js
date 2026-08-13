@@ -5,7 +5,7 @@ import {
 } from '../../cloudflare/seguridad-cloudinary.js';
 
 const APPS_SCRIPT_SYNC_URL =
-  'https://script.google.com/macros/s/AKfycbwiBvdkkEeWMHLnj57st2nBKwx9Xci88J0hAMlkkJ1j7vkpzn0A0f4DhPDqh8KkL947/exec';
+  'https://script.google.com/macros/s/AKfycbyh9I5aPp9d3lMSnYRNfrHcSCCobCoDOif9CqtXmMe4FgwSjzlKf4kjQZqvKDRmEY6S/exec';
 const MAX_BODY_BYTES = 64 * 1024;
 const SHEETS_TIMEOUT_MS = 12_000;
 
