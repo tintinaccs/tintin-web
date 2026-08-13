@@ -4820,6 +4820,8 @@ const UnsavedGuard = {
    ============================================= */
 let _allProducts = [];
 let _productosUnsub = null;
+let _productInventoryUnsub = null;
+const _productInventoryById = new Map();
 
 // Live listener: any create/edit/delete/activate/deactivate — from this session
 // or another admin's — updates the table immediately, no manual refresh needed.
@@ -4829,6 +4831,12 @@ function loadProductos() {
   document.getElementById('prod-loading').innerHTML = 'Cargando productos…';
   document.getElementById('prod-table-wrap').style.display = 'none';
   document.getElementById('prod-empty').style.display = 'none';
+  if (!_productInventoryUnsub && currentRole === 'superadmin') {
+    _productInventoryUnsub = onSnapshot(collection(db, 'productInventory'), snap => {
+      _productInventoryById.clear();
+      snap.docs.forEach(item => _productInventoryById.set(item.id, item.data()));
+    }, error => console.error('[Tintin Inventory] No se pudo cargar el inventario interno.', error));
+  }
   if (_productosUnsub) return; // listener already active, just re-show current data
   // Con conexión lenta o inestable (típico en tablet/mobile con wifi débil)
   // onSnapshot puede tardar mucho en resolver, o nunca resolver, sin avisar —
@@ -5038,8 +5046,17 @@ function serializeProductForm() {
     description: document.getElementById('prod-description').value,
     material: document.getElementById('prod-material').value,
     measurements: document.getElementById('prod-measurements').value,
+    colorFinish: document.getElementById('prod-color-finish').value,
     care: document.getElementById('prod-care').value,
+    waterResistance: document.getElementById('prod-water-resistance').value,
     warranty: document.getElementById('prod-warranty').value,
+    sizeFit: document.getElementById('prod-size-fit').value,
+    packageContents: document.getElementById('prod-package-contents').value,
+    imagesExtra: document.getElementById('prod-images-extra').value,
+    costUnit: document.getElementById('prod-cost-unit').value,
+    purchased: document.getElementById('prod-purchased').value,
+    stockMinimum: document.getElementById('prod-stock-minimum').value,
+    internalNotes: document.getElementById('prod-internal-notes').value,
     tags: document.getElementById('prod-tags').value,
     variants: document.getElementById('prod-variants-text').value,
     badge: document.getElementById('prod-badge').value,
@@ -5070,8 +5087,17 @@ function _prodNuevoNow() {
   document.getElementById('prod-description').value = '';
   document.getElementById('prod-material').value = '';
   document.getElementById('prod-measurements').value = '';
+  document.getElementById('prod-color-finish').value = '';
   document.getElementById('prod-care').value = '';
+  document.getElementById('prod-water-resistance').value = '';
   document.getElementById('prod-warranty').value = '';
+  document.getElementById('prod-size-fit').value = '';
+  document.getElementById('prod-package-contents').value = '';
+  document.getElementById('prod-images-extra').value = '';
+  document.getElementById('prod-cost-unit').value = '';
+  document.getElementById('prod-purchased').value = '';
+  document.getElementById('prod-stock-minimum').value = '';
+  document.getElementById('prod-internal-notes').value = '';
   document.getElementById('prod-tags').value = '';
   document.getElementById('prod-variants-text').value = '';
   document.getElementById('prod-badge').value = '';
@@ -5092,6 +5118,7 @@ window.prodEditar = function(docId) {
 function _prodEditarNow(docId) {
   const p = _allProducts.find(x => x._docId === docId);
   if (!p) return;
+  const inventory = _productInventoryById.get(docId) || {};
   document.getElementById('prod-id').value = docId;
   document.getElementById('prod-form-title').textContent = 'Editar producto';
   document.getElementById('prod-name').value = p.name || '';
@@ -5112,8 +5139,17 @@ function _prodEditarNow(docId) {
   document.getElementById('prod-description').value = p.description || '';
   document.getElementById('prod-material').value = p.material || '';
   document.getElementById('prod-measurements').value = p.measurements || '';
+  document.getElementById('prod-color-finish').value = p.colorFinish || '';
   document.getElementById('prod-care').value = p.care || '';
+  document.getElementById('prod-water-resistance').value = p.waterResistance || '';
   document.getElementById('prod-warranty').value = p.warranty || '';
+  document.getElementById('prod-size-fit').value = p.sizeFit || '';
+  document.getElementById('prod-package-contents').value = p.packageContents || '';
+  document.getElementById('prod-images-extra').value = Array.isArray(p.imagesExtra) ? p.imagesExtra.join('\n') : '';
+  document.getElementById('prod-cost-unit').value = inventory.costUnit ?? '';
+  document.getElementById('prod-purchased').value = inventory.purchased ?? '';
+  document.getElementById('prod-stock-minimum').value = inventory.stockMinimum ?? '';
+  document.getElementById('prod-internal-notes').value = inventory.internalNotes || '';
   document.getElementById('prod-badge').value = p.badge || '';
   document.getElementById('prod-collection').value = p.collection || '';
   document.getElementById('prod-tags').value = Array.isArray(p.tags) ? p.tags.join(', ') : (p.tags || '');
@@ -5231,6 +5267,26 @@ async function prodGuardar() {
   const badge = document.getElementById('prod-badge').value || null;
 
   const collection_ = document.getElementById('prod-collection').value.trim() || null;
+  const imagesExtra = [...new Set(document.getElementById('prod-images-extra').value
+    .split(/\r?\n|,/).map(value => sanitizeImageUrl(value.trim())).filter(Boolean))].slice(0, 12);
+  const optionalInteger = id => {
+    const raw = document.getElementById(id).value.trim();
+    return raw === '' ? null : Number(raw);
+  };
+  const inventoryData = {
+    costUnit: optionalInteger('prod-cost-unit'),
+    purchased: optionalInteger('prod-purchased'),
+    stockMinimum: optionalInteger('prod-stock-minimum'),
+    internalNotes: document.getElementById('prod-internal-notes').value.trim().slice(0, 1000),
+    updatedAt: serverTimestamp(),
+  };
+  if ([inventoryData.costUnit, inventoryData.purchased, inventoryData.stockMinimum]
+    .some(value => value != null && (!Number.isInteger(value) || value < 0 || value > 1000000000))) {
+    errEl.textContent = 'Costo, cantidad comprada y stock mínimo deben ser enteros positivos o quedar vacíos.';
+    errEl.style.display = '';
+    btn.textContent = 'Guardar producto'; btn.disabled = false;
+    return false;
+  }
 
   const data = {
     name,
@@ -5246,8 +5302,13 @@ async function prodGuardar() {
     description: document.getElementById('prod-description').value.trim() || '',
     material: document.getElementById('prod-material').value.trim().slice(0, 240),
     measurements: document.getElementById('prod-measurements').value.trim().slice(0, 240),
+    colorFinish: document.getElementById('prod-color-finish').value.trim().slice(0, 240),
     care: document.getElementById('prod-care').value.trim().slice(0, 500),
+    waterResistance: document.getElementById('prod-water-resistance').value.trim().slice(0, 240),
     warranty: document.getElementById('prod-warranty').value.trim().slice(0, 240),
+    sizeFit: document.getElementById('prod-size-fit').value.trim().slice(0, 240),
+    packageContents: document.getElementById('prod-package-contents').value.trim().slice(0, 500),
+    imagesExtra,
     tags,
     badge,
     active: document.getElementById('prod-active').checked,
@@ -5262,6 +5323,7 @@ async function prodGuardar() {
     if (docId) {
       const oldProd = _allProducts.find(p => p._docId === docId);
       await updateDoc(doc(db, 'products', docId), data);
+      await setDoc(doc(db, 'productInventory', docId), inventoryData, { merge: true });
       await pushProductsToSheets([docId]);
       const changes = [];
       if (oldProd) {
@@ -5287,6 +5349,7 @@ async function prodGuardar() {
       data.createdAt = serverTimestamp();
       const newRef = doc(collection(db, 'products'));
       await setDoc(newRef, data);
+      await setDoc(doc(db, 'productInventory', newRef.id), inventoryData, { merge: true });
       await pushProductsToSheets([newRef.id]);
       logAudit('crear_producto', 'producto', newRef.id, name, `Precio: ${data.price} · Stock: ${data.stock}`);
       toast('Producto creado');
@@ -5323,6 +5386,7 @@ async function prodEliminar(docId, name) {
   if (!confirm(`¿Eliminar "${name}"? Esta acción no se puede deshacer.`)) return;
   try {
     await deleteDoc(doc(db, 'products', docId));
+    await deleteDoc(doc(db, 'productInventory', docId));
     await pushProductsToSheets([docId]);
     logAudit('eliminar_producto', 'producto', docId, name, 'Producto eliminado');
     toast('Producto eliminado');
