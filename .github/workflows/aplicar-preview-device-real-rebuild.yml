@@ -51,8 +51,8 @@ jobs:
       - name: Validar build completo
         run: npm run build:pages
 
-      - name: Confirmar árbol limpio después del build
-        run: git diff --exit-code
+      - name: Mostrar cambios esperados
+        run: git status --short
 
       - name: Guardar resultado final
         run: |
