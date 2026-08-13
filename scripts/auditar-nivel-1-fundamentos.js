@@ -111,7 +111,7 @@ check(
 );
 check(
   'El Super Admin oficial está protegido en reglas',
-  rules.includes('request.auth.token.email == "tintinaccs@gmail.com"')
+  rules.includes('request.auth.token.email.lower() == "tintinaccs@gmail.com"')
 );
 check(
   'Las cuentas bloqueadas se consideran en permisos',
