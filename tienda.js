@@ -781,6 +781,7 @@ function renderProductCardMarkup(p, options = {}) {
         <div class="tt-product-cat">${escapeHtml(p.category || p.cat || '')}</div>
         <h3 class="tt-product-name"><a href="${productHref}">${safeName}</a></h3>
         <div class="tt-product-price">${formatPrice(p.price)}</div>
+        <div data-review-rating hidden style="font-size:12px;color:#ad3f67;font-weight:700;margin-top:4px"></div>
         <div class="tt-product-actions">
           <a href="${productHref}" class="tt-btn tt-btn-sm">${primaryLabel}</a>
           ${secondaryAction}

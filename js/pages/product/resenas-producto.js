@@ -43,7 +43,7 @@ function ensureSection() {
         <div class="tt-review-list" id="product-review-list" aria-live="polite"></div>
       </div>
     </div>`;
-  const related = document.querySelector('.tt-related-products, #related-products');
+  const related = document.querySelector('.tt-related-section, .tt-related-products, #related-products');
   (related?.parentNode || document.body).insertBefore(section, related || document.querySelector('.tt-footer'));
   return section;
 }

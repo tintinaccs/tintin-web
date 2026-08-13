@@ -723,7 +723,7 @@ function renderGrid(lista) {
     const catLabel = p.category || p.cat || '';
     const isFavorite = Boolean(window.TintinFavorites?.has?.(p.id));
     return `
-      <article class="tt-card">
+      <article class="tt-card" data-product-id="${safeId}">
         <button type="button" class="tt-card-favorite${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${safeAlt}" data-favorite-price="${escapeCatalogHtml(p.price)}" data-favorite-image="${escapeCatalogHtml(imageUrl)}" data-favorite-cat="${escapeCatalogHtml(catLabel)}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${isFavorite ? '♥' : '♡'}</span></button>
         <a href="${productHref}" class="tt-card-img-wrap" aria-label="Ver ${safeAlt}">
           ${imgHtml}
@@ -733,6 +733,7 @@ function renderGrid(lista) {
           ${catLabel ? `<div class="tt-card-cat">${escapeCatalogHtml(catLabel)}</div>` : ''}
           <h2 class="tt-card-name"><a href="${productHref}">${safeAlt}</a></h2>
           <div class="tt-card-price">${fmt(p.price)}</div>
+          <div data-review-rating hidden style="font-size:12px;color:#ad3f67;font-weight:700;margin-top:4px"></div>
           <div class="tt-card-stock ${inStock ? 'tt-card-stock--in' : 'tt-card-stock--out'}">${inStock ? 'Disponible' : 'Agotado'}</div>
           <div class="tt-card-btns">
             <a class="tt-card-btn tt-card-btn-view" href="${productHref}">Ver producto</a>
@@ -957,6 +958,7 @@ document.getElementById('cat-grid').addEventListener('click', async e => {
 });
 </script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-1"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260726-session-guard-1"></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
