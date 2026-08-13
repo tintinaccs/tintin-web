@@ -1131,15 +1131,18 @@ service cloud.firestore {
           !isBlockedUser() &&
           request.auth.uid == userId &&
           isStoreOpenOrAllowed();
-        allow create, update: if isSignedIn() &&
-          !isBlockedUser() &&
-          request.auth.uid == userId &&
-          isStoreOpenOrAllowed() &&
-          favoriteItemValid(productId);
-        allow delete: if isSignedIn() &&
+        // Los corazones pasan por /api/engagement. El servidor crea a la vez
+        // el favorito privado y el registro administrativo, por lo que una
+        // escritura directa no puede dejar ambas vistas desincronizadas.
+        allow create, update, delete: if false;
+      }
+
+      match /reviews/{productId} {
+        allow read: if isSignedIn() &&
           !isBlockedUser() &&
           request.auth.uid == userId &&
           isStoreOpenOrAllowed();
+        allow create, update, delete: if false;
       }
     }
 
@@ -1175,6 +1178,28 @@ service cloud.firestore {
         );
 
       allow delete: if isSuperAdmin();
+
+      // Solo contiene la versión pública anonimizada. Nombre real, correo,
+      // historial y UID viven en reviewRecords y nunca se entregan al sitio.
+      match /reviews/{reviewId} {
+        allow read: if isStoreOpenOrAllowed();
+        allow create, update, delete: if false;
+      }
+    }
+
+    match /productReviewStats/{productId} {
+      allow read: if isStoreOpenOrAllowed();
+      allow write: if false;
+    }
+
+    match /reviewRecords/{reviewId} {
+      allow read: if isSuperAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /likeRecords/{likeId} {
+      allow read: if isSuperAdmin();
+      allow create, update, delete: if false;
     }
 
     match /collections/{collectionId} {

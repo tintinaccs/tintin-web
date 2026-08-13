@@ -3,7 +3,7 @@ const APPS_SCRIPT_SYNC_URL =
 const SYNC_TIMEOUT_MS = 12_000;
 
 export async function syncEngagementToSheets(idToken, event) {
-  if (!idToken || !event?.action) return false;
+  if (!idToken || !event?.type) return false;
   try {
     const response = await fetch(APPS_SCRIPT_SYNC_URL, {
       method: 'POST',
