@@ -1,10 +1,12 @@
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { collection, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   CONTENT_PAGE_IDS, SITE_CONTENT_SCHEMA, getNested, getPageDefaults, getPageSchema,
   mergeContent, sanitizeContentHref, setNested,
 } from '../../core/store/esquema-contenido.js?v=tintin-20260810-visual-studio-v2-3';
+import { chooseRandomPreviewProduct, productPreviewTarget } from './preview-dynamic-targets.js?v=tintin-20260812-preview-dinamico-1';
 
 const $ = id => document.getElementById(id);
 const clone = value => JSON.parse(JSON.stringify(value));
@@ -53,6 +55,8 @@ let inspectorTab = 'content';
 let libraryOpen = false;
 let draggedEntry = null;
 let sectionListNode = null;
+let previewProductsPromise = null;
+let previewProductSample = null;
 
 const responsiveDefaults = () => ({ visibility:'inherit', spacing:'inherit', width:'inherit', align:'inherit', columns:'inherit', imageFit:'inherit' });
 const defaultStyle = () => ({
@@ -202,10 +206,39 @@ function renderProperties(){const root=$('visual-properties');if(!root)return;ro
 
 function renderHistory(){const root=$('visual-history-list');if(!root)return;root.replaceChildren();if(!history.length){root.appendChild(make('div','visual-empty','Todavía no hay versiones publicadas.'));return;}history.forEach(item=>{const row=make('div','visual-history-item');const info=make('div');info.append(make('strong','',`Versión ${item.version} · ${item.action==='restore'?'restauración':'publicación'}`),make('small','',`${item.actorEmail||''} · ${new Date(item.createdAt).toLocaleString('es-PY')}`));row.appendChild(info);if(['publish','restore'].includes(item.action)&&item.version>0){const button=make('button','adm-btn adm-btn-outline adm-btn-sm','Restaurar');button.type='button';button.dataset.restore=item.id;row.appendChild(button);}root.appendChild(row);});}
 function postPreview(){const frame=$('visual-preview-frame');if(!frame?.contentWindow||!config||!content)return;frame.contentWindow.postMessage({type:'tintin:visual-preview',pageId,config,content,selected},location.origin);}
-function loadPreview(){const frame=$('visual-preview-frame');frame.src=`${getPageSchema(pageId)?.path||'index.html'}?ttVisualPreview=1`;frame.onload=()=>{postPreview();setTimeout(postPreview,300);setTimeout(postPreview,1200);};}
+function renderPreviewVersion(){const node=$('visual-version');if(!node)return;const sample=pageId==='product'&&previewProductSample?` · Muestra: ${String(previewProductSample.name||previewProductSample.title||'Producto')}`:'';node.textContent=`Versión publicada: ${version}${sample}`;}
+async function loadPreviewProducts(){
+  if (!previewProductsPromise) {
+    previewProductsPromise=getDocs(query(collection(db,'products'),limit(250)))
+      .then(snapshot=>snapshot.docs.map(item=>({id:item.id,...item.data()})))
+      .catch(error=>{previewProductsPromise=null;throw error;});
+  }
+  return previewProductsPromise;
+}
+async function previewTarget(){
+  const basePath=getPageSchema(pageId)?.path||'index.html';
+  if(pageId!=='product')return basePath;
+  if(!previewProductSample)previewProductSample=chooseRandomPreviewProduct(await loadPreviewProducts(),()=>crypto.getRandomValues(new Uint32Array(1))[0]/4294967296);
+  if(!previewProductSample)throw new Error('No hay productos disponibles para generar la vista previa.');
+  return productPreviewTarget(basePath,previewProductSample);
+}
+async function loadPreview(){
+  const frame=$('visual-preview-frame');
+  try{
+    const target=await previewTarget();
+    const separator=target.includes('?')?'&':'?';
+    frame.src=`${target}${separator}ttVisualPreview=1`;
+    renderPreviewVersion();
+    frame.onload=()=>{postPreview();setTimeout(postPreview,300);setTimeout(postPreview,1200);};
+  }catch(error){
+    frame.removeAttribute('src');
+    setStatus(error.message||'No se pudo preparar la vista previa dinámica.','error');
+    throw error;
+  }
+}
 function renderDeviceState(){if($('visual-preview-stage'))$('visual-preview-stage').dataset.device=editDevice;document.querySelectorAll('[data-visual-device]').forEach(button=>{const active=button.dataset.visualDevice===editDevice;button.setAttribute('aria-pressed',String(active));button.classList.toggle('active',active);});if($('visual-device-edit-badge'))$('visual-device-edit-badge').textContent=`Editando ${DEVICE_LABELS[editDevice]}`;}
-function renderAll(){ensureStudioUi();renderPages();renderBlockTypeOptions();renderSectionList();renderProperties();renderHistory();renderDeviceState();if($('visual-version'))$('visual-version').textContent=`Versión publicada: ${version}`;updateActions();postPreview();}
-async function loadPage(){busy(true);try{const data=await api();version=Number(data.state?.version||0);contentRevision=String(data.contentRevision||'');history=data.history||[];config=normalizedConfig(data.draft?.config||data.state?.config||{});content=mergeContent(getPageDefaults(pageId),clone(data.draft?.content||data.content||getPageDefaults(pageId)));selected={kind:'section',id:config.sectionOrder[0]||Object.keys(getPageSchema(pageId).sections)[0]};undoStack=[];redoStack=[];dirty=Boolean(data.draft);renderAll();loadPreview();if(data.draft&&(Number(data.draft.basedOnVersion)!==version||String(data.draft.basedOnContentRevision||'')!==contentRevision))setStatus('Este borrador parte de una versión anterior. Revisalo antes de publicar.','error');else setStatus(data.draft?'Borrador recuperado. Nada está publicado todavía.':'Página lista para editar.','saved');}catch(error){setStatus(error.message,'error');}finally{busy(false);}}
+function renderAll(){ensureStudioUi();renderPages();renderBlockTypeOptions();renderSectionList();renderProperties();renderHistory();renderDeviceState();renderPreviewVersion();updateActions();postPreview();}
+async function loadPage(){busy(true);try{const data=await api();version=Number(data.state?.version||0);contentRevision=String(data.contentRevision||'');history=data.history||[];config=normalizedConfig(data.draft?.config||data.state?.config||{});content=mergeContent(getPageDefaults(pageId),clone(data.draft?.content||data.content||getPageDefaults(pageId)));selected={kind:'section',id:config.sectionOrder[0]||Object.keys(getPageSchema(pageId).sections)[0]};undoStack=[];redoStack=[];dirty=Boolean(data.draft);renderAll();await loadPreview();if(data.draft&&(Number(data.draft.basedOnVersion)!==version||String(data.draft.basedOnContentRevision||'')!==contentRevision))setStatus('Este borrador parte de una versión anterior. Revisalo antes de publicar.','error');else setStatus(data.draft?'Borrador recuperado. Nada está publicado todavía.':'Página lista para editar.','saved');}catch(error){setStatus(error.message,'error');}finally{busy(false);}}
 
 function baseBlock(type,preset={}){const ids=Object.keys(getPageSchema(pageId).sections);const anchor=selected?.kind==='section'?selected.id:(selectedBlock()?.afterSection||ids[0]||TOP_ANCHOR);const titles={products:'Productos destacados',collections:'Explorá nuestras colecciones',gallery:'Galería',features:'Todo pensado para vos',countdown:'No te lo pierdas',marquee:'TINTÍN · NUEVO · TINTÍN · NUEVO',testimonial:'Lo que dicen nuestras clientas'};return{id:`${type}-${crypto.randomUUID().slice(0,8)}`,type,label:preset.label||BLOCK_LABELS[type]||'Nueva sección',afterSection:anchor,eyebrow:'TINTÍN',title:titles[type]||'Nueva sección',text:'',buttonLabel:['banner','promotion','button','section','columns'].includes(type)?'Ver más':'',href:'catalogo.html',image:'',imageAlt:'',count:4,category:'',videoUrl:'',imageSide:'left',images:[],items:[],endAt:'',expiredText:'Finalizado',marqueeSpeed:'normal',spacerSize:'medium',style:{...defaultStyle(),variant:preset.variant||'default'}};}
 function addBlockFromPreset(preset){const block=baseBlock(preset.type,preset);if(preset.type==='features')block.items=[{q:'Compra fácil',a:'Elegí tus favoritos desde la web.'},{q:'Atención personalizada',a:'Estamos para ayudarte.'},{q:'Envíos',a:'Opciones de entrega para tu zona.'}];if(preset.type==='faq')block.items=[{q:'¿Cómo comprar?',a:'Elegí tus productos, agregalos al carrito y completá el checkout.'}];if(preset.type==='countdown')block.endAt=new Date(Date.now()+86400000).toISOString();mutate(()=>{config.customBlocks.push(block);selected={kind:'block',id:block.id};inspectorTab='content';},{message:'Sección agregada al borrador.'});}
