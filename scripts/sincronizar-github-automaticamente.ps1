@@ -79,11 +79,8 @@ try {
     Write-SyncLog 'Commit automatico creado.'
   }
 
-  $aheadCount = [int]((Invoke-Git -GitArguments @('rev-list', '--count', 'origin/main..HEAD') | Select-Object -First 1).Trim())
-  if ($aheadCount -gt 0) {
-    Invoke-Git -GitArguments @('push', 'origin', 'main') | Out-Null
-    Write-SyncLog "Sincronizacion completada ($aheadCount commit(s) enviados)."
-  }
+  Invoke-Git -GitArguments @('push', 'origin', 'HEAD:refs/heads/automatic-backup') | Out-Null
+  Write-SyncLog "Sincronizacion completada en la rama 'automatic-backup'."
 } catch {
   try {
     Write-SyncLog "ERROR: $($_.Exception.Message)"
