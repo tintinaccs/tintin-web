@@ -26,7 +26,8 @@ const claims = {
   admin1: { email: 'admin@example.com', email_verified: true },
   agent1: { email: 'agent@example.com', email_verified: true },
   viewer1: { email: 'viewer@example.com', email_verified: true },
-  super1: { email: 'tintinaccs@gmail.com', email_verified: true }
+  super1: { email: 'tintinaccs@gmail.com', email_verified: true },
+  superCase: { email: 'TintinAccs@Gmail.com', email_verified: true }
 };
 
 async function seed() {
@@ -63,6 +64,9 @@ async function seed() {
     });
     await setDoc(doc(db, 'users', 'super1'), {
       email: claims.super1.email, role: 'superadmin', blocked: false, name: 'Super Admin'
+    });
+    await setDoc(doc(db, 'users', 'superCase'), {
+      email: claims.superCase.email, role: 'superadmin', blocked: false, name: 'Super Admin Case'
     });
     await setDoc(doc(db, 'rolePermissions', 'main'), {
       admin: {
@@ -253,6 +257,11 @@ try {
   await succeeds(setDoc(doc(superDb, 'orderTrash', 'super_trash_test'), { orderNumber: 'TINPED99', status: 'cancelado' }));
   await succeeds(getDoc(doc(superDb, 'orderTrash', 'super_trash_test')));
   await succeeds(deleteDoc(doc(superDb, 'orderTrash', 'super_trash_test')));
+
+  const superCaseDb = ctx('superCase');
+  await succeeds(setDoc(doc(superCaseDb, 'orderTrash', 'super_case_trash_test'), { orderNumber: 'TINPED100', status: 'cancelado' }));
+  await succeeds(getDoc(doc(superCaseDb, 'orderTrash', 'super_case_trash_test')));
+  await succeeds(deleteDoc(doc(superCaseDb, 'orderTrash', 'super_case_trash_test')));
   await succeeds(deleteDoc(doc(superDb, 'orders', 'client2_order1')));
   await fails(deleteDoc(doc(superDb, 'users', 'super1')));
 
