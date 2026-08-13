@@ -93,6 +93,20 @@ function reviewPublic(record) {
   };
 }
 
+function ownReviewView(record) {
+  if (!record) return null;
+  return {
+    reviewId: record.reviewId,
+    productId: record.productId,
+    rating: record.rating,
+    comment: record.comment,
+    editCount: record.editCount,
+    visible: Boolean(record.visible),
+    deleted: Boolean(record.deleted),
+    conversation: reviewPublic(record).conversation,
+  };
+}
+
 async function updateReviewStats(env, productId) {
   const documents = await firestoreAdminList(env, `products/${productId}/reviews`, 300);
   const reviews = documents.map(decoded).filter(Boolean);
@@ -119,16 +133,7 @@ export async function getOwnReview(env, user, productId) {
   const id = safeId(productId, 'Producto');
   const mapping = decoded(await firestoreAdminGet(env, `users/${safeId(user.uid, 'Cuenta')}/reviews/${id}`));
   if (!mapping) return null;
-  return {
-    reviewId: mapping.reviewId,
-    productId: mapping.productId,
-    rating: mapping.rating,
-    comment: mapping.comment,
-    editCount: mapping.editCount,
-    visible: mapping.visible,
-    deleted: mapping.deleted,
-    conversation: mapping.conversation || [],
-  };
+  return ownReviewView(mapping);
 }
 
 export async function createReview(env, user, input) {
@@ -185,7 +190,7 @@ export async function editOwnReview(env, user, input) {
     { path: `users/${safeId(user.uid, 'Cuenta')}/reviews/${productId}`, fields: encodeFirestoreFields({
       schemaVersion: 1, reviewId, productId, productName: record.productName, rating, comment,
       editCount: 1, visible: Boolean(record.visible), deleted: false,
-      conversation: record.conversation || [], createdAt: new Date(record.createdAt), updatedAt: now,
+      conversation: reviewPublic(updated).conversation, createdAt: new Date(record.createdAt), updatedAt: now,
     }) },
   ];
   if (record.visible) writes.push({ path: `products/${productId}/reviews/${reviewId}`, fields: encodeFirestoreFields(reviewPublic(updated)) });
@@ -213,7 +218,7 @@ export async function addCustomerReply(env, user, input) {
     { path: `users/${safeId(user.uid, 'Cuenta')}/reviews/${productId}`, fields: encodeFirestoreFields({
       schemaVersion: 1, reviewId, productId, productName: record.productName, rating: record.rating,
       comment: record.comment, editCount: record.editCount, visible: Boolean(record.visible), deleted: false,
-      conversation, createdAt: new Date(record.createdAt), updatedAt: now,
+      conversation: reviewPublic(updated).conversation, createdAt: new Date(record.createdAt), updatedAt: now,
     }) },
   ];
   if (record.visible) writes.push({ path: `products/${productId}/reviews/${reviewId}`, fields: encodeFirestoreFields(reviewPublic(updated)) });
@@ -254,5 +259,6 @@ export async function toggleFavorite(env, user, input) {
 export const engagementClean = clean;
 export const engagementDecoded = decoded;
 export const engagementReviewPublic = reviewPublic;
+export const engagementOwnReviewView = ownReviewView;
 export const engagementUpdateReviewStats = updateReviewStats;
 export const engagementSafeId = safeId;

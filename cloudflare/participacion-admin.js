@@ -7,6 +7,7 @@ import {
 import {
   engagementClean as clean,
   engagementDecoded as decoded,
+  engagementOwnReviewView as ownReviewView,
   engagementReviewPublic as reviewPublic,
   engagementSafeId as safeId,
   engagementUpdateReviewStats as updateReviewStats,
@@ -26,7 +27,7 @@ function mapping(record) {
     editCount: record.editCount,
     visible: Boolean(record.visible),
     deleted: Boolean(record.deleted),
-    conversation: record.conversation || [],
+    conversation: ownReviewView(record).conversation,
     createdAt: new Date(record.createdAt),
     updatedAt: new Date(record.updatedAt),
   };
