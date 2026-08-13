@@ -44,6 +44,13 @@ test('preview solo acepta postMessage same-origin del padre', () => {
   assert.match(runtime, /event\.source !== window\.parent/); assert.match(admin, /postMessage\([\s\S]*location\.origin/);
 });
 
+test('preview de Producto resuelve una sola muestra real antes de cargar el iframe', () => {
+  assert.match(admin, /previewProductSample=chooseRandomPreviewProduct/);
+  assert.match(admin, /productPreviewTarget\(basePath,previewProductSample\)/);
+  assert.match(admin, /await loadPreview\(\)/);
+  assert.match(admin, /Muestra:/);
+});
+
 test('inspector ignora selecciones atrasadas o inexistentes de la vista previa', () => {
   assert.match(runtime, /type: 'tintin:visual-select', pageId/);
   assert.match(admin, /event\.source!==\$\('visual-preview-frame'\)\?\.contentWindow/);

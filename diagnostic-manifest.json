@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-13T00:35:13.901Z",
-  "sourceFingerprint": "62f4c2dc3a25aa7561fe1478c4679343ef245d6483b8dfa0f572044e7e4c9b13",
+  "generatedAt": "2026-08-13T00:48:11.768Z",
+  "sourceFingerprint": "b4bf4834388dffa6e561f2ffcfff23b6e67f9c07e6765a256019f4f22b87eb59",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 599,
-    "textFiles": 567,
-    "totalBytes": 6356358,
+    "files": 601,
+    "textFiles": 569,
+    "totalBytes": 6360981,
     "pages": 18,
-    "modules": 366
+    "modules": 368
   },
   "viewports": [
     {
@@ -1785,8 +1785,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 161846,
-      "sha256": "7ffe0830a1e46d0b6650f5fb30265243c4212840e8dd4d472e2a22f7a1f0639f",
+      "bytes": 161843,
+      "sha256": "950c92c55233cb08ca5bf7476d06fcb13e84a0ef90a182f015aa06be38468822",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1835,7 +1835,7 @@
           "line": 1910
         },
         {
-          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260812-studio-tres-paneles-1",
+          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260812-preview-producto-1",
           "target": "js/admin/appearance/editor-visual-admin.js",
           "line": 1911
         },
@@ -2042,7 +2042,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260812-studio-tres-paneles-1",
+          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260812-preview-producto-1",
           "target": "js/admin/appearance/editor-visual-admin.js",
           "line": 1911,
           "exists": true
@@ -17037,8 +17037,8 @@
     },
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
-      "bytes": 45212,
-      "sha256": "d15acbffb9218b6f9f9b894e954f8daefd3ab35b3f15b9be9405aff365838a6d",
+      "bytes": 46849,
+      "sha256": "310b5d314b6bbc532c11baa50aeec2ad62dc4014e549c9f28c11eaa772681c8e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17057,24 +17057,51 @@
           "line": 2
         },
         {
+          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
           "raw": "../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/core/auth/roles.js",
           "dynamic": false,
-          "line": 3
+          "line": 4
         },
         {
           "raw": "../../core/store/esquema-contenido.js?v=tintin-20260810-visual-studio-v2-3",
           "target": "js/core/store/esquema-contenido.js",
           "dynamic": false,
-          "line": 7
+          "line": 8
+        },
+        {
+          "raw": "./preview-dynamic-targets.js?v=tintin-20260812-preview-dinamico-1",
+          "target": "js/admin/appearance/preview-dynamic-targets.js",
+          "dynamic": false,
+          "line": 9
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
           "line": 2
+        },
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
+          "line": 3
         }
       ]
+    },
+    {
+      "path": "js/admin/appearance/preview-dynamic-targets.js",
+      "bytes": 1218,
+      "sha256": "498f4238428c88e522475f691c5b47e476f61816350a6679e66db0eeec1d74ac",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
     },
     {
       "path": "js/admin/appearance/visual-studio-global-admin.js",
@@ -24929,9 +24956,39 @@
       "endpoints": []
     },
     {
+      "path": "tests/visual-builder/preview-dynamic-targets.test.mjs",
+      "bytes": 1246,
+      "sha256": "d578d1d81162e5f88a3a697dd0ef128e37c25c847a019ee21c45301d9d34ec8b",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../js/admin/appearance/preview-dynamic-targets.js",
+          "target": "js/admin/appearance/preview-dynamic-targets.js",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/visual-builder/visual-builder-contract.test.mjs",
-      "bytes": 3352,
-      "sha256": "718c211e92506ba6130d6ac9ae7a9158d24fbf1db1784a1ea1d07a00373fe2d3",
+      "bytes": 3687,
+      "sha256": "aa1d7eec53da2ccff50796172cb795a0b6cfa3551bf26657ee27d12d8696bf6d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25441,8 +25498,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 161846,
-      "sha256": "7ffe0830a1e46d0b6650f5fb30265243c4212840e8dd4d472e2a22f7a1f0639f"
+      "bytes": 161843,
+      "sha256": "950c92c55233cb08ca5bf7476d06fcb13e84a0ef90a182f015aa06be38468822"
     },
     {
       "path": "apple-touch-icon.png",
@@ -26545,8 +26602,14 @@
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
       "extension": ".js",
-      "bytes": 45212,
-      "sha256": "d15acbffb9218b6f9f9b894e954f8daefd3ab35b3f15b9be9405aff365838a6d"
+      "bytes": 46849,
+      "sha256": "310b5d314b6bbc532c11baa50aeec2ad62dc4014e549c9f28c11eaa772681c8e"
+    },
+    {
+      "path": "js/admin/appearance/preview-dynamic-targets.js",
+      "extension": ".js",
+      "bytes": 1218,
+      "sha256": "498f4238428c88e522475f691c5b47e476f61816350a6679e66db0eeec1d74ac"
     },
     {
       "path": "js/admin/appearance/visual-studio-global-admin.js",
@@ -28417,8 +28480,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 27716,
-      "sha256": "acca82486e3d50b30b466a1baab12bd1b16bafc824da13125a91dc189a09cc7f"
+      "bytes": 27906,
+      "sha256": "0be108797ce1e459080dc56bdce4e391c34dafb75edbcd59c85be26bbf49e828"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -28739,10 +28802,16 @@
       "sha256": "ccfede808c340a74744a56603d33778a5f2b3f4f5691cc3a40129a3aa11e1906"
     },
     {
+      "path": "tests/visual-builder/preview-dynamic-targets.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1246,
+      "sha256": "d578d1d81162e5f88a3a697dd0ef128e37c25c847a019ee21c45301d9d34ec8b"
+    },
+    {
       "path": "tests/visual-builder/visual-builder-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 3352,
-      "sha256": "718c211e92506ba6130d6ac9ae7a9158d24fbf1db1784a1ea1d07a00373fe2d3"
+      "bytes": 3687,
+      "sha256": "aa1d7eec53da2ccff50796172cb795a0b6cfa3551bf26657ee27d12d8696bf6d"
     },
     {
       "path": "tests/visual-builder/visual-builder-core.test.mjs",
@@ -29770,14 +29839,14 @@
     },
     {
       "file": "js/admin/appearance/editor-visual-admin.js",
-      "line": 205,
+      "line": 219,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "js/admin/appearance/editor-visual-admin.js",
-      "line": 210,
+      "line": 243,
       "raw": "catalogo.html",
       "target": "catalogo.html",
       "exists": true
@@ -32789,6 +32858,11 @@
             "file": "js/admin/admin-app.js",
             "line": 6789,
             "operation": "doc"
+          },
+          {
+            "file": "js/admin/appearance/editor-visual-admin.js",
+            "line": 212,
+            "operation": "collection"
           },
           {
             "file": "js/admin/importacion-admin.js",
