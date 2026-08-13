@@ -1192,6 +1192,12 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Costos, compras, stock mÃ­nimo y notas nunca forman parte del producto
+    // pÃºblico. La hoja Productos y el panel superadmin los reflejan aquÃ­.
+    match /productInventory/{productId} {
+      allow read, create, update, delete: if isSuperAdmin();
+    }
+
     match /reviewRecords/{reviewId} {
       allow read: if isSuperAdmin();
       allow create, update, delete: if false;
