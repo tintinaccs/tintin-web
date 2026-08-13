@@ -21,7 +21,8 @@ service cloud.firestore {
     // firebase-cloud-functions-inactive/README.md.
     function isSuperAdmin() {
       return isSignedIn() &&
-        request.auth.token.email == "tintinaccs@gmail.com";
+        request.auth.token.email != null &&
+        request.auth.token.email.lower() == "tintinaccs@gmail.com";
     }
 
     function userDocExists() {
@@ -44,7 +45,7 @@ service cloud.firestore {
 
     function isBlockedUser() {
       return isSignedIn() &&
-        request.auth.token.email != "tintinaccs@gmail.com" &&
+        !isSuperAdmin() &&
         userDocExists() &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.blocked == true;
     }
@@ -64,7 +65,8 @@ service cloud.firestore {
     }
 
     function isSuperAdminAccount(data) {
-      return data.email == "tintinaccs@gmail.com";
+      return data.email is string &&
+        data.email.lower() == "tintinaccs@gmail.com";
     }
 
     /* ============================================================
@@ -349,8 +351,8 @@ service cloud.firestore {
         data.email.lower() == request.auth.token.email.lower() &&
         data.get('blocked', false) == false &&
         (
-          (request.auth.token.email == "tintinaccs@gmail.com" && data.get('role', 'superadmin') == 'superadmin') ||
-          (request.auth.token.email != "tintinaccs@gmail.com" && data.get('role', 'client') == 'client')
+          (isSuperAdmin() && data.get('role', 'superadmin') == 'superadmin') ||
+          (!isSuperAdmin() && data.get('role', 'client') == 'client')
         ) &&
         data.get('purchaseCount', 0) == 0 &&
         data.get('totalSpent', 0) == 0 &&
@@ -1017,7 +1019,7 @@ service cloud.firestore {
       allow create: if checkoutGuardWriteValid(userId);
       allow update: if checkoutGuardWriteValid(userId) &&
         (
-          request.auth.token.email == "tintinaccs@gmail.com" ||
+          isSuperAdmin() ||
           request.resource.data.lastCheckoutOrderId == resource.data.lastCheckoutOrderId ||
           !('lastCheckoutAt' in resource.data) ||
           request.time > resource.data.lastCheckoutAt + duration.value(90, 's')
@@ -1094,10 +1096,6 @@ service cloud.firestore {
         ) ||
         (
           isSuperAdmin() &&
-          (
-            request.auth.token.email == "tintinaccs@gmail.com" ||
-            !isSuperAdminAccount(resource.data)
-          ) &&
           (
             !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']) ||
             (
