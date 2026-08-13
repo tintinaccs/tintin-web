@@ -23,7 +23,7 @@ check('Contenido conserva site_content como única fuente', content.includes("do
 check('Firebase sigue centralizado', firebase.includes('initializeApp') && !content.includes('initializeApp(') && !app.includes('initializeApp('));
 check('Contenido usa el guard global de cambios pendientes', content.includes('window.AdminUnsaved.register(nextId') && content.includes('window.AdminUnsaved?.markDirty(activeUnsavedScopeId)') && content.includes('window.AdminUnsaved?.markClean(activeUnsavedScopeId)'));
 check('No existe un beforeunload duplicado dentro de Contenido', !content.includes("window.addEventListener('beforeunload'"));
-check('Apariencia mantiene constructor, preview e inspector visibles juntos', studio.includes('/* TINTIN layout unificado: constructor, preview e inspector visibles juntos */') && studio.includes('grid-template-areas:"sidebar preview properties"'));
+check('Apariencia pone preview arriba y los dos editores abajo', studio.includes('/* TINTIN layout unificado: preview arriba, editores abajo */') && studio.includes('grid-template-areas:"preview preview" "sidebar properties"'));
 const failed = checks.filter(item => !item.ok);
 for (const item of checks) console.log(`${item.ok ? 'OK' : 'ERROR'} — ${item.name}`);
 if (failed.length) { console.error(`\nApariencia unificada: ${failed.length} fallo(s).`); process.exit(1); }
