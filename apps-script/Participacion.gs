@@ -89,7 +89,41 @@ function tintinSetupEngagement() {
     sheet.autoResizeColumns(1, sheet.getLastColumn());
   });
   ScriptApp.getProjectTriggers().filter(function (trigger) { return trigger.getHandlerFunction() === 'tintinDailyEngagementDigest'; }).forEach(ScriptApp.deleteTrigger);
+  ScriptApp.getProjectTriggers().filter(function (trigger) { return trigger.getHandlerFunction() === 'tintinEngagementOnEdit'; }).forEach(ScriptApp.deleteTrigger);
+  ScriptApp.newTrigger('tintinEngagementOnEdit').forSpreadsheet(SpreadsheetApp.getActiveSpreadsheet()).onEdit().create();
   ScriptApp.newTrigger('tintinDailyEngagementDigest').timeBased().everyDays(1).atHour(8).create();
+}
+
+function tintinEngagementOnEdit(e) {
+  var sheet = e.range.getSheet();
+  if (sheet.getName() !== TINTIN_REVIEWS_SHEET_ || e.range.getRow() < 2) return;
+  var column = e.range.getColumn();
+  if ([4, 5, 18].indexOf(column) === -1) return;
+  var row = sheet.getRange(e.range.getRow(), 1, 1, TINTIN_REVIEW_HEADERS_.length).getValues()[0];
+  var action = '';
+  var input = { reviewId: String(row[0] || '') };
+  if (column === 4 || column === 5) {
+    action = 'reviewEdit'; input.rating = Number(row[3]); input.comment = String(row[4] || '');
+  } else {
+    var map = { 'Publicar':'reviewVisibility', 'Ocultar':'reviewVisibility', 'Eliminar':'reviewDelete', 'Restaurar':'reviewRestore', 'Me gusta':'reviewLike', 'Quitar Me gusta':'reviewLike' };
+    action = map[String(row[17] || '')] || '';
+    if (action === 'reviewVisibility') input.visible = row[17] === 'Publicar';
+    if (action === 'reviewLike') input.liked = row[17] === 'Me gusta';
+  }
+  if (!action || !input.reviewId) return;
+  input.action = action;
+  var properties = PropertiesService.getScriptProperties();
+  var url = properties.getProperty('TINTIN_STORE_URL');
+  var secret = properties.getProperty('SHEETS_ENGAGEMENT_SECRET');
+  if (!url || !secret) throw new Error('Configura TINTIN_STORE_URL y SHEETS_ENGAGEMENT_SECRET en Propiedades del script.');
+  var response = UrlFetchApp.fetch(url.replace(/\/$/, '') + '/api/sheets-engagement-webhook', {
+    method: 'post', contentType: 'application/json', headers: { 'X-Tintin-Sheets-Secret': secret },
+    payload: JSON.stringify(input), muteHttpExceptions: true
+  });
+  if (response.getResponseCode() < 200 || response.getResponseCode() >= 300) throw new Error('No se pudo sincronizar el cambio con Firestore.');
+  var result = JSON.parse(response.getContentText() || '{}');
+  if (!result.ok || !result.record) throw new Error(result.error || 'Respuesta de sincronizacion invalida.');
+  sheet.getRange(e.range.getRow(), 1, 1, TINTIN_REVIEW_HEADERS_.length).setValues([tintinReviewRow_(result.record)]);
 }
 
 function tintinDailyEngagementDigest() {
