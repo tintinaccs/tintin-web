@@ -257,6 +257,13 @@
     </div>
   </div>
 
+  <div class="perfil-card" id="perfil-favorites-card">
+    <div class="perfil-body">
+      <div class="perfil-section-title">Mis favoritos</div>
+      <div id="perfil-favorites-list"><div style="text-align:center;color:var(--text-muted);padding:16px;font-size:13px">Cargando favoritos...</div></div>
+    </div>
+  </div>
+
   <!-- Rol (solo si no es cliente) -->
   <div class="perfil-card" id="perfil-role-card" style="display:none">
     <div class="perfil-body">
@@ -636,6 +643,8 @@ async function loadUserOrders(user) {
 }
 </script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260813-participacion-1"></script>
+<script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20260813-participacion-1"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260726-session-guard-1"></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
