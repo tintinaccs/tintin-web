@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-13T11:42:38.513Z",
-  "sourceFingerprint": "8e437c741b3b5a2b510bcdcf557a742c82e043735915f35c760631d931383982",
+  "generatedAt": "2026-08-13T11:43:41.348Z",
+  "sourceFingerprint": "52bd169cbb7f84b8854e44cdb431268366a90390cd7c39070c17f7cea182f0a9",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 620,
     "textFiles": 588,
-    "totalBytes": 6465803,
+    "totalBytes": 6466367,
     "pages": 18,
     "modules": 382
   },
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 9137,
-      "sha256": "ed0f8154848d2792edf802165d58e6f1a34285171790a03ffb082aa046b9ffba",
+      "bytes": 9169,
+      "sha256": "27425de7826f748fa493a9cebef8f5ef6be58d1431ed4f53549c89d61eca449e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -99,7 +99,7 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
@@ -109,7 +109,7 @@
           "line": 7
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 8
         },
@@ -151,72 +151,72 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 34
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 36
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 37
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 39
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 40
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 41
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 42
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 43
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 44
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 45
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 46
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 47
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 48
         }
@@ -316,7 +316,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
@@ -328,7 +328,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 8,
           "exists": true
@@ -376,85 +376,85 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 34,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 36,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 37,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 39,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 40,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 41,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 42,
           "exists": true
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 43,
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 44,
           "exists": true
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 45,
           "exists": true
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 46,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 48,
           "exists": true
@@ -529,8 +529,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20681,
-      "sha256": "f3c76ea4c523d7bb17a4d5b71ca43152b958613143a6891b8842268f8e2586d7",
+      "bytes": 20713,
+      "sha256": "b31998473a0fdbb91c925e40c312b653e8c4f58fc8f0b89482206f6302388af2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -560,7 +560,7 @@
       "ids": 1,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
@@ -570,7 +570,7 @@
           "line": 7
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 8
         },
@@ -617,72 +617,72 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 47
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 47
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 48
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 49
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 50
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 51
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 52
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 53
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 54
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 55
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 56
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 57
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 58
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 59
         }
@@ -939,7 +939,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
@@ -951,7 +951,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 8,
           "exists": true
@@ -1005,85 +1005,85 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 48,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 49,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 50,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 51,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 52,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 53,
           "exists": true
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 54,
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 55,
           "exists": true
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 56,
           "exists": true
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 57,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 58,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 59,
           "exists": true
@@ -1238,8 +1238,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 36672,
-      "sha256": "1ada7847e50a28fc1c116486508216b8d8d59552c463f4e7e3bc447fd04232a9",
+      "bytes": 36692,
+      "sha256": "ba4ad67b70c1c023188b1c388994f5aeaa7eca302956c767491f13ec7269a5a4",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1291,52 +1291,52 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 21
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 26
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 27
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 28
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 29
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 30
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 31
         },
         {
-          "raw": "css/admin/admin-color-tokens.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/admin/admin-color-tokens.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/admin/admin-color-tokens.css",
           "line": 32
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 33
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 34
         }
@@ -1400,61 +1400,61 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 21,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 26,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 27,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 28,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 29,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 30,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 31,
           "exists": true
         },
         {
-          "raw": "css/admin/admin-color-tokens.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/admin/admin-color-tokens.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/admin/admin-color-tokens.css",
           "line": 32,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 33,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 34,
           "exists": true
@@ -1785,8 +1785,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 168023,
-      "sha256": "2c217210fb049ba804bad013c79b7797a79be9c928e2569d1add3c14492ce404",
+      "bytes": 168057,
+      "sha256": "6e4547f4eb4342cfcc630a061b6056f95af92d7dd769eba3995678114bacd29d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1862,57 +1862,57 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 19
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 24
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 25
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 26
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 27
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 28
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 29
         },
         {
-          "raw": "css/admin/admin-color-tokens.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/admin/admin-color-tokens.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/admin/admin-color-tokens.css",
           "line": 30
         },
         {
-          "raw": "css/core/tokens-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-tintin.css",
           "line": 31
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/admin/admin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/admin/admin.css",
           "line": 32
         },
         {
-          "raw": "css/admin/ai-builder.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/admin/ai-builder.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/admin/ai-builder.css",
           "line": 33
         },
@@ -1927,32 +1927,32 @@
           "line": 35
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 36
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 37
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 38
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 39
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 40
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 41
         }
@@ -2082,67 +2082,67 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 19,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 24,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 25,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 26,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 27,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 28,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 29,
           "exists": true
         },
         {
-          "raw": "css/admin/admin-color-tokens.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/admin/admin-color-tokens.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/admin/admin-color-tokens.css",
           "line": 30,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-tintin.css",
           "line": 31,
           "exists": true
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/admin/admin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/admin/admin.css",
           "line": 32,
           "exists": true
         },
         {
-          "raw": "css/admin/ai-builder.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/admin/ai-builder.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/admin/ai-builder.css",
           "line": 33,
           "exists": true
@@ -2160,37 +2160,37 @@
           "exists": true
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 36,
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 37,
           "exists": true
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 38,
           "exists": true
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 39,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 40,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 41,
           "exists": true
@@ -6976,8 +6976,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14035,
-      "sha256": "9e9fa016e4203f99cc5ed9ce5de9a7dc2eb2c75d1751e4a161818c7f0e3a2548",
+      "bytes": 14067,
+      "sha256": "567c11e65619c7690eeab326a1dc1b308f8765e2577ebac69b1219eef3ba44fb",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7001,7 +7001,7 @@
       "ids": 1,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
@@ -7011,7 +7011,7 @@
           "line": 7
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 8
         },
@@ -7058,72 +7058,72 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 47
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 47
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 48
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 49
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 50
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 51
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 52
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 53
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 54
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 55
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 56
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 57
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 58
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 59
         }
@@ -7342,7 +7342,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
@@ -7354,7 +7354,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 8,
           "exists": true
@@ -7408,85 +7408,85 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 48,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 49,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 50,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 51,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 52,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 53,
           "exists": true
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 54,
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 55,
           "exists": true
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 56,
           "exists": true
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 57,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 58,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 59,
           "exists": true
@@ -7603,8 +7603,8 @@
         "guest",
         "client"
       ],
-      "bytes": 52441,
-      "sha256": "1b6fe61249a37b44d0e65e2c83b56be3279b33e6fb481741bbb7293231c46603",
+      "bytes": 52473,
+      "sha256": "6f3f9c584b473321026c156446d2fddf7c6a0f605b7740d22b5b69131f84a633",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7640,7 +7640,7 @@
       "ids": 17,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
@@ -7650,7 +7650,7 @@
           "line": 8
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 9
         },
@@ -7702,72 +7702,72 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 48
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 48
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 49
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 50
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 51
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 52
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 53
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 54
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 55
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 56
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 57
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 58
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 59
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 60
         }
@@ -7956,7 +7956,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
@@ -7968,7 +7968,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 9,
           "exists": true
@@ -8028,85 +8028,85 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 48,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 48,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 49,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 50,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 51,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 52,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 53,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 54,
           "exists": true
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 55,
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 56,
           "exists": true
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 57,
           "exists": true
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 58,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 59,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 60,
           "exists": true
@@ -8337,8 +8337,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 90298,
-      "sha256": "1241be69d4728424d2a183fe4dda98fad77445ef633e861b8750da9ea4705794",
+      "bytes": 90334,
+      "sha256": "f98ec06ebe5755135adec49a5ee9ef72c8ef45c43f0dcccfeb41f254f166e2fa",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8368,7 +8368,7 @@
       "ids": 73,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
@@ -8378,7 +8378,7 @@
           "line": 8
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 9
         },
@@ -8410,7 +8410,7 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 34
         },
@@ -8420,77 +8420,77 @@
           "line": 37
         },
         {
-          "raw": "css/core/tokens-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-tintin.css",
           "line": 38
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 39
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 40
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 41
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 42
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 43
         },
         {
-          "raw": "css/pages/checkout/checkout.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/pages/checkout/checkout.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/pages/checkout/checkout.css",
           "line": 44
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 45
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 46
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 47
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 48
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 49
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 50
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 51
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 52
         }
@@ -8530,7 +8530,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
@@ -8542,7 +8542,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 9,
           "exists": true
@@ -8578,97 +8578,97 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 34,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-tintin.css",
           "line": 38,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 39,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 40,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 41,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 42,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 43,
           "exists": true
         },
         {
-          "raw": "css/pages/checkout/checkout.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/pages/checkout/checkout.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/pages/checkout/checkout.css",
           "line": 44,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 45,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 46,
           "exists": true
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 48,
           "exists": true
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 49,
           "exists": true
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 50,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 51,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 52,
           "exists": true
@@ -9029,8 +9029,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15908,
-      "sha256": "da35b9cba4351e305f19373edb5e860496a922f3122bef4d1ea56f3dc8077555",
+      "bytes": 15942,
+      "sha256": "f0602dfb1bacfb08d6f131ae9f25d5b71e3540b6ee040b8d7baa8705679615d0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9060,7 +9060,7 @@
       "ids": 8,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
@@ -9070,7 +9070,7 @@
           "line": 8
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 9
         },
@@ -9122,77 +9122,77 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 48
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 48
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 49
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 50
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 51
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 52
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 53
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 54
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 55
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 56
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 57
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 58
         },
         {
-          "raw": "css/pages/collections/collections-page.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/pages/collections/collections-page.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/pages/collections/collections-page.css",
           "line": 59
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 60
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 61
         }
@@ -9401,7 +9401,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
@@ -9413,7 +9413,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 9,
           "exists": true
@@ -9473,91 +9473,91 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 48,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 48,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 49,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 50,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 51,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 52,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 53,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 54,
           "exists": true
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 55,
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 56,
           "exists": true
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 57,
           "exists": true
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 58,
           "exists": true
         },
         {
-          "raw": "css/pages/collections/collections-page.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/pages/collections/collections-page.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/pages/collections/collections-page.css",
           "line": 59,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 60,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 61,
           "exists": true
@@ -9668,8 +9668,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18709,
-      "sha256": "48f0b4f5270771152734fad442b8de21b59da8592710198b8243326776d7b636",
+      "bytes": 18741,
+      "sha256": "b437d62206b88831ddf5b6f222d2399ec4fd344291c6bccc0cf99506dc75de29",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9699,7 +9699,7 @@
       "ids": 8,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
@@ -9709,7 +9709,7 @@
           "line": 7
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 8
         },
@@ -9756,72 +9756,72 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 47
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 47
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 48
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 49
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 50
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 51
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 52
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 53
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 54
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 55
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 56
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 57
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 58
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 59
         }
@@ -10040,7 +10040,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
@@ -10052,7 +10052,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 8,
           "exists": true
@@ -10106,85 +10106,85 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 48,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 49,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 50,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 51,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 52,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 53,
           "exists": true
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 54,
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 55,
           "exists": true
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 56,
           "exists": true
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 57,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 58,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 59,
           "exists": true
@@ -10337,8 +10337,8 @@
         "guest",
         "client"
       ],
-      "bytes": 17380,
-      "sha256": "10f93754ac99c967a81f54f4d2b2cdadbe340b5962010cc33f1482cab76db0aa",
+      "bytes": 17412,
+      "sha256": "845dc1dace511c6e83260e0d6778adf4a3bb44f9d8d9704323c799086aa2ddc6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10368,7 +10368,7 @@
       "ids": 3,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
@@ -10378,7 +10378,7 @@
           "line": 7
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 8
         },
@@ -10425,72 +10425,72 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 47
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 47
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 48
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 49
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 50
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 51
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 52
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 53
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 54
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 55
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 56
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 57
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 58
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 59
         }
@@ -10709,7 +10709,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
@@ -10721,7 +10721,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 8,
           "exists": true
@@ -10775,85 +10775,85 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 48,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 49,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 50,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 51,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 52,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 53,
           "exists": true
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 54,
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 55,
           "exists": true
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 56,
           "exists": true
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 57,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 58,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 59,
           "exists": true
@@ -10970,8 +10970,8 @@
         "guest",
         "client"
       ],
-      "bytes": 44297,
-      "sha256": "d91512ff7a9ddba25e91db3b0a8defb02bdf404020c25ba396caaffdb517efc8",
+      "bytes": 44335,
+      "sha256": "b90615c6883e14f24e0c5dbcd29023f9da2fd23cd412f46efbf7c29df06ff02a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11013,7 +11013,7 @@
       "ids": 13,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
@@ -11023,7 +11023,7 @@
           "line": 8
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 9
         },
@@ -11085,87 +11085,87 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 59
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 66
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 67
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 68
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 69
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 70
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 71
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 72
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 73
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 74
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 75
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 76
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 86
         },
         {
-          "raw": "css/pages/home/hero-apple-inicio.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/pages/home/hero-apple-inicio.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/pages/home/hero-apple-inicio.css",
           "line": 87
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 88
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 89
         },
         {
-          "raw": "css/components/ai-builder-public.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/ai-builder-public.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/ai-builder-public.css",
           "line": 90
         }
@@ -11718,7 +11718,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
@@ -11730,7 +11730,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 9,
           "exists": true
@@ -11802,103 +11802,103 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 59,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 66,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 67,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 68,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 69,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 70,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 71,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 72,
           "exists": true
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 73,
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 74,
           "exists": true
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 75,
           "exists": true
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 76,
           "exists": true
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 86,
           "exists": true
         },
         {
-          "raw": "css/pages/home/hero-apple-inicio.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/pages/home/hero-apple-inicio.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/pages/home/hero-apple-inicio.css",
           "line": 87,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 88,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 89,
           "exists": true
         },
         {
-          "raw": "css/components/ai-builder-public.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/ai-builder-public.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/ai-builder-public.css",
           "line": 90,
           "exists": true
@@ -12265,8 +12265,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 48060,
-      "sha256": "9625afe889b330c3a2d45eaaefe1a73a3e679a32b5d9a7e091a6696bab621955",
+      "bytes": 48100,
+      "sha256": "1e07a86fed37d9aea268ed1796183b90648559ac114968fc9121162ce05945df",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12296,7 +12296,7 @@
       "ids": 46,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
@@ -12306,7 +12306,7 @@
           "line": 8
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 9
         },
@@ -12333,72 +12333,72 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 32
         },
         {
-          "raw": "css/core/tokens-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-tintin.css",
           "line": 35
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 36
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 37
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 39
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 40
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 41
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 42
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 43
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 44
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 45
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 46
         },
         {
-          "raw": "css/pages/login/login.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/pages/login/login.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/pages/login/login.css",
           "line": 47
         },
@@ -12408,22 +12408,22 @@
           "line": 48
         },
         {
-          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/location/selector-ubicacion.css",
           "line": 49
         },
         {
-          "raw": "css/pages/login/login-maintenance.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/pages/login/login-maintenance.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/pages/login/login-maintenance.css",
           "line": 50
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 51
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 52
         }
@@ -12453,7 +12453,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
@@ -12465,7 +12465,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 9,
           "exists": true
@@ -12495,109 +12495,109 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 32,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-tintin.css",
           "line": 35,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 36,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 37,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 38,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 39,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 40,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 41,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 42,
           "exists": true
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 43,
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 44,
           "exists": true
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 45,
           "exists": true
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 46,
           "exists": true
         },
         {
-          "raw": "css/pages/login/login.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/pages/login/login.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/pages/login/login.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/location/selector-ubicacion.css",
           "line": 49,
           "exists": true
         },
         {
-          "raw": "css/pages/login/login-maintenance.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/pages/login/login-maintenance.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/pages/login/login-maintenance.css",
           "line": 50,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 51,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 52,
           "exists": true
@@ -12851,8 +12851,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1751,
-      "sha256": "6fac7f87224504f656d740be6ef1925fdfaf365f1f977b12eaffd7db358f8ee0",
+      "bytes": 1759,
+      "sha256": "f2ee6285cd8260244f81e0e100c8e37eaae068017bf6449b401a8ed52aaec8c4",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12876,22 +12876,22 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 18
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 19
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 20
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 21
         }
@@ -12917,25 +12917,25 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 18,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 19,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 20,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 21,
           "exists": true
@@ -12971,8 +12971,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 31651,
-      "sha256": "264d001090d2fd1b637275b6df3c576ae8dace8243fe3836cb015857d2b6bbd6",
+      "bytes": 31685,
+      "sha256": "cf3d7b65df404d864c365d78321f6281e57d382e95ee8daa6305fc9a5a006db5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13002,7 +13002,7 @@
       "ids": 30,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
@@ -13012,7 +13012,7 @@
           "line": 8
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 9
         },
@@ -13059,77 +13059,77 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 32
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 35
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 36
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 37
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 38
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 39
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 40
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 41
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 42
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 43
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 44
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 45
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 46
         },
         {
-          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/location/selector-ubicacion.css",
           "line": 47
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 48
         }
@@ -13199,7 +13199,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
@@ -13211,7 +13211,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 9,
           "exists": true
@@ -13265,91 +13265,91 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 32,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 35,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 36,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 37,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 38,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 39,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 40,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 41,
           "exists": true
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 42,
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 43,
           "exists": true
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 44,
           "exists": true
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 45,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 46,
           "exists": true
         },
         {
-          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/location/selector-ubicacion.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/location/selector-ubicacion.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 48,
           "exists": true
@@ -13518,8 +13518,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15884,
-      "sha256": "1314639ec76727b06dfccc509245c1ad0177b9e6d0c04145cf559d48d0d9ed28",
+      "bytes": 15916,
+      "sha256": "7beda56215a5d53d1c926def3906b4195ca1dcbac7ec840ff0b40d8d2d9839ce",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13543,7 +13543,7 @@
       "ids": 1,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
@@ -13553,7 +13553,7 @@
           "line": 7
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 8
         },
@@ -13600,72 +13600,72 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 47
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 47
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 48
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 49
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 50
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 51
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 52
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 53
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 54
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 55
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 56
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 57
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 58
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 59
         }
@@ -13884,7 +13884,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
@@ -13896,7 +13896,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 8,
           "exists": true
@@ -13950,85 +13950,85 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 48,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 49,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 50,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 51,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 52,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 53,
           "exists": true
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 54,
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 55,
           "exists": true
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 56,
           "exists": true
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 57,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 58,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 59,
           "exists": true
@@ -14145,8 +14145,8 @@
         "guest",
         "client"
       ],
-      "bytes": 17942,
-      "sha256": "aeb1d31b530a9cad1a3b8c4fdb3c71949fafa222eb37f148737b6183432329e3",
+      "bytes": 17974,
+      "sha256": "e0d598122531a0a55746e90aa4843ddd86a5ecdd748bfa6564809a799faadcf4",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14170,7 +14170,7 @@
       "ids": 2,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
@@ -14180,7 +14180,7 @@
           "line": 7
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 8
         },
@@ -14222,72 +14222,72 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 47
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 47
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 48
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 49
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 50
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 51
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 52
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 53
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 54
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 55
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 56
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 57
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 58
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 59
         }
@@ -14536,7 +14536,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
@@ -14548,7 +14548,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 8,
           "exists": true
@@ -14596,85 +14596,85 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 48,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 49,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 50,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 51,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 52,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 53,
           "exists": true
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 54,
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 55,
           "exists": true
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 56,
           "exists": true
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 57,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 58,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 59,
           "exists": true
@@ -14808,8 +14808,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20726,
-      "sha256": "78682825ff20116291646711ee131a51d8c07aa0b90859848eaf16b0ab1cfc17",
+      "bytes": 20758,
+      "sha256": "10168ece569a53c0cc6f824bbed5615531adc7420722e74d11856d5920adc425",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14833,7 +14833,7 @@
       "ids": 54,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7
         },
@@ -14843,7 +14843,7 @@
           "line": 8
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 9
         },
@@ -14910,62 +14910,62 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 48
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 48
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 49
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 50
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 51
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 52
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 53
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 54
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 55
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 56
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 57
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 58
         },
@@ -14980,12 +14980,12 @@
           "line": 60
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 61
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 62
         }
@@ -15194,7 +15194,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 7,
           "exists": true
@@ -15206,7 +15206,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 9,
           "exists": true
@@ -15284,73 +15284,73 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 48,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 48,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 49,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 50,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 51,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 52,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 53,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 54,
           "exists": true
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 55,
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 56,
           "exists": true
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 57,
           "exists": true
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 58,
           "exists": true
@@ -15368,13 +15368,13 @@
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 61,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 62,
           "exists": true
@@ -15669,8 +15669,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15634,
-      "sha256": "813e74708d253a308d1c5666baa6d959b55c78705db4e23e9440eb12f9a8ccfa",
+      "bytes": 15666,
+      "sha256": "16ce805146dd0931beee83c9d2cff481a6bc9ac357fb74d2732d6efa69fbda18",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15687,7 +15687,7 @@
       "ids": 1,
       "scripts": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6
         },
@@ -15697,7 +15697,7 @@
           "line": 7
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 8
         },
@@ -15739,72 +15739,72 @@
       ],
       "styles": [
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 47
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 47
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 48
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 49
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 50
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 51
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 52
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 53
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 54
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 55
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 56
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 57
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 58
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 59
         }
@@ -16063,7 +16063,7 @@
       ],
       "references": [
         {
-          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/color/esquema-color-instantaneo.js",
           "line": 6,
           "exists": true
@@ -16075,7 +16075,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260813-products-unified-1",
+          "raw": "js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2",
           "target": "js/components/navigation/compatibilidad/inicio-control-paneles.js",
           "line": 8,
           "exists": true
@@ -16123,85 +16123,85 @@
           "exists": true
         },
         {
-          "raw": "css/core/montserrat.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/montserrat.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/superficies-solidas-interfaz.css",
           "line": 47,
           "exists": true
         },
         {
-          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/components/navigation/movil/fondos-solidos-movil.css",
           "line": 48,
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 49,
           "exists": true
         },
         {
-          "raw": "css/core/tokens-color.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tokens-color.css",
           "line": 50,
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260813-products-unified-1",
+          "raw": "styles.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "styles.css",
           "line": 51,
           "exists": true
         },
         {
-          "raw": "css/quality/ajuste-global.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/ajuste-global.css",
           "line": 52,
           "exists": true
         },
         {
-          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/estados-especiales-sistema.css",
           "line": 53,
           "exists": true
         },
         {
-          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/calidad-interfaz.css",
           "line": 54,
           "exists": true
         },
         {
-          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/tema-unificado-tintin.css",
           "line": 55,
           "exists": true
         },
         {
-          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/core/limpieza-tema-tintin.css",
           "line": 56,
           "exists": true
         },
         {
-          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/theme/paridad-segura-tintin.css",
           "line": 57,
           "exists": true
         },
         {
-          "raw": "css/quality/movimiento.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/movimiento.css",
           "line": 58,
           "exists": true
         },
         {
-          "raw": "css/quality/contraste.css?v=tintin-20260813-products-unified-1",
+          "raw": "css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2",
           "target": "css/quality/contraste.css",
           "line": 59,
           "exists": true
@@ -26181,8 +26181,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 9137,
-      "sha256": "ed0f8154848d2792edf802165d58e6f1a34285171790a03ffb082aa046b9ffba"
+      "bytes": 9169,
+      "sha256": "27425de7826f748fa493a9cebef8f5ef6be58d1431ed4f53549c89d61eca449e"
     },
     {
       "path": "AGENTS.md",
@@ -26205,20 +26205,20 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 20681,
-      "sha256": "f3c76ea4c523d7bb17a4d5b71ca43152b958613143a6891b8842268f8e2586d7"
+      "bytes": 20713,
+      "sha256": "b31998473a0fdbb91c925e40c312b653e8c4f58fc8f0b89482206f6302388af2"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 36672,
-      "sha256": "1ada7847e50a28fc1c116486508216b8d8d59552c463f4e7e3bc447fd04232a9"
+      "bytes": 36692,
+      "sha256": "ba4ad67b70c1c023188b1c388994f5aeaa7eca302956c767491f13ec7269a5a4"
     },
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 168023,
-      "sha256": "2c217210fb049ba804bad013c79b7797a79be9c928e2569d1add3c14492ce404"
+      "bytes": 168057,
+      "sha256": "6e4547f4eb4342cfcc630a061b6056f95af92d7dd769eba3995678114bacd29d"
     },
     {
       "path": "apple-touch-icon.png",
@@ -26421,20 +26421,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 14035,
-      "sha256": "9e9fa016e4203f99cc5ed9ce5de9a7dc2eb2c75d1751e4a161818c7f0e3a2548"
+      "bytes": 14067,
+      "sha256": "567c11e65619c7690eeab326a1dc1b308f8765e2577ebac69b1219eef3ba44fb"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 52441,
-      "sha256": "1b6fe61249a37b44d0e65e2c83b56be3279b33e6fb481741bbb7293231c46603"
+      "bytes": 52473,
+      "sha256": "6f3f9c584b473321026c156446d2fddf7c6a0f605b7740d22b5b69131f84a633"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 90298,
-      "sha256": "1241be69d4728424d2a183fe4dda98fad77445ef633e861b8750da9ea4705794"
+      "bytes": 90334,
+      "sha256": "f98ec06ebe5755135adec49a5ee9ef72c8ef45c43f0dcccfeb41f254f166e2fa"
     },
     {
       "path": "cloudflare/ai-builder-core.js",
@@ -26505,8 +26505,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 15908,
-      "sha256": "da35b9cba4351e305f19373edb5e860496a922f3122bef4d1ea56f3dc8077555"
+      "bytes": 15942,
+      "sha256": "f0602dfb1bacfb08d6f131ae9f25d5b71e3540b6ee040b8d7baa8705679615d0"
     },
     {
       "path": "configuracion-cloudinary.md",
@@ -26517,8 +26517,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 18709,
-      "sha256": "48f0b4f5270771152734fad442b8de21b59da8592710198b8243326776d7b636"
+      "bytes": 18741,
+      "sha256": "b437d62206b88831ddf5b6f222d2399ec4fd344291c6bccc0cf99506dc75de29"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -27081,8 +27081,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 17380,
-      "sha256": "10f93754ac99c967a81f54f4d2b2cdadbe340b5962010cc33f1482cab76db0aa"
+      "bytes": 17412,
+      "sha256": "845dc1dace511c6e83260e0d6778adf4a3bb44f9d8d9704323c799086aa2ddc6"
     },
     {
       "path": "favicon-16x16.png",
@@ -27369,8 +27369,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 44297,
-      "sha256": "d91512ff7a9ddba25e91db3b0a8defb02bdf404020c25ba396caaffdb517efc8"
+      "bytes": 44335,
+      "sha256": "b90615c6883e14f24e0c5dbcd29023f9da2fd23cd412f46efbf7c29df06ff02a"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -28455,8 +28455,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 48060,
-      "sha256": "9625afe889b330c3a2d45eaaefe1a73a3e679a32b5d9a7e091a6696bab621955"
+      "bytes": 48100,
+      "sha256": "1e07a86fed37d9aea268ed1796183b90648559ac114968fc9121162ce05945df"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -28641,8 +28641,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1751,
-      "sha256": "6fac7f87224504f656d740be6ef1925fdfaf365f1f977b12eaffd7db358f8ee0"
+      "bytes": 1759,
+      "sha256": "f2ee6285cd8260244f81e0e100c8e37eaae068017bf6449b401a8ed52aaec8c4"
     },
     {
       "path": "package-lock.json",
@@ -28659,8 +28659,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 31651,
-      "sha256": "264d001090d2fd1b637275b6df3c576ae8dace8243fe3836cb015857d2b6bbd6"
+      "bytes": 31685,
+      "sha256": "cf3d7b65df404d864c365d78321f6281e57d382e95ee8daa6305fc9a5a006db5"
     },
     {
       "path": "playwright.config.js",
@@ -28671,20 +28671,20 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 15884,
-      "sha256": "1314639ec76727b06dfccc509245c1ad0177b9e6d0c04145cf559d48d0d9ed28"
+      "bytes": 15916,
+      "sha256": "7beda56215a5d53d1c926def3906b4195ca1dcbac7ec840ff0b40d8d2d9839ce"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 17942,
-      "sha256": "aeb1d31b530a9cad1a3b8c4fdb3c71949fafa222eb37f148737b6183432329e3"
+      "bytes": 17974,
+      "sha256": "e0d598122531a0a55746e90aa4843ddd86a5ecdd748bfa6564809a799faadcf4"
     },
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 20726,
-      "sha256": "78682825ff20116291646711ee131a51d8c07aa0b90859848eaf16b0ab1cfc17"
+      "bytes": 20758,
+      "sha256": "10168ece569a53c0cc6f824bbed5615531adc7420722e74d11856d5920adc425"
     },
     {
       "path": "robots.txt",
@@ -29433,8 +29433,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 15634,
-      "sha256": "813e74708d253a308d1c5666baa6d959b55c78705db4e23e9440eb12f9a8ccfa"
+      "bytes": 15666,
+      "sha256": "16ce805146dd0931beee83c9d2cff481a6bc9ac357fb74d2732d6efa69fbda18"
     },
     {
       "path": "tests/ai-builder/ai-builder-contract.test.mjs",
