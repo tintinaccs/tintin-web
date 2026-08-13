@@ -345,7 +345,9 @@ export async function firestoreAdminCommit(env, writes) {
   const body = {
     writes: (Array.isArray(writes) ? writes : []).map(write => {
       const path = String(write?.path || '');
-      if (!/^[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+$/.test(path)) throw new Error('Ruta de documento inválida para commit');
+      if (!/^(?:[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+)(?:\/[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+)*$/.test(path)) {
+        throw new Error('Ruta de documento inválida para commit');
+      }
       const currentDocument = write.currentDocument && typeof write.currentDocument === 'object'
         ? { currentDocument: write.currentDocument }
         : {};

@@ -2,7 +2,7 @@
 'use strict';
 if(window.TintinPageAuditFixBooted)return;
 window.TintinPageAuditFixBooted=true;
-var VERSION='tintin-20260810-fast-nav-2';
+var VERSION='tintin-20260813-products-unified-1';
 var WA_EXCLUDE='.tt-wa-float,.tt-tabbar,.tt-privacy-consent,.tt-search-panel,.tt-cart-drawer,.tt-collections-sheet,.tt-header';
 var WA_PATH=(location.pathname||'').toLowerCase().replace(/\/+$/,'');
 var WA_REQUIRED_EVENT=/\/(?:terminos|privacidad)(?:\.html)?$/.test(WA_PATH)

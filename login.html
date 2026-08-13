@@ -6,7 +6,7 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2"></script>
   <script src="js/cargador-pagina.js?v=tintin-20260812-apariencia-seleccion-1"></script>
-  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260810-fast-nav-2" defer></script>
+  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260810-global-studio-7" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -279,7 +279,7 @@ function errMsg(code) {
 // destino por defecto en vez de redirigir a un sitio ajeno tras un login real.
 function safeLocalRedirect(value) {
   const v = String(value || '');
-  return /^[a-zA-Z0-9_-]+\.html$/.test(v) ? v : '';
+  return /^[a-zA-Z0-9_-]+\.html(?:\?[a-zA-Z0-9_=&%.-]*)?$/.test(v) ? v : '';
 }
 
 async function redirectByRole(role, email, options = {}) {
@@ -953,7 +953,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
 };
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script src="tienda.js?v=tintin-20260810-fast-nav-2" defer></script>
+<script src="tienda.js?v=tintin-20260813-products-unified-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

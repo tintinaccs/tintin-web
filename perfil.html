@@ -6,7 +6,7 @@
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2"></script>
   <script src="js/cargador-pagina.js?v=tintin-20260812-apariencia-seleccion-1"></script>
-  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260810-fast-nav-2" defer></script>
+  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260810-global-studio-7" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -257,6 +257,13 @@
     </div>
   </div>
 
+  <div class="perfil-card" id="perfil-favorites-card">
+    <div class="perfil-body">
+      <div class="perfil-section-title">Mis favoritos</div>
+      <div id="perfil-favorites-list"><div style="text-align:center;color:var(--text-muted);padding:16px;font-size:13px">Cargando favoritos...</div></div>
+    </div>
+  </div>
+
   <!-- Rol (solo si no es cliente) -->
   <div class="perfil-card" id="perfil-role-card" style="display:none">
     <div class="perfil-body">
@@ -309,7 +316,7 @@
 
 
 <!-- Scripts -->
-<script src="tienda.js?v=tintin-20260810-fast-nav-2"></script>
+<script src="tienda.js?v=tintin-20260813-products-unified-1"></script>
 
 <script type="module">
 import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4";
@@ -636,6 +643,8 @@ async function loadUserOrders(user) {
 }
 </script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260813-participacion-1"></script>
+<script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20260813-participacion-1"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260726-session-guard-1"></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>

@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260810-fast-nav-2';
+const VERSION = 'tintin-20260813-products-unified-1';
 const LOADER_VERSION = 'tintin-20260812-apariencia-seleccion-1';
 const PUBLIC_SHELL_VERSION = 'tintin-20260810-global-studio-7';
 const NAV_ENTRY_VERSION = 'tintin-20260811-cls-header-reserve-1';

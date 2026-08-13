@@ -110,7 +110,7 @@ export async function requireSuperAdmin(request) {
     throw new Error('Solo el Super Admin puede administrar imágenes');
   }
 
-  return { uid: String(user.localId), email };
+  return { uid: String(user.localId), email, idToken: token };
 }
 
 export function getCloudinaryConfig(env = {}) {

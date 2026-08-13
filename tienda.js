@@ -781,6 +781,7 @@ function renderProductCardMarkup(p, options = {}) {
         <div class="tt-product-cat">${escapeHtml(p.category || p.cat || '')}</div>
         <h3 class="tt-product-name"><a href="${productHref}">${safeName}</a></h3>
         <div class="tt-product-price">${formatPrice(p.price)}</div>
+        <div data-review-rating hidden style="font-size:12px;color:#ad3f67;font-weight:700;margin-top:4px"></div>
         <div class="tt-product-actions">
           <a href="${productHref}" class="tt-btn tt-btn-sm">${primaryLabel}</a>
           ${secondaryAction}
@@ -1165,6 +1166,21 @@ function _renderProductDetail(product) {
       descEl.textContent = '';
       descEl.style.display = 'none';
     }
+  }
+  const specsEl = document.getElementById('product-specifications');
+  if (specsEl) {
+    const specs = [
+      ['Material', product.material],
+      ['Medidas', product.measurements],
+      ['Color / acabado', product.colorFinish],
+      ['Cuidados', product.care],
+      ['Resistencia al agua', product.waterResistance],
+      ['Garantía', product.warranty],
+      ['Talle / ajuste', product.sizeFit],
+      ['Contenido del paquete', product.packageContents],
+    ].filter(([, value]) => value && String(value).trim());
+    specsEl.hidden = specs.length === 0;
+    specsEl.innerHTML = specs.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(sanitizePlainText(value, 500))}</dd></div>`).join('');
   }
   if (badgeEl) {
     if (product.badge) { badgeEl.textContent = product.badge; badgeEl.style.display = 'inline-block'; }

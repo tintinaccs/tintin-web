@@ -51,6 +51,8 @@ export async function onRequest(context) {
       headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
       body: JSON.stringify({
         action: 'syncProducts',
+        sheetName: 'Productos',
+        schemaVersion: 2,
         productIds,
         idToken: String(payload.idToken),
       }),

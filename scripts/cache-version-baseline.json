@@ -15,6 +15,10 @@
     "version": "tintin-20260812-apariencia-responsive-1",
     "sha256": "5c62c524e16d395d39f5992420f36e126ee260faad26ac2d3f1e1e88341a06d2"
   },
+  "css/admin/participacion-admin.css": {
+    "version": "tintin-20260813-participacion-1",
+    "sha256": "7d2118e67ebcc6c3b0c139781be780748e306ebb47afd2a37cac034e5e047669"
+  },
   "css/admin/visual-studio-global-admin.css": {
     "version": "tintin-20260810-global-studio-3",
     "sha256": "ddf1bf30c135a116914ef534429b8fb819fa5df5f8167e7172e7f31c3b572cb5"
@@ -132,12 +136,16 @@
     "sha256": "bf0b574259ff20fa08df7df377896870c6ccff1c9b51d1a05fc069bca2be870a"
   },
   "css/pages/product/product-extras.css": {
-    "version": "tintin-20260811-cls-desktop-stable-2",
-    "sha256": "4f6514a040beba9881159e5fcb00228112b554b0406c37f807631729c738e262"
+    "version": "tintin-20260813-products-unified-1",
+    "sha256": "5b97054d0f7bcce8a40779f05767edef55d928b5ecad52c8e1d4b7ce88108fd6"
   },
   "css/pages/product/product-maintenance.css": {
     "version": "tintin-20260809-loader-motion-fix-1",
     "sha256": "272a6ec18e9bc3aa757c3a2008af2e3a7fdacdf7448acdaef57c14de80b375b5"
+  },
+  "css/pages/product/resenas-producto.css": {
+    "version": "tintin-20260813-reviews-1",
+    "sha256": "d0a171cecf034e6004299807486a21b6dd682ded186545b5ae926a4d7921172e"
   },
   "css/quality/accesibilidad-global.css": {
     "version": "tintin-20260731-phase10-a11y-1",
@@ -188,8 +196,8 @@
     "sha256": "19a7b83d603358bbbc225b5c07d056c0aa8aecbc5881bfa4ea882892c0f0bc8d"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20260812-apariencia-contenido-1",
-    "sha256": "251498de4cc8bca5ee1e6ad5e71566ce1cae4ebbb014dc578c5bdb2a2673f2a8"
+    "version": "tintin-20260813-products-unified-1",
+    "sha256": "86ddbb3879e2b179f36782b1d6779caa162c6c52ee4a741a798b051b7ed413bd"
   },
   "js/admin/ai-builder-admin.js": {
     "version": "tintin-20260716-cloudinary-fix-1",
@@ -222,6 +230,10 @@
   "js/admin/orders/pedidos-superadmin-crud.js": {
     "version": "tintin-20260812-tinped-crud-2",
     "sha256": "c36f9f0254b8ecaad509228ce39b2ffe65fb855b53746de171f490bf3551ae2c"
+  },
+  "js/admin/participacion/gestion-participacion-admin.js": {
+    "version": "tintin-20260813-participacion-1",
+    "sha256": "f992294c72481a5983ff786e51e89a51b38269090c5c6aeade1915188396fdbb"
   },
   "js/admin/products/biblioteca-multimedia-admin.js": {
     "version": "tintin-20260716-cloudinary-fix-1",
@@ -273,7 +285,7 @@
   },
   "js/cargador-mantenimiento-pagina.js": {
     "version": "tintin-20260730-stock-visibility-1",
-    "sha256": "c1e690eea054788dcdf8ca3ad898f0183680004f35b711bb083c6898b871251d"
+    "sha256": "2ddd31d9c3a77d21a6063bbf861c96aefa92c9c60a1882adaea34a464383dbde"
   },
   "js/cargador-pagina.js": {
     "version": "tintin-20260812-apariencia-seleccion-1",
@@ -314,6 +326,10 @@
   "js/components/contact/whatsapp.js": {
     "version": "tintin-20260716-cloudinary-fix-1",
     "sha256": "2fde332fbc6a57b1d6b793bd0de05c96b131d72eef8721ad4dad3a223476242e"
+  },
+  "js/components/favorites/sincronizacion-favoritos.js": {
+    "version": "tintin-20260813-participacion-1",
+    "sha256": "3743311d3397b44e3c8325bbb9aa6c531e62b7f4040832c21d8a0b33f101ccd2"
   },
   "js/components/forms/entrada-codigo-otp.js": {
     "version": "tintin-20260803-otp-input-1",
@@ -376,12 +392,16 @@
     "sha256": "c15de71a164aa1d8e729a12243b2cab67f714e992983d839f2c5f38c8ffadb35"
   },
   "js/components/navigation/compatibilidad/inicio-control-paneles.js": {
-    "version": "tintin-20260810-fast-nav-2",
+    "version": "tintin-20260811-cls-desktop-stable-2",
     "sha256": "ee01b238964e47e928d324797b4719a5769ac9712eb246909eab22014a88b16c"
   },
   "js/components/navigation/entrada-navegacion-publica.js": {
     "version": "tintin-20260811-cls-header-reserve-1",
     "sha256": "ed1bdb713c55747475d5735ecbc2c8f2b8eed5d5ac455ed842e27fa4af1d98f5"
+  },
+  "js/components/reviews/valoraciones-catalogo.js": {
+    "version": "tintin-20260813-reviews-1",
+    "sha256": "88a0576320cd148d4f536a5176532c1229253d50f28c52fee263d0b621364ad9"
   },
   "js/components/welcome/configuracion-bienvenida.js": {
     "version": "tintin-20260812-welcome-media-1",
@@ -464,8 +484,8 @@
     "sha256": "2eec0eedf622af18599bb6c02d2987738977bedce1616f0c47ac23c53d9ae0ae"
   },
   "js/core/store/estado-productos.js": {
-    "version": "tintin-20260730-stock-visibility-1",
-    "sha256": "1561049fcfcbf1d460378e8b40d13f28a6584a62c9f804a5aa673bf80156debd"
+    "version": "tintin-20260813-products-unified-1",
+    "sha256": "4ef291955265b418beb20f20cfb1d08f825f6173ba78e9318420776b16b5c1dd"
   },
   "js/core/store/modelo-inventario.mjs": {
     "version": "tintin-20260720-critical-healing-1",
@@ -532,7 +552,7 @@
     "sha256": "eb8305b8c6eb38b57006062fa48c27f7970b275c08ebd5eef28176e7d652d92c"
   },
   "js/pages/catalog/politica-visibilidad-catalogo.js": {
-    "version": "tintin-20260730-stock-visibility-1",
+    "version": "tintin-20260813-products-unified-1",
     "sha256": "702fee29b9a1249f6c6a34610b2c7c195f46e605dc8b171005c62a44248bfd12"
   },
   "js/pages/catalog/prioridad-stock-catalogo.js": {
@@ -571,6 +591,10 @@
     "version": "tintin-20260716-cloudinary-fix-1",
     "sha256": "35c533c512ea95c036d3d766e96e545c6f15ee0e94f04a5cc42aaac330a35291"
   },
+  "js/pages/product/resenas-producto.js": {
+    "version": "tintin-20260813-reviews-1",
+    "sha256": "4878dd4f1ea821a9db2bc033563751ad7b87ff9277d3c3a57ba95d7c563b41e2"
+  },
   "js/pages/product/seleccion-producto.js": {
     "version": "tintin-20260716-cloudinary-fix-1",
     "sha256": "da9c600f592cc43432df24e3819b7a8cab3350def3e954605c568ad262384ea8"
@@ -582,6 +606,10 @@
   "js/pages/profile/control-acceso-perfil.js": {
     "version": "tintin-20260803-profile-gate-1",
     "sha256": "c6a7405f13b8a1f3955185eb5e2bb81757b42277d5397c03452e2caee9f6713f"
+  },
+  "js/pages/profile/favoritos-perfil.js": {
+    "version": "tintin-20260813-participacion-1",
+    "sha256": "b2e2f7be11f1766556c6d2ad770061188e67267f289ca6e3dac397978d1256d0"
   },
   "js/quality/accesibilidad-global.js": {
     "version": "tintin-20260731-phase10-a11y-1",
@@ -604,7 +632,7 @@
     "sha256": "1cea37b7f24b689a349cd3f0ec2c8c2f4bf763b0af124661d58005817034e292"
   },
   "tienda.js": {
-    "version": "tintin-20260810-fast-nav-2",
-    "sha256": "ae1d2b3b940329453046412727bbfe94de33fdeab4c1dec4d3983a1512e0593f"
+    "version": "tintin-20260813-products-unified-1",
+    "sha256": "139f6aaa1ed139bad5a3e8b7bf795236c14ca4b33b56f6df0f998862d5f490ab"
   }
 }
