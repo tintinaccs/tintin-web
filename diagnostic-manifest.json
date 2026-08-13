@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-13T00:35:13.901Z",
-  "sourceFingerprint": "62f4c2dc3a25aa7561fe1478c4679343ef245d6483b8dfa0f572044e7e4c9b13",
+  "generatedAt": "2026-08-13T00:47:26.321Z",
+  "sourceFingerprint": "37348c51457c49264c557874788b3c057acf71e0cb51e24bb52ce7421ff57761",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 599,
     "textFiles": 567,
-    "totalBytes": 6356358,
+    "totalBytes": 6359909,
     "pages": 18,
     "modules": 366
   },
@@ -1786,7 +1786,7 @@
         "viewer"
       ],
       "bytes": 161846,
-      "sha256": "7ffe0830a1e46d0b6650f5fb30265243c4212840e8dd4d472e2a22f7a1f0639f",
+      "sha256": "7171c505917cb492b84f2a77a35f10fae6562bbb19e786aa2ccc55db9d4233aa",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1835,7 +1835,7 @@
           "line": 1910
         },
         {
-          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260812-studio-tres-paneles-1",
+          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260812-preview-arriba-real-1",
           "target": "js/admin/appearance/editor-visual-admin.js",
           "line": 1911
         },
@@ -2042,7 +2042,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260812-studio-tres-paneles-1",
+          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260812-preview-arriba-real-1",
           "target": "js/admin/appearance/editor-visual-admin.js",
           "line": 1911,
           "exists": true
@@ -17038,7 +17038,7 @@
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
       "bytes": 45212,
-      "sha256": "d15acbffb9218b6f9f9b894e954f8daefd3ab35b3f15b9be9405aff365838a6d",
+      "sha256": "8d1cb38581419038c7b998d87c48c24c0629261e58514c51e22c09b6500033c8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21262,8 +21262,8 @@
     },
     {
       "path": "scripts/auditar-admin-apariencia-unificada.js",
-      "bytes": 3358,
-      "sha256": "b7bd5b50dae263f9735d481a660d9dc8cc421ab9a5de86afaf5327601a58f57a",
+      "bytes": 3337,
+      "sha256": "df56acfe800ae8e2e520c44512a79d23036fe1b82a953368961f19bd46bb8dcb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24919,8 +24919,8 @@
     },
     {
       "path": "tests/visual-builder/apariencia-preview-abajo.spec.js",
-      "bytes": 6320,
-      "sha256": "ccfede808c340a74744a56603d33778a5f2b3f4f5691cc3a40129a3aa11e1906",
+      "bytes": 7183,
+      "sha256": "6007c9ccd2fc6d3337200696d52a1daaba3ecb52e7e20e0c85a62be312bdd7e5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25442,7 +25442,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 161846,
-      "sha256": "7ffe0830a1e46d0b6650f5fb30265243c4212840e8dd4d472e2a22f7a1f0639f"
+      "sha256": "7171c505917cb492b84f2a77a35f10fae6562bbb19e786aa2ccc55db9d4233aa"
     },
     {
       "path": "apple-touch-icon.png",
@@ -25753,8 +25753,8 @@
     {
       "path": "css/admin/visual-studio-v2.css",
       "extension": ".css",
-      "bytes": 12361,
-      "sha256": "4237f857f34926652b8c281da2e08015d3279d4d897c431f7fcb8e1e997c9199"
+      "bytes": 15016,
+      "sha256": "62995230d525c5d7d7ec1d5e3022da68cfe9853ce0b013c83a933d36ae5e3d47"
     },
     {
       "path": "css/components/ai-builder-public.css",
@@ -26546,7 +26546,7 @@
       "path": "js/admin/appearance/editor-visual-admin.js",
       "extension": ".js",
       "bytes": 45212,
-      "sha256": "d15acbffb9218b6f9f9b894e954f8daefd3ab35b3f15b9be9405aff365838a6d"
+      "sha256": "8d1cb38581419038c7b998d87c48c24c0629261e58514c51e22c09b6500033c8"
     },
     {
       "path": "js/admin/appearance/visual-studio-global-admin.js",
@@ -27769,8 +27769,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 9881,
-      "sha256": "8a63319d890e6e30b0685f1adf726c493898bde774a059530c83ab203b710e2c"
+      "bytes": 9935,
+      "sha256": "22ca4abd2ca17f15e6fe6f455355ea289662f5a9fbc9e11d0764f452c31ab01a"
     },
     {
       "path": "perfil.html",
@@ -27835,8 +27835,8 @@
     {
       "path": "scripts/auditar-admin-apariencia-unificada.js",
       "extension": ".js",
-      "bytes": 3358,
-      "sha256": "b7bd5b50dae263f9735d481a660d9dc8cc421ab9a5de86afaf5327601a58f57a"
+      "bytes": 3337,
+      "sha256": "df56acfe800ae8e2e520c44512a79d23036fe1b82a953368961f19bd46bb8dcb"
     },
     {
       "path": "scripts/auditar-admin-commerce-shopify.js",
@@ -28418,7 +28418,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 27716,
-      "sha256": "acca82486e3d50b30b466a1baab12bd1b16bafc824da13125a91dc189a09cc7f"
+      "sha256": "bcaec9bf30f9ab454f487975f3391d26b0ffbbc05698b68cd2cb30f81a9f9393"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -28735,8 +28735,8 @@
     {
       "path": "tests/visual-builder/apariencia-preview-abajo.spec.js",
       "extension": ".js",
-      "bytes": 6320,
-      "sha256": "ccfede808c340a74744a56603d33778a5f2b3f4f5691cc3a40129a3aa11e1906"
+      "bytes": 7183,
+      "sha256": "6007c9ccd2fc6d3337200696d52a1daaba3ecb52e7e20e0c85a62be312bdd7e5"
     },
     {
       "path": "tests/visual-builder/visual-builder-contract.test.mjs",
