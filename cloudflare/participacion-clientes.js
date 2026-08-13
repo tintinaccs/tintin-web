@@ -39,15 +39,15 @@ function customerName(profile, email) {
     clean(String(email || '').split('@')[0], 120) || 'Clienta Tintin';
 }
 
-function maskWord(word) {
+function maskWord(word, compact = false) {
   const chars = Array.from(clean(word, 80));
   if (!chars.length) return '';
   if (chars.length <= 2) return `${chars[0]}*`;
-  return `${chars[0]}${'*'.repeat(Math.max(3, chars.length - 2))}${chars.at(-1)}`;
+  return `${chars[0]}${'*'.repeat(compact ? 3 : Math.max(3, chars.length - 2))}${chars.at(-1)}`;
 }
 
 export function publicCustomerName(realName) {
-  return clean(realName, 160).split(/\s+/).filter(Boolean).map(maskWord).join(' ');
+  return clean(realName, 160).split(/\s+/).filter(Boolean).map((word, index) => maskWord(word, index === 0)).join(' ');
 }
 
 async function readContext(env, user, productId) {
