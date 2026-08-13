@@ -5072,6 +5072,7 @@ window.prodNuevo = function() {
 };
 
 function _prodNuevoNow() {
+  document.getElementById('prod-inventory-fields').style.display = currentRole === 'superadmin' ? 'contents' : 'none';
   document.getElementById('prod-id').value = '';
   document.getElementById('prod-form-title').textContent = 'Nuevo producto';
   document.getElementById('prod-name').value = '';
@@ -5119,6 +5120,7 @@ function _prodEditarNow(docId) {
   const p = _allProducts.find(x => x._docId === docId);
   if (!p) return;
   const inventory = _productInventoryById.get(docId) || {};
+  document.getElementById('prod-inventory-fields').style.display = currentRole === 'superadmin' ? 'contents' : 'none';
   document.getElementById('prod-id').value = docId;
   document.getElementById('prod-form-title').textContent = 'Editar producto';
   document.getElementById('prod-name').value = p.name || '';
@@ -5323,7 +5325,9 @@ async function prodGuardar() {
     if (docId) {
       const oldProd = _allProducts.find(p => p._docId === docId);
       await updateDoc(doc(db, 'products', docId), data);
-      await setDoc(doc(db, 'productInventory', docId), inventoryData, { merge: true });
+      if (currentRole === 'superadmin') {
+        await setDoc(doc(db, 'productInventory', docId), inventoryData, { merge: true });
+      }
       await pushProductsToSheets([docId]);
       const changes = [];
       if (oldProd) {
@@ -5349,7 +5353,9 @@ async function prodGuardar() {
       data.createdAt = serverTimestamp();
       const newRef = doc(collection(db, 'products'));
       await setDoc(newRef, data);
-      await setDoc(doc(db, 'productInventory', newRef.id), inventoryData, { merge: true });
+      if (currentRole === 'superadmin') {
+        await setDoc(doc(db, 'productInventory', newRef.id), inventoryData, { merge: true });
+      }
       await pushProductsToSheets([newRef.id]);
       logAudit('crear_producto', 'producto', newRef.id, name, `Precio: ${data.price} · Stock: ${data.stock}`);
       toast('Producto creado');

@@ -32,7 +32,7 @@ El Super Admin se reconoce por la cuenta oficial. Los demás roles operativos se
   la sincronización con Google Sheets; no es el remitente de pedidos.
 - Google Apps Script mantiene el espejo operativo de catálogo y clientas en
   Google Sheets. Firestore sigue siendo la fuente de verdad: las ediciones de
-  `Catálogo web` usan el valor capturado por el evento `onEdit`, no una lectura
+  `Productos` usan el valor capturado por el evento `onEdit`, no una lectura
   posterior de la celda, para que un refresco concurrente no restaure el stock
   anterior.
 - `functions/` contiene adaptadores y documentación para funciones privadas opcionales.

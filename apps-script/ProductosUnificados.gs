@@ -166,6 +166,14 @@ function tintinSyncProductsFromFirestore_(body) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+// Llamar desde el doPost existente. Devuelve null cuando la solicitud no
+// pertenece al sincronizador de productos y permite continuar las demás rutas.
+function tintinHandleUnifiedProductsPost_(body) {
+  if (!body || body.action !== 'syncProducts') return null;
+  return tintinSyncProductsFromFirestore_(body);
+}
+
 // Enlazar desde el doPost existente antes de cualquier ruta heredada:
-// if (body.action === 'syncProducts') return tintinSyncProductsFromFirestore_(body);
+// var unifiedProductsResponse = tintinHandleUnifiedProductsPost_(body);
+// if (unifiedProductsResponse) return unifiedProductsResponse;
 // Esta ruta escribe solo en Productos y nunca vuelve a crear Catálogo web.
