@@ -2,7 +2,7 @@ import {
   jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import {
-  addCustomerReply, createReview, editOwnReview, getOwnReview, toggleFavorite,
+  addCustomerReply, createReview, editOwnReview, getOwnReview, toggleFavorite, engagementOwnReviewView,
 } from '../../cloudflare/participacion-clientes.js';
 import { syncEngagementToSheets } from '../../cloudflare/sincronizacion-participacion-sheets.js';
 
@@ -25,14 +25,16 @@ export async function onRequest(context) {
     if (!raw || new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) throw new Error('Solicitud vacía o demasiado grande');
     const input = JSON.parse(raw);
     let result;
-    if (input.action === 'createReview') result = { review: await createReview(env, user, input) };
-    else if (input.action === 'editReview') result = { review: await editOwnReview(env, user, input) };
-    else if (input.action === 'replyReview') result = { review: await addCustomerReply(env, user, input) };
+    let privateReview = null;
+    if (input.action === 'createReview') privateReview = await createReview(env, user, input);
+    else if (input.action === 'editReview') privateReview = await editOwnReview(env, user, input);
+    else if (input.action === 'replyReview') privateReview = await addCustomerReply(env, user, input);
     else if (input.action === 'toggleFavorite') result = await toggleFavorite(env, user, input);
     else throw new Error('Acción no permitida');
+    if (privateReview) result = { review: engagementOwnReviewView(privateReview) };
     const syncEvent = input.action === 'toggleFavorite'
       ? { type: 'like', operation: result.selected ? 'upsert' : 'delete', record: result.record }
-      : { type: 'review', operation: 'upsert', record: result.review };
+      : { type: 'review', operation: 'upsert', record: privateReview };
     context.waitUntil?.(syncEngagementToSheets(env, user.idToken, syncEvent));
     return jsonResponse({ ok: true, ...result }, 200, origin, request.url);
   } catch (error) {

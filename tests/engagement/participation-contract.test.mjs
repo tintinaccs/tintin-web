@@ -1,12 +1,23 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { publicCustomerName } from '../../cloudflare/participacion-clientes.js';
+import { engagementOwnReviewView, publicCustomerName } from '../../cloudflare/participacion-clientes.js';
 
 const read = path => readFile(new URL(`../../${path}`, import.meta.url), 'utf8');
 
 test('public review names follow the required mask', () => {
   assert.equal(publicCustomerName('Antonia Peralta'), 'A***a P*****a');
+});
+
+test('customer responses never expose private review fields', () => {
+  const view = engagementOwnReviewView({
+    reviewId: 'r1', productId: 'p1', rating: 5, comment: 'Excelente', editCount: 1,
+    visible: true, deleted: false, realName: 'Antonia Peralta', email: 'antonia@example.com',
+    history: [{ comment: 'Anterior' }], conversation: [], createdAt: new Date(), updatedAt: new Date(),
+  });
+  assert.equal(view.realName, undefined);
+  assert.equal(view.email, undefined);
+  assert.equal(view.history, undefined);
 });
 
 test('engagement writes stay behind server APIs', async () => {
