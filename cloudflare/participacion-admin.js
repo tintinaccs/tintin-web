@@ -111,6 +111,7 @@ export async function markLikeSeen(env, likeId) {
   const id = safeId(likeId, 'Me gusta');
   const document = await firestoreAdminGet(env, `likeRecords/${id}`);
   if (!document) return null;
-  await firestoreAdminMerge(env, `likeRecords/${id}`, encodeFirestoreFields({ unread: false, updatedAt: new Date() }));
-  return decoded(document);
+  const updated = { ...decoded(document), unread: false, updatedAt: new Date() };
+  await firestoreAdminMerge(env, `likeRecords/${id}`, encodeFirestoreFields({ unread: false, updatedAt: updated.updatedAt }));
+  return updated;
 }

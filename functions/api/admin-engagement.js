@@ -17,6 +17,9 @@ export async function onRequest(context) {
     const input = JSON.parse(raw);
     if (input.action === 'likeSeen') {
       const record = await markLikeSeen(env, input.likeId);
+      if (record) context.waitUntil?.(syncEngagementToSheets(env, actor.idToken, {
+        type: 'like', operation: 'upsert', record,
+      }));
       return jsonResponse({ ok: true, record }, 200, origin, request.url);
     }
     const record = await adminReviewAction(env, actor, input);
