@@ -7,6 +7,7 @@ import {
   mergeContent, sanitizeContentHref, setNested,
 } from '../../core/store/esquema-contenido.js?v=tintin-20260810-visual-studio-v2-3';
 import { chooseRandomPreviewProduct, productPreviewTarget } from './preview-dynamic-targets.js?v=tintin-20260812-preview-dinamico-1';
+import { installWorkspaceSplitters } from './workspace-splitters.js?v=tintin-20260813-apariencia-splitters-1';
 
 const $ = id => document.getElementById(id);
 const clone = value => JSON.parse(JSON.stringify(value));
@@ -119,7 +120,7 @@ function ensureStudioUi() {
   const editor = $('visual-editor'); if (!editor || editor.dataset.studioReady === '1') return;
   editor.dataset.studioReady='1'; editor.classList.add('visual-studio-v2'); sectionListNode=$('visual-section-list');
   if (!document.getElementById('visual-studio-v2-css')) {
-    const link=document.createElement('link'); link.id='visual-studio-v2-css'; link.rel='stylesheet'; link.href='css/admin/visual-studio-v2.css?v=tintin-20260812-studio-tres-paneles-1'; document.head.appendChild(link);
+    const link=document.createElement('link'); link.id='visual-studio-v2-css'; link.rel='stylesheet'; link.href='css/admin/visual-studio-v2.css?v=tintin-20260813-apariencia-horizontal-1'; document.head.appendChild(link);
   }
   const pageLabel=editor.querySelector('label[for="visual-page"]'); pageLabel?.classList.add('visual-studio-hidden'); $('visual-page')?.classList.add('visual-studio-hidden');
   const sidebar=editor.querySelector('.visual-editor-sidebar');
@@ -142,6 +143,7 @@ function ensureStudioUi() {
   const grid=make('div','visual-library-grid'); grid.id='visual-library-grid'; panel.append(head,search,grid); overlay.appendChild(panel); editor.appendChild(overlay); overlay.addEventListener('click',event=>{if(event.target===overlay)toggleLibrary(false);});
   editor.addEventListener('dragstart',handleDragStart); editor.addEventListener('dragover',handleDragOver); editor.addEventListener('drop',handleDrop);
   editor.addEventListener('dragend',()=>{draggedEntry=null;document.querySelectorAll('.visual-drag-over,.is-dragging').forEach(node=>node.classList.remove('visual-drag-over','is-dragging'));});
+  installWorkspaceSplitters(editor);
 }
 function toggleLibrary(open) { libraryOpen=Boolean(open); const overlay=$('visual-library-overlay'); if(!overlay)return; overlay.hidden=!libraryOpen; if(libraryOpen){renderLibrary();setTimeout(()=>$('visual-library-search')?.focus(),20);} }
 function renderLibrary() {
