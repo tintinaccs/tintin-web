@@ -60,6 +60,8 @@ function tintinUpsert_(sheet, row) {
 }
 
 function tintinHandleEngagement_(payload) {
+  var expectedSecret = PropertiesService.getScriptProperties().getProperty('SHEETS_ENGAGEMENT_SECRET');
+  if (!expectedSecret || String(payload.syncSecret || '') !== expectedSecret) return tintinJson_({ ok: false, error: 'unauthorized_source' });
   var user = tintinVerifyUser_(payload.idToken);
   var event = payload.event || {};
   var record = event.record || {};

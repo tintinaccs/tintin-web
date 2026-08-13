@@ -176,7 +176,7 @@ export async function editOwnReview(env, user, input) {
   const updated = {
     ...record, rating, comment, editCount: 1, unread: true,
     history: [...(record.history || []), {
-      rating: record.rating, comment: record.comment, changedAt: now, changedBy: 'customer',
+      action: 'customer_edit', rating: record.rating, comment: record.comment, changedAt: now, changedBy: 'customer',
     }].slice(-20),
     updatedAt: now,
   };

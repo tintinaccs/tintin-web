@@ -33,7 +33,7 @@ export async function onRequest(context) {
     const syncEvent = input.action === 'toggleFavorite'
       ? { type: 'like', operation: result.selected ? 'upsert' : 'delete', record: result.record }
       : { type: 'review', operation: 'upsert', record: result.review };
-    context.waitUntil?.(syncEngagementToSheets(user.idToken, syncEvent));
+    context.waitUntil?.(syncEngagementToSheets(env, user.idToken, syncEvent));
     return jsonResponse({ ok: true, ...result }, 200, origin, request.url);
   } catch (error) {
     const conflict = error?.code === 'version_conflict';

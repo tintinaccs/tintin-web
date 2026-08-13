@@ -20,7 +20,7 @@ export async function onRequest(context) {
       return jsonResponse({ ok: true, record }, 200, origin, request.url);
     }
     const record = await adminReviewAction(env, actor, input);
-    context.waitUntil?.(syncEngagementToSheets(actor.idToken, {
+    context.waitUntil?.(syncEngagementToSheets(env, actor.idToken, {
       type: 'review', operation: record.deleted ? 'trash' : 'upsert', record,
     }));
     return jsonResponse({ ok: true, record }, 200, origin, request.url);
