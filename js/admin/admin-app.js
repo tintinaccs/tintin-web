@@ -5036,6 +5036,10 @@ function serializeProductForm() {
     stock: document.getElementById('prod-stock').value,
     imageUrl: document.getElementById('prod-imageUrl').value,
     description: document.getElementById('prod-description').value,
+    material: document.getElementById('prod-material').value,
+    measurements: document.getElementById('prod-measurements').value,
+    care: document.getElementById('prod-care').value,
+    warranty: document.getElementById('prod-warranty').value,
     tags: document.getElementById('prod-tags').value,
     variants: document.getElementById('prod-variants-text').value,
     badge: document.getElementById('prod-badge').value,
@@ -5064,6 +5068,10 @@ function _prodNuevoNow() {
     hint: 'Se muestra en la grilla y la ficha del producto',
   });
   document.getElementById('prod-description').value = '';
+  document.getElementById('prod-material').value = '';
+  document.getElementById('prod-measurements').value = '';
+  document.getElementById('prod-care').value = '';
+  document.getElementById('prod-warranty').value = '';
   document.getElementById('prod-tags').value = '';
   document.getElementById('prod-variants-text').value = '';
   document.getElementById('prod-badge').value = '';
@@ -5102,6 +5110,10 @@ function _prodEditarNow(docId) {
     hint: 'Se muestra en la grilla y la ficha del producto',
   });
   document.getElementById('prod-description').value = p.description || '';
+  document.getElementById('prod-material').value = p.material || '';
+  document.getElementById('prod-measurements').value = p.measurements || '';
+  document.getElementById('prod-care').value = p.care || '';
+  document.getElementById('prod-warranty').value = p.warranty || '';
   document.getElementById('prod-badge').value = p.badge || '';
   document.getElementById('prod-collection').value = p.collection || '';
   document.getElementById('prod-tags').value = Array.isArray(p.tags) ? p.tags.join(', ') : (p.tags || '');
@@ -5232,6 +5244,10 @@ async function prodGuardar() {
     stock: stockValue,
     imageUrl: document.getElementById('prod-imageUrl').value.trim() || null,
     description: document.getElementById('prod-description').value.trim() || '',
+    material: document.getElementById('prod-material').value.trim().slice(0, 240),
+    measurements: document.getElementById('prod-measurements').value.trim().slice(0, 240),
+    care: document.getElementById('prod-care').value.trim().slice(0, 500),
+    warranty: document.getElementById('prod-warranty').value.trim().slice(0, 240),
     tags,
     badge,
     active: document.getElementById('prod-active').checked,
