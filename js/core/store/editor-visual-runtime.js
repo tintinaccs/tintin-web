@@ -406,7 +406,7 @@ export async function initVisualBuilderRuntime(pageId) {
       const section = event.target.closest('[data-tt-visual-section]');
       if (block || section) {
         event.preventDefault(); event.stopPropagation();
-        window.parent.postMessage({ type: 'tintin:visual-select', kind: block ? 'block' : 'section', id: block?.dataset.ttVisualBlock || section?.dataset.ttVisualSection }, location.origin);
+        window.parent.postMessage({ type: 'tintin:visual-select', pageId, kind: block ? 'block' : 'section', id: block?.dataset.ttVisualBlock || section?.dataset.ttVisualSection }, location.origin);
         return;
       }
       if (event.target.closest('a,button,input[type="submit"]')) event.preventDefault();
