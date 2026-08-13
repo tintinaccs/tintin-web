@@ -65,6 +65,33 @@ try {
     exit 0
   }
 
+  Invoke-Git -GitArguments @('fetch', 'origin', 'main') | Out-Null
+
+  $worktreeChanges = @(Invoke-Git -GitArguments @('status', '--porcelain') | Where-Object {
+    -not [string]::IsNullOrWhiteSpace([string]$_)
+  })
+  $stashCreated = $worktreeChanges.Count -gt 0
+  if ($stashCreated) {
+    Invoke-Git -GitArguments @(
+      'stash', 'push', '--include-untracked', '-m', 'tintin-auto-sync-temporal'
+    ) | Out-Null
+  }
+
+  try {
+    Invoke-Git -GitArguments @('rebase', 'origin/main') | Out-Null
+  } catch {
+    & git -C $RepositoryRoot rebase --abort 2>$null
+    if ($stashCreated) {
+      & git -C $RepositoryRoot stash pop 2>$null
+    }
+    throw
+  }
+
+  if ($stashCreated) {
+    Invoke-Git -GitArguments @('stash', 'pop') | Out-Null
+  }
+  Write-SyncLog 'Ultima version de origin/main descargada e integrada.'
+
   Invoke-Git -GitArguments @('add', '-A', '--', '.') | Out-Null
 
   & git -C $RepositoryRoot diff --cached --quiet
