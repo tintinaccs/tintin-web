@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="css/admin/admin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/admin/ai-builder.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/admin/editor-visual.css?v=tintin-20260812-apariencia-responsive-1">
+  <link rel="stylesheet" href="css/admin/participacion-admin.css?v=tintin-20260813-participacion-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -86,6 +87,12 @@
     <button type="button" class="adm-nav-item" data-section="productos">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span> Productos
     </button>
+    <button type="button" class="adm-nav-item" data-section="resenas" id="nav-resenas">
+      <span class="adm-nav-icon" aria-hidden="true">&#9733;</span> Rese&ntilde;as <span class="adm-notification-badge" id="reviews-unread-badge" hidden>0</span>
+    </button>
+    <button type="button" class="adm-nav-item" data-section="me-gusta" id="nav-me-gusta">
+      <span class="adm-nav-icon" aria-hidden="true">&#9825;</span> Me gusta <span class="adm-notification-badge" id="likes-unread-badge" hidden>0</span>
+    </button>
     <button type="button" class="adm-nav-item" data-section="colecciones">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></span> Colecciones
     </button>
@@ -139,6 +146,8 @@
   <button type="button" class="adm-mobile-tab" data-mobile-primary data-section="usuarios" id="mtab-usuarios"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>Usuarios</button>
   <button type="button" class="adm-mobile-tab" data-mobile-primary data-section="pedidos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10V6a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 6v4"/><path d="M12 22v-9"/><path d="M3.29 7L12 12l8.71-5"/><path d="M21 10l-9 5-9-5"/></svg></span>Pedidos</button>
   <button type="button" class="adm-mobile-tab" data-mobile-primary data-section="productos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span>Productos</button>
+  <button type="button" class="adm-mobile-tab" data-section="resenas"><span class="adm-nav-icon" aria-hidden="true">&#9733;</span>Rese&ntilde;as</button>
+  <button type="button" class="adm-mobile-tab" data-section="me-gusta"><span class="adm-nav-icon" aria-hidden="true">&#9825;</span>Me gusta</button>
   <button type="button" class="adm-mobile-tab" data-section="colecciones"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></span>Colecciones</button>
   <button type="button" class="adm-mobile-tab" data-section="importar"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Import</button>
   <a href="admin-images.html" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>Imágenes</a>
@@ -1856,6 +1865,23 @@
     </div>
 
     <!-- ===================== TINTÍN AI BUILDER ===================== -->
+    <div class="adm-section" id="section-resenas">
+      <div class="adm-engagement-toolbar">
+        <input class="adm-input" id="reviews-search" type="search" placeholder="Buscar por clienta, correo, producto o comentario">
+        <select class="adm-select" id="reviews-filter"><option value="all">Todas</option><option value="visible">Visibles</option><option value="hidden">Ocultas</option><option value="deleted">Eliminadas</option></select>
+      </div>
+      <div id="reviews-admin-list" class="adm-engagement-list"><p class="adm-engagement-empty">Cargando rese&ntilde;as...</p></div>
+      <div class="adm-card adm-quick-replies">
+        <div class="adm-card-head"><div class="adm-card-title">Respuestas r&aacute;pidas</div></div>
+        <div class="adm-card-body"><textarea class="adm-input" id="review-quick-replies" rows="5" placeholder="Una respuesta por l&iacute;nea"></textarea><button type="button" class="adm-btn adm-btn-primary" id="save-review-quick-replies">Guardar respuestas</button></div>
+      </div>
+    </div>
+
+    <div class="adm-section" id="section-me-gusta">
+      <div class="adm-engagement-toolbar"><input class="adm-input" id="likes-search" type="search" placeholder="Buscar por clienta, correo o producto"></div>
+      <div id="likes-admin-list" class="adm-engagement-list"><p class="adm-engagement-empty">Cargando Me gusta...</p></div>
+    </div>
+
     <div class="adm-section" id="section-ai-builder">
       <div class="ai-builder-shell">
         <section class="ai-builder-panel" aria-labelledby="ai-builder-title">
@@ -1906,6 +1932,7 @@
 <div class="adm-toast" id="adm-toast"></div>
 
 <script type="module" src="js/admin/admin-app.js?v=tintin-20260812-apariencia-contenido-1"></script>
+<script type="module" src="js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260813-participacion-1"></script>
 <script type="module" src="js/admin/shopify-commerce-admin.js?v=tintin-20260812-trash-aislado-1"></script>
 <script type="module" src="js/admin/ai-builder-admin.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/admin/appearance/editor-visual-admin.js?v=tintin-20260813-apariencia-horizontal-2"></script>

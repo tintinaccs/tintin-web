@@ -490,6 +490,8 @@ const SECTION_LABELS = {
   usuarios: 'Usuarios',
   pedidos: 'Pedidos',
   productos: 'Productos',
+  resenas: 'Reseñas',
+  'me-gusta': 'Me gusta',
   colecciones: 'Colecciones',
   mensajes: 'Mensajes',
   auditoria: 'Auditoría',
@@ -511,6 +513,8 @@ const SECTION_LABELS = {
 const SECTION_PERMISSION = {
   estadisticas:  'manageSettings',
   usuarios:      'manageUsers',
+  resenas:       'manageSettings',
+  'me-gusta':    'manageSettings',
   configuracion: 'manageSettings',
   // La importación CSV puede sobrescribir el catálogo entero de una sola vez
   // — es una acción de riesgo distinto a editar un producto por vez, así que
@@ -558,6 +562,10 @@ function switchSection(target) {
   }
   if (target === 'permisos' && currentUser?.email !== SUPER_ADMIN) {
     toast('Roles y Permisos es exclusivo de tintinaccs@gmail.com');
+    target = 'dashboard';
+  }
+  if ((target === 'resenas' || target === 'me-gusta') && currentUser?.email !== SUPER_ADMIN) {
+    toast('Esta sección es exclusiva de tintinaccs@gmail.com');
     target = 'dashboard';
   }
   if (target === 'estadisticas' && currentRole !== 'superadmin') {
