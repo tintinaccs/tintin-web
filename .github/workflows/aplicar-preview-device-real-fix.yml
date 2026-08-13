@@ -1,0 +1,60 @@
+name: Aplicar preview con viewport real
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: preview-device-real-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  apply:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'fix/preview-dispositivos-reales' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Aplicar corrección
+        run: node scripts/apply-preview-device-real-fix.mjs
+
+      - name: Retirar utilidades temporales
+        run: |
+          rm scripts/apply-preview-device-real-fix.mjs
+          rm .github/workflows/aplicar-preview-device-real-fix.yml
+
+      - name: Regenerar artefactos versionados
+        run: |
+          node scripts/generar-csp-cloudflare.js
+          node scripts/construir-manifiesto-diagnostico.js
+          node scripts/auditar-versionado-cache.mjs --write
+
+      - name: Validar contratos estáticos
+        run: |
+          node --check js/admin/appearance/editor-visual-admin.js
+          node scripts/auditar-versionado-cache.mjs
+          node scripts/auditar-admin-apariencia-unificada.js
+          node scripts/auditar-admin-contenido-apariencia.js
+          node scripts/generar-csp-cloudflare.js --check
+          node scripts/verificar-manifiesto-diagnostico.js
+
+      - name: Guardar corrección en la rama
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix(admin): usar viewports reales en la vista previa"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
