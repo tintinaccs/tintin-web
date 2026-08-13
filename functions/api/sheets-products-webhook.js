@@ -2,6 +2,7 @@ import { jsonResponse } from '../../cloudflare/seguridad-cloudinary.js';
 import {
   encodeFirestoreFields,
   firestoreAdminCommit,
+  firestoreAdminMerge,
 } from '../../cloudflare/firebase-admin-ligero.js';
 
 const MAX_BODY_BYTES = 32 * 1024;
@@ -109,10 +110,10 @@ export async function onRequestPost({ request, env }) {
       updatedAt: new Date(),
     };
 
-    await firestoreAdminCommit(env, [
-      { path: `products/${id}`, fields: encodeFirestoreFields(publicData) },
-      { path: `productInventory/${id}`, fields: encodeFirestoreFields(inventoryData) },
-    ]);
+    // Merge conserva metadatos que no pertenecen a Sheets (createdAt,
+    // collectionOrder, restockedAt y futuros campos del catálogo).
+    await firestoreAdminMerge(env, `products/${id}`, encodeFirestoreFields(publicData));
+    await firestoreAdminMerge(env, `productInventory/${id}`, encodeFirestoreFields(inventoryData));
     return jsonResponse({ ok: true, productId: id }, 200, '', request.url);
   } catch (error) {
     return jsonResponse({ ok: false, error: String(error?.message || 'No se pudo sincronizar.').slice(0, 300) }, 400, '', request.url);

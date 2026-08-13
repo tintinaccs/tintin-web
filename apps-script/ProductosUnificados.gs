@@ -89,7 +89,83 @@ function tintinInstalarProductosUnificados() {
   ScriptApp.newTrigger('tintinProductosOnEdit').forSpreadsheet(spreadsheet).onEdit().create();
 }
 
+function tintinFindProductRow_(sheet, productId) {
+  var lastRow = Math.max(sheet.getLastRow(), TINTIN_PRODUCTS_FIRST_ROW);
+  var ids = sheet.getRange(TINTIN_PRODUCTS_FIRST_ROW, 1, lastRow - TINTIN_PRODUCTS_FIRST_ROW + 1, 1).getDisplayValues();
+  for (var index = 0; index < ids.length; index += 1) {
+    if (String(ids[index][0] || '').trim() === productId) return TINTIN_PRODUCTS_FIRST_ROW + index;
+  }
+  return sheet.getLastRow() + 1;
+}
+
+function tintinYesNo_(value) {
+  return value === true ? 'Sí' : 'No';
+}
+
+function tintinSyncProductsFromFirestore_(body) {
+  var auth = verifyFirebaseIdToken_(body && body.idToken);
+  if (!auth || auth.ok !== true || !phase3EmailMatches_(auth.email, SUPER_ADMIN_EMAIL)) {
+    return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'No autorizado' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  var ids = Array.isArray(body.productIds) ? body.productIds.slice(0, 100) : [];
+  var sheet = SpreadsheetApp.getActive().getSheetByName(TINTIN_PRODUCTS_SHEET);
+  if (!sheet) throw new Error('No existe la hoja Productos.');
+
+  ids.forEach(function(rawId) {
+    var id = String(rawId || '').trim();
+    if (!/^[A-Za-z0-9_-]{1,128}$/.test(id)) return;
+    var productResult = phase3FetchDocument_('products/' + encodeURIComponent(id), body.idToken);
+    var rowNumber = tintinFindProductRow_(sheet, id);
+    if (!productResult.ok) {
+      if (rowNumber <= sheet.getLastRow()) sheet.deleteRow(rowNumber);
+      return;
+    }
+    var product = productResult.data || {};
+    var inventoryResult = phase3FetchDocument_('productInventory/' + encodeURIComponent(id), body.idToken);
+    var inventory = inventoryResult.ok ? inventoryResult.data || {} : {};
+    var current = sheet.getRange(rowNumber, 1, 1, 35).getValues()[0];
+    var sold = Number(current[9] || 0);
+    var purchased = inventory.purchased == null
+      ? (product.stock == null ? current[8] : Number(product.stock) + sold)
+      : inventory.purchased;
+
+    current[0] = id;
+    current[1] = product.name || '';
+    current[3] = product.category || '';
+    current[4] = inventory.costUnit == null ? '' : inventory.costUnit;
+    current[5] = product.price == null ? '' : product.price;
+    current[8] = purchased == null ? '' : purchased;
+    current[11] = inventory.stockMinimum == null ? '' : inventory.stockMinimum;
+    current[13] = inventory.internalNotes || '';
+    current[14] = tintinYesNo_(product.active !== false);
+    current[15] = tintinYesNo_(product.oferta === true);
+    current[16] = tintinYesNo_(product.destacado === true);
+    current[17] = product.priceBefore == null ? '' : product.priceBefore;
+    current[18] = product.badge || '';
+    current[19] = product.imageUrl || '';
+    current[20] = product.description || '';
+    current[21] = new Date();
+    current[22] = product.material || '';
+    current[23] = product.measurements || '';
+    current[24] = product.colorFinish || '';
+    current[25] = product.care || '';
+    current[26] = product.waterResistance || '';
+    current[27] = product.warranty || '';
+    current[28] = product.sizeFit || '';
+    current[29] = product.packageContents || '';
+    current[30] = Array.isArray(product.imagesExtra) ? product.imagesExtra.join('\n') : '';
+    current[31] = product.collection || '';
+    current[32] = Array.isArray(product.tags) ? product.tags.join(', ') : '';
+    current[33] = product.variants ? JSON.stringify(product.variants) : '';
+    current[34] = '';
+    sheet.getRange(rowNumber, 1, 1, 35).setValues([current]);
+  });
+
+  return ContentService.createTextOutput(JSON.stringify({ ok: true, sheetName: TINTIN_PRODUCTS_SHEET, synced: ids.length }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
 // Enlazar desde el doPost existente antes de cualquier ruta heredada:
 // if (body.action === 'syncProducts') return tintinSyncProductsFromFirestore_(body);
-// La implementacion desplegada debe escribir solo en Productos (A, B, D, F,
-// K y O:AH) y nunca volver a crear la pestaña Catálogo web.
+// Esta ruta escribe solo en Productos y nunca vuelve a crear Catálogo web.
