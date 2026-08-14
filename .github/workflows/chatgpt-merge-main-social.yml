@@ -1,0 +1,104 @@
+name: ChatGPT reconcile social commerce with main
+
+on:
+  push:
+    branches:
+      - chatgpt/social-commerce-notifications-v1
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    if: ${{ !contains(github.event.head_commit.message, '[main-reconciled]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout social branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Merge current main without losing social work
+        run: |
+          git config user.name "tintin-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git fetch origin main
+          set +e
+          git merge --no-commit --no-ff origin/main
+          merge_status=$?
+          set -e
+
+          conflicts="$(git diff --name-only --diff-filter=U || true)"
+          echo "Conflicts detected:"
+          printf '%s\n' "$conflicts"
+
+          for file in $conflicts; do
+            case "$file" in
+              admin.html|index.html|js/admin/admin-app.js|diagnostic-manifest.json|scripts/cache-version-baseline.json|_headers)
+                git checkout --theirs -- "$file"
+                git add "$file"
+                ;;
+              *)
+                echo "Unexpected merge conflict: $file"
+                exit 1
+                ;;
+            esac
+          done
+
+          if git diff --name-only --diff-filter=U | grep -q .; then
+            echo "Unresolved merge conflicts remain."
+            git diff --name-only --diff-filter=U
+            exit 1
+          fi
+
+      - name: Reapply social entrypoints after conflict resolution
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const VERSION = 'tintin-20260814-social-notifications-1';
+
+          let admin = fs.readFileSync('admin.html', 'utf8');
+          const adminScript = `<script type="module" src="js/admin/notifications/notificaciones-admin.js?v=${VERSION}"></script>`;
+          if (!admin.includes('js/admin/notifications/notificaciones-admin.js')) {
+            admin = admin.replace('</body>', `${adminScript}\n</body>`);
+          }
+          fs.writeFileSync('admin.html', admin);
+
+          for (const file of fs.readdirSync('.').filter(name => name.endsWith('.html'))) {
+            let source = fs.readFileSync(file, 'utf8');
+            source = source
+              .replace(/js\/inicio-navegacion-publica\.js\?v=[A-Za-z0-9._-]+/g, `js/inicio-navegacion-publica.js?v=${VERSION}`)
+              .replace(/js\/components\/navigation\/entrada-navegacion-publica\.js\?v=[A-Za-z0-9._-]+/g, `js/components/navigation/entrada-navegacion-publica.js?v=${VERSION}`);
+            fs.writeFileSync(file, source);
+          }
+          NODE
+
+      - name: Remove temporary reconciliation workflow
+        run: git rm .github/workflows/chatgpt-merge-main-social.yml
+
+      - name: Refresh generated artifacts after merge
+        run: |
+          npm run cache-versioning:write
+          npm run build:pages
+
+      - name: Revalidate social contracts after merge
+        run: |
+          node --test tests/engagement/notificaciones-sociales.test.mjs
+          npm run test:engagement
+          npm run audit:email-messaging
+          npm run audit:cache-versioning
+
+      - name: Commit reconciled tree
+        run: |
+          git add -A
+          git commit -m "merge: reconciliar social commerce con TCG [main-reconciled]"
+          git push origin HEAD:${GITHUB_REF_NAME}
