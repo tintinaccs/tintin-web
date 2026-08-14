@@ -1,0 +1,275 @@
+name: ChatGPT finalize social commerce
+
+on:
+  push:
+    branches:
+      - chatgpt/social-commerce-notifications-v1
+
+permissions:
+  contents: write
+
+jobs:
+  finalize-social:
+    if: ${{ !contains(github.event.head_commit.message, '[social-finalized]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply final social integration patches
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const VERSION = 'tintin-20260814-social-notifications-1';
+
+          function read(file) { return fs.readFileSync(file, 'utf8'); }
+          function write(file, value) { fs.writeFileSync(file, value); }
+          function replaceRequired(file, from, to, label = from) {
+            const source = read(file);
+            if (!source.includes(from)) throw new Error(`No se encontró el contrato requerido en ${file}: ${label}`);
+            write(file, source.replace(from, to));
+          }
+          function appendOnce(file, marker, text) {
+            const source = read(file);
+            if (source.includes(marker)) return;
+            write(file, `${source.trimEnd()}\n\n${text.trim()}\n`);
+          }
+
+          // Firestore: lectura privada de notificaciones; las escrituras siguen solo por servidor.
+          replaceRequired('firestore.rules', `      match /reviews/{productId} {
+        allow read: if isSignedIn() &&
+          !isBlockedUser() &&
+          request.auth.uid == userId &&
+          isStoreOpenOrAllowed();
+        allow create, update, delete: if false;
+      }
+    }`, `      match /reviews/{productId} {
+        allow read: if isSignedIn() &&
+          !isBlockedUser() &&
+          request.auth.uid == userId &&
+          isStoreOpenOrAllowed();
+        allow create, update, delete: if false;
+      }
+
+      match /reviewLikeProducts/{productId} {
+        allow read: if isSignedIn() &&
+          !isBlockedUser() &&
+          request.auth.uid == userId;
+        allow create, update, delete: if false;
+      }
+
+      match /notifications/{notificationId} {
+        allow get: if isSignedIn() &&
+          !isBlockedUser() &&
+          request.auth.uid == userId;
+        allow list: if isSignedIn() &&
+          !isBlockedUser() &&
+          request.auth.uid == userId &&
+          request.query.limit != null &&
+          request.query.limit <= 100;
+        allow create, update, delete: if false;
+      }
+    }`, 'subcolecciones sociales de usuario');
+
+          replaceRequired('firestore.rules', `    match /likeRecords/{likeId} {
+      allow read: if isSuperAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /collections/{collectionId} {`, `    match /likeRecords/{likeId} {
+      allow read: if isSuperAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /adminNotifications/{notificationId} {
+      allow get: if isSuperAdmin();
+      allow list: if isSuperAdmin() &&
+        request.query.limit != null &&
+        request.query.limit <= 100;
+      allow create, update, delete: if false;
+    }
+
+    match /collections/{collectionId} {`, 'notificaciones privadas del superadmin');
+
+          // Evitar que cuentas históricas se anuncien como nuevas cuando se publica el runtime.
+          replaceRequired('functions/api/notifications.js', `  decodeFirestoreFields, firestoreAdminGet, firestoreAdminMerge,
+`, `  decodeFirestoreFields, firestoreAdminGet, firestoreAdminList, firestoreAdminMerge,
+`, 'import firestoreAdminList');
+          replaceRequired('functions/api/notifications.js', `  const createdAt = profile.createdAt ? new Date(profile.createdAt) : new Date();
+
+  const adminResult = await notifyAdminIfAbsent(env, {`, `  const createdAt = profile.createdAt ? new Date(profile.createdAt) : null;
+  const createdAtMs = createdAt?.getTime?.();
+  if (!Number.isFinite(createdAtMs) || Date.now() - createdAtMs > 60 * 60 * 1000) {
+    return { created: false, skipped: true, reason: 'existing_profile' };
+  }
+
+  const adminResult = await notifyAdminIfAbsent(env, {`, 'guard de altas históricas');
+          replaceRequired('functions/api/notifications.js', `      if (action === 'adminNotificationsSeenAll') {
+        const count = await markAllNotificationsRead(env, { admin: true, limit: 150 });
+        return jsonResponse({ ok: true, count }, 200, origin, request.url);
+      }`, `      if (action === 'adminNotificationsSeenAll') {
+        const documents = await firestoreAdminList(env, 'adminNotifications', 100);
+        const unreadSources = documents
+          .filter(document => document?.fields?.read?.booleanValue !== true)
+          .map(document => decodeFirestoreFields(document.fields || {}));
+        await Promise.allSettled(unreadSources.map(notification => markSourceSeen(env, notification)));
+        const count = await markAllNotificationsRead(env, { admin: true, limit: 100 });
+        return jsonResponse({ ok: true, count }, 200, origin, request.url);
+      }`, 'integración de marcar todo con badges existentes');
+
+          // Al autenticarse, registrar idempotentemente una cuenta recién creada.
+          replaceRequired('js/components/notifications/notificaciones-clientes.js', `  authUnsubscribe = onAuthStateChanged(auth, user => {
+    currentUser = user || null;
+    setTriggersVisible(Boolean(user));
+    subscribe(currentUser);
+  });`, `  authUnsubscribe = onAuthStateChanged(auth, user => {
+    currentUser = user || null;
+    setTriggersVisible(Boolean(user));
+    subscribe(currentUser);
+    if (currentUser) {
+      api('profileCreated').catch(error => console.warn('[notifications] No se pudo registrar el alta social:', error));
+    }
+  });`, 'alta social desde sesión pública');
+
+          // Badge autocontenido en admin (no depende de CSS público).
+          appendOnce('css/admin/notificaciones-admin.css', '.adm-notifications-wrap .tt-notification-badge', `
+          .adm-notifications-wrap .tt-notification-badge {
+            position:absolute;
+            top:-6px;
+            right:-7px;
+            min-width:18px;
+            height:18px;
+            padding:0 5px;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            border:2px solid #fff;
+            border-radius:999px;
+            background:#9f315c;
+            color:#fff;
+            font-size:10px;
+            font-weight:850;
+            line-height:1;
+            box-shadow:0 4px 10px rgba(159,49,92,.22);
+          }
+          .adm-notifications-wrap .tt-notification-badge[hidden] { display:none!important; }
+          `);
+
+          // Perfil: cada pedido tiene ancla estable y el deep link abre su seguimiento.
+          replaceRequired('js/pages/profile/mantenimiento-perfil.js', `      return \`<article class="perfil-order-row">`, `      const orderAnchor = String(order.id || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 220);
+      return \`<article class="perfil-order-row" id="pedido-\${orderAnchor}" data-order-id="\${orderAnchor}">`, 'ancla de pedido');
+          replaceRequired('js/pages/profile/mantenimiento-perfil.js', `    }).join('') + (sorted.length > visible.length ? \`<div class="tt-profile-state">Mostrando los 10 pedidos más recientes de \${sorted.length}.</div>\` : '');
+  }`, `    }).join('') + (sorted.length > visible.length ? \`<div class="tt-profile-state">Mostrando los 10 pedidos más recientes de \${sorted.length}.</div>\` : '');
+
+    const requested = String(location.hash || '').match(/^#pedido-([A-Za-z0-9_-]+)$/)?.[1];
+    if (requested) {
+      requestAnimationFrame(() => {
+        const target = document.getElementById(\`pedido-\${requested}\`);
+        if (!target) return;
+        target.querySelector('details')?.setAttribute('open', '');
+        target.classList.add('tt-profile-order-focus');
+        target.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+        window.setTimeout(() => target.classList.remove('tt-profile-order-focus'), 2200);
+      });
+    }
+  }`, 'resolución de deep link de pedido');
+          replaceRequired('js/pages/profile/mantenimiento-perfil.js', `      .perfil-order-row { padding:14px!important;border-radius:14px;margin-bottom:10px;border:1px solid var(--border,#ecd5de)!important; }
+`, `      .perfil-order-row { padding:14px!important;border-radius:14px;margin-bottom:10px;border:1px solid var(--border,#ecd5de)!important; }
+      .perfil-order-row.tt-profile-order-focus { box-shadow:0 0 0 4px rgba(199,154,59,.24),0 18px 38px rgba(173,63,103,.14)!important; }
+`, 'highlight de pedido');
+
+          // Cargar el centro unificado en Super Admin.
+          replaceRequired('admin.html', `</body>`, `<script type="module" src="js/admin/notifications/notificaciones-admin.js?v=${VERSION}"></script>\n</body>`, 'runtime de notificaciones admin');
+
+          // La interacción social de reseñas tiene estilos propios.
+          replaceRequired('product.html', `<link rel="stylesheet" href="css/pages/product/resenas-producto.css?v=tintin-20260814-reviews-pink-gold-1">`, `<link rel="stylesheet" href="css/pages/product/resenas-producto.css?v=tintin-20260814-reviews-pink-gold-1">\n  <link rel="stylesheet" href="css/components/notifications/interacciones-sociales.css?v=${VERSION}">`, 'estilos sociales de producto');
+          replaceRequired('product.html', `js/pages/product/resenas-producto.js?v=tintin-20260814-reviews-pink-gold-1`, `js/pages/product/resenas-producto.js?v=${VERSION}`, 'runtime social de reseñas');
+
+          // Versionado explícito de módulos de navegación modificados.
+          replaceRequired('js/components/navigation/entrada-navegacion-publica.js', `import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js';`, `import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=${VERSION}';`);
+          replaceRequired('js/components/navigation/entrada-navegacion-publica.js', `import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js';`, `import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=${VERSION}';`);
+          replaceRequired('js/components/navigation/entrada-navegacion-publica.js', `import { renderMobileTabbar } from './movil/encabezado-movil.js';`, `import { renderMobileTabbar } from './movil/encabezado-movil.js?v=${VERSION}';`);
+          replaceRequired('js/inicio-navegacion-publica.js', `const MODULE_VERSION = 'tintin-20260810-global-studio-7';`, `const MODULE_VERSION = '${VERSION}';`);
+
+          // Checkout: propagar el cambio hasta el módulo que realmente se carga en navegador.
+          replaceRequired('js/pages/checkout/checkout-puente-correo.js', `../../email/notificacion-pedido-resend.js?v=tintin-20260717-resend-1`, `../../email/notificacion-pedido-resend.js?v=${VERSION}`, 'notificación social de pedido');
+          replaceRequired('js/orders/pedido-checkout-seguro.js', `../pages/checkout/checkout-puente-correo.js?v=tintin-20260716-cloudinary-fix-1`, `../pages/checkout/checkout-puente-correo.js?v=${VERSION}`, 'puente de checkout social');
+
+          // El carrito es quien carga pedido-checkout-seguro. Bump del import sin tocar su lógica.
+          {
+            const file = 'js/components/cart/sincronizacion-carrito.js';
+            let source = read(file);
+            const before = source;
+            source = source.replace(/\.\.\/\.\.\/orders\/pedido-checkout-seguro\.js\?v=[A-Za-z0-9._-]+/g, `../../orders/pedido-checkout-seguro.js?v=${VERSION}`)
+              .replace(/\.\.\/\.\.\/\.\.\/orders\/pedido-checkout-seguro\.js\?v=[A-Za-z0-9._-]+/g, `../../../orders/pedido-checkout-seguro.js?v=${VERSION}`)
+              .replace(/pedido-checkout-seguro\.js\?v=[A-Za-z0-9._-]+/g, `pedido-checkout-seguro.js?v=${VERSION}`);
+            if (source === before) throw new Error('No se encontró import de pedido-checkout-seguro en sincronizacion-carrito.js');
+            write(file, source);
+          }
+
+          // Bump global de los puntos de entrada públicos y de carrito ya versionados.
+          for (const file of fs.readdirSync('.').filter(name => name.endsWith('.html'))) {
+            let source = read(file);
+            source = source
+              .replace(/js\/inicio-navegacion-publica\.js\?v=[A-Za-z0-9._-]+/g, `js/inicio-navegacion-publica.js?v=${VERSION}`)
+              .replace(/js\/components\/navigation\/entrada-navegacion-publica\.js\?v=[A-Za-z0-9._-]+/g, `js/components/navigation/entrada-navegacion-publica.js?v=${VERSION}`)
+              .replace(/js\/components\/cart\/sincronizacion-carrito\.js\?v=[A-Za-z0-9._-]+/g, `js/components/cart/sincronizacion-carrito.js?v=${VERSION}`);
+            write(file, source);
+          }
+
+          // Si hay referencias JS directas al carrito modificado, propagar versión.
+          for (const dir of ['js']) {
+            const walk = current => {
+              for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+                const full = path.join(current, entry.name);
+                if (entry.isDirectory()) walk(full);
+                else if (entry.name.endsWith('.js')) {
+                  let source = read(full);
+                  source = source.replace(/sincronizacion-carrito\.js\?v=[A-Za-z0-9._-]+/g, `sincronizacion-carrito.js?v=${VERSION}`);
+                  write(full, source);
+                }
+              }
+            };
+            walk(dir);
+          }
+          NODE
+
+      - name: Remove temporary workflow from final tree
+        run: git rm .github/workflows/chatgpt-finalize-social-commerce.yml
+
+      - name: Refresh cache baseline and generated files
+        run: |
+          npm run cache-versioning:write
+          npm run build:pages
+
+      - name: Focused social checks
+        run: |
+          node --test tests/engagement/notificaciones-sociales.test.mjs
+          npm run test:engagement
+          npm run audit:email-messaging
+          npm run audit:unified-navigation
+          npm run audit:cache-versioning
+
+      - name: Commit finalized branch
+        run: |
+          git add -A
+          git config user.name "tintin-ci"
+          git config user.email "actions@users.noreply.github.com"
+          if git diff --cached --quiet; then
+            echo "No final changes to commit."
+            exit 0
+          fi
+          git commit -m "feat(social): finalize notification ecosystem [social-finalized]"
+          git push origin HEAD:${GITHUB_REF_NAME}
