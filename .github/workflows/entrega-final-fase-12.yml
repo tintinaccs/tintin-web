@@ -60,7 +60,7 @@ jobs:
           cache: npm
 
       - name: Configurar Java para emuladores Firebase
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
@@ -136,7 +136,7 @@ jobs:
         run: npm run audit:canonical-viewports
 
       - name: Dependencias usadas en producción
-        run: npm audit --omit=dev --audit-level=critical
+        run: npm audit --omit=dev --audit-level=moderate
 
       - name: Registrar auditoría completa de herramientas
         shell: bash
@@ -148,7 +148,7 @@ jobs:
 
       - name: Guardar evidencias
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: phase12-final-evidence
           path: |
