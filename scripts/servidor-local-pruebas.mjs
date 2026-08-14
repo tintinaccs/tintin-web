@@ -18,11 +18,6 @@ const mime = {
 
 const server = http.createServer((request, response) => {
   const url = new URL(request.url || '/', `http://${host}:${port}`);
-  if (url.pathname === '/api/ai-builder-public') {
-    response.writeHead(200, { 'cache-control': 'no-store', 'content-type': 'application/json; charset=utf-8' });
-    response.end('{"blocks":[],"version":0}');
-    return;
-  }
   if (url.pathname === '/api/visual-builder-public') {
     response.writeHead(200, { 'cache-control': 'no-store', 'content-type': 'application/json; charset=utf-8' });
     response.end('{"ok":true,"config":null,"version":0}');

@@ -58,11 +58,6 @@ function safeLocalPath(requestURL) {
 
 const server = http.createServer((request, response) => {
   const pathname = decodeURIComponent(new URL(request.url || '/', baseURL).pathname);
-  if (pathname === '/api/ai-builder-public') {
-    response.writeHead(200, { 'cache-control': 'no-store', 'content-type': 'application/json; charset=utf-8' });
-    response.end('{"blocks":[],"version":0}');
-    return;
-  }
   if (pathname === '/api/visual-builder-public') {
     response.writeHead(200, { 'cache-control': 'no-store', 'content-type': 'application/json; charset=utf-8' });
     response.end('{"ok":true,"config":null,"version":0}');

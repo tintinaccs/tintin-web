@@ -16,10 +16,6 @@ const SEEDED_PRODUCTS = [
 
 const server = http.createServer((request, response) => {
   const pathname = decodeURIComponent(new URL(request.url || '/', baseURL).pathname);
-  if (pathname === '/api/ai-builder-public') {
-    response.writeHead(200, { 'cache-control':'no-store', 'content-type':'application/json' });
-    return response.end('{"blocks":[],"version":0}');
-  }
   if (pathname === '/api/visual-builder-public') {
     response.writeHead(200, { 'cache-control':'no-store', 'content-type':'application/json' });
     return response.end('{"ok":true,"config":null,"version":0}');
