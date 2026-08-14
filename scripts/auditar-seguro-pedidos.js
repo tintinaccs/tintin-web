@@ -97,7 +97,7 @@ check(
 check(
   'El checkout seguro se carga solo donde corresponde',
   cart.includes("checkoutPath.endsWith('/checkout.html')") &&
-    cart.includes("import('../../orders/pedido-checkout-seguro.js?v=tintin-20260811-phonefix-pedido-checkout-seguro-1"),
+    /import\(['"]\.\.\/\.\.\/orders\/pedido-checkout-seguro\.js\?v=[^'"]+['"]\)/.test(cart),
   'El módulo debe arrancar únicamente en checkout.'
 );
 
