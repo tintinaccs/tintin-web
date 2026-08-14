@@ -44,6 +44,51 @@ jobs:
           fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
           NODE
 
+      - name: Adaptar inventario diagnóstico a clean URLs
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const file = 'scripts/construir-manifiesto-diagnostico.js';
+          let source = fs.readFileSync(file, 'utf8');
+          if (!source.includes('function localReferenceExists(')) {
+            const marker = '\nfunction labelForPage(file, title) {';
+            const helper = `
+const CLEAN_ROUTE_FILES = new Map([
+  ['', 'index.html'],
+  ['about', 'about.html'],
+  ['catalogo', 'catalogo.html'],
+  ['collections', 'collections.html'],
+  ['product', 'product.html'],
+  ['contact', 'contact.html'],
+  ['envios', 'envios.html'],
+  ['cambios-devoluciones', 'cambios-devoluciones.html'],
+  ['preguntas-frecuentes', 'preguntas-frecuentes.html'],
+  ['terminos', 'terminos.html'],
+  ['privacidad', 'privacidad.html'],
+  ['checkout', 'checkout.html'],
+  ['login', 'login.html'],
+  ['perfil', 'perfil.html'],
+  ['admin', 'admin.html'],
+  ['admin-images', 'admin-images.html'],
+  ['404', '404.html'],
+  ['nosotros', 'nosotros.html']
+]);
+
+function localReferenceExists(target, allPaths) {
+  if (allPaths.has(target)) return true;
+  const clean = String(target || '').replace(/^\\/+|\\/+$/g, '');
+  const physical = CLEAN_ROUTE_FILES.get(clean);
+  return Boolean(physical && allPaths.has(physical));
+}
+`;
+            if (!source.includes(marker)) throw new Error('No se encontró ancla de diagnóstico.');
+            source = source.replace(marker, helper + marker);
+          }
+          source = source.replace('exists: allPaths.has(item.target)', 'exists: localReferenceExists(item.target, allPaths)');
+          fs.writeFileSync(file, source);
+          NODE
+
       - name: Sincronizar origen, rutas, caché, CSP y diagnósticos
         run: |
           npm run sync:public-origin
