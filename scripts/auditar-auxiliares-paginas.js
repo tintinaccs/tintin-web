@@ -12,8 +12,8 @@
    Fija las invariantes que las mantienen correctas: el 404 no debe indexarse y
    siempre debe ofrecer salida (inicio, catálogo, categorías y WhatsApp); la
    ruta legacy debe seguir siendo un stub mínimo que redirige y consolida su
-   canonical en about.html, sin volverse un duplicado del contenido real ni ser
-   enlazada por error desde el resto del sitio.
+   canonical en la URL final limpia de about, sin volverse un duplicado del
+   contenido real ni ser enlazada por error desde el resto del sitio.
 
    No abre navegador: comprobaciones estáticas sobre el código publicado.
    ============================================================= */
@@ -87,7 +87,6 @@ check(
   'Debe haber un H1 y ningún manejador de eventos inline.'
 );
 
-// 404: todos los enlaces internos .html deben resolver.
 const links404 = [...notFound.matchAll(/href="([^"#?:]+\.html)(?:[?#][^"]*)?"/g)]
   .map(m => m[1]).filter((v, i, a) => a.indexOf(v) === i);
 const broken404 = links404.filter(t => !exists(t));
@@ -111,9 +110,9 @@ check(
   'La ruta duplicada no debe indexarse, pero debe transmitir el enlace a about.html.'
 );
 check(
-  '[nosotros.html] consolida su canonical en about.html',
-  legacy.includes('<link rel="canonical" href="https://tintinaccesorios.pages.dev/about.html">'),
-  'El canonical debe apuntar a la página real, no a la ruta legacy.'
+  '[nosotros.html] consolida su canonical en la URL final limpia de about',
+  legacy.includes('<link rel="canonical" href="https://tintinaccesorios.pages.dev/about">'),
+  'El canonical debe apuntar a la URL final limpia de la página real, no a un alias .html redirigido.'
 );
 check(
   '[nosotros.html] tiene un enlace visible de respaldo hacia about.html',
@@ -130,11 +129,10 @@ check(
 check(
   '[nosotros.html] la página destino about.html existe y no crea bucle de canonical',
   exists('about.html') &&
-    read('about.html').includes('<link rel="canonical" href="https://tintinaccesorios.pages.dev/about.html">'),
+    read('about.html').includes('<link rel="canonical" href="https://tintinaccesorios.pages.dev/about">'),
   'El destino debe existir y canonizarse en sí mismo (sin apuntar de vuelta a la ruta legacy).'
 );
 
-// La ruta legacy debe permanecer NO enlazada desde el resto del sitio público.
 const publicHtml = fs.readdirSync(root).filter(f => f.endsWith('.html') && f !== 'nosotros.html');
 const linkingLegacy = publicHtml.filter(f => /href="[^"]*nosotros\.html/.test(read(f)));
 check(
@@ -143,7 +141,6 @@ check(
   `Estas páginas enlazan a la ruta legacy (deberían apuntar a about.html): ${linkingLegacy.join(', ')}`
 );
 
-// ---------------------------------------------------------------------------
 const failed = checks.filter(item => !item.ok);
 checks.forEach(item => {
   console.log(`${item.ok ? 'OK' : 'ERROR'} — ${item.name}`);

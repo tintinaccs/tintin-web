@@ -160,7 +160,7 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
 
   function normalizeGenericMetadata() {
     const base = `${location.origin}/`;
-    const current = new URL('product.html', base);
+    const current = new URL('product', base);
     const id = new URLSearchParams(location.search).get('id');
     if (id) current.searchParams.set('id', id);
     document.getElementById('link-canonical')?.setAttribute('href', current.href);

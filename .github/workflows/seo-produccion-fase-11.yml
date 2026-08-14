@@ -12,6 +12,7 @@ on:
       - 'sitemap.xml'
       - 'scripts/auditar-fase-11-seo.js'
       - 'scripts/auditar-produccion-salud.mjs'
+      - 'scripts/servidor-local-pruebas.mjs'
       - 'tests/seo/**'
       - 'package.json'
       - '.github/workflows/seo-produccion-fase-11.yml'
@@ -35,8 +36,25 @@ jobs:
       - run: npm ci
       - name: Instalar Chromium para Playwright
         run: npx playwright install --with-deps chromium
-      - run: npm run audit:phase11
-      - run: npm run test:phase11-seo
+      - name: Auditar contratos SEO estáticos
+        run: npm run audit:phase11
+      - name: Servir el árbol exacto evaluado
+        shell: bash
+        run: |
+          node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-phase11-http.log 2>&1 &
+          echo $! > /tmp/tintin-phase11-http.pid
+          for attempt in {1..20}; do
+            if curl --fail --silent --show-error http://127.0.0.1:4173/index.html > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/tintin-phase11-http.log || true
+          exit 1
+      - name: Probar SEO dinámico del mismo commit
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+        run: npm run test:phase11-seo
 
   production-health:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
@@ -49,7 +67,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run monitor:production
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         if: always()
         with:
           name: phase11-production-health

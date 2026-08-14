@@ -7,11 +7,11 @@ test.beforeEach(async ({ page }) => {
 
 test('inicio publica canonical, OG y Store JSON-LD consistentes', async ({ page }) => {
   await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://tintinaccesorios.pages.dev/index.html');
-  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', 'https://tintinaccesorios.pages.dev/index.html');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://tintinaccesorios.pages.dev/');
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', 'https://tintinaccesorios.pages.dev/');
   const store = JSON.parse(await page.locator('#tt-store-jsonld').textContent());
   expect(store['@type']).toBe('Store');
-  expect(store.url).toBe('https://tintinaccesorios.pages.dev/index.html');
+  expect(store.url).toBe('https://tintinaccesorios.pages.dev/');
 });
 
 test('producto actualiza canonical y JSON-LD con URL coherente, PYG y stock', async ({ page }) => {
@@ -34,8 +34,8 @@ test('producto actualiza canonical y JSON-LD con URL coherente, PYG y stock', as
 
     const canonical = document.querySelector('#link-canonical')?.getAttribute('href') || '';
     const jsonLd = JSON.parse(document.querySelector('#tt-product-jsonld')?.textContent || '{}');
-    const expectedCanonicalUrl = new URL('/product.html?id=seo-prueba', location.origin).href;
-    const expectedStructuredDataUrl = new URL('/product.html?id=seo-prueba', 'https://tintinaccesorios.pages.dev').href;
+    const expectedCanonicalUrl = new URL('/product?id=seo-prueba', location.origin).href;
+    const expectedStructuredDataUrl = new URL('/product?id=seo-prueba', 'https://tintinaccesorios.pages.dev').href;
     return { canonical, jsonLd, expectedCanonicalUrl, expectedStructuredDataUrl };
   });
 

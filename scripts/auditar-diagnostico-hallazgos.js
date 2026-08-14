@@ -131,9 +131,9 @@ check(
 );
 
 check(
-  'nosotros.html es un alias no indexable con canonical absoluto',
+  'nosotros.html es un alias no indexable con canonical absoluto limpio',
   /name=["']robots["'][^>]+content=["']noindex,\s*follow["']/i.test(nosotros) &&
-    /rel=["']canonical["'][^>]+href=["']https:\/\/tintinaccesorios\.pages\.dev\/about\.html["']/i.test(nosotros) &&
+    /rel=["']canonical["'][^>]+href=["']https:\/\/tintinaccesorios\.pages\.dev\/about["']/i.test(nosotros) &&
     /http-equiv=["']refresh["'][^>]+about\.html/i.test(nosotros)
 );
 check('nosotros.html no aparece en sitemap.xml', !/nosotros\.html/i.test(sitemap));

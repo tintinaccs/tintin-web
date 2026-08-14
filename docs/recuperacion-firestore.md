@@ -97,7 +97,7 @@ Una copia se considera válida cuando:
 - `counts` coincide con lo observado en el panel.
 - Una muestra de productos y colecciones conserva precio, stock, estado e imágenes.
 
-## Lo que no existe: pedidos, usuarios y registros
+## Lo que no entra en la copia operativa local: pedidos, usuarios y registros
 
 `exportOperationalBackup()` declara explícitamente
 `excludes: ['users', 'orders', 'carts', 'auditLog', 'emailLogs']`.
