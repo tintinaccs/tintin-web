@@ -1,0 +1,53 @@
+name: Regenerar manifiesto final temporal
+
+on:
+  push:
+    branches:
+      - chatgpt/production-surgical-hardening
+
+permissions:
+  contents: write
+
+concurrency:
+  group: regenerar-manifiesto-final-temporal
+  cancel-in-progress: false
+
+jobs:
+  regenerate:
+    if: ${{ !contains(github.event.head_commit.message, '[manifest-final]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: chatgpt/production-surgical-hardening
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Regenerar exactamente como quedará el árbol final
+        shell: bash
+        run: |
+          rm -f .github/workflows/regenerar-manifiesto-final-temporal.yml
+          npm run build:pages
+          git status --short
+      - name: Verificar manifiesto sobre árbol sin temporal
+        run: |
+          npm run verify:diagnostics
+          npm run verify:csp
+          node scripts/auditar-nivel-3-calidad.js
+      - name: Restaurar solo el temporal y guardar artefactos finales
+        shell: bash
+        run: |
+          git checkout HEAD -- .github/workflows/regenerar-manifiesto-final-temporal.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostic-manifest.json _headers
+          if git diff --cached --quiet; then
+            echo 'No hay artefactos pendientes.'
+            exit 0
+          fi
+          git commit -m "chore: sincronizar manifiesto final [manifest-final]"
+          git push origin HEAD:chatgpt/production-surgical-hardening
