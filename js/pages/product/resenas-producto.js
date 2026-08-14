@@ -47,8 +47,14 @@ function ensureSection() {
         <div class="tt-review-list" id="product-review-list" aria-live="polite"></div>
       </div>
     </div>`;
-  const related = document.querySelector('.tt-related-section, .tt-related-products, #related-products');
-  (related?.parentNode || document.body).insertBefore(section, related || document.querySelector('.tt-footer'));
+
+  const productDetail = document.getElementById('product-detail');
+  if (productDetail?.parentNode) {
+    productDetail.insertAdjacentElement('afterend', section);
+  } else {
+    const related = document.querySelector('.tt-related-section, .tt-related-products, #related-products');
+    (related?.parentNode || document.body).insertBefore(section, related || document.querySelector('.tt-footer'));
+  }
   return section;
 }
 
