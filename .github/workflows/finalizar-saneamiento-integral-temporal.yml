@@ -52,15 +52,20 @@ jobs:
           npm run build:csp
           npm run build:diagnostics
 
-      - name: Verificar invariantes nuevas
-        run: |
-          npm run verify:public-origin
-          npm run audit:public-routes
-          npm run verify:csp
-          npm run verify:diagnostics
-          npm run audit:edge
-          npm run audit:cutover
-          npm run audit:cache-versioning
+      - name: Verificar origen público
+        run: npm run verify:public-origin
+      - name: Verificar rutas limpias
+        run: npm run audit:public-routes
+      - name: Verificar CSP reproducible
+        run: npm run verify:csp
+      - name: Verificar manifiesto diagnóstico
+        run: npm run verify:diagnostics
+      - name: Verificar operación edge
+        run: npm run audit:edge
+      - name: Verificar preparación de dominio
+        run: npm run audit:cutover
+      - name: Verificar versionado de caché
+        run: npm run audit:cache-versioning
 
       - name: Revisar sintaxis del backend nuevo
         run: |
@@ -72,13 +77,16 @@ jobs:
       - name: Compilar Pages Functions
         run: npx --yes wrangler@latest pages functions build functions --outdir=.cloudflare-functions --project-directory=.
 
-      - name: Contratos críticos
-        run: |
-          npm run audit:phase11
-          npm run audit:security
-          npm run test:checkout-contract
-          npm run test:engagement
-          npm audit --omit=dev --audit-level=moderate
+      - name: SEO estático
+        run: npm run audit:phase11
+      - name: Seguridad
+        run: npm run audit:security
+      - name: Contrato checkout
+        run: npm run test:checkout-contract
+      - name: Contrato social
+        run: npm run test:engagement
+      - name: Dependencias productivas
+        run: npm audit --omit=dev --audit-level=moderate
 
       - name: Auditoría integral estática
         run: npm run audit:final
