@@ -6,16 +6,22 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const ASSET_VERSION = 'tintin-20260814-social-notifications-1';
+const ORDER_RECOVERY_WINDOW_MS = 2 * 60 * 60 * 1000;
+const ORDER_NOTIFY_RETRY_DELAYS_MS = [700, 1800];
+const MAX_RECOVERY_ORDERS = 60;
 let user = null;
 let notifications = [];
 let unsubscribeNotifications = null;
 let unsubscribeOrders = null;
 let orderState = new Map();
 let ordersPrimed = false;
+const orderNotificationInFlight = new Set();
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
 })[character]);
+
+const sleep = ms => new Promise(resolve => window.setTimeout(resolve, Math.max(0, Number(ms) || 0)));
 
 function ensureStyles() {
   if (document.querySelector('link[data-adm-social-notifications]')) return;
@@ -37,6 +43,20 @@ function iconSvg(iconKey) {
   if (iconKey === 'order') return `<svg ${common}><path d="M6 7V5a6 6 0 0112 0v2"/><path d="M4 7h16l-1 14H5L4 7z"/></svg>`;
   if (iconKey === 'user') return `<svg ${common}><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>`;
   return bellSvg();
+}
+
+function safeImageUrl(value) {
+  const raw = String(value || '').trim();
+  if (!raw || /^(?:javascript:|data:|vbscript:|file:|\/\/)/i.test(raw)) return '';
+  if (/^https?:\/\//i.test(raw)) {
+    try {
+      const parsed = new URL(raw);
+      return parsed.protocol === 'https:' || parsed.protocol === 'http:' ? parsed.href : '';
+    } catch {
+      return '';
+    }
+  }
+  return /^[A-Za-z0-9_./?=&%+#:-]+$/.test(raw) ? raw : '';
 }
 
 function asDate(value) {
@@ -97,7 +117,7 @@ function render() {
     return;
   }
   root.innerHTML = notifications.map(notification => {
-    const image = String(notification.productImageUrl || '').trim();
+    const image = safeImageUrl(notification.productImageUrl);
     const trailing = image
       ? `<img class="adm-notification-thumb" src="${escapeHtml(image)}" alt="" loading="lazy" decoding="async">`
       : '<span class="adm-notification-placeholder" aria-hidden="true">T</span>';
@@ -109,16 +129,20 @@ function render() {
   updateBadge();
 }
 
-async function api(action, payload = {}) {
+async function api(action, payload = {}, forceRefresh = false) {
   if (!user) throw new Error('Sesión no disponible');
-  const token = await user.getIdToken();
+  const token = await user.getIdToken(forceRefresh);
   const response = await fetch('/api/notifications', {
     method: 'POST', cache: 'no-store', keepalive: true,
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ action, ...payload }),
   });
   const result = await response.json().catch(() => ({}));
-  if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo completar la acción');
+  if (!response.ok || result.ok !== true) {
+    const error = new Error(result.error || 'No se pudo completar la acción');
+    error.status = response.status;
+    throw error;
+  }
   return result;
 }
 
@@ -157,7 +181,7 @@ function closePanel() {
 
 function subscribeNotifications() {
   unsubscribeNotifications?.();
-  const source = query(collection(db, 'adminNotifications'), orderBy('createdAt', 'desc'), limit(70));
+  const source = query(collection(db, 'adminNotifications'), orderBy('createdAt', 'desc'), limit(100));
   unsubscribeNotifications = onSnapshot(source, snapshot => {
     notifications = snapshot.docs.map(document => ({ id: document.id, ...document.data() }));
     render();
@@ -172,6 +196,46 @@ function orderSignature(data = {}) {
   return `${String(data.status || '')}|${String(data.paymentStatus || data.payment?.status || '')}`;
 }
 
+function orderNeedsRecovery(data = {}) {
+  const updatedAt = asDate(data.updatedAt).getTime();
+  if (!updatedAt || Date.now() - updatedAt > ORDER_RECOVERY_WINDOW_MS) return false;
+  const status = String(data.status || '').trim();
+  const paymentStatus = String(data.paymentStatus || data.payment?.status || '').trim();
+  const revision = Math.max(0, Number(data.inventoryRevision || 0));
+  return revision > 1 || !['pendiente', 'inventory_pending'].includes(status) || (paymentStatus && paymentStatus !== 'pendiente');
+}
+
+async function notifyOrderStatusWithRetry(orderId) {
+  const id = String(orderId || '').trim();
+  if (!id || orderNotificationInFlight.has(id) || !user) return;
+  orderNotificationInFlight.add(id);
+  let lastError = null;
+  try {
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        await api('adminOrderStatusChanged', { orderId: id }, attempt > 0 && lastError?.status === 401);
+        return;
+      } catch (error) {
+        lastError = error;
+        const status = Number(error?.status || 0);
+        const retryable = !status || status === 401 || [408, 425, 429].includes(status) || status >= 500;
+        if (!retryable || attempt >= 2) break;
+        await sleep(ORDER_NOTIFY_RETRY_DELAYS_MS[Math.min(attempt, ORDER_NOTIFY_RETRY_DELAYS_MS.length - 1)]);
+      }
+    }
+    console.warn('[admin-notifications] No se pudo notificar estado de pedido tras reintentos:', id, lastError);
+  } finally {
+    orderNotificationInFlight.delete(id);
+  }
+}
+
+async function recoverRecentOrderStatuses(orderIds) {
+  for (const orderId of orderIds.slice(0, MAX_RECOVERY_ORDERS)) {
+    if (!user) return;
+    await notifyOrderStatusWithRetry(orderId);
+  }
+}
+
 function subscribeOrderStatusChanges() {
   unsubscribeOrders?.();
   orderState = new Map();
@@ -180,19 +244,21 @@ function subscribeOrderStatusChanges() {
   unsubscribeOrders = onSnapshot(source, snapshot => {
     const next = new Map();
     const changed = [];
+    const recovery = [];
     snapshot.docs.forEach(document => {
-      const signature = orderSignature(document.data());
+      const data = document.data() || {};
+      const signature = orderSignature(data);
       next.set(document.id, signature);
+      if (!ordersPrimed && orderNeedsRecovery(data)) recovery.push(document.id);
       if (ordersPrimed && orderState.has(document.id) && orderState.get(document.id) !== signature) changed.push(document.id);
     });
     orderState = next;
     if (!ordersPrimed) {
       ordersPrimed = true;
+      void recoverRecentOrderStatuses(recovery);
       return;
     }
-    changed.forEach(orderId => {
-      api('adminOrderStatusChanged', { orderId }).catch(error => console.warn('[admin-notifications] No se pudo notificar estado de pedido:', orderId, error));
-    });
+    changed.forEach(orderId => { void notifyOrderStatusWithRetry(orderId); });
   }, error => console.warn('[admin-notifications] No se pudieron observar estados de pedidos:', error));
 }
 
@@ -246,6 +312,7 @@ onAuthStateChanged(auth, current => {
     document.getElementById('adm-notifications-wrap')?.remove();
     unsubscribeNotifications?.();
     unsubscribeOrders?.();
+    orderNotificationInFlight.clear();
     return;
   }
   user = current;
