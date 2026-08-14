@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-14T12:20:06.293Z",
-  "sourceFingerprint": "55eb8cb246287d2bfde664a459647e1c650a671cd2069d76e16733c8319b7abe",
+  "generatedAt": "2026-08-14T12:27:24.775Z",
+  "sourceFingerprint": "d4504e9494f30daef8f2187a470027648917d5b4269b9815415af6a9590eb28a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 615,
     "textFiles": 583,
-    "totalBytes": 6498090,
+    "totalBytes": 6498063,
     "pages": 18,
     "modules": 377
   },
@@ -22077,8 +22077,8 @@
     },
     {
       "path": "scripts/auditar-colecciones-fase-4.js",
-      "bytes": 8787,
-      "sha256": "f9442ce3759a6cb3e6bfdc6042986fb8666cd706e929d83a28e0f9e595e2e7ea",
+      "bytes": 8760,
+      "sha256": "959d316a4e388c70ea4e588976620e6f2dd5e8c35ab437dffd993ffbfe690b75",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22095,12 +22095,6 @@
           "target": "scripts/estado-colecciones.js",
           "dynamic": true,
           "line": 139
-        },
-        {
-          "raw": "../../components/cart/sincronizacion-carrito.js?v=tintin-20260811-phonefix-sincronizacion-carrito-1",
-          "target": null,
-          "dynamic": true,
-          "line": 161
         }
       ],
       "endpoints": []
@@ -28551,8 +28545,8 @@
     {
       "path": "scripts/auditar-colecciones-fase-4.js",
       "extension": ".js",
-      "bytes": 8787,
-      "sha256": "f9442ce3759a6cb3e6bfdc6042986fb8666cd706e929d83a28e0f9e595e2e7ea"
+      "bytes": 8760,
+      "sha256": "959d316a4e388c70ea4e588976620e6f2dd5e8c35ab437dffd993ffbfe690b75"
     },
     {
       "path": "scripts/auditar-colecciones-pagina.js",
