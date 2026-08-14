@@ -6,28 +6,38 @@ const path = require('path');
 
 const root = path.resolve(__dirname, '..');
 const headersPath = path.join(root, '_headers');
+const originConfig = JSON.parse(fs.readFileSync(path.join(root, 'config/origenes-tintin.json'), 'utf8'));
+const publicOrigin = String(originConfig.publicOrigin || '').replace(/\/$/, '');
+if (!/^https:\/\/[a-z0-9.-]+$/i.test(publicOrigin)) throw new Error('publicOrigin inválido en config/origenes-tintin.json');
+
 const startMarker = '# CSP_ROUTE_POLICIES_START';
 const endMarker = '# CSP_ROUTE_POLICIES_END';
-// Cloudflare Pages no reemplaza el header de una coincidencia más específica:
-// agrega un Content-Security-Policy adicional por cada bloque de _headers que
-// matchea la ruta. El navegador combina varias CSP de forma restrictiva (gana
-// la más estricta por directiva) — así que un frame-ancestors 'none' acá
-// arriba anulaba en la práctica el 'self' que cada ruta declara para su
-// propia página, sin importar qué tan específica fuera esa ruta. Cada .html
-// ya trae su propio frame-ancestors completo (ver generateRouteBlock más
-// abajo); esta política global es el resguardo mínimo para lo que no es una
-// página (JS, CSS, imágenes) — ahí framing no aplica, así que no hace falta
-// repetirlo acá.
-const globalPolicy = "object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests";
 const scriptOrigins = "https://*.gstatic.com https://*.google.com https://unpkg.com https://www.googletagmanager.com";
 const connectOrigins = "https://*.googleapis.com https://*.google.com https://*.gstatic.com https://unpkg.com https://*.googleusercontent.com https://res.cloudinary.com https://api.cloudinary.com https://api.imgbb.com https://*.google-analytics.com https://*.analytics.google.com";
-// El editor visual (Apariencia) previsualiza estas páginas dentro de un
-// <iframe> en admin.html — mismo origen, sesión de Super Admin ya validada.
-// frame-ancestors 'none' se lo bloqueaba también a sí mismo: el navegador no
-// distingue "me embebe mi propio panel admin" de "me embebe un sitio ajeno".
-// Solo estas páginas (las que existen en SITE_CONTENT_SCHEMA, ver
-// js/core/store/esquema-contenido.js) aflojan a 'self'; el resto conserva
-// 'none' porque nunca se cargan en un iframe.
+
+// Cloudflare Pages combina las reglas que coinciden. La política global debe
+// ser completa pero suficientemente permisiva para no bloquear una página
+// antes de que su política específica, más estricta, se aplique. Esto evita
+// que una ruta quede con una CSP parcial si Cloudflare no aplica por cualquier
+// motivo el bloque específico (el caso real detectado en `/`).
+const globalPolicy = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline' ${scriptOrigins}`,
+  "script-src-attr 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline' https://unpkg.com",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' data:",
+  `connect-src 'self' ${connectOrigins}`,
+  `frame-src 'self' ${publicOrigin} https://*.google.com https://*.gstatic.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com`,
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self'",
+  "manifest-src 'self'",
+  "worker-src 'self' blob:",
+  "upgrade-insecure-requests"
+].join('; ') + ';';
+
 const VISUAL_BUILDER_PREVIEWABLE_PAGES = new Set([
   'index.html', 'about.html', 'catalogo.html', 'collections.html',
   'contact.html', 'envios.html', 'preguntas-frecuentes.html', 'cambios-devoluciones.html',
@@ -54,7 +64,7 @@ function pagePolicy(file) {
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
     `connect-src 'self' ${connectOrigins}`,
-    "frame-src 'self' https://tintinaccesorios.pages.dev https://*.google.com https://*.gstatic.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com",
+    `frame-src 'self' ${publicOrigin} https://*.google.com https://*.gstatic.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com`,
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
@@ -67,10 +77,17 @@ function pagePolicy(file) {
 
 function generateRouteBlock() {
   const files = fs.readdirSync(root).filter(name => name.endsWith('.html')).sort();
-  const blocks = files.map(file => {
+  const blocks = [];
+  for (const file of files) {
     const route = file === 'index.html' ? '/' : `/${path.basename(file, '.html')}`;
-    return `${route}\n  Content-Security-Policy: ${pagePolicy(file)}`;
-  });
+    const policy = pagePolicy(file);
+    blocks.push(`${route}\n  Content-Security-Policy: ${policy}`);
+    if (file === 'index.html') {
+      // Regla absoluta redundante a propósito: protege el root incluso si una
+      // peculiaridad del matching interno de Pages deja fuera el bloque `/`.
+      blocks.push(`${publicOrigin}/\n  Content-Security-Policy: ${policy}`);
+    }
+  }
   return `${startMarker}\n# Generado por scripts/generar-csp-cloudflare.js; no editar a mano.\n${blocks.join('\n\n')}\n${endMarker}`;
 }
 
