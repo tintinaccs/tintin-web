@@ -73,6 +73,9 @@ async function seed() {
       audience: 'admin',
       recipientUid: '',
     });
+    await setDoc(doc(db, 'socialRateLimits', 'server_only_guard'), {
+      kind: 'review_reply', uid: 'client1', lastAt: new Date(),
+    });
   });
 }
 
@@ -92,6 +95,7 @@ try {
   const anon = testEnv.unauthenticatedContext().firestore();
   await fails(getDoc(doc(anon, 'users', 'client1', 'notifications', 'notif_client1')));
   await fails(getDoc(doc(anon, 'adminNotifications', 'notif_admin')));
+  await fails(getDoc(doc(anon, 'socialRateLimits', 'server_only_guard')));
 
   const client1 = dbFor('client1');
   await succeeds(getDoc(doc(client1, 'users', 'client1', 'notifications', 'notif_client1')));
@@ -106,6 +110,8 @@ try {
   }));
   await fails(updateDoc(doc(client1, 'users', 'client1', 'notifications', 'notif_client1'), { read: true }));
   await fails(deleteDoc(doc(client1, 'users', 'client1', 'notifications', 'notif_client1')));
+  await fails(getDoc(doc(client1, 'socialRateLimits', 'server_only_guard')));
+  await fails(setDoc(doc(client1, 'socialRateLimits', 'forged_guard'), { lastAt: new Date() }));
 
   const client2 = dbFor('client2');
   await fails(getDoc(doc(client2, 'users', 'client1', 'notifications', 'notif_client1')));
@@ -120,6 +126,8 @@ try {
   await fails(setDoc(doc(superDb, 'adminNotifications', 'forged_admin'), { title: 'Inventada' }));
   await fails(updateDoc(doc(superDb, 'adminNotifications', 'notif_admin'), { read: true }));
   await fails(deleteDoc(doc(superDb, 'adminNotifications', 'notif_admin')));
+  await fails(getDoc(doc(superDb, 'socialRateLimits', 'server_only_guard')));
+  await fails(setDoc(doc(superDb, 'socialRateLimits', 'super_forged_guard'), { lastAt: new Date() }));
 
   // Ni siquiera Super Admin lee la bandeja privada de una clienta desde el navegador.
   // La administración recibe su propia copia saneada en adminNotifications.
