@@ -1,0 +1,89 @@
+.tt-review-social-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 2px;
+}
+
+.tt-review-like-button,
+.tt-review-like-count {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.tt-review-like-button {
+  padding: 7px 12px;
+  border: 1px solid #efc8d7;
+  background: #fff;
+  color: #9f315c;
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease, transform .18s ease;
+}
+
+.tt-review-like-button:hover,
+.tt-review-like-button:focus-visible {
+  background: #fff2f7;
+  border-color: #d99bb2;
+  outline: none;
+}
+
+.tt-review-like-button:active {
+  transform: scale(.98);
+}
+
+.tt-review-like-button.is-liked {
+  background: #fff0f5;
+  border-color: #d98aa8;
+  color: #b53f6d;
+}
+
+.tt-review-like-button.is-liked span:first-child {
+  color: #b53f6d;
+  filter: drop-shadow(0 2px 4px rgba(181,63,109,.15));
+}
+
+.tt-review-like-button:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+
+.tt-review-like-count {
+  padding: 7px 4px;
+  color: #876b77;
+}
+
+.tt-review-reply-row {
+  margin-top: 12px;
+}
+
+.tt-review-message:not(.tt-review-message--store) strong {
+  color: #87425f;
+}
+
+.tt-review-message--store {
+  border-color: #ead7aa !important;
+  background: #fffbf2 !important;
+}
+
+.tt-review-message--store strong {
+  color: #a47720 !important;
+}
+
+@media (max-width: 520px) {
+  .tt-review-social-actions {
+    margin-top: 10px;
+  }
+  .tt-review-like-button {
+    min-height: 42px;
+    padding: 9px 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tt-review-like-button { transition: none !important; }
+}
