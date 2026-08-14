@@ -1,5 +1,4 @@
 import {
-  decodeFirestoreFields,
   encodeFirestoreFields,
   firestoreAdminCommit,
   firestoreAdminGet,
@@ -136,17 +135,14 @@ export async function markNotificationRead(env, { uid, notificationId, admin = f
 export async function markAllNotificationsRead(env, { uid, admin = false, limit = 100 }) {
   const root = admin ? 'adminNotifications' : `users/${safeId(uid, 'Cuenta')}/notifications`;
   const documents = await firestoreAdminList(env, root, Math.max(1, Math.min(200, Number(limit) || 100)));
-  const unread = documents
-    .map(document => ({ document, record: decodeFirestoreFields(document.fields || {}) }))
-    .filter(item => item.record?.read !== true);
+  const unread = documents.filter(document => document?.fields?.read?.booleanValue !== true);
+  const fields = encodeFirestoreFields({ read: true, updatedAt: new Date() });
 
-  for (let index = 0; index < unread.length; index += 20) {
-    const chunk = unread.slice(index, index + 20);
-    await firestoreAdminCommit(env, chunk.map(({ document, record }) => ({
-      path: String(document.name || '').split('/documents/').pop(),
-      fields: encodeFirestoreFields({ ...record, read: true, updatedAt: new Date() }),
-      currentDocument: document.updateTime ? { updateTime: document.updateTime } : undefined,
-    })));
+  for (let index = 0; index < unread.length; index += 10) {
+    await Promise.all(unread.slice(index, index + 10).map(document => {
+      const path = String(document.name || '').split('/documents/').pop();
+      return firestoreAdminMerge(env, path, fields);
+    }));
   }
   return unread.length;
 }
