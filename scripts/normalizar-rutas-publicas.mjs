@@ -50,18 +50,32 @@ function normalize(text) {
   let output = text;
   for (const [file, route] of routeMap) {
     const escapedFile = escapeRegex(file);
-    // Enlaces HTML reales o generados dentro de template strings.
-    output = output.replace(new RegExp(`href=(['"])${escapedFile}(?=([?#]|\\1))`, 'g'), `href=$1${route}`);
-    output = output.replace(new RegExp(`href=\\\\(['"])${escapedFile}(?=([?#]|\\\\?\\1))`, 'g'), `href=\\$1${route}`);
+    const localPrefix = '(?:\\./|/)?';
+
+    // href reales y href dentro de templates/strings, con o sin ./ o /.
+    output = output.replace(
+      new RegExp(`href=(['"])${localPrefix}${escapedFile}(?=([?#]|\\1))`, 'g'),
+      `href=$1${route}`
+    );
+    output = output.replace(
+      new RegExp(`href=\\\\(['"])${localPrefix}${escapedFile}(?=([?#]|\\\\?\\1))`, 'g'),
+      `href=\\$1${route}`
+    );
+
+    // Strings de navegación usados por location.href, assign(), etc.
+    output = output.replace(
+      new RegExp(`(['"])${localPrefix}${escapedFile}(?=([?#]|\\1))`, 'g'),
+      (match, quote) => `${quote}${route}`
+    );
 
     // Canonical/OG absolutos que todavía llevan extensión.
     output = output.replace(new RegExp(`https://tintinaccesorios\\.pages\\.dev/${escapedFile}(?=([?#'"<]|$))`, 'g'), `https://tintinaccesorios.pages.dev${route}`);
     output = output.replace(new RegExp(`https://tintinaccs\\.com/${escapedFile}(?=([?#'"<]|$))`, 'g'), `https://tintinaccs.com${route}`);
   }
 
-  // Las tarjetas de producto se construyen en JS y no siempre usan un atributo href literal al definir la URL.
-  output = output.replace(/`product\.html\?id=/g, '`/product?id=');
-  output = output.replace(/['"]product\.html\?id=/g, match => `${match[0]}/product?id=`);
+  // URLs de producto construidas por template literal.
+  output = output.replace(/`(?:\.\/|\/)?product\.html\?id=/g, '`/product?id=');
+  output = output.replace(/(['"])(?:\.\/|\/)?product\.html\?id=/g, '$1/product?id=');
   return output;
 }
 
