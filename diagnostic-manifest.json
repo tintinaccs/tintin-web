@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-14T12:34:20.397Z",
-  "sourceFingerprint": "8797678529622c6649c261ae9c2b37ae3fcda3a9eb973ff525dbe00a83b57cb5",
+  "generatedAt": "2026-08-14T13:11:07.897Z",
+  "sourceFingerprint": "74c817d492a19cdfcae1d9504e1e9b7100ae4b789a730778c82b0a3c74cd9c26",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 615,
-    "textFiles": 583,
-    "totalBytes": 6498089,
+    "files": 617,
+    "textFiles": 585,
+    "totalBytes": 6516661,
     "pages": 18,
-    "modules": 377
+    "modules": 378
   },
   "viewports": [
     {
@@ -16189,8 +16189,8 @@
     },
     {
       "path": "cloudflare/notificaciones-sociales.js",
-      "bytes": 5520,
-      "sha256": "1f590019364b7caeb4882a15baa0724f4334a4e41885e2e7e237e8a486471d8b",
+      "bytes": 8688,
+      "sha256": "23b60b022ee3fc78c834f540386e6e2882ee571f7e650cd5be6c56fc909cc0b8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16203,7 +16203,16 @@
           "line": 7
         }
       ],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://www.googleapis.com/auth/datastore",
+          "line": 14
+        },
+        {
+          "url": "https://firestore.googleapis.com/v1/projects/$%7BencodeURIComponent(projectId",
+          "line": 185
+        }
+      ]
     },
     {
       "path": "cloudflare/participacion-admin.js",
@@ -16583,8 +16592,8 @@
     },
     {
       "path": "functions/api/engagement.js",
-      "bytes": 3200,
-      "sha256": "53112f6a90a0c01233cb833def61dbbefbb352829cdff04faa22ac7c8006881c",
+      "bytes": 4572,
+      "sha256": "e969a8dbb99e2378cf78b058a471d7f42b9a6fd85a4a816ca0b2e950c6a4be26",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16603,10 +16612,16 @@
           "line": 7
         },
         {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 10
+        },
+        {
           "raw": "../../cloudflare/sincronizacion-participacion-sheets.js",
           "target": "cloudflare/sincronizacion-participacion-sheets.js",
           "dynamic": false,
-          "line": 8
+          "line": 11
         }
       ],
       "endpoints": []
@@ -16666,8 +16681,8 @@
     },
     {
       "path": "functions/api/notifications.js",
-      "bytes": 9414,
-      "sha256": "1eed12b2bc17b2eba5910f28cce15488c4e1e7143b90cd5b10e8ea2d36ab1ec4",
+      "bytes": 9711,
+      "sha256": "f5c24f91861c15d5a02fa14ce3da1775077cf6b252cd8afb0abf1be67c6f578f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17688,8 +17703,8 @@
     },
     {
       "path": "js/admin/notifications/notificaciones-admin.js",
-      "bytes": 11894,
-      "sha256": "b08eae61b05f4ea4d19e9a1bac73b01c213af0c027026cdd0650d3972b0ee8d3",
+      "bytes": 14505,
+      "sha256": "df1739a0384e041c571c62e9124708db86cdb29edcbfa88c92f22f2812df454a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19618,8 +19633,8 @@
     },
     {
       "path": "js/components/notifications/notificaciones-clientes.js",
-      "bytes": 10791,
-      "sha256": "947899d2beb4eed75544d95c4f4312667fe69c09f94b3f431d354186587d45a2",
+      "bytes": 12231,
+      "sha256": "dea14d0ef5a49fa6b88022630aa8013fc19926bb6574f8317b89ae6afdcee916",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20676,8 +20691,8 @@
     },
     {
       "path": "js/email/notificacion-pedido-resend.js",
-      "bytes": 6216,
-      "sha256": "588c6087bf73c836e0f9bebc8a731680a483e16dde6728d6e0b67166d232f976",
+      "bytes": 7069,
+      "sha256": "009ebe3668163dc6984bbd1afe503bc3b64a9006231b6a69180e69c69e89850c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24346,6 +24361,36 @@
       "endpoints": []
     },
     {
+      "path": "scripts/probar-firestore-notificaciones.mjs",
+      "bytes": 5606,
+      "sha256": "4dc0539dc1bc0c980bdded95adbdae84b01b4190aeee30ce3e9cfef767cd5524",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "@firebase/rules-unit-testing",
+          "target": "scripts/@firebase/rules-unit-testing",
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "firebase/firestore",
+          "target": "scripts/firebase/firestore",
+          "dynamic": false,
+          "line": 17
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/probar-firestore-telefono-unico.mjs",
       "bytes": 3748,
       "sha256": "86c1b1a97dde09f9a77b7f4bd4d9bddcf1aad1fee303f5a3b698496fb5bf6340",
@@ -24866,8 +24911,8 @@
     },
     {
       "path": "tests/engagement/notificaciones-sociales.test.mjs",
-      "bytes": 3252,
-      "sha256": "1a90886a4c99353516a265646ebba42af012fc2b30783e7691f77dea9a25bfec",
+      "bytes": 5085,
+      "sha256": "c4f7a6bc091b2f223478f106cf66cd94a76cb56200781f6f641b2e110e12f785",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25064,8 +25109,8 @@
     },
     {
       "path": "tests/navigation/header-responsive.spec.js",
-      "bytes": 4904,
-      "sha256": "9c2ad153239d012603c68ef3304d1e4d543bb72a36f80aa201b3e211ccf824bd",
+      "bytes": 5128,
+      "sha256": "59b49a4932280f9cfa88a0c70518695e45f6e85d5c19845b11c89d69d1284f0e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25807,6 +25852,12 @@
       "sha256": "616fba0f6c075cda2415368025d375245804fa00102aef5c5fca6dfb032778bf"
     },
     {
+      "path": ".github/workflows/auditar-notificaciones-sociales.yml",
+      "extension": ".yml",
+      "bytes": 990,
+      "sha256": "bad23404b8b9efffb1055571639c143594c7f62492b50cbe97e9587b4fbcc783"
+    },
+    {
       "path": ".github/workflows/auditar-pedidos-seguros.yml",
       "extension": ".yml",
       "bytes": 1558,
@@ -26175,8 +26226,8 @@
     {
       "path": "cloudflare/notificaciones-sociales.js",
       "extension": ".js",
-      "bytes": 5520,
-      "sha256": "1f590019364b7caeb4882a15baa0724f4334a4e41885e2e7e237e8a486471d8b"
+      "bytes": 8688,
+      "sha256": "23b60b022ee3fc78c834f540386e6e2882ee571f7e650cd5be6c56fc909cc0b8"
     },
     {
       "path": "cloudflare/participacion-admin.js",
@@ -26385,8 +26436,8 @@
     {
       "path": "css/components/notifications/notificaciones-sociales.css",
       "extension": ".css",
-      "bytes": 7786,
-      "sha256": "9eefb03f4bd952c4981d242c631cf57291dbb37b8450ffbc8798f46b59f1fa87"
+      "bytes": 7964,
+      "sha256": "b28d81041c012a9a23e13f091ca2d16bc14d66ededa02ccbebf963582629bf45"
     },
     {
       "path": "css/components/payments/payment-methods.css",
@@ -26931,8 +26982,8 @@
     {
       "path": "functions/api/engagement.js",
       "extension": ".js",
-      "bytes": 3200,
-      "sha256": "53112f6a90a0c01233cb833def61dbbefbb352829cdff04faa22ac7c8006881c"
+      "bytes": 4572,
+      "sha256": "e969a8dbb99e2378cf78b058a471d7f42b9a6fd85a4a816ca0b2e950c6a4be26"
     },
     {
       "path": "functions/api/geo-search.js",
@@ -26949,8 +27000,8 @@
     {
       "path": "functions/api/notifications.js",
       "extension": ".js",
-      "bytes": 9414,
-      "sha256": "1eed12b2bc17b2eba5910f28cce15488c4e1e7143b90cd5b10e8ea2d36ab1ec4"
+      "bytes": 9711,
+      "sha256": "f5c24f91861c15d5a02fa14ce3da1775077cf6b252cd8afb0abf1be67c6f578f"
     },
     {
       "path": "functions/api/order-email.js",
@@ -27159,8 +27210,8 @@
     {
       "path": "js/admin/notifications/notificaciones-admin.js",
       "extension": ".js",
-      "bytes": 11894,
-      "sha256": "b08eae61b05f4ea4d19e9a1bac73b01c213af0c027026cdd0650d3972b0ee8d3"
+      "bytes": 14505,
+      "sha256": "df1739a0384e041c571c62e9124708db86cdb29edcbfa88c92f22f2812df454a"
     },
     {
       "path": "js/admin/orders/eliminacion-pedidos-admin.js",
@@ -27657,8 +27708,8 @@
     {
       "path": "js/components/notifications/notificaciones-clientes.js",
       "extension": ".js",
-      "bytes": 10791,
-      "sha256": "947899d2beb4eed75544d95c4f4312667fe69c09f94b3f431d354186587d45a2"
+      "bytes": 12231,
+      "sha256": "dea14d0ef5a49fa6b88022630aa8013fc19926bb6574f8317b89ae6afdcee916"
     },
     {
       "path": "js/components/reviews/valoraciones-catalogo.js",
@@ -27891,8 +27942,8 @@
     {
       "path": "js/email/notificacion-pedido-resend.js",
       "extension": ".js",
-      "bytes": 6216,
-      "sha256": "588c6087bf73c836e0f9bebc8a731680a483e16dde6728d6e0b67166d232f976"
+      "bytes": 7069,
+      "sha256": "009ebe3668163dc6984bbd1afe503bc3b64a9006231b6a69180e69c69e89850c"
     },
     {
       "path": "js/email/notificaciones-correo.js",
@@ -29014,7 +29065,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 29944,
-      "sha256": "d24f6cfa6d191208d4a43040b646c92f13d426f050a40542ba49f777dffc564b"
+      "sha256": "4b244457178af1675ce7cf19dd3ad7d44702bd4c15e2906a46e7412a7f00bb26"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -29081,6 +29132,12 @@
       "extension": ".mjs",
       "bytes": 10551,
       "sha256": "fb67be79fa8b91424860f0763b7c8ed89a17798c8061631df185f8f9ce3a014a"
+    },
+    {
+      "path": "scripts/probar-firestore-notificaciones.mjs",
+      "extension": ".mjs",
+      "bytes": 5606,
+      "sha256": "4dc0539dc1bc0c980bdded95adbdae84b01b4190aeee30ce3e9cfef767cd5524"
     },
     {
       "path": "scripts/probar-firestore-telefono-unico.mjs",
@@ -29193,8 +29250,8 @@
     {
       "path": "tests/engagement/notificaciones-sociales.test.mjs",
       "extension": ".mjs",
-      "bytes": 3252,
-      "sha256": "1a90886a4c99353516a265646ebba42af012fc2b30783e7691f77dea9a25bfec"
+      "bytes": 5085,
+      "sha256": "c4f7a6bc091b2f223478f106cf66cd94a76cb56200781f6f641b2e110e12f785"
     },
     {
       "path": "tests/engagement/participation-contract.test.mjs",
@@ -29229,8 +29286,8 @@
     {
       "path": "tests/navigation/header-responsive.spec.js",
       "extension": ".js",
-      "bytes": 4904,
-      "sha256": "9c2ad153239d012603c68ef3304d1e4d543bb72a36f80aa201b3e211ccf824bd"
+      "bytes": 5128,
+      "sha256": "59b49a4932280f9cfa88a0c70518695e45f6e85d5c19845b11c89d69d1284f0e"
     },
     {
       "path": "tests/navigation/loader-shell-wait.spec.js",
@@ -30813,7 +30870,14 @@
     },
     {
       "file": "js/components/notifications/notificaciones-clientes.js",
-      "line": 39,
+      "line": 42,
+      "raw": "index.html",
+      "target": "index.html",
+      "exists": true
+    },
+    {
+      "file": "js/components/notifications/notificaciones-clientes.js",
+      "line": 43,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -32762,7 +32826,7 @@
     },
     {
       "file": "js/admin/notifications/notificaciones-admin.js",
-      "line": 115,
+      "line": 135,
       "target": "/api/notifications",
       "method": "POST"
     },
@@ -32792,7 +32856,7 @@
     },
     {
       "file": "js/components/notifications/notificaciones-clientes.js",
-      "line": 146,
+      "line": 163,
       "target": "/api/notifications",
       "method": "POST"
     },
@@ -32830,7 +32894,7 @@
         "references": [
           {
             "file": "js/admin/notifications/notificaciones-admin.js",
-            "line": 160,
+            "line": 184,
             "operation": "collection"
           }
         ]
@@ -33285,7 +33349,7 @@
           },
           {
             "file": "js/admin/notifications/notificaciones-admin.js",
-            "line": 179,
+            "line": 243,
             "operation": "collection"
           },
           {
@@ -34070,7 +34134,7 @@
           },
           {
             "file": "js/components/notifications/notificaciones-clientes.js",
-            "line": 162,
+            "line": 199,
             "operation": "collection"
           },
           {
