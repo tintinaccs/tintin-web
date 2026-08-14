@@ -13,6 +13,17 @@ function cleanOrigin(value, name) {
   return raw;
 }
 
+function walkJs(dir) {
+  if (!fs.existsSync(dir)) return [];
+  const out = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...walkJs(full));
+    else if (entry.isFile() && entry.name.endsWith('.js')) out.push(full);
+  }
+  return out;
+}
+
 const publicOrigin = cleanOrigin(config.publicOrigin, 'publicOrigin');
 const functionsOrigin = cleanOrigin(config.functionsFallbackOrigin, 'functionsFallbackOrigin');
 const futureOrigin = cleanOrigin(config.futurePublicOrigin, 'futurePublicOrigin');
@@ -38,9 +49,13 @@ targets.set('js/core/config/origenes-publicos.js', generatedBrowserConfig);
 
 for (const name of fs.readdirSync(root).filter(name => name.endsWith('.html'))) {
   const file = path.join(root, name);
-  let text = fs.readFileSync(file, 'utf8');
-  text = text.replace(originPattern, publicOrigin);
-  targets.set(name, text);
+  targets.set(name, fs.readFileSync(file, 'utf8').replace(originPattern, publicOrigin));
+}
+
+for (const file of [path.join(root, 'tienda.js'), ...walkJs(path.join(root, 'js'))]) {
+  const relative = path.relative(root, file).replace(/\\/g, '/');
+  if (relative === 'js/core/config/origenes-publicos.js') continue;
+  targets.set(relative, fs.readFileSync(file, 'utf8').replace(originPattern, publicOrigin));
 }
 
 {
@@ -53,8 +68,7 @@ for (const name of fs.readdirSync(root).filter(name => name.endsWith('.html'))) 
 
 {
   const file = path.join(root, 'sitemap.xml');
-  const text = fs.readFileSync(file, 'utf8').replace(originPattern, publicOrigin);
-  targets.set('sitemap.xml', text);
+  targets.set('sitemap.xml', fs.readFileSync(file, 'utf8').replace(originPattern, publicOrigin));
 }
 
 const drift = [];
