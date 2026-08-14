@@ -34,7 +34,7 @@ jobs:
 
       - name: Upload reports and screenshots
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: admin-part2f-report
           path: |
