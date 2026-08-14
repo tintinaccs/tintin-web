@@ -49,7 +49,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run monitor:production
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         if: always()
         with:
           name: phase11-production-health
