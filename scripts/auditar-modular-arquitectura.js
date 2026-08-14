@@ -54,9 +54,9 @@ if (requiredFiles.every(exists)) {
   check(config.includes('desktopMin: 1025'), 'config: desktopMin debe ser 1025');
 
   const entry = read('js/components/navigation/entrada-navegacion-publica.js');
-  check(entry.includes("from './escritorio/encabezado-escritorio.js'"), 'entry: falta escritorio');
-  check(entry.includes("from './tableta/encabezado-tableta.js'"), 'entry: falta tableta');
-  check(entry.includes("from './movil/encabezado-movil.js'"), 'entry: falta móvil');
+  check(/from ['"]\.\/escritorio\/encabezado-escritorio\.js(?:\?v=[^'"]+)?['"]/.test(entry), 'entry: falta escritorio');
+  check(/from ['"]\.\/tableta\/encabezado-tableta\.js(?:\?v=[^'"]+)?['"]/.test(entry), 'entry: falta tableta');
+  check(/from ['"]\.\/movil\/encabezado-movil\.js(?:\?v=[^'"]+)?['"]/.test(entry), 'entry: falta móvil');
   check(entry.includes("from './compartido/panel-busqueda.js'"), 'entry: falta buscador compartido');
   check(entry.includes("from './compartido/panel-cuenta.js'"), 'entry: falta cuenta compartida');
   check(entry.includes("from './compartido/panel-carrito.js'"), 'entry: falta carrito compartido');
