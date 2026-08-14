@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-14T12:15:59.720Z",
-  "sourceFingerprint": "ecc107f8d4b1e1953ff19e843d9ffe51cf37faced70b1fa5aa4211c0e60665cd",
+  "generatedAt": "2026-08-14T12:20:06.293Z",
+  "sourceFingerprint": "55eb8cb246287d2bfde664a459647e1c650a671cd2069d76e16733c8319b7abe",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 615,
     "textFiles": 583,
-    "totalBytes": 6498118,
+    "totalBytes": 6498090,
     "pages": 18,
     "modules": 377
   },
@@ -23702,20 +23702,13 @@
     },
     {
       "path": "scripts/auditar-seguro-pedidos.js",
-      "bytes": 5011,
-      "sha256": "d4fcca26ae25bbb681bc66d904b49527dca8600d28682b70b4d6b9a24eaf280d",
+      "bytes": 4983,
+      "sha256": "fbbcdf0940cb823453321e3eab132472d7c66b66b302b0969524cc015bdf457a",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [
-        {
-          "raw": "../../orders/pedido-checkout-seguro.js?v=tintin-20260811-phonefix-pedido-checkout-seguro-1",
-          "target": null,
-          "dynamic": true,
-          "line": 100
-        }
-      ],
+      "imports": [],
       "endpoints": []
     },
     {
@@ -28948,8 +28941,8 @@
     {
       "path": "scripts/auditar-seguro-pedidos.js",
       "extension": ".js",
-      "bytes": 5011,
-      "sha256": "d4fcca26ae25bbb681bc66d904b49527dca8600d28682b70b4d6b9a24eaf280d"
+      "bytes": 4983,
+      "sha256": "fbbcdf0940cb823453321e3eab132472d7c66b66b302b0969524cc015bdf457a"
     },
     {
       "path": "scripts/auditar-sistema-especial-estados-parte-2g-v2.mjs",
