@@ -6,17 +6,18 @@ const origin = 'https://tintinaccesorios.pages.dev';
 const indexed = ["index.html","catalogo.html","collections.html","product.html","about.html","contact.html","envios.html","cambios-devoluciones.html","preguntas-frecuentes.html","terminos.html","privacidad.html"];
 const noindex = ["404.html","admin.html","admin-images.html","checkout.html","login.html","perfil.html","nosotros.html"];
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
+const routeFor = file => file === 'index.html' ? '/' : '/' + file.replace(/\.html$/, '');
 const checks = [];
 const check = (name, ok, problem) => checks.push({ name, ok: Boolean(ok), problem });
 const count = (text, regex) => (text.match(regex) || []).length;
 
 for (const file of indexed) {
   const html = read(file);
-  const expected = origin + '/' + file;
+  const expected = origin + routeFor(file);
   check(file + ': título único', count(html, /<title>/gi) === 1 && /<title>[^<]{8,}<\/title>/i.test(html), 'Cada página indexable necesita un título descriptivo.');
   check(file + ': descripción única', count(html, /<meta\b[^>]*name=["']description["']/gi) === 1, 'Debe existir una sola descripción.');
-  check(file + ': canonical único', count(html, /<link\b[^>]*rel=["']canonical["']/gi) === 1 && html.includes('href="' + expected), 'El canonical debe apuntar al dominio público vigente.');
-  check(file + ': Open Graph completo', /property="og:title"/.test(html) && /property="og:description"/.test(html) && /property="og:image"/.test(html) && html.includes('property="og:url" content="' + expected), 'Faltan etiquetas sociales absolutas.');
+  check(file + ': canonical único', count(html, /<link\b[^>]*rel=["']canonical["']/gi) === 1 && html.includes('href="' + expected), 'El canonical debe usar la URL limpia que Cloudflare sirve finalmente.');
+  check(file + ': Open Graph completo', /property="og:title"/.test(html) && /property="og:description"/.test(html) && /property="og:image"/.test(html) && html.includes('property="og:url" content="' + expected), 'Faltan etiquetas sociales absolutas o usan una URL redirigida.');
   check(file + ': Twitter completo', /name="twitter:card" content="summary_large_image"/.test(html) && /name="twitter:title"/.test(html) && /name="twitter:description"/.test(html) && /name="twitter:image"/.test(html), 'Faltan etiquetas para compartir.');
   check(file + ': PWA e iconos', /rel="manifest" href="manifest.json"/.test(html) && /apple-touch-icon/.test(html) && /favicon-32x32/.test(html), 'La publicación debe conservar manifest e iconos.');
   check(file + ': indexable', /name="robots" content="index, follow, max-image-preview:large"/.test(html), 'La página pública debe declarar indexación coherente.');
@@ -35,18 +36,19 @@ const oldRefs = activeFiles.filter(file => read(file).includes('tintinaccs.githu
 check('No quedan URLs activas de GitHub Pages', oldRefs.length === 0, 'Referencias antiguas: ' + oldRefs.join(', '));
 
 const script = read('tienda.js');
-check('Producto genera canonical absoluto y estable', script.includes("new URL('/product.html', '" + origin + "')") && script.includes("canonicalProductUrl.searchParams.set('id', String(product.id))"), 'El producto no debe canonicalizar previews, localhost ni URLs sin id.');
+check('Producto genera canonical absoluto y estable', script.includes("new URL('/product', '" + origin + "')") && script.includes("canonicalProductUrl.searchParams.set('id', String(product.id))"), 'El producto no debe canonicalizar una URL .html que Cloudflare redirige.');
 check('Producto publica JSON-LD vigente', /'@type': 'Product'/.test(script) && /priceCurrency: 'PYG'/.test(script) && /schema.org\/InStock/.test(script) && /schema.org\/OutOfStock/.test(script) && /canonicalProductUrl.href/.test(script), 'Los datos estructurados deben reflejar precio, moneda, URL y stock.');
 
-const sitemap = read('sitemap.xml');
-const locations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
-const expectedLocations = indexed.filter(file => file !== 'product.html').map(file => origin + '/' + file);
-check('Sitemap contiene solo páginas indexables', JSON.stringify(locations) === JSON.stringify(expectedLocations), 'El sitemap debe coincidir exactamente con páginas públicas estáticas.');
+const sitemapText = read('sitemap.xml');
+const locations = [...sitemapText.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
+const expectedLocations = indexed.filter(file => file !== 'product.html').map(file => origin + routeFor(file));
+check('Sitemap contiene solo URLs finales indexables', JSON.stringify(locations) === JSON.stringify(expectedLocations), 'El sitemap debe coincidir exactamente con las URLs limpias públicas.');
+check('Sitemap no publica URLs .html', !locations.some(url => /\.html(?:$|[?#])/.test(url)), 'Cloudflare redirige .html; el sitemap no debe publicar destinos intermedios.');
 check('robots enlaza el sitemap vigente', read('robots.txt').includes('Sitemap: ' + origin + '/sitemap.xml'), 'robots.txt debe enlazar el sitemap de producción.');
 
-const manifest = JSON.parse(read('manifest.json'));
-check('Manifest tiene identidad, scope e iconos válidos', manifest.id === '/' && manifest.start_url === '/index.html' && manifest.scope === '/' && manifest.icons?.some(icon => icon.sizes === '192x192') && manifest.icons?.some(icon => icon.sizes === '512x512'), 'La PWA debe instalarse desde una identidad estable.');
-check('Inicio publica Store JSON-LD', /id="tt-store-jsonld"/.test(read('index.html')) && /"@type":"Store"/.test(read('index.html')), 'La organización debe tener datos estructurados básicos.');
+const manifestData = JSON.parse(read('manifest.json'));
+check('Manifest tiene identidad, scope e iconos válidos', manifestData.id === '/' && manifestData.start_url === '/' && manifestData.scope === '/' && manifestData.icons?.some(icon => icon.sizes === '192x192') && manifestData.icons?.some(icon => icon.sizes === '512x512'), 'La PWA debe instalarse desde la URL raíz final.');
+check('Inicio publica Store JSON-LD', /id="tt-store-jsonld"/.test(read('index.html')) && /"@type":"Store"/.test(read('index.html')) && read('index.html').includes('"url":"' + origin + '/"'), 'La organización debe usar la URL raíz canónica.');
 
 for (const file of fs.readdirSync(root).filter(file => file.endsWith('.html'))) {
   const html = read(file);

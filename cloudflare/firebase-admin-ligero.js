@@ -321,6 +321,33 @@ export async function firestoreAdminList(env, path, pageSize = 300) {
   return Array.isArray(data.documents) ? data.documents : [];
 }
 
+
+/** Lista una colección completa de forma paginada, con un techo explícito. */
+export async function firestoreAdminListAll(env, path, maxDocuments = 1000) {
+  const sa = parseServiceAccount(env);
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const limit = Math.max(1, Math.min(5000, Number(maxDocuments) || 1000));
+  const documents = [];
+  let pageToken = '';
+
+  do {
+    const remaining = limit - documents.length;
+    const params = new URLSearchParams({ pageSize: String(Math.min(300, remaining)) });
+    if (pageToken) params.set('pageToken', pageToken);
+    const response = await fetch(`${firestoreDocUrl(sa, path)}?${params.toString()}`, {
+      headers: { authorization: `Bearer ${accessToken}` }
+    });
+    if (response.status === 404) return documents;
+    if (!response.ok) throw new Error(`Firestore LIST ALL falló (${response.status})`);
+    const data = await response.json().catch(() => ({}));
+    const page = Array.isArray(data.documents) ? data.documents : [];
+    documents.push(...page.slice(0, remaining));
+    pageToken = data.nextPageToken || '';
+  } while (pageToken && documents.length < limit);
+
+  return documents;
+}
+
 function encodeFirestoreValue(value) {
   if (value === null || value === undefined) return { nullValue: null };
   if (typeof value === 'string') return { stringValue: value };

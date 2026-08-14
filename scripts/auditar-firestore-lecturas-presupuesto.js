@@ -19,15 +19,27 @@ const settingsStore = read('js/core/store/configuracion-publica.js');
 const whatsapp = read('js/components/contact/whatsapp.js');
 const paymentMethods = read('js/pages/checkout/checkout-metodos-pago.js');
 const readCache = read('js/core/firebase/cache-lecturas-firestore.js');
+const publicCatalogApi = read('functions/api/public-catalog.js');
+const publicCatalogClient = read('js/core/firebase/catalogo-publico-api.js');
+const routesConfig = read('_routes.json');
 
 check(
-  'Productos abre un solo listener acotado en páginas comerciales',
-  products.includes('onSnapshot') &&
-    products.includes('startPublicProductsRealtime') &&
-    /query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)\)/.test(products) &&
-    products.includes("window.addEventListener('pagehide'") &&
-    /(?:index\|catalogo\|collections)/.test(products),
-  'El canal en vivo debe estar acotado, limitado a páginas comerciales y cerrarse al salir.'
+  'Catálogo público evita un listener completo por visitante',
+  products.includes('startPublicProductsRealtime') &&
+    products.includes('return loadAllProducts();') &&
+    !/catalogo\|collections[\s\S]{0,160}return startPublicProductsRealtime\(\)/.test(products),
+  'Catálogo y colecciones deben usar carga cacheada; el listener completo no puede abrirse automáticamente.'
+);
+check(
+  'Catálogo público usa caché edge con fallback seguro',
+  publicCatalogApi.includes('caches.default') &&
+    publicCatalogApi.includes("s-maxage=60") &&
+    publicCatalogApi.includes('PRODUCT_FIELDS') &&
+    publicCatalogClient.includes("/api/public-catalog") &&
+    products.includes("fetchPublicCatalogResource('products')") &&
+    collections.includes("fetchPublicCatalogResource('collections')") &&
+    routesConfig.includes('"/api/public-catalog"'),
+  'La lectura masiva debe concentrarse en Cloudflare y publicar únicamente campos permitidos.'
 );
 check('Catálogo usa caché TTL compacta', products.includes("ALL_CACHE_KEY = 'products:cards'") && products.includes('compactProduct') && products.includes('readCached(ALL_CACHE_KEY') && products.includes('writeCached(ALL_CACHE_KEY'), 'La caché debe guardar solo datos de tarjetas.');
 check('Solicitudes simultáneas se deduplican', products.includes("runSingleFlight('products:all'") && readCache.includes('const flights = new Map()'), 'Dos módulos no deben repetir la misma consulta.');
@@ -40,7 +52,7 @@ check(
 );
 check('Páginas sin catálogo no cargan productos', /(?:index\|catalogo\|collections)/.test(products) && /return Array\.isArray\(window\.PRODUCTS\)/.test(products), 'Perfil, login, contacto, legales y checkout deben quedar sin lectura de productos.');
 check('La búsqueda carga productos solo al abrirse', products.includes("['btn-search', 'tabbar-search']") && products.includes('ensureProductsForSearch') && products.includes("control.addEventListener('click', load, { once: true })"), 'La lupa no debe consultar antes de usarse.');
-check('Colecciones públicas usan getDocs y caché', collections.includes('getDocs') && collections.includes('loadCollections') && collections.includes('CACHE_TTL'), 'El menú público no debe mantener un listener.');
+check('Colecciones públicas usan edge y conservan fallback acotado', collections.includes("fetchPublicCatalogResource('collections')") && collections.includes('getDocs') && collections.includes('loadCollections') && collections.includes('CACHE_TTL'), 'El menú público debe preferir edge y conservar Firestore solo como respaldo.');
 check('Colecciones en vivo quedan reservadas al Admin', collections.includes('startAdminListener') && collections.includes('adminSubscribers') && collections.includes('onSnapshot'), 'El CRUD Admin debe conservar tiempo real.');
 check(
   'Menú Tienda carga colecciones por demanda',

@@ -523,7 +523,7 @@ function goToCheckout() {
 
 function directWAProduct(product, variant = '') {
   if (!product) return;
-  const productUrl = new URL('/product.html', 'https://tintinaccesorios.pages.dev');
+  const productUrl = new URL('/product', 'https://tintinaccesorios.pages.dev');
   productUrl.search = '';
   productUrl.searchParams.set('id', String(product.id));
   const variantLine = variant ? `\n  Variante: ${variant}` : '';
@@ -1099,7 +1099,7 @@ function _updateProductMeta(product, mainImgUrl) {
   const description = product.desc
     ? String(product.desc).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 200)
     : `${product.name} — Tintin Accesorios & Relojes, tu boutique femenina en Paraguay.`;
-  const productUrl = new URL('product.html', window.location.href);
+  const productUrl = new URL('/product', window.location.origin);
   productUrl.search = '';
   productUrl.searchParams.set('id', String(product.id));
   const url = productUrl.href;

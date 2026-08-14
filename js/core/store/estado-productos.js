@@ -20,6 +20,7 @@ import {
   writeCached
 } from '../firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
 import { listPublicCollectionRest } from '../firebase/respaldo-rest-firestore.js?v=tintin-20260726-browser-fallback-1';
+import { fetchPublicCatalogResource } from '../firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1';
 import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1';
 
 const ALL_CACHE_KEY = 'products:cards';
@@ -226,20 +227,22 @@ async function fetchHomeProducts() {
 async function fetchAllProducts() {
   let products;
   try {
-    products = await fetchAllProductsFromRest();
-  } catch (restError) {
-    if (!await appCheckReady) throw restError;
-    products = await fetchAllProductsFromSdk();
+    const items = await fetchPublicCatalogResource('products');
+    products = items.map(item => mapProduct(item.id, item.data));
+  } catch (edgeError) {
+    try {
+      products = await fetchAllProductsFromRest();
+    } catch (restError) {
+      if (!await appCheckReady) throw restError;
+      products = await fetchAllProductsFromSdk();
+    }
   }
   products = normalizeList(products);
   const cards = products.map(compactProduct);
   // Un catálogo vacío no es una caché útil. Una lectura transitoria bloqueada
-  // por App Check, red o un despliegue nunca debe dejar al navegador mostrando
-  // "0 productos" durante todo el TTL después de que Firestore se recupere.
-  // El resultado vacío sí se publica para esta carga, pero la próxima visita
-  // vuelve a consultar el servidor en lugar de confiar en ese vacío.
+  // por red o un despliegue nunca debe dejar al navegador mostrando "0 productos".
   if (cards.length) writeCached(ALL_CACHE_KEY, cards);
-  return publish(products, 'server-or-rest-fallback');
+  return publish(products, 'edge-or-firestore-fallback');
 }
 
 async function startPublicProductsRealtime() {
@@ -474,7 +477,7 @@ export async function ensureProductsForCurrentPage() {
   if (/(^|\/)product(?:\.html)?$/.test(path)) return loadProductPage();
   if (path.endsWith('/') || /(^|\/)index(?:\.html)?$/.test(path)) return loadHomeProducts();
   if (/(^|\/)(?:catalogo|collections)(?:\.html)?$/.test(path)) {
-    return startPublicProductsRealtime();
+    return loadAllProducts();
   }
   // Inventario histórico de rutas para auditorías: index|catalogo|collections.
   return Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
