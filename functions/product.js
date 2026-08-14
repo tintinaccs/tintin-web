@@ -2,8 +2,7 @@ import {
   decodeFirestoreFields,
   firestoreAdminGet
 } from '../cloudflare/firebase-admin-ligero.js';
-
-const PUBLIC_ORIGIN = 'https://tintinaccesorios.pages.dev';
+import { TINTIN_PUBLIC_ORIGIN } from '../js/core/config/origenes-publicos.js';
 
 function plain(value, max = 220) {
   return String(value || '')
@@ -22,12 +21,12 @@ function escapeAttr(value) {
 
 function safeImage(value) {
   const raw = String(value || '').trim();
-  if (!raw || raw.length > 2048) return `${PUBLIC_ORIGIN}/assets/og-cover.jpg`;
+  if (!raw || raw.length > 2048) return `${TINTIN_PUBLIC_ORIGIN}/assets/og-cover.jpg`;
   try {
-    const url = new URL(raw, PUBLIC_ORIGIN);
-    return url.protocol === 'https:' ? url.href : `${PUBLIC_ORIGIN}/assets/og-cover.jpg`;
+    const url = new URL(raw, TINTIN_PUBLIC_ORIGIN);
+    return url.protocol === 'https:' ? url.href : `${TINTIN_PUBLIC_ORIGIN}/assets/og-cover.jpg`;
   } catch {
-    return `${PUBLIC_ORIGIN}/assets/og-cover.jpg`;
+    return `${TINTIN_PUBLIC_ORIGIN}/assets/og-cover.jpg`;
   }
 }
 
@@ -66,7 +65,7 @@ function injectMetadata(html, product, id) {
   const name = plain(product.name || product.title || product.Title, 180) || 'Producto Tintin';
   const description = plain(product.description || product.desc || product['Body (HTML)'], 220)
     || `${name} — Tintin Accesorios & Relojes, Paraguay.`;
-  const canonical = `${PUBLIC_ORIGIN}/product?id=${encodeURIComponent(id)}`;
+  const canonical = `${TINTIN_PUBLIC_ORIGIN}/product?id=${encodeURIComponent(id)}`;
   const image = safeImage(
     product.imageUrl || product.image || product.img || product.photo || product.imageSrc
     || product.image_src || product['Image Src'] || product['Variant Image']
