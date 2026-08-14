@@ -12,7 +12,7 @@ import {
   clearCart,
   cartTotal,
   formatPrice
-} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260811-phonefix-sincronizacion-carrito-1';
+} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260814-social-notifications-1';
 import {
   findCountryByCode,
   normalizePhone,
@@ -33,7 +33,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   // (ver js/components/cart/sincronizacion-carrito.js), así que alcanza con importarlo acá.
   if (!window.TintinCheckoutEmailBridgeLoading) {
     window.TintinCheckoutEmailBridgeLoading = true;
-    import('../pages/checkout/checkout-puente-correo.js?v=tintin-20260716-cloudinary-fix-1').catch(error => {
+    import('../pages/checkout/checkout-puente-correo.js?v=tintin-20260814-social-notifications-1').catch(error => {
       console.error('[secure-checkout-order] No se pudo cargar el puente de correo del pedido:', error);
     });
   }

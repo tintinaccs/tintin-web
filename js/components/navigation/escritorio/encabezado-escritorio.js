@@ -1,6 +1,8 @@
 import { CATEGORIES, UI_ICONS, categoryIcon, svgIcon } from '../compartido/iconos.js';
 import { logoUrl } from '../compartido/configuracion.js';
 
+const notificationBell = () => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>';
+
 function renderDesktopCategories() {
   return CATEGORIES.map(({ slug, label }) => `
     <a href="catalogo.html?cat=${encodeURIComponent(slug)}" class="tt-dropdown-card">
@@ -34,6 +36,9 @@ export function renderDesktopHeader() {
         <div class="tt-header-actions">
           <button type="button" id="btn-search" data-nav-action="search" title="Buscar" aria-label="Buscar" aria-expanded="false" aria-controls="search-panel">
             ${svgIcon(UI_ICONS.search)}
+          </button>
+          <button type="button" id="btn-notifications" class="tt-notification-trigger" data-nav-action="notifications" title="Notificaciones" aria-label="Notificaciones" aria-expanded="false" aria-controls="notifications-drawer" hidden>
+            ${notificationBell()}<span class="tt-notification-badge" data-notification-badge hidden>0</span>
           </button>
           <button type="button" id="btn-cuenta" data-nav-action="account" data-auth-account-button title="Mi cuenta" aria-label="Mi cuenta" aria-expanded="false" aria-controls="account-drawer">
             ${svgIcon(UI_ICONS.account)}

@@ -7,6 +7,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const ORDER_EMAIL_API = apiUrl('order-email');
+const SOCIAL_NOTIFICATIONS_API = apiUrl('notifications');
 const MAX_DELIVERY_ATTEMPTS = 3;
 const RETRY_DELAYS_MS = [700, 1800];
 const REQUEST_TIMEOUT_MS = 15000;
@@ -57,6 +58,21 @@ async function getIdToken(forceRefresh = false) {
     return await user.getIdToken(forceRefresh);
   } catch {
     return '';
+  }
+}
+
+async function registerOrderSocialActivity(orderId, idToken) {
+  try {
+    const response = await fetch(SOCIAL_NOTIFICATIONS_API, {
+      method: 'POST',
+      cache: 'no-store',
+      keepalive: true,
+      headers: { Authorization: `Bearer ${idToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'orderCreated', orderId }),
+    });
+    if (!response.ok) console.warn('[resend-order] El pedido se creó, pero la actividad social no pudo registrarse:', response.status);
+  } catch (error) {
+    console.warn('[resend-order] No se pudo registrar la actividad social del pedido:', error);
   }
 }
 
@@ -162,6 +178,7 @@ export async function sendOrderNotification(orderId, order, isResend = false) {
     await sleep(RETRY_DELAYS_MS[Math.min(attempt - 1, RETRY_DELAYS_MS.length - 1)]);
   }
 
+  if (!isResend) await registerOrderSocialActivity(normalizedOrderId, idToken);
   await logOrderEmailAttempt(normalizedOrderId, order, isResend, finalResult);
   return finalResult;
 }

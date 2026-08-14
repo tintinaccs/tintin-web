@@ -55,7 +55,7 @@ check(
 );
 check(
   'El puente del checkout, si se carga, usa el MISMO canal Resend',
-  bridge.includes("from '../../email/notificacion-pedido-resend.js?v=tintin-20260717-resend-1'") &&
+  bridge.includes("from '../../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-1'") &&
     !bridge.includes('notificaciones-correo.js'),
   'El puente no debe introducir un segundo backend de correo distinto al del checkout.'
 );

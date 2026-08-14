@@ -2,7 +2,8 @@ import {
   jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import {
-  addCustomerReply, createReview, editOwnReview, getOwnReview, toggleFavorite, engagementOwnReviewView,
+  addCustomerReply, createReview, editOwnReview, getOwnReview, getReviewInteractions,
+  toggleFavorite, toggleReviewLike, engagementOwnReviewView,
 } from '../../cloudflare/participacion-clientes.js';
 import { syncEngagementToSheets } from '../../cloudflare/sincronizacion-participacion-sheets.js';
 
@@ -17,8 +18,15 @@ export async function onRequest(context) {
     const user = await requireFirebaseUser(request);
     if (request.method === 'GET') {
       const url = new URL(request.url);
-      if (url.searchParams.get('action') !== 'ownReview') throw new Error('Acción no permitida');
-      return jsonResponse({ ok: true, review: await getOwnReview(env, user, url.searchParams.get('productId')) }, 200, origin, request.url);
+      const action = url.searchParams.get('action');
+      const productId = url.searchParams.get('productId');
+      if (action === 'ownReview') {
+        return jsonResponse({ ok: true, review: await getOwnReview(env, user, productId) }, 200, origin, request.url);
+      }
+      if (action === 'reviewInteractions') {
+        return jsonResponse({ ok: true, interactions: await getReviewInteractions(env, user, productId) }, 200, origin, request.url);
+      }
+      throw new Error('Acción no permitida');
     }
     if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido' }, 405, origin, request.url);
     const raw = await request.text();
@@ -30,12 +38,16 @@ export async function onRequest(context) {
     else if (input.action === 'editReview') privateReview = await editOwnReview(env, user, input);
     else if (input.action === 'replyReview') privateReview = await addCustomerReply(env, user, input);
     else if (input.action === 'toggleFavorite') result = await toggleFavorite(env, user, input);
+    else if (input.action === 'toggleReviewLike') result = await toggleReviewLike(env, user, input);
     else throw new Error('Acción no permitida');
     if (privateReview) result = { review: engagementOwnReviewView(privateReview) };
-    const syncEvent = input.action === 'toggleFavorite'
-      ? { type: 'like', operation: result.selected ? 'upsert' : 'delete', record: result.record }
-      : { type: 'review', operation: 'upsert', record: privateReview };
-    context.waitUntil?.(syncEngagementToSheets(env, user.idToken, syncEvent));
+
+    if (input.action !== 'toggleReviewLike') {
+      const syncEvent = input.action === 'toggleFavorite'
+        ? { type: 'like', operation: result.selected ? 'upsert' : 'delete', record: result.record }
+        : { type: 'review', operation: 'upsert', record: privateReview };
+      context.waitUntil?.(syncEngagementToSheets(env, user.idToken, syncEvent));
+    }
     return jsonResponse({ ok: true, ...result }, 200, origin, request.url);
   } catch (error) {
     const conflict = error?.code === 'version_conflict';

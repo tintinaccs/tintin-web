@@ -11,7 +11,7 @@ import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } fro
 // automático del checkout (js/pages/checkout/checkout-puente-correo.js), no el webhook viejo
 // de Apps Script de notificaciones-correo.js — evita reenviar por un canal que ya no
 // se usa para pedidos reales.
-import { sendOrderNotification } from "../email/notificacion-pedido-resend.js?v=tintin-20260717-resend-1";
+import { sendOrderNotification } from "../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-1";
 import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1";
 import {
   PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
