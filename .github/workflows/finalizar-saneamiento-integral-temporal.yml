@@ -139,7 +139,27 @@ jobs:
         run: npm audit --omit=dev --audit-level=moderate
 
       - name: Auditoría integral estática
-        run: npm run audit:final
+        id: audit_final
+        continue-on-error: true
+        shell: bash
+        run: |
+          set +e
+          npm run audit:final > audit-final.log 2>&1
+          status=$?
+          tail -n 240 audit-final.log
+          exit "$status"
+
+      - name: Guardar diagnóstico de auditoría integral
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: full-site-hardening-audit-final
+          path: audit-final.log
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Exigir auditoría integral verde
+        run: test "${{ steps.audit_final.outcome }}" = "success"
 
       - name: Instalar Chromium
         run: npx playwright install --with-deps chromium
