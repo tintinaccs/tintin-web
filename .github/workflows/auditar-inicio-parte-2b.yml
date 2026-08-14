@@ -32,7 +32,7 @@ jobs:
 
       - name: Upload home report and screenshots
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: home-part2b-report
           path: |
