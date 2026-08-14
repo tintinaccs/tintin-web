@@ -14,21 +14,24 @@ test('mobile conserva etiquetas y se compacta como Instagram al desplazarse', as
   await openPublicPage(page, { width: 390, height: 844 });
 
   const nav = page.locator('#tt-tabbar');
-  const labels = nav.locator('.tt-tabbar-btn > span:last-child');
+  const visibleButtons = nav.locator('.tt-tabbar-btn:not([hidden])');
+  const labels = nav.locator('.tt-tabbar-btn:not([hidden]) > span:last-child');
   await expect(nav).toBeVisible();
+  await expect(nav.locator('.tt-tabbar-btn')).toHaveCount(6);
+  await expect(visibleButtons).toHaveCount(5);
+  await expect(nav.locator('#tabbar-notifications')).toBeHidden();
   await expect(labels).toHaveCount(5);
   await expect(labels.first()).toBeVisible();
-  await expect(nav.locator('.tt-tabbar-btn')).toHaveCount(5);
-  await expect(nav.locator('.tt-tabbar-btn').nth(0)).toHaveAttribute('aria-label', 'Inicio');
-  await expect(nav.locator('.tt-tabbar-btn').nth(1)).toHaveAttribute('aria-label', 'Buscar');
-  await expect(nav.locator('.tt-tabbar-btn').nth(2)).toHaveAttribute('aria-label', 'Tienda');
+  await expect(visibleButtons.nth(0)).toHaveAttribute('aria-label', 'Inicio');
+  await expect(visibleButtons.nth(1)).toHaveAttribute('aria-label', 'Buscar');
+  await expect(visibleButtons.nth(2)).toHaveAttribute('aria-label', 'Tienda');
 
   const expandedWidth = await nav.evaluate(node => node.getBoundingClientRect().width);
   await page.evaluate(() => window.scrollTo(0, 560));
   await expect(nav).toHaveClass(/tt-tabbar-compact/);
   const compactWidth = await nav.evaluate(node => node.getBoundingClientRect().width);
   expect(compactWidth).toBeLessThan(expandedWidth);
-  await expect(nav.locator('.tt-tabbar-btn').first()).toHaveCSS('min-height', '48px');
+  await expect(visibleButtons.first()).toHaveCSS('min-height', '48px');
 
   await page.evaluate(() => window.scrollTo(0, 0));
   await expect(nav).not.toHaveClass(/tt-tabbar-compact/);
@@ -49,8 +52,9 @@ test('tablet tiene header exclusivo, marca completa y menú navegable', async ({
   await expect(page.locator('#tt-header-desktop-tablet')).toBeHidden();
   await expect(page.locator('#tt-tabbar')).toBeHidden();
   await expect(page.locator('#tt-header-tablet .tt-header-brand-copy strong')).toHaveText('TINTÍN');
+  await expect(page.locator('#btn-notifications-tablet')).toBeHidden();
 
-  for (const control of await page.locator('#btn-menu-tablet,.tt-tablet-actions > button').all()) {
+  for (const control of await page.locator('#btn-menu-tablet,.tt-tablet-actions > button:not([hidden])').all()) {
     const box = await control.evaluate(node => node.getBoundingClientRect());
     expect(box.width).toBeGreaterThanOrEqual(44);
     expect(box.height).toBeGreaterThanOrEqual(44);
