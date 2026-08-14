@@ -251,10 +251,25 @@
     }
     .adm-topbar-btn:hover { background: var(--rose); }
 
-    /* ======== CONTENT ======== */
+    /* ======== CONTENT — Tintin Contained Grid (TCG) ========
+       Contenedor centrado con margen generoso en vez de edge-to-edge: el
+       contenido nunca se estira a todo el ancho disponible más allá de
+       --tcg-max-w, así queda "contenido y respirable" en pantallas anchas
+       sin afectar tablet/mobile (que siguen ocupando el 100% disponible). */
+    :root {
+      --tcg-max-w: 1440px;
+      --tcg-space-sm: 12px;
+      --tcg-space-md: 20px;
+      --tcg-space-lg: 28px;
+      --tcg-radius: 16px;
+      --tcg-shadow: 0 6px 24px rgba(86,42,58,.06);
+    }
     .adm-content {
-      padding: 28px;
+      max-width: var(--tcg-max-w);
+      margin-inline: auto;
+      padding: var(--tcg-space-lg) 32px;
       flex: 1;
+      width: 100%;
     }
 
     /* ======== SECTIONS ======== */
@@ -264,8 +279,9 @@
     /* ======== CARDS ======== */
     .adm-card {
       background: var(--adm-card);
-      border-radius: 14px;
-      border: 1.5px solid var(--adm-border);
+      border-radius: var(--tcg-radius);
+      border: 1px solid var(--adm-border);
+      box-shadow: var(--tcg-shadow);
       overflow: hidden;
     }
     .adm-card-head {
@@ -290,13 +306,14 @@
     .adm-stats {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
+      gap: var(--tcg-space-md);
+      margin-bottom: var(--tcg-space-lg);
     }
     .adm-stat {
       background: var(--adm-card);
-      border-radius: 14px;
-      border: 1.5px solid var(--adm-border);
+      border-radius: var(--tcg-radius);
+      border: 1px solid var(--adm-border);
+      box-shadow: var(--tcg-shadow);
       padding: 20px;
     }
     .adm-stat-icon { margin-bottom: 8px; display:flex; align-items:center; }
@@ -1520,7 +1537,7 @@
 
       .adm-nav-bottom { padding: 8px 0 16px; }
       .adm-hamburger { display: none; }
-      .adm-content { padding: 16px; }
+      .adm-content { max-width: none; padding: 16px; }
       .adm-stats { grid-template-columns: repeat(2, 1fr); }
     }
 
@@ -1545,6 +1562,7 @@
       }
 
       .adm-content {
+        max-width: none;
         min-width: 0;
         padding: 10px;
       }
