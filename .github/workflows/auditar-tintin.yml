@@ -37,7 +37,7 @@ jobs:
 
       - name: Upload page-load audit log
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: page-loading-audit-log
           path: page-loading-audit.log
@@ -130,7 +130,7 @@ jobs:
         run: npm run audit:critical-healing
 
       - name: Configurar Java para emuladores Firebase
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
@@ -145,7 +145,7 @@ jobs:
 
       - name: Upload adversarial Firestore report
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: firestore-critical-report
           path: firestore-critical.log
@@ -172,7 +172,7 @@ jobs:
 
       - name: Upload global responsive report and failure screenshots
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: global-responsive-geometry
           path: |
@@ -193,7 +193,7 @@ jobs:
 
       - name: Upload Chromium smoke report
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: chromium-smoke-report
           path: chromium-smoke.log
