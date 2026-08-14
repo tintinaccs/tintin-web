@@ -26,6 +26,16 @@ jobs:
           cache: npm
       - name: Instalar dependencias
         run: npm ci
+      - name: Corregir escape literal del generador temporal
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/aplicar-endurecimiento-produccion-temporal.mjs')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace("raw.includes('${')", "raw.includes('\\${')")
+          p.write_text(s, encoding='utf-8')
+          PY
       - name: Aplicar cambios quirúrgicos
         run: node scripts/aplicar-endurecimiento-produccion-temporal.mjs
       - name: Actualizar versionado y artefactos generados
