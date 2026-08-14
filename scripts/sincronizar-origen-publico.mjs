@@ -43,9 +43,11 @@ const originPattern = new RegExp([...knownOrigins]
   .join('|'), 'g');
 
 const generatedBrowserConfig = `// Generado a partir de config/origenes-tintin.json.\n// Mantener este módulo sincronizado mediante scripts/sincronizar-origen-publico.mjs.\nexport const TINTIN_PUBLIC_ORIGIN = '${publicOrigin}';\nexport const TINTIN_FUNCTIONS_FALLBACK_ORIGIN = '${functionsOrigin}';\nexport const TINTIN_AUTH_DOMAIN = '${authDomain}';\nexport const TINTIN_FUTURE_PUBLIC_ORIGIN = '${futureOrigin}';\n`;
+const generatedEdgeConfig = `// Generado a partir de config/origenes-tintin.json.\n// Mantener sincronizado mediante scripts/sincronizar-origen-publico.mjs.\nexport const TINTIN_PUBLIC_ORIGIN = '${publicOrigin}';\nexport const TINTIN_FUTURE_PUBLIC_ORIGIN = '${futureOrigin}';\n`;
 
 const targets = new Map();
 targets.set('js/core/config/origenes-publicos.js', generatedBrowserConfig);
+targets.set('cloudflare/origenes-publicos.js', generatedEdgeConfig);
 
 for (const name of fs.readdirSync(root).filter(name => name.endsWith('.html'))) {
   const file = path.join(root, name);
