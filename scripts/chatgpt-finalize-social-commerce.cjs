@@ -114,6 +114,7 @@ replaceRequired('js/inicio-navegacion-publica.js', `const MODULE_VERSION = 'tint
 
 replaceRequired('js/pages/checkout/checkout-puente-correo.js', `../../email/notificacion-pedido-resend.js?v=tintin-20260717-resend-1`, `../../email/notificacion-pedido-resend.js?v=${VERSION}`, 'notificación social de pedido');
 replaceRequired('js/orders/pedido-checkout-seguro.js', `../pages/checkout/checkout-puente-correo.js?v=tintin-20260716-cloudinary-fix-1`, `../pages/checkout/checkout-puente-correo.js?v=${VERSION}`, 'puente de checkout social');
+replaceRequired('scripts/auditar-admin-correo-mensajeria.js', `from '../../email/notificacion-pedido-resend.js?v=tintin-20260717-resend-1'`, `from '../../email/notificacion-pedido-resend.js?v=${VERSION}'`, 'contrato de auditoría de correo versionado');
 
 {
   const file = 'js/components/cart/sincronizacion-carrito.js';
