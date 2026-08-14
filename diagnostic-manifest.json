@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-14T12:13:05.633Z",
-  "sourceFingerprint": "725b3dd3144856e1f1f0eaa7a36bd758d70dc793e12796837b7794f327d831b1",
+  "generatedAt": "2026-08-14T12:15:59.720Z",
+  "sourceFingerprint": "ecc107f8d4b1e1953ff19e843d9ffe51cf37faced70b1fa5aa4211c0e60665cd",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 615,
     "textFiles": 583,
-    "totalBytes": 6498041,
+    "totalBytes": 6498118,
     "pages": 18,
     "modules": 377
   },
@@ -22297,24 +22297,18 @@
     },
     {
       "path": "scripts/auditar-correo-fase-3.js",
-      "bytes": 5100,
-      "sha256": "76ee02d4906e84508fa2ba25080f76e36d1d2b8ed14516d724ee5ea74636d699",
+      "bytes": 5177,
+      "sha256": "6d7f36a3e22d6ed39bcdbbbe80dbccfd39d613f0be7e62d2a4d1db9cc3e8a5b1",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../email/notificacion-pedido-resend.js?v=tintin-20260717-resend-1",
-          "target": null,
-          "dynamic": false,
-          "line": 27
-        },
-        {
           "raw": "./sincronizacion-correo-admin.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "scripts/sincronizacion-correo-admin.js",
           "dynamic": true,
-          "line": 78
+          "line": 79
         }
       ],
       "endpoints": []
@@ -28618,8 +28612,8 @@
     {
       "path": "scripts/auditar-correo-fase-3.js",
       "extension": ".js",
-      "bytes": 5100,
-      "sha256": "76ee02d4906e84508fa2ba25080f76e36d1d2b8ed14516d724ee5ea74636d699"
+      "bytes": 5177,
+      "sha256": "6d7f36a3e22d6ed39bcdbbbe80dbccfd39d613f0be7e62d2a4d1db9cc3e8a5b1"
     },
     {
       "path": "scripts/auditar-critico-recuperacion.js",
@@ -33374,12 +33368,12 @@
           },
           {
             "file": "scripts/auditar-correo-fase-3.js",
-            "line": 46,
+            "line": 47,
             "operation": "doc"
           },
           {
             "file": "scripts/auditar-correo-fase-3.js",
-            "line": 53,
+            "line": 54,
             "operation": "doc"
           },
           {
@@ -33874,12 +33868,12 @@
           },
           {
             "file": "scripts/auditar-correo-fase-3.js",
-            "line": 68,
+            "line": 69,
             "operation": "doc"
           },
           {
             "file": "scripts/auditar-correo-fase-3.js",
-            "line": 70,
+            "line": 71,
             "operation": "doc"
           },
           {
