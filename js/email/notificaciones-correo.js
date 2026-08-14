@@ -232,7 +232,7 @@ if (
   !window.TintinCheckoutEmailBridgeLoading
 ) {
   window.TintinCheckoutEmailBridgeLoading = true;
-  import('../pages/checkout/checkout-puente-correo.js?v=tintin-20260716-cloudinary-fix-1').catch(error => {
+  import('../pages/checkout/checkout-puente-correo.js?v=tintin-20260814-social-notifications-1').catch(error => {
     console.error('[email-notify] No se pudo cargar el puente del checkout:', error);
   });
 }

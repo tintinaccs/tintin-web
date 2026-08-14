@@ -1144,6 +1144,25 @@ service cloud.firestore {
           isStoreOpenOrAllowed();
         allow create, update, delete: if false;
       }
+
+      match /reviewLikeProducts/{productId} {
+        allow read: if isSignedIn() &&
+          !isBlockedUser() &&
+          request.auth.uid == userId;
+        allow create, update, delete: if false;
+      }
+
+      match /notifications/{notificationId} {
+        allow get: if isSignedIn() &&
+          !isBlockedUser() &&
+          request.auth.uid == userId;
+        allow list: if isSignedIn() &&
+          !isBlockedUser() &&
+          request.auth.uid == userId &&
+          request.query.limit != null &&
+          request.query.limit <= 100;
+        allow create, update, delete: if false;
+      }
     }
 
     /* ============================================================
@@ -1205,6 +1224,14 @@ service cloud.firestore {
 
     match /likeRecords/{likeId} {
       allow read: if isSuperAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /adminNotifications/{notificationId} {
+      allow get: if isSuperAdmin();
+      allow list: if isSuperAdmin() &&
+        request.query.limit != null &&
+        request.query.limit <= 100;
       allow create, update, delete: if false;
     }
 

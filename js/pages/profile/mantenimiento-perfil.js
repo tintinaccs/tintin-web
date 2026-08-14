@@ -51,6 +51,7 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
       }
       .perfil-btn-danger:hover { background:var(--danger,#b42345)!important;color:#fff!important; }
       .perfil-order-row { padding:14px!important;border-radius:14px;margin-bottom:10px;border:1px solid var(--border,#ecd5de)!important; }
+      .perfil-order-row.tt-profile-order-focus { box-shadow:0 0 0 4px rgba(199,154,59,.24),0 18px 38px rgba(173,63,103,.14)!important; }
       .tt-profile-order-head { display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px; }
       .tt-profile-order-meta { font-size:11px;color:var(--text-muted,#755f67);font-weight:750; }
       .tt-profile-order-items { font-size:13px;color:var(--text,#382d31);line-height:1.55; }
@@ -157,7 +158,8 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
       const payment = escapeHtml(order.paymentMethod || order.payment || 'A confirmar');
       const delivery = escapeHtml(order.shippingMethod || order.deliveryMethod || 'A coordinar');
       const address = escapeHtml(order.address || order.deliveryAddress || order.city || 'Sin direccion registrada');
-      return `<article class="perfil-order-row">
+      const orderAnchor = String(order.id || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 220);
+      return `<article class="perfil-order-row" id="pedido-${orderAnchor}" data-order-id="${orderAnchor}">
         <div class="tt-profile-order-head"><span class="tt-profile-order-meta">#${shortId} · ${dateText}</span><span class="tt-profile-status tt-profile-status--${status}">${escapeHtml(order.status || 'pendiente')}</span></div>
         <div class="tt-profile-order-items">${itemsText || 'Sin detalle de productos'}${more}</div>
         <div class="tt-profile-order-total">Total: ${formatPrice(order.total)}</div>
@@ -168,6 +170,18 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
         </details>
       </article>`;
     }).join('') + (sorted.length > visible.length ? `<div class="tt-profile-state">Mostrando los 10 pedidos más recientes de ${sorted.length}.</div>` : '');
+
+    const requested = String(location.hash || '').match(/^#pedido-([A-Za-z0-9_-]+)$/)?.[1];
+    if (requested) {
+      requestAnimationFrame(() => {
+        const target = document.getElementById(`pedido-${requested}`);
+        if (!target) return;
+        target.querySelector('details')?.setAttribute('open', '');
+        target.classList.add('tt-profile-order-focus');
+        target.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+        window.setTimeout(() => target.classList.remove('tt-profile-order-focus'), 2200);
+      });
+    }
   }
 
   function renderOrdersError(message) {

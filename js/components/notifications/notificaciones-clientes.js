@@ -229,6 +229,9 @@ export function initClientNotifications() {
     currentUser = user || null;
     setTriggersVisible(Boolean(user));
     subscribe(currentUser);
+    if (currentUser) {
+      api('profileCreated').catch(error => console.warn('[notifications] No se pudo registrar el alta social:', error));
+    }
   });
 }
 

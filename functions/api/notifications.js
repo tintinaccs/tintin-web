@@ -2,7 +2,7 @@ import {
   jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser, requireSuperAdmin,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import {
-  decodeFirestoreFields, firestoreAdminGet, firestoreAdminMerge,
+  decodeFirestoreFields, firestoreAdminGet, firestoreAdminList, firestoreAdminMerge,
 } from '../../cloudflare/firebase-admin-ligero.js';
 import {
   markAllNotificationsRead,
@@ -38,7 +38,11 @@ async function registerProfileNotification(env, user) {
   if (!userDocument) throw new Error('El perfil todavía no existe');
   const profile = decodeFirestoreFields(userDocument.fields || {});
   const name = clean(profile.name || profile.displayName || String(user.email || '').split('@')[0] || 'Nueva clienta', 160);
-  const createdAt = profile.createdAt ? new Date(profile.createdAt) : new Date();
+  const createdAt = profile.createdAt ? new Date(profile.createdAt) : null;
+  const createdAtMs = createdAt?.getTime?.();
+  if (!Number.isFinite(createdAtMs) || Date.now() - createdAtMs > 60 * 60 * 1000) {
+    return { created: false, skipped: true, reason: 'existing_profile' };
+  }
 
   const adminResult = await notifyAdminIfAbsent(env, {
     kind: 'user_joined', actorType: 'customer', actorUid: uid, actorName: name,
@@ -142,7 +146,12 @@ export async function onRequest(context) {
         return jsonResponse({ ok: true }, 200, origin, request.url);
       }
       if (action === 'adminNotificationsSeenAll') {
-        const count = await markAllNotificationsRead(env, { admin: true, limit: 150 });
+        const documents = await firestoreAdminList(env, 'adminNotifications', 100);
+        const unreadSources = documents
+          .filter(document => document?.fields?.read?.booleanValue !== true)
+          .map(document => decodeFirestoreFields(document.fields || {}));
+        await Promise.allSettled(unreadSources.map(notification => markSourceSeen(env, notification)));
+        const count = await markAllNotificationsRead(env, { admin: true, limit: 100 });
         return jsonResponse({ ok: true, count }, 200, origin, request.url);
       }
       if (action === 'adminOrderStatusChanged') {

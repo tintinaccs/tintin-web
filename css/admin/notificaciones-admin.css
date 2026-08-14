@@ -214,3 +214,24 @@
 @media (prefers-reduced-motion: reduce) {
   .adm-notification-focus { animation: none !important; }
 }
+
+.adm-notifications-wrap .tt-notification-badge {
+  position:absolute;
+  top:-6px;
+  right:-7px;
+  min-width:18px;
+  height:18px;
+  padding:0 5px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:2px solid #fff;
+  border-radius:999px;
+  background:#9f315c;
+  color:#fff;
+  font-size:10px;
+  font-weight:850;
+  line-height:1;
+  box-shadow:0 4px 10px rgba(159,49,92,.22);
+}
+.adm-notifications-wrap .tt-notification-badge[hidden] { display:none!important; }
