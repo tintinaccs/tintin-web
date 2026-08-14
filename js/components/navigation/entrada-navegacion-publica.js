@@ -13,6 +13,7 @@ import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
 import { fetchGlobalLayoutConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260811-cls-header-reserve-1';
 import { initGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20260810-global-studio-9';
+import { initClientNotifications } from '../notifications/notificaciones-clientes.js?v=tintin-20260814-social-notifications-1';
 
 const LEGACY_SHELL_IDS = Object.freeze([
   'tt-header-desktop-tablet',
@@ -28,6 +29,7 @@ const LEGACY_SHELL_IDS = Object.freeze([
   'sheet-backdrop',
   'tt-shared-backdrop',
   'tt-shared-morph',
+  'notifications-drawer',
 ]);
 
 let mountPromise = null;
@@ -60,12 +62,6 @@ function mountPublicShell() {
   if (mountPromise) return mountPromise;
 
   document.body.classList.add('tt-public-shell-mounting');
-  // El header/nav real se inserta en el DOM de forma asíncrona (fetch de
-  // assets + registro de paneles). Si el loader de página ya se ocultó
-  // antes de que esto termine, el contenido bajo el header se corre
-  // visiblemente en cuanto se inserta — layout shift real, no solo teórico.
-  // beginWait/endWait bloquean el ocultamiento del loader únicamente
-  // mientras esta tarea puntual sigue en curso, sin agregar demora fija.
   window.TintinLoader?.beginWait?.();
   mountPromise = Promise.all([
     ensureNavigationAssets(),
@@ -85,9 +81,10 @@ function mountPublicShell() {
     enhanceMobileFooter();
     await registerNavigationSurfaces();
     loadSharedRuntime();
+    initClientNotifications();
 
     document.dispatchEvent(new CustomEvent('tintin:public-shell-ready', {
-      detail: { architecture: 'modular-navigation-v1' },
+      detail: { architecture: 'modular-navigation-v1', socialNotifications: true },
     }));
   }).catch(error => {
     console.error('[PublicShell] No se pudo montar la navegación.', error);
