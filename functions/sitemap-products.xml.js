@@ -2,7 +2,7 @@ import {
   decodeFirestoreFields,
   firestoreAdminListAll
 } from '../cloudflare/firebase-admin-ligero.js';
-import { TINTIN_PUBLIC_ORIGIN } from '../js/core/config/origenes-publicos.js';
+import { TINTIN_PUBLIC_ORIGIN } from '../cloudflare/origenes-publicos.js';
 
 function esc(value) {
   return String(value || '')
