@@ -15,29 +15,6 @@ const endMarker = '# CSP_ROUTE_POLICIES_END';
 const scriptOrigins = "https://*.gstatic.com https://*.google.com https://unpkg.com https://www.googletagmanager.com";
 const connectOrigins = "https://*.googleapis.com https://*.google.com https://*.gstatic.com https://unpkg.com https://*.googleusercontent.com https://res.cloudinary.com https://api.cloudinary.com https://api.imgbb.com https://*.google-analytics.com https://*.analytics.google.com";
 
-// Cloudflare Pages combina las reglas que coinciden. La política global debe
-// ser completa pero suficientemente permisiva para no bloquear una página
-// antes de que su política específica, más estricta, se aplique. Esto evita
-// que una ruta quede con una CSP parcial si Cloudflare no aplica por cualquier
-// motivo el bloque específico (el caso real detectado en `/`).
-const globalPolicy = [
-  "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' ${scriptOrigins}`,
-  "script-src-attr 'unsafe-inline'",
-  "style-src 'self' 'unsafe-inline' https://unpkg.com",
-  "img-src 'self' data: blob: https:",
-  "font-src 'self' data:",
-  `connect-src 'self' ${connectOrigins}`,
-  `frame-src 'self' ${publicOrigin} https://*.google.com https://*.gstatic.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com`,
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "frame-ancestors 'self'",
-  "manifest-src 'self'",
-  "worker-src 'self' blob:",
-  "upgrade-insecure-requests"
-].join('; ') + ';';
-
 const VISUAL_BUILDER_PREVIEWABLE_PAGES = new Set([
   'index.html', 'about.html', 'catalogo.html', 'collections.html',
   'contact.html', 'envios.html', 'preguntas-frecuentes.html', 'cambios-devoluciones.html',
@@ -52,6 +29,35 @@ function inlineHashes(file) {
     hashes.add(`'sha256-${crypto.createHash('sha256').update(match[2], 'utf8').digest('base64')}'`);
   }
   return [...hashes].sort();
+}
+
+function allInlineHashes() {
+  const hashes = new Set();
+  for (const file of fs.readdirSync(root).filter(name => name.endsWith('.html'))) {
+    inlineHashes(file).forEach(hash => hashes.add(hash));
+  }
+  return [...hashes].sort();
+}
+
+function globalPolicy() {
+  const hashes = allInlineHashes();
+  return [
+    "default-src 'self'",
+    `script-src 'self'${hashes.length ? ` ${hashes.join(' ')}` : ''} ${scriptOrigins}`,
+    "script-src-attr 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline' https://unpkg.com",
+    "img-src 'self' data: blob: https:",
+    "font-src 'self' data:",
+    `connect-src 'self' ${connectOrigins}`,
+    `frame-src 'self' ${publicOrigin} https://*.google.com https://*.gstatic.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com`,
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'self'",
+    "manifest-src 'self'",
+    "worker-src 'self' blob:",
+    "upgrade-insecure-requests"
+  ].join('; ') + ';';
 }
 
 function pagePolicy(file) {
@@ -83,8 +89,6 @@ function generateRouteBlock() {
     const policy = pagePolicy(file);
     blocks.push(`${route}\n  Content-Security-Policy: ${policy}`);
     if (file === 'index.html') {
-      // Regla absoluta redundante a propósito: protege el root incluso si una
-      // peculiaridad del matching interno de Pages deja fuera el bloque `/`.
       blocks.push(`${publicOrigin}/\n  Content-Security-Policy: ${policy}`);
     }
   }
@@ -94,7 +98,7 @@ function generateRouteBlock() {
 function expectedHeaders() {
   let headers = fs.readFileSync(headersPath, 'utf8').replace(/\r\n?/g, '\n');
   headers = headers.replace(new RegExp(`${startMarker}[\\s\\S]*?${endMarker}\\n*`, 'g'), '');
-  headers = headers.replace(/^  Content-Security-Policy:.*$/m, `  Content-Security-Policy: ${globalPolicy}`);
+  headers = headers.replace(/^  Content-Security-Policy:.*$/m, `  Content-Security-Policy: ${globalPolicy()}`);
   const cacheRoot = '\n/\n  Cache-Control: no-cache, no-store, must-revalidate';
   if (!headers.includes(cacheRoot)) throw new Error('No se encontró el bloque de caché raíz en _headers.');
   return headers.replace(cacheRoot, `\n${generateRouteBlock()}\n${cacheRoot}`).replace(/\n{3,}/g, '\n\n');
