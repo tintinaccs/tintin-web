@@ -17,6 +17,7 @@ const required = [
   'scripts/auditar-fase-10-accessibility.js',
   'scripts/auditar-fase-11-seo.js',
   'scripts/auditar-fase-12-entrega.mjs',
+  'scripts/auditar-github-actions-soportadas.mjs',
   'scripts/generar-csp-cloudflare.js',
   'scripts/produccion-smoke-fase-12.mjs',
   'docs/informe-entrega-fase-12.md',
@@ -40,14 +41,16 @@ check(
 
 const workflow = read('.github/workflows/entrega-final-fase-12.yml');
 for (const token of [
+  'node scripts/auditar-github-actions-soportadas.mjs',
   'npm run audit:final',
   'npm run test:rules-critical',
+  'npm run test:rules-phone',
   'npm run test:pages',
   'npm run test:phase8-ui',
   'npm run test:phase10-a11y',
   'npm run test:phase11-seo',
   'npm run audit:canonical-viewports',
-  'npm audit --omit=dev --audit-level=critical',
+  'npm audit --omit=dev --audit-level=moderate',
   'node scripts/produccion-smoke-fase-12.mjs'
 ]) {
   check('El workflow final ejecuta ' + token, workflow.includes(token), 'Falta una comprobación obligatoria de Fase 12.');
@@ -79,8 +82,6 @@ walk(root);
 
 const conflicts = [];
 const privateKeys = [];
-// Exige un bloque PEM completo y una carga útil suficientemente larga. Una
-// auditoría que contiene el texto de detección no se confunde con una clave.
 const privateKeyBlock = /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----\s*\r?\n(?:[A-Za-z0-9+/=]{20,}\r?\n){2,}-----END (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/;
 for (const absolute of textFiles) {
   const relative = path.relative(root, absolute).replaceAll('\\', '/');
