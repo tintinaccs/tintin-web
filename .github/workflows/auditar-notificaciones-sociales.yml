@@ -1,0 +1,38 @@
+name: Auditoría social de notificaciones
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  notifications-security:
+    name: Social notifications security
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Setup Java for Firebase emulator
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Test social notification contract
+        run: node --test tests/engagement/notificaciones-sociales.test.mjs
+
+      - name: Test notification Firestore rules in emulator
+        run: npx firebase emulators:exec --only firestore --project demo-tintin-social-notifications "node scripts/probar-firestore-notificaciones.mjs"
