@@ -3,7 +3,7 @@ name: Deploy Firebase rules once
 on:
   push:
     branches:
-      - chatgpt/firebase-rules-live-deploy
+      - main
 
 permissions:
   contents: read
@@ -11,17 +11,17 @@ permissions:
 jobs:
   deploy-rules:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     steps:
-      - name: Esperar preview Cloudflare y publicar reglas
+      - name: Esperar Cloudflare producción y publicar reglas
         shell: bash
         run: |
           set -euo pipefail
-          URL='https://chatgpt-firebase-rules-live.tintinaccesorios.pages.dev/api/firebase-rules-deploy-once?commit=c64acac6bed8ec41ef610dbc7473be676a1c1aca'
+          URL='https://tintinaccesorios.pages.dev/api/firebase-rules-deploy-once?commit=c64acac6bed8ec41ef610dbc7473be676a1c1aca'
           rm -f response.json
 
-          for attempt in $(seq 1 36); do
-            echo "Intento ${attempt}/36"
+          for attempt in $(seq 1 48); do
+            echo "Intento ${attempt}/48"
             code="$(curl --silent --show-error --location --connect-timeout 10 --max-time 30 --output response.json --write-out '%{http_code}' "$URL" || true)"
             cat response.json 2>/dev/null || true
             echo
@@ -39,11 +39,8 @@ jobs:
               exit 0
             fi
 
-            # Mientras Cloudflare actualiza la preview puede responder 404/5xx.
-            # Reintentamos; si el error es persistente, el job termina en rojo y
-            # conserva la respuesta para diagnóstico sin imprimir credenciales.
             sleep 10
           done
 
-          echo "No se pudo confirmar el deploy de Firebase dentro de la ventana de reintentos." >&2
+          echo "No se pudo confirmar el deploy de Firebase en producción dentro de la ventana de reintentos." >&2
           exit 1
