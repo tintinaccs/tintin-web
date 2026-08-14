@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-14T10:36:47.409Z",
-  "sourceFingerprint": "136473e1e409359bea3a44704b0bf44eb9d80d11a230b611cb265df7bf520f81",
+  "generatedAt": "2026-08-14T11:07:05.472Z",
+  "sourceFingerprint": "85178940903d0f3f4c6214d69eb08d73655d0521c73035ca09a91b9946f9ced3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 620,
-    "textFiles": 588,
-    "totalBytes": 6470601,
+    "files": 621,
+    "textFiles": 589,
+    "totalBytes": 6483789,
     "pages": 18,
     "modules": 382
   },
@@ -14808,8 +14808,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20744,
-      "sha256": "4d0e8dd4c7578eda5f66fbdb098adfccb008a62321cff0da472673a3ba79ef17",
+      "bytes": 20762,
+      "sha256": "cc3d7bb7acca816b1da7ab834950016121eb6aefd1cb52d6cfc9152d5b8997da",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14855,57 +14855,57 @@
         {
           "raw": "tienda.js?v=tintin-20260813-products-unified-1",
           "target": "tienda.js",
-          "line": 325
+          "line": 324
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 326
+          "line": 325
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 327
+          "line": 326
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 328
+          "line": 327
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260726-session-guard-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 329
+          "line": 328
         },
         {
           "raw": "js/pages/product/beneficios-producto.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/pages/product/beneficios-producto.js",
-          "line": 330
+          "line": 329
         },
         {
           "raw": "js/pages/product/seleccion-producto.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/pages/product/seleccion-producto.js",
-          "line": 331
+          "line": 330
         },
         {
           "raw": "js/pages/product/productos-relacionados.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/pages/product/productos-relacionados.js",
-          "line": 332
+          "line": 331
         },
         {
-          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260813-reviews-1",
+          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260814-reviews-pink-gold-1",
           "target": "js/pages/product/resenas-producto.js",
-          "line": 333
+          "line": 332
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 334
+          "line": 333
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260814-visual-studio-v2-4",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 335
+          "line": 334
         }
       ],
       "styles": [
@@ -14975,7 +14975,7 @@
           "line": 59
         },
         {
-          "raw": "css/pages/product/resenas-producto.css?v=tintin-20260813-reviews-1",
+          "raw": "css/pages/product/resenas-producto.css?v=tintin-20260814-reviews-pink-gold-1",
           "target": "css/pages/product/resenas-producto.css",
           "line": 60
         },
@@ -14997,7 +14997,7 @@
           "target": "assets-tintin/images/general/logo.png",
           "alt": "TINTIN",
           "hasAlt": true,
-          "line": 282
+          "line": 281
         }
       ],
       "links": [
@@ -15039,7 +15039,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 254
+          "line": 253
         },
         {
           "raw": "index.html",
@@ -15049,7 +15049,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "TINTIN",
-          "line": 282
+          "line": 281
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -15059,7 +15059,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 284
+          "line": 283
         },
         {
           "raw": "catalogo.html?cat=relojes",
@@ -15069,7 +15069,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 292
+          "line": 291
         },
         {
           "raw": "catalogo.html?cat=bolsos",
@@ -15079,7 +15079,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 293
+          "line": 292
         },
         {
           "raw": "catalogo.html?cat=collares",
@@ -15089,7 +15089,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 294
+          "line": 293
         },
         {
           "raw": "catalogo.html?cat=aros",
@@ -15099,7 +15099,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 295
+          "line": 294
         },
         {
           "raw": "about.html",
@@ -15109,7 +15109,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 301
+          "line": 300
         },
         {
           "raw": "contact.html",
@@ -15119,7 +15119,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 302
+          "line": 301
         },
         {
           "raw": "collections.html",
@@ -15129,7 +15129,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 303
+          "line": 302
         },
         {
           "raw": "terminos.html",
@@ -15139,7 +15139,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 304
+          "line": 303
         },
         {
           "raw": "privacidad.html",
@@ -15149,7 +15149,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 305
+          "line": 304
         },
         {
           "raw": "tel:+595981299331",
@@ -15159,7 +15159,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 311
+          "line": 310
         },
         {
           "raw": "https://instagram.com/tintinaccs",
@@ -15169,7 +15169,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 312
+          "line": 311
         },
         {
           "raw": "mailto:tintinaccs@gmail.com",
@@ -15179,7 +15179,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 313
+          "line": 312
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -15189,7 +15189,7 @@
           "ariaLabel": "WhatsApp",
           "title": "",
           "imageAlt": "",
-          "line": 322
+          "line": 321
         }
       ],
       "references": [
@@ -15220,67 +15220,67 @@
         {
           "raw": "tienda.js?v=tintin-20260813-products-unified-1",
           "target": "tienda.js",
-          "line": 325,
+          "line": 324,
           "exists": true
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 326,
+          "line": 325,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 327,
+          "line": 326,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 328,
+          "line": 327,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260726-session-guard-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 329,
+          "line": 328,
           "exists": true
         },
         {
           "raw": "js/pages/product/beneficios-producto.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/pages/product/beneficios-producto.js",
-          "line": 330,
+          "line": 329,
           "exists": true
         },
         {
           "raw": "js/pages/product/seleccion-producto.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/pages/product/seleccion-producto.js",
-          "line": 331,
+          "line": 330,
           "exists": true
         },
         {
           "raw": "js/pages/product/productos-relacionados.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/pages/product/productos-relacionados.js",
-          "line": 332,
+          "line": 331,
           "exists": true
         },
         {
-          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260813-reviews-1",
+          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260814-reviews-pink-gold-1",
           "target": "js/pages/product/resenas-producto.js",
-          "line": 333,
+          "line": 332,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 334,
+          "line": 333,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260814-visual-studio-v2-4",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 335,
+          "line": 334,
           "exists": true
         },
         {
@@ -15362,7 +15362,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/product/resenas-producto.css?v=tintin-20260813-reviews-1",
+          "raw": "css/pages/product/resenas-producto.css?v=tintin-20260814-reviews-pink-gold-1",
           "target": "css/pages/product/resenas-producto.css",
           "line": 60,
           "exists": true
@@ -15382,7 +15382,7 @@
         {
           "raw": "assets-tintin/images/general/logo.png?v=tintin-20260715-15",
           "target": "assets-tintin/images/general/logo.png",
-          "line": 282,
+          "line": 281,
           "exists": true
         },
         {
@@ -15406,67 +15406,67 @@
         {
           "raw": "checkout.html",
           "target": "checkout.html",
-          "line": 254,
+          "line": 253,
           "exists": true
         },
         {
           "raw": "index.html",
           "target": "index.html",
-          "line": 282,
+          "line": 281,
           "exists": true
         },
         {
           "raw": "catalogo.html?cat=relojes",
           "target": "catalogo.html",
-          "line": 292,
+          "line": 291,
           "exists": true
         },
         {
           "raw": "catalogo.html?cat=bolsos",
           "target": "catalogo.html",
-          "line": 293,
+          "line": 292,
           "exists": true
         },
         {
           "raw": "catalogo.html?cat=collares",
           "target": "catalogo.html",
-          "line": 294,
+          "line": 293,
           "exists": true
         },
         {
           "raw": "catalogo.html?cat=aros",
           "target": "catalogo.html",
-          "line": 295,
+          "line": 294,
           "exists": true
         },
         {
           "raw": "about.html",
           "target": "about.html",
-          "line": 301,
+          "line": 300,
           "exists": true
         },
         {
           "raw": "contact.html",
           "target": "contact.html",
-          "line": 302,
+          "line": 301,
           "exists": true
         },
         {
           "raw": "collections.html",
           "target": "collections.html",
-          "line": 303,
+          "line": 302,
           "exists": true
         },
         {
           "raw": "terminos.html",
           "target": "terminos.html",
-          "line": 304,
+          "line": 303,
           "exists": true
         },
         {
           "raw": "privacidad.html",
           "target": "privacidad.html",
-          "line": 305,
+          "line": 304,
           "exists": true
         }
       ],
@@ -15637,7 +15637,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 253
+          "line": 252
         },
         {
           "id": "related-refresh",
@@ -15651,7 +15651,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 266
+          "line": 265
         }
       ],
       "controls": []
@@ -21550,8 +21550,8 @@
     },
     {
       "path": "js/pages/product/resenas-producto.js",
-      "bytes": 10291,
-      "sha256": "4878dd4f1ea821a9db2bc033563751ad7b87ff9277d3c3a57ba95d7c563b41e2",
+      "bytes": 13866,
+      "sha256": "ea3f6c2bc2b30598976e82a44dfd69270906976c9b124c818210d7bdbafdeab8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26119,6 +26119,12 @@
       "sha256": "256bbbe40d8c21020608d572fcd1a0a267e2dbc445097d058f584a72c8d14d59"
     },
     {
+      "path": ".github/workflows/chatgpt-refresh-generated.yml",
+      "extension": ".yml",
+      "bytes": 1220,
+      "sha256": "1f130c93d19fdf43f9f37c11947b710a1a50049d0bf9bf3b08125e242635725c"
+    },
+    {
       "path": ".github/workflows/corregir-esquema-checkout.yml",
       "extension": ".yml",
       "bytes": 662,
@@ -26793,8 +26799,8 @@
     {
       "path": "css/pages/product/resenas-producto.css",
       "extension": ".css",
-      "bytes": 2952,
-      "sha256": "d0a171cecf034e6004299807486a21b6dd682ded186545b5ae926a4d7921172e"
+      "bytes": 11307,
+      "sha256": "00226dd7d05471fcfd1d67bdaadc7f9a70b30ff2e01c9bb581a46f9e24516aca"
     },
     {
       "path": "css/quality/accesibilidad-global.css",
@@ -28365,8 +28371,8 @@
     {
       "path": "js/pages/product/resenas-producto.js",
       "extension": ".js",
-      "bytes": 10291,
-      "sha256": "4878dd4f1ea821a9db2bc033563751ad7b87ff9277d3c3a57ba95d7c563b41e2"
+      "bytes": 13866,
+      "sha256": "ea3f6c2bc2b30598976e82a44dfd69270906976c9b124c818210d7bdbafdeab8"
     },
     {
       "path": "js/pages/product/seleccion-producto.js",
@@ -28683,8 +28689,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 20744,
-      "sha256": "4d0e8dd4c7578eda5f66fbdb098adfccb008a62321cff0da472673a3ba79ef17"
+      "bytes": 20762,
+      "sha256": "cc3d7bb7acca816b1da7ab834950016121eb6aefd1cb52d6cfc9152d5b8997da"
     },
     {
       "path": "robots.txt",
@@ -29301,8 +29307,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 29389,
-      "sha256": "1b68865dddb7e388289d9198d1e464af51f5576a3ecd94f47e3f7f95112d4f4e"
+      "bytes": 29409,
+      "sha256": "bc8253faf286e55d8eb1535b0b1c8a29fdcdeaf8076e8b92ae30657996117c16"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -31785,7 +31791,7 @@
     },
     {
       "file": "js/pages/product/resenas-producto.js",
-      "line": 125,
+      "line": 173,
       "raw": "product.html",
       "target": "product.html",
       "exists": true
@@ -32254,16 +32260,23 @@
     },
     {
       "file": "product.html",
-      "line": 254,
+      "line": 253,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "product.html",
-      "line": 282,
+      "line": 281,
       "raw": "index.html",
       "target": "index.html",
+      "exists": true
+    },
+    {
+      "file": "product.html",
+      "line": 291,
+      "raw": "catalogo.html",
+      "target": "catalogo.html",
       "exists": true
     },
     {
@@ -32289,42 +32302,35 @@
     },
     {
       "file": "product.html",
-      "line": 295,
-      "raw": "catalogo.html",
-      "target": "catalogo.html",
-      "exists": true
-    },
-    {
-      "file": "product.html",
-      "line": 301,
+      "line": 300,
       "raw": "about.html",
       "target": "about.html",
       "exists": true
     },
     {
       "file": "product.html",
-      "line": 302,
+      "line": 301,
       "raw": "contact.html",
       "target": "contact.html",
       "exists": true
     },
     {
       "file": "product.html",
-      "line": 303,
+      "line": 302,
       "raw": "collections.html",
       "target": "collections.html",
       "exists": true
     },
     {
       "file": "product.html",
-      "line": 304,
+      "line": 303,
       "raw": "terminos.html",
       "target": "terminos.html",
       "exists": true
     },
     {
       "file": "product.html",
-      "line": 305,
+      "line": 304,
       "raw": "privacidad.html",
       "target": "privacidad.html",
       "exists": true
@@ -32874,6 +32880,10 @@
         },
         {
           "file": "product.html",
+          "line": 291
+        },
+        {
+          "file": "product.html",
           "line": 292
         },
         {
@@ -32883,10 +32893,6 @@
         {
           "file": "product.html",
           "line": 294
-        },
-        {
-          "file": "product.html",
-          "line": 295
         },
         {
           "file": "terminos.html",
@@ -32976,7 +32982,7 @@
         },
         {
           "file": "js/pages/product/resenas-producto.js",
-          "line": 125
+          "line": 173
         },
         {
           "file": "js/pages/profile/control-acceso-perfil.js",
@@ -33009,7 +33015,7 @@
         },
         {
           "file": "js/pages/product/resenas-producto.js",
-          "line": 125
+          "line": 173
         },
         {
           "file": "js/pages/product/seleccion-producto.js",
@@ -33737,7 +33743,7 @@
           },
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 159,
+            "line": 208,
             "operation": "doc"
           }
         ]
@@ -33892,7 +33898,7 @@
           },
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 152,
+            "line": 201,
             "operation": "collection"
           },
           {
