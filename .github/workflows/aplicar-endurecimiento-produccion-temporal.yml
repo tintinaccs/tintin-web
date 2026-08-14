@@ -1,0 +1,58 @@
+name: Aplicar endurecimiento quirúrgico temporal
+
+on:
+  push:
+    branches:
+      - chatgpt/production-surgical-hardening
+
+permissions:
+  contents: write
+
+concurrency:
+  group: production-surgical-hardening
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Aplicar cambios quirúrgicos
+        run: node scripts/aplicar-endurecimiento-produccion-temporal.mjs
+      - name: Actualizar versionado y artefactos generados
+        run: |
+          npm run cache-versioning:write
+          npm run build:pages
+      - name: Validar SEO, lecturas, seguridad y contratos críticos
+        run: |
+          npm run audit:phase11
+          node scripts/auditar-firestore-lecturas-presupuesto.js
+          node --test tests/catalog/public-catalog-cache.test.mjs
+          npm run audit:security
+          npm run test:checkout-contract
+          npm run test:engagement
+      - name: Confirmar que no quedaron archivos temporales
+        run: |
+          test ! -e scripts/aplicar-endurecimiento-produccion-temporal.mjs
+          test ! -e .github/workflows/aplicar-endurecimiento-produccion-temporal.yml
+      - name: Commit de cambios validados
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No hay cambios para confirmar."
+            exit 0
+          fi
+          git commit -m "fix: endurecer producción, SEO y lecturas públicas"
+          git push origin HEAD:chatgpt/production-surgical-hardening
