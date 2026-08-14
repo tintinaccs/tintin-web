@@ -55,11 +55,22 @@ function cleanRouteLiteral(raw) {
   return route == null ? value : `${route}${match[2] || ''}`;
 }
 
+function normalizeAbsoluteLegacyUrls(text) {
+  let output = text;
+  for (const [file, route] of routeMap) {
+    const escapedFile = escapeRegex(file);
+    output = output.replace(new RegExp(`https://tintinaccesorios\\.pages\\.dev/${escapedFile}(?=([?#'"<]|$))`, 'g'), `https://tintinaccesorios.pages.dev${route}`);
+    output = output.replace(new RegExp(`https://tintinaccs\\.com/${escapedFile}(?=([?#'"<]|$))`, 'g'), `https://tintinaccs.com${route}`);
+  }
+  return output;
+}
+
 function normalizeHtml(text) {
-  return text.replace(/\bhref=(['"])([^'"\n>]+)\1/gi, (whole, quote, value) => {
+  const local = text.replace(/\bhref=(['"])([^'"\n>]+)\1/gi, (whole, quote, value) => {
     const normalized = cleanRouteLiteral(value);
     return normalized === value ? whole : `href=${quote}${normalized}${quote}`;
   });
+  return normalizeAbsoluteLegacyUrls(local);
 }
 
 function normalizeJs(text) {
@@ -87,12 +98,7 @@ function normalizeJs(text) {
   output = output.replace(/`(?:\.\/|\/)?product\.html\?id=/g, '`/product?id=');
   output = output.replace(/(['"])(?:\.\/|\/)?product\.html\?id=/g, '$1/product?id=');
 
-  for (const [file, route] of routeMap) {
-    const escapedFile = escapeRegex(file);
-    output = output.replace(new RegExp(`https://tintinaccesorios\\.pages\\.dev/${escapedFile}(?=([?#'"<]|$))`, 'g'), `https://tintinaccesorios.pages.dev${route}`);
-    output = output.replace(new RegExp(`https://tintinaccs\\.com/${escapedFile}(?=([?#'"<]|$))`, 'g'), `https://tintinaccs.com${route}`);
-  }
-  return output;
+  return normalizeAbsoluteLegacyUrls(output);
 }
 
 const changed = [];
@@ -121,7 +127,7 @@ if (!write && changed.length) {
   process.exit(1);
 }
 if (remaining.length) {
-  console.error('Todavía existen navegaciones internas .html: ' + remaining.join(', '));
+  console.error('Todavía existen navegaciones/canonical internas .html: ' + remaining.join(', '));
   process.exit(1);
 }
 
