@@ -1,3 +1,4 @@
+// Normaliza únicamente contextos de navegación; no reescribe claves de esquema ni literales arbitrarios.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -64,19 +65,16 @@ function normalizeHtml(text) {
 function normalizeJs(text) {
   let output = text;
 
-  // HTML generado dentro de templates/strings.
   output = output.replace(/\bhref=(\\?['"])([^'"\n>]+)(\\?['"])/gi, (whole, open, value, close) => {
     const normalized = cleanRouteLiteral(value);
     return normalized === value ? whole : `href=${open}${normalized}${close}`;
   });
 
-  // Objetos/props de navegación: { href: 'catalogo.html' }.
   output = output.replace(/(\bhref\s*:\s*)(['"])([^'"\n]+)\2/g, (whole, prefix, quote, value) => {
     const normalized = cleanRouteLiteral(value);
     return normalized === value ? whole : `${prefix}${quote}${normalized}${quote}`;
   });
 
-  // Asignaciones de navegación explícitas.
   output = output.replace(/((?:window\.)?location\.href\s*=\s*)(['"])([^'"\n]+)\2/g, (whole, prefix, quote, value) => {
     const normalized = cleanRouteLiteral(value);
     return normalized === value ? whole : `${prefix}${quote}${normalized}${quote}`;
@@ -86,11 +84,9 @@ function normalizeJs(text) {
     return normalized === value ? whole : `${prefix}${quote}${normalized}${quote}`;
   });
 
-  // URLs de producto construidas por template literal/strings.
   output = output.replace(/`(?:\.\/|\/)?product\.html\?id=/g, '`/product?id=');
   output = output.replace(/(['"])(?:\.\/|\/)?product\.html\?id=/g, '$1/product?id=');
 
-  // Canonical/OG absolutos heredados.
   for (const [file, route] of routeMap) {
     const escapedFile = escapeRegex(file);
     output = output.replace(new RegExp(`https://tintinaccesorios\\.pages\\.dev/${escapedFile}(?=([?#'"<]|$))`, 'g'), `https://tintinaccesorios.pages.dev${route}`);
