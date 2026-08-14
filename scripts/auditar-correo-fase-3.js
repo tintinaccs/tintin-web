@@ -23,8 +23,9 @@ check(
   'El checkout envía la notificación de pedido por Resend (canal único)',
   // checkout-puente-correo.js (no checkout.html) es quien llama a
   // sendOrderNotification tras el éxito del pedido — ver "Checkout usa un
-  // solo canal Resend" en auditar-admin-correo-mensajeria.js.
-  bridge.includes("from '../../email/notificacion-pedido-resend.js?v=tintin-20260717-resend-1'") &&
+  // solo canal Resend" en auditar-admin-correo-mensajeria.js. El tag ?v=
+  // es cache-busting inmutable y puede cambiar sin alterar el contrato.
+  /from ['"]\.\.\/\.\.\/email\/notificacion-pedido-resend\.js\?v=[^'"]+['"]/.test(bridge) &&
     !checkout.includes('notificaciones-correo.js') &&
     !checkout.includes('notificacion-pedido-resend.js'),
   'El checkout debe enviar el correo del pedido por el canal Resend (notificacion-pedido-resend.js), no por el webhook viejo de Apps Script (notificaciones-correo.js).'
