@@ -14,6 +14,7 @@ import {
 } from '../../cloudflare/notificaciones-sociales.js';
 
 const MAX_BODY_BYTES = 6 * 1024;
+const PROFILE_RECOVERY_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 async function markSourceSeen(env, notification) {
   const sourceType = clean(notification?.sourceType, 60);
@@ -37,10 +38,11 @@ async function registerProfileNotification(env, user) {
   const userDocument = await firestoreAdminGet(env, `users/${uid}`);
   if (!userDocument) throw new Error('El perfil todavía no existe');
   const profile = decodeFirestoreFields(userDocument.fields || {});
-  const name = clean(profile.name || profile.displayName || String(user.email || '').split('@')[0] || 'Nueva clienta', 160);
+  const fullName = clean([profile.firstName, profile.lastName].filter(Boolean).join(' '), 160);
+  const name = fullName || clean(profile.name || profile.displayName || String(user.email || '').split('@')[0] || 'Nueva clienta', 160);
   const createdAt = profile.createdAt ? new Date(profile.createdAt) : null;
   const createdAtMs = createdAt?.getTime?.();
-  if (!Number.isFinite(createdAtMs) || Date.now() - createdAtMs > 60 * 60 * 1000) {
+  if (!Number.isFinite(createdAtMs) || Date.now() - createdAtMs > PROFILE_RECOVERY_WINDOW_MS) {
     return { created: false, skipped: true, reason: 'existing_profile' };
   }
 
