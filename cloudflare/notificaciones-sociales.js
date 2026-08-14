@@ -195,7 +195,7 @@ async function listNotificationPage(env, root, pageToken = '') {
   };
 }
 
-export async function markAllNotificationsRead(env, { uid, admin = false } = {}) {
+export async function markAllNotificationsRead(env, { uid, admin = false, onUnread = null } = {}) {
   const root = admin ? 'adminNotifications' : `users/${safeId(uid, 'Cuenta')}/notifications`;
   let pageToken = '';
   let scanned = 0;
@@ -207,6 +207,10 @@ export async function markAllNotificationsRead(env, { uid, admin = false } = {})
     scanned += documents.length;
     const unread = documents.filter(document => document?.fields?.read?.booleanValue !== true);
     const timestampValue = new Date().toISOString();
+
+    if (typeof onUnread === 'function' && unread.length) {
+      await Promise.allSettled(unread.map(document => onUnread(document)));
+    }
 
     for (let index = 0; index < unread.length; index += 20) {
       const writes = unread.slice(index, index + 20).map(document => {
