@@ -68,6 +68,9 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
+      - name: Verificar Actions soportadas
+        run: node scripts/auditar-github-actions-soportadas.mjs
+
       - name: Regenerar manifiesto diagnóstico
         shell: bash
         run: |
