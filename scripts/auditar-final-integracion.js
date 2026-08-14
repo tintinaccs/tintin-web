@@ -74,12 +74,28 @@ check(
   'robots.txt no protege todas las rutas privadas.'
 );
 const sitemap = read('sitemap.xml');
+const publicOrigin = 'https://tintinaccesorios.pages.dev';
+const publicRoutes = [
+  '/',
+  '/catalogo',
+  '/collections',
+  '/about',
+  '/contact',
+  '/envios',
+  '/cambios-devoluciones',
+  '/preguntas-frecuentes',
+  '/terminos',
+  '/privacidad'
+];
 check(
-  'sitemap incluye las páginas públicas',
-  ['index.html', 'catalogo.html', 'collections.html', 'about.html', 'contact.html',
-   'envios.html', 'cambios-devoluciones.html', 'preguntas-frecuentes.html',
-   'terminos.html', 'privacidad.html'].every(page => sitemap.includes(`/${page}<`)),
-  'Faltan páginas públicas en sitemap.xml.'
+  'sitemap incluye las páginas públicas en sus URLs finales limpias',
+  publicRoutes.every(route => sitemap.includes(`<loc>${publicOrigin}${route}</loc>`)),
+  'Faltan páginas públicas limpias en sitemap.xml.'
+);
+check(
+  'sitemap no publica aliases .html redirigidos',
+  !/<loc>[^<]*\.html(?:[?#][^<]*)?<\/loc>/i.test(sitemap),
+  'Los destinos redirigidos .html no deben competir con sus URLs finales limpias.'
 );
 check(
   'sitemap no expone páginas privadas',
