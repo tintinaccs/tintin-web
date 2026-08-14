@@ -520,9 +520,9 @@
       min-width: 0;
       padding: 17px;
       border: 1px solid var(--adm-border);
-      border-radius: 14px;
+      border-radius: var(--tcg-radius);
       background: var(--adm-card);
-      box-shadow: 0 5px 20px rgba(86,42,58,.045);
+      box-shadow: var(--tcg-shadow);
     }
     .adm-stat-kpi > span {
       display: block;
@@ -558,15 +558,15 @@
     .adm-analytics-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+      gap: var(--tcg-space-md);
     }
     .adm-analytics-card {
       min-width: 0;
       padding: 20px;
       border: 1px solid var(--adm-border);
-      border-radius: 16px;
+      border-radius: var(--tcg-radius);
       background: var(--adm-card);
-      box-shadow: 0 7px 24px rgba(86,42,58,.045);
+      box-shadow: var(--tcg-shadow);
     }
     .adm-analytics-card-wide { grid-column: 1 / -1; }
     .adm-analytics-head {
@@ -962,6 +962,11 @@
       padding: 2px 4px; border-radius: 50%;
     }
     .correos-chip button:hover { background: rgba(184,76,114,.15); }
+
+    /* ======== APARIENCIA — INTRO ======== */
+    .apar-intro { margin-bottom: var(--tcg-space-md); }
+    .apar-intro-title { font-size: 18px; font-weight: 800; color: var(--adm-text); margin: 0 0 6px; }
+    .apar-intro-text { font-size: 13px; color: var(--adm-muted); margin: 0; line-height: 1.5; }
     .correos-chip.blocked { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
 
     /* Barra de progreso de envío por tandas (Promociones) */
