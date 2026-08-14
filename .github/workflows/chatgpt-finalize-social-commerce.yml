@@ -28,10 +28,12 @@ jobs:
         run: npm ci
 
       - name: Apply final social integration patches
-        run: node scripts/chatgpt-finalize-social-commerce.cjs
+        run: |
+          node scripts/chatgpt-finalize-social-commerce.cjs
+          node scripts/chatgpt-fix-social-cache-refs.cjs
 
       - name: Remove temporary finalizer from final tree
-        run: git rm .github/workflows/chatgpt-finalize-social-commerce.yml scripts/chatgpt-finalize-social-commerce.cjs
+        run: git rm .github/workflows/chatgpt-finalize-social-commerce.yml scripts/chatgpt-finalize-social-commerce.cjs scripts/chatgpt-fix-social-cache-refs.cjs
 
       - name: Refresh cache baseline and generated files
         run: |
