@@ -1,0 +1,49 @@
+name: Deploy Firebase rules once
+
+on:
+  push:
+    branches:
+      - chatgpt/firebase-rules-live-deploy
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-rules:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Esperar preview Cloudflare y publicar reglas
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL='https://chatgpt-firebase-rules-live.tintinaccesorios.pages.dev/api/firebase-rules-deploy-once?commit=c64acac6bed8ec41ef610dbc7473be676a1c1aca'
+          rm -f response.json
+
+          for attempt in $(seq 1 36); do
+            echo "Intento ${attempt}/36"
+            code="$(curl --silent --show-error --location --connect-timeout 10 --max-time 30 --output response.json --write-out '%{http_code}' "$URL" || true)"
+            cat response.json 2>/dev/null || true
+            echo
+
+            if [ "$code" = '200' ]; then
+              node - <<'NODE'
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('response.json', 'utf8'));
+          if (!data.ok) throw new Error(`Firebase no confirmó el deploy: ${data.error || 'sin detalle'}`);
+          if (!data.verified && !data.alreadyCurrent) throw new Error('La respuesta no confirmó release verificada ni ruleset ya vigente');
+          console.log(`Firebase OK: ${data.alreadyCurrent ? 'ruleset ya vigente' : 'ruleset publicado y verificado'}`);
+          console.log(`Release: ${data.releaseName || 'n/d'}`);
+          console.log(`Ruleset: ${data.rulesetName || 'n/d'}`);
+          NODE
+              exit 0
+            fi
+
+            # Mientras Cloudflare actualiza la preview puede responder 404/5xx.
+            # Reintentamos; si el error es persistente, el job termina en rojo y
+            # conserva la respuesta para diagnóstico sin imprimir credenciales.
+            sleep 10
+          done
+
+          echo "No se pudo confirmar el deploy de Firebase dentro de la ventana de reintentos." >&2
+          exit 1
