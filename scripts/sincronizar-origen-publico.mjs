@@ -61,6 +61,17 @@ for (const file of [path.join(root, 'tienda.js'), ...walkJs(path.join(root, 'js'
 {
   const file = path.join(root, 'robots.txt');
   let text = fs.readFileSync(file, 'utf8').replace(originPattern, publicOrigin);
+  const requiredDisallows = [
+    '/admin', '/admin-images', '/checkout', '/login', '/perfil', '/404', '/nosotros',
+    '/admin.html', '/admin-images.html', '/checkout.html', '/login.html', '/perfil.html', '/404.html', '/nosotros.html'
+  ];
+  for (const route of requiredDisallows) {
+    if (!text.includes(`Disallow: ${route}\n`) && !text.endsWith(`Disallow: ${route}`)) {
+      const sitemapIndex = text.search(/^Sitemap:/m);
+      if (sitemapIndex >= 0) text = `${text.slice(0, sitemapIndex).trimEnd()}\nDisallow: ${route}\n\n${text.slice(sitemapIndex)}`;
+      else text = `${text.trimEnd()}\nDisallow: ${route}\n`;
+    }
+  }
   text = text.replace(/^Sitemap:.*$/gm, '').replace(/\n{3,}/g, '\n\n').trimEnd();
   text += `\n\nSitemap: ${publicOrigin}/sitemap.xml\nSitemap: ${publicOrigin}/sitemap-products.xml\n`;
   targets.set('robots.txt', text);
