@@ -99,6 +99,18 @@ try {
     throw new Error('Sitemap dinámico de productos vacío o con URLs inválidas.');
   }
 
+  const sampleProductUrl = new URL(productUrls[0]);
+  const sampleProduct = await inspect(sampleProductUrl.pathname + sampleProductUrl.search, 'text/html');
+  if (!/^edge(?:-cache)?$/.test(sampleProduct.headers['x-tintin-product-meta'])) {
+    throw new Error('Producto real no recibió metadatos SEO desde el edge.');
+  }
+  if (!sampleProduct.body.includes(`<link rel="canonical" href="${sampleProductUrl.href}"`)) {
+    throw new Error('Producto real no recibió canonical específico desde el edge.');
+  }
+  if (!sampleProduct.body.includes('id="tt-product-jsonld"')) {
+    throw new Error('Producto real no recibió JSON-LD Product desde el edge.');
+  }
+
   await inspect('/manifest.json', 'json');
 
   const health = await inspectJson('/api/health', data => data?.ok === true && data?.checks?.runtime === true && data?.checks?.configuration === true && data?.checks?.firestore === true);
