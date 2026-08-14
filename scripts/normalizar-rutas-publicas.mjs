@@ -36,46 +36,66 @@ function walk(dir) {
   return out;
 }
 
-const files = [
-  ...fs.readdirSync(root).filter(name => name.endsWith('.html')).map(name => path.join(root, name)),
-  path.join(root, 'tienda.js'),
-  ...walk(path.join(root, 'js'))
-].filter(fs.existsSync);
+const htmlFiles = fs.readdirSync(root)
+  .filter(name => name.endsWith('.html'))
+  .map(name => path.join(root, name));
+const jsFiles = [path.join(root, 'tienda.js'), ...walk(path.join(root, 'js'))].filter(fs.existsSync);
+const files = [...htmlFiles, ...jsFiles];
 
 function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function normalize(text) {
+function cleanRouteLiteral(raw) {
+  const value = String(raw || '');
+  const match = value.match(/^(?:\.\/|\/)?([^?#]+\.html)([?#].*)?$/i);
+  if (!match) return value;
+  const route = routeMap.get(match[1]);
+  return route == null ? value : `${route}${match[2] || ''}`;
+}
+
+function normalizeHtml(text) {
+  return text.replace(/\bhref=(['"])([^'"\n>]+)\1/gi, (whole, quote, value) => {
+    const normalized = cleanRouteLiteral(value);
+    return normalized === value ? whole : `href=${quote}${normalized}${quote}`;
+  });
+}
+
+function normalizeJs(text) {
   let output = text;
+
+  // HTML generado dentro de templates/strings.
+  output = output.replace(/\bhref=(\\?['"])([^'"\n>]+)(\\?['"])/gi, (whole, open, value, close) => {
+    const normalized = cleanRouteLiteral(value);
+    return normalized === value ? whole : `href=${open}${normalized}${close}`;
+  });
+
+  // Objetos/props de navegación: { href: 'catalogo.html' }.
+  output = output.replace(/(\bhref\s*:\s*)(['"])([^'"\n]+)\2/g, (whole, prefix, quote, value) => {
+    const normalized = cleanRouteLiteral(value);
+    return normalized === value ? whole : `${prefix}${quote}${normalized}${quote}`;
+  });
+
+  // Asignaciones de navegación explícitas.
+  output = output.replace(/((?:window\.)?location\.href\s*=\s*)(['"])([^'"\n]+)\2/g, (whole, prefix, quote, value) => {
+    const normalized = cleanRouteLiteral(value);
+    return normalized === value ? whole : `${prefix}${quote}${normalized}${quote}`;
+  });
+  output = output.replace(/((?:window\.)?location\.(?:assign|replace)\(\s*)(['"])([^'"\n]+)\2/g, (whole, prefix, quote, value) => {
+    const normalized = cleanRouteLiteral(value);
+    return normalized === value ? whole : `${prefix}${quote}${normalized}${quote}`;
+  });
+
+  // URLs de producto construidas por template literal/strings.
+  output = output.replace(/`(?:\.\/|\/)?product\.html\?id=/g, '`/product?id=');
+  output = output.replace(/(['"])(?:\.\/|\/)?product\.html\?id=/g, '$1/product?id=');
+
+  // Canonical/OG absolutos heredados.
   for (const [file, route] of routeMap) {
     const escapedFile = escapeRegex(file);
-    const localPrefix = '(?:\\./|/)?';
-
-    // href reales y href dentro de templates/strings, con o sin ./ o /.
-    output = output.replace(
-      new RegExp(`href=(['"])${localPrefix}${escapedFile}(?=([?#]|\\1))`, 'g'),
-      `href=$1${route}`
-    );
-    output = output.replace(
-      new RegExp(`href=\\\\(['"])${localPrefix}${escapedFile}(?=([?#]|\\\\?\\1))`, 'g'),
-      `href=\\$1${route}`
-    );
-
-    // Strings de navegación usados por location.href, assign(), etc.
-    output = output.replace(
-      new RegExp(`(['"])${localPrefix}${escapedFile}(?=([?#]|\\1))`, 'g'),
-      (match, quote) => `${quote}${route}`
-    );
-
-    // Canonical/OG absolutos que todavía llevan extensión.
     output = output.replace(new RegExp(`https://tintinaccesorios\\.pages\\.dev/${escapedFile}(?=([?#'"<]|$))`, 'g'), `https://tintinaccesorios.pages.dev${route}`);
     output = output.replace(new RegExp(`https://tintinaccs\\.com/${escapedFile}(?=([?#'"<]|$))`, 'g'), `https://tintinaccs.com${route}`);
   }
-
-  // URLs de producto construidas por template literal.
-  output = output.replace(/`(?:\.\/|\/)?product\.html\?id=/g, '`/product?id=');
-  output = output.replace(/(['"])(?:\.\/|\/)?product\.html\?id=/g, '$1/product?id=');
   return output;
 }
 
@@ -83,15 +103,20 @@ const changed = [];
 const remaining = [];
 for (const file of files) {
   const original = fs.readFileSync(file, 'utf8');
-  const expected = normalize(original);
+  const isHtml = file.endsWith('.html');
+  const expected = isHtml ? normalizeHtml(original) : normalizeJs(original);
   const relative = path.relative(root, file).replace(/\\/g, '/');
   if (original !== expected) {
     changed.push(relative);
     if (write) fs.writeFileSync(file, expected, 'utf8');
   }
+
   const inspected = write ? expected : original;
-  const matches = [...inspected.matchAll(/href=(?:\\?['"])[^'"\n>]*\.html(?:[?#][^'"\n>]*)?(?:\\?['"])/g)];
-  if (matches.length) remaining.push(`${relative} (${matches.length})`);
+  const actualHrefs = [...inspected.matchAll(/\bhref=(?:\\?['"])([^'"\n>]*\.html(?:[?#][^'"\n>]*)?)(?:\\?['"])/gi)];
+  const navProps = isHtml ? [] : [...inspected.matchAll(/\bhref\s*:\s*['"]([^'"\n]*\.html(?:[?#][^'"\n>]*)?)['"]/gi)];
+  const assignments = isHtml ? [] : [...inspected.matchAll(/(?:window\.)?location\.href\s*=\s*['"]([^'"\n]*\.html(?:[?#][^'"\n>]*)?)['"]/gi)];
+  const count = actualHrefs.length + navProps.length + assignments.length;
+  if (count) remaining.push(`${relative} (${count})`);
 }
 
 if (!write && changed.length) {
@@ -100,7 +125,7 @@ if (!write && changed.length) {
   process.exit(1);
 }
 if (remaining.length) {
-  console.error('Todavía existen href internos .html: ' + remaining.join(', '));
+  console.error('Todavía existen navegaciones internas .html: ' + remaining.join(', '));
   process.exit(1);
 }
 
