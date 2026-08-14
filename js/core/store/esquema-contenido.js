@@ -350,12 +350,33 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
       },
     },
   },
+  terminos: {
+    label: 'Términos',
+    path: 'terminos.html',
+    sections: {
+      header: {
+        label: 'Encabezado',
+        root: '.tt-page-hero',
+        fields: headerFields('Información', 'Términos y Condiciones 📋', 'Las reglas claras de cómo funciona tu compra en Tintin Accesorios & Relojes.'),
+      },
+    },
+  },
+
+  privacidad: {
+    label: 'Privacidad',
+    path: 'privacidad.html',
+    sections: {
+      header: {
+        label: 'Encabezado',
+        root: '.tt-page-hero',
+        fields: headerFields('Información', 'Política de Privacidad 🔒', 'Qué datos tuyos usamos, para qué, y cómo los cuidamos.'),
+      },
+    },
+  },
 });
 
 const VISUAL_ONLY_PAGE_SCHEMA = Object.freeze({
   product: { label: 'Producto', path: 'product.html', sections: {} },
-  terminos: { label: 'Términos', path: 'terminos.html', sections: {} },
-  privacidad: { label: 'Privacidad', path: 'privacidad.html', sections: {} },
   '404': { label: '404', path: '404.html', sections: {} },
 });
 
