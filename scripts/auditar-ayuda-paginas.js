@@ -38,10 +38,11 @@ function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
+const PUBLIC_ORIGIN = 'https://tintinaccesorios.pages.dev';
 const PAGES = [
-  { file: 'envios.html', id: 'envios' },
-  { file: 'cambios-devoluciones.html', id: 'cambios' },
-  { file: 'preguntas-frecuentes.html', id: 'faq' }
+  { file: 'envios.html', id: 'envios', route: '/envios' },
+  { file: 'cambios-devoluciones.html', id: 'cambios', route: '/cambios-devoluciones' },
+  { file: 'preguntas-frecuentes.html', id: 'faq', route: '/preguntas-frecuentes' }
 ];
 
 const schema = read('js/core/store/esquema-contenido.js');
@@ -49,7 +50,7 @@ const schema = read('js/core/store/esquema-contenido.js');
 // ---------------------------------------------------------------------------
 // Comprobaciones por página
 // ---------------------------------------------------------------------------
-PAGES.forEach(({ file, id }) => {
+PAGES.forEach(({ file, id, route }) => {
   const html = read(file);
   const tag = `[${file}]`;
 
@@ -63,9 +64,9 @@ PAGES.forEach(({ file, id }) => {
   );
 
   check(
-    `${tag} canonical propio hacia el dominio canónico`,
-    html.includes(`<link rel="canonical" href="https://tintinaccesorios.pages.dev/${file}">`),
-    'El canonical debe apuntar a la propia URL en el dominio canónico publicado.'
+    `${tag} canonical propio hacia la URL final limpia`,
+    html.includes(`<link rel="canonical" href="${PUBLIC_ORIGIN}${route}">`),
+    'El canonical debe apuntar a la URL final limpia que Cloudflare publica, no al alias .html redirigido.'
   );
 
   check(
