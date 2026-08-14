@@ -7,6 +7,7 @@ const read = path => readFile(new URL(`../../${path}`, import.meta.url), 'utf8')
 const files = await Promise.all([
   read('cloudflare/notificaciones-sociales.js'),
   read('functions/api/notifications.js'),
+  read('functions/api/engagement.js'),
   read('cloudflare/participacion-clientes.js'),
   read('cloudflare/participacion-admin.js'),
   read('js/pages/product/resenas-producto.js'),
@@ -15,14 +16,18 @@ const files = await Promise.all([
   read('firestore.rules'),
 ]);
 
-const [core, api, customerEngagement, adminEngagement, productReviews, clientUi, adminUi, rules] = files;
+const [core, api, engagementApi, customerEngagement, adminEngagement, productReviews, clientUi, adminUi, rules] = files;
 
-test('el núcleo social usa notificaciones dirigidas e idempotentes', () => {
+test('el núcleo social usa notificaciones dirigidas, idempotentes y saneadas', () => {
   assert.match(core, /buildUserNotificationWrite/);
   assert.match(core, /buildAdminNotificationWrite/);
   assert.match(core, /dedupeKey/);
+  assert.match(core, /normalizeDedupeKey/);
+  assert.match(core, /review_like/);
+  assert.match(core, /safeImageUrl/);
   assert.match(core, /markNotificationRead/);
   assert.match(core, /markAllNotificationsRead/);
+  assert.match(core, /nextPageToken/);
 });
 
 test('la API cubre altas, pedidos y lectura para clienta y superadmin', () => {
@@ -32,6 +37,13 @@ test('la API cubre altas, pedidos y lectura para clienta y superadmin', () => {
   ]) assert.match(api, new RegExp(action));
   assert.match(api, /requireFirebaseUser/);
   assert.match(api, /requireSuperAdmin/);
+});
+
+test('las respuestas entre clientas tienen ventana anti-ráfaga server-side', () => {
+  assert.match(engagementApi, /REPLY_COOLDOWN_MS/);
+  assert.match(engagementApi, /socialRateLimits/);
+  assert.match(engagementApi, /reserveReplyWindow/);
+  assert.match(engagementApi, /currentDocument/);
 });
 
 test('la participación entre clientas genera actividad social y protege identidad pública', () => {
