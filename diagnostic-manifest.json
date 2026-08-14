@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-14T10:53:33.011Z",
-  "sourceFingerprint": "d016379ab5404af665ec19a471e9c0471832749417fbc69fbe5721bfb806e6a6",
+  "generatedAt": "2026-08-14T11:01:37.599Z",
+  "sourceFingerprint": "d65a18052d70acf07f9a55a956e63bfa46e8c596894852275ecd91752905bd33",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 620,
     "textFiles": 588,
-    "totalBytes": 6471719,
+    "totalBytes": 6471678,
     "pages": 18,
     "modules": 382
   },
@@ -1785,8 +1785,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 168061,
-      "sha256": "14fc06e9dcdcc82636ebbc7edabbd2ef576b2c31840727c59b02c1720b31e30b",
+      "bytes": 168057,
+      "sha256": "b157400af490dca00d56fec3ff74377ff58713913ace450ff8330784bb0d95c0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1907,7 +1907,7 @@
           "line": 31
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20260814-tcg-tables-badges-tabs-2",
+          "raw": "css/admin/admin.css?v=tintin-20260814-tcg-tables-cleanup-3",
           "target": "css/admin/admin.css",
           "line": 32
         },
@@ -2136,7 +2136,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20260814-tcg-tables-badges-tabs-2",
+          "raw": "css/admin/admin.css?v=tintin-20260814-tcg-tables-cleanup-3",
           "target": "css/admin/admin.css",
           "line": 32,
           "exists": true
@@ -26217,8 +26217,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 168061,
-      "sha256": "14fc06e9dcdcc82636ebbc7edabbd2ef576b2c31840727c59b02c1720b31e30b"
+      "bytes": 168057,
+      "sha256": "b157400af490dca00d56fec3ff74377ff58713913ace450ff8330784bb0d95c0"
     },
     {
       "path": "apple-touch-icon.png",
@@ -26529,8 +26529,8 @@
     {
       "path": "css/admin/admin.css",
       "extension": ".css",
-      "bytes": 78305,
-      "sha256": "d2115e518571f95a710b1982f31cb74880b36ca02798bf03421e79c171a2ad25"
+      "bytes": 78272,
+      "sha256": "541e5997e9a5e8d5be6bfafb308a48a0a803e57d92b0821b1c8d9014bb3cb5a7"
     },
     {
       "path": "css/admin/ai-builder.css",
@@ -29301,8 +29301,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 29393,
-      "sha256": "e9c150d9b61efac76e507aea3554aebbb67b76bef1245f0d42f4b3b5ce63acea"
+      "bytes": 29389,
+      "sha256": "acae5f2252d8e5309bfc3166169c0d1fb503310c9621b6437c147e0ff50fe3c8"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
