@@ -1,0 +1,84 @@
+name: Preparar commit atómico temporal de Actions
+
+on:
+  push:
+    branches:
+      - chatgpt/production-surgical-hardening
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Preparar árbol y commit sin mover la rama
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          replacements = {
+              'actions/setup-java@v4': 'actions/setup-java@v5',
+              'actions/upload-artifact@v5': 'actions/upload-artifact@v6',
+              'actions/upload-artifact@v4': 'actions/upload-artifact@v6',
+              'actions/download-artifact@v5': 'actions/download-artifact@v6',
+              'actions/download-artifact@v4': 'actions/download-artifact@v6',
+          }
+          changed = []
+          for path in sorted(Path('.github/workflows').glob('*.y*ml')):
+              text = path.read_text(encoding='utf-8')
+              updated = text
+              for old, new in replacements.items():
+                  updated = updated.replace(old, new)
+              if path.name == 'entrega-final-fase-12.yml':
+                  updated = updated.replace(
+                      'npm audit --omit=dev --audit-level=critical',
+                      'npm audit --omit=dev --audit-level=moderate'
+                  )
+              if updated != text:
+                  path.write_text(updated, encoding='utf-8')
+                  changed.append(str(path))
+          Path('/tmp/changed-workflows.txt').write_text('\n'.join(changed) + '\n', encoding='utf-8')
+          print('Workflows actualizados:', len(changed))
+          for item in changed:
+              print(item)
+          PY
+
+          test -s /tmp/changed-workflows.txt
+          echo '[]' > /tmp/tree-elements.json
+          while IFS= read -r file; do
+            [ -n "$file" ] || continue
+            blob=$(gh api --method POST "repos/$REPO/git/blobs" \
+              -f content="$(cat "$file")" \
+              -f encoding='utf-8' --jq '.sha')
+            jq --arg path "$file" --arg sha "$blob" \
+              '. + [{path:$path,mode:"100644",type:"blob",sha:$sha}]' \
+              /tmp/tree-elements.json > /tmp/tree-elements.next
+            mv /tmp/tree-elements.next /tmp/tree-elements.json
+          done < /tmp/changed-workflows.txt
+
+          jq --arg path '.github/workflows/preparar-commit-actions-temporal.yml' \
+            '. + [{path:$path,mode:"100644",type:"blob",sha:null}]' \
+            /tmp/tree-elements.json > /tmp/tree-elements.next
+          mv /tmp/tree-elements.next /tmp/tree-elements.json
+
+          base_tree=$(git rev-parse HEAD^{tree})
+          parent=$(git rev-parse HEAD)
+          jq -n --arg base "$base_tree" --slurpfile tree /tmp/tree-elements.json \
+            '{base_tree:$base,tree:$tree[0]}' > /tmp/tree-request.json
+          tree_sha=$(gh api --method POST "repos/$REPO/git/trees" --input /tmp/tree-request.json --jq '.sha')
+
+          jq -n --arg message 'ci: actualizar Actions soportadas y gate de dependencias' \
+            --arg tree "$tree_sha" --arg parent "$parent" \
+            '{message:$message,tree:$tree,parents:[$parent]}' > /tmp/commit-request.json
+          commit_sha=$(gh api --method POST "repos/$REPO/git/commits" --input /tmp/commit-request.json --jq '.sha')
+          echo "PREPARED_COMMIT=$commit_sha"
+          echo "PREPARED_TREE=$tree_sha"
