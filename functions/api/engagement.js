@@ -5,9 +5,44 @@ import {
   addCustomerReply, createReview, editOwnReview, getOwnReview, getReviewInteractions,
   toggleFavorite, toggleReviewLike, engagementOwnReviewView,
 } from '../../cloudflare/participacion-clientes.js';
+import {
+  encodeFirestoreFields, firestoreAdminCommit, firestoreAdminGet,
+} from '../../cloudflare/firebase-admin-ligero.js';
 import { syncEngagementToSheets } from '../../cloudflare/sincronizacion-participacion-sheets.js';
 
 const MAX_BODY_BYTES = 8 * 1024;
+const REPLY_COOLDOWN_MS = 5000;
+
+async function hashKey(value) {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(String(value)));
+  return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, '0')).join('').slice(0, 48);
+}
+
+async function reserveReplyWindow(env, user, input) {
+  const reviewId = String(input.reviewId || '').trim();
+  if (!reviewId) return;
+  const guardId = await hashKey(`reply:${user.uid}:${reviewId}`);
+  const path = `socialRateLimits/${guardId}`;
+  const existing = await firestoreAdminGet(env, path);
+  const lastAt = existing?.fields?.lastAt?.timestampValue
+    ? new Date(existing.fields.lastAt.timestampValue).getTime()
+    : 0;
+  const now = Date.now();
+  if (Number.isFinite(lastAt) && lastAt > 0 && now - lastAt < REPLY_COOLDOWN_MS) {
+    throw new Error('Esperá unos segundos antes de enviar otra respuesta.');
+  }
+
+  await firestoreAdminCommit(env, [{
+    path,
+    fields: encodeFirestoreFields({
+      kind: 'review_reply',
+      uid: user.uid,
+      reviewId,
+      lastAt: new Date(now),
+    }),
+    currentDocument: existing ? { updateTime: existing.updateTime } : { exists: false },
+  }]);
+}
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -36,7 +71,10 @@ export async function onRequest(context) {
     let privateReview = null;
     if (input.action === 'createReview') privateReview = await createReview(env, user, input);
     else if (input.action === 'editReview') privateReview = await editOwnReview(env, user, input);
-    else if (input.action === 'replyReview') privateReview = await addCustomerReply(env, user, input);
+    else if (input.action === 'replyReview') {
+      await reserveReplyWindow(env, user, input);
+      privateReview = await addCustomerReply(env, user, input);
+    }
     else if (input.action === 'toggleFavorite') result = await toggleFavorite(env, user, input);
     else if (input.action === 'toggleReviewLike') result = await toggleReviewLike(env, user, input);
     else throw new Error('Acción no permitida');

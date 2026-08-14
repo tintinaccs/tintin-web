@@ -2,7 +2,7 @@ import {
   jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser, requireSuperAdmin,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import {
-  decodeFirestoreFields, firestoreAdminGet, firestoreAdminList, firestoreAdminMerge,
+  decodeFirestoreFields, firestoreAdminGet, firestoreAdminMerge,
 } from '../../cloudflare/firebase-admin-ligero.js';
 import {
   markAllNotificationsRead,
@@ -14,6 +14,7 @@ import {
 } from '../../cloudflare/notificaciones-sociales.js';
 
 const MAX_BODY_BYTES = 6 * 1024;
+const PROFILE_RECOVERY_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 async function markSourceSeen(env, notification) {
   const sourceType = clean(notification?.sourceType, 60);
@@ -37,10 +38,11 @@ async function registerProfileNotification(env, user) {
   const userDocument = await firestoreAdminGet(env, `users/${uid}`);
   if (!userDocument) throw new Error('El perfil todavía no existe');
   const profile = decodeFirestoreFields(userDocument.fields || {});
-  const name = clean(profile.name || profile.displayName || String(user.email || '').split('@')[0] || 'Nueva clienta', 160);
+  const fullName = clean([profile.firstName, profile.lastName].filter(Boolean).join(' '), 160);
+  const name = fullName || clean(profile.name || profile.displayName || String(user.email || '').split('@')[0] || 'Nueva clienta', 160);
   const createdAt = profile.createdAt ? new Date(profile.createdAt) : null;
   const createdAtMs = createdAt?.getTime?.();
-  if (!Number.isFinite(createdAtMs) || Date.now() - createdAtMs > 60 * 60 * 1000) {
+  if (!Number.isFinite(createdAtMs) || Date.now() - createdAtMs > PROFILE_RECOVERY_WINDOW_MS) {
     return { created: false, skipped: true, reason: 'existing_profile' };
   }
 
@@ -109,8 +111,15 @@ async function notifyOrderStatus(env, actor, orderId) {
   const status = clean(order.status || 'actualizado', 80);
   const paymentStatus = clean(order.paymentStatus || order.payment?.status, 80);
   const revision = Number(order.inventoryRevision || 0);
-  const statusLabel = status.replace(/_/g, ' ');
 
+  // El primer estado reservado/pendiente pertenece a la creación y ya tiene
+  // su propia notificación "Recibimos tu pedido". Esto permite revalidar
+  // pedidos recientes al abrir Super Admin sin generar una segunda alerta.
+  if (revision <= 1 && ['pendiente', 'inventory_pending'].includes(status) && (!paymentStatus || paymentStatus === 'pendiente')) {
+    return { skipped: true, reason: 'initial_order_state' };
+  }
+
+  const statusLabel = status.replace(/_/g, ' ');
   return notifyUserIfAbsent(env, uid, {
     kind: 'order_status', actorType: 'store', actorUid: actor.uid, actorName: 'Tintin Accesorios',
     title: `Tu pedido ${orderNumber} fue actualizado`,
@@ -146,12 +155,10 @@ export async function onRequest(context) {
         return jsonResponse({ ok: true }, 200, origin, request.url);
       }
       if (action === 'adminNotificationsSeenAll') {
-        const documents = await firestoreAdminList(env, 'adminNotifications', 100);
-        const unreadSources = documents
-          .filter(document => document?.fields?.read?.booleanValue !== true)
-          .map(document => decodeFirestoreFields(document.fields || {}));
-        await Promise.allSettled(unreadSources.map(notification => markSourceSeen(env, notification)));
-        const count = await markAllNotificationsRead(env, { admin: true, limit: 100 });
+        const count = await markAllNotificationsRead(env, {
+          admin: true,
+          onUnread: document => markSourceSeen(env, decodeFirestoreFields(document.fields || {})),
+        });
         return jsonResponse({ ok: true, count }, 200, origin, request.url);
       }
       if (action === 'adminOrderStatusChanged') {
@@ -167,7 +174,7 @@ export async function onRequest(context) {
       return jsonResponse({ ok: true }, 200, origin, request.url);
     }
     if (action === 'notificationsSeenAll') {
-      const count = await markAllNotificationsRead(env, { uid: user.uid, limit: 150 });
+      const count = await markAllNotificationsRead(env, { uid: user.uid });
       return jsonResponse({ ok: true, count }, 200, origin, request.url);
     }
     if (action === 'profileCreated') {

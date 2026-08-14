@@ -2,14 +2,16 @@ import {
   encodeFirestoreFields,
   firestoreAdminCommit,
   firestoreAdminGet,
-  firestoreAdminList,
   firestoreAdminMerge,
+  getGoogleAccessToken,
 } from './firebase-admin-ligero.js';
 
 const MAX_TITLE = 180;
 const MAX_BODY = 420;
 const MAX_SNIPPET = 260;
 const MAX_URL = 900;
+const MAX_MARK_ALL_DOCUMENTS = 3000;
+const FIRESTORE_SCOPE = 'https://www.googleapis.com/auth/datastore';
 
 const clean = (value, max = 180) => String(value ?? '')
   .replace(/[\u0000-\u001f\u007f<>]/g, ' ')
@@ -26,9 +28,42 @@ const safeId = (value, label = 'Identificador') => {
 function safeTargetUrl(value) {
   const url = clean(value, MAX_URL);
   if (!url) return '';
-  if (/^(?:https?:|javascript:|data:|\/\/)/i.test(url)) return '';
+  if (/^(?:https?:|javascript:|data:|vbscript:|file:|\/\/)/i.test(url)) return '';
   if (!/^[A-Za-z0-9_./?=&%+#:-]+$/.test(url)) return '';
   return url;
+}
+
+function safeImageUrl(value) {
+  const url = clean(value, 1200);
+  if (!url) return '';
+  if (/^(?:javascript:|data:|vbscript:|file:|\/\/)/i.test(url)) return '';
+  if (/^https?:\/\//i.test(url)) {
+    try {
+      const parsed = new URL(url);
+      return parsed.protocol === 'https:' || parsed.protocol === 'http:' ? parsed.href : '';
+    } catch {
+      return '';
+    }
+  }
+  return /^[A-Za-z0-9_./?=&%+#:-]+$/.test(url) ? url : '';
+}
+
+function normalizeDedupeKey(value) {
+  let key = clean(value, 500);
+  if (!key) return '';
+
+  // Dar/quitar/dar Me gusta repetidamente no debe bombardear a la autora.
+  // El estado del like sigue cambiando en tiempo real, pero la notificación
+  // para el mismo actor/reseña se agrupa como máximo una vez por día UTC.
+  const reviewLike = key.match(/^(review_like:[A-Za-z0-9_-]{1,180}:[A-Za-z0-9_-]{1,180}):(\d{10,})$/);
+  if (reviewLike) {
+    const timestamp = Number(reviewLike[2]);
+    const day = Number.isFinite(timestamp)
+      ? new Date(timestamp).toISOString().slice(0, 10)
+      : new Date().toISOString().slice(0, 10);
+    key = `${reviewLike[1]}:${day}`;
+  }
+  return key;
 }
 
 async function hashId(seed) {
@@ -51,7 +86,7 @@ function normalizeEvent(event = {}) {
     targetUrl: safeTargetUrl(event.targetUrl),
     productId: clean(event.productId, 180),
     productName: clean(event.productName, 180),
-    productImageUrl: clean(event.productImageUrl, 1200),
+    productImageUrl: safeImageUrl(event.productImageUrl),
     reviewId: clean(event.reviewId, 180),
     orderId: clean(event.orderId, 220),
     orderNumber: clean(event.orderNumber, 80),
@@ -66,7 +101,7 @@ function normalizeEvent(event = {}) {
 
 export async function buildUserNotificationWrite(recipientUid, event, dedupeKey) {
   const uid = safeId(recipientUid, 'Cuenta destinataria');
-  const key = clean(dedupeKey, 500);
+  const key = normalizeDedupeKey(dedupeKey);
   if (!key) throw new Error('La notificación requiere clave de deduplicación');
   const notificationId = await hashId(`user:${uid}:${key}`);
   const record = {
@@ -85,7 +120,7 @@ export async function buildUserNotificationWrite(recipientUid, event, dedupeKey)
 }
 
 export async function buildAdminNotificationWrite(event, dedupeKey) {
-  const key = clean(dedupeKey, 500);
+  const key = normalizeDedupeKey(dedupeKey);
   if (!key) throw new Error('La notificación requiere clave de deduplicación');
   const notificationId = await hashId(`admin:${key}`);
   const record = {
@@ -132,19 +167,71 @@ export async function markNotificationRead(env, { uid, notificationId, admin = f
   return true;
 }
 
-export async function markAllNotificationsRead(env, { uid, admin = false, limit = 100 }) {
-  const root = admin ? 'adminNotifications' : `users/${safeId(uid, 'Cuenta')}/notifications`;
-  const documents = await firestoreAdminList(env, root, Math.max(1, Math.min(200, Number(limit) || 100)));
-  const unread = documents.filter(document => document?.fields?.read?.booleanValue !== true);
-  const fields = encodeFirestoreFields({ read: true, updatedAt: new Date() });
-
-  for (let index = 0; index < unread.length; index += 10) {
-    await Promise.all(unread.slice(index, index + 10).map(document => {
-      const path = String(document.name || '').split('/documents/').pop();
-      return firestoreAdminMerge(env, path, fields);
-    }));
+function firestoreProjectId(env) {
+  let serviceAccount;
+  try {
+    serviceAccount = JSON.parse(env.FIREBASE_SERVICE_ACCOUNT_KEY || '{}');
+  } catch {
+    throw new Error('FIREBASE_SERVICE_ACCOUNT_KEY no es un JSON válido');
   }
-  return unread.length;
+  const projectId = clean(serviceAccount?.project_id, 160);
+  if (!/^[A-Za-z0-9_.:-]{2,160}$/.test(projectId)) throw new Error('Proyecto Firebase inválido');
+  return projectId;
+}
+
+async function listNotificationPage(env, root, pageToken = '') {
+  const projectId = firestoreProjectId(env);
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const url = new URL(`https://firestore.googleapis.com/v1/projects/${encodeURIComponent(projectId)}/databases/(default)/documents/${root}`);
+  url.searchParams.set('pageSize', '300');
+  if (pageToken) url.searchParams.set('pageToken', pageToken);
+  const response = await fetch(url.toString(), { headers: { authorization: `Bearer ${accessToken}` } });
+  if (response.status === 404) return { documents: [], nextPageToken: '' };
+  if (!response.ok) throw new Error(`Firestore LIST de notificaciones falló (${response.status})`);
+  const data = await response.json().catch(() => ({}));
+  return {
+    documents: Array.isArray(data.documents) ? data.documents : [],
+    nextPageToken: clean(data.nextPageToken, 2000),
+  };
+}
+
+export async function markAllNotificationsRead(env, { uid, admin = false, onUnread = null } = {}) {
+  const root = admin ? 'adminNotifications' : `users/${safeId(uid, 'Cuenta')}/notifications`;
+  let pageToken = '';
+  let scanned = 0;
+  let changed = 0;
+
+  do {
+    const page = await listNotificationPage(env, root, pageToken);
+    const documents = page.documents;
+    scanned += documents.length;
+    const unread = documents.filter(document => document?.fields?.read?.booleanValue !== true);
+    const timestampValue = new Date().toISOString();
+
+    if (typeof onUnread === 'function' && unread.length) {
+      await Promise.allSettled(unread.map(document => onUnread(document)));
+    }
+
+    for (let index = 0; index < unread.length; index += 20) {
+      const writes = unread.slice(index, index + 20).map(document => {
+        const path = String(document.name || '').split('/documents/').pop();
+        return {
+          path,
+          fields: {
+            ...(document.fields || {}),
+            read: { booleanValue: true },
+            updatedAt: { timestampValue },
+          },
+        };
+      });
+      if (writes.length) await firestoreAdminCommit(env, writes);
+    }
+
+    changed += unread.length;
+    pageToken = scanned < MAX_MARK_ALL_DOCUMENTS ? page.nextPageToken : '';
+  } while (pageToken);
+
+  return changed;
 }
 
 export const socialNotificationClean = clean;

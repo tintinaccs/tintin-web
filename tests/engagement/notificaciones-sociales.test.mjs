@@ -7,31 +7,49 @@ const read = path => readFile(new URL(`../../${path}`, import.meta.url), 'utf8')
 const files = await Promise.all([
   read('cloudflare/notificaciones-sociales.js'),
   read('functions/api/notifications.js'),
+  read('functions/api/engagement.js'),
   read('cloudflare/participacion-clientes.js'),
   read('cloudflare/participacion-admin.js'),
   read('js/pages/product/resenas-producto.js'),
   read('js/components/notifications/notificaciones-clientes.js'),
   read('js/admin/notifications/notificaciones-admin.js'),
+  read('js/email/notificacion-pedido-resend.js'),
   read('firestore.rules'),
 ]);
 
-const [core, api, customerEngagement, adminEngagement, productReviews, clientUi, adminUi, rules] = files;
+const [core, api, engagementApi, customerEngagement, adminEngagement, productReviews, clientUi, adminUi, orderEmail, rules] = files;
 
-test('el núcleo social usa notificaciones dirigidas e idempotentes', () => {
+test('el núcleo social usa notificaciones dirigidas, idempotentes y saneadas', () => {
   assert.match(core, /buildUserNotificationWrite/);
   assert.match(core, /buildAdminNotificationWrite/);
   assert.match(core, /dedupeKey/);
+  assert.match(core, /normalizeDedupeKey/);
+  assert.match(core, /review_like/);
+  assert.match(core, /safeImageUrl/);
   assert.match(core, /markNotificationRead/);
   assert.match(core, /markAllNotificationsRead/);
+  assert.match(core, /nextPageToken/);
 });
 
-test('la API cubre altas, pedidos y lectura para clienta y superadmin', () => {
+test('la API cubre altas, pedidos, recuperación y lectura para clienta y superadmin', () => {
   for (const action of [
     'profileCreated', 'orderCreated', 'notificationSeen', 'notificationsSeenAll',
     'adminNotificationSeen', 'adminNotificationsSeenAll', 'adminOrderStatusChanged',
   ]) assert.match(api, new RegExp(action));
   assert.match(api, /requireFirebaseUser/);
   assert.match(api, /requireSuperAdmin/);
+  assert.match(api, /PROFILE_RECOVERY_WINDOW_MS/);
+  assert.match(api, /24 \* 60 \* 60 \* 1000/);
+  assert.match(api, /profile\.firstName/);
+  assert.match(api, /profile\.lastName/);
+  assert.match(api, /initial_order_state/);
+});
+
+test('las respuestas entre clientas tienen ventana anti-ráfaga server-side', () => {
+  assert.match(engagementApi, /REPLY_COOLDOWN_MS/);
+  assert.match(engagementApi, /socialRateLimits/);
+  assert.match(engagementApi, /reserveReplyWindow/);
+  assert.match(engagementApi, /currentDocument/);
 });
 
 test('la participación entre clientas genera actividad social y protege identidad pública', () => {
@@ -57,13 +75,34 @@ test('la ficha de producto admite Me gusta, respuestas y deep links de reseña',
   assert.match(productReviews, /#review-/);
 });
 
-test('clientas y superadmin tienen centro de actividad con contador', () => {
+test('clientas tienen bandeja de 100, saneado y reintentos de acciones importantes', () => {
   assert.match(clientUi, /data-notification-badge/);
   assert.match(clientUi, /users'.*notifications|users.*,.*notifications/s);
   assert.match(clientUi, /notificationSeen/);
+  assert.match(clientUi, /limit\(100\)/);
+  assert.match(clientUi, /safeImageUrl/);
+  assert.match(clientUi, /apiWithRetry\('notificationsSeenAll'/);
+  assert.match(clientUi, /apiWithRetry\('profileCreated'/);
+});
+
+test('superadmin recupera estados recientes y reintenta sin carreras', () => {
   assert.match(adminUi, /adminNotifications/);
   assert.match(adminUi, /adminOrderStatusChanged/);
   assert.match(adminUi, /adm-notifications-badge/);
+  assert.match(adminUi, /limit\(100\)/);
+  assert.match(adminUi, /ORDER_RECOVERY_WINDOW_MS/);
+  assert.match(adminUi, /orderNotificationInFlight/);
+  assert.match(adminUi, /notifyOrderStatusWithRetry/);
+  assert.match(adminUi, /recoverRecentOrderStatuses/);
+  assert.match(adminUi, /safeImageUrl/);
+});
+
+test('pedido nuevo registra actividad social en paralelo y con reintentos', () => {
+  assert.match(orderEmail, /registerOrderSocialActivity/);
+  assert.match(orderEmail, /MAX_DELIVERY_ATTEMPTS/);
+  assert.match(orderEmail, /socialActivityPromise/);
+  assert.match(orderEmail, /registerOrderSocialActivity\(normalizedOrderId, idToken\)/);
+  assert.match(orderEmail, /await socialActivityPromise/);
 });
 
 test('Firestore mantiene las notificaciones de solo lectura desde el navegador', () => {
