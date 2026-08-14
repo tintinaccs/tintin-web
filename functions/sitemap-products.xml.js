@@ -2,8 +2,7 @@ import {
   decodeFirestoreFields,
   firestoreAdminListAll
 } from '../cloudflare/firebase-admin-ligero.js';
-
-const PUBLIC_ORIGIN = 'https://tintinaccesorios.pages.dev';
+import { TINTIN_PUBLIC_ORIGIN } from '../js/core/config/origenes-publicos.js';
 
 function esc(value) {
   return String(value || '')
@@ -58,7 +57,7 @@ export async function onRequest({ request, env, waitUntil }) {
       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
       ...products.map(({ id, data }) => {
         const lastmod = normalizeDate(data.updatedAt || data.updated_at || data.modifiedAt || data.restockedAt || data.catalogActivityAt);
-        const loc = `${PUBLIC_ORIGIN}/product?id=${encodeURIComponent(id)}`;
+        const loc = `${TINTIN_PUBLIC_ORIGIN}/product?id=${encodeURIComponent(id)}`;
         return `  <url><loc>${esc(loc)}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}<changefreq>weekly</changefreq><priority>0.7</priority></url>`;
       }),
       '</urlset>',
