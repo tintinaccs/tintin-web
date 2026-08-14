@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-14T11:07:05.472Z",
-  "sourceFingerprint": "85178940903d0f3f4c6214d69eb08d73655d0521c73035ca09a91b9946f9ced3",
+  "generatedAt": "2026-08-14T11:10:11.359Z",
+  "sourceFingerprint": "b164f746ecf0f43611066bd22f3c03e37a90510adaaf95d294cf24e0b96e48a1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 621,
-    "textFiles": 589,
-    "totalBytes": 6483789,
+    "files": 620,
+    "textFiles": 588,
+    "totalBytes": 6482569,
     "pages": 18,
     "modules": 382
   },
@@ -26117,12 +26117,6 @@
       "extension": ".yml",
       "bytes": 712,
       "sha256": "256bbbe40d8c21020608d572fcd1a0a267e2dbc445097d058f584a72c8d14d59"
-    },
-    {
-      "path": ".github/workflows/chatgpt-refresh-generated.yml",
-      "extension": ".yml",
-      "bytes": 1220,
-      "sha256": "1f130c93d19fdf43f9f37c11947b710a1a50049d0bf9bf3b08125e242635725c"
     },
     {
       "path": ".github/workflows/corregir-esquema-checkout.yml",
