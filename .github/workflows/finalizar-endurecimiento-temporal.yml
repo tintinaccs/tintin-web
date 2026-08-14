@@ -10,7 +10,7 @@ permissions:
 
 concurrency:
   group: finalizar-production-surgical-hardening
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   finalize:
