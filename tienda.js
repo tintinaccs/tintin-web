@@ -1061,7 +1061,7 @@ function _injectProductJsonLd(product, mainImgUrl, extraImages, stock) {
     ? String(product.desc).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
     : undefined;
   const available = !(stock !== null && stock <= 0);
-  const canonicalProductUrl = new URL('/product.html', 'https://tintinaccesorios.pages.dev');
+  const canonicalProductUrl = new URL('/product', 'https://tintinaccesorios.pages.dev');
   canonicalProductUrl.searchParams.set('id', String(product.id));
   const data = {
     '@context': 'https://schema.org/',
@@ -1084,7 +1084,7 @@ function _injectProductJsonLd(product, mainImgUrl, extraImages, stock) {
   tag.textContent = JSON.stringify(data);
 }
 
-// Canonical/OG/Twitter tags default to the generic product.html?id= URL and
+// Canonical/OG/Twitter tags usan la URL pública limpia /product?id= y
 // the sitewide cover image — without this, every product self-canonicalizes
 // to the same bare URL and shares with the same generic preview, so Google
 // treats every product as a duplicate and WhatsApp/social previews never

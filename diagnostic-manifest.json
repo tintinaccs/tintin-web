@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-14T17:01:36.035Z",
-  "sourceFingerprint": "ce963781fb4f94d4a4bf6f2b0b7a959d91289322a832f00c33e57efd5d29dac4",
+  "generatedAt": "2026-08-14T18:41:25.679Z",
+  "sourceFingerprint": "b7a25a9ab8b4fee7c8076eede17ab556fb05c8c53494b8359cba0d6ae6f508f6",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 623,
-    "textFiles": 591,
-    "totalBytes": 6531010,
+    "files": 624,
+    "textFiles": 592,
+    "totalBytes": 6539451,
     "pages": 18,
     "modules": 382
   },
@@ -21264,8 +21264,8 @@
     },
     {
       "path": "js/pages/home/mantenimiento-inicio.js",
-      "bytes": 9701,
-      "sha256": "b3de6e80bf8d001910e7dbf97983f0bc729752c3c8be61c10eabe52f258f9e07",
+      "bytes": 9673,
+      "sha256": "2fdbf35345d14230f0a919c419ae72c744ee7afaf7e0c2b432caf691288a96d2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21387,8 +21387,8 @@
     },
     {
       "path": "js/pages/product/mantenimiento-producto.js",
-      "bytes": 9451,
-      "sha256": "0cdfb15071162233e8dec831cd43067840b162dc17bcc8c5aeaf6721f0335e79",
+      "bytes": 9446,
+      "sha256": "1e29d5f16c7f708e9dff239b59ca90d71e4123c10f407c82e6cf0f0dfb86fc4c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24550,8 +24550,8 @@
     },
     {
       "path": "scripts/servidor-local-pruebas.mjs",
-      "bytes": 2322,
-      "sha256": "b45a235e99415a4f1d2cc74917012d410c977a8c5f36d8c95f5d8208062b1567",
+      "bytes": 2916,
+      "sha256": "714e4a9fad9885cfd3a5bba045205345dd285994e60ba4c70fdfd313ef62f739",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24597,8 +24597,8 @@
     },
     {
       "path": "scripts/smoke-todas-paginas.mjs",
-      "bytes": 17463,
-      "sha256": "c049271a9378f24498c4947f3d7c65ac0cc5c019604fe35da97664d6b31940d6",
+      "bytes": 18086,
+      "sha256": "7739fbdd7cc89418ccb369128990a7e78ec96ce6320e158066c6e4720d3c9f1a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25771,8 +25771,8 @@
     },
     {
       "path": "tienda.js",
-      "bytes": 90247,
-      "sha256": "5ef94a44d163a02c46f5b8d62659393bad929c6159e26e742f4eece597937a9e",
+      "bytes": 90237,
+      "sha256": "14b00ab901b6d663ec6ac60683704eeea0a65167ac5a070e47b71c1e75408ae4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26007,6 +26007,12 @@
       "sha256": "256bbbe40d8c21020608d572fcd1a0a267e2dbc445097d058f584a72c8d14d59"
     },
     {
+      "path": ".github/workflows/corregir-cierre-seo-smoke-temporal.yml",
+      "extension": ".yml",
+      "bytes": 6557,
+      "sha256": "236a1b24ce23b711697a43893dabe30f40240bf04b5c45d841589afec73669fa"
+    },
+    {
       "path": ".github/workflows/corregir-esquema-checkout.yml",
       "extension": ".yml",
       "bytes": 662,
@@ -26039,8 +26045,8 @@
     {
       "path": ".github/workflows/seo-produccion-fase-11.yml",
       "extension": ".yml",
-      "bytes": 1507,
-      "sha256": "7cb8854ad010818fe39d0e8f4fb62c6a574763d3769b86acf9dc421e9ba2cd7d"
+      "bytes": 2217,
+      "sha256": "1082f716663a9f1afd4abf44440750fd3d18be24e5bf229d454ba3b95a7466ed"
     },
     {
       "path": ".github/workflows/validar-editor-visual-seguro.yml",
@@ -28205,8 +28211,8 @@
     {
       "path": "js/pages/home/mantenimiento-inicio.js",
       "extension": ".js",
-      "bytes": 9701,
-      "sha256": "b3de6e80bf8d001910e7dbf97983f0bc729752c3c8be61c10eabe52f258f9e07"
+      "bytes": 9673,
+      "sha256": "2fdbf35345d14230f0a919c419ae72c744ee7afaf7e0c2b432caf691288a96d2"
     },
     {
       "path": "js/pages/institutional/mantenimiento-contacto.js",
@@ -28241,8 +28247,8 @@
     {
       "path": "js/pages/product/mantenimiento-producto.js",
       "extension": ".js",
-      "bytes": 9451,
-      "sha256": "0cdfb15071162233e8dec831cd43067840b162dc17bcc8c5aeaf6721f0335e79"
+      "bytes": 9446,
+      "sha256": "1e29d5f16c7f708e9dff239b59ca90d71e4123c10f407c82e6cf0f0dfb86fc4c"
     },
     {
       "path": "js/pages/product/productos-relacionados.js",
@@ -29196,7 +29202,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 30127,
-      "sha256": "0570b366f0a22e817f4f610e31f0dbac755380eb5546d3622cac027ce8484104"
+      "sha256": "108d2dc7962d2e14221e16bf6a2ef7a6b0443df3f5a7f1d4b8d40fa1b2a70660"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -29291,8 +29297,8 @@
     {
       "path": "scripts/servidor-local-pruebas.mjs",
       "extension": ".mjs",
-      "bytes": 2322,
-      "sha256": "b45a235e99415a4f1d2cc74917012d410c977a8c5f36d8c95f5d8208062b1567"
+      "bytes": 2916,
+      "sha256": "714e4a9fad9885cfd3a5bba045205345dd285994e60ba4c70fdfd313ef62f739"
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
@@ -29303,8 +29309,8 @@
     {
       "path": "scripts/smoke-todas-paginas.mjs",
       "extension": ".mjs",
-      "bytes": 17463,
-      "sha256": "c049271a9378f24498c4947f3d7c65ac0cc5c019604fe35da97664d6b31940d6"
+      "bytes": 18086,
+      "sha256": "7739fbdd7cc89418ccb369128990a7e78ec96ce6320e158066c6e4720d3c9f1a"
     },
     {
       "path": "scripts/verificar-manifiesto-diagnostico.js",
@@ -29573,8 +29579,8 @@
     {
       "path": "tienda.js",
       "extension": ".js",
-      "bytes": 90247,
-      "sha256": "5ef94a44d163a02c46f5b8d62659393bad929c6159e26e742f4eece597937a9e"
+      "bytes": 90237,
+      "sha256": "14b00ab901b6d663ec6ac60683704eeea0a65167ac5a070e47b71c1e75408ae4"
     }
   ],
   "sitemapRoutes": [],
@@ -31591,13 +31597,6 @@
     },
     {
       "file": "js/pages/home/mantenimiento-inicio.js",
-      "line": 27,
-      "raw": "index.html",
-      "target": "index.html",
-      "exists": true
-    },
-    {
-      "file": "js/pages/home/mantenimiento-inicio.js",
       "line": 145,
       "raw": "catalogo.html",
       "target": "catalogo.html",
@@ -31650,13 +31649,6 @@
       "line": 46,
       "raw": "login.html",
       "target": "login.html",
-      "exists": true
-    },
-    {
-      "file": "js/pages/product/mantenimiento-producto.js",
-      "line": 163,
-      "raw": "product.html",
-      "target": "product.html",
       "exists": true
     },
     {
@@ -32382,13 +32374,6 @@
     },
     {
       "file": "tienda.js",
-      "line": 1064,
-      "raw": "/product.html",
-      "target": "product.html",
-      "exists": true
-    },
-    {
-      "file": "tienda.js",
       "line": 1482,
       "raw": "checkout.html",
       "target": "checkout.html",
@@ -32903,10 +32888,6 @@
         {
           "file": "tienda.js",
           "line": 821
-        },
-        {
-          "file": "tienda.js",
-          "line": 1087
         }
       ]
     }

@@ -24,7 +24,7 @@ if (isHome && !window.TintinHomeMaintenanceBooted) {
 
   function normalizePublicMetadata() {
     const base = currentBaseUrl();
-    const homeUrl = new URL('index.html', base).href;
+    const homeUrl = base;
     const coverUrl = new URL('assets/og-cover.jpg', base).href;
     const logoUrl = new URL('assets-tintin/images/general/logo.png', base).href;
 
