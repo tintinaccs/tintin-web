@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-14T16:02:53.280Z",
-  "sourceFingerprint": "95c690b14ff6adc3420b14bfd875c8e2afff6e9c4608e2c868a1b4eec6fe337d",
+  "generatedAt": "2026-08-14T17:01:36.035Z",
+  "sourceFingerprint": "ce963781fb4f94d4a4bf6f2b0b7a959d91289322a832f00c33e57efd5d29dac4",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 621,
-    "textFiles": 589,
-    "totalBytes": 6528504,
+    "files": 623,
+    "textFiles": 591,
+    "totalBytes": 6531010,
     "pages": 18,
-    "modules": 381
+    "modules": 382
   },
   "viewports": [
     {
@@ -12658,8 +12658,8 @@
         "guest",
         "client"
       ],
-      "bytes": 1759,
-      "sha256": "f2ee6285cd8260244f81e0e100c8e37eaae068017bf6449b401a8ed52aaec8c4",
+      "bytes": 1753,
+      "sha256": "119bf7bebd09df7fbd5cf03af6a20753bb7a60f8de23bfdc8d09cf1a185ac675",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -22000,8 +22000,8 @@
     },
     {
       "path": "scripts/auditar-auxiliares-paginas.js",
-      "bytes": 6533,
-      "sha256": "df8c32810a7f10d3e27c026aa59d6a91791fef6e013c2a30e088bb4bf2326c2a",
+      "bytes": 6376,
+      "sha256": "163799c3ef33267cf6a8058dc41c6a9dd0aaf529c2e6e076dfe184954683fd3c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22009,15 +22009,15 @@
       "imports": [],
       "endpoints": [
         {
-          "url": "https://tintinaccesorios.pages.dev/about.html",
-          "line": 115
+          "url": "https://tintinaccesorios.pages.dev/about",
+          "line": 114
         }
       ]
     },
     {
       "path": "scripts/auditar-ayuda-paginas.js",
-      "bytes": 7979,
-      "sha256": "086ac2b2dca2d286bc5c78cf147db957141f90d96be9e4b5355341a3afaadb83",
+      "bytes": 8134,
+      "sha256": "fae6135a44bf8c4824f7710b871fe16e36afba39f39569dc041503e19a8d7a2a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22025,12 +22025,12 @@
       "imports": [],
       "endpoints": [
         {
-          "url": "https://tintinaccesorios.pages.dev/$%7Bfile%7D",
-          "line": 67
+          "url": "https://tintinaccesorios.pages.dev/",
+          "line": 41
         },
         {
           "url": "https://tintinaccesorios.pages.dev/assets/og-cover.jpg",
-          "line": 78
+          "line": 79
         }
       ]
     },
@@ -22520,8 +22520,8 @@
     },
     {
       "path": "scripts/auditar-diagnostico-hallazgos.js",
-      "bytes": 8289,
-      "sha256": "b1c118a38ceaa22267a1e8b391d22024372efde8ce0cda1d2018aaced88c9980",
+      "bytes": 8290,
+      "sha256": "5259a0a9c60953dcff5e9377d94ab80016fd1e8a896ab0aea02046d639c60068",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22739,8 +22739,8 @@
     },
     {
       "path": "scripts/auditar-fase-12-entrega.mjs",
-      "bytes": 7007,
-      "sha256": "c6c7eb94eae09dbfca470d85dc72e077c799134d130293a4e39ecfe5550ecd79",
+      "bytes": 6987,
+      "sha256": "56ffaabb48e7b813f0952765dfe2fff634a5de18b12b77bb6da5beb962869a71",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22864,8 +22864,8 @@
     },
     {
       "path": "scripts/auditar-final-integracion.js",
-      "bytes": 7649,
-      "sha256": "43e9ffc89d5d8752db4d3807bbca5821bc0cc845b937656fdc6be4f0dc19b385",
+      "bytes": 7978,
+      "sha256": "f0d2e98aa6f464f5430adb22dbf423fe4452bdf538a05021429ee12bc53f89ee",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22878,7 +22878,12 @@
           "line": 41
         }
       ],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/",
+          "line": 77
+        }
+      ]
     },
     {
       "path": "scripts/auditar-firestore-lecturas-presupuesto.js",
@@ -22900,6 +22905,30 @@
           "target": "scripts/mantenimiento-producto.js",
           "dynamic": false,
           "line": 69
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/auditar-github-actions-soportadas.mjs",
+      "bytes": 1203,
+      "sha256": "ddcce506a2e1d4230407a3770fa37f51922738c96b9a386c6b848948320830f7",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 2
         }
       ],
       "endpoints": []
@@ -23442,14 +23471,19 @@
     },
     {
       "path": "scripts/auditar-nivel-3-calidad.js",
-      "bytes": 9837,
-      "sha256": "50a945d27763294c4296e7f9d34b72d0cd4ebdeb40b050f5c5adc0b4d2beaf14",
+      "bytes": 10058,
+      "sha256": "c85c618554a2399256e8fefa52b3d717ac1a14060745a6daf548a9430e3ff115",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/",
+          "line": 39
+        }
+      ]
     },
     {
       "path": "scripts/auditar-nosotros-pagina.js",
@@ -25820,211 +25854,217 @@
       "path": ".github/workflows/aplicar-logica-tienda-unificada.yml",
       "extension": ".yml",
       "bytes": 2568,
-      "sha256": "a37b4770a82f7fec131917d9f2ee4a74f5408a7b46121072ac6e2ddf2bf3da77"
+      "sha256": "1eee36f3c13f4900986ee6c8ed2efeff12a68e67e684b90663cb509e37cc72ab"
+    },
+    {
+      "path": ".github/workflows/auditar-actions-soportadas.yml",
+      "extension": ".yml",
+      "bytes": 672,
+      "sha256": "94a1dc93d18b531b4e76375ae7b158e00ec4cff5c48eb7659bbba187a5a4cec2"
     },
     {
       "path": ".github/workflows/auditar-admin-parte-2f.yml",
       "extension": ".yml",
       "bytes": 1232,
-      "sha256": "64dd7b80448047b127f818eeb5bae7220aaf4cb56faf7467473f240aa0696891"
+      "sha256": "db2466495fd92f01ed7b2b238819a58d9f97b9abcc8bd60d99149e16cd91bf2c"
     },
     {
       "path": ".github/workflows/auditar-barrido-final-parte-2h.yml",
       "extension": ".yml",
       "bytes": 1075,
-      "sha256": "a278d842149798516e0ac517be635087fdb9b923c6ba2e832be579b61786be74"
+      "sha256": "e3da226ea01fe7111f0123d5f518f96c6d372e4b8f481a5f607d175304e69009"
     },
     {
       "path": ".github/workflows/auditar-calidad-nivel-3.yml",
       "extension": ".yml",
       "bytes": 4454,
-      "sha256": "138c0e111ffebe8827dcfe8e76f67a3c87f9948ffdac979282b35f653ac24fff"
+      "sha256": "2e5028f0301ae1c67719cb823d008c6fb7862846fb55d73b71c03eba23eeb67c"
     },
     {
       "path": ".github/workflows/auditar-carrito-fase-7.yml",
       "extension": ".yml",
       "bytes": 3122,
-      "sha256": "4fe4d036f051f79f2389cd979f43e68a9bc84705d6d93bf9bb847bbec3874fa7"
+      "sha256": "cc57d294eb7d83972eddadeedc46721a8e7f2661ea7d3a08e130683ed99ba68f"
     },
     {
       "path": ".github/workflows/auditar-colecciones-fase-4.yml",
       "extension": ".yml",
       "bytes": 1225,
-      "sha256": "5a06a0041efd2148ab035e3d46900be77025ba6802708c4f2ad68189f08103fd"
+      "sha256": "91bdb9d4eddb4e0c4a500afdd4950057e9d6e2794419fedd2378ce208f6acbe0"
     },
     {
       "path": ".github/workflows/auditar-comercio-nivel-2.yml",
       "extension": ".yml",
       "bytes": 944,
-      "sha256": "54079c8da43657a6cff49ebee38c4b5d610f620c62e215ed42b75e7252209982"
+      "sha256": "f26f35847fa117aefc97b8a7b98bf76c43476eb09ad257ac377525e76137b46f"
     },
     {
       "path": ".github/workflows/auditar-comercio-parte-2c.yml",
       "extension": ".yml",
       "bytes": 1210,
-      "sha256": "5e2b926927422bc06d0c40c1608c9e0335ce8367c9ef50f25da629d906b1a476"
+      "sha256": "9fd883f618849bb21965d089d8f7fc08da79fa313f20d00dd316636277602482"
     },
     {
       "path": ".github/workflows/auditar-contenido-fase-6.yml",
       "extension": ".yml",
       "bytes": 1270,
-      "sha256": "56dc46b9ffbccfff619a44a8efabd8558cd38b4c8d926959ea80d1d2665e59dd"
+      "sha256": "5c0d74873a6380c928a9295a0cd74566d582cc81bbe42418510cc2389860a7d2"
     },
     {
       "path": ".github/workflows/auditar-correo-fase-3.yml",
       "extension": ".yml",
       "bytes": 1189,
-      "sha256": "173672e38009e21517abe60f5dde724f1e8b061cbab0113cc117bb2ef37bfaea"
+      "sha256": "3c0ad249742ff80ae0ee1ea5b7678d04b2eabe67689ab9e66e525ddd01a11a05"
     },
     {
       "path": ".github/workflows/auditar-diagnostico.yml",
       "extension": ".yml",
       "bytes": 935,
-      "sha256": "ffa5648eaa9e6ec03a046e55061e659f067f57e45ec90487908de2b43f86dd97"
+      "sha256": "6434aaccbbf2b24b47d00ec6445ee79082c9e1b4b4730a5de8118660bee1e6cd"
     },
     {
       "path": ".github/workflows/auditar-flujo-cuenta-parte-2d.yml",
       "extension": ".yml",
       "bytes": 1876,
-      "sha256": "5353a6526d6e099290e04d577346514d7718480321091f932d2391f7c2eeb8e6"
+      "sha256": "f42d2cdb6a4e26d4609314285e8e6be0e65737c736e3a1d9cfce0e9a9e6e7af2"
     },
     {
       "path": ".github/workflows/auditar-imagenes-fase-5.yml",
       "extension": ".yml",
       "bytes": 4337,
-      "sha256": "7d962809cc5dc598794b2ddf711adc6fd54d467789c0ea8ced9b8eeb234800d5"
+      "sha256": "58258df542e846d7cf55b95f00785bd6f5b7ad996cae7180d3529ae905ad073d"
     },
     {
       "path": ".github/workflows/auditar-inicio-parte-2b.yml",
       "extension": ".yml",
       "bytes": 1181,
-      "sha256": "db8bbb9eb6f6d53e2b5a2d60d1faf9083bd6b5325172b2d56d362a0d0d3cdb25"
+      "sha256": "26844751f55b24eb0a81110f6489a864576cff74e1aaa5e21093c4d521625a5f"
     },
     {
       "path": ".github/workflows/auditar-institucional-ayuda-legal-parte-2e.yml",
       "extension": ".yml",
       "bytes": 2428,
-      "sha256": "9cca660d4609b19b5f15c4b5e779492035b49c1373e151bba4a2acafce017a2b"
+      "sha256": "9f51d03a158d29469fbdea6df760ca854dc4f4fc1f7ad793ee29e0821d80dc49"
     },
     {
       "path": ".github/workflows/auditar-limpiar-ramas.yml",
       "extension": ".yml",
       "bytes": 3921,
-      "sha256": "80ae739f9847757b469b17373441ba45cf92df96c269d940133e08a9aa8183f2"
+      "sha256": "273cbd4db3ef542ce8e7e784b1631ac31d4a25bc7ae035d7f48206a7f81cc53f"
     },
     {
       "path": ".github/workflows/auditar-navegacion-modular.yml",
       "extension": ".yml",
       "bytes": 2544,
-      "sha256": "4273cc55bb6d3b27c2e7399831be9a2f4c1b0f7a9107618634fb4fca96fae6d3"
+      "sha256": "616fba0f6c075cda2415368025d375245804fa00102aef5c5fca6dfb032778bf"
     },
     {
       "path": ".github/workflows/auditar-notificaciones-sociales.yml",
       "extension": ".yml",
       "bytes": 990,
-      "sha256": "47313ea99ced4d05cc949fd158af5358c33803afa8519f8cf00d4122b960df8d"
+      "sha256": "1c6fdb01de5f325a7ffedac0baf8ab7ecda4f801419c6eed7f3cf1706aaac5e4"
     },
     {
       "path": ".github/workflows/auditar-pedidos-seguros.yml",
       "extension": ".yml",
       "bytes": 1558,
-      "sha256": "09d9346caa1871547d4ca0113e875cd091b979a1ae286e307798dd2c3b809117"
+      "sha256": "7d3b2ba56511019ef8bf792169ae35e92130dc2e18ef9ef8d85cafc42da070ea"
     },
     {
       "path": ".github/workflows/auditar-responsive-global.yml",
       "extension": ".yml",
       "bytes": 2111,
-      "sha256": "2dc440c38365d9045be8943331455803e5269a579c7a4adfcb5daec392737a82"
+      "sha256": "1670b898687d30366c4bd42c959668ad0151311126b583cb178a97087568e97e"
     },
     {
       "path": ".github/workflows/auditar-seguridad-fase-8.yml",
       "extension": ".yml",
       "bytes": 3155,
-      "sha256": "a9fb19c396a15b278300d01ed4738f3b5e399d659c7b180a6e6e8396f22cc374"
+      "sha256": "db41a12092f48336f900f32786b302071f5e127212087c2a8206c0eb9d966c4e"
     },
     {
       "path": ".github/workflows/auditar-sistema-especial-parte-2g.yml",
       "extension": ".yml",
       "bytes": 1303,
-      "sha256": "fc49a4f3926684ef93903be712a2674e261a39c1ede4c1d0b1e48d3a6e23debd"
+      "sha256": "c3c40759c7ad79c1fcdda91b5a5eb50713de1de652a8da0549a53555a86aa847"
     },
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
       "bytes": 6893,
-      "sha256": "117252c56e5b2011485629968b3673bbb7d3fecd1bba1dffe0a678172479ccb0"
+      "sha256": "0c063ed472f0b0e1b343552c63e08b1d2737891d1901f355bca01fb4dfc44bbb"
     },
     {
       "path": ".github/workflows/auditar-tipografia.yml",
       "extension": ".yml",
       "bytes": 1178,
-      "sha256": "c0e0f81c08c7235fa4c63fb7120172d575c2a737fc687d324afcce67d0018c14"
+      "sha256": "cfd7af10c1d9eaa4c0c12f1df800d022759916e1c6f4cab97a5beef8c9c84184"
     },
     {
       "path": ".github/workflows/auditar-versionado-cache.yml",
       "extension": ".yml",
       "bytes": 712,
-      "sha256": "fc2d3bc80d6f56976dcca08affb29b67e5b5cab3e97f0ab04a6edf177b9d4659"
+      "sha256": "256bbbe40d8c21020608d572fcd1a0a267e2dbc445097d058f584a72c8d14d59"
     },
     {
       "path": ".github/workflows/corregir-esquema-checkout.yml",
       "extension": ".yml",
       "bytes": 662,
-      "sha256": "972fbe285dacb481e6373dea0dcf9d0b1d6dad33d8fec9acf9c58a245b412571"
+      "sha256": "c70faaca8f9fd0e0be6ca49aef02944e0dcee832da1a488759ebd843a07af9e3"
     },
     {
       "path": ".github/workflows/desplegar-pages.yml",
       "extension": ".yml",
       "bytes": 3244,
-      "sha256": "d746ae1924ba6483c9ca20eff0ad7e2c6d042bf5f500cc77d1c8ceb9d1d73c69"
+      "sha256": "d318614d6f41ce99f0ea0e4191fb30fe824f2838d5b9b69cf9edc4f0202de22b"
     },
     {
       "path": ".github/workflows/entrega-final-fase-12.yml",
       "extension": ".yml",
-      "bytes": 4337,
-      "sha256": "1b3a1cbad872980a851a25e9f350cf95a25d1ce2028cb362a0bcddf1a92aee46"
+      "bytes": 4445,
+      "sha256": "662d5a5fd928f1728ecf1e302fcfeb4068978cd6a5e76ac27e5b262b3c6c8bd3"
     },
     {
       "path": ".github/workflows/entrega-final-fase-9.yml",
       "extension": ".yml",
       "bytes": 2521,
-      "sha256": "970a1e9f1c0544670c68ac2a1ad1dba388ff866e9b512fde82c5ee2706b0ad7f"
+      "sha256": "6a2eca592cb337151a33f84556075cf6a15d7329c7cff4eae016b6e43ce70d2f"
     },
     {
       "path": ".github/workflows/respaldo-repositorio.yml",
       "extension": ".yml",
       "bytes": 1741,
-      "sha256": "5fc3985235cbe15ed47405ac9f003ef53a14d12a4c24fe2ae05ce9bcb23ff22b"
+      "sha256": "aba3c2acc96e842af823d1595c08750e897bea27d060d4f69d07d28670d151ad"
     },
     {
       "path": ".github/workflows/seo-produccion-fase-11.yml",
       "extension": ".yml",
       "bytes": 1507,
-      "sha256": "ee1911dab8cb2b89f0206da02e59d85f1ad77e1893f970bb48b40a36c707c9a9"
+      "sha256": "7cb8854ad010818fe39d0e8f4fb62c6a574763d3769b86acf9dc421e9ba2cd7d"
     },
     {
       "path": ".github/workflows/validar-editor-visual-seguro.yml",
       "extension": ".yml",
       "bytes": 2903,
-      "sha256": "25d2dfad1dcb108bae5d8d9946451bc758596d859de6e5e44347f5368405c5d5"
+      "sha256": "e4f989e55b3ab3541fe047d0af2c1e8d1de61fefccf39c7dc4554ebaa4fe77dc"
     },
     {
       "path": ".github/workflows/validar-header-responsive.yml",
       "extension": ".yml",
       "bytes": 1581,
-      "sha256": "a00be3cab60d9a08ade4474ad127a629589f6da5dacf439cc883003e7c8f92ed"
+      "sha256": "e53c79a10f017ffad616ffbf3cf012e698de96cd380c01b121ca12b74fccac1b"
     },
     {
       "path": ".github/workflows/validar-navegacion-inmediata.yml",
       "extension": ".yml",
       "bytes": 1324,
-      "sha256": "1c9694a0f2b873ebae9c80b9a579e574fd52e966c81abdd535ac7ae8e0c0884a"
+      "sha256": "cbaa93e3cb5261be1dc82b89b1d7959f7f470ca14a0299aa4367f57e209884e0"
     },
     {
       "path": ".github/workflows/validar-tienda-unificada-final.yml",
       "extension": ".yml",
       "bytes": 2472,
-      "sha256": "74de1beb7f84cde87b2894c26838a792b3b1ab372d8c28ece4c669f8b951f00a"
+      "sha256": "749bbfd077e857567e85de7fe415bb7768f5fdc00cb3af39449b5ed829ddf73a"
     },
     {
       "path": "404.html",
@@ -28489,8 +28529,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1759,
-      "sha256": "f2ee6285cd8260244f81e0e100c8e37eaae068017bf6449b401a8ed52aaec8c4"
+      "bytes": 1753,
+      "sha256": "119bf7bebd09df7fbd5cf03af6a20753bb7a60f8de23bfdc8d09cf1a185ac675"
     },
     {
       "path": "package-lock.json",
@@ -28633,14 +28673,14 @@
     {
       "path": "scripts/auditar-auxiliares-paginas.js",
       "extension": ".js",
-      "bytes": 6533,
-      "sha256": "df8c32810a7f10d3e27c026aa59d6a91791fef6e013c2a30e088bb4bf2326c2a"
+      "bytes": 6376,
+      "sha256": "163799c3ef33267cf6a8058dc41c6a9dd0aaf529c2e6e076dfe184954683fd3c"
     },
     {
       "path": "scripts/auditar-ayuda-paginas.js",
       "extension": ".js",
-      "bytes": 7979,
-      "sha256": "086ac2b2dca2d286bc5c78cf147db957141f90d96be9e4b5355341a3afaadb83"
+      "bytes": 8134,
+      "sha256": "fae6135a44bf8c4824f7710b871fe16e36afba39f39569dc041503e19a8d7a2a"
     },
     {
       "path": "scripts/auditar-canonicos-viewports.mjs",
@@ -28765,8 +28805,8 @@
     {
       "path": "scripts/auditar-diagnostico-hallazgos.js",
       "extension": ".js",
-      "bytes": 8289,
-      "sha256": "b1c118a38ceaa22267a1e8b391d22024372efde8ce0cda1d2018aaced88c9980"
+      "bytes": 8290,
+      "sha256": "5259a0a9c60953dcff5e9377d94ab80016fd1e8a896ab0aea02046d639c60068"
     },
     {
       "path": "scripts/auditar-diagnostico.js",
@@ -28813,8 +28853,8 @@
     {
       "path": "scripts/auditar-fase-12-entrega.mjs",
       "extension": ".mjs",
-      "bytes": 7007,
-      "sha256": "c6c7eb94eae09dbfca470d85dc72e077c799134d130293a4e39ecfe5550ecd79"
+      "bytes": 6987,
+      "sha256": "56ffaabb48e7b813f0952765dfe2fff634a5de18b12b77bb6da5beb962869a71"
     },
     {
       "path": "scripts/auditar-fase-5-rendimiento.js",
@@ -28855,14 +28895,20 @@
     {
       "path": "scripts/auditar-final-integracion.js",
       "extension": ".js",
-      "bytes": 7649,
-      "sha256": "43e9ffc89d5d8752db4d3807bbca5821bc0cc845b937656fdc6be4f0dc19b385"
+      "bytes": 7978,
+      "sha256": "f0d2e98aa6f464f5430adb22dbf423fe4452bdf538a05021429ee12bc53f89ee"
     },
     {
       "path": "scripts/auditar-firestore-lecturas-presupuesto.js",
       "extension": ".js",
       "bytes": 7489,
       "sha256": "c9fb49cc1719a9238e4dbc7be4ba45fb63da3cdfa305fd57dc9f970cbd559569"
+    },
+    {
+      "path": "scripts/auditar-github-actions-soportadas.mjs",
+      "extension": ".mjs",
+      "bytes": 1203,
+      "sha256": "ddcce506a2e1d4230407a3770fa37f51922738c96b9a386c6b848948320830f7"
     },
     {
       "path": "scripts/auditar-global-fit-parte-2f.mjs",
@@ -28975,8 +29021,8 @@
     {
       "path": "scripts/auditar-nivel-3-calidad.js",
       "extension": ".js",
-      "bytes": 9837,
-      "sha256": "50a945d27763294c4296e7f9d34b72d0cd4ebdeb40b050f5c5adc0b4d2beaf14"
+      "bytes": 10058,
+      "sha256": "c85c618554a2399256e8fefa52b3d717ac1a14060745a6daf548a9430e3ff115"
     },
     {
       "path": "scripts/auditar-nosotros-pagina.js",
@@ -33955,7 +34001,7 @@
           },
           {
             "file": "scripts/auditar-ayuda-paginas.js",
-            "line": 160,
+            "line": 161,
             "operation": "doc"
           },
           {
