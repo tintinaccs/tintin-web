@@ -21,6 +21,18 @@ export const AUTH_METHOD = {
   EMAIL: 'emailOtp',
 };
 
+async function registerSocialProfile(user) {
+  if (!user || user.email === SUPER_ADMIN) return;
+  const token = await user.getIdToken();
+  const response = await fetch('/api/notifications', {
+    method: 'POST',
+    cache: 'no-store',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'profileCreated' }),
+  });
+  if (!response.ok) throw new Error(`No se pudo registrar la actividad social (${response.status})`);
+}
+
 /**
  * Método con el que se registró un perfil ya guardado.
  *
@@ -54,9 +66,6 @@ export async function ensureUserProfile(db, user, method) {
     const role = user.email === SUPER_ADMIN ? 'superadmin' : 'client';
     const welcomePending = role === 'client';
     await setDoc(ref, {
-      // Google entrega un nombre; el correo no entrega ninguno. En los dos
-      // casos el setup posterior lo confirma o lo pide antes de darlo por
-      // bueno — acá sólo se deja el valor de partida.
       name: method === AUTH_METHOD.GOOGLE ? (user.displayName || '') : '',
       email: user.email,
       phone: '',
@@ -74,6 +83,7 @@ export async function ensureUserProfile(db, user, method) {
       updatedAt: serverTimestamp(),
       lastLogin: serverTimestamp(),
     });
+    registerSocialProfile(user).catch(error => console.warn('[user-profile] No se pudo registrar la notificación de alta:', error));
     return { role, blocked: false, isNew: true, welcomePending, method };
   }
 
@@ -84,16 +94,11 @@ export async function ensureUserProfile(db, user, method) {
     return { role: 'superadmin', blocked: false, isNew: false, welcomePending: false, method };
   }
 
-  // Cada cuenta entra sólo por donde se creó. No se crea un perfil nuevo, no
-  // se duplica y no se cambia el método guardado: se devuelve cuál es el
-  // correcto para que la pantalla lo señale.
   const registeredMethod = getRegisteredMethod(data);
   if (registeredMethod !== method) {
     return { wrongMethod: registeredMethod };
   }
 
-  // lastLogin es informativo: no concede permisos ni decide el destino, así
-  // que no se espera y un fallo no bloquea el ingreso.
   setDoc(ref, { updatedAt: serverTimestamp(), lastLogin: serverTimestamp() }, { merge: true })
     .catch(error => console.warn('[user-profile] No se pudo actualizar lastLogin:', error));
 
