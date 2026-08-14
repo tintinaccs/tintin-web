@@ -61,19 +61,38 @@ async function getIdToken(forceRefresh = false) {
   }
 }
 
-async function registerOrderSocialActivity(orderId, idToken) {
-  try {
-    const response = await fetch(SOCIAL_NOTIFICATIONS_API, {
-      method: 'POST',
-      cache: 'no-store',
-      keepalive: true,
-      headers: { Authorization: `Bearer ${idToken}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'orderCreated', orderId }),
-    });
-    if (!response.ok) console.warn('[resend-order] El pedido se creó, pero la actividad social no pudo registrarse:', response.status);
-  } catch (error) {
-    console.warn('[resend-order] No se pudo registrar la actividad social del pedido:', error);
+async function registerOrderSocialActivity(orderId, initialIdToken) {
+  let idToken = initialIdToken;
+  let lastError = null;
+
+  for (let attempt = 1; attempt <= MAX_DELIVERY_ATTEMPTS; attempt += 1) {
+    try {
+      const response = await fetch(SOCIAL_NOTIFICATIONS_API, {
+        method: 'POST',
+        cache: 'no-store',
+        keepalive: true,
+        headers: { Authorization: `Bearer ${idToken}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'orderCreated', orderId }),
+      });
+      if (response.ok) return true;
+
+      lastError = new Error(`HTTP ${response.status}`);
+      if (response.status === 401 && attempt < MAX_DELIVERY_ATTEMPTS) {
+        idToken = await getIdToken(true) || idToken;
+      }
+      const retryable = [408, 425, 429].includes(response.status) || response.status >= 500 || response.status === 401;
+      if (!retryable) break;
+    } catch (error) {
+      lastError = error;
+    }
+
+    if (attempt < MAX_DELIVERY_ATTEMPTS) {
+      await sleep(RETRY_DELAYS_MS[Math.min(attempt - 1, RETRY_DELAYS_MS.length - 1)]);
+    }
   }
+
+  console.warn('[resend-order] El pedido quedó creado, pero la actividad social no pudo registrarse tras reintentos:', lastError);
+  return false;
 }
 
 function defaultFailure(error, attempts = 1) {
@@ -156,6 +175,12 @@ export async function sendOrderNotification(orderId, order, isResend = false) {
     sendCustomer: true
   };
 
+  // El feed social no espera a Resend: ambos canales arrancan juntos.
+  // orderCreated es idempotente en servidor, así que los reintentos no duplican.
+  const socialActivityPromise = isResend
+    ? Promise.resolve(true)
+    : registerOrderSocialActivity(normalizedOrderId, idToken);
+
   let refreshedToken = false;
   let finalResult = defaultFailure('No se pudo completar el envío.');
 
@@ -178,7 +203,7 @@ export async function sendOrderNotification(orderId, order, isResend = false) {
     await sleep(RETRY_DELAYS_MS[Math.min(attempt - 1, RETRY_DELAYS_MS.length - 1)]);
   }
 
-  if (!isResend) await registerOrderSocialActivity(normalizedOrderId, idToken);
+  await socialActivityPromise;
   await logOrderEmailAttempt(normalizedOrderId, order, isResend, finalResult);
   return finalResult;
 }
