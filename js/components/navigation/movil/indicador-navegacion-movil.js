@@ -18,7 +18,10 @@
     nav.classList.add('tt-mobile-nav-ready');
   };
 
-  const current = () => items.find(item => item.classList.contains('active')) || null;
+  const current = () =>
+    items.find(item => item.getAttribute('aria-expanded') === 'true') ||
+    items.find(item => item.classList.contains('active')) ||
+    null;
   const sync = () => locate(current());
   const observer = new MutationObserver(sync);
   items.forEach(item => observer.observe(item, {

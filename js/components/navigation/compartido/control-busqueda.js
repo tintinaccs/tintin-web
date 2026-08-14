@@ -136,11 +136,13 @@ function createResult(product, position) {
 function showResultsContainer(results) {
   results.hidden = false;
   results.style.display = 'block';
+  document.getElementById('search-panel')?.classList.add('tt-has-results');
 }
 
 function hideResultsContainer(results) {
   results.hidden = true;
   results.style.display = 'none';
+  document.getElementById('search-panel')?.classList.remove('tt-has-results');
 }
 
 function renderResults(query) {
