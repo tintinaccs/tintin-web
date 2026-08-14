@@ -5,6 +5,9 @@ import {
   firestoreAdminMerge,
 } from './firebase-admin-ligero.js';
 import {
+  buildUserNotificationWrite,
+} from './notificaciones-sociales.js';
+import {
   engagementClean as clean,
   engagementDecoded as decoded,
   engagementOwnReviewView as ownReviewView,
@@ -18,7 +21,7 @@ const MAX_REPLY = 1200;
 
 function mapping(record) {
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     reviewId: record.reviewId,
     productId: record.productId,
     productName: record.productName,
@@ -27,6 +30,7 @@ function mapping(record) {
     editCount: record.editCount,
     visible: Boolean(record.visible),
     deleted: Boolean(record.deleted),
+    likeCount: Math.max(0, Number(record.likeCount) || 0),
     conversation: ownReviewView(record).conversation,
     createdAt: new Date(record.createdAt),
     updatedAt: new Date(record.updatedAt),
@@ -41,7 +45,7 @@ async function loadReview(env, reviewId) {
   return { id, document, record };
 }
 
-async function saveReview(env, document, record) {
+async function saveReview(env, document, record, extraWrites = []) {
   const writes = [
     {
       path: `reviewRecords/${record.reviewId}`,
@@ -56,6 +60,7 @@ async function saveReview(env, document, record) {
   const publicPath = `products/${safeId(record.productId, 'Producto')}/reviews/${record.reviewId}`;
   if (record.visible && !record.deleted) writes.push({ path: publicPath, fields: encodeFirestoreFields(reviewPublic(record)) });
   else writes.push({ path: publicPath, delete: true });
+  writes.push(...extraWrites);
   await firestoreAdminCommit(env, writes);
   await updateReviewStats(env, record.productId);
   return record;
@@ -66,7 +71,8 @@ export async function adminReviewAction(env, actor, input) {
   const now = new Date();
   const action = clean(input.action, 60);
   const history = [...(record.history || [])];
-  let updated = { ...record, updatedAt: now, lastAdminEmail: actor.email };
+  const extraWrites = [];
+  let updated = { ...record, schemaVersion: 2, likeCount: Math.max(0, Number(record.likeCount) || 0), updatedAt: now, lastAdminEmail: actor.email };
 
   if (action === 'reviewVisibility') {
     updated.visible = Boolean(input.visible);
@@ -75,14 +81,35 @@ export async function adminReviewAction(env, actor, input) {
   } else if (action === 'reviewLike') {
     updated.storeLiked = Boolean(input.liked);
     history.push({ action: updated.storeLiked ? 'store_liked' : 'store_unliked', changedAt: now, changedBy: actor.email });
+    if (updated.storeLiked) {
+      const notification = await buildUserNotificationWrite(record.ownerUid, {
+        kind: 'store_review_like', actorType: 'store', actorUid: actor.uid, actorName: 'Tintin Accesorios',
+        title: 'A TINTIN le gustó tu reseña',
+        body: clean(record.comment, 420), snippet: clean(record.comment, 260), iconKey: 'heart',
+        targetUrl: `product.html?id=${record.productId}#review-${record.reviewId}`,
+        productId: record.productId, productName: record.productName, productImageUrl: record.productImageUrl,
+        reviewId: record.reviewId, sourceType: 'review', sourceId: record.reviewId, createdAt: now,
+      }, `store_review_like:${record.reviewId}:${now.getTime()}`);
+      extraWrites.push(notification.write);
+    }
   } else if (action === 'reviewReply') {
     const text = clean(input.text, MAX_REPLY);
     if (!text) throw new Error('La respuesta está vacía');
+    const messageId = crypto.randomUUID();
     updated.conversation = [...(record.conversation || []), {
-      id: crypto.randomUUID(), authorType: 'store', actorUid: actor.uid,
+      id: messageId, authorType: 'store', actorUid: actor.uid,
       actorEmail: actor.email, text, createdAt: now,
     }].slice(-50);
     history.push({ action: 'store_reply', text, changedAt: now, changedBy: actor.email });
+    const notification = await buildUserNotificationWrite(record.ownerUid, {
+      kind: 'store_review_reply', actorType: 'store', actorUid: actor.uid, actorName: 'Tintin Accesorios',
+      title: 'Tintin Accesorios respondió a tu reseña',
+      body: text, snippet: text, iconKey: 'comment',
+      targetUrl: `product.html?id=${record.productId}#review-${record.reviewId}`,
+      productId: record.productId, productName: record.productName, productImageUrl: record.productImageUrl,
+      reviewId: record.reviewId, sourceType: 'review', sourceId: record.reviewId, createdAt: now,
+    }, `store_review_reply:${record.reviewId}:${messageId}`);
+    extraWrites.push(notification.write);
   } else if (action === 'reviewEdit') {
     const rating = Number(input.rating);
     const comment = clean(input.comment, MAX_COMMENT);
@@ -105,7 +132,7 @@ export async function adminReviewAction(env, actor, input) {
     throw new Error('Acción de reseña no permitida');
   }
   updated.history = history.slice(-50);
-  return saveReview(env, document, updated);
+  return saveReview(env, document, updated, extraWrites);
 }
 
 export async function markLikeSeen(env, likeId) {
