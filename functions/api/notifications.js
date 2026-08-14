@@ -58,6 +58,41 @@ async function registerProfileNotification(env, user) {
   return adminResult;
 }
 
+async function registerOrderCreated(env, user, orderId) {
+  const id = safeId(orderId, 'Pedido');
+  const document = await firestoreAdminGet(env, `orders/${id}`);
+  if (!document) throw new Error('No se encontró el pedido');
+  const order = decodeFirestoreFields(document.fields || {});
+  if (clean(order.userId, 180) !== user.uid) throw new Error('El pedido no pertenece a esta cuenta');
+  if (clean(order.userEmail, 254).toLowerCase() !== clean(user.email, 254).toLowerCase()) throw new Error('El correo del pedido no coincide con la cuenta');
+
+  const orderNumber = clean(order.orderNumber || order.shortId || id, 80);
+  const customerName = clean(order.userName || String(user.email || '').split('@')[0] || 'Una clienta', 160);
+  const total = Math.max(0, Math.round(Number(order.total) || 0));
+  const createdAt = order.createdAt ? new Date(order.createdAt) : new Date();
+  const totalText = total ? `${total.toLocaleString('es-PY')} Gs.` : 'Monto a confirmar.';
+
+  const adminResult = await notifyAdminIfAbsent(env, {
+    kind: 'order_created', actorType: 'customer', actorUid: user.uid, actorName: customerName,
+    title: `${customerName} realizó el pedido ${orderNumber}`,
+    body: `Nuevo pedido por ${totalText}`,
+    iconKey: 'order', targetUrl: 'admin.html#section-pedidos',
+    orderId: id, orderNumber, status: clean(order.status || 'pendiente', 80),
+    sourceType: 'order', sourceId: id, createdAt,
+  }, `order_created:${id}`);
+
+  await notifyUserIfAbsent(env, user.uid, {
+    kind: 'order_created', actorType: 'store', actorName: 'Tintin Accesorios',
+    title: `Recibimos tu pedido ${orderNumber}`,
+    body: 'Tu pedido ya está registrado. Te vamos a avisar por acá cada cambio importante de estado.',
+    iconKey: 'order', targetUrl: `perfil.html#pedido-${encodeURIComponent(id)}`,
+    orderId: id, orderNumber, status: clean(order.status || 'pendiente', 80),
+    sourceType: 'order', sourceId: id, createdAt,
+  }, `order_created:${id}`);
+
+  return adminResult;
+}
+
 async function notifyOrderStatus(env, actor, orderId) {
   const id = safeId(orderId, 'Pedido');
   const document = await firestoreAdminGet(env, `orders/${id}`);
@@ -128,6 +163,10 @@ export async function onRequest(context) {
     }
     if (action === 'profileCreated') {
       const result = await registerProfileNotification(env, user);
+      return jsonResponse({ ok: true, result }, 200, origin, request.url);
+    }
+    if (action === 'orderCreated') {
+      const result = await registerOrderCreated(env, user, input.orderId);
       return jsonResponse({ ok: true, result }, 200, origin, request.url);
     }
     throw new Error('Acción no permitida');
