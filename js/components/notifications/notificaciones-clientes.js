@@ -5,6 +5,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const ASSET_VERSION = 'tintin-20260814-social-notifications-1';
+const API_RETRY_DELAYS_MS = [450, 1200];
 let initialized = false;
 let currentUser = null;
 let notifications = [];
@@ -14,6 +15,8 @@ let authUnsubscribe = null;
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
 })[character]);
+
+const sleep = ms => new Promise(resolve => window.setTimeout(resolve, Math.max(0, Number(ms) || 0)));
 
 function ensureStyles() {
   if (document.querySelector('link[data-tt-social-notifications]')) return;
@@ -36,8 +39,22 @@ function iconSvg(iconKey) {
 
 function safeTarget(value) {
   const target = String(value || '').trim();
-  if (!target || /^(?:https?:|javascript:|data:|\/\/)/i.test(target)) return 'index.html';
-  return target;
+  if (!target || /^(?:https?:|javascript:|data:|vbscript:|file:|\/\/)/i.test(target)) return 'index.html';
+  return /^[A-Za-z0-9_./?=&%+#:-]+$/.test(target) ? target : 'index.html';
+}
+
+function safeImageUrl(value) {
+  const raw = String(value || '').trim();
+  if (!raw || /^(?:javascript:|data:|vbscript:|file:|\/\/)/i.test(raw)) return '';
+  if (/^https?:\/\//i.test(raw)) {
+    try {
+      const parsed = new URL(raw);
+      return parsed.protocol === 'https:' || parsed.protocol === 'http:' ? parsed.href : '';
+    } catch {
+      return '';
+    }
+  }
+  return /^[A-Za-z0-9_./?=&%+#:-]+$/.test(raw) ? raw : '';
 }
 
 function timeValue(value) {
@@ -124,7 +141,7 @@ function render() {
     return;
   }
   root.innerHTML = notifications.map(notification => {
-    const image = String(notification.productImageUrl || '').trim();
+    const image = safeImageUrl(notification.productImageUrl);
     const trailing = image
       ? `<img class="tt-notification-thumb" src="${escapeHtml(image)}" alt="" loading="lazy" decoding="async">`
       : `<span class="tt-notification-thumb-placeholder" aria-hidden="true">T</span>`;
@@ -140,17 +157,37 @@ function render() {
   updateBadge();
 }
 
-async function api(action, payload = {}) {
+async function api(action, payload = {}, forceRefresh = false) {
   if (!currentUser) throw new Error('Necesitás iniciar sesión');
-  const token = await currentUser.getIdToken();
+  const token = await currentUser.getIdToken(forceRefresh);
   const response = await fetch('/api/notifications', {
     method: 'POST', cache: 'no-store', keepalive: true,
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ action, ...payload }),
   });
   const result = await response.json().catch(() => ({}));
-  if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo actualizar la notificación');
+  if (!response.ok || result.ok !== true) {
+    const error = new Error(result.error || 'No se pudo actualizar la notificación');
+    error.status = response.status;
+    throw error;
+  }
   return result;
+}
+
+async function apiWithRetry(action, payload = {}, attempts = 3) {
+  let lastError = null;
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    try {
+      return await api(action, payload, attempt > 0 && lastError?.status === 401);
+    } catch (error) {
+      lastError = error;
+      const status = Number(error?.status || 0);
+      const retryable = !status || status === 401 || [408, 425, 429].includes(status) || status >= 500;
+      if (!retryable || attempt >= attempts - 1) break;
+      await sleep(API_RETRY_DELAYS_MS[Math.min(attempt, API_RETRY_DELAYS_MS.length - 1)]);
+    }
+  }
+  throw lastError || new Error('No se pudo completar la operación');
 }
 
 function subscribe(user) {
@@ -159,7 +196,7 @@ function subscribe(user) {
   notifications = [];
   render();
   if (!user) return;
-  const source = query(collection(db, 'users', user.uid, 'notifications'), orderBy('createdAt', 'desc'), limit(50));
+  const source = query(collection(db, 'users', user.uid, 'notifications'), orderBy('createdAt', 'desc'), limit(100));
   unsubscribe = onSnapshot(source, snapshot => {
     notifications = snapshot.docs.map(document => ({ id: document.id, ...document.data() }));
     render();
@@ -210,7 +247,7 @@ function wireEvents() {
       event.preventDefault();
       notifications.forEach(item => { item.read = true; });
       render();
-      api('notificationsSeenAll').catch(error => {
+      apiWithRetry('notificationsSeenAll').catch(error => {
         console.warn('[notifications] No se pudieron marcar todas como leídas:', error);
         subscribe(currentUser);
       });
@@ -230,7 +267,7 @@ export function initClientNotifications() {
     setTriggersVisible(Boolean(user));
     subscribe(currentUser);
     if (currentUser) {
-      api('profileCreated').catch(error => console.warn('[notifications] No se pudo registrar el alta social:', error));
+      apiWithRetry('profileCreated').catch(error => console.warn('[notifications] No se pudo registrar el alta social:', error));
     }
   });
 }
