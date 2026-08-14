@@ -124,6 +124,9 @@ jobs:
       - name: Compilar Pages Functions
         run: npx --yes wrangler@latest pages functions build functions --outdir=.cloudflare-functions --project-directory=.
 
+      - name: Retirar artefacto temporal de Wrangler
+        run: rm -rf .cloudflare-functions
+
       - name: SEO estático
         run: npm run audit:phase11
       - name: Seguridad
