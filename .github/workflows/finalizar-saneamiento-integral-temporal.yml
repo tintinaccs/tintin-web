@@ -1,0 +1,113 @@
+name: Finalizar saneamiento integral temporal
+
+on:
+  push:
+    branches:
+      - chatgpt/full-site-hardening-20260814
+
+permissions:
+  contents: write
+
+concurrency:
+  group: full-site-hardening-finalizer
+  cancel-in-progress: true
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Integrar gates nuevos en package.json
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          pkg.scripts['audit:edge'] = 'node scripts/auditar-operacion-edge.mjs';
+          pkg.scripts['audit:cutover'] = 'node scripts/auditar-cutover-dominio.mjs';
+          const prefix = 'npm run verify:public-origin && npm run audit:public-routes';
+          const replacement = `${prefix} && npm run audit:edge && npm run audit:cutover`;
+          if (!pkg.scripts['audit:final'].includes('npm run audit:edge')) {
+            pkg.scripts['audit:final'] = pkg.scripts['audit:final'].replace(prefix, replacement);
+          }
+          fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          NODE
+
+      - name: Sincronizar origen, rutas, caché, CSP y diagnósticos
+        run: |
+          npm run sync:public-origin
+          npm run normalize:public-routes
+          npm run cache-versioning:write
+          npm run build:csp
+          npm run build:diagnostics
+
+      - name: Verificar invariantes nuevas
+        run: |
+          npm run verify:public-origin
+          npm run audit:public-routes
+          npm run verify:csp
+          npm run verify:diagnostics
+          npm run audit:edge
+          npm run audit:cutover
+          npm run audit:cache-versioning
+
+      - name: Revisar sintaxis del backend nuevo
+        run: |
+          node --check functions/api/health.js
+          node --check functions/product.js
+          node --check functions/sitemap-products.xml.js
+          node --check scripts/auditar-produccion-salud.mjs
+
+      - name: Compilar Pages Functions
+        run: npx --yes wrangler@latest pages functions build functions --outdir=.cloudflare-functions --project-directory=.
+
+      - name: Contratos críticos
+        run: |
+          npm run audit:phase11
+          npm run audit:security
+          npm run test:checkout-contract
+          npm run test:engagement
+          npm audit --omit=dev --audit-level=moderate
+
+      - name: Auditoría integral estática
+        run: npm run audit:final
+
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Servir árbol exacto y medir rendimiento público
+        shell: bash
+        run: |
+          node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-hardening-http.log 2>&1 &
+          for attempt in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/index.html >/dev/null && break
+            sleep 1
+          done
+          PERF_BASE_URL=http://127.0.0.1:4173 npm run test:performance
+
+      - name: Retirar workflow temporal del árbol final
+        run: rm -f .github/workflows/finalizar-saneamiento-integral-temporal.yml
+
+      - name: Commit atómico del árbol saneado
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No hay cambios generados.'
+            exit 0
+          fi
+          git commit -m "chore: regenerar y validar saneamiento integral de la web"
+          git push origin HEAD:chatgpt/full-site-hardening-20260814
