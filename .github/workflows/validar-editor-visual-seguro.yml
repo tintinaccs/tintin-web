@@ -66,7 +66,6 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run test:visual-builder-ui
       - run: npx playwright test tests/visual-builder/visual-studio-v2-runtime.spec.js --project=chromium
-      - run: npm run test:ai-builder-ui
       - run: npm run test:phase10-a11y
       - name: Servir el árbol exacto de la PR para rendimiento
         run: |

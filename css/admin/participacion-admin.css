@@ -3,7 +3,7 @@
 .adm-engagement-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
 .adm-engagement-toolbar .adm-input{flex:1;min-width:240px}
 .adm-engagement-list{display:grid;gap:12px}
-.adm-engagement-card{background:#fff;border:1px solid var(--adm-border);border-radius:8px;padding:16px;display:grid;gap:12px}
+.adm-engagement-card{background:var(--adm-card,#fff);border:1px solid var(--adm-border);border-radius:var(--tcg-radius,16px);box-shadow:var(--tcg-shadow,0 6px 24px rgba(86,42,58,.06));padding:16px;display:grid;gap:12px}
 .adm-engagement-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
 .adm-engagement-meta{font-size:12px;color:var(--adm-muted);line-height:1.6}
 .adm-engagement-comment{white-space:pre-wrap;line-height:1.55;margin:0}

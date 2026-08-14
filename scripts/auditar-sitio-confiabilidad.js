@@ -259,9 +259,7 @@ const forbiddenPhrase = [
 const forbiddenAuthorship = new RegExp(`\\b(?:${forbiddenTerms.join('|')})\\b|${forbiddenPhrase}|(?:generad[oa]|cread[oa]|asistid[oa])\\s+(?:por|con)\\s+(?:una\\s+)?ia\\b`, 'i');
 const technicalProviderFiles = new Set([
   '.env.example',
-  'cloudflare/ai-provider.js',
-  'diagnostic-manifest.json',
-  'tests/ai-builder/ai-builder-contract.test.mjs'
+  'diagnostic-manifest.json'
 ]);
 function sourceFiles(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
