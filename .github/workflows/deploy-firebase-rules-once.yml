@@ -1,0 +1,46 @@
+name: Deploy Firebase rules once
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-rules:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Esperar Cloudflare producción y publicar reglas
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL='https://tintinaccesorios.pages.dev/api/firebase-rules-deploy-once?commit=c64acac6bed8ec41ef610dbc7473be676a1c1aca'
+          rm -f response.json
+
+          for attempt in $(seq 1 48); do
+            echo "Intento ${attempt}/48"
+            code="$(curl --silent --show-error --location --connect-timeout 10 --max-time 30 --output response.json --write-out '%{http_code}' "$URL" || true)"
+            cat response.json 2>/dev/null || true
+            echo
+
+            if [ "$code" = '200' ]; then
+              node - <<'NODE'
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('response.json', 'utf8'));
+          if (!data.ok) throw new Error(`Firebase no confirmó el deploy: ${data.error || 'sin detalle'}`);
+          if (!data.verified && !data.alreadyCurrent) throw new Error('La respuesta no confirmó release verificada ni ruleset ya vigente');
+          console.log(`Firebase OK: ${data.alreadyCurrent ? 'ruleset ya vigente' : 'ruleset publicado y verificado'}`);
+          console.log(`Release: ${data.releaseName || 'n/d'}`);
+          console.log(`Ruleset: ${data.rulesetName || 'n/d'}`);
+          NODE
+              exit 0
+            fi
+
+            sleep 10
+          done
+
+          echo "No se pudo confirmar el deploy de Firebase en producción dentro de la ventana de reintentos." >&2
+          exit 1
