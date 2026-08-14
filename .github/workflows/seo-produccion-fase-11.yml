@@ -7,11 +7,20 @@ on:
       - '*.html'
       - 'tienda.js'
       - 'js/**'
+      - 'config/**'
+      - 'functions/product.js'
+      - 'functions/sitemap-products.xml.js'
+      - 'functions/api/health.js'
+      - 'functions/api/public-catalog.js'
+      - '_headers'
+      - '_routes.json'
       - 'manifest.json'
       - 'robots.txt'
       - 'sitemap.xml'
       - 'scripts/auditar-fase-11-seo.js'
       - 'scripts/auditar-produccion-salud.mjs'
+      - 'scripts/sincronizar-origen-publico.mjs'
+      - 'scripts/normalizar-rutas-publicas.mjs'
       - 'scripts/servidor-local-pruebas.mjs'
       - 'tests/seo/**'
       - 'package.json'
@@ -34,6 +43,12 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Verificar origen y rutas públicas
+        run: |
+          npm run verify:public-origin
+          npm run audit:public-routes
+      - name: Verificar CSP reproducible
+        run: npm run verify:csp
       - name: Instalar Chromium para Playwright
         run: npx playwright install --with-deps chromium
       - name: Auditar contratos SEO estáticos
