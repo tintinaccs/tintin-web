@@ -15,8 +15,8 @@ import {
   sanitizeContentHref,
   normalizeContentValue,
   detectContentPageId,
-} from './esquema-contenido.js?v=tintin-20260810-visual-studio-v2-3';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260812-apariencia-seleccion-1';
+} from './esquema-contenido.js?v=tintin-20260814-visual-studio-v2-4';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260814-visual-studio-v2-4';
 
 const subscriptions = new Map();
 const latestData = new Map();
