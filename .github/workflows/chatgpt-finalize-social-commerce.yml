@@ -27,6 +27,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Chromium for responsive navigation audit
+        run: npx playwright install --with-deps chromium
+
       - name: Apply final social integration patches
         run: |
           node scripts/chatgpt-finalize-social-commerce.cjs
