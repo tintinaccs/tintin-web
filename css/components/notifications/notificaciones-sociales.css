@@ -53,17 +53,20 @@
   background: linear-gradient(180deg, #fff 0%, #fff9fb 100%);
   border-left: 1px solid var(--tt-notif-pink-border);
   box-shadow: -22px 0 60px rgba(83, 42, 59, .16);
-  transform: translate3d(105%, 0, 0);
+  clip-path: inset(0 0 0 100%);
+  visibility: hidden;
   opacity: 0;
   pointer-events: none;
-  transition: transform .28s cubic-bezier(.2,.82,.2,1), opacity .2s ease;
+  transition: clip-path .28s cubic-bezier(.2,.82,.2,1), opacity .2s ease, visibility 0s linear .28s;
   color: var(--tt-notif-ink);
 }
 
 .tt-notifications-drawer.open {
-  transform: translate3d(0, 0, 0);
+  clip-path: inset(0);
+  visibility: visible;
   opacity: 1;
   pointer-events: auto;
+  transition-delay: 0s;
 }
 
 .tt-notifications-head {
@@ -291,13 +294,13 @@
 }
 
 @media (max-width: 767px) {
-  #tt-tabbar:has(#tabbar-notifications) {
+  #tt-tabbar:has(#tabbar-notifications:not([hidden])) {
     grid-template-columns: repeat(6, minmax(0, 1fr));
     width: min(446px, calc(100vw - 12px));
     padding-inline: 7px;
   }
 
-  #tt-tabbar:has(#tabbar-notifications).tt-tabbar-compact {
+  #tt-tabbar:has(#tabbar-notifications:not([hidden])).tt-tabbar-compact {
     width: min(356px, calc(100vw - 28px));
   }
 
@@ -314,8 +317,12 @@
     border-left: 0;
     border-top: 1px solid var(--tt-notif-pink-border);
     border-radius: 26px 26px 0 0;
-    transform: translate3d(0, 105%, 0);
+    clip-path: inset(100% 0 0 0);
     box-shadow: 0 -22px 60px rgba(83, 42, 59, .18);
+  }
+
+  .tt-notifications-drawer.open {
+    clip-path: inset(0);
   }
 
   .tt-notifications-head {
@@ -343,7 +350,7 @@
 }
 
 @media (max-width: 360px) {
-  #tt-tabbar:has(#tabbar-notifications) .tt-tabbar-btn span:last-child {
+  #tt-tabbar:has(#tabbar-notifications:not([hidden])) .tt-tabbar-btn span:last-child {
     font-size: .47rem;
   }
   .tt-notification-card {
