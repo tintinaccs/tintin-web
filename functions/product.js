@@ -2,7 +2,7 @@ import {
   decodeFirestoreFields,
   firestoreAdminGet
 } from '../cloudflare/firebase-admin-ligero.js';
-import { TINTIN_PUBLIC_ORIGIN } from '../js/core/config/origenes-publicos.js';
+import { TINTIN_PUBLIC_ORIGIN } from '../cloudflare/origenes-publicos.js';
 
 function plain(value, max = 220) {
   return String(value || '')
@@ -129,7 +129,7 @@ export async function onRequest(context) {
     const sourceHtml = await assetResponse.text();
     const html = injectMetadata(sourceHtml, product, id);
     const headers = new Headers(assetResponse.headers);
-    headers.set('cache-control', 'public, max-age=30, s-maxage=60');
+    headers.set('cache-control', 'public, max-age=30, s-maxage=300');
     headers.set('x-tintin-product-meta', 'edge');
     headers.set('x-content-type-options', 'nosniff');
     const response = new Response(request.method === 'HEAD' ? null : html, {
