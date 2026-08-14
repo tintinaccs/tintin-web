@@ -2,14 +2,11 @@
 
 /**
  * Configuración compartida de Playwright para rendimiento y UI/UX.
- *
- * Rendimiento:
- *   PERF_BASE_URL="https://tintinaccesorios.pages.dev" npx playwright test tests/performance
- *
- * UI/UX local:
- *   PLAYWRIGHT_BASE_URL="http://127.0.0.1:4173" npx playwright test tests/ui-ux
+ * El origen por defecto sale de config/origenes-tintin.json para que el
+ * futuro cutover no deje pruebas apuntando al dominio anterior.
  */
 const { defineConfig, devices } = require('@playwright/test');
+const { publicOrigin } = require('./config/origenes-tintin.json');
 
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined;
 
@@ -24,7 +21,7 @@ module.exports = defineConfig({
     baseURL:
       process.env.PLAYWRIGHT_BASE_URL ||
       process.env.PERF_BASE_URL ||
-      'https://tintinaccesorios.pages.dev',
+      publicOrigin,
     launchOptions: executablePath
       ? { executablePath, args: ['--no-sandbox'] }
       : { args: ['--no-sandbox'] }
