@@ -29,6 +29,9 @@ for (const pageName of PUBLIC_PAGES) {
       `INP=${vitals.inp}ms reqs=${vitals.requests} duplicadas=${vitals.duplicateRequests} ` +
       `transfer=${vitals.transferKB}KB firestore=${vitals.firestoreReads}`
     );
+    if (vitals.duplicateUrls?.length) {
+      console.log(`[${pageName}] DUPLICATE_URLS=${JSON.stringify(vitals.duplicateUrls)}`);
+    }
     if (vitals.shifts?.length) {
       console.log(`[${pageName}] LAYOUT_SHIFTS=${JSON.stringify(vitals.shifts)}`);
     }
