@@ -4,6 +4,9 @@ import {
 } from '../cloudflare/firebase-admin-ligero.js';
 
 const PUBLIC_ORIGIN = 'https://tintinaccesorios.pages.dev';
+const CLOUDINARY_HOST = 'res.cloudinary.com';
+const CLOUDINARY_UPLOAD = '/upload/';
+const CLOUDINARY_TINTIN_TRANSFORM = /^f_auto,q_auto,c_limit,w_\d+,dpr_auto\//;
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -51,6 +54,23 @@ function absoluteUrl(value) {
     return new URL(String(value || ''), PUBLIC_ORIGIN).toString();
   } catch {
     return `${PUBLIC_ORIGIN}/assets/og-cover.jpg`;
+  }
+}
+
+function productImageUrl(value, width = 900) {
+  const href = absoluteUrl(value);
+  try {
+    const url = new URL(href);
+    if (url.hostname !== CLOUDINARY_HOST) return href;
+    const index = url.pathname.indexOf(CLOUDINARY_UPLOAD);
+    if (index === -1) return href;
+    const insertAt = index + CLOUDINARY_UPLOAD.length;
+    const before = url.pathname.slice(0, insertAt);
+    const after = url.pathname.slice(insertAt).replace(CLOUDINARY_TINTIN_TRANSFORM, '');
+    url.pathname = `${before}f_auto,q_auto,c_limit,w_${width},dpr_auto/${after}`;
+    return url.href;
+  } catch {
+    return href;
   }
 }
 
@@ -125,6 +145,7 @@ export async function onRequest(context) {
     const rawDescription = firstValue(data, ['description', 'desc', 'Body (HTML)']);
     const description = (stripHtml(rawDescription) || `${name} disponible en Tintin Accesorios & Relojes.`).slice(0, 220);
     const image = absoluteUrl(firstImage(data));
+    const mainImage = productImageUrl(image, 900);
     const canonical = `${PUBLIC_ORIGIN}/product?id=${encodeURIComponent(id)}`;
     const price = firstValue(data, ['price', 'Variant Price']);
     const title = `${name} | Tintin Accesorios & Relojes`;
@@ -154,7 +175,7 @@ export async function onRequest(context) {
       stock: firstValue(data, ['stock', 'Variant Inventory Qty']),
       sku: firstValue(data, ['handle', 'Handle'])
     });
-    const performanceHints = `<link rel="preload" as="image" href="${escapeHtml(image)}" fetchpriority="high" id="tt-product-image-preload">`;
+    const performanceHints = `<link rel="preload" as="image" href="${escapeHtml(mainImage)}" fetchpriority="high" id="tt-product-image-preload">`;
     html = html.replace('</head>', `  ${performanceHints}\n  <script type="application/ld+json" id="tt-product-jsonld-server">${ld}</script>\n</head>`);
 
     const headers = new Headers(asset.headers);
