@@ -80,26 +80,13 @@ const sitemapIndex = read('sitemap.xml');
 const sitemapPages = read('sitemap-pages.xml');
 const publicOrigin = 'https://tintinaccesorios.pages.dev';
 const publicRoutes = [
-  '/',
-  '/catalogo',
-  '/collections',
-  '/about',
-  '/contact',
-  '/envios',
-  '/cambios-devoluciones',
-  '/preguntas-frecuentes',
-  '/terminos',
-  '/privacidad'
+  '/', '/catalogo', '/collections', '/about', '/contact', '/envios',
+  '/cambios-devoluciones', '/preguntas-frecuentes', '/terminos', '/privacidad'
 ];
-const childSitemaps = [
-  '/sitemap-pages.xml',
-  '/sitemap-products.xml',
-  '/sitemap-collections.xml'
-];
+const childSitemaps = ['/sitemap-pages.xml', '/sitemap-products.xml', '/sitemap-collections.xml'];
 check(
   'sitemap.xml es un índice completo',
-  /<sitemapindex\b/i.test(sitemapIndex) &&
-    childSitemaps.every(route => sitemapIndex.includes(`<loc>${publicOrigin}${route}</loc>`)),
+  /<sitemapindex\b/i.test(sitemapIndex) && childSitemaps.every(route => sitemapIndex.includes(`<loc>${publicOrigin}${route}</loc>`)),
   'El índice debe enlazar páginas, productos y colecciones.'
 );
 check(
@@ -120,9 +107,7 @@ check(
 );
 
 let manifest = null;
-try {
-  manifest = JSON.parse(read('manifest.json'));
-} catch {}
+try { manifest = JSON.parse(read('manifest.json')); } catch {}
 check(
   'manifest es válido y sus iconos existen',
   manifest && manifest.name && manifest.start_url && manifest.scope && manifest.theme_color &&
@@ -132,39 +117,39 @@ check(
 
 const apiFunctions = fs.readdirSync(path.join(root, 'functions/api'))
   .filter(file => file.endsWith('.js')).map(file => `/api/${file.replace(/\.js$/, '')}`);
-// Cloudflare Pages Functions también procesa superficies públicas y privadas
-// que no son /api: CSP Admin, runtime liviano para páginas informativas,
-// metadata de Producto, redirects legacy de Shopify y sitemaps dinámicos.
-// _routes.json debe limitar esas Functions a esta allowlist exacta.
-const pageFunctionRoutes = [
-  '/admin',
-  '/admin-images',
-  '/about',
-  '/contact',
-  '/envios',
-  '/cambios-devoluciones',
-  '/preguntas-frecuentes',
-  '/terminos',
-  '/privacidad',
-  '/404',
-  '/product',
-  '/products/*',
-  '/collections/*',
-  '/pages/*',
-  '/policies/*',
-  '/sitemap-products.xml',
-  '/sitemap-collections.xml'
+const htmlFunctionRoutes = htmlFiles.flatMap(file => {
+  if (file === 'index.html') return ['/', '/index.html'];
+  return [`/${path.basename(file, '.html')}`, `/${file}`];
+});
+const dynamicFunctionRoutes = [
+  '/products/*', '/collections/*', '/pages/*', '/policies/*',
+  '/sitemap-products.xml', '/sitemap-collections.xml'
 ];
-const expectedRoutes = [...apiFunctions, '/__/auth/*', ...pageFunctionRoutes].sort();
+const expectedRoutes = [...new Set([...apiFunctions, '/__/auth/*', ...htmlFunctionRoutes, ...dynamicFunctionRoutes])].sort();
 const routeConfig = JSON.parse(read('_routes.json'));
-const routes = (routeConfig.include || []).slice().sort();
+const routes = [...new Set(routeConfig.include || [])].sort();
 check(
-  '_routes incluye exactamente APIs, Auth y Pages Functions permitidas',
-  routeConfig.version === 1 &&
-    Array.isArray(routeConfig.exclude) && routeConfig.exclude.length === 0 &&
+  '_routes incluye exactamente APIs, Auth y documentos HTML protegidos por middleware',
+  routeConfig.version === 1 && Array.isArray(routeConfig.exclude) && routeConfig.exclude.length === 0 &&
     JSON.stringify(expectedRoutes) === JSON.stringify(routes),
   `Rutas esperadas: ${expectedRoutes.join(', ')} | Rutas: ${routes.join(', ')}`
 );
+
+const cspRuntime = (() => { try { return JSON.parse(read('config/csp-runtime.json')); } catch { return null; } })();
+check(
+  'CSP de HTML se entrega por Pages Functions y no por _headers',
+  exists('functions/_middleware.js') &&
+    read('functions/_middleware.js').includes("headers.set('Content-Security-Policy', policy)") &&
+    !read('_headers').includes('Content-Security-Policy:') &&
+    cspRuntime?.generatedBy === 'scripts/generar-csp-cloudflare.js',
+  'Ejecutá npm run build:csp; la CSP grande no puede volver a _headers.'
+);
+check(
+  '_headers respeta el límite de 2000 caracteres por línea',
+  read('_headers').split(/\r?\n/).every(line => line.length <= 2000),
+  'Una línea sobredimensionada bloquea el deploy de Cloudflare Pages.'
+);
+
 check(
   'firebase.json solo despliega reglas',
   (() => {
