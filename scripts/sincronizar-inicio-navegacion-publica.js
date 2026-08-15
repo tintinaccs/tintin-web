@@ -7,8 +7,10 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260813-products-unified-1';
 const LOADER_VERSION = 'tintin-20260812-apariencia-seleccion-1';
-const PUBLIC_SHELL_VERSION = 'tintin-20260810-global-studio-7';
-const NAV_ENTRY_VERSION = 'tintin-20260811-cls-header-reserve-1';
+const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
+const PUBLIC_SHELL_VERSION = 'tintin-20260815-prelaunch-cache-1';
+const NAV_ENTRY_VERSION = 'tintin-20260815-prelaunch-cache-1';
+const SESSION_PROTECTION_VERSION = 'tintin-20260815-profile-routes-1';
 // Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
 // esa constante decide la URL exacta (con ?v=) que entrada-navegacion-publica.js y
 // ensureNavigationAssets() piden en tiempo de ejecución. Si difieren, el preload no
@@ -133,7 +135,7 @@ function ensureShellScript(html) {
     .replace(/\s*<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js[^"']*["'][^>]*><\/script>/gi, '');
   const loader = /(<script\b[^>]*src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>)/i;
   if (!loader.test(out)) throw new Error('La pagina no carga js/cargador-pagina.js');
-  return out.replace(loader, `$1\n  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=${VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${PUBLIC_SHELL_VERSION}" defer></script>`);
+  return out.replace(loader, `$1\n  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=${PANEL_COMPAT_VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${PUBLIC_SHELL_VERSION}" defer></script>`);
 }
 
 function centralizeRuntime(html) {
@@ -150,14 +152,16 @@ function centralizeRuntime(html) {
 }
 
 function versionRuntimeLoader(html) {
-  // Tag propio, separado de VERSION: cargador-pagina.js cambia con más
-  // frecuencia que tienda.js/inicio-control-paneles.js (ver ensureShellScript
-  // y centralizeRuntime más arriba, que sí usan VERSION), y forzar el mismo
-  // tag en los tres cada vez que solo uno cambia haría descargar de nuevo
-  // archivos idénticos para todas las visitantes sin necesidad.
   return html.replace(
     /(<script\b[^>]*src=["']js\/cargador-pagina\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi,
     `$1?v=${LOADER_VERSION}$2`
+  );
+}
+
+function versionSessionProtection(html) {
+  return html.replace(
+    /(js\/core\/auth\/proteccion-sesion\.js)(?:\?v=[A-Za-z0-9._-]+)?/gi,
+    `$1?v=${SESSION_PROTECTION_VERSION}`
   );
 }
 
@@ -180,12 +184,27 @@ for (const page of PUBLIC_PAGES) {
   html = ensureShellScript(html);
   html = centralizeRuntime(html);
   html = versionRuntimeLoader(html);
+  html = versionSessionProtection(html);
   html = normalizeWhitespace(html);
 
   if (html !== before) {
     fs.writeFileSync(file, html, 'utf8');
     changed += 1;
     console.log(`synced ${page}`);
+  }
+}
+
+// Admin y cualquier otra superficie fuera del shell público también pueden
+// cargar proteccion-sesion.js. Se sincroniza únicamente ese tag sin intentar
+// insertar navegación pública en esas páginas.
+for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') && !PUBLIC_PAGES.includes(file))) {
+  const file = path.join(ROOT, page);
+  const before = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
+  const html = versionSessionProtection(before);
+  if (html !== before) {
+    fs.writeFileSync(file, html, 'utf8');
+    changed += 1;
+    console.log(`session version synced ${page}`);
   }
 }
 
