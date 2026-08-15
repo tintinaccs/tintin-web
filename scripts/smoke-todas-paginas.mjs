@@ -25,7 +25,7 @@ const routes = [
   { name: 'Cambios y devoluciones', url: '/cambios-devoluciones.html' },
   { name: 'Preguntas frecuentes', url: '/preguntas-frecuentes.html' },
   { name: '404', url: '/404.html' },
-  { name: 'Nosotros legacy', url: '/nosotros.html', redirectPath: '/about.html' },
+  { name: 'Nosotros legacy', url: '/nosotros.html', redirectPath: '/about' },
   { name: 'Super Admin', url: '/admin.html' },
   { name: 'Admin imágenes', url: '/admin-images.html' },
 ];
@@ -48,9 +48,32 @@ const mimeTypes = {
   '.xml': 'application/xml; charset=utf-8',
 };
 
+// Cloudflare Pages sirve rutas limpias (/about, /catalogo, etc.) resolviendo
+// al .html correspondiente vía su asset handling por defecto. Debe reflejar
+// PAGE_ROUTES de scripts/normalizar-rutas-publicas.js para que este server
+// estático local no reporte 404 en rutas que sí funcionan en producción.
+const CLEAN_ROUTE_FILES = new Map([
+  ['/catalogo', '/catalogo.html'],
+  ['/collections', '/collections.html'],
+  ['/product', '/product.html'],
+  ['/about', '/about.html'],
+  ['/contact', '/contact.html'],
+  ['/envios', '/envios.html'],
+  ['/cambios-devoluciones', '/cambios-devoluciones.html'],
+  ['/preguntas-frecuentes', '/preguntas-frecuentes.html'],
+  ['/terminos', '/terminos.html'],
+  ['/privacidad', '/privacidad.html'],
+  ['/checkout', '/checkout.html'],
+  ['/login', '/login.html'],
+  ['/perfil', '/perfil.html'],
+  ['/admin', '/admin.html'],
+  ['/admin-images', '/admin-images.html'],
+  ['/404', '/404.html']
+]);
+
 function safeLocalPath(requestURL) {
   const pathname = decodeURIComponent(new URL(requestURL, baseURL).pathname);
-  const requested = pathname === '/' ? '/index.html' : pathname;
+  const requested = pathname === '/' ? '/index.html' : (CLEAN_ROUTE_FILES.get(pathname) || pathname);
   const absolute = path.resolve(root, `.${requested}`);
   if (absolute !== root && !absolute.startsWith(`${root}${path.sep}`)) return null;
   return absolute;
