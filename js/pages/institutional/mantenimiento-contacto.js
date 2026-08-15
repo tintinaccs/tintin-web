@@ -1,8 +1,8 @@
 import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-const file = (location.pathname.split('/').pop() || '').toLowerCase();
-if (file === 'contact.html' && !window.TintinContactMaintenanceBooted) {
+const routePath = (location.pathname || '').toLowerCase().replace(/\/+$/, '');
+if (/(?:^|\/)contact(?:\.html)?$/.test(routePath) && !window.TintinContactMaintenanceBooted) {
   window.TintinContactMaintenanceBooted = true;
 
   const clean = (value, max = 500) => String(value ?? '').replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/[<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, max);
@@ -52,10 +52,10 @@ if (file === 'contact.html' && !window.TintinContactMaintenanceBooted) {
   }
 
   function setMeta() {
-    const url = new URL('contact.html', location.href); url.search = ''; url.hash = '';
+    const url = new URL('/contact', location.origin);
     document.querySelector('link[rel="canonical"]')?.setAttribute('href', url.href);
     document.querySelector('meta[property="og:url"]')?.setAttribute('content', url.href);
-    const image = new URL('assets/og-cover.jpg', location.href).href;
+    const image = new URL('/assets/og-cover.jpg', location.origin).href;
     document.querySelector('meta[property="og:image"]')?.setAttribute('content', image);
     document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', image);
   }

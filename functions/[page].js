@@ -10,6 +10,7 @@ const LIGHTWEIGHT_PAGES = new Set([
 ]);
 
 const ABOUT_CANONICAL_GUARD = '/js/pages/institutional/about-canonical-clean-v1.js';
+const CONTACT_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-contacto.js?v=tintin-20260815-contact-clean-1';
 
 function pageName(request) {
   const url = new URL(request.url);
@@ -29,13 +30,20 @@ export function lightenHtml(html) {
     .replace(/\s*<link\s+rel=["']modulepreload["'][^>]*>\s*/gi, '\n');
 }
 
+function injectBeforeHeadClose(html, tag) {
+  if (html.includes(tag)) return html;
+  return html.includes('</head>') ? html.replace('</head>', `  ${tag}\n</head>`) : `${tag}\n${html}`;
+}
+
 export function injectLightweightPageGuards(html, page) {
   let output = String(html || '');
-  if (page !== 'about' || output.includes(ABOUT_CANONICAL_GUARD)) return output;
-  const tag = `<script src="${ABOUT_CANONICAL_GUARD}" defer></script>`;
-  return output.includes('</head>')
-    ? output.replace('</head>', `  ${tag}\n</head>`)
-    : `${tag}\n${output}`;
+  if (page === 'about' && !output.includes(ABOUT_CANONICAL_GUARD)) {
+    output = injectBeforeHeadClose(output, `<script src="${ABOUT_CANONICAL_GUARD}" defer></script>`);
+  }
+  if (page === 'contact' && !output.includes(CONTACT_MAINTENANCE_RUNTIME)) {
+    output = injectBeforeHeadClose(output, `<script type="module" src="${CONTACT_MAINTENANCE_RUNTIME}"></script>`);
+  }
+  return output;
 }
 
 export function isLightweightPageName(value) {
