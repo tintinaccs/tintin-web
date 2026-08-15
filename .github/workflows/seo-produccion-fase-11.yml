@@ -71,6 +71,7 @@ jobs:
   cloudflare-delivered-headers:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -84,6 +85,8 @@ jobs:
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_SHA: ${{ github.event.pull_request.head.sha }}
+          TINTIN_CLOUDFLARE_GATE_ATTEMPTS: 90
+          TINTIN_CLOUDFLARE_GATE_POLL_MS: 10000
         run: node scripts/auditar-cloudflare-entrega-real.mjs
 
   production-health:
