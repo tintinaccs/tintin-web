@@ -35,7 +35,8 @@ const performanceAudit = read('scripts/auditar-rendimiento-tiempo-real.js');
 const regressionAudit = read('scripts/auditar-rendimiento-regresiones.js');
 const finalIntegration = read('scripts/auditar-final-integracion.js');
 const robots = read('robots.txt');
-const sitemap = read('sitemap.xml');
+const sitemapIndex = read('sitemap.xml');
+const sitemapPages = read('sitemap-pages.xml');
 const publicOrigin = 'https://tintinaccesorios.pages.dev';
 
 const canonicalViewports = [
@@ -154,6 +155,19 @@ for (const route of ['/admin.html', '/admin-images.html', '/login.html', '/check
 }
 check('robots.txt enlaza sitemap', /Sitemap:\s*https?:\/\/.+\/sitemap\.xml/i.test(robots));
 
+const expectedSitemaps = [
+  '/sitemap-pages.xml',
+  '/sitemap-products.xml',
+  '/sitemap-collections.xml'
+];
+check(
+  'sitemap.xml es un índice de sitemaps',
+  /<sitemapindex\b/i.test(sitemapIndex) && !/<urlset\b/i.test(sitemapIndex)
+);
+for (const route of expectedSitemaps) {
+  check(`sitemap index incluye ${route}`, sitemapIndex.includes(`<loc>${publicOrigin}${route}</loc>`));
+}
+
 const sitemapRoutes = [
   '/',
   '/catalogo',
@@ -167,9 +181,12 @@ const sitemapRoutes = [
   '/privacidad'
 ];
 for (const route of sitemapRoutes) {
-  check(`sitemap incluye ruta limpia ${route}`, sitemap.includes(`<loc>${publicOrigin}${route}</loc>`));
+  check(`sitemap de páginas incluye ruta limpia ${route}`, sitemapPages.includes(`<loc>${publicOrigin}${route}</loc>`));
 }
-check('sitemap no publica destinos .html redirigidos', !/<loc>[^<]*\.html(?:[?#][^<]*)?<\/loc>/i.test(sitemap));
+check(
+  'sitemaps estáticos no publican destinos .html redirigidos',
+  !/<loc>[^<]*\.html(?:[?#][^<]*)?<\/loc>/i.test(`${sitemapIndex}\n${sitemapPages}`)
+);
 check('Existe manifest PWA', exists('manifest.json'));
 
 const recoveryFiles = [
