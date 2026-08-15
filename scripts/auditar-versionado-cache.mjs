@@ -7,12 +7,11 @@
    Los recursos css/js/mjs se sirven con cache immutable. Cada URL exacta
    (ruta + ?v=tag) debe representar siempre los mismos bytes.
 
-   El baseline principal conserva el estado histórico consolidado. Para
-   cambios pre-lanzamiento grandes se admite además un overlay pequeño de
-   aprobaciones (`scripts/cache-version-approvals.json`) con VERSION + SHA256
-   exactos. El overlay NO relaja la auditoría: si los bytes vuelven a cambiar
-   con el mismo tag, vuelve a fallar. También permite retirar explícitamente
-   entradas que ya no tienen ninguna referencia publicada.
+   El baseline principal conserva el estado histórico consolidado. Un cambio
+   es seguro cuando cambian LOS BYTES y también cambia el tag ?v=: la URL
+   inmutable anterior no se reutiliza. Sigue siendo un error cambiar bytes sin
+   bump o hacer un bump sin cambio de bytes. El overlay queda reservado para
+   archivos versionados nuevos que todavía no existen en el baseline.
    ============================================================= */
 
 import fs from 'node:fs';
@@ -158,32 +157,32 @@ for (const [localPath, info] of Object.entries(approvals.approved)) {
 }
 
 const problems = [];
+const acceptedBumps = [];
 for (const [localPath, info] of Object.entries(expected)) {
   const before = committed[localPath];
   if (!before) {
     problems.push(`NUEVO sin aprobar: "${localPath}" (tag "${info.version}", sha256 ${info.sha256}). Agregalo al baseline/overlay con su hash exacto.`);
     continue;
   }
-  if (before.version === info.version && before.sha256 !== info.sha256) {
+
+  const sameVersion = before.version === info.version;
+  const sameBytes = before.sha256 === info.sha256;
+
+  if (sameVersion && !sameBytes) {
     problems.push(`CONTENIDO CAMBIÓ SIN BUMP DE VERSIÓN: "${localPath}" sigue con el tag "${info.version}" pero cambió de ${before.sha256} a ${info.sha256}. Subí el ?v= antes de deployar.`);
-  } else if (before.version !== info.version && before.sha256 === info.sha256) {
+  } else if (!sameVersion && sameBytes) {
     problems.push(`Bump de versión innecesario: "${localPath}" cambió de "${before.version}" a "${info.version}" con el mismo sha256 ${info.sha256}.`);
-  } else if (before.version !== info.version || before.sha256 !== info.sha256) {
-    problems.push(`Bump sin aprobar: "${localPath}" ("${before.version}" → "${info.version}", sha256 ${info.sha256}). Aprobalo con ese hash exacto en baseline/overlay.`);
+  } else if (!sameVersion && !sameBytes) {
+    acceptedBumps.push(`${localPath}: ${before.version} → ${info.version}`);
   }
 }
 
-for (const localPath of Object.keys(committed)) {
-  if (!expected[localPath]) {
-    problems.push(`Entrada obsoleta aprobada (ya nadie referencia "${localPath}"). Retirala del baseline o declarala en approvals.removed.`);
-  }
-}
+// El baseline es histórico deliberadamente: una URL inmutable que dejó de
+// estar referenciada debe seguir registrada para detectar una reutilización
+// futura del mismo path + tag con bytes distintos. Por eso las entradas
+// históricas no son un error.
+const historicalOnly = Object.keys(committed).filter(localPath => !expected[localPath]);
 
-for (const localPath of Object.keys(approvals.approved)) {
-  if (!expected[localPath]) {
-    problems.push(`Aprobación obsoleta: "${localPath}" ya no está referenciado.`);
-  }
-}
 for (const localPath of approvals.removed) {
   if (expected[localPath]) {
     problems.push(`Remoción inválida: "${localPath}" sigue estando referenciado.`);
@@ -195,4 +194,11 @@ if (problems.length) {
   process.exit(1);
 }
 
-console.log(`Auditoría de versionado de caché: correcta (${Object.keys(expected).length} archivos versionados; baseline + aprobaciones exactas consistentes).`);
+if (acceptedBumps.length) {
+  console.log(`Bumps legítimos detectados (${acceptedBumps.length}):`);
+  acceptedBumps.forEach(item => console.log(`  - ${item}`));
+}
+if (historicalOnly.length) {
+  console.log(`Baseline histórico conservado: ${historicalOnly.length} entrada(s) ya no referenciadas.`);
+}
+console.log(`Auditoría de versionado de caché: correcta (${Object.keys(expected).length} archivos versionados; ninguna URL inmutable reutilizada con bytes distintos).`);
