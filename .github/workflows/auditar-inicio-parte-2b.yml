@@ -6,6 +6,13 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: visual-part2b-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   home:
     name: Inicio completo en 7 pantallas
