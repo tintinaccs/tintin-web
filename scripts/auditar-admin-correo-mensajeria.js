@@ -33,8 +33,8 @@ check(
 );
 check(
   'El canal Resend llama al endpoint de Cloudflare con Bearer token',
-  // El origen (relativo en Cloudflare, pages.dev en GitHub Pages/Netlify) lo
-  // resuelve js/core/firebase/origen-funciones.js — ver "El fallback de host..." abajo.
+  // El origen lo resuelve js/core/firebase/origen-funciones.js y los imports
+  // pueden llevar ?v= para invalidación de caché sin cambiar el contrato.
   resendNotify.includes("const ORDER_EMAIL_API = apiUrl('order-email')") &&
     resendNotify.includes('Authorization: `Bearer ${idToken}`') &&
     resendNotify.includes("action: isResend ? 'resendOrderEmail' : 'sendOrderEmail'"),
@@ -42,14 +42,13 @@ check(
 );
 check(
   'El fallback de host para /api NO se reinventa por archivo (bug ya visto)',
-  // Antes notificacion-pedido-resend.js y sincronizacion-correo-admin.js usaban rutas
-  // relativas "/api/..." sin el fallback a Cloudflare que sí tenían
-  // biblioteca-multimedia.js y actividad-sitio.js — eso daba 404 en GitHub Pages y el
-  // correo de "pedido nuevo" fallaba en silencio. Ahora los cuatro llamadores
-  // comparten la misma resolución de origen.
-  resendNotify.includes("import { apiUrl } from '../core/firebase/origen-funciones.js") &&
-    adminSync.includes("import { apiUrl } from '../../core/firebase/origen-funciones.js") &&
-    functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'") &&
+  // Todos los llamadores comparten origen-funciones.js. El origen fallback
+  // está centralizado en config/origenes-publicos.js para que el futuro
+  // cambio de dominio no requiera constantes duplicadas.
+  /import\s*\{\s*apiUrl\s*\}\s*from\s*['"]\.\.\/core\/firebase\/origen-funciones\.js(?:\?[^'"]+)?['"]/.test(resendNotify) &&
+    /import\s*\{\s*apiUrl\s*\}\s*from\s*['"]\.\.\/\.\.\/core\/firebase\/origen-funciones\.js(?:\?[^'"]+)?['"]/.test(adminSync) &&
+    functionOrigin.includes("import { TINTIN_FUNCTIONS_FALLBACK_ORIGIN } from '../config/origenes-publicos.js'") &&
+    functionOrigin.includes('return TINTIN_FUNCTIONS_FALLBACK_ORIGIN') &&
     functionOrigin.includes("hostname.endsWith('github.io')"),
   'Toda ruta /api/* del cliente debe resolverse con js/core/firebase/origen-funciones.js, no con una constante relativa suelta.'
 );
