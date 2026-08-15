@@ -18,6 +18,11 @@ const PUBLIC_PAGES = [
   'terminos.html', 'privacidad.html'
 ];
 
+const LIGHTWEIGHT_PAGES = new Set([
+  'contact.html', 'about.html', 'envios.html', 'cambios-devoluciones.html',
+  'preguntas-frecuentes.html', 'terminos.html', 'privacidad.html'
+]);
+
 function url(page) { return `${BASE_URL}/${page.replace(/^\//, '')}`; }
 
 async function installVitalsObserver(page) {
@@ -131,15 +136,19 @@ async function collectVitals(page) {
 const BUDGETS = {
   dclMs: 6000,
   lcpMs: 5000,
+  productLcpMs: 2500,
   clsMax: 0.1,
   inpMs: 500,
   transferKB: 6500,
-  duplicateRequests: 5,
+  duplicateRequests: 0,
+  homeRequests: 155,
+  lightweightRequests: 120,
+  lightweightTransferKB: 1500,
   homeFirestoreReads: 30,
   loaderMaxMs: 11000
 };
 
 module.exports = {
-  BASE_URL, VIEWPORTS, PUBLIC_PAGES, url, installVitalsObserver,
+  BASE_URL, VIEWPORTS, PUBLIC_PAGES, LIGHTWEIGHT_PAGES, url, installVitalsObserver,
   waitLoaderGone, probeInteraction, collectVitals, BUDGETS
 };
