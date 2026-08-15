@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-15T23:15:35.140Z",
-  "sourceFingerprint": "1d4a826c7cf00407c960800bf45cd11bf6f8419d3fc870e4d57693c5a43a668a",
+  "generatedAt": "2026-08-15T23:35:21.333Z",
+  "sourceFingerprint": "0182e31c0d740162fa69fc2208498b7c6460b80a4f23c95d711b8260e83fe715",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 652,
     "textFiles": 620,
-    "totalBytes": 7318039,
+    "totalBytes": 7318493,
     "pages": 18,
     "modules": 405
   },
@@ -22316,8 +22316,8 @@
     },
     {
       "path": "scripts/auditar-cloudflare-entrega-real.mjs",
-      "bytes": 10811,
-      "sha256": "18341eeab2c52b15a07126efc253d3ed2abec14c635ac3c0ba7d0295da801017",
+      "bytes": 11251,
+      "sha256": "bb90626f6fe07716c75276f23395764bc2d00272d0996fe443e6349ffdaee4b5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22339,11 +22339,11 @@
       "endpoints": [
         {
           "url": "https://api.github.com/repos/$%7Brepository%7D/commits/$%7Bsha%7D/check-runs",
-          "line": 40
+          "line": 45
         },
         {
           "url": "https://api.cloudinary.com/",
-          "line": 109
+          "line": 114
         }
       ]
     },
@@ -26346,8 +26346,8 @@
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 7942,
-      "sha256": "59d8babb6e87a7b667045ffc0f4329c546cfe9299edcc0cd401d575514833fdf"
+      "bytes": 7949,
+      "sha256": "e029bb97d686685883940efe8adcfb62354966632e0953b23384fb024c4d13a2"
     },
     {
       "path": ".github/workflows/auditar-tipografia.yml",
@@ -26400,8 +26400,8 @@
     {
       "path": ".github/workflows/seo-produccion-fase-11.yml",
       "extension": ".yml",
-      "bytes": 5672,
-      "sha256": "a904d9efab4232b07b3d52aa367ff751bb76e22c7f6d948b6f945f5b80257d4d"
+      "bytes": 5679,
+      "sha256": "88dedce62664d9c8b9655f16ff13d4fa24bf6f6d14146c08da2217f56cff54db"
     },
     {
       "path": ".github/workflows/validar-editor-visual-seguro.yml",
@@ -29190,8 +29190,8 @@
     {
       "path": "scripts/auditar-cloudflare-entrega-real.mjs",
       "extension": ".mjs",
-      "bytes": 10811,
-      "sha256": "18341eeab2c52b15a07126efc253d3ed2abec14c635ac3c0ba7d0295da801017"
+      "bytes": 11251,
+      "sha256": "bb90626f6fe07716c75276f23395764bc2d00272d0996fe443e6349ffdaee4b5"
     },
     {
       "path": "scripts/auditar-colecciones-fase-4.js",
