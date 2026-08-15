@@ -154,11 +154,13 @@ export async function onRequest(context) {
       stock: firstValue(data, ['stock', 'Variant Inventory Qty']),
       sku: firstValue(data, ['handle', 'Handle'])
     });
-    html = html.replace('</head>', `  <script type="application/ld+json" id="tt-product-jsonld-server">${ld}</script>\n</head>`);
+    const performanceHints = `<link rel="preload" as="image" href="${escapeHtml(image)}" fetchpriority="high" id="tt-product-image-preload">`;
+    html = html.replace('</head>', `  ${performanceHints}\n  <script type="application/ld+json" id="tt-product-jsonld-server">${ld}</script>\n</head>`);
 
     const headers = new Headers(asset.headers);
     headers.set('cache-control', 'public, max-age=30, s-maxage=120, stale-while-revalidate=300');
     headers.set('x-tintin-product-meta', 'server');
+    headers.set('x-tintin-product-image-preload', 'server');
     headers.delete('content-length');
     return new Response(html, { status: asset.status, statusText: asset.statusText, headers });
   } catch (error) {
