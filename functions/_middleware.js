@@ -37,12 +37,19 @@ function failClosed() {
 }
 
 export async function onRequest(context) {
+  const pathname = new URL(context.request.url).pathname;
+
+  // /__/auth/* es un proxy transparente hacia Firebase Authentication. Sus
+  // páginas auxiliares e iframes tienen su propio runtime y el proxy elimina
+  // CSP/X-Frame-Options del upstream deliberadamente para conservar el flujo
+  // same-origin. No se debe superponer la CSP de las páginas de la tienda.
+  if (pathname.startsWith('/__/auth/')) return context.next();
+
   const response = await context.next();
   const contentType = response.headers.get('content-type') || '';
   if (!contentType.toLowerCase().includes('text/html')) return response;
   if (!runtimeReady()) return failClosed();
 
-  const pathname = new URL(context.request.url).pathname;
   const policy = policyForPath(pathname);
   if (!policy || !policy.includes("default-src 'self'")) return failClosed();
 
