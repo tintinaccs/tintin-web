@@ -4,9 +4,11 @@ on:
   pull_request:
     paths:
       - '**/*.html'
+      - '_headers'
       - 'js/**/*.js'
       - 'js/**/*.mjs'
       - 'css/**/*.css'
+      - 'tests/cache/**'
       - 'scripts/sincronizar-inicio-navegacion-publica.js'
       - 'scripts/auditar-versionado-cache.mjs'
       - 'scripts/cache-version-baseline.json'
@@ -37,3 +39,5 @@ jobs:
         run: npm run sync:public-shell
       - name: Audit cache versioning
         run: npm run audit:cache-versioning
+      - name: Enforce immutable cache headers
+        run: node --test tests/cache/cache-headers.test.mjs
