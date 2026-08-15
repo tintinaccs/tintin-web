@@ -11,8 +11,8 @@ import { ensureNavigationAssets } from './compartido/recursos-navegacion.js';
 import { loadSharedRuntime } from './compartido/carga-navegacion.js';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
-import { fetchGlobalLayoutConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260811-cls-header-reserve-1';
-import { initGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20260810-global-studio-9';
+import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260811-cls-header-reserve-1';
+import { applyGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20260810-global-studio-9';
 
 const LEGACY_SHELL_IDS = Object.freeze([
   'tt-header-desktop-tablet',
@@ -64,15 +64,17 @@ function mountPublicShell() {
   window.TintinLoader?.beginWait?.();
   mountPromise = Promise.all([
     ensureNavigationAssets(),
-    fetchGlobalLayoutConfig(),
-  ]).then(async ([, layoutConfig]) => {
+    fetchGlobalVisualStudioConfig(),
+  ]).then(async ([, globalConfig]) => {
     if (document.body.classList.contains('tt-public-shell-mounted')) return;
 
     removeLegacyShell();
     document.body.insertAdjacentHTML('afterbegin', renderTopShell());
     document.body.insertAdjacentHTML('beforeend', renderBottomShell());
-    if (layoutConfig) applyGlobalLayout(layoutConfig);
+    if (globalConfig?.layout) applyGlobalLayout(globalConfig.layout);
     else document.documentElement.dataset.ttGlobalLayout = 'fallback';
+    if (globalConfig) applyGlobalVisualStudio(globalConfig);
+    else document.documentElement.dataset.ttGlobalStudio = 'fallback';
     document.body.classList.add('tt-public-shell-mounted');
     document.body.classList.toggle('tt-public-shell-home', currentPage() === 'home');
 
@@ -82,7 +84,7 @@ function mountPublicShell() {
     loadSharedRuntime();
 
     document.dispatchEvent(new CustomEvent('tintin:public-shell-ready', {
-      detail: { architecture: 'modular-navigation-v1', socialNotifications: 'on-demand' },
+      detail: { architecture: 'modular-navigation-v1', socialNotifications: 'on-demand', globalConfigRequests: 1 },
     }));
   }).catch(error => {
     console.error('[PublicShell] No se pudo montar la navegación.', error);
@@ -97,7 +99,6 @@ function mountPublicShell() {
 }
 
 function startPublicExperience() {
-  void initGlobalVisualStudio();
   void mountPublicShell();
 }
 
