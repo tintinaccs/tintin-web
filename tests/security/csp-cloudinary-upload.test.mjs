@@ -54,3 +54,12 @@ test('Pages Functions consume el módulo JS generado y no imports JSON con attri
   assert.ok(!adminCsp.includes('csp-runtime.json'));
   assert.ok(generator.includes('config/csp-runtime.js'));
 });
+
+test('Firebase Auth conserva su proxy transparente fuera de la CSP de la tienda', () => {
+  const middleware = read('functions/_middleware.js');
+  const authProxy = read('functions/__/auth/[[path]].js');
+  assert.ok(middleware.includes("pathname.startsWith('/__/auth/')"));
+  assert.ok(middleware.includes("return context.next()"));
+  assert.ok(authProxy.includes("responseHeaders.delete('content-security-policy')"));
+  assert.ok(authProxy.includes("responseHeaders.delete('x-frame-options')"));
+});
