@@ -1,4 +1,4 @@
-import cspRuntime from '../config/csp-runtime.json' with { type: 'json' };
+import cspRuntime from '../config/csp-runtime.js';
 
 const GENERATED_BY = 'scripts/generar-csp-cloudflare.js';
 const SECURITY_HEADERS = Object.freeze({
