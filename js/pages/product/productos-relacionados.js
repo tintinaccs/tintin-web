@@ -238,7 +238,7 @@ if (grid && !window.TintinRelatedProducts) {
     const id = encodeURIComponent(String(product.id));
     const name = escapeAttribute(product.name || 'Producto');
     return `<article class="tt-product-card" data-product-id="${id}">
-      <a class="tt-product-card-fallback" href="product.html?id=${id}">${name}</a>
+      <a class="tt-product-card-fallback" href="/product?id=${id}">${name}</a>
     </article>`;
   }
 

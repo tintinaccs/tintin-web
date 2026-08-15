@@ -5,11 +5,11 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260813-products-unified-1';
+const VERSION = 'tintin-20260815-routes-clean-1';
 const LOADER_VERSION = 'tintin-20260812-apariencia-seleccion-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260815-prelaunch-cache-2';
-const NAV_ENTRY_VERSION = 'tintin-20260815-prelaunch-cache-2';
+const NAV_ENTRY_VERSION = 'tintin-20260815-routes-clean-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20260815-profile-routes-1';
 const PROFILE_GATE_VERSION = 'tintin-20260815-profile-routes-1';
 // Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:

@@ -38,7 +38,7 @@ function walkDir(dir, exts) {
   return out;
 }
 
-const JS_FILES = walkDir('js', ['.js', '.mjs']);
+const JS_FILES = [...walkDir('js', ['.js', '.mjs']), ...walkDir('functions', ['.js', '.mjs'])];
 const VERSIONED_LITERAL_RE = /["']([^"'?]+\.(?:css|js|mjs))\?v=([A-Za-z0-9._-]+)["']/g;
 
 function collectFromHtml(file) {

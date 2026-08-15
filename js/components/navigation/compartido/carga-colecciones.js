@@ -28,7 +28,7 @@ function safeUrl(value, fallback = '') {
 }
 
 function catalogHref(slug) {
-  return `catalogo.html?cat=${encodeURIComponent(text(slug))}`;
+  return `/catalogo?cat=${encodeURIComponent(text(slug))}`;
 }
 
 function imageCandidates(collection) {

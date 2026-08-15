@@ -253,7 +253,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
           <div class="ck-empty-icon">🛒</div>
           <div class="ck-empty-text">Tu carrito está vacío</div>
           <p style="color:#8B5B6B;font-size:13px;margin:6px 0 16px">Agregá un producto para comenzar una compra nueva.</p>
-          <a href="catalogo.html" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 24px;text-decoration:none;border-radius:999px;background:#AD3F67;color:#fff!important;font-weight:800">Ver catálogo →</a>
+          <a href="/catalogo" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 24px;text-decoration:none;border-radius:999px;background:#AD3F67;color:#fff!important;font-weight:800">Ver catálogo →</a>
         </div>`;
       subtotalNode.textContent = 'Gs. 0';
       return;

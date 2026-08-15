@@ -1,6 +1,6 @@
 import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260815-prelaunch-cache-1';
 import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260815-prelaunch-cache-1';
-import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20260814-social-notifications-1';
+import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20260815-routes-clean-1';
 import { renderSearchPanel } from './compartido/panel-busqueda.js';
 import { renderCartDrawer } from './compartido/panel-carrito.js';
 import { renderAccountDrawer } from './compartido/panel-cuenta.js';

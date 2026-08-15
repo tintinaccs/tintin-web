@@ -1,7 +1,7 @@
 import {
   detectContentPageId, getNested, getPageSchema, normalizeContentValue,
   sanitizeContentHref, sanitizeContentText,
-} from './esquema-contenido.js?v=tintin-20260814-visual-studio-v2-4';
+} from './esquema-contenido.js?v=tintin-20260815-routes-clean-1';
 import {
   VISUAL_BLOCK_TYPES, VISUAL_STYLE_OPTIONS,
 } from './contratos-visual-builder.js?v=tintin-20260810-visual-studio-v2-1';
@@ -232,7 +232,7 @@ function renderProductCards(root, block) {
   root.replaceChildren();
   if (!products.length) {
     const fallback = el('a', 'tt-visual-product-card tt-visual-product-fallback', 'Explorar productos');
-    fallback.href = 'catalogo.html'; root.appendChild(fallback); return;
+    fallback.href = '/catalogo'; root.appendChild(fallback); return;
   }
   products.forEach(product => {
     const link = el('a', 'tt-visual-product-card'); link.href = `product.html?id=${encodeURIComponent(String(product.id || ''))}`;
@@ -249,7 +249,7 @@ function renderCollectionCards(root, block) {
   const labels = [...new Set((Array.isArray(window.PRODUCTS) ? window.PRODUCTS : []).filter(item => item?.active !== false).map(item => plain(item.category || item.cat || '', 120)).filter(Boolean))].slice(0, block.count);
   root.replaceChildren();
   (labels.length ? labels : ['Ver colecciones']).forEach(label => {
-    const link = el('a', '', label); link.href = label === 'Ver colecciones' ? 'collections.html' : `catalogo.html?cat=${encodeURIComponent(label)}`; root.appendChild(link);
+    const link = el('a', '', label); link.href = label === 'Ver colecciones' ? 'collections.html' : `/catalogo?cat=${encodeURIComponent(label)}`; root.appendChild(link);
   });
 }
 

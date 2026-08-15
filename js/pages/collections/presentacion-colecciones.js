@@ -24,7 +24,7 @@ if (!window.TintinCollectionsPhase4Booted) {
   const clean = value => String(value == null ? '' : value).trim();
 
   function catalogHref(slug) {
-    return `catalogo.html?cat=${encodeURIComponent(clean(slug))}`;
+    return `/catalogo?cat=${encodeURIComponent(clean(slug))}`;
   }
 
   function safeUrl(value, fallback = '') {
@@ -270,7 +270,7 @@ if (!window.TintinCollectionsPhase4Booted) {
 
   function navigateCatalog(slug) {
     if (slug === 'todos') {
-      window.location.assign('catalogo.html');
+      window.location.assign('/catalogo');
       return;
     }
     window.location.assign(catalogHref(slug));
@@ -392,7 +392,7 @@ if (!window.TintinCollectionsPhase4Booted) {
     } else if (!collections.length) {
       const item = mark(document.createElement('li'));
       const link = document.createElement('a');
-      link.href = 'catalogo.html';
+      link.href = '/catalogo';
       link.textContent = 'Ver catálogo';
       item.appendChild(link);
       nodes = [item];

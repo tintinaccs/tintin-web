@@ -52,11 +52,11 @@ function normalizeJs(text) {
     const clean = normalizePageUrl(raw);
     return `${prefix}${quote}${clean}${quote}`;
   });
-  output = output.replace(/(((?:window\.)?location\.(?:href)\s*=\s*))(['"])([^'"]+\.html(?:[?#][^'"]*)?)\3/g, (full, prefix, quote, raw) => {
+  output = output.replace(/((?:window\.)?location\.(?:href)\s*=\s*)(['"])([^'"]+\.html(?:[?#][^'"]*)?)\2/g, (full, prefix, quote, raw) => {
     const clean = normalizePageUrl(raw);
     return `${prefix}${quote}${clean}${quote}`;
   });
-  output = output.replace(/(((?:window\.)?location\.(?:assign|replace)\(\s*))(['"])([^'"]+\.html(?:[?#][^'"]*)?)\3/g, (full, prefix, quote, raw) => {
+  output = output.replace(/((?:window\.)?location\.(?:assign|replace)\(\s*)(['"])([^'"]+\.html(?:[?#][^'"]*)?)\2/g, (full, prefix, quote, raw) => {
     const clean = normalizePageUrl(raw);
     return `${prefix}${quote}${clean}${quote}`;
   });

@@ -22,7 +22,7 @@ function doLogout(){
  silentLogoutStarted=true;
  beginSilentAuthTransition();
  signOut(auth)
-  .then(()=>window.location.replace('index.html'))
+  .then(()=>window.location.replace('/'))
   .catch(error=>{
    console.error('[auth-nav] No se pudo cerrar sesión:',error);
    silentLogoutStarted=false;
@@ -99,11 +99,11 @@ function renderMobileTabbarPhoto(user){
 function renderAccountPanel(user,role='client'){
  const panel=document.getElementById('account-panel');
  if(!panel)return;
- if(!user){panel.innerHTML=`<p class="tt-account-guest-copy">Ingresá para guardar favoritos, ver pedidos y comprar más rápido.</p><a class="tt-account-item" href="login.html">Iniciar sesión</a><a class="tt-account-item" href="login.html">Crear una cuenta</a>`;return;}
+ if(!user){panel.innerHTML=`<p class="tt-account-guest-copy">Ingresá para guardar favoritos, ver pedidos y comprar más rápido.</p><a class="tt-account-item" href="/login">Iniciar sesión</a><a class="tt-account-item" href="/login">Crear una cuenta</a>`;return;}
  const name=escapeHtmlNav(user.displayName||user.email||'Mi cuenta');
  const photo=user.photoURL?`<img class="tt-account-panel-avatar" src="${user.photoURL}" alt="${name}" referrerpolicy="no-referrer" width="32" height="32">`:'';
- const adminLink=hasAdminAccess(user,role)?`<a class="tt-account-item" href="admin.html" data-internal-admin-link="true">${roleLabel(role)}</a>`:'';
- panel.innerHTML=`<div class="tt-account-header">${photo}<span>${name}</span></div>${adminLink}<a class="tt-account-item" href="perfil.html">Mi cuenta</a><a class="tt-account-item" href="perfil.html#mis-pedidos">Mis pedidos</a><div class="tt-account-divider"></div><button type="button" class="tt-account-item tt-account-logout" id="account-logout-btn">Cerrar sesión</button>`;
+ const adminLink=hasAdminAccess(user,role)?`<a class="tt-account-item" href="/admin" data-internal-admin-link="true">${roleLabel(role)}</a>`:'';
+ panel.innerHTML=`<div class="tt-account-header">${photo}<span>${name}</span></div>${adminLink}<a class="tt-account-item" href="/perfil">Mi cuenta</a><a class="tt-account-item" href="/perfil#mis-pedidos">Mis pedidos</a><div class="tt-account-divider"></div><button type="button" class="tt-account-item tt-account-logout" id="account-logout-btn">Cerrar sesión</button>`;
  wireLogout(panel);
 }
 

@@ -45,8 +45,14 @@ const runtimeFiles = [
   ...walk(path.join(root, 'scripts'), file => /\.(?:js|mjs)$/i.test(file))
 ];
 const explicitFiles = ['_headers', 'robots.txt'].map(file => path.join(root, file)).filter(fs.existsSync);
+// auditar-cutover-live.mjs fija a propósito el dominio DEFINITIVO post-cutover
+// como default (tintinaccs.com), independiente del origen público activo hoy.
+// No debe sincronizarse con el origen actual o dejaría de auditar el dominio
+// de destino real del cutover.
+const excludedFiles = [path.join(root, 'scripts', 'auditar-cutover-live.mjs')];
 const files = [...new Set([...runtimeFiles, ...explicitFiles])]
-  .filter(file => path.resolve(file) !== path.resolve(configPath) && path.resolve(file) !== selfPath);
+  .filter(file => path.resolve(file) !== path.resolve(configPath) && path.resolve(file) !== selfPath)
+  .filter(file => !excludedFiles.includes(path.resolve(file)));
 
 function syncText(file, text) {
   let output = text;

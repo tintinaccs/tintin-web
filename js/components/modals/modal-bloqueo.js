@@ -49,7 +49,7 @@ export function showBlockedModal() {
             target="_blank"
             rel="noopener"
           >Contactar soporte</a>
-          <a class="tt-blocked-action tt-blocked-action-primary" href="index.html">Volver al inicio</a>
+          <a class="tt-blocked-action tt-blocked-action-primary" href="/">Volver al inicio</a>
         </div>
       </section>`;
 
