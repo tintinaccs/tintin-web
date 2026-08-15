@@ -50,8 +50,19 @@ function isIgnoredReference(value) {
 function resolveLocalReference(ownerFile, rawReference) {
   const clean = stripQueryAndHash(rawReference);
   if (!clean) return null;
-  if (clean.startsWith('/')) return clean.slice(1);
-  return path.normalize(path.join(path.dirname(ownerFile), clean)).replace(/\\/g, '/');
+
+  let target;
+  if (clean === '/') return 'index.html';
+  if (clean.startsWith('/')) target = clean.slice(1);
+  else target = path.normalize(path.join(path.dirname(ownerFile), clean)).replace(/\\/g, '/');
+
+  // Cloudflare Pages publica los documentos HTML con URLs limpias. Un href
+  // como /catalogo representa catalogo.html en el árbol estático; la auditoría
+  // debe validar el archivo real sin obligar a reintroducir .html en enlaces.
+  if (target && !path.posix.extname(target) && exists(`${target}.html`)) {
+    return `${target}.html`;
+  }
+  return target;
 }
 
 function extractTagReferences(html) {
@@ -171,6 +182,15 @@ if (
 ) {
   fail('auditor', 'el analizador de referencias confunde atributos data-* con src/href reales.');
 }
+
+// Tripwire explícito de URLs limpias: evita que una futura regresión del
+// auditor obligue a volver a publicar enlaces .html para hacerlo pasar.
+if (resolveLocalReference('index.html', '/catalogo') !== 'catalogo.html' ||
+    resolveLocalReference('index.html', '/contact?from=nav') !== 'contact.html' ||
+    resolveLocalReference('index.html', '/') !== 'index.html') {
+  fail('auditor', 'la resolución de URLs limpias no coincide con los HTML publicados por Pages.');
+}
+
 for (const expected of expectedPages) {
   if (!actualPages.includes(expected)) fail('inventario', `falta ${expected}.`);
 }
@@ -214,4 +234,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`AUDITORÍA DE CARGA DE PÁGINAS: OK · ${actualPages.length} HTML · referencias locales · imports relativos · loaders · IDs · Producto reconocido.`);
+console.log(`AUDITORÍA DE CARGA DE PÁGINAS: OK · ${actualPages.length} HTML · referencias locales/clean URLs · imports relativos · loaders · IDs · Producto reconocido.`);
