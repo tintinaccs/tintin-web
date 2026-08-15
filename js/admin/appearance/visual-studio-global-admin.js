@@ -57,7 +57,7 @@ function checksField(label, options, selected, onChange, allLabel='Todo el sitio
 }
 
 function defaultCampaign(preset={}) { return { id:`campaign-${crypto.randomUUID().slice(0,8)}`,name:preset.name||'Nueva campaña',enabled:false,priority:50,startAt:'',endAt:'',effect:preset.effect||'none',intensity:'medium',announcement:preset.announcement||'',href:'',closable:true,background:preset.background||'',textColor:preset.textColor||'',accentColor:preset.accentColor||'' }; }
-function defaultPopup() { return { id:`popup-${crypto.randomUUID().slice(0,8)}`,name:'Nuevo pop-up',enabled:false,priority:50,kind:'center',title:'',text:'',image:'',imageAlt:'',buttonLabel:'Ver más',href:'catalogo.html',trigger:'delay',triggerValue:3,frequency:'session',pages:['*'],devices:['desktop','tablet','mobile'],productIds:[],categories:[],startAt:'',endAt:'',background:'',textColor:'',accentColor:'',animation:'fade' }; }
+function defaultPopup() { return { id:`popup-${crypto.randomUUID().slice(0,8)}`,name:'Nuevo pop-up',enabled:false,priority:50,kind:'center',title:'',text:'',image:'',imageAlt:'',buttonLabel:'Ver más',href:'/catalogo',trigger:'delay',triggerValue:3,frequency:'session',pages:['*'],devices:['desktop','tablet','mobile'],productIds:[],categories:[],startAt:'',endAt:'',background:'',textColor:'',accentColor:'',animation:'fade' }; }
 function currentList() { return tab==='campaigns'?config.campaigns:tab==='popups'?config.popups:[]; }
 function selectedItem() { return currentList().find(item=>item.id===selectedId)||null; }
 

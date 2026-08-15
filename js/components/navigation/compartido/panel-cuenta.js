@@ -7,8 +7,8 @@ export function renderAccountDrawer() {
       </div>
       <div class="tt-account-panel" id="account-panel">
         <p class="tt-account-guest-copy">Ingresá para guardar favoritos, ver pedidos y comprar más rápido.</p>
-        <a class="tt-account-item" href="login.html">Iniciar sesión</a>
-        <a class="tt-account-item" href="login.html">Crear una cuenta</a>
+        <a class="tt-account-item" href="/login">Iniciar sesión</a>
+        <a class="tt-account-item" href="/login">Crear una cuenta</a>
       </div>
     </div>`;
 }

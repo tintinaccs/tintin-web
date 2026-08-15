@@ -128,6 +128,34 @@ function normalizeLocalReference(fromFile, raw) {
   return normalized.startsWith('../') ? null : normalized;
 }
 
+const CLEAN_ROUTE_FILES = new Map([
+  ['', 'index.html'],
+  ['about', 'about.html'],
+  ['catalogo', 'catalogo.html'],
+  ['collections', 'collections.html'],
+  ['product', 'product.html'],
+  ['contact', 'contact.html'],
+  ['envios', 'envios.html'],
+  ['cambios-devoluciones', 'cambios-devoluciones.html'],
+  ['preguntas-frecuentes', 'preguntas-frecuentes.html'],
+  ['terminos', 'terminos.html'],
+  ['privacidad', 'privacidad.html'],
+  ['checkout', 'checkout.html'],
+  ['login', 'login.html'],
+  ['perfil', 'perfil.html'],
+  ['admin', 'admin.html'],
+  ['admin-images', 'admin-images.html'],
+  ['404', '404.html'],
+  ['nosotros', 'nosotros.html']
+]);
+
+function localReferenceExists(target, allPaths) {
+  if (allPaths.has(target)) return true;
+  const clean = String(target || '').replace(/^\/+|\/+$/g, '');
+  const physical = CLEAN_ROUTE_FILES.get(clean);
+  return Boolean(physical && allPaths.has(physical));
+}
+
 function labelForPage(file, title) {
   const known = {
     'index.html': 'Inicio',
@@ -296,7 +324,7 @@ function extractPage(file, allPaths, jsCorpus) {
       raw: item.raw,
       target: item.target,
       line: item.line,
-      exists: allPaths.has(item.target)
+      exists: localReferenceExists(item.target, allPaths)
     }));
 
   const access = pageAccess(file);

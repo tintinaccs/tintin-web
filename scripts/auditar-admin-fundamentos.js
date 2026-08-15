@@ -67,19 +67,19 @@ check(
   'admin-app.js debe resolver la sesión con onAuthStateChanged antes de mostrar el panel.'
 );
 check(
-  'Sin sesión se redirige a login.html',
-  /if \(!user\)\s*\{[^}]*login\.html/.test(adminApp),
-  'Un usuario no autenticado debe terminar en login.html, nunca dentro del panel.'
+  'Sin sesión se redirige a /login',
+  /if \(!user\)\s*\{[^}]*\/login/.test(adminApp),
+  'Un usuario no autenticado debe terminar en /login, nunca dentro del panel.'
 );
 check(
-  'Un rol de cliente/sin rol se saca del panel a perfil.html',
-  /role === 'client' \|\| !role/.test(adminApp) && adminApp.includes("window.location.href = 'perfil.html'"),
-  'Solo roles de staff pueden ver el panel; el resto va a perfil.html.'
+  'Un rol de cliente/sin rol se saca del panel a /perfil',
+  /role === 'client' \|\| !role/.test(adminApp) && adminApp.includes("window.location.href = '/perfil'"),
+  'Solo roles de staff pueden ver el panel; el resto va a /perfil.'
 );
 check(
   'Las cuentas bloqueadas se expulsan con aviso',
-  adminApp.includes('login.html?blocked=1') && /\.blocked\b/.test(adminApp),
-  'Una cuenta con blocked=true debe cerrar sesión e ir a login.html?blocked=1.'
+  adminApp.includes('/login?blocked=1') && /\.blocked\b/.test(adminApp),
+  'Una cuenta con blocked=true debe cerrar sesión e ir a /login?blocked=1.'
 );
 check(
   'El Super Admin nunca queda bloqueado ni pierde acceso',
@@ -88,7 +88,7 @@ check(
 );
 check(
   'Un error inesperado en el init termina en el destino seguro (login)',
-  /catch\s*\(e\)\s*\{[\s\S]{0,220}window\.location\.href = 'login\.html'/.test(adminApp),
+  /catch\s*\(e\)\s*\{[\s\S]{0,220}window\.location\.href = '\/login'/.test(adminApp),
   'Si el init falla, el panel real no debe quedar armado detrás del loader.'
 );
 check(

@@ -1,6 +1,6 @@
 /* Canonical y Open Graph de cada producto siempre apuntan al dominio público.
  * El observador corrige también cambios posteriores hechos por el render en vivo. */
-const TT_PUBLIC_PRODUCT_URL = 'https://tintinaccesorios.pages.dev/product.html';
+const TT_PUBLIC_PRODUCT_URL = 'https://tintinaccesorios.pages.dev/product';
 const ttCanonicalProduct = document.getElementById('link-canonical');
 const ttOpenGraphProductUrl = document.getElementById('meta-og-url');
 let ttSyncingProductSeo = false;
@@ -238,7 +238,7 @@ if (grid && !window.TintinRelatedProducts) {
     const id = encodeURIComponent(String(product.id));
     const name = escapeAttribute(product.name || 'Producto');
     return `<article class="tt-product-card" data-product-id="${id}">
-      <a class="tt-product-card-fallback" href="product.html?id=${id}">${name}</a>
+      <a class="tt-product-card-fallback" href="/product?id=${id}">${name}</a>
     </article>`;
   }
 

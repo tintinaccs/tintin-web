@@ -117,9 +117,10 @@ check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
   !/\b(?:ip|latitude|longitude|postalCode|asn)\s*:/.test(geoFunction) &&
   !rules.includes("'ip'") && !rules.includes("'latitude'") && !rules.includes("'longitude'"));
 check('GitHub Pages usa el servicio geográfico de Cloudflare',
-  activity.includes("import { apiUrl } from '../core/firebase/origen-funciones.js") &&
+  /import\s*\{\s*apiUrl\s*\}\s*from\s*['"]\.\.\/core\/firebase\/origen-funciones\.js(?:\?[^'"]+)?['"]/.test(activity) &&
   activity.includes('function geoEndpoint() {\n    return apiUrl(') &&
-  functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'") &&
+  functionOrigin.includes("import { TINTIN_FUNCTIONS_FALLBACK_ORIGIN } from '../config/origenes-publicos.js'") &&
+  functionOrigin.includes('return TINTIN_FUNCTIONS_FALLBACK_ORIGIN') &&
   functionOrigin.includes("hostname.endsWith('github.io')") &&
   !activity.includes('/.netlify/functions/'));
 check('Los previews de Cloudflare no escriben estadísticas',

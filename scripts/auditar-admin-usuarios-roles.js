@@ -213,7 +213,7 @@ check(
 );
 check(
   'El acceso al panel se decide por rol real (client/sin rol fuera)',
-  /if \(role === 'client' \|\| !role\) \{\s*\n\s*window\.location\.href = 'perfil\.html'/.test(adminApp),
+  /if \(role === 'client' \|\| !role\) \{\s*\n\s*window\.location\.href = '\/perfil'/.test(adminApp),
   'Un cliente autenticado nunca debe entrar al panel.'
 );
 

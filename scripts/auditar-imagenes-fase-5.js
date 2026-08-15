@@ -235,8 +235,8 @@ check(
   // actividad-sitio.js, notificacion-pedido-resend.js y sincronizacion-correo-admin.js para
   // que ningún llamador nuevo lo reinvente (y lo olvide) por separado.
   files.mediaLibrary.includes("callSecureFunction('cloudinary-sign-upload'") &&
-    files.mediaLibrary.includes("import { apiUrl } from '../../core/firebase/origen-funciones.js") &&
-    files.functionOrigin.includes('CLOUDFLARE_FALLBACK_ORIGIN') &&
+    /import\s*\{\s*apiUrl\s*\}\s*from\s*['"]\.\.\/\.\.\/core\/firebase\/origen-funciones\.js(?:\?[^'"]+)?['"]/.test(files.mediaLibrary) &&
+    files.functionOrigin.includes('TINTIN_FUNCTIONS_FALLBACK_ORIGIN') &&
     files.functionOrigin.includes("hostname.endsWith('github.io')") &&
     files.mediaLibrary.includes('uploadBlobToCloudinary') &&
     files.mediaLibrary.includes("provider: 'cloudinary'") &&

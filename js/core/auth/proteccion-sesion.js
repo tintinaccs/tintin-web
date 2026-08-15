@@ -39,7 +39,7 @@ function readSessionStart() {
 
 function goToExpiredLogin() {
   if (location.pathname.endsWith('/login.html') || location.pathname.endsWith('login.html')) return;
-  location.href = 'login.html?expired=1';
+  location.href = '/login?expired=1';
 }
 
 async function enforce(user) {

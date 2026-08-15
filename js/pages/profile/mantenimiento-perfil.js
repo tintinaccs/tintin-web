@@ -139,7 +139,7 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
     list.setAttribute('aria-busy', 'false');
     const sorted = [...orders].sort((a,b) => orderTimestamp(b) - orderTimestamp(a));
     if (!sorted.length) {
-      list.innerHTML = `<div class="tt-profile-state">Todavía no tenés pedidos.<br><a href="catalogo.html" class="perfil-btn perfil-btn-outline">Ver productos →</a></div>`;
+      list.innerHTML = `<div class="tt-profile-state">Todavía no tenés pedidos.<br><a href="/catalogo" class="perfil-btn perfil-btn-outline">Ver productos →</a></div>`;
       return;
     }
     const visible = sorted.slice(0, 10);

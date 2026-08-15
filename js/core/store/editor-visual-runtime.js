@@ -235,7 +235,7 @@ function renderProductCards(root, block) {
     fallback.href = 'catalogo.html'; root.appendChild(fallback); return;
   }
   products.forEach(product => {
-    const link = el('a', 'tt-visual-product-card'); link.href = `product.html?id=${encodeURIComponent(String(product.id || ''))}`;
+    const link = el('a', 'tt-visual-product-card'); link.href = `/product?id=${encodeURIComponent(String(product.id || ''))}`;
     const src = safeImage(product.imageUrl);
     if (src) { const image = el('img'); image.src = src; image.alt = plain(product.name || 'Producto TINTÍN', 180); image.loading = 'lazy'; image.decoding = 'async'; link.appendChild(image); }
     else link.appendChild(el('span', 'tt-visual-product-placeholder'));

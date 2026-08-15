@@ -102,7 +102,7 @@ function goCompleteProfile() {
   // el destino terminara siendo el propio login, se va a la portada — este
   // guardia no puede ser el que deja la página colgada.
   const page = currentPageName();
-  if (page === 'login') { location.replace('login.html'); return; }
+  if (page === 'login') { location.replace('/login'); return; }
 
   const from = `${page}.html`;
   location.replace(`login.html?from=${encodeURIComponent(from)}`);

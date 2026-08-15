@@ -101,7 +101,7 @@ function createResult(product, position) {
   const link = document.createElement('a');
   link.className = 'tt-search-result-item';
   link.id = `tt-search-result-${position}`;
-  link.href = `product.html?id=${encodeURIComponent(String(product.id || ''))}`;
+  link.href = `/product?id=${encodeURIComponent(String(product.id || ''))}`;
   link.setAttribute('role', 'option');
   link.setAttribute('aria-selected', 'false');
   link.dataset.searchPosition = String(position);

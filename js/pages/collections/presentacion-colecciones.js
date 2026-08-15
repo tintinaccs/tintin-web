@@ -270,7 +270,7 @@ if (!window.TintinCollectionsPhase4Booted) {
 
   function navigateCatalog(slug) {
     if (slug === 'todos') {
-      window.location.assign('catalogo.html');
+      window.location.assign('/catalogo');
       return;
     }
     window.location.assign(catalogHref(slug));

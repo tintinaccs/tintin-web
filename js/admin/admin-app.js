@@ -782,13 +782,13 @@ window.addEventListener('hashchange', () => {
 // ---- MOBILE TAB LOGOUT ----
 const mtabLogout = document.getElementById('mtab-logout');
 if (mtabLogout) mtabLogout.onclick = () => {
-  const leave = async () => { await signOut(auth); window.location.href = 'login.html'; };
+  const leave = async () => { await signOut(auth); window.location.href = '/login'; };
   window.AdminUnsaved ? window.AdminUnsaved.requestNavigation(leave) : leave();
 };
 
 // ---- LOGOUT ----
 document.getElementById('adm-logout').onclick = () => {
-  const leave = async () => { await signOut(auth); window.location.href = 'login.html'; };
+  const leave = async () => { await signOut(auth); window.location.href = '/login'; };
   window.AdminUnsaved ? window.AdminUnsaved.requestNavigation(leave) : leave();
 };
 
@@ -807,7 +807,7 @@ onAuthStateChanged(auth, async user => {
     // siempre en un finally, así que en conexiones lentas el loader podía
     // desaparecer y dejar ver el panel real (sidebar, secciones) durante el
     // rato en que la navegación todavía no terminaba de cargar el destino.
-    if (!user) { window.location.href = 'login.html'; return; }
+    if (!user) { window.location.href = '/login'; return; }
     currentUser = user;
 
     const role = await getUserRole(user.uid, user.email);
@@ -820,13 +820,13 @@ onAuthStateChanged(auth, async user => {
       const selfSnap = await getDoc(doc(db, 'users', user.uid));
       if (selfSnap.exists() && selfSnap.data().blocked) {
         await signOut(auth);
-        window.location.href = 'login.html?blocked=1';
+        window.location.href = '/login?blocked=1';
         return;
       }
     }
 
     if (role === 'client' || !role) {
-      window.location.href = 'perfil.html';
+      window.location.href = '/perfil';
       return;
     }
 
@@ -865,7 +865,7 @@ onAuthStateChanged(auth, async user => {
     console.error('[Admin] Auth init error:', e);
     // No se sabe si el usuario es válido: mismo destino seguro que "sin
     // sesión", en vez de dejar el panel real armado detrás del loader.
-    window.location.href = 'login.html';
+    window.location.href = '/login';
   }
 });
 
@@ -2799,7 +2799,7 @@ const TEMPLATE_SEEDS = {
     greeting: 'Nuevo pedido de {{clienteNombre}}.',
     intro: 'Se recibió un nuevo pedido en la tienda.',
     closing: 'Revisalo en el panel de administración.', signature: 'Tintin Accesorios', promoText: '',
-    buttonText: 'Ver en el panel', buttonUrl: 'https://tintinaccesorios.pages.dev/admin.html',
+    buttonText: 'Ver en el panel', buttonUrl: 'https://tintinaccesorios.pages.dev/admin',
     brandPhrase: 'Tintin Accesorios', footer: '' },
   pedido_confirmado: { name: 'Pedido confirmado', category: 'pedido',
     subject: 'Tu pedido #{{pedidoNumero}} fue confirmado',

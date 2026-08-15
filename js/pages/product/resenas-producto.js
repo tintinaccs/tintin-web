@@ -190,7 +190,7 @@ function renderForm() {
   const root = document.getElementById('product-review-form');
   if (!root) return;
   if (!currentUser) {
-    root.innerHTML = `<div class="tt-review-form"><h3>Compartí tu opinión</h3><p>Iniciá sesión para dejar una reseña distinta para este producto.</p><a class="tt-btn" href="login.html?from=${encodeURIComponent(`product.html?id=${productId}`)}">Iniciar sesión</a></div>`;
+    root.innerHTML = `<div class="tt-review-form"><h3>Compartí tu opinión</h3><p>Iniciá sesión para dejar una reseña distinta para este producto.</p><a class="tt-btn" href="/login?from=${encodeURIComponent(`/product?id=${productId}`)}">Iniciar sesión</a></div>`;
     return;
   }
   if (ownReview && Number(ownReview.editCount) >= 1) {

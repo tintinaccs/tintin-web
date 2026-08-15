@@ -31,7 +31,7 @@
   <link rel="preload" as="style" href="css/components/navigation/compartido/busqueda.css?v=tintin-20260811-cls-header-reserve-1">
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
   <meta name="description" content="Mi perfil en Tintin Accesorios. Gestioná tu cuenta, pedidos y datos." />
-  <link rel="canonical" href="https://tintinaccesorios.pages.dev/perfil.html" />
+  <link rel="canonical" href="https://tintinaccesorios.pages.dev/perfil" />
   <link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -181,7 +181,7 @@
      PROFILE CONTENT
 ══════════════════════════════════════ -->
 <div class="perfil-wrap">
-  <a href="index.html" class="perfil-back">← Volver a la tienda</a>
+  <a href="/" class="perfil-back">← Volver a la tienda</a>
 
   <!-- Avatar + datos básicos -->
   <div class="perfil-card">
@@ -270,7 +270,7 @@
       <div class="perfil-section-title">Mi rol</div>
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
         <span id="perfil-role-badge" style="display:inline-block;padding:4px 14px;border-radius:50px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em"></span>
-        <a href="admin.html" class="perfil-btn perfil-btn-primary" id="link-admin-panel" style="display:none">⚙️ Panel de administración</a>
+        <a href="/admin" class="perfil-btn perfil-btn-primary" id="link-admin-panel" style="display:none">⚙️ Panel de administración</a>
       </div>
     </div>
   </div>
@@ -295,9 +295,9 @@
     <div class="perfil-body">
       <div class="perfil-section-title">Accesos rápidos</div>
       <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <a href="catalogo.html"  class="perfil-btn perfil-btn-outline">🛍️ Ver catálogo</a>
-        <a href="checkout.html"  class="perfil-btn perfil-btn-outline">🛒 Finalizar compra</a>
-        <a href="index.html"     class="perfil-btn perfil-btn-outline">🏠 Inicio</a>
+        <a href="/catalogo"  class="perfil-btn perfil-btn-outline">🛍️ Ver catálogo</a>
+        <a href="/checkout"  class="perfil-btn perfil-btn-outline">🛒 Finalizar compra</a>
+        <a href="/"     class="perfil-btn perfil-btn-outline">🏠 Inicio</a>
       </div>
     </div>
   </div>
@@ -617,7 +617,7 @@ async function loadUserOrders(user) {
       listEl.innerHTML = `
         <div style="text-align:center;color:var(--text-muted);padding:16px 0;font-size:13px">
           Todavía no tenés pedidos 🛒<br>
-          <a href="catalogo.html" style="color:var(--pink-dark);font-weight:700;margin-top:8px;display:inline-block">Ver productos →</a>
+          <a href="/catalogo" style="color:var(--pink-dark);font-weight:700;margin-top:8px;display:inline-block">Ver productos →</a>
         </div>`;
       return;
     }

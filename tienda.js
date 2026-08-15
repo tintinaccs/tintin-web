@@ -351,7 +351,7 @@ function renderCart() {
         const safeFavoriteId = escapeAttribute(item.id);
         const favoriteImage = sanitizeClassicImageUrl(item.imageUrl || getProductImage(item.id), 120);
         return `<div class="tt-cart-favorite-item">
-          <a href="product.html?id=${encodeURIComponent(String(item.id))}" class="tt-cart-favorite-img" aria-label="Ver ${escapeAttribute(item.name)}">${favoriteImage ? `<img src="${escapeAttribute(favoriteImage)}" alt="${escapeAttribute(item.name)}" loading="lazy">` : ''}</a>
+          <a href="/product?id=${encodeURIComponent(String(item.id))}" class="tt-cart-favorite-img" aria-label="Ver ${escapeAttribute(item.name)}">${favoriteImage ? `<img src="${escapeAttribute(favoriteImage)}" alt="${escapeAttribute(item.name)}" loading="lazy">` : ''}</a>
           <div class="tt-cart-favorite-info"><strong>${escapeHtml(item.name)}</strong><span>${formatPrice(item.price)}</span></div>
           <button type="button" class="tt-cart-favorite-add" data-favorite-add-cart="${safeFavoriteId}" aria-label="Agregar ${escapeAttribute(item.name)} al carrito">+ Carrito</button>
           <button type="button" class="tt-cart-favorite-toggle is-favorite" data-favorite-id="${safeFavoriteId}" data-favorite-name="${escapeAttribute(item.name)}" data-favorite-price="${escapeAttribute(item.price)}" data-favorite-image="${escapeAttribute(item.imageUrl || '')}" aria-pressed="true"><span data-favorite-icon aria-hidden="true">♥</span></button>
@@ -366,7 +366,7 @@ function renderCart() {
           <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
         </div>
         <div class="tt-cart-empty-text">Tu carrito está vacío.<br>¡Agregá algo hermoso!</div>
-        <a href="checkout.html" class="tt-cart-goto-btn">IR A MI CARRITO →</a>
+        <a href="/checkout" class="tt-cart-goto-btn">IR A MI CARRITO →</a>
       </div>
       ${favoritesHtml}
     `;
@@ -412,7 +412,7 @@ function renderCart() {
         <span>Subtotal</span>
         <span>${formatPrice(getCartTotal())}</span>
       </div>
-      <a href="checkout.html" class="tt-cart-checkout-btn" style="margin-top:12px;">
+      <a href="/checkout" class="tt-cart-checkout-btn" style="margin-top:12px;">
         Finalizar compra →
       </a>
       <button type="button" data-cart-action="close" style="width:100%;margin-top:8px;padding:10px;background:none;border:1px solid #ddd;border-radius:50px;font-size:0.78rem;color:#AD3F67;cursor:pointer;font-family:Montserrat">
@@ -518,7 +518,7 @@ function goToCheckout() {
     alert('Tu carrito está vacío. ¡Agregá productos primero!');
     return;
   }
-  window.location.href = 'checkout.html';
+  window.location.href = '/checkout';
 }
 
 function directWAProduct(product, variant = '') {
@@ -646,7 +646,7 @@ function initSearch() {
         results.dataset.searchState = 'results';
         results.innerHTML = matches.map(p => {
           const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id), 160);
-          const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
+          const productHref = `/product?id=${encodeURIComponent(String(p.id))}`;
           const thumb = imgUrl
             ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;" loading="lazy">`
             : '';
@@ -753,7 +753,7 @@ function renderProductCardMarkup(p, options = {}) {
   const safeId = escapeAttribute(p.id);
   const safeName = escapeHtml(p.name);
   const isFavorite = Boolean(window.TintinFavorites?.has?.(p.id));
-  const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
+  const productHref = `/product?id=${encodeURIComponent(String(p.id))}`;
   const imgContent = imgUrl
     ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" class="tt-product-img-real" loading="lazy" onerror="_onProductImgError(this)">`
     : `<div class="tt-prod-placeholder tt-prod-ph-svg"></div>`;
@@ -818,7 +818,7 @@ function renderLookCombo() {
   grid.innerHTML = currentCombo.map(p => {
     const imgUrl = sanitizeClassicImageUrl(p.imageUrl || p.image || getProductImage(p.id), 480);
     const safeId = escapeAttribute(p.id);
-    const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
+    const productHref = `/product?id=${encodeURIComponent(String(p.id))}`;
     const imgContent = imgUrl
       ? `<img src="${escapeAttribute(imgUrl)}" alt="${escapeAttribute(p.name)}" style="width:100%;height:100%;object-fit:contain;background:transparent;" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.add('tt-look-card-img-ph')">`
       : '';
@@ -1479,7 +1479,7 @@ function _renderProductDetail(product) {
         try {
           const variantStr = _pdGetSelectedVariant();
           const result = await _addToCartWithQty(_pdProduct, _pdQty, variantStr);
-          if (result?.item) window.location.assign('checkout.html');
+          if (result?.item) window.location.assign('/checkout');
         } finally {
           delete btnBuyNow.dataset.busy;
           btnBuyNow.disabled = _pdProduct?.stock != null && Number(_pdProduct.stock) <= 0;

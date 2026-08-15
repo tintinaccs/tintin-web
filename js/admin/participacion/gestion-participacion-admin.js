@@ -69,7 +69,7 @@ function renderLikes() {
   if (!root) return;
   const term = (document.getElementById('likes-search')?.value || '').toLowerCase();
   const filtered = likes.filter(item => !term || [item.realName, item.email, item.productName].some(value => String(value || '').toLowerCase().includes(term)));
-  root.innerHTML = filtered.length ? filtered.map(item => `<article class="adm-engagement-card"><div class="adm-engagement-head"><div><strong>${escapeHtml(item.realName || 'Sin nombre')}</strong><div class="adm-engagement-meta">${escapeHtml(item.email)} · ${formatDate(item.createdAt)}</div></div>${item.unread ? '<span class="adm-engagement-state">Nuevo</span>' : ''}</div><div><strong>${escapeHtml(item.productName)}</strong></div><a class="adm-btn adm-btn-sm adm-btn-outline" href="product.html?id=${encodeURIComponent(item.productId)}" target="_blank" rel="noopener">Ver producto</a></article>`).join('') : '<p class="adm-engagement-empty">No hay productos marcados con Me gusta.</p>';
+  root.innerHTML = filtered.length ? filtered.map(item => `<article class="adm-engagement-card"><div class="adm-engagement-head"><div><strong>${escapeHtml(item.realName || 'Sin nombre')}</strong><div class="adm-engagement-meta">${escapeHtml(item.email)} · ${formatDate(item.createdAt)}</div></div>${item.unread ? '<span class="adm-engagement-state">Nuevo</span>' : ''}</div><div><strong>${escapeHtml(item.productName)}</strong></div><a class="adm-btn adm-btn-sm adm-btn-outline" href="/product?id=${encodeURIComponent(item.productId)}" target="_blank" rel="noopener">Ver producto</a></article>`).join('') : '<p class="adm-engagement-empty">No hay productos marcados con Me gusta.</p>';
 }
 
 async function markCurrentSeen(type) {
