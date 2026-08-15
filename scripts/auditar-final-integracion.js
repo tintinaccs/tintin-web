@@ -136,13 +136,26 @@ check(
 );
 
 const cspRuntime = (() => { try { return JSON.parse(read('config/csp-runtime.json')); } catch { return null; } })();
+const headerCspLines = read('_headers').split(/\r?\n/).filter(line => line.includes('Content-Security-Policy:'));
+const staticFallbackCsp = headerCspLines[0] || '';
 check(
-  'CSP de HTML se entrega por Pages Functions y no por _headers',
+  'CSP completa de HTML se entrega por Pages Functions y _headers conserva solo un fallback corto',
   exists('functions/_middleware.js') &&
+    exists('config/csp-runtime.js') &&
     read('functions/_middleware.js').includes("headers.set('Content-Security-Policy', policy)") &&
-    !read('_headers').includes('Content-Security-Policy:') &&
+    headerCspLines.length === 1 &&
+    staticFallbackCsp.length <= 2000 &&
+    staticFallbackCsp.includes("script-src-attr 'none'") &&
+    !staticFallbackCsp.includes('https://api.cloudinary.com') &&
+    !staticFallbackCsp.includes("script-src 'self' 'unsafe-inline'") &&
     cspRuntime?.generatedBy === 'scripts/generar-csp-cloudflare.js',
-  'Ejecutá npm run build:csp; la CSP grande no puede volver a _headers.'
+  'Ejecutá npm run build:csp; la CSP completa vive en middleware y el fallback estático debe permanecer corto y restringido.'
+);
+check(
+  'Firebase Auth queda fuera del middleware CSP de la tienda',
+  read('functions/_middleware.js').includes("pathname.startsWith('/__/auth/')") &&
+    read('functions/_middleware.js').includes('return context.next()'),
+  'El helper /__/auth/* debe conservar su proxy transparente.'
 );
 check(
   '_headers respeta el límite de 2000 caracteres por línea',
