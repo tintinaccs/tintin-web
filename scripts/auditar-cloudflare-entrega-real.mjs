@@ -122,6 +122,28 @@ const runtime = JSON.parse(fs.readFileSync('config/csp-runtime.json', 'utf8'));
 if (runtime.generatedBy !== 'scripts/generar-csp-cloudflare.js') throw new Error('config/csp-runtime.json no fue generado por build:csp.');
 const preview = await waitForCloudflarePreview();
 
+// El check-run "Cloudflare Pages" puede marcarse success antes de que el
+// alias del preview esté propagado en todo el edge (404 "Deployment Not
+// Found" transitorio de Cloudflare). Se espera a que el propio preview
+// responda antes de correr las aserciones estrictas de contrato.
+async function waitForPreviewReady() {
+  const readinessAttempts = 6;
+  for (let attempt = 1; attempt <= readinessAttempts; attempt += 1) {
+    try {
+      const response = await fetch(preview + '/', {
+        redirect: 'follow',
+        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/3.1' },
+        signal: AbortSignal.timeout(timeoutMs)
+      });
+      if (response.ok) return;
+    } catch {
+      // reintenta hasta agotar los intentos
+    }
+    if (attempt < readinessAttempts) await sleep(attempt * 2000);
+  }
+}
+await waitForPreviewReady();
+
 const publicRoutes = [
   '/', '/catalogo', '/collections', '/product', '/about', '/contact', '/envios',
   '/cambios-devoluciones', '/preguntas-frecuentes', '/terminos', '/privacidad',
