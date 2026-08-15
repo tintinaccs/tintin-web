@@ -88,16 +88,33 @@ check(
   'Cross-Origin-Opener-Policy: same-origin-allow-popups'
 ].forEach(header => check('Encabezado estático presente: ' + header, headers.includes(header)));
 
+const staticCspLines = headers.split('\n').filter(line => line.includes('Content-Security-Policy:'));
+const staticCsp = staticCspLines[0] || '';
 check(
-  'CSP no se publica desde _headers',
-  !headers.includes('Content-Security-Policy:'),
-  'Cloudflare Pages limita cada línea de _headers a 2000 caracteres; CSP debe salir del middleware.'
+  '_headers conserva una única CSP fallback corta para respuestas estáticas/404',
+  staticCspLines.length === 1 &&
+    staticCsp.length <= 2000 &&
+    staticCsp.includes("default-src 'self'") &&
+    staticCsp.includes("script-src-attr 'none'") &&
+    staticCsp.includes("object-src 'none'") &&
+    !staticCsp.includes('https://api.cloudinary.com') &&
+    !staticCsp.includes("script-src 'self' 'unsafe-inline'"),
+  'La CSP completa de páginas vive en middleware; el fallback estático debe seguir corto y sin capacidades Admin.'
 );
 const overlongHeaderLines = headers.split('\n').filter(line => line.length > 2000);
 check(
   'Cada línea de _headers respeta el límite de Cloudflare Pages',
   overlongHeaderLines.length === 0,
   overlongHeaderLines.map(line => `${line.slice(0, 40)}... (${line.length} caracteres)`).join(', ')
+);
+
+const notFoundHtml = read('404.html');
+const notFoundInlineScripts = [...notFoundHtml.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
+  .filter(match => !/\bsrc\s*=/.test(match[1]));
+check(
+  '404 estático no depende de scripts inline que el fallback bloquearía',
+  notFoundInlineScripts.length === 0,
+  `Se encontraron ${notFoundInlineScripts.length} script(s) inline en 404.html.`
 );
 
 check(
@@ -107,7 +124,12 @@ check(
     middleware.includes("'X-Content-Type-Options'") &&
     middleware.includes("'X-Frame-Options'") &&
     middleware.includes('failClosed()'),
-  'Las respuestas de Pages Functions no heredan _headers y deben fijar seguridad explícitamente.'
+  'Las respuestas de Pages Functions no heredan la CSP fallback estática y deben fijar seguridad explícitamente.'
+);
+check(
+  'Firebase Auth queda fuera de la CSP de la tienda',
+  middleware.includes("pathname.startsWith('/__/auth/')") && middleware.includes('return context.next()'),
+  'El proxy /__/auth/* debe permanecer transparente para los helpers de Firebase.'
 );
 check(
   'Las CSP runtime fueron generadas por la fuente canónica',
@@ -177,13 +199,17 @@ check(
     routePolicies.get('/admin-images')?.includes(cloudinaryOrigin) &&
     [...routePolicies.entries()].every(([route, policy]) =>
       route.startsWith('/admin') || !policy.includes(cloudinaryOrigin)
-    ),
-  'El endpoint de upload no debe aparecer en CSP públicas.'
+    ) &&
+    !staticCsp.includes(cloudinaryOrigin),
+  'El endpoint de upload no debe aparecer en CSP públicas ni en el fallback estático.'
 );
 check(
-  'La CSP runtime es reproducible',
-  exists('scripts/generar-csp-cloudflare.js') && exists('functions/_middleware.js'),
-  'Ejecutá npm run build:csp para regenerar las políticas.'
+  'La CSP runtime es reproducible y compilable por Pages',
+  exists('scripts/generar-csp-cloudflare.js') &&
+    exists('functions/_middleware.js') &&
+    exists('config/csp-runtime.json') &&
+    exists('config/csp-runtime.js'),
+  'Ejecutá npm run build:csp para regenerar las políticas y su módulo runtime.'
 );
 
 check(
