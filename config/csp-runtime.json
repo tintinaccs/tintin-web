@@ -1,0 +1,5 @@
+{
+  "generatedBy": "fail-closed placeholder; npm run build:csp must replace this before serving Admin",
+  "admin": "default-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';",
+  "adminImages": "default-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';"
+}
