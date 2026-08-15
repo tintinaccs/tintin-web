@@ -25,7 +25,7 @@ const routes = [
   { name: 'Cambios y devoluciones', url: '/cambios-devoluciones.html' },
   { name: 'Preguntas frecuentes', url: '/preguntas-frecuentes.html' },
   { name: '404', url: '/404.html' },
-  { name: 'Nosotros legacy', url: '/nosotros.html', redirectPath: '/about.html' },
+  { name: 'Nosotros legacy', url: '/nosotros.html', redirectPath: '/about' },
   { name: 'Super Admin', url: '/admin.html' },
   { name: 'Admin imágenes', url: '/admin-images.html' },
 ];
@@ -48,9 +48,34 @@ const mimeTypes = {
   '.xml': 'application/xml; charset=utf-8',
 };
 
+// Cloudflare Pages publica estos HTML con URL limpia. El smoke usa un
+// servidor Node mínimo, así que debe reproducir esa resolución en vez de
+// inventar 404 cuando la propia aplicación navega correctamente a /about,
+// /login, /perfil, etc. El pathname del navegador se mantiene limpio: solo
+// cambia el archivo físico que el servidor de prueba entrega.
+const cleanRouteFiles = new Map([
+  ['/', '/index.html'],
+  ['/about', '/about.html'],
+  ['/admin', '/admin.html'],
+  ['/admin-images', '/admin-images.html'],
+  ['/cambios-devoluciones', '/cambios-devoluciones.html'],
+  ['/catalogo', '/catalogo.html'],
+  ['/checkout', '/checkout.html'],
+  ['/collections', '/collections.html'],
+  ['/contact', '/contact.html'],
+  ['/envios', '/envios.html'],
+  ['/login', '/login.html'],
+  ['/nosotros', '/nosotros.html'],
+  ['/perfil', '/perfil.html'],
+  ['/preguntas-frecuentes', '/preguntas-frecuentes.html'],
+  ['/privacidad', '/privacidad.html'],
+  ['/product', '/product.html'],
+  ['/terminos', '/terminos.html'],
+]);
+
 function safeLocalPath(requestURL) {
   const pathname = decodeURIComponent(new URL(requestURL, baseURL).pathname);
-  const requested = pathname === '/' ? '/index.html' : pathname;
+  const requested = cleanRouteFiles.get(pathname) || pathname;
   const absolute = path.resolve(root, `.${requested}`);
   if (absolute !== root && !absolute.startsWith(`${root}${path.sep}`)) return null;
   return absolute;
