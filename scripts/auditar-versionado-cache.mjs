@@ -11,7 +11,8 @@
    es seguro cuando cambian LOS BYTES y también cambia el tag ?v=: la URL
    inmutable anterior no se reutiliza. Sigue siendo un error cambiar bytes sin
    bump o hacer un bump sin cambio de bytes. El overlay queda reservado para
-   archivos versionados nuevos que todavía no existen en el baseline.
+   archivos versionados nuevos que todavía no existen en el baseline y debe
+   anclar su contenido exacto por SHA-256 o por Git blob SHA-1.
    ============================================================= */
 
 import fs from 'node:fs';
@@ -65,6 +66,12 @@ function collectFromJs(file) {
   return found;
 }
 
+function gitBlobSha(text) {
+  const body = Buffer.from(text, 'utf8');
+  const header = Buffer.from(`blob ${body.length}\0`, 'utf8');
+  return crypto.createHash('sha1').update(header).update(body).digest('hex');
+}
+
 const references = [
   ...HTML_FILES.flatMap(collectFromHtml),
   ...JS_FILES.flatMap(collectFromJs),
@@ -103,13 +110,17 @@ for (const [localPath, ref] of [...byPath.entries()].sort(([a], [b]) => a.locale
   expected[localPath] = {
     version: ref.tag,
     sha256: crypto.createHash('sha256').update(canonicalText, 'utf8').digest('hex'),
+    gitBlobSha: gitBlobSha(canonicalText),
   };
 }
 
 const mode = process.argv.includes('--write') ? 'write' : 'check';
 
 if (mode === 'write') {
-  fs.writeFileSync(BASELINE_PATH, JSON.stringify(expected, null, 2) + '\n', 'utf8');
+  const baselineSnapshot = Object.fromEntries(
+    Object.entries(expected).map(([localPath, info]) => [localPath, { version: info.version, sha256: info.sha256 }])
+  );
+  fs.writeFileSync(BASELINE_PATH, JSON.stringify(baselineSnapshot, null, 2) + '\n', 'utf8');
   if (fs.existsSync(APPROVALS_PATH)) {
     fs.writeFileSync(APPROVALS_PATH, JSON.stringify({ approved: {}, removed: [] }, null, 2) + '\n', 'utf8');
   }
@@ -149,11 +160,30 @@ if (!Array.isArray(approvals.removed)) {
 const committed = { ...baseline };
 for (const localPath of approvals.removed) delete committed[localPath];
 for (const [localPath, info] of Object.entries(approvals.approved)) {
-  if (!info || typeof info.version !== 'string' || !/^[a-f0-9]{64}$/.test(String(info.sha256 || ''))) {
-    console.error(`Aprobación inválida para "${localPath}": requiere version y sha256 hexadecimal de 64 caracteres.`);
+  const sha256 = String(info?.sha256 || '');
+  const blobSha = String(info?.gitBlobSha || '');
+  const validSha256 = /^[a-f0-9]{64}$/.test(sha256);
+  const validBlobSha = /^[a-f0-9]{40}$/.test(blobSha);
+  if (!info || typeof info.version !== 'string' || (!validSha256 && !validBlobSha)) {
+    console.error(`Aprobación inválida para "${localPath}": requiere version y sha256 (64 hex) o gitBlobSha (40 hex).`);
     process.exit(1);
   }
-  committed[localPath] = { version: info.version, sha256: info.sha256 };
+
+  const current = expected[localPath];
+  if (!current) {
+    console.error(`Aprobación obsoleta: "${localPath}" ya no está referenciado con ?v=.`);
+    process.exit(1);
+  }
+  if (validBlobSha && current.gitBlobSha !== blobSha) {
+    console.error(`Aprobación de Git blob no coincide para "${localPath}": esperado ${blobSha}, actual ${current.gitBlobSha}.`);
+    process.exit(1);
+  }
+  if (validSha256 && current.sha256 !== sha256) {
+    console.error(`Aprobación SHA-256 no coincide para "${localPath}": esperado ${sha256}, actual ${current.sha256}.`);
+    process.exit(1);
+  }
+
+  committed[localPath] = { version: info.version, sha256: current.sha256 };
 }
 
 const problems = [];
@@ -161,7 +191,7 @@ const acceptedBumps = [];
 for (const [localPath, info] of Object.entries(expected)) {
   const before = committed[localPath];
   if (!before) {
-    problems.push(`NUEVO sin aprobar: "${localPath}" (tag "${info.version}", sha256 ${info.sha256}). Agregalo al baseline/overlay con su hash exacto.`);
+    problems.push(`NUEVO sin aprobar: "${localPath}" (tag "${info.version}", sha256 ${info.sha256}, gitBlobSha ${info.gitBlobSha}). Agregalo al baseline/overlay con su huella exacta.`);
     continue;
   }
 
