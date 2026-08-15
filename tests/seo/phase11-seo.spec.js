@@ -14,40 +14,27 @@ test('inicio publica canonical, OG y Store JSON-LD consistentes', async ({ page 
   expect(store.url).toBe('https://tintinaccesorios.pages.dev/');
 });
 
-test('producto actualiza canonical y JSON-LD con URL coherente, PYG y stock', async ({ page }) => {
-  test.setTimeout(35_000);
-  await page.goto('/product.html', { waitUntil: 'domcontentloaded' });
-  await page.waitForFunction(() => typeof window._updateProductMeta === 'function' && typeof window._injectProductJsonLd === 'function');
+test('producto llega con canonical, social preview y JSON-LD server-side coherentes', async ({ page }) => {
+  const response = await page.goto('/product?id=seo-prueba', { waitUntil: 'domcontentloaded' });
+  expect(response?.status()).toBe(200);
+  expect(response?.headers()['x-tintin-product-meta']).toBe('server-test');
 
-  // product.html inicializa el catálogo de forma asíncrona. La función SEO se
-  // prueba después de que esa carga termina para que el estado inicial de
-  // “producto no encontrado / error” no vuelva a escribir el canonical base.
-  await expect(page.locator('#product-loading')).toBeHidden({ timeout: 25_000 });
+  const canonical = 'https://tintinaccesorios.pages.dev/product?id=seo-prueba';
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', canonical);
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', canonical);
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', /Reloj SEO Prueba/);
+  await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'product');
+  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
+  await expect(page.locator('#tt-product-image-preload')).toHaveAttribute('fetchpriority', 'high');
 
-  // Aplicar y leer el resultado dentro de la misma tarea del navegador evita
-  // que una carga asíncrona ajena a esta unidad de prueba reemplace el canonical
-  // entre la llamada a la función SEO y la afirmación de Playwright.
-  const resultadoSeo = await page.evaluate(() => {
-    const product = { id: 'seo-prueba', name: 'Reloj SEO Prueba', price: 150000, desc: 'Producto de prueba SEO', category: 'Relojes' };
-    window._updateProductMeta(product, 'https://tintinaccesorios.pages.dev/assets/og-cover.jpg');
-    window._injectProductJsonLd(product, 'https://tintinaccesorios.pages.dev/assets/og-cover.jpg', [], 0);
-
-    const canonical = document.querySelector('#link-canonical')?.getAttribute('href') || '';
-    const jsonLd = JSON.parse(document.querySelector('#tt-product-jsonld')?.textContent || '{}');
-    const expectedCanonicalUrl = new URL('/product?id=seo-prueba', location.origin).href;
-    const expectedStructuredDataUrl = new URL('/product?id=seo-prueba', 'https://tintinaccesorios.pages.dev').href;
-    return { canonical, jsonLd, expectedCanonicalUrl, expectedStructuredDataUrl };
-  });
-
-  // El canonical refleja el origen real donde se sirve la página. Durante la
-  // auditoría es 127.0.0.1; en producción es el dominio público. El JSON-LD,
-  // en cambio, fija deliberadamente la URL pública para no publicar localhost
-  // en los datos estructurados que consumen los buscadores.
-  expect(resultadoSeo.canonical).toBe(resultadoSeo.expectedCanonicalUrl);
-  expect(resultadoSeo.jsonLd['@type']).toBe('Product');
-  expect(resultadoSeo.jsonLd.offers.url).toBe(resultadoSeo.expectedStructuredDataUrl);
-  expect(resultadoSeo.jsonLd.offers.priceCurrency).toBe('PYG');
-  expect(resultadoSeo.jsonLd.offers.availability).toBe('https://schema.org/OutOfStock');
+  const jsonLd = JSON.parse(await page.locator('#tt-product-jsonld-server').textContent());
+  expect(jsonLd['@type']).toBe('Product');
+  expect(jsonLd.name).toBe('Reloj SEO Prueba');
+  expect(jsonLd.url).toBe(canonical);
+  expect(jsonLd.offers.url).toBe(canonical);
+  expect(jsonLd.offers.priceCurrency).toBe('PYG');
+  expect(jsonLd.offers.price).toBe('150000');
+  expect(jsonLd.offers.availability).toBe('https://schema.org/OutOfStock');
 });
 
 test('superficies privadas y auxiliares permanecen noindex', async ({ browser, baseURL }) => {
