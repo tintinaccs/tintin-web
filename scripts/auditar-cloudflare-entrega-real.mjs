@@ -24,7 +24,7 @@ async function githubJson(url) {
   const headers = {
     accept: 'application/vnd.github+json',
     'x-github-api-version': '2022-11-28',
-    'user-agent': 'TintinCloudflareDeliveryGate/2.3'
+    'user-agent': 'TintinCloudflareDeliveryGate/2.4'
   };
   if (githubToken) headers.authorization = `Bearer ${githubToken}`;
 
@@ -105,7 +105,7 @@ async function fetchPreview(url) {
     try {
       const response = await fetch(url, {
         redirect: 'follow',
-        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/2.3' },
+        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/2.4' },
         signal: AbortSignal.timeout(timeoutMs)
       });
       if (response.status >= 500) throw new Error(`HTTP ${response.status}`);
@@ -132,6 +132,15 @@ function assertStrongCsp(csp, route) {
   }
 }
 
+function assertNoUnsafePublicCapabilities(csp, route) {
+  if (csp.includes('https://api.cloudinary.com')) {
+    throw new Error(`${route}: la CSP pública no debe autorizar uploads directos a Cloudinary.`);
+  }
+  if (csp.includes("script-src-attr 'unsafe-inline'")) {
+    throw new Error(`${route}: la CSP pública no debe reabrir handlers inline globalmente.`);
+  }
+}
+
 function assertCleanInternalRoutes(html, route) {
   const legacy = /\b(?:href|action)=["'](?:\.\/|\/)?(?:index|catalogo|collections|product|about|contact|envios|cambios-devoluciones|preguntas-frecuentes|terminos|privacidad|checkout|login|perfil|admin|admin-images|nosotros)\.html(?:[?#][^"']*)?["']/i;
   const match = String(html || '').match(legacy);
@@ -143,13 +152,16 @@ execFileSync(process.execPath, ['scripts/generar-csp-cloudflare.js'], { stdio: '
 
 const preview = await waitForCloudflarePreview();
 const policies = readRoutePolicies();
-const routes = [
+const globalPolicy = policies.get('/*');
+if (!globalPolicy) throw new Error('No existe la CSP wildcard /* generada; el fallback global es obligatorio.');
+
+const publicRoutes = [
   '/', '/catalogo', '/collections', '/product', '/about', '/contact', '/envios',
   '/cambios-devoluciones', '/preguntas-frecuentes', '/terminos', '/privacidad',
   '/checkout', '/login', '/perfil'
 ];
 
-for (const route of routes) {
+for (const route of publicRoutes) {
   const response = await fetchPreview(preview + route);
   const csp = response.headers.get('content-security-policy') || '';
   if (!response.ok || !(response.headers.get('content-type') || '').includes('text/html')) {
@@ -157,15 +169,38 @@ for (const route of routes) {
   }
   const html = await response.text();
   assertStrongCsp(csp, route);
+  assertNoUnsafePublicCapabilities(csp, route);
   assertCleanInternalRoutes(html, route);
 
   const expectedKey = route === '/' ? '/index.html' : route;
-  const expectedPolicy = policies.get(expectedKey) || policies.get(route);
-  if (!expectedPolicy) throw new Error(`${route}: no existe CSP generada en _headers para comparar.`);
-  if (!csp.includes(expectedPolicy)) {
-    throw new Error(`${route}: Cloudflare no entregó la CSP generada por este commit.`);
+  const routePolicy = policies.get(expectedKey) || policies.get(route);
+  const acceptablePolicies = [routePolicy, globalPolicy].filter(Boolean);
+  if (!acceptablePolicies.some(policy => csp.includes(policy))) {
+    throw new Error(`${route}: Cloudflare no entregó ni la CSP específica ni el fallback wildcard generado por este commit.`);
   }
-  console.log(`OK — ${preview}${route} — CSP y rutas internas reales correctas.`);
+  console.log(`OK — ${preview}${route} — CSP pública segura y rutas internas reales correctas.`);
+}
+
+for (const route of ['/admin', '/admin-images']) {
+  const response = await fetchPreview(preview + route);
+  const csp = response.headers.get('content-security-policy') || '';
+  if (!response.ok || !(response.headers.get('content-type') || '').includes('text/html')) {
+    throw new Error(`${route}: preview Admin inesperado HTTP ${response.status}.`);
+  }
+  const html = await response.text();
+  assertStrongCsp(csp, route);
+  assertCleanInternalRoutes(html, route);
+  if (!csp.includes('https://api.cloudinary.com')) {
+    throw new Error(`${route}: la biblioteca Admin necesita el origen de upload de Cloudinary.`);
+  }
+  if (csp.includes("script-src-attr 'unsafe-inline'")) {
+    throw new Error(`${route}: Admin no debe reabrir handlers inline globalmente.`);
+  }
+  const expectedPolicy = policies.get(route);
+  if (!expectedPolicy || !csp.includes(expectedPolicy)) {
+    throw new Error(`${route}: la Pages Function no entregó la CSP Admin específica generada por este commit.`);
+  }
+  console.log(`OK — ${preview}${route} — CSP Admin específica con upload aislado.`);
 }
 
 execFileSync(process.execPath, ['scripts/auditar-shopify-redirects.mjs'], {
@@ -173,4 +208,4 @@ execFileSync(process.execPath, ['scripts/auditar-shopify-redirects.mjs'], {
   env: { ...process.env, TINTIN_MIGRATION_ORIGIN: preview }
 });
 
-console.log(`\nGate Cloudflare aprobado para ${preview}: headers, rutas limpias y migración Shopify.`);
+console.log(`\nGate Cloudflare aprobado para ${preview}: fallback seguro, Admin aislado, rutas limpias y migración Shopify.`);
