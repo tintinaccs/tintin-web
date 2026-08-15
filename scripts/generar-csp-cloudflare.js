@@ -26,7 +26,6 @@ const publicOrigin = String(process.env.TINTIN_PUBLIC_ORIGIN || publicSite.origi
 const headersPath = path.join(root, '_headers');
 const startMarker = '# CSP_ROUTE_POLICIES_START';
 const endMarker = '# CSP_ROUTE_POLICIES_END';
-const globalPolicy = "object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests";
 const baseScriptOrigins = ['https://*.gstatic.com', 'https://*.google.com', 'https://www.googletagmanager.com'];
 const baseConnectOrigins = [
   'https://*.googleapis.com',
@@ -36,7 +35,40 @@ const baseConnectOrigins = [
   'https://*.google-analytics.com',
   'https://*.analytics.google.com'
 ];
+const globalScriptOrigins = [...baseScriptOrigins, 'https://unpkg.com'];
+const globalConnectOrigins = [...baseConnectOrigins, 'https://api.cloudinary.com'];
+const frameOrigins = [
+  publicOrigin,
+  'https://*.google.com',
+  'https://*.gstatic.com',
+  'https://www.youtube.com',
+  'https://www.youtube-nocookie.com',
+  'https://player.vimeo.com'
+];
 const CLOUDINARY_UPLOAD_PAGES = new Set(['admin.html', 'admin-images.html']);
+
+// Cloudflare Pages puede resolver una URL limpia hacia su asset .html y
+// terminar aplicando únicamente el bloque wildcard de _headers. Por eso el
+// wildcard DEBE ser funcional por sí solo. Conserva unsafe-inline solo como
+// fallback de compatibilidad; las políticas específicas de cada página que
+// aparecen debajo vuelven a restringir scripts/handlers mediante hashes.
+const globalPolicy = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline' ${globalScriptOrigins.join(' ')}`,
+  "script-src-attr 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline' https://unpkg.com",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' data:",
+  `connect-src 'self' ${globalConnectOrigins.join(' ')}`,
+  `frame-src 'self' ${frameOrigins.join(' ')}`,
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self'",
+  "manifest-src 'self'",
+  "worker-src 'self' blob:",
+  "upgrade-insecure-requests"
+].join('; ') + ';';
 
 const VISUAL_BUILDER_PREVIEWABLE_PAGES = new Set([
   'index.html', 'about.html', 'catalogo.html', 'collections.html',
@@ -116,7 +148,7 @@ function pagePolicy(file) {
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
     `connect-src 'self' ${connects.join(' ')}`,
-    `frame-src 'self' ${publicOrigin} https://*.google.com https://*.gstatic.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com`,
+    `frame-src 'self' ${frameOrigins.join(' ')}`,
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
@@ -157,8 +189,8 @@ if (checkMode) {
     console.error('ERROR — _headers no coincide con las CSP por ruta generadas. Ejecutá npm run build:csp.');
     process.exit(1);
   }
-  console.log(`OK — CSP reproducible; ${handlerHashes.length} handler(s) inline autorizados por hash, sin script-src-attr unsafe-inline.`);
+  console.log(`OK — CSP reproducible; fallback global completo + ${handlerHashes.length} handler(s) inline restringidos por hash en CSP por página.`);
 } else {
   fs.writeFileSync(headersPath, expected, 'utf8');
-  console.log(`CSP generada: ${handlerHashes.length} handler(s) heredados autorizados por hash.`);
+  console.log(`CSP generada: fallback global completo; ${handlerHashes.length} handler(s) heredados autorizados por hash en políticas por página.`);
 }
