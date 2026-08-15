@@ -1,5 +1,5 @@
-import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260814-social-notifications-1';
-import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260814-social-notifications-1';
+import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260815-prelaunch-cache-1';
+import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260815-prelaunch-cache-1';
 import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20260814-social-notifications-1';
 import { renderSearchPanel } from './compartido/panel-busqueda.js';
 import { renderCartDrawer } from './compartido/panel-carrito.js';
@@ -11,7 +11,7 @@ import { ensureNavigationAssets } from './compartido/recursos-navegacion.js';
 import { loadSharedRuntime } from './compartido/carga-navegacion.js';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
-import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260811-cls-header-reserve-1';
+import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260815-prelaunch-cache-1';
 import { applyGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20260810-global-studio-9';
 
 const LEGACY_SHELL_IDS = Object.freeze([
