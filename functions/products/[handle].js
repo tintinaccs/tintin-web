@@ -1,15 +1,59 @@
 import {
+  decodeFirestoreFields,
   firestoreAdminFindFirstByFields,
-  firestoreAdminGet
+  firestoreAdminGet,
+  firestoreAdminListAll
 } from '../../cloudflare/firebase-admin-ligero.js';
+
+let legacyFallbackMapPromise = null;
 
 function safeHandle(value) {
   const handle = String(value || '').trim().toLowerCase();
   return /^[a-z0-9][a-z0-9-]{0,179}$/.test(handle) ? handle : '';
 }
 
+function slugify(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 180);
+}
+
 function documentId(document) {
   return String(document?.name || '').split('/').pop() || '';
+}
+
+async function legacyFallbackMap(env) {
+  if (!legacyFallbackMapPromise) {
+    legacyFallbackMapPromise = firestoreAdminListAll(env, 'products', 1000)
+      .then(documents => {
+        const map = new Map();
+        for (const document of documents) {
+          const id = documentId(document);
+          if (!id) continue;
+          const data = decodeFirestoreFields(document?.fields || {});
+          const keys = [
+            data.handle,
+            data.Handle,
+            data.slug,
+            data.shopifyHandle,
+            data.name,
+            data.title,
+            data.Title
+          ].map(slugify).filter(Boolean);
+          keys.forEach(key => { if (!map.has(key)) map.set(key, document); });
+        }
+        return map;
+      })
+      .catch(error => {
+        legacyFallbackMapPromise = null;
+        throw error;
+      });
+  }
+  return legacyFallbackMapPromise;
 }
 
 function permanentRedirect(request, path) {
@@ -33,10 +77,8 @@ export async function onRequest({ request, env, params }) {
   if (!handle) return new Response('Producto no encontrado', { status: 404, headers: { 'cache-control': 'no-store' } });
 
   try {
-    // Algunos catálogos importados usan el handle como ID. Esa ruta evita una
-    // consulta adicional; si no coincide, se buscan los nombres históricos
-    // de campo usados por exportaciones Shopify y normalizaciones anteriores.
     let document = await firestoreAdminGet(env, `products/${handle}`);
+
     if (!document) {
       document = await firestoreAdminFindFirstByFields(
         env,
@@ -44,6 +86,10 @@ export async function onRequest({ request, env, params }) {
         ['handle', 'Handle', 'slug', 'shopifyHandle'],
         handle
       );
+    }
+
+    if (!document) {
+      document = (await legacyFallbackMap(env)).get(handle) || null;
     }
 
     const id = documentId(document);
