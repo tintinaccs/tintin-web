@@ -48,9 +48,11 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: node --test tests/*/*.test.mjs
+      - name: Construir primero el mismo artefacto que se publica
+        run: npm run build:pages
+      - name: Ejecutar regresión sobre artefactos generados vigentes
+        run: node --test tests/*/*.test.mjs
       - run: npm run audit:final
-      - run: npm run build:pages
 
   ui:
     name: Responsive, accesibilidad y rendimiento
