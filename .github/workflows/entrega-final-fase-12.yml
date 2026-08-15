@@ -71,12 +71,13 @@ jobs:
       - name: Verificar Actions soportadas
         run: node scripts/auditar-github-actions-soportadas.mjs
 
-      - name: Regenerar manifiesto diagnóstico
+      - name: Construir el artefacto exacto de Pages
         shell: bash
         run: |
-          npm run build:diagnostics
+          npm run build:pages
           mkdir -p artifacts
           cp diagnostic-manifest.json artifacts/diagnostic-manifest.json
+          cp config/csp-runtime.json artifacts/csp-runtime.json
 
       - name: Instalar Chromium
         run: npx playwright install --with-deps chromium
