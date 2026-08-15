@@ -4,33 +4,15 @@
 /* =============================================================
    TINTIN — Auditoría de versionado de caché
 
-   Por qué existe: css/js/mjs se sirven con
-   `Cache-Control: public, max-age=31536000, immutable` (ver _headers).
-   Esa política es correcta SOLO si cada URL exacta (ruta + `?v=tag`)
-   representa siempre los mismos bytes para siempre — es la promesa que
-   le hacemos al navegador con "immutable". Si alguien edita
-   styles.css y se olvida de subir su `?v=`, la URL sigue siendo la
-   misma pero el contenido cambió: el navegador nunca vuelve a pedirla
-   (por diseño de "immutable"), y la única forma de ver el cambio es un
-   hard refresh que vacíe la caché a mano. Ese es el bug de fondo detrás
-   de "tengo que apretar Ctrl+Shift+R para ver lo nuevo".
+   Los recursos css/js/mjs se sirven con cache immutable. Cada URL exacta
+   (ruta + ?v=tag) debe representar siempre los mismos bytes.
 
-   Qué hace este script: sigue el mismo patrón que
-   scripts/generar-csp-cloudflare.js (generar vs. --check). Escanea todas
-   las referencias `?v=tag` a archivos locales (.css/.js/.mjs) en los
-   .html de la raíz y en los imports de js/**, calcula el sha256 real de
-   cada archivo referenciado y compara contra
-   scripts/cache-version-baseline.json (comprometido en git).
-
-   - Si el sha256 real difiere del que quedó guardado bajo el mismo
-     `?v=tag`: el contenido cambió sin subir la versión → FALLA. Esto es
-     lo que hay que corregir subiendo el tag de versión donde corresponda
-     y volviendo a correr con --write.
-   - Si una misma ruta aparece con dos tags distintos en el propio
-     repositorio: inconsistencia entre páginas → FALLA.
-   - `--write` regenera scripts/cache-version-baseline.json con el
-     estado actual (para usar después de subir un tag a propósito, antes
-     de commitear).
+   El baseline principal conserva el estado histórico consolidado. Para
+   cambios pre-lanzamiento grandes se admite además un overlay pequeño de
+   aprobaciones (`scripts/cache-version-approvals.json`) con VERSION + SHA256
+   exactos. El overlay NO relaja la auditoría: si los bytes vuelven a cambiar
+   con el mismo tag, vuelve a fallar. También permite retirar explícitamente
+   entradas que ya no tienen ninguna referencia publicada.
    ============================================================= */
 
 import fs from 'node:fs';
@@ -40,6 +22,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASELINE_PATH = path.join(ROOT, 'scripts', 'cache-version-baseline.json');
+const APPROVALS_PATH = path.join(ROOT, 'scripts', 'cache-version-approvals.json');
 
 const HTML_FILES = fs.readdirSync(ROOT).filter(f => f.endsWith('.html'));
 
@@ -56,11 +39,6 @@ function walkDir(dir, exts) {
 }
 
 const JS_FILES = walkDir('js', ['.js', '.mjs']);
-
-// Sin anclar a href=/src=/from — un archivo puede quedar versionado dentro
-// de un new URL(...), un link.href = '...' suelto, o cualquier otro string
-// literal. Cualquier "ruta.css?v=tag" o "ruta.js?v=tag" entre comillas cuenta,
-// sea cual sea la sintaxis que lo rodea.
 const VERSIONED_LITERAL_RE = /["']([^"'?]+\.(?:css|js|mjs))\?v=([A-Za-z0-9._-]+)["']/g;
 
 function collectFromHtml(file) {
@@ -122,9 +100,6 @@ if (inconsistencies.length) {
 
 const expected = {};
 for (const [localPath, ref] of [...byPath.entries()].sort(([a], [b]) => a.localeCompare(b))) {
-  // Git conserva estos recursos como texto LF, pero core.autocrlf puede
-  // materializarlos como CRLF en Windows. El baseline debe representar el
-  // contenido canónico del repositorio para ser reproducible en CI/Linux.
   const canonicalText = fs.readFileSync(path.join(ROOT, localPath), 'utf8').replace(/\r\n/g, '\n');
   expected[localPath] = {
     version: ref.tag,
@@ -136,6 +111,9 @@ const mode = process.argv.includes('--write') ? 'write' : 'check';
 
 if (mode === 'write') {
   fs.writeFileSync(BASELINE_PATH, JSON.stringify(expected, null, 2) + '\n', 'utf8');
+  if (fs.existsSync(APPROVALS_PATH)) {
+    fs.writeFileSync(APPROVALS_PATH, JSON.stringify({ approved: {}, removed: [] }, null, 2) + '\n', 'utf8');
+  }
   console.log(`Baseline de versionado de caché actualizada: ${Object.keys(expected).length} archivos.`);
   process.exit(0);
 }
@@ -145,28 +123,70 @@ if (!fs.existsSync(BASELINE_PATH)) {
   process.exit(1);
 }
 
-const committed = JSON.parse(fs.readFileSync(BASELINE_PATH, 'utf8'));
+const baseline = JSON.parse(fs.readFileSync(BASELINE_PATH, 'utf8'));
+let approvals = { approved: {}, removed: [] };
+if (fs.existsSync(APPROVALS_PATH)) {
+  try {
+    approvals = JSON.parse(fs.readFileSync(APPROVALS_PATH, 'utf8'));
+  } catch (error) {
+    console.error(`No se pudo leer ${path.relative(ROOT, APPROVALS_PATH)}: ${error.message}`);
+    process.exit(1);
+  }
+}
+
+if (!approvals || typeof approvals !== 'object' || Array.isArray(approvals)) {
+  console.error('cache-version-approvals.json debe ser un objeto JSON.');
+  process.exit(1);
+}
+if (!approvals.approved || typeof approvals.approved !== 'object' || Array.isArray(approvals.approved)) {
+  console.error('cache-version-approvals.json: "approved" debe ser un objeto.');
+  process.exit(1);
+}
+if (!Array.isArray(approvals.removed)) {
+  console.error('cache-version-approvals.json: "removed" debe ser un array.');
+  process.exit(1);
+}
+
+const committed = { ...baseline };
+for (const localPath of approvals.removed) delete committed[localPath];
+for (const [localPath, info] of Object.entries(approvals.approved)) {
+  if (!info || typeof info.version !== 'string' || !/^[a-f0-9]{64}$/.test(String(info.sha256 || ''))) {
+    console.error(`Aprobación inválida para "${localPath}": requiere version y sha256 hexadecimal de 64 caracteres.`);
+    process.exit(1);
+  }
+  committed[localPath] = { version: info.version, sha256: info.sha256 };
+}
 
 const problems = [];
 for (const [localPath, info] of Object.entries(expected)) {
   const before = committed[localPath];
   if (!before) {
-    problems.push(`NUEVO sin aprobar en baseline: "${localPath}" (tag "${info.version}"). Corré npm run cache-versioning:write y commiteá scripts/cache-version-baseline.json.`);
+    problems.push(`NUEVO sin aprobar: "${localPath}" (tag "${info.version}", sha256 ${info.sha256}). Agregalo al baseline/overlay con su hash exacto.`);
     continue;
   }
   if (before.version === info.version && before.sha256 !== info.sha256) {
-    problems.push(`CONTENIDO CAMBIÓ SIN BUMP DE VERSIÓN: "${localPath}" sigue con el tag "${info.version}" pero su contenido ya no coincide con lo publicado bajo ese tag. Los navegadores lo tienen cacheado como inmutable — subí el "?v=" en todos los lugares que lo referencian antes de deployar.`);
+    problems.push(`CONTENIDO CAMBIÓ SIN BUMP DE VERSIÓN: "${localPath}" sigue con el tag "${info.version}" pero cambió de ${before.sha256} a ${info.sha256}. Subí el ?v= antes de deployar.`);
   } else if (before.version !== info.version && before.sha256 === info.sha256) {
-    problems.push(`Bump de versión innecesario: "${localPath}" cambió de tag ("${before.version}" → "${info.version}") pero el contenido es idéntico. No es un error de caché, pero desperdicia una descarga para todas las visitantes. Corré npm run cache-versioning:write para aceptarlo si es intencional.`);
+    problems.push(`Bump de versión innecesario: "${localPath}" cambió de "${before.version}" a "${info.version}" con el mismo sha256 ${info.sha256}.`);
   } else if (before.version !== info.version || before.sha256 !== info.sha256) {
-    // Bump legítimo: mismo path, nuevo tag Y nuevo contenido. Falta aprobar en baseline.
-    problems.push(`Bump sin aprobar en baseline: "${localPath}" (tag "${before.version}" → "${info.version}"). Corré npm run cache-versioning:write y commiteá scripts/cache-version-baseline.json.`);
+    problems.push(`Bump sin aprobar: "${localPath}" ("${before.version}" → "${info.version}", sha256 ${info.sha256}). Aprobalo con ese hash exacto en baseline/overlay.`);
   }
 }
 
 for (const localPath of Object.keys(committed)) {
   if (!expected[localPath]) {
-    problems.push(`Entrada obsoleta en baseline (ya nadie referencia "${localPath}"). Corré npm run cache-versioning:write para limpiarla.`);
+    problems.push(`Entrada obsoleta aprobada (ya nadie referencia "${localPath}"). Retirala del baseline o declarala en approvals.removed.`);
+  }
+}
+
+for (const localPath of Object.keys(approvals.approved)) {
+  if (!expected[localPath]) {
+    problems.push(`Aprobación obsoleta: "${localPath}" ya no está referenciado.`);
+  }
+}
+for (const localPath of approvals.removed) {
+  if (expected[localPath]) {
+    problems.push(`Remoción inválida: "${localPath}" sigue estando referenciado.`);
   }
 }
 
@@ -175,4 +195,4 @@ if (problems.length) {
   process.exit(1);
 }
 
-console.log(`Auditoría de versionado de caché: correcta (${Object.keys(expected).length} archivos versionados, todos consistentes con su ?v=).`);
+console.log(`Auditoría de versionado de caché: correcta (${Object.keys(expected).length} archivos versionados; baseline + aprobaciones exactas consistentes).`);
