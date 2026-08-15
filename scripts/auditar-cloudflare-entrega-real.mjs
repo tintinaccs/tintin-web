@@ -4,10 +4,17 @@ import { execFileSync } from 'node:child_process';
 const repository = String(process.env.GITHUB_REPOSITORY || '').trim();
 const sha = String(process.env.GITHUB_SHA || '').trim();
 const timeoutMs = Number(process.env.TINTIN_CLOUDFLARE_GATE_TIMEOUT_MS || 15000);
-const pollAttempts = Number(process.env.TINTIN_CLOUDFLARE_GATE_ATTEMPTS || 30);
+const pollAttempts = Number(process.env.TINTIN_CLOUDFLARE_GATE_ATTEMPTS || 90);
+const pollIntervalMs = Number(process.env.TINTIN_CLOUDFLARE_GATE_POLL_MS || 10000);
 
 if (!repository || !sha) {
   throw new Error('Faltan GITHUB_REPOSITORY o GITHUB_SHA para auditar Cloudflare.');
+}
+if (!Number.isFinite(pollAttempts) || pollAttempts < 1 || pollAttempts > 180) {
+  throw new Error('TINTIN_CLOUDFLARE_GATE_ATTEMPTS debe estar entre 1 y 180.');
+}
+if (!Number.isFinite(pollIntervalMs) || pollIntervalMs < 1000 || pollIntervalMs > 60000) {
+  throw new Error('TINTIN_CLOUDFLARE_GATE_POLL_MS debe estar entre 1000 y 60000 ms.');
 }
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -17,7 +24,7 @@ async function githubJson(url) {
     headers: {
       accept: 'application/vnd.github+json',
       'x-github-api-version': '2022-11-28',
-      'user-agent': 'TintinCloudflareDeliveryGate/2.1'
+      'user-agent': 'TintinCloudflareDeliveryGate/2.2'
     },
     signal: AbortSignal.timeout(timeoutMs)
   });
@@ -34,6 +41,9 @@ function previewUrlFromCheck(check) {
 async function waitForCloudflarePreview() {
   const endpoint = `https://api.github.com/repos/${repository}/commits/${sha}/check-runs?per_page=100`;
   let lastState = 'sin check';
+  let lastCheckId = '';
+  const startedAt = Date.now();
+
   for (let attempt = 1; attempt <= pollAttempts; attempt += 1) {
     const data = await githubJson(endpoint);
     const checks = Array.isArray(data?.check_runs) ? data.check_runs : [];
@@ -42,16 +52,28 @@ async function waitForCloudflarePreview() {
       .sort((a, b) => new Date(b?.started_at || 0) - new Date(a?.started_at || 0));
 
     const success = cloudflare.find(item => item.status === 'completed' && item.conclusion === 'success' && previewUrlFromCheck(item));
-    if (success) return previewUrlFromCheck(success).replace(/\/$/, '');
+    if (success) {
+      const elapsedSeconds = Math.round((Date.now() - startedAt) / 1000);
+      console.log(`Cloudflare Pages publicó el preview del SHA ${sha.slice(0, 12)} en ${elapsedSeconds}s.`);
+      return previewUrlFromCheck(success).replace(/\/$/, '');
+    }
 
     const failed = cloudflare.find(item => item.status === 'completed' && item.conclusion && item.conclusion !== 'success');
-    if (failed) throw new Error(`Cloudflare Pages terminó en ${failed.conclusion}; no se puede aprobar la entrega real.`);
+    if (failed) {
+      throw new Error(`Cloudflare Pages terminó en ${failed.conclusion}; no se puede aprobar la entrega real.`);
+    }
 
-    if (cloudflare[0]) lastState = `${cloudflare[0].status}/${cloudflare[0].conclusion || 'pendiente'}`;
-    console.log(`Esperando preview de Cloudflare (${attempt}/${pollAttempts}) — ${lastState}`);
-    await sleep(10000);
+    if (cloudflare[0]) {
+      lastCheckId = String(cloudflare[0].id || '');
+      lastState = `${cloudflare[0].status}/${cloudflare[0].conclusion || 'pendiente'}`;
+    }
+    const elapsedSeconds = Math.round((Date.now() - startedAt) / 1000);
+    console.log(`Esperando preview de Cloudflare (${attempt}/${pollAttempts}) — ${lastState}${lastCheckId ? ` check=${lastCheckId}` : ''} — ${elapsedSeconds}s`);
+    if (attempt < pollAttempts) await sleep(pollIntervalMs);
   }
-  throw new Error('Cloudflare Pages no publicó un preview verificable dentro del límite del gate.');
+
+  const totalSeconds = Math.round((Date.now() - startedAt) / 1000);
+  throw new Error(`Cloudflare Pages no publicó un preview verificable del SHA ${sha.slice(0, 12)} dentro de ${totalSeconds}s. Último estado: ${lastState}.`);
 }
 
 function readRoutePolicies() {
@@ -73,7 +95,7 @@ async function fetchPreview(url) {
     try {
       const response = await fetch(url, {
         redirect: 'follow',
-        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/2.1' },
+        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/2.2' },
         signal: AbortSignal.timeout(timeoutMs)
       });
       if (response.status >= 500) throw new Error(`HTTP ${response.status}`);
