@@ -8,10 +8,14 @@ on:
       - 'firestore.rules'
       - '_headers'
       - 'config/csp-runtime.json'
+      - 'config/csp-runtime.js'
       - 'scripts/generar-csp-cloudflare.js'
       - 'cloudflare/servir-admin-con-csp.js'
+      - 'functions/_middleware.js'
+      - 'functions/__/auth/**'
       - 'functions/admin.js'
       - 'functions/admin-images.js'
+      - 'tests/security/**'
       - 'apps-script/Seguridad.gs'
       - 'apps-script/CrearPedido.gs'
       - 'js/create-order-client.js'
@@ -29,10 +33,14 @@ on:
       - 'firestore.rules'
       - '_headers'
       - 'config/csp-runtime.json'
+      - 'config/csp-runtime.js'
       - 'scripts/generar-csp-cloudflare.js'
       - 'cloudflare/servir-admin-con-csp.js'
+      - 'functions/_middleware.js'
+      - 'functions/__/auth/**'
       - 'functions/admin.js'
       - 'functions/admin-images.js'
+      - 'tests/security/**'
       - 'apps-script/Seguridad.gs'
       - 'apps-script/CrearPedido.gs'
       - 'js/create-order-client.js'
@@ -50,7 +58,7 @@ permissions:
 
 concurrency:
   group: tintin-security-generated-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   audit:

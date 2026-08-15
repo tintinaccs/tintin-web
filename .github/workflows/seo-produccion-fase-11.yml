@@ -8,6 +8,8 @@ on:
       - 'tienda.js'
       - 'js/**'
       - 'functions/**'
+      - 'config/csp-runtime.json'
+      - 'config/csp-runtime.js'
       - '_headers'
       - '_routes.json'
       - 'manifest.json'
@@ -29,6 +31,10 @@ on:
 permissions:
   contents: read
   checks: read
+
+concurrency:
+  group: phase11-${{ github.event.pull_request.number || github.ref }}-${{ github.event_name }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   seo-contracts:

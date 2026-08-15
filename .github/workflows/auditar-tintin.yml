@@ -18,6 +18,10 @@ permissions:
   contents: read
   checks: read
 
+concurrency:
+  group: repository-audit-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   audit:
     name: Repository audit
