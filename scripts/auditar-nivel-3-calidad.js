@@ -242,7 +242,7 @@ check(
 );
 check(
   'La integración final verifica SEO, PWA y fuentes únicas',
-  finalIntegration.includes('robots bloquea páginas privadas y declara sitemap') &&
+  finalIntegration.includes('robots bloquea páginas privadas limpias y legacy y declara sitemap') &&
     finalIntegration.includes('manifest es válido y sus iconos existen') &&
     finalIntegration.includes('Firebase se inicializa únicamente en js/core/firebase/firebase.js') &&
     finalIntegration.includes('Configuración general pública tiene una sola suscripción compartida')
