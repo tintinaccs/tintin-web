@@ -6,6 +6,7 @@ const path = require('path');
 const root = path.resolve(__dirname, '..');
 const checkOnly = process.argv.includes('--check');
 const configPath = path.join(root, 'config/public-site.json');
+const selfPath = path.resolve(__filename);
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 const origin = String(process.env.TINTIN_PUBLIC_ORIGIN || config.origin || '').replace(/\/$/, '');
 const hostname = new URL(origin).hostname;
@@ -45,7 +46,7 @@ const runtimeFiles = [
 ];
 const explicitFiles = ['_headers', 'robots.txt'].map(file => path.join(root, file)).filter(fs.existsSync);
 const files = [...new Set([...runtimeFiles, ...explicitFiles])]
-  .filter(file => path.resolve(file) !== path.resolve(configPath));
+  .filter(file => path.resolve(file) !== path.resolve(configPath) && path.resolve(file) !== selfPath);
 
 function syncText(file, text) {
   let output = text;
