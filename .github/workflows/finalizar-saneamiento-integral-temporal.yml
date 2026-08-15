@@ -148,6 +148,16 @@ jobs:
               .replace('Una cuenta con blocked=true debe cerrar sesión e ir a login.html?blocked=1.', 'Una cuenta con blocked=true debe cerrar sesión e ir a /login?blocked=1.');
             fs.writeFileSync(file, source);
           }
+
+          {
+            const file = 'scripts/auditar-admin-usuarios-roles.js';
+            let source = fs.readFileSync(file, 'utf8');
+            const from = String.raw`window\.location\.href = 'perfil\.html'`;
+            const to = String.raw`window\.location\.href = '\/perfil'`;
+            if (source.includes(from)) source = source.replace(from, to);
+            if (!source.includes(to)) throw new Error('No se pudo adaptar el acceso por rol a /perfil.');
+            fs.writeFileSync(file, source);
+          }
           NODE
 
       - name: Sincronizar origen, rutas, caché, CSP y diagnósticos
