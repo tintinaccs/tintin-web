@@ -31,31 +31,18 @@ function inlineHashes(file) {
   return [...hashes].sort();
 }
 
-function allInlineHashes() {
-  const hashes = new Set();
-  for (const file of fs.readdirSync(root).filter(name => name.endsWith('.html'))) {
-    inlineHashes(file).forEach(hash => hashes.add(hash));
-  }
-  return [...hashes].sort();
-}
-
 function globalPolicy() {
-  const hashes = allInlineHashes();
+  // La regla /* coincide también con cada ruta específica. Cloudflare combina
+  // valores repetidos del mismo header; por eso una script-src global sin los
+  // hashes exactos intersectaría la CSP por página y bloquearía scripts inline
+  // legítimos. Mantener aquí únicamente las protecciones estructurales evita
+  // esa intersección, protege cualquier ruta no catalogada y mantiene cada
+  // línea muy por debajo del límite de 2.000 caracteres de Pages. Las páginas
+  // HTML reciben abajo su CSP completa y estricta, generada por ruta.
   return [
-    "default-src 'self'",
-    `script-src 'self'${hashes.length ? ` ${hashes.join(' ')}` : ''} ${scriptOrigins}`,
-    "script-src-attr 'unsafe-inline'",
-    "style-src 'self' 'unsafe-inline' https://unpkg.com",
-    "img-src 'self' data: blob: https:",
-    "font-src 'self' data:",
-    `connect-src 'self' ${connectOrigins}`,
-    `frame-src 'self' ${publicOrigin} https://*.google.com https://*.gstatic.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com`,
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-    "frame-ancestors 'self'",
-    "manifest-src 'self'",
-    "worker-src 'self' blob:",
     "upgrade-insecure-requests"
   ].join('; ') + ';';
 }
