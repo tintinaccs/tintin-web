@@ -103,6 +103,26 @@ const scriptAttrDirective = handlerHashes.length
   ? `script-src-attr 'unsafe-hashes' ${handlerHashes.join(' ')}`
   : "script-src-attr 'none'";
 
+function staticFallbackPolicy() {
+  return [
+    "default-src 'self'",
+    `script-src 'self' ${globalScriptOrigins.join(' ')}`,
+    "script-src-attr 'none'",
+    "style-src 'self' 'unsafe-inline' https://unpkg.com",
+    "img-src 'self' data: blob: https:",
+    "font-src 'self' data:",
+    `connect-src 'self' ${baseConnectOrigins.join(' ')}`,
+    `frame-src 'self' ${frameOrigins.join(' ')}`,
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'self'",
+    "manifest-src 'self'",
+    "worker-src 'self' blob:",
+    "upgrade-insecure-requests"
+  ].join('; ') + ';';
+}
+
 function publicPolicy() {
   return [
     "default-src 'self'",
@@ -183,8 +203,9 @@ function expectedHeaders() {
   headers = headers.replace(/^\s+Content-Security-Policy:.*(?:\n|$)/gm, '');
   headers = headers.replace(
     /^# TINTIN — seguridad y caché para Cloudflare Pages[\s\S]*?\n\n(?=\/\*)/,
-    '# TINTIN — seguridad y caché para Cloudflare Pages\n# CSP de documentos HTML se entrega desde functions/_middleware.js.\n# _headers conserva únicamente reglas estáticas cortas y caché.\n\n'
+    '# TINTIN — seguridad y caché para Cloudflare Pages\n# CSP completa de HTML se entrega desde functions/_middleware.js.\n# _headers conserva una CSP fallback corta para respuestas estáticas/404.\n\n'
   );
+  headers = headers.replace(/\/\*\n/, `/*\n  Content-Security-Policy: ${staticFallbackPolicy()}\n`);
   headers = headers.replace(/\n{3,}/g, '\n\n');
   const oversized = headers.split('\n').filter(line => line.length > 2000);
   if (oversized.length) {
@@ -201,6 +222,11 @@ function validateRuntimePolicies(policies) {
     if (policy.length > 120000) throw new Error(`CSP runtime demasiado grande para ${route}: ${policy.length} caracteres.`);
   }
   if (policies.public.length > 120000) throw new Error(`CSP pública demasiado grande: ${policies.public.length} caracteres.`);
+  const fallback = staticFallbackPolicy();
+  if (fallback.length > 1900) throw new Error(`CSP fallback estática demasiado grande: ${fallback.length} caracteres.`);
+  if (fallback.includes('https://api.cloudinary.com') || fallback.includes("script-src 'self' 'unsafe-inline'")) {
+    throw new Error('CSP fallback estática abrió capacidades que solo corresponden al runtime específico.');
+  }
 }
 
 function runtimeModuleSource(policies) {
@@ -231,10 +257,10 @@ if (checkMode) {
     failed = true;
   }
   if (failed) process.exit(1);
-  console.log(`OK — CSP runtime reproducible; ${Object.keys(policies.routes).length} rutas HTML y ${handlerHashes.length} handler(s) fijados por hash.`);
+  console.log(`OK — CSP runtime reproducible; ${Object.keys(policies.routes).length} rutas HTML, fallback estático corto y ${handlerHashes.length} handler(s) fijados por hash.`);
 } else {
   fs.writeFileSync(headersPath, expected, 'utf8');
   fs.writeFileSync(runtimePoliciesPath, runtimeExpected, 'utf8');
   fs.writeFileSync(runtimeModulePath, runtimeModuleExpected, 'utf8');
-  console.log(`CSP runtime generada para ${Object.keys(policies.routes).length} rutas HTML; _headers queda bajo el límite de Pages.`);
+  console.log(`CSP runtime generada para ${Object.keys(policies.routes).length} rutas HTML; fallback estático protegido y _headers bajo el límite de Pages.`);
 }
