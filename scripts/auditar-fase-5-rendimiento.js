@@ -54,10 +54,13 @@ check('tienda.js optimizado por Cloudinary tiene cache bust nuevo', staleScript.
 check('Montserrat italic conserva el preload contractual', italicPreloads.length === html.filter(([, source]) => source.includes('montserrat-latin-wght-normal.woff2\" as=\"font\"')).length, html.filter(([file, source]) => source.includes('montserrat-latin-wght-normal.woff2\" as=\"font\"') && !source.includes('montserrat-latin-wght-italic.woff2\" as=\"font\"')).map(([file]) => file).join(', '));
 
 const perfHelpers = read('tests/performance/_helpers.js');
+const publicOrigins = JSON.parse(read('config/origenes-tintin.json'));
 check(
-  'La medición apunta al origen canónico de Cloudflare',
-  perfHelpers.includes('https://tintinaccesorios.pages.dev'),
-  'Las pruebas no deben medir la redirección antigua de GitHub Pages.'
+  'La medición apunta al origen canónico centralizado de Cloudflare',
+  publicOrigins.publicOrigin === 'https://tintinaccesorios.pages.dev' &&
+    perfHelpers.includes("require('../../config/origenes-tintin.json')") &&
+    perfHelpers.includes('process.env.PERF_BASE_URL || publicOrigin'),
+  'Las pruebas deben tomar el origen de config/origenes-tintin.json y permitir PERF_BASE_URL únicamente para medir el árbol local exacto en CI.'
 );
 check(
   'Web Vitals incluye DCL, INP, transferencias, duplicados y lecturas',
