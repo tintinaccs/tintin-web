@@ -24,6 +24,7 @@ execFileSync(process.execPath, [
 const publicSite = JSON.parse(fs.readFileSync(path.join(root, 'config/public-site.json'), 'utf8'));
 const publicOrigin = String(process.env.TINTIN_PUBLIC_ORIGIN || publicSite.origin || '').replace(/\/$/, '');
 const headersPath = path.join(root, '_headers');
+const runtimePoliciesPath = path.join(root, 'config/csp-runtime.json');
 const startMarker = '# CSP_ROUTE_POLICIES_START';
 const endMarker = '# CSP_ROUTE_POLICIES_END';
 const baseScriptOrigins = ['https://*.gstatic.com', 'https://*.google.com', 'https://www.googletagmanager.com'];
@@ -36,7 +37,7 @@ const baseConnectOrigins = [
   'https://*.analytics.google.com'
 ];
 const globalScriptOrigins = [...baseScriptOrigins, 'https://unpkg.com'];
-const globalConnectOrigins = [...baseConnectOrigins, 'https://api.cloudinary.com'];
+const globalConnectOrigins = [...baseConnectOrigins];
 const frameOrigins = [
   publicOrigin,
   'https://*.google.com',
@@ -46,29 +47,6 @@ const frameOrigins = [
   'https://player.vimeo.com'
 ];
 const CLOUDINARY_UPLOAD_PAGES = new Set(['admin.html', 'admin-images.html']);
-
-// Cloudflare Pages puede resolver una URL limpia hacia su asset .html y
-// terminar aplicando únicamente el bloque wildcard de _headers. Por eso el
-// wildcard DEBE ser funcional por sí solo. Conserva unsafe-inline solo como
-// fallback de compatibilidad; las políticas específicas de cada página que
-// aparecen debajo vuelven a restringir scripts/handlers mediante hashes.
-const globalPolicy = [
-  "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' ${globalScriptOrigins.join(' ')}`,
-  "script-src-attr 'unsafe-inline'",
-  "style-src 'self' 'unsafe-inline' https://unpkg.com",
-  "img-src 'self' data: blob: https:",
-  "font-src 'self' data:",
-  `connect-src 'self' ${globalConnectOrigins.join(' ')}`,
-  `frame-src 'self' ${frameOrigins.join(' ')}`,
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "frame-ancestors 'self'",
-  "manifest-src 'self'",
-  "worker-src 'self' blob:",
-  "upgrade-insecure-requests"
-].join('; ') + ';';
 
 const VISUAL_BUILDER_PREVIEWABLE_PAGES = new Set([
   'index.html', 'about.html', 'catalogo.html', 'collections.html',
@@ -117,7 +95,48 @@ function eventHandlerHashes() {
   return [...values].map(sha256Source).sort();
 }
 
+function allInlineScriptHashes() {
+  const hashes = new Set();
+  for (const file of fs.readdirSync(root).filter(name => name.endsWith('.html')).sort()) {
+    for (const hash of inlineHashes(file)) hashes.add(hash);
+  }
+  return [...hashes].sort();
+}
+
 const handlerHashes = eventHandlerHashes();
+const globalInlineHashes = allInlineScriptHashes();
+
+function scriptAttrDirective() {
+  return handlerHashes.length
+    ? `script-src-attr 'unsafe-hashes' ${handlerHashes.join(' ')}`
+    : "script-src-attr 'none'";
+}
+
+// Cloudflare Pages puede resolver una URL limpia hacia su asset .html y
+// terminar aplicando únicamente el bloque wildcard de _headers. El wildcard
+// debe ser funcional por sí mismo, pero no por eso puede abrir unsafe-inline
+// ni Cloudinary upload a toda la tienda. Para compatibilidad incluye la unión
+// exacta de hashes de scripts/handlers realmente publicados; Admin recibe su
+// excepción de upload en la política por página y en su Pages Function.
+function globalPolicy() {
+  return [
+    "default-src 'self'",
+    `script-src 'self'${globalInlineHashes.length ? ` ${globalInlineHashes.join(' ')}` : ''} ${globalScriptOrigins.join(' ')}`,
+    scriptAttrDirective(),
+    "style-src 'self' 'unsafe-inline' https://unpkg.com",
+    "img-src 'self' data: blob: https:",
+    "font-src 'self' data:",
+    `connect-src 'self' ${globalConnectOrigins.join(' ')}`,
+    `frame-src 'self' ${frameOrigins.join(' ')}`,
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'self'",
+    "manifest-src 'self'",
+    "worker-src 'self' blob:",
+    "upgrade-insecure-requests"
+  ].join('; ') + ';';
+}
 
 function pageUsesUnpkg(file) {
   return fs.readFileSync(path.join(root, file), 'utf8').includes('https://unpkg.com/');
@@ -132,18 +151,13 @@ function pagePolicy(file) {
     scripts.push('https://unpkg.com');
     styles.push('https://unpkg.com');
   }
-  if (CLOUDINARY_UPLOAD_PAGES.has(file)) {
-    connects.push('https://api.cloudinary.com');
-  }
-  const scriptAttr = handlerHashes.length
-    ? `script-src-attr 'unsafe-hashes' ${handlerHashes.join(' ')}`
-    : "script-src-attr 'none'";
+  if (CLOUDINARY_UPLOAD_PAGES.has(file)) connects.push('https://api.cloudinary.com');
   const styleSrc = `style-src 'self' 'unsafe-inline'${styles.length ? ` ${styles.join(' ')}` : ''}`;
 
   return [
     "default-src 'self'",
     `script-src 'self'${hashes.length ? ` ${hashes.join(' ')}` : ''} ${scripts.join(' ')}`,
-    scriptAttr,
+    scriptAttrDirective(),
     styleSrc,
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
@@ -173,10 +187,18 @@ function generateRouteBlock() {
   return `${startMarker}\n# Generado por scripts/generar-csp-cloudflare.js; no editar a mano.\n${blocks.join('\n\n')}\n${endMarker}`;
 }
 
+function runtimePolicies() {
+  return {
+    generatedBy: 'scripts/generar-csp-cloudflare.js',
+    admin: pagePolicy('admin.html'),
+    adminImages: pagePolicy('admin-images.html')
+  };
+}
+
 function expectedHeaders() {
   let headers = fs.readFileSync(headersPath, 'utf8').replace(/\r\n?/g, '\n');
   headers = headers.replace(new RegExp(`${startMarker}[\\s\\S]*?${endMarker}\\n*`, 'g'), '');
-  headers = headers.replace(/^  Content-Security-Policy:.*$/m, `  Content-Security-Policy: ${globalPolicy}`);
+  headers = headers.replace(/^  Content-Security-Policy:.*$/m, `  Content-Security-Policy: ${globalPolicy()}`);
   const cacheRoot = '\n/\n  Cache-Control: no-cache, no-store, must-revalidate';
   if (!headers.includes(cacheRoot)) throw new Error('No se encontró el bloque de caché raíz en _headers.');
   return headers.replace(cacheRoot, `\n${generateRouteBlock()}\n${cacheRoot}`).replace(/\n{3,}/g, '\n\n');
@@ -184,13 +206,23 @@ function expectedHeaders() {
 
 const current = fs.readFileSync(headersPath, 'utf8').replace(/\r\n?/g, '\n');
 const expected = expectedHeaders();
+const runtimeExpected = JSON.stringify(runtimePolicies(), null, 2) + '\n';
+const runtimeCurrent = fs.existsSync(runtimePoliciesPath) ? fs.readFileSync(runtimePoliciesPath, 'utf8') : '';
+
 if (checkMode) {
+  let failed = false;
   if (current !== expected) {
     console.error('ERROR — _headers no coincide con las CSP por ruta generadas. Ejecutá npm run build:csp.');
-    process.exit(1);
+    failed = true;
   }
-  console.log(`OK — CSP reproducible; fallback global completo + ${handlerHashes.length} handler(s) inline restringidos por hash en CSP por página.`);
+  if (runtimeCurrent !== runtimeExpected) {
+    console.error('ERROR — config/csp-runtime.json no coincide con las políticas Admin generadas. Ejecutá npm run build:csp.');
+    failed = true;
+  }
+  if (failed) process.exit(1);
+  console.log(`OK — CSP reproducible; fallback global por hashes + ${handlerHashes.length} handler(s) inline restringidos por hash.`);
 } else {
   fs.writeFileSync(headersPath, expected, 'utf8');
-  console.log(`CSP generada: fallback global completo; ${handlerHashes.length} handler(s) heredados autorizados por hash en políticas por página.`);
+  fs.writeFileSync(runtimePoliciesPath, runtimeExpected, 'utf8');
+  console.log(`CSP generada: fallback global por hashes; Admin conserva upload Cloudinary solo en sus rutas.`);
 }
