@@ -28,6 +28,26 @@ const expectedPages = [
   'terminos.html'
 ];
 
+const CLEAN_ROUTE_FILES = new Map([
+  ['', 'index.html'],
+  ['about', 'about.html'],
+  ['admin', 'admin.html'],
+  ['admin-images', 'admin-images.html'],
+  ['cambios-devoluciones', 'cambios-devoluciones.html'],
+  ['catalogo', 'catalogo.html'],
+  ['checkout', 'checkout.html'],
+  ['collections', 'collections.html'],
+  ['contact', 'contact.html'],
+  ['envios', 'envios.html'],
+  ['login', 'login.html'],
+  ['nosotros', 'nosotros.html'],
+  ['perfil', 'perfil.html'],
+  ['preguntas-frecuentes', 'preguntas-frecuentes.html'],
+  ['privacidad', 'privacidad.html'],
+  ['product', 'product.html'],
+  ['terminos', 'terminos.html']
+]);
+
 const exists = relative => fs.existsSync(path.join(root, relative));
 const read = relative => fs.readFileSync(path.join(root, relative), 'utf8');
 
@@ -47,10 +67,18 @@ function isIgnoredReference(value) {
     /\$\{|\{\{|<%/.test(ref);
 }
 
+function cleanRouteTarget(value) {
+  const route = String(value || '').replace(/^\/+|\/+$/g, '');
+  return CLEAN_ROUTE_FILES.get(route) || null;
+}
+
 function resolveLocalReference(ownerFile, rawReference) {
   const clean = stripQueryAndHash(rawReference);
   if (!clean) return null;
-  if (clean.startsWith('/')) return clean.slice(1);
+  if (clean.startsWith('/')) {
+    const routeTarget = cleanRouteTarget(clean);
+    return routeTarget || clean.slice(1);
+  }
   return path.normalize(path.join(path.dirname(ownerFile), clean)).replace(/\\/g, '/');
 }
 
