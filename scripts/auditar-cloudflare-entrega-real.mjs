@@ -17,7 +17,7 @@ async function githubJson(url) {
     headers: {
       accept: 'application/vnd.github+json',
       'x-github-api-version': '2022-11-28',
-      'user-agent': 'TintinCloudflareDeliveryGate/2.0'
+      'user-agent': 'TintinCloudflareDeliveryGate/2.1'
     },
     signal: AbortSignal.timeout(timeoutMs)
   });
@@ -73,7 +73,7 @@ async function fetchPreview(url) {
     try {
       const response = await fetch(url, {
         redirect: 'follow',
-        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/2.0' },
+        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/2.1' },
         signal: AbortSignal.timeout(timeoutMs)
       });
       if (response.status >= 500) throw new Error(`HTTP ${response.status}`);
@@ -106,9 +106,6 @@ function assertCleanInternalRoutes(html, route) {
   if (match) throw new Error(`${route}: Cloudflare todavía entrega un enlace interno heredado: ${match[0]}`);
 }
 
-// Repository audit también invoca este gate directamente. Normalizamos el
-// workspace acá para que el contrato local sea exactamente el mismo que debe
-// construir Pages antes de comparar la entrega real.
 execFileSync(process.execPath, ['scripts/normalizar-rutas-publicas.js'], { stdio: 'inherit' });
 execFileSync(process.execPath, ['scripts/generar-csp-cloudflare.js'], { stdio: 'inherit' });
 
@@ -139,4 +136,9 @@ for (const route of routes) {
   console.log(`OK — ${preview}${route} — CSP y rutas internas reales correctas.`);
 }
 
-console.log(`\nGate Cloudflare aprobado para ${preview}.`);
+execFileSync(process.execPath, ['scripts/auditar-shopify-redirects.mjs'], {
+  stdio: 'inherit',
+  env: { ...process.env, TINTIN_MIGRATION_ORIGIN: preview }
+});
+
+console.log(`\nGate Cloudflare aprobado para ${preview}: headers, rutas limpias y migración Shopify.`);
