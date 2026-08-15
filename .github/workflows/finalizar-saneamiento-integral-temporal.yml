@@ -91,27 +91,41 @@ jobs:
           fs.writeFileSync(file, source);
           NODE
 
-      - name: Adaptar auditor de imágenes a imports y origen centralizados
+      - name: Adaptar auditores históricos a imports y origen centralizados
         shell: bash
         run: |
           node <<'NODE'
           const fs = require('fs');
-          const file = 'scripts/auditar-imagenes-fase-5.js';
-          let source = fs.readFileSync(file, 'utf8');
-          const legacyImport = `files.mediaLibrary.includes("import { apiUrl } from '../../core/firebase/origen-funciones.js")`;
-          const robustImport = `/import\\s*\\{\\s*apiUrl\\s*\\}\\s*from\\s*['\"]\\.\\.\\/\\.\\.\\/core\\/firebase\\/origen-funciones\\.js(?:\\?[^'\"]+)?['\"]/.test(files.mediaLibrary)`;
-          if (source.includes(legacyImport)) source = source.replace(legacyImport, robustImport);
-          source = source.replace(
-            `files.functionOrigin.includes('CLOUDFLARE_FALLBACK_ORIGIN')`,
-            `files.functionOrigin.includes('TINTIN_FUNCTIONS_FALLBACK_ORIGIN')`
-          );
-          if (!source.includes(robustImport)) {
-            throw new Error('No se pudo adaptar el contrato de import versionado de apiUrl.');
+
+          {
+            const file = 'scripts/auditar-imagenes-fase-5.js';
+            let source = fs.readFileSync(file, 'utf8');
+            const legacyImport = `files.mediaLibrary.includes("import { apiUrl } from '../../core/firebase/origen-funciones.js")`;
+            const robustImport = `/import\\s*\\{\\s*apiUrl\\s*\\}\\s*from\\s*['\"]\\.\\.\\/\\.\\.\\/core\\/firebase\\/origen-funciones\\.js(?:\\?[^'\"]+)?['\"]/.test(files.mediaLibrary)`;
+            if (source.includes(legacyImport)) source = source.replace(legacyImport, robustImport);
+            source = source.replace(
+              `files.functionOrigin.includes('CLOUDFLARE_FALLBACK_ORIGIN')`,
+              `files.functionOrigin.includes('TINTIN_FUNCTIONS_FALLBACK_ORIGIN')`
+            );
+            if (!source.includes(robustImport)) throw new Error('No se pudo adaptar el contrato de apiUrl en Fase 5.');
+            if (!source.includes(`files.functionOrigin.includes('TINTIN_FUNCTIONS_FALLBACK_ORIGIN')`)) throw new Error('No se pudo adaptar el origen en Fase 5.');
+            fs.writeFileSync(file, source);
           }
-          if (!source.includes(`files.functionOrigin.includes('TINTIN_FUNCTIONS_FALLBACK_ORIGIN')`)) {
-            throw new Error('No se pudo adaptar el contrato del origen centralizado.');
+
+          {
+            const file = 'scripts/auditar-sitio-confiabilidad.js';
+            let source = fs.readFileSync(file, 'utf8');
+            const legacyImport = `activity.includes("import { apiUrl } from '../core/firebase/origen-funciones.js")`;
+            const robustImport = `/import\\s*\\{\\s*apiUrl\\s*\\}\\s*from\\s*['\"]\\.\\.\\/core\\/firebase\\/origen-funciones\\.js(?:\\?[^'\"]+)?['\"]/.test(activity)`;
+            if (source.includes(legacyImport)) source = source.replace(legacyImport, robustImport);
+            source = source.replace(
+              `functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'")`,
+              `functionOrigin.includes("import { TINTIN_FUNCTIONS_FALLBACK_ORIGIN } from '../config/origenes-publicos.js'") &&\n  functionOrigin.includes('return TINTIN_FUNCTIONS_FALLBACK_ORIGIN')`
+            );
+            if (!source.includes(robustImport)) throw new Error('No se pudo adaptar el import de apiUrl en confiabilidad.');
+            if (!source.includes(`functionOrigin.includes('return TINTIN_FUNCTIONS_FALLBACK_ORIGIN')`)) throw new Error('No se pudo adaptar el fallback centralizado en confiabilidad.');
+            fs.writeFileSync(file, source);
           }
-          fs.writeFileSync(file, source);
           NODE
 
       - name: Sincronizar origen, rutas, caché, CSP y diagnósticos
