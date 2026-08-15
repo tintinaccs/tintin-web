@@ -132,12 +132,13 @@ check(
 
 const apiFunctions = fs.readdirSync(path.join(root, 'functions/api'))
   .filter(file => file.endsWith('.js')).map(file => `/api/${file.replace(/\.js$/, '')}`);
-// Cloudflare Pages Functions también procesa superficies públicas que no son
-// /api: runtime liviano para páginas informativas, metadata de Producto,
-// redirects legacy de Shopify y sitemaps dinámicos. _routes.json debe limitar
-// esas Functions a esta allowlist exacta; no deben desaparecer del contrato ni
-// convertirse accidentalmente en un comodín global.
-const publicFunctionRoutes = [
+// Cloudflare Pages Functions también procesa superficies públicas y privadas
+// que no son /api: CSP Admin, runtime liviano para páginas informativas,
+// metadata de Producto, redirects legacy de Shopify y sitemaps dinámicos.
+// _routes.json debe limitar esas Functions a esta allowlist exacta.
+const pageFunctionRoutes = [
+  '/admin',
+  '/admin-images',
   '/about',
   '/contact',
   '/envios',
@@ -154,11 +155,11 @@ const publicFunctionRoutes = [
   '/sitemap-products.xml',
   '/sitemap-collections.xml'
 ];
-const expectedRoutes = [...apiFunctions, '/__/auth/*', ...publicFunctionRoutes].sort();
+const expectedRoutes = [...apiFunctions, '/__/auth/*', ...pageFunctionRoutes].sort();
 const routeConfig = JSON.parse(read('_routes.json'));
 const routes = (routeConfig.include || []).slice().sort();
 check(
-  '_routes incluye exactamente APIs, Auth y Pages Functions públicas',
+  '_routes incluye exactamente APIs, Auth y Pages Functions permitidas',
   routeConfig.version === 1 &&
     Array.isArray(routeConfig.exclude) && routeConfig.exclude.length === 0 &&
     JSON.stringify(expectedRoutes) === JSON.stringify(routes),
@@ -196,8 +197,6 @@ const branchScopedWorkflows = new Map([
 const workflowMissing = [];
 for (const file of fs.readdirSync(workflowDirectory).filter(file => /\.ya?ml$/.test(file))) {
   const requiredRef = branchScopedWorkflows.get(file) || '';
-  // Estos workflows solo pueden ejecutarse para su rama exacta. Sus scripts
-  // viven en esa misma rama de trabajo y no forman parte del producto publicado.
   if (requiredRef && currentWorkflowRef !== requiredRef) continue;
   const text = fs.readFileSync(path.join(workflowDirectory, file), 'utf8');
   for (const match of text.matchAll(/node (scripts\/[A-Za-z0-9._-]+\.js)/g)) {
