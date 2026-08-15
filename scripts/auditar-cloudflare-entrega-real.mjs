@@ -18,7 +18,7 @@ async function githubJson(url) {
   const headers = {
     accept: 'application/vnd.github+json',
     'x-github-api-version': '2022-11-28',
-    'user-agent': 'TintinCloudflareDeliveryGate/3.0'
+    'user-agent': 'TintinCloudflareDeliveryGate/3.1'
   };
   if (githubToken) headers.authorization = `Bearer ${githubToken}`;
   const response = await fetch(url, { headers, signal: AbortSignal.timeout(timeoutMs) });
@@ -62,7 +62,7 @@ async function fetchPreview(url) {
     try {
       const response = await fetch(url, {
         redirect: 'follow',
-        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/3.0' },
+        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/3.1' },
         signal: AbortSignal.timeout(timeoutMs)
       });
       if (response.status >= 500) throw new Error(`HTTP ${response.status}`);
@@ -87,11 +87,29 @@ function assertCleanInternalRoutes(html, route) {
   if (match) throw new Error(`${route}: Cloudflare todavía entrega un enlace interno heredado: ${match[0]}`);
 }
 
+function staticFallbackPolicy(headersText) {
+  const lines = headersText.split('\n');
+  const wildcard = lines.findIndex(line => line.trim() === '/*');
+  if (wildcard < 0) throw new Error('_headers no contiene el bloque wildcard /*.');
+  for (let index = wildcard + 1; index < lines.length && (/^\s/.test(lines[index]) || !lines[index].trim()); index += 1) {
+    const match = lines[index].match(/^\s+Content-Security-Policy:\s*(.+)$/);
+    if (match) return match[1].trim();
+  }
+  throw new Error('_headers no contiene la CSP fallback corta bajo /*.');
+}
+
 execFileSync(process.execPath, ['scripts/normalizar-rutas-publicas.js'], { stdio: 'inherit' });
 execFileSync(process.execPath, ['scripts/generar-csp-cloudflare.js'], { stdio: 'inherit' });
 
 const staticHeaders = fs.readFileSync('_headers', 'utf8').replace(/\r\n?/g, '\n');
-if (staticHeaders.includes('Content-Security-Policy:')) throw new Error('_headers volvió a contener CSP; esto puede superar el límite de 2000 caracteres de Pages.');
+const cspLines = staticHeaders.split('\n').filter(line => line.includes('Content-Security-Policy:'));
+if (cspLines.length !== 1) throw new Error(`_headers debe contener exactamente una CSP fallback corta; encontradas: ${cspLines.length}.`);
+const fallbackPolicy = staticFallbackPolicy(staticHeaders);
+if (cspLines[0].length > 2000) throw new Error(`La CSP fallback de _headers supera 2000 caracteres (${cspLines[0].length}).`);
+if (fallbackPolicy.includes('https://api.cloudinary.com')) throw new Error('La CSP fallback estática no debe autorizar upload Cloudinary.');
+if (fallbackPolicy.includes("script-src-attr 'unsafe-inline'")) throw new Error('La CSP fallback estática no debe reabrir handlers inline.');
+if (!fallbackPolicy.includes("script-src-attr 'none'")) throw new Error("La CSP fallback estática debe bloquear handlers con script-src-attr 'none'.");
+assertStrongCsp(fallbackPolicy, '/* fallback');
 const overlong = staticHeaders.split('\n').filter(line => line.length > 2000);
 if (overlong.length) throw new Error(`_headers tiene ${overlong.length} línea(s) por encima de 2000 caracteres.`);
 
@@ -134,9 +152,19 @@ for (const route of ['/admin', '/admin-images']) {
   console.log(`OK — ${preview}${route} — CSP Admin runtime exacta con upload aislado.`);
 }
 
+const notFoundRoute = `/__tintin-csp-404-probe-${sha.slice(0, 8)}__`;
+const notFound = await fetchPreview(preview + notFoundRoute);
+const notFoundCsp = notFound.headers.get('content-security-policy') || '';
+if (notFound.status !== 404) throw new Error(`${notFoundRoute}: se esperaba HTTP 404 y llegó ${notFound.status}.`);
+if (!(notFound.headers.get('content-type') || '').includes('text/html')) throw new Error(`${notFoundRoute}: el 404 no se entregó como HTML.`);
+if (notFound.headers.get('x-tintin-csp') === 'edge-runtime') throw new Error(`${notFoundRoute}: una ruta inexistente no debería depender del middleware de páginas conocidas.`);
+if (notFoundCsp !== fallbackPolicy) throw new Error(`${notFoundRoute}: Cloudflare no entregó la CSP fallback estática exacta.`);
+assertStrongCsp(notFoundCsp, notFoundRoute);
+console.log(`OK — ${preview}${notFoundRoute} — 404 protegido por CSP fallback corta.`);
+
 execFileSync(process.execPath, ['scripts/auditar-shopify-redirects.mjs'], {
   stdio: 'inherit',
   env: { ...process.env, TINTIN_MIGRATION_ORIGIN: preview }
 });
 
-console.log(`\nGate Cloudflare aprobado para ${preview}: CSP por middleware, rutas limpias y migración Shopify.`);
+console.log(`\nGate Cloudflare aprobado para ${preview}: CSP runtime, fallback 404, rutas limpias y migración Shopify.`);
