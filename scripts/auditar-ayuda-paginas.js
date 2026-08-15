@@ -126,13 +126,14 @@ PAGES.forEach(({ file, id, route }) => {
   );
 
   check(
-    `${tag} el footer enlaza a las páginas hermanas de información`,
-    html.includes('href="envios.html"') &&
-      html.includes('href="cambios-devoluciones.html"') &&
-      html.includes('href="preguntas-frecuentes.html"') &&
-      html.includes('href="terminos.html"') &&
-      html.includes('href="privacidad.html"'),
-    'La navegación de información debe enlazar de forma coherente entre las páginas de servicio.'
+    `${tag} el footer enlaza a las páginas hermanas con URLs limpias`,
+    html.includes('href="/envios"') &&
+      html.includes('href="/cambios-devoluciones"') &&
+      html.includes('href="/preguntas-frecuentes"') &&
+      html.includes('href="/terminos"') &&
+      html.includes('href="/privacidad"') &&
+      !/href="(?:\.\/)?(?:envios|cambios-devoluciones|preguntas-frecuentes|terminos|privacidad)\.html(?:[?#][^"]*)?"/.test(html),
+    'La navegación de información debe usar directamente las rutas finales limpias, sin redirecciones .html.'
   );
 
   check(
@@ -141,13 +142,14 @@ PAGES.forEach(({ file, id, route }) => {
     'No debe haber manejadores inline; el comportamiento va en módulos externos.'
   );
 
-  // Enlaces internos: cada href a un .html local debe resolver a un archivo real.
+  // Compatibilidad: si queda algún href .html local no relacionado con las
+  // rutas públicas normalizadas, igual debe resolver a un archivo real.
   const localLinks = [...html.matchAll(/href="([^"#?:]+\.html)(?:[?#][^"]*)?"/g)]
     .map(m => m[1])
     .filter((v, i, a) => a.indexOf(v) === i);
   const broken = localLinks.filter(target => !exists(target));
   check(
-    `${tag} todos los enlaces internos .html resuelven`,
+    `${tag} cualquier enlace local .html residual resuelve`,
     broken.length === 0,
     `Enlaces rotos: ${broken.join(', ')}`
   );
