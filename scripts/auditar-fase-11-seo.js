@@ -2,15 +2,19 @@
 const fs = require('fs');
 const path = require('path');
 const root = path.resolve(__dirname, '..');
-const origin = 'https://tintinaccesorios.pages.dev';
+const read = file => fs.readFileSync(path.join(root, file), 'utf8');
+const publicSite = JSON.parse(read('config/public-site.json'));
+const origin = String(process.env.TINTIN_PUBLIC_ORIGIN || publicSite.origin || '').replace(/\/$/, '');
 const indexed = ["index.html","catalogo.html","collections.html","product.html","about.html","contact.html","envios.html","cambios-devoluciones.html","preguntas-frecuentes.html","terminos.html","privacidad.html"];
 const noindex = ["404.html","admin.html","admin-images.html","checkout.html","login.html","perfil.html","nosotros.html"];
-const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const routeFor = file => file === 'index.html' ? '/' : '/' + file.replace(/\.html$/, '');
 const checks = [];
 const check = (name, ok, problem) => checks.push({ name, ok: Boolean(ok), problem });
 const count = (text, regex) => (text.match(regex) || []).length;
 const xmlLocations = text => [...text.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
+
+check('Origen público central válido', /^https:\/\/[a-z0-9.-]+(?::\d+)?$/i.test(origin), 'config/public-site.json debe ser la fuente única del origen público HTTPS.');
+check('Firebase Auth centralizado', typeof publicSite.firebaseAuthDomain === 'string' && publicSite.firebaseAuthDomain.length > 3, 'El dominio de Firebase Auth debe quedar declarado junto al origen público.');
 
 for (const file of indexed) {
   const html = read(file);
@@ -81,6 +85,7 @@ for (const file of fs.readdirSync(root).filter(file => file.endsWith('.html'))) 
 const pkg = JSON.parse(read('package.json'));
 check('Fase 11 forma parte del cierre', pkg.scripts['audit:phase11'] === 'node scripts/auditar-fase-11-seo.js' && pkg.scripts['test:phase11-seo'] === 'playwright test tests/seo/phase11-seo.spec.js --project=chromium' && pkg.scripts['audit:final'].includes('audit:phase11'), 'Las verificaciones SEO deben quedar permanentes.');
 check('Existe monitor de producción', fs.existsSync(path.join(root, 'scripts/auditar-produccion-salud.mjs')) && fs.existsSync(path.join(root, '.github/workflows/seo-produccion-fase-11.yml')), 'La disponibilidad pública debe revisarse de forma recurrente.');
+check('Origen se sincroniza antes de CSP', read('scripts/generar-csp-cloudflare.js').includes('scripts/sincronizar-origen-publico.js') && read('scripts/generar-csp-cloudflare.js').includes('config/public-site.json'), 'El build debe aplicar una sola fuente de dominio antes de generar hashes y CSP.');
 
 const failed = checks.filter(item => !item.ok);
 checks.forEach(item => { console.log((item.ok ? 'OK' : 'ERROR') + ' — ' + item.name); if (!item.ok) console.log('  ' + item.problem); });
