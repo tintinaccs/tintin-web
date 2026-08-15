@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { execFileSync } from 'node:child_process';
 
 const repository = String(process.env.GITHUB_REPOSITORY || '').trim();
 const sha = String(process.env.GITHUB_SHA || '').trim();
@@ -16,7 +17,7 @@ async function githubJson(url) {
     headers: {
       accept: 'application/vnd.github+json',
       'x-github-api-version': '2022-11-28',
-      'user-agent': 'TintinCloudflareDeliveryGate/1.0'
+      'user-agent': 'TintinCloudflareDeliveryGate/2.0'
     },
     signal: AbortSignal.timeout(timeoutMs)
   });
@@ -72,7 +73,7 @@ async function fetchPreview(url) {
     try {
       const response = await fetch(url, {
         redirect: 'follow',
-        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/1.0' },
+        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/2.0' },
         signal: AbortSignal.timeout(timeoutMs)
       });
       if (response.status >= 500) throw new Error(`HTTP ${response.status}`);
@@ -99,9 +100,25 @@ function assertStrongCsp(csp, route) {
   }
 }
 
+function assertCleanInternalRoutes(html, route) {
+  const legacy = /\b(?:href|action)=["'](?:\.\/|\/)?(?:index|catalogo|collections|product|about|contact|envios|cambios-devoluciones|preguntas-frecuentes|terminos|privacidad|checkout|login|perfil|admin|admin-images|nosotros)\.html(?:[?#][^"']*)?["']/i;
+  const match = String(html || '').match(legacy);
+  if (match) throw new Error(`${route}: Cloudflare todavía entrega un enlace interno heredado: ${match[0]}`);
+}
+
+// Repository audit también invoca este gate directamente. Normalizamos el
+// workspace acá para que el contrato local sea exactamente el mismo que debe
+// construir Pages antes de comparar la entrega real.
+execFileSync(process.execPath, ['scripts/normalizar-rutas-publicas.js'], { stdio: 'inherit' });
+execFileSync(process.execPath, ['scripts/generar-csp-cloudflare.js'], { stdio: 'inherit' });
+
 const preview = await waitForCloudflarePreview();
 const policies = readRoutePolicies();
-const routes = ['/', '/catalogo', '/collections', '/product'];
+const routes = [
+  '/', '/catalogo', '/collections', '/product', '/about', '/contact', '/envios',
+  '/cambios-devoluciones', '/preguntas-frecuentes', '/terminos', '/privacidad',
+  '/checkout', '/login', '/perfil'
+];
 
 for (const route of routes) {
   const response = await fetchPreview(preview + route);
@@ -109,7 +126,9 @@ for (const route of routes) {
   if (!response.ok || !(response.headers.get('content-type') || '').includes('text/html')) {
     throw new Error(`${route}: preview inesperado HTTP ${response.status}.`);
   }
+  const html = await response.text();
   assertStrongCsp(csp, route);
+  assertCleanInternalRoutes(html, route);
 
   const expectedKey = route === '/' ? '/index.html' : route;
   const expectedPolicy = policies.get(expectedKey) || policies.get(route);
@@ -117,7 +136,7 @@ for (const route of routes) {
   if (!csp.includes(expectedPolicy)) {
     throw new Error(`${route}: Cloudflare no entregó la CSP generada por este commit.`);
   }
-  console.log(`OK — ${preview}${route} — CSP real coincide con _headers.`);
+  console.log(`OK — ${preview}${route} — CSP y rutas internas reales correctas.`);
 }
 
 console.log(`\nGate Cloudflare aprobado para ${preview}.`);
