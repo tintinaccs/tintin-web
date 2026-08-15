@@ -11,6 +11,7 @@ const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260815-prelaunch-cache-2';
 const NAV_ENTRY_VERSION = 'tintin-20260815-prelaunch-cache-2';
 const SESSION_PROTECTION_VERSION = 'tintin-20260815-profile-routes-1';
+const PROFILE_GATE_VERSION = 'tintin-20260815-profile-routes-1';
 // Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
 // esa constante decide la URL exacta (con ?v=) que entrada-navegacion-publica.js y
 // ensureNavigationAssets() piden en tiempo de ejecución. Si difieren, el preload no
@@ -165,6 +166,13 @@ function versionSessionProtection(html) {
   );
 }
 
+function versionProfileGate(html) {
+  return html.replace(
+    /(js\/pages\/profile\/control-acceso-perfil\.js)(?:\?v=[A-Za-z0-9._-]+)?/gi,
+    `$1?v=${PROFILE_GATE_VERSION}`
+  );
+}
+
 function normalizeWhitespace(html) {
   return html
     .replace(/\n{4,}/g, '\n\n\n')
@@ -185,6 +193,7 @@ for (const page of PUBLIC_PAGES) {
   html = centralizeRuntime(html);
   html = versionRuntimeLoader(html);
   html = versionSessionProtection(html);
+  html = versionProfileGate(html);
   html = normalizeWhitespace(html);
 
   if (html !== before) {
@@ -200,7 +209,7 @@ for (const page of PUBLIC_PAGES) {
 for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') && !PUBLIC_PAGES.includes(file))) {
   const file = path.join(ROOT, page);
   const before = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
-  const html = versionSessionProtection(before);
+  const html = versionProfileGate(versionSessionProtection(before));
   if (html !== before) {
     fs.writeFileSync(file, html, 'utf8');
     changed += 1;
