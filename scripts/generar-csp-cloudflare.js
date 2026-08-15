@@ -3,8 +3,25 @@
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 
 const root = path.resolve(__dirname, '..');
+const checkMode = process.argv.includes('--check');
+
+// CSP se calcula sobre el mismo árbol que se publica. Primero sincronizamos
+// el origen oficial y las rutas limpias para que los hashes inline no queden
+// atados a una versión distinta del HTML que termina sirviendo Cloudflare.
+execFileSync(process.execPath, [
+  path.join(root, 'scripts/sincronizar-origen-publico.js'),
+  ...(checkMode ? ['--check'] : [])
+], { stdio: 'inherit' });
+execFileSync(process.execPath, [
+  path.join(root, 'scripts/normalizar-rutas-publicas.js'),
+  ...(checkMode ? ['--check'] : [])
+], { stdio: 'inherit' });
+
+const publicSite = JSON.parse(fs.readFileSync(path.join(root, 'config/public-site.json'), 'utf8'));
+const publicOrigin = String(process.env.TINTIN_PUBLIC_ORIGIN || publicSite.origin || '').replace(/\/$/, '');
 const headersPath = path.join(root, '_headers');
 const startMarker = '# CSP_ROUTE_POLICIES_START';
 const endMarker = '# CSP_ROUTE_POLICIES_END';
@@ -54,7 +71,7 @@ function pagePolicy(file) {
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
     `connect-src 'self' ${connectOrigins}`,
-    "frame-src 'self' https://tintinaccesorios.pages.dev https://*.google.com https://*.gstatic.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com",
+    `frame-src 'self' ${publicOrigin} https://*.google.com https://*.gstatic.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com`,
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
@@ -94,7 +111,7 @@ function expectedHeaders() {
 
 const current = fs.readFileSync(headersPath, 'utf8').replace(/\r\n?/g, '\n');
 const expected = expectedHeaders();
-if (process.argv.includes('--check')) {
+if (checkMode) {
   if (current !== expected) {
     console.error('ERROR — _headers no coincide con las CSP por ruta generadas. Ejecutá npm run build:csp.');
     process.exit(1);
