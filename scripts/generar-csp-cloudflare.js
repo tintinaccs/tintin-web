@@ -8,9 +8,6 @@ const { execFileSync } = require('child_process');
 const root = path.resolve(__dirname, '..');
 const checkMode = process.argv.includes('--check');
 
-// CSP se calcula sobre el mismo árbol que se publica. Primero sincronizamos
-// el origen oficial y las rutas limpias para que los hashes inline no queden
-// atados a una versión distinta del HTML que termina sirviendo Cloudflare.
 execFileSync(process.execPath, [
   path.join(root, 'scripts/sincronizar-origen-publico.js'),
   ...(checkMode ? ['--check'] : [])
@@ -35,6 +32,7 @@ const baseConnectOrigins = [
   'https://*.google-analytics.com',
   'https://*.analytics.google.com'
 ];
+const CLOUDINARY_UPLOAD_PAGES = new Set(['admin.html', 'admin-images.html']);
 
 const VISUAL_BUILDER_PREVIEWABLE_PAGES = new Set([
   'index.html', 'about.html', 'catalogo.html', 'collections.html',
@@ -67,10 +65,6 @@ function walkRuntimeFiles(directory) {
 }
 
 function eventHandlerHashes() {
-  // `unsafe-hashes` permite conservar únicamente los handlers heredados que
-  // realmente existen, sin abrir TODOS los atributos script con
-  // script-src-attr 'unsafe-inline'. También se inspeccionan strings JS que
-  // construyen HTML dinámico (por ejemplo onclick=\"location.reload()\").
   const files = [
     ...fs.readdirSync(root).filter(name => /\.(?:html|js)$/i.test(name)).map(name => path.join(root, name)),
     ...walkRuntimeFiles(path.join(root, 'js'))
@@ -97,9 +91,13 @@ function pagePolicy(file) {
   const hashes = inlineHashes(file);
   const scripts = [...baseScriptOrigins];
   const styles = [];
+  const connects = [...baseConnectOrigins];
   if (pageUsesUnpkg(file)) {
     scripts.push('https://unpkg.com');
     styles.push('https://unpkg.com');
+  }
+  if (CLOUDINARY_UPLOAD_PAGES.has(file)) {
+    connects.push('https://api.cloudinary.com');
   }
   const scriptAttr = handlerHashes.length
     ? `script-src-attr 'unsafe-hashes' ${handlerHashes.join(' ')}`
@@ -113,7 +111,7 @@ function pagePolicy(file) {
     styleSrc,
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
-    `connect-src 'self' ${baseConnectOrigins.join(' ')}`,
+    `connect-src 'self' ${connects.join(' ')}`,
     `frame-src 'self' ${publicOrigin} https://*.google.com https://*.gstatic.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com`,
     "object-src 'none'",
     "base-uri 'self'",
