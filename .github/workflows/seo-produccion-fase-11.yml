@@ -91,7 +91,7 @@ jobs:
       - name: Comparar contra el preview real de Cloudflare
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_SHA: ${{ github.event.pull_request.head.sha }}
+          TINTIN_TARGET_SHA: ${{ github.event.pull_request.head.sha }}
           GITHUB_TOKEN: ${{ github.token }}
           TINTIN_CLOUDFLARE_GATE_ATTEMPTS: 45
           TINTIN_CLOUDFLARE_GATE_POLL_MS: 20000

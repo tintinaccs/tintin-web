@@ -2,13 +2,18 @@ import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
 
 const repository = String(process.env.GITHUB_REPOSITORY || '').trim();
-const sha = String(process.env.GITHUB_SHA || '').trim();
+// GITHUB_SHA es una variable reservada de GitHub Actions: cualquier intento de
+// sobrescribirla vía `env:` a nivel de step es ignorado por el runner, que
+// siempre inyecta el SHA del merge ref efímero de la PR en su lugar. Por eso
+// el commit real a auditar viaja en TINTIN_TARGET_SHA (con GITHUB_SHA como
+// fallback para invocaciones fuera de pull_request, donde ambos coinciden).
+const sha = String(process.env.TINTIN_TARGET_SHA || process.env.GITHUB_SHA || '').trim();
 const githubToken = String(process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '').trim();
 const timeoutMs = Number(process.env.TINTIN_CLOUDFLARE_GATE_TIMEOUT_MS || 15000);
 const pollAttempts = Number(process.env.TINTIN_CLOUDFLARE_GATE_ATTEMPTS || 45);
 const pollIntervalMs = Number(process.env.TINTIN_CLOUDFLARE_GATE_POLL_MS || 20000);
 
-if (!repository || !sha) throw new Error('Faltan GITHUB_REPOSITORY o GITHUB_SHA para auditar Cloudflare.');
+if (!repository || !sha) throw new Error('Faltan GITHUB_REPOSITORY o TINTIN_TARGET_SHA/GITHUB_SHA para auditar Cloudflare.');
 if (!Number.isFinite(pollAttempts) || pollAttempts < 1 || pollAttempts > 180) throw new Error('TINTIN_CLOUDFLARE_GATE_ATTEMPTS debe estar entre 1 y 180.');
 if (!Number.isFinite(pollIntervalMs) || pollIntervalMs < 1000 || pollIntervalMs > 60000) throw new Error('TINTIN_CLOUDFLARE_GATE_POLL_MS debe estar entre 1000 y 60000 ms.');
 
