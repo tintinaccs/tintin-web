@@ -84,7 +84,7 @@ test('desktop conserva navegación, marca, submenú e indexación interna', asyn
   await page.locator('#btn-tienda').click();
   const dropdown = page.locator('#tt-tienda-dropdown-panel');
   await expect(dropdown).toHaveAttribute('aria-hidden', 'false');
-  await expect(dropdown.locator('a[href^="catalogo.html?cat="]')).toHaveCount(12);
+  await expect(dropdown.locator('a[href^="/catalogo?cat="], a[href^="catalogo.html?cat="]')).toHaveCount(12);
   const bounds = await dropdown.evaluate(node => {
     const rect = node.getBoundingClientRect();
     return { left: rect.left, right: rect.right, viewport: document.documentElement.clientWidth };
@@ -94,6 +94,6 @@ test('desktop conserva navegación, marca, submenú e indexación interna', asyn
 
   await page.keyboard.press('Escape');
   await page.locator('#btn-cuenta').click();
-  await expect(page.locator('#account-panel a[href="login.html"]')).toHaveCount(2);
+  await expect(page.locator('#account-panel a[href="/login"], #account-panel a[href="login.html"]')).toHaveCount(2);
   await expect(page.locator('#account-drawer')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
 });
