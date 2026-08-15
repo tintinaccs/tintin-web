@@ -89,12 +89,17 @@ jobs:
       - name: Generar y verificar CSP evaluada
         run: npm run build:csp && npm run verify:csp
 
+      - name: Probar regresiones CSP, Cloudinary y Firebase Auth
+        run: node --test tests/security/csp-cloudinary-upload.test.mjs
+
       - name: Revisar sintaxis de seguridad
         run: |
           node --check scripts/auditar-fase-6-seguridad.js
           node --check scripts/probar-firestore-critico.mjs
           node --check js/create-order-client.js
           node --check cloudflare/servir-admin-con-csp.js
+          node --check functions/_middleware.js
+          node --check config/csp-runtime.js
           node --check functions/admin.js
           node --check functions/admin-images.js
           cp apps-script/Seguridad.gs /tmp/Phase3Security.js
