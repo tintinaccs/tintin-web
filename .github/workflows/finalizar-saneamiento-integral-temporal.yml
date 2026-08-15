@@ -91,6 +91,24 @@ jobs:
           fs.writeFileSync(file, source);
           NODE
 
+      - name: Adaptar auditor de imágenes a imports versionados
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const file = 'scripts/auditar-imagenes-fase-5.js';
+          let source = fs.readFileSync(file, 'utf8');
+          const legacy = `files.mediaLibrary.includes("import { apiUrl } from '../../core/firebase/origen-funciones.js")`;
+          const robust = `/import\\s*\\{\\s*apiUrl\\s*\\}\\s*from\\s*['\"]\\.\\.\\/\\.\\.\\/core\\/firebase\\/origen-funciones\\.js(?:\\?[^'\"]+)?['\"]/.test(files.mediaLibrary)`;
+          if (source.includes(legacy)) {
+            source = source.replace(legacy, robust);
+          }
+          if (!source.includes(robust)) {
+            throw new Error('No se pudo adaptar el contrato de import versionado de apiUrl.');
+          }
+          fs.writeFileSync(file, source);
+          NODE
+
       - name: Sincronizar origen, rutas, caché, CSP y diagnósticos
         run: |
           npm run sync:public-origin
