@@ -11,6 +11,7 @@ const LIGHTWEIGHT_PAGES = new Set([
 
 const ABOUT_CANONICAL_GUARD = '/js/pages/institutional/about-canonical-clean-v1.js';
 const CONTACT_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-contacto.js?v=tintin-20260815-contact-clean-1';
+const LEGAL_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-legal.js?v=tintin-20260815-legal-clean-1';
 
 function pageName(request) {
   const url = new URL(request.url);
@@ -19,14 +20,7 @@ function pageName(request) {
 
 export function lightenHtml(html) {
   return String(html || '')
-    // El cargador completo inicia Store Gate + Firebase + carrito + favoritos +
-    // colecciones. Las páginas informativas deben seguir disponibles aunque
-    // el estado comercial no pueda comprobarse; la navegación modular carga
-    // cuenta/carrito bajo demanda cuando la persona intenta usarlos.
     .replace(/\s*<script\s+src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>\s*/i, '\n')
-    // Los modulepreload estaban descargando Firebase/Auth/App Check incluso
-    // cuando ningún runtime informativo los usaba. Los imports reales siguen
-    // resolviéndose normalmente si una interacción posterior los necesita.
     .replace(/\s*<link\s+rel=["']modulepreload["'][^>]*>\s*/gi, '\n');
 }
 
@@ -42,6 +36,9 @@ export function injectLightweightPageGuards(html, page) {
   }
   if (page === 'contact' && !output.includes(CONTACT_MAINTENANCE_RUNTIME)) {
     output = injectBeforeHeadClose(output, `<script type="module" src="${CONTACT_MAINTENANCE_RUNTIME}"></script>`);
+  }
+  if ((page === 'terminos' || page === 'privacidad') && !output.includes(LEGAL_MAINTENANCE_RUNTIME)) {
+    output = injectBeforeHeadClose(output, `<script type="module" src="${LEGAL_MAINTENANCE_RUNTIME}"></script>`);
   }
   return output;
 }
