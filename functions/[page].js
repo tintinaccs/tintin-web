@@ -14,7 +14,7 @@ function pageName(request) {
   return url.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
 }
 
-function lightenHtml(html) {
+export function lightenHtml(html) {
   return String(html || '')
     // El cargador completo inicia Store Gate + Firebase + carrito + favoritos +
     // colecciones. Las páginas informativas deben seguir disponibles aunque
@@ -25,6 +25,10 @@ function lightenHtml(html) {
     // cuando ningún runtime informativo los usaba. Los imports reales siguen
     // resolviéndose normalmente si una interacción posterior los necesita.
     .replace(/\s*<link\s+rel=["']modulepreload["'][^>]*>\s*/gi, '\n');
+}
+
+export function isLightweightPageName(value) {
+  return LIGHTWEIGHT_PAGES.has(String(value || '').trim().toLowerCase());
 }
 
 export async function onRequest({ request, env }) {
