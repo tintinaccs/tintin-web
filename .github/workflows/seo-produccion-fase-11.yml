@@ -7,9 +7,14 @@ on:
       - '*.html'
       - 'tienda.js'
       - 'js/**'
+      - 'functions/**'
+      - '_headers'
+      - '_routes.json'
       - 'manifest.json'
       - 'robots.txt'
       - 'sitemap.xml'
+      - 'scripts/generar-csp-cloudflare.js'
+      - 'scripts/auditar-cloudflare-entrega-real.mjs'
       - 'scripts/auditar-fase-11-seo.js'
       - 'scripts/auditar-produccion-salud.mjs'
       - 'scripts/servidor-local-pruebas.mjs'
@@ -34,6 +39,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Regenerar CSP que Cloudflare debe publicar
+        run: npm run build:csp
+      - name: Verificar CSP reproducible
+        run: npm run verify:csp
       - name: Instalar Chromium para Playwright
         run: npx playwright install --with-deps chromium
       - name: Auditar contratos SEO estáticos
@@ -55,6 +64,24 @@ jobs:
         env:
           PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
         run: npm run test:phase11-seo
+
+  cloudflare-delivered-headers:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Generar contrato de headers del commit
+        run: npm run build:csp
+      - name: Comparar contra el preview real de Cloudflare
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node scripts/auditar-cloudflare-entrega-real.mjs
 
   production-health:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
