@@ -1,4 +1,4 @@
-import policies from '../config/csp-runtime.json' with { type: 'json' };
+import policies from '../config/csp-runtime.js';
 
 const POLICY_BY_SURFACE = Object.freeze({
   admin: policies.admin,
