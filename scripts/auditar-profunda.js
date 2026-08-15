@@ -85,6 +85,30 @@ function stripQuery(value) {
     .trim();
 }
 
+// Debe reflejar el PAGE_ROUTES de scripts/normalizar-rutas-publicas.js: las
+// rutas limpias no existen como archivos en disco, las sirve Cloudflare
+// Pages Functions. Sin este mapeo el chequeo de enlaces rotos reporta falsos
+// positivos para cada href a una ruta limpia (/about, /catalogo, etc.).
+const CLEAN_ROUTE_FILES = new Map([
+  ['/', 'index.html'],
+  ['/catalogo', 'catalogo.html'],
+  ['/collections', 'collections.html'],
+  ['/product', 'product.html'],
+  ['/about', 'about.html'],
+  ['/contact', 'contact.html'],
+  ['/envios', 'envios.html'],
+  ['/cambios-devoluciones', 'cambios-devoluciones.html'],
+  ['/preguntas-frecuentes', 'preguntas-frecuentes.html'],
+  ['/terminos', 'terminos.html'],
+  ['/privacidad', 'privacidad.html'],
+  ['/checkout', 'checkout.html'],
+  ['/login', 'login.html'],
+  ['/perfil', 'perfil.html'],
+  ['/admin', 'admin.html'],
+  ['/admin-images', 'admin-images.html'],
+  ['/404', '404.html']
+]);
+
 function isExternal(value) {
   return /^(https?:)?\/\//i.test(value)
     || /^mailto:/i.test(value)
@@ -101,6 +125,8 @@ function resolveLocal(fromFile, rawValue) {
   if (!clean || isExternal(rawValue)) return null;
 
   if (clean.startsWith('/')) {
+    const routeFile = CLEAN_ROUTE_FILES.get(clean);
+    if (routeFile) return routeFile;
     return clean.replace(/^\/+/, '');
   }
 
