@@ -16,6 +16,10 @@ execFileSync(process.execPath, [
   path.join(root, 'scripts/normalizar-rutas-publicas.js'),
   ...(checkMode ? ['--check'] : [])
 ], { stdio: 'inherit' });
+execFileSync(process.execPath, [
+  path.join(root, 'scripts/endurecer-dependencias-terceros.js'),
+  ...(checkMode ? ['--check'] : [])
+], { stdio: 'inherit' });
 
 const publicSite = JSON.parse(fs.readFileSync(path.join(root, 'config/public-site.json'), 'utf8'));
 const publicOrigin = String(process.env.TINTIN_PUBLIC_ORIGIN || publicSite.origin || '').replace(/\/$/, '');
