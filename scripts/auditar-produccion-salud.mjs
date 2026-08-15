@@ -1,7 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const origin = String(process.env.TINTIN_PUBLIC_ORIGIN || 'https://tintinaccesorios.pages.dev').replace(/\/$/, '');
+const publicSite = JSON.parse(fs.readFileSync(path.resolve('config/public-site.json'), 'utf8'));
+const origin = String(process.env.TINTIN_PUBLIC_ORIGIN || publicSite.origin || '').replace(/\/$/, '');
 const timeoutMs = Number(process.env.TINTIN_HEALTH_TIMEOUT_MS || 15000);
 const attempts = 3;
 const results = [];
@@ -14,7 +15,7 @@ async function fetchWithRetry(url, options = {}) {
     try {
       const response = await fetch(url, {
         redirect: options.redirect || 'follow',
-        headers: { 'user-agent': 'TintinProductionHealth/4.0 (+https://tintinaccesorios.pages.dev/)' },
+        headers: { 'user-agent': `TintinProductionHealth/4.1 (+${origin}/)` },
         signal: AbortSignal.timeout(timeoutMs)
       });
       if (response.status >= 500) throw new Error('HTTP ' + response.status);
@@ -131,9 +132,6 @@ await check('manifest', async () => {
   await inspect('/manifest.json', 'json');
 });
 
-// Pages Functions: checks no destructivos. /api/health valida runtime,
-// configuración crítica y una lectura mínima de Firestore. public-catalog
-// valida además el endpoint público que alimenta catálogo/producto.
 await check('api-health', async () => {
   const health = await inspect('/api/health', 'application/json');
   const payload = JSON.parse(health.body || '{}');
