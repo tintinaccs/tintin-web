@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderProductMetadataHtml } from '../functions/product.js';
+import { lightenHtml, isLightweightPageName } from '../functions/[page].js';
 
 const port = Math.max(1024, Math.min(65535, Number(process.argv[2]) || 4184));
 const root = process.argv[3]
@@ -46,6 +47,26 @@ function serveSeoProductFixture(url, response) {
   return true;
 }
 
+function serveCleanHtmlRoute(url, response) {
+  const page = url.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+  if (!page || path.extname(page)) return false;
+  const file = path.resolve(root, `${page}.html`);
+  if (file === root || !file.startsWith(`${root}${path.sep}`) || !fs.existsSync(file)) return false;
+  const stat = fs.statSync(file);
+  if (!stat.isFile()) return false;
+
+  let html = fs.readFileSync(file, 'utf8');
+  const lightweight = isLightweightPageName(page);
+  if (lightweight) html = lightenHtml(html);
+  response.writeHead(200, {
+    'cache-control': 'no-store',
+    'content-type': 'text/html; charset=utf-8',
+    ...(lightweight ? { 'x-tintin-page-runtime': 'lightweight-test' } : {})
+  });
+  response.end(html);
+  return true;
+}
+
 const server = http.createServer((request, response) => {
   const url = new URL(request.url || '/', `http://${host}:${port}`);
   if (serveSeoProductFixture(url, response)) return;
@@ -70,6 +91,8 @@ const server = http.createServer((request, response) => {
     response.end('{"ok":true,"version":0,"config":{"popups":[],"campaigns":[]}}');
     return;
   }
+  if (serveCleanHtmlRoute(url, response)) return;
+
   const requested = url.pathname === '/' ? '/index.html' : decodeURIComponent(url.pathname);
   const file = path.resolve(root, `.${requested}`);
   if (file !== root && !file.startsWith(`${root}${path.sep}`)) {
