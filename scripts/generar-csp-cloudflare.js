@@ -8,18 +8,13 @@ const { execFileSync } = require('child_process');
 const root = path.resolve(__dirname, '..');
 const checkMode = process.argv.includes('--check');
 
-execFileSync(process.execPath, [
-  path.join(root, 'scripts/sincronizar-origen-publico.js'),
-  ...(checkMode ? ['--check'] : [])
-], { stdio: 'inherit' });
-execFileSync(process.execPath, [
-  path.join(root, 'scripts/normalizar-rutas-publicas.js'),
-  ...(checkMode ? ['--check'] : [])
-], { stdio: 'inherit' });
-execFileSync(process.execPath, [
-  path.join(root, 'scripts/endurecer-dependencias-terceros.js'),
-  ...(checkMode ? ['--check'] : [])
-], { stdio: 'inherit' });
+for (const [script, args = []] of [
+  ['scripts/sincronizar-origen-publico.js', checkMode ? ['--check'] : []],
+  ['scripts/normalizar-rutas-publicas.js', checkMode ? ['--check'] : []],
+  ['scripts/endurecer-dependencias-terceros.js', checkMode ? ['--check'] : []]
+]) {
+  execFileSync(process.execPath, [path.join(root, script), ...args], { stdio: 'inherit' });
+}
 
 const publicSite = JSON.parse(fs.readFileSync(path.join(root, 'config/public-site.json'), 'utf8'));
 const publicOrigin = String(process.env.TINTIN_PUBLIC_ORIGIN || publicSite.origin || '').replace(/\/$/, '');
@@ -37,7 +32,6 @@ const baseConnectOrigins = [
   'https://*.analytics.google.com'
 ];
 const globalScriptOrigins = [...baseScriptOrigins, 'https://unpkg.com'];
-const globalConnectOrigins = [...baseConnectOrigins];
 const frameOrigins = [
   publicOrigin,
   'https://*.google.com',
@@ -47,11 +41,10 @@ const frameOrigins = [
   'https://player.vimeo.com'
 ];
 const CLOUDINARY_UPLOAD_PAGES = new Set(['admin.html', 'admin-images.html']);
-
 const VISUAL_BUILDER_PREVIEWABLE_PAGES = new Set([
   'index.html', 'about.html', 'catalogo.html', 'collections.html',
   'contact.html', 'envios.html', 'preguntas-frecuentes.html', 'cambios-devoluciones.html',
-  'product.html', 'terminos.html', 'privacidad.html', '404.html',
+  'product.html', 'terminos.html', 'privacidad.html', '404.html'
 ]);
 
 function sha256Source(value) {
@@ -105,28 +98,19 @@ function allInlineScriptHashes() {
 
 const handlerHashes = eventHandlerHashes();
 const globalInlineHashes = allInlineScriptHashes();
+const scriptAttrDirective = handlerHashes.length
+  ? `script-src-attr 'unsafe-hashes' ${handlerHashes.join(' ')}`
+  : "script-src-attr 'none'";
 
-function scriptAttrDirective() {
-  return handlerHashes.length
-    ? `script-src-attr 'unsafe-hashes' ${handlerHashes.join(' ')}`
-    : "script-src-attr 'none'";
-}
-
-// Cloudflare Pages puede resolver una URL limpia hacia su asset .html y
-// terminar aplicando únicamente el bloque wildcard de _headers. El wildcard
-// debe ser funcional por sí mismo, pero no por eso puede abrir unsafe-inline
-// ni Cloudinary upload a toda la tienda. Para compatibilidad incluye la unión
-// exacta de hashes de scripts/handlers realmente publicados; Admin recibe su
-// excepción de upload en la política por página y en su Pages Function.
-function globalPolicy() {
+function publicPolicy() {
   return [
     "default-src 'self'",
     `script-src 'self'${globalInlineHashes.length ? ` ${globalInlineHashes.join(' ')}` : ''} ${globalScriptOrigins.join(' ')}`,
-    scriptAttrDirective(),
+    scriptAttrDirective,
     "style-src 'self' 'unsafe-inline' https://unpkg.com",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
-    `connect-src 'self' ${globalConnectOrigins.join(' ')}`,
+    `connect-src 'self' ${baseConnectOrigins.join(' ')}`,
     `frame-src 'self' ${frameOrigins.join(' ')}`,
     "object-src 'none'",
     "base-uri 'self'",
@@ -152,13 +136,11 @@ function pagePolicy(file) {
     styles.push('https://unpkg.com');
   }
   if (CLOUDINARY_UPLOAD_PAGES.has(file)) connects.push('https://api.cloudinary.com');
-  const styleSrc = `style-src 'self' 'unsafe-inline'${styles.length ? ` ${styles.join(' ')}` : ''}`;
-
   return [
     "default-src 'self'",
     `script-src 'self'${hashes.length ? ` ${hashes.join(' ')}` : ''} ${scripts.join(' ')}`,
-    scriptAttrDirective(),
-    styleSrc,
+    scriptAttrDirective,
+    `style-src 'self' 'unsafe-inline'${styles.length ? ` ${styles.join(' ')}` : ''}`,
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
     `connect-src 'self' ${connects.join(' ')}`,
@@ -174,55 +156,73 @@ function pagePolicy(file) {
 }
 
 function routesForFile(file) {
-  if (file !== 'index.html') return [`/${path.basename(file, '.html')}`];
-  return ['/', '/index.html'];
-}
-
-function generateRouteBlock() {
-  const files = fs.readdirSync(root).filter(name => name.endsWith('.html')).sort();
-  const blocks = files.flatMap(file => {
-    const policy = pagePolicy(file);
-    return routesForFile(file).map(route => `${route}\n  Content-Security-Policy: ${policy}`);
-  });
-  return `${startMarker}\n# Generado por scripts/generar-csp-cloudflare.js; no editar a mano.\n${blocks.join('\n\n')}\n${endMarker}`;
+  if (file === 'index.html') return ['/', '/index.html'];
+  const clean = `/${path.basename(file, '.html')}`;
+  return [clean, `/${file}`];
 }
 
 function runtimePolicies() {
+  const routes = {};
+  for (const file of fs.readdirSync(root).filter(name => name.endsWith('.html')).sort()) {
+    const policy = pagePolicy(file);
+    for (const route of routesForFile(file)) routes[route] = policy;
+  }
   return {
     generatedBy: 'scripts/generar-csp-cloudflare.js',
-    admin: pagePolicy('admin.html'),
-    adminImages: pagePolicy('admin-images.html')
+    public: publicPolicy(),
+    routes,
+    admin: routes['/admin'],
+    adminImages: routes['/admin-images']
   };
 }
 
 function expectedHeaders() {
   let headers = fs.readFileSync(headersPath, 'utf8').replace(/\r\n?/g, '\n');
   headers = headers.replace(new RegExp(`${startMarker}[\\s\\S]*?${endMarker}\\n*`, 'g'), '');
-  headers = headers.replace(/^  Content-Security-Policy:.*$/m, `  Content-Security-Policy: ${globalPolicy()}`);
-  const cacheRoot = '\n/\n  Cache-Control: no-cache, no-store, must-revalidate';
-  if (!headers.includes(cacheRoot)) throw new Error('No se encontró el bloque de caché raíz en _headers.');
-  return headers.replace(cacheRoot, `\n${generateRouteBlock()}\n${cacheRoot}`).replace(/\n{3,}/g, '\n\n');
+  headers = headers.replace(/^\s+Content-Security-Policy:.*(?:\n|$)/gm, '');
+  headers = headers.replace(
+    /^# TINTIN — seguridad y caché para Cloudflare Pages[\s\S]*?\n\n(?=\/\*)/,
+    '# TINTIN — seguridad y caché para Cloudflare Pages\n# CSP de documentos HTML se entrega desde functions/_middleware.js.\n# _headers conserva únicamente reglas estáticas cortas y caché.\n\n'
+  );
+  headers = headers.replace(/\n{3,}/g, '\n\n');
+  const oversized = headers.split('\n').filter(line => line.length > 2000);
+  if (oversized.length) {
+    throw new Error(`_headers excede el límite de 2000 caracteres por línea (${oversized.map(line => line.length).join(', ')}).`);
+  }
+  return headers;
 }
 
-const current = fs.readFileSync(headersPath, 'utf8').replace(/\r\n?/g, '\n');
+function validateRuntimePolicies(policies) {
+  for (const [route, policy] of Object.entries(policies.routes || {})) {
+    if (!policy.includes("default-src 'self'") || !policy.includes("object-src 'none'")) {
+      throw new Error(`CSP runtime incompleta para ${route}.`);
+    }
+    if (policy.length > 120000) throw new Error(`CSP runtime demasiado grande para ${route}: ${policy.length} caracteres.`);
+  }
+  if (policies.public.length > 120000) throw new Error(`CSP pública demasiado grande: ${policies.public.length} caracteres.`);
+}
+
 const expected = expectedHeaders();
-const runtimeExpected = JSON.stringify(runtimePolicies(), null, 2) + '\n';
+const policies = runtimePolicies();
+validateRuntimePolicies(policies);
+const runtimeExpected = JSON.stringify(policies, null, 2) + '\n';
+const current = fs.readFileSync(headersPath, 'utf8').replace(/\r\n?/g, '\n');
 const runtimeCurrent = fs.existsSync(runtimePoliciesPath) ? fs.readFileSync(runtimePoliciesPath, 'utf8') : '';
 
 if (checkMode) {
   let failed = false;
   if (current !== expected) {
-    console.error('ERROR — _headers no coincide con las CSP por ruta generadas. Ejecutá npm run build:csp.');
+    console.error('ERROR — _headers contiene CSP o reglas estáticas desactualizadas. Ejecutá npm run build:csp.');
     failed = true;
   }
   if (runtimeCurrent !== runtimeExpected) {
-    console.error('ERROR — config/csp-runtime.json no coincide con las políticas Admin generadas. Ejecutá npm run build:csp.');
+    console.error('ERROR — config/csp-runtime.json no coincide con las CSP runtime generadas. Ejecutá npm run build:csp.');
     failed = true;
   }
   if (failed) process.exit(1);
-  console.log(`OK — CSP reproducible; fallback global por hashes + ${handlerHashes.length} handler(s) inline restringidos por hash.`);
+  console.log(`OK — CSP runtime reproducible; ${Object.keys(policies.routes).length} rutas HTML y ${handlerHashes.length} handler(s) fijados por hash.`);
 } else {
   fs.writeFileSync(headersPath, expected, 'utf8');
   fs.writeFileSync(runtimePoliciesPath, runtimeExpected, 'utf8');
-  console.log(`CSP generada: fallback global por hashes; Admin conserva upload Cloudinary solo en sus rutas.`);
+  console.log(`CSP runtime generada para ${Object.keys(policies.routes).length} rutas HTML; _headers queda bajo el límite de Pages.`);
 }
