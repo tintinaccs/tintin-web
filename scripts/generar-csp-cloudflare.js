@@ -20,6 +20,7 @@ const publicSite = JSON.parse(fs.readFileSync(path.join(root, 'config/public-sit
 const publicOrigin = String(process.env.TINTIN_PUBLIC_ORIGIN || publicSite.origin || '').replace(/\/$/, '');
 const headersPath = path.join(root, '_headers');
 const runtimePoliciesPath = path.join(root, 'config/csp-runtime.json');
+const runtimeModulePath = path.join(root, 'config/csp-runtime.js');
 const startMarker = '# CSP_ROUTE_POLICIES_START';
 const endMarker = '# CSP_ROUTE_POLICIES_END';
 const baseScriptOrigins = ['https://*.gstatic.com', 'https://*.google.com', 'https://www.googletagmanager.com'];
@@ -202,12 +203,18 @@ function validateRuntimePolicies(policies) {
   if (policies.public.length > 120000) throw new Error(`CSP pública demasiado grande: ${policies.public.length} caracteres.`);
 }
 
+function runtimeModuleSource(policies) {
+  return `// Generado por scripts/generar-csp-cloudflare.js; no editar a mano.\nexport default ${JSON.stringify(policies, null, 2)};\n`;
+}
+
 const expected = expectedHeaders();
 const policies = runtimePolicies();
 validateRuntimePolicies(policies);
 const runtimeExpected = JSON.stringify(policies, null, 2) + '\n';
+const runtimeModuleExpected = runtimeModuleSource(policies);
 const current = fs.readFileSync(headersPath, 'utf8').replace(/\r\n?/g, '\n');
 const runtimeCurrent = fs.existsSync(runtimePoliciesPath) ? fs.readFileSync(runtimePoliciesPath, 'utf8') : '';
+const runtimeModuleCurrent = fs.existsSync(runtimeModulePath) ? fs.readFileSync(runtimeModulePath, 'utf8') : '';
 
 if (checkMode) {
   let failed = false;
@@ -219,10 +226,15 @@ if (checkMode) {
     console.error('ERROR — config/csp-runtime.json no coincide con las CSP runtime generadas. Ejecutá npm run build:csp.');
     failed = true;
   }
+  if (runtimeModuleCurrent !== runtimeModuleExpected) {
+    console.error('ERROR — config/csp-runtime.js no coincide con las CSP runtime generadas. Ejecutá npm run build:csp.');
+    failed = true;
+  }
   if (failed) process.exit(1);
   console.log(`OK — CSP runtime reproducible; ${Object.keys(policies.routes).length} rutas HTML y ${handlerHashes.length} handler(s) fijados por hash.`);
 } else {
   fs.writeFileSync(headersPath, expected, 'utf8');
   fs.writeFileSync(runtimePoliciesPath, runtimeExpected, 'utf8');
+  fs.writeFileSync(runtimeModulePath, runtimeModuleExpected, 'utf8');
   console.log(`CSP runtime generada para ${Object.keys(policies.routes).length} rutas HTML; _headers queda bajo el límite de Pages.`);
 }
