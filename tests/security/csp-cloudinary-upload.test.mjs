@@ -35,10 +35,15 @@ test('CSP no vuelve a abrir handlers inline de forma global', () => {
   }
 });
 
-test('_headers no transporta CSP sobredimensionada y middleware la aplica', () => {
+test('_headers conserva solo una CSP fallback corta y middleware aplica la completa', () => {
   const headers = read('_headers');
   const middleware = read('functions/_middleware.js');
-  assert.ok(!headers.includes('Content-Security-Policy:'), 'CSP de HTML no debe volver a _headers');
+  const cspLines = headers.split(/\r?\n/).filter(line => line.includes('Content-Security-Policy:'));
+  assert.equal(cspLines.length, 1, '_headers debe tener una sola CSP fallback estática');
+  assert.ok(cspLines[0].length <= 2000, 'la CSP fallback debe respetar el límite por línea de Pages');
+  assert.ok(cspLines[0].includes("script-src-attr 'none'"));
+  assert.ok(!cspLines[0].includes('https://api.cloudinary.com'));
+  assert.ok(!cspLines[0].includes("script-src 'self' 'unsafe-inline'"));
   assert.ok(headers.split(/\r?\n/).every(line => line.length <= 2000), '_headers debe respetar el límite por línea de Pages');
   assert.ok(middleware.includes("headers.set('Content-Security-Policy', policy)"));
   assert.ok(middleware.includes("'X-Tintin-CSP', 'edge-runtime'"));
