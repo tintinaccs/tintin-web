@@ -116,11 +116,15 @@ check(
 );
 const apiFunctions = fs.readdirSync(path.join(root, 'functions/api'))
   .filter(file => file.endsWith('.js')).map(file => `/api/${file.replace(/\.js$/, '')}`);
+const rootFunctions = fs.readdirSync(path.join(root, 'functions'), { withFileTypes: true })
+  .filter(entry => entry.isFile() && entry.name.endsWith('.js'))
+  .map(entry => `/${entry.name.replace(/\.js$/, '')}`);
 // El proxy de autenticación (functions/__/auth/[[path]].js) no sigue la
 // convención de un archivo por endpoint en functions/api — es una sola
-// ruta comodín, así que se agrega a mano en vez de derivarla del listado
-// de archivos.
-const expectedRoutes = [...apiFunctions, '/__/auth/*'].sort();
+// ruta comodín, así que se agrega a mano. Las Pages Functions de nivel raíz
+// (por ejemplo /product y /sitemap-products.xml) se derivan del directorio
+// functions para que el contrato no quede obsoleto al añadir una ruta edge.
+const expectedRoutes = [...apiFunctions, ...rootFunctions, '/__/auth/*'].sort();
 const routes = (JSON.parse(read('_routes.json')).include || []).slice().sort();
 check(
   '_routes incluye exactamente las funciones existentes',
