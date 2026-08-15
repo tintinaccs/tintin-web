@@ -16,7 +16,7 @@ import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { SUPER_ADMIN } from "./roles.js?v=tintin-20260716-cloudinary-fix-1";
-import { startProfileGate } from "../../pages/profile/control-acceso-perfil.js?v=tintin-20260803-profile-gate-1";
+import { startProfileGate } from "../../pages/profile/control-acceso-perfil.js?v=tintin-20260815-profile-routes-1";
 
 const SESSION_DURATION_MS = 30 * 60 * 1000;
 const STORAGE_KEY = 'tt_session_started_at';
@@ -38,8 +38,8 @@ function readSessionStart() {
 }
 
 function goToExpiredLogin() {
-  if (location.pathname.endsWith('/login.html') || location.pathname.endsWith('login.html')) return;
-  location.href = 'login.html?expired=1';
+  if (location.pathname === '/login' || location.pathname.endsWith('/login.html') || location.pathname.endsWith('login.html')) return;
+  location.href = '/login?expired=1';
 }
 
 async function enforce(user) {
