@@ -89,6 +89,9 @@ jobs:
   production-health:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -96,7 +99,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run monitor:production
+      - name: Monitorear producción
+        id: production_monitor
+        continue-on-error: true
+        run: npm run monitor:production
       - uses: actions/upload-artifact@v6
         if: always()
         with:
@@ -104,3 +110,33 @@ jobs:
           path: artifacts/phase11-production-health.json
           if-no-files-found: warn
           retention-days: 30
+      - name: Abrir o actualizar alerta visible si producción falla
+        if: steps.production_monitor.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        shell: bash
+        run: |
+          title='[Producción] Monitor horario en rojo'
+          issue="$(gh issue list --state open --search \"$title in:title\" --json number --jq '.[0].number // empty')"
+          body="El monitor automático de producción falló el $(date -u +'%Y-%m-%d %H:%M UTC').\n\nRun: $RUN_URL\n\nRevisar el artefacto phase11-production-health antes de desplegar o anunciar cambios."
+          if [ -n "$issue" ]; then
+            gh issue comment "$issue" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body"
+          fi
+      - name: Cerrar alerta cuando producción se recupera
+        if: steps.production_monitor.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        shell: bash
+        run: |
+          title='[Producción] Monitor horario en rojo'
+          issue="$(gh issue list --state open --search \"$title in:title\" --json number --jq '.[0].number // empty')"
+          if [ -n "$issue" ]; then
+            gh issue comment "$issue" --body "Producción volvió a pasar el monitor automático. Run: $RUN_URL"
+            gh issue close "$issue" --reason completed
+          fi
+      - name: Hacer fallar el run si producción sigue en rojo
+        run: test "${{ steps.production_monitor.outcome }}" = "success"
