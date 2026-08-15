@@ -85,7 +85,14 @@ const htmlFiles = fs.readdirSync(root)
   .filter(name => name.endsWith('.html'))
   .map(name => path.join(root, name));
 const jsFiles = fs.existsSync(path.join(root, 'js')) ? walk(path.join(root, 'js')).filter(file => file.endsWith('.js')) : [];
-const files = [...new Set([...htmlFiles, ...rootRuntimeJs, ...jsFiles])];
+// js/admin/admin-app.js: el auth guard del panel Super Admin necesita rutas
+// .html literales a propósito (scripts/auditar-admin-fundamentos.js lo exige
+// por contrato) para no depender del enrutamiento de Cloudflare Pages
+// Functions antes de que Firebase resuelva la sesión. Normalizarlo a rutas
+// limpias aquí lo desharía en cada build:pages.
+const excludedFiles = [path.join(root, 'js', 'admin', 'admin-app.js')];
+const files = [...new Set([...htmlFiles, ...rootRuntimeJs, ...jsFiles])]
+  .filter(file => !excludedFiles.includes(path.resolve(file)));
 
 const changed = [];
 for (const file of files) {

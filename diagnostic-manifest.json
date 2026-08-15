@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-15T22:39:09.830Z",
-  "sourceFingerprint": "8b8a0b3ea260049efbecf1b2daeceb6217c4a50268d05bdddb7da2497d782619",
+  "generatedAt": "2026-08-15T22:49:09.951Z",
+  "sourceFingerprint": "85ca14817109037c5742b413aed963bb96efb2ddc7abbed24896f9decfa5927f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 652,
     "textFiles": 620,
-    "totalBytes": 7315456,
+    "totalBytes": 7315968,
     "pages": 18,
     "modules": 405
   },
@@ -1773,8 +1773,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 164223,
-      "sha256": "4d5b9fd23c44ab3f0fb3f3ea83e1e556429d8c846ddac4425c1c3099715b1e3c",
+      "bytes": 164229,
+      "sha256": "15fc1d7c9a1c78042c47538a20e4538f1aec7bd2176ecdcf2db322d1be05e9ab",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1808,7 +1808,7 @@
           "line": 8
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260815-routes-clean-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20260815-admin-auth-literal-1",
           "target": "js/admin/admin-app.js",
           "line": 1904
         },
@@ -2017,7 +2017,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260815-routes-clean-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20260815-admin-auth-literal-1",
           "target": "js/admin/admin-app.js",
           "line": 1904,
           "exists": true
@@ -17279,8 +17279,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 421410,
-      "sha256": "1e4346d3ffe53f05f8f678e852320dfb81a3943c75536a54a04ccbba6b820ecf",
+      "bytes": 421426,
+      "sha256": "2af464dace24e291286f75c386c2e103228b3325a8517664fd42e78646de4928",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24639,8 +24639,8 @@
     },
     {
       "path": "scripts/normalizar-rutas-publicas.js",
-      "bytes": 4158,
-      "sha256": "1d0d300a910c15a72058ca7e4b794bf54a5fc22c4767ed162cea1f99604d4f4c",
+      "bytes": 4648,
+      "sha256": "a333769f0cff5b8e9d7a4a3f368927451a184e31dd0dff8d646d68242f0e8ce2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26466,8 +26466,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 164223,
-      "sha256": "4d5b9fd23c44ab3f0fb3f3ea83e1e556429d8c846ddac4425c1c3099715b1e3c"
+      "bytes": 164229,
+      "sha256": "15fc1d7c9a1c78042c47538a20e4538f1aec7bd2176ecdcf2db322d1be05e9ab"
     },
     {
       "path": "apple-touch-icon.png",
@@ -27720,8 +27720,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 421410,
-      "sha256": "1e4346d3ffe53f05f8f678e852320dfb81a3943c75536a54a04ccbba6b820ecf"
+      "bytes": 421426,
+      "sha256": "2af464dace24e291286f75c386c2e103228b3325a8517664fd42e78646de4928"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -29754,8 +29754,8 @@
     {
       "path": "scripts/normalizar-rutas-publicas.js",
       "extension": ".js",
-      "bytes": 4158,
-      "sha256": "1d0d300a910c15a72058ca7e4b794bf54a5fc22c4767ed162cea1f99604d4f4c"
+      "bytes": 4648,
+      "sha256": "a333769f0cff5b8e9d7a4a3f368927451a184e31dd0dff8d646d68242f0e8ce2"
     },
     {
       "path": "scripts/preparar-hosting.js",
@@ -31151,6 +31151,34 @@
       "exists": true
     },
     {
+      "file": "js/admin/admin-app.js",
+      "line": 810,
+      "raw": "login.html",
+      "target": "login.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/admin-app.js",
+      "line": 823,
+      "raw": "login.html",
+      "target": "login.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/admin-app.js",
+      "line": 829,
+      "raw": "perfil.html",
+      "target": "perfil.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/admin-app.js",
+      "line": 868,
+      "raw": "login.html",
+      "target": "login.html",
+      "exists": true
+    },
+    {
       "file": "js/admin/ajuste-barra-lateral-movil-admin.js",
       "line": 6,
       "raw": "/admin.html",
@@ -32152,6 +32180,10 @@
     {
       "pattern": "login.html?blocked=:dynamic",
       "references": [
+        {
+          "file": "js/admin/admin-app.js",
+          "line": 823
+        },
         {
           "file": "perfil.html",
           "line": 424
