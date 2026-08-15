@@ -3,9 +3,10 @@ import { execFileSync } from 'node:child_process';
 
 const repository = String(process.env.GITHUB_REPOSITORY || '').trim();
 const sha = String(process.env.GITHUB_SHA || '').trim();
+const githubToken = String(process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '').trim();
 const timeoutMs = Number(process.env.TINTIN_CLOUDFLARE_GATE_TIMEOUT_MS || 15000);
-const pollAttempts = Number(process.env.TINTIN_CLOUDFLARE_GATE_ATTEMPTS || 90);
-const pollIntervalMs = Number(process.env.TINTIN_CLOUDFLARE_GATE_POLL_MS || 10000);
+const pollAttempts = Number(process.env.TINTIN_CLOUDFLARE_GATE_ATTEMPTS || 45);
+const pollIntervalMs = Number(process.env.TINTIN_CLOUDFLARE_GATE_POLL_MS || 20000);
 
 if (!repository || !sha) {
   throw new Error('Faltan GITHUB_REPOSITORY o GITHUB_SHA para auditar Cloudflare.');
@@ -20,15 +21,24 @@ if (!Number.isFinite(pollIntervalMs) || pollIntervalMs < 1000 || pollIntervalMs 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 async function githubJson(url) {
+  const headers = {
+    accept: 'application/vnd.github+json',
+    'x-github-api-version': '2022-11-28',
+    'user-agent': 'TintinCloudflareDeliveryGate/2.3'
+  };
+  if (githubToken) headers.authorization = `Bearer ${githubToken}`;
+
   const response = await fetch(url, {
-    headers: {
-      accept: 'application/vnd.github+json',
-      'x-github-api-version': '2022-11-28',
-      'user-agent': 'TintinCloudflareDeliveryGate/2.2'
-    },
+    headers,
     signal: AbortSignal.timeout(timeoutMs)
   });
-  if (!response.ok) throw new Error(`GitHub API ${response.status} al buscar el deployment de Cloudflare.`);
+  if (!response.ok) {
+    const remaining = response.headers.get('x-ratelimit-remaining');
+    const reset = response.headers.get('x-ratelimit-reset');
+    const details = [remaining != null ? `remaining=${remaining}` : '', reset ? `reset=${reset}` : '']
+      .filter(Boolean).join(', ');
+    throw new Error(`GitHub API ${response.status} al buscar el deployment de Cloudflare${details ? ` (${details})` : ''}.`);
+  }
   return response.json();
 }
 
@@ -95,7 +105,7 @@ async function fetchPreview(url) {
     try {
       const response = await fetch(url, {
         redirect: 'follow',
-        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/2.2' },
+        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/2.3' },
         signal: AbortSignal.timeout(timeoutMs)
       });
       if (response.status >= 500) throw new Error(`HTTP ${response.status}`);
