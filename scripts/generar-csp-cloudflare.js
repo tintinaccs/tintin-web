@@ -25,52 +25,95 @@ const publicOrigin = String(process.env.TINTIN_PUBLIC_ORIGIN || publicSite.origi
 const headersPath = path.join(root, '_headers');
 const startMarker = '# CSP_ROUTE_POLICIES_START';
 const endMarker = '# CSP_ROUTE_POLICIES_END';
-// Cloudflare Pages no reemplaza el header de una coincidencia más específica:
-// agrega un Content-Security-Policy adicional por cada bloque de _headers que
-// matchea la ruta. El navegador combina varias CSP de forma restrictiva (gana
-// la más estricta por directiva) — así que un frame-ancestors 'none' acá
-// arriba anulaba en la práctica el 'self' que cada ruta declara para su
-// propia página, sin importar qué tan específica fuera esa ruta. Cada .html
-// ya trae su propio frame-ancestors completo (ver generateRouteBlock más
-// abajo); esta política global es el resguardo mínimo para lo que no es una
-// página (JS, CSS, imágenes) — ahí framing no aplica, así que no hace falta
-// repetirlo acá.
 const globalPolicy = "object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests";
-const scriptOrigins = "https://*.gstatic.com https://*.google.com https://unpkg.com https://www.googletagmanager.com";
-const connectOrigins = "https://*.googleapis.com https://*.google.com https://*.gstatic.com https://unpkg.com https://*.googleusercontent.com https://res.cloudinary.com https://api.cloudinary.com https://api.imgbb.com https://*.google-analytics.com https://*.analytics.google.com";
-// El editor visual (Apariencia) previsualiza estas páginas dentro de un
-// <iframe> en admin.html — mismo origen, sesión de Super Admin ya validada.
-// frame-ancestors 'none' se lo bloqueaba también a sí mismo: el navegador no
-// distingue "me embebe mi propio panel admin" de "me embebe un sitio ajeno".
-// Solo estas páginas (las que existen en SITE_CONTENT_SCHEMA, ver
-// js/core/store/esquema-contenido.js) aflojan a 'self'; el resto conserva
-// 'none' porque nunca se cargan en un iframe.
+const baseScriptOrigins = ['https://*.gstatic.com', 'https://*.google.com', 'https://www.googletagmanager.com'];
+const baseConnectOrigins = [
+  'https://*.googleapis.com',
+  'https://*.google.com',
+  'https://*.gstatic.com',
+  'https://*.googleusercontent.com',
+  'https://*.google-analytics.com',
+  'https://*.analytics.google.com'
+];
+
 const VISUAL_BUILDER_PREVIEWABLE_PAGES = new Set([
   'index.html', 'about.html', 'catalogo.html', 'collections.html',
   'contact.html', 'envios.html', 'preguntas-frecuentes.html', 'cambios-devoluciones.html',
   'product.html', 'terminos.html', 'privacidad.html', '404.html',
 ]);
 
+function sha256Source(value) {
+  return `'sha256-${crypto.createHash('sha256').update(value, 'utf8').digest('base64')}'`;
+}
+
 function inlineHashes(file) {
   const html = fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n?/g, '\n');
   const hashes = new Set();
   for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
     if (/\bsrc\s*=/.test(match[1])) continue;
-    hashes.add(`'sha256-${crypto.createHash('sha256').update(match[2], 'utf8').digest('base64')}'`);
+    hashes.add(sha256Source(match[2]));
   }
   return [...hashes].sort();
 }
 
+function walkRuntimeFiles(directory) {
+  if (!fs.existsSync(directory)) return [];
+  return fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
+    if (entry.name.startsWith('.') || ['node_modules', 'artifacts', 'maintenance', 'tests'].includes(entry.name)) return [];
+    const absolute = path.join(directory, entry.name);
+    if (entry.isDirectory()) return walkRuntimeFiles(absolute);
+    return /\.(?:html|js)$/i.test(entry.name) ? [absolute] : [];
+  });
+}
+
+function eventHandlerHashes() {
+  // `unsafe-hashes` permite conservar únicamente los handlers heredados que
+  // realmente existen, sin abrir TODOS los atributos script con
+  // script-src-attr 'unsafe-inline'. También se inspeccionan strings JS que
+  // construyen HTML dinámico (por ejemplo onclick=\"location.reload()\").
+  const files = [
+    ...fs.readdirSync(root).filter(name => /\.(?:html|js)$/i.test(name)).map(name => path.join(root, name)),
+    ...walkRuntimeFiles(path.join(root, 'js'))
+  ];
+  const values = new Set();
+  for (const file of files) {
+    const raw = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
+    const source = raw.replace(/\\"/g, '"').replace(/\\'/g, "'");
+    for (const match of source.matchAll(/\bon[a-z]+\s*=\s*(["'])([\s\S]*?)\1/gi)) {
+      const value = String(match[2] || '').trim();
+      if (value) values.add(value);
+    }
+  }
+  return [...values].map(sha256Source).sort();
+}
+
+const handlerHashes = eventHandlerHashes();
+
+function pageUsesUnpkg(file) {
+  return fs.readFileSync(path.join(root, file), 'utf8').includes('https://unpkg.com/');
+}
+
 function pagePolicy(file) {
   const hashes = inlineHashes(file);
+  const scripts = [...baseScriptOrigins];
+  const styles = [];
+  if (pageUsesUnpkg(file)) {
+    scripts.push('https://unpkg.com');
+    styles.push('https://unpkg.com');
+  }
+  const scriptAttr = handlerHashes.length
+    ? `script-src-attr 'unsafe-hashes' ${handlerHashes.join(' ')}`
+    : "script-src-attr 'none'";
+  const styleSrc = `style-src 'self' 'unsafe-inline'${styles.length ? ` ${styles.join(' ')}` : ''}`;
+
   return [
     "default-src 'self'",
-    `script-src 'self'${hashes.length ? ` ${hashes.join(' ')}` : ''} ${scriptOrigins}`,
-    "script-src-attr 'unsafe-inline'",
-    "style-src 'self' 'unsafe-inline' https://unpkg.com",
+    `script-src 'self'${hashes.length ? ` ${hashes.join(' ')}` : ''} ${scripts.join(' ')}`,
+    scriptAttr,
+    styleSrc,
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
-    `connect-src 'self' ${connectOrigins}`,
+    `connect-src 'self' ${baseConnectOrigins.join(' ')}`,
     `frame-src 'self' ${publicOrigin} https://*.google.com https://*.gstatic.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com`,
     "object-src 'none'",
     "base-uri 'self'",
@@ -84,10 +127,6 @@ function pagePolicy(file) {
 
 function routesForFile(file) {
   if (file !== 'index.html') return [`/${path.basename(file, '.html')}`];
-  // Pages sirve index.html al pedir "/". En producción vimos que la regla
-  // exacta "/" no siempre heredaba la CSP específica y quedaba únicamente
-  // la política global. Declarar también el asset real evita que la portada
-  // pierda su CSP fuerte durante la resolución de la URL limpia.
   return ['/', '/index.html'];
 }
 
@@ -116,8 +155,8 @@ if (checkMode) {
     console.error('ERROR — _headers no coincide con las CSP por ruta generadas. Ejecutá npm run build:csp.');
     process.exit(1);
   }
-  console.log('OK — CSP de Cloudflare reproducible y actualizada.');
+  console.log(`OK — CSP reproducible; ${handlerHashes.length} handler(s) inline autorizados por hash, sin script-src-attr unsafe-inline.`);
 } else {
   fs.writeFileSync(headersPath, expected, 'utf8');
-  console.log('CSP de Cloudflare generada por ruta.');
+  console.log(`CSP generada: ${handlerHashes.length} handler(s) heredados autorizados por hash.`);
 }
