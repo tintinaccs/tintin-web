@@ -32,6 +32,7 @@ const LEGACY_SHELL_IDS = Object.freeze([
 ]);
 
 let mountPromise = null;
+let sharedLogoDataPromise = null;
 
 function removeLegacyShell(root = document) {
   LEGACY_SHELL_IDS.forEach(id => root.getElementById(id)?.remove());
@@ -56,6 +57,41 @@ function renderBottomShell() {
   ].join('');
 }
 
+function blobAsDataUrl(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ''));
+    reader.onerror = () => reject(reader.error || new Error('No se pudo leer el logo.'));
+    reader.readAsDataURL(blob);
+  });
+}
+
+function hydrateSharedLogos(root = document) {
+  const images = [...root.querySelectorAll('img[data-tt-shared-logo]')];
+  const source = images.find(image => image.dataset.ttSharedLogo)?.dataset.ttSharedLogo;
+  if (!images.length || !source) return Promise.resolve();
+
+  if (!sharedLogoDataPromise) {
+    sharedLogoDataPromise = fetch(source, { cache: 'force-cache', credentials: 'same-origin' })
+      .then(response => {
+        if (!response.ok) throw new Error(`Logo HTTP ${response.status}`);
+        return response.blob();
+      })
+      .then(blobAsDataUrl)
+      .catch(error => {
+        console.warn('[PublicShell] No se pudo compartir el logo en memoria.', error);
+        return source;
+      });
+  }
+
+  return sharedLogoDataPromise.then(value => {
+    images.forEach(image => {
+      image.src = value;
+      image.removeAttribute('data-tt-shared-logo');
+    });
+  });
+}
+
 function mountPublicShell() {
   if (!document.body || document.body.classList.contains('tt-public-shell-mounted')) return Promise.resolve();
   if (mountPromise) return mountPromise;
@@ -71,6 +107,7 @@ function mountPublicShell() {
     removeLegacyShell();
     document.body.insertAdjacentHTML('afterbegin', renderTopShell());
     document.body.insertAdjacentHTML('beforeend', renderBottomShell());
+    void hydrateSharedLogos();
     if (globalConfig?.layout) applyGlobalLayout(globalConfig.layout);
     else document.documentElement.dataset.ttGlobalLayout = 'fallback';
     if (globalConfig) applyGlobalVisualStudio(globalConfig);
@@ -84,7 +121,12 @@ function mountPublicShell() {
     loadSharedRuntime();
 
     document.dispatchEvent(new CustomEvent('tintin:public-shell-ready', {
-      detail: { architecture: 'modular-navigation-v1', socialNotifications: 'on-demand', globalConfigRequests: 1 },
+      detail: {
+        architecture: 'modular-navigation-v1',
+        socialNotifications: 'on-demand',
+        globalConfigRequests: 1,
+        sharedLogoRequests: 1,
+      },
     }));
   }).catch(error => {
     console.error('[PublicShell] No se pudo montar la navegación.', error);
