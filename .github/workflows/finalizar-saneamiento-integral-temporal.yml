@@ -160,6 +160,12 @@ jobs:
           }
           NODE
 
+      - name: Excluir workflow temporal del árbol generado
+        shell: bash
+        run: |
+          cp .github/workflows/finalizar-saneamiento-integral-temporal.yml /tmp/finalizar-saneamiento-integral-temporal.yml
+          rm .github/workflows/finalizar-saneamiento-integral-temporal.yml
+
       - name: Sincronizar origen, rutas, caché, CSP y diagnósticos
         run: |
           npm run sync:public-origin
@@ -242,6 +248,9 @@ jobs:
             sleep 1
           done
           PERF_BASE_URL=http://127.0.0.1:4173 npm run test:performance
+
+      - name: Restaurar workflow temporal antes del commit
+        run: cp /tmp/finalizar-saneamiento-integral-temporal.yml .github/workflows/finalizar-saneamiento-integral-temporal.yml
 
       - name: Commit atómico del árbol saneado
         shell: bash
