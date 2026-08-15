@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-14T18:46:11.445Z",
-  "sourceFingerprint": "bc6eb037ad410de83f6c789614b34f32f10d144ecf04d991734c9a801a069ebe",
+  "generatedAt": "2026-08-15T11:39:34.365Z",
+  "sourceFingerprint": "523b0f52db9d5b67b8ac8a64885e98d50303d750ea1093a63576142d65035cb8",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 623,
     "textFiles": 591,
-    "totalBytes": 6532894,
+    "totalBytes": 6533607,
     "pages": 18,
     "modules": 382
   },
@@ -24295,8 +24295,8 @@
     },
     {
       "path": "scripts/generar-csp-cloudflare.js",
-      "bytes": 5161,
-      "sha256": "6f67728e5260c903ab7eef3662bc6e868c87feebc3d3984e054099063d9e105b",
+      "bytes": 5751,
+      "sha256": "03bc8d19317098f343172d85e5dad203d8548f808a05a068a9b0f296c293a6f7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24305,63 +24305,63 @@
       "endpoints": [
         {
           "url": "https://*.gstatic.com/",
-          "line": 22
+          "line": 11
         },
         {
           "url": "https://*.google.com/",
-          "line": 22
+          "line": 11
         },
         {
           "url": "https://unpkg.com/",
-          "line": 22
+          "line": 11
         },
         {
           "url": "https://www.googletagmanager.com/",
-          "line": 22
+          "line": 11
         },
         {
           "url": "https://*.googleapis.com/",
-          "line": 23
+          "line": 12
         },
         {
           "url": "https://*.googleusercontent.com/",
-          "line": 23
+          "line": 12
         },
         {
           "url": "https://res.cloudinary.com/",
-          "line": 23
+          "line": 12
         },
         {
           "url": "https://api.cloudinary.com/",
-          "line": 23
+          "line": 12
         },
         {
           "url": "https://api.imgbb.com/",
-          "line": 23
+          "line": 12
         },
         {
           "url": "https://*.google-analytics.com/",
-          "line": 23
+          "line": 12
         },
         {
           "url": "https://*.analytics.google.com/",
-          "line": 23
+          "line": 12
         },
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 57
+          "line": 13
         },
         {
           "url": "https://www.youtube.com/",
-          "line": 57
+          "line": 13
         },
         {
           "url": "https://www.youtube-nocookie.com/",
-          "line": 57
+          "line": 13
         },
         {
           "url": "https://player.vimeo.com/",
-          "line": 57
+          "line": 13
         }
       ]
     },
@@ -25949,8 +25949,8 @@
     {
       "path": ".github/workflows/auditar-limpiar-ramas.yml",
       "extension": ".yml",
-      "bytes": 3921,
-      "sha256": "273cbd4db3ef542ce8e7e784b1631ac31d4a25bc7ae035d7f48206a7f81cc53f"
+      "bytes": 4044,
+      "sha256": "0b59684129f0951f74b3fa796ad5c28195a1ac8133ebed00fa3a84366ff3b5d0"
     },
     {
       "path": ".github/workflows/auditar-navegacion-modular.yml",
@@ -29243,8 +29243,8 @@
     {
       "path": "scripts/generar-csp-cloudflare.js",
       "extension": ".js",
-      "bytes": 5161,
-      "sha256": "6f67728e5260c903ab7eef3662bc6e868c87feebc3d3984e054099063d9e105b"
+      "bytes": 5751,
+      "sha256": "03bc8d19317098f343172d85e5dad203d8548f808a05a068a9b0f296c293a6f7"
     },
     {
       "path": "scripts/preparar-hosting.js",
