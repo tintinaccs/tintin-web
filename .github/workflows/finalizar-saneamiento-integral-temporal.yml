@@ -91,7 +91,7 @@ jobs:
           fs.writeFileSync(file, source);
           NODE
 
-      - name: Adaptar auditores históricos a imports y origen centralizados
+      - name: Adaptar auditores históricos a imports, origen y rutas limpias
         shell: bash
         run: |
           node <<'NODE'
@@ -124,6 +124,28 @@ jobs:
             );
             if (!source.includes(robustImport)) throw new Error('No se pudo adaptar el import de apiUrl en confiabilidad.');
             if (!source.includes(`functionOrigin.includes('return TINTIN_FUNCTIONS_FALLBACK_ORIGIN')`)) throw new Error('No se pudo adaptar el fallback centralizado en confiabilidad.');
+            fs.writeFileSync(file, source);
+          }
+
+          {
+            const file = 'scripts/auditar-admin-fundamentos.js';
+            let source = fs.readFileSync(file, 'utf8');
+            const replacements = [
+              [String.raw`/if \(!user\)\s*\{[^}]*login\.html/.test(adminApp)`, String.raw`/if \(!user\)\s*\{[^}]*\/login/.test(adminApp)`],
+              [`adminApp.includes("window.location.href = 'perfil.html'")`, `adminApp.includes("window.location.href = '/perfil'")`],
+              [`adminApp.includes('login.html?blocked=1')`, `adminApp.includes('/login?blocked=1')`],
+              [String.raw`/catch\s*\(e\)\s*\{[\s\S]{0,220}window\.location\.href = 'login\.html'/.test(adminApp)`, String.raw`/catch\s*\(e\)\s*\{[\s\S]{0,220}window\.location\.href = '\/login'/.test(adminApp)`]
+            ];
+            for (const [from, to] of replacements) {
+              if (source.includes(from)) source = source.replace(from, to);
+              if (!source.includes(to)) throw new Error(`No se pudo adaptar auditor admin: ${from}`);
+            }
+            source = source
+              .replace('Sin sesión se redirige a login.html', 'Sin sesión se redirige a /login')
+              .replace('Un rol de cliente/sin rol se saca del panel a perfil.html', 'Un rol de cliente/sin rol se saca del panel a /perfil')
+              .replace('Un usuario no autenticado debe terminar en login.html, nunca dentro del panel.', 'Un usuario no autenticado debe terminar en /login, nunca dentro del panel.')
+              .replace('Solo roles de staff pueden ver el panel; el resto va a perfil.html.', 'Solo roles de staff pueden ver el panel; el resto va a /perfil.')
+              .replace('Una cuenta con blocked=true debe cerrar sesión e ir a login.html?blocked=1.', 'Una cuenta con blocked=true debe cerrar sesión e ir a /login?blocked=1.');
             fs.writeFileSync(file, source);
           }
           NODE
