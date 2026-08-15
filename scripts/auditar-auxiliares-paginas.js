@@ -7,7 +7,7 @@
    tenían auditoría propia:
 
      - 404.html        → página de error (no indexable, con recuperación).
-     - nosotros.html   → ruta antigua / no enlazada: redirige a about.html.
+     - nosotros.html   → ruta antigua / no enlazada: redirige a /about.
 
    Fija las invariantes que las mantienen correctas: el 404 no debe indexarse y
    siempre debe ofrecer salida (inicio, catálogo, categorías y WhatsApp); la
@@ -69,11 +69,12 @@ check(
   'El enlace de WhatsApp debe sincronizarse y la visita debe poder medirse.'
 );
 check(
-  '[404.html] ofrece recuperación: inicio, catálogo y categorías',
-  notFound.includes('href="index.html"') &&
-    notFound.includes('href="catalogo.html"') &&
-    /href="catalogo\.html\?cat=/.test(notFound),
-  'Un 404 debe ofrecer siempre salidas claras hacia el sitio.'
+  '[404.html] ofrece recuperación con rutas limpias: inicio, catálogo y categorías',
+  notFound.includes('href="/"') &&
+    notFound.includes('href="/catalogo"') &&
+    /href="\/catalogo\?cat=/.test(notFound) &&
+    !/href="(?:\.\/)?(?:index|catalogo)\.html(?:[?#][^"]*)?"/.test(notFound),
+  'Un 404 debe ofrecer siempre salidas claras y directas hacia las URLs finales del sitio.'
 );
 check(
   '[404.html] incluye ayuda por WhatsApp',
@@ -87,27 +88,29 @@ check(
   'Debe haber un H1 y ningún manejador de eventos inline.'
 );
 
+// Compatibilidad: cualquier .html residual ajeno a las rutas ya normalizadas
+// debe seguir resolviendo a un archivo existente.
 const links404 = [...notFound.matchAll(/href="([^"#?:]+\.html)(?:[?#][^"]*)?"/g)]
   .map(m => m[1]).filter((v, i, a) => a.indexOf(v) === i);
 const broken404 = links404.filter(t => !exists(t));
 check(
-  '[404.html] todos los enlaces internos resuelven',
+  '[404.html] cualquier enlace local .html residual resuelve',
   broken404.length === 0,
   `Enlaces rotos: ${broken404.join(', ')}`
 );
 
 // ===========================================================================
-// 2. RUTA LEGACY — nosotros.html (redirige a about.html)
+// 2. RUTA LEGACY — nosotros.html (redirige a /about)
 // ===========================================================================
 check(
-  '[nosotros.html] redirige a about.html (meta refresh)',
-  /<meta http-equiv="refresh" content="0; url=about\.html">/.test(legacy),
-  'La ruta antigua debe redirigir a la página real de Quiénes somos.'
+  '[nosotros.html] redirige directamente a /about (meta refresh)',
+  /<meta http-equiv="refresh" content="0; url=\/about">/.test(legacy),
+  'La ruta antigua debe redirigir directamente a la URL limpia de Quiénes somos.'
 );
 check(
   '[nosotros.html] es no indexable pero sigue el enlace (noindex, follow)',
   /<meta name="robots" content="noindex, follow">/.test(legacy),
-  'La ruta duplicada no debe indexarse, pero debe transmitir el enlace a about.html.'
+  'La ruta duplicada no debe indexarse, pero debe transmitir el enlace a /about.'
 );
 check(
   '[nosotros.html] consolida su canonical en la URL final limpia de about',
@@ -115,9 +118,9 @@ check(
   'El canonical debe apuntar a la URL final limpia de la página real, no a un alias .html redirigido.'
 );
 check(
-  '[nosotros.html] tiene un enlace visible de respaldo hacia about.html',
-  /<a href="about\.html">/.test(legacy),
-  'Si el refresh no dispara, debe existir un enlace manual a about.html.'
+  '[nosotros.html] tiene un enlace visible de respaldo hacia /about',
+  /<a href="\/about">/.test(legacy),
+  'Si el refresh no dispara, debe existir un enlace manual directo a /about.'
 );
 check(
   '[nosotros.html] sigue siendo un stub mínimo (no duplica el contenido real)',
@@ -130,15 +133,15 @@ check(
   '[nosotros.html] la página destino about.html existe y no crea bucle de canonical',
   exists('about.html') &&
     read('about.html').includes('<link rel="canonical" href="https://tintinaccesorios.pages.dev/about">'),
-  'El destino debe existir y canonizarse en sí mismo (sin apuntar de vuelta a la ruta legacy).'
+  'El destino físico debe existir y canonizarse en su URL pública limpia.'
 );
 
 const publicHtml = fs.readdirSync(root).filter(f => f.endsWith('.html') && f !== 'nosotros.html');
-const linkingLegacy = publicHtml.filter(f => /href="[^"]*nosotros\.html/.test(read(f)));
+const linkingLegacy = publicHtml.filter(f => /href="[^"]*nosotros(?:\.html)?(?:[?#][^"]*)?"/.test(read(f)));
 check(
-  'Ninguna página pública enlaza a la ruta legacy nosotros.html',
+  'Ninguna página pública enlaza a la ruta legacy nosotros',
   linkingLegacy.length === 0,
-  `Estas páginas enlazan a la ruta legacy (deberían apuntar a about.html): ${linkingLegacy.join(', ')}`
+  `Estas páginas enlazan a la ruta legacy (deberían apuntar a /about): ${linkingLegacy.join(', ')}`
 );
 
 const failed = checks.filter(item => !item.ok);
