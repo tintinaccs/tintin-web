@@ -91,20 +91,25 @@ jobs:
           fs.writeFileSync(file, source);
           NODE
 
-      - name: Adaptar auditor de imágenes a imports versionados
+      - name: Adaptar auditor de imágenes a imports y origen centralizados
         shell: bash
         run: |
           node <<'NODE'
           const fs = require('fs');
           const file = 'scripts/auditar-imagenes-fase-5.js';
           let source = fs.readFileSync(file, 'utf8');
-          const legacy = `files.mediaLibrary.includes("import { apiUrl } from '../../core/firebase/origen-funciones.js")`;
-          const robust = `/import\\s*\\{\\s*apiUrl\\s*\\}\\s*from\\s*['\"]\\.\\.\\/\\.\\.\\/core\\/firebase\\/origen-funciones\\.js(?:\\?[^'\"]+)?['\"]/.test(files.mediaLibrary)`;
-          if (source.includes(legacy)) {
-            source = source.replace(legacy, robust);
-          }
-          if (!source.includes(robust)) {
+          const legacyImport = `files.mediaLibrary.includes("import { apiUrl } from '../../core/firebase/origen-funciones.js")`;
+          const robustImport = `/import\\s*\\{\\s*apiUrl\\s*\\}\\s*from\\s*['\"]\\.\\.\\/\\.\\.\\/core\\/firebase\\/origen-funciones\\.js(?:\\?[^'\"]+)?['\"]/.test(files.mediaLibrary)`;
+          if (source.includes(legacyImport)) source = source.replace(legacyImport, robustImport);
+          source = source.replace(
+            `files.functionOrigin.includes('CLOUDFLARE_FALLBACK_ORIGIN')`,
+            `files.functionOrigin.includes('TINTIN_FUNCTIONS_FALLBACK_ORIGIN')`
+          );
+          if (!source.includes(robustImport)) {
             throw new Error('No se pudo adaptar el contrato de import versionado de apiUrl.');
+          }
+          if (!source.includes(`files.functionOrigin.includes('TINTIN_FUNCTIONS_FALLBACK_ORIGIN')`)) {
+            throw new Error('No se pudo adaptar el contrato del origen centralizado.');
           }
           fs.writeFileSync(file, source);
           NODE
@@ -191,9 +196,6 @@ jobs:
             sleep 1
           done
           PERF_BASE_URL=http://127.0.0.1:4173 npm run test:performance
-
-      - name: Retirar workflow temporal del árbol final
-        run: rm -f .github/workflows/finalizar-saneamiento-integral-temporal.yml
 
       - name: Commit atómico del árbol saneado
         shell: bash
