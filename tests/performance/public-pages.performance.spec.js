@@ -26,11 +26,14 @@ for (const pageName of PUBLIC_PAGES) {
     const vitals = await collectVitals(page);
     console.log(
       `[${pageName}] DCL=${vitals.dcl}ms LCP=${vitals.lcp}ms CLS=${vitals.cls} ` +
-      `INP=${vitals.inp}ms reqs=${vitals.requests} duplicadas=${vitals.duplicateRequests} ` +
+      `INP=${vitals.inp}ms reqs=${vitals.requests} duplicadas-first-party=${vitals.duplicateRequests} ` +
       `transfer=${vitals.transferKB}KB firestore=${vitals.firestoreReads}`
     );
     if (vitals.duplicateUrls?.length) {
-      console.log(`[${pageName}] DUPLICATE_URLS=${JSON.stringify(vitals.duplicateUrls)}`);
+      console.log(`[${pageName}] FIRST_PARTY_DUPLICATE_URLS=${JSON.stringify(vitals.duplicateUrls)}`);
+    }
+    if (vitals.thirdPartyDuplicateUrls?.length) {
+      console.log(`[${pageName}] THIRD_PARTY_DUPLICATE_URLS=${JSON.stringify(vitals.thirdPartyDuplicateUrls)}`);
     }
     if (vitals.shifts?.length) {
       console.log(`[${pageName}] LAYOUT_SHIFTS=${JSON.stringify(vitals.shifts)}`);
@@ -44,7 +47,10 @@ for (const pageName of PUBLIC_PAGES) {
     if (vitals.inp != null) expect(vitals.inp, 'INP de laboratorio dentro de presupuesto').toBeLessThanOrEqual(BUDGETS.inpMs);
     expect(vitals.cls, 'CLS dentro de presupuesto').toBeLessThanOrEqual(BUDGETS.clsMax);
     expect(vitals.transferKB, 'peso transferido dentro de presupuesto').toBeLessThanOrEqual(BUDGETS.transferKB);
-    expect(vitals.duplicateRequests, `sin solicitudes duplicadas: ${JSON.stringify(vitals.duplicateUrls || [])}`).toBeLessThanOrEqual(BUDGETS.duplicateRequests);
+    expect(
+      vitals.duplicateRequests,
+      `sin solicitudes first-party duplicadas: ${JSON.stringify(vitals.duplicateUrls || [])}`
+    ).toBeLessThanOrEqual(BUDGETS.duplicateRequests);
 
     if (pageName === 'index.html') {
       expect(vitals.requests, 'Inicio no debe volver a superar la matriz pre-optimización').toBeLessThanOrEqual(BUDGETS.homeRequests);
