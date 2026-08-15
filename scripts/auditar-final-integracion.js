@@ -67,13 +67,17 @@ check(
 );
 
 const robots = read('robots.txt');
+const privateRoutes = ['/admin', '/admin-images', '/login', '/checkout', '/perfil'];
 check(
-  'robots bloquea páginas privadas y declara sitemap',
-  ['/admin.html', '/admin-images.html', '/login.html', '/checkout.html', '/perfil.html']
-    .every(page => robots.includes(`Disallow: ${page}`)) && /Sitemap:\s*https?:\/\//.test(robots),
-  'robots.txt no protege todas las rutas privadas.'
+  'robots bloquea páginas privadas limpias y legacy y declara sitemap',
+  privateRoutes.every(route => robots.includes(`Disallow: ${route}`)) &&
+    privateRoutes.every(route => robots.includes(`Disallow: ${route}.html`)) &&
+    /Sitemap:\s*https?:\/\//.test(robots),
+  'robots.txt no refleja todas las rutas privadas limpias y legacy.'
 );
-const sitemap = read('sitemap.xml');
+
+const sitemapIndex = read('sitemap.xml');
+const sitemapPages = read('sitemap-pages.xml');
 const publicOrigin = 'https://tintinaccesorios.pages.dev';
 const publicRoutes = [
   '/',
@@ -87,21 +91,32 @@ const publicRoutes = [
   '/terminos',
   '/privacidad'
 ];
+const childSitemaps = [
+  '/sitemap-pages.xml',
+  '/sitemap-products.xml',
+  '/sitemap-collections.xml'
+];
 check(
-  'sitemap incluye las páginas públicas en sus URLs finales limpias',
-  publicRoutes.every(route => sitemap.includes(`<loc>${publicOrigin}${route}</loc>`)),
-  'Faltan páginas públicas limpias en sitemap.xml.'
+  'sitemap.xml es un índice completo',
+  /<sitemapindex\b/i.test(sitemapIndex) &&
+    childSitemaps.every(route => sitemapIndex.includes(`<loc>${publicOrigin}${route}</loc>`)),
+  'El índice debe enlazar páginas, productos y colecciones.'
 );
 check(
-  'sitemap no publica aliases .html redirigidos',
-  !/<loc>[^<]*\.html(?:[?#][^<]*)?<\/loc>/i.test(sitemap),
+  'sitemap de páginas incluye las URLs públicas finales limpias',
+  publicRoutes.every(route => sitemapPages.includes(`<loc>${publicOrigin}${route}</loc>`)),
+  'Faltan páginas públicas limpias en sitemap-pages.xml.'
+);
+check(
+  'sitemaps estáticos no publican aliases .html redirigidos',
+  !/<loc>[^<]*\.html(?:[?#][^<]*)?<\/loc>/i.test(`${sitemapIndex}\n${sitemapPages}`),
   'Los destinos redirigidos .html no deben competir con sus URLs finales limpias.'
 );
 check(
-  'sitemap no expone páginas privadas',
-  ['admin.html', 'admin-images.html', 'login.html', 'checkout.html', 'perfil.html',
-   '404.html', 'nosotros.html'].every(page => !sitemap.includes(`/${page}<`)),
-  'El sitemap contiene rutas que no deben indexarse.'
+  'sitemaps estáticos no exponen páginas privadas',
+  ['admin', 'admin-images', 'login', 'checkout', 'perfil', '404', 'nosotros']
+    .every(page => !new RegExp(`<loc>[^<]*/${page}(?:\\.html)?(?:[?#][^<]*)?</loc>`, 'i').test(`${sitemapIndex}\n${sitemapPages}`)),
+  'Los sitemaps contienen rutas que no deben indexarse.'
 );
 
 let manifest = null;
@@ -114,17 +129,39 @@ check(
     Array.isArray(manifest.icons) && manifest.icons.length > 0 && manifest.icons.every(icon => exists(icon.src)),
   'manifest.json o sus recursos son inválidos.'
 );
+
 const apiFunctions = fs.readdirSync(path.join(root, 'functions/api'))
   .filter(file => file.endsWith('.js')).map(file => `/api/${file.replace(/\.js$/, '')}`);
-// El proxy de autenticación (functions/__/auth/[[path]].js) no sigue la
-// convención de un archivo por endpoint en functions/api — es una sola
-// ruta comodín, así que se agrega a mano en vez de derivarla del listado
-// de archivos.
-const expectedRoutes = [...apiFunctions, '/__/auth/*'].sort();
-const routes = (JSON.parse(read('_routes.json')).include || []).slice().sort();
+// Cloudflare Pages Functions también procesa superficies públicas que no son
+// /api: runtime liviano para páginas informativas, metadata de Producto,
+// redirects legacy de Shopify y sitemaps dinámicos. _routes.json debe limitar
+// esas Functions a esta allowlist exacta; no deben desaparecer del contrato ni
+// convertirse accidentalmente en un comodín global.
+const publicFunctionRoutes = [
+  '/about',
+  '/contact',
+  '/envios',
+  '/cambios-devoluciones',
+  '/preguntas-frecuentes',
+  '/terminos',
+  '/privacidad',
+  '/404',
+  '/product',
+  '/products/*',
+  '/collections/*',
+  '/pages/*',
+  '/policies/*',
+  '/sitemap-products.xml',
+  '/sitemap-collections.xml'
+];
+const expectedRoutes = [...apiFunctions, '/__/auth/*', ...publicFunctionRoutes].sort();
+const routeConfig = JSON.parse(read('_routes.json'));
+const routes = (routeConfig.include || []).slice().sort();
 check(
-  '_routes incluye exactamente las funciones existentes',
-  JSON.stringify(expectedRoutes) === JSON.stringify(routes),
+  '_routes incluye exactamente APIs, Auth y Pages Functions públicas',
+  routeConfig.version === 1 &&
+    Array.isArray(routeConfig.exclude) && routeConfig.exclude.length === 0 &&
+    JSON.stringify(expectedRoutes) === JSON.stringify(routes),
   `Rutas esperadas: ${expectedRoutes.join(', ')} | Rutas: ${routes.join(', ')}`
 );
 check(
