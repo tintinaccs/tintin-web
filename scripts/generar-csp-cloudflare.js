@@ -8,19 +8,38 @@ const root = path.resolve(__dirname, '..');
 const headersPath = path.join(root, '_headers');
 const startMarker = '# CSP_ROUTE_POLICIES_START';
 const endMarker = '# CSP_ROUTE_POLICIES_END';
-// Cloudflare Pages no reemplaza el header de una coincidencia más específica:
-// agrega un Content-Security-Policy adicional por cada bloque de _headers que
-// matchea la ruta. El navegador combina varias CSP de forma restrictiva (gana
-// la más estricta por directiva) — así que un frame-ancestors 'none' acá
-// arriba anulaba en la práctica el 'self' que cada ruta declara para su
-// propia página, sin importar qué tan específica fuera esa ruta. Cada .html
-// ya trae su propio frame-ancestors completo (ver generateRouteBlock más
-// abajo); esta política global es el resguardo mínimo para lo que no es una
-// página (JS, CSS, imágenes) — ahí framing no aplica, así que no hace falta
-// repetirlo acá.
-const globalPolicy = "object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests";
 const scriptOrigins = "https://*.gstatic.com https://*.google.com https://unpkg.com https://www.googletagmanager.com";
 const connectOrigins = "https://*.googleapis.com https://*.google.com https://*.gstatic.com https://unpkg.com https://*.googleusercontent.com https://res.cloudinary.com https://api.cloudinary.com https://api.imgbb.com https://*.google-analytics.com https://*.analytics.google.com";
+const frameOrigins = "https://tintinaccesorios.pages.dev https://*.google.com https://*.gstatic.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com";
+// Cloudflare Pages puede resolver una URL limpia (por ejemplo /catalogo) hacia
+// su archivo .html y terminar aplicando al HTML únicamente el bloque wildcard
+// de _headers. Por eso la política global tiene que ser una CSP completa y
+// funcional por sí sola, no solo un conjunto mínimo de directivas.
+//
+// Las políticas por página siguen agregándose debajo. Cuando Cloudflare aplica
+// ambas, el navegador combina varias CSP de forma restrictiva: los hashes por
+// ruta vuelven a limitar los scripts inline, y frame-ancestors 'none' continúa
+// endureciendo las páginas que nunca deben embeberse. El fallback global usa
+// 'unsafe-inline' solo para conservar funcionalidad si el bloque específico no
+// llega a la respuesta; aun así restringe orígenes, objetos, formularios,
+// framing externo, workers y navegación insegura.
+const globalPolicy = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline' ${scriptOrigins}`,
+  "script-src-attr 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline' https://unpkg.com",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' data:",
+  `connect-src 'self' ${connectOrigins}`,
+  `frame-src 'self' ${frameOrigins}`,
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self'",
+  "manifest-src 'self'",
+  "worker-src 'self' blob:",
+  "upgrade-insecure-requests"
+].join('; ') + ';';
 // El editor visual (Apariencia) previsualiza estas páginas dentro de un
 // <iframe> en admin.html — mismo origen, sesión de Super Admin ya validada.
 // frame-ancestors 'none' se lo bloqueaba también a sí mismo: el navegador no
@@ -54,7 +73,7 @@ function pagePolicy(file) {
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
     `connect-src 'self' ${connectOrigins}`,
-    "frame-src 'self' https://tintinaccesorios.pages.dev https://*.google.com https://*.gstatic.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com",
+    `frame-src 'self' ${frameOrigins}`,
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
