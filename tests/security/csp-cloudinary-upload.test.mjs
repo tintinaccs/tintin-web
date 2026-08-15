@@ -43,3 +43,14 @@ test('_headers no transporta CSP sobredimensionada y middleware la aplica', () =
   assert.ok(middleware.includes("headers.set('Content-Security-Policy', policy)"));
   assert.ok(middleware.includes("'X-Tintin-CSP', 'edge-runtime'"));
 });
+
+test('Pages Functions consume el módulo JS generado y no imports JSON con attributes', () => {
+  const middleware = read('functions/_middleware.js');
+  const adminCsp = read('cloudflare/servir-admin-con-csp.js');
+  const generator = read('scripts/generar-csp-cloudflare.js');
+  assert.ok(middleware.includes("../config/csp-runtime.js"));
+  assert.ok(adminCsp.includes("../config/csp-runtime.js"));
+  assert.ok(!middleware.includes('csp-runtime.json'));
+  assert.ok(!adminCsp.includes('csp-runtime.json'));
+  assert.ok(generator.includes('config/csp-runtime.js'));
+});
