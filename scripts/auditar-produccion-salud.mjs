@@ -14,7 +14,7 @@ async function fetchWithRetry(url, options = {}) {
     try {
       const response = await fetch(url, {
         redirect: options.redirect || 'follow',
-        headers: { 'user-agent': 'TintinProductionHealth/3.0 (+https://tintinaccesorios.pages.dev/)' },
+        headers: { 'user-agent': 'TintinProductionHealth/4.0 (+https://tintinaccesorios.pages.dev/)' },
         signal: AbortSignal.timeout(timeoutMs)
       });
       if (response.status >= 500) throw new Error('HTTP ' + response.status);
@@ -34,6 +34,10 @@ function assertStrongCsp(value, route) {
   }
 }
 
+function xmlLocations(body) {
+  return [...String(body || '').matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
+}
+
 async function inspect(relative, expectedType) {
   const requestedUrl = origin + relative;
   const started = Date.now();
@@ -41,7 +45,7 @@ async function inspect(relative, expectedType) {
     const response = await fetchWithRetry(requestedUrl);
     const body = await response.text();
     const type = response.headers.get('content-type') || '';
-    const headers = Object.fromEntries(['content-security-policy','strict-transport-security','x-content-type-options','x-frame-options','referrer-policy','cache-control'].map(name => [name, response.headers.get(name) || '']));
+    const headers = Object.fromEntries(['content-security-policy','strict-transport-security','x-content-type-options','x-frame-options','referrer-policy','cache-control','x-tintin-product-meta'].map(name => [name, response.headers.get(name) || '']));
     const ok = response.ok && (!expectedType || type.includes(expectedType));
     results.push({ requestedUrl, finalUrl: response.url, redirected: response.redirected, status: response.status, ms: Date.now() - started, type, ok, bytes: body.length, headers });
     if (!ok) throw new Error('Respuesta inesperada: ' + response.status + ' ' + type);
@@ -87,12 +91,40 @@ await check('home-canonical', async () => {
 await check('robots', async () => {
   const robots = await inspect('/robots.txt', 'text/plain');
   if (!robots.body.includes('Sitemap: ' + origin + '/sitemap.xml')) throw new Error('robots.txt no apunta al sitemap vigente.');
+  for (const route of ['/admin', '/admin-images', '/checkout', '/login', '/perfil']) {
+    if (!robots.body.includes('Disallow: ' + route + '\n')) throw new Error('robots.txt no bloquea la ruta limpia ' + route + '.');
+  }
 });
 
-await check('sitemap', async () => {
+await check('sitemap-index', async () => {
   const sitemap = await inspect('/sitemap.xml', 'xml');
-  const urls = [...sitemap.body.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
-  if (!urls.length || urls.some(url => !url.startsWith(origin + '/')) || urls.some(url => /\.html(?:$|[?#])/.test(url))) throw new Error('Sitemap vacío, con otro origen o con URLs .html redirigidas.');
+  const urls = xmlLocations(sitemap.body);
+  const expected = [origin + '/sitemap-pages.xml', origin + '/sitemap-products.xml', origin + '/sitemap-collections.xml'];
+  if (JSON.stringify(urls) !== JSON.stringify(expected)) throw new Error('El índice de sitemaps no contiene páginas, productos y colecciones esperados.');
+});
+
+await check('sitemap-pages', async () => {
+  const sitemap = await inspect('/sitemap-pages.xml', 'xml');
+  const urls = xmlLocations(sitemap.body);
+  if (!urls.length || urls.some(url => !url.startsWith(origin + '/')) || urls.some(url => /\.html(?:$|[?#])/.test(url))) {
+    throw new Error('Sitemap de páginas vacío, con otro origen o con URLs .html.');
+  }
+});
+
+await check('sitemap-products', async () => {
+  const sitemap = await inspect('/sitemap-products.xml', 'xml');
+  const urls = xmlLocations(sitemap.body);
+  if (!urls.length || urls.some(url => !url.startsWith(origin + '/product?id='))) {
+    throw new Error('Sitemap dinámico de productos vacío o con URLs inválidas.');
+  }
+});
+
+await check('sitemap-collections', async () => {
+  const sitemap = await inspect('/sitemap-collections.xml', 'xml');
+  const urls = xmlLocations(sitemap.body);
+  if (urls.some(url => !url.startsWith(origin + '/catalogo?cat='))) {
+    throw new Error('Sitemap dinámico de colecciones contiene URLs inválidas.');
+  }
 });
 
 await check('manifest', async () => {
@@ -110,12 +142,26 @@ await check('api-health', async () => {
   }
 });
 
+let sampleProductId = '';
 await check('api-public-catalog', async () => {
   const catalog = await inspect('/api/public-catalog?resource=products', 'application/json');
   const payload = JSON.parse(catalog.body || '{}');
   if (payload?.ok !== true || payload?.resource !== 'products' || !Array.isArray(payload?.items)) {
     throw new Error('/api/public-catalog no devolvió el contrato esperado.');
   }
+  sampleProductId = String(payload.items.find(item => item?.id)?.id || '');
+  if (!sampleProductId) throw new Error('/api/public-catalog no devolvió ningún producto para el canary SEO.');
+});
+
+await check('product-server-metadata', async () => {
+  if (!sampleProductId) throw new Error('No hay producto de muestra disponible para probar metadata.');
+  const route = '/product?id=' + encodeURIComponent(sampleProductId);
+  const product = await inspect(route, 'text/html');
+  assertStrongCsp(product.headers['content-security-policy'], route);
+  if (product.headers['x-tintin-product-meta'] !== 'server') throw new Error('Producto no fue enriquecido por Pages Function.');
+  if (!product.body.includes('<meta property="og:type" content="product">')) throw new Error('Producto no entrega Open Graph específico desde servidor.');
+  if (!product.body.includes('id="tt-product-jsonld-server"')) throw new Error('Producto no entrega JSON-LD específico desde servidor.');
+  if (!product.body.includes('<link rel="canonical" href="' + origin + '/product?id=')) throw new Error('Producto no entrega canonical específico desde servidor.');
 });
 
 fs.mkdirSync(path.resolve('artifacts'), { recursive: true });
@@ -133,4 +179,4 @@ if (failures.length) {
   failures.forEach(item => console.error('- ' + item.name + ': ' + item.error));
   process.exit(1);
 }
-console.log('\nProducción disponible: páginas, metadatos, headers y Pages Functions verificados.');
+console.log('\nProducción disponible: páginas, metadatos, headers, sitemaps y Pages Functions verificados.');
