@@ -49,7 +49,15 @@ const explicitFiles = ['_headers', 'robots.txt'].map(file => path.join(root, fil
 // como default (tintinaccs.com), independiente del origen público activo hoy.
 // No debe sincronizarse con el origen actual o dejaría de auditar el dominio
 // de destino real del cutover.
-const excludedFiles = [path.join(root, 'scripts', 'auditar-cutover-live.mjs')];
+// diagnostic-manifest.json es un artefacto generado por build:diagnostics a
+// partir de los archivos fuente reales (incluido el endpoint pinneado de
+// auditar-cutover-live.mjs). Barrerlo aquí como texto plano reescribiría ese
+// endpoint embebido con el origen activo, desincronizándolo del archivo
+// fuente real que sí queda excluido arriba.
+const excludedFiles = [
+  path.join(root, 'scripts', 'auditar-cutover-live.mjs'),
+  path.join(root, 'diagnostic-manifest.json')
+];
 const files = [...new Set([...runtimeFiles, ...explicitFiles])]
   .filter(file => path.resolve(file) !== path.resolve(configPath) && path.resolve(file) !== selfPath)
   .filter(file => !excludedFiles.includes(path.resolve(file)));
