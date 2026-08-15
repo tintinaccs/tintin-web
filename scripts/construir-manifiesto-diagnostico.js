@@ -118,11 +118,39 @@ if (
   throw new Error('El analizador de atributos confunde nombres data-* con atributos HTML reales.');
 }
 
+// Debe reflejar el PAGE_ROUTES de scripts/normalizar-rutas-publicas.js: las
+// rutas limpias no existen como archivos en disco, las sirve Cloudflare
+// Pages Functions. Sin este mapeo el inventario de referencias locales
+// reporta falsos positivos para cada href a una ruta limpia (/about, etc.).
+const CLEAN_ROUTE_FILES = new Map([
+  ['/catalogo', 'catalogo.html'],
+  ['/collections', 'collections.html'],
+  ['/product', 'product.html'],
+  ['/about', 'about.html'],
+  ['/contact', 'contact.html'],
+  ['/envios', 'envios.html'],
+  ['/cambios-devoluciones', 'cambios-devoluciones.html'],
+  ['/preguntas-frecuentes', 'preguntas-frecuentes.html'],
+  ['/terminos', 'terminos.html'],
+  ['/privacidad', 'privacidad.html'],
+  ['/checkout', 'checkout.html'],
+  ['/login', 'login.html'],
+  ['/perfil', 'perfil.html'],
+  ['/admin', 'admin.html'],
+  ['/admin-images', 'admin-images.html'],
+  ['/404', '404.html']
+]);
+
 function normalizeLocalReference(fromFile, raw) {
   const value = String(raw || '').trim();
   if (!value || value.startsWith('#') || value.includes('${')) return null;
   if (/^(?:node:|https?:|mailto:|tel:|javascript:|data:|blob:|\/\/)/i.test(value)) return null;
-  const clean = value.split('#')[0].split('?')[0].replace(/^\//, '');
+  const withoutHashOrQuery = value.split('#')[0].split('?')[0];
+  if (withoutHashOrQuery.startsWith('/')) {
+    const routeFile = CLEAN_ROUTE_FILES.get(withoutHashOrQuery);
+    if (routeFile) return routeFile;
+  }
+  const clean = withoutHashOrQuery.replace(/^\//, '');
   if (!clean) return null;
   const normalized = path.posix.normalize(path.posix.join(path.posix.dirname(fromFile), clean));
   return normalized.startsWith('../') ? null : normalized;

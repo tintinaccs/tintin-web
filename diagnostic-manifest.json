@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-15T22:49:09.951Z",
-  "sourceFingerprint": "85ca14817109037c5742b413aed963bb96efb2ddc7abbed24896f9decfa5927f",
+  "generatedAt": "2026-08-15T22:57:36.364Z",
+  "sourceFingerprint": "ac71f6d737ec8fb5604015e3ae2409343c06d04012390e2e645fd07954f1d2b2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 652,
     "textFiles": 620,
-    "totalBytes": 7315968,
+    "totalBytes": 7317072,
     "pages": 18,
     "modules": 405
   },
@@ -235,7 +235,7 @@
         },
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Ver catálogo",
           "id": "",
           "ariaLabel": "",
@@ -245,7 +245,7 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Relojes",
           "id": "",
           "ariaLabel": "",
@@ -255,7 +255,7 @@
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Aros",
           "id": "",
           "ariaLabel": "",
@@ -265,7 +265,7 @@
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Collares",
           "id": "",
           "ariaLabel": "",
@@ -275,7 +275,7 @@
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Bags",
           "id": "",
           "ariaLabel": "",
@@ -285,7 +285,7 @@
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Pulseras",
           "id": "",
           "ariaLabel": "",
@@ -295,7 +295,7 @@
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Anillos",
           "id": "",
           "ariaLabel": "",
@@ -461,45 +461,45 @@
         },
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 158,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 162,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 163,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 164,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 165,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 166,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 167,
-          "exists": false
+          "exists": true
         }
       ],
       "forms": [],
@@ -742,7 +742,7 @@
       "links": [
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Ver catálogo completo",
           "id": "",
           "ariaLabel": "",
@@ -752,7 +752,7 @@
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "text": "Contactarnos",
           "id": "",
           "ariaLabel": "",
@@ -782,7 +782,7 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Relojes",
           "id": "",
           "ariaLabel": "",
@@ -792,7 +792,7 @@
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Bags",
           "id": "",
           "ariaLabel": "",
@@ -802,7 +802,7 @@
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Collares",
           "id": "",
           "ariaLabel": "",
@@ -812,7 +812,7 @@
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Aros",
           "id": "",
           "ariaLabel": "",
@@ -822,7 +822,7 @@
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Pulseras",
           "id": "",
           "ariaLabel": "",
@@ -832,7 +832,7 @@
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Anillos",
           "id": "",
           "ariaLabel": "",
@@ -842,7 +842,7 @@
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "text": "Quiénes somos",
           "id": "",
           "ariaLabel": "",
@@ -852,7 +852,7 @@
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "text": "Contacto",
           "id": "",
           "ariaLabel": "",
@@ -862,7 +862,7 @@
         },
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Ver catálogo",
           "id": "",
           "ariaLabel": "",
@@ -872,7 +872,7 @@
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "text": "Términos y condiciones",
           "id": "",
           "ariaLabel": "",
@@ -882,7 +882,7 @@
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "text": "Política de privacidad",
           "id": "",
           "ariaLabel": "",
@@ -1126,81 +1126,81 @@
         },
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 112,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "line": 113,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 230,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 231,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 232,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 233,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 234,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 235,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "line": 241,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "line": 242,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 243,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "line": 244,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "line": 245,
-          "exists": false
+          "exists": true
         }
       ],
       "forms": [],
@@ -1333,7 +1333,7 @@
       "links": [
         {
           "raw": "/login",
-          "target": "login",
+          "target": "login.html",
           "text": "Iniciar sesión",
           "id": "",
           "ariaLabel": "",
@@ -1343,7 +1343,7 @@
         },
         {
           "raw": "/admin",
-          "target": "admin",
+          "target": "admin.html",
           "text": "← Volver al panel",
           "id": "",
           "ariaLabel": "",
@@ -1353,7 +1353,7 @@
         },
         {
           "raw": "/admin",
-          "target": "admin",
+          "target": "admin.html",
           "text": "◀ Panel",
           "id": "",
           "ariaLabel": "",
@@ -1449,21 +1449,21 @@
         },
         {
           "raw": "/login",
-          "target": "login",
+          "target": "login.html",
           "line": 322,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/admin",
-          "target": "admin",
+          "target": "admin.html",
           "line": 338,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/admin",
-          "target": "admin",
+          "target": "admin.html",
           "line": 377,
-          "exists": false
+          "exists": true
         }
       ],
       "forms": [],
@@ -1944,7 +1944,7 @@
       "links": [
         {
           "raw": "/admin-images",
-          "target": "admin-images",
+          "target": "admin-images.html",
           "text": "Imágenes",
           "id": "",
           "ariaLabel": "",
@@ -1964,7 +1964,7 @@
         },
         {
           "raw": "/admin-images",
-          "target": "admin-images",
+          "target": "admin-images.html",
           "text": "Imágenes",
           "id": "",
           "ariaLabel": "",
@@ -1984,7 +1984,7 @@
         },
         {
           "raw": "/checkout",
-          "target": "checkout",
+          "target": "checkout.html",
           "text": "+ Nuevo pedido",
           "id": "",
           "ariaLabel": "",
@@ -2174,21 +2174,21 @@
         },
         {
           "raw": "/admin-images",
-          "target": "admin-images",
+          "target": "admin-images.html",
           "line": 102,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/admin-images",
-          "target": "admin-images",
+          "target": "admin-images.html",
           "line": 149,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/checkout",
-          "target": "checkout",
+          "target": "checkout.html",
           "line": 176,
-          "exists": false
+          "exists": true
         }
       ],
       "forms": [],
@@ -6976,7 +6976,7 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Relojes",
           "id": "",
           "ariaLabel": "",
@@ -6986,7 +6986,7 @@
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Bags",
           "id": "",
           "ariaLabel": "",
@@ -6996,7 +6996,7 @@
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Collares",
           "id": "",
           "ariaLabel": "",
@@ -7006,7 +7006,7 @@
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Aros",
           "id": "",
           "ariaLabel": "",
@@ -7016,7 +7016,7 @@
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Pulseras",
           "id": "",
           "ariaLabel": "",
@@ -7026,7 +7026,7 @@
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Anillos",
           "id": "",
           "ariaLabel": "",
@@ -7036,7 +7036,7 @@
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "text": "Quiénes somos",
           "id": "",
           "ariaLabel": "",
@@ -7046,7 +7046,7 @@
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "text": "Contacto",
           "id": "",
           "ariaLabel": "",
@@ -7056,7 +7056,7 @@
         },
         {
           "raw": "/envios",
-          "target": "envios",
+          "target": "envios.html",
           "text": "Política de envíos",
           "id": "",
           "ariaLabel": "",
@@ -7066,7 +7066,7 @@
         },
         {
           "raw": "/cambios-devoluciones",
-          "target": "cambios-devoluciones",
+          "target": "cambios-devoluciones.html",
           "text": "Cambios y devoluciones",
           "id": "",
           "ariaLabel": "",
@@ -7076,7 +7076,7 @@
         },
         {
           "raw": "/preguntas-frecuentes",
-          "target": "preguntas-frecuentes",
+          "target": "preguntas-frecuentes.html",
           "text": "Preguntas frecuentes",
           "id": "",
           "ariaLabel": "",
@@ -7086,7 +7086,7 @@
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "text": "Términos y condiciones",
           "id": "",
           "ariaLabel": "",
@@ -7096,7 +7096,7 @@
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "text": "Política de privacidad",
           "id": "",
           "ariaLabel": "",
@@ -7304,81 +7304,81 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 140,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 141,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 142,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 143,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 144,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 145,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "line": 151,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "line": 152,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/envios",
-          "target": "envios",
+          "target": "envios.html",
           "line": 153,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
-          "target": "cambios-devoluciones",
+          "target": "cambios-devoluciones.html",
           "line": 154,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
-          "target": "preguntas-frecuentes",
+          "target": "preguntas-frecuentes.html",
           "line": 155,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "line": 156,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "line": 157,
-          "exists": false
+          "exists": true
         }
       ],
       "forms": [],
@@ -7604,7 +7604,7 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Relojes",
           "id": "",
           "ariaLabel": "",
@@ -7614,7 +7614,7 @@
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Bags",
           "id": "",
           "ariaLabel": "",
@@ -7624,7 +7624,7 @@
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Collares",
           "id": "",
           "ariaLabel": "",
@@ -7634,7 +7634,7 @@
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Aros",
           "id": "",
           "ariaLabel": "",
@@ -7644,7 +7644,7 @@
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Pulseras",
           "id": "",
           "ariaLabel": "",
@@ -7654,7 +7654,7 @@
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Anillos",
           "id": "",
           "ariaLabel": "",
@@ -7664,7 +7664,7 @@
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "text": "Quiénes somos",
           "id": "",
           "ariaLabel": "",
@@ -7674,7 +7674,7 @@
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "text": "Contacto",
           "id": "",
           "ariaLabel": "",
@@ -7694,7 +7694,7 @@
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "text": "Términos y condiciones",
           "id": "",
           "ariaLabel": "",
@@ -7704,7 +7704,7 @@
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "text": "Política de privacidad",
           "id": "",
           "ariaLabel": "",
@@ -7918,63 +7918,63 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 462,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 463,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 464,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 465,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 466,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 467,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "line": 473,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "line": 474,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "line": 476,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "line": 477,
-          "exists": false
+          "exists": true
         }
       ],
       "forms": [],
@@ -8985,7 +8985,7 @@
       "links": [
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Ver catálogo completo →",
           "id": "",
           "ariaLabel": "",
@@ -9025,7 +9025,7 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Relojes",
           "id": "",
           "ariaLabel": "",
@@ -9035,7 +9035,7 @@
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Bags",
           "id": "",
           "ariaLabel": "",
@@ -9045,7 +9045,7 @@
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Collares",
           "id": "",
           "ariaLabel": "",
@@ -9055,7 +9055,7 @@
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Aros",
           "id": "",
           "ariaLabel": "",
@@ -9065,7 +9065,7 @@
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Pulseras",
           "id": "",
           "ariaLabel": "",
@@ -9075,7 +9075,7 @@
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Anillos",
           "id": "",
           "ariaLabel": "",
@@ -9085,7 +9085,7 @@
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "text": "Quiénes somos",
           "id": "",
           "ariaLabel": "",
@@ -9095,7 +9095,7 @@
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "text": "Contacto",
           "id": "",
           "ariaLabel": "",
@@ -9115,7 +9115,7 @@
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "text": "Términos y condiciones",
           "id": "",
           "ariaLabel": "",
@@ -9125,7 +9125,7 @@
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "text": "Política de privacidad",
           "id": "",
           "ariaLabel": "",
@@ -9345,69 +9345,69 @@
         },
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 135,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 156,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 157,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 158,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 159,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 160,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 161,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "line": 167,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "line": 168,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "line": 170,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "line": 171,
-          "exists": false
+          "exists": true
         }
       ],
       "forms": [],
@@ -9672,7 +9672,7 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Relojes",
           "id": "",
           "ariaLabel": "",
@@ -9682,7 +9682,7 @@
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Bags",
           "id": "",
           "ariaLabel": "",
@@ -9692,7 +9692,7 @@
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Collares",
           "id": "",
           "ariaLabel": "",
@@ -9702,7 +9702,7 @@
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Aros",
           "id": "",
           "ariaLabel": "",
@@ -9712,7 +9712,7 @@
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "text": "Quiénes somos",
           "id": "",
           "ariaLabel": "",
@@ -9722,7 +9722,7 @@
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "text": "Contacto",
           "id": "",
           "ariaLabel": "",
@@ -9732,7 +9732,7 @@
         },
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Ver catálogo",
           "id": "",
           "ariaLabel": "",
@@ -9742,7 +9742,7 @@
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "text": "Términos y condiciones",
           "id": "",
           "ariaLabel": "",
@@ -9752,7 +9752,7 @@
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "text": "Política de privacidad",
           "id": "",
           "ariaLabel": "",
@@ -9960,57 +9960,57 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 180,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 181,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 182,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 183,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "line": 189,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "line": 190,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 191,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "line": 192,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "line": 193,
-          "exists": false
+          "exists": true
         }
       ],
       "forms": [
@@ -10295,7 +10295,7 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Relojes",
           "id": "",
           "ariaLabel": "",
@@ -10305,7 +10305,7 @@
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Bags",
           "id": "",
           "ariaLabel": "",
@@ -10315,7 +10315,7 @@
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Collares",
           "id": "",
           "ariaLabel": "",
@@ -10325,7 +10325,7 @@
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Aros",
           "id": "",
           "ariaLabel": "",
@@ -10335,7 +10335,7 @@
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Pulseras",
           "id": "",
           "ariaLabel": "",
@@ -10345,7 +10345,7 @@
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Anillos",
           "id": "",
           "ariaLabel": "",
@@ -10355,7 +10355,7 @@
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "text": "Quiénes somos",
           "id": "",
           "ariaLabel": "",
@@ -10365,7 +10365,7 @@
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "text": "Contacto",
           "id": "",
           "ariaLabel": "",
@@ -10375,7 +10375,7 @@
         },
         {
           "raw": "/envios",
-          "target": "envios",
+          "target": "envios.html",
           "text": "Política de envíos",
           "id": "",
           "ariaLabel": "",
@@ -10385,7 +10385,7 @@
         },
         {
           "raw": "/cambios-devoluciones",
-          "target": "cambios-devoluciones",
+          "target": "cambios-devoluciones.html",
           "text": "Cambios y devoluciones",
           "id": "",
           "ariaLabel": "",
@@ -10395,7 +10395,7 @@
         },
         {
           "raw": "/preguntas-frecuentes",
-          "target": "preguntas-frecuentes",
+          "target": "preguntas-frecuentes.html",
           "text": "Preguntas frecuentes",
           "id": "",
           "ariaLabel": "",
@@ -10405,7 +10405,7 @@
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "text": "Términos y condiciones",
           "id": "",
           "ariaLabel": "",
@@ -10415,7 +10415,7 @@
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "text": "Política de privacidad",
           "id": "",
           "ariaLabel": "",
@@ -10623,81 +10623,81 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 147,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 148,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 149,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 150,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 151,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 152,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "line": 158,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "line": 159,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/envios",
-          "target": "envios",
+          "target": "envios.html",
           "line": 160,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
-          "target": "cambios-devoluciones",
+          "target": "cambios-devoluciones.html",
           "line": 161,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
-          "target": "preguntas-frecuentes",
+          "target": "preguntas-frecuentes.html",
           "line": 162,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "line": 163,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "line": 164,
-          "exists": false
+          "exists": true
         }
       ],
       "forms": [],
@@ -11068,7 +11068,7 @@
       "links": [
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Comprar ahora",
           "id": "",
           "ariaLabel": "",
@@ -11078,7 +11078,7 @@
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "text": "¿Quiénes somos? →",
           "id": "",
           "ariaLabel": "",
@@ -11088,7 +11088,7 @@
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "LO QUIERO YA!",
           "id": "",
           "ariaLabel": "",
@@ -11098,7 +11098,7 @@
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "BAGS",
           "id": "",
           "ariaLabel": "",
@@ -11108,7 +11108,7 @@
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "COLLARES",
           "id": "",
           "ariaLabel": "",
@@ -11118,7 +11118,7 @@
         },
         {
           "raw": "/catalogo?cat=earcuff",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "EARCUFF",
           "id": "",
           "ariaLabel": "",
@@ -11128,7 +11128,7 @@
         },
         {
           "raw": "/catalogo?cat=gafas",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "GAFAS",
           "id": "",
           "ariaLabel": "",
@@ -11138,7 +11138,7 @@
         },
         {
           "raw": "/catalogo?cat=brazaletes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "BRAZALETES",
           "id": "",
           "ariaLabel": "",
@@ -11148,7 +11148,7 @@
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "AROS",
           "id": "",
           "ariaLabel": "",
@@ -11158,7 +11158,7 @@
         },
         {
           "raw": "/catalogo?cat=armcuff",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "ARMCUFF",
           "id": "",
           "ariaLabel": "",
@@ -11168,7 +11168,7 @@
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "ANILLOS",
           "id": "",
           "ariaLabel": "",
@@ -11178,7 +11178,7 @@
         },
         {
           "raw": "/catalogo?cat=joyeros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "JOYEROS",
           "id": "",
           "ariaLabel": "",
@@ -11188,7 +11188,7 @@
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "PULSERAS",
           "id": "",
           "ariaLabel": "",
@@ -11198,7 +11198,7 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "RELOJES",
           "id": "",
           "ariaLabel": "",
@@ -11208,7 +11208,7 @@
         },
         {
           "raw": "/catalogo?cat=tobilleras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "TOBILLERAS",
           "id": "",
           "ariaLabel": "",
@@ -11218,7 +11218,7 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "VER RELOJES →",
           "id": "",
           "ariaLabel": "",
@@ -11228,7 +11228,7 @@
         },
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Ver todo el catálogo →",
           "id": "",
           "ariaLabel": "",
@@ -11258,7 +11258,7 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Relojes",
           "id": "",
           "ariaLabel": "",
@@ -11268,7 +11268,7 @@
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Bags",
           "id": "",
           "ariaLabel": "",
@@ -11278,7 +11278,7 @@
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Collares",
           "id": "",
           "ariaLabel": "",
@@ -11288,7 +11288,7 @@
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Aros",
           "id": "",
           "ariaLabel": "",
@@ -11298,7 +11298,7 @@
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Pulseras",
           "id": "",
           "ariaLabel": "",
@@ -11308,7 +11308,7 @@
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Anillos",
           "id": "",
           "ariaLabel": "",
@@ -11318,7 +11318,7 @@
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "text": "Quiénes somos",
           "id": "",
           "ariaLabel": "",
@@ -11328,7 +11328,7 @@
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "text": "Contacto",
           "id": "",
           "ariaLabel": "",
@@ -11338,7 +11338,7 @@
         },
         {
           "raw": "/collections",
-          "target": "collections",
+          "target": "collections.html",
           "text": "Colecciones",
           "id": "",
           "ariaLabel": "",
@@ -11348,7 +11348,7 @@
         },
         {
           "raw": "/envios",
-          "target": "envios",
+          "target": "envios.html",
           "text": "Política de envíos",
           "id": "",
           "ariaLabel": "",
@@ -11358,7 +11358,7 @@
         },
         {
           "raw": "/cambios-devoluciones",
-          "target": "cambios-devoluciones",
+          "target": "cambios-devoluciones.html",
           "text": "Cambios y devoluciones",
           "id": "",
           "ariaLabel": "",
@@ -11368,7 +11368,7 @@
         },
         {
           "raw": "/preguntas-frecuentes",
-          "target": "preguntas-frecuentes",
+          "target": "preguntas-frecuentes.html",
           "text": "Preguntas frecuentes",
           "id": "",
           "ariaLabel": "",
@@ -11378,7 +11378,7 @@
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "text": "Términos y condiciones",
           "id": "",
           "ariaLabel": "",
@@ -11388,7 +11388,7 @@
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "text": "Política de privacidad",
           "id": "",
           "ariaLabel": "",
@@ -11748,189 +11748,189 @@
         },
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 169,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "line": 170,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 233,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 249,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 255,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=earcuff",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 261,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=gafas",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 267,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=brazaletes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 273,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 279,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=armcuff",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 285,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 291,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=joyeros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 297,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 303,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 309,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=tobilleras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 315,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 374,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 392,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 462,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 463,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 464,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 465,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 466,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 467,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "line": 474,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "line": 475,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/collections",
-          "target": "collections",
+          "target": "collections.html",
           "line": 476,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/envios",
-          "target": "envios",
+          "target": "envios.html",
           "line": 477,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
-          "target": "cambios-devoluciones",
+          "target": "cambios-devoluciones.html",
           "line": 478,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
-          "target": "preguntas-frecuentes",
+          "target": "preguntas-frecuentes.html",
           "line": 479,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "line": 480,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "line": 481,
-          "exists": false
+          "exists": true
         }
       ],
       "forms": [],
@@ -12568,13 +12568,13 @@
         "guest",
         "client"
       ],
-      "bytes": 1749,
-      "sha256": "a7a03827055bbd9346f2c3899fd6bc2b7642b8f36fd2799a422fc0a7705632c8",
+      "bytes": 1745,
+      "sha256": "2e567b5f57adc3e22751d01c5a624d3799e5b2807f0d732ad52eb5da39f8fc8e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
         "noindex": true,
-        "redirectsTo": "about.html",
+        "redirectsTo": "/about",
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
@@ -12617,7 +12617,7 @@
       "links": [
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "text": "Hacé clic aquí si no redirige automáticamente.",
           "id": "",
           "ariaLabel": "",
@@ -12659,9 +12659,9 @@
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "line": 26,
-          "exists": false
+          "exists": true
         }
       ],
       "forms": [],
@@ -12865,7 +12865,7 @@
         },
         {
           "raw": "/admin",
-          "target": "admin",
+          "target": "admin.html",
           "text": "⚙️ Panel de administración",
           "id": "link-admin-panel",
           "ariaLabel": "",
@@ -12885,7 +12885,7 @@
         },
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "🛍️ Ver catálogo",
           "id": "",
           "ariaLabel": "",
@@ -12895,7 +12895,7 @@
         },
         {
           "raw": "/checkout",
-          "target": "checkout",
+          "target": "checkout.html",
           "text": "🛒 Finalizar compra",
           "id": "",
           "ariaLabel": "",
@@ -13073,21 +13073,21 @@
         },
         {
           "raw": "/admin",
-          "target": "admin",
+          "target": "admin.html",
           "line": 273,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 298,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/checkout",
-          "target": "checkout",
+          "target": "checkout.html",
           "line": 299,
-          "exists": false
+          "exists": true
         }
       ],
       "forms": [],
@@ -13418,7 +13418,7 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Relojes",
           "id": "",
           "ariaLabel": "",
@@ -13428,7 +13428,7 @@
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Bags",
           "id": "",
           "ariaLabel": "",
@@ -13438,7 +13438,7 @@
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Collares",
           "id": "",
           "ariaLabel": "",
@@ -13448,7 +13448,7 @@
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Aros",
           "id": "",
           "ariaLabel": "",
@@ -13458,7 +13458,7 @@
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Pulseras",
           "id": "",
           "ariaLabel": "",
@@ -13468,7 +13468,7 @@
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Anillos",
           "id": "",
           "ariaLabel": "",
@@ -13478,7 +13478,7 @@
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "text": "Quiénes somos",
           "id": "",
           "ariaLabel": "",
@@ -13488,7 +13488,7 @@
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "text": "Contacto",
           "id": "",
           "ariaLabel": "",
@@ -13498,7 +13498,7 @@
         },
         {
           "raw": "/envios",
-          "target": "envios",
+          "target": "envios.html",
           "text": "Política de envíos",
           "id": "",
           "ariaLabel": "",
@@ -13508,7 +13508,7 @@
         },
         {
           "raw": "/cambios-devoluciones",
-          "target": "cambios-devoluciones",
+          "target": "cambios-devoluciones.html",
           "text": "Cambios y devoluciones",
           "id": "",
           "ariaLabel": "",
@@ -13518,7 +13518,7 @@
         },
         {
           "raw": "/preguntas-frecuentes",
-          "target": "preguntas-frecuentes",
+          "target": "preguntas-frecuentes.html",
           "text": "Preguntas frecuentes",
           "id": "",
           "ariaLabel": "",
@@ -13528,7 +13528,7 @@
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "text": "Términos y condiciones",
           "id": "",
           "ariaLabel": "",
@@ -13538,7 +13538,7 @@
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "text": "Política de privacidad",
           "id": "",
           "ariaLabel": "",
@@ -13746,81 +13746,81 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 169,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 170,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 171,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 172,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 173,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 174,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "line": 180,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "line": 181,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/envios",
-          "target": "envios",
+          "target": "envios.html",
           "line": 182,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
-          "target": "cambios-devoluciones",
+          "target": "cambios-devoluciones.html",
           "line": 183,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
-          "target": "preguntas-frecuentes",
+          "target": "preguntas-frecuentes.html",
           "line": 184,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "line": 185,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "line": 186,
-          "exists": false
+          "exists": true
         }
       ],
       "forms": [],
@@ -14064,7 +14064,7 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Relojes",
           "id": "",
           "ariaLabel": "",
@@ -14074,7 +14074,7 @@
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Bags",
           "id": "",
           "ariaLabel": "",
@@ -14084,7 +14084,7 @@
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Collares",
           "id": "",
           "ariaLabel": "",
@@ -14094,7 +14094,7 @@
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Aros",
           "id": "",
           "ariaLabel": "",
@@ -14104,7 +14104,7 @@
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Pulseras",
           "id": "",
           "ariaLabel": "",
@@ -14114,7 +14114,7 @@
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Anillos",
           "id": "",
           "ariaLabel": "",
@@ -14124,7 +14124,7 @@
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "text": "Quiénes somos",
           "id": "",
           "ariaLabel": "",
@@ -14134,7 +14134,7 @@
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "text": "Contacto",
           "id": "",
           "ariaLabel": "",
@@ -14144,7 +14144,7 @@
         },
         {
           "raw": "/envios",
-          "target": "envios",
+          "target": "envios.html",
           "text": "Política de envíos",
           "id": "",
           "ariaLabel": "",
@@ -14154,7 +14154,7 @@
         },
         {
           "raw": "/cambios-devoluciones",
-          "target": "cambios-devoluciones",
+          "target": "cambios-devoluciones.html",
           "text": "Cambios y devoluciones",
           "id": "",
           "ariaLabel": "",
@@ -14164,7 +14164,7 @@
         },
         {
           "raw": "/preguntas-frecuentes",
-          "target": "preguntas-frecuentes",
+          "target": "preguntas-frecuentes.html",
           "text": "Preguntas frecuentes",
           "id": "",
           "ariaLabel": "",
@@ -14174,7 +14174,7 @@
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "text": "Términos y condiciones",
           "id": "",
           "ariaLabel": "",
@@ -14184,7 +14184,7 @@
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "text": "Política de privacidad",
           "id": "",
           "ariaLabel": "",
@@ -14386,81 +14386,81 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 178,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 179,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 180,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 181,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 182,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 183,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "line": 189,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "line": 190,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/envios",
-          "target": "envios",
+          "target": "envios.html",
           "line": 191,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
-          "target": "cambios-devoluciones",
+          "target": "cambios-devoluciones.html",
           "line": 192,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
-          "target": "preguntas-frecuentes",
+          "target": "preguntas-frecuentes.html",
           "line": 193,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "line": 194,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "line": 195,
-          "exists": false
+          "exists": true
         }
       ],
       "forms": [],
@@ -14711,7 +14711,7 @@
         },
         {
           "raw": "/collections",
-          "target": "collections",
+          "target": "collections.html",
           "text": "Colecciones",
           "id": "",
           "ariaLabel": "",
@@ -14721,7 +14721,7 @@
         },
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Volver a la tienda",
           "id": "",
           "ariaLabel": "",
@@ -14731,7 +14731,7 @@
         },
         {
           "raw": "/checkout",
-          "target": "checkout",
+          "target": "checkout.html",
           "text": "Finalizar compra →",
           "id": "",
           "ariaLabel": "",
@@ -14761,7 +14761,7 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Relojes",
           "id": "",
           "ariaLabel": "",
@@ -14771,7 +14771,7 @@
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Bags",
           "id": "",
           "ariaLabel": "",
@@ -14781,7 +14781,7 @@
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Collares",
           "id": "",
           "ariaLabel": "",
@@ -14791,7 +14791,7 @@
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Aros",
           "id": "",
           "ariaLabel": "",
@@ -14801,7 +14801,7 @@
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "text": "Quiénes somos",
           "id": "",
           "ariaLabel": "",
@@ -14811,7 +14811,7 @@
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "text": "Contacto",
           "id": "",
           "ariaLabel": "",
@@ -14821,7 +14821,7 @@
         },
         {
           "raw": "/collections",
-          "target": "collections",
+          "target": "collections.html",
           "text": "Colecciones",
           "id": "",
           "ariaLabel": "",
@@ -14831,7 +14831,7 @@
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "text": "Términos y condiciones",
           "id": "",
           "ariaLabel": "",
@@ -14841,7 +14841,7 @@
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "text": "Política de privacidad",
           "id": "",
           "ariaLabel": "",
@@ -15091,75 +15091,75 @@
         },
         {
           "raw": "/collections",
-          "target": "collections",
+          "target": "collections.html",
           "line": 73,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 94,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/checkout",
-          "target": "checkout",
+          "target": "checkout.html",
           "line": 254,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 292,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 293,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 294,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 295,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "line": 301,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "line": 302,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/collections",
-          "target": "collections",
+          "target": "collections.html",
           "line": 303,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "line": 304,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "line": 305,
-          "exists": false
+          "exists": true
         }
       ],
       "forms": [],
@@ -15514,7 +15514,7 @@
       "links": [
         {
           "raw": "/envios",
-          "target": "envios",
+          "target": "envios.html",
           "text": "Política de Envíos",
           "id": "",
           "ariaLabel": "",
@@ -15524,7 +15524,7 @@
         },
         {
           "raw": "/cambios-devoluciones",
-          "target": "cambios-devoluciones",
+          "target": "cambios-devoluciones.html",
           "text": "Política de Cambios y Devoluciones",
           "id": "",
           "ariaLabel": "",
@@ -15534,7 +15534,7 @@
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "text": "Política de Privacidad",
           "id": "",
           "ariaLabel": "",
@@ -15584,7 +15584,7 @@
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Relojes",
           "id": "",
           "ariaLabel": "",
@@ -15594,7 +15594,7 @@
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Bags",
           "id": "",
           "ariaLabel": "",
@@ -15604,7 +15604,7 @@
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Collares",
           "id": "",
           "ariaLabel": "",
@@ -15614,7 +15614,7 @@
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Aros",
           "id": "",
           "ariaLabel": "",
@@ -15624,7 +15624,7 @@
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Pulseras",
           "id": "",
           "ariaLabel": "",
@@ -15634,7 +15634,7 @@
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "text": "Anillos",
           "id": "",
           "ariaLabel": "",
@@ -15644,7 +15644,7 @@
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "text": "Quiénes somos",
           "id": "",
           "ariaLabel": "",
@@ -15654,7 +15654,7 @@
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "text": "Contacto",
           "id": "",
           "ariaLabel": "",
@@ -15664,7 +15664,7 @@
         },
         {
           "raw": "/envios",
-          "target": "envios",
+          "target": "envios.html",
           "text": "Política de envíos",
           "id": "",
           "ariaLabel": "",
@@ -15674,7 +15674,7 @@
         },
         {
           "raw": "/cambios-devoluciones",
-          "target": "cambios-devoluciones",
+          "target": "cambios-devoluciones.html",
           "text": "Cambios y devoluciones",
           "id": "",
           "ariaLabel": "",
@@ -15684,7 +15684,7 @@
         },
         {
           "raw": "/preguntas-frecuentes",
-          "target": "preguntas-frecuentes",
+          "target": "preguntas-frecuentes.html",
           "text": "Preguntas frecuentes",
           "id": "",
           "ariaLabel": "",
@@ -15694,7 +15694,7 @@
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "text": "Términos y condiciones",
           "id": "",
           "ariaLabel": "",
@@ -15704,7 +15704,7 @@
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "text": "Política de privacidad",
           "id": "",
           "ariaLabel": "",
@@ -15906,99 +15906,99 @@
         },
         {
           "raw": "/envios",
-          "target": "envios",
+          "target": "envios.html",
           "line": 108,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
-          "target": "cambios-devoluciones",
+          "target": "cambios-devoluciones.html",
           "line": 113,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "line": 123,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 159,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 160,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=collares",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 161,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=aros",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 162,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=pulseras",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 163,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/catalogo?cat=anillos",
-          "target": "catalogo",
+          "target": "catalogo.html",
           "line": 164,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/about",
-          "target": "about",
+          "target": "about.html",
           "line": 170,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/contact",
-          "target": "contact",
+          "target": "contact.html",
           "line": 171,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/envios",
-          "target": "envios",
+          "target": "envios.html",
           "line": 172,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
-          "target": "cambios-devoluciones",
+          "target": "cambios-devoluciones.html",
           "line": 173,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
-          "target": "preguntas-frecuentes",
+          "target": "preguntas-frecuentes.html",
           "line": 174,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/terminos",
-          "target": "terminos",
+          "target": "terminos.html",
           "line": 175,
-          "exists": false
+          "exists": true
         },
         {
           "raw": "/privacidad",
-          "target": "privacidad",
+          "target": "privacidad.html",
           "line": 176,
-          "exists": false
+          "exists": true
         }
       ],
       "forms": [],
@@ -22760,7 +22760,7 @@
     {
       "path": "scripts/auditar-diagnostico-hallazgos.js",
       "bytes": 8290,
-      "sha256": "5259a0a9c60953dcff5e9377d94ab80016fd1e8a896ab0aea02046d639c60068",
+      "sha256": "57b5717e2f59942f5d68988819362dcb99c117ff89e1ddcf8d8a0dfa658af857",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24381,8 +24381,8 @@
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
-      "bytes": 24339,
-      "sha256": "25c54a0247dee49b2806036537a84c0a165302a536e6efc94c6589665c4427bd",
+      "bytes": 25447,
+      "sha256": "8e0639509b0358d5792056cef9652ccabc5ce6f37310ad3f69e23b6c21b382bb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28998,8 +28998,8 @@
     {
       "path": "nosotros.html",
       "extension": ".html",
-      "bytes": 1749,
-      "sha256": "a7a03827055bbd9346f2c3899fd6bc2b7642b8f36fd2799a422fc0a7705632c8"
+      "bytes": 1745,
+      "sha256": "2e567b5f57adc3e22751d01c5a624d3799e5b2807f0d732ad52eb5da39f8fc8e"
     },
     {
       "path": "package-lock.json",
@@ -29287,7 +29287,7 @@
       "path": "scripts/auditar-diagnostico-hallazgos.js",
       "extension": ".js",
       "bytes": 8290,
-      "sha256": "5259a0a9c60953dcff5e9377d94ab80016fd1e8a896ab0aea02046d639c60068"
+      "sha256": "57b5717e2f59942f5d68988819362dcb99c117ff89e1ddcf8d8a0dfa658af857"
     },
     {
       "path": "scripts/auditar-diagnostico.js",
@@ -29700,8 +29700,8 @@
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
       "extension": ".js",
-      "bytes": 24339,
-      "sha256": "25c54a0247dee49b2806036537a84c0a165302a536e6efc94c6589665c4427bd"
+      "bytes": 25447,
+      "sha256": "8e0639509b0358d5792056cef9652ccabc5ce6f37310ad3f69e23b6c21b382bb"
     },
     {
       "path": "scripts/corregir-fuente-tintin.js",
@@ -30107,1034 +30107,7 @@
     }
   ],
   "sitemapRoutes": [],
-  "missingReferences": [
-    {
-      "page": "404.html",
-      "target": "catalogo",
-      "raw": "/catalogo",
-      "line": 158
-    },
-    {
-      "page": "404.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=relojes",
-      "line": 162
-    },
-    {
-      "page": "404.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=aros",
-      "line": 163
-    },
-    {
-      "page": "404.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=collares",
-      "line": 164
-    },
-    {
-      "page": "404.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=bolsos",
-      "line": 165
-    },
-    {
-      "page": "404.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=pulseras",
-      "line": 166
-    },
-    {
-      "page": "404.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=anillos",
-      "line": 167
-    },
-    {
-      "page": "about.html",
-      "target": "catalogo",
-      "raw": "/catalogo",
-      "line": 112
-    },
-    {
-      "page": "about.html",
-      "target": "contact",
-      "raw": "/contact",
-      "line": 113
-    },
-    {
-      "page": "about.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=relojes",
-      "line": 230
-    },
-    {
-      "page": "about.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=bolsos",
-      "line": 231
-    },
-    {
-      "page": "about.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=collares",
-      "line": 232
-    },
-    {
-      "page": "about.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=aros",
-      "line": 233
-    },
-    {
-      "page": "about.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=pulseras",
-      "line": 234
-    },
-    {
-      "page": "about.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=anillos",
-      "line": 235
-    },
-    {
-      "page": "about.html",
-      "target": "about",
-      "raw": "/about",
-      "line": 241
-    },
-    {
-      "page": "about.html",
-      "target": "contact",
-      "raw": "/contact",
-      "line": 242
-    },
-    {
-      "page": "about.html",
-      "target": "catalogo",
-      "raw": "/catalogo",
-      "line": 243
-    },
-    {
-      "page": "about.html",
-      "target": "terminos",
-      "raw": "/terminos",
-      "line": 244
-    },
-    {
-      "page": "about.html",
-      "target": "privacidad",
-      "raw": "/privacidad",
-      "line": 245
-    },
-    {
-      "page": "admin-images.html",
-      "target": "login",
-      "raw": "/login",
-      "line": 322
-    },
-    {
-      "page": "admin-images.html",
-      "target": "admin",
-      "raw": "/admin",
-      "line": 338
-    },
-    {
-      "page": "admin-images.html",
-      "target": "admin",
-      "raw": "/admin",
-      "line": 377
-    },
-    {
-      "page": "admin.html",
-      "target": "admin-images",
-      "raw": "/admin-images",
-      "line": 102
-    },
-    {
-      "page": "admin.html",
-      "target": "admin-images",
-      "raw": "/admin-images",
-      "line": 149
-    },
-    {
-      "page": "admin.html",
-      "target": "checkout",
-      "raw": "/checkout",
-      "line": 176
-    },
-    {
-      "page": "cambios-devoluciones.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=relojes",
-      "line": 140
-    },
-    {
-      "page": "cambios-devoluciones.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=bolsos",
-      "line": 141
-    },
-    {
-      "page": "cambios-devoluciones.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=collares",
-      "line": 142
-    },
-    {
-      "page": "cambios-devoluciones.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=aros",
-      "line": 143
-    },
-    {
-      "page": "cambios-devoluciones.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=pulseras",
-      "line": 144
-    },
-    {
-      "page": "cambios-devoluciones.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=anillos",
-      "line": 145
-    },
-    {
-      "page": "cambios-devoluciones.html",
-      "target": "about",
-      "raw": "/about",
-      "line": 151
-    },
-    {
-      "page": "cambios-devoluciones.html",
-      "target": "contact",
-      "raw": "/contact",
-      "line": 152
-    },
-    {
-      "page": "cambios-devoluciones.html",
-      "target": "envios",
-      "raw": "/envios",
-      "line": 153
-    },
-    {
-      "page": "cambios-devoluciones.html",
-      "target": "cambios-devoluciones",
-      "raw": "/cambios-devoluciones",
-      "line": 154
-    },
-    {
-      "page": "cambios-devoluciones.html",
-      "target": "preguntas-frecuentes",
-      "raw": "/preguntas-frecuentes",
-      "line": 155
-    },
-    {
-      "page": "cambios-devoluciones.html",
-      "target": "terminos",
-      "raw": "/terminos",
-      "line": 156
-    },
-    {
-      "page": "cambios-devoluciones.html",
-      "target": "privacidad",
-      "raw": "/privacidad",
-      "line": 157
-    },
-    {
-      "page": "catalogo.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=relojes",
-      "line": 462
-    },
-    {
-      "page": "catalogo.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=bolsos",
-      "line": 463
-    },
-    {
-      "page": "catalogo.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=collares",
-      "line": 464
-    },
-    {
-      "page": "catalogo.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=aros",
-      "line": 465
-    },
-    {
-      "page": "catalogo.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=pulseras",
-      "line": 466
-    },
-    {
-      "page": "catalogo.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=anillos",
-      "line": 467
-    },
-    {
-      "page": "catalogo.html",
-      "target": "about",
-      "raw": "/about",
-      "line": 473
-    },
-    {
-      "page": "catalogo.html",
-      "target": "contact",
-      "raw": "/contact",
-      "line": 474
-    },
-    {
-      "page": "catalogo.html",
-      "target": "terminos",
-      "raw": "/terminos",
-      "line": 476
-    },
-    {
-      "page": "catalogo.html",
-      "target": "privacidad",
-      "raw": "/privacidad",
-      "line": 477
-    },
-    {
-      "page": "collections.html",
-      "target": "catalogo",
-      "raw": "/catalogo",
-      "line": 135
-    },
-    {
-      "page": "collections.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=relojes",
-      "line": 156
-    },
-    {
-      "page": "collections.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=bolsos",
-      "line": 157
-    },
-    {
-      "page": "collections.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=collares",
-      "line": 158
-    },
-    {
-      "page": "collections.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=aros",
-      "line": 159
-    },
-    {
-      "page": "collections.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=pulseras",
-      "line": 160
-    },
-    {
-      "page": "collections.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=anillos",
-      "line": 161
-    },
-    {
-      "page": "collections.html",
-      "target": "about",
-      "raw": "/about",
-      "line": 167
-    },
-    {
-      "page": "collections.html",
-      "target": "contact",
-      "raw": "/contact",
-      "line": 168
-    },
-    {
-      "page": "collections.html",
-      "target": "terminos",
-      "raw": "/terminos",
-      "line": 170
-    },
-    {
-      "page": "collections.html",
-      "target": "privacidad",
-      "raw": "/privacidad",
-      "line": 171
-    },
-    {
-      "page": "contact.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=relojes",
-      "line": 180
-    },
-    {
-      "page": "contact.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=bolsos",
-      "line": 181
-    },
-    {
-      "page": "contact.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=collares",
-      "line": 182
-    },
-    {
-      "page": "contact.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=aros",
-      "line": 183
-    },
-    {
-      "page": "contact.html",
-      "target": "about",
-      "raw": "/about",
-      "line": 189
-    },
-    {
-      "page": "contact.html",
-      "target": "contact",
-      "raw": "/contact",
-      "line": 190
-    },
-    {
-      "page": "contact.html",
-      "target": "catalogo",
-      "raw": "/catalogo",
-      "line": 191
-    },
-    {
-      "page": "contact.html",
-      "target": "terminos",
-      "raw": "/terminos",
-      "line": 192
-    },
-    {
-      "page": "contact.html",
-      "target": "privacidad",
-      "raw": "/privacidad",
-      "line": 193
-    },
-    {
-      "page": "envios.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=relojes",
-      "line": 147
-    },
-    {
-      "page": "envios.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=bolsos",
-      "line": 148
-    },
-    {
-      "page": "envios.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=collares",
-      "line": 149
-    },
-    {
-      "page": "envios.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=aros",
-      "line": 150
-    },
-    {
-      "page": "envios.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=pulseras",
-      "line": 151
-    },
-    {
-      "page": "envios.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=anillos",
-      "line": 152
-    },
-    {
-      "page": "envios.html",
-      "target": "about",
-      "raw": "/about",
-      "line": 158
-    },
-    {
-      "page": "envios.html",
-      "target": "contact",
-      "raw": "/contact",
-      "line": 159
-    },
-    {
-      "page": "envios.html",
-      "target": "envios",
-      "raw": "/envios",
-      "line": 160
-    },
-    {
-      "page": "envios.html",
-      "target": "cambios-devoluciones",
-      "raw": "/cambios-devoluciones",
-      "line": 161
-    },
-    {
-      "page": "envios.html",
-      "target": "preguntas-frecuentes",
-      "raw": "/preguntas-frecuentes",
-      "line": 162
-    },
-    {
-      "page": "envios.html",
-      "target": "terminos",
-      "raw": "/terminos",
-      "line": 163
-    },
-    {
-      "page": "envios.html",
-      "target": "privacidad",
-      "raw": "/privacidad",
-      "line": 164
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo",
-      "line": 169
-    },
-    {
-      "page": "index.html",
-      "target": "about",
-      "raw": "/about",
-      "line": 170
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=bolsos",
-      "line": 233
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=bolsos",
-      "line": 249
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=collares",
-      "line": 255
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=earcuff",
-      "line": 261
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=gafas",
-      "line": 267
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=brazaletes",
-      "line": 273
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=aros",
-      "line": 279
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=armcuff",
-      "line": 285
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=anillos",
-      "line": 291
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=joyeros",
-      "line": 297
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=pulseras",
-      "line": 303
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=relojes",
-      "line": 309
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=tobilleras",
-      "line": 315
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=relojes",
-      "line": 374
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo",
-      "line": 392
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=relojes",
-      "line": 462
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=bolsos",
-      "line": 463
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=collares",
-      "line": 464
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=aros",
-      "line": 465
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=pulseras",
-      "line": 466
-    },
-    {
-      "page": "index.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=anillos",
-      "line": 467
-    },
-    {
-      "page": "index.html",
-      "target": "about",
-      "raw": "/about",
-      "line": 474
-    },
-    {
-      "page": "index.html",
-      "target": "contact",
-      "raw": "/contact",
-      "line": 475
-    },
-    {
-      "page": "index.html",
-      "target": "collections",
-      "raw": "/collections",
-      "line": 476
-    },
-    {
-      "page": "index.html",
-      "target": "envios",
-      "raw": "/envios",
-      "line": 477
-    },
-    {
-      "page": "index.html",
-      "target": "cambios-devoluciones",
-      "raw": "/cambios-devoluciones",
-      "line": 478
-    },
-    {
-      "page": "index.html",
-      "target": "preguntas-frecuentes",
-      "raw": "/preguntas-frecuentes",
-      "line": 479
-    },
-    {
-      "page": "index.html",
-      "target": "terminos",
-      "raw": "/terminos",
-      "line": 480
-    },
-    {
-      "page": "index.html",
-      "target": "privacidad",
-      "raw": "/privacidad",
-      "line": 481
-    },
-    {
-      "page": "nosotros.html",
-      "target": "about",
-      "raw": "/about",
-      "line": 26
-    },
-    {
-      "page": "perfil.html",
-      "target": "admin",
-      "raw": "/admin",
-      "line": 273
-    },
-    {
-      "page": "perfil.html",
-      "target": "catalogo",
-      "raw": "/catalogo",
-      "line": 298
-    },
-    {
-      "page": "perfil.html",
-      "target": "checkout",
-      "raw": "/checkout",
-      "line": 299
-    },
-    {
-      "page": "preguntas-frecuentes.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=relojes",
-      "line": 169
-    },
-    {
-      "page": "preguntas-frecuentes.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=bolsos",
-      "line": 170
-    },
-    {
-      "page": "preguntas-frecuentes.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=collares",
-      "line": 171
-    },
-    {
-      "page": "preguntas-frecuentes.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=aros",
-      "line": 172
-    },
-    {
-      "page": "preguntas-frecuentes.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=pulseras",
-      "line": 173
-    },
-    {
-      "page": "preguntas-frecuentes.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=anillos",
-      "line": 174
-    },
-    {
-      "page": "preguntas-frecuentes.html",
-      "target": "about",
-      "raw": "/about",
-      "line": 180
-    },
-    {
-      "page": "preguntas-frecuentes.html",
-      "target": "contact",
-      "raw": "/contact",
-      "line": 181
-    },
-    {
-      "page": "preguntas-frecuentes.html",
-      "target": "envios",
-      "raw": "/envios",
-      "line": 182
-    },
-    {
-      "page": "preguntas-frecuentes.html",
-      "target": "cambios-devoluciones",
-      "raw": "/cambios-devoluciones",
-      "line": 183
-    },
-    {
-      "page": "preguntas-frecuentes.html",
-      "target": "preguntas-frecuentes",
-      "raw": "/preguntas-frecuentes",
-      "line": 184
-    },
-    {
-      "page": "preguntas-frecuentes.html",
-      "target": "terminos",
-      "raw": "/terminos",
-      "line": 185
-    },
-    {
-      "page": "preguntas-frecuentes.html",
-      "target": "privacidad",
-      "raw": "/privacidad",
-      "line": 186
-    },
-    {
-      "page": "privacidad.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=relojes",
-      "line": 178
-    },
-    {
-      "page": "privacidad.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=bolsos",
-      "line": 179
-    },
-    {
-      "page": "privacidad.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=collares",
-      "line": 180
-    },
-    {
-      "page": "privacidad.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=aros",
-      "line": 181
-    },
-    {
-      "page": "privacidad.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=pulseras",
-      "line": 182
-    },
-    {
-      "page": "privacidad.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=anillos",
-      "line": 183
-    },
-    {
-      "page": "privacidad.html",
-      "target": "about",
-      "raw": "/about",
-      "line": 189
-    },
-    {
-      "page": "privacidad.html",
-      "target": "contact",
-      "raw": "/contact",
-      "line": 190
-    },
-    {
-      "page": "privacidad.html",
-      "target": "envios",
-      "raw": "/envios",
-      "line": 191
-    },
-    {
-      "page": "privacidad.html",
-      "target": "cambios-devoluciones",
-      "raw": "/cambios-devoluciones",
-      "line": 192
-    },
-    {
-      "page": "privacidad.html",
-      "target": "preguntas-frecuentes",
-      "raw": "/preguntas-frecuentes",
-      "line": 193
-    },
-    {
-      "page": "privacidad.html",
-      "target": "terminos",
-      "raw": "/terminos",
-      "line": 194
-    },
-    {
-      "page": "privacidad.html",
-      "target": "privacidad",
-      "raw": "/privacidad",
-      "line": 195
-    },
-    {
-      "page": "product.html",
-      "target": "collections",
-      "raw": "/collections",
-      "line": 73
-    },
-    {
-      "page": "product.html",
-      "target": "catalogo",
-      "raw": "/catalogo",
-      "line": 94
-    },
-    {
-      "page": "product.html",
-      "target": "checkout",
-      "raw": "/checkout",
-      "line": 254
-    },
-    {
-      "page": "product.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=relojes",
-      "line": 292
-    },
-    {
-      "page": "product.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=bolsos",
-      "line": 293
-    },
-    {
-      "page": "product.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=collares",
-      "line": 294
-    },
-    {
-      "page": "product.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=aros",
-      "line": 295
-    },
-    {
-      "page": "product.html",
-      "target": "about",
-      "raw": "/about",
-      "line": 301
-    },
-    {
-      "page": "product.html",
-      "target": "contact",
-      "raw": "/contact",
-      "line": 302
-    },
-    {
-      "page": "product.html",
-      "target": "collections",
-      "raw": "/collections",
-      "line": 303
-    },
-    {
-      "page": "product.html",
-      "target": "terminos",
-      "raw": "/terminos",
-      "line": 304
-    },
-    {
-      "page": "product.html",
-      "target": "privacidad",
-      "raw": "/privacidad",
-      "line": 305
-    },
-    {
-      "page": "terminos.html",
-      "target": "envios",
-      "raw": "/envios",
-      "line": 108
-    },
-    {
-      "page": "terminos.html",
-      "target": "cambios-devoluciones",
-      "raw": "/cambios-devoluciones",
-      "line": 113
-    },
-    {
-      "page": "terminos.html",
-      "target": "privacidad",
-      "raw": "/privacidad",
-      "line": 123
-    },
-    {
-      "page": "terminos.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=relojes",
-      "line": 159
-    },
-    {
-      "page": "terminos.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=bolsos",
-      "line": 160
-    },
-    {
-      "page": "terminos.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=collares",
-      "line": 161
-    },
-    {
-      "page": "terminos.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=aros",
-      "line": 162
-    },
-    {
-      "page": "terminos.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=pulseras",
-      "line": 163
-    },
-    {
-      "page": "terminos.html",
-      "target": "catalogo",
-      "raw": "/catalogo?cat=anillos",
-      "line": 164
-    },
-    {
-      "page": "terminos.html",
-      "target": "about",
-      "raw": "/about",
-      "line": 170
-    },
-    {
-      "page": "terminos.html",
-      "target": "contact",
-      "raw": "/contact",
-      "line": 171
-    },
-    {
-      "page": "terminos.html",
-      "target": "envios",
-      "raw": "/envios",
-      "line": 172
-    },
-    {
-      "page": "terminos.html",
-      "target": "cambios-devoluciones",
-      "raw": "/cambios-devoluciones",
-      "line": 173
-    },
-    {
-      "page": "terminos.html",
-      "target": "preguntas-frecuentes",
-      "raw": "/preguntas-frecuentes",
-      "line": 174
-    },
-    {
-      "page": "terminos.html",
-      "target": "terminos",
-      "raw": "/terminos",
-      "line": 175
-    },
-    {
-      "page": "terminos.html",
-      "target": "privacidad",
-      "raw": "/privacidad",
-      "line": 176
-    }
-  ],
+  "missingReferences": [],
   "routeReferences": [
     {
       "file": "catalogo.html",
