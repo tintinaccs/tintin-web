@@ -9,6 +9,8 @@ const LIGHTWEIGHT_PAGES = new Set([
   '404'
 ]);
 
+const ABOUT_CANONICAL_GUARD = '/js/pages/institutional/about-canonical-clean-v1.js';
+
 function pageName(request) {
   const url = new URL(request.url);
   return url.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
@@ -27,6 +29,15 @@ export function lightenHtml(html) {
     .replace(/\s*<link\s+rel=["']modulepreload["'][^>]*>\s*/gi, '\n');
 }
 
+export function injectLightweightPageGuards(html, page) {
+  let output = String(html || '');
+  if (page !== 'about' || output.includes(ABOUT_CANONICAL_GUARD)) return output;
+  const tag = `<script src="${ABOUT_CANONICAL_GUARD}" defer></script>`;
+  return output.includes('</head>')
+    ? output.replace('</head>', `  ${tag}\n</head>`)
+    : `${tag}\n${output}`;
+}
+
 export function isLightweightPageName(value) {
   return LIGHTWEIGHT_PAGES.has(String(value || '').trim().toLowerCase());
 }
@@ -38,7 +49,7 @@ export async function onRequest({ request, env }) {
   if (request.method === 'HEAD') return asset;
   if (!asset.ok || !(asset.headers.get('content-type') || '').includes('text/html')) return asset;
 
-  const html = lightenHtml(await asset.text());
+  const html = injectLightweightPageGuards(lightenHtml(await asset.text()), page);
   const headers = new Headers(asset.headers);
   headers.delete('content-length');
   headers.set('x-tintin-page-runtime', 'lightweight');
