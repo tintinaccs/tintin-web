@@ -65,11 +65,20 @@ function pagePolicy(file) {
   ].join('; ') + ';';
 }
 
+function routesForFile(file) {
+  if (file !== 'index.html') return [`/${path.basename(file, '.html')}`];
+  // Pages sirve index.html al pedir "/". En producción vimos que la regla
+  // exacta "/" no siempre heredaba la CSP específica y quedaba únicamente
+  // la política global. Declarar también el asset real evita que la portada
+  // pierda su CSP fuerte durante la resolución de la URL limpia.
+  return ['/', '/index.html'];
+}
+
 function generateRouteBlock() {
   const files = fs.readdirSync(root).filter(name => name.endsWith('.html')).sort();
-  const blocks = files.map(file => {
-    const route = file === 'index.html' ? '/' : `/${path.basename(file, '.html')}`;
-    return `${route}\n  Content-Security-Policy: ${pagePolicy(file)}`;
+  const blocks = files.flatMap(file => {
+    const policy = pagePolicy(file);
+    return routesForFile(file).map(route => `${route}\n  Content-Security-Policy: ${policy}`);
   });
   return `${startMarker}\n# Generado por scripts/generar-csp-cloudflare.js; no editar a mano.\n${blocks.join('\n\n')}\n${endMarker}`;
 }
