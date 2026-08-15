@@ -7,6 +7,11 @@ on:
     paths:
       - 'firestore.rules'
       - '_headers'
+      - 'config/csp-runtime.json'
+      - 'scripts/generar-csp-cloudflare.js'
+      - 'cloudflare/servir-admin-con-csp.js'
+      - 'functions/admin.js'
+      - 'functions/admin-images.js'
       - 'apps-script/Seguridad.gs'
       - 'apps-script/CrearPedido.gs'
       - 'js/create-order-client.js'
@@ -23,6 +28,11 @@ on:
     paths:
       - 'firestore.rules'
       - '_headers'
+      - 'config/csp-runtime.json'
+      - 'scripts/generar-csp-cloudflare.js'
+      - 'cloudflare/servir-admin-con-csp.js'
+      - 'functions/admin.js'
+      - 'functions/admin-images.js'
       - 'apps-script/Seguridad.gs'
       - 'apps-script/CrearPedido.gs'
       - 'js/create-order-client.js'
@@ -39,8 +49,8 @@ permissions:
   contents: read
 
 # Evita solapar dos ejecuciones de Seguridad sobre la misma PR. El workflow ya
-# no escribe en la rama (ver "Verificar manifiesto reproducible" más abajo),
-# así que no hay push concurrente que serializar entre workflows.
+# no escribe en la rama, así que no hay push concurrente que serializar entre
+# workflows.
 concurrency:
   group: tintin-security-generated-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
@@ -71,11 +81,17 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
+      - name: Generar y verificar CSP evaluada
+        run: npm run build:csp && npm run verify:csp
+
       - name: Revisar sintaxis de seguridad
         run: |
           node --check scripts/auditar-fase-6-seguridad.js
           node --check scripts/probar-firestore-critico.mjs
           node --check js/create-order-client.js
+          node --check cloudflare/servir-admin-con-csp.js
+          node --check functions/admin.js
+          node --check functions/admin-images.js
           cp apps-script/Seguridad.gs /tmp/Phase3Security.js
           cp apps-script/CrearPedido.gs /tmp/Phase4CreateOrder.js
           node --check /tmp/Phase3Security.js
@@ -87,12 +103,14 @@ jobs:
       - name: Ejecutar matriz adversarial de Firestore Rules
         run: npm run test:rules-phase6
 
+      - name: Construir artefacto reproducible antes de auditoría integral
+        run: npm run build:pages
+
       - name: Ejecutar auditoría integral
         run: npm run audit:final
 
       - name: Verificar manifiesto reproducible
         run: |
-          npm run build:pages
           if ! git diff --exit-code -- diagnostic-manifest.json; then
             echo '::error::diagnostic-manifest.json está desactualizado. Ejecutá "npm run build:pages" localmente y commiteá el resultado.'
             exit 1
