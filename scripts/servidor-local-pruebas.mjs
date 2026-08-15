@@ -2,6 +2,7 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { renderProductMetadataHtml } from '../functions/product.js';
 
 const port = Math.max(1024, Math.min(65535, Number(process.argv[2]) || 4184));
 const root = process.argv[3]
@@ -16,8 +17,38 @@ const mime = {
   '.woff': 'font/woff', '.woff2': 'font/woff2', '.webmanifest': 'application/manifest+json; charset=utf-8',
 };
 
+const SEO_PRODUCT_FIXTURE = Object.freeze({
+  id: 'seo-prueba',
+  name: 'Reloj SEO Prueba',
+  description: 'Producto determinista para validar el renderer SEO de Cloudflare.',
+  price: 150000,
+  stock: 0,
+  active: true,
+  handle: 'reloj-seo-prueba',
+  imageUrl: 'https://tintinaccesorios.pages.dev/assets/og-cover.jpg',
+});
+
+function serveSeoProductFixture(url, response) {
+  if (url.pathname !== '/product' || url.searchParams.get('id') !== SEO_PRODUCT_FIXTURE.id) return false;
+  try {
+    const source = fs.readFileSync(path.join(root, 'product.html'), 'utf8');
+    const rendered = renderProductMetadataHtml(source, SEO_PRODUCT_FIXTURE.id, SEO_PRODUCT_FIXTURE);
+    response.writeHead(200, {
+      'cache-control': 'no-store',
+      'content-type': 'text/html; charset=utf-8',
+      'x-tintin-product-meta': 'server-test',
+    });
+    response.end(rendered.html);
+  } catch (error) {
+    response.writeHead(500, { 'content-type': 'text/plain; charset=utf-8' });
+    response.end(`SEO fixture error: ${error?.message || error}`);
+  }
+  return true;
+}
+
 const server = http.createServer((request, response) => {
   const url = new URL(request.url || '/', `http://${host}:${port}`);
+  if (serveSeoProductFixture(url, response)) return;
   if (url.pathname === '/api/public-catalog') {
     const resource = url.searchParams.get('resource');
     if (!['products', 'collections'].includes(resource)) {
