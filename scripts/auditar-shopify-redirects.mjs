@@ -1,5 +1,5 @@
 const origin = String(process.env.TINTIN_MIGRATION_ORIGIN || '').replace(/\/$/, '');
-const productCanary = String(process.env.TINTIN_SHOPIFY_PRODUCT_CANARY || 'anillo-anvirel').trim();
+const productCanary = String(process.env.TINTIN_SHOPIFY_PRODUCT_CANARY || 'anillo-liso-dorado').trim();
 const timeoutMs = Number(process.env.TINTIN_MIGRATION_TIMEOUT_MS || 15000);
 
 if (!/^https:\/\//i.test(origin)) throw new Error('TINTIN_MIGRATION_ORIGIN debe ser una URL HTTPS.');
