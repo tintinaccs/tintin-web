@@ -66,6 +66,36 @@ function blobAsDataUrl(blob) {
   });
 }
 
+function waitForImageReady(image, ceilingMs = 1600) {
+  if (!image) return Promise.resolve();
+  if (image.complete) return Promise.resolve();
+
+  return new Promise(resolve => {
+    let settled = false;
+    let timer = 0;
+
+    function finish() {
+      if (settled) return;
+      settled = true;
+      if (timer) window.clearTimeout(timer);
+      image.removeEventListener('load', finish);
+      image.removeEventListener('error', finish);
+      resolve();
+    }
+
+    image.addEventListener('load', finish, { once: true });
+    image.addEventListener('error', finish, { once: true });
+    timer = window.setTimeout(finish, ceilingMs);
+  });
+}
+
+async function waitForShellBrandImages(root = document) {
+  const images = [...root.querySelectorAll(
+    '#tt-header-desktop-tablet img, #tt-header-tablet img, #tt-tablet-menu img'
+  )];
+  await Promise.all(images.map(image => waitForImageReady(image)));
+}
+
 function hydrateSharedLogos(root = document) {
   const images = [...root.querySelectorAll('img[data-tt-shared-logo]')];
   const source = images.find(image => image.dataset.ttSharedLogo)?.dataset.ttSharedLogo;
@@ -84,11 +114,12 @@ function hydrateSharedLogos(root = document) {
       });
   }
 
-  return sharedLogoDataPromise.then(value => {
+  return sharedLogoDataPromise.then(async value => {
     images.forEach(image => {
       image.src = value;
       image.removeAttribute('data-tt-shared-logo');
     });
+    await Promise.all(images.map(image => waitForImageReady(image)));
   });
 }
 
@@ -97,21 +128,41 @@ function mountPublicShell() {
   if (mountPromise) return mountPromise;
 
   document.body.classList.add('tt-public-shell-mounting');
+  // Barrera secundaria: el bootstrap ya arma una espera antes del import(),
+  // pero se conserva esta protección para cualquier consumidor que importe
+  // este módulo directamente en el futuro.
   window.TintinLoader?.beginWait?.();
-  mountPromise = Promise.all([
-    ensureNavigationAssets(),
-    fetchGlobalVisualStudioConfig(),
-  ]).then(async ([, globalConfig]) => {
+
+  // CSS de navegación y configuración remota arrancan en paralelo. El header
+  // ya no espera a que /api/visual-studio-global-public responda para existir:
+  // apenas las hojas que definen su geometría están listas, se inserta el shell
+  // debajo del loader. La configuración se aplica antes de revelar la página.
+  const navigationAssetsPromise = ensureNavigationAssets();
+  const globalConfigPromise = fetchGlobalVisualStudioConfig();
+
+  mountPromise = navigationAssetsPromise.then(async () => {
     if (document.body.classList.contains('tt-public-shell-mounted')) return;
 
     removeLegacyShell();
     document.body.insertAdjacentHTML('afterbegin', renderTopShell());
     document.body.insertAdjacentHTML('beforeend', renderBottomShell());
-    void hydrateSharedLogos();
+
+    // Primero termina el logo base. Después se aplica Visual Studio para que,
+    // si existe un logo personalizado, este gane de forma determinista y no
+    // sea sobrescrito más tarde por una hidratación asíncrona atrasada.
+    await hydrateSharedLogos();
+
+    const globalConfig = await globalConfigPromise;
     if (globalConfig?.layout) applyGlobalLayout(globalConfig.layout);
     else document.documentElement.dataset.ttGlobalLayout = 'fallback';
     if (globalConfig) applyGlobalVisualStudio(globalConfig);
     else document.documentElement.dataset.ttGlobalStudio = 'fallback';
+
+    // Si Visual Studio cambió el logo, también esperamos ese recurso antes de
+    // anunciar shell-ready. Así el primer frame visible no recibe un logo que
+    // aparece o cambia un instante después del header.
+    await waitForShellBrandImages();
+
     document.body.classList.add('tt-public-shell-mounted');
     document.body.classList.toggle('tt-public-shell-home', currentPage() === 'home');
 
