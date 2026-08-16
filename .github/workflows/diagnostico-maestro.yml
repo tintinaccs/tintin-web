@@ -1,0 +1,489 @@
+name: Diagnóstico Maestro Tintin
+
+on:
+  workflow_dispatch:
+    inputs:
+      production_origin:
+        description: Origen público que debe auditarse como producción real
+        required: true
+        default: https://tintinaccesorios.pages.dev
+        type: string
+      include_production:
+        description: Incluir pruebas contra producción real
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: diagnostico-maestro-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22'
+  MASTER_ARTIFACTS_DIR: artifacts/master
+  TINTIN_PUBLIC_ORIGIN: ${{ inputs.production_origin }}
+
+jobs:
+  static:
+    name: 1 · Integridad y diagnóstico estructural
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Descargar versión exacta
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Instalar Chromium para auditorías que lo requieran
+        run: npx playwright install --with-deps chromium
+
+      - name: Ejecutar suite de integridad
+        id: suite
+        continue-on-error: true
+        run: node scripts/ejecutar-diagnostico-maestro.mjs static
+
+      - name: Guardar evidencia de integridad
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: master-static
+          path: artifacts/master/static/**
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Aplicar resultado de la suite
+        if: always()
+        run: test "${{ steps.suite.outcome }}" = "success"
+
+  commerce:
+    name: 2 · Comercio, pedidos, carrito y datos
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Construir artefactos derivados
+        run: npm run build:pages
+
+      - name: Ejecutar suite de comercio y datos
+        id: suite
+        continue-on-error: true
+        run: node scripts/ejecutar-diagnostico-maestro.mjs commerce
+
+      - name: Guardar evidencia de comercio
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: master-commerce
+          path: artifacts/master/commerce/**
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Aplicar resultado de la suite
+        if: always()
+        run: test "${{ steps.suite.outcome }}" = "success"
+
+  public-ui:
+    name: 3 · Cliente, visual, responsive y accesibilidad
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Construir artefactos derivados
+        run: npm run build:pages
+
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Servir el árbol exacto auditado
+        shell: bash
+        run: |
+          node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-master-public-http.log 2>&1 &
+          echo $! > /tmp/tintin-master-public-http.pid
+          for attempt in {1..30}; do
+            if curl --fail --silent --show-error http://127.0.0.1:4173/index.html > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/tintin-master-public-http.log || true
+          exit 1
+
+      - name: Ejecutar suite de experiencia cliente
+        id: suite
+        continue-on-error: true
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+        run: node scripts/ejecutar-diagnostico-maestro.mjs public-ui
+
+      - name: Guardar evidencia cliente
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: master-public-ui
+          path: |
+            artifacts/master/public-ui/**
+            artifacts/canonical-viewports/**
+            artifacts/responsive/**
+            playwright-report/**
+            test-results/**
+            /tmp/tintin-master-public-http.log
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Aplicar resultado de la suite
+        if: always()
+        run: test "${{ steps.suite.outcome }}" = "success"
+
+  admin-ui:
+    name: 4 · Super Admin, visual y operación
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Construir artefactos derivados
+        run: npm run build:pages
+
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Servir el árbol exacto auditado
+        shell: bash
+        run: |
+          node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-master-admin-http.log 2>&1 &
+          echo $! > /tmp/tintin-master-admin-http.pid
+          for attempt in {1..30}; do
+            if curl --fail --silent --show-error http://127.0.0.1:4173/admin.html > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/tintin-master-admin-http.log || true
+          exit 1
+
+      - name: Ejecutar suite de Super Admin
+        id: suite
+        continue-on-error: true
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+        run: node scripts/ejecutar-diagnostico-maestro.mjs admin-ui
+
+      - name: Guardar evidencia Super Admin
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: master-admin-ui
+          path: |
+            artifacts/master/admin-ui/**
+            artifacts/admin-part2f/**
+            artifacts/global-fit-part2f/**
+            playwright-report/**
+            test-results/**
+            /tmp/tintin-master-admin-http.log
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Aplicar resultado de la suite
+        if: always()
+        run: test "${{ steps.suite.outcome }}" = "success"
+
+  performance:
+    name: 5 · Performance, fluidez, carga y caché
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Construir artefactos derivados
+        run: npm run build:pages
+
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Servir el árbol exacto auditado
+        shell: bash
+        run: |
+          node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-master-performance-http.log 2>&1 &
+          echo $! > /tmp/tintin-master-performance-http.pid
+          for attempt in {1..30}; do
+            if curl --fail --silent --show-error http://127.0.0.1:4173/index.html > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/tintin-master-performance-http.log || true
+          exit 1
+
+      - name: Ejecutar suite de performance
+        id: suite
+        continue-on-error: true
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+          PERF_BASE_URL: http://127.0.0.1:4173
+        run: node scripts/ejecutar-diagnostico-maestro.mjs performance
+
+      - name: Guardar evidencia de performance
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: master-performance
+          path: |
+            artifacts/master/performance/**
+            artifacts/performance/**
+            playwright-report/**
+            test-results/**
+            /tmp/tintin-master-performance-http.log
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Aplicar resultado de la suite
+        if: always()
+        run: test "${{ steps.suite.outcome }}" = "success"
+
+  security:
+    name: 6 · Seguridad, CSP, App Check y dependencias
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Construir artefactos derivados
+        run: npm run build:pages
+
+      - name: Ejecutar suite de seguridad
+        id: suite
+        continue-on-error: true
+        run: node scripts/ejecutar-diagnostico-maestro.mjs security
+
+      - name: Registrar npm audit completo
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p artifacts/master/security
+          npm audit --json > artifacts/master/security/npm-audit-full.json || true
+
+      - name: Guardar evidencia de seguridad
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: master-security
+          path: artifacts/master/security/**
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Aplicar resultado de la suite
+        if: always()
+        run: test "${{ steps.suite.outcome }}" = "success"
+
+  rules:
+    name: 7 · Firestore Rules e identidad
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Configurar Java para emuladores Firebase
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Ejecutar reglas críticas
+        id: suite
+        continue-on-error: true
+        run: node scripts/ejecutar-diagnostico-maestro.mjs rules
+
+      - name: Guardar evidencia de reglas
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: master-rules
+          path: |
+            artifacts/master/rules/**
+            firebase-debug.log
+            firestore-debug.log
+            ui-debug.log
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Aplicar resultado de la suite
+        if: always()
+        run: test "${{ steps.suite.outcome }}" = "success"
+
+  production:
+    name: 8 · Producción real
+    if: ${{ inputs.include_production }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Ejecutar suite contra producción
+        id: suite
+        continue-on-error: true
+        run: node scripts/ejecutar-diagnostico-maestro.mjs production
+
+      - name: Guardar evidencia de producción
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: master-production
+          path: |
+            artifacts/master/production/**
+            artifacts/production-health/**
+            artifacts/phase12-production/**
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Aplicar resultado de la suite
+        if: always()
+        run: test "${{ steps.suite.outcome }}" = "success"
+
+  summary:
+    name: 9 · Informe Maestro y gate final
+    if: always()
+    needs:
+      - static
+      - commerce
+      - public-ui
+      - admin-ui
+      - performance
+      - security
+      - rules
+      - production
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Descargar versión exacta
+        uses: actions/checkout@v5
+
+      - name: Descargar evidencias de todas las suites
+        id: download
+        continue-on-error: true
+        uses: actions/download-artifact@v6
+        with:
+          pattern: master-*
+          path: artifacts/collected
+
+      - name: Construir informe maestro
+        id: report
+        continue-on-error: true
+        env:
+          MASTER_COLLECTED_DIR: artifacts/collected
+          MASTER_SUMMARY_DIR: artifacts/master-summary
+          MASTER_INCLUDE_PRODUCTION: ${{ inputs.include_production }}
+        run: node scripts/ejecutar-diagnostico-maestro.mjs summary
+
+      - name: Publicar resumen visible en GitHub
+        if: always()
+        shell: bash
+        run: |
+          if [ -f artifacts/master-summary/RESUMEN-MAESTRO.md ]; then
+            cat artifacts/master-summary/RESUMEN-MAESTRO.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo '# Diagnóstico Maestro Tintin' >> "$GITHUB_STEP_SUMMARY"
+            echo '' >> "$GITHUB_STEP_SUMMARY"
+            echo '**FAIL — no se pudo generar RESUMEN-MAESTRO.md.**' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Guardar informe final
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: diagnostico-maestro-tintin
+          path: |
+            artifacts/master-summary/**
+            artifacts/collected/**
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Gate final
+        if: always()
+        shell: bash
+        run: |
+          test "${{ steps.download.outcome }}" = "success"
+          test "${{ steps.report.outcome }}" = "success"
