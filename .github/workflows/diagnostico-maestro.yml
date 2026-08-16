@@ -15,7 +15,10 @@ on:
         type: boolean
 
 permissions:
+  actions: read
+  checks: read
   contents: read
+  statuses: read
 
 concurrency:
   group: diagnostico-maestro-${{ github.ref }}
@@ -30,7 +33,7 @@ jobs:
   static:
     name: 1 · Integridad y diagnóstico estructural
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 75
     steps:
       - name: Descargar versión exacta
         uses: actions/checkout@v5
@@ -54,6 +57,21 @@ jobs:
         continue-on-error: true
         run: node scripts/ejecutar-diagnostico-maestro.mjs static
 
+      - name: Verificar estado global del commit en GitHub/CI
+        id: ci_global
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          MASTER_CI_WAIT_SECONDS: '600'
+          MASTER_CI_POLL_SECONDS: '15'
+        run: node scripts/verificar-salud-ci-global.mjs
+
+      - name: Integrar GitHub/CI al resultado estructural
+        id: ci_merge
+        if: always()
+        continue-on-error: true
+        run: node scripts/verificar-salud-ci-global.mjs --merge
+
       - name: Guardar evidencia de integridad
         if: always()
         uses: actions/upload-artifact@v6
@@ -65,7 +83,11 @@ jobs:
 
       - name: Aplicar resultado de la suite
         if: always()
-        run: test "${{ steps.suite.outcome }}" = "success"
+        shell: bash
+        run: |
+          test "${{ steps.suite.outcome }}" = "success"
+          test "${{ steps.ci_global.outcome }}" = "success"
+          test "${{ steps.ci_merge.outcome }}" = "success"
 
   commerce:
     name: 2 · Comercio, pedidos, carrito y datos
