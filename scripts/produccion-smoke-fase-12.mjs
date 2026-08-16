@@ -60,7 +60,17 @@ try {
   assert(robots.body.includes('Sitemap: ' + origin + '/sitemap.xml'), 'robots.txt no apunta al sitemap de producción.');
   const sitemap = await request('/sitemap.xml');
   assert(sitemap.response.ok && /xml/.test(sitemap.result.type), 'sitemap.xml no está disponible como XML.');
-  const sitemapUrls = [...sitemap.body.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
+  let sitemapUrls = [...sitemap.body.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
+  if (/<sitemapindex[\s>]/i.test(sitemap.body)) {
+    const childSitemaps = sitemapUrls;
+    sitemapUrls = [];
+    for (const childUrl of childSitemaps) {
+      assert(childUrl.startsWith(origin + '/'), 'El sitemap index referencia un origen ajeno: ' + childUrl);
+      const child = await request(childUrl.slice(origin.length));
+      assert(child.response.ok && /xml/.test(child.result.type), childUrl + ' no está disponible como XML.');
+      sitemapUrls.push(...[...child.body.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]));
+    }
+  }
   for (const page of indexablePages) assert(sitemapUrls.includes(origin + page), 'El sitemap no incluye ' + page);
   assert(!sitemapUrls.some(url => /\.html(?:$|[?#])/.test(url)), 'El sitemap publica URLs .html que Cloudflare redirige.');
   assert(!sitemapUrls.some(url => /\/(admin|login|checkout|perfil|404)(?:\.html)?$/.test(url)), 'El sitemap expone una superficie privada.');
