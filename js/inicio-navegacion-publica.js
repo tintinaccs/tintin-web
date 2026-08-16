@@ -22,6 +22,10 @@
   }
 
   const release = () => {
+    if (window.__TintinPublicShellStartupWaitHeld) {
+      window.__TintinPublicShellStartupWaitHeld = false;
+      window.TintinLoader?.endWait?.();
+    }
     if (!waitHeld) return;
     waitHeld = false;
     window.TintinLoader?.endWait?.();
