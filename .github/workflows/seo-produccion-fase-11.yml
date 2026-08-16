@@ -129,7 +129,7 @@ jobs:
         shell: bash
         run: |
           title='[Producción] Monitor horario en rojo'
-          issue="$(gh issue list --state open --search \"$title in:title\" --json number --jq '.[0].number // empty')"
+          issue="$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number // empty')"
           body="El monitor automático de producción falló el $(date -u +'%Y-%m-%d %H:%M UTC').\n\nRun: $RUN_URL\n\nRevisar el artefacto phase11-production-health antes de desplegar o anunciar cambios."
           if [ -n "$issue" ]; then
             gh issue comment "$issue" --body "$body"
@@ -144,7 +144,7 @@ jobs:
         shell: bash
         run: |
           title='[Producción] Monitor horario en rojo'
-          issue="$(gh issue list --state open --search \"$title in:title\" --json number --jq '.[0].number // empty')"
+          issue="$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number // empty')"
           if [ -n "$issue" ]; then
             gh issue comment "$issue" --body "Producción volvió a pasar el monitor automático. Run: $RUN_URL"
             gh issue close "$issue" --reason completed
