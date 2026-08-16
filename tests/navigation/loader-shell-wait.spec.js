@@ -4,14 +4,14 @@ const { test, expect } = require('@playwright/test');
 
 // Cubre el contrato atómico del primer render: el loader no debe revelar la
 // página hasta que la navegación real y la marca visual estén listas. Las
-// pruebas de regresión retrasan explícitamente recursos del camino crítico
-// para cubrir la ventana que antes quedaba fuera del test normal.
+// pruebas de regresión bloquean explícitamente recursos del camino crítico
+// hasta que el propio test decide liberarlos; así no dependen de cuánto tardó
+// DOMContentLoaded en el runner de CI.
 
 test('TintinLoader.beginWait() retiene el ocultamiento hasta endWait()', async ({ page }) => {
   await page.goto('/about.html', { waitUntil: 'domcontentloaded' });
 
   const result = await page.evaluate(async () => {
-    // Espera a que el loader real quede disponible.
     for (let i = 0; i < 50 && !window.TintinLoader; i += 1) {
       await new Promise(resolve => setTimeout(resolve, 20));
     }
@@ -75,20 +75,29 @@ async function installFirstFrameProbe(page) {
 test('una importación lenta del shell nunca deja un frame visible sin header', async ({ page }) => {
   await installFirstFrameProbe(page);
 
+  let releaseEntry;
+  const entryGate = new Promise(resolve => { releaseEntry = resolve; });
+  let markEntryRequested;
+  const entryRequested = new Promise(resolve => { markEntryRequested = resolve; });
+
   await page.route('**/js/components/navigation/entrada-navegacion-publica.js*', async route => {
-    await new Promise(resolve => setTimeout(resolve, 900));
+    markEntryRequested();
+    await entryGate;
     await route.continue();
   });
 
+  let releaseConfig;
+  const configGate = new Promise(resolve => { releaseConfig = resolve; });
   await page.route('**/api/visual-studio-global-public*', async route => {
-    await new Promise(resolve => setTimeout(resolve, 650));
+    await configGate;
     await route.continue();
   });
 
-  await page.goto('/catalogo.html', { waitUntil: 'domcontentloaded' });
+  const navigation = page.goto('/catalogo.html', { waitUntil: 'domcontentloaded' });
+  await entryRequested;
+  await page.waitForSelector('#tt-loader', { state: 'attached', timeout: 5000 });
 
-  await page.waitForTimeout(500);
-  const duringDelay = await page.evaluate(() => {
+  const whileEntryBlocked = await page.evaluate(() => {
     const loader = document.getElementById('tt-loader');
     return {
       loaderVisible: Boolean(loader)
@@ -98,8 +107,12 @@ test('una importación lenta del shell nunca deja un frame visible sin header', 
     };
   });
 
-  expect(duringDelay.loaderVisible, 'el loader debe seguir cubriendo la página mientras el módulo todavía no llegó').toBe(true);
-  expect(duringDelay.shellMounted, 'el retraso artificial debe mantener el shell aún sin montar en este punto').toBe(false);
+  expect(whileEntryBlocked.loaderVisible, 'el loader debe cubrir la página mientras el módulo de navegación sigue bloqueado').toBe(true);
+  expect(whileEntryBlocked.shellMounted, 'el shell no puede estar montado antes de que llegue su módulo').toBe(false);
+
+  releaseEntry();
+  releaseConfig();
+  await navigation;
 
   await page.waitForFunction(() => document.body.classList.contains('tt-public-shell-mounted'), null, { timeout: 9000 });
   await page.waitForFunction(() => {
@@ -118,15 +131,22 @@ test('el loader no se retira antes de que el logo inicial termine de cargar', as
     window.TT_DISABLE_STORE_GATE = true;
   });
 
+  let releaseLogo;
+  const logoGate = new Promise(resolve => { releaseLogo = resolve; });
+  let markLogoRequested;
+  const logoRequested = new Promise(resolve => { markLogoRequested = resolve; });
+
   await page.route('**/assets-tintin/images/general/tintin-loader-brand.svg*', async route => {
-    await new Promise(resolve => setTimeout(resolve, 900));
+    markLogoRequested();
+    await logoGate;
     await route.continue();
   });
 
-  await page.goto('/about.html', { waitUntil: 'domcontentloaded' });
-  await page.waitForTimeout(500);
+  const navigation = page.goto('/about.html', { waitUntil: 'domcontentloaded' });
+  await logoRequested;
+  await page.waitForSelector('#tt-loader-logo', { state: 'attached', timeout: 5000 });
 
-  const halfway = await page.evaluate(() => {
+  const whileLogoBlocked = await page.evaluate(() => {
     const loader = document.getElementById('tt-loader');
     const logo = document.getElementById('tt-loader-logo');
     return {
@@ -137,8 +157,11 @@ test('el loader no se retira antes de que el logo inicial termine de cargar', as
     };
   });
 
-  expect(halfway.logoComplete, 'el recurso está retrasado a propósito para probar la barrera de marca').toBe(false);
-  expect(halfway.loaderVisible, 'el loader debe permanecer mientras el logo todavía está pendiente').toBe(true);
+  expect(whileLogoBlocked.logoComplete, 'el logo debe seguir incompleto mientras su respuesta está bloqueada').toBe(false);
+  expect(whileLogoBlocked.loaderVisible, 'el loader debe permanecer mientras el logo todavía está pendiente').toBe(true);
+
+  releaseLogo();
+  await navigation;
 
   await page.waitForFunction(() => document.getElementById('tt-loader-logo')?.complete === true, null, { timeout: 5000 });
   await page.waitForFunction(() => {
