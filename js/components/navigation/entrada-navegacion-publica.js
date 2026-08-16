@@ -66,6 +66,32 @@ function blobAsDataUrl(blob) {
   });
 }
 
+function resolveWithCeiling(promise, ceilingMs, fallbackValue = null) {
+  return new Promise(resolve => {
+    let settled = false;
+    const timer = window.setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      resolve(fallbackValue);
+    }, ceilingMs);
+
+    Promise.resolve(promise).then(
+      value => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timer);
+        resolve(value);
+      },
+      () => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timer);
+        resolve(fallbackValue);
+      }
+    );
+  });
+}
+
 function waitForImageReady(image, ceilingMs = 1600) {
   if (!image) return Promise.resolve();
   if (image.complete) return Promise.resolve();
@@ -102,7 +128,14 @@ function hydrateSharedLogos(root = document) {
   if (!images.length || !source) return Promise.resolve();
 
   if (!sharedLogoDataPromise) {
-    sharedLogoDataPromise = fetch(source, { cache: 'force-cache', credentials: 'same-origin' })
+    const controller = typeof AbortController === 'function' ? new AbortController() : null;
+    const timer = window.setTimeout(() => controller?.abort(), 1800);
+
+    sharedLogoDataPromise = fetch(source, {
+      cache: 'force-cache',
+      credentials: 'same-origin',
+      ...(controller ? { signal: controller.signal } : {}),
+    })
       .then(response => {
         if (!response.ok) throw new Error(`Logo HTTP ${response.status}`);
         return response.blob();
@@ -111,7 +144,8 @@ function hydrateSharedLogos(root = document) {
       .catch(error => {
         console.warn('[PublicShell] No se pudo compartir el logo en memoria.', error);
         return source;
-      });
+      })
+      .finally(() => window.clearTimeout(timer));
   }
 
   return sharedLogoDataPromise.then(async value => {
@@ -138,7 +172,11 @@ function mountPublicShell() {
   // apenas las hojas que definen su geometría están listas, se inserta el shell
   // debajo del loader. La configuración se aplica antes de revelar la página.
   const navigationAssetsPromise = ensureNavigationAssets();
-  const globalConfigPromise = fetchGlobalVisualStudioConfig();
+  const globalConfigPromise = resolveWithCeiling(
+    fetchGlobalVisualStudioConfig(),
+    3500,
+    null
+  );
 
   mountPromise = navigationAssetsPromise.then(async () => {
     if (document.body.classList.contains('tt-public-shell-mounted')) return;
