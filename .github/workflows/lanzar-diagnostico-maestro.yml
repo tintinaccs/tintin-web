@@ -9,6 +9,8 @@ on:
       - .github/workflows/diagnostico-maestro.yml
       - scripts/ejecutar-diagnostico-maestro.mjs
       - scripts/verificar-salud-ci-global.mjs
+      - '*.html'
+      - diagnostic-manifest.json
   workflow_dispatch:
 
 permissions:
