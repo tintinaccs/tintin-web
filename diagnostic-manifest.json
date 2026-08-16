@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-16T13:05:45.055Z",
-  "sourceFingerprint": "151dfffb7f2a268c67fbf1ec99f0afafdf59317523d8ffe900041eda7fe5a8b6",
+  "generatedAt": "2026-08-16T13:22:17.595Z",
+  "sourceFingerprint": "da9071dac4795cfe3a5b944fcda05acfcb0831fe6481481872f8ea29d6c693c2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 652,
     "textFiles": 620,
-    "totalBytes": 7320581,
+    "totalBytes": 7321802,
     "pages": 18,
     "modules": 405
   },
@@ -523,8 +523,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20604,
-      "sha256": "ed8050ec8aecd45972c11c4809815d7704cf56f9ec85231abc53235fafa1fbbd",
+      "bytes": 21313,
+      "sha256": "2caa031f6e708fb66377d82fed4c4ae24036438675c63a25285cde188b87f557",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -596,17 +596,17 @@
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 302
+          "line": 320
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 303
+          "line": 321
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260815-routes-clean-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 304
+          "line": 322
         }
       ],
       "styles": [
@@ -983,19 +983,19 @@
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 302,
+          "line": 320,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 303,
+          "line": 321,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260815-routes-clean-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 304,
+          "line": 322,
           "exists": true
         },
         {
@@ -16269,7 +16269,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 330173,
-      "sha256": "f56cb069f33eef6f150daa1f20a802a011e7c89603e161b060c713a6ec912b3e",
+      "sha256": "20df72d700b1c5d7110ab42a3831d9c558eb0f1549eab83e7753784d2ac91e92",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18995,8 +18995,8 @@
     },
     {
       "path": "js/components/images/gestion-imagenes.js",
-      "bytes": 16198,
-      "sha256": "bd85c4d8a50173d15a8abb49a000e0bf028df38cac0b8fb781c2d9dea1e1a6e6",
+      "bytes": 16710,
+      "sha256": "ddf1e02caa502a2c8e8e4458a4d586f7db8be785ce8daf828685aee6487b7ae1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26454,8 +26454,8 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 20604,
-      "sha256": "ed8050ec8aecd45972c11c4809815d7704cf56f9ec85231abc53235fafa1fbbd"
+      "bytes": 21313,
+      "sha256": "2caa031f6e708fb66377d82fed4c4ae24036438675c63a25285cde188b87f557"
     },
     {
       "path": "admin-images.html",
@@ -26755,13 +26755,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 330173,
-      "sha256": "f56cb069f33eef6f150daa1f20a802a011e7c89603e161b060c713a6ec912b3e"
+      "sha256": "20df72d700b1c5d7110ab42a3831d9c558eb0f1549eab83e7753784d2ac91e92"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 330088,
-      "sha256": "5dba6798d0ec116375eff13e52706e1a4b98fd12c5699a85db33594594f5dd6f"
+      "sha256": "7e80358cd900ccc81f524714ec0e1ad1158e6beea4991b08285284ad5b489606"
     },
     {
       "path": "config/public-site.json",
@@ -28014,8 +28014,8 @@
     {
       "path": "js/components/images/gestion-imagenes.js",
       "extension": ".js",
-      "bytes": 16198,
-      "sha256": "bd85c4d8a50173d15a8abb49a000e0bf028df38cac0b8fb781c2d9dea1e1a6e6"
+      "bytes": 16710,
+      "sha256": "ddf1e02caa502a2c8e8e4458a4d586f7db8be785ce8daf828685aee6487b7ae1"
     },
     {
       "path": "js/components/images/imagenes.js",
