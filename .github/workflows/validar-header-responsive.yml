@@ -5,6 +5,9 @@ on:
     paths:
       - 'css/components/navigation/**'
       - 'js/components/navigation/**'
+      - 'js/cargador-pagina.js'
+      - 'js/inicio-navegacion-publica.js'
+      - 'scripts/sincronizar-inicio-navegacion-publica.js'
       - 'tests/navigation/**'
       - 'styles.css'
       - 'package.json'
@@ -15,6 +18,9 @@ on:
     paths:
       - 'css/components/navigation/**'
       - 'js/components/navigation/**'
+      - 'js/cargador-pagina.js'
+      - 'js/inicio-navegacion-publica.js'
+      - 'scripts/sincronizar-inicio-navegacion-publica.js'
       - 'tests/navigation/**'
       - 'styles.css'
       - 'package.json'
@@ -40,6 +46,8 @@ jobs:
           cache: npm
       - name: Instalar dependencias
         run: npm ci
+      - name: Sincronizar shell público
+        run: npm run sync:public-shell
       - name: Instalar Chromium
         run: npx playwright install --with-deps chromium
       - name: Servir la aplicación
