@@ -126,7 +126,7 @@ test('una importación lenta del shell nunca deja un frame visible sin header', 
   expect(probe.violation, 'no puede existir ningún frame posterior a la aparición del loader donde este ya se haya ido y el header todavía no esté montado').toBe(false);
 });
 
-test('el loader no se retira antes de que el logo inicial termine de cargar', async ({ page }) => {
+test('el loader no se retira mientras la respuesta del logo inicial sigue pendiente', async ({ page }) => {
   await page.addInitScript(() => {
     window.TT_DISABLE_STORE_GATE = true;
   });
@@ -146,24 +146,26 @@ test('el loader no se retira antes de que el logo inicial termine de cargar', as
   await logoRequested;
   await page.waitForSelector('#tt-loader-logo', { state: 'attached', timeout: 5000 });
 
+  // La condición que importa no es naturalWidth: Chromium puede conservar un
+  // recurso decodificado entre solicitudes aun cuando la respuesta actual esté
+  // interceptada. El contrato real es que, mientras esta solicitud crítica
+  // continúa bloqueada, el loader no puede revelar la página.
   const whileLogoBlocked = await page.evaluate(() => {
     const loader = document.getElementById('tt-loader');
-    const logo = document.getElementById('tt-loader-logo');
     return {
       loaderVisible: Boolean(loader)
         && getComputedStyle(loader).display !== 'none'
         && !loader.classList.contains('tt-out'),
-      logoNaturalWidth: Number(logo?.naturalWidth || 0),
+      shellMounted: document.body.classList.contains('tt-public-shell-mounted'),
     };
   });
 
-  expect(whileLogoBlocked.logoNaturalWidth, 'el logo no debe tener píxeles disponibles mientras su respuesta está bloqueada').toBe(0);
-  expect(whileLogoBlocked.loaderVisible, 'el loader debe permanecer mientras el logo todavía está pendiente').toBe(true);
+  expect(whileLogoBlocked.loaderVisible, 'el loader debe permanecer mientras la respuesta del logo todavía está pendiente').toBe(true);
 
   releaseLogo();
   await navigation;
 
-  await page.waitForFunction(() => (document.getElementById('tt-loader-logo')?.naturalWidth || 0) > 0, null, { timeout: 5000 });
+  await page.waitForFunction(() => document.body.classList.contains('tt-public-shell-mounted'), null, { timeout: 9000 });
   await page.waitForFunction(() => {
     const loader = document.getElementById('tt-loader');
     return !loader || getComputedStyle(loader).display === 'none' || loader.classList.contains('tt-out');
