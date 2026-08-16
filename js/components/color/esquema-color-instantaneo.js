@@ -89,6 +89,53 @@
     return true;
   }
 
+  // El loader se ejecuta justo después de este script. Preparamos un observer
+  // antes de devolver el control al parser para tomar su API en el mismo
+  // microtask en el que termina de inicializarse: así beginWait() queda activo
+  // antes de que el body pueda declarar page-ready, sin agregar otro <script>
+  // síncrono ni un bloque inline que rompa el fallback CSP del 404.
+  function installLoaderShellHoldBridge() {
+    if (window.__TintinLoaderShellHoldBridgeInstalled) return;
+    window.__TintinLoaderShellHoldBridgeInstalled = true;
+
+    var observer = null;
+
+    function arm() {
+      var loader = window.TintinLoader;
+      if (!loader || typeof loader.beginWait !== 'function') return false;
+
+      // hide() históricamente apuntaba a hideNow() y podía saltarse
+      // pendingWaits. Los consumidores externos solo pueden solicitar ready;
+      // el propio loader decide cuándo es seguro desaparecer.
+      if (!window.__TintinLoaderSafeHideInstalled && typeof loader.ready === 'function') {
+        window.__TintinLoaderSafeHideInstalled = true;
+        loader.hide = function safeHideRequest() {
+          loader.ready();
+        };
+      }
+
+      if (!window.__TintinPublicShellStartupWaitHeld) {
+        loader.beginWait();
+        window.__TintinPublicShellStartupWaitHeld = true;
+      }
+
+      if (observer) observer.disconnect();
+      return true;
+    }
+
+    if (arm()) return;
+
+    if (typeof MutationObserver === 'function') {
+      observer = new MutationObserver(function () {
+        arm();
+      });
+      observer.observe(document.documentElement, { childList: true, subtree: true });
+      window.addEventListener('load', function () {
+        if (observer) observer.disconnect();
+      }, { once: true });
+    }
+  }
+
   function scheduleFastInitialReveal() {
     var deadline = Date.now() + FAST_REVEAL_TIMEOUT_MS;
 
@@ -309,6 +356,7 @@
   }
 
   root.classList.add('tt-first-paint-bg', 'tt-color-scheme-pending', 'tt-fast-navigation');
+  installLoaderShellHoldBridge();
   installCheckoutNameGuard();
   installNavigationPrefetch();
 
