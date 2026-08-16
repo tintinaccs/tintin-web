@@ -153,17 +153,17 @@ test('el loader no se retira antes de que el logo inicial termine de cargar', as
       loaderVisible: Boolean(loader)
         && getComputedStyle(loader).display !== 'none'
         && !loader.classList.contains('tt-out'),
-      logoComplete: Boolean(logo?.complete),
+      logoNaturalWidth: Number(logo?.naturalWidth || 0),
     };
   });
 
-  expect(whileLogoBlocked.logoComplete, 'el logo debe seguir incompleto mientras su respuesta está bloqueada').toBe(false);
+  expect(whileLogoBlocked.logoNaturalWidth, 'el logo no debe tener píxeles disponibles mientras su respuesta está bloqueada').toBe(0);
   expect(whileLogoBlocked.loaderVisible, 'el loader debe permanecer mientras el logo todavía está pendiente').toBe(true);
 
   releaseLogo();
   await navigation;
 
-  await page.waitForFunction(() => document.getElementById('tt-loader-logo')?.complete === true, null, { timeout: 5000 });
+  await page.waitForFunction(() => (document.getElementById('tt-loader-logo')?.naturalWidth || 0) > 0, null, { timeout: 5000 });
   await page.waitForFunction(() => {
     const loader = document.getElementById('tt-loader');
     return !loader || getComputedStyle(loader).display === 'none' || loader.classList.contains('tt-out');
