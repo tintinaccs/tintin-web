@@ -26,7 +26,7 @@
     "test:engagement": "node --test tests/engagement/*.test.mjs",
     "test:visual-builder": "node --test tests/visual-builder/*.test.mjs",
     "test:visual-builder-ui": "playwright test tests/visual-builder/visual-builder-ui.spec.js tests/visual-builder/visual-builder-runtime.spec.js --project=chromium",
-    "test:navigation-header": "playwright test tests/navigation/header-responsive.spec.js --project=chromium",
+    "test:navigation-header": "playwright test tests/navigation/header-responsive.spec.js tests/navigation/loader-shell-wait.spec.js --project=chromium",
     "audit:security": "node scripts/auditar-seguridad-fase-8.js",
     "audit:release": "node scripts/auditar-final-entrega.js",
     "audit:integral": "node scripts/auditar-integral-plataforma.js",

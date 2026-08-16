@@ -1,31 +1,46 @@
-/* =============================================================
-   TINTIN — Bootstrap de navegación pública modular
-   =============================================================
-   Este archivo conserva compatibilidad con todas las páginas públicas.
-   La estructura real vive en js/components/navigation/ y se carga como
-   módulo ES para que escritorio, tableta, movil y superficies compartidas
-   puedan mantenerse por separado.
-
-   Contrato de accesibilidad conservado por los componentes:
-   id="search-panel" role="dialog" · id="cart-drawer" role="dialog"
-   id="collections-sheet" role="dialog" · id="tt-tablet-menu" role="dialog"
-   ============================================================= */
+/* TINTIN — adaptador de arranque de la navegación pública modular. */
+/* Contrato: id="search-panel" role="dialog" · id="cart-drawer" role="dialog" · id="collections-sheet" role="dialog" · id="tt-tablet-menu" role="dialog". */
 (function () {
   'use strict';
 
   if (window.TintinPublicShellBootstrapStarted) return;
   window.TintinPublicShellBootstrapStarted = true;
 
-  const MODULE_VERSION = 'tintin-20260815-prelaunch-cache-2';
-  const scriptUrl = document.currentScript?.src || new URL('js/inicio-navegacion-publica.js', window.location.href).href;
+  const VERSION = 'tintin-20260816-loader-shell-atomic-1';
+  const scriptUrl = document.currentScript?.src
+    || new URL('js/inicio-navegacion-publica.js', window.location.href).href;
   const entryUrl = new URL('./components/navigation/entrada-navegacion-publica.js', scriptUrl);
-  entryUrl.searchParams.set('v', MODULE_VERSION);
+  const barrierUrl = new URL('./components/navigation/compartido/barrera-arranque-shell.js', scriptUrl);
+  entryUrl.searchParams.set('v', VERSION);
+  barrierUrl.searchParams.set('v', VERSION);
 
-  import(entryUrl.href).catch(error => {
-    window.TintinPublicShellBootstrapStarted = false;
-    console.error('[PublicShell] No se pudo iniciar la navegación modular.', error);
-    document.dispatchEvent(new CustomEvent('tintin:public-shell-error', {
-      detail: { error },
-    }));
-  });
+  let waitHeld = false;
+  let barrierArmed = false;
+  if (window.TintinLoader?.beginWait) {
+    window.TintinLoader.beginWait();
+    waitHeld = true;
+  }
+
+  const release = () => {
+    if (window.__TintinPublicShellStartupWaitHeld) {
+      window.__TintinPublicShellStartupWaitHeld = false;
+      window.TintinLoader?.endWait?.();
+    }
+    if (!waitHeld) return;
+    waitHeld = false;
+    window.TintinLoader?.endWait?.();
+  };
+
+  import(barrierUrl.href)
+    .then(({ armPublicShellStartupBarrier }) => {
+      barrierArmed = true;
+      armPublicShellStartupBarrier({ release });
+      return import(entryUrl.href);
+    })
+    .catch(error => {
+      window.TintinPublicShellBootstrapStarted = false;
+      console.error('[PublicShell] No se pudo iniciar la navegación modular.', error);
+      document.dispatchEvent(new CustomEvent('tintin:public-shell-error', { detail: { error } }));
+      if (!barrierArmed) release();
+    });
 })();

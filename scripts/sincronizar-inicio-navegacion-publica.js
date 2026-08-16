@@ -6,10 +6,12 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260815-routes-clean-1';
+const COLOR_FIRST_PAINT_VERSION = 'tintin-20260816-loader-shell-bridge-1';
 const LOADER_VERSION = 'tintin-20260816-loader-min-show-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
-const PUBLIC_SHELL_VERSION = 'tintin-20260815-prelaunch-cache-2';
-const NAV_ENTRY_VERSION = 'tintin-20260815-routes-clean-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20260816-loader-shell-atomic-1';
+const NAV_ENTRY_VERSION = 'tintin-20260816-loader-shell-atomic-1';
+const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20260815-profile-routes-1';
 const PROFILE_GATE_VERSION = 'tintin-20260815-profile-routes-1';
 // Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
@@ -105,7 +107,7 @@ function ensureStyles(html) {
 
 function ensureNavigationPreloads(html) {
   let out = html.replace(
-    /\s*<link\b[^>]*rel=["']modulepreload["'][^>]*href=["']js\/components\/navigation\/entrada-navegacion-publica\.js[^"']*["'][^>]*>/gi,
+    /\s*<link\b[^>]*rel=["']modulepreload["'][^>]*href=["']js\/components\/navigation\/(?:entrada-navegacion-publica|compartido\/barrera-arranque-shell)\.js[^"']*["'][^>]*>/gi,
     ''
   );
   out = out.replace(
@@ -114,6 +116,7 @@ function ensureNavigationPreloads(html) {
   );
 
   const preloadTags = [
+    `<link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=${NAV_BARRIER_VERSION}">`,
     `<link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=${NAV_ENTRY_VERSION}">`,
     ...NAVIGATION_PRELOAD_STYLES.map(
       href => `<link rel="preload" as="style" href="${href}?v=${NAV_SHELL_VERSION}">`
@@ -133,9 +136,15 @@ function ensureShellScript(html) {
   let out = html
     .replace(/\s*<script\b[^>]*src=["']js\/(?:surface-controller|ui-navigation-controller)\.js[^"']*["'][^>]*><\/script>/gi, '')
     .replace(/\s*<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^"']*["'][^>]*><\/script>/gi, '')
-    .replace(/\s*<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js[^"']*["'][^>]*><\/script>/gi, '');
+    .replace(/\s*<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/(?:inicio-control-paneles|retencion-cargador-shell)\.js[^"']*["'][^>]*><\/script>/gi, '')
+    .replace(/\s*<script\b[^>]*data-tt-shell-startup-hold[^>]*>[\s\S]*?<\/script>/gi, '');
   const loader = /(<script\b[^>]*src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>)/i;
   if (!loader.test(out)) throw new Error('La pagina no carga js/cargador-pagina.js');
+
+  // La espera temprana del shell se arma desde esquema-color-instantaneo.js,
+  // que ya es parte del camino crítico permitido y corre antes del loader.
+  // Así no agregamos otro request bloqueante ni scripts inline (importante para
+  // la CSP del 404), mientras inicio-navegacion-publica.js puede seguir defer.
   return out.replace(loader, `$1\n  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=${PANEL_COMPAT_VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${PUBLIC_SHELL_VERSION}" defer></script>`);
 }
 
@@ -150,6 +159,13 @@ function centralizeRuntime(html) {
     out = out.replace(/(<script\b[^>]*src=["']tienda\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi, `$1?v=${VERSION}$2`);
   }
   return out;
+}
+
+function versionFirstPaint(html) {
+  return html.replace(
+    /(<script\b[^>]*src=["']js\/components\/color\/esquema-color-instantaneo\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi,
+    `$1?v=${COLOR_FIRST_PAINT_VERSION}$2`
+  );
 }
 
 function versionRuntimeLoader(html) {
@@ -191,6 +207,7 @@ for (const page of PUBLIC_PAGES) {
   html = ensureNavigationPreloads(html);
   html = ensureShellScript(html);
   html = centralizeRuntime(html);
+  html = versionFirstPaint(html);
   html = versionRuntimeLoader(html);
   html = versionSessionProtection(html);
   html = versionProfileGate(html);
