@@ -6,7 +6,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260815-routes-clean-1';
-const LOADER_VERSION = 'tintin-20260812-apariencia-seleccion-1';
+const LOADER_VERSION = 'tintin-20260816-loader-min-show-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260815-prelaunch-cache-2';
 const NAV_ENTRY_VERSION = 'tintin-20260815-routes-clean-1';

@@ -83,8 +83,14 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260812-apariencia-seleccion-1';
-  const MIN_SHOW_MS = 120;
+  const TT_CACHE_VERSION = 'tintin-20260816-loader-min-show-1';
+  // 120ms (fijado en #396 para matar esperas artificiales) resultó por
+  // debajo del umbral de percepción humana: en conexiones rápidas el logo y
+  // el texto de sección ("Página Principal", "Catálogo", "Producto") no
+  // llegan a registrarse visualmente. 400ms es el estándar habitual de
+  // splash/loading screens (suficiente para que se perciba la marca, sin
+  // reintroducir la espera artificial de 900ms que hubo antes de #396).
+  const MIN_SHOW_MS = 400;
   // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
   // emergencia "No pudimos comprobar el estado de la tienda" en un equipo
   // donde el propio loader ya llevaba ~6s arriba antes de que este tope se
