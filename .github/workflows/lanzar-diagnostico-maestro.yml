@@ -6,6 +6,9 @@ on:
       - main
     paths:
       - .github/workflows/lanzar-diagnostico-maestro.yml
+      - .github/workflows/diagnostico-maestro.yml
+      - scripts/ejecutar-diagnostico-maestro.mjs
+      - scripts/verificar-salud-ci-global.mjs
   workflow_dispatch:
 
 permissions:
