@@ -448,7 +448,6 @@ jobs:
         with:
           pattern: master-*
           path: artifacts/collected
-          merge-multiple: true
 
       - name: Construir informe maestro
         id: report
