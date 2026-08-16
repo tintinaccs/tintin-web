@@ -1,4 +1,5 @@
 /* TINTIN — adaptador de arranque de la navegación pública modular. */
+/* Contrato: id="search-panel" role="dialog" · id="cart-drawer" role="dialog" · id="collections-sheet" role="dialog" · id="tt-tablet-menu" role="dialog". */
 (function () {
   'use strict';
 
