@@ -10,6 +10,7 @@ const LOADER_VERSION = 'tintin-20260816-loader-min-show-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const NAV_ENTRY_VERSION = 'tintin-20260816-loader-shell-atomic-1';
+const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20260815-profile-routes-1';
 const PROFILE_GATE_VERSION = 'tintin-20260815-profile-routes-1';
 // Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
@@ -105,7 +106,7 @@ function ensureStyles(html) {
 
 function ensureNavigationPreloads(html) {
   let out = html.replace(
-    /\s*<link\b[^>]*rel=["']modulepreload["'][^>]*href=["']js\/components\/navigation\/entrada-navegacion-publica\.js[^"']*["'][^>]*>/gi,
+    /\s*<link\b[^>]*rel=["']modulepreload["'][^>]*href=["']js\/components\/navigation\/(?:entrada-navegacion-publica|compartido\/barrera-arranque-shell)\.js[^"']*["'][^>]*>/gi,
     ''
   );
   out = out.replace(
@@ -114,6 +115,7 @@ function ensureNavigationPreloads(html) {
   );
 
   const preloadTags = [
+    `<link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=${NAV_BARRIER_VERSION}">`,
     `<link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=${NAV_ENTRY_VERSION}">`,
     ...NAVIGATION_PRELOAD_STYLES.map(
       href => `<link rel="preload" as="style" href="${href}?v=${NAV_SHELL_VERSION}">`
