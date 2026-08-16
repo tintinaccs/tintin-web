@@ -1,0 +1,28 @@
+name: Lanzar Diagnóstico Maestro
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/lanzar-diagnostico-maestro.yml
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  dispatch:
+    name: Disparar auditoría global
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ejecutar Diagnóstico Maestro sobre main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run diagnostico-maestro.yml \
+            --repo "${{ github.repository }}" \
+            --ref main \
+            -f production_origin=https://tintinaccesorios.pages.dev \
+            -f include_production=true
