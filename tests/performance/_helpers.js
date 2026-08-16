@@ -160,7 +160,12 @@ const BUDGETS = {
   inpMs: 500,
   transferKB: 6500,
   duplicateRequests: 0,
-  homeRequests: 155,
+  // Inicio carga productos destacados desde Firestore: el conteo real crece
+  // con el catálogo (más productos publicados = más imágenes), no con
+  // regresiones de código. 155 fue la medición exacta post-optimización de
+  // #441; CI ya observó 161 sin cambios de código. Se deja margen sobre esa
+  // deriva esperable sin abandonar el tripwire de bloat real.
+  homeRequests: 175,
   lightweightRequests: 120,
   lightweightTransferKB: 1500,
   homeFirestoreReads: 30,
