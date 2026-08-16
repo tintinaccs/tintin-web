@@ -11,6 +11,7 @@ const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const NAV_ENTRY_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
+const NAV_STARTUP_HOLD_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20260815-profile-routes-1';
 const PROFILE_GATE_VERSION = 'tintin-20260815-profile-routes-1';
 // Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
@@ -135,14 +136,13 @@ function ensureShellScript(html) {
   let out = html
     .replace(/\s*<script\b[^>]*src=["']js\/(?:surface-controller|ui-navigation-controller)\.js[^"']*["'][^>]*><\/script>/gi, '')
     .replace(/\s*<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^"']*["'][^>]*><\/script>/gi, '')
-    .replace(/\s*<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js[^"']*["'][^>]*><\/script>/gi, '');
+    .replace(/\s*<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/(?:inicio-control-paneles|retencion-cargador-shell)\.js[^"']*["'][^>]*><\/script>/gi, '');
   const loader = /(<script\b[^>]*src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>)/i;
   if (!loader.test(out)) throw new Error('La pagina no carga js/cargador-pagina.js');
-  // El bootstrap del shell es deliberadamente síncrono: corre inmediatamente
-  // después del loader en <head> y registra beginWait() antes de que cualquier
-  // ttPageReady() inline del final del body pueda liberar la pantalla. El
-  // archivo es un adaptador mínimo y sus imports reales siguen siendo async.
-  return out.replace(loader, `$1\n  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=${PANEL_COMPAT_VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${PUBLIC_SHELL_VERSION}"></script>`);
+  // La retención es síncrona y mínima: bloquea el parser justo después del
+  // loader para registrar beginWait() antes de cualquier ttPageReady() del
+  // body. El bootstrap modular conserva defer, como exige la arquitectura.
+  return out.replace(loader, `$1\n  <script src="js/components/navigation/compatibilidad/retencion-cargador-shell.js?v=${NAV_STARTUP_HOLD_VERSION}"></script>\n  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=${PANEL_COMPAT_VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${PUBLIC_SHELL_VERSION}" defer></script>`);
 }
 
 function centralizeRuntime(html) {
