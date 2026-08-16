@@ -1,23 +1,23 @@
-name: Diagnóstico temporal — árbol limpio Nivel 3
+name: Sincronización temporal — shell público Nivel 3
 
 on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  dirty-tree:
-    name: Aislar archivos modificados por generadores
+  sync-generated-shell:
+    name: Sincronizar salidas canónicas en rama de reparación
+    if: github.head_ref == 'fix/nivel3-clean-tree' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout rama de reparación
         uses: actions/checkout@v5
         with:
-          ref: ${{ github.head_ref || github.ref_name }}
+          ref: ${{ github.head_ref }}
           fetch-depth: 0
 
       - name: Setup Node.js
@@ -29,35 +29,62 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Prepare evidence directory
-        run: mkdir -p /tmp/nivel3-dirty-tree
+      - name: Generar shell público canónico
+        run: npm run build:pages
 
-      - name: Run build pages and capture mutations
+      - name: Retirar sonda temporal y regenerar manifiesto final
         run: |
-          npm run build:pages
-          git status --short > /tmp/nivel3-dirty-tree/after-build-status.txt
-          git diff --name-only > /tmp/nivel3-dirty-tree/after-build-files.txt
-          git diff > /tmp/nivel3-dirty-tree/after-build.patch
-          echo '=== AFTER build:pages ==='
-          cat /tmp/nivel3-dirty-tree/after-build-status.txt
+          rm .github/workflows/diagnosticar-nivel3-clean-tree.yml
+          npm run build:diagnostics
 
-      - name: Reset tracked files before isolated final audit
-        run: git restore --source=HEAD --staged --worktree .
-
-      - name: Run final audit and capture mutations
+      - name: Verificar que sólo cambien salidas esperadas
+        shell: bash
         run: |
-          npm run audit:final
-          git status --short > /tmp/nivel3-dirty-tree/after-final-status.txt
-          git diff --name-only > /tmp/nivel3-dirty-tree/after-final-files.txt
-          git diff > /tmp/nivel3-dirty-tree/after-final.patch
-          echo '=== AFTER audit:final ==='
-          cat /tmp/nivel3-dirty-tree/after-final-status.txt
+          set -euo pipefail
+          allowed=$(cat <<'EOF'
+          .github/workflows/diagnosticar-nivel3-clean-tree.yml
+          404.html
+          about.html
+          cambios-devoluciones.html
+          catalogo.html
+          checkout.html
+          collections.html
+          contact.html
+          diagnostic-manifest.json
+          envios.html
+          index.html
+          login.html
+          perfil.html
+          preguntas-frecuentes.html
+          privacidad.html
+          product.html
+          terminos.html
+          EOF
+          )
+          changed=$(git status --porcelain=v1 | sed -E 's/^.. //' | sort -u)
+          unexpected=$(comm -23 <(printf '%s\n' "$changed" | sed '/^$/d' | sort -u) <(printf '%s\n' "$allowed" | sed 's/^ *//' | sed '/^$/d' | sort -u))
+          echo 'Archivos modificados por la sincronización:'
+          printf '%s\n' "$changed"
+          if [ -n "$unexpected" ]; then
+            echo 'ERROR: aparecieron cambios fuera de la lista controlada:'
+            printf '%s\n' "$unexpected"
+            exit 1
+          fi
 
-      - name: Upload dirty-tree evidence
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: nivel3-dirty-tree-evidence
-          path: /tmp/nivel3-dirty-tree
-          if-no-files-found: error
-          retention-days: 7
+      - name: Commit de salidas sincronizadas en la rama
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -- \
+            .github/workflows/diagnosticar-nivel3-clean-tree.yml \
+            404.html about.html cambios-devoluciones.html catalogo.html checkout.html \
+            collections.html contact.html diagnostic-manifest.json envios.html index.html \
+            login.html perfil.html preguntas-frecuentes.html privacidad.html product.html terminos.html
+          if git diff --cached --quiet; then
+            echo 'No hay cambios para consolidar.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'build: sincronizar shell público generado'
+          git push origin HEAD:${{ github.head_ref }}
