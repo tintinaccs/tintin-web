@@ -11,7 +11,6 @@ const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const NAV_ENTRY_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
-const NAV_STARTUP_HOLD_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20260815-profile-routes-1';
 const PROFILE_GATE_VERSION = 'tintin-20260815-profile-routes-1';
 // Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
@@ -136,13 +135,19 @@ function ensureShellScript(html) {
   let out = html
     .replace(/\s*<script\b[^>]*src=["']js\/(?:surface-controller|ui-navigation-controller)\.js[^"']*["'][^>]*><\/script>/gi, '')
     .replace(/\s*<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^"']*["'][^>]*><\/script>/gi, '')
-    .replace(/\s*<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/(?:inicio-control-paneles|retencion-cargador-shell)\.js[^"']*["'][^>]*><\/script>/gi, '');
+    .replace(/\s*<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/(?:inicio-control-paneles|retencion-cargador-shell)\.js[^"']*["'][^>]*><\/script>/gi, '')
+    .replace(/\s*<script\b[^>]*data-tt-shell-startup-hold[^>]*>[\s\S]*?<\/script>/gi, '');
   const loader = /(<script\b[^>]*src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>)/i;
   if (!loader.test(out)) throw new Error('La pagina no carga js/cargador-pagina.js');
-  // La retención es síncrona y mínima: bloquea el parser justo después del
-  // loader para registrar beginWait() antes de cualquier ttPageReady() del
-  // body. El bootstrap modular conserva defer, como exige la arquitectura.
-  return out.replace(loader, `$1\n  <script src="js/components/navigation/compatibilidad/retencion-cargador-shell.js?v=${NAV_STARTUP_HOLD_VERSION}"></script>\n  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=${PANEL_COMPAT_VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${PUBLIC_SHELL_VERSION}" defer></script>`);
+
+  // La retención debe quedar registrada antes de cualquier ttPageReady() del body,
+  // pero no merece una descarga JS bloqueante extra. Este bloque inline corre justo
+  // después del loader ya imprescindible, convierte hide() en una solicitud segura
+  // y mantiene una espera que barrera-arranque-shell.js libera al quedar listo el shell.
+  // build:csp calcula automáticamente el hash de este bloque para cada ruta pública.
+  const startupHold = `<script data-tt-shell-startup-hold>(function(){'use strict';var l=window.TintinLoader;if(!l||typeof l.beginWait!=='function')return;if(!window.__TintinLoaderSafeHideInstalled&&typeof l.ready==='function'){window.__TintinLoaderSafeHideInstalled=true;l.hide=function(){l.ready();};}if(window.__TintinPublicShellStartupWaitHeld)return;l.beginWait();window.__TintinPublicShellStartupWaitHeld=true;})();</script>`;
+
+  return out.replace(loader, `$1\n  ${startupHold}\n  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=${PANEL_COMPAT_VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${PUBLIC_SHELL_VERSION}" defer></script>`);
 }
 
 function centralizeRuntime(html) {
