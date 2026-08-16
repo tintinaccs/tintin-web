@@ -21,6 +21,15 @@ function fail(message) {
   process.exitCode = 1;
 }
 
+function cleanRouteHasBackingPage(raw) {
+  const value = String(raw || '').trim();
+  if (!value.startsWith('/') || value.startsWith('//')) return false;
+  const pathname = value.split('#')[0].split('?')[0].replace(/^\/+|\/+$/g, '');
+  if (!pathname) return fs.existsSync(path.join(ROOT, 'index.html'));
+  if (path.extname(pathname)) return false;
+  return fs.existsSync(path.join(ROOT, `${pathname}.html`));
+}
+
 if (!fs.existsSync(MANIFEST_PATH)) {
   console.error('FAIL — No existe diagnostic-manifest.json. Ejecutá primero npm run build:diagnostics.');
   process.exit(1);
@@ -61,12 +70,21 @@ for (const page of manifest.pages) {
 
 if (!Array.isArray(manifest.missingReferences)) {
   fail('El manifiesto no incluye el inventario de referencias faltantes.');
-} else if (manifest.missingReferences.length) {
-  const summary = manifest.missingReferences
-    .slice(0, 10)
-    .map(item => `${item.page}:${item.line || '?'} → ${item.raw || item.target || '?'}`)
-    .join(' | ');
-  fail(`Hay ${manifest.missingReferences.length} referencia(s) local(es) faltante(s): ${summary}.`);
+} else {
+  // Las URLs públicas finales son limpias (/catalogo, /contact, etc.), pero el
+  // repositorio conserva su asset físico equivalente (*.html). Solo se descarta
+  // la advertencia cuando ese HTML existe de verdad; una ruta limpia huérfana
+  // continúa fallando y bloqueando el deploy.
+  const unresolved = manifest.missingReferences.filter(
+    item => !cleanRouteHasBackingPage(item.raw || item.target)
+  );
+  if (unresolved.length) {
+    const summary = unresolved
+      .slice(0, 10)
+      .map(item => `${item.page}:${item.line || '?'} → ${item.raw || item.target || '?'}`)
+      .join(' | ');
+    fail(`Hay ${unresolved.length} referencia(s) local(es) faltante(s): ${summary}.`);
+  }
 }
 
 if (process.exitCode) {

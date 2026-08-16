@@ -16,7 +16,7 @@
   if (window.TintinPublicShellBootstrapStarted) return;
   window.TintinPublicShellBootstrapStarted = true;
 
-  const MODULE_VERSION = 'tintin-20260814-social-notifications-1';
+  const MODULE_VERSION = 'tintin-20260815-prelaunch-cache-2';
   const scriptUrl = document.currentScript?.src || new URL('js/inicio-navegacion-publica.js', window.location.href).href;
   const entryUrl = new URL('./components/navigation/entrada-navegacion-publica.js', scriptUrl);
   entryUrl.searchParams.set('v', MODULE_VERSION);

@@ -1,7 +1,7 @@
-const file = (location.pathname.split('/').pop() || '').toLowerCase();
-const supported = new Set(['terminos.html', 'privacidad.html']);
+const page = (location.pathname.split('/').pop() || '').toLowerCase().replace(/\.html$/, '');
+const supported = new Set(['terminos', 'privacidad']);
 
-if (supported.has(file) && !window.TintinLegalMaintenanceBooted) {
+if (supported.has(page) && !window.TintinLegalMaintenanceBooted) {
   window.TintinLegalMaintenanceBooted = true;
 
   const clean = (value, max = 180) => String(value ?? '')
@@ -45,12 +45,10 @@ if (supported.has(file) && !window.TintinLegalMaintenanceBooted) {
   }
 
   function setMetadata() {
-    const canonical = new URL(file, location.href);
-    canonical.search = '';
-    canonical.hash = '';
+    const canonical = new URL(`/${page}`, location.origin);
     document.querySelector('link[rel="canonical"]')?.setAttribute('href', canonical.href);
     document.querySelector('meta[property="og:url"]')?.setAttribute('content', canonical.href);
-    const image = new URL('assets/og-cover.jpg', location.href).href;
+    const image = new URL('/assets/og-cover.jpg', location.origin).href;
     document.querySelector('meta[property="og:image"]')?.setAttribute('content', image);
     document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', image);
   }
@@ -135,9 +133,7 @@ if (supported.has(file) && !window.TintinLegalMaintenanceBooted) {
   if (footer) footer.textContent = `© 2024-${new Date().getFullYear()} TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS`;
 
   // Nada de lo de arriba necesita datos remotos (solo reordena HTML ya
-  // presente), así que el SDK de Firebase —varios módulos desde gstatic.com,
-  // vía firebase.js— se carga recién acá, después de que el índice y el
-  // resto del contenido ya están en pantalla, en vez de bloquearlos.
+  // presente), así que el SDK de Firebase se carga después del contenido.
   Promise.all([
     import('../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4'),
     import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),

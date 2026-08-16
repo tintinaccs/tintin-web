@@ -6,9 +6,8 @@ on:
       - main
     paths:
       # `npm run audit:final` y `npm run build:pages` inspeccionan superficies
-      # amplias del repositorio. La PR debe cubrir el mismo alcance que push para
-      # regenerar diagnostic-manifest.json antes del merge y no descubrir el
-      # desfase recién en main.
+      # amplias del repositorio. La PR cubre el mismo alcance que push para
+      # detectar cualquier regresión antes del merge.
       - 'catalogo.html'
       - 'admin.html'
       - 'tienda.js'
@@ -22,9 +21,6 @@ on:
     branches:
       - main
     paths:
-      # El job ejecuta `npm run audit:final`, que audita todo el repositorio.
-      # Por eso el filtro de push cubre js/** y scripts/** completos: un cambio
-      # en cualquier superficie o script de auditoría puede romperlo.
       - 'catalogo.html'
       - 'admin.html'
       - 'tienda.js'
@@ -39,9 +35,6 @@ on:
 permissions:
   contents: read
 
-# Evita solapar dos ejecuciones de Catálogo sobre la misma PR. El workflow ya
-# no escribe en la rama (ver "Verificar manifiesto reproducible" más abajo),
-# así que no hay push concurrente que serializar entre workflows.
 concurrency:
   group: tintin-catalog-generated-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
@@ -83,13 +76,21 @@ jobs:
       - name: Auditar carrito
         run: npm run audit:cart
 
+      - name: Construir artefacto reproducible antes de auditoría integral
+        run: npm run build:pages
+
       - name: Ejecutar auditoría integral
         run: npm run audit:final
 
-      - name: Verificar manifiesto reproducible
+      - name: Verificar manifiesto reproducible por fingerprint
+        shell: bash
         run: |
-          npm run build:pages
-          if ! git diff --exit-code -- diagnostic-manifest.json; then
-            echo '::error::diagnostic-manifest.json está desactualizado. Ejecutá "npm run build:pages" localmente y commiteá el resultado.'
+          first="$(node -p "require('./diagnostic-manifest.json').sourceFingerprint")"
+          npm run build:diagnostics
+          npm run verify:diagnostics
+          second="$(node -p "require('./diagnostic-manifest.json').sourceFingerprint")"
+          if [ -z "$first" ] || [ "$first" != "$second" ]; then
+            echo "::error::El sourceFingerprint del diagnóstico no es reproducible: $first != $second"
             exit 1
           fi
+          echo "Fingerprint diagnóstico reproducible: $second"

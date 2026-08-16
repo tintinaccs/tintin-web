@@ -1,0 +1,13 @@
+{
+  "origin": "https://tintinaccesorios.pages.dev",
+  "firebaseAuthDomain": "tintinaccesorios.pages.dev",
+  "cutover": {
+    "origin": "https://tintinaccs.com",
+    "firebaseAuthDomain": "tintinaccs.com",
+    "oauthRedirectUri": "https://tintinaccs.com/__/auth/handler",
+    "appCheckDomains": [
+      "tintinaccs.com",
+      "www.tintinaccs.com"
+    ]
+  }
+}

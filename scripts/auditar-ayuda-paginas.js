@@ -1,25 +1,6 @@
 'use strict';
 
-/* =============================================================
-   TINTIN — Auditoría de páginas informativas de ayuda
-
-   Cubre las páginas de servicio/ayuda que hasta ahora no tenían auditoría
-   propia (las legales terminos/privacidad ya la tienen en auditar-legal-paginas.js):
-
-     - envios.html
-     - cambios-devoluciones.html
-     - preguntas-frecuentes.html
-
-   Fija las invariantes que las mantienen correctas de punta a punta:
-   metadatos y canonical, Open Graph/Twitter con imagen existente, contenido
-   editable desde el Super Admin (data-tt-editable + site-content + esquema),
-   scripts compartidos (esquema de color en vivo, sincronización de contacto),
-   footer con contacto sincronizado y copyright vigente, enlaces internos que
-   resuelven, y ausencia de manejadores inline inseguros.
-
-   No abre navegador: comprobaciones estáticas sobre el código publicado.
-   ============================================================= */
-
+/* TINTIN — Auditoría de páginas informativas de ayuda. */
 const fs = require('fs');
 const path = require('path');
 
@@ -44,12 +25,17 @@ const PAGES = [
   { file: 'cambios-devoluciones.html', id: 'cambios', route: '/cambios-devoluciones' },
   { file: 'preguntas-frecuentes.html', id: 'faq', route: '/preguntas-frecuentes' }
 ];
+const CLEAN_INFO_LINKS = ['/envios', '/cambios-devoluciones', '/preguntas-frecuentes', '/terminos', '/privacidad'];
+const PAGE_FILE_BY_ROUTE = new Map([
+  ['/envios', 'envios.html'],
+  ['/cambios-devoluciones', 'cambios-devoluciones.html'],
+  ['/preguntas-frecuentes', 'preguntas-frecuentes.html'],
+  ['/terminos', 'terminos.html'],
+  ['/privacidad', 'privacidad.html']
+]);
 
 const schema = read('js/core/store/esquema-contenido.js');
 
-// ---------------------------------------------------------------------------
-// Comprobaciones por página
-// ---------------------------------------------------------------------------
 PAGES.forEach(({ file, id, route }) => {
   const html = read(file);
   const tag = `[${file}]`;
@@ -66,53 +52,50 @@ PAGES.forEach(({ file, id, route }) => {
   check(
     `${tag} canonical propio hacia la URL final limpia`,
     html.includes(`<link rel="canonical" href="${PUBLIC_ORIGIN}${route}">`),
-    'El canonical debe apuntar a la URL final limpia que Cloudflare publica, no al alias .html redirigido.'
+    'El canonical debe apuntar a la URL final limpia que Cloudflare publica.'
   );
 
   check(
     `${tag} Open Graph y Twitter completos con imagen existente`,
     /property="og:title"/.test(html) &&
       /property="og:description"/.test(html) &&
-      /property="og:url"/.test(html) &&
+      html.includes(`property="og:url" content="${PUBLIC_ORIGIN}${route}"`) &&
       /property="og:type"/.test(html) &&
       /name="twitter:card" content="summary_large_image"/.test(html) &&
       html.includes('og:image" content="https://tintinaccesorios.pages.dev/assets/og-cover.jpg"') &&
       exists('assets/og-cover.jpg'),
-    'Las tarjetas sociales deben estar completas y la imagen debe existir en el repo.'
+    'Las tarjetas sociales deben estar completas y usar la URL final limpia.'
   );
 
   check(
     `${tag} theme-color, favicon y manifest`,
-    /name="theme-color"/.test(html) &&
-      /rel="icon"/.test(html) &&
-      /rel="manifest"/.test(html),
-    'Faltan metadatos de PWA/branding (theme-color, favicon o manifest).'
+    /name="theme-color"/.test(html) && /rel="icon"/.test(html) && /rel="manifest"/.test(html),
+    'Faltan metadatos de PWA/branding.'
   );
 
   check(
-    `${tag} contenido editable desde el Super Admin (selector + init + esquema)`,
+    `${tag} contenido editable desde el Super Admin`,
     new RegExp(`data-tt-editable="${id}"`).test(html) &&
       /data-tt-section=/.test(html) &&
       html.includes(`initSiteContent('${id}')`) &&
       new RegExp(`'${file}': '${id}'`).test(schema),
-    'La página debe declarar su sección editable, inicializar site-content y estar en el esquema de contenido.'
+    'La página debe declarar su sección editable, inicializar site-content y estar en el esquema.'
   );
 
   check(
     `${tag} esquema de color: primera pintura + motor en vivo`,
-    html.includes('js/components/color/esquema-color-instantaneo.js') &&
-      html.includes('js/components/color/esquema-color.js'),
-    'Debe cargar la primera pintura estable y el motor de color en vivo para reflejar Apariencia.'
+    html.includes('js/components/color/esquema-color-instantaneo.js') && html.includes('js/components/color/esquema-color.js'),
+    'Debe cargar la primera pintura estable y el motor de color en vivo.'
   );
 
   check(
-    `${tag} scripts compartidos (shell, loader, contacto, analítica)`,
+    `${tag} scripts compartidos`,
     html.includes('js/cargador-pagina.js') &&
       html.includes('js/inicio-navegacion-publica.js') &&
       html.includes('js/components/contact/whatsapp.js') &&
       html.includes('js/analytics/analitica.js') &&
       html.includes('tienda.js'),
-    'La página debe compartir el shell público, loader, sincronización de contacto y analítica.'
+    'La fuente HTML debe conservar shell, loader, contacto, analítica y runtime compartido; Pages puede aligerarlos al servir.'
   );
 
   check(
@@ -122,40 +105,34 @@ PAGES.forEach(({ file, id, route }) => {
       /tt-contact-email/.test(html) &&
       /tt-contact-addr/.test(html) &&
       html.includes('© 2024-2026 TINTIN ACCESORIOS'),
-    'El footer debe traer las clases de contacto que whatsapp.js sincroniza y el copyright vigente.'
+    'El footer debe traer las clases de contacto sincronizables y copyright vigente.'
   );
 
   check(
-    `${tag} el footer enlaza a las páginas hermanas de información`,
-    html.includes('href="envios.html"') &&
-      html.includes('href="cambios-devoluciones.html"') &&
-      html.includes('href="preguntas-frecuentes.html"') &&
-      html.includes('href="terminos.html"') &&
-      html.includes('href="privacidad.html"'),
-    'La navegación de información debe enlazar de forma coherente entre las páginas de servicio.'
+    `${tag} footer usa las cinco rutas informativas limpias`,
+    CLEAN_INFO_LINKS.every(cleanRoute => html.includes(`href="${cleanRoute}"`)),
+    'Después de build:routes, la navegación informativa debe apuntar a rutas limpias y no a aliases .html.'
   );
 
   check(
-    `${tag} sin manejadores de eventos inline (onclick=...)`,
+    `${tag} no vuelve a publicar enlaces internos .html normalizables`,
+    !/href="(?:\.\/|\/)?(?:envios|cambios-devoluciones|preguntas-frecuentes|terminos|privacidad)\.html(?:[?#][^"]*)?"/i.test(html),
+    'Los aliases .html redirigen; no deben permanecer como enlaces navegables después de normalizar rutas.'
+  );
+
+  check(
+    `${tag} las rutas informativas limpias resuelven a HTML existentes`,
+    CLEAN_INFO_LINKS.every(cleanRoute => exists(PAGE_FILE_BY_ROUTE.get(cleanRoute))),
+    'Cada destino limpio debe tener su documento HTML fuente correspondiente.'
+  );
+
+  check(
+    `${tag} sin manejadores de eventos inline`,
     !/\son[a-z]+\s*=\s*"/i.test(html.replace(/data-tt-[a-z-]+="[^"]*"/gi, '')),
     'No debe haber manejadores inline; el comportamiento va en módulos externos.'
   );
-
-  // Enlaces internos: cada href a un .html local debe resolver a un archivo real.
-  const localLinks = [...html.matchAll(/href="([^"#?:]+\.html)(?:[?#][^"]*)?"/g)]
-    .map(m => m[1])
-    .filter((v, i, a) => a.indexOf(v) === i);
-  const broken = localLinks.filter(target => !exists(target));
-  check(
-    `${tag} todos los enlaces internos .html resuelven`,
-    broken.length === 0,
-    `Enlaces rotos: ${broken.join(', ')}`
-  );
 });
 
-// ---------------------------------------------------------------------------
-// Comprobaciones específicas
-// ---------------------------------------------------------------------------
 check(
   '[envios.html] las ciudades de envío se leen de settings/shippingRates con estados de carga/vacío/error',
   read('envios.html').includes("onSnapshot(doc(db, 'settings', 'shippingRates')") &&
@@ -170,7 +147,7 @@ check(
   read('preguntas-frecuentes.html').includes('tt-faq-q') &&
     read('preguntas-frecuentes.html').includes('tt-faq-a') &&
     schema.includes("faqField('questions.0.q'"),
-  'Las preguntas frecuentes deben mapear a los campos editables del esquema de contenido.'
+  'Las preguntas frecuentes deben mapear a campos editables del esquema.'
 );
 
 check(
@@ -182,7 +159,6 @@ check(
   'El editor de contenido debe cubrir envíos, cambios y preguntas frecuentes.'
 );
 
-// ---------------------------------------------------------------------------
 const failed = checks.filter(item => !item.ok);
 checks.forEach(item => {
   console.log(`${item.ok ? 'OK' : 'ERROR'} — ${item.name}`);
@@ -194,4 +170,4 @@ if (failed.length) {
   process.exit(1);
 }
 
-console.log(`\nAuditoría de páginas de ayuda completada correctamente (${checks.length} comprobaciones).`);
+console.log(`\nAuditoría de páginas de ayuda completada correctamente (${checks.length} comprobaciones, rutas limpias).`);

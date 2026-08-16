@@ -1,5 +1,18 @@
 User-agent: *
 Allow: /
+
+# Rutas privadas/operativas canónicas (URLs limpias)
+Disallow: /admin
+Disallow: /admin-images
+Disallow: /checkout
+Disallow: /login
+Disallow: /perfil
+Disallow: /404
+Disallow: /nosotros
+Disallow: /api/
+Disallow: /__/auth/
+
+# Compatibilidad con URLs heredadas; no deben indexarse durante la transición.
 Disallow: /admin.html
 Disallow: /admin-images.html
 Disallow: /checkout.html
@@ -7,6 +20,8 @@ Disallow: /login.html
 Disallow: /perfil.html
 Disallow: /404.html
 Disallow: /nosotros.html
+
+# Árbol técnico no público
 Disallow: /functions/
 Disallow: /scripts/
 Disallow: /maintenance/

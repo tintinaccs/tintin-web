@@ -1,23 +1,6 @@
 'use strict';
 
-/* =============================================================
-   TINTIN — Auditoría de páginas auxiliares y rutas legacy
-
-   Cubre las páginas de sistema que no son de contenido y que hasta ahora no
-   tenían auditoría propia:
-
-     - 404.html        → página de error (no indexable, con recuperación).
-     - nosotros.html   → ruta antigua / no enlazada: redirige a about.html.
-
-   Fija las invariantes que las mantienen correctas: el 404 no debe indexarse y
-   siempre debe ofrecer salida (inicio, catálogo, categorías y WhatsApp); la
-   ruta legacy debe seguir siendo un stub mínimo que redirige y consolida su
-   canonical en la URL final limpia de about, sin volverse un duplicado del
-   contenido real ni ser enlazada por error desde el resto del sitio.
-
-   No abre navegador: comprobaciones estáticas sobre el código publicado.
-   ============================================================= */
-
+/* TINTIN — Auditoría de 404 y ruta legacy nosotros. */
 const fs = require('fs');
 const path = require('path');
 
@@ -39,41 +22,47 @@ function check(name, condition, problem) {
 const notFound = read('404.html');
 const legacy = read('nosotros.html');
 
-// ===========================================================================
-// 1. PÁGINA DE ERROR — 404.html
-// ===========================================================================
+function hasHref(html, cleanRoute, legacyFile) {
+  return html.includes(`href="${cleanRoute}"`) || html.includes(`href="${legacyFile}"`);
+}
+
+function localTargetExists(raw) {
+  const value = String(raw || '').split(/[?#]/)[0];
+  if (!value || /^(?:https?:|mailto:|tel:|#|\/\/)/i.test(value)) return true;
+  if (value === '/') return exists('index.html');
+  const clean = value.replace(/^\//, '');
+  if (exists(clean)) return true;
+  if (!path.extname(clean) && exists(`${clean}.html`)) return true;
+  return false;
+}
+
 check(
   '[404.html] idioma, viewport, título y descripción',
-  /<html[^>]*lang="es"/.test(notFound) &&
-    /name="viewport"/.test(notFound) &&
-    /<title>[^<]+<\/title>/.test(notFound) &&
-    /name="description" content="[^"]{15,}"/.test(notFound),
+  /<html[^>]*lang="es"/.test(notFound) && /name="viewport"/.test(notFound) &&
+    /<title>[^<]+<\/title>/.test(notFound) && /name="description" content="[^"]{15,}"/.test(notFound),
   'La página de error necesita metadatos básicos legibles.'
 );
 check(
-  '[404.html] es NO indexable (robots noindex)',
+  '[404.html] es NO indexable',
   /<meta\s+name="robots"\s+content="[^"]*\bnoindex\b[^"]*">/i.test(notFound),
-  'Una página de error nunca debe indexarse en buscadores.'
+  'Una página de error nunca debe indexarse.'
 );
 check(
-  '[404.html] mantiene el tema del sitio (primera pintura + motor en vivo)',
-  notFound.includes('js/components/color/esquema-color-instantaneo.js') &&
-    notFound.includes('js/components/color/esquema-color.js'),
-  'El 404 debe verse con el mismo esquema de color que el resto del sitio.'
+  '[404.html] mantiene el tema del sitio',
+  notFound.includes('js/components/color/esquema-color-instantaneo.js') && notFound.includes('js/components/color/esquema-color.js'),
+  'El 404 debe verse con el mismo esquema de color.'
 );
 check(
   '[404.html] contacto y analítica compartidos',
-  notFound.includes('js/components/contact/whatsapp.js') &&
-    notFound.includes('js/analytics/analitica.js') &&
-    notFound.includes('tienda.js'),
+  notFound.includes('js/components/contact/whatsapp.js') && notFound.includes('js/analytics/analitica.js') && notFound.includes('tienda.js'),
   'El enlace de WhatsApp debe sincronizarse y la visita debe poder medirse.'
 );
 check(
-  '[404.html] ofrece recuperación: inicio, catálogo y categorías',
-  notFound.includes('href="index.html"') &&
-    notFound.includes('href="catalogo.html"') &&
-    /href="catalogo\.html\?cat=/.test(notFound),
-  'Un 404 debe ofrecer siempre salidas claras hacia el sitio.'
+  '[404.html] ofrece recuperación hacia inicio, catálogo y categorías',
+  hasHref(notFound, '/', 'index.html') &&
+    hasHref(notFound, '/catalogo', 'catalogo.html') &&
+    /href="(?:\/catalogo|catalogo\.html)\?cat=/.test(notFound),
+  'El 404 debe funcionar tanto en fuente como después de build:routes y ofrecer salidas claras.'
 );
 check(
   '[404.html] incluye ayuda por WhatsApp',
@@ -81,64 +70,58 @@ check(
   'El error debe ofrecer un canal de ayuda directo.'
 );
 check(
-  '[404.html] tiene un encabezado principal y sin manejadores inline',
-  /<h1[^>]*class="tt-404-title"/.test(notFound) &&
-    !/\son[a-z]+\s*=\s*"/i.test(notFound),
+  '[404.html] tiene H1 y no usa manejadores inline',
+  /<h1[^>]*class="tt-404-title"/.test(notFound) && !/\son[a-z]+\s*=\s*"/i.test(notFound),
   'Debe haber un H1 y ningún manejador de eventos inline.'
 );
 
-const links404 = [...notFound.matchAll(/href="([^"#?:]+\.html)(?:[?#][^"]*)?"/g)]
-  .map(m => m[1]).filter((v, i, a) => a.indexOf(v) === i);
-const broken404 = links404.filter(t => !exists(t));
+const internal404 = [...notFound.matchAll(/href="([^"#]+)"/g)]
+  .map(match => match[1])
+  .filter(value => !/^(?:https?:|mailto:|tel:|#|\/\/)/i.test(value));
+const broken404 = internal404.filter(value => !localTargetExists(value));
 check(
-  '[404.html] todos los enlaces internos resuelven',
+  '[404.html] todos los destinos internos resuelven, incluida la forma limpia',
   broken404.length === 0,
   `Enlaces rotos: ${broken404.join(', ')}`
 );
 
-// ===========================================================================
-// 2. RUTA LEGACY — nosotros.html (redirige a about.html)
-// ===========================================================================
 check(
-  '[nosotros.html] redirige a about.html (meta refresh)',
-  /<meta http-equiv="refresh" content="0; url=about\.html">/.test(legacy),
-  'La ruta antigua debe redirigir a la página real de Quiénes somos.'
+  '[nosotros.html] redirige directamente a /about',
+  /<meta http-equiv="refresh" content="0; url=\/about">/.test(legacy),
+  'La ruta antigua debe saltar directamente a la URL limpia final.'
 );
 check(
-  '[nosotros.html] es no indexable pero sigue el enlace (noindex, follow)',
+  '[nosotros.html] es noindex, follow',
   /<meta name="robots" content="noindex, follow">/.test(legacy),
-  'La ruta duplicada no debe indexarse, pero debe transmitir el enlace a about.html.'
+  'La ruta duplicada no debe indexarse.'
 );
 check(
-  '[nosotros.html] consolida su canonical en la URL final limpia de about',
+  '[nosotros.html] canonicaliza a /about',
   legacy.includes('<link rel="canonical" href="https://tintinaccesorios.pages.dev/about">'),
-  'El canonical debe apuntar a la URL final limpia de la página real, no a un alias .html redirigido.'
+  'El canonical debe apuntar a la URL limpia real.'
 );
 check(
-  '[nosotros.html] tiene un enlace visible de respaldo hacia about.html',
-  /<a href="about\.html">/.test(legacy),
-  'Si el refresh no dispara, debe existir un enlace manual a about.html.'
+  '[nosotros.html] tiene respaldo visible hacia /about',
+  /<a href="\/about">/.test(legacy),
+  'Si el refresh no dispara debe existir un enlace manual limpio.'
 );
 check(
-  '[nosotros.html] sigue siendo un stub mínimo (no duplica el contenido real)',
-  legacy.length < 2000 &&
-    !legacy.includes('tt-footer') &&
-    !legacy.includes('initSiteContent'),
-  'La ruta legacy debe quedar como redirección mínima, no como copia de about.html.'
+  '[nosotros.html] sigue siendo un stub mínimo',
+  legacy.length < 2000 && !legacy.includes('tt-footer') && !legacy.includes('initSiteContent'),
+  'La ruta legacy no debe duplicar el contenido de About.'
 );
 check(
-  '[nosotros.html] la página destino about.html existe y no crea bucle de canonical',
-  exists('about.html') &&
-    read('about.html').includes('<link rel="canonical" href="https://tintinaccesorios.pages.dev/about">'),
-  'El destino debe existir y canonizarse en sí mismo (sin apuntar de vuelta a la ruta legacy).'
+  '[nosotros.html] destino About existe y canonicaliza a sí mismo',
+  exists('about.html') && read('about.html').includes('<link rel="canonical" href="https://tintinaccesorios.pages.dev/about">'),
+  'El destino debe existir y usar canonical limpio.'
 );
 
-const publicHtml = fs.readdirSync(root).filter(f => f.endsWith('.html') && f !== 'nosotros.html');
-const linkingLegacy = publicHtml.filter(f => /href="[^"]*nosotros\.html/.test(read(f)));
+const publicHtml = fs.readdirSync(root).filter(file => file.endsWith('.html') && file !== 'nosotros.html');
+const linkingLegacy = publicHtml.filter(file => /href="[^"]*nosotros\.html/.test(read(file)));
 check(
-  'Ninguna página pública enlaza a la ruta legacy nosotros.html',
+  'Ninguna página pública enlaza nosotros.html',
   linkingLegacy.length === 0,
-  `Estas páginas enlazan a la ruta legacy (deberían apuntar a about.html): ${linkingLegacy.join(', ')}`
+  `Páginas con enlace legacy: ${linkingLegacy.join(', ')}`
 );
 
 const failed = checks.filter(item => !item.ok);
@@ -146,10 +129,8 @@ checks.forEach(item => {
   console.log(`${item.ok ? 'OK' : 'ERROR'} — ${item.name}`);
   if (!item.ok) console.log(`  ${item.problem}`);
 });
-
 if (failed.length) {
   console.error(`\nAuditoría de páginas auxiliares fallida: ${failed.length} problema(s).`);
   process.exit(1);
 }
-
-console.log(`\nAuditoría de páginas auxiliares completada correctamente (${checks.length} comprobaciones).`);
+console.log(`\nAuditoría de páginas auxiliares completada correctamente (${checks.length} comprobaciones, rutas limpias).`);

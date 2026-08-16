@@ -4,17 +4,25 @@ on:
   pull_request:
     paths:
       - '**/*.html'
+      - '_headers'
       - 'js/**/*.js'
       - 'js/**/*.mjs'
       - 'css/**/*.css'
+      - 'tests/cache/**'
+      - 'scripts/sincronizar-inicio-navegacion-publica.js'
       - 'scripts/auditar-versionado-cache.mjs'
       - 'scripts/cache-version-baseline.json'
+      - 'scripts/cache-version-approvals.json'
       - 'package.json'
       - '.github/workflows/auditar-versionado-cache.yml'
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: cache-versioning-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   cache-versioning:
@@ -27,5 +35,9 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: 22
+      - name: Sync published shell versions
+        run: npm run sync:public-shell
       - name: Audit cache versioning
         run: npm run audit:cache-versioning
+      - name: Enforce immutable cache headers
+        run: node --test tests/cache/cache-headers.test.mjs

@@ -19,8 +19,8 @@ if (!fs.existsSync(runtimePath)) errors.push('falta js/pages/institutional/mante
 else {
   const runtime = fs.readFileSync(runtimePath, 'utf8');
   [
-    'terminos.html',
-    'privacidad.html',
+    "new Set(['terminos', 'privacidad'])",
+    "replace(/\\.html$/, '')",
     'tt-legal-nav',
     'aria-labelledby',
     "settings', 'general",
@@ -30,12 +30,17 @@ else {
   ].forEach(token => {
     if (!runtime.includes(token)) errors.push(`runtime legal: falta ${token}`);
   });
+  if (!runtime.includes('new URL(`/${page}`, location.origin)')) errors.push('runtime legal: canonical debe usar ruta limpia');
 }
 
 const loader = fs.readFileSync('js/cargador-mantenimiento-pagina.js', 'utf8');
 if (!/terminos\|privacidad[\s\S]*load\('pages\/institutional\/mantenimiento-legal\.js'\)/.test(loader)) {
   errors.push('page-maintenance-loader no importa legal-maintenance en páginas legales');
 }
+
+const pageFunction = fs.readFileSync('functions/[page].js', 'utf8');
+if (!pageFunction.includes('mantenimiento-legal.js?v=tintin-20260815-legal-clean-1')) errors.push('Pages Function no inyecta runtime legal versionado');
+if (!pageFunction.includes("page === 'terminos' || page === 'privacidad'")) errors.push('Pages Function no limita runtime legal a rutas legales');
 
 const workflow = fs.readFileSync('.github/workflows/auditar-tintin.yml', 'utf8');
 if (!workflow.includes('node scripts/auditar-legal-paginas.js')) errors.push('workflow no ejecuta auditoría legal');
@@ -46,4 +51,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('Auditoría de páginas informativas: OK');
+console.log('Auditoría de páginas informativas: OK · rutas limpias y runtime legal versionado.');

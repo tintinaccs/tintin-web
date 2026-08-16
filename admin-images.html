@@ -319,7 +319,7 @@
   <div style="font-size:2.5rem;">🔒</div>
   <h2 style="font-size:1.1rem;">Acceso denegado</h2>
   <p style="font-size:0.88rem;color:#6b6b6b;">No tenés permisos para ver esta página.</p>
-  <a href="login.html" class="adm-auth-login" style="margin-top:12px;background:#b84c72;color:#fff;padding:10px 24px;border-radius:20px;text-decoration:none;font-weight:600;font-size:0.88rem;">Iniciar sesión</a>
+  <a href="/login" class="adm-auth-login" style="margin-top:12px;background:#b84c72;color:#fff;padding:10px 24px;border-radius:20px;text-decoration:none;font-weight:600;font-size:0.88rem;">Iniciar sesión</a>
 </div>
 
 <!-- OVERLAY -->
@@ -335,7 +335,7 @@
   </div>
   <div class="adm-header-right">
     <span class="adm-user-email" id="adm-user-email"></span>
-    <a href="admin.html" class="adm-back-btn">← Volver al panel</a>
+    <a href="/admin" class="adm-back-btn">← Volver al panel</a>
   </div>
 </header>
 
@@ -374,7 +374,7 @@
   <button type="button" class="adm-mobile-tab" data-section="nosotros"><span class="nav-icon">🌸</span>Nosotros</button>
   <button type="button" class="adm-mobile-tab" data-section="branding"><span class="nav-icon">🏷️</span>Branding</button>
   <button type="button" class="adm-mobile-tab" data-section="biblioteca"><span class="nav-icon">📁</span>Biblioteca</button>
-  <a href="admin.html" class="adm-mobile-tab"><span class="nav-icon">◀</span>Panel</a>
+  <a href="/admin" class="adm-mobile-tab"><span class="nav-icon">◀</span>Panel</a>
 </nav>
 
 <!-- MAIN -->
@@ -750,6 +750,6 @@ onAuthStateChanged(auth, async (user) => {
 });
 </script>
 <script type="module" src="js/admin/settings/esquema-color-admin.js?v=tintin-20260810-global-studio-4"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260726-session-guard-1"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260815-profile-routes-1"></script>
 </body>
 </html>

@@ -782,13 +782,13 @@ window.addEventListener('hashchange', () => {
 // ---- MOBILE TAB LOGOUT ----
 const mtabLogout = document.getElementById('mtab-logout');
 if (mtabLogout) mtabLogout.onclick = () => {
-  const leave = async () => { await signOut(auth); window.location.href = 'login.html'; };
+  const leave = async () => { await signOut(auth); window.location.href = '/login'; };
   window.AdminUnsaved ? window.AdminUnsaved.requestNavigation(leave) : leave();
 };
 
 // ---- LOGOUT ----
 document.getElementById('adm-logout').onclick = () => {
-  const leave = async () => { await signOut(auth); window.location.href = 'login.html'; };
+  const leave = async () => { await signOut(auth); window.location.href = '/login'; };
   window.AdminUnsaved ? window.AdminUnsaved.requestNavigation(leave) : leave();
 };
 

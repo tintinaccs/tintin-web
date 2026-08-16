@@ -11,6 +11,7 @@ const PAGE_BY_FILE = Object.freeze({
 const MODAL_KINDS = new Set(['center', 'bottom-sheet']);
 let initialized = false;
 let activePopupCleanup = null;
+let campaignBarObserver = null;
 
 function currentPageId() {
   const file = location.pathname.split('/').filter(Boolean).at(-1) || '';
@@ -80,10 +81,31 @@ function syncCampaignBarOffset() {
     document.documentElement.style.removeProperty('--tt-global-campaign-bar-h');
   }
 }
+
+function stopCampaignBarObserver() {
+  campaignBarObserver?.disconnect();
+  campaignBarObserver = null;
+}
+
+function observeCampaignBar(bar) {
+  stopCampaignBarObserver();
+  syncCampaignBarOffset();
+  if (!(bar instanceof HTMLElement) || typeof ResizeObserver !== 'function') {
+    requestAnimationFrame(syncCampaignBarOffset);
+    return;
+  }
+  campaignBarObserver = new ResizeObserver(() => syncCampaignBarOffset());
+  campaignBarObserver.observe(bar);
+  // El CSS del runtime se carga de forma asíncrona. El observer capturará su
+  // cambio de tamaño; este frame adicional cubre navegadores sin notificación
+  // inmediata y mantiene el valor correcto desde el primer render estable.
+  requestAnimationFrame(syncCampaignBarOffset);
+}
 window.addEventListener('resize', syncCampaignBarOffset, { passive: true });
 
 function renderCampaign(config) {
   const campaign = highest((config.campaigns || []).filter(item => activeWindow(item)));
+  stopCampaignBarObserver();
   document.querySelectorAll('[data-tt-global-campaign]').forEach(node => node.remove());
   document.querySelectorAll('[data-tt-global-effects]').forEach(node => node.remove());
   document.documentElement.removeAttribute('data-tt-global-campaign-active');
@@ -101,10 +123,16 @@ function renderCampaign(config) {
     if (campaign.href) label.href = campaign.href; bar.appendChild(label);
     if (campaign.closable !== false) {
       const close = make('button', '', '×'); close.type = 'button'; close.setAttribute('aria-label', 'Cerrar anuncio');
-      close.addEventListener('click', () => { storageSet(window.sessionStorage, `tt_campaign_bar_${campaign.id}`, 'closed'); bar.remove(); syncCampaignBarOffset(); }); bar.appendChild(close);
+      close.addEventListener('click', () => {
+        storageSet(window.sessionStorage, `tt_campaign_bar_${campaign.id}`, 'closed');
+        stopCampaignBarObserver();
+        bar.remove();
+        syncCampaignBarOffset();
+      });
+      bar.appendChild(close);
     }
     document.body.prepend(bar);
-    syncCampaignBarOffset();
+    observeCampaignBar(bar);
   }
   renderEffect(campaign);
 }
@@ -205,6 +233,8 @@ export async function initGlobalVisualStudio() {
 
 export function disposeGlobalVisualStudio() {
   activePopupCleanup?.(); activePopupCleanup = null;
+  stopCampaignBarObserver();
   document.querySelectorAll('[data-tt-global-campaign],[data-tt-global-effects],[data-tt-global-popup]').forEach(node => node.remove());
   document.documentElement.removeAttribute('data-tt-global-studio'); document.documentElement.removeAttribute('data-tt-global-campaign-active');
+  document.documentElement.style.removeProperty('--tt-global-campaign-bar-h');
 }

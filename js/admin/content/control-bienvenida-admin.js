@@ -301,7 +301,7 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
         if (!await saveConfig()) return;
         sessionStorage.setItem('tt_welcome_preview_superadmin', '1');
         localStorage.setItem('tt_welcome_preview_superadmin', '1');
-        window.location.href = 'index.html?welcomePreview=1&t=' + Date.now();
+        window.location.href = '/?welcomePreview=1&t=' + Date.now();
       } catch (e) {
         console.error(e);
         toast('No se pudo preparar la prueba.', 4200);

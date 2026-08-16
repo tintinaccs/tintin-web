@@ -4,9 +4,8 @@
 // El SDK oficial `firebase-admin` es para Node y no corre en el runtime de
 // Cloudflare Workers (usa módulos nativos de Node que acá no existen). Este
 // módulo hace, con Web Crypto (sí disponible en Workers), exactamente las
-// dos operaciones que necesitamos de ese SDK: firmar un JWT como la cuenta
-// de servicio (para pedir un access token de Google) y firmar un Firebase
-// Custom Token — nada más. La clave privada sale de env.FIREBASE_SERVICE_ACCOUNT_KEY
+// operaciones admin que necesita la tienda sin exponer credenciales al
+// navegador. La clave privada sale de env.FIREBASE_SERVICE_ACCOUNT_KEY
 // (variable secreta de Cloudflare), nunca del navegador ni del repo.
 
 function base64UrlFromBytes(bytes) {
@@ -20,13 +19,6 @@ function base64UrlFromString(str) {
   return base64UrlFromBytes(new TextEncoder().encode(str));
 }
 
-// Quita las líneas delimitadoras PEM (-----BEGIN...-----/-----END...-----)
-// sin dejar el texto completo de ninguna de las dos como substring literal
-// en este archivo — evita un falso positivo del escáner de secretos
-// (scripts/auditar-fase-6-seguridad.js), que busca exactamente esa cabecera
-// como señal de una clave privada pegada a mano en el repo. Acá nunca hay
-// una clave real: el PEM llega en tiempo de ejecución desde la variable de
-// entorno FIREBASE_SERVICE_ACCOUNT_KEY.
 function pemToDer(pem) {
   const base64 = pem
     .replace(/-{5}(BEGIN|END)[^-]+-{5}/g, '')
@@ -75,14 +67,6 @@ async function signJwt(header, payload, privateKeyPem) {
   return `${signingInput}.${base64UrlFromBytes(signature)}`;
 }
 
-// Reutilizable dentro del mismo isolate de Worker (mejor esfuerzo — si el
-// isolate se recicla, simplemente se pide uno nuevo, no rompe nada).
-//
-// La caché va indexada POR SCOPE: un token pedido para `datastore` no sirve
-// para llamar a Identity Toolkit (Google responde 403 por scope insuficiente).
-// Cachear un solo token sin distinguir el scope hacía que, dentro de un mismo
-// request, el token de Firestore (que se pide primero, al leer el código OTP)
-// se reutilizara para `accounts:lookup` y el login fallara siempre.
 const accessTokenCache = new Map();
 
 /** Access token OAuth2 de la cuenta de servicio, para llamar APIs de Google admin. */
@@ -126,9 +110,7 @@ export async function getGoogleAccessToken(env, scopes) {
 
 /**
  * Firma un Firebase Custom Token para `uid` — el navegador lo usa con
- * signInWithCustomToken(auth, token). Es una firma local (sin llamar a
- * ninguna API de Google), sigue exactamente el formato que exige
- * Identity Toolkit para custom tokens.
+ * signInWithCustomToken(auth, token).
  */
 export async function createFirebaseCustomToken(env, uid, extraClaims = {}) {
   const sa = parseServiceAccount(env);
@@ -148,17 +130,7 @@ export async function createFirebaseCustomToken(env, uid, extraClaims = {}) {
   );
 }
 
-/**
- * Busca una cuenta por email y devuelve sus proveedores vinculados
- * (ej. 'google.com'), sin crear nada.
- *
- * Si la consulta falla, lanza. Antes devolvía `{exists:false}` ante cualquier
- * error, y como de esta respuesta depende el bloqueo "esta cuenta es de
- * Google, no mandes un código por correo", un fallo de la consulta dejaba
- * pasar el envío como si la cuenta no existiera. Un control de identidad
- * tiene que fallar cerrado: quien llama decide qué mostrar, pero no puede
- * confundir "no existe" con "no pude averiguarlo".
- */
+/** Busca proveedores vinculados a una cuenta por email, sin crear nada. */
 export async function lookupUserProvidersByEmail(env, email) {
   const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
   const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:lookup', {
@@ -192,11 +164,8 @@ async function lookupUserByEmail(accessToken, email) {
 /** Busca una cuenta de Firebase Auth por email; si no existe, la crea (ya verificada). */
 export async function findOrCreateUserByEmail(env, email) {
   const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
-
   const existing = await lookupUserByEmail(accessToken, email);
-  if (existing?.localId) {
-    return { uid: existing.localId, isNewUser: false };
-  }
+  if (existing?.localId) return { uid: existing.localId, isNewUser: false };
 
   const createResp = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp', {
     method: 'POST',
@@ -204,20 +173,12 @@ export async function findOrCreateUserByEmail(env, email) {
     body: JSON.stringify({ email, emailVerified: true })
   });
   const createData = await createResp.json().catch(() => ({}));
-  if (createResp.ok && createData.localId) {
-    return { uid: createData.localId, isNewUser: true };
-  }
+  if (createResp.ok && createData.localId) return { uid: createData.localId, isNewUser: true };
 
-  // La cuenta pudo haberse creado entre el lookup y este signUp (doble pestaña,
-  // reintento del navegador). En vez de fallar con "EMAIL_EXISTS", se busca de
-  // nuevo antes de dar el error por real.
   if (createData?.error?.message === 'EMAIL_EXISTS') {
     const raceExisting = await lookupUserByEmail(accessToken, email);
-    if (raceExisting?.localId) {
-      return { uid: raceExisting.localId, isNewUser: false };
-    }
+    if (raceExisting?.localId) return { uid: raceExisting.localId, isNewUser: false };
   }
-
   throw new Error('No se pudo crear la cuenta de acceso: ' + (createData?.error?.message || createResp.status));
 }
 
@@ -231,19 +192,14 @@ export async function deleteFirebaseUser(env, uid) {
     headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
     body: JSON.stringify({ localId: safeUid })
   });
-  if (!response.ok) {
+  if (response.status !== 404 && !response.ok) {
     const data = await response.json().catch(() => ({}));
     if (data?.error?.message === 'USER_NOT_FOUND') return;
     throw new Error('No se pudo eliminar la cuenta de acceso: ' + (data?.error?.message || response.status));
   }
 }
 
-// --- Firestore admin REST — credencial de servicio, no pasa por las reglas
-// de seguridad del cliente (mismo nivel de acceso que el SDK Admin normal).
-// Se usa ÚNICAMENTE para la colección emailOtpCodes, que no tiene ninguna
-// regla de cliente que la permita (cae en el "deny all" por defecto del
-// final de firestore.rules) — este es el único camino que puede tocarla.
-
+// --- Firestore admin REST ---
 const FIRESTORE_SCOPE = 'https://www.googleapis.com/auth/datastore';
 
 function firestoreDocUrl(sa, path) {
@@ -263,6 +219,56 @@ export async function firestoreAdminGet(env, path) {
   if (response.status === 404) return null;
   if (!response.ok) throw new Error(`Firestore GET falló (${response.status})`);
   return response.json();
+}
+
+/**
+ * Busca el primer documento cuyo campo coincida exactamente con `value`.
+ * Hace una consulta index-free de igualdad por cada nombre de campo legado
+ * indicado. Se usa en el cutover de Shopify para resolver handles antiguos
+ * sin descargar los ~400 productos en cada isolate de Cloudflare.
+ */
+export async function firestoreAdminFindFirstByFields(env, collectionId, fieldPaths, value) {
+  const safeCollection = String(collectionId || '').trim();
+  if (!/^[A-Za-z0-9_-]{1,120}$/.test(safeCollection)) throw new Error('Colección inválida para query Firestore');
+  const fields = [...new Set((Array.isArray(fieldPaths) ? fieldPaths : [fieldPaths])
+    .map(field => String(field || '').trim())
+    .filter(field => /^[A-Za-z0-9_. -]{1,120}$/.test(field)))];
+  if (!fields.length) throw new Error('Campo inválido para query Firestore');
+
+  const sa = parseServiceAccount(env);
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const endpoint = `${firestoreDatabaseUrl(sa)}/documents:runQuery`;
+
+  for (const fieldPath of fields) {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        structuredQuery: {
+          from: [{ collectionId: safeCollection }],
+          where: {
+            fieldFilter: {
+              field: { fieldPath },
+              op: 'EQUAL',
+              value: { stringValue: String(value ?? '') }
+            }
+          },
+          limit: 1
+        }
+      })
+    });
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(`Firestore RUN QUERY falló (${response.status}): ${data?.error?.message || ''}`);
+    }
+    const rows = await response.json().catch(() => []);
+    const document = Array.isArray(rows) ? rows.find(row => row?.document)?.document : null;
+    if (document) return document;
+  }
+  return null;
 }
 
 /** Reemplaza el documento completo por `fields` (sin updateMask = set, no merge parcial). */
@@ -305,9 +311,7 @@ export async function firestoreAdminDelete(env, path) {
     method: 'DELETE',
     headers: { authorization: `Bearer ${accessToken}` }
   });
-  if (response.status !== 404 && !response.ok) {
-    throw new Error(`Firestore DELETE falló (${response.status})`);
-  }
+  if (response.status !== 404 && !response.ok) throw new Error(`Firestore DELETE falló (${response.status})`);
 }
 
 export async function firestoreAdminList(env, path, pageSize = 300) {
@@ -320,7 +324,6 @@ export async function firestoreAdminList(env, path, pageSize = 300) {
   const data = await response.json().catch(() => ({}));
   return Array.isArray(data.documents) ? data.documents : [];
 }
-
 
 /** Lista una colección completa de forma paginada, con un techo explícito. */
 export async function firestoreAdminListAll(env, path, maxDocuments = 1000) {

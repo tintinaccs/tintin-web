@@ -44,13 +44,11 @@ export function clearProfileGateCache() {
 }
 
 /**
- * Nombre de la página actual, sin carpeta ni extensión.
+ * Nombre de la página actual, sin carpeta ni extensión heredada.
  *
- * Cloudflare Pages sirve /login.html también como /login (sin extensión), y
- * la raíz del sitio como '/'. Comparar contra 'login.html' a secas hacía que
- * en producción —donde la URL real es /login— esta misma página no se
- * reconociera como exenta: el guardia se redirigía a sí mismo una y otra vez,
- * acumulando ?from=login?from=login... hasta colgar el login entero.
+ * Cloudflare Pages sirve las páginas mediante rutas limpias. Normalizamos el
+ * último segmento para reconocer correctamente login y checkout incluso si
+ * llega una URL antigua que Cloudflare todavía redirige por compatibilidad.
  */
 function currentPageName() {
   const last = location.pathname.split('/').pop() || 'index';
@@ -95,17 +93,15 @@ function goCompleteProfile() {
   if (redirecting) return;
   redirecting = true;
 
-  // `from` conserva a dónde quería ir, para devolverla ahí apenas termine
-  // (login.html ya lo respeta al redirigir después del alta). Nunca se
-  // arrastra el `from` que ya viniera en la URL: encadenarlos fue lo que
-  // produjo el bucle de ?from=login?from=login... Además, si por lo que sea
-  // el destino terminara siendo el propio login, se va a la portada — este
-  // guardia no puede ser el que deja la página colgada.
+  // `from` conserva a dónde quería ir, para devolverla ahí apenas termine.
+  // Nunca se arrastra un `from` previo: encadenarlo fue lo que produjo el
+  // bucle histórico. Si el destino terminara siendo el propio login, se va
+  // al login limpio sin parámetros para que el guardia nunca pueda colgarlo.
   const page = currentPageName();
-  if (page === 'login') { location.replace('login.html'); return; }
+  if (page === 'login') { location.replace('/login'); return; }
 
-  const from = `${page}.html`;
-  location.replace(`login.html?from=${encodeURIComponent(from)}`);
+  const from = `/${page}`;
+  location.replace(`/login?from=${encodeURIComponent(from)}`);
 }
 
 async function enforceProfileComplete(user) {

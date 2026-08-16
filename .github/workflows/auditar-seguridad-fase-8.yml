@@ -7,6 +7,15 @@ on:
     paths:
       - 'firestore.rules'
       - '_headers'
+      - 'config/csp-runtime.json'
+      - 'config/csp-runtime.js'
+      - 'scripts/generar-csp-cloudflare.js'
+      - 'cloudflare/servir-admin-con-csp.js'
+      - 'functions/_middleware.js'
+      - 'functions/__/auth/**'
+      - 'functions/admin.js'
+      - 'functions/admin-images.js'
+      - 'tests/security/**'
       - 'apps-script/Seguridad.gs'
       - 'apps-script/CrearPedido.gs'
       - 'js/create-order-client.js'
@@ -23,6 +32,15 @@ on:
     paths:
       - 'firestore.rules'
       - '_headers'
+      - 'config/csp-runtime.json'
+      - 'config/csp-runtime.js'
+      - 'scripts/generar-csp-cloudflare.js'
+      - 'cloudflare/servir-admin-con-csp.js'
+      - 'functions/_middleware.js'
+      - 'functions/__/auth/**'
+      - 'functions/admin.js'
+      - 'functions/admin-images.js'
+      - 'tests/security/**'
       - 'apps-script/Seguridad.gs'
       - 'apps-script/CrearPedido.gs'
       - 'js/create-order-client.js'
@@ -38,12 +56,9 @@ on:
 permissions:
   contents: read
 
-# Evita solapar dos ejecuciones de Seguridad sobre la misma PR. El workflow ya
-# no escribe en la rama (ver "Verificar manifiesto reproducible" más abajo),
-# así que no hay push concurrente que serializar entre workflows.
 concurrency:
   group: tintin-security-generated-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   audit:
@@ -71,11 +86,22 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
+      - name: Generar y verificar CSP evaluada
+        run: npm run build:csp && npm run verify:csp
+
+      - name: Probar regresiones CSP, Cloudinary y Firebase Auth
+        run: node --test tests/security/csp-cloudinary-upload.test.mjs
+
       - name: Revisar sintaxis de seguridad
         run: |
           node --check scripts/auditar-fase-6-seguridad.js
           node --check scripts/probar-firestore-critico.mjs
           node --check js/create-order-client.js
+          node --check cloudflare/servir-admin-con-csp.js
+          node --check functions/_middleware.js
+          node --check config/csp-runtime.js
+          node --check functions/admin.js
+          node --check functions/admin-images.js
           cp apps-script/Seguridad.gs /tmp/Phase3Security.js
           cp apps-script/CrearPedido.gs /tmp/Phase4CreateOrder.js
           node --check /tmp/Phase3Security.js
@@ -87,13 +113,21 @@ jobs:
       - name: Ejecutar matriz adversarial de Firestore Rules
         run: npm run test:rules-phase6
 
+      - name: Construir artefacto reproducible antes de auditoría integral
+        run: npm run build:pages
+
       - name: Ejecutar auditoría integral
         run: npm run audit:final
 
-      - name: Verificar manifiesto reproducible
+      - name: Verificar manifiesto reproducible por fingerprint
+        shell: bash
         run: |
-          npm run build:pages
-          if ! git diff --exit-code -- diagnostic-manifest.json; then
-            echo '::error::diagnostic-manifest.json está desactualizado. Ejecutá "npm run build:pages" localmente y commiteá el resultado.'
+          first="$(node -p "require('./diagnostic-manifest.json').sourceFingerprint")"
+          npm run build:diagnostics
+          npm run verify:diagnostics
+          second="$(node -p "require('./diagnostic-manifest.json').sourceFingerprint")"
+          if [ -z "$first" ] || [ "$first" != "$second" ]; then
+            echo "::error::El sourceFingerprint del diagnóstico no es reproducible: $first != $second"
             exit 1
           fi
+          echo "Fingerprint diagnóstico reproducible: $second"

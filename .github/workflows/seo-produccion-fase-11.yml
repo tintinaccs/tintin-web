@@ -7,9 +7,17 @@ on:
       - '*.html'
       - 'tienda.js'
       - 'js/**'
+      - 'functions/**'
+      - 'config/csp-runtime.json'
+      - 'config/csp-runtime.js'
+      - '_headers'
+      - '_routes.json'
       - 'manifest.json'
       - 'robots.txt'
-      - 'sitemap.xml'
+      - 'sitemap*.xml'
+      - 'scripts/normalizar-rutas-publicas.js'
+      - 'scripts/generar-csp-cloudflare.js'
+      - 'scripts/auditar-cloudflare-entrega-real.mjs'
       - 'scripts/auditar-fase-11-seo.js'
       - 'scripts/auditar-produccion-salud.mjs'
       - 'scripts/servidor-local-pruebas.mjs'
@@ -22,6 +30,11 @@ on:
 
 permissions:
   contents: read
+  checks: read
+
+concurrency:
+  group: phase11-${{ github.event.pull_request.number || github.ref }}-${{ github.event_name }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   seo-contracts:
@@ -34,6 +47,12 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Normalizar rutas que Cloudflare debe publicar
+        run: npm run build:routes
+      - name: Regenerar CSP que Cloudflare debe publicar
+        run: npm run build:csp
+      - name: Verificar rutas y CSP reproducibles
+        run: npm run verify:routes && npm run verify:csp
       - name: Instalar Chromium para Playwright
         run: npx playwright install --with-deps chromium
       - name: Auditar contratos SEO estáticos
@@ -56,9 +75,10 @@ jobs:
           PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
         run: npm run test:phase11-seo
 
-  production-health:
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+  cloudflare-delivered-headers:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -66,7 +86,34 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run monitor:production
+      - name: Generar contrato exacto del artefacto público
+        run: npm run build:routes && npm run build:csp && npm run verify:routes && npm run verify:csp
+      - name: Comparar contra el preview real de Cloudflare
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TINTIN_TARGET_SHA: ${{ github.event.pull_request.head.sha }}
+          GITHUB_TOKEN: ${{ github.token }}
+          TINTIN_CLOUDFLARE_GATE_ATTEMPTS: 45
+          TINTIN_CLOUDFLARE_GATE_POLL_MS: 20000
+        run: node scripts/auditar-cloudflare-entrega-real.mjs
+
+  production-health:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Monitorear producción
+        id: production_monitor
+        continue-on-error: true
+        run: npm run monitor:production
       - uses: actions/upload-artifact@v6
         if: always()
         with:
@@ -74,3 +121,33 @@ jobs:
           path: artifacts/phase11-production-health.json
           if-no-files-found: warn
           retention-days: 30
+      - name: Abrir o actualizar alerta visible si producción falla
+        if: steps.production_monitor.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        shell: bash
+        run: |
+          title='[Producción] Monitor horario en rojo'
+          issue="$(gh issue list --state open --search \"$title in:title\" --json number --jq '.[0].number // empty')"
+          body="El monitor automático de producción falló el $(date -u +'%Y-%m-%d %H:%M UTC').\n\nRun: $RUN_URL\n\nRevisar el artefacto phase11-production-health antes de desplegar o anunciar cambios."
+          if [ -n "$issue" ]; then
+            gh issue comment "$issue" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body"
+          fi
+      - name: Cerrar alerta cuando producción se recupera
+        if: steps.production_monitor.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        shell: bash
+        run: |
+          title='[Producción] Monitor horario en rojo'
+          issue="$(gh issue list --state open --search \"$title in:title\" --json number --jq '.[0].number // empty')"
+          if [ -n "$issue" ]; then
+            gh issue comment "$issue" --body "Producción volvió a pasar el monitor automático. Run: $RUN_URL"
+            gh issue close "$issue" --reason completed
+          fi
+      - name: Hacer fallar el run si producción sigue en rojo
+        run: test "${{ steps.production_monitor.outcome }}" = "success"

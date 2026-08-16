@@ -15,7 +15,17 @@ const SEEDED_PRODUCTS = [
 ];
 
 const server = http.createServer((request, response) => {
-  const pathname = decodeURIComponent(new URL(request.url || '/', baseURL).pathname);
+  const url = new URL(request.url || '/', baseURL);
+  const pathname = decodeURIComponent(url.pathname);
+  if (pathname === '/api/public-catalog') {
+    const resource = url.searchParams.get('resource');
+    if (!['products', 'collections'].includes(resource)) {
+      response.writeHead(400, { 'cache-control':'no-store', 'content-type':'application/json; charset=utf-8' });
+      return response.end('{"ok":false,"error":"resource_invalid"}');
+    }
+    response.writeHead(200, { 'cache-control':'no-store', 'content-type':'application/json; charset=utf-8', 'x-tintin-cache':'audit' });
+    return response.end(JSON.stringify({ ok:true, resource, items:[], count:0 }));
+  }
   if (pathname === '/api/visual-builder-public') {
     response.writeHead(200, { 'cache-control':'no-store', 'content-type':'application/json' });
     return response.end('{"ok":true,"config":null,"version":0}');

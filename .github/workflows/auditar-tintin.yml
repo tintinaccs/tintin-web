@@ -14,6 +14,14 @@ on:
       - ready_for_review
   workflow_dispatch:
 
+permissions:
+  contents: read
+  checks: read
+
+concurrency:
+  group: repository-audit-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   audit:
     name: Repository audit
@@ -26,6 +34,25 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: 22
+
+      # Repository audit es un status requerido por el ruleset de main. Estas
+      # comprobaciones viven acá deliberadamente para que Fase 12 y los
+      # headers REALES de Cloudflare no puedan quedar como checks opcionales.
+      - name: Generar y verificar CSP de entrega
+        run: npm run build:csp && npm run verify:csp
+
+      - name: Validar contrato estático de Fase 12
+        run: node scripts/auditar-fase-12-entrega.mjs
+
+      - name: Validar headers reales del preview de Cloudflare
+        if: github.event_name == 'pull_request'
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TINTIN_TARGET_SHA: ${{ github.event.pull_request.head.sha }}
+          GITHUB_TOKEN: ${{ github.token }}
+          TINTIN_CLOUDFLARE_GATE_ATTEMPTS: 45
+          TINTIN_CLOUDFLARE_GATE_POLL_MS: 20000
+        run: node scripts/auditar-cloudflare-entrega-real.mjs
 
       - name: Test branch cleanup guard rails
         run: node --test tests/branches/auditar-limpiar-ramas.test.mjs

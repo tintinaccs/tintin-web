@@ -7,7 +7,7 @@ export function renderMobileTabbar() {
     <nav class="tt-tabbar" id="tt-tabbar" aria-label="Navegación principal móvil">
       <span class="tt-mobile-nav-halo" aria-hidden="true"></span>
       <span class="tt-mobile-nav-indicator" aria-hidden="true"></span>
-      <a href="index.html" class="tt-tabbar-btn" aria-label="Inicio" data-shell-tab="home">
+      <a href="/" class="tt-tabbar-btn" aria-label="Inicio" data-shell-tab="home">
         ${svgIcon(UI_ICONS.home)}<span>Inicio</span>
       </a>
       <button type="button" class="tt-tabbar-btn" id="tabbar-search" aria-label="Buscar" aria-expanded="false" aria-controls="search-panel" data-shell-tab="search">

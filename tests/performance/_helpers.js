@@ -18,6 +18,11 @@ const PUBLIC_PAGES = [
   'terminos.html', 'privacidad.html'
 ];
 
+const LIGHTWEIGHT_PAGES = new Set([
+  'contact.html', 'about.html', 'envios.html', 'cambios-devoluciones.html',
+  'preguntas-frecuentes.html', 'terminos.html', 'privacidad.html'
+]);
+
 function url(page) { return `${BASE_URL}/${page.replace(/^\//, '')}`; }
 
 async function installVitalsObserver(page) {
@@ -95,9 +100,10 @@ async function probeInteraction(page) {
 async function collectVitals(page) {
   return page.evaluate(() => new Promise(resolve => {
     const out = {
-      fcp: null, lcp: window.__ttVitals?.lcp ?? null, cls: window.__ttVitals?.cls || 0,
+      fcp: null, lcp: window.__ttVitals?.lcp ?? null, cls: 0,
       inp: window.__ttVitals?.inp ?? null, ttfb: null, dcl: null, load: null,
-      requests: 0, transferKB: 0, duplicateRequests: 0, duplicateUrls: [], firestoreReads: 0,
+      requests: 0, transferKB: 0, duplicateRequests: 0, duplicateUrls: [],
+      thirdPartyDuplicateUrls: [], firestoreReads: 0,
       firestoreSources: {}, shifts: window.__ttVitals?.shifts || []
     };
     try {
@@ -110,10 +116,28 @@ async function collectVitals(page) {
       const resources = performance.getEntriesByType('resource');
       out.requests = resources.length;
       out.transferKB = Math.round(resources.reduce((sum, item) => sum + (item.transferSize || 0), 0) / 1024);
-      const counts = new Map();
-      resources.forEach(item => counts.set(item.name, (counts.get(item.name) || 0) + 1));
-      out.duplicateUrls = [...counts.entries()].filter(([, count]) => count > 1).map(([name, count]) => ({ name, count }));
+
+      // El presupuesto de duplicados debe medir solicitudes que Tintin puede
+      // controlar. SDKs externos (por ejemplo reCAPTCHA Enterprise) pueden
+      // repetir internamente endpoints propios sin que exista una segunda
+      // petición disparada por nuestro código. Esas repeticiones se conservan
+      // como diagnóstico, pero no pueden falsear el tripwire first-party.
+      const appCounts = new Map();
+      const thirdPartyCounts = new Map();
+      for (const item of resources) {
+        let sameOrigin = false;
+        try { sameOrigin = new URL(item.name, location.href).origin === location.origin; } catch {}
+        const target = sameOrigin ? appCounts : thirdPartyCounts;
+        target.set(item.name, (target.get(item.name) || 0) + 1);
+      }
+      out.duplicateUrls = [...appCounts.entries()]
+        .filter(([, count]) => count > 1)
+        .map(([name, count]) => ({ name, count }));
+      out.thirdPartyDuplicateUrls = [...thirdPartyCounts.entries()]
+        .filter(([, count]) => count > 1)
+        .map(([name, count]) => ({ name, count }));
       out.duplicateRequests = out.duplicateUrls.reduce((sum, item) => sum + item.count - 1, 0);
+
       const budget = window.TintinReadBudget || {};
       out.firestoreReads = Number(budget.estimatedDocuments) || 0;
       out.firestoreSources = budget.sources || {};
@@ -131,15 +155,19 @@ async function collectVitals(page) {
 const BUDGETS = {
   dclMs: 6000,
   lcpMs: 5000,
+  productLcpMs: 2500,
   clsMax: 0.1,
   inpMs: 500,
   transferKB: 6500,
-  duplicateRequests: 5,
+  duplicateRequests: 0,
+  homeRequests: 155,
+  lightweightRequests: 120,
+  lightweightTransferKB: 1500,
   homeFirestoreReads: 30,
   loaderMaxMs: 11000
 };
 
 module.exports = {
-  BASE_URL, VIEWPORTS, PUBLIC_PAGES, url, installVitalsObserver,
+  BASE_URL, VIEWPORTS, PUBLIC_PAGES, LIGHTWEIGHT_PAGES, url, installVitalsObserver,
   waitLoaderGone, probeInteraction, collectVitals, BUDGETS
 };

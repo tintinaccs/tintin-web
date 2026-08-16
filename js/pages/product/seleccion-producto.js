@@ -71,7 +71,7 @@ function render(){
       var safeVariant = escapeHtml(item.variant || '');
       var safeVariantAttr = escapeHtml(item.variant || '');
       var img = item.imageUrl || item.imgUrl || '';
-      var url = 'product.html?id=' + encodeURIComponent(item.id);
+      var url = '/product?id=' + encodeURIComponent(item.id);
       var isFavorite = Boolean(window.TintinFavorites && window.TintinFavorites.has && window.TintinFavorites.has(item.id));
       return (
         '<div class="tinsel-item" data-id="' + safeId + '">' +
@@ -146,7 +146,7 @@ if (cartBtn) cartBtn.addEventListener('click', function(){
 
 if (checkoutBtn) checkoutBtn.addEventListener('click', function(){
   if (typeof window.goToCheckout === 'function') window.goToCheckout();
-  else window.location.href = 'checkout.html';
+  else window.location.href = '/checkout';
 });
 
 render();

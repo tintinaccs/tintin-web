@@ -2,6 +2,12 @@ import { currentPage } from './estado-ruta.js';
 import { versionedJsModule, versionedSiteAsset } from './configuracion.js';
 
 let productsRuntimePromise = null;
+let authRuntimePromise = null;
+let cartRuntimePromise = null;
+let notificationsRuntimePromise = null;
+let collectionsRuntimePromise = null;
+
+const FULL_COMMERCE_PAGES = new Set(['home', 'shop', 'cart', 'account']);
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -15,6 +21,24 @@ function scheduleNonCritical(task) {
     return;
   }
   window.setTimeout(task, 450);
+}
+
+function bindDemand(selector, loader) {
+  let started = false;
+  const load = () => {
+    if (started) return;
+    started = true;
+    Promise.resolve(loader()).catch(error => {
+      started = false;
+      console.warn('[PublicShell] No se pudo cargar un runtime bajo demanda.', error);
+    });
+  };
+  document.querySelectorAll(selector).forEach(control => {
+    control.addEventListener('pointerenter', load, { once: true, passive: true });
+    control.addEventListener('focus', load, { once: true });
+    control.addEventListener('pointerdown', load, { once: true, passive: true });
+    control.addEventListener('click', load, { once: true });
+  });
 }
 
 function loadHomeMaintenance() {
@@ -47,6 +71,52 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
   });
 }
 
+function loadAuthRuntime() {
+  if (!authRuntimePromise) {
+    authRuntimePromise = import(versionedJsModule('core/auth/navegacion-autenticacion.js')).catch(error => {
+      authRuntimePromise = null;
+      throw error;
+    });
+  }
+  return authRuntimePromise;
+}
+
+function loadCartRuntime() {
+  if (!cartRuntimePromise) {
+    cartRuntimePromise = import(versionedJsModule('components/cart/sincronizacion-carrito.js')).catch(error => {
+      cartRuntimePromise = null;
+      throw error;
+    });
+  }
+  return cartRuntimePromise;
+}
+
+function loadNotificationsRuntime() {
+  if (!notificationsRuntimePromise) {
+    notificationsRuntimePromise = import(versionedJsModule('components/notifications/notificaciones-clientes.js'))
+      .then(module => {
+        module.initClientNotifications?.();
+        return module;
+      })
+      .catch(error => {
+        notificationsRuntimePromise = null;
+        throw error;
+      });
+  }
+  return notificationsRuntimePromise;
+}
+
+function loadCollectionsRuntime() {
+  if (!collectionsRuntimePromise) {
+    collectionsRuntimePromise = import(versionedJsModule('components/navigation/compartido/carga-colecciones.js'))
+      .catch(error => {
+        collectionsRuntimePromise = null;
+        throw error;
+      });
+  }
+  return collectionsRuntimePromise;
+}
+
 function attachProductsDemand() {
   let started = false;
 
@@ -69,6 +139,21 @@ function attachProductsDemand() {
   });
 }
 
+function attachLightweightCommerceDemand() {
+  bindDemand(
+    '[data-nav-action="account"],[data-shell-route="account"],#tabbar-account',
+    () => Promise.all([loadAuthRuntime(), loadNotificationsRuntime()])
+  );
+  bindDemand(
+    '[data-nav-action="cart"],[data-shell-route="cart"],#tabbar-cart',
+    loadCartRuntime
+  );
+  bindDemand(
+    '#btn-tienda,#btn-tablet-tienda,[data-collections-nav],#collections-sheet',
+    loadCollectionsRuntime
+  );
+}
+
 function loadNavigationBehaviors() {
   const controllerReady = window.TintinSurfaceControllerReady || Promise.resolve(window.TintinSurfaceController);
   return Promise.resolve(controllerReady)
@@ -89,21 +174,30 @@ function loadNavigationBehaviors() {
 
 export function loadSharedRuntime() {
   const page = currentPage();
-  const critical = [
-    import(versionedJsModule('core/auth/navegacion-autenticacion.js')),
-    import(versionedJsModule('components/cart/sincronizacion-carrito.js')),
-  ];
+  attachProductsDemand();
+  loadNavigationBehaviors();
 
+  // Páginas informativas (Nosotros, Contacto, ayuda, legales y 404) no
+  // necesitan abrir Firebase/Auth, carrito, notificaciones ni colecciones al
+  // cargar. Conservan exactamente las mismas superficies; esos runtimes se
+  // hidratan cuando la persona muestra intención de usarlos.
+  if (!FULL_COMMERCE_PAGES.has(page)) {
+    attachLightweightCommerceDemand();
+    return;
+  }
+
+  const critical = [loadAuthRuntime(), loadCartRuntime()];
   if (page === 'home' || page === 'shop') critical.push(loadProductsRuntime());
   if (page === 'cart') critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')));
 
   Promise.allSettled(critical).then(reportRuntimeFailures);
-  attachProductsDemand();
-  loadNavigationBehaviors();
+  void loadNotificationsRuntime().catch(error => {
+    console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
+  });
 
   scheduleNonCritical(() => {
     Promise.allSettled([
-      import(versionedJsModule('components/navigation/compartido/carga-colecciones.js')),
+      loadCollectionsRuntime(),
       loadHomeMaintenance(),
     ]).then(reportRuntimeFailures);
   });

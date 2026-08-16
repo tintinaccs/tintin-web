@@ -7,6 +7,11 @@
  * This wrapper removes only that authenticated page from the anonymous public
  * sweep; profile/login behavior is covered by the dedicated login/profile
  * audits already present in the repository.
+ *
+ * The production navigation now uses clean URLs. The historical audit still
+ * targets contact.html for the tablet-menu close regression, so CI adapts only
+ * that selector to the canonical /contact route while preserving the exact
+ * assertion that one click invokes close() exactly once.
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -18,12 +23,18 @@ const sourcePath = path.join(scriptsDir, 'auditar-todas-navegacion-superficies.m
 const runtimePath = path.join(scriptsDir, `.audit-all-navigation-surfaces-${process.pid}.mjs`);
 
 const original = await fs.readFile(sourcePath, 'utf8');
-const expected = "'login.html', 'perfil.html', 'about.html'";
-if (!original.includes(expected)) {
+const expectedPages = "'login.html', 'perfil.html', 'about.html'";
+const expectedTabletSelector = `#tt-tablet-menu a[href="contact.html"]`;
+if (!original.includes(expectedPages)) {
   throw new Error('No se encontró la lista esperada de páginas públicas para adaptar el audit de CI.');
 }
+if (!original.includes(expectedTabletSelector)) {
+  throw new Error('No se encontró el selector histórico del enlace Contacto del menú tablet.');
+}
 
-const adapted = original.replace(expected, "'login.html', 'about.html'");
+const adapted = original
+  .replace(expectedPages, "'login.html', 'about.html'")
+  .replace(expectedTabletSelector, `#tt-tablet-menu a[href="/contact"], #tt-tablet-menu a[href="contact.html"]`);
 await fs.writeFile(runtimePath, adapted, 'utf8');
 
 try {

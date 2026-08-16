@@ -1,5 +1,6 @@
 const LAYOUT_CSS_VERSION = 'tintin-20260810-global-layout-2';
 let loaded = false;
+let globalConfigPromise = null;
 
 function ensureCss() {
   if (document.getElementById('tt-global-layout-css')) return;
@@ -137,20 +138,25 @@ export function applyGlobalLayout(layout = {}) {
   window.dispatchEvent(new CustomEvent('tintin:global-layout-ready'));
 }
 
-// Se pide en paralelo con los assets del shell (ver entrada-navegacion-publica.js)
-// y se aplica ANTES de insertar el header/footer reales en el DOM: si en cambio
-// se aplicara después (como hacía loadGlobalLayout antes), el texto/colores/logo
-// por defecto ya pintados se reemplazan en un segundo paso — un salto visual
-// real que el navegador cuenta como CLS aunque el loader de página lo tape.
+export function fetchGlobalVisualStudioConfig() {
+  if (globalConfigPromise) return globalConfigPromise;
+  globalConfigPromise = fetch('/api/visual-studio-global-public', { headers: { accept: 'application/json' } })
+    .then(async response => {
+      if (!response.ok) return null;
+      const data = await response.json().catch(() => null);
+      return data?.config || null;
+    })
+    .catch(() => null);
+  return globalConfigPromise;
+}
+
+// Header/footer y campañas usan el MISMO endpoint. Esta función comparte una
+// sola promesa con visual-studio-global-runtime.js para que cada navegación
+// haga una solicitud real, no dos solicitudes idénticas.
 export async function fetchGlobalLayoutConfig() {
   if (loaded) return null;
   loaded = true;
   ensureCss();
-  try {
-    const response = await fetch('/api/visual-studio-global-public', { headers: { accept: 'application/json' } });
-    const data = response.ok ? await response.json() : null;
-    return data?.config?.layout || null;
-  } catch {
-    return null;
-  }
+  const config = await fetchGlobalVisualStudioConfig();
+  return config?.layout || null;
 }

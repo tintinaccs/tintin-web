@@ -51,7 +51,7 @@ const PUBLIC_PAGES = [
   'index.html', 'catalogo.html', 'collections.html', 'product.html', 'checkout.html',
   'login.html', 'perfil.html', 'about.html', 'contact.html', 'envios.html',
   'cambios-devoluciones.html', 'preguntas-frecuentes.html', 'terminos.html',
-  'privacidad.html', '404.html', 'nosotros.html',
+  'privacidad.html', '404.html',
 ];
 const AUX_PAGES_NO_ACTIVE_ROUTE = [
   'envios.html', 'cambios-devoluciones.html', 'preguntas-frecuentes.html',

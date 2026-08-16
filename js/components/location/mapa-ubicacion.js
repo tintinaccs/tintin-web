@@ -7,6 +7,7 @@
 import { searchPlaces } from "./selector-ubicacion.js?v=tintin-20260803-location-picker-2";
 
 const LEAFLET_JS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+const LEAFLET_JS_INTEGRITY = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
 const DEFAULT_CENTER = [-25.2867, -57.6467];
 const DEFAULT_ZOOM = 13;
 const PICKED_ZOOM = 17;
@@ -26,6 +27,8 @@ function loadLeaflet() {
   leafletPromise = new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.src = LEAFLET_JS;
+    script.integrity = LEAFLET_JS_INTEGRITY;
+    script.crossOrigin = 'anonymous';
     script.onload = () => resolve(window.L);
     script.onerror = () => reject(new Error('No se pudo cargar el mapa'));
     document.head.appendChild(script);

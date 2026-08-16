@@ -9,6 +9,8 @@ const exists = file => fs.existsSync(path.join(root, file));
 
 const rules = read('firestore.rules');
 const headers = read('_headers');
+const runtime = JSON.parse(read('config/csp-runtime.json'));
+const middleware = read('functions/_middleware.js');
 const server = read('apps-script/CrearPedido.gs');
 const phase3 = read('apps-script/Seguridad.gs');
 const orderClient = read('js/create-order-client.js');
@@ -78,21 +80,27 @@ check(
 );
 
 [
-  'Content-Security-Policy:',
   'Strict-Transport-Security:',
   'Permissions-Policy:',
   'Referrer-Policy:',
   'X-Content-Type-Options:',
   'X-Frame-Options: SAMEORIGIN',
   'Cross-Origin-Opener-Policy: same-origin-allow-popups'
-].forEach(header => check('Encabezado presente: ' + header, headers.includes(header)));
-check(
-  'La CSP permite el endpoint server-side de pedidos',
-  (headers.includes('https://script.google.com') || headers.includes('https://*.google.com')) &&
-    (headers.includes('https://script.googleusercontent.com') || headers.includes('https://*.googleusercontent.com')),
-  'Apps Script y su redirección deben estar en connect-src'
-);
+].forEach(header => check('Encabezado estático presente: ' + header, headers.includes(header)));
 
+const staticCspLines = headers.split('\n').filter(line => line.includes('Content-Security-Policy:'));
+const staticCsp = staticCspLines[0] || '';
+check(
+  '_headers conserva una única CSP fallback corta para respuestas estáticas/404',
+  staticCspLines.length === 1 &&
+    staticCsp.length <= 2000 &&
+    staticCsp.includes("default-src 'self'") &&
+    staticCsp.includes("script-src-attr 'none'") &&
+    staticCsp.includes("object-src 'none'") &&
+    !staticCsp.includes('https://api.cloudinary.com') &&
+    !staticCsp.includes("script-src 'self' 'unsafe-inline'"),
+  'La CSP completa de páginas vive en middleware; el fallback estático debe seguir corto y sin capacidades Admin.'
+);
 const overlongHeaderLines = headers.split('\n').filter(line => line.length > 2000);
 check(
   'Cada línea de _headers respeta el límite de Cloudflare Pages',
@@ -100,17 +108,47 @@ check(
   overlongHeaderLines.map(line => `${line.slice(0, 40)}... (${line.length} caracteres)`).join(', ')
 );
 
-const routePolicies = new Map();
-let currentHeaderRoute = '';
-for (const line of headers.split('\n')) {
-  if (line && !/^\s/.test(line) && !line.startsWith('#')) currentHeaderRoute = line.trim();
-  const policy = line.match(/^\s+Content-Security-Policy:\s*(.*)$/)?.[1];
-  if (policy && currentHeaderRoute) routePolicies.set(currentHeaderRoute, policy);
-}
+const notFoundHtml = read('404.html');
+const notFoundInlineScripts = [...notFoundHtml.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
+  .filter(match => !/\bsrc\s*=/.test(match[1]));
+check(
+  '404 estático no depende de scripts inline que el fallback bloquearía',
+  notFoundInlineScripts.length === 0,
+  `Se encontraron ${notFoundInlineScripts.length} script(s) inline en 404.html.`
+);
 
+check(
+  'El middleware entrega CSP y headers de seguridad a documentos HTML',
+  middleware.includes("headers.set('Content-Security-Policy', policy)") &&
+    middleware.includes("'Strict-Transport-Security'") &&
+    middleware.includes("'X-Content-Type-Options'") &&
+    middleware.includes("'X-Frame-Options'") &&
+    middleware.includes('failClosed()'),
+  'Las respuestas de Pages Functions no heredan la CSP fallback estática y deben fijar seguridad explícitamente.'
+);
+check(
+  'Firebase Auth queda fuera de la CSP de la tienda',
+  middleware.includes("pathname.startsWith('/__/auth/')") && middleware.includes('return context.next()'),
+  'El proxy /__/auth/* debe permanecer transparente para los helpers de Firebase.'
+);
+check(
+  'Las CSP runtime fueron generadas por la fuente canónica',
+  runtime.generatedBy === 'scripts/generar-csp-cloudflare.js' &&
+    typeof runtime.public === 'string' &&
+    runtime.routes && typeof runtime.routes === 'object',
+  'Ejecutá npm run build:csp antes de auditar.'
+);
+check(
+  'La CSP runtime permite Apps Script y su redirección server-side',
+  runtime.public.includes('https://*.google.com') && runtime.public.includes('https://*.googleusercontent.com'),
+  'Apps Script y su redirección deben estar en connect-src.'
+);
+
+const routePolicies = new Map(Object.entries(runtime.routes || {}));
 const missingRoutePolicies = [];
 const missingRouteHashes = [];
 const unsafeInlineRoutes = [];
+const unsafeInlineAttrRoutes = [];
 const missingStructuralDirectives = [];
 const unsafeFrameAncestorsRoutes = [];
 const structuralDirectives = [
@@ -119,15 +157,9 @@ const structuralDirectives = [
   "form-action 'self'",
   'upgrade-insecure-requests'
 ];
-// El editor visual (Apariencia) previsualiza sus páginas propias en un
-// <iframe> dentro de admin.html — mismo origen, ya autenticado como Super
-// Admin. frame-ancestors 'self' sigue bloqueando cualquier clickjacking desde
-// un sitio ajeno (el objetivo real de esta protección); solo 'none' o 'self'
-// cuentan como seguros acá, cualquier otra cosa (o ausencia total) falla.
 const SAFE_FRAME_ANCESTORS = ["frame-ancestors 'none'", "frame-ancestors 'self'"];
+
 for (const file of fs.readdirSync(root).filter(name => name.endsWith('.html'))) {
-  // GitHub y Cloudflare sirven los blobs con LF. Normalizar aquí evita que un
-  // checkout local de Windows calcule hashes CRLF que fallen luego en Linux.
   const html = fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n?/g, '\n');
   const inlineScriptHashes = new Set();
   for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
@@ -136,48 +168,48 @@ for (const file of fs.readdirSync(root).filter(name => name.endsWith('.html'))) 
       `'sha256-${crypto.createHash('sha256').update(match[2], 'utf8').digest('base64')}'`
     );
   }
-  const route = file === 'index.html' ? '/' : '/' + path.basename(file, '.html');
-  const policy = routePolicies.get(route) || '';
-  if (!policy) missingRoutePolicies.push(route);
-  const scriptSrc = policy.match(/script-src\s+([^;]+);/)?.[1] || '';
-  const missing = [...inlineScriptHashes].filter(hash => !scriptSrc.includes(hash));
-  if (missing.length) missingRouteHashes.push(`${route}: ${missing.length}`);
-  if (scriptSrc.includes("'unsafe-inline'")) unsafeInlineRoutes.push(route);
-  const structuralMissing = structuralDirectives.filter(directive => !policy.includes(directive));
-  if (structuralMissing.length) missingStructuralDirectives.push(`${route}: ${structuralMissing.join(', ')}`);
-  if (!SAFE_FRAME_ANCESTORS.some(directive => policy.includes(directive))) {
-    unsafeFrameAncestorsRoutes.push(route);
+
+  const cleanRoute = file === 'index.html' ? '/' : '/' + path.basename(file, '.html');
+  const legacyRoute = '/' + file;
+  for (const route of new Set([cleanRoute, legacyRoute])) {
+    const policy = routePolicies.get(route) || '';
+    if (!policy) missingRoutePolicies.push(route);
+    const scriptSrc = policy.match(/(?:^|;)\s*script-src\s+([^;]+)/)?.[1] || '';
+    const missing = [...inlineScriptHashes].filter(hash => !scriptSrc.includes(hash));
+    if (missing.length) missingRouteHashes.push(`${route}: ${missing.length}`);
+    if (scriptSrc.includes("'unsafe-inline'")) unsafeInlineRoutes.push(route);
+    if (policy.includes("script-src-attr 'unsafe-inline'")) unsafeInlineAttrRoutes.push(route);
+    const structuralMissing = structuralDirectives.filter(directive => !policy.includes(directive));
+    if (structuralMissing.length) missingStructuralDirectives.push(`${route}: ${structuralMissing.join(', ')}`);
+    if (!SAFE_FRAME_ANCESTORS.some(directive => policy.includes(directive))) unsafeFrameAncestorsRoutes.push(route);
   }
 }
+
+check('Cada página tiene CSP runtime para ruta limpia y alias .html', missingRoutePolicies.length === 0, missingRoutePolicies.join(', '));
+check('Cada CSP runtime fija scripts inline por hash', missingRouteHashes.length === 0, missingRouteHashes.join(', '));
+check('Ninguna CSP runtime permite script inline arbitrario', unsafeInlineRoutes.length === 0, unsafeInlineRoutes.join(', '));
+check('Ninguna CSP runtime reabre handlers con unsafe-inline', unsafeInlineAttrRoutes.length === 0, unsafeInlineAttrRoutes.join(', '));
+check('Cada CSP runtime conserva protecciones estructurales', missingStructuralDirectives.length === 0, missingStructuralDirectives.join('; '));
+check("Cada CSP runtime bloquea clickjacking con 'none' o 'self'", unsafeFrameAncestorsRoutes.length === 0, unsafeFrameAncestorsRoutes.join(', '));
+
+const cloudinaryOrigin = 'https://api.cloudinary.com';
 check(
-  'Cada página tiene una CSP exacta para su ruta pública',
-  missingRoutePolicies.length === 0,
-  missingRoutePolicies.join(', ')
+  'Cloudinary upload existe solo en Admin',
+  routePolicies.get('/admin')?.includes(cloudinaryOrigin) &&
+    routePolicies.get('/admin-images')?.includes(cloudinaryOrigin) &&
+    [...routePolicies.entries()].every(([route, policy]) =>
+      route.startsWith('/admin') || !policy.includes(cloudinaryOrigin)
+    ) &&
+    !staticCsp.includes(cloudinaryOrigin),
+  'El endpoint de upload no debe aparecer en CSP públicas ni en el fallback estático.'
 );
 check(
-  'Cada CSP por ruta fija sus scripts inline por hash',
-  missingRouteHashes.length === 0,
-  missingRouteHashes.join(', ')
-);
-check(
-  'Ninguna CSP por ruta permite ejecución inline arbitraria',
-  unsafeInlineRoutes.length === 0,
-  'unsafe-inline solo puede permanecer temporalmente en script-src-attr'
-);
-check(
-  'Cada CSP por ruta conserva las protecciones estructurales',
-  missingStructuralDirectives.length === 0,
-  missingStructuralDirectives.join('; ')
-);
-check(
-  "Cada CSP por ruta bloquea el clickjacking (frame-ancestors 'none' o 'self')",
-  unsafeFrameAncestorsRoutes.length === 0,
-  unsafeFrameAncestorsRoutes.join(', ')
-);
-check(
-  'La CSP por ruta es reproducible',
-  headers.includes('# CSP_ROUTE_POLICIES_START') && headers.includes('# CSP_ROUTE_POLICIES_END') && exists('scripts/generar-csp-cloudflare.js'),
-  'Ejecutá npm run build:csp para regenerar las políticas'
+  'La CSP runtime es reproducible y compilable por Pages',
+  exists('scripts/generar-csp-cloudflare.js') &&
+    exists('functions/_middleware.js') &&
+    exists('config/csp-runtime.json') &&
+    exists('config/csp-runtime.js'),
+  'Ejecutá npm run build:csp para regenerar las políticas y su módulo runtime.'
 );
 
 check(
@@ -206,23 +238,18 @@ function walk(dir) {
 }
 walk(root);
 const secretHits = [];
-const secretScanAllowlist = new Set([
-  'scripts/auditar-nivel-1-fundamentos.js'
-]);
+const secretScanAllowlist = new Set(['scripts/auditar-nivel-1-fundamentos.js']);
 for (const file of sourceFiles) {
   const relative = path.relative(root, file).replace(/\\/g, '/');
   if (secretScanAllowlist.has(relative)) continue;
   const content = fs.readFileSync(file, 'utf8');
-  if (privateKeyPatterns.some(pattern => pattern.test(content))) {
-    secretHits.push(relative);
-  }
+  if (privateKeyPatterns.some(pattern => pattern.test(content))) secretHits.push(relative);
 }
 check('No hay claves privadas o service accounts en el repositorio', secretHits.length === 0, secretHits.join(', '));
 
 check(
   'La Fase 6 forma parte de audit:final',
-  pkg.includes('"audit:phase6": "node scripts/auditar-fase-6-seguridad.js"') &&
-    pkg.includes('npm run audit:phase6')
+  pkg.includes('"audit:phase6": "node scripts/auditar-fase-6-seguridad.js"') && pkg.includes('npm run audit:phase6')
 );
 
 if (failures) {

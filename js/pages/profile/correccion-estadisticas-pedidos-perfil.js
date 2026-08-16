@@ -51,7 +51,7 @@ import { getOrdersForUserIdentity, calculateOrderStats } from '../../core/store/
     if (total) total.textContent = formatPrice(Math.max(0, stats.totalSpent || 0));
 
     if (!orders.length) {
-      list.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:16px 0;font-size:13px">Todavía no tenés pedidos 🛒<br><a href="catalogo.html" style="color:var(--pink-dark);font-weight:700;margin-top:8px;display:inline-block">Ver productos →</a></div>';
+      list.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:16px 0;font-size:13px">Todavía no tenés pedidos 🛒<br><a href="/catalogo" style="color:var(--pink-dark);font-weight:700;margin-top:8px;display:inline-block">Ver productos →</a></div>';
       return;
     }
 
