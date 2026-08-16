@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260810-fast-nav-2"></script>
-  <script src="js/cargador-pagina.js?v=tintin-20260812-apariencia-seleccion-1"></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260816-loader-min-show-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260815-prelaunch-cache-2" defer></script>
   <title>Quiénes Somos | TINTIN Accesorios & Relojes</title>
@@ -273,9 +273,17 @@ initSiteContent('nosotros');
 <script type="module">
 import { onImagesUpdate } from './js/components/images/imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
-// Real-time: applies immediately with cached data, then re-applies live every
-// time Super Admin saves a new image — no reload needed.
-onImagesUpdate((images) => {
+// La primera entrega de onImagesUpdate es el caché local (puede estar vacío o
+// desactualizado); recién de la segunda en adelante es el snapshot real de
+// Firestore. Aplicar ya en la primera pasada mostraría una imagen vieja/vacía
+// que luego se reemplaza por la real — un parpadeo de "fondo ya establecido".
+// Se espera la confirmación para pintar una sola vez. Si el listener en
+// tiempo real falla, no hay una segunda entrega nunca: se pinta igual con lo
+// último disponible en vez de dejar los slots vacíos para siempre.
+let ttImagesUpdateCount = 0;
+let ttLatestImages = {};
+
+function ttApplyImageSlots(images) {
   document.querySelectorAll('[data-img-slot]').forEach(el => {
     const slotId = el.dataset.imgSlot;
     const url = images[slotId];
@@ -297,6 +305,16 @@ onImagesUpdate((images) => {
       `;
     }
   });
+}
+
+onImagesUpdate((images) => {
+  ttLatestImages = images;
+  ttImagesUpdateCount += 1;
+  if (ttImagesUpdateCount < 2) return;
+  ttApplyImageSlots(images);
+}, () => {
+  if (ttImagesUpdateCount >= 2) return;
+  ttApplyImageSlots(ttLatestImages);
 });
 </script>
 <script type="module" src="js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1"></script>

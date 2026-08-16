@@ -140,6 +140,13 @@ if (!window.TintinImagesPhase5Booted) {
     const slotId = target.dataset.imgSlot;
     const fallback = STATIC[slotId];
     if (!fallback) return;
+    // Igual que el hero: la primera entrega de onImagesUpdate es el caché
+    // local (puede estar vacío o desactualizado). Insertar la imagen ya en esa
+    // primera pasada mostraría el respaldo empaquetado y lo reemplazaría por
+    // la imagen real configurada en Super Admin apenas confirme Firestore —
+    // un parpadeo de "fondo ya establecido" seguido del fondo real. Se espera
+    // a heroDataConfirmed para pintar una sola vez, directo al contenido final.
+    if (!heroDataConfirmed) return;
 
     const urls = resolvedSlotUrls(slotId, fallback);
     const signature = slotSignature(slotId, urls);
