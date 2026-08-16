@@ -13,7 +13,7 @@ const checks = [
   ['about image has useful alt', /alt="Tintin Accesorios y Relojes"/.test(html)],
   ['about runtime is loaded by page', /about[\s\S]*load\('pages\/institutional\/mantenimiento-nosotros\.js'\)/.test(loader)],
   ['runtime recognizes clean and legacy about route', js.includes('about(?:\\.html)?')],
-  ['clean canonical guard is injected by Pages Function', pageFunction.includes('about-canonical-clean-v1.js') && pageFunction.includes("page !== 'about'")],
+  ['clean canonical guard is injected by Pages Function', pageFunction.includes('about-canonical-clean-v1.js') && pageFunction.includes("page === 'about'")],
   ['clean canonical guard pins canonical and OG to /about', canonicalGuard.includes("new URL('/about', window.location.origin)") && canonicalGuard.includes('link[rel="canonical"]') && canonicalGuard.includes('meta[property="og:url"]')],
   ['clean canonical guard resists later metadata rewrites', canonicalGuard.includes('MutationObserver') && canonicalGuard.includes("attributeFilter: ['href', 'content']") && canonicalGuard.includes("addEventListener('pageshow'")],
   ['social metadata is normalized', js.includes('meta[property="og:url"]') && js.includes('meta[name="twitter:image"]')],
