@@ -152,6 +152,11 @@ test('un enlace limpio /product conserva el nombre para el loader siguiente', as
     window.TT_DISABLE_STORE_GATE = true;
   });
   await page.goto('/catalogo.html', { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(
+    () => window.__TintinCleanProductLoaderLabelsBound === true,
+    null,
+    { timeout: 5000 }
+  );
 
   const stored = await page.evaluate(() => {
     sessionStorage.removeItem('tt_next_loader_label');
