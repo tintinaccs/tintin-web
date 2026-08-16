@@ -61,23 +61,30 @@ async function waitForCloudflarePreview() {
   throw new Error(`Cloudflare Pages no publicó un preview verificable del SHA ${sha.slice(0, 12)}. Último estado: ${lastState}.`);
 }
 
-async function fetchPreview(url) {
+async function fetchPreview(url, { acceptNotFound = false } = {}) {
+  const retryableStatuses = new Set([404, 408, 425, 429, 500, 502, 503, 504]);
   let lastError;
-  for (let attempt = 1; attempt <= 4; attempt += 1) {
+  let lastResponse;
+  const attempts = 8;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
     try {
       const response = await fetch(url, {
         redirect: 'follow',
-        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/3.1' },
+        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/3.2' },
         signal: AbortSignal.timeout(timeoutMs)
       });
-      if (response.status >= 500) throw new Error(`HTTP ${response.status}`);
-      return response;
+      if (response.ok || (acceptNotFound && response.status === 404)) return response;
+      lastResponse = response;
+      if (!retryableStatuses.has(response.status)) return response;
+      console.log(`Preview aún no estable (${attempt}/${attempts}) — ${url} — HTTP ${response.status}`);
     } catch (error) {
       lastError = error;
-      if (attempt < 4) await sleep(attempt * 1500);
+      console.log(`Preview aún no accesible (${attempt}/${attempts}) — ${url} — ${error?.message || error}`);
     }
+    if (attempt < attempts) await sleep(Math.min(10000, attempt * 2000));
   }
-  throw lastError;
+  if (lastResponse) return lastResponse;
+  throw lastError || new Error(`No se pudo consultar ${url}.`);
 }
 
 function assertStrongCsp(csp, route) {
@@ -124,23 +131,30 @@ const preview = await waitForCloudflarePreview();
 
 // El check-run "Cloudflare Pages" puede marcarse success antes de que el
 // alias del preview esté propagado en todo el edge (404 "Deployment Not
-// Found" transitorio de Cloudflare). Se espera a que el propio preview
-// responda antes de correr las aserciones estrictas de contrato.
+// Found" transitorio de Cloudflare). Se exige disponibilidad real antes de
+// correr las aserciones estrictas de contrato.
 async function waitForPreviewReady() {
-  const readinessAttempts = 6;
+  const readinessAttempts = 8;
+  let lastStatus = 'sin respuesta';
   for (let attempt = 1; attempt <= readinessAttempts; attempt += 1) {
     try {
       const response = await fetch(preview + '/', {
         redirect: 'follow',
-        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/3.1' },
+        headers: { 'user-agent': 'TintinCloudflareDeliveryGate/3.2' },
         signal: AbortSignal.timeout(timeoutMs)
       });
-      if (response.ok) return;
-    } catch {
-      // reintenta hasta agotar los intentos
+      lastStatus = `HTTP ${response.status}`;
+      if (response.ok && (response.headers.get('content-type') || '').includes('text/html')) {
+        console.log(`Preview Cloudflare disponible (${attempt}/${readinessAttempts}) — ${preview}/ — ${lastStatus}`);
+        return;
+      }
+    } catch (error) {
+      lastStatus = error?.message || String(error);
     }
-    if (attempt < readinessAttempts) await sleep(attempt * 2000);
+    console.log(`Esperando propagación HTTP del preview (${attempt}/${readinessAttempts}) — ${lastStatus}`);
+    if (attempt < readinessAttempts) await sleep(Math.min(10000, attempt * 2000));
   }
+  throw new Error(`Cloudflare marcó success pero el preview ${preview}/ no quedó disponible. Último estado: ${lastStatus}.`);
 }
 await waitForPreviewReady();
 
@@ -180,7 +194,7 @@ for (const route of ['/admin', '/admin-images']) {
 }
 
 const notFoundRoute = `/__tintin-csp-404-probe-${sha.slice(0, 8)}__`;
-const notFound = await fetchPreview(preview + notFoundRoute);
+const notFound = await fetchPreview(preview + notFoundRoute, { acceptNotFound: true });
 const notFoundCsp = notFound.headers.get('content-security-policy') || '';
 if (notFound.status !== 404) throw new Error(`${notFoundRoute}: se esperaba HTTP 404 y llegó ${notFound.status}.`);
 if (!(notFound.headers.get('content-type') || '').includes('text/html')) throw new Error(`${notFoundRoute}: el 404 no se entregó como HTML.`);
