@@ -1,0 +1,63 @@
+name: Diagnóstico temporal — árbol limpio Nivel 3
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dirty-tree:
+    name: Aislar archivos modificados por generadores
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prepare evidence directory
+        run: mkdir -p /tmp/nivel3-dirty-tree
+
+      - name: Run build pages and capture mutations
+        run: |
+          npm run build:pages
+          git status --short > /tmp/nivel3-dirty-tree/after-build-status.txt
+          git diff --name-only > /tmp/nivel3-dirty-tree/after-build-files.txt
+          git diff > /tmp/nivel3-dirty-tree/after-build.patch
+          echo '=== AFTER build:pages ==='
+          cat /tmp/nivel3-dirty-tree/after-build-status.txt
+
+      - name: Reset tracked files before isolated final audit
+        run: git restore --source=HEAD --staged --worktree .
+
+      - name: Run final audit and capture mutations
+        run: |
+          npm run audit:final
+          git status --short > /tmp/nivel3-dirty-tree/after-final-status.txt
+          git diff --name-only > /tmp/nivel3-dirty-tree/after-final-files.txt
+          git diff > /tmp/nivel3-dirty-tree/after-final.patch
+          echo '=== AFTER audit:final ==='
+          cat /tmp/nivel3-dirty-tree/after-final-status.txt
+
+      - name: Upload dirty-tree evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: nivel3-dirty-tree-evidence
+          path: /tmp/nivel3-dirty-tree
+          if-no-files-found: error
+          retention-days: 7
