@@ -79,7 +79,7 @@ function latestLegacyStatuses(statuses) {
 async function collectState() {
   const [runsPayload, checksPayload, suitesPayload, statusesPayload] = await Promise.all([
     githubApi(`/actions/runs?head_sha=${encodeURIComponent(sha)}&per_page=100`),
-    githubApi(`/commits/${encodeURIComponent(sha)}/check-runs?filter=all&per_page=100`),
+    githubApi(`/commits/${encodeURIComponent(sha)}/check-runs?filter=latest&per_page=100`),
     githubApi(`/commits/${encodeURIComponent(sha)}/check-suites?per_page=100`),
     githubApi(`/commits/${encodeURIComponent(sha)}/statuses?per_page=100`)
   ]);
@@ -143,7 +143,7 @@ function renderEvidence(payload) {
     `Commit: \`${sha}\``,
     `Workflow actual excluido del cómputo: \`${currentRunId || 'desconocido'}\``,
     `Workflow runs externos observados: ${payload.workflowRuns.length}`,
-    `Check runs externos observados: ${payload.checkRuns.length}`,
+    `Check runs vigentes observados: ${payload.checkRuns.length}`,
     `Estados legacy observados: ${payload.legacyStatuses.length}`,
     '',
     '## Fallos bloqueantes',
@@ -159,6 +159,8 @@ function renderEvidence(payload) {
     emptySuites.length
       ? `${emptySuites.map(item => `- ${item}`).join('\n')}\n\nEstas suites se registran como advertencia, pero no bloquean por sí solas porque no generaron ningún check-run real.`
       : '- Ninguna.',
+    '',
+    'Nota: para evitar falsos rojos por reintentos/superseded checks, se evalúa únicamente el check-run vigente que GitHub devuelve con `filter=latest`.',
     '',
     `Esperó hasta ${waitSeconds}s por checks reales pendientes antes de cerrar.`,
     ''
@@ -288,7 +290,7 @@ function mergeIntoStaticResult() {
   result.checks.push({
     id: 'github-ci-global',
     label: 'Estado global del commit en GitHub/CI (incluye la X roja de checks)',
-    command: 'GitHub REST: Actions + Check Runs + commit statuses',
+    command: 'GitHub REST: Actions + Check Runs vigentes + commit statuses',
     status: health.status === 'PASS' ? 'PASS' : 'FAIL',
     exitCode: health.status === 'PASS' ? 0 : 1,
     durationMs: Number(health.durationMs || 0),
