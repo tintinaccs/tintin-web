@@ -138,7 +138,11 @@ function ensureShellScript(html) {
     .replace(/\s*<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js[^"']*["'][^>]*><\/script>/gi, '');
   const loader = /(<script\b[^>]*src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>)/i;
   if (!loader.test(out)) throw new Error('La pagina no carga js/cargador-pagina.js');
-  return out.replace(loader, `$1\n  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=${PANEL_COMPAT_VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${PUBLIC_SHELL_VERSION}" defer></script>`);
+  // El bootstrap del shell es deliberadamente síncrono: corre inmediatamente
+  // después del loader en <head> y registra beginWait() antes de que cualquier
+  // ttPageReady() inline del final del body pueda liberar la pantalla. El
+  // archivo es un adaptador mínimo y sus imports reales siguen siendo async.
+  return out.replace(loader, `$1\n  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=${PANEL_COMPAT_VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${PUBLIC_SHELL_VERSION}"></script>`);
 }
 
 function centralizeRuntime(html) {
