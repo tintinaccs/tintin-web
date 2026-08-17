@@ -1,7 +1,7 @@
 import {
   jsonResponse, originIsAllowed, preflightResponse, requireSuperAdmin,
 } from '../../cloudflare/seguridad-cloudinary.js';
-import { adminReviewAction, markLikeSeen } from '../../cloudflare/participacion-admin.js';
+import { adminDeleteLike, adminReviewAction, markLikeSeen } from '../../cloudflare/participacion-admin.js';
 import { syncEngagementToSheets } from '../../cloudflare/sincronizacion-participacion-sheets.js';
 
 export async function onRequest(context) {
@@ -19,6 +19,13 @@ export async function onRequest(context) {
       const record = await markLikeSeen(env, input.likeId);
       if (record) context.waitUntil?.(syncEngagementToSheets(env, actor.idToken, {
         type: 'like', operation: 'upsert', record,
+      }));
+      return jsonResponse({ ok: true, record }, 200, origin, request.url);
+    }
+    if (input.action === 'likeDelete') {
+      const record = await adminDeleteLike(env, actor, input.likeId);
+      context.waitUntil?.(syncEngagementToSheets(env, actor.idToken, {
+        type: 'like', operation: 'trash', record,
       }));
       return jsonResponse({ ok: true, record }, 200, origin, request.url);
     }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-17T16:36:04.522Z",
-  "sourceFingerprint": "64b0c70dd1ee3b8291233306c9daa0618f83e25e28424d994ca3dd76874a1bb3",
+  "generatedAt": "2026-08-17T16:44:53.622Z",
+  "sourceFingerprint": "0228dff72a24fda4a46ee62000cf6e1ca9d5e9b406d07a59c7b400d8f5b674e7",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 662,
     "textFiles": 630,
-    "totalBytes": 7429066,
+    "totalBytes": 7433393,
     "pages": 18,
     "modules": 411
   },
@@ -1773,8 +1773,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 164224,
-      "sha256": "632a0fe68eba36a319551296614e8fb2133627992968d45ae294206897405280",
+      "bytes": 164232,
+      "sha256": "22e50507c43353efe2915210361848ae6b513f7eda7c6ce792bf92423e0f699b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1813,7 +1813,7 @@
           "line": 1904
         },
         {
-          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260815-routes-clean-1",
+          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260817-engagement-master-1",
           "target": "js/admin/participacion/gestion-participacion-admin.js",
           "line": 1905
         },
@@ -1905,7 +1905,7 @@
           "line": 33
         },
         {
-          "raw": "css/admin/participacion-admin.css?v=tintin-20260814-tcg-engagement-2",
+          "raw": "css/admin/participacion-admin.css?v=tintin-20260817-engagement-master-1",
           "target": "css/admin/participacion-admin.css",
           "line": 34
         },
@@ -2023,7 +2023,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260815-routes-clean-1",
+          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260817-engagement-master-1",
           "target": "js/admin/participacion/gestion-participacion-admin.js",
           "line": 1905,
           "exists": true
@@ -2131,7 +2131,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/participacion-admin.css?v=tintin-20260814-tcg-engagement-2",
+          "raw": "css/admin/participacion-admin.css?v=tintin-20260817-engagement-master-1",
           "target": "css/admin/participacion-admin.css",
           "line": 34,
           "exists": true
@@ -16095,8 +16095,8 @@
     },
     {
       "path": "cloudflare/participacion-admin.js",
-      "bytes": 6584,
-      "sha256": "66b2499c5ef63f3661c4eeef528a2bdbe8977bc2f7c8787483d88d1fe6aff309",
+      "bytes": 7235,
+      "sha256": "a4fe2bb1c9a2bc8cc401d6e81bb2950739d6ae18fb25abe1aec4ec310bea88c4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16507,8 +16507,8 @@
     },
     {
       "path": "functions/api/admin-engagement.js",
-      "bytes": 1909,
-      "sha256": "0741a01bc64bdba482d1a905f715f0ac72d4e261cb7f1ab24e24c5c0465c5dea",
+      "bytes": 2250,
+      "sha256": "330570dfd429fb94455c68a67acd789c7f5b1f12d72231e8543c02a29c90d6e1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18083,8 +18083,8 @@
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin.js",
-      "bytes": 9847,
-      "sha256": "4690c76ee245db88244234e3e7b41e88c18de3ab89f4a8a54b43b4ac2f754682",
+      "bytes": 12835,
+      "sha256": "a5e326f1ba11da76405a480b20055dcc9e653902867d2313aee378ae2090b661",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26639,8 +26639,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 164224,
-      "sha256": "632a0fe68eba36a319551296614e8fb2133627992968d45ae294206897405280"
+      "bytes": 164232,
+      "sha256": "22e50507c43353efe2915210361848ae6b513f7eda7c6ce792bf92423e0f699b"
     },
     {
       "path": "apple-touch-icon.png",
@@ -26879,8 +26879,8 @@
     {
       "path": "cloudflare/participacion-admin.js",
       "extension": ".js",
-      "bytes": 6584,
-      "sha256": "66b2499c5ef63f3661c4eeef528a2bdbe8977bc2f7c8787483d88d1fe6aff309"
+      "bytes": 7235,
+      "sha256": "a4fe2bb1c9a2bc8cc401d6e81bb2950739d6ae18fb25abe1aec4ec310bea88c4"
     },
     {
       "path": "cloudflare/participacion-clientes.js",
@@ -26993,8 +26993,8 @@
     {
       "path": "css/admin/participacion-admin.css",
       "extension": ".css",
-      "bytes": 1749,
-      "sha256": "603418d168a7627127d6c3102c4d7c05efca7f447b99470d43b7f0794888f7de"
+      "bytes": 2088,
+      "sha256": "58272ae0f1aa308502b88d2943e61ec7b2d4bf4d0dcf3056869dda87e4fe691f"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
@@ -27671,8 +27671,8 @@
     {
       "path": "functions/api/admin-engagement.js",
       "extension": ".js",
-      "bytes": 1909,
-      "sha256": "0741a01bc64bdba482d1a905f715f0ac72d4e261cb7f1ab24e24c5c0465c5dea"
+      "bytes": 2250,
+      "sha256": "330570dfd429fb94455c68a67acd789c7f5b1f12d72231e8543c02a29c90d6e1"
     },
     {
       "path": "functions/api/cloudinary-delete.js",
@@ -28013,8 +28013,8 @@
     {
       "path": "js/admin/participacion/gestion-participacion-admin.js",
       "extension": ".js",
-      "bytes": 9847,
-      "sha256": "4690c76ee245db88244234e3e7b41e88c18de3ab89f4a8a54b43b4ac2f754682"
+      "bytes": 12835,
+      "sha256": "a5e326f1ba11da76405a480b20055dcc9e653902867d2313aee378ae2090b661"
     },
     {
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
@@ -31451,7 +31451,7 @@
     },
     {
       "file": "js/admin/participacion/gestion-participacion-admin.js",
-      "line": 20,
+      "line": 21,
       "target": "/api/admin-engagement",
       "method": "POST"
     },
@@ -31928,7 +31928,7 @@
         "references": [
           {
             "file": "js/admin/participacion/gestion-participacion-admin.js",
-            "line": 124,
+            "line": 186,
             "operation": "collection"
           }
         ]
@@ -32298,7 +32298,7 @@
         "references": [
           {
             "file": "js/admin/participacion/gestion-participacion-admin.js",
-            "line": 119,
+            "line": 181,
             "operation": "collection"
           }
         ]
@@ -32408,12 +32408,12 @@
           },
           {
             "file": "js/admin/participacion/gestion-participacion-admin.js",
-            "line": 111,
+            "line": 168,
             "operation": "doc"
           },
           {
             "file": "js/admin/participacion/gestion-participacion-admin.js",
-            "line": 129,
+            "line": 191,
             "operation": "doc"
           },
           {
@@ -32719,6 +32719,11 @@
           {
             "file": "js/admin/content/control-bienvenida-admin.js",
             "line": 172,
+            "operation": "collection"
+          },
+          {
+            "file": "js/admin/participacion/gestion-participacion-admin.js",
+            "line": 176,
             "operation": "collection"
           },
           {
