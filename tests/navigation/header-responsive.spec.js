@@ -10,8 +10,29 @@ async function openPublicPage(page, viewport, path = '/index.html') {
   });
 }
 
-test('mobile conserva etiquetas y se compacta como Instagram al desplazarse', async ({ page }) => {
+async function expectLoadedLogo(locator) {
+  await expect(locator).toBeVisible();
+  const loaded = await locator.evaluate(image => ({
+    complete: image.complete,
+    naturalWidth: image.naturalWidth,
+    naturalHeight: image.naturalHeight,
+    alt: image.alt,
+  }));
+  expect(loaded.complete).toBe(true);
+  expect(loaded.naturalWidth).toBeGreaterThan(0);
+  expect(loaded.naturalHeight).toBeGreaterThan(0);
+  expect(loaded.alt).toContain('TINTIN');
+}
+
+test('mobile conserva etiquetas, muestra la marca arriba y se compacta como Instagram al desplazarse', async ({ page }) => {
   await openPublicPage(page, { width: 390, height: 844 });
+
+  const brandbar = page.locator('#tt-mobile-brandbar');
+  await expect(brandbar).toBeVisible();
+  await expect(page.locator('#tt-header-desktop-tablet')).toBeHidden();
+  await expect(page.locator('#tt-header-tablet')).toBeHidden();
+  await expectLoadedLogo(brandbar.locator('.tt-mobile-brand-logo-img'));
+  await expect(brandbar.locator('.tt-header-brand-copy')).toHaveCount(0);
 
   const nav = page.locator('#tt-tabbar');
   const visibleButtons = nav.locator('.tt-tabbar-btn:not([hidden])');
@@ -25,6 +46,7 @@ test('mobile conserva etiquetas y se compacta como Instagram al desplazarse', as
   await expect(visibleButtons.nth(0)).toHaveAttribute('aria-label', 'Inicio');
   await expect(visibleButtons.nth(1)).toHaveAttribute('aria-label', 'Buscar');
   await expect(visibleButtons.nth(2)).toHaveAttribute('aria-label', 'Tienda');
+  await expect(nav.locator('#tabbar-cuenta > svg')).toHaveCSS('border-radius', '50%');
 
   const expandedWidth = await nav.evaluate(node => node.getBoundingClientRect().width);
   await page.evaluate(() => window.scrollTo(0, 560));
@@ -45,13 +67,16 @@ test('mobile conserva etiquetas y se compacta como Instagram al desplazarse', as
   await expect(page.locator('#btn-close-sheet')).toBeFocused();
 });
 
-test('tablet tiene header exclusivo, marca completa y menú navegable', async ({ page }) => {
+test('tablet tiene header exclusivo, logo único y menú navegable', async ({ page }) => {
   await openPublicPage(page, { width: 768, height: 1024 });
 
-  await expect(page.locator('#tt-header-tablet')).toBeVisible();
+  const header = page.locator('#tt-header-tablet');
+  await expect(header).toBeVisible();
   await expect(page.locator('#tt-header-desktop-tablet')).toBeHidden();
+  await expect(page.locator('#tt-mobile-brandbar')).toBeHidden();
   await expect(page.locator('#tt-tabbar')).toBeHidden();
-  await expect(page.locator('#tt-header-tablet .tt-header-brand-copy strong')).toHaveText('TINTÍN');
+  await expectLoadedLogo(header.locator('.tt-tablet-logo-img'));
+  await expect(header.locator('.tt-header-brand-copy')).toHaveCount(0);
   await expect(page.locator('#btn-notifications-tablet')).toBeHidden();
 
   for (const control of await page.locator('#btn-menu-tablet,.tt-tablet-actions > button:not([hidden])').all()) {
@@ -63,6 +88,8 @@ test('tablet tiene header exclusivo, marca completa y menú navegable', async ({
   await page.locator('#btn-menu-tablet').click();
   await expect(page.locator('#tt-tablet-menu')).toHaveAttribute('aria-hidden', 'false');
   await expect(page.locator('#btn-tablet-close')).toBeFocused();
+  await expectLoadedLogo(page.locator('#tt-tablet-menu .tt-tablet-menu-logo-img'));
+  await expect(page.locator('#tt-tablet-menu .tt-header-brand-copy')).toHaveCount(0);
   await page.locator('#btn-tablet-tienda').click();
   await expect(page.locator('#tt-tablet-menu')).toHaveClass(/tt-tablet-shop-view/);
   await expect(page.locator('#tablet-cats .tt-tablet-cats-grid a')).toHaveCount(12);
@@ -71,14 +98,16 @@ test('tablet tiene header exclusivo, marca completa y menú navegable', async ({
   await expect(page.locator('#tt-tablet-menu')).toHaveAttribute('aria-hidden', 'true');
 });
 
-test('desktop conserva navegación, marca, submenú e indexación interna', async ({ page }) => {
+test('desktop conserva navegación, logo único, submenú e indexación interna', async ({ page }) => {
   await openPublicPage(page, { width: 1440, height: 900 });
 
   const header = page.locator('#tt-header-desktop-tablet');
   await expect(header).toBeVisible();
   await expect(page.locator('#tt-header-tablet')).toBeHidden();
+  await expect(page.locator('#tt-mobile-brandbar')).toBeHidden();
   await expect(page.locator('#tt-tabbar')).toBeHidden();
-  await expect(header.locator('.tt-header-brand-copy strong')).toHaveText('TINTÍN');
+  await expectLoadedLogo(header.locator('.tt-logo-img'));
+  await expect(header.locator('.tt-header-brand-copy')).toHaveCount(0);
   await expect(header.locator('[data-desktop-nav-item]')).toHaveCount(4);
 
   await page.locator('#btn-tienda').click();
