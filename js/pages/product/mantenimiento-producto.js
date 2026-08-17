@@ -1,4 +1,8 @@
 /* TINTIN — Runtime integral de product.html */
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
+
 const PRODUCT_PATH_RE = /(?:^|\/)product(?:\.html)?\/?$/i;
 
 function isProductPage() {
@@ -25,6 +29,7 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
   let inspectQueued = false;
   let pageReleased = false;
   let watchdog = 0;
+  let isSuperAdmin = false;
 
   function setAttributeIfChanged(node, name, value) {
     if (!node || node.getAttribute(name) === value) return false;
@@ -54,7 +59,7 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
     if (document.querySelector('link[data-tt-product-maintenance]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('../../../css/pages/product/product-maintenance.css?v=tintin-20260809-loader-motion-fix-1', import.meta.url).href;
+    link.href = new URL('../../../css/pages/product/product-maintenance.css?v=tintin-20260817-sync-badge-breadcrumb-1', import.meta.url).href;
     link.dataset.ttProductMaintenance = '1';
     document.head.appendChild(link);
   }
@@ -62,15 +67,16 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
   function ensureSyncNode() {
     let node = document.getElementById('tt-product-sync-state');
     if (node) return node;
-    const page = document.querySelector('.tt-product-page');
-    if (!page) return null;
-    node = document.createElement('div');
+    const breadcrumb = document.querySelector('.tt-breadcrumb');
+    if (!breadcrumb) return null;
+    node = document.createElement('span');
     node.id = 'tt-product-sync-state';
     node.dataset.ttOperationalStatus = 'product';
     node.setAttribute('role', 'status');
     node.setAttribute('aria-live', 'polite');
     node.dataset.state = navigator.onLine === false ? 'offline' : 'loading';
-    page.insertAdjacentElement('beforebegin', node);
+    node.classList.toggle('tt-sync-superadmin', isSuperAdmin);
+    breadcrumb.appendChild(node);
     return node;
   }
 
@@ -86,6 +92,11 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
     setDatasetIfChanged(node, 'state', state);
     setTextIfChanged(node, message || labels[state] || labels.synced);
   }
+
+  onAuthStateChanged(auth, user => {
+    isSuperAdmin = String(user?.email || '').trim().toLowerCase() === SUPER_ADMIN;
+    document.getElementById('tt-product-sync-state')?.classList.toggle('tt-sync-superadmin', isSuperAdmin);
+  });
 
   function isVisible(node) {
     if (!node) return false;

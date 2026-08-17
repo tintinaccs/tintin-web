@@ -3720,7 +3720,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 ═══════════════════════════════════════════════ */
 .tt-breadcrumb {
   padding: 16px 0;
-  font-size: 0.78rem;
+  font-size: 0.86rem;
+  font-weight: 600;
   color: var(--text-muted);
   display: flex;
   align-items: center;
@@ -3750,6 +3751,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 }
 .tt-breadcrumb a:hover { color: var(--pink-dark); }
 .tt-breadcrumb span { color: var(--text-sec); }
+.tt-breadcrumb span#breadcrumb-product { color: var(--pink-dark); font-weight: 700; }
 
 /* ═══════════════════════════════════════════════
    RESPONSIVE — 1024px (Tablet)
