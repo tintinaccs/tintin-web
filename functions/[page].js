@@ -1,3 +1,5 @@
+import { injectMasterDiagnosticsRuntime } from '../cloudflare/inyectar-diagnostico-maestro-admin.js';
+
 const LIGHTWEIGHT_PAGES = new Set([
   'about',
   'contact',
@@ -12,6 +14,7 @@ const LIGHTWEIGHT_PAGES = new Set([
 const ABOUT_CANONICAL_GUARD = '/js/pages/institutional/about-canonical-clean-v1.js';
 const CONTACT_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-contacto.js?v=tintin-20260815-contact-clean-1';
 const LEGAL_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-legal.js?v=tintin-20260815-legal-clean-1';
+const MASTER_DIAGNOSTICS_RUNTIME = '/js/admin/diagnostics/diagnostico-maestro-admin.js?v=tintin-20260817-master-diagnostics-3';
 
 function pageName(request) {
   const url = new URL(request.url);
@@ -50,6 +53,13 @@ export function isLightweightPageName(value) {
 export async function onRequest({ request, env }) {
   const page = pageName(request);
   const asset = await env.ASSETS.fetch(request);
+
+  // /admin tiene una Function dedicada; /admin.html cae en este wildcard.
+  // Ambos caminos deben cargar exactamente el mismo módulo del Diagnóstico Maestro.
+  if (page === 'admin.html') {
+    return injectMasterDiagnosticsRuntime(asset, request.method, MASTER_DIAGNOSTICS_RUNTIME);
+  }
+
   if (!LIGHTWEIGHT_PAGES.has(page)) return asset;
   if (request.method === 'HEAD') return asset;
   if (!asset.ok || !(asset.headers.get('content-type') || '').includes('text/html')) return asset;
