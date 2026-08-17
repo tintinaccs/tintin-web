@@ -206,6 +206,8 @@ function buildLatest(run, jobs, currentCommit) {
 
 function safeError(error, fallback) {
   const message = String(error?.message || '');
+  if (/sesión venció/i.test(message)) return 'La sesión venció; volvé a iniciar sesión.';
+  if (/solo el super admin|correo verificado/i.test(message)) return 'La sesión no corresponde al Super Admin autorizado.';
   if (error?.status === 403 && /rate limit/i.test(message)) {
     return 'GitHub alcanzó temporalmente el límite de consultas. Volvé a actualizar en unos minutos.';
   }
@@ -307,7 +309,9 @@ export async function onRequest(context) {
   const origin = request.headers.get('origin') || '';
   const requestUrl = request.url;
 
-  if (!origin || !originIsAllowed(origin, requestUrl)) {
+  // Los GET same-origin no siempre incluyen Origin. La sesión Bearer de Firebase
+  // sigue siendo obligatoria; si Origin existe, además debe coincidir con este sitio.
+  if (origin && !originIsAllowed(origin, requestUrl)) {
     return jsonResponse({ ok: false, error: 'Origen no permitido.' }, 403, origin, requestUrl);
   }
   if (request.method === 'OPTIONS') return preflightResponse(origin, requestUrl, 'GET, POST, OPTIONS');
@@ -329,7 +333,8 @@ export async function onRequest(context) {
       ? 'No se pudo iniciar el Diagnóstico Maestro.'
       : 'No se pudo consultar el Diagnóstico Maestro.';
     const message = safeError(error, fallback);
-    const status = error?.status === 401 ? 401 : (error?.status === 403 ? 502 : 500);
+    const authFailure = /sesión|super admin|correo verificado/i.test(String(error?.message || ''));
+    const status = authFailure ? 401 : (error?.status === 403 ? 502 : 500);
     return jsonResponse({ ok: false, error: message }, status, origin, requestUrl);
   }
 }
