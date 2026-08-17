@@ -40,7 +40,7 @@ jobs:
           git diff --exit-code -- diagnostic-manifest.json scripts/cache-version-baseline.json _headers _routes.json
       - name: Conservar manifiesto regenerado si quedó desactualizado
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: diagnostic-manifest-regenerado
           path: diagnostic-manifest.json
