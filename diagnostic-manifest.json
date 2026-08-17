@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-17T13:16:57.903Z",
-  "sourceFingerprint": "9dbfd1e1815caecf181bd0665e2a0b5775b03ce3732e59f5541f9c5af437001e",
+  "generatedAt": "2026-08-17T13:35:18.212Z",
+  "sourceFingerprint": "6a28ddcc65f48f56d1745b2c66f5882fc84b294222957b80f2c3394592e3c462",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 658,
-    "textFiles": 626,
-    "totalBytes": 7389319,
+    "files": 662,
+    "textFiles": 630,
+    "totalBytes": 7431402,
     "pages": 18,
-    "modules": 408
+    "modules": 411
   },
   "viewports": [
     {
@@ -16056,6 +16056,17 @@
       ]
     },
     {
+      "path": "cloudflare/inyectar-diagnostico-maestro-admin.js",
+      "bytes": 1596,
+      "sha256": "29cd03e4e6dd9bdc378406ed980b122044e4fc4b9263d00f65d8e9b5db73a57b",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "cloudflare/notificaciones-sociales.js",
       "bytes": 8688,
       "sha256": "23b60b022ee3fc78c834f540386e6e2882ee571f7e650cd5be6c56fc909cc0b8",
@@ -16378,13 +16389,20 @@
     },
     {
       "path": "functions/[page].js",
-      "bytes": 2634,
-      "sha256": "30394788bb977244936342d3cf3debb2fe7b1c14e9bcb87608a4996af7ad5e28",
+      "bytes": 3158,
+      "sha256": "5295573da22b508f11974a874b8bf8ddd038c5ecba857c525b5dcc0a173446d5",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [],
+      "imports": [
+        {
+          "raw": "../cloudflare/inyectar-diagnostico-maestro-admin.js",
+          "target": "cloudflare/inyectar-diagnostico-maestro-admin.js",
+          "dynamic": false,
+          "line": 1
+        }
+      ],
       "endpoints": []
     },
     {
@@ -16441,8 +16459,8 @@
     },
     {
       "path": "functions/admin.js",
-      "bytes": 161,
-      "sha256": "ff5f575de27ac27a3dc475c7f9e85ad5b1b7ce6e0ad8c15a24e0313e49f05b11",
+      "bytes": 517,
+      "sha256": "ce39ff274c7d325283ee2fdc084b9fb6585ab378db44188b37fa219c1af3a628",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16453,6 +16471,12 @@
           "target": "cloudflare/servir-admin-con-csp.js",
           "dynamic": false,
           "line": 1
+        },
+        {
+          "raw": "../cloudflare/inyectar-diagnostico-maestro-admin.js",
+          "target": "cloudflare/inyectar-diagnostico-maestro-admin.js",
+          "dynamic": false,
+          "line": 2
         }
       ],
       "endpoints": []
@@ -16716,6 +16740,33 @@
         }
       ],
       "endpoints": []
+    },
+    {
+      "path": "functions/api/master-diagnostics.js",
+      "bytes": 13468,
+      "sha256": "e9d2d49ace8b4df959dbf41634eaed38819d22d617e98d4f7de85d0a167dd256",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/",
+          "line": 11
+        },
+        {
+          "url": "https://api.github.com/",
+          "line": 12
+        }
+      ]
     },
     {
       "path": "functions/api/notifications.js",
@@ -17772,6 +17823,41 @@
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "line": 16
+        }
+      ]
+    },
+    {
+      "path": "js/admin/diagnostics/diagnostico-maestro-admin.js",
+      "bytes": 18829,
+      "sha256": "2d3d8e53088ea5ae0099115764517a66b3fc061a35ac26221ad0fa0e01b2ae4d",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/core/firebase/firebase.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1",
+          "target": "js/core/auth/roles.js",
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
+          "line": 3
         }
       ]
     },
@@ -26535,8 +26621,8 @@
     {
       "path": "_routes.json",
       "extension": ".json",
-      "bytes": 1682,
-      "sha256": "89d583403bee4b08ed0e586672fe78e5e0dc6fe8bddf17252968bfae60fa5ef8"
+      "bytes": 1713,
+      "sha256": "d747d0c9a3268dc36566c13f94e97f0b1b8d9900484efde3baa5da4b0e4a9dc1"
     },
     {
       "path": "about.html",
@@ -26779,6 +26865,12 @@
       "sha256": "6ca37968932e4ac02165a9625858d44f686b06210668507ef69b8bd24a35dca7"
     },
     {
+      "path": "cloudflare/inyectar-diagnostico-maestro-admin.js",
+      "extension": ".js",
+      "bytes": 1596,
+      "sha256": "29cd03e4e6dd9bdc378406ed980b122044e4fc4b9263d00f65d8e9b5db73a57b"
+    },
+    {
       "path": "cloudflare/notificaciones-sociales.js",
       "extension": ".js",
       "bytes": 8688,
@@ -26879,6 +26971,12 @@
       "extension": ".css",
       "bytes": 78591,
       "sha256": "fc5087a5473324b09e4ea0d97dcf5e245efedb84c0c610dc7bb5a64923151114"
+    },
+    {
+      "path": "css/admin/diagnostico-maestro.css",
+      "extension": ".css",
+      "bytes": 6923,
+      "sha256": "245fae28edfa7d86eee2f460aaf81d3dbe19ac64895259e441b1f0fcd201156a"
     },
     {
       "path": "css/admin/editor-visual.css",
@@ -27537,8 +27635,8 @@
     {
       "path": "functions/[page].js",
       "extension": ".js",
-      "bytes": 2634,
-      "sha256": "30394788bb977244936342d3cf3debb2fe7b1c14e9bcb87608a4996af7ad5e28"
+      "bytes": 3158,
+      "sha256": "5295573da22b508f11974a874b8bf8ddd038c5ecba857c525b5dcc0a173446d5"
     },
     {
       "path": "functions/__/auth/[[path]].js",
@@ -27561,8 +27659,8 @@
     {
       "path": "functions/admin.js",
       "extension": ".js",
-      "bytes": 161,
-      "sha256": "ff5f575de27ac27a3dc475c7f9e85ad5b1b7ce6e0ad8c15a24e0313e49f05b11"
+      "bytes": 517,
+      "sha256": "ce39ff274c7d325283ee2fdc084b9fb6585ab378db44188b37fa219c1af3a628"
     },
     {
       "path": "functions/api/admin-delete-user.js",
@@ -27623,6 +27721,12 @@
       "extension": ".js",
       "bytes": 167,
       "sha256": "72f9f8481f45d6247fb5fecca7eab044ec2818041717f47e8b5d5044e7ed165e"
+    },
+    {
+      "path": "functions/api/master-diagnostics.js",
+      "extension": ".js",
+      "bytes": 13468,
+      "sha256": "e9d2d49ace8b4df959dbf41634eaed38819d22d617e98d4f7de85d0a167dd256"
     },
     {
       "path": "functions/api/notifications.js",
@@ -27869,6 +27973,12 @@
       "extension": ".js",
       "bytes": 21932,
       "sha256": "348143490de1909b2656462861b336e695b1bee35a0eba2140eb60dd1576a043"
+    },
+    {
+      "path": "js/admin/diagnostics/diagnostico-maestro-admin.js",
+      "extension": ".js",
+      "bytes": 18829,
+      "sha256": "2d3d8e53088ea5ae0099115764517a66b3fc061a35ac26221ad0fa0e01b2ae4d"
     },
     {
       "path": "js/admin/diagnostics/diagnostico-sitio-admin.js",
@@ -29787,8 +29897,8 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 600,
-      "sha256": "b6a1ffdc9522b0b724b4d13a1687eeb9786a9fb0e20b45e3358f42408bd5706f"
+      "bytes": 956,
+      "sha256": "3c1311eff5eaf811b140473795f344598a8384fb1cefdb9f18136614c61d5773"
     },
     {
       "path": "scripts/cache-version-baseline.json",
