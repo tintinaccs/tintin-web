@@ -213,10 +213,21 @@ function buildLatest(run, jobs, currentCommit, checkRuns = []) {
   })));
   const compact = compactRun(run);
   const evidenceIncomplete = notVerifiedAreas.length > 0 || (runCompleted && !globalCiStep);
+  const observedGlobalFailure = externalFailures.length > 0;
+  let effectiveState = compact.state;
+  if (effectiveState === 'PASS' && observedGlobalFailure) effectiveState = 'FAIL';
+  else if (effectiveState === 'PASS' && evidenceIncomplete) effectiveState = 'NOT_VERIFIED';
+
+  const reportedGlobalState = globalCiStep
+    ? stateFor(globalCiStep.status, globalCiStep.conclusion)
+    : (runCompleted ? 'NOT_VERIFIED' : 'QUEUED');
+  const effectiveGlobalState = observedGlobalFailure && reportedGlobalState === 'PASS'
+    ? 'FAIL'
+    : reportedGlobalState;
 
   return {
     ...compact,
-    state: compact.state === 'PASS' && evidenceIncomplete ? 'NOT_VERIFIED' : compact.state,
+    state: effectiveState,
     currentCommit,
     isCurrentCommit: Boolean(currentCommit && run.head_sha === currentCommit),
     productionOrigin: PRODUCTION_ORIGIN,
@@ -225,19 +236,12 @@ function buildLatest(run, jobs, currentCommit, checkRuns = []) {
       total: totalJobs,
       percent: totalJobs ? Math.max(0, Math.min(100, Math.round((finishedJobs / totalJobs) * 100))) : 0
     },
-    githubGlobal: globalCiStep ? {
-      state: stateFor(globalCiStep.status, globalCiStep.conclusion),
-      status: globalCiStep.status,
-      conclusion: globalCiStep.conclusion || null,
-      startedAt: globalCiStep.started_at || null,
-      completedAt: globalCiStep.completed_at || null,
-      failures: externalFailures
-    } : {
-      state: runCompleted ? 'NOT_VERIFIED' : 'QUEUED',
-      status: 'not_reported',
-      conclusion: null,
-      startedAt: null,
-      completedAt: null,
+    githubGlobal: {
+      state: effectiveGlobalState,
+      status: globalCiStep?.status || 'not_reported',
+      conclusion: globalCiStep?.conclusion || null,
+      startedAt: globalCiStep?.started_at || null,
+      completedAt: globalCiStep?.completed_at || null,
       failures: externalFailures
     },
     areas,
