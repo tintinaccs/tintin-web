@@ -1,6 +1,6 @@
-import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260815-prelaunch-cache-1';
-import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260815-prelaunch-cache-1';
-import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20260815-routes-clean-1';
+import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260816-logo-only-1';
+import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260816-logo-only-1';
+import { renderMobileHeader, renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20260816-logo-only-1';
 import { renderSearchPanel } from './compartido/panel-busqueda.js';
 import { renderCartDrawer } from './compartido/panel-carrito.js';
 import { renderAccountDrawer } from './compartido/panel-cuenta.js';
@@ -11,12 +11,14 @@ import { ensureNavigationAssets } from './compartido/recursos-navegacion.js';
 import { loadSharedRuntime } from './compartido/carga-navegacion.js';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
-import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260815-prelaunch-cache-1';
+import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260816-logo-only-1';
+import { logoUrl } from './compartido/configuracion.js';
 import { applyGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20260815-global-studio-10';
 
 const LEGACY_SHELL_IDS = Object.freeze([
   'tt-header-desktop-tablet',
   'tt-header-tablet',
+  'tt-header-mobile',
   'search-panel',
   'mobile-menu',
   'tt-tablet-menu',
@@ -42,6 +44,7 @@ function renderTopShell() {
   return [
     renderDesktopHeader(),
     renderTabletHeader(),
+    renderMobileHeader(),
     renderSearchPanel(),
     renderTabletMenu(),
   ].join('');
@@ -55,6 +58,45 @@ function renderBottomShell() {
     renderCollectionsSheet(),
     renderSurfaceLayer(),
   ].join('');
+}
+
+function absoluteUrl(value) {
+  try {
+    return new URL(String(value || ''), document.baseURI).href;
+  } catch {
+    return String(value || '');
+  }
+}
+
+function armSharedLogoFallback(image) {
+  if (!image || image.dataset.ttLogoFallbackArmed === 'true') return;
+  image.dataset.ttLogoFallbackArmed = 'true';
+
+  image.addEventListener('load', () => {
+    image.hidden = false;
+    image.removeAttribute('data-tt-logo-failed');
+  });
+
+  image.addEventListener('error', () => {
+    const fallback = logoUrl();
+    const current = absoluteUrl(image.getAttribute('src') || image.src);
+    const fallbackAbsolute = absoluteUrl(fallback);
+
+    if (current && current !== fallbackAbsolute) {
+      image.hidden = false;
+      image.src = fallback;
+      return;
+    }
+
+    image.hidden = true;
+    image.setAttribute('data-tt-logo-failed', 'true');
+    image.removeAttribute('src');
+  });
+}
+
+function armSharedLogoFallbacks(root = document) {
+  root.querySelectorAll('img[data-tt-shared-logo], .tt-logo-img, .tt-tablet-logo-img, .tt-tablet-menu-logo-img, .tt-mobile-logo-img')
+    .forEach(armSharedLogoFallback);
 }
 
 function blobAsDataUrl(blob) {
@@ -93,7 +135,7 @@ function resolveWithCeiling(promise, ceilingMs, fallbackValue = null) {
 }
 
 function waitForImageReady(image, ceilingMs = 1600) {
-  if (!image) return Promise.resolve();
+  if (!image || image.hidden) return Promise.resolve();
   if (image.complete) return Promise.resolve();
 
   return new Promise(resolve => {
@@ -117,7 +159,7 @@ function waitForImageReady(image, ceilingMs = 1600) {
 
 async function waitForShellBrandImages(root = document) {
   const images = [...root.querySelectorAll(
-    '#tt-header-desktop-tablet img, #tt-header-tablet img, #tt-tablet-menu img'
+    '#tt-header-desktop-tablet img, #tt-header-tablet img, #tt-header-mobile img, #tt-tablet-menu img'
   )];
   await Promise.all(images.map(image => waitForImageReady(image)));
 }
@@ -126,6 +168,8 @@ function hydrateSharedLogos(root = document) {
   const images = [...root.querySelectorAll('img[data-tt-shared-logo]')];
   const source = images.find(image => image.dataset.ttSharedLogo)?.dataset.ttSharedLogo;
   if (!images.length || !source) return Promise.resolve();
+
+  images.forEach(armSharedLogoFallback);
 
   if (!sharedLogoDataPromise) {
     const controller = typeof AbortController === 'function' ? new AbortController() : null;
@@ -142,17 +186,19 @@ function hydrateSharedLogos(root = document) {
       })
       .then(blobAsDataUrl)
       .catch(error => {
-        console.warn('[PublicShell] No se pudo compartir el logo en memoria.', error);
-        return source;
+        console.warn('[PublicShell] No se pudo compartir el logo en memoria; se conserva el logo local.', error);
+        return null;
       })
       .finally(() => window.clearTimeout(timer));
   }
 
   return sharedLogoDataPromise.then(async value => {
-    images.forEach(image => {
-      image.src = value;
-      image.removeAttribute('data-tt-shared-logo');
-    });
+    if (value) {
+      images.forEach(image => {
+        image.hidden = false;
+        image.src = value;
+      });
+    }
     await Promise.all(images.map(image => waitForImageReady(image)));
   });
 }
@@ -162,15 +208,8 @@ function mountPublicShell() {
   if (mountPromise) return mountPromise;
 
   document.body.classList.add('tt-public-shell-mounting');
-  // Barrera secundaria: el bootstrap ya arma una espera antes del import(),
-  // pero se conserva esta protección para cualquier consumidor que importe
-  // este módulo directamente en el futuro.
   window.TintinLoader?.beginWait?.();
 
-  // CSS de navegación y configuración remota arrancan en paralelo. El header
-  // ya no espera a que /api/visual-studio-global-public responda para existir:
-  // apenas las hojas que definen su geometría están listas, se inserta el shell
-  // debajo del loader. La configuración se aplica antes de revelar la página.
   const navigationAssetsPromise = ensureNavigationAssets();
   const globalConfigPromise = resolveWithCeiling(
     fetchGlobalVisualStudioConfig(),
@@ -184,10 +223,8 @@ function mountPublicShell() {
     removeLegacyShell();
     document.body.insertAdjacentHTML('afterbegin', renderTopShell());
     document.body.insertAdjacentHTML('beforeend', renderBottomShell());
+    armSharedLogoFallbacks();
 
-    // Primero termina el logo base. Después se aplica Visual Studio para que,
-    // si existe un logo personalizado, este gane de forma determinista y no
-    // sea sobrescrito más tarde por una hidratación asíncrona atrasada.
     await hydrateSharedLogos();
 
     const globalConfig = await globalConfigPromise;
@@ -196,9 +233,7 @@ function mountPublicShell() {
     if (globalConfig) applyGlobalVisualStudio(globalConfig);
     else document.documentElement.dataset.ttGlobalStudio = 'fallback';
 
-    // Si Visual Studio cambió el logo, también esperamos ese recurso antes de
-    // anunciar shell-ready. Así el primer frame visible no recibe un logo que
-    // aparece o cambia un instante después del header.
+    armSharedLogoFallbacks();
     await waitForShellBrandImages();
 
     document.body.classList.add('tt-public-shell-mounted');
