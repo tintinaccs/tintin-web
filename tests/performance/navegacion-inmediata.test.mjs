@@ -8,7 +8,7 @@ const pages = [
   'about.html', 'envios.html', 'cambios-devoluciones.html', 'preguntas-frecuentes.html',
   'terminos.html', 'privacidad.html', '404.html', 'login.html', 'perfil.html', 'checkout.html'
 ];
-const version = 'tintin-20260810-fast-nav-2';
+const version = 'tintin-20260816-loader-shell-bridge-1';
 
 test('la primera pintura se libera en <=250 ms sin esperar Firestore', () => {
   const release = Number(instant.match(/RELEASE_TIMEOUT_MS\s*=\s*(\d+)/)?.[1]);
@@ -38,7 +38,7 @@ test('prefetch solo adelanta navegación interna y respeta ahorro de datos', () 
   assert.match(instant, /touchstart/);
 });
 
-test('todas las páginas públicas apuntan al bootstrap nuevo', () => {
+test('todas las páginas públicas apuntan al bootstrap vigente', () => {
   for (const page of pages) {
     const html = fs.readFileSync(page, 'utf8');
     assert.match(
