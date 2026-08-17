@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-17T14:53:01.258Z",
-  "sourceFingerprint": "ca3bd59203957f008d3111fa94522779b51de02ed8c429bfb8711d573880c72e",
+  "generatedAt": "2026-08-17T15:27:24.872Z",
+  "sourceFingerprint": "54d427dbd4930dcddbbc6301def537fa91a77a7a83096ac212d0dd88ac5733ca",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 662,
     "textFiles": 630,
-    "totalBytes": 7431326,
+    "totalBytes": 7431905,
     "pages": 18,
     "modules": 411
   },
@@ -16390,7 +16390,7 @@
     {
       "path": "functions/[page].js",
       "bytes": 3158,
-      "sha256": "5295573da22b508f11974a874b8bf8ddd038c5ecba857c525b5dcc0a173446d5",
+      "sha256": "99b89ccb121db2d2021cbc37e0e9cae2c7e6df969868ef5831249f4cd3edcc67",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16460,7 +16460,7 @@
     {
       "path": "functions/admin.js",
       "bytes": 517,
-      "sha256": "ce39ff274c7d325283ee2fdc084b9fb6585ab378db44188b37fa219c1af3a628",
+      "sha256": "7c3b2816f4cdcbfa1a80aedb80eb0768fb1a0b5c83b88108a15df3567dad2cb4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16743,8 +16743,8 @@
     },
     {
       "path": "functions/api/master-diagnostics.js",
-      "bytes": 13468,
-      "sha256": "e9d2d49ace8b4df959dbf41634eaed38819d22d617e98d4f7de85d0a167dd256",
+      "bytes": 12618,
+      "sha256": "36a3b3bb020e9f78ec5e5f8353df3f7238891b85bd282929677f7f7e38c6d850",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16760,11 +16760,11 @@
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 11
+          "line": 12
         },
         {
           "url": "https://api.github.com/",
-          "line": 12
+          "line": 13
         }
       ]
     },
@@ -17828,8 +17828,8 @@
     },
     {
       "path": "js/admin/diagnostics/diagnostico-maestro-admin.js",
-      "bytes": 18829,
-      "sha256": "2d3d8e53088ea5ae0099115764517a66b3fc061a35ac26221ad0fa0e01b2ae4d",
+      "bytes": 18249,
+      "sha256": "9a035c18a6903a4dd5aafaf396638bdf0aa09a044cd63bd8e6c26060d0ea662f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26435,8 +26435,8 @@
     {
       "path": ".github/workflows/auditar-diagnostico.yml",
       "extension": ".yml",
-      "bytes": 935,
-      "sha256": "6434aaccbbf2b24b47d00ec6445ee79082c9e1b4b4730a5de8118660bee1e6cd"
+      "bytes": 1975,
+      "sha256": "9b932477764d75f1b75b5922323970d2d00b755f0a7fb178d9ec784541efdb9f"
     },
     {
       "path": ".github/workflows/auditar-flujo-cuenta-parte-2d.yml",
@@ -26975,8 +26975,8 @@
     {
       "path": "css/admin/diagnostico-maestro.css",
       "extension": ".css",
-      "bytes": 6923,
-      "sha256": "245fae28edfa7d86eee2f460aaf81d3dbe19ac64895259e441b1f0fcd201156a"
+      "bytes": 6974,
+      "sha256": "6735067cdec2721210b0f0cf3f6fac6766016022296bc3da071e2a0e411c485a"
     },
     {
       "path": "css/admin/editor-visual.css",
@@ -27636,7 +27636,7 @@
       "path": "functions/[page].js",
       "extension": ".js",
       "bytes": 3158,
-      "sha256": "5295573da22b508f11974a874b8bf8ddd038c5ecba857c525b5dcc0a173446d5"
+      "sha256": "99b89ccb121db2d2021cbc37e0e9cae2c7e6df969868ef5831249f4cd3edcc67"
     },
     {
       "path": "functions/__/auth/[[path]].js",
@@ -27660,7 +27660,7 @@
       "path": "functions/admin.js",
       "extension": ".js",
       "bytes": 517,
-      "sha256": "ce39ff274c7d325283ee2fdc084b9fb6585ab378db44188b37fa219c1af3a628"
+      "sha256": "7c3b2816f4cdcbfa1a80aedb80eb0768fb1a0b5c83b88108a15df3567dad2cb4"
     },
     {
       "path": "functions/api/admin-delete-user.js",
@@ -27725,8 +27725,8 @@
     {
       "path": "functions/api/master-diagnostics.js",
       "extension": ".js",
-      "bytes": 13468,
-      "sha256": "e9d2d49ace8b4df959dbf41634eaed38819d22d617e98d4f7de85d0a167dd256"
+      "bytes": 12618,
+      "sha256": "36a3b3bb020e9f78ec5e5f8353df3f7238891b85bd282929677f7f7e38c6d850"
     },
     {
       "path": "functions/api/notifications.js",
@@ -27977,8 +27977,8 @@
     {
       "path": "js/admin/diagnostics/diagnostico-maestro-admin.js",
       "extension": ".js",
-      "bytes": 18829,
-      "sha256": "2d3d8e53088ea5ae0099115764517a66b3fc061a35ac26221ad0fa0e01b2ae4d"
+      "bytes": 18249,
+      "sha256": "9a035c18a6903a4dd5aafaf396638bdf0aa09a044cd63bd8e6c26060d0ea662f"
     },
     {
       "path": "js/admin/diagnostics/diagnostico-sitio-admin.js",
@@ -29897,8 +29897,8 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 38,
-      "sha256": "dd9d3b46a69239cd812969333746634c254684c83bb0c9501af9d578669e38b8"
+      "bytes": 956,
+      "sha256": "2a80ecc54a3cda1b638a2019ce995f310ba4627a1898ac176621c423185b3de6"
     },
     {
       "path": "scripts/cache-version-baseline.json",
