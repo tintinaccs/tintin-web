@@ -1,4 +1,4 @@
-export const SHELL_VERSION = 'tintin-20260811-cls-header-reserve-1';
+export const SHELL_VERSION = 'tintin-20260816-header-logo-only-1';
 
 export const BREAKPOINTS = Object.freeze({
   mobileMax: 767,
