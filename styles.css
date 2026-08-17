@@ -3530,19 +3530,30 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   margin-bottom: 20px;
 }
 
-.tt-product-favorite-main {
-  width: 100%;
-  min-height: 48px;
+.tt-product-name-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.tt-product-name-row .tt-product-detail-name { margin-bottom: 0; flex: 1; }
+
+.tt-product-favorite-icon {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid var(--pink);
-  border-radius: var(--radius-pill);
+  border-radius: 50%;
   background: var(--pink-pale);
   color: var(--pink-dark);
-  font: 700 .78rem/1.3 Montserrat, sans-serif;
-  letter-spacing: .04em;
+  font-size: 1.3rem;
   cursor: pointer;
+  margin-top: 4px;
 }
-.tt-product-favorite-main span { margin-right: 8px; font-size: 1.2rem; }
-.tt-product-favorite-main.is-favorite { background: #f8dce7; border-color: var(--pink-dark); }
+.tt-product-favorite-icon.is-favorite { background: #f8dce7; border-color: var(--pink-dark); }
 
 .tt-product-wa-link {
   min-width: 44px;

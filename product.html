@@ -50,7 +50,7 @@
 <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2">
 <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2">
 <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260817-related-centering-1">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260817-favorite-icon-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -122,7 +122,12 @@
         <span class="tt-product-status" id="product-status">Disponible</span>
 
         <div class="tt-product-detail-cat" id="product-cat"></div>
-        <h1 class="tt-product-detail-name" id="product-name"></h1>
+        <div class="tt-product-name-row">
+          <h1 class="tt-product-detail-name" id="product-name"></h1>
+          <button type="button" class="tt-product-favorite-icon" id="btn-product-favorite" data-favorite-id="" aria-pressed="false" aria-label="Guardar en favoritos">
+            <span data-favorite-icon aria-hidden="true">♡</span>
+          </button>
+        </div>
         <span id="product-badge-label" class="tt-product-badge" style="display:none;margin-bottom:16px;font-size:0.72rem;padding:5px 14px;"></span>
 
         <div class="tt-product-detail-price" id="product-price"></div>
@@ -146,10 +151,6 @@
 
         <!-- Actions -->
         <div class="tt-product-actions-panel">
-          <button type="button" class="tt-product-favorite-main" id="btn-product-favorite" data-favorite-id="" aria-pressed="false">
-            <span data-favorite-icon aria-hidden="true">♡</span>
-            Guardar en favoritos
-          </button>
           <button type="button" class="tt-btn tt-btn-lg tt-btn-primary-full" id="btn-product-add-cart">
             Agregar al carrito
           </button>
