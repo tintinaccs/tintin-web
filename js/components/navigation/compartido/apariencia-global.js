@@ -89,12 +89,11 @@ function applyHeader(raw = {}) {
 
   const brandName = safeText(raw.brandName, 'TINTÍN', 60);
   const brandTagline = safeText(raw.brandTagline, 'ACCESORIOS & RELOJES', 80);
-  setText('.tt-header-brand-copy strong', brandName);
-  setText('.tt-header-brand-copy small', brandTagline);
-
   const logo = safeImage(raw.logo);
   if (logo) {
-    document.querySelectorAll('.tt-logo-img,.tt-tablet-logo-img,.tt-tablet-menu-logo-img').forEach(image => {
+    document.querySelectorAll('.tt-logo-img,.tt-tablet-logo-img,.tt-tablet-menu-logo-img,.tt-mobile-logo-img').forEach(image => {
+      image.hidden = false;
+      image.removeAttribute('data-tt-logo-failed');
       image.src = logo;
       image.alt = `${brandName} ${brandTagline}`.trim();
     });
@@ -150,9 +149,6 @@ export function fetchGlobalVisualStudioConfig() {
   return globalConfigPromise;
 }
 
-// Header/footer y campañas usan el MISMO endpoint. Esta función comparte una
-// sola promesa con visual-studio-global-runtime.js para que cada navegación
-// haga una solicitud real, no dos solicitudes idénticas.
 export async function fetchGlobalLayoutConfig() {
   if (loaded) return null;
   loaded = true;
