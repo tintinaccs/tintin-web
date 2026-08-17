@@ -3,7 +3,7 @@ import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260716-cloudina
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
 const API_URL = '/api/master-diagnostics';
-const STYLE_URL = '/css/admin/diagnostico-maestro.css?v=tintin-20260817-master-diagnostics-1';
+const STYLE_URL = '/css/admin/diagnostico-maestro.css?v=tintin-20260817-master-diagnostics-2';
 const POLL_MS = 12000;
 const STATE_LABELS = {
   PASS: 'PASS',
@@ -11,6 +11,7 @@ const STATE_LABELS = {
   RUNNING: 'EN EJECUCIÓN',
   QUEUED: 'EN COLA',
   SKIPPED: 'OMITIDO',
+  NOT_VERIFIED: 'NO SE PUDO VERIFICAR',
   UNKNOWN: 'SIN DATOS'
 };
 
@@ -51,7 +52,7 @@ function stateLabel(state) {
 }
 
 function loadStylesheet() {
-  if (document.querySelector(`link[href^="/css/admin/diagnostico-maestro.css"]`)) return;
+  if (document.querySelector('link[href^="/css/admin/diagnostico-maestro.css"]')) return;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href = STYLE_URL;
@@ -115,7 +116,7 @@ function mount() {
     section.prepend(masterCard);
   }
 
-  $('btn-refresh-master-diagnostics')?.addEventListener('click', () => loadMaster({ force: true }));
+  $('btn-refresh-master-diagnostics')?.addEventListener('click', () => loadMaster());
   $('btn-run-master-diagnostics')?.addEventListener('click', runMaster);
   mounted = true;
   return true;
@@ -185,9 +186,9 @@ function renderKpis(latest) {
   const values = [
     ['PASS', counts.pass || 0],
     ['FAIL', counts.fail || 0],
+    ['No verificado', counts.notVerified || 0],
     ['En ejecución', counts.running || 0],
-    ['En cola', counts.queued || 0],
-    ['Checks fallidos', counts.failedSteps || 0]
+    ['Checks con evidencia', counts.failedSteps || 0]
   ];
   node.hidden = false;
   node.innerHTML = values.map(([label, value]) => `
@@ -203,7 +204,9 @@ function renderArea(area, extraClass = '') {
     ? `Finalizó ${formatDate(area.completedAt)}`
     : area.startedAt
       ? `Inició ${formatDate(area.startedAt)}`
-      : 'Esperando ejecución';
+      : area.state === 'NOT_VERIFIED'
+        ? 'La ejecución terminó sin evidencia verificable para esta área'
+        : 'Esperando ejecución';
   return `
     <article class="adm-master-area ${extraClass}">
       <div class="adm-master-area-head">
@@ -223,12 +226,18 @@ function renderAreas(latest) {
     return;
   }
   const global = latest.githubGlobal || { state: 'UNKNOWN', status: 'not_reported' };
+  const globalNeedsEvidence = ['FAIL', 'NOT_VERIFIED'].includes(global.state);
   const globalArea = {
     label: 'GitHub / CI global del commit',
     state: global.state,
     startedAt: global.startedAt,
     completedAt: global.completedAt,
-    failedSteps: global.state === 'FAIL' ? [{ name: 'El estado global de GitHub/CI no pasó', conclusion: global.conclusion || global.status }] : []
+    failedSteps: globalNeedsEvidence ? [{
+      name: global.state === 'NOT_VERIFIED'
+        ? 'El chequeo global de GitHub/CI no produjo evidencia verificable'
+        : 'El estado global de GitHub/CI no pasó',
+      conclusion: global.conclusion || global.status
+    }] : []
   };
   node.innerHTML = [
     renderArea(globalArea, 'adm-master-github-global'),
@@ -287,6 +296,8 @@ function render(payload) {
     showNotice('El Diagnóstico Maestro está corriendo. Esta vista se actualizará automáticamente mientras GitHub termina las suites.', 'info');
   } else if (latest.state === 'FAIL') {
     showNotice('El último Diagnóstico Maestro terminó con fallos. Las áreas rojas de abajo muestran dónde falló.', 'error');
+  } else if (latest.state === 'NOT_VERIFIED' || Number(latest.counts?.notVerified || 0) > 0 || latest.githubGlobal?.state === 'NOT_VERIFIED') {
+    showNotice('La ejecución terminó, pero falta evidencia verificable en una o más áreas. No se considera PASS hasta que todo quede confirmado.', 'warning');
   } else if (!latest.isCurrentCommit) {
     showNotice('El último resultado corresponde a un commit anterior. Ejecutá nuevamente el Maestro para auditar el main actual.', 'warning');
   } else if (!payload.triggerConfigured) {
@@ -359,9 +370,11 @@ async function loadMaster({ silent = false } = {}) {
     setState('UNKNOWN');
     showNotice('Cargando el último Diagnóstico Maestro…', 'info');
   }
+  let succeeded = false;
   try {
     const payload = await requestJson('GET');
-    render(payload);
+    lastPayload = payload;
+    succeeded = true;
   } catch (error) {
     console.error('[Diagnóstico Maestro Admin]', error);
     setState(lastPayload?.latest?.state || 'UNKNOWN');
@@ -374,7 +387,7 @@ async function loadMaster({ silent = false } = {}) {
       refreshButton.disabled = false;
       refreshButton.textContent = 'Actualizar';
     }
-    if (lastPayload) render(lastPayload);
+    if (succeeded && lastPayload) render(lastPayload);
   }
 }
 
@@ -389,22 +402,22 @@ async function runMaster() {
   showNotice('Solicitando una nueva ejecución del Diagnóstico Maestro sobre main…', 'info');
   try {
     const result = await requestJson('POST', { includeProduction: true });
-    if (result.alreadyRunning) {
-      showNotice('Ya había un Diagnóstico Maestro en ejecución. Voy a seguir mostrando ese run.', 'info');
-    } else {
-      showNotice('Diagnóstico Maestro enviado a GitHub. Esperando que aparezca la nueva ejecución…', 'info');
-    }
+    showNotice(
+      result.alreadyRunning
+        ? 'Ya había un Diagnóstico Maestro en ejecución. Voy a seguir mostrando ese run.'
+        : 'Diagnóstico Maestro enviado a GitHub. Esperando que aparezca la nueva ejecución…',
+      'info'
+    );
     window.setTimeout(() => {
       loading = false;
-      loadMaster({ force: true });
+      loadMaster();
     }, 1800);
   } catch (error) {
     console.error('[Diagnóstico Maestro Admin] No se pudo iniciar:', error);
     loading = false;
     showNotice(error.message || 'No se pudo iniciar el Diagnóstico Maestro.', 'error');
-    if (lastPayload) render(lastPayload);
-    else if (button) {
-      button.disabled = false;
+    if (button) {
+      button.disabled = Boolean(lastPayload && !lastPayload.triggerConfigured);
       button.textContent = 'Ejecutar Diagnóstico Maestro';
     }
   }
