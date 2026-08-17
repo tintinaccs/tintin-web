@@ -1,0 +1,94 @@
+name: Validar reparación header logo-only
+
+on:
+  push:
+    branches:
+      - fix/header-logo-only-mobile
+    paths:
+      - '.github/workflows/validar-header-logo-only-temporal.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout rama exacta
+        uses: actions/checkout@v5
+        with:
+          ref: fix/header-logo-only-mobile
+          fetch-depth: 0
+
+      - name: Node 22
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Dependencias
+        run: npm ci
+
+      - name: Generar shell y derivados
+        run: npm run build:pages
+
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Servir rama exacta
+        run: |
+          node scripts/servidor-local-pruebas.mjs 4173 > /tmp/header-logo-only-http.log 2>&1 &
+          echo $! > /tmp/header-logo-only-http.pid
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4173/index.html >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/header-logo-only-http.log || true
+          exit 1
+
+      - name: Probar header desktop tablet mobile
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+        run: npm run test:navigation-header
+
+      - name: Probar geometría responsive global
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+        run: npm run audit:global-responsive-geometry
+
+      - name: Retirar sonda y regenerar manifiesto final
+        run: |
+          git rm .github/workflows/validar-header-logo-only-temporal.yml
+          npm run build:pages
+
+      - name: Bloquear derivados inesperados
+        shell: bash
+        run: |
+          git add \
+            404.html about.html cambios-devoluciones.html catalogo.html checkout.html \
+            collections.html contact.html envios.html index.html login.html perfil.html \
+            preguntas-frecuentes.html privacidad.html product.html terminos.html \
+            diagnostic-manifest.json \
+            .github/workflows/validar-header-logo-only-temporal.yml
+          if ! git diff --quiet; then
+            echo 'Hay archivos derivados inesperados sin stage:'
+            git status --short
+            git diff --name-only
+            exit 1
+          fi
+          echo 'Derivados esperados:'
+          git diff --cached --name-status
+
+      - name: Consolidar derivados si las pruebas pasaron
+        shell: bash
+        run: |
+          if git diff --cached --quiet; then
+            echo 'No hay derivados para consolidar.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'build(header): sincronizar shell logo-only'
+          git push origin HEAD:fix/header-logo-only-mobile
