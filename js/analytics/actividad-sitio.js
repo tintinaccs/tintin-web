@@ -334,7 +334,7 @@ if (
   const hostname = String(window.location.hostname || '').toLowerCase();
   const localHost = /^(?:localhost|127\.0\.0\.1|0\.0\.0\.0)$/i.test(hostname);
   const netlifyPreview = /^deploy-preview-/i.test(hostname);
-  const cloudflarePreview = /\.tintinaccesorios\.pages\.dev$/i.test(hostname);
+  const cloudflarePreview = hostname === 'tintinaccesorios.pages.dev' || /\.tintinaccesorios\.pages\.dev$/i.test(hostname);
   const trackablePage = !isAdminPage();
   analyticsWritable = !localHost && !netlifyPreview && !cloudflarePreview;
 
