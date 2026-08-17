@@ -35,9 +35,35 @@ function reviewIdOf(review) {
   return String(review?.reviewId || review?.id || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 180);
 }
 
+function placeSectionInProductFlow(section) {
+  const selection = document.getElementById('tinsel-root');
+  if (selection?.parentNode) {
+    selection.insertAdjacentElement('afterend', section);
+    return;
+  }
+
+  const related = document.querySelector('.tt-related-section, .tt-related-products, #related-products');
+  if (related?.parentNode) {
+    related.parentNode.insertBefore(section, related);
+    return;
+  }
+
+  const productDetail = document.getElementById('product-detail');
+  if (productDetail?.parentNode) {
+    productDetail.insertAdjacentElement('afterend', section);
+    return;
+  }
+
+  document.body.appendChild(section);
+}
+
 function ensureSection() {
   let section = document.getElementById('product-reviews');
-  if (section) return section;
+  if (section) {
+    placeSectionInProductFlow(section);
+    return section;
+  }
+
   section = document.createElement('section');
   section.id = 'product-reviews';
   section.className = 'tt-reviews-product';
@@ -48,19 +74,13 @@ function ensureSection() {
         <h2 class="tt-section-title" id="product-reviews-title">Reseñas</h2>
         <div id="product-review-summary" aria-live="polite"></div>
       </aside>
-      <div>
+      <div class="tt-reviews-content">
         <div id="product-review-form"></div>
         <div class="tt-review-list" id="product-review-list" aria-live="polite"></div>
       </div>
     </div>`;
 
-  const productDetail = document.getElementById('product-detail');
-  if (productDetail?.parentNode) {
-    productDetail.insertAdjacentElement('afterend', section);
-  } else {
-    const related = document.querySelector('.tt-related-section, .tt-related-products, #related-products');
-    (related?.parentNode || document.body).insertBefore(section, related || document.querySelector('.tt-footer'));
-  }
+  placeSectionInProductFlow(section);
   return section;
 }
 
@@ -155,8 +175,11 @@ function renderReviews() {
 function ratingButtons() {
   return `<div class="tt-rating-field">
     <span class="tt-rating-label">Tu puntuación</span>
-    <div class="tt-rating-input" role="radiogroup" aria-label="Puntuación de la reseña" data-rating-value="${selectedRating}">${[1,2,3,4,5].map(value => `
-      <button type="button" role="radio" aria-checked="${selectedRating === value}" tabindex="${selectedRating ? (selectedRating === value ? 0 : -1) : (value === 1 ? 0 : -1)}" class="${selectedRating >= value ? 'is-active' : ''}${selectedRating === value ? ' is-current' : ''}" data-review-rating="${value}" aria-label="${value} estrella${value === 1 ? '' : 's'}">★</button>`).join('')}</div>
+    <div class="tt-rating-input" role="radiogroup" aria-label="Puntuación de la reseña" data-rating-value="${selectedRating}">${[1,2,3,4,5].map(value => {
+      const active = selectedRating >= value;
+      return `
+      <button type="button" role="radio" aria-checked="${selectedRating === value}" tabindex="${selectedRating ? (selectedRating === value ? 0 : -1) : (value === 1 ? 0 : -1)}" class="${active ? 'is-active' : ''}${selectedRating === value ? ' is-current' : ''}" data-review-rating="${value}" aria-label="${value} estrella${value === 1 ? '' : 's'}">${active ? '★' : '☆'}</button>`;
+    }).join('')}</div>
     <span class="tt-rating-status" data-rating-status aria-live="polite">${selectedRating ? `${selectedRating} de 5 estrellas seleccionadas` : 'Sin puntuación seleccionada'}</span>
   </div>`;
 }
@@ -167,15 +190,22 @@ function syncRatingButtons(previewRating = null) {
   const preview = previewRating === null ? null : normalizeRating(previewRating);
   const effectiveRating = preview === null ? selectedRating : preview;
   group.dataset.ratingValue = String(selectedRating);
+  group.dataset.previewRating = preview === null ? '' : String(preview);
   group.querySelectorAll('[data-review-rating]').forEach(button => {
     const value = normalizeRating(button.dataset.reviewRating);
-    button.classList.toggle('is-active', effectiveRating > 0 && value <= effectiveRating);
+    const active = effectiveRating > 0 && value <= effectiveRating;
+    button.classList.toggle('is-active', active);
     button.classList.toggle('is-current', preview === null && selectedRating === value);
+    button.textContent = active ? '★' : '☆';
     button.setAttribute('aria-checked', String(selectedRating === value));
     button.tabIndex = selectedRating ? (selectedRating === value ? 0 : -1) : (value === 1 ? 0 : -1);
   });
   const status = group.parentElement?.querySelector('[data-rating-status]');
-  if (status) status.textContent = selectedRating ? `${selectedRating} de 5 estrellas seleccionadas` : 'Sin puntuación seleccionada';
+  if (status) {
+    status.textContent = preview !== null
+      ? `${preview} de 5 estrellas previsualizadas`
+      : (selectedRating ? `${selectedRating} de 5 estrellas seleccionadas` : 'Sin puntuación seleccionada');
+  }
 }
 
 function setSelectedRating(value, { focus = false } = {}) {
@@ -287,15 +317,25 @@ document.addEventListener('keydown', event => {
   setSelectedRating(next, { focus: true });
 });
 
-document.addEventListener('pointerover', event => {
-  if (event.pointerType && event.pointerType !== 'mouse') return;
+document.addEventListener('mouseover', event => {
   const button = event.target.closest('[data-review-rating]');
   if (!button) return;
   syncRatingButtons(button.dataset.reviewRating);
 });
 
-document.addEventListener('pointerout', event => {
-  if (event.pointerType && event.pointerType !== 'mouse') return;
+document.addEventListener('mouseout', event => {
+  const group = event.target.closest('.tt-rating-input');
+  if (!group || group.contains(event.relatedTarget)) return;
+  syncRatingButtons();
+});
+
+document.addEventListener('focusin', event => {
+  const button = event.target.closest('[data-review-rating]');
+  if (!button) return;
+  syncRatingButtons(button.dataset.reviewRating);
+});
+
+document.addEventListener('focusout', event => {
   const group = event.target.closest('.tt-rating-input');
   if (!group || group.contains(event.relatedTarget)) return;
   syncRatingButtons();
