@@ -1,0 +1,429 @@
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+
+const API_URL = '/api/master-diagnostics';
+const STYLE_URL = '/css/admin/diagnostico-maestro.css?v=tintin-20260817-master-diagnostics-1';
+const POLL_MS = 12000;
+const STATE_LABELS = {
+  PASS: 'PASS',
+  FAIL: 'FAIL',
+  RUNNING: 'EN EJECUCIÓN',
+  QUEUED: 'EN COLA',
+  SKIPPED: 'OMITIDO',
+  UNKNOWN: 'SIN DATOS'
+};
+
+let mounted = false;
+let loading = false;
+let pollTimer = null;
+let lastPayload = null;
+
+function $(id) {
+  return document.getElementById(id);
+}
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[char]);
+}
+
+function formatDate(value) {
+  if (!value) return '—';
+  try {
+    return new Intl.DateTimeFormat('es-PY', {
+      dateStyle: 'medium',
+      timeStyle: 'medium'
+    }).format(new Date(value));
+  } catch {
+    return String(value);
+  }
+}
+
+function shortSha(value) {
+  const sha = String(value || '');
+  return sha ? sha.slice(0, 10) : '—';
+}
+
+function stateLabel(state) {
+  return STATE_LABELS[state] || state || STATE_LABELS.UNKNOWN;
+}
+
+function loadStylesheet() {
+  if (document.querySelector(`link[href^="/css/admin/diagnostico-maestro.css"]`)) return;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = STYLE_URL;
+  document.head.appendChild(link);
+}
+
+function masterCardMarkup() {
+  return `
+    <div class="adm-card adm-master-diagnostic-card" id="adm-master-diagnostic-card">
+      <div class="adm-card-head adm-master-diagnostic-head">
+        <div>
+          <div class="adm-card-title">Diagnóstico Maestro Tintin</div>
+          <p>Resultado real del workflow maestro: código, checkout, Cliente, Super Admin, responsive, accesibilidad, performance, seguridad, Firestore, producción y estado global de GitHub/CI.</p>
+        </div>
+        <div class="adm-master-actions">
+          <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="btn-refresh-master-diagnostics">Actualizar</button>
+          <button type="button" class="adm-btn adm-btn-primary" id="btn-run-master-diagnostics">Ejecutar Diagnóstico Maestro</button>
+        </div>
+      </div>
+      <div class="adm-card-body">
+        <div class="adm-master-state-row">
+          <span class="adm-master-state" id="master-diagnostic-state" data-state="UNKNOWN">SIN DATOS</span>
+          <span class="adm-master-freshness" id="master-diagnostic-freshness">Consultando GitHub/CI…</span>
+        </div>
+        <div class="adm-master-notice notice-info" id="master-diagnostic-notice">
+          <span class="adm-master-loading">Cargando el último Diagnóstico Maestro…</span>
+        </div>
+        <div class="adm-master-meta" id="master-diagnostic-meta" hidden></div>
+        <div class="adm-master-progress-wrap" id="master-diagnostic-progress-wrap" hidden>
+          <div class="adm-master-progress-label"><span id="master-diagnostic-progress-text">Progreso</span><strong id="master-diagnostic-progress-percent">0%</strong></div>
+          <div class="adm-master-progress" aria-hidden="true"><span id="master-diagnostic-progress-bar"></span></div>
+        </div>
+        <div class="adm-master-kpis" id="master-diagnostic-kpis" hidden></div>
+        <div class="adm-master-areas" id="master-diagnostic-areas"></div>
+        <details class="adm-master-history" id="master-diagnostic-history" hidden>
+          <summary>Historial reciente de ejecuciones</summary>
+          <div class="adm-master-history-list" id="master-diagnostic-history-list"></div>
+        </details>
+      </div>
+    </div>`;
+}
+
+function mount() {
+  if (mounted) return true;
+  const section = $('section-diagnostico');
+  if (!section) return false;
+  loadStylesheet();
+
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = masterCardMarkup().trim();
+  const masterCard = wrapper.firstElementChild;
+  const localCard = section.querySelector('.adm-diagnostic-card');
+  if (localCard) {
+    section.insertBefore(masterCard, localCard);
+    localCard.classList.add('adm-local-diagnostic-card');
+    const title = localCard.querySelector('.adm-card-title');
+    if (title && /Diagnóstico integral de la plataforma/i.test(title.textContent || '')) {
+      title.textContent = 'Diagnóstico local de solo lectura';
+    }
+  } else {
+    section.prepend(masterCard);
+  }
+
+  $('btn-refresh-master-diagnostics')?.addEventListener('click', () => loadMaster({ force: true }));
+  $('btn-run-master-diagnostics')?.addEventListener('click', runMaster);
+  mounted = true;
+  return true;
+}
+
+function setState(state = 'UNKNOWN') {
+  const node = $('master-diagnostic-state');
+  if (!node) return;
+  node.dataset.state = state;
+  node.textContent = stateLabel(state);
+}
+
+function showNotice(message, type = 'info') {
+  const node = $('master-diagnostic-notice');
+  if (!node) return;
+  node.hidden = !message;
+  node.className = `adm-master-notice notice-${type}`;
+  node.textContent = message || '';
+}
+
+function renderMeta(latest) {
+  const node = $('master-diagnostic-meta');
+  if (!node) return;
+  if (!latest) {
+    node.hidden = true;
+    node.replaceChildren();
+    return;
+  }
+  node.hidden = false;
+  const runValue = latest.htmlUrl
+    ? `<a href="${escapeHtml(latest.htmlUrl)}" target="_blank" rel="noopener noreferrer">#${escapeHtml(latest.runNumber || latest.id)} · intento ${escapeHtml(latest.attempt || 1)}</a>`
+    : `#${escapeHtml(latest.runNumber || latest.id || '—')}`;
+  node.innerHTML = `
+    <div class="adm-master-meta-item"><span>Commit auditado</span><strong title="${escapeHtml(latest.headSha || '')}">${escapeHtml(shortSha(latest.headSha))}</strong></div>
+    <div class="adm-master-meta-item"><span>Run de GitHub</span>${runValue}</div>
+    <div class="adm-master-meta-item"><span>Última actualización</span><strong>${escapeHtml(formatDate(latest.updatedAt))}</strong></div>
+    <div class="adm-master-meta-item"><span>Producción</span><strong>${escapeHtml(latest.productionOrigin || '—')}</strong></div>`;
+}
+
+function renderProgress(latest) {
+  const wrap = $('master-diagnostic-progress-wrap');
+  const bar = $('master-diagnostic-progress-bar');
+  const label = $('master-diagnostic-progress-text');
+  const percentNode = $('master-diagnostic-progress-percent');
+  if (!wrap || !bar || !label || !percentNode) return;
+  if (!latest) {
+    wrap.hidden = true;
+    return;
+  }
+  const progress = latest.progress || { completed: 0, total: 0, percent: 0 };
+  const percent = latest.status === 'completed' ? 100 : Number(progress.percent || 0);
+  wrap.hidden = false;
+  bar.style.width = `${Math.max(0, Math.min(100, percent))}%`;
+  label.textContent = `${progress.completed || 0} de ${progress.total || 0} áreas cerradas`;
+  percentNode.textContent = `${Math.max(0, Math.min(100, percent))}%`;
+}
+
+function renderKpis(latest) {
+  const node = $('master-diagnostic-kpis');
+  if (!node) return;
+  if (!latest) {
+    node.hidden = true;
+    node.replaceChildren();
+    return;
+  }
+  const counts = latest.counts || {};
+  const values = [
+    ['PASS', counts.pass || 0],
+    ['FAIL', counts.fail || 0],
+    ['En ejecución', counts.running || 0],
+    ['En cola', counts.queued || 0],
+    ['Checks fallidos', counts.failedSteps || 0]
+  ];
+  node.hidden = false;
+  node.innerHTML = values.map(([label, value]) => `
+    <div class="adm-master-kpi"><strong>${escapeHtml(value)}</strong><span>${escapeHtml(label)}</span></div>`).join('');
+}
+
+function renderArea(area, extraClass = '') {
+  const failed = Array.isArray(area.failedSteps) ? area.failedSteps : [];
+  const failureList = failed.length
+    ? `<ul class="adm-master-area-failures">${failed.slice(0, 5).map(step => `<li>${escapeHtml(step.name)} · ${escapeHtml(step.conclusion || 'falló')}</li>`).join('')}</ul>`
+    : '';
+  const timing = area.completedAt
+    ? `Finalizó ${formatDate(area.completedAt)}`
+    : area.startedAt
+      ? `Inició ${formatDate(area.startedAt)}`
+      : 'Esperando ejecución';
+  return `
+    <article class="adm-master-area ${extraClass}">
+      <div class="adm-master-area-head">
+        <div class="adm-master-area-title">${escapeHtml(area.label)}</div>
+        <span class="adm-master-area-state" data-state="${escapeHtml(area.state || 'UNKNOWN')}">${escapeHtml(stateLabel(area.state))}</span>
+      </div>
+      <div class="adm-master-area-detail">${escapeHtml(timing)}</div>
+      ${failureList}
+    </article>`;
+}
+
+function renderAreas(latest) {
+  const node = $('master-diagnostic-areas');
+  if (!node) return;
+  if (!latest) {
+    node.innerHTML = '<div class="adm-master-empty">Todavía no hay una ejecución del Diagnóstico Maestro para mostrar.</div>';
+    return;
+  }
+  const global = latest.githubGlobal || { state: 'UNKNOWN', status: 'not_reported' };
+  const globalArea = {
+    label: 'GitHub / CI global del commit',
+    state: global.state,
+    startedAt: global.startedAt,
+    completedAt: global.completedAt,
+    failedSteps: global.state === 'FAIL' ? [{ name: 'El estado global de GitHub/CI no pasó', conclusion: global.conclusion || global.status }] : []
+  };
+  node.innerHTML = [
+    renderArea(globalArea, 'adm-master-github-global'),
+    ...(latest.areas || []).map(area => renderArea(area))
+  ].join('');
+}
+
+function renderHistory(history = []) {
+  const root = $('master-diagnostic-history');
+  const list = $('master-diagnostic-history-list');
+  if (!root || !list) return;
+  if (!history.length) {
+    root.hidden = true;
+    list.replaceChildren();
+    return;
+  }
+  root.hidden = false;
+  list.innerHTML = history.map(run => `
+    <div class="adm-master-history-item">
+      <span class="adm-master-area-state" data-state="${escapeHtml(run.state || 'UNKNOWN')}">${escapeHtml(stateLabel(run.state))}</span>
+      <strong>Run #${escapeHtml(run.runNumber || run.id || '—')} · ${escapeHtml(shortSha(run.headSha))}</strong>
+      <time datetime="${escapeHtml(run.updatedAt || '')}">${escapeHtml(formatDate(run.updatedAt))}</time>
+    </div>`).join('');
+}
+
+function render(payload) {
+  lastPayload = payload;
+  const latest = payload?.latest || null;
+  const runButton = $('btn-run-master-diagnostics');
+  const refreshButton = $('btn-refresh-master-diagnostics');
+  const freshness = $('master-diagnostic-freshness');
+  const isActive = latest && ['RUNNING', 'QUEUED'].includes(latest.state);
+
+  setState(latest?.state || 'UNKNOWN');
+  if (freshness) {
+    freshness.className = 'adm-master-freshness';
+    if (!latest) {
+      freshness.textContent = 'Sin ejecuciones registradas';
+    } else if (latest.isCurrentCommit) {
+      freshness.classList.add('is-current');
+      freshness.textContent = `main auditado · ${shortSha(latest.currentCommit)}`;
+    } else {
+      freshness.classList.add('is-stale');
+      freshness.textContent = `Resultado anterior · main actual ${shortSha(payload.currentCommit)}`;
+    }
+  }
+
+  if (!latest) {
+    showNotice(
+      payload.triggerConfigured
+        ? 'No hay una ejecución previa. Podés lanzar el Diagnóstico Maestro desde este panel.'
+        : 'No hay una ejecución previa y el disparo desde el panel todavía no tiene disponible la credencial privada de GitHub.',
+      payload.triggerConfigured ? 'info' : 'warning'
+    );
+  } else if (isActive) {
+    showNotice('El Diagnóstico Maestro está corriendo. Esta vista se actualizará automáticamente mientras GitHub termina las suites.', 'info');
+  } else if (latest.state === 'FAIL') {
+    showNotice('El último Diagnóstico Maestro terminó con fallos. Las áreas rojas de abajo muestran dónde falló.', 'error');
+  } else if (!latest.isCurrentCommit) {
+    showNotice('El último resultado corresponde a un commit anterior. Ejecutá nuevamente el Maestro para auditar el main actual.', 'warning');
+  } else if (!payload.triggerConfigured) {
+    showNotice('El resultado se puede consultar normalmente. Para lanzar una nueva ejecución desde este botón hace falta la credencial privada de GitHub del backend.', 'warning');
+  } else {
+    showNotice('El último Diagnóstico Maestro pasó y corresponde al commit actual de main.', 'info');
+  }
+
+  if (runButton) {
+    runButton.disabled = Boolean(isActive || !payload.triggerConfigured || loading);
+    runButton.title = payload.triggerConfigured
+      ? (isActive ? 'Ya hay un Diagnóstico Maestro en ejecución.' : 'Ejecuta el workflow maestro sobre main, incluyendo producción.')
+      : 'El backend no tiene configurado GITHUB_TOKEN.';
+    runButton.textContent = isActive ? 'Diagnóstico en ejecución…' : 'Ejecutar Diagnóstico Maestro';
+  }
+  if (refreshButton) refreshButton.disabled = loading;
+
+  renderMeta(latest);
+  renderProgress(latest);
+  renderKpis(latest);
+  renderAreas(latest);
+  renderHistory(payload?.history || []);
+  schedulePoll(latest?.state);
+}
+
+function schedulePoll(state) {
+  clearTimeout(pollTimer);
+  pollTimer = null;
+  if (!['RUNNING', 'QUEUED'].includes(state)) return;
+  pollTimer = window.setTimeout(() => loadMaster({ silent: true }), POLL_MS);
+}
+
+async function authorizedFetch(method, body, forceToken = false) {
+  const user = auth.currentUser;
+  if (!user || String(user.email || '').toLowerCase() !== String(SUPER_ADMIN).toLowerCase()) {
+    throw new Error('La sesión de Super Admin no está disponible.');
+  }
+  const idToken = await user.getIdToken(forceToken);
+  return fetch(API_URL, {
+    method,
+    cache: 'no-store',
+    credentials: 'same-origin',
+    headers: {
+      authorization: `Bearer ${idToken}`,
+      ...(body === undefined ? {} : { 'content-type': 'application/json' })
+    },
+    body: body === undefined ? undefined : JSON.stringify(body)
+  });
+}
+
+async function requestJson(method = 'GET', body) {
+  let response = await authorizedFetch(method, body, false);
+  if (response.status === 401) response = await authorizedFetch(method, body, true);
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.ok !== true) {
+    throw new Error(data.error || `El backend respondió HTTP ${response.status}.`);
+  }
+  return data;
+}
+
+async function loadMaster({ silent = false } = {}) {
+  if (loading) return;
+  loading = true;
+  const refreshButton = $('btn-refresh-master-diagnostics');
+  if (refreshButton) {
+    refreshButton.disabled = true;
+    refreshButton.textContent = 'Actualizando…';
+  }
+  if (!silent && !lastPayload) {
+    setState('UNKNOWN');
+    showNotice('Cargando el último Diagnóstico Maestro…', 'info');
+  }
+  try {
+    const payload = await requestJson('GET');
+    render(payload);
+  } catch (error) {
+    console.error('[Diagnóstico Maestro Admin]', error);
+    setState(lastPayload?.latest?.state || 'UNKNOWN');
+    showNotice(error.message || 'No se pudo consultar el Diagnóstico Maestro.', 'error');
+    clearTimeout(pollTimer);
+    pollTimer = null;
+  } finally {
+    loading = false;
+    if (refreshButton) {
+      refreshButton.disabled = false;
+      refreshButton.textContent = 'Actualizar';
+    }
+    if (lastPayload) render(lastPayload);
+  }
+}
+
+async function runMaster() {
+  if (loading) return;
+  loading = true;
+  const button = $('btn-run-master-diagnostics');
+  if (button) {
+    button.disabled = true;
+    button.textContent = 'Solicitando ejecución…';
+  }
+  showNotice('Solicitando una nueva ejecución del Diagnóstico Maestro sobre main…', 'info');
+  try {
+    const result = await requestJson('POST', { includeProduction: true });
+    if (result.alreadyRunning) {
+      showNotice('Ya había un Diagnóstico Maestro en ejecución. Voy a seguir mostrando ese run.', 'info');
+    } else {
+      showNotice('Diagnóstico Maestro enviado a GitHub. Esperando que aparezca la nueva ejecución…', 'info');
+    }
+    window.setTimeout(() => {
+      loading = false;
+      loadMaster({ force: true });
+    }, 1800);
+  } catch (error) {
+    console.error('[Diagnóstico Maestro Admin] No se pudo iniciar:', error);
+    loading = false;
+    showNotice(error.message || 'No se pudo iniciar el Diagnóstico Maestro.', 'error');
+    if (lastPayload) render(lastPayload);
+    else if (button) {
+      button.disabled = false;
+      button.textContent = 'Ejecutar Diagnóstico Maestro';
+    }
+  }
+}
+
+function startForSuperAdmin(user) {
+  if (!user || String(user.email || '').toLowerCase() !== String(SUPER_ADMIN).toLowerCase()) return;
+  if (!mount()) {
+    window.setTimeout(() => startForSuperAdmin(user), 100);
+    return;
+  }
+  loadMaster();
+}
+
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    clearTimeout(pollTimer);
+    pollTimer = null;
+    return;
+  }
+  startForSuperAdmin(user);
+});
