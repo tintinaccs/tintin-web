@@ -99,6 +99,11 @@ function allInlineScriptHashes() {
 
 const handlerHashes = eventHandlerHashes();
 const globalInlineHashes = allInlineScriptHashes();
+// La CSP corta de _headers es el último cinturón de seguridad cuando una
+// respuesta HTML no atraviesa el middleware de Pages. El catálogo depende de
+// tres módulos inline para arrancar; autorizar únicamente sus hashes exactos
+// mantiene el fallback funcional sin reabrir 'unsafe-inline'.
+const fallbackInlineHashes = inlineHashes('catalogo.html');
 const scriptAttrDirective = handlerHashes.length
   ? `script-src-attr 'unsafe-hashes' ${handlerHashes.join(' ')}`
   : "script-src-attr 'none'";
@@ -106,7 +111,7 @@ const scriptAttrDirective = handlerHashes.length
 function staticFallbackPolicy() {
   return [
     "default-src 'self'",
-    `script-src 'self' ${globalScriptOrigins.join(' ')}`,
+    `script-src 'self'${fallbackInlineHashes.length ? ` ${fallbackInlineHashes.join(' ')}` : ''} ${globalScriptOrigins.join(' ')}`,
     "script-src-attr 'none'",
     "style-src 'self' 'unsafe-inline' https://unpkg.com",
     "img-src 'self' data: blob: https:",
@@ -226,6 +231,9 @@ function validateRuntimePolicies(policies) {
   if (fallback.length > 1900) throw new Error(`CSP fallback estática demasiado grande: ${fallback.length} caracteres.`);
   if (fallback.includes('https://api.cloudinary.com') || fallback.includes("script-src 'self' 'unsafe-inline'")) {
     throw new Error('CSP fallback estática abrió capacidades que solo corresponden al runtime específico.');
+  }
+  for (const hash of fallbackInlineHashes) {
+    if (!fallback.includes(hash)) throw new Error(`CSP fallback perdió el hash requerido por catalogo.html: ${hash}.`);
   }
 }
 
