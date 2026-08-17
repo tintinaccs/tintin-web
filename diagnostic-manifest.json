@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-16T23:02:29.565Z",
-  "sourceFingerprint": "493b822dcdc823e038be7fc2a0c3eb3d6b2ef33b1e335d7fdc83835ce053e7c2",
+  "generatedAt": "2026-08-17T12:38:05.026Z",
+  "sourceFingerprint": "be6cc986f82782be8f0a986bc725783a8e33657f4f36070f1f4036ad85cd1763",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 658,
     "textFiles": 626,
-    "totalBytes": 7387129,
+    "totalBytes": 7389308,
     "pages": 18,
     "modules": 408
   },
@@ -14501,8 +14501,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20951,
-      "sha256": "2a7cc9395bb8b999998b432b147d5779ae0f043a0b7d6ef1c62f61909b0da233",
+      "bytes": 20956,
+      "sha256": "e703b1523d39c32fb1348c206ccaf71a95a312686558774867bc9dc2eee6ea25",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14586,7 +14586,7 @@
           "line": 333
         },
         {
-          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260815-routes-clean-1",
+          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260817-reviews-order-fix-1",
           "target": "js/pages/product/resenas-producto.js",
           "line": 334
         },
@@ -14964,7 +14964,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260815-routes-clean-1",
+          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260817-reviews-order-fix-1",
           "target": "js/pages/product/resenas-producto.js",
           "line": 334,
           "exists": true
@@ -18452,8 +18452,8 @@
     },
     {
       "path": "js/analytics/actividad-sitio.js",
-      "bytes": 12054,
-      "sha256": "01a674fd767ae1e2792120c1e67f01b7a6c5a79fe6a3471fd628ce12502cf485",
+      "bytes": 12099,
+      "sha256": "77ab7369bbeecab7c960f5f1053a249c4132b9a1a1a8b711f6f742df4c36b170",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21608,8 +21608,8 @@
     },
     {
       "path": "js/pages/product/resenas-producto.js",
-      "bytes": 16722,
-      "sha256": "e786f20cd5c05dbc0f0b2151d98643c74b09daa1025e1aa0beddd692c583c79c",
+      "bytes": 16931,
+      "sha256": "53807f930c857f1d1f7a0a2f4461cfd0162c898252b7a87a441237cc092d3174",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22327,8 +22327,8 @@
     },
     {
       "path": "scripts/auditar-cloudflare-entrega-real.mjs",
-      "bytes": 12093,
-      "sha256": "686457700c1cc772af22dd6026fabd7a5f21dff06d57527cbfbda3ecf995fa59",
+      "bytes": 13249,
+      "sha256": "23e1b83993b8e2e7c347743bf8bd181aa45eb96b515503c7621c7944673d32bb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22354,7 +22354,7 @@
         },
         {
           "url": "https://api.cloudinary.com/",
-          "line": 114
+          "line": 121
         }
       ]
     },
@@ -24625,8 +24625,8 @@
     },
     {
       "path": "scripts/generar-csp-cloudflare.js",
-      "bytes": 11067,
-      "sha256": "302d2e7f3541a89000805bddf32940e754b9a984aab727ae58261d5f02ea0b65",
+      "bytes": 11669,
+      "sha256": "3c8778447df0cbe929628b4fae4dd515d6c8538d88d46c3909c6b59262a25ce0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24679,7 +24679,7 @@
         },
         {
           "url": "https://api.cloudinary.com/",
-          "line": 159
+          "line": 164
         }
       ]
     },
@@ -26475,8 +26475,8 @@
     {
       "path": ".github/workflows/lanzar-diagnostico-maestro.yml",
       "extension": ".yml",
-      "bytes": 807,
-      "sha256": "5d21cc9fccb71e727f3e3a8049568a2ccdbc901cf01c7a015dc11c15dfcd3967"
+      "bytes": 857,
+      "sha256": "7e47f74ed88d995bd1cc54def54975bebe133eee4a0fc691c3b5e45b0020bd04"
     },
     {
       "path": ".github/workflows/respaldo-repositorio.yml",
@@ -26487,8 +26487,8 @@
     {
       "path": ".github/workflows/seo-produccion-fase-11.yml",
       "extension": ".yml",
-      "bytes": 5675,
-      "sha256": "8643319e466d686f23ad8c8039cf657d0563b8b72f7e9544213e52450aed2dac"
+      "bytes": 5787,
+      "sha256": "4d0ff8b69fb55a5d5bf17847442c9a24a025c216f06162b5983b3d22d78a9bce"
     },
     {
       "path": ".github/workflows/validar-editor-visual-seguro.yml",
@@ -27981,8 +27981,8 @@
     {
       "path": "js/analytics/actividad-sitio.js",
       "extension": ".js",
-      "bytes": 12054,
-      "sha256": "01a674fd767ae1e2792120c1e67f01b7a6c5a79fe6a3471fd628ce12502cf485"
+      "bytes": 12099,
+      "sha256": "77ab7369bbeecab7c960f5f1053a249c4132b9a1a1a8b711f6f742df4c36b170"
     },
     {
       "path": "js/analytics/analitica.js",
@@ -28821,8 +28821,8 @@
     {
       "path": "js/pages/product/resenas-producto.js",
       "extension": ".js",
-      "bytes": 16722,
-      "sha256": "e786f20cd5c05dbc0f0b2151d98643c74b09daa1025e1aa0beddd692c583c79c"
+      "bytes": 16931,
+      "sha256": "53807f930c857f1d1f7a0a2f4461cfd0162c898252b7a87a441237cc092d3174"
     },
     {
       "path": "js/pages/product/seleccion-producto.js",
@@ -29139,8 +29139,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 20951,
-      "sha256": "2a7cc9395bb8b999998b432b147d5779ae0f043a0b7d6ef1c62f61909b0da233"
+      "bytes": 20956,
+      "sha256": "e703b1523d39c32fb1348c206ccaf71a95a312686558774867bc9dc2eee6ea25"
     },
     {
       "path": "robots.txt",
@@ -29289,8 +29289,8 @@
     {
       "path": "scripts/auditar-cloudflare-entrega-real.mjs",
       "extension": ".mjs",
-      "bytes": 12093,
-      "sha256": "686457700c1cc772af22dd6026fabd7a5f21dff06d57527cbfbda3ecf995fa59"
+      "bytes": 13249,
+      "sha256": "23e1b83993b8e2e7c347743bf8bd181aa45eb96b515503c7621c7944673d32bb"
     },
     {
       "path": "scripts/auditar-colecciones-fase-4.js",
@@ -29853,8 +29853,8 @@
     {
       "path": "scripts/generar-csp-cloudflare.js",
       "extension": ".js",
-      "bytes": 11067,
-      "sha256": "302d2e7f3541a89000805bddf32940e754b9a984aab727ae58261d5f02ea0b65"
+      "bytes": 11669,
+      "sha256": "3c8778447df0cbe929628b4fae4dd515d6c8538d88d46c3909c6b59262a25ce0"
     },
     {
       "path": "scripts/normalizar-rutas-publicas.js",
@@ -32018,7 +32018,7 @@
           },
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 241,
+            "line": 246,
             "operation": "doc"
           }
         ]
@@ -32173,7 +32173,7 @@
           },
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 234,
+            "line": 239,
             "operation": "collection"
           },
           {
