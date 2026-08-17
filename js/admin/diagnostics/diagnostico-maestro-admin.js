@@ -19,6 +19,8 @@ let mounted = false;
 let loading = false;
 let pollTimer = null;
 let lastPayload = null;
+let dispatchPollsRemaining = 0;
+let awaitingRunAfterId = null;
 
 function $(id) {
   return document.getElementById(id);
@@ -187,8 +189,8 @@ function renderKpis(latest) {
     ['PASS', counts.pass || 0],
     ['FAIL', counts.fail || 0],
     ['No verificado', counts.notVerified || 0],
-    ['En ejecución', counts.running || 0],
-    ['Checks con evidencia', counts.failedSteps || 0]
+    ['Checks fallidos', counts.failedSteps || 0],
+    ['CI externos', counts.externalFailures || 0]
   ];
   node.hidden = false;
   node.innerHTML = values.map(([label, value]) => `
@@ -198,7 +200,7 @@ function renderKpis(latest) {
 function renderArea(area, extraClass = '') {
   const failed = Array.isArray(area.failedSteps) ? area.failedSteps : [];
   const failureList = failed.length
-    ? `<ul class="adm-master-area-failures">${failed.slice(0, 5).map(step => `<li>${escapeHtml(step.name)} · ${escapeHtml(step.conclusion || 'falló')}</li>`).join('')}</ul>`
+    ? `<ul class="adm-master-area-failures">${failed.slice(0, 8).map(step => `<li>${escapeHtml(step.name)} · ${escapeHtml(step.conclusion || 'falló')}</li>`).join('')}</ul>`
     : '';
   const timing = area.completedAt
     ? `Finalizó ${formatDate(area.completedAt)}`
@@ -225,19 +227,26 @@ function renderAreas(latest) {
     node.innerHTML = '<div class="adm-master-empty">Todavía no hay una ejecución del Diagnóstico Maestro para mostrar.</div>';
     return;
   }
-  const global = latest.githubGlobal || { state: 'UNKNOWN', status: 'not_reported' };
-  const globalNeedsEvidence = ['FAIL', 'NOT_VERIFIED'].includes(global.state);
+  const global = latest.githubGlobal || { state: 'UNKNOWN', status: 'not_reported', failures: [] };
+  const externalFailures = Array.isArray(global.failures) ? global.failures : [];
+  let globalFailures = externalFailures.map(check => ({
+    name: check.app ? `${check.name} (${check.app})` : check.name,
+    conclusion: check.conclusion || 'failure'
+  }));
+  if (!globalFailures.length && ['FAIL', 'NOT_VERIFIED'].includes(global.state)) {
+    globalFailures = [{
+      name: global.state === 'NOT_VERIFIED'
+        ? 'El chequeo global de GitHub/CI no produjo evidencia verificable'
+        : 'El estado global de GitHub/CI no pasó',
+      conclusion: global.conclusion || global.status
+    }];
+  }
   const globalArea = {
     label: 'GitHub / CI global del commit',
     state: global.state,
     startedAt: global.startedAt,
     completedAt: global.completedAt,
-    failedSteps: globalNeedsEvidence ? [{
-      name: global.state === 'NOT_VERIFIED'
-        ? 'El chequeo global de GitHub/CI no produjo evidencia verificable'
-        : 'El estado global de GitHub/CI no pasó',
-      conclusion: global.conclusion || global.status
-    }] : []
+    failedSteps: globalFailures
   };
   node.innerHTML = [
     renderArea(globalArea, 'adm-master-github-global'),
@@ -266,12 +275,19 @@ function renderHistory(history = []) {
 function render(payload) {
   lastPayload = payload;
   const latest = payload?.latest || null;
+  if (dispatchPollsRemaining > 0 && latest?.id && latest.id !== awaitingRunAfterId) {
+    dispatchPollsRemaining = 0;
+    awaitingRunAfterId = null;
+  }
+
   const runButton = $('btn-run-master-diagnostics');
   const refreshButton = $('btn-refresh-master-diagnostics');
   const freshness = $('master-diagnostic-freshness');
-  const isActive = latest && ['RUNNING', 'QUEUED'].includes(latest.state);
+  const workflowActive = latest && ['RUNNING', 'QUEUED'].includes(latest.state);
+  const waitingForDispatch = dispatchPollsRemaining > 0;
+  const isActive = Boolean(workflowActive || waitingForDispatch);
 
-  setState(latest?.state || 'UNKNOWN');
+  setState(waitingForDispatch && !workflowActive ? 'QUEUED' : (latest?.state || 'UNKNOWN'));
   if (freshness) {
     freshness.className = 'adm-master-freshness';
     if (!latest) {
@@ -285,17 +301,19 @@ function render(payload) {
     }
   }
 
-  if (!latest) {
+  if (waitingForDispatch && !workflowActive) {
+    showNotice('GitHub recibió la solicitud. Esperando que aparezca la nueva ejecución del Diagnóstico Maestro…', 'info');
+  } else if (!latest) {
     showNotice(
       payload.triggerConfigured
         ? 'No hay una ejecución previa. Podés lanzar el Diagnóstico Maestro desde este panel.'
         : 'No hay una ejecución previa y el disparo desde el panel todavía no tiene disponible la credencial privada de GitHub.',
       payload.triggerConfigured ? 'info' : 'warning'
     );
-  } else if (isActive) {
+  } else if (workflowActive) {
     showNotice('El Diagnóstico Maestro está corriendo. Esta vista se actualizará automáticamente mientras GitHub termina las suites.', 'info');
   } else if (latest.state === 'FAIL') {
-    showNotice('El último Diagnóstico Maestro terminó con fallos. Las áreas rojas de abajo muestran dónde falló.', 'error');
+    showNotice('El último Diagnóstico Maestro o el estado global de GitHub/CI tiene fallos. Las áreas rojas de abajo muestran dónde falló.', 'error');
   } else if (latest.state === 'NOT_VERIFIED' || Number(latest.counts?.notVerified || 0) > 0 || latest.githubGlobal?.state === 'NOT_VERIFIED') {
     showNotice('La ejecución terminó, pero falta evidencia verificable en una o más áreas. No se considera PASS hasta que todo quede confirmado.', 'warning');
   } else if (!latest.isCurrentCommit) {
@@ -309,7 +327,7 @@ function render(payload) {
   if (runButton) {
     runButton.disabled = Boolean(isActive || !payload.triggerConfigured || loading);
     runButton.title = payload.triggerConfigured
-      ? (isActive ? 'Ya hay un Diagnóstico Maestro en ejecución.' : 'Ejecuta el workflow maestro sobre main, incluyendo producción.')
+      ? (isActive ? 'Ya hay un Diagnóstico Maestro solicitado o en ejecución.' : 'Ejecuta el workflow maestro sobre main, incluyendo producción.')
       : 'El backend no tiene configurado GITHUB_TOKEN.';
     runButton.textContent = isActive ? 'Diagnóstico en ejecución…' : 'Ejecutar Diagnóstico Maestro';
   }
@@ -326,7 +344,9 @@ function render(payload) {
 function schedulePoll(state) {
   clearTimeout(pollTimer);
   pollTimer = null;
-  if (!['RUNNING', 'QUEUED'].includes(state)) return;
+  const workflowActive = ['RUNNING', 'QUEUED'].includes(state);
+  if (!workflowActive && dispatchPollsRemaining <= 0) return;
+  if (!workflowActive && dispatchPollsRemaining > 0) dispatchPollsRemaining -= 1;
   pollTimer = window.setTimeout(() => loadMaster({ silent: true }), POLL_MS);
 }
 
@@ -401,7 +421,10 @@ async function runMaster() {
   }
   showNotice('Solicitando una nueva ejecución del Diagnóstico Maestro sobre main…', 'info');
   try {
+    const previousRunId = lastPayload?.latest?.id || null;
     const result = await requestJson('POST', { includeProduction: true });
+    awaitingRunAfterId = result.alreadyRunning ? previousRunId : previousRunId;
+    dispatchPollsRemaining = 10;
     showNotice(
       result.alreadyRunning
         ? 'Ya había un Diagnóstico Maestro en ejecución. Voy a seguir mostrando ese run.'
@@ -415,6 +438,8 @@ async function runMaster() {
   } catch (error) {
     console.error('[Diagnóstico Maestro Admin] No se pudo iniciar:', error);
     loading = false;
+    dispatchPollsRemaining = 0;
+    awaitingRunAfterId = null;
     showNotice(error.message || 'No se pudo iniciar el Diagnóstico Maestro.', 'error');
     if (button) {
       button.disabled = Boolean(lastPayload && !lastPayload.triggerConfigured);
@@ -436,6 +461,8 @@ onAuthStateChanged(auth, user => {
   if (!user) {
     clearTimeout(pollTimer);
     pollTimer = null;
+    dispatchPollsRemaining = 0;
+    awaitingRunAfterId = null;
     return;
   }
   startForSuperAdmin(user);
