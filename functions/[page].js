@@ -1,3 +1,5 @@
+import { injectMasterDiagnosticsRuntime } from '../cloudflare/inyectar-diagnostico-maestro-admin.js';
+
 const LIGHTWEIGHT_PAGES = new Set([
   'about',
   'contact',
@@ -50,6 +52,13 @@ export function isLightweightPageName(value) {
 export async function onRequest({ request, env }) {
   const page = pageName(request);
   const asset = await env.ASSETS.fetch(request);
+
+  // /admin tiene una Function dedicada; /admin.html cae en este wildcard.
+  // Ambos caminos deben cargar exactamente el mismo módulo del Diagnóstico Maestro.
+  if (page === 'admin.html') {
+    return injectMasterDiagnosticsRuntime(asset, request.method);
+  }
+
   if (!LIGHTWEIGHT_PAGES.has(page)) return asset;
   if (request.method === 'HEAD') return asset;
   if (!asset.ok || !(asset.headers.get('content-type') || '').includes('text/html')) return asset;
