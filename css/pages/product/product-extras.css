@@ -16,9 +16,9 @@
   width: 100%;
 }
 .tinben-wrap{
-  max-width: 1600px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: clamp(24px,3vw,48px) clamp(16px,4vw,72px);
+  padding: clamp(24px,3vw,48px) 24px;
   box-sizing: border-box;
 }
 .tinben-heading{
@@ -112,6 +112,9 @@
   .tinben-icon-img{ width: 72%; height: 72%; }
   .tinben-card-title{ font-size: 13px; }
   .tinben-card-text{ font-size: 12px; }
+  .tinben-wrap{ padding: clamp(20px,3vw,32px) 24px; }
+}
+@media(max-width:480px){
   .tinben-wrap{ padding: clamp(20px,3vw,32px) 16px; }
 }
 @media(max-width:400px){
@@ -130,9 +133,9 @@
   width: 100%;
 }
 .tinsel-wrap{
-  max-width: 1600px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: clamp(24px,3vw,48px) clamp(16px,4vw,72px);
+  padding: clamp(24px,3vw,48px) 24px;
   box-sizing: border-box;
 }
 .tinsel-box{
@@ -335,12 +338,15 @@
 }
 
 @media(max-width:768px){
-  .tinsel-wrap{ padding:clamp(20px,3vw,32px) 14px; }
+  .tinsel-wrap{ padding:clamp(20px,3vw,32px) 24px; }
   .tinsel-item-name{ font-size:12px; }
   .tinsel-item-price{ font-size:13px; }
   .tinsel-footer{ flex-direction:column; align-items:stretch; }
   .tinsel-footer-btns{ flex-direction:column; }
   .tinsel-btn{ text-align:center; }
+}
+@media(max-width:480px){
+  .tinsel-wrap{ padding:clamp(20px,3vw,32px) 16px; }
 }
 
 @media(max-width:380px){

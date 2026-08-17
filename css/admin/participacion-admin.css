@@ -13,5 +13,8 @@
 .adm-engagement-history{font-size:12px;color:var(--adm-muted)}
 .adm-engagement-state{font-size:11px;font-weight:800;text-transform:uppercase;color:#8b3153}
 .adm-engagement-empty{padding:30px;text-align:center;color:var(--adm-muted)}
+.adm-engagement-avatar{width:36px;height:36px;border-radius:50%;flex:none;object-fit:cover;background:var(--adm-border)}
+.adm-engagement-avatar-fallback{display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#8b3153}
+.adm-engagement-links{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .adm-quick-replies{margin-top:18px}.adm-quick-replies textarea{width:100%;margin-bottom:10px}
 @media(max-width:700px){.adm-engagement-head{display:block}.adm-engagement-card{padding:12px}.adm-engagement-actions .adm-btn{flex:1}.adm-engagement-reply{align-items:stretch}.adm-engagement-reply .adm-btn{width:100%}}

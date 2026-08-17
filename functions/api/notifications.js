@@ -48,6 +48,7 @@ async function registerProfileNotification(env, user) {
 
   const adminResult = await notifyAdminIfAbsent(env, {
     kind: 'user_joined', actorType: 'customer', actorUid: uid, actorName: name,
+    actorPhotoUrl: profile.photoURL,
     title: `${name} se sumó a Tintin Accesorios`,
     body: 'Hay una nueva cuenta registrada en Tintin.',
     iconKey: 'user', targetUrl: 'admin.html#section-usuarios',
@@ -66,12 +67,16 @@ async function registerProfileNotification(env, user) {
 
 async function registerOrderCreated(env, user, orderId) {
   const id = safeId(orderId, 'Pedido');
-  const document = await firestoreAdminGet(env, `orders/${id}`);
+  const [document, userDocument] = await Promise.all([
+    firestoreAdminGet(env, `orders/${id}`),
+    firestoreAdminGet(env, `users/${safeId(user.uid, 'Cuenta')}`),
+  ]);
   if (!document) throw new Error('No se encontró el pedido');
   const order = decodeFirestoreFields(document.fields || {});
   if (clean(order.userId, 180) !== user.uid) throw new Error('El pedido no pertenece a esta cuenta');
   if (clean(order.userEmail, 254).toLowerCase() !== clean(user.email, 254).toLowerCase()) throw new Error('El correo del pedido no coincide con la cuenta');
 
+  const profile = userDocument ? decodeFirestoreFields(userDocument.fields || {}) : {};
   const orderNumber = clean(order.orderNumber || order.shortId || id, 80);
   const customerName = clean(order.userName || String(user.email || '').split('@')[0] || 'Una clienta', 160);
   const total = Math.max(0, Math.round(Number(order.total) || 0));
@@ -80,6 +85,7 @@ async function registerOrderCreated(env, user, orderId) {
 
   const adminResult = await notifyAdminIfAbsent(env, {
     kind: 'order_created', actorType: 'customer', actorUid: user.uid, actorName: customerName,
+    actorPhotoUrl: profile.photoURL,
     title: `${customerName} realizó el pedido ${orderNumber}`,
     body: `Nuevo pedido por ${totalText}`,
     iconKey: 'order', targetUrl: 'admin.html#section-pedidos',

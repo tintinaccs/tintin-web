@@ -73,6 +73,7 @@ async function readContext(env, user, productId) {
     imageUrl: clean(product.imageUrl || product.image || '', 1200),
     realName,
     publicName: publicCustomerName(realName),
+    photoUrl: clean(profile.photoURL || '', 1200),
   };
 }
 
@@ -183,6 +184,7 @@ export async function createReview(env, user, input) {
   const record = {
     schemaVersion: 2, reviewId, ownerUid: user.uid, email: user.email,
     realName: context.realName, publicName: context.publicName,
+    actorPhotoUrl: context.photoUrl,
     productId: context.productId, productName: context.productName,
     productImageUrl: context.imageUrl, rating, comment,
     originalRating: rating, originalComment: comment, editCount: 0,
@@ -191,6 +193,7 @@ export async function createReview(env, user, input) {
   };
   const adminNotification = await buildAdminNotificationWrite({
     kind: 'review_created', actorType: 'customer', actorUid: user.uid, actorName: context.realName,
+    actorPhotoUrl: context.photoUrl,
     title: `${context.realName} publicó una reseña en ${context.productName}`,
     body: comment, snippet: comment, iconKey: 'review',
     targetUrl: `product.html?id=${context.productId}#review-${reviewId}`,
@@ -229,6 +232,7 @@ export async function editOwnReview(env, user, input) {
   };
   const adminNotification = await buildAdminNotificationWrite({
     kind: 'review_edited', actorType: 'customer', actorUid: user.uid, actorName: record.realName,
+    actorPhotoUrl: record.actorPhotoUrl,
     title: `${record.realName} editó su reseña en ${record.productName}`,
     body: comment, snippet: comment, iconKey: 'review',
     targetUrl: `product.html?id=${productId}#review-${reviewId}`,
@@ -264,6 +268,7 @@ export async function addCustomerReply(env, user, input) {
   const updated = { ...record, schemaVersion: 2, conversation, unread: true, updatedAt: now };
   const adminNotification = await buildAdminNotificationWrite({
     kind: 'review_reply', actorType: 'customer', actorUid: user.uid, actorName: context.realName,
+    actorPhotoUrl: context.photoUrl,
     title: `${context.realName} respondió en ${record.productName}`,
     body: text, snippet: text, iconKey: 'comment',
     targetUrl: `product.html?id=${productId}#review-${reviewId}`,
@@ -329,6 +334,7 @@ export async function toggleReviewLike(env, user, input) {
   if (!selected) {
     const adminNotification = await buildAdminNotificationWrite({
       kind: 'review_like', actorType: 'customer', actorUid: user.uid, actorName: context.realName,
+      actorPhotoUrl: context.photoUrl,
       title: `${context.realName} indicó que le gusta una reseña de ${record.productName}`,
       body: record.comment, snippet: record.comment, iconKey: 'heart',
       targetUrl: `product.html?id=${productId}#review-${reviewId}`,
@@ -374,6 +380,7 @@ export async function toggleFavorite(env, user, input) {
   };
   const adminNotification = await buildAdminNotificationWrite({
     kind: 'product_like', actorType: 'customer', actorUid: user.uid, actorName: context.realName,
+    actorPhotoUrl: context.photoUrl,
     title: `${context.realName} indicó que le gusta ${context.productName}`,
     body: `Nuevo Me gusta en ${context.productName}.`, iconKey: 'heart',
     targetUrl: `product.html?id=${context.productId}`,

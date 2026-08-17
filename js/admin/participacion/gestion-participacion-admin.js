@@ -6,6 +6,7 @@ const SUPER_ADMIN = 'tintinaccs@gmail.com';
 let user = null;
 let reviews = [];
 let likes = [];
+let usersByUid = new Map();
 let quickReplies = ['Gracias por compartir tu experiencia.', 'Nos alegra mucho que te haya gustado.', 'Gracias por avisarnos. Te escribiremos para ayudarte.'];
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
@@ -26,6 +27,35 @@ async function api(input) {
   return result;
 }
 
+function avatarMarkup(ownerUid, fallbackName) {
+  const record = usersByUid.get(String(ownerUid || ''));
+  const initial = (String(record?.name || fallbackName || '?').trim()[0] || '?').toUpperCase();
+  if (record?.photoURL) {
+    return `<img class="adm-engagement-avatar" src="${escapeHtml(record.photoURL)}" alt="" loading="lazy" width="36" height="36">`;
+  }
+  return `<span class="adm-engagement-avatar adm-engagement-avatar-fallback" aria-hidden="true">${escapeHtml(initial)}</span>`;
+}
+
+function viewProfile(ownerUid, email) {
+  const record = usersByUid.get(String(ownerUid || ''));
+  const query = record?.email || email || '';
+  window.location.hash = '#usuarios';
+  window.setTimeout(() => {
+    const search = document.getElementById('user-search');
+    if (!search) return;
+    search.value = query;
+    search.dispatchEvent(new Event('input', { bubbles: true }));
+    search.focus();
+  }, 0);
+}
+
+document.addEventListener('click', event => {
+  const trigger = event.target.closest('[data-view-profile]');
+  if (!trigger) return;
+  event.preventDefault();
+  viewProfile(trigger.dataset.ownerUid, trigger.dataset.email);
+});
+
 function setBadge(id, count) {
   const badge = document.getElementById(id);
   if (!badge) return;
@@ -38,11 +68,15 @@ function reviewCard(review) {
   const history = Array.isArray(review.history) ? review.history : [];
   const conversation = Array.isArray(review.conversation) ? review.conversation : [];
   return `<article class="adm-engagement-card" data-review-id="${escapeHtml(review.reviewId)}">
-    <div class="adm-engagement-head"><div><strong>${escapeHtml(review.realName || 'Sin nombre')}</strong><div class="adm-engagement-meta">${escapeHtml(review.email)} · ${escapeHtml(review.productName)} · ${formatDate(review.createdAt)}</div></div><span class="adm-engagement-state">${state}${review.unread ? ' · Nueva' : ''}</span></div>
+    <div class="adm-engagement-head">${avatarMarkup(review.ownerUid, review.realName)}<div><strong>${escapeHtml(review.realName || 'Sin nombre')}</strong><div class="adm-engagement-meta">${escapeHtml(review.email)} · ${escapeHtml(review.productName)} · ${formatDate(review.createdAt)}</div></div><span class="adm-engagement-state">${state}${review.unread ? ' · Nueva' : ''}</span></div>
     <div><strong>${'&#9733;'.repeat(Number(review.rating) || 0)}</strong> <span class="adm-engagement-meta">${review.rating}/5</span></div>
     <p class="adm-engagement-comment">${escapeHtml(review.comment)}</p>
     ${review.editCount ? `<div class="adm-engagement-history">Editada por la clienta. Versi&oacute;n anterior: ${escapeHtml(review.originalComment || history.find(item => item.action === 'customer_edit')?.comment || 'registrada en historial')}.</div>` : ''}
     ${conversation.length ? `<div class="adm-engagement-conversation">${conversation.map(item => `<div><strong>${item.authorType === 'store' ? 'Tintin Accesorios' : escapeHtml(review.realName || 'Clienta')}:</strong> ${escapeHtml(item.text)} <span class="adm-engagement-meta">${formatDate(item.createdAt)}</span></div>`).join('')}</div>` : ''}
+    <div class="adm-engagement-links">
+      <a class="adm-btn adm-btn-sm adm-btn-outline" href="/product?id=${encodeURIComponent(review.productId)}#review-${encodeURIComponent(review.reviewId)}" target="_blank" rel="noopener">Ver publicaci&oacute;n</a>
+      <button type="button" class="adm-btn adm-btn-sm adm-btn-outline" data-view-profile data-owner-uid="${escapeHtml(review.ownerUid || '')}" data-email="${escapeHtml(review.email || '')}">Ver perfil</button>
+    </div>
     <div class="adm-engagement-actions">
       ${review.deleted ? '<button class="adm-btn adm-btn-sm" data-action="reviewRestore">Restaurar</button>' : `<button class="adm-btn adm-btn-sm" data-action="reviewVisibility" data-visible="${!review.visible}">${review.visible ? 'Ocultar' : 'Publicar'}</button><button class="adm-btn adm-btn-sm" data-action="reviewLike" data-liked="${!review.storeLiked}">${review.storeLiked ? 'Quitar Me gusta' : 'Me gusta'}</button><button class="adm-btn adm-btn-sm" data-action="reviewEdit">Editar</button><button class="adm-btn adm-btn-sm adm-btn-danger" data-action="reviewDelete">Eliminar</button>`}
     </div>
@@ -64,13 +98,36 @@ function renderReviews() {
   root.innerHTML = visible.length ? visible.map(reviewCard).join('') : '<p class="adm-engagement-empty">No hay rese&ntilde;as para este filtro.</p>';
 }
 
+function likeCard(item) {
+  return `<article class="adm-engagement-card" data-like-id="${escapeHtml(item.likeId)}">
+    <div class="adm-engagement-head">${avatarMarkup(item.ownerUid, item.realName)}<div><strong>${escapeHtml(item.realName || 'Sin nombre')}</strong><div class="adm-engagement-meta">${escapeHtml(item.email)} · ${formatDate(item.createdAt)}</div></div>${item.unread ? '<span class="adm-engagement-state">Nuevo</span>' : ''}</div>
+    <div><strong>${escapeHtml(item.productName)}</strong></div>
+    <div class="adm-engagement-links">
+      <a class="adm-btn adm-btn-sm adm-btn-outline" href="/product?id=${encodeURIComponent(item.productId)}" target="_blank" rel="noopener">Ver producto</a>
+      <button type="button" class="adm-btn adm-btn-sm adm-btn-outline" data-view-profile data-owner-uid="${escapeHtml(item.ownerUid || '')}" data-email="${escapeHtml(item.email || '')}">Ver perfil</button>
+      <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" data-action="likeDelete">Eliminar</button>
+    </div>
+  </article>`;
+}
+
 function renderLikes() {
   const root = document.getElementById('likes-admin-list');
   if (!root) return;
   const term = (document.getElementById('likes-search')?.value || '').toLowerCase();
   const filtered = likes.filter(item => !term || [item.realName, item.email, item.productName].some(value => String(value || '').toLowerCase().includes(term)));
-  root.innerHTML = filtered.length ? filtered.map(item => `<article class="adm-engagement-card"><div class="adm-engagement-head"><div><strong>${escapeHtml(item.realName || 'Sin nombre')}</strong><div class="adm-engagement-meta">${escapeHtml(item.email)} · ${formatDate(item.createdAt)}</div></div>${item.unread ? '<span class="adm-engagement-state">Nuevo</span>' : ''}</div><div><strong>${escapeHtml(item.productName)}</strong></div><a class="adm-btn adm-btn-sm adm-btn-outline" href="/product?id=${encodeURIComponent(item.productId)}" target="_blank" rel="noopener">Ver producto</a></article>`).join('') : '<p class="adm-engagement-empty">No hay productos marcados con Me gusta.</p>';
+  root.innerHTML = filtered.length ? filtered.map(likeCard).join('') : '<p class="adm-engagement-empty">No hay productos marcados con Me gusta.</p>';
 }
+
+document.getElementById('likes-admin-list')?.addEventListener('click', async event => {
+  const button = event.target.closest('[data-action="likeDelete"]');
+  if (!button) return;
+  const card = button.closest('[data-like-id]');
+  const item = likes.find(entry => entry.likeId === card?.dataset.likeId);
+  if (!item) return;
+  if (!confirm('¿Eliminar este Me gusta? Se quitará también de los favoritos de la clienta.')) return;
+  button.disabled = true;
+  try { await api({ action: 'likeDelete', likeId: item.likeId }); } catch (error) { alert(error.message); } finally { button.disabled = false; }
+});
 
 async function markCurrentSeen(type) {
   const items = (type === 'reviews' ? reviews : likes).filter(item => item.unread).slice(0, 50);
@@ -116,6 +173,11 @@ onAuthStateChanged(auth, async current => {
   if (current?.email?.toLowerCase() !== SUPER_ADMIN) return;
   user = current;
   await appCheckReady;
+  onSnapshot(collection(db, 'users'), snapshot => {
+    usersByUid = new Map(snapshot.docs.map(item => [item.id, item.data()]));
+    renderReviews();
+    renderLikes();
+  });
   onSnapshot(collection(db, 'reviewRecords'), snapshot => {
     reviews = snapshot.docs.map(item => item.data()).sort((a,b) => asDate(b.createdAt) - asDate(a.createdAt));
     setBadge('reviews-unread-badge', reviews.filter(item => item.unread).length);

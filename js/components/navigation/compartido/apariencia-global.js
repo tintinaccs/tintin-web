@@ -1,4 +1,4 @@
-const LAYOUT_CSS_VERSION = 'tintin-20260810-global-layout-2';
+const LAYOUT_CSS_VERSION = 'tintin-20260817-footer-contrast-1';
 let loaded = false;
 let globalConfigPromise = null;
 
@@ -59,6 +59,18 @@ function setMobileLabel(tab, label) {
 
 function setMobileVisibility(tab, visible) {
   document.querySelectorAll(`[data-shell-tab="${tab}"]`).forEach(node => { node.hidden = visible === false; });
+}
+
+function relativeLuminance(hex) {
+  const channels = [hex.slice(1, 3), hex.slice(3, 5), hex.slice(5, 7)].map(part => {
+    const value = parseInt(part, 16) / 255;
+    return value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+}
+
+function readableTextColor(backgroundHex) {
+  return relativeLuminance(backgroundHex) > 0.5 ? '#2b2b2b' : '#ffffff';
 }
 
 function setCustomColor(root, attribute, cssVar, value) {
@@ -122,11 +134,17 @@ function applyFooter(raw = {}) {
   const root = document.documentElement;
   root.dataset.ttFooterDensity = ['compact', 'normal', 'roomy'].includes(raw.density) ? raw.density : 'normal';
   root.dataset.ttFooterStyle = ['default', 'minimal', 'boxed'].includes(raw.style) ? raw.style : 'default';
-  setCustomColor(root, 'data-tt-footer-bg-custom', '--tt-global-footer-bg', raw.background);
-  setCustomColor(root, 'data-tt-footer-text-custom', '--tt-global-footer-text', raw.textColor);
+  const background = safeColor(raw.background);
+  // Si se personaliza el fondo sin fijar también un color de texto, el texto
+  // del footer queda hardcodeado en blanco (ver styles.css .tt-footer) y se
+  // vuelve ilegible sobre fondos claros. Derivamos un color legible por
+  // contraste cuando el admin no eligió uno explícito.
+  const textColor = safeColor(raw.textColor) || (background ? readableTextColor(background) : '');
+  setCustomColor(root, 'data-tt-footer-bg-custom', '--tt-global-footer-bg', background);
+  setCustomColor(root, 'data-tt-footer-text-custom', '--tt-global-footer-text', textColor);
   setCustomColor(root, 'data-tt-footer-accent-custom', '--tt-global-footer-accent', raw.accentColor);
-  setDirectColor('.tt-footer', 'background-color', raw.background);
-  setDirectColor('.tt-footer', 'color', raw.textColor);
+  setDirectColor('.tt-footer', 'background-color', background);
+  setDirectColor('.tt-footer', 'color', textColor);
   document.querySelectorAll('.tt-footer-wa').forEach(node => { node.hidden = raw.showWhatsapp === false; });
 }
 

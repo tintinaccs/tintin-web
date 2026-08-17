@@ -11,7 +11,7 @@ import { ensureNavigationAssets } from './compartido/recursos-navegacion.js';
 import { loadSharedRuntime } from './compartido/carga-navegacion.js';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
-import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260815-prelaunch-cache-1';
+import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260817-footer-contrast-1';
 import { applyGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20260815-global-studio-10';
 
 const LEGACY_SHELL_IDS = Object.freeze([

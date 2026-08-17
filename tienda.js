@@ -1181,6 +1181,8 @@ function _renderProductDetail(product) {
     ].filter(([, value]) => value && String(value).trim());
     specsEl.hidden = specs.length === 0;
     specsEl.innerHTML = specs.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(sanitizePlainText(value, 500))}</dd></div>`).join('');
+    const specsTrigger = document.getElementById('specs-trigger');
+    if (specsTrigger) specsTrigger.hidden = specs.length === 0;
   }
   if (badgeEl) {
     if (product.badge) { badgeEl.textContent = product.badge; badgeEl.style.display = 'inline-block'; }

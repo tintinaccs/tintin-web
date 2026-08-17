@@ -143,3 +143,19 @@ export async function markLikeSeen(env, likeId) {
   await firestoreAdminMerge(env, `likeRecords/${id}`, encodeFirestoreFields({ unread: false, updatedAt: updated.updatedAt }));
   return updated;
 }
+
+export async function adminDeleteLike(env, actor, likeId) {
+  const id = safeId(likeId, 'Me gusta');
+  const document = await firestoreAdminGet(env, `likeRecords/${id}`);
+  const record = decoded(document);
+  if (!record) throw new Error('No se encontró el Me gusta');
+  const writes = [{ path: `likeRecords/${id}`, delete: true }];
+  if (record.ownerUid && record.productId) {
+    writes.push({
+      path: `users/${safeId(record.ownerUid, 'Cuenta')}/favorites/${safeId(record.productId, 'Producto')}`,
+      delete: true,
+    });
+  }
+  await firestoreAdminCommit(env, writes);
+  return { ...record, deleted: true, lastAdminEmail: actor.email };
+}

@@ -6,7 +6,7 @@ function pathName() {
 }
 
 function load(file) {
-  return import(`./${file}?v=tintin-20260720-read-budget-1`);
+  return import(`./${file}?v=tintin-20260817-mobile-accordion-1`);
 }
 
 export function loadPageMaintenance() {

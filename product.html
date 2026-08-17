@@ -50,15 +50,15 @@
 <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2">
 <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2">
 <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260811-cls-desktop-stable-2">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260817-mobile-accordion-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="css/pages/product/product-extras.css?v=tintin-20260813-products-unified-1">
-  <link rel="stylesheet" href="css/pages/product/resenas-producto.css?v=tintin-20260814-reviews-pink-gold-1">
+  <link rel="stylesheet" href="css/pages/product/product-extras.css?v=tintin-20260817-margin-consistency-1">
+  <link rel="stylesheet" href="css/pages/product/resenas-producto.css?v=tintin-20260817-mobile-accordion-1">
   <link rel="stylesheet" href="css/components/notifications/interacciones-sociales.css?v=tintin-20260814-social-notifications-1">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -122,13 +122,24 @@
         <span class="tt-product-status" id="product-status">Disponible</span>
 
         <div class="tt-product-detail-cat" id="product-cat"></div>
-        <h1 class="tt-product-detail-name" id="product-name"></h1>
+        <div class="tt-product-name-row">
+          <h1 class="tt-product-detail-name" id="product-name"></h1>
+          <button type="button" class="tt-product-favorite-icon" id="btn-product-favorite" data-favorite-id="" aria-pressed="false" aria-label="Guardar en favoritos">
+            <span data-favorite-icon aria-hidden="true">♡</span>
+          </button>
+        </div>
         <span id="product-badge-label" class="tt-product-badge" style="display:none;margin-bottom:16px;font-size:0.72rem;padding:5px 14px;"></span>
 
         <div class="tt-product-detail-price" id="product-price"></div>
 
         <p class="tt-product-detail-desc" id="product-desc"></p>
-        <dl id="product-specifications" class="tt-product-specifications" hidden></dl>
+        <div class="tt-specs-block" data-collapsed="true">
+          <button type="button" class="tt-mobile-accordion-trigger" id="specs-trigger" aria-expanded="false" aria-controls="product-specifications" hidden>
+            <span>Características</span>
+            <svg class="tt-accordion-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <dl id="product-specifications" class="tt-product-specifications" hidden></dl>
+        </div>
 
         <!-- Variants (JS fills) -->
         <div id="product-variants"></div>
@@ -146,10 +157,6 @@
 
         <!-- Actions -->
         <div class="tt-product-actions-panel">
-          <button type="button" class="tt-product-favorite-main" id="btn-product-favorite" data-favorite-id="" aria-pressed="false">
-            <span data-favorite-icon aria-hidden="true">♡</span>
-            Guardar en favoritos
-          </button>
           <button type="button" class="tt-btn tt-btn-lg tt-btn-primary-full" id="btn-product-add-cart">
             Agregar al carrito
           </button>
@@ -257,12 +264,13 @@
 </div>
 
 <!-- RELATED PRODUCTS -->
-<section class="tt-related-section">
+<section class="tt-related-section" data-collapsed="true">
   <div class="container">
     <div class="tt-related-header">
-      <div>
+      <div class="tt-mobile-accordion-trigger" id="related-trigger" role="button" tabindex="0" aria-expanded="false" aria-controls="related-status related-grid">
         <p class="tt-section-sub">También te puede gustar</p>
         <h2 class="tt-section-title">OTROS PRODUCTOS</h2>
+        <svg class="tt-accordion-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <button type="button" class="tt-related-refresh" id="related-refresh" aria-label="Mostrar otros productos" title="Mostrar otros productos">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6v5h-5M4 18v-5h5M18.2 9A7 7 0 0 0 6.1 6.6L4 9m16 6-2.1 2.4A7 7 0 0 1 5.8 15"/></svg>
@@ -323,15 +331,15 @@
 <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-wa-float" id="wa-float" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
-<script src="tienda.js?v=tintin-20260815-routes-clean-1" defer></script>
+<script src="tienda.js?v=tintin-20260817-mobile-accordion-1" defer></script>
 <script type="module" src="js/components/images/inicio-carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260815-profile-routes-1"></script>
 <script type="module" src="js/pages/product/beneficios-producto.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/pages/product/seleccion-producto.js?v=tintin-20260815-routes-clean-1"></script>
-<script type="module" src="js/pages/product/productos-relacionados.js?v=tintin-20260815-routes-clean-1"></script>
-<script type="module" src="js/pages/product/resenas-producto.js?v=tintin-20260817-reviews-order-fix-1"></script>
+<script type="module" src="js/pages/product/productos-relacionados.js?v=tintin-20260817-related-fix-1"></script>
+<script type="module" src="js/pages/product/resenas-producto.js?v=tintin-20260817-mobile-accordion-1"></script>
 <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/visual-builder-bootstrap.js?v=tintin-20260815-routes-clean-1"></script>
 </body>

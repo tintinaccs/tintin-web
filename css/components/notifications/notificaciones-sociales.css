@@ -76,7 +76,7 @@
   gap: 16px;
   padding: 24px 22px 18px;
   border-bottom: 1px solid var(--tt-notif-pink-border);
-  background: rgba(255, 247, 250, .92);
+  background: #fff7fa;
 }
 
 .tt-notifications-kicker {
@@ -277,7 +277,7 @@
   border: 1px dashed var(--tt-notif-pink-border);
   border-radius: 20px;
   color: var(--tt-notif-muted);
-  background: rgba(255,255,255,.72);
+  background: #fff;
 }
 
 .tt-notifications-error {

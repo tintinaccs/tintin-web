@@ -41,14 +41,15 @@ function ensureSection() {
   section = document.createElement('section');
   section.id = 'product-reviews';
   section.className = 'tt-reviews-product';
+  section.dataset.collapsed = 'true';
   section.innerHTML = `
     <div class="container tt-reviews-layout">
       <aside class="tt-reviews-summary" aria-labelledby="product-reviews-title">
         <p class="tt-section-sub">Opiniones reales</p>
-        <h2 class="tt-section-title" id="product-reviews-title">Reseñas</h2>
+        <h2 class="tt-section-title tt-mobile-accordion-trigger" id="product-reviews-title" role="button" tabindex="0" aria-expanded="false" aria-controls="product-review-summary product-reviews-content">Reseñas<svg class="tt-accordion-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></h2>
         <div id="product-review-summary" aria-live="polite"></div>
       </aside>
-      <div>
+      <div id="product-reviews-content">
         <div id="product-review-form"></div>
         <div class="tt-review-list" id="product-review-list" aria-live="polite"></div>
       </div>

@@ -413,6 +413,32 @@
   }
 }
 
+@media (max-width: 768px) {
+  #product-reviews-title.tt-mobile-accordion-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  #product-reviews-title .tt-accordion-chevron {
+    display: block;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+    color: var(--tt-review-pink-deep);
+    transition: transform 0.2s ease;
+  }
+
+  #product-reviews-title[aria-expanded="false"] .tt-accordion-chevron { transform: rotate(-90deg); }
+
+  #product-reviews[data-collapsed="true"] #product-review-summary,
+  #product-reviews[data-collapsed="true"] #product-reviews-content {
+    display: none;
+  }
+}
+
 @media (max-width: 820px) {
   .tt-reviews-product .tt-reviews-layout {
     grid-template-columns: 1fr;

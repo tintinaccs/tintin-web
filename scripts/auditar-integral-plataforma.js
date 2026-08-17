@@ -100,8 +100,8 @@ check(
   files.productRelated.includes('const LIMIT = 3') &&
     files.productRelated.includes('new Set(state.visible.map(categoryKey))') &&
     files.productRelated.includes('String(product.id) === currentId') &&
-    files.productRelated.includes('prefers-reduced-motion: reduce') &&
-    files.productRelated.includes("document.addEventListener('visibilitychange'") &&
+    files.productRelated.includes("if (grid && !window.TintinRelatedProducts)") &&
+    files.productRelated.includes("refreshButton?.addEventListener('click', refreshAll)") &&
     files.productRelated.includes('historyFor(category)') &&
     !files.productsStore.includes("['colls-products-grid', 'related-grid']") &&
     !files.imageInit.includes("['colls-products-grid', 'related-grid']"),

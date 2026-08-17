@@ -178,12 +178,29 @@ body.tt-product-maintenance .tt-added-toast {
 }
 
 /* El indicador de sincronización en vivo ("Actualizando producto…" /
-   "Producto actualizado") queda oculto a propósito en esta página — el
-   estado sigue actualizándose igual por dentro (lo sigue usando el
-   watchdog de carga), solo no se muestra como texto flotante arriba de
-   la foto. */
+   "Producto actualizado") queda oculto para clientes — es información
+   operativa, no de catálogo. Solo se hace visible cuando mantenimiento-
+   producto.js confirma que el usuario autenticado es el Super Admin (clase
+   tt-sync-superadmin), y se ubica dentro del breadcrumb en vez de flotar
+   suelto arriba de la foto del producto. El estado interno se sigue
+   actualizando igual para todos (lo sigue usando el watchdog de carga). */
 #tt-product-sync-state {
   display: none;
+}
+
+#tt-product-sync-state.tt-sync-superadmin {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--color-text-secondary, #7B6F72);
+  background: var(--color-badge-background, #FDECF2);
+  border: 1px solid var(--color-card-border, #F1E4E7);
+  border-radius: 999px;
+  padding: 4px 10px 4px 8px;
 }
 
 #tt-product-sync-state::before {
