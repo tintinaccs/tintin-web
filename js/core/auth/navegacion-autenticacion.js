@@ -56,8 +56,6 @@ window.addEventListener('tintin:login-cancelled',endSilentAuthTransition);
 window.addEventListener('tintin:login-failed',endSilentAuthTransition);
 
 onAuthStateChanged(auth,async user=>{
- // login.html es el único dueño del alta, bloqueo y destino posterior al
- // acceso. Evita dos redirecciones paralelas compitiendo por la misma sesión.
  if(IS_LOGIN_PAGE)return;
  let role='client';
  try{if(user)role=await getUserRole(user.uid,user.email);}catch(e){console.warn('[auth-nav] No se pudo leer rol:',e);}
@@ -90,10 +88,14 @@ function renderMobileTabbarPhoto(user){
  if(!tab.dataset.ttDefaultHtml)tab.dataset.ttDefaultHtml=tab.innerHTML;
  if(user&&user.photoURL){
   const name=escapeHtmlNav(user.displayName||user.email||'Mi cuenta');
-  tab.innerHTML=`<img class="tt-tabbar-avatar" src="${user.photoURL}" alt="${name}" referrerpolicy="no-referrer" width="24" height="24"><span>Cuenta</span>`;
+  tab.innerHTML=`<span class="tt-tabbar-account-icon" aria-hidden="true"><img class="tt-tabbar-avatar" src="${user.photoURL}" alt="" referrerpolicy="no-referrer" width="30" height="30"></span><span>Cuenta</span>`;
+  tab.setAttribute('aria-label',name);
   const img=tab.querySelector('img');
-  if(img)img.onerror=()=>{tab.innerHTML=tab.dataset.ttDefaultHtml;};
- }else tab.innerHTML=tab.dataset.ttDefaultHtml;
+  if(img)img.onerror=()=>{tab.innerHTML=tab.dataset.ttDefaultHtml;tab.setAttribute('aria-label','Mi cuenta');};
+ }else{
+  tab.innerHTML=tab.dataset.ttDefaultHtml;
+  tab.setAttribute('aria-label','Mi cuenta');
+ }
 }
 
 function renderAccountPanel(user,role='client'){
