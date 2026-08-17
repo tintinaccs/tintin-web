@@ -128,8 +128,9 @@ jobs:
           RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         shell: bash
         run: |
+          set -euo pipefail
           title='[Producción] Monitor horario en rojo'
-          issue="$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number // empty')"
+          issue="$(gh issue list --state open --limit 100 --json number,title --jq '.[] | select(.title == "[Producción] Monitor horario en rojo") | .number' | head -n 1)"
           body="El monitor automático de producción falló el $(date -u +'%Y-%m-%d %H:%M UTC').\n\nRun: $RUN_URL\n\nRevisar el artefacto phase11-production-health antes de desplegar o anunciar cambios."
           if [ -n "$issue" ]; then
             gh issue comment "$issue" --body "$body"
@@ -143,8 +144,8 @@ jobs:
           RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         shell: bash
         run: |
-          title='[Producción] Monitor horario en rojo'
-          issue="$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number // empty')"
+          set -euo pipefail
+          issue="$(gh issue list --state open --limit 100 --json number,title --jq '.[] | select(.title == "[Producción] Monitor horario en rojo") | .number' | head -n 1)"
           if [ -n "$issue" ]; then
             gh issue comment "$issue" --body "Producción volvió a pasar el monitor automático. Run: $RUN_URL"
             gh issue close "$issue" --reason completed
