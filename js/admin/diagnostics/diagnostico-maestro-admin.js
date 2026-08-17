@@ -3,7 +3,7 @@ import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260716-cloudina
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
 const API_URL = '/api/master-diagnostics';
-const STYLE_URL = '/css/admin/diagnostico-maestro.css?v=tintin-20260817-master-diagnostics-2';
+const STYLE_URL = '/css/admin/diagnostico-maestro.css?v=tintin-20260817-master-diagnostics-3';
 const POLL_MS = 12000;
 const STATE_LABELS = {
   PASS: 'PASS',
@@ -54,7 +54,9 @@ function stateLabel(state) {
 }
 
 function loadStylesheet() {
-  if (document.querySelector('link[href^="/css/admin/diagnostico-maestro.css"]')) return;
+  const previous = document.querySelector('link[href^="/css/admin/diagnostico-maestro.css"]');
+  if (previous?.href.includes('master-diagnostics-3')) return;
+  previous?.remove();
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href = STYLE_URL;
@@ -67,7 +69,7 @@ function masterCardMarkup() {
       <div class="adm-card-head adm-master-diagnostic-head">
         <div>
           <div class="adm-card-title">Diagnóstico Maestro Tintin</div>
-          <p>Resultado real del workflow maestro: código, checkout, Cliente, Super Admin, responsive, accesibilidad, performance, seguridad, Firestore, producción y estado global de GitHub/CI.</p>
+          <p>Resultado único del diagnóstico: código, checkout, Cliente, Super Admin, responsive, accesibilidad, performance, seguridad, Firestore, producción y estado global de GitHub/CI.</p>
         </div>
         <div class="adm-master-actions">
           <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="btn-refresh-master-diagnostics">Actualizar</button>
@@ -103,20 +105,10 @@ function mount() {
   if (!section) return false;
   loadStylesheet();
 
+  section.querySelectorAll('.adm-diagnostic-card, .adm-local-diagnostic-card').forEach(card => card.remove());
   const wrapper = document.createElement('div');
   wrapper.innerHTML = masterCardMarkup().trim();
-  const masterCard = wrapper.firstElementChild;
-  const localCard = section.querySelector('.adm-diagnostic-card');
-  if (localCard) {
-    section.insertBefore(masterCard, localCard);
-    localCard.classList.add('adm-local-diagnostic-card');
-    const title = localCard.querySelector('.adm-card-title');
-    if (title && /Diagnóstico integral de la plataforma/i.test(title.textContent || '')) {
-      title.textContent = 'Diagnóstico local de solo lectura';
-    }
-  } else {
-    section.prepend(masterCard);
-  }
+  section.prepend(wrapper.firstElementChild);
 
   $('btn-refresh-master-diagnostics')?.addEventListener('click', () => loadMaster());
   $('btn-run-master-diagnostics')?.addEventListener('click', runMaster);
@@ -224,7 +216,7 @@ function renderAreas(latest) {
   const node = $('master-diagnostic-areas');
   if (!node) return;
   if (!latest) {
-    node.innerHTML = '<div class="adm-master-empty">Todavía no hay una ejecución del Diagnóstico Maestro para mostrar.</div>';
+    node.innerHTML = '<div class="adm-master-empty">No se pudo recuperar una ejecución del Diagnóstico Maestro. Usá Actualizar para reintentar.</div>';
     return;
   }
   const global = latest.githubGlobal || { state: 'UNKNOWN', status: 'not_reported', failures: [] };
@@ -291,7 +283,7 @@ function render(payload) {
   if (freshness) {
     freshness.className = 'adm-master-freshness';
     if (!latest) {
-      freshness.textContent = 'Sin ejecuciones registradas';
+      freshness.textContent = 'Resultado no disponible';
     } else if (latest.isCurrentCommit) {
       freshness.classList.add('is-current');
       freshness.textContent = `main auditado · ${shortSha(latest.currentCommit)}`;
@@ -304,12 +296,7 @@ function render(payload) {
   if (waitingForDispatch && !workflowActive) {
     showNotice('GitHub recibió la solicitud. Esperando que aparezca la nueva ejecución del Diagnóstico Maestro…', 'info');
   } else if (!latest) {
-    showNotice(
-      payload.triggerConfigured
-        ? 'No hay una ejecución previa. Podés lanzar el Diagnóstico Maestro desde este panel.'
-        : 'No hay una ejecución previa y el disparo desde el panel todavía no tiene disponible la credencial privada de GitHub.',
-      payload.triggerConfigured ? 'info' : 'warning'
-    );
+    showNotice('No se pudo recuperar todavía un resultado del Diagnóstico Maestro. La lectura no depende de la credencial de ejecución; usá Actualizar para reintentar.', 'warning');
   } else if (workflowActive) {
     showNotice('El Diagnóstico Maestro está corriendo. Esta vista se actualizará automáticamente mientras GitHub termina las suites.', 'info');
   } else if (latest.state === 'FAIL') {
@@ -318,8 +305,6 @@ function render(payload) {
     showNotice('La ejecución terminó, pero falta evidencia verificable en una o más áreas. No se considera PASS hasta que todo quede confirmado.', 'warning');
   } else if (!latest.isCurrentCommit) {
     showNotice('El último resultado corresponde a un commit anterior. Ejecutá nuevamente el Maestro para auditar el main actual.', 'warning');
-  } else if (!payload.triggerConfigured) {
-    showNotice('El resultado se puede consultar normalmente. Para lanzar una nueva ejecución desde este botón hace falta la credencial privada de GitHub del backend.', 'warning');
   } else {
     showNotice('El último Diagnóstico Maestro pasó y corresponde al commit actual de main.', 'info');
   }
@@ -328,7 +313,7 @@ function render(payload) {
     runButton.disabled = Boolean(isActive || !payload.triggerConfigured || loading);
     runButton.title = payload.triggerConfigured
       ? (isActive ? 'Ya hay un Diagnóstico Maestro solicitado o en ejecución.' : 'Ejecuta el workflow maestro sobre main, incluyendo producción.')
-      : 'El backend no tiene configurado GITHUB_TOKEN.';
+      : 'La lectura de resultados funciona. Para iniciar una nueva ejecución desde el panel falta la credencial privada del backend.';
     runButton.textContent = isActive ? 'Diagnóstico en ejecución…' : 'Ejecutar Diagnóstico Maestro';
   }
   if (refreshButton) refreshButton.disabled = loading;
@@ -397,7 +382,7 @@ async function loadMaster({ silent = false } = {}) {
     succeeded = true;
   } catch (error) {
     console.error('[Diagnóstico Maestro Admin]', error);
-    setState(lastPayload?.latest?.state || 'UNKNOWN');
+    setState(lastPayload?.latest?.state || 'NOT_VERIFIED');
     showNotice(error.message || 'No se pudo consultar el Diagnóstico Maestro.', 'error');
     clearTimeout(pollTimer);
     pollTimer = null;
@@ -423,7 +408,7 @@ async function runMaster() {
   try {
     const previousRunId = lastPayload?.latest?.id || null;
     const result = await requestJson('POST', { includeProduction: true });
-    awaitingRunAfterId = result.alreadyRunning ? previousRunId : previousRunId;
+    awaitingRunAfterId = previousRunId;
     dispatchPollsRemaining = 10;
     showNotice(
       result.alreadyRunning
