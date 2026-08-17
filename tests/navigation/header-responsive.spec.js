@@ -28,9 +28,10 @@ test('mobile tiene barra blanca con logo centrado, cuenta circular y tabbar resp
   await expect(mobileHeader).toHaveCSS('background-color', 'rgb(255, 255, 255)');
   await expectHealthyLogo(page, '#tt-header-mobile .tt-mobile-logo-img');
 
-  const centering = await page.locator('#tt-header-mobile .tt-mobile-logo-img').evaluate(node => {
-    const rect = node.getBoundingClientRect();
-    return Math.abs((rect.left + rect.width / 2) - (document.documentElement.clientWidth / 2));
+  const centering = await mobileHeader.evaluate(header => {
+    const headerRect = header.getBoundingClientRect();
+    const logoRect = header.querySelector('.tt-mobile-logo-img').getBoundingClientRect();
+    return Math.abs((logoRect.left + logoRect.width / 2) - (headerRect.left + headerRect.width / 2));
   });
   expect(centering).toBeLessThanOrEqual(3);
 
@@ -87,12 +88,13 @@ test('mobile recupera automáticamente un logo remoto roto sin texto de error', 
     width: node.naturalWidth,
   }))).toEqual(expect.objectContaining({ hidden: false }));
 
-  const recovered = await logo.evaluate(node => ({
+  await expect.poll(() => logo.evaluate(node => ({
     src: node.getAttribute('src') || '',
     width: node.naturalWidth,
+  }))).toEqual(expect.objectContaining({
+    src: expect.stringContaining('assets-tintin/images/general/logo.png'),
   }));
-  expect(recovered.src).toContain('assets-tintin/images/general/logo.png');
-  expect(recovered.width).toBeGreaterThan(0);
+  expect(await logo.evaluate(node => node.naturalWidth)).toBeGreaterThan(0);
   await expect(page.locator('body')).not.toContainText('No pudimos cargar la imagen');
 });
 
