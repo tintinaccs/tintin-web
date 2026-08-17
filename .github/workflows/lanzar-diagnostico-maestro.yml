@@ -7,8 +7,15 @@ on:
     paths:
       - .github/workflows/lanzar-diagnostico-maestro.yml
       - .github/workflows/diagnostico-maestro.yml
+      - .github/workflows/auditar-diagnostico.yml
       - scripts/ejecutar-diagnostico-maestro.mjs
       - scripts/verificar-salud-ci-global.mjs
+      - functions/api/master-diagnostics.js
+      - functions/admin.js
+      - 'functions/[page].js'
+      - cloudflare/inyectar-diagnostico-maestro-admin.js
+      - js/admin/diagnostics/**
+      - css/admin/diagnostico-maestro.css
       - '*.html'
       - diagnostic-manifest.json
   workflow_dispatch:
