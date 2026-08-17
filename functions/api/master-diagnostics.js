@@ -59,9 +59,7 @@ async function githubRequest(path, { token = '', method = 'GET', body } = {}) {
 }
 
 function stateFor(status, conclusion) {
-  if (status !== 'completed') {
-    return status === 'in_progress' ? 'RUNNING' : 'QUEUED';
-  }
+  if (status !== 'completed') return status === 'in_progress' ? 'RUNNING' : 'QUEUED';
   if (conclusion === 'success') return 'PASS';
   if (conclusion === 'skipped' || conclusion === 'neutral') return 'SKIPPED';
   return 'FAIL';
@@ -78,17 +76,25 @@ function compactStep(step) {
   };
 }
 
-function compactJob(job, key, fallbackLabel) {
+function compactJob(job, key, fallbackLabel, runCompleted = false) {
   if (!job) {
+    const missing = runCompleted;
     return {
       key,
       label: fallbackLabel,
-      state: 'QUEUED',
-      status: 'queued',
+      state: missing ? 'NOT_VERIFIED' : 'QUEUED',
+      status: missing ? 'not_reported' : 'queued',
       conclusion: null,
       startedAt: null,
       completedAt: null,
-      failedSteps: [],
+      failedSteps: missing ? [{
+        number: null,
+        name: 'La suite no produjo un job verificable',
+        status: 'not_reported',
+        conclusion: 'not_verified',
+        startedAt: null,
+        completedAt: null
+      }] : [],
       steps: []
     };
   }
@@ -154,7 +160,10 @@ function findJob(jobs, prefix) {
 
 function buildLatest(run, jobs, currentCommit) {
   if (!run) return null;
-  const areas = AREA_DEFINITIONS.map(([key, prefix, label]) => compactJob(findJob(jobs, prefix), key, label));
+  const runCompleted = run.status === 'completed';
+  const areas = AREA_DEFINITIONS.map(([key, prefix, label]) =>
+    compactJob(findJob(jobs, prefix), key, label, runCompleted)
+  );
   const staticJob = findJob(jobs, '1 ·');
   const globalCiStep = staticJob?.steps?.find(step =>
     /Verificar estado global del commit en GitHub\/CI/i.test(String(step.name || ''))
@@ -162,14 +171,18 @@ function buildLatest(run, jobs, currentCommit) {
   const finishedJobs = jobs.filter(job => job.status === 'completed').length;
   const totalJobs = Math.max(AREA_DEFINITIONS.length, jobs.length);
   const failedAreas = areas.filter(area => area.state === 'FAIL');
+  const notVerifiedAreas = areas.filter(area => area.state === 'NOT_VERIFIED');
   const failedSteps = areas.flatMap(area => area.failedSteps.map(step => ({
     area: area.key,
     areaLabel: area.label,
     ...step
   })));
+  const compact = compactRun(run);
+  const evidenceIncomplete = notVerifiedAreas.length > 0 || (runCompleted && !globalCiStep);
 
   return {
-    ...compactRun(run),
+    ...compact,
+    state: compact.state === 'PASS' && evidenceIncomplete ? 'NOT_VERIFIED' : compact.state,
     currentCommit,
     isCurrentCommit: Boolean(currentCommit && run.head_sha === currentCommit),
     productionOrigin: PRODUCTION_ORIGIN,
@@ -185,7 +198,7 @@ function buildLatest(run, jobs, currentCommit) {
       startedAt: globalCiStep.started_at || null,
       completedAt: globalCiStep.completed_at || null
     } : {
-      state: run.status === 'completed' ? 'FAIL' : 'QUEUED',
+      state: runCompleted ? 'NOT_VERIFIED' : 'QUEUED',
       status: 'not_reported',
       conclusion: null,
       startedAt: null,
@@ -198,6 +211,7 @@ function buildLatest(run, jobs, currentCommit) {
       running: areas.filter(area => area.state === 'RUNNING').length,
       queued: areas.filter(area => area.state === 'QUEUED').length,
       skipped: areas.filter(area => area.state === 'SKIPPED').length,
+      notVerified: notVerifiedAreas.length,
       failedSteps: failedSteps.length
     },
     failures: failedSteps
@@ -251,9 +265,7 @@ async function handlePost(request, env) {
   }
 
   const raw = await request.text();
-  if (raw.length > 3000) {
-    return { status: 400, body: { ok: false, error: 'Solicitud inválida.' } };
-  }
+  if (raw.length > 3000) return { status: 400, body: { ok: false, error: 'Solicitud inválida.' } };
   let body = {};
   if (raw.trim()) {
     try {
@@ -268,11 +280,7 @@ async function handlePost(request, env) {
   if (active) {
     return {
       status: 202,
-      body: {
-        ok: true,
-        alreadyRunning: true,
-        run: compactRun(active)
-      }
+      body: { ok: true, alreadyRunning: true, run: compactRun(active) }
     };
   }
 
@@ -309,8 +317,6 @@ export async function onRequest(context) {
   const origin = request.headers.get('origin') || '';
   const requestUrl = request.url;
 
-  // Los GET same-origin no siempre incluyen Origin. La sesión Bearer de Firebase
-  // sigue siendo obligatoria; si Origin existe, además debe coincidir con este sitio.
   if (origin && !originIsAllowed(origin, requestUrl)) {
     return jsonResponse({ ok: false, error: 'Origen no permitido.' }, 403, origin, requestUrl);
   }
