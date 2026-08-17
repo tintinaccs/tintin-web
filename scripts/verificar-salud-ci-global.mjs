@@ -18,6 +18,27 @@ const currentRunId = Number(process.env.GITHUB_RUN_ID || 0);
 const token = String(process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '').trim();
 const waitSeconds = Math.max(0, Number(process.env.MASTER_CI_WAIT_SECONDS || 600));
 const pollSeconds = Math.max(5, Number(process.env.MASTER_CI_POLL_SECONDS || 15));
+const maxApiRetries = Math.max(0, Number(process.env.MASTER_CI_API_MAX_RETRIES || 4));
+const apiRetryBaseMs = Math.max(100, Number(process.env.MASTER_CI_API_RETRY_BASE_MS || 1000));
+const apiRetryCapMs = Math.max(apiRetryBaseMs, Number(process.env.MASTER_CI_API_RETRY_CAP_MS || 30000));
+const rateLimitWaitCapMs = Math.max(1000, Number(process.env.MASTER_CI_RATE_LIMIT_WAIT_CAP_MS || 120000));
+
+// Errores de infraestructura (rate-limit agotado tras reintentos, caídas
+// transitorias 5xx/429, o falla de red al contactar la API) se distinguen de
+// una falla de aplicación (endpoint inválido, payload inesperado): no son
+// evidencia de que el CI real esté roto, sino de que esta verificación no
+// pudo completarse de forma confiable.
+class GithubInfraError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'GithubInfraError';
+    this.infra = true;
+  }
+}
+
+function isRetryableStatus(status) {
+  return status === 429 || status === 502 || status === 503 || status === 504;
+}
 
 const blockingConclusions = new Set([
   'failure',
@@ -43,20 +64,55 @@ function durationLabel(ms) {
 }
 
 async function githubApi(endpoint) {
-  const response = await fetch(`https://api.github.com/repos/${repo}${endpoint}`, {
-    headers: {
-      Accept: 'application/vnd.github+json',
-      Authorization: `Bearer ${token}`,
-      'X-GitHub-Api-Version': '2022-11-28',
-      'User-Agent': 'tintin-diagnostico-maestro'
-    }
-  });
+  let lastInfraError;
 
-  if (!response.ok) {
+  for (let attempt = 0; attempt <= maxApiRetries; attempt += 1) {
+    let response;
+    try {
+      response = await fetch(`https://api.github.com/repos/${repo}${endpoint}`, {
+        headers: {
+          Accept: 'application/vnd.github+json',
+          Authorization: `Bearer ${token}`,
+          'X-GitHub-Api-Version': '2022-11-28',
+          'User-Agent': 'tintin-diagnostico-maestro'
+        }
+      });
+    } catch (error) {
+      lastInfraError = new GithubInfraError(`No se pudo contactar la API de GitHub en ${endpoint}: ${error?.message || error}`);
+      if (attempt >= maxApiRetries) throw lastInfraError;
+      await sleep(Math.min(apiRetryCapMs, apiRetryBaseMs * 2 ** attempt));
+      continue;
+    }
+
+    if (response.ok) return response.json();
+
+    const isRateLimited = response.status === 403 && response.headers.get('x-ratelimit-remaining') === '0';
+    if (isRateLimited || isRetryableStatus(response.status)) {
+      const body = await response.text().catch(() => '');
+      lastInfraError = new GithubInfraError(`GitHub API ${response.status} en ${endpoint} (rate-limit/caída transitoria): ${body.slice(0, 300)}`);
+      if (attempt >= maxApiRetries) throw lastInfraError;
+
+      let waitMs = apiRetryBaseMs * 2 ** attempt;
+      const retryAfter = Number(response.headers.get('retry-after'));
+      if (Number.isFinite(retryAfter) && retryAfter > 0) {
+        waitMs = Math.max(waitMs, retryAfter * 1000);
+      } else if (isRateLimited) {
+        const resetEpochSeconds = Number(response.headers.get('x-ratelimit-reset'));
+        if (Number.isFinite(resetEpochSeconds)) {
+          waitMs = Math.max(waitMs, resetEpochSeconds * 1000 - Date.now() + 1000);
+        }
+      }
+      waitMs = Math.min(waitMs, rateLimitWaitCapMs);
+      console.log(`GitHub API ${response.status} en ${endpoint}; reintentando en ${Math.round(waitMs / 1000)}s (intento ${attempt + 1}/${maxApiRetries})...`);
+      await sleep(waitMs);
+      continue;
+    }
+
     const body = await response.text();
     throw new Error(`GitHub API ${response.status} en ${endpoint}: ${body.slice(0, 500)}`);
   }
-  return response.json();
+
+  throw lastInfraError;
 }
 
 function isCurrentMasterCheck(check) {
@@ -213,9 +269,14 @@ async function verifyGlobalCi() {
       await sleep(pollSeconds * 1000);
     }
   } catch (error) {
+    // Una caída/rate-limit de la API de GitHub (ya reintentada sin éxito) no
+    // es evidencia de que el CI real esté roto: es que esta verificación no
+    // pudo completarse. Se marca NOT_VERIFIED para no reportar un falso FAIL
+    // de "checks fallidos" cuando en realidad no se pudo consultar GitHub.
+    const status = error?.infra ? 'NOT_VERIFIED' : 'FAIL';
     const payload = {
       schemaVersion: 1,
-      status: 'FAIL',
+      status,
       reason: String(error?.message || error),
       repository: repo,
       commit: sha,
