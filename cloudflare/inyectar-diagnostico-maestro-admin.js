@@ -1,16 +1,20 @@
-const MASTER_DIAGNOSTICS_RUNTIME = '/js/admin/diagnostics/diagnostico-maestro-admin.js?v=tintin-20260817-master-diagnostics-1';
-
 /**
  * Agrega el runtime del Diagnóstico Maestro únicamente a la superficie Admin.
- * Se hace en edge para no acoplar el módulo nuevo al gran bundle admin-app.js
- * ni duplicar lógica dentro del HTML fuente.
+ * La URL versionada se declara en los handlers de Functions para que la
+ * auditoría de caché pueda verificar sus bytes y su tag inmutable.
  */
-export async function injectMasterDiagnosticsRuntime(response, requestMethod = 'GET') {
+export async function injectMasterDiagnosticsRuntime(response, requestMethod = 'GET', runtimeUrl = '') {
   if (!response || requestMethod === 'HEAD' || !response.ok) return response;
   if (!(response.headers.get('content-type') || '').includes('text/html')) return response;
 
+  const safeRuntimeUrl = String(runtimeUrl || '').trim();
+  if (!/^\/js\/admin\/diagnostics\/diagnostico-maestro-admin\.js\?v=[A-Za-z0-9._-]+$/.test(safeRuntimeUrl)) {
+    console.error('[master-diagnostics] URL de runtime inválida.');
+    return response;
+  }
+
   const html = await response.text();
-  if (html.includes(MASTER_DIAGNOSTICS_RUNTIME) || html.includes('/js/admin/diagnostics/diagnostico-maestro-admin.js')) {
+  if (html.includes(safeRuntimeUrl) || html.includes('/js/admin/diagnostics/diagnostico-maestro-admin.js')) {
     return new Response(html, {
       status: response.status,
       statusText: response.statusText,
@@ -18,7 +22,7 @@ export async function injectMasterDiagnosticsRuntime(response, requestMethod = '
     });
   }
 
-  const tag = `<script type="module" src="${MASTER_DIAGNOSTICS_RUNTIME}"></script>`;
+  const tag = `<script type="module" src="${safeRuntimeUrl}"></script>`;
   const output = html.includes('</body>')
     ? html.replace('</body>', `  ${tag}\n</body>`)
     : `${html}\n${tag}\n`;
