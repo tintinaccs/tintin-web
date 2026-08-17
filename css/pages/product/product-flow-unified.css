@@ -1,0 +1,217 @@
+/* TINTIN — flujo visual unificado de la ficha de producto.
+   Orden esperado: ficha -> confianza -> selección -> reseñas -> relacionados. */
+
+.tt-reviews-product {
+  --tt-product-section-bg: #fdf0f5;
+  --tt-product-card-bg: #ffffff;
+  --tt-product-border: rgba(212,120,154,.15);
+  --tt-product-accent: var(--tt-accent, var(--color-brand-primary, #AD3F67));
+  width: 100%;
+  padding: 0 !important;
+  border: 0 !important;
+  background: var(--tt-product-section-bg) !important;
+}
+
+.tt-reviews-product .tt-reviews-layout {
+  width: 100%;
+  max-width: 1600px !important;
+  margin: 0 auto;
+  padding: clamp(24px,3vw,48px) clamp(16px,4vw,72px) !important;
+  display: grid;
+  grid-template-columns: minmax(230px,.78fr) minmax(0,1.72fr);
+  gap: clamp(18px,3vw,34px);
+  align-items: start;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tt-reviews-summary,
+.tt-reviews-content {
+  min-width: 0;
+  border: 1px solid var(--tt-product-border) !important;
+  border-radius: 32px !important;
+  background: var(--tt-product-card-bg) !important;
+  box-shadow: none !important;
+}
+
+.tt-reviews-summary {
+  padding: clamp(18px,2vw,28px) !important;
+}
+
+.tt-reviews-content {
+  padding: clamp(18px,2vw,28px);
+}
+
+.tt-reviews-product .tt-section-sub {
+  color: rgba(45,45,45,.7) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  letter-spacing: .02em !important;
+  text-transform: none !important;
+  margin-bottom: 5px !important;
+}
+
+.tt-reviews-product .tt-section-title {
+  margin: 0 !important;
+  color: #2d2d2d !important;
+  font-size: clamp(20px,2.2vw,28px) !important;
+  font-weight: 500 !important;
+  letter-spacing: -.02em !important;
+}
+
+.tt-review-form,
+.tt-review-card,
+.tt-review-empty {
+  border-color: var(--tt-product-border) !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+.tt-review-form:first-child {
+  margin-top: 0;
+}
+
+.tt-review-stars,
+.tt-review-bar > span:first-child {
+  color: var(--color-rating-star, #8A6D1F) !important;
+}
+
+/* Selector real de 1 a 5: las seleccionadas/previsualizadas quedan llenas
+   y las restantes se ven únicamente como estrella de contorno. */
+.tt-reviews-product .tt-rating-input button {
+  color: #b78da0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tt-reviews-product .tt-rating-input button.is-active {
+  color: var(--color-rating-star, #8A6D1F) !important;
+}
+
+.tt-reviews-product .tt-rating-input button.is-current {
+  color: var(--color-rating-star, #8A6D1F) !important;
+  background: #f9efd2 !important;
+  box-shadow: inset 0 0 0 1px rgba(138,109,31,.2) !important;
+}
+
+@media (hover:hover) and (pointer:fine) {
+  .tt-reviews-product .tt-rating-input button:hover {
+    color: var(--color-rating-star, #8A6D1F) !important;
+  }
+}
+
+/* "También te puede gustar": siempre tres columnas, también en mobile.
+   El contenido interno se comprime en vez de generar scroll horizontal. */
+.tt-related-section .tt-related-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+  width: 100%;
+  gap: clamp(8px,1.7vw,20px) !important;
+  overflow: visible !important;
+}
+
+.tt-related-section .tt-related-slot,
+.tt-related-section .tt-related-slot > .tt-product-card {
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.tt-related-section .tt-product-img,
+.tt-related-section .tt-product-image,
+.tt-related-section .tt-product-image-wrap {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width:768px) {
+  .tt-reviews-product .tt-reviews-layout {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: clamp(20px,3vw,32px) 14px !important;
+  }
+
+  .tt-reviews-summary {
+    position: static !important;
+    display: block !important;
+  }
+
+  .tt-reviews-summary #product-review-summary {
+    display: block;
+  }
+
+  .tt-reviews-summary,
+  .tt-reviews-content {
+    border-radius: 24px !important;
+    padding: 16px !important;
+  }
+
+  .tt-related-section .container {
+    padding-inline: 14px;
+  }
+
+  .tt-related-section .tt-related-grid {
+    gap: 8px !important;
+  }
+
+  .tt-related-section .tt-product-info {
+    min-width: 0;
+    padding: 9px 7px !important;
+  }
+
+  .tt-related-section .tt-product-name {
+    font-size: clamp(.58rem,2.55vw,.72rem) !important;
+    letter-spacing: .025em !important;
+    line-height: 1.25 !important;
+    overflow-wrap: anywhere;
+  }
+
+  .tt-related-section .tt-product-price {
+    font-size: clamp(.72rem,3vw,.88rem) !important;
+    white-space: normal !important;
+  }
+
+  .tt-related-section .tt-product-cat,
+  .tt-related-section .tt-product-actions .tt-btn-icon span,
+  .tt-related-section .tt-product-actions .tt-btn span {
+    font-size: .58rem !important;
+  }
+
+  .tt-related-section .tt-product-actions {
+    gap: 5px !important;
+  }
+}
+
+@media (max-width:390px) {
+  .tt-related-section .container {
+    padding-inline: 10px;
+  }
+
+  .tt-related-section .tt-related-grid {
+    gap: 6px !important;
+  }
+
+  .tt-related-section .tt-product-info {
+    padding: 8px 5px !important;
+  }
+
+  .tt-reviews-product .tt-rating-input {
+    gap: 0;
+  }
+
+  .tt-reviews-product .tt-rating-input button {
+    width: 38px;
+    height: 38px;
+    flex-basis: 38px;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .tt-reviews-product *,
+  .tt-related-section .tt-related-slot {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}

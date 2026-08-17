@@ -1,6 +1,17 @@
 import { UI_ICONS, svgIcon } from '../compartido/iconos.js';
+import { logoUrl } from '../compartido/configuracion.js?v=tintin-20260817-header-logo-mobilebar-1';
 
 const notificationBell = () => '<svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>';
+const EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
+
+export function renderMobileHeader() {
+  return `
+    <header class="tt-mobile-brandbar" id="tt-mobile-brandbar" data-header-device="mobile">
+      <a href="/" class="tt-mobile-brandbar-link" aria-label="Tintin, ir al inicio">
+        <img loading="eager" decoding="async" fetchpriority="high" src="${EMPTY_IMAGE}" data-tt-shared-logo="${logoUrl()}" alt="TINTIN Accesorios &amp; Relojes" class="tt-mobile-brand-logo-img">
+      </a>
+    </header>`;
+}
 
 export function renderMobileTabbar() {
   return `

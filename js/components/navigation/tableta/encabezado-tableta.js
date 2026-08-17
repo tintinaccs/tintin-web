@@ -1,5 +1,5 @@
 import { CATEGORIES, UI_ICONS, categoryIcon, svgIcon } from '../compartido/iconos.js';
-import { logoUrl } from '../compartido/configuracion.js';
+import { logoUrl } from '../compartido/configuracion.js?v=tintin-20260817-header-logo-mobilebar-1';
 
 const notificationBell = () => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>';
 const EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
@@ -25,7 +25,6 @@ export function renderTabletHeader() {
         </button>
         <a href="/" class="tt-tablet-logo-link" aria-label="Tintin, ir al inicio">
           ${logoImage('tt-tablet-logo-img', 'TINTIN Accesorios & Relojes', true)}
-          <span class="tt-header-brand-copy" aria-hidden="true"><strong>TINTÍN</strong><small>ACCESORIOS &amp; RELOJES</small></span>
         </a>
         <div class="tt-tablet-actions">
           <button type="button" id="btn-search-tablet" data-nav-action="search" title="Buscar" aria-label="Buscar" aria-expanded="false" aria-controls="search-panel">${svgIcon(UI_ICONS.search, { size: 22 })}</button>
@@ -43,7 +42,6 @@ export function renderTabletMenu() {
       <div class="tt-tablet-menu-header">
         <a href="/" class="tt-tablet-menu-logo" aria-label="Tintin, ir al inicio">
           ${logoImage('tt-tablet-menu-logo-img', 'TINTIN')}
-          <span class="tt-header-brand-copy" aria-hidden="true"><strong>TINTÍN</strong><small>ACCESORIOS &amp; RELOJES</small></span>
         </a>
         <button type="button" class="tt-tablet-menu-close" id="btn-tablet-close" aria-label="Cerrar menú">
           ${svgIcon(UI_ICONS.close)}

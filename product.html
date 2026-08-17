@@ -7,7 +7,7 @@
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1"></script>
   <script src="js/cargador-pagina.js?v=tintin-20260816-loader-min-show-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20260816-loader-shell-atomic-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20260817-header-logo-mobilebar-1" defer></script>
   <title>Producto | TINTIN Accesorios & Relojes</title>
   <meta name="description" content="Detalle de producto — Tintin Accesorios &amp; Relojes, tu boutique femenina en Paraguay." id="meta-description">
   <meta name="robots" content="index, follow, max-image-preview:large">
@@ -19,7 +19,7 @@
   <meta property="og:site_name" content="Tintin Accesorios & Relojes">
   <meta property="og:locale" content="es_PY">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Producto | TINTIN Accesorios &amp; Relojes" id="meta-twitter-title">
+  <meta name="twitter:title" content="Producto | TINTIN Accesorios & Relojes" id="meta-twitter-title">
   <meta name="twitter:description" content="Detalle de producto — Tintin Accesorios &amp; Relojes, tu boutique femenina en Paraguay." id="meta-twitter-description">
   <meta name="twitter:image" content="https://tintinaccesorios.pages.dev/assets/og-cover.jpg" id="meta-twitter-image">
   <link rel="canonical" href="https://tintinaccesorios.pages.dev/product" id="link-canonical">
@@ -39,13 +39,14 @@
   <link rel="modulepreload" href="js/core/store-gate/control-tienda.js?v=tintin-20260809-loader-lifecycle-fix-1">
   <link rel="modulepreload" href="js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260730-appcheck-stable-4">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260816-loader-shell-atomic-1">
-  <link rel="preload" as="style" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260811-cls-header-reserve-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260817-header-logo-mobilebar-1">
+  <link rel="preload" as="style" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260817-header-logo-mobilebar-1">
   <link rel="preload" as="style" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260811-cls-header-reserve-1">
-  <link rel="preload" as="style" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260811-cls-header-reserve-1">
+  <link rel="preload" as="style" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260817-header-logo-mobilebar-1">
   <link rel="preload" as="style" href="css/components/navigation/compartido/transiciones-navegacion.css?v=tintin-20260811-cls-header-reserve-1">
   <link rel="preload" as="style" href="css/components/navigation/compartido/paneles.css?v=tintin-20260811-cls-header-reserve-1">
   <link rel="preload" as="style" href="css/components/navigation/compartido/busqueda.css?v=tintin-20260811-cls-header-reserve-1">
+  <link rel="stylesheet" href="css/components/navigation/compartido/marca-header-v3.css?v=tintin-20260817-header-brand-polish-3">
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2"><link rel="stylesheet" href="css/theme/superficies-solidas-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
 <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260811-cls-desktop-stable-2">
 <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -59,12 +60,12 @@
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/pages/product/product-extras.css?v=tintin-20260813-products-unified-1">
   <link rel="stylesheet" href="css/pages/product/resenas-producto.css?v=tintin-20260814-reviews-pink-gold-1">
+  <link rel="stylesheet" href="css/pages/product/product-flow-unified.css?v=tintin-20260817-product-flow-1">
   <link rel="stylesheet" href="css/components/notifications/interacciones-sociales.css?v=tintin-20260814-social-notifications-1">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2">
 </head>
 <body>
-
 
 <!-- BREADCRUMB -->
 <div class="container">
@@ -80,14 +81,11 @@
 <!-- PRODUCT DETAIL -->
 <section class="tt-product-page" id="product-detail">
   <div class="container">
-
-    <!-- Loading state -->
     <div id="product-loading" style="text-align:center;padding:80px 0;">
       <div class="tt-prod-loading-spinner"></div>
       <p style="color:var(--text-muted);margin-top:16px;font-size:0.9rem;">Cargando producto…</p>
     </div>
 
-    <!-- Not found state (hidden by default) -->
     <div id="product-not-found" style="display:none;text-align:center;padding:80px 0;">
       <div style="font-size:3rem;margin-bottom:16px;">😢</div>
       <h2 style="font-family:Montserrat;color:var(--pink-dark);margin-bottom:12px;">Producto no encontrado</h2>
@@ -102,38 +100,22 @@
       <button type="button" class="tt-btn" id="btn-product-retry">Reintentar</button>
     </div>
 
-    <!-- Product grid (hidden until loaded) -->
     <div class="tt-product-detail-grid" id="product-grid" style="display:none;">
-
-      <!-- Gallery -->
       <div class="tt-product-gallery">
-        <button type="button" class="tt-gallery-main" id="gallery-main" aria-label="Ampliar imagen del producto">
-          <!-- JS renders img here -->
-        </button>
-        <div class="tt-gallery-thumbs" id="gallery-thumbs" style="display:none;">
-          <!-- JS renders thumbs here -->
-        </div>
+        <button type="button" class="tt-gallery-main" id="gallery-main" aria-label="Ampliar imagen del producto"></button>
+        <div class="tt-gallery-thumbs" id="gallery-thumbs" style="display:none;"></div>
       </div>
 
-      <!-- Product Info Panel -->
       <div class="tt-product-info-panel">
-
-        <!-- Status badge -->
         <span class="tt-product-status" id="product-status">Disponible</span>
-
         <div class="tt-product-detail-cat" id="product-cat"></div>
         <h1 class="tt-product-detail-name" id="product-name"></h1>
         <span id="product-badge-label" class="tt-product-badge" style="display:none;margin-bottom:16px;font-size:0.72rem;padding:5px 14px;"></span>
-
         <div class="tt-product-detail-price" id="product-price"></div>
-
         <p class="tt-product-detail-desc" id="product-desc"></p>
         <dl id="product-specifications" class="tt-product-specifications" hidden></dl>
-
-        <!-- Variants (JS fills) -->
         <div id="product-variants"></div>
 
-        <!-- Quantity selector -->
         <div class="tt-qty-wrap" id="qty-wrap">
           <span class="tt-qty-label">Cantidad</span>
           <div class="tt-qty-selector">
@@ -144,37 +126,26 @@
           <span class="tt-qty-stock" id="qty-stock"></span>
         </div>
 
-        <!-- Actions -->
         <div class="tt-product-actions-panel">
           <button type="button" class="tt-product-favorite-main" id="btn-product-favorite" data-favorite-id="" aria-pressed="false">
             <span data-favorite-icon aria-hidden="true">♡</span>
             Guardar en favoritos
           </button>
-          <button type="button" class="tt-btn tt-btn-lg tt-btn-primary-full" id="btn-product-add-cart">
-            Agregar al carrito
-          </button>
-          <button type="button" class="tt-btn tt-btn-lg tt-btn-outline-full" id="btn-product-buy-now">
-            Comprar ahora →
-          </button>
+          <button type="button" class="tt-btn tt-btn-lg tt-btn-primary-full" id="btn-product-add-cart">Agregar al carrito</button>
+          <button type="button" class="tt-btn tt-btn-lg tt-btn-outline-full" id="btn-product-buy-now">Comprar ahora →</button>
           <div style="text-align:center;margin-top:4px;">
-            <button type="button" id="btn-product-wa" class="tt-product-wa-link">
-              ¿Tenés dudas? Consultanos por WhatsApp
-            </button>
+            <button type="button" id="btn-product-wa" class="tt-product-wa-link">¿Tenés dudas? Consultanos por WhatsApp</button>
           </div>
         </div>
 
-        <!-- Trust badges (JS fills based on category) -->
         <div class="tt-product-trust-badges" id="product-trust-badges"></div>
-
-        <!-- Share -->
         <div class="tt-product-share" id="product-share"></div>
-
       </div>
     </div>
   </div>
 </section>
 
-<!-- BENEFICIOS RÁPIDOS -->
+<!-- 1. COMPRA CON CONFIANZA -->
 <section class="tinben" aria-label="Beneficios">
   <div class="tinben-wrap">
     <div class="tinben-heading">
@@ -206,11 +177,10 @@
   </div>
 </section>
 
-<!-- TU SELECCIÓN / LISTA RÁPIDA -->
+<!-- 2. TU SELECCIÓN TINTIN -->
 <section class="tinsel" id="tinsel-root" aria-label="Tu selección">
   <div class="tinsel-wrap">
     <div class="tinsel-box">
-
       <div class="tinsel-head">
         <div class="tinsel-head-left">
           <h2 class="tinsel-title">Tu selección Tintin 💕</h2>
@@ -226,9 +196,7 @@
         <div class="tinsel-skel-item"></div>
         <div class="tinsel-skel-item"></div>
       </div>
-
       <div class="tinsel-items" id="tinsel-items" style="display:none"></div>
-
       <div class="tinsel-footer" id="tinsel-footer" style="display:none">
         <div class="tinsel-footer-total">
           <span class="tinsel-footer-label">Total de tu selección</span>
@@ -244,7 +212,8 @@
   <div class="tinsel-toast" id="tinsel-toast"></div>
 </section>
 
-<!-- Added-to-cart toast -->
+<!-- 3. RESEÑAS: js/pages/product/resenas-producto.js inserta aquí #product-reviews -->
+
 <div id="tt-added-toast" class="tt-added-toast" style="display:none;">
   <div class="tt-added-toast-msg">
     <span class="tt-added-toast-icon">✓</span>
@@ -256,8 +225,8 @@
   </div>
 </div>
 
-<!-- RELATED PRODUCTS -->
-<section class="tt-related-section">
+<!-- 4. TAMBIÉN TE PUEDE GUSTAR: exactamente 3 productos -->
+<section class="tt-related-section" id="related-products" aria-label="También te puede gustar">
   <div class="container">
     <div class="tt-related-header">
       <div>
@@ -269,13 +238,10 @@
       </button>
     </div>
     <p class="tt-related-status" id="related-status" aria-live="polite"></p>
-    <div class="tt-related-grid" id="related-grid" aria-busy="true">
-      <!-- Rendered by JS -->
-    </div>
+    <div class="tt-related-grid" id="related-grid" aria-busy="true"></div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer class="tt-footer">
   <div class="container">
     <div class="tt-footer-grid">
@@ -331,7 +297,7 @@
 <script type="module" src="js/pages/product/beneficios-producto.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/pages/product/seleccion-producto.js?v=tintin-20260815-routes-clean-1"></script>
 <script type="module" src="js/pages/product/productos-relacionados.js?v=tintin-20260815-routes-clean-1"></script>
-<script type="module" src="js/pages/product/resenas-producto.js?v=tintin-20260815-routes-clean-1"></script>
+<script type="module" src="js/pages/product/resenas-producto.js?v=tintin-20260817-product-flow-1"></script>
 <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/visual-builder-bootstrap.js?v=tintin-20260815-routes-clean-1"></script>
 </body>
