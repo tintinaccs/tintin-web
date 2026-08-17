@@ -10,6 +10,9 @@ const WORKFLOW_FILE = 'diagnostico-maestro.yml';
 const BASE_BRANCH = 'main';
 const PRODUCTION_ORIGIN = 'https://tintinaccesorios.pages.dev';
 const GITHUB_API = 'https://api.github.com';
+const BLOCKING_CONCLUSIONS = new Set([
+  'failure', 'cancelled', 'timed_out', 'action_required', 'startup_failure', 'stale'
+]);
 
 const AREA_DEFINITIONS = [
   ['static', '1 ·', 'Integridad y diagnóstico estructural'],
@@ -154,11 +157,41 @@ async function loadRunJobs(runId, token) {
   return Array.isArray(data?.jobs) ? data.jobs : [];
 }
 
+async function loadCommitChecks(sha, token) {
+  if (!sha) return [];
+  const { data } = await githubRequest(
+    `/repos/${REPOSITORY}/commits/${encodeURIComponent(sha)}/check-runs?filter=latest&per_page=100`,
+    { token }
+  );
+  return Array.isArray(data?.check_runs) ? data.check_runs : [];
+}
+
+function isMasterAreaCheck(name) {
+  return /^\s*[1-9]\s*·\s*/.test(String(name || ''));
+}
+
+function compactBlockingChecks(checkRuns) {
+  return checkRuns
+    .filter(check =>
+      check?.status === 'completed' &&
+      BLOCKING_CONCLUSIONS.has(String(check?.conclusion || '')) &&
+      !isMasterAreaCheck(check?.name)
+    )
+    .map(check => ({
+      name: String(check.name || 'Check sin nombre'),
+      conclusion: String(check.conclusion || 'failure'),
+      app: String(check.app?.name || ''),
+      detailsUrl: check.details_url || null,
+      completedAt: check.completed_at || null
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name, 'es'));
+}
+
 function findJob(jobs, prefix) {
   return jobs.find(job => String(job.name || '').trim().startsWith(prefix)) || null;
 }
 
-function buildLatest(run, jobs, currentCommit) {
+function buildLatest(run, jobs, currentCommit, checkRuns = []) {
   if (!run) return null;
   const runCompleted = run.status === 'completed';
   const areas = AREA_DEFINITIONS.map(([key, prefix, label]) =>
@@ -168,6 +201,7 @@ function buildLatest(run, jobs, currentCommit) {
   const globalCiStep = staticJob?.steps?.find(step =>
     /Verificar estado global del commit en GitHub\/CI/i.test(String(step.name || ''))
   ) || null;
+  const externalFailures = compactBlockingChecks(checkRuns);
   const finishedJobs = jobs.filter(job => job.status === 'completed').length;
   const totalJobs = Math.max(AREA_DEFINITIONS.length, jobs.length);
   const failedAreas = areas.filter(area => area.state === 'FAIL');
@@ -196,13 +230,15 @@ function buildLatest(run, jobs, currentCommit) {
       status: globalCiStep.status,
       conclusion: globalCiStep.conclusion || null,
       startedAt: globalCiStep.started_at || null,
-      completedAt: globalCiStep.completed_at || null
+      completedAt: globalCiStep.completed_at || null,
+      failures: externalFailures
     } : {
       state: runCompleted ? 'NOT_VERIFIED' : 'QUEUED',
       status: 'not_reported',
       conclusion: null,
       startedAt: null,
-      completedAt: null
+      completedAt: null,
+      failures: externalFailures
     },
     areas,
     counts: {
@@ -212,7 +248,8 @@ function buildLatest(run, jobs, currentCommit) {
       queued: areas.filter(area => area.state === 'QUEUED').length,
       skipped: areas.filter(area => area.state === 'SKIPPED').length,
       notVerified: notVerifiedAreas.length,
-      failedSteps: failedSteps.length
+      failedSteps: failedSteps.length,
+      externalFailures: externalFailures.length
     },
     failures: failedSteps
   };
@@ -234,9 +271,10 @@ async function handleGet(env) {
   const token = cleanToken(env);
   const runs = await listMasterRuns(token);
   const latestRun = runs[0] || null;
-  const [jobs, currentCommit] = await Promise.all([
+  const [jobs, currentCommit, checks] = await Promise.all([
     latestRun ? loadRunJobs(latestRun.id, token) : Promise.resolve([]),
-    loadCurrentCommit(token)
+    loadCurrentCommit(token),
+    latestRun?.head_sha ? loadCommitChecks(latestRun.head_sha, token) : Promise.resolve([])
   ]);
   return {
     ok: true,
@@ -245,7 +283,7 @@ async function handleGet(env) {
     workflow: WORKFLOW_FILE,
     triggerConfigured: Boolean(token),
     currentCommit,
-    latest: buildLatest(latestRun, jobs, currentCommit),
+    latest: buildLatest(latestRun, jobs, currentCommit, checks),
     history: runs.map(compactRun),
     checkedAt: new Date().toISOString()
   };
@@ -278,10 +316,7 @@ async function handlePost(request, env) {
   const runs = await listMasterRuns(token);
   const active = runs.find(run => ['queued', 'in_progress', 'waiting', 'pending'].includes(run.status));
   if (active) {
-    return {
-      status: 202,
-      body: { ok: true, alreadyRunning: true, run: compactRun(active) }
-    };
+    return { status: 202, body: { ok: true, alreadyRunning: true, run: compactRun(active) } };
   }
 
   const includeProduction = body.includeProduction !== false;
