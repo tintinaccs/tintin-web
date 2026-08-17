@@ -29,6 +29,9 @@ jobs:
       - name: Install Playwright
         run: npm install --no-save --package-lock=false
 
+      - name: Sincronizar shell público de producción
+        run: npm run sync:public-shell
+
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
