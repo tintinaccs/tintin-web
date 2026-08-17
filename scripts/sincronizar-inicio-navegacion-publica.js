@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260817-mobile-accordion-1';
+const VERSION = 'tintin-20260817-mobile-accordion-2';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260816-loader-shell-bridge-1';
 const LOADER_VERSION = 'tintin-20260816-loader-min-show-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
@@ -18,7 +18,7 @@ const PROFILE_GATE_VERSION = 'tintin-20260815-profile-routes-1';
 // esa constante decide la URL exacta (con ?v=) que entrada-navegacion-publica.js y
 // ensureNavigationAssets() piden en tiempo de ejecución. Si difieren, el preload no
 // acierta la cache key exacta y el navegador vuelve a pedir el recurso igual.
-const NAV_SHELL_VERSION = 'tintin-20260817-header-refined-1';
+const NAV_SHELL_VERSION = 'tintin-20260817-header-refined-2';
 const NAVIGATION_PRELOAD_STYLES = [
   'css/components/navigation/escritorio/encabezado-escritorio.css',
   'css/components/navigation/tableta/encabezado-tableta.css',

@@ -138,7 +138,6 @@ test('layout global vacío hereda el diseño existente y los overrides explícit
   await expect(page.locator('#tt-tabbar')).toHaveCSS('background-color', 'rgb(17, 34, 51)');
   await expect(page.locator('.tt-footer')).toHaveCSS('background-color', 'rgb(34, 51, 68)');
   await expect(page.locator('[data-shell-tab="home"]')).toBeHidden();
-  await expect(page.locator('#tt-header-desktop-tablet .tt-header-brand-copy strong')).toHaveText('TINTIN TEST');
   let columns = await page.locator('#tt-tabbar').evaluate(node => getComputedStyle(node).gridTemplateColumns.split(/\s+/).filter(Boolean).length);
   expect(columns).toBe(4);
 

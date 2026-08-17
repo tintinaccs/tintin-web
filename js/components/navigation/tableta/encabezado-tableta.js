@@ -25,7 +25,6 @@ export function renderTabletHeader() {
         </button>
         <a href="/" class="tt-tablet-logo-link" aria-label="Tintin, ir al inicio">
           ${logoImage('tt-tablet-logo-img', 'TINTIN Accesorios & Relojes', true)}
-          <span class="tt-header-brand-copy" aria-hidden="true"><strong>TINTÍN</strong><small>ACCESORIOS &amp; RELOJES</small></span>
         </a>
         <div class="tt-tablet-actions">
           <button type="button" id="btn-search-tablet" data-nav-action="search" title="Buscar" aria-label="Buscar" aria-expanded="false" aria-controls="search-panel">${svgIcon(UI_ICONS.search, { size: 22 })}</button>
@@ -43,7 +42,6 @@ export function renderTabletMenu() {
       <div class="tt-tablet-menu-header">
         <a href="/" class="tt-tablet-menu-logo" aria-label="Tintin, ir al inicio">
           ${logoImage('tt-tablet-menu-logo-img', 'TINTIN')}
-          <span class="tt-header-brand-copy" aria-hidden="true"><strong>TINTÍN</strong><small>ACCESORIOS &amp; RELOJES</small></span>
         </a>
         <button type="button" class="tt-tablet-menu-close" id="btn-tablet-close" aria-label="Cerrar menú">
           ${svgIcon(UI_ICONS.close)}

@@ -51,7 +51,7 @@ test('tablet tiene header exclusivo, marca completa y menú navegable', async ({
   await expect(page.locator('#tt-header-tablet')).toBeVisible();
   await expect(page.locator('#tt-header-desktop-tablet')).toBeHidden();
   await expect(page.locator('#tt-tabbar')).toBeHidden();
-  await expect(page.locator('#tt-header-tablet .tt-header-brand-copy strong')).toHaveText('TINTÍN');
+  await expect(page.locator('#tt-header-tablet .tt-tablet-logo-img')).toBeVisible();
   await expect(page.locator('#btn-notifications-tablet')).toBeHidden();
 
   for (const control of await page.locator('#btn-menu-tablet,.tt-tablet-actions > button:not([hidden])').all()) {
@@ -78,7 +78,7 @@ test('desktop conserva navegación, marca, submenú e indexación interna', asyn
   await expect(header).toBeVisible();
   await expect(page.locator('#tt-header-tablet')).toBeHidden();
   await expect(page.locator('#tt-tabbar')).toBeHidden();
-  await expect(header.locator('.tt-header-brand-copy strong')).toHaveText('TINTÍN');
+  await expect(header.locator('.tt-logo-img')).toBeVisible();
   await expect(header.locator('[data-desktop-nav-item]')).toHaveCount(4);
 
   await page.locator('#btn-tienda').click();

@@ -1,6 +1,7 @@
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { heartIconMarkup } from './icono-corazon.js?v=tintin-20260817-heart-icon-1';
 
 const MAX_FAVORITES = 200;
 let currentUser = null;
@@ -39,7 +40,7 @@ function publish() {
     const label = clean(button.dataset.favoriteName || 'producto', 100);
     button.setAttribute('aria-label', selected ? `Quitar ${label} de favoritos` : `Guardar ${label} en favoritos`);
     const icon = button.querySelector('[data-favorite-icon]');
-    if (icon) icon.textContent = selected ? '♥' : '♡';
+    if (icon) icon.innerHTML = heartIconMarkup(selected);
   });
   window.dispatchEvent(new CustomEvent('tintin:favorites-updated', {
     detail: { items: [...items], userId: currentUser?.uid || null },

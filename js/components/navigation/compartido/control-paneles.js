@@ -293,7 +293,7 @@
 
     onClick(event) {
       const target = event.target instanceof Element ? event.target : null;
-      const closeButton = target?.closest('#btn-search-close,#btn-cart-close,#btn-account-close,#btn-close-sheet,#btn-tablet-close');
+      const closeButton = target?.closest('#btn-search-close,#btn-cart-close,#btn-account-close,#btn-close-sheet,#btn-tablet-close,#btn-notifications-close');
       if (closeButton) {
         event.preventDefault();
         event.stopImmediatePropagation();
@@ -306,7 +306,7 @@
         return;
       }
 
-      const trigger = target?.closest('#btn-tienda,#btn-menu-tablet,#tabbar-tienda,[data-nav-action="search"],#tabbar-search,[data-nav-action="cart"],#tabbar-cart,[data-nav-action="account"]');
+      const trigger = target?.closest('#btn-tienda,#btn-menu-tablet,#tabbar-tienda,[data-nav-action="search"],#tabbar-search,[data-nav-action="cart"],#tabbar-cart,[data-nav-action="account"],[data-nav-action="notifications"],#tabbar-notifications');
       if (!trigger && this.surface !== 'none') {
         const openConfig = this.registry.get(this.surface);
         if (openConfig && !openConfig.modal && target && !openConfig.element.contains(target)) {
@@ -321,7 +321,8 @@
           : trigger.id === 'tabbar-tienda' ? 'mobile-shop'
             : trigger.matches('[data-nav-action="search"],#tabbar-search') ? 'search'
               : trigger.matches('[data-nav-action="cart"],#tabbar-cart') ? 'cart'
-                : 'account';
+                : trigger.matches('[data-nav-action="notifications"],#tabbar-notifications') ? 'notifications'
+                  : 'account';
       if (!this.registry.has(surface)) return;
 
       event.preventDefault();

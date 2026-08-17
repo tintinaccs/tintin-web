@@ -51,6 +51,11 @@
     transition:transform .34s cubic-bezier(.2,.85,.2,1),color .2s ease;
   }
 
+  #tt-tabbar .tt-tabbar-avatar {
+    border-radius:7px !important;
+    object-fit:cover !important;
+  }
+
   #tt-tabbar .tt-tabbar-btn span:last-child {
     display:block !important;
     max-height:16px;
