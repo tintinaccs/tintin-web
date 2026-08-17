@@ -14,14 +14,15 @@ const NAV_ENTRY_VERSION = 'tintin-20260816-header-logo-only-1';
 const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20260815-profile-routes-1';
 const PROFILE_GATE_VERSION = 'tintin-20260815-profile-routes-1';
-const NAV_SHELL_VERSION = 'tintin-20260816-header-logo-only-1';
+const HEADER_STYLE_VERSION = 'tintin-20260816-header-logo-only-1';
+const LEGACY_NAV_STYLE_VERSION = 'tintin-20260811-cls-header-reserve-1';
 const NAVIGATION_PRELOAD_STYLES = [
-  'css/components/navigation/escritorio/encabezado-escritorio.css',
-  'css/components/navigation/tableta/encabezado-tableta.css',
-  'css/components/navigation/movil/encabezado-movil.css',
-  'css/components/navigation/compartido/transiciones-navegacion.css',
-  'css/components/navigation/compartido/paneles.css',
-  'css/components/navigation/compartido/busqueda.css',
+  { href: 'css/components/navigation/escritorio/encabezado-escritorio.css', version: HEADER_STYLE_VERSION },
+  { href: 'css/components/navigation/tableta/encabezado-tableta.css', version: HEADER_STYLE_VERSION },
+  { href: 'css/components/navigation/movil/encabezado-movil.css', version: HEADER_STYLE_VERSION },
+  { href: 'css/components/navigation/compartido/transiciones-navegacion.css', version: LEGACY_NAV_STYLE_VERSION },
+  { href: 'css/components/navigation/compartido/paneles.css', version: LEGACY_NAV_STYLE_VERSION },
+  { href: 'css/components/navigation/compartido/busqueda.css', version: LEGACY_NAV_STYLE_VERSION },
 ];
 const PUBLIC_PAGES = [
   '404.html',
@@ -117,7 +118,7 @@ function ensureNavigationPreloads(html) {
     `<link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=${NAV_BARRIER_VERSION}">`,
     `<link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=${NAV_ENTRY_VERSION}">`,
     ...NAVIGATION_PRELOAD_STYLES.map(
-      href => `<link rel="preload" as="style" href="${href}?v=${NAV_SHELL_VERSION}">`
+      ({ href, version }) => `<link rel="preload" as="style" href="${href}?v=${version}">`
     ),
   ].map(tag => `  ${tag}`).join('\n');
 
