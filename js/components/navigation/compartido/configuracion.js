@@ -1,4 +1,5 @@
 export const SHELL_VERSION = 'tintin-20260816-header-logo-only-1';
+export const LEGACY_NAV_STYLE_VERSION = 'tintin-20260811-cls-header-reserve-1';
 
 export const BREAKPOINTS = Object.freeze({
   mobileMax: 767,
@@ -10,9 +11,9 @@ export const BREAKPOINTS = Object.freeze({
 const SITE_ROOT_URL = new URL('../../../../', import.meta.url);
 const JS_ROOT_URL = new URL('../../../', import.meta.url);
 
-export function versionedSiteAsset(path) {
+export function versionedSiteAsset(path, version = SHELL_VERSION) {
   const url = new URL(path, SITE_ROOT_URL);
-  url.searchParams.set('v', SHELL_VERSION);
+  url.searchParams.set('v', version);
   return url.href;
 }
 
