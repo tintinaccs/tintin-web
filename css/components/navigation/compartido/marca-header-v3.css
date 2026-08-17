@@ -77,16 +77,15 @@
     outline:3px solid rgba(173,63,103,.2);
     outline-offset:2px;
   }
+}
 
-  /* La barra superior ocupa 64px en el flujo. El Hero de Inicio usa el
-     resto del viewport para que sus CTA no queden detrás/cerca de la
-     tabbar inferior fija. */
-  body.tt-public-shell-home #hero.tt-hero {
-    height:calc(100svh - 64px);
-  }
-
-  body.tt-public-shell-home #hero .tt-hero-content {
-    padding-bottom:100px;
+/* Entre 381 y 520px la composición base del Home hacía crecer la foto lo
+   suficiente para empujar el segundo CTA detrás de la tabbar fija. Se limita
+   sólo esa fila del hero: 360px conserva su ajuste propio y tablet/desktop no
+   cambian. */
+@media (min-width:381px) and (max-width:520px) {
+  html body.tt-home-premium #hero.tt-hero {
+    grid-template-rows:clamp(326px,44svh,412px) auto !important;
   }
 }
 
