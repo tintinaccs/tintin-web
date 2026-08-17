@@ -12,6 +12,7 @@
 .adm-master-state[data-state="RUNNING"]{background:#eef5ff;border-color:#c8daf7;color:#2d63a5}
 .adm-master-state[data-state="QUEUED"]{background:#fff8e9;border-color:#efdcae;color:#8c6518}
 .adm-master-state[data-state="SKIPPED"]{background:#f5f4f6;border-color:#dfdbe0;color:#655d63}
+.adm-master-state[data-state="NOT_VERIFIED"]{background:#fff5e8;border-color:#ebc58e;color:#93560d}
 .adm-master-state[data-state="UNKNOWN"]{background:#f7f7f7;border-color:#e3e3e3;color:#666}
 .adm-master-freshness{font-size:12px;color:var(--adm-muted)}
 .adm-master-freshness.is-current{color:#27733b;font-weight:700}
@@ -44,6 +45,7 @@
 .adm-master-area-state[data-state="RUNNING"]{background:#eef5ff;color:#2d63a5}
 .adm-master-area-state[data-state="QUEUED"]{background:#fff8e9;color:#8c6518}
 .adm-master-area-state[data-state="SKIPPED"]{background:#f5f4f6;color:#655d63}
+.adm-master-area-state[data-state="NOT_VERIFIED"]{background:#fff5e8;color:#93560d}
 .adm-master-area-detail{font-size:11px;color:var(--adm-muted);margin-top:8px;line-height:1.45}
 .adm-master-area-failures{margin:8px 0 0;padding:8px 10px 8px 24px;border-radius:9px;background:#fff4f5;color:#8e2938;font-size:11px;line-height:1.5}
 .adm-master-github-global{grid-column:1/-1;border-style:dashed}
