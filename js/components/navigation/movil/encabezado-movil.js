@@ -1,6 +1,17 @@
 import { UI_ICONS, svgIcon } from '../compartido/iconos.js';
+import { logoUrl } from '../compartido/configuracion.js';
 
 const notificationBell = () => '<svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>';
+
+export function renderMobileHeader() {
+  const logo = logoUrl();
+  return `
+    <header class="tt-header-mobile" id="tt-header-mobile" data-header-device="mobile">
+      <a href="/" class="tt-mobile-logo-link" aria-label="Tintin, ir al inicio">
+        <img loading="eager" decoding="async" fetchpriority="high" src="${logo}" data-tt-shared-logo="${logo}" alt="TINTIN Accesorios &amp; Relojes" class="tt-logo-img tt-mobile-logo-img">
+      </a>
+    </header>`;
+}
 
 export function renderMobileTabbar() {
   return `
@@ -23,7 +34,7 @@ export function renderMobileTabbar() {
         ${svgIcon(UI_ICONS.bag)}<span class="tt-cart-badge hidden" id="cart-badge-mobile">0</span><span>Carrito</span>
       </button>
       <button type="button" id="tabbar-cuenta" class="tt-tabbar-btn" aria-label="Mi cuenta" aria-expanded="false" aria-controls="account-drawer" data-nav-action="account" data-shell-tab="account">
-        ${svgIcon(UI_ICONS.account)}<span>Cuenta</span>
+        <span class="tt-tabbar-account-icon" aria-hidden="true">${svgIcon(UI_ICONS.account)}</span><span>Cuenta</span>
       </button>
     </nav>`;
 }
