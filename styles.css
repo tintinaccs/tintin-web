@@ -3688,6 +3688,11 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   height: 100%;
 }
 
+.tt-related-grid .tt-product-info {
+  align-items: center;
+  text-align: center;
+}
+
 .tt-related-slot.is-leaving {
   opacity: 0;
   transform: translateY(10px) scale(0.985);

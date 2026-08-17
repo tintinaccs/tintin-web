@@ -46,7 +46,6 @@ window.addEventListener('pagehide', () => ttProductSeoObserver.disconnect(), { o
 window.TintinProductSeoCanonical = { sync: ttSyncPublicProductSeo };
 
 const LIMIT = 3;
-const AUTO_ROTATE_MS = 7600;
 const EXIT_MS = 220;
 const CATEGORY_FALLBACK = 'sin-coleccion';
 const LAST_COMBINATION_KEY = 'tt_product_related_last_v1';
@@ -61,11 +60,7 @@ if (grid && !window.TintinRelatedProducts) {
     currentProduct: null,
     visible: [],
     history: new Map(),
-    timer: 0,
-    pointerPaused: false,
-    focusPaused: false,
     replacing: false,
-    destroyed: false,
   };
 
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -161,6 +156,8 @@ if (grid && !window.TintinRelatedProducts) {
 
   function buildCombination({ excludeVisible = false } = {}) {
     const groups = groupedProducts();
+    const pool = validProducts();
+    const targetCount = Math.min(LIMIT, pool.length);
     const visibleIds = excludeVisible
       ? new Set(state.visible.map(product => String(product.id)))
       : new Set();
@@ -169,7 +166,7 @@ if (grid && !window.TintinRelatedProducts) {
       : new Set();
 
     let categories = categoryOrder(groups, visibleCategories);
-    if (categories.length < Math.min(LIMIT, groups.size)) {
+    if (categories.length < targetCount) {
       categories = [
         ...categories,
         ...categoryOrder(groups).filter(category => !categories.includes(category)),
@@ -182,9 +179,9 @@ if (grid && !window.TintinRelatedProducts) {
       if (!selected) continue;
       result.push(selected);
       visibleIds.add(String(selected.id));
-      if (result.length === Math.min(LIMIT, groups.size)) break;
+      if (result.length === targetCount) break;
     }
-    const targetCount = Math.min(LIMIT, groups.size);
+
     if (excludeVisible && result.length < targetCount) {
       const usedCategories = new Set(result.map(categoryKey));
       for (const product of shuffled(state.visible)) {
@@ -199,6 +196,15 @@ if (grid && !window.TintinRelatedProducts) {
         if (result.length === targetCount) break;
       }
     }
+
+    if (result.length < targetCount) {
+      for (const product of shuffled(pool.filter(item => !visibleIds.has(String(item.id))))) {
+        result.push(product);
+        visibleIds.add(String(product.id));
+        if (result.length === targetCount) break;
+      }
+    }
+
     return result;
   }
 
@@ -277,83 +283,6 @@ if (grid && !window.TintinRelatedProducts) {
     }
   }
 
-  function clearTimer() {
-    if (!state.timer) return;
-    window.clearTimeout(state.timer);
-    state.timer = 0;
-  }
-
-  function shouldPause() {
-    return document.hidden
-      || motionQuery.matches
-      || state.pointerPaused
-      || state.focusPaused
-      || state.replacing
-      || state.visible.length < 2;
-  }
-
-  function scheduleRotation() {
-    clearTimer();
-    if (state.destroyed || shouldPause()) return;
-    state.timer = window.setTimeout(async () => {
-      await rotateOne();
-      scheduleRotation();
-    }, AUTO_ROTATE_MS);
-  }
-
-  function findReplacement(index) {
-    const groups = groupedProducts();
-    const otherVisible = state.visible.filter((_, visibleIndex) => visibleIndex !== index);
-    const excludedCategories = new Set(otherVisible.map(categoryKey));
-    const excludedIds = new Set(state.visible.map(product => String(product.id)));
-    const outgoingCategory = categoryKey(state.visible[index]);
-    const categories = categoryOrder(groups, excludedCategories);
-    const preferred = [
-      ...categories.filter(category => category !== outgoingCategory),
-      ...categories.filter(category => category === outgoingCategory),
-    ];
-
-    for (const category of preferred) {
-      const selected = chooseFromCategory(category, groups.get(category) || [], excludedIds);
-      if (selected) return selected;
-    }
-    return null;
-  }
-
-  async function replaceSlot(index, replacement, announceChange = false) {
-    const slot = grid.querySelector(`[data-related-index="${index}"]`);
-    if (!slot || !replacement || state.replacing) return false;
-
-    state.replacing = true;
-    clearTimer();
-    grid.setAttribute('aria-busy', 'true');
-    slot.classList.add('is-leaving');
-    if (!motionQuery.matches) {
-      await new Promise(resolve => window.setTimeout(resolve, EXIT_MS));
-    }
-
-    state.visible[index] = replacement;
-    rememberCombination(state.visible);
-    slot.outerHTML = renderSlot(replacement, index, true);
-    const nextSlot = grid.querySelector(`[data-related-index="${index}"]`);
-    window.requestAnimationFrame(() => nextSlot?.classList.remove('is-entering'));
-    grid.setAttribute('aria-busy', 'false');
-    state.replacing = false;
-    if (announceChange) announce('Combinación de productos actualizada.');
-    scheduleRotation();
-    return true;
-  }
-
-  async function rotateOne() {
-    if (state.replacing || !state.visible.length) return false;
-    const indexes = shuffled(state.visible.map((_, index) => index));
-    for (const index of indexes) {
-      const replacement = findReplacement(index);
-      if (replacement) return replaceSlot(index, replacement);
-    }
-    return false;
-  }
-
   async function refreshAll() {
     if (state.replacing) return;
     const combination = buildCombination({ excludeVisible: true });
@@ -362,12 +291,10 @@ if (grid && !window.TintinRelatedProducts) {
     const nextIds = combination.map(product => String(product.id)).sort().join('|');
     if (previousIds === nextIds) {
       announce('No hay otra combinación disponible en este momento.');
-      scheduleRotation();
       return;
     }
 
     state.replacing = true;
-    clearTimer();
     refreshButton?.classList.add('is-refreshing');
     grid.setAttribute('aria-busy', 'true');
     const slots = [...grid.querySelectorAll('.tt-related-slot')];
@@ -378,7 +305,6 @@ if (grid && !window.TintinRelatedProducts) {
     renderAll(combination, { announceChange: true });
     refreshButton?.classList.remove('is-refreshing');
     state.replacing = false;
-    scheduleRotation();
   }
 
   function syncWithProducts() {
@@ -389,57 +315,35 @@ if (grid && !window.TintinRelatedProducts) {
       grid.innerHTML = '';
       grid.setAttribute('aria-busy', 'false');
       updateEmptyState();
-      clearTimer();
       return;
     }
 
     const groups = groupedProducts();
+    const targetCount = Math.min(LIMIT, validProducts().length);
     const stillValid = state.visible.length > 0
-      && state.visible.length === Math.min(LIMIT, groups.size)
+      && state.visible.length === targetCount
       && state.visible.every(product => {
         const group = groups.get(categoryKey(product)) || [];
         return group.some(candidate => String(candidate.id) === String(product.id));
       })
-      && new Set(state.visible.map(categoryKey)).size === state.visible.length;
+      && new Set(state.visible.map(categoryKey)).size === Math.min(state.visible.length, groups.size);
 
     if (!stillValid) renderAll(state.visible.length ? buildCombination() : buildInitialCombination());
     updateEmptyState();
-    scheduleRotation();
   }
 
   refreshButton?.addEventListener('click', refreshAll);
-  grid.addEventListener('pointerenter', () => {
-    state.pointerPaused = true;
-    clearTimer();
-  });
-  grid.addEventListener('pointerleave', () => {
-    state.pointerPaused = false;
-    scheduleRotation();
-  });
-  grid.addEventListener('focusin', () => {
-    state.focusPaused = true;
-    clearTimer();
-  });
-  grid.addEventListener('focusout', event => {
-    if (grid.contains(event.relatedTarget)) return;
-    state.focusPaused = false;
-    scheduleRotation();
-  });
-  document.addEventListener('visibilitychange', scheduleRotation);
   window.addEventListener('tintin:products-loaded', syncWithProducts);
   window.addEventListener('tintin:product-rendered', syncWithProducts);
   window.addEventListener('tintin:product-unavailable', syncWithProducts);
-  motionQuery.addEventListener?.('change', scheduleRotation);
 
   window.TintinRelatedProducts = {
     refresh: refreshAll,
-    rotateOne,
     sync: syncWithProducts,
     getVisible: () => state.visible.map(product => ({
       id: String(product.id),
       category: productCategory(product),
     })),
-    isPaused: shouldPause,
   };
 
   syncWithProducts();
