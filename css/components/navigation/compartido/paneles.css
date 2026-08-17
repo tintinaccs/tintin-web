@@ -57,6 +57,15 @@
   isolation: isolate;
 }
 
+/* El aviso de conectividad (#tt-store-gate-network-notice) flota con un
+   z-index deliberadamente altísimo y, al quedar sobre el pie de las hojas
+   modales, tapa a la mitad botones como "Ver todas las colecciones". Se
+   oculta mientras el panel modal está abierto; reaparece al cerrarlo. */
+body:has(.tt-collections-sheet.open) #tt-store-gate-network-notice,
+body:has(.tt-notifications-drawer.open) #tt-store-gate-network-notice {
+  display: none !important;
+}
+
 .tt-dropdown {
   transition: opacity var(--motion-fast) ease, transform var(--motion-normal) var(--ease-tintin) !important;
 }

@@ -1,6 +1,7 @@
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { collection, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { heartIconMarkup } from '../../components/favorites/icono-corazon.js?v=tintin-20260817-heart-icon-1';
 
 const productId = String(new URLSearchParams(location.search).get('id') || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 180);
 let currentUser = null;
@@ -148,9 +149,9 @@ function renderReviews() {
         <time class="tt-review-date">${dateValue(review.createdAt).toLocaleDateString('es-PY')}</time>
       </div>
       <p class="tt-review-comment">${escapeHtml(review.comment)}</p>
-      ${review.storeLiked ? '<div class="tt-review-store-like">♥ A Tintin Accesorios le gustó esta reseña</div>' : ''}
+      ${review.storeLiked ? `<div class="tt-review-store-like">${heartIconMarkup(true)} A Tintin Accesorios le gustó esta reseña</div>` : ''}
       <div class="tt-review-social-actions">
-        ${currentUser ? `<button type="button" class="tt-review-like-button${liked ? ' is-liked' : ''}" data-review-like="${escapeHtml(id)}" aria-pressed="${liked}" aria-label="${liked ? 'Quitar Me gusta' : 'Dar Me gusta'} a esta reseña"><span aria-hidden="true">♥</span><span>${likeCount ? `${likeCount} Me gusta` : 'Me gusta'}</span></button>` : `<span class="tt-review-like-count">${likeCount ? `♥ ${likeCount} Me gusta` : 'Todavía sin Me gusta'}</span>`}
+        ${currentUser ? `<button type="button" class="tt-review-like-button${liked ? ' is-liked' : ''}" data-review-like="${escapeHtml(id)}" aria-pressed="${liked}" aria-label="${liked ? 'Quitar Me gusta' : 'Dar Me gusta'} a esta reseña"><span aria-hidden="true">${heartIconMarkup(liked)}</span><span>${likeCount ? `${likeCount} Me gusta` : 'Me gusta'}</span></button>` : `<span class="tt-review-like-count">${likeCount ? `${heartIconMarkup(true)} ${likeCount} Me gusta` : 'Todavía sin Me gusta'}</span>`}
       </div>
       ${renderConversation(review)}
     </article>`;

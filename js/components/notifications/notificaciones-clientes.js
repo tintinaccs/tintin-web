@@ -215,21 +215,6 @@ function optimisticRead(id) {
 
 function wireEvents() {
   document.addEventListener('click', event => {
-    const trigger = event.target.closest?.('[data-nav-action="notifications"],#tabbar-notifications');
-    if (trigger && !trigger.hidden) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      ensureDrawer();
-      window.TintinSurfaceController?.toggle?.('notifications', trigger);
-      return;
-    }
-
-    if (event.target.closest?.('#btn-notifications-close')) {
-      event.preventDefault();
-      window.TintinSurfaceController?.close?.('close-button');
-      return;
-    }
-
     const card = event.target.closest?.('[data-notification-id]');
     if (card) {
       event.preventDefault();

@@ -9,6 +9,15 @@
    UTILITIES
 ────────────────────────────────────── */
 
+// Ícono de corazón compartido (mismo path que js/components/favorites/icono-corazon.js;
+// este archivo se carga como script clásico y no puede usar import).
+const TT_HEART_PATH_D = 'M12 21s-6.716-4.35-9.428-8.485C.79 9.702 1.5 6.06 4.5 4.5 7.03 3.18 9.79 4.06 12 6.5c2.21-2.44 4.97-3.32 7.5-2C22.5 6.06 23.21 9.702 21.428 12.515 18.716 16.65 12 21 12 21z';
+function heartIconMarkup(filled) {
+  return filled
+    ? `<svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><path d="${TT_HEART_PATH_D}"/></svg>`
+    : `<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="${TT_HEART_PATH_D}"/></svg>`;
+}
+
 /**
  * Format a number as Guaraní: 210000 → "Gs. 210.000"
  */
@@ -354,7 +363,7 @@ function renderCart() {
           <a href="/product?id=${encodeURIComponent(String(item.id))}" class="tt-cart-favorite-img" aria-label="Ver ${escapeAttribute(item.name)}">${favoriteImage ? `<img src="${escapeAttribute(favoriteImage)}" alt="${escapeAttribute(item.name)}" loading="lazy">` : ''}</a>
           <div class="tt-cart-favorite-info"><strong>${escapeHtml(item.name)}</strong><span>${formatPrice(item.price)}</span></div>
           <button type="button" class="tt-cart-favorite-add" data-favorite-add-cart="${safeFavoriteId}" aria-label="Agregar ${escapeAttribute(item.name)} al carrito">+ Carrito</button>
-          <button type="button" class="tt-cart-favorite-toggle is-favorite" data-favorite-id="${safeFavoriteId}" data-favorite-name="${escapeAttribute(item.name)}" data-favorite-price="${escapeAttribute(item.price)}" data-favorite-image="${escapeAttribute(item.imageUrl || '')}" aria-pressed="true"><span data-favorite-icon aria-hidden="true">♥</span></button>
+          <button type="button" class="tt-cart-favorite-toggle is-favorite" data-favorite-id="${safeFavoriteId}" data-favorite-name="${escapeAttribute(item.name)}" data-favorite-price="${escapeAttribute(item.price)}" data-favorite-image="${escapeAttribute(item.imageUrl || '')}" aria-pressed="true"><span data-favorite-icon aria-hidden="true">${heartIconMarkup(true)}</span></button>
         </div>`;
       }).join('')}
     </section>` : '';
@@ -398,7 +407,7 @@ function renderCart() {
         </div>
       </div>
       <div class="tt-cart-item-actions">
-        <button type="button" class="tt-cart-favorite-toggle${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${escapeAttribute(item.name)}" data-favorite-price="${escapeAttribute(item.price)}" data-favorite-image="${escapeAttribute(item.imageUrl || '')}" data-favorite-cat="${escapeAttribute(item.cat || '')}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${isFavorite ? '♥' : '♡'}</span></button>
+        <button type="button" class="tt-cart-favorite-toggle${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${escapeAttribute(item.name)}" data-favorite-price="${escapeAttribute(item.price)}" data-favorite-image="${escapeAttribute(item.imageUrl || '')}" data-favorite-cat="${escapeAttribute(item.cat || '')}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${heartIconMarkup(isFavorite)}</span></button>
         <button type="button" class="tt-cart-item-remove" data-cart-action="remove" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" aria-label="Eliminar">✕</button>
       </div>
     </div>
@@ -772,7 +781,7 @@ function renderProductCardMarkup(p, options = {}) {
 
   return `
     <article class="tt-product-card" data-id="${safeId}" data-category="${escapeAttribute(p.category || p.cat || '')}">
-      <button type="button" class="tt-product-favorite-button${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${escapeAttribute(p.name)}" data-favorite-price="${escapeAttribute(p.price)}" data-favorite-image="${escapeAttribute(imgUrl)}" data-favorite-cat="${escapeAttribute(p.category || p.cat || '')}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${isFavorite ? '♥' : '♡'}</span></button>
+      <button type="button" class="tt-product-favorite-button${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${escapeAttribute(p.name)}" data-favorite-price="${escapeAttribute(p.price)}" data-favorite-image="${escapeAttribute(imgUrl)}" data-favorite-cat="${escapeAttribute(p.category || p.cat || '')}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${heartIconMarkup(isFavorite)}</span></button>
       <a href="${productHref}" class="tt-product-img tt-product-card-img-link" aria-label="Ver ${escapeAttribute(p.name)}">
         ${badgeHTML}
         ${imgContent}

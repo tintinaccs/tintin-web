@@ -41,11 +41,25 @@
 
   html body #search-panel,
   html body #cart-drawer,
-  html body #collections-sheet {
+  html body #collections-sheet,
+  html body #notifications-drawer {
     background: #FFFFFF !important;
     background-color: #FFFFFF !important;
     background-image: none !important;
     border: 1px solid #F1C8D5 !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    mix-blend-mode: normal !important;
+  }
+
+  html body #tt-tabbar #tabbar-notifications,
+  html body #tt-tabbar #tabbar-notifications:hover,
+  html body #tt-tabbar #tabbar-notifications:focus-visible,
+  html body #tt-tabbar #tabbar-notifications[aria-expanded="true"] {
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    background-image: none !important;
     opacity: 1 !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;

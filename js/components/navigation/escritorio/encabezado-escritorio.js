@@ -18,7 +18,6 @@ export function renderDesktopHeader() {
       <div class="tt-header-inner">
         <a href="/" class="tt-logo-link" aria-label="Tintin, ir al inicio">
           <img loading="eager" decoding="async" fetchpriority="high" src="${EMPTY_IMAGE}" data-tt-shared-logo="${logoUrl()}" alt="TINTIN Accesorios &amp; Relojes" class="tt-logo-img">
-          <span class="tt-header-brand-copy" aria-hidden="true"><strong>TINTÍN</strong><small>ACCESORIOS &amp; RELOJES</small></span>
         </a>
 
         <nav class="tt-nav tt-nav-desktop" id="tt-nav-desktop-tablet" aria-label="Navegación principal">
