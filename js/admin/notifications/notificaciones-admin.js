@@ -5,7 +5,7 @@ import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-const ASSET_VERSION = 'tintin-20260814-social-notifications-1';
+const ASSET_VERSION = 'tintin-20260817-notification-actor-profile-1';
 const ORDER_RECOVERY_WINDOW_MS = 2 * 60 * 60 * 1000;
 const ORDER_NOTIFY_RETRY_DELAYS_MS = [700, 1800];
 const MAX_RECOVERY_ORDERS = 60;
@@ -108,6 +108,19 @@ function updateBadge() {
   if (button) button.disabled = unread === 0;
 }
 
+function trailingMarkup(notification) {
+  const hasActor = notification.actorType === 'customer' && notification.actorUid;
+  if (hasActor) {
+    const photo = safeImageUrl(notification.actorPhotoUrl);
+    if (photo) return `<img class="adm-notification-avatar" src="${escapeHtml(photo)}" alt="" loading="lazy" decoding="async">`;
+    const initial = (String(notification.actorName || '?').trim()[0] || '?').toUpperCase();
+    return `<span class="adm-notification-avatar adm-notification-avatar-fallback" aria-hidden="true">${escapeHtml(initial)}</span>`;
+  }
+  const image = safeImageUrl(notification.productImageUrl);
+  if (image) return `<img class="adm-notification-thumb" src="${escapeHtml(image)}" alt="" loading="lazy" decoding="async">`;
+  return '<span class="adm-notification-placeholder" aria-hidden="true">T</span>';
+}
+
 function render() {
   const root = document.getElementById('adm-notifications-list');
   if (!root) return;
@@ -117,14 +130,17 @@ function render() {
     return;
   }
   root.innerHTML = notifications.map(notification => {
-    const image = safeImageUrl(notification.productImageUrl);
-    const trailing = image
-      ? `<img class="adm-notification-thumb" src="${escapeHtml(image)}" alt="" loading="lazy" decoding="async">`
-      : '<span class="adm-notification-placeholder" aria-hidden="true">T</span>';
-    return `<button type="button" class="adm-notification-card${notification.read === true ? '' : ' is-unread'}" data-adm-notification="${escapeHtml(notification.id)}">
-      <span class="adm-notification-icon" data-icon="${escapeHtml(notification.iconKey || 'bell')}">${iconSvg(notification.iconKey)}</span>
-      <span><strong>${escapeHtml(notification.title || 'Nueva actividad')}</strong>${notification.body ? `<p>${escapeHtml(notification.body)}</p>` : ''}<span class="adm-notification-time">${escapeHtml(relativeTime(notification.createdAt))}</span></span>${trailing}
-    </button>`;
+    const trailing = trailingMarkup(notification);
+    const hasActor = notification.actorType === 'customer' && notification.actorUid;
+    const profileButton = hasActor
+      ? `<button type="button" class="adm-notification-profile-link" data-view-actor-profile data-owner-uid="${escapeHtml(notification.actorUid)}" data-owner-name="${escapeHtml(notification.actorName || '')}">Ver perfil</button>`
+      : '';
+    return `<div class="adm-notification-card${notification.read === true ? '' : ' is-unread'}">
+      <button type="button" class="adm-notification-main" data-notification-open="${escapeHtml(notification.id)}">
+        <span class="adm-notification-icon" data-icon="${escapeHtml(notification.iconKey || 'bell')}">${iconSvg(notification.iconKey)}</span>
+        <span><strong>${escapeHtml(notification.title || 'Nueva actividad')}</strong>${notification.body ? `<p>${escapeHtml(notification.body)}</p>` : ''}<span class="adm-notification-time">${escapeHtml(relativeTime(notification.createdAt))}</span></span>${trailing}
+      </button>${profileButton}
+    </div>`;
   }).join('');
   updateBadge();
 }
@@ -170,6 +186,18 @@ function goToNotification(notification) {
   else if (source === 'user') openSection('usuarios', sourceId);
   else if (source === 'order') openSection('pedidos', sourceId);
   else if (notification.targetUrl) window.location.href = notification.targetUrl;
+}
+
+function goToUserProfile(query) {
+  const trigger = document.querySelector('[data-section="usuarios"]');
+  trigger?.click();
+  window.setTimeout(() => {
+    const search = document.getElementById('user-search');
+    if (!search) return;
+    search.value = query;
+    search.dispatchEvent(new Event('input', { bubbles: true }));
+    search.focus();
+  }, 220);
 }
 
 function closePanel() {
@@ -274,10 +302,20 @@ function wireEvents() {
       return;
     }
 
-    const card = event.target.closest?.('[data-adm-notification]');
+    const profileButton = event.target.closest?.('[data-view-actor-profile]');
+    if (profileButton) {
+      event.preventDefault();
+      event.stopPropagation();
+      const query = profileButton.dataset.ownerName || profileButton.dataset.ownerUid || '';
+      closePanel();
+      goToUserProfile(query);
+      return;
+    }
+
+    const card = event.target.closest?.('[data-notification-open]');
     if (card) {
       event.preventDefault();
-      const notification = notifications.find(item => item.id === card.dataset.admNotification);
+      const notification = notifications.find(item => item.id === card.dataset.notificationOpen);
       if (!notification) return;
       notification.read = true;
       render();

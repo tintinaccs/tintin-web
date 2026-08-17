@@ -89,30 +89,58 @@
 }
 
 .adm-notification-card {
+  position: relative;
+  border: 1px solid transparent;
+  border-radius: 17px;
+  background: transparent;
+  color: #4a3540;
+}
+
+.adm-notification-card:hover,
+.adm-notification-card:focus-within {
+  border-color: #efc8d7;
+  background: #fff;
+}
+
+.adm-notification-card.is-unread {
+  border-color: #f0d2de;
+  background: #fff2f7;
+}
+
+.adm-notification-main {
   width: 100%;
   display: grid;
   grid-template-columns: 42px minmax(0, 1fr) 50px;
   align-items: center;
   gap: 10px;
   padding: 11px;
-  border: 1px solid transparent;
+  border: none;
   border-radius: 17px;
   background: transparent;
   text-align: left;
-  color: #4a3540;
+  color: inherit;
   cursor: pointer;
-}
-
-.adm-notification-card:hover,
-.adm-notification-card:focus-visible {
-  border-color: #efc8d7;
-  background: #fff;
   outline: none;
 }
 
-.adm-notification-card.is-unread {
-  border-color: #f0d2de;
+.adm-notification-profile-link {
+  display: block;
+  margin: 0 11px 11px 62px;
+  padding: 5px 12px;
+  border: 1px solid #efc8d7;
+  border-radius: 999px;
+  background: #fff;
+  color: #9f315c;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.adm-notification-profile-link:hover,
+.adm-notification-profile-link:focus-visible {
   background: #fff2f7;
+  outline: none;
 }
 
 .adm-notification-icon {
@@ -163,6 +191,23 @@
   border: 1px solid #efc8d7;
   border-radius: 12px;
   background: #fff;
+}
+
+.adm-notification-avatar {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border: 1px solid #efc8d7;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.adm-notification-avatar-fallback {
+  display: grid;
+  place-items: center;
+  color: #9f315c;
+  background: #fff2f7;
+  font-weight: 800;
 }
 
 .adm-notification-placeholder {

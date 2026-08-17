@@ -79,6 +79,7 @@ function normalizeEvent(event = {}) {
     actorType: ['customer', 'store', 'system'].includes(event.actorType) ? event.actorType : 'system',
     actorUid: clean(event.actorUid, 180),
     actorName: clean(event.actorName || 'Tintin', 160),
+    actorPhotoUrl: safeImageUrl(event.actorPhotoUrl),
     title: clean(event.title, MAX_TITLE),
     body: clean(event.body, MAX_BODY),
     snippet: clean(event.snippet, MAX_SNIPPET),

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-17T17:23:26.034Z",
-  "sourceFingerprint": "305007cffa2d5621f0f73155eb9af839b8515507ca2e42b74d1dc1de368b5a1e",
+  "generatedAt": "2026-08-17T17:49:45.565Z",
+  "sourceFingerprint": "5455d4c4092b6d9c12918c5f58fbfd5b556304001b29e0e92364fd177708c49f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 662,
     "textFiles": 630,
-    "totalBytes": 7439548,
+    "totalBytes": 7445762,
     "pages": 18,
     "modules": 411
   },
@@ -1773,8 +1773,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 164232,
-      "sha256": "22e50507c43353efe2915210361848ae6b513f7eda7c6ce792bf92423e0f699b",
+      "bytes": 164238,
+      "sha256": "2d856e8c6a24328bb1feb5ecdff092220faa30b7a5a5352c90c27f1039767855",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1843,7 +1843,7 @@
           "line": 2106
         },
         {
-          "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20260814-social-notifications-1",
+          "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20260817-notification-actor-profile-1",
           "target": "js/admin/notifications/notificaciones-admin.js",
           "line": 2107
         }
@@ -2059,7 +2059,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20260814-social-notifications-1",
+          "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20260817-notification-actor-profile-1",
           "target": "js/admin/notifications/notificaciones-admin.js",
           "line": 2107,
           "exists": true
@@ -16082,8 +16082,8 @@
     },
     {
       "path": "cloudflare/notificaciones-sociales.js",
-      "bytes": 8688,
-      "sha256": "23b60b022ee3fc78c834f540386e6e2882ee571f7e650cd5be6c56fc909cc0b8",
+      "bytes": 8742,
+      "sha256": "5f65597d7a6078211508b0289f4b8cc5551e6c469269b7d725cf5813ba3cf493",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16103,7 +16103,7 @@
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/$%7BencodeURIComponent(projectId",
-          "line": 185
+          "line": 186
         }
       ]
     },
@@ -16139,8 +16139,8 @@
     },
     {
       "path": "cloudflare/participacion-clientes.js",
-      "bytes": 19177,
-      "sha256": "aef280fecc023879acb4a7467de8f2714fff60e008678678a9bc2428390db37e",
+      "bytes": 19456,
+      "sha256": "d4769c27762eb83e6feb48886fd015ed68a088013bb5c058966c6672878b3053",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16784,8 +16784,8 @@
     },
     {
       "path": "functions/api/notifications.js",
-      "bytes": 9711,
-      "sha256": "f5c24f91861c15d5a02fa14ce3da1775077cf6b252cd8afb0abf1be67c6f578f",
+      "bytes": 9980,
+      "sha256": "dd6335e469b4e8ac869596c19d743b9c2e1f2d28f4b6b3b669029ca25fa02b2a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17999,8 +17999,8 @@
     },
     {
       "path": "js/admin/notifications/notificaciones-admin.js",
-      "bytes": 14505,
-      "sha256": "df1739a0384e041c571c62e9124708db86cdb29edcbfa88c92f22f2812df454a",
+      "bytes": 16241,
+      "sha256": "e5539b93fbc27342596af5a95a5dac1fab6c60033e84849db258e686e53dcbaa",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25176,8 +25176,8 @@
     },
     {
       "path": "scripts/verificar-salud-ci-global.mjs",
-      "bytes": 12216,
-      "sha256": "a249aadafc06e216c8d9f2315e397301a9f75f41a5a824a93a10e368d3cb9680",
+      "bytes": 15263,
+      "sha256": "3a21e1746f7448a0fe1a3e0ebe29983d0d439d7f438743ad89f5a7ea300c662a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25199,7 +25199,7 @@
       "endpoints": [
         {
           "url": "https://api.github.com/repos/$%7Brepo%7D$%7Bendpoint%7D",
-          "line": 46
+          "line": 72
         }
       ]
     },
@@ -26677,8 +26677,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 164232,
-      "sha256": "22e50507c43353efe2915210361848ae6b513f7eda7c6ce792bf92423e0f699b"
+      "bytes": 164238,
+      "sha256": "2d856e8c6a24328bb1feb5ecdff092220faa30b7a5a5352c90c27f1039767855"
     },
     {
       "path": "apple-touch-icon.png",
@@ -26911,8 +26911,8 @@
     {
       "path": "cloudflare/notificaciones-sociales.js",
       "extension": ".js",
-      "bytes": 8688,
-      "sha256": "23b60b022ee3fc78c834f540386e6e2882ee571f7e650cd5be6c56fc909cc0b8"
+      "bytes": 8742,
+      "sha256": "5f65597d7a6078211508b0289f4b8cc5551e6c469269b7d725cf5813ba3cf493"
     },
     {
       "path": "cloudflare/participacion-admin.js",
@@ -26923,8 +26923,8 @@
     {
       "path": "cloudflare/participacion-clientes.js",
       "extension": ".js",
-      "bytes": 19177,
-      "sha256": "aef280fecc023879acb4a7467de8f2714fff60e008678678a9bc2428390db37e"
+      "bytes": 19456,
+      "sha256": "d4769c27762eb83e6feb48886fd015ed68a088013bb5c058966c6672878b3053"
     },
     {
       "path": "cloudflare/paypal-seguro.js",
@@ -27025,8 +27025,8 @@
     {
       "path": "css/admin/notificaciones-admin.css",
       "extension": ".css",
-      "bytes": 4645,
-      "sha256": "c86e38564906d5c3db1f07ad2f3df9ccb03f99e424bcd2a9813e1920fa989e02"
+      "bytes": 5468,
+      "sha256": "0052e5a376aea67401c410fa9bdd79b94a140a7f812f3bc182669e84cda8e84a"
     },
     {
       "path": "css/admin/participacion-admin.css",
@@ -27769,8 +27769,8 @@
     {
       "path": "functions/api/notifications.js",
       "extension": ".js",
-      "bytes": 9711,
-      "sha256": "f5c24f91861c15d5a02fa14ce3da1775077cf6b252cd8afb0abf1be67c6f578f"
+      "bytes": 9980,
+      "sha256": "dd6335e469b4e8ac869596c19d743b9c2e1f2d28f4b6b3b669029ca25fa02b2a"
     },
     {
       "path": "functions/api/order-email.js",
@@ -28033,8 +28033,8 @@
     {
       "path": "js/admin/notifications/notificaciones-admin.js",
       "extension": ".js",
-      "bytes": 14505,
-      "sha256": "df1739a0384e041c571c62e9124708db86cdb29edcbfa88c92f22f2812df454a"
+      "bytes": 16241,
+      "sha256": "e5539b93fbc27342596af5a95a5dac1fab6c60033e84849db258e686e53dcbaa"
     },
     {
       "path": "js/admin/orders/eliminacion-pedidos-admin.js",
@@ -30091,8 +30091,8 @@
     {
       "path": "scripts/verificar-salud-ci-global.mjs",
       "extension": ".mjs",
-      "bytes": 12216,
-      "sha256": "a249aadafc06e216c8d9f2315e397301a9f75f41a5a824a93a10e368d3cb9680"
+      "bytes": 15263,
+      "sha256": "3a21e1746f7448a0fe1a3e0ebe29983d0d439d7f438743ad89f5a7ea300c662a"
     },
     {
       "path": "sitemap-pages.xml",
@@ -31483,7 +31483,7 @@
     },
     {
       "file": "js/admin/notifications/notificaciones-admin.js",
-      "line": 135,
+      "line": 151,
       "target": "/api/notifications",
       "method": "POST"
     },
@@ -31551,7 +31551,7 @@
         "references": [
           {
             "file": "js/admin/notifications/notificaciones-admin.js",
-            "line": 184,
+            "line": 212,
             "operation": "collection"
           }
         ]
@@ -32006,7 +32006,7 @@
           },
           {
             "file": "js/admin/notifications/notificaciones-admin.js",
-            "line": 243,
+            "line": 271,
             "operation": "collection"
           },
           {
