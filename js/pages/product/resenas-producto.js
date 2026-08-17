@@ -54,12 +54,17 @@ function ensureSection() {
       </div>
     </div>`;
 
+  const related = document.querySelector('.tt-related-section, .tt-related-products, #related-products');
+  const tinsel = document.querySelector('.tinsel, #tinsel-root');
   const productDetail = document.getElementById('product-detail');
-  if (productDetail?.parentNode) {
+  if (related?.parentNode) {
+    related.parentNode.insertBefore(section, related);
+  } else if (tinsel?.parentNode) {
+    tinsel.insertAdjacentElement('afterend', section);
+  } else if (productDetail?.parentNode) {
     productDetail.insertAdjacentElement('afterend', section);
   } else {
-    const related = document.querySelector('.tt-related-section, .tt-related-products, #related-products');
-    (related?.parentNode || document.body).insertBefore(section, related || document.querySelector('.tt-footer'));
+    document.body.insertBefore(section, document.querySelector('.tt-footer'));
   }
   return section;
 }
