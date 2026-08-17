@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-17T17:16:12.006Z",
-  "sourceFingerprint": "44237f4f9d298d69076d41031b33729232503f290852f9227422f320ce9d64d6",
+  "generatedAt": "2026-08-17T17:23:26.034Z",
+  "sourceFingerprint": "305007cffa2d5621f0f73155eb9af839b8515507ca2e42b74d1dc1de368b5a1e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 662,
     "textFiles": 630,
-    "totalBytes": 7439526,
+    "totalBytes": 7439548,
     "pages": 18,
     "modules": 411
   },
@@ -19352,8 +19352,8 @@
     },
     {
       "path": "js/components/navigation/compartido/apariencia-global.js",
-      "bytes": 7227,
-      "sha256": "5141e65fa658b44571b5397832505fd1483d7ef3ba09f1c01fcf73f3084eaa38",
+      "bytes": 8102,
+      "sha256": "361ca944399128eb430e448a84a18dbecb10d6ceb880c36cd879078589fa704b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19723,7 +19723,7 @@
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
       "bytes": 8516,
-      "sha256": "8ef62550934db964eadb21df48752c6f28c59e61133bc504a61b2e1252090d60",
+      "sha256": "e6bf6d6a4d652482877d62e69c22683f3f30ece04e7267226336d056a6924d98",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19808,7 +19808,7 @@
           "line": 13
         },
         {
-          "raw": "./compartido/apariencia-global.js?v=tintin-20260815-prelaunch-cache-1",
+          "raw": "./compartido/apariencia-global.js?v=tintin-20260817-footer-contrast-1",
           "target": "js/components/navigation/compartido/apariencia-global.js",
           "dynamic": false,
           "line": 14
@@ -27067,8 +27067,8 @@
     {
       "path": "css/components/navigation/compartido/apariencia-global.css",
       "extension": ".css",
-      "bytes": 4350,
-      "sha256": "dfc87418baf24dd11e910f7c75e468aa3e15d5011feb4d03c24b1608033783c8"
+      "bytes": 4402,
+      "sha256": "a7443871a19c6cf23675ddb745f1afdbd6054782eb0abc4e20bbda9230fa2b26"
     },
     {
       "path": "css/components/navigation/compartido/busqueda.css",
@@ -28327,8 +28327,8 @@
     {
       "path": "js/components/navigation/compartido/apariencia-global.js",
       "extension": ".js",
-      "bytes": 7227,
-      "sha256": "5141e65fa658b44571b5397832505fd1483d7ef3ba09f1c01fcf73f3084eaa38"
+      "bytes": 8102,
+      "sha256": "361ca944399128eb430e448a84a18dbecb10d6ceb880c36cd879078589fa704b"
     },
     {
       "path": "js/components/navigation/compartido/barrera-arranque-shell.js",
@@ -28490,7 +28490,7 @@
       "path": "js/components/navigation/entrada-navegacion-publica.js",
       "extension": ".js",
       "bytes": 8516,
-      "sha256": "8ef62550934db964eadb21df48752c6f28c59e61133bc504a61b2e1252090d60"
+      "sha256": "e6bf6d6a4d652482877d62e69c22683f3f30ece04e7267226336d056a6924d98"
     },
     {
       "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
@@ -29935,14 +29935,14 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 956,
-      "sha256": "2a80ecc54a3cda1b638a2019ce995f310ba4627a1898ac176621c423185b3de6"
+      "bytes": 38,
+      "sha256": "dd9d3b46a69239cd812969333746634c254684c83bb0c9501af9d578669e38b8"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 30817,
-      "sha256": "b2fc241c4058dd38fbca6720906644e659ba1e2072c0268b7b2d7e5d4e924173"
+      "bytes": 30830,
+      "sha256": "07cbf3fa499ebe08bb82b9c984111f32764b9ef9644f0dec1f3130aae681e22a"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -31507,7 +31507,7 @@
     },
     {
       "file": "js/components/navigation/compartido/apariencia-global.js",
-      "line": 143,
+      "line": 161,
       "target": "/api/visual-studio-global-public",
       "method": "GET"
     },
