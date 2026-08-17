@@ -1,11 +1,51 @@
-/* TINTIN mobile tabbar — source of truth for 0–767px. */
+/* TINTIN mobile header + tabbar — source of truth for 0–767px. */
+.tt-header-mobile { display:none !important; }
+
 @media (min-width: 768px) {
+  #tt-header-mobile,
   #tt-tabbar { display:none !important; visibility:hidden !important; pointer-events:none !important; }
 }
 
 @media (max-width: 767px) {
   #tt-header-desktop-tablet,
   #tt-header-tablet { display:none !important; visibility:hidden !important; pointer-events:none !important; }
+
+  #tt-header-mobile {
+    display:flex !important;
+    visibility:visible !important;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    min-height:72px;
+    padding:8px 16px;
+    box-sizing:border-box;
+    background:#fff !important;
+    color:#8b2642 !important;
+    border-bottom:1px solid rgba(238,190,208,.8);
+    box-shadow:0 6px 22px rgba(126,30,65,.04);
+    position:relative;
+    z-index:var(--z-header,900);
+  }
+
+  #tt-header-mobile .tt-mobile-logo-link {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:min(220px,68vw);
+    min-height:56px;
+    text-decoration:none;
+  }
+
+  #tt-header-mobile .tt-mobile-logo-img {
+    display:block;
+    width:auto;
+    height:56px;
+    max-width:min(200px,62vw);
+    object-fit:contain;
+    margin:0 auto;
+  }
+
+  #tt-header-mobile .tt-mobile-logo-img[hidden] { display:none !important; }
 
   #tt-tabbar {
     --tt-mobile-step: 0px;
@@ -44,11 +84,54 @@
   }
 
   #tt-tabbar .tt-tabbar-btn::after { display:none; }
-  #tt-tabbar .tt-tabbar-btn svg,
+  #tt-tabbar .tt-tabbar-btn > svg,
   #tt-tabbar .tt-tabbar-avatar {
     width:23px !important;
     height:23px !important;
     transition:transform .34s cubic-bezier(.2,.85,.2,1),color .2s ease;
+  }
+
+  #tabbar-cuenta .tt-tabbar-account-icon {
+    display:grid !important;
+    place-items:center;
+    flex:0 0 30px;
+    width:30px !important;
+    height:30px !important;
+    margin:0 auto;
+    border-radius:50% !important;
+    overflow:hidden !important;
+    background:transparent;
+    box-sizing:border-box;
+    transition:transform .34s cubic-bezier(.2,.85,.2,1),background-color .2s ease;
+  }
+
+  #tabbar-cuenta .tt-tabbar-account-icon > svg {
+    display:block;
+    width:23px !important;
+    height:23px !important;
+    border-radius:50% !important;
+    background:transparent !important;
+    box-shadow:none !important;
+  }
+
+  #tabbar-cuenta .tt-tabbar-avatar {
+    display:block !important;
+    width:100% !important;
+    height:100% !important;
+    max-width:none !important;
+    max-height:none !important;
+    margin:0 !important;
+    object-fit:cover !important;
+    border-radius:50% !important;
+    clip-path:circle(50%) !important;
+    background:#fff !important;
+  }
+
+  #tabbar-cuenta.active .tt-tabbar-account-icon,
+  #tabbar-cuenta[aria-expanded="true"] .tt-tabbar-account-icon {
+    background:#fde6ef;
+    border-radius:50% !important;
+    transform:translateY(-8px) scale(1.12);
   }
 
   #tt-tabbar .tt-tabbar-btn span:last-child {
@@ -83,25 +166,40 @@
     transform:translateY(5px);
   }
 
-  #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn svg,
+  #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn > svg,
   #tt-tabbar.tt-tabbar-compact .tt-tabbar-avatar {
     width:24px !important;
     height:24px !important;
   }
 
-  #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn.active svg,
+  #tt-tabbar.tt-tabbar-compact #tabbar-cuenta .tt-tabbar-account-icon {
+    width:30px !important;
+    height:30px !important;
+  }
+
+  #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn.active > svg,
   #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn.active .tt-tabbar-avatar,
-  #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn[aria-expanded="true"] svg,
+  #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn[aria-expanded="true"] > svg,
   #tt-tabbar.tt-tabbar-compact .tt-tabbar-btn[aria-expanded="true"] .tt-tabbar-avatar {
+    transform:translateY(-4px) scale(1.08);
+  }
+
+  #tt-tabbar.tt-tabbar-compact #tabbar-cuenta.active .tt-tabbar-account-icon,
+  #tt-tabbar.tt-tabbar-compact #tabbar-cuenta[aria-expanded="true"] .tt-tabbar-account-icon {
     transform:translateY(-4px) scale(1.08);
   }
 
   #tt-tabbar .tt-tabbar-btn.active,
   #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] { color:#a3154b !important; }
-  #tt-tabbar .tt-tabbar-btn.active svg,
+  #tt-tabbar .tt-tabbar-btn.active > svg,
   #tt-tabbar .tt-tabbar-btn.active .tt-tabbar-avatar,
-  #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] svg,
+  #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] > svg,
   #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] .tt-tabbar-avatar { transform:translateY(-8px) scale(1.12); }
+
+  #tabbar-cuenta.active .tt-tabbar-account-icon .tt-tabbar-avatar,
+  #tabbar-cuenta[aria-expanded="true"] .tt-tabbar-account-icon .tt-tabbar-avatar {
+    transform:none !important;
+  }
 
   .tt-mobile-nav-halo,
   .tt-mobile-nav-indicator {
@@ -148,13 +246,15 @@
   #tt-tabbar:not(.tt-tabbar-compact) { width:calc(100vw - 12px); padding-inline:5px; }
   #tt-tabbar.tt-tabbar-compact { width:calc(100vw - 42px); padding-inline:6px; }
   #tt-tabbar .tt-tabbar-btn span:last-child { font-size:.52rem; }
+  #tt-header-mobile .tt-mobile-logo-img { max-width:58vw; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .tt-mobile-nav-halo,
   .tt-mobile-nav-indicator,
-  #tt-tabbar .tt-tabbar-btn svg,
+  #tt-tabbar .tt-tabbar-btn > svg,
   #tt-tabbar .tt-tabbar-avatar,
+  #tabbar-cuenta .tt-tabbar-account-icon,
   #tt-tabbar .tt-tabbar-btn span:last-child,
   #tt-tabbar { transition:none !important; }
 }
