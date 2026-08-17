@@ -3613,6 +3613,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   padding: 44px 0;
 }
 
+.tt-accordion-chevron { display: none; }
+
 .tt-related-header {
   display: flex;
   align-items: center;
@@ -4034,6 +4036,57 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   .tt-qty-wrap { flex-wrap: wrap; gap: 10px 12px; }
   .tt-related-header { justify-content: space-between; text-align: left; margin-bottom: 26px; }
   .tt-related-refresh { width: 44px; height: 44px; flex-basis: 44px; }
+
+  #related-trigger {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    column-gap: 10px;
+    flex: 1 1 auto;
+    min-width: 0;
+    cursor: pointer;
+  }
+  #related-trigger .tt-section-sub,
+  #related-trigger .tt-section-title { grid-column: 1; }
+  #related-trigger .tt-accordion-chevron {
+    display: block;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    width: 20px;
+    height: 20px;
+    color: var(--pink-dark);
+    transition: transform 0.2s ease;
+  }
+  #related-trigger[aria-expanded="false"] .tt-accordion-chevron { transform: rotate(-90deg); }
+  .tt-related-section[data-collapsed="true"] #related-status,
+  .tt-related-section[data-collapsed="true"] #related-grid { display: none; }
+
+  #specs-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    margin: 18px 0 0;
+    padding: 12px 0;
+    border: 0;
+    border-top: 1px solid var(--border, #eadde2);
+    background: none;
+    font: inherit;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text);
+    cursor: pointer;
+  }
+  #specs-trigger .tt-accordion-chevron {
+    display: block;
+    width: 18px;
+    height: 18px;
+    color: var(--pink-dark);
+    transition: transform 0.2s ease;
+  }
+  #specs-trigger[aria-expanded="false"] .tt-accordion-chevron { transform: rotate(-90deg); }
+  .tt-specs-block[data-collapsed="true"] #product-specifications { display: none; }
   .tt-added-toast { width: calc(100vw - 32px); min-width: 0; bottom: 82px; }
   .tt-added-toast-actions { flex-wrap: wrap; }
   .tt-added-toast-btn { min-width: 120px; min-height: 40px; }

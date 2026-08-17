@@ -98,6 +98,26 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
     document.getElementById('tt-product-sync-state')?.classList.toggle('tt-sync-superadmin', isSuperAdmin);
   });
 
+  function toggleMobileAccordion(trigger) {
+    const expanded = trigger.getAttribute('aria-expanded') === 'true';
+    trigger.setAttribute('aria-expanded', String(!expanded));
+    const root = trigger.closest('.tt-specs-block, .tt-related-section, #product-reviews');
+    if (root) root.dataset.collapsed = expanded ? 'true' : 'false';
+  }
+
+  document.addEventListener('click', event => {
+    const trigger = event.target.closest('.tt-mobile-accordion-trigger');
+    if (trigger) toggleMobileAccordion(trigger);
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    const trigger = event.target.closest('.tt-mobile-accordion-trigger[role="button"]');
+    if (!trigger) return;
+    event.preventDefault();
+    toggleMobileAccordion(trigger);
+  });
+
   function isVisible(node) {
     if (!node) return false;
     return !node.hidden && node.style.display !== 'none' && getComputedStyle(node).display !== 'none';
