@@ -1,0 +1,19 @@
+/* TINTIN — integra la barra superior mobile con el primer viewport de Inicio.
+   La barra de marca ocupa 64px en el flujo; el Hero usa el resto del svh y
+   deja 100px bajo sus CTA para no competir con la tabbar inferior fija. */
+@media (max-width: 767px) {
+  body.tt-public-shell-home #hero.tt-hero {
+    height: calc(100svh - 64px);
+  }
+
+  body.tt-public-shell-home #hero .tt-hero-content {
+    padding-bottom: 100px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.tt-public-shell-home #hero,
+  body.tt-public-shell-home #hero .tt-hero-content {
+    scroll-behavior: auto;
+  }
+}
