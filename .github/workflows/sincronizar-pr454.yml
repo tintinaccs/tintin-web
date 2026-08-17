@@ -1,0 +1,37 @@
+name: Sincronizar PR 454
+
+on:
+  push:
+    branches:
+      - chatgpt/fix-header-logos-mobile-brandbar
+    paths:
+      - .github/workflows/sincronizar-pr454.yml
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    name: Sincronizar shell y persistir HTML
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout rama del PR
+        uses: actions/checkout@v5
+        with:
+          ref: chatgpt/fix-header-logos-mobile-brandbar
+          fetch-depth: 0
+
+      - name: Sincronizar páginas públicas
+        run: npm run sync:public-shell
+
+      - name: Persistir salidas reproducibles
+        run: |
+          if git diff --quiet -- '*.html'; then
+            echo "Las páginas ya estaban sincronizadas."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- '*.html'
+          git commit -m "chore(shell): persistir páginas públicas sincronizadas"
+          git push origin HEAD:chatgpt/fix-header-logos-mobile-brandbar
