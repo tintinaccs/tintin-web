@@ -11,21 +11,18 @@ const LOADER_VERSION = 'tintin-20260816-loader-min-show-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260817-header-logo-mobilebar-1';
 const NAV_ENTRY_VERSION = 'tintin-20260817-header-logo-mobilebar-1';
-const NAV_BARRIER_VERSION = 'tintin-20260817-header-logo-mobilebar-1';
+const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20260815-profile-routes-1';
 const PROFILE_GATE_VERSION = 'tintin-20260815-profile-routes-1';
-// Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
-// esa constante decide la URL exacta (con ?v=) que entrada-navegacion-publica.js y
-// ensureNavigationAssets() piden en tiempo de ejecución. Si difieren, el preload no
-// acierta la cache key exacta y el navegador vuelve a pedir el recurso igual.
-const NAV_SHELL_VERSION = 'tintin-20260817-header-logo-mobilebar-1';
+const NAV_SHELL_VERSION = 'tintin-20260811-cls-header-reserve-1';
+const NAV_HEADER_BRAND_VERSION = 'tintin-20260817-header-logo-mobilebar-1';
 const NAVIGATION_PRELOAD_STYLES = [
-  'css/components/navigation/escritorio/encabezado-escritorio.css',
-  'css/components/navigation/tableta/encabezado-tableta.css',
-  'css/components/navigation/movil/encabezado-movil.css',
-  'css/components/navigation/compartido/transiciones-navegacion.css',
-  'css/components/navigation/compartido/paneles.css',
-  'css/components/navigation/compartido/busqueda.css',
+  ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_BRAND_VERSION],
+  ['css/components/navigation/tableta/encabezado-tableta.css', NAV_SHELL_VERSION],
+  ['css/components/navigation/movil/encabezado-movil.css', NAV_HEADER_BRAND_VERSION],
+  ['css/components/navigation/compartido/transiciones-navegacion.css', NAV_SHELL_VERSION],
+  ['css/components/navigation/compartido/paneles.css', NAV_SHELL_VERSION],
+  ['css/components/navigation/compartido/busqueda.css', NAV_SHELL_VERSION],
 ];
 const PUBLIC_PAGES = [
   '404.html',
@@ -51,6 +48,7 @@ const SHELL_IDS = [
   'tt-mobile-brandbar',
   'search-panel',
   'mobile-menu',
+  'tt-tablet-menu',
   'tt-tabbar',
   'cart-overlay',
   'cart-drawer',
@@ -121,7 +119,7 @@ function ensureNavigationPreloads(html) {
     `<link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=${NAV_BARRIER_VERSION}">`,
     `<link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=${NAV_ENTRY_VERSION}">`,
     ...NAVIGATION_PRELOAD_STYLES.map(
-      href => `<link rel="preload" as="style" href="${href}?v=${NAV_SHELL_VERSION}">`
+      ([href, version]) => `<link rel="preload" as="style" href="${href}?v=${version}">`
     ),
   ].map(tag => `  ${tag}`).join('\n');
 
