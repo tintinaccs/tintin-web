@@ -1,6 +1,20 @@
 # tintinaccesorios.pages.dev pasó a ser el dominio real del sitio (antes
-# solo corría las funciones /api/* de atrás). Ya no redirige a nadie —
-# sirve el sitio completo tal cual, incluida la ficha de autenticación de
-# Firebase por functions/__/auth/[[path]].js (ver js/firebase.js:
-# authDomain). _routes.json sigue mandando /api/* y /__/auth/* a sus
-# funciones antes de llegar a cualquier archivo estático.
+# solo corría las funciones /api/* de atrás). Ya no redirige el sitio
+# completo a otro origen: sirve la web y mantiene únicamente redirects
+# canónicos de URLs heredadas de Shopify.
+#
+# Estas rutas deben resolverse en la capa estática de Pages para que la
+# migración no dependa del cold start/propagación de una Function dinámica.
+/collections/all /catalogo 301
+/collections/relojes /catalogo?cat=relojes 301
+/pages/contact /contact 301
+/policies/privacy-policy /privacidad 301
+/policies/terms-of-service /terminos 301
+/policies/refund-policy /cambios-devoluciones 301
+
+# La ficha dinámica /products/:handle se conserva en
+# functions/products/[handle].js porque necesita resolver el ID real del
+# producto antes de emitir su 301 a /product?id=...
+#
+# _routes.json sigue mandando /api/* y /__/auth/* a sus funciones antes de
+# llegar a cualquier archivo estático.
