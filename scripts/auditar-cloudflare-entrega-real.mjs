@@ -41,11 +41,46 @@ function previewUrlFromCheck(check) {
   return [...text.matchAll(/https:\/\/[a-z0-9-]+\.tintinaccesorios\.pages\.dev/gi)].map(match => match[0])[0] || '';
 }
 
+// Vía directa contra la API de Cloudflare: el check-run "Cloudflare Pages" en
+// GitHub depende de un webhook de la app de Cloudflare que, en la práctica,
+// a veces no se entrega aunque el deploy termine bien (visible en el propio
+// dashboard de Cloudflare). La API de Cloudflare es la fuente autoritativa y
+// no depende de ese webhook, así que se usa como vía primaria cuando hay
+// credenciales; si no las hay, el gate cae al polling de check-runs de abajo
+// sin cambiar de comportamiento.
+const cloudflareApiToken = String(process.env.CLOUDFLARE_API_TOKEN || '').trim();
+const cloudflareAccountId = String(process.env.CLOUDFLARE_ACCOUNT_ID || '').trim();
+const cloudflarePagesProject = String(process.env.CLOUDFLARE_PAGES_PROJECT || 'tintinaccesorios').trim();
+const cloudflareApiEnabled = Boolean(cloudflareApiToken && cloudflareAccountId);
+
+async function findCloudflareDeploymentBySha() {
+  const endpoint = `https://api.cloudflare.com/client/v4/accounts/${cloudflareAccountId}/pages/projects/${cloudflarePagesProject}/deployments?per_page=25`;
+  const response = await fetch(endpoint, {
+    headers: { authorization: `Bearer ${cloudflareApiToken}`, accept: 'application/json' },
+    signal: AbortSignal.timeout(timeoutMs)
+  });
+  if (!response.ok) throw new Error(`Cloudflare API ${response.status} al listar deployments de ${cloudflarePagesProject}.`);
+  const data = await response.json();
+  const deployments = Array.isArray(data?.result) ? data.result : [];
+  return deployments.find(item => item?.deployment_trigger?.metadata?.commit_hash === sha) || null;
+}
+
 async function waitForCloudflarePreview() {
   const endpoint = `https://api.github.com/repos/${repository}/commits/${sha}/check-runs?per_page=100`;
   let lastState = 'sin check';
   const startedAt = Date.now();
   for (let attempt = 1; attempt <= pollAttempts; attempt += 1) {
+    if (cloudflareApiEnabled) {
+      const deployment = await findCloudflareDeploymentBySha();
+      const stage = deployment?.latest_stage;
+      if (deployment && stage?.name === 'deploy' && stage?.status === 'success' && deployment.url) {
+        return String(deployment.url).replace(/\/$/, '');
+      }
+      if (deployment && stage?.status === 'failure') {
+        throw new Error(`Cloudflare Pages (API) terminó en failure para el SHA ${sha.slice(0, 12)}; no se puede aprobar la entrega real.`);
+      }
+      if (deployment) lastState = `cloudflare-api:${stage?.name || 'deploy'}/${stage?.status || 'pendiente'}`;
+    }
     const data = await githubJson(endpoint);
     const cloudflare = (Array.isArray(data?.check_runs) ? data.check_runs : [])
       .filter(item => item?.name === 'Cloudflare Pages' || item?.app?.slug === 'cloudflare-workers-and-pages')
@@ -54,7 +89,7 @@ async function waitForCloudflarePreview() {
     if (success) return previewUrlFromCheck(success).replace(/\/$/, '');
     const failed = cloudflare.find(item => item.status === 'completed' && item.conclusion && item.conclusion !== 'success');
     if (failed) throw new Error(`Cloudflare Pages terminó en ${failed.conclusion}; no se puede aprobar la entrega real.`);
-    if (cloudflare[0]) lastState = `${cloudflare[0].status}/${cloudflare[0].conclusion || 'pendiente'}`;
+    if (!cloudflareApiEnabled && cloudflare[0]) lastState = `${cloudflare[0].status}/${cloudflare[0].conclusion || 'pendiente'}`;
     console.log(`Esperando preview de Cloudflare (${attempt}/${pollAttempts}) — ${lastState} — ${Math.round((Date.now() - startedAt) / 1000)}s`);
     if (attempt < pollAttempts) await sleep(pollIntervalMs);
   }
