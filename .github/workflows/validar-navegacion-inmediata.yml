@@ -40,4 +40,5 @@ jobs:
           npm run sync:public-shell
           npm run audit:cache-versioning
           npm run build:pages
-          git diff --exit-code -- diagnostic-manifest.json scripts/cache-version-baseline.json _headers _routes.json
+          npm run verify:diagnostics
+          git diff --exit-code -- scripts/cache-version-baseline.json _headers _routes.json
