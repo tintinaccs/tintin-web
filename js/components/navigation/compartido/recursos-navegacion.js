@@ -1,4 +1,4 @@
-import { versionedSiteAsset } from './configuracion.js';
+import { versionedSiteAsset } from './configuracion.js?v=tintin-20260817-header-logo-mobilebar-1';
 
 const NAVIGATION_STYLES = Object.freeze([
   ['tt-navigation-desktop-css', 'css/components/navigation/escritorio/encabezado-escritorio.css'],
