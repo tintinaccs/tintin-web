@@ -10,8 +10,39 @@ async function openPublicPage(page, viewport, path = '/index.html') {
   });
 }
 
-test('mobile conserva etiquetas y se compacta como Instagram al desplazarse', async ({ page }) => {
+async function expectHealthyLogo(page, selector) {
+  const logo = page.locator(selector);
+  await expect(logo).toBeVisible();
+  await expect.poll(() => logo.evaluate(node => ({ complete: node.complete, width: node.naturalWidth })))
+    .toEqual(expect.objectContaining({ complete: true }));
+  expect(await logo.evaluate(node => node.naturalWidth)).toBeGreaterThan(0);
+  await expect(page.locator('body')).not.toContainText('No pudimos cargar la imagen');
+  await expect(page.locator('.tt-header-brand-copy')).toHaveCount(0);
+}
+
+test('mobile tiene barra blanca con logo centrado, cuenta circular y tabbar responsive', async ({ page }) => {
   await openPublicPage(page, { width: 390, height: 844 });
+
+  const mobileHeader = page.locator('#tt-header-mobile');
+  await expect(mobileHeader).toBeVisible();
+  await expect(mobileHeader).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  await expectHealthyLogo(page, '#tt-header-mobile .tt-mobile-logo-img');
+
+  const centering = await page.locator('#tt-header-mobile .tt-mobile-logo-img').evaluate(node => {
+    const rect = node.getBoundingClientRect();
+    return Math.abs((rect.left + rect.width / 2) - (document.documentElement.clientWidth / 2));
+  });
+  expect(centering).toBeLessThanOrEqual(3);
+
+  const accountIcon = page.locator('#tabbar-cuenta .tt-tabbar-account-icon');
+  await expect(accountIcon).toBeVisible();
+  const accountGeometry = await accountIcon.evaluate(node => {
+    const rect = node.getBoundingClientRect();
+    const radius = parseFloat(getComputedStyle(node).borderTopLeftRadius || '0');
+    return { width: rect.width, height: rect.height, radius };
+  });
+  expect(Math.abs(accountGeometry.width - accountGeometry.height)).toBeLessThanOrEqual(1);
+  expect(accountGeometry.radius).toBeGreaterThanOrEqual(accountGeometry.width / 2 - 1);
 
   const nav = page.locator('#tt-tabbar');
   const visibleButtons = nav.locator('.tt-tabbar-btn:not([hidden])');
@@ -45,13 +76,34 @@ test('mobile conserva etiquetas y se compacta como Instagram al desplazarse', as
   await expect(page.locator('#btn-close-sheet')).toBeFocused();
 });
 
-test('tablet tiene header exclusivo, marca completa y menú navegable', async ({ page }) => {
+test('mobile recupera automáticamente un logo remoto roto sin texto de error', async ({ page }) => {
+  await openPublicPage(page, { width: 390, height: 844 });
+  const logo = page.locator('#tt-header-mobile .tt-mobile-logo-img');
+  await logo.evaluate(node => { node.src = '/__logo-roto-header-test__.png'; });
+
+  await expect.poll(() => logo.evaluate(node => ({
+    hidden: node.hidden,
+    src: node.getAttribute('src') || '',
+    width: node.naturalWidth,
+  }))).toEqual(expect.objectContaining({ hidden: false }));
+
+  const recovered = await logo.evaluate(node => ({
+    src: node.getAttribute('src') || '',
+    width: node.naturalWidth,
+  }));
+  expect(recovered.src).toContain('assets-tintin/images/general/logo.png');
+  expect(recovered.width).toBeGreaterThan(0);
+  await expect(page.locator('body')).not.toContainText('No pudimos cargar la imagen');
+});
+
+test('tablet tiene header exclusivo, logo-only y menú navegable', async ({ page }) => {
   await openPublicPage(page, { width: 768, height: 1024 });
 
   await expect(page.locator('#tt-header-tablet')).toBeVisible();
+  await expect(page.locator('#tt-header-mobile')).toBeHidden();
   await expect(page.locator('#tt-header-desktop-tablet')).toBeHidden();
   await expect(page.locator('#tt-tabbar')).toBeHidden();
-  await expect(page.locator('#tt-header-tablet .tt-header-brand-copy strong')).toHaveText('TINTÍN');
+  await expectHealthyLogo(page, '#tt-header-tablet .tt-tablet-logo-img');
   await expect(page.locator('#btn-notifications-tablet')).toBeHidden();
 
   for (const control of await page.locator('#btn-menu-tablet,.tt-tablet-actions > button:not([hidden])').all()) {
@@ -71,14 +123,15 @@ test('tablet tiene header exclusivo, marca completa y menú navegable', async ({
   await expect(page.locator('#tt-tablet-menu')).toHaveAttribute('aria-hidden', 'true');
 });
 
-test('desktop conserva navegación, marca, submenú e indexación interna', async ({ page }) => {
+test('desktop conserva navegación con branding solo por logo y submenú funcional', async ({ page }) => {
   await openPublicPage(page, { width: 1440, height: 900 });
 
   const header = page.locator('#tt-header-desktop-tablet');
   await expect(header).toBeVisible();
+  await expect(page.locator('#tt-header-mobile')).toBeHidden();
   await expect(page.locator('#tt-header-tablet')).toBeHidden();
   await expect(page.locator('#tt-tabbar')).toBeHidden();
-  await expect(header.locator('.tt-header-brand-copy strong')).toHaveText('TINTÍN');
+  await expectHealthyLogo(page, '#tt-header-desktop-tablet .tt-logo-img');
   await expect(header.locator('[data-desktop-nav-item]')).toHaveCount(4);
 
   await page.locator('#btn-tienda').click();
