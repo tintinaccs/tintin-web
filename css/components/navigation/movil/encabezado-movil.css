@@ -236,6 +236,17 @@
 
   #tt-tabbar.tt-mobile-nav-ready .tt-mobile-nav-halo,
   #tt-tabbar.tt-mobile-nav-ready .tt-mobile-nav-indicator { opacity:1; }
+
+  /* Mantiene los controles flotantes holgadamente separados de la tabbar.
+     Se desplazan juntos para conservar también el espacio entre WhatsApp y
+     "volver arriba" cuando el safe-area del dispositivo aumenta. */
+  .tt-wa-float {
+    bottom:max(100px,calc(84px + env(safe-area-inset-bottom,0px))) !important;
+  }
+  .tt-back-to-top {
+    bottom:max(160px,calc(144px + env(safe-area-inset-bottom,0px))) !important;
+  }
+
   #tt-store-gate-network-notice {
     bottom:max(92px,calc(82px + env(safe-area-inset-bottom))) !important;
   }
