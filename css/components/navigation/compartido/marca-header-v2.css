@@ -1,0 +1,90 @@
+/* TINTIN — ajuste visual de marca compartido por todas las páginas públicas.
+   Se carga como hoja nueva para no depender de CSS immutable ya cacheado. */
+
+@media (min-width:1025px) {
+  #tt-header-desktop-tablet .tt-logo-link {
+    min-height:54px;
+    transition:transform .22s cubic-bezier(.2,.85,.2,1),opacity .18s ease;
+  }
+
+  #tt-header-desktop-tablet .tt-logo-img {
+    width:auto !important;
+    height:48px !important;
+    max-width:202px !important;
+    object-fit:contain !important;
+  }
+
+  #tt-header-desktop-tablet .tt-logo-link:hover {
+    transform:translateY(-1px) scale(1.015);
+  }
+}
+
+@media (min-width:1025px) and (max-width:1120px) {
+  #tt-header-desktop-tablet .tt-logo-img {
+    height:41px !important;
+    max-width:138px !important;
+  }
+}
+
+@media (min-width:768px) and (max-width:1024px) {
+  #tt-header-tablet .tt-tablet-logo-link {
+    min-width:54px;
+    min-height:54px;
+    justify-content:center;
+    transition:transform .22s cubic-bezier(.2,.85,.2,1),opacity .18s ease;
+  }
+
+  #tt-header-tablet .tt-tablet-logo-img {
+    width:auto !important;
+    height:44px !important;
+    max-width:176px !important;
+    object-fit:contain !important;
+  }
+
+  #tt-header-tablet .tt-tablet-logo-link:hover {
+    transform:translate(-50%,-50%) scale(1.02);
+  }
+}
+
+@media (max-width:767px) {
+  #tt-mobile-brandbar {
+    background:#fff !important;
+    transition:box-shadow .24s ease,border-color .24s ease;
+  }
+
+  #tt-mobile-brandbar .tt-mobile-brandbar-link {
+    min-width:56px;
+    min-height:48px;
+    border-radius:16px;
+    transition:transform .24s cubic-bezier(.2,.85,.2,1),background-color .2s ease,box-shadow .2s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  #tt-mobile-brandbar .tt-mobile-brand-logo-img {
+    width:auto !important;
+    height:38px !important;
+    max-width:min(184px,62vw) !important;
+    object-fit:contain !important;
+    transition:transform .24s cubic-bezier(.2,.85,.2,1),opacity .18s ease;
+  }
+
+  #tt-mobile-brandbar .tt-mobile-brandbar-link:active {
+    transform:scale(.965);
+    background:#fff6f9;
+  }
+
+  #tt-mobile-brandbar .tt-mobile-brandbar-link:focus-visible {
+    outline:3px solid rgba(173,63,103,.2);
+    outline-offset:2px;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  #tt-header-desktop-tablet .tt-logo-link,
+  #tt-header-tablet .tt-tablet-logo-link,
+  #tt-mobile-brandbar,
+  #tt-mobile-brandbar .tt-mobile-brandbar-link,
+  #tt-mobile-brandbar .tt-mobile-brand-logo-img {
+    transition:none !important;
+  }
+}
