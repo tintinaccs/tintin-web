@@ -16,8 +16,8 @@ const SESSION_PROTECTION_VERSION = 'tintin-20260815-profile-routes-1';
 const PROFILE_GATE_VERSION = 'tintin-20260815-profile-routes-1';
 const NAV_SHELL_VERSION = 'tintin-20260811-cls-header-reserve-1';
 const NAV_HEADER_BRAND_VERSION = 'tintin-20260817-header-logo-mobilebar-1';
-const HEADER_BRAND_OVERRIDE_VERSION = 'tintin-20260817-header-brand-polish-1';
-const HEADER_BRAND_OVERRIDE = 'css/components/navigation/compartido/marca-header-v2.css';
+const HEADER_BRAND_OVERRIDE_VERSION = 'tintin-20260817-header-brand-polish-2';
+const HEADER_BRAND_OVERRIDE = 'css/components/navigation/compartido/marca-header-v3.css';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_BRAND_VERSION],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_SHELL_VERSION],
@@ -117,7 +117,7 @@ function ensureNavigationPreloads(html) {
     ''
   );
   out = out.replace(
-    /\s*<link\b[^>]*rel=["']stylesheet["'][^>]*href=["']css\/components\/navigation\/compartido\/marca-header-v2\.css[^"']*["'][^>]*>/gi,
+    /\s*<link\b[^>]*rel=["']stylesheet["'][^>]*href=["']css\/components\/navigation\/compartido\/marca-header-v(?:2|3)\.css[^"']*["'][^>]*>/gi,
     ''
   );
 
