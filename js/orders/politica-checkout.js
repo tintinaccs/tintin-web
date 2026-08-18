@@ -1,8 +1,8 @@
 export const CHECKOUT_DRAFT_KEYS = Object.freeze([
   'requestId', 'cartLines', 'name', 'phone', 'contactEmail', 'notes',
   'selectedCity', 'departamento', 'address', 'referencia', 'mapLocation',
-  'shippingMethod', 'encomiendaMode', 'paymentMethod', 'expectedSubtotal',
-  'expectedShippingCost', 'expectedShippingPending', 'expectedTotal'
+  'shippingMethod', 'encomiendaMode', 'documentNumber', 'paymentMethod',
+  'expectedSubtotal', 'expectedShippingCost', 'expectedShippingPending', 'expectedTotal'
 ]);
 
 const clean = value => String(value == null ? '' : value).trim();
@@ -47,6 +47,7 @@ export function composeCheckoutDraft(input) {
     mapLocation: input.shipping.mapLocation,
     shippingMethod: input.shipping.method,
     encomiendaMode: input.shipping.encomiendaMode || '',
+    documentNumber: input.shipping.method === 'encomienda' ? clean(input.documentNumber) : '',
     paymentMethod: input.paymentMethod,
     expectedSubtotal: Math.round(input.subtotal),
     expectedShippingCost: Math.round(shippingCost),
