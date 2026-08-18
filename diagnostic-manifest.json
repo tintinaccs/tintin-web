@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-18T10:51:26.623Z",
-  "sourceFingerprint": "de65f0fffca0ca4ccb4575c07fefa2165603973300f84e25caccb748a9d93c16",
+  "generatedAt": "2026-08-18T11:00:11.433Z",
+  "sourceFingerprint": "6613939955a3fc9df2793ce73cded965f8c64bdf375a993effde7039ede1c8d6",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 663,
-    "textFiles": 631,
-    "totalBytes": 7456606,
+    "files": 664,
+    "textFiles": 632,
+    "totalBytes": 7469401,
     "pages": 18,
-    "modules": 412
+    "modules": 413
   },
   "viewports": [
     {
@@ -22095,6 +22095,48 @@
       ]
     },
     {
+      "path": "scripts/.audit-home-part2b-runtime-v3.mjs",
+      "bytes": 14630,
+      "sha256": "40383fed81f6d66eaa2c8a80e01088d2f1d184c50962605de80d711a3affb378",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "playwright",
+          "target": "scripts/playwright",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:http",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/auditar-acceso-aislamiento.js",
       "bytes": 2565,
       "sha256": "e576acd19692a6faa4f296daedc01fdc33e3e0e2d501adac24af80240eb9f700",
@@ -23502,8 +23544,8 @@
     },
     {
       "path": "scripts/auditar-inicio-visual-parte-2b-v3.mjs",
-      "bytes": 4476,
-      "sha256": "ffcdd5a4b79b8f91da56866c8f0ece7e74a2eda9308dbe40f331f0ef4333d279",
+      "bytes": 2523,
+      "sha256": "66310e0040affc3219a110c019c25600dc7979add642f902863e7c2547766153",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23532,8 +23574,8 @@
     },
     {
       "path": "scripts/auditar-inicio-visual-parte-2b.mjs",
-      "bytes": 13357,
-      "sha256": "103f7f7effd0af0b8b16eda459aa3a18113750256981c74adab5b19c27fe8715",
+      "bytes": 13475,
+      "sha256": "c511236d9691c3169cc81de933c28c1d4456ace024410b54fee6b2e5d81c8d13",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29330,6 +29372,12 @@
       "sha256": "857c7081889b4ad579cf6ed7cf06a5294e845cc355377f2ed651f8483f842a47"
     },
     {
+      "path": "scripts/.audit-home-part2b-runtime-v3.mjs",
+      "extension": ".mjs",
+      "bytes": 14630,
+      "sha256": "40383fed81f6d66eaa2c8a80e01088d2f1d184c50962605de80d711a3affb378"
+    },
+    {
       "path": "scripts/auditar-acceso-aislamiento.js",
       "extension": ".js",
       "bytes": 2565,
@@ -29710,14 +29758,14 @@
     {
       "path": "scripts/auditar-inicio-visual-parte-2b-v3.mjs",
       "extension": ".mjs",
-      "bytes": 4476,
-      "sha256": "ffcdd5a4b79b8f91da56866c8f0ece7e74a2eda9308dbe40f331f0ef4333d279"
+      "bytes": 2523,
+      "sha256": "66310e0040affc3219a110c019c25600dc7979add642f902863e7c2547766153"
     },
     {
       "path": "scripts/auditar-inicio-visual-parte-2b.mjs",
       "extension": ".mjs",
-      "bytes": 13357,
-      "sha256": "103f7f7effd0af0b8b16eda459aa3a18113750256981c74adab5b19c27fe8715"
+      "bytes": 13475,
+      "sha256": "c511236d9691c3169cc81de933c28c1d4456ace024410b54fee6b2e5d81c8d13"
     },
     {
       "path": "scripts/auditar-institucional-ayuda-legal-parte-2e-v2.mjs",
