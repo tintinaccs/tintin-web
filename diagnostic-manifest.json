@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-18T15:11:26.629Z",
-  "sourceFingerprint": "b1d6a61995547de26ef29cb0e7dfcd1caaecf6a8cf643738cd396c18c71b0dd9",
+  "generatedAt": "2026-08-18T15:13:06.438Z",
+  "sourceFingerprint": "0fe3da48aa6c8c47d5936f86c39c1e4fbbef05c881d3cc09c5c83a13dab8a5b7",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 665,
     "textFiles": 633,
-    "totalBytes": 7569833,
+    "totalBytes": 7571125,
     "pages": 18,
     "modules": 413
   },
@@ -11988,8 +11988,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 48383,
-      "sha256": "bce163659e7e4adef647ce4a7c8421b91faca91da7a77e6c370d9ee49088feb2",
+      "bytes": 49675,
+      "sha256": "1c1ca7508d4ae237b71781186438c01486c94c06dc53e9ed28eec3eabfb3cd6b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12041,17 +12041,17 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 956
+          "line": 962
         },
         {
           "raw": "tienda.js?v=tintin-20260817-mobile-accordion-2",
           "target": "tienda.js",
-          "line": 957
+          "line": 963
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 958
+          "line": 964
         }
       ],
       "styles": [
@@ -12202,19 +12202,19 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 956,
+          "line": 962,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20260817-mobile-accordion-2",
           "target": "tienda.js",
-          "line": 957,
+          "line": 963,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 958,
+          "line": 964,
           "exists": true
         },
         {
@@ -12429,7 +12429,7 @@
             "tt-map-locate"
           ],
           "type": "button",
-          "text": "📍 Usar mi ubicación actual",
+          "text": "Usar mi ubicación actual",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -16294,7 +16294,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 330173,
-      "sha256": "b0c2b5d877684da66000e56eaedf1bc3ab9e6f4dc471f00fa741a54bce1551db",
+      "sha256": "fc6a202b464f9e6da7da268d6829143121f8732175300b9d83c0eb223bc011a4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27017,13 +27017,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 330173,
-      "sha256": "b0c2b5d877684da66000e56eaedf1bc3ab9e6f4dc471f00fa741a54bce1551db"
+      "sha256": "fc6a202b464f9e6da7da268d6829143121f8732175300b9d83c0eb223bc011a4"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 330088,
-      "sha256": "582053500f9b1ad050bf3c5fdafb1dbe71ccc3397d35397649d5fca32d6b80f7"
+      "sha256": "6597ebeec4a2fcc0a688827a8bece60f1e85947418755beb640961bee534c55c"
     },
     {
       "path": "config/public-site.json",
@@ -29122,8 +29122,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 48383,
-      "sha256": "bce163659e7e4adef647ce4a7c8421b91faca91da7a77e6c370d9ee49088feb2"
+      "bytes": 49675,
+      "sha256": "1c1ca7508d4ae237b71781186438c01486c94c06dc53e9ed28eec3eabfb3cd6b"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -32939,7 +32939,7 @@
           },
           {
             "file": "login.html",
-            "line": 691,
+            "line": 697,
             "operation": "doc"
           },
           {
