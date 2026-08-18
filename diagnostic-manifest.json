@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-18T13:29:19.313Z",
-  "sourceFingerprint": "1763f30bdb5edbfd6a1fafc42100627e75df4c92dbd34437289eb3129bacfcaa",
+  "generatedAt": "2026-08-18T13:51:09.281Z",
+  "sourceFingerprint": "93d9cd34b932841c4156f40e5d400c7d1354b150f81b6d50b69a03a5fe477a59",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 665,
     "textFiles": 633,
-    "totalBytes": 7546336,
+    "totalBytes": 7547002,
     "pages": 18,
     "modules": 413
   },
@@ -8124,8 +8124,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 93843,
-      "sha256": "f8a81e5e83a083a0195ab5d4e35d1729ba84225e9de71858c83070cbf49d8ff2",
+      "bytes": 94509,
+      "sha256": "606da26121bdbdc2316b46f91b6dbf8f596f221039249cec074ca7ad706f6ce5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8237,7 +8237,7 @@
           "line": 44
         },
         {
-          "raw": "css/pages/checkout/checkout.css?v=tintin-20260818-icon-containers-1",
+          "raw": "css/pages/checkout/checkout.css?v=tintin-20260818-pay-icons-1",
           "target": "css/pages/checkout/checkout.css",
           "line": 45
         },
@@ -8407,7 +8407,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/checkout/checkout.css?v=tintin-20260818-icon-containers-1",
+          "raw": "css/pages/checkout/checkout.css?v=tintin-20260818-pay-icons-1",
           "target": "css/pages/checkout/checkout.css",
           "line": 45,
           "exists": true
@@ -26938,8 +26938,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 93843,
-      "sha256": "f8a81e5e83a083a0195ab5d4e35d1729ba84225e9de71858c83070cbf49d8ff2"
+      "bytes": 94509,
+      "sha256": "606da26121bdbdc2316b46f91b6dbf8f596f221039249cec074ca7ad706f6ce5"
     },
     {
       "path": "cloudflare/firebase-admin-ligero.js",
