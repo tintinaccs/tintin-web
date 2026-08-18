@@ -66,11 +66,28 @@ if (!window.TintinCollectionsPhase4Booted) {
     }
   }
 
+  // Cuando la colección no tiene imagen propia (o fue eliminada), se usa la
+  // foto del producto más antiguo de esa categoría como respaldo visual.
+  // Es puramente de presentación: no se persiste nada en Firestore.
+  function firstProductImage(slug) {
+    const normalized = clean(slug).toLowerCase();
+    const matches = products.filter(product =>
+      clean(product?.category || product?.cat).toLowerCase() === normalized &&
+      clean(product?.name) &&
+      product?.active !== false &&
+      clean(product?.imageUrl)
+    );
+    if (!matches.length) return '';
+    matches.sort((a, b) => (a?.createdAt || 0) - (b?.createdAt || 0));
+    return matches[0].imageUrl;
+  }
+
   function imageCandidates(collection) {
     const slug = clean(collection?.slug);
     const file = SLUG_FILE_MAP[slug] || slug;
     return [...new Set([
       withShopifyCardWidth(safeUrl(collection?.image)),
+      safeUrl(firstProductImage(slug)),
       safeUrl(`${COLL_IMG_BASE}col-${file}.webp`),
       safeUrl(COLL_PLACEHOLDER)
     ].filter(Boolean))];
@@ -161,13 +178,29 @@ if (!window.TintinCollectionsPhase4Booted) {
     enforce();
   }
 
-  function collectionNodesOrState(buildNode, emptyMessage) {
+  function categoryCount(slug) {
+    const normalized = clean(slug).toLowerCase();
+    return products.filter(product =>
+      clean(product?.category || product?.cat).toLowerCase() === normalized &&
+      clean(product?.name)
+    ).length;
+  }
+
+  // No hay productos aún cargados: no se puede saber qué colecciones están
+  // vacías, así que se muestran todas para no ocultar catálogo real por error.
+  function collectionsWithProducts() {
+    if (!products.length) return collections || [];
+    return (collections || []).filter(item => categoryCount(item.slug) > 0);
+  }
+
+  function collectionNodesOrState(buildNode, emptyMessage, hideEmpty = false) {
     if (collectionError) {
       return [stateNode('No pudimos cargar las colecciones.', 'error')];
     }
     if (!collections) return [stateNode('Cargando colecciones…')];
-    if (!collections.length) return [stateNode(emptyMessage)];
-    return collections.map(buildNode);
+    const list = hideEmpty ? collectionsWithProducts() : collections;
+    if (!list.length) return [stateNode(emptyMessage)];
+    return list.map(buildNode);
   }
 
   function buildHomeCard(collection) {
@@ -192,7 +225,7 @@ if (!window.TintinCollectionsPhase4Booted) {
   function renderHomeGrid(target) {
     replaceOwned(
       target,
-      collectionNodesOrState(buildHomeCard, 'No hay colecciones disponibles todavía.'),
+      collectionNodesOrState(buildHomeCard, 'No hay colecciones disponibles todavía.', true),
       'home-grid'
     );
   }
@@ -248,18 +281,11 @@ if (!window.TintinCollectionsPhase4Booted) {
       target,
       collectionNodesOrState(
         buildCollectionsPageCard,
-        'No hay colecciones disponibles todavía.'
+        'No hay colecciones disponibles todavía.',
+        true
       ),
       'collections-page'
     );
-  }
-
-  function categoryCount(slug) {
-    const normalized = clean(slug).toLowerCase();
-    return products.filter(product =>
-      clean(product?.category || product?.cat).toLowerCase() === normalized &&
-      clean(product?.name)
-    ).length;
   }
 
   function selectedCatalogSlug() {

@@ -127,9 +127,9 @@
   .tt-tablet-nav > [aria-current="page"] { color:#a50f4d; background:#fde9f0; border-radius:16px; }
   .tt-tablet-cats { max-height:0; overflow:hidden; opacity:0; transition:max-height .32s cubic-bezier(.2,.8,.2,1),opacity .2s ease; }
   .tt-tablet-cats.open { max-height:620px; opacity:1; }
-  .tt-tablet-cats-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; padding:14px 0; }
+  .tt-tablet-cats-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; padding:14px 0; }
   .tt-tablet-cat-card { display:flex; flex-direction:column; align-items:center; gap:7px; min-width:0; padding:10px 6px; color:#5b414b; font:650 .7rem/1.2 Montserrat; text-decoration:none; }
-  .tt-tablet-cat-img { display:flex; align-items:center; justify-content:center; width:58px; height:58px; border-radius:16px; overflow:hidden; }
+  .tt-tablet-cat-img { display:flex; align-items:center; justify-content:center; width:74px; height:74px; border-radius:18px; overflow:hidden; }
   .tt-tablet-cat-img img { width:100%; height:100%; object-fit:cover; }
   .tt-tablet-ver-todo { display:flex; justify-content:center; padding:13px; color:#9d2452; font-weight:700; text-decoration:none; }
   .tt-tablet-account-entry {
