@@ -2,7 +2,6 @@ import { CATEGORIES, UI_ICONS, categoryIcon, svgIcon } from '../compartido/icono
 import { logoUrl } from '../compartido/configuracion.js';
 
 const notificationBell = () => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>';
-const EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
 
 function renderTabletCategories() {
   return CATEGORIES.map(({ slug, label, background }) => `
@@ -13,7 +12,8 @@ function renderTabletCategories() {
 }
 
 function logoImage(className, alt, highPriority = false) {
-  return `<img loading="eager" decoding="async"${highPriority ? ' fetchpriority="high"' : ''} src="${EMPTY_IMAGE}" data-tt-shared-logo="${logoUrl()}" alt="${alt}" class="${className}">`;
+  const fallbackLogo = logoUrl();
+  return `<img loading="eager" decoding="async"${highPriority ? ' fetchpriority="high"' : ''} src="${fallbackLogo}" data-tt-shell-logo-pending data-tt-fallback-logo="${fallbackLogo}" alt="${alt}" class="${className}" style="visibility:hidden">`;
 }
 
 export function renderTabletHeader() {
