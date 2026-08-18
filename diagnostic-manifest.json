@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-18T15:59:05.522Z",
-  "sourceFingerprint": "26ba6a09a4db6b13e2ae1d4025b1f2b0041e097d9f3972059114e3a38e225d62",
+  "generatedAt": "2026-08-18T16:01:55.350Z",
+  "sourceFingerprint": "9007414e1f2332f0d0a15b5d2925375679a19a78b30bfc6817903ba05ef994d9",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 669,
-    "textFiles": 637,
-    "totalBytes": 7608776,
+    "files": 670,
+    "textFiles": 638,
+    "totalBytes": 7610800,
     "pages": 18,
     "modules": 417
   },
@@ -26772,6 +26772,12 @@
       "extension": ".yml",
       "bytes": 1139,
       "sha256": "f224696da578a2907249a4b78ba4829c3ac3e891cb752a6570b328130de04719"
+    },
+    {
+      "path": ".github/workflows/repair-pr477-generated-artifacts.yml",
+      "extension": ".yml",
+      "bytes": 2024,
+      "sha256": "02689e3e2b93272c43d7c10d84f54b8fd1d33d5fdcc3b135501b1f0c888e8f18"
     },
     {
       "path": ".github/workflows/respaldo-repositorio.yml",
