@@ -5,7 +5,7 @@ import { readFile } from 'node:fs/promises';
 const read = path => readFile(new URL(`../../${path}`, import.meta.url), 'utf8');
 const [identity, orderClient, orderV2, api, shell, mapCapture] = await Promise.all([
   read('js/pages/checkout/checkout-identidad-navegacion.js'),
-  read('js/create-order-client.js'),
+  read('js/create-order-client-v2.js'),
   read('js/orders/pedido-checkout-seguro-v2.js'),
   read('functions/api/create-order.js'),
   read('js/components/navigation/compartido/carga-navegacion.js'),
@@ -67,6 +67,7 @@ test('el flujo V2 se activa antes del import heredado y está versionado', () =>
   assert.match(shell, /pedido-checkout-seguro-v2\.js/);
   assert.match(shell, /checkout-identidad-navegacion\.js/);
   assert.match(shell, /checkout-captura-mapa\.js/);
+  assert.match(orderV2, /create-order-client-v2\.js/);
   assert.match(orderV2, /createOrderViaServer/);
   assert.match(orderV2, /document_invalid/);
 });
