@@ -1,5 +1,5 @@
-import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260817-header-refined-2';
-import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260817-header-refined-2';
+import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260818-shell-unified-1';
+import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260818-shell-unified-1';
 import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20260815-routes-clean-1';
 import { renderSearchPanel } from './compartido/panel-busqueda.js';
 import { renderCartDrawer } from './compartido/panel-carrito.js';
@@ -32,18 +32,24 @@ const LEGACY_SHELL_IDS = Object.freeze([
 ]);
 
 let mountPromise = null;
-let sharedLogoDataPromise = null;
 
 function removeLegacyShell(root = document) {
   LEGACY_SHELL_IDS.forEach(id => root.getElementById(id)?.remove());
 }
 
-function renderTopShell() {
+function safeInitialHeaderLogo(config) {
+  const source = String(config?.layout?.header?.logo || '').trim();
+  if (/^assets-tintin\/[A-Za-z0-9_./-]+$/.test(source)) return source;
+  if (/^https:\/\/res\.cloudinary\.com\/[A-Za-z0-9_./,%~-]+$/i.test(source)) return source;
+  return undefined;
+}
+
+function renderTopShell(initialLogo) {
   return [
-    renderDesktopHeader(),
-    renderTabletHeader(),
+    renderDesktopHeader(initialLogo),
+    renderTabletHeader(initialLogo),
     renderSearchPanel(),
-    renderTabletMenu(),
+    renderTabletMenu(initialLogo),
   ].join('');
 }
 
@@ -55,15 +61,6 @@ function renderBottomShell() {
     renderCollectionsSheet(),
     renderSurfaceLayer(),
   ].join('');
-}
-
-function blobAsDataUrl(blob) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result || ''));
-    reader.onerror = () => reject(reader.error || new Error('No se pudo leer el logo.'));
-    reader.readAsDataURL(blob);
-  });
 }
 
 function resolveWithCeiling(promise, ceilingMs, fallbackValue = null) {
@@ -94,7 +91,7 @@ function resolveWithCeiling(promise, ceilingMs, fallbackValue = null) {
 
 function waitForImageReady(image, ceilingMs = 1600) {
   if (!image) return Promise.resolve();
-  if (image.complete) return Promise.resolve();
+  if (image.complete && image.naturalWidth > 0) return Promise.resolve();
 
   return new Promise(resolve => {
     let settled = false;
@@ -122,41 +119,6 @@ async function waitForShellBrandImages(root = document) {
   await Promise.all(images.map(image => waitForImageReady(image)));
 }
 
-function hydrateSharedLogos(root = document) {
-  const images = [...root.querySelectorAll('img[data-tt-shared-logo]')];
-  const source = images.find(image => image.dataset.ttSharedLogo)?.dataset.ttSharedLogo;
-  if (!images.length || !source) return Promise.resolve();
-
-  if (!sharedLogoDataPromise) {
-    const controller = typeof AbortController === 'function' ? new AbortController() : null;
-    const timer = window.setTimeout(() => controller?.abort(), 1800);
-
-    sharedLogoDataPromise = fetch(source, {
-      cache: 'force-cache',
-      credentials: 'same-origin',
-      ...(controller ? { signal: controller.signal } : {}),
-    })
-      .then(response => {
-        if (!response.ok) throw new Error(`Logo HTTP ${response.status}`);
-        return response.blob();
-      })
-      .then(blobAsDataUrl)
-      .catch(error => {
-        console.warn('[PublicShell] No se pudo compartir el logo en memoria.', error);
-        return source;
-      })
-      .finally(() => window.clearTimeout(timer));
-  }
-
-  return sharedLogoDataPromise.then(async value => {
-    images.forEach(image => {
-      image.src = value;
-      image.removeAttribute('data-tt-shared-logo');
-    });
-    await Promise.all(images.map(image => waitForImageReady(image)));
-  });
-}
-
 function mountPublicShell() {
   if (!document.body || document.body.classList.contains('tt-public-shell-mounted')) return Promise.resolve();
   if (mountPromise) return mountPromise;
@@ -171,16 +133,18 @@ function mountPublicShell() {
     null
   );
 
-  mountPromise = navigationAssetsPromise.then(async () => {
+  mountPromise = Promise.all([navigationAssetsPromise, globalConfigPromise]).then(async ([, globalConfig]) => {
     if (document.body.classList.contains('tt-public-shell-mounted')) return;
 
+    // El header se monta una sola vez con el logo final ya resuelto. Antes se
+    // insertaba una imagen transparente y luego se cambiaba primero al logo
+    // local y finalmente al logo configurado, lo que producía el parpadeo
+    // visible en desktop/tablet. El loader permanece activo durante esta fase.
+    const initialLogo = safeInitialHeaderLogo(globalConfig);
     removeLegacyShell();
-    document.body.insertAdjacentHTML('afterbegin', renderTopShell());
+    document.body.insertAdjacentHTML('afterbegin', renderTopShell(initialLogo));
     document.body.insertAdjacentHTML('beforeend', renderBottomShell());
 
-    await hydrateSharedLogos();
-
-    const globalConfig = await globalConfigPromise;
     if (globalConfig?.layout) applyGlobalLayout(globalConfig.layout);
     else document.documentElement.dataset.ttGlobalLayout = 'fallback';
     if (globalConfig) applyGlobalVisualStudio(globalConfig);
@@ -202,7 +166,8 @@ function mountPublicShell() {
         socialNotifications: 'firestore-realtime-always-on',
         responsiveSurfaces: 'viewport-fit-v2',
         globalConfigRequests: 1,
-        sharedLogoRequests: 1,
+        sharedLogoRequests: 0,
+        initialHeaderLogoStable: true,
       },
     }));
   }).catch(error => {
