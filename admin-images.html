@@ -126,7 +126,7 @@
 
     /* ── MAIN CONTENT ── */
     .adm-main {
-      margin-left: var(--sidebar-w); flex: 1; padding: 32px 28px;
+      margin: 0 auto 0 var(--sidebar-w); flex: 1; max-width: 1280px; padding: 32px 24px;
     }
     .adm-section-header { margin-bottom: 24px; }
     .adm-section-header h1 { font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; }
@@ -274,7 +274,7 @@
       .adm-nav-btn { flex-direction: column; gap: 2px; padding: 10px 0; font-size: 8px; align-items: center; text-align: center; border-left: none; border-bottom: 3px solid transparent; }
       .adm-nav-btn.active { border-left: none; border-bottom-color: var(--rose); }
       .adm-nav-btn .nav-icon { font-size: 1.4rem; }
-      .adm-main { margin-left: 56px; padding: 20px 16px; }
+      .adm-main { margin-left: 56px; padding: 20px 24px; }
       .adm-cards-grid { grid-template-columns: 1fr; }
       .adm-card-btns { flex-direction: column; }
       .adm-btn-save, .adm-btn-clear { width: 100%; }
@@ -284,7 +284,7 @@
     @media (max-width: 480px) {
       :root { --sidebar-w: 0px; }
       .adm-sidebar { display: none; }
-      .adm-main { margin-left: 0; padding: 12px; padding-bottom: 72px; }
+      .adm-main { margin-left: 0; padding: 16px; padding-bottom: 72px; }
       .adm-mobile-tabs { display: flex !important; }
       .adm-cards-grid { grid-template-columns: 1fr; }
       .adm-card-btns { flex-direction: column; }

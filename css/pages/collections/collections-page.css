@@ -39,12 +39,6 @@
   border-bottom: 1px solid var(--color-border-primary, #F1E4E7);
 }
 
-.tt-collections-page .tt-page-hero .container,
-.tt-collections-page .tt-colls-page-section .container,
-.tt-collections-page .tt-products-section .container {
-  width: min(1180px, calc(100% - 40px));
-}
-
 .tt-collections-page .tt-page-hero-title,
 .tt-collections-page .tt-section-title,
 .tt-collections-page .tt-coll-page-name,
@@ -296,12 +290,6 @@
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
-  .tt-collections-page .tt-page-hero .container,
-  .tt-collections-page .tt-colls-page-section .container,
-  .tt-collections-page .tt-products-section .container {
-    width: min(940px, calc(100% - 32px));
-  }
-
   .tt-collections-page .tt-colls-page-grid,
   .tt-collections-page .tt-products-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -320,13 +308,6 @@
 
   .tt-collections-page .tt-page-hero {
     padding: 36px 0 44px;
-  }
-
-  .tt-collections-page .tt-page-hero .container,
-  .tt-collections-page .tt-colls-page-section .container,
-  .tt-collections-page .tt-products-section .container,
-  #tt-collections-sync-state {
-    width: min(720px, calc(100% - 24px));
   }
 
   .tt-collections-page .tt-page-hero-title {
@@ -386,12 +367,6 @@
 }
 
 @media (max-width: 360px) {
-  .tt-collections-page .tt-page-hero .container,
-  .tt-collections-page .tt-colls-page-section .container,
-  .tt-collections-page .tt-products-section .container,
-  #tt-collections-sync-state {
-    width: calc(100% - 20px);
-  }
 
   .tt-collections-page .tt-product-info {
     padding: 9px;
