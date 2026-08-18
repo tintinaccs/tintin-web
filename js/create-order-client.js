@@ -14,7 +14,7 @@ import { auth } from './core/firebase/firebase.js?v=tintin-20260730-appcheck-sta
 function phoneForOrderServer(value) {
   // El checkout normaliza el teléfono a formato internacional con "+"
   // (ej. +595981299331), pero el Apps Script desplegado valida actualmente
-  // sólo díitos (8–20). Adaptamos únicamente el payload de transporte para
+  // sólo dígitos (8–20). Adaptamos únicamente el payload de transporte para
   // mantener la UI y el perfil en formato internacional sin bloquear pedidos.
   return String(value == null ? '' : value).replace(/\D/g, '');
 }
