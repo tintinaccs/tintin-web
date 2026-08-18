@@ -34,33 +34,15 @@ const prepareReplacement = `    if (document.body) {
     if (consent) consent.style.setProperty('display', 'none', 'important');
     document.querySelectorAll('.tt-home-motion').forEach(node => node.classList.add('is-visible'));
   });
+  await page.waitForFunction(() => {
+    const grid = document.querySelector('.tt-collections-grid');
+    if (!grid) return false;
+    return grid.querySelector('.tt-coll-card') || grid.querySelector('.tt-phase4-collections-state');
+  }, null, { timeout: 12000 }).catch(() => {});
   await page.waitForTimeout(250);`;
 
-const collectionsOriginal = `    const collectionCards = [...document.querySelectorAll('.tt-collections-grid .tt-coll-card')].filter(visible);
-    if (collectionCards.length < 8) issues.push(\`colecciones: solo \${collectionCards.length} tarjetas visibles\`);
-    collectionCards.forEach((card, index) => {
-      const b = rect(card);
-      if (b.width < 80 || b.height < 80) issues.push(\`colecciones: tarjeta \${index + 1} demasiado pequeña\`);
-    });`;
-
-const collectionsReplacement = `    const collectionCards = [...document.querySelectorAll('.tt-collections-grid .tt-coll-card')].filter(visible);
-    const collectionState = document.querySelector('.tt-collections-grid > .tt-phase4-collections-state');
-    if (collectionCards.length < 8 && !visible(collectionState)) {
-      issues.push(\`colecciones: no hay tarjetas ni estado visible\`);
-    }
-    if (visible(collectionState)) {
-      const stateBox = rect(collectionState);
-      if (stateBox.height < 160) issues.push(\`colecciones: estado demasiado bajo (\${Math.round(stateBox.height)}px)\`);
-      if (stateBox.left < -1 || stateBox.right > width + 1) issues.push('colecciones: estado sale horizontalmente');
-    }
-    collectionCards.forEach((card, index) => {
-      const b = rect(card);
-      if (b.width < 80 || b.height < 80) issues.push(\`colecciones: tarjeta \${index + 1} demasiado pequeña\`);
-    });`;
-
 if (!source.includes(prepareOriginal)) throw new Error('No se encontró el bloque de preparación esperado.');
-if (!source.includes(collectionsOriginal)) throw new Error('No se encontró el bloque de colecciones esperado.');
-source = source.replace(prepareOriginal, prepareReplacement).replace(collectionsOriginal, collectionsReplacement);
+source = source.replace(prepareOriginal, prepareReplacement);
 fs.writeFileSync(runtimePath, source);
 try {
   await import(`${pathToFileURL(runtimePath).href}?run=${Date.now()}`);

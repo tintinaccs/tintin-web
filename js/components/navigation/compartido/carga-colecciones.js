@@ -4,9 +4,42 @@ const SLUG_FILE_MAP = { bolsos: 'bags' };
 const MOBILE_GRADIENT = 'linear-gradient(135deg,#e8c5d0,#c48a9e)';
 let started = false;
 let unsubscribe = null;
+let lastCollections = null;
+let products = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
 
 function text(value) {
   return String(value == null ? '' : value).trim();
+}
+
+// Sin productos cargados todavía no se puede saber qué colecciones están
+// vacías, así que se muestran todas para no ocultar catálogo real por error.
+function hasProducts(slug) {
+  const normalized = text(slug).toLowerCase();
+  return products.some(product =>
+    text(product?.category || product?.cat).toLowerCase() === normalized &&
+    text(product?.name)
+  );
+}
+
+function visibleCollections(collections) {
+  if (!products.length) return collections;
+  return collections.filter(item => hasProducts(item.slug));
+}
+
+// Cuando la colección no tiene imagen propia (o fue eliminada), se usa la
+// foto del producto más antiguo de esa categoría como respaldo visual.
+// Es puramente de presentación: no se persiste nada en Firestore.
+function firstProductImage(slug) {
+  const normalized = text(slug).toLowerCase();
+  const matches = products.filter(product =>
+    text(product?.category || product?.cat).toLowerCase() === normalized &&
+    text(product?.name) &&
+    product?.active !== false &&
+    text(product?.imageUrl)
+  );
+  if (!matches.length) return '';
+  matches.sort((a, b) => (a?.createdAt || 0) - (b?.createdAt || 0));
+  return matches[0].imageUrl;
 }
 
 function collImgFile(slug) {
@@ -34,6 +67,7 @@ function catalogHref(slug) {
 function imageCandidates(collection) {
   return [...new Set([
     safeUrl(collection?.image),
+    safeUrl(firstProductImage(collection?.slug)),
     safeUrl(`${COLL_IMG_BASE}col-${collImgFile(collection?.slug)}.webp`),
     safeUrl(COLL_PLACEHOLDER),
   ].filter(Boolean))];
@@ -194,6 +228,14 @@ function renderError() {
   });
 }
 
+function renderAll(collections) {
+  const visible = visibleCollections(collections);
+  document.querySelectorAll('[data-collections-nav="desktop"]').forEach(container => renderInto(container, visible, buildDesktopCard));
+  document.querySelectorAll('[data-collections-nav="tablet"]').forEach(container => renderInto(container, visible, buildTabletCard));
+  document.querySelectorAll('[data-collections-nav="mobile"]').forEach(container => renderInto(container, visible, collection => buildMobileNode(container, collection)));
+  document.querySelectorAll('[data-collections-nav="sheet"]').forEach(container => renderInto(container, visible, buildSheetItem));
+}
+
 export function initNavCollections(force = false) {
   if (started && !force) return Promise.resolve();
   started = true;
@@ -203,10 +245,8 @@ export function initNavCollections(force = false) {
     .then(({ onCollectionsUpdate, loadCollections }) => {
       unsubscribe?.();
       unsubscribe = onCollectionsUpdate(collections => {
-        document.querySelectorAll('[data-collections-nav="desktop"]').forEach(container => renderInto(container, collections, buildDesktopCard));
-        document.querySelectorAll('[data-collections-nav="tablet"]').forEach(container => renderInto(container, collections, buildTabletCard));
-        document.querySelectorAll('[data-collections-nav="mobile"]').forEach(container => renderInto(container, collections, collection => buildMobileNode(container, collection)));
-        document.querySelectorAll('[data-collections-nav="sheet"]').forEach(container => renderInto(container, collections, buildSheetItem));
+        lastCollections = collections;
+        renderAll(collections);
       }, renderError);
       if (force) return loadCollections({ force: true });
       return null;
@@ -217,6 +257,11 @@ export function initNavCollections(force = false) {
       renderError();
     });
 }
+
+window.addEventListener('tintin:products-loaded', event => {
+  products = Array.isArray(event.detail?.products) ? event.detail.products : [];
+  if (lastCollections) renderAll(lastCollections);
+});
 
 function isCollectionPage() {
   const path = location.pathname.toLowerCase();

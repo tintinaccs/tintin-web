@@ -871,7 +871,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
 .tt-mobile-cats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   padding-bottom: 12px;
 }
@@ -2372,7 +2372,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
 .tt-sheet-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1px;
   background: var(--border);
 }
@@ -2395,8 +2395,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-sheet-item:hover,
 .tt-sheet-item:active { background: var(--pink-pale); color: var(--pink-dark); }
 .tt-sheet-item-img {
-  width: 46px;
-  height: 46px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;

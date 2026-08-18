@@ -169,7 +169,8 @@ async function audit(page, width, height) {
     }
 
     const collectionCards = [...document.querySelectorAll('.tt-collections-grid .tt-coll-card')].filter(visible);
-    if (collectionCards.length < 8) issues.push(`colecciones: solo ${collectionCards.length} tarjetas visibles`);
+    const collectionState = document.querySelector('.tt-collections-grid > .tt-phase4-collections-state');
+    if (!collectionCards.length && !visible(collectionState)) issues.push('colecciones: no hay tarjetas ni estado visible');
     collectionCards.forEach((card, index) => {
       const b = rect(card);
       if (b.width < 80 || b.height < 80) issues.push(`colecciones: tarjeta ${index + 1} demasiado pequeña`);

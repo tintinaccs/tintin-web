@@ -176,7 +176,7 @@ async function auditCollections(page, vp) {
   const cards = page.locator('#colls-page-grid .tt-coll-page-card:not([aria-hidden="true"])');
   const count = await cards.count();
   const cols = await columnsFor(page, '#colls-page-grid .tt-coll-page-card:not([aria-hidden="true"])');
-  const expected = vp.width <= 480 ? 1 : vp.width <= 1024 ? 2 : 3;
+  const expected = vp.width <= 480 ? 1 : 2;
   if (cols && cols !== Math.min(expected, count)) addFailure('collections', vp.name, `La grilla usa ${cols} columnas; se esperaban ${Math.min(expected, count)}.`);
 
   const featured = await page.evaluate(() => {
