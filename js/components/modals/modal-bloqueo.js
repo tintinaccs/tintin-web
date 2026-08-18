@@ -37,7 +37,7 @@ export function showBlockedModal() {
         aria-describedby="tt-blocked-message"
         tabindex="-1"
       >
-        <div class="tt-blocked-icon" aria-hidden="true">🚫</div>
+        <div class="tt-blocked-icon" aria-hidden="true"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="5.5" y1="5.5" x2="18.5" y2="18.5"/></svg></div>
         <h2 class="tt-blocked-title" id="tt-blocked-title">No podés ingresar</h2>
         <p class="tt-blocked-message" id="tt-blocked-message">
           Lo siento, ahora no podés ingresar. Podés comunicarte con nuestro soporte por WhatsApp.

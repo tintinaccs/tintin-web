@@ -22,8 +22,8 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
-  <link rel="modulepreload" href="js/core/store-gate/control-tienda.js?v=tintin-20260809-loader-lifecycle-fix-1">
-  <link rel="modulepreload" href="js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260730-appcheck-stable-4">
+  <link rel="modulepreload" href="js/core/store-gate/control-tienda.js?v=tintin-20260818-gate-icon-svg-2">
+  <link rel="modulepreload" href="js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
   <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260816-loader-shell-atomic-1">
   <link rel="preload" as="style" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260818-header-dropdowns-solid-3">
@@ -335,7 +335,7 @@
 
       <!-- BOTÓN PRINCIPAL: Confirmar pedido -->
       <button type="button" id="ck-confirm-btn" class="ck-btn" style="margin-top:4px">
-        ✓ Confirmar pedido
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polyline points="20 6 9 17 4 12"/></svg> Confirmar pedido
       </button>
       <div class="ck-error" id="error-4" role="alert"></div>
 
@@ -373,13 +373,13 @@ import {
   removeFromCart, updateQty, clearCart
 } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260814-social-notifications-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
-import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260815-routes-clean-1";
+import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
 import {
   isAccessAllowed,
   normalizeStoreAccessConfig,
   renderStoreClosedOverlay,
   removeStoreClosedOverlay
-} from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260730-appcheck-stable-4";
+} from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1";
 import { cleanText } from "./js/core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=tintin-20260803-location-picker-2";
 import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260803-encomienda-1";
@@ -919,7 +919,7 @@ function showLoginRequiredModal(targetStep) {
   ov.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(30,10,18,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px';
   ov.innerHTML = `
     <div id="ck-login-required-card" role="dialog" aria-modal="true" aria-labelledby="ck-login-required-title" aria-describedby="ck-login-required-message" style="position:relative;background:#fff;border-radius:20px;max-width:420px;width:100%;padding:38px 26px 28px;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.28)">
-      <button type="button" id="ck-login-required-close" aria-label="Cerrar" style="position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:50%;border:none;background:#f5eef1;color:#555;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+      <button type="button" id="ck-login-required-close" aria-label="Cerrar" style="position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:50%;border:none;background:#f5eef1;color:#555;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       <div style="margin-bottom:14px;display:flex;justify-content:center"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
       <div id="ck-login-required-title" style="font-weight:800;font-size:17px;color:var(--acc-dark);margin-bottom:12px;line-height:1.35">Iniciá sesión para continuar</div>
       <p id="ck-login-required-message" style="font-size:14px;color:#555;line-height:1.6;margin:0 0 20px">Para continuar con tu compra, ingresá con tu cuenta de Google o con un código que te mandamos a tu correo. Solo toma unos segundos y nos ayuda a guardar correctamente tu pedido y enviarte la confirmación.</p>
@@ -1840,7 +1840,7 @@ onAuthStateChanged(auth, user => {
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260815-profile-routes-1"></script>
-<script src="tienda.js?v=tintin-20260818-product-trust-icons-1" defer></script>
+<script src="tienda.js?v=tintin-20260818-product-trust-icons-2" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

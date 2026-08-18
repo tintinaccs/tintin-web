@@ -1,4 +1,4 @@
-import { CATEGORIES } from './iconos.js';
+import { CATEGORIES, UI_ICONS, svgIcon } from './iconos.js';
 
 function renderSheetCategories() {
   return CATEGORIES.map(({ slug, label }) => `
@@ -14,7 +14,7 @@ export function renderCollectionsSheet() {
       <div class="tt-sheet-handle" aria-hidden="true"></div>
       <div class="tt-sheet-header">
         <span>Colecciones</span>
-        <button type="button" id="btn-close-sheet" aria-label="Cerrar colecciones">✕</button>
+        <button type="button" id="btn-close-sheet" aria-label="Cerrar colecciones">${svgIcon(UI_ICONS.close, { size: 16 })}</button>
       </div>
       <div class="tt-sheet-grid" data-collections-nav="sheet">${renderSheetCategories()}</div>
       <div class="tt-sheet-footer">

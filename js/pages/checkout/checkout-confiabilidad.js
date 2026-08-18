@@ -11,6 +11,10 @@
 
 import { apiUrl } from '../../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
 
+const BAG_ICON_SVG = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>';
+const PIN_ICON_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-2px"><path d="M12 2C7.6 2 4 5.6 4 10c0 5.5 7 12 8 12s8-6.5 8-12c0-4.4-3.6-8-8-8z"/><circle cx="12" cy="10" r="3" fill="#fff"/></svg>';
+const MAP_ICON_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><polygon points="1 6 8 3 16 6 23 3 23 18 16 21 8 18 1 21"/><line x1="8" y1="3" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="21"/></svg>';
+
 const CHECKOUT_PATH_RE = /(?:^|\/)checkout(?:\.html)?\/?$/i;
 if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheckoutReliabilityBooted) {
   // Este módulo se importa desde el shell compartido, pero no hace nada fuera
@@ -250,7 +254,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
     if (!items.length) {
       container.innerHTML = `
         <div class="ck-empty">
-          <div class="ck-empty-icon">🛒</div>
+          <div class="ck-empty-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
           <div class="ck-empty-text">Tu carrito está vacío</div>
           <p style="color:#8B5B6B;font-size:13px;margin:6px 0 16px">Agregá un producto para comenzar una compra nueva.</p>
           <a href="/catalogo" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 24px;text-decoration:none;border-radius:999px;background:#AD3F67;color:#fff!important;font-weight:800">Ver catálogo →</a>
@@ -264,8 +268,8 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
       const name = escapeHtml(item.name);
       const cat = escapeHtml(item.cat);
       const image = item.imageUrl
-        ? `<img class="ck-item-img" src="${escapeHtml(item.imageUrl)}" alt="${name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ck-item-img-placeholder" style="display:none">🛍️</div>`
-        : '<div class="ck-item-img-placeholder">🛍️</div>';
+        ? `<img class="ck-item-img" src="${escapeHtml(item.imageUrl)}" alt="${name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ck-item-img-placeholder" style="display:none">${BAG_ICON_SVG}</div>`
+        : `<div class="ck-item-img-placeholder">${BAG_ICON_SVG}</div>`;
       return `<div class="ck-item" data-id="${id}">
         ${image}
         <div class="ck-item-info">
@@ -455,7 +459,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
     }
     results.innerHTML = places.map((place, index) => `
       <button type="button" class="tt-map-smart-result" data-smart-place="${index}">
-        <div class="tt-map-smart-result-name">📍 ${escapeHtml(place.name)}</div>
+        <div class="tt-map-smart-result-name">${PIN_ICON_SVG} ${escapeHtml(place.name)}</div>
         <div class="tt-map-smart-result-address">${escapeHtml(place.address)} · ${escapeHtml(place.source || '')}</div>
       </button>`).join('');
     results.classList.add('show');
@@ -511,8 +515,8 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
     tools.id = 'tt-map-smart-tools';
     tools.className = 'tt-map-smart-tools';
     tools.innerHTML = `
-      <button type="button" class="tt-map-smart-button" id="tt-use-current-location">📍 Usar mi ubicación actual</button>
-      <a class="tt-map-smart-button" id="tt-open-google-maps" href="https://www.google.com/maps/search/?api=1&query=Paraguay" target="_blank" rel="noopener">🗺️ Buscar en Google Maps</a>`;
+      <button type="button" class="tt-map-smart-button" id="tt-use-current-location">${PIN_ICON_SVG} Usar mi ubicación actual</button>
+      <a class="tt-map-smart-button" id="tt-open-google-maps" href="https://www.google.com/maps/search/?api=1&query=Paraguay" target="_blank" rel="noopener">${MAP_ICON_SVG} Buscar en Google Maps</a>`;
 
     const help = document.createElement('div');
     help.className = 'tt-map-smart-help';

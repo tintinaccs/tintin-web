@@ -408,7 +408,7 @@ function renderCart() {
       </div>
       <div class="tt-cart-item-actions">
         <button type="button" class="tt-cart-favorite-toggle${isFavorite ? ' is-favorite' : ''}" data-favorite-id="${safeId}" data-favorite-name="${escapeAttribute(item.name)}" data-favorite-price="${escapeAttribute(item.price)}" data-favorite-image="${escapeAttribute(item.imageUrl || '')}" data-favorite-cat="${escapeAttribute(item.cat || '')}" aria-pressed="${isFavorite}"><span data-favorite-icon aria-hidden="true">${heartIconMarkup(isFavorite)}</span></button>
-        <button type="button" class="tt-cart-item-remove" data-cart-action="remove" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" aria-label="Eliminar">✕</button>
+        <button type="button" class="tt-cart-item-remove" data-cart-action="remove" data-cart-id="${safeId}" data-cart-variant="${safeVariantAttr}" aria-label="Eliminar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       </div>
     </div>
   `;

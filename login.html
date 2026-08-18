@@ -196,11 +196,11 @@ import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260803-profile-store-1";
 import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260815-profile-routes-1";
-import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260815-routes-clean-1";
+import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
 import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260815-profile-routes-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260730-appcheck-stable-4";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260803-profile-onboarding-2";
-import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260815-routes-clean-1";
+import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260818-pin-icon-svg-1";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
 
@@ -960,7 +960,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
 };
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script src="tienda.js?v=tintin-20260818-product-trust-icons-1" defer></script>
+<script src="tienda.js?v=tintin-20260818-product-trust-icons-2" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

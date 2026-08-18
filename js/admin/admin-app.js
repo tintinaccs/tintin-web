@@ -18,7 +18,7 @@ import {
   canDo, saveRolePermissions, buildDefaultRolePermissions
 } from "../core/auth/permisos-roles.js?v=tintin-20260716-cloudinary-fix-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260730-appcheck-stable-4";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1";
 import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260818-browser-fallback-2";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";

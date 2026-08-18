@@ -39,7 +39,7 @@ function loadLeaflet() {
 function pinIcon(L) {
   return L.divIcon({
     className: '',
-    html: '<div style="font-size:32px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))">📍</div>',
+    html: '<div style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))"><svg width="32" height="32" viewBox="0 0 24 24" fill="#e91e8c" stroke="#e91e8c" stroke-width="1"><path d="M12 2C7.6 2 4 5.6 4 10c0 5.5 7 12 8 12s8-6.5 8-12c0-4.4-3.6-8-8-8z" stroke="none"/><circle cx="12" cy="10" r="3" fill="#fff" stroke="none"/></svg></div>',
     iconSize: [32, 32],
     iconAnchor: [16, 32],
   });

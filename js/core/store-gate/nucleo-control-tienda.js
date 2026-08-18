@@ -471,7 +471,10 @@ function buildOverlayHtml(kind) {
 
   return `
     <section class="${DIALOG_CLASS}" role="dialog" aria-modal="true" aria-labelledby="tt-store-gate-title" aria-describedby="tt-store-gate-message">
-      <span class="tt-store-gate-icon" aria-hidden="true">${unavailable ? '⚠️' : '🌙'}</span>
+      <span class="tt-store-gate-icon" aria-hidden="true">${unavailable
+        ? '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 1 21h22L12 2z"/><line x1="12" y1="9" x2="12" y2="14"/><line x1="12" y1="17.5" x2="12" y2="17.5"/></svg>'
+        : '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z"/></svg>'
+      }</span>
       <h1 id="tt-store-gate-title" class="tt-store-gate-title">${title}</h1>
       <p id="tt-store-gate-message" class="tt-store-gate-message">${message}</p>
       <div class="tt-store-gate-actions">
