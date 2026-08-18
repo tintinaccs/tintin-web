@@ -1,5 +1,5 @@
-import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260817-header-refined-2';
-import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260817-header-refined-2';
+import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260818-logo-no-flash-1';
+import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260818-logo-no-flash-1';
 import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20260815-routes-clean-1';
 import { renderSearchPanel } from './compartido/panel-busqueda.js';
 import { renderCartDrawer } from './compartido/panel-carrito.js';
@@ -32,7 +32,6 @@ const LEGACY_SHELL_IDS = Object.freeze([
 ]);
 
 let mountPromise = null;
-let sharedLogoDataPromise = null;
 
 function removeLegacyShell(root = document) {
   LEGACY_SHELL_IDS.forEach(id => root.getElementById(id)?.remove());
@@ -57,13 +56,53 @@ function renderBottomShell() {
   ].join('');
 }
 
-function blobAsDataUrl(blob) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result || ''));
-    reader.onerror = () => reject(reader.error || new Error('No se pudo leer el logo.'));
-    reader.readAsDataURL(blob);
+function waitForImageReady(image, ceilingMs = 1800) {
+  if (!image) return Promise.resolve(false);
+  if (image.complete) return Promise.resolve(image.naturalWidth > 0);
+
+  return new Promise(resolve => {
+    let settled = false;
+    let timer = 0;
+
+    function finish(loaded) {
+      if (settled) return;
+      settled = true;
+      if (timer) window.clearTimeout(timer);
+      image.removeEventListener('load', onLoad);
+      image.removeEventListener('error', onError);
+      resolve(Boolean(loaded));
+    }
+
+    function onLoad() { finish(image.naturalWidth > 0); }
+    function onError() { finish(false); }
+
+    image.addEventListener('load', onLoad, { once: true });
+    image.addEventListener('error', onError, { once: true });
+    timer = window.setTimeout(() => finish(image.complete && image.naturalWidth > 0), ceilingMs);
   });
+}
+
+async function settleShellBrandImage(image) {
+  if (!image) return;
+  let loaded = await waitForImageReady(image);
+  const fallback = image.dataset.ttFallbackLogo || '';
+
+  if (!loaded && fallback && image.src !== fallback) {
+    image.src = fallback;
+    loaded = await waitForImageReady(image, 1200);
+  }
+
+  // El logo queda oculto hasta que Visual Studio ya decidió la fuente final.
+  // Así nunca se ve el logo local/default y luego el personalizado encima.
+  image.style.removeProperty('visibility');
+  image.removeAttribute('data-tt-shell-logo-pending');
+}
+
+async function finalizeShellBrandImages(root = document) {
+  const images = [...root.querySelectorAll(
+    '#tt-header-desktop-tablet img[data-tt-shell-logo-pending], #tt-header-tablet img[data-tt-shell-logo-pending], #tt-tablet-menu img[data-tt-shell-logo-pending]'
+  )];
+  await Promise.all(images.map(settleShellBrandImage));
 }
 
 function resolveWithCeiling(promise, ceilingMs, fallbackValue = null) {
@@ -92,71 +131,6 @@ function resolveWithCeiling(promise, ceilingMs, fallbackValue = null) {
   });
 }
 
-function waitForImageReady(image, ceilingMs = 1600) {
-  if (!image) return Promise.resolve();
-  if (image.complete) return Promise.resolve();
-
-  return new Promise(resolve => {
-    let settled = false;
-    let timer = 0;
-
-    function finish() {
-      if (settled) return;
-      settled = true;
-      if (timer) window.clearTimeout(timer);
-      image.removeEventListener('load', finish);
-      image.removeEventListener('error', finish);
-      resolve();
-    }
-
-    image.addEventListener('load', finish, { once: true });
-    image.addEventListener('error', finish, { once: true });
-    timer = window.setTimeout(finish, ceilingMs);
-  });
-}
-
-async function waitForShellBrandImages(root = document) {
-  const images = [...root.querySelectorAll(
-    '#tt-header-desktop-tablet img, #tt-header-tablet img, #tt-tablet-menu img'
-  )];
-  await Promise.all(images.map(image => waitForImageReady(image)));
-}
-
-function hydrateSharedLogos(root = document) {
-  const images = [...root.querySelectorAll('img[data-tt-shared-logo]')];
-  const source = images.find(image => image.dataset.ttSharedLogo)?.dataset.ttSharedLogo;
-  if (!images.length || !source) return Promise.resolve();
-
-  if (!sharedLogoDataPromise) {
-    const controller = typeof AbortController === 'function' ? new AbortController() : null;
-    const timer = window.setTimeout(() => controller?.abort(), 1800);
-
-    sharedLogoDataPromise = fetch(source, {
-      cache: 'force-cache',
-      credentials: 'same-origin',
-      ...(controller ? { signal: controller.signal } : {}),
-    })
-      .then(response => {
-        if (!response.ok) throw new Error(`Logo HTTP ${response.status}`);
-        return response.blob();
-      })
-      .then(blobAsDataUrl)
-      .catch(error => {
-        console.warn('[PublicShell] No se pudo compartir el logo en memoria.', error);
-        return source;
-      })
-      .finally(() => window.clearTimeout(timer));
-  }
-
-  return sharedLogoDataPromise.then(async value => {
-    images.forEach(image => {
-      image.src = value;
-      image.removeAttribute('data-tt-shared-logo');
-    });
-    await Promise.all(images.map(image => waitForImageReady(image)));
-  });
-}
-
 function mountPublicShell() {
   if (!document.body || document.body.classList.contains('tt-public-shell-mounted')) return Promise.resolve();
   if (mountPromise) return mountPromise;
@@ -178,15 +152,15 @@ function mountPublicShell() {
     document.body.insertAdjacentHTML('afterbegin', renderTopShell());
     document.body.insertAdjacentHTML('beforeend', renderBottomShell());
 
-    await hydrateSharedLogos();
-
+    // Primero se resuelve la configuración global y recién después se revela
+    // el logo. El usuario nunca ve una imagen provisional durante ese tiempo.
     const globalConfig = await globalConfigPromise;
     if (globalConfig?.layout) applyGlobalLayout(globalConfig.layout);
     else document.documentElement.dataset.ttGlobalLayout = 'fallback';
     if (globalConfig) applyGlobalVisualStudio(globalConfig);
     else document.documentElement.dataset.ttGlobalStudio = 'fallback';
 
-    await waitForShellBrandImages();
+    await finalizeShellBrandImages();
 
     document.body.classList.add('tt-public-shell-mounted');
     document.body.classList.toggle('tt-public-shell-home', currentPage() === 'home');
@@ -202,7 +176,8 @@ function mountPublicShell() {
         socialNotifications: 'firestore-realtime-always-on',
         responsiveSurfaces: 'viewport-fit-v2',
         globalConfigRequests: 1,
-        sharedLogoRequests: 1,
+        sharedLogoRequests: 0,
+        brandPaint: 'configured-logo-first',
       },
     }));
   }).catch(error => {
