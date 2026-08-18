@@ -34,10 +34,21 @@ check(
     shellRuntime.includes('attachProductsDemand()'),
   'Products-store debe cargarse por demanda al abrir Buscar fuera de inicio/tienda.'
 );
+
+const checkoutBlockMatch = shellRuntime.match(/if \(page === 'cart'\) \{([\s\S]*?)\n  \}/);
+const checkoutBlock = checkoutBlockMatch?.[1] || '';
 check(
   'Checkout reliability se limita a Checkout',
-  shellRuntime.includes("if (page === 'cart') critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')))"),
-  'El módulo de mapa y recuperación del checkout no debe descargarse en todas las páginas.'
+  Boolean(checkoutBlockMatch) &&
+    checkoutBlock.includes("pages/checkout/checkout-confiabilidad.js") &&
+    checkoutBlock.includes('loadCheckoutMapRuntime()') &&
+    checkoutBlock.includes('loadCheckoutIdentityRuntime()') &&
+    checkoutBlock.includes('loadCheckoutOrderRuntime()') &&
+    !shellRuntime.replace(checkoutBlockMatch?.[0] || '', '').includes("pages/checkout/checkout-confiabilidad.js") &&
+    !shellRuntime.replace(checkoutBlockMatch?.[0] || '', '').includes('loadCheckoutMapRuntime()') &&
+    !shellRuntime.replace(checkoutBlockMatch?.[0] || '', '').includes('loadCheckoutIdentityRuntime()') &&
+    !shellRuntime.replace(checkoutBlockMatch?.[0] || '', '').includes('loadCheckoutOrderRuntime()'),
+  'Confiabilidad, mapa, identidad y creación de pedido V2 deben iniciarse únicamente dentro del bloque page === cart.'
 );
 check(
   'El shell reconoce URLs limpias de Cloudflare',
