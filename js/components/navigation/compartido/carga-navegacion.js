@@ -8,7 +8,7 @@ let notificationsRuntimePromise = null;
 let collectionsRuntimePromise = null;
 
 const FULL_COMMERCE_PAGES = new Set(['home', 'shop', 'cart', 'account']);
-const NOTIFICATIONS_RUNTIME_VERSION = 'tintin-20260818-notifications-realtime-solid-1';
+const CHECKOUT_IDENTITY_VERSION = 'tintin-20260818-checkout-identity-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -92,15 +92,9 @@ function loadCartRuntime() {
   return cartRuntimePromise;
 }
 
-function notificationRuntimeUrl() {
-  const url = new URL(versionedJsModule('components/notifications/notificaciones-clientes.js'));
-  url.searchParams.set('v', NOTIFICATIONS_RUNTIME_VERSION);
-  return url.href;
-}
-
 function loadNotificationsRuntime() {
   if (!notificationsRuntimePromise) {
-    notificationsRuntimePromise = import(notificationRuntimeUrl())
+    notificationsRuntimePromise = import(versionedJsModule('components/notifications/notificaciones-clientes.js'))
       .then(module => {
         module.initClientNotifications?.();
         return module;
@@ -122,6 +116,12 @@ function loadCollectionsRuntime() {
       });
   }
   return collectionsRuntimePromise;
+}
+
+function loadCheckoutIdentityRuntime() {
+  const url = new URL('../../../pages/checkout/checkout-identidad-navegacion.js', import.meta.url);
+  url.searchParams.set('v', CHECKOUT_IDENTITY_VERSION);
+  return import(url.href);
 }
 
 function attachProductsDemand() {
@@ -202,7 +202,10 @@ export function loadSharedRuntime() {
 
   const critical = [loadAuthRuntime(), loadCartRuntime()];
   if (page === 'home' || page === 'shop') critical.push(loadProductsRuntime());
-  if (page === 'cart') critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')));
+  if (page === 'cart') {
+    critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')));
+    critical.push(loadCheckoutIdentityRuntime());
+  }
 
   Promise.allSettled(critical).then(reportRuntimeFailures);
 
