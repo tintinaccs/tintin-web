@@ -9,6 +9,7 @@ let collectionsRuntimePromise = null;
 
 const FULL_COMMERCE_PAGES = new Set(['home', 'shop', 'cart', 'account']);
 const CHECKOUT_IDENTITY_VERSION = 'tintin-20260818-checkout-identity-1';
+const CHECKOUT_ORDER_VERSION = 'tintin-20260818-checkout-cloudflare-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -124,6 +125,12 @@ function loadCheckoutIdentityRuntime() {
   return import(url.href);
 }
 
+function loadCheckoutOrderRuntime() {
+  const url = new URL('../../../orders/pedido-checkout-seguro-v2.js', import.meta.url);
+  url.searchParams.set('v', CHECKOUT_ORDER_VERSION);
+  return import(url.href);
+}
+
 function attachProductsDemand() {
   let started = false;
 
@@ -200,11 +207,18 @@ export function loadSharedRuntime() {
     return;
   }
 
+  // El carrito histórico intenta importar pedido-checkout-seguro.js por
+  // compatibilidad. En checkout se marca ese runtime como ya atendido ANTES
+  // de importar el carrito; el flujo real se inicia explícitamente con V2,
+  // que usa /api/create-order y ya no depende del Apps Script desincronizado.
+  if (page === 'cart') window.TintinSecureCheckoutOrderBooted = true;
+
   const critical = [loadAuthRuntime(), loadCartRuntime()];
   if (page === 'home' || page === 'shop') critical.push(loadProductsRuntime());
   if (page === 'cart') {
     critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')));
     critical.push(loadCheckoutIdentityRuntime());
+    critical.push(loadCheckoutOrderRuntime());
   }
 
   Promise.allSettled(critical).then(reportRuntimeFailures);
