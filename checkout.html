@@ -42,7 +42,7 @@
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="styles.css?v=tintin-20260818-collections-apple-1">
-  <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20260818-panel-title-icons-1">
+  <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20260818-icon-containers-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -151,12 +151,12 @@
       </div>
 
       <div class="ck-ship-reminder" id="ck-ship-reminder">
-        <div class="ck-ship-reminder-icon">⏰</div>
+        <div class="ck-ship-reminder-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
         <div class="ck-ship-reminder-text" id="ck-ship-reminder-text"></div>
       </div>
 
       <div class="ck-pickup-notice" id="ck-pickup-notice" role="note" aria-live="polite">
-        <div class="ck-pickup-notice-icon" aria-hidden="true">🔐</div>
+        <div class="ck-pickup-notice-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
         <div>
           <strong>Ubicación de retiro protegida</strong>
           <p>Por seguridad, no publicamos la dirección exacta. Confirmá primero tu pedido y luego solicitá la ubicación a uno de nuestros agentes por WhatsApp.</p>
@@ -169,12 +169,12 @@
            antes de pedirlos. Sólo aparece para las ciudades del interior. -->
       <div class="ck-enc-modes" id="ck-enc-modes" style="display:none" role="radiogroup" aria-label="Cómo querés recibir tu pedido">
         <button type="button" class="ck-enc-mode" id="ck-enc-agencia" role="radio" aria-checked="false">
-          <span class="ck-enc-mode-icon" aria-hidden="true">🏢</span>
+          <span class="ck-enc-mode-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="1"/><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="22" x2="10" y2="15"/><line x1="14" y1="22" x2="14" y2="15"/></svg></span>
           <span class="ck-enc-mode-title">Retiro en agencia</span>
           <span class="ck-enc-mode-sub">Lo pasás a buscar por la transportadora</span>
         </button>
         <button type="button" class="ck-enc-mode" id="ck-enc-puerta" role="radio" aria-checked="false">
-          <span class="ck-enc-mode-icon" aria-hidden="true">🏠</span>
+          <span class="ck-enc-mode-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
           <span class="ck-enc-mode-title">Entrega en puerta</span>
           <span class="ck-enc-mode-sub">Te lo llevan a tu dirección</span>
         </button>
@@ -325,7 +325,7 @@
     </div>
     <!-- Success header (shown after confirming) -->
     <div id="ck-success-head" class="ck-confirm-check" style="display:none">
-      <div class="ck-confirm-icon">✅</div>
+      <div class="ck-confirm-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div class="ck-confirm-title">¡Pedido confirmado!</div>
       <div class="ck-confirm-sub">Ya lo tenemos. Ahora verificamos disponibilidad y te escribimos por WhatsApp para coordinar el pago y la entrega — normalmente dentro de las próximas horas hábiles.</div>
     </div>
@@ -919,7 +919,7 @@ function showLoginRequiredModal(targetStep) {
   ov.innerHTML = `
     <div id="ck-login-required-card" role="dialog" aria-modal="true" aria-labelledby="ck-login-required-title" aria-describedby="ck-login-required-message" style="position:relative;background:#fff;border-radius:20px;max-width:420px;width:100%;padding:38px 26px 28px;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.28)">
       <button type="button" id="ck-login-required-close" aria-label="Cerrar" style="position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:50%;border:none;background:#f5eef1;color:#555;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
-      <div style="font-size:36px;margin-bottom:14px">🔐</div>
+      <div style="margin-bottom:14px;display:flex;justify-content:center"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
       <div id="ck-login-required-title" style="font-weight:800;font-size:17px;color:var(--acc-dark);margin-bottom:12px;line-height:1.35">Iniciá sesión para continuar</div>
       <p id="ck-login-required-message" style="font-size:14px;color:#555;line-height:1.6;margin:0 0 20px">Para continuar con tu compra, ingresá con tu cuenta de Google o con un código que te mandamos a tu correo. Solo toma unos segundos y nos ayuda a guardar correctamente tu pedido y enviarte la confirmación.</p>
       <a id="ck-login-required-login" class="ck-btn" style="text-decoration:none;margin-top:0" href="/login?from=${from}">Iniciar sesión</a>
