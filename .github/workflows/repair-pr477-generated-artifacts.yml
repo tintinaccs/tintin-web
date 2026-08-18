@@ -1,0 +1,68 @@
+name: Reparar artefactos PR 477
+
+on:
+  push:
+    branches:
+      - claude/tintin-visual-studio-v2-closure-agzdgu
+    paths:
+      - '.github/workflows/repair-pr477-generated-artifacts.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repair-pr477-generated-artifacts
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout rama exacta
+        uses: actions/checkout@v5
+        with:
+          ref: claude/tintin-visual-studio-v2-closure-agzdgu
+          fetch-depth: 0
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Integrar main vigente
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git merge --no-edit origin/main
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Regenerar artefactos reproducibles
+        run: npm run build:pages
+
+      - name: Verificar árbol reproducible
+        shell: bash
+        run: |
+          npm run verify:routes
+          npm run verify:csp
+          npm run verify:diagnostics
+          npm run audit:cache-versioning
+
+      - name: Commit de reparación y auto-limpieza
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm .github/workflows/repair-pr477-generated-artifacts.yml
+          git add diagnostic-manifest.json scripts/cache-version-baseline.json scripts/cache-version-approvals.json _headers _routes.json config/csp-runtime.js config/csp-runtime.json
+          if git diff --cached --quiet; then
+            echo 'No hay artefactos por actualizar.'
+            exit 0
+          fi
+          git commit -m 'chore(ci): sincronizar #477 con main y regenerar artefactos'
+          git push origin HEAD:claude/tintin-visual-studio-v2-closure-agzdgu
