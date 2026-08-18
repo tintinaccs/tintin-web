@@ -6,7 +6,7 @@
   if (window.TintinPublicShellBootstrapStarted) return;
   window.TintinPublicShellBootstrapStarted = true;
 
-  const VERSION = 'tintin-20260818-responsive-shell-realtime-1';
+  const VERSION = 'tintin-20260818-shell-unified-1';
   const scriptUrl = document.currentScript?.src
     || new URL('js/inicio-navegacion-publica.js', window.location.href).href;
   const entryUrl = new URL('./components/navigation/entrada-navegacion-publica.js', scriptUrl);
