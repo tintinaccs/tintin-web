@@ -75,7 +75,7 @@ function normalizeCartLines(cartLines) {
     const id = clean(rawLine.id, 180);
     const qty = Number(rawLine.qty);
     const rawVariants = Array.isArray(rawLine.variants) ? rawLine.variants : (rawLine.variant ? [rawLine.variant] : []);
-    if (!id || !Number.isInteger(qty) || qty < 1 || qty > 99 || rawVariants.length > 10) return { ok: false, error: 'invalid_cart' };
+    if (!/^[A-Za-z0-9_-]{1,180}$/.test(id) || !Number.isInteger(qty) || qty < 1 || qty > 99 || rawVariants.length > 10) return { ok: false, error: 'invalid_cart' };
     const variants = rawVariants.map(value => clean(value, 120));
     if (variants.some((value, index) => !value || value !== rawVariants[index] || String(rawVariants[index]).length > 120)) return { ok: false, error: 'invalid_cart' };
     const existing = byId.get(id) || { id, qty: 0, variants: [] };
