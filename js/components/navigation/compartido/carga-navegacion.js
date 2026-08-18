@@ -10,6 +10,7 @@ let collectionsRuntimePromise = null;
 const FULL_COMMERCE_PAGES = new Set(['home', 'shop', 'cart', 'account']);
 const CHECKOUT_IDENTITY_VERSION = 'tintin-20260818-checkout-identity-1';
 const CHECKOUT_ORDER_VERSION = 'tintin-20260818-checkout-cloudflare-1';
+const CHECKOUT_MAP_VERSION = 'tintin-20260818-checkout-map-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -119,16 +120,22 @@ function loadCollectionsRuntime() {
   return collectionsRuntimePromise;
 }
 
-function loadCheckoutIdentityRuntime() {
-  const url = new URL('../../../pages/checkout/checkout-identidad-navegacion.js', import.meta.url);
-  url.searchParams.set('v', CHECKOUT_IDENTITY_VERSION);
+function versionedCheckoutModule(path, version) {
+  const url = new URL(`../../../${path}`, import.meta.url);
+  url.searchParams.set('v', version);
   return import(url.href);
 }
 
+function loadCheckoutIdentityRuntime() {
+  return versionedCheckoutModule('pages/checkout/checkout-identidad-navegacion.js', CHECKOUT_IDENTITY_VERSION);
+}
+
 function loadCheckoutOrderRuntime() {
-  const url = new URL('../../../orders/pedido-checkout-seguro-v2.js', import.meta.url);
-  url.searchParams.set('v', CHECKOUT_ORDER_VERSION);
-  return import(url.href);
+  return versionedCheckoutModule('orders/pedido-checkout-seguro-v2.js', CHECKOUT_ORDER_VERSION);
+}
+
+function loadCheckoutMapRuntime() {
+  return versionedCheckoutModule('pages/checkout/checkout-captura-mapa.js', CHECKOUT_MAP_VERSION);
 }
 
 function attachProductsDemand() {
@@ -217,6 +224,7 @@ export function loadSharedRuntime() {
   if (page === 'home' || page === 'shop') critical.push(loadProductsRuntime());
   if (page === 'cart') {
     critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')));
+    critical.push(loadCheckoutMapRuntime());
     critical.push(loadCheckoutIdentityRuntime());
     critical.push(loadCheckoutOrderRuntime());
   }
