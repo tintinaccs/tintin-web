@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-18T15:09:35.454Z",
-  "sourceFingerprint": "80aed78038e2dfb5b16af21bde8b3e058cc2a1f27222fbdd83f0e0195c849779",
+  "generatedAt": "2026-08-18T15:11:26.629Z",
+  "sourceFingerprint": "b1d6a61995547de26ef29cb0e7dfcd1caaecf6a8cf643738cd396c18c71b0dd9",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 665,
     "textFiles": 633,
-    "totalBytes": 7565833,
+    "totalBytes": 7569833,
     "pages": 18,
     "modules": 413
   },
@@ -12688,8 +12688,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 31805,
-      "sha256": "df87175f0a112a0beb2242bd5cf49f836b2c9b52358a9ea5ffdd00b4eb763d6b",
+      "bytes": 35805,
+      "sha256": "349a94e1e31fe2dabe2dbdda3057fd5575e4789cc851698c7e4df09ee447e388",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12746,32 +12746,32 @@
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 646
+          "line": 650
         },
         {
           "raw": "js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260817-heart-icon-1",
           "target": "js/components/favorites/sincronizacion-favoritos.js",
-          "line": 647
+          "line": 651
         },
         {
           "raw": "js/pages/profile/favoritos-perfil.js?v=tintin-20260815-routes-clean-1",
           "target": "js/pages/profile/favoritos-perfil.js",
-          "line": 648
+          "line": 652
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 649
+          "line": 653
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260815-profile-routes-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 650
+          "line": 654
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 651
+          "line": 655
         }
       ],
       "styles": [
@@ -12876,7 +12876,7 @@
         {
           "raw": "https://wa.me/595981299331?text=Hola%21+Necesito+ayuda+con+mi+pedido+%F0%9F%8C%B8",
           "target": null,
-          "text": "💬 Contactar por WhatsApp Te respondemos en minutos — Lun a Sáb",
+          "text": "Contactar por WhatsApp Te respondemos en minutos — Lun a Sáb",
           "id": "",
           "ariaLabel": "",
           "title": "",
@@ -12886,7 +12886,7 @@
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "text": "🛍️ Ver catálogo",
+          "text": "Ver catálogo",
           "id": "",
           "ariaLabel": "",
           "title": "",
@@ -12896,7 +12896,7 @@
         {
           "raw": "/checkout",
           "target": "checkout.html",
-          "text": "🛒 Finalizar compra",
+          "text": "Finalizar compra",
           "id": "",
           "ariaLabel": "",
           "title": "",
@@ -12906,7 +12906,7 @@
         {
           "raw": "/",
           "target": null,
-          "text": "🏠 Inicio",
+          "text": "Inicio",
           "id": "",
           "ariaLabel": "",
           "title": "",
@@ -12948,37 +12948,37 @@
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 646,
+          "line": 650,
           "exists": true
         },
         {
           "raw": "js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260817-heart-icon-1",
           "target": "js/components/favorites/sincronizacion-favoritos.js",
-          "line": 647,
+          "line": 651,
           "exists": true
         },
         {
           "raw": "js/pages/profile/favoritos-perfil.js?v=tintin-20260815-routes-clean-1",
           "target": "js/pages/profile/favoritos-perfil.js",
-          "line": 648,
+          "line": 652,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 649,
+          "line": 653,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260815-profile-routes-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 650,
+          "line": 654,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 651,
+          "line": 655,
           "exists": true
         },
         {
@@ -13103,7 +13103,7 @@
             "perfil-btn-outline"
           ],
           "type": "button",
-          "text": "📍 Elegir ubicación",
+          "text": "Elegir ubicación",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -13147,7 +13147,7 @@
             "perfil-btn-primary"
           ],
           "type": "button",
-          "text": "💾 Guardar cambios",
+          "text": "Guardar cambios",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -13162,7 +13162,7 @@
             "perfil-btn-danger"
           ],
           "type": "button",
-          "text": "🚪 Cerrar sesión",
+          "text": "Cerrar sesión",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -16294,7 +16294,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 330173,
-      "sha256": "0fc425277c1d5a330453768720da92ea2bf065f6f5395788e11c0fcf09fdc3bd",
+      "sha256": "b0c2b5d877684da66000e56eaedf1bc3ab9e6f4dc471f00fa741a54bce1551db",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27017,13 +27017,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 330173,
-      "sha256": "0fc425277c1d5a330453768720da92ea2bf065f6f5395788e11c0fcf09fdc3bd"
+      "sha256": "b0c2b5d877684da66000e56eaedf1bc3ab9e6f4dc471f00fa741a54bce1551db"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 330088,
-      "sha256": "bb2ffa5ad5f75d1080f7b8fa5516239b5332532dc100315959cd53f5e50557f7"
+      "sha256": "582053500f9b1ad050bf3c5fdafb1dbe71ccc3397d35397649d5fca32d6b80f7"
     },
     {
       "path": "config/public-site.json",
@@ -29326,8 +29326,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 31805,
-      "sha256": "df87175f0a112a0beb2242bd5cf49f836b2c9b52358a9ea5ffdd00b4eb763d6b"
+      "bytes": 35805,
+      "sha256": "349a94e1e31fe2dabe2dbdda3057fd5575e4789cc851698c7e4df09ee447e388"
     },
     {
       "path": "playwright.config.js",
@@ -31413,21 +31413,21 @@
     },
     {
       "file": "perfil.html",
-      "line": 414,
+      "line": 418,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 425,
+      "line": 429,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 586,
+      "line": 590,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -31488,7 +31488,7 @@
         },
         {
           "file": "perfil.html",
-          "line": 425
+          "line": 429
         }
       ]
     },
@@ -32129,12 +32129,12 @@
           },
           {
             "file": "perfil.html",
-            "line": 597,
+            "line": 601,
             "operation": "collection"
           },
           {
             "file": "perfil.html",
-            "line": 605,
+            "line": 609,
             "operation": "collection"
           },
           {
@@ -32944,7 +32944,7 @@
           },
           {
             "file": "perfil.html",
-            "line": 420,
+            "line": 424,
             "operation": "doc"
           },
           {
