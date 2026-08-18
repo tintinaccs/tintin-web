@@ -51,7 +51,14 @@ const collectionsOriginal = `    const collectionCards = [...document.querySelec
 const collectionsReplacement = `    const collectionCards = [...document.querySelectorAll('.tt-collections-grid .tt-coll-card')].filter(visible);
     const collectionState = document.querySelector('.tt-collections-grid > .tt-phase4-collections-state');
     if (collectionCards.length < 8 && !visible(collectionState)) {
-      issues.push(\`colecciones: no hay tarjetas ni estado visible\`);
+      const grid = document.querySelector('.tt-collections-grid');
+      const diag = {
+        gridChildren: grid ? grid.children.length : -1,
+        gridFirstClass: grid?.firstElementChild?.className || '(none)',
+        productsLen: Array.isArray(window.PRODUCTS) ? window.PRODUCTS.length : -1,
+        phase4Booted: !!window.TintinCollectionsPhase4Booted,
+      };
+      issues.push(\`colecciones: no hay tarjetas ni estado visible — DIAG \${JSON.stringify(diag)}\`);
     }
     if (visible(collectionState)) {
       const stateBox = rect(collectionState);
