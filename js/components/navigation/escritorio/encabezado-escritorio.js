@@ -2,7 +2,6 @@ import { CATEGORIES, UI_ICONS, categoryIcon, svgIcon } from '../compartido/icono
 import { logoUrl } from '../compartido/configuracion.js';
 
 const notificationBell = () => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>';
-const EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
 
 function renderDesktopCategories() {
   return CATEGORIES.map(({ slug, label }) => `
@@ -13,11 +12,12 @@ function renderDesktopCategories() {
 }
 
 export function renderDesktopHeader() {
+  const fallbackLogo = logoUrl();
   return `
     <header class="tt-header tt-header-desktop" id="tt-header-desktop-tablet" data-header-device="desktop">
       <div class="tt-header-inner">
         <a href="/" class="tt-logo-link" aria-label="Tintin, ir al inicio">
-          <img loading="eager" decoding="async" fetchpriority="high" src="${EMPTY_IMAGE}" data-tt-shared-logo="${logoUrl()}" alt="TINTIN Accesorios &amp; Relojes" class="tt-logo-img">
+          <img loading="eager" decoding="async" fetchpriority="high" src="${fallbackLogo}" data-tt-shell-logo-pending data-tt-fallback-logo="${fallbackLogo}" alt="TINTIN Accesorios &amp; Relojes" class="tt-logo-img" style="visibility:hidden">
         </a>
 
         <nav class="tt-nav tt-nav-desktop" id="tt-nav-desktop-tablet" aria-label="Navegación principal">
