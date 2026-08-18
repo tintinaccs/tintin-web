@@ -6,11 +6,13 @@ let authRuntimePromise = null;
 let cartRuntimePromise = null;
 let notificationsRuntimePromise = null;
 let collectionsRuntimePromise = null;
+let checkoutNavigationPromise = null;
 
 const FULL_COMMERCE_PAGES = new Set(['home', 'shop', 'cart', 'account']);
 const CHECKOUT_IDENTITY_VERSION = 'tintin-20260818-checkout-identity-1';
 const CHECKOUT_ORDER_VERSION = 'tintin-20260818-checkout-cloudflare-1';
 const CHECKOUT_MAP_VERSION = 'tintin-20260818-checkout-map-1';
+const CHECKOUT_NAV_VERSION = 'tintin-20260818-checkout-unified-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -126,6 +128,19 @@ function versionedCheckoutModule(path, version) {
   return import(url.href);
 }
 
+function loadCheckoutNavigationRuntime() {
+  if (!checkoutNavigationPromise) {
+    checkoutNavigationPromise = versionedCheckoutModule(
+      'components/cart/navegacion-checkout-unificada.js',
+      CHECKOUT_NAV_VERSION
+    ).catch(error => {
+      checkoutNavigationPromise = null;
+      throw error;
+    });
+  }
+  return checkoutNavigationPromise;
+}
+
 function loadCheckoutIdentityRuntime() {
   return versionedCheckoutModule('pages/checkout/checkout-identidad-navegacion.js', CHECKOUT_IDENTITY_VERSION);
 }
@@ -197,6 +212,13 @@ export function loadSharedRuntime() {
   const page = currentPage();
   attachProductsDemand();
   loadNavigationBehaviors();
+
+  // Una sola puerta de entrada al checkout para desktop, tablet y mobile.
+  // Se instala en todas las páginas públicas y también normaliza CTAs que el
+  // carrito crea dinámicamente después del arranque.
+  void loadCheckoutNavigationRuntime().catch(error => {
+    console.warn('[PublicShell] No se pudo iniciar la navegación unificada del checkout.', error);
+  });
 
   /* Las notificaciones son infraestructura en vivo, no una mejora bajo
      demanda. Se inicia el listener Firestore en TODAS las páginas públicas
