@@ -15,7 +15,7 @@ async function fetchWithRetry(url, options = {}) {
     try {
       const response = await fetch(url, {
         redirect: options.redirect || 'follow',
-        headers: { 'user-agent': `TintinProductionHealth/4.1 (+${origin}/)` },
+        headers: { 'user-agent': `TintinProductionHealth/4.2 (+${origin}/)`, ...(options.headers || {}) },
         signal: AbortSignal.timeout(timeoutMs)
       });
       if (response.status >= 500) throw new Error('HTTP ' + response.status);
@@ -51,6 +51,25 @@ async function inspect(relative, expectedType) {
     results.push({ requestedUrl, finalUrl: response.url, redirected: response.redirected, status: response.status, ms: Date.now() - started, type, ok, bytes: body.length, headers });
     if (!ok) throw new Error('Respuesta inesperada: ' + response.status + ' ' + type);
     return { body, response, headers };
+  } catch (error) {
+    if (!results.some(item => item.requestedUrl === requestedUrl && item.ms >= 0)) {
+      results.push({ requestedUrl, status: 0, ms: Date.now() - started, type: '', ok: false, error: String(error?.message || error) });
+    }
+    throw error;
+  }
+}
+
+async function inspectExpectedStatus(relative, expectedStatuses, expectedType = '') {
+  const requestedUrl = origin + relative;
+  const started = Date.now();
+  try {
+    const response = await fetchWithRetry(requestedUrl);
+    const body = await response.text();
+    const type = response.headers.get('content-type') || '';
+    const ok = expectedStatuses.includes(response.status) && (!expectedType || type.includes(expectedType));
+    results.push({ requestedUrl, finalUrl: response.url, redirected: response.redirected, status: response.status, ms: Date.now() - started, type, ok, bytes: body.length, headers: {} });
+    if (!ok) throw new Error('Respuesta inesperada: ' + response.status + ' ' + type);
+    return { body, response };
   } catch (error) {
     if (!results.some(item => item.requestedUrl === requestedUrl && item.ms >= 0)) {
       results.push({ requestedUrl, status: 0, ms: Date.now() - started, type: '', ok: false, error: String(error?.message || error) });
@@ -135,8 +154,29 @@ await check('manifest', async () => {
 await check('api-health', async () => {
   const health = await inspect('/api/health', 'application/json');
   const payload = JSON.parse(health.body || '{}');
-  if (payload?.ok !== true || payload?.checks?.runtime !== true || payload?.checks?.firebase !== true) {
-    throw new Error('/api/health respondió sin estado saludable.');
+  if (
+    payload?.ok !== true
+    || payload?.checks?.runtime !== true
+    || payload?.checks?.firebase !== true
+    || payload?.checks?.adminRuntime !== true
+    || payload?.checks?.visualBuilder !== true
+  ) {
+    throw new Error('/api/health respondió sin estado saludable del backend administrativo.');
+  }
+  const adminChecks = payload?.admin || {};
+  for (const checkId of ['products','collections','orders','users','reviews','likes','emailLogs','siteContent','visualBuilder']) {
+    if (adminChecks[checkId] !== true) throw new Error(`/api/health reportó ${checkId}=false.`);
+  }
+});
+
+await check('admin-runtime-auth-guard', async () => {
+  const guarded = await inspectExpectedStatus('/api/admin-runtime-health', [401, 403], 'application/json');
+  const payload = JSON.parse(guarded.body || '{}');
+  if (payload?.ok !== false || !['authentication_required', 'forbidden'].includes(payload?.code)) {
+    throw new Error('/api/admin-runtime-health existe pero no aplicó el guard de autenticación esperado.');
+  }
+  if (!String(payload?.requestId || '').startsWith('admin-health-')) {
+    throw new Error('/api/admin-runtime-health no devolvió requestId trazable.');
   }
 });
 
@@ -177,4 +217,4 @@ if (failures.length) {
   failures.forEach(item => console.error('- ' + item.name + ': ' + item.error));
   process.exit(1);
 }
-console.log('\nProducción disponible: páginas, metadatos, headers, sitemaps y Pages Functions verificados.');
+console.log('\nProducción disponible: páginas, metadatos, headers, sitemaps, Pages Functions y backend administrativo verificados.');
