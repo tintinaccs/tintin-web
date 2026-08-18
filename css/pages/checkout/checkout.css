@@ -143,12 +143,16 @@
       border-bottom: 1.5px solid var(--border);
     }
     .ck-panel-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       font-size: 16px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: .06em;
       color: var(--acc);
     }
+    .ck-panel-title-icon { flex: 0 0 auto; }
     .ck-panel-sub {
       font-size: 12px;
       color: var(--text-muted);
