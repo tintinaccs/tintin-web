@@ -80,7 +80,7 @@
           </button>
           <div class="login-google-nudge-arrow" id="login-google-nudge-arrow" style="display:none" aria-hidden="true">
             <div class="login-google-nudge-point"></div>
-            <div class="login-google-nudge-bubble">Esta cuenta ya usa Google — entrá por acá 👆</div>
+            <div class="login-google-nudge-bubble">Esta cuenta ya usa Google — entrá por acá <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-left:3px"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div>
           </div>
         </div>
         <div class="login-google-nudge-backdrop" id="login-google-nudge-backdrop" style="display:none" role="button" tabindex="0" aria-label="Cerrar aviso"></div>
@@ -93,7 +93,7 @@
           <button type="button" class="login-email-btn" id="btn-send-otp">Enviar código</button>
           <div class="login-google-nudge-arrow" id="login-email-nudge-arrow" style="display:none" aria-hidden="true">
             <div class="login-google-nudge-point"></div>
-            <div class="login-google-nudge-bubble">Esta cuenta se creó con tu correo — entrá por acá 👆</div>
+            <div class="login-google-nudge-bubble">Esta cuenta se creó con tu correo — entrá por acá <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-left:3px"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div>
           </div>
         </div>
 
@@ -135,7 +135,7 @@
                 <input type="text" class="login-email-input" id="login-profile-address" placeholder="Buscá tu calle, barrio o un negocio cerca…" autocomplete="off" spellcheck="false" />
                 <div class="tt-map-results" id="login-profile-address-results" role="listbox"></div>
               </div>
-              <button type="button" class="tt-map-locate" id="login-profile-locate">📍 Usar mi ubicación actual</button>
+              <button type="button" class="tt-map-locate" id="login-profile-locate"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Usar mi ubicación actual</button>
               <div class="tt-map-canvas" id="login-profile-map"></div>
               <p class="tt-map-coords tt-map-coords-missing" id="login-profile-address-selected">Todavía no marcaste tu ubicación</p>
               <label class="login-email-label" for="login-profile-address-name">Nombre de esta ubicación</label>
@@ -426,6 +426,11 @@ async function ensureProfileComplete(user, role) {
 
   // El mismo componente de mapa que usa el checkout (js/components/location/mapa-ubicacion.js): se
   // busca o se toca el mapa, y el punto queda con sus coordenadas exactas.
+  const escapeHtmlLogin = s => {
+    const div = document.createElement('div');
+    div.textContent = s || '';
+    return div.innerHTML;
+  };
   const addressNameInput = document.getElementById('login-profile-address-name');
   const addressStatus = document.getElementById('login-profile-address-selected');
   let addressMap = null;
@@ -433,9 +438,10 @@ async function ensureProfileComplete(user, role) {
   const renderAddressStatus = place => {
     if (place) {
       addressStatus.classList.remove('tt-map-coords-missing');
-      addressStatus.textContent = place.name
-        ? `📍 ${place.name} — podés arrastrar el pin para ajustar`
-        : `📍 ${place.lat.toFixed(5)}, ${place.lng.toFixed(5)} — podés arrastrar el pin para ajustar`;
+      const pinIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+      addressStatus.innerHTML = place.name
+        ? `${pinIcon}${escapeHtmlLogin(place.name)} — podés arrastrar el pin para ajustar`
+        : `${pinIcon}${place.lat.toFixed(5)}, ${place.lng.toFixed(5)} — podés arrastrar el pin para ajustar`;
       // El nombre del lugar buscado se ofrece como nombre de la ubicación,
       // pero sin pisar lo que la persona haya escrito.
       if (place.name && !addressNameInput.value.trim()) addressNameInput.value = place.name;
@@ -954,7 +960,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
 };
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script src="tienda.js?v=tintin-20260817-mobile-accordion-2" defer></script>
+<script src="tienda.js?v=tintin-20260818-product-trust-icons-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

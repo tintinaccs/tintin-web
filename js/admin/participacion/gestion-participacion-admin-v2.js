@@ -192,7 +192,7 @@ function hydrateSections() {
             <button type="button" data-review-quick="pending">Sin responder</button>
             <button type="button" data-review-quick="low">1–2 estrellas</button>
             <button type="button" data-review-quick="hidden">Ocultas</button>
-            <button type="button" data-review-quick="storeLiked">♥ Tintin</button>
+            <button type="button" data-review-quick="storeLiked"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 21s-6.7-4.35-9.3-8.1C1 10.1 1.6 6.6 4.6 5.1c2.2-1.1 4.6-.4 6 1.4l1.4 1.8 1.4-1.8c1.4-1.8 3.8-2.5 6-1.4 3 1.5 3.6 5 1.9 7.8C18.7 16.65 12 21 12 21z"/></svg> Tintin</button>
           </div>
           <div class="eg-bulkbar" id="eg-review-bulk" hidden>
             <strong id="eg-review-selected-count">0 seleccionadas</strong>
@@ -294,7 +294,7 @@ function confirmDialog({ title, message, confirmText = 'Confirmar', danger = fal
     const root = $('#eg-modal-root');
     root.innerHTML = `<div class="eg-modal-backdrop" data-eg-modal-close>
       <div class="eg-modal" role="dialog" aria-modal="true" aria-labelledby="eg-confirm-title">
-        <div class="eg-modal-icon ${danger ? 'is-danger' : ''}">${danger ? '!' : '✓'}</div>
+        <div class="eg-modal-icon ${danger ? 'is-danger' : ''}">${danger ? '!' : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'}</div>
         <h2 id="eg-confirm-title">${escapeHtml(title)}</h2>
         <p>${escapeHtml(message)}</p>
         <div class="eg-modal-actions">

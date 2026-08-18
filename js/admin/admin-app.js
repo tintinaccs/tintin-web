@@ -19,7 +19,7 @@ import {
 } from "../core/auth/permisos-roles.js?v=tintin-20260716-cloudinary-fix-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260730-appcheck-stable-4";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260726-browser-fallback-1";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260818-browser-fallback-2";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260716-cloudinary-fix-1";
@@ -1649,7 +1649,7 @@ function renderUsersTable(users) {
     // se explicita acá en vez de omitirlo en silencio.
     const blockedDetail = u.blocked ? `
       <div style="margin-top:6px;font-size:11px;color:#888;line-height:1.6;max-width:230px">
-        ${u.phone ? `<div>📞 ${escapeHtmlAdmin(u.phone)}</div>` : ''}
+        ${u.phone ? `<div><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>${escapeHtmlAdmin(u.phone)}</div>` : ''}
         ${u.roleBeforeBlock ? `<div>Rol antes del bloqueo: <strong>${escapeHtmlAdmin(ROLE_LABELS[u.roleBeforeBlock] || u.roleBeforeBlock)}</strong></div>` : ''}
         ${u.blockedAt ? `<div>Bloqueado: ${formatDate(u.blockedAt)}</div>` : ''}
         ${u.blockedBy ? `<div>Por: ${escapeHtmlAdmin(u.blockedBy)}</div>` : ''}
@@ -2089,7 +2089,7 @@ function renderOrdersTable(orders) {
           ${notifBadge(o.notificationStatus || 'pending')}
           ${o.resendCount ? `<div style="font-size:9px;color:#888;margin-top:2px">Reenviado (${o.resendCount})</div>` : ''}
           ${o.notificationError ? `<div style="font-size:9px;color:#c62828;margin-top:2px" title="${escapeHtmlAdmin(o.notificationError)}">ver error</div>` : ''}
-          ${canResend ? `<button type="button" class="adm-btn adm-btn-sm" id="resend-btn-${safeOrderId}" style="margin-top:4px;font-size:9px;padding:3px 8px" onclick="window.resendOrderEmail(${orderArg})" title="Reenviar el correo de este pedido">✉️ Reenviar</button>` : ''}
+          ${canResend ? `<button type="button" class="adm-btn adm-btn-sm" id="resend-btn-${safeOrderId}" style="margin-top:4px;font-size:9px;padding:3px 8px" onclick="window.resendOrderEmail(${orderArg})" title="Reenviar el correo de este pedido"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 6l9 7 9-7"/></svg>Reenviar</button>` : ''}
         </td>
         <td data-label="Editar" onclick="event.stopPropagation()">
           ${canEditFull ? `<button type="button" class="adm-btn adm-btn-sm" onclick="openOrderEdit(${orderArg})" title="Editar pedido completo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : '—'}
@@ -2137,7 +2137,7 @@ function renderOrdersTable(orders) {
             </div>
             ${o.userPhone ? `
             <div style="margin-top:12px">
-              <a href="https://wa.me/${o.userPhone.replace(/\D/g,'')}?text=${encodeURIComponent(waConfirmMessageTemplate.replace(/\{nombre\}/g, o.userName || ''))}" target="_blank" rel="noopener" class="adm-btn adm-btn-sm" style="background:#25D366;color:#fff!important;text-decoration:none;display:inline-flex;align-items:center;gap:6px">💬 Abrir WhatsApp del cliente</a>
+              <a href="https://wa.me/${o.userPhone.replace(/\D/g,'')}?text=${encodeURIComponent(waConfirmMessageTemplate.replace(/\{nombre\}/g, o.userName || ''))}" target="_blank" rel="noopener" class="adm-btn adm-btn-sm" style="background:#25D366;color:#fff!important;text-decoration:none;display:inline-flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>Abrir WhatsApp del cliente</a>
             </div>` : ''}
           </div>
         </td>
@@ -2231,7 +2231,7 @@ window.resendOrderEmail = async (orderId) => {
     applyOrderFilters();
   } catch (e) {
     toast('Error al reenviar el correo: ' + e.message);
-    if (btn) { btn.disabled = false; btn.textContent = '✉️ Reenviar'; }
+    if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 6l9 7 9-7"/></svg>Reenviar'; }
   }
 };
 
@@ -3903,7 +3903,7 @@ function renderPromoChips_() {
   wrap.innerHTML = promoRecipients.map((r, i) => {
     const c = allClientUsers.find(x => x.email.toLowerCase() === r.email.toLowerCase());
     const blockedClass = c && c.blocked ? ' blocked' : '';
-    return `<span class="correos-chip${blockedClass}"><span>${r.name ? escapeHtmlAdmin(r.name) + ' — ' : ''}${escapeHtmlAdmin(r.email)}${c && c.blocked ? ' (bloqueada)' : ''}</span><button onclick="window.removePromoRecipient(${i})" title="Quitar" type="button">✕</button></span>`;
+    return `<span class="correos-chip${blockedClass}"><span>${r.name ? escapeHtmlAdmin(r.name) + ' — ' : ''}${escapeHtmlAdmin(r.email)}${c && c.blocked ? ' (bloqueada)' : ''}</span><button onclick="window.removePromoRecipient(${i})" title="Quitar" type="button"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></span>`;
   }).join('');
   const countEl = document.getElementById('promo-recipients-count');
   if (countEl) countEl.textContent = `${promoRecipients.length} destinatarias`;
@@ -4900,13 +4900,13 @@ function productRowHtml(p) {
           ? `<img src="${escapeHtmlAdmin(imageUrl)}" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:6px;border:1px solid var(--adm-border)">`
           : `<div style="width:48px;height:48px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8a0b4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`}
       </td>
-      <td style="padding:10px 16px;font-weight:600;max-width:200px">${p.name && p.name.trim() ? escapeHtmlAdmin(p.name) : '<span style="color:#c62828;background:#fce4ec;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800">⚠ SIN NOMBRE — revisar/eliminar</span>'}${
+      <td style="padding:10px 16px;font-weight:600;max-width:200px">${p.name && p.name.trim() ? escapeHtmlAdmin(p.name) : '<span style="color:#c62828;background:#fce4ec;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><path d="M12 2L2 21h20L12 2z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>SIN NOMBRE — revisar/eliminar</span>'}${
         p.name && p.name.length > 180
-          ? '<br><span style="color:#bf360c;background:#fff3e0;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800" title="Un nombre de más de 180 caracteres no coincide con lo que envía el checkout y bloquea la compra de este producto">⚠ NOMBRE MUY LARGO</span>'
+          ? '<br><span style="color:#bf360c;background:#fff3e0;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800" title="Un nombre de más de 180 caracteres no coincide con lo que envía el checkout y bloquea la compra de este producto"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><path d="M12 2L2 21h20L12 2z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>NOMBRE MUY LARGO</span>'
           : ''
       }${
         typeof p.price !== 'number' || !Number.isFinite(p.price)
-          ? '<br><span style="color:#bf360c;background:#fff3e0;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800" title="El precio no es un número válido: las reglas de Firestore rechazan el checkout de este producto">⚠ PRECIO INVÁLIDO</span>'
+          ? '<br><span style="color:#bf360c;background:#fff3e0;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800" title="El precio no es un número válido: las reglas de Firestore rechazan el checkout de este producto"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><path d="M12 2L2 21h20L12 2z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>PRECIO INVÁLIDO</span>'
           : ''
       }</td>
       <td style="padding:10px 16px;color:var(--adm-muted);text-transform:capitalize">${escapeHtmlAdmin(p.category||'—')}</td>
@@ -5832,7 +5832,7 @@ function renderCollCurrentList() {
         ${p.active !== false ? 'Activo' : 'Inactivo'}
       </span>
       ${(can(currentRole, 'editProducts') && roleCanDo('productos', 'activarDesactivar')) ? `<button type="button" class="adm-btn adm-btn-sm" style="flex-shrink:0;background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#bf360c' : '#2e7d32'}" onclick="collToggleActive('${p._docId}', ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
-      ${(can(currentRole, 'manageContent') && roleCanDo('colecciones', 'editar')) ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" style="flex-shrink:0" onclick="collRemoveFromCollection('${p._docId}')" title="Quitar de esta colección">✕ Quitar</button>` : ''}
+      ${(can(currentRole, 'manageContent') && roleCanDo('colecciones', 'editar')) ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" style="flex-shrink:0" onclick="collRemoveFromCollection('${p._docId}')" title="Quitar de esta colección"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-1px;margin-right:2px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Quitar</button>` : ''}
     </div>`;
   }).join('');
 }
@@ -7814,7 +7814,7 @@ function aparRenderContrast() {
     const min = p.level === 'normal' ? '4.5' : '3';
     return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--adm-border)">
       <span>${p.label}</span>
-      <span style="font-weight:700;color:${ok ? 'var(--admin-color-success-text)' : 'var(--admin-color-error-text)'}">${ratio ? ratio.toFixed(2) : '?'}:1 ${ok ? '✓' : `✗ (mín ${min}:1)`}</span>
+      <span style="font-weight:700;color:${ok ? 'var(--admin-color-success-text)' : 'var(--admin-color-error-text)'}">${ratio ? ratio.toFixed(2) : '?'}:1 ${ok ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><polyline points="20 6 9 17 4 12"/></svg>' : `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" style="vertical-align:-1px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> (mín ${min}:1)`}</span>
     </div>`;
   }).join('');
 }

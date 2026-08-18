@@ -1343,9 +1343,12 @@ function _renderProductDetail(product) {
     // funcional en las acciones de arriba — repetirlos acá como texto suelto,
     // sin acción, solo saturaba la pantalla sin sumar nada nuevo. Se dejan
     // solo los dos datos que no aparecen en ningún otro lado de la página.
+    const iconCheck = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>';
+    const iconWatch = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M12 10v3l2 2"/><path d="M9 3h6l1 4H8l1-4z"/><path d="M9 21h6l1-4H8l1 4z"/></svg>';
+    const iconGift = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c-3-3-3-7 0-7s3 4 0 7z"/><path d="M12 12c3-3 3-7 0-7s-3 4 0 7z"/><path d="M12 12v9"/><path d="M8 21h8"/></svg>';
     const badges = [
-      { icon: '✅', text: 'Productos originales garantizados' },
-      ...(isWatch ? [{ icon: '⌚', text: 'Ajuste de malla incluido' }] : [{ icon: '🎀', text: 'Empaque especial de regalo' }]),
+      { icon: iconCheck, text: 'Productos originales garantizados' },
+      ...(isWatch ? [{ icon: iconWatch, text: 'Ajuste de malla incluido' }] : [{ icon: iconGift, text: 'Empaque especial de regalo' }]),
     ];
     trustEl.innerHTML = badges.map(b => `
       <div class="tt-trust-badge-item">

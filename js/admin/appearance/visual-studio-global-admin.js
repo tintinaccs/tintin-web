@@ -63,7 +63,7 @@ function selectedItem() { return currentList().find(item=>item.id===selectedId)|
 
 function installLauncher() {
   if(installed)return true; const brand=document.querySelector('#visual-editor .visual-studio-brand'); if(!brand)return false; ensureCss(); installed=true;
-  const button=make('button','visual-global-launcher');button.type='button';const icon=make('span','','✦');const text=make('span');text.append(make('strong','','Campañas y pop-ups'),make('small','','Temporadas, efectos y avisos globales'));button.append(icon,text);button.addEventListener('click',openStudio);brand.after(button);
+  const button=make('button','visual-global-launcher');button.type='button';const icon=make('span','');icon.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg>';const text=make('span');text.append(make('strong','','Campañas y pop-ups'),make('small','','Temporadas, efectos y avisos globales'));button.append(icon,text);button.addEventListener('click',openStudio);brand.after(button);
   buildOverlay(); window.AdminUnsaved?.register?.('visual-studio-global',{hasChanges:()=>dirty,message:'CAMBIOS SIN PUBLICAR en campañas y pop-ups.'}); return true;
 }
 function buildOverlay() {

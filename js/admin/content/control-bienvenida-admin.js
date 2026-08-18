@@ -78,7 +78,7 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
       btn.className = 'adm-nav-item';
       btn.id = 'nav-welcome';
       btn.dataset.section = 'welcome';
-      btn.innerHTML = '<span class="adm-nav-icon">💌</span> Mensaje bienvenida';
+      btn.innerHTML = '<span class="adm-nav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 6l9 7 9-7"/></svg></span> Mensaje bienvenida';
       const config = document.getElementById('nav-config');
       nav.insertBefore(btn, config?.parentElement === nav ? config : null);
     }
@@ -89,7 +89,7 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
       btn.className = 'adm-mobile-tab';
       btn.id = 'mtab-welcome';
       btn.dataset.section = 'welcome';
-      btn.innerHTML = '<span class="adm-nav-icon">💌</span>Bienvenida';
+      btn.innerHTML = '<span class="adm-nav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 6l9 7 9-7"/></svg></span>Bienvenida';
       const config = document.getElementById('mtab-config');
       tabs.insertBefore(btn, config?.parentElement === tabs ? config : null);
     }
