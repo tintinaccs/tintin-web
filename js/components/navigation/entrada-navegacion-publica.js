@@ -7,8 +7,8 @@ import { renderAccountDrawer } from './compartido/panel-cuenta.js';
 import { renderCollectionsSheet } from './compartido/panel-colecciones.js';
 import { renderSurfaceLayer } from './compartido/capas-paneles.js';
 import { applyActiveState, currentPage } from './compartido/estado-ruta.js';
-import { ensureNavigationAssets } from './compartido/recursos-navegacion.js';
-import { loadSharedRuntime } from './compartido/carga-navegacion.js';
+import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20260818-responsive-shell-realtime-1';
+import { loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260818-responsive-shell-realtime-1';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
 import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260817-footer-contrast-1';
@@ -162,15 +162,8 @@ function mountPublicShell() {
   if (mountPromise) return mountPromise;
 
   document.body.classList.add('tt-public-shell-mounting');
-  // Barrera secundaria: el bootstrap ya arma una espera antes del import(),
-  // pero se conserva esta protección para cualquier consumidor que importe
-  // este módulo directamente en el futuro.
   window.TintinLoader?.beginWait?.();
 
-  // CSS de navegación y configuración remota arrancan en paralelo. El header
-  // ya no espera a que /api/visual-studio-global-public responda para existir:
-  // apenas las hojas que definen su geometría están listas, se inserta el shell
-  // debajo del loader. La configuración se aplica antes de revelar la página.
   const navigationAssetsPromise = ensureNavigationAssets();
   const globalConfigPromise = resolveWithCeiling(
     fetchGlobalVisualStudioConfig(),
@@ -185,9 +178,6 @@ function mountPublicShell() {
     document.body.insertAdjacentHTML('afterbegin', renderTopShell());
     document.body.insertAdjacentHTML('beforeend', renderBottomShell());
 
-    // Primero termina el logo base. Después se aplica Visual Studio para que,
-    // si existe un logo personalizado, este gane de forma determinista y no
-    // sea sobrescrito más tarde por una hidratación asíncrona atrasada.
     await hydrateSharedLogos();
 
     const globalConfig = await globalConfigPromise;
@@ -196,9 +186,6 @@ function mountPublicShell() {
     if (globalConfig) applyGlobalVisualStudio(globalConfig);
     else document.documentElement.dataset.ttGlobalStudio = 'fallback';
 
-    // Si Visual Studio cambió el logo, también esperamos ese recurso antes de
-    // anunciar shell-ready. Así el primer frame visible no recibe un logo que
-    // aparece o cambia un instante después del header.
     await waitForShellBrandImages();
 
     document.body.classList.add('tt-public-shell-mounted');
@@ -212,7 +199,8 @@ function mountPublicShell() {
     document.dispatchEvent(new CustomEvent('tintin:public-shell-ready', {
       detail: {
         architecture: 'modular-navigation-v1',
-        socialNotifications: 'on-demand',
+        socialNotifications: 'firestore-realtime-always-on',
+        responsiveSurfaces: 'viewport-fit-v2',
         globalConfigRequests: 1,
         sharedLogoRequests: 1,
       },
