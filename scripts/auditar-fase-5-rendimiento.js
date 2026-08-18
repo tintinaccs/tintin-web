@@ -37,17 +37,20 @@ check(
 
 const checkoutBlockMatch = shellRuntime.match(/if \(page === 'cart'\) \{([\s\S]*?)\n  \}/);
 const checkoutBlock = checkoutBlockMatch?.[1] || '';
+const shellWithoutCheckoutBlock = checkoutBlockMatch
+  ? shellRuntime.slice(0, checkoutBlockMatch.index) + shellRuntime.slice(checkoutBlockMatch.index + checkoutBlockMatch[0].length)
+  : shellRuntime;
 check(
   'Checkout reliability se limita a Checkout',
   Boolean(checkoutBlockMatch) &&
-    checkoutBlock.includes("pages/checkout/checkout-confiabilidad.js") &&
-    checkoutBlock.includes('loadCheckoutMapRuntime()') &&
-    checkoutBlock.includes('loadCheckoutIdentityRuntime()') &&
-    checkoutBlock.includes('loadCheckoutOrderRuntime()') &&
-    !shellRuntime.replace(checkoutBlockMatch?.[0] || '', '').includes("pages/checkout/checkout-confiabilidad.js") &&
-    !shellRuntime.replace(checkoutBlockMatch?.[0] || '', '').includes('loadCheckoutMapRuntime()') &&
-    !shellRuntime.replace(checkoutBlockMatch?.[0] || '', '').includes('loadCheckoutIdentityRuntime()') &&
-    !shellRuntime.replace(checkoutBlockMatch?.[0] || '', '').includes('loadCheckoutOrderRuntime()'),
+    checkoutBlock.includes("critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')))" ) &&
+    checkoutBlock.includes('critical.push(loadCheckoutMapRuntime())') &&
+    checkoutBlock.includes('critical.push(loadCheckoutIdentityRuntime())') &&
+    checkoutBlock.includes('critical.push(loadCheckoutOrderRuntime())') &&
+    !shellWithoutCheckoutBlock.includes("critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')))" ) &&
+    !shellWithoutCheckoutBlock.includes('critical.push(loadCheckoutMapRuntime())') &&
+    !shellWithoutCheckoutBlock.includes('critical.push(loadCheckoutIdentityRuntime())') &&
+    !shellWithoutCheckoutBlock.includes('critical.push(loadCheckoutOrderRuntime())'),
   'Confiabilidad, mapa, identidad y creación de pedido V2 deben iniciarse únicamente dentro del bloque page === cart.'
 );
 check(
