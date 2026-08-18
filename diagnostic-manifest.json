@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-18T15:52:50.008Z",
-  "sourceFingerprint": "5e90cc86447bff43cc365af02adddfc0f54ab6cb2b3bd37e543f453efa2b81cb",
+  "generatedAt": "2026-08-18T15:59:05.522Z",
+  "sourceFingerprint": "26ba6a09a4db6b13e2ae1d4025b1f2b0041e097d9f3972059114e3a38e225d62",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 665,
-    "textFiles": 633,
-    "totalBytes": 7591039,
+    "files": 669,
+    "textFiles": 637,
+    "totalBytes": 7608776,
     "pages": 18,
-    "modules": 413
+    "modules": 417
   },
   "viewports": [
     {
@@ -16026,6 +16026,24 @@
   ],
   "modules": [
     {
+      "path": "cloudflare/admin-runtime-health.js",
+      "bytes": 3387,
+      "sha256": "b4f734051971c63135f579ffbec055a653945228858d5d31268664644972f171",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "cloudflare/firebase-admin-ligero.js",
       "bytes": 18666,
       "sha256": "6ca37968932e4ac02165a9625858d44f686b06210668507ef69b8bd24a35dca7",
@@ -16550,6 +16568,30 @@
       "endpoints": []
     },
     {
+      "path": "functions/api/admin-runtime-health.js",
+      "bytes": 2530,
+      "sha256": "b9208a54b440ea5b17ab90d3f7eb8b33bb518628aad1b84ee401520577908ce6",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/admin-runtime-health.js",
+          "target": "cloudflare/admin-runtime-health.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 2
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "functions/api/cloudinary-delete.js",
       "bytes": 3023,
       "sha256": "3bb802a5e92c1f0e283b394c62d569ec6bc6761cd4a55697ae9098516d47eeb0",
@@ -16721,16 +16763,16 @@
     },
     {
       "path": "functions/api/health.js",
-      "bytes": 1880,
-      "sha256": "653807cf3c4b6c026c0ac6aa6e9b96d40b79c1d4371292ffc482fc785892540b",
+      "bytes": 2523,
+      "sha256": "cf05d0060ba4937d8eea9aa3547a6699fbea9ae602b52414884c1278a876d037",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../cloudflare/firebase-admin-ligero.js",
-          "target": "cloudflare/firebase-admin-ligero.js",
+          "raw": "../../cloudflare/admin-runtime-health.js",
+          "target": "cloudflare/admin-runtime-health.js",
           "dynamic": false,
           "line": 1
         }
@@ -17103,8 +17145,8 @@
     },
     {
       "path": "functions/api/visual-builder.js",
-      "bytes": 10961,
-      "sha256": "76b642fcaf53334d711c66a79d6375122c40e0a753b49cca1c21c291d38f08cb",
+      "bytes": 14224,
+      "sha256": "e877671f353e96c995e58fbfc33b8833146995ecba09b651bee28d0142f4312b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23980,8 +24022,8 @@
     },
     {
       "path": "scripts/auditar-produccion-salud.mjs",
-      "bytes": 8718,
-      "sha256": "788a174a1c4d69f444891ce816ab5424ff426219725176ecd02c6bb11f90e372",
+      "bytes": 10783,
+      "sha256": "7583b14ea00e7f4a3f0ee1d0b80de3c73b0fd1ee98eab2d42f642b6fe8e22bf8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26109,6 +26151,51 @@
       "endpoints": []
     },
     {
+      "path": "tests/visual-builder/admin-runtime-health.test.mjs",
+      "bytes": 3381,
+      "sha256": "e9d73805badecadb53586f2dff96135b84e90bdcbb2bf2be0b32bea081737924",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/admin-runtime-health.js",
+          "target": "cloudflare/admin-runtime-health.js",
+          "dynamic": false,
+          "line": 8
+        },
+        {
+          "raw": "../../functions/api/admin-runtime-health.js",
+          "target": "functions/api/admin-runtime-health.js",
+          "dynamic": false,
+          "line": 9
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/api/admin-runtime-health",
+          "line": 69
+        },
+        {
+          "url": "https://tintinaccesorios.pages.dev/",
+          "line": 71
+        }
+      ]
+    },
+    {
       "path": "tests/visual-builder/apariencia-preview-abajo.spec.js",
       "bytes": 6881,
       "sha256": "aa3ee592152776f98a9e7ee40254290141356b79e31dca71d09753420f23a4e3",
@@ -26148,6 +26235,45 @@
         }
       ],
       "endpoints": []
+    },
+    {
+      "path": "tests/visual-builder/visual-builder-api-runtime.test.mjs",
+      "bytes": 2435,
+      "sha256": "e1b045ab2a05a90da1d9834764f2c51cdaadbf841a069af2078887b7118cd477",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../functions/api/visual-builder.js",
+          "target": "functions/api/visual-builder.js",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/api/visual-builder",
+          "line": 45
+        },
+        {
+          "url": "https://tintinaccesorios.pages.dev/",
+          "line": 47
+        }
+      ]
     },
     {
       "path": "tests/visual-builder/visual-builder-contract.test.mjs",
@@ -26704,8 +26830,8 @@
     {
       "path": "_routes.json",
       "extension": ".json",
-      "bytes": 1713,
-      "sha256": "d747d0c9a3268dc36566c13f94e97f0b1b8d9900484efde3baa5da4b0e4a9dc1"
+      "bytes": 1746,
+      "sha256": "2b4754ae72e52f8acd5152dfb5feff4223b8f9533013c9d6af3b15ec7dcfe323"
     },
     {
       "path": "about.html",
@@ -26940,6 +27066,12 @@
       "extension": ".html",
       "bytes": 106836,
       "sha256": "ba68e4b69a3a642fa11c7674bf4770acabfa718fae2753536711a20cd7231cd1"
+    },
+    {
+      "path": "cloudflare/admin-runtime-health.js",
+      "extension": ".js",
+      "bytes": 3387,
+      "sha256": "b4f734051971c63135f579ffbec055a653945228858d5d31268664644972f171"
     },
     {
       "path": "cloudflare/firebase-admin-ligero.js",
@@ -27764,6 +27896,12 @@
       "sha256": "d1c4dc8732672425b38a7bd54ca4133d51b1c6c8260a733c22c408b83ac584ca"
     },
     {
+      "path": "functions/api/admin-runtime-health.js",
+      "extension": ".js",
+      "bytes": 2530,
+      "sha256": "b9208a54b440ea5b17ab90d3f7eb8b33bb518628aad1b84ee401520577908ce6"
+    },
+    {
       "path": "functions/api/cloudinary-delete.js",
       "extension": ".js",
       "bytes": 3023,
@@ -27802,8 +27940,8 @@
     {
       "path": "functions/api/health.js",
       "extension": ".js",
-      "bytes": 1880,
-      "sha256": "653807cf3c4b6c026c0ac6aa6e9b96d40b79c1d4371292ffc482fc785892540b"
+      "bytes": 2523,
+      "sha256": "cf05d0060ba4937d8eea9aa3547a6699fbea9ae602b52414884c1278a876d037"
     },
     {
       "path": "functions/api/location-search.js",
@@ -27898,8 +28036,8 @@
     {
       "path": "functions/api/visual-builder.js",
       "extension": ".js",
-      "bytes": 10961,
-      "sha256": "76b642fcaf53334d711c66a79d6375122c40e0a753b49cca1c21c291d38f08cb"
+      "bytes": 14224,
+      "sha256": "e877671f353e96c995e58fbfc33b8833146995ecba09b651bee28d0142f4312b"
     },
     {
       "path": "functions/api/visual-studio-global-public.js",
@@ -29854,8 +29992,8 @@
     {
       "path": "scripts/auditar-produccion-salud.mjs",
       "extension": ".mjs",
-      "bytes": 8718,
-      "sha256": "788a174a1c4d69f444891ce816ab5424ff426219725176ecd02c6bb11f90e372"
+      "bytes": 10783,
+      "sha256": "7583b14ea00e7f4a3f0ee1d0b80de3c73b0fd1ee98eab2d42f642b6fe8e22bf8"
     },
     {
       "path": "scripts/auditar-producto-pagina.js",
@@ -30368,6 +30506,12 @@
       "sha256": "1d5cc640e41eef1b7245900e9669b7f1738551ad45a08ef93451747a1ec640c6"
     },
     {
+      "path": "tests/visual-builder/admin-runtime-health.test.mjs",
+      "extension": ".mjs",
+      "bytes": 3381,
+      "sha256": "e9d73805badecadb53586f2dff96135b84e90bdcbb2bf2be0b32bea081737924"
+    },
+    {
       "path": "tests/visual-builder/apariencia-preview-abajo.spec.js",
       "extension": ".js",
       "bytes": 6881,
@@ -30378,6 +30522,12 @@
       "extension": ".mjs",
       "bytes": 1246,
       "sha256": "d578d1d81162e5f88a3a697dd0ef128e37c25c847a019ee21c45301d9d34ec8b"
+    },
+    {
+      "path": "tests/visual-builder/visual-builder-api-runtime.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2435,
+      "sha256": "e1b045ab2a05a90da1d9834764f2c51cdaadbf841a069af2078887b7118cd477"
     },
     {
       "path": "tests/visual-builder/visual-builder-contract.test.mjs",
