@@ -1,4 +1,4 @@
-import { firestoreAdminList } from '../../cloudflare/firebase-admin-ligero.js';
+import { compactAdminRuntimeChecks, runAdminRuntimeChecks } from '../../cloudflare/admin-runtime-health.js';
 
 const REQUIRED_CONFIG = [
   'FIREBASE_SERVICE_ACCOUNT_KEY',
@@ -26,28 +26,37 @@ export async function onRequest({ request, env }) {
   }
 
   const missingConfig = REQUIRED_CONFIG.filter(name => !String(env?.[name] || '').trim());
-  let firebaseOk = false;
+  let runtimeReport = null;
 
   if (!missingConfig.includes('FIREBASE_SERVICE_ACCOUNT_KEY')) {
     try {
-      // Lectura mínima y no destructiva. Valida runtime, credencial de servicio,
-      // OAuth de Google y acceso a Firestore sin devolver datos del catálogo.
-      await firestoreAdminList(env, 'products', 1);
-      firebaseOk = true;
+      // Smoke no destructivo de las mismas colecciones privadas que sostienen
+      // los módulos del Super Admin. Los probes nunca devuelven documentos ni
+      // datos de clientas: solo disponibilidad booleana por superficie.
+      runtimeReport = await runAdminRuntimeChecks(env);
     } catch (error) {
-      console.error('[health] Firebase/Firestore no disponible:', error?.message || error);
+      // runAdminRuntimeChecks ya aísla errores por probe; este catch protege un
+      // fallo inesperado del propio runner para que /api/health siga respondiendo.
+      console.error('[health] Admin runtime no disponible:', error?.message || error);
     }
   }
 
-  const ok = missingConfig.length === 0 && firebaseOk;
+  const adminChecks = compactAdminRuntimeChecks(runtimeReport);
+  const firebaseOk = adminChecks.products === true;
+  const visualBuilderOk = adminChecks.siteContent === true && adminChecks.visualBuilder === true;
+  const adminRuntimeOk = runtimeReport?.ok === true;
+  const ok = missingConfig.length === 0 && firebaseOk && visualBuilderOk && adminRuntimeOk;
   const payload = {
     ok,
     service: 'tintin-pages-functions',
     checks: {
       runtime: true,
       configuration: missingConfig.length === 0,
-      firebase: firebaseOk
+      firebase: firebaseOk,
+      adminRuntime: adminRuntimeOk,
+      visualBuilder: visualBuilderOk,
     },
+    admin: adminChecks,
     checkedAt: new Date().toISOString()
   };
 
