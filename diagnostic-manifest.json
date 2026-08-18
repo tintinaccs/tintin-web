@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-18T11:00:11.433Z",
-  "sourceFingerprint": "6613939955a3fc9df2793ce73cded965f8c64bdf375a993effde7039ede1c8d6",
+  "generatedAt": "2026-08-18T11:03:36.556Z",
+  "sourceFingerprint": "0cba56512e834480337cfb92c5544dde42015a4e1a92028516de93853e6099ac",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 664,
-    "textFiles": 632,
-    "totalBytes": 7469401,
+    "files": 665,
+    "textFiles": 633,
+    "totalBytes": 7542889,
     "pages": 18,
     "modules": 413
   },
@@ -16109,8 +16109,8 @@
     },
     {
       "path": "cloudflare/participacion-admin.js",
-      "bytes": 7235,
-      "sha256": "a4fe2bb1c9a2bc8cc401d6e81bb2950739d6ae18fb25abe1aec4ec310bea88c4",
+      "bytes": 9147,
+      "sha256": "1ddac2969ca133ca79e286c5f3901146d2a9794eef51181fd439ed721974fceb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16521,8 +16521,8 @@
     },
     {
       "path": "functions/api/admin-engagement.js",
-      "bytes": 2250,
-      "sha256": "330570dfd429fb94455c68a67acd789c7f5b1f12d72231e8543c02a29c90d6e1",
+      "bytes": 2380,
+      "sha256": "d1c4dc8732672425b38a7bd54ca4133d51b1c6c8260a733c22c408b83ac584ca",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18096,9 +18096,9 @@
       ]
     },
     {
-      "path": "js/admin/participacion/gestion-participacion-admin.js",
-      "bytes": 12835,
-      "sha256": "a5e326f1ba11da76405a480b20055dcc9e653902867d2313aee378ae2090b661",
+      "path": "js/admin/participacion/gestion-participacion-admin-v2.js",
+      "bytes": 76601,
+      "sha256": "dac475537a1a4f8e69740375bbecea2828efbe03fac829b73a5dec4e7602a0bc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18133,6 +18133,24 @@
           "line": 3
         }
       ]
+    },
+    {
+      "path": "js/admin/participacion/gestion-participacion-admin.js",
+      "bytes": 87,
+      "sha256": "640a1452f330e1c6295f8fae1bc79363d8a05572134ca3145ab445edc1095cc6",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./gestion-participacion-admin-v2.js?v=tintin-20260818-engagement-master-v2-1",
+          "target": "js/admin/participacion/gestion-participacion-admin-v2.js",
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
@@ -22095,48 +22113,6 @@
       ]
     },
     {
-      "path": "scripts/.audit-home-part2b-runtime-v3.mjs",
-      "bytes": 14630,
-      "sha256": "40383fed81f6d66eaa2c8a80e01088d2f1d184c50962605de80d711a3affb378",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "playwright",
-          "target": "scripts/playwright",
-          "dynamic": false,
-          "line": 1
-        },
-        {
-          "raw": "node:http",
-          "target": null,
-          "dynamic": false,
-          "line": 2
-        },
-        {
-          "raw": "node:fs",
-          "target": null,
-          "dynamic": false,
-          "line": 3
-        },
-        {
-          "raw": "node:path",
-          "target": null,
-          "dynamic": false,
-          "line": 4
-        },
-        {
-          "raw": "node:url",
-          "target": null,
-          "dynamic": false,
-          "line": 5
-        }
-      ],
-      "endpoints": []
-    },
-    {
       "path": "scripts/auditar-acceso-aislamiento.js",
       "bytes": 2565,
       "sha256": "e576acd19692a6faa4f296daedc01fdc33e3e0e2d501adac24af80240eb9f700",
@@ -25664,8 +25640,8 @@
     },
     {
       "path": "tests/engagement/participation-contract.test.mjs",
-      "bytes": 2155,
-      "sha256": "6d87349d628afda6f528f39a2d67b5c7c99af375133d48e2309f161701a31298",
+      "bytes": 4184,
+      "sha256": "5e6c2e52f8976681a18c8c9cfe0f21e038f544075b48c943190941a00710e572",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26986,8 +26962,8 @@
     {
       "path": "cloudflare/participacion-admin.js",
       "extension": ".js",
-      "bytes": 7235,
-      "sha256": "a4fe2bb1c9a2bc8cc401d6e81bb2950739d6ae18fb25abe1aec4ec310bea88c4"
+      "bytes": 9147,
+      "sha256": "1ddac2969ca133ca79e286c5f3901146d2a9794eef51181fd439ed721974fceb"
     },
     {
       "path": "cloudflare/participacion-clientes.js",
@@ -27098,10 +27074,16 @@
       "sha256": "0052e5a376aea67401c410fa9bdd79b94a140a7f812f3bc182669e84cda8e84a"
     },
     {
+      "path": "css/admin/participacion-admin-v2.css",
+      "extension": ".css",
+      "bytes": 21389,
+      "sha256": "234fbdb4de1680f94f851267e7173ac113cb4918dbf78fb7cbfb18d60878d4b7"
+    },
+    {
       "path": "css/admin/participacion-admin.css",
       "extension": ".css",
-      "bytes": 2088,
-      "sha256": "58272ae0f1aa308502b88d2943e61ec7b2d4bf4d0dcf3056869dda87e4fe691f"
+      "bytes": 86,
+      "sha256": "1250e8f1efcc9860a190cc34c829b8b968fbe968b4c24130820921e8d868d9c3"
     },
     {
       "path": "css/admin/shopify-commerce-admin.css",
@@ -27778,8 +27760,8 @@
     {
       "path": "functions/api/admin-engagement.js",
       "extension": ".js",
-      "bytes": 2250,
-      "sha256": "330570dfd429fb94455c68a67acd789c7f5b1f12d72231e8543c02a29c90d6e1"
+      "bytes": 2380,
+      "sha256": "d1c4dc8732672425b38a7bd54ca4133d51b1c6c8260a733c22c408b83ac584ca"
     },
     {
       "path": "functions/api/cloudinary-delete.js",
@@ -28118,10 +28100,16 @@
       "sha256": "c36f9f0254b8ecaad509228ce39b2ffe65fb855b53746de171f490bf3551ae2c"
     },
     {
+      "path": "js/admin/participacion/gestion-participacion-admin-v2.js",
+      "extension": ".js",
+      "bytes": 76601,
+      "sha256": "dac475537a1a4f8e69740375bbecea2828efbe03fac829b73a5dec4e7602a0bc"
+    },
+    {
       "path": "js/admin/participacion/gestion-participacion-admin.js",
       "extension": ".js",
-      "bytes": 12835,
-      "sha256": "a5e326f1ba11da76405a480b20055dcc9e653902867d2313aee378ae2090b661"
+      "bytes": 87,
+      "sha256": "640a1452f330e1c6295f8fae1bc79363d8a05572134ca3145ab445edc1095cc6"
     },
     {
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
@@ -29372,12 +29360,6 @@
       "sha256": "857c7081889b4ad579cf6ed7cf06a5294e845cc355377f2ed651f8483f842a47"
     },
     {
-      "path": "scripts/.audit-home-part2b-runtime-v3.mjs",
-      "extension": ".mjs",
-      "bytes": 14630,
-      "sha256": "40383fed81f6d66eaa2c8a80e01088d2f1d184c50962605de80d711a3affb378"
-    },
-    {
       "path": "scripts/auditar-acceso-aislamiento.js",
       "extension": ".js",
       "bytes": 2565,
@@ -30016,8 +29998,8 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 38,
-      "sha256": "dd9d3b46a69239cd812969333746634c254684c83bb0c9501af9d578669e38b8"
+      "bytes": 845,
+      "sha256": "c7ddb0e5fbc13f981c97e6130f116da5d64fcf845950ebf55c3910b01c779632"
     },
     {
       "path": "scripts/cache-version-baseline.json",
@@ -30262,8 +30244,8 @@
     {
       "path": "tests/engagement/participation-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 2155,
-      "sha256": "6d87349d628afda6f528f39a2d67b5c7c99af375133d48e2309f161701a31298"
+      "bytes": 4184,
+      "sha256": "5e6c2e52f8976681a18c8c9cfe0f21e038f544075b48c943190941a00710e572"
     },
     {
       "path": "tests/import/phase9-import-normalization.test.mjs",
@@ -31569,8 +31551,8 @@
       "method": "POST"
     },
     {
-      "file": "js/admin/participacion/gestion-participacion-admin.js",
-      "line": 21,
+      "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
+      "line": 78,
       "target": "/api/admin-engagement",
       "method": "POST"
     },
@@ -32046,8 +32028,8 @@
         "name": "likeRecords",
         "references": [
           {
-            "file": "js/admin/participacion/gestion-participacion-admin.js",
-            "line": 186,
+            "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
+            "line": 1080,
             "operation": "collection"
           }
         ]
@@ -32416,8 +32398,8 @@
         "name": "reviewRecords",
         "references": [
           {
-            "file": "js/admin/participacion/gestion-participacion-admin.js",
-            "line": 181,
+            "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
+            "line": 1075,
             "operation": "collection"
           }
         ]
@@ -32526,13 +32508,23 @@
             "operation": "doc"
           },
           {
-            "file": "js/admin/participacion/gestion-participacion-admin.js",
-            "line": 168,
+            "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
+            "line": 934,
             "operation": "doc"
           },
           {
-            "file": "js/admin/participacion/gestion-participacion-admin.js",
-            "line": 191,
+            "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
+            "line": 936,
+            "operation": "doc"
+          },
+          {
+            "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
+            "line": 1085,
+            "operation": "doc"
+          },
+          {
+            "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
+            "line": 1089,
             "operation": "doc"
           },
           {
@@ -32841,8 +32833,8 @@
             "operation": "collection"
           },
           {
-            "file": "js/admin/participacion/gestion-participacion-admin.js",
-            "line": 176,
+            "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
+            "line": 1071,
             "operation": "collection"
           },
           {
