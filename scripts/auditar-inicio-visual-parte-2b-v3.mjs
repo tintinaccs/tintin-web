@@ -34,6 +34,11 @@ const prepareReplacement = `    if (document.body) {
     if (consent) consent.style.setProperty('display', 'none', 'important');
     document.querySelectorAll('.tt-home-motion').forEach(node => node.classList.add('is-visible'));
   });
+  await page.waitForFunction(() => {
+    const grid = document.querySelector('.tt-collections-grid');
+    if (!grid) return false;
+    return grid.querySelector('.tt-coll-card') || grid.querySelector('.tt-phase4-collections-state');
+  }, null, { timeout: 12000 }).catch(() => {});
   await page.waitForTimeout(250);`;
 
 const collectionsOriginal = `    const collectionCards = [...document.querySelectorAll('.tt-collections-grid .tt-coll-card')].filter(visible);
