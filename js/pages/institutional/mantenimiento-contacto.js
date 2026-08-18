@@ -136,7 +136,7 @@ if (/(?:^|\/)contact(?:\.html)?$/.test(routePath) && !window.TintinContactMainte
     const scheduleItem = [...document.querySelectorAll('.tt-contact-info-item')].find(item => item.textContent.includes('Horario de atención'));
     if (scheduleItem) {
       const strong = scheduleItem.querySelector('strong');
-      scheduleItem.innerHTML = `<span class="tt-contact-info-icon">🕐</span><div><strong>${strong?.textContent || 'Horario de atención'}</strong><br><span>${schedule}</span></div>`;
+      scheduleItem.innerHTML = `<span class="tt-contact-info-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><div><strong>${strong?.textContent || 'Horario de atención'}</strong><br><span>${schedule}</span></div>`;
     }
   }
 

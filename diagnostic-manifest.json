@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-18T16:02:34.325Z",
-  "sourceFingerprint": "26ba6a09a4db6b13e2ae1d4025b1f2b0041e097d9f3972059114e3a38e225d62",
+  "generatedAt": "2026-08-18T19:24:34.462Z",
+  "sourceFingerprint": "60c151e64b02cd0767517c5d8d28a98b950c932b588de8278de5dee3f0df937c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 669,
     "textFiles": 637,
-    "totalBytes": 7608776,
+    "totalBytes": 7619225,
     "pages": 18,
     "modules": 417
   },
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 9296,
-      "sha256": "97a4d4622bacee0c5068ac35a79b8ea8d7280a6b5deaecf6aa615c213bbab775",
+      "bytes": 9287,
+      "sha256": "32d41957bdb8cbcf6de027048302d7cf2dc6ae9be4a4055d6e1cce13e26190e3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -134,7 +134,7 @@
           "line": 176
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 177
         },
@@ -176,7 +176,7 @@
           "line": 40
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 41
         },
@@ -358,7 +358,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 177,
           "exists": true
@@ -406,7 +406,7 @@
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 41,
           "exists": true
@@ -523,8 +523,8 @@
         "guest",
         "client"
       ],
-      "bytes": 23214,
-      "sha256": "315b97555848ce8ecbff22404dd7ea2e9750f0836997e365bf00d2d44a5dbd22",
+      "bytes": 23205,
+      "sha256": "032921ad7790377811a4cc45aede2eda54023d88557e12cba9862f46fdb28508",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -574,7 +574,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 266
         },
@@ -594,7 +594,7 @@
           "line": 269
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260818-edit-badge-svg-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 321
         },
@@ -636,7 +636,7 @@
           "line": 51
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 52
         },
@@ -957,7 +957,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 266,
           "exists": true
@@ -981,7 +981,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260818-edit-badge-svg-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 321,
           "exists": true
@@ -1029,7 +1029,7 @@
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 52,
           "exists": true
@@ -1226,8 +1226,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 36703,
-      "sha256": "3458c2eb4e464f2fcd9d7003f77d07af17c01b67cf4f1aa475cb4fecc759fb0d",
+      "bytes": 40948,
+      "sha256": "a833f6f07b46357d0f654e12325b243bcc88dac726c4964d1191984af7c123d8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1478,7 +1478,7 @@
             "adm-hamburger"
           ],
           "type": "button",
-          "text": "☰",
+          "text": "",
           "ariaLabel": "Menú",
           "title": "",
           "inlineHandler": false,
@@ -1493,7 +1493,7 @@
             "active"
           ],
           "type": "button",
-          "text": "🏠 Inicio / Hero",
+          "text": "Inicio / Hero",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -1509,7 +1509,7 @@
             "adm-nav-btn"
           ],
           "type": "button",
-          "text": "⌚ Productos",
+          "text": "Productos",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -1525,7 +1525,7 @@
             "adm-nav-btn"
           ],
           "type": "button",
-          "text": "🖼️ Editorial / Colecciones",
+          "text": "Editorial / Colecciones",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -1541,7 +1541,7 @@
             "adm-nav-btn"
           ],
           "type": "button",
-          "text": "✨ Íconos / Trust",
+          "text": "Íconos / Trust",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -1557,7 +1557,7 @@
             "adm-nav-btn"
           ],
           "type": "button",
-          "text": "🌸 Nosotros",
+          "text": "Nosotros",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -1573,7 +1573,7 @@
             "adm-nav-btn"
           ],
           "type": "button",
-          "text": "🏷️ Branding / Logo",
+          "text": "Branding / Logo",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -1589,7 +1589,7 @@
             "adm-nav-btn"
           ],
           "type": "button",
-          "text": "📁 Biblioteca multimedia",
+          "text": "Biblioteca multimedia",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -1606,7 +1606,7 @@
             "active"
           ],
           "type": "button",
-          "text": "🏠 Hero",
+          "text": "Hero",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -1622,7 +1622,7 @@
             "adm-mobile-tab"
           ],
           "type": "button",
-          "text": "🛍️ Productos",
+          "text": "Productos",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -1638,7 +1638,7 @@
             "adm-mobile-tab"
           ],
           "type": "button",
-          "text": "✨ Editorial",
+          "text": "Editorial",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -1654,7 +1654,7 @@
             "adm-mobile-tab"
           ],
           "type": "button",
-          "text": "⭐ Íconos",
+          "text": "Íconos",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -1670,7 +1670,7 @@
             "adm-mobile-tab"
           ],
           "type": "button",
-          "text": "🌸 Nosotros",
+          "text": "Nosotros",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -1686,7 +1686,7 @@
             "adm-mobile-tab"
           ],
           "type": "button",
-          "text": "🏷️ Branding",
+          "text": "Branding",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -1702,7 +1702,7 @@
             "adm-mobile-tab"
           ],
           "type": "button",
-          "text": "📁 Biblioteca",
+          "text": "Biblioteca",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -1733,7 +1733,7 @@
             "adm-bulk-btn"
           ],
           "type": "button",
-          "text": "⬇️ Exportar URLs",
+          "text": "Exportar URLs",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -1747,7 +1747,7 @@
             "adm-bulk-btn"
           ],
           "type": "button",
-          "text": "✕ Limpiar selección",
+          "text": "Limpiar selección",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -1774,7 +1774,7 @@
         "viewer"
       ],
       "bytes": 176189,
-      "sha256": "f8fc066311848e01463fd1155d3fd917394438eb3f8f962c210361465cddee7d",
+      "sha256": "f1f1ca9581dcab22396b1bc540dfc7661cb4c21fb4fc644e80edf9fde5faeae2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1808,7 +1808,7 @@
           "line": 8
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260818-emoji-icons-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20260818-emoji-icons-2",
           "target": "js/admin/admin-app.js",
           "line": 1904
         },
@@ -2017,7 +2017,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260818-emoji-icons-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20260818-emoji-icons-2",
           "target": "js/admin/admin-app.js",
           "line": 1904,
           "exists": true
@@ -6781,8 +6781,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14872,
-      "sha256": "01d18b64a0e39e3e3c48099aea70511a32d1c550325b1f95bcd1bf85b189b3f9",
+      "bytes": 14863,
+      "sha256": "cb609d7d9cea1aab7c7ea606321265b2db964222c004ab746bbccd3f93443708",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -6826,7 +6826,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 178
         },
@@ -6846,7 +6846,7 @@
           "line": 181
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260818-edit-badge-svg-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 186
         },
@@ -6888,7 +6888,7 @@
           "line": 51
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 52
         },
@@ -7171,7 +7171,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 178,
           "exists": true
@@ -7195,7 +7195,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260818-edit-badge-svg-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 186,
           "exists": true
@@ -7243,7 +7243,7 @@
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 52,
           "exists": true
@@ -7402,8 +7402,8 @@
         "guest",
         "client"
       ],
-      "bytes": 53269,
-      "sha256": "31227ca34d47c42bad367f9d9ed5671ef97a17aa4ac1b8dfd66427f58f3906b7",
+      "bytes": 53260,
+      "sha256": "39cb0b96dc7b2f32fd93f24fa801d2ca2a1fae00290250897331e1d496fdd02e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7459,12 +7459,12 @@
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 498
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260818-edit-badge-svg-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 503
         },
@@ -7526,7 +7526,7 @@
           "line": 52
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 53
         },
@@ -7779,13 +7779,13 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 498,
           "exists": true
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260818-edit-badge-svg-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 503,
           "exists": true
@@ -7857,7 +7857,7 @@
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 53,
           "exists": true
@@ -8124,8 +8124,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 106836,
-      "sha256": "ba68e4b69a3a642fa11c7674bf4770acabfa718fae2753536711a20cd7231cd1",
+      "bytes": 107264,
+      "sha256": "11067e43e5ad765096a17f9b31e06faeb970b547a9b7a3d3fa0c04abad010af5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8185,7 +8185,7 @@
           "line": 1842
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 1843
         },
@@ -8232,7 +8232,7 @@
           "line": 43
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 44
         },
@@ -8353,7 +8353,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 1843,
           "exists": true
@@ -8401,7 +8401,7 @@
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 44,
           "exists": true
@@ -8653,7 +8653,7 @@
             "ck-btn"
           ],
           "type": "button",
-          "text": "✓ Confirmar pedido",
+          "text": "Confirmar pedido",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -8804,8 +8804,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16025,
-      "sha256": "8a2b2797ab63bdb196e566c87670efe7a1e1af70c1341724a0c8f04c9c10b45c",
+      "bytes": 16016,
+      "sha256": "f64fdc2f07d06fb06311747296beacf66d289c4552c3fd6d13e8f816df177ee6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8855,7 +8855,7 @@
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 192
         },
@@ -8880,7 +8880,7 @@
           "line": 196
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260818-edit-badge-svg-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 201
         },
@@ -8922,7 +8922,7 @@
           "line": 52
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 53
         },
@@ -9200,7 +9200,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 192,
           "exists": true
@@ -9230,7 +9230,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260818-edit-badge-svg-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 201,
           "exists": true
@@ -9278,7 +9278,7 @@
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 53,
           "exists": true
@@ -9431,8 +9431,8 @@
         "guest",
         "client"
       ],
-      "bytes": 20751,
-      "sha256": "1d983b6a3f3d8b2a27e5e9bdb3371396c0a91e209d67696f4764a48eef927c20",
+      "bytes": 20742,
+      "sha256": "51a4de14eaa27ba1ebcd283e2bdf80c9d7e9154ae89ea3d5ea0deb8f91152f8b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9482,7 +9482,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 214
         },
@@ -9502,7 +9502,7 @@
           "line": 248
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260818-edit-badge-svg-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 253
         },
@@ -9544,7 +9544,7 @@
           "line": 51
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 52
         },
@@ -9827,7 +9827,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 214,
           "exists": true
@@ -9851,7 +9851,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260818-edit-badge-svg-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 253,
           "exists": true
@@ -9899,7 +9899,7 @@
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 52,
           "exists": true
@@ -10094,8 +10094,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18245,
-      "sha256": "955be62c4b783f47690583049c02d60b00b334c91ab869315a00cdf7be46f83a",
+      "bytes": 18236,
+      "sha256": "06f54017280045f1ed57dcd86f82842bd3783780e3e7a9009e37690fc92cf66c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10145,7 +10145,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 185
         },
@@ -10165,7 +10165,7 @@
           "line": 188
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260818-edit-badge-svg-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 193
         },
@@ -10207,7 +10207,7 @@
           "line": 51
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 52
         },
@@ -10490,7 +10490,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 185,
           "exists": true
@@ -10514,7 +10514,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260818-edit-badge-svg-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 193,
           "exists": true
@@ -10562,7 +10562,7 @@
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 52,
           "exists": true
@@ -10721,8 +10721,8 @@
         "guest",
         "client"
       ],
-      "bytes": 44064,
-      "sha256": "8d2d2e8c81624adfea9a7ad5fac15aa2be3c7769e17da896106c4b5be9721552",
+      "bytes": 44055,
+      "sha256": "f49cb67454facbfc6a57320792d51eea05f8d823167d6466b6c2e3842e7a0ac9",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10784,7 +10784,7 @@
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 597
         },
@@ -10814,7 +10814,7 @@
           "line": 602
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260818-edit-badge-svg-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 607
         },
@@ -10856,7 +10856,7 @@
           "line": 70
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 71
         },
@@ -11483,7 +11483,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 597,
           "exists": true
@@ -11519,7 +11519,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260818-edit-badge-svg-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 607,
           "exists": true
@@ -11567,7 +11567,7 @@
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 71,
           "exists": true
@@ -11988,8 +11988,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 49678,
-      "sha256": "57d8119a3cb7c7a5021b64e94d2be12247589f3ba36f9cdce14e31245be1eef0",
+      "bytes": 49680,
+      "sha256": "fa1776f71d4f66050f937c7bd030284fc36a69e502a7a0fe78ab459ecebaeef3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12044,7 +12044,7 @@
           "line": 962
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 963
         },
@@ -12086,7 +12086,7 @@
           "line": 40
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 41
         },
@@ -12206,7 +12206,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 963,
           "exists": true
@@ -12254,7 +12254,7 @@
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 41,
           "exists": true
@@ -12688,8 +12688,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 35808,
-      "sha256": "91ca5d28dddeeb7a987b81acd105bc8531ccd7ee1f05abe1ae95ba29bab95572",
+      "bytes": 36602,
+      "sha256": "20feb3446b0d9110c99b887fbff099f489b7fe8f5582202b054baeb3d583e7f3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12739,7 +12739,7 @@
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 320
         },
@@ -12801,7 +12801,7 @@
           "line": 39
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 40
         },
@@ -12866,7 +12866,7 @@
         {
           "raw": "/admin",
           "target": "admin.html",
-          "text": "⚙️ Panel de administración",
+          "text": "Panel de administración",
           "id": "link-admin-panel",
           "ariaLabel": "",
           "title": "",
@@ -12940,7 +12940,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 320,
           "exists": true
@@ -13012,7 +13012,7 @@
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 40,
           "exists": true
@@ -13223,8 +13223,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16778,
-      "sha256": "e484fa455671268ffe6b9ecc5767abd8992e7e9ef254586b464c648503ba0307",
+      "bytes": 16769,
+      "sha256": "1f5f85c6e4976d6018e2584d983e613bf17f906960ea8071c1a0de53aae5886b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13268,7 +13268,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 207
         },
@@ -13288,7 +13288,7 @@
           "line": 210
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260818-edit-badge-svg-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 215
         },
@@ -13330,7 +13330,7 @@
           "line": 51
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 52
         },
@@ -13613,7 +13613,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 207,
           "exists": true
@@ -13637,7 +13637,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260818-edit-badge-svg-1",
           "target": "js/core/auth/insignia-edicion.js",
           "line": 215,
           "exists": true
@@ -13685,7 +13685,7 @@
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 52,
           "exists": true
@@ -13844,8 +13844,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18739,
-      "sha256": "fcb8937c269e99abba41fe4525e257997f6a44cf99a1309540795829d24d7c3f",
+      "bytes": 18730,
+      "sha256": "a958eb4ccd39e1c6f08c9fce9a731f3488cabd77efea58b77d6ca17dc3c4d18e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13889,7 +13889,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 216
         },
@@ -13946,7 +13946,7 @@
           "line": 51
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 52
         },
@@ -14259,7 +14259,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 216,
           "exists": true
@@ -14325,7 +14325,7 @@
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 52,
           "exists": true
@@ -14501,8 +14501,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24646,
-      "sha256": "158792bb1bf75febe151e4b38294a1b7b30ba95a63d69031e8a27ec7edb423d2",
+      "bytes": 24898,
+      "sha256": "aabec4126af4e08dcfa699a033ec0980a2558c27b9f4b3c90b1cc3a517e39024",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14546,7 +14546,7 @@
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 334
         },
@@ -14628,7 +14628,7 @@
           "line": 52
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 53
         },
@@ -14916,7 +14916,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 334,
           "exists": true
@@ -15012,7 +15012,7 @@
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 53,
           "exists": true
@@ -15375,8 +15375,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16547,
-      "sha256": "eed10dcbb2a85de2ff1a3c884c17271a41f95e4a7af9eea1ee7c57de69ea1578",
+      "bytes": 16538,
+      "sha256": "a28cd2f825bd2723e10aae2d064b2488e2dd9ae9952514f15977f25684e105b9",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15413,7 +15413,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 197
         },
@@ -15470,7 +15470,7 @@
           "line": 51
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 52
         },
@@ -15793,7 +15793,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-1",
+          "raw": "tienda.js?v=tintin-20260818-product-trust-icons-2",
           "target": "tienda.js",
           "line": 197,
           "exists": true
@@ -15859,7 +15859,7 @@
           "exists": true
         },
         {
-          "raw": "styles.css?v=tintin-20260818-collections-apple-1",
+          "raw": "styles.css?v=tintin-20260818-collections-apple-2",
           "target": "styles.css",
           "line": 52,
           "exists": true
@@ -16312,7 +16312,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 330173,
-      "sha256": "302a5a962ee218aa692fc97b8f819f55962aa56e3ebac020b28a979a307a0e4e",
+      "sha256": "28da097516483e7842a3bac913b550eed76ce0eb2343978f82e661823c30168d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16421,8 +16421,8 @@
     },
     {
       "path": "functions/[page].js",
-      "bytes": 3158,
-      "sha256": "99b89ccb121db2d2021cbc37e0e9cae2c7e6df969868ef5831249f4cd3edcc67",
+      "bytes": 3162,
+      "sha256": "c84868d1afd136111bdda509df9beb8a4546ae1a40fd354b84d513cc252aa018",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17386,8 +17386,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 424563,
-      "sha256": "e99a547640e99ec4ebcd237055826cec76992abbc310f14f8e44a30066ee9704",
+      "bytes": 424555,
+      "sha256": "7ebb0cd58deb1d9098faf881f1bf750cc136d0ab0a4a936a93fb09595ec41758",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17442,7 +17442,7 @@
           "line": 20
         },
         {
-          "raw": "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260730-appcheck-stable-4",
+          "raw": "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1",
           "target": "js/core/store-gate/nucleo-control-tienda.js",
           "dynamic": false,
           "line": 21
@@ -17478,7 +17478,7 @@
           "line": 26
         },
         {
-          "raw": "./products/biblioteca-multimedia-admin.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "./products/biblioteca-multimedia-admin.js?v=tintin-20260818-icon-svg-2",
           "target": "js/admin/products/biblioteca-multimedia-admin.js",
           "dynamic": false,
           "line": 27
@@ -18196,8 +18196,8 @@
     },
     {
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
-      "bytes": 7821,
-      "sha256": "9a4eb1249a4cfce932e5bb3bfac99e5e271d6e0d4516d8084c749f313e0c1da9",
+      "bytes": 8042,
+      "sha256": "2859caffe8871aecf1803c1cd4aa3a21404d7631eec2dabe6748bdd51016411c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19335,8 +19335,8 @@
     },
     {
       "path": "js/components/location/mapa-ubicacion.js",
-      "bytes": 13288,
-      "sha256": "efeb40c2589ee862fbbdd5b4a7457b84138bcbc706f27c0cb387e86761e3e2c9",
+      "bytes": 13507,
+      "sha256": "8910e92b31e337c31ae8dd190527ce1f455e32979885b4b2306db662c47d453e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19395,8 +19395,8 @@
     },
     {
       "path": "js/components/modals/modal-bloqueo.js",
-      "bytes": 2478,
-      "sha256": "10aed15d93f9ac32959cd771b8d587b4766c0fde4d854bc7e7c602df3d3160fc",
+      "bytes": 2702,
+      "sha256": "d6d0ee5a47db4353cc4623c3ed2d46f97924e4a90e8e2692730afca3c7189e27",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19610,8 +19610,8 @@
     },
     {
       "path": "js/components/navigation/compartido/panel-busqueda.js",
-      "bytes": 740,
-      "sha256": "dec652003de069381f3cf6e643760696c4fc0789c829b8db80f5f6c880429da7",
+      "bytes": 777,
+      "sha256": "5e348dc237b2e8718aeab39390d2aa9d0d83139801add1bdafc2954d57912823",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19628,19 +19628,26 @@
     },
     {
       "path": "js/components/navigation/compartido/panel-carrito.js",
-      "bytes": 732,
-      "sha256": "535a54d83305755d9661cd7a560e291fe28f5e25f183327766160488d7dccd6f",
+      "bytes": 819,
+      "sha256": "3eeca01d86dbcaa8693ff6108592ded19d9ee43171a529d2489ac89fbeb59230",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [],
+      "imports": [
+        {
+          "raw": "./iconos.js",
+          "target": "js/components/navigation/compartido/iconos.js",
+          "dynamic": false,
+          "line": 1
+        }
+      ],
       "endpoints": []
     },
     {
       "path": "js/components/navigation/compartido/panel-colecciones.js",
-      "bytes": 1041,
-      "sha256": "f7016e7e03f2148e3190fe7e218cf8bac82f3990555acd7ce0af402f9d2b854f",
+      "bytes": 1097,
+      "sha256": "d2c9295e56da7695268daeec5cc5ebe8028ffece21f4944552eca522a5501b9d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19657,13 +19664,20 @@
     },
     {
       "path": "js/components/navigation/compartido/panel-cuenta.js",
-      "bytes": 696,
-      "sha256": "a1ccb98eee3aff7e9336d0145491370a6c676687ded791e248d2079a34db0b65",
+      "bytes": 783,
+      "sha256": "460e0ad487b8e08cd97394986541ef43001f74e135b1a9a07a9fdbed28a16a5a",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [],
+      "imports": [
+        {
+          "raw": "./iconos.js",
+          "target": "js/components/navigation/compartido/iconos.js",
+          "dynamic": false,
+          "line": 1
+        }
+      ],
       "endpoints": []
     },
     {
@@ -20148,8 +20162,8 @@
     },
     {
       "path": "js/core/auth/insignia-edicion.js",
-      "bytes": 5048,
-      "sha256": "16ecb9969f027d6ed0838dbf2dd86abff091bb409acac59087dc6d165f591345",
+      "bytes": 5250,
+      "sha256": "c5007f7330575c1bea90af4ea15fb918e7f998010f20649284af29b6f78d75c1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20474,8 +20488,8 @@
     },
     {
       "path": "js/core/store-gate/control-tienda.js",
-      "bytes": 5813,
-      "sha256": "95a09733e899694f1e32e7d80f15b903e71d301d44a7334fc221c8207dfc579b",
+      "bytes": 5811,
+      "sha256": "75fce57a6ae4c754cd4de012a2a78b391e5a026a7915c8d8c803bbef4ae9dbfb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20506,7 +20520,7 @@
           "line": 18
         },
         {
-          "raw": "./nucleo-control-tienda.js?v=tintin-20260730-appcheck-stable-4",
+          "raw": "./nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1",
           "target": "js/core/store-gate/nucleo-control-tienda.js",
           "dynamic": false,
           "line": 27
@@ -20525,8 +20539,8 @@
     },
     {
       "path": "js/core/store-gate/nucleo-control-tienda.js",
-      "bytes": 26387,
-      "sha256": "fd6e24ee2b11026f255102626c99bdc36b39f28e861e83268b475b21172678e8",
+      "bytes": 26877,
+      "sha256": "219979d6f7ad6306df630a2032ff513bff236bbca72f3948485e9067addf01c4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21334,8 +21348,8 @@
     },
     {
       "path": "js/pages/checkout/checkout-confiabilidad.js",
-      "bytes": 27193,
-      "sha256": "647ba018b838946015ebec71cf6b1195905debbab4c63a2d049f1ea5212b0480",
+      "bytes": 28410,
+      "sha256": "2a58c003d896af5aea9868cab597b72f462896d1769b3f22b39d183a6ad443ef",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21351,7 +21365,7 @@
       "endpoints": [
         {
           "url": "https://www.google.com/maps/search/",
-          "line": 515
+          "line": 519
         }
       ]
     },
@@ -21651,8 +21665,8 @@
     },
     {
       "path": "js/pages/institutional/mantenimiento-contacto.js",
-      "bytes": 12155,
-      "sha256": "fbbc9877c5c64c86cbcfeb32a9dc6842520c1b903d09ca9ef602b313929e54ab",
+      "bytes": 12369,
+      "sha256": "380b294a6f10a2fdc333b996f279f9c78a5b619f9ba0f2fdfd3f3a8099e862c3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21927,8 +21941,8 @@
     },
     {
       "path": "js/pages/profile/correccion-estadisticas-pedidos-perfil.js",
-      "bytes": 4780,
-      "sha256": "2a251a6100c7ffb2b3338abf07eecf1337a1f93400e9809d009befe8123f7173",
+      "bytes": 5090,
+      "sha256": "1224ac6bea906fcbcce59365ca75853cd0bdf87fd9ff4c529916bc5353c2c4f9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22669,8 +22683,8 @@
     },
     {
       "path": "scripts/auditar-contacto-pagina.js",
-      "bytes": 2272,
-      "sha256": "e0d3c393481660910d1b64d8d48cb1763c86a14d1e8023f1baf9ce948377509f",
+      "bytes": 2276,
+      "sha256": "a32e89465d4fae843a02e811d2ec6490b2bdc104d7ad855e5d76a0345756899c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22691,8 +22705,8 @@
     },
     {
       "path": "scripts/auditar-contraste.mjs",
-      "bytes": 5253,
-      "sha256": "189cddcb59627277aaa18598d7e7d4a81b02b77bed3592ae2af9eb46c34fe18e",
+      "bytes": 6283,
+      "sha256": "6414d973f80a9a5940cfe65ea9a0b9d287228bf2ab62c2d33986fc3e8bedd0a1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23495,8 +23509,8 @@
     },
     {
       "path": "scripts/auditar-imagenes-fase-5.js",
-      "bytes": 24676,
-      "sha256": "656405ffa5ce3ec9c8fd45ee4ce539423e1bbb0668b1be54a0e475d9f7073794",
+      "bytes": 24774,
+      "sha256": "9907146647644f184e6f6ddd037f9ac5f9adcd17a4f76577f8e6e0ea780e489d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25144,7 +25158,7 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "bytes": 9228,
-      "sha256": "3f23b67b3bac0e2bb46758f9de91022e8bf4265ce37687cfa9e60f95b3aac63f",
+      "sha256": "175f2bc43fa61e8be574689ffa0b9986ab60d7c4340b15d8aa2bcaa76eec528f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26496,8 +26510,8 @@
     },
     {
       "path": "tienda.js",
-      "bytes": 91997,
-      "sha256": "d28f3af3214c3cf1b402d9bde68f10ad9813c6b157e495fef008ead71817a7fb",
+      "bytes": 92220,
+      "sha256": "670ebd69693bbead5d7ee0fa07a726699d4cb3dbe582de3dbbdb3c3b45de0cb2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26812,8 +26826,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 9296,
-      "sha256": "97a4d4622bacee0c5068ac35a79b8ea8d7280a6b5deaecf6aa615c213bbab775"
+      "bytes": 9287,
+      "sha256": "32d41957bdb8cbcf6de027048302d7cf2dc6ae9be4a4055d6e1cce13e26190e3"
     },
     {
       "path": "AGENTS.md",
@@ -26836,20 +26850,20 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 23214,
-      "sha256": "315b97555848ce8ecbff22404dd7ea2e9750f0836997e365bf00d2d44a5dbd22"
+      "bytes": 23205,
+      "sha256": "032921ad7790377811a4cc45aede2eda54023d88557e12cba9862f46fdb28508"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 36703,
-      "sha256": "3458c2eb4e464f2fcd9d7003f77d07af17c01b67cf4f1aa475cb4fecc759fb0d"
+      "bytes": 40948,
+      "sha256": "a833f6f07b46357d0f654e12325b243bcc88dac726c4964d1191984af7c123d8"
     },
     {
       "path": "admin.html",
       "extension": ".html",
       "bytes": 176189,
-      "sha256": "f8fc066311848e01463fd1155d3fd917394438eb3f8f962c210361465cddee7d"
+      "sha256": "f1f1ca9581dcab22396b1bc540dfc7661cb4c21fb4fc644e80edf9fde5faeae2"
     },
     {
       "path": "apple-touch-icon.png",
@@ -27052,20 +27066,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 14872,
-      "sha256": "01d18b64a0e39e3e3c48099aea70511a32d1c550325b1f95bcd1bf85b189b3f9"
+      "bytes": 14863,
+      "sha256": "cb609d7d9cea1aab7c7ea606321265b2db964222c004ab746bbccd3f93443708"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 53269,
-      "sha256": "31227ca34d47c42bad367f9d9ed5671ef97a17aa4ac1b8dfd66427f58f3906b7"
+      "bytes": 53260,
+      "sha256": "39cb0b96dc7b2f32fd93f24fa801d2ca2a1fae00290250897331e1d496fdd02e"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 106836,
-      "sha256": "ba68e4b69a3a642fa11c7674bf4770acabfa718fae2753536711a20cd7231cd1"
+      "bytes": 107264,
+      "sha256": "11067e43e5ad765096a17f9b31e06faeb970b547a9b7a3d3fa0c04abad010af5"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -27142,20 +27156,20 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 16025,
-      "sha256": "8a2b2797ab63bdb196e566c87670efe7a1e1af70c1341724a0c8f04c9c10b45c"
+      "bytes": 16016,
+      "sha256": "f64fdc2f07d06fb06311747296beacf66d289c4552c3fd6d13e8f816df177ee6"
     },
     {
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 330173,
-      "sha256": "302a5a962ee218aa692fc97b8f819f55962aa56e3ebac020b28a979a307a0e4e"
+      "sha256": "28da097516483e7842a3bac913b550eed76ce0eb2343978f82e661823c30168d"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 330088,
-      "sha256": "11290fef07cc6e7e62e02b686073f5f6e2720ae708420d86e920a18f9ab0c9b2"
+      "sha256": "4548d3fc004f2f14b267cf7876a49365e03b88378ed9379562bd6557f93026dd"
     },
     {
       "path": "config/public-site.json",
@@ -27172,8 +27186,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 20751,
-      "sha256": "1d983b6a3f3d8b2a27e5e9bdb3371396c0a91e209d67696f4764a48eef927c20"
+      "bytes": 20742,
+      "sha256": "51a4de14eaa27ba1ebcd283e2bdf80c9d7e9154ae89ea3d5ea0deb8f91152f8b"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -27418,8 +27432,8 @@
     {
       "path": "css/pages/home/mantenimiento-inicio.css",
       "extension": ".css",
-      "bytes": 10814,
-      "sha256": "4c4f3cae77be4f8d4431bae6bec6cf6ef432d1a76d87fb5e8023cd99045affcb"
+      "bytes": 10772,
+      "sha256": "f2eef21c0970ad81b68a7cc476de616a8285dd09dca5a82aed6a1145a8594ee6"
     },
     {
       "path": "css/pages/institutional/about-maintenance.css",
@@ -27766,8 +27780,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 18245,
-      "sha256": "955be62c4b783f47690583049c02d60b00b334c91ab869315a00cdf7be46f83a"
+      "bytes": 18236,
+      "sha256": "06f54017280045f1ed57dcd86f82842bd3783780e3e7a9009e37690fc92cf66c"
     },
     {
       "path": "favicon-16x16.png",
@@ -27856,8 +27870,8 @@
     {
       "path": "functions/[page].js",
       "extension": ".js",
-      "bytes": 3158,
-      "sha256": "99b89ccb121db2d2021cbc37e0e9cae2c7e6df969868ef5831249f4cd3edcc67"
+      "bytes": 3162,
+      "sha256": "c84868d1afd136111bdda509df9beb8a4546ae1a40fd354b84d513cc252aa018"
     },
     {
       "path": "functions/__/auth/[[path]].js",
@@ -28138,14 +28152,14 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 44064,
-      "sha256": "8d2d2e8c81624adfea9a7ad5fac15aa2be3c7769e17da896106c4b5be9721552"
+      "bytes": 44055,
+      "sha256": "f49cb67454facbfc6a57320792d51eea05f8d823167d6466b6c2e3842e7a0ac9"
     },
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 424563,
-      "sha256": "e99a547640e99ec4ebcd237055826cec76992abbc310f14f8e44a30066ee9704"
+      "bytes": 424555,
+      "sha256": "7ebb0cd58deb1d9098faf881f1bf750cc136d0ab0a4a936a93fb09595ec41758"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -28252,8 +28266,8 @@
     {
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
       "extension": ".js",
-      "bytes": 7821,
-      "sha256": "9a4eb1249a4cfce932e5bb3bfac99e5e271d6e0d4516d8084c749f313e0c1da9"
+      "bytes": 8042,
+      "sha256": "2859caffe8871aecf1803c1cd4aa3a21404d7631eec2dabe6748bdd51016411c"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -28498,8 +28512,8 @@
     {
       "path": "js/components/location/mapa-ubicacion.js",
       "extension": ".js",
-      "bytes": 13288,
-      "sha256": "efeb40c2589ee862fbbdd5b4a7457b84138bcbc706f27c0cb387e86761e3e2c9"
+      "bytes": 13507,
+      "sha256": "8910e92b31e337c31ae8dd190527ce1f455e32979885b4b2306db662c47d453e"
     },
     {
       "path": "js/components/location/selector-ubicacion.js",
@@ -28516,8 +28530,8 @@
     {
       "path": "js/components/modals/modal-bloqueo.js",
       "extension": ".js",
-      "bytes": 2478,
-      "sha256": "10aed15d93f9ac32959cd771b8d587b4766c0fde4d854bc7e7c602df3d3160fc"
+      "bytes": 2702,
+      "sha256": "d6d0ee5a47db4353cc4623c3ed2d46f97924e4a90e8e2692730afca3c7189e27"
     },
     {
       "path": "js/components/navigation/compartido/acordeon-pie-pagina.js",
@@ -28612,26 +28626,26 @@
     {
       "path": "js/components/navigation/compartido/panel-busqueda.js",
       "extension": ".js",
-      "bytes": 740,
-      "sha256": "dec652003de069381f3cf6e643760696c4fc0789c829b8db80f5f6c880429da7"
+      "bytes": 777,
+      "sha256": "5e348dc237b2e8718aeab39390d2aa9d0d83139801add1bdafc2954d57912823"
     },
     {
       "path": "js/components/navigation/compartido/panel-carrito.js",
       "extension": ".js",
-      "bytes": 732,
-      "sha256": "535a54d83305755d9661cd7a560e291fe28f5e25f183327766160488d7dccd6f"
+      "bytes": 819,
+      "sha256": "3eeca01d86dbcaa8693ff6108592ded19d9ee43171a529d2489ac89fbeb59230"
     },
     {
       "path": "js/components/navigation/compartido/panel-colecciones.js",
       "extension": ".js",
-      "bytes": 1041,
-      "sha256": "f7016e7e03f2148e3190fe7e218cf8bac82f3990555acd7ce0af402f9d2b854f"
+      "bytes": 1097,
+      "sha256": "d2c9295e56da7695268daeec5cc5ebe8028ffece21f4944552eca522a5501b9d"
     },
     {
       "path": "js/components/navigation/compartido/panel-cuenta.js",
       "extension": ".js",
-      "bytes": 696,
-      "sha256": "a1ccb98eee3aff7e9336d0145491370a6c676687ded791e248d2079a34db0b65"
+      "bytes": 783,
+      "sha256": "460e0ad487b8e08cd97394986541ef43001f74e135b1a9a07a9fdbed28a16a5a"
     },
     {
       "path": "js/components/navigation/compartido/recursos-navegacion.js",
@@ -28762,8 +28776,8 @@
     {
       "path": "js/core/auth/insignia-edicion.js",
       "extension": ".js",
-      "bytes": 5048,
-      "sha256": "16ecb9969f027d6ed0838dbf2dd86abff091bb409acac59087dc6d165f591345"
+      "bytes": 5250,
+      "sha256": "c5007f7330575c1bea90af4ea15fb918e7f998010f20649284af29b6f78d75c1"
     },
     {
       "path": "js/core/auth/navegacion-autenticacion.js",
@@ -28834,14 +28848,14 @@
     {
       "path": "js/core/store-gate/control-tienda.js",
       "extension": ".js",
-      "bytes": 5813,
-      "sha256": "95a09733e899694f1e32e7d80f15b903e71d301d44a7334fc221c8207dfc579b"
+      "bytes": 5811,
+      "sha256": "75fce57a6ae4c754cd4de012a2a78b391e5a026a7915c8d8c803bbef4ae9dbfb"
     },
     {
       "path": "js/core/store-gate/nucleo-control-tienda.js",
       "extension": ".js",
-      "bytes": 26387,
-      "sha256": "fd6e24ee2b11026f255102626c99bdc36b39f28e861e83268b475b21172678e8"
+      "bytes": 26877,
+      "sha256": "219979d6f7ad6306df630a2032ff513bff236bbca72f3948485e9067addf01c4"
     },
     {
       "path": "js/core/store/configuracion-publica.js",
@@ -29038,8 +29052,8 @@
     {
       "path": "js/pages/checkout/checkout-confiabilidad.js",
       "extension": ".js",
-      "bytes": 27193,
-      "sha256": "647ba018b838946015ebec71cf6b1195905debbab4c63a2d049f1ea5212b0480"
+      "bytes": 28410,
+      "sha256": "2a58c003d896af5aea9868cab597b72f462896d1769b3f22b39d183a6ad443ef"
     },
     {
       "path": "js/pages/checkout/checkout-control-cuota.js",
@@ -29128,8 +29142,8 @@
     {
       "path": "js/pages/institutional/mantenimiento-contacto.js",
       "extension": ".js",
-      "bytes": 12155,
-      "sha256": "fbbc9877c5c64c86cbcfeb32a9dc6842520c1b903d09ca9ef602b313929e54ab"
+      "bytes": 12369,
+      "sha256": "380b294a6f10a2fdc333b996f279f9c78a5b619f9ba0f2fdfd3f3a8099e862c3"
     },
     {
       "path": "js/pages/institutional/mantenimiento-legal.js",
@@ -29194,8 +29208,8 @@
     {
       "path": "js/pages/profile/correccion-estadisticas-pedidos-perfil.js",
       "extension": ".js",
-      "bytes": 4780,
-      "sha256": "2a251a6100c7ffb2b3338abf07eecf1337a1f93400e9809d009befe8123f7173"
+      "bytes": 5090,
+      "sha256": "1224ac6bea906fcbcce59365ca75853cd0bdf87fd9ff4c529916bc5353c2c4f9"
     },
     {
       "path": "js/pages/profile/favoritos-perfil.js",
@@ -29260,8 +29274,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 49678,
-      "sha256": "57d8119a3cb7c7a5021b64e94d2be12247589f3ba36f9cdce14e31245be1eef0"
+      "bytes": 49680,
+      "sha256": "fa1776f71d4f66050f937c7bd030284fc36a69e502a7a0fe78ab459ecebaeef3"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -29464,8 +29478,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 35808,
-      "sha256": "91ca5d28dddeeb7a987b81acd105bc8531ccd7ee1f05abe1ae95ba29bab95572"
+      "bytes": 36602,
+      "sha256": "20feb3446b0d9110c99b887fbff099f489b7fe8f5582202b054baeb3d583e7f3"
     },
     {
       "path": "playwright.config.js",
@@ -29476,20 +29490,20 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 16778,
-      "sha256": "e484fa455671268ffe6b9ecc5767abd8992e7e9ef254586b464c648503ba0307"
+      "bytes": 16769,
+      "sha256": "1f5f85c6e4976d6018e2584d983e613bf17f906960ea8071c1a0de53aae5886b"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 18739,
-      "sha256": "fcb8937c269e99abba41fe4525e257997f6a44cf99a1309540795829d24d7c3f"
+      "bytes": 18730,
+      "sha256": "a958eb4ccd39e1c6f08c9fce9a731f3488cabd77efea58b77d6ca17dc3c4d18e"
     },
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 24646,
-      "sha256": "158792bb1bf75febe151e4b38294a1b7b30ba95a63d69031e8a27ec7edb423d2"
+      "bytes": 24898,
+      "sha256": "aabec4126af4e08dcfa699a033ec0980a2558c27b9f4b3c90b1cc3a517e39024"
     },
     {
       "path": "robots.txt",
@@ -29662,8 +29676,8 @@
     {
       "path": "scripts/auditar-contacto-pagina.js",
       "extension": ".js",
-      "bytes": 2272,
-      "sha256": "e0d3c393481660910d1b64d8d48cb1763c86a14d1e8023f1baf9ce948377509f"
+      "bytes": 2276,
+      "sha256": "a32e89465d4fae843a02e811d2ec6490b2bdc104d7ad855e5d76a0345756899c"
     },
     {
       "path": "scripts/auditar-contenido-fase-6.js",
@@ -29674,8 +29688,8 @@
     {
       "path": "scripts/auditar-contraste.mjs",
       "extension": ".mjs",
-      "bytes": 5253,
-      "sha256": "189cddcb59627277aaa18598d7e7d4a81b02b77bed3592ae2af9eb46c34fe18e"
+      "bytes": 6283,
+      "sha256": "6414d973f80a9a5940cfe65ea9a0b9d287228bf2ab62c2d33986fc3e8bedd0a1"
     },
     {
       "path": "scripts/auditar-control-tienda-bloqueo.js",
@@ -29860,8 +29874,8 @@
     {
       "path": "scripts/auditar-imagenes-fase-5.js",
       "extension": ".js",
-      "bytes": 24676,
-      "sha256": "656405ffa5ce3ec9c8fd45ee4ce539423e1bbb0668b1be54a0e475d9f7073794"
+      "bytes": 24774,
+      "sha256": "9907146647644f184e6f6ddd037f9ac5f9adcd17a4f76577f8e6e0ea780e489d"
     },
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
@@ -30263,7 +30277,7 @@
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
       "bytes": 9228,
-      "sha256": "3f23b67b3bac0e2bb46758f9de91022e8bf4265ce37687cfa9e60f95b3aac63f"
+      "sha256": "175f2bc43fa61e8be574689ffa0b9986ab60d7c4340b15d8aa2bcaa76eec528f"
     },
     {
       "path": "scripts/sincronizar-origen-publico.js",
@@ -30310,14 +30324,14 @@
     {
       "path": "styles.css",
       "extension": ".css",
-      "bytes": 126021,
-      "sha256": "ab2675d84f3c544affdb62a0d8685225b08b0a2c3e44a66aaf8c79fbaf5a7484"
+      "bytes": 126177,
+      "sha256": "9958477ad8f5c7cd8fd9eab69e05a2b6f9dac4e16f3605924c2ec3a01aed35d5"
     },
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 16547,
-      "sha256": "eed10dcbb2a85de2ff1a3c884c17271a41f95e4a7af9eea1ee7c57de69ea1578"
+      "bytes": 16538,
+      "sha256": "a28cd2f825bd2723e10aae2d064b2488e2dd9ae9952514f15977f25684e105b9"
     },
     {
       "path": "tests/branches/auditar-limpiar-ramas.test.mjs",
@@ -30574,8 +30588,8 @@
     {
       "path": "tienda.js",
       "extension": ".js",
-      "bytes": 91997,
-      "sha256": "d28f3af3214c3cf1b402d9bde68f10ad9813c6b157e495fef008ead71817a7fb"
+      "bytes": 92220,
+      "sha256": "670ebd69693bbead5d7ee0fa07a726699d4cb3dbe582de3dbbdb3c3b45de0cb2"
     }
   ],
   "sitemapRoutes": [],

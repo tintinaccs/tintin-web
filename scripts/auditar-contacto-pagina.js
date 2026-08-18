@@ -33,7 +33,7 @@ for (const token of requiredHtml) if (!html.includes(token)) missing.push(`conta
 for (const token of requiredRuntime) if (!runtime.includes(token)) missing.push(`mantenimiento-contacto.js: ${token}`);
 if (!runtime.includes('contact(?:\\.html)?')) missing.push('mantenimiento-contacto.js: clean + legacy route recognition');
 if (!runtime.includes("new URL('/contact', location.origin)")) missing.push('mantenimiento-contacto.js: clean canonical /contact');
-if (!pageFunction.includes('mantenimiento-contacto.js?v=tintin-20260815-contact-clean-1')) missing.push('functions/[page].js: versioned contact runtime injection');
+if (!pageFunction.includes('mantenimiento-contacto.js?v=tintin-20260818-contact-clock-svg-1')) missing.push('functions/[page].js: versioned contact runtime injection');
 if (!pageFunction.includes('page === \'contact\'')) missing.push('functions/[page].js: contact-only runtime guard');
 if (!pageFunction.includes('type="module"')) missing.push('functions/[page].js: Contact runtime must be loaded as ES module');
 if (!/contact[\s\S]*load\('pages\/institutional\/mantenimiento-contacto\.js'\)/.test(loader)) missing.push('cargador-mantenimiento-pagina.js: contact maintenance fallback import');

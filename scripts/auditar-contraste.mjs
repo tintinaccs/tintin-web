@@ -43,9 +43,23 @@ for (const pag of paginas) {
         const ratio = (a, b) => { const l1 = lum(a), l2 = lum(b); return (Math.max(l1,l2)+.05)/(Math.min(l1,l2)+.05); };
         const parse = s => { const m = String(s).match(/rgba?\(([^)]+)\)/); if (!m) return null;
           const p = m[1].split(',').map(x => parseFloat(x)); return { c: p.slice(0,3), a: p.length > 3 ? p[3] : 1 }; };
+        // Un background-image con gradiente (shorthand `background: linear-gradient(...)`)
+        // deja backgroundColor en transparente aunque pinte una superficie opaca real;
+        // se promedian sus stops de color para no dar falsos positivos de contraste.
+        const gradiente = img => { if (!img || img === 'none') return null;
+          const stops = [...img.matchAll(/rgba?\(([^)]+)\)/g)].map(m => m[1].split(',').map(Number));
+          if (!stops.length) return null;
+          return [0, 1, 2].map(i => stops.reduce((s, c) => s + c[i], 0) / stops.length); };
         // Fondo real: sube por los ancestros hasta encontrar uno opaco.
+        // Con background-clip:text el gradiente no es un fondo real: se recorta
+        // a la forma del texto (p.ej. el ícono "G" de Google), asi que se ignora
+        // y se sigue subiendo por los ancestros.
         const fondo = el => { let n = el;
-          while (n) { const b = parse(getComputedStyle(n).backgroundColor); if (b && b.a > .95) return b.c; n = n.parentElement; }
+          while (n) { const cs = getComputedStyle(n);
+            const recortadoATexto = cs.webkitBackgroundClip === 'text' || cs.backgroundClip === 'text';
+            const g = recortadoATexto ? null : gradiente(cs.backgroundImage); if (g) return g;
+            const b = parse(cs.backgroundColor); if (b && b.a > .95) return b.c;
+            n = n.parentElement; }
           return [255,255,255]; };
         const malos = [];
         for (const el of document.querySelectorAll('button,a,input,label,p,span,h1,h2,h3,h4,li,td,th,small,strong')) {

@@ -18,13 +18,13 @@ import {
   canDo, saveRolePermissions, buildDefaultRolePermissions
 } from "../core/auth/permisos-roles.js?v=tintin-20260716-cloudinary-fix-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260730-appcheck-stable-4";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1";
 import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260818-browser-fallback-2";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
-import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260716-cloudinary-fix-1";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260818-icon-svg-2";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260722-order-delete-2";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {

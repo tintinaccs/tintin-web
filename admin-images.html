@@ -16,8 +16,8 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
-  <link rel="modulepreload" href="js/core/store-gate/control-tienda.js?v=tintin-20260809-loader-lifecycle-fix-1">
-  <link rel="modulepreload" href="js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260730-appcheck-stable-4">
+  <link rel="modulepreload" href="js/core/store-gate/control-tienda.js?v=tintin-20260818-gate-icon-svg-2">
+  <link rel="modulepreload" href="js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1">
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -316,7 +316,7 @@
 
 <!-- AUTH GATE (denegado) — la carga la cubre el loader de marca -->
 <div id="auth-denied">
-  <div style="font-size:2.5rem;">🔒</div>
+  <div style="font-size:2.5rem;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
   <h2 style="font-size:1.1rem;">Acceso denegado</h2>
   <p style="font-size:0.88rem;color:#6b6b6b;">No tenés permisos para ver esta página.</p>
   <a href="/login" class="adm-auth-login" style="margin-top:12px;background:#b84c72;color:#fff;padding:10px 24px;border-radius:20px;text-decoration:none;font-weight:600;font-size:0.88rem;">Iniciar sesión</a>
@@ -328,7 +328,7 @@
 <!-- HEADER -->
 <header class="adm-header" id="adm-header" style="display:none;">
   <div style="display:flex;align-items:center;gap:12px;">
-    <button type="button" class="adm-hamburger" id="adm-hamburger" aria-label="Menú">☰</button>
+    <button type="button" class="adm-hamburger" id="adm-hamburger" aria-label="Menú"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
     <div class="adm-logo">
       Tintin <span>Gestión de Imágenes</span>
     </div>
@@ -343,37 +343,37 @@
 <aside class="adm-sidebar" id="adm-sidebar" style="display:none;">
   <div class="adm-sidebar-title">Secciones</div>
   <button type="button" class="adm-nav-btn active" data-section="hero">
-    <span class="nav-icon">🏠</span> Inicio / Hero
+    <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span> Inicio / Hero
   </button>
   <button type="button" class="adm-nav-btn" data-section="productos">
-    <span class="nav-icon">⌚</span> Productos
+    <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span> Productos
   </button>
   <button type="button" class="adm-nav-btn" data-section="editorial">
-    <span class="nav-icon">🖼️</span> Editorial / Colecciones
+    <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span> Editorial / Colecciones
   </button>
   <button type="button" class="adm-nav-btn" data-section="iconos">
-    <span class="nav-icon">✨</span> Íconos / Trust
+    <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></span> Íconos / Trust
   </button>
   <button type="button" class="adm-nav-btn" data-section="nosotros">
-    <span class="nav-icon">🌸</span> Nosotros
+    <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span> Nosotros
   </button>
   <button type="button" class="adm-nav-btn" data-section="branding">
-    <span class="nav-icon">🏷️</span> Branding / Logo
+    <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41L13.42 20.58a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span> Branding / Logo
   </button>
   <button type="button" class="adm-nav-btn" data-section="biblioteca">
-    <span class="nav-icon">📁</span> Biblioteca multimedia
+    <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></span> Biblioteca multimedia
   </button>
 </aside>
 
 <!-- MOBILE BOTTOM TABS -->
 <nav class="adm-mobile-tabs" id="adm-mobile-tabs">
-  <button type="button" class="adm-mobile-tab active" data-section="hero"><span class="nav-icon">🏠</span>Hero</button>
-  <button type="button" class="adm-mobile-tab" data-section="productos"><span class="nav-icon">🛍️</span>Productos</button>
-  <button type="button" class="adm-mobile-tab" data-section="editorial"><span class="nav-icon">✨</span>Editorial</button>
-  <button type="button" class="adm-mobile-tab" data-section="iconos"><span class="nav-icon">⭐</span>Íconos</button>
-  <button type="button" class="adm-mobile-tab" data-section="nosotros"><span class="nav-icon">🌸</span>Nosotros</button>
-  <button type="button" class="adm-mobile-tab" data-section="branding"><span class="nav-icon">🏷️</span>Branding</button>
-  <button type="button" class="adm-mobile-tab" data-section="biblioteca"><span class="nav-icon">📁</span>Biblioteca</button>
+  <button type="button" class="adm-mobile-tab active" data-section="hero"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Hero</button>
+  <button type="button" class="adm-mobile-tab" data-section="productos"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span>Productos</button>
+  <button type="button" class="adm-mobile-tab" data-section="editorial"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></span>Editorial</button>
+  <button type="button" class="adm-mobile-tab" data-section="iconos"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>Íconos</button>
+  <button type="button" class="adm-mobile-tab" data-section="nosotros"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>Nosotros</button>
+  <button type="button" class="adm-mobile-tab" data-section="branding"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41L13.42 20.58a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>Branding</button>
+  <button type="button" class="adm-mobile-tab" data-section="biblioteca"><span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></span>Biblioteca</button>
   <a href="/admin" class="adm-mobile-tab"><span class="nav-icon">◀</span>Panel</a>
 </nav>
 
@@ -387,8 +387,8 @@
     <div class="adm-bulk-toolbar" id="img-bulk-toolbar">
       <span class="adm-bulk-count" id="img-bulk-count">0 seleccionadas</span>
       <button class="adm-bulk-btn danger" id="btn-img-bulk-clear" type="button">Quitar seleccionadas</button>
-      <button class="adm-bulk-btn" id="btn-img-bulk-export" type="button">⬇️ Exportar URLs</button>
-      <button class="adm-bulk-btn" id="btn-img-bulk-clear-sel" type="button">✕ Limpiar selección</button>
+      <button class="adm-bulk-btn" id="btn-img-bulk-export" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><line x1="4" y1="21" x2="20" y2="21"/></svg> Exportar URLs</button>
+      <button class="adm-bulk-btn" id="btn-img-bulk-clear-sel" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Limpiar selección</button>
     </div>
     <div class="adm-cards-grid" id="adm-cards-grid">
       <!-- Cards rendered by JS -->
@@ -406,7 +406,7 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/f
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/components/images/imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "./js/components/images/carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
-import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySection } from "./js/admin/products/biblioteca-multimedia-admin.js?v=tintin-20260716-cloudinary-fix-1";
+import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySection } from "./js/admin/products/biblioteca-multimedia-admin.js?v=tintin-20260818-icon-svg-2";
 
 // firestore.rules solo deja escribir settings/images a Super Admin
 // (js/core/auth/roles.js: manageImages:false para "admin") — dejar entrar a Admin acá

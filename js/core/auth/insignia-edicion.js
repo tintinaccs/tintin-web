@@ -62,7 +62,7 @@ function createBadge(element) {
   badge.href = `admin.html?tab=contenido&page=${encodeURIComponent(page)}&section=${encodeURIComponent(section)}`;
   badge.title = 'Editar esta sección en Super Admin';
   badge.setAttribute('aria-label', 'Editar esta sección');
-  badge.textContent = '✏️';
+  badge.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg>';
   badge.addEventListener('click', event => event.stopPropagation());
   element.addEventListener('mouseenter', () => badge.classList.add('tt-edit-badge-on'));
   element.addEventListener('mouseleave', () => badge.classList.remove('tt-edit-badge-on'));

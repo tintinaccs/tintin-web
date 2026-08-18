@@ -12,7 +12,7 @@ const LIGHTWEIGHT_PAGES = new Set([
 ]);
 
 const ABOUT_CANONICAL_GUARD = '/js/pages/institutional/about-canonical-clean-v1.js';
-const CONTACT_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-contacto.js?v=tintin-20260815-contact-clean-1';
+const CONTACT_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-contacto.js?v=tintin-20260818-contact-clock-svg-1';
 const LEGAL_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-legal.js?v=tintin-20260815-legal-clean-1';
 const MASTER_DIAGNOSTICS_RUNTIME = '/js/admin/diagnostics/diagnostico-maestro-admin.js?v=tintin-20260817-master-diagnostics-4';
 
