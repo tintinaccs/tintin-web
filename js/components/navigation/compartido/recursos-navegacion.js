@@ -1,4 +1,4 @@
-import { versionedSiteAsset } from './configuracion.js';
+import { versionedSiteAsset } from './configuracion.js?v=tintin-20260818-responsive-shell-realtime-1';
 
 const NAVIGATION_STYLES = Object.freeze([
   ['tt-navigation-desktop-css', 'css/components/navigation/escritorio/encabezado-escritorio.css'],
@@ -7,6 +7,7 @@ const NAVIGATION_STYLES = Object.freeze([
   ['tt-navigation-shared-css', 'css/components/navigation/compartido/transiciones-navegacion.css'],
   ['tt-surface-controller-css', 'css/components/navigation/compartido/paneles.css'],
   ['tt-navigation-search-css', 'css/components/navigation/compartido/busqueda.css'],
+  ['tt-navigation-responsive-hardening-css', 'css/components/navigation/compartido/responsive-shell-hardening.css'],
 ]);
 
 function ensureStylesheet(id, path) {
