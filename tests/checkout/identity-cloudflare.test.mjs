@@ -62,6 +62,11 @@ test('la creación de pedidos ya no usa el Apps Script desincronizado', () => {
   assert.match(api, /FIREBASE_SERVICE_ACCOUNT_KEY/);
 });
 
+test('el servidor limita ids de producto a un segmento Firestore seguro', () => {
+  assert.match(api, /\^\[A-Za-z0-9_-\]\{1,180\}\$/);
+  assert.match(api, /error: 'invalid_cart'/);
+});
+
 test('el flujo V2 se activa antes del import heredado y está versionado', () => {
   assert.match(shell, /window\.TintinSecureCheckoutOrderBooted = true/);
   assert.match(shell, /pedido-checkout-seguro-v2\.js/);
