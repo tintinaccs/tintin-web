@@ -510,7 +510,7 @@ import { heartIconMarkup } from './js/components/favorites/icono-corazon.js?v=ti
 // incluido el polling/fallback de productos más abajo, que es justo lo que
 // tiene que seguir funcionando pase lo que pase con las colecciones.
 let onCollectionsUpdate = () => {};
-import('./js/pages/collections/estado-colecciones.js?v=tintin-20260726-browser-fallback-1')
+import('./js/pages/collections/estado-colecciones.js?v=tintin-20260818-browser-fallback-2')
   .then(m => { onCollectionsUpdate = m.onCollectionsUpdate; bootCollections(); })
   .catch(e => console.warn('[catalogo] No se pudieron actualizar las colecciones:', e));
 
