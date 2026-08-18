@@ -1,0 +1,35 @@
+name: Sync public shell PR471
+
+on:
+  push:
+    branches:
+      - fix/realtime-notifications-responsive-shell
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: fix/realtime-notifications-responsive-shell
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Sync published shell
+        run: npm run sync:public-shell
+      - name: Commit generated public pages
+        run: |
+          if git diff --quiet -- '*.html'; then
+            echo "No generated HTML changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- '*.html'
+          git commit -m "chore(shell): sincronizar páginas públicas"
+          git push origin HEAD:fix/realtime-notifications-responsive-shell
