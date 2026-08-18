@@ -35,9 +35,49 @@ test('one review edit and one review per account/product are enforced server-sid
 });
 
 test('admin and customer surfaces are wired', async () => {
-  const [admin, product, profile] = await Promise.all([read('admin.html'), read('product.html'), read('perfil.html')]);
+  const [admin, product, profile, adminLoader, adminStyles] = await Promise.all([
+    read('admin.html'), read('product.html'), read('perfil.html'),
+    read('js/admin/participacion/gestion-participacion-admin.js'),
+    read('css/admin/participacion-admin.css'),
+  ]);
   assert.match(admin, /id="section-resenas"/);
   assert.match(admin, /id="section-me-gusta"/);
   assert.match(product, /resenas-producto\.js/);
   assert.match(profile, /favoritos-perfil\.js/);
+  assert.match(adminLoader, /gestion-participacion-admin-v2\.js/);
+  assert.match(adminStyles, /participacion-admin-v2\.css/);
+});
+
+test('master engagement console exposes management views and real tools', async () => {
+  const source = await read('js/admin/participacion/gestion-participacion-admin-v2.js');
+  for (const token of [
+    'data-eg-review-view="products"', 'data-eg-review-view="clients"', 'data-eg-review-view="analytics"',
+    'data-eg-like-view="products"', 'data-eg-like-view="clients"', 'data-eg-like-view="analytics"',
+    'Exportar CSV', 'reviewSaveMeta', 'likeSaveNote', 'likeArchive', 'reviewArchive', 'reviewPin',
+  ]) assert.match(source, new RegExp(token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+});
+
+test('archiving a like is administrative and does not remove the customer favorite', async () => {
+  const source = await read('cloudflare/participacion-admin.js');
+  const archiveBlock = source.match(/export async function adminLikeAction[\s\S]*?export async function markLikeSeen/)?.[0] || '';
+  assert.match(archiveBlock, /likeArchive/);
+  assert.match(archiveBlock, /patch\.archived = Boolean\(input\.archived\)/);
+  assert.doesNotMatch(archiveBlock, /\/favorites\//);
+
+  const deleteBlock = source.match(/export async function adminDeleteLike[\s\S]*$/)?.[0] || '';
+  assert.match(deleteBlock, /\/favorites\//);
+});
+
+test('new review admin metadata stays private while actions are server-backed', async () => {
+  const [adminSource, route] = await Promise.all([
+    read('cloudflare/participacion-admin.js'),
+    read('functions/api/admin-engagement.js'),
+  ]);
+  assert.match(adminSource, /reviewArchive/);
+  assert.match(adminSource, /reviewPin/);
+  assert.match(adminSource, /reviewMeta/);
+  assert.match(adminSource, /reviewUnread/);
+  assert.match(route, /likeUnread/);
+  assert.match(route, /likeArchive/);
+  assert.match(route, /likeNote/);
 });
