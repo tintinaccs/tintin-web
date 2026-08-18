@@ -1,8 +1,8 @@
 export const CHECKOUT_DRAFT_KEYS = Object.freeze([
   'requestId', 'cartLines', 'name', 'phone', 'contactEmail', 'notes',
   'selectedCity', 'departamento', 'address', 'referencia', 'mapLocation',
-  'shippingMethod', 'encomiendaMode', 'documentNumber', 'paymentMethod',
-  'expectedSubtotal', 'expectedShippingCost', 'expectedShippingPending', 'expectedTotal'
+  'shippingMethod', 'encomiendaMode', 'paymentMethod', 'expectedSubtotal',
+  'expectedShippingCost', 'expectedShippingPending', 'expectedTotal'
 ]);
 
 const clean = value => String(value == null ? '' : value).trim();
@@ -11,7 +11,7 @@ export function aggregateCheckoutCart(items) {
   const byProduct = new Map();
   for (const item of items || []) {
     const id = clean(item?.id);
-    const qty = Number(item?.qty || 1);
+    const qty = Number(item.qty || 1);
     if (!id || !Number.isInteger(qty) || qty < 1 || qty > 99) {
       throw Object.assign(new Error('Encontramos una cantidad no válida en el carrito.'), { code: 'invalid_cart' });
     }
@@ -47,7 +47,6 @@ export function composeCheckoutDraft(input) {
     mapLocation: input.shipping.mapLocation,
     shippingMethod: input.shipping.method,
     encomiendaMode: input.shipping.encomiendaMode || '',
-    documentNumber: input.shipping.method === 'encomienda' ? clean(input.documentNumber) : '',
     paymentMethod: input.paymentMethod,
     expectedSubtotal: Math.round(input.subtotal),
     expectedShippingCost: Math.round(shippingCost),
