@@ -107,7 +107,7 @@ check(/@media \(min-width: 1025px\)/.test(desktopStyles), 'escritorio: falta el 
 check(/@media \(min-width: 768px\) and \(max-width: 1024px\)/.test(tabletStyles), 'tableta: falta el rango exacto 768-1024px');
 check(/@media \(max-width: 767px\)/.test(mobileStyles), 'móvil: falta el rango exacto <=767px');
 check(desktopStyles.includes('.tt-nav-dropdown:not(.open) .tt-dropdown'), 'escritorio: falta el cierre visual definitivo de Tienda');
-check(desktopStyles.includes('width: 68px !important'), 'escritorio: las imágenes de colecciones no fueron ampliadas');
+check(desktopStyles.includes('width: 84px !important'), 'escritorio: las imágenes de colecciones no fueron ampliadas');
 check(surfaceStyles.includes('grid-template-columns: auto minmax(0, 1fr) auto'), 'buscar: falta la estructura grid estable');
 check(surfaceStyles.includes('width: min(1120px, calc(100vw - 64px))'), 'buscar escritorio: falta el tamaño ampliado');
 check(surfaceStyles.includes('linear-gradient(135deg, #8f204b, #c53f75)'), 'cuenta: falta el encabezado sólido de alto contraste');
