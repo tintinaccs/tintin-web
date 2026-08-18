@@ -137,10 +137,10 @@
   .tt-tablet-actions button,
   .tt-tablet-actions a {
     flex: 0 0 auto;
-    width: clamp(42px, 5.3vw, 46px) !important;
-    height: clamp(42px, 5.3vw, 46px) !important;
-    min-width: 42px;
-    min-height: 42px;
+    width: clamp(44px, 5.3vw, 46px) !important;
+    height: clamp(44px, 5.3vw, 46px) !important;
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .tt-tablet-menu {
@@ -223,8 +223,18 @@
     box-sizing: border-box;
   }
 
+  #tt-tabbar.tt-tabbar-compact {
+    width: min(316px, calc(100vw - 54px)) !important;
+    max-width: calc(100vw - 54px) !important;
+  }
+
   #tt-tabbar:has(#tabbar-notifications:not([hidden])) {
     grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  }
+
+  #tt-tabbar:has(#tabbar-notifications:not([hidden])).tt-tabbar-compact {
+    width: min(356px, calc(100vw - 28px)) !important;
+    max-width: calc(100vw - 28px) !important;
   }
 
   #tt-tabbar .tt-tabbar-btn {
@@ -330,7 +340,9 @@
 }
 
 @media (max-width: 390px) {
-  #tt-tabbar { width: calc(100vw - 10px) !important; padding-inline: 5px !important; }
+  #tt-tabbar:not(.tt-tabbar-compact) { width: calc(100vw - 10px) !important; padding-inline: 5px !important; }
+  #tt-tabbar.tt-tabbar-compact { width: calc(100vw - 54px) !important; max-width: 316px !important; padding-inline: 6px !important; }
+  #tt-tabbar:has(#tabbar-notifications:not([hidden])).tt-tabbar-compact { width: calc(100vw - 28px) !important; max-width: 356px !important; }
   #tt-tabbar .tt-tabbar-btn { padding-inline: 1px !important; }
   #tt-tabbar .tt-tabbar-btn span:last-child { font-size: .5rem !important; letter-spacing: 0 !important; }
   .tt-collections-sheet .tt-sheet-grid { gap: 10px !important; padding-inline: 12px !important; }
