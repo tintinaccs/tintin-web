@@ -6,6 +6,7 @@ import {
   compactAdminRuntimeChecks,
   runAdminRuntimeChecks,
 } from '../../cloudflare/admin-runtime-health.js';
+import { onRequest as adminRuntimeHealthRequest } from '../../functions/api/admin-runtime-health.js';
 
 test('admin runtime health recorre todas las superficies sin devolver datos', async () => {
   const calls = [];
@@ -62,4 +63,17 @@ test('clasificación de fallos no expone detalles internos como contrato públic
   assert.equal(classifyAdminRuntimeError(new Error('Firestore GET falló (500)')), 'firestore_unavailable');
   assert.equal(classifyAdminRuntimeError(new Error('fetch failed')), 'network_unavailable');
   assert.equal(classifyAdminRuntimeError(new Error('otra cosa')), 'runtime_check_failed');
+});
+
+test('el health privado exige una sesión real de Super Admin', async () => {
+  const request = new Request('https://tintinaccesorios.pages.dev/api/admin-runtime-health', {
+    method: 'GET',
+    headers: { origin: 'https://tintinaccesorios.pages.dev' },
+  });
+  const response = await adminRuntimeHealthRequest({ request, env: {} });
+  const payload = await response.json();
+  assert.equal(response.status, 401);
+  assert.equal(payload.ok, false);
+  assert.equal(payload.code, 'authentication_required');
+  assert.match(payload.requestId, /^admin-health-/);
 });
