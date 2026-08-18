@@ -4,7 +4,7 @@ import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-const ASSET_VERSION = 'tintin-20260817-notifications-opaque-1';
+const ASSET_VERSION = 'tintin-20260818-notifications-realtime-solid-1';
 const API_RETRY_DELAYS_MS = [450, 1200];
 let initialized = false;
 let currentUser = null;
@@ -196,10 +196,19 @@ function subscribe(user) {
   notifications = [];
   render();
   if (!user) return;
-  const source = query(collection(db, 'users', user.uid, 'notifications'), orderBy('createdAt', 'desc'), limit(100));
-  unsubscribe = onSnapshot(source, snapshot => {
+
+  const source = query(collection(db, 'users', user.uid, 'notifications'), orderBy('createdAt', 'desc'), limit(150));
+  unsubscribe = onSnapshot(source, { includeMetadataChanges: true }, snapshot => {
     notifications = snapshot.docs.map(document => ({ id: document.id, ...document.data() }));
     render();
+    document.dispatchEvent(new CustomEvent('tintin:notifications-realtime', {
+      detail: {
+        audience: 'user',
+        count: notifications.length,
+        fromCache: snapshot.metadata.fromCache,
+        hasPendingWrites: snapshot.metadata.hasPendingWrites,
+      },
+    }));
   }, error => {
     console.warn('[notifications] No se pudo escuchar la actividad:', error);
     const root = document.getElementById('tt-notifications-list');

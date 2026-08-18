@@ -8,6 +8,9 @@ let notificationsRuntimePromise = null;
 let collectionsRuntimePromise = null;
 
 const FULL_COMMERCE_PAGES = new Set(['home', 'shop', 'cart', 'account']);
+const CHECKOUT_IDENTITY_VERSION = 'tintin-20260818-checkout-identity-1';
+const CHECKOUT_ORDER_VERSION = 'tintin-20260818-checkout-cloudflare-1';
+const CHECKOUT_MAP_VERSION = 'tintin-20260818-checkout-map-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -117,6 +120,24 @@ function loadCollectionsRuntime() {
   return collectionsRuntimePromise;
 }
 
+function versionedCheckoutModule(path, version) {
+  const url = new URL(`../../../${path}`, import.meta.url);
+  url.searchParams.set('v', version);
+  return import(url.href);
+}
+
+function loadCheckoutIdentityRuntime() {
+  return versionedCheckoutModule('pages/checkout/checkout-identidad-navegacion.js', CHECKOUT_IDENTITY_VERSION);
+}
+
+function loadCheckoutOrderRuntime() {
+  return versionedCheckoutModule('orders/pedido-checkout-seguro-v2.js', CHECKOUT_ORDER_VERSION);
+}
+
+function loadCheckoutMapRuntime() {
+  return versionedCheckoutModule('pages/checkout/checkout-captura-mapa.js', CHECKOUT_MAP_VERSION);
+}
+
 function attachProductsDemand() {
   let started = false;
 
@@ -142,7 +163,7 @@ function attachProductsDemand() {
 function attachLightweightCommerceDemand() {
   bindDemand(
     '[data-nav-action="account"],[data-shell-route="account"],#tabbar-account',
-    () => Promise.all([loadAuthRuntime(), loadNotificationsRuntime()])
+    loadAuthRuntime
   );
   bindDemand(
     '[data-nav-action="cart"],[data-shell-route="cart"],#tabbar-cart',
@@ -177,23 +198,38 @@ export function loadSharedRuntime() {
   attachProductsDemand();
   loadNavigationBehaviors();
 
-  // Páginas informativas (Nosotros, Contacto, ayuda, legales y 404) no
-  // necesitan abrir Firebase/Auth, carrito, notificaciones ni colecciones al
-  // cargar. Conservan exactamente las mismas superficies; esos runtimes se
-  // hidratan cuando la persona muestra intención de usarlos.
+  /* Las notificaciones son infraestructura en vivo, no una mejora bajo
+     demanda. Se inicia el listener Firestore en TODAS las páginas públicas
+     apenas el shell está listo, independientemente del tamaño de pantalla o
+     del tipo de página. No usa polling ni espera a abrir la campana. */
+  void loadNotificationsRuntime().catch(error => {
+    console.warn('[PublicShell] No se pudieron iniciar las notificaciones realtime.', error);
+  });
+
+  // Páginas informativas mantienen catálogo, carrito, cuenta y colecciones
+  // bajo demanda para no abrir trabajo que no necesitan. Solo notificaciones
+  // permanece siempre conectada porque debe reaccionar en tiempo real.
   if (!FULL_COMMERCE_PAGES.has(page)) {
     attachLightweightCommerceDemand();
     return;
   }
 
+  // El carrito histórico intenta importar pedido-checkout-seguro.js por
+  // compatibilidad. En checkout se marca ese runtime como ya atendido ANTES
+  // de importar el carrito; el flujo real se inicia explícitamente con V2,
+  // que usa /api/create-order y ya no depende del Apps Script desincronizado.
+  if (page === 'cart') window.TintinSecureCheckoutOrderBooted = true;
+
   const critical = [loadAuthRuntime(), loadCartRuntime()];
   if (page === 'home' || page === 'shop') critical.push(loadProductsRuntime());
-  if (page === 'cart') critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')));
+  if (page === 'cart') {
+    critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')));
+    critical.push(loadCheckoutMapRuntime());
+    critical.push(loadCheckoutIdentityRuntime());
+    critical.push(loadCheckoutOrderRuntime());
+  }
 
   Promise.allSettled(critical).then(reportRuntimeFailures);
-  void loadNotificationsRuntime().catch(error => {
-    console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
-  });
 
   scheduleNonCritical(() => {
     Promise.allSettled([
