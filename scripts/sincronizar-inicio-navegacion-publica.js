@@ -18,7 +18,7 @@ const PROFILE_GATE_VERSION = 'tintin-20260815-profile-routes-1';
 // esa constante decide la URL exacta (con ?v=) que entrada-navegacion-publica.js y
 // ensureNavigationAssets() piden en tiempo de ejecución. Si difieren, el preload no
 // acierta la cache key exacta y el navegador vuelve a pedir el recurso igual.
-const NAV_SHELL_VERSION = 'tintin-20260818-header-dropdowns-solid-1';
+const NAV_SHELL_VERSION = 'tintin-20260818-header-dropdowns-solid-2';
 const NAVIGATION_PRELOAD_STYLES = [
   'css/components/navigation/escritorio/encabezado-escritorio.css',
   'css/components/navigation/tableta/encabezado-tableta.css',
