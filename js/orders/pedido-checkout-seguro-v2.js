@@ -9,8 +9,8 @@ import {
   formatPrice,
 } from '../components/cart/sincronizacion-carrito.js?v=tintin-20260814-social-notifications-1';
 import { findCountryByCode, normalizePhone, isValidPhone } from '../components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1';
-import { createOrderViaServer } from '../create-order-client.js?v=tintin-20260818-checkout-cloudflare-1';
-import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260818-checkout-identity-1';
+import { createOrderViaServer } from '../create-order-client-v2.js?v=tintin-20260818-checkout-cloudflare-1';
+import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260808-contract-1';
 
 if (!window.TintinSecureCheckoutOrderV2Booted) {
   window.TintinSecureCheckoutOrderV2Booted = true;
@@ -172,22 +172,25 @@ if (!window.TintinSecureCheckoutOrderV2Booted) {
       if (!shipping.mapLocation || !shipping.mapLocation.name) throw appError('map_required', 'Marcá y nombrá la ubicación para la entrega en puerta.');
     }
 
-    return composeCheckoutDraft({
-      requestId: requestId(),
-      items,
-      name,
-      phone: readPhone(),
-      contactEmail: text(document.getElementById('ck-email')?.value).toLowerCase(),
-      notes: text(document.getElementById('ck-notes')?.value).slice(0, 1000),
-      selectedCity,
-      departamento: text(document.getElementById('ck-departamento')?.value),
-      address,
-      referencia: text(document.getElementById('ck-referencia')?.value),
-      shipping,
-      documentNumber: readDocumentNumber(shipping.method),
-      paymentMethod,
-      subtotal: cartTotal(items),
-    });
+    const documentNumber = readDocumentNumber(shipping.method);
+    return {
+      ...composeCheckoutDraft({
+        requestId: requestId(),
+        items,
+        name,
+        phone: readPhone(),
+        contactEmail: text(document.getElementById('ck-email')?.value).toLowerCase(),
+        notes: text(document.getElementById('ck-notes')?.value).slice(0, 1000),
+        selectedCity,
+        departamento: text(document.getElementById('ck-departamento')?.value),
+        address,
+        referencia: text(document.getElementById('ck-referencia')?.value),
+        shipping,
+        paymentMethod,
+        subtotal: cartTotal(items),
+      }),
+      documentNumber,
+    };
   }
 
   async function reserveCheckoutGuard(draft) {
