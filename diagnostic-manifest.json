@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-18T13:51:09.281Z",
-  "sourceFingerprint": "93d9cd34b932841c4156f40e5d400c7d1354b150f81b6d50b69a03a5fe477a59",
+  "generatedAt": "2026-08-18T14:26:34.580Z",
+  "sourceFingerprint": "53dd8e5bb470bed21560f6ca005362237308229d5451e466bb9bbee2d5cc6c97",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 665,
     "textFiles": 633,
-    "totalBytes": 7547002,
+    "totalBytes": 7558500,
     "pages": 18,
     "modules": 413
   },
@@ -8124,8 +8124,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 94509,
-      "sha256": "606da26121bdbdc2316b46f91b6dbf8f596f221039249cec074ca7ad706f6ce5",
+      "bytes": 106007,
+      "sha256": "0923e20ac9a7df8dc96ef5b669b7f213e08e18a04d83a8a4c98175363fcea94b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8177,22 +8177,22 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 1823
+          "line": 1841
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260815-profile-routes-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 1824
+          "line": 1842
         },
         {
           "raw": "tienda.js?v=tintin-20260817-mobile-accordion-2",
           "target": "tienda.js",
-          "line": 1825
+          "line": 1843
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1826
+          "line": 1844
         }
       ],
       "styles": [
@@ -8237,7 +8237,7 @@
           "line": 44
         },
         {
-          "raw": "css/pages/checkout/checkout.css?v=tintin-20260818-pay-icons-1",
+          "raw": "css/pages/checkout/checkout.css?v=tintin-20260818-text-icons-1",
           "target": "css/pages/checkout/checkout.css",
           "line": 45
         },
@@ -8297,7 +8297,7 @@
         {
           "raw": "https://wa.me/595981299331",
           "target": null,
-          "text": "💬 Consultar por mi pedido",
+          "text": "Consultar por mi pedido",
           "id": "ck-wa-support",
           "ariaLabel": "",
           "title": "",
@@ -8307,7 +8307,7 @@
         {
           "raw": "/",
           "target": null,
-          "text": "🏠 Volver al inicio",
+          "text": "Volver al inicio",
           "id": "",
           "ariaLabel": "",
           "title": "",
@@ -8343,25 +8343,25 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 1823,
+          "line": 1841,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260815-profile-routes-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 1824,
+          "line": 1842,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20260817-mobile-accordion-2",
           "target": "tienda.js",
-          "line": 1825,
+          "line": 1843,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1826,
+          "line": 1844,
           "exists": true
         },
         {
@@ -8407,7 +8407,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/checkout/checkout.css?v=tintin-20260818-pay-icons-1",
+          "raw": "css/pages/checkout/checkout.css?v=tintin-20260818-text-icons-1",
           "target": "css/pages/checkout/checkout.css",
           "line": 45,
           "exists": true
@@ -16294,7 +16294,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 330173,
-      "sha256": "fd9021126c3e010ff710665ce43072ee5e7d1581aa14c02fedcc023afc2393c0",
+      "sha256": "0fc425277c1d5a330453768720da92ea2bf065f6f5395788e11c0fcf09fdc3bd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26938,8 +26938,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 94509,
-      "sha256": "606da26121bdbdc2316b46f91b6dbf8f596f221039249cec074ca7ad706f6ce5"
+      "bytes": 106007,
+      "sha256": "0923e20ac9a7df8dc96ef5b669b7f213e08e18a04d83a8a4c98175363fcea94b"
     },
     {
       "path": "cloudflare/firebase-admin-ligero.js",
@@ -27017,13 +27017,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 330173,
-      "sha256": "fd9021126c3e010ff710665ce43072ee5e7d1581aa14c02fedcc023afc2393c0"
+      "sha256": "0fc425277c1d5a330453768720da92ea2bf065f6f5395788e11c0fcf09fdc3bd"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 330088,
-      "sha256": "f51fd26e5e386bc61bb6854c599af418ddcda4f9bcb44a66975c01b37bd175fa"
+      "sha256": "bb2ffa5ad5f75d1080f7b8fa5516239b5332532dc100315959cd53f5e50557f7"
     },
     {
       "path": "config/public-site.json",
@@ -30440,7 +30440,7 @@
     },
     {
       "file": "checkout.html",
-      "line": 915,
+      "line": 916,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
@@ -31528,7 +31528,7 @@
     },
     {
       "file": "checkout.html",
-      "line": 1698,
+      "line": 1716,
       "target": "https://overpass-api.de/api/interpreter",
       "method": "POST"
     },
@@ -32239,7 +32239,7 @@
         "references": [
           {
             "file": "checkout.html",
-            "line": 759,
+            "line": 760,
             "operation": "collection"
           },
           {
@@ -32779,12 +32779,12 @@
           },
           {
             "file": "checkout.html",
-            "line": 1564,
+            "line": 1582,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 1806,
+            "line": 1824,
             "operation": "doc"
           },
           {
