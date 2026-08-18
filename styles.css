@@ -1495,7 +1495,9 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--white);
+  /* Sin !important pierde contra el span{color:var(--tt-text)!important}
+     genérico de tema-unificado-tintin.css, que se carga después. */
+  color: var(--white) !important;
   text-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 
