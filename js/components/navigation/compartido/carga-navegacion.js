@@ -1,5 +1,5 @@
 import { currentPage } from './estado-ruta.js';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260818-responsive-shell-realtime-1';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;
@@ -142,7 +142,7 @@ function attachProductsDemand() {
 function attachLightweightCommerceDemand() {
   bindDemand(
     '[data-nav-action="account"],[data-shell-route="account"],#tabbar-account',
-    () => Promise.all([loadAuthRuntime(), loadNotificationsRuntime()])
+    loadAuthRuntime
   );
   bindDemand(
     '[data-nav-action="cart"],[data-shell-route="cart"],#tabbar-cart',
@@ -177,10 +177,17 @@ export function loadSharedRuntime() {
   attachProductsDemand();
   loadNavigationBehaviors();
 
-  // Páginas informativas (Nosotros, Contacto, ayuda, legales y 404) no
-  // necesitan abrir Firebase/Auth, carrito, notificaciones ni colecciones al
-  // cargar. Conservan exactamente las mismas superficies; esos runtimes se
-  // hidratan cuando la persona muestra intención de usarlos.
+  /* Las notificaciones son infraestructura en vivo, no una mejora bajo
+     demanda. Se inicia el listener Firestore en TODAS las páginas públicas
+     apenas el shell está listo, independientemente del tamaño de pantalla o
+     del tipo de página. No usa polling ni espera a abrir la campana. */
+  void loadNotificationsRuntime().catch(error => {
+    console.warn('[PublicShell] No se pudieron iniciar las notificaciones realtime.', error);
+  });
+
+  // Páginas informativas mantienen catálogo, carrito, cuenta y colecciones
+  // bajo demanda para no abrir trabajo que no necesitan. Solo notificaciones
+  // permanece siempre conectada porque debe reaccionar en tiempo real.
   if (!FULL_COMMERCE_PAGES.has(page)) {
     attachLightweightCommerceDemand();
     return;
@@ -191,9 +198,6 @@ export function loadSharedRuntime() {
   if (page === 'cart') critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')));
 
   Promise.allSettled(critical).then(reportRuntimeFailures);
-  void loadNotificationsRuntime().catch(error => {
-    console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
-  });
 
   scheduleNonCritical(() => {
     Promise.allSettled([
