@@ -1,0 +1,50 @@
+name: Merge main into PR471
+
+on:
+  push:
+    branches:
+      - fix/realtime-notifications-responsive-shell
+
+permissions:
+  contents: write
+
+jobs:
+  merge-main:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: fix/realtime-notifications-responsive-shell
+          fetch-depth: 0
+      - name: Merge latest main without losing checkout work
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          set +e
+          git merge --no-ff --no-commit origin/main
+          merge_status=$?
+          set -e
+          conflicts="$(git diff --name-only --diff-filter=U)"
+          if [ -n "$conflicts" ]; then
+            echo "Conflicts detected:"
+            echo "$conflicts"
+            unexpected="$(echo "$conflicts" | grep -v '^diagnostic-manifest.json$' || true)"
+            if [ -n "$unexpected" ]; then
+              echo "Unexpected conflicts; refusing automatic resolution."
+              exit 1
+            fi
+            git checkout --theirs -- diagnostic-manifest.json
+            git add diagnostic-manifest.json
+          elif [ "$merge_status" -ne 0 ]; then
+            echo "Merge failed without a resolvable diagnostic conflict."
+            exit "$merge_status"
+          fi
+          if git rev-parse -q --verify MERGE_HEAD >/dev/null; then
+            git commit -m "chore: integrar main actual antes del cierre"
+            git push origin HEAD:fix/realtime-notifications-responsive-shell
+          else
+            echo "Branch already contains main."
+          fi
