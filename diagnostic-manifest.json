@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-17T20:31:41.993Z",
-  "sourceFingerprint": "aee2988317fc4c912f546e61ecd2739660e3137d4072cb7666733be88a2b0640",
+  "generatedAt": "2026-08-17T22:07:48.691Z",
+  "sourceFingerprint": "5c4ac6e3bbc3333a1c340a68dbb8317559f7fc1548f0cd6e93ef1712017c08e2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 663,
     "textFiles": 631,
-    "totalBytes": 7452785,
+    "totalBytes": 7451960,
     "pages": 18,
     "modules": 412
   },
@@ -1226,8 +1226,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 36676,
-      "sha256": "6dddb30c0732cd5b9bc4f4e4bf2b7601979a88862139dd30942231bba80a2a42",
+      "bytes": 36699,
+      "sha256": "a5cfb7a830515f40dfa7eaa0da3247094e6755b49e84a2bc75e2e44ce69a1184",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1773,8 +1773,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 165010,
-      "sha256": "fc62f9eb1c0c2660939f504885e20f86b16aebfcaaebfd87c2cce1fd970add27",
+      "bytes": 165012,
+      "sha256": "155740cb6d24906036ab4fb49bf80418f7dbef9a2329a2ba567ee192197711c1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1895,7 +1895,7 @@
           "line": 31
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20260814-tcg-panel-extend-4",
+          "raw": "css/admin/admin.css?v=tintin-20260817-margin-consistency-2",
           "target": "css/admin/admin.css",
           "line": 32
         },
@@ -2119,7 +2119,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20260814-tcg-panel-extend-4",
+          "raw": "css/admin/admin.css?v=tintin-20260817-margin-consistency-2",
           "target": "css/admin/admin.css",
           "line": 32,
           "exists": true
@@ -7403,7 +7403,7 @@
         "client"
       ],
       "bytes": 52600,
-      "sha256": "d32e2b0d498506ecaf3d9787d7b590de63c45f4f61a6781b2d79aec042c22911",
+      "sha256": "3891113add9b0aef8f6947d4cd4c183880d32df71ccb15627b3cf59317072834",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8805,7 +8805,7 @@
         "client"
       ],
       "bytes": 15970,
-      "sha256": "9ae82447612c226de1ab8231b1770bbb1fda9e333579886eb0bce0b40d984d2f",
+      "sha256": "eacb3a6eba14fd802379854f49c70ea070a7f575fa4082c1b4259839a652d15c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8957,7 +8957,7 @@
           "line": 59
         },
         {
-          "raw": "css/pages/collections/collections-page.css?v=tintin-20260811-cls-desktop-stable-2",
+          "raw": "css/pages/collections/collections-page.css?v=tintin-20260817-margin-consistency-2",
           "target": "css/pages/collections/collections-page.css",
           "line": 60
         },
@@ -9320,7 +9320,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/collections/collections-page.css?v=tintin-20260811-cls-desktop-stable-2",
+          "raw": "css/pages/collections/collections-page.css?v=tintin-20260817-margin-consistency-2",
           "target": "css/pages/collections/collections-page.css",
           "line": 60,
           "exists": true
@@ -21204,8 +21204,8 @@
     },
     {
       "path": "js/pages/catalog/mantenimiento-catalogo.js",
-      "bytes": 9894,
-      "sha256": "21c5f0a54a076fdcfc6b1fd9dae8db828b220f56693938f3a64deb90ea7e7c09",
+      "bytes": 9895,
+      "sha256": "a751755cd61b8a63c19d00a7d7c3d9e5ce8acf7b579ead3177a4e8c311c4db07",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26698,14 +26698,14 @@
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 36676,
-      "sha256": "6dddb30c0732cd5b9bc4f4e4bf2b7601979a88862139dd30942231bba80a2a42"
+      "bytes": 36699,
+      "sha256": "a5cfb7a830515f40dfa7eaa0da3247094e6755b49e84a2bc75e2e44ce69a1184"
     },
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 165010,
-      "sha256": "fc62f9eb1c0c2660939f504885e20f86b16aebfcaaebfd87c2cce1fd970add27"
+      "bytes": 165012,
+      "sha256": "155740cb6d24906036ab4fb49bf80418f7dbef9a2329a2ba567ee192197711c1"
     },
     {
       "path": "apple-touch-icon.png",
@@ -26915,7 +26915,7 @@
       "path": "catalogo.html",
       "extension": ".html",
       "bytes": 52600,
-      "sha256": "d32e2b0d498506ecaf3d9787d7b590de63c45f4f61a6781b2d79aec042c22911"
+      "sha256": "3891113add9b0aef8f6947d4cd4c183880d32df71ccb15627b3cf59317072834"
     },
     {
       "path": "checkout.html",
@@ -26993,7 +26993,7 @@
       "path": "collections.html",
       "extension": ".html",
       "bytes": 15970,
-      "sha256": "9ae82447612c226de1ab8231b1770bbb1fda9e333579886eb0bce0b40d984d2f"
+      "sha256": "eacb3a6eba14fd802379854f49c70ea070a7f575fa4082c1b4259839a652d15c"
     },
     {
       "path": "config/csp-runtime.js",
@@ -27035,7 +27035,7 @@
       "path": "css/admin/admin.css",
       "extension": ".css",
       "bytes": 78591,
-      "sha256": "fc5087a5473324b09e4ea0d97dcf5e245efedb84c0c610dc7bb5a64923151114"
+      "sha256": "8a3083aa88dd1d987494c18321b2cab33f5f5728ada2e7890b155d6d1d80f0b4"
     },
     {
       "path": "css/admin/diagnostico-maestro.css",
@@ -27226,8 +27226,8 @@
     {
       "path": "css/pages/catalog/catalog-maintenance.css",
       "extension": ".css",
-      "bytes": 9993,
-      "sha256": "d555957a79d2b9ec0fa64514b6a6d66ba5f10982028391eae099383402e7cc07"
+      "bytes": 10024,
+      "sha256": "5dba057131bdf1aa7f13835052d183f9ce5af530563c4c4ee2a7ac36b44ddec5"
     },
     {
       "path": "css/pages/checkout/checkout-maintenance.css",
@@ -27244,8 +27244,8 @@
     {
       "path": "css/pages/collections/collections-page.css",
       "extension": ".css",
-      "bytes": 12676,
-      "sha256": "21c4c5076c74b9a122604bd0e7a704061ec7f245ae39a0d1151b81332b8cf080"
+      "bytes": 11794,
+      "sha256": "389d13d0212ffec121f212f0d095f9be49b5b2ecf4a64d7bde98915f46e9892c"
     },
     {
       "path": "css/pages/home/ajuste-inicio.css",
@@ -28846,8 +28846,8 @@
     {
       "path": "js/pages/catalog/mantenimiento-catalogo.js",
       "extension": ".js",
-      "bytes": 9894,
-      "sha256": "21c5f0a54a076fdcfc6b1fd9dae8db828b220f56693938f3a64deb90ea7e7c09"
+      "bytes": 9895,
+      "sha256": "a751755cd61b8a63c19d00a7d7c3d9e5ce8acf7b579ead3177a4e8c311c4db07"
     },
     {
       "path": "js/pages/catalog/politica-exhibicion-catalogo.js",

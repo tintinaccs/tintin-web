@@ -257,7 +257,7 @@
        --tcg-max-w, así queda "contenido y respirable" en pantallas anchas
        sin afectar tablet/mobile (que siguen ocupando el 100% disponible). */
     :root {
-      --tcg-max-w: 1440px;
+      --tcg-max-w: 1280px;
       --tcg-space-sm: 12px;
       --tcg-space-md: 20px;
       --tcg-space-lg: 28px;
@@ -267,7 +267,7 @@
     .adm-content {
       max-width: var(--tcg-max-w);
       margin-inline: auto;
-      padding: var(--tcg-space-lg) 32px;
+      padding: var(--tcg-space-lg) 24px;
       flex: 1;
       width: 100%;
     }
@@ -1545,7 +1545,7 @@
 
       .adm-nav-bottom { padding: 8px 0 16px; }
       .adm-hamburger { display: none; }
-      .adm-content { max-width: none; padding: 16px; }
+      .adm-content { max-width: none; padding: 24px; }
       .adm-stats { grid-template-columns: repeat(2, 1fr); }
     }
 
@@ -1572,7 +1572,7 @@
       .adm-content {
         max-width: none;
         min-width: 0;
-        padding: 10px;
+        padding: 16px;
       }
       .adm-content > *,
       .adm-section,
