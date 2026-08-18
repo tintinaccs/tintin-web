@@ -1,68 +1,44 @@
 /**
- * TINTIN — cliente de creación segura de pedidos.
+ * TINTIN — Cliente del endpoint server-side de pedidos (Fase 4).
  *
- * La creación vive en /api/create-order (Cloudflare Pages Functions) y usa
- * la cuenta de servicio de Firebase del servidor. Así el checkout no depende
- * de que una versión manual de Google Apps Script tenga exactamente los
- * mismos archivos auxiliares desplegados.
+ * Llama a la acción `createOrder` del mismo Apps Script que ya manda los
+ * correos (ver js/email/notificaciones-correo.js), autenticado con el idToken real de
+ * quien compra. El Apps Script corre con la identidad de su dueño
+ * (ScriptApp.getOAuthToken()) y por eso no pasa por el límite de 1000
+ * expresiones de firestore.rules ni por ningún tope de productos —
+ * ver apps-script/CrearPedido.gs para la validación completa.
  */
+import { EMAIL_WEBHOOK_URL } from './email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1';
 import { auth } from './core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
-import { apiUrl } from './core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
-
-function digits(value, max = 40) {
-  return String(value == null ? '' : value).replace(/\D/g, '').slice(0, max);
-}
 
 function phoneForOrderServer(value) {
-  // La UI conserva +595... como formato canónico de contacto; el contrato de
-  // transporte manda solo dígitos para que servidor, Sheets y WhatsApp usen
-  // una representación única.
-  return digits(value, 20);
-}
-
-function documentForOrderServer() {
-  const exposed = window.TintinCheckoutInputEnhancements?.documentNumberDigits?.();
-  if (exposed != null) return digits(exposed, 8);
-  return digits(document.getElementById('ck-document-number')?.value, 8);
+  // El checkout normaliza el teléfono a formato internacional con "+"
+  // (ej. +595981299331), pero el Apps Script desplegado valida actualmente
+  // sólo díitos (8–20). Adaptamos únicamente el payload de transporte para
+  // mantener la UI y el perfil en formato internacional sin bloquear pedidos.
+  return String(value == null ? '' : value).replace(/\D/g, '');
 }
 
 export async function createOrderViaServer(draft) {
-  const user = auth.currentUser;
-  const idToken = await user?.getIdToken(true);
+  const idToken = await auth.currentUser?.getIdToken(true);
   if (!idToken) return { ok: false, error: 'missing_id_token' };
 
   const serverDraft = {
     ...draft,
-    phone: phoneForOrderServer(draft?.phone),
-    documentNumber: documentForOrderServer(),
+    phone: phoneForOrderServer(draft?.phone)
   };
 
-  let response;
-  try {
-    response = await fetch(apiUrl('create-order'), {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${idToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(serverDraft),
-    });
-  } catch (error) {
-    console.error('[create-order-client] No se pudo conectar con el endpoint de pedidos.', error);
-    return { ok: false, error: 'server_error' };
-  }
+  const response = await fetch(EMAIL_WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'createOrder', idToken, ...serverDraft })
+  });
 
   const body = await response.text();
-  let data;
   try {
-    data = JSON.parse(body);
+    return JSON.parse(body);
   } catch {
     console.error('[create-order-client] El endpoint devolvió una respuesta no válida. HTTP', response.status);
     return { ok: false, error: 'invalid_response', status: response.status };
   }
-
-  if (!response.ok && data?.ok !== false) {
-    return { ok: false, error: data?.error || 'server_error', status: response.status };
-  }
-  return data;
 }
