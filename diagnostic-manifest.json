@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-18T13:08:35.010Z",
-  "sourceFingerprint": "89ffe6b646875146e27efbc1c7c2a2f4e807a0e5cd1ad351af4ea6cddffb415f",
+  "generatedAt": "2026-08-18T13:29:19.313Z",
+  "sourceFingerprint": "1763f30bdb5edbfd6a1fafc42100627e75df4c92dbd34437289eb3129bacfcaa",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 665,
     "textFiles": 633,
-    "totalBytes": 7544772,
+    "totalBytes": 7546336,
     "pages": 18,
     "modules": 413
   },
@@ -8124,8 +8124,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 92279,
-      "sha256": "e748b6794e6eee5da1868ba6abae56c79bae9220f3d9dc48a04d3a2cff2d06b6",
+      "bytes": 93843,
+      "sha256": "f8a81e5e83a083a0195ab5d4e35d1729ba84225e9de71858c83070cbf49d8ff2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8237,7 +8237,7 @@
           "line": 44
         },
         {
-          "raw": "css/pages/checkout/checkout.css?v=tintin-20260818-panel-title-icons-1",
+          "raw": "css/pages/checkout/checkout.css?v=tintin-20260818-icon-containers-1",
           "target": "css/pages/checkout/checkout.css",
           "line": 45
         },
@@ -8407,7 +8407,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/checkout/checkout.css?v=tintin-20260818-panel-title-icons-1",
+          "raw": "css/pages/checkout/checkout.css?v=tintin-20260818-icon-containers-1",
           "target": "css/pages/checkout/checkout.css",
           "line": 45,
           "exists": true
@@ -8513,7 +8513,7 @@
             "ck-enc-mode"
           ],
           "type": "button",
-          "text": "🏢 Retiro en agencia Lo pasás a buscar por la transportadora",
+          "text": "Retiro en agencia Lo pasás a buscar por la transportadora",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -8527,7 +8527,7 @@
             "ck-enc-mode"
           ],
           "type": "button",
-          "text": "🏠 Entrega en puerta Te lo llevan a tu dirección",
+          "text": "Entrega en puerta Te lo llevan a tu dirección",
           "ariaLabel": "",
           "title": "",
           "inlineHandler": false,
@@ -16294,7 +16294,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 330173,
-      "sha256": "cec93074a233f3e8a9eb3360999309cee853ad2019accf66fb9e5fca92a46d6b",
+      "sha256": "fd9021126c3e010ff710665ce43072ee5e7d1581aa14c02fedcc023afc2393c0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26938,8 +26938,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 92279,
-      "sha256": "e748b6794e6eee5da1868ba6abae56c79bae9220f3d9dc48a04d3a2cff2d06b6"
+      "bytes": 93843,
+      "sha256": "f8a81e5e83a083a0195ab5d4e35d1729ba84225e9de71858c83070cbf49d8ff2"
     },
     {
       "path": "cloudflare/firebase-admin-ligero.js",
@@ -27017,13 +27017,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 330173,
-      "sha256": "cec93074a233f3e8a9eb3360999309cee853ad2019accf66fb9e5fca92a46d6b"
+      "sha256": "fd9021126c3e010ff710665ce43072ee5e7d1581aa14c02fedcc023afc2393c0"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 330088,
-      "sha256": "5ef1a9cdacb99c786a150320f8f0297a2c5d17c66420335b2650325c35dc0048"
+      "sha256": "f51fd26e5e386bc61bb6854c599af418ddcda4f9bcb44a66975c01b37bd175fa"
     },
     {
       "path": "config/public-site.json",
