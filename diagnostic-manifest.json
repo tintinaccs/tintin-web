@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-18T15:34:06.232Z",
-  "sourceFingerprint": "dcafbf68fa04fb07fd971c914eb041f4d7a83a4232fbedd07d33db4eaba34045",
+  "generatedAt": "2026-08-18T15:38:56.730Z",
+  "sourceFingerprint": "df023870838cb7ea75998266c8f2ce3fddf5113166ce25b5ed325b51b34edf9a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 665,
     "textFiles": 633,
-    "totalBytes": 7574623,
+    "totalBytes": 7576062,
     "pages": 18,
     "modules": 413
   },
@@ -7402,8 +7402,8 @@
         "guest",
         "client"
       ],
-      "bytes": 52656,
-      "sha256": "3c9bfbfcf64d1ea0b77fb58a3d32d4b343fe32178b254fbaa7767bbd120726d9",
+      "bytes": 53269,
+      "sha256": "b4ea05b39cffa794ceb9e099b4b770f042534e6c4e60c3e2d5a364ed633162a6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8124,8 +8124,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 106010,
-      "sha256": "c1c159801e60e2ffd05cbbde598fe497dcdfd9ba3a533b397c7e5be60824df1b",
+      "bytes": 106836,
+      "sha256": "ba68e4b69a3a642fa11c7674bf4770acabfa718fae2753536711a20cd7231cd1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16294,7 +16294,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 330173,
-      "sha256": "fc6a202b464f9e6da7da268d6829143121f8732175300b9d83c0eb223bc011a4",
+      "sha256": "b64c1fd7dd8fecbb796713362b0b119256d994da8d03df33b05d21f58cb36382",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26932,14 +26932,14 @@
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 52656,
-      "sha256": "3c9bfbfcf64d1ea0b77fb58a3d32d4b343fe32178b254fbaa7767bbd120726d9"
+      "bytes": 53269,
+      "sha256": "b4ea05b39cffa794ceb9e099b4b770f042534e6c4e60c3e2d5a364ed633162a6"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 106010,
-      "sha256": "c1c159801e60e2ffd05cbbde598fe497dcdfd9ba3a533b397c7e5be60824df1b"
+      "bytes": 106836,
+      "sha256": "ba68e4b69a3a642fa11c7674bf4770acabfa718fae2753536711a20cd7231cd1"
     },
     {
       "path": "cloudflare/firebase-admin-ligero.js",
@@ -27017,13 +27017,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 330173,
-      "sha256": "fc6a202b464f9e6da7da268d6829143121f8732175300b9d83c0eb223bc011a4"
+      "sha256": "b64c1fd7dd8fecbb796713362b0b119256d994da8d03df33b05d21f58cb36382"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 330088,
-      "sha256": "6597ebeec4a2fcc0a688827a8bece60f1e85947418755beb640961bee534c55c"
+      "sha256": "7ddc2a00b2f502b044439d0e8b5665aba76c4ffc816924550a8993e8abbb028e"
     },
     {
       "path": "config/public-site.json",

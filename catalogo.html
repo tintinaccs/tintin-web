@@ -695,7 +695,7 @@ function renderGrid(lista) {
   if (!lista.length) {
     grid.innerHTML = `
       <div class="cat-empty">
-        <div class="cat-empty-icon">😔</div>
+        <div class="cat-empty-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5-2 4-2 4 2 4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
         <div style="font-size:16px;font-weight:800;text-transform:uppercase;margin-bottom:6px">Sin resultados</div>
         <div style="font-size:13px;margin-bottom:20px">No hay productos disponibles en esta categoría</div>
         <a href="/catalogo" class="tt-btn tt-btn-sm">Ver todo el catálogo →</a>
@@ -710,8 +710,8 @@ function renderGrid(lista) {
     const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;
     const imageUrl = safeCatalogImageUrl(p.imageUrl);
     const imgHtml = imageUrl
-      ? `<img src="${escapeCatalogHtml(imageUrl)}" alt="${safeAlt}" loading="lazy" decoding="async"><div class="cat-card-placeholder" hidden aria-hidden="true">✨</div>`
-      : `<div class="cat-card-placeholder" aria-hidden="true">✨</div>`;
+      ? `<img src="${escapeCatalogHtml(imageUrl)}" alt="${safeAlt}" loading="lazy" decoding="async"><div class="cat-card-placeholder" hidden aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></div>`
+      : `<div class="cat-card-placeholder" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></div>`;
     const inStock = isInStockCat(p);
     const isNew = Boolean(inStock && window.TintinCatalogMerchandising?.isNewProduct?.(p));
     const hasVariants = window.TintinCatalogPolicy?.hasVariants
