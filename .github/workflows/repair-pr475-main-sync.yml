@@ -1,0 +1,73 @@
+name: Sincronizar PR 475 con main
+
+on:
+  push:
+    branches:
+      - fix/global-unified-realtime-checkout-v3
+    paths:
+      - '.github/workflows/repair-pr475-main-sync.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repair-pr475-main-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout rama exacta
+        uses: actions/checkout@v5
+        with:
+          ref: fix/global-unified-realtime-checkout-v3
+          fetch-depth: 0
+
+      - name: Configurar Git
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+      - name: Integrar main vigente
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git merge --no-edit origin/main
+
+      - name: Retirar helper antes de generar manifiestos
+        run: git rm .github/workflows/repair-pr475-main-sync.yml
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Regenerar artefactos reproducibles
+        run: npm run build:pages
+
+      - name: Verificar rutas, CSP, diagnóstico y caché
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run verify:routes
+          npm run verify:csp
+          npm run verify:diagnostics
+          npm run audit:cache-versioning
+
+      - name: Guardar sincronización
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(ci): regenerar artefactos tras sincronizar #475'
+          fi
+          git push origin HEAD:fix/global-unified-realtime-checkout-v3
