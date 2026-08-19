@@ -174,20 +174,6 @@
     /* ── Catalog Layout ── */
     .cat-wrap { max-width: 1280px; margin: 0 auto; padding: 24px 24px 36px; }
 
-    .cat-hero {
-      background: #fce4ec; border-radius: 20px;
-      padding: 34px 32px; margin-bottom: 28px; text-align: center;
-      margin-top: var(--header-h);
-    }
-    .cat-hero-title {
-      font-size: clamp(28px, 4vw, 48px); font-weight: 900;
-      text-transform: uppercase; letter-spacing: .04em; color: var(--acc); line-height: 1;
-    }
-    .cat-hero-sub {
-      font-size: 13px; font-weight: 600; color: var(--text-muted);
-      margin-top: 8px; letter-spacing: .1em; text-transform: uppercase;
-    }
-
     .cat-layout { display: grid; grid-template-columns: 240px 1fr; gap: 28px; align-items: start; }
 
     .cat-sidebar {
@@ -300,7 +286,6 @@
     }
     @media (max-width: 768px) {
       .cat-layout { grid-template-columns: 1fr; gap: 0; }
-      .cat-hero { margin-top: 0; }
       .cat-sidebar {
         display: block; position: static; max-height: 0; opacity: 0; overflow: hidden;
         padding-top: 0; padding-bottom: 0; border-width: 0; transform: translateY(-8px);
@@ -326,9 +311,6 @@
     @media (max-width: 480px) {
       .cat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .cat-wrap { padding: 20px 16px 80px; }
-      .cat-hero { padding: 20px 12px 24px; margin-bottom: 18px; }
-      .cat-hero-title { font-size: clamp(25px, 8vw, 34px); }
-      .cat-hero-sub { font-size: 10px; letter-spacing: .07em; }
       .cat-top { padding: 14px; }
       .cat-controls { display: grid; grid-template-columns: 1fr; }
       .cat-search, .cat-sort { width: 100%; }
@@ -356,13 +338,15 @@
 <body>
 
 
-<div class="cat-wrap">
+<!-- HERO -->
+<section class="tt-page-hero" data-tt-editable="catalogo" data-tt-section="header" aria-labelledby="cat-titulo">
+  <div class="container">
+    <h1 class="tt-page-hero-title" id="cat-titulo">Todo el catálogo</h1>
+    <p class="tt-page-hero-sub" id="cat-subtitulo">Descubrí todos nuestros accesorios</p>
+  </div>
+</section>
 
-  <!-- HERO -->
-  <section class="cat-hero" data-tt-editable="catalogo" data-tt-section="header" aria-labelledby="cat-titulo">
-    <h1 class="cat-hero-title" id="cat-titulo">Todo el catálogo</h1>
-    <div class="cat-hero-sub" id="cat-subtitulo">Descubrí todos nuestros accesorios</div>
-  </section>
+<div class="cat-wrap">
 
   <!-- TABS MOBILE -->
   <nav class="cat-tabs-mobile" id="cat-tabs-mobile" aria-label="Categorías del catálogo">
