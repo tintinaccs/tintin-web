@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-18T19:24:34.462Z",
-  "sourceFingerprint": "60c151e64b02cd0767517c5d8d28a98b950c932b588de8278de5dee3f0df937c",
+  "generatedAt": "2026-08-20T15:02:28.475Z",
+  "sourceFingerprint": "30db8a283fe78af10324c43d3b2655d01a67b679f324defcc11168fd168f34d2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 669,
-    "textFiles": 637,
-    "totalBytes": 7619225,
+    "files": 692,
+    "textFiles": 660,
+    "totalBytes": 7837294,
     "pages": 18,
-    "modules": 417
+    "modules": 433
   },
   "viewports": [
     {
@@ -16044,6 +16044,69 @@
       "endpoints": []
     },
     {
+      "path": "cloudflare/estudio-codigo-core.js",
+      "bytes": 17457,
+      "sha256": "106e6a5e2e0123cf9b3f8d80e781b672b736665c414fa662c59b05f729fc6eca",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://console.firebase.google.com/project/$%7BencodeURIComponent(project",
+          "line": 257
+        }
+      ]
+    },
+    {
+      "path": "cloudflare/estudio-codigo-github.js",
+      "bytes": 19187,
+      "sha256": "0cda8043a67e8721eb91c0756a900580a284a66148ba4ae6866c7b6b606a6ab0",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./estudio-codigo-core.js",
+          "target": "cloudflare/estudio-codigo-core.js",
+          "dynamic": false,
+          "line": 13
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://api.github.com/",
+          "line": 15
+        }
+      ]
+    },
+    {
+      "path": "cloudflare/estudio-codigo-ia.js",
+      "bytes": 5479,
+      "sha256": "0f7f89ab03b9f5cdf46e542d650654bd4d358b9a7774ca48b08eeebfd00e8b79",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./estudio-codigo-core.js",
+          "target": "cloudflare/estudio-codigo-core.js",
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "./estudio-codigo-github.js",
+          "target": "cloudflare/estudio-codigo-github.js",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "cloudflare/firebase-admin-ligero.js",
       "bytes": 18666,
       "sha256": "6ca37968932e4ac02165a9625858d44f686b06210668507ef69b8bd24a35dca7",
@@ -16091,6 +16154,17 @@
       "path": "cloudflare/inyectar-diagnostico-maestro-admin.js",
       "bytes": 1596,
       "sha256": "29cd03e4e6dd9bdc378406ed980b122044e4fc4b9263d00f65d8e9b5db73a57b",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "cloudflare/inyectar-estudio-codigo-admin.js",
+      "bytes": 2454,
+      "sha256": "cb206ee13aa9b25c0929aa863aaac08047ac233fc5648e17898a2ff269c93d39",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16311,8 +16385,8 @@
     },
     {
       "path": "config/csp-runtime.js",
-      "bytes": 330173,
-      "sha256": "28da097516483e7842a3bac913b550eed76ce0eb2343978f82e661823c30168d",
+      "bytes": 338597,
+      "sha256": "ee440fbf216b957d8b4adef2c30d05059d9ed7667dd27fda33bd5bbe272ad167",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16491,8 +16565,8 @@
     },
     {
       "path": "functions/admin.js",
-      "bytes": 517,
-      "sha256": "7c3b2816f4cdcbfa1a80aedb80eb0768fb1a0b5c83b88108a15df3567dad2cb4",
+      "bytes": 1133,
+      "sha256": "b3abeb427ec36468d3e07ee17cb2bef6a7d2ad6a8aaecff96e4ed3571b330c93",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16509,6 +16583,12 @@
           "target": "cloudflare/inyectar-diagnostico-maestro-admin.js",
           "dynamic": false,
           "line": 2
+        },
+        {
+          "raw": "../cloudflare/inyectar-estudio-codigo-admin.js",
+          "target": "cloudflare/inyectar-estudio-codigo-admin.js",
+          "dynamic": false,
+          "line": 3
         }
       ],
       "endpoints": []
@@ -16636,6 +16716,180 @@
           "line": 52
         }
       ]
+    },
+    {
+      "path": "functions/api/code-studio/[[path]].js",
+      "bytes": 20655,
+      "sha256": "36011b532e203caa3172989f1392df5c4efbdd9b61072dbb1d73aa2685421e73",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../../cloudflare/estudio-codigo-core.js",
+          "target": "cloudflare/estudio-codigo-core.js",
+          "dynamic": false,
+          "line": 21
+        },
+        {
+          "raw": "../../../cloudflare/estudio-codigo-github.js",
+          "target": "cloudflare/estudio-codigo-github.js",
+          "dynamic": false,
+          "line": 38
+        },
+        {
+          "raw": "../../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 45
+        },
+        {
+          "raw": "../../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 52
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "functions/api/code-studio/ai/analyze.js",
+      "bytes": 2277,
+      "sha256": "b71f88d553fecfde219fdcebf8e9b20fb4ab70fb7af9d499e37248c1a2ca0c36",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../../../cloudflare/estudio-codigo-core.js",
+          "target": "cloudflare/estudio-codigo-core.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../../../../cloudflare/estudio-codigo-ia.js",
+          "target": "cloudflare/estudio-codigo-ia.js",
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "functions/api/code-studio/graph.js",
+      "bytes": 2327,
+      "sha256": "1ebb407ba1a8728ef9b5b3c896d5be22fe40a1c2af41e367d0d118ca088278f4",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../../cloudflare/estudio-codigo-core.js",
+          "target": "cloudflare/estudio-codigo-core.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../../../cloudflare/estudio-codigo-github.js",
+          "target": "cloudflare/estudio-codigo-github.js",
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "functions/api/code-studio/merge.js",
+      "bytes": 3220,
+      "sha256": "e68d61854e8a7825228fc0951520f45af4c2f2548171d009de7098dedc1e89d5",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../../cloudflare/estudio-codigo-core.js",
+          "target": "cloudflare/estudio-codigo-core.js",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "../../../cloudflare/estudio-codigo-github.js",
+          "target": "cloudflare/estudio-codigo-github.js",
+          "dynamic": false,
+          "line": 10
+        },
+        {
+          "raw": "../../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 11
+        },
+        {
+          "raw": "../../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 12
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "functions/api/code-studio/restore.js",
+      "bytes": 5692,
+      "sha256": "34ee63f04561318bbfca5ed51747b792ba929c132d186b1993330f2429eeccd9",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../../cloudflare/estudio-codigo-core.js",
+          "target": "cloudflare/estudio-codigo-core.js",
+          "dynamic": false,
+          "line": 13
+        },
+        {
+          "raw": "../../../cloudflare/estudio-codigo-github.js",
+          "target": "cloudflare/estudio-codigo-github.js",
+          "dynamic": false,
+          "line": 18
+        },
+        {
+          "raw": "../../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 22
+        },
+        {
+          "raw": "../../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 28
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "functions/api/email-otp-send.js",
@@ -17981,6 +18235,54 @@
           "line": 569
         }
       ]
+    },
+    {
+      "path": "js/admin/estudio-codigo/estudio-codigo-admin.js",
+      "bytes": 62092,
+      "sha256": "48d6881b80a17277f60c5716885b9f97168f2b6ab8185efcee5ee196a305af31",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/core/firebase/firebase.js",
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "../../core/auth/roles.js",
+          "target": "js/core/auth/roles.js",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "js/admin/estudio-codigo/restaurar-estudio-codigo-admin.js",
+      "bytes": 5575,
+      "sha256": "fe140f00f65a74eabe5bf589e688ab76f50dd5ad71986d8d61001fcb3ee54c6e",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/core/firebase/firebase.js",
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../core/auth/roles.js",
+          "target": "js/core/auth/roles.js",
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "js/admin/importacion-admin.js",
@@ -23198,8 +23500,8 @@
     },
     {
       "path": "scripts/auditar-fase-11-seo.js",
-      "bytes": 9494,
-      "sha256": "d8a8d033967776f3c99b2343406335a0c5fdb92d2e20f64aa4ec508b4e54ca93",
+      "bytes": 9529,
+      "sha256": "45600d398221f35a895243c3c6563ae0e4c1679b35f1e949015b0ac285a1b3a4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23330,8 +23632,8 @@
     },
     {
       "path": "scripts/auditar-final-integracion.js",
-      "bytes": 10310,
-      "sha256": "397b6661d9fce875990058b53ba378ba59029688778e5bc6b1e64496eda65ef4",
+      "bytes": 10332,
+      "sha256": "45f9bb7a9f5410f8d1f35dfc12875862122e6eec40cc3787b0d237113e592532",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24459,8 +24761,8 @@
     },
     {
       "path": "scripts/auditar-tipografia.js",
-      "bytes": 12705,
-      "sha256": "8adc0f3f419b3c50e929711067c68a4994486dc0d88ee0ca609864974bc5aac7",
+      "bytes": 13000,
+      "sha256": "67ee65c760878afae1ce07d50d7bf385e3987b187cb4b49e218138082bcd8118",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24617,8 +24919,8 @@
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
-      "bytes": 25447,
-      "sha256": "8e0639509b0358d5792056cef9652ccabc5ce6f37310ad3f69e23b6c21b382bb",
+      "bytes": 25742,
+      "sha256": "f9ab3cd210daa6e1ce269835e2394280645a28f8a097f6d98ad02970eaac8eec",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25103,6 +25405,24 @@
       ]
     },
     {
+      "path": "scripts/resumir-auditoria-dependencias.mjs",
+      "bytes": 1427,
+      "sha256": "561e24764adf630fbca066b7158bf83b39fbd5e37f99d78849b3e7b2e604dd9d",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/servidor-local-pruebas.mjs",
       "bytes": 4980,
       "sha256": "710fcb37cd6d37776f0520e4f816923b45f34f2bff2c78dc30eddbf230ffb01e",
@@ -25164,6 +25484,30 @@
         "error": ""
       },
       "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/sincronizar-monaco-local.mjs",
+      "bytes": 681,
+      "sha256": "8d6ace2254cb7578e8b54973b0ea608d29307a632960c13542acb0f26f60fbf3",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs/promises",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        }
+      ],
       "endpoints": []
     },
     {
@@ -25618,6 +25962,107 @@
           "target": "js/pages/checkout/checkout-ubicacion-guardada.js",
           "dynamic": false,
           "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/code-studio/estudio-codigo-contract.test.mjs",
+      "bytes": 5618,
+      "sha256": "51bf22fde3e8dd0fcc9bf0c910f17a6843a429f3a24a02cb601f4f8a5a4b1b72",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs/promises",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/code-studio/estudio-codigo-core.test.mjs",
+      "bytes": 6050,
+      "sha256": "37075ea7384a27badd109024fea6e2eb9dbd477b98ed4733769b89eca3fd96d6",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/estudio-codigo-core.js",
+          "target": "cloudflare/estudio-codigo-core.js",
+          "dynamic": false,
+          "line": 15
+        },
+        {
+          "raw": "${relativePrefix}core/auth/roles.js",
+          "target": null,
+          "dynamic": false,
+          "line": 62
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://github.com/tintinaccs/tintin-web",
+          "line": 84
+        }
+      ]
+    },
+    {
+      "path": "tests/code-studio/estudio-codigo-ia.test.mjs",
+      "bytes": 1288,
+      "sha256": "40e0987f0786952869b8fa72b666be4676ae84dc82312af8a2af402906101e78",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/estudio-codigo-ia.js",
+          "target": "cloudflare/estudio-codigo-ia.js",
+          "dynamic": false,
+          "line": 4
         }
       ],
       "endpoints": []
@@ -26746,6 +27191,12 @@
       "sha256": "0a709a7ad00725d9e8361645649620be2b5f5c71615ef5f8400e1b3b3179b5a0"
     },
     {
+      "path": ".github/workflows/auditoria-dependencias.yml",
+      "extension": ".yml",
+      "bytes": 1635,
+      "sha256": "07a46797fd092770ab8cf781f6da4071531cab8d5aa2fc70f8cd536251f6c5d9"
+    },
+    {
       "path": ".github/workflows/auditoria-tooling.yml",
       "extension": ".yml",
       "bytes": 1598,
@@ -26806,6 +27257,12 @@
       "sha256": "698cb3487c10042cd84616c3769cbfa05b6bcfa1e69cdbd3b2ca1a5821c3c371"
     },
     {
+      "path": ".github/workflows/validar-estudio-codigo.yml",
+      "extension": ".yml",
+      "bytes": 1746,
+      "sha256": "77d1ea94f8b6b82d579fda157e070f9f3c565250e894f558fae0acc3d6b749bb"
+    },
+    {
       "path": ".github/workflows/validar-header-responsive.yml",
       "extension": ".yml",
       "bytes": 2049,
@@ -26844,8 +27301,8 @@
     {
       "path": "_routes.json",
       "extension": ".json",
-      "bytes": 1746,
-      "sha256": "2b4754ae72e52f8acd5152dfb5feff4223b8f9533013c9d6af3b15ec7dcfe323"
+      "bytes": 1772,
+      "sha256": "fa40ac65c45babbd0b20e6d4b0c0b02dcd16d2d2a538b518bdac7b7d4b334773"
     },
     {
       "path": "about.html",
@@ -27088,6 +27545,24 @@
       "sha256": "b4f734051971c63135f579ffbec055a653945228858d5d31268664644972f171"
     },
     {
+      "path": "cloudflare/estudio-codigo-core.js",
+      "extension": ".js",
+      "bytes": 17457,
+      "sha256": "106e6a5e2e0123cf9b3f8d80e781b672b736665c414fa662c59b05f729fc6eca"
+    },
+    {
+      "path": "cloudflare/estudio-codigo-github.js",
+      "extension": ".js",
+      "bytes": 19187,
+      "sha256": "0cda8043a67e8721eb91c0756a900580a284a66148ba4ae6866c7b6b606a6ab0"
+    },
+    {
+      "path": "cloudflare/estudio-codigo-ia.js",
+      "extension": ".js",
+      "bytes": 5479,
+      "sha256": "0f7f89ab03b9f5cdf46e542d650654bd4d358b9a7774ca48b08eeebfd00e8b79"
+    },
+    {
       "path": "cloudflare/firebase-admin-ligero.js",
       "extension": ".js",
       "bytes": 18666,
@@ -27098,6 +27573,12 @@
       "extension": ".js",
       "bytes": 1596,
       "sha256": "29cd03e4e6dd9bdc378406ed980b122044e4fc4b9263d00f65d8e9b5db73a57b"
+    },
+    {
+      "path": "cloudflare/inyectar-estudio-codigo-admin.js",
+      "extension": ".js",
+      "bytes": 2454,
+      "sha256": "cb206ee13aa9b25c0929aa863aaac08047ac233fc5648e17898a2ff269c93d39"
     },
     {
       "path": "cloudflare/notificaciones-sociales.js",
@@ -27162,14 +27643,14 @@
     {
       "path": "config/csp-runtime.js",
       "extension": ".js",
-      "bytes": 330173,
-      "sha256": "28da097516483e7842a3bac913b550eed76ce0eb2343978f82e661823c30168d"
+      "bytes": 338597,
+      "sha256": "ee440fbf216b957d8b4adef2c30d05059d9ed7667dd27fda33bd5bbe272ad167"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
-      "bytes": 330088,
-      "sha256": "4548d3fc004f2f14b267cf7876a49365e03b88378ed9379562bd6557f93026dd"
+      "bytes": 338512,
+      "sha256": "71f865364ecfd44671700a98011a05a3d615b4adc88bda44664f013a248d598d"
     },
     {
       "path": "config/public-site.json",
@@ -27212,6 +27693,12 @@
       "extension": ".css",
       "bytes": 6166,
       "sha256": "5c62c524e16d395d39f5992420f36e126ee260faad26ac2d3f1e1e88341a06d2"
+    },
+    {
+      "path": "css/admin/estudio-codigo.css",
+      "extension": ".css",
+      "bytes": 11325,
+      "sha256": "dff0af17ccbb1368374418a2f4acba6eb781f94fd3f3a9d27eb8b97ed93f9f72"
     },
     {
       "path": "css/admin/notificaciones-admin.css",
@@ -27598,6 +28085,12 @@
       "sha256": "142acb02418d05b7482432a67fa21a73ce2bcb757929af01280d1b540132a335"
     },
     {
+      "path": "docs/cierre-operativo-2026-08-20.md",
+      "extension": ".md",
+      "bytes": 7145,
+      "sha256": "006b2bcc15d04bb41a06ef232c10d91b6578409f2b75ed89f4bc3e44f5022877"
+    },
+    {
       "path": "docs/cierre-produccion-manual.md",
       "extension": ".md",
       "bytes": 1551,
@@ -27676,6 +28169,12 @@
       "sha256": "22bbdbee77e5a51906bf0a5a608de1e36ff30f76168523cc9e4906e49550457a"
     },
     {
+      "path": "docs/estudio-codigo-tintin.md",
+      "extension": ".md",
+      "bytes": 10407,
+      "sha256": "4c0a2efe6dfe7f005c77a17b13c7d050ac0ea91ca5da62c03265cee7c43389dc"
+    },
+    {
       "path": "docs/excepciones-contractuales-nombres.md",
       "extension": ".md",
       "bytes": 1729,
@@ -27744,14 +28243,20 @@
     {
       "path": "docs/plan-respaldo-recuperacion.md",
       "extension": ".md",
-      "bytes": 5686,
-      "sha256": "19736a11bc9b5a733dd6e557826f156a57536c675cc72e0a902e2b2c10735b9e"
+      "bytes": 6541,
+      "sha256": "5f991c8a7bd9046e1da4baaf8991e132f2f072ded1c3d31c214523acfaff1c39"
     },
     {
       "path": "docs/prueba-compra-real.md",
       "extension": ".md",
-      "bytes": 5949,
-      "sha256": "0339159e7668a8c749f7a0e70712e3ebf00ca7f878206590becf6292e052cfa1"
+      "bytes": 6390,
+      "sha256": "7b881cc043528f531de9ae0ca907a83c1ab63b230a0cbbaaeed156d81e92ca4b"
+    },
+    {
+      "path": "docs/prueba-e2e-sin-cobro.md",
+      "extension": ".md",
+      "bytes": 3853,
+      "sha256": "ece8000cef82a4fac7ca754de721a2571a3dfb8d3e92be538c63b24a8fc7b4f8"
     },
     {
       "path": "docs/recuperacion-firestore.md",
@@ -27894,8 +28399,8 @@
     {
       "path": "functions/admin.js",
       "extension": ".js",
-      "bytes": 517,
-      "sha256": "7c3b2816f4cdcbfa1a80aedb80eb0768fb1a0b5c83b88108a15df3567dad2cb4"
+      "bytes": 1133,
+      "sha256": "b3abeb427ec36468d3e07ee17cb2bef6a7d2ad6a8aaecff96e4ed3571b330c93"
     },
     {
       "path": "functions/api/admin-delete-user.js",
@@ -27926,6 +28431,36 @@
       "extension": ".js",
       "bytes": 1981,
       "sha256": "4f4aafd56555573228eb2820659e9e57e5832622aeb892341499c5af778e1646"
+    },
+    {
+      "path": "functions/api/code-studio/[[path]].js",
+      "extension": ".js",
+      "bytes": 20655,
+      "sha256": "36011b532e203caa3172989f1392df5c4efbdd9b61072dbb1d73aa2685421e73"
+    },
+    {
+      "path": "functions/api/code-studio/ai/analyze.js",
+      "extension": ".js",
+      "bytes": 2277,
+      "sha256": "b71f88d553fecfde219fdcebf8e9b20fb4ab70fb7af9d499e37248c1a2ca0c36"
+    },
+    {
+      "path": "functions/api/code-studio/graph.js",
+      "extension": ".js",
+      "bytes": 2327,
+      "sha256": "1ebb407ba1a8728ef9b5b3c896d5be22fe40a1c2af41e367d0d118ca088278f4"
+    },
+    {
+      "path": "functions/api/code-studio/merge.js",
+      "extension": ".js",
+      "bytes": 3220,
+      "sha256": "e68d61854e8a7825228fc0951520f45af4c2f2548171d009de7098dedc1e89d5"
+    },
+    {
+      "path": "functions/api/code-studio/restore.js",
+      "extension": ".js",
+      "bytes": 5692,
+      "sha256": "34ee63f04561318bbfca5ed51747b792ba929c132d186b1993330f2429eeccd9"
     },
     {
       "path": "functions/api/email-otp-send.js",
@@ -28108,6 +28643,12 @@
       "sha256": "8fdbc16cbd92e7d9bd06fb42abbab34e0f43ab964150d7c7fe30ea49ded1f12a"
     },
     {
+      "path": "functions/js/package.json",
+      "extension": ".json",
+      "bytes": 23,
+      "sha256": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a"
+    },
+    {
       "path": "functions/js/pedido-checkout-seguro.js",
       "extension": ".js",
       "bytes": 1865,
@@ -28226,6 +28767,18 @@
       "extension": ".js",
       "bytes": 83053,
       "sha256": "f21b7f9c52c347c86604ef69a73da6907c6ceebca42f93d554ee0ce0db03b03c"
+    },
+    {
+      "path": "js/admin/estudio-codigo/estudio-codigo-admin.js",
+      "extension": ".js",
+      "bytes": 62092,
+      "sha256": "48d6881b80a17277f60c5716885b9f97168f2b6ab8185efcee5ee196a305af31"
+    },
+    {
+      "path": "js/admin/estudio-codigo/restaurar-estudio-codigo-admin.js",
+      "extension": ".js",
+      "bytes": 5575,
+      "sha256": "fe140f00f65a74eabe5bf589e688ab76f50dd5ad71986d8d61001fcb3ee54c6e"
     },
     {
       "path": "js/admin/importacion-admin.js",
@@ -29466,14 +30019,14 @@
     {
       "path": "package-lock.json",
       "extension": ".json",
-      "bytes": 330657,
-      "sha256": "7c75ee530c617da1530bf8fb1ab0f14225b24c073519d065082db76bef5353d1"
+      "bytes": 331011,
+      "sha256": "11351429f34815b1fe195f6a0c66b94bc0401d14ec69b77837153abdc73902d3"
     },
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 10169,
-      "sha256": "3e4bfc8e6ad5969f5135a0edd7153eae6eabc83dd570751de3ea519c7e74b7f8"
+      "bytes": 10287,
+      "sha256": "46ccf140d1f3d51c99b30514e49f12ac9bce8c7decaea89b4232150718e87a35"
     },
     {
       "path": "perfil.html",
@@ -29790,8 +30343,8 @@
     {
       "path": "scripts/auditar-fase-11-seo.js",
       "extension": ".js",
-      "bytes": 9494,
-      "sha256": "d8a8d033967776f3c99b2343406335a0c5fdb92d2e20f64aa4ec508b4e54ca93"
+      "bytes": 9529,
+      "sha256": "45600d398221f35a895243c3c6563ae0e4c1679b35f1e949015b0ac285a1b3a4"
     },
     {
       "path": "scripts/auditar-fase-12-entrega.mjs",
@@ -29838,8 +30391,8 @@
     {
       "path": "scripts/auditar-final-integracion.js",
       "extension": ".js",
-      "bytes": 10310,
-      "sha256": "397b6661d9fce875990058b53ba378ba59029688778e5bc6b1e64496eda65ef4"
+      "bytes": 10332,
+      "sha256": "45f9bb7a9f5410f8d1f35dfc12875862122e6eec40cc3787b0d237113e592532"
     },
     {
       "path": "scripts/auditar-firestore-lecturas-presupuesto.js",
@@ -30108,8 +30661,8 @@
     {
       "path": "scripts/auditar-tipografia.js",
       "extension": ".js",
-      "bytes": 12705,
-      "sha256": "8adc0f3f419b3c50e929711067c68a4994486dc0d88ee0ca609864974bc5aac7"
+      "bytes": 13000,
+      "sha256": "67ee65c760878afae1ce07d50d7bf385e3987b187cb4b49e218138082bcd8118"
     },
     {
       "path": "scripts/auditar-todas-navegacion-superficies-ci.mjs",
@@ -30156,14 +30709,14 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 31263,
-      "sha256": "f25b943d89cdab77f2279b38c34d4f36ca95bf73d9e99d9fcfb324125c320f86"
+      "bytes": 31814,
+      "sha256": "69c5442c7ace720445705a538cb11eeac678fdc78f6f6ac7f255beca712053c2"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
       "extension": ".js",
-      "bytes": 25447,
-      "sha256": "8e0639509b0358d5792056cef9652ccabc5ce6f37310ad3f69e23b6c21b382bb"
+      "bytes": 25742,
+      "sha256": "f9ab3cd210daa6e1ce269835e2394280645a28f8a097f6d98ad02970eaac8eec"
     },
     {
       "path": "scripts/corregir-fuente-tintin.js",
@@ -30268,6 +30821,12 @@
       "sha256": "aba8ccb0ae521eddc43228e09248ef8911ce37355166e75fa1175572a7732ac9"
     },
     {
+      "path": "scripts/resumir-auditoria-dependencias.mjs",
+      "extension": ".mjs",
+      "bytes": 1427,
+      "sha256": "561e24764adf630fbca066b7158bf83b39fbd5e37f99d78849b3e7b2e604dd9d"
+    },
+    {
       "path": "scripts/servidor-local-pruebas.mjs",
       "extension": ".mjs",
       "bytes": 4980,
@@ -30278,6 +30837,12 @@
       "extension": ".js",
       "bytes": 9228,
       "sha256": "175f2bc43fa61e8be574689ffa0b9986ab60d7c4340b15d8aa2bcaa76eec528f"
+    },
+    {
+      "path": "scripts/sincronizar-monaco-local.mjs",
+      "extension": ".mjs",
+      "bytes": 681,
+      "sha256": "8d6ace2254cb7578e8b54973b0ea608d29307a632960c13542acb0f26f60fbf3"
     },
     {
       "path": "scripts/sincronizar-origen-publico.js",
@@ -30380,6 +30945,24 @@
       "extension": ".mjs",
       "bytes": 1912,
       "sha256": "4fa88f97be49f49b196e2dfb42e12a3d520d17329c14b90208e87295f7867c21"
+    },
+    {
+      "path": "tests/code-studio/estudio-codigo-contract.test.mjs",
+      "extension": ".mjs",
+      "bytes": 5618,
+      "sha256": "51bf22fde3e8dd0fcc9bf0c910f17a6843a429f3a24a02cb601f4f8a5a4b1b72"
+    },
+    {
+      "path": "tests/code-studio/estudio-codigo-core.test.mjs",
+      "extension": ".mjs",
+      "bytes": 6050,
+      "sha256": "37075ea7384a27badd109024fea6e2eb9dbd477b98ed4733769b89eca3fd96d6"
+    },
+    {
+      "path": "tests/code-studio/estudio-codigo-ia.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1288,
+      "sha256": "40e0987f0786952869b8fa72b666be4676ae84dc82312af8a2af402906101e78"
     },
     {
       "path": "tests/diagnostics/manifest-exclusions.test.mjs",
@@ -30795,6 +31378,20 @@
       "file": "js/admin/diagnostics/diagnostico-sitio-admin.js",
       "line": 1175,
       "raw": "/admin.html",
+      "target": "admin.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/estudio-codigo/estudio-codigo-admin.js",
+      "line": 76,
+      "raw": "checkout.html",
+      "target": "checkout.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/estudio-codigo/estudio-codigo-admin.js",
+      "line": 77,
+      "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },

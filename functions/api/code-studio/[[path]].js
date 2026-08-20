@@ -11,6 +11,7 @@ import {
   normalizeBranchName,
   normalizeCodePath,
   normalizeSha,
+  requireRecentAuthToken,
   requiresRecentAuth,
   sanitizeCommitMessage,
   sanitizeSearchQuery,
@@ -22,6 +23,7 @@ import {
   compareBranch,
   commitWorkspaceChanges,
   createWorkspaceBranch,
+  findPullRequestForBranch,
   getBranchHead,
   getChecks,
   getDeploymentState,
@@ -100,22 +102,8 @@ function rateLimit(key, limit = 90, windowMs = 60_000) {
   }
 }
 
-function decodeJwtPayload(token) {
-  const part = String(token || '').split('.')[1] || '';
-  if (!part) return {};
-  try {
-    const normalized = part.replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(part.length / 4) * 4, '=');
-    return JSON.parse(atob(normalized));
-  } catch { return {}; }
-}
-
 function requireRecentAuth(user) {
-  const payload = decodeJwtPayload(user?.idToken);
-  const authTime = Number(payload.auth_time || 0);
-  const age = Math.floor(Date.now() / 1000) - authTime;
-  if (!authTime || age < 0 || age > RECENT_AUTH_SECONDS) {
-    throw Object.assign(new Error('Este cambio toca archivos rojos y requiere volver a autenticarte antes de continuar'), { status: 403, code: 'recent_auth_required' });
-  }
+  return requireRecentAuthToken(user?.idToken, RECENT_AUTH_SECONDS);
 }
 
 async function audit(env, user, action, detail = {}) {
@@ -142,6 +130,53 @@ async function getRecentEvents(env, limit = 30) {
   const docs = await firestoreAdminList(env, 'codeStudioEvents', Math.max(1, Math.min(100, Number(limit) || 30)));
   return docs.map(doc => ({ id: String(doc.name || '').split('/').pop(), ...decodeFirestoreFields(doc.fields || {}) }))
     .sort((a, b) => String(b.receivedAt || '').localeCompare(String(a.receivedAt || '')));
+}
+
+function createEventsStream(env, request) {
+  const encoder = new TextEncoder();
+  let cancelled = false;
+  let timer = null;
+  let lastSignature = '';
+  const startedAt = Date.now();
+  const stream = new ReadableStream({
+    start(controller) {
+      const enqueue = value => {
+        if (!cancelled) controller.enqueue(encoder.encode(value));
+      };
+      const pump = async () => {
+        if (cancelled) return;
+        try {
+          const events = await getRecentEvents(env, 30);
+          const signature = events.map(item => item.id).join(',');
+          if (signature !== lastSignature) {
+            lastSignature = signature;
+            enqueue(`event: snapshot\ndata: ${JSON.stringify({ events, at: new Date().toISOString() })}\n\n`);
+          } else {
+            enqueue(`event: heartbeat\ndata: ${JSON.stringify({ at: new Date().toISOString() })}\n\n`);
+          }
+        } catch (error) {
+          enqueue(`event: warning\ndata: ${JSON.stringify({ error: cleanError(error), at: new Date().toISOString() })}\n\n`);
+        }
+        if (Date.now() - startedAt >= 50_000) {
+          enqueue('event: reconnect\ndata: {}\n\n');
+          controller.close();
+          return;
+        }
+        timer = setTimeout(pump, 4_000);
+      };
+      enqueue('retry: 3000\n\n');
+      pump();
+    },
+    cancel() {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+    }
+  });
+  const headers = corsHeaders(request.headers.get('origin') || '', request.url);
+  headers['content-type'] = 'text/event-stream; charset=utf-8';
+  headers['cache-control'] = 'private, no-cache, no-store, no-transform';
+  headers['x-accel-buffering'] = 'no';
+  return new Response(stream, { status: 200, headers });
 }
 
 async function verifyWebhook(request, env, rawBody) {
@@ -180,6 +215,8 @@ async function handleWebhook(request, env) {
     ref: String(payload?.ref || payload?.pull_request?.head?.ref || '').slice(0, 220),
     sha: String(payload?.after || payload?.check_suite?.head_sha || payload?.workflow_run?.head_sha || payload?.deployment?.sha || payload?.pull_request?.head?.sha || '').slice(0, 80),
     number: Number(payload?.number || payload?.pull_request?.number || 0),
+    state: String(payload?.deployment_status?.state || payload?.check_run?.conclusion || payload?.check_run?.status || payload?.workflow_run?.conclusion || payload?.workflow_run?.status || '').slice(0, 80),
+    environmentUrl: String(payload?.deployment_status?.environment_url || payload?.deployment_status?.target_url || '').slice(0, 1000),
     receivedAt: new Date().toISOString()
   };
   await firestoreAdminReplace(env, `codeStudioEvents/${deliveryId}`, encodeFirestoreFields(record));
@@ -272,6 +309,16 @@ async function handleAuthenticated(request, env, route, user) {
     return { ok: true, pullRequest: await getPullRequest(env, url.searchParams.get('number')) };
   }
 
+  if (request.method === 'GET' && route === 'workspace') {
+    const branch = normalizeBranchName(url.searchParams.get('branch'));
+    const [headSha, pullRequest, compare] = await Promise.all([
+      getBranchHead(env, branch),
+      findPullRequestForBranch(env, branch),
+      compareBranch(env, { branch })
+    ]);
+    return { ok: true, workspace: { branch, headSha, pullRequest, compare } };
+  }
+
   if (request.method === 'GET' && route === 'checks') {
     return { ok: true, checks: await getChecks(env, normalizeSha(url.searchParams.get('sha'))) };
   }
@@ -285,12 +332,7 @@ async function handleAuthenticated(request, env, route, user) {
   }
 
   if (request.method === 'GET' && route === 'events') {
-    const events = await getRecentEvents(env, 30);
-    const headers = corsHeaders(request.headers.get('origin') || '', request.url);
-    headers['content-type'] = 'text/event-stream; charset=utf-8';
-    headers['cache-control'] = 'no-cache, no-store';
-    const payload = `event: snapshot\ndata: ${JSON.stringify({ events })}\n\nevent: reconcile\ndata: ${JSON.stringify({ at: new Date().toISOString() })}\n\n`;
-    return new Response(payload, { status: 200, headers });
+    return createEventsStream(env, request);
   }
 
   enforceSameOrigin(request);
@@ -335,7 +377,16 @@ async function handleAuthenticated(request, env, route, user) {
       const file = await getFile(env, { path, ref: branch });
       files.push({ path, content: file.content.slice(0, 120000) });
     }
-    return { ok: true, graph: buildFileEvidenceGraph(files), analyzed: files.map(file => file.path) };
+    const allowedExternalHosts = String(env.CODE_STUDIO_EXTERNAL_ALLOWED_HOSTS || 'console.firebase.google.com,dash.cloudflare.com,github.com,docs.github.com,tintinaccesorios.pages.dev')
+      .split(',').map(value => value.trim().toLowerCase()).filter(Boolean);
+    return {
+      ok: true,
+      graph: buildFileEvidenceGraph(files, {
+        firebaseProjectId: env.CODE_STUDIO_FIREBASE_PROJECT_ID || env.FIREBASE_PROJECT_ID || '',
+        allowedExternalHosts
+      }),
+      analyzed: files.map(file => file.path)
+    };
   }
 
   if (request.method === 'POST' && route === 'ai/analyze') {
@@ -346,8 +397,13 @@ async function handleAuthenticated(request, env, route, user) {
     requireRecentAuth(user);
     const pr = await getPullRequest(env, body.number);
     const files = (await compareBranch(env, { branch: pr.headRef })).files.map(file => file.filename);
-    const result = await mergePullRequestWithHumanApproval(env, { number: body.number, expectedHeadSha: body.expectedHeadSha, approvalToken: body.approvalToken });
-    await audit(env, user, 'merge', { branch: pr.headRef, commitSha: result.sha, files, risk: summarizeRisk(files), detail: 'Merge ejecutado solo después de aprobación humana externa y checks verdes.' });
+    const result = await mergePullRequestWithHumanApproval(env, {
+      number: body.number,
+      expectedHeadSha: body.expectedHeadSha,
+      confirmation: body.confirmation,
+      requirePreview: true
+    });
+    await audit(env, user, 'merge', { branch: pr.headRef, commitSha: result.sha, files, risk: summarizeRisk(files), detail: 'Merge confirmado por una persona dentro de Tintin después de checks y preview.' });
     return { ok: true, merge: result };
   }
 

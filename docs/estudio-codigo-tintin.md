@@ -17,7 +17,7 @@ La fuente de verdad es GitHub. El navegador recibe archivos y estados a través 
 7. Los archivos de riesgo rojo requieren autenticación reciente.
 8. El preview abre un deployment externo; el código modificado no se ejecuta dentro del origen Admin.
 9. La IA analiza y propone. No tiene una ruta de commit, merge o deploy.
-10. El endpoint `/api/code-studio/merge` está cerrado con `403`: el merge final se realiza como revisión humana en GitHub.
+10. El merge final solo se habilita con checks y preview verdes, autenticación reciente y confirmación humana exacta dentro de Tintin.
 11. Restaurar significa crear un commit nuevo desde una versión histórica. Nunca se resetea ni se borra historia.
 12. El Editor visual seguro existente continúa siendo una herramienta distinta y conserva sus límites actuales.
 
@@ -33,7 +33,7 @@ Implementado:
 - Búsqueda global mediante GitHub Code Search.
 - Lectura de archivos con SHA.
 - Pestañas, estado `dirty`, riesgo por archivo y shortcuts.
-- Monaco Editor `0.52.2` cargado desde el origen externo que la CSP actual ya contempla. No se agregó `unsafe-eval`, `unsafe-inline` ni una relajación nueva de CSP. Si Monaco no puede inicializarse en un navegador, el Estudio cae a un editor de texto seguro y mantiene el flujo de GitHub.
+- Monaco Editor `0.52.2` empaquetado localmente durante `build:pages`; el Super Admin no depende de un CDN. No se agregó `unsafe-eval`, `unsafe-inline` ni una relajación nueva de CSP. Si Monaco no puede inicializarse, el Estudio cae a un editor de texto seguro y mantiene el flujo de GitHub.
 - Marcadores de lenguaje, minimapa, folding y navegación provista por los language services que Monaco soporte para el tipo abierto.
 
 ## Etapa 2 — Edición, commits, diff, PR y checks
@@ -65,13 +65,13 @@ Implementado:
 - Historial por rama y opcionalmente por archivo.
 - Restauración desde un commit anterior como un **nuevo commit reversible**.
 - Webhook GitHub con HMAC SHA-256 y deduplicación por `X-GitHub-Delivery`.
-- Eventos almacenados por el backend en `codeStudioEvents` y expuestos como snapshot SSE autenticado.
+- Eventos almacenados por el backend en `codeStudioEvents` y transmitidos por un stream SSE autenticado, con snapshots, heartbeat y reconexión.
 - Reconciliación periódica del estado GitHub para detectar cambios externos aunque un webhook se retrase o falle.
 - Las colecciones `codeStudioEvents` y `codeStudioAudit` no tienen reglas explícitas de cliente: quedan alcanzadas por el `match /{document=**} { allow read, write: if false; }` final de Firestore. La cuenta de servicio backend es la única que las usa.
 
 ### Publicación
 
-El Estudio muestra PR, checks y preview, pero **no fusiona**. Esta separación es deliberada: quien aprueba debe ser una persona revisando el PR y el preview en GitHub. El asistente IA no puede aprobar su propio trabajo.
+El Estudio muestra PR, checks, preview y estado de despliegue, y permite la aprobación humana final sin salir de Tintin. El backend vuelve a validar PR, rama, SHA, checks y preview; exige una sesión reciente y la frase exacta `MERGEAR #<número>`. La IA no recibe esta capacidad y no puede aprobar su propio trabajo.
 
 ## Etapa 4 — Mapa de conexiones e impacto
 
@@ -82,9 +82,12 @@ El mapa analiza los archivos abiertos/seleccionados y crea nodos y relaciones cu
 - `import`/`export from` literal → relación de archivo confirmada;
 - `fetch()` con URL literal → API/servicio llamado confirmado;
 - `collection(db, '...')` literal → colección Firestore confirmada;
+- clases y funciones → píldoras navegables con archivo y línea exacta;
+- llamada a un símbolo con nombre único entre los archivos analizados → relación probable entre funciones;
+- URL HTTPS literal de un host allowlisted → enlace navegable fuera del Admin;
 - paquetes/servicios externos → informacional si el import no representa un archivo local resoluble.
 
-Cada relación conserva archivo, línea aproximada, tipo y clase de evidencia: `confirmed`, `probable` o `informational`. No se inventan conexiones para completar el gráfico. El análisis puede crecer progresivamente abriendo más archivos, lo que evita descargar el repositorio entero al navegador.
+Cada relación conserva archivo, línea, tipo y clase de evidencia: `confirmed`, `probable` o `informational`. Al pulsar una píldora local, Monaco abre el archivo y revela la línea; una URL o colección abre únicamente una consola HTTPS allowlisted. No se inventan conexiones para completar el gráfico. El análisis crece abriendo más archivos, evitando descargar el repositorio entero al navegador.
 
 ## Etapa 5 — Asistente IA
 
@@ -106,6 +109,7 @@ El prompt de sistema obliga al asistente a:
 - no revelar secretos;
 - no sugerir evasión de permisos, CSP, checks o autenticación;
 - entregar diagnóstico, propuesta, impacto, pruebas y rollback;
+- devolver JSON estructurado y, si propone cambios, el contenido completo de cada archivo existente con su SHA base;
 - declarar cuando falta evidencia;
 - no aprobar, fusionar, desplegar ni publicar.
 
@@ -125,6 +129,7 @@ Permisos recomendados mínimos:
 | Deployments | Read | estado y URL de preview/deploy |
 
 No conceder `Actions: write` salvo que una necesidad futura se diseñe y audite de forma separada.
+No otorgar a la GitHub App bypass de las reglas de protección de `main`: el endpoint valida estados y GitHub debe seguir haciendo cumplir la protección como segunda barrera.
 
 Eventos de webhook útiles:
 
@@ -152,6 +157,8 @@ CODE_STUDIO_GITHUB_INSTALLATION_ID
 CODE_STUDIO_GITHUB_APP_PRIVATE_KEY
 CODE_STUDIO_GITHUB_REPOSITORY=tintinaccs/tintin-web
 CODE_STUDIO_GITHUB_WEBHOOK_SECRET
+CODE_STUDIO_FIREBASE_PROJECT_ID=tintin-accesorios
+CODE_STUDIO_EXTERNAL_ALLOWED_HOSTS=console.firebase.google.com,dash.cloudflare.com,github.com,docs.github.com,tintinaccesorios.pages.dev
 ```
 
 El registro de auditoría y la deduplicación de webhooks reutilizan `FIREBASE_SERVICE_ACCOUNT_KEY`, que ya es el mecanismo backend usado por otras funciones administrativas del proyecto.
@@ -186,12 +193,13 @@ El saneamiento elimina patrones de token, secret, private key y authorization. E
 `.github/workflows/validar-estudio-codigo.yml` ejecuta para cambios relevantes:
 
 1. `node --test tests/code-studio/*.test.mjs`
-2. `npm run audit:names`
-3. `npm run verify:routes`
-4. `npm run verify:csp`
-5. `npm run audit:security`
-6. `npm run audit:admin-foundation`
-7. `npm run test:visual-builder`
+2. `npm run sync:monaco` y verificación del loader local
+3. `npm run audit:names`
+4. `npm run verify:routes`
+5. `npm run verify:csp`
+6. `npm run audit:security`
+7. `npm run audit:admin-foundation`
+8. `npm run test:visual-builder`
 
 No se afirma que una prueba pasó hasta que GitHub Actions reporte su resultado.
 
@@ -218,7 +226,7 @@ preview Cloudflare por SHA
   ↓
 REVISIÓN HUMANA
   ↓
-merge en GitHub
+merge desde Tintin mediante GitHub App
   ↓
 deploy/verificación
 ```

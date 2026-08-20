@@ -38,18 +38,24 @@ test('las escrituras usan rama aislada, SHA esperado y ref no forzado', async ()
   assert.match(github, /no se sobrescribió nada/);
 });
 
-test('la fusión desde el panel está bloqueada y exige revisión humana', async () => {
+test('la fusión se aprueba dentro de Tintin con autenticación reciente y confirmación exacta', async () => {
   const merge = await read('functions/api/code-studio/merge.js');
   const ui = await read('js/admin/estudio-codigo/estudio-codigo-admin.js');
-  assert.match(merge, /human_merge_required/);
-  assert.match(merge, /403/);
-  assert.match(merge, /revisión humana/i);
-  assert.doesNotMatch(ui, /api\(['"]merge/);
+  assert.match(merge, /requireRecentAuthToken/);
+  assert.match(merge, /mergePullRequestWithHumanApproval/);
+  assert.match(merge, /confirmation/);
+  assert.match(ui, /MERGEAR #\$\{number\}/);
+  assert.match(ui, /api\(['"]merge/);
+  const github = await read('cloudflare/estudio-codigo-github.js');
+  assert.match(github, /mergeableState/);
+  assert.match(github, /falta una preview o deployment exitoso/);
+  assert.doesNotMatch(merge, /approvalToken|HUMAN_APPROVAL_SECRET/);
 });
 
 test('preview abre un deployment externo y no inyecta el código modificado en Admin', async () => {
   const ui = await read('js/admin/estudio-codigo/estudio-codigo-admin.js');
-  assert.match(ui, /window\.open\(ready\.environmentUrl/);
+  assert.match(ui, /safeExternalHref\(ready\.environmentUrl\)/);
+  assert.match(ui, /window\.open\(previewUrl/);
   assert.doesNotMatch(ui, /eval\s*\(|new Function\s*\(/);
   assert.doesNotMatch(ui, /srcdoc\s*=/);
 });
@@ -60,6 +66,39 @@ test('webhook verifica HMAC y deduplica X-GitHub-Delivery', async () => {
   assert.match(api, /HMAC/);
   assert.match(api, /x-github-delivery/i);
   assert.match(api, /codeStudioEvents/);
+});
+
+test('tiempo real usa un stream SSE autenticado y conserva reconciliación periódica', async () => {
+  const api = await read('functions/api/code-studio/[[path]].js');
+  const ui = await read('js/admin/estudio-codigo/estudio-codigo-admin.js');
+  assert.match(api, /ReadableStream/);
+  assert.match(api, /text\/event-stream/);
+  assert.match(ui, /response\.body\.getReader/);
+  assert.match(ui, /setInterval\(\(\) => \{ if \(state\.visible\) syncState\(\)/);
+  assert.doesNotMatch(ui, /eventsTimer/);
+});
+
+test('Monaco se sirve localmente y el build genera el artefacto', async () => {
+  const ui = await read('js/admin/estudio-codigo/estudio-codigo-admin.js');
+  const pkg = JSON.parse(await read('package.json'));
+  const sync = await read('scripts/sincronizar-monaco-local.mjs');
+  const diagnostics = await read('scripts/construir-manifiesto-diagnostico.js');
+  const typography = await read('scripts/auditar-tipografia.js');
+  assert.match(ui, /\/js\/vendor\/monaco\/vs/);
+  assert.doesNotMatch(ui, /unpkg|jsdelivr|cdnjs/);
+  assert.match(pkg.scripts['build:pages'], /^npm run sync:monaco/);
+  assert.equal(pkg.devDependencies['monaco-editor'], '0.52.2');
+  assert.match(sync, /node_modules\/monaco-editor\/min\/vs/);
+  assert.match(diagnostics, /js\/vendor\/monaco/);
+  assert.match(typography, /js\/vendor\/monaco/);
+});
+
+test('el mapa permite navegar a evidencia exacta y limita enlaces externos', async () => {
+  const ui = await read('js/admin/estudio-codigo/estudio-codigo-admin.js');
+  assert.match(ui, /revealEditorLocation/);
+  assert.match(ui, /EXTERNAL_HOSTS/);
+  assert.match(ui, /node\.path/);
+  assert.match(ui, /node\.url/);
 });
 
 test('restaurar crea un commit nuevo en una rama y nunca resetea main', async () => {
@@ -73,4 +112,6 @@ test('el asistente IA está aislado de commit, merge y deploy', async () => {
   const ai = await read('cloudflare/estudio-codigo-ia.js');
   assert.match(ai, /No podés aprobar, fusionar, desplegar ni publicar/);
   assert.doesNotMatch(ai, /commitWorkspaceChanges|openPullRequest|mergePullRequest|git\/refs/);
+  assert.match(ai, /archivo completo/);
+  assert.match(ai, /validateChanges/);
 });

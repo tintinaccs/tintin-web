@@ -314,6 +314,15 @@ export async function getPullRequest(env, number) {
   };
 }
 
+export async function findPullRequestForBranch(env, branch) {
+  const safeBranch = normalizeBranchName(branch);
+  const { owner } = getCodeStudioRepo(env);
+  const params = new URLSearchParams({ state: 'all', head: `${owner}:${safeBranch}`, base: CODE_STUDIO_MAIN_BRANCH, per_page: '10' });
+  const data = (await githubRequest(env, repoPath(env, `/pulls?${params.toString()}`))).data;
+  const item = Array.isArray(data) ? data[0] : null;
+  return item ? getPullRequest(env, item.number) : null;
+}
+
 export async function getChecks(env, sha) {
   const safeSha = normalizeSha(sha, 'SHA para checks');
   const data = (await githubRequest(env, repoPath(env, `/commits/${safeSha}/check-runs?per_page=100`))).data;
@@ -323,6 +332,7 @@ export async function getChecks(env, sha) {
     status: run.status,
     conclusion: run.conclusion,
     url: run.html_url,
+    detailsUrl: run.details_url || run.html_url || '',
     startedAt: run.started_at,
     completedAt: run.completed_at
   }));
@@ -361,15 +371,25 @@ export async function getDeploymentState(env, sha) {
   return result;
 }
 
-export async function mergePullRequestWithHumanApproval(env, { number, expectedHeadSha, approvalToken } = {}) {
-  const requiredToken = String(env.CODE_STUDIO_HUMAN_APPROVAL_SECRET || '').trim();
-  if (!requiredToken || String(approvalToken || '') !== requiredToken) {
-    const error = new Error('La publicación requiere una aprobación humana externa al asistente');
-    error.status = 403;
+export async function mergePullRequestWithHumanApproval(env, { number, expectedHeadSha, confirmation, requirePreview = true } = {}) {
+  const prNumber = Number(number);
+  if (!Number.isInteger(prNumber) || prNumber < 1 || String(confirmation || '').trim() !== `MERGEAR #${prNumber}`) {
+    const error = new Error(`Escribí MERGEAR #${prNumber || '?'} para confirmar la fusión humana`);
+    error.status = 400;
     throw error;
   }
   const pr = await getPullRequest(env, number);
   const expected = normalizeSha(expectedHeadSha, 'SHA esperado del PR');
+  if (pr.state !== 'open' || pr.draft || pr.baseRef !== CODE_STUDIO_MAIN_BRANCH || pr.headRef === CODE_STUDIO_MAIN_BRANCH) {
+    const error = new Error('El pull request no está abierto, está en borrador o no apunta de una rama aislada hacia main');
+    error.status = 409;
+    throw error;
+  }
+  if (pr.mergeable === false || ['dirty', 'blocked'].includes(pr.mergeableState)) {
+    const error = new Error(`El pull request no es fusionable: ${pr.mergeableState || 'conflicto detectado'}`);
+    error.status = 409;
+    throw error;
+  }
   if (normalizeSha(pr.headSha, 'SHA actual del PR') !== expected) {
     const error = new Error('El PR cambió después de la aprobación; hay que revisarlo de nuevo');
     error.status = 409;
@@ -382,9 +402,25 @@ export async function mergePullRequestWithHumanApproval(env, { number, expectedH
     error.status = 409;
     throw error;
   }
+  let preview = checks.find(check => /cloudflare pages|preview|deploy/i.test(check.name) && check.conclusion === 'success') || null;
+  if (!preview) {
+    const deployments = await getDeploymentState(env, expected);
+    const deployment = deployments.find(item => item.state === 'success' && /^https:\/\//i.test(item.environmentUrl || ''));
+    if (deployment) preview = { name: deployment.environment || 'preview', detailsUrl: deployment.environmentUrl, conclusion: 'success' };
+  }
+  if (requirePreview && !preview) {
+    const error = new Error('No se puede fusionar: falta una preview o deployment exitoso para el commit aprobado');
+    error.status = 409;
+    throw error;
+  }
   const data = (await githubRequest(env, repoPath(env, `/pulls/${Number(number)}/merge`), {
     method: 'PUT',
     body: JSON.stringify({ sha: expected, merge_method: 'squash' })
   })).data;
-  return { merged: Boolean(data.merged), sha: data.sha || '', message: data.message || '' };
+  if (!data?.merged) {
+    const error = new Error(String(data?.message || 'GitHub no pudo completar el merge'));
+    error.status = 409;
+    throw error;
+  }
+  return { merged: true, sha: data.sha || '', message: data.message || '', checks: checks.length, preview: preview?.detailsUrl || '' };
 }

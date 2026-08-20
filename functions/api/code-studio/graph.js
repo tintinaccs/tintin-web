@@ -25,7 +25,13 @@ export async function onRequest(context) {
       const file = await getFile(env, { path, ref: branch });
       files.push({ path, content: file.content.slice(0, 120000) });
     }
-    return jsonResponse({ ok: true, graph: buildFileEvidenceGraph(files), analyzed: files.map(file => file.path) }, 200, origin, request.url);
+    const allowedExternalHosts = String(env.CODE_STUDIO_EXTERNAL_ALLOWED_HOSTS || 'console.firebase.google.com,dash.cloudflare.com,github.com,docs.github.com,tintinaccesorios.pages.dev')
+      .split(',').map(value => value.trim().toLowerCase()).filter(Boolean);
+    const graph = buildFileEvidenceGraph(files, {
+      firebaseProjectId: env.CODE_STUDIO_FIREBASE_PROJECT_ID || '',
+      allowedExternalHosts
+    });
+    return jsonResponse({ ok: true, graph, analyzed: files.map(file => file.path) }, 200, origin, request.url);
   } catch (error) {
     const status = Number(error?.status) || (/sesión|Super Admin|autorizado/i.test(error?.message || '') ? 403 : 400);
     return jsonResponse({ ok: false, error: String(error?.message || 'Error interno').slice(0, 700) }, status, origin, request.url);

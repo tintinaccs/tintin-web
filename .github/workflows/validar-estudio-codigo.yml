@@ -11,6 +11,11 @@ on:
       - 'cloudflare/inyectar-estudio-codigo-admin.js'
       - 'js/admin/estudio-codigo/**'
       - 'css/admin/estudio-codigo.css'
+      - 'scripts/sincronizar-monaco-local.mjs'
+      - 'scripts/construir-manifiesto-diagnostico.js'
+      - 'scripts/auditar-tipografia.js'
+      - 'package.json'
+      - 'package-lock.json'
       - 'tests/code-studio/**'
       - '.github/workflows/validar-estudio-codigo.yml'
   workflow_dispatch:
@@ -39,6 +44,9 @@ jobs:
 
       - name: Pruebas propias del Estudio de Código
         run: node --test tests/code-studio/*.test.mjs
+
+      - name: Monaco privado disponible sin CDN
+        run: npm run sync:monaco && test -f js/vendor/monaco/vs/loader.js
 
       - name: Convenciones de nombres
         run: npm run audit:names

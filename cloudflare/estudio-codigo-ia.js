@@ -3,12 +3,40 @@
 // No expone credenciales, no escribe GitHub y no publica.
 // =============================================================
 
-import { isTextFile, normalizeBranchName, normalizeCodePath, summarizeRisk } from './estudio-codigo-core.js';
+import { isTextFile, normalizeBranchName, normalizeCodePath, summarizeRisk, validateChanges } from './estudio-codigo-core.js';
 import { getFile } from './estudio-codigo-github.js';
 
 function resolveBranch(value) {
   const branch = String(value || '').trim();
   return !branch || branch === 'main' ? 'main' : normalizeBranchName(branch);
+}
+
+export function parseStructuredProposal(text, files) {
+  const fenced = String(text || '').match(/```(?:json)?\s*([\s\S]*?)```/i)?.[1];
+  let data;
+  try { data = JSON.parse(fenced || text); } catch {
+    return { summary: String(text || '').slice(0, 40000), diagnosis: [], impact: [], tests: [], rollback: '', changes: [] };
+  }
+  const known = new Map(files.map(file => [file.path, file]));
+  const requested = Array.isArray(data?.changes) ? data.changes.slice(0, 12) : [];
+  const candidates = [];
+  for (const item of requested) {
+    let path;
+    try { path = normalizeCodePath(item?.path); } catch { continue; }
+    const source = known.get(path);
+    if (!source || typeof item?.content !== 'string' || item.content === source.content) continue;
+    candidates.push({ path, operation: 'update', content: item.content, baseSha: source.sha });
+  }
+  const changes = candidates.length ? validateChanges(candidates) : [];
+  const cleanList = value => (Array.isArray(value) ? value : []).slice(0, 30).map(item => String(item || '').slice(0, 1000)).filter(Boolean);
+  return {
+    summary: String(data?.summary || data?.resumen || '').slice(0, 8000),
+    diagnosis: cleanList(data?.diagnosis || data?.diagnostico),
+    impact: cleanList(data?.impact || data?.impacto),
+    tests: cleanList(data?.tests || data?.pruebas),
+    rollback: String(data?.rollback || '').slice(0, 4000),
+    changes
+  };
 }
 
 export async function analyzeWithCodeStudioAi(env, body = {}) {
@@ -37,7 +65,7 @@ export async function analyzeWithCodeStudioAi(env, body = {}) {
   for (const path of paths) {
     if (!isTextFile(path)) continue;
     const file = await getFile(env, { path, ref: branch });
-    files.push({ path, sha: file.sha, content: file.content.slice(0, 50000) });
+    files.push({ path, sha: file.sha, content: file.content.slice(0, 120000) });
   }
 
   const context = files.map(file => `FILE ${file.path} SHA ${file.sha}\n${file.content}`).join('\n\n---\n\n');
@@ -47,7 +75,9 @@ export async function analyzeWithCodeStudioAi(env, body = {}) {
     'No inventes archivos, pruebas ejecutadas, resultados, dependencias ni conexiones.',
     'No reveles secretos ni propongas evadir autenticación, permisos, CSP, checks o revisión humana.',
     'No podés aprobar, fusionar, desplegar ni publicar.',
-    'Respondé con diagnóstico, propuesta, diff conceptual o código cuando corresponda, impacto, pruebas recomendadas y rollback.',
+    'Respondé exclusivamente como JSON válido, sin Markdown.',
+    'Usá esta forma: {"summary":"...","diagnosis":["..."],"impact":["..."],"tests":["..."],"rollback":"...","changes":[{"path":"ruta existente","content":"archivo completo modificado"}]}.',
+    'Solo podés proponer updates de archivos entregados. Cada content debe contener el archivo completo, nunca fragmentos.',
     'Si falta evidencia, indicá exactamente qué falta.'
   ].join(' ');
 
@@ -71,8 +101,11 @@ export async function analyzeWithCodeStudioAi(env, body = {}) {
   const text = String(data?.output_text || data?.choices?.[0]?.message?.content || data?.text || '').trim();
   if (!text) throw Object.assign(new Error('El proveedor IA no devolvió una propuesta utilizable'), { status: 502 });
 
+  const proposal = parseStructuredProposal(text, files);
+
   return {
-    text: text.slice(0, 40000),
+    text: proposal.summary || text.slice(0, 40000),
+    proposal,
     branch,
     risk: summarizeRisk(paths),
     files: files.map(file => ({ path: file.path, sha: file.sha }))

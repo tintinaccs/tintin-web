@@ -41,7 +41,8 @@
     "verify:diagnostics": "node scripts/verificar-manifiesto-diagnostico.js",
     "cache-versioning:write": "node scripts/auditar-versionado-cache.mjs --write",
     "audit:cache-versioning": "node scripts/auditar-versionado-cache.mjs",
-    "build:pages": "npm run sync:public-shell && npm run build:routes && npm run build:csp && npm run build:diagnostics && npm run sync:public-origin && npm run verify:routes && npm run verify:csp && npm run verify:diagnostics && npm run audit:cache-versioning",
+    "sync:monaco": "node scripts/sincronizar-monaco-local.mjs",
+    "build:pages": "npm run sync:monaco && npm run sync:public-shell && npm run build:routes && npm run build:csp && npm run build:diagnostics && npm run sync:public-origin && npm run verify:routes && npm run verify:csp && npm run verify:diagnostics && npm run audit:cache-versioning",
     "prepare:hosting": "node scripts/preparar-hosting.js",
     "audit:diagnostics": "node scripts/auditar-diagnostico.js",
     "audit:diagnostic-findings": "node scripts/auditar-diagnostico-hallazgos.js",
@@ -106,6 +107,7 @@
     "@playwright/test": "^1.62.1",
     "firebase": "^12.17.1",
     "firebase-tools": "^15.26.0",
+    "monaco-editor": "0.52.2",
     "playwright": "^1.62.1"
   },
   "overrides": {

@@ -8,6 +8,7 @@ import {
   makeWorkspaceBranch,
   normalizeBranchName,
   normalizeCodePath,
+  requireRecentAuthToken,
   requiresRecentAuth,
   sanitizedAuditPayload,
   validateChanges
@@ -67,6 +68,43 @@ test('mapa solo afirma conexiones que tienen evidencia literal', () => {
   assert.ok(graph.edges.every(edge => ['confirmed', 'probable', 'informational'].includes(edge.evidence)));
   assert.ok(graph.edges.some(edge => edge.kind === 'imports' && edge.evidence === 'confirmed'));
   assert.ok(graph.edges.some(edge => edge.kind === 'calls' && edge.target === '/api/health'));
+});
+
+test('la aprobación sensible exige auth_time reciente del token ya verificado', () => {
+  const token = authTime => `x.${Buffer.from(JSON.stringify({ auth_time: authTime })).toString('base64url')}.y`;
+  const now = Math.floor(Date.now() / 1000);
+  assert.equal(requireRecentAuthToken(token(now - 30), 600), true);
+  assert.throws(() => requireRecentAuthToken(token(now - 900), 600), error => error.code === 'recent_auth_required');
+  assert.throws(() => requireRecentAuthToken('inválido', 600), /volver a autenticarte/);
+});
+
+test('mapa conecta símbolos, líneas exactas y consolas externas allowlisted', () => {
+  const graph = buildFileEvidenceGraph([{
+    path: 'js/admin/orders.js',
+    content: `export async function loadOrders() {\n  collection(db, 'orders');\n  return fetch('https://github.com/tintinaccs/tintin-web');\n}\n`
+  }], {
+    firebaseProjectId: 'tintin-accesorios',
+    allowedExternalHosts: ['github.com']
+  });
+  const symbol = graph.nodes.find(node => node.type === 'function' && node.label === 'loadOrders');
+  const collection = graph.nodes.find(node => node.id === 'firestore:orders');
+  const external = graph.nodes.find(node => node.type === 'external-link');
+  assert.equal(symbol.path, 'js/admin/orders.js');
+  assert.equal(symbol.line, 1);
+  assert.match(collection.url, /^https:\/\/console\.firebase\.google\.com\//);
+  assert.equal(external.url, 'https://github.com/tintinaccs/tintin-web');
+  assert.ok(graph.edges.some(edge => edge.source === symbol.id && edge.target === collection.id && edge.line === 2));
+});
+
+test('mapa baja de archivo a función y conecta llamadas de símbolo sin inventar ambigüedades', () => {
+  const graph = buildFileEvidenceGraph([{
+    path: 'js/demo.js',
+    content: `function helper() { return 1; }\nfunction controller() { return helper(); }\n`
+  }]);
+  const helper = graph.nodes.find(node => node.label === 'helper');
+  const controller = graph.nodes.find(node => node.label === 'controller');
+  assert.ok(graph.edges.some(edge => edge.source === 'js/demo.js' && edge.target === controller.id && edge.kind === 'contains'));
+  assert.ok(graph.edges.some(edge => edge.source === controller.id && edge.target === helper.id && edge.kind === 'calls-symbol' && edge.evidence === 'probable'));
 });
 
 test('auditoría no conserva valores que parezcan secretos', () => {

@@ -7,7 +7,28 @@ import { auth } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck
 import { SUPER_ADMIN } from '../../core/auth/roles.js';
 
 const API = '/api/code-studio';
-const MONACO_BASE = 'https://unpkg.com/monaco-editor@0.52.2/min/vs';
+const MONACO_BASE = '/js/vendor/monaco/vs';
+const EXTERNAL_HOSTS = new Set(['console.firebase.google.com', 'dash.cloudflare.com', 'github.com', 'docs.github.com', 'tintinaccesorios.pages.dev']);
+const PHASES = Object.freeze({
+  disconnected: { label: 'Sin conexión', tone: 'bad' },
+  clean: { label: 'Sincronizado', tone: 'ok' },
+  dirty: { label: 'Cambios locales', tone: 'warn' },
+  saving: { label: 'Guardando', tone: 'running' },
+  committing: { label: 'Creando commit', tone: 'running' },
+  syncing: { label: 'Sincronizando', tone: 'running' },
+  checks_queued: { label: 'Checks en cola', tone: 'warn' },
+  checks_running: { label: 'Checks ejecutándose', tone: 'running' },
+  checks_failed: { label: 'Checks fallidos', tone: 'bad' },
+  ready_to_merge: { label: 'Listo para merge', tone: 'ok' },
+  merge_requested: { label: 'Merge solicitado', tone: 'running' },
+  merging: { label: 'Mergeando', tone: 'running' },
+  merged: { label: 'Merge completado', tone: 'ok' },
+  deploying: { label: 'Desplegando', tone: 'running' },
+  published: { label: 'Publicado', tone: 'ok' },
+  deploy_failed: { label: 'Error de despliegue', tone: 'bad' },
+  conflict: { label: 'Conflicto', tone: 'warn' },
+  error: { label: 'Error', tone: 'bad' }
+});
 const state = {
   ready: false,
   visible: false,
@@ -26,13 +47,29 @@ const state = {
   fallback: null,
   pullRequest: null,
   bottom: 'problems',
-  eventsTimer: null,
   reconcileTimer: null,
-  lastEvents: []
+  realtimeController: null,
+  realtimeReconnectTimer: null,
+  realtimeConnected: false,
+  lastEvents: [],
+  lastSyncAt: '',
+  phase: 'syncing',
+  phaseDetail: 'Comprobando GitHub…',
+  checks: [],
+  aiProposal: null,
+  mergedSha: '',
+  graphScale: 1,
+  graphFocus: ''
 };
 
 const $ = selector => document.querySelector(selector);
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
+const safeExternalHref = value => {
+  try {
+    const url = new URL(String(value || ''));
+    return url.protocol === 'https:' && EXTERNAL_HOSTS.has(url.hostname.toLowerCase()) ? url.toString() : '';
+  } catch { return ''; }
+};
 
 function classifyRisk(path) {
   const value = String(path || '').toLowerCase();
@@ -145,7 +182,7 @@ function makeShell() {
     <div class="cs-shell">
       <div class="cs-top">
         <div class="cs-brand">Estudio de Código Tintin</div>
-        <div class="cs-status"><span class="cs-dot" id="cs-dot"></span><span id="cs-status">Comprobando GitHub…</span></div>
+        <button class="cs-status" id="cs-github-center-toggle" type="button" aria-expanded="false"><span class="cs-dot" id="cs-dot"></span><span id="cs-status">Comprobando GitHub…</span></button>
         <div class="cs-spacer"></div>
         <div class="cs-branch" id="cs-branch">main</div>
         <button class="cs-btn" id="cs-sync" type="button">Sincronizar</button>
@@ -153,8 +190,13 @@ function makeShell() {
         <button class="cs-btn" id="cs-preview" type="button" disabled>Preview</button>
         <button class="cs-btn cs-btn-primary" id="cs-commit" type="button" disabled>Guardar commit</button>
         <button class="cs-btn" id="cs-pr" type="button" disabled>Abrir PR</button>
+        <button class="cs-btn cs-btn-primary" id="cs-merge" type="button" disabled>Mergear</button>
         <button class="cs-btn" id="cs-ai-toggle" type="button">IA</button>
       </div>
+      <aside class="cs-github-center cs-hidden" id="cs-github-center" aria-live="polite">
+        <div class="cs-pane-title"><span>Centro GitHub en vivo</span><button class="cs-icon-btn" id="cs-github-center-close" type="button">✕</button></div>
+        <div class="cs-github-center-body" id="cs-github-center-body"></div>
+      </aside>
       <div class="cs-progress"><span id="cs-progress" style="width:0%"></span></div>
       <div class="cs-banner" id="cs-banner"><strong>Seguridad:</strong> lectura desde GitHub oficial. Nunca se escribe directo a main y la publicación final requiere revisión humana.</div>
       <div class="cs-grid">
@@ -183,6 +225,7 @@ function makeShell() {
           <div class="cs-ai-body">
             <div class="cs-ai-context" id="cs-ai-context">Usa únicamente los archivos abiertos como contexto verificado.</div>
             <div class="cs-ai-output" id="cs-ai-output">Diagnóstico, propuesta, impacto, pruebas y rollback aparecerán acá. La IA no puede publicar.</div>
+            <div class="cs-ai-proposal-actions cs-hidden" id="cs-ai-proposal-actions"><button class="cs-btn" id="cs-ai-discard" type="button">Descartar</button><button class="cs-btn cs-btn-primary" id="cs-ai-apply" type="button">Aplicar a buffers</button></div>
             <textarea class="cs-ai-input" id="cs-ai-input" maxlength="6000" placeholder="¿Qué querés analizar o cambiar?"></textarea>
             <div class="cs-ai-actions"><button class="cs-btn cs-btn-primary" id="cs-ai-send" type="button">Analizar</button></div>
           </div>
@@ -213,26 +256,79 @@ function setProgress(value) {
   if (bar) bar.style.width = `${Math.max(0, Math.min(100, Number(value) || 0))}%`;
 }
 
+function setPhase(phase, detail = '') {
+  state.phase = PHASES[phase] ? phase : 'error';
+  state.phaseDetail = String(detail || PHASES[state.phase].label).slice(0, 500);
+  state.lastSyncAt = new Date().toISOString();
+  updateTopStatus();
+}
+
+function checksSummary() {
+  const checks = state.checks || [];
+  const failed = checks.filter(check => check.status === 'completed' && !['success', 'neutral', 'skipped'].includes(check.conclusion));
+  const pending = checks.filter(check => check.status !== 'completed');
+  return { total: checks.length, failed, pending, green: checks.length > 0 && !failed.length && !pending.length };
+}
+
+function derivePhase() {
+  if (!state.github?.appConfigured) return 'disconnected';
+  if (['saving', 'committing', 'syncing', 'merge_requested', 'merging', 'merged', 'deploying', 'published', 'deploy_failed', 'conflict', 'error'].includes(state.phase)) return state.phase;
+  if ([...state.tabs.values()].some(tab => tab.dirty)) return 'dirty';
+  if (state.pullRequest?.state === 'open') {
+    const summary = checksSummary();
+    if (summary.failed.length) return 'checks_failed';
+    if (summary.pending.some(check => check.status === 'in_progress')) return 'checks_running';
+    if (summary.pending.length || !summary.total) return 'checks_queued';
+    if (summary.green) return 'ready_to_merge';
+  }
+  return 'clean';
+}
+
+function renderGithubCenter() {
+  const host = $('#cs-github-center-body');
+  if (!host) return;
+  const phase = PHASES[derivePhase()] || PHASES.error;
+  const summary = checksSummary();
+  host.innerHTML = `
+    <div class="cs-status-grid">
+      <span>Repositorio</span><strong>${escapeHtml(state.github?.repository || 'Sin configurar')}</strong>
+      <span>Rama</span><strong>${escapeHtml(state.branch || 'main · solo lectura')}</strong>
+      <span>Commit</span><strong class="cs-code">${escapeHtml(String(state.headSha || state.github?.mainSha || '').slice(0, 12) || '—')}</strong>
+      <span>Pull request</span><strong>${state.pullRequest?.number ? `#${state.pullRequest.number} · ${escapeHtml(state.pullRequest.state || '')}` : '—'}</strong>
+      <span>Checks</span><strong>${summary.total ? `${summary.total - summary.failed.length - summary.pending.length}/${summary.total} aprobados` : '—'}</strong>
+      <span>Estado</span><strong>${escapeHtml(phase.label)}</strong>
+      <span>Última señal</span><strong>${escapeHtml(state.lastSyncAt ? new Date(state.lastSyncAt).toLocaleTimeString() : '—')}</strong>
+      <span>Canal</span><strong>${state.realtimeConnected ? 'SSE conectado' : 'Reconciliación API'}</strong>
+    </div>
+    ${state.phaseDetail ? `<div class="cs-banner"><strong>Detalle:</strong> ${escapeHtml(state.phaseDetail)}</div>` : ''}
+    ${safeExternalHref(state.pullRequest?.url) ? `<a class="cs-btn cs-external-link" href="${escapeHtml(safeExternalHref(state.pullRequest.url))}" target="_blank" rel="noopener noreferrer">Referencia del PR</a>` : ''}`;
+}
+
 function updateTopStatus() {
   const dot = $('#cs-dot');
   const label = $('#cs-status');
   const branch = $('#cs-branch');
   const commit = $('#cs-commit');
   const pr = $('#cs-pr');
+  const merge = $('#cs-merge');
   const preview = $('#cs-preview');
   if (!label) return;
   if (!state.github?.appConfigured) {
     label.textContent = state.github?.error || 'GitHub App sin configurar';
     dot.className = 'cs-dot bad';
   } else {
-    label.textContent = `${state.github.repository} · ${String(state.headSha || state.github.mainSha || '').slice(0, 8)}`;
-    dot.className = 'cs-dot ok';
+    const currentPhase = derivePhase();
+    const phase = PHASES[currentPhase] || PHASES.error;
+    label.textContent = `${phase.label} · ${String(state.headSha || state.github.mainSha || '').slice(0, 8)}`;
+    dot.className = `cs-dot ${phase.tone}`;
   }
   branch.textContent = state.branch || 'main · solo lectura';
   const dirty = [...state.tabs.values()].some(tab => tab.dirty);
   commit.disabled = !state.branch || !dirty;
   pr.disabled = !state.branch || dirty;
   preview.disabled = !state.branch;
+  if (merge) merge.disabled = !state.pullRequest?.number || dirty || !checksSummary().green || derivePhase() === 'merging';
+  renderGithubCenter();
 }
 
 async function bootstrap() {
@@ -241,16 +337,29 @@ async function bootstrap() {
     const data = await api('bootstrap');
     state.github = data.github;
     state.headSha = data.github?.mainSha || '';
+    const rememberedBranch = sessionStorage.getItem('tintin.codeStudio.branch') || '';
+    if (rememberedBranch && data.github?.appConfigured) {
+      try {
+        const workspace = await api(`workspace?branch=${encodeURIComponent(rememberedBranch)}`);
+        state.branch = workspace.workspace.branch;
+        state.currentRef = workspace.workspace.branch;
+        state.headSha = workspace.workspace.headSha;
+        state.pullRequest = workspace.workspace.pullRequest;
+      } catch {
+        sessionStorage.removeItem('tintin.codeStudio.branch');
+      }
+    }
     state.ready = true;
-    updateTopStatus();
+    setPhase('clean', 'Repositorio y rama reconciliados con GitHub.');
     await refreshTree();
+    if (state.pullRequest?.headSha) await refreshChecksState(false);
     setProgress(100);
     setTimeout(() => setProgress(0), 500);
   } catch (error) {
     setProgress(0);
     toast(error.message, true);
     state.github = { appConfigured: false, error: error.message };
-    updateTopStatus();
+    setPhase('disconnected', error.message);
   }
 }
 
@@ -468,6 +577,22 @@ function activateTab(path) {
   if (state.bottom === 'changes') renderChanges();
 }
 
+async function revealEditorLocation(path, line = 1, column = 1) {
+  const tab = await openFile(path);
+  activateTab(tab.path);
+  const position = { lineNumber: Math.max(1, Number(line) || 1), column: Math.max(1, Number(column) || 1) };
+  if (state.editor) {
+    state.editor.setPosition(position);
+    state.editor.revealPositionInCenter(position);
+    state.editor.focus();
+  } else if (state.fallback) {
+    const lines = state.fallback.value.split('\n');
+    const offset = lines.slice(0, position.lineNumber - 1).reduce((total, value) => total + value.length + 1, 0) + position.column - 1;
+    state.fallback.focus();
+    state.fallback.setSelectionRange(offset, offset);
+  }
+}
+
 function renderEditor() {
   const host = $('#cs-editor-host');
   const tab = state.tabs.get(state.activePath);
@@ -518,11 +643,13 @@ async function createBranch() {
   const label = prompt('Nombre corto para este trabajo:', 'cambio-tintin');
   if (!label) return;
   setProgress(30);
+  setPhase('syncing', 'Creando una rama aislada desde el SHA verificado de main.');
   try {
     const result = await api('branch', { method: 'POST', body: JSON.stringify({ label, expectedMainSha: state.github.mainSha }) });
     state.branch = result.branch;
     state.currentRef = result.branch;
     state.headSha = result.sha;
+    sessionStorage.setItem('tintin.codeStudio.branch', result.branch);
     for (const tab of state.tabs.values()) {
       const fresh = await api(`file?ref=${encodeURIComponent(state.branch)}&path=${encodeURIComponent(tab.path)}`);
       tab.sha = fresh.sha; tab.baseline = fresh.content; tab.content = fresh.content; tab.dirty = false; tab.operation = 'update';
@@ -531,8 +658,9 @@ async function createBranch() {
     renderEditor(); renderTabs(); updateTopStatus(); await refreshTree();
     setProgress(100); setTimeout(() => setProgress(0), 400);
     toast(`Rama creada: ${result.branch}`);
+    setPhase('clean', `Rama ${result.branch} creada y sincronizada.`);
   } catch (error) {
-    setProgress(0); toast(error.message, true);
+    setProgress(0); setPhase(error.status === 409 ? 'conflict' : 'error', error.message); toast(error.message, true);
   }
 }
 
@@ -587,6 +715,7 @@ async function commitChanges() {
       setProgress(35);
       const changes = changed.map(tab => ({ path: tab.path, operation: tab.operation, content: tab.content, baseSha: tab.operation === 'create' ? null : tab.sha }));
       try {
+        setPhase('committing', `Creando commit con ${changes.length} archivo(s) y SHA esperado.`);
         const result = await api('commit', { method: 'POST', body: JSON.stringify({ branch: state.branch, expectedHeadSha: state.headSha, message, changes }) });
         state.headSha = result.commitSha;
         for (const tab of changed) {
@@ -601,8 +730,10 @@ async function commitChanges() {
         renderTabs(); renderEditor(); updateTopStatus(); await refreshTree(); await renderChanges();
         setProgress(100); setTimeout(() => setProgress(0), 450);
         toast(`Commit ${result.commitSha.slice(0, 8)} guardado en ${state.branch}.`);
+        setPhase('syncing', `Commit ${result.commitSha.slice(0, 8)} enviado; esperando checks de GitHub.`);
       } catch (error) {
         setProgress(0);
+        setPhase(error.status === 409 ? 'conflict' : 'error', error.message);
         if (error.code === 'recent_auth_required') {
           toast('Reautenticación reciente requerida. Cerrá sesión y volvé a entrar antes de modificar archivos rojos.', true);
         }
@@ -621,10 +752,49 @@ async function openPr() {
     confirmText: 'Abrir PR',
     body: `<div class="cs-field"><label>Título</label><input id="cs-pr-title" class="cs-input" maxlength="180" value="feat: integrar Estudio de Código Tintin"></div><div class="cs-field"><label>Descripción</label><textarea id="cs-pr-body" class="cs-input" rows="8">Cambio preparado desde una rama aislada del Estudio de Código Tintin.\n\nRequiere CI verde, preview y revisión humana antes de fusionar.</textarea></div><div class="cs-list">${compare.compare.files.map(file => `<div class="cs-list-item"><strong>${escapeHtml(file.filename)}</strong> · +${file.additions} / -${file.deletions}</div>`).join('')}</div>`,
     onConfirm: async backdrop => {
+      setPhase('syncing', 'Creando pull request en GitHub.');
       const data = await api('pr', { method: 'POST', body: JSON.stringify({ branch: state.branch, title: backdrop.querySelector('#cs-pr-title').value, body: backdrop.querySelector('#cs-pr-body').value }) });
       state.pullRequest = data.pullRequest;
-      toast(`PR #${data.pullRequest.number} abierto. La fusión queda para revisión humana.`);
+      toast(`PR #${data.pullRequest.number} abierto. Podrás aprobar y mergear desde Tintin cuando todo esté verde.`);
+      setPhase('checks_queued', `PR #${data.pullRequest.number} abierto; esperando checks y preview.`);
       await renderChecks();
+    }
+  });
+}
+
+async function mergeFromStudio() {
+  if (!state.pullRequest?.number || !checksSummary().green) return toast('El PR, sus checks y el preview deben estar listos.', true);
+  const number = state.pullRequest.number;
+  const expected = `MERGEAR #${number}`;
+  await modal({
+    title: `Aprobación final del PR #${number}`,
+    confirmText: 'Fusionar en main',
+    danger: true,
+    body: `<p>Esta es la única acción que modifica <strong>main</strong>. Escribí <strong>${escapeHtml(expected)}</strong> para confirmar después de revisar diff, checks y preview.</p><div class="cs-field"><label>Confirmación exacta</label><input id="cs-merge-confirmation" class="cs-input" autocomplete="off"></div><p class="cs-muted">La sesión debe ser reciente. GitHub seguirá siendo el historial y motor de CI, pero no necesitás salir de Tintin.</p>`,
+    onConfirm: async backdrop => {
+      const confirmation = backdrop.querySelector('#cs-merge-confirmation').value.trim();
+      if (confirmation !== expected) throw new Error(`Escribí exactamente ${expected}`);
+      setPhase('merge_requested', `Aprobación humana recibida para el PR #${number}.`);
+      setProgress(35);
+      try {
+        setPhase('merging', `GitHub está fusionando el PR #${number}.`);
+        const data = await api('merge', {
+          method: 'POST',
+          forceToken: true,
+          body: JSON.stringify({ number, expectedHeadSha: state.pullRequest.headSha, confirmation })
+        });
+        state.mergedSha = data.merge?.sha || '';
+        state.pullRequest = { ...state.pullRequest, state: 'closed', merged: true };
+        setPhase('merged', `PR #${number} fusionado en ${state.mergedSha.slice(0, 8)}.`);
+        setProgress(72);
+        setPhase('deploying', 'Merge correcto; esperando el despliegue de producción informado por GitHub/Cloudflare.');
+        toast(`PR #${number} fusionado. El panel seguirá el despliegue en vivo.`);
+      } catch (error) {
+        setProgress(0);
+        setPhase(error.status === 409 ? 'conflict' : 'error', error.message);
+        if (error.code === 'recent_auth_required') toast('Volvé a iniciar sesión para renovar la autenticación y repetí la aprobación.', true);
+        throw error;
+      }
     }
   });
 }
@@ -637,12 +807,26 @@ async function syncState() {
       const previousMain = state.github?.mainSha;
       state.github = data.github;
       if (!state.branch) state.headSha = data.github.mainSha;
+      if (state.branch) {
+        try {
+          const workspace = await api(`workspace?branch=${encodeURIComponent(state.branch)}`);
+          state.headSha = workspace.workspace.headSha;
+          state.pullRequest = workspace.workspace.pullRequest;
+        } catch (error) {
+          if (error.status === 404) sessionStorage.removeItem('tintin.codeStudio.branch');
+        }
+      }
+      state.lastSyncAt = new Date().toISOString();
+      if (!['merging', 'merged', 'deploying', 'published', 'deploy_failed'].includes(state.phase)) state.phase = 'clean';
       updateTopStatus();
       if (previousMain && previousMain !== data.github.mainSha && state.branch) {
         $('#cs-banner').innerHTML = '<strong>GitHub cambió:</strong> main avanzó desde que creaste tu rama. Revisá el comparador antes de continuar; no se hará ninguna sobreescritura silenciosa.';
       }
     }
-  } catch {}
+  } catch (error) {
+    state.realtimeConnected = false;
+    setPhase('disconnected', error.message || 'No se pudo reconciliar con GitHub.');
+  }
 }
 
 async function previewDeployment() {
@@ -655,7 +839,9 @@ async function previewDeployment() {
       toast(candidates.length ? 'El preview todavía no está listo.' : 'GitHub todavía no reporta un deployment para este commit.', true);
       return;
     }
-    window.open(ready.environmentUrl, '_blank', 'noopener,noreferrer');
+    const previewUrl = safeExternalHref(ready.environmentUrl);
+    if (!previewUrl) throw new Error('GitHub informó un preview fuera de los dominios autorizados');
+    window.open(previewUrl, '_blank', 'noopener,noreferrer');
   } catch (error) { toast(error.message, true); }
 }
 
@@ -716,20 +902,37 @@ async function renderHistory() {
   } catch (error) { host.innerHTML = `<div class="cs-list-item cs-problem-error">${escapeHtml(error.message)}</div>`; }
 }
 
+async function refreshChecksState(showLoading = true) {
+  const host = $('#cs-bottom-content');
+  if (showLoading && state.bottom === 'checks' && host) host.innerHTML = '<div class="cs-muted">Cargando checks…</div>';
+  let sha = state.pullRequest?.headSha || state.headSha;
+  if (!sha) return [];
+  if (state.pullRequest?.number) {
+    const pr = await api(`pr?number=${state.pullRequest.number}`);
+    state.pullRequest = pr.pullRequest;
+    sha = state.pullRequest.headSha;
+  }
+  const data = await api(`checks?sha=${encodeURIComponent(sha)}`);
+  state.checks = data.checks || [];
+  const summary = checksSummary();
+  if (!['merging', 'merged', 'deploying', 'published', 'deploy_failed'].includes(state.phase)) {
+    if (summary.failed.length) state.phase = 'checks_failed';
+    else if (summary.pending.some(check => check.status === 'in_progress')) state.phase = 'checks_running';
+    else if (summary.pending.length || !summary.total) state.phase = 'checks_queued';
+    else if (summary.green && state.pullRequest?.state === 'open') state.phase = 'ready_to_merge';
+    else state.phase = 'clean';
+  }
+  state.lastSyncAt = new Date().toISOString();
+  updateTopStatus();
+  return state.checks;
+}
+
 async function renderChecks() {
   const host = $('#cs-bottom-content');
-  if (state.bottom === 'checks' && host) host.innerHTML = '<div class="cs-muted">Cargando checks…</div>';
-  let sha = state.pullRequest?.headSha || state.headSha;
-  if (!sha) return;
   try {
-    if (state.pullRequest?.number) {
-      const pr = await api(`pr?number=${state.pullRequest.number}`);
-      state.pullRequest = pr.pullRequest;
-      sha = state.pullRequest.headSha;
-    }
-    const data = await api(`checks?sha=${encodeURIComponent(sha)}`);
+    const checks = await refreshChecksState(true);
     if (state.bottom !== 'checks' || !host) return;
-    host.innerHTML = `<div class="cs-list">${data.checks.map(check => `<div class="cs-list-item"><div class="cs-list-title">${check.conclusion === 'success' ? '✓' : check.status === 'completed' ? '!' : '…'} ${escapeHtml(check.name)}</div><div class="cs-muted">${escapeHtml(check.status)} · ${escapeHtml(check.conclusion || 'pendiente')}</div></div>`).join('') || '<div class="cs-muted">GitHub todavía no reporta checks para este commit.</div>'}</div>${state.pullRequest?.url ? `<p class="cs-muted" style="margin-top:8px">La aprobación y fusión final se hacen como revisión humana en GitHub: <a href="${escapeHtml(state.pullRequest.url)}" target="_blank" rel="noopener noreferrer">abrir PR #${state.pullRequest.number}</a>.</p>` : ''}`;
+    host.innerHTML = `<div class="cs-list">${checks.map(check => { const href = safeExternalHref(check.detailsUrl || check.url); return `<a class="cs-list-item cs-check-link"${href ? ` href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer"` : ''}><div class="cs-list-title">${check.conclusion === 'success' ? '✓' : check.status === 'completed' ? '✕' : '…'} ${escapeHtml(check.name)}</div><div class="cs-muted">${escapeHtml(check.status)} · ${escapeHtml(check.conclusion || 'pendiente')}</div></a>`; }).join('') || '<div class="cs-muted">GitHub todavía no reporta checks para este commit.</div>'}</div>${state.pullRequest?.number ? `<p class="cs-muted" style="margin-top:8px">PR #${state.pullRequest.number}. Cuando checks y preview estén verdes, la aprobación humana se realiza con “Mergear” dentro de Tintin.</p>` : ''}`;
   } catch (error) { if (state.bottom === 'checks' && host) host.innerHTML = `<div class="cs-list-item cs-problem-error">${escapeHtml(error.message)}</div>`; }
 }
 
@@ -742,31 +945,106 @@ async function renderMap() {
   try {
     const data = await api('graph', { method: 'POST', body: JSON.stringify({ branch: state.currentRef, paths }) });
     const graph = data.graph;
-    host.innerHTML = `<div class="cs-map">${graph.nodes.map(node => `<button type="button" class="cs-node" data-node="${escapeHtml(node.id)}">${escapeHtml(node.type)} · ${escapeHtml(node.label)}</button>`).join('')}</div><div style="margin-top:10px">${graph.edges.map(edge => `<div class="cs-edge ${edge.evidence}"><strong>${escapeHtml(edge.evidence)}</strong> · ${escapeHtml(edge.source)} → ${escapeHtml(edge.target)} · ${escapeHtml(edge.kind)}${edge.path ? ` · ${escapeHtml(edge.path)}${edge.line ? ':' + edge.line : ''}` : ''}</div>`).join('') || '<div class="cs-muted">No se encontraron conexiones literales en los archivos abiertos.</div>'}</div>`;
-    host.querySelectorAll('[data-node]').forEach(node => node.addEventListener('click', () => {
-      const id = node.dataset.node;
-      if (state.tabs.has(id)) activateTab(id);
-      else if (!id.startsWith('http') && !id.startsWith('/api/') && id.includes('/')) openFile(id).catch(() => {});
+    const columns = { file: 80, 'file-reference': 80, class: 360, function: 360, api: 670, collection: 670, 'external-link': 670, 'external-service': 670 };
+    const counters = new Map();
+    const positions = new Map(graph.nodes.map(node => {
+      const x = columns[node.type] ?? 500;
+      const row = counters.get(x) || 0;
+      counters.set(x, row + 1);
+      return [node.id, { x, y: 30 + row * 58 }];
+    }));
+    const height = Math.max(170, ...[...positions.values()].map(position => position.y + 50));
+    const lines = graph.edges.map(edge => {
+      const source = positions.get(edge.source);
+      const target = positions.get(edge.target);
+      if (!source || !target) return '';
+      return `<path class="cs-graph-line ${escapeHtml(edge.evidence)}" d="M ${source.x + 150} ${source.y + 17} C ${source.x + 210} ${source.y + 17}, ${target.x - 60} ${target.y + 17}, ${target.x} ${target.y + 17}"><title>${escapeHtml(`${edge.kind} · ${edge.path || ''}:${edge.line || ''}`)}</title></path>`;
+    }).join('');
+    const nodes = graph.nodes.map(node => {
+      const position = positions.get(node.id);
+      const location = node.path ? `${node.path}:${node.line || 1}` : node.url ? new URL(node.url).hostname : node.id;
+      return `<button type="button" class="cs-graph-node ${escapeHtml(node.type)}" style="left:${position.x}px;top:${position.y}px" data-graph-id="${escapeHtml(node.id)}"><span>${escapeHtml(node.label)}</span><small>${escapeHtml(node.type)} · ${escapeHtml(location)}</small></button>`;
+    }).join('');
+    host.innerHTML = `<div class="cs-graph-toolbar"><strong>Mapa de impacto verificable</strong><span class="cs-spacer"></span><button class="cs-btn" data-graph-zoom="out" type="button">−</button><button class="cs-btn" data-graph-zoom="reset" type="button">Centrar</button><button class="cs-btn" data-graph-zoom="in" type="button">＋</button></div><div class="cs-graph-viewport"><div class="cs-graph-canvas" style="width:900px;height:${height}px;transform:scale(${state.graphScale})"><svg width="900" height="${height}" aria-hidden="true">${lines}</svg>${nodes}</div></div><div class="cs-graph-legend">Archivo → símbolo → API, Firestore o servicio. Verde: confirmado; amarillo: probable; gris: informativo.</div>`;
+    host.querySelectorAll('[data-graph-id]').forEach(button => button.addEventListener('click', async () => {
+      const node = graph.nodes.find(item => item.id === button.dataset.graphId);
+      if (!node) return;
+      if (node.url) {
+        try {
+          const url = new URL(node.url);
+          if (url.protocol !== 'https:' || !EXTERNAL_HOSTS.has(url.hostname.toLowerCase())) throw new Error('Enlace externo no autorizado');
+          window.open(url.toString(), '_blank', 'noopener,noreferrer');
+        } catch (error) { toast(error.message, true); }
+        return;
+      }
+      if (node.path) await revealEditorLocation(node.path, node.line, node.column).catch(error => toast(error.message, true));
+    }));
+    host.querySelectorAll('[data-graph-zoom]').forEach(button => button.addEventListener('click', () => {
+      if (button.dataset.graphZoom === 'in') state.graphScale = Math.min(1.6, state.graphScale + 0.15);
+      if (button.dataset.graphZoom === 'out') state.graphScale = Math.max(0.55, state.graphScale - 0.15);
+      if (button.dataset.graphZoom === 'reset') state.graphScale = 1;
+      host.querySelector('.cs-graph-canvas').style.transform = `scale(${state.graphScale})`;
     }));
   } catch (error) { host.innerHTML = `<div class="cs-list-item cs-problem-error">${escapeHtml(error.message)}</div>`; }
 }
 
-async function fetchEventsSnapshot() {
+async function processRealtimeSnapshot(payload) {
+  state.lastEvents = Array.isArray(payload?.events) ? payload.events : [];
+  state.lastSyncAt = new Date().toISOString();
+  const deploymentEvent = state.lastEvents.find(event => event.event === 'deployment_status' && (!state.mergedSha || !event.sha || event.sha === state.mergedSha));
+  if (deploymentEvent && state.phase === 'deploying') {
+    if (deploymentEvent.state === 'success') { setProgress(100); setPhase('published', 'Cloudflare confirmó el despliegue de producción.'); }
+    else if (['failure', 'error', 'inactive'].includes(deploymentEvent.state)) { setProgress(0); setPhase('deploy_failed', `El despliegue terminó en estado ${deploymentEvent.state}.`); }
+    else if (state.mergedSha) setPhase('deploying', `Despliegue de producción: ${deploymentEvent.state || 'en curso'}.`);
+  }
+  if (state.lastEvents.some(event => ['check_run', 'check_suite', 'workflow_run', 'pull_request'].includes(event.event))) refreshChecksState(false).catch(() => {});
+  updateTopStatus();
+  if (state.bottom === 'events') renderEvents();
+}
+
+async function connectRealtimeEvents() {
+  if (state.realtimeController) return;
+  const controller = new AbortController();
+  state.realtimeController = controller;
   try {
     const token = await currentToken();
-    const response = await fetch(`${API}/events`, { headers: { authorization: `Bearer ${token}` }, cache: 'no-store' });
-    if (!response.ok) return;
-    const text = await response.text();
-    const match = text.match(/event:\s*snapshot\s*\ndata:\s*(\{.*\})/);
-    if (match) state.lastEvents = JSON.parse(match[1]).events || [];
-    if (state.bottom === 'events') renderEvents();
-  } catch {}
+    const response = await fetch(`${API}/events`, { headers: { authorization: `Bearer ${token}`, accept: 'text/event-stream' }, cache: 'no-store', signal: controller.signal });
+    if (!response.ok || !response.body) throw new Error(`Canal en vivo no disponible (${response.status})`);
+    state.realtimeConnected = true;
+    updateTopStatus();
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true }).replace(/\r\n/g, '\n');
+      let boundary;
+      while ((boundary = buffer.indexOf('\n\n')) >= 0) {
+        const block = buffer.slice(0, boundary);
+        buffer = buffer.slice(boundary + 2);
+        const eventName = block.match(/^event:\s*(.+)$/m)?.[1]?.trim();
+        const rawData = block.split('\n').filter(line => line.startsWith('data:')).map(line => line.slice(5).trimStart()).join('\n');
+        if (eventName === 'snapshot' && rawData) {
+          try { await processRealtimeSnapshot(JSON.parse(rawData)); } catch {}
+        }
+      }
+    }
+  } catch (error) {
+    if (error.name !== 'AbortError') state.phaseDetail = `Canal en vivo reconectando: ${error.message}`;
+  } finally {
+    if (state.realtimeController === controller) state.realtimeController = null;
+    state.realtimeConnected = false;
+    updateTopStatus();
+    clearTimeout(state.realtimeReconnectTimer);
+    state.realtimeReconnectTimer = setTimeout(() => { if (state.visible) connectRealtimeEvents(); }, 1500);
+  }
 }
 
 function renderEvents() {
   const host = $('#cs-bottom-content');
   if (!host || state.bottom !== 'events') return;
-  host.innerHTML = `<div class="cs-list">${state.lastEvents.map(event => `<div class="cs-list-item"><div class="cs-list-title">${escapeHtml(event.event)} · ${escapeHtml(event.action || 'evento')}</div><div class="cs-muted">${escapeHtml(event.ref || '')} ${escapeHtml(String(event.sha || '').slice(0, 8))} · ${escapeHtml(event.receivedAt || '')}</div></div>`).join('') || '<div class="cs-muted">Sin webhooks recientes. El panel también reconcilia periódicamente con GitHub.</div>'}</div>`;
+  host.innerHTML = `<div class="cs-list">${state.lastEvents.map(event => `<div class="cs-list-item"><div class="cs-list-title">${escapeHtml(event.event)} · ${escapeHtml(event.action || event.state || 'evento')}</div><div class="cs-muted">${escapeHtml(event.ref || '')} ${escapeHtml(String(event.sha || '').slice(0, 8))}${event.state ? ` · ${escapeHtml(event.state)}` : ''} · ${escapeHtml(event.receivedAt || '')}</div></div>`).join('') || '<div class="cs-muted">Sin webhooks recientes. El canal SSE está autenticado y el panel también reconcilia periódicamente con GitHub.</div>'}</div>`;
 }
 
 async function sendAi() {
@@ -777,11 +1055,41 @@ async function sendAi() {
   output.textContent = 'Analizando únicamente evidencia verificada de GitHub…';
   try {
     const data = await api('ai/analyze', { method: 'POST', body: JSON.stringify({ question, branch: state.currentRef, paths: [...state.tabs.keys()].slice(0, 12) }) });
-    output.textContent = data.proposal.text;
+    const result = data.proposal;
+    const proposal = result.proposal || { summary: result.text, changes: [] };
+    state.aiProposal = proposal;
+    const section = (title, values) => Array.isArray(values) && values.length ? `<h4>${title}</h4><ul>${values.map(value => `<li>${escapeHtml(value)}</li>`).join('')}</ul>` : '';
+    output.innerHTML = `<h3>Propuesta basada en GitHub</h3><p>${escapeHtml(proposal.summary || result.text)}</p>${section('Diagnóstico', proposal.diagnosis)}${section('Impacto', proposal.impact)}${section('Pruebas sugeridas', proposal.tests)}${proposal.rollback ? `<h4>Rollback</h4><p>${escapeHtml(proposal.rollback)}</p>` : ''}<h4>Cambios completos</h4>${proposal.changes?.length ? proposal.changes.map(change => `<div class="cs-list-item"><strong>${escapeHtml(change.path)}</strong><br><span class="cs-muted">Actualización completa · base ${escapeHtml(String(change.baseSha || '').slice(0, 8))}</span></div>`).join('') : '<p class="cs-muted">La IA no propuso modificaciones aplicables.</p>'}`;
+    $('#cs-ai-proposal-actions')?.classList.toggle('cs-hidden', !proposal.changes?.length);
   } catch (error) {
     output.textContent = error.message;
     toast(error.message, true);
   }
+}
+
+async function applyAiProposal() {
+  const changes = state.aiProposal?.changes || [];
+  if (!state.branch) return toast('Creá o recuperá una rama antes de aplicar cambios.', true);
+  if (!changes.length) return;
+  for (const change of changes) {
+    const tab = await openFile(change.path);
+    if (tab.dirty || tab.sha !== change.baseSha) throw new Error(`${change.path} cambió desde el análisis. Volvé a pedir la revisión para evitar sobrescribir trabajo.`);
+  }
+  for (const change of changes) {
+    const tab = state.tabs.get(change.path);
+    tab.content = change.content;
+    tab.dirty = tab.content !== tab.baseline;
+    if (tab.model) tab.model.setValue(tab.content);
+  }
+  renderTabs(); updateTopStatus(); updateAiContext(); switchBottom('changes');
+  $('#cs-ai-proposal-actions')?.classList.add('cs-hidden');
+  toast(`${changes.length} archivo(s) aplicados únicamente a buffers locales. Revisalos antes del commit.`);
+}
+
+function discardAiProposal() {
+  state.aiProposal = null;
+  $('#cs-ai-proposal-actions')?.classList.add('cs-hidden');
+  $('#cs-ai-output').textContent = 'Propuesta descartada. No se modificó ningún archivo.';
 }
 
 function updateAiContext() {
@@ -792,9 +1100,8 @@ function updateAiContext() {
 }
 
 function startRealtimeLoops() {
-  if (!state.eventsTimer) state.eventsTimer = setInterval(() => { if (state.visible) fetchEventsSnapshot(); }, 15000);
   if (!state.reconcileTimer) state.reconcileTimer = setInterval(() => { if (state.visible) syncState(); }, 60000);
-  fetchEventsSnapshot();
+  connectRealtimeEvents();
 }
 
 async function globalSearch() {
@@ -831,10 +1138,22 @@ function bindUi() {
   $('#cs-delete')?.addEventListener('click', deleteSelected);
   $('#cs-commit')?.addEventListener('click', commitChanges);
   $('#cs-pr')?.addEventListener('click', openPr);
+  $('#cs-merge')?.addEventListener('click', mergeFromStudio);
   $('#cs-preview')?.addEventListener('click', previewDeployment);
   $('#cs-ai-send')?.addEventListener('click', sendAi);
+  $('#cs-ai-apply')?.addEventListener('click', () => applyAiProposal().catch(error => toast(error.message, true)));
+  $('#cs-ai-discard')?.addEventListener('click', discardAiProposal);
   $('#cs-ai-close')?.addEventListener('click', () => $('#cs-ai')?.classList.add('cs-collapsed'));
   $('#cs-ai-toggle')?.addEventListener('click', () => $('#cs-ai')?.classList.toggle('cs-collapsed'));
+  $('#cs-github-center-toggle')?.addEventListener('click', () => {
+    const panel = $('#cs-github-center');
+    const hidden = panel?.classList.toggle('cs-hidden');
+    $('#cs-github-center-toggle')?.setAttribute('aria-expanded', String(!hidden));
+  });
+  $('#cs-github-center-close')?.addEventListener('click', () => {
+    $('#cs-github-center')?.classList.add('cs-hidden');
+    $('#cs-github-center-toggle')?.setAttribute('aria-expanded', 'false');
+  });
   document.querySelectorAll('.cs-bottom-tab').forEach(button => button.addEventListener('click', () => switchBottom(button.dataset.bottom)));
   let searchTimer;
   $('#cs-search')?.addEventListener('input', () => { clearTimeout(searchTimer); searchTimer = setTimeout(globalSearch, 350); });

@@ -90,6 +90,21 @@ export function requiresRecentAuth(paths = []) {
   return paths.some(path => classifyCodeRisk(path) === 'red');
 }
 
+export function requireRecentAuthToken(idToken, maxAgeSeconds = 10 * 60) {
+  const part = String(idToken || '').split('.')[1] || '';
+  let payload = {};
+  try {
+    const normalized = part.replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(part.length / 4) * 4, '=');
+    payload = JSON.parse(atob(normalized));
+  } catch {}
+  const authTime = Number(payload.auth_time || 0);
+  const age = Math.floor(Date.now() / 1000) - authTime;
+  if (!authTime || age < 0 || age > Math.max(60, Number(maxAgeSeconds) || 600)) {
+    throw Object.assign(new Error('Esta operación requiere volver a autenticarte antes de continuar'), { status: 403, code: 'recent_auth_required' });
+  }
+  return true;
+}
+
 export function sanitizeCommitMessage(value) {
   const message = String(value || '').replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim();
   if (message.length < 6 || message.length > 180) throw new Error('El mensaje de commit debe tener entre 6 y 180 caracteres');
@@ -197,43 +212,156 @@ export function makeEvidence({ source, target, kind, path, line = null, evidence
   };
 }
 
-export function buildFileEvidenceGraph(files = []) {
+function lineAt(content, index) {
+  return content.slice(0, Math.max(0, index)).split('\n').length;
+}
+
+function symbolId(path, line, name) {
+  return `symbol:${path}:${line}:${name}`;
+}
+
+function extractSymbols(path, content) {
+  const symbols = [];
+  const seen = new Set();
+  const add = (match, name, type) => {
+    if (!name || seen.has(`${match.index}:${name}`)) return;
+    const line = lineAt(content, match.index);
+    seen.add(`${match.index}:${name}`);
+    symbols.push({ id: symbolId(path, line, name), name, type, line, index: match.index });
+  };
+
+  const patterns = [
+    { type: 'class', regex: /\bclass\s+([A-Za-z_$][\w$]*)/g, group: 1 },
+    { type: 'function', regex: /\b(?:export\s+)?(?:async\s+)?function\s+([A-Za-z_$][\w$]*)\s*\(/g, group: 1 },
+    { type: 'function', regex: /\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*(?:async\s*)?(?:function\b|(?:\([^)]*\)|[A-Za-z_$][\w$]*)\s*=>)/g, group: 1 }
+  ];
+  for (const pattern of patterns) {
+    let match;
+    while ((match = pattern.regex.exec(content))) add(match, match[pattern.group], pattern.type);
+  }
+  return symbols.sort((first, second) => first.index - second.index);
+}
+
+function symbolAt(symbols, index, fallback) {
+  let owner = fallback;
+  for (const symbol of symbols) {
+    if (symbol.index > index) break;
+    owner = symbol.id;
+  }
+  return owner;
+}
+
+function safeFirebaseConsoleUrl(projectId, collection) {
+  const project = String(projectId || '').trim();
+  if (!/^[a-z][a-z0-9-]{4,29}$/i.test(project)) return '';
+  return `https://console.firebase.google.com/project/${encodeURIComponent(project)}/firestore/databases/-default-/data/~2F${encodeURIComponent(collection)}`;
+}
+
+export function buildFileEvidenceGraph(files = [], options = {}) {
   const nodes = new Map();
   const edges = [];
-  const addNode = (id, type, label = id) => {
-    if (!nodes.has(id)) nodes.set(id, { id, type, label: String(label).slice(0, 160) });
+  const analyzedFiles = [];
+  const symbolsByName = new Map();
+  const allowedHosts = Array.isArray(options.allowedExternalHosts) ? options.allowedExternalHosts : [];
+  const addNode = (id, type, label = id, metadata = {}) => {
+    if (!nodes.has(id)) {
+      nodes.set(id, {
+        id,
+        type,
+        label: String(label).slice(0, 160),
+        path: metadata.path ? normalizeCodePath(metadata.path) : null,
+        line: Number.isInteger(metadata.line) && metadata.line > 0 ? metadata.line : null,
+        column: Number.isInteger(metadata.column) && metadata.column > 0 ? metadata.column : 1,
+        symbol: String(metadata.symbol || '').slice(0, 160),
+        url: String(metadata.url || '').slice(0, 1000),
+        risk: metadata.path ? classifyCodeRisk(metadata.path) : String(metadata.risk || 'green')
+      });
+    } else if (metadata.url) {
+      const existing = nodes.get(id);
+      existing.url = String(metadata.url).slice(0, 1000);
+      existing.type = type === 'external-link' ? type : existing.type;
+      if (!existing.path && metadata.path) existing.path = normalizeCodePath(metadata.path);
+      if (!existing.line && Number.isInteger(metadata.line) && metadata.line > 0) existing.line = metadata.line;
+    }
   };
 
   for (const file of files) {
     let path;
     try { path = normalizeCodePath(file?.path); } catch { continue; }
     const content = String(file?.content || '');
-    addNode(path, 'file', path.split('/').pop());
+    addNode(path, 'file', path.split('/').pop(), { path, line: 1 });
+    const symbols = extractSymbols(path, content);
+    analyzedFiles.push({ path, content, symbols });
+    for (const symbol of symbols) {
+      const matches = symbolsByName.get(symbol.name) || [];
+      matches.push(symbol);
+      symbolsByName.set(symbol.name, matches);
+      addNode(symbol.id, symbol.type, symbol.name, { path, line: symbol.line, symbol: symbol.name });
+      edges.push(makeEvidence({ source: path, target: symbol.id, kind: 'contains', path, line: symbol.line, evidence: 'confirmed', detail: `${symbol.type} ${symbol.name}` }));
+    }
 
     const importRegex = /(?:import\s+(?:[^'";]+?\s+from\s+)?|export\s+[^'";]+?\s+from\s+|import\s*\()(['"])([^'"]+)\1/g;
     let match;
     while ((match = importRegex.exec(content))) {
       const specifier = match[2];
-      const line = content.slice(0, match.index).split('\n').length;
+      const line = lineAt(content, match.index);
       const target = specifier.startsWith('.') ? resolveRelativeImport(path, specifier) : specifier;
-      addNode(target, specifier.startsWith('.') ? 'file-reference' : 'external-service', target.split('/').pop());
-      edges.push(makeEvidence({ source: path, target, kind: 'imports', path, line, evidence: specifier.startsWith('.') ? 'confirmed' : 'informational', detail: specifier }));
+      addNode(target, specifier.startsWith('.') ? 'file-reference' : 'external-service', target.split('/').pop(), specifier.startsWith('.') ? { path: target, line: 1 } : {});
+      edges.push(makeEvidence({ source: symbolAt(symbols, match.index, path), target, kind: 'imports', path, line, evidence: specifier.startsWith('.') ? 'confirmed' : 'informational', detail: specifier }));
     }
 
     const fetchRegex = /fetch\s*\(\s*(['"`])([^'"`$]+)\1/g;
     while ((match = fetchRegex.exec(content))) {
       const target = match[2];
-      const line = content.slice(0, match.index).split('\n').length;
-      addNode(target, target.startsWith('/api/') ? 'api' : 'external-service', target);
-      edges.push(makeEvidence({ source: path, target, kind: 'calls', path, line, evidence: 'confirmed', detail: 'fetch() literal' }));
+      const line = lineAt(content, match.index);
+      addNode(target, target.startsWith('/api/') ? 'api' : 'external-service', target, { path, line });
+      edges.push(makeEvidence({ source: symbolAt(symbols, match.index, path), target, kind: 'calls', path, line, evidence: 'confirmed', detail: 'fetch() literal' }));
     }
 
     const collectionRegex = /collection\s*\(\s*[^,]+,\s*(['"])([^'"]+)\1/g;
     while ((match = collectionRegex.exec(content))) {
       const target = `firestore:${match[2]}`;
-      const line = content.slice(0, match.index).split('\n').length;
-      addNode(target, 'collection', match[2]);
-      edges.push(makeEvidence({ source: path, target, kind: 'reads-or-writes', path, line, evidence: 'confirmed', detail: 'Firestore collection() literal' }));
+      const line = lineAt(content, match.index);
+      addNode(target, 'collection', match[2], { path, line, url: safeFirebaseConsoleUrl(options.firebaseProjectId, match[2]), risk: 'orange' });
+      edges.push(makeEvidence({ source: symbolAt(symbols, match.index, path), target, kind: 'reads-or-writes', path, line, evidence: 'confirmed', detail: 'Firestore collection() literal' }));
+    }
+
+    const urlRegex = /https:\/\/[^\s'"`)<>]+/g;
+    while ((match = urlRegex.exec(content))) {
+      const rawUrl = match[0].replace(/[.,;]+$/, '');
+      let safeUrl;
+      try { safeUrl = sanitizeExternalUrl(rawUrl, allowedHosts); } catch { continue; }
+      const line = lineAt(content, match.index);
+      addNode(safeUrl, 'external-link', new URL(safeUrl).hostname, { path, line, url: safeUrl, risk: 'orange' });
+      edges.push(makeEvidence({ source: symbolAt(symbols, match.index, path), target: safeUrl, kind: 'links-to', path, line, evidence: 'confirmed', detail: 'URL HTTPS allowlisted' }));
+    }
+  }
+
+  const callEdges = new Set();
+  const ignoredCalls = new Set(['if', 'for', 'while', 'switch', 'catch', 'function', 'fetch', 'collection']);
+  for (const file of analyzedFiles) {
+    const callRegex = /\b([A-Za-z_$][\w$]*)\s*\(/g;
+    let match;
+    while ((match = callRegex.exec(file.content))) {
+      const name = match[1];
+      if (ignoredCalls.has(name)) continue;
+      const targets = symbolsByName.get(name) || [];
+      if (targets.length !== 1 || targets[0].index === match.index) continue;
+      const source = symbolAt(file.symbols, match.index, file.path);
+      const target = targets[0].id;
+      if (source === target) continue;
+      const key = `${source}\u0000${target}\u0000${match.index}`;
+      if (callEdges.has(key)) continue;
+      callEdges.add(key);
+      edges.push(makeEvidence({
+        source,
+        target,
+        kind: 'calls-symbol',
+        path: file.path,
+        line: lineAt(file.content, match.index),
+        evidence: 'probable',
+        detail: `Llamada literal a ${name}; resolución única entre los archivos analizados`
+      }));
     }
   }
 
