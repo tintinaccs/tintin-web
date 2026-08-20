@@ -1,5 +1,9 @@
 # Prueba de compra real y smoke autenticado
 
+> [!IMPORTANT]
+> **ESTADO: DIFERIDA — NO EJECUTAR EN EL CIERRE ACTUAL.**
+> Por decisión del propietario, desde el 20/08/2026 la compra real queda fuera de esta etapa. La validación activa es [`docs/prueba-e2e-sin-cobro.md`](./prueba-e2e-sin-cobro.md), que no cobra, no crea pedidos reales y no modifica stock de producción. Este documento se conserva únicamente para una autorización futura explícita cercana al cutover definitivo.
+
 Guion ejecutable para los dos pendientes manuales de #340: la compra controlada de punta
 a punta (punto 1) y el smoke autenticado en producción (punto 2).
 
