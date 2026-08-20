@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-20T02:18:37.017Z",
-  "sourceFingerprint": "93d49aa282f22c442a0e0fb0968e251bc5697b3cc83c23c900f32f8ef9f42223",
+  "generatedAt": "2026-08-20T12:22:36.597Z",
+  "sourceFingerprint": "0c08c5295ed932520e8ccab792d103c4edf212eeda326e70061bc8eb530dd406",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 669,
-    "textFiles": 637,
-    "totalBytes": 7618297,
+    "files": 674,
+    "textFiles": 642,
+    "totalBytes": 7633711,
     "pages": 18,
-    "modules": 417
+    "modules": 418
   },
   "viewports": [
     {
@@ -23198,8 +23198,8 @@
     },
     {
       "path": "scripts/auditar-fase-11-seo.js",
-      "bytes": 9494,
-      "sha256": "d8a8d033967776f3c99b2343406335a0c5fdb92d2e20f64aa4ec508b4e54ca93",
+      "bytes": 9529,
+      "sha256": "45600d398221f35a895243c3c6563ae0e4c1679b35f1e949015b0ac285a1b3a4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25103,6 +25103,24 @@
       ]
     },
     {
+      "path": "scripts/resumir-auditoria-dependencias.mjs",
+      "bytes": 1427,
+      "sha256": "561e24764adf630fbca066b7158bf83b39fbd5e37f99d78849b3e7b2e604dd9d",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/servidor-local-pruebas.mjs",
       "bytes": 4980,
       "sha256": "710fcb37cd6d37776f0520e4f816923b45f34f2bff2c78dc30eddbf230ffb01e",
@@ -26746,6 +26764,12 @@
       "sha256": "0a709a7ad00725d9e8361645649620be2b5f5c71615ef5f8400e1b3b3179b5a0"
     },
     {
+      "path": ".github/workflows/auditoria-dependencias.yml",
+      "extension": ".yml",
+      "bytes": 1635,
+      "sha256": "07a46797fd092770ab8cf781f6da4071531cab8d5aa2fc70f8cd536251f6c5d9"
+    },
+    {
       "path": ".github/workflows/auditoria-tooling.yml",
       "extension": ".yml",
       "bytes": 1598,
@@ -27598,6 +27622,12 @@
       "sha256": "142acb02418d05b7482432a67fa21a73ce2bcb757929af01280d1b540132a335"
     },
     {
+      "path": "docs/cierre-operativo-2026-08-20.md",
+      "extension": ".md",
+      "bytes": 7145,
+      "sha256": "006b2bcc15d04bb41a06ef232c10d91b6578409f2b75ed89f4bc3e44f5022877"
+    },
+    {
       "path": "docs/cierre-produccion-manual.md",
       "extension": ".md",
       "bytes": 1551,
@@ -27744,14 +27774,20 @@
     {
       "path": "docs/plan-respaldo-recuperacion.md",
       "extension": ".md",
-      "bytes": 5686,
-      "sha256": "19736a11bc9b5a733dd6e557826f156a57536c675cc72e0a902e2b2c10735b9e"
+      "bytes": 6541,
+      "sha256": "5f991c8a7bd9046e1da4baaf8991e132f2f072ded1c3d31c214523acfaff1c39"
     },
     {
       "path": "docs/prueba-compra-real.md",
       "extension": ".md",
-      "bytes": 5949,
-      "sha256": "0339159e7668a8c749f7a0e70712e3ebf00ca7f878206590becf6292e052cfa1"
+      "bytes": 6390,
+      "sha256": "7b881cc043528f531de9ae0ca907a83c1ab63b230a0cbbaaeed156d81e92ca4b"
+    },
+    {
+      "path": "docs/prueba-e2e-sin-cobro.md",
+      "extension": ".md",
+      "bytes": 3853,
+      "sha256": "ece8000cef82a4fac7ca754de721a2571a3dfb8d3e92be538c63b24a8fc7b4f8"
     },
     {
       "path": "docs/recuperacion-firestore.md",
@@ -28106,6 +28142,12 @@
       "extension": ".md",
       "bytes": 3038,
       "sha256": "8fdbc16cbd92e7d9bd06fb42abbab34e0f43ab964150d7c7fe30ea49ded1f12a"
+    },
+    {
+      "path": "functions/js/package.json",
+      "extension": ".json",
+      "bytes": 23,
+      "sha256": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a"
     },
     {
       "path": "functions/js/pedido-checkout-seguro.js",
@@ -29790,8 +29832,8 @@
     {
       "path": "scripts/auditar-fase-11-seo.js",
       "extension": ".js",
-      "bytes": 9494,
-      "sha256": "d8a8d033967776f3c99b2343406335a0c5fdb92d2e20f64aa4ec508b4e54ca93"
+      "bytes": 9529,
+      "sha256": "45600d398221f35a895243c3c6563ae0e4c1679b35f1e949015b0ac285a1b3a4"
     },
     {
       "path": "scripts/auditar-fase-12-entrega.mjs",
@@ -30266,6 +30308,12 @@
       "extension": ".mjs",
       "bytes": 6934,
       "sha256": "aba8ccb0ae521eddc43228e09248ef8911ce37355166e75fa1175572a7732ac9"
+    },
+    {
+      "path": "scripts/resumir-auditoria-dependencias.mjs",
+      "extension": ".mjs",
+      "bytes": 1427,
+      "sha256": "561e24764adf630fbca066b7158bf83b39fbd5e37f99d78849b3e7b2e604dd9d"
     },
     {
       "path": "scripts/servidor-local-pruebas.mjs",
