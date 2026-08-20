@@ -7,12 +7,12 @@
    real se realiza con firmas temporales de Cloudinary emitidas por Cloudflare.
    ============================================================= */
 
-import { validateImageFile } from './procesamiento-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
+import { validateImageFile } from './procesamiento-imagenes.js?v=tintin-20260820-microcopy-ios-1';
 import {
   deleteMediaByUrlIfUnused,
   deleteMediaItem,
   uploadImageToLibrary
-} from './biblioteca-multimedia.js?v=tintin-20260716-cloudinary-fix-1';
+} from './biblioteca-multimedia.js?v=tintin-20260820-microcopy-ios-1';
 
 const STAGE_LABELS = {
   validating: 'Validando archivo…',

@@ -22,7 +22,7 @@ import {
   setDoc,
   where,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { validateImageFile, processImage } from './procesamiento-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
+import { validateImageFile, processImage } from './procesamiento-imagenes.js?v=tintin-20260820-microcopy-ios-1';
 
 const MEDIA_COLLECTION = 'media';
 const TOKEN_TIMEOUT_MS = 10000;

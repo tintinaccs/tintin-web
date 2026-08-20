@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1"></script>
-  <script src="js/cargador-pagina.js?v=tintin-20260816-loader-min-show-1"></script>
+  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260820-microcopy-ios-1"></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260820-microcopy-ios-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260816-loader-shell-atomic-1" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
@@ -23,7 +23,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
   <link rel="modulepreload" href="js/core/store-gate/control-tienda.js?v=tintin-20260818-gate-icon-svg-2">
-  <link rel="modulepreload" href="js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1">
+  <link rel="modulepreload" href="js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260820-microcopy-ios-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
   <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260816-loader-shell-atomic-1">
   <link rel="preload" as="style" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260818-header-dropdowns-solid-3">
@@ -41,7 +41,7 @@
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3">
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260818-collections-apple-2">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260820-microcopy-ios-1">
   <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20260818-text-icons-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -371,7 +371,7 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart
-} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260814-social-notifications-1";
+} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260820-microcopy-ios-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
 import {
@@ -379,10 +379,10 @@ import {
   normalizeStoreAccessConfig,
   renderStoreClosedOverlay,
   removeStoreClosedOverlay
-} from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1";
+} from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260820-microcopy-ios-1";
 import { cleanText } from "./js/core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
-import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=tintin-20260803-location-picker-2";
-import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260803-encomienda-1";
+import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=tintin-20260820-microcopy-ios-1";
+import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260820-microcopy-ios-1";
 import { attachSavedLocationConfirm, isConfirmableLocation } from "./js/pages/checkout/checkout-ubicacion-guardada.js?v=tintin-20260803-saved-location-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { apiUrl } from "./js/core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
@@ -804,7 +804,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260814-social-notifications-1');
+        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260820-microcopy-ios-1');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -1838,9 +1838,9 @@ onAuthStateChanged(auth, user => {
     .catch(e => console.error('No se pudo cargar el perfil del usuario:', e));
 });
 </script>
-<script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/analytics/analitica.js?v=tintin-20260820-microcopy-ios-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260815-profile-routes-1"></script>
-<script src="tienda.js?v=tintin-20260818-product-trust-icons-2" defer></script>
+<script src="tienda.js?v=tintin-20260820-microcopy-ios-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

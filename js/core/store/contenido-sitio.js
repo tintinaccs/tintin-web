@@ -15,8 +15,8 @@ import {
   sanitizeContentHref,
   normalizeContentValue,
   detectContentPageId,
-} from './esquema-contenido.js?v=tintin-20260815-routes-clean-1';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260815-routes-clean-1';
+} from './esquema-contenido.js?v=tintin-20260820-microcopy-ios-1';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260820-microcopy-ios-1';
 
 const subscriptions = new Map();
 const latestData = new Map();

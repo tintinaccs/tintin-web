@@ -5,9 +5,9 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260818-product-trust-icons-2';
-const COLOR_FIRST_PAINT_VERSION = 'tintin-20260816-loader-shell-bridge-1';
-const LOADER_VERSION = 'tintin-20260816-loader-min-show-1';
+const VERSION = 'tintin-20260820-microcopy-ios-1';
+const COLOR_FIRST_PAINT_VERSION = 'tintin-20260820-microcopy-ios-1';
+const LOADER_VERSION = 'tintin-20260820-microcopy-ios-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const NAV_ENTRY_VERSION = 'tintin-20260816-loader-shell-atomic-1';

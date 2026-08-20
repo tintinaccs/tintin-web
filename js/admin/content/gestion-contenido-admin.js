@@ -29,7 +29,7 @@ import {
   sanitizeSection,
   sanitizeContentHref,
   normalizeContentValue,
-} from '../../core/store/esquema-contenido.js?v=tintin-20260815-routes-clean-1';
+} from '../../core/store/esquema-contenido.js?v=tintin-20260820-microcopy-ios-1';
 
 if (!window.TintinAdminContentPhase6Booted) {
   window.TintinAdminContentPhase6Booted = true;

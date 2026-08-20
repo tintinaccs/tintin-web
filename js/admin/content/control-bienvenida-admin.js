@@ -14,7 +14,7 @@ import {
   defaultWelcomeSteps,
   normalizeWelcomeConfig,
   normalizeWelcomeStep
-} from '../../components/welcome/configuracion-bienvenida.js?v=tintin-20260812-welcome-media-1';
+} from '../../components/welcome/configuracion-bienvenida.js?v=tintin-20260820-microcopy-ios-1';
 
 const REF = doc(db, 'settings', 'welcomeTutorial');
 

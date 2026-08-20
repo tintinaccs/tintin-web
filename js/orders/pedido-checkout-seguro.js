@@ -12,14 +12,14 @@ import {
   clearCart,
   cartTotal,
   formatPrice
-} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260814-social-notifications-1';
+} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260820-microcopy-ios-1';
 import {
   findCountryByCode,
   normalizePhone,
   isValidPhone
 } from '../components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1';
 import { createOrderViaServer } from '../create-order-client.js?v=tintin-20260811-phone-order-1';
-import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260808-contract-1';
+import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260820-microcopy-ios-1';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
