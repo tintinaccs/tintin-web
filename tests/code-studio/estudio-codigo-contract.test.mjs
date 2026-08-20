@@ -21,7 +21,7 @@ test('el Editor de Código ocupa el contenido del Admin y conserva su tema aisla
   assert.match(ui, /querySelector\('\.adm-content'\)\?\.appendChild\(section\)/);
   assert.match(ui, /topbarTitle\.textContent = 'Editor de Código'/);
   assert.match(styles, /body\.code-studio-open \.adm-content/);
-  assert.match(styles, /\.cs-editor\s*\{[\s\S]*background:\s*#111015 !important/);
+  assert.match(styles, /\.cs-editor\s*\{[\s\S]*background:\s*var\(--cs-panel-2\) !important/);
   assert.match(theme, /span:not\(\.cs-shell \*\)/);
 });
 

@@ -618,7 +618,7 @@ function renderEditor() {
       host.innerHTML = '';
       state.editor = state.monaco.editor.create(host, {
         model: tab.model,
-        theme: 'vs-dark',
+        theme: 'vs',
         automaticLayout: true,
         minimap: { enabled: true },
         fontSize: 12,
@@ -891,7 +891,7 @@ async function renderChanges() {
     host.innerHTML = '<div style="height:165px" id="cs-diff-host"></div>';
     const original = state.monaco.editor.createModel(active.operation === 'create' ? '' : active.baseline, active.language);
     const modified = state.monaco.editor.createModel(active.content, active.language);
-    state.diffEditor = state.monaco.editor.createDiffEditor($('#cs-diff-host'), { theme: 'vs-dark', automaticLayout: true, readOnly: true, renderSideBySide: true, minimap: { enabled: false } });
+    state.diffEditor = state.monaco.editor.createDiffEditor($('#cs-diff-host'), { theme: 'vs', automaticLayout: true, readOnly: true, renderSideBySide: true, minimap: { enabled: false } });
     state.diffEditor.setModel({ original, modified });
     state.diffEditor.onDidDispose(() => { original.dispose(); modified.dispose(); });
   } else {
