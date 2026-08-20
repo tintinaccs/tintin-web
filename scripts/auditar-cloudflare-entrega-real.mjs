@@ -122,6 +122,20 @@ async function fetchPreview(url, { acceptNotFound = false } = {}) {
   throw lastError || new Error(`No se pudo consultar ${url}.`);
 }
 
+async function fetchPreviewWithExpectedCsp(url, expectedPolicy) {
+  const attempts = 8;
+  let lastResponse;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    const response = await fetchPreview(url);
+    lastResponse = response;
+    const csp = response.headers.get('content-security-policy') || '';
+    if (response.ok && csp === expectedPolicy) return response;
+    console.log(`Esperando propagación CSP (${attempt}/${attempts}) — ${url} — HTTP ${response.status}`);
+    if (attempt < attempts) await sleep(Math.min(10000, attempt * 2000));
+  }
+  return lastResponse;
+}
+
 function assertStrongCsp(csp, route) {
   for (const directive of ["default-src 'self'", "script-src 'self'", "object-src 'none'", "base-uri 'self'", "form-action 'self'", 'frame-ancestors', 'upgrade-insecure-requests']) {
     if (!csp.includes(directive)) throw new Error(`${route}: Cloudflare entregó una CSP incompleta; falta ${directive}.`);
@@ -200,7 +214,8 @@ const publicRoutes = [
 ];
 
 for (const route of publicRoutes) {
-  const response = await fetchPreview(preview + route);
+  const expectedPolicy = runtime.routes?.[route] || runtime.public;
+  const response = await fetchPreviewWithExpectedCsp(preview + route, expectedPolicy);
   const csp = response.headers.get('content-security-policy') || '';
   if (!response.ok || !(response.headers.get('content-type') || '').includes('text/html')) throw new Error(`${route}: preview inesperado HTTP ${response.status}.`);
   if (response.headers.get('x-tintin-csp') !== 'edge-runtime') throw new Error(`${route}: la respuesta HTML no pasó por el middleware CSP.`);
@@ -209,13 +224,13 @@ for (const route of publicRoutes) {
   assertCleanInternalRoutes(html, route);
   if (csp.includes('https://api.cloudinary.com')) throw new Error(`${route}: la CSP pública no debe autorizar upload Cloudinary.`);
   if (csp.includes("script-src-attr 'unsafe-inline'")) throw new Error(`${route}: la CSP pública no debe reabrir handlers inline.`);
-  const expectedPolicy = runtime.routes?.[route] || runtime.public;
   if (!expectedPolicy || csp !== expectedPolicy) throw new Error(`${route}: Cloudflare no entregó la CSP runtime exacta generada por este commit.`);
   console.log(`OK — ${preview}${route} — CSP runtime exacta y rutas limpias.`);
 }
 
 for (const route of ['/admin', '/admin-images']) {
-  const response = await fetchPreview(preview + route);
+  const expectedPolicy = runtime.routes?.[route];
+  const response = await fetchPreviewWithExpectedCsp(preview + route, expectedPolicy);
   const csp = response.headers.get('content-security-policy') || '';
   if (!response.ok || !(response.headers.get('content-type') || '').includes('text/html')) throw new Error(`${route}: preview Admin inesperado HTTP ${response.status}.`);
   if (response.headers.get('x-tintin-csp') !== 'edge-runtime') throw new Error(`${route}: Admin no pasó por middleware CSP.`);
@@ -224,7 +239,7 @@ for (const route of ['/admin', '/admin-images']) {
   assertCleanInternalRoutes(html, route);
   if (!csp.includes('https://api.cloudinary.com')) throw new Error(`${route}: Admin necesita upload Cloudinary.`);
   if (csp.includes("script-src-attr 'unsafe-inline'")) throw new Error(`${route}: Admin no debe reabrir handlers inline.`);
-  if (csp !== runtime.routes?.[route]) throw new Error(`${route}: Cloudflare no entregó la CSP Admin exacta.`);
+  if (csp !== expectedPolicy) throw new Error(`${route}: Cloudflare no entregó la CSP Admin exacta.`);
   console.log(`OK — ${preview}${route} — CSP Admin runtime exacta con upload aislado.`);
 }
 

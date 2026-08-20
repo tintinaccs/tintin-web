@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-20T15:02:28.475Z",
-  "sourceFingerprint": "30db8a283fe78af10324c43d3b2655d01a67b679f324defcc11168fd168f34d2",
+  "generatedAt": "2026-08-20T16:16:18.981Z",
+  "sourceFingerprint": "f32cac084431676333d15b029a60d91c79337833ef137f263b66f596ef72f2fb",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 692,
     "textFiles": 660,
-    "totalBytes": 7837294,
+    "totalBytes": 7838535,
     "pages": 18,
     "modules": 433
   },
@@ -22850,8 +22850,8 @@
     },
     {
       "path": "scripts/auditar-cloudflare-entrega-real.mjs",
-      "bytes": 15485,
-      "sha256": "99da2b10cfce1aba322bde493f2efad6917abbf0a2b32868b6914c7046bfa7d0",
+      "bytes": 16182,
+      "sha256": "4a354c2760b2028351da997735bfe939e6d5fc41acfc09b6614a961d19ef2231",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22881,7 +22881,7 @@
         },
         {
           "url": "https://api.cloudinary.com/",
-          "line": 156
+          "line": 170
         }
       ]
     },
@@ -24373,8 +24373,8 @@
     },
     {
       "path": "scripts/auditar-profunda.js",
-      "bytes": 16271,
-      "sha256": "2914e2b12c4362af434fe6edb3eecc4d59ec0c1e90408851a5232f3534dc742a",
+      "bytes": 16308,
+      "sha256": "1071351333709b2d11bbd0206966ca1624ad04e08795f32ac050267e8c92c2e4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24650,8 +24650,8 @@
     },
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
-      "bytes": 18415,
-      "sha256": "fb5ef6f4a06e65fe56e6637c78829d5cafde6932331c342f63c4569d0fe07cbd",
+      "bytes": 18780,
+      "sha256": "fb75a6d0e67aacb428e63bbd3bc3dc70f402f59ae0d4a2c01bea4bb206eb11f9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27103,8 +27103,8 @@
     {
       "path": ".github/workflows/auditar-diagnostico.yml",
       "extension": ".yml",
-      "bytes": 1975,
-      "sha256": "9b932477764d75f1b75b5922323970d2d00b755f0a7fb178d9ec784541efdb9f"
+      "bytes": 2046,
+      "sha256": "f4ce9ce5db05184f8b5b1d959dc6c73d90238f9ed09fdded91334e120ac24eed"
     },
     {
       "path": ".github/workflows/auditar-flujo-cuenta-parte-2d.yml",
@@ -27211,8 +27211,8 @@
     {
       "path": ".github/workflows/desplegar-pages.yml",
       "extension": ".yml",
-      "bytes": 3244,
-      "sha256": "d318614d6f41ce99f0ea0e4191fb30fe824f2838d5b9b69cf9edc4f0202de22b"
+      "bytes": 3315,
+      "sha256": "e1b30e961dde9f501c5e7ba017093265ac853bbe9e4af2df3eefda0f72640fb7"
     },
     {
       "path": ".github/workflows/diagnostico-maestro.yml",
@@ -30205,8 +30205,8 @@
     {
       "path": "scripts/auditar-cloudflare-entrega-real.mjs",
       "extension": ".mjs",
-      "bytes": 15485,
-      "sha256": "99da2b10cfce1aba322bde493f2efad6917abbf0a2b32868b6914c7046bfa7d0"
+      "bytes": 16182,
+      "sha256": "4a354c2760b2028351da997735bfe939e6d5fc41acfc09b6614a961d19ef2231"
     },
     {
       "path": "scripts/auditar-colecciones-fase-4.js",
@@ -30571,8 +30571,8 @@
     {
       "path": "scripts/auditar-profunda.js",
       "extension": ".js",
-      "bytes": 16271,
-      "sha256": "2914e2b12c4362af434fe6edb3eecc4d59ec0c1e90408851a5232f3534dc742a"
+      "bytes": 16308,
+      "sha256": "1071351333709b2d11bbd0206966ca1624ad04e08795f32ac050267e8c92c2e4"
     },
     {
       "path": "scripts/auditar-publico-operativo-contrato.js",
@@ -30637,8 +30637,8 @@
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
       "extension": ".js",
-      "bytes": 18415,
-      "sha256": "fb5ef6f4a06e65fe56e6637c78829d5cafde6932331c342f63c4569d0fe07cbd"
+      "bytes": 18780,
+      "sha256": "fb75a6d0e67aacb428e63bbd3bc3dc70f402f59ae0d4a2c01bea4bb206eb11f9"
     },
     {
       "path": "scripts/auditar-tableta-correcciones.mjs",
