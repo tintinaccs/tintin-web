@@ -35,7 +35,7 @@ function injectBeforeHeadClose(html, tag) {
 
 function markVisualLayoutPending(html) {
   const source = String(html || '');
-  if (/^\s*<html[^>]*class=["']/i.test(source)) {
+  if (/<html[^>]*class=["']/i.test(source)) {
     return source.replace(/(<html[^>]*class=["'])([^"']*)/i, '$1tt-vb-layout-pending $2');
   }
   return source.replace(/<html/i, '<html class="tt-vb-layout-pending"');
