@@ -123,7 +123,7 @@ const htmlFunctionRoutes = htmlFiles.flatMap(file => {
 });
 const dynamicFunctionRoutes = [
   '/products/*', '/collections/*', '/pages/*', '/policies/*',
-  '/sitemap-products.xml', '/sitemap-collections.xml'
+  '/sitemap-products.xml', '/sitemap-collections.xml', '/api/code-studio/*'
 ];
 const expectedRoutes = [...new Set([...apiFunctions, '/__/auth/*', ...htmlFunctionRoutes, ...dynamicFunctionRoutes])].sort();
 const routeConfig = JSON.parse(read('_routes.json'));

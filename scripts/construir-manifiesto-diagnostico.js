@@ -41,6 +41,10 @@ function walk(directory, prefix = '') {
     if (entry.isDirectory() && isToolingDir(entry.name)) continue;
     const absolute = path.join(directory, entry.name);
     const relative = path.posix.join(prefix, entry.name);
+    // Monaco es un artefacto reproducible de node_modules validado por su propia
+    // versión/loader. Analizar su bundle minificado como código de Tintin genera
+    // falsos positivos de rutas y símbolos internos.
+    if (entry.isDirectory() && relative === 'js/vendor/monaco') continue;
     if (entry.isDirectory()) files.push(...walk(absolute, relative));
     else if (
       entry.isFile() &&

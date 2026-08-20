@@ -33,6 +33,9 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Instalar dependencias reproducibles
+        run: npm ci
+
       - name: Regenerar y verificar inventario de diagnóstico
         run: npm run build:pages
 
