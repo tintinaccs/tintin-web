@@ -142,7 +142,7 @@ function attachProductsDemand() {
 function attachLightweightCommerceDemand() {
   bindDemand(
     '[data-nav-action="account"],[data-shell-route="account"],#tabbar-account',
-    () => Promise.all([loadAuthRuntime(), loadNotificationsRuntime()])
+    loadAuthRuntime
   );
   bindDemand(
     '[data-nav-action="cart"],[data-shell-route="cart"],#tabbar-cart',
@@ -177,10 +177,15 @@ export function loadSharedRuntime() {
   attachProductsDemand();
   loadNavigationBehaviors();
 
-  // Páginas informativas (Nosotros, Contacto, ayuda, legales y 404) no
-  // necesitan abrir Firebase/Auth, carrito, notificaciones ni colecciones al
-  // cargar. Conservan exactamente las mismas superficies; esos runtimes se
-  // hidratan cuando la persona muestra intención de usarlos.
+  // Las notificaciones son una superficie global: deben hidratarse en todas
+  // las páginas para que el icono, el badge y el drawer reflejen la sesión
+  // actual tanto en desktop como en tablet y mobile.
+  void loadNotificationsRuntime().catch(error => {
+    console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
+  });
+
+  // Las páginas informativas siguen cargando carrito, cuenta y colecciones
+  // bajo demanda, pero ya no dejan las notificaciones sin inicializar.
   if (!FULL_COMMERCE_PAGES.has(page)) {
     attachLightweightCommerceDemand();
     return;
@@ -191,9 +196,6 @@ export function loadSharedRuntime() {
   if (page === 'cart') critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')));
 
   Promise.allSettled(critical).then(reportRuntimeFailures);
-  void loadNotificationsRuntime().catch(error => {
-    console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
-  });
 
   scheduleNonCritical(() => {
     Promise.allSettled([
