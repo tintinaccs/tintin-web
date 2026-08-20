@@ -57,10 +57,10 @@ test('mapa solo afirma conexiones que tienen evidencia literal', () => {
   const graph = buildFileEvidenceGraph([
     {
       path: 'js/admin/demo.js',
-      content: "import { x } from '../core/x.js';\nfetch('/api/health');\ncollection(db, 'orders');\n"
+      content: "import { x } from '../" + "core/auth/roles.js';\nfetch('/api/health');\ncollection(db, 'orders');\n"
     }
   ]);
-  assert.ok(graph.nodes.some(node => node.id === 'js/core/x.js'));
+  assert.ok(graph.nodes.some(node => node.id === 'js/core/auth/roles.js'));
   assert.ok(graph.nodes.some(node => node.id === '/api/health'));
   assert.ok(graph.nodes.some(node => node.id === 'firestore:orders'));
   assert.ok(graph.edges.every(edge => ['confirmed', 'probable', 'informational'].includes(edge.evidence)));
