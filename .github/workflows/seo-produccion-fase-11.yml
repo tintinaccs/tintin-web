@@ -80,14 +80,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
+      # Cloudflare Pages despliega el SHA de la rama, mientras que Actions usa
+      # por defecto el merge ref efímero de la PR. El contrato debe generarse
+      # desde el mismo árbol que publicó Cloudflare para que la comparación sea
+      # exacta incluso cuando main avanzó después de abrir el PR.
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
       - run: npm ci
       - name: Generar contrato exacto del artefacto público
-        run: npm run build:routes && npm run build:csp && npm run verify:routes && npm run verify:csp
+        run: npm run build:pages
       - name: Comparar contra el preview real de Cloudflare
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
