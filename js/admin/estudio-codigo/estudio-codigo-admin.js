@@ -159,7 +159,7 @@ function makeShell() {
   navButton.className = 'adm-nav-item';
   navButton.id = 'nav-estudio-codigo';
   navButton.dataset.section = 'estudio-codigo';
-  navButton.innerHTML = '<span class="adm-nav-icon" aria-hidden="true">⌘</span> Estudio de Código';
+  navButton.innerHTML = '<span class="adm-nav-icon" aria-hidden="true">⌘</span> Editor de Código';
   const anchor = $('#nav-correos');
   if (nav && anchor) nav.insertBefore(navButton, anchor);
   else nav?.appendChild(navButton);
@@ -171,7 +171,7 @@ function makeShell() {
     button.className = 'adm-mobile-tab';
     button.dataset.section = 'estudio-codigo';
     button.id = 'mtab-estudio-codigo';
-    button.innerHTML = '<span class="adm-nav-icon">⌘</span>Código';
+    button.innerHTML = '<span class="adm-nav-icon">⌘</span>Editor';
     mobile.appendChild(button);
   }
 
@@ -181,17 +181,22 @@ function makeShell() {
   section.innerHTML = `
     <div class="cs-shell">
       <div class="cs-top">
-        <div class="cs-brand">Estudio de Código Tintin</div>
-        <button class="cs-status" id="cs-github-center-toggle" type="button" aria-expanded="false"><span class="cs-dot" id="cs-dot"></span><span id="cs-status">Comprobando GitHub…</span></button>
-        <div class="cs-spacer"></div>
-        <div class="cs-branch" id="cs-branch">main</div>
-        <button class="cs-btn" id="cs-sync" type="button">Sincronizar</button>
-        <button class="cs-btn" id="cs-branch-new" type="button">Nueva rama</button>
-        <button class="cs-btn" id="cs-preview" type="button" disabled>Preview</button>
-        <button class="cs-btn cs-btn-primary" id="cs-commit" type="button" disabled>Guardar commit</button>
-        <button class="cs-btn" id="cs-pr" type="button" disabled>Abrir PR</button>
-        <button class="cs-btn cs-btn-primary" id="cs-merge" type="button" disabled>Mergear</button>
-        <button class="cs-btn" id="cs-ai-toggle" type="button">IA</button>
+        <div class="cs-top-main">
+          <div class="cs-identity">
+            <div class="cs-brand">Editor de Código</div>
+            <button class="cs-status" id="cs-github-center-toggle" type="button" aria-expanded="false"><span class="cs-dot" id="cs-dot"></span><span id="cs-status">Comprobando GitHub…</span></button>
+          </div>
+          <div class="cs-branch" id="cs-branch" title="Rama activa">main</div>
+        </div>
+        <div class="cs-toolbar" aria-label="Acciones del editor">
+          <button class="cs-btn" id="cs-sync" type="button">Sincronizar</button>
+          <button class="cs-btn" id="cs-branch-new" type="button">Nueva rama</button>
+          <button class="cs-btn" id="cs-preview" type="button" disabled>Preview</button>
+          <button class="cs-btn cs-btn-primary" id="cs-commit" type="button" disabled>Guardar commit</button>
+          <button class="cs-btn" id="cs-pr" type="button" disabled>Abrir PR</button>
+          <button class="cs-btn cs-btn-primary" id="cs-merge" type="button" disabled>Mergear</button>
+          <button class="cs-btn" id="cs-ai-toggle" type="button">IA</button>
+        </div>
       </div>
       <aside class="cs-github-center cs-hidden" id="cs-github-center" aria-live="polite">
         <div class="cs-pane-title"><span>Centro GitHub en vivo</span><button class="cs-icon-btn" id="cs-github-center-close" type="button">✕</button></div>
@@ -232,7 +237,7 @@ function makeShell() {
         </aside>
       </div>
     </div>`;
-  document.querySelector('.adm-main')?.appendChild(section);
+  document.querySelector('.adm-content')?.appendChild(section);
 
   [navButton, $('#mtab-estudio-codigo')].filter(Boolean).forEach(button => button.addEventListener('click', event => {
     event.preventDefault();
@@ -246,6 +251,10 @@ function showStudio() {
   $('#section-estudio-codigo')?.classList.add('active');
   $('#nav-estudio-codigo')?.classList.add('active');
   $('#mtab-estudio-codigo')?.classList.add('active');
+  document.body.classList.add('code-studio-open');
+  const topbarTitle = $('#adm-topbar-title');
+  if (topbarTitle) topbarTitle.textContent = 'Editor de Código';
+  window.scrollTo({ top: 0, behavior: 'auto' });
   state.visible = true;
   if (!state.ready) bootstrap();
   startRealtimeLoops();
@@ -750,7 +759,7 @@ async function openPr() {
   await modal({
     title: 'Abrir Pull Request',
     confirmText: 'Abrir PR',
-    body: `<div class="cs-field"><label>Título</label><input id="cs-pr-title" class="cs-input" maxlength="180" value="feat: integrar Estudio de Código Tintin"></div><div class="cs-field"><label>Descripción</label><textarea id="cs-pr-body" class="cs-input" rows="8">Cambio preparado desde una rama aislada del Estudio de Código Tintin.\n\nRequiere CI verde, preview y revisión humana antes de fusionar.</textarea></div><div class="cs-list">${compare.compare.files.map(file => `<div class="cs-list-item"><strong>${escapeHtml(file.filename)}</strong> · +${file.additions} / -${file.deletions}</div>`).join('')}</div>`,
+    body: `<div class="cs-field"><label>Título</label><input id="cs-pr-title" class="cs-input" maxlength="180" value="feat: integrar Editor de Código Tintin"></div><div class="cs-field"><label>Descripción</label><textarea id="cs-pr-body" class="cs-input" rows="8">Cambio preparado desde una rama aislada del Editor de Código Tintin.\n\nRequiere CI verde, preview y revisión humana antes de fusionar.</textarea></div><div class="cs-list">${compare.compare.files.map(file => `<div class="cs-list-item"><strong>${escapeHtml(file.filename)}</strong> · +${file.additions} / -${file.deletions}</div>`).join('')}</div>`,
     onConfirm: async backdrop => {
       setPhase('syncing', 'Creando pull request en GitHub.');
       const data = await api('pr', { method: 'POST', body: JSON.stringify({ branch: state.branch, title: backdrop.querySelector('#cs-pr-title').value, body: backdrop.querySelector('#cs-pr-body').value }) });
@@ -1166,7 +1175,10 @@ function bindUi() {
   });
   document.addEventListener('click', event => {
     const adminNav = event.target.closest('.adm-nav-item,.adm-mobile-tab');
-    if (adminNav && adminNav.dataset.section && adminNav.dataset.section !== 'estudio-codigo') state.visible = false;
+    if (adminNav && adminNav.dataset.section && adminNav.dataset.section !== 'estudio-codigo') {
+      state.visible = false;
+      document.body.classList.remove('code-studio-open');
+    }
   }, true);
 }
 
