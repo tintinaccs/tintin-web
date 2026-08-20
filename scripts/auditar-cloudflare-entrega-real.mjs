@@ -123,7 +123,10 @@ async function fetchPreview(url, { acceptNotFound = false } = {}) {
 }
 
 async function fetchPreviewWithExpectedCsp(url, expectedPolicy) {
-  const attempts = 8;
+  // Cloudflare puede entregar el HTML nuevo antes de propagar el bundle de
+  // Functions que contiene la CSP del mismo commit. En previews recientes
+  // observamos esa ventana durante algo más de dos minutos.
+  const attempts = 24;
   let lastResponse;
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     const response = await fetchPreview(url);

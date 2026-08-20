@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-20T16:16:18.981Z",
-  "sourceFingerprint": "f32cac084431676333d15b029a60d91c79337833ef137f263b66f596ef72f2fb",
+  "generatedAt": "2026-08-20T16:20:31.608Z",
+  "sourceFingerprint": "d46ffc868de60508bd61e14c237ffab160f0d8d5dd67ae96e5dc54c27b46e2d3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 692,
     "textFiles": 660,
-    "totalBytes": 7838535,
+    "totalBytes": 7838749,
     "pages": 18,
     "modules": 433
   },
@@ -22850,8 +22850,8 @@
     },
     {
       "path": "scripts/auditar-cloudflare-entrega-real.mjs",
-      "bytes": 16182,
-      "sha256": "4a354c2760b2028351da997735bfe939e6d5fc41acfc09b6614a961d19ef2231",
+      "bytes": 16396,
+      "sha256": "3b487f511fd88ca474b4ff9cbffe2438eb62a1a196313047d55068528813500d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22881,7 +22881,7 @@
         },
         {
           "url": "https://api.cloudinary.com/",
-          "line": 170
+          "line": 173
         }
       ]
     },
@@ -30205,8 +30205,8 @@
     {
       "path": "scripts/auditar-cloudflare-entrega-real.mjs",
       "extension": ".mjs",
-      "bytes": 16182,
-      "sha256": "4a354c2760b2028351da997735bfe939e6d5fc41acfc09b6614a961d19ef2231"
+      "bytes": 16396,
+      "sha256": "3b487f511fd88ca474b4ff9cbffe2438eb62a1a196313047d55068528813500d"
     },
     {
       "path": "scripts/auditar-colecciones-fase-4.js",
