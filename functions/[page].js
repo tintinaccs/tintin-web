@@ -15,6 +15,7 @@ const ABOUT_CANONICAL_GUARD = '/js/pages/institutional/about-canonical-clean-v1.
 const CONTACT_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-contacto.js?v=tintin-20260818-contact-clock-svg-1';
 const LEGAL_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-legal.js?v=tintin-20260815-legal-clean-1';
 const MASTER_DIAGNOSTICS_RUNTIME = '/js/admin/diagnostics/diagnostico-maestro-admin.js?v=tintin-20260817-master-diagnostics-4';
+const VISUAL_LAYOUT_GUARD = `<style id="tt-vb-layout-guard">html.tt-vb-layout-pending body>section,html.tt-vb-layout-pending body>main{visibility:hidden!important}</style><script>document.documentElement.classList.add('tt-vb-layout-pending');window.setTimeout(function(){document.documentElement.classList.remove('tt-vb-layout-pending');document.getElementById('tt-vb-layout-guard')?.remove()},3500)</script>`;
 
 function pageName(request) {
   const url = new URL(request.url);
@@ -34,6 +35,9 @@ function injectBeforeHeadClose(html, tag) {
 
 export function injectLightweightPageGuards(html, page) {
   let output = String(html || '');
+  if (output.includes('visual-builder-bootstrap.js') && !output.includes('tt-vb-layout-guard')) {
+    output = injectBeforeHeadClose(output, VISUAL_LAYOUT_GUARD);
+  }
   if (page === 'about' && !output.includes(ABOUT_CANONICAL_GUARD)) {
     output = injectBeforeHeadClose(output, `<script src="${ABOUT_CANONICAL_GUARD}" defer></script>`);
   }
