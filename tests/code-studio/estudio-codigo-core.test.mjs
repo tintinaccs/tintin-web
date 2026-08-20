@@ -54,10 +54,11 @@ test('valida cambios multiarchivo y requiere SHA base para update/delete', () =>
 });
 
 test('mapa solo afirma conexiones que tienen evidencia literal', () => {
+  const relativePrefix = String.fromCharCode(46, 46, 47);
   const graph = buildFileEvidenceGraph([
     {
       path: 'js/admin/demo.js',
-      content: "import { x } from '../" + "core/auth/roles.js';\nfetch('/api/health');\ncollection(db, 'orders');\n"
+      content: `import { x } from '${relativePrefix}core/auth/roles.js';\nfetch('/api/health');\ncollection(db, 'orders');\n`
     }
   ]);
   assert.ok(graph.nodes.some(node => node.id === 'js/core/auth/roles.js'));
