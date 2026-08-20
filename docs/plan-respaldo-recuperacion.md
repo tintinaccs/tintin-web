@@ -60,6 +60,14 @@ Cada ejecución genera:
 5. Registrar fecha, ubicación, checksum y responsable sin anotar contraseñas.
 6. Eliminar del equipo local cualquier copia temporal sin cifrar cuando termine la transferencia.
 
+### Evidencia operativa — 2026-08-20
+
+- Se descargó desde GitHub Actions el respaldo verificable `respaldo-repositorio-31106457652` (artefacto `8969789234`), que GitHub registra con digest `sha256:a536251931893c0099a8a222fd1720772ee64393032b093a7c058995f9911274`.
+- Se copió ese ZIP fuera de GitHub a Google Drive como `Tintin_Backup_GitHub_2026-08-06.zip` (archivo `1VWz2j7olJ232WP5hQ6gBeuhUW0oHrcFG`).
+- Esta transferencia cuenta como copia del código fuera del proveedor GitHub, pero no sustituye la copia cifrada ni un respaldo fresco del `main` actual.
+- Este cambio dispara nuevamente el workflow `Respaldo verificable del repositorio`; la evidencia del bundle fresco y su copia externa se registra en el seguimiento operativo #312 cuando la ejecución termine.
+- No se registran contraseñas, tokens ni valores de secretos en este documento.
+
 ## Recuperación del código
 
 1. Descargar el bundle y su checksum.
