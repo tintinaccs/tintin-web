@@ -12,6 +12,7 @@ const checks = [];
 const check = (name, ok, problem) => checks.push({ name, ok: Boolean(ok), problem });
 const count = (text, regex) => (text.match(regex) || []).length;
 const xmlLocations = text => [...text.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
+const robots = read('robots.txt').replace(/\r\n?/g, '\n');
 
 check('Origen público central válido', /^https:\/\/[a-z0-9.-]+(?::\d+)?$/i.test(origin), 'config/public-site.json debe ser la fuente única del origen público HTTPS.');
 check('Firebase Auth centralizado', typeof publicSite.firebaseAuthDomain === 'string' && publicSite.firebaseAuthDomain.length > 3, 'El dominio de Firebase Auth debe quedar declarado junto al origen público.');
@@ -63,8 +64,8 @@ check('Existen generadores dinámicos de catálogo', fs.existsSync(path.join(roo
 
 const routes = JSON.parse(read('_routes.json'));
 check('Pages Functions sirve SEO y sitemaps dinámicos', ['/product', '/sitemap-products.xml', '/sitemap-collections.xml'].every(route => routes.include?.includes(route)), '_routes.json debe enviar Producto y sitemaps dinámicos al runtime de Cloudflare.');
-check('robots enlaza el sitemap vigente', read('robots.txt').includes('Sitemap: ' + origin + '/sitemap.xml'), 'robots.txt debe enlazar el sitemap de producción.');
-check('robots contempla rutas privadas limpias', ['/admin','/admin-images','/checkout','/login','/perfil'].every(route => read('robots.txt').includes('Disallow: ' + route + '\n')), 'robots.txt debe reflejar la arquitectura limpia real.');
+check('robots enlaza el sitemap vigente', robots.includes('Sitemap: ' + origin + '/sitemap.xml'), 'robots.txt debe enlazar el sitemap de producción.');
+check('robots contempla rutas privadas limpias', ['/admin','/admin-images','/checkout','/login','/perfil'].every(route => robots.includes('Disallow: ' + route + '\n')), 'robots.txt debe reflejar la arquitectura limpia real.');
 
 const manifestData = JSON.parse(read('manifest.json'));
 check('Manifest tiene identidad, scope e iconos válidos', manifestData.id === '/' && manifestData.start_url === '/' && manifestData.scope === '/' && manifestData.icons?.some(icon => icon.sizes === '192x192') && manifestData.icons?.some(icon => icon.sizes === '512x512'), 'La PWA debe instalarse desde la URL raíz final.');
