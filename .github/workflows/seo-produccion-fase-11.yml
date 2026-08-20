@@ -93,7 +93,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Generar contrato exacto del artefacto público
-        run: npm run build:routes && npm run build:csp && npm run verify:routes && npm run verify:csp
+        run: npm run build:pages
       - name: Comparar contra el preview real de Cloudflare
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
