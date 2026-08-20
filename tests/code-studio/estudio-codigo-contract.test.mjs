@@ -12,6 +12,19 @@ test('el Admin carga el Estudio solo desde la superficie privada', async () => {
   assert.match(injector, /\/css\/admin\/estudio-codigo\.css/);
 });
 
+test('el Editor de Código ocupa el contenido del Admin y conserva su tema aislado', async () => {
+  const ui = await read('js/admin/estudio-codigo/estudio-codigo-admin.js');
+  const styles = await read('css/admin/estudio-codigo.css');
+  const theme = await read('css/core/tema-unificado-tintin.css');
+  assert.match(ui, /navButton\.innerHTML = '[^']*Editor de Código'/);
+  assert.match(ui, /class="cs-brand">Editor de Código</);
+  assert.match(ui, /querySelector\('\.adm-content'\)\?\.appendChild\(section\)/);
+  assert.match(ui, /topbarTitle\.textContent = 'Editor de Código'/);
+  assert.match(styles, /body\.code-studio-open \.adm-content/);
+  assert.match(styles, /\.cs-editor\s*\{[\s\S]*background:\s*#111015 !important/);
+  assert.match(theme, /span:not\(\.cs-shell \*\)/);
+});
+
 test('la API code-studio está incluida en Pages Functions', async () => {
   const routes = JSON.parse(await read('_routes.json'));
   assert.ok(routes.include.includes('/api/code-studio/*'));
