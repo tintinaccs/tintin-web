@@ -85,7 +85,6 @@
   background: var(--color-background-surface, #FFFFFF) !important;
   border-color: var(--color-card-border, #F1E4E7) !important;
   color: var(--color-text-primary, #2B2B2B) !important;
-  box-shadow: 0 8px 28px var(--color-card-shadow, rgba(212,106,138,.10));
 }
 
 /* Los placeholders son efímeros: aislarlos con contain/translateZ hace que

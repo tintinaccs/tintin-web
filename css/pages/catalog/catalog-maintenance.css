@@ -18,17 +18,17 @@ body.tt-catalog-maintenance .cat-layout {
   min-width: 0;
 }
 
-body.tt-catalog-maintenance .cat-hero {
+body.tt-catalog-maintenance .tt-page-hero {
   background: var(--color-background-surface-soft, #FFF9FC) !important;
   border: 1px solid var(--color-border-primary, #F1E4E7);
   box-shadow: 0 10px 30px var(--color-card-shadow, rgba(212,106,138,.10));
 }
 
-body.tt-catalog-maintenance .cat-hero-title {
+body.tt-catalog-maintenance .tt-page-hero-title {
   color: var(--color-text-title, #2B2B2B) !important;
 }
 
-body.tt-catalog-maintenance .cat-hero-sub,
+body.tt-catalog-maintenance .tt-page-hero-sub,
 body.tt-catalog-maintenance .cat-count,
 body.tt-catalog-maintenance .cat-filter-count,
 body.tt-catalog-maintenance .cat-range-sep {
@@ -211,7 +211,7 @@ body.tt-catalog-maintenance .tt-footer-tagline {
 @media (max-width: 768px) {
   body.tt-catalog-maintenance { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
   body.tt-catalog-maintenance .cat-wrap { padding: 16px 24px 90px; }
-  body.tt-catalog-maintenance .cat-hero { margin-top: 0; padding: 24px 16px; border-radius: 16px; }
+  body.tt-catalog-maintenance .tt-page-hero { padding: calc(var(--header-h) + 24px) 16px 24px; border-radius: 16px; }
   body.tt-catalog-maintenance .cat-sidebar {
     display: none !important;
     max-height: none !important;

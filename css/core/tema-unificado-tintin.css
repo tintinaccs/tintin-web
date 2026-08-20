@@ -92,7 +92,7 @@ body:has(.adm-main){
 
 html,body{background:var(--tt-page-bg)!important;color:var(--tt-text)!important;color-scheme:light}body{accent-color:var(--tt-accent)}
 body:has(.adm-main){background:var(--admin-color-background-page)!important;color:var(--admin-color-text-primary)!important;accent-color:var(--admin-color-brand)}
-main,section,.section,.section-sm,.tt-section,.tt-page,.tt-page-hero,.tt-products-section,.tt-reviews-section,.tt-trust-bar,.cat-wrap,.cat-hero,.perfil-wrap,.login-page,.ck-body{background:var(--tt-page-bg)!important;color:var(--tt-text)!important}
+main,section,.section,.section-sm,.tt-section,.tt-page,.tt-page-hero,.tt-products-section,.tt-reviews-section,.tt-trust-bar,.cat-wrap,.perfil-wrap,.login-page,.ck-body{background:var(--tt-page-bg)!important;color:var(--tt-text)!important}
 body:has(.adm-main) .adm-main,body:has(.adm-main) .adm-content{background:var(--admin-color-background-page)!important;color:var(--admin-color-text-primary)!important}
 
 .tt-header,.tt-mobile-menu,.tt-search-panel,.tt-cart-drawer,.tt-collections-sheet,.tt-account-panel,.tt-dropdown,.tt-card,.tt-product-card,.tt-review-card,.tt-info-block,.tt-trust-item,.tt-coll-card,.tt-category-card,.tt-quick-cat,.tt-sheet-item,.tt-mobile-cat-card,.cat-sidebar,.cat-top,.cat-filter-option,.cat-product-card,.perfil-card,.login-box,.ck-panel,.ck-header,.tt-welcome-card,.tt-welcome-admin-card,.tt-welcome-step-card{background:var(--tt-surface)!important;background-color:var(--tt-surface)!important;border-color:var(--tt-border);color:var(--tt-text)!important}
