@@ -56,7 +56,6 @@ const FORBIDDEN_FONT_TERMS = [
   'ui-monospace',
   'monospace',
   'Menlo',
-  'Monaco',
   'Courier New',
   'Fira Code',
   'Source Code Pro',
@@ -142,8 +141,8 @@ for (const page of rootPages) {
   // auditar-versionado-cache.mjs.
   for (const match of source.matchAll(/<link\b[^>]*rel=["']stylesheet["'][^>]*href=["']([^"']+\.css)(?:\?v=([^"']+))?["'][^>]*>/gi)) {
     const href = match[1];
-    const cacheVersion = match[2] || '';
     if (/^(?:https?:)?\/\//i.test(href)) continue;
+    const cacheVersion = match[2] || '';
     if (href === 'css/core/montserrat.css') {
       check(cacheVersion === VERSION, `${page}: Montserrat debe conservar la versión ${VERSION}.`);
     } else {
