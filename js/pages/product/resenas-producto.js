@@ -209,7 +209,7 @@ function renderForm() {
     <h3>${ownReview ? 'Editar mi reseña' : 'Compartí tu opinión'}</h3>
     ${ratingButtons()}
     <textarea class="tt-review-textarea" name="comment" maxlength="1600" required placeholder="¿Qué te pareció este producto?">${escapeHtml(ownReview?.comment || '')}</textarea>
-    <div class="tt-review-form-actions"><small>${ownReview ? 'Esta es tu única edición disponible.' : 'Tu nombre se mostrará de forma protegida.'}</small><button type="submit" class="tt-btn">${ownReview ? 'Guardar edición' : 'Publicar reseña'}</button></div>
+    <div class="tt-review-form-actions"><small>${ownReview ? 'Esta es tu única edición disponible' : 'Tu nombre se mostrará de forma protegida'}</small><button type="submit" class="tt-btn">${ownReview ? 'Guardar edición' : 'Publicar reseña'}</button></div>
     <div role="alert" data-review-error></div>
   </form>`;
   syncRatingButtons();
@@ -315,7 +315,7 @@ document.addEventListener('submit', async event => {
     const error = event.target.querySelector('[data-review-error]');
     error.textContent = '';
     if (selectedRating < 1 || selectedRating > 5) {
-      error.textContent = 'Elegí de 1 a 5 estrellas antes de publicar tu reseña.';
+      error.textContent = 'Elegí de 1 a 5 estrellas antes de publicar tu reseña';
       event.target.querySelector('[data-review-rating]')?.focus();
       return;
     }

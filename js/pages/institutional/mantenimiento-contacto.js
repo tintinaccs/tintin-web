@@ -105,10 +105,10 @@ if (/(?:^|\/)contact(?:\.html)?$/.test(routePath) && !window.TintinContactMainte
       phone: clean(phone?.value, 80),
       message: clean(message?.value, 1200),
     };
-    fieldError(name, values.name.length < 2 ? 'Escribí tu nombre completo.' : '');
-    fieldError(message, values.message.length < 5 ? 'Contanos brevemente en qué podemos ayudarte.' : '');
-    fieldError(email, values.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email) ? 'Revisá el formato del correo.' : '');
-    fieldError(phone, values.phone && digits(values.phone).length < 8 ? 'Revisá el número de teléfono.' : '');
+    fieldError(name, values.name.length < 2 ? 'Escribí tu nombre completo' : '');
+    fieldError(message, values.message.length < 5 ? 'Contanos brevemente en qué podemos ayudarte' : '');
+    fieldError(email, values.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email) ? 'Revisá el formato del correo' : '');
+    fieldError(phone, values.phone && digits(values.phone).length < 8 ? 'Revisá el número de teléfono' : '');
     const invalid = form.querySelector('[aria-invalid="true"]');
     invalid?.focus();
     return invalid ? null : values;
@@ -151,7 +151,7 @@ if (/(?:^|\/)contact(?:\.html)?$/.test(routePath) && !window.TintinContactMainte
     }
     if (!node) return;
     node.hidden = navigator.onLine !== false;
-    node.textContent = 'Sin conexión. Podés completar el mensaje, pero necesitás internet para abrir WhatsApp.';
+    node.textContent = 'Sin conexión. Podés completar el mensaje, pero necesitás internet para abrir WhatsApp';
   }
 
   function bindForm() {

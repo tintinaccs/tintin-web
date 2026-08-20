@@ -181,7 +181,7 @@ export function normalizeImagesData(raw) {
 
 export function normalizeImagePatch(data) {
   if (!data || typeof data !== 'object' || Array.isArray(data)) {
-    throw new Error('Los datos de imagen no son válidos.');
+    throw new Error('Los datos de imagen no son válidos');
   }
 
   const patch = {};
@@ -200,7 +200,7 @@ export function normalizeImagePatch(data) {
 
     if (IMAGE_SLOT_SET.has(key) || deviceVariantKeyInfo(key)) {
       const safe = sanitizeImageUrl(value);
-      if (!safe) throw new Error(`La URL de “${key}” no es válida o no es segura.`);
+      if (!safe) throw new Error(`La URL de “${key}” no es válida o no es segura`);
       patch[key] = safe;
       return;
     }

@@ -15,7 +15,7 @@
 export const ENCOMIENDA_MODES = { AGENCIA: 'agencia', PUERTA: 'puerta' };
 
 const AGENCIA_NOTE =
-  'La agencia y la transportadora las coordinamos por WhatsApp después de confirmar el pedido, según tu zona.';
+  'La agencia y la transportadora las coordinamos por WhatsApp después de confirmar el pedido, según tu zona';
 
 /**
  * Qué mostrar y qué pedir para cada modo. Devolverlo como dato (en vez de
@@ -34,12 +34,12 @@ export function encomiendaFieldPlan(mode) {
 
 /** Qué falta para poder continuar. `null` = está todo. */
 export function encomiendaValidationError(mode, { mapLocation, locationName, address } = {}) {
-  if (!mode) return 'Elegí si retirás en la agencia o si te lo llevamos a la puerta.';
+  if (!mode) return 'Elegí si retirás en la agencia o si te lo llevamos a la puerta';
   if (mode === ENCOMIENDA_MODES.AGENCIA) return null;
 
-  if (!mapLocation) return 'Marcá en el mapa dónde te lo entregamos (buscándolo o tocando el mapa).';
-  if (!String(locationName || '').trim()) return 'Ponele un nombre a tu ubicación (ej: Mi casa) para continuar.';
-  if (!String(address || '').trim()) return 'Ingresá tu dirección de entrega.';
+  if (!mapLocation) return 'Marcá en el mapa dónde te lo entregamos (buscándolo o tocando el mapa)';
+  if (!String(locationName || '').trim()) return 'Ponele un nombre a tu ubicación (ej: Mi casa) para continuar';
+  if (!String(address || '').trim()) return 'Ingresá tu dirección de entrega';
   return null;
 }
 

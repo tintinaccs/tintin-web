@@ -66,7 +66,7 @@
       <div class="login-box">
         <div class="login-eyebrow">Tu cuenta Tintin</div>
         <h1 class="login-heading" id="login-heading">Qué lindo verte</h1>
-        <p class="login-heading-sub" id="login-heading-sub">Ingresá de forma segura para continuar.</p>
+        <p class="login-heading-sub" id="login-heading-sub">Ingresá de forma segura para continuar</p>
 
         <div class="login-error" id="login-error"></div>
         <div class="login-success" id="login-success"></div>
@@ -130,7 +130,7 @@
           <div id="login-profile-address-field">
             <label class="login-email-label" for="login-profile-address">Dirección de entrega</label>
             <div class="tt-map-block">
-              <p class="tt-map-tip">Buscala acá o tocá el mapa para marcar el punto exacto.</p>
+              <p class="tt-map-tip">Buscala acá o tocá el mapa para marcar el punto exacto</p>
               <div class="tt-map-search">
                 <input type="text" class="login-email-input" id="login-profile-address" placeholder="Buscá tu calle, barrio o un negocio cerca…" autocomplete="off" spellcheck="false" />
                 <div class="tt-map-results" id="login-profile-address-results" role="listbox"></div>
@@ -145,7 +145,7 @@
           <button type="button" class="login-email-btn" id="btn-save-profile">Continuar</button>
         </div>
 
-        <p class="login-hint" id="login-hint">Sin contraseñas: Google o un código de acceso enviado a tu correo.</p>
+        <p class="login-hint" id="login-hint">Sin contraseñas: Google o un código de acceso enviado a tu correo</p>
 
         <div class="login-back" id="login-back-link">
           <a href="/" aria-label="Volver a la tienda">
@@ -263,12 +263,12 @@ function hideMessages() {
 
 function errMsg(code) {
   const msgs = {
-    "auth/popup-closed-by-user":      "Cerraste la ventana de Google antes de terminar.",
-    "auth/cancelled-popup-request":   "Cerraste la ventana de Google antes de terminar.",
-    "auth/popup-blocked":             "El navegador bloqueó la ventana de Google — permití ventanas emergentes para este sitio e intentá de nuevo.",
-    "auth/network-request-failed":    "Sin conexión — revisá tu internet e intentá de nuevo.",
-    "auth/too-many-requests":         "Demasiados intentos. Esperá un momento e intentá de nuevo.",
-    "auth/user-disabled":             "Esta cuenta fue deshabilitada. Escribinos por WhatsApp.",
+    "auth/popup-closed-by-user":      "Cerraste la ventana de Google antes de terminar",
+    "auth/cancelled-popup-request":   "Cerraste la ventana de Google antes de terminar",
+    "auth/popup-blocked":             "El navegador bloqueó la ventana de Google — permití ventanas emergentes para este sitio e intentá de nuevo",
+    "auth/network-request-failed":    "Sin conexión — revisá tu internet e intentá de nuevo",
+    "auth/too-many-requests":         "Demasiados intentos. Esperá un momento e intentá de nuevo",
+    "auth/user-disabled":             "Esta cuenta fue deshabilitada. Escribinos por WhatsApp",
   };
   return msgs[code] || ("Ocurrió un error. Intentá de nuevo. (" + code + ")");
 }
@@ -343,13 +343,13 @@ async function ensureProfileComplete(user, role) {
   document.getElementById('login-heading').textContent = missingCount > 1 ? 'Últimos datos' : 'Un dato más';
   document.getElementById('login-heading-sub').textContent = missingCount > 1
     ? (plan.suggestedName
-        ? 'Confirmá tus datos y completá lo que falta para terminar.'
-        : 'Completá estos datos para terminar de crear tu cuenta.')
+        ? 'Confirmá tus datos y completá lo que falta para terminar'
+        : 'Completá estos datos para terminar de crear tu cuenta')
     : plan.needsName
-      ? (plan.suggestedName ? 'Confirmá el nombre de tu cuenta para continuar.' : 'Completá tu nombre y apellido para continuar.')
+      ? (plan.suggestedName ? 'Confirmá el nombre de tu cuenta para continuar' : 'Completá tu nombre y apellido para continuar')
       : plan.needsPhone
-        ? 'Completá tu teléfono para continuar.'
-        : 'Elegí tu dirección de entrega para continuar.';
+        ? 'Completá tu teléfono para continuar'
+        : 'Elegí tu dirección de entrega para continuar';
   document.getElementById('login-google-section').style.display = 'none';
   document.getElementById('login-divider-section').style.display = 'none';
   document.getElementById('login-email-block').style.display = 'none';
@@ -461,17 +461,17 @@ async function ensureProfileComplete(user, role) {
         onError: message => showError(message),
       });
     } catch {
-      showError('No pudimos cargar el mapa. Revisá tu conexión y recargá la página.');
+      showError('No pudimos cargar el mapa. Revisá tu conexión y recargá la página');
     }
 
     document.getElementById('login-profile-locate').onclick = () => {
       if (!navigator.geolocation) {
-        showError('Tu navegador no permite compartir la ubicación. Buscala o tocá el mapa.');
+        showError('Tu navegador no permite compartir la ubicación. Buscala o tocá el mapa');
         return;
       }
       navigator.geolocation.getCurrentPosition(
         position => addressMap?.setLocation({ lat: position.coords.latitude, lng: position.coords.longitude }),
-        () => showError('No pudimos obtener tu ubicación. Buscala o tocá el mapa para marcarla.'),
+        () => showError('No pudimos obtener tu ubicación. Buscala o tocá el mapa para marcarla'),
         { enableHighAccuracy: true, timeout: 10000 }
       );
     };
@@ -508,28 +508,28 @@ async function ensureProfileComplete(user, role) {
       const point = addressMap?.getLocation() || null;
       const locationName = addressNameInput.value.trim();
       if (plan.needsName) {
-        if (!isValidNamePart(firstName)) { showError('Ingresá tu nombre real (al menos dos letras, sin números ni símbolos).'); firstNameInput.focus(); return; }
-        if (!isValidNamePart(lastName)) { showError('Ingresá tu apellido real (al menos dos letras, sin números ni símbolos).'); lastNameInput.focus(); return; }
+        if (!isValidNamePart(firstName)) { showError('Ingresá tu nombre real (al menos dos letras, sin números ni símbolos)'); firstNameInput.focus(); return; }
+        if (!isValidNamePart(lastName)) { showError('Ingresá tu apellido real (al menos dos letras, sin números ni símbolos)'); lastNameInput.focus(); return; }
       }
       if (plan.needsPhone && (!phoneRaw || !isValidPhone(phoneRaw, country))) {
-        showError(`Ingresá un teléfono válido para ${country.flag} ${country.name}.`);
+        showError(`Ingresá un teléfono válido para ${country.flag} ${country.name}`);
         phoneInput.focus();
         return;
       }
       if (plan.needsPhone && !isRealisticPhone(phoneRaw, country)) {
         showError(country.code === 'PY'
-          ? 'Ese número no parece un celular paraguayo. Escribilo así: 0981 123 456.'
-          : 'Ese número no parece válido. Revisalo e intentá de nuevo.');
+          ? 'Ese número no parece un celular paraguayo. Escribilo así: 0981 123 456'
+          : 'Ese número no parece válido. Revisalo e intentá de nuevo');
         phoneInput.focus();
         return;
       }
       if (plan.needsAddress && !point) {
-        showError('Marcá tu ubicación en el mapa —buscala o tocá el punto— para poder entregarte el pedido.');
+        showError('Marcá tu ubicación en el mapa —buscala o tocá el punto— para poder entregarte el pedido');
         document.getElementById('login-profile-address').focus();
         return;
       }
       if (plan.needsAddress && !locationName) {
-        showError('Poné un nombre a esta ubicación (ej: Mi casa) para reconocerla después.');
+        showError('Poné un nombre a esta ubicación (ej: Mi casa) para reconocerla después');
         addressNameInput.focus();
         return;
       }
@@ -572,12 +572,12 @@ async function ensureProfileComplete(user, role) {
           // Puede ser suyo de verdad (cambió de cuenta, se registró antes con
           // otro correo). No hay forma de resolverlo sola sin exponer datos de
           // la otra cuenta, así que se le ofrece escribir.
-          showError('Ese número ya está registrado en otra cuenta. Si es tuyo, escribinos por WhatsApp y lo resolvemos.');
+          showError('Ese número ya está registrado en otra cuenta. Si es tuyo, escribinos por WhatsApp y lo resolvemos');
           document.getElementById('login-phone-help').style.display = '';
           phoneInput.focus();
         } else {
           console.error('[login] No se pudo guardar el perfil:', e);
-          showError('No pudimos guardar tus datos. Probá de nuevo.');
+          showError('No pudimos guardar tus datos. Probá de nuevo');
         }
       }
     };
@@ -658,7 +658,7 @@ async function handleGoogleRedirectReturn(observedUser) {
   window.ttPageReady && window.ttPageReady();
   showError(error
     ? errMsg(error.code)
-    : 'Google no pudo completar el ingreso en este navegador. Probá otra vez o usá el acceso por correo.');
+    : 'Google no pudo completar el ingreso en este navegador. Probá otra vez o usá el acceso por correo');
   return true;
 }
 
@@ -684,7 +684,7 @@ onAuthStateChanged(auth, async user => {
     if (params.get('blocked') === '1') {
       showBlockedModal();
     } else if (params.get('expired') === '1') {
-      showSuccess('Tu sesión expiró por seguridad. Volvé a ingresar.');
+      showSuccess('Tu sesión expiró por seguridad. Volvé a ingresar');
     }
     return;
   }
@@ -704,7 +704,7 @@ onAuthStateChanged(auth, async user => {
     await signOut(auth);
     hideLoginOverlay();
     window.ttPageReady && window.ttPageReady();
-    showError('No pudimos verificar tu cuenta de forma segura. Revisá tu conexión e intentá de nuevo.');
+    showError('No pudimos verificar tu cuenta de forma segura. Revisá tu conexión e intentá de nuevo');
     return;
   }
   const profileSnapshot = profileResult.snapshot;
@@ -889,7 +889,7 @@ async function sendOtp(email) {
   try {
     await requestOtpCode(email);
     otpEmail = email;
-    showSuccess(`Te mandamos un código de 6 dígitos a ${email}. Vence en 5 minutos.`);
+    showSuccess(`Te mandamos un código de 6 dígitos a ${email}. Vence en 5 minutos`);
     showOtpStep();
     startOtpResendCooldown();
   } catch (e) {
@@ -906,7 +906,7 @@ async function sendOtp(email) {
 document.getElementById('btn-send-otp').onclick = () => {
   const email = document.getElementById('login-email-input').value.trim();
   if (!isValidEmailFormat(email)) {
-    showError('Escribí un correo con formato válido (ej: tu@email.com).');
+    showError('Escribí un correo con formato válido (ej: tu@email.com)');
     return;
   }
   sendOtp(email);
@@ -927,8 +927,8 @@ attachOtpCodeInput(document.getElementById('login-otp-input'), {
   onInput: () => hideMessages(),
   onInvalidPaste: digits => {
     showError(digits.length
-      ? `Lo que pegaste tiene ${digits.length} de los 6 dígitos. Copiá el código completo del correo.`
-      : 'Lo que pegaste no tiene ningún número. Copiá el código de 6 dígitos del correo.');
+      ? `Lo que pegaste tiene ${digits.length} de los 6 dígitos. Copiá el código completo del correo`
+      : 'Lo que pegaste no tiene ningún número. Copiá el código de 6 dígitos del correo');
   },
 });
 document.getElementById('login-email-input').addEventListener('keydown', e => {
@@ -939,7 +939,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
   hideMessages();
   const code = document.getElementById('login-otp-input').value.trim();
   if (!/^\d{6}$/.test(code)) {
-    showError('El código tiene que tener 6 dígitos.');
+    showError('El código tiene que tener 6 dígitos');
     return;
   }
   const btn = document.getElementById('btn-verify-otp');

@@ -169,7 +169,7 @@ function renderResults(query) {
 
   const matches = searchProducts(cleaned);
   if (!matches.length) {
-    results.appendChild(stateNode(`No encontramos resultados para “${cleaned}”.`));
+    results.appendChild(stateNode(`No encontramos resultados para “${cleaned}”`));
     return;
   }
   const fragment = document.createDocumentFragment();
@@ -258,7 +258,7 @@ async function ensureProducts(force = false) {
       console.warn('[SearchController] No se pudo cargar el catálogo.', error);
       if (results) {
         showResultsContainer(results);
-        results.replaceChildren(stateNode('No pudimos cargar el catálogo. Revisá tu conexión y volvé a intentar.', { error: true, retry: true }));
+        results.replaceChildren(stateNode('No pudimos cargar el catálogo. Revisá tu conexión y volvé a intentar', { error: true, retry: true }));
       }
       throw error;
     });
@@ -310,7 +310,7 @@ export function initSearchController() {
     if (!input.value) return;
     console.warn('[SearchController] Catálogo no disponible.', event.detail?.error);
     showResultsContainer(results);
-    results.replaceChildren(stateNode('No pudimos cargar el catálogo. Revisá tu conexión y volvé a intentar.', { error: true, retry: true }));
+    results.replaceChildren(stateNode('No pudimos cargar el catálogo. Revisá tu conexión y volvé a intentar', { error: true, retry: true }));
   });
 }
 

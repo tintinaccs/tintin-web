@@ -96,7 +96,7 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
     }
 
     if (!grid.children.length) {
-      renderState('loading', 'Preparando catálogo', 'Estamos organizando los productos y filtros.');
+      renderState('loading', 'Preparando catálogo', 'Estamos organizando los productos y filtros');
     }
   }
 
@@ -229,10 +229,10 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
     loadingTimer = setTimeout(() => {
       if (!hasRealCards()) {
         if (navigator.onLine === false) {
-          renderState('offline', 'Sin conexión', 'No pudimos descargar productos nuevos. Revisá tu conexión y volvé a intentar.');
+          renderState('offline', 'Sin conexión', 'No pudimos descargar productos nuevos. Revisá tu conexión y volvé a intentar');
           setSync('offline');
         } else {
-          renderState('error', 'El catálogo tardó demasiado', 'Podés reintentar sin perder los filtros elegidos.');
+          renderState('error', 'El catálogo tardó demasiado', 'Podés reintentar sin perder los filtros elegidos');
           setSync('error');
         }
         setReady();

@@ -224,7 +224,7 @@ function renderError() {
     removeStateNodes(container);
     container.removeAttribute('aria-busy');
     container.dataset.phase4CollectionsState = 'error';
-    container.appendChild(createStateNode('No pudimos actualizar las colecciones. Podés seguir usando las opciones disponibles.', 'error'));
+    container.appendChild(createStateNode('No pudimos actualizar las colecciones. Podés seguir usando las opciones disponibles', 'error'));
   });
 }
 

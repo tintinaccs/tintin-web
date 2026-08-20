@@ -268,14 +268,14 @@ function updateConnectivity() {
   const status = ensureConnectivityStatus();
   if (!status) return;
   if (online) {
-    if (!status.hidden) window.TintinUX?.announce?.('La conexión volvió a estar disponible.');
+    if (!status.hidden) window.TintinUX?.announce?.('La conexión volvió a estar disponible');
     status.hidden = true;
     document.documentElement.classList.remove('tt-is-offline');
     return;
   }
   document.documentElement.classList.add('tt-is-offline');
   const text = status.querySelector('.tt-connectivity-status-text');
-  if (text) text.textContent = 'Estás sin conexión. Podés seguir revisando la página; las acciones en línea se reanudan al reconectar.';
+  if (text) text.textContent = 'Estás sin conexión. Podés seguir revisando la página; las acciones en línea se reanudan al reconectar';
   status.hidden = Boolean(document.getElementById('tt-store-gate-network-notice'));
 }
 
@@ -302,7 +302,7 @@ function bindInvalidFeedback() {
     if (!(field instanceof HTMLElement)) return;
     field.setAttribute('aria-invalid', 'true');
     const label = cleanText(field.getAttribute('aria-label') || field.getAttribute('name') || 'Campo');
-    window.TintinUX?.announce?.(label + ': revisá este dato antes de continuar.', { assertive: true });
+    window.TintinUX?.announce?.(label + ': revisá este dato antes de continuar', { assertive: true });
     const focusField = () => {
       if (field.isConnected && !field.inert && !activeDialog) field.focus({ preventScroll: false });
     };

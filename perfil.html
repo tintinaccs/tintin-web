@@ -372,7 +372,7 @@ function renderSavedLocation(loc) {
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
         <div>
           <div style="font-weight:800;font-size:14px;color:var(--text)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${escapeHtmlPerfil(loc.name)}</div>
-          <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Se usa para completar sola tu ubicación la próxima vez que compres con envío a domicilio.</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Se usa para completar sola tu ubicación la próxima vez que compres con envío a domicilio</div>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <a href="https://maps.google.com/?q=${loc.lat},${loc.lng}" target="_blank" rel="noopener" class="perfil-btn perfil-btn-outline"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>Ver en el mapa</a>

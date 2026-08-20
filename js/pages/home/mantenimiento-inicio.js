@@ -99,11 +99,11 @@ if (isHome && !window.TintinHomeMaintenanceBooted) {
 
     if (products && !products.children.length) {
       products.setAttribute('aria-busy', 'true');
-      createState(products, 'loading', 'Cargando productos', 'Estamos sincronizando el catálogo en tiempo real.');
+      createState(products, 'loading', 'Cargando productos', 'Estamos sincronizando el catálogo en tiempo real');
     }
     if (look && !look.children.length) {
       look.setAttribute('aria-busy', 'true');
-      createState(look, 'loading', 'Preparando combinaciones', 'Estamos eligiendo accesorios disponibles para vos.');
+      createState(look, 'loading', 'Preparando combinaciones', 'Estamos eligiendo accesorios disponibles para vos');
     }
   }
 
@@ -140,8 +140,8 @@ if (isHome && !window.TintinHomeMaintenanceBooted) {
       navigator.onLine === false ? 'offline' : 'error',
       navigator.onLine === false ? 'Estás sin conexión' : 'El catálogo está tardando más de lo esperado',
       navigator.onLine === false
-        ? 'Cuando vuelva internet, esta sección se actualizará automáticamente.'
-        : 'Podés abrir el catálogo completo mientras reintentamos la sincronización.',
+        ? 'Cuando vuelva internet, esta sección se actualizará automáticamente'
+        : 'Podés abrir el catálogo completo mientras reintentamos la sincronización',
       { href: 'catalogo.html', label: 'Ver catálogo' },
     );
   }
@@ -156,7 +156,7 @@ if (isHome && !window.TintinHomeMaintenanceBooted) {
       look,
       'empty',
       'Combinaciones temporalmente no disponibles',
-      'La página sigue funcionando y podés explorar todos los productos desde el catálogo.',
+      'La página sigue funcionando y podés explorar todos los productos desde el catálogo',
       { href: 'catalogo.html', label: 'Explorar accesorios' },
     );
   }

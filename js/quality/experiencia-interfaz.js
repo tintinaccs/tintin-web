@@ -127,7 +127,7 @@ export function setButtonBusy(button, busy = true, options = {}) {
   const spinner = createButtonSpinner(button);
   const timer = window.setTimeout(() => {
     setButtonBusy(button, false);
-    announce('La operación está tardando más de lo esperado. Podés volver a intentarlo.');
+    announce('La operación está tardando más de lo esperado. Podés volver a intentarlo');
   }, Math.max(1500, Number(options.timeout) || BUSY_TIMEOUT_MS));
 
   busyButtons.set(button, {
@@ -264,7 +264,7 @@ function enhanceImages(root = document) {
         const label = document.createElement('span');
         label.className = 'tt-img-error-label';
         label.setAttribute('role', 'status');
-        label.textContent = `No pudimos cargar la imagen de ${alt}.`;
+        label.textContent = `No pudimos cargar la imagen de ${alt}`;
         image.insertAdjacentElement('afterend', label);
       }
     }, { once: true });

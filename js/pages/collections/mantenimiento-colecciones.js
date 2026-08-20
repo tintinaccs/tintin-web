@@ -93,7 +93,7 @@ if (COLLECTIONS_PATH_RE.test(location.pathname || '') && !window.TintinCollectio
       return;
     }
     if (!collectionsGrid.children.length) {
-      renderRuntimeState(collectionsGrid, 'loading', 'Preparando colecciones', 'Estamos organizando las colecciones disponibles.');
+      renderRuntimeState(collectionsGrid, 'loading', 'Preparando colecciones', 'Estamos organizando las colecciones disponibles');
     }
   }
 
@@ -108,7 +108,7 @@ if (COLLECTIONS_PATH_RE.test(location.pathname || '') && !window.TintinCollectio
       return;
     }
     if (!featuredGrid.children.length) {
-      renderRuntimeState(featuredGrid, 'loading', 'Preparando productos destacados', 'Estamos seleccionando productos disponibles.');
+      renderRuntimeState(featuredGrid, 'loading', 'Preparando productos destacados', 'Estamos seleccionando productos disponibles');
     }
   }
 
@@ -138,7 +138,7 @@ if (COLLECTIONS_PATH_RE.test(location.pathname || '') && !window.TintinCollectio
 
     window.addEventListener('tintin:products-error', () => {
       if (!featuredResolved && featuredGrid) {
-        renderRuntimeState(featuredGrid, 'error', 'No se pudieron cargar los productos', 'Podés seguir explorando colecciones o reintentar.');
+        renderRuntimeState(featuredGrid, 'error', 'No se pudieron cargar los productos', 'Podés seguir explorando colecciones o reintentar');
         featuredResolved = true;
       }
       setSync('error');
@@ -173,9 +173,9 @@ if (COLLECTIONS_PATH_RE.test(location.pathname || '') && !window.TintinCollectio
     setTimeout(() => {
       if (!collectionsResolved && collectionsGrid) {
         if (navigator.onLine === false) {
-          renderRuntimeState(collectionsGrid, 'offline', 'Sin conexión', 'No pudimos actualizar las colecciones. Revisá tu conexión.');
+          renderRuntimeState(collectionsGrid, 'offline', 'Sin conexión', 'No pudimos actualizar las colecciones. Revisá tu conexión');
         } else {
-          renderRuntimeState(collectionsGrid, 'error', 'Las colecciones tardaron demasiado', 'Podés reintentar sin perder tu navegación.');
+          renderRuntimeState(collectionsGrid, 'error', 'Las colecciones tardaron demasiado', 'Podés reintentar sin perder tu navegación');
         }
         collectionsResolved = true;
       }
@@ -185,9 +185,9 @@ if (COLLECTIONS_PATH_RE.test(location.pathname || '') && !window.TintinCollectio
     setTimeout(() => {
       if (!featuredResolved && featuredGrid) {
         if (navigator.onLine === false) {
-          renderRuntimeState(featuredGrid, 'offline', 'Sin conexión', 'No pudimos actualizar los productos destacados.');
+          renderRuntimeState(featuredGrid, 'offline', 'Sin conexión', 'No pudimos actualizar los productos destacados');
         } else {
-          renderRuntimeState(featuredGrid, 'error', 'Los destacados tardaron demasiado', 'Podés reintentar o abrir el catálogo completo.');
+          renderRuntimeState(featuredGrid, 'error', 'Los destacados tardaron demasiado', 'Podés reintentar o abrir el catálogo completo');
         }
         featuredResolved = true;
       }

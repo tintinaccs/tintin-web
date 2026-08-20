@@ -222,7 +222,7 @@ export function attachImageUploadWidget(container, options = {}) {
     } catch (error) {
       setBusy(false);
       renderActions();
-      setStatus(error?.message || 'No se pudo abrir la biblioteca.', 'error');
+      setStatus(error?.message || 'No se pudo abrir la biblioteca', 'error');
     }
   }
 
@@ -232,7 +232,7 @@ export function attachImageUploadWidget(container, options = {}) {
     pendingPreviewUrl = '';
     renderPreview();
     renderActions();
-    setStatus('Carga cancelada.');
+    setStatus('Carga cancelada');
   }
 
   async function removeImage() {
@@ -252,7 +252,7 @@ export function attachImageUploadWidget(container, options = {}) {
       setBusy(false);
       renderPreview();
       renderActions();
-      setStatus(error?.message || 'No se pudo quitar la imagen.', 'error');
+      setStatus(error?.message || 'No se pudo quitar la imagen', 'error');
     }
   }
 
@@ -269,13 +269,13 @@ export function attachImageUploadWidget(container, options = {}) {
     pendingPreviewUrl = URL.createObjectURL(file);
     renderPreview();
     renderActions();
-    setStatus('Vista previa lista. Confirmá para subir la imagen.');
+    setStatus('Vista previa lista. Confirmá para subir la imagen');
   }
 
   async function commitPendingFile() {
     debugImageFlow('[image-upload-widget] confirm clicked', { hasPendingFile: Boolean(pendingFile), busy });
     if (!pendingFile) {
-      setStatus('Elegí una imagen antes de confirmar.', 'error');
+      setStatus('Elegí una imagen antes de confirmar', 'error');
       return;
     }
     if (busy) return;
@@ -311,7 +311,7 @@ export function attachImageUploadWidget(container, options = {}) {
       }
       setBusy(false);
       renderActions();
-      setStatus(error?.message || 'No se pudo subir la imagen. Intentá de nuevo.', 'error');
+      setStatus(error?.message || 'No se pudo subir la imagen. Intentá de nuevo', 'error');
     }
   }
 

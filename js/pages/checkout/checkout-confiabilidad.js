@@ -484,7 +484,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
       return;
     }
     if (parsed?.shortGoogleUrl) {
-      renderSmartResults([], 'Ese es un enlace corto de Google Maps. Abrilo y copiá el enlace completo que contiene las coordenadas, o buscá el nombre directamente acá.');
+      renderSmartResults([], 'Ese es un enlace corto de Google Maps. Abrilo y copiá el enlace completo que contiene las coordenadas, o buscá el nombre directamente acá');
       return;
     }
 
@@ -497,7 +497,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
     } catch (error) {
       console.warn('[checkout-map] No se pudo completar la búsqueda ampliada:', error);
       if (generation === mapSearchGeneration) {
-        renderSmartResults([], 'No pudimos consultar el buscador ahora. Igual podés tocar directamente el punto exacto en el mapa.');
+        renderSmartResults([], 'No pudimos consultar el buscador ahora. Igual podés tocar directamente el punto exacto en el mapa');
       }
     }
   }
@@ -520,7 +520,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
 
     const help = document.createElement('div');
     help.className = 'tt-map-smart-help';
-    help.textContent = 'Podés buscar por nombre —por ejemplo un negocio o local—, pegar coordenadas o un enlace completo de Google Maps. También podés tocar cualquier punto del mapa y escribir el nombre que prefieras.';
+    help.textContent = 'Podés buscar por nombre —por ejemplo un negocio o local—, pegar coordenadas o un enlace completo de Google Maps. También podés tocar cualquier punto del mapa y escribir el nombre que prefieras';
 
     const results = document.createElement('div');
     results.id = 'tt-map-smart-results';
@@ -550,7 +550,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
     document.getElementById('tt-use-current-location')?.addEventListener('click', () => {
       const button = document.getElementById('tt-use-current-location');
       if (!navigator.geolocation) {
-        renderSmartResults([], 'Este navegador no permite obtener la ubicación actual. Podés buscarla o marcarla manualmente en el mapa.');
+        renderSmartResults([], 'Este navegador no permite obtener la ubicación actual. Podés buscarla o marcarla manualmente en el mapa');
         return;
       }
       if (button) { button.disabled = true; button.textContent = '📍 Obteniendo ubicación…'; }
@@ -566,7 +566,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
         },
         () => {
           if (button) { button.disabled = false; button.textContent = '📍 Usar mi ubicación actual'; }
-          renderSmartResults([], 'No pudimos obtener tu ubicación. Revisá el permiso del navegador o marcá el punto manualmente.');
+          renderSmartResults([], 'No pudimos obtener tu ubicación. Revisá el permiso del navegador o marcá el punto manualmente');
         },
         { enableHighAccuracy: true, timeout: 9000, maximumAge: 60000 },
       );
