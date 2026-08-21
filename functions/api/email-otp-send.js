@@ -7,10 +7,12 @@ import {
   firestoreAdminGet,
   firestoreAdminReplace,
   decodeFirestoreFields,
+  resolveEmailFromUsernameKey,
   fsString,
   fsInteger,
   fsTimestamp
 } from '../../cloudflare/firebase-admin-ligero.js';
+import { usernameKey } from '../../js/components/forms/utilidades-username.js';
 
 const FROM_EMAIL = 'Tintin Accesorios <noreply@tintinaccs.com>';
 const CODE_TTL_MS = 5 * 60 * 1000; // 5 minutos, a pedido: "código de bonificación" con vencimiento corto
@@ -160,10 +162,8 @@ export async function onRequest(context) {
     const rawBody = await request.text();
     if (rawBody.length > 2000) throw new Error('request_too_large');
     const body = JSON.parse(rawBody || '{}');
-    const email = clean(body.email, 254).toLowerCase();
-    if (!emailIsValid(email)) {
-      return jsonResponse({ success: false, error: 'invalid_email' }, 400, origin, requestUrl);
-    }
+    const rawUsername = clean(body.username, 20);
+    const rawEmail = clean(body.email, 254).toLowerCase();
 
     const now = Date.now();
     try {
@@ -177,6 +177,27 @@ export async function onRequest(context) {
         }, 429, origin, requestUrl);
       }
       throw rateError;
+    }
+
+    let email;
+    if (rawUsername) {
+      // Login por username: se resuelve al email real de la cuenta ANTES de
+      // rate-limitear/enviar. Si el username no existe, la respuesta tiene
+      // que ser indistinguible de un envío real (mismo success:true, sin
+      // tocar emailOtpCodes ni llamar a Resend) — igual que ya exige
+      // firestore.rules para que usernameReservations no sea un oráculo de
+      // qué usernames tienen cuenta (ver scripts/probar-firestore-username-unico.mjs).
+      const key = usernameKey(rawUsername);
+      const resolved = key ? await resolveEmailFromUsernameKey(env, key) : null;
+      if (!resolved) {
+        return jsonResponse({ success: true }, 200, origin, requestUrl);
+      }
+      email = resolved;
+    } else {
+      email = rawEmail;
+      if (!emailIsValid(email)) {
+        return jsonResponse({ success: false, error: 'invalid_email' }, 400, origin, requestUrl);
+      }
     }
 
     // El PIN es un segundo método de acceso a la MISMA cuenta, también si la

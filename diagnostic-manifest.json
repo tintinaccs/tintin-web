@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-21T19:36:59.350Z",
-  "sourceFingerprint": "99b838059e49c5f6b99a3c6f01220715b3bb7ce07d1eee8cced8dea10641eb18",
+  "generatedAt": "2026-08-21T20:09:12.356Z",
+  "sourceFingerprint": "2a53258378d9613385fcf313e85385921cbfddd4f7592e71a1a72f3e59e50b34",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 703,
-    "textFiles": 671,
-    "totalBytes": 7912469,
+    "files": 704,
+    "textFiles": 672,
+    "totalBytes": 7917793,
     "pages": 18,
-    "modules": 441
+    "modules": 442
   },
   "viewports": [
     {
@@ -11989,7 +11989,7 @@
         "viewer"
       ],
       "bytes": 49217,
-      "sha256": "cfc096aee5289548b41bb72463af74da5ac6a4041dfbf763b0e293fdd8d6c45c",
+      "sha256": "bbc29dfaf4d2f77c573ffb79d10f22db93e1125b7719c26b88505bf3c22155ca",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16119,8 +16119,8 @@
     },
     {
       "path": "cloudflare/firebase-admin-ligero.js",
-      "bytes": 19817,
-      "sha256": "8bda6f0a992b57166a81d80e000aeaec79baaecfd43f25509384d56e12d997cc",
+      "bytes": 21227,
+      "sha256": "4ef8d03bec1dfa562233835c715b62d335adff6bb5aae1383adbe3c175f23c1b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16408,7 +16408,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 338597,
-      "sha256": "ccad1e345c34fa55a71caa8a65951d7bb67ca8dc6826a19b988cddb2cab7363e",
+      "sha256": "73b5f3df941ea9a55753b0916d30fdce6da035555717857d238a5ddb476c7d24",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16915,37 +16915,8 @@
     },
     {
       "path": "functions/api/email-otp-send.js",
-      "bytes": 9557,
-      "sha256": "11d36ad1404c4c64098433ac7d36f24708877721a45ddcd52f68b5bd0ffcc941",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../../cloudflare/seguridad-cloudinary.js",
-          "target": "cloudflare/seguridad-cloudinary.js",
-          "dynamic": false,
-          "line": 5
-        },
-        {
-          "raw": "../../cloudflare/firebase-admin-ligero.js",
-          "target": "cloudflare/firebase-admin-ligero.js",
-          "dynamic": false,
-          "line": 13
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://api.resend.com/emails",
-          "line": 119
-        }
-      ]
-    },
-    {
-      "path": "functions/api/email-otp-verify.js",
-      "bytes": 4968,
-      "sha256": "4b86f42f61fa32e4a9362c73d23f56a63190fa895b60c4ec30481556a2126bb8",
+      "bytes": 10528,
+      "sha256": "b2114beb3c71836a56316af8fd4259f083e1be58b6d488cb66b6542e7bd447ed",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16962,6 +16933,47 @@
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
           "line": 14
+        },
+        {
+          "raw": "../../js/components/forms/utilidades-username.js",
+          "target": "js/components/forms/utilidades-username.js",
+          "dynamic": false,
+          "line": 15
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://api.resend.com/emails",
+          "line": 121
+        }
+      ]
+    },
+    {
+      "path": "functions/api/email-otp-verify.js",
+      "bytes": 5756,
+      "sha256": "4cd3d59de9d1ed6477835813be1a9ef413fb3cedd8e26bb85aa512a6acdc3526",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 15
+        },
+        {
+          "raw": "../../js/components/forms/utilidades-username.js",
+          "target": "js/components/forms/utilidades-username.js",
+          "dynamic": false,
+          "line": 16
         }
       ],
       "endpoints": []
@@ -21470,8 +21482,8 @@
     },
     {
       "path": "js/email/correo-autenticacion.js",
-      "bytes": 6196,
-      "sha256": "2c6172ddc95bded7a0fb6bd01fc9c94a2adc2e2f4b2496066e6493e2da428eab",
+      "bytes": 6657,
+      "sha256": "52d795b707d802acc5ed6abdb56d72d073a96f5b8d809af0215dc190d213666f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25890,6 +25902,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/accounts/username-login.test.mjs",
+      "bytes": 1694,
+      "sha256": "d2905d9623da868628b32fad4fc41aa887beca644b3b20f47d288a191ed1bea9",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/branches/auditar-limpiar-ramas.test.mjs",
       "bytes": 10341,
       "sha256": "2a888c58fa610693dddc1fc20bcd5fae3ea95beffd850e957d269d64b14c1248",
@@ -27818,8 +27860,8 @@
     {
       "path": "cloudflare/firebase-admin-ligero.js",
       "extension": ".js",
-      "bytes": 19817,
-      "sha256": "8bda6f0a992b57166a81d80e000aeaec79baaecfd43f25509384d56e12d997cc"
+      "bytes": 21227,
+      "sha256": "4ef8d03bec1dfa562233835c715b62d335adff6bb5aae1383adbe3c175f23c1b"
     },
     {
       "path": "cloudflare/inyectar-diagnostico-maestro-admin.js",
@@ -27903,13 +27945,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 338597,
-      "sha256": "ccad1e345c34fa55a71caa8a65951d7bb67ca8dc6826a19b988cddb2cab7363e"
+      "sha256": "73b5f3df941ea9a55753b0916d30fdce6da035555717857d238a5ddb476c7d24"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 338512,
-      "sha256": "d4211a8867f8ad140120698fccaf25917170923dfd3bbf4c0cc049a48f2dba65"
+      "sha256": "4b3afa64e37817d4e409c91b46b83e14e82a141757f3689f20224ec13fd34b1a"
     },
     {
       "path": "config/public-site.json",
@@ -28730,14 +28772,14 @@
     {
       "path": "functions/api/email-otp-send.js",
       "extension": ".js",
-      "bytes": 9557,
-      "sha256": "11d36ad1404c4c64098433ac7d36f24708877721a45ddcd52f68b5bd0ffcc941"
+      "bytes": 10528,
+      "sha256": "b2114beb3c71836a56316af8fd4259f083e1be58b6d488cb66b6542e7bd447ed"
     },
     {
       "path": "functions/api/email-otp-verify.js",
       "extension": ".js",
-      "bytes": 4968,
-      "sha256": "4b86f42f61fa32e4a9362c73d23f56a63190fa895b60c4ec30481556a2126bb8"
+      "bytes": 5756,
+      "sha256": "4cd3d59de9d1ed6477835813be1a9ef413fb3cedd8e26bb85aa512a6acdc3526"
     },
     {
       "path": "functions/api/engagement.js",
@@ -29822,8 +29864,8 @@
     {
       "path": "js/email/correo-autenticacion.js",
       "extension": ".js",
-      "bytes": 6196,
-      "sha256": "2c6172ddc95bded7a0fb6bd01fc9c94a2adc2e2f4b2496066e6493e2da428eab"
+      "bytes": 6657,
+      "sha256": "52d795b707d802acc5ed6abdb56d72d073a96f5b8d809af0215dc190d213666f"
     },
     {
       "path": "js/email/notificacion-pedido-resend.js",
@@ -30111,7 +30153,7 @@
       "path": "login.html",
       "extension": ".html",
       "bytes": 49217,
-      "sha256": "cfc096aee5289548b41bb72463af74da5ac6a4041dfbf763b0e293fdd8d6c45c"
+      "sha256": "bbc29dfaf4d2f77c573ffb79d10f22db93e1125b7719c26b88505bf3c22155ca"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -31204,6 +31246,12 @@
       "extension": ".mjs",
       "bytes": 2358,
       "sha256": "5349998871e8e02df970ed65d60cee8362a2f15c95680861b0b79d058ea6ed0a"
+    },
+    {
+      "path": "tests/accounts/username-login.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1694,
+      "sha256": "d2905d9623da868628b32fad4fc41aa887beca644b3b20f47d288a191ed1bea9"
     },
     {
       "path": "tests/branches/auditar-limpiar-ramas.test.mjs",
