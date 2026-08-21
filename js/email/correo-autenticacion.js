@@ -22,6 +22,12 @@ export function isValidEmailFormat(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || '').trim());
 }
 
+/** Arma el body del POST según el identificador sea un email o un username. */
+function identifierBody(identifier) {
+  const value = String(identifier || '').trim();
+  return isValidEmailFormat(value) ? { email: value.toLowerCase() } : { username: value };
+}
+
 async function postJson(name, body) {
   // apiUrl() y no una ruta relativa: el sitio también se publica en GitHub
   // Pages, donde las funciones /api/* no existen y un fetch relativo da 404
@@ -60,18 +66,22 @@ async function postJson(name, body) {
   return data;
 }
 
-/** Pide que se mande un código de 6 dígitos al correo (vence en 5 minutos). */
-export async function requestOtpCode(email) {
-  await postJson('email-otp-send', { email });
+/**
+ * Pide que se mande un código de 6 dígitos al correo (vence en 5 minutos).
+ * `identifier` puede ser el email de la cuenta o su username de login.
+ */
+export async function requestOtpCode(identifier) {
+  await postJson('email-otp-send', identifierBody(identifier));
 }
 
 /**
  * Verifica el código contra el backend y, si es correcto, firma la sesión
  * real de Firebase Auth con el Custom Token que devuelve — recién ahí existe
- * un usuario autenticado de verdad, nunca antes.
+ * un usuario autenticado de verdad, nunca antes. `identifier` puede ser el
+ * email de la cuenta o su username de login.
  */
-export async function verifyOtpCode(email, code) {
-  const data = await postJson('email-otp-verify', { email, code });
+export async function verifyOtpCode(identifier, code) {
+  const data = await postJson('email-otp-verify', { ...identifierBody(identifier), code });
   const cred = await signInWithCustomToken(auth, data.customToken);
   return cred.user;
 }
