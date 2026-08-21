@@ -73,6 +73,7 @@
     "test:pages": "node scripts/smoke-todas-paginas.mjs",
     "audit:critical-healing": "node scripts/auditar-critico-recuperacion.js && node scripts/probar-modelo-inventario.mjs",
     "test:rules-phone": "firebase emulators:exec --only firestore --project demo-tintin-phone \"node scripts/probar-firestore-telefono-unico.mjs\"",
+    "test:rules-username": "firebase emulators:exec --only firestore --project demo-tintin-username \"node scripts/probar-firestore-username-unico.mjs\"",
     "test:rules-critical": "firebase emulators:exec --only firestore --project demo-tintin-critical \"node scripts/probar-firestore-critico.mjs\"",
     "audit:login-isolation": "node scripts/auditar-acceso-aislamiento.js",
     "audit:login-profile": "node scripts/auditar-acceso-perfil-incorporacion.js && node --test tests/login/profile-onboarding.test.mjs",

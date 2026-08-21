@@ -330,7 +330,9 @@ service cloud.firestore {
       let data = request.resource.data;
       return (!('name' in data) || (data.name is string && data.name.size() <= 120)) &&
         (!('phone' in data) || (data.phone is string && data.phone.size() <= 40)) &&
-        (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 2000));
+        (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 2000)) &&
+        (!('username' in data) || (data.username is string && data.username.size() <= 20 &&
+          data.username.matches('^[a-z0-9_]{0,20}$')));
     }
 
     // Un teléfono no puede estar en dos cuentas, y eso tiene que valer también
@@ -358,6 +360,22 @@ service cloud.firestore {
           (
             exists(/databases/$(database)/documents/phoneReservations/$(phoneReservationKey(data.phone))) &&
             get(/databases/$(database)/documents/phoneReservations/$(phoneReservationKey(data.phone))).data.uid == request.auth.uid
+          )
+        );
+    }
+
+    // Mismo mecanismo que phoneIsReservedByCaller(): el username guardado en
+    // el perfil sólo se acepta si existe una reserva en `usernameReservations`
+    // a nombre de esta misma cuenta (ver js/components/forms/reserva-username.js).
+    function usernameIsReservedByCaller() {
+      let data = request.resource.data;
+      return !('username' in data) ||
+        data.username == '' ||
+        (
+          (resource != null && 'username' in resource.data && resource.data.username == data.username) ||
+          (
+            exists(/databases/$(database)/documents/usernameReservations/$(data.username)) &&
+            get(/databases/$(database)/documents/usernameReservations/$(data.username)).data.uid == request.auth.uid
           )
         );
     }
@@ -1102,6 +1120,32 @@ service cloud.firestore {
     }
 
     /* ============================================================
+       USERNAME RESERVATIONS
+
+       Mismo patrón que phoneReservations: un username no puede estar en dos
+       cuentas, y eso tiene que valer también para quien escriba directo desde
+       la consola. La clave del documento es el username ya normalizado en
+       minúsculas (ver js/components/forms/utilidades-username.js).
+       ============================================================ */
+
+    match /usernameReservations/{usernameKey} {
+      allow read: if isSuperAdmin();
+
+      allow create: if isSignedIn() &&
+        !isBlockedUser() &&
+        request.resource.data.keys().hasOnly(['uid', 'createdAt']) &&
+        request.resource.data.uid is string &&
+        request.resource.data.uid == request.auth.uid &&
+        request.resource.data.createdAt == request.time &&
+        usernameKey.size() >= 3 && usernameKey.size() <= 20 &&
+        usernameKey.matches('^[a-z0-9_]{3,20}$');
+
+      allow delete: if isSignedIn() && resource.data.uid == request.auth.uid;
+
+      allow update: if false;
+    }
+
+    /* ============================================================
        USERS
        ============================================================ */
 
@@ -1117,6 +1161,7 @@ service cloud.firestore {
           !isBlockedUser() &&
           userProfileFieldsValid() &&
           phoneIsReservedByCaller() &&
+          usernameIsReservedByCaller() &&
           (
             (
               isStoreOpenOrAllowed() &&
