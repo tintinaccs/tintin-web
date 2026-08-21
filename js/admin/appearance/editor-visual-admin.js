@@ -120,7 +120,7 @@ function ensureStudioUi() {
   const editor = $('visual-editor'); if (!editor || editor.dataset.studioReady === '1') return;
   editor.dataset.studioReady='1'; editor.classList.add('visual-studio-v2'); sectionListNode=$('visual-section-list');
   if (!document.getElementById('visual-studio-v2-css')) {
-    const link=document.createElement('link'); link.id='visual-studio-v2-css'; link.rel='stylesheet'; link.href='css/admin/visual-studio-v2.css?v=tintin-20260813-apariencia-horizontal-2'; document.head.appendChild(link);
+    const link=document.createElement('link'); link.id='visual-studio-v2-css'; link.rel='stylesheet'; link.href='css/admin/visual-studio-v2.css?v=tintin-20260813-apariencia-horizontal-viewport-real-3'; document.head.appendChild(link);
   }
   const pageLabel=editor.querySelector('label[for="visual-page"]'); pageLabel?.classList.add('visual-studio-hidden'); $('visual-page')?.classList.add('visual-studio-hidden');
   const sidebar=editor.querySelector('.visual-editor-sidebar');
