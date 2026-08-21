@@ -23,6 +23,9 @@ test('el Editor de Código ocupa el contenido del Admin con tema claro y contras
   assert.match(styles, /body\.code-studio-open \.adm-content/);
   assert.match(styles, /--cs-bg:\s*#fffafc/);
   assert.match(styles, /#section-estudio-codigo \.cs-editor[\s\S]*background:\s*#fff !important/);
+  assert.match(styles, /container-name:\s*code-studio/);
+  assert.match(styles, /@container code-studio \(max-width: 1180px\)/);
+  assert.match(styles, /\.cs-github-center\s*\{[\s\S]*position:\s*static/);
   assert.match(ui, /theme:\s*'vs'/);
   assert.doesNotMatch(ui, /theme:\s*'vs-dark'/);
   assert.match(ui, /matchMedia\('\(max-width: 1200px\)'\)[\s\S]*classList\.add\('cs-collapsed'\)/);
@@ -42,6 +45,7 @@ test('si GitHub App no está disponible no se solicita el árbol y se muestra co
   assert.match(ui, /if \(!data\.github\?\.appConfigured\) \{[\s\S]*renderGithubUnavailable\(detail\);[\s\S]*return;/);
   assert.match(ui, /if \(!state\.github\?\.appConfigured\) \{[\s\S]*renderGithubUnavailable/);
   assert.match(ui, /error\.status === 503/);
+  assert.match(ui, /Conexión con GitHub pendiente/);
 });
 
 test('la API code-studio está incluida en Pages Functions', async () => {

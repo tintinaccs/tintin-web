@@ -164,7 +164,7 @@ body.code-studio-open .adm-content {
 
 .cs-shell {
   height: calc(100dvh - 102px);
-  min-height: 600px;
+  min-height: min(520px, calc(100dvh - 102px));
   display: flex;
   flex-direction: column;
   border-radius: 16px;
@@ -276,7 +276,7 @@ body.code-studio-open .adm-content {
 
 .cs-editor {
   min-height: 0;
-  grid-template-rows: 38px minmax(180px, 1fr) 180px;
+  grid-template-rows: 38px minmax(120px, 1fr) minmax(120px, 160px);
   background: var(--cs-panel-2) !important;
   color: var(--cs-text) !important;
 }
@@ -287,7 +287,7 @@ body.code-studio-open .adm-content {
 }
 
 .cs-bottom-content {
-  height: 144px;
+  height: calc(100% - 34px);
 }
 
 .cs-search,
@@ -415,5 +415,234 @@ body.code-studio-open .adm-content {
 
   .cs-bottom-content {
     height: 156px;
+  }
+}
+
+/* Ajuste responsive por el ancho REAL del módulo. La barra lateral del Admin
+   reduce el espacio útil aun cuando el viewport siga siendo de escritorio. */
+#section-estudio-codigo .cs-shell {
+  container-name: code-studio;
+  container-type: inline-size;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* El centro de GitHub participa del flujo: al abrirlo desplaza el editor y
+   nunca queda flotando encima del explorador, el código o el asistente. */
+#section-estudio-codigo .cs-github-center {
+  position: static;
+  z-index: auto;
+  width: auto;
+  max-width: none;
+  flex: 0 0 auto;
+  margin: 0;
+  border-width: 0 0 1px;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#section-estudio-codigo .cs-github-center-body {
+  padding: 10px 14px 12px;
+}
+
+#section-estudio-codigo .cs-status-grid {
+  grid-template-columns: repeat(4, minmax(74px, auto) minmax(0, 1fr));
+  align-items: center;
+  gap: 6px 10px;
+}
+
+#section-estudio-codigo .cs-status-grid strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#section-estudio-codigo .cs-pane-title {
+  min-width: 0;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+#section-estudio-codigo .cs-pane-title > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#section-estudio-codigo .cs-tools {
+  flex: 0 0 auto;
+  gap: 1px;
+}
+
+#section-estudio-codigo .cs-tools .cs-icon-btn {
+  width: 24px;
+  height: 24px;
+  min-height: 24px !important;
+}
+
+#section-estudio-codigo .cs-side,
+#section-estudio-codigo .cs-editor,
+#section-estudio-codigo .cs-ai,
+#section-estudio-codigo .cs-tree,
+#section-estudio-codigo .cs-ai-body {
+  min-width: 0;
+  min-height: 0;
+}
+
+#section-estudio-codigo .cs-bottom-tabs {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
+#section-estudio-codigo .cs-bottom {
+  min-width: 0;
+  overflow: hidden;
+}
+
+#section-estudio-codigo .cs-bottom-tab {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+@container code-studio (max-width: 1180px) {
+  #section-estudio-codigo .cs-top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  #section-estudio-codigo .cs-top-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(150px, 210px);
+  }
+
+  #section-estudio-codigo .cs-identity {
+    overflow: hidden;
+  }
+
+  #section-estudio-codigo .cs-status {
+    max-width: none;
+  }
+
+  #section-estudio-codigo .cs-toolbar {
+    justify-content: flex-start;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+  }
+
+  #section-estudio-codigo .cs-grid {
+    grid-template-columns: minmax(210px, 220px) minmax(360px, 1fr) minmax(250px, 270px);
+  }
+
+}
+
+@container code-studio (max-width: 920px) {
+  #section-estudio-codigo .cs-grid {
+    grid-template-columns: minmax(200px, 220px) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  #section-estudio-codigo .cs-shell:has(.cs-ai:not(.cs-collapsed)) .cs-grid {
+    grid-template-rows: minmax(300px, 1fr) minmax(280px, 320px);
+    overflow-y: auto;
+  }
+
+  #section-estudio-codigo .cs-ai {
+    position: static;
+    inset: auto;
+    grid-column: 1 / -1;
+    width: auto;
+    height: min(320px, 42dvh);
+    border-top: 1px solid var(--cs-border);
+    border-left: 0;
+    box-shadow: none;
+  }
+
+  #section-estudio-codigo .cs-ai.cs-collapsed {
+    display: none;
+  }
+
+  #section-estudio-codigo .cs-status-grid {
+    grid-template-columns: repeat(2, minmax(74px, auto) minmax(0, 1fr));
+  }
+}
+
+@container code-studio (max-width: 720px) {
+  #section-estudio-codigo .cs-shell {
+    height: auto;
+    min-height: 0;
+  }
+
+  #section-estudio-codigo .cs-top-main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #section-estudio-codigo .cs-identity {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  #section-estudio-codigo .cs-status {
+    width: 100%;
+    max-width: 100%;
+    justify-content: flex-start;
+  }
+
+  #section-estudio-codigo .cs-branch {
+    width: 100%;
+    max-width: none;
+  }
+
+  #section-estudio-codigo .cs-status-grid {
+    grid-template-columns: minmax(80px, auto) minmax(0, 1fr);
+  }
+
+  #section-estudio-codigo .cs-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 240px 640px auto;
+    height: auto;
+  }
+
+  #section-estudio-codigo .cs-shell:has(.cs-ai:not(.cs-collapsed)) .cs-grid {
+    grid-template-rows: 240px 640px auto;
+    overflow: visible;
+  }
+
+  #section-estudio-codigo .cs-side {
+    display: flex;
+    border-right: 0;
+    border-bottom: 1px solid var(--cs-border);
+  }
+
+  #section-estudio-codigo .cs-editor {
+    min-height: 0;
+    grid-template-rows: 38px minmax(360px, 1fr) 200px;
+  }
+
+  #section-estudio-codigo .cs-ai {
+    height: 360px;
+  }
+}
+
+@media (max-width: 820px) {
+  body.code-studio-open .adm-content {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 540px) {
+  body.code-studio-open .adm-content {
+    padding: 10px;
+  }
+
+  #section-estudio-codigo .cs-shell {
+    border: 1px solid var(--cs-border);
+    border-radius: 12px;
   }
 }

@@ -184,7 +184,7 @@ function makeShell() {
         <div class="cs-top-main">
           <div class="cs-identity">
             <div class="cs-brand">Editor de Código</div>
-            <button class="cs-status" id="cs-github-center-toggle" type="button" aria-expanded="false"><span class="cs-dot" id="cs-dot"></span><span id="cs-status">Comprobando GitHub…</span></button>
+            <button class="cs-status" id="cs-github-center-toggle" type="button" aria-expanded="false" aria-controls="cs-github-center"><span class="cs-dot" id="cs-dot"></span><span id="cs-status">Comprobando GitHub…</span></button>
           </div>
           <div class="cs-branch" id="cs-branch" title="Rama activa">main</div>
         </div>
@@ -199,7 +199,7 @@ function makeShell() {
         </div>
       </div>
       <aside class="cs-github-center cs-hidden" id="cs-github-center" aria-live="polite">
-        <div class="cs-pane-title"><span>Centro GitHub en vivo</span><button class="cs-icon-btn" id="cs-github-center-close" type="button">✕</button></div>
+        <div class="cs-pane-title"><span>Centro GitHub en vivo</span><button class="cs-icon-btn" id="cs-github-center-close" type="button" aria-label="Cerrar estado de GitHub">✕</button></div>
         <div class="cs-github-center-body" id="cs-github-center-body"></div>
       </aside>
       <div class="cs-progress"><span id="cs-progress" style="width:0%"></span></div>
@@ -324,7 +324,7 @@ function updateTopStatus() {
   const preview = $('#cs-preview');
   if (!label) return;
   if (!state.github?.appConfigured) {
-    label.textContent = state.github?.error || 'GitHub App sin configurar';
+    label.textContent = 'Conexión GitHub pendiente';
     dot.className = 'cs-dot bad';
   } else {
     const currentPhase = derivePhase();
@@ -344,10 +344,17 @@ function updateTopStatus() {
 function renderGithubUnavailable(message = '') {
   const root = $('#cs-tree');
   const search = $('#cs-search');
-  const detail = String(message || 'La conexión privada con GitHub todavía no está configurada.');
+  const rawDetail = String(message || 'La conexión privada con GitHub todavía no está configurada.');
+  const detail = /instalaci[oó]n/i.test(rawDetail)
+    ? 'Falta registrar en Cloudflare el identificador de la instalación de GitHub App.'
+    : /clave privada/i.test(rawDetail)
+      ? 'Falta configurar en Cloudflare la clave privada de la GitHub App.'
+      : /github app/i.test(rawDetail)
+        ? 'Faltan datos privados de la GitHub App en Cloudflare.'
+        : rawDetail;
   if (search) search.disabled = true;
   if (root) {
-    root.innerHTML = `<div class="cs-connection-state" role="status"><strong>GitHub no está conectado</strong><p>${escapeHtml(detail)}</p><p>Configurá la GitHub App en Cloudflare y luego presioná <strong>Sincronizar</strong>. El editor no expondrá credenciales en el navegador.</p></div>`;
+    root.innerHTML = `<div class="cs-connection-state" role="status"><strong>Conexión con GitHub pendiente</strong><p>${escapeHtml(detail)}</p><p>Cuando la configuración privada esté completa, presioná <strong>Sincronizar</strong>. El editor nunca expondrá credenciales en el navegador.</p></div>`;
   }
 }
 
