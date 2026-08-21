@@ -1,7 +1,6 @@
 import { CATEGORIES, UI_ICONS, categoryIcon, svgIcon } from '../compartido/iconos.js';
 import { logoUrl } from '../compartido/configuracion.js';
 
-const notificationBell = () => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>';
 const EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
 
 function renderTabletCategories() {
@@ -28,7 +27,7 @@ export function renderTabletHeader() {
         </a>
         <div class="tt-tablet-actions">
           <button type="button" id="btn-search-tablet" data-nav-action="search" title="Buscar" aria-label="Buscar" aria-expanded="false" aria-controls="search-panel">${svgIcon(UI_ICONS.search, { size: 22 })}</button>
-          <button type="button" id="btn-notifications-tablet" class="tt-notification-trigger" data-nav-action="notifications" title="Notificaciones" aria-label="Notificaciones" aria-expanded="false" aria-controls="notifications-drawer" hidden>${notificationBell()}<span class="tt-notification-badge" data-notification-badge hidden>0</span></button>
+          <button type="button" id="btn-notifications-tablet" class="tt-notification-trigger" data-nav-action="notifications" title="Notificaciones" aria-label="Notificaciones" aria-expanded="false" aria-controls="notifications-drawer" hidden>${svgIcon(UI_ICONS.bell, { size: 22 })}<span class="tt-notification-badge" data-notification-badge hidden>0</span></button>
           <button type="button" id="btn-cuenta-tablet" data-nav-action="account" data-auth-account-button data-shell-route="account" title="Mi cuenta" aria-label="Mi cuenta" aria-expanded="false" aria-controls="account-drawer">${svgIcon(UI_ICONS.account, { size: 22 })}</button>
           <button type="button" id="btn-cart-tablet" data-nav-action="cart" title="Carrito" aria-label="Carrito" aria-expanded="false" aria-controls="cart-drawer">${svgIcon(UI_ICONS.bag, { size: 22 })}<span class="tt-cart-badge hidden" id="cart-badge-tablet">0</span></button>
         </div>

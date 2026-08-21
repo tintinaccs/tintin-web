@@ -10,6 +10,8 @@ const content = read('js/core/store/contenido-sitio.js');
 const admin = read('js/admin/appearance/editor-visual-admin.js');
 const rules = read('firestore.rules');
 const coreServer = read('cloudflare/visual-builder-core.js');
+const bootstrap = read('js/visual-builder-bootstrap.js');
+const lightweightPages = read('functions/[page].js');
 
 test('whitelist de tipos de bloque y opciones de estilo tiene una única fuente compartida', () => {
   assert.ok(coreServer.includes('contratos-visual-builder.js'), 'el servidor debe importar el contrato compartido');
@@ -37,6 +39,21 @@ test('colecciones privadas quedan denegadas a navegadores', () => {
 test('runtime usa DOM seguro y el contenido mantiene nodos de texto', () => {
   assert.doesNotMatch(runtime, /innerHTML\s*=/); assert.match(runtime, /document\.createElement/); assert.match(runtime, /textContent/);
   assert.match(content, /document\.createTextNode/); assert.match(runtime, /applyVisualContentPreview/);
+});
+
+test('el primer frame espera la configuración real y conserva el layout nativo si la sección nunca fue editada', () => {
+  assert.match(bootstrap, /initVisualBuilderRuntime\(pageId\)/);
+  assert.match(bootstrap, /waitForVisualBuilderSettlement/);
+  assert.match(bootstrap, /tintin:visual-builder-ready/);
+  assert.match(bootstrap, /loader\.beginWait\(\)/);
+  assert.match(bootstrap, /loader\.endWait/);
+  assert.match(bootstrap, /restoreNativeGeometryForUntouchedSections/);
+  assert.match(bootstrap, /removeAttribute\('data-tt-visual-width'\)/);
+  assert.match(bootstrap, /removeAttribute\('data-tt-visual-align'\)/);
+  assert.match(bootstrap, /classList\.remove\('tt-vb-layout-pending'\)/);
+  assert.match(lightweightPages, /tt-vb-layout-pending/);
+  assert.match(lightweightPages, /tt-vb-layout-guard/);
+  assert.match(lightweightPages, /markVisualLayoutPending/);
 });
 
 test('preview solo acepta postMessage same-origin del padre', () => {

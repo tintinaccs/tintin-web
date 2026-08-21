@@ -16,7 +16,7 @@ import {
   normalizeContentValue,
   detectContentPageId,
 } from './esquema-contenido.js?v=tintin-20260820-microcopy-ios-1';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260820-microcopy-ios-1';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260821-visual-flash-fix-1';
 
 const subscriptions = new Map();
 const latestData = new Map();

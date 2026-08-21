@@ -1,6 +1,6 @@
-import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260817-header-refined-2';
-import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260817-header-refined-2';
-import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20260815-routes-clean-1';
+import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260820-notifications-global-1';
+import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260820-notifications-global-1';
+import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20260820-notifications-global-1';
 import { renderSearchPanel } from './compartido/panel-busqueda.js';
 import { renderCartDrawer } from './compartido/panel-carrito.js';
 import { renderAccountDrawer } from './compartido/panel-cuenta.js';
@@ -8,7 +8,7 @@ import { renderCollectionsSheet } from './compartido/panel-colecciones.js';
 import { renderSurfaceLayer } from './compartido/capas-paneles.js';
 import { applyActiveState, currentPage } from './compartido/estado-ruta.js';
 import { ensureNavigationAssets } from './compartido/recursos-navegacion.js';
-import { loadSharedRuntime } from './compartido/carga-navegacion.js';
+import { loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260821-notifications-lazy-1';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
 import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260817-footer-contrast-1';
@@ -212,7 +212,7 @@ function mountPublicShell() {
     document.dispatchEvent(new CustomEvent('tintin:public-shell-ready', {
       detail: {
         architecture: 'modular-navigation-v1',
-        socialNotifications: 'on-demand',
+        socialNotifications: 'global',
         globalConfigRequests: 1,
         sharedLogoRequests: 1,
       },

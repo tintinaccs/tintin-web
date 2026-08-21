@@ -41,6 +41,35 @@ function bindDemand(selector, loader) {
   });
 }
 
+function hasActiveSessionHint() {
+  try {
+    const startedAt = Number(window.localStorage.getItem('tt_session_started_at'));
+    return Number.isFinite(startedAt) && startedAt > 0;
+  } catch {
+    return false;
+  }
+}
+
+function attachNotificationsDemand() {
+  bindDemand(
+    '[data-nav-action="notifications"],#tabbar-notifications',
+    loadNotificationsRuntime
+  );
+
+  window.addEventListener('tintin:auth-nav-updated', event => {
+    if (!event.detail?.authenticated) return;
+    void loadNotificationsRuntime().catch(error => {
+      console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
+    });
+  });
+
+  if (hasActiveSessionHint()) {
+    void loadNotificationsRuntime().catch(error => {
+      console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
+    });
+  }
+}
+
 function loadHomeMaintenance() {
   if (currentPage() !== 'home') return Promise.resolve();
 
@@ -142,7 +171,7 @@ function attachProductsDemand() {
 function attachLightweightCommerceDemand() {
   bindDemand(
     '[data-nav-action="account"],[data-shell-route="account"],#tabbar-account',
-    () => Promise.all([loadAuthRuntime(), loadNotificationsRuntime()])
+    loadAuthRuntime
   );
   bindDemand(
     '[data-nav-action="cart"],[data-shell-route="cart"],#tabbar-cart',
@@ -175,12 +204,12 @@ function loadNavigationBehaviors() {
 export function loadSharedRuntime() {
   const page = currentPage();
   attachProductsDemand();
+  attachNotificationsDemand();
   loadNavigationBehaviors();
 
-  // Páginas informativas (Nosotros, Contacto, ayuda, legales y 404) no
-  // necesitan abrir Firebase/Auth, carrito, notificaciones ni colecciones al
-  // cargar. Conservan exactamente las mismas superficies; esos runtimes se
-  // hidratan cuando la persona muestra intención de usarlos.
+  // Las páginas informativas mantienen disponible la bandeja global sin
+  // descargar Firestore para visitantes sin sesión. Las sesiones activas se
+  // hidratan arriba mediante la marca de sesión y el evento de autenticación.
   if (!FULL_COMMERCE_PAGES.has(page)) {
     attachLightweightCommerceDemand();
     return;
@@ -191,9 +220,6 @@ export function loadSharedRuntime() {
   if (page === 'cart') critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')));
 
   Promise.allSettled(critical).then(reportRuntimeFailures);
-  void loadNotificationsRuntime().catch(error => {
-    console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
-  });
 
   scheduleNonCritical(() => {
     Promise.allSettled([
