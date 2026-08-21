@@ -59,7 +59,9 @@ const state = {
   aiProposal: null,
   mergedSha: '',
   graphScale: 1,
-  graphFocus: ''
+  graphFocus: '',
+  problemsTimer: null,
+  markersSubscription: null
 };
 
 const $ = selector => document.querySelector(selector);
@@ -217,7 +219,7 @@ function makeShell() {
           <div id="cs-editor-host" class="cs-editor-host"><div class="cs-empty">Elegí un archivo del explorador.</div></div>
           <section class="cs-bottom">
             <div class="cs-bottom-tabs">
-              <button class="cs-bottom-tab active" data-bottom="problems" type="button">Problemas</button>
+              <button class="cs-bottom-tab active" data-bottom="problems" type="button">Problemas <span class="cs-problem-count" id="cs-problem-count" hidden>0</span></button>
               <button class="cs-bottom-tab" data-bottom="changes" type="button">Cambios</button>
               <button class="cs-bottom-tab" data-bottom="history" type="button">Historial</button>
               <button class="cs-bottom-tab" data-bottom="checks" type="button">Checks</button>
@@ -526,15 +528,42 @@ function createModel(tab) {
     tab.dirty = tab.operation !== 'update' || tab.content !== tab.baseline;
     renderTabs();
     updateTopStatus();
-    if (state.bottom === 'problems') setTimeout(renderProblems, 150);
+    scheduleProblemsRender();
     if (state.bottom === 'changes') setTimeout(renderChanges, 150);
   });
+  scheduleProblemsRender();
+}
+
+function scheduleProblemsRender(delay = 180) {
+  clearTimeout(state.problemsTimer);
+  state.problemsTimer = setTimeout(() => {
+    state.problemsTimer = null;
+    renderProblems();
+  }, delay);
+}
+
+function configureMonacoDiagnostics(monaco) {
+  const language = monaco?.languages?.typescript;
+  const diagnostics = {
+    noSyntaxValidation: false,
+    noSemanticValidation: true,
+    noSuggestionDiagnostics: false,
+    onlyVisible: false
+  };
+  language?.javascriptDefaults?.setDiagnosticsOptions(diagnostics);
+  language?.typescriptDefaults?.setDiagnosticsOptions(diagnostics);
+  language?.javascriptDefaults?.setEagerModelSync(true);
+  language?.typescriptDefaults?.setEagerModelSync(true);
+
+  state.markersSubscription?.dispose?.();
+  state.markersSubscription = monaco.editor.onDidChangeMarkers(() => scheduleProblemsRender(60));
 }
 
 async function ensureMonaco() {
   if (state.monaco) return state.monaco;
   if (window.monaco) {
     state.monaco = window.monaco;
+    if (!state.markersSubscription) configureMonacoDiagnostics(state.monaco);
     return state.monaco;
   }
   return new Promise(resolve => {
@@ -543,6 +572,7 @@ async function ensureMonaco() {
         if (window.monaco || window.__tintinMonacoFailed) {
           clearInterval(timer);
           state.monaco = window.monaco || null;
+          if (state.monaco && !state.markersSubscription) configureMonacoDiagnostics(state.monaco);
           resolve(state.monaco);
         }
       }, 80);
@@ -564,6 +594,7 @@ async function ensureMonaco() {
           window.require.config({ paths: { vs: MONACO_BASE } });
           window.require(['vs/editor/editor.main'], () => {
             state.monaco = window.monaco;
+            configureMonacoDiagnostics(state.monaco);
             window.__tintinMonacoLoading = false;
             resolve(state.monaco);
           }, () => {
@@ -615,6 +646,7 @@ function closeTab(path) {
   renderTabs();
   renderEditor();
   updateTopStatus();
+  scheduleProblemsRender(0);
 }
 
 function activateTab(path) {
@@ -903,20 +935,49 @@ async function previewDeployment() {
 
 async function renderProblems() {
   const host = $('#cs-bottom-content');
-  if (!host || state.bottom !== 'problems') return;
+  const counter = $('#cs-problem-count');
+  if (!host) return;
   if (!state.monaco) {
-    host.innerHTML = '<div class="cs-muted">Monaco no está disponible; se mantiene el editor de texto seguro, pero no hay diagnósticos de lenguaje.</div>';
+    if (counter) { counter.hidden = true; counter.textContent = '0'; }
+    if (state.bottom === 'problems') host.innerHTML = '<div class="cs-muted">Monaco no está disponible; se mantiene el editor de texto seguro, pero no hay diagnósticos de lenguaje.</div>';
     return;
   }
   const markers = state.monaco.editor.getModelMarkers({}).filter(marker => {
     const path = marker.resource?.path?.replace(/^\//, '');
     return state.tabs.has(path);
-  });
+  }).sort((left, right) => right.severity - left.severity
+    || left.resource.path.localeCompare(right.resource.path)
+    || left.startLineNumber - right.startLineNumber
+    || left.startColumn - right.startColumn);
+
+  const errors = markers.filter(marker => marker.severity === state.monaco.MarkerSeverity.Error).length;
+  const warnings = markers.filter(marker => marker.severity === state.monaco.MarkerSeverity.Warning).length;
+  if (counter) {
+    counter.textContent = String(errors + warnings);
+    counter.hidden = errors + warnings === 0;
+    counter.classList.toggle('has-errors', errors > 0);
+    counter.setAttribute('aria-label', `${errors} errores y ${warnings} advertencias`);
+  }
+  if (state.bottom !== 'problems') return;
   if (!markers.length) {
-    host.innerHTML = '<div class="cs-muted">Sin marcadores de sintaxis/lenguaje reportados por Monaco.</div>';
+    const opened = state.tabs.size;
+    host.innerHTML = `<div class="cs-problem-summary cs-problem-summary-ok"><strong>✓ Sin problemas detectados</strong><span>Monaco revisó ${opened} archivo(s) abierto(s). El análisis se actualiza mientras escribís.</span></div>`;
     return;
   }
-  host.innerHTML = `<div class="cs-list">${markers.map(marker => `<div class="cs-list-item ${marker.severity >= 8 ? 'cs-problem-error' : 'cs-problem-warn'}"><div class="cs-list-title">${escapeHtml(marker.resource.path.replace(/^\//, ''))}:${marker.startLineNumber}:${marker.startColumn}</div><div>${escapeHtml(marker.message)}</div></div>`).join('')}</div>`;
+  const summary = [
+    errors ? `${errors} error${errors === 1 ? '' : 'es'}` : '',
+    warnings ? `${warnings} advertencia${warnings === 1 ? '' : 's'}` : '',
+    markers.length - errors - warnings ? `${markers.length - errors - warnings} sugerencia(s)` : ''
+  ].filter(Boolean).join(' · ');
+  host.innerHTML = `<div class="cs-problem-summary"><strong>${escapeHtml(summary)}</strong><span>Seleccioná un problema para abrir su ubicación exacta.</span></div><div class="cs-list">${markers.map(marker => {
+    const path = marker.resource.path.replace(/^\//, '');
+    const severity = marker.severity === state.monaco.MarkerSeverity.Error
+      ? 'error'
+      : marker.severity === state.monaco.MarkerSeverity.Warning ? 'warn' : 'info';
+    const label = severity === 'error' ? 'Error' : severity === 'warn' ? 'Advertencia' : 'Sugerencia';
+    const source = marker.source ? ` · ${escapeHtml(marker.source)}` : '';
+    return `<button type="button" class="cs-list-item cs-problem-item cs-problem-${severity}" data-problem-path="${escapeHtml(path)}" data-problem-line="${marker.startLineNumber}" data-problem-column="${marker.startColumn}"><span class="cs-problem-icon" aria-hidden="true">${severity === 'error' ? '×' : severity === 'warn' ? '!' : 'i'}</span><span class="cs-problem-copy"><span class="cs-list-title">${escapeHtml(label)} · ${escapeHtml(path)}:${marker.startLineNumber}:${marker.startColumn}${source}</span><span>${escapeHtml(marker.message)}</span></span></button>`;
+  }).join('')}</div>`;
 }
 
 async function renderChanges() {
@@ -1211,6 +1272,12 @@ function bindUi() {
     $('#cs-github-center-toggle')?.setAttribute('aria-expanded', 'false');
   });
   document.querySelectorAll('.cs-bottom-tab').forEach(button => button.addEventListener('click', () => switchBottom(button.dataset.bottom)));
+  $('#cs-bottom-content')?.addEventListener('click', event => {
+    const problem = event.target.closest('[data-problem-path]');
+    if (!problem) return;
+    revealEditorLocation(problem.dataset.problemPath, problem.dataset.problemLine, problem.dataset.problemColumn)
+      .catch(error => toast(error.message, true));
+  });
   let searchTimer;
   $('#cs-search')?.addEventListener('input', () => { clearTimeout(searchTimer); searchTimer = setTimeout(globalSearch, 350); });
   document.addEventListener('keydown', event => {

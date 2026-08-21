@@ -700,3 +700,101 @@ body.code-studio-open .adm-content {
   flex: 0 0 auto;
   padding-bottom: 2px;
 }
+
+/* Diagnósticos vivos del código abierto. Las filas completas son controles
+   navegables y conservan contraste tanto con errores como con advertencias. */
+#section-estudio-codigo .cs-problem-count {
+  display: inline-grid;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  place-items: center;
+  border-radius: 999px;
+  background: #f4e6eb;
+  color: var(--cs-warn);
+  font-size: 9px;
+  line-height: 1;
+}
+
+#section-estudio-codigo .cs-problem-count.has-errors {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+#section-estudio-codigo .cs-problem-count[hidden] {
+  display: none !important;
+}
+
+#section-estudio-codigo .cs-problem-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+  padding: 7px 9px;
+  border: 1px solid var(--cs-border);
+  border-radius: 7px;
+  background: var(--cs-panel-2);
+  font-size: 10px;
+}
+
+#section-estudio-codigo .cs-problem-summary span {
+  color: var(--cs-muted);
+}
+
+#section-estudio-codigo .cs-problem-summary-ok strong {
+  color: var(--cs-ok);
+}
+
+#section-estudio-codigo .cs-problem-item {
+  display: flex;
+  width: 100%;
+  gap: 9px;
+  text-align: left;
+  color: var(--cs-text);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+#section-estudio-codigo .cs-problem-item:hover,
+#section-estudio-codigo .cs-problem-item:focus-visible {
+  border-color: var(--cs-accent);
+  background: var(--cs-panel-2);
+  outline: none;
+}
+
+#section-estudio-codigo .cs-problem-icon {
+  display: grid;
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 900;
+}
+
+#section-estudio-codigo .cs-problem-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+#section-estudio-codigo .cs-problem-error .cs-problem-icon {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+#section-estudio-codigo .cs-problem-warn .cs-problem-icon {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+#section-estudio-codigo .cs-problem-info {
+  border-left: 3px solid #2563eb;
+}
+
+#section-estudio-codigo .cs-problem-info .cs-problem-icon {
+  background: #dbeafe;
+  color: #1d4ed8;
+}

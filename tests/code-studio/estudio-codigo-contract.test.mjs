@@ -133,6 +133,18 @@ test('Monaco se sirve localmente y el build genera el artefacto', async () => {
   assert.match(typography, /js\/vendor\/monaco/);
 });
 
+test('Problemas se actualiza con Monaco y permite saltar al error exacto', async () => {
+  const ui = await read('js/admin/estudio-codigo/estudio-codigo-admin.js');
+  const styles = await read('css/admin/estudio-codigo.css');
+  assert.match(ui, /onDidChangeMarkers\(\(\) => scheduleProblemsRender/);
+  assert.match(ui, /noSyntaxValidation:\s*false/);
+  assert.match(ui, /data-problem-path/);
+  assert.match(ui, /revealEditorLocation\(problem\.dataset\.problemPath/);
+  assert.match(ui, /id="cs-problem-count"/);
+  assert.match(styles, /\.cs-problem-count/);
+  assert.match(styles, /\.cs-problem-item:hover/);
+});
+
 test('el mapa permite navegar a evidencia exacta y limita enlaces externos', async () => {
   const ui = await read('js/admin/estudio-codigo/estudio-codigo-admin.js');
   assert.match(ui, /revealEditorLocation/);
