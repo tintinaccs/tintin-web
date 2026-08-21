@@ -11,7 +11,8 @@ const LOADER_VERSION = 'tintin-20260816-loader-min-show-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260820-layout-notifications-global-1';
 const NAV_ENTRY_VERSION = 'tintin-20260820-layout-notifications-global-1';
-const NAV_BARRIER_VERSION = 'tintin-20260820-layout-notifications-global-1';
+const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
+const VISUAL_BUILDER_VERSION = 'tintin-20260821-layout-stable-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20260815-profile-routes-1';
 const PROFILE_GATE_VERSION = 'tintin-20260815-profile-routes-1';
 // Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
@@ -175,6 +176,13 @@ function versionRuntimeLoader(html) {
   );
 }
 
+function versionVisualBuilder(html) {
+  return html.replace(
+    /(<script\b[^>]*src=["']js\/visual-builder-bootstrap\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi,
+    `$1?v=${VISUAL_BUILDER_VERSION}$2`
+  );
+}
+
 function versionSessionProtection(html) {
   return html.replace(
     /(js\/core\/auth\/proteccion-sesion\.js)(?:\?v=[A-Za-z0-9._-]+)?/gi,
@@ -209,6 +217,7 @@ for (const page of PUBLIC_PAGES) {
   html = centralizeRuntime(html);
   html = versionFirstPaint(html);
   html = versionRuntimeLoader(html);
+  html = versionVisualBuilder(html);
   html = versionSessionProtection(html);
   html = versionProfileGate(html);
   html = normalizeWhitespace(html);
@@ -226,7 +235,7 @@ for (const page of PUBLIC_PAGES) {
 for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') && !PUBLIC_PAGES.includes(file))) {
   const file = path.join(ROOT, page);
   const before = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
-  const html = versionProfileGate(versionSessionProtection(before));
+  const html = versionVisualBuilder(versionProfileGate(versionSessionProtection(before)));
   if (html !== before) {
     fs.writeFileSync(file, html, 'utf8');
     changed += 1;
