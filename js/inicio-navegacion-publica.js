@@ -6,7 +6,7 @@
   if (window.TintinPublicShellBootstrapStarted) return;
   window.TintinPublicShellBootstrapStarted = true;
 
-  const ENTRY_VERSION = 'tintin-20260820-layout-notifications-global-1';
+  const ENTRY_VERSION = 'tintin-20260821-notifications-lazy-1';
   const BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
   const scriptUrl = document.currentScript?.src
     || new URL('js/inicio-navegacion-publica.js', window.location.href).href;

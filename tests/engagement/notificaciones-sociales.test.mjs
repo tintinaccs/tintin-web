@@ -94,11 +94,12 @@ test('clientas tienen bandeja de 100, saneado y reintentos de acciones important
   assert.match(clientUi, /apiWithRetry\('profileCreated'/);
 });
 
-test('la campana pública se inicializa globalmente y comparte icono en desktop, tablet y mobile', () => {
-  const globalLoadIndex = navigationRuntime.indexOf('void loadNotificationsRuntime()');
-  const lightweightReturnIndex = navigationRuntime.indexOf("if (!FULL_COMMERCE_PAGES.has(page))");
-  assert.ok(globalLoadIndex >= 0, 'falta iniciar notificaciones globalmente');
-  assert.ok(lightweightReturnIndex > globalLoadIndex, 'las páginas livianas salen antes de inicializar notificaciones');
+test('la campana pública evita Firestore para visitas livianas y se hidrata con sesión o demanda', () => {
+  assert.match(navigationRuntime, /function attachNotificationsDemand\(\)/);
+  assert.match(navigationRuntime, /\[data-nav-action="notifications"\],#tabbar-notifications/);
+  assert.match(navigationRuntime, /tintin:auth-nav-updated/);
+  assert.match(navigationRuntime, /hasActiveSessionHint\(\)/);
+  assert.doesNotMatch(navigationRuntime, /attachProductsDemand\(\);\s*loadNavigationBehaviors\(\);\s*void loadNotificationsRuntime\(\)/);
   assert.match(sharedIcons, /bell:\s*'<path/);
   assert.match(desktopHeader, /svgIcon\(UI_ICONS\.bell/);
   assert.match(tabletHeader, /svgIcon\(UI_ICONS\.bell/);

@@ -41,6 +41,35 @@ function bindDemand(selector, loader) {
   });
 }
 
+function hasActiveSessionHint() {
+  try {
+    const startedAt = Number(window.localStorage.getItem('tt_session_started_at'));
+    return Number.isFinite(startedAt) && startedAt > 0;
+  } catch {
+    return false;
+  }
+}
+
+function attachNotificationsDemand() {
+  bindDemand(
+    '[data-nav-action="notifications"],#tabbar-notifications',
+    loadNotificationsRuntime
+  );
+
+  window.addEventListener('tintin:auth-nav-updated', event => {
+    if (!event.detail?.authenticated) return;
+    void loadNotificationsRuntime().catch(error => {
+      console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
+    });
+  });
+
+  if (hasActiveSessionHint()) {
+    void loadNotificationsRuntime().catch(error => {
+      console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
+    });
+  }
+}
+
 function loadHomeMaintenance() {
   if (currentPage() !== 'home') return Promise.resolve();
 
@@ -175,17 +204,12 @@ function loadNavigationBehaviors() {
 export function loadSharedRuntime() {
   const page = currentPage();
   attachProductsDemand();
+  attachNotificationsDemand();
   loadNavigationBehaviors();
 
-  // Las notificaciones son una superficie global: deben hidratarse en todas
-  // las páginas para que el icono, el badge y el drawer reflejen la sesión
-  // actual tanto en desktop como en tablet y mobile.
-  void loadNotificationsRuntime().catch(error => {
-    console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
-  });
-
-  // Las páginas informativas siguen cargando carrito, cuenta y colecciones
-  // bajo demanda, pero ya no dejan las notificaciones sin inicializar.
+  // Las páginas informativas mantienen disponible la bandeja global sin
+  // descargar Firestore para visitantes sin sesión. Las sesiones activas se
+  // hidratan arriba mediante la marca de sesión y el evento de autenticación.
   if (!FULL_COMMERCE_PAGES.has(page)) {
     attachLightweightCommerceDemand();
     return;
