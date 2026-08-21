@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-21T18:49:07.681Z",
-  "sourceFingerprint": "da2588e83ff7cef136e1473c4b6ad8cbaa987b76d2d1f213de9e9fc86537fee7",
+  "generatedAt": "2026-08-21T19:36:59.350Z",
+  "sourceFingerprint": "99b838059e49c5f6b99a3c6f01220715b3bb7ce07d1eee8cced8dea10641eb18",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 700,
-    "textFiles": 668,
-    "totalBytes": 7902419,
+    "files": 703,
+    "textFiles": 671,
+    "totalBytes": 7912469,
     "pages": 18,
-    "modules": 438
+    "modules": 441
   },
   "viewports": [
     {
@@ -19431,9 +19431,49 @@
       ]
     },
     {
+      "path": "js/components/forms/reserva-username.js",
+      "bytes": 2572,
+      "sha256": "7f97bfdc66aca99bf96b86ea04ad938e0e6e17c8c876341c3cd7747a226abb5c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
+          "target": null,
+          "dynamic": false,
+          "line": 16
+        },
+        {
+          "raw": "./utilidades-username.js?v=tintin-20260821-username-unique-1",
+          "target": "js/components/forms/utilidades-username.js",
+          "dynamic": false,
+          "line": 17
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
+          "line": 16
+        }
+      ]
+    },
+    {
       "path": "js/components/forms/utilidades-telefono.js",
       "bytes": 6067,
       "sha256": "16068c8fed7482a3d8e49d83848260718c9dbe3c4ac40b8792dc989d20946004",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/components/forms/utilidades-username.js",
+      "bytes": 1439,
+      "sha256": "745b292533368749c13668a797a93648bbaf030c050f5a23c76beeb62f013ada",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25457,6 +25497,36 @@
       "endpoints": []
     },
     {
+      "path": "scripts/probar-firestore-username-unico.mjs",
+      "bytes": 3797,
+      "sha256": "41e13091febf94c753d55e39d5c2680439c0c9910421e1a8c69860ae59e1085d",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "@firebase/rules-unit-testing",
+          "target": "scripts/@firebase/rules-unit-testing",
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "firebase/firestore",
+          "target": "scripts/firebase/firestore",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/probar-modelo-inventario.mjs",
       "bytes": 1739,
       "sha256": "705cc01c661ab250daa5d63a81313427151fa0549b4cfece2a82b887115eac64",
@@ -28564,8 +28634,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 59439,
-      "sha256": "bed3c25966569e3388d654910b8868a2019fe0eadf0a7f90aee00afdf857fa8f"
+      "bytes": 61484,
+      "sha256": "685dae0d325f420858e4e32ad5e15a3803d228e81fc2cb52d2a594c432671433"
     },
     {
       "path": "functions/[page].js",
@@ -29198,10 +29268,22 @@
       "sha256": "61868afc9109a1065f30b3920ff25d972c1d4ff2a0dd8b29d90435875c649c8e"
     },
     {
+      "path": "js/components/forms/reserva-username.js",
+      "extension": ".js",
+      "bytes": 2572,
+      "sha256": "7f97bfdc66aca99bf96b86ea04ad938e0e6e17c8c876341c3cd7747a226abb5c"
+    },
+    {
       "path": "js/components/forms/utilidades-telefono.js",
       "extension": ".js",
       "bytes": 6067,
       "sha256": "16068c8fed7482a3d8e49d83848260718c9dbe3c4ac40b8792dc989d20946004"
+    },
+    {
+      "path": "js/components/forms/utilidades-username.js",
+      "extension": ".js",
+      "bytes": 1439,
+      "sha256": "745b292533368749c13668a797a93648bbaf030c050f5a23c76beeb62f013ada"
     },
     {
       "path": "js/components/images/biblioteca-multimedia.js",
@@ -30226,8 +30308,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 10559,
-      "sha256": "995536fbacb5d010239674d30e162026113f4ac289500ebc3c4867578bdc1ba6"
+      "bytes": 10714,
+      "sha256": "86f4779f62b829b9ee4f21fc1363f3bb897e66348ba65f8650de6226876fceb3"
     },
     {
       "path": "perfil.html",
@@ -30910,14 +30992,14 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 428,
-      "sha256": "45eaba2839cca30f03697180ca564b3327b1021ed89c56777a7eea32ab2c945b"
+      "bytes": 38,
+      "sha256": "dd9d3b46a69239cd812969333746634c254684c83bb0c9501af9d578669e38b8"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 31819,
-      "sha256": "b9204f5544be247f53849f321efdd40f084e0ed3189f65a8150842c28ddb83a9"
+      "bytes": 32251,
+      "sha256": "d1485c9d51c11dd0a2b3eca8de1b16ace6141168a1e0d2e22fcf56b6da2ca301"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -31014,6 +31096,12 @@
       "extension": ".mjs",
       "bytes": 3748,
       "sha256": "86c1b1a97dde09f9a77b7f4bd4d9bddcf1aad1fee303f5a3b698496fb5bf6340"
+    },
+    {
+      "path": "scripts/probar-firestore-username-unico.mjs",
+      "extension": ".mjs",
+      "bytes": 3797,
+      "sha256": "41e13091febf94c753d55e39d5c2680439c0c9910421e1a8c69860ae59e1085d"
     },
     {
       "path": "scripts/probar-modelo-inventario.mjs",
@@ -33756,6 +33844,21 @@
         ]
       },
       {
+        "name": "usernameReservations",
+        "references": [
+          {
+            "file": "js/components/forms/reserva-username.js",
+            "line": 35,
+            "operation": "doc"
+          },
+          {
+            "file": "js/components/forms/reserva-username.js",
+            "line": 56,
+            "operation": "doc"
+          }
+        ]
+      },
+      {
         "name": "users",
         "references": [
           {
@@ -33978,6 +34081,7 @@
       "sitePresence",
       "siteTraffic",
       "site_content",
+      "usernameReservations",
       "users",
       "visualBuilderDrafts",
       "visualBuilderHistory",
