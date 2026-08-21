@@ -1,8 +1,8 @@
-# Estudio de Código Tintin
+# Editor de Código Tintin
 
 ## Objetivo
 
-El **Estudio de Código Tintin** agrega al Super Panel Admin una superficie técnica separada del Editor visual seguro para inspeccionar, editar y revisar el repositorio oficial de Tintin sin convertir el navegador en una terminal ni exponer credenciales.
+El **Editor de Código Tintin** agrega al Super Panel Admin una superficie técnica separada del Editor visual seguro para inspeccionar, editar y revisar el repositorio oficial de Tintin sin convertir el navegador en una terminal ni exponer credenciales.
 
 La fuente de verdad es GitHub. El navegador recibe archivos y estados a través de Cloudflare Pages Functions autenticadas como Super Admin. Los secretos de GitHub App, Firebase Admin y del proveedor de IA permanecen en el backend.
 
@@ -25,7 +25,7 @@ La fuente de verdad es GitHub. El navegador recibe archivos y estados a través 
 
 Implementado:
 
-- Entrada `Estudio de Código` solo para la cuenta Super Admin ya autenticada.
+- Entrada `Editor de Código` solo para la cuenta Super Admin ya autenticada.
 - Autoridad real en servidor mediante `requireSuperAdmin()`.
 - GitHub App exclusiva de backend.
 - Estado del repositorio, SHA de `main` y protección informada por GitHub.
@@ -208,7 +208,7 @@ No se afirma que una prueba pasó hasta que GitHub Actions reporte su resultado.
 ```text
 Super Admin
   ↓
-Estudio de Código
+Editor de Código
   ↓
 GitHub oficial (lectura)
   ↓
