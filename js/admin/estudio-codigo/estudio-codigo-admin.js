@@ -122,9 +122,11 @@ async function api(path, options = {}) {
 function toast(message, bad = false) {
   document.querySelectorAll('.cs-toast').forEach(node => node.remove());
   const node = document.createElement('div');
-  node.className = `cs-toast${bad ? ' bad' : ''}`;
+  node.className = `cs-toast cs-toast-inline${bad ? ' bad' : ''}`;
+  node.setAttribute('role', bad ? 'alert' : 'status');
+  node.setAttribute('aria-live', bad ? 'assertive' : 'polite');
   node.textContent = message;
-  document.body.appendChild(node);
+  (document.querySelector('#section-estudio-codigo .cs-shell') || document.body).appendChild(node);
   setTimeout(() => node.remove(), 5200);
 }
 

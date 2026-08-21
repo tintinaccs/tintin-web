@@ -646,3 +646,57 @@ body.code-studio-open .adm-content {
     border-radius: 12px;
   }
 }
+
+/* El encabezado puede compartir pantalla con la navegación lateral del Admin.
+   Ningún texto conserva ancho fuera de su celda y el estado se trunca antes de
+   invadir la rama o las acciones. */
+#section-estudio-codigo .cs-top-main,
+#section-estudio-codigo .cs-identity {
+  min-width: 0;
+}
+
+#section-estudio-codigo .cs-identity {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+}
+
+#section-estudio-codigo .cs-brand {
+  min-width: max-content;
+}
+
+#section-estudio-codigo .cs-status {
+  width: 100%;
+  max-width: none;
+}
+
+#section-estudio-codigo .cs-branch {
+  flex-basis: 150px;
+  min-width: 120px;
+}
+
+/* Las notificaciones forman una barra del propio editor. Así nunca cubren el
+   botón Analizar ni ningún control del panel lateral. */
+#section-estudio-codigo .cs-toast-inline {
+  position: static;
+  inset: auto;
+  z-index: auto;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  border-width: 1px 0 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 9px 14px;
+  pointer-events: none;
+}
+
+#section-estudio-codigo .cs-ai-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+#section-estudio-codigo .cs-ai-actions {
+  flex: 0 0 auto;
+  padding-bottom: 2px;
+}
