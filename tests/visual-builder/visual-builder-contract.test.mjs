@@ -41,10 +41,15 @@ test('runtime usa DOM seguro y el contenido mantiene nodos de texto', () => {
   assert.match(content, /document\.createTextNode/); assert.match(runtime, /applyVisualContentPreview/);
 });
 
-test('el primer frame espera la configuración visual para evitar saltos de geometría', () => {
-  assert.match(bootstrap, /await initVisualBuilderRuntime\(pageId\)/);
+test('el primer frame espera la configuración real y conserva el layout nativo si la sección nunca fue editada', () => {
+  assert.match(bootstrap, /initVisualBuilderRuntime\(pageId\)/);
+  assert.match(bootstrap, /waitForVisualBuilderSettlement/);
+  assert.match(bootstrap, /tintin:visual-builder-ready/);
   assert.match(bootstrap, /loader\.beginWait\(\)/);
   assert.match(bootstrap, /loader\.endWait/);
+  assert.match(bootstrap, /restoreNativeGeometryForUntouchedSections/);
+  assert.match(bootstrap, /removeAttribute\('data-tt-visual-width'\)/);
+  assert.match(bootstrap, /removeAttribute\('data-tt-visual-align'\)/);
   assert.match(bootstrap, /classList\.remove\('tt-vb-layout-pending'\)/);
   assert.match(lightweightPages, /tt-vb-layout-pending/);
   assert.match(lightweightPages, /tt-vb-layout-guard/);
