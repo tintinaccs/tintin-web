@@ -4,11 +4,10 @@
 // Este módulo corre únicamente en el runtime de Cloudflare. Las credenciales
 // de Cloudinary se leen desde context.env y nunca se envían al navegador.
 
+import { SUPER_ADMIN_EMAIL } from './contrato-cuentas-generado.js';
+
 const FIREBASE_WEB_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
-// Fuente de verdad para este runtime (Cloudflare). El cliente tiene la suya
-// en js/core/auth/roles.js (SUPER_ADMIN) — no se puede compartir una entre ambos
-// porque son plataformas de despliegue distintas.
-export const SUPERADMIN_EMAIL = 'tintinaccs@gmail.com';
+export const SUPERADMIN_EMAIL = SUPER_ADMIN_EMAIL;
 
 // Las funciones privadas solo aceptan el mismo origen que las sirve. Un futuro
 // dominio propio funcionará sin otra lista porque requestUrl y Origin coincidirán.

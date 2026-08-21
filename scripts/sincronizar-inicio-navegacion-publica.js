@@ -5,16 +5,16 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260818-product-trust-icons-2';
+const VERSION = 'tintin-20260821-accounts-phase-a-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260816-loader-shell-bridge-1';
 const LOADER_VERSION = 'tintin-20260821-hero-authoritative-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
-const PUBLIC_SHELL_VERSION = 'tintin-20260821-notifications-lazy-1';
-const NAV_ENTRY_VERSION = 'tintin-20260821-notifications-lazy-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20260821-accounts-phase-a-1';
+const NAV_ENTRY_VERSION = 'tintin-20260821-accounts-phase-a-1';
 const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const VISUAL_BUILDER_VERSION = 'tintin-20260821-layout-stable-1';
-const SESSION_PROTECTION_VERSION = 'tintin-20260815-profile-routes-1';
-const PROFILE_GATE_VERSION = 'tintin-20260815-profile-routes-1';
+const SESSION_PROTECTION_VERSION = 'tintin-20260821-accounts-phase-a-1';
+const PROFILE_GATE_VERSION = 'tintin-20260821-accounts-phase-a-1';
 // Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
 // esa constante decide la URL exacta (con ?v=) que entrada-navegacion-publica.js y
 // ensureNavigationAssets() piden en tiempo de ejecución. Si difieren, el preload no

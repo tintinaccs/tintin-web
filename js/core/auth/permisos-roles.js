@@ -21,7 +21,8 @@ import { db } from "../firebase/firebase.js?v=tintin-20260730-appcheck-stable-4"
 import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { PERMISSIONS } from "./roles.js?v=tintin-20260716-cloudinary-fix-1";
+import { PERMISSIONS } from "./roles.js?v=tintin-20260821-accounts-phase-a-1";
+import { EDITABLE_PERMISSION_ROLES } from './contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 
 export const ROLE_PERM_DOC = { col: 'rolePermissions', id: 'main' };
 // Roles que aparecen como COLUMNAS editables en la matriz. Super Admin no
@@ -30,7 +31,7 @@ export const ROLE_PERM_DOC = { col: 'rolePermissions', id: 'main' };
 // (comprar, ver su perfil, etc.) son funcionalidad base de la tienda, no un
 // permiso de panel administrativo — ver la sección aparte "Web pública /
 // cliente" en el reporte.
-export const EDITABLE_ROLES = ['admin', 'agent', 'viewer'];
+export const EDITABLE_ROLES = EDITABLE_PERMISSION_ROLES;
 
 // ---- Catálogo de módulos/acciones ----
 // defaultFrom: de qué flag de PERMISSIONS (roles.js) sale el valor por

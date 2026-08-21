@@ -22,6 +22,16 @@ Cloud Firestore es la fuente operativa de productos, colecciones, usuarios, carr
 
 Firebase Authentication identifica al usuario. Firestore Rules autorizan cada operación. Ocultar un botón nunca se considera control de seguridad.
 
+Firebase UID permanece como clave de autenticación. `customerId` es el
+identificador comercial estable (`CUS_<uid>`), inmutable y sin PII. La
+eliminación deshabilita Auth y conserva un tombstone para impedir que el mismo
+email reaparezca como una identidad nueva.
+
+`config/account-contract.json` es la fuente canónica de roles e identidad. Sus
+artefactos para navegador, Cloudflare y Apps Script son generados y CI rechaza
+cualquier divergencia; Firestore Rules se verifica contra ese contrato mediante
+auditoría.
+
 El Super Admin se reconoce por la cuenta oficial. Los demás roles operativos se obtienen de documentos protegidos y permisos dinámicos. Una cuenta bloqueada no conserva poder administrativo.
 
 ### 5. Integraciones externas

@@ -39,26 +39,30 @@ const rolePerms  = read('js/core/auth/permisos-roles.js');
 const adminApp   = read('js/admin/admin-app.js');
 const phase8     = read('js/admin/users/gestion-usuarios-admin.js');
 const rules      = read('firestore.rules');
+const accountContract = JSON.parse(read('config/account-contract.json'));
+const generatedContract = read('js/core/auth/contrato-cuentas-generado.js');
+const accountStatusFunction = read('functions/api/admin-delete-user.js');
 
 // ===========================================================================
 // 1. IDENTIDAD Y TECHO DE ROLES (roles.js)
 // ===========================================================================
 check(
   'El Super Admin se identifica por el correo oficial de Firebase Auth',
-  /export const SUPER_ADMIN = 'tintinaccs@gmail\.com'/.test(roles) &&
+  /export const SUPER_ADMIN = SUPER_ADMIN_EMAIL/.test(roles) &&
+    accountContract.superAdminEmail === 'tintinaccs@gmail.com' &&
     /if \(authenticatedEmail === SUPER_ADMIN\) return 'superadmin'/.test(roles),
   'La identidad de Super Admin no debe depender de un campo editable en Firestore.'
 );
 check(
   'Un rol inválido o un documento faltante caen a "client" (default seguro)',
   /if \(!snap\.exists\(\)\) return 'client'/.test(roles) &&
-    /\['admin', 'agent', 'viewer', 'client'\]\.includes\(role\) \? role : 'client'/.test(roles),
+    /ASSIGNABLE_ROLES\.includes\(role\) \? role : 'client'/.test(roles),
   'Sin ficha o con un rol desconocido, el usuario nunca debe quedar con permisos.'
 );
 check(
   'setUserRole nunca permite asignar "superadmin"',
-  /const allowed = \['admin', 'agent', 'viewer', 'client'\]/.test(roles) &&
-    /if \(!allowed\.includes\(role\)\) throw new Error/.test(roles),
+  /if \(!ASSIGNABLE_ROLES\.includes\(role\)\) throw new Error/.test(roles) &&
+    !accountContract.assignableRoles.includes('superadmin'),
   '"superadmin" es una identidad protegida, no un rol asignable.'
 );
 check(
@@ -72,7 +76,8 @@ check(
 // ===========================================================================
 check(
   'Solo admin/agent/viewer son columnas editables (no superadmin ni client)',
-  /export const EDITABLE_ROLES = \['admin', 'agent', 'viewer'\]/.test(rolePerms),
+  /export const EDITABLE_ROLES = EDITABLE_PERMISSION_ROLES/.test(rolePerms) &&
+    JSON.stringify(accountContract.editablePermissionRoles) === JSON.stringify(['admin', 'agent', 'viewer']),
   'Super Admin siempre tiene todo y Cliente no es un rol de panel; no se editan acá.'
 );
 check(
@@ -127,7 +132,7 @@ check(
   'Cambiar rol bloquea al Super Admin, valida permiso y limita a roles reales',
   /if \(email === SUPER_ADMIN\) \{\s*\n\s*toast\('El rol del Super Admin está protegido/.test(adminApp) &&
     /if \(!can\(currentRole, 'assignRoles'\)\) \{ toast\('No tenés permiso para cambiar roles'\)/.test(adminApp) &&
-    /if \(!\['admin', 'agent', 'viewer', 'client'\]\.includes\(role\)\)/.test(adminApp),
+    /if \(!ASSIGNABLE_ROLES\.includes\(role\)\)/.test(adminApp),
   'updateUserRole no debe degradar al Super Admin ni escribir un rol inválido/"superadmin".'
 );
 check(
@@ -145,7 +150,8 @@ check(
   /logAudit\('cambiar_rol'/.test(adminApp) &&
     /logAudit\('bloquear_usuario'/.test(adminApp) &&
     /logAudit\('restaurar_usuario'/.test(adminApp) &&
-    /logAudit\('eliminar_usuario'/.test(adminApp),
+    /action === 'softDelete' \? 'eliminar_cuenta' : 'reactivar_cuenta'/.test(accountStatusFunction) &&
+    /auditLog\/\$\{id\}/.test(accountStatusFunction),
   'El cambio de rol, bloqueo, restauración y eliminación deben dejar rastro.'
 );
 check(
@@ -169,7 +175,8 @@ check(
 );
 check(
   'El módulo Fase 8 solo maneja roles reales (sin superadmin)',
-  /const ALLOWED_ROLES = \['admin', 'agent', 'viewer', 'client'\]/.test(phase8),
+  /const ALLOWED_ROLES = ASSIGNABLE_ROLES/.test(phase8) &&
+    generatedContract.includes("assignableRoles: Object.freeze(['admin', 'agent', 'viewer', 'client'])"),
   'No debe existir "superadmin" como opción de rol asignable.'
 );
 
@@ -178,8 +185,8 @@ check(
 // ===========================================================================
 check(
   'Las reglas impiden eliminar la ficha del Super Admin',
-  /allow delete: if isSuperAdmin\(\) &&\s*\n\s*!isSuperAdminAccount\(resource\.data\)/.test(rules),
-  'Ni el propio Super Admin debe poder borrar su ficha desde el cliente.'
+  /match \/users\/\{userId\}[\s\S]{0,1800}allow delete: if false/.test(rules),
+  'Ningún SDK cliente, incluido Super Admin, debe borrar una identidad histórica.'
 );
 check(
   'Las reglas impiden asignar superadmin y protegen la cuenta oficial',

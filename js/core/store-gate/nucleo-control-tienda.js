@@ -10,7 +10,7 @@ import {
   doc,
   getDoc
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN } from '../auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { SUPER_ADMIN } from '../auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
 import { getPublicDocumentRest } from '../firebase/respaldo-rest-firestore.js?v=tintin-20260726-browser-fallback-1';
 
 const OVERLAY_ID = 'tt-store-closed-overlay';

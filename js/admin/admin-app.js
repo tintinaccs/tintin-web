@@ -12,20 +12,21 @@ import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } fro
 // de Apps Script de notificaciones-correo.js — evita reenviar por un canal que ya no
 // se usa para pedidos reales.
 import { sendOrderNotification } from "../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-1";
-import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1";
+import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1";
+import { ASSIGNABLE_ROLES } from '../core/auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 import {
   PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
   canDo, saveRolePermissions, buildDefaultRolePermissions
-} from "../core/auth/permisos-roles.js?v=tintin-20260716-cloudinary-fix-1";
+} from "../core/auth/permisos-roles.js?v=tintin-20260821-accounts-phase-a-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260818-browser-fallback-2";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260821-accounts-phase-a-1";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260821-accounts-phase-a-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260818-icon-svg-2";
-import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260722-order-delete-2";
+import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260821-accounts-phase-a-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
@@ -35,8 +36,8 @@ import {
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260716-cloudinary-fix-1";
 import { createOrderViaServer } from "../create-order-client.js?v=tintin-20260811-phone-order-1";
-import './products/integridad-inventario-admin.js?v=tintin-20260722-order-delete-2';
-import './orders/pedidos-superadmin-crud.js?v=tintin-20260812-tinped-crud-2';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20260821-accounts-phase-a-1';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20260821-accounts-phase-a-1';
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -1727,7 +1728,7 @@ window.updateUserRole = async (uid, role, email) => {
   // 'superadmin' es una identidad protegida por email, nunca un rol asignable
   // desde el panel (igual que setUserRole en roles.js y phase8). Un valor fuera
   // de la lista se rechaza en vez de escribir un rol inválido en la ficha.
-  if (!['admin', 'agent', 'viewer', 'client'].includes(role)) {
+  if (!ASSIGNABLE_ROLES.includes(role)) {
     toast('Rol no válido');
     return;
   }
@@ -1775,12 +1776,38 @@ window.blockUser = async (uid, email) => {
   }
 };
 
+async function updateAccountStatusFromAdmin_(uid, action, reason = '') {
+  if (!currentUser || currentRole !== 'superadmin' || currentUser.email !== SUPER_ADMIN) {
+    throw new Error('Solo el Super Admin puede cambiar el estado de una cuenta');
+  }
+  const token = await currentUser.getIdToken();
+  const response = await fetch('/api/admin-delete-user', {
+    method: 'POST',
+    cache: 'no-store',
+    headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
+    body: JSON.stringify({ uid, action, reason })
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo actualizar la cuenta');
+  return result;
+}
+
 // Restaurar: si tenía un rol elevado antes del bloqueo, pide confirmación
 // explícita para devolvérselo; si no hay historial (o decide no confirmarlo),
 // restaura como Cliente por seguridad — tal como pidió Tintin.
 window.restoreUser = async (uid) => {
   const u = allUsers.find(x => x.uid === uid);
   if (!u) return;
+  if (u.deleted === true || u.profileStatus === 'deleted') {
+    if (!confirm(`¿Reactivar la identidad histórica de "${u.name || u.email}" como Cliente?`)) return;
+    try {
+      await updateAccountStatusFromAdmin_(uid, 'reactivate', 'Reactivación desde Super Admin');
+      toast('Cuenta reactivada y auditada');
+    } catch (e) {
+      toast(e.message || 'Error al reactivar usuario');
+    }
+    return;
+  }
   let targetRole = 'client';
   const prevRole = u.roleBeforeBlock;
   if (prevRole && prevRole !== 'client') {
@@ -1820,22 +1847,16 @@ window.deleteUser = async (uid, name) => {
   if (_target && _target.email === SUPER_ADMIN) { toast('El perfil del Super Admin no se puede eliminar'); return; }
   // Cada acción sensible valida el permiso del actor, no solo la UI.
   if (!can(currentRole, 'deleteUsers')) { toast('No tenés permiso para eliminar usuarios'); return; }
-  // Aclaración honesta (Fase E): esto borra la FICHA de Firestore, no la cuenta
-  // real de acceso en Firebase Authentication — eso requeriría Cloud Functions
-  // con facturación habilitada (Blaze), que este proyecto no usa. Si la persona
-  // vuelve a entrar con el mismo correo, se le crea una ficha nueva como Cliente.
+  const reason = window.prompt('Motivo de la eliminación (queda en auditoría):', '') ?? null;
+  if (reason === null) return;
   if (!confirm(
-    `¿Eliminar el perfil de "${name}" de la base de datos?\n\n` +
-    `Esto borra su ficha de Firestore (datos, rol, historial de bloqueo) pero NO elimina su cuenta real de acceso ` +
-    `(Firebase Authentication) — eso necesita un backend con Cloud Functions y facturación, que este proyecto no tiene. ` +
-    `Si vuelve a entrar con el mismo correo, se le crea una ficha nueva como Cliente.\n\n` +
-    `Esta acción no se puede deshacer.`
+    `¿Eliminar la cuenta de "${name}"?\n\n` +
+    `Se revocará el acceso y se liberará el teléfono, pero se conservarán customerId, email, pedidos y auditoría ` +
+    `como identidad histórica. Super Admin podrá reactivarla.`
   )) return;
   try {
-    await deleteDoc(doc(db, 'users', uid));
-    allUsers = allUsers.filter(u => u.uid !== uid);
-    logAudit('eliminar_usuario', 'usuario', uid, name);
-    toast('Perfil eliminado de Firestore');
+    await updateAccountStatusFromAdmin_(uid, 'softDelete', reason);
+    toast('Acceso revocado; identidad histórica conservada y auditada');
     applyUserFilters();
   } catch(e) {
     toast('Error al eliminar usuario');

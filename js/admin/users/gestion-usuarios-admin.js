@@ -21,12 +21,13 @@ import {
   writeBatch,
   serverTimestamp,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN, ROLE_LABELS } from '../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { SUPER_ADMIN, ROLE_LABELS } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
+import { ASSIGNABLE_ROLES } from '../../core/auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 
 if (!window.TintinAdminUsersPhase8Booted) {
   window.TintinAdminUsersPhase8Booted = true;
 
-  const ALLOWED_ROLES = ['admin', 'agent', 'viewer', 'client'];
+  const ALLOWED_ROLES = ASSIGNABLE_ROLES;
   const state = {
     user: null,
     users: [],
@@ -101,6 +102,20 @@ if (!window.TintinAdminUsersPhase8Booted) {
     });
     batch.set(doc(collection(db, 'auditLog')), audit);
     await batch.commit();
+  }
+
+  async function commitAccountStatus(user, action, reason = '') {
+    if (!ensureSuperAdmin()) throw new Error('Solo Super Admin puede gestionar usuarios.');
+    const token = await state.user.getIdToken();
+    const response = await fetch('/api/admin-delete-user', {
+      method: 'POST',
+      cache: 'no-store',
+      headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
+      body: JSON.stringify({ uid: user.uid, action, reason })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo actualizar la cuenta.');
+    return result;
   }
 
   function filteredUsers() {
@@ -200,6 +215,16 @@ if (!window.TintinAdminUsersPhase8Booted) {
   }
 
   async function restoreOne(user) {
+    if (user.deleted === true || user.profileStatus === 'deleted') {
+      if (!confirm(`¿Reactivar la identidad histórica de ${user.name || user.email} como Cliente?`)) return;
+      try {
+        await commitAccountStatus(user, 'reactivate', 'Reactivación desde Super Admin');
+        toast('Cuenta reactivada y auditada');
+      } catch (error) {
+        toast(error.message || 'No se pudo reactivar', true);
+      }
+      return;
+    }
     if (!confirm(`¿Restaurar a ${user.name || user.email} como Cliente?`)) return;
     try {
       await commitUserAction([
@@ -221,19 +246,12 @@ if (!window.TintinAdminUsersPhase8Booted) {
 
   async function deleteOne(user) {
     if (isSuperRecord(user)) return toast('El perfil del Super Admin no se puede eliminar', true);
-    if (!confirm(`¿Eliminar definitivamente a ${user.name || user.email}?\n\nSe borrarán la cuenta de acceso, el perfil, el carrito y la reserva telefónica. Esta acción no se puede deshacer.`)) return;
+    const reason = prompt('Motivo de la eliminación (queda en auditoría):', '') ?? null;
+    if (reason === null) return;
+    if (!confirm(`¿Eliminar la cuenta de ${user.name || user.email}?\n\nSe revocará el acceso y se liberará el teléfono, pero se conservarán customerId, email, pedidos y auditoría como identidad histórica. Super Admin podrá reactivarla.`)) return;
     try {
-      const token = await state.user.getIdToken();
-      const response = await fetch('/api/admin-delete-user', {
-        method: 'POST',
-        cache: 'no-store',
-        headers: { 'authorization': `Bearer ${token}`, 'content-type': 'application/json' },
-        body: JSON.stringify({ uid: user.uid })
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo eliminar la cuenta.');
-      await commitUserAction([], auditPayload('eliminar_usuario', user, 'Eliminó Auth, perfil, carrito y reserva telefónica'));
-      toast('Cuenta y datos asociados eliminados');
+      await commitAccountStatus(user, 'softDelete', reason);
+      toast('Acceso revocado; identidad histórica conservada y auditada');
     } catch (error) {
       toast(error.message || 'No se pudo eliminar', true);
     }

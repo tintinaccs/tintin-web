@@ -1,5 +1,5 @@
 import { auth, db } from '../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
-import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
 import {
   doc,
   getDoc,
@@ -12,7 +12,7 @@ import {
   clearCart,
   cartTotal,
   formatPrice
-} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260814-social-notifications-1';
+} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260821-accounts-phase-a-1';
 import {
   findCountryByCode,
   normalizePhone,

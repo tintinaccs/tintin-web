@@ -1,14 +1,12 @@
 import {
   jsonResponse,
   originIsAllowed,
-  preflightResponse,
-  SUPERADMIN_EMAIL
+  preflightResponse
 } from '../../cloudflare/seguridad-cloudinary.js';
 import {
   firestoreAdminGet,
   firestoreAdminReplace,
   decodeFirestoreFields,
-  lookupUserProvidersByEmail,
   fsString,
   fsInteger,
   fsTimestamp
@@ -181,25 +179,10 @@ export async function onRequest(context) {
       throw rateError;
     }
 
-    // El correo normal no es un segundo camino hacia una cuenta que ya usa
-    // Google — evita confusión ("¿por qué mi cuenta cambió?") y el riesgo
-    // de que alguien intente entrar así a una cuenta ajena si adivina el
-    // código. Excepción: el Super Admin siempre puede usar cualquiera de
-    // los dos métodos, a pedido explícito.
-    if (email !== SUPERADMIN_EMAIL.toLowerCase()) {
-      let account;
-      try {
-        account = await lookupUserProvidersByEmail(env, email);
-      } catch (error) {
-        // Sin poder confirmar el método de la cuenta no se manda el código:
-        // hacerlo igual sería justamente saltear este control.
-        console.error('[email-otp-send] No se pudo verificar el metodo de la cuenta:', error?.message || error);
-        return jsonResponse({ success: false, error: 'storage_unavailable' }, 503, origin, requestUrl);
-      }
-      if (account.exists && account.providers.includes('google.com')) {
-        return jsonResponse({ success: false, error: 'google_account_exists' }, 409, origin, requestUrl);
-      }
-    }
+    // El PIN es un segundo método de acceso a la MISMA cuenta, también si la
+    // identidad se creó con Google. findOrCreateUserByEmail() reutiliza el UID
+    // existente de Firebase Auth y solo crea uno cuando el email verificado no
+    // existe, por lo que habilitar este camino no duplica perfiles.
 
     const path = docPath(email);
     const existingDoc = await firestoreAdminGet(env, path);
