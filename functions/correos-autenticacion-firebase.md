@@ -14,16 +14,20 @@ contraseña:
    solo manda enlaces, no códigos; quedó habilitado en el proyecto pero sin
    uso real, no hace falta deshabilitarlo).
 
-Ambos caminos terminan en el mismo lugar: `guardarUsuario()` /
+Ambos caminos son métodos de acceso a una sola identidad y terminan en el mismo lugar: `guardarUsuario()` /
 `ensureUserDocForEmailLogin()` crean o actualizan `users/{uid}` con el mismo
 criterio (primera vez arma el perfil, las siguientes solo tocan
-`lastLogin`), y `redirectByRole()` decide el destino según el rol. Antes de
+`lastLogin` y `authMethods`), y `redirectByRole()` decide el destino según el rol. Una
+cuenta creada con Google también puede pedir PIN: el backend busca primero el
+email verificado en Firebase Auth y reutiliza el mismo UID, sin crear otro
+`customerId`. Antes de
 redirigir, `ensureProfileComplete()` pide **solamente los campos ausentes**:
 una cuenta completa entra directo, el nombre provisto por Google se confirma
 y puede corregirse, y cada escritura se vuelve a validar en una transacción
 para no pisar datos existentes. El superadmin está excluido del onboarding.
-Los perfiles quedan en `users/{uid}`, la fuente que alimenta la pestaña
-`Clientas` de Google Sheets mediante la sincronización ya instalada.
+Los perfiles quedan en `users/{uid}`. La publicación del contrato actualizado
+en la pestaña de clientas de Google Sheets se trata como una operación externa
+separada: el repositorio no presume que el Apps Script desplegado ya coincida.
 
 ## Cómo funciona el código de 6 dígitos
 

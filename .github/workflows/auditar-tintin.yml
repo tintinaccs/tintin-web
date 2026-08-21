@@ -120,6 +120,12 @@ jobs:
       - name: Audit users, roles and permissions (Super Admin protections)
         run: node scripts/auditar-admin-usuarios-roles.js
 
+      - name: Audit canonical account contract (web, Cloudflare, Rules and Apps Script)
+        run: npm run audit:account-contract
+
+      - name: Test account identity, unified access and tombstones
+        run: npm run test:accounts
+
       - name: Audit content and appearance (editor safety, color apply)
         run: node scripts/auditar-admin-contenido-apariencia.js
 

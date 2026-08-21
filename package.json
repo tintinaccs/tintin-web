@@ -1,5 +1,8 @@
 {
   "scripts": {
+    "sync:account-contract": "node scripts/sincronizar-contrato-cuentas.mjs",
+    "audit:account-contract": "node scripts/sincronizar-contrato-cuentas.mjs --check && node scripts/auditar-contrato-cuentas.mjs",
+    "test:accounts": "node --test tests/accounts/*.test.mjs",
     "audit:typography": "node scripts/auditar-tipografia.js",
     "audit:colors": "node scripts/auditar-esquema-color.js",
     "fix:tintin": "node scripts/corregir-fuente-tintin.js",

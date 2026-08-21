@@ -1,26 +1,27 @@
 // =============================================
 // TINTIN ACCESORIOS — Expiración de sesión
 // =============================================
-// Firebase Auth por sí solo mantiene la sesión activa indefinidamente
-// (renueva el token solo). Acá se agrega un límite propio: pasados ~30
-// minutos desde que la persona inició sesión, se cierra la sesión sola y
-// hay que volver a loguearse — para todos los roles excepto el Super
-// Admin (tintinaccs@gmail.com), que nunca se desloguea sola por esto (es
-// quien tiene que poder quedarse trabajando en el panel sin cortes). Se
-// importa una sola vez desde cada página pública y desde admin.html;
-// marca el inicio real del login solo login.html (markSessionStart),
-// pero el chequeo corre en todas.
+// Firebase Auth mantiene la sesión y renueva su token. La política adicional
+// de TINTIN se aplica solo al personal y mide INACTIVIDAD real: una clienta no
+// es expulsada mientras mira productos ni 30 minutos después del login. El
+// Super Admin también tiene límite (más amplio), sin excepción eterna.
 
 import { auth } from "../firebase/firebase.js?v=tintin-20260730-appcheck-stable-4";
 import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { SUPER_ADMIN } from "./roles.js?v=tintin-20260716-cloudinary-fix-1";
-import { startProfileGate } from "../../pages/profile/control-acceso-perfil.js?v=tintin-20260815-profile-routes-1";
+import { getUserRole } from "./roles.js?v=tintin-20260821-accounts-phase-a-1";
+import { STAFF_ROLES } from './contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
+import { startProfileGate } from "../../pages/profile/control-acceso-perfil.js?v=tintin-20260821-accounts-phase-a-1";
 
-const SESSION_DURATION_MS = 30 * 60 * 1000;
-const STORAGE_KEY = 'tt_session_started_at';
+const STAFF_INACTIVITY_MS = 30 * 60 * 1000;
+const SUPERADMIN_INACTIVITY_MS = 2 * 60 * 60 * 1000;
+const STORAGE_KEY = 'tt_session_last_activity_at';
 const CHECK_INTERVAL_MS = 30 * 1000;
+const ACTIVITY_WRITE_INTERVAL_MS = 15 * 1000;
+let currentRole = '';
+let roleUid = '';
+let lastActivityWrite = 0;
 
 export function markSessionStart() {
   try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch {}
@@ -42,18 +43,33 @@ function goToExpiredLogin() {
   location.href = '/login?expired=1';
 }
 
+function recordActivity() {
+  if (!STAFF_ROLES.includes(currentRole)) return;
+  const now = Date.now();
+  if (now - lastActivityWrite < ACTIVITY_WRITE_INTERVAL_MS) return;
+  lastActivityWrite = now;
+  try { localStorage.setItem(STORAGE_KEY, String(now)); } catch {}
+}
+
 async function enforce(user) {
-  if (!user) { clearSessionStart(); return; }
-  if (String(user.email || '').toLowerCase() === SUPER_ADMIN) { clearSessionStart(); return; }
+  if (!user) { currentRole = ''; roleUid = ''; clearSessionStart(); return; }
+  if (roleUid !== user.uid) {
+    try {
+      currentRole = await getUserRole(user.uid, user.email);
+      roleUid = user.uid;
+    } catch {
+      // Un fallo transitorio leyendo el rol no debe expulsar a una clienta.
+      return;
+    }
+  }
+  if (!STAFF_ROLES.includes(currentRole)) { clearSessionStart(); return; }
   const startedAt = readSessionStart();
   if (startedAt === null) {
-    // Sesión ya activa sin marca propia (login anterior a este cambio, u
-    // otra pestaña que la vació) — se fija ahora en vez de dejarla sin
-    // límite de tiempo.
     markSessionStart();
     return;
   }
-  if (Date.now() - startedAt > SESSION_DURATION_MS) {
+  const timeout = currentRole === 'superadmin' ? SUPERADMIN_INACTIVITY_MS : STAFF_INACTIVITY_MS;
+  if (Date.now() - startedAt > timeout) {
     clearSessionStart();
     try { await signOut(auth); } catch {}
     goToExpiredLogin();
@@ -62,6 +78,12 @@ async function enforce(user) {
 
 onAuthStateChanged(auth, enforce);
 setInterval(() => { if (auth.currentUser) enforce(auth.currentUser); }, CHECK_INTERVAL_MS);
+['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(eventName => {
+  window.addEventListener(eventName, recordActivity, { passive: true });
+});
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) recordActivity();
+});
 
 // Una cuenta sin nombre, teléfono ni ubicación no puede navegar logueada:
 // se la manda a terminar el alta. Va enganchado acá porque esta hoja ya se

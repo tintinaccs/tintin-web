@@ -7,7 +7,7 @@
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1"></script>
   <script src="js/cargador-pagina.js?v=tintin-20260821-hero-authoritative-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20260821-notifications-lazy-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20260821-accounts-phase-a-1" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -20,10 +20,8 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
-  <link rel="modulepreload" href="js/core/store-gate/control-tienda.js?v=tintin-20260818-gate-icon-svg-2">
-  <link rel="modulepreload" href="js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260821-notifications-lazy-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260821-accounts-phase-a-1">
   <link rel="preload" as="style" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260818-header-dropdowns-solid-3">
   <link rel="preload" as="style" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260818-header-dropdowns-solid-3">
   <link rel="preload" as="style" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260818-header-dropdowns-solid-3">
@@ -317,7 +315,7 @@
 
 
 <!-- Scripts -->
-<script src="tienda.js?v=tintin-20260818-product-trust-icons-2"></script>
+<script src="tienda.js?v=tintin-20260821-accounts-phase-a-1"></script>
 
 <script type="module">
 import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4";
@@ -328,12 +326,12 @@ import {
   doc, getDoc, getDocs, setDoc, serverTimestamp,
   collection, query, where, orderBy, limit
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1";
-import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260814-social-notifications-1";
+import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1";
+import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260821-accounts-phase-a-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachLocationPicker } from "./js/components/location/selector-ubicacion.js?v=tintin-20260803-location-picker-2";
 import { toSavedLocation } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260803-profile-onboarding-2";
-import { getRegisteredMethod, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260803-profile-store-1";
+import { getRegisteredMethod, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260821-accounts-phase-a-1";
 import { DEFAULT_COUNTRY, phoneKey, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
 import { changeReservedPhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260803-phone-reservation-1";
 
@@ -648,10 +646,10 @@ async function loadUserOrders(user) {
 }
 </script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260817-heart-icon-1"></script>
+<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260821-accounts-phase-a-1"></script>
 <script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20260815-routes-clean-1"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260815-profile-routes-1"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260821-accounts-phase-a-1"></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

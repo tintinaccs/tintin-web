@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "superAdminEmail": "tintinaccs@gmail.com",
+  "roles": ["superadmin", "admin", "agent", "viewer", "client"],
+  "assignableRoles": ["admin", "agent", "viewer", "client"],
+  "editablePermissionRoles": ["admin", "agent", "viewer"],
+  "staffRoles": ["superadmin", "admin", "agent", "viewer"],
+  "anonymousRole": "guest",
+  "profileStatuses": ["legacy", "incomplete", "active", "deleted"],
+  "customerIdPrefix": "CUS_",
+  "identityVersion": 1
+}

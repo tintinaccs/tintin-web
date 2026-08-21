@@ -4,7 +4,7 @@
    Mantiene una sola definición de producto comprable para portada,
    catálogo, búsqueda, ficha directa, relacionados y carrito.
    ============================================================= */
-import { loadCollections } from '../collections/estado-colecciones.js?v=tintin-20260818-browser-fallback-2';
+import { loadCollections } from '../collections/estado-colecciones.js?v=tintin-20260821-accounts-phase-a-1';
 import { isNewProduct, productActivityAtMillis, sortCatalogProducts, timestampToMillis } from './politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1';
 import { pageHasCompleteCatalog } from '../../components/cart/politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
 

@@ -86,7 +86,7 @@ function fixtureHtml() {
       window.openOrderEdit=id=>call('openOrderEdit',id); window.updateOrderStatus=(id,s)=>call('updateOrderStatus',id,s); window.updatePayStatus=(id,s)=>call('updatePayStatus',id,s);
       window.resendOrderEmail=id=>call('resendOrderEmail',id); window.deleteOrder=id=>call('deleteOrder',id);
     </script>
-    <script type="module" src="/js/admin/shopify-commerce-admin.js?v=tintin-20260810-shopify-core-1"></script>
+    <script type="module" src="/js/admin/shopify-commerce-admin.js?v=tintin-20260821-accounts-phase-a-1"></script>
   </body></html>`;
 }
 

@@ -48,7 +48,8 @@ async function seed() {
     });
     await setDoc(doc(db, 'settings', 'privateSecrets'), { internal: 'solo-servidor' });
     await setDoc(doc(db, 'users', 'client1'), {
-      email: claims.client1.email, role: 'client', blocked: false, name: 'Clienta Uno'
+      email: claims.client1.email, role: 'client', blocked: false, name: 'Clienta Uno',
+      customerId: 'CUS_client1', identityVersion: 1, profileStatus: 'active'
     });
     await setDoc(doc(db, 'users', 'client2'), {
       email: claims.client2.email, role: 'client', blocked: false, name: 'Clienta Dos'
@@ -204,6 +205,18 @@ try {
   await succeeds(updateDoc(doc(client1, 'users', 'client1'), { name: 'Nombre válido' }));
   await fails(updateDoc(doc(client1, 'users', 'client1'), { role: 'admin' }));
   await fails(updateDoc(doc(client1, 'users', 'client1'), { blocked: true }));
+  await fails(updateDoc(doc(client1, 'users', 'client1'), { customerId: 'CUS_otro' }));
+  await fails(deleteDoc(doc(client1, 'users', 'client1')));
+  await succeeds(updateDoc(doc(ctx('client2'), 'users', 'client2'), {
+    customerId: 'CUS_client2',
+    identityVersion: 1,
+    profileStatus: 'legacy',
+    lastAuthMethod: 'google',
+    authMethods: ['google'],
+    lastLogin: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  }));
+  await fails(updateDoc(doc(ctx('client2'), 'users', 'client2'), { customerId: 'CUS_reasignado' }));
   await fails(updateDoc(doc(client1, 'products', 'p1'), { price: 1 }));
   await fails(updateDoc(doc(client1, 'products', 'p1'), { stock: 999 }));
   await fails(setDoc(doc(client1, 'orders', 'client1_req_direct_123456'), directOrderPayload));

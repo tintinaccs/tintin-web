@@ -17,9 +17,9 @@ import {
   collection,
   onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
-import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20260716-cloudinary-fix-1';
-import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20260818-browser-fallback-2';
+import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
+import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20260821-accounts-phase-a-1';
+import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20260821-accounts-phase-a-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 const VERSION = 'tintin-20260810-shopify-core-1';

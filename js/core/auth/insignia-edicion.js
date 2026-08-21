@@ -1,7 +1,7 @@
 import { auth } from '../firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { SUPER_ADMIN, getUserRole } from './roles.js?v=tintin-20260716-cloudinary-fix-1';
-import { EDITABLE_ROLES, loadRolePermissions, canDo } from './permisos-roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { SUPER_ADMIN, getUserRole } from './roles.js?v=tintin-20260821-accounts-phase-a-1';
+import { EDITABLE_ROLES, loadRolePermissions, canDo } from './permisos-roles.js?v=tintin-20260821-accounts-phase-a-1';
 
 const BADGE_Z = 1250;
 const tracked = new Map();

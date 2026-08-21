@@ -13,7 +13,8 @@
 // pedidos. Google Sheets en este proyecto sincroniza productos, no usuarios.
 
 import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { SUPER_ADMIN } from "../auth/roles.js?v=tintin-20260716-cloudinary-fix-1";
+import { SUPER_ADMIN } from "../auth/roles.js?v=tintin-20260821-accounts-phase-a-1";
+import { customerIdForUid, ACCOUNT_CONTRACT } from '../auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 
 /** Métodos de acceso válidos, tal como quedan guardados en `users.provider`. */
 export const AUTH_METHOD = {
@@ -38,9 +39,8 @@ export function getRegisteredMethod(profileData) {
  * Crea el perfil la primera vez, o sólo refresca lastLogin las siguientes.
  *
  * Nunca pisa datos ya guardados (nombre, teléfono, dirección, rol, bloqueo):
- * un login no es el lugar donde se editan. Si la cuenta ya existe y se
- * registró con OTRO método, no toca nada y devuelve `wrongMethod` con el
- * método correcto, para que la pantalla indique por dónde tiene que entrar.
+ * un login no es el lugar donde se editan. Google y PIN son métodos de acceso
+ * de una misma identidad Firebase, no tipos de cuenta excluyentes.
  *
  * @param {object} db        Instancia de Firestore.
  * @param {object} user      Usuario de Firebase Auth ya autenticado.
@@ -59,10 +59,15 @@ export async function ensureUserProfile(db, user, method) {
       // bueno — acá sólo se deja el valor de partida.
       name: method === AUTH_METHOD.GOOGLE ? (user.displayName || '') : '',
       email: user.email,
+      customerId: customerIdForUid(user.uid),
+      identityVersion: ACCOUNT_CONTRACT.identityVersion,
+      profileStatus: 'incomplete',
       phone: '',
       photoURL: method === AUTH_METHOD.GOOGLE ? (user.photoURL || '') : '',
       role,
       provider: method,
+      authMethods: [method],
+      lastAuthMethod: method,
       onboardingCompleted: !welcomePending,
       welcomeTutorialSeen: !welcomePending,
       welcomeTutorialPending: welcomePending,
@@ -79,27 +84,40 @@ export async function ensureUserProfile(db, user, method) {
 
   const data = snap.data();
 
+  if (data.profileStatus === 'deleted' || data.deleted === true) {
+    return { role: 'client', blocked: true, deleted: true, isNew: false, welcomePending: false, method };
+  }
+
   if (user.email === SUPER_ADMIN && data.role !== 'superadmin') {
     await setDoc(ref, { role: 'superadmin', updatedAt: serverTimestamp(), lastLogin: serverTimestamp() }, { merge: true });
     return { role: 'superadmin', blocked: false, isNew: false, welcomePending: false, method };
   }
 
-  // Cada cuenta entra sólo por donde se creó. No se crea un perfil nuevo, no
-  // se duplica y no se cambia el método guardado: se devuelve cuál es el
-  // correcto para que la pantalla lo señale.
   const registeredMethod = getRegisteredMethod(data);
-  if (registeredMethod !== method) {
-    return { wrongMethod: registeredMethod };
+  const authMethods = [...new Set([
+    ...(Array.isArray(data.authMethods) ? data.authMethods : [registeredMethod]),
+    method,
+  ].filter(value => Object.values(AUTH_METHOD).includes(value)))];
+  const identityPatch = {
+    updatedAt: serverTimestamp(),
+    lastLogin: serverTimestamp(),
+    lastAuthMethod: method,
+    authMethods,
+  };
+  // Migración progresiva: UID sigue siendo la clave de Auth y el customerId
+  // comercial se deriva una sola vez de ese identificador aleatorio. No se
+  // inventan username ni fecha de nacimiento para perfiles históricos.
+  if (!data.customerId) {
+    identityPatch.customerId = customerIdForUid(user.uid);
+    identityPatch.identityVersion = ACCOUNT_CONTRACT.identityVersion;
+    identityPatch.profileStatus = 'legacy';
   }
-
-  // lastLogin es informativo: no concede permisos ni decide el destino, así
-  // que no se espera y un fallo no bloquea el ingreso.
-  setDoc(ref, { updatedAt: serverTimestamp(), lastLogin: serverTimestamp() }, { merge: true })
+  setDoc(ref, identityPatch, { merge: true })
     .catch(error => console.warn('[user-profile] No se pudo actualizar lastLogin:', error));
 
   const role = data.role || 'client';
   const welcomePending = role === 'client' && !data.welcomeTutorialSeen && data.onboardingCompleted !== true;
-  return { role, blocked: !!data.blocked, isNew: false, welcomePending, method: registeredMethod };
+  return { role, blocked: !!data.blocked, isNew: false, welcomePending, method, authMethods };
 }
 
 /** Mismo chequeo de cuenta bloqueada para los dos métodos de acceso. */

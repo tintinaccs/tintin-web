@@ -269,8 +269,35 @@ service cloud.firestore {
 
     function loginMetadataOnlyUpdate() {
       return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
-        'lastLogin', 'updatedAt'
-      ]);
+        'lastLogin', 'updatedAt', 'lastAuthMethod', 'authMethods'
+      ]) &&
+      (!('lastAuthMethod' in request.resource.data) ||
+        request.resource.data.lastAuthMethod in ['google', 'emailOtp']) &&
+      (!('authMethods' in request.resource.data) ||
+        (request.resource.data.authMethods is list &&
+          request.resource.data.authMethods.size() >= 1 &&
+          request.resource.data.authMethods.size() <= 2 &&
+          request.resource.data.authMethods.hasOnly(['google', 'emailOtp'])));
+    }
+
+    // Backfill progresivo para perfiles anteriores al contrato de identidad.
+    // El cliente solo puede agregar el customerId determinista ligado a SU UID;
+    // una vez presente, protectedUserFieldsChanged() impide modificarlo.
+    function identityBootstrapOnlyUpdate(userId) {
+      let data = request.resource.data;
+      return !('customerId' in resource.data) &&
+        data.diff(resource.data).affectedKeys().hasOnly([
+          'customerId', 'identityVersion', 'profileStatus',
+          'lastLogin', 'updatedAt', 'lastAuthMethod', 'authMethods'
+        ]) &&
+        data.customerId == 'CUS_' + userId &&
+        data.identityVersion == 1 &&
+        data.profileStatus == 'legacy' &&
+        data.lastAuthMethod in ['google', 'emailOtp'] &&
+        data.authMethods is list &&
+        data.authMethods.size() >= 1 &&
+        data.authMethods.size() <= 2 &&
+        data.authMethods.hasOnly(['google', 'emailOtp']);
     }
 
     function checkoutGuardWriteValid(userId) {
@@ -290,6 +317,7 @@ service cloud.firestore {
 
     function protectedUserFieldsChanged() {
       return request.resource.data.diff(resource.data).affectedKeys().hasAny([
+        'customerId', 'identityVersion', 'profileStatus', 'deleted', 'deletedAt', 'deletedBy',
         'email', 'createdAt', 'provider', 'role', 'blocked', 'blockedAt', 'blockedBy', 'blockReason',
         'roleBeforeBlock', 'purchaseCount', 'orderCount', 'totalOrders',
         'totalSpent', 'completedOrders', 'pendingOrders', 'cancelledOrders',
@@ -340,7 +368,8 @@ service cloud.firestore {
         request.auth.uid == userId &&
         request.auth.token.email != null &&
         data.keys().hasOnly([
-          'name', 'email', 'phone', 'photoURL', 'role', 'provider',
+          'name', 'email', 'customerId', 'identityVersion', 'profileStatus',
+          'phone', 'photoURL', 'role', 'provider', 'authMethods', 'lastAuthMethod',
           'onboardingCompleted', 'welcomeTutorialSeen',
           'welcomeTutorialPending', 'welcomeTutorialVersion', 'blocked',
           'purchaseCount', 'totalSpent', 'orderCount', 'totalOrders',
@@ -349,6 +378,14 @@ service cloud.firestore {
         ]) &&
         data.email is string &&
         data.email.lower() == request.auth.token.email.lower() &&
+        data.customerId == 'CUS_' + userId &&
+        data.identityVersion == 1 &&
+        data.profileStatus == 'incomplete' &&
+        data.lastAuthMethod in ['google', 'emailOtp'] &&
+        data.authMethods is list &&
+        data.authMethods.size() >= 1 &&
+        data.authMethods.size() <= 2 &&
+        data.authMethods.hasOnly(['google', 'emailOtp']) &&
         data.get('blocked', false) == false &&
         (
           (isSuperAdmin() && data.get('role', 'superadmin') == 'superadmin') ||
@@ -1085,7 +1122,8 @@ service cloud.firestore {
               isStoreOpenOrAllowed() &&
               !protectedUserFieldsChanged()
             ) ||
-            loginMetadataOnlyUpdate()
+            loginMetadataOnlyUpdate() ||
+            identityBootstrapOnlyUpdate(userId)
           )
         ) ||
         (
@@ -1096,6 +1134,7 @@ service cloud.firestore {
         ) ||
         (
           isSuperAdmin() &&
+          !request.resource.data.diff(resource.data).affectedKeys().hasAny(['customerId']) &&
           (
             !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']) ||
             (
@@ -1106,8 +1145,9 @@ service cloud.firestore {
         )
       );
 
-      allow delete: if isSuperAdmin() &&
-        !isSuperAdminAccount(resource.data);
+      // Las cuentas se eliminan mediante tombstone desde Cloudflare; ni el
+      // cliente ni Super Admin borran la identidad histórica desde el SDK.
+      allow delete: if false;
 
       match /cart/{itemId} {
         allow read: if isSignedIn() &&

@@ -15,7 +15,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
   ensureUserProfile, isBlockedAccount, AUTH_METHOD
-} from "../core/store/perfil-usuario.js?v=tintin-20260803-profile-store-1";
+} from "../core/store/perfil-usuario.js?v=tintin-20260821-accounts-phase-a-1";
 import { apiUrl } from "../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
 
 export function isValidEmailFormat(email) {
@@ -114,10 +114,6 @@ export function otpErrorMessage(code) {
     'daily_limit_exceeded': 'Se alcanzó el límite de códigos por hoy para este correo. Probá más tarde o entrá con Google.',
     'resend_not_configured': 'El envío de correos no está disponible en este momento. Entrá con "Continuar con Google".',
     'send_failed': 'No pudimos enviar el código a tu correo. Revisá que esté bien escrito e intentá de nuevo.',
-
-    // Método de ingreso
-    'google_account_exists': 'Este correo fue registrado con Google. Entrá con el botón "Continuar con Google".',
-    'email_account_exists': 'Este correo fue registrado con código de verificación. Entrá escribiendo tu correo.',
 
     // Infraestructura
     'origin_not_allowed': 'No se pudo validar el pedido. Recargá la página e intentá de nuevo.',

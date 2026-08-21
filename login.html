@@ -7,7 +7,7 @@
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1"></script>
   <script src="js/cargador-pagina.js?v=tintin-20260821-hero-authoritative-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20260821-notifications-lazy-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20260821-accounts-phase-a-1" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -23,7 +23,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260821-notifications-lazy-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260821-accounts-phase-a-1">
   <link rel="preload" as="style" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260818-header-dropdowns-solid-3">
   <link rel="preload" as="style" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260818-header-dropdowns-solid-3">
   <link rel="preload" as="style" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260818-header-dropdowns-solid-3">
@@ -186,19 +186,20 @@ import {
 import {
   doc, setDoc, getDoc, runTransaction, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1";
+import { SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1";
+import { ASSIGNABLE_ROLES } from './js/core/auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 import {
   isValidEmailFormat, requestOtpCode, verifyOtpCode,
   ensureUserDocForEmailLogin, otpErrorMessage
-} from "./js/email/correo-autenticacion.js?v=tintin-20260716-cloudinary-fix-1";
+} from "./js/email/correo-autenticacion.js?v=tintin-20260821-accounts-phase-a-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
 import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260803-phone-reservation-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
-import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260803-profile-store-1";
-import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260815-profile-routes-1";
+import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260821-accounts-phase-a-1";
+import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260821-accounts-phase-a-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
-import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260815-profile-routes-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1";
+import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260821-accounts-phase-a-1";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260821-accounts-phase-a-1";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260803-profile-onboarding-2";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260818-pin-icon-svg-1";
 
@@ -291,7 +292,7 @@ async function redirectByRole(role, email, options = {}) {
     renderStoreClosedOverlay();
     return;
   }
-  markSessionStart(); // arranca acá la ventana de ~30 min de sesión (proteccion-sesion.js la controla en el resto del sitio)
+  markSessionStart(); // para staff inicia el reloj de inactividad; clientes conservan sesión normal
   const from = safeLocalRedirect(new URLSearchParams(window.location.search).get('from'));
   const normalizedEmail = String(email || '').trim().toLowerCase();
   // Única regla de destino del login: solo el correo oficial entra
@@ -307,12 +308,9 @@ async function redirectByRole(role, email, options = {}) {
 // Crea el perfil la primera vez que alguien entra con Google, o solo
 // actualiza lastLogin las siguientes veces. La lógica vive en
 // js/core/store/perfil-usuario.js, compartida con el login por correo — acá sólo se
-// fija el método. Si la cuenta se había creado por correo, devuelve
-// `wrongMethod` y el login no avanza.
+// registra el método usado sin crear otra identidad.
 async function guardarUsuario(user) {
-  const result = await ensureUserProfile(db, user, AUTH_METHOD.GOOGLE);
-  if (result.wrongMethod === AUTH_METHOD.EMAIL) return { emailOnlyAccount: true };
-  return result;
+  return ensureUserProfile(db, user, AUTH_METHOD.GOOGLE);
 }
 
 function populateCountrySelect(selectEl) {
@@ -364,7 +362,7 @@ async function ensureProfileComplete(user, role) {
   // Intentar irse con el alta a medias abre una decisión explícita, no una
   // salida silenciosa: o completa, o cierra sesión y sigue mirando la tienda
   // sin cuenta. Sin esto quedaría encerrada — el guardia de
-  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260815-profile-routes-1 la traería de vuelta acá desde cualquier página,
+  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260821-accounts-phase-a-1 la traería de vuelta acá desde cualquier página,
   // porque su perfil sigue incompleto.
   const exitModal = document.getElementById('login-exit-modal');
 
@@ -591,16 +589,6 @@ async function finishGoogleLogin(user) {
     guardarUsuario(user),
     getStoreAccessConfig()
   ]);
-  if (profile.emailOnlyAccount) {
-    await signOut(auth);
-    explicitLoginInProgress = false;
-    document.getElementById('btn-google').disabled = false;
-    document.body.classList.remove('tt-login-busy');
-    document.getElementById('btn-google-label').textContent = 'Continuar con Google';
-    hideLoginOverlay();
-    showAccountNudge('email');
-    return;
-  }
   const { role, blocked, welcomePending } = profile;
   if (blocked) {
     await signOut(auth);
@@ -718,7 +706,7 @@ onAuthStateChanged(auth, async user => {
   const storedRole = profileData.role || 'client';
   const role = isSuperAdmin
     ? 'superadmin'
-    : ['admin', 'agent', 'viewer', 'client'].includes(storedRole)
+    : ASSIGNABLE_ROLES.includes(storedRole)
       ? storedRole
       : 'client';
   const welcomePending =
@@ -960,7 +948,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
 };
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script src="tienda.js?v=tintin-20260818-product-trust-icons-2" defer></script>
+<script src="tienda.js?v=tintin-20260821-accounts-phase-a-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

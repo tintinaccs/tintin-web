@@ -199,6 +199,22 @@ export async function deleteFirebaseUser(env, uid) {
   }
 }
 
+/** Habilita/deshabilita una cuenta sin destruir su UID ni su email histórico. */
+export async function setFirebaseUserDisabled(env, uid, disabled) {
+  const safeUid = String(uid || '').trim();
+  if (!/^[A-Za-z0-9_-]{6,128}$/.test(safeUid)) throw new Error('UID inválido');
+  const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
+  const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:update', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify({ localId: safeUid, disableUser: disabled === true })
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error('No se pudo actualizar el acceso de la cuenta: ' + (data?.error?.message || response.status));
+  }
+}
+
 // --- Firestore admin REST ---
 const FIRESTORE_SCOPE = 'https://www.googleapis.com/auth/datastore';
 
@@ -382,7 +398,10 @@ export async function firestoreAdminCommit(env, writes) {
         ? { currentDocument: write.currentDocument }
         : {};
       if (write.delete) return { delete: prefix + path, ...currentDocument };
-      return { update: { name: prefix + path, fields: write.fields || {} }, ...currentDocument };
+      const updateMask = Array.isArray(write.mergeFields) && write.mergeFields.length
+        ? { updateMask: { fieldPaths: write.mergeFields.map(field => String(field)) } }
+        : {};
+      return { update: { name: prefix + path, fields: write.fields || {} }, ...updateMask, ...currentDocument };
     })
   };
   if (!body.writes.length || body.writes.length > 20) throw new Error('Cantidad de escrituras inválida');
@@ -423,3 +442,4 @@ export function decodeFirestoreFields(fields) {
 export const fsString = value => ({ stringValue: String(value) });
 export const fsInteger = value => ({ integerValue: String(Math.trunc(Number(value) || 0)) });
 export const fsTimestamp = date => ({ timestampValue: date.toISOString() });
+export const fsBoolean = value => ({ booleanValue: value === true });

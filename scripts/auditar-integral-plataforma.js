@@ -33,7 +33,7 @@ function check(label, condition, detail = '') {
 
 check(
   'La portada no abre listeners duplicados de colecciones o imágenes',
-  !files.home.includes("import { onCollectionsUpdate } from './js/pages/collections/estado-colecciones.js?v=tintin-20260716-cloudinary-fix-1'") &&
+  !files.home.includes("import { onCollectionsUpdate } from './js/pages/collections/estado-colecciones.js?v=tintin-20260821-accounts-phase-a-1'") &&
     !files.home.includes("import { onImagesUpdate } from './js/components/images/imagenes.js?v=tintin-20260716-cloudinary-fix-1'"),
   'la sincronización global debe ser la única propietaria de esas superficies'
 );

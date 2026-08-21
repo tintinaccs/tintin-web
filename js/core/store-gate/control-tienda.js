@@ -15,7 +15,7 @@ import {
   doc,
   onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { getUserRole } from '../auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { getUserRole } from '../auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
 import {
   isAccessAllowed,
   renderStoreClosedOverlay,
@@ -24,7 +24,7 @@ import {
   getStoreAccessConfig,
   getStoreAccessConfigFromRest,
   normalizeStoreAccessConfig
-} from './nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1';
+} from './nucleo-control-tienda.js?v=tintin-20260821-accounts-phase-a-1';
 
 export {
   isAccessAllowed,
