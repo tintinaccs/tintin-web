@@ -279,7 +279,7 @@ if (grid && !window.TintinRelatedProducts) {
       grid.querySelectorAll('.is-entering').forEach(slot => slot.classList.remove('is-entering'));
     });
     if (announceChange && state.visible.length) {
-      announce(`Se muestran ${state.visible.length} productos diferentes.`);
+      announce(`Se muestran ${state.visible.length} productos diferentes`);
     }
   }
 
@@ -290,7 +290,7 @@ if (grid && !window.TintinRelatedProducts) {
     const previousIds = state.visible.map(product => String(product.id)).sort().join('|');
     const nextIds = combination.map(product => String(product.id)).sort().join('|');
     if (previousIds === nextIds) {
-      announce('No hay otra combinación disponible en este momento.');
+      announce('No hay otra combinación disponible en este momento');
       return;
     }
 

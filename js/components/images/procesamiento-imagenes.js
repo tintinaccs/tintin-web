@@ -74,18 +74,18 @@ export async function detectRealImageMime(file) {
  */
 export async function validateImageFile(file) {
   if (!file || !(file instanceof Blob)) {
-    return { ok: false, error: 'No se recibió ningún archivo.' };
+    return { ok: false, error: 'No se recibió ningún archivo' };
   }
   if (file.size > MAX_UPLOAD_BYTES) {
-    return { ok: false, error: `El archivo pesa demasiado (máximo ${Math.round(MAX_UPLOAD_BYTES / 1024 / 1024)} MB).` };
+    return { ok: false, error: `El archivo pesa demasiado (máximo ${Math.round(MAX_UPLOAD_BYTES / 1024 / 1024)} MB)` };
   }
   if (file.size === 0) {
-    return { ok: false, error: 'El archivo está vacío.' };
+    return { ok: false, error: 'El archivo está vacío' };
   }
 
   const mime = await detectRealImageMime(file);
   if (!mime || !ALLOWED_MIME.has(mime)) {
-    return { ok: false, error: 'El archivo no es una imagen válida (formatos permitidos: JPG, PNG, WebP, AVIF).' };
+    return { ok: false, error: 'El archivo no es una imagen válida (formatos permitidos: JPG, PNG, WebP, AVIF)' };
   }
 
   try {
@@ -93,11 +93,11 @@ export async function validateImageFile(file) {
     const { width, height } = bitmap;
     bitmap.close?.();
     if (!width || !height) {
-      return { ok: false, error: 'No se pudo leer el contenido de la imagen.' };
+      return { ok: false, error: 'No se pudo leer el contenido de la imagen' };
     }
     return { ok: true, mime, width, height };
   } catch {
-    return { ok: false, error: 'El archivo dice ser una imagen pero no pudo decodificarse.' };
+    return { ok: false, error: 'El archivo dice ser una imagen pero no pudo decodificarse' };
   }
 }
 
@@ -133,7 +133,7 @@ function canvasToBlob(canvas, mime, quality) {
   return new Promise((resolve, reject) => {
     canvas.toBlob(blob => {
       if (blob) resolve(blob);
-      else reject(new Error('No se pudo generar el archivo procesado.'));
+      else reject(new Error('No se pudo generar el archivo procesado'));
     }, mime, quality);
   });
 }

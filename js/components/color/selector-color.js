@@ -381,7 +381,7 @@ export function attachColorPicker(triggerEl, opts = {}) {
         }
         render();
       } catch (error) {
-        errEl.textContent = 'El navegador no permitió leer el portapapeles.';
+        errEl.textContent = 'El navegador no permitió leer el portapapeles';
         errEl.style.display = 'block';
       }
     });

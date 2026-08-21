@@ -22,7 +22,7 @@ import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   Promise.allSettled([
     import('../../admin/settings/compatibilidad-pagos-anteriores-admin.js?v=tintin-20260720-payment-crud-1'),
-    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20260818-payment-crud-2')
+    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20260820-microcopy-ios-1')
   ]);
 }
 

@@ -452,8 +452,8 @@ function showLoginClosedNotice(kind) {
 
   error.textContent =
     kind === 'unavailable'
-      ? 'No pudimos comprobar el estado de la tienda. Por seguridad no se habilitó el acceso. Probá nuevamente en unos minutos.'
-      : 'La tienda está cerrada. Esta cuenta no tiene permiso de mantenimiento. Podés intentar con otra cuenta autorizada.';
+      ? 'No pudimos comprobar el estado de la tienda. Por seguridad no se habilitó el acceso. Probá nuevamente en unos minutos'
+      : 'La tienda está cerrada. Esta cuenta no tiene permiso de mantenimiento. Podés intentar con otra cuenta autorizada';
   error.classList.add('show');
 }
 
@@ -463,8 +463,8 @@ function buildOverlayHtml(kind) {
     ? 'No pudimos comprobar el estado de la tienda'
     : 'Tienda temporalmente cerrada';
   const message = unavailable
-    ? 'Por seguridad, el sitio permanece bloqueado hasta que podamos confirmar su estado.'
-    : 'En este momento la tienda no está disponible. Solo puede ingresar el equipo autorizado.';
+    ? 'Por seguridad, el sitio permanece bloqueado hasta que podamos confirmar su estado'
+    : 'En este momento la tienda no está disponible. Solo puede ingresar el equipo autorizado';
   const retryButton = unavailable
     ? '<button type="button" id="tt-store-gate-retry" class="tt-store-gate-action">Reintentar</button>'
     : '';

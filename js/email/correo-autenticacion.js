@@ -98,34 +98,34 @@ export async function checkBlockedEmailLogin(uid, email) {
 export function otpErrorMessage(code) {
   const msgs = {
     // Correo
-    'invalid_email': 'Escribí un correo con formato válido (ej: tu@email.com).',
-    'email_not_allowed': 'Ese correo no puede recibir el código. Probá con otro o entrá con Google.',
+    'invalid_email': 'Escribí un correo con formato válido (ej: tu@email.com)',
+    'email_not_allowed': 'Ese correo no puede recibir el código. Probá con otro o entrá con Google',
 
     // Código
-    'invalid_code_format': 'El código son 6 dígitos, sin letras ni espacios.',
-    'code_not_found': 'No hay ningún código pendiente para este correo. Pedí uno nuevo.',
-    'code_expired': 'Ese código venció. Pedí uno nuevo y usalo dentro de los 5 minutos.',
-    'code_mismatch': 'Código incorrecto. Revisá los 6 dígitos del correo e intentá de nuevo.',
-    'code_already_used': 'Ese código ya se usó. Pedí uno nuevo para volver a entrar.',
-    'too_many_attempts': 'Demasiados intentos con este código. Pedí uno nuevo.',
+    'invalid_code_format': 'El código son 6 dígitos, sin letras ni espacios',
+    'code_not_found': 'No hay ningún código pendiente para este correo. Pedí uno nuevo',
+    'code_expired': 'Ese código venció. Pedí uno nuevo y usalo dentro de los 5 minutos',
+    'code_mismatch': 'Código incorrecto. Revisá los 6 dígitos del correo e intentá de nuevo',
+    'code_already_used': 'Ese código ya se usó. Pedí uno nuevo para volver a entrar',
+    'too_many_attempts': 'Demasiados intentos con este código. Pedí uno nuevo',
 
     // Envío
-    'cooldown_active': 'Esperá unos segundos antes de pedir otro código.',
-    'daily_limit_exceeded': 'Se alcanzó el límite de códigos por hoy para este correo. Probá más tarde o entrá con Google.',
-    'resend_not_configured': 'El envío de correos no está disponible en este momento. Entrá con "Continuar con Google".',
-    'send_failed': 'No pudimos enviar el código a tu correo. Revisá que esté bien escrito e intentá de nuevo.',
+    'cooldown_active': 'Esperá unos segundos antes de pedir otro código',
+    'daily_limit_exceeded': 'Se alcanzó el límite de códigos por hoy para este correo. Probá más tarde o entrá con Google',
+    'resend_not_configured': 'El envío de correos no está disponible en este momento. Entrá con "Continuar con Google"',
+    'send_failed': 'No pudimos enviar el código a tu correo. Revisá que esté bien escrito e intentá de nuevo',
 
     // Método de ingreso
-    'google_account_exists': 'Este correo fue registrado con Google. Entrá con el botón "Continuar con Google".',
-    'email_account_exists': 'Este correo fue registrado con código de verificación. Entrá escribiendo tu correo.',
+    'google_account_exists': 'Este correo fue registrado con Google. Entrá con el botón "Continuar con Google"',
+    'email_account_exists': 'Este correo fue registrado con código de verificación. Entrá escribiendo tu correo',
 
     // Infraestructura
-    'origin_not_allowed': 'No se pudo validar el pedido. Recargá la página e intentá de nuevo.',
-    'invalid_request': 'No pudimos procesar el pedido. Recargá la página e intentá de nuevo.',
-    'storage_unavailable': 'No pudimos leer tus datos en este momento. Probá de nuevo en unos segundos.',
-    'login_failed': 'El código era correcto, pero no pudimos completar el ingreso. Probá de nuevo en unos segundos.',
-    'server_error': 'El servidor no respondió bien. Esperá unos segundos y probá de nuevo.',
-    'network_error': 'No pudimos conectarnos. Revisá tu conexión y volvé a intentar.',
+    'origin_not_allowed': 'No se pudo validar el pedido. Recargá la página e intentá de nuevo',
+    'invalid_request': 'No pudimos procesar el pedido. Recargá la página e intentá de nuevo',
+    'storage_unavailable': 'No pudimos leer tus datos en este momento. Probá de nuevo en unos segundos',
+    'login_failed': 'El código era correcto, pero no pudimos completar el ingreso. Probá de nuevo en unos segundos',
+    'server_error': 'El servidor no respondió bien. Esperá unos segundos y probá de nuevo',
+    'network_error': 'No pudimos conectarnos. Revisá tu conexión y volvé a intentar',
   };
-  return msgs[code] || 'Ocurrió un error. Intentá de nuevo.';
+  return msgs[code] || 'Ocurrió un error. Intentá de nuevo';
 }

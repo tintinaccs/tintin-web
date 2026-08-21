@@ -155,7 +155,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         root: '.tt-footer',
         global: true,
         fields: [
-          field('tagline', 'Descripción de la marca', '.tt-footer-tagline', 'Accesorios femeninos elegantes con brillo propio. Somos tu boutique online de confianza en Paraguay.', { type: 'multiline', rows: 3, maxLength: 500 }),
+          field('tagline', 'Descripción de la marca', '.tt-footer-tagline', 'Accesorios femeninos elegantes con brillo propio. Somos tu boutique online de confianza en Paraguay', { type: 'multiline', rows: 3, maxLength: 500 }),
           field('waText', 'Texto del botón WhatsApp', '.tt-footer-wa-text', 'Escribirnos por WhatsApp', { maxLength: 100 }),
           field('copy', 'Copyright', '.tt-footer-bottom', '© 2024-2026 TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS', { maxLength: 180 }),
         ],
@@ -205,7 +205,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         fields: [
           field('eyebrow', 'Texto pequeño', '#cat-subtitulo', 'Encontrá tu favorito', { maxLength: 160 }),
           field('title', 'Título', '#cat-titulo', 'Todos los productos', { maxLength: 180 }),
-          field('desc', 'Descripción', '#cat-subtitulo', 'Explorá el catálogo completo de Tintin.', { type: 'multiline', rows: 3, maxLength: 500 }),
+          field('desc', 'Descripción', '#cat-subtitulo', 'Explorá el catálogo completo de Tintin', { type: 'multiline', rows: 3, maxLength: 500 }),
         ],
       },
     },
@@ -218,7 +218,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
       header: {
         label: 'Encabezado',
         root: '.tt-page-hero',
-        fields: headerFields('Explorá', 'Nuestras Colecciones', 'Encontrá accesorios para cada estilo.'),
+        fields: headerFields('Explorá', 'Nuestras Colecciones', 'Encontrá accesorios para cada estilo'),
       },
     },
   },
@@ -237,7 +237,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         root: '.tt-contact-section',
         fields: [
           field('formTitle', 'Título del formulario', '.tt-contact-form-title', 'Envianos un mensaje', { maxLength: 160 }),
-          field('formDesc', 'Descripción del formulario', '.tt-contact-form-sub', 'Completá el formulario y te respondemos por WhatsApp a la brevedad.', { type: 'multiline', rows: 3, maxLength: 500 }),
+          field('formDesc', 'Descripción del formulario', '.tt-contact-form-sub', 'Completá el formulario y te respondemos por WhatsApp a la brevedad', { type: 'multiline', rows: 3, maxLength: 500 }),
           field('successText', 'Mensaje de éxito', '#form-success', '✅ ¡Gracias por tu mensaje! Serás redirigida a WhatsApp para completar tu consulta.', { type: 'multiline', rows: 3, maxLength: 500 }),
           field('submitText', 'Texto del botón', '#contact-form button[type="submit"]', 'Enviar por WhatsApp 💬', { maxLength: 100 }),
           field('directTitle', 'Título de contacto directo', '.tt-contact-alt-title', '¿Preferís escribirnos directo?', { maxLength: 180 }),
@@ -255,7 +255,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
       header: {
         label: 'Encabezado',
         root: '.tt-page-hero',
-        fields: headerFields('Información', 'Política de Envíos 🚚', 'Todo lo que necesitás saber sobre cómo te llegará tu pedido.'),
+        fields: headerFields('Información', 'Política de Envíos 🚚', 'Todo lo que necesitás saber sobre cómo te llegará tu pedido'),
       },
       details: {
         label: 'Información de envíos',
@@ -284,7 +284,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
       header: {
         label: 'Encabezado',
         root: '.tt-page-hero',
-        fields: headerFields('Ayuda', 'Preguntas Frecuentes 💬', 'Encontrá respuestas rápidas a las dudas más comunes.'),
+        fields: headerFields('Ayuda', 'Preguntas Frecuentes 💬', 'Encontrá respuestas rápidas a las dudas más comunes'),
       },
       questions: {
         label: 'Preguntas y respuestas',
@@ -357,7 +357,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
       header: {
         label: 'Encabezado',
         root: '.tt-page-hero',
-        fields: headerFields('Información', 'Términos y Condiciones 📋', 'Las reglas claras de cómo funciona tu compra en Tintin Accesorios & Relojes.'),
+        fields: headerFields('Información', 'Términos y Condiciones 📋', 'Las reglas claras de cómo funciona tu compra en Tintin Accesorios & Relojes'),
       },
     },
   },
@@ -369,7 +369,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
       header: {
         label: 'Encabezado',
         root: '.tt-page-hero',
-        fields: headerFields('Información', 'Política de Privacidad 🔒', 'Qué datos tuyos usamos, para qué, y cómo los cuidamos.'),
+        fields: headerFields('Información', 'Política de Privacidad 🔒', 'Qué datos tuyos usamos, para qué, y cómo los cuidamos'),
       },
     },
   },

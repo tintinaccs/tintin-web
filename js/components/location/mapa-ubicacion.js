@@ -4,7 +4,7 @@
 // Registro y checkout usan el mismo formato {lat,lng,name,address}, el mismo
 // zoom, la misma precisión y el mismo backend de búsqueda.
 
-import { searchPlaces } from "./selector-ubicacion.js?v=tintin-20260803-location-picker-2";
+import { searchPlaces } from "./selector-ubicacion.js?v=tintin-20260820-microcopy-ios-1";
 
 const LEAFLET_JS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
 const LEAFLET_JS_INTEGRITY = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
@@ -47,15 +47,15 @@ function pinIcon(L) {
 
 function geolocationErrorMessage(error) {
   if (error?.code === 1) {
-    return 'El permiso de ubicación está bloqueado. Permitilo desde el icono junto a la dirección del sitio o marcá el punto manualmente.';
+    return 'El permiso de ubicación está bloqueado. Permitilo desde el icono junto a la dirección del sitio o marcá el punto manualmente';
   }
   if (error?.code === 2) {
-    return 'El dispositivo no pudo determinar tu ubicación. Activá la ubicación del sistema o marcá el punto manualmente.';
+    return 'El dispositivo no pudo determinar tu ubicación. Activá la ubicación del sistema o marcá el punto manualmente';
   }
   if (error?.code === 3) {
-    return 'La ubicación tardó demasiado. Volvé a intentarlo o marcá el punto manualmente.';
+    return 'La ubicación tardó demasiado. Volvé a intentarlo o marcá el punto manualmente';
   }
-  return 'No pudimos obtener tu ubicación. Revisá el permiso del navegador o marcá el punto manualmente.';
+  return 'No pudimos obtener tu ubicación. Revisá el permiso del navegador o marcá el punto manualmente';
 }
 
 function parseCoordinateInput(rawValue) {
@@ -204,13 +204,13 @@ export async function createLocationMap({
   const locateCurrent = () => new Promise(resolve => {
     if (locating) { resolve(false); return; }
     if (!window.isSecureContext) {
-      if (typeof onError === 'function') onError('La ubicación actual solo funciona en una conexión segura HTTPS.');
+      if (typeof onError === 'function') onError('La ubicación actual solo funciona en una conexión segura HTTPS');
       resolve(false);
       return;
     }
     if (!navigator.geolocation) {
       if (typeof onError === 'function') {
-        onError('Este navegador no permite obtener la ubicación actual. Podés buscarla o marcarla manualmente en el mapa.');
+        onError('Este navegador no permite obtener la ubicación actual. Podés buscarla o marcarla manualmente en el mapa');
       }
       resolve(false);
       return;
@@ -260,7 +260,7 @@ export async function createLocationMap({
   const renderResults = places => {
     if (!resultsEl) return;
     if (!places.length) {
-      renderMessage('No encontramos ese lugar. Probá con el nombre del negocio, la calle o el barrio; también podés tocar el mapa.');
+      renderMessage('No encontramos ese lugar. Probá con el nombre del negocio, la calle o el barrio; también podés tocar el mapa');
       return;
     }
 
@@ -307,9 +307,9 @@ export async function createLocationMap({
       renderResults(places);
     } catch {
       if (generation !== searchGeneration) return;
-      renderMessage('No pudimos consultar el buscador ahora. Podés usar tu ubicación actual o marcar el punto directamente en el mapa.');
+      renderMessage('No pudimos consultar el buscador ahora. Podés usar tu ubicación actual o marcar el punto directamente en el mapa');
       if (typeof onError === 'function') {
-        onError('No pudimos consultar el buscador ahora. Podés usar tu ubicación actual o marcar el punto directamente en el mapa.');
+        onError('No pudimos consultar el buscador ahora. Podés usar tu ubicación actual o marcar el punto directamente en el mapa');
       }
     }
   };

@@ -17,7 +17,7 @@ const DEFAULT_METHODS = [
     description: 'Envianos el comprobante por WhatsApp',
     icon: '🏦',
     enabled: true,
-    instructions: 'Envianos el comprobante por WhatsApp al confirmar el pedido.',
+    instructions: 'Envianos el comprobante por WhatsApp al confirmar el pedido',
     details: [],
     order: 1,
   },

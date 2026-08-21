@@ -106,9 +106,9 @@ check('La tarjeta de privacidad no bloquea ni cubre toda la página',
   styles.includes('width: min(400px, calc(100vw - 36px))') &&
   !/\.tt-privacy-consent\s*\{[^}]*\binset\s*:\s*0/i.test(styles));
 check('La actividad propia y Google Analytics esperan el permiso opcional',
-  activity.includes("from './consentimiento-privacidad.js?v=tintin-20260716-cloudinary-fix-1'") &&
+  activity.includes("from './consentimiento-privacidad.js?v=tintin-20260820-microcopy-ios-1'") &&
   activity.includes('if (hasConsent() && analyticsWritable) startActivity()') &&
-  analytics.includes("from './consentimiento-privacidad.js?v=tintin-20260716-cloudinary-fix-1'") &&
+  analytics.includes("from './consentimiento-privacidad.js?v=tintin-20260820-microcopy-ios-1'") &&
   analytics.includes('!isTrackablePage() || !hasStatisticsConsent()') &&
   analytics.includes("analytics_storage: 'denied'"));
 check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
@@ -163,8 +163,8 @@ check('La primera sesión de una clienta llega a inicio con bienvenida pendiente
   welcomeRuntime.includes('data?.welcomeTutorialPending === true'));
 check('Bienvenida pública y Super Admin usan una sola configuración',
   welcomeConfig.includes("export const WELCOME_VERSION = 'home-welcome-v5-media'") &&
-  welcomeRuntime.includes("from './configuracion-bienvenida.js?v=tintin-20260812-welcome-media-1'") &&
-  welcomeAdmin.includes("from '../../components/welcome/configuracion-bienvenida.js?v=tintin-20260812-welcome-media-1'") &&
+  welcomeRuntime.includes("from './configuracion-bienvenida.js?v=tintin-20260820-microcopy-ios-1'") &&
+  welcomeAdmin.includes("from '../../components/welcome/configuracion-bienvenida.js?v=tintin-20260820-microcopy-ios-1'") &&
   !fs.existsSync(path.join(root, 'js', 'onboarding.js')) &&
   !fs.existsSync(path.join(root, 'js', 'welcome-tutorial-init.js')) &&
   !profile.includes('./js/onboarding.js'));

@@ -15,8 +15,8 @@ import {
   sanitizeContentHref,
   normalizeContentValue,
   detectContentPageId,
-} from './esquema-contenido.js?v=tintin-20260815-routes-clean-1';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260815-routes-clean-1';
+} from './esquema-contenido.js?v=tintin-20260820-microcopy-ios-1';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260821-visual-flash-fix-1';
 
 const subscriptions = new Map();
 const latestData = new Map();
@@ -150,6 +150,8 @@ function applyPage(pageId, data, onlySectionId = null) {
   }));
 }
 
+const FIRST_SNAPSHOT_CEILING_MS = 3500;
+
 function startSubscription(key, pageId, callback) {
   if (subscriptions.has(key)) return subscriptions.get(key);
   let active = true;
@@ -161,9 +163,23 @@ function startSubscription(key, pageId, callback) {
   };
   subscriptions.set(key, unsubscribe);
 
+  // El HTML estático de respaldo no puede quedar visible tras el loader y
+  // luego encimarse con el contenido publicado de Firestore: se retiene el
+  // primer snapshot (o error) con un techo, igual que el resto del shell.
+  window.TintinLoader?.beginWait?.();
+  let firstSettleDone = false;
+  const settleFirstWait = () => {
+    if (firstSettleDone) return;
+    firstSettleDone = true;
+    window.clearTimeout(firstWaitCeiling);
+    window.TintinLoader?.endWait?.();
+  };
+  const firstWaitCeiling = window.setTimeout(settleFirstWait, FIRST_SNAPSHOT_CEILING_MS);
+
   appCheckReady.then(ready => {
     if (!ready || !active) {
       document.documentElement.dataset.ttContentState = 'offline-safe';
+      settleFirstWait();
       return;
     }
     stopSnapshot = onSnapshot(
@@ -172,6 +188,7 @@ function startSubscription(key, pageId, callback) {
         const data = snapshot.exists() ? snapshot.data() || {} : {};
         latestData.set(pageId, data);
         callback(data, snapshot.exists());
+        settleFirstWait();
       },
       error => {
         console.warn(`[site-content] no se pudo leer ${pageId}:`, error);
@@ -181,6 +198,7 @@ function startSubscription(key, pageId, callback) {
         }));
         // El HTML publicado queda visible como respaldo. Nunca se reemplaza por
         // texto viejo de otra página ni por contenido local no confirmado.
+        settleFirstWait();
       }
     );
   });

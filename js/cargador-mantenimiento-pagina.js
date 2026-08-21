@@ -1,4 +1,4 @@
-import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20260818-products-unified-2';
+import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20260820-microcopy-ios-1';
 import './pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1';
 
 function pathName() {
@@ -6,7 +6,7 @@ function pathName() {
 }
 
 function load(file) {
-  return import(`./${file}?v=tintin-20260817-mobile-accordion-1`);
+  return import(`./${file}?v=tintin-20260820-microcopy-ios-1`);
 }
 
 export function loadPageMaintenance() {

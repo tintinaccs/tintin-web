@@ -241,7 +241,7 @@ function createRuntime() {
       rawSet(GUEST_CART_KEY, []);
       rawRemove(GUEST_ACTIVITY_KEY);
       dispatchCartUpdated();
-      showFeedback('El carrito temporal se vació después de 30 minutos sin actividad.', 'info');
+      showFeedback('El carrito temporal se vació después de 30 minutos sin actividad', 'info');
     }, Math.min(remaining + 50, 2147483647));
   }
 
@@ -843,13 +843,13 @@ function createRuntime() {
       if (existing && accepted <= 0) {
         const reason = limit <= 1 ? 'already_in_cart' : 'stock_limit';
         const message = limit <= 1
-          ? 'Este producto ya se encuentra en tu carrito y solo hay una unidad disponible.'
-          : `Ya alcanzaste el stock disponible de “${incoming.name || existing.name || 'este producto'}”.`;
+          ? 'Este producto ya se encuentra en tu carrito y solo hay una unidad disponible'
+          : `Ya alcanzaste el stock disponible de “${incoming.name || existing.name || 'este producto'}”`;
         showFeedback(message, 'warning');
         return { item: existing, capped: true, changed: false, reason, limit, requested, accepted: 0 };
       }
       if (!existing && accepted <= 0) {
-        showFeedback(`“${incoming.name || 'Este producto'}” está sin stock.`, 'warning');
+        showFeedback(`“${incoming.name || 'Este producto'}” está sin stock`, 'warning');
         return { item: null, capped: true, changed: false, reason: 'out_of_stock', limit, requested, accepted: 0 };
       }
 
@@ -865,7 +865,7 @@ function createRuntime() {
       scheduleRemoteSync(normalized);
       const saved = normalized.find(entry => entry.lineId === incoming.lineId) || null;
       if (capped) {
-        showFeedback(`Se agregó solamente la cantidad disponible (${accepted} de ${requested}).`, 'warning');
+        showFeedback(`Se agregó solamente la cantidad disponible (${accepted} de ${requested})`, 'warning');
       }
       return { item: saved, capped, changed: true, reason: capped ? 'partially_added' : 'added', limit, requested, accepted };
     });
@@ -901,7 +901,7 @@ function createRuntime() {
         capped = allowedDelta < numericDelta;
         changed = allowedDelta > 0;
         line.qty = Math.min(MAX_QTY, line.qty + allowedDelta);
-        if (capped) showFeedback(`No podés superar el stock disponible (${limit}).`, 'warning');
+        if (capped) showFeedback(`No podés superar el stock disponible (${limit})`, 'warning');
       } else {
         line.qty = Math.max(1, line.qty + numericDelta);
       }
@@ -1081,7 +1081,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-  import('../../orders/pedido-checkout-seguro.js?v=tintin-20260814-social-notifications-1').catch(error => {
+  import('../../orders/pedido-checkout-seguro.js?v=tintin-20260820-microcopy-ios-1').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

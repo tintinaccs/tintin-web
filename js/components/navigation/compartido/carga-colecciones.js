@@ -224,7 +224,7 @@ function renderError() {
     removeStateNodes(container);
     container.removeAttribute('aria-busy');
     container.dataset.phase4CollectionsState = 'error';
-    container.appendChild(createStateNode('No pudimos actualizar las colecciones. Podés seguir usando las opciones disponibles.', 'error'));
+    container.appendChild(createStateNode('No pudimos actualizar las colecciones. Podés seguir usando las opciones disponibles', 'error'));
   });
 }
 
@@ -241,7 +241,7 @@ export function initNavCollections(force = false) {
   started = true;
   renderLoading();
 
-  return import('../../../pages/collections/estado-colecciones.js?v=tintin-20260818-browser-fallback-2')
+  return import('../../../pages/collections/estado-colecciones.js?v=tintin-20260820-microcopy-ios-1')
     .then(({ onCollectionsUpdate, loadCollections }) => {
       unsubscribe?.();
       unsubscribe = onCollectionsUpdate(collections => {

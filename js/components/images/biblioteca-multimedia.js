@@ -22,7 +22,7 @@ import {
   setDoc,
   where,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { validateImageFile, processImage } from './procesamiento-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
+import { validateImageFile, processImage } from './procesamiento-imagenes.js?v=tintin-20260820-microcopy-ios-1';
 
 const MEDIA_COLLECTION = 'media';
 const TOKEN_TIMEOUT_MS = 10000;
@@ -66,12 +66,12 @@ async function parseJsonResponse(response, name) {
 
 async function callSecureFunction(name, payload) {
   const user = auth.currentUser;
-  if (!user) throw new Error('Tu sesión venció. Volvé a iniciar sesión.');
+  if (!user) throw new Error('Tu sesión venció. Volvé a iniciar sesión');
 
   const token = await withTimeout(
     () => user.getIdToken(),
     TOKEN_TIMEOUT_MS,
-    'La sesión venció. Volvé a iniciar sesión.'
+    'La sesión venció. Volvé a iniciar sesión'
   );
 
   const response = await withTimeout(
@@ -85,9 +85,9 @@ async function callSecureFunction(name, payload) {
       signal
     }),
     SIGN_TIMEOUT_MS,
-    'Cloudflare no pudo autorizar la subida (tardó demasiado en responder).'
+    'Cloudflare no pudo autorizar la subida (tardó demasiado en responder)'
   ).catch(error => {
-    if (error instanceof TypeError) throw new Error('No se pudo conectar con el servicio de imágenes.');
+    if (error instanceof TypeError) throw new Error('No se pudo conectar con el servicio de imágenes');
     throw error;
   });
   return parseJsonResponse(response, name);
@@ -106,9 +106,9 @@ async function uploadBlobToCloudinary(blob, mediaId, variant) {
   const response = await withTimeout(
     signal => fetch(authorization.uploadUrl, { method: 'POST', body: form, signal }),
     UPLOAD_TIMEOUT_MS,
-    'Cloudinary rechazó la firma o tardó demasiado en responder.'
+    'Cloudinary rechazó la firma o tardó demasiado en responder'
   ).catch(error => {
-    if (error instanceof TypeError) throw new Error('No se pudo conectar con Cloudinary.');
+    if (error instanceof TypeError) throw new Error('No se pudo conectar con Cloudinary');
     throw error;
   });
   const result = await response.json().catch(() => ({}));
@@ -117,7 +117,7 @@ async function uploadBlobToCloudinary(blob, mediaId, variant) {
     throw new Error(`Cloudinary (${variant}) rechazó la subida: ${raw}`);
   }
   if (!result.secure_url || !result.public_id) {
-    throw new Error('Cloudinary no devolvió una URL válida para la imagen.');
+    throw new Error('Cloudinary no devolvió una URL válida para la imagen');
   }
   return result;
 }
@@ -188,11 +188,11 @@ export async function uploadImageToLibrary(file, options = {}) {
     await withTimeout(
       () => setDoc(doc(db, MEDIA_COLLECTION, mediaId), record),
       TOKEN_TIMEOUT_MS,
-      'No se pudo guardar la URL en Firestore (tardó demasiado en responder).'
+      'No se pudo guardar la URL en Firestore (tardó demasiado en responder)'
     ).catch(error => {
       throw new Error(error?.message?.startsWith('No se pudo guardar la URL')
         ? error.message
-        : 'No se pudo guardar la URL en Firestore.');
+        : 'No se pudo guardar la URL en Firestore');
     });
 
     return {
@@ -275,7 +275,7 @@ export async function deleteMediaItem(mediaId, { force = false } = {}) {
   if (!force) {
     const usage = await findImageUsage(data.url);
     if (usage.length) {
-      const error = new Error(`Esta imagen está en uso y no se puede borrar: ${usage.join(', ')}.`);
+      const error = new Error(`Esta imagen está en uso y no se puede borrar: ${usage.join(', ')}`);
       error.usage = usage;
       throw error;
     }

@@ -216,6 +216,26 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   padding: 0 24px;
 }
 
+/* El Visual Builder (js/core/store/editor-visual-runtime.js) aplica su
+   config publicada (align/width) recién después de un fetch async, vía
+   clase .tt-visual-managed + atributos data-tt-visual-*. Sin esto, estas
+   secciones nacen sin ese estado y se ven a la izquierda/anchas hasta que
+   el fetch resuelve y saltan al centro/contenidas — el shift reportado.
+   align:center + max-width:1120px replica el default real del builder
+   (y el valor publicado hoy) para que no haya salto visible; en cuanto
+   JS agrega .tt-visual-managed, sus reglas (mayor especificidad) toman
+   el control, incluida cualquier personalización futura distinta. */
+.tt-trust-bar:not(.tt-visual-managed) .container,
+.tt-about-section:not(.tt-visual-managed) .container,
+.tt-contact-section:not(.tt-visual-managed) .container,
+.tt-reviews-section:not(.tt-visual-managed) .container,
+.tt-footer:not(.tt-visual-managed) .container,
+.tt-page-hero:not(.tt-visual-managed) .container {
+  max-width: 1120px;
+  margin-inline: auto;
+  text-align: center;
+}
+
 .section { padding: 48px 0; }
 .section-sm { padding: 32px 0; }
 .text-center { text-align: center; }

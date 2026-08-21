@@ -222,13 +222,13 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
         ensureNetworkState();
       }, error => {
         console.warn('[profile-maintenance] orders listener failed', error);
-        renderOrdersError(navigator.onLine === false ? 'No podemos actualizar tus pedidos sin conexión.' : 'No pudimos sincronizar tus pedidos ahora.');
+        renderOrdersError(navigator.onLine === false ? 'No podemos actualizar tus pedidos sin conexión' : 'No pudimos sincronizar tus pedidos ahora');
         ensureNetworkState().dataset.state = 'error';
         retryTimer = window.setTimeout(() => startRealtimeOrders(true), 6000);
       });
     } catch (error) {
       console.warn('[profile-maintenance] runtime failed', error);
-      renderOrdersError('No pudimos preparar la actualización de pedidos.');
+      renderOrdersError('No pudimos preparar la actualización de pedidos');
     } finally {
       startingOrders = false;
     }

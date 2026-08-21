@@ -15,7 +15,7 @@ const orderData = {
 
 async function callFunction(source, method = 'GET') {
   const request = new Request(
-    'https://tintinaccesorios.pages.dev/js/orders/pedido-checkout-seguro.js?v=test',
+    'https://tintinaccesorios.pages.dev/js/orders/pedido-checkout-seguro.js?v=tintin-20260820-microcopy-ios-1',
     { method }
   );
   const env = {

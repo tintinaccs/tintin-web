@@ -7,7 +7,7 @@
    renderer legado vuelva a dejar categorías antiguas después del snapshot.
    ============================================================= */
 
-import { onCollectionsUpdate } from './estado-colecciones.js?v=tintin-20260818-browser-fallback-2';
+import { onCollectionsUpdate } from './estado-colecciones.js?v=tintin-20260820-microcopy-ios-1';
 
 if (!window.TintinCollectionsPhase4Booted) {
   window.TintinCollectionsPhase4Booted = true;
@@ -195,7 +195,7 @@ if (!window.TintinCollectionsPhase4Booted) {
 
   function collectionNodesOrState(buildNode, emptyMessage, hideEmpty = false) {
     if (collectionError) {
-      return [stateNode('No pudimos cargar las colecciones.', 'error')];
+      return [stateNode('No pudimos cargar las colecciones', 'error')];
     }
     if (!collections) return [stateNode('Cargando colecciones…')];
     const list = hideEmpty ? collectionsWithProducts() : collections;
@@ -225,7 +225,7 @@ if (!window.TintinCollectionsPhase4Booted) {
   function renderHomeGrid(target) {
     replaceOwned(
       target,
-      collectionNodesOrState(buildHomeCard, 'No hay colecciones disponibles todavía.', true),
+      collectionNodesOrState(buildHomeCard, 'No hay colecciones disponibles todavía', true),
       'home-grid'
     );
   }
@@ -281,7 +281,7 @@ if (!window.TintinCollectionsPhase4Booted) {
       target,
       collectionNodesOrState(
         buildCollectionsPageCard,
-        'No hay colecciones disponibles todavía.',
+        'No hay colecciones disponibles todavía',
         true
       ),
       'collections-page'
@@ -345,7 +345,7 @@ if (!window.TintinCollectionsPhase4Booted) {
     all.addEventListener('click', () => navigateCatalog('todos'));
 
     const nodes = [title, all];
-    if (collectionError) nodes.push(stateNode('No pudimos cargar las categorías.', 'error'));
+    if (collectionError) nodes.push(stateNode('No pudimos cargar las categorías', 'error'));
     else if (!collections) nodes.push(stateNode('Cargando categorías…'));
     else collections.forEach(collection =>
       nodes.push(buildCatalogSidebarButton(collection, selected === collection.slug))

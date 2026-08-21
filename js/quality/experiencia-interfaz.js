@@ -127,7 +127,7 @@ export function setButtonBusy(button, busy = true, options = {}) {
   const spinner = createButtonSpinner(button);
   const timer = window.setTimeout(() => {
     setButtonBusy(button, false);
-    announce('La operación está tardando más de lo esperado. Podés volver a intentarlo.');
+    announce('La operación está tardando más de lo esperado. Podés volver a intentarlo');
   }, Math.max(1500, Number(options.timeout) || BUSY_TIMEOUT_MS));
 
   busyButtons.set(button, {
@@ -264,7 +264,7 @@ function enhanceImages(root = document) {
         const label = document.createElement('span');
         label.className = 'tt-img-error-label';
         label.setAttribute('role', 'status');
-        label.textContent = `No pudimos cargar la imagen de ${alt}.`;
+        label.textContent = `No pudimos cargar la imagen de ${alt}`;
         image.insertAdjacentElement('afterend', label);
       }
     }, { once: true });
@@ -356,7 +356,7 @@ else boot();
 // Fase 10 se monta sobre la instancia única y ya estabilizada de Fase 8.
 if (!window.__TintinPhase10ImportStarted) {
   window.__TintinPhase10ImportStarted = true;
-  import('./accesibilidad-global.js?v=tintin-20260731-phase10-a11y-1').catch(error => {
+  import('./accesibilidad-global.js?v=tintin-20260820-microcopy-ios-1').catch(error => {
     console.error('[phase10-accessibility] No se pudo iniciar la capa accesible:', error);
   });
 }

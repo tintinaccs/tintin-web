@@ -12,14 +12,14 @@ import {
   clearCart,
   cartTotal,
   formatPrice
-} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260814-social-notifications-1';
+} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260820-microcopy-ios-1';
 import {
   findCountryByCode,
   normalizePhone,
   isValidPhone
 } from '../components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1';
 import { createOrderViaServer } from '../create-order-client.js?v=tintin-20260811-phone-order-1';
-import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260808-contract-1';
+import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260820-microcopy-ios-1';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
@@ -248,7 +248,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     if (encomienda) {
       const mode = encomiendaMode();
       if (!mode) {
-        throw appError('shipping_invalid', 'Elegí si retirás en la agencia o si te lo llevamos a la puerta.');
+        throw appError('shipping_invalid', 'Elegí si retirás en la agencia o si te lo llevamos a la puerta');
       }
       return {
         method: 'encomienda',
@@ -265,14 +265,14 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       };
     }
 
-    throw appError('shipping_invalid', 'La ciudad elegida ya no está disponible.');
+    throw appError('shipping_invalid', 'La ciudad elegida ya no está disponible');
   }
 
   function readPhone() {
     const raw = text(document.getElementById('ck-phone-number')?.value);
     const country = findCountryByCode(document.getElementById('ck-phone-country')?.value);
     if (!country || !isValidPhone(raw, country)) {
-      throw appError('phone_invalid', 'Ingresá un teléfono o WhatsApp válido.');
+      throw appError('phone_invalid', 'Ingresá un teléfono o WhatsApp válido');
     }
     return normalizePhone(raw, country).value;
   }
@@ -280,18 +280,18 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   async function buildDraft() {
     const user = auth.currentUser;
     if (!user || user.isAnonymous || !user.emailVerified) {
-      throw appError('login_required', 'Necesitás iniciar sesión con un correo verificado.');
+      throw appError('login_required', 'Necesitás iniciar sesión con un correo verificado');
     }
 
     const items = getCartLocal();
-    if (!items.length) throw appError('empty_cart', 'Tu carrito está vacío.');
+    if (!items.length) throw appError('empty_cart', 'Tu carrito está vacío');
 
     const [settingsSnap, shippingRatesSnap] = await Promise.all([
       getDoc(doc(db, 'settings', 'general')),
       getDoc(doc(db, 'settings', 'shippingRates'))
     ]);
     if (!settingsSnap.exists()) {
-      throw appError('settings_missing', 'No pudimos comprobar la configuración de la tienda.');
+      throw appError('settings_missing', 'No pudimos comprobar la configuración de la tienda');
     }
     const settings = mergeShippingRates(settingsSnap.data() || {}, shippingRatesSnap);
     const selectedCity = text(document.getElementById('ck-city')?.value);
@@ -302,19 +302,19 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const address = text(document.getElementById('ck-address')?.value);
     const paymentMethod = text(document.querySelector('input[name="ck-pay"]:checked')?.value);
 
-    if (name.length < 2) throw appError('name_required', 'Ingresá tu nombre completo.');
+    if (name.length < 2) throw appError('name_required', 'Ingresá tu nombre completo');
     if (!['efectivo', 'transferencia'].includes(paymentMethod)) {
-      throw appError('payment_required', 'Seleccioná un método de pago disponible.');
+      throw appError('payment_required', 'Seleccioná un método de pago disponible');
     }
     if (shipping.method === 'delivery' && (!shipping.mapLocation || !shipping.mapLocation.name)) {
-      throw appError('map_required', 'Marcá y nombrá tu ubicación en el mapa.');
+      throw appError('map_required', 'Marcá y nombrá tu ubicación en el mapa');
     }
     if (shipping.method === 'encomienda' && shipping.encomiendaMode === 'puerta') {
       if (address.length < 5) {
-        throw appError('address_required', 'Ingresá la dirección para la entrega en puerta.');
+        throw appError('address_required', 'Ingresá la dirección para la entrega en puerta');
       }
       if (!shipping.mapLocation || !shipping.mapLocation.name) {
-        throw appError('map_required', 'Marcá y nombrá la ubicación para la entrega en puerta.');
+        throw appError('map_required', 'Marcá y nombrá la ubicación para la entrega en puerta');
       }
     }
 
@@ -394,7 +394,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         Date.now() - lastCheckoutMs < CHECKOUT_COOLDOWN_MS
       ) {
         const remaining = Math.max(1, Math.ceil((CHECKOUT_COOLDOWN_MS - (Date.now() - lastCheckoutMs)) / 1000));
-        throw appError('checkout_cooldown', 'Esperá un momento antes de crear otro pedido.', { remaining });
+        throw appError('checkout_cooldown', 'Esperá un momento antes de crear otro pedido', { remaining });
       }
 
       transaction.set(guardRef, {
@@ -421,7 +421,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   async function createOrderOnServer(draft) {
     const response = await createOrderViaServer(draft);
     if (!response || typeof response !== 'object') {
-      throw appError('server_error', 'No pudimos confirmar el pedido. Intentá nuevamente.');
+      throw appError('server_error', 'No pudimos confirmar el pedido. Intentá nuevamente');
     }
     if (response.ok !== true) {
       throw appError(response.error || 'server_error', undefined, {
@@ -531,47 +531,47 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   function message(error) {
     const code = error?.details?.code || error?.code || error?.message;
     const messages = {
-      empty_cart: 'Tu carrito está vacío.',
-      name_required: 'Ingresá tu nombre completo.',
-      phone_invalid: 'Ingresá un teléfono o WhatsApp válido.',
-      payment_required: 'Seleccioná un método de pago.',
-      map_required: 'Marcá y nombrá tu ubicación en el mapa.',
-      address_required: 'Ingresá la dirección para la encomienda.',
-      shipping_invalid: 'La ciudad elegida ya no está disponible.',
-      settings_missing: 'No pudimos comprobar la configuración de la tienda.',
-      profile_missing: 'No pudimos comprobar tu perfil. Cerrá sesión y volvé a ingresar.',
+      empty_cart: 'Tu carrito está vacío',
+      name_required: 'Ingresá tu nombre completo',
+      phone_invalid: 'Ingresá un teléfono o WhatsApp válido',
+      payment_required: 'Seleccioná un método de pago',
+      map_required: 'Marcá y nombrá tu ubicación en el mapa',
+      address_required: 'Ingresá la dirección para la encomienda',
+      shipping_invalid: 'La ciudad elegida ya no está disponible',
+      settings_missing: 'No pudimos comprobar la configuración de la tienda',
+      profile_missing: 'No pudimos comprobar tu perfil. Cerrá sesión y volvé a ingresar',
       checkout_cooldown: error?.details?.remaining
-        ? `Esperá ${error.details.remaining} segundos antes de crear otro pedido.`
-        : 'Esperá un momento antes de crear otro pedido.',
-      login_required: 'Necesitás iniciar sesión con un correo verificado.',
-      blocked_account: 'Esta cuenta está bloqueada.',
-      store_closed: 'La tienda está temporalmente cerrada.',
-      payment_unavailable: 'Ese método de pago ya no está disponible.',
-      too_many_products: error?.message || 'Tu pedido tiene demasiados productos distintos. Escribinos por WhatsApp para coordinarlo.',
+        ? `Esperá ${error.details.remaining} segundos antes de crear otro pedido`
+        : 'Esperá un momento antes de crear otro pedido',
+      login_required: 'Necesitás iniciar sesión con un correo verificado',
+      blocked_account: 'Esta cuenta está bloqueada',
+      store_closed: 'La tienda está temporalmente cerrada',
+      payment_unavailable: 'Ese método de pago ya no está disponible',
+      too_many_products: error?.message || 'Tu pedido tiene demasiados productos distintos. Escribinos por WhatsApp para coordinarlo',
       invalid_cart: error?.message,
-      invalid_price: 'No pudimos comprobar el precio de uno de los productos.',
-      quote_changed: 'Cambió un precio o el costo de envío. Confirmá de nuevo para continuar con los valores actuales.',
-      order_state_invalid: 'Este pedido ya no puede reanudarse. Volvé a intentar desde el carrito.',
-      checkout_guard_missing: 'No pudimos confirmar tu turno de compra. Volvé a intentar.',
-      checkout_guard_expired: 'Pasó demasiado tiempo desde que confirmaste. Volvé a intentar.',
-      missing_id_token: 'Necesitás iniciar sesión con un correo verificado.',
-      invalid_id_token: 'Tu sesión expiró. Volvé a ingresar e intentá de nuevo.',
-      token_verify_failed: 'No pudimos verificar tu sesión. Volvé a intentar.',
-      email_not_verified: 'Necesitás verificar tu correo antes de comprar.',
-      server_error: 'No pudimos confirmar el pedido. Intentá nuevamente.',
-      transaction_begin_failed: 'No pudimos conectar con el servidor. Intentá nuevamente.',
-      batch_get_failed: 'No pudimos conectar con el servidor. Intentá nuevamente.',
-      commit_failed: 'No pudimos confirmar el pedido. Intentá nuevamente.',
-      create_order_failed: 'No pudimos confirmar el pedido. Intentá nuevamente.'
+      invalid_price: 'No pudimos comprobar el precio de uno de los productos',
+      quote_changed: 'Cambió un precio o el costo de envío. Confirmá de nuevo para continuar con los valores actuales',
+      order_state_invalid: 'Este pedido ya no puede reanudarse. Volvé a intentar desde el carrito',
+      checkout_guard_missing: 'No pudimos confirmar tu turno de compra. Volvé a intentar',
+      checkout_guard_expired: 'Pasó demasiado tiempo desde que confirmaste. Volvé a intentar',
+      missing_id_token: 'Necesitás iniciar sesión con un correo verificado',
+      invalid_id_token: 'Tu sesión expiró. Volvé a ingresar e intentá de nuevo',
+      token_verify_failed: 'No pudimos verificar tu sesión. Volvé a intentar',
+      email_not_verified: 'Necesitás verificar tu correo antes de comprar',
+      server_error: 'No pudimos confirmar el pedido. Intentá nuevamente',
+      transaction_begin_failed: 'No pudimos conectar con el servidor. Intentá nuevamente',
+      batch_get_failed: 'No pudimos conectar con el servidor. Intentá nuevamente',
+      commit_failed: 'No pudimos confirmar el pedido. Intentá nuevamente',
+      create_order_failed: 'No pudimos confirmar el pedido. Intentá nuevamente'
     };
     if (messages[code]) return messages[code];
     if (code === 'permission-denied' || code === 'firestore/permission-denied') {
-      return 'No pudimos registrar el pedido por un problema de permisos. Volvé a intentar; si continúa, escribinos por WhatsApp.';
+      return 'No pudimos registrar el pedido por un problema de permisos. Volvé a intentar; si continúa, escribinos por WhatsApp';
     }
     if (code === 'unavailable' || code === 'firestore/unavailable') {
-      return 'No pudimos conectar con Firebase. Revisá tu internet y volvé a intentar.';
+      return 'No pudimos conectar con Firebase. Revisá tu internet y volvé a intentar';
     }
-    return 'No pudimos confirmar el pedido. Intentá nuevamente.';
+    return 'No pudimos confirmar el pedido. Intentá nuevamente';
   }
 
   async function submit(button) {
@@ -594,7 +594,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       const code = error?.details?.code || error?.code;
       if (code === 'quote_changed' && error.details?.quote) {
         renderQuote(error.details.quote);
-        showError('Cambió un precio o el costo de envío. Revisá el resumen actualizado y confirmá nuevamente.');
+        showError('Cambió un precio o el costo de envío. Revisá el resumen actualizado y confirmá nuevamente');
         button.disabled = false;
         button.textContent = '✓ Confirmar pedido actualizado';
       } else if (code === 'insufficient_stock') {
@@ -611,14 +611,14 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         button.textContent = 'Revisá el carrito para continuar';
         showError(
           available > 0
-            ? `Cambió el stock. Dejamos la cantidad disponible: ${available}.`
-            : 'Uno de los productos se agotó y lo quitamos del carrito.',
+            ? `Cambió el stock. Dejamos la cantidad disponible: ${available}`
+            : 'Uno de los productos se agotó y lo quitamos del carrito',
           true
         );
       } else if (code === 'product_not_found' || code === 'product_inactive') {
         button.disabled = true;
         button.textContent = 'Revisá el carrito para continuar';
-        showError('Uno de los productos ya no está disponible.', true);
+        showError('Uno de los productos ya no está disponible', true);
       } else {
         showError(message(error));
         button.disabled = false;

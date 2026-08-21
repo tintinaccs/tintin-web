@@ -262,7 +262,7 @@
       var input = nameInput();
       var error = document.getElementById('error-2');
       if (error) {
-        error.textContent = 'Ingresá tu nombre completo, no solamente una inicial.';
+        error.textContent = 'Ingresá tu nombre completo, no solamente una inicial';
         error.classList.add('show');
       }
       if (input) {

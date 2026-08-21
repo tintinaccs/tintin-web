@@ -133,8 +133,8 @@ function announceRestored(summary) {
   toast.setAttribute('aria-live', 'polite');
   toast.setAttribute('aria-atomic', 'true');
   toast.textContent = summary.quantity === 1
-    ? 'Recuperamos el producto que habías guardado en tu carrito.'
-    : `Recuperamos los ${summary.quantity} productos que habías guardado en tu carrito.`;
+    ? 'Recuperamos el producto que habías guardado en tu carrito'
+    : `Recuperamos los ${summary.quantity} productos que habías guardado en tu carrito`;
 
   const close = document.createElement('button');
   close.type = 'button';

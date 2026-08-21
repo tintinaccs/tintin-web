@@ -127,7 +127,7 @@ export function attachLocationPicker({ input, resultsList, selectedLabel, onChan
     if (!list.length) {
       const empty = document.createElement('li');
       empty.className = 'tt-address-result tt-address-result-empty';
-      empty.textContent = 'No encontramos ese lugar. Probá con el nombre del negocio, la calle o el barrio.';
+      empty.textContent = 'No encontramos ese lugar. Probá con el nombre del negocio, la calle o el barrio';
       resultsList.appendChild(empty);
       resultsList.hidden = false;
       input.setAttribute('aria-expanded', 'true');
@@ -180,7 +180,7 @@ export function attachLocationPicker({ input, resultsList, selectedLabel, onChan
     } catch {
       closeList();
       if (typeof onError === 'function') {
-        onError('No pudimos consultar el buscador ahora. Podés usar tu ubicación actual o marcar el punto directamente en el mapa.');
+        onError('No pudimos consultar el buscador ahora. Podés usar tu ubicación actual o marcar el punto directamente en el mapa');
       }
     }
   };

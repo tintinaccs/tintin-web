@@ -1,7 +1,7 @@
 import {
   detectContentPageId, getNested, getPageSchema, normalizeContentValue,
   sanitizeContentHref, sanitizeContentText,
-} from './esquema-contenido.js?v=tintin-20260815-routes-clean-1';
+} from './esquema-contenido.js?v=tintin-20260820-microcopy-ios-1';
 import {
   VISUAL_BLOCK_TYPES, VISUAL_STYLE_OPTIONS,
 } from './contratos-visual-builder.js?v=tintin-20260810-visual-studio-v2-1';
@@ -392,11 +392,24 @@ export async function initVisualBuilderRuntime(pageId) {
   const isStaticLocalHost = ['127.0.0.1', 'localhost', '::1'].includes(location.hostname);
   const shouldFetchPublishedConfig = !isStaticLocalHost || window.TT_VISUAL_BUILDER_FETCH_LOCAL === true;
   if (shouldFetchPublishedConfig) {
+    // El loader no puede revelar la página con el estilo por defecto y luego
+    // encimar el layout publicado un instante después: se retiene hasta que
+    // la config llegue o venza el techo, igual que el resto del shell.
+    window.TintinLoader?.beginWait?.();
+    const controller = typeof AbortController === 'function' ? new AbortController() : null;
+    const ceiling = window.setTimeout(() => controller?.abort(), 1500);
     try {
-      const response = await fetch(`/api/visual-builder-public?page=${encodeURIComponent(pageId)}`, { headers: { accept: 'application/json' } });
+      const response = await fetch(`/api/visual-builder-public?page=${encodeURIComponent(pageId)}`, {
+        headers: { accept: 'application/json' },
+        ...(controller ? { signal: controller.signal } : {}),
+      });
       const data = response.ok ? await response.json() : null;
       if (data?.config) applyVisualBuilderConfig(pageId, data.config); else document.documentElement.dataset.ttVisualBuilder = 'fallback';
     } catch { document.documentElement.dataset.ttVisualBuilder = 'fallback'; }
+    finally {
+      window.clearTimeout(ceiling);
+      window.TintinLoader?.endWait?.();
+    }
   } else document.documentElement.dataset.ttVisualBuilder = 'fallback';
 
   const preview = new URLSearchParams(location.search).get('ttVisualPreview') === '1' && window.parent !== window;

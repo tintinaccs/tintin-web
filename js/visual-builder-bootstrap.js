@@ -1,5 +1,5 @@
-import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-20260815-routes-clean-1';
-import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20260815-routes-clean-1';
+import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-20260820-microcopy-ios-1';
+import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20260821-visual-flash-fix-1';
 
 const VISUAL_SETTLE_CEILING_MS = 3500;
 

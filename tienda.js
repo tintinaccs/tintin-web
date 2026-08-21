@@ -243,7 +243,7 @@ function getStockLimit(productId) {
 async function addToCart(productId) {
   const product = getProductById(productId);
   if (!product) return null;
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260808-product-cart-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260820-microcopy-ios-1');
   const result = await cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -583,7 +583,7 @@ function initSearch() {
 
   addEventListener('tintin:surface-change', event => {
     if (event.detail?.surface === 'search' && event.detail?.state === 'opening' && !input.value.trim()) {
-      renderState('initial', 'Escribí el nombre, categoría o detalle de un producto.');
+      renderState('initial', 'Escribí el nombre, categoría o detalle de un producto');
     }
   });
 
@@ -611,7 +611,7 @@ function initSearch() {
     searchAbort?.abort();
     searchAbort = new AbortController();
     clearTimeout(searchDebounceTimer);
-    if (!input.value.trim()) { renderState('initial', 'Escribí el nombre, categoría o detalle de un producto.'); return; }
+    if (!input.value.trim()) { renderState('initial', 'Escribí el nombre, categoría o detalle de un producto'); return; }
     renderState('searching', 'Buscando productos…');
     const signal = searchAbort.signal;
     searchDebounceTimer = setTimeout(() => { if (!signal.aborted) runSearch(signal); }, 180);
@@ -621,7 +621,7 @@ function initSearch() {
       if (signal?.aborted) return;
       const q = input.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
       if (!q) {
-        renderState('initial', 'Escribí el nombre, categoría o detalle de un producto.');
+        renderState('initial', 'Escribí el nombre, categoría o detalle de un producto');
         return;
       }
 
@@ -650,7 +650,7 @@ function initSearch() {
       ).slice(0, SEARCH_RESULTS_LIMIT);
 
       if (matches.length === 0) {
-        renderState('empty', 'No encontramos productos con esa búsqueda.');
+        renderState('empty', 'No encontramos productos con esa búsqueda');
       } else {
         results.dataset.searchState = 'results';
         results.innerHTML = matches.map(p => {
@@ -678,7 +678,7 @@ function initSearch() {
     if (surfaceController?.surface === 'search' && input.value.trim()) runSearch(searchAbort?.signal);
   });
   addEventListener('tintin:products-error', () => {
-    if (surfaceController?.surface === 'search') renderState('error', 'No pudimos cargar el catálogo. Revisá tu conexión e intentá nuevamente.');
+    if (surfaceController?.surface === 'search') renderState('error', 'No pudimos cargar el catálogo. Revisá tu conexión e intentá nuevamente');
   });
   panel.addEventListener('click', event => {
     if (event.target.closest('.tt-search-result-item')) surfaceController?.close('search-result', { restoreFocus: false });
@@ -738,7 +738,7 @@ function _showProductsLoadError(containerId) {
   if (!container) return;
   container.innerHTML = `
     <div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--text-muted)">
-      <p style="margin-bottom:14px;font-size:0.95rem">No pudimos cargar los productos. Revisá tu conexión e intentá de nuevo.</p>
+      <p style="margin-bottom:14px;font-size:0.95rem">No pudimos cargar los productos. Revisá tu conexión e intentá de nuevo</p>
       <button type="button" class="tt-btn" onclick="location.reload()">Reintentar</button>
     </div>`;
 }
@@ -882,7 +882,7 @@ function initLookCombinator() {
       btnAdd.disabled = true;
       btnAdd.setAttribute('aria-busy', 'true');
       try {
-        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260808-product-cart-1');
+        const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260820-microcopy-ios-1');
         const results = [];
         for (const p of currentCombo) {
           results.push(await cartSync.addToCart({
@@ -900,7 +900,7 @@ function initLookCombinator() {
         openCart();
       } catch (error) {
         console.error('[look-combo] No se pudo agregar la combinación al carrito.', error);
-        showCartToast('No pudimos agregar la combinación. Inténtalo nuevamente.');
+        showCartToast('No pudimos agregar la combinación. Inténtalo nuevamente');
       } finally {
         btnAdd.disabled = false;
         btnAdd.removeAttribute('aria-busy');
@@ -1525,7 +1525,7 @@ function _galleryThumbClick(thumb) {
 window._galleryThumbClick = _galleryThumbClick;
 
 async function _addToCartWithQty(product, qty, variantStr) {
-  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260808-product-cart-1');
+  const cartSync = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260820-microcopy-ios-1');
   return cartSync.addToCart({
     id: product.id,
     name: product.name,
@@ -1819,7 +1819,7 @@ function initContactForm() {
     const msg = form.querySelector('#f-msg').value.trim();
 
     if (!nombre || !msg) {
-      alert('Por favor completá al menos tu nombre y tu mensaje.');
+      alert('Por favor completá al menos tu nombre y tu mensaje');
       return;
     }
 

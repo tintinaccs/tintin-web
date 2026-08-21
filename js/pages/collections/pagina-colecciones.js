@@ -3,7 +3,7 @@ const collectionsGrid = document.getElementById('colls-page-grid');
 const featuredGrid = document.getElementById('collections-featured-grid');
 const collectionsStatus = document.getElementById('collections-grid-status');
 const featuredStatus = document.getElementById('collections-featured-status');
-const cartSyncPromise = import('../../components/cart/sincronizacion-carrito.js?v=tintin-20260814-social-notifications-1');
+const cartSyncPromise = import('../../components/cart/sincronizacion-carrito.js?v=tintin-20260820-microcopy-ios-1');
 let liveProducts = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
 let collectionsReady = false;
 let productsReady = false;
@@ -64,7 +64,7 @@ function renderFeaturedProducts(products) {
   window.renderProductsGrid(featuredGrid.id, selectedProducts);
   featuredGrid.setAttribute('aria-busy', 'false');
   if (featuredStatus) {
-    featuredStatus.textContent = `${selectedProducts.length} producto${selectedProducts.length === 1 ? '' : 's'} destacado${selectedProducts.length === 1 ? '' : 's'} cargado${selectedProducts.length === 1 ? '' : 's'}.`;
+    featuredStatus.textContent = `${selectedProducts.length} producto${selectedProducts.length === 1 ? '' : 's'} destacado${selectedProducts.length === 1 ? '' : 's'} cargado${selectedProducts.length === 1 ? '' : 's'}`;
   }
   productsReady = true;
   enhanceFeaturedCards();
@@ -84,7 +84,7 @@ function scheduleFeaturedRender(products, attempt = 0) {
 function showFeaturedError() {
   if (!featuredGrid || productsReady) return;
   featuredGrid.setAttribute('aria-busy', 'false');
-  if (featuredStatus) featuredStatus.textContent = 'No se pudieron cargar los productos destacados.';
+  if (featuredStatus) featuredStatus.textContent = 'No se pudieron cargar los productos destacados';
   featuredGrid.innerHTML = `
     <div class="tt-collections-state" role="alert">
       <p>No pudimos cargar los productos destacados. Podés seguir explorando las colecciones o intentarlo nuevamente.</p>
@@ -166,12 +166,12 @@ function completeCollectionsLoading() {
   collectionsGrid.setAttribute('aria-busy', 'false');
   if (collectionsStatus) {
     if (signature.includes(':error:')) {
-      collectionsStatus.textContent = 'No se pudieron cargar las colecciones.';
+      collectionsStatus.textContent = 'No se pudieron cargar las colecciones';
     } else {
       const amount = collectionsGrid.querySelectorAll('.tt-coll-page-card').length;
       collectionsStatus.textContent = amount === 1
-        ? '1 colección cargada.'
-        : `${amount} colecciones cargadas.`;
+        ? '1 colección cargada'
+        : `${amount} colecciones cargadas`;
     }
   }
   enhanceCollectionCards();

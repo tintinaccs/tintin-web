@@ -13,7 +13,7 @@ export function aggregateCheckoutCart(items) {
     const id = clean(item?.id);
     const qty = Number(item?.qty || 1);
     if (!id || !Number.isInteger(qty) || qty < 1 || qty > 99) {
-      throw Object.assign(new Error('Encontramos una cantidad no válida en el carrito.'), { code: 'invalid_cart' });
+      throw Object.assign(new Error('Encontramos una cantidad no válida en el carrito'), { code: 'invalid_cart' });
     }
     const variant = clean(item?.variant);
     const existing = byProduct.get(id);
@@ -26,7 +26,7 @@ export function aggregateCheckoutCart(items) {
   }
   const result = [...byProduct.values()];
   if (result.some(item => item.qty > 99)) {
-    throw Object.assign(new Error('La cantidad de uno de los productos es demasiado alta.'), { code: 'invalid_cart' });
+    throw Object.assign(new Error('La cantidad de uno de los productos es demasiado alta'), { code: 'invalid_cart' });
   }
   return result;
 }

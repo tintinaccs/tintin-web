@@ -49,7 +49,7 @@ function renderCooldown() {
     control.textContent = `Esperá ${seconds} s para reintentar`;
   }
   if (box) {
-    box.textContent = 'Firestore alcanzó temporalmente el límite de lecturas. Tu pedido no fue creado ni se descontó stock. Conservamos todos tus datos y tu carrito.';
+    box.textContent = 'Firestore alcanzó temporalmente el límite de lecturas. Tu pedido no fue creado ni se descontó stock. Conservamos todos tus datos y tu carrito';
     box.classList.add('show');
     box.setAttribute('role', 'alert');
   }
