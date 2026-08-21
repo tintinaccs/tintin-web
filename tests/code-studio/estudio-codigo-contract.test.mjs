@@ -12,7 +12,7 @@ test('el Admin carga el Estudio solo desde la superficie privada', async () => {
   assert.match(injector, /\/css\/admin\/estudio-codigo\.css/);
 });
 
-test('el Editor de Código ocupa el contenido del Admin y conserva su tema aislado', async () => {
+test('el Editor de Código ocupa el contenido del Admin con tema claro y contraste aislado', async () => {
   const ui = await read('js/admin/estudio-codigo/estudio-codigo-admin.js');
   const styles = await read('css/admin/estudio-codigo.css');
   const theme = await read('css/core/tema-unificado-tintin.css');
@@ -21,8 +21,27 @@ test('el Editor de Código ocupa el contenido del Admin y conserva su tema aisla
   assert.match(ui, /querySelector\('\.adm-content'\)\?\.appendChild\(section\)/);
   assert.match(ui, /topbarTitle\.textContent = 'Editor de Código'/);
   assert.match(styles, /body\.code-studio-open \.adm-content/);
-  assert.match(styles, /\.cs-editor\s*\{[\s\S]*background:\s*#111015 !important/);
+  assert.match(styles, /--cs-bg:\s*#fffafc/);
+  assert.match(styles, /#section-estudio-codigo \.cs-editor[\s\S]*background:\s*#fff !important/);
+  assert.match(ui, /theme:\s*'vs'/);
+  assert.doesNotMatch(ui, /theme:\s*'vs-dark'/);
+  assert.match(ui, /matchMedia\('\(max-width: 1200px\)'\)[\s\S]*classList\.add\('cs-collapsed'\)/);
   assert.match(theme, /span:not\(\.cs-shell \*\)/);
+});
+
+test('Restaurar se instala dentro de la toolbar sin bucle de MutationObserver', async () => {
+  const restore = await read('js/admin/estudio-codigo/restaurar-estudio-codigo-admin.js');
+  assert.match(restore, /anchor\?\.closest\('\.cs-toolbar'\)/);
+  assert.match(restore, /anchor\?\.parentElement === toolbar \? anchor : null/);
+  assert.match(restore, /catch \(error\) \{[\s\S]*observer\.disconnect\(\)/);
+  assert.doesNotMatch(restore, /top\.insertBefore\(button, pr/);
+});
+
+test('si GitHub App no está disponible no se solicita el árbol y se muestra configuración', async () => {
+  const ui = await read('js/admin/estudio-codigo/estudio-codigo-admin.js');
+  assert.match(ui, /if \(!data\.github\?\.appConfigured\) \{[\s\S]*renderGithubUnavailable\(detail\);[\s\S]*return;/);
+  assert.match(ui, /if \(!state\.github\?\.appConfigured\) \{[\s\S]*renderGithubUnavailable/);
+  assert.match(ui, /error\.status === 503/);
 });
 
 test('la API code-studio está incluida en Pages Functions', async () => {

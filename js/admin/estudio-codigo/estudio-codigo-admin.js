@@ -238,6 +238,7 @@ function makeShell() {
       </div>
     </div>`;
   document.querySelector('.adm-content')?.appendChild(section);
+  if (window.matchMedia('(max-width: 1200px)').matches) $('#cs-ai')?.classList.add('cs-collapsed');
 
   [navButton, $('#mtab-estudio-codigo')].filter(Boolean).forEach(button => button.addEventListener('click', event => {
     event.preventDefault();
@@ -340,12 +341,30 @@ function updateTopStatus() {
   renderGithubCenter();
 }
 
+function renderGithubUnavailable(message = '') {
+  const root = $('#cs-tree');
+  const search = $('#cs-search');
+  const detail = String(message || 'La conexión privada con GitHub todavía no está configurada.');
+  if (search) search.disabled = true;
+  if (root) {
+    root.innerHTML = `<div class="cs-connection-state" role="status"><strong>GitHub no está conectado</strong><p>${escapeHtml(detail)}</p><p>Configurá la GitHub App en Cloudflare y luego presioná <strong>Sincronizar</strong>. El editor no expondrá credenciales en el navegador.</p></div>`;
+  }
+}
+
 async function bootstrap() {
   setProgress(12);
   try {
     const data = await api('bootstrap');
     state.github = data.github;
     state.headSha = data.github?.mainSha || '';
+    state.ready = true;
+    if (!data.github?.appConfigured) {
+      const detail = data.github?.error || 'GitHub App sin configurar';
+      setProgress(0);
+      setPhase('disconnected', detail);
+      renderGithubUnavailable(detail);
+      return;
+    }
     const rememberedBranch = sessionStorage.getItem('tintin.codeStudio.branch') || '';
     if (rememberedBranch && data.github?.appConfigured) {
       try {
@@ -358,7 +377,6 @@ async function bootstrap() {
         sessionStorage.removeItem('tintin.codeStudio.branch');
       }
     }
-    state.ready = true;
     setPhase('clean', 'Repositorio y rama reconciliados con GitHub.');
     await refreshTree();
     if (state.pullRequest?.headSha) await refreshChecksState(false);
@@ -369,18 +387,31 @@ async function bootstrap() {
     toast(error.message, true);
     state.github = { appConfigured: false, error: error.message };
     setPhase('disconnected', error.message);
+    renderGithubUnavailable(error.message);
   }
 }
 
 async function refreshTree() {
   const root = $('#cs-tree');
   if (!root) return;
+  if (!state.github?.appConfigured) {
+    renderGithubUnavailable(state.github?.error);
+    return;
+  }
+  const search = $('#cs-search');
+  if (search) search.disabled = false;
   root.innerHTML = '<div class="cs-muted" style="padding:8px">Cargando…</div>';
   try {
     const data = await api(`tree?ref=${encodeURIComponent(state.currentRef)}`);
     root.innerHTML = '';
     renderEntries(root, data.entries, 0);
   } catch (error) {
+    if (error.status === 503) {
+      state.github = { ...(state.github || {}), appConfigured: false, error: error.message };
+      setPhase('disconnected', error.message);
+      renderGithubUnavailable(error.message);
+      return;
+    }
     root.innerHTML = `<div class="cs-list-item cs-problem-error">${escapeHtml(error.message)}</div>`;
   }
 }
@@ -618,7 +649,7 @@ function renderEditor() {
       host.innerHTML = '';
       state.editor = state.monaco.editor.create(host, {
         model: tab.model,
-        theme: 'vs-dark',
+        theme: 'vs',
         automaticLayout: true,
         minimap: { enabled: true },
         fontSize: 12,
@@ -812,6 +843,13 @@ async function syncState() {
   if (!state.ready) return;
   try {
     const data = await api('bootstrap');
+    if (!data.github?.appConfigured) {
+      const detail = data.github?.error || 'GitHub App sin configurar';
+      state.github = { ...data.github, appConfigured: false, error: detail };
+      setPhase('disconnected', detail);
+      renderGithubUnavailable(detail);
+      return;
+    }
     if (data.github?.appConfigured) {
       const previousMain = state.github?.mainSha;
       state.github = data.github;
@@ -891,7 +929,7 @@ async function renderChanges() {
     host.innerHTML = '<div style="height:165px" id="cs-diff-host"></div>';
     const original = state.monaco.editor.createModel(active.operation === 'create' ? '' : active.baseline, active.language);
     const modified = state.monaco.editor.createModel(active.content, active.language);
-    state.diffEditor = state.monaco.editor.createDiffEditor($('#cs-diff-host'), { theme: 'vs-dark', automaticLayout: true, readOnly: true, renderSideBySide: true, minimap: { enabled: false } });
+    state.diffEditor = state.monaco.editor.createDiffEditor($('#cs-diff-host'), { theme: 'vs', automaticLayout: true, readOnly: true, renderSideBySide: true, minimap: { enabled: false } });
     state.diffEditor.setModel({ original, modified });
     state.diffEditor.onDidDispose(() => { original.dispose(); modified.dispose(); });
   } else {

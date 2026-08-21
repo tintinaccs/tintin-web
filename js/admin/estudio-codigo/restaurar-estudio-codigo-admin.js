@@ -97,13 +97,21 @@ function install() {
   button.textContent = 'Restaurar';
   button.title = 'Restaurar un archivo desde un commit anterior creando un commit nuevo';
   const pr = document.querySelector('#cs-pr');
-  top.insertBefore(button, pr || document.querySelector('#cs-ai-toggle'));
+  const fallback = document.querySelector('#cs-ai-toggle');
+  const anchor = pr || fallback;
+  const toolbar = anchor?.closest('.cs-toolbar') || top.querySelector('.cs-toolbar') || top;
+  toolbar.insertBefore(button, anchor?.parentElement === toolbar ? anchor : null);
   button.addEventListener('click', restoreSelected);
   return true;
 }
 
 const observer = new MutationObserver(() => {
-  if (install()) observer.disconnect();
+  try {
+    if (install()) observer.disconnect();
+  } catch (error) {
+    observer.disconnect();
+    console.error('[code-studio] No se pudo instalar la acción Restaurar.', error);
+  }
 });
 observer.observe(document.documentElement, { childList: true, subtree: true });
 install();
