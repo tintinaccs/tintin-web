@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-21T12:50:11.419Z",
-  "sourceFingerprint": "8b57eefea0d13300f69eed507894560e49e3f1e82ac44de07e352ba499548cb0",
+  "generatedAt": "2026-08-21T13:54:55.452Z",
+  "sourceFingerprint": "36d963e6aef210c97f384af3bf75bdb8e209a34d198850845ee3d23ce66aaedc",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 692,
     "textFiles": 660,
-    "totalBytes": 7865691,
+    "totalBytes": 7867614,
     "pages": 18,
     "modules": 433
   },
@@ -16566,7 +16566,7 @@
     {
       "path": "functions/admin.js",
       "bytes": 1145,
-      "sha256": "7632d3b668448826b8b3062f1b9008477fd75d750f0b4673c159ccbac45298e4",
+      "sha256": "6e2afc1ad18ab5bf2d197ccd390c9ba68048dd454d8c913069216214335598f1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18238,8 +18238,8 @@
     },
     {
       "path": "js/admin/estudio-codigo/estudio-codigo-admin.js",
-      "bytes": 64636,
-      "sha256": "46dea53cd7f6ca9c25f3ab879043f0092f044dee17d3f2b47303edb3037d7b66",
+      "bytes": 64836,
+      "sha256": "4261fbe49de1fa8cf997d81d7b8999be99202a01e6f1e12fbf6ba7b117693bec",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18262,8 +18262,8 @@
     },
     {
       "path": "js/admin/estudio-codigo/restaurar-estudio-codigo-admin.js",
-      "bytes": 5915,
-      "sha256": "f9c4a4a1151860e61a42e7db9ff699be37e55f495d18835ddf050e8e61b4de4d",
+      "bytes": 6115,
+      "sha256": "504a8aede0fc775fb4ab3c87fc75f8e8fc1c0f9085834e729adf5339299b6539",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25974,8 +25974,8 @@
     },
     {
       "path": "tests/code-studio/estudio-codigo-contract.test.mjs",
-      "bytes": 7848,
-      "sha256": "41d5c14777b486f25b3ada30b64cff9e7ed02a1716f057228b6546a5d26df3be",
+      "bytes": 8154,
+      "sha256": "91fbc4114b08828356d3208225046119efa5c0a67a4064d001967f7cd5aa7777",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27703,8 +27703,8 @@
     {
       "path": "css/admin/estudio-codigo.css",
       "extension": ".css",
-      "bytes": 25481,
-      "sha256": "9696716a1470003e55eee2340894cddfd870c5af70838e6e434697a23ed2bee3"
+      "bytes": 26698,
+      "sha256": "243e91415014df0b11b66400ddf63807afd1b76061f828d1ab50c4ae6131c5be"
     },
     {
       "path": "css/admin/notificaciones-admin.css",
@@ -28406,7 +28406,7 @@
       "path": "functions/admin.js",
       "extension": ".js",
       "bytes": 1145,
-      "sha256": "7632d3b668448826b8b3062f1b9008477fd75d750f0b4673c159ccbac45298e4"
+      "sha256": "6e2afc1ad18ab5bf2d197ccd390c9ba68048dd454d8c913069216214335598f1"
     },
     {
       "path": "functions/api/admin-delete-user.js",
@@ -28777,14 +28777,14 @@
     {
       "path": "js/admin/estudio-codigo/estudio-codigo-admin.js",
       "extension": ".js",
-      "bytes": 64636,
-      "sha256": "46dea53cd7f6ca9c25f3ab879043f0092f044dee17d3f2b47303edb3037d7b66"
+      "bytes": 64836,
+      "sha256": "4261fbe49de1fa8cf997d81d7b8999be99202a01e6f1e12fbf6ba7b117693bec"
     },
     {
       "path": "js/admin/estudio-codigo/restaurar-estudio-codigo-admin.js",
       "extension": ".js",
-      "bytes": 5915,
-      "sha256": "f9c4a4a1151860e61a42e7db9ff699be37e55f495d18835ddf050e8e61b4de4d"
+      "bytes": 6115,
+      "sha256": "504a8aede0fc775fb4ab3c87fc75f8e8fc1c0f9085834e729adf5339299b6539"
     },
     {
       "path": "js/admin/importacion-admin.js",
@@ -30716,7 +30716,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 31819,
-      "sha256": "c2b154bef15a04a8b7b74e4c06e2ad15e43d3c619950cc2302d49a61571610e6"
+      "sha256": "b9204f5544be247f53849f321efdd40f084e0ed3189f65a8150842c28ddb83a9"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -30955,8 +30955,8 @@
     {
       "path": "tests/code-studio/estudio-codigo-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 7848,
-      "sha256": "41d5c14777b486f25b3ada30b64cff9e7ed02a1716f057228b6546a5d26df3be"
+      "bytes": 8154,
+      "sha256": "91fbc4114b08828356d3208225046119efa5c0a67a4064d001967f7cd5aa7777"
     },
     {
       "path": "tests/code-studio/estudio-codigo-core.test.mjs",

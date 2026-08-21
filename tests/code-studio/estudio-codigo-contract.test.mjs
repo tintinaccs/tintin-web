@@ -26,6 +26,10 @@ test('el Editor de Código ocupa el contenido del Admin con tema claro y contras
   assert.match(styles, /container-name:\s*code-studio/);
   assert.match(styles, /@container code-studio \(max-width: 1180px\)/);
   assert.match(styles, /\.cs-github-center\s*\{[\s\S]*position:\s*static/);
+  assert.match(styles, /\.cs-identity\s*\{[\s\S]*grid-template-columns:\s*max-content minmax\(0, 1fr\)/);
+  assert.match(styles, /\.cs-toast-inline\s*\{[\s\S]*position:\s*static/);
+  assert.match(ui, /cs-toast cs-toast-inline/);
+  assert.match(ui, /querySelector\('#section-estudio-codigo \.cs-shell'\)/);
   assert.match(ui, /theme:\s*'vs'/);
   assert.doesNotMatch(ui, /theme:\s*'vs-dark'/);
   assert.match(ui, /matchMedia\('\(max-width: 1200px\)'\)[\s\S]*classList\.add\('cs-collapsed'\)/);
