@@ -15,9 +15,18 @@ const files = await Promise.all([
   read('js/admin/notifications/notificaciones-admin.js'),
   read('js/email/notificacion-pedido-resend.js'),
   read('firestore.rules'),
+  read('js/components/navigation/compartido/carga-navegacion.js'),
+  read('js/components/navigation/compartido/iconos.js'),
+  read('js/components/navigation/escritorio/encabezado-escritorio.js'),
+  read('js/components/navigation/tableta/encabezado-tableta.js'),
+  read('js/components/navigation/movil/encabezado-movil.js'),
 ]);
 
-const [core, api, engagementApi, customerEngagement, adminEngagement, productReviews, clientUi, adminUi, orderEmail, rules] = files;
+const [
+  core, api, engagementApi, customerEngagement, adminEngagement, productReviews,
+  clientUi, adminUi, orderEmail, rules, navigationRuntime, sharedIcons,
+  desktopHeader, tabletHeader, mobileHeader,
+] = files;
 
 test('el núcleo social usa notificaciones dirigidas, idempotentes y saneadas', () => {
   assert.match(core, /buildUserNotificationWrite/);
@@ -83,6 +92,22 @@ test('clientas tienen bandeja de 100, saneado y reintentos de acciones important
   assert.match(clientUi, /safeImageUrl/);
   assert.match(clientUi, /apiWithRetry\('notificationsSeenAll'/);
   assert.match(clientUi, /apiWithRetry\('profileCreated'/);
+});
+
+test('la campana pública evita Firestore para visitas livianas y se hidrata con sesión o demanda', () => {
+  assert.match(navigationRuntime, /function attachNotificationsDemand\(\)/);
+  assert.match(navigationRuntime, /\[data-nav-action="notifications"\],#tabbar-notifications/);
+  assert.match(navigationRuntime, /tintin:auth-nav-updated/);
+  assert.match(navigationRuntime, /hasActiveSessionHint\(\)/);
+  assert.doesNotMatch(navigationRuntime, /attachProductsDemand\(\);\s*loadNavigationBehaviors\(\);\s*void loadNotificationsRuntime\(\)/);
+  assert.match(sharedIcons, /bell:\s*'<path/);
+  assert.match(desktopHeader, /svgIcon\(UI_ICONS\.bell/);
+  assert.match(tabletHeader, /svgIcon\(UI_ICONS\.bell/);
+  assert.match(mobileHeader, /svgIcon\(UI_ICONS\.bell/);
+  for (const source of [desktopHeader, tabletHeader, mobileHeader]) {
+    assert.match(source, /data-nav-action="notifications"/);
+    assert.match(source, /data-notification-badge/);
+  }
 });
 
 test('superadmin recupera estados recientes y reintenta sin carreras', () => {
