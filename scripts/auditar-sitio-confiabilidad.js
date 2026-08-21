@@ -290,7 +290,7 @@ for (const file of htmlFiles.concat(['tienda.js', 'js/cargador-pagina.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan la versión vigente de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260816-loader-min-show-1'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260821-hero-authoritative-1'"));
 
 check(
   'El runtime público liviano carga imágenes, colecciones, carrito, colores y el fix de auditoría de página (no solo admin-images)',

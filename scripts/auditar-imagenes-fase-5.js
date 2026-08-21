@@ -31,6 +31,7 @@ const files = {
   cloudinarySetup: read('configuracion-cloudinary.md'),
   loader: read('js/cargador-pagina.js'),
   indexHtml: read('index.html'),
+  homeCss: read('css/pages/home/ajuste-inicio.css'),
 };
 
 let failures = 0;
@@ -126,15 +127,29 @@ check(
     files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'desktop');") &&
     files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'tablet');") &&
     files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'mobile');") &&
-    files.runtime.includes("if (desktop) image.src = desktop; else image.removeAttribute('src');"),
+    files.runtime.includes("if (desktop) image.src = desktop; else image.removeAttribute('src');") &&
+    files.runtime.includes("image.removeAttribute('src');") &&
+    !files.runtime.includes('const fallback = absolute(STATIC.placeholder);\n        if (image.src !== fallback) image.src = fallback;'),
   'nunca debe verse una imagen distinta a la guardada en Super Admin → Imágenes, ni siquiera de relleno'
 );
 
 check(
-  'El Hero se revela recién cuando la imagen real terminó de cargar, no solo cuando Firestore confirma la URL',
+  'El Hero ignora el caché anterior y se revela solo al cargar la URL confirmada',
+  files.runtime.includes('if (!heroDataConfirmed) {') &&
+    files.runtime.includes("media?.classList.add('tt-hero-pending');") &&
+    files.homeCss.includes('.tt-home-premium .tt-hero-media.tt-hero-pending') &&
+    files.homeCss.includes('visibility:hidden!important') &&
+    files.homeCss.includes('opacity:0!important') &&
+    !files.homeCss.includes('.tt-hero-media.tt-hero-pending{\n  transition:'),
+  'el caché local nunca debe asignarse ni ser visible antes del snapshot autoritativo de Firestore'
+);
+
+check(
+  'El Hero se revela recién cuando la imagen real terminó de cargar y un error no muestra placeholder',
   files.runtime.includes('function revealHeroWhenImageReady(image)') &&
-    files.runtime.includes('image.addEventListener(\'load\', onSettle, { once: true });') &&
-    files.runtime.includes('image.addEventListener(\'error\', onSettle, { once: true });') &&
+    files.runtime.includes("image.addEventListener('load', onLoad, { once: true });") &&
+    files.runtime.includes("image.addEventListener('error', onError, { once: true });") &&
+    files.runtime.includes("image.removeAttribute('src');") &&
     (files.runtime.match(/revealHeroWhenImageReady\(image\)/g) || []).length >= 2,
   'sin esto, Firestore puede confirmar la URL antes de que la foto termine de descargarse, dejando ver el fondo de .tt-hero-media un instante'
 );

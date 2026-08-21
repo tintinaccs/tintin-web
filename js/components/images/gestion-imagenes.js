@@ -63,17 +63,34 @@ if (!window.TintinImagesPhase5Booted) {
   // quedar colgado) antes de sacar .tt-hero-pending — así la transición es
   // directa al contenido final, nunca pasa por el fondo a la vista.
   function revealHeroWhenImageReady(image) {
-    if (!image.getAttribute('src') || (image.complete && image.naturalWidth > 0)) {
+    const picture = image.closest('picture');
+    const activeSource = Array.from(picture?.querySelectorAll('source[srcset]') || [])
+      .find(source => !source.media || window.matchMedia(source.media).matches);
+    const requestedSrc = image.currentSrc || activeSource?.srcset || image.getAttribute('src');
+    if (!requestedSrc) return;
+    if (image.complete && image.naturalWidth > 0) {
       revealHero();
       return;
     }
-    const onSettle = () => {
-      image.removeEventListener('load', onSettle);
-      image.removeEventListener('error', onSettle);
+    if (image.complete) return;
+    if (image.dataset.ttHeroRevealBoundSrc === requestedSrc) return;
+    image.dataset.ttHeroRevealBoundSrc = requestedSrc;
+
+    const cleanup = () => {
+      image.removeEventListener('load', onLoad);
+      image.removeEventListener('error', onError);
+      delete image.dataset.ttHeroRevealBoundSrc;
+    };
+    const onLoad = () => {
+      cleanup();
       revealHero();
     };
-    image.addEventListener('load', onSettle, { once: true });
-    image.addEventListener('error', onSettle, { once: true });
+    const onError = () => {
+      cleanup();
+      document.getElementById('tt-hero-media')?.classList.add('tt-hero-pending');
+    };
+    image.addEventListener('load', onLoad, { once: true });
+    image.addEventListener('error', onError, { once: true });
   }
 
   function absolute(value) {
@@ -196,9 +213,18 @@ if (!window.TintinImagesPhase5Booted) {
   function applyHero() {
     const image = document.getElementById('tt-hero-img');
     const picture = image?.closest('picture');
+    const media = document.getElementById('tt-hero-media');
     if (!image || !picture) return;
 
     ensureHeroStyle();
+    // La primera entrega de onImagesUpdate es solo el caché del navegador y
+    // puede contener un hero publicado anteriormente. No se asigna siquiera
+    // como src: se espera el snapshot autoritativo de Firestore para impedir
+    // que una imagen vieja se pinte durante un frame antes de la vigente.
+    if (!heroDataConfirmed) {
+      media?.classList.add('tt-hero-pending');
+      return;
+    }
     // Cloudinary (subido desde Super Admin → Imágenes) es la ÚNICA fuente
     // permitida para el hero: sin respaldo estático. Si no hay URL guardada,
     // no se setea ningún src — nunca debe verse una imagen distinta a la
@@ -266,8 +292,13 @@ if (!window.TintinImagesPhase5Booted) {
     if (!image.dataset.ttHeroPhase5ErrorBound) {
       image.dataset.ttHeroPhase5ErrorBound = '1';
       image.addEventListener('error', () => {
-        const fallback = absolute(STATIC.placeholder);
-        if (image.src !== fallback) image.src = fallback;
+        // El hero no tiene imagen de demostración ni placeholder. Ante un
+        // error se conserva únicamente el fondo sólido hasta que llegue una
+        // URL publicada válida en una actualización posterior.
+        media?.classList.add('tt-hero-pending');
+        mobileSource.removeAttribute('srcset');
+        tabletSource.removeAttribute('srcset');
+        image.removeAttribute('src');
       });
     }
 
@@ -381,10 +412,11 @@ if (!window.TintinImagesPhase5Booted) {
       }));
     },
     error => {
-      // Sin datos mejores en camino: revelar el hero igual (con lo que haya
-      // en caché o el respaldo estático) en vez de dejarlo oculto hasta que
-      // dispare la red de seguridad de 900ms.
-      heroDataConfirmed = true;
+      // Un error de red no convierte el caché local en fuente autoritativa:
+      // podría contener precisamente el banner anterior que no debe volver
+      // a verse. El loader tiene su propio tope y después deja el fondo sólido.
+      heroDataConfirmed = false;
+      document.getElementById('tt-hero-media')?.classList.add('tt-hero-pending');
       console.warn('[images-phase5] No se pudo actualizar desde Firestore:', error);
       scheduleApply();
       window.dispatchEvent(new CustomEvent('tintin:images-phase5-error', {

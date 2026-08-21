@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1"></script>
-  <script src="js/cargador-pagina.js?v=tintin-20260816-loader-min-show-1"></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260821-hero-authoritative-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260821-notifications-lazy-1" defer></script>
   <!-- La señal de "página lista" (window.ttPageReady) ya NO se dispara desde
@@ -84,7 +84,7 @@
        disponible desde el primer paint, sin depender de red externa.
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
        existe (ver js/components/images/imagenes.js). -->
-  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260811-cls-desktop-stable-2">
+  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260821-hero-authoritative-1">
   <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/hero-apple-inicio.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -98,10 +98,10 @@
 ══════════════════════════════════════ -->
 <section class="tt-hero" id="hero" data-tt-editable="index" data-tt-section="hero">
 
-  <!-- Cloudinary (subida desde Super Admin → Imágenes) sigue siendo la fuente
-       editorial principal. Mientras llega o si la red falla, el contenedor
-       conserva una imagen local responsive para que el hero nunca quede vacío;
-       la imagen administrada la cubre apenas gestion-imagenes.js la confirma. -->
+  <!-- Cloudinary (subida desde Super Admin → Imágenes) es la única fuente del
+       hero. El medio permanece oculto hasta que Firestore confirma la URL
+       publicada y la imagen termina de cargar: nunca se usa un banner local,
+       un placeholder ni una versión anterior guardada en el navegador. -->
   <div class="tt-hero-media tt-hero-pending" id="tt-hero-media">
     <picture>
       <img
