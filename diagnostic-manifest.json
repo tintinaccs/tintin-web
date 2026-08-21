@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-21T18:39:23.748Z",
-  "sourceFingerprint": "b711cedfd850ae35344f2be5a30cd8b0da824b9a0dc74f16f4744730e5e666e0",
+  "generatedAt": "2026-08-21T18:46:55.832Z",
+  "sourceFingerprint": "077d3f8d81aa7cd08f38938dba38aa089e205d95f91c3e24d62df3fdadbdd9b1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 700,
     "textFiles": 668,
-    "totalBytes": 7885295,
+    "totalBytes": 7902419,
     "pages": 18,
     "modules": 438
   },
@@ -16407,8 +16407,8 @@
     },
     {
       "path": "config/csp-runtime.js",
-      "bytes": 330173,
-      "sha256": "2db4389a83bb0edac399b4c0ef7f83514901ad542b6725b3dd665f2872d98a68",
+      "bytes": 338597,
+      "sha256": "ccad1e345c34fa55a71caa8a65951d7bb67ca8dc6826a19b988cddb2cab7363e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25917,8 +25917,8 @@
     },
     {
       "path": "tests/cart/persistence-and-favorites.test.mjs",
-      "bytes": 1970,
-      "sha256": "e1f0f7bb02b4ba75265dca3210e17bfc258f8955c60a3c45a02eb861d85717d0",
+      "bytes": 2039,
+      "sha256": "81ae2aebc7f6c4a25897b3ec3c7e6453898337958ab3967e44131524e5aaaafa",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27832,14 +27832,14 @@
     {
       "path": "config/csp-runtime.js",
       "extension": ".js",
-      "bytes": 330173,
-      "sha256": "2db4389a83bb0edac399b4c0ef7f83514901ad542b6725b3dd665f2872d98a68"
+      "bytes": 338597,
+      "sha256": "ccad1e345c34fa55a71caa8a65951d7bb67ca8dc6826a19b988cddb2cab7363e"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
-      "bytes": 330088,
-      "sha256": "6e6fd30d7d0f02a17a8c09e295f5e5515e9bcc5a8eea0daeeb541f8026bef1bb"
+      "bytes": 338512,
+      "sha256": "d4211a8867f8ad140120698fccaf25917170923dfd3bbf4c0cc049a48f2dba65"
     },
     {
       "path": "config/public-site.json",
@@ -28378,8 +28378,8 @@
     {
       "path": "docs/implementacion-cuentas-sync-checkpoint.md",
       "extension": ".md",
-      "bytes": 5501,
-      "sha256": "120eea6a20ca05a3746783e213d03a31e36583a401df2e7b5b4105e6c3f5c8c1"
+      "bytes": 5708,
+      "sha256": "84dc082271d43eb14a40e6e9db5c603c878a6aca3cf9a5c3f895b2a95a5baabe"
     },
     {
       "path": "docs/informe-entrega-fase-12.md",
@@ -31132,8 +31132,8 @@
     {
       "path": "tests/cart/persistence-and-favorites.test.mjs",
       "extension": ".mjs",
-      "bytes": 1970,
-      "sha256": "e1f0f7bb02b4ba75265dca3210e17bfc258f8955c60a3c45a02eb861d85717d0"
+      "bytes": 2039,
+      "sha256": "81ae2aebc7f6c4a25897b3ec3c7e6453898337958ab3967e44131524e5aaaafa"
     },
     {
       "path": "tests/catalog/public-catalog-cache.test.mjs",

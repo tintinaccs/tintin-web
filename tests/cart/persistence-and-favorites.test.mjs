@@ -27,7 +27,7 @@ test('el carrito agrega líneas sin reemplazar las existentes', async () => {
   assert.match(runtime, /GUEST_CART_TTL_MS/);
 });
 
-test('favoritos está conectado a interfaz, cuenta y reglas', async () => {
+test('favoritos está conectado y se conserva al desactivar una cuenta', async () => {
   const [favorites, product, cart, rules, deletion] = await Promise.all([
     read('js/components/favorites/sincronizacion-favoritos.js'),
     read('product.html'),
@@ -39,5 +39,6 @@ test('favoritos está conectado a interfaz, cuenta y reglas', async () => {
   assert.match(product, /btn-product-favorite/);
   assert.match(cart, /tt-cart-favorites/);
   assert.match(rules, /match \/favorites\/\{productId\}/);
-  assert.match(deletion, /favoriteDocs/);
+  assert.match(deletion, /tombstone/);
+  assert.doesNotMatch(deletion, /favoriteDocs|favorites\//);
 });
