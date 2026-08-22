@@ -1,0 +1,1126 @@
+name: TEMP checkout hardening 2026-08-22
+
+on:
+  push:
+    branches:
+      - fix/checkout-hardening-2026-08-22
+
+permissions:
+  contents: write
+
+jobs:
+  harden:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: fix/checkout-hardening-2026-08-22
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply checkout hardening
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          def read(path):
+              return Path(path).read_text(encoding='utf-8')
+
+          def write(path, text):
+              Path(path).write_text(text, encoding='utf-8')
+
+          def replace_once(text, old, new, label):
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{label}: expected exactly 1 occurrence, found {count}')
+              return text.replace(old, new, 1)
+
+          def sub_once(text, pattern, repl, label, flags=0):
+              out, count = re.subn(pattern, repl, text, count=1, flags=flags)
+              if count != 1:
+                  raise SystemExit(f'{label}: expected exactly 1 regex match, found {count}')
+              return out
+
+          # ------------------------------------------------------------
+          # checkout.html
+          # ------------------------------------------------------------
+          path = 'checkout.html'
+          s = read(path)
+
+          s = replace_once(s,
+          "  getCartLocal, setCartLocal, formatPrice, cartTotal,\n  removeFromCart, updateQty, clearCart\n",
+          "  getCartLocal, setCartLocal, formatPrice, cartTotal, awaitCartReady,\n  removeFromCart, updateQty, clearCart\n",
+          'checkout import awaitCartReady')
+
+          old = """function applyShippingRates_() {
+  const src = (Array.isArray(_shipRatesReal.deliveryCities) || Array.isArray(_shipRatesReal.encomiendaCities))
+    ? _shipRatesReal
+    : _shipRatesFallback;
+  if (src.deliveryCost   > 0) DEFAULT_DELIVERY_COST   = src.deliveryCost;
+  if (src.encomiendaCost > 0) DEFAULT_ENCOMIENDA_COST = src.encomiendaCost;
+  DELIVERY_CITIES   = normalizeCities(src.deliveryCities,   DEFAULT_DELIVERY_COST);
+  ENCOMIENDA_CITIES = normalizeCities(src.encomiendaCities, DEFAULT_ENCOMIENDA_COST);
+  populateCities();
+}
+"""
+          new = """function applyShippingRates_() {
+  // settings/shippingRates puede estar migrado parcialmente. Mezclar campo por
+  // campo evita que una sola lista presente borre la otra lista de respaldo.
+  const src = {
+    deliveryCities: Array.isArray(_shipRatesReal.deliveryCities)
+      ? _shipRatesReal.deliveryCities
+      : _shipRatesFallback.deliveryCities,
+    encomiendaCities: Array.isArray(_shipRatesReal.encomiendaCities)
+      ? _shipRatesReal.encomiendaCities
+      : _shipRatesFallback.encomiendaCities,
+    deliveryCost: _shipRatesReal.deliveryCost ?? _shipRatesFallback.deliveryCost,
+    encomiendaCost: _shipRatesReal.encomiendaCost ?? _shipRatesFallback.encomiendaCost,
+  };
+  const deliveryDefault = Number(src.deliveryCost);
+  const encomiendaDefault = Number(src.encomiendaCost);
+  // Costo 0 es válido (envío gratis). Antes se ignoraba por usar > 0.
+  if (Number.isFinite(deliveryDefault) && deliveryDefault >= 0) DEFAULT_DELIVERY_COST = deliveryDefault;
+  if (Number.isFinite(encomiendaDefault) && encomiendaDefault >= 0) DEFAULT_ENCOMIENDA_COST = encomiendaDefault;
+  DELIVERY_CITIES   = normalizeCities(src.deliveryCities,   DEFAULT_DELIVERY_COST);
+  ENCOMIENDA_CITIES = normalizeCities(src.encomiendaCities, DEFAULT_ENCOMIENDA_COST);
+  populateCities();
+}
+"""
+          s = replace_once(s, old, new, 'shipping rates merge/free shipping')
+
+          s = replace_once(s,
+          "let currentUserProfile = null; // caché de users/{uid} (name, phone) para prellenar el paso 3\nlet authReady = false; // true recién cuando el primer onAuthStateChanged ya disparó\n",
+          "let currentUserProfile = null; // caché de users/{uid} (name, phone) para prellenar el paso 3\nlet authReady = false; // true recién cuando el primer onAuthStateChanged ya disparó\nlet profileReady = false; // una cuenta real no puede avanzar hasta conocer users/{uid}\nlet profileLoadFailed = false;\n",
+          'profile readiness state')
+
+          s = replace_once(s,
+          """    retiroOpt.value = RETIRO_VALUE;
+    retiroOpt.textContent = '🏪 Retiro en tienda';
+""",
+          """    retiroOpt.value = RETIRO_VALUE;
+    retiroOpt.textContent = '🏪 Retiro en tienda';
+    retiroOpt.dataset.method = 'retiro';
+    retiroOpt.dataset.departamento = 'Central';
+""",
+          'retiro option metadata')
+
+          s = replace_once(s,
+          """      opt.value = city.name;
+      opt.textContent = `${city.name} — ${cityCostLabel(city.price)}`;
+      group.appendChild(opt);
+    });
+    select.appendChild(group);
+  }
+  if (encomienda.length) {
+""",
+          """      opt.value = city.name;
+      opt.textContent = `${city.name} — ${cityCostLabel(city.price)}`;
+      opt.dataset.method = 'delivery';
+      opt.dataset.departamento = city.departamento || DEPARTAMENTO_POR_DEFECTO;
+      group.appendChild(opt);
+    });
+    select.appendChild(group);
+  }
+  if (encomienda.length) {
+""",
+          'delivery option metadata')
+
+          # Same option body, now in the encomienda block.
+          s = replace_once(s,
+          """      opt.value = city.name;
+      opt.textContent = `${city.name} — ${cityCostLabel(city.price)}`;
+      group.appendChild(opt);
+    });
+    select.appendChild(group);
+  }
+
+  if (keepCityIfPresent) {
+""",
+          """      opt.value = city.name;
+      opt.textContent = `${city.name} — ${cityCostLabel(city.price)}`;
+      opt.dataset.method = 'encomienda';
+      opt.dataset.departamento = city.departamento || DEPARTAMENTO_POR_DEFECTO;
+      group.appendChild(opt);
+    });
+    select.appendChild(group);
+  }
+
+  if (keepCityIfPresent) {
+""",
+          'encomienda option metadata')
+
+          old = """function getCityPrice(cityName) {
+  const d = DELIVERY_CITIES.find(c => c.name === cityName);
+  if (d) return d.price;
+  const e = ENCOMIENDA_CITIES.find(c => c.name === cityName);
+  if (e) return e.price;
+  return null;
+}
+"""
+          new = """function getCityPrice(cityName, departamento, method) {
+  const wantedDepartment = departamento || DEPARTAMENTO_POR_DEFECTO;
+  const matches = c => c.name === cityName && (c.departamento || DEPARTAMENTO_POR_DEFECTO) === wantedDepartment;
+  if (method === 'delivery') return DELIVERY_CITIES.find(matches)?.price ?? null;
+  if (method === 'encomienda') return ENCOMIENDA_CITIES.find(matches)?.price ?? null;
+  return null;
+}
+"""
+          s = replace_once(s, old, new, 'department-aware city price')
+
+          s = replace_once(s,
+          "async function renderCart() {\n  cartItems = getCartLocal();\n",
+          "async function renderCart() {\n  await awaitCartReady();\n  cartItems = getCartLocal();\n",
+          'render waits cart ready')
+
+          s = replace_once(s,
+          """    const safeId = escapeSearchHtml(item.id);
+    const safeName = escapeSearchHtml(item.name);
+    const safeCat = escapeSearchHtml(item.cat || '');
+    const safeImage = sanitizeImageUrl(item.imgUrl || item.imageUrl || '');
+""",
+          """    const safeId = escapeSearchHtml(item.id);
+    const safeLineId = escapeSearchHtml(item.lineId || item.id);
+    const safeName = escapeSearchHtml(item.name);
+    const safeCat = escapeSearchHtml(item.cat || '');
+    const safeVariant = escapeSearchHtml(item.variant || '');
+    const safeImage = sanitizeImageUrl(item.imgUrl || item.imageUrl || '');
+""",
+          'cart line metadata vars')
+          s = replace_once(s,
+          '<div class="ck-item" data-id="${safeId}">',
+          '<div class="ck-item" data-id="${safeId}" data-line-id="${safeLineId}">',
+          'cart row line id')
+          s = replace_once(s,
+          '<div class="ck-item-cat">${safeCat}</div>\n        <div class="ck-item-price">',
+          '<div class="ck-item-cat">${safeCat}</div>\n        ${safeVariant ? `<div class="ck-item-cat" data-cart-variant="${safeVariant}">${safeVariant}</div>` : ``}\n        <div class="ck-item-price">',
+          'cart row variant')
+
+          s = replace_once(s,
+          """  const id = btn.dataset.id;
+  const action = btn.dataset.action;
+  if (action === 'plus') {
+    const res = await updateQty(id, 1);
+""",
+          """  const row = btn.closest('.ck-item');
+  const identifier = row?.dataset.lineId || btn.dataset.id;
+  const action = btn.dataset.action;
+  if (action === 'plus') {
+    const res = await updateQty(identifier, 1);
+""",
+          'cart controls use line id')
+          s = replace_once(s, "if (action === 'minus')  await updateQty(id, -1);\n  if (action === 'remove') await removeFromCart(id);",
+                              "if (action === 'minus')  await updateQty(identifier, -1);\n  if (action === 'remove') await removeFromCart(identifier);",
+                              'cart controls line id minus/remove')
+
+          old = """function isCheckoutAuthorized() {
+  return !!(
+    currentUser &&
+    !currentUser.isAnonymous &&
+    currentUser.emailVerified &&
+    !currentUserProfile?.blocked
+  );
+}
+"""
+          new = """function isCheckoutAuthorized() {
+  return !!(
+    currentUser &&
+    !currentUser.isAnonymous &&
+    currentUser.emailVerified &&
+    profileReady &&
+    !profileLoadFailed &&
+    currentUserProfile &&
+    !currentUserProfile.blocked
+  );
+}
+"""
+          s = replace_once(s, old, new, 'authorization requires loaded profile')
+
+          old = """function waitForAuthReady(timeoutMs = 4000) {
+  if (authReady) return Promise.resolve();
+  return new Promise(resolve => {
+    const iv = setInterval(() => {
+      if (authReady) { clearInterval(iv); resolve(); }
+    }, 50);
+    setTimeout(() => { clearInterval(iv); resolve(); }, timeoutMs);
+  });
+}
+"""
+          new = """function checkoutIdentityReady() {
+  if (!authReady) return false;
+  if (!currentUser || currentUser.isAnonymous) return true;
+  return profileReady || profileLoadFailed;
+}
+
+function waitForAuthReady(timeoutMs = 6000) {
+  if (checkoutIdentityReady()) return Promise.resolve();
+  return new Promise(resolve => {
+    const iv = setInterval(() => {
+      if (checkoutIdentityReady()) { clearInterval(iv); resolve(); }
+    }, 50);
+    setTimeout(() => { clearInterval(iv); resolve(); }, timeoutMs);
+  });
+}
+"""
+          s = replace_once(s, old, new, 'wait for profile')
+
+          s = replace_once(s,
+          """function goToStep(n) {
+  if (n >= 1 && !isCheckoutAuthorized()) {
+    showLoginRequiredModal(n);
+    n = 0;
+  }
+""",
+          """function goToStep(n) {
+  if (n >= 1 && profileLoadFailed) {
+    showError(0, 'No pudimos cargar los datos de tu cuenta. Recargá la página e intentá de nuevo.');
+    n = 0;
+  } else if (n >= 1 && !isCheckoutAuthorized()) {
+    showLoginRequiredModal(n);
+    n = 0;
+  }
+""",
+          'profile failure protected navigation')
+
+          s = replace_once(s,
+          """document.getElementById('btn-step1-next').onclick = async () => {
+  hideErrors();
+  cartItems = getCartLocal();
+""",
+          """document.getElementById('btn-step1-next').onclick = async () => {
+  hideErrors();
+  await awaitCartReady();
+  cartItems = getCartLocal();
+""",
+          'step1 cart ready')
+
+          s = replace_once(s,
+          """  const isDelivery = DELIVERY_CITIES.some(c => c.name === val);
+  const isEncomienda = ENCOMIENDA_CITIES.some(c => c.name === val);
+""",
+          """  const selectedOption = this.selectedOptions?.[0];
+  const selectedMethod = selectedOption?.dataset.method || '';
+  const selectedDepartment = selectedOption?.dataset.departamento || document.getElementById('ck-departamento').value;
+  const isDelivery = selectedMethod === 'delivery';
+  const isEncomienda = selectedMethod === 'encomienda';
+""",
+          'city method from option metadata')
+          s = replace_once(s, "const price = getCityPrice(val);", "const price = getCityPrice(val, selectedDepartment, selectedMethod);", 'city price exact method/dept')
+
+          s = replace_once(s,
+          """  orderData.paymentMethod = selected.value;
+  await buildConfirmation();
+  goToStep(4);
+""",
+          """  orderData.paymentMethod = selected.value;
+  if (await buildConfirmation()) goToStep(4);
+""",
+          'confirmation only when valid')
+          s = replace_once(s,
+          """async function buildConfirmation() {
+  cartItems = getCartLocal();
+  const subtotal = cartTotal(cartItems);
+""",
+          """async function buildConfirmation() {
+  await awaitCartReady();
+  cartItems = getCartLocal();
+  if (!cartItems.length) {
+    showError(0, 'Tu carrito está vacío. Agregá productos antes de continuar.');
+    goToStep(0);
+    return false;
+  }
+  const subtotal = cartTotal(cartItems);
+""",
+          'confirmation guards empty cart')
+          s = replace_once(s,
+          """  if (confirmBtn) {
+    confirmBtn.onclick = () => {
+      console.error('[checkout] El módulo seguro de pedidos no cargó a tiempo.');
+      showError(4, 'No se pudo cargar el checkout. Recargá la página e intentá de nuevo.');
+    };
+  }
+}
+""",
+          """  if (confirmBtn) {
+    confirmBtn.onclick = () => {
+      console.error('[checkout] El módulo seguro de pedidos no cargó a tiempo.');
+      showError(4, 'No se pudo cargar el checkout. Recargá la página e intentá de nuevo.');
+    };
+  }
+  return true;
+}
+""",
+          'confirmation returns success')
+
+          s = replace_once(s,
+          """onAuthStateChanged(auth, user => {
+  currentUser = user;
+  currentUserProfile = null;
+  authReady = true;
+""",
+          """onAuthStateChanged(auth, user => {
+  currentUser = user;
+  currentUserProfile = null;
+  authReady = true;
+  profileReady = !user || user.isAnonymous;
+  profileLoadFailed = false;
+""",
+          'auth resets profile state')
+          s = replace_once(s,
+          """    .then(snap => {
+      currentUserProfile = snap.exists() ? snap.data() : null;
+""",
+          """    .then(snap => {
+      currentUserProfile = snap.exists() ? snap.data() : null;
+      profileReady = true;
+      profileLoadFailed = !currentUserProfile;
+""",
+          'profile load state success')
+          s = replace_once(s,
+          """    .catch(e => console.error('No se pudo cargar el perfil del usuario:', e));
+""",
+          """    .catch(e => {
+      profileReady = true;
+      profileLoadFailed = true;
+      console.error('No se pudo cargar el perfil del usuario:', e);
+      enforceCheckoutGuard();
+      showError(0, 'No pudimos cargar los datos de tu cuenta. Recargá la página e intentá de nuevo.');
+    });
+""",
+          'profile load failure blocks checkout')
+
+          write(path, s)
+
+          # ------------------------------------------------------------
+          # checkout reliability layer: don't erase resume state and keep line identity
+          # ------------------------------------------------------------
+          path = 'js/pages/checkout/checkout-confiabilidad.js'
+          s = read(path)
+          s = sub_once(s, r"  function clearResumeState\(\) \{\n    try \{ sessionStorage\.removeItem\(RESUME_KEY\); \} catch \{\}\n  \}",
+          """  function clearResumeState() {
+    // El estado de reanudación pertenece al flujo principal de checkout.html.
+    // Esta capa visual no debe borrarlo al montar/desmontar la página: hacerlo
+    // impedía volver al paso esperado después de iniciar sesión.
+  }""", 'reliability resume ownership')
+          s = replace_once(s, "      confirmButton.disabled = false;\n      confirmButton.textContent = '✓ Confirmar pedido';",
+                              "      if (!document.body?.classList.contains('tt-checkout-submitting')) confirmButton.textContent = '✓ Confirmar pedido';",
+                              'reliability does not enable confirm')
+          old = """      .map(item => ({
+        id: String(item.id),
+        name: String(item.name || item.title || 'Producto'),
+        cat: String(item.cat || item.category || ''),
+        price: Math.max(0, Number(item.price) || 0),
+        qty: Math.max(1, Math.min(99, Math.floor(Number(item.qty) || 1))),
+        imageUrl: safeImageUrl(item.imageUrl || item.imgUrl || item.image || ''),
+      }));
+"""
+          new = """      .map(item => ({
+        lineId: String(item.lineId || item.id),
+        id: String(item.id),
+        variant: String(item.variant || ''),
+        name: String(item.name || item.title || 'Producto'),
+        cat: String(item.cat || item.category || ''),
+        price: Math.max(0, Number(item.price) || 0),
+        qty: Math.max(1, Math.min(99, Math.floor(Number(item.qty) || 1))),
+        imageUrl: safeImageUrl(item.imageUrl || item.imgUrl || item.image || ''),
+      }));
+"""
+          s = replace_once(s, old, new, 'reliability keeps variant identity')
+          s = replace_once(s,
+          "return JSON.stringify(items.map(item => [item.id, item.qty, item.price, item.name, item.imageUrl]));",
+          "return JSON.stringify(items.map(item => [item.lineId, item.id, item.variant, item.qty, item.price, item.name, item.imageUrl]));",
+          'reliability variant fingerprint')
+          s = replace_once(s,
+          """      const id = escapeHtml(item.id);
+      const name = escapeHtml(item.name);
+      const cat = escapeHtml(item.cat);
+""",
+          """      const id = escapeHtml(item.id);
+      const lineId = escapeHtml(item.lineId || item.id);
+      const variant = escapeHtml(item.variant || '');
+      const name = escapeHtml(item.name);
+      const cat = escapeHtml(item.cat);
+""",
+          'reliability row identity vars')
+          s = replace_once(s, '<div class="ck-item" data-id="${id}">', '<div class="ck-item" data-id="${id}" data-line-id="${lineId}">', 'reliability row line id')
+          s = replace_once(s,
+          '<div class="ck-item-cat">${cat}</div>\n          <div class="ck-item-price">',
+          '<div class="ck-item-cat">${cat}</div>\n          ${variant ? `<div class="ck-item-cat" data-cart-variant="${variant}">${variant}</div>` : ``}\n          <div class="ck-item-price">',
+          'reliability displays variant')
+          write(path, s)
+
+          # ------------------------------------------------------------
+          # checkout maintenance: unlock only its own lock
+          # ------------------------------------------------------------
+          path = 'js/pages/checkout/checkout-mantenimiento.js'
+          s = read(path)
+          s = replace_once(s,
+          """      confirmLocked = true;
+      body?.classList.add('tt-checkout-submitting');
+      button.disabled = true;
+""",
+          """      confirmLocked = true;
+      body?.classList.add('tt-checkout-submitting');
+      button.dataset.ttMaintenanceLocked = '1';
+      button.disabled = true;
+""",
+          'maintenance lock ownership')
+          s = replace_once(s,
+          """        confirmLocked = false;
+        body?.classList.remove('tt-checkout-submitting');
+        button.disabled = false;
+        button.removeAttribute('aria-busy');
+""",
+          """        confirmLocked = false;
+        body?.classList.remove('tt-checkout-submitting');
+        delete button.dataset.ttMaintenanceLocked;
+        const blockedElsewhere = button.dataset.ttCartGuardDisabled === '1' || button.dataset.ttQuotaDisabled === '1';
+        if (!blockedElsewhere) button.disabled = false;
+        button.removeAttribute('aria-busy');
+""",
+          'maintenance safe unlock')
+          write(path, s)
+
+          # ------------------------------------------------------------
+          # quota guard: no global console monkey-patch, no clobbering other guards
+          # ------------------------------------------------------------
+          Path('js/pages/checkout/checkout-control-cuota.js').write_text(r'''const COOLDOWN_KEY = 'tt_checkout_quota_cooldown_until';
+const COOLDOWN_MS = 60 * 1000;
+let timer = 0;
+
+function cooldownUntil() {
+  try { return Number(sessionStorage.getItem(COOLDOWN_KEY) || 0); }
+  catch { return 0; }
+}
+
+function saveCooldown(until) {
+  try { sessionStorage.setItem(COOLDOWN_KEY, String(until)); } catch {}
+}
+
+function isQuotaError(error) {
+  const code = String(error?.code || error?.name || error?.details?.code || '').toLowerCase();
+  const message = String(error?.message || '').toLowerCase();
+  return code.includes('resource-exhausted') || message.includes('quota exceeded') || message.includes('resource-exhausted');
+}
+
+const errorBox = () => document.getElementById('error-4');
+const button = () => document.getElementById('ck-confirm-btn');
+
+function blockedByAnotherGuard(control) {
+  return !control ||
+    control.dataset.ttCartGuardDisabled === '1' ||
+    control.dataset.ttMaintenanceLocked === '1' ||
+    document.body?.classList.contains('tt-checkout-submitting');
+}
+
+function renderCooldown() {
+  clearTimeout(timer);
+  const remaining = Math.max(0, cooldownUntil() - Date.now());
+  const control = button();
+  const box = errorBox();
+  if (!remaining) {
+    if (control) {
+      delete control.dataset.ttQuotaDisabled;
+      if (!blockedByAnotherGuard(control)) control.disabled = false;
+      if (!control.disabled) control.textContent = '✓ Confirmar pedido';
+    }
+    window.dispatchEvent(new CustomEvent('tintin:checkout-quota-ended'));
+    return;
+  }
+
+  const seconds = Math.ceil(remaining / 1000);
+  if (control) {
+    control.dataset.ttQuotaDisabled = '1';
+    control.disabled = true;
+    control.textContent = `Esperá ${seconds} s para reintentar`;
+  }
+  if (box) {
+    box.textContent = 'Firestore alcanzó temporalmente el límite de lecturas. Tu pedido no fue creado ni se descontó stock. Conservamos todos tus datos y tu carrito.';
+    box.classList.add('show');
+    box.setAttribute('role', 'alert');
+  }
+  timer = window.setTimeout(renderCooldown, 1000);
+}
+
+function activateCooldown() {
+  saveCooldown(Date.now() + COOLDOWN_MS);
+  window.setTimeout(renderCooldown, 0);
+}
+
+window.addEventListener('tintin:checkout-submit-error', event => {
+  if (isQuotaError(event.detail || {})) activateCooldown();
+});
+
+window.addEventListener('click', event => {
+  const control = event.target?.closest?.('#ck-confirm-btn');
+  if (!control || cooldownUntil() <= Date.now()) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  event.stopPropagation();
+  renderCooldown();
+}, true);
+
+// Respaldo para errores de Firebase ajenos al submit controlado.
+window.addEventListener('unhandledrejection', event => {
+  if (isQuotaError(event.reason)) activateCooldown();
+});
+
+if (cooldownUntil() > Date.now()) renderCooldown();
+
+window.TintinCheckoutQuotaGuard = {
+  getRemaining: () => Math.max(0, cooldownUntil() - Date.now()),
+  activate: activateCooldown
+};
+''', encoding='utf-8')
+
+          # ------------------------------------------------------------
+          # server request client: timeout + network errors
+          # ------------------------------------------------------------
+          Path('js/create-order-client.js').write_text(r'''/**
+ * TINTIN — Cliente del endpoint server-side de pedidos (Fase 4).
+ */
+import { EMAIL_WEBHOOK_URL } from './email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1';
+import { auth } from './core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
+
+const CREATE_ORDER_TIMEOUT_MS = 35000;
+
+function phoneForOrderServer(value) {
+  return String(value == null ? '' : value).replace(/\D/g, '');
+}
+
+export async function createOrderViaServer(draft) {
+  const idToken = await auth.currentUser?.getIdToken(true);
+  if (!idToken) return { ok: false, error: 'missing_id_token' };
+
+  const serverDraft = { ...draft, phone: phoneForOrderServer(draft?.phone) };
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), CREATE_ORDER_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(EMAIL_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'createOrder', idToken, ...serverDraft }),
+      signal: controller.signal,
+    });
+
+    const body = await response.text();
+    try {
+      return JSON.parse(body);
+    } catch {
+      console.error('[create-order-client] El endpoint devolvió una respuesta no válida. HTTP', response.status);
+      return { ok: false, error: 'invalid_response', status: response.status };
+    }
+  } catch (error) {
+    if (error?.name === 'AbortError') return { ok: false, error: 'server_timeout' };
+    console.error('[create-order-client] No se pudo conectar con el servidor de pedidos:', error);
+    return { ok: false, error: 'network_error' };
+  } finally {
+    window.clearTimeout(timeout);
+  }
+}
+''', encoding='utf-8')
+
+          # ------------------------------------------------------------
+          # checkout draft: preserve quantities per variant
+          # ------------------------------------------------------------
+          path = 'js/orders/politica-checkout.js'
+          s = read(path)
+          s = sub_once(s,
+          r"export function aggregateCheckoutCart\(items\) \{.*?\n\}\n\nexport function composeCheckoutDraft",
+          """export function aggregateCheckoutCart(items) {
+  const byLine = new Map();
+  for (const item of items || []) {
+    const id = clean(item?.id);
+    const variant = clean(item?.variant);
+    const qty = Number(item?.qty || 1);
+    if (!id || !Number.isInteger(qty) || qty < 1 || qty > 99) {
+      throw Object.assign(new Error('Encontramos una cantidad no válida en el carrito.'), { code: 'invalid_cart' });
+    }
+    const key = `${id}\u241f${variant}`;
+    const existing = byLine.get(key);
+    if (existing) existing.qty += qty;
+    else byLine.set(key, { id, qty, variant });
+  }
+  const result = [...byLine.values()];
+  if (result.some(item => item.qty > 99)) {
+    throw Object.assign(new Error('La cantidad de una variante es demasiado alta.'), { code: 'invalid_cart' });
+  }
+  return result;
+}
+
+export function composeCheckoutDraft""",
+          'variant-preserving draft', flags=re.S)
+          write(path, s)
+
+          # ------------------------------------------------------------
+          # secure checkout order module
+          # ------------------------------------------------------------
+          path = 'js/orders/pedido-checkout-seguro.js'
+          s = read(path)
+          s = sub_once(s,
+          r"  function normalizeCities\(list, fallback\) \{.*?\n  \}\n\n  function mergeShippingRates",
+          """  function normalizeCities(list, fallback) {
+    const parsedFallback = parseMoney(fallback);
+    const fallbackPrice = Number.isFinite(parsedFallback) ? parsedFallback : null;
+    return (Array.isArray(list) ? list : [])
+      .map((item, sourceIndex) => {
+        if (typeof item === 'string') {
+          return { name: text(item), departamento: 'Central', price: fallbackPrice, sourceIndex };
+        }
+        if (!item?.name) return null;
+        const rawPrice = item.price === null ? null : parseMoney(item.price === undefined ? fallback : item.price);
+        return {
+          name: text(item.name),
+          departamento: text(item.departamento) || 'Central',
+          price: Number.isFinite(rawPrice) ? rawPrice : null,
+          sourceIndex
+        };
+      })
+      .filter(Boolean);
+  }
+
+  function mergeShippingRates""",
+          'secure normalize cities', flags=re.S)
+
+          s = sub_once(s,
+          r"  function resolveShipping\(settings, selectedCity, location\) \{.*?\n  \}\n\n  function readPhone",
+          """  function resolveShipping(settings, selectedCity, selectedDepartamento, requestedMethod, location) {
+    if (selectedCity === '__retiro__') {
+      if (requestedMethod && requestedMethod !== 'retiro') throw appError('shipping_changed', 'Cambió el método de entrega.');
+      if (selectedDepartamento && selectedDepartamento !== 'Central') throw appError('shipping_invalid', 'El retiro corresponde a Central.');
+      return {
+        method: 'retiro', city: 'Retiro coordinado', departamento: 'Central',
+        cost: 0, pending: false, rateIndex: -1, mapLocation: null
+      };
+    }
+
+    const wanted = text(selectedCity).toLocaleLowerCase('es');
+    const wantedDepartment = text(selectedDepartamento) || 'Central';
+    const matches = city =>
+      city.name.toLocaleLowerCase('es') === wanted && city.departamento === wantedDepartment;
+
+    if (requestedMethod === 'delivery') {
+      const delivery = normalizeCities(settings.deliveryCities, settings.deliveryCost).find(matches);
+      if (!delivery) throw appError('shipping_invalid', 'La ciudad elegida ya no está disponible para delivery.');
+      return {
+        method: 'delivery', city: delivery.name, departamento: delivery.departamento,
+        cost: delivery.price, pending: delivery.price === null,
+        rateIndex: delivery.sourceIndex, mapLocation: location
+      };
+    }
+
+    if (requestedMethod === 'encomienda') {
+      const encomienda = normalizeCities(settings.encomiendaCities, settings.encomiendaCost).find(matches);
+      if (!encomienda) throw appError('shipping_invalid', 'La ciudad elegida ya no está disponible para encomienda.');
+      const mode = encomiendaMode();
+      if (!mode) throw appError('shipping_invalid', 'Elegí si retirás en la agencia o si te lo llevamos a la puerta.');
+      return {
+        method: 'encomienda', encomiendaMode: mode,
+        city: encomienda.name, departamento: encomienda.departamento,
+        cost: 0, pending: false, rateIndex: encomienda.sourceIndex,
+        mapLocation: mode === 'puerta' ? location : null
+      };
+    }
+
+    throw appError('shipping_invalid', 'El método de entrega ya no está disponible.');
+  }
+
+  function readPhone""",
+          'secure department/method shipping resolver', flags=re.S)
+
+          s = replace_once(s,
+          """    const selectedCity = text(document.getElementById('ck-city')?.value);
+    const selectedDepartamentoRaw = text(document.getElementById('ck-departamento')?.value);
+    const selectedDepartamento = selectedDepartamentoRaw === '__retiro__' ? '' : selectedDepartamentoRaw;
+    const shipping = resolveShipping(settings, selectedCity, mapLocation());
+""",
+          """    const citySelect = document.getElementById('ck-city');
+    const selectedCity = text(citySelect?.value);
+    const selectedDepartamentoRaw = text(document.getElementById('ck-departamento')?.value);
+    const selectedDepartamento = selectedDepartamentoRaw === '__retiro__' ? '' : selectedDepartamentoRaw;
+    const selectedOption = citySelect?.selectedOptions?.[0];
+    const requestedShippingMethod = text(selectedOption?.dataset.method || (selectedCity === '__retiro__' ? 'retiro' : ''));
+    const shipping = resolveShipping(settings, selectedCity, selectedDepartamento, requestedShippingMethod, mapLocation());
+""",
+          'secure build draft exact shipping selection')
+
+          s = sub_once(s,
+          r"  function authoritativeCartFromQuote\(quote\) \{.*?\n  \}\n\n  function renderQuote",
+          """  function authoritativeCartFromQuote(quote) {
+    const keyOf = item => `${String(item?.id || '')}\u241f${text(item?.variant)}`;
+    const currentByLine = new Map(getCartLocal().map(item => [keyOf(item), item]));
+    return (quote.items || []).map(item => ({
+      ...(currentByLine.get(keyOf(item)) || {}),
+      id: item.id,
+      name: item.name,
+      cat: item.cat || '',
+      price: Number(item.price || 0),
+      qty: Number(item.qty || 1),
+      variant: item.variant || '',
+      imageUrl: item.imageUrl || '',
+      imgUrl: item.imageUrl || ''
+    }));
+  }
+
+  function renderQuote""",
+          'quote preserves variant metadata', flags=re.S)
+
+          s = replace_once(s,
+          """      try {
+        await persistCheckoutDefaults(draft);
+      } catch (profileError) {
+        console.warn('[secure-checkout-order] El pedido continúa, pero no se pudieron guardar CI/facturación:', profileError);
+      }
+      await reserveCheckoutGuard(draft);
+      const result = await createOrderOnServer(draft);
+      orderCompleted = true;
+""",
+          """      await reserveCheckoutGuard(draft);
+      const result = await createOrderOnServer(draft);
+      orderCompleted = true;
+      // Guardar datos reutilizables sólo después de que el pedido exista de
+      // verdad; un intento rechazado no debe modificar el perfil de la clienta.
+      try {
+        await persistCheckoutDefaults(draft);
+      } catch (profileError) {
+        console.warn('[secure-checkout-order] El pedido se creó, pero no se pudieron guardar CI/facturación:', profileError);
+      }
+""",
+          'persist defaults after successful order')
+
+          s = replace_once(s,
+          """      server_error: 'No pudimos confirmar el pedido. Intentá nuevamente.',
+      transaction_begin_failed: 'No pudimos conectar con el servidor. Intentá nuevamente.',
+""",
+          """      server_error: 'No pudimos confirmar el pedido. Intentá nuevamente.',
+      server_timeout: 'El servidor tardó demasiado en responder. Tu carrito sigue guardado; intentá nuevamente.',
+      network_error: 'No pudimos conectar con el servidor de pedidos. Revisá tu conexión e intentá nuevamente.',
+      invalid_response: 'El servidor respondió de una forma inesperada. Intentá nuevamente.',
+      transaction_begin_failed: 'No pudimos conectar con el servidor. Intentá nuevamente.',
+""",
+          'server/network user messages')
+
+          s = replace_once(s,
+          """      console.error('[spark-checkout]', error);
+      const code = error?.details?.code || error?.code;
+""",
+          """      console.error('[spark-checkout]', error);
+      const code = error?.details?.code || error?.code;
+      window.dispatchEvent(new CustomEvent('tintin:checkout-submit-error', {
+        detail: { code: code || error?.name || '', message: error?.message || '' }
+      }));
+""",
+          'explicit submit error event')
+
+          s = sub_once(s,
+          r"      \} else if \(code === 'insufficient_stock'\) \{.*?\n      \} else if \(code === 'product_not_found' \|\| code === 'product_inactive'\) \{",
+          """      } else if (code === 'insufficient_stock') {
+        const productId = String(error.details?.productId || '');
+        const available = Math.max(0, Number(error.details?.available || 0));
+        let remaining = available;
+        setCartLocal(
+          getCartLocal()
+            .map(item => {
+              if (String(item.id) !== productId) return item;
+              const qty = Math.min(Number(item.qty || 1), remaining);
+              remaining -= qty;
+              return qty > 0 ? { ...item, qty } : null;
+            })
+            .filter(Boolean)
+        );
+        button.disabled = true;
+        button.textContent = 'Revisá el carrito para continuar';
+        showError(
+          available > 0
+            ? `Cambió el stock. Repartimos la cantidad disponible (${available}) entre las variantes de tu carrito.`
+            : 'Uno de los productos se agotó y lo quitamos del carrito.',
+          true
+        );
+      } else if (code === 'product_not_found' || code === 'product_inactive') {""",
+          'stock correction across variants', flags=re.S)
+          write(path, s)
+
+          # ------------------------------------------------------------
+          # Apps Script source: exact department/method and quantities per variant
+          # ------------------------------------------------------------
+          path = 'apps-script/CrearPedido.gs'
+          s = read(path)
+          s = sub_once(s,
+          r"function phase4NormalizeCartLines_\(cartLines\) \{.*?\n\}\n\nfunction phase4VariantGroups_",
+          """function phase4NormalizeCartLines_(cartLines) {
+  if (!Array.isArray(cartLines) || !cartLines.length) return { ok: false, error: 'empty_cart' };
+  if (cartLines.length > PHASE4_MAX_ITEMS_) return { ok: false, error: 'too_many_products' };
+  var byLine = Object.create(null);
+  var orderedKeys = [];
+  for (var i = 0; i < cartLines.length; i++) {
+    var rawLine = cartLines[i];
+    if (!phase4HasOnlyKeys_(rawLine, ['id', 'qty', 'variants', 'variant'])) return { ok: false, error: 'invalid_cart' };
+    var id = phase4CleanText_(rawLine.id, 180);
+    var qty = Number(rawLine.qty);
+    var rawVariants = Array.isArray(rawLine.variants) ? rawLine.variants : (rawLine.variant ? [rawLine.variant] : []);
+    if (!id || !isFinite(qty) || !Number.isInteger(qty) || qty < 1 || qty > 99 || rawVariants.length > 10) {
+      return { ok: false, error: 'invalid_cart' };
+    }
+    var variants = [];
+    for (var v = 0; v < rawVariants.length; v++) {
+      if (typeof rawVariants[v] !== 'string') return { ok: false, error: 'invalid_cart' };
+      var cleanVariant = phase4CleanText_(rawVariants[v], 120);
+      if (!cleanVariant || rawVariants[v].length > 120) return { ok: false, error: 'invalid_cart' };
+      if (variants.indexOf(cleanVariant) === -1) variants.push(cleanVariant);
+    }
+    var key = id + '\u241f' + variants.join('\u241e');
+    if (!byLine[key]) {
+      byLine[key] = { id: id, qty: 0, variants: variants };
+      orderedKeys.push(key);
+    }
+    byLine[key].qty += qty;
+    if (byLine[key].qty > 99) return { ok: false, error: 'invalid_cart' };
+  }
+  return { ok: true, lines: orderedKeys.map(function (key) { return byLine[key]; }) };
+}
+
+function phase4VariantGroups_""",
+          'server variant line normalization', flags=re.S)
+
+          s = sub_once(s,
+          r"function phase4NormalizeCities_\(list, fallbackCost\) \{.*?\n\}\n\n// Espejo de resolveShipping\(\).*?function phase4ResolveShipping_\(shippingRates, selectedCity\) \{.*?\n\}\n",
+          """function phase4NormalizeCities_(list, fallbackCost) {
+  return (Array.isArray(list) ? list : []).map(function (item, index) {
+    var fallback = phase4ParseMoney_(fallbackCost);
+    var fallbackPrice = isFinite(fallback) ? fallback : null;
+    if (typeof item === 'string') {
+      return { name: phase4CleanText_(item, 120), departamento: 'Central', price: fallbackPrice, sourceIndex: index };
+    }
+    if (!item || !item.name) return null;
+    var price = item.price === null ? null : phase4ParseMoney_(item.price === undefined ? fallbackCost : item.price);
+    return {
+      name: phase4CleanText_(item.name, 120),
+      departamento: phase4CleanText_(item.departamento, 80) || 'Central',
+      price: isFinite(price) ? price : null,
+      sourceIndex: index
+    };
+  }).filter(function (city) { return city; });
+}
+
+// Espejo del resolver del navegador. Ciudad + departamento + método forman la
+// identidad de la tarifa; el nombre solo no alcanza porque se repite en Paraguay.
+function phase4ResolveShipping_(shippingRates, selectedCity, selectedDepartamento, requestedMethod) {
+  if (selectedCity === '__retiro__') {
+    if (requestedMethod && requestedMethod !== 'retiro') return { ok: false, error: 'shipping_changed' };
+    if (selectedDepartamento && selectedDepartamento !== 'Central') return { ok: false, error: 'shipping_invalid' };
+    return { ok: true, method: 'retiro', city: 'Retiro coordinado', departamento: 'Central', cost: 0, pending: false, rateIndex: -1 };
+  }
+  var wanted = String(selectedCity || '').trim().toLowerCase();
+  var wantedDepartment = phase4CleanText_(selectedDepartamento, 80) || 'Central';
+  var match = function (city) { return city.name.toLowerCase() === wanted && city.departamento === wantedDepartment; };
+  if (requestedMethod === 'delivery') {
+    var delivery = phase4NormalizeCities_(shippingRates.deliveryCities, shippingRates.deliveryCost).filter(match)[0];
+    return delivery
+      ? { ok: true, method: 'delivery', city: delivery.name, departamento: delivery.departamento, cost: delivery.price, pending: delivery.price === null, rateIndex: delivery.sourceIndex }
+      : { ok: false, error: 'shipping_invalid' };
+  }
+  if (requestedMethod === 'encomienda') {
+    var encomienda = phase4NormalizeCities_(shippingRates.encomiendaCities, shippingRates.encomiendaCost).filter(match)[0];
+    return encomienda
+      ? { ok: true, method: 'encomienda', city: encomienda.name, departamento: encomienda.departamento, cost: 0, pending: false, rateIndex: encomienda.sourceIndex }
+      : { ok: false, error: 'shipping_invalid' };
+  }
+  return { ok: false, error: 'shipping_invalid' };
+}
+""",
+          'server exact shipping identity', flags=re.S)
+
+          s = replace_once(s,
+          """    var productPaths = cartLines.map(function (line) { return 'products/' + phase4CleanText_(line.id, 180); });
+""",
+          """    var productIds = [];
+    cartLines.forEach(function (line) {
+      var id = phase4CleanText_(line.id, 180);
+      if (productIds.indexOf(id) === -1) productIds.push(id);
+    });
+    var productPaths = productIds.map(function (id) { return 'products/' + id; });
+""",
+          'server dedupe product reads')
+
+          s = replace_once(s,
+          """    var shipping = phase4ResolveShipping_(shippingRatesMerged, selectedCity);
+    if (!shipping.ok) { phase4Rollback_(transactionId); return shipping; }
+    var requestedShippingMethod = phase4CleanText_(payload.shippingMethod, 20);
+    if (requestedShippingMethod !== shipping.method) {
+""",
+          """    var requestedShippingMethod = phase4CleanText_(payload.shippingMethod, 20);
+    var shipping = phase4ResolveShipping_(shippingRatesMerged, selectedCity, departamento, requestedShippingMethod);
+    if (!shipping.ok) { phase4Rollback_(transactionId); return shipping; }
+    if (requestedShippingMethod !== shipping.method) {
+""",
+          'server resolver receives method/dept')
+
+          s = replace_once(s,
+          """    var resolvedItems = [];
+    var subtotal = 0;
+    for (var idx = 0; idx < cartLines.length; idx++) {
+""",
+          """    var requestedQtyByProduct = Object.create(null);
+    cartLines.forEach(function (line) {
+      var productId = phase4CleanText_(line.id, 180);
+      requestedQtyByProduct[productId] = (requestedQtyByProduct[productId] || 0) + Number(line.qty || 0);
+    });
+    if (Object.keys(requestedQtyByProduct).some(function (id) { return requestedQtyByProduct[id] > 99; })) {
+      phase4Rollback_(transactionId);
+      return { ok: false, error: 'invalid_cart' };
+    }
+
+    var resolvedItems = [];
+    var subtotal = 0;
+    for (var idx = 0; idx < cartLines.length; idx++) {
+""",
+          'server aggregate stock demand')
+          s = replace_once(s,
+          """      if (stock !== null && qty > stock) {
+        phase4Rollback_(transactionId);
+        return { ok: false, error: 'insufficient_stock', productId: productId, available: stock, requested: qty };
+      }
+""",
+          """      var requestedProductQty = requestedQtyByProduct[productId] || qty;
+      if (stock !== null && requestedProductQty > stock) {
+        phase4Rollback_(transactionId);
+        return { ok: false, error: 'insufficient_stock', productId: productId, available: stock, requested: requestedProductQty };
+      }
+""",
+          'server total stock across variants')
+          s = replace_once(s, 'departamento: departamento,', 'departamento: shipping.departamento,', 'server authoritative department')
+          s = sub_once(s,
+          r"    resolvedItems\.forEach\(function \(item\) \{\n      var stock = phase4ParseStock_\(docs\['products/' \+ item\.id\]\.stock\);\n      if \(stock !== null\) \{\n        writes\.push\(phase4UpdateWrite_\('products/' \+ item\.id, \{\n          stock: stock - item\.qty,\n          lastStockOrderId: orderId,\n          updatedAt: nowIso\n        \}, \['stock', 'lastStockOrderId', 'updatedAt'\]\)\);\n      \}\n    \}\);",
+          """    productIds.forEach(function (productId) {
+      var stock = phase4ParseStock_(docs['products/' + productId].stock);
+      if (stock !== null) {
+        writes.push(phase4UpdateWrite_('products/' + productId, {
+          stock: stock - requestedQtyByProduct[productId],
+          lastStockOrderId: orderId,
+          updatedAt: nowIso
+        }, ['stock', 'lastStockOrderId', 'updatedAt']));
+      }
+    });""",
+          'server one stock write per product', flags=re.S)
+          write(path, s)
+
+          # ------------------------------------------------------------
+          # Tests documenting all regressions fixed in this hardening pass
+          # ------------------------------------------------------------
+          Path('tests/checkout/checkout-hardening.test.mjs').write_text(r'''import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { aggregateCheckoutCart } from '../../js/orders/politica-checkout.js';
+
+const checkout = readFileSync(new URL('../../checkout.html', import.meta.url), 'utf8');
+const secure = readFileSync(new URL('../../js/orders/pedido-checkout-seguro.js', import.meta.url), 'utf8');
+const reliability = readFileSync(new URL('../../js/pages/checkout/checkout-confiabilidad.js', import.meta.url), 'utf8');
+const quota = readFileSync(new URL('../../js/pages/checkout/checkout-control-cuota.js', import.meta.url), 'utf8');
+const client = readFileSync(new URL('../../js/create-order-client.js', import.meta.url), 'utf8');
+const server = readFileSync(new URL('../../apps-script/CrearPedido.gs', import.meta.url), 'utf8');
+
+test('checkout waits for the authoritative scoped cart in UI and confirmation', () => {
+  assert.match(checkout, /awaitCartReady/);
+  assert.match(checkout, /async function renderCart\(\) \{\s*await awaitCartReady\(\)/);
+  assert.match(checkout, /async function buildConfirmation\(\) \{\s*await awaitCartReady\(\)/);
+  assert.match(checkout, /if \(!cartItems\.length\)[\s\S]*return false/);
+});
+
+test('real accounts cannot advance before the profile is known', () => {
+  assert.match(checkout, /let profileReady = false/);
+  assert.match(checkout, /let profileLoadFailed = false/);
+  assert.match(checkout, /profileReady &&\s*!profileLoadFailed &&\s*currentUserProfile/);
+});
+
+test('same product variants keep independent quantities', () => {
+  assert.deepEqual(aggregateCheckoutCart([
+    { id: 'A', qty: 2, variant: '6' },
+    { id: 'A', qty: 1, variant: '7' },
+    { id: 'A', qty: 1, variant: '6' },
+  ]), [
+    { id: 'A', qty: 3, variant: '6' },
+    { id: 'A', qty: 1, variant: '7' },
+  ]);
+  assert.match(checkout, /data-line-id/);
+  assert.match(checkout, /data-cart-variant/);
+  assert.match(reliability, /data-line-id/);
+  assert.match(reliability, /variant: String\(item\.variant/);
+  assert.match(server, /requestedQtyByProduct/);
+  assert.match(server, /productIds\.forEach/);
+});
+
+test('shipping is identified by method + city + department and free delivery is valid', () => {
+  assert.match(checkout, /dataset\.method = 'delivery'/);
+  assert.match(checkout, /dataset\.method = 'encomienda'/);
+  assert.match(checkout, /deliveryDefault >= 0/);
+  assert.match(secure, /selectedDepartamento, requestedMethod/);
+  assert.match(secure, /city\.departamento === wantedDepartment/);
+  assert.match(server, /phase4ResolveShipping_\(shippingRates, selectedCity, selectedDepartamento, requestedMethod\)/);
+  assert.match(server, /departamento: shipping\.departamento/);
+});
+
+test('login resume state is not deleted by the reliability layer', () => {
+  const body = reliability.match(/function clearResumeState\(\) \{([\s\S]*?)\n  \}/)?.[1] || '';
+  assert.doesNotMatch(body, /removeItem/);
+});
+
+test('order transport has a timeout and quota guard does not monkey patch console', () => {
+  assert.match(client, /AbortController/);
+  assert.match(client, /server_timeout/);
+  assert.match(secure, /network_error/);
+  assert.match(secure, /tintin:checkout-submit-error/);
+  assert.doesNotMatch(quota, /console\.error\s*=/);
+  assert.match(quota, /ttQuotaDisabled/);
+});
+''', encoding='utf-8')
+
+          # The temporary workflow must not become part of production/generated manifests.
+          Path('.github/workflows/temp-checkout-hardening-20260822.yml').unlink(missing_ok=True)
+          PY
+
+      - name: Syntax and focused checkout tests
+        run: |
+          node --check js/orders/pedido-checkout-seguro.js
+          node --check js/create-order-client.js
+          node --check js/orders/politica-checkout.js
+          node --check js/pages/checkout/checkout-confiabilidad.js
+          node --check js/pages/checkout/checkout-control-cuota.js
+          node --check js/pages/checkout/checkout-mantenimiento.js
+          node --test tests/checkout/checkout-hardening.test.mjs tests/checkout/cart-profile-persistence.test.mjs
+          node scripts/auditar-checkout-pagina.js
+          npm run test:checkout-contract
+          npm run audit:secure-orders
+          npm run audit:cart
+          git diff --check
+
+      - name: Regenerate deterministic deploy artifacts
+        run: npm run build:pages
+
+      - name: Verify generated contracts
+        run: |
+          npm run audit:cache-versioning
+          npm run verify:csp
+          npm run verify:diagnostics
+          git diff --check
+
+      - name: Commit hardening and self-delete
+        shell: bash
+        run: |
+          git config user.name 'tintinaccs'
+          git config user.email 'tintinaccs@gmail.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No changes to commit.'
+            exit 0
+          fi
+          git commit -m 'fix(checkout): harden cart shipping variants and retries'
+          git push origin HEAD:fix/checkout-hardening-2026-08-22
