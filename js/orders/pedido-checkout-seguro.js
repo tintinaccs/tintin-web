@@ -540,7 +540,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       throw appError('razon_social_required', 'Ingresá la razón social para la factura.');
     }
     if (wantsInvoice && !isValidRuc(rucRaw)) {
-      throw appError('ruc_invalid', 'Ingresá un RUC válido, con guion y díito verificador (ej: 80012345-6).');
+      throw appError('ruc_invalid', 'Ingresá un RUC válido, con guion y dígito verificador (ej: 80012345-6).');
     }
 
     const localSubtotal = cartTotal(items);
