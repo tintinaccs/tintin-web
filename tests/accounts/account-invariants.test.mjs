@@ -48,3 +48,21 @@ test('la encomienda fija cédula canónica y customerId en el pedido', () => {
   assert.match(server, /error: 'ci_mismatch'/);
   assert.match(server, /error: 'ci_already_registered'/);
 });
+
+test('el PIN se genera sin sesgo por módulo y se emite con precondición atómica', () => {
+  const sender = read('functions/api/email-otp-send.js');
+  assert.match(sender, /OTP_UNBIASED_LIMIT/);
+  assert.match(sender, /while \(value >= OTP_UNBIASED_LIMIT\)/);
+  assert.match(sender, /currentDocument: existingDoc[\s\S]*?updateTime: existingDoc\.updateTime/);
+  assert.match(sender, /firestoreAdminCommit/);
+});
+
+test('un PIN correcto se consume atómicamente antes de crear la sesión', () => {
+  const verify = read('functions/api/email-otp-verify.js');
+  assert.match(verify, /consumedAt/);
+  assert.match(verify, /currentDocument: \{ updateTime: existingDoc\.updateTime \}/);
+  assert.match(verify, /await atomicMerge\(env, path, doc, \{ consumedAt:/);
+  const consumeIndex = verify.indexOf('await atomicMerge(env, path, doc, { consumedAt:');
+  const sessionIndex = verify.indexOf('findOrCreateUserByEmail');
+  assert.ok(consumeIndex >= 0 && sessionIndex >= 0 && consumeIndex < sessionIndex, 'el PIN debe consumirse antes de crear la sesión');
+});
