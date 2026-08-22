@@ -205,6 +205,11 @@
         <label class="perfil-label">Dirección de entrega (opcional)</label>
         <input type="text" class="perfil-input" id="perfil-dir" placeholder="Ej: Av. España 1234, Asunción" />
       </div>
+      <div class="perfil-field">
+        <label class="perfil-label">Nombre de usuario</label>
+        <input type="text" class="perfil-input" id="perfil-username" placeholder="minusculas_y_numeros" maxlength="20" autocapitalize="off" autocorrect="off" spellcheck="false" />
+        <div id="perfil-username-hint" style="font-size:12px;color:var(--text-muted);margin-top:4px"></div>
+      </div>
     </div>
   </div>
 
@@ -334,6 +339,8 @@ import { toSavedLocation } from "./js/pages/profile/configuracion-inicial-perfil
 import { getRegisteredMethod, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260821-accounts-phase-a-1";
 import { DEFAULT_COUNTRY, phoneKey, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
 import { changeReservedPhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260803-phone-reservation-1";
+import { changeReservedUsername } from "./js/components/forms/reserva-username.js?v=tintin-20260822-dob-username-onboarding-1";
+import { isValidUsernameFormat, isReservedUsername, usernameKey } from "./js/components/forms/utilidades-username.js?v=tintin-20260821-username-unique-1";
 
 const ROLE_COLORS = {
   superadmin: '#8b2642', admin: '#b84c72',
@@ -473,6 +480,16 @@ onAuthStateChanged(auth, async user => {
     document.getElementById('perfil-dir').value    = userData.address || '';
     document.getElementById('perfil-purchase-count').textContent = userData.purchaseCount || 0;
     document.getElementById('perfil-total-spent').textContent    = formatPrice(userData.totalSpent || 0);
+
+    const usernameInput = document.getElementById('perfil-username');
+    const usernameHint  = document.getElementById('perfil-username-hint');
+    usernameInput.value = userData.username || '';
+    if (userData.usernameChangedAt) {
+      usernameInput.disabled = true;
+      usernameHint.textContent = 'Ya usaste tu único cambio de nombre de usuario.';
+    } else {
+      usernameHint.textContent = 'Podés cambiarlo una sola vez. Solo minúsculas, números y guion bajo (3 a 20 caracteres).';
+    }
   }
 
   // Datos de la cuenta — se guardan desde el alta (js/core/store/perfil-usuario.js).
@@ -547,6 +564,19 @@ onAuthStateChanged(auth, async user => {
     const release = () => window.TintinReleaseProfileButton?.('btn-guardar-perfil');
     const nuevoTelefono = document.getElementById('perfil-tel').value.trim();
     const country = DEFAULT_COUNTRY;
+    const usernameInput = document.getElementById('perfil-username');
+    const nuevoUsername = usernameInput.value.trim().toLowerCase();
+    const usernameYaCambiado = !!userData?.usernameChangedAt;
+    const usernameActual = (userData?.username || '').toLowerCase();
+    const cambioUsername = !usernameYaCambiado && nuevoUsername !== usernameActual;
+
+    if (cambioUsername && nuevoUsername) {
+      if (!isValidUsernameFormat(nuevoUsername) || isReservedUsername(nuevoUsername)) {
+        toast('❌ Usuario inválido: 3 a 20 caracteres, minúsculas, números y guion bajo');
+        release();
+        return;
+      }
+    }
 
     try {
       // El teléfono pasa por la misma reserva que el alta: si no, editarlo
@@ -564,18 +594,37 @@ onAuthStateChanged(auth, async user => {
         await changeReservedPhone(db, user.uid, claveAnterior, nuevoTelefono, country);
       }
 
-      await setDoc(ref, {
+      const updates = {
         name:      document.getElementById('perfil-nombre').value.trim(),
         phone:     nuevoTelefono,
         address:   document.getElementById('perfil-dir').value.trim(),
         email:     user.email,
         updatedAt: serverTimestamp(),
-      }, { merge: true });
+      };
+
+      if (cambioUsername && nuevoUsername) {
+        // Mismo patrón que el teléfono: reserva la clave nueva y recién
+        // después libera la vieja. `usernameChangedAt` consume el único
+        // cambio permitido (ver usernameChangeValid() en firestore.rules).
+        await changeReservedUsername(db, user.uid, usernameKey(usernameActual), nuevoUsername);
+        updates.username = nuevoUsername;
+        updates.usernameChangedAt = serverTimestamp();
+      }
+
+      await setDoc(ref, updates, { merge: true });
       if (userData) userData.phone = nuevoTelefono; // para que un segundo guardado no reintente la reserva
+      if (cambioUsername && nuevoUsername) {
+        userData.username = nuevoUsername;
+        userData.usernameChangedAt = true;
+        usernameInput.disabled = true;
+        document.getElementById('perfil-username-hint').textContent = 'Ya usaste tu único cambio de nombre de usuario.';
+      }
       toast('✅ Perfil actualizado');
     } catch (e) {
       if (e?.code === 'phone_already_registered') {
         toast('❌ Ese número ya está en otra cuenta');
+      } else if (cambioUsername && (e?.code === 'username_already_taken' || e?.code === 'permission-denied')) {
+        toast('❌ Ese usuario ya está en uso');
       } else {
         console.error('[perfil] No se pudo guardar:', e);
         toast('❌ Error al guardar');

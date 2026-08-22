@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-22T15:02:39.379Z",
-  "sourceFingerprint": "98e961a93a3ec95b4c55766a4fa3fec4e87543e1060a2ca71d7d68f33a646c30",
+  "generatedAt": "2026-08-22T20:12:22.328Z",
+  "sourceFingerprint": "94601b730755824f40dc8d659c92ca05b83924fd87f6c36183119a70717427d0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 710,
     "textFiles": 678,
-    "totalBytes": 7985931,
+    "totalBytes": 8003758,
     "pages": 18,
     "modules": 447
   },
@@ -1773,8 +1773,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 176197,
-      "sha256": "4bcbe93f170ab5eabd846d89ce8bc6e3756d1c3020301ec76f2f32d5b3f19db0",
+      "bytes": 177525,
+      "sha256": "de36147ab30e3e5e38eff0f43ca9113a70b676fdbc4e1e67dc7466bb0fe5fa50",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1795,7 +1795,7 @@
           "error": ""
         }
       ],
-      "ids": 495,
+      "ids": 497,
       "scripts": [
         {
           "raw": "js/cargador-pagina.js?v=tintin-20260821-hero-authoritative-1",
@@ -1808,7 +1808,7 @@
           "line": 8
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260822-facturacion-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20260822-fase16-ficha-1",
           "target": "js/admin/admin-app.js",
           "line": 1904
         },
@@ -1830,22 +1830,22 @@
         {
           "raw": "js/admin/appearance/visual-studio-layout-admin.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/admin/appearance/visual-studio-layout-admin.js",
-          "line": 2104
+          "line": 2117
         },
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 2105
+          "line": 2118
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 2106
+          "line": 2119
         },
         {
           "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/admin/notifications/notificaciones-admin.js",
-          "line": 2107
+          "line": 2120
         }
       ],
       "styles": [
@@ -2017,7 +2017,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260822-facturacion-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20260822-fase16-ficha-1",
           "target": "js/admin/admin-app.js",
           "line": 1904,
           "exists": true
@@ -2043,25 +2043,25 @@
         {
           "raw": "js/admin/appearance/visual-studio-layout-admin.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/admin/appearance/visual-studio-layout-admin.js",
-          "line": 2104,
+          "line": 2117,
           "exists": true
         },
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 2105,
+          "line": 2118,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 2106,
+          "line": 2119,
           "exists": true
         },
         {
           "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/admin/notifications/notificaciones-admin.js",
-          "line": 2107,
+          "line": 2120,
           "exists": true
         },
         {
@@ -2269,22 +2269,28 @@
           "line": 1929
         },
         {
-          "id": "tpl-edit-overlay",
+          "id": "client-ficha-overlay",
           "role": "dialog",
           "classes": "",
           "line": 2031
         },
         {
+          "id": "tpl-edit-overlay",
+          "role": "dialog",
+          "classes": "",
+          "line": 2044
+        },
+        {
           "id": "tpl-preview-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2077
+          "line": 2090
         },
         {
           "id": "promo-confirm-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2090
+          "line": 2103
         }
       ],
       "tabs": [
@@ -5078,12 +5084,26 @@
           ],
           "type": "button",
           "text": "",
-          "ariaLabel": "Cerrar editor de plantilla",
+          "ariaLabel": "Cerrar ficha de cliente",
           "title": "",
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
           "line": 2035
+        },
+        {
+          "id": "",
+          "classes": [
+            "adm-icon-close"
+          ],
+          "type": "button",
+          "text": "",
+          "ariaLabel": "Cerrar editor de plantilla",
+          "title": "",
+          "inlineHandler": true,
+          "dataAction": {},
+          "hasSourceReference": "",
+          "line": 2048
         },
         {
           "id": "tpl-edit-restore-btn",
@@ -5099,7 +5119,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2066
+          "line": 2079
         },
         {
           "id": "tpl-edit-preview-btn",
@@ -5115,7 +5135,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2067
+          "line": 2080
         },
         {
           "id": "",
@@ -5129,7 +5149,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2070
+          "line": 2083
         },
         {
           "id": "tpl-edit-save-btn",
@@ -5144,7 +5164,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2071
+          "line": 2084
         },
         {
           "id": "",
@@ -5158,7 +5178,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 2081
+          "line": 2094
         },
         {
           "id": "",
@@ -5172,7 +5192,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2098
+          "line": 2111
         },
         {
           "id": "promo-confirm-send-btn",
@@ -5187,7 +5207,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2099
+          "line": 2112
         }
       ],
       "controls": [
@@ -6646,7 +6666,7 @@
           "name": "",
           "type": "hidden",
           "ariaLabel": "",
-          "line": 2038,
+          "line": 2051,
           "labeled": true
         },
         {
@@ -6655,7 +6675,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2041,
+          "line": 2054,
           "labeled": true
         },
         {
@@ -6664,7 +6684,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2043,
+          "line": 2056,
           "labeled": true
         },
         {
@@ -6673,7 +6693,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2044,
+          "line": 2057,
           "labeled": true
         },
         {
@@ -6682,7 +6702,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2045,
+          "line": 2058,
           "labeled": true
         },
         {
@@ -6691,7 +6711,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2046,
+          "line": 2059,
           "labeled": true
         },
         {
@@ -6700,7 +6720,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2047,
+          "line": 2060,
           "labeled": true
         },
         {
@@ -6709,7 +6729,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2048,
+          "line": 2061,
           "labeled": true
         },
         {
@@ -6718,7 +6738,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2050,
+          "line": 2063,
           "labeled": true
         },
         {
@@ -6727,7 +6747,7 @@
           "name": "",
           "type": "url",
           "ariaLabel": "",
-          "line": 2051,
+          "line": 2064,
           "labeled": true
         },
         {
@@ -6736,7 +6756,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2053,
+          "line": 2066,
           "labeled": true
         },
         {
@@ -6745,7 +6765,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2054,
+          "line": 2067,
           "labeled": true
         },
         {
@@ -6754,7 +6774,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 2056,
+          "line": 2069,
           "labeled": true
         },
         {
@@ -6763,7 +6783,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2096,
+          "line": 2109,
           "labeled": true
         }
       ]
@@ -12024,8 +12044,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 53399,
-      "sha256": "5d86c909d561b3c05356d4ec4a427a4abf4e93b86bbd8fc93191f4a880b0a930",
+      "bytes": 55452,
+      "sha256": "b67e1034ef7af818aecf15c74e818404624a10d94f432a4278e8d30783c179e5",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12046,13 +12066,13 @@
           "error": ""
         },
         {
-          "line": 186,
+          "line": 187,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 50,
+      "ids": 52,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1",
@@ -12077,17 +12097,17 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 1014
+          "line": 1064
         },
         {
           "raw": "tienda.js?v=tintin-20260822-facturacion-1",
           "target": "tienda.js",
-          "line": 1015
+          "line": 1065
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1016
+          "line": 1066
         }
       ],
       "styles": [
@@ -12197,7 +12217,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 132
+          "line": 133
         },
         {
           "raw": "/",
@@ -12207,7 +12227,7 @@
           "ariaLabel": "Volver a la tienda",
           "title": "",
           "imageAlt": "",
-          "line": 160
+          "line": 161
         }
       ],
       "references": [
@@ -12238,19 +12258,19 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 1014,
+          "line": 1064,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20260822-facturacion-1",
           "target": "tienda.js",
-          "line": 1015,
+          "line": 1065,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1016,
+          "line": 1066,
           "exists": true
         },
         {
@@ -12369,7 +12389,7 @@
           "id": "login-exit-modal",
           "role": "dialog",
           "classes": "login-exit-modal",
-          "line": 173
+          "line": 174
         }
       ],
       "tabs": [],
@@ -12404,6 +12424,20 @@
           "line": 93
         },
         {
+          "id": "btn-toggle-identifier",
+          "classes": [
+            "login-email-resend"
+          ],
+          "type": "button",
+          "text": "¿Preferís entrar con tu @usuario?",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 94
+        },
+        {
           "id": "btn-verify-otp",
           "classes": [
             "login-email-btn"
@@ -12415,7 +12449,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 103
+          "line": 104
         },
         {
           "id": "btn-resend-otp",
@@ -12429,7 +12463,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 104
+          "line": 105
         },
         {
           "id": "btn-change-email",
@@ -12443,7 +12477,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 105
+          "line": 106
         },
         {
           "id": "btn-change-profile-name",
@@ -12457,7 +12491,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 112
+          "line": 113
         },
         {
           "id": "login-profile-locate",
@@ -12471,7 +12505,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 147
+          "line": 148
         },
         {
           "id": "btn-save-profile",
@@ -12485,7 +12519,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 154
+          "line": 155
         },
         {
           "id": "btn-exit-continue",
@@ -12499,7 +12533,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 181
+          "line": 182
         },
         {
           "id": "btn-exit-logout",
@@ -12513,7 +12547,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 182
+          "line": 183
         }
       ],
       "controls": [
@@ -12532,7 +12566,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 102,
+          "line": 103,
           "labeled": true
         },
         {
@@ -12541,7 +12575,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 116,
+          "line": 117,
           "labeled": true
         },
         {
@@ -12550,7 +12584,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 118,
+          "line": 119,
           "labeled": true
         },
         {
@@ -12559,7 +12593,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 122,
+          "line": 123,
           "labeled": true
         },
         {
@@ -12568,7 +12602,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "País del teléfono",
-          "line": 128,
+          "line": 129,
           "labeled": true
         },
         {
@@ -12577,7 +12611,7 @@
           "name": "",
           "type": "tel",
           "ariaLabel": "",
-          "line": 129,
+          "line": 130,
           "labeled": true
         },
         {
@@ -12586,7 +12620,7 @@
           "name": "",
           "type": "date",
           "ariaLabel": "",
-          "line": 137,
+          "line": 138,
           "labeled": true
         },
         {
@@ -12595,7 +12629,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 144,
+          "line": 145,
           "labeled": true
         },
         {
@@ -12604,7 +12638,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 151,
+          "line": 152,
           "labeled": true
         }
       ]
@@ -12742,8 +12776,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 36394,
-      "sha256": "34f444b4641761819d359d78601a8e27568c09e0ca43f559d7fa60dface33b1d",
+      "bytes": 39174,
+      "sha256": "447a14a912160e9b9f08c5050a5940f4ecc650505954be0bba06bd9bcb0e3c25",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12764,13 +12798,13 @@
           "error": ""
         },
         {
-          "line": 320,
+          "line": 325,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 30,
+      "ids": 32,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1",
@@ -12795,37 +12829,37 @@
         {
           "raw": "tienda.js?v=tintin-20260822-facturacion-1",
           "target": "tienda.js",
-          "line": 318
+          "line": 323
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 648
+          "line": 697
         },
         {
           "raw": "js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260822-checkout-cart-profile-1",
           "target": "js/components/favorites/sincronizacion-favoritos.js",
-          "line": 649
+          "line": 698
         },
         {
           "raw": "js/pages/profile/favoritos-perfil.js?v=tintin-20260815-routes-clean-1",
           "target": "js/pages/profile/favoritos-perfil.js",
-          "line": 650
+          "line": 699
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 651
+          "line": 700
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 652
+          "line": 701
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 653
+          "line": 702
         }
       ],
       "styles": [
@@ -12925,7 +12959,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 272
+          "line": 277
         },
         {
           "raw": "https://wa.me/595981299331?text=Hola%21+Necesito+ayuda+con+mi+pedido+%F0%9F%8C%B8",
@@ -12935,7 +12969,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 281
+          "line": 286
         },
         {
           "raw": "/catalogo",
@@ -12945,7 +12979,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 297
+          "line": 302
         },
         {
           "raw": "/checkout",
@@ -12955,7 +12989,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 298
+          "line": 303
         },
         {
           "raw": "/",
@@ -12965,7 +12999,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 299
+          "line": 304
         }
       ],
       "references": [
@@ -12996,43 +13030,43 @@
         {
           "raw": "tienda.js?v=tintin-20260822-facturacion-1",
           "target": "tienda.js",
-          "line": 318,
+          "line": 323,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 648,
+          "line": 697,
           "exists": true
         },
         {
           "raw": "js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260822-checkout-cart-profile-1",
           "target": "js/components/favorites/sincronizacion-favoritos.js",
-          "line": 649,
+          "line": 698,
           "exists": true
         },
         {
           "raw": "js/pages/profile/favoritos-perfil.js?v=tintin-20260815-routes-clean-1",
           "target": "js/pages/profile/favoritos-perfil.js",
-          "line": 650,
+          "line": 699,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 651,
+          "line": 700,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 652,
+          "line": 701,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 653,
+          "line": 702,
           "exists": true
         },
         {
@@ -13128,19 +13162,19 @@
         {
           "raw": "/admin",
           "target": "admin.html",
-          "line": 272,
+          "line": 277,
           "exists": true
         },
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 297,
+          "line": 302,
           "exists": true
         },
         {
           "raw": "/checkout",
           "target": "checkout.html",
-          "line": 298,
+          "line": 303,
           "exists": true
         }
       ],
@@ -13163,7 +13197,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 216
+          "line": 221
         },
         {
           "id": "btn-guardar-ubicacion",
@@ -13177,7 +13211,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 225
+          "line": 230
         },
         {
           "id": "btn-cancelar-ubicacion",
@@ -13192,7 +13226,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 226
+          "line": 231
         },
         {
           "id": "btn-guardar-perfil",
@@ -13207,7 +13241,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 308
+          "line": 313
         },
         {
           "id": "btn-logout",
@@ -13222,7 +13256,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 309
+          "line": 314
         }
       ],
       "controls": [
@@ -13255,11 +13289,20 @@
         },
         {
           "tag": "input",
+          "id": "perfil-username",
+          "name": "",
+          "type": "text",
+          "ariaLabel": "",
+          "line": 210,
+          "labeled": true
+        },
+        {
+          "tag": "input",
           "id": "perfil-location-search",
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 220,
+          "line": 225,
           "labeled": true
         }
       ]
@@ -16461,8 +16504,8 @@
     },
     {
       "path": "config/csp-runtime.js",
-      "bytes": 338597,
-      "sha256": "9f0f7f7d9a6726d9a48520d869c3b080fa4362715173bfc37441d911a3f2c1cc",
+      "bytes": 340703,
+      "sha256": "16b533e2b247a0e24c4b28f912d95f5a1d4273818c23a43c3d5aba8eae430291",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17728,8 +17771,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 425963,
-      "sha256": "28b287ff765f31ac559efef48251d1f3ba54635d36866cea123e72a4ed9ce671",
+      "bytes": 426066,
+      "sha256": "928eada35a9d5d07f2b0eff860b79c214b6935fb22664e47e2a6773668348b0f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17891,27 +17934,27 @@
         },
         {
           "url": "https://wa.me/$%7Bo.userPhone.replace(//D/g",
-          "line": 2166
+          "line": 2167
         },
         {
           "url": "https://tintinaccesorios.pages.dev/admin.html",
-          "line": 2828
+          "line": 2829
         },
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 2878
+          "line": 2879
         },
         {
           "url": "https://wa.me/",
-          "line": 4571
+          "line": 4572
         },
         {
           "url": "https://via.placeholder.com/400x400/fce4ec/ea7ea3",
-          "line": 6232
+          "line": 6233
         },
         {
           "url": "https://maps.google.com/",
-          "line": 7050
+          "line": 7051
         }
       ]
     },
@@ -18963,8 +19006,8 @@
     },
     {
       "path": "js/admin/users/gestion-usuarios-admin.js",
-      "bytes": 20764,
-      "sha256": "50f64c0b78eb68e89f9ec0ed64dbeb73092f05a6aa4741fe23f2f1bb59ba5b09",
+      "bytes": 26712,
+      "sha256": "f555596c9f6486024a0e13dc35e5b2c6e04967ae667d3b0ec050be2f191b2e00",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18986,19 +19029,19 @@
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 23
+          "line": 25
         },
         {
           "raw": "../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/core/auth/roles.js",
           "dynamic": false,
-          "line": 24
+          "line": 26
         },
         {
           "raw": "../../core/auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1",
           "target": "js/core/auth/contrato-cuentas-generado.js",
           "dynamic": false,
-          "line": 25
+          "line": 27
         }
       ],
       "endpoints": [
@@ -19008,7 +19051,7 @@
         },
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 23
+          "line": 25
         }
       ]
     },
@@ -27814,8 +27857,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 176197,
-      "sha256": "4bcbe93f170ab5eabd846d89ce8bc6e3756d1c3020301ec76f2f32d5b3f19db0"
+      "bytes": 177525,
+      "sha256": "de36147ab30e3e5e38eff0f43ca9113a70b676fdbc4e1e67dc7466bb0fe5fa50"
     },
     {
       "path": "apple-touch-icon.png",
@@ -28156,14 +28199,14 @@
     {
       "path": "config/csp-runtime.js",
       "extension": ".js",
-      "bytes": 338597,
-      "sha256": "9f0f7f7d9a6726d9a48520d869c3b080fa4362715173bfc37441d911a3f2c1cc"
+      "bytes": 340703,
+      "sha256": "16b533e2b247a0e24c4b28f912d95f5a1d4273818c23a43c3d5aba8eae430291"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
-      "bytes": 338512,
-      "sha256": "345693931b66cda790b4d3fcdd0a8e327a7f3ead4a382c386e1e14be7073ef17"
+      "bytes": 340618,
+      "sha256": "0aa5ddcb9cc3a09f382370c4db885a8951ae709d8e34ba509d1c9e11eb0c0aaa"
     },
     {
       "path": "config/public-site.json",
@@ -28894,8 +28937,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 62658,
-      "sha256": "d9a8131985e9aa30dffabf8820dfd92d7bea372ab080518632ec7a9d904326a6"
+      "bytes": 64061,
+      "sha256": "731299046fd9b4853665e85934d6d0eb0bb2e910467336dbf841751995ca75aa"
     },
     {
       "path": "functions/[page].js",
@@ -29224,8 +29267,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 425963,
-      "sha256": "28b287ff765f31ac559efef48251d1f3ba54635d36866cea123e72a4ed9ce671"
+      "bytes": 426066,
+      "sha256": "928eada35a9d5d07f2b0eff860b79c214b6935fb22664e47e2a6773668348b0f"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -29410,8 +29453,8 @@
     {
       "path": "js/admin/users/gestion-usuarios-admin.js",
       "extension": ".js",
-      "bytes": 20764,
-      "sha256": "50f64c0b78eb68e89f9ec0ed64dbeb73092f05a6aa4741fe23f2f1bb59ba5b09"
+      "bytes": 26712,
+      "sha256": "f555596c9f6486024a0e13dc35e5b2c6e04967ae667d3b0ec050be2f191b2e00"
     },
     {
       "path": "js/analytics/actividad-sitio.js",
@@ -30382,8 +30425,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 53399,
-      "sha256": "5d86c909d561b3c05356d4ec4a427a4abf4e93b86bbd8fc93191f4a880b0a930"
+      "bytes": 55452,
+      "sha256": "b67e1034ef7af818aecf15c74e818404624a10d94f432a4278e8d30783c179e5"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -30586,8 +30629,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 36394,
-      "sha256": "34f444b4641761819d359d78601a8e27568c09e0ca43f559d7fa60dface33b1d"
+      "bytes": 39174,
+      "sha256": "447a14a912160e9b9f08c5050a5940f4ecc650505954be0bba06bd9bcb0e3c25"
     },
     {
       "path": "playwright.config.js",
@@ -31797,28 +31840,28 @@
     },
     {
       "file": "js/admin/admin-app.js",
-      "line": 811,
+      "line": 812,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/admin/admin-app.js",
-      "line": 824,
+      "line": 825,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/admin/admin-app.js",
-      "line": 830,
+      "line": 831,
       "raw": "perfil.html",
       "target": "perfil.html",
       "exists": true
     },
     {
       "file": "js/admin/admin-app.js",
-      "line": 869,
+      "line": 870,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
@@ -32749,49 +32792,49 @@
     },
     {
       "file": "login.html",
-      "line": 314,
+      "line": 320,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 317,
+      "line": 323,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 317,
+      "line": 323,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 409,
+      "line": 415,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 416,
+      "line": 423,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 427,
+      "line": 434,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 588,
+      "line": 637,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -32839,7 +32882,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 317
+          "line": 323
         }
       ]
     },
@@ -32848,11 +32891,11 @@
       "references": [
         {
           "file": "js/admin/admin-app.js",
-          "line": 824
+          "line": 825
         },
         {
           "file": "perfil.html",
-          "line": 427
+          "line": 434
         }
       ]
     },
@@ -32898,7 +32941,7 @@
     },
     {
       "file": "js/admin/admin-app.js",
-      "line": 1784,
+      "line": 1785,
       "target": "/api/admin-delete-user",
       "method": "POST"
     },
@@ -32928,7 +32971,7 @@
     },
     {
       "file": "js/admin/users/gestion-usuarios-admin.js",
-      "line": 110,
+      "line": 236,
       "target": "/api/admin-delete-user",
       "method": "POST"
     },
@@ -33009,12 +33052,12 @@
           },
           {
             "file": "js/admin/users/gestion-usuarios-admin.js",
-            "line": 103,
+            "line": 229,
             "operation": "collection"
           },
           {
             "file": "js/admin/users/gestion-usuarios-admin.js",
-            "line": 487,
+            "line": 622,
             "operation": "collection"
           },
           {
@@ -33059,47 +33102,47 @@
         "references": [
           {
             "file": "js/admin/admin-app.js",
-            "line": 5474,
+            "line": 5475,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 5608,
+            "line": 5609,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6039,
+            "line": 6040,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6046,
+            "line": 6047,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6053,
+            "line": 6054,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6058,
+            "line": 6059,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6099,
+            "line": 6100,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6110,
+            "line": 6111,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6129,
+            "line": 6130,
             "operation": "doc"
           },
           {
@@ -33144,77 +33187,77 @@
         "references": [
           {
             "file": "js/admin/admin-app.js",
-            "line": 7532,
+            "line": 7533,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7853,
+            "line": 7854,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7873,
+            "line": 7874,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8061,
+            "line": 8062,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8081,
+            "line": 8082,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7472,
+            "line": 7473,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7475,
+            "line": 7476,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7540,
+            "line": 7541,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7917,
+            "line": 7918,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7965,
+            "line": 7966,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7977,
+            "line": 7978,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7998,
+            "line": 7999,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8033,
+            "line": 8034,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8105,
+            "line": 8106,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8119,
+            "line": 8120,
             "operation": "doc"
           },
           {
@@ -33244,27 +33287,27 @@
         "references": [
           {
             "file": "js/admin/admin-app.js",
-            "line": 3155,
+            "line": 3156,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 3178,
+            "line": 3179,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 4052,
+            "line": 4053,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 4090,
+            "line": 4091,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 4096,
+            "line": 4097,
             "operation": "doc"
           }
         ]
@@ -33274,17 +33317,17 @@
         "references": [
           {
             "file": "js/admin/admin-app.js",
-            "line": 3102,
+            "line": 3103,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 3151,
+            "line": 3152,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 3177,
+            "line": 3178,
             "operation": "collection"
           },
           {
@@ -33314,17 +33357,17 @@
         "references": [
           {
             "file": "js/admin/admin-app.js",
-            "line": 3043,
+            "line": 3044,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 3050,
+            "line": 3051,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 3159,
+            "line": 3160,
             "operation": "doc"
           },
           {
@@ -33339,57 +33382,57 @@
         "references": [
           {
             "file": "js/admin/admin-app.js",
-            "line": 3147,
+            "line": 3148,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 3176,
+            "line": 3177,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 3776,
+            "line": 3777,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 3793,
+            "line": 3794,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 3067,
+            "line": 3068,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 3664,
+            "line": 3665,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 3738,
+            "line": 3739,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 3762,
+            "line": 3763,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 3810,
+            "line": 3811,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 3827,
+            "line": 3828,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 4386,
+            "line": 4387,
             "operation": "doc"
           }
         ]
@@ -33409,32 +33452,32 @@
         "references": [
           {
             "file": "js/admin/admin-app.js",
-            "line": 1248,
+            "line": 1249,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6173,
+            "line": 6174,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 2246,
+            "line": 2247,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 2269,
+            "line": 2270,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 2493,
+            "line": 2494,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7206,
+            "line": 7207,
             "operation": "doc"
           },
           {
@@ -33465,6 +33508,11 @@
           {
             "file": "js/admin/shopify-commerce-admin.js",
             "line": 1014,
+            "operation": "collection"
+          },
+          {
+            "file": "js/admin/users/gestion-usuarios-admin.js",
+            "line": 97,
             "operation": "collection"
           },
           {
@@ -33499,12 +33547,12 @@
           },
           {
             "file": "perfil.html",
-            "line": 599,
+            "line": 648,
             "operation": "collection"
           },
           {
             "file": "perfil.html",
-            "line": 607,
+            "line": 656,
             "operation": "collection"
           },
           {
@@ -33569,22 +33617,22 @@
         "references": [
           {
             "file": "js/admin/admin-app.js",
-            "line": 4855,
+            "line": 4856,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 5349,
+            "line": 5350,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 5377,
+            "line": 5378,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 5415,
+            "line": 5416,
             "operation": "doc"
           }
         ]
@@ -33614,67 +33662,67 @@
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 4874,
+            "line": 4875,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 5374,
+            "line": 5375,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6157,
+            "line": 6158,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6257,
+            "line": 6258,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6527,
+            "line": 6528,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 4720,
+            "line": 4721,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 5347,
+            "line": 5348,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 5399,
+            "line": 5400,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 5414,
+            "line": 5415,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 5879,
+            "line": 5880,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 5891,
+            "line": 5892,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 5902,
+            "line": 5903,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6903,
+            "line": 6904,
             "operation": "doc"
           },
           {
@@ -33804,12 +33852,7 @@
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 2623,
-            "operation": "doc"
-          },
-          {
-            "file": "js/admin/admin-app.js",
-            "line": 2699,
+            "line": 2624,
             "operation": "doc"
           },
           {
@@ -33819,52 +33862,57 @@
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 4484,
+            "line": 2701,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 4562,
+            "line": 4485,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 4583,
+            "line": 4563,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 4593,
+            "line": 4584,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 4596,
+            "line": 4594,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 4603,
+            "line": 4597,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7465,
+            "line": 4604,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7484,
+            "line": 7466,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7493,
+            "line": 7485,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8048,
+            "line": 7494,
+            "operation": "doc"
+          },
+          {
+            "file": "js/admin/admin-app.js",
+            "line": 8049,
             "operation": "doc"
           },
           {
@@ -34089,7 +34137,7 @@
         "references": [
           {
             "file": "js/admin/admin-app.js",
-            "line": 1398,
+            "line": 1399,
             "operation": "doc"
           },
           {
@@ -34104,7 +34152,7 @@
         "references": [
           {
             "file": "js/admin/admin-app.js",
-            "line": 1434,
+            "line": 1435,
             "operation": "collection"
           },
           {
@@ -34119,12 +34167,12 @@
         "references": [
           {
             "file": "js/admin/admin-app.js",
-            "line": 1193,
+            "line": 1194,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 1416,
+            "line": 1417,
             "operation": "collection"
           },
           {
@@ -34174,42 +34222,42 @@
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 1263,
+            "line": 1264,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6208,
+            "line": 6209,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 821,
+            "line": 822,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 1738,
+            "line": 1739,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 1761,
+            "line": 1762,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 1814,
+            "line": 1815,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 1948,
+            "line": 1949,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 1986,
+            "line": 1987,
             "operation": "doc"
           },
           {
@@ -34224,12 +34272,12 @@
           },
           {
             "file": "js/admin/users/gestion-usuarios-admin.js",
-            "line": 481,
+            "line": 616,
             "operation": "collection"
           },
           {
             "file": "js/admin/users/gestion-usuarios-admin.js",
-            "line": 99,
+            "line": 225,
             "operation": "doc"
           },
           {
@@ -34329,17 +34377,17 @@
           },
           {
             "file": "login.html",
-            "line": 338,
+            "line": 344,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 749,
+            "line": 755,
             "operation": "doc"
           },
           {
             "file": "perfil.html",
-            "line": 422,
+            "line": 429,
             "operation": "doc"
           },
           {

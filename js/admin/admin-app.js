@@ -684,6 +684,7 @@ window.addEventListener('hashchange', () => {
 (function setupAdminOverlayA11y() {
   const OVERLAYS = [
     { id: 'order-edit-overlay',   close: () => window.closeOrderEdit && window.closeOrderEdit() },
+    { id: 'client-ficha-overlay', close: () => window.closeClientFicha && window.closeClientFicha() },
     { id: 'tpl-edit-overlay',     close: () => window.closeTplEdit && window.closeTplEdit() },
     { id: 'tpl-preview-overlay',  close: () => window.closeTplPreview && window.closeTplPreview() },
     { id: 'promo-confirm-overlay',close: () => window.closePromoConfirm && window.closePromoConfirm() }
