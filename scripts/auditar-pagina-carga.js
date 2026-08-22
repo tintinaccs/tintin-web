@@ -107,7 +107,10 @@ function auditHtmlPage(page) {
   const isRedirect = /http-equiv=["']refresh["']/i.test(html) || /location\.(?:replace|href|assign)/.test(html);
   if (!isRedirect && meaningfulBodyLength(html) < 10) fail(page, 'el cuerpo queda prácticamente vacío sin ser una redirección.');
 
-  const ids = [...html.matchAll(/\bid\s*=\s*(["'])(.*?)\1/gi)]
+  // Auditar IDs solo en el marcado real: una asignación JavaScript como
+  // `group.id = '...'` no crea un segundo nodo simultáneo en el DOM.
+  const markupWithoutScripts = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ');
+  const ids = [...markupWithoutScripts.matchAll(/\bid\s*=\s*(["'])(.*?)\1/gi)]
     .map(match => match[2])
     .filter(id => id && !/\$\{|\{\{|<%/.test(id));
   const duplicateIds = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))];
