@@ -15,7 +15,7 @@ import {
   cartTotal,
   formatPrice,
   awaitCartReady
-} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260822-checkout-cart-profile-1';
+} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260822-checkout-hardening-2';
 import {
   findCountryByCode,
   normalizePhone,
@@ -28,8 +28,8 @@ import {
   normalizeRuc,
   isValidRazonSocial
 } from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1';
-import { createOrderViaServer } from '../create-order-client.js?v=tintin-20260811-phone-order-1';
-import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-facturacion-1';
+import { createOrderViaServer } from '../create-order-client.js?v=tintin-20260822-checkout-hardening-2';
+import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-checkout-hardening-2';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;

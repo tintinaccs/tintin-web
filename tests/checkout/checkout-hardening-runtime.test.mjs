@@ -20,7 +20,7 @@ test('cart controls use lineId so variants cannot mutate the wrong row', () => {
   assert.match(hardening, /row\.dataset\.lineId/);
   assert.match(hardening, /updateQty\(lineId/);
   assert.match(hardening, /removeFromCart\(lineId\)/);
-  assert.match(hardening, /dataCartVariant/);
+  assert.match(hardening, /dataset\.cartVariant/);
 });
 
 test('profile must load and not be blocked before forward navigation', () => {

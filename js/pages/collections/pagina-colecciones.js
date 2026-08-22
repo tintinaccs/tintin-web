@@ -3,7 +3,7 @@ const collectionsGrid = document.getElementById('colls-page-grid');
 const featuredGrid = document.getElementById('collections-featured-grid');
 const collectionsStatus = document.getElementById('collections-grid-status');
 const featuredStatus = document.getElementById('collections-featured-status');
-const cartSyncPromise = import('../../components/cart/sincronizacion-carrito.js?v=tintin-20260822-checkout-cart-profile-1');
+const cartSyncPromise = import('../../components/cart/sincronizacion-carrito.js?v=tintin-20260822-checkout-hardening-2');
 let liveProducts = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
 let collectionsReady = false;
 let productsReady = false;
