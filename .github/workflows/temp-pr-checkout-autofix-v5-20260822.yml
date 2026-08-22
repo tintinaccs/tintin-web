@@ -1,0 +1,86 @@
+name: TEMP PR checkout autofix v5 2026-08-22
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  autofix-v5:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout rama del PR
+        uses: actions/checkout@v5
+        with:
+          ref: fix/checkout-hardening-2026-08-22
+          fetch-depth: 0
+
+      - name: Evitar segunda pasada
+        id: guard
+        shell: bash
+        run: |
+          if git log -1 --pretty=%B | grep -q '\[checkout-autofix-v5\]'; then
+            echo 'skip=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'skip=false' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Node
+        if: steps.guard.outputs.skip != 'true'
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Aplicar parche completo corregido
+        if: steps.guard.outputs.skip != 'true'
+        shell: bash
+        run: |
+          awk "/python3 - <<'PY'/{flag=1;next} /^          PY$/{flag=0} flag" .github/workflows/temp-pr-checkout-autofix-20260822.yml | sed 's/^          //' > /tmp/checkout_patch.py
+          python3 /tmp/checkout_patch.py
+
+          awk "/python3 - <<'PY'/{flag=1;next} /^          PY$/{flag=0} flag" .github/workflows/temp-pr-checkout-autofix-v4-20260822.yml | sed 's/^          //' | sed 's/ROOT/root/g' > /tmp/checkout_patch_v4.py
+          python3 /tmp/checkout_patch_v4.py
+
+      - name: Instalar dependencias
+        if: steps.guard.outputs.skip != 'true'
+        run: npm install
+
+      - name: Validar sintaxis
+        if: steps.guard.outputs.skip != 'true'
+        shell: bash
+        run: |
+          node --check js/create-order-client.js
+          node --check js/orders/politica-checkout.js
+          node --check js/orders/pedido-checkout-seguro.js
+          node --check js/pages/checkout/checkout-hardening.js
+          cp apps-script/CrearPedido.gs /tmp/CrearPedido.js
+          cp apps-script/Seguridad.gs /tmp/Seguridad.js
+          node --check /tmp/CrearPedido.js
+          node --check /tmp/Seguridad.js
+
+      - name: Probar checkout completo
+        if: steps.guard.outputs.skip != 'true'
+        run: npm run test:checkout-contract
+
+      - name: Auditar pedidos seguros
+        if: steps.guard.outputs.skip != 'true'
+        run: npm run audit:secure-orders
+
+      - name: Auditar versionado de caché
+        if: steps.guard.outputs.skip != 'true'
+        run: npm run audit:cache-versioning
+
+      - name: Commit y push
+        if: steps.guard.outputs.skip != 'true'
+        shell: bash
+        run: |
+          git config user.name "Tintin Checkout Autofix"
+          git config user.email "actions@users.noreply.github.com"
+          git add apps-script checkout.html js tests
+          git diff --cached --check
+          git commit -m "fix(checkout): cerrar auditoría integral [checkout-autofix-v5]"
+          git push origin HEAD:fix/checkout-hardening-2026-08-22
