@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-22T15:31:42.185Z",
-  "sourceFingerprint": "93032fc32993a456af7c6e8c4e4a7356fbda476570c8513f5f75f65e5f3088c3",
+  "generatedAt": "2026-08-22T18:23:33.189Z",
+  "sourceFingerprint": "08c9a2b4ea82ab6659224cd5032bdb408e4b459a882304415afb36f27b8d6e66",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 710,
     "textFiles": 678,
-    "totalBytes": 7987847,
+    "totalBytes": 7992030,
     "pages": 18,
     "modules": 447
   },
@@ -12756,8 +12756,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 36394,
-      "sha256": "34f444b4641761819d359d78601a8e27568c09e0ca43f559d7fa60dface33b1d",
+      "bytes": 39174,
+      "sha256": "447a14a912160e9b9f08c5050a5940f4ecc650505954be0bba06bd9bcb0e3c25",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12778,13 +12778,13 @@
           "error": ""
         },
         {
-          "line": 320,
+          "line": 325,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 30,
+      "ids": 32,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1",
@@ -12809,37 +12809,37 @@
         {
           "raw": "tienda.js?v=tintin-20260822-facturacion-1",
           "target": "tienda.js",
-          "line": 318
+          "line": 323
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 648
+          "line": 697
         },
         {
           "raw": "js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260822-checkout-cart-profile-1",
           "target": "js/components/favorites/sincronizacion-favoritos.js",
-          "line": 649
+          "line": 698
         },
         {
           "raw": "js/pages/profile/favoritos-perfil.js?v=tintin-20260815-routes-clean-1",
           "target": "js/pages/profile/favoritos-perfil.js",
-          "line": 650
+          "line": 699
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 651
+          "line": 700
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 652
+          "line": 701
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 653
+          "line": 702
         }
       ],
       "styles": [
@@ -12939,7 +12939,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 272
+          "line": 277
         },
         {
           "raw": "https://wa.me/595981299331?text=Hola%21+Necesito+ayuda+con+mi+pedido+%F0%9F%8C%B8",
@@ -12949,7 +12949,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 281
+          "line": 286
         },
         {
           "raw": "/catalogo",
@@ -12959,7 +12959,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 297
+          "line": 302
         },
         {
           "raw": "/checkout",
@@ -12969,7 +12969,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 298
+          "line": 303
         },
         {
           "raw": "/",
@@ -12979,7 +12979,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 299
+          "line": 304
         }
       ],
       "references": [
@@ -13010,43 +13010,43 @@
         {
           "raw": "tienda.js?v=tintin-20260822-facturacion-1",
           "target": "tienda.js",
-          "line": 318,
+          "line": 323,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 648,
+          "line": 697,
           "exists": true
         },
         {
           "raw": "js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260822-checkout-cart-profile-1",
           "target": "js/components/favorites/sincronizacion-favoritos.js",
-          "line": 649,
+          "line": 698,
           "exists": true
         },
         {
           "raw": "js/pages/profile/favoritos-perfil.js?v=tintin-20260815-routes-clean-1",
           "target": "js/pages/profile/favoritos-perfil.js",
-          "line": 650,
+          "line": 699,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 651,
+          "line": 700,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 652,
+          "line": 701,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 653,
+          "line": 702,
           "exists": true
         },
         {
@@ -13142,19 +13142,19 @@
         {
           "raw": "/admin",
           "target": "admin.html",
-          "line": 272,
+          "line": 277,
           "exists": true
         },
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 297,
+          "line": 302,
           "exists": true
         },
         {
           "raw": "/checkout",
           "target": "checkout.html",
-          "line": 298,
+          "line": 303,
           "exists": true
         }
       ],
@@ -13177,7 +13177,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 216
+          "line": 221
         },
         {
           "id": "btn-guardar-ubicacion",
@@ -13191,7 +13191,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 225
+          "line": 230
         },
         {
           "id": "btn-cancelar-ubicacion",
@@ -13206,7 +13206,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 226
+          "line": 231
         },
         {
           "id": "btn-guardar-perfil",
@@ -13221,7 +13221,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 308
+          "line": 313
         },
         {
           "id": "btn-logout",
@@ -13236,7 +13236,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 309
+          "line": 314
         }
       ],
       "controls": [
@@ -13269,11 +13269,20 @@
         },
         {
           "tag": "input",
+          "id": "perfil-username",
+          "name": "",
+          "type": "text",
+          "ariaLabel": "",
+          "line": 210,
+          "labeled": true
+        },
+        {
+          "tag": "input",
           "id": "perfil-location-search",
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 220,
+          "line": 225,
           "labeled": true
         }
       ]
@@ -16476,7 +16485,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 338597,
-      "sha256": "51c9cd02da37bcd7f61e547af2321302f50e48516f4ccd3492b5617896944324",
+      "sha256": "bd8e841d04d826af1942ba8dd3a9f354804effe7177d4d4f2df110c02e68102d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28171,13 +28180,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 338597,
-      "sha256": "51c9cd02da37bcd7f61e547af2321302f50e48516f4ccd3492b5617896944324"
+      "sha256": "bd8e841d04d826af1942ba8dd3a9f354804effe7177d4d4f2df110c02e68102d"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 338512,
-      "sha256": "a1631033a645d35c3cb7b7e86b5231430dede5ce14cd95aad25962ce8865bfd3"
+      "sha256": "66535b82687b3c096461c11b001b02110d88f576df60c49d411463b71413a516"
     },
     {
       "path": "config/public-site.json",
@@ -28908,8 +28917,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 62658,
-      "sha256": "d9a8131985e9aa30dffabf8820dfd92d7bea372ab080518632ec7a9d904326a6"
+      "bytes": 64061,
+      "sha256": "731299046fd9b4853665e85934d6d0eb0bb2e910467336dbf841751995ca75aa"
     },
     {
       "path": "functions/[page].js",
@@ -30600,8 +30609,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 36394,
-      "sha256": "34f444b4641761819d359d78601a8e27568c09e0ca43f559d7fa60dface33b1d"
+      "bytes": 39174,
+      "sha256": "447a14a912160e9b9f08c5050a5940f4ecc650505954be0bba06bd9bcb0e3c25"
     },
     {
       "path": "playwright.config.js",
@@ -32791,21 +32800,21 @@
     },
     {
       "file": "perfil.html",
-      "line": 416,
+      "line": 423,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 427,
+      "line": 434,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 588,
+      "line": 637,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -32866,7 +32875,7 @@
         },
         {
           "file": "perfil.html",
-          "line": 427
+          "line": 434
         }
       ]
     },
@@ -33513,12 +33522,12 @@
           },
           {
             "file": "perfil.html",
-            "line": 599,
+            "line": 648,
             "operation": "collection"
           },
           {
             "file": "perfil.html",
-            "line": 607,
+            "line": 656,
             "operation": "collection"
           },
           {
@@ -34353,7 +34362,7 @@
           },
           {
             "file": "perfil.html",
-            "line": 422,
+            "line": 429,
             "operation": "doc"
           },
           {
