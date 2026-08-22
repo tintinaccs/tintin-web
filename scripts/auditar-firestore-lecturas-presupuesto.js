@@ -23,6 +23,17 @@ const publicCatalogApi = read('functions/api/public-catalog.js');
 const publicCatalogClient = read('js/core/firebase/catalogo-publico-api.js');
 const routesConfig = read('_routes.json');
 
+// El guard de cuota debe vivir únicamente dentro de la rama de Checkout del
+// cargador por página. El runtime usa un segundo argumento `version` para que
+// todos los módulos del checkout compartan una URL de caché inmutable.
+const checkoutRouteStart = pageLoader.indexOf("if (/\\/checkout(?:\\.html)?$/.test(path)) {");
+const nextRouteStart = pageLoader.indexOf("if (/\\/login(?:\\.html)?$/.test(path))", checkoutRouteStart + 1);
+const checkoutRouteBlock = checkoutRouteStart >= 0 && nextRouteStart > checkoutRouteStart
+  ? pageLoader.slice(checkoutRouteStart, nextRouteStart)
+  : '';
+const quotaLoadPattern = /load\('pages\/checkout\/checkout-control-cuota\.js',\s*version\)/g;
+const quotaLoadCount = (pageLoader.match(quotaLoadPattern) || []).length;
+
 check(
   'Catálogo público evita un listener completo por visitante',
   products.includes('startPublicProductsRealtime') &&
@@ -69,7 +80,11 @@ check(
 check('Mantenimientos se cargan por página', pageLoader.includes('loadPageMaintenance') && !collections.includes("import './mantenimiento-catalogo.js") && !collections.includes("import './mantenimiento-producto.js"), 'Un store compartido no debe ejecutar todos los runtimes.');
 check('Clientas no leen rolePermissions/main', editBadge.includes('if (!EDITABLE_ROLES.includes(role)) return false;') && !editBadge.includes('loadRolePermissions(true)'), 'Solo roles administrativos deben consultar la matriz.');
 check('Checkout bloquea clics repetidos tras 429', quotaGuard.includes('resource-exhausted') && quotaGuard.includes('COOLDOWN_MS') && quotaGuard.includes('stopImmediatePropagation'), 'Un 429 no debe generar nuevos intentos inmediatos.');
-check('Protección de cuota se carga solo en Checkout', pageLoader.includes("load('pages/checkout/checkout-control-cuota.js')"), 'El guard no debe formar parte de otras páginas.');
+check(
+  'Protección de cuota se carga solo en Checkout',
+  quotaLoadCount === 1 && quotaLoadPattern.test(checkoutRouteBlock),
+  'El guard debe cargarse exactamente una vez y dentro de la rama Checkout del cargador por página.'
+);
 check('Settings general usa una suscripción compartida', /onSnapshot\(doc\(db, 'settings', 'general'\)/.test(settingsStore) && whatsapp.includes('onPublicSettings') && paymentMethods.includes('onPublicSettings'), 'WhatsApp y pagos no deben abrir listeners paralelos.');
 check('Páginas con configuración propia evitan el listener global', whatsapp.includes('pageOwnsSettings') && ['contact.html', 'terminos.html', 'privacidad.html', 'envios.html'].every(page => whatsapp.includes(page)), 'Las páginas con runtime propio duplicarían settings/general.');
 check('Firestore continúa sin persistencia IndexedDB', firebase.includes('getFirestore(app)') && !/initializeFirestore\s*\(/.test(firebase) && !/enableIndexedDbPersistence\s*\(/.test(firebase), 'No debe volver la persistencia que bloqueaba navegadores restrictivos.');
