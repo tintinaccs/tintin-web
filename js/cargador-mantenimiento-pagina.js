@@ -6,7 +6,7 @@ function pathName() {
 }
 
 function load(file) {
-  return import(`./${file}?v=tintin-20260817-mobile-accordion-1`);
+  return import(`./${file}?v=tintin-20260822-checkout-hardening-2`);
 }
 
 export function loadPageMaintenance() {
@@ -16,6 +16,7 @@ export function loadPageMaintenance() {
   if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js');
   if (/\/checkout(?:\.html)?$/.test(path)) {
     return Promise.allSettled([
+      load('pages/checkout/checkout-hardening.js'),
       load('pages/checkout/checkout-mantenimiento.js'),
       load('pages/checkout/checkout-metodos-pago.js'),
       load('pages/checkout/checkout-control-cuota.js')
