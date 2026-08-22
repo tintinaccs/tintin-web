@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-22T15:02:39.379Z",
-  "sourceFingerprint": "98e961a93a3ec95b4c55766a4fa3fec4e87543e1060a2ca71d7d68f33a646c30",
+  "generatedAt": "2026-08-22T15:31:42.185Z",
+  "sourceFingerprint": "93032fc32993a456af7c6e8c4e4a7356fbda476570c8513f5f75f65e5f3088c3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 710,
     "textFiles": 678,
-    "totalBytes": 7985931,
+    "totalBytes": 7987847,
     "pages": 18,
     "modules": 447
   },
@@ -12024,8 +12024,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 53399,
-      "sha256": "5d86c909d561b3c05356d4ec4a427a4abf4e93b86bbd8fc93191f4a880b0a930",
+      "bytes": 55315,
+      "sha256": "ef3dffc5e8b73fb16bd2f2ac314327b511267c6bf6153930334d1dbdc605848b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12046,13 +12046,13 @@
           "error": ""
         },
         {
-          "line": 186,
+          "line": 187,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 50,
+      "ids": 52,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1",
@@ -12077,17 +12077,17 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 1014
+          "line": 1059
         },
         {
           "raw": "tienda.js?v=tintin-20260822-facturacion-1",
           "target": "tienda.js",
-          "line": 1015
+          "line": 1060
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1016
+          "line": 1061
         }
       ],
       "styles": [
@@ -12197,7 +12197,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 132
+          "line": 133
         },
         {
           "raw": "/",
@@ -12207,7 +12207,7 @@
           "ariaLabel": "Volver a la tienda",
           "title": "",
           "imageAlt": "",
-          "line": 160
+          "line": 161
         }
       ],
       "references": [
@@ -12238,19 +12238,19 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 1014,
+          "line": 1059,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20260822-facturacion-1",
           "target": "tienda.js",
-          "line": 1015,
+          "line": 1060,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1016,
+          "line": 1061,
           "exists": true
         },
         {
@@ -12369,7 +12369,7 @@
           "id": "login-exit-modal",
           "role": "dialog",
           "classes": "login-exit-modal",
-          "line": 173
+          "line": 174
         }
       ],
       "tabs": [],
@@ -12404,6 +12404,20 @@
           "line": 93
         },
         {
+          "id": "btn-toggle-identifier",
+          "classes": [
+            "login-email-resend"
+          ],
+          "type": "button",
+          "text": "¿Preferís entrar con tu @usuario?",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 94
+        },
+        {
           "id": "btn-verify-otp",
           "classes": [
             "login-email-btn"
@@ -12415,7 +12429,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 103
+          "line": 104
         },
         {
           "id": "btn-resend-otp",
@@ -12429,7 +12443,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 104
+          "line": 105
         },
         {
           "id": "btn-change-email",
@@ -12443,7 +12457,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 105
+          "line": 106
         },
         {
           "id": "btn-change-profile-name",
@@ -12457,7 +12471,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 112
+          "line": 113
         },
         {
           "id": "login-profile-locate",
@@ -12471,7 +12485,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 147
+          "line": 148
         },
         {
           "id": "btn-save-profile",
@@ -12485,7 +12499,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 154
+          "line": 155
         },
         {
           "id": "btn-exit-continue",
@@ -12499,7 +12513,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 181
+          "line": 182
         },
         {
           "id": "btn-exit-logout",
@@ -12513,7 +12527,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 182
+          "line": 183
         }
       ],
       "controls": [
@@ -12532,7 +12546,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 102,
+          "line": 103,
           "labeled": true
         },
         {
@@ -12541,7 +12555,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 116,
+          "line": 117,
           "labeled": true
         },
         {
@@ -12550,7 +12564,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 118,
+          "line": 119,
           "labeled": true
         },
         {
@@ -12559,7 +12573,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 122,
+          "line": 123,
           "labeled": true
         },
         {
@@ -12568,7 +12582,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "País del teléfono",
-          "line": 128,
+          "line": 129,
           "labeled": true
         },
         {
@@ -12577,7 +12591,7 @@
           "name": "",
           "type": "tel",
           "ariaLabel": "",
-          "line": 129,
+          "line": 130,
           "labeled": true
         },
         {
@@ -12586,7 +12600,7 @@
           "name": "",
           "type": "date",
           "ariaLabel": "",
-          "line": 137,
+          "line": 138,
           "labeled": true
         },
         {
@@ -12595,7 +12609,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 144,
+          "line": 145,
           "labeled": true
         },
         {
@@ -12604,7 +12618,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 151,
+          "line": 152,
           "labeled": true
         }
       ]
@@ -16462,7 +16476,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 338597,
-      "sha256": "9f0f7f7d9a6726d9a48520d869c3b080fa4362715173bfc37441d911a3f2c1cc",
+      "sha256": "51c9cd02da37bcd7f61e547af2321302f50e48516f4ccd3492b5617896944324",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28157,13 +28171,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 338597,
-      "sha256": "9f0f7f7d9a6726d9a48520d869c3b080fa4362715173bfc37441d911a3f2c1cc"
+      "sha256": "51c9cd02da37bcd7f61e547af2321302f50e48516f4ccd3492b5617896944324"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 338512,
-      "sha256": "345693931b66cda790b4d3fcdd0a8e327a7f3ead4a382c386e1e14be7073ef17"
+      "sha256": "a1631033a645d35c3cb7b7e86b5231430dede5ce14cd95aad25962ce8865bfd3"
     },
     {
       "path": "config/public-site.json",
@@ -30382,8 +30396,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 53399,
-      "sha256": "5d86c909d561b3c05356d4ec4a427a4abf4e93b86bbd8fc93191f4a880b0a930"
+      "bytes": 55315,
+      "sha256": "ef3dffc5e8b73fb16bd2f2ac314327b511267c6bf6153930334d1dbdc605848b"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -32749,28 +32763,28 @@
     },
     {
       "file": "login.html",
-      "line": 314,
+      "line": 315,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 317,
+      "line": 318,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 317,
+      "line": 318,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 409,
+      "line": 410,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -32839,7 +32853,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 317
+          "line": 318
         }
       ]
     },
@@ -34329,12 +34343,12 @@
           },
           {
             "file": "login.html",
-            "line": 338,
+            "line": 339,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 749,
+            "line": 750,
             "operation": "doc"
           },
           {
