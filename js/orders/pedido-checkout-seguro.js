@@ -1,17 +1,20 @@
 import { auth, db } from '../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
   doc,
   getDoc,
   runTransaction,
-  serverTimestamp
+  serverTimestamp,
+  setDoc
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import {
   getCartLocal,
   setCartLocal,
   clearCart,
   cartTotal,
-  formatPrice
+  formatPrice,
+  awaitCartReady
 } from '../components/cart/sincronizacion-carrito.js?v=tintin-20260822-facturacion-1';
 import {
   findCountryByCode,
@@ -31,13 +34,6 @@ import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-f
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
 
-  // El puente que dispara el correo de confirmación del pedido
-  // (checkout-puente-correo.js) se cargaba como efecto secundario de
-  // importar js/email/notificaciones-correo.js — pero desde la migración a Resend (PR
-  // #177) checkout.html dejó de importar ese archivo, así que el puente
-  // nunca se volvía a cargar y ningún correo de pedido se disparaba desde
-  // el checkout real. Este módulo ya se carga únicamente en checkout.html
-  // (ver js/components/cart/sincronizacion-carrito.js), así que alcanza con importarlo acá.
   if (!window.TintinCheckoutEmailBridgeLoading) {
     window.TintinCheckoutEmailBridgeLoading = true;
     import('../pages/checkout/checkout-puente-correo.js?v=tintin-20260814-social-notifications-1').catch(error => {
@@ -48,7 +44,14 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   const REQUEST_KEY = 'tt_spark_checkout_request_id';
   const DEFAULT_STORE_WHATSAPP = '595981299331';
   const CHECKOUT_COOLDOWN_MS = 90 * 1000;
+  const GUEST_CART_KEY = 'tt_cart_guest';
+  const GUEST_ACTIVITY_KEY = 'tt_cart_guest_activity_v1';
+  const CHECKOUT_DEFAULTS_FIELD = 'checkoutDefaults';
   let submitting = false;
+  let orderCompleted = false;
+  let replayingForwardClick = false;
+  let cartGuardTimer = 0;
+  let lastProfilePrefillUid = '';
 
   const text = value => String(value == null ? '' : value).trim();
   const escapeHtml = value => text(value)
@@ -79,8 +82,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     return Number.isFinite(parsed) ? Math.round(parsed) : NaN;
   }
 
-  // Conserva la misma clave de idempotencia durante la carga aunque el
-  // navegador bloquee sessionStorage (modo privado o navegador embebido).
   let inMemoryRequestId = null;
   function requestId() {
     try {
@@ -117,6 +118,224 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       box.textContent = '';
     }
   }
+
+  function readGuestCartForRecovery() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(GUEST_CART_KEY) || '[]');
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  // El runtime del carrito espera App Check antes de abrir el listener remoto.
+  // Si App Check queda bloqueado por el navegador, awaitCartReady() resuelve en
+  // modo offline. En ese caso, una compra agregada como invitada justo antes de
+  // que Firebase Auth resolviera podía quedar todavía en tt_cart_guest mientras
+  // el scope activo ya había cambiado al usuario, haciendo que checkout viera
+  // un carrito vacío. Sólo recuperamos ese carrito DESPUÉS de awaitCartReady():
+  // si la sincronización remota funcionó, el runtime ya lo migró por sí mismo.
+  async function readyCartItems() {
+    await awaitCartReady();
+    let items = getCartLocal();
+    const user = auth.currentUser;
+    if (items.length || !user || user.isAnonymous) return items;
+
+    const guestItems = readGuestCartForRecovery();
+    if (!guestItems.length) return items;
+
+    items = setCartLocal(guestItems);
+    try {
+      localStorage.removeItem(GUEST_CART_KEY);
+      localStorage.removeItem(GUEST_ACTIVITY_KEY);
+    } catch {}
+    console.info('[secure-checkout-order] Carrito temporal recuperado para la cuenta activa.');
+    return items;
+  }
+
+  function activeCheckoutStep() {
+    return Array.from(document.querySelectorAll('.ck-panel'))
+      .findIndex(panel => panel.classList.contains('active'));
+  }
+
+  function setConfirmDisabledByCart(disabled) {
+    const button = document.getElementById('ck-confirm-btn');
+    if (!button || button.style.display === 'none') return;
+    if (disabled) {
+      button.dataset.ttCartGuardDisabled = '1';
+      button.disabled = true;
+      button.setAttribute('aria-disabled', 'true');
+      return;
+    }
+    if (button.dataset.ttCartGuardDisabled === '1' && !submitting) {
+      delete button.dataset.ttCartGuardDisabled;
+      button.disabled = false;
+      button.setAttribute('aria-disabled', 'false');
+    }
+  }
+
+  function forceBackToCart(message = 'Tu carrito está vacío. Agregá productos antes de continuar.') {
+    if (orderCompleted) return;
+    document.querySelectorAll('.ck-panel').forEach((panel, index) => {
+      panel.classList.toggle('active', index === 0);
+    });
+    document.querySelectorAll('.ck-step').forEach((step, index) => {
+      step.classList.remove('active', 'done');
+      if (index === 0) step.classList.add('active');
+    });
+    const summary = document.getElementById('ck-confirm-summary');
+    if (summary) summary.innerHTML = '';
+    const error = document.getElementById('error-0');
+    if (error) {
+      error.textContent = message;
+      error.classList.add('show');
+    }
+    setConfirmDisabledByCart(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function ensureCartAvailable({ forceBack = true } = {}) {
+    const items = await readyCartItems();
+    if (items.length) {
+      setConfirmDisabledByCart(false);
+      return items;
+    }
+    setConfirmDisabledByCart(true);
+    if (forceBack) forceBackToCart();
+    return [];
+  }
+
+  async function prefillCheckoutDefaults(user) {
+    if (!user || user.isAnonymous || !user.uid || lastProfilePrefillUid === user.uid) return;
+    lastProfilePrefillUid = user.uid;
+    try {
+      const snapshot = await getDoc(doc(db, 'users', user.uid));
+      if (auth.currentUser?.uid !== user.uid || !snapshot.exists()) return;
+      const profile = snapshot.data() || {};
+      const defaults = profile[CHECKOUT_DEFAULTS_FIELD] || {};
+      const invoice = defaults.invoice || {};
+
+      const ci = text(defaults.ci);
+      const ciInput = document.getElementById('ck-ci');
+      if (ciInput && !text(ciInput.value) && isValidCi(ci)) {
+        ciInput.value = normalizeCi(ci);
+      }
+
+      const razonSocial = text(invoice.razonSocial);
+      const razonInput = document.getElementById('ck-razon-social');
+      if (razonInput && !text(razonInput.value) && isValidRazonSocial(razonSocial)) {
+        razonInput.value = razonSocial;
+      }
+
+      const ruc = text(invoice.ruc);
+      const rucInput = document.getElementById('ck-ruc');
+      if (rucInput && !text(rucInput.value) && isValidRuc(ruc)) {
+        rucInput.value = normalizeRuc(ruc);
+      }
+    } catch (error) {
+      lastProfilePrefillUid = '';
+      console.warn('[secure-checkout-order] No se pudieron precargar CI/facturación:', error);
+    }
+  }
+
+  async function persistCheckoutDefaults(draft) {
+    const user = auth.currentUser;
+    if (!user || user.isAnonymous || !user.uid) return;
+    const userRef = doc(db, 'users', user.uid);
+    let previous = {};
+    try {
+      const snapshot = await getDoc(userRef);
+      previous = snapshot.exists() ? (snapshot.data()?.[CHECKOUT_DEFAULTS_FIELD] || {}) : {};
+    } catch {}
+
+    const previousInvoice = previous.invoice || {};
+    const draftCi = text(draft?.ci);
+    const draftRazon = text(draft?.razonSocial);
+    const draftRuc = text(draft?.ruc);
+    const previousCi = text(previous.ci);
+    const previousRazon = text(previousInvoice.razonSocial);
+    const previousRuc = text(previousInvoice.ruc);
+
+    const ci = isValidCi(draftCi)
+      ? normalizeCi(draftCi)
+      : (isValidCi(previousCi) ? normalizeCi(previousCi) : '');
+    const razonSocial = draft?.wantsInvoice && isValidRazonSocial(draftRazon)
+      ? draftRazon
+      : (isValidRazonSocial(previousRazon) ? previousRazon : '');
+    const ruc = draft?.wantsInvoice && isValidRuc(draftRuc)
+      ? normalizeRuc(draftRuc)
+      : (isValidRuc(previousRuc) ? normalizeRuc(previousRuc) : '');
+
+    await setDoc(userRef, {
+      [CHECKOUT_DEFAULTS_FIELD]: {
+        ci,
+        invoice: { razonSocial, ruc },
+        updatedAt: serverTimestamp()
+      }
+    }, { merge: true });
+  }
+
+  // Antes de cualquier avance esperamos el scope real del carrito. Así el
+  // botón no puede usar el carrito de invitada durante unos milisegundos y
+  // luego continuar con el carrito de la cuenta vacío.
+  window.addEventListener('click', event => {
+    const button = event.target?.closest?.(
+      '#btn-step1-next,#btn-step2-next,#btn-step3-next,#btn-step4-next'
+    );
+    if (!button || replayingForwardClick || orderCompleted) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+
+    Promise.resolve().then(async () => {
+      const items = await ensureCartAvailable();
+      if (!items.length) return;
+      replayingForwardClick = true;
+      try {
+        button.click();
+      } finally {
+        replayingForwardClick = false;
+      }
+    }).catch(error => {
+      console.error('[secure-checkout-order] No se pudo validar el carrito antes de avanzar:', error);
+      forceBackToCart('No pudimos cargar tu carrito. Recargá la página e intentá de nuevo.');
+    });
+  }, true);
+
+  // Si el carrito cambia mientras la clienta ya está en Envío/Datos/Pago o
+  // Confirmación y queda realmente vacío, no puede permanecer en un resumen
+  // de Gs. 0 ni conservar Confirmar pedido habilitado.
+  window.addEventListener('tt_cart_updated', () => {
+    if (orderCompleted) return;
+    window.clearTimeout(cartGuardTimer);
+    cartGuardTimer = window.setTimeout(async () => {
+      try {
+        const items = await readyCartItems();
+        if (!items.length && activeCheckoutStep() > 0) {
+          forceBackToCart();
+        } else {
+          setConfirmDisabledByCart(!items.length);
+        }
+      } catch (error) {
+        console.warn('[secure-checkout-order] No se pudo reevaluar el carrito:', error);
+      }
+    }, 0);
+  });
+
+  onAuthStateChanged(auth, user => {
+    lastProfilePrefillUid = '';
+    if (user && !user.isAnonymous) prefillCheckoutDefaults(user);
+  });
+
+  // Fuerza un render nuevo cuando el runtime ya resolvió cuál es el carrito
+  // real de la cuenta. checkout.html ya escucha tt_cart_updated y redibuja.
+  readyCartItems()
+    .then(() => window.setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('tt_cart_updated', {
+        detail: { source: 'secure-checkout-ready' }
+      }));
+    }, 0))
+    .catch(error => console.warn('[secure-checkout-order] Carrito inicial no disponible:', error));
 
   function installLeafletCapture() {
     if (!window.L?.marker || window.L.__ttCheckoutCapture) return false;
@@ -194,13 +413,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       .filter(Boolean);
   }
 
-  // deliveryCities/encomiendaCities/deliveryCost/encomiendaCost viven en
-  // settings/shippingRates, separado de settings/general (ver
-  // sparkShippingRatesPath() en firestore.rules) — settings/general debe
-  // quedar liviano para no superar el límite de 1000 expresiones que
-  // Firestore evalúa por escritura. Si settings/shippingRates todavía no
-  // existe (recién migrado, ver js/admin/admin-app.js), se usan los mismos
-  // campos si siguen presentes en settings/general como respaldo.
   function mergeShippingRates(settings, shippingRatesSnap) {
     const rates = shippingRatesSnap?.exists() ? shippingRatesSnap.data() || {} : {};
     return {
@@ -212,10 +424,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     };
   }
 
-  // 'agencia' | 'puerta' | '' — lo elige la clienta en el paso de envío y sólo
-  // aplica a encomienda. Sin este dato no se sabe si el pedido se despacha a
-  // una agencia o se lleva a una puerta, que es justamente lo que hay que
-  // coordinar después.
   function encomiendaMode() {
     const puerta = document.getElementById('ck-enc-puerta');
     const agencia = document.getElementById('ck-enc-agencia');
@@ -259,12 +467,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       }
       return {
         method: 'encomienda',
-        // Entrega en puerta necesita el punto exacto igual que el delivery;
-        // el retiro en agencia no tiene dirección que guardar.
         encomiendaMode: mode,
         city: encomienda.name,
-        // La transportadora cobra la encomienda al recibir. No forma parte
-        // del importe cobrado por Tintin ni del total que verá una pasarela.
         cost: 0,
         pending: false,
         rateIndex: encomienda.sourceIndex,
@@ -290,7 +494,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       throw appError('login_required', 'Necesitás iniciar sesión con un correo verificado.');
     }
 
-    const items = getCartLocal();
+    const items = await readyCartItems();
     if (!items.length) throw appError('empty_cart', 'Tu carrito está vacío.');
 
     const [settingsSnap, shippingRatesSnap] = await Promise.all([
@@ -325,9 +529,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       }
     }
 
-    // CI sólo se exige para encomienda (la transportadora la pide). Factura
-    // es un pedido explícito, nunca obligatorio — pero si se marcó, razón
-    // social y RUC sí lo son.
     const ciRaw = text(document.getElementById('ck-ci')?.value);
     if (shipping.method === 'encomienda' && !isValidCi(ciRaw)) {
       throw appError('ci_invalid', 'Ingresá tu cédula de identidad (solo números, 5 a 8 dígitos).');
@@ -339,7 +540,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       throw appError('razon_social_required', 'Ingresá la razón social para la factura.');
     }
     if (wantsInvoice && !isValidRuc(rucRaw)) {
-      throw appError('ruc_invalid', 'Ingresá un RUC válido, con guion y dígito verificador (ej: 80012345-6).');
+      throw appError('ruc_invalid', 'Ingresá un RUC válido, con guion y díito verificador (ej: 80012345-6).');
     }
 
     const localSubtotal = cartTotal(items);
@@ -381,10 +582,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
 
   function renderQuote(quote) {
     setCartLocal(authoritativeCartFromQuote(quote));
-    // Reemplaza solo el contenedor de ítems/totales (#ck-summary-quote,
-    // definido en checkout.html), no todo #ck-confirm-summary — de lo
-    // contrario se perdían nombre/teléfono/dirección/notas del resumen
-    // justo cuando se le pide a la clienta que lo revise de nuevo.
     const target = document.getElementById('ck-summary-quote') || document.getElementById('ck-confirm-summary');
     if (!target) return;
     target.innerHTML = `
@@ -397,7 +594,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       <div class="ck-summary-total"><span>Costo de envío</span><span class="ck-summary-total-val">${quote.shippingPending ? 'A confirmar' : formatPrice(quote.shippingCost || 0)}</span></div>
       <div class="ck-summary-total" style="font-size:18px"><span>TOTAL${quote.shippingPending ? ' (+ envío)' : ''}</span><span class="ck-summary-total-val">${formatPrice(quote.total)}</span></div>`;
   }
-
 
   async function reserveCheckoutGuard(draft) {
     const user = auth.currentUser;
@@ -436,16 +632,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }, { maxAttempts: 2 });
   }
 
-  // El pedido se crea server-side (Apps Script, apps-script/CrearPedido.gs)
-  // en vez de con una transacción de Firestore desde el navegador: ese
-  // proceso corre con la identidad de su dueño (ScriptApp.getOAuthToken()),
-  // así que no pasa por el límite de 1000 expresiones de firestore.rules ni
-  // por ningún tope de productos distintos. El servidor vuelve a leer
-  // precio/stock real de cada producto, valida tienda/cuenta/envío/turno de
-  // compra (checkoutGuards) y crea el pedido ya con el stock descontado en
-  // una sola transacción — no hay estado "pendiente" intermedio que limpiar
-  // en un reintento: si el requestId ya generó un pedido, el servidor
-  // devuelve ese mismo pedido (created: false) en vez de duplicarlo.
   async function createOrderOnServer(draft) {
     const response = await createOrderViaServer(draft);
     if (!response || typeof response !== 'object') {
@@ -484,15 +670,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     return mode ? `${base} — ${mode}` : base;
   }
 
-  /**
-   * Mensaje de WhatsApp para CONSULTAR por un pedido que ya se hizo.
-   *
-   * Los pedidos se hacen en la página, no por WhatsApp: cuando este botón
-   * aparece, el pedido ya está registrado con su número. El mensaje lleva el
-   * detalle para que no haya que reescribirlo al preguntar algo, y arranca
-   * diciendo que es una consulta — no un pedido nuevo, para que nadie del
-   * otro lado lo cargue dos veces.
-   */
   function buildWhatsAppMessage(result, draft) {
     const itemLines = (result.items || [])
       .map(item => `• ${item.qty}x ${item.name} — ${formatPrice(item.price * item.qty)}`)
@@ -620,9 +797,19 @@ if (!window.TintinSecureCheckoutOrderBooted) {
 
     try {
       const draft = await buildDraft();
+      try {
+        await persistCheckoutDefaults(draft);
+      } catch (profileError) {
+        console.warn('[secure-checkout-order] El pedido continúa, pero no se pudieron guardar CI/facturación:', profileError);
+      }
       await reserveCheckoutGuard(draft);
       const result = await createOrderOnServer(draft);
-      await clearCart();
+      orderCompleted = true;
+      try {
+        await clearCart();
+      } catch (clearError) {
+        console.warn('[secure-checkout-order] El pedido se creó, pero no se pudo limpiar el carrito local:', clearError);
+      }
       try { sessionStorage.removeItem(REQUEST_KEY); } catch {}
       inMemoryRequestId = null;
       success(result, draft);
@@ -656,6 +843,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         button.disabled = true;
         button.textContent = 'Revisá el carrito para continuar';
         showError('Uno de los productos ya no está disponible.', true);
+      } else if (code === 'empty_cart') {
+        forceBackToCart();
+        button.textContent = '✓ Confirmar pedido';
       } else {
         showError(message(error));
         button.disabled = false;
