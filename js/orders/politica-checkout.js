@@ -9,25 +9,24 @@ export const CHECKOUT_DRAFT_KEYS = Object.freeze([
 const clean = value => String(value == null ? '' : value).trim();
 
 export function aggregateCheckoutCart(items) {
-  const byProduct = new Map();
+  // La unidad lógica es producto + variante. Agrupar sólo por id mezclaba,
+  // por ejemplo, 2 anillos talle 6 + 1 talle 7 en una sola línea de qty 3.
+  const byLine = new Map();
   for (const item of items || []) {
     const id = clean(item?.id);
+    const variant = clean(item?.variant);
     const qty = Number(item?.qty || 1);
     if (!id || !Number.isInteger(qty) || qty < 1 || qty > 99) {
       throw Object.assign(new Error('Encontramos una cantidad no válida en el carrito.'), { code: 'invalid_cart' });
     }
-    const variant = clean(item?.variant);
-    const existing = byProduct.get(id);
-    if (existing) {
-      existing.qty += qty;
-      if (variant && !existing.variants.includes(variant)) existing.variants.push(variant);
-    } else {
-      byProduct.set(id, { id, qty, variants: variant ? [variant] : [] });
-    }
+    const key = `${id}\u241f${variant}`;
+    const existing = byLine.get(key);
+    if (existing) existing.qty += qty;
+    else byLine.set(key, { id, qty, variant });
   }
-  const result = [...byProduct.values()];
+  const result = [...byLine.values()];
   if (result.some(item => item.qty > 99)) {
-    throw Object.assign(new Error('La cantidad de uno de los productos es demasiado alta.'), { code: 'invalid_cart' });
+    throw Object.assign(new Error('La cantidad de una variante es demasiado alta.'), { code: 'invalid_cart' });
   }
   return result;
 }
