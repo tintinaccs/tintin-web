@@ -16,7 +16,7 @@
 
    Funciones manuales/trigger:
    - tintinSyncAllToSheets_(): reconstruye el espejo desde Firestore.
-   - tintinInstallSyncTrigger_(): instala un trigger onEdit autorizado.
+   - tintinInstallSyncTrigger_(): instala onEdit + reconciliación periódica.
    - tintinSyncEditedRow_(e): propaga desde Sheets únicamente campos
      explícitamente permitidos y genera changeId para evitar bucles.
    ============================================================= */
@@ -110,6 +110,14 @@ function tintinSyncFirestoreList_(collectionId, maxDocs) {
     pageToken = body.nextPageToken || '';
   } while (pageToken && all.length < max);
   return all;
+}
+
+function tintinSyncFirestoreGet_(collectionId, documentId) {
+  var result = phase3FetchDocument_(
+    collectionId + '/' + encodeURIComponent(documentId),
+    ScriptApp.getOAuthToken()
+  );
+  return result && result.ok ? result.data || {} : null;
 }
 
 function tintinSyncFirestorePatch_(collectionId, documentId, patch) {
@@ -253,6 +261,11 @@ function tintinSyncWriteMeta_(entityType, entityId, firestoreUpdatedAt, changeId
 }
 
 function tintinSyncAllToSheets_() {
+  // Crea snapshots faltantes antes de exponer el espejo administrativo. En
+  // pedidos nuevos el propio checkout debe escribirlos; esta reconciliación
+  // cubre históricos y cualquier pedido legado que todavía no los tenga.
+  if (typeof tintinEnsureOrderSnapshots_ === 'function') tintinEnsureOrderSnapshots_();
+
   var lock = LockService.getScriptLock();
   lock.waitLock(30000);
   try {
@@ -281,12 +294,23 @@ function tintinSyncHeaderMap_(sheet) {
   return map;
 }
 
+function tintinSyncRefreshUserRow_(sheet, row, uid) {
+  var data = tintinSyncFirestoreGet_('users', uid);
+  if (!data) throw new Error('No se pudo recargar el usuario desde Firestore');
+  sheet.getRange(row, 1, 1, TINTIN_SYNC_HEADERS_.Users.length).setValues([tintinSyncUserRow_(uid, data)]);
+}
+
+function tintinSyncRefreshOrderRow_(sheet, row, orderId) {
+  var data = tintinSyncFirestoreGet_('orders', orderId);
+  if (!data) throw new Error('No se pudo recargar el pedido desde Firestore');
+  sheet.getRange(row, 1, 1, TINTIN_SYNC_HEADERS_.Orders.length).setValues([tintinSyncOrderRow_(orderId, data)]);
+}
+
 function tintinSyncEditedUserRow_(sheet, row) {
   var map = tintinSyncHeaderMap_(sheet);
   var values = sheet.getRange(row, 1, 1, sheet.getLastColumn()).getValues()[0];
   var uid = tintinSyncClean_(values[map.uid], 180);
   if (!uid) return;
-  // Sheets nunca puede modificar identificadores, permisos ni acceso.
   var patch = {
     name: tintinSyncClean_(values[map.name], 160),
     address: tintinSyncClean_(values[map.address], 500),
@@ -327,10 +351,40 @@ function tintinSyncEditedRow_(e) {
   var row = e.range.getRow();
   if (row <= 1) return;
   var name = sheet.getName();
+  if (name !== TINTIN_SYNC_SHEETS_.users && name !== TINTIN_SYNC_SHEETS_.orders) return;
+
+  var map = tintinSyncHeaderMap_(sheet);
+  var start = e.range.getColumn() - 1;
+  var width = e.range.getNumColumns();
+  var changedHeaders = Object.keys(map).filter(function (header) {
+    return map[header] >= start && map[header] < start + width;
+  });
+
   try {
-    if (name === TINTIN_SYNC_SHEETS_.users) tintinSyncEditedUserRow_(sheet, row);
-    else if (name === TINTIN_SYNC_SHEETS_.orders) tintinSyncEditedOrderRow_(sheet, row);
-    // AuditLog y SyncMeta son espejo/telemetría: nunca escriben de vuelta.
+    if (name === TINTIN_SYNC_SHEETS_.users) {
+      var userValues = sheet.getRange(row, 1, 1, sheet.getLastColumn()).getValues()[0];
+      var uid = tintinSyncClean_(userValues[map.uid], 180);
+      var allowedUserColumns = ['name', 'address'];
+      var forbiddenUserEdit = changedHeaders.some(function (header) { return allowedUserColumns.indexOf(header) === -1; });
+      if (forbiddenUserEdit) {
+        if (uid) tintinSyncRefreshUserRow_(sheet, row, uid);
+        tintinSyncWriteMeta_('user', uid || ('row-' + row), '', '', 'rejected', 'Sheets no puede modificar identidad, acceso, rol, teléfono, CI, email ni username.');
+        return;
+      }
+      tintinSyncEditedUserRow_(sheet, row);
+      return;
+    }
+
+    var orderValues = sheet.getRange(row, 1, 1, sheet.getLastColumn()).getValues()[0];
+    var orderId = tintinSyncClean_(orderValues[map.orderId], 220);
+    var allowedOrderColumns = ['status', 'paymentStatus'];
+    var forbiddenOrderEdit = changedHeaders.some(function (header) { return allowedOrderColumns.indexOf(header) === -1; });
+    if (forbiddenOrderEdit) {
+      if (orderId) tintinSyncRefreshOrderRow_(sheet, row, orderId);
+      tintinSyncWriteMeta_('order', orderId || ('row-' + row), '', '', 'rejected', 'Sheets sólo puede cambiar estado operativo y estado de pago; el snapshot y los importes son inmutables.');
+      return;
+    }
+    tintinSyncEditedOrderRow_(sheet, row);
   } catch (error) {
     console.error('[TintinSync] onEdit falló:', error);
     try {
@@ -340,11 +394,20 @@ function tintinSyncEditedRow_(e) {
   }
 }
 
+function tintinPeriodicReconcile_() {
+  return tintinSyncAllToSheets_();
+}
+
 function tintinInstallSyncTrigger_() {
   var spreadsheet = tintinSyncSpreadsheet_();
   ScriptApp.getProjectTriggers().forEach(function (trigger) {
-    if (trigger.getHandlerFunction() === 'tintinSyncEditedRow_') ScriptApp.deleteTrigger(trigger);
+    var handler = trigger.getHandlerFunction();
+    if (handler === 'tintinSyncEditedRow_' || handler === 'tintinPeriodicReconcile_') {
+      ScriptApp.deleteTrigger(trigger);
+    }
   });
   ScriptApp.newTrigger('tintinSyncEditedRow_').forSpreadsheet(spreadsheet).onEdit().create();
-  return { ok: true };
+  ScriptApp.newTrigger('tintinPeriodicReconcile_').timeBased().everyMinutes(5).create();
+  var initial = tintinSyncAllToSheets_();
+  return { ok: true, initial: initial, intervalMinutes: 5 };
 }
