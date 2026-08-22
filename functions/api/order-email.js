@@ -260,7 +260,7 @@ function adminEmail(order, orderId) {
         <tr><td style="padding:5px 0;color:#7b6f72;width:150px">Cliente</td><td style="padding:5px 0"><strong>${escapeHtml(order.userName)}</strong></td></tr>
         <tr><td style="padding:5px 0;color:#7b6f72">Correo</td><td style="padding:5px 0">${escapeHtml(order.userEmail)}</td></tr>
         <tr><td style="padding:5px 0;color:#7b6f72">Teléfono</td><td style="padding:5px 0">${escapeHtml(order.userPhone)}</td></tr>
-        <tr><td style="padding:5px 0;color:#7b6f72">Ciudad</td><td style="padding:5px 0">${escapeHtml(order?.shipping?.city)}</td></tr>
+        <tr><td style="padding:5px 0;color:#7b6f72">Ciudad</td><td style="padding:5px 0">${escapeHtml(   clean(order?.shipping?.city, 120) +   (clean(order?.shipping?.departamento, 80)     ? ` (${clean(order?.shipping?.departamento, 80)})`     : '') )}</td></tr>
         <tr><td style="padding:5px 0;color:#7b6f72">Dirección</td><td style="padding:5px 0">${escapeHtml(order?.shipping?.address || '—')}</td></tr>
         <tr><td style="padding:5px 0;color:#7b6f72">Referencia</td><td style="padding:5px 0">${escapeHtml(order?.shipping?.referencia || '—')}</td></tr>
         <tr><td style="padding:5px 0;color:#7b6f72">Entrega</td><td style="padding:5px 0">${escapeHtml(shippingLabel(order))}</td></tr>
