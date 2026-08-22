@@ -1,16 +1,15 @@
-name: TEMP checkout final v8
+name: TEMP checkout final v9
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
+      - fix/checkout-hardening-2026-08-22
 
 permissions:
   contents: write
-  pull-requests: read
 
 jobs:
-  final-v8:
+  final-v9:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout rama
@@ -23,7 +22,7 @@ jobs:
         id: guard
         shell: bash
         run: |
-          if git log -1 --pretty=%B | grep -q '\[checkout-final-v8\]'; then
+          if git log -1 --pretty=%B | grep -q '\[checkout-final-v9\]'; then
             echo 'skip=true' >> "$GITHUB_OUTPUT"
           else
             echo 'skip=false' >> "$GITHUB_OUTPUT"
@@ -46,19 +45,36 @@ jobs:
           path = Path('js/orders/pedido-checkout-seguro.js')
           text = path.read_text(encoding='utf-8')
 
-          old = """          return {\n            name: text(item),\n            price: parseMoney(fallback),\n            sourceIndex\n          };"""
-          new = """          return {\n            name: text(item),\n            price: parseMoney(fallback),\n            departamento: 'Central',\n            sourceIndex\n          };"""
-          if old not in text:
-              raise SystemExit('No se encontró normalización legacy de ciudad')
-          text = text.replace(old, new, 1)
+          legacy_old = """          return {
+            name: text(item),
+            price: parseMoney(fallback),
+            sourceIndex
+          };"""
+          legacy_new = """          return {
+            name: text(item),
+            price: parseMoney(fallback),
+            departamento: 'Central',
+            sourceIndex
+          };"""
+          if legacy_old in text:
+              text = text.replace(legacy_old, legacy_new, 1)
 
-          old = """        return {\n          name: text(item.name),\n          price: Number.isFinite(price) ? price : null,\n          sourceIndex\n        };"""
-          new = """        return {\n          name: text(item.name),\n          price: Number.isFinite(price) ? price : null,\n          departamento: text(item.departamento) || 'Central',\n          sourceIndex\n        };"""
-          if old not in text:
-              raise SystemExit('No se encontró normalización de ciudad objeto')
-          text = text.replace(old, new, 1)
+          object_old = """        return {
+          name: text(item.name),
+          price: Number.isFinite(price) ? price : null,
+          sourceIndex
+        };"""
+          object_new = """        return {
+          name: text(item.name),
+          price: Number.isFinite(price) ? price : null,
+          departamento: text(item.departamento) || 'Central',
+          sourceIndex
+        };"""
+          if object_old in text:
+              text = text.replace(object_old, object_new, 1)
 
-          resolver = r'''  function resolveShipping(settings, selectedCity, selectedDepartment, requestedMethod, location) {
+          if 'function resolveShipping(settings, selectedCity, selectedDepartment, requestedMethod, location)' not in text:
+              resolver = r'''  function resolveShipping(settings, selectedCity, selectedDepartment, requestedMethod, location) {
             const requested = text(requestedMethod);
             if (selectedCity === '__retiro__') {
               if (requested && requested !== 'retiro') {
@@ -121,27 +137,93 @@ jobs:
             };
           }
 '''
-          text, count = re.subn(
-              r"  function resolveShipping\(settings, selectedCity, location\) \{.*?\n  \}\n\n  function readPhone\(\)",
-              resolver + "\n  function readPhone()",
-              text,
-              count=1,
-              flags=re.S
-          )
-          if count != 1:
-              raise SystemExit(f'No se pudo reemplazar resolveShipping: {count}')
+              text, count = re.subn(
+                  r"  function resolveShipping\(settings, selectedCity, location\) \{.*?\n  \}\n\n  function readPhone\(\)",
+                  resolver + "\n  function readPhone()",
+                  text,
+                  count=1,
+                  flags=re.S
+              )
+              if count != 1:
+                  raise SystemExit(f'No se pudo reemplazar resolveShipping: {count}')
 
-          old = """    const selectedCity = text(document.getElementById('ck-city')?.value);\n    const selectedDepartamentoRaw = text(document.getElementById('ck-departamento')?.value);\n    const selectedDepartamento = selectedDepartamentoRaw === '__retiro__' ? '' : selectedDepartamentoRaw;\n    const shipping = resolveShipping(settings, selectedCity, mapLocation());"""
-          new = """    const citySelect = document.getElementById('ck-city');\n    const selectedCity = text(citySelect?.value);\n    const selectedDepartamentoRaw = text(document.getElementById('ck-departamento')?.value);\n    const selectedDepartamento = selectedDepartamentoRaw === '__retiro__' ? '' : selectedDepartamentoRaw;\n    const selectedOption = citySelect?.options?.[citySelect.selectedIndex];\n    const selectedGroupId = selectedOption?.parentElement?.id || '';\n    const requestedShippingMethod = selectedCity === '__retiro__'\n      ? 'retiro'\n      : selectedGroupId === 'ck-city-delivery-group'\n        ? 'delivery'\n        : selectedGroupId === 'ck-city-encomienda-group'\n          ? 'encomienda'\n          : '';\n    if (!requestedShippingMethod) {\n      throw appError('shipping_invalid', 'Volvé a elegir tu ciudad y método de entrega.');\n    }\n    const shipping = resolveShipping(\n      settings,\n      selectedCity,\n      selectedDepartamento,\n      requestedShippingMethod,\n      mapLocation()\n    );"""
-          if old not in text:
-              raise SystemExit('No se encontró llamada original a resolveShipping')
-          text = text.replace(old, new, 1)
+          old_call = """    const selectedCity = text(document.getElementById('ck-city')?.value);
+    const selectedDepartamentoRaw = text(document.getElementById('ck-departamento')?.value);
+    const selectedDepartamento = selectedDepartamentoRaw === '__retiro__' ? '' : selectedDepartamentoRaw;
+    const shipping = resolveShipping(settings, selectedCity, mapLocation());"""
+          new_call = """    const citySelect = document.getElementById('ck-city');
+    const selectedCity = text(citySelect?.value);
+    const selectedDepartamentoRaw = text(document.getElementById('ck-departamento')?.value);
+    const selectedDepartamento = selectedDepartamentoRaw === '__retiro__' ? '' : selectedDepartamentoRaw;
+    const selectedOption = citySelect?.options?.[citySelect.selectedIndex];
+    const selectedGroupId = selectedOption?.parentElement?.id || '';
+    const requestedShippingMethod = selectedCity === '__retiro__'
+      ? 'retiro'
+      : selectedGroupId === 'ck-city-delivery-group'
+        ? 'delivery'
+        : selectedGroupId === 'ck-city-encomienda-group'
+          ? 'encomienda'
+          : '';
+    if (!requestedShippingMethod) {
+      throw appError('shipping_invalid', 'Volvé a elegir tu ciudad y método de entrega.');
+    }
+    const shipping = resolveShipping(
+      settings,
+      selectedCity,
+      selectedDepartamento,
+      requestedShippingMethod,
+      mapLocation()
+    );"""
+          if old_call in text:
+              text = text.replace(old_call, new_call, 1)
 
-          old = """  function authoritativeCartFromQuote(quote) {\n    const currentById = new Map(getCartLocal().map(item => [String(item.id), item]));\n    return (quote.items || []).map(item => ({\n      ...(currentById.get(String(item.id)) || {}),\n      id: item.id,\n      name: item.name,\n      cat: item.cat || '',\n      price: Number(item.price || 0),\n      qty: Number(item.qty || 1),\n      variant: item.variant || '',\n      imageUrl: item.imageUrl || '',\n      imgUrl: item.imageUrl || ''\n    }));\n  }"""
-          new = """  function cartLineKey(item) {\n    return `${String(item?.id ?? '')}\\u241f${text(item?.variant)}`;\n  }\n\n  function authoritativeCartFromQuote(quote) {\n    const currentByLine = new Map(getCartLocal().map(item => [cartLineKey(item), item]));\n    return (quote.items || []).map(item => ({\n      ...(currentByLine.get(cartLineKey(item)) || {}),\n      id: item.id,\n      name: item.name,\n      cat: item.cat || '',\n      price: Number(item.price || 0),\n      qty: Number(item.qty || 1),\n      variant: item.variant || '',\n      imageUrl: item.imageUrl || '',\n      imgUrl: item.imageUrl || ''\n    }));\n  }"""
-          if old not in text:
-              raise SystemExit('No se encontró authoritativeCartFromQuote original')
-          text = text.replace(old, new, 1)
+          old_quote = """  function authoritativeCartFromQuote(quote) {
+    const currentById = new Map(getCartLocal().map(item => [String(item.id), item]));
+    return (quote.items || []).map(item => ({
+      ...(currentById.get(String(item.id)) || {}),
+      id: item.id,
+      name: item.name,
+      cat: item.cat || '',
+      price: Number(item.price || 0),
+      qty: Number(item.qty || 1),
+      variant: item.variant || '',
+      imageUrl: item.imageUrl || '',
+      imgUrl: item.imageUrl || ''
+    }));
+  }"""
+          new_quote = """  function cartLineKey(item) {
+    return `${String(item?.id ?? '')}\\u241f${text(item?.variant)}`;
+  }
+
+  function authoritativeCartFromQuote(quote) {
+    const currentByLine = new Map(getCartLocal().map(item => [cartLineKey(item), item]));
+    return (quote.items || []).map(item => ({
+      ...(currentByLine.get(cartLineKey(item)) || {}),
+      id: item.id,
+      name: item.name,
+      cat: item.cat || '',
+      price: Number(item.price || 0),
+      qty: Number(item.qty || 1),
+      variant: item.variant || '',
+      imageUrl: item.imageUrl || '',
+      imgUrl: item.imageUrl || ''
+    }));
+  }"""
+          if old_quote in text:
+              text = text.replace(old_quote, new_quote, 1)
+
+          required = [
+              'function resolveShipping(settings, selectedCity, selectedDepartment, requestedMethod, location)',
+              "selectedGroupId === 'ck-city-delivery-group'",
+              "selectedGroupId === 'ck-city-encomienda-group'",
+              "city.departamento.toLocaleLowerCase('es') === wantedDepartment",
+              'function cartLineKey(item)',
+              'currentByLine.get(cartLineKey(item))'
+          ]
+          missing = [item for item in required if item not in text]
+          if missing:
+              raise SystemExit('Corrección incompleta: ' + ', '.join(missing))
+
           path.write_text(text, encoding='utf-8')
 
           test_path = Path('tests/checkout/checkout-hardening-runtime.test.mjs')
@@ -163,16 +245,16 @@ test('quote recovery matches current cart metadata by product and variant', () =
   assert.doesNotMatch(secure, /currentById\.get\(String\(item\.id\)\)/);
 });
 '''
-          if "secure checkout resolves shipping by city, department and selected method" not in tests:
+          if 'secure checkout resolves shipping by city, department and selected method' not in tests:
               tests += extra
           test_path.write_text(tests, encoding='utf-8')
           PY
 
       - name: Instalar dependencias
         if: steps.guard.outputs.skip != 'true'
-        run: npm install
+        run: npm ci
 
-      - name: Resolver versionado de caché
+      - name: Resolver cascada de versionado de caché
         if: steps.guard.outputs.skip != 'true'
         shell: bash
         run: |
@@ -181,45 +263,58 @@ test('quote recovery matches current cart metadata by product and variant', () =
           import re
           import subprocess
 
-          issue_re = re.compile(r'CONTENIDO CAMBIÓ SIN BUMP DE VERSIÓN: "([^"]+)" sigue con el tag "([^"]+)"')
-          for round_no in range(1, 16):
+          changed_re = re.compile(r'CONTENIDO CAMBIÓ SIN BUMP DE VERSIÓN: "([^"]+)"')
+          mismatch_re = re.compile(r'"([^"]+)" se referencia con tags distintos:')
+          allowed = {'.js', '.mjs', '.html', '.css'}
+
+          for round_no in range(1, 31):
               proc = subprocess.run(['npm', 'run', 'audit:cache-versioning'], text=True, capture_output=True)
               output = (proc.stdout or '') + '\n' + (proc.stderr or '')
               print(output)
               if proc.returncode == 0:
                   break
-              issues = issue_re.findall(output)
-              if not issues:
+
+              affected = set(changed_re.findall(output)) | set(mismatch_re.findall(output))
+              if not affected:
                   raise SystemExit('Fallo de caché no auto-resoluble')
-              for local_path, old_tag in issues:
+
+              for local_path in sorted(affected):
                   basename = Path(local_path).name
-                  new_tag = f'tintin-20260822-checkout-final-v8-{round_no}'
-                  needle = re.compile(rf'({re.escape(basename)}\?v=){re.escape(old_tag)}')
+                  safe = re.sub(r'[^a-z0-9]+', '-', Path(local_path).stem.lower()).strip('-')[:24] or 'asset'
+                  new_tag = f'tintin-20260822-checkout-final-v9-{round_no}-{safe}'
+                  needle = re.compile(rf'({re.escape(basename)}\?v=)[A-Za-z0-9._-]+')
                   hits = 0
                   for file in Path('.').rglob('*'):
-                      if not file.is_file() or file.suffix.lower() not in {'.js', '.mjs', '.html'}:
+                      if not file.is_file() or file.suffix.lower() not in allowed:
+                          continue
+                      if '.git' in file.parts or 'node_modules' in file.parts:
                           continue
                       try:
                           source = file.read_text(encoding='utf-8')
-                      except UnicodeDecodeError:
+                      except (UnicodeDecodeError, OSError):
                           continue
                       updated, count = needle.subn(rf'\g<1>{new_tag}', source)
                       if count:
                           file.write_text(updated, encoding='utf-8')
                           hits += count
                   if not hits:
-                      raise SystemExit(f'No se pudo versionar {local_path}')
+                      raise SystemExit(f'No se encontraron referencias versionadas para {local_path}')
           else:
               raise SystemExit('La cascada de caché no convergió')
           PY
 
-      - name: Validar todo
+      - name: Validar cierre funcional
         if: steps.guard.outputs.skip != 'true'
         shell: bash
         run: |
           node --check js/orders/pedido-checkout-seguro.js
+          cp apps-script/CrearPedido.gs /tmp/CrearPedido.js
+          cp apps-script/Seguridad.gs /tmp/Seguridad.js
+          node --check /tmp/CrearPedido.js
+          node --check /tmp/Seguridad.js
           npm run test:checkout-contract
           npm run audit:secure-orders
+          npm run build:pages
           npm run audit:cache-versioning
 
       - name: Commit y push
@@ -228,7 +323,11 @@ test('quote recovery matches current cart metadata by product and variant', () =
         run: |
           git config user.name "Tintin Checkout Final"
           git config user.email "actions@users.noreply.github.com"
-          git add js tests
+          git add -A
           git diff --cached --check
-          git commit -m "fix(checkout): resolver destino seguro sin ambigüedad [checkout-final-v8]"
+          if git diff --cached --quiet; then
+            echo 'No hay cambios que guardar.'
+            exit 0
+          fi
+          git commit -m "fix(checkout): cerrar resolver y versionado [checkout-final-v9]"
           git push origin HEAD:fix/checkout-hardening-2026-08-22
