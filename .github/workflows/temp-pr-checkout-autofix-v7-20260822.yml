@@ -1,0 +1,163 @@
+name: TEMP PR checkout autofix v7 2026-08-22
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  autofix-v7:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout rama del PR
+        uses: actions/checkout@v5
+        with:
+          ref: fix/checkout-hardening-2026-08-22
+          fetch-depth: 0
+
+      - name: Evitar segunda pasada
+        id: guard
+        shell: bash
+        run: |
+          if git log -1 --pretty=%B | grep -q '\[checkout-autofix-v7\]'; then
+            echo 'skip=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'skip=false' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Node
+        if: steps.guard.outputs.skip != 'true'
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Aplicar correcciones funcionales
+        if: steps.guard.outputs.skip != 'true'
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import textwrap
+
+          def extract_exact(source_path, out_path, replace_root=False):
+              text = Path(source_path).read_text(encoding='utf-8')
+              marker = "          python3 - <<'PY'\n"
+              start = text.find(marker)
+              if start < 0:
+                  raise SystemExit(f'No se encontró heredoc Python exacto en {source_path}')
+              start += len(marker)
+              end = text.find("\n          PY", start)
+              if end < 0:
+                  raise SystemExit(f'No se encontró cierre del heredoc en {source_path}')
+              body = textwrap.dedent(text[start:end])
+              if replace_root:
+                  body = body.replace('ROOT', 'root')
+              Path(out_path).write_text(body + '\n', encoding='utf-8')
+
+          extract_exact('.github/workflows/temp-pr-checkout-autofix-20260822.yml', '/tmp/checkout_base.py')
+          extract_exact('.github/workflows/temp-pr-checkout-autofix-v4-20260822.yml', '/tmp/checkout_v4.py', replace_root=True)
+          PY
+          python3 /tmp/checkout_base.py
+          python3 /tmp/checkout_v4.py
+
+      - name: Instalar dependencias
+        if: steps.guard.outputs.skip != 'true'
+        run: npm install
+
+      - name: Resolver cascada de caché inmutable
+        if: steps.guard.outputs.skip != 'true'
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import subprocess
+
+          root = Path('.')
+          exts = {'.js', '.mjs', '.html'}
+          issue_re = re.compile(r'CONTENIDO CAMBIÓ SIN BUMP DE VERSIÓN: "([^"]+)" sigue con el tag "([^"]+)"')
+
+          for round_no in range(1, 16):
+              proc = subprocess.run(
+                  ['npm', 'run', 'audit:cache-versioning'],
+                  cwd=root,
+                  text=True,
+                  capture_output=True
+              )
+              output = (proc.stdout or '') + '\n' + (proc.stderr or '')
+              print(output)
+              if proc.returncode == 0:
+                  print(f'Cascada de caché resuelta en {round_no} ronda(s).')
+                  break
+
+              issues = issue_re.findall(output)
+              if not issues:
+                  raise SystemExit('La auditoría de caché falló por una causa no auto-resoluble.')
+
+              changed_any = False
+              for local_path, old_tag in issues:
+                  basename = Path(local_path).name
+                  new_tag = f'tintin-20260822-checkout-hardening-cascade-{round_no}'
+                  needle = re.compile(rf'({re.escape(basename)}\?v=){re.escape(old_tag)}')
+                  matches_for_path = 0
+                  for file in root.rglob('*'):
+                      if not file.is_file() or file.suffix.lower() not in exts:
+                          continue
+                      try:
+                          source = file.read_text(encoding='utf-8')
+                      except UnicodeDecodeError:
+                          continue
+                      updated, count = needle.subn(rf'\g<1>{new_tag}', source)
+                      if count:
+                          file.write_text(updated, encoding='utf-8')
+                          matches_for_path += count
+                          changed_any = True
+                  if matches_for_path == 0:
+                      raise SystemExit(f'No se encontró referencia versionada para {local_path} ({old_tag}).')
+                  print(f'Bump {local_path}: {old_tag} -> {new_tag} ({matches_for_path} referencia(s))')
+
+              if not changed_any:
+                  raise SystemExit('No se pudo aplicar ningún bump de caché.')
+          else:
+              raise SystemExit('La cascada de caché no convergió en 15 rondas.')
+          PY
+
+      - name: Validar sintaxis
+        if: steps.guard.outputs.skip != 'true'
+        shell: bash
+        run: |
+          node --check js/create-order-client.js
+          node --check js/orders/politica-checkout.js
+          node --check js/orders/pedido-checkout-seguro.js
+          node --check js/pages/checkout/checkout-hardening.js
+          cp apps-script/CrearPedido.gs /tmp/CrearPedido.js
+          cp apps-script/Seguridad.gs /tmp/Seguridad.js
+          node --check /tmp/CrearPedido.js
+          node --check /tmp/Seguridad.js
+
+      - name: Probar checkout completo
+        if: steps.guard.outputs.skip != 'true'
+        run: npm run test:checkout-contract
+
+      - name: Auditar pedidos seguros
+        if: steps.guard.outputs.skip != 'true'
+        run: npm run audit:secure-orders
+
+      - name: Confirmar versionado de caché
+        if: steps.guard.outputs.skip != 'true'
+        run: npm run audit:cache-versioning
+
+      - name: Commit y push
+        if: steps.guard.outputs.skip != 'true'
+        shell: bash
+        run: |
+          git config user.name "Tintin Checkout Autofix"
+          git config user.email "actions@users.noreply.github.com"
+          git add apps-script checkout.html js tests
+          git diff --cached --check
+          git commit -m "fix(checkout): cerrar auditoría integral [checkout-autofix-v7]"
+          git push origin HEAD:fix/checkout-hardening-2026-08-22
