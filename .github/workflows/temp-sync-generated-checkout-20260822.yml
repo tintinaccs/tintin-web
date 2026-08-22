@@ -10,6 +10,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: temp-sync-generated-checkout-20260822
+  cancel-in-progress: true
+
 jobs:
   sync:
     runs-on: ubuntu-latest
@@ -26,24 +30,21 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Remove temporary workflow before manifest build
+        run: rm -f .github/workflows/temp-sync-generated-checkout-20260822.yml
+
       - name: Install dependencies
         run: npm ci
 
       - name: Regenerate official page artifacts
         run: npm run build:pages
 
-      - name: Commit only generated artifacts
+      - name: Commit generated state and remove helper
         shell: bash
         run: |
           set -euo pipefail
-          git add -- \
-            _headers \
-            _routes.json \
-            diagnostic-manifest.json \
-            config/csp-runtime.js \
-            config/csp-runtime.json \
-            scripts/cache-version-baseline.json
-          echo 'Generated changes:'
+          git add -A
+          echo 'Generated/final changes:'
           git diff --cached --name-only
           if git diff --cached --quiet; then
             echo 'No generated changes to commit.'
