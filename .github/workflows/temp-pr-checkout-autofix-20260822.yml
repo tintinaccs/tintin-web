@@ -1,0 +1,49 @@
+name: TEMP checkout audit-fix source
+
+on:
+  workflow_dispatch:
+
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fuente de corrección
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          level2_path = Path('scripts/auditar-nivel-2-comercio.js')
+          level2 = level2_path.read_text(encoding='utf-8')
+          old_level2 = """  phase4.includes(\"phase4CreateWrite_('orders/' + orderId, orderData)\") &&
+            phase4.includes(\"phase4UpdateWrite_('products/' + item.id\") &&
+            phase4.includes('phase4Commit_(writes, transactionId)') &&
+            !/cartLines\\.length\\s*>\\s*4\\b/.test(phase4)"""
+          new_level2 = """  phase4.includes(\"phase4CreateWrite_('orders/' + orderId, orderData)\") &&
+            phase4.includes('Object.keys(requestedQtyByProduct).forEach(function (productId)') &&
+            phase4.includes(\"phase4UpdateWrite_('products/' + productId\") &&
+            phase4.includes('stock: stock - requestedQtyByProduct[productId]') &&
+            phase4.includes('phase4Commit_(writes, transactionId)') &&
+            !/cartLines\\.length\\s*>\\s*4\\b/.test(phase4)"""
+          if old_level2 not in level2:
+              raise SystemExit('No se encontró el contrato Level 2 antiguo')
+          level2 = level2.replace(old_level2, new_level2, 1)
+          level2_path.write_text(level2, encoding='utf-8')
+
+          loading_path = Path('scripts/auditar-pagina-carga.js')
+          loading = loading_path.read_text(encoding='utf-8')
+          old_loading = """  const ids = [...html.matchAll(/\\bid\\s*=\\s*([\"'])(.*?)\\1/gi)]
+            .map(match => match[2])
+            .filter(id => id && !/\\$\\{|\\{\\{|<%/.test(id));"""
+          new_loading = """  // Los IDs se auditan solo sobre el marcado real. El código dentro de
+            // <script> puede contener asignaciones como `group.id = '...'` que
+            // no representan un segundo nodo simultáneo en el DOM.
+            const markupWithoutScripts = html.replace(/<script\\b[^>]*>[\\s\\S]*?<\\/script>/gi, ' ');
+            const ids = [...markupWithoutScripts.matchAll(/\\bid\\s*=\\s*([\"'])(.*?)\\1/gi)]
+              .map(match => match[2])
+              .filter(id => id && !/\\$\\{|\\{\\{|<%/.test(id));"""
+          if old_loading not in loading:
+              raise SystemExit('No se encontró el detector de IDs antiguo')
+          loading = loading.replace(old_loading, new_loading, 1)
+          loading_path.write_text(loading, encoding='utf-8')
+          PY
