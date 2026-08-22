@@ -13,8 +13,8 @@ const PUBLIC_SHELL_VERSION = 'tintin-20260821-accounts-phase-a-1';
 const NAV_ENTRY_VERSION = 'tintin-20260821-accounts-phase-a-1';
 const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const VISUAL_BUILDER_VERSION = 'tintin-20260821-layout-stable-1';
-const SESSION_PROTECTION_VERSION = 'tintin-20260821-accounts-phase-a-1';
-const PROFILE_GATE_VERSION = 'tintin-20260821-accounts-phase-a-1';
+const SESSION_PROTECTION_VERSION = 'tintin-20260822-dob-username-onboarding-1';
+const PROFILE_GATE_VERSION = 'tintin-20260822-dob-username-onboarding-1';
 // Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
 // esa constante decide la URL exacta (con ?v=) que entrada-navegacion-publica.js y
 // ensureNavigationAssets() piden en tiempo de ejecución. Si difieren, el preload no

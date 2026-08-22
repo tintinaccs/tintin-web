@@ -197,6 +197,109 @@ test('una ubicación guardada desde checkout no abre el onboarding por sí sola'
   assert.equal(plan.skip, true);
 });
 
+test('una cuenta nueva (incomplete) también necesita username y fecha de nacimiento', () => {
+  const plan = getProfileCompletionPlan({
+    profile: { profileStatus: 'incomplete', ...COMPLETE },
+    user: { email: 'nueva@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(plan.skip, false);
+  assert.equal(plan.needsUsername, true);
+  assert.equal(plan.needsDob, true);
+});
+
+test('una cuenta legacy o sin profileStatus no pide username ni DOB', () => {
+  const legacy = getProfileCompletionPlan({
+    profile: { profileStatus: 'legacy', ...COMPLETE },
+    user: { email: 'legacy@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(legacy.needsUsername, false);
+  assert.equal(legacy.needsDob, false);
+  assert.equal(legacy.skip, true);
+
+  const sinEstado = getProfileCompletionPlan({
+    profile: COMPLETE,
+    user: { email: 'viejo@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(sinEstado.needsUsername, false);
+  assert.equal(sinEstado.needsDob, false);
+});
+
+test('una cuenta incomplete con username y DOB ya guardados no vuelve a pedirlos', () => {
+  const plan = getProfileCompletionPlan({
+    profile: { profileStatus: 'incomplete', username: 'maria_98', dob: new Date('2000-01-01'), ...COMPLETE },
+    user: { email: 'maria@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(plan.needsUsername, false);
+  assert.equal(plan.needsDob, false);
+  assert.equal(plan.skip, true);
+});
+
+test('completar username y DOB de una cuenta incomplete la pasa a active', () => {
+  const patch = buildMissingProfilePatch({
+    currentProfile: { profileStatus: 'incomplete', ...COMPLETE },
+    submittedUsername: 'Maria_98',
+    submittedDob: '2000-05-15',
+  });
+  assert.equal(patch.username, 'maria_98');
+  assert.ok(patch.dob instanceof Date);
+  assert.equal(patch.profileStatus, 'active');
+});
+
+test('un username inválido o reservado no se guarda ni activa la cuenta', () => {
+  const patchInvalido = buildMissingProfilePatch({
+    currentProfile: { profileStatus: 'incomplete', ...COMPLETE },
+    submittedUsername: 'ab',
+    submittedDob: '2000-05-15',
+  });
+  assert.equal('username' in patchInvalido, false);
+  assert.equal('profileStatus' in patchInvalido, false);
+
+  const patchReservado = buildMissingProfilePatch({
+    currentProfile: { profileStatus: 'incomplete', ...COMPLETE },
+    submittedUsername: 'admin',
+    submittedDob: '2000-05-15',
+  });
+  assert.equal('username' in patchReservado, false);
+});
+
+test('una fecha de nacimiento fuera de 16-120 años no se guarda ni activa la cuenta', () => {
+  const patch = buildMissingProfilePatch({
+    currentProfile: { profileStatus: 'incomplete', ...COMPLETE },
+    submittedUsername: 'maria_98',
+    submittedDob: '2020-01-01',
+  });
+  assert.equal('dob' in patch, false);
+  assert.equal('profileStatus' in patch, false);
+});
+
+test('completar sólo el username sin DOB no activa la cuenta todavía', () => {
+  const patch = buildMissingProfilePatch({
+    currentProfile: { profileStatus: 'incomplete', ...COMPLETE },
+    submittedUsername: 'maria_98',
+    submittedDob: '',
+  });
+  assert.equal(patch.username, 'maria_98');
+  assert.equal('dob' in patch, false);
+  assert.equal('profileStatus' in patch, false);
+});
+
+test('una cuenta legacy no se activa aunque se le manden username y DOB', () => {
+  const patch = buildMissingProfilePatch({
+    currentProfile: { profileStatus: 'legacy', ...COMPLETE },
+    submittedUsername: 'maria_98',
+    submittedDob: '2000-05-15',
+  });
+  assert.equal('profileStatus' in patch, false);
+});
+
 test('un nombre inválido nunca se guarda', () => {
   for (const [first, last] of [['A', 'B'], ['Usuario', 'Sin nombre'], ['undefined', 'null'], ['Juan2', 'Pérez'], ['😀', 'Pérez'], ['', 'Pérez']]) {
     assert.deepEqual(

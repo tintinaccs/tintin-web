@@ -1,6 +1,41 @@
 # Checkpoint — cuentas y sincronización TINTIN
 
-Fecha: 2026-08-21. Rama: `feat/cuentas-sync-fase-a`.
+Fecha: 2026-08-22. Rama: `claude/tintin-final-audit-6o9qy2`.
+
+## Fase B — cierre (2026-08-22)
+
+Se completó el resto de la Fase B: onboarding mínimo con username y fecha de
+nacimiento, en `login.html` junto a nombre/teléfono/dirección.
+
+- `js/components/forms/validacion-nacimiento.js` (nuevo): valida edad entre
+  16 y 120 años a partir de `dob`. La edad nunca se persiste calculada, solo
+  la fecha — se recalcula cada vez que hace falta.
+- `js/pages/profile/configuracion-inicial-perfil.mjs`: `getProfileCompletionPlan`
+  agrega `needsUsername`/`needsDob` (sólo para `profileStatus === 'incomplete'`;
+  cuentas `legacy` o sin `profileStatus` no los piden retroactivamente).
+  `buildMissingProfilePatch` reserva el patch de `username`/`dob` y, si con
+  ese patch el perfil queda completo (nombre + teléfono + username + dob),
+  agrega `profileStatus: 'active'` — transición que antes no existía en
+  ningún lugar del código (los perfiles `incomplete` quedaban así para
+  siempre).
+- `login.html`: campos de username (reservado vía `reserveUsername`, mismo
+  patrón que el teléfono) y fecha de nacimiento en el alta; catch específico
+  para cuando la reserva de teléfono o username ya está tomada por otra
+  cuenta (antes ese caso —real, no hipotético— caía en el mensaje genérico
+  porque `phone_already_registered` nunca se lanza en la práctica).
+- `firestore.rules`: `userProfileFieldsValid()` valida `dob` como timestamp
+  dentro de 16-120 años; nueva función `onboardingActivationUpdate()` permite
+  la única transición `incomplete → active`, atada a los mismos campos del
+  alta y sin abrir la puerta a tocar campos protegidos (rol, pedidos, etc.)
+  en la misma escritura.
+- Verificado: `test:accounts`, `test:rules-username` (13/13), `test:rules-phone`
+  (12/12), `test:rules-critical` (56/56), `audit:account-contract`,
+  `audit:security`, `audit:login-isolation`, `audit:login-profile` (29/29),
+  `audit:final` completo en verde, `cache-versioning:write` + verify.
+
+Pendiente, en orden: Fases C–I (documentos/facturación, checkout con
+snapshots, sincronización bidireccional completa con Sheets) — no se
+adelantó nada de eso todavía.
 
 ## Alcance cerrado
 

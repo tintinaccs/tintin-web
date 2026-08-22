@@ -543,6 +543,14 @@ body.login-setup-open { --login-shell-width: 560px; }
   }
 }
 
+/* Ayuda corta debajo de un campo del alta (ej: formato del username). */
+.login-field-hint {
+  margin: -6px 0 12px;
+  color: #6b5259;
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
 /* Ayuda que aparece cuando el teléfono ya está en otra cuenta. */
 .login-phone-help {
   margin: -6px 0 12px;

@@ -136,8 +136,8 @@
     "sha256": "e95a2ffddd825764bcdead1ac25444ec07570d7357360b94103188917d23507e"
   },
   "css/pages/login/login.css": {
-    "version": "tintin-20260811-cls-desktop-stable-2",
-    "sha256": "bf0b574259ff20fa08df7df377896870c6ccff1c9b51d1a05fc069bca2be870a"
+    "version": "tintin-20260822-dob-username-onboarding-1",
+    "sha256": "dccce6ae755b8b2bddf880a219ed237e5345a1d1592e938cc92f597f7acb1d0d"
   },
   "css/pages/product/product-extras.css": {
     "version": "tintin-20260817-margin-consistency-1",
@@ -355,6 +355,10 @@
     "version": "tintin-20260803-phone-reservation-1",
     "sha256": "61868afc9109a1065f30b3920ff25d972c1d4ff2a0dd8b29d90435875c649c8e"
   },
+  "js/components/forms/reserva-username.js": {
+    "version": "tintin-20260822-dob-username-onboarding-1",
+    "sha256": "7f97bfdc66aca99bf96b86ea04ad938e0e6e17c8c876341c3cd7747a226abb5c"
+  },
   "js/components/forms/utilidades-telefono.js": {
     "version": "tintin-20260803-phone-unique-1",
     "sha256": "16068c8fed7482a3d8e49d83848260718c9dbe3c4ac40b8792dc989d20946004"
@@ -362,6 +366,10 @@
   "js/components/forms/utilidades-username.js": {
     "version": "tintin-20260821-username-unique-1",
     "sha256": "745b292533368749c13668a797a93648bbaf030c050f5a23c76beeb62f013ada"
+  },
+  "js/components/forms/validacion-nacimiento.js": {
+    "version": "tintin-20260822-dob-username-onboarding-1",
+    "sha256": "e19c0f93ca4786c0568483cbddd12e7809f46b5fa04fe45722f99b74078b603a"
   },
   "js/components/images/biblioteca-multimedia.js": {
     "version": "tintin-20260716-cloudinary-fix-1",
@@ -460,8 +468,8 @@
     "sha256": "ea828c286ca53fbfb9025220161ad35d6fa2bf7a769c63f0a8d2aff48503b03c"
   },
   "js/core/auth/proteccion-sesion.js": {
-    "version": "tintin-20260821-accounts-phase-a-1",
-    "sha256": "371a6002abf72e9df10594b387be449b035676653fb2eb5738df95c4a81d3395"
+    "version": "tintin-20260822-dob-username-onboarding-1",
+    "sha256": "90e18c928b24db24489417ec4752647f5803df3dbaf305845f213be19703c4cb"
   },
   "js/core/auth/roles.js": {
     "version": "tintin-20260821-accounts-phase-a-1",
@@ -656,12 +664,12 @@
     "sha256": "1932a5f9b2b21586aa9e0275638237e400abd1aee82a4544c1baf48303af5a27"
   },
   "js/pages/profile/configuracion-inicial-perfil.mjs": {
-    "version": "tintin-20260803-profile-onboarding-2",
-    "sha256": "a56738975ebfb22d83e41c294e46f0190361f956f6c833c62ab0948245ad4e8f"
+    "version": "tintin-20260822-dob-username-onboarding-2",
+    "sha256": "332b43dc794095b3307a148ab0dd3eb53f04d9f74a7310df8a333505c05d2133"
   },
   "js/pages/profile/control-acceso-perfil.js": {
-    "version": "tintin-20260821-accounts-phase-a-1",
-    "sha256": "3f5690f6b696678c03f8bdad882a2aa2c70c0aa37620c1aefd3a55b799f3cde7"
+    "version": "tintin-20260822-dob-username-onboarding-1",
+    "sha256": "4693b7a38892b4230a5945c94ec96c01301a3634cfaa4c3a837f363cfd71ae3a"
   },
   "js/pages/profile/favoritos-perfil.js": {
     "version": "tintin-20260815-routes-clean-1",
