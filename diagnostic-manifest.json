@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-22T14:58:42.977Z",
-  "sourceFingerprint": "a8921bbd476439865b182051382394db460d095b6f16669579397bacae104d82",
+  "generatedAt": "2026-08-22T15:02:39.379Z",
+  "sourceFingerprint": "98e961a93a3ec95b4c55766a4fa3fec4e87543e1060a2ca71d7d68f33a646c30",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 711,
-    "textFiles": 679,
-    "totalBytes": 7977122,
+    "files": 710,
+    "textFiles": 678,
+    "totalBytes": 7985931,
     "pages": 18,
     "modules": 447
   },
@@ -16461,8 +16461,8 @@
     },
     {
       "path": "config/csp-runtime.js",
-      "bytes": 330173,
-      "sha256": "2c493b54f418caf6c2a980e6f464fa9fc31ce2360282c6dbd2a3fe82a283b3fa",
+      "bytes": 338597,
+      "sha256": "9f0f7f7d9a6726d9a48520d869c3b080fa4362715173bfc37441d911a3f2c1cc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27746,12 +27746,6 @@
       "sha256": "08a6925aa5f963124e673d1a6f2ea69e58001c2ec59410ff073448329ba0f8ae"
     },
     {
-      "path": ".github/workflows/temp-checkout-cart-fix.yml",
-      "extension": ".yml",
-      "bytes": 8039,
-      "sha256": "f644b1c46e351fdc5152eb8345e21ff1b333cd86b67b5acbc42d7ae8a4af6d4e"
-    },
-    {
       "path": ".github/workflows/validar-editor-visual-seguro.yml",
       "extension": ".yml",
       "bytes": 3220,
@@ -28162,14 +28156,14 @@
     {
       "path": "config/csp-runtime.js",
       "extension": ".js",
-      "bytes": 330173,
-      "sha256": "2c493b54f418caf6c2a980e6f464fa9fc31ce2360282c6dbd2a3fe82a283b3fa"
+      "bytes": 338597,
+      "sha256": "9f0f7f7d9a6726d9a48520d869c3b080fa4362715173bfc37441d911a3f2c1cc"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
-      "bytes": 330088,
-      "sha256": "aa8b40b29caa677c973ac0fc35951619bd78ba2c91149b7ca1859f5e544dc1d6"
+      "bytes": 338512,
+      "sha256": "345693931b66cda790b4d3fcdd0a8e327a7f3ead4a382c386e1e14be7073ef17"
     },
     {
       "path": "config/public-site.json",
