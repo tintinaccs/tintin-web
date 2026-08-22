@@ -146,6 +146,12 @@ check(
   'Una cuenta bloqueada no debe conservar admin/agent; se guarda roleBeforeBlock.'
 );
 check(
+  'Restaurar recupera roleBeforeBlock y usa client solo como respaldo',
+  /ASSIGNABLE_ROLES\.includes\(u\?\.roleBeforeBlock\)\s*\?\s*u\.roleBeforeBlock\s*:\s*'client'/.test(adminApp) &&
+    /ALLOWED_ROLES\.includes\(user\.roleBeforeBlock\)\s*\?\s*user\.roleBeforeBlock\s*:\s*'client'/.test(phase8),
+  'Una cuenta restaurada debe recuperar su rol anterior válido; no degradarse silenciosamente.'
+);
+check(
   'Cada acción de usuario queda registrada en Auditoría',
   /logAudit\('cambiar_rol'/.test(adminApp) &&
     /logAudit\('bloquear_usuario'/.test(adminApp) &&
