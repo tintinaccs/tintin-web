@@ -225,20 +225,21 @@ if (!window.TintinAdminUsersPhase8Booted) {
       }
       return;
     }
-    if (!confirm(`¿Restaurar a ${user.name || user.email} como Cliente?`)) return;
+    const restoredRole = ALLOWED_ROLES.includes(user.roleBeforeBlock) ? user.roleBeforeBlock : 'client';
+    if (!confirm(`¿Restaurar a ${user.name || user.email} como ${ROLE_LABELS[restoredRole] || restoredRole}?`)) return;
     try {
       await commitUserAction([
         { uid: user.uid, data: {
           blocked: false,
-          role: 'client',
+          role: restoredRole,
           blockedAt: null,
           blockedBy: '',
           blockReason: '',
           roleBeforeBlock: '',
           updatedAt: serverTimestamp(),
         } }
-      ], auditPayload('restaurar_usuario', user, 'Restaurado como Cliente'));
-      toast('Usuario restaurado como Cliente');
+      ], auditPayload('restaurar_usuario', user, `Rol anterior restaurado: ${ROLE_LABELS[restoredRole] || restoredRole}`));
+      toast(`Usuario restaurado como ${ROLE_LABELS[restoredRole] || restoredRole}`);
     } catch (error) {
       toast(error.message || 'No se pudo restaurar', true);
     }
@@ -371,10 +372,10 @@ if (!window.TintinAdminUsersPhase8Booted) {
     } else if (type === 'restore') {
       const eligible = selectedUsers.filter(user => user.blocked);
       if (!eligible.length) return toast('No hay usuarios bloqueados seleccionados', true);
-      if (!confirm(`¿Restaurar ${eligible.length} usuario(s) como Cliente?`)) return;
+      if (!confirm(`¿Restaurar ${eligible.length} usuario(s) con su rol anterior?`)) return;
       changes = eligible.map(user => ({ uid: user.uid, data: {
         blocked: false,
-        role: 'client',
+        role: ALLOWED_ROLES.includes(user.roleBeforeBlock) ? user.roleBeforeBlock : 'client',
         blockedAt: null,
         blockedBy: '',
         blockReason: '',
@@ -382,7 +383,7 @@ if (!window.TintinAdminUsersPhase8Booted) {
         updatedAt: serverTimestamp(),
       } }));
       action = 'restaurar_usuario';
-      details = 'Restauración masiva como Cliente';
+      details = 'Restauración masiva con rol anterior';
     }
 
     try {

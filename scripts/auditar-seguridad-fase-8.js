@@ -61,11 +61,12 @@ check(
 );
 
 check(
-  'La restauración masiva vuelve a Cliente',
-  phase.includes('Restauración masiva como Cliente') &&
-    phase.includes("blocked: false") &&
-    phase.includes("role: 'client'"),
-  'No se debe adivinar un rol elevado en una acción masiva'
+  'La restauración masiva recupera el rol previo válido',
+  phase.includes('roleBeforeBlock') &&
+    phase.includes('ALLOWED_ROLES.includes(user.roleBeforeBlock)') &&
+    phase.includes("? user.roleBeforeBlock : 'client'") &&
+    phase.includes('blocked: false'),
+  'Debe recuperar roleBeforeBlock cuando sea válido y usar client solo como respaldo seguro'
 );
 
 check(

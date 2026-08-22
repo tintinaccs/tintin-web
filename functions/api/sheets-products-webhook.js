@@ -1,11 +1,26 @@
-import { jsonResponse } from '../../cloudflare/seguridad-cloudinary.js';
+import { corsHeaders } from '../../cloudflare/seguridad-cloudinary.js';
 import {
   encodeFirestoreFields,
   firestoreAdminCommit,
-  firestoreAdminMerge,
 } from '../../cloudflare/firebase-admin-ligero.js';
 
 const MAX_BODY_BYTES = 32 * 1024;
+export const PRODUCTS_WEBHOOK_REVISION = 'products-canonical-v3';
+
+export function classifySheetsWebhookAuth(provided, expected) {
+  const providedValue = String(provided || '');
+  const expectedValue = String(expected || '');
+  if (!providedValue) return 'missing-header';
+  if (!expectedValue) return 'server-secret-missing';
+  return sameSecret(providedValue, expectedValue) ? 'authenticated' : 'secret-mismatch';
+}
+
+function webhookResponse(body, status, requestUrl, authState = 'authenticated') {
+  const headers = corsHeaders('', requestUrl);
+  headers['x-tintin-products-webhook'] = PRODUCTS_WEBHOOK_REVISION;
+  headers['x-tintin-auth-state'] = authState;
+  return new Response(JSON.stringify(body), { status, headers });
+}
 
 function sameSecret(provided, expected) {
   const left = new TextEncoder().encode(String(provided || ''));
@@ -45,29 +60,47 @@ function variants(value) {
   return Object.keys(output).length ? output : null;
 }
 
-function productId(value) {
+function productId(value, allowCreate) {
   const id = text(value, 128);
   if (id && !/^[A-Za-z0-9_-]+$/.test(id)) throw new Error('ID de producto invalido.');
-  return id || crypto.randomUUID().replace(/-/g, '');
+  if (id) return id;
+  if (!allowCreate) throw new Error('El producto existente necesita productId.');
+  return crypto.randomUUID().replace(/-/g, '');
 }
 
 export async function onRequestPost({ request, env }) {
-  if (!sameSecret(request.headers.get('X-Tintin-Sheets-Secret'), env.SHEETS_ENGAGEMENT_SECRET)) {
-    return jsonResponse({ ok: false, error: 'No autorizado' }, 401, '', request.url);
+  const authState = classifySheetsWebhookAuth(
+    request.headers.get('X-Tintin-Sheets-Secret'),
+    env.SHEETS_ENGAGEMENT_SECRET,
+  );
+  if (authState !== 'authenticated') {
+    return webhookResponse({ ok: false, error: 'No autorizado' }, 401, request.url, authState);
   }
 
   try {
     const raw = await request.text();
     if (!raw || new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) throw new Error('Solicitud invalida.');
     const input = JSON.parse(raw);
-    const id = productId(input.productId);
+
+    if (input.action === 'diagnose') {
+      return webhookResponse({
+        ok: true,
+        authenticated: true,
+        destructive: false,
+        endpoint: '/api/sheets-products-webhook',
+        revision: PRODUCTS_WEBHOOK_REVISION,
+        hostname: new URL(request.url).hostname,
+      }, 200, request.url);
+    }
+
+    const id = productId(input.productId, input.action === 'saveProduct');
 
     if (input.action === 'deleteProduct') {
       await firestoreAdminCommit(env, [
         { path: `products/${id}`, delete: true },
         { path: `productInventory/${id}`, delete: true },
       ]);
-      return jsonResponse({ ok: true, productId: id, deleted: true }, 200, '', request.url);
+      return webhookResponse({ ok: true, productId: id, deleted: true }, 200, request.url);
     }
     if (input.action !== 'saveProduct') throw new Error('Accion no permitida.');
 
@@ -110,12 +143,21 @@ export async function onRequestPost({ request, env }) {
       updatedAt: new Date(),
     };
 
-    // Merge conserva metadatos que no pertenecen a Sheets (createdAt,
-    // collectionOrder, restockedAt y futuros campos del catálogo).
-    await firestoreAdminMerge(env, `products/${id}`, encodeFirestoreFields(publicData));
-    await firestoreAdminMerge(env, `productInventory/${id}`, encodeFirestoreFields(inventoryData));
-    return jsonResponse({ ok: true, productId: id }, 200, '', request.url);
+    // Un único commit evita que products cambie si falla productInventory (o
+    // viceversa). updateMask conserva metadatos que Sheets no administra.
+    const publicFields = encodeFirestoreFields(publicData);
+    const inventoryFields = encodeFirestoreFields(inventoryData);
+    await firestoreAdminCommit(env, [
+      { path: `products/${id}`, fields: publicFields, mergeFields: Object.keys(publicFields) },
+      { path: `productInventory/${id}`, fields: inventoryFields, mergeFields: Object.keys(inventoryFields) },
+    ]);
+    return webhookResponse({ ok: true, productId: id }, 200, request.url);
   } catch (error) {
-    return jsonResponse({ ok: false, error: String(error?.message || 'No se pudo sincronizar.').slice(0, 300) }, 400, '', request.url);
+    const upstreamStatus = Number(error?.status);
+    const responseStatus = upstreamStatus === 409 || upstreamStatus === 502 ? upstreamStatus : 400;
+    return webhookResponse({
+      ok: false,
+      error: String(error?.message || 'No se pudo sincronizar.').slice(0, 300),
+    }, responseStatus, request.url);
   }
 }
