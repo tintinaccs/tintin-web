@@ -81,8 +81,8 @@ function extractTagReferences(html) {
 function meaningfulBodyLength(html) {
   const body = html.match(/<body\b[^>]*>([\s\S]*?)<\/body>/i)?.[1] || '';
   return body
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, ' ')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi, ' ')
     .replace(/<!--([\s\S]*?)-->/g, ' ')
     .replace(/<[^>]+>/g, ' ')
     .replace(/&(?:nbsp|amp|lt|gt|quot|#\d+);/gi, ' ')
@@ -109,7 +109,7 @@ function auditHtmlPage(page) {
 
   // Auditar IDs solo en el marcado real: una asignación JavaScript como
   // `group.id = '...'` no crea un segundo nodo simultáneo en el DOM.
-  const markupWithoutScripts = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ');
+  const markupWithoutScripts = html.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, ' ');
   const ids = [...markupWithoutScripts.matchAll(/\bid\s*=\s*(["'])(.*?)\1/gi)]
     .map(match => match[2])
     .filter(id => id && !/\$\{|\{\{|<%/.test(id));
@@ -184,6 +184,14 @@ if (
   JSON.stringify(['js/inicio-navegacion-publica.js', 'styles.css'])
 ) {
   fail('auditor', 'el analizador de referencias confunde atributos data-* con src/href reales.');
+}
+
+// Tripwire del filtrado de scripts: HTML permite espacios antes del > en el
+// cierre, y ese contenido JavaScript nunca debe contaminar la auditoría de IDs.
+const scriptFilteringProbe = '<body><script>const x = "id=\\"duplicado\\"";</script ><main id="real">Contenido real</main></body>';
+if (meaningfulBodyLength(scriptFilteringProbe) !== 'Contenido real'.length ||
+    /duplicado/.test(scriptFilteringProbe.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, ' '))) {
+  fail('auditor', 'el filtrado de bloques script no admite cierres HTML con espacios.');
 }
 
 // Tripwire explícito de URLs limpias: evita que una futura regresión del
