@@ -1,3 +1,5 @@
+import { usernameKey } from "../../components/forms/utilidades-username.js?v=tintin-20260821-username-unique-1";
+
 function clean(value) {
   return String(value || '').trim().replace(/\s+/g, ' ');
 }
@@ -129,6 +131,7 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
     return {
       skip: true, needsName: false, needsPhone: false, needsAddress: false,
       suggestedName: '', suggestedFirstName: '', suggestedLastName: '',
+      offerUsername: false, suggestedUsername: '',
     };
   }
 
@@ -140,6 +143,11 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
   const needsPhone = !storedPhone;
   const addressMissing = !addressOk;
   const onboardingRequired = needsName || needsPhone || addressMissing;
+  // El username es siempre opcional: no abre el onboarding por sí solo ni
+  // bloquea el guardado. Sólo se ofrece cuando la pantalla ya está abierta
+  // por otro motivo y la cuenta todavía no tiene uno.
+  const storedUsername = clean(profile.username);
+  const offerUsername = onboardingRequired && !storedUsername;
 
   exposeSavedLocationForOnboarding(profile);
 
@@ -161,6 +169,8 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
     suggestedFirstName,
     suggestedLastName,
     suggestedName: clean(`${suggestedFirstName} ${suggestedLastName}`),
+    offerUsername,
+    suggestedUsername: '',
   };
 }
 
@@ -174,12 +184,14 @@ export function buildMissingProfilePatch({
   submittedName = '',
   submittedPhone = '',
   submittedAddress = null,
+  submittedUsername = '',
   explicitNameChange = false,
 } = {}) {
   const patch = {};
   const current = readProfileName(currentProfile);
   const currentNameIsValid = isValidFullName(current.firstName, current.lastName);
   const currentPhone = clean(currentProfile.phone);
+  const currentUsername = clean(currentProfile.username);
 
   // Compatibilidad: quien todavía mande `submittedName` entero se separa acá.
   const fallback = splitFullName(submittedName);
@@ -197,6 +209,11 @@ export function buildMissingProfilePatch({
   }
 
   if (!currentPhone && clean(submittedPhone)) patch.phone = clean(submittedPhone);
+
+  // El username llega ya normalizado y reservado (usernameKey); acá sólo se
+  // confirma que la cuenta todavía no tenga uno, igual que el resto de los
+  // campos opcionales de esta transacción.
+  if (!currentUsername && usernameKey(submittedUsername)) patch.username = usernameKey(submittedUsername);
 
   if (submittedAddress) {
     const savedLocation = toSavedLocation(submittedAddress);

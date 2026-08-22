@@ -355,6 +355,10 @@
     "version": "tintin-20260803-phone-reservation-1",
     "sha256": "61868afc9109a1065f30b3920ff25d972c1d4ff2a0dd8b29d90435875c649c8e"
   },
+  "js/components/forms/reserva-username.js": {
+    "version": "tintin-20260821-username-unique-1",
+    "sha256": "7f97bfdc66aca99bf96b86ea04ad938e0e6e17c8c876341c3cd7747a226abb5c"
+  },
   "js/components/forms/utilidades-telefono.js": {
     "version": "tintin-20260803-phone-unique-1",
     "sha256": "16068c8fed7482a3d8e49d83848260718c9dbe3c4ac40b8792dc989d20946004"
@@ -460,8 +464,8 @@
     "sha256": "ea828c286ca53fbfb9025220161ad35d6fa2bf7a769c63f0a8d2aff48503b03c"
   },
   "js/core/auth/proteccion-sesion.js": {
-    "version": "tintin-20260821-accounts-phase-a-1",
-    "sha256": "371a6002abf72e9df10594b387be449b035676653fb2eb5738df95c4a81d3395"
+    "version": "tintin-20260822-username-onboarding-1",
+    "sha256": "681c6a23a93bb19ef6ec2a8bf96154637db7ef788882dba9d91dea7cc7d12be8"
   },
   "js/core/auth/roles.js": {
     "version": "tintin-20260821-accounts-phase-a-1",
@@ -568,8 +572,8 @@
     "sha256": "abbf216512f820e8910baf20acc5a7df021ce7c0296ee261d5e7c67801e67477"
   },
   "js/email/correo-autenticacion.js": {
-    "version": "tintin-20260821-accounts-phase-a-1",
-    "sha256": "2c6172ddc95bded7a0fb6bd01fc9c94a2adc2e2f4b2496066e6493e2da428eab"
+    "version": "tintin-20260821-accounts-phase-b-2",
+    "sha256": "52d795b707d802acc5ed6abdb56d72d073a96f5b8d809af0215dc190d213666f"
   },
   "js/email/notificacion-pedido-resend.js": {
     "version": "tintin-20260814-social-notifications-1",
@@ -656,12 +660,12 @@
     "sha256": "1932a5f9b2b21586aa9e0275638237e400abd1aee82a4544c1baf48303af5a27"
   },
   "js/pages/profile/configuracion-inicial-perfil.mjs": {
-    "version": "tintin-20260803-profile-onboarding-2",
-    "sha256": "a56738975ebfb22d83e41c294e46f0190361f956f6c833c62ab0948245ad4e8f"
+    "version": "tintin-20260822-username-onboarding-1",
+    "sha256": "a89d760d305f31c030b36a2473ae1bb2e23893ccb286f443ec009155d31af485"
   },
   "js/pages/profile/control-acceso-perfil.js": {
-    "version": "tintin-20260821-accounts-phase-a-1",
-    "sha256": "3f5690f6b696678c03f8bdad882a2aa2c70c0aa37620c1aefd3a55b799f3cde7"
+    "version": "tintin-20260822-username-onboarding-1",
+    "sha256": "2fa6418b0465adc088f55376fc3e1b92168cb2c199591fa55e8a256a22988f10"
   },
   "js/pages/profile/favoritos-perfil.js": {
     "version": "tintin-20260815-routes-clean-1",

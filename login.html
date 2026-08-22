@@ -142,6 +142,11 @@
               <input type="text" class="login-email-input" id="login-profile-address-name" placeholder="Ej: Mi casa, Mi trabajo" maxlength="60" />
             </div>
           </div>
+          <div id="login-profile-username-field" style="display:none">
+            <label class="login-email-label" for="login-profile-username">Nombre de usuario (opcional)</label>
+            <input type="text" class="login-email-input" id="login-profile-username" placeholder="Ej: maria98" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="20" />
+            <p class="login-phone-help" id="login-username-help" style="display:none">Ese nombre de usuario ya está en uso. Probá con otro.</p>
+          </div>
           <button type="button" class="login-email-btn" id="btn-save-profile">Continuar</button>
         </div>
 
@@ -194,13 +199,15 @@ import {
 } from "./js/email/correo-autenticacion.js?v=tintin-20260821-accounts-phase-b-2";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
 import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260803-phone-reservation-1";
+import { isValidUsername } from "./js/components/forms/utilidades-username.js?v=tintin-20260821-username-unique-1";
+import { reserveUsername } from "./js/components/forms/reserva-username.js?v=tintin-20260821-username-unique-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260821-accounts-phase-a-1";
-import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260821-accounts-phase-a-1";
+import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260822-username-onboarding-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
-import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260821-accounts-phase-a-1";
+import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260822-username-onboarding-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260821-accounts-phase-a-1";
-import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260803-profile-onboarding-2";
+import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260822-username-onboarding-1";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260818-pin-icon-svg-1";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
@@ -362,7 +369,7 @@ async function ensureProfileComplete(user, role) {
   // Intentar irse con el alta a medias abre una decisión explícita, no una
   // salida silenciosa: o completa, o cierra sesión y sigue mirando la tienda
   // sin cuenta. Sin esto quedaría encerrada — el guardia de
-  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260821-accounts-phase-a-1 la traería de vuelta acá desde cualquier página,
+  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260822-username-onboarding-1 la traería de vuelta acá desde cualquier página,
   // porque su perfil sigue incompleto.
   const exitModal = document.getElementById('login-exit-modal');
 
@@ -415,12 +422,18 @@ async function ensureProfileComplete(user, role) {
   const phoneField = document.getElementById('login-profile-phone-field');
   const countrySelect = document.getElementById('login-profile-country');
   const addressField = document.getElementById('login-profile-address-field');
+  const usernameInput = document.getElementById('login-profile-username');
+  const usernameField = document.getElementById('login-profile-username-field');
+  const usernameHelp = document.getElementById('login-username-help');
   populateCountrySelect(countrySelect);
   firstNameInput.value = plan.suggestedFirstName;
   lastNameInput.value = plan.suggestedLastName;
   phoneInput.value = '';
   phoneField.style.display = plan.needsPhone ? '' : 'none';
   addressField.style.display = plan.needsAddress ? '' : 'none';
+  usernameInput.value = plan.suggestedUsername || '';
+  usernameField.style.display = plan.offerUsername ? '' : 'none';
+  usernameHelp.style.display = 'none';
 
   // El mismo componente de mapa que usa el checkout (js/components/location/mapa-ubicacion.js): se
   // busca o se toca el mapa, y el punto queda con sus coordenadas exactas.
@@ -505,6 +518,8 @@ async function ensureProfileComplete(user, role) {
       const phoneRaw = phoneInput.value.trim();
       const point = addressMap?.getLocation() || null;
       const locationName = addressNameInput.value.trim();
+      const usernameRaw = usernameInput.value.trim();
+      usernameHelp.style.display = 'none';
       if (plan.needsName) {
         if (!isValidNamePart(firstName)) { showError('Ingresá tu nombre real (al menos dos letras, sin números ni símbolos).'); firstNameInput.focus(); return; }
         if (!isValidNamePart(lastName)) { showError('Ingresá tu apellido real (al menos dos letras, sin números ni símbolos).'); lastNameInput.focus(); return; }
@@ -531,8 +546,16 @@ async function ensureProfileComplete(user, role) {
         addressNameInput.focus();
         return;
       }
+      // El username es opcional: solo se valida el formato si escribió algo,
+      // nunca bloquea el guardado por dejarlo vacío.
+      if (usernameRaw && !isValidUsername(usernameRaw)) {
+        showError('El nombre de usuario debe tener entre 3 y 20 letras minúsculas, números o guion bajo.');
+        usernameInput.focus();
+        return;
+      }
       const btn = document.getElementById('btn-save-profile');
       btn.disabled = true;
+      let reservedUsernameKey = '';
       try {
         const normalizedPhone = plan.needsPhone ? normalizePhone(phoneRaw, country).value : '';
 
@@ -544,6 +567,13 @@ async function ensureProfileComplete(user, role) {
           await reservePhone(db, user.uid, phoneRaw, country);
         }
 
+        // Mismo mecanismo que el teléfono: se reserva antes de guardar, y la
+        // escritura del perfil vuelve a validar el dueño de la reserva. Al ser
+        // opcional, sólo se reserva si la persona escribió algo.
+        if (usernameRaw) {
+          reservedUsernameKey = await reserveUsername(db, user.uid, usernameRaw);
+        }
+
         await runTransaction(db, async transaction => {
           const currentSnap = await transaction.get(ref);
           const currentProfile = currentSnap.exists() ? currentSnap.data() : {};
@@ -553,6 +583,7 @@ async function ensureProfileComplete(user, role) {
             submittedLastName: lastName,
             submittedPhone: normalizedPhone,
             submittedAddress: point ? { ...point, name: locationName } : null,
+            submittedUsername: reservedUsernameKey,
             explicitNameChange,
           });
           if (Object.keys(patch).length) {
@@ -573,6 +604,12 @@ async function ensureProfileComplete(user, role) {
           showError('Ese número ya está registrado en otra cuenta. Si es tuyo, escribinos por WhatsApp y lo resolvemos.');
           document.getElementById('login-phone-help').style.display = '';
           phoneInput.focus();
+        } else if (reservedUsernameKey && e?.code === 'permission-denied') {
+          // El username es opcional: se avisa y se deja reintentar, borrándolo
+          // o probando otro, sin perder el resto de los datos ya escritos.
+          showError('Ese nombre de usuario ya está en uso. Probá con otro o dejalo en blanco para continuar.');
+          usernameHelp.style.display = '';
+          usernameInput.focus();
         } else {
           console.error('[login] No se pudo guardar el perfil:', e);
           showError('No pudimos guardar tus datos. Probá de nuevo.');

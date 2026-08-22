@@ -22,7 +22,7 @@
 import { auth, db } from "../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20260803-profile-onboarding-2";
+import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20260822-username-onboarding-1";
 import { SUPER_ADMIN } from "../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1";
 
 // Evita releer el perfil en cada navegación de la misma sesión. Se guarda el
