@@ -12,14 +12,21 @@ import {
   clearCart,
   cartTotal,
   formatPrice
-} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260821-accounts-phase-a-1';
+} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260822-facturacion-1';
 import {
   findCountryByCode,
   normalizePhone,
   isValidPhone
 } from '../components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1';
+import {
+  isValidCi,
+  normalizeCi,
+  isValidRuc,
+  normalizeRuc,
+  isValidRazonSocial
+} from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1';
 import { createOrderViaServer } from '../create-order-client.js?v=tintin-20260811-phone-order-1';
-import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260808-contract-1';
+import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-facturacion-1';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
@@ -318,6 +325,23 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       }
     }
 
+    // CI sólo se exige para encomienda (la transportadora la pide). Factura
+    // es un pedido explícito, nunca obligatorio — pero si se marcó, razón
+    // social y RUC sí lo son.
+    const ciRaw = text(document.getElementById('ck-ci')?.value);
+    if (shipping.method === 'encomienda' && !isValidCi(ciRaw)) {
+      throw appError('ci_invalid', 'Ingresá tu cédula de identidad (solo números, 5 a 8 dígitos).');
+    }
+    const wantsInvoice = document.getElementById('ck-wants-invoice')?.checked === true;
+    const razonSocial = text(document.getElementById('ck-razon-social')?.value);
+    const rucRaw = text(document.getElementById('ck-ruc')?.value);
+    if (wantsInvoice && !isValidRazonSocial(razonSocial)) {
+      throw appError('razon_social_required', 'Ingresá la razón social para la factura.');
+    }
+    if (wantsInvoice && !isValidRuc(rucRaw)) {
+      throw appError('ruc_invalid', 'Ingresá un RUC válido, con guion y dígito verificador (ej: 80012345-6).');
+    }
+
     const localSubtotal = cartTotal(items);
     return composeCheckoutDraft({
       requestId: requestId(),
@@ -332,7 +356,11 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       referencia: text(document.getElementById('ck-referencia')?.value),
       shipping,
       paymentMethod,
-      subtotal: localSubtotal
+      subtotal: localSubtotal,
+      ci: shipping.method === 'encomienda' ? normalizeCi(ciRaw) : '',
+      wantsInvoice,
+      razonSocial: wantsInvoice ? razonSocial : '',
+      ruc: wantsInvoice ? normalizeRuc(rucRaw) : ''
     });
   }
 
@@ -501,6 +529,12 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const payment = text(draft?.paymentMethod);
     if (payment) lines.push(`💳 Pago: ${PAYMENT_LABELS[payment] || payment}`);
 
+    const ci = text(draft?.ci);
+    if (ci) lines.push(`🪪 CI: ${ci}`);
+    if (draft?.wantsInvoice) {
+      lines.push(`🧾 Factura — Razón social: ${text(draft?.razonSocial)} — RUC: ${text(draft?.ruc)}`);
+    }
+
     const name = text(draft?.name);
     if (name) lines.push('', `👤 ${name}`);
     const phone = text(draft?.phone);
@@ -537,6 +571,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       payment_required: 'Seleccioná un método de pago.',
       map_required: 'Marcá y nombrá tu ubicación en el mapa.',
       address_required: 'Ingresá la dirección para la encomienda.',
+      ci_invalid: 'Ingresá tu cédula de identidad (solo números, 5 a 8 dígitos).',
+      razon_social_required: 'Ingresá la razón social para la factura.',
+      ruc_invalid: 'Ingresá un RUC válido, con guion y dígito verificador (ej: 80012345-6).',
       shipping_invalid: 'La ciudad elegida ya no está disponible.',
       settings_missing: 'No pudimos comprobar la configuración de la tienda.',
       profile_missing: 'No pudimos comprobar tu perfil. Cerrá sesión y volvé a ingresar.',

@@ -300,6 +300,20 @@ service cloud.firestore {
         data.authMethods.hasOnly(['google', 'emailOtp']);
     }
 
+    // El alta inicial guarda nombre, teléfono, username y fecha de nacimiento
+    // en una sola escritura, y recién ahí el perfil puede pasar de
+    // 'incomplete' a 'active' — nunca al revés, nunca desde otro estado, y
+    // nunca junto con campos protegidos de pedidos/rol/bloqueo (esos siguen
+    // bloqueados por protectedUserFieldsChanged() en cualquier otro camino).
+    function onboardingActivationUpdate() {
+      return resource.data.profileStatus == 'incomplete' &&
+        request.resource.data.profileStatus == 'active' &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'name', 'firstName', 'lastName', 'phone', 'username', 'dob',
+          'address', 'savedLocation', 'profileStatus', 'updatedAt'
+        ]);
+    }
+
     function checkoutGuardWriteValid(userId) {
       let data = request.resource.data;
       return isSignedIn() &&
@@ -332,7 +346,12 @@ service cloud.firestore {
         (!('phone' in data) || (data.phone is string && data.phone.size() <= 40)) &&
         (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 2000)) &&
         (!('username' in data) || (data.username is string && data.username.size() <= 20 &&
-          data.username.matches('^[a-z0-9_]{0,20}$')));
+          data.username.matches('^[a-z0-9_]{0,20}$'))) &&
+        // Igual que en el cliente (validacion-nacimiento.js): edad entre 16 y
+        // 120 años. Nunca se guarda una edad calculada, sólo esta fecha.
+        (!('dob' in data) || (data.dob is timestamp &&
+          data.dob < request.time - duration.value(16 * 365, 'd') &&
+          data.dob > request.time - duration.value(120 * 365, 'd')));
     }
 
     // Un teléfono no puede estar en dos cuentas, y eso tiene que valer también
@@ -1168,7 +1187,8 @@ service cloud.firestore {
               !protectedUserFieldsChanged()
             ) ||
             loginMetadataOnlyUpdate() ||
-            identityBootstrapOnlyUpdate(userId)
+            identityBootstrapOnlyUpdate(userId) ||
+            onboardingActivationUpdate()
           )
         ) ||
         (

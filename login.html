@@ -45,7 +45,7 @@
   <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260820-code-editor-1">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="css/pages/login/login.css?v=tintin-20260811-cls-desktop-stable-2">
+  <link rel="stylesheet" href="css/pages/login/login.css?v=tintin-20260822-dob-username-onboarding-1">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous" />
   <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/pages/login/login-maintenance.css?v=tintin-20260811-cls-desktop-stable-2" data-tt-login-maintenance>
@@ -117,6 +117,11 @@
             <label class="login-email-label" for="login-profile-last-name">Apellido</label>
             <input type="text" class="login-email-input" id="login-profile-last-name" placeholder="Ej: González" autocomplete="family-name" maxlength="60" />
           </div>
+          <div id="login-profile-username-field">
+            <label class="login-email-label" for="login-profile-username">Nombre de usuario</label>
+            <input type="text" class="login-email-input" id="login-profile-username" placeholder="Ej: maria_98" autocomplete="off" maxlength="20" />
+            <p class="login-field-hint">3 a 20 letras/números en minúscula, sin espacios (podés usar guion bajo).</p>
+          </div>
           <div id="login-profile-phone-field">
             <label class="login-email-label" for="login-profile-phone">Teléfono / WhatsApp</label>
             <div class="login-phone-row">
@@ -126,6 +131,10 @@
             <p class="login-phone-help" id="login-phone-help" style="display:none">
               <a id="login-phone-wa" href="https://wa.me/595981299331?text=Hola%2C%20mi%20n%C3%BAmero%20ya%20figura%20en%20otra%20cuenta%20y%20no%20puedo%20completar%20mi%20registro." target="_blank" rel="noopener">Escribinos por WhatsApp</a> y te ayudamos a recuperar tu cuenta.
             </p>
+          </div>
+          <div id="login-profile-dob-field">
+            <label class="login-email-label" for="login-profile-dob">Fecha de nacimiento</label>
+            <input type="date" class="login-email-input" id="login-profile-dob" autocomplete="bday" />
           </div>
           <div id="login-profile-address-field">
             <label class="login-email-label" for="login-profile-address">Dirección de entrega</label>
@@ -194,13 +203,16 @@ import {
 } from "./js/email/correo-autenticacion.js?v=tintin-20260821-accounts-phase-b-2";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
 import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260803-phone-reservation-1";
+import { isValidUsernameFormat, isReservedUsername, normalizeUsername } from "./js/components/forms/utilidades-username.js?v=tintin-20260821-username-unique-1";
+import { reserveUsername } from "./js/components/forms/reserva-username.js?v=tintin-20260822-dob-username-onboarding-1";
+import { isValidDob } from "./js/components/forms/validacion-nacimiento.js?v=tintin-20260822-dob-username-onboarding-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260821-accounts-phase-a-1";
-import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260821-accounts-phase-a-1";
+import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260822-dob-username-onboarding-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
-import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260821-accounts-phase-a-1";
+import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260821-accounts-phase-a-1";
-import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260803-profile-onboarding-2";
+import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260822-dob-username-onboarding-2";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260818-pin-icon-svg-1";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
@@ -337,7 +349,7 @@ async function ensureProfileComplete(user, role) {
   hideLoginOverlay();
   window.ttPageReady && window.ttPageReady();
 
-  const missingCount = [plan.needsName, plan.needsPhone, plan.needsAddress].filter(Boolean).length;
+  const missingCount = [plan.needsName, plan.needsPhone, plan.needsAddress, plan.needsUsername, plan.needsDob].filter(Boolean).length;
   document.getElementById('login-heading').textContent = missingCount > 1 ? 'Últimos datos' : 'Un dato más';
   document.getElementById('login-heading-sub').textContent = missingCount > 1
     ? (plan.suggestedName
@@ -345,9 +357,13 @@ async function ensureProfileComplete(user, role) {
         : 'Completá estos datos para terminar de crear tu cuenta.')
     : plan.needsName
       ? (plan.suggestedName ? 'Confirmá el nombre de tu cuenta para continuar.' : 'Completá tu nombre y apellido para continuar.')
-      : plan.needsPhone
-        ? 'Completá tu teléfono para continuar.'
-        : 'Elegí tu dirección de entrega para continuar.';
+      : plan.needsUsername
+        ? 'Elegí un nombre de usuario para continuar.'
+        : plan.needsPhone
+          ? 'Completá tu teléfono para continuar.'
+          : plan.needsDob
+            ? 'Completá tu fecha de nacimiento para continuar.'
+            : 'Elegí tu dirección de entrega para continuar.';
   document.getElementById('login-google-section').style.display = 'none';
   document.getElementById('login-divider-section').style.display = 'none';
   document.getElementById('login-email-block').style.display = 'none';
@@ -362,7 +378,7 @@ async function ensureProfileComplete(user, role) {
   // Intentar irse con el alta a medias abre una decisión explícita, no una
   // salida silenciosa: o completa, o cierra sesión y sigue mirando la tienda
   // sin cuenta. Sin esto quedaría encerrada — el guardia de
-  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260821-accounts-phase-a-1 la traería de vuelta acá desde cualquier página,
+  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260822-dob-username-onboarding-1 la traería de vuelta acá desde cualquier página,
   // porque su perfil sigue incompleto.
   const exitModal = document.getElementById('login-exit-modal');
 
@@ -415,12 +431,20 @@ async function ensureProfileComplete(user, role) {
   const phoneField = document.getElementById('login-profile-phone-field');
   const countrySelect = document.getElementById('login-profile-country');
   const addressField = document.getElementById('login-profile-address-field');
+  const usernameInput = document.getElementById('login-profile-username');
+  const usernameField = document.getElementById('login-profile-username-field');
+  const dobInput = document.getElementById('login-profile-dob');
+  const dobField = document.getElementById('login-profile-dob-field');
   populateCountrySelect(countrySelect);
   firstNameInput.value = plan.suggestedFirstName;
   lastNameInput.value = plan.suggestedLastName;
   phoneInput.value = '';
+  usernameInput.value = '';
+  dobInput.value = '';
   phoneField.style.display = plan.needsPhone ? '' : 'none';
   addressField.style.display = plan.needsAddress ? '' : 'none';
+  usernameField.style.display = plan.needsUsername ? '' : 'none';
+  dobField.style.display = plan.needsDob ? '' : 'none';
 
   // El mismo componente de mapa que usa el checkout (js/components/location/mapa-ubicacion.js): se
   // busca o se toca el mapa, y el punto queda con sus coordenadas exactas.
@@ -505,9 +529,28 @@ async function ensureProfileComplete(user, role) {
       const phoneRaw = phoneInput.value.trim();
       const point = addressMap?.getLocation() || null;
       const locationName = addressNameInput.value.trim();
+      const usernameRaw = usernameInput.value.trim();
+      const dobRaw = dobInput.value.trim();
       if (plan.needsName) {
         if (!isValidNamePart(firstName)) { showError('Ingresá tu nombre real (al menos dos letras, sin números ni símbolos).'); firstNameInput.focus(); return; }
         if (!isValidNamePart(lastName)) { showError('Ingresá tu apellido real (al menos dos letras, sin números ni símbolos).'); lastNameInput.focus(); return; }
+      }
+      if (plan.needsUsername) {
+        if (!isValidUsernameFormat(usernameRaw)) {
+          showError('El nombre de usuario debe tener entre 3 y 20 letras/números en minúscula (podés usar guion bajo).');
+          usernameInput.focus();
+          return;
+        }
+        if (isReservedUsername(usernameRaw)) {
+          showError('Ese nombre de usuario no está disponible. Elegí otro.');
+          usernameInput.focus();
+          return;
+        }
+      }
+      if (plan.needsDob && !isValidDob(dobRaw)) {
+        showError('Ingresá una fecha de nacimiento válida (tenés que tener entre 16 y 120 años).');
+        dobInput.focus();
+        return;
       }
       if (plan.needsPhone && (!phoneRaw || !isValidPhone(phoneRaw, country))) {
         showError(`Ingresá un teléfono válido para ${country.flag} ${country.name}.`);
@@ -543,6 +586,12 @@ async function ensureProfileComplete(user, role) {
         if (plan.needsPhone) {
           await reservePhone(db, user.uid, phoneRaw, country);
         }
+        // Mismo patrón que el teléfono: se reserva ANTES de guardar el
+        // perfil, y la unicidad real la garantizan las reglas de Firestore
+        // (usernameIsReservedByCaller), no esta comprobación del navegador.
+        if (plan.needsUsername) {
+          await reserveUsername(db, user.uid, usernameRaw);
+        }
 
         await runTransaction(db, async transaction => {
           const currentSnap = await transaction.get(ref);
@@ -553,6 +602,8 @@ async function ensureProfileComplete(user, role) {
             submittedLastName: lastName,
             submittedPhone: normalizedPhone,
             submittedAddress: point ? { ...point, name: locationName } : null,
+            submittedUsername: plan.needsUsername ? normalizeUsername(usernameRaw) : '',
+            submittedDob: plan.needsDob ? dobRaw : '',
             explicitNameChange,
           });
           if (Object.keys(patch).length) {
@@ -573,6 +624,19 @@ async function ensureProfileComplete(user, role) {
           showError('Ese número ya está registrado en otra cuenta. Si es tuyo, escribinos por WhatsApp y lo resolvemos.');
           document.getElementById('login-phone-help').style.display = '';
           phoneInput.focus();
+        } else if (e?.code === 'permission-denied' && (plan.needsPhone || plan.needsUsername)) {
+          // La reserva de teléfono/username no avisa en el momento si ya está
+          // tomada por otra cuenta (ver reserva-username.js): recién acá, al
+          // rechazar el guardado del perfil, se sabe que alguno de los dos ya
+          // estaba en uso. No hay forma de saber cuál sin exponer datos de la
+          // otra cuenta, así que se avisan los dos campos posibles.
+          showError(plan.needsPhone && plan.needsUsername
+            ? 'Ese teléfono o ese nombre de usuario ya está en uso en otra cuenta. Si alguno es tuyo, escribinos por WhatsApp y lo resolvemos.'
+            : plan.needsPhone
+              ? 'Ese número ya está registrado en otra cuenta. Si es tuyo, escribinos por WhatsApp y lo resolvemos.'
+              : 'Ese nombre de usuario ya está en uso en otra cuenta. Elegí otro, o si es tuyo escribinos por WhatsApp.');
+          if (plan.needsPhone) document.getElementById('login-phone-help').style.display = '';
+          (plan.needsUsername ? usernameInput : phoneInput).focus();
         } else {
           console.error('[login] No se pudo guardar el perfil:', e);
           showError('No pudimos guardar tus datos. Probá de nuevo.');
@@ -948,7 +1012,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
 };
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script src="tienda.js?v=tintin-20260821-accounts-phase-a-1" defer></script>
+<script src="tienda.js?v=tintin-20260822-facturacion-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

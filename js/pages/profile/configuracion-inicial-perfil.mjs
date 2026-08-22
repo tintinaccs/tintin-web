@@ -1,3 +1,6 @@
+import { isValidUsername, normalizeUsername } from '../../components/forms/utilidades-username.js?v=tintin-20260821-username-unique-1';
+import { isValidDob, parseDob } from '../../components/forms/validacion-nacimiento.js?v=tintin-20260822-dob-username-onboarding-1';
+
 function clean(value) {
   return String(value || '').trim().replace(/\s+/g, ' ');
 }
@@ -128,6 +131,7 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
     exposeSavedLocationForOnboarding({});
     return {
       skip: true, needsName: false, needsPhone: false, needsAddress: false,
+      needsUsername: false, needsDob: false,
       suggestedName: '', suggestedFirstName: '', suggestedLastName: '',
     };
   }
@@ -139,7 +143,14 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
   const needsName = !storedNameIsValid;
   const needsPhone = !storedPhone;
   const addressMissing = !addressOk;
-  const onboardingRequired = needsName || needsPhone || addressMissing;
+  // Username y fecha de nacimiento sólo se piden a cuentas nuevas marcadas
+  // explícitamente `incomplete` (creadas después de este cambio). Cuentas
+  // `legacy` o sin `profileStatus` (anteriores al contrato de identidad) no
+  // los tenían antes y no se les inventa ninguno acá — mismo criterio que ya
+  // aplica al nombre/teléfono/dirección para esas cuentas.
+  const needsUsername = profile.profileStatus === 'incomplete' && !isValidUsername(profile.username);
+  const needsDob = profile.profileStatus === 'incomplete' && !profile.dob;
+  const onboardingRequired = needsName || needsPhone || addressMissing || needsUsername || needsDob;
 
   exposeSavedLocationForOnboarding(profile);
 
@@ -158,6 +169,8 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
     // guardada. mapa-ubicacion.js la precarga y permite continuar sin tocarla.
     needsAddress: onboardingRequired && requireAddress,
     addressAlreadySaved: addressOk,
+    needsUsername,
+    needsDob,
     suggestedFirstName,
     suggestedLastName,
     suggestedName: clean(`${suggestedFirstName} ${suggestedLastName}`),
@@ -174,12 +187,15 @@ export function buildMissingProfilePatch({
   submittedName = '',
   submittedPhone = '',
   submittedAddress = null,
+  submittedUsername = '',
+  submittedDob = '',
   explicitNameChange = false,
 } = {}) {
   const patch = {};
   const current = readProfileName(currentProfile);
   const currentNameIsValid = isValidFullName(current.firstName, current.lastName);
   const currentPhone = clean(currentProfile.phone);
+  const currentUsername = clean(currentProfile.username);
 
   // Compatibilidad: quien todavía mande `submittedName` entero se separa acá.
   const fallback = splitFullName(submittedName);
@@ -208,6 +224,37 @@ export function buildMissingProfilePatch({
       patch.savedLocation = savedLocation;
       // `address` es el texto que checkout usa para prellenar la dirección.
       patch.address = savedLocation.address || savedLocation.name;
+    }
+  }
+
+  // El username lo reserva login.html en `usernameReservations` ANTES de
+  // llamar acá (mismo patrón que el teléfono); esta función sólo decide si
+  // hace falta guardarlo, nunca lo reserva ni lo valida contra Firestore.
+  if (!isValidUsername(currentUsername) && isValidUsername(submittedUsername)) {
+    patch.username = normalizeUsername(submittedUsername);
+  }
+
+  // La edad no se persiste calculada — sólo la fecha de nacimiento. Se
+  // recalcula desde `dob` cada vez que hace falta (ver validacion-nacimiento.js).
+  if (!currentProfile.dob && isValidDob(submittedDob)) {
+    patch.dob = parseDob(submittedDob);
+  }
+
+  // Perfiles nuevos ('incomplete') pasan a 'active' en cuanto tienen nombre,
+  // teléfono, username y fecha de nacimiento válidos, ya sea porque ya los
+  // tenían guardados o porque se acaban de completar en este mismo alta. La
+  // dirección ayuda a comprar pero no bloquea el pasaje a 'active': checkout
+  // la vuelve a pedir si todavía falta. Los perfiles 'legacy' no se tocan acá
+  // — no se les exige username ni DOB retroactivamente.
+  if (currentProfile.profileStatus === 'incomplete') {
+    const finalFirstName = patch.firstName || current.firstName;
+    const finalLastName = patch.lastName || current.lastName;
+    const finalPhone = patch.phone || currentPhone;
+    const finalUsername = patch.username || currentUsername;
+    const finalDob = patch.dob || currentProfile.dob;
+    if (isValidFullName(finalFirstName, finalLastName) && finalPhone &&
+        isValidUsername(finalUsername) && finalDob) {
+      patch.profileStatus = 'active';
     }
   }
 

@@ -70,6 +70,93 @@ test('encomienda puerta conserva modo, dirección y ubicación sin sumar flete',
   assert.equal(draft.expectedTotal, 50000);
 });
 
+test('CI sólo se conserva en el draft para encomienda; factura sólo si se pidió', () => {
+  const encomienda = draftFor({ method: 'encomienda', encomiendaMode: 'agencia', city: 'Encarnación', cost: 0, pending: false, mapLocation: null });
+  assert.equal(encomienda.ci, '');
+  const draft = composeCheckoutDraft({
+    requestId: 'request_123456789',
+    items: [{ id: 'p1', qty: 2, variant: 'Dorado / M' }],
+    name: 'Clienta Tintin', phone: '595981123456', contactEmail: 'clienta@example.com', notes: '',
+    selectedCity: 'Encarnación', departamento: 'Itapúa', address: '', referencia: '',
+    shipping: { method: 'encomienda', encomiendaMode: 'agencia', city: 'Encarnación', cost: 0, pending: false, mapLocation: null },
+    paymentMethod: 'transferencia', subtotal: 50000,
+    ci: '4123456', wantsInvoice: true, razonSocial: 'Tintin SA', ruc: '80012345-6'
+  });
+  assert.equal(draft.ci, '4123456');
+  assert.equal(draft.wantsInvoice, true);
+  assert.equal(draft.razonSocial, 'Tintin SA');
+  assert.equal(draft.ruc, '80012345-6');
+
+  const retiro = composeCheckoutDraft({
+    requestId: 'request_123456789',
+    items: [{ id: 'p1', qty: 2, variant: 'Dorado / M' }],
+    name: 'Clienta Tintin', phone: '595981123456', contactEmail: 'clienta@example.com', notes: '',
+    selectedCity: '__retiro__', departamento: '', address: '', referencia: '',
+    shipping: { method: 'retiro', city: 'Retiro coordinado', cost: 0, pending: false, mapLocation: null },
+    paymentMethod: 'transferencia', subtotal: 50000,
+    ci: '4123456', wantsInvoice: false
+  });
+  assert.equal(retiro.ci, '', 'el retiro no exige CI aunque se haya escrito algo en el campo');
+  assert.equal(retiro.wantsInvoice, false);
+  assert.equal(retiro.razonSocial, '');
+  assert.equal(retiro.ruc, '');
+});
+
+test('servidor rechaza CI inválida en encomienda y RUC/razón social inválidos si se pidió factura', () => {
+  const server = phase4Context();
+  server.SUPER_ADMIN_EMAIL = 'teamdinas@gmail.com';
+  server.verifyFirebaseIdToken_ = () => ({ ok: true, emailVerified: true, uid: 'admin-uid', email: 'teamdinas@gmail.com' });
+  server.phase3EmailMatches_ = (email, expected) => email === expected;
+  server.phase4BeginTransaction_ = () => ({ ok: true, transaction: 'tx' });
+  server.phase4Rollback_ = () => {};
+  server.phase4BatchGet_ = () => ({ ok: true, documents: {
+    'orders/admin-uid_request_123456789': null,
+    'settings/general': { paymentMethods: { transferencia: true }, whatsappNumber: '595981299331' },
+    'settings/shippingRates': { encomiendaCities: [{ name: 'Encarnación', price: 0 }] },
+    'settings/orderSequence': { lastNumber: 41, lastCode: 'TINPED41' },
+    'users/admin-uid': { role: 'superadmin' },
+    'checkoutGuards/admin-uid': null,
+    'products/p1': { name: 'Aro', price: 10000, stock: 10, active: true }
+  }});
+  let committedWrites = null;
+  server.phase4Commit_ = writes => { committedWrites = writes; return { ok: true }; };
+
+  const basePayload = {
+    requestId: 'request_123456789', cartLines: [{ id: 'p1', qty: 5, variant: '' }],
+    name: 'Admin Tintin', phone: '595981123456', contactEmail: 'teamdinas@gmail.com', notes: '',
+    selectedCity: 'Encarnación', departamento: 'Itapúa', address: '', referencia: '', mapLocation: null,
+    shippingMethod: 'encomienda', encomiendaMode: 'agencia', paymentMethod: 'transferencia',
+    expectedSubtotal: 50000, expectedShippingCost: 0, expectedShippingPending: false, expectedTotal: 50000
+  };
+
+  const sinCi = server.phase4CreateOrder_({ ...basePayload, ci: '' }, 'token');
+  assert.equal(sinCi.error, 'ci_invalid');
+  assert.equal(committedWrites, null);
+
+  const ciLetras = server.phase4CreateOrder_({ ...basePayload, ci: 'abc1234' }, 'token');
+  assert.equal(ciLetras.error, 'ci_invalid');
+
+  const facturaSinRazonSocial = server.phase4CreateOrder_({ ...basePayload, ci: '4123456', wantsInvoice: true, ruc: '80012345-6' }, 'token');
+  assert.equal(facturaSinRazonSocial.error, 'razon_social_required');
+
+  const facturaRucInvalido = server.phase4CreateOrder_({ ...basePayload, ci: '4123456', wantsInvoice: true, razonSocial: 'Tintin SA', ruc: '80012345' }, 'token');
+  assert.equal(facturaRucInvalido.error, 'ruc_invalid');
+
+  const ok = server.phase4CreateOrder_({ ...basePayload, ci: '4123456', wantsInvoice: true, razonSocial: 'Tintin SA', ruc: '80012345-6' }, 'token');
+  assert.equal(ok.ok, true);
+  assert.equal(ok.order.ci, '4123456');
+  assert.equal(ok.order.invoice.wanted, true);
+  assert.equal(ok.order.invoice.razonSocial, 'Tintin SA');
+  assert.equal(ok.order.invoice.ruc, '80012345-6');
+
+  committedWrites = null;
+  const sinFacturaNiCi = server.phase4CreateOrder_({ ...basePayload, ci: '4123456' }, 'token');
+  assert.equal(sinFacturaNiCi.ok, true);
+  assert.equal(sinFacturaNiCi.order.invoice.wanted, false);
+  assert.equal(sinFacturaNiCi.order.invoice.razonSocial, '');
+  assert.equal(sinFacturaNiCi.order.invoice.ruc, '');
+});
+
 test('retiro cuesta cero y no incluye ubicación privada', () => {
   const draft = draftFor({ method: 'retiro', city: 'Retiro coordinado', cost: 0, pending: false, mapLocation: null });
   assert.equal(draft.shippingMethod, 'retiro');

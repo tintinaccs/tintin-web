@@ -1,6 +1,87 @@
 # Checkpoint — cuentas y sincronización TINTIN
 
-Fecha: 2026-08-21. Rama: `feat/cuentas-sync-fase-a`.
+Fecha: 2026-08-22. Rama: `claude/tintin-final-audit-6o9qy2`.
+
+## Fase B — cierre (2026-08-22)
+
+Se completó el resto de la Fase B: onboarding mínimo con username y fecha de
+nacimiento, en `login.html` junto a nombre/teléfono/dirección.
+
+- `js/components/forms/validacion-nacimiento.js` (nuevo): valida edad entre
+  16 y 120 años a partir de `dob`. La edad nunca se persiste calculada, solo
+  la fecha — se recalcula cada vez que hace falta.
+- `js/pages/profile/configuracion-inicial-perfil.mjs`: `getProfileCompletionPlan`
+  agrega `needsUsername`/`needsDob` (sólo para `profileStatus === 'incomplete'`;
+  cuentas `legacy` o sin `profileStatus` no los piden retroactivamente).
+  `buildMissingProfilePatch` reserva el patch de `username`/`dob` y, si con
+  ese patch el perfil queda completo (nombre + teléfono + username + dob),
+  agrega `profileStatus: 'active'` — transición que antes no existía en
+  ningún lugar del código (los perfiles `incomplete` quedaban así para
+  siempre).
+- `login.html`: campos de username (reservado vía `reserveUsername`, mismo
+  patrón que el teléfono) y fecha de nacimiento en el alta; catch específico
+  para cuando la reserva de teléfono o username ya está tomada por otra
+  cuenta (antes ese caso —real, no hipotético— caía en el mensaje genérico
+  porque `phone_already_registered` nunca se lanza en la práctica).
+- `firestore.rules`: `userProfileFieldsValid()` valida `dob` como timestamp
+  dentro de 16-120 años; nueva función `onboardingActivationUpdate()` permite
+  la única transición `incomplete → active`, atada a los mismos campos del
+  alta y sin abrir la puerta a tocar campos protegidos (rol, pedidos, etc.)
+  en la misma escritura.
+- Verificado: `test:accounts`, `test:rules-username` (13/13), `test:rules-phone`
+  (12/12), `test:rules-critical` (56/56), `audit:account-contract`,
+  `audit:security`, `audit:login-isolation`, `audit:login-profile` (29/29),
+  `audit:final` completo en verde, `cache-versioning:write` + verify.
+
+## Fase C — documentos/facturación (2026-08-22)
+
+Alcance acordado con el negocio: RUC + razón social para quien pide
+factura; CI para quien pide encomienda (la transportadora la exige); si pide
+las dos cosas, van los tres datos. Nunca obligatorio salvo que corresponda.
+
+Investigación previa relevante: el checkout NO crea el pedido con un
+`addDoc`/`runTransaction` directo desde `checkout.html` como parecía a
+primera vista — lo hace `js/orders/pedido-checkout-seguro.js` (cargado
+dinámicamente desde `js/components/cart/sincronizacion-carrito.js`), que arma
+un "draft" con `js/orders/politica-checkout.js` y lo manda a
+`apps-script/CrearPedido.gs` (Apps Script con OAuth propio, sin el límite de
+1000 expresiones de `firestore.rules`). Ese es el único lugar real donde se
+valida y persiste un pedido — por eso el cambio tocó los tres, no sólo el
+HTML.
+
+- `js/components/forms/validacion-documentos-py.js` (nuevo): formato de CI
+  (5-8 dígitos) y RUC (dígitos-guion-verificador, ej. `80012345-6`) —no
+  recalcula el dígito verificador real, eso es de la DNIT—, y razón social
+  (mínimo 3 caracteres reales).
+- `checkout.html`: checkbox "Quiero factura" (revela razón social + RUC) y
+  campo de CI que aparece sólo si el envío elegido es encomienda. Validado
+  al avanzar del paso "Tus datos" y otra vez al confirmar (mismo patrón que
+  nombre/teléfono).
+- `js/orders/politica-checkout.js` / `pedido-checkout-seguro.js`: el draft
+  lleva `wantsInvoice`/`razonSocial`/`ruc`/`ci`, saneados según corresponda
+  (RUC/razón social sólo si `wantsInvoice`; CI sólo si `shippingMethod ===
+  'encomienda'`) — así un valor tipeado y después descartado (ej. desmarcó
+  factura) nunca llega al servidor.
+- `apps-script/CrearPedido.gs`: valida los mismos formatos server-side y
+  persiste `ci` e `invoice: {wanted, razonSocial, ruc}` en el pedido.
+- `js/admin/admin-app.js`: el detalle del pedido en Super Admin muestra CI y
+  el bloque de factura pedida, para que quien facture/despache tenga el dato
+  a mano sin tener que preguntarlo de nuevo por WhatsApp.
+- Verificado: `tests/checkout/documentos-py.test.mjs` (formato),
+  `tests/checkout/order-contract.test.mjs` (draft + servidor, incluyendo
+  rechazo de CI/RUC/razón social inválidos vía el mismo `CrearPedido.gs`
+  cargado en una sandbox de Node), `audit:checkout-delivery`,
+  `audit:secure-orders`, `audit:cart`, `audit:final` completo en verde.
+
+⚠️ Paso manual pendiente (no lo puedo hacer yo): pegar el
+`apps-script/CrearPedido.gs` actualizado en el proyecto real de Apps Script
+que ya tiene `Código.gs`/`Seguridad.gs` — el repo no lo despliega solo.
+
+## Pendiente
+
+Fases D–I (checkout con snapshots inmutables, sincronización bidireccional
+completa usuarios/pedidos/auditoría con Sheets, y el resto del encargo
+original) — no se adelantó nada de eso todavía.
 
 ## Alcance cerrado
 

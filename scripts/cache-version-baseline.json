@@ -136,8 +136,8 @@
     "sha256": "e95a2ffddd825764bcdead1ac25444ec07570d7357360b94103188917d23507e"
   },
   "css/pages/login/login.css": {
-    "version": "tintin-20260811-cls-desktop-stable-2",
-    "sha256": "bf0b574259ff20fa08df7df377896870c6ccff1c9b51d1a05fc069bca2be870a"
+    "version": "tintin-20260822-dob-username-onboarding-1",
+    "sha256": "dccce6ae755b8b2bddf880a219ed237e5345a1d1592e938cc92f597f7acb1d0d"
   },
   "css/pages/product/product-extras.css": {
     "version": "tintin-20260817-margin-consistency-1",
@@ -200,8 +200,8 @@
     "sha256": "77f776d5b297ce973fe5ea432f318498d7e9f07a41f183525a79159c6686c12d"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20260821-accounts-phase-a-1",
-    "sha256": "dbca97fa88efd28f97193e9e780ecfbbfe65f4e0dbb6ceb457dca9d9cf7c26a2"
+    "version": "tintin-20260822-facturacion-1",
+    "sha256": "28b287ff765f31ac559efef48251d1f3ba54635d36866cea123e72a4ed9ce671"
   },
   "js/admin/appearance/editor-visual-admin.js": {
     "version": "tintin-20260821-accounts-phase-a-1",
@@ -312,8 +312,8 @@
     "sha256": "336d03db95834d47190e11df21a9baeda04c335646e3abec995a64c1fbb95e34"
   },
   "js/components/cart/sincronizacion-carrito.js": {
-    "version": "tintin-20260821-accounts-phase-a-1",
-    "sha256": "87ae23efb48b18438bca2cf4695c643ea0e02011e224ccd43f29b922fc07bef8"
+    "version": "tintin-20260822-facturacion-1",
+    "sha256": "c92b41b378984b94c6d1b145bf5b7fa339a8f4c27925c64cc6062df65d5d604a"
   },
   "js/components/color/esquema-color-catalogo.js": {
     "version": "tintin-20260716-cloudinary-fix-1",
@@ -344,8 +344,8 @@
     "sha256": "d5eb84962ad0a0960de13b6f49e245569357486b5138ee218ba746d8d72f92f6"
   },
   "js/components/favorites/sincronizacion-favoritos.js": {
-    "version": "tintin-20260821-accounts-phase-a-1",
-    "sha256": "f79ab05b1859bb34ff17b334b877e8326a0d17162a6d57fa3ec93fea95b9a0bc"
+    "version": "tintin-20260822-facturacion-1",
+    "sha256": "a726af17c5221ee7c18e43a1bef637e22580dfa1c85d5ee23ab7a06a4faa7128"
   },
   "js/components/forms/entrada-codigo-otp.js": {
     "version": "tintin-20260803-otp-input-1",
@@ -355,6 +355,10 @@
     "version": "tintin-20260803-phone-reservation-1",
     "sha256": "61868afc9109a1065f30b3920ff25d972c1d4ff2a0dd8b29d90435875c649c8e"
   },
+  "js/components/forms/reserva-username.js": {
+    "version": "tintin-20260822-dob-username-onboarding-1",
+    "sha256": "7f97bfdc66aca99bf96b86ea04ad938e0e6e17c8c876341c3cd7747a226abb5c"
+  },
   "js/components/forms/utilidades-telefono.js": {
     "version": "tintin-20260803-phone-unique-1",
     "sha256": "16068c8fed7482a3d8e49d83848260718c9dbe3c4ac40b8792dc989d20946004"
@@ -362,6 +366,14 @@
   "js/components/forms/utilidades-username.js": {
     "version": "tintin-20260821-username-unique-1",
     "sha256": "745b292533368749c13668a797a93648bbaf030c050f5a23c76beeb62f013ada"
+  },
+  "js/components/forms/validacion-documentos-py.js": {
+    "version": "tintin-20260822-facturacion-1",
+    "sha256": "d6493c954f8c57db0925910c9c1b9e43fd35854be4640ef082de9efb34478b46"
+  },
+  "js/components/forms/validacion-nacimiento.js": {
+    "version": "tintin-20260822-dob-username-onboarding-1",
+    "sha256": "e19c0f93ca4786c0568483cbddd12e7809f46b5fa04fe45722f99b74078b603a"
   },
   "js/components/images/biblioteca-multimedia.js": {
     "version": "tintin-20260716-cloudinary-fix-1",
@@ -460,8 +472,8 @@
     "sha256": "ea828c286ca53fbfb9025220161ad35d6fa2bf7a769c63f0a8d2aff48503b03c"
   },
   "js/core/auth/proteccion-sesion.js": {
-    "version": "tintin-20260821-accounts-phase-a-1",
-    "sha256": "371a6002abf72e9df10594b387be449b035676653fb2eb5738df95c4a81d3395"
+    "version": "tintin-20260822-dob-username-onboarding-1",
+    "sha256": "90e18c928b24db24489417ec4752647f5803df3dbaf305845f213be19703c4cb"
   },
   "js/core/auth/roles.js": {
     "version": "tintin-20260821-accounts-phase-a-1",
@@ -588,12 +600,12 @@
     "sha256": "321c226e0b347a7fb3f1d2088c5078aebb0b5af8206555365e487ffb909c6583"
   },
   "js/orders/pedido-checkout-seguro.js": {
-    "version": "tintin-20260821-accounts-phase-a-1",
-    "sha256": "ab9c27a36c9ce20400aaff05e48848a896a2997fd7da261d21575215f77c0bec"
+    "version": "tintin-20260822-facturacion-1",
+    "sha256": "4cca976bad4b5216554f75bd8296992798cbd2ef76113961efe8341df5b48486"
   },
   "js/orders/politica-checkout.js": {
-    "version": "tintin-20260808-contract-1",
-    "sha256": "e961366e4cadbcf38353df7c9a5531f214e32680b65a5817d71dca01b4ce314c"
+    "version": "tintin-20260822-facturacion-1",
+    "sha256": "7165077aa538d72a80a6aafdf98c4bcf6dd1553f0f7ce0c1f3086ca4100a41f6"
   },
   "js/pages/catalog/politica-exhibicion-catalogo.js": {
     "version": "tintin-20260731-unified-store-1",
@@ -628,8 +640,8 @@
     "sha256": "92d3b33c5e3a97c4b4fa1637726a01a209708b867ae8ee75c57676d375fc5fa6"
   },
   "js/pages/collections/pagina-colecciones.js": {
-    "version": "tintin-20260821-accounts-phase-a-1",
-    "sha256": "29db6211aa234f1d1dc8539f4b4fe8977abb693bb0145ec0e053663a983d5525"
+    "version": "tintin-20260822-facturacion-1",
+    "sha256": "4ba9feeaf3382c964c06943aa6724ff688632f47d6fa18101aeb8435ab121c27"
   },
   "js/pages/institutional/mantenimiento-contacto.js": {
     "version": "tintin-20260818-contact-clock-svg-1",
@@ -656,12 +668,12 @@
     "sha256": "1932a5f9b2b21586aa9e0275638237e400abd1aee82a4544c1baf48303af5a27"
   },
   "js/pages/profile/configuracion-inicial-perfil.mjs": {
-    "version": "tintin-20260803-profile-onboarding-2",
-    "sha256": "a56738975ebfb22d83e41c294e46f0190361f956f6c833c62ab0948245ad4e8f"
+    "version": "tintin-20260822-dob-username-onboarding-2",
+    "sha256": "332b43dc794095b3307a148ab0dd3eb53f04d9f74a7310df8a333505c05d2133"
   },
   "js/pages/profile/control-acceso-perfil.js": {
-    "version": "tintin-20260821-accounts-phase-a-1",
-    "sha256": "3f5690f6b696678c03f8bdad882a2aa2c70c0aa37620c1aefd3a55b799f3cde7"
+    "version": "tintin-20260822-dob-username-onboarding-1",
+    "sha256": "4693b7a38892b4230a5945c94ec96c01301a3634cfaa4c3a837f363cfd71ae3a"
   },
   "js/pages/profile/favoritos-perfil.js": {
     "version": "tintin-20260815-routes-clean-1",
@@ -688,7 +700,7 @@
     "sha256": "9958477ad8f5c7cd8fd9eab69e05a2b6f9dac4e16f3605924c2ec3a01aed35d5"
   },
   "tienda.js": {
-    "version": "tintin-20260821-accounts-phase-a-1",
-    "sha256": "001afbda0ddab827d36f0b5ee677158ae8d8cf302f6f5ab03034b416c1282641"
+    "version": "tintin-20260822-facturacion-1",
+    "sha256": "05ecf62ba4a686aff0e6fb1967c9162440b82d2fbeb969ba25c2d40ee0534d16"
   }
 }

@@ -38,8 +38,14 @@ var PHASE4_ALLOWED_PAYLOAD_KEYS_ = [
   'contactEmail', 'notes', 'selectedCity', 'departamento', 'address',
   'referencia', 'mapLocation', 'shippingMethod', 'encomiendaMode',
   'paymentMethod', 'expectedSubtotal', 'expectedShippingCost',
-  'expectedShippingPending', 'expectedTotal'
+  'expectedShippingPending', 'expectedTotal',
+  'wantsInvoice', 'razonSocial', 'ruc', 'ci'
 ];
+// Mismo formato que valida el cliente en
+// js/components/forms/validacion-documentos-py.js — no se recalcula el
+// dígito verificador real del RUC (eso es responsabilidad de la DNIT).
+var PHASE4_CI_PATTERN_ = /^\d{5,8}$/;
+var PHASE4_RUC_PATTERN_ = /^\d{5,8}-\d$/;
 
 function phase4AuthHeaders_() {
   return { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() };
@@ -326,7 +332,7 @@ function phase4ResolveShipping_(shippingRates, selectedCity) {
  * selectedCity, departamento, address, referencia, mapLocation,
  * shippingMethod, encomiendaMode,
  * paymentMethod, expectedSubtotal, expectedShippingCost,
- * expectedShippingPending, expectedTotal.
+ * expectedShippingPending, expectedTotal, wantsInvoice, razonSocial, ruc, ci.
  *
  * A diferencia del checkout actual (que crea el pedido en estado
  * "pending" y recién después reserva stock en una segunda escritura,
@@ -511,6 +517,27 @@ function phase4CreateOrder_(payload, idToken) {
       }
     }
 
+    // CI sólo se exige para encomienda (la transportadora la pide al recibir
+    // o retirar). Factura nunca es obligatoria, pero si se pidió, razón
+    // social y RUC sí lo son — mismas reglas que valida el cliente en
+    // js/orders/pedido-checkout-seguro.js.
+    var ci = phase4CleanText_(payload.ci, 8);
+    if (shipping.method === 'encomienda' && !PHASE4_CI_PATTERN_.test(ci)) {
+      phase4Rollback_(transactionId);
+      return { ok: false, error: 'ci_invalid' };
+    }
+    var wantsInvoice = payload.wantsInvoice === true;
+    var razonSocial = phase4CleanText_(payload.razonSocial, 180);
+    var ruc = phase4CleanText_(payload.ruc, 12);
+    if (wantsInvoice && razonSocial.length < 3) {
+      phase4Rollback_(transactionId);
+      return { ok: false, error: 'razon_social_required' };
+    }
+    if (wantsInvoice && !PHASE4_RUC_PATTERN_.test(ruc)) {
+      phase4Rollback_(transactionId);
+      return { ok: false, error: 'ruc_invalid' };
+    }
+
     var resolvedItems = [];
     var subtotal = 0;
     for (var idx = 0; idx < cartLines.length; idx++) {
@@ -605,6 +632,8 @@ function phase4CreateOrder_(payload, idToken) {
       paymentStatus: 'pendiente',
       status: 'pendiente',
       notes: notes,
+      ci: ci,
+      invoice: { wanted: wantsInvoice, razonSocial: wantsInvoice ? razonSocial : '', ruc: wantsInvoice ? ruc : '' },
       notificationStatus: 'pending',
       inventoryState: 'reserved',
       inventoryRevision: 1,
