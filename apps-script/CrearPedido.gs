@@ -30,7 +30,7 @@
 
 var PHASE4_FIRESTORE_BASE_URL_ =
   'https://firestore.googleapis.com/v1/projects/' + FIRESTORE_PROJECT_ID_ + '/databases/(default)/documents';
-var PHASE4_MAX_ITEMS_ = 60; // Tope generoso contra payloads absurdos — no es el límite artificial de 4 que esto reemplaza.
+var PHASE4_MAX_ITEMS_ = 60;
 var PHASE4_CHECKOUT_GUARD_WINDOW_MS_ = 5 * 60 * 1000;
 var PHASE4_DEFAULT_STORE_WHATSAPP_ = '595981299331';
 var PHASE4_ALLOWED_PAYLOAD_KEYS_ = [
@@ -41,9 +41,6 @@ var PHASE4_ALLOWED_PAYLOAD_KEYS_ = [
   'expectedShippingPending', 'expectedTotal',
   'wantsInvoice', 'razonSocial', 'ruc', 'ci'
 ];
-// Mismo formato que valida el cliente en
-// js/components/forms/validacion-documentos-py.js — no se recalcula el
-// dígito verificador real del RUC (eso es responsabilidad de la DNIT).
 var PHASE4_CI_PATTERN_ = /^\d{5,8}$/;
 var PHASE4_RUC_PATTERN_ = /^\d{5,8}-\d$/;
 
@@ -81,7 +78,7 @@ function phase4Rollback_(transactionId) {
       muteHttpExceptions: true
     });
   } catch (error) {
-    // No hay nada más que hacer — Firestore igual expira la transacción sola.
+    // Firestore expira la transacción automáticamente.
   }
 }
 
@@ -301,10 +298,6 @@ function phase4NormalizeCities_(list, fallbackCost) {
   }).filter(function (city) { return city; });
 }
 
-// Espejo de resolveShipping() en js/pedido-checkout-seguro.js, sobre
-// settings/general (paymentMethods, storeOpen) y settings/shippingRates
-// (deliveryCities/encomiendaCities) — ver sparkShippingRatesPath() en
-// firestore.rules para por qué viven separados.
 function phase4ResolveShipping_(shippingRates, selectedCity) {
   if (selectedCity === '__retiro__') {
     return { ok: true, method: 'retiro', city: 'Retiro coordinado', cost: 0, pending: false, rateIndex: -1 };
@@ -318,34 +311,16 @@ function phase4ResolveShipping_(shippingRates, selectedCity) {
   var encomienda = phase4NormalizeCities_(shippingRates.encomiendaCities, shippingRates.encomiendaCost)
     .filter(function (city) { return city.name.toLowerCase() === wanted; })[0];
   if (encomienda) {
-    // El costo de la transportadora se abona al recibir y no se suma al
-    // pedido ni a una futura pasarela de pago.
     return { ok: true, method: 'encomienda', city: encomienda.name, cost: 0, pending: false, rateIndex: encomienda.sourceIndex };
   }
   return { ok: false, error: 'shipping_invalid' };
 }
 
 /**
- * action: 'createOrder'. payload es el mismo "draft" que ya arma
- * buildDraft() en js/pedido-checkout-seguro.js: requestId, cartLines
- * ([{id, qty, variants}]), name, phone, contactEmail, notes,
- * selectedCity, departamento, address, referencia, mapLocation,
- * shippingMethod, encomiendaMode,
- * paymentMethod, expectedSubtotal, expectedShippingCost,
- * expectedShippingPending, expectedTotal, wantsInvoice, razonSocial, ruc, ci.
- *
- * A diferencia del checkout actual (que crea el pedido en estado
- * "pending" y recién después reserva stock en una segunda escritura,
- * porque las reglas de Firestore no dejan a la clienta reescribir su
- * propio pedido pendiente), acá todo pasa en UNA sola transacción: se
- * lee stock/precio real y se crea el pedido ya "reservado" al mismo
- * tiempo, porque no hay reglas de por medio que lo impidan.
- *
- * Nota: si Firestore aborta el commit por una escritura concurrente
- * sobre el mismo producto (alguien más compró justo antes), esta
- * versión no reintenta sola todavía — devuelve el error y quien llama
- * puede reintentar la misma acción (mismo requestId, así que no duplica
- * nada: ver el chequeo de "pedido ya existe" más abajo).
+ * Crea un pedido verificado del lado servidor. Además de reservar stock y
+ * validar el quote, fija la identidad canónica del pedido mediante customerId.
+ * Para encomienda, la cédula se convierte en dato canónico del perfil en la
+ * misma transacción y se reserva en ciReservations para impedir duplicados.
  */
 function phase4CreateOrder_(payload, idToken) {
   var auth = verifyFirebaseIdToken_(idToken);
@@ -384,6 +359,7 @@ function phase4CreateOrder_(payload, idToken) {
   var departamento = phase4CleanText_(payload.departamento, 80);
   var address = phase4CleanText_(payload.address, 300);
   var referencia = phase4CleanText_(payload.referencia, 300);
+  var ciCandidate = phase4CleanText_(payload.ci, 8);
 
   if (!/^\d{8,20}$/.test(phone)) return { ok: false, error: 'phone_invalid' };
   if (!phase4EmailValid_(contactEmail)) return { ok: false, error: 'email_invalid' };
@@ -431,6 +407,11 @@ function phase4CreateOrder_(payload, idToken) {
       'users/' + uid,
       'checkoutGuards/' + uid
     ];
+    var ciReservationPath = PHASE4_CI_PATTERN_.test(ciCandidate)
+      ? 'ciReservations/' + ciCandidate
+      : '';
+    if (ciReservationPath) readPaths.push(ciReservationPath);
+
     var productPaths = cartLines.map(function (line) { return 'products/' + phase4CleanText_(line.id, 180); });
     var batch = phase4BatchGet_(readPaths.concat(productPaths), transactionId);
     if (!batch.ok) { phase4Rollback_(transactionId); return batch; }
@@ -451,6 +432,14 @@ function phase4CreateOrder_(payload, idToken) {
     var guardData = docs['checkoutGuards/' + uid];
 
     if (!userData) { phase4Rollback_(transactionId); return { ok: false, error: 'profile_missing' }; }
+
+    var expectedCustomerId = 'CUS_' + uid;
+    var storedCustomerId = phase4CleanText_(userData.customerId, 180);
+    if (storedCustomerId && storedCustomerId !== expectedCustomerId) {
+      phase4Rollback_(transactionId);
+      return { ok: false, error: 'identity_mismatch' };
+    }
+    var customerId = storedCustomerId || expectedCustomerId;
 
     if (!isSuperAdmin) {
       if (settings.storeOpen !== true) { phase4Rollback_(transactionId); return { ok: false, error: 'store_closed' }; }
@@ -475,11 +464,6 @@ function phase4CreateOrder_(payload, idToken) {
       return { ok: false, error: 'payment_unavailable' };
     }
 
-    // Respaldo en settings/general por si settings/shippingRates todavía no
-    // se migró del todo (ver js/create-order-client.js y la migración
-    // automática en js/admin-app.js) — el mismo respaldo que ya usa
-    // mergeShippingRates() en js/pedido-checkout-seguro.js, para que el
-    // cliente y el servidor calculen el mismo costo de envío siempre.
     var shippingRatesMerged = {
       deliveryCities: Array.isArray(shippingRates.deliveryCities) ? shippingRates.deliveryCities : settings.deliveryCities,
       encomiendaCities: Array.isArray(shippingRates.encomiendaCities) ? shippingRates.encomiendaCities : settings.encomiendaCities,
@@ -517,15 +501,29 @@ function phase4CreateOrder_(payload, idToken) {
       }
     }
 
-    // CI sólo se exige para encomienda (la transportadora la pide al recibir
-    // o retirar). Factura nunca es obligatoria, pero si se pidió, razón
-    // social y RUC sí lo son — mismas reglas que valida el cliente en
-    // js/orders/pedido-checkout-seguro.js.
-    var ci = phase4CleanText_(payload.ci, 8);
+    var ci = shipping.method === 'encomienda' ? ciCandidate : '';
     if (shipping.method === 'encomienda' && !PHASE4_CI_PATTERN_.test(ci)) {
       phase4Rollback_(transactionId);
       return { ok: false, error: 'ci_invalid' };
     }
+
+    var storedCi = phase4CleanText_(userData.ci, 8);
+    var ciReservation = ciReservationPath ? docs[ciReservationPath] : null;
+    if (shipping.method === 'encomienda') {
+      if (storedCi && !PHASE4_CI_PATTERN_.test(storedCi)) {
+        phase4Rollback_(transactionId);
+        return { ok: false, error: 'profile_ci_invalid' };
+      }
+      if (storedCi && storedCi !== ci) {
+        phase4Rollback_(transactionId);
+        return { ok: false, error: 'ci_mismatch' };
+      }
+      if (ciReservation && String(ciReservation.uid || '') !== uid) {
+        phase4Rollback_(transactionId);
+        return { ok: false, error: 'ci_already_registered' };
+      }
+    }
+
     var wantsInvoice = payload.wantsInvoice === true;
     var razonSocial = phase4CleanText_(payload.razonSocial, 180);
     var ruc = phase4CleanText_(payload.ruc, 12);
@@ -606,6 +604,7 @@ function phase4CreateOrder_(payload, idToken) {
       orderNumber: publicOrderNumber,
       orderSequenceNumber: nextOrderSequence,
       userId: uid,
+      customerId: customerId,
       userEmail: email,
       contactEmail: contactEmail,
       userName: name,
@@ -645,7 +644,35 @@ function phase4CreateOrder_(payload, idToken) {
 
     var writes = [phase4CreateWrite_('orders/' + orderId, orderData)];
     var sequencePatch = { lastNumber: nextOrderSequence, lastCode: publicOrderNumber, updatedAt: nowIso, updatedBy: email };
-    writes.push(docs['settings/orderSequence'] ? phase4UpdateWrite_('settings/orderSequence', sequencePatch, ['lastNumber', 'lastCode', 'updatedAt', 'updatedBy']) : phase4CreateWrite_('settings/orderSequence', sequencePatch));
+    writes.push(docs['settings/orderSequence']
+      ? phase4UpdateWrite_('settings/orderSequence', sequencePatch, ['lastNumber', 'lastCode', 'updatedAt', 'updatedBy'])
+      : phase4CreateWrite_('settings/orderSequence', sequencePatch));
+
+    var userIdentityPatch = {};
+    var userIdentityMask = [];
+    if (!storedCustomerId) {
+      userIdentityPatch.customerId = customerId;
+      userIdentityPatch.identityVersion = 1;
+      userIdentityMask.push('customerId', 'identityVersion');
+    }
+    if (shipping.method === 'encomienda' && !storedCi) {
+      userIdentityPatch.ci = ci;
+      userIdentityMask.push('ci');
+    }
+    if (userIdentityMask.length) {
+      userIdentityPatch.updatedAt = nowIso;
+      userIdentityMask.push('updatedAt');
+      writes.push(phase4UpdateWrite_('users/' + uid, userIdentityPatch, userIdentityMask));
+    }
+
+    if (shipping.method === 'encomienda' && !ciReservation) {
+      writes.push(phase4CreateWrite_(ciReservationPath, {
+        uid: uid,
+        customerId: customerId,
+        createdAt: nowIso
+      }));
+    }
+
     resolvedItems.forEach(function (item) {
       var stock = phase4ParseStock_(docs['products/' + item.id].stock);
       if (stock !== null) {

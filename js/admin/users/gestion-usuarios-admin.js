@@ -14,8 +14,10 @@ import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/f
 import {
   collection,
   doc,
+  getDocs,
   onSnapshot,
   query,
+  where,
   orderBy,
   limit,
   writeBatch,
@@ -37,6 +39,7 @@ if (!window.TintinAdminUsersPhase8Booted) {
     search: '',
     stopUsers: null,
     stopLogs: null,
+    profileRequest: 0,
   };
 
   const text = value => String(value == null ? '' : value);
@@ -70,6 +73,27 @@ if (!window.TintinAdminUsersPhase8Booted) {
     return new Intl.DateTimeFormat('es-PY', {
       dateStyle: 'short', timeStyle: 'medium'
     }).format(date);
+  }
+
+  function timeValue(value) {
+    if (!value) return 0;
+    const date = value?.toDate ? value.toDate() : new Date(value);
+    return Number.isNaN(date.getTime()) ? 0 : date.getTime();
+  }
+
+  function formatMoney(value) {
+    return `Gs. ${Math.max(0, Math.round(Number(value) || 0)).toLocaleString('es-PY')}`;
+  }
+
+  function displayLocation(user) {
+    const direct = text(user?.address || '').trim();
+    if (direct) return direct;
+    const location = user?.savedLocation;
+    if (typeof location === 'string' && location.trim()) return location.trim();
+    if (location && typeof location === 'object') {
+      return text(location.address || location.name || location.label || '').trim() || '—';
+    }
+    return '—';
   }
 
   function auditPayload(action, target, details = '', meta = {}) {
@@ -123,7 +147,8 @@ if (!window.TintinAdminUsersPhase8Booted) {
       const blocked = user.blocked === true;
       if (state.tab === 'blocked' ? !blocked : blocked) return false;
       if (!state.search) return true;
-      return lower(user.name).includes(state.search) || lower(user.email).includes(state.search);
+      return [user.name, user.email, user.phone, user.username, user.ci, user.customerId, user.uid]
+        .some(value => lower(value).includes(state.search));
     });
   }
 
@@ -189,6 +214,187 @@ if (!window.TintinAdminUsersPhase8Booted) {
     button.type = 'button';
     button.addEventListener('click', handler);
     return button;
+  }
+
+  function ensureProfileDrawer() {
+    let overlay = document.getElementById('phase8-user-profile-overlay');
+    if (overlay) return overlay;
+    overlay = document.createElement('div');
+    overlay.id = 'phase8-user-profile-overlay';
+    overlay.className = 'phase8-user-profile-overlay';
+    overlay.hidden = true;
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-labelledby', 'phase8-user-profile-title');
+
+    const panel = document.createElement('section');
+    panel.className = 'phase8-user-profile-panel';
+    const head = el('div', 'phase8-user-profile-head');
+    const title = el('div', '', 'Ficha completa del cliente');
+    title.id = 'phase8-user-profile-title';
+    const close = actionButton('Cerrar', 'adm-btn adm-btn-sm adm-btn-outline', closeUserProfile);
+    head.append(title, close);
+    const body = el('div', 'phase8-user-profile-body');
+    body.id = 'phase8-user-profile-body';
+    panel.append(head, body);
+    overlay.appendChild(panel);
+    overlay.addEventListener('click', event => {
+      if (event.target === overlay) closeUserProfile();
+    });
+    document.body.appendChild(overlay);
+    return overlay;
+  }
+
+  function closeUserProfile() {
+    state.profileRequest += 1;
+    const overlay = document.getElementById('phase8-user-profile-overlay');
+    if (!overlay) return;
+    overlay.hidden = true;
+    document.body.classList.remove('phase8-profile-open');
+  }
+
+  function profileField(label, value, { mono = false } = {}) {
+    const item = el('div', 'phase8-profile-field');
+    item.appendChild(el('span', 'phase8-profile-field-label', label));
+    const content = el('strong', mono ? 'phase8-profile-mono' : '', value || '—');
+    item.appendChild(content);
+    return item;
+  }
+
+  function orderLabel(order) {
+    return text(order.orderNumber || order.shortId || order.id || '').trim() || 'Pedido';
+  }
+
+  async function loadUserOrders(user) {
+    const queries = [
+      query(collection(db, 'orders'), where('userId', '==', user.uid), limit(200)),
+    ];
+    if (user.customerId) {
+      queries.push(query(collection(db, 'orders'), where('customerId', '==', user.customerId), limit(200)));
+    }
+    if (user.email) {
+      // Compatibilidad únicamente para pedidos históricos previos al customerId.
+      queries.push(query(collection(db, 'orders'), where('userEmail', '==', user.email), limit(200)));
+    }
+    const results = await Promise.all(queries.map(item => getDocs(item)));
+    const merged = new Map();
+    results.forEach(snapshot => snapshot.docs.forEach(item => merged.set(item.id, { id: item.id, ...item.data() })));
+    return [...merged.values()].sort((a, b) => timeValue(b.createdAt) - timeValue(a.createdAt));
+  }
+
+  function renderFullProfile(user, orders) {
+    const body = document.getElementById('phase8-user-profile-body');
+    if (!body) return;
+    body.replaceChildren();
+
+    const header = el('div', 'phase8-profile-hero');
+    header.appendChild(avatarFor(user));
+    const heroText = el('div');
+    heroText.appendChild(el('h3', '', user.name || 'Sin nombre'));
+    heroText.appendChild(el('p', '', user.username ? `@${user.username}` : 'Sin @username'));
+    header.appendChild(heroText);
+    header.appendChild(el('span', `adm-badge ${user.blocked ? 'badge-cancelado' : 'badge-entregado'}`, user.blocked ? 'Bloqueado' : 'Activo'));
+    body.appendChild(header);
+
+    const identity = el('section', 'phase8-profile-section');
+    identity.appendChild(el('h4', '', 'Identidad'));
+    const identityGrid = el('div', 'phase8-profile-grid');
+    identityGrid.append(
+      profileField('Customer ID', user.customerId || `CUS_${user.uid}`, { mono: true }),
+      profileField('Firebase UID', user.uid, { mono: true }),
+      profileField('@Username', user.username ? `@${user.username}` : 'Sin registrar'),
+      profileField('Cédula', user.ci || 'Sin registrar'),
+      profileField('Estado de perfil', user.profileStatus || 'legacy'),
+      profileField('Versión de identidad', text(user.identityVersion || 1))
+    );
+    identity.appendChild(identityGrid);
+    body.appendChild(identity);
+
+    const contact = el('section', 'phase8-profile-section');
+    contact.appendChild(el('h4', '', 'Contacto y ubicación'));
+    const contactGrid = el('div', 'phase8-profile-grid');
+    contactGrid.append(
+      profileField('Email', user.email || '—'),
+      profileField('Teléfono', user.phone || '—'),
+      profileField('Ubicación / dirección', displayLocation(user)),
+      profileField('Método de acceso', Array.isArray(user.authMethods) ? user.authMethods.join(', ') : (user.lastAuthMethod || user.provider || '—'))
+    );
+    contact.appendChild(contactGrid);
+    body.appendChild(contact);
+
+    const account = el('section', 'phase8-profile-section');
+    account.appendChild(el('h4', '', 'Cuenta y seguridad'));
+    const accountGrid = el('div', 'phase8-profile-grid');
+    accountGrid.append(
+      profileField('Rol', ROLE_LABELS[canonicalRole(user)] || canonicalRole(user)),
+      profileField('Creada', formatDate(user.createdAt)),
+      profileField('Último acceso', formatDate(user.lastLogin)),
+      profileField('Última actualización', formatDate(user.updatedAt)),
+      profileField('Cambio de @ usado', Number(user.usernameChangeCount || 0) >= 1 ? 'Sí' : 'No'),
+      profileField('Bloqueo', user.blocked ? (user.blockReason || 'Bloqueada') : 'No')
+    );
+    account.appendChild(accountGrid);
+    body.appendChild(account);
+
+    const ordersSection = el('section', 'phase8-profile-section');
+    ordersSection.appendChild(el('h4', '', 'Pedidos vinculados'));
+    const completed = orders.filter(order => lower(order.status) === 'entregado').length;
+    const cancelled = orders.filter(order => ['cancelado', 'rechazado'].includes(lower(order.status))).length;
+    const pending = Math.max(0, orders.length - completed - cancelled);
+    const total = orders.reduce((sum, order) => sum + Math.max(0, Number(order.total) || 0), 0);
+    const summary = el('div', 'phase8-profile-order-summary');
+    [
+      ['Total', orders.length],
+      ['Pendientes', pending],
+      ['Completados', completed],
+      ['Cancelados', cancelled],
+      ['Importe histórico', formatMoney(total)],
+    ].forEach(([label, value]) => {
+      const card = el('div', 'phase8-profile-stat');
+      card.append(el('span', '', label), el('strong', '', text(value)));
+      summary.appendChild(card);
+    });
+    ordersSection.appendChild(summary);
+
+    const list = el('div', 'phase8-profile-orders');
+    if (!orders.length) {
+      list.appendChild(el('p', 'phase8-profile-empty', 'No encontramos pedidos vinculados a esta identidad.'));
+    } else {
+      orders.slice(0, 30).forEach(order => {
+        const row = el('div', 'phase8-profile-order');
+        const main = el('div');
+        main.appendChild(el('strong', '', orderLabel(order)));
+        main.appendChild(el('span', '', `${formatDate(order.createdAt)} · ${text(order.status || 'pendiente')}`));
+        const totalNode = el('strong', '', formatMoney(order.total));
+        row.append(main, totalNode);
+        list.appendChild(row);
+      });
+      if (orders.length > 30) list.appendChild(el('p', 'phase8-profile-empty', `Mostrando los 30 pedidos más recientes de ${orders.length}.`));
+    }
+    ordersSection.appendChild(list);
+    body.appendChild(ordersSection);
+  }
+
+  async function openUserProfile(user) {
+    if (!ensureSuperAdmin()) return toast('Solo Super Admin puede abrir la ficha completa.', true);
+    const overlay = ensureProfileDrawer();
+    const body = document.getElementById('phase8-user-profile-body');
+    const requestId = ++state.profileRequest;
+    overlay.hidden = false;
+    document.body.classList.add('phase8-profile-open');
+    if (body) {
+      body.replaceChildren();
+      body.appendChild(el('div', 'phase8-profile-loading', 'Cargando identidad y pedidos vinculados…'));
+    }
+    try {
+      const orders = await loadUserOrders(user);
+      if (requestId !== state.profileRequest) return;
+      renderFullProfile(user, orders);
+    } catch (error) {
+      if (requestId !== state.profileRequest || !body) return;
+      body.replaceChildren();
+      body.appendChild(el('div', 'phase8-profile-error', `No se pudo cargar la ficha completa: ${text(error?.message || 'error desconocido')}`));
+    }
   }
 
   async function blockOne(user) {
@@ -301,6 +507,7 @@ if (!window.TintinAdminUsersPhase8Booted) {
       const nameCell = document.createElement('td');
       const strong = el('strong', '', user.name || '—');
       nameCell.appendChild(strong);
+      if (user.username) nameCell.appendChild(el('div', 'phase8-username-inline', `@${user.username}`));
       const emailCell = el('td', '', user.email || '—');
       emailCell.style.cssText = 'font-size:12px;color:#666';
       const roleCell = document.createElement('td');
@@ -319,16 +526,19 @@ if (!window.TintinAdminUsersPhase8Booted) {
       }
 
       const actionsCell = document.createElement('td');
+      const wrap = el('div', 'phase8-actions');
+      if (ensureSuperAdmin()) {
+        wrap.appendChild(actionButton('Ver ficha', 'adm-btn adm-btn-sm adm-btn-outline', () => openUserProfile(user)));
+      }
       if (ensureSuperAdmin() && !protectedUser) {
-        const wrap = el('div', 'phase8-actions');
         wrap.appendChild(user.blocked
           ? actionButton('Restaurar', 'adm-btn adm-btn-sm adm-btn-outline', () => restoreOne(user))
           : actionButton('Bloquear', 'adm-btn adm-btn-sm adm-btn-outline', () => blockOne(user)));
         wrap.appendChild(actionButton('Eliminar ficha', 'adm-btn adm-btn-sm adm-btn-danger', () => deleteOne(user)));
-        actionsCell.appendChild(wrap);
-      } else {
-        actionsCell.textContent = protectedUser ? 'Cuenta protegida' : '—';
+      } else if (protectedUser) {
+        wrap.appendChild(el('span', 'phase8-protected-note', 'Cuenta protegida'));
       }
+      actionsCell.appendChild(wrap);
 
       row.append(selectCell, avatarCell, nameCell, emailCell, roleCell, statusCell, actionsCell);
       tbody.appendChild(row);
@@ -430,6 +640,7 @@ if (!window.TintinAdminUsersPhase8Booted) {
   function bindLegacyControls() {
     const search = document.getElementById('user-search');
     if (search) {
+      search.placeholder = 'Buscar por nombre, email, @, teléfono, cédula o ID…';
       search.oninput = () => {
         state.search = lower(search.value.trim());
         renderUsers();
@@ -469,8 +680,10 @@ if (!window.TintinAdminUsersPhase8Booted) {
     const style = document.createElement('style');
     style.id = 'phase8-users-styles';
     style.textContent = `
-      .phase8-actions{display:flex;gap:6px;flex-wrap:wrap}.phase8-block-detail{margin-top:6px;font-size:11px;color:#777;line-height:1.55;max-width:260px}.phase8-role-select{min-width:120px}.adm-toast.phase8-error{background:#a52828!important}
-      #section-auditoria .adm-table td{white-space:normal;vertical-align:top}.phase8-protected-note{font-size:11px;color:#777}
+      .phase8-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.phase8-block-detail{margin-top:6px;font-size:11px;color:#777;line-height:1.55;max-width:260px}.phase8-role-select{min-width:120px}.adm-toast.phase8-error{background:#a52828!important}
+      #section-auditoria .adm-table td{white-space:normal;vertical-align:top}.phase8-protected-note,.phase8-username-inline{font-size:11px;color:#777}.phase8-username-inline{margin-top:3px;color:var(--adm-accent);font-weight:700}
+      body.phase8-profile-open{overflow:hidden}.phase8-user-profile-overlay{position:fixed;inset:0;z-index:5000;background:rgba(29,19,23,.52);display:flex;justify-content:flex-end}.phase8-user-profile-overlay[hidden]{display:none}.phase8-user-profile-panel{width:min(720px,100%);height:100%;background:var(--adm-bg,#fff);box-shadow:-18px 0 48px rgba(0,0,0,.18);overflow:auto}.phase8-user-profile-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;border-bottom:1px solid var(--adm-border);background:var(--adm-bg,#fff);font-weight:850}.phase8-user-profile-body{padding:22px}.phase8-profile-loading,.phase8-profile-error,.phase8-profile-empty{padding:18px;border-radius:12px;background:#fff7fa;color:var(--adm-muted);font-size:12px;line-height:1.6}.phase8-profile-error{color:#9b243e;background:#fff0f3}.phase8-profile-hero{display:flex;align-items:center;gap:12px;margin-bottom:18px}.phase8-profile-hero h3{margin:0 0 3px;font-size:19px}.phase8-profile-hero p{margin:0;color:var(--adm-muted);font-size:12px}.phase8-profile-hero>.adm-badge{margin-left:auto}.phase8-profile-section{border:1px solid var(--adm-border);border-radius:14px;padding:16px;margin-top:14px;background:#fff}.phase8-profile-section h4{margin:0 0 12px;font-size:13px;color:var(--adm-primary);text-transform:uppercase;letter-spacing:.04em}.phase8-profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.phase8-profile-field{padding:10px 12px;border-radius:10px;background:#fff7fa;min-width:0}.phase8-profile-field-label{display:block;font-size:10px;font-weight:750;color:var(--adm-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}.phase8-profile-field strong{display:block;font-size:12px;overflow-wrap:anywhere}.phase8-profile-mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.phase8-profile-order-summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px}.phase8-profile-stat{padding:10px;border-radius:10px;background:#fff7fa;text-align:center}.phase8-profile-stat span{display:block;font-size:9px;text-transform:uppercase;color:var(--adm-muted);font-weight:750}.phase8-profile-stat strong{display:block;margin-top:4px;font-size:12px}.phase8-profile-orders{display:flex;flex-direction:column;gap:7px;max-height:360px;overflow:auto}.phase8-profile-order{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--adm-border);border-radius:10px}.phase8-profile-order>div{min-width:0}.phase8-profile-order span{display:block;margin-top:3px;font-size:10px;color:var(--adm-muted)}
+      @media(max-width:700px){.phase8-profile-grid{grid-template-columns:1fr}.phase8-profile-order-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.phase8-user-profile-body{padding:14px}.phase8-profile-hero{align-items:flex-start;flex-wrap:wrap}.phase8-profile-hero>.adm-badge{margin-left:0}}
     `;
     document.head.appendChild(style);
   }
@@ -496,6 +709,7 @@ if (!window.TintinAdminUsersPhase8Booted) {
   function boot() {
     injectStyles();
     bindLegacyControls();
+    ensureProfileDrawer();
     onAuthStateChanged(auth, user => {
       state.user = user;
       if (!user || lower(user.email) !== SUPER_ADMIN) return;

@@ -1,8 +1,8 @@
 // Un teléfono, una cuenta — verificado contra el emulador de Firestore.
 //
-// La unicidad no puede depender del código del navegador: alguien puede
-// escribir directo desde la consola. Estos casos comprueban que las reglas la
-// sostienen igual, incluso saltándose el formulario.
+// La unicidad y la inmutabilidad no pueden depender del código del navegador:
+// estos casos comprueban que las reglas las sostienen incluso si alguien
+// intenta escribir directo desde la consola.
 import fs from 'node:fs';
 import { initializeTestEnvironment, assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
 import { doc, setDoc, updateDoc, getDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
@@ -21,6 +21,7 @@ const claims = {
 const ctx = uid => testEnv.authenticatedContext(uid, claims[uid]).firestore();
 
 const TEL_ANA = '595981123456';
+const TEL_OTRO = '595971000000';
 let checks = 0;
 const ok = async (label, p) => { await assertSucceeds(p); checks++; console.log(`OK   ${label}`); };
 const no = async (label, p) => { await assertFails(p); checks++; console.log(`OK   ${label} (rechazado, como corresponde)`); };
@@ -32,6 +33,7 @@ try {
     for (const uid of ['ana', 'bea']) {
       await setDoc(doc(db, 'users', uid), {
         name: '', email: claims[uid].email, phone: '', role: 'client', blocked: false,
+        profileStatus: 'incomplete', customerId: `CUS_${uid}`,
       });
     }
   });
@@ -39,7 +41,7 @@ try {
   const ana = ctx('ana');
   const bea = ctx('bea');
 
-  await ok('Ana reserva su número',
+  await ok('Ana reserva su número inicial',
     setDoc(doc(ana, 'phoneReservations', TEL_ANA), { uid: 'ana', createdAt: serverTimestamp() }));
 
   await no('Bea NO puede reservar el mismo número',
@@ -51,33 +53,42 @@ try {
   await no('Una reserva no se puede leer para averiguar si un número tiene cuenta',
     getDoc(doc(bea, 'phoneReservations', TEL_ANA)));
 
-  await ok('Ana guarda en su perfil el número que reservó',
-    updateDoc(doc(ana, 'users', 'ana'), { phone: '+' + TEL_ANA, updatedAt: serverTimestamp() }));
+  // El teléfono se fija una vez durante el onboarding incomplete -> active.
+  await ok('Ana fija el número reservado al completar onboarding',
+    updateDoc(doc(ana, 'users', 'ana'), {
+      phone: '+' + TEL_ANA,
+      profileStatus: 'active',
+      updatedAt: serverTimestamp(),
+    }));
 
-  // El agujero que esto cierra: escribir el teléfono ajeno directo, sin
-  // pasar por el formulario ni por la reserva.
+  await no('Ana NO puede cambiar su teléfono después del onboarding',
+    updateDoc(doc(ana, 'users', 'ana'), { phone: '+' + TEL_OTRO, updatedAt: serverTimestamp() }));
+
+  await no('Ana NO puede vaciar su teléfono después del onboarding',
+    updateDoc(doc(ana, 'users', 'ana'), { phone: '', updatedAt: serverTimestamp() }));
+
+  await no('Ana NO puede reservar un segundo teléfono desde el navegador',
+    setDoc(doc(ana, 'phoneReservations', TEL_OTRO), { uid: 'ana', createdAt: serverTimestamp() }));
+
   await no('Bea NO puede escribir en su perfil el número de Ana desde la consola',
     updateDoc(doc(bea, 'users', 'bea'), { phone: '+' + TEL_ANA, updatedAt: serverTimestamp() }));
 
   await no('Bea NO puede escribir un número que nadie reservó',
-    updateDoc(doc(bea, 'users', 'bea'), { phone: '+595971000000', updatedAt: serverTimestamp() }));
-
-  await ok('Vaciar el teléfono siempre se puede',
-    updateDoc(doc(bea, 'users', 'bea'), { phone: '', updatedAt: serverTimestamp() }));
+    updateDoc(doc(bea, 'users', 'bea'), { phone: '+' + TEL_OTRO, updatedAt: serverTimestamp() }));
 
   await ok('Ana actualiza otros campos sin tocar el teléfono',
     updateDoc(doc(ana, 'users', 'ana'), { name: 'Ana Gómez', updatedAt: serverTimestamp() }));
 
-  await no('Nadie puede robar la reserva de otra cuenta borrándola',
+  await no('Otra cuenta no puede borrar la reserva de Ana',
     deleteDoc(doc(bea, 'phoneReservations', TEL_ANA)));
 
-  await ok('Ana libera su propio número al cambiarlo',
+  await no('Ana tampoco puede liberar su teléfono activo desde el navegador',
     deleteDoc(doc(ana, 'phoneReservations', TEL_ANA)));
 
-  await ok('Liberado, Bea ya lo puede tomar',
+  await no('Mientras la reserva canónica exista, Bea no puede tomar ese número',
     setDoc(doc(bea, 'phoneReservations', TEL_ANA), { uid: 'bea', createdAt: serverTimestamp() }));
 
-  console.log(`\nUn teléfono una cuenta: ${checks} controles verificados contra el emulador.`);
+  console.log(`\nUn teléfono una cuenta + teléfono inmutable: ${checks} controles verificados contra el emulador.`);
 } finally {
   await testEnv.cleanup();
 }

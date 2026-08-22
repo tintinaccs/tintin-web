@@ -74,12 +74,6 @@ service cloud.firestore {
        ============================================================ */
 
     function isStoreOpenOrAllowed() {
-      // Si settings/storeGate todavía no existe (recién desplegado el
-      // cierre y el Super Admin todavía no guardó Configuración una vez
-      // para crear el documento), no hay nada que evaluar todavía: se
-      // permite el acceso normal en vez de bloquear el sitio entero por un
-      // documento que nunca llegó a crearse. Apenas el documento existe,
-      // manda por completo su storeOpen/maintenanceAccess como antes.
       return isSuperAdmin() ||
         (
           !isBlockedUser() &&
@@ -99,9 +93,6 @@ service cloud.firestore {
        TINTIN — ROLES Y PERMISOS DINÁMICOS
        ============================================================ */
 
-    /* Actividad anónima: puede guardar ciudad/región/país aproximados, pero
-       nunca IP, GPS, coordenadas, código postal, navegador, nombre ni correo.
-       Solo Super Admin puede leer las sesiones y la presencia. */
     function activityUserIdIsValid(data) {
       return data.userId is string &&
         data.userId.size() <= 128 &&
@@ -159,12 +150,6 @@ service cloud.firestore {
         data.startedAt == request.time;
     }
 
-    // El heartbeat de presencia real (site-activity.js) manda cada 60s. Un
-    // script que reescriba el mismo documento en bucle sin este freno agota
-    // la cuota diaria de escrituras del plan gratuito (Spark/Blaze) — el
-    // mismo incidente que llevó a cerrar esta colección por completo antes.
-    // Reactivada con este freno + Firebase App Check (bloquea scripts que no
-    // sean el sitio real) en vez de mantenerla apagada indefinidamente.
     function presenceUpdateNotTooFrequent() {
       return resource.data.lastSeen is timestamp &&
         request.time > resource.data.lastSeen + duration.value(20, 's');
@@ -184,10 +169,6 @@ service cloud.firestore {
       allow update: if false;
     }
 
-    // Conteo agregado de visitas del día, sin identificar a nadie (sin
-    // visitorId, geografía ni página) — por eso puede aceptar la visita de
-    // cualquier persona sin depender del consentimiento de estadísticas que
-    // sí exige sitePresence/siteTraffic (esos guardan detalle por persona).
     function aggregateVisitCreateValid(dayKey) {
       let data = request.resource.data;
       return data.keys().hasOnly(['dayKey', 'totalVisits', 'updatedAt']) &&
@@ -230,12 +211,6 @@ service cloud.firestore {
        ============================================================ */
 
     function isOwnOrderByUidOrEmail() {
-      // El checkout hace transaction.get(orderRef) para revisar si ese pedido
-      // ya existe (evita duplicados en reintentos) ANTES de crearlo. Para un
-      // orderId que todavía no existe, resource es null, y resource.data
-      // sobre null revienta la evaluación igual que get(...).data — por eso
-      // se permite la lectura cuando el documento no existe todavía (no hay
-      // datos ajenos que proteger) en vez de asumir que siempre existe.
       return isSignedIn() && !isBlockedUser() && (
         resource == null ||
         resource.data.userId == request.auth.uid ||
@@ -280,9 +255,6 @@ service cloud.firestore {
           request.resource.data.authMethods.hasOnly(['google', 'emailOtp'])));
     }
 
-    // Backfill progresivo para perfiles anteriores al contrato de identidad.
-    // El cliente solo puede agregar el customerId determinista ligado a SU UID;
-    // una vez presente, protectedUserFieldsChanged() impide modificarlo.
     function identityBootstrapOnlyUpdate(userId) {
       let data = request.resource.data;
       return !('customerId' in resource.data) &&
@@ -300,11 +272,6 @@ service cloud.firestore {
         data.authMethods.hasOnly(['google', 'emailOtp']);
     }
 
-    // El alta inicial guarda nombre, teléfono, username y fecha de nacimiento
-    // en una sola escritura, y recién ahí el perfil puede pasar de
-    // 'incomplete' a 'active' — nunca al revés, nunca desde otro estado, y
-    // nunca junto con campos protegidos de pedidos/rol/bloqueo (esos siguen
-    // bloqueados por protectedUserFieldsChanged() en cualquier otro camino).
     function onboardingActivationUpdate() {
       return resource.data.profileStatus == 'incomplete' &&
         request.resource.data.profileStatus == 'active' &&
@@ -329,12 +296,17 @@ service cloud.firestore {
         data.lastCheckoutOrderId.size() <= 260;
     }
 
+    // Datos de identidad que la clienta puede ver pero no cambiar directamente.
+    // El teléfono y username se fijan durante onboarding; el único cambio de
+    // username posterior pasa por /api/account-username-change (backend admin).
+    // La cédula se fija desde el checkout de encomienda del lado servidor.
     function protectedUserFieldsChanged() {
       return request.resource.data.diff(resource.data).affectedKeys().hasAny([
         'customerId', 'identityVersion', 'profileStatus', 'deleted', 'deletedAt', 'deletedBy',
-        'email', 'createdAt', 'provider', 'role', 'blocked', 'blockedAt', 'blockedBy', 'blockReason',
-        'roleBeforeBlock', 'purchaseCount', 'orderCount', 'totalOrders',
-        'totalSpent', 'completedOrders', 'pendingOrders', 'cancelledOrders',
+        'email', 'phone', 'ci', 'username', 'usernameChangeCount', 'usernameAssignedAt',
+        'usernameChangedAt', 'createdAt', 'provider', 'role', 'blocked', 'blockedAt',
+        'blockedBy', 'blockReason', 'roleBeforeBlock', 'purchaseCount', 'orderCount',
+        'totalOrders', 'totalSpent', 'completedOrders', 'pendingOrders', 'cancelledOrders',
         'lastOrderAt', 'lastOrderId', 'lastPurchaseAt', 'lastPurchaseOrderId',
         'profileStatsUpdatedAt', 'orderStats', 'lastCheckoutAt', 'lastCheckoutOrderId'
       ]);
@@ -347,22 +319,11 @@ service cloud.firestore {
         (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 2000)) &&
         (!('username' in data) || (data.username is string && data.username.size() <= 20 &&
           data.username.matches('^[a-z0-9_]{0,20}$'))) &&
-        // Igual que en el cliente (validacion-nacimiento.js): edad entre 16 y
-        // 120 años. Nunca se guarda una edad calculada, sólo esta fecha.
         (!('dob' in data) || (data.dob is timestamp &&
           data.dob < request.time - duration.value(16 * 365, 'd') &&
           data.dob > request.time - duration.value(120 * 365, 'd')));
     }
 
-    // Un teléfono no puede estar en dos cuentas, y eso tiene que valer también
-    // para quien escriba directo desde la consola del navegador saltándose el
-    // formulario. Por eso el número guardado en el perfil sólo se acepta si
-    // existe una reserva en `phoneReservations` a nombre de esta misma cuenta
-    // (ver js/phone-reservation.js). Sin esta comprobación, la unicidad
-    // dependería únicamente del código del cliente, que es modificable.
-    //
-    // La clave de la reserva es el número sin el '+': '+595981123456' guardado
-    // en el perfil corresponde al documento '595981123456'.
     function phoneReservationKey(phone) {
       return phone.replace('^\\+', '');
     }
@@ -372,9 +333,6 @@ service cloud.firestore {
       return !('phone' in data) ||
         data.phone == '' ||
         (
-          // Un número sin cambios respecto de lo ya guardado no vuelve a
-          // verificarse: evita romper actualizaciones de otros campos (y una
-          // lectura extra) en perfiles anteriores a esta regla.
           (resource != null && 'phone' in resource.data && resource.data.phone == data.phone) ||
           (
             exists(/databases/$(database)/documents/phoneReservations/$(phoneReservationKey(data.phone))) &&
@@ -383,9 +341,6 @@ service cloud.firestore {
         );
     }
 
-    // Mismo mecanismo que phoneIsReservedByCaller(): el username guardado en
-    // el perfil sólo se acepta si existe una reserva en `usernameReservations`
-    // a nombre de esta misma cuenta (ver js/components/forms/reserva-username.js).
     function usernameIsReservedByCaller() {
       let data = request.resource.data;
       return !('username' in data) ||
@@ -497,9 +452,6 @@ service cloud.firestore {
 
     /* ============================================================
        TINTIN — PEDIDOS SIN BLAZE (SPARK)
-
-       Máximo 4 productos diferentes por pedido para permanecer dentro de los
-       límites de lecturas de reglas. Precio y stock se validan contra products.
        ============================================================ */
 
     function sparkProductPath(productId) {
@@ -539,19 +491,6 @@ service cloud.firestore {
     }
 
     function sparkItemValid(item, orderId) {
-      // Se evalúa hasta 4 veces por escritura (una por cada producto
-      // distinto del carrito, el máximo permitido) — cada chequeo extra acá
-      // cuenta 4 veces contra el límite de 1000 expresiones que Firestore
-      // evalúa por escritura. Con las validaciones que había antes
-      // (item.keys().hasOnly(), fallback de nombre a 3 niveles, precio y
-      // stock verificados con exists()+get() por separado) un carrito de
-      // 3-4 productos distintos superaba ese límite y el pedido se
-      // rechazaba siempre, sin ningún aviso claro de la causa. Recortado a
-      // lo esencial para el dinero y el inventario (precio real y stock
-      // disponible); ya no exige que el nombre mostrado coincida exacto
-      // con el del producto ni limita las claves del item — un campo de
-      // más o un nombre desactualizado ahí es cosmético, no cambia lo que
-      // se cobra ni lo que se descuenta de stock.
       let product = get(/databases/$(database)/documents/products/$(item.id)).data;
       return item is map &&
         item.id is string && item.id.size() > 0 && item.id.size() <= 180 &&
@@ -611,15 +550,6 @@ service cloud.firestore {
         );
     }
 
-    // La carga masiva de departamentos dejó deliveryCities/encomiendaCities
-    // con cientos de entradas (una por ciudad de Paraguay). Mientras vivían
-    // dentro de settings/general, CUALQUIER pedido — incluido retiro en
-    // tienda, que ni usa esas listas — pagaba el costo de materializar el
-    // documento entero al hacer settings = get(settingsPath).data, y
-    // terminaba superando el límite de 1000 expresiones que Firestore
-    // evalúa por escritura (rechazo sin aviso claro de la causa). Viven en
-    // su propio documento, settings/shippingRates, para que solo lo lean
-    // los pedidos por delivery/encomienda que de verdad lo necesitan.
     function sparkShippingRatesPath() {
       return /databases/$(database)/documents/settings/shippingRates;
     }
@@ -641,16 +571,6 @@ service cloud.firestore {
         );
     }
 
-    // Encomienda no valida la ciudad contra el arreglo de tarifas (a
-    // diferencia de delivery, arriba): con la carga masiva de departamentos
-    // esa lista pasó a tener ~240 entradas, y solo indexarla (cities[i])
-    // ya alcanza el límite de 1000 expresiones por escritura de Firestore
-    // por sí solo — no hay margen para sumarle validaciones. Es un riesgo
-    // aceptado a propósito: casi todas esas ciudades tienen precio "a
-    // confirmar" (costo 0, se negocia por WhatsApp antes de cobrar nada),
-    // así que no hay ningún cobro automático que alguien pueda falsear acá
-    // — el peor caso es que el equipo tenga que confirmar manualmente el
-    // costo real de envío en vez de leerlo ya validado.
     function sparkEncomiendaValid(data) {
       let shipping = data.shipping;
       return shipping.city is string && shipping.city.size() > 0 &&
@@ -672,12 +592,6 @@ service cloud.firestore {
     }
 
     function sparkShippingValid(data) {
-      // Igual que en sparkOrderCreateValid: ya no exige
-      // shipping.keys().hasOnly([...]) — esa llamada, sumada a las de más
-      // arriba, alcanzaba el límite de 1000 expresiones con 3-4 productos
-      // en el carrito. Un campo de más en shipping es cosmético (no hay
-      // ningún código que confíe en claves fuera de las que ya se validan
-      // por separado abajo).
       let shipping = data.shipping;
       return shipping is map &&
         sparkMapLocationValid(shipping.mapLocation) &&
@@ -700,16 +614,6 @@ service cloud.firestore {
     }
 
     function sparkOrderCreateValid(orderId) {
-      // exists(path) seguido de get(path) sobre el MISMO documento cuenta
-      // como dos operaciones separadas para el límite de 1000 expresiones
-      // que Firestore evalúa por escritura. Con hasta 4 productos distintos
-      // por pedido (settings + usuario + guard + hasta 4 productos = hasta
-      // 12 pares exists/get), un carrito de 3-4 productos ya alcanzaba ese
-      // límite y el pedido se rechazaba sin ningún aviso claro de la causa
-      // — el checkout quedaba roto en la práctica para cualquiera que
-      // comprara más de 2 productos distintos a la vez. Sin el exists()
-      // previo: si el documento no existe, get() falla la evaluación (deniega
-      // igual que antes), pero cada lectura pasa a costar la mitad.
       let data = request.resource.data;
       let settingsPath = /databases/$(database)/documents/settings/general;
       let settings = get(settingsPath).data;
@@ -733,15 +637,6 @@ service cloud.firestore {
             request.time <= guardData.lastCheckoutAt + duration.value(5, 'm')
           )
         ) &&
-        // Ya no se exige data.keys().hasOnly([...]) acá: llamar .keys()/
-        // hasOnly() sobre el documento completo del pedido cuesta en
-        // expresiones evaluadas según la complejidad TOTAL de ese documento
-        // (incluida la lista items, anidada) — con 3-4 productos distintos
-        // en el carrito, esa sola llamada ya alcanzaba el límite de 1000
-        // expresiones por escritura de Firestore. Un campo de más que
-        // alguien logre colar no lo lee ni confía en él ningún código del
-        // sitio (los campos que sí importan — precio, montos, estado,
-        // permisos — siguen validados uno por uno más abajo).
         orderId == request.auth.uid + '_' + data.requestId &&
         data.userId == request.auth.uid &&
         data.userEmail.lower() == request.auth.token.email.lower() &&
@@ -850,15 +745,8 @@ service cloud.firestore {
         resource.data.source == 'spark-checkout-v1' &&
         resource.data.status == 'inventory_pending' &&
         resource.data.inventoryState == 'pending' &&
-        // Sin este mínimo, crear+borrar el mismo orderId en loop esquivaba
-        // el cooldown de checkoutGuards (que solo exige lastCheckoutOrderId
-        // == orderId, y el orderId no cambia entre reintentos): el guard
-        // nunca se tocaba, así que nunca se disparaba. 10s no afecta un
-        // reintento real (recién se dispara si el draft cambió).
         request.time > resource.data.createdAt + duration.value(10, 's');
     }
-
-
 
     function orderStateReservesInventory(data) {
       let state = data.get('inventoryState', '');
@@ -967,7 +855,6 @@ service cloud.firestore {
         request.resource.data.updatedAt == request.time;
     }
 
-
     function productUpdateValid(productId) {
       let changed = request.resource.data.diff(resource.data).affectedKeys();
       return
@@ -1010,8 +897,6 @@ service cloud.firestore {
       allow write: if isSuperAdmin();
     }
 
-    // Tarifas de envío (deliveryCities/encomiendaCities) separadas de
-    // settings/general — ver sparkShippingRatesPath() más arriba.
     match /settings/shippingRates {
       allow read: if isStoreOpenOrAllowed();
       allow write: if isSuperAdmin();
@@ -1041,23 +926,10 @@ service cloud.firestore {
       allow read, write: if isSuperAdmin();
     }
 
-    /* ============================================================
-       BIBLIOTECA MULTIMEDIA (Super Admin → Imágenes)
-       Los archivos en sí viven en Storage con su propia download URL
-       pública; estos documentos son solo la metadata de administración
-       (nombre, tamaño, quién subió, dónde se usa), por eso quedan
-       restringidos a Super Admin igual que el resto del panel.
-       ============================================================ */
     match /media/{mediaId} {
       allow read, write: if isSuperAdmin();
     }
 
-    /* ============================================================
-       APARIENCIA Y ESQUEMAS DE COLOR (Super Admin → Apariencia)
-       Las páginas públicas leen por ID el esquema activo, pero no pueden
-       enumerar la colección. El listado y la administración quedan
-       exclusivamente en manos del Super Admin.
-       ============================================================ */
     match /colorSchemes/{schemeId} {
       allow get: if true;
       allow list: if isSuperAdmin();
@@ -1070,9 +942,6 @@ service cloud.firestore {
       }
     }
 
-    /* Editor visual: no existe acceso directo desde ningún navegador.
-       El backend valida Super Admin, esquema y límites antes de usar la
-       cuenta de servicio. La tienda pública recibe solo el JSON saneado. */
     match /visualBuilderPages/{pageId} {
       allow read, write: if false;
     }
@@ -1086,7 +955,6 @@ service cloud.firestore {
     /* ============================================================
        CHECKOUT GUARDS
        ============================================================ */
-
 
     match /checkoutGuards/{userId} {
       allow get: if isSignedIn() && request.auth.uid == userId;
@@ -1103,27 +971,15 @@ service cloud.firestore {
 
     /* ============================================================
        RESERVAS DE TELÉFONO
-       ============================================================
-       Un teléfono no puede estar en dos cuentas. El id del documento es el
-       número normalizado (595981123456), así que la unicidad la garantiza
-       Firestore: `allow create` sólo aplica cuando el documento NO existe,
-       de modo que el segundo intento de reservar el mismo número es
-       rechazado por las reglas, sin carrera posible entre dos personas
-       registrándose a la vez.
-
-       No hay `allow read` para clientas: poder leer estos documentos
-       permitiría averiguar si un número tiene cuenta. El cliente no necesita
-       leerlos — le alcanza con que la creación falle.
-
-       No hay `allow update`: un número reservado no cambia de dueña. Si
-       alguien cambia su teléfono, borra su reserva vieja (el número queda
-       libre para quien lo herede, que es lo que pasa en la vida real) y crea
-       la nueva.
        ============================================================ */
 
     match /phoneReservations/{phoneKey} {
       allow read: if isSuperAdmin();
 
+      // Una cuenta incompleta puede reservar su teléfono inicial. Una cuenta
+      // que ya tiene teléfono no puede reservar números adicionales desde el
+      // navegador; así no puede liberar/squattear identificadores saltándose
+      // el perfil. Las operaciones administrativas usan backend privilegiado.
       allow create: if isSignedIn() &&
         !isBlockedUser() &&
         request.resource.data.keys().hasOnly(['uid', 'createdAt']) &&
@@ -1131,25 +987,37 @@ service cloud.firestore {
         request.resource.data.uid == request.auth.uid &&
         request.resource.data.createdAt == request.time &&
         phoneKey.size() >= 8 && phoneKey.size() <= 20 &&
-        phoneKey.matches('^[0-9]+$');
+        phoneKey.matches('^[0-9]+$') &&
+        (
+          !userDocExists() ||
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('phone', '') == '' ||
+          phoneReservationKey(get(/databases/$(database)/documents/users/$(request.auth.uid)).data.phone) == phoneKey
+        );
 
-      allow delete: if isSignedIn() && resource.data.uid == request.auth.uid;
+      // Sólo puede limpiar una reserva que todavía NO sea el teléfono activo
+      // del perfil. El número canónico de una cuenta activa no se libera desde
+      // cliente; la baja administrativa lo hace por backend.
+      allow delete: if isSignedIn() &&
+        resource.data.uid == request.auth.uid &&
+        (
+          !userDocExists() ||
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('phone', '') == '' ||
+          phoneReservationKey(get(/databases/$(database)/documents/users/$(request.auth.uid)).data.phone) != phoneKey
+        );
 
       allow update: if false;
     }
 
     /* ============================================================
        USERNAME RESERVATIONS
-
-       Mismo patrón que phoneReservations: un username no puede estar en dos
-       cuentas, y eso tiene que valer también para quien escriba directo desde
-       la consola. La clave del documento es el username ya normalizado en
-       minúsculas (ver js/components/forms/utilidades-username.js).
        ============================================================ */
 
     match /usernameReservations/{usernameKey} {
       allow read: if isSuperAdmin();
 
+      // El navegador sólo reserva la asignación inicial del onboarding.
+      // Cambios posteriores se realizan por /api/account-username-change,
+      // que usa backend privilegiado y aplica el límite de una sola vez.
       allow create: if isSignedIn() &&
         !isBlockedUser() &&
         request.resource.data.keys().hasOnly(['uid', 'createdAt']) &&
@@ -1157,11 +1025,30 @@ service cloud.firestore {
         request.resource.data.uid == request.auth.uid &&
         request.resource.data.createdAt == request.time &&
         usernameKey.size() >= 3 && usernameKey.size() <= 20 &&
-        usernameKey.matches('^[a-z0-9_]{3,20}$');
+        usernameKey.matches('^[a-z0-9_]{3,20}$') &&
+        (
+          !userDocExists() ||
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('username', '') == '' ||
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.username == usernameKey
+        );
 
-      allow delete: if isSignedIn() && resource.data.uid == request.auth.uid;
+      allow delete: if isSignedIn() &&
+        resource.data.uid == request.auth.uid &&
+        (
+          !userDocExists() ||
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('username', '') == '' ||
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.username != usernameKey
+        );
 
       allow update: if false;
+    }
+
+    /* Cédulas reservadas por backend al confirmar una encomienda. El cliente
+       puede ver su cédula desde users/{uid}, pero jamás enumerar ni escribir
+       el índice de unicidad. */
+    match /ciReservations/{ciKey} {
+      allow read: if isSuperAdmin();
+      allow create, update, delete: if false;
     }
 
     /* ============================================================
@@ -1210,8 +1097,6 @@ service cloud.firestore {
         )
       );
 
-      // Las cuentas se eliminan mediante tombstone desde Cloudflare; ni el
-      // cliente ni Super Admin borran la identidad histórica desde el SDK.
       allow delete: if false;
 
       match /cart/{itemId} {
@@ -1230,15 +1115,11 @@ service cloud.firestore {
           isStoreOpenOrAllowed();
       }
 
-
       match /favorites/{productId} {
         allow read: if isSignedIn() &&
           !isBlockedUser() &&
           request.auth.uid == userId &&
           isStoreOpenOrAllowed();
-        // Los corazones pasan por /api/engagement. El servidor crea a la vez
-        // el favorito privado y el registro administrativo, por lo que una
-        // escritura directa no puede dejar ambas vistas desincronizadas.
         allow create, update, delete: if false;
       }
 
@@ -1290,9 +1171,6 @@ service cloud.firestore {
           currentRolePermAllows('productos', 'crear')
         );
 
-      // El checkout actual reserva stock desde Apps Script con OAuth del
-      // propietario. El navegador ya no puede descontar inventario usando la
-      // ruta heredada sparkStockUpdateValid().
       allow update: if adminInventoryStockUpdateValid(productId);
       allow update: if isSuperAdmin() ||
         (
@@ -1303,8 +1181,6 @@ service cloud.firestore {
 
       allow delete: if isSuperAdmin();
 
-      // Solo contiene la versión pública anonimizada. Nombre real, correo,
-      // historial y UID viven en reviewRecords y nunca se entregan al sitio.
       match /reviews/{reviewId} {
         allow read: if isStoreOpenOrAllowed();
         allow create, update, delete: if false;
@@ -1316,8 +1192,6 @@ service cloud.firestore {
       allow write: if false;
     }
 
-    // Costos, compras, stock mÃ­nimo y notas nunca forman parte del producto
-    // pÃºblico. La hoja Productos y el panel superadmin los reflejan aquÃ­.
     match /productInventory/{productId} {
       allow read, create, update, delete: if isSuperAdmin();
     }
@@ -1398,8 +1272,6 @@ service cloud.firestore {
        ============================================================ */
 
     match /orders/{orderId} {
-      // Checkout: crea exclusivamente el servidor. La única excepción de navegador
-      // es Super Admin para el CRUD manual solicitado desde el panel privado.
       allow create: if isSuperAdmin();
 
       allow read: if isSuperAdmin() ||
