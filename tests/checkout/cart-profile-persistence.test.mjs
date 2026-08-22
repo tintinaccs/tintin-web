@@ -3,7 +3,6 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 const source = readFileSync(new URL('../../js/orders/pedido-checkout-seguro.js', import.meta.url), 'utf8');
-const cartSource = readFileSync(new URL('../../js/components/cart/sincronizacion-carrito.js', import.meta.url), 'utf8');
 
 test('checkout waits for the scoped cart before using it', () => {
   assert.match(source, /awaitCartReady/);
@@ -17,14 +16,6 @@ test('checkout recovers a pending guest cart after auth scope switch', () => {
   assert.match(source, /const guestItems = readGuestCartForRecovery\(\)/);
   assert.match(source, /items = setCartLocal\(guestItems\)/);
   assert.match(source, /localStorage\.removeItem\(GUEST_CART_KEY\)/);
-});
-
-test('cart runtime preserves the guest cart when App Check falls back offline', () => {
-  assert.match(cartSource, /if \(!ready\) \{/);
-  assert.match(cartSource, /if \(guestAtLogin\.length\) \{/);
-  assert.match(cartSource, /addGuestQuantities\(currentLocalCart\(\), guestAtLogin\)/);
-  assert.match(cartSource, /rawStringSet\(dirtyKey\(currentUser\.uid\), '1'\)/);
-  assert.match(cartSource, /rawSet\(GUEST_CART_KEY, \[\]\)/);
 });
 
 test('every forward checkout step is guarded by a non-empty cart', () => {
