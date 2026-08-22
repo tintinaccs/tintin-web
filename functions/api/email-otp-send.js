@@ -5,8 +5,9 @@ import {
 } from '../../cloudflare/seguridad-cloudinary.js';
 import {
   firestoreAdminGet,
-  firestoreAdminReplace,
+  firestoreAdminCommit,
   decodeFirestoreFields,
+  encodeFirestoreFields,
   resolveEmailFromUsernameKey,
   fsString,
   fsInteger,
@@ -15,11 +16,14 @@ import {
 import { usernameKey } from '../../js/components/forms/utilidades-username.js';
 
 const FROM_EMAIL = 'Tintin Accesorios <noreply@tintinaccs.com>';
-const CODE_TTL_MS = 5 * 60 * 1000; // 5 minutos, a pedido: "código de bonificación" con vencimiento corto
+const CODE_TTL_MS = 5 * 60 * 1000;
 const RESEND_COOLDOWN_MS = 45 * 1000;
 const MAX_CODES_PER_DAY = 8;
 const MAX_CODES_PER_IP_DAY = 30;
 const IP_COOLDOWN_MS = 10 * 1000;
+const UINT32_RANGE = 0x100000000;
+const OTP_SPACE = 1_000_000;
+const OTP_UNBIASED_LIMIT = Math.floor(UINT32_RANGE / OTP_SPACE) * OTP_SPACE;
 
 function clean(value, maxLength = 254) {
   return String(value == null ? '' : value).trim().slice(0, maxLength);
@@ -47,6 +51,16 @@ async function hashRateKey(value) {
   return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+async function atomicReplace(env, path, fields, existingDoc) {
+  return firestoreAdminCommit(env, [{
+    path,
+    fields,
+    currentDocument: existingDoc
+      ? { updateTime: existingDoc.updateTime }
+      : { exists: false },
+  }]);
+}
+
 async function enforceIpRateLimit(request, env, now) {
   const ip = clean(request.headers.get('CF-Connecting-IP'), 80);
   if (!ip) throw new Error('rate_identity_missing');
@@ -65,29 +79,37 @@ async function enforceIpRateLimit(request, env, now) {
       : 86400;
     throw error;
   }
-  await firestoreAdminReplace(env, path, {
-    lastSentAt: fsTimestamp(new Date(now)),
-    dateKey: fsString(dateKey),
-    sendCountToday: fsInteger(count + 1)
-  });
+
+  try {
+    await atomicReplace(env, path, {
+      lastSentAt: fsTimestamp(new Date(now)),
+      dateKey: fsString(dateKey),
+      sendCountToday: fsInteger(count + 1)
+    }, existingDoc);
+  } catch (error) {
+    if (error?.status === 409 || error?.code === 'version_conflict') {
+      const rateError = new Error('ip_rate_limit');
+      rateError.retryAfterSeconds = Math.ceil(IP_COOLDOWN_MS / 1000);
+      throw rateError;
+    }
+    throw error;
+  }
 }
 
 function generateCode() {
-  // Rechaza el sesgo del módulo relanzando si cae fuera del rango exacto de
-  // 6 dígitos parejos (0..999999 son 1.000.000 valores, ya exacto para
-  // Uint32 % 1e6 sin sesgo real — se mantiene simple).
-  const value = crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000;
-  return String(value).padStart(6, '0');
+  // Rejection sampling: 2^32 no es múltiplo exacto de 1.000.000. Rechazamos
+  // la cola sobrante antes de aplicar módulo para que cada PIN de 000000 a
+  // 999999 tenga exactamente la misma probabilidad.
+  const buffer = new Uint32Array(1);
+  let value;
+  do {
+    crypto.getRandomValues(buffer);
+    value = buffer[0];
+  } while (value >= OTP_UNBIASED_LIMIT);
+  return String(value % OTP_SPACE).padStart(6, '0');
 }
 
 async function sendCodeEmail(apiKey, email, code) {
-  // Tabla en vez de flex/grid para las 6 cifras: Outlook de escritorio
-  // renderiza con el motor de Word y no soporta flexbox/grid de forma
-  // confiable — una tabla con <td> es lo único que se ve igual en todos
-  // los clientes de correo. La fuente declara Montserrat primero (se ve
-  // así en los pocos clientes que sí la cargan) con una pila web-safe de
-  // respaldo (Helvetica/Arial) para el resto, en vez de forzar Montserrat
-  // sola y dejar que el cliente caiga en su serif genérica.
   const digitCells = code
     .split('')
     .map(digit => `<td style="width:40px;height:52px;border:1.5px solid #f1c4d4;border-radius:10px;background:#fff6fa;font-size:26px;font-weight:800;color:#ad3f67;text-align:center;vertical-align:middle">${digit}</td>`)
@@ -181,12 +203,6 @@ export async function onRequest(context) {
 
     let email;
     if (rawUsername) {
-      // Login por username: se resuelve al email real de la cuenta ANTES de
-      // rate-limitear/enviar. Si el username no existe, la respuesta tiene
-      // que ser indistinguible de un envío real (mismo success:true, sin
-      // tocar emailOtpCodes ni llamar a Resend) — igual que ya exige
-      // firestore.rules para que usernameReservations no sea un oráculo de
-      // qué usernames tienen cuenta (ver scripts/probar-firestore-username-unico.mjs).
       const key = usernameKey(rawUsername);
       const resolved = key ? await resolveEmailFromUsernameKey(env, key) : null;
       if (!resolved) {
@@ -199,11 +215,6 @@ export async function onRequest(context) {
         return jsonResponse({ success: false, error: 'invalid_email' }, 400, origin, requestUrl);
       }
     }
-
-    // El PIN es un segundo método de acceso a la MISMA cuenta, también si la
-    // identidad se creó con Google. findOrCreateUserByEmail() reutiliza el UID
-    // existente de Firebase Auth y solo crea uno cuando el email verificado no
-    // existe, por lo que habilitar este camino no duplica perfiles.
 
     const path = docPath(email);
     const existingDoc = await firestoreAdminGet(env, path);
@@ -228,23 +239,32 @@ export async function onRequest(context) {
 
     const code = generateCode();
     const codeHash = await hashCode(code);
-
-    await firestoreAdminReplace(env, path, {
+    const otpFields = {
       codeHash: fsString(codeHash),
       expiresAt: fsTimestamp(new Date(now + CODE_TTL_MS)),
       attempts: fsInteger(0),
       lastSentAt: fsTimestamp(new Date(now)),
       dateKey: fsString(dateKey),
       sendCountToday: fsInteger(sendCountToday + 1)
-    });
+    };
+
+    try {
+      await atomicReplace(env, path, otpFields, existingDoc);
+    } catch (error) {
+      if (error?.status === 409 || error?.code === 'version_conflict') {
+        return jsonResponse({
+          success: false,
+          error: 'cooldown_active',
+          retryAfterSeconds: Math.ceil(RESEND_COOLDOWN_MS / 1000)
+        }, 429, origin, requestUrl);
+      }
+      throw error;
+    }
 
     await sendCodeEmail(apiKey, email, code);
 
     return jsonResponse({ success: true }, 200, origin, requestUrl);
   } catch (error) {
-    // Mismo criterio que email-otp-verify: el detalle interno va a los logs,
-    // nunca al cliente como código de error (no lo sabe traducir y expone
-    // información del servidor).
     console.error('[email-otp-send] Error inesperado:', error?.message || error);
     const badRequest = error?.message === 'request_too_large' || error instanceof SyntaxError;
     return jsonResponse(
