@@ -88,9 +88,10 @@
         <div class="login-divider" id="login-divider-section"><span>o usá tu correo</span></div>
 
         <div class="login-email-block" id="login-email-block">
-          <label class="login-email-label" for="login-email-input">Correo electrónico</label>
+          <label class="login-email-label" for="login-email-input" id="login-identifier-label">Correo electrónico</label>
           <input type="email" class="login-email-input" id="login-email-input" placeholder="tu@email.com" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
           <button type="button" class="login-email-btn" id="btn-send-otp">Enviar código</button>
+          <button type="button" class="login-email-resend" id="btn-toggle-identifier">¿Preferís entrar con tu @usuario?</button>
           <div class="login-google-nudge-arrow" id="login-email-nudge-arrow" style="display:none" aria-hidden="true">
             <div class="login-google-nudge-point"></div>
             <div class="login-google-nudge-bubble">Esta cuenta se creó con tu correo — entrá por acá <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-left:3px"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div>
@@ -268,6 +269,11 @@ function showSuccess(html) {
   hideMessages();
   const el = document.getElementById("login-success");
   el.innerHTML = html; el.classList.add("show");
+}
+function escapeHtml(s) {
+  const div = document.createElement('div');
+  div.textContent = s || '';
+  return div.innerHTML;
 }
 function hideMessages() {
   document.getElementById("login-error").classList.remove("show");
@@ -894,6 +900,7 @@ function showEmailStep() {
   clearInterval(otpResendTimer);
   document.getElementById('login-otp-block').style.display = 'none';
   document.getElementById('login-email-block').style.display = '';
+  setIdentifierMode('email');
 }
 
 // Cuando una cuenta ya está atada a un método (Google o correo) y se
@@ -933,15 +940,49 @@ window.addEventListener('scroll', () => {
   if (googleNudgeBackdrop.style.display !== 'none') hideAccountNudge();
 }, { passive: true });
 
-async function sendOtp(email) {
+let loginIdentifierMode = 'email'; // 'email' | 'username'
+
+function setIdentifierMode(mode) {
+  loginIdentifierMode = mode;
+  hideMessages();
+  const input = document.getElementById('login-email-input');
+  const label = document.getElementById('login-identifier-label');
+  const toggleBtn = document.getElementById('btn-toggle-identifier');
+  input.value = '';
+  if (mode === 'username') {
+    label.textContent = 'Nombre de usuario';
+    input.type = 'text';
+    input.placeholder = '@tu_usuario';
+    input.autocomplete = 'username';
+    toggleBtn.textContent = '¿Preferís entrar con tu correo?';
+  } else {
+    label.textContent = 'Correo electrónico';
+    input.type = 'email';
+    input.placeholder = 'tu@email.com';
+    input.autocomplete = 'email';
+    toggleBtn.textContent = '¿Preferís entrar con tu @usuario?';
+  }
+  input.focus();
+}
+
+document.getElementById('btn-toggle-identifier').onclick = () => {
+  setIdentifierMode(loginIdentifierMode === 'email' ? 'username' : 'email');
+};
+
+async function sendOtp(identifier, mode) {
   hideMessages();
   hideGoogleNudge();
-  const activeBtn = document.getElementById(otpEmail === email && document.getElementById('login-otp-block').style.display !== 'none' ? 'btn-resend-otp' : 'btn-send-otp');
+  const activeBtn = document.getElementById(otpEmail === identifier && document.getElementById('login-otp-block').style.display !== 'none' ? 'btn-resend-otp' : 'btn-send-otp');
   activeBtn.disabled = true;
   try {
-    await requestOtpCode(email);
-    otpEmail = email;
-    showSuccess(`Te mandamos un código de 6 dígitos a ${email}. Vence en 5 minutos.`);
+    await requestOtpCode(identifier);
+    otpEmail = identifier;
+    // Con @usuario nunca revelamos el correo real de la cuenta (evita que el
+    // login sirva para enumerar qué usuario pertenece a qué correo) — mismo
+    // criterio anti-enumeración que ya aplica el backend (email-otp-send.js).
+    showSuccess(mode === 'username'
+      ? 'Si ese usuario existe, mandamos un código de 6 dígitos al correo de esa cuenta. Vence en 5 minutos.'
+      : `Te mandamos un código de 6 dígitos a ${escapeHtml(identifier)}. Vence en 5 minutos.`);
     showOtpStep();
     startOtpResendCooldown();
   } catch (e) {
@@ -956,15 +997,24 @@ async function sendOtp(email) {
 }
 
 document.getElementById('btn-send-otp').onclick = () => {
-  const email = document.getElementById('login-email-input').value.trim();
-  if (!isValidEmailFormat(email)) {
+  const rawValue = document.getElementById('login-email-input').value.trim();
+  if (loginIdentifierMode === 'username') {
+    const value = rawValue.replace(/^@/, '');
+    if (!isValidUsernameFormat(value)) {
+      showError('Escribí un nombre de usuario válido.');
+      return;
+    }
+    sendOtp(value, loginIdentifierMode);
+    return;
+  }
+  if (!isValidEmailFormat(rawValue)) {
     showError('Escribí un correo con formato válido (ej: tu@email.com).');
     return;
   }
-  sendOtp(email);
+  sendOtp(rawValue, loginIdentifierMode);
 };
 
-document.getElementById('btn-resend-otp').onclick = () => sendOtp(otpEmail);
+document.getElementById('btn-resend-otp').onclick = () => sendOtp(otpEmail, loginIdentifierMode);
 document.getElementById('btn-change-email').onclick = () => { hideMessages(); showEmailStep(); };
 
 document.getElementById('login-otp-input').addEventListener('keydown', e => {
