@@ -22,7 +22,9 @@ export function loadPageMaintenance() {
     ]);
   }
   if (/\/login(?:\.html)?$/.test(path)) return load('pages/login/mantenimiento-acceso.js');
-  if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js');
+  if (/\/perfil(?:\.html)?$/.test(path)) {
+    return import('./pages/profile/mantenimiento-perfil.js?v=tintin-20260822-account-invariants-1');
+  }
   if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js');
   if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-contacto.js');
   if (/\/(?:terminos|privacidad)(?:\.html)?$/.test(path)) {
