@@ -62,6 +62,12 @@ if (CHECKOUT_RE.test(location.pathname || '') && !window.TintinCheckoutMaintenan
     }
   }
 
+  function lockedByAnotherGuard(button) {
+    return !button ||
+      button.dataset.ttCartGuardDisabled === '1' ||
+      button.dataset.ttQuotaDisabled === '1';
+  }
+
   function lockConfirmation() {
     const button = document.getElementById('ck-confirm-btn');
     if (!button || button.dataset.ttMaintenanceBound) return;
@@ -74,6 +80,7 @@ if (CHECKOUT_RE.test(location.pathname || '') && !window.TintinCheckoutMaintenan
       }
       confirmLocked = true;
       body?.classList.add('tt-checkout-submitting');
+      button.dataset.ttMaintenanceLocked = '1';
       button.disabled = true;
       button.setAttribute('aria-busy', 'true');
       const unlock = () => {
@@ -81,7 +88,8 @@ if (CHECKOUT_RE.test(location.pathname || '') && !window.TintinCheckoutMaintenan
         if (successVisible) return;
         confirmLocked = false;
         body?.classList.remove('tt-checkout-submitting');
-        button.disabled = false;
+        delete button.dataset.ttMaintenanceLocked;
+        if (!lockedByAnotherGuard(button)) button.disabled = false;
         button.removeAttribute('aria-busy');
       };
       window.setTimeout(unlock, 12000);
@@ -90,6 +98,7 @@ if (CHECKOUT_RE.test(location.pathname || '') && !window.TintinCheckoutMaintenan
     window.addEventListener('tintin:order-created', () => {
       confirmLocked = true;
       body?.classList.add('tt-checkout-submitting');
+      button.dataset.ttMaintenanceLocked = '1';
     });
   }
 
