@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-22T23:38:22.633Z",
-  "sourceFingerprint": "0635bfabc274fb17efff5eb420855d9294d11d51beed6f501a5e4957425863b8",
+  "generatedAt": "2026-08-22T23:42:09.864Z",
+  "sourceFingerprint": "8d252a7aca7c69655466c575e310efe7c9444b5c4cc88b3625cbb4b772d1bcae",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 713,
-    "textFiles": 681,
-    "totalBytes": 8029305,
+    "files": 712,
+    "textFiles": 680,
+    "totalBytes": 8028501,
     "pages": 18,
     "modules": 449
   },
@@ -24351,8 +24351,8 @@
     },
     {
       "path": "scripts/auditar-integral-plataforma.js",
-      "bytes": 7567,
-      "sha256": "9899b2d46230ba22a3b253f89db782447c9761aa2c01bc42ce31637586dd9940",
+      "bytes": 8285,
+      "sha256": "06ccb4ea72c01c94c0bc4ae57a9bbd7bf2a6620ed9fa863908df58012dc0b17b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27870,12 +27870,6 @@
       "sha256": "08a6925aa5f963124e673d1a6f2ea69e58001c2ec59410ff073448329ba0f8ae"
     },
     {
-      "path": ".github/workflows/temp-sync-generated-checkout-20260822.yml",
-      "extension": ".yml",
-      "bytes": 1522,
-      "sha256": "b9572c3a6b1c979964f3134fd08979baa8f24b602c181c02c413ccb16390c0ae"
-    },
-    {
       "path": ".github/workflows/validar-editor-visual-seguro.yml",
       "extension": ".yml",
       "bytes": 3220,
@@ -31160,8 +31154,8 @@
     {
       "path": "scripts/auditar-integral-plataforma.js",
       "extension": ".js",
-      "bytes": 7567,
-      "sha256": "9899b2d46230ba22a3b253f89db782447c9761aa2c01bc42ce31637586dd9940"
+      "bytes": 8285,
+      "sha256": "06ccb4ea72c01c94c0bc4ae57a9bbd7bf2a6620ed9fa863908df58012dc0b17b"
     },
     {
       "path": "scripts/auditar-interaccion-latencia.mjs",
