@@ -1,53 +1,45 @@
 /* =============================================================
    TINTIN — SINCRONIZACIÓN CANÓNICA DE CUENTAS / PEDIDOS / AUDITORÍA
 
-   Firestore sigue siendo la fuente operativa. Esta hoja es un espejo
-   administrativo y nunca puede otorgar acceso, cambiar customerId, email,
-   teléfono, CI, username, rol ni bloqueo.
+   Fuente operativa: Firestore.
+   Vista administrativa: TINTIN INVENTARIO 2026 — Google Sheets.
 
-   Spreadsheet real preparado: "Tintin — Sync"
-   ID: 1_6yZX6WZgDnh_Berz7F7dnn4vbWbaTbUIv5Cx5DBZPw
+   No crea una segunda tabla de usuarios: reutiliza `Usuarios web`, que el
+   proyecto ya declara como única vista administrativa de cuentas. Añade
+   solamente las columnas canónicas que faltaban. `Pedidos web` y
+   `Auditoría web` son espejos operativos; `Historial sync` conserva la
+   trazabilidad compartida con el motor de productos.
 
-   Pestañas:
-   - Users
-   - Orders
-   - AuditLog
-   - SyncMeta
-
-   Funciones manuales/trigger:
-   - tintinSyncAllToSheets_(): reconstruye el espejo desde Firestore.
-   - tintinInstallSyncTrigger_(): instala onEdit + reconciliación periódica.
-   - tintinSyncEditedRow_(e): propaga desde Sheets únicamente campos
-     explícitamente permitidos y genera changeId para evitar bucles.
+   El trigger propio ignora `Usuarios web`: sus ediciones existentes siguen
+   pasando por `alEditarClientas` y el dispatcher canónico ya desplegado.
    ============================================================= */
 
-var TINTIN_SYNC_SPREADSHEET_ID_ = '1_6yZX6WZgDnh_Berz7F7dnn4vbWbaTbUIv5Cx5DBZPw';
+var TINTIN_SYNC_SPREADSHEET_ID_ = '106Z1A8veL9fGMc4U7R10NVNMsJiEYt9wiGr4YFAav1U';
 var TINTIN_SYNC_MAX_DOCS_ = 5000;
 var TINTIN_SYNC_SHEETS_ = {
-  users: 'Users',
-  orders: 'Orders',
-  audit: 'AuditLog',
-  meta: 'SyncMeta'
+  users: 'Usuarios web',
+  orders: 'Pedidos web',
+  audit: 'Auditoría web',
+  meta: 'Historial sync'
 };
+var TINTIN_SYNC_USERS_HEADER_ROW_ = 6;
+var TINTIN_SYNC_USERS_FIRST_ROW_ = 7;
 
-var TINTIN_SYNC_HEADERS_ = {
-  Users: [
-    'customerId','uid','email','username','phone','ci','name','firstName','lastName','dob','address',
-    'profileStatus','role','blocked','authMethods','lastAuthMethod','createdAt','updatedAt','lastLogin',
-    'usernameChangeCount','deleted','deletedAt','source','lastChangeId'
-  ],
-  Orders: [
-    'orderId','orderNumber','requestId','customerId','userId','userEmail','contactEmail','userName','userPhone','ci',
-    'status','paymentMethod','paymentStatus','shippingMethod','shippingCity','departamento','address','subtotal',
-    'shippingCost','total','invoiceWanted','razonSocial','ruc','itemsSnapshot','createdAt','updatedAt','inventoryState',
-    'notificationStatus','lastChangeId'
-  ],
-  AuditLog: [
-    'eventId','timestamp','customerId','actorId','actorEmail','actorRole','action','entityType','entityId','before','after',
-    'origin','result','changeId'
-  ],
-  SyncMeta: ['entityType','entityId','firestoreUpdatedAt','sheetsUpdatedAt','lastChangeId','syncState','lastError','sourceOfTruth']
-};
+var TINTIN_SYNC_ORDER_HEADERS_ = [
+  'orderId','orderNumber','requestId','customerId','userId','userEmail','contactEmail','userName','userPhone','ci',
+  'status','paymentMethod','paymentStatus','shippingMethod','shippingCity','departamento','address','subtotal',
+  'shippingCost','total','invoiceWanted','razonSocial','ruc','itemsSnapshot','createdAt','updatedAt','inventoryState',
+  'notificationStatus','lastChangeId'
+];
+var TINTIN_SYNC_AUDIT_HEADERS_ = [
+  'eventId','timestamp','customerId','actorId','actorEmail','actorRole','action','entityType','entityId','before','after',
+  'origin','result','changeId'
+];
+var TINTIN_SYNC_USER_HEADERS_B_S_ = [
+  'UID (oculto)','Nombre','Correo','Fecha de registro','Rol','Bloqueada','Pedidos','Total gastado (Gs.)','Notas internas',
+  'Eliminar (solo Super Admin web)','Customer ID','@Username','Teléfono','Cédula','Estado perfil','Último acceso',
+  'Cambio @ usado','ID último cambio'
+];
 
 function tintinSyncSpreadsheet_() {
   return SpreadsheetApp.openById(TINTIN_SYNC_SPREADSHEET_ID_);
@@ -73,17 +65,21 @@ function tintinSyncDate_(value) {
   return isNaN(parsed.getTime()) ? raw.slice(0, 80) : parsed.toISOString();
 }
 
+function tintinSyncDateDisplay_(value) {
+  if (!value) return '';
+  var parsed = value instanceof Date ? value : new Date(String(value));
+  if (isNaN(parsed.getTime())) return tintinSyncClean_(value, 80);
+  return Utilities.formatDate(parsed, 'America/Asuncion', 'dd/MM/yyyy HH:mm:ss');
+}
+
 function tintinSyncChangeId_(prefix) {
   return (prefix || 'SYNC') + '_' + Utilities.getUuid().replace(/-/g, '');
 }
 
-function tintinSyncEnsureHeaders_(sheet, expected) {
-  var actual = sheet.getRange(1, 1, 1, expected.length).getDisplayValues()[0];
+function tintinSyncEnsureHeaders_(sheet, row, column, expected) {
+  var actual = sheet.getRange(row, column, 1, expected.length).getDisplayValues()[0];
   var matches = expected.every(function (header, index) { return actual[index] === header; });
-  if (!matches) {
-    sheet.getRange(1, 1, 1, expected.length).setValues([expected]);
-    sheet.setFrozenRows(1);
-  }
+  if (!matches) sheet.getRange(row, column, 1, expected.length).setValues([expected]);
 }
 
 function tintinSyncFirestoreList_(collectionId, maxDocs) {
@@ -91,9 +87,9 @@ function tintinSyncFirestoreList_(collectionId, maxDocs) {
   var pageToken = '';
   var max = Math.max(1, Math.min(TINTIN_SYNC_MAX_DOCS_, Number(maxDocs || TINTIN_SYNC_MAX_DOCS_)));
   do {
-    var query = '?pageSize=' + Math.min(300, max - all.length);
-    if (pageToken) query += '&pageToken=' + encodeURIComponent(pageToken);
-    var response = UrlFetchApp.fetch(FIRESTORE_DOCUMENTS_URL_ + collectionId + query, {
+    var queryString = '?pageSize=' + Math.min(300, max - all.length);
+    if (pageToken) queryString += '&pageToken=' + encodeURIComponent(pageToken);
+    var response = UrlFetchApp.fetch(FIRESTORE_DOCUMENTS_URL_ + collectionId + queryString, {
       method: 'get',
       headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() },
       muteHttpExceptions: true
@@ -102,10 +98,9 @@ function tintinSyncFirestoreList_(collectionId, maxDocs) {
     if (code === 404) return all;
     if (code < 200 || code >= 300) throw new Error('Firestore list ' + collectionId + ' falló HTTP ' + code);
     var body = JSON.parse(response.getContentText() || '{}');
-    (body.documents || []).forEach(function (doc) {
-      var relativeName = String(doc.name || '').split('/documents/')[1] || '';
-      var id = relativeName.split('/').pop();
-      all.push({ id: id, data: phase3DecodeFields_(doc.fields || {}) });
+    (body.documents || []).forEach(function (document) {
+      var relativeName = String(document.name || '').split('/documents/')[1] || '';
+      all.push({ id: relativeName.split('/').pop(), data: phase3DecodeFields_(document.fields || {}) });
     });
     pageToken = body.nextPageToken || '';
   } while (pageToken && all.length < max);
@@ -113,10 +108,7 @@ function tintinSyncFirestoreList_(collectionId, maxDocs) {
 }
 
 function tintinSyncFirestoreGet_(collectionId, documentId) {
-  var result = phase3FetchDocument_(
-    collectionId + '/' + encodeURIComponent(documentId),
-    ScriptApp.getOAuthToken()
-  );
+  var result = phase3FetchDocument_(collectionId + '/' + encodeURIComponent(documentId), ScriptApp.getOAuthToken());
   return result && result.ok ? result.data || {} : null;
 }
 
@@ -124,46 +116,40 @@ function tintinSyncFirestorePatch_(collectionId, documentId, patch) {
   var keys = Object.keys(patch || {});
   if (!keys.length) return;
   var masks = keys.map(function (key) { return 'updateMask.fieldPaths=' + encodeURIComponent(key); }).join('&');
-  var response = UrlFetchApp.fetch(
-    FIRESTORE_DOCUMENTS_URL_ + collectionId + '/' + encodeURIComponent(documentId) + '?' + masks,
-    {
-      method: 'patch',
-      contentType: 'application/json',
-      headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() },
-      payload: JSON.stringify({ fields: phase4EncodeFields_(patch) }),
-      muteHttpExceptions: true
-    }
-  );
+  var response = UrlFetchApp.fetch(FIRESTORE_DOCUMENTS_URL_ + collectionId + '/' + encodeURIComponent(documentId) + '?' + masks, {
+    method: 'patch',
+    contentType: 'application/json',
+    headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() },
+    payload: JSON.stringify({ fields: phase4EncodeFields_(patch) }),
+    muteHttpExceptions: true
+  });
   var code = response.getResponseCode();
   if (code < 200 || code >= 300) throw new Error('Firestore patch ' + collectionId + '/' + documentId + ' falló HTTP ' + code);
 }
 
-function tintinSyncUserRow_(id, data) {
+function tintinSyncUserRow_(id, data, preserved) {
+  preserved = preserved || {};
   var customerId = tintinSyncClean_(data.customerId, 180) || ('CUS_' + id);
+  var orderCount = Number(data.orderCount || data.totalOrders || data.purchaseCount || 0);
+  var totalSpent = Number(data.totalSpent || 0);
   return [
-    customerId,
     id,
+    tintinSyncClean_(data.name, 160),
     tintinSyncClean_(data.email, 254),
-    tintinSyncClean_(data.username, 40),
+    tintinSyncDateDisplay_(data.createdAt),
+    tintinSyncClean_(data.role || 'client', 40),
+    data.blocked === true ? 'Sí' : 'No',
+    orderCount,
+    totalSpent,
+    tintinSyncClean_(preserved.notes, 1000),
+    '',
+    customerId,
+    data.username ? '@' + tintinSyncClean_(data.username, 40) : '',
     tintinSyncClean_(data.phone, 40),
     tintinSyncClean_(data.ci, 20),
-    tintinSyncClean_(data.name, 160),
-    tintinSyncClean_(data.firstName, 100),
-    tintinSyncClean_(data.lastName, 100),
-    tintinSyncDate_(data.dob),
-    tintinSyncClean_(data.address || (data.savedLocation && (data.savedLocation.address || data.savedLocation.name)), 500),
-    tintinSyncClean_(data.profileStatus, 40),
-    tintinSyncClean_(data.role, 40),
-    data.blocked === true,
-    tintinSyncJson_(data.authMethods || []),
-    tintinSyncClean_(data.lastAuthMethod || data.provider, 40),
-    tintinSyncDate_(data.createdAt),
-    tintinSyncDate_(data.updatedAt),
-    tintinSyncDate_(data.lastLogin),
-    Number(data.usernameChangeCount || 0),
-    data.deleted === true,
-    tintinSyncDate_(data.deletedAt),
-    'firestore',
+    tintinSyncClean_(data.profileStatus || 'legacy', 40),
+    tintinSyncDateDisplay_(data.lastLogin),
+    Number(data.usernameChangeCount || 0) >= 1 ? 'Sí' : 'No',
     tintinSyncClean_(data.lastChangeId, 180)
   ];
 }
@@ -225,101 +211,88 @@ function tintinSyncAuditRow_(id, data) {
   ];
 }
 
-function tintinSyncReplaceSheet_(sheetName, headers, rows) {
+function tintinSyncExistingUserNotes_(sheet) {
+  var last = sheet.getLastRow();
+  var map = {};
+  if (last < TINTIN_SYNC_USERS_FIRST_ROW_) return map;
+  var rows = sheet.getRange(TINTIN_SYNC_USERS_FIRST_ROW_, 2, last - TINTIN_SYNC_USERS_FIRST_ROW_ + 1, 9).getValues();
+  rows.forEach(function (row) {
+    var uid = tintinSyncClean_(row[0], 180);
+    if (uid) map[uid] = { notes: row[8] };
+  });
+  return map;
+}
+
+function tintinSyncReplaceUsers_(records) {
+  var sheet = tintinSyncSpreadsheet_().getSheetByName(TINTIN_SYNC_SHEETS_.users);
+  if (!sheet) throw new Error('Falta Usuarios web');
+  tintinSyncEnsureHeaders_(sheet, TINTIN_SYNC_USERS_HEADER_ROW_, 2, TINTIN_SYNC_USER_HEADERS_B_S_);
+  var preserved = tintinSyncExistingUserNotes_(sheet);
+  var last = sheet.getLastRow();
+  if (last >= TINTIN_SYNC_USERS_FIRST_ROW_) {
+    sheet.getRange(TINTIN_SYNC_USERS_FIRST_ROW_, 2, last - TINTIN_SYNC_USERS_FIRST_ROW_ + 1, TINTIN_SYNC_USER_HEADERS_B_S_.length).clearContent();
+  }
+  var rows = records.map(function (record) { return tintinSyncUserRow_(record.id, record.data || {}, preserved[record.id]); });
+  if (rows.length) sheet.getRange(TINTIN_SYNC_USERS_FIRST_ROW_, 2, rows.length, TINTIN_SYNC_USER_HEADERS_B_S_.length).setValues(rows);
+}
+
+function tintinSyncReplaceSimpleSheet_(sheetName, headers, rows) {
   var sheet = tintinSyncSpreadsheet_().getSheetByName(sheetName);
   if (!sheet) throw new Error('Falta la pestaña ' + sheetName);
-  tintinSyncEnsureHeaders_(sheet, headers);
-  var oldRows = Math.max(0, sheet.getLastRow() - 1);
-  if (oldRows) sheet.getRange(2, 1, oldRows, Math.max(headers.length, sheet.getLastColumn())).clearContent();
+  tintinSyncEnsureHeaders_(sheet, 1, 1, headers);
+  var last = sheet.getLastRow();
+  if (last > 1) sheet.getRange(2, 1, last - 1, Math.max(headers.length, sheet.getLastColumn())).clearContent();
   if (rows.length) sheet.getRange(2, 1, rows.length, headers.length).setValues(rows);
 }
 
-function tintinSyncWriteMeta_(entityType, entityId, firestoreUpdatedAt, changeId, state, error) {
+function tintinSyncWriteMeta_(entityType, entityId, firestoreUpdatedAt, changeId, state, message) {
   var sheet = tintinSyncSpreadsheet_().getSheetByName(TINTIN_SYNC_SHEETS_.meta);
   if (!sheet) return;
-  tintinSyncEnsureHeaders_(sheet, TINTIN_SYNC_HEADERS_.SyncMeta);
-  var values = sheet.getDataRange().getValues();
-  var rowIndex = -1;
-  for (var i = 1; i < values.length; i++) {
-    if (String(values[i][0]) === String(entityType) && String(values[i][1]) === String(entityId)) {
-      rowIndex = i + 1;
-      break;
-    }
-  }
-  var row = [
+  var next = Math.max(8, sheet.getLastRow() + 1);
+  sheet.getRange(next, 1, 1, 10).setValues([[
+    new Date(),
+    String(state || 'SYNCED').toUpperCase(),
+    'Cuentas web',
     entityType,
     entityId,
-    tintinSyncDate_(firestoreUpdatedAt),
-    new Date().toISOString(),
-    changeId || '',
-    state || 'synced',
-    error || '',
-    'firestore'
-  ];
-  if (rowIndex > 0) sheet.getRange(rowIndex, 1, 1, row.length).setValues([row]);
-  else sheet.appendRow(row);
+    'Cambio canónico',
+    '',
+    '',
+    tintinSyncClean_(message || 'Sincronizado', 1000),
+    changeId || ''
+  ]]);
 }
 
 function tintinSyncAllToSheets_() {
-  // Crea snapshots faltantes antes de exponer el espejo administrativo. En
-  // pedidos nuevos el propio checkout debe escribirlos; esta reconciliación
-  // cubre históricos y cualquier pedido legado que todavía no los tenga.
   if (typeof tintinEnsureOrderSnapshots_ === 'function') tintinEnsureOrderSnapshots_();
-
   var lock = LockService.getScriptLock();
   lock.waitLock(30000);
   try {
-    var users = tintinSyncFirestoreList_('users').map(function (doc) { return tintinSyncUserRow_(doc.id, doc.data); });
-    var orders = tintinSyncFirestoreList_('orders').map(function (doc) { return tintinSyncOrderRow_(doc.id, doc.data); });
-    var audits = tintinSyncFirestoreList_('auditLog').map(function (doc) { return tintinSyncAuditRow_(doc.id, doc.data); });
-
-    tintinSyncReplaceSheet_(TINTIN_SYNC_SHEETS_.users, TINTIN_SYNC_HEADERS_.Users, users);
-    tintinSyncReplaceSheet_(TINTIN_SYNC_SHEETS_.orders, TINTIN_SYNC_HEADERS_.Orders, orders);
-    tintinSyncReplaceSheet_(TINTIN_SYNC_SHEETS_.audit, TINTIN_SYNC_HEADERS_.AuditLog, audits);
-
-    var meta = tintinSyncSpreadsheet_().getSheetByName(TINTIN_SYNC_SHEETS_.meta);
-    tintinSyncEnsureHeaders_(meta, TINTIN_SYNC_HEADERS_.SyncMeta);
-    meta.getRange('A2:H2').setValues([['system','full-sync',new Date().toISOString(),new Date().toISOString(),tintinSyncChangeId_('FULL'),'synced','', 'firestore']]);
-    return { ok: true, users: users.length, orders: orders.length, auditLog: audits.length };
+    var users = tintinSyncFirestoreList_('users');
+    var orders = tintinSyncFirestoreList_('orders');
+    var audits = tintinSyncFirestoreList_('auditLog');
+    tintinSyncReplaceUsers_(users);
+    tintinSyncReplaceSimpleSheet_(TINTIN_SYNC_SHEETS_.orders, TINTIN_SYNC_ORDER_HEADERS_, orders.map(function (doc) { return tintinSyncOrderRow_(doc.id, doc.data); }));
+    tintinSyncReplaceSimpleSheet_(TINTIN_SYNC_SHEETS_.audit, TINTIN_SYNC_AUDIT_HEADERS_, audits.map(function (doc) { return tintinSyncAuditRow_(doc.id, doc.data); }));
+    var changeId = tintinSyncChangeId_('FULL');
+    tintinSyncWriteMeta_('Firestore → Sheets', 'Usuarios web / Pedidos web / Auditoría web', new Date().toISOString(), changeId, 'SYNCED', users.length + ' usuario(s), ' + orders.length + ' pedido(s), ' + audits.length + ' evento(s).');
+    return { ok: true, users: users.length, orders: orders.length, auditLog: audits.length, changeId: changeId };
   } finally {
     lock.releaseLock();
   }
 }
 
 function tintinSyncHeaderMap_(sheet) {
-  var lastColumn = sheet.getLastColumn();
-  var headers = sheet.getRange(1, 1, 1, lastColumn).getDisplayValues()[0];
+  var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getDisplayValues()[0];
   var map = {};
   headers.forEach(function (header, index) { map[String(header)] = index; });
   return map;
 }
 
-function tintinSyncRefreshUserRow_(sheet, row, uid) {
-  var data = tintinSyncFirestoreGet_('users', uid);
-  if (!data) throw new Error('No se pudo recargar el usuario desde Firestore');
-  sheet.getRange(row, 1, 1, TINTIN_SYNC_HEADERS_.Users.length).setValues([tintinSyncUserRow_(uid, data)]);
-}
-
 function tintinSyncRefreshOrderRow_(sheet, row, orderId) {
   var data = tintinSyncFirestoreGet_('orders', orderId);
   if (!data) throw new Error('No se pudo recargar el pedido desde Firestore');
-  sheet.getRange(row, 1, 1, TINTIN_SYNC_HEADERS_.Orders.length).setValues([tintinSyncOrderRow_(orderId, data)]);
-}
-
-function tintinSyncEditedUserRow_(sheet, row) {
-  var map = tintinSyncHeaderMap_(sheet);
-  var values = sheet.getRange(row, 1, 1, sheet.getLastColumn()).getValues()[0];
-  var uid = tintinSyncClean_(values[map.uid], 180);
-  if (!uid) return;
-  var patch = {
-    name: tintinSyncClean_(values[map.name], 160),
-    address: tintinSyncClean_(values[map.address], 500),
-    updatedAt: new Date().toISOString(),
-    lastChangeId: tintinSyncChangeId_('SHEET_USER')
-  };
-  tintinSyncFirestorePatch_('users', uid, patch);
-  sheet.getRange(row, map.lastChangeId + 1).setValue(patch.lastChangeId);
-  tintinSyncWriteMeta_('user', uid, patch.updatedAt, patch.lastChangeId, 'synced', '');
+  sheet.getRange(row, 1, 1, TINTIN_SYNC_ORDER_HEADERS_.length).setValues([tintinSyncOrderRow_(orderId, data)]);
 }
 
 function tintinSyncEditedOrderRow_(sheet, row) {
@@ -334,62 +307,40 @@ function tintinSyncEditedOrderRow_(sheet, row) {
   if (allowedStatus.indexOf(status) === -1) throw new Error('Estado de pedido inválido en Sheets');
   if (allowedPayment.indexOf(paymentStatus) === -1) throw new Error('Estado de pago inválido en Sheets');
   var changeId = tintinSyncChangeId_('SHEET_ORDER');
-  var patch = {
+  tintinSyncFirestorePatch_('orders', orderId, {
     status: status,
     paymentStatus: paymentStatus,
     updatedAt: new Date().toISOString(),
     lastChangeId: changeId
-  };
-  tintinSyncFirestorePatch_('orders', orderId, patch);
+  });
   sheet.getRange(row, map.lastChangeId + 1).setValue(changeId);
-  tintinSyncWriteMeta_('order', orderId, patch.updatedAt, changeId, 'synced', '');
+  tintinSyncWriteMeta_('Google Sheets', 'Pedidos web!' + row, '', changeId, 'SYNCED', 'Estado operativo sincronizado a Firestore.');
 }
 
 function tintinSyncEditedRow_(e) {
   if (!e || !e.range) return;
   var sheet = e.range.getSheet();
+  if (sheet.getName() !== TINTIN_SYNC_SHEETS_.orders || e.range.getRow() <= 1) return;
   var row = e.range.getRow();
-  if (row <= 1) return;
-  var name = sheet.getName();
-  if (name !== TINTIN_SYNC_SHEETS_.users && name !== TINTIN_SYNC_SHEETS_.orders) return;
-
   var map = tintinSyncHeaderMap_(sheet);
   var start = e.range.getColumn() - 1;
   var width = e.range.getNumColumns();
-  var changedHeaders = Object.keys(map).filter(function (header) {
-    return map[header] >= start && map[header] < start + width;
-  });
-
+  var changed = Object.keys(map).filter(function (header) { return map[header] >= start && map[header] < start + width; });
+  var allowed = ['status', 'paymentStatus'];
+  var orderId = tintinSyncClean_(sheet.getRange(row, 1).getValue(), 220);
   try {
-    if (name === TINTIN_SYNC_SHEETS_.users) {
-      var userValues = sheet.getRange(row, 1, 1, sheet.getLastColumn()).getValues()[0];
-      var uid = tintinSyncClean_(userValues[map.uid], 180);
-      var allowedUserColumns = ['name', 'address'];
-      var forbiddenUserEdit = changedHeaders.some(function (header) { return allowedUserColumns.indexOf(header) === -1; });
-      if (forbiddenUserEdit) {
-        if (uid) tintinSyncRefreshUserRow_(sheet, row, uid);
-        tintinSyncWriteMeta_('user', uid || ('row-' + row), '', '', 'rejected', 'Sheets no puede modificar identidad, acceso, rol, teléfono, CI, email ni username.');
-        return;
-      }
-      tintinSyncEditedUserRow_(sheet, row);
-      return;
-    }
-
-    var orderValues = sheet.getRange(row, 1, 1, sheet.getLastColumn()).getValues()[0];
-    var orderId = tintinSyncClean_(orderValues[map.orderId], 220);
-    var allowedOrderColumns = ['status', 'paymentStatus'];
-    var forbiddenOrderEdit = changedHeaders.some(function (header) { return allowedOrderColumns.indexOf(header) === -1; });
-    if (forbiddenOrderEdit) {
+    if (changed.some(function (header) { return allowed.indexOf(header) === -1; })) {
       if (orderId) tintinSyncRefreshOrderRow_(sheet, row, orderId);
-      tintinSyncWriteMeta_('order', orderId || ('row-' + row), '', '', 'rejected', 'Sheets sólo puede cambiar estado operativo y estado de pago; el snapshot y los importes son inmutables.');
+      tintinSyncWriteMeta_('Google Sheets', 'Pedidos web!' + row, '', '', 'REJECTED', 'Sólo status y paymentStatus pueden editarse desde Sheets; snapshot, identidad e importes fueron restaurados desde Firestore.');
       return;
     }
     tintinSyncEditedOrderRow_(sheet, row);
   } catch (error) {
     console.error('[TintinSync] onEdit falló:', error);
-    try {
-      tintinSyncWriteMeta_(name, 'row-' + row, '', '', 'error', String(error && error.message || error));
-    } catch (_) {}
+    if (orderId) {
+      try { tintinSyncRefreshOrderRow_(sheet, row, orderId); } catch (_) {}
+    }
+    tintinSyncWriteMeta_('Google Sheets', 'Pedidos web!' + row, '', '', 'ERROR', String(error && error.message || error));
     throw error;
   }
 }
@@ -402,12 +353,10 @@ function tintinInstallSyncTrigger_() {
   var spreadsheet = tintinSyncSpreadsheet_();
   ScriptApp.getProjectTriggers().forEach(function (trigger) {
     var handler = trigger.getHandlerFunction();
-    if (handler === 'tintinSyncEditedRow_' || handler === 'tintinPeriodicReconcile_') {
-      ScriptApp.deleteTrigger(trigger);
-    }
+    if (handler === 'tintinSyncEditedRow_' || handler === 'tintinPeriodicReconcile_') ScriptApp.deleteTrigger(trigger);
   });
+  // Se suma al dispatcher existente. Ignora Usuarios web y Productos.
   ScriptApp.newTrigger('tintinSyncEditedRow_').forSpreadsheet(spreadsheet).onEdit().create();
   ScriptApp.newTrigger('tintinPeriodicReconcile_').timeBased().everyMinutes(5).create();
-  var initial = tintinSyncAllToSheets_();
-  return { ok: true, initial: initial, intervalMinutes: 5 };
+  return { ok: true, initial: tintinSyncAllToSheets_(), intervalMinutes: 5 };
 }
