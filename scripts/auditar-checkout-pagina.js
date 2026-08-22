@@ -11,6 +11,8 @@ const runtime = read('js/pages/checkout/checkout-mantenimiento.js');
 const reliability = read('js/pages/checkout/checkout-confiabilidad.js');
 const loader = read('js/cargador-mantenimiento-pagina.js');
 
+// El checkout carga sus módulos con un tag de versión común para conservar
+// URLs inmutables de caché; la auditoría exige explícitamente ese contrato.
 const checks = [
   ['cinco paneles', [0,1,2,3,4].every(i => html.includes(`id="panel-${i}"`))],
   ['botón confirmación', html.includes('id="ck-confirm-btn"')],
