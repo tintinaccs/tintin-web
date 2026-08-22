@@ -15,7 +15,7 @@ import {
   cartTotal,
   formatPrice,
   awaitCartReady
-} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260822-facturacion-1';
+} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260822-checkout-cart-profile-1';
 import {
   findCountryByCode,
   normalizePhone,
