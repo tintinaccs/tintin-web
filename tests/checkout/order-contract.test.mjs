@@ -114,7 +114,7 @@ test('servidor rechaza CI inválida en encomienda y RUC/razón social inválidos
     'settings/general': { paymentMethods: { transferencia: true }, whatsappNumber: '595981299331' },
     'settings/shippingRates': { encomiendaCities: [{ name: 'Encarnación', price: 0 }] },
     'settings/orderSequence': { lastNumber: 41, lastCode: 'TINPED41' },
-    'users/admin-uid': { role: 'superadmin' },
+    'users/admin-uid': { role: 'superadmin', customerId: 'CUS_admin-uid', identityVersion: 1 },
     'checkoutGuards/admin-uid': null,
     'products/p1': { name: 'Aro', price: 10000, stock: 10, active: true }
   }});
@@ -215,7 +215,7 @@ test('PayPal queda rechazado en Apps Script hasta habilitarlo expresamente', () 
     'orders/admin-uid_request_123456789': null,
     'settings/general': { paymentMethods: { transferencia: true }, whatsappNumber: '595981299331' },
     'settings/shippingRates': {},
-    'users/admin-uid': { role: 'superadmin' },
+    'users/admin-uid': { role: 'superadmin', customerId: 'CUS_admin-uid', identityVersion: 1 },
     'checkoutGuards/admin-uid': null,
     'products/p1': { name: 'Aro', price: 10000, stock: 10, active: true }
   }});
@@ -246,7 +246,7 @@ test('pedido manipulado con productId repetido descuenta stock agregado una sola
     'settings/general': { paymentMethods: { transferencia: true }, whatsappNumber: '595981299331' },
     'settings/shippingRates': {},
     'settings/orderSequence': { lastNumber: 41, lastCode: 'TINPED41' },
-    'users/admin-uid': { role: 'superadmin' },
+    'users/admin-uid': { role: 'superadmin', customerId: 'CUS_admin-uid', identityVersion: 1 },
     'checkoutGuards/admin-uid': null,
     'products/p1': { name: 'Aro', price: 10000, stock: 10, active: true, variants: { Color: ['Dorado', 'Plateado'], Talla: ['M'] } }
   }});
