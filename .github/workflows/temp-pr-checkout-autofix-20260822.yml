@@ -13,6 +13,8 @@ jobs:
           python3 - <<'PY'
           import subprocess
 
+          subprocess.run(['git', 'config', 'user.name', 'Tintin Checkout Final'], check=True)
+          subprocess.run(['git', 'config', 'user.email', 'actions@users.noreply.github.com'], check=True)
           subprocess.run(
               ['git', 'merge', '--no-commit', '-X', 'theirs', 'origin/main'],
               check=True,
