@@ -258,6 +258,29 @@
         <textarea class="ck-textarea" id="ck-notes" placeholder="Ej: Entregar después de las 17hs, timbre no funciona…"></textarea>
       </div>
 
+      <div class="ck-field" id="ck-ci-field" style="display:none">
+        <label class="ck-label" for="ck-ci">Cédula de identidad *</label>
+        <input type="text" class="ck-input" id="ck-ci" placeholder="Ej: 4123456" inputmode="numeric" maxlength="8" />
+        <p style="margin:4px 0 0;font-size:11.5px;color:var(--text-muted);line-height:1.4">La transportadora la pide para la encomienda.</p>
+      </div>
+
+      <div class="ck-field">
+        <label class="ck-checkbox-row" id="ck-wants-invoice-row">
+          <input type="checkbox" id="ck-wants-invoice" />
+          <span>Quiero factura</span>
+        </label>
+      </div>
+      <div id="ck-invoice-fields" style="display:none">
+        <div class="ck-field">
+          <label class="ck-label" for="ck-razon-social">Razón social *</label>
+          <input type="text" class="ck-input" id="ck-razon-social" placeholder="Nombre o razón social para la factura" />
+        </div>
+        <div class="ck-field">
+          <label class="ck-label" for="ck-ruc">RUC *</label>
+          <input type="text" class="ck-input" id="ck-ruc" placeholder="Ej: 80012345-6" />
+        </div>
+      </div>
+
       <div class="ck-error" id="error-2" role="alert"></div>
       <button type="button" class="ck-btn" id="btn-step3-next">Elegir forma de pago →</button>
       <button type="button" class="ck-btn-back" id="btn-step3-back">← Volver al envío</button>
@@ -369,8 +392,9 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart
-} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260821-accounts-phase-a-1";
+} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260822-facturacion-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
+import { isValidCi, normalizeCi, isValidRuc, normalizeRuc, isValidRazonSocial } from "./js/components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
 import {
   isAccessAllowed,
@@ -587,7 +611,11 @@ let orderData = {
   phone: '',
   email: '',
   notes: '',
-  paymentMethod: ''
+  paymentMethod: '',
+  wantsInvoice: false,
+  razonSocial: '',
+  ruc: '',
+  ci: ''
 };
 
 // ---- LABEL FOR A CITY'S SHIPPING COST (null = sin precio cargado) ----
@@ -802,7 +830,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260821-accounts-phase-a-1');
+        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260822-facturacion-1');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -1028,6 +1056,12 @@ function goToStep(n) {
     if (i < n)  s.classList.add('done');
   });
   currentStep = n;
+  // El CI sólo se pide para encomienda, decidido en el paso anterior (envío)
+  // — se revela recién acá porque es cuando orderData.shippingMethod ya está
+  // definido.
+  if (n === 2) {
+    document.getElementById('ck-ci-field').style.display = orderData.shippingMethod === 'encomienda' ? '' : 'none';
+  }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -1264,12 +1298,21 @@ phoneCountrySelect.innerHTML = COUNTRIES.map(c =>
 ).join('');
 phoneCountrySelect.value = DEFAULT_COUNTRY.code;
 
+const invoiceFieldsEl = document.getElementById('ck-invoice-fields');
+document.getElementById('ck-wants-invoice').onchange = function() {
+  invoiceFieldsEl.style.display = this.checked ? '' : 'none';
+};
+
 document.getElementById('btn-step3-next').onclick = () => {
   hideErrors();
   const name = document.getElementById('ck-name').value.trim();
   const phoneRaw = document.getElementById('ck-phone-number').value.trim();
   const country = findCountryByCode(phoneCountrySelect.value);
   const email = document.getElementById('ck-email').value.trim();
+  const wantsInvoice = document.getElementById('ck-wants-invoice').checked;
+  const razonSocial = document.getElementById('ck-razon-social').value.trim();
+  const ruc = document.getElementById('ck-ruc').value.trim();
+  const ciRaw = document.getElementById('ck-ci').value.trim();
   if (!name) { showError(2, 'Ingresá tu nombre completo.'); return; }
   if (!phoneRaw) { showError(2, 'Ingresá tu teléfono o WhatsApp.'); return; }
   if (!isValidPhone(phoneRaw, country)) {
@@ -1284,10 +1327,26 @@ document.getElementById('btn-step3-next').onclick = () => {
     showError(2, 'Ingresá un email válido o dejalo en blanco.');
     return;
   }
+  if (orderData.shippingMethod === 'encomienda' && !isValidCi(ciRaw)) {
+    showError(2, 'Ingresá tu cédula de identidad (solo números, 5 a 8 dígitos) — la transportadora la pide para la encomienda.');
+    return;
+  }
+  if (wantsInvoice && !isValidRazonSocial(razonSocial)) {
+    showError(2, 'Ingresá la razón social para la factura.');
+    return;
+  }
+  if (wantsInvoice && !isValidRuc(ruc)) {
+    showError(2, 'Ingresá un RUC válido, con guion y dígito verificador (ej: 80012345-6).');
+    return;
+  }
   orderData.name = name;
   orderData.phone = phone;
   orderData.email = email;
   orderData.notes = document.getElementById('ck-notes').value.trim();
+  orderData.ci = orderData.shippingMethod === 'encomienda' ? normalizeCi(ciRaw) : '';
+  orderData.wantsInvoice = wantsInvoice;
+  orderData.razonSocial = wantsInvoice ? razonSocial : '';
+  orderData.ruc = wantsInvoice ? normalizeRuc(ruc) : '';
   goToStep(3);
 };
 document.getElementById('btn-step3-back').onclick = () => goToStep(1);
@@ -1838,7 +1897,7 @@ onAuthStateChanged(auth, user => {
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1"></script>
-<script src="tienda.js?v=tintin-20260821-accounts-phase-a-1" defer></script>
+<script src="tienda.js?v=tintin-20260822-facturacion-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

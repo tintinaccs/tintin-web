@@ -2,7 +2,8 @@ export const CHECKOUT_DRAFT_KEYS = Object.freeze([
   'requestId', 'cartLines', 'name', 'phone', 'contactEmail', 'notes',
   'selectedCity', 'departamento', 'address', 'referencia', 'mapLocation',
   'shippingMethod', 'encomiendaMode', 'paymentMethod', 'expectedSubtotal',
-  'expectedShippingCost', 'expectedShippingPending', 'expectedTotal'
+  'expectedShippingCost', 'expectedShippingPending', 'expectedTotal',
+  'wantsInvoice', 'razonSocial', 'ruc', 'ci'
 ]);
 
 const clean = value => String(value == null ? '' : value).trim();
@@ -51,6 +52,13 @@ export function composeCheckoutDraft(input) {
     expectedSubtotal: Math.round(input.subtotal),
     expectedShippingCost: Math.round(shippingCost),
     expectedShippingPending: input.shipping.pending,
-    expectedTotal: Math.round(input.subtotal + shippingCost)
+    expectedTotal: Math.round(input.subtotal + shippingCost),
+    // Factura (razonSocial/ruc) es un pedido explícito de la clienta, nunca
+    // obligatorio. CI sólo se pide para encomienda porque la transportadora
+    // lo exige para el retiro/entrega — si además pide factura, van los tres.
+    wantsInvoice: Boolean(input.wantsInvoice),
+    razonSocial: input.wantsInvoice ? String(input.razonSocial || '') : '',
+    ruc: input.wantsInvoice ? String(input.ruc || '') : '',
+    ci: input.shipping.method === 'encomienda' ? String(input.ci || '') : ''
   };
 }

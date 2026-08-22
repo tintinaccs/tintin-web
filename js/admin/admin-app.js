@@ -2135,7 +2135,9 @@ function renderOrdersTable(orders) {
               ${o.shipping?.referencia || o.referencia ? `<div class="adm-detail-row"><span class="adm-detail-label">Referencia:</span> ${escapeHtmlAdmin(o.shipping?.referencia || o.referencia)}</div>` : ''}
               <div class="adm-detail-row"><span class="adm-detail-label">Pago:</span> ${escapeHtmlAdmin(o.payment?.method || o.paymentMethod || '—')}</div>
               <div class="adm-detail-row"><span class="adm-detail-label">Estado pago:</span> ${escapeHtmlAdmin(payStatus)}</div>
+              ${o.ci ? `<div class="adm-detail-row"><span class="adm-detail-label">CI:</span> ${escapeHtmlAdmin(o.ci)}</div>` : ''}
             </div>
+            ${o.invoice?.wanted ? `<div class="adm-detail-row" style="grid-column:1/-1;background:#fff3f7;border-radius:6px;padding:6px 10px;margin-bottom:8px"><strong>🧾 Pidió factura</strong> — Razón social: ${escapeHtmlAdmin(o.invoice.razonSocial || '—')} · RUC: ${escapeHtmlAdmin(o.invoice.ruc || '—')}</div>` : ''}
             ${o.notes || o.customerNotes ? `<div class="adm-detail-row" style="grid-column:1/-1"><span class="adm-detail-label">Notas:</span> <em>${escapeHtmlAdmin(o.notes || o.customerNotes)}</em></div>` : ''}
             <div style="margin-top:8px">
               <strong>Productos:</strong>
