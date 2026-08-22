@@ -66,3 +66,18 @@ test('quota and maintenance only release their own button lock', () => {
 test('checkout hardening is part of the checkout maintenance bundle', () => {
   assert.match(loader, /pages\/checkout\/checkout-hardening\.js/);
 });
+
+test('secure checkout resolves shipping by city, department and selected method', () => {
+  const secure = readFileSync(new URL('../../js/orders/pedido-checkout-seguro.js', import.meta.url), 'utf8');
+  assert.match(secure, /resolveShipping\(settings, selectedCity, selectedDepartment, requestedMethod, location\)/);
+  assert.match(secure, /selectedGroupId === 'ck-city-delivery-group'/);
+  assert.match(secure, /selectedGroupId === 'ck-city-encomienda-group'/);
+  assert.match(secure, /city\.departamento\.toLocaleLowerCase\('es'\) === wantedDepartment/);
+});
+
+test('quote recovery matches current cart metadata by product and variant', () => {
+  const secure = readFileSync(new URL('../../js/orders/pedido-checkout-seguro.js', import.meta.url), 'utf8');
+  assert.match(secure, /function cartLineKey\(item\)/);
+  assert.match(secure, /currentByLine\.get\(cartLineKey\(item\)\)/);
+  assert.doesNotMatch(secure, /currentById\.get\(String\(item\.id\)\)/);
+});
