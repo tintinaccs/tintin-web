@@ -1,0 +1,55 @@
+name: TEMP sync generated checkout artifacts
+
+on:
+  push:
+    branches:
+      - fix/checkout-hardening-2026-08-22
+    paths:
+      - .github/workflows/temp-sync-generated-checkout-20260822.yml
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v5
+        with:
+          ref: fix/checkout-hardening-2026-08-22
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Regenerate official page artifacts
+        run: npm run build:pages
+
+      - name: Commit only generated artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -- \
+            _headers \
+            _routes.json \
+            diagnostic-manifest.json \
+            config/csp-runtime.js \
+            config/csp-runtime.json \
+            scripts/cache-version-baseline.json
+          echo 'Generated changes:'
+          git diff --cached --name-only
+          if git diff --cached --quiet; then
+            echo 'No generated changes to commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'chore(build): actualizar artefactos generados'
+          git push origin HEAD:fix/checkout-hardening-2026-08-22
