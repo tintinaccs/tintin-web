@@ -1808,17 +1808,8 @@ window.restoreUser = async (uid) => {
     }
     return;
   }
-  let targetRole = 'client';
-  const prevRole = u.roleBeforeBlock;
-  if (prevRole && prevRole !== 'client') {
-    const roleLabel = ROLE_LABELS[prevRole] || prevRole;
-    const restoreElevated = confirm(
-      `Este usuario tenía el rol "${roleLabel}" antes de bloquearse.\n\n` +
-      `Aceptar = restaurar como ${roleLabel}\n` +
-      `Cancelar = restaurar como Cliente (opción más segura)`
-    );
-    targetRole = restoreElevated ? prevRole : 'client';
-  }
+  const targetRole = ASSIGNABLE_ROLES.includes(u.roleBeforeBlock) ? u.roleBeforeBlock : 'client';
+  if (!confirm(`¿Restaurar a "${u.name || u.email}" como ${ROLE_LABELS[targetRole] || targetRole}?`)) return;
   try {
     await updateDoc(doc(db, 'users', uid), {
       blocked: false,
@@ -1972,10 +1963,9 @@ window.bulkBlockUsers = async function() {
   } catch (e) { toast('Error: ' + e.message); }
 };
 
-// Restaurar masivo siempre vuelve a "Cliente" (nunca intenta adivinar/preguntar
-// el rol anterior de cada uno por separado) — es la opción más segura para
-// una acción en lote; si hace falta un rol más alto, se reasigna a mano
-// después con el cambio de rol individual o masivo.
+// Restaurar masivo conserva el rol válido anterior. El bloqueo ya revoca el
+// acceso mediante `blocked`; degradar silenciosamente a Cliente al desbloquear
+// hacía perder permisos legítimos de viewer/agent/admin.
 window.bulkRestoreUsers = async function() {
   if (!_selectedUsers.size) return;
   if (!can(currentRole, 'manageUsers')) { toast('No tenés permiso para restaurar usuarios'); return; }
@@ -1985,18 +1975,31 @@ window.bulkRestoreUsers = async function() {
   });
   if (!ids.length) { toast('No hay usuarios elegibles en la selección'); return; }
   const n = ids.length;
-  if (!confirm(`¿Restaurar ${n} usuario(s) como Cliente? (opción más segura para una restauración en lote)`)) return;
+  if (!confirm(`¿Restaurar ${n} usuario(s) con el rol que tenían antes del bloqueo?`)) return;
   try {
-    await batchUpdateChunked(ids, () => ({
-      blocked: false, role: 'client', blockedAt: deleteField(), blockedBy: deleteField(),
-      blockReason: deleteField(), roleBeforeBlock: deleteField(), updatedAt: serverTimestamp()
-    }), 'users');
+    const CHUNK = 450;
+    for (let i = 0; i < ids.length; i += CHUNK) {
+      const batch = writeBatch(db);
+      ids.slice(i, i + CHUNK).forEach(uid => {
+        const u = allUsers.find(x => x.uid === uid);
+        const restoredRole = ASSIGNABLE_ROLES.includes(u?.roleBeforeBlock) ? u.roleBeforeBlock : 'client';
+        batch.update(doc(db, 'users', uid), {
+          blocked: false, role: restoredRole, blockedAt: deleteField(), blockedBy: deleteField(),
+          blockReason: deleteField(), roleBeforeBlock: deleteField(), updatedAt: serverTimestamp()
+        });
+      });
+      await batch.commit();
+    }
     ids.forEach(uid => {
       const u = allUsers.find(x => x.uid === uid);
-      if (u) { Object.assign(u, { blocked: false, role: 'client' }); delete u.blockedAt; delete u.blockedBy; delete u.blockReason; delete u.roleBeforeBlock; }
+      if (u) {
+        const restoredRole = ASSIGNABLE_ROLES.includes(u.roleBeforeBlock) ? u.roleBeforeBlock : 'client';
+        Object.assign(u, { blocked: false, role: restoredRole });
+        delete u.blockedAt; delete u.blockedBy; delete u.blockReason; delete u.roleBeforeBlock;
+      }
     });
-    logAudit('restaurar_usuario', 'usuario', '', '', 'Restaurados como Cliente', { bulk: true, count: n });
-    toast(`${n} usuario(s) restaurados como Cliente`);
+    logAudit('restaurar_usuario', 'usuario', '', '', 'Roles anteriores restaurados', { bulk: true, count: n });
+    toast(`${n} usuario(s) restaurados con su rol anterior`);
     clearUsersSelection();
     applyUserFilters();
   } catch (e) { toast('Error: ' + e.message); }

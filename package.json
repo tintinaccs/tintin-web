@@ -27,6 +27,7 @@
     "audit:cart": "node scripts/auditar-carrito-fase-7.js",
     "test:cart-persistence": "node --test tests/cart/*.test.mjs",
     "test:engagement": "node --test tests/engagement/*.test.mjs",
+    "test:products-sync": "node --test tests/sync/*.test.mjs",
     "test:visual-builder": "node --test tests/visual-builder/*.test.mjs",
     "test:visual-builder-ui": "playwright test tests/visual-builder/visual-builder-ui.spec.js tests/visual-builder/visual-builder-runtime.spec.js --project=chromium",
     "test:navigation-header": "playwright test tests/navigation/header-responsive.spec.js tests/navigation/loader-shell-wait.spec.js --project=chromium",

@@ -126,6 +126,9 @@ jobs:
       - name: Test account identity, unified access and tombstones
         run: npm run test:accounts
 
+      - name: Test canonical Productos sync and Sheets webhook
+        run: npm run test:products-sync
+
       - name: Audit content and appearance (editor safety, color apply)
         run: node scripts/auditar-admin-contenido-apariencia.js
 
