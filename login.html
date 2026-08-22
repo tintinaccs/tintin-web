@@ -270,6 +270,11 @@ function showSuccess(html) {
   const el = document.getElementById("login-success");
   el.innerHTML = html; el.classList.add("show");
 }
+function escapeHtml(s) {
+  const div = document.createElement('div');
+  div.textContent = s || '';
+  return div.innerHTML;
+}
 function hideMessages() {
   document.getElementById("login-error").classList.remove("show");
   document.getElementById("login-success").classList.remove("show");
@@ -977,7 +982,7 @@ async function sendOtp(identifier, mode) {
     // criterio anti-enumeración que ya aplica el backend (email-otp-send.js).
     showSuccess(mode === 'username'
       ? 'Si ese usuario existe, mandamos un código de 6 dígitos al correo de esa cuenta. Vence en 5 minutos.'
-      : `Te mandamos un código de 6 dígitos a ${identifier}. Vence en 5 minutos.`);
+      : `Te mandamos un código de 6 dígitos a ${escapeHtml(identifier)}. Vence en 5 minutos.`);
     showOtpStep();
     startOtpResendCooldown();
   } catch (e) {
