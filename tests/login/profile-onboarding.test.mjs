@@ -240,6 +240,78 @@ test('readProfileName prefiere los campos separados y si no parte `name`', () =>
   assert.deepEqual(readProfileName({}), { firstName: '', lastName: '' });
 });
 
+test('el username se ofrece solo cuando el onboarding ya está abierto por otro motivo', () => {
+  const planCompleto = getProfileCompletionPlan({
+    profile: COMPLETE,
+    user: { email: 'juan@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(planCompleto.skip, true);
+  assert.equal(planCompleto.offerUsername, false, 'una cuenta completa no debe abrir el onboarding solo por el username');
+
+  const planAbierto = getProfileCompletionPlan({
+    profile: { name: 'Juan Pérez', phone: '', ...ADDRESS },
+    user: { email: 'juan@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(planAbierto.offerUsername, true);
+
+  const planConUsername = getProfileCompletionPlan({
+    profile: { name: 'Juan Pérez', phone: '', username: 'juan98', ...ADDRESS },
+    user: { email: 'juan@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(planConUsername.offerUsername, false, 'si ya tiene username no se vuelve a ofrecer');
+});
+
+test('el superadmin nunca recibe la oferta de username', () => {
+  const plan = getProfileCompletionPlan({
+    profile: {},
+    user: { email: superAdminEmail },
+    role: 'superadmin',
+    superAdminEmail,
+  });
+  assert.equal(plan.offerUsername, false);
+});
+
+test('el username dejado en blanco no bloquea el guardado del resto del perfil', () => {
+  assert.deepEqual(buildMissingProfilePatch({
+    currentProfile: { name: 'Juan Pérez', phone: '', ...ADDRESS },
+    submittedPhone: '+595981123456',
+    submittedAddress: ADDRESS.savedLocation,
+    submittedUsername: '',
+  }), { phone: '+595981123456' });
+});
+
+test('un username válido se guarda junto con el resto del patch', () => {
+  assert.deepEqual(buildMissingProfilePatch({
+    currentProfile: { name: 'Juan Pérez', phone: '', ...ADDRESS },
+    submittedPhone: '+595981123456',
+    submittedAddress: ADDRESS.savedLocation,
+    submittedUsername: 'juan98',
+  }), { phone: '+595981123456', username: 'juan98' });
+});
+
+test('un perfil que ya tiene username no lo pisa con uno nuevo', () => {
+  assert.deepEqual(buildMissingProfilePatch({
+    currentProfile: { name: 'Juan Pérez', phone: '+595981123456', username: 'juanviejo', ...ADDRESS },
+    submittedUsername: 'juannuevo',
+  }), {});
+});
+
+test('un username con formato inválido no se guarda', () => {
+  for (const value of ['ab', 'admin', 'Juan Pérez', 'a'.repeat(21), '_juan', 'juan_']) {
+    assert.deepEqual(
+      buildMissingProfilePatch({ currentProfile: {}, submittedUsername: value }),
+      {},
+      `debería rechazar ${JSON.stringify(value)}`
+    );
+  }
+});
+
 test('hasUsableAddress exige nombre y coordenadas reales', () => {
   assert.equal(hasUsableAddress(ADDRESS), true);
   assert.equal(hasUsableAddress({ address: 'Solo texto' }), false);
