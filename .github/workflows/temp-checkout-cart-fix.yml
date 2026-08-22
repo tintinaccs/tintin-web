@@ -64,10 +64,13 @@ jobs:
           function patchExact(file, before, after, label) {
             const abs = path.join(ROOT, file);
             let text = fs.readFileSync(abs, 'utf8');
+            if (text.includes(before)) {
+              text = text.replace(before, after);
+              fs.writeFileSync(abs, text, 'utf8');
+              return;
+            }
             if (text.includes(after)) return;
-            if (!text.includes(before)) throw new Error(`No se encontró el bloque esperado: ${label}`);
-            text = text.replace(before, after);
-            fs.writeFileSync(abs, text, 'utf8');
+            throw new Error(`No se encontró el bloque esperado: ${label}`);
           }
 
           patchExact(
@@ -105,7 +108,7 @@ jobs:
 
             for (const sourceFile of sourceFiles) {
               const abs = path.join(ROOT, sourceFile);
-              let text = fs.readFileSync(abs, 'utf8');
+              const text = fs.readFileSync(abs, 'utf8');
               let touched = false;
               const next = text.replace(versionRe, (whole, quote, ref, tag) => {
                 const resolved = resolveRef(sourceFile, ref);
@@ -116,14 +119,10 @@ jobs:
               if (!touched) continue;
               fs.writeFileSync(abs, next, 'utf8');
               changedSources.add(sourceFile);
-              if (/\.(?:js|mjs)$/.test(sourceFile) && !processed.has(sourceFile)) {
-                queue.push(sourceFile);
-              }
+              if (/\.(?:js|mjs)$/.test(sourceFile) && !processed.has(sourceFile)) queue.push(sourceFile);
             }
           }
 
-          // Recolecta qué archivos siguen realmente referenciados con ?v= para
-          // actualizar sólo esas entradas del baseline, preservando el historial.
           const referenced = new Map();
           for (const sourceFile of sourceFiles) {
             const text = fs.readFileSync(path.join(ROOT, sourceFile), 'utf8');
