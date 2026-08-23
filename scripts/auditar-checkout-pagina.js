@@ -11,13 +11,15 @@ const runtime = read('js/pages/checkout/checkout-mantenimiento.js');
 const reliability = read('js/pages/checkout/checkout-confiabilidad.js');
 const loader = read('js/cargador-mantenimiento-pagina.js');
 
+// El checkout carga sus módulos con un tag de versión común para conservar
+// URLs inmutables de caché; la auditoría exige explícitamente ese contrato.
 const checks = [
   ['cinco paneles', [0,1,2,3,4].every(i => html.includes(`id="panel-${i}"`))],
   ['botón confirmación', html.includes('id="ck-confirm-btn"')],
   ['mapa', html.includes('id="ck-map"') && html.includes('id="ck-map-search"')],
   ['reinicio al paso uno', reliability.includes('resetVisualStep') && reliability.includes('index === 0')],
-  ['runtime integral por página', /checkout[\s\S]*load\('pages\/checkout\/checkout-mantenimiento\.js'\)/.test(loader)],
-  ['protección de cuota por página', /checkout[\s\S]*load\('pages\/checkout\/checkout-control-cuota\.js'\)/.test(loader)],
+  ['runtime integral por página', /checkout[\s\S]*load\('pages\/checkout\/checkout-mantenimiento\.js',\s*version\)/.test(loader)],
+  ['protección de cuota por página', /checkout[\s\S]*load\('pages\/checkout\/checkout-control-cuota\.js',\s*version\)/.test(loader)],
   ['bloqueo doble confirmación', runtime.includes('confirmLocked') && runtime.includes('stopImmediatePropagation')],
   ['estado offline', runtime.includes("addEventListener('offline'") && css.includes('tt-checkout-offline')],
   ['canonical dinámico', runtime.includes('normalizeMetadata')],

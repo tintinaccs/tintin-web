@@ -17,7 +17,7 @@ function saveCooldown(until) {
 }
 
 function isQuotaError(error) {
-  const code = String(error?.code || error?.name || '').toLowerCase();
+  const code = String(error?.code || error?.name || error?.details?.code || '').toLowerCase();
   const message = String(error?.message || '').toLowerCase();
   return code.includes('resource-exhausted') || message.includes('quota exceeded') || message.includes('resource-exhausted');
 }
@@ -30,6 +30,13 @@ function button() {
   return document.getElementById('ck-confirm-btn');
 }
 
+function blockedElsewhere(control) {
+  return !control ||
+    control.dataset.ttCartGuardDisabled === '1' ||
+    control.dataset.ttMaintenanceLocked === '1' ||
+    document.body?.classList.contains('tt-checkout-submitting');
+}
+
 function renderCooldown() {
   clearTimeout(timer);
   const remaining = Math.max(0, cooldownUntil() - Date.now());
@@ -37,14 +44,21 @@ function renderCooldown() {
   const box = errorBox();
   if (!remaining) {
     if (control) {
-      control.disabled = false;
-      control.textContent = '✓ Confirmar pedido';
+      delete control.dataset.ttQuotaDisabled;
+      // Este módulo sólo puede retirar SU bloqueo. Nunca debe habilitar un
+      // botón que el carrito, el submit o mantenimiento mantengan bloqueado.
+      if (!blockedElsewhere(control)) {
+        control.disabled = false;
+        control.textContent = '✓ Confirmar pedido';
+      }
     }
+    window.dispatchEvent(new CustomEvent('tintin:checkout-quota-ended'));
     return;
   }
 
   const seconds = Math.ceil(remaining / 1000);
   if (control) {
+    control.dataset.ttQuotaDisabled = '1';
     control.disabled = true;
     control.textContent = `Esperá ${seconds} s para reintentar`;
   }
@@ -61,11 +75,18 @@ function activateCooldown() {
   window.setTimeout(renderCooldown, 0);
 }
 
+// Compatibilidad con el flujo actual: el checkout seguro registra el error en
+// consola después de atraparlo. Conservamos esa señal, pero sin usarla para
+// manipular ningún estado que no sea el cooldown propio.
 const originalConsoleError = console.error.bind(console);
 console.error = (...args) => {
   originalConsoleError(...args);
   if (args[0] === '[spark-checkout]' && args.some(isQuotaError)) activateCooldown();
 };
+
+window.addEventListener('tintin:checkout-submit-error', event => {
+  if (isQuotaError(event.detail || {})) activateCooldown();
+});
 
 window.addEventListener('click', event => {
   const control = event.target?.closest?.('#ck-confirm-btn');

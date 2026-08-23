@@ -392,7 +392,7 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart
-} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260822-checkout-cart-profile-1";
+} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260822-checkout-final-cart-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
 import { isValidCi, normalizeCi, isValidRuc, normalizeRuc, isValidRazonSocial } from "./js/components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
@@ -700,6 +700,7 @@ function populateCitiesForDepartamento(dep, keepCityIfPresent) {
   }
   if (delivery.length) {
     const group = document.createElement('optgroup');
+    group.id = 'ck-city-delivery-group';
     group.label = '🚚 Delivery a domicilio';
     delivery.forEach(city => {
       const opt = document.createElement('option');
@@ -711,6 +712,7 @@ function populateCitiesForDepartamento(dep, keepCityIfPresent) {
   }
   if (encomienda.length) {
     const group = document.createElement('optgroup');
+    group.id = 'ck-city-encomienda-group';
     group.label = '📦 Encomienda';
     encomienda.forEach(city => {
       const opt = document.createElement('option');
@@ -830,7 +832,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260822-checkout-cart-profile-1');
+        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260822-checkout-final-cart-1');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -1113,12 +1115,20 @@ document.getElementById('ck-city').onchange = function() {
     reminderEl.classList.remove('show');
     document.getElementById('ck-pickup-notice').classList.remove('show');
     hideEncomiendaModes();
+    orderData.city = '';
+    orderData.shippingMethod = '';
+    orderData.encomiendaMode = '';
+    orderData.shippingCost = 0;
+    orderData.mapLocation = null;
+    refreshPaymentOptions();
     return;
   }
 
   infoEl.classList.add('show');
-  const isDelivery = DELIVERY_CITIES.some(c => c.name === val);
-  const isEncomienda = ENCOMIENDA_CITIES.some(c => c.name === val);
+  const selectedOption = this.options[this.selectedIndex];
+  const selectedGroupId = selectedOption?.parentElement?.id || '';
+  const isDelivery = selectedGroupId === 'ck-city-delivery-group' || (!selectedGroupId && DELIVERY_CITIES.some(c => c.name === val) && !ENCOMIENDA_CITIES.some(c => c.name === val));
+  const isEncomienda = selectedGroupId === 'ck-city-encomienda-group' || (!selectedGroupId && ENCOMIENDA_CITIES.some(c => c.name === val) && !DELIVERY_CITIES.some(c => c.name === val));
 
   // Dato guardado en el perfil (perfil.html → "Dirección de entrega") — se
   // usa solo para prellenar, nunca pisa lo que la clienta ya haya escrito.
@@ -1132,6 +1142,10 @@ document.getElementById('ck-city').onchange = function() {
     costEl.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:5px"><polyline points="20 6 9 17 4 12"/></svg>Sin costo de envío';
     orderData.shippingMethod = 'retiro';
     orderData.shippingCost = 0;
+    orderData.encomiendaMode = '';
+    orderData.address = '';
+    orderData.referencia = '';
+    orderData.mapLocation = null;
     addressField.style.display = 'none';
     referenciaField.style.display = 'none';
     mapWrap.classList.remove('show');
@@ -1897,7 +1911,7 @@ onAuthStateChanged(auth, user => {
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1"></script>
-<script src="tienda.js?v=tintin-20260822-facturacion-1" defer></script>
+<script src="tienda.js?v=tintin-20260822-checkout-hardening-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

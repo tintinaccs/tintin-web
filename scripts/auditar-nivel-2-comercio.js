@@ -105,7 +105,9 @@ check(
 check(
   'Creación del pedido y descuento de stock ocurren en una sola transacción, sin tope bajo de ítems',
   phase4.includes("phase4CreateWrite_('orders/' + orderId, orderData)") &&
-    phase4.includes("phase4UpdateWrite_('products/' + item.id") &&
+    phase4.includes('Object.keys(requestedQtyByProduct).forEach(function (productId)') &&
+    phase4.includes("phase4UpdateWrite_('products/' + productId") &&
+    phase4.includes('stock: stock - requestedQtyByProduct[productId]') &&
     phase4.includes('phase4Commit_(writes, transactionId)') &&
     !/cartLines\.length\s*>\s*4\b/.test(phase4)
 );
