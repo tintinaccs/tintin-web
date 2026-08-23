@@ -1,10 +1,9 @@
 name: TEMP — Segunda pasada auditoría integral
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
-    types: [opened, reopened, synchronize]
+      - fix/auditoria-integral-incongruencias-2026-08-23
 
 permissions:
   contents: write
@@ -43,14 +42,12 @@ jobs:
               p.write_text(text.replace(old, new), encoding='utf-8')
               print(f'OK {path}: {count} reemplazo(s)')
 
-          # Catálogo público: las tarjetas deben navegar a la ruta canónica limpia.
           replace_exact(
               'catalogo.html',
               "    const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;",
               "    const productHref = `/product?id=${encodeURIComponent(String(p.id))}`;"
           )
 
-          # Visual Builder: aceptar alias heredados, pero siempre emitir rutas públicas limpias.
           replace_exact(
               'js/core/store/editor-visual-runtime.js',
               "function safeHref(value) {\n  const href = String(value || '').trim();\n  if (/^(?:index|about|nosotros|catalogo|collections|product|checkout|login|perfil|contact|envios|preguntas-frecuentes|cambios-devoluciones|terminos|privacidad)\\.html(?:[?#][A-Za-z0-9_=&%.-]*)?$/i.test(href)) return href;\n  if (/^https:\\/\\//i.test(href)) return href;\n  return 'catalogo.html';\n}",
@@ -67,7 +64,6 @@ jobs:
               "    const link = el('a', '', label); link.href = label === 'Ver colecciones' ? '/collections' : `/catalogo?cat=${encodeURIComponent(label)}`; root.appendChild(link);"
           )
 
-          # Los mantenimientos de catálogo/colecciones no deben sobrescribir canonical limpios.
           replace_exact(
               'js/pages/catalog/mantenimiento-catalogo.js',
               "    const page = `${base}catalogo.html`;",
@@ -79,14 +75,12 @@ jobs:
               "    const page = `${base}collections`;"
           )
 
-          # Envíos: evitar un cutoff fijo en texto estático que puede divergir de la operación/configuración.
           replace_exact(
               'envios.html',
               "      <p>Todos los pedidos se preparan en el mismo día si son realizados antes de las 11:00 hs. Pedidos posteriores se preparan al día siguiente hábil.</p>",
               "      <p>Los pedidos se preparan según disponibilidad y horario de confirmación.</p>"
           )
 
-          # Producto: la modalidad pública de retiro debe decir dónde se realiza.
           replace_exact(
               'product.html',
               "      <div class=\"tinben-card\" data-title=\"Retiro disponible\">",
@@ -103,25 +97,22 @@ jobs:
               "        <p class=\"tinben-card-text\">Podés retirar tu pedido sin costo en San Lorenzo, coordinando previamente.</p>"
           )
 
-          # Términos: no enumerar solo dos métodos cuando el checkout es la fuente dinámica de verdad.
           replace_exact(
               'terminos.html',
               "      <p>Un pedido queda confirmado cuando lo enviás desde el checkout con tu cuenta verificada. Los métodos de pago disponibles (efectivo contra entrega, transferencia bancaria) se muestran en el paso de pago del checkout — pueden variar según lo que la tienda tenga habilitado en cada momento.</p>",
               "      <p>Un pedido queda confirmado cuando lo enviás desde el checkout con tu cuenta verificada. Los métodos de pago disponibles se muestran en el paso de pago del checkout y pueden variar según lo que la tienda tenga habilitado en cada momento.</p>"
           )
 
-          # Documentación interna del origen: Cloudflare Pages es hoy la publicación oficial.
           replace_exact(
               'js/core/firebase/origen-funciones.js',
               "// El sitio se publica en GitHub Pages (ver robots.txt, sitemap.xml y los\n// canonical de cada página), pero las funciones /api/* (Cloudinary, geo,\n// email) corren en Cloudflare Pages. Un fetch a una ruta relativa como\n// \"/api/order-email\" funciona en Cloudflare (mismo origen) pero da 404 en\n// github.io o netlify.app. Este módulo centraliza esa detección para que\n// cada llamador no tenga que reinventarla (y olvidarla, como pasaba antes).",
               "// El sitio y las funciones /api/* se publican oficialmente en Cloudflare\n// Pages. Los dominios históricos de GitHub Pages/Netlify pueden seguir\n// apareciendo en previews o enlaces antiguos; allí una ruta relativa como\n// \"/api/order-email\" no existe y debe usar el origen oficial de respaldo.\n// Este módulo centraliza esa compatibilidad para que cada llamador no tenga\n// que reinventarla."
           )
 
-          # El normalizador debe reconocer template literals con expresiones JS que contienen comillas.
           p = ROOT / 'scripts/normalizar-rutas-publicas.js'
           text = p.read_text(encoding='utf-8')
           marker = "  // Constructores de URL inequívocos con query de producto/categoría.\n"
-          addition = "  // Template literals dinámicos como `product.html?id=${encodeURIComponent(String(id))}`\n  // pueden contener comillas dentro de ${...}; el patrón general de abajo no\n  // debe depender de que toda la expresión esté libre de comillas.\n  output = output.replace(/`(?:\\.\\/|\\/)?(product|catalogo)\\.html(\\?(?:id|cat)=\\$\\{[^`]+\\})`/g, (full, page, query) => {\n    return `\\`/${page}${query}\\``;\n  });\n\n"
+          addition = "  // Template literals dinámicos como `product.html?id=${encodeURIComponent(String(id))}`\n  // pueden contener comillas dentro de ${...}; este patrón los normaliza.\n  output = output.replace(/`(?:\\.\\/|\\/)?(product|catalogo)\\.html(\\?(?:id|cat)=\\$\\{[^`]+\\})`/g, (full, page, query) => {\n    return `\\`/${page}${query}\\``;\n  });\n\n"
           if marker not in text:
               raise SystemExit('scripts/normalizar-rutas-publicas.js: marcador no encontrado')
           if 'Template literals dinámicos como `product.html?id=${encodeURIComponent(String(id))}`' not in text:
@@ -129,7 +120,6 @@ jobs:
               p.write_text(text, encoding='utf-8')
               print('OK scripts/normalizar-rutas-publicas.js: patrón dinámico agregado')
 
-          # Extender la auditoría existente para que estos hallazgos no regresen.
           p = ROOT / 'scripts/auditar-contenido-fase-6.js'
           text = p.read_text(encoding='utf-8')
           old = "  orderEmail: read('functions/api/order-email.js'),\n};"
