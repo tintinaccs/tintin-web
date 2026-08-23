@@ -1,0 +1,259 @@
+name: TEMP — Segunda pasada auditoría integral
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  repair-and-validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: fix/auditoria-integral-incongruencias-2026-08-23
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Aplicar segunda pasada de correcciones confirmadas
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          ROOT = Path('.')
+
+          def replace_exact(path, old, new, count=1):
+              p = ROOT / path
+              text = p.read_text(encoding='utf-8')
+              actual = text.count(old)
+              if actual != count:
+                  raise SystemExit(f'{path}: esperado {count} coincidencia(s), encontradas {actual}: {old[:120]!r}')
+              p.write_text(text.replace(old, new), encoding='utf-8')
+              print(f'OK {path}: {count} reemplazo(s)')
+
+          # Catálogo público: las tarjetas deben navegar a la ruta canónica limpia.
+          replace_exact(
+              'catalogo.html',
+              "    const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;",
+              "    const productHref = `/product?id=${encodeURIComponent(String(p.id))}`;"
+          )
+
+          # Visual Builder: aceptar alias heredados, pero siempre emitir rutas públicas limpias.
+          replace_exact(
+              'js/core/store/editor-visual-runtime.js',
+              "function safeHref(value) {\n  const href = String(value || '').trim();\n  if (/^(?:index|about|nosotros|catalogo|collections|product|checkout|login|perfil|contact|envios|preguntas-frecuentes|cambios-devoluciones|terminos|privacidad)\\.html(?:[?#][A-Za-z0-9_=&%.-]*)?$/i.test(href)) return href;\n  if (/^https:\\/\\//i.test(href)) return href;\n  return 'catalogo.html';\n}",
+              "function safeHref(value) {\n  const href = String(value || '').trim();\n  if (/^https:\\/\\//i.test(href)) return href;\n  const match = href.match(/^\\/?(index|about|nosotros|catalogo|collections|product|checkout|login|perfil|contact|envios|preguntas-frecuentes|cambios-devoluciones|terminos|privacidad)(?:\\.html)?([?#][A-Za-z0-9_=&%.,+~:@\\/-]*)?$/i);\n  if (!match) return '/catalogo';\n  const page = match[1].toLowerCase();\n  const suffix = match[2] || '';\n  const route = page === 'index' ? '/' : page === 'nosotros' ? '/about' : `/${page}`;\n  return `${route}${suffix}`;\n}"
+          )
+          replace_exact(
+              'js/core/store/editor-visual-runtime.js',
+              "    const link = el('a', 'tt-visual-product-card'); link.href = `product.html?id=${encodeURIComponent(String(product.id || ''))}`;",
+              "    const link = el('a', 'tt-visual-product-card'); link.href = `/product?id=${encodeURIComponent(String(product.id || ''))}`;"
+          )
+          replace_exact(
+              'js/core/store/editor-visual-runtime.js',
+              "    const link = el('a', '', label); link.href = label === 'Ver colecciones' ? 'collections.html' : `/catalogo?cat=${encodeURIComponent(label)}`; root.appendChild(link);",
+              "    const link = el('a', '', label); link.href = label === 'Ver colecciones' ? '/collections' : `/catalogo?cat=${encodeURIComponent(label)}`; root.appendChild(link);"
+          )
+
+          # Los mantenimientos de catálogo/colecciones no deben sobrescribir canonical limpios.
+          replace_exact(
+              'js/pages/catalog/mantenimiento-catalogo.js',
+              "    const page = `${base}catalogo.html`;",
+              "    const page = `${base}catalogo`;"
+          )
+          replace_exact(
+              'js/pages/collections/mantenimiento-colecciones.js',
+              "    const page = `${base}collections.html`;",
+              "    const page = `${base}collections`;"
+          )
+
+          # Envíos: evitar un cutoff fijo en texto estático que puede divergir de la operación/configuración.
+          replace_exact(
+              'envios.html',
+              "      <p>Todos los pedidos se preparan en el mismo día si son realizados antes de las 11:00 hs. Pedidos posteriores se preparan al día siguiente hábil.</p>",
+              "      <p>Los pedidos se preparan según disponibilidad y horario de confirmación.</p>"
+          )
+
+          # Producto: la modalidad pública de retiro debe decir dónde se realiza.
+          replace_exact(
+              'product.html',
+              "      <div class=\"tinben-card\" data-title=\"Retiro disponible\">",
+              "      <div class=\"tinben-card\" data-title=\"Retiro en San Lorenzo\">"
+          )
+          replace_exact(
+              'product.html',
+              "        <p class=\"tinben-card-title\">Retiro disponible</p>",
+              "        <p class=\"tinben-card-title\">Retiro en San Lorenzo</p>"
+          )
+          replace_exact(
+              'product.html',
+              "        <p class=\"tinben-card-text\">Podés retirar tu pedido desde nuestra ubicación.</p>",
+              "        <p class=\"tinben-card-text\">Podés retirar tu pedido sin costo en San Lorenzo, coordinando previamente.</p>"
+          )
+
+          # Términos: no enumerar solo dos métodos cuando el checkout es la fuente dinámica de verdad.
+          replace_exact(
+              'terminos.html',
+              "      <p>Un pedido queda confirmado cuando lo enviás desde el checkout con tu cuenta verificada. Los métodos de pago disponibles (efectivo contra entrega, transferencia bancaria) se muestran en el paso de pago del checkout — pueden variar según lo que la tienda tenga habilitado en cada momento.</p>",
+              "      <p>Un pedido queda confirmado cuando lo enviás desde el checkout con tu cuenta verificada. Los métodos de pago disponibles se muestran en el paso de pago del checkout y pueden variar según lo que la tienda tenga habilitado en cada momento.</p>"
+          )
+
+          # Documentación interna del origen: Cloudflare Pages es hoy la publicación oficial.
+          replace_exact(
+              'js/core/firebase/origen-funciones.js',
+              "// El sitio se publica en GitHub Pages (ver robots.txt, sitemap.xml y los\n// canonical de cada página), pero las funciones /api/* (Cloudinary, geo,\n// email) corren en Cloudflare Pages. Un fetch a una ruta relativa como\n// \"/api/order-email\" funciona en Cloudflare (mismo origen) pero da 404 en\n// github.io o netlify.app. Este módulo centraliza esa detección para que\n// cada llamador no tenga que reinventarla (y olvidarla, como pasaba antes).",
+              "// El sitio y las funciones /api/* se publican oficialmente en Cloudflare\n// Pages. Los dominios históricos de GitHub Pages/Netlify pueden seguir\n// apareciendo en previews o enlaces antiguos; allí una ruta relativa como\n// \"/api/order-email\" no existe y debe usar el origen oficial de respaldo.\n// Este módulo centraliza esa compatibilidad para que cada llamador no tenga\n// que reinventarla."
+          )
+
+          # El normalizador debe reconocer template literals con expresiones JS que contienen comillas.
+          p = ROOT / 'scripts/normalizar-rutas-publicas.js'
+          text = p.read_text(encoding='utf-8')
+          marker = "  // Constructores de URL inequívocos con query de producto/categoría.\n"
+          addition = "  // Template literals dinámicos como `product.html?id=${encodeURIComponent(String(id))}`\n  // pueden contener comillas dentro de ${...}; el patrón general de abajo no\n  // debe depender de que toda la expresión esté libre de comillas.\n  output = output.replace(/`(?:\\.\\/|\\/)?(product|catalogo)\\.html(\\?(?:id|cat)=\\$\\{[^`]+\\})`/g, (full, page, query) => {\n    return `\\`/${page}${query}\\``;\n  });\n\n"
+          if marker not in text:
+              raise SystemExit('scripts/normalizar-rutas-publicas.js: marcador no encontrado')
+          if 'Template literals dinámicos como `product.html?id=${encodeURIComponent(String(id))}`' not in text:
+              text = text.replace(marker, addition + marker, 1)
+              p.write_text(text, encoding='utf-8')
+              print('OK scripts/normalizar-rutas-publicas.js: patrón dinámico agregado')
+
+          # Extender la auditoría existente para que estos hallazgos no regresen.
+          p = ROOT / 'scripts/auditar-contenido-fase-6.js'
+          text = p.read_text(encoding='utf-8')
+          old = "  orderEmail: read('functions/api/order-email.js'),\n};"
+          new = "  orderEmail: read('functions/api/order-email.js'),\n  catalog: read('catalogo.html'),\n  visualRuntime: read('js/core/store/editor-visual-runtime.js'),\n  catalogMaintenance: read('js/pages/catalog/mantenimiento-catalogo.js'),\n  collectionsMaintenance: read('js/pages/collections/mantenimiento-colecciones.js'),\n  functionOrigin: read('js/core/firebase/origen-funciones.js'),\n  productPage: read('product.html'),\n  terms: read('terminos.html'),\n};"
+          if old not in text:
+              raise SystemExit('scripts/auditar-contenido-fase-6.js: bloque files esperado no encontrado')
+          text = text.replace(old, new, 1)
+
+          marker = "if (failures) {\n"
+          extra = r'''
+check(
+  'Catálogo genera enlaces canónicos de producto',
+  files.catalog.includes('const productHref = `/product?id=${encodeURIComponent(String(p.id))}`;') &&
+    !files.catalog.includes('const productHref = `product.html?id='),
+  'Las tarjetas del catálogo no deben reintroducir product.html'
+);
+
+check(
+  'Visual Builder normaliza enlaces internos a rutas limpias',
+  files.visualRuntime.includes("if (!match) return '/catalogo';") &&
+    files.visualRuntime.includes("? '/collections' : `/catalogo?cat=") &&
+    files.visualRuntime.includes('link.href = `/product?id=${encodeURIComponent') &&
+    !files.visualRuntime.includes("return 'catalogo.html'") &&
+    !files.visualRuntime.includes('link.href = `product.html?id=') &&
+    !files.visualRuntime.includes("? 'collections.html' :"),
+  'El builder debe aceptar aliases heredados sin volver a publicarlos'
+);
+
+check(
+  'Canonical dinámicos de catálogo y colecciones permanecen limpios',
+  files.catalogMaintenance.includes('const page = `${base}catalogo`;') &&
+    files.collectionsMaintenance.includes('const page = `${base}collections`;') &&
+    !files.catalogMaintenance.includes('`${base}catalogo.html`') &&
+    !files.collectionsMaintenance.includes('`${base}collections.html`'),
+  'Los mantenimientos no deben sobrescribir canonical con .html'
+);
+
+check(
+  'Envíos no publica un cutoff fijo divergente',
+  files.shipping.includes('Los pedidos se preparan según disponibilidad y horario de confirmación.') &&
+    !files.shipping.includes('antes de las 11:00 hs'),
+  'La preparación pública debe seguir una descripción estable y configurable'
+);
+
+check(
+  'Producto identifica correctamente el retiro en San Lorenzo',
+  files.productPage.includes('data-title="Retiro en San Lorenzo"') &&
+    files.productPage.includes('Podés retirar tu pedido sin costo en San Lorenzo, coordinando previamente.') &&
+    !files.productPage.includes('data-title="Retiro disponible"'),
+  'La ficha no debe sugerir una tienda física genérica'
+);
+
+check(
+  'Términos delega los métodos de pago al checkout vigente',
+  files.terms.includes('Los métodos de pago disponibles se muestran en el paso de pago del checkout') &&
+    !files.terms.includes('Los métodos de pago disponibles (efectivo contra entrega, transferencia bancaria)'),
+  'La política no debe congelar una lista parcial de métodos'
+);
+
+check(
+  'Origen de funciones documenta Cloudflare Pages como publicación oficial',
+  files.functionOrigin.includes('se publican oficialmente en Cloudflare') &&
+    !files.functionOrigin.includes('El sitio se publica en GitHub Pages'),
+  'La documentación interna debe coincidir con la arquitectura vigente'
+);
+
+'''
+          if marker not in text:
+              raise SystemExit('scripts/auditar-contenido-fase-6.js: marcador final no encontrado')
+          if "Catálogo genera enlaces canónicos de producto" not in text:
+              text = text.replace(marker, extra + marker, 1)
+              p.write_text(text, encoding='utf-8')
+              print('OK scripts/auditar-contenido-fase-6.js: segunda tanda de regresiones agregada')
+          PY
+
+          rm -f .github/workflows/tmp-auditoria-integral-rutas-2.yml
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Regenerar rutas, CSP, diagnóstico y caché
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run sync:monaco
+          npm run sync:public-shell
+          npm run build:routes
+          npm run build:csp
+          npm run sync:public-origin
+          npm run cache-versioning:write
+          npm run build:diagnostics
+          npm run verify:routes
+          npm run verify:csp
+          npm run verify:diagnostics
+          npm run audit:cache-versioning
+
+      - name: Validar sintaxis y contratos
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check js/core/store/editor-visual-runtime.js
+          node --check js/pages/catalog/mantenimiento-catalogo.js
+          node --check js/pages/collections/mantenimiento-colecciones.js
+          node --check js/core/firebase/origen-funciones.js
+          node --check scripts/normalizar-rutas-publicas.js
+          node --check scripts/auditar-contenido-fase-6.js
+          npm run audit:content
+          npm run audit:phase11
+          npm run audit:page-loading
+          npm run audit:secure-orders
+          npm run audit:integral
+          npm run test:visual-builder
+          git diff --check
+
+      - name: Guardar únicamente el resultado validado
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "Tintin Site Audit"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No hay cambios adicionales.'
+            exit 0
+          fi
+          git commit -m "fix(site): cerrar inconsistencias de rutas y contratos públicos"
+          git push origin HEAD:fix/auditoria-integral-incongruencias-2026-08-23
