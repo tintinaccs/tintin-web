@@ -109,7 +109,7 @@ export async function adminReviewAction(env, actor, input) {
         kind: 'store_review_like', actorType: 'store', actorUid: actor.uid, actorName: 'Tintin Accesorios',
         title: 'A TINTIN le gustó tu reseña',
         body: clean(record.comment, 420), snippet: clean(record.comment, 260), iconKey: 'heart',
-        targetUrl: `product.html?id=${record.productId}#review-${record.reviewId}`,
+        targetUrl: `/product?id=${record.productId}#review-${record.reviewId}`,
         productId: record.productId, productName: record.productName, productImageUrl: record.productImageUrl,
         reviewId: record.reviewId, sourceType: 'review', sourceId: record.reviewId, createdAt: now,
       }, `store_review_like:${record.reviewId}:${now.getTime()}`);
@@ -129,7 +129,7 @@ export async function adminReviewAction(env, actor, input) {
       kind: 'store_review_reply', actorType: 'store', actorUid: actor.uid, actorName: 'Tintin Accesorios',
       title: 'Tintin Accesorios respondió a tu reseña',
       body: text, snippet: text, iconKey: 'comment',
-      targetUrl: `product.html?id=${record.productId}#review-${record.reviewId}`,
+      targetUrl: `/product?id=${record.productId}#review-${record.reviewId}`,
       productId: record.productId, productName: record.productName, productImageUrl: record.productImageUrl,
       reviewId: record.reviewId, sourceType: 'review', sourceId: record.reviewId, createdAt: now,
     }, `store_review_reply:${record.reviewId}:${messageId}`);

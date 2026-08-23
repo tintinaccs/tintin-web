@@ -10,7 +10,7 @@ const FIREBASE_PROJECT_ID = 'tintin-accesorios';
 const ADMIN_EMAIL = SUPERADMIN_EMAIL;
 const FROM_EMAIL = 'Tintin Pedidos <pedidos@tintinaccs.com>';
 const REPLY_TO = ADMIN_EMAIL;
-const ADMIN_PANEL = 'https://tintinaccesorios.pages.dev/admin.html';
+const ADMIN_PANEL = 'https://tintinaccesorios.pages.dev/admin';
 const STORE_NAME = 'Tintin Accesorios';
 
 function clean(value, maxLength = 1000) {
@@ -156,6 +156,18 @@ function paymentLabel(order) {
   }[method] || method || 'A coordinar';
 }
 
+function cityDepartmentLabel(order) {
+  const city = clean(order?.shipping?.city, 120);
+  const departamento = clean(order?.shipping?.departamento, 80);
+  if (!city && !departamento) return '—';
+  if (!city) return departamento;
+  if (!departamento) return city;
+  const normalizedCity = city.toLowerCase();
+  const normalizedDepartment = departamento.toLowerCase();
+  if (normalizedCity.includes(`(${normalizedDepartment})`)) return city;
+  return `${city} (${departamento})`;
+}
+
 function customerEmail(order, orderId) {
   const shortId = clean(order.shortId, 30) || clean(orderId, 8).toUpperCase();
   const items = Array.isArray(order.items) ? order.items : [];
@@ -235,6 +247,7 @@ Podés responder directamente a este correo para comunicarte con Tintin.`;
 function adminEmail(order, orderId) {
   const shortId = clean(order.shortId, 30) || clean(orderId, 8).toUpperCase();
   const items = Array.isArray(order.items) ? order.items : [];
+  const cityLabel = cityDepartmentLabel(order);
   const itemRows = items.map(item => `
     <tr>
       <td style="padding:9px 0;border-bottom:1px solid #f2e4e9">${escapeHtml(item.qty)}x ${escapeHtml(item.name)}</td>
@@ -260,7 +273,7 @@ function adminEmail(order, orderId) {
         <tr><td style="padding:5px 0;color:#7b6f72;width:150px">Cliente</td><td style="padding:5px 0"><strong>${escapeHtml(order.userName)}</strong></td></tr>
         <tr><td style="padding:5px 0;color:#7b6f72">Correo</td><td style="padding:5px 0">${escapeHtml(order.userEmail)}</td></tr>
         <tr><td style="padding:5px 0;color:#7b6f72">Teléfono</td><td style="padding:5px 0">${escapeHtml(order.userPhone)}</td></tr>
-        <tr><td style="padding:5px 0;color:#7b6f72">Ciudad</td><td style="padding:5px 0">${escapeHtml(order?.shipping?.city)}</td></tr>
+        <tr><td style="padding:5px 0;color:#7b6f72">Ciudad</td><td style="padding:5px 0">${escapeHtml(cityLabel)}</td></tr>
         <tr><td style="padding:5px 0;color:#7b6f72">Dirección</td><td style="padding:5px 0">${escapeHtml(order?.shipping?.address || '—')}</td></tr>
         <tr><td style="padding:5px 0;color:#7b6f72">Referencia</td><td style="padding:5px 0">${escapeHtml(order?.shipping?.referencia || '—')}</td></tr>
         <tr><td style="padding:5px 0;color:#7b6f72">Entrega</td><td style="padding:5px 0">${escapeHtml(shippingLabel(order))}</td></tr>
@@ -293,7 +306,7 @@ Fecha: ${fmtDate(order.createdAt)}
 Cliente: ${clean(order.userName, 120)}
 Correo: ${clean(order.userEmail, 254)}
 Teléfono: ${clean(order.userPhone, 40)}
-Ciudad: ${clean(order?.shipping?.city, 120)}
+Ciudad: ${cityLabel}
 Dirección: ${clean(order?.shipping?.address || '—', 300)}
 Referencia: ${clean(order?.shipping?.referencia || '—', 300)}
 Entrega: ${shippingLabel(order)}

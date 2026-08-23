@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-23T00:07:39.704Z",
-  "sourceFingerprint": "42cf9b9d74e07b5900a904ef916a69413c7119793707c3ec943607e29c106d44",
+  "generatedAt": "2026-08-23T22:36:03.162Z",
+  "sourceFingerprint": "e659eca7876cbf4d4d8e7ef8699db0db212b4ab48a8dabbd0b4ab8a3cfe94185",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 712,
     "textFiles": 680,
-    "totalBytes": 8029402,
+    "totalBytes": 8034152,
     "pages": 18,
     "modules": 449
   },
@@ -8144,8 +8144,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 110749,
-      "sha256": "d0fa7c85a5a3603912c142538b8ac4b1402b6849bc44d5e9871169c2c8b3beb6",
+      "bytes": 110771,
+      "sha256": "48b49cf4a90ad4c39f0474b4fe2b2b843e83de757ec9ce48b2a7fe16cfa08c4b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10150,8 +10150,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18016,
-      "sha256": "bce8af4d04abfbcd34ef4752ddbbe5de221647da6d565e2d92d21ccf3c252443",
+      "bytes": 18021,
+      "sha256": "b0e6d0e937106f7641e4db0701de0c936553782c123efc7954d895a53a15c5aa",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13320,8 +13320,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16549,
-      "sha256": "ab424f6f85b785166a9ee10cada22197d38f317d26e49ee3c79e359881fd21d4",
+      "bytes": 15814,
+      "sha256": "db7e69ba02b8072e35d21223e2406831b817affba59d9a2c50bc6ea582ea2b16",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13336,7 +13336,7 @@
       "duplicateIds": [],
       "inlineScripts": [
         {
-          "line": 209,
+          "line": 205,
           "module": true,
           "ok": true,
           "error": ""
@@ -13367,37 +13367,37 @@
         {
           "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
           "target": "tienda.js",
-          "line": 205
+          "line": 201
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 206
+          "line": 202
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 207
+          "line": 203
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 208
+          "line": 204
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 213
+          "line": 209
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 214
+          "line": 210
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260821-layout-stable-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 215
+          "line": 211
         }
       ],
       "styles": [
@@ -13479,7 +13479,7 @@
           "target": "assets-tintin/images/general/logo.png",
           "alt": "TINTIN",
           "hasAlt": true,
-          "line": 158
+          "line": 154
         }
       ],
       "links": [
@@ -13491,7 +13491,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 146
+          "line": 142
         },
         {
           "raw": "/",
@@ -13501,7 +13501,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "TINTIN",
-          "line": 158
+          "line": 154
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -13511,7 +13511,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 160
+          "line": 156
         },
         {
           "raw": "/catalogo?cat=relojes",
@@ -13521,7 +13521,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 168
+          "line": 164
         },
         {
           "raw": "/catalogo?cat=bolsos",
@@ -13531,7 +13531,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 169
+          "line": 165
         },
         {
           "raw": "/catalogo?cat=collares",
@@ -13541,7 +13541,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 170
+          "line": 166
         },
         {
           "raw": "/catalogo?cat=aros",
@@ -13551,7 +13551,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 171
+          "line": 167
         },
         {
           "raw": "/catalogo?cat=pulseras",
@@ -13561,7 +13561,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 172
+          "line": 168
         },
         {
           "raw": "/catalogo?cat=anillos",
@@ -13571,7 +13571,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 173
+          "line": 169
         },
         {
           "raw": "/about",
@@ -13581,7 +13581,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 179
+          "line": 175
         },
         {
           "raw": "/contact",
@@ -13591,7 +13591,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 180
+          "line": 176
         },
         {
           "raw": "/envios",
@@ -13601,7 +13601,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 181
+          "line": 177
         },
         {
           "raw": "/cambios-devoluciones",
@@ -13611,7 +13611,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 182
+          "line": 178
         },
         {
           "raw": "/preguntas-frecuentes",
@@ -13621,7 +13621,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 183
+          "line": 179
         },
         {
           "raw": "/terminos",
@@ -13631,7 +13631,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 184
+          "line": 180
         },
         {
           "raw": "/privacidad",
@@ -13641,7 +13641,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 185
+          "line": 181
         },
         {
           "raw": "tel:+595981299331",
@@ -13651,7 +13651,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 191
+          "line": 187
         },
         {
           "raw": "https://instagram.com/tintinaccs",
@@ -13661,7 +13661,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 192
+          "line": 188
         },
         {
           "raw": "mailto:tintinaccs@gmail.com",
@@ -13671,7 +13671,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 193
+          "line": 189
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -13681,7 +13681,7 @@
           "ariaLabel": "WhatsApp",
           "title": "",
           "imageAlt": "",
-          "line": 202
+          "line": 198
         }
       ],
       "references": [
@@ -13712,43 +13712,43 @@
         {
           "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
           "target": "tienda.js",
-          "line": 205,
+          "line": 201,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 206,
+          "line": 202,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 207,
+          "line": 203,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 208,
+          "line": 204,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 213,
+          "line": 209,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 214,
+          "line": 210,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260821-layout-stable-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 215,
+          "line": 211,
           "exists": true
         },
         {
@@ -13838,85 +13838,85 @@
         {
           "raw": "assets-tintin/images/general/logo.png?v=tintin-20260715-15",
           "target": "assets-tintin/images/general/logo.png",
-          "line": 158,
+          "line": 154,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
           "target": "catalogo.html",
-          "line": 168,
+          "line": 164,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
           "target": "catalogo.html",
-          "line": 169,
+          "line": 165,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=collares",
           "target": "catalogo.html",
-          "line": 170,
+          "line": 166,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=aros",
           "target": "catalogo.html",
-          "line": 171,
+          "line": 167,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=pulseras",
           "target": "catalogo.html",
-          "line": 172,
+          "line": 168,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=anillos",
           "target": "catalogo.html",
-          "line": 173,
+          "line": 169,
           "exists": true
         },
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 179,
+          "line": 175,
           "exists": true
         },
         {
           "raw": "/contact",
           "target": "contact.html",
-          "line": 180,
+          "line": 176,
           "exists": true
         },
         {
           "raw": "/envios",
           "target": "envios.html",
-          "line": 181,
+          "line": 177,
           "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
           "target": "cambios-devoluciones.html",
-          "line": 182,
+          "line": 178,
           "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
           "target": "preguntas-frecuentes.html",
-          "line": 183,
+          "line": 179,
           "exists": true
         },
         {
           "raw": "/terminos",
           "target": "terminos.html",
-          "line": 184,
+          "line": 180,
           "exists": true
         },
         {
           "raw": "/privacidad",
           "target": "privacidad.html",
-          "line": 185,
+          "line": 181,
           "exists": true
         }
       ],
@@ -13941,8 +13941,8 @@
         "guest",
         "client"
       ],
-      "bytes": 18508,
-      "sha256": "b039157112f5976a6e61bf90b895d62bdeb54bee565fd9e6fbd059b268ab9448",
+      "bytes": 18521,
+      "sha256": "4b51c9a6645bb379dbf0634a1843697e5d74f0144af69e87c6e7d4d5bd3c6cbc",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16313,8 +16313,8 @@
     },
     {
       "path": "cloudflare/participacion-admin.js",
-      "bytes": 9147,
-      "sha256": "1ddac2969ca133ca79e286c5f3901146d2a9794eef51181fd439ed721974fceb",
+      "bytes": 9139,
+      "sha256": "34c9109f74a8dfb7db2f470f0254ad95b8efafb8892089b05d1ca3beb3a085ed",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16343,8 +16343,8 @@
     },
     {
       "path": "cloudflare/participacion-clientes.js",
-      "bytes": 19456,
-      "sha256": "d4769c27762eb83e6feb48886fd015ed68a088013bb5c058966c6672878b3053",
+      "bytes": 19428,
+      "sha256": "a7281dd4820cedf923d83162a21b96e62ed1efbfbcb0b845efc7e49adc9822d9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16505,7 +16505,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 340703,
-      "sha256": "fdee78b4917bd1281d2fa60f186e85eced9103d3801bad01c5e8aa40d7439380",
+      "sha256": "0b326aae31a51dfb0137aa015908e9dacf736637348c69a4220c535451bb6cda",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17241,8 +17241,8 @@
     },
     {
       "path": "functions/api/order-email.js",
-      "bytes": 19945,
-      "sha256": "0d26803c21c14b98c290d59aeca7f73bc5909604d38da7084a1e3f3fd7a25ccf",
+      "bytes": 20435,
+      "sha256": "d99b1f466ee41bd40042116c963db197c476b4312d08c306575c72611ef7bef9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17257,7 +17257,7 @@
       ],
       "endpoints": [
         {
-          "url": "https://tintinaccesorios.pages.dev/admin.html",
+          "url": "https://tintinaccesorios.pages.dev/admin",
           "line": 13
         },
         {
@@ -17270,11 +17270,11 @@
         },
         {
           "url": "https://maps.google.com/",
-          "line": 246
+          "line": 259
         },
         {
           "url": "https://api.resend.com/emails",
-          "line": 319
+          "line": 332
         }
       ]
     },
@@ -19104,8 +19104,8 @@
     },
     {
       "path": "js/analytics/analitica.js",
-      "bytes": 12172,
-      "sha256": "f2f256b8372e9b8732ac9c45a05ed66011824cab2a8e155d0ad8cdf5d3ab4ea2",
+      "bytes": 12186,
+      "sha256": "a2f57189cd1f38e838b9321e9a4d73063b0e64520e5face1f4d93af7e941c1c5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19197,8 +19197,8 @@
     },
     {
       "path": "js/cargador-pagina.js",
-      "bytes": 39509,
-      "sha256": "68eb722286f5f86c7e5a0267b457fc353a8d51f6d281f7311b99f975fe1e6288",
+      "bytes": 39588,
+      "sha256": "8bb6c4f2644f5f854aab64e49bc7bf5da5e0bdf8dbc784ff7895d3673bbddaa0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19223,7 +19223,7 @@
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/tintin-accesorios/",
-          "line": 693
+          "line": 694
         }
       ]
     },
@@ -20044,8 +20044,8 @@
     },
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
-      "bytes": 10543,
-      "sha256": "9163440e52ec7f0eec7e7676ca6556d2322029caf6ea7f23693fd3d294ce7ed3",
+      "bytes": 10539,
+      "sha256": "9ec0fcf4a9409b81e4900012448c792e41f236c19433b671d8783d7356e06455",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21151,8 +21151,8 @@
     },
     {
       "path": "js/core/store/contenido-sitio.js",
-      "bytes": 7450,
-      "sha256": "e7df65c0aed62fdd7148c1835fdc58c1d97846231783aa7f21469e758615c385",
+      "bytes": 7642,
+      "sha256": "1aad6925f3c62d1c13ca41c79b4a3254dad15b92bfda918b76a9678d6250e12a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21238,8 +21238,8 @@
     },
     {
       "path": "js/core/store/esquema-contenido.js",
-      "bytes": 28429,
-      "sha256": "1bf390b5f6fe548f85650f11a6516125119c9e735c2aa8ac4e9b8e00dd596a96",
+      "bytes": 28461,
+      "sha256": "f0738a4e6c45147d1d9ac1bfa534b3ff2d092fa5a6e9e403b3841916a7459532",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21996,8 +21996,8 @@
     },
     {
       "path": "js/pages/checkout/checkout-mantenimiento.js",
-      "bytes": 5379,
-      "sha256": "27abeed0065c3bf0e3dc1a8f3bcaebf0668a8b3082d3347238fb6b5fd62adc63",
+      "bytes": 5350,
+      "sha256": "ea1763327c08fad7abcde46c99947bedead60cd64a35cc221a49ef1c11303e60",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22241,8 +22241,8 @@
     },
     {
       "path": "js/pages/home/mantenimiento-inicio.js",
-      "bytes": 9673,
-      "sha256": "2fdbf35345d14230f0a919c419ae72c744ee7afaf7e0c2b432caf691288a96d2",
+      "bytes": 9665,
+      "sha256": "0259d761bab1b2fd3db607cc6e10310c12ae3dec6759d835a309b9786ec7f7a9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22353,8 +22353,8 @@
     },
     {
       "path": "js/pages/login/mantenimiento-acceso.js",
-      "bytes": 2821,
-      "sha256": "cac8a7041634a9e69e62a6ee6070fd7a896f072c7ad355147f9887e3d0623684",
+      "bytes": 2792,
+      "sha256": "37a1c3eb7e3c360c27b02f5b530a4853464bb539ea5ea3f605952cf72e7c2508",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22631,8 +22631,8 @@
     },
     {
       "path": "js/pages/profile/mantenimiento-perfil.js",
-      "bytes": 18260,
-      "sha256": "b1fa56e1164df32e21299c181cc29defbe8b3ea39192bb7ba63eb4d9dd3457d2",
+      "bytes": 18250,
+      "sha256": "d4882d2fef47340fd38bb3b7df7d696111bd48699a02976e1edd99f6e1703037",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23316,8 +23316,8 @@
     },
     {
       "path": "scripts/auditar-contenido-fase-6.js",
-      "bytes": 6291,
-      "sha256": "2deb1975b74bb958855fb0e667d2d664c2d0cce0a6cd6e280062ede4e1215a69",
+      "bytes": 11014,
+      "sha256": "8648435c7b02adc1c244f39ce6aa25122efda34289592c252ba78ac50bb2ae57",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28160,8 +28160,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 110749,
-      "sha256": "d0fa7c85a5a3603912c142538b8ac4b1402b6849bc44d5e9871169c2c8b3beb6"
+      "bytes": 110771,
+      "sha256": "48b49cf4a90ad4c39f0474b4fe2b2b843e83de757ec9ce48b2a7fe16cfa08c4b"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -28220,14 +28220,14 @@
     {
       "path": "cloudflare/participacion-admin.js",
       "extension": ".js",
-      "bytes": 9147,
-      "sha256": "1ddac2969ca133ca79e286c5f3901146d2a9794eef51181fd439ed721974fceb"
+      "bytes": 9139,
+      "sha256": "34c9109f74a8dfb7db2f470f0254ad95b8efafb8892089b05d1ca3beb3a085ed"
     },
     {
       "path": "cloudflare/participacion-clientes.js",
       "extension": ".js",
-      "bytes": 19456,
-      "sha256": "d4769c27762eb83e6feb48886fd015ed68a088013bb5c058966c6672878b3053"
+      "bytes": 19428,
+      "sha256": "a7281dd4820cedf923d83162a21b96e62ed1efbfbcb0b845efc7e49adc9822d9"
     },
     {
       "path": "cloudflare/paypal-seguro.js",
@@ -28281,13 +28281,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 340703,
-      "sha256": "fdee78b4917bd1281d2fa60f186e85eced9103d3801bad01c5e8aa40d7439380"
+      "sha256": "0b326aae31a51dfb0137aa015908e9dacf736637348c69a4220c535451bb6cda"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 340618,
-      "sha256": "2787e254c3c017830a3f12a89288c602ba6e73f84b7f4d93f1065aa5e6d91180"
+      "sha256": "aba5cd5cd054792ed38f5efaefd017a9cfd2454beb6c36345e6109721cb1e248"
     },
     {
       "path": "config/public-site.json",
@@ -28934,8 +28934,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 18016,
-      "sha256": "bce8af4d04abfbcd34ef4752ddbbe5de221647da6d565e2d92d21ccf3c252443"
+      "bytes": 18021,
+      "sha256": "b0e6d0e937106f7641e4db0701de0c936553782c123efc7954d895a53a15c5aa"
     },
     {
       "path": "favicon-16x16.png",
@@ -29162,8 +29162,8 @@
     {
       "path": "functions/api/order-email.js",
       "extension": ".js",
-      "bytes": 19945,
-      "sha256": "0d26803c21c14b98c290d59aeca7f73bc5909604d38da7084a1e3f3fd7a25ccf"
+      "bytes": 20435,
+      "sha256": "d99b1f466ee41bd40042116c963db197c476b4312d08c306575c72611ef7bef9"
     },
     {
       "path": "functions/api/paypal-capture-order.js",
@@ -29546,8 +29546,8 @@
     {
       "path": "js/analytics/analitica.js",
       "extension": ".js",
-      "bytes": 12172,
-      "sha256": "f2f256b8372e9b8732ac9c45a05ed66011824cab2a8e155d0ad8cdf5d3ab4ea2"
+      "bytes": 12186,
+      "sha256": "a2f57189cd1f38e838b9321e9a4d73063b0e64520e5face1f4d93af7e941c1c5"
     },
     {
       "path": "js/analytics/consentimiento-privacidad.js",
@@ -29564,8 +29564,8 @@
     {
       "path": "js/cargador-pagina.js",
       "extension": ".js",
-      "bytes": 39509,
-      "sha256": "68eb722286f5f86c7e5a0267b457fc353a8d51f6d281f7311b99f975fe1e6288"
+      "bytes": 39588,
+      "sha256": "8bb6c4f2644f5f854aab64e49bc7bf5da5e0bdf8dbc784ff7895d3673bbddaa0"
     },
     {
       "path": "js/components/cart/politica-persistencia-carrito.js",
@@ -29816,8 +29816,8 @@
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
       "extension": ".js",
-      "bytes": 10543,
-      "sha256": "9163440e52ec7f0eec7e7676ca6556d2322029caf6ea7f23693fd3d294ce7ed3"
+      "bytes": 10539,
+      "sha256": "9ec0fcf4a9409b81e4900012448c792e41f236c19433b671d8783d7356e06455"
     },
     {
       "path": "js/components/navigation/compartido/control-paneles.js",
@@ -30098,8 +30098,8 @@
     {
       "path": "js/core/store/contenido-sitio.js",
       "extension": ".js",
-      "bytes": 7450,
-      "sha256": "e7df65c0aed62fdd7148c1835fdc58c1d97846231783aa7f21469e758615c385"
+      "bytes": 7642,
+      "sha256": "1aad6925f3c62d1c13ca41c79b4a3254dad15b92bfda918b76a9678d6250e12a"
     },
     {
       "path": "js/core/store/contratos-visual-builder.js",
@@ -30122,8 +30122,8 @@
     {
       "path": "js/core/store/esquema-contenido.js",
       "extension": ".js",
-      "bytes": 28429,
-      "sha256": "1bf390b5f6fe548f85650f11a6516125119c9e735c2aa8ac4e9b8e00dd596a96"
+      "bytes": 28461,
+      "sha256": "f0738a4e6c45147d1d9ac1bfa534b3ff2d092fa5a6e9e403b3841916a7459532"
     },
     {
       "path": "js/core/store/estadisticas-pedidos.js",
@@ -30308,8 +30308,8 @@
     {
       "path": "js/pages/checkout/checkout-mantenimiento.js",
       "extension": ".js",
-      "bytes": 5379,
-      "sha256": "27abeed0065c3bf0e3dc1a8f3bcaebf0668a8b3082d3347238fb6b5fd62adc63"
+      "bytes": 5350,
+      "sha256": "ea1763327c08fad7abcde46c99947bedead60cd64a35cc221a49ef1c11303e60"
     },
     {
       "path": "js/pages/checkout/checkout-metodos-pago.js",
@@ -30368,8 +30368,8 @@
     {
       "path": "js/pages/home/mantenimiento-inicio.js",
       "extension": ".js",
-      "bytes": 9673,
-      "sha256": "2fdbf35345d14230f0a919c419ae72c744ee7afaf7e0c2b432caf691288a96d2"
+      "bytes": 9665,
+      "sha256": "0259d761bab1b2fd3db607cc6e10310c12ae3dec6759d835a309b9786ec7f7a9"
     },
     {
       "path": "js/pages/institutional/about-canonical-clean-v1.js",
@@ -30398,8 +30398,8 @@
     {
       "path": "js/pages/login/mantenimiento-acceso.js",
       "extension": ".js",
-      "bytes": 2821,
-      "sha256": "cac8a7041634a9e69e62a6ee6070fd7a896f072c7ad355147f9887e3d0623684"
+      "bytes": 2792,
+      "sha256": "37a1c3eb7e3c360c27b02f5b530a4853464bb539ea5ea3f605952cf72e7c2508"
     },
     {
       "path": "js/pages/product/beneficios-producto.js",
@@ -30458,8 +30458,8 @@
     {
       "path": "js/pages/profile/mantenimiento-perfil.js",
       "extension": ".js",
-      "bytes": 18260,
-      "sha256": "b1fa56e1164df32e21299c181cc29defbe8b3ea39192bb7ba63eb4d9dd3457d2"
+      "bytes": 18250,
+      "sha256": "d4882d2fef47340fd38bb3b7df7d696111bd48699a02976e1edd99f6e1703037"
     },
     {
       "path": "js/quality/accesibilidad-global.js",
@@ -30728,14 +30728,14 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 16549,
-      "sha256": "ab424f6f85b785166a9ee10cada22197d38f317d26e49ee3c79e359881fd21d4"
+      "bytes": 15814,
+      "sha256": "db7e69ba02b8072e35d21223e2406831b817affba59d9a2c50bc6ea582ea2b16"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 18508,
-      "sha256": "b039157112f5976a6e61bf90b895d62bdeb54bee565fd9e6fbd059b268ab9448"
+      "bytes": 18521,
+      "sha256": "4b51c9a6645bb379dbf0634a1843697e5d74f0144af69e87c6e7d4d5bd3c6cbc"
     },
     {
       "path": "product.html",
@@ -30920,8 +30920,8 @@
     {
       "path": "scripts/auditar-contenido-fase-6.js",
       "extension": ".js",
-      "bytes": 6291,
-      "sha256": "2deb1975b74bb958855fb0e667d2d664c2d0cce0a6cd6e280062ede4e1215a69"
+      "bytes": 11014,
+      "sha256": "8648435c7b02adc1c244f39ce6aa25122efda34289592c252ba78ac50bb2ae57"
     },
     {
       "path": "scripts/auditar-contraste.mjs",
@@ -31400,8 +31400,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 32868,
-      "sha256": "4109c4d88fecfa90190aa2db6c02e4c7cae68e06c0b51185e8ac428ac08e4ca6"
+      "bytes": 32899,
+      "sha256": "ce5771ad2543e1a9cb33040550e7edc7026d25d67de5d8eb9b549aac39b728ca"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -32178,21 +32178,14 @@
     },
     {
       "file": "js/cargador-pagina.js",
-      "line": 220,
-      "raw": "product.html",
-      "target": "product.html",
-      "exists": true
-    },
-    {
-      "file": "js/cargador-pagina.js",
-      "line": 782,
+      "line": 783,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "js/cargador-pagina.js",
-      "line": 788,
+      "line": 789,
       "raw": "/perfil.html",
       "target": "perfil.html",
       "exists": true
@@ -32447,20 +32440,6 @@
       "line": 62,
       "raw": "index.html",
       "target": "index.html",
-      "exists": true
-    },
-    {
-      "file": "js/core/store/esquema-contenido.js",
-      "line": 73,
-      "raw": "catalogo.html",
-      "target": "catalogo.html",
-      "exists": true
-    },
-    {
-      "file": "js/core/store/esquema-contenido.js",
-      "line": 75,
-      "raw": "about.html",
-      "target": "about.html",
       "exists": true
     },
     {
@@ -32758,13 +32737,6 @@
       "exists": true
     },
     {
-      "file": "js/pages/checkout/checkout-mantenimiento.js",
-      "line": 20,
-      "raw": "checkout.html",
-      "target": "checkout.html",
-      "exists": true
-    },
-    {
       "file": "js/pages/home/inicio-premium.js",
       "line": 6,
       "raw": "/index.html",
@@ -32772,38 +32744,10 @@
       "exists": true
     },
     {
-      "file": "js/pages/home/mantenimiento-inicio.js",
-      "line": 145,
-      "raw": "catalogo.html",
-      "target": "catalogo.html",
-      "exists": true
-    },
-    {
-      "file": "js/pages/home/mantenimiento-inicio.js",
-      "line": 160,
-      "raw": "catalogo.html",
-      "target": "catalogo.html",
-      "exists": true
-    },
-    {
       "file": "js/pages/institutional/mantenimiento-nosotros.js",
       "line": 17,
       "raw": "about.html",
       "target": "about.html",
-      "exists": true
-    },
-    {
-      "file": "js/pages/login/mantenimiento-acceso.js",
-      "line": 46,
-      "raw": "login.html",
-      "target": "login.html",
-      "exists": true
-    },
-    {
-      "file": "js/pages/profile/mantenimiento-perfil.js",
-      "line": 88,
-      "raw": "perfil.html",
-      "target": "perfil.html",
       "exists": true
     },
     {
@@ -33007,10 +32951,6 @@
         {
           "file": "catalogo.html",
           "line": 708
-        },
-        {
-          "file": "js/components/navigation/compartido/control-busqueda.js",
-          "line": 104
         },
         {
           "file": "js/core/store/editor-visual-runtime.js",
@@ -34210,7 +34150,7 @@
           },
           {
             "file": "js/core/store/contenido-sitio.js",
-            "line": 170,
+            "line": 174,
             "operation": "doc"
           },
           {
