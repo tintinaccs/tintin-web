@@ -1,0 +1,191 @@
+name: TEMP — Corrección integral de incongruencias
+
+on:
+  push:
+    branches:
+      - fix/auditoria-integral-incongruencias-2026-08-23
+
+permissions:
+  contents: write
+
+jobs:
+  repair-and-validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: fix/auditoria-integral-incongruencias-2026-08-23
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Aplicar correcciones confirmadas
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          ROOT = Path('.')
+
+          def replace_exact(path, old, new, count=1):
+              p = ROOT / path
+              text = p.read_text(encoding='utf-8')
+              actual = text.count(old)
+              if actual != count:
+                  raise SystemExit(f'{path}: esperado {count} coincidencia(s), encontradas {actual}: {old[:100]!r}')
+              p.write_text(text.replace(old, new), encoding='utf-8')
+              print(f'OK {path}: {count} reemplazo(s)')
+
+          # 1) Las rutas internas restauradas desde Apariencia deben seguir siendo canónicas limpias.
+          replace_exact(
+              'js/core/store/esquema-contenido.js',
+              "field('primaryHref', 'Enlace del botón principal', '.tt-hero-actions a', 'catalogo.html', { index: 0, type: 'href', maxLength: 500 }),",
+              "field('primaryHref', 'Enlace del botón principal', '.tt-hero-actions a', '/catalogo', { index: 0, type: 'href', maxLength: 500 }),"
+          )
+          replace_exact(
+              'js/core/store/esquema-contenido.js',
+              "field('btnHref', 'Enlace del botón secundario', '.tt-hero-actions a', 'about.html', { index: 1, type: 'href', maxLength: 500 }),",
+              "field('btnHref', 'Enlace del botón secundario', '.tt-hero-actions a', '/about', { index: 1, type: 'href', maxLength: 500 }),"
+          )
+          replace_exact(
+              'js/core/store/esquema-contenido.js',
+              "field('blocks.2.title', 'Retiro — título', '.tt-info-title', 'Retiro en Tienda — Gratis', { index: 2, maxLength: 180 }),",
+              "field('blocks.2.title', 'Retiro — título', '.tt-info-title', 'Retiro en San Lorenzo — Gratis', { index: 2, maxLength: 180 }),"
+          )
+          replace_exact(
+              'js/core/store/esquema-contenido.js',
+              "  return PAGE_PATH_TO_ID[file] || (raw === '' ? 'index' : null);",
+              "  return PAGE_PATH_TO_ID[file] || PAGE_PATH_TO_ID[`${file}.html`] || (raw === '' ? 'index' : null);"
+          )
+
+          # 2) Footer global: muchas páginas conservan el texto directamente dentro del <a>, no en un span.
+          replace_exact(
+              'js/core/store/contenido-sitio.js',
+              "  const index = item.index == null ? 0 : item.index;\n  return matches[index] || null;",
+              "  const index = item.index == null ? 0 : item.index;\n  const target = matches[index] || null;\n  if (target) return target;\n  if (item.selector === '.tt-footer-wa-text') return root.querySelector('.tt-footer-wa');\n  return null;"
+          )
+          replace_exact(
+              'js/core/store/contenido-sitio.js',
+              "    element.id === 'form-success' ||\n    element.classList.contains('tt-contact-wa-link');",
+              "    element.id === 'form-success' ||\n    element.classList.contains('tt-contact-wa-link') ||\n    element.classList.contains('tt-footer-wa');"
+          )
+
+          # 3) GA4: begin_checkout debe reconocer tanto /checkout como el alias legado /checkout.html.
+          replace_exact(
+              'js/analytics/analitica.js',
+              "  if (/\\/checkout\\.html$/i.test(window.location.pathname || '')) {",
+              "  if (/(?:^|\\/)checkout(?:\\.html)?\\/?$/i.test(window.location.pathname || '')) {"
+          )
+
+          # 4) Los mantenimientos no deben convertir canonical limpio en .html.
+          replace_exact(
+              'js/pages/login/mantenimiento-acceso.js',
+              "    const canonical = new URL('login.html', location.href);\n    canonical.search = '';",
+              "    const canonical = new URL('/login', location.origin);"
+          )
+          replace_exact(
+              'js/pages/checkout/checkout-mantenimiento.js',
+              "    const canonical = new URL('checkout.html', location.href);\n    canonical.search = '';",
+              "    const canonical = new URL('/checkout', location.origin);"
+          )
+          replace_exact(
+              'js/pages/profile/mantenimiento-perfil.js',
+              "    if (canonical) canonical.href = new URL('perfil.html', window.location.origin + '/').href;",
+              "    if (canonical) canonical.href = new URL('/perfil', window.location.origin).href;"
+          )
+
+          # 5) Fallbacks de Inicio y selector de retiro usan también rutas/texto públicos canónicos.
+          replace_exact(
+              'js/pages/home/mantenimiento-inicio.js',
+              "{ href: 'catalogo.html', label: 'Ver catálogo' },",
+              "{ href: '/catalogo', label: 'Ver catálogo' },"
+          )
+          replace_exact(
+              'js/pages/home/mantenimiento-inicio.js',
+              "{ href: 'catalogo.html', label: 'Explorar accesorios' },",
+              "{ href: '/catalogo', label: 'Explorar accesorios' },"
+          )
+          replace_exact(
+              'checkout.html',
+              "  // El retiro en tienda es una ciudad más (la única sin costo de envío),",
+              "  // El retiro coordinado en San Lorenzo es una opción más (la única sin costo de envío),"
+          )
+          replace_exact(
+              'checkout.html',
+              "    retiroOpt.textContent = '🏪 Retiro en tienda';",
+              "    retiroOpt.textContent = '📍 Retiro en San Lorenzo';"
+          )
+
+          # 6) El auditor de contenido debe impedir que estas incongruencias vuelvan.
+          p = ROOT / 'scripts/auditar-contenido-fase-6.js'
+          text = p.read_text(encoding='utf-8')
+          old = "  adminApp: read('js/admin/admin-app.js'),\n};"
+          new = "  adminApp: read('js/admin/admin-app.js'),\n  faq: read('preguntas-frecuentes.html'),\n  privacy: read('privacidad.html'),\n  shipping: read('envios.html'),\n  analytics: read('js/analytics/analitica.js'),\n  loginMaintenance: read('js/pages/login/mantenimiento-acceso.js'),\n  checkoutMaintenance: read('js/pages/checkout/checkout-mantenimiento.js'),\n  profileMaintenance: read('js/pages/profile/mantenimiento-perfil.js'),\n};"
+          if text.count(old) != 1:
+              raise SystemExit('auditar-contenido-fase-6.js: no se encontró bloque files esperado')
+          text = text.replace(old, new)
+          marker = "check(\n  'El comando de auditoría está disponible',\n  files.packageJson.includes('\\\"audit:content\\\"'),\n  'Falta npm run audit:content'\n);\n"
+          if text.count(marker) != 1:
+              raise SystemExit('auditar-contenido-fase-6.js: no se encontró marcador final esperado')
+          extra = marker + "\ncheck(\n  'Las rutas limpias identifican el mismo contenido que sus alias .html',\n  files.schema.includes('PAGE_PATH_TO_ID[`${file}.html`]'),\n  'detectContentPageId debe resolver /about, /envios, /privacidad y demás rutas limpias'\n);\n\ncheck(\n  'Los defaults restaurados no reintroducen enlaces .html ni retiro en una tienda física',\n  files.schema.includes(\"'/catalogo'\") &&\n    files.schema.includes(\"'/about'\") &&\n    files.schema.includes('Retiro en San Lorenzo — Gratis') &&\n    !files.schema.includes(\"'catalogo.html', { index: 0, type: 'href'\") &&\n    !files.schema.includes(\"'about.html', { index: 1, type: 'href'\"),\n  'Los valores restaurados deben usar las rutas públicas canónicas y la modalidad real de retiro'\n);\n\ncheck(\n  'El footer global puede actualizar el texto de WhatsApp en todas las páginas',\n  files.publicRuntime.includes(\"item.selector === '.tt-footer-wa-text'\") &&\n    files.publicRuntime.includes(\"element.classList.contains('tt-footer-wa')\"),\n  'Las páginas sin .tt-footer-wa-text deben conservar el SVG y reemplazar solo la etiqueta del enlace'\n);\n\nconst faqQuestions = (files.faq.match(/class=\\\"tt-faq-q\\\"/g) || []).length;\nconst faqAnswers = (files.faq.match(/class=\\\"tt-faq-a\\\"/g) || []).length;\ncheck(\n  'FAQ estática y esquema editable conservan exactamente once preguntas en el mismo orden',\n  faqQuestions === 11 && faqAnswers === 11 &&\n    !files.faq.includes('¿Los relojes son originales?') &&\n    files.faq.includes('Los métodos habilitados aparecen en el checkout al confirmar tu pedido.') &&\n    files.faq.includes('En cada producto indicamos su material y características.'),\n  `Preguntas=${faqQuestions}, respuestas=${faqAnswers}; una pregunta extra desplaza todos los índices del editor`\n);\n\ncheck(\n  'Privacidad identifica Cloudflare como proveedor actual de geolocalización aproximada',\n  files.privacy.includes('Cloudflare estima la ciudad, región y país') &&\n    files.privacy.includes('Cloudflare, como proveedor técnico') &&\n    !files.privacy.includes('Netlify'),\n  'La política pública debe coincidir con functions/api/visitor-geo.js'\n);\n\ncheck(\n  'La página de envíos describe el retiro como retiro en San Lorenzo',\n  files.shipping.includes('Retiro en San Lorenzo — Gratis') &&\n    !files.shipping.includes('Retiro en Tienda — Gratis'),\n  'La tienda es online; el retiro se coordina en San Lorenzo'\n);\n\ncheck(\n  'Analítica reconoce la ruta limpia del checkout',\n  files.analytics.includes('checkout(?:\\\\.html)?\\\\/?$') &&\n    !files.analytics.includes('/\\\\/checkout\\\\.html$/i.test'),\n  'begin_checkout no debe depender exclusivamente de /checkout.html'\n);\n\ncheck(\n  'Los canonical de cuenta y checkout permanecen en rutas limpias',\n  files.loginMaintenance.includes(\"new URL('/login', location.origin)\") &&\n    files.checkoutMaintenance.includes(\"new URL('/checkout', location.origin)\") &&\n    files.profileMaintenance.includes(\"new URL('/perfil', window.location.origin)\") &&\n    !files.loginMaintenance.includes(\"new URL('login.html'\") &&\n    !files.checkoutMaintenance.includes(\"new URL('checkout.html'\") &&\n    !files.profileMaintenance.includes(\"new URL('perfil.html'\"),\n  'El runtime no debe sobrescribir canonical limpios con URLs .html'\n);\n"
+          p.write_text(text.replace(marker, extra), encoding='utf-8')
+          print('OK scripts/auditar-contenido-fase-6.js: guardas de regresión agregadas')
+          PY
+
+          rm -f .github/workflows/tmp-auditoria-integral-incongruencias.yml
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Sincronizar artefactos y versionado de caché
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run sync:monaco
+          npm run sync:public-shell
+          npm run build:routes
+          npm run build:csp
+          npm run sync:public-origin
+          npm run cache-versioning:write
+          npm run build:diagnostics
+          npm run verify:routes
+          npm run verify:csp
+          npm run verify:diagnostics
+          npm run audit:cache-versioning
+
+      - name: Validar sintaxis y contratos afectados
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check js/core/store/esquema-contenido.js
+          node --check js/core/store/contenido-sitio.js
+          node --check js/analytics/analitica.js
+          node --check js/pages/login/mantenimiento-acceso.js
+          node --check js/pages/checkout/checkout-mantenimiento.js
+          node --check js/pages/profile/mantenimiento-perfil.js
+          node --check js/pages/home/mantenimiento-inicio.js
+          node --check scripts/auditar-contenido-fase-6.js
+          npm run audit:content
+          npm run audit:phase11
+          npm run audit:page-loading
+          npm run audit:secure-orders
+          npm run audit:integral
+          git diff --check
+
+      - name: Guardar únicamente el resultado validado
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "Tintin Site Audit"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No hay cambios adicionales.'
+            exit 0
+          fi
+          git commit -m "fix(site): alinear rutas, contenido y contratos públicos"
+          git push origin HEAD:fix/auditoria-integral-incongruencias-2026-08-23
