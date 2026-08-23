@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - fix/auditoria-integral-incongruencias-2026-08-23
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -12,7 +15,7 @@ jobs:
   repair-and-validate:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v5
         with:
@@ -22,6 +25,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
+
       - name: Aplicar correcciones confirmadas
         shell: bash
         run: |
@@ -36,11 +40,20 @@ jobs:
               text = p.read_text(encoding='utf-8')
               actual = text.count(old)
               if actual != count:
-                  raise SystemExit(f'{path}: esperado {count} coincidencia(s), encontradas {actual}: {old[:100]!r}')
+                  raise SystemExit(f'{path}: esperado {count} coincidencia(s), encontradas {actual}: {old[:120]!r}')
               p.write_text(text.replace(old, new), encoding='utf-8')
               print(f'OK {path}: {count} reemplazo(s)')
 
-          # 1) Las rutas internas restauradas desde Apariencia deben seguir siendo canónicas limpias.
+          def replace_all(path, old, new, minimum=1):
+              p = ROOT / path
+              text = p.read_text(encoding='utf-8')
+              actual = text.count(old)
+              if actual < minimum:
+                  raise SystemExit(f'{path}: esperado al menos {minimum} coincidencia(s), encontradas {actual}: {old!r}')
+              p.write_text(text.replace(old, new), encoding='utf-8')
+              print(f'OK {path}: {actual} reemplazo(s)')
+
+          # Contenido editable y rutas públicas canónicas.
           replace_exact(
               'js/core/store/esquema-contenido.js',
               "field('primaryHref', 'Enlace del botón principal', '.tt-hero-actions a', 'catalogo.html', { index: 0, type: 'href', maxLength: 500 }),",
@@ -62,7 +75,7 @@ jobs:
               "  return PAGE_PATH_TO_ID[file] || PAGE_PATH_TO_ID[`${file}.html`] || (raw === '' ? 'index' : null);"
           )
 
-          # 2) Footer global: muchas páginas conservan el texto directamente dentro del <a>, no en un span.
+          # Footer global: la mayoría de las páginas conserva texto directo dentro del anchor.
           replace_exact(
               'js/core/store/contenido-sitio.js',
               "  const index = item.index == null ? 0 : item.index;\n  return matches[index] || null;",
@@ -74,14 +87,14 @@ jobs:
               "    element.id === 'form-success' ||\n    element.classList.contains('tt-contact-wa-link') ||\n    element.classList.contains('tt-footer-wa');"
           )
 
-          # 3) GA4: begin_checkout debe reconocer tanto /checkout como el alias legado /checkout.html.
+          # Analítica: /checkout es la ruta canónica, .html queda solo como alias compatible.
           replace_exact(
               'js/analytics/analitica.js',
               "  if (/\\/checkout\\.html$/i.test(window.location.pathname || '')) {",
               "  if (/(?:^|\\/)checkout(?:\\.html)?\\/?$/i.test(window.location.pathname || '')) {"
           )
 
-          # 4) Los mantenimientos no deben convertir canonical limpio en .html.
+          # Canonical dinámicos limpios.
           replace_exact(
               'js/pages/login/mantenimiento-acceso.js',
               "    const canonical = new URL('login.html', location.href);\n    canonical.search = '';",
@@ -98,44 +111,183 @@ jobs:
               "    if (canonical) canonical.href = new URL('/perfil', window.location.origin).href;"
           )
 
-          # 5) Fallbacks de Inicio y selector de retiro usan también rutas/texto públicos canónicos.
+          # Inicio y checkout: navegación/textos públicos sin aliases ni tienda física implícita.
+          replace_exact('js/pages/home/mantenimiento-inicio.js', "{ href: 'catalogo.html', label: 'Ver catálogo' },", "{ href: '/catalogo', label: 'Ver catálogo' },")
+          replace_exact('js/pages/home/mantenimiento-inicio.js', "{ href: 'catalogo.html', label: 'Explorar accesorios' },", "{ href: '/catalogo', label: 'Explorar accesorios' },")
+          replace_exact('checkout.html', "  // El retiro en tienda es una ciudad más (la única sin costo de envío),", "  // El retiro coordinado en San Lorenzo es una opción más (la única sin costo de envío),")
+          replace_exact('checkout.html', "    retiroOpt.textContent = '🏪 Retiro en tienda';", "    retiroOpt.textContent = '📍 Retiro en San Lorenzo';")
+
+          # Búsqueda y loader deben reconocer/generar la ficha canónica /product.
           replace_exact(
-              'js/pages/home/mantenimiento-inicio.js',
-              "{ href: 'catalogo.html', label: 'Ver catálogo' },",
-              "{ href: '/catalogo', label: 'Ver catálogo' },"
+              'js/components/navigation/compartido/control-busqueda.js',
+              "  link.href = `product.html?id=${encodeURIComponent(String(product.id || ''))}`;",
+              "  link.href = `/product?id=${encodeURIComponent(String(product.id || ''))}`;"
           )
           replace_exact(
-              'js/pages/home/mantenimiento-inicio.js',
-              "{ href: 'catalogo.html', label: 'Explorar accesorios' },",
-              "{ href: '/catalogo', label: 'Explorar accesorios' },"
+              'js/cargador-pagina.js',
+              "  // Cualquier tarjeta o link que lleve a product.html guarda el nombre del\n  // producto justo antes de navegar, porque el id de la URL no es legible",
+              "  // Cualquier tarjeta o link que lleve a la ficha /product (o al alias\n  // product.html) guarda el nombre antes de navegar, porque el id no es legible"
           )
           replace_exact(
-              'checkout.html',
-              "  // El retiro en tienda es una ciudad más (la única sin costo de envío),",
-              "  // El retiro coordinado en San Lorenzo es una opción más (la única sin costo de envío),"
-          )
-          replace_exact(
-              'checkout.html',
-              "    retiroOpt.textContent = '🏪 Retiro en tienda';",
-              "    retiroOpt.textContent = '📍 Retiro en San Lorenzo';"
+              'js/cargador-pagina.js',
+              "      if (url.pathname.split('/').pop() !== 'product.html') return;",
+              "      const productPath = url.pathname.replace(/\\/+$/, '').split('/').pop() || '';\n      if (!/^product(?:\\.html)?$/i.test(productPath)) return;"
           )
 
-          # 6) El auditor de contenido debe impedir que estas incongruencias vuelvan.
+          # Notificaciones sociales: deep links públicos canónicos.
+          replace_all('cloudflare/participacion-clientes.js', 'product.html?id=', '/product?id=')
+          replace_all('cloudflare/participacion-admin.js', 'product.html?id=', '/product?id=')
+
+          # Correo administrativo: ruta limpia y ciudad + departamento sin duplicar.
+          replace_exact(
+              'functions/api/order-email.js',
+              "const ADMIN_PANEL = 'https://tintinaccesorios.pages.dev/admin.html';",
+              "const ADMIN_PANEL = 'https://tintinaccesorios.pages.dev/admin';"
+          )
+          payment_block = """function paymentLabel(order) {
+            const method = clean(order?.payment?.method, 40);
+            return {
+              efectivo: 'Efectivo contra entrega',
+              transferencia: 'Transferencia bancaria',
+              paypal: 'PayPal',
+              pagopark: 'PagoPar',
+              tarjeta: 'Tarjeta'
+            }[method] || method || 'A coordinar';
+          }
+          """
+          city_helper = payment_block + """
+          function cityDepartmentLabel(order) {
+            const city = clean(order?.shipping?.city, 120);
+            const departamento = clean(order?.shipping?.departamento, 80);
+            if (!city && !departamento) return '—';
+            if (!city) return departamento;
+            if (!departamento) return city;
+            const normalizedCity = city.toLowerCase();
+            const normalizedDepartment = departamento.toLowerCase();
+            if (normalizedCity.includes(`(${normalizedDepartment})`)) return city;
+            return `${city} (${departamento})`;
+          }
+          """
+          replace_exact('functions/api/order-email.js', payment_block, city_helper)
+          replace_exact(
+              'functions/api/order-email.js',
+              "  const items = Array.isArray(order.items) ? order.items : [];\n  const itemRows = items.map(item => `",
+              "  const items = Array.isArray(order.items) ? order.items : [];\n  const cityLabel = cityDepartmentLabel(order);\n  const itemRows = items.map(item => `"
+          )
+          replace_exact('functions/api/order-email.js', '${escapeHtml(order?.shipping?.city)}</td></tr>', '${escapeHtml(cityLabel)}</td></tr>')
+          replace_exact('functions/api/order-email.js', 'Ciudad: ${clean(order?.shipping?.city, 120)}', 'Ciudad: ${cityLabel}')
+
+          # Auditor de contenido: convertir las incongruencias encontradas en regresiones permanentes.
           p = ROOT / 'scripts/auditar-contenido-fase-6.js'
           text = p.read_text(encoding='utf-8')
-          old = "  adminApp: read('js/admin/admin-app.js'),\n};"
-          new = "  adminApp: read('js/admin/admin-app.js'),\n  faq: read('preguntas-frecuentes.html'),\n  privacy: read('privacidad.html'),\n  shipping: read('envios.html'),\n  analytics: read('js/analytics/analitica.js'),\n  loginMaintenance: read('js/pages/login/mantenimiento-acceso.js'),\n  checkoutMaintenance: read('js/pages/checkout/checkout-mantenimiento.js'),\n  profileMaintenance: read('js/pages/profile/mantenimiento-perfil.js'),\n};"
-          if text.count(old) != 1:
-              raise SystemExit('auditar-contenido-fase-6.js: no se encontró bloque files esperado')
-          text = text.replace(old, new)
-          marker = "check(\n  'El comando de auditoría está disponible',\n  files.packageJson.includes('\\\"audit:content\\\"'),\n  'Falta npm run audit:content'\n);\n"
+          old_files = "  adminApp: read('js/admin/admin-app.js'),\n};"
+          new_files = "  adminApp: read('js/admin/admin-app.js'),\n  faq: read('preguntas-frecuentes.html'),\n  privacy: read('privacidad.html'),\n  shipping: read('envios.html'),\n  analytics: read('js/analytics/analitica.js'),\n  loginMaintenance: read('js/pages/login/mantenimiento-acceso.js'),\n  checkoutMaintenance: read('js/pages/checkout/checkout-mantenimiento.js'),\n  profileMaintenance: read('js/pages/profile/mantenimiento-perfil.js'),\n  searchController: read('js/components/navigation/compartido/control-busqueda.js'),\n  pageLoader: read('js/cargador-pagina.js'),\n  engagementCustomer: read('cloudflare/participacion-clientes.js'),\n  engagementAdmin: read('cloudflare/participacion-admin.js'),\n  orderEmail: read('functions/api/order-email.js'),\n};"
+          if text.count(old_files) != 1:
+              raise SystemExit('auditar-contenido-fase-6.js: bloque files inesperado')
+          text = text.replace(old_files, new_files)
+
+          marker = "\nif (failures) {"
           if text.count(marker) != 1:
-              raise SystemExit('auditar-contenido-fase-6.js: no se encontró marcador final esperado')
-          extra = marker + "\ncheck(\n  'Las rutas limpias identifican el mismo contenido que sus alias .html',\n  files.schema.includes('PAGE_PATH_TO_ID[`${file}.html`]'),\n  'detectContentPageId debe resolver /about, /envios, /privacidad y demás rutas limpias'\n);\n\ncheck(\n  'Los defaults restaurados no reintroducen enlaces .html ni retiro en una tienda física',\n  files.schema.includes(\"'/catalogo'\") &&\n    files.schema.includes(\"'/about'\") &&\n    files.schema.includes('Retiro en San Lorenzo — Gratis') &&\n    !files.schema.includes(\"'catalogo.html', { index: 0, type: 'href'\") &&\n    !files.schema.includes(\"'about.html', { index: 1, type: 'href'\"),\n  'Los valores restaurados deben usar las rutas públicas canónicas y la modalidad real de retiro'\n);\n\ncheck(\n  'El footer global puede actualizar el texto de WhatsApp en todas las páginas',\n  files.publicRuntime.includes(\"item.selector === '.tt-footer-wa-text'\") &&\n    files.publicRuntime.includes(\"element.classList.contains('tt-footer-wa')\"),\n  'Las páginas sin .tt-footer-wa-text deben conservar el SVG y reemplazar solo la etiqueta del enlace'\n);\n\nconst faqQuestions = (files.faq.match(/class=\\\"tt-faq-q\\\"/g) || []).length;\nconst faqAnswers = (files.faq.match(/class=\\\"tt-faq-a\\\"/g) || []).length;\ncheck(\n  'FAQ estática y esquema editable conservan exactamente once preguntas en el mismo orden',\n  faqQuestions === 11 && faqAnswers === 11 &&\n    !files.faq.includes('¿Los relojes son originales?') &&\n    files.faq.includes('Los métodos habilitados aparecen en el checkout al confirmar tu pedido.') &&\n    files.faq.includes('En cada producto indicamos su material y características.'),\n  `Preguntas=${faqQuestions}, respuestas=${faqAnswers}; una pregunta extra desplaza todos los índices del editor`\n);\n\ncheck(\n  'Privacidad identifica Cloudflare como proveedor actual de geolocalización aproximada',\n  files.privacy.includes('Cloudflare estima la ciudad, región y país') &&\n    files.privacy.includes('Cloudflare, como proveedor técnico') &&\n    !files.privacy.includes('Netlify'),\n  'La política pública debe coincidir con functions/api/visitor-geo.js'\n);\n\ncheck(\n  'La página de envíos describe el retiro como retiro en San Lorenzo',\n  files.shipping.includes('Retiro en San Lorenzo — Gratis') &&\n    !files.shipping.includes('Retiro en Tienda — Gratis'),\n  'La tienda es online; el retiro se coordina en San Lorenzo'\n);\n\ncheck(\n  'Analítica reconoce la ruta limpia del checkout',\n  files.analytics.includes('checkout(?:\\\\.html)?\\\\/?$') &&\n    !files.analytics.includes('/\\\\/checkout\\\\.html$/i.test'),\n  'begin_checkout no debe depender exclusivamente de /checkout.html'\n);\n\ncheck(\n  'Los canonical de cuenta y checkout permanecen en rutas limpias',\n  files.loginMaintenance.includes(\"new URL('/login', location.origin)\") &&\n    files.checkoutMaintenance.includes(\"new URL('/checkout', location.origin)\") &&\n    files.profileMaintenance.includes(\"new URL('/perfil', window.location.origin)\") &&\n    !files.loginMaintenance.includes(\"new URL('login.html'\") &&\n    !files.checkoutMaintenance.includes(\"new URL('checkout.html'\") &&\n    !files.profileMaintenance.includes(\"new URL('perfil.html'\"),\n  'El runtime no debe sobrescribir canonical limpios con URLs .html'\n);\n"
-          p.write_text(text.replace(marker, extra), encoding='utf-8')
-          print('OK scripts/auditar-contenido-fase-6.js: guardas de regresión agregadas')
+              raise SystemExit('auditar-contenido-fase-6.js: marcador de cierre inesperado')
+          checks = r'''
+
+          check(
+            'Las rutas limpias identifican el mismo contenido que sus alias .html',
+            files.schema.includes('PAGE_PATH_TO_ID[`${file}.html`]'),
+            'detectContentPageId debe resolver las rutas públicas limpias'
+          );
+
+          check(
+            'Defaults restaurados conservan rutas limpias y retiro real',
+            files.schema.includes("'/catalogo'") &&
+              files.schema.includes("'/about'") &&
+              files.schema.includes('Retiro en San Lorenzo — Gratis') &&
+              !files.schema.includes("'catalogo.html', { index: 0, type: 'href'") &&
+              !files.schema.includes("'about.html', { index: 1, type: 'href'"),
+            'Restaurar Apariencia no debe reintroducir aliases .html ni una tienda física'
+          );
+
+          check(
+            'Footer global actualiza WhatsApp aun sin span auxiliar',
+            files.publicRuntime.includes("item.selector === '.tt-footer-wa-text'") &&
+              files.publicRuntime.includes("element.classList.contains('tt-footer-wa')"),
+            'Debe conservar el SVG y reemplazar solo el texto del enlace'
+          );
+
+          const faqQuestions = (files.faq.match(/class="tt-faq-q"/g) || []).length;
+          const faqAnswers = (files.faq.match(/class="tt-faq-a"/g) || []).length;
+          check(
+            'FAQ estática coincide con los once índices editables',
+            faqQuestions === 11 && faqAnswers === 11 &&
+              !files.faq.includes('¿Los relojes son originales?') &&
+              files.faq.includes('Los métodos habilitados aparecen en el checkout al confirmar tu pedido.') &&
+              files.faq.includes('En cada producto indicamos su material y características.'),
+            `Preguntas=${faqQuestions}, respuestas=${faqAnswers}`
+          );
+
+          check(
+            'Privacidad identifica al proveedor real de geolocalización aproximada',
+            files.privacy.includes('Cloudflare estima la ciudad, región y país') &&
+              files.privacy.includes('Cloudflare, como proveedor técnico') &&
+              !files.privacy.includes('Netlify'),
+            'La política debe coincidir con functions/api/visitor-geo.js'
+          );
+
+          check(
+            'Envíos describe el retiro como retiro en San Lorenzo',
+            files.shipping.includes('Retiro en San Lorenzo — Gratis') &&
+              !files.shipping.includes('Retiro en Tienda — Gratis'),
+            'La operación es online y el retiro se coordina en San Lorenzo'
+          );
+
+          check(
+            'Analítica reconoce /checkout y /checkout.html',
+            files.analytics.includes('checkout(?:\\.html)?\\/?$') &&
+              !files.analytics.includes('/\\/checkout\\.html$/i.test'),
+            'begin_checkout no debe depender del alias .html'
+          );
+
+          check(
+            'Canonical dinámicos de cuenta y checkout permanecen limpios',
+            files.loginMaintenance.includes("new URL('/login', location.origin)") &&
+              files.checkoutMaintenance.includes("new URL('/checkout', location.origin)") &&
+              files.profileMaintenance.includes("new URL('/perfil', window.location.origin)") &&
+              !files.loginMaintenance.includes("new URL('login.html'") &&
+              !files.checkoutMaintenance.includes("new URL('checkout.html'") &&
+              !files.profileMaintenance.includes("new URL('perfil.html'"),
+            'El runtime no debe sobrescribir canonical limpios con .html'
+          );
+
+          check(
+            'Búsqueda y notificaciones generan links canónicos de producto',
+            files.searchController.includes('`/product?id=${encodeURIComponent') &&
+              !files.searchController.includes('`product.html?id=') &&
+              !files.engagementCustomer.includes('product.html?id=') &&
+              !files.engagementAdmin.includes('product.html?id='),
+            'Los enlaces visibles y notificaciones deben usar /product?id='
+          );
+
+          check(
+            'Loader reconoce producto tanto por ruta limpia como por alias legado',
+            files.pageLoader.includes('/^product(?:\\.html)?$/i.test(productPath)'),
+            'El nombre del producto debe preservarse al navegar desde /product'
+          );
+
+          check(
+            'Correo administrativo muestra ciudad y departamento sin duplicar',
+            files.orderEmail.includes('function cityDepartmentLabel(order)') &&
+              files.orderEmail.includes('const cityLabel = cityDepartmentLabel(order);') &&
+              files.orderEmail.includes('${escapeHtml(cityLabel)}</td></tr>') &&
+              files.orderEmail.includes('Ciudad: ${cityLabel}') &&
+              files.orderEmail.includes("/admin';"),
+            'El correo debe mostrar, por ejemplo, Santiago (Misiones)'
+          );
+          '''
+          p.write_text(text.replace(marker, checks + marker), encoding='utf-8')
+          print('OK scripts/auditar-contenido-fase-6.js: regresiones agregadas')
           PY
 
+          # El helper no forma parte de la solución final.
           rm -f .github/workflows/tmp-auditoria-integral-incongruencias.yml
 
       - name: Instalar dependencias
@@ -157,18 +309,26 @@ jobs:
           npm run verify:diagnostics
           npm run audit:cache-versioning
 
-      - name: Validar sintaxis y contratos afectados
+      - name: Validar contratos afectados
         shell: bash
         run: |
           set -euo pipefail
-          node --check js/core/store/esquema-contenido.js
-          node --check js/core/store/contenido-sitio.js
-          node --check js/analytics/analitica.js
-          node --check js/pages/login/mantenimiento-acceso.js
-          node --check js/pages/checkout/checkout-mantenimiento.js
-          node --check js/pages/profile/mantenimiento-perfil.js
-          node --check js/pages/home/mantenimiento-inicio.js
-          node --check scripts/auditar-contenido-fase-6.js
+          for file in \
+            js/core/store/esquema-contenido.js \
+            js/core/store/contenido-sitio.js \
+            js/analytics/analitica.js \
+            js/pages/login/mantenimiento-acceso.js \
+            js/pages/checkout/checkout-mantenimiento.js \
+            js/pages/profile/mantenimiento-perfil.js \
+            js/pages/home/mantenimiento-inicio.js \
+            js/components/navigation/compartido/control-busqueda.js \
+            js/cargador-pagina.js \
+            cloudflare/participacion-clientes.js \
+            cloudflare/participacion-admin.js \
+            functions/api/order-email.js \
+            scripts/auditar-contenido-fase-6.js; do
+            node --check "$file"
+          done
           npm run audit:content
           npm run audit:phase11
           npm run audit:page-loading
@@ -176,7 +336,7 @@ jobs:
           npm run audit:integral
           git diff --check
 
-      - name: Guardar únicamente el resultado validado
+      - name: Guardar únicamente resultado validado
         shell: bash
         run: |
           set -euo pipefail
