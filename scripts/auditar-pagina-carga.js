@@ -78,11 +78,20 @@ function extractTagReferences(html) {
   return references;
 }
 
+// Para estas auditorías no interpretamos JavaScript/CSS: los quitamos antes
+// de revisar texto e IDs. El cierre tolera cualquier contenido hasta el > para
+// que una etiqueta extraña o malformada no deje código mezclado con el marcado.
+function stripScriptBlocks(html) {
+  return String(html || '').replace(/<script\b[^>]*>[\s\S]*?<\/script\b[^>]*>/gi, ' ');
+}
+
+function stripStyleBlocks(html) {
+  return String(html || '').replace(/<style\b[^>]*>[\s\S]*?<\/style\b[^>]*>/gi, ' ');
+}
+
 function meaningfulBodyLength(html) {
   const body = html.match(/<body\b[^>]*>([\s\S]*?)<\/body>/i)?.[1] || '';
-  return body
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, ' ')
-    .replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi, ' ')
+  return stripStyleBlocks(stripScriptBlocks(body))
     .replace(/<!--([\s\S]*?)-->/g, ' ')
     .replace(/<[^>]+>/g, ' ')
     .replace(/&(?:nbsp|amp|lt|gt|quot|#\d+);/gi, ' ')
@@ -109,7 +118,7 @@ function auditHtmlPage(page) {
 
   // Auditar IDs solo en el marcado real: una asignación JavaScript como
   // `group.id = '...'` no crea un segundo nodo simultáneo en el DOM.
-  const markupWithoutScripts = html.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, ' ');
+  const markupWithoutScripts = stripScriptBlocks(html);
   const ids = [...markupWithoutScripts.matchAll(/\bid\s*=\s*(["'])(.*?)\1/gi)]
     .map(match => match[2])
     .filter(id => id && !/\$\{|\{\{|<%/.test(id));
@@ -186,12 +195,12 @@ if (
   fail('auditor', 'el analizador de referencias confunde atributos data-* con src/href reales.');
 }
 
-// Tripwire del filtrado de scripts: HTML permite espacios antes del > en el
-// cierre, y ese contenido JavaScript nunca debe contaminar la auditoría de IDs.
-const scriptFilteringProbe = '<body><script>const x = "id=\\"duplicado\\"";</script ><main id="real">Contenido real</main></body>';
+// Tripwire del filtrado: incluso un cierre extraño debe quedar fuera del
+// contenido auditable, evitando que texto JavaScript genere falsos IDs.
+const scriptFilteringProbe = '<body><script>const x = "id=\\"duplicado\\"";</script\t\n bar><main id="real">Contenido real</main></body>';
 if (meaningfulBodyLength(scriptFilteringProbe) !== 'Contenido real'.length ||
-    /duplicado/.test(scriptFilteringProbe.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, ' '))) {
-  fail('auditor', 'el filtrado de bloques script no admite cierres HTML con espacios.');
+    /duplicado/.test(stripScriptBlocks(scriptFilteringProbe))) {
+  fail('auditor', 'el filtrado de bloques script no tolera cierres HTML extraños.');
 }
 
 // Tripwire explícito de URLs limpias: evita que una futura regresión del
