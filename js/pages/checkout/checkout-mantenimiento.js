@@ -17,8 +17,7 @@ if (CHECKOUT_RE.test(location.pathname || '') && !window.TintinCheckoutMaintenan
   }
 
   function normalizeMetadata() {
-    const canonical = new URL('checkout.html', location.href);
-    canonical.search = '';
+    const canonical = new URL('/checkout', location.origin);
     document.querySelector('link[rel="canonical"]')?.setAttribute('href', canonical.href);
   }
 

@@ -43,8 +43,7 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
       }
       history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
     }
-    const canonical = new URL('login.html', location.href);
-    canonical.search = '';
+    const canonical = new URL('/login', location.origin);
     document.querySelector('link[rel="canonical"]')?.setAttribute('href', canonical.href);
   }
 

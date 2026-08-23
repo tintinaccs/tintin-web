@@ -50,7 +50,10 @@ function findTarget(root, item) {
     return null;
   }
   const index = item.index == null ? 0 : item.index;
-  return matches[index] || null;
+  const target = matches[index] || null;
+  if (target) return target;
+  if (item.selector === '.tt-footer-wa-text') return root.querySelector('.tt-footer-wa');
+  return null;
 }
 
 function appendPlainLines(element, value) {
@@ -78,7 +81,8 @@ function applyText(element, value, item) {
   const safe = sanitizeContentText(value, item.maxLength);
   const preserveChildren =
     element.id === 'form-success' ||
-    element.classList.contains('tt-contact-wa-link');
+    element.classList.contains('tt-contact-wa-link') ||
+    element.classList.contains('tt-footer-wa');
 
   if (preserveChildren) {
     replaceLabelPreservingChildren(element, safe);

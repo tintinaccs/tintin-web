@@ -689,13 +689,13 @@ function populateCitiesForDepartamento(dep, keepCityIfPresent) {
 
   select.disabled = false;
   select.innerHTML = '<option value="">— Seleccioná tu ciudad —</option>';
-  // El retiro en tienda es una ciudad más (la única sin costo de envío),
+  // El retiro coordinado en San Lorenzo es una opción más (la única sin costo de envío),
   // no un departamento aparte — solo existe en Central, que es donde está
   // San Lorenzo, y va arriba de todo el resto de las opciones de esa zona.
   if (dep === 'Central') {
     const retiroOpt = document.createElement('option');
     retiroOpt.value = RETIRO_VALUE;
-    retiroOpt.textContent = '🏪 Retiro en tienda';
+    retiroOpt.textContent = '📍 Retiro en San Lorenzo';
     select.appendChild(retiroOpt);
   }
   if (delivery.length) {
