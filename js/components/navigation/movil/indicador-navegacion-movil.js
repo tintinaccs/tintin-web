@@ -5,8 +5,11 @@
   nav.dataset.ttMobileReady = '1';
 
   const items = [...nav.querySelectorAll('.tt-tabbar-btn')];
+  const visible = item => Boolean(
+    item && !item.hidden && item.getClientRects().length && getComputedStyle(item).visibility !== 'hidden'
+  );
   const locate = item => {
-    if (!item) {
+    if (!visible(item)) {
       nav.classList.remove('tt-mobile-nav-ready');
       return;
     }
@@ -19,18 +22,21 @@
   };
 
   const current = () =>
-    items.find(item => item.getAttribute('aria-expanded') === 'true') ||
-    items.find(item => item.classList.contains('active')) ||
+    items.find(item => visible(item) && item.getAttribute('aria-expanded') === 'true') ||
+    items.find(item => visible(item) && item.classList.contains('active')) ||
     null;
   const sync = () => locate(current());
   const observer = new MutationObserver(sync);
   items.forEach(item => observer.observe(item, {
     attributes: true,
-    attributeFilter: ['class', 'aria-expanded', 'aria-current'],
+    attributeFilter: ['class', 'aria-expanded', 'aria-current', 'hidden'],
   }));
 
   const resizeObserver = new ResizeObserver(sync);
   resizeObserver.observe(nav);
   addEventListener('orientationchange', sync, { passive: true });
+  addEventListener('tintin:global-layout-ready', sync);
+  addEventListener('tintin:auth-session-resolved', sync);
+  addEventListener('tintin:auth-nav-updated', sync);
   requestAnimationFrame(sync);
 })();
