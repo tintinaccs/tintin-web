@@ -1,16 +1,27 @@
 import { versionedSiteAsset } from './configuracion.js';
 
+const HEADER_RESPONSIVE_VERSION = 'tintin-20260824-header-responsive-sync-1';
+const NAVIGATION_SHARED_VERSION = 'tintin-20260818-header-dropdowns-solid-3';
+const MOBILE_SOLID_VERSION = 'tintin-20260817-cls-desktop-stable-3';
+const NOTIFICATIONS_VERSION = 'tintin-20260817-notifications-opaque-1';
+
 const NAVIGATION_STYLES = Object.freeze([
-  ['tt-navigation-desktop-css', 'css/components/navigation/escritorio/encabezado-escritorio.css'],
-  ['tt-navigation-tablet-css', 'css/components/navigation/tableta/encabezado-tableta.css'],
-  ['tt-navigation-mobile-css', 'css/components/navigation/movil/encabezado-movil.css'],
-  ['tt-navigation-mobile-solid-css', 'css/components/navigation/movil/fondos-solidos-movil.css'],
-  ['tt-navigation-notifications-css', 'css/components/notifications/notificaciones-sociales.css'],
-  ['tt-navigation-shared-css', 'css/components/navigation/compartido/transiciones-navegacion.css'],
-  ['tt-surface-controller-css', 'css/components/navigation/compartido/paneles.css'],
-  ['tt-navigation-notification-surface-css', 'css/components/navigation/compartido/superficie-notificaciones.css'],
-  ['tt-navigation-search-css', 'css/components/navigation/compartido/busqueda.css'],
+  ['tt-navigation-desktop-css', 'css/components/navigation/escritorio/encabezado-escritorio.css', HEADER_RESPONSIVE_VERSION],
+  ['tt-navigation-tablet-css', 'css/components/navigation/tableta/encabezado-tableta.css', HEADER_RESPONSIVE_VERSION],
+  ['tt-navigation-mobile-css', 'css/components/navigation/movil/encabezado-movil.css', HEADER_RESPONSIVE_VERSION],
+  ['tt-navigation-mobile-solid-css', 'css/components/navigation/movil/fondos-solidos-movil.css', MOBILE_SOLID_VERSION],
+  ['tt-navigation-notifications-css', 'css/components/notifications/notificaciones-sociales.css', NOTIFICATIONS_VERSION],
+  ['tt-navigation-shared-css', 'css/components/navigation/compartido/transiciones-navegacion.css', NAVIGATION_SHARED_VERSION],
+  ['tt-surface-controller-css', 'css/components/navigation/compartido/paneles.css', NAVIGATION_SHARED_VERSION],
+  ['tt-navigation-notification-surface-css', 'css/components/navigation/compartido/superficie-notificaciones.css', HEADER_RESPONSIVE_VERSION],
+  ['tt-navigation-search-css', 'css/components/navigation/compartido/busqueda.css', NAVIGATION_SHARED_VERSION],
 ]);
+
+function versionedStyleHref(path, version) {
+  const url = new URL(versionedSiteAsset(path));
+  url.searchParams.set('v', version);
+  return url.href;
+}
 
 function stylesheetForPath(path) {
   const expectedPath = new URL(versionedSiteAsset(path)).pathname;
@@ -53,16 +64,13 @@ function waitForStylesheet(link, ceilingMs = 2200) {
 }
 
 function reloadStylesheet(link, href) {
-  // Una hoja ya cargada tiene link.sheet. Al cambiar su href necesitamos
-  // esperar un NUEVO evento load/error; no sirve reutilizar el estado de la
-  // versión anterior porque haría visible el shell antes de completar la hoja.
   const ready = awaitStylesheetEvent(link);
   link.href = href;
   return ready;
 }
 
-function ensureStylesheet(id, path) {
-  const expectedHref = versionedSiteAsset(path);
+function ensureStylesheet(id, path, version) {
+  const expectedHref = versionedStyleHref(path, version);
   const existing = document.getElementById(id) || stylesheetForPath(path);
   if (existing) {
     markStylesheet(existing, id);
@@ -80,7 +88,7 @@ function ensureStylesheet(id, path) {
 
 export function ensureNavigationAssets() {
   document.documentElement.classList.add('tt-navigation-styles-loading');
-  const pending = NAVIGATION_STYLES.map(([id, path]) => ensureStylesheet(id, path));
+  const pending = NAVIGATION_STYLES.map(([id, path, version]) => ensureStylesheet(id, path, version));
   return Promise.all(pending).finally(() => {
     document.documentElement.classList.remove('tt-navigation-styles-loading');
     document.documentElement.classList.add('tt-navigation-styles-ready');
