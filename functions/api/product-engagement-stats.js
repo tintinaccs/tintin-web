@@ -25,6 +25,44 @@ function normalizeReviewStats(raw = {}) {
   return { reviewCount: count, average };
 }
 
+export function buildPublicProductEngagementStats(likeDocuments = [], reviewStatDocuments = []) {
+  const byProduct = new Map();
+
+  for (const document of reviewStatDocuments) {
+    const data = decode(document);
+    const productId = safeProductId(data?.productId || data?.id);
+    if (!productId) continue;
+    byProduct.set(productId, {
+      productId,
+      likeCount: 0,
+      ...normalizeReviewStats(data),
+    });
+  }
+
+  for (const document of likeDocuments) {
+    const data = decode(document);
+    const productId = safeProductId(data?.productId);
+    if (!productId) continue;
+    const current = byProduct.get(productId) || {
+      productId,
+      likeCount: 0,
+      reviewCount: 0,
+      average: 0,
+    };
+    current.likeCount += 1;
+    byProduct.set(productId, current);
+  }
+
+  return [...byProduct.values()]
+    .sort((a, b) => a.productId.localeCompare(b.productId))
+    .map(item => ({
+      productId: item.productId,
+      likeCount: Math.max(0, Number(item.likeCount) || 0),
+      reviewCount: Math.max(0, Number(item.reviewCount) || 0),
+      average: Math.max(0, Math.min(5, Number(item.average) || 0)),
+    }));
+}
+
 export async function onRequest(context) {
   const { request, env } = context;
   const origin = request.headers.get('origin') || '';
@@ -41,42 +79,7 @@ export async function onRequest(context) {
       firestoreAdminListAll(env, 'likeRecords', MAX_RECORDS),
       firestoreAdminListAll(env, 'productReviewStats', MAX_RECORDS),
     ]);
-
-    const byProduct = new Map();
-
-    for (const document of reviewStatDocuments) {
-      const data = decode(document);
-      const productId = safeProductId(data?.productId || data?.id);
-      if (!productId) continue;
-      byProduct.set(productId, {
-        productId,
-        likeCount: 0,
-        ...normalizeReviewStats(data),
-      });
-    }
-
-    for (const document of likeDocuments) {
-      const data = decode(document);
-      const productId = safeProductId(data?.productId);
-      if (!productId) continue;
-      const current = byProduct.get(productId) || {
-        productId,
-        likeCount: 0,
-        reviewCount: 0,
-        average: 0,
-      };
-      current.likeCount += 1;
-      byProduct.set(productId, current);
-    }
-
-    const stats = [...byProduct.values()]
-      .sort((a, b) => a.productId.localeCompare(b.productId))
-      .map(item => ({
-        productId: item.productId,
-        likeCount: Math.max(0, Number(item.likeCount) || 0),
-        reviewCount: Math.max(0, Number(item.reviewCount) || 0),
-        average: Math.max(0, Math.min(5, Number(item.average) || 0)),
-      }));
+    const stats = buildPublicProductEngagementStats(likeDocuments, reviewStatDocuments);
 
     if (request.method === 'HEAD') {
       return new Response(null, { status: 200, headers: { 'cache-control': 'private, no-store, max-age=0' } });
