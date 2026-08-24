@@ -26,6 +26,8 @@ const mobileSolidStyles = read('css/components/navigation/movil/fondos-solidos-m
 const notificationStyles = read('css/components/notifications/notificaciones-sociales.css');
 const navigationAssets = read('js/components/navigation/compartido/recursos-navegacion.js');
 const sharedRuntime = read('js/components/navigation/compartido/carga-navegacion.js');
+const mobileCompact = read('js/components/navigation/movil/navegacion-compacta-movil.js');
+const mobileIndicator = read('js/components/navigation/movil/indicador-navegacion-movil.js');
 const styles = [
   desktopStyles,
   tabletStyles,
@@ -77,12 +79,30 @@ check(
   'el shell global no precarga la geometría/estilos de notificaciones'
 );
 check(
+  navigationAssets.includes('stylesheetForPath(path)') && navigationAssets.includes('data.ttSocialNotifications'),
+  'el cargador global no reutiliza hojas existentes o no marca el CSS de notificaciones'
+);
+check(
   mobileSolidStyles.includes('@media (max-width: 767px)') && !mobileSolidStyles.includes('@media (max-width: 768px)'),
   'fondos sólidos móviles no respetan el corte exacto 767/768'
 );
 check(
   notificationStyles.includes('grid-template-columns: repeat(6, minmax(0, 1fr))'),
   'mobile no reserva seis columnas cuando Alertas está visible'
+);
+check(
+  mobileStyles.includes('data-tt-mobile-home="hidden"') &&
+    mobileStyles.includes('grid-template-columns:repeat(5,minmax(0,1fr)) !important'),
+  'mobile no recompone cinco columnas cuando Inicio está oculto y Alertas visible'
+);
+check(
+  mobileCompact.includes('.tt-notifications-drawer.open'),
+  'la barra compacta mobile no reconoce Notificaciones como superficie abierta'
+);
+check(
+  mobileIndicator.includes("attributeFilter: ['class', 'aria-expanded', 'aria-current', 'hidden']") &&
+    mobileIndicator.includes('!item.hidden'),
+  'el indicador mobile no se resincroniza cuando Auth muestra u oculta Alertas'
 );
 check(
   sharedRuntime.includes('void loadAuthRuntime()') && !sharedRuntime.includes('tt_session_started_at'),
@@ -98,6 +118,10 @@ check(
   desktopStyles.includes('#tt-header-desktop-tablet #tt-nav-desktop-tablet #btn-tienda.active') &&
     desktopStyles.includes('border-color: transparent !important;'),
   'desktop no neutraliza el segundo marco heredado de Tienda'
+);
+check(
+  desktopStyles.includes('grid-template-columns: 196px minmax(0, 1fr) 196px !important'),
+  'desktop compacto no reserva espacio simétrico para las cuatro acciones autenticadas'
 );
 check(
   tabletStyles.includes('grid-template-columns: minmax(210px, 1fr) auto minmax(210px, 1fr)') &&
