@@ -8,11 +8,12 @@ const NAVIGATION_STYLES = Object.freeze([
   ['tt-navigation-notifications-css', 'css/components/notifications/notificaciones-sociales.css'],
   ['tt-navigation-shared-css', 'css/components/navigation/compartido/transiciones-navegacion.css'],
   ['tt-surface-controller-css', 'css/components/navigation/compartido/paneles.css'],
+  ['tt-navigation-notification-surface-css', 'css/components/navigation/compartido/superficie-notificaciones.css'],
   ['tt-navigation-search-css', 'css/components/navigation/compartido/busqueda.css'],
 ]);
 
 function stylesheetForPath(path) {
-  const expectedPath = new URL(path, window.location.href).pathname;
+  const expectedPath = new URL(versionedSiteAsset(path)).pathname;
   return [...document.querySelectorAll('link[rel~="stylesheet"][href]')].find(link => {
     try {
       return new URL(link.href, window.location.href).pathname === expectedPath;
@@ -54,33 +55,17 @@ function ensureStylesheet(id, path) {
     markStylesheet(existing, id);
     if (existing.href === expectedHref) return waitForStylesheet(existing);
 
-    return new Promise(resolve => {
-      let settled = false;
-      let timer = 0;
-      const finish = () => {
-        if (settled) return;
-        settled = true;
-        if (timer) window.clearTimeout(timer);
-        existing.removeEventListener('load', finish);
-        existing.removeEventListener('error', finish);
-        resolve(existing);
-      };
-      existing.addEventListener('load', finish, { once: true });
-      existing.addEventListener('error', finish, { once: true });
-      timer = window.setTimeout(finish, 2200);
-      existing.href = expectedHref;
-    });
+    const ready = waitForStylesheet(existing);
+    existing.href = expectedHref;
+    return ready;
   }
 
-  return new Promise(resolve => {
-    const link = markStylesheet(document.createElement('link'), id);
-    link.rel = 'stylesheet';
-    link.href = expectedHref;
-    const finish = () => resolve(link);
-    link.addEventListener('load', finish, { once: true });
-    link.addEventListener('error', finish, { once: true });
-    document.head.appendChild(link);
-  });
+  const link = markStylesheet(document.createElement('link'), id);
+  link.rel = 'stylesheet';
+  link.href = expectedHref;
+  const ready = waitForStylesheet(link);
+  document.head.appendChild(link);
+  return ready;
 }
 
 export function ensureNavigationAssets() {
