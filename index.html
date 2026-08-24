@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1"></script>
-  <script src="js/cargador-pagina.js?v=tintin-20260821-hero-authoritative-1"></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260824-hero-first-paint-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20260821-accounts-phase-a-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20260824-header-logo-fallback-1" defer></script>
   <!-- La señal de "página lista" (window.ttPageReady) ya NO se dispara desde
        acá. cargador-pagina.js caía al fallback window.load si no se le avisaba
        — que espera a TODAS las imágenes de la página completa, no solo al
@@ -48,10 +48,10 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260821-accounts-phase-a-1">
-  <link rel="preload" as="style" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260818-header-dropdowns-solid-3">
-  <link rel="preload" as="style" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260818-header-dropdowns-solid-3">
-  <link rel="preload" as="style" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260818-header-dropdowns-solid-3">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260824-header-logo-fallback-1">
+  <link rel="preload" as="style" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260824-header-responsive-sync-1">
+  <link rel="preload" as="style" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260824-header-responsive-sync-1">
+  <link rel="preload" as="style" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" href="css/components/navigation/compartido/transiciones-navegacion.css?v=tintin-20260818-header-dropdowns-solid-3">
   <link rel="preload" as="style" href="css/components/navigation/compartido/paneles.css?v=tintin-20260818-header-dropdowns-solid-3">
   <link rel="preload" as="style" href="css/components/navigation/compartido/busqueda.css?v=tintin-20260818-header-dropdowns-solid-3">
@@ -96,16 +96,19 @@
 ══════════════════════════════════════ -->
 <section class="tt-hero" id="hero" data-tt-editable="index" data-tt-section="hero">
 
-  <!-- Cloudinary (subida desde Super Admin → Imágenes) es la única fuente del
-       hero. El medio permanece oculto hasta que Firestore confirma la URL
-       publicada y la imagen termina de cargar: nunca se usa un banner local,
-       un placeholder ni una versión anterior guardada en el navegador. -->
-  <div class="tt-hero-media tt-hero-pending" id="tt-hero-media">
+  <!-- Cloudinary (subida desde Super Admin → Imágenes) es la fuente dinámica
+       del hero. Se precarga la última portada publicada para que el primer
+       paint pase del loader directamente al banner; Firestore la reemplaza
+       cuando confirma una versión nueva. -->
+  <div class="tt-hero-media" id="tt-hero-media">
     <picture>
+      <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784313313/tintin_media_d4980e04509c435681c1bb5e23dcbfc9_full.webp">
+      <source media="(max-width: 1120px)" srcset="https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784315346/tintin_media_9cef2bfbeb1149cd908fc7b1ed81ea1a_full.webp">
       <img
         id="tt-hero-img"
         class="tt-hero-img"
         data-dynamic-src="true"
+        src="https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784309046/tintin_media_6ea5859c12554fa9b576a84de5ec53c1_full.webp"
         alt="Tintin Accesorios y Relojes — boutique femenina Paraguay"
         width="1920"
         height="1080"
