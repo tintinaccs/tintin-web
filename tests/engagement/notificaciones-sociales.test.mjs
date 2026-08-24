@@ -98,7 +98,11 @@ test('la campana pública evita Firestore para visitas livianas y se hidrata con
   assert.match(navigationRuntime, /function attachNotificationsDemand\(\)/);
   assert.match(navigationRuntime, /\[data-nav-action="notifications"\],#tabbar-notifications/);
   assert.match(navigationRuntime, /tintin:auth-nav-updated/);
-  assert.match(navigationRuntime, /hasActiveSessionHint\(\)/);
+  assert.match(navigationRuntime, /void loadAuthRuntime\(\)/);
+  assert.match(navigationRuntime, /const authenticated = Boolean\(event\.detail\?\.authenticated\)/);
+  assert.match(navigationRuntime, /void loadNotificationsRuntime\(\)\s*\.then\(\(\) => setNotificationTriggersVisible\(true\)\)/s);
+  assert.match(navigationRuntime, /if \(!authenticated\) \{\s*setNotificationTriggersVisible\(false\)/s);
+  assert.doesNotMatch(navigationRuntime, /tt_session_started_at|hasActiveSessionHint\(\)/);
   assert.doesNotMatch(navigationRuntime, /attachProductsDemand\(\);\s*loadNavigationBehaviors\(\);\s*void loadNotificationsRuntime\(\)/);
   assert.match(sharedIcons, /bell:\s*'<path/);
   assert.match(desktopHeader, /svgIcon\(UI_ICONS\.bell/);

@@ -142,5 +142,25 @@ jobs:
             canonical-viewports.log \
             phase5-performance.log
           rm -rf artifacts/canonical-viewports
-          git restore diagnostic-manifest.json
+          # build:pages sincroniza deliberadamente el shell público in-place para
+          # validar exactamente el artefacto que luego publica Pages. Esos HTML,
+          # igual que el manifiesto diagnóstico, son salidas generadas esperadas
+          # dentro del runner y no deben convertir el guard de limpieza en un rojo.
+          git restore -- \
+            diagnostic-manifest.json \
+            404.html \
+            about.html \
+            cambios-devoluciones.html \
+            catalogo.html \
+            checkout.html \
+            collections.html \
+            contact.html \
+            envios.html \
+            index.html \
+            login.html \
+            perfil.html \
+            preguntas-frecuentes.html \
+            privacidad.html \
+            product.html \
+            terminos.html
           git diff --exit-code
