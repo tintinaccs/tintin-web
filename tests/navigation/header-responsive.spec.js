@@ -10,7 +10,30 @@ async function openPublicPage(page, viewport, path = '/index.html') {
   });
 }
 
-test('mobile conserva etiquetas y se compacta como Instagram al desplazarse', async ({ page }) => {
+async function expectNoHorizontalOverlap(locator) {
+  const boxes = await locator.evaluateAll(nodes => nodes
+    .filter(node => {
+      const style = getComputedStyle(node);
+      const rect = node.getBoundingClientRect();
+      return !node.hidden && style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
+    })
+    .map(node => {
+      const rect = node.getBoundingClientRect();
+      return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom };
+    }));
+
+  for (let i = 0; i < boxes.length; i += 1) {
+    for (let j = i + 1; j < boxes.length; j += 1) {
+      const a = boxes[i];
+      const b = boxes[j];
+      const sameRow = a.top < b.bottom - 2 && a.bottom > b.top + 2;
+      if (!sameRow) continue;
+      expect(Math.min(a.right, b.right) - Math.max(a.left, b.left)).toBeLessThanOrEqual(2);
+    }
+  }
+}
+
+test('mobile conserva etiquetas, admite Alertas y se compacta sin solaparse', async ({ page }) => {
   await openPublicPage(page, { width: 390, height: 844 });
 
   const nav = page.locator('#tt-tabbar');
@@ -26,12 +49,21 @@ test('mobile conserva etiquetas y se compacta como Instagram al desplazarse', as
   await expect(visibleButtons.nth(1)).toHaveAttribute('aria-label', 'Buscar');
   await expect(visibleButtons.nth(2)).toHaveAttribute('aria-label', 'Tienda');
 
+  // Simula el estado autenticado más exigente: aparecen las seis acciones.
+  await nav.locator('#tabbar-notifications').evaluate(node => { node.hidden = false; });
+  await expect(visibleButtons).toHaveCount(6);
+  const columnCount = await nav.evaluate(node => getComputedStyle(node).gridTemplateColumns.split(/\s+/).filter(Boolean).length);
+  expect(columnCount).toBe(6);
+  await expect(nav.locator('#tabbar-notifications')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  await expectNoHorizontalOverlap(nav.locator('.tt-tabbar-btn:not([hidden])'));
+
   const expandedWidth = await nav.evaluate(node => node.getBoundingClientRect().width);
   await page.evaluate(() => window.scrollTo(0, 560));
   await expect(nav).toHaveClass(/tt-tabbar-compact/);
   const compactWidth = await nav.evaluate(node => node.getBoundingClientRect().width);
   expect(compactWidth).toBeLessThan(expandedWidth);
   await expect(visibleButtons.first()).toHaveCSS('min-height', '48px');
+  await expectNoHorizontalOverlap(nav.locator('.tt-tabbar-btn:not([hidden])'));
 
   await page.evaluate(() => window.scrollTo(0, 0));
   await expect(nav).not.toHaveClass(/tt-tabbar-compact/);
@@ -45,7 +77,7 @@ test('mobile conserva etiquetas y se compacta como Instagram al desplazarse', as
   await expect(page.locator('#btn-close-sheet')).toBeFocused();
 });
 
-test('tablet tiene header exclusivo, marca completa y menú navegable', async ({ page }) => {
+test('tablet reserva espacio para logo y cuatro acciones sin colisiones', async ({ page }) => {
   await openPublicPage(page, { width: 768, height: 1024 });
 
   await expect(page.locator('#tt-header-tablet')).toBeVisible();
@@ -60,6 +92,28 @@ test('tablet tiene header exclusivo, marca completa y menú navegable', async ({
     expect(box.height).toBeGreaterThanOrEqual(44);
   }
 
+  await page.locator('#btn-notifications-tablet').evaluate(node => { node.hidden = false; });
+  await expect(page.locator('.tt-tablet-actions > button:not([hidden])')).toHaveCount(4);
+  await expect(page.locator('#btn-notifications-tablet')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+
+  const tabletGeometry = await page.evaluate(() => {
+    const menu = document.getElementById('btn-menu-tablet').getBoundingClientRect();
+    const logo = document.querySelector('.tt-tablet-logo-link').getBoundingClientRect();
+    const actions = document.querySelector('.tt-tablet-actions').getBoundingClientRect();
+    const header = document.getElementById('tt-header-tablet');
+    return {
+      menuRight: menu.right,
+      logoLeft: logo.left,
+      logoRight: logo.right,
+      actionsLeft: actions.left,
+      scrollWidth: header.scrollWidth,
+      clientWidth: header.clientWidth,
+    };
+  });
+  expect(tabletGeometry.menuRight).toBeLessThanOrEqual(tabletGeometry.logoLeft);
+  expect(tabletGeometry.logoRight).toBeLessThanOrEqual(tabletGeometry.actionsLeft);
+  expect(tabletGeometry.scrollWidth).toBeLessThanOrEqual(tabletGeometry.clientWidth + 1);
+
   await page.locator('#btn-menu-tablet').click();
   await expect(page.locator('#tt-tablet-menu')).toHaveAttribute('aria-hidden', 'false');
   await expect(page.locator('#btn-tablet-close')).toBeFocused();
@@ -71,7 +125,7 @@ test('tablet tiene header exclusivo, marca completa y menú navegable', async ({
   await expect(page.locator('#tt-tablet-menu')).toHaveAttribute('aria-hidden', 'true');
 });
 
-test('desktop conserva navegación, marca, submenú e indexación interna', async ({ page }) => {
+test('desktop conserva un solo indicador para Tienda y acciones sólidas', async ({ page }) => {
   await openPublicPage(page, { width: 1440, height: 900 });
 
   const header = page.locator('#tt-header-desktop-tablet');
@@ -81,7 +135,23 @@ test('desktop conserva navegación, marca, submenú e indexación interna', asyn
   await expect(header.locator('.tt-logo-img')).toBeVisible();
   await expect(header.locator('[data-desktop-nav-item]')).toHaveCount(4);
 
+  await page.locator('#btn-notifications').evaluate(node => { node.hidden = false; });
+  await expect(page.locator('#btn-notifications')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  await expectNoHorizontalOverlap(header.locator('.tt-nav-desktop [data-desktop-nav-item],.tt-header-actions > button:not([hidden])'));
+
   await page.locator('#btn-tienda').click();
+  const tiendaStyle = await page.locator('#btn-tienda').evaluate(node => {
+    const style = getComputedStyle(node);
+    return {
+      backgroundColor: style.backgroundColor,
+      borderTopColor: style.borderTopColor,
+      boxShadow: style.boxShadow,
+    };
+  });
+  expect(tiendaStyle.backgroundColor).toBe('rgba(0, 0, 0, 0)');
+  expect(tiendaStyle.borderTopColor).toBe('rgba(0, 0, 0, 0)');
+  expect(tiendaStyle.boxShadow).toBe('none');
+
   const dropdown = page.locator('#tt-tienda-dropdown-panel');
   await expect(dropdown).toHaveAttribute('aria-hidden', 'false');
   await expect(dropdown.locator('a[href^="/catalogo?cat="], a[href^="catalogo.html?cat="]')).toHaveCount(12);
