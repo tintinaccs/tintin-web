@@ -7,10 +7,15 @@
   nav.dataset.ttDesktopReady = '1';
 
   const items = [...nav.querySelectorAll('[data-desktop-nav-item]')];
-  const activeItem = () => items.find(item => item.classList.contains('active') || item.getAttribute('aria-current') === 'page') || null;
+  const visible = item => Boolean(
+    item && !item.hidden && item.getClientRects().length && getComputedStyle(item).visibility !== 'hidden'
+  );
+  const activeItem = () => items.find(item =>
+    visible(item) && (item.classList.contains('active') || item.getAttribute('aria-current') === 'page')
+  ) || null;
 
   const move = item => {
-    if (!item) {
+    if (!visible(item)) {
       pill.classList.remove('is-ready');
       return;
     }
@@ -33,5 +38,11 @@
 
   const observer = new ResizeObserver(restore);
   observer.observe(nav);
+  const stateObserver = new MutationObserver(restore);
+  items.forEach(item => stateObserver.observe(item, {
+    attributes: true,
+    attributeFilter: ['class', 'aria-current', 'hidden'],
+  }));
+  addEventListener('tintin:global-layout-ready', restore);
   requestAnimationFrame(restore);
 })();
