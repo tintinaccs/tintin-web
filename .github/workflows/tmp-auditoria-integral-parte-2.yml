@@ -1,0 +1,259 @@
+name: TEMP — Auditoría integral parte 2
+
+on:
+  push:
+    branches:
+      - fix/auditoria-integral-parte-2-2026-08-24
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: fix/auditoria-integral-parte-2-2026-08-24
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Corregir incongruencias confirmadas
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def replace_exact(path, old, new, count=1):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              actual = text.count(old)
+              if actual != count:
+                  raise SystemExit(f'{path}: esperado {count}, encontradas {actual}: {old[:120]!r}')
+              p.write_text(text.replace(old, new), encoding='utf-8')
+              print(f'OK {path}')
+
+          # Rutas públicas limpias en superficies dinámicas.
+          replace_exact(
+              'catalogo.html',
+              "    const productHref = `product.html?id=${encodeURIComponent(String(p.id))}`;",
+              "    const productHref = `/product?id=${encodeURIComponent(String(p.id))}`;"
+          )
+
+          replace_exact(
+              'js/core/store/editor-visual-runtime.js',
+              """function safeHref(value) {
+  const href = String(value || '').trim();
+  if (/^(?:index|about|nosotros|catalogo|collections|product|checkout|login|perfil|contact|envios|preguntas-frecuentes|cambios-devoluciones|terminos|privacidad)\\.html(?:[?#][A-Za-z0-9_=&%.-]*)?$/i.test(href)) return href;
+  if (/^https:\\/\\//i.test(href)) return href;
+  return 'catalogo.html';
+}""",
+              """function safeHref(value) {
+  const href = String(value || '').trim();
+  if (/^https:\\/\\//i.test(href)) return href;
+  const match = href.match(/^\\/?(index|about|nosotros|catalogo|collections|product|checkout|login|perfil|contact|envios|preguntas-frecuentes|cambios-devoluciones|terminos|privacidad)(?:\\.html)?([?#][A-Za-z0-9_=&%.,+~:@\\/-]*)?$/i);
+  if (!match) return '/catalogo';
+  const page = match[1].toLowerCase();
+  const suffix = match[2] || '';
+  const route = page === 'index' ? '/' : page === 'nosotros' ? '/about' : `/${page}`;
+  return `${route}${suffix}`;
+}"""
+          )
+          replace_exact(
+              'js/core/store/editor-visual-runtime.js',
+              "    const link = el('a', 'tt-visual-product-card'); link.href = `product.html?id=${encodeURIComponent(String(product.id || ''))}`;",
+              "    const link = el('a', 'tt-visual-product-card'); link.href = `/product?id=${encodeURIComponent(String(product.id || ''))}`;"
+          )
+          replace_exact(
+              'js/core/store/editor-visual-runtime.js',
+              "    const link = el('a', '', label); link.href = label === 'Ver colecciones' ? 'collections.html' : `/catalogo?cat=${encodeURIComponent(label)}`; root.appendChild(link);",
+              "    const link = el('a', '', label); link.href = label === 'Ver colecciones' ? '/collections' : `/catalogo?cat=${encodeURIComponent(label)}`; root.appendChild(link);"
+          )
+
+          # Canonical/OG dinámicos deben coincidir con las URLs públicas limpias.
+          replace_exact(
+              'js/pages/catalog/mantenimiento-catalogo.js',
+              "    const page = `${base}catalogo.html`;",
+              "    const page = `${base}catalogo`;"
+          )
+          replace_exact(
+              'js/pages/collections/mantenimiento-colecciones.js',
+              "    const page = `${base}collections.html`;",
+              "    const page = `${base}collections`;"
+          )
+
+          # Envíos: HTML estático y defaults del editor deben decir lo mismo.
+          replace_exact(
+              'envios.html',
+              "      <p>Todos los pedidos se preparan en el mismo día si son realizados antes de las 11:00 hs. Pedidos posteriores se preparan al día siguiente hábil.</p>",
+              "      <p>Los pedidos se preparan según disponibilidad y horario de confirmación.</p>"
+          )
+
+          # Producto: la modalidad real no es una tienda física genérica.
+          replace_exact('product.html', '      <div class="tinben-card" data-title="Retiro disponible">', '      <div class="tinben-card" data-title="Retiro en San Lorenzo">')
+          replace_exact('product.html', '        <p class="tinben-card-title">Retiro disponible</p>', '        <p class="tinben-card-title">Retiro en San Lorenzo</p>')
+          replace_exact('product.html', '        <p class="tinben-card-text">Podés retirar tu pedido desde nuestra ubicación.</p>', '        <p class="tinben-card-text">Podés retirar tu pedido sin costo en San Lorenzo, coordinando previamente.</p>')
+
+          # Términos: los medios de pago son configurables desde el sistema.
+          replace_exact(
+              'terminos.html',
+              '      <p>Un pedido queda confirmado cuando lo enviás desde el checkout con tu cuenta verificada. Los métodos de pago disponibles (efectivo contra entrega, transferencia bancaria) se muestran en el paso de pago del checkout — pueden variar según lo que la tienda tenga habilitado en cada momento.</p>',
+              '      <p>Un pedido queda confirmado cuando lo enviás desde el checkout con tu cuenta verificada. Los métodos de pago disponibles se muestran en el paso de pago del checkout y pueden variar según lo que la tienda tenga habilitado en cada momento.</p>'
+          )
+
+          # Inicio: evitar cutoffs fijos, métodos fijos y afirmaciones absolutas sobre materiales.
+          for path in ['index.html', 'js/core/store/esquema-contenido.js']:
+              replace_exact(path, 'Envío mismo día', 'Entregas coordinadas')
+              replace_exact(path, 'Pedidos antes de las 11 hs, Zona Central', 'Según zona, método y disponibilidad')
+              replace_exact(path, 'No se oxida ni decolora', 'Resistente y pensado para uso diario')
+              replace_exact(path, 'Transferencia o efectivo', 'Métodos disponibles en checkout')
+
+          # Nosotros: el HTML publicado debe coincidir con el default editable y no congelar un cutoff operativo.
+          replace_exact(
+              'about.html',
+              '          Trabajamos con envío el mismo día para pedidos antes de las 11 hs en zona central, y hacemos envíos a todo el país.',
+              '          Realizamos envíos en Zona Central y a todo el país.'
+          )
+
+          # Documentación runtime del origen oficial actual, manteniendo compatibilidad con hosts históricos.
+          replace_exact(
+              'js/core/firebase/origen-funciones.js',
+              '''// El sitio se publica en GitHub Pages (ver robots.txt, sitemap.xml y los
+// canonical de cada página), pero las funciones /api/* (Cloudinary, geo,
+// email) corren en Cloudflare Pages. Un fetch a una ruta relativa como
+// "/api/order-email" funciona en Cloudflare (mismo origen) pero da 404 en
+// github.io o netlify.app. Este módulo centraliza esa detección para que
+// cada llamador no tenga que reinventarla (y olvidarla, como pasaba antes).''',
+              '''// El sitio y las funciones /api/* se publican oficialmente en Cloudflare
+// Pages. Los dominios históricos de GitHub Pages/Netlify pueden aparecer en
+// previews o enlaces antiguos; allí una ruta relativa como /api/order-email
+// no existe y debe usar el origen oficial de respaldo. Este módulo centraliza
+// esa compatibilidad para que cada llamador no tenga que reinventarla.'''
+          )
+
+          # Guardas de regresión en la auditoría de contenido existente.
+          audit = Path('scripts/auditar-contenido-fase-6.js')
+          text = audit.read_text(encoding='utf-8')
+          old_files = "  orderEmail: read('functions/api/order-email.js'),\n};"
+          new_files = "  orderEmail: read('functions/api/order-email.js'),\n  catalog: read('catalogo.html'),\n  visualRuntime: read('js/core/store/editor-visual-runtime.js'),\n  catalogMaintenance: read('js/pages/catalog/mantenimiento-catalogo.js'),\n  collectionsMaintenance: read('js/pages/collections/mantenimiento-colecciones.js'),\n  functionOrigin: read('js/core/firebase/origen-funciones.js'),\n  productPage: read('product.html'),\n  terms: read('terminos.html'),\n  home: read('index.html'),\n  about: read('about.html'),\n};"
+          if text.count(old_files) != 1:
+              raise SystemExit('auditor: bloque files no encontrado de forma única')
+          text = text.replace(old_files, new_files, 1)
+          marker = "if (failures) {\n"
+          guards = r'''
+check(
+  'Catálogo y Visual Builder publican rutas limpias de producto y colecciones',
+  files.catalog.includes('const productHref = `/product?id=${encodeURIComponent(String(p.id))}`;') &&
+    files.visualRuntime.includes('link.href = `/product?id=${encodeURIComponent') &&
+    files.visualRuntime.includes("? '/collections' : `/catalogo?cat=") &&
+    files.visualRuntime.includes("if (!match) return '/catalogo';") &&
+    !files.catalog.includes('const productHref = `product.html?id=') &&
+    !files.visualRuntime.includes('link.href = `product.html?id=') &&
+    !files.visualRuntime.includes("return 'catalogo.html'"),
+  'Las superficies dinámicas no deben reintroducir aliases .html'
+);
+
+check(
+  'Canonical dinámicos de catálogo y colecciones permanecen limpios',
+  files.catalogMaintenance.includes('const page = `${base}catalogo`;') &&
+    files.collectionsMaintenance.includes('const page = `${base}collections`;') &&
+    !files.catalogMaintenance.includes('`${base}catalogo.html`') &&
+    !files.collectionsMaintenance.includes('`${base}collections.html`'),
+  'Los mantenimientos no deben sobrescribir canonical limpios'
+);
+
+check(
+  'Envíos mantiene preparación sin cutoff fijo y consistente con el esquema editable',
+  files.shipping.includes('Los pedidos se preparan según disponibilidad y horario de confirmación.') &&
+    files.schema.includes('Los pedidos se preparan según disponibilidad y horario de confirmación.') &&
+    !files.shipping.includes('antes de las 11:00 hs'),
+  'HTML y defaults de Apariencia deben expresar la misma política'
+);
+
+check(
+  'Producto identifica el retiro en San Lorenzo',
+  files.productPage.includes('data-title="Retiro en San Lorenzo"') &&
+    files.productPage.includes('Podés retirar tu pedido sin costo en San Lorenzo, coordinando previamente.'),
+  'La ficha debe coincidir con checkout y política de envíos'
+);
+
+check(
+  'Términos obtiene los métodos de pago del checkout vigente',
+  files.terms.includes('Los métodos de pago disponibles se muestran en el paso de pago del checkout') &&
+    !files.terms.includes('Los métodos de pago disponibles (efectivo contra entrega, transferencia bancaria)'),
+  'No debe quedar una lista parcial hardcodeada'
+);
+
+check(
+  'Inicio evita promesas operativas fijas y claims absolutos que el sistema no puede garantizar globalmente',
+  files.home.includes('Entregas coordinadas') &&
+    files.home.includes('Según zona, método y disponibilidad') &&
+    files.home.includes('Resistente y pensado para uso diario') &&
+    files.home.includes('Métodos disponibles en checkout') &&
+    files.schema.includes('Entregas coordinadas') &&
+    files.schema.includes('Métodos disponibles en checkout') &&
+    !files.home.includes('Pedidos antes de las 11 hs, Zona Central') &&
+    !files.home.includes('No se oxida ni decolora') &&
+    !files.home.includes('Transferencia o efectivo'),
+  'El contenido visible y sus defaults deben permanecer alineados con la operación configurable'
+);
+
+check(
+  'Nosotros no publica un cutoff distinto al default editable',
+  files.about.includes('Realizamos envíos en Zona Central y a todo el país.') &&
+    files.schema.includes('Realizamos envíos en Zona Central y a todo el país.') &&
+    !files.about.includes('pedidos antes de las 11 hs'),
+  'HTML y Apariencia deben conservar el mismo texto operativo'
+);
+
+check(
+  'Origen de funciones documenta Cloudflare Pages como publicación oficial',
+  files.functionOrigin.includes('se publican oficialmente en Cloudflare') &&
+    !files.functionOrigin.includes('El sitio se publica en GitHub Pages'),
+  'La documentación interna debe reflejar la arquitectura vigente'
+);
+
+'''
+          if text.count(marker) != 1:
+              raise SystemExit('auditor: marcador final no encontrado de forma única')
+          audit.write_text(text.replace(marker, guards + marker, 1), encoding='utf-8')
+          print('OK scripts/auditar-contenido-fase-6.js')
+          PY
+
+          # El helper nunca debe formar parte del manifiesto/fingerprint final.
+          rm -f .github/workflows/tmp-auditoria-integral-parte-2.yml
+          rm -f .github/workflows/.trigger-auditoria-integral-parte-2
+
+      - name: Regenerar artefactos oficiales y validar
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check js/core/store/editor-visual-runtime.js
+          node --check js/pages/catalog/mantenimiento-catalogo.js
+          node --check js/pages/collections/mantenimiento-colecciones.js
+          node --check js/core/firebase/origen-funciones.js
+          node --check scripts/auditar-contenido-fase-6.js
+          npm run audit:content
+          npm run cache-versioning:write
+          npm run build:pages
+          npm run audit:phase11
+          npm run audit:page-loading
+          npm run audit:secure-orders
+          git diff --check
+
+      - name: Guardar resultado validado
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "Tintin Site Audit"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "fix(site): alinear rutas, políticas y contenido residual"
+          git push origin HEAD:fix/auditoria-integral-parte-2-2026-08-24
