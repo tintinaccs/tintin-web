@@ -33,6 +33,16 @@ async function expectNoHorizontalOverlap(locator) {
   }
 }
 
+async function expectHeaderBrandHealthy(page) {
+  const shell = page.locator('#tt-header-desktop-tablet,#tt-header-tablet,#tt-tablet-menu');
+  await expect(shell.locator('.tt-img-error-label')).toHaveCount(0);
+  const broken = await shell.locator('img').evaluateAll(images => images
+    .filter(image => !image.complete || image.naturalWidth === 0)
+    .map(image => ({ alt: image.alt, src: image.currentSrc || image.src })));
+  expect(broken).toEqual([]);
+  await expect(shell.locator('img[data-tt-shared-logo]')).toHaveCount(0);
+}
+
 test('mobile conserva etiquetas, admite Alertas y se compacta sin solaparse', async ({ page }) => {
   await openPublicPage(page, { width: 390, height: 844 });
 
@@ -96,6 +106,7 @@ test('tablet reserva espacio para logo y cuatro acciones sin colisiones', async 
   await expect(page.locator('#tt-header-desktop-tablet')).toBeHidden();
   await expect(page.locator('#tt-tabbar')).toBeHidden();
   await expect(page.locator('#tt-header-tablet .tt-tablet-logo-img')).toBeVisible();
+  await expectHeaderBrandHealthy(page);
   await expect(page.locator('#btn-notifications-tablet')).toBeHidden();
 
   for (const control of await page.locator('#btn-menu-tablet,.tt-tablet-actions > button:not([hidden])').all()) {
@@ -145,6 +156,7 @@ test('desktop conserva un solo indicador para Tienda y acciones sólidas', async
   await expect(page.locator('#tt-header-tablet')).toBeHidden();
   await expect(page.locator('#tt-tabbar')).toBeHidden();
   await expect(header.locator('.tt-logo-img')).toBeVisible();
+  await expectHeaderBrandHealthy(page);
   await expect(header.locator('[data-desktop-nav-item]')).toHaveCount(4);
 
   await page.locator('#btn-notifications').evaluate(node => { node.hidden = false; });

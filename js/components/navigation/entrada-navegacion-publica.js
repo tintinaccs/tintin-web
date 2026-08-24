@@ -1,5 +1,5 @@
-import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260820-notifications-global-1';
-import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260820-notifications-global-1';
+import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260824-header-logo-fallback-1';
+import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260824-header-logo-fallback-1';
 import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20260820-notifications-global-1';
 import { renderSearchPanel } from './compartido/panel-busqueda.js';
 import { renderCartDrawer } from './compartido/panel-carrito.js';
@@ -122,6 +122,13 @@ async function waitForShellBrandImages(root = document) {
   await Promise.all(images.map(image => waitForImageReady(image)));
 }
 
+function clearSharedLogoErrorState(image) {
+  if (!(image instanceof HTMLImageElement)) return;
+  image.classList.remove('tt-img-error');
+  const label = image.nextElementSibling;
+  if (label?.classList.contains('tt-img-error-label')) label.remove();
+}
+
 function hydrateSharedLogos(root = document) {
   const images = [...root.querySelectorAll('img[data-tt-shared-logo]')];
   const source = images.find(image => image.dataset.ttSharedLogo)?.dataset.ttSharedLogo;
@@ -150,10 +157,12 @@ function hydrateSharedLogos(root = document) {
 
   return sharedLogoDataPromise.then(async value => {
     images.forEach(image => {
+      clearSharedLogoErrorState(image);
       image.src = value;
       image.removeAttribute('data-tt-shared-logo');
     });
     await Promise.all(images.map(image => waitForImageReady(image)));
+    images.forEach(clearSharedLogoErrorState);
   });
 }
 
