@@ -97,9 +97,12 @@
 <section class="tt-hero" id="hero" data-tt-editable="index" data-tt-section="hero">
 
   <!-- Cloudinary (subida desde Super Admin → Imágenes) es la única fuente del
-       hero. El medio permanece oculto hasta que Firestore confirma la URL
-       publicada y la imagen termina de cargar: nunca se usa un banner local,
-       un placeholder ni una versión anterior guardada en el navegador. -->
+       hero. El medio permanece oculto solo hasta que hay una URL real
+       disponible (caché local del navegador o snapshot de Firestore) y esa
+       imagen termina de cargar — nunca se usa un banner local ni un
+       placeholder. Si el caché local pinta primero y Firestore confirma
+       después una URL distinta, gestion-imagenes.js hace un cross-fade en
+       vez de un salto. -->
   <div class="tt-hero-media tt-hero-pending" id="tt-hero-media">
     <picture>
       <img

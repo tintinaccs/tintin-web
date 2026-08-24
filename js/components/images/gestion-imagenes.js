@@ -217,14 +217,6 @@ if (!window.TintinImagesPhase5Booted) {
     if (!image || !picture) return;
 
     ensureHeroStyle();
-    // La primera entrega de onImagesUpdate es solo el caché del navegador y
-    // puede contener un hero publicado anteriormente. No se asigna siquiera
-    // como src: se espera el snapshot autoritativo de Firestore para impedir
-    // que una imagen vieja se pinte durante un frame antes de la vigente.
-    if (!heroDataConfirmed) {
-      media?.classList.add('tt-hero-pending');
-      return;
-    }
     // Cloudinary (subido desde Super Admin → Imágenes) es la ÚNICA fuente
     // permitida para el hero: sin respaldo estático. Si no hay URL guardada,
     // no se setea ningún src — nunca debe verse una imagen distinta a la
@@ -232,6 +224,19 @@ if (!window.TintinImagesPhase5Booted) {
     const desktop = resolveSlotImage(images, 'hero_bg', 'desktop');
     const tablet = resolveSlotImage(images, 'hero_bg', 'tablet');
     const mobile = resolveSlotImage(images, 'hero_bg', 'mobile');
+
+    // La primera entrega de onImagesUpdate es el caché local (localStorage),
+    // disponible en el mismo frame, sin esperar red. Se pinta con eso de
+    // inmediato en vez de mostrar el fondo oscuro hasta que llegue el
+    // snapshot de Firestore: si ese snapshot confirma la misma URL no pasa
+    // nada visible, y si trae una URL distinta (el admin publicó un cambio),
+    // se reemplaza con el cross-fade de abajo, nunca con un salto brusco. Sin
+    // ninguna URL todavía (ni caché ni Firestore, p. ej. primera visita en
+    // este navegador) no hay nada que pintar y se deja el fondo sólido.
+    if (!desktop && !tablet && !mobile) {
+      media?.classList.add('tt-hero-pending');
+      return;
+    }
     const signature = [desktop, tablet, mobile,
       images.hero_bg_desktop_size, images.hero_bg_desktop_pos,
       images.hero_bg_tablet_size, images.hero_bg_tablet_pos,
@@ -240,7 +245,7 @@ if (!window.TintinImagesPhase5Booted) {
 
     if (image.dataset.ttHeroPhase5Signature === signature) {
       debugImageFlow('[images-phase5] applyHero: sin cambios (misma firma), no se toca el DOM', { desktop, tablet, mobile });
-      if (heroDataConfirmed) revealHeroWhenImageReady(image);
+      revealHeroWhenImageReady(image);
       return;
     }
     debugImageFlow('[images-phase5] applyHero: aplicando URLs nuevas', { desktop, tablet, mobile });
@@ -312,7 +317,7 @@ if (!window.TintinImagesPhase5Booted) {
 
     image.dataset.ttHeroPhase5Signature = signature;
     image.dataset.ttImagePhase5 = '1';
-    if (heroDataConfirmed) revealHeroWhenImageReady(image);
+    revealHeroWhenImageReady(image);
   }
 
   function currentDevice() {
@@ -412,11 +417,16 @@ if (!window.TintinImagesPhase5Booted) {
       }));
     },
     error => {
-      // Un error de red no convierte el caché local en fuente autoritativa:
-      // podría contener precisamente el banner anterior que no debe volver
-      // a verse. El loader tiene su propio tope y después deja el fondo sólido.
       heroDataConfirmed = false;
-      document.getElementById('tt-hero-media')?.classList.add('tt-hero-pending');
+      // Si el hero ya se pintó desde el caché local y la imagen terminó de
+      // cargar, un error posterior del listener (reconexión, App Check) no
+      // debe volver a ocultar algo que ya se ve bien — solo se fuerza el
+      // fondo sólido si todavía no había nada visible.
+      const heroImg = document.getElementById('tt-hero-img');
+      const heroAlreadyVisible = heroImg instanceof HTMLImageElement && heroImg.complete && heroImg.naturalWidth > 0;
+      if (!heroAlreadyVisible) {
+        document.getElementById('tt-hero-media')?.classList.add('tt-hero-pending');
+      }
       console.warn('[images-phase5] No se pudo actualizar desde Firestore:', error);
       scheduleApply();
       window.dispatchEvent(new CustomEvent('tintin:images-phase5-error', {
