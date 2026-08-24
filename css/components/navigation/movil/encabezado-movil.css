@@ -10,7 +10,9 @@
   #tt-tabbar {
     --tt-mobile-step: 0px;
     display:grid !important;
-    grid-template-columns:repeat(5,minmax(0,1fr));
+    grid-template-columns:none;
+    grid-auto-flow:column;
+    grid-auto-columns:minmax(0,1fr);
     align-items:center;
     left:50%;
     bottom:max(12px,env(safe-area-inset-bottom));
