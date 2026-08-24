@@ -59,11 +59,19 @@ onAuthStateChanged(auth,async user=>{
  // login.html es el único dueño del alta, bloqueo y destino posterior al
  // acceso. Evita dos redirecciones paralelas compitiendo por la misma sesión.
  if(IS_LOGIN_PAGE)return;
+
+ // La identidad visual y la disponibilidad de Notificaciones no dependen del
+ // rol administrativo. Se publican apenas Firebase resuelve la sesión; el rol
+ // puede llegar después sin retrasar el header en páginas informativas.
+ renderAccountButtonPhoto(user);
+ renderMobileTabbarPhoto(user);
+ window.dispatchEvent(new CustomEvent('tintin:auth-session-resolved',{
+  detail:{authenticated:Boolean(user)}
+ }));
+
  let role='client';
  try{if(user)role=await getUserRole(user.uid,user.email);}catch(e){console.warn('[auth-nav] No se pudo leer rol:',e);}
  publishStaffVisibility(user,role);
- renderAccountButtonPhoto(user);
- renderMobileTabbarPhoto(user);
  renderAccountPanel(user,role);
  window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated',{
   detail:{authenticated:Boolean(user),role}
