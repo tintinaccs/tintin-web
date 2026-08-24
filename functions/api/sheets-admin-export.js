@@ -64,7 +64,9 @@ function orderUserId(order) {
 }
 
 function orderIsCancelled(order) {
-  return ['cancelado', 'rechazado'].includes(String(order?.status || '').trim().toLowerCase());
+  const status = String(order?.status || '').trim().toLowerCase();
+  const paymentStatus = String(order?.payment?.status || order?.paymentStatus || '').trim().toLowerCase();
+  return ['cancelado', 'rechazado'].includes(status) || ['cancelado', 'rechazado', 'reembolsado'].includes(paymentStatus);
 }
 
 function lastOrderValue(orders, uid, fieldGetter) {
@@ -78,8 +80,9 @@ function lastOrderValue(orders, uid, fieldGetter) {
 
 export function projectUserForSheets(user, orders = []) {
   const uid = String(user?.id || user?.uid || '').trim();
-  const ownOrders = orders.filter(order => orderUserId(order) === uid && !orderIsCancelled(order));
-  const totalSpent = ownOrders.reduce((sum, order) => sum + number(order?.total), 0);
+  const allOrders = orders.filter(order => orderUserId(order) === uid);
+  const validForSpent = allOrders.filter(order => !orderIsCancelled(order));
+  const totalSpent = validForSpent.reduce((sum, order) => sum + number(order?.total), 0);
   const checkoutDefaults = user?.checkoutDefaults || {};
   const ci = String(
     user?.ci || checkoutDefaults?.ci ||
@@ -92,7 +95,7 @@ export function projectUserForSheets(user, orders = []) {
     createdAt: user?.createdAt || user?.registeredAt || '',
     role: user?.role || 'client',
     blocked: user?.blocked === true,
-    orderCount: ownOrders.length,
+    orderCount: allOrders.length,
     totalSpent,
     internalNotes: user?.internalNotes || user?.notes || '',
     customerId: user?.customerId || (uid ? `CUS_${uid}` : ''),
