@@ -1,4 +1,4 @@
-export const SHELL_VERSION = 'tintin-20260818-header-dropdowns-solid-3';
+export const SHELL_VERSION = 'tintin-20260824-header-integral-1';
 
 export const BREAKPOINTS = Object.freeze({
   mobileMax: 767,
