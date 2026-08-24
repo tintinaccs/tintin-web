@@ -7,6 +7,7 @@ const PUBLIC_ORIGIN = 'https://tintinaccesorios.pages.dev';
 const CLOUDINARY_HOST = 'res.cloudinary.com';
 const CLOUDINARY_UPLOAD = '/upload/';
 const CLOUDINARY_TINTIN_TRANSFORM = /^f_auto,q_auto,c_limit,w_\d+,dpr_auto\//;
+const PRODUCT_METADATA_CEILING_MS = 1400;
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -172,6 +173,38 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
   return { html, canonical, image, mainImage };
 }
 
+/**
+ * La metadata server-side mejora SEO y previews sociales, pero nunca puede ser
+ * requisito para abrir la ficha. OAuth/Firestore son servicios externos y un
+ * request lento no debe mantener al navegador esperando el documento HTML.
+ */
+export function resolveProductMetadataWithin(promise, ceilingMs = PRODUCT_METADATA_CEILING_MS) {
+  const limit = Math.max(100, Number(ceilingMs) || PRODUCT_METADATA_CEILING_MS);
+  return new Promise((resolve, reject) => {
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      reject(new Error('product_metadata_timeout'));
+    }, limit);
+
+    Promise.resolve(promise).then(
+      value => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve(value);
+      },
+      error => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        reject(error);
+      }
+    );
+  });
+}
+
 export async function onRequest(context) {
   const { request, env } = context;
   if (!['GET', 'HEAD'].includes(request.method)) {
@@ -187,7 +220,9 @@ export async function onRequest(context) {
   if (!id || !/^[A-Za-z0-9_-]{1,180}$/.test(id)) return asset;
 
   try {
-    const document = await firestoreAdminGet(env, `products/${id}`);
+    const document = await resolveProductMetadataWithin(
+      firestoreAdminGet(env, `products/${id}`)
+    );
     if (!document?.fields) return asset;
     const data = decodeFirestoreFields(document.fields);
     if (data.active === false) return asset;
@@ -200,7 +235,12 @@ export async function onRequest(context) {
     headers.delete('content-length');
     return new Response(rendered.html, { status: asset.status, statusText: asset.statusText, headers });
   } catch (error) {
-    console.error('[product-meta] no se pudo renderizar metadata:', error?.message || error);
+    const reason = error?.message || error;
+    if (reason === 'product_metadata_timeout') {
+      console.warn('[product-meta] metadata omitida por tiempo máximo; se entrega la ficha base.');
+    } else {
+      console.error('[product-meta] no se pudo renderizar metadata:', reason);
+    }
     return asset;
   }
 }
