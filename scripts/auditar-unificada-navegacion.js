@@ -119,6 +119,11 @@ check(
   'el header sigue dependiendo de una marca local de sesión en vez de resolver Auth globalmente'
 );
 check(
+  sharedRuntime.includes('setNotificationTriggersVisible(authenticated)') &&
+    sharedRuntime.includes('const authenticated = Boolean(event.detail?.authenticated)'),
+  'la visibilidad de Alertas no está enlazada directamente al estado global de Auth'
+);
+check(
   sharedRuntime.includes('scheduleNonCritical(() => {') &&
     sharedRuntime.includes('Promise.allSettled([loadCollectionsRuntime()]).then(reportRuntimeFailures);'),
   'las páginas informativas no precargan la configuración canónica de colecciones'
