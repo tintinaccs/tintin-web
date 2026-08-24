@@ -134,14 +134,15 @@ check(
 );
 
 check(
-  'El Hero ignora el caché anterior y se revela solo al cargar la URL confirmada',
-  files.runtime.includes('if (!heroDataConfirmed) {') &&
+  'El Hero pinta con la primera URL disponible (caché o Firestore) y reconcilia con cross-fade',
+  !files.runtime.includes('if (!heroDataConfirmed) {') &&
+    files.runtime.includes('if (!desktop && !tablet && !mobile) {') &&
     files.runtime.includes("media?.classList.add('tt-hero-pending');") &&
+    files.runtime.includes('const cambiaFuente') &&
     files.homeCss.includes('.tt-home-premium .tt-hero-media.tt-hero-pending') &&
     files.homeCss.includes('visibility:hidden!important') &&
-    files.homeCss.includes('opacity:0!important') &&
-    !files.homeCss.includes('.tt-hero-media.tt-hero-pending{\n  transition:'),
-  'el caché local nunca debe asignarse ni ser visible antes del snapshot autoritativo de Firestore'
+    files.homeCss.includes('opacity:0!important'),
+  'el fondo sólido debe cubrir solo la ausencia total de URL (ni caché ni Firestore); en cuanto exista una se pinta de inmediato, y si Firestore confirma después una URL distinta se reemplaza con cross-fade, nunca con un salto'
 );
 
 check(
