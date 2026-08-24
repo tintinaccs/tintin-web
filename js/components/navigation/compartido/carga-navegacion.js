@@ -41,15 +41,6 @@ function bindDemand(selector, loader) {
   });
 }
 
-function hasActiveSessionHint() {
-  try {
-    const startedAt = Number(window.localStorage.getItem('tt_session_started_at'));
-    return Number.isFinite(startedAt) && startedAt > 0;
-  } catch {
-    return false;
-  }
-}
-
 function attachNotificationsDemand() {
   bindDemand(
     '[data-nav-action="notifications"],#tabbar-notifications',
@@ -63,11 +54,13 @@ function attachNotificationsDemand() {
     });
   });
 
-  if (hasActiveSessionHint()) {
-    void loadNotificationsRuntime().catch(error => {
-      console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
-    });
-  }
+  // La autenticación es una dependencia global del header, incluso en páginas
+  // informativas. Solo consulta el estado de Auth; el runtime de notificaciones
+  // y Firestore continúa siendo lazy y se importa únicamente si hay sesión.
+  // Esto evita depender de marcas locales que pueden no existir o quedar viejas.
+  void loadAuthRuntime().catch(error => {
+    console.warn('[PublicShell] No se pudo resolver la sesión global del header.', error);
+  });
 }
 
 function loadHomeMaintenance() {
@@ -207,9 +200,9 @@ export function loadSharedRuntime() {
   attachNotificationsDemand();
   loadNavigationBehaviors();
 
-  // Las páginas informativas mantienen disponible la bandeja global sin
-  // descargar Firestore para visitantes sin sesión. Las sesiones activas se
-  // hidratan arriba mediante la marca de sesión y el evento de autenticación.
+  // Las páginas informativas resuelven Auth globalmente para que el header
+  // conozca la sesión en cualquier ruta, pero mantienen carrito, catálogo y
+  // Firestore bajo demanda para no convertirlas en páginas de comercio pesado.
   if (!FULL_COMMERCE_PAGES.has(page)) {
     attachLightweightCommerceDemand();
     return;
