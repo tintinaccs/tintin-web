@@ -93,8 +93,10 @@ check(
   'el cargador global no reutiliza hojas existentes o no limita la espera de CSS'
 );
 check(
-  mobileSolidStyles.includes('@media (max-width: 767px)') && !mobileSolidStyles.includes('@media (max-width: 768px)'),
-  'fondos sólidos móviles no respetan el corte exacto 767/768'
+  mobileStyles.includes('@media (max-width: 767px)') &&
+    mobileStyles.includes('@media (min-width: 768px)') &&
+    mobileSolidStyles.includes('@media (max-width: 768px)'),
+  'el contrato móvil principal no protege el corte 767/768 frente a la hoja sólida heredada'
 );
 check(
   notificationStyles.includes('grid-template-columns: repeat(6, minmax(0, 1fr))'),
