@@ -172,31 +172,13 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
   return { html, canonical, image, mainImage };
 }
 
-/**
- * La URL pública y canónica es /product?id=..., pero el ASSETS binding debe
- * leer el documento físico de forma determinista. Pedir /product otra vez
- * desde la propia Pages Function delegaba esa resolución al pretty-URL del
- * edge y podía devolver 404/non-HTML antes de que la ficha llegara al cliente.
- */
-export function productAssetRequest(request) {
-  const url = new URL(request.url);
-  url.pathname = '/product.html';
-  url.search = '';
-  url.hash = '';
-  return new Request(url.toString(), {
-    method: request.method,
-    headers: request.headers,
-    redirect: 'manual'
-  });
-}
-
 export async function onRequest(context) {
   const { request, env } = context;
   if (!['GET', 'HEAD'].includes(request.method)) {
     return new Response(null, { status: 405, headers: { allow: 'GET, HEAD' } });
   }
 
-  const asset = await env.ASSETS.fetch(productAssetRequest(request));
+  const asset = await env.ASSETS.fetch(request);
   if (request.method === 'HEAD') return asset;
   if (!asset.ok || !(asset.headers.get('content-type') || '').includes('text/html')) return asset;
 
