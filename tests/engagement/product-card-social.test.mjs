@@ -63,7 +63,9 @@ test('la ficha conserva selector accesible de 1 a 5 estrellas antes de publicar'
   assert.match(source, /role=\"radiogroup\"/);
   assert.match(source, /data-review-rating=\"\$\{value\}\"/);
   assert.match(source, /Sin puntuación seleccionada/);
-  assert.match(source, /action:\s*'createReview'/);
+  assert.match(source, /const action = ownReview \? 'editReview' : 'createReview'/);
+  assert.match(source, /api\(\{ action, productId, rating: selectedRating, comment \}\)/);
+  assert.match(source, /Elegí de 1 a 5 estrellas antes de publicar tu reseña/);
 });
 
 test('el middleware inyecta el módulo social versionado solo en superficies de producto', () => {
