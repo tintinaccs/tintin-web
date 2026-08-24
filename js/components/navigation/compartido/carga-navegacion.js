@@ -8,6 +8,7 @@ let notificationsRuntimePromise = null;
 let collectionsRuntimePromise = null;
 
 const FULL_COMMERCE_PAGES = new Set(['home', 'shop', 'cart', 'account']);
+const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar-notifications';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -41,14 +42,19 @@ function bindDemand(selector, loader) {
   });
 }
 
+function setNotificationTriggersVisible(visible) {
+  document.querySelectorAll(NOTIFICATION_TRIGGER_SELECTOR).forEach(trigger => {
+    trigger.hidden = !visible;
+  });
+}
+
 function attachNotificationsDemand() {
-  bindDemand(
-    '[data-nav-action="notifications"],#tabbar-notifications',
-    loadNotificationsRuntime
-  );
+  bindDemand(NOTIFICATION_TRIGGER_SELECTOR, loadNotificationsRuntime);
 
   window.addEventListener('tintin:auth-nav-updated', event => {
-    if (!event.detail?.authenticated) return;
+    const authenticated = Boolean(event.detail?.authenticated);
+    setNotificationTriggersVisible(authenticated);
+    if (!authenticated) return;
     void loadNotificationsRuntime().catch(error => {
       console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
     });
