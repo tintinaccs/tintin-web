@@ -60,7 +60,8 @@ test('una eliminación exige productId y no inventa otro producto', async () => 
 
 test('Products e inventario se guardan en un commit atómico', () => {
   const source = read('functions/api/sheets-products-webhook.js');
-  assert.match(source, /await firestoreAdminCommit\(env, \[/);
+  assert.match(source, /const writes = \[\];/);
+  assert.match(source, /await firestoreAdminCommit\(env, writes\);/);
   assert.match(source, /path: `products\/\$\{id\}`/);
   assert.match(source, /path: `productInventory\/\$\{id\}`/);
   assert.match(source, /upstreamStatus === 409 \|\| upstreamStatus === 502/);
@@ -76,6 +77,18 @@ test('Apps Script usa Productos y un solo dispatcher instalable', () => {
   assert.match(source, /sheetName === TINTIN_PRODUCTS_SHEET/);
   assert.match(source, /sheetName === TINTIN_USERS_SHEET/);
   assert.doesNotMatch(source, /insertSheet\(['"]Catálogo web['"]\)/);
+});
+
+test('una edición parcial no valida ni reemplaza las demás columnas del producto', () => {
+  const source = read('functions/api/sheets-products-webhook.js');
+  const appScript = read('apps-script/ProductosUnificados.gs');
+  assert.match(source, /const fields = selectedFields\(input\.changedFields, id\);/);
+  assert.match(source, /if \(\(!fields \|\| fields\.has\('name'\)\) && !name\)/);
+  assert.match(source, /if \(Object\.keys\(publicData\)\.length\) publicData\.updatedAt/);
+  assert.match(appScript, /function tintinProductFieldsForColumns_/);
+  assert.match(appScript, /2: \['name'\]/);
+  assert.match(appScript, /33: \['tags'\], 34: \['variants'\]/);
+  assert.match(appScript, /tintinSendProductRowWithRetry_\(sheet, rowNumber, changedFields\)/);
 });
 
 test('el espejo integral limita las escrituras a los campos administrativos', () => {
