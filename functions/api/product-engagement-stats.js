@@ -5,6 +5,9 @@ import {
 } from '../../cloudflare/firebase-admin-ligero.js';
 
 const MAX_RECORDS = 5000;
+const CACHE_TTL_MS = 10_000;
+let cachedStats = null;
+let cachedAt = 0;
 
 function documentId(document) {
   return String(document?.name || '').split('/').pop();
@@ -63,6 +66,18 @@ export function buildPublicProductEngagementStats(likeDocuments = [], reviewStat
     }));
 }
 
+async function readStats(env, fresh) {
+  const now = Date.now();
+  if (!fresh && Array.isArray(cachedStats) && now - cachedAt < CACHE_TTL_MS) return cachedStats;
+  const [likeDocuments, reviewStatDocuments] = await Promise.all([
+    firestoreAdminListAll(env, 'likeRecords', MAX_RECORDS),
+    firestoreAdminListAll(env, 'productReviewStats', MAX_RECORDS),
+  ]);
+  cachedStats = buildPublicProductEngagementStats(likeDocuments, reviewStatDocuments);
+  cachedAt = now;
+  return cachedStats;
+}
+
 export async function onRequest(context) {
   const { request, env } = context;
   const origin = request.headers.get('origin') || '';
@@ -75,12 +90,8 @@ export async function onRequest(context) {
   }
 
   try {
-    const [likeDocuments, reviewStatDocuments] = await Promise.all([
-      firestoreAdminListAll(env, 'likeRecords', MAX_RECORDS),
-      firestoreAdminListAll(env, 'productReviewStats', MAX_RECORDS),
-    ]);
-    const stats = buildPublicProductEngagementStats(likeDocuments, reviewStatDocuments);
-
+    const url = new URL(request.url);
+    const stats = await readStats(env, url.searchParams.get('fresh') === '1');
     if (request.method === 'HEAD') {
       return new Response(null, { status: 200, headers: { 'cache-control': 'private, no-store, max-age=0' } });
     }
