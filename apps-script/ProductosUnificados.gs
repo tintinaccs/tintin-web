@@ -68,15 +68,24 @@ function tintinAppendSyncHistory_(status, sheetName, cell, detail) {
     else if (/^(origen|source)$/.test(key)) { values[index] = 'Google Sheets'; matched += 1; }
     else if (/^(hoja|sheet)$/.test(key)) { values[index] = sheetName; matched += 1; }
     else if (/^(celda|rango|cell)$/.test(key)) { values[index] = cell; matched += 1; }
-    else if (/^(detalle|mensaje|descripcion|error)$/.test(key)) { values[index] = String(detail || '').slice(0, 500); matched += 1; }
+    else if (/^(detalle|mensaje|descripcion|error|resultado)$/.test(key)) { values[index] = String(detail || '').slice(0, 500); matched += 1; }
   });
   // No adivina columnas: si la fila 7 no expone estado, conserva el historial intacto.
   if (!headers.some(function(header) { return /^(estado|status)$/.test(tintinSyncHeaderKey_(header)); })) return false;
-  history.insertRowBefore(TINTIN_SYNC_HISTORY_FIRST_ROW);
-  history.getRange(TINTIN_SYNC_HISTORY_FIRST_ROW, 1, 1, width).setValues([values]);
-  var firstExcessRow = TINTIN_SYNC_HISTORY_FIRST_ROW + TINTIN_SYNC_HISTORY_MAX_ROWS;
-  if (history.getLastRow() >= firstExcessRow) {
-    history.deleteRows(firstExcessRow, history.getLastRow() - firstExcessRow + 1);
+  // insertRowBefore/deleteRows desplazan filas; sin lock, dos ediciones casi
+  // simultaneas (dos onEdit en paralelo) pueden pisarse y Sheets responde
+  // "Those rows are out of bounds", perdiendo la fila de historial.
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(10000)) throw new Error('No se pudo obtener el lock de Historial sync.');
+  try {
+    history.insertRowBefore(TINTIN_SYNC_HISTORY_FIRST_ROW);
+    history.getRange(TINTIN_SYNC_HISTORY_FIRST_ROW, 1, 1, width).setValues([values]);
+    var firstExcessRow = TINTIN_SYNC_HISTORY_FIRST_ROW + TINTIN_SYNC_HISTORY_MAX_ROWS;
+    if (history.getLastRow() >= firstExcessRow) {
+      history.deleteRows(firstExcessRow, history.getLastRow() - firstExcessRow + 1);
+    }
+  } finally {
+    lock.releaseLock();
   }
   return matched > 0;
 }
