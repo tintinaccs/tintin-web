@@ -1,4 +1,4 @@
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   html body #tt-tabbar {
     background: #FFFFFF !important;
     background-color: #FFFFFF !important;
@@ -56,7 +56,6 @@
   html body #tt-tabbar #tabbar-notifications,
   html body #tt-tabbar #tabbar-notifications:hover,
   html body #tt-tabbar #tabbar-notifications:focus-visible,
-  html body #tt-tabbar #tabbar-notifications.active,
   html body #tt-tabbar #tabbar-notifications[aria-expanded="true"] {
     background: #FFFFFF !important;
     background-color: #FFFFFF !important;
