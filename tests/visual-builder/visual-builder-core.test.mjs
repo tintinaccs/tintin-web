@@ -41,18 +41,20 @@ test('bloques están limitados, deduplicados y conectados a secciones reales', (
   assert.ok(blocks.length <= VISUAL_BUILDER_LIMITS.maxCustomBlocks);
   assert.equal(blocks[0].type, 'section');
   assert.notEqual(blocks[0].afterSection, 'checkout');
-  assert.equal(blocks[0].href, 'catalogo.html');
+  assert.equal(blocks[0].href, '/catalogo');
   assert.equal(blocks[0].image, '');
   assert.equal(blocks.filter(item => item.id === 'duplicado').length, 1);
   assert.equal(blocks.at(-1).count, 12);
 });
 
-test('imágenes y enlaces usan listas permitidas', () => {
+test('imágenes y enlaces usan listas permitidas y rutas internas limpias', () => {
   assert.equal(safeVisualImage('assets-tintin/images/general/logo.png'), 'assets-tintin/images/general/logo.png');
   assert.equal(safeVisualImage('https://res.cloudinary.com/demo/image/upload/a.webp'), 'https://res.cloudinary.com/demo/image/upload/a.webp');
   assert.equal(safeVisualImage('data:image/svg+xml,x'), '');
-  assert.equal(safeVisualHref('catalogo.html?cat=relojes'), 'catalogo.html?cat=relojes');
-  assert.equal(safeVisualHref('javascript:alert(1)'), 'catalogo.html');
+  assert.equal(safeVisualHref('catalogo.html?cat=relojes'), '/catalogo?cat=relojes');
+  assert.equal(safeVisualHref('/catalogo?cat=relojes'), '/catalogo?cat=relojes');
+  assert.equal(safeVisualHref('about.html#historia'), '/about#historia');
+  assert.equal(safeVisualHref('javascript:alert(1)'), '/catalogo');
 });
 
 test('contenido queda limitado al esquema existente', () => {
@@ -60,7 +62,7 @@ test('contenido queda limitado al esquema existente', () => {
   assert.equal(clean.hero.title.length, 220);
   assert.equal(clean.hero.unknown, undefined);
   assert.equal(clean.checkout, undefined);
-  assert.equal(clean.hero.primaryHref, 'catalogo.html');
+  assert.equal(clean.hero.primaryHref, '/catalogo');
 });
 
 test('los embeds de video solo admiten YouTube, Vimeo o Cloudinary', () => {
