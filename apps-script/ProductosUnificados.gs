@@ -105,6 +105,38 @@ function tintinIsRowPushInProgress_(sheet, rowNumber) {
   return CacheService.getScriptCache().get(tintinSyncGuardKey_(sheet, rowNumber)) === '1';
 }
 
+/** Verifica el token Firebase del usuario que solicita un cambio desde la web. */
+function verifyFirebaseIdToken_(idToken) {
+  if (!idToken) return { ok: false, error: 'missing_id_token' };
+
+  var apiKey = String(PropertiesService.getScriptProperties().getProperty('FIREBASE_WEB_API_KEY') || '').trim();
+  if (!apiKey) return { ok: false, error: 'missing_firebase_api_key' };
+
+  try {
+    var response = UrlFetchApp.fetch(
+      'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=' + encodeURIComponent(apiKey),
+      {
+        method: 'post',
+        contentType: 'application/json',
+        payload: JSON.stringify({ idToken: idToken }),
+        muteHttpExceptions: true
+      }
+    );
+    if (response.getResponseCode() !== 200) return { ok: false, error: 'invalid_id_token' };
+
+    var user = (JSON.parse(response.getContentText() || '{}').users || [])[0];
+    if (!user) return { ok: false, error: 'invalid_id_token' };
+    return {
+      ok: true,
+      email: String(user.email || ''),
+      emailVerified: user.emailVerified === true,
+      uid: String(user.localId || '')
+    };
+  } catch (error) {
+    return { ok: false, error: 'token_verify_failed' };
+  }
+}
+
 // Dos activadores instalables heredados pueden recibir el mismo onEdit. Sin
 // esta llave, uno puede confirmar Firestore y otro restaurar una versión vieja
 // de Sheets, dejando ambos lados con nombres distintos.
