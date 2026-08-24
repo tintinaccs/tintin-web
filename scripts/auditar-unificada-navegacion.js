@@ -79,7 +79,7 @@ check(
   'el shell global no precarga la geometría/estilos de notificaciones'
 );
 check(
-  navigationAssets.includes('stylesheetForPath(path)') && navigationAssets.includes('data.ttSocialNotifications'),
+  navigationAssets.includes('stylesheetForPath(path)') && navigationAssets.includes('dataset.ttSocialNotifications'),
   'el cargador global no reutiliza hojas existentes o no marca el CSS de notificaciones'
 );
 check(
