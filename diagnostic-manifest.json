@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-24T22:57:53.841Z",
-  "sourceFingerprint": "339f379fa62e543db84a007e8f6cb7ce970a0ded0f102996b654b44c30bfea86",
+  "generatedAt": "2026-08-24T23:51:33.556Z",
+  "sourceFingerprint": "cd27917d5fd958b08ac5332931030e7fe278188a6ed854c4326739435212d84f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 715,
     "textFiles": 683,
-    "totalBytes": 8086877,
+    "totalBytes": 8086746,
     "pages": 18,
     "modules": 451
   },
@@ -8144,8 +8144,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 110777,
-      "sha256": "bd2248d1b2f1dbbebac9046eb95c17df57033d3ffc900c55c82b05a197579119",
+      "bytes": 110775,
+      "sha256": "f14c0327ea082c4e245f9c8c0c2f858f25f2927cf65103062a2a8a9343b4af4f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17037,7 +17037,7 @@
     {
       "path": "functions/api/email-otp-send.js",
       "bytes": 10528,
-      "sha256": "b2114beb3c71836a56316af8fd4259f083e1be58b6d488cb66b6542e7bd447ed",
+      "sha256": "703faf5e6846ee8f05c59b39e203bff6e053bbf2a3d47ccc9cf94cd1d97cec7e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17266,7 +17266,7 @@
     {
       "path": "functions/api/order-email.js",
       "bytes": 20435,
-      "sha256": "d99b1f466ee41bd40042116c963db197c476b4312d08c306575c72611ef7bef9",
+      "sha256": "bc9b3dcfa5c3676e62ef86e20ec43b144bbcf0f6fba85e61a831350d3b22fbef",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21991,8 +21991,8 @@
     },
     {
       "path": "js/pages/checkout/checkout-confiabilidad.js",
-      "bytes": 28410,
-      "sha256": "2a58c003d896af5aea9868cab597b72f462896d1769b3f22b39d183a6ad443ef",
+      "bytes": 28281,
+      "sha256": "aaa95b020006b87e1ab5301a90a942b4f0ba6e6099d858cfe88c91496b98fdc5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28245,8 +28245,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 110777,
-      "sha256": "bd2248d1b2f1dbbebac9046eb95c17df57033d3ffc900c55c82b05a197579119"
+      "bytes": 110775,
+      "sha256": "f14c0327ea082c4e245f9c8c0c2f858f25f2927cf65103062a2a8a9343b4af4f"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -29206,7 +29206,7 @@
       "path": "functions/api/email-otp-send.js",
       "extension": ".js",
       "bytes": 10528,
-      "sha256": "b2114beb3c71836a56316af8fd4259f083e1be58b6d488cb66b6542e7bd447ed"
+      "sha256": "703faf5e6846ee8f05c59b39e203bff6e053bbf2a3d47ccc9cf94cd1d97cec7e"
     },
     {
       "path": "functions/api/email-otp-verify.js",
@@ -29254,7 +29254,7 @@
       "path": "functions/api/order-email.js",
       "extension": ".js",
       "bytes": 20435,
-      "sha256": "d99b1f466ee41bd40042116c963db197c476b4312d08c306575c72611ef7bef9"
+      "sha256": "bc9b3dcfa5c3676e62ef86e20ec43b144bbcf0f6fba85e61a831350d3b22fbef"
     },
     {
       "path": "functions/api/paypal-capture-order.js",
@@ -30387,8 +30387,8 @@
     {
       "path": "js/pages/checkout/checkout-confiabilidad.js",
       "extension": ".js",
-      "bytes": 28410,
-      "sha256": "2a58c003d896af5aea9868cab597b72f462896d1769b3f22b39d183a6ad443ef"
+      "bytes": 28281,
+      "sha256": "aaa95b020006b87e1ab5301a90a942b4f0ba6e6099d858cfe88c91496b98fdc5"
     },
     {
       "path": "js/pages/checkout/checkout-control-cuota.js",

@@ -95,10 +95,10 @@ async function sendCodeEmail(apiKey, email, code) {
 
   const html = `<!doctype html>
 <html lang="es">
-<body style="margin:0;background:#fdf1f5;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2226">
+<body style="margin:0;background:#fff6fa;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2b2b">
   <div style="max-width:460px;margin:0 auto;padding:32px 16px">
     <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:20px;overflow:hidden">
-      <div style="background:linear-gradient(135deg,#c6557d,#8e274d);padding:20px 24px;text-align:center">
+      <div style="background:#ad3f67;padding:20px 24px;text-align:center;border-bottom:4px solid #8b2642">
         <div style="font-size:20px;font-weight:800;letter-spacing:.16em;color:#ffffff">TINTIN</div>
         <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.78);margin-top:4px">Accesorios &amp; Relojes</div>
       </div>
