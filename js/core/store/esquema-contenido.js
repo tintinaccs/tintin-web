@@ -70,9 +70,9 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
           field('title', 'Título', '.tt-hero-title', 'DETALLES QUE ELEVAN\nTU ESTILO', { type: 'multiline', rows: 3, maxLength: 220 }),
           field('subtitle', 'Subtítulo', '.tt-hero-subtitle', '', { type: 'multiline', rows: 3, maxLength: 500 }),
           field('primaryText', 'Botón principal', '.tt-hero-actions a', 'Comprar ahora', { index: 0, maxLength: 80 }),
-          field('primaryHref', 'Enlace del botón principal', '.tt-hero-actions a', 'catalogo.html', { index: 0, type: 'href', maxLength: 500 }),
+          field('primaryHref', 'Enlace del botón principal', '.tt-hero-actions a', '/catalogo', { index: 0, type: 'href', maxLength: 500 }),
           field('btnText', 'Botón secundario', '.tt-hero-actions a', '¿Quiénes somos? →', { index: 1, maxLength: 80 }),
-          field('btnHref', 'Enlace del botón secundario', '.tt-hero-actions a', 'about.html', { index: 1, type: 'href', maxLength: 500 }),
+          field('btnHref', 'Enlace del botón secundario', '.tt-hero-actions a', '/about', { index: 1, type: 'href', maxLength: 500 }),
         ],
       },
       trust: {
@@ -265,7 +265,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
           field('blocks.0.body', 'Delivery — descripción', '.tt-info-block > p', 'Realizamos delivery a domicilio en Asunción, Gran Asunción y zonas aledañas.', { index: 0, type: 'multiline', rows: 4, maxLength: 900 }),
           field('blocks.1.title', 'Encomienda — título', '.tt-info-title', 'Encomienda — Interior del País', { index: 1, maxLength: 180 }),
           field('blocks.1.body', 'Encomienda — descripción', '.tt-info-block > p', 'Enviamos al interior de Paraguay mediante empresas de transporte.', { index: 1, type: 'multiline', rows: 4, maxLength: 900 }),
-          field('blocks.2.title', 'Retiro — título', '.tt-info-title', 'Retiro en Tienda — Gratis', { index: 2, maxLength: 180 }),
+          field('blocks.2.title', 'Retiro — título', '.tt-info-title', 'Retiro en San Lorenzo — Gratis', { index: 2, maxLength: 180 }),
           field('blocks.2.body', 'Retiro — descripción', '.tt-info-block > p', 'Podés retirar tu pedido sin costo en San Lorenzo. Coordinamos día y hora por WhatsApp.', { index: 2, type: 'multiline', rows: 4, maxLength: 900 }),
           field('blocks.3.title', 'Preparación — título', '.tt-info-title', 'Tiempos de preparación', { index: 3, maxLength: 180 }),
           field('blocks.3.body', 'Preparación — descripción', '.tt-info-block > p', 'Los pedidos se preparan según disponibilidad y horario de confirmación.', { index: 3, type: 'multiline', rows: 4, maxLength: 900 }),
@@ -500,5 +500,5 @@ export function sanitizeSection(pageId, sectionId, sectionValue = {}) {
 export function detectContentPageId(pathname = window.location.pathname) {
   const raw = String(pathname || '').toLowerCase().replace(/\/+$/, '');
   const file = raw.split('/').pop() || '';
-  return PAGE_PATH_TO_ID[file] || (raw === '' ? 'index' : null);
+  return PAGE_PATH_TO_ID[file] || PAGE_PATH_TO_ID[`${file}.html`] || (raw === '' ? 'index' : null);
 }

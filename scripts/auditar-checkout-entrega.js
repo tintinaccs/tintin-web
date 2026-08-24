@@ -14,13 +14,16 @@ const checks = [
     checkout.includes('Ubicación de retiro protegida') && checkout.includes('Confirmá primero tu pedido') &&
     client.includes('Solicito la ubicación exacta y el horario disponible para retirar.')],
   ['Retiro no suma envío en cliente ni servidor',
-    client.includes("city: 'Retiro coordinado'") && server.includes("method: 'retiro', city: 'Retiro coordinado', cost: 0")],
+    client.includes("city: 'Retiro coordinado'") &&
+    client.includes("method: 'retiro'") &&
+    client.includes('cost: 0') &&
+    server.includes("method: 'retiro', city: 'Retiro coordinado', departamento: 'Central', cost: 0")],
   ['Delivery conserva su tarifa dentro del total',
     client.includes('cost: delivery.price') && server.includes('cost: delivery.price')],
   ['Encomienda se cobra al recibir y no entra al total web',
     checkout.includes('Se abona a la transportadora al recibir') &&
     client.includes("method: 'encomienda'") && client.includes('cost: 0') &&
-    server.includes("method: 'encomienda', city: encomienda.name, cost: 0")],
+    server.includes("method: 'encomienda', city: encomienda.name, departamento: encomienda.departamento, cost: 0")],
   ['Agencia no exige dirección; puerta exige dirección y mapa',
     client.includes("shipping.encomiendaMode === 'puerta'") && server.includes("encomiendaMode === 'puerta'") &&
     server.includes("encomiendaMode !== 'agencia' && encomiendaMode !== 'puerta'")],

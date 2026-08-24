@@ -210,39 +210,33 @@ function phase4ParseStock_(value) {
 function phase4NormalizeCartLines_(cartLines) {
   if (!Array.isArray(cartLines) || !cartLines.length) return { ok: false, error: 'empty_cart' };
   if (cartLines.length > PHASE4_MAX_ITEMS_) return { ok: false, error: 'too_many_products' };
-  var byId = Object.create(null);
-  var orderedIds = [];
+  var byLine = Object.create(null);
+  var orderedKeys = [];
   for (var i = 0; i < cartLines.length; i++) {
     var rawLine = cartLines[i];
-    if (!phase4HasOnlyKeys_(rawLine, ['id', 'qty', 'variants', 'variant'])) {
-      return { ok: false, error: 'invalid_cart' };
-    }
+    if (!phase4HasOnlyKeys_(rawLine, ['id', 'qty', 'variants', 'variant'])) return { ok: false, error: 'invalid_cart' };
     var id = phase4CleanText_(rawLine.id, 180);
     var qty = Number(rawLine.qty);
-    var rawVariants = Array.isArray(rawLine.variants)
-      ? rawLine.variants
-      : (rawLine.variant ? [rawLine.variant] : []);
-    if (
-      !id || !isFinite(qty) || !Number.isInteger(qty) || qty < 1 || qty > 99 ||
-      rawVariants.length > 10 || rawVariants.some(function (variant) {
-        return typeof variant !== 'string' || !phase4CleanText_(variant, 120) || variant.length > 120;
-      })
-    ) {
-      return { ok: false, error: 'invalid_cart' };
+    var legacyVariants = rawLine.variants;
+    if (legacyVariants !== undefined && legacyVariants !== null && !Array.isArray(legacyVariants)) return { ok: false, error: 'invalid_cart' };
+    if (Array.isArray(legacyVariants) && legacyVariants.length > 1) return { ok: false, error: 'invalid_cart' };
+    if (rawLine.variant !== undefined && rawLine.variant !== null && rawLine.variant !== '' && typeof rawLine.variant !== 'string') return { ok: false, error: 'invalid_cart' };
+    var legacyVariant = Array.isArray(legacyVariants) && legacyVariants.length ? legacyVariants[0] : '';
+    if (legacyVariant && typeof legacyVariant !== 'string') return { ok: false, error: 'invalid_cart' };
+    var explicitVariant = phase4CleanText_(rawLine.variant, 120);
+    var migratedVariant = phase4CleanText_(legacyVariant, 120);
+    if (explicitVariant && migratedVariant && explicitVariant !== migratedVariant) return { ok: false, error: 'invalid_cart' };
+    var variant = explicitVariant || migratedVariant;
+    if (!id || !isFinite(qty) || !Number.isInteger(qty) || qty < 1 || qty > 99) return { ok: false, error: 'invalid_cart' };
+    var lineKey = JSON.stringify([id, variant]);
+    if (!byLine[lineKey]) {
+      byLine[lineKey] = { id: id, qty: 0, variant: variant };
+      orderedKeys.push(lineKey);
     }
-    if (!byId[id]) {
-      byId[id] = { id: id, qty: 0, variants: [] };
-      orderedIds.push(id);
-    }
-    byId[id].qty += qty;
-    if (byId[id].qty > 99) return { ok: false, error: 'invalid_cart' };
-    rawVariants.forEach(function (variant) {
-      var cleanVariant = phase4CleanText_(variant, 120);
-      if (byId[id].variants.indexOf(cleanVariant) === -1) byId[id].variants.push(cleanVariant);
-    });
-    if (byId[id].variants.length > 10) return { ok: false, error: 'invalid_cart' };
+    byLine[lineKey].qty += qty;
+    if (byLine[lineKey].qty > 99) return { ok: false, error: 'invalid_cart' };
   }
-  return { ok: true, lines: orderedIds.map(function (id) { return byId[id]; }) };
+  return { ok: true, lines: orderedKeys.map(function (key) { return byLine[key]; }) };
 }
 
 function phase4VariantGroups_(value) {
@@ -290,38 +284,39 @@ function phase4VariantIsValid_(product, selectedVariant) {
   return parts.every(function (part, index) { return groups[index].indexOf(part) !== -1; });
 }
 
+function phase4NormalizeDepartment_(value) {
+  return phase4CleanText_(value, 80) || 'Central';
+}
+
 function phase4NormalizeCities_(list, fallbackCost) {
   return (Array.isArray(list) ? list : []).map(function (item, index) {
-    if (typeof item === 'string') {
-      return { name: phase4CleanText_(item, 120), price: phase4ParseMoney_(fallbackCost), sourceIndex: index };
-    }
+    if (typeof item === 'string') return { name: phase4CleanText_(item, 120), price: phase4ParseMoney_(fallbackCost), departamento: 'Central', sourceIndex: index };
     if (!item || !item.name) return null;
     var price = item.price === null ? null : phase4ParseMoney_(item.price === undefined ? fallbackCost : item.price);
-    return { name: phase4CleanText_(item.name, 120), price: isFinite(price) ? price : null, sourceIndex: index };
-  }).filter(function (city) { return city; });
+    return { name: phase4CleanText_(item.name, 120), price: isFinite(price) ? price : null, departamento: phase4NormalizeDepartment_(item.departamento), sourceIndex: index };
+  }).filter(function (city) { return city && city.name; });
 }
 
 // Espejo de resolveShipping() en js/pedido-checkout-seguro.js, sobre
 // settings/general (paymentMethods, storeOpen) y settings/shippingRates
 // (deliveryCities/encomiendaCities) — ver sparkShippingRatesPath() en
 // firestore.rules para por qué viven separados.
-function phase4ResolveShipping_(shippingRates, selectedCity) {
+function phase4ResolveShipping_(shippingRates, selectedCity, selectedDepartment, requestedMethod) {
+  var requested = phase4CleanText_(requestedMethod, 20);
   if (selectedCity === '__retiro__') {
-    return { ok: true, method: 'retiro', city: 'Retiro coordinado', cost: 0, pending: false, rateIndex: -1 };
+    if (requested && requested !== 'retiro') return { ok: false, error: 'shipping_changed' };
+    return { ok: true, method: 'retiro', city: 'Retiro coordinado', departamento: 'Central', cost: 0, pending: false, rateIndex: -1 };
   }
   var wanted = String(selectedCity || '').trim().toLowerCase();
-  var delivery = phase4NormalizeCities_(shippingRates.deliveryCities, shippingRates.deliveryCost)
-    .filter(function (city) { return city.name.toLowerCase() === wanted; })[0];
-  if (delivery) {
-    return { ok: true, method: 'delivery', city: delivery.name, cost: delivery.price, pending: delivery.price === null, rateIndex: delivery.sourceIndex };
+  var wantedDepartment = phase4CleanText_(selectedDepartment, 80).toLowerCase();
+  function matches(city) {
+    if (!city || city.name.toLowerCase() !== wanted) return false;
+    return !wantedDepartment || city.departamento.toLowerCase() === wantedDepartment;
   }
-  var encomienda = phase4NormalizeCities_(shippingRates.encomiendaCities, shippingRates.encomiendaCost)
-    .filter(function (city) { return city.name.toLowerCase() === wanted; })[0];
-  if (encomienda) {
-    // El costo de la transportadora se abona al recibir y no se suma al
-    // pedido ni a una futura pasarela de pago.
-    return { ok: true, method: 'encomienda', city: encomienda.name, cost: 0, pending: false, rateIndex: encomienda.sourceIndex };
-  }
+  var delivery = requested && requested !== 'delivery' ? null : phase4NormalizeCities_(shippingRates.deliveryCities, shippingRates.deliveryCost).filter(matches)[0];
+  if (delivery) return { ok: true, method: 'delivery', city: delivery.name, departamento: delivery.departamento, cost: delivery.price, pending: delivery.price === null, rateIndex: delivery.sourceIndex };
+  var encomienda = requested && requested !== 'encomienda' ? null : phase4NormalizeCities_(shippingRates.encomiendaCities, shippingRates.encomiendaCost).filter(matches)[0];
+  if (encomienda) return { ok: true, method: 'encomienda', city: encomienda.name, departamento: encomienda.departamento, cost: 0, pending: false, rateIndex: encomienda.sourceIndex };
   return { ok: false, error: 'shipping_invalid' };
 }
 
@@ -370,6 +365,10 @@ function phase4CreateOrder_(payload, idToken) {
   var normalizedCart = phase4NormalizeCartLines_(payload.cartLines);
   if (!normalizedCart.ok) return normalizedCart;
   var cartLines = normalizedCart.lines;
+  var requestedQtyByProduct = Object.create(null);
+  cartLines.forEach(function (line) {
+    requestedQtyByProduct[line.id] = (requestedQtyByProduct[line.id] || 0) + Number(line.qty || 0);
+  });
 
   var name = phase4CleanText_(payload.name, 120);
   if (name.length < 2) return { ok: false, error: 'name_required' };
@@ -486,12 +485,16 @@ function phase4CreateOrder_(payload, idToken) {
       deliveryCost: shippingRates.deliveryCost != null ? shippingRates.deliveryCost : settings.deliveryCost,
       encomiendaCost: shippingRates.encomiendaCost != null ? shippingRates.encomiendaCost : settings.encomiendaCost
     };
-    var shipping = phase4ResolveShipping_(shippingRatesMerged, selectedCity);
-    if (!shipping.ok) { phase4Rollback_(transactionId); return shipping; }
     var requestedShippingMethod = phase4CleanText_(payload.shippingMethod, 20);
+    var shipping = phase4ResolveShipping_(shippingRatesMerged, selectedCity, departamento, requestedShippingMethod);
+    if (!shipping.ok) { phase4Rollback_(transactionId); return shipping; }
     if (requestedShippingMethod !== shipping.method) {
       phase4Rollback_(transactionId);
       return { ok: false, error: 'shipping_changed' };
+    }
+    if (shipping.method === 'encomienda' && paymentMethod === 'efectivo') {
+      phase4Rollback_(transactionId);
+      return { ok: false, error: 'payment_unavailable' };
     }
     var encomiendaMode = phase4CleanText_(payload.encomiendaMode, 20);
     if (shipping.method !== 'encomienda' && encomiendaMode) {
@@ -550,29 +553,25 @@ function phase4CreateOrder_(payload, idToken) {
       if (!isFinite(price) || price < 0) { phase4Rollback_(transactionId); return { ok: false, error: 'invalid_price', productId: productId }; }
       var stock = phase4ParseStock_(product.stock);
       var qty = Number(line.qty);
-      if (stock !== null && qty > stock) {
+      if (stock !== null && requestedQtyByProduct[productId] > stock) {
         phase4Rollback_(transactionId);
-        return { ok: false, error: 'insufficient_stock', productId: productId, available: stock, requested: qty };
+        return { ok: false, error: 'insufficient_stock', productId: productId, available: stock, requested: requestedQtyByProduct[productId] };
       }
-      var variants = Array.isArray(line.variants) ? line.variants : (line.variant ? [line.variant] : []);
-      if (!variants.length && !phase4VariantIsValid_(product, '')) {
-        phase4Rollback_(transactionId);
-        return { ok: false, error: 'variant_required', productId: productId };
-      }
-      if (variants.some(function (variant) { return !phase4VariantIsValid_(product, variant); })) {
-        phase4Rollback_(transactionId);
-        return { ok: false, error: 'invalid_variant', productId: productId };
-      }
-      resolvedItems.push({
-        id: productId,
-        name: phase4CleanText_(product.name || product.title || 'Producto', 180),
-        cat: phase4CleanText_(product.category || product.collectionSlug || product.collection || product.cat || '', 120),
-        price: price,
-        qty: qty,
-        variant: phase4CleanText_(variants.join(' / '), 120),
-        imageUrl: phase4CleanText_(product.imageUrl || product.image || '', 900)
-      });
-      subtotal += price * qty;
+      var selectedVariant = phase4CleanText_(line.variant, 120);
+    if (!phase4VariantIsValid_(product, selectedVariant)) {
+      phase4Rollback_(transactionId);
+      return { ok: false, error: selectedVariant ? 'invalid_variant' : 'variant_required', productId: productId };
+    }
+    resolvedItems.push({
+      id: productId,
+      name: phase4CleanText_(product.name || product.title || 'Producto', 180),
+      cat: phase4CleanText_(product.category || product.collectionSlug || product.collection || product.cat || '', 120),
+      price: price,
+      qty: qty,
+      variant: selectedVariant,
+      imageUrl: phase4CleanText_(product.imageUrl || product.image || '', 900)
+    });
+    subtotal += price * qty;
     }
 
     var shippingCost = shipping.cost === null ? 0 : shipping.cost;
@@ -621,7 +620,7 @@ function phase4CreateOrder_(payload, idToken) {
         method: shipping.method,
         encomiendaMode: shipping.method === 'encomienda' ? encomiendaMode : '',
         city: shipping.city,
-        departamento: departamento,
+        departamento: shipping.departamento || departamento,
         rateIndex: shipping.rateIndex,
         address: keepsAddress ? address : '',
         referencia: keepsAddress ? referencia : '',
@@ -646,16 +645,16 @@ function phase4CreateOrder_(payload, idToken) {
     var writes = [phase4CreateWrite_('orders/' + orderId, orderData)];
     var sequencePatch = { lastNumber: nextOrderSequence, lastCode: publicOrderNumber, updatedAt: nowIso, updatedBy: email };
     writes.push(docs['settings/orderSequence'] ? phase4UpdateWrite_('settings/orderSequence', sequencePatch, ['lastNumber', 'lastCode', 'updatedAt', 'updatedBy']) : phase4CreateWrite_('settings/orderSequence', sequencePatch));
-    resolvedItems.forEach(function (item) {
-      var stock = phase4ParseStock_(docs['products/' + item.id].stock);
-      if (stock !== null) {
-        writes.push(phase4UpdateWrite_('products/' + item.id, {
-          stock: stock - item.qty,
-          lastStockOrderId: orderId,
-          updatedAt: nowIso
-        }, ['stock', 'lastStockOrderId', 'updatedAt']));
-      }
-    });
+    Object.keys(requestedQtyByProduct).forEach(function (productId) {
+    var stock = phase4ParseStock_(docs['products/' + productId].stock);
+    if (stock !== null) {
+      writes.push(phase4UpdateWrite_('products/' + productId, {
+        stock: stock - requestedQtyByProduct[productId],
+        lastStockOrderId: orderId,
+        updatedAt: nowIso
+      }, ['stock', 'lastStockOrderId', 'updatedAt']));
+    }
+  });
 
     var commit = phase4Commit_(writes, transactionId);
     if (!commit.ok) return commit;

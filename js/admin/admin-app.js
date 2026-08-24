@@ -35,7 +35,7 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20260716-cloudinary-fix-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260716-cloudinary-fix-1";
-import { createOrderViaServer } from "../create-order-client.js?v=tintin-20260811-phone-order-1";
+import { createOrderViaServer } from "../create-order-client.js?v=tintin-20260822-checkout-hardening-2";
 import './orders/pedidos-superadmin-crud.js?v=tintin-20260821-accounts-phase-a-1';
 import './orders/pedidos-superadmin-crud.js?v=tintin-20260821-accounts-phase-a-1';
 

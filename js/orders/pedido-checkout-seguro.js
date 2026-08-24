@@ -15,7 +15,7 @@ import {
   cartTotal,
   formatPrice,
   awaitCartReady
-} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260822-checkout-cart-profile-1';
+} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260822-checkout-final-cart-1';
 import {
   findCountryByCode,
   normalizePhone,
@@ -28,8 +28,8 @@ import {
   normalizeRuc,
   isValidRazonSocial
 } from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1';
-import { createOrderViaServer } from '../create-order-client.js?v=tintin-20260811-phone-order-1';
-import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-facturacion-1';
+import { createOrderViaServer } from '../create-order-client.js?v=tintin-20260822-checkout-hardening-2';
+import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-checkout-hardening-2';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
@@ -397,6 +397,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
           return {
             name: text(item),
             price: parseMoney(fallback),
+            departamento: 'Central',
             sourceIndex
           };
         }
@@ -407,6 +408,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
         return {
           name: text(item.name),
           price: Number.isFinite(price) ? price : null,
+          departamento: text(item.departamento) || 'Central',
           sourceIndex
         };
       })
@@ -432,11 +434,16 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     return '';
   }
 
-  function resolveShipping(settings, selectedCity, location) {
+  function resolveShipping(settings, selectedCity, selectedDepartment, requestedMethod, location) {
+    const requested = text(requestedMethod);
     if (selectedCity === '__retiro__') {
+      if (requested && requested !== 'retiro') {
+        throw appError('shipping_changed', 'El método de entrega cambió. Volvé a elegir cómo recibir tu pedido.');
+      }
       return {
         method: 'retiro',
         city: 'Retiro coordinado',
+        departamento: 'Central',
         cost: 0,
         pending: false,
         rateIndex: -1,
@@ -444,13 +451,25 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       };
     }
 
+    if (!['delivery', 'encomienda'].includes(requested)) {
+      throw appError('shipping_invalid', 'Volvé a elegir tu ciudad y método de entrega.');
+    }
+
     const wanted = text(selectedCity).toLocaleLowerCase('es');
-    const delivery = normalizeCities(settings.deliveryCities, settings.deliveryCost)
-      .find(city => city.name.toLocaleLowerCase('es') === wanted);
-    if (delivery) {
+    const wantedDepartment = text(selectedDepartment).toLocaleLowerCase('es');
+    const matches = city =>
+      city.name.toLocaleLowerCase('es') === wanted &&
+      (!wantedDepartment || city.departamento.toLocaleLowerCase('es') === wantedDepartment);
+
+    if (requested === 'delivery') {
+      const delivery = normalizeCities(settings.deliveryCities, settings.deliveryCost).find(matches);
+      if (!delivery) {
+        throw appError('shipping_invalid', 'La ciudad elegida ya no está disponible para delivery.');
+      }
       return {
         method: 'delivery',
         city: delivery.name,
+        departamento: delivery.departamento,
         cost: delivery.price,
         pending: delivery.price === null,
         rateIndex: delivery.sourceIndex,
@@ -458,25 +477,24 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       };
     }
 
-    const encomienda = normalizeCities(settings.encomiendaCities, settings.encomiendaCost)
-      .find(city => city.name.toLocaleLowerCase('es') === wanted);
-    if (encomienda) {
-      const mode = encomiendaMode();
-      if (!mode) {
-        throw appError('shipping_invalid', 'Elegí si retirás en la agencia o si te lo llevamos a la puerta.');
-      }
-      return {
-        method: 'encomienda',
-        encomiendaMode: mode,
-        city: encomienda.name,
-        cost: 0,
-        pending: false,
-        rateIndex: encomienda.sourceIndex,
-        mapLocation: mode === 'puerta' ? location : null
-      };
+    const encomienda = normalizeCities(settings.encomiendaCities, settings.encomiendaCost).find(matches);
+    if (!encomienda) {
+      throw appError('shipping_invalid', 'La ciudad elegida ya no está disponible para encomienda.');
     }
-
-    throw appError('shipping_invalid', 'La ciudad elegida ya no está disponible.');
+    const mode = encomiendaMode();
+    if (!mode) {
+      throw appError('shipping_invalid', 'Elegí si retirás en la agencia o si te lo llevamos a la puerta.');
+    }
+    return {
+      method: 'encomienda',
+      encomiendaMode: mode,
+      city: encomienda.name,
+      departamento: encomienda.departamento,
+      cost: 0,
+      pending: false,
+      rateIndex: encomienda.sourceIndex,
+      mapLocation: mode === 'puerta' ? location : null
+    };
   }
 
   function readPhone() {
@@ -505,10 +523,29 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       throw appError('settings_missing', 'No pudimos comprobar la configuración de la tienda.');
     }
     const settings = mergeShippingRates(settingsSnap.data() || {}, shippingRatesSnap);
-    const selectedCity = text(document.getElementById('ck-city')?.value);
+    const citySelect = document.getElementById('ck-city');
+    const selectedCity = text(citySelect?.value);
     const selectedDepartamentoRaw = text(document.getElementById('ck-departamento')?.value);
     const selectedDepartamento = selectedDepartamentoRaw === '__retiro__' ? '' : selectedDepartamentoRaw;
-    const shipping = resolveShipping(settings, selectedCity, mapLocation());
+    const selectedOption = citySelect?.options?.[citySelect.selectedIndex];
+    const selectedGroupId = selectedOption?.parentElement?.id || '';
+    const requestedShippingMethod = selectedCity === '__retiro__'
+      ? 'retiro'
+      : selectedGroupId === 'ck-city-delivery-group'
+        ? 'delivery'
+        : selectedGroupId === 'ck-city-encomienda-group'
+          ? 'encomienda'
+          : '';
+    if (!requestedShippingMethod) {
+      throw appError('shipping_invalid', 'Volvé a elegir tu ciudad y método de entrega.');
+    }
+    const shipping = resolveShipping(
+      settings,
+      selectedCity,
+      selectedDepartamento,
+      requestedShippingMethod,
+      mapLocation()
+    );
     const name = text(document.getElementById('ck-name')?.value);
     const address = text(document.getElementById('ck-address')?.value);
     const paymentMethod = text(document.querySelector('input[name="ck-pay"]:checked')?.value);
@@ -565,10 +602,14 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     });
   }
 
+  function cartLineKey(item) {
+    return `${String(item?.id ?? '')}\u241f${text(item?.variant)}`;
+  }
+
   function authoritativeCartFromQuote(quote) {
-    const currentById = new Map(getCartLocal().map(item => [String(item.id), item]));
+    const currentByLine = new Map(getCartLocal().map(item => [cartLineKey(item), item]));
     return (quote.items || []).map(item => ({
-      ...(currentById.get(String(item.id)) || {}),
+      ...(currentByLine.get(cartLineKey(item)) || {}),
       id: item.id,
       name: item.name,
       cat: item.cat || '',
