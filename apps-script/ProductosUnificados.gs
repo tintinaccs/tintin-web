@@ -174,7 +174,7 @@ function tintinCallProductsWebhook_(payload) {
   return { response: response, body: tintinParseJsonResponse_(response) };
 }
 
-function tintinProductPayload_(row) {
+function tintinProductPayload_(row, changedFields) {
   var requestedAction = String(row[34] || '').trim().toLowerCase();
   return {
     action: requestedAction === 'eliminar' ? 'deleteProduct' : 'saveProduct',
@@ -205,15 +205,41 @@ function tintinProductPayload_(row) {
     imagesExtra: row[30],
     collection: row[31],
     tags: row[32],
-    variants: row[33]
+    variants: row[33],
+    // En una edición de una celda sólo se envían esos campos. Así un JSON de
+    // variantes pendiente de corregir no puede bloquear, por ejemplo, el
+    // cambio de nombre de un producto ya existente.
+    changedFields: Array.isArray(changedFields) ? changedFields : []
   };
 }
 
-function tintinSendProductRow_(sheet, rowNumber) {
+function tintinProductFieldsForColumns_(firstColumn, columnCount) {
+  var byColumn = {
+    2: ['name'], 4: ['category'], 5: ['costUnit'], 6: ['price'],
+    // Stock actual (K) es una fórmula: al cambiar comprado (I) se actualizan
+    // juntos inventario.purchased y products.stock.
+    9: ['purchased', 'stock'], 12: ['stockMinimum'], 14: ['internalNotes'],
+    15: ['active'], 16: ['oferta'], 17: ['destacado'], 18: ['priceBefore'],
+    19: ['badge'], 20: ['imageUrl'], 21: ['description'], 23: ['material'],
+    24: ['measurements'], 25: ['colorFinish'], 26: ['care'],
+    27: ['waterResistance'], 28: ['warranty'], 29: ['sizeFit'],
+    30: ['packageContents'], 31: ['imagesExtra'], 32: ['collection'],
+    33: ['tags'], 34: ['variants']
+  };
+  var fields = [];
+  for (var column = firstColumn; column < firstColumn + columnCount; column += 1) {
+    (byColumn[column] || []).forEach(function(field) {
+      if (fields.indexOf(field) === -1) fields.push(field);
+    });
+  }
+  return fields;
+}
+
+function tintinSendProductRow_(sheet, rowNumber, changedFields) {
   var row = sheet.getRange(rowNumber, 1, 1, 35).getValues()[0];
   if (!row[1]) return;
   var requestedAction = String(row[34] || '').trim().toLowerCase();
-  var payload = tintinProductPayload_(row);
+  var payload = tintinProductPayload_(row, changedFields);
   payload.schemaVersion = 3;
   payload.source = 'google-sheets:Productos';
   var requestResult = tintinCallProductsWebhook_(payload);
@@ -241,14 +267,14 @@ function tintinSendProductRow_(sheet, rowNumber) {
 // Un 409/502 es recuperable (conflicto o indisponibilidad transitoria del
 // servicio). Reintenta una vez antes de informar el fallo, sin duplicar una
 // escritura que el endpoint ya confirmó.
-function tintinSendProductRowWithRetry_(sheet, rowNumber) {
+function tintinSendProductRowWithRetry_(sheet, rowNumber, changedFields) {
   try {
-    return tintinSendProductRow_(sheet, rowNumber);
+    return tintinSendProductRow_(sheet, rowNumber, changedFields);
   } catch (firstError) {
     var status = Number(firstError && firstError.tintinHttpStatus || 0);
     if (status !== 409 && status !== 502) throw firstError;
     Utilities.sleep(750);
-    return tintinSendProductRow_(sheet, rowNumber);
+    return tintinSendProductRow_(sheet, rowNumber, changedFields);
   }
 }
 
@@ -263,27 +289,32 @@ function tintinHandleProductEdit_(e) {
   var sheet = e.range.getSheet();
   if (sheet.getName() !== TINTIN_PRODUCTS_SHEET || e.range.getRow() < TINTIN_PRODUCTS_FIRST_ROW) return;
   if (tintinIsRowPushInProgress_(sheet, e.range.getRow())) return;
-  if (e.range.getColumn() === 2 || e.range.getColumn() === 4 || e.range.getColumn() === 5 ||
-      e.range.getColumn() === 6 || e.range.getColumn() === 9 || e.range.getColumn() === 12 ||
-      e.range.getColumn() === 14 || e.range.getColumn() >= 15) {
+  var changedFields = tintinProductFieldsForColumns_(e.range.getColumn(), e.range.getNumColumns());
+  var actionColumnTouched = e.range.getColumn() <= 35 && e.range.getColumn() + e.range.getNumColumns() - 1 >= 35;
+  if (actionColumnTouched && changedFields.indexOf('active') === -1) changedFields.push('active');
+  if (changedFields.length || actionColumnTouched) {
     if (!tintinClaimProductEdit_(e)) return;
-    var cell = e.range.getA1Notation();
-    tintinRecordSyncSafely_('SYNCING', sheet.getName(), cell, 'Sincronizando producto con Firestore.');
-    try {
-      tintinSendProductRowWithRetry_(sheet, e.range.getRow());
-      tintinRecordSyncSafely_('SYNCED', sheet.getName(), cell, 'Producto sincronizado.');
-    } catch (error) {
-      var isRejected = error && error.tintinHttpStatus === 400 || /valor numerico invalido/i.test(String(error && error.message || error));
-      // Solo se revierte un valor que el servidor rechazó como inválido. Una
-      // falla temporal no puede borrar una edición válida de la operadora.
-      if (isRejected && e.range.getNumRows() === 1 && e.range.getNumColumns() === 1) {
-        if (Object.prototype.hasOwnProperty.call(e, 'oldValue')) e.range.setValue(e.oldValue);
-        else e.range.clearContent();
+    for (var rowNumber = e.range.getRow(); rowNumber < e.range.getRow() + e.range.getNumRows(); rowNumber += 1) {
+      var cell = sheet.getRange(rowNumber, e.range.getColumn(), 1, e.range.getNumColumns()).getA1Notation();
+      // Marca la edición local antes del envío. Una actualización web más
+      // antigua nunca debe restaurar un nombre que la operadora acaba de editar.
+      sheet.getRange(rowNumber, 22).setValue(new Date());
+      tintinRecordSyncSafely_('SYNCING', sheet.getName(), cell, 'Sincronizando campos: ' + (changedFields.join(', ') || 'acción') + '.');
+      try {
+        tintinSendProductRowWithRetry_(sheet, rowNumber, changedFields);
+        tintinRecordSyncSafely_('SYNCED', sheet.getName(), cell, 'Producto sincronizado: ' + (changedFields.join(', ') || 'acción') + '.');
+      } catch (error) {
+        var isRejected = error && error.tintinHttpStatus === 400 || /valor numerico invalido/i.test(String(error && error.message || error));
+        // Sólo se revierte la celda editada si ese valor concreto fue rechazado.
+        if (isRejected && e.range.getNumRows() === 1 && e.range.getNumColumns() === 1) {
+          if (Object.prototype.hasOwnProperty.call(e, 'oldValue')) e.range.setValue(e.oldValue);
+          else e.range.clearContent();
+        }
+        var status = isRejected ? 'REJECTED' : 'ERROR';
+        tintinRecordSyncSafely_(status, sheet.getName(), cell, String(error && error.message || error));
+        if (isRejected) throw error;
+        console.error('La edición quedó guardada en Sheets, pero falta reintentar la sincronización: ' + String(error && error.message || error));
       }
-      var status = isRejected ? 'REJECTED' : 'ERROR';
-      tintinRecordSyncSafely_(status, sheet.getName(), cell, String(error && error.message || error));
-      if (isRejected) throw error;
-      console.error('La edición quedó guardada en Sheets, pero falta reintentar la sincronización: ' + String(error && error.message || error));
     }
   }
 }
