@@ -1,13 +1,12 @@
 /* TINTIN — normalización de la superficie global de notificaciones.
    La bandeja comparte capa, fondo sólido y contrato visual con las demás
-   superficies del header; su geometría por dispositivo sigue en
+   superficies del header; su geometría y transición por dispositivo siguen en
    css/components/notifications/notificaciones-sociales.css. */
 #notifications-drawer {
   z-index: 1460 !important;
   background: #FFFFFF !important;
   background-color: #FFFFFF !important;
   background-image: none !important;
-  opacity: 1 !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   mix-blend-mode: normal !important;
