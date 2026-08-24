@@ -54,10 +54,9 @@ function attachNotificationsDemand() {
     });
   });
 
-  // La autenticación es una dependencia global del header, incluso en páginas
-  // informativas. Solo consulta el estado de Auth; el runtime de notificaciones
-  // y Firestore continúa siendo lazy y se importa únicamente si hay sesión.
-  // Esto evita depender de marcas locales que pueden no existir o quedar viejas.
+  // Auth es una dependencia global del header incluso en páginas informativas.
+  // Resolver la sesión aquí no descarga el feed de notificaciones para un
+  // visitante: ese módulo y sus lecturas se activan solo cuando hay sesión.
   void loadAuthRuntime().catch(error => {
     console.warn('[PublicShell] No se pudo resolver la sesión global del header.', error);
   });
@@ -201,10 +200,15 @@ export function loadSharedRuntime() {
   loadNavigationBehaviors();
 
   // Las páginas informativas resuelven Auth globalmente para que el header
-  // conozca la sesión en cualquier ruta, pero mantienen carrito, catálogo y
-  // Firestore bajo demanda para no convertirlas en páginas de comercio pesado.
+  // conozca la sesión en cualquier ruta. Catálogo completo, carrito y feed de
+  // notificaciones siguen bajo demanda; la configuración liviana de
+  // colecciones se precarga en idle para que el primer menú ya coincida con
+  // Inicio/Tienda y no dependa del momento en que el usuario lo abra.
   if (!FULL_COMMERCE_PAGES.has(page)) {
     attachLightweightCommerceDemand();
+    scheduleNonCritical(() => {
+      Promise.allSettled([loadCollectionsRuntime()]).then(reportRuntimeFailures);
+    });
     return;
   }
 
