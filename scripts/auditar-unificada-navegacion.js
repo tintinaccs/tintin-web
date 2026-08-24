@@ -119,9 +119,11 @@ check(
   'el header sigue dependiendo de una marca local de sesión en vez de resolver Auth globalmente'
 );
 check(
-  sharedRuntime.includes('setNotificationTriggersVisible(authenticated)') &&
-    sharedRuntime.includes('const authenticated = Boolean(event.detail?.authenticated)'),
-  'la visibilidad de Alertas no está enlazada directamente al estado global de Auth'
+  sharedRuntime.includes('const authenticated = Boolean(event.detail?.authenticated)') &&
+    sharedRuntime.includes('.then(() => setNotificationTriggersVisible(true))') &&
+    sharedRuntime.includes('setNotificationTriggersVisible(false)') &&
+    sharedRuntime.includes('void loadNotificationsRuntime()'),
+  'la visibilidad de Alertas no espera Auth y el registro exitoso de su superficie'
 );
 check(
   sharedRuntime.includes('scheduleNonCritical(() => {') &&
