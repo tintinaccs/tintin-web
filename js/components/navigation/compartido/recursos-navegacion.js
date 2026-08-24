@@ -11,19 +11,51 @@ const NAVIGATION_STYLES = Object.freeze([
   ['tt-navigation-search-css', 'css/components/navigation/compartido/busqueda.css'],
 ]);
 
+function stylesheetForPath(path) {
+  const expectedPath = new URL(path, window.location.href).pathname;
+  return [...document.querySelectorAll('link[rel~="stylesheet"][href]')].find(link => {
+    try {
+      return new URL(link.href, window.location.href).pathname === expectedPath;
+    } catch {
+      return false;
+    }
+  }) || null;
+}
+
+function markStylesheet(link, id) {
+  if (!link.id) link.id = id;
+  if (id === 'tt-navigation-notifications-css') link.dataset.ttSocialNotifications = '1';
+  return link;
+}
+
+function waitForStylesheet(link) {
+  if (link.sheet) return Promise.resolve(link);
+  return new Promise(resolve => {
+    const finish = () => resolve(link);
+    link.addEventListener('load', finish, { once: true });
+    link.addEventListener('error', finish, { once: true });
+  });
+}
+
 function ensureStylesheet(id, path) {
-  const existing = document.getElementById(id);
+  const expectedHref = versionedSiteAsset(path);
+  const existing = document.getElementById(id) || stylesheetForPath(path);
   if (existing) {
-    const expectedHref = versionedSiteAsset(path);
-    if (existing.href !== expectedHref) existing.href = expectedHref;
-    return Promise.resolve(existing);
+    markStylesheet(existing, id);
+    if (existing.href === expectedHref) return waitForStylesheet(existing);
+
+    return new Promise(resolve => {
+      const finish = () => resolve(existing);
+      existing.addEventListener('load', finish, { once: true });
+      existing.addEventListener('error', finish, { once: true });
+      existing.href = expectedHref;
+    });
   }
 
   return new Promise(resolve => {
-    const link = document.createElement('link');
-    link.id = id;
+    const link = markStylesheet(document.createElement('link'), id);
     link.rel = 'stylesheet';
-    link.href = versionedSiteAsset(path);
+    link.href = expectedHref;
     link.addEventListener('load', () => resolve(link), { once: true });
     link.addEventListener('error', () => resolve(link), { once: true });
     document.head.appendChild(link);
