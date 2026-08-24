@@ -10,7 +10,10 @@
   #tt-tabbar {
     --tt-mobile-step: 0px;
     display:grid !important;
-    grid-template-columns:none;
+    /* Las columnas nacen de los controles visibles. Así invitada, cuenta
+       iniciada y Home oculto pueden tener 4/5/6 acciones sin dejar huecos ni
+       comprimir un sexto botón dentro de una grilla de cinco. */
+    grid-template-columns:none !important;
     grid-auto-flow:column;
     grid-auto-columns:minmax(0,1fr);
     align-items:center;
