@@ -37,6 +37,20 @@ test('producto llega con canonical, social preview y JSON-LD server-side coheren
   expect(jsonLd.offers.availability).toBe('https://schema.org/OutOfStock');
 });
 
+test('Function de producto resuelve /product al documento físico sin perder el contrato público', async () => {
+  const { productAssetRequest } = await import('../../functions/product.js');
+  const publicRequest = new Request('https://tintinaccesorios.pages.dev/product?id=abc_123&ref=catalogo', {
+    headers: { accept: 'text/html' }
+  });
+  const assetRequest = productAssetRequest(publicRequest);
+  const assetUrl = new URL(assetRequest.url);
+
+  expect(assetUrl.pathname).toBe('/product.html');
+  expect(assetUrl.search).toBe('');
+  expect(assetRequest.method).toBe('GET');
+  expect(assetRequest.headers.get('accept')).toBe('text/html');
+});
+
 test('superficies privadas y auxiliares permanecen noindex', async ({ browser, baseURL }) => {
   // Las etiquetas robots forman parte del HTML inicial. Se verifican sin
   // JavaScript para que las redirecciones legítimas de autenticación de una
