@@ -37,18 +37,13 @@ test('producto llega con canonical, social preview y JSON-LD server-side coheren
   expect(jsonLd.offers.availability).toBe('https://schema.org/OutOfStock');
 });
 
-test('Function de producto resuelve /product al documento físico sin perder el contrato público', async () => {
-  const { productAssetRequest } = await import('../../functions/product.js');
-  const publicRequest = new Request('https://tintinaccesorios.pages.dev/product?id=abc_123&ref=catalogo', {
-    headers: { accept: 'text/html' }
-  });
-  const assetRequest = productAssetRequest(publicRequest);
-  const assetUrl = new URL(assetRequest.url);
-
-  expect(assetUrl.pathname).toBe('/product.html');
-  expect(assetUrl.search).toBe('');
-  expect(assetRequest.method).toBe('GET');
-  expect(assetRequest.headers.get('accept')).toBe('text/html');
+test('ruta limpia de producto con id siempre entrega el documento navegable', async ({ page }) => {
+  const response = await page.goto('/product?id=route-probe-inexistente', { waitUntil: 'domcontentloaded' });
+  expect(response?.status()).toBe(200);
+  await expect(page.locator('#product-detail')).toHaveCount(1);
+  await expect(page.locator('#product-loading')).toHaveCount(1);
+  expect(new URL(page.url()).pathname).toBe('/product');
+  expect(new URL(page.url()).searchParams.get('id')).toBe('route-probe-inexistente');
 });
 
 test('superficies privadas y auxiliares permanecen noindex', async ({ browser, baseURL }) => {
