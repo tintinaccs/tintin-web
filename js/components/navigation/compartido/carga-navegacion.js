@@ -53,11 +53,20 @@ function attachNotificationsDemand() {
 
   window.addEventListener('tintin:auth-nav-updated', event => {
     const authenticated = Boolean(event.detail?.authenticated);
-    setNotificationTriggersVisible(authenticated);
-    if (!authenticated) return;
-    void loadNotificationsRuntime().catch(error => {
-      console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
-    });
+    if (!authenticated) {
+      setNotificationTriggersVisible(false);
+      return;
+    }
+
+    // La campana se muestra solo después de registrar su superficie. Así un
+    // clic inmediato tras resolver Auth nunca cae en un trigger visible que
+    // todavía no tenga drawer/controlador disponible.
+    void loadNotificationsRuntime()
+      .then(() => setNotificationTriggersVisible(true))
+      .catch(error => {
+        setNotificationTriggersVisible(false);
+        console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
+      });
   });
 
   // Auth es una dependencia global del header incluso en páginas informativas.
