@@ -153,7 +153,9 @@
 
 @media (min-width: 1025px) and (max-width: 1120px) {
   .tt-header-desktop .tt-header-inner {
-    grid-template-columns: 126px minmax(0, 1fr) 146px !important;
+    /* La reserva simétrica mantiene la navegación centrada y deja espacio
+       real para Buscar + Alertas + Cuenta + Carrito en una sesión activa. */
+    grid-template-columns: 196px minmax(0, 1fr) 196px !important;
     gap: 10px !important;
     padding-inline: 14px !important;
   }
