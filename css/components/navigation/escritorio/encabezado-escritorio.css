@@ -73,6 +73,22 @@
     transform: none !important;
   }
 
+  /* Tienda es parte de la navegación principal, no un botón de acción.
+     Esta regla deliberadamente más específica neutraliza capas globales
+     antiguas que le aplicaban un segundo marco blanco/rosado al activarse. */
+  #tt-header-desktop-tablet #tt-nav-desktop-tablet #btn-tienda,
+  #tt-header-desktop-tablet #tt-nav-desktop-tablet #btn-tienda:hover,
+  #tt-header-desktop-tablet #tt-nav-desktop-tablet #btn-tienda:focus-visible,
+  #tt-header-desktop-tablet #tt-nav-desktop-tablet #btn-tienda.active,
+  #tt-header-desktop-tablet #tt-nav-desktop-tablet #btn-tienda[aria-expanded="true"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
   .tt-header-desktop .tt-nav > a::after,
   .tt-header-desktop .tt-nav-dropdown > button::after { display: none; }
   .tt-header-desktop .tt-nav > a:hover,
