@@ -11,19 +11,12 @@ function text(value) {
   return String(value == null ? '' : value).trim();
 }
 
-// Sin productos cargados todavía no se puede saber qué colecciones están
-// vacías, así que se muestran todas para no ocultar catálogo real por error.
-function hasProducts(slug) {
-  const normalized = text(slug).toLowerCase();
-  return products.some(product =>
-    text(product?.category || product?.cat).toLowerCase() === normalized &&
-    text(product?.name)
-  );
-}
-
+// La navegación se rige por las colecciones públicas habilitadas, no por si
+// la página actual ya cargó o no el catálogo de productos. Antes Inicio podía
+// ocultar categorías vacías mientras Nosotros/Contacto mostraban todas,
+// dejando distintos menús para la misma tienda según la ruta visitada.
 function visibleCollections(collections) {
-  if (!products.length) return collections;
-  return collections.filter(item => hasProducts(item.slug));
+  return collections;
 }
 
 // Cuando la colección no tiene imagen propia (o fue eliminada), se usa la
