@@ -2,7 +2,6 @@ import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-2026
 import { collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const STYLE_ID = 'tt-product-card-engagement-style';
-const STYLE_VERSION = 'tintin-20260824-product-card-engagement-1';
 
 let ratings = new Map();
 let engagement = new Map();
@@ -11,11 +10,21 @@ let refreshTimer = null;
 
 function ensureStyles() {
   if (document.getElementById(STYLE_ID)) return;
-  const link = document.createElement('link');
-  link.id = STYLE_ID;
-  link.rel = 'stylesheet';
-  link.href = `/css/components/products/tarjeta-participacion.css?v=${STYLE_VERSION}`;
-  document.head.appendChild(link);
+  const style = document.createElement('style');
+  style.id = STYLE_ID;
+  style.textContent = `
+    .tt-product-rating-summary{margin-top:5px;color:#ad3f67;font-size:12px;font-weight:700;line-height:1.35}
+    .tt-product-engagement{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:7px;min-height:22px}
+    .tt-product-engagement-action{display:inline-flex;align-items:center;gap:5px;min-width:0;padding:2px 0;border:0;background:transparent;color:#7d5866;font:inherit;font-size:11.5px;font-weight:600;line-height:1.25;text-decoration:none;cursor:pointer;transition:color 160ms ease,transform 160ms ease}
+    .tt-product-engagement-action:hover,.tt-product-engagement-action:focus-visible{color:#ad3f67}
+    .tt-product-engagement-action:focus-visible{outline:2px solid rgba(173,63,103,.38);outline-offset:3px;border-radius:5px}
+    .tt-product-engagement-action:active{transform:scale(.97)}
+    .tt-product-engagement-heart{display:inline-flex;align-items:center;justify-content:center;width:16px;min-width:16px;font-size:17px;line-height:1;color:#ad3f67}
+    .tt-product-engagement-comments svg{width:15px;height:15px;flex:0 0 15px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+    @media(max-width:480px){.tt-product-rating-summary{font-size:11px}.tt-product-engagement{gap:9px}.tt-product-engagement-action{font-size:10.5px}}
+    @media(prefers-reduced-motion:reduce){.tt-product-engagement-action{transition:none}}
+  `;
+  document.head.appendChild(style);
 }
 
 function formatAverage(value) {
@@ -97,7 +106,8 @@ function renderCard(card) {
   const row = ensureEngagementHost(card, id);
   if (!row) return;
 
-  const favoriteButton = card.querySelector(`[data-favorite-id="${CSS.escape(id)}"]`);
+  const favoriteButton = [...card.querySelectorAll('[data-favorite-id]')]
+    .find(button => String(button.dataset.favoriteId || '') === id);
   const selected = favoriteButton?.getAttribute('aria-pressed') === 'true';
   const likeButton = row.querySelector('[data-card-product-like]');
   const likeIcon = row.querySelector('[data-card-like-icon]');
@@ -108,7 +118,7 @@ function renderCard(card) {
   if (likeButton) {
     likeButton.classList.toggle('is-liked', selected);
     likeButton.setAttribute('aria-pressed', String(selected));
-    likeButton.setAttribute('aria-label', `${selected ? 'Quitar Me gusta de' : 'Dar Me gusta a'} este producto. ${value.likeCount} ${plural(value.likeCount, 'Me gusta', 'Me gusta')}`);
+    likeButton.setAttribute('aria-label', `${selected ? 'Quitar Me gusta de' : 'Dar Me gusta a'} este producto. ${value.likeCount} Me gusta`);
   }
   if (likeIcon) likeIcon.textContent = selected ? '♥' : '♡';
   if (likeCount) likeCount.textContent = `${value.likeCount} Me gusta`;
