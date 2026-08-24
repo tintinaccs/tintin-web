@@ -1,0 +1,40 @@
+name: Validar ruta de producto en Cloudflare
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'functions/product.js'
+      - 'product.html'
+      - 'tienda.js'
+      - 'scripts/auditar-producto-cloudflare-preview.mjs'
+      - 'tests/seo/**'
+      - '.github/workflows/validar-ruta-producto-cloudflare.yml'
+
+permissions:
+  contents: read
+  checks: read
+
+concurrency:
+  group: product-route-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  product-route-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Probar /product?id=... en preview real de Cloudflare
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TINTIN_TARGET_SHA: ${{ github.event.pull_request.head.sha }}
+          GITHUB_TOKEN: ${{ github.token }}
+          TINTIN_PRODUCT_PREVIEW_ATTEMPTS: 45
+          TINTIN_PRODUCT_PREVIEW_POLL_MS: 10000
+        run: node scripts/auditar-producto-cloudflare-preview.mjs
