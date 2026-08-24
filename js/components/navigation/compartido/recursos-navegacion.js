@@ -28,12 +28,22 @@ function markStylesheet(link, id) {
   return link;
 }
 
-function waitForStylesheet(link) {
+function waitForStylesheet(link, ceilingMs = 2200) {
   if (link.sheet) return Promise.resolve(link);
   return new Promise(resolve => {
-    const finish = () => resolve(link);
+    let settled = false;
+    let timer = 0;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      if (timer) window.clearTimeout(timer);
+      link.removeEventListener('load', finish);
+      link.removeEventListener('error', finish);
+      resolve(link);
+    };
     link.addEventListener('load', finish, { once: true });
     link.addEventListener('error', finish, { once: true });
+    timer = window.setTimeout(finish, ceilingMs);
   });
 }
 
@@ -45,9 +55,19 @@ function ensureStylesheet(id, path) {
     if (existing.href === expectedHref) return waitForStylesheet(existing);
 
     return new Promise(resolve => {
-      const finish = () => resolve(existing);
+      let settled = false;
+      let timer = 0;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        if (timer) window.clearTimeout(timer);
+        existing.removeEventListener('load', finish);
+        existing.removeEventListener('error', finish);
+        resolve(existing);
+      };
       existing.addEventListener('load', finish, { once: true });
       existing.addEventListener('error', finish, { once: true });
+      timer = window.setTimeout(finish, 2200);
       existing.href = expectedHref;
     });
   }
@@ -56,8 +76,9 @@ function ensureStylesheet(id, path) {
     const link = markStylesheet(document.createElement('link'), id);
     link.rel = 'stylesheet';
     link.href = expectedHref;
-    link.addEventListener('load', () => resolve(link), { once: true });
-    link.addEventListener('error', () => resolve(link), { once: true });
+    const finish = () => resolve(link);
+    link.addEventListener('load', finish, { once: true });
+    link.addEventListener('error', finish, { once: true });
     document.head.appendChild(link);
   });
 }
