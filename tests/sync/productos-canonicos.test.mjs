@@ -78,16 +78,39 @@ test('Apps Script usa Productos y un solo dispatcher instalable', () => {
   assert.doesNotMatch(source, /insertSheet\(['"]Catálogo web['"]\)/);
 });
 
+test('el espejo integral limita las escrituras a los campos administrativos', () => {
+  const appScript = read('apps-script/ProductosUnificados.gs');
+  const adminWebhook = read('functions/api/sheets-admin-webhook.js');
+  const snapshot = read('functions/api/sheets-sync-snapshot.js');
+  assert.match(appScript, /function tintinHandleUserEdit_/);
+  assert.match(appScript, /function tintinHandleOrderEdit_/);
+  assert.match(appScript, /function tintinReconciliarEspejosWeb/);
+  assert.match(appScript, /everyMinutes\(5\)/);
+  assert.match(appScript, /function doPost\(e\)/);
+  assert.match(adminWebhook, /const ROLES = new Set/);
+  assert.match(adminWebhook, /const ORDER_STATUS = new Set/);
+  assert.match(adminWebhook, /const PAYMENT_STATUS = new Set/);
+  assert.match(adminWebhook, /mergeFields: \['status', 'paymentStatus', 'payment', 'updatedAt', 'lastChangeId'\]/);
+  assert.match(snapshot, /ALLOWED_ENTITIES = new Set\(\['products', 'users', 'orders', 'audit'\]\)/);
+  assert.match(snapshot, /sameSecret\(request\.headers\.get\('X-Tintin-Sheets-Secret'\)/);
+});
+
 test('Historial sync conserva el contrato de estados, fila 8 y máximo 500', () => {
   const source = read('apps-script/ProductosUnificados.gs');
   assert.match(source, /TINTIN_SYNC_HISTORY_FIRST_ROW = 8/);
   assert.match(source, /TINTIN_SYNC_HISTORY_MAX_ROWS = 500/);
   assert.match(source, /SYNCED: true, SYNCING: true, ERROR: true, REJECTED: true, LOCAL: true/);
+  assert.match(source, /detalle\|mensaje\|descripcion\|resultado\|error/);
   assert.match(source, /insertRowBefore\(TINTIN_SYNC_HISTORY_FIRST_ROW\)/);
   assert.match(source, /tintinRecordSyncSafely_\('SYNCING'/);
   assert.match(source, /tintinRecordSyncSafely_\('SYNCED'/);
   assert.match(source, /tintinRecordSyncSafely_\('LOCAL'/);
   assert.match(source, /isRejected \? 'REJECTED' : 'ERROR'/);
+  assert.match(source, /function tintinSendProductRowWithRetry_/);
+  assert.match(source, /status !== 409 && status !== 502/);
+  assert.match(source, /if \(isRejected && e\.range\.getNumRows\(\) === 1/);
+  assert.match(source, /function tintinClaimProductEdit_/);
+  assert.match(source, /if \(!tintinClaimProductEdit_\(e\)\) return;/);
 });
 
 test('los archivos Apps Script versionados no tienen funciones globales duplicadas', () => {
