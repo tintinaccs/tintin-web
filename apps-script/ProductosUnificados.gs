@@ -365,6 +365,14 @@ function tintinYesNo_(value) {
   return value === true ? 'Sí' : 'No';
 }
 
+// Firestore conserva el rol técnico de superadministración; la hoja expone
+// solamente los cuatro roles operativos que admite su validación de datos.
+function tintinSheetUserRole_(value) {
+  var role = String(value || '').trim().toLowerCase();
+  if (role === 'superadmin' || role === 'super_admin' || role === 'super admin') return 'admin';
+  return ['client', 'viewer', 'agent', 'admin'].indexOf(role) >= 0 ? role : 'client';
+}
+
 function tintinPrepareNewProductRow_(sheet, rowNumber) {
   var templateRow = TINTIN_PRODUCTS_FIRST_ROW;
   if (sheet.getLastRow() < templateRow || rowNumber <= sheet.getLastRow()) return;
@@ -639,7 +647,7 @@ function tintinReplaceTabRows_(sheetName, firstRow, width, rows) {
 
 function tintinPullUsersFromWeb_() {
   var rows = tintinSnapshot_('users').map(function(user) {
-    return ['', user.uid, user.name, user.email, tintinDateFromIso_(user.createdAt), user.role,
+    return ['', user.uid, user.name, user.email, tintinDateFromIso_(user.createdAt), tintinSheetUserRole_(user.role),
       tintinYesNo_(user.blocked), user.orders, user.totalSpent, user.internalNotes, '', user.customerId,
       user.username, user.phone, user.ci, user.profileStatus, tintinDateFromIso_(user.lastAccess),
       tintinYesNo_(user.usernameChangeUsed), user.lastChangeId];
