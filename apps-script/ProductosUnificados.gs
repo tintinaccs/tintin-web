@@ -17,6 +17,36 @@ var TINTIN_ADMIN_WEBHOOK_PATH = '/api/sheets-admin-webhook';
 var TINTIN_ORDERS_SHEET = 'Pedidos web';
 var TINTIN_AUDIT_SHEET = 'Auditoría web';
 
+// Este proyecto sí está vinculado al spreadsheet canónico. El menú debe vivir
+// aquí; tintin-guardian es un proyecto auxiliar separado y no recibe onOpen de
+// esta hoja.
+function onOpen(e) {
+  SpreadsheetApp.getUi()
+    .createMenu('🔄 Tintin Sync')
+    .addItem('📊 Revisar estado y configuración', 'tintinRevisarConfiguracionTintin')
+    .addItem('📋 Abrir Historial sync', 'tintinAbrirHistorialSync')
+    .addToUi();
+}
+
+function tintinAbrirHistorialSync() {
+  var spreadsheet = tintinProductsSpreadsheet_();
+  var sheet = spreadsheet.getSheetByName(TINTIN_SYNC_HISTORY_SHEET);
+  if (!sheet) throw new Error('No existe la hoja Historial sync.');
+  spreadsheet.setActiveSheet(sheet);
+  sheet.showSheet();
+  sheet.setActiveRange(sheet.getRange('A1:J20'));
+}
+
+function tintinInstalarMenuPrincipal() {
+  var spreadsheet = tintinProductsSpreadsheet_();
+  var exists = ScriptApp.getProjectTriggers().some(function(trigger) {
+    return trigger.getHandlerFunction() === 'onOpen' &&
+      trigger.getEventType() === ScriptApp.EventType.ON_OPEN;
+  });
+  if (!exists) ScriptApp.newTrigger('onOpen').forSpreadsheet(spreadsheet).onOpen().create();
+  return { ok: true, menu: 'Tintin Sync', openTrigger: true };
+}
+
 function tintinProductsSpreadsheet_() {
   return SpreadsheetApp.openById(TINTIN_PRODUCTS_SPREADSHEET_ID);
 }
