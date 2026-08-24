@@ -11,7 +11,7 @@ function ensureStyles() {
   const style = document.createElement('style');
   style.id = STYLE_ID;
   style.textContent = `
-    ${CARD_SELECTOR} [data-review-rating]{display:none!important}
+    .tt-product-card[data-id] [data-review-rating],.tt-product-card[data-product-id] [data-review-rating],.tt-card[data-product-id] [data-review-rating]{display:none!important}
     .tt-product-rating-social{margin-top:5px;color:#ad3f67;font-size:12px;font-weight:700;line-height:1.35}
     .tt-product-engagement{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:7px;min-height:22px;margin-bottom:7px}
     .tt-product-engagement-action{display:inline-flex;align-items:center;gap:5px;min-width:0;padding:2px 0;border:0;background:transparent;color:#7d5866;font:inherit;font-size:11.5px;font-weight:600;line-height:1.25;text-decoration:none;cursor:pointer;transition:color 160ms ease,transform 160ms ease}
@@ -141,9 +141,10 @@ function render() {
   document.querySelectorAll(CARD_SELECTOR).forEach(renderCard);
 }
 
-async function refreshStats() {
+async function refreshStats({ fresh = false } = {}) {
   if (refreshPromise) return refreshPromise;
-  refreshPromise = fetch('/api/product-engagement-stats', { cache: 'no-store' })
+  const endpoint = `/api/product-engagement-stats${fresh ? '?fresh=1' : ''}`;
+  refreshPromise = fetch(endpoint, { cache: 'no-store' })
     .then(async response => {
       const payload = await response.json().catch(() => ({}));
       if (!response.ok || payload.ok !== true || !Array.isArray(payload.stats)) {
@@ -162,7 +163,7 @@ async function refreshStats() {
 
 function scheduleRefresh(delay = 120) {
   window.clearTimeout(refreshTimer);
-  refreshTimer = window.setTimeout(() => refreshStats(), delay);
+  refreshTimer = window.setTimeout(() => refreshStats({ fresh: true }), delay);
 }
 
 document.addEventListener('click', event => {
