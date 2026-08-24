@@ -29,8 +29,7 @@ function markStylesheet(link, id) {
   return link;
 }
 
-function waitForStylesheet(link, ceilingMs = 2200) {
-  if (link.sheet) return Promise.resolve(link);
+function awaitStylesheetEvent(link, ceilingMs = 2200) {
   return new Promise(resolve => {
     let settled = false;
     let timer = 0;
@@ -48,16 +47,27 @@ function waitForStylesheet(link, ceilingMs = 2200) {
   });
 }
 
+function waitForStylesheet(link, ceilingMs = 2200) {
+  if (link.sheet) return Promise.resolve(link);
+  return awaitStylesheetEvent(link, ceilingMs);
+}
+
+function reloadStylesheet(link, href) {
+  // Una hoja ya cargada tiene link.sheet. Al cambiar su href necesitamos
+  // esperar un NUEVO evento load/error; no sirve reutilizar el estado de la
+  // versión anterior porque haría visible el shell antes de completar la hoja.
+  const ready = awaitStylesheetEvent(link);
+  link.href = href;
+  return ready;
+}
+
 function ensureStylesheet(id, path) {
   const expectedHref = versionedSiteAsset(path);
   const existing = document.getElementById(id) || stylesheetForPath(path);
   if (existing) {
     markStylesheet(existing, id);
     if (existing.href === expectedHref) return waitForStylesheet(existing);
-
-    const ready = waitForStylesheet(existing);
-    existing.href = expectedHref;
-    return ready;
+    return reloadStylesheet(existing, expectedHref);
   }
 
   const link = markStylesheet(document.createElement('link'), id);
