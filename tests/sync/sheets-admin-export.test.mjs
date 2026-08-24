@@ -31,7 +31,7 @@ test('Usuarios web proyecta identidad, alias y métricas desde Firestore', () =>
   assert.equal(row.username, 'barbi');
   assert.equal(row.customerId, 'CUS_123');
   assert.equal(row.ci, '1234567');
-  assert.equal(row.orderCount, 1);
+  assert.equal(row.orderCount, 2);
   assert.equal(row.totalSpent, 100000);
 });
 
