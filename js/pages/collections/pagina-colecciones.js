@@ -1,3 +1,5 @@
+import '../../components/reviews/valoraciones-catalogo.js?v=tintin-20260824-product-card-engagement-1';
+
 const FEATURED_LIMIT = 4;
 const collectionsGrid = document.getElementById('colls-page-grid');
 const featuredGrid = document.getElementById('collections-featured-grid');
