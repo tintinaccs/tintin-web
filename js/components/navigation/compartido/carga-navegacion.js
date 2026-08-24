@@ -56,12 +56,15 @@ function attachNotificationsDemand() {
     loadNotificationsRuntime
   );
 
-  window.addEventListener('tintin:auth-nav-updated', event => {
+  const startForAuthenticatedSession = event => {
     if (!event.detail?.authenticated) return;
     void loadNotificationsRuntime().catch(error => {
       console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
     });
-  });
+  };
+
+  window.addEventListener('tintin:auth-session-resolved', startForAuthenticatedSession);
+  window.addEventListener('tintin:auth-nav-updated', startForAuthenticatedSession);
 
   if (hasActiveSessionHint()) {
     void loadNotificationsRuntime().catch(error => {
@@ -138,6 +141,10 @@ function loadNotificationsRuntime() {
 function loadCollectionsRuntime() {
   if (!collectionsRuntimePromise) {
     collectionsRuntimePromise = import(versionedJsModule('components/navigation/compartido/carga-colecciones.js'))
+      .then(async module => {
+        await module.initNavCollections?.();
+        return module;
+      })
       .catch(error => {
         collectionsRuntimePromise = null;
         throw error;
@@ -207,15 +214,27 @@ export function loadSharedRuntime() {
   attachNotificationsDemand();
   loadNavigationBehaviors();
 
-  // Las páginas informativas mantienen disponible la bandeja global sin
-  // descargar Firestore para visitantes sin sesión. Las sesiones activas se
-  // hidratan arriba mediante la marca de sesión y el evento de autenticación.
+  // La identidad forma parte del shell global: si ya existe una sesión, Cuenta
+  // y Notificaciones deben hidratarse también en Nosotros, Contacto y páginas
+  // informativas. Un visitante sin sesión no dispara lectura de rol.
+  const authPromise = loadAuthRuntime();
+
+  // La lista pública de colecciones es pequeña y cacheada. Hidratarla en todas
+  // las rutas evita que TIENDA tenga un número distinto de opciones según qué
+  // otros runtimes hayan cargado antes en la página.
+  scheduleNonCritical(() => {
+    loadCollectionsRuntime().catch(error => {
+      console.warn('[PublicShell] No se pudieron sincronizar las colecciones.', error);
+    });
+  });
+
   if (!FULL_COMMERCE_PAGES.has(page)) {
     attachLightweightCommerceDemand();
+    Promise.allSettled([authPromise]).then(reportRuntimeFailures);
     return;
   }
 
-  const critical = [loadAuthRuntime(), loadCartRuntime()];
+  const critical = [authPromise, loadCartRuntime()];
   if (page === 'home' || page === 'shop') critical.push(loadProductsRuntime());
   if (page === 'cart') critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')));
 
@@ -223,7 +242,6 @@ export function loadSharedRuntime() {
 
   scheduleNonCritical(() => {
     Promise.allSettled([
-      loadCollectionsRuntime(),
       loadHomeMaintenance(),
     ]).then(reportRuntimeFailures);
   });
