@@ -188,10 +188,10 @@ function customerEmail(order, orderId) {
 
   const html = `<!doctype html>
 <html lang="es">
-<body style="margin:0;background:#fdf1f5;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2226">
+<body style="margin:0;background:#fff6fa;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2b2b">
   <div style="max-width:560px;margin:0 auto;padding:32px 16px">
     <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:20px;overflow:hidden">
-      <div style="background:linear-gradient(135deg,#c6557d,#8e274d);padding:26px 24px;text-align:center">
+      <div style="background:#ad3f67;padding:26px 24px;text-align:center;border-bottom:4px solid #8b2642">
         <div style="width:52px;height:52px;margin:0 auto 12px;border-radius:50%;background:rgba(255,255,255,.16);line-height:52px;font-size:24px">✓</div>
         <div style="font-size:20px;font-weight:750;color:#ffffff;letter-spacing:-.01em">¡Recibimos tu pedido!</div>
         <div style="margin-top:6px;font-size:12.5px;font-weight:600;letter-spacing:.06em;color:rgba(255,255,255,.78)">PEDIDO #${escapeHtml(shortId)}</div>
@@ -261,10 +261,10 @@ function adminEmail(order, orderId) {
 
   const html = `<!doctype html>
 <html lang="es">
-<body style="margin:0;background:#fdf1f5;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2226">
+<body style="margin:0;background:#fff6fa;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2b2b">
   <div style="max-width:640px;margin:0 auto;padding:32px 16px">
     <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:20px;overflow:hidden">
-      <div style="background:linear-gradient(135deg,#c6557d,#8e274d);padding:22px 24px;text-align:center">
+      <div style="background:#ad3f67;padding:22px 24px;text-align:center;border-bottom:4px solid #8b2642">
         <div style="font-size:18px;font-weight:750;color:#ffffff;letter-spacing:-.01em">Nuevo pedido #${escapeHtml(shortId)}</div>
         <div style="margin-top:5px;font-size:12px;color:rgba(255,255,255,.78)">${escapeHtml(fmtDate(order.createdAt))}</div>
       </div>
