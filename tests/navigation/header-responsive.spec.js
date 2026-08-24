@@ -52,9 +52,21 @@ test('mobile conserva etiquetas, admite Alertas y se compacta sin solaparse', as
   // Simula el estado autenticado más exigente: aparecen las seis acciones.
   await nav.locator('#tabbar-notifications').evaluate(node => { node.hidden = false; });
   await expect(visibleButtons).toHaveCount(6);
-  const columnCount = await nav.evaluate(node => getComputedStyle(node).gridTemplateColumns.split(/\s+/).filter(Boolean).length);
+  let columnCount = await nav.evaluate(node => getComputedStyle(node).gridTemplateColumns.split(/\s+/).filter(Boolean).length);
   expect(columnCount).toBe(6);
   await expect(nav.locator('#tabbar-notifications')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  await expectNoHorizontalOverlap(nav.locator('.tt-tabbar-btn:not([hidden])'));
+
+  // Respeta una configuración exclusiva de mobile: Inicio oculto. Con Alertas
+  // visible deben quedar cinco columnas reales, no seis con un hueco fantasma.
+  await page.evaluate(() => {
+    document.documentElement.dataset.ttMobileHome = 'hidden';
+    const home = document.querySelector('[data-shell-tab="home"]');
+    if (home) home.hidden = true;
+  });
+  await expect(visibleButtons).toHaveCount(5);
+  columnCount = await nav.evaluate(node => getComputedStyle(node).gridTemplateColumns.split(/\s+/).filter(Boolean).length);
+  expect(columnCount).toBe(5);
   await expectNoHorizontalOverlap(nav.locator('.tt-tabbar-btn:not([hidden])'));
 
   const expandedWidth = await nav.evaluate(node => node.getBoundingClientRect().width);
