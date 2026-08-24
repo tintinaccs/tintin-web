@@ -167,3 +167,34 @@ test('desktop conserva un solo indicador para Tienda y acciones sólidas', async
   await expect(page.locator('#account-panel a[href="/login"], #account-panel a[href="login.html"]')).toHaveCount(2);
   await expect(page.locator('#account-drawer')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
 });
+
+test('desktop compacto 1025px reserva las cuatro acciones autenticadas', async ({ page }) => {
+  await openPublicPage(page, { width: 1025, height: 768 });
+
+  const header = page.locator('#tt-header-desktop-tablet');
+  await expect(header).toBeVisible();
+  await expect(page.locator('#tt-header-tablet')).toBeHidden();
+  await expect(page.locator('#tt-tabbar')).toBeHidden();
+  await page.locator('#btn-notifications').evaluate(node => { node.hidden = false; });
+  await expect(page.locator('.tt-header-actions > button:not([hidden])')).toHaveCount(4);
+
+  const geometry = await page.evaluate(() => {
+    const logo = document.querySelector('#tt-header-desktop-tablet .tt-logo-link').getBoundingClientRect();
+    const nav = document.getElementById('tt-nav-desktop-tablet').getBoundingClientRect();
+    const actions = document.querySelector('#tt-header-desktop-tablet .tt-header-actions').getBoundingClientRect();
+    const header = document.getElementById('tt-header-desktop-tablet');
+    return {
+      logoRight: logo.right,
+      navLeft: nav.left,
+      navRight: nav.right,
+      actionsLeft: actions.left,
+      scrollWidth: header.scrollWidth,
+      clientWidth: header.clientWidth,
+    };
+  });
+
+  expect(geometry.logoRight).toBeLessThanOrEqual(geometry.navLeft);
+  expect(geometry.navRight).toBeLessThanOrEqual(geometry.actionsLeft);
+  expect(geometry.scrollWidth).toBeLessThanOrEqual(geometry.clientWidth + 1);
+  await expectNoHorizontalOverlap(header.locator('.tt-nav-desktop [data-desktop-nav-item],.tt-header-actions > button:not([hidden])'));
+});
