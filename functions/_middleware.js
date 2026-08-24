@@ -10,6 +10,14 @@ const SECURITY_HEADERS = Object.freeze({
   'X-Permitted-Cross-Domain-Policies': 'none'
 });
 
+const CARD_SOCIAL_SRC = '/js/components/reviews/participacion-tarjetas.js?v=tintin-20260824-card-social-1';
+const CARD_SOCIAL_PATHS = new Set([
+  '/', '/index', '/index.html',
+  '/catalogo', '/catalogo.html',
+  '/collections', '/collections.html',
+  '/product', '/product.html'
+]);
+
 function policyForPath(pathname) {
   const routes = cspRuntime?.routes || {};
   return routes[pathname] || cspRuntime?.public || '';
@@ -36,6 +44,16 @@ function failClosed() {
   });
 }
 
+async function cardSocialBody(response, pathname, method, headers) {
+  if (method !== 'GET' || !CARD_SOCIAL_PATHS.has(pathname) || !response.ok) return response.body;
+  const html = await response.text();
+  if (html.includes(CARD_SOCIAL_SRC) || !html.includes('</body>')) return html;
+  headers.delete('content-length');
+  headers.set('X-Tintin-Card-Social', '1');
+  const script = `<script type="module" src="${CARD_SOCIAL_SRC}"></script>`;
+  return html.replace('</body>', `${script}\n</body>`);
+}
+
 export async function onRequest(context) {
   const pathname = new URL(context.request.url).pathname;
 
@@ -59,7 +77,8 @@ export async function onRequest(context) {
   headers.set('X-Frame-Options', policy.includes("frame-ancestors 'self'") ? 'SAMEORIGIN' : 'DENY');
   headers.set('X-Tintin-CSP', 'edge-runtime');
 
-  return new Response(response.body, {
+  const body = await cardSocialBody(response, pathname, context.request.method, headers);
+  return new Response(body, {
     status: response.status,
     statusText: response.statusText,
     headers
