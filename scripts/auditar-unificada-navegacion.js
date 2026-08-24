@@ -24,6 +24,7 @@ const tabletStyles = read('css/components/navigation/tableta/encabezado-tableta.
 const mobileStyles = read('css/components/navigation/movil/encabezado-movil.css');
 const mobileSolidStyles = read('css/components/navigation/movil/fondos-solidos-movil.css');
 const notificationStyles = read('css/components/notifications/notificaciones-sociales.css');
+const notificationSurfaceStyles = read('css/components/navigation/compartido/superficie-notificaciones.css');
 const navigationAssets = read('js/components/navigation/compartido/recursos-navegacion.js');
 const sharedRuntime = read('js/components/navigation/compartido/carga-navegacion.js');
 const mobileCompact = read('js/components/navigation/movil/navegacion-compacta-movil.js');
@@ -79,8 +80,17 @@ check(
   'el shell global no precarga la geometría/estilos de notificaciones'
 );
 check(
-  navigationAssets.includes('stylesheetForPath(path)') && navigationAssets.includes('dataset.ttSocialNotifications'),
-  'el cargador global no reutiliza hojas existentes o no marca el CSS de notificaciones'
+  navigationAssets.includes("css/components/navigation/compartido/superficie-notificaciones.css") &&
+    notificationSurfaceStyles.includes('z-index: 1460 !important') &&
+    notificationSurfaceStyles.includes('background: #FFFFFF !important'),
+  'Alertas no comparte capa y fondo blanco sólido con las demás superficies del header'
+);
+check(
+  navigationAssets.includes('stylesheetForPath(path)') &&
+    navigationAssets.includes('new URL(versionedSiteAsset(path)).pathname') &&
+    navigationAssets.includes('dataset.ttSocialNotifications') &&
+    navigationAssets.includes('waitForStylesheet(link)'),
+  'el cargador global no reutiliza hojas existentes o no limita la espera de CSS'
 );
 check(
   mobileSolidStyles.includes('@media (max-width: 767px)') && !mobileSolidStyles.includes('@media (max-width: 768px)'),
@@ -107,6 +117,11 @@ check(
 check(
   sharedRuntime.includes('void loadAuthRuntime()') && !sharedRuntime.includes('tt_session_started_at'),
   'el header sigue dependiendo de una marca local de sesión en vez de resolver Auth globalmente'
+);
+check(
+  sharedRuntime.includes('scheduleNonCritical(() => {') &&
+    sharedRuntime.includes('Promise.allSettled([loadCollectionsRuntime()]).then(reportRuntimeFailures);'),
+  'las páginas informativas no precargan la configuración canónica de colecciones'
 );
 check(
   collections.includes('function visibleCollections(collections)') &&
