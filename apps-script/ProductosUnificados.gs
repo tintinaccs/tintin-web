@@ -11,6 +11,7 @@ var TINTIN_ON_EDIT_DISPATCHER = 'tintinDespacharEdicionInstalable';
 var TINTIN_SYNC_HISTORY_HEADER_ROW = 7;
 var TINTIN_SYNC_HISTORY_FIRST_ROW = 8;
 var TINTIN_SYNC_HISTORY_MAX_ROWS = 500;
+var TINTIN_SYNC_GUARD_TTL_SECONDS = 30;
 
 function tintinProductsSpreadsheet_() {
   return SpreadsheetApp.openById(TINTIN_PRODUCTS_SPREADSHEET_ID);
@@ -78,6 +79,26 @@ function tintinAppendSyncHistory_(status, sheetName, cell, detail) {
     history.deleteRows(firstExcessRow, history.getLastRow() - firstExcessRow + 1);
   }
   return matched > 0;
+}
+
+// Un push Firestore->Sheet escribe la fila en varios tramos (id/nombre,
+// categoria/costo/precio, vendidos, stock minimo, resto de columnas). Varias
+// de esas escrituras caen en columnas que el dispatcher de onEdit trata como
+// ediciones manuales, y sin este freno reenviaban la fila de vuelta a
+// Firestore (Sheet->Firestore) a mitad del push, con columnas que todavia no
+// habian terminado de actualizarse: la carrera resultante podia devolver a
+// Firestore una version parcial/vieja de la fila. Este freno bloquea ese
+// reenvio mientras la fila tiene un push Firestore->Sheet en curso.
+function tintinSyncGuardKey_(sheet, rowNumber) {
+  return 'tintin_push_' + sheet.getParent().getId() + '_' + sheet.getSheetId() + '_' + rowNumber;
+}
+
+function tintinMarkRowPushInProgress_(sheet, rowNumber) {
+  CacheService.getScriptCache().put(tintinSyncGuardKey_(sheet, rowNumber), '1', TINTIN_SYNC_GUARD_TTL_SECONDS);
+}
+
+function tintinIsRowPushInProgress_(sheet, rowNumber) {
+  return CacheService.getScriptCache().get(tintinSyncGuardKey_(sheet, rowNumber)) === '1';
 }
 
 function tintinRecordSyncSafely_(status, sheetName, cell, detail) {
@@ -173,6 +194,7 @@ function tintinHandleProductEdit_(e) {
   if (!e || !e.range) return;
   var sheet = e.range.getSheet();
   if (sheet.getName() !== TINTIN_PRODUCTS_SHEET || e.range.getRow() < TINTIN_PRODUCTS_FIRST_ROW) return;
+  if (tintinIsRowPushInProgress_(sheet, e.range.getRow())) return;
   if (e.range.getColumn() === 2 || e.range.getColumn() === 4 || e.range.getColumn() === 5 ||
       e.range.getColumn() === 6 || e.range.getColumn() === 9 || e.range.getColumn() === 12 ||
       e.range.getColumn() === 14 || e.range.getColumn() >= 15) {
@@ -302,6 +324,7 @@ function tintinSyncProductsFromFirestore_(body) {
     var inventoryResult = phase3FetchDocument_('productInventory/' + encodeURIComponent(id), body.idToken);
     var inventory = inventoryResult.ok ? inventoryResult.data || {} : {};
     tintinPrepareNewProductRow_(sheet, rowNumber);
+    tintinMarkRowPushInProgress_(sheet, rowNumber);
     var current = sheet.getRange(rowNumber, 1, 1, 35).getValues()[0];
     var sold = Number(current[9] || 0);
     var purchased = inventory.purchased == null
