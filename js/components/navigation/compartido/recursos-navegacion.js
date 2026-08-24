@@ -4,6 +4,8 @@ const NAVIGATION_STYLES = Object.freeze([
   ['tt-navigation-desktop-css', 'css/components/navigation/escritorio/encabezado-escritorio.css'],
   ['tt-navigation-tablet-css', 'css/components/navigation/tableta/encabezado-tableta.css'],
   ['tt-navigation-mobile-css', 'css/components/navigation/movil/encabezado-movil.css'],
+  ['tt-navigation-mobile-solid-css', 'css/components/navigation/movil/fondos-solidos-movil.css'],
+  ['tt-navigation-notifications-css', 'css/components/notifications/notificaciones-sociales.css'],
   ['tt-navigation-shared-css', 'css/components/navigation/compartido/transiciones-navegacion.css'],
   ['tt-surface-controller-css', 'css/components/navigation/compartido/paneles.css'],
   ['tt-navigation-search-css', 'css/components/navigation/compartido/busqueda.css'],
