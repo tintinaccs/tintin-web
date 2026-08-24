@@ -37,6 +37,13 @@ test('producto llega con canonical, social preview y JSON-LD server-side coheren
   expect(jsonLd.offers.availability).toBe('https://schema.org/OutOfStock');
 });
 
+test('metadata de producto no puede bloquear indefinidamente la respuesta HTML', async () => {
+  const { resolveProductMetadataWithin } = await import('../../functions/product.js');
+  const started = Date.now();
+  await expect(resolveProductMetadataWithin(new Promise(() => {}), 120)).rejects.toThrow('product_metadata_timeout');
+  expect(Date.now() - started).toBeLessThan(800);
+});
+
 test('ruta limpia de producto con id siempre entrega el documento navegable', async ({ page }) => {
   const response = await page.goto('/product?id=route-probe-inexistente', { waitUntil: 'domcontentloaded' });
   expect(response?.status()).toBe(200);
