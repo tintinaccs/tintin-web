@@ -9,6 +9,11 @@
   <title>Panel Admin | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><meta name="description" content="Panel privado de administración de Tintin Accesorios.">
   <meta name="theme-color" content="#AD3F67">
+  <link rel="manifest" href="admin-manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Tintin Pedidos">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js" crossorigin>
@@ -1599,7 +1604,26 @@
         </div>
       </div>
 
-      <button type="button" class="adm-btn adm-btn-primary" id="btn-save-config" style="font-size:14px;padding:12px 28px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar toda la configuración</button>
+      <div class="adm-card" id="push-card" style="margin-bottom:20px;display:none">
+        <div class="adm-card-head" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <div class="adm-card-title">🔔 Notificaciones de pedidos</div>
+          <span class="adm-badge" id="push-status-pill">No configuradas</span>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:12px;color:var(--adm-muted);margin:0 0 14px" id="push-status-detail">Activá las notificaciones para recibir un aviso en este dispositivo cada vez que una clienta completa un pedido, aunque el panel esté cerrado.</p>
+          <label class="adm-label" for="push-device-label">Nombre de este dispositivo</label>
+          <input type="text" class="adm-input" id="push-device-label" maxlength="60" placeholder="Ej: iPhone de Barbi" autocomplete="off">
+          <div style="font-size:12px;color:var(--adm-muted);margin:12px 0">Último registro correcto: <strong id="push-last-register" style="color:var(--adm-text)">—</strong></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="btn-push-enable">Activar notificaciones</button>
+            <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="btn-push-test" disabled>Enviar notificación de prueba</button>
+            <button type="button" class="adm-btn adm-btn-danger adm-btn-sm" id="btn-push-disable" style="display:none">Desactivar en este dispositivo</button>
+          </div>
+          <p id="push-notice" style="display:none;font-size:12px;margin:14px 0 0;color:var(--adm-muted)"></p>
+          <p style="font-size:12px;color:var(--adm-muted);margin:14px 0 0;padding-top:14px;border-top:1px solid var(--adm-border)">🔒 La pantalla bloqueada sólo muestra número de pedido, total y tipo de entrega.</p>
+        </div>
+      </div>
+      <button type="button" class="adm-btn adm-btn-primary" id="btn-save-config" style="font-size:14px;padding:12px 28px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M19 21H5a2 2 0 01-2-2V5a2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar toda la configuración</button>
     </div>
 
     <!-- ===================== ROLES Y PERMISOS ===================== -->
@@ -1901,7 +1925,7 @@
 
 <div class="adm-toast" id="adm-toast"></div>
 
-<script type="module" src="js/admin/admin-app.js?v=tintin-20260822-fase16-ficha-1"></script>
+<script type="module" src="js/admin/admin-app.js?v=tintin-20260825-web-push-integration-1"></script>
 <script type="module" src="js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260818-engagement-master-2"></script>
 <script type="module" src="js/admin/shopify-commerce-admin.js?v=tintin-20260821-accounts-phase-a-1"></script>
 <script type="module" src="js/admin/appearance/editor-visual-admin.js?v=tintin-20260821-accounts-phase-a-1"></script>
@@ -2118,5 +2142,7 @@
 <script type="module" src="js/admin/settings/esquema-color-admin.js?v=tintin-20260821-accounts-phase-a-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1"></script>
 <script type="module" src="js/admin/notifications/notificaciones-admin.js?v=tintin-20260821-accounts-phase-a-1"></script>
+<script type="module" src="js/admin/notifications/notificaciones-push.js?v=tintin-20260825-web-push-2"></script>
+<script type="module" src="js/admin/notifications/enlace-pedido-push.js?v=tintin-20260825-web-push-2"></script>
 </body>
 </html>

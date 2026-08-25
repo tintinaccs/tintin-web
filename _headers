@@ -25,6 +25,13 @@
 /*.js
   Cache-Control: public, max-age=31536000, immutable
 
+/firebase-messaging-sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Service-Worker-Allowed: /
+
+/admin-manifest.json
+  Cache-Control: no-cache, no-store, must-revalidate
+
 /*.mjs
   Cache-Control: public, max-age=31536000, immutable
 
