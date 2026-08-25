@@ -1449,9 +1449,20 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 }
 
 .tt-collections-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 16px;
+  --tt-coll-cols: 6;
+  --tt-coll-gap: 16px;
+  display: flex;
+  gap: var(--tt-coll-gap);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tt-collections-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .tt-coll-card {
@@ -1463,6 +1474,83 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   text-decoration: none;
   display: block;
   aspect-ratio: 3/4;
+  flex: 0 0 calc((100% - (var(--tt-coll-cols) - 1) * var(--tt-coll-gap)) / var(--tt-coll-cols));
+  scroll-snap-align: start;
+}
+
+/* Carrusel: envoltorio con flechas y paginación por puntos alrededor
+   del grid (nunca dentro de él — sus hijos son propiedad exclusiva del
+   renderer de Firestore en presentacion-colecciones.js). */
+.tt-coll-carousel {
+  position: relative;
+}
+
+.tt-coll-carousel-arrow {
+  display: none;
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: var(--white, #fff);
+  color: var(--tt-accent, #AD3F67);
+  box-shadow: var(--shadow-lg, 0 12px 28px rgba(0,0,0,0.15));
+  cursor: pointer;
+  transition: opacity var(--transition), transform var(--transition);
+}
+
+.tt-coll-carousel--scrollable .tt-coll-carousel-arrow {
+  display: flex;
+}
+
+.tt-coll-carousel-arrow--prev {
+  left: -8px;
+  transform: translate(-50%, -50%);
+}
+
+.tt-coll-carousel-arrow--next {
+  right: -8px;
+  transform: translate(50%, -50%);
+}
+
+.tt-coll-carousel-arrow:hover {
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.tt-coll-carousel-arrow--next:hover {
+  transform: translate(50%, -50%) scale(1.06);
+}
+
+.tt-coll-carousel-arrow:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tt-coll-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.tt-coll-carousel-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-card-border, #E7D3DA);
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.tt-coll-carousel-dot.is-active {
+  background: var(--tt-accent, #AD3F67);
+  transform: scale(1.25);
 }
 
 .tt-coll-card:hover {
@@ -3765,7 +3853,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
   /* Quick cats hidden on all screen sizes */
 
-  .tt-collections-grid { grid-template-columns: repeat(4, 1fr); }
+  .tt-collections-grid { --tt-coll-cols: 4; }
   .tt-products-grid { grid-template-columns: repeat(3, 1fr); }
 
   .tt-footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
@@ -3913,7 +4001,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   .tt-editorial.reverse .tt-editorial-img { order: 0; }
   .tt-editorial.reverse .tt-editorial-content { order: 1; }
 
-  .tt-collections-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .tt-collections-grid { --tt-coll-cols: 3; --tt-coll-gap: 10px; }
+  .tt-coll-carousel-arrow { width: 38px; height: 38px; }
   .tt-look-grid { grid-template-columns: 1fr; }
 
   .tt-watch-feature { grid-template-columns: 1fr; }
@@ -4009,7 +4098,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   .tt-hero-actions { flex-direction: column; justify-content: center; align-items: center; gap: 10px; }
   .tt-hero-actions .tt-btn { width: 100%; max-width: 280px; justify-content: center; }
 
-  .tt-collections-grid { grid-template-columns: repeat(2, 1fr); }
+  .tt-collections-grid { --tt-coll-cols: 2; }
+  .tt-coll-carousel-arrow { display: none !important; }
 
   .tt-dropdown { width: min(95vw, 400px); }
   .tt-dropdown-grid { grid-template-columns: repeat(3, 1fr); }

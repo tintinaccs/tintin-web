@@ -66,7 +66,7 @@
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3">
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260818-collections-apple-2">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260825-collections-carousel-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -247,7 +247,14 @@
       <h2 class="tt-section-title">NUESTRAS COLECCIONES</h2>
       <p class="tt-section-desc" style="margin:0 auto;text-align:center;">Descubrí todo lo que tenemos para vos</p>
     </div>
-    <div class="tt-collections-grid">
+    <div class="tt-coll-carousel">
+    <button type="button" class="tt-coll-carousel-arrow tt-coll-carousel-arrow--prev" aria-label="Ver colecciones anteriores" data-coll-carousel-prev>
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <button type="button" class="tt-coll-carousel-arrow tt-coll-carousel-arrow--next" aria-label="Ver más colecciones" data-coll-carousel-next>
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+    <div class="tt-collections-grid" id="tt-collections-grid">
       <a href="/catalogo?cat=bolsos" class="tt-coll-card" data-slug="bolsos">
         <div class="tt-coll-card-img" data-img-slot="coll_bags">
           <img src="assets-tintin/images/collections/col-bags.webp" alt="Colección Bags" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
@@ -320,6 +327,8 @@
         </div>
         <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">TOBILLERAS</span></div>
       </a>
+    </div>
+    <div class="tt-coll-carousel-dots" data-coll-carousel-dots aria-hidden="true"></div>
     </div>
   </div>
 </section>

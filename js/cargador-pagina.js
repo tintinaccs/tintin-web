@@ -815,6 +815,12 @@
     }
   }
 
+  function bootCollectionsCarouselPublic() {
+    if (!window.TintinCollectionsCarouselBooted) {
+      importSibling('pages/home/carrusel-colecciones.js', 'Collections Carousel');
+    }
+  }
+
   function bootCartSyncPublic() {
     importSibling('components/cart/sincronizacion-carrito.js', 'Cart Sync');
   }
@@ -879,6 +885,7 @@
     bootSiteActivity();
     bootImagesPhase5Public();
     bootCollectionsPhase4Public();
+    bootCollectionsCarouselPublic();
     bootCartSyncPublic();
     bootFavoritesPublic();
     bootThemeColorSanitizerPublic();
