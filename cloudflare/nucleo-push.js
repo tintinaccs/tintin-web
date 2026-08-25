@@ -80,7 +80,7 @@ export function adminOrderLink(orderId) {
  * Contenido visible + datos internos del push. El pedido llega leído desde
  * Firestore con credenciales de servidor — nunca del navegador ni del webhook.
  */
-export function buildPushContent({ type, orderId, order, eventId, foregroundSound = 'default' }) {
+export function buildPushContent({ type, orderId, order, eventId, foregroundSound = 'default', foregroundSoundUrl = '' }) {
   const shortId = shortIdFor(order, orderId);
   const total = formatGuarani(order?.total);
   const url = adminOrderLink(orderId);
@@ -106,6 +106,7 @@ export function buildPushContent({ type, orderId, order, eventId, foregroundSoun
     title,
       body,
       foregroundSound: cleanText(foregroundSound, 20) || 'default',
+      foregroundSoundUrl: cleanText(foregroundSoundUrl, 500),
     // Sólo identificadores y texto ya construido: ni nombre, ni teléfono, ni
     // correo, ni dirección, ni coordenadas, ni notas, ni detalle de productos.
     data: {
@@ -121,7 +122,7 @@ export function buildPushContent({ type, orderId, order, eventId, foregroundSoun
   };
 }
 
-export function buildTestPushContent(eventId, foregroundSound = 'default') {
+export function buildTestPushContent(eventId, foregroundSound = 'default', foregroundSoundUrl = '') {
   const url = '/admin.html?section=configuracion';
   // Simulación controlada: no representa un pedido real ni escribe en
   // Firestore. Sirve para comprobar el formato visible del aviso push.
@@ -131,6 +132,7 @@ export function buildTestPushContent(eventId, foregroundSound = 'default') {
     title,
       body,
       foregroundSound: cleanText(foregroundSound, 20) || 'default',
+      foregroundSoundUrl: cleanText(foregroundSoundUrl, 500),
     data: {
       type: 'push.test',
       orderId: '',

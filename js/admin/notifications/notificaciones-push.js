@@ -232,7 +232,7 @@ async function ensureMessaging() {
         // constructor; the in-panel notice above remains the fallback.
       }
     }
-    window.TintinPushPlayForegroundSound?.(data.foregroundSound || 'default');
+    window.TintinPushPlayForegroundSound?.(data.foregroundSound || 'default', data.foregroundSoundUrl || '');
     if ('setAppBadge' in navigator) {
       navigator.setAppBadge(foregroundCount).catch(() => {});
     }
@@ -313,12 +313,12 @@ const enableNotifications = withBusy(async () => {
 });
 
 const sendTestNotification = withBusy(async () => {
-  notice('Enviando prueba...');
+  notice('Enviando prueba a todos los dispositivos activos...');
   const result = await authorizedFetch('push-test', {
     method: 'POST',
-    body: JSON.stringify({ scope: 'device', token: currentToken })
+    body: JSON.stringify({ scope: 'all' })
   });
-  notice(`Prueba enviada: ${result.successCount} de ${result.attempted} dispositivo(s).`);
+  notice(`Prueba global enviada: ${result.successCount} de ${result.attempted} dispositivo(s).`);
 });
 
 const disableNotifications = withBusy(async () => {

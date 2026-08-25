@@ -56,8 +56,45 @@ function applySettings(settings = {}) {
   $('push-master-sound').value = settings.foregroundSound || 'default';
   $('push-master-sound-url').value = settings.foregroundSoundUrl || '';
   $('push-master-sound-url').style.display = settings.foregroundSound === 'custom' ? '' : 'none';
+  $('btn-push-master-upload').style.display = settings.foregroundSound === 'custom' ? '' : 'none';
+  for (const slot of ['order', 'review', 'like']) {
+    const mode = settings[`foregroundSound${slot[0].toUpperCase()}${slot.slice(1)}`] || 'default';
+    const url = settings[`foregroundSound${slot[0].toUpperCase()}${slot.slice(1)}Url`] || '';
+    const select = $(`push-tone-${slot}`); const input = $(`push-tone-${slot}-url`);
+    if (select) select.value = mode;
+    if (input) { input.value = url; input.style.display = mode === 'custom' ? '' : 'none'; }
+    document.querySelector(`[data-push-tone-upload="${slot}"]`)?.style.setProperty('display', mode === 'custom' ? '' : 'none');
+  }
   $('push-master-status').textContent = settings.enabled === false ? 'Pausado' : 'Activo';
   try { localStorage.setItem(SOUND_KEY, JSON.stringify({ mode: settings.foregroundSound || 'default', url: settings.foregroundSoundUrl || '' })); } catch {}
+}
+
+async function uploadTone(slot = 'global') {
+  const suffix = slot === 'global' ? 'master-sound' : `tone-${slot}`;
+  const file = $(`push-${suffix}-file`)?.files?.[0];
+  if (!file) throw new Error('Elegí un archivo MP3 antes de subirlo.');
+  if (!/^audio\/(mpeg|ogg|wav)$/i.test(file.type) && !/\.(mp3|ogg|wav)$/i.test(file.name)) throw new Error('Sólo se aceptan archivos MP3, OGG o WAV.');
+  if (file.size > 1024 * 1024) throw new Error('El tono no puede superar 1 MB.');
+  const button = slot === 'global' ? $('btn-push-master-upload') : document.querySelector(`[data-push-tone-upload="${slot}"]`); button.disabled = true; notice('Subiendo el tono…');
+  try {
+    const user = auth.currentUser;
+    const token = await user.getIdToken();
+    const signedResponse = await fetch(apiUrl('cloudinary-sign-audio-upload'), { method: 'POST', headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' }, body: JSON.stringify({ slot }) });
+    const signed = await signedResponse.json().catch(() => ({}));
+    if (!signedResponse.ok || !signed.uploadUrl) throw new Error(signed.error || 'No se pudo preparar la subida.');
+    const form = new FormData();
+    form.append('file', file);
+    form.append('api_key', signed.apiKey);
+    form.append('public_id', signed.publicId);
+    form.append('timestamp', String(signed.timestamp));
+    form.append('signature', signed.signature);
+    form.append('type', 'upload');
+    const uploadResponse = await fetch(signed.uploadUrl, { method: 'POST', body: form });
+    const uploaded = await uploadResponse.json().catch(() => ({}));
+    if (!uploadResponse.ok || !uploaded.secure_url) throw new Error(uploaded?.error?.message || 'Cloudinary no pudo guardar el tono.');
+    $(`push-${suffix}-url`).value = uploaded.secure_url;
+    notice('Tono subido. Guardá las preferencias para aplicarlo.');
+  } finally { button.disabled = false; }
 }
 
 async function refresh() {
@@ -72,17 +109,24 @@ async function save() {
   if (sound === 'custom' && !/^https:\/\//i.test(url)) throw new Error('El sonido personalizado debe ser una URL HTTPS.');
   const button = $('btn-push-master-save'); button.disabled = true;
   try {
-    const data = await call('save-settings', { method: 'POST', body: JSON.stringify({ action: 'save-settings', enabled: $('push-master-enabled').checked, foregroundSound: sound, foregroundSoundUrl: url }) });
+    const payload = { action: 'save-settings', enabled: $('push-master-enabled').checked, foregroundSound: sound, foregroundSoundUrl: url };
+    for (const slot of ['order', 'review', 'like']) {
+      const key = `foregroundSound${slot[0].toUpperCase()}${slot.slice(1)}`;
+      payload[key] = $(`push-tone-${slot}`).value;
+      payload[`${key}Url`] = $(`push-tone-${slot}-url`).value.trim();
+      if (payload[key] === 'custom' && !/^https:\/\//i.test(payload[`${key}Url`])) throw new Error(`El tono de ${slot} debe ser una URL HTTPS.`);
+    }
+    const data = await call('save-settings', { method: 'POST', body: JSON.stringify(payload) });
     applySettings(data.settings); notice('Preferencias push guardadas.');
   } finally { button.disabled = false; }
 }
 
 function installForegroundSound() {
-  window.TintinPushPlayForegroundSound = mode => {
+  window.TintinPushPlayForegroundSound = (mode, eventUrl = '') => {
     let config = {};
     try { config = JSON.parse(localStorage.getItem(SOUND_KEY) || '{}'); } catch {}
     if ((mode || config.mode) === 'none') return;
-    const url = config.mode === 'custom' ? config.url : '';
+    const url = mode === 'custom' ? (eventUrl || config.url) : '';
     if (!url) return; // El sonido predeterminado lo decide el sistema operativo.
     const audio = new Audio(url); audio.volume = 0.75; audio.play().catch(() => {});
   };
@@ -93,7 +137,18 @@ function boot() {
   const card = $('push-master-card');
   if (!card) return;
   installForegroundSound();
-  $('push-master-sound')?.addEventListener('change', event => { $('push-master-sound-url').style.display = event.target.value === 'custom' ? '' : 'none'; });
+  $('push-master-sound')?.addEventListener('change', event => { const custom = event.target.value === 'custom'; $('push-master-sound-url').style.display = custom ? '' : 'none'; $('btn-push-master-upload').style.display = custom ? '' : 'none'; });
+  for (const slot of ['order', 'review', 'like']) {
+    $(`push-tone-${slot}`)?.addEventListener('change', event => {
+      const custom = event.target.value === 'custom';
+      $(`push-tone-${slot}-url`).style.display = custom ? '' : 'none';
+      document.querySelector(`[data-push-tone-upload="${slot}"]`)?.style.setProperty('display', custom ? '' : 'none');
+    });
+    document.querySelector(`[data-push-tone-upload="${slot}"]`)?.addEventListener('click', () => $(`push-tone-${slot}-file`)?.click());
+    $(`push-tone-${slot}-file`)?.addEventListener('change', () => uploadTone(slot).catch(error => notice(error.message, true)));
+  }
+  $('btn-push-master-upload')?.addEventListener('click', () => $('push-master-sound-file')?.click());
+  $('push-master-sound-file')?.addEventListener('change', () => uploadTone().catch(error => notice(error.message, true)));
   $('btn-push-master-save')?.addEventListener('click', () => save().catch(error => notice(error.message, true)));
   $('btn-push-master-revoke-all')?.addEventListener('click', async () => {
     if (!window.confirm('¿Revocar TODOS los dispositivos push? Ninguno recibirá pedidos hasta volver a autorizarlo.')) return;
