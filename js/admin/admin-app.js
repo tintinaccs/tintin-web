@@ -27,6 +27,7 @@ import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tin
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260818-icon-svg-2";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260821-accounts-phase-a-1";
+import "./pages/paginas-admin.js?v=tintin-20260825-pages-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
@@ -505,6 +506,7 @@ const SECTION_LABELS = {
   // un título legible al entrar a Roles y Permisos.
   permisos: 'Roles y Permisos',
   apariencia: 'Apariencia y contenido'
+  ,paginas: 'Páginas'
 };
 
 // Secciones sensibles y el permiso que hace falta para entrar — una sola
@@ -541,7 +543,10 @@ const SECTION_PERMISSION = {
   // pero además se blinda con un chequeo de EMAIL exacto más abajo — no
   // alcanza con role==='superadmin' en Firestore, tiene que ser literalmente
   // tintinaccs@gmail.com (pedido explícito de seguridad).
-  permisos:      'manageSettings'
+  permisos:      'manageSettings',
+  // El gestor de páginas publica contenido arbitrario; queda reservado al
+  // superadmin titular, no sólo a cualquier cuenta con el permiso genérico.
+  paginas:       'manageSettings'
 };
 
 // Evita el bucle switchSection → replaceState(#x) → hashchange → switchSection.
@@ -563,6 +568,10 @@ function switchSection(target) {
   }
   if (target === 'permisos' && currentUser?.email !== SUPER_ADMIN) {
     toast('Roles y Permisos es exclusivo de tintinaccs@gmail.com');
+    target = 'dashboard';
+  }
+  if (target === 'paginas' && (currentRole !== 'superadmin' || currentUser?.email !== SUPER_ADMIN)) {
+    toast('Páginas es exclusivo de tintinaccs@gmail.com');
     target = 'dashboard';
   }
   if ((target === 'resenas' || target === 'me-gusta') && currentUser?.email !== SUPER_ADMIN) {
@@ -621,6 +630,7 @@ function switchSection(target) {
   if (target === 'importar') loadImportar();
   if (target === 'permisos') loadPermisosSection();
   if (target === 'apariencia') loadApariencia();
+  if (target === 'paginas') window.TintinPagesAdminRefresh?.();
 }
 
 navItems.forEach(btn => {
@@ -900,9 +910,11 @@ function setupPermissions(role) {
   // pantalla (antes esto solo ocultaba el ID de escritorio, dejando visibles
   // en mobile pestañas que en desktop ya estaban ocultas).
   Object.entries(SECTION_PERMISSION).forEach(([section, perm]) => {
-    const allowed = section === 'apariencia'
-      ? canAccessUnifiedAppearance(role)
-      : can(role, perm);
+    const allowed = section === 'paginas'
+      ? (role === 'superadmin' && currentUser?.email === SUPER_ADMIN)
+      : section === 'apariencia'
+        ? canAccessUnifiedAppearance(role)
+        : can(role, perm);
     document.querySelectorAll(`[data-section="${section}"]`).forEach(el => {
       el.style.display = allowed ? '' : 'none';
     });

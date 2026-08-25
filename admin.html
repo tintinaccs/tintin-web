@@ -37,6 +37,7 @@
   <link rel="stylesheet" href="css/admin/admin.css?v=tintin-20260817-margin-consistency-2">
   <link rel="stylesheet" href="css/admin/editor-visual.css?v=tintin-20260812-apariencia-responsive-1">
   <link rel="stylesheet" href="css/admin/participacion-admin.css?v=tintin-20260817-engagement-master-1">
+  <link rel="stylesheet" href="css/admin/paginas-admin.css?v=tintin-20260825-pages-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260824-contrast-buttons-3">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -100,6 +101,9 @@
     <button type="button" class="adm-nav-item" data-section="colecciones">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></span> Colecciones
     </button>
+    <button type="button" class="adm-nav-item" data-section="paginas" id="nav-paginas">
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l3 3v17H6z"/><path d="M15 2v4h4M9 11h6M9 15h6M9 19h4"/></svg></span> Páginas
+    </button>
     <div class="adm-nav-divider"></div>
     <button type="button" class="adm-nav-item" data-section="importar">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span> Import/Export
@@ -153,6 +157,7 @@
   <button type="button" class="adm-mobile-tab" data-section="resenas"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>Rese&ntilde;as</button>
   <button type="button" class="adm-mobile-tab" data-section="me-gusta"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg></span>Me gusta</button>
   <button type="button" class="adm-mobile-tab" data-section="colecciones"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></span>Colecciones</button>
+  <button type="button" class="adm-mobile-tab" data-section="paginas" id="mtab-paginas"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l3 3v17H6z"/><path d="M15 2v4h4M9 11h6M9 15h6M9 19h4"/></svg></span>Páginas</button>
   <button type="button" class="adm-mobile-tab" data-section="importar"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Import</button>
   <a href="/admin-images" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>Imágenes</a>
   <button type="button" class="adm-mobile-tab" data-section="mensajes"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>Mensajes</button>
@@ -1314,6 +1319,10 @@
       <div class="adm-section-head"><h2>Notificaciones push</h2><p>Recibí pedidos al instante y administrá los dispositivos autorizados.</p></div>
     </div>
 
+    <div class="adm-section" id="section-paginas">
+      <div id="tt-pages-admin-root"></div>
+    </div>
+
     <div class="adm-section" id="section-configuracion">
       <!-- Estado de la tienda -->
       <div class="adm-card" style="margin-bottom:20px">
@@ -1949,7 +1958,7 @@
 
 <div class="adm-toast" id="adm-toast"></div>
 
-<script type="module" src="js/admin/admin-app.js?v=tintin-20260825-web-push-integration-1"></script>
+<script type="module" src="js/admin/admin-app.js?v=tintin-20260825-pages-2"></script>
 <script type="module" src="js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260818-engagement-master-2"></script>
 <script type="module" src="js/admin/shopify-commerce-admin.js?v=tintin-20260821-accounts-phase-a-1"></script>
 <script type="module" src="js/admin/appearance/editor-visual-admin.js?v=tintin-20260821-accounts-phase-a-1"></script>
