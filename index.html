@@ -66,13 +66,13 @@
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3">
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260818-collections-apple-2">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260825-hero-scrapbook-collage-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260824-contrast-buttons-3">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
+  <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260825-hero-scrapbook-collage-1">
   <!-- Antes se insertaba dinámicamente vía injectHomeFit() en js/components/images/imagenes.js,
        un módulo que importa Firebase primero — si esa importación fallaba
        o tardaba (CDN lenta, bloqueada), esta hoja (y las alturas mínimas
@@ -82,8 +82,8 @@
        disponible desde el primer paint, sin depender de red externa.
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
        existe (ver js/components/images/imagenes.js). -->
-  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260821-hero-authoritative-1">
-  <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/hero-apple-inicio.css?v=tintin-20260811-cls-desktop-stable-2">
+  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260825-hero-scrapbook-collage-1">
+  <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/hero-apple-inicio.css?v=tintin-20260825-hero-scrapbook-collage-1">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2">
   <script type="application/ld+json" id="tt-store-jsonld">{"@context":"https://schema.org","@type":"Store","@id":"https://tintinaccesorios.pages.dev/#store","name":"Tintin Accesorios & Relojes","url":"https://tintinaccesorios.pages.dev/","logo":"https://tintinaccesorios.pages.dev/assets-tintin/images/general/logo.png","image":"https://tintinaccesorios.pages.dev/assets/og-cover.jpg","description":"Tintin Accesorios & Relojes — tienda de accesorios femeninos elegantes en Paraguay. Relojes, bolsos, collares, aros, brazaletes y más.","areaServed":{"@type":"Country","name":"Paraguay"},"currenciesAccepted":"PYG"}</script>
@@ -92,87 +92,123 @@
 
 
 <!-- ══════════════════════════════════════
-     HERO
+     HERO — scrapbook / collage
 ══════════════════════════════════════ -->
 <section class="tt-hero" id="hero" data-tt-editable="index" data-tt-section="hero">
+  <div class="tt-hero-inner">
 
-  <!-- Cloudinary (subida desde Super Admin → Imágenes) es la fuente dinámica
-       del hero. Se precarga la última portada publicada para que el primer
-       paint pase del loader directamente al banner; Firestore la reemplaza
-       cuando confirma una versión nueva. -->
-  <div class="tt-hero-media" id="tt-hero-media">
-    <picture>
-      <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784313313/tintin_media_d4980e04509c435681c1bb5e23dcbfc9_full.webp">
-      <source media="(max-width: 1120px)" srcset="https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784315346/tintin_media_9cef2bfbeb1149cd908fc7b1ed81ea1a_full.webp">
-      <img
-        id="tt-hero-img"
-        class="tt-hero-img"
-        data-dynamic-src="true"
-        src="https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784309046/tintin_media_6ea5859c12554fa9b576a84de5ec53c1_full.webp"
-        alt="Tintin Accesorios y Relojes — boutique femenina Paraguay"
-        width="1920"
-        height="1080"
-        loading="eager"
-        decoding="async"
-        fetchpriority="high"
-        draggable="false"
-      >
-    </picture>
-  </div>
-  <script>
-    // Red de seguridad independiente de gestion-imagenes.js: si por lo que sea
-    // (bloqueador, red, error) nunca llega a confirmar la imagen, el hero no
-    // puede quedar invisible para siempre. Si a los 900ms ya hay una imagen
-    // en camino (gestion-imagenes.js le asignó un src real) pero todavía no
-    // terminó de descargarse, espera un poco más en vez de revelar el fondo
-    // oscuro antes de tiempo — hasta un tope duro de 4s, para no depender
-    // nunca de una red que jamás responda.
-    //
-    // Si al llegar el tope no hay ninguna imagen realmente cargada (nunca
-    // llegó un src — Firestore/Cloudinary bloqueados o inalcanzables por
-    // completo — o llegó y falló), NO se revela: revelar la etiqueta de
-    // imagen sin foto real muestra el ícono de "imagen rota" + el alt
-    // completo como texto visible (tiene width/height fijos, así que el
-    // navegador sí le reserva ese cuadro), mucho peor que dejar el fondo
-    // oscuro de .tt-hero-media a la vista, que es lo que el propio diseño
-    // ya prevé como respaldo.
-    (function () {
-      var media = document.getElementById('tt-hero-media');
-      var img = document.getElementById('tt-hero-img');
-      if (!media) return;
-      var deadline = Date.now() + 4000;
-      function reveal() { media.classList.remove('tt-hero-pending'); }
-      function tick() {
-        var loaded = img && img.complete && img.naturalWidth > 0;
-        if (loaded) { reveal(); return; }
-        if (Date.now() < deadline) {
-          window.setTimeout(tick, 150);
-          return;
-        }
-        // Tope alcanzado sin imagen real (nunca llegó un src, llegó y
-        // falló, o sigue a medio descargar): se deja el fondo oscuro. Si
-        // gestion-imagenes.js consigue la imagen más tarde igual,
-        // revealHeroWhenImageReady() en ese archivo saca la clase por su
-        // cuenta apenas esté lista.
-      }
-      window.setTimeout(tick, 900);
-    })();
-  </script>
-
-  <!-- Overlay: keeps text readable over any image -->
-  <div class="tt-hero-overlay" aria-hidden="true"></div>
-
-  <!-- Content -->
-  <div class="tt-hero-content">
-    <p class="tt-hero-eyebrow">Bienvenidas a TINTIN</p>
-    <h1 class="tt-hero-title">DETALLES QUE ELEVAN<br>TU ESTILO</h1>
-    <p class="tt-hero-subtitle"></p>
-    <div class="tt-hero-actions">
-      <a href="/catalogo" class="tt-btn tt-btn-lg">Comprar ahora</a>
-      <a href="/about" class="tt-btn tt-btn-lg tt-btn-outline">¿Quiénes somos? →</a>
+    <!-- Content -->
+    <div class="tt-hero-content">
+      <p class="tt-hero-eyebrow">Bienvenidas a TINTIN</p>
+      <h1 class="tt-hero-title">DETALLES QUE ELEVAN<br>TU ESTILO</h1>
+      <p class="tt-hero-subtitle"></p>
+      <div class="tt-hero-actions">
+        <a href="/catalogo" class="tt-btn tt-btn-lg">Comprar ahora</a>
+        <a href="/about" class="tt-btn tt-btn-lg tt-btn-outline">¿Quiénes somos? →</a>
+      </div>
     </div>
-  </div>
 
+    <!-- Collage: foto principal (Cloudinary, viva vía Super Admin) + dos
+         fotos de relleno (placeholder hasta que se suban las reales) +
+         notas decorativas estilo "manuscrito". -->
+    <div class="tt-hero-scrapbook">
+      <div class="tt-hero-photo tt-hero-photo--main">
+        <div class="tt-hero-photo-frame">
+          <!-- Cloudinary (subida desde Super Admin → Imágenes) es la fuente
+               dinámica de esta foto. Se precarga la última portada publicada
+               para que el primer paint pase del loader directamente al
+               banner; Firestore la reemplaza cuando confirma una versión
+               nueva. -->
+          <div class="tt-hero-media" id="tt-hero-media">
+            <picture>
+              <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784313313/tintin_media_d4980e04509c435681c1bb5e23dcbfc9_full.webp">
+              <source media="(max-width: 1120px)" srcset="https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784315346/tintin_media_9cef2bfbeb1149cd908fc7b1ed81ea1a_full.webp">
+              <img
+                id="tt-hero-img"
+                class="tt-hero-img"
+                data-dynamic-src="true"
+                src="https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784309046/tintin_media_6ea5859c12554fa9b576a84de5ec53c1_full.webp"
+                alt="Tintin Accesorios y Relojes — boutique femenina Paraguay"
+                width="1920"
+                height="1080"
+                loading="eager"
+                decoding="async"
+                fetchpriority="high"
+                draggable="false"
+              >
+            </picture>
+          </div>
+        </div>
+      </div>
+      <script>
+        // Red de seguridad independiente de gestion-imagenes.js: si por lo que sea
+        // (bloqueador, red, error) nunca llega a confirmar la imagen, el hero no
+        // puede quedar invisible para siempre. Si a los 900ms ya hay una imagen
+        // en camino (gestion-imagenes.js le asignó un src real) pero todavía no
+        // terminó de descargarse, espera un poco más en vez de revelar el fondo
+        // oscuro antes de tiempo — hasta un tope duro de 4s, para no depender
+        // nunca de una red que jamás responda.
+        //
+        // Si al llegar el tope no hay ninguna imagen realmente cargada (nunca
+        // llegó un src — Firestore/Cloudinary bloqueados o inalcanzables por
+        // completo — o llegó y falló), NO se revela: revelar la etiqueta de
+        // imagen sin foto real muestra el ícono de "imagen rota" + el alt
+        // completo como texto visible (tiene width/height fijos, así que el
+        // navegador sí le reserva ese cuadro), mucho peor que dejar el fondo
+        // oscuro de .tt-hero-media a la vista, que es lo que el propio diseño
+        // ya prevé como respaldo.
+        (function () {
+          var media = document.getElementById('tt-hero-media');
+          var img = document.getElementById('tt-hero-img');
+          if (!media) return;
+          var deadline = Date.now() + 4000;
+          function reveal() { media.classList.remove('tt-hero-pending'); }
+          function tick() {
+            var loaded = img && img.complete && img.naturalWidth > 0;
+            if (loaded) { reveal(); return; }
+            if (Date.now() < deadline) {
+              window.setTimeout(tick, 150);
+              return;
+            }
+            // Tope alcanzado sin imagen real (nunca llegó un src, llegó y
+            // falló, o sigue a medio descargar): se deja el fondo oscuro. Si
+            // gestion-imagenes.js consigue la imagen más tarde igual,
+            // revealHeroWhenImageReady() en ese archivo saca la clase por su
+            // cuenta apenas esté lista.
+          }
+          window.setTimeout(tick, 900);
+        })();
+      </script>
+
+      <div class="tt-hero-photo tt-hero-photo--two">
+        <div class="tt-hero-photo-frame">
+          <img
+            src="assets-tintin/images/home/hero-collage/hero-collage-2.webp"
+            alt="Detalle de accesorio Tintin"
+            loading="lazy"
+            decoding="async"
+            onerror="this.onerror=null;this.src='assets-tintin/images/general/placeholder-section.webp';"
+          >
+        </div>
+      </div>
+
+      <div class="tt-hero-photo tt-hero-photo--three">
+        <div class="tt-hero-photo-frame">
+          <img
+            src="assets-tintin/images/home/hero-collage/hero-collage-3.webp"
+            alt="Detalle de accesorio Tintin"
+            loading="lazy"
+            decoding="async"
+            onerror="this.onerror=null;this.src='assets-tintin/images/general/placeholder-section.webp';"
+          >
+        </div>
+      </div>
+
+      <span class="tt-hero-note tt-hero-note--1" aria-hidden="true">hecho con amor</span>
+      <span class="tt-hero-note tt-hero-note--2" aria-hidden="true">calidad Tintin</span>
+    </div>
+
+  </div>
 </section>
 
 <!-- ══════════════════════════════════════

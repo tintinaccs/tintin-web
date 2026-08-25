@@ -19,15 +19,8 @@ body.tt-home-premium:not(.tt-home-runtime-ready) *::after {
 }
 
 body.tt-home-premium .tt-hero,
-body.tt-home-premium .tt-hero-media,
-body.tt-home-premium .tt-hero-overlay {
+body.tt-home-premium .tt-hero-media {
   background-color: var(--color-brand-secondary, #F6B7C8);
-}
-
-body.tt-home-premium .tt-hero {
-  min-height: clamp(520px, 76svh, 900px);
-  isolation: isolate;
-  overflow: hidden;
 }
 
 body.tt-home-premium .tt-hero-media {
@@ -68,28 +61,6 @@ body.tt-home-premium .tt-hero-img {
    transparente para que el fallback responsive siempre sea visible. */
 body.tt-home-premium .tt-hero-media picture {
   background: transparent !important;
-}
-
-body.tt-home-premium .tt-hero-overlay {
-  background: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--color-brand-primary-hover, #8B2642) 68%, transparent),
-    color-mix(in srgb, var(--color-brand-primary, #AD3F67) 32%, transparent) 52%,
-    transparent 100%
-  ) !important;
-}
-
-body.tt-home-premium .tt-hero-content,
-body.tt-home-premium .tt-hero-title,
-body.tt-home-premium .tt-hero-eyebrow,
-body.tt-home-premium .tt-hero-subtitle {
-  color: var(--color-text-inverse, #FFFFFF) !important;
-  text-shadow: 0 2px 18px color-mix(in srgb, var(--color-brand-primary-hover, #8B2642) 54%, transparent);
-}
-
-body.tt-home-premium .tt-hero-content {
-  position: relative;
-  z-index: 2;
 }
 
 body.tt-home-premium .tt-trust-bar,
@@ -260,10 +231,6 @@ body.tt-home-premium .tt-wa-float * {
 
 /* Tablet */
 @media (min-width: 769px) and (max-width: 1120px) {
-  body.tt-home-premium .tt-hero {
-    min-height: clamp(540px, 72svh, 760px);
-  }
-
   body.tt-home-premium .tt-editorial,
   body.tt-home-premium .tt-watch-feature {
     min-width: 0;
@@ -279,19 +246,6 @@ body.tt-home-premium .tt-wa-float * {
 @media (max-width: 768px) {
   body.tt-home-premium {
     padding-bottom: calc(72px + env(safe-area-inset-bottom));
-  }
-
-  body.tt-home-premium .tt-hero {
-    min-height: max(560px, 82svh);
-  }
-
-  body.tt-home-premium .tt-hero-overlay {
-    background: linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--color-brand-primary-hover, #8B2642) 20%, transparent),
-      color-mix(in srgb, var(--color-brand-primary-hover, #8B2642) 72%, transparent) 78%,
-      var(--color-brand-primary-hover, #8B2642) 100%
-    ) !important;
   }
 
   body.tt-home-premium .tt-hero-actions,

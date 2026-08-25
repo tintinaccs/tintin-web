@@ -1098,21 +1098,112 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-hero {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
-  height: 100vh;
-  height: 100svh;
-  min-height: 680px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  text-align: left;
-  background: #1a0610;
+  padding: clamp(48px, 7vw, 96px) 0 clamp(56px, 8vw, 112px);
+  background: var(--bg);
   /* El primer gesto real puede empezar sobre el fondo del hero — nunca debe
      competir con el scroll vertical nativo. */
   touch-action: pan-y;
 }
 
-/* ── Media container: fills hero, sits behind everything ── */
+.tt-hero-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 64px);
+}
+
+/* ── Scrapbook: caja relativa donde las tres fotos se reparten por
+   posición absoluta, cada una rotada como si estuvieran pegadas a mano. ── */
+.tt-hero-scrapbook {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 1 / 1.05;
+  margin: 0 auto;
+}
+
+.tt-hero-photo {
+  position: absolute;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 10px 10px 26px;
+}
+
+.tt-hero-photo-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #1a0610;
+}
+
+.tt-hero-photo-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tt-hero-photo--main {
+  width: 62%;
+  left: 2%;
+  top: 12%;
+  transform: rotate(-3deg);
+  z-index: 2;
+}
+
+.tt-hero-photo--two {
+  width: 40%;
+  right: 0;
+  top: 0;
+  transform: rotate(6deg);
+  z-index: 3;
+}
+
+.tt-hero-photo--three {
+  width: 38%;
+  left: 0;
+  bottom: 0;
+  transform: rotate(-8deg);
+  z-index: 3;
+}
+
+/* ── Notas decorativas estilo manuscrito — sin fuente nueva: cursiva +
+   rotación + subrayado ondulado nativo sobre Montserrat, la misma
+   tipografía del resto del sitio. Puramente ornamental. ── */
+.tt-hero-note {
+  position: absolute;
+  font-family: Montserrat;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--pink-dark);
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: currentColor;
+  text-underline-offset: 4px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.tt-hero-note--1 {
+  top: -8px;
+  left: 6%;
+  transform: rotate(-6deg);
+}
+
+.tt-hero-note--2 {
+  bottom: 2%;
+  right: -6px;
+  transform: rotate(5deg);
+}
+
+/* ── Media container: fills its photo frame ── */
 /* Decorativo, nunca interactivo: pointer-events:none saca esta capa por
    completo del hit-testing, así el primer toque siempre llega directo al
    scroll nativo del documento en vez de competir con el gesto nativo de
@@ -1161,19 +1252,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 }
 
 
-/* ── Text content sits above overlay ── */
 .tt-hero-content {
-  position: relative;
-  z-index: 2;
-  max-width: 860px;
-  padding: 0 32px;
-  margin-top: 0;
-}
-
-@media (min-width: 1025px) {
-  .tt-hero-content {
-    max-width: 50%;
-  }
+  max-width: 480px;
 }
 
 .tt-hero-eyebrow {
@@ -3851,24 +3931,20 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
     min-height: 44px;
   }
 
-  .tt-hero {
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    min-height: 640px;
+  .tt-hero-inner {
+    grid-template-columns: 1fr;
+    gap: 48px;
   }
   .tt-hero-content {
-    grid-row: 2;
-    align-self: start;
-    justify-self: center;
     max-width: 620px;
     width: 100%;
-    padding: 40px 32px 56px;
+    margin: 0 auto;
     text-align: center;
   }
   .tt-hero-eyebrow { justify-content: center; }
   .tt-hero-pills { justify-content: center; }
   .tt-hero-actions { justify-content: center; }
-  .tt-hero-img { object-position: center; }
+  .tt-hero-scrapbook { order: -1; max-width: 460px; }
 }
 
 /* ═══════════════════════════════════════════════
@@ -3952,25 +4028,19 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
     letter-spacing: 0.02em;
   }
 
-  /* Mobile hero — bloque de contenido centrado horizontalmente y apoyado
-     hacia abajo (no en el medio vertical del banner), con un margen
-     inferior chico y parejo. min-height se mantiene igual que antes; sólo
-     cambia el alineado. */
+  /* Mobile hero — texto centrado, collage debajo, apoyado con margen
+     inferior para no chocar con la tabbar fija. */
   .tt-hero {
-    min-height: 620px;
-    align-items: flex-end;
-    justify-content: center;
     text-align: center;
+  }
+  .tt-hero-inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
   }
   .tt-hero-content {
     width: 100%;
-    max-width: 620px;
+    max-width: 480px;
     margin: 0 auto;
-    /* 100px: la tabbar en esta franja (481-768px) muestra las etiquetas de
-       texto bajo cada ícono y mide ~68.8px + 16px de separación del borde
-       = ~84.8px de altura real desde el borde inferior. 100px conserva un
-       margen táctil visible de unos 15px sin superponer los botones. */
-    padding: 0 clamp(18px, 5vw, 32px) 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -3980,8 +4050,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   .tt-hero-title,
   .tt-hero-subtitle { width: 100%; text-align: center; }
   .tt-hero-actions { justify-content: center; }
-  .tt-hero-img { object-position: center top; }
-  .tt-hero-title { font-size: clamp(3rem, 10vw, 5rem); }
+  .tt-hero-title { font-size: clamp(2.4rem, 8vw, 3.2rem); }
+  .tt-hero-scrapbook { max-width: 380px; }
 }
 
 /* ═══════════════════════════════════════════════
@@ -3995,19 +4065,13 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   .tt-related-section { padding: 30px 0; }
   .tt-page-hero { padding: calc(var(--header-h) + 32px) 0 30px; }
 
-  /* Mobile hero pequeño — mismo centrado horizontal y apoyo hacia abajo
-     que el bloque de 768px de arriba, sólo ajusta min-height/padding/
-     tamaño de título para pantallas chicas y apila los botones (siguen
-     centrados, nunca align-items:flex-start). */
-  .tt-hero { min-height: 560px; align-items: flex-end; justify-content: center; }
-  /* 92px: acá la tabbar esconde las etiquetas de texto (span{display:none}
-     más abajo) y mide ~56px + 16px de separación = ~72px reales desde el
-     borde inferior. 92px deja cerca de 16px entre la navegación y el CTA. */
-  .tt-hero-content { padding: 0 20px 92px; }
-  .tt-hero-img { object-position: center top; }
-  .tt-hero-title { font-size: clamp(2.2rem, 8vw, 3rem); }
+  /* Mobile hero pequeño — mismo centrado horizontal que el bloque de 768px,
+     sólo ajusta tamaño de título para pantallas chicas y apila los botones. */
+  .tt-hero-content { padding: 0 20px; }
+  .tt-hero-title { font-size: clamp(2rem, 8vw, 2.6rem); }
   .tt-hero-actions { flex-direction: column; justify-content: center; align-items: center; gap: 10px; }
   .tt-hero-actions .tt-btn { width: 100%; max-width: 280px; justify-content: center; }
+  .tt-hero-scrapbook { max-width: 320px; }
 
   .tt-collections-grid { grid-template-columns: repeat(2, 1fr); }
 
