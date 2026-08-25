@@ -5,6 +5,7 @@ import { collection, doc, onSnapshot, setDoc, deleteDoc, serverTimestamp } from 
 const SUPER_ADMIN = 'tintinaccs@gmail.com';
 const ROOT_ID = 'tt-pages-admin-root';
 let pages = [];
+let customPages = [];
 let unsubscribe = null;
 let editing = null;
 let ready = false;
@@ -13,6 +14,28 @@ const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&am
 const slugify = value => String(value || '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 120);
 const cleanHtml = value => String(value || '').slice(0, 100000);
 const dateLabel = value => { try { const date = value?.toDate ? value.toDate() : new Date(value); return Number.isNaN(date.getTime()) ? '—' : new Intl.DateTimeFormat('es-PY', { dateStyle:'medium', timeStyle:'short' }).format(date); } catch { return '—'; } };
+
+// Rutas que ya forman parte del sitio. Se muestran en el mismo inventario que
+// las páginas creadas desde Firestore, pero se mantienen como "Sistema": no se
+// pueden borrar ni editar desde este CRUD para evitar romper la aplicación.
+const BUILTIN_PAGES = [
+  ['Inicio', '/', 'index.html'],
+  ['Catálogo', '/catalogo', 'catalogo.html'],
+  ['Colecciones', '/collections', 'collections.html'],
+  ['Producto', '/product', 'product.html'],
+  ['Checkout', '/checkout', 'checkout.html'],
+  ['Nosotros', '/nosotros', 'nosotros.html'],
+  ['Sobre Tintin', '/about', 'about.html'],
+  ['Contacto', '/contact', 'contact.html'],
+  ['Preguntas frecuentes', '/preguntas-frecuentes', 'preguntas-frecuentes.html'],
+  ['Envíos', '/envios', 'envios.html'],
+  ['Cambios y devoluciones', '/cambios-devoluciones', 'cambios-devoluciones.html'],
+  ['Privacidad', '/privacidad', 'privacidad.html'],
+  ['Términos y condiciones', '/terminos', 'terminos.html'],
+  ['Ingreso', '/login', 'login.html'],
+  ['Perfil', '/perfil', 'perfil.html'],
+  ['Página no encontrada', '/404', '404.html'],
+].map(([title, slug, path]) => ({ id:`builtin:${slug}`, title, slug, path, pageType:'builtin', published:true, template:'Tintin', updatedAt:null }));
 
 function root() { return document.getElementById(ROOT_ID); }
 function canUse() { return String(auth.currentUser?.email || '').toLowerCase() === SUPER_ADMIN; }
@@ -27,10 +50,10 @@ function render() {
   const filter = document.getElementById('tt-pages-filter')?.value || 'all';
   const filtered = pages.filter(page => (!query || `${page.title} ${page.slug}`.toLowerCase().includes(query)) && (filter === 'all' || (filter === 'live' ? page.published !== false : page.published === false)));
   host.innerHTML = `<div class="tt-pages-admin">
-    <div class="tt-pages-head"><div><h2>Páginas</h2><p>Creá páginas públicas de Tintin, editá su contenido, SEO y visibilidad desde un solo módulo.</p></div><div class="tt-pages-actions"><button type="button" class="adm-btn adm-btn-primary" id="tt-pages-new">+ Nueva página</button></div></div>
+    <div class="tt-pages-head"><div><h2>Páginas</h2><p>Administrá las páginas existentes de Tintin y creá nuevas páginas personalizadas desde un solo módulo.</p></div><div class="tt-pages-actions"><button type="button" class="adm-btn adm-btn-primary" id="tt-pages-new">+ Nueva página</button></div></div>
     <div class="tt-pages-toolbar"><div class="tt-pages-filters"><input class="adm-input" id="tt-pages-search" type="search" placeholder="Buscar por título o slug…" value="${esc(query)}"><select class="adm-input" id="tt-pages-filter"><option value="all" ${filter==='all'?'selected':''}>Todas</option><option value="live" ${filter==='live'?'selected':''}>Publicadas</option><option value="draft" ${filter==='draft'?'selected':''}>Borradores</option></select></div><span class="adm-badge">${filtered.length} de ${pages.length}</span></div>
-    <div class="tt-pages-notice">Las páginas se publican en <strong>/pages/slug</strong>. Los borradores no son visibles públicamente. El contenido acepta HTML seguro básico y se adapta a desktop, tablet y mobile.</div>
-    <div class="tt-pages-table">${filtered.length ? `<table><thead><tr><th>Título</th><th>Visibilidad</th><th>Plantilla</th><th>Actualización</th><th></th></tr></thead><tbody>${filtered.map(page => `<tr><td><span class="tt-pages-title">${esc(page.title || page.slug)}</span><span class="tt-pages-slug">/pages/${esc(page.slug)}</span></td><td><span class="tt-pages-status ${page.published !== false ? 'is-live':'is-draft'}">${page.published !== false ? 'Publicada':'Borrador'}</span></td><td>${esc(page.template || 'standard')}</td><td>${esc(dateLabel(page.updatedAt))}</td><td><div class="tt-pages-actions-cell"><button type="button" class="adm-btn adm-btn-sm" data-page-edit="${esc(page.slug)}">Editar</button>${page.published !== false ? `<a class="adm-btn adm-btn-sm" href="/pages/${encodeURIComponent(page.slug)}" target="_blank" rel="noopener">Ver</a>`:''}<button type="button" class="adm-btn adm-btn-sm" data-page-duplicate="${esc(page.slug)}">Duplicar</button><button type="button" class="adm-btn adm-btn-sm adm-btn-danger" data-page-delete="${esc(page.slug)}">Eliminar</button></div></td></tr>`).join('')}</tbody></table>` : '<div class="tt-pages-empty">Todavía no hay páginas personalizadas.<br>Creá la primera con “Nueva página”.</div>'}</div>
+    <div class="tt-pages-notice">Las páginas del sistema son las rutas que ya existen en la web. Las personalizadas se publican en <strong>/pages/slug</strong>; los borradores no son visibles públicamente.</div>
+    <div class="tt-pages-table">${filtered.length ? `<table><thead><tr><th>Título</th><th>Tipo</th><th>Visibilidad</th><th>Plantilla</th><th>Actualización</th><th></th></tr></thead><tbody>${filtered.map(page => { const builtin = page.pageType === 'builtin'; const href = builtin ? page.path : `/pages/${encodeURIComponent(page.slug)}`; return `<tr><td><span class="tt-pages-title">${esc(page.title || page.slug)}</span><span class="tt-pages-slug">${esc(href)}</span></td><td><span class="tt-pages-status ${builtin ? 'is-system' : 'is-custom'}">${builtin ? 'Sistema' : 'Personalizada'}</span></td><td><span class="tt-pages-status ${page.published !== false ? 'is-live':'is-draft'}">${page.published !== false ? 'Publicada':'Borrador'}</span></td><td>${esc(page.template || 'standard')}</td><td>${esc(dateLabel(page.updatedAt))}</td><td><div class="tt-pages-actions-cell">${builtin ? `<a class="adm-btn adm-btn-sm" href="${esc(href)}" target="_blank" rel="noopener">Ver</a>` : `<button type="button" class="adm-btn adm-btn-sm" data-page-edit="${esc(page.slug)}">Editar</button>${page.published !== false ? `<a class="adm-btn adm-btn-sm" href="${esc(href)}" target="_blank" rel="noopener">Ver</a>`:''}<button type="button" class="adm-btn adm-btn-sm" data-page-duplicate="${esc(page.slug)}">Duplicar</button><button type="button" class="adm-btn adm-btn-sm adm-btn-danger" data-page-delete="${esc(page.slug)}">Eliminar</button>`}</div></td></tr>`; }).join('')}</tbody></table>` : '<div class="tt-pages-empty">No se encontraron páginas con esos filtros.</div>'}</div>
   </div>`;
   host.querySelector('#tt-pages-new')?.addEventListener('click', () => openEditor());
   host.querySelector('#tt-pages-search')?.addEventListener('input', render);
@@ -88,7 +111,7 @@ async function removePage(slug) {
 
 function subscribe() {
   if (unsubscribe || !canUse()) return;
-  unsubscribe = onSnapshot(collection(db, 'site_content'), snapshot => { pages = snapshot.docs.map(item => ({ id:item.id, ...item.data() })).filter(page => page.pageType === 'custom').sort((a,b) => String(a.title || '').localeCompare(String(b.title || ''), 'es')); ready = true; render(); }, error => { ready = false; const host = root(); if (host) host.innerHTML = `<div class="adm-card"><div class="adm-card-body"><div class="tt-pages-error is-visible">No se pudieron cargar las páginas: ${esc(error?.message || error)}</div></div></div>`; });
+  unsubscribe = onSnapshot(collection(db, 'site_content'), snapshot => { customPages = snapshot.docs.map(item => ({ id:item.id, ...item.data() })).filter(page => page.pageType === 'custom').sort((a,b) => String(a.title || '').localeCompare(String(b.title || ''), 'es')); pages = [...BUILTIN_PAGES, ...customPages]; ready = true; render(); }, error => { ready = false; pages = [...BUILTIN_PAGES]; const host = root(); if (host) { render(); host.insertAdjacentHTML('afterbegin', `<div class="tt-pages-error is-visible">No se pudieron cargar las páginas personalizadas: ${esc(error?.message || error)}</div>`); } });
 }
 
 window.TintinPagesAdminRefresh = () => { if (canUse()) { subscribe(); render(); } };
