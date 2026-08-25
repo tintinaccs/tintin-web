@@ -206,8 +206,32 @@ async function ensureMessaging() {
   messagingInstance = sdk.getMessaging(auth.app);
   sdk.onMessage(messagingInstance, payload => {
     const data = payload?.data || {};
+    const title = data.title || 'Tintin Pedidos';
+    const body = data.body || 'Nuevo aviso';
     foregroundCount += 1;
-    notice(`${data.title || 'Tintin Pedidos'} — ${data.body || 'Nuevo aviso'}`);
+    notice(`${title} — ${body}`);
+    // FCM data-only messages are deliberately rendered by us. When the
+    // panel is visible, show the same native Chrome notification as the
+    // service worker does in the background (without relying on a toast).
+    if (Notification.permission === 'granted') {
+      try {
+        const notification = new Notification(title, {
+          body,
+          icon: '/favicon-192x192.png',
+          badge: '/favicon-192x192.png',
+          tag: String(data.tag || data.eventId || 'tintin-push'),
+          silent: false
+        });
+        notification.onclick = () => {
+          notification.close();
+          window.focus();
+          window.location.href = '/admin.html?section=pedidos';
+        };
+      } catch {
+        // Some installed-browser shells expose permission but block the
+        // constructor; the in-panel notice above remains the fallback.
+      }
+    }
     window.TintinPushPlayForegroundSound?.(data.foregroundSound || 'default');
     if ('setAppBadge' in navigator) {
       navigator.setAppBadge(foregroundCount).catch(() => {});
