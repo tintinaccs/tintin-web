@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-25T13:15:07.982Z",
-  "sourceFingerprint": "085859c8256a8f51de6d38f7037e29f005e62f459150449ab368e3ea1e89f31f",
+  "generatedAt": "2026-08-25T13:27:53.963Z",
+  "sourceFingerprint": "d1c5bf30874257fe32f96a9c1a4b952c9634cc0368f33a0e94cddb1bd172d259",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 731,
     "textFiles": 699,
-    "totalBytes": 8226292,
+    "totalBytes": 8226433,
     "pages": 18,
     "modules": 464
   },
@@ -1774,7 +1774,7 @@
         "viewer"
       ],
       "bytes": 183422,
-      "sha256": "37a59b0562e9683ebe60781085a024bef00b521e15c5f8caea6d83e50f61ebe1",
+      "sha256": "4099b157c08d317fc99b55414095375e4bff0ee3bf2a5fdd9fe7d6f908766b9a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1848,7 +1848,7 @@
           "line": 2162
         },
         {
-          "raw": "js/admin/notifications/notificaciones-push.js?v=tintin-20260825-web-push-4",
+          "raw": "js/admin/notifications/notificaciones-push.js?v=tintin-20260825-web-push-5",
           "target": "js/admin/notifications/notificaciones-push.js",
           "line": 2163
         },
@@ -2080,7 +2080,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/notifications/notificaciones-push.js?v=tintin-20260825-web-push-4",
+          "raw": "js/admin/notifications/notificaciones-push.js?v=tintin-20260825-web-push-5",
           "target": "js/admin/notifications/notificaciones-push.js",
           "line": 2163,
           "exists": true
@@ -19090,8 +19090,8 @@
     },
     {
       "path": "js/admin/notifications/notificaciones-push.js",
-      "bytes": 14455,
-      "sha256": "3aeea86c73756b16c491c0b4629d7759020038f21b0bf0398695f2603b9973a7",
+      "bytes": 14596,
+      "sha256": "dd50b7ed47ee46874c25402047ff4a6df54ae41bd6a81addc891acbecdada443",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25416,7 +25416,7 @@
     {
       "path": "scripts/auditar-push-web.js",
       "bytes": 16182,
-      "sha256": "dfaaa7b81250c24a9990f4034c5b8a77fbc57d762dbc164214429d235ef317aa",
+      "sha256": "a4a05cdc6763c895f9334224deafd3a7351d612544486a5eb42ddb339702beb5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28657,7 +28657,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 183422,
-      "sha256": "37a59b0562e9683ebe60781085a024bef00b521e15c5f8caea6d83e50f61ebe1"
+      "sha256": "4099b157c08d317fc99b55414095375e4bff0ee3bf2a5fdd9fe7d6f908766b9a"
     },
     {
       "path": "apple-touch-icon.png",
@@ -30246,8 +30246,8 @@
     {
       "path": "js/admin/notifications/notificaciones-push.js",
       "extension": ".js",
-      "bytes": 14455,
-      "sha256": "3aeea86c73756b16c491c0b4629d7759020038f21b0bf0398695f2603b9973a7"
+      "bytes": 14596,
+      "sha256": "dd50b7ed47ee46874c25402047ff4a6df54ae41bd6a81addc891acbecdada443"
     },
     {
       "path": "js/admin/orders/eliminacion-pedidos-admin.js",
@@ -32089,7 +32089,7 @@
       "path": "scripts/auditar-push-web.js",
       "extension": ".js",
       "bytes": 16182,
-      "sha256": "dfaaa7b81250c24a9990f4034c5b8a77fbc57d762dbc164214429d235ef317aa"
+      "sha256": "a4a05cdc6763c895f9334224deafd3a7351d612544486a5eb42ddb339702beb5"
     },
     {
       "path": "scripts/auditar-rendimiento-metricas.mjs",
@@ -32209,7 +32209,7 @@
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
       "bytes": 818,
-      "sha256": "4d03a43dab6a5a7693393f3c7b4e76a3e750e10bdb87f354d2e49e4416d4acf8"
+      "sha256": "f839edc06b4d887c3509cee8b6057594f55078ea44433a9a5b49d014d6e31f6b"
     },
     {
       "path": "scripts/cache-version-baseline.json",
