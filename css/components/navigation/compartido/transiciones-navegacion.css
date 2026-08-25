@@ -7,3 +7,24 @@
 @media (prefers-reduced-motion:reduce) {
   ::view-transition-old(root),::view-transition-new(root){animation:none!important}
 }
+/* La variante móvil no se descarga en tablet/desktop, por eso este límite
+   compartido mantiene oculto el tabbar fuera de su rango. */
+@media (min-width: 768px) {
+  #tt-tabbar { display: none !important; visibility: hidden !important; pointer-events: none !important; }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  #tt-header-desktop-tablet { display: none !important; visibility: hidden !important; pointer-events: none !important; }
+}
+
+@media (max-width: 767px) {
+  #tt-header-desktop-tablet,
+  #tt-header-tablet,
+  .tt-tablet-menu { display: none !important; visibility: hidden !important; pointer-events: none !important; }
+}
+
+@media (min-width: 1025px) {
+  #tt-header-tablet,
+  .tt-tablet-menu,
+  #tt-tabbar { display: none !important; visibility: hidden !important; pointer-events: none !important; }
+}

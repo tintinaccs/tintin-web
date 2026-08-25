@@ -96,7 +96,8 @@ check('No existe Service Worker con caché vieja', !exists('sw.js') && !exists('
 check('La interfaz respeta reducción de movimiento', /prefers-reduced-motion/.test(read('css/quality/calidad-interfaz.css')), 'Se perdió prefers-reduced-motion.');
 check(
   'El presupuesto de estilos no cuenta dos veces un archivo preparado',
-  read('scripts/auditar-rendimiento-tiempo-real.js').includes('const homeCssUrls = new Set('),
+  read('scripts/auditar-rendimiento-tiempo-real.js').includes('const homeCssLinks =') &&
+    read('scripts/auditar-rendimiento-tiempo-real.js').includes('new Set(homeCssLinks'),
   'La medición volvió a sumar por separado el preload y la hoja de estilos de una misma URL.'
 );
 

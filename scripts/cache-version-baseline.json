@@ -44,16 +44,16 @@
     "sha256": "922b99de23264ae4c9154ec3dd386573d9dec7ffc86555e593081f70ce514324"
   },
   "css/components/navigation/compartido/busqueda.css": {
-    "version": "tintin-20260818-header-dropdowns-solid-3",
+    "version": "tintin-20260825-responsive-css-budget-2",
     "sha256": "7d1cf2359550691b56b397957ba397d1ec1a395d2f299c93b9e6f7017de8706f"
   },
   "css/components/navigation/compartido/paneles.css": {
-    "version": "tintin-20260818-header-dropdowns-solid-3",
+    "version": "tintin-20260825-responsive-css-budget-2",
     "sha256": "1d9a96a8d44e21f0f90979a3f99f6286d24cb799e0921e948fceaabbfe7a22ab"
   },
   "css/components/navigation/compartido/transiciones-navegacion.css": {
-    "version": "tintin-20260818-header-dropdowns-solid-3",
-    "sha256": "ba36fabc7e04e62bab031d76b930d17602068383542a5ee218e7255c07c60751"
+    "version": "tintin-20260825-responsive-css-budget-2",
+    "sha256": "212e9dba7d27f5c1ccab55e609574353941a1a2c85eb5d9b6d623c33787eee22"
   },
   "css/components/navigation/escritorio/encabezado-escritorio.css": {
     "version": "tintin-20260824-header-responsive-sync-1",
@@ -204,8 +204,8 @@
     "sha256": "77f776d5b297ce973fe5ea432f318498d7e9f07a41f183525a79159c6686c12d"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20260825-web-push-integration-1",
-    "sha256": "a29b1bf920779c7354bcaad2347df153c49308bdf076d63e6dd24acda0c30910"
+    "version": "tintin-20260825-pages-2",
+    "sha256": "ef12f03310f33fd0d08efbbc51f3efa36d7ecba9b18e2a3b0f3329a3bfa859fc"
   },
   "js/admin/appearance/editor-visual-admin.js": {
     "version": "tintin-20260821-accounts-phase-a-1",
@@ -264,8 +264,8 @@
     "sha256": "83c877e95a9ac987fb4f307553f5a0540d50cb1d66a82cecb31d0e3c981a5649"
   },
   "js/admin/pages/paginas-admin.js": {
-    "version": "tintin-20260825-pages-1",
-    "sha256": "25c64963f73b6f590a525cdd2c642828423dff896d2b675dc175b5c234a22c5f"
+    "version": "tintin-20260825-pages-2",
+    "sha256": "aa13ceb41267d847805e9d85b7094ea85f4123f0f27612d49d925d3d0d9fab1a"
   },
   "js/admin/participacion/gestion-participacion-admin-v2.js": {
     "version": "tintin-20260818-engagement-master-v2-2",
@@ -276,8 +276,8 @@
     "sha256": "2d929570b9f84f339c8e325f26b0377b2bc95bb93f06c9f24f775c42cb9c9eb4"
   },
   "js/admin/products/biblioteca-multimedia-admin.js": {
-    "version": "tintin-20260818-icon-svg-2",
-    "sha256": "2859caffe8871aecf1803c1cd4aa3a21404d7631eec2dabe6748bdd51016411c"
+    "version": "tintin-20260825-media-library-ui-1",
+    "sha256": "19e4cf12a619415aec15b7a60590bad248116c5065f2d2a180b3b7cd82ade5d4"
   },
   "js/admin/proteccion-cambios-pendientes-admin.js": {
     "version": "tintin-20260716-cloudinary-fix-1",
@@ -320,8 +320,8 @@
     "sha256": "0f18ef99f9c64ed882f65662cfb48d6e34071208eb5ebb823a03bb1c4e732e17"
   },
   "js/cargador-pagina.js": {
-    "version": "tintin-20260824-hero-first-paint-1",
-    "sha256": "5a6c2e2262c0a418bbf7638d8bb4c6f066ff5f1fe42045b63a9e9f599eefdbe6"
+    "version": "tintin-20260825-scroll-reveal-2",
+    "sha256": "b68a52647b9a895b797344914ce9257c65cfbe977ae893994face8f5eb4f474c"
   },
   "js/components/cart/politica-persistencia-carrito.js": {
     "version": "tintin-20260808-product-cart-1",
@@ -396,12 +396,12 @@
     "sha256": "e19c0f93ca4786c0568483cbddd12e7809f46b5fa04fe45722f99b74078b603a"
   },
   "js/components/images/biblioteca-multimedia.js": {
-    "version": "tintin-20260716-cloudinary-fix-1",
-    "sha256": "c02c5ffb24070330d4e857d9e7984e53a8abf59fea4d591cf31186ebe4e6fc9a"
+    "version": "tintin-20260825-media-library-meta-1",
+    "sha256": "81e71e0238dee78f74a2ad0eeead203cfeea3ffee940fb1b370b91493fe6f4f2"
   },
   "js/components/images/carga-imagenes.js": {
-    "version": "tintin-20260716-cloudinary-fix-1",
-    "sha256": "c0dad7e02699310c03c3831ada42f09462031231677f540db79e61cadd552be5"
+    "version": "tintin-20260825-media-library-meta-1",
+    "sha256": "c15b91433e36289216ed2bfd9566c6a74f0c97e7b119af58d2975854800e4d81"
   },
   "js/components/images/imagenes.js": {
     "version": "tintin-20260716-cloudinary-fix-1",
@@ -716,8 +716,8 @@
     "sha256": "a59f5ace5133c4e25d436b0c4c20c730d1044c46800c6cd1652c35b75c2a53af"
   },
   "styles.css": {
-    "version": "tintin-20260818-collections-apple-2",
-    "sha256": "9958477ad8f5c7cd8fd9eab69e05a2b6f9dac4e16f3605924c2ec3a01aed35d5"
+    "version": "tintin-20260825-css-budget-1",
+    "sha256": "f16448592dd4ab601af5bac2784af40213d65c61fd7b45bedd92dabae9567a73"
   },
   "tienda.js": {
     "version": "tintin-20260822-checkout-hardening-1",

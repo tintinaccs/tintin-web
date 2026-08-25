@@ -16,14 +16,14 @@ const VISUAL_BUILDER_VERSION = 'tintin-20260821-layout-stable-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20260822-dob-username-onboarding-1';
 const PROFILE_GATE_VERSION = 'tintin-20260822-dob-username-onboarding-1';
 const NAV_HEADER_VERSION = 'tintin-20260824-header-responsive-sync-1';
-const NAV_SHARED_VERSION = 'tintin-20260818-header-dropdowns-solid-3';
+const NAV_SHARED_VERSION = 'tintin-20260825-responsive-css-budget-2';
 const NAVIGATION_PRELOAD_STYLES = [
-  ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION],
-  ['css/components/navigation/tableta/encabezado-tableta.css', NAV_HEADER_VERSION],
-  ['css/components/navigation/movil/encabezado-movil.css', NAV_HEADER_VERSION],
-  ['css/components/navigation/compartido/transiciones-navegacion.css', NAV_SHARED_VERSION],
-  ['css/components/navigation/compartido/paneles.css', NAV_SHARED_VERSION],
-  ['css/components/navigation/compartido/busqueda.css', NAV_SHARED_VERSION],
+  ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
+  ['css/components/navigation/tableta/encabezado-tableta.css', NAV_HEADER_VERSION, '(min-width: 768px) and (max-width: 1024px)'],
+  ['css/components/navigation/movil/encabezado-movil.css', NAV_HEADER_VERSION, '(max-width: 767px)'],
+  ['css/components/navigation/compartido/transiciones-navegacion.css', NAV_SHARED_VERSION, ''],
+  ['css/components/navigation/compartido/paneles.css', NAV_SHARED_VERSION, ''],
+  ['css/components/navigation/compartido/busqueda.css', NAV_SHARED_VERSION, ''],
 ];
 const PUBLIC_PAGES = [
   '404.html',
@@ -117,7 +117,7 @@ function ensureNavigationPreloads(html) {
     `<link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=${NAV_BARRIER_VERSION}">`,
     `<link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=${NAV_ENTRY_VERSION}">`,
     ...NAVIGATION_PRELOAD_STYLES.map(
-      ([href, version]) => `<link rel="preload" as="style" href="${href}?v=${version}">`
+      ([href, version, media]) => `<link rel="preload" as="style"${media ? ` media="${media}"` : ''} href="${href}?v=${version}">`
     ),
   ].map(tag => `  ${tag}`).join('\n');
 

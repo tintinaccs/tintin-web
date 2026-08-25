@@ -103,7 +103,7 @@ check('Cookies y estadísticas comparten una sola elección revocable',
   privacy.includes('id="tt-open-privacy-settings"'));
 check('La tarjeta de privacidad no bloquea ni cubre toda la página',
   styles.includes('.tt-privacy-consent') &&
-  styles.includes('width: min(400px, calc(100vw - 36px))') &&
+  /width\s*:\s*min\(400px,\s*calc\(100vw\s*-\s*36px\)\)/.test(styles) &&
   !/\.tt-privacy-consent\s*\{[^}]*\binset\s*:\s*0/i.test(styles));
 check('La actividad propia y Google Analytics esperan el permiso opcional',
   activity.includes("from './consentimiento-privacidad.js?v=tintin-20260716-cloudinary-fix-1'") &&

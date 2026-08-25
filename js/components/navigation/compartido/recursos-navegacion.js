@@ -1,7 +1,7 @@
 import { versionedSiteAsset } from './configuracion.js';
 
 const HEADER_RESPONSIVE_VERSION = 'tintin-20260824-header-responsive-sync-1';
-const NAVIGATION_SHARED_VERSION = 'tintin-20260818-header-dropdowns-solid-3';
+const NAVIGATION_SHARED_VERSION = 'tintin-20260825-responsive-css-budget-2';
 const MOBILE_SOLID_VERSION = 'tintin-20260817-cls-desktop-stable-3';
 const NOTIFICATIONS_VERSION = 'tintin-20260824-notifications-badge-contained-1';
 
@@ -80,6 +80,12 @@ function ensureStylesheet(id, path, version) {
 
   const link = markStylesheet(document.createElement('link'), id);
   link.rel = 'stylesheet';
+  // No descargues las tres variantes del header en cada dispositivo. El
+  // atributo media también mantiene la cascada disponible para el viewport
+  // correcto sin bloquear el primer paint con CSS que no se aplicará.
+  if (id === 'tt-navigation-desktop-css') link.media = '(min-width: 1025px)';
+  if (id === 'tt-navigation-tablet-css') link.media = '(min-width: 768px) and (max-width: 1024px)';
+  if (id === 'tt-navigation-mobile-css' || id === 'tt-navigation-mobile-solid-css') link.media = '(max-width: 767px)';
   link.href = expectedHref;
   const ready = waitForStylesheet(link);
   document.head.appendChild(link);
