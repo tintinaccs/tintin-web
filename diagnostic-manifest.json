@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-25T19:17:51.015Z",
-  "sourceFingerprint": "a3ab9c6fbdcee73999733cb6b2a74ee5e157c3033567e531a2bed9deb8e6f929",
+  "generatedAt": "2026-08-25T20:14:58.772Z",
+  "sourceFingerprint": "69b866425781c2ff87b8e8a55b409a7b0e77fabd19fcaeebb9ef47eb53331779",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 734,
     "textFiles": 702,
-    "totalBytes": 8272547,
+    "totalBytes": 8274288,
     "pages": 18,
     "modules": 466
   },
@@ -18533,7 +18533,7 @@
     {
       "path": "js/admin/admin-app.js",
       "bytes": 427184,
-      "sha256": "a0317895be9efd240fd7a4e18f4aadded4a53e7931f499f528b9c1bf71769493",
+      "sha256": "ef12f03310f33fd0d08efbbc51f3efa36d7ecba9b18e2a3b0f3329a3bfa859fc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18672,7 +18672,7 @@
           "line": 39
         },
         {
-          "raw": "./pages/paginas-admin.js?v=tintin-20260825-pages-1",
+          "raw": "./pages/paginas-admin.js?v=tintin-20260825-pages-2",
           "target": "js/admin/pages/paginas-admin.js",
           "dynamic": false,
           "line": 30
@@ -19436,8 +19436,8 @@
     },
     {
       "path": "js/admin/pages/paginas-admin.js",
-      "bytes": 12766,
-      "sha256": "25c64963f73b6f590a525cdd2c642828423dff896d2b675dc175b5c234a22c5f",
+      "bytes": 14378,
+      "sha256": "aa13ceb41267d847805e9d85b7094ea85f4123f0f27612d49d925d3d0d9fab1a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25071,8 +25071,8 @@
     },
     {
       "path": "scripts/auditar-imagenes-fase-5.js",
-      "bytes": 25763,
-      "sha256": "e3088633d12e1c01c8f21552af9c13db15b8a7d841a32cef65293c931f8efaa3",
+      "bytes": 25892,
+      "sha256": "183be3280bf4e51e70537b2187df61b5870357a784ad6c5cfb5df4ef9bd2c95a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30438,7 +30438,7 @@
       "path": "js/admin/admin-app.js",
       "extension": ".js",
       "bytes": 427184,
-      "sha256": "a0317895be9efd240fd7a4e18f4aadded4a53e7931f499f528b9c1bf71769493"
+      "sha256": "ef12f03310f33fd0d08efbbc51f3efa36d7ecba9b18e2a3b0f3329a3bfa859fc"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -30563,8 +30563,8 @@
     {
       "path": "js/admin/pages/paginas-admin.js",
       "extension": ".js",
-      "bytes": 12766,
-      "sha256": "25c64963f73b6f590a525cdd2c642828423dff896d2b675dc175b5c234a22c5f"
+      "bytes": 14378,
+      "sha256": "aa13ceb41267d847805e9d85b7094ea85f4123f0f27612d49d925d3d0d9fab1a"
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin-v2.js",
@@ -32231,8 +32231,8 @@
     {
       "path": "scripts/auditar-imagenes-fase-5.js",
       "extension": ".js",
-      "bytes": 25763,
-      "sha256": "e3088633d12e1c01c8f21552af9c13db15b8a7d841a32cef65293c931f8efaa3"
+      "bytes": 25892,
+      "sha256": "183be3280bf4e51e70537b2187df61b5870357a784ad6c5cfb5df4ef9bd2c95a"
     },
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
@@ -32514,7 +32514,7 @@
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
       "bytes": 386,
-      "sha256": "a47adbe0bc66fd02a217427649e59da995c4914edcfe3814d05f05c9cee12d7c"
+      "sha256": "c57403323fc0cb9d18c8e96e8c07f8bd3979d1aa7a891afa5524a528c0a0aead"
     },
     {
       "path": "scripts/cache-version-baseline.json",
@@ -33271,6 +33271,118 @@
       "line": 89,
       "raw": "/admin.html",
       "target": "admin.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/pages/paginas-admin.js",
+      "line": 22,
+      "raw": "index.html",
+      "target": "index.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/pages/paginas-admin.js",
+      "line": 23,
+      "raw": "catalogo.html",
+      "target": "catalogo.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/pages/paginas-admin.js",
+      "line": 24,
+      "raw": "collections.html",
+      "target": "collections.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/pages/paginas-admin.js",
+      "line": 25,
+      "raw": "product.html",
+      "target": "product.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/pages/paginas-admin.js",
+      "line": 26,
+      "raw": "checkout.html",
+      "target": "checkout.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/pages/paginas-admin.js",
+      "line": 27,
+      "raw": "nosotros.html",
+      "target": "nosotros.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/pages/paginas-admin.js",
+      "line": 28,
+      "raw": "about.html",
+      "target": "about.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/pages/paginas-admin.js",
+      "line": 29,
+      "raw": "contact.html",
+      "target": "contact.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/pages/paginas-admin.js",
+      "line": 30,
+      "raw": "preguntas-frecuentes.html",
+      "target": "preguntas-frecuentes.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/pages/paginas-admin.js",
+      "line": 31,
+      "raw": "envios.html",
+      "target": "envios.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/pages/paginas-admin.js",
+      "line": 32,
+      "raw": "cambios-devoluciones.html",
+      "target": "cambios-devoluciones.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/pages/paginas-admin.js",
+      "line": 33,
+      "raw": "privacidad.html",
+      "target": "privacidad.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/pages/paginas-admin.js",
+      "line": 34,
+      "raw": "terminos.html",
+      "target": "terminos.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/pages/paginas-admin.js",
+      "line": 35,
+      "raw": "login.html",
+      "target": "login.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/pages/paginas-admin.js",
+      "line": 36,
+      "raw": "perfil.html",
+      "target": "perfil.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/pages/paginas-admin.js",
+      "line": 37,
+      "raw": "404.html",
+      "target": "404.html",
       "exists": true
     },
     {
@@ -35303,22 +35415,22 @@
           },
           {
             "file": "js/admin/pages/paginas-admin.js",
-            "line": 91,
+            "line": 114,
             "operation": "collection"
           },
           {
             "file": "js/admin/pages/paginas-admin.js",
-            "line": 77,
+            "line": 100,
             "operation": "doc"
           },
           {
             "file": "js/admin/pages/paginas-admin.js",
-            "line": 78,
+            "line": 101,
             "operation": "doc"
           },
           {
             "file": "js/admin/pages/paginas-admin.js",
-            "line": 86,
+            "line": 109,
             "operation": "doc"
           },
           {

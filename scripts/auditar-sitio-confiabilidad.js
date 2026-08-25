@@ -185,8 +185,9 @@ check('El rosa principal cumple contraste AA sobre blanco',
 check('Los renderers principales escapan texto almacenado',
   main.includes('function escapeHtml(value)') &&
   admin.includes('function escapeHtmlAdmin(value)'));
-check('El reveal es irreversible, liviano y procesa solo nodos agregados',
-  scrollReveal.includes('observer?.unobserve(element)') &&
+check('El reveal se repite al volver al viewport, es liviano y procesa solo nodos agregados',
+  scrollReveal.includes('function hideForRepeat(element)') &&
+  scrollReveal.includes('else hideForRepeat(entry.target)') &&
   scrollReveal.includes("element.classList.add('tt-visible')") &&
   scrollReveal.includes('scheduleScan(node)') &&
   !scrollReveal.includes('filter:blur'));
