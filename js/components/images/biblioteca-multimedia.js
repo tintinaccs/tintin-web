@@ -20,6 +20,7 @@ import {
   query,
   serverTimestamp,
   setDoc,
+  updateDoc,
   where,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { validateImageFile, processImage } from './procesamiento-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
@@ -283,6 +284,15 @@ export async function deleteMediaItem(mediaId, { force = false } = {}) {
 
   await deleteCloudinaryAssets([data.publicId, data.thumbPublicId]);
   await deleteDoc(mediaRef);
+  return true;
+}
+
+/** Actualiza únicamente metadatos editables; nunca cambia la URL publicada. */
+export async function updateMediaMetadata(mediaId, { originalName, alt } = {}) {
+  const patch = { updatedAt: serverTimestamp() };
+  if (originalName !== undefined) patch.originalName = String(originalName || '').trim().slice(0, 200);
+  if (alt !== undefined) patch.alt = String(alt || '').trim().slice(0, 240);
+  await updateDoc(doc(db, MEDIA_COLLECTION, mediaId), patch);
   return true;
 }
 
