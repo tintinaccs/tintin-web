@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-25T16:38:16.855Z",
-  "sourceFingerprint": "29d4091c7f7276bcb04b2cc2b2c077fedc1a6c3579567405fe3ff503ca271526",
+  "generatedAt": "2026-08-25T17:01:51.551Z",
+  "sourceFingerprint": "b82176e3ec48f6ca9aa7fec22e7711df375202612b7325eaf2a25b486a0a64bf",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 732,
     "textFiles": 700,
-    "totalBytes": 8237892,
+    "totalBytes": 8240848,
     "pages": 18,
     "modules": 465
   },
@@ -16825,8 +16825,8 @@
     },
     {
       "path": "cloudflare/servicio-push.js",
-      "bytes": 22920,
-      "sha256": "8bd90f1f49ded33b2c01a1051c88e59a13bfad5781034d2a071de27edf682801",
+      "bytes": 24737,
+      "sha256": "dec3491fd9160f7f9b561234769f16e891ac553d97ffc6a79e34f9f4ce55f3b9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16855,12 +16855,16 @@
           "line": 29
         },
         {
+          "url": "https://ntfy.sh/",
+          "line": 39
+        },
+        {
           "url": "https://firestore.googleapis.com/v1/projects/$%7BprojectId%7D/databases/(default",
-          "line": 42
+          "line": 67
         },
         {
           "url": "https://fcm.googleapis.com/v1/projects/$%7Bsa.project_id%7D/messages:send",
-          "line": 365
+          "line": 391
         }
       ]
     },
@@ -28821,8 +28825,8 @@
     {
       "path": "_routes.json",
       "extension": ".json",
-      "bytes": 1966,
-      "sha256": "5984ce7d1787c369da72e42f31a142bb20bba3f3d36a305854208ed0f5859f9b"
+      "bytes": 2007,
+      "sha256": "f5628b5a08fa1a541216ebc68fcd5c717d0854679c553ab3e3fa05db7290fefa"
     },
     {
       "path": "about.html",
@@ -29157,8 +29161,8 @@
     {
       "path": "cloudflare/servicio-push.js",
       "extension": ".js",
-      "bytes": 22920,
-      "sha256": "8bd90f1f49ded33b2c01a1051c88e59a13bfad5781034d2a071de27edf682801"
+      "bytes": 24737,
+      "sha256": "dec3491fd9160f7f9b561234769f16e891ac553d97ffc6a79e34f9f4ce55f3b9"
     },
     {
       "path": "cloudflare/servir-admin-con-csp.js",
@@ -29673,8 +29677,8 @@
     {
       "path": "docs/configuracion-push-web-firebase.md",
       "extension": ".md",
-      "bytes": 13319,
-      "sha256": "9c6dbaf4da3e7855799fc71196c0ad205f932acb3362516454ee563226c7a482"
+      "bytes": 14543,
+      "sha256": "964925b4594499088fc7238c5ac48e188a7245188cf5e898f0d55617d4bac7d2"
     },
     {
       "path": "docs/contenido-fase-6.md",
@@ -32403,14 +32407,14 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 754,
-      "sha256": "3446eadcc39f5d5a19f8beff1d98e9b713408b002a9a8eb9a83328016473d480"
+      "bytes": 38,
+      "sha256": "dd9d3b46a69239cd812969333746634c254684c83bb0c9501af9d578669e38b8"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 32899,
-      "sha256": "ce5771ad2543e1a9cb33040550e7edc7026d25d67de5d8eb9b549aac39b728ca"
+      "bytes": 33489,
+      "sha256": "92c691f3915e1babba9943c937b2014825a1f948944bfc8f55235eed41eaf3e3"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
