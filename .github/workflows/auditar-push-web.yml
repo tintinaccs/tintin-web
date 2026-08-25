@@ -32,6 +32,8 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '22'
+      - name: Instalar dependencias de build
+        run: npm ci --ignore-scripts
       - name: Auditar arquitectura Web Push
         run: npm run audit:web-push
       - name: Ejecutar pruebas Web Push
