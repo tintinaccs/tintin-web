@@ -12,7 +12,7 @@
 
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
 import { apiUrl } from '../../core/firebase/origen-funciones.js';
 
 const DEVICE_ID_KEY = 'tt_push_device_id';
