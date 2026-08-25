@@ -129,7 +129,10 @@ check('El módulo la muestra sólo al Super Admin', clientModule.includes('SUPER
 check('Todos los estados visibles están definidos', ['No configuradas', 'Listas para activar', 'Activas en este dispositivo', 'Permiso bloqueado', 'Navegador no compatible', 'Instalación requerida en iPhone', 'Error de configuración'].every(label => clientModule.includes(label)));
 check('Comprueba isSupported() antes de ofrecer nada', clientModule.includes('isSupported()'));
 check('Registra el service worker con alcance raíz', clientModule.includes("register(SW_PATH, { scope: '/' })"));
-check('No inicializa una segunda aplicación Firebase', clientModule.includes('getApp()') && !clientModule.includes('initializeApp('));
+check('No inicializa una segunda aplicación Firebase',
+  clientModule.includes('getMessaging(app)') &&
+  clientModule.includes('import { auth, app }') &&
+  !clientModule.includes('initializeApp('));
 check('Pide permiso sólo desde el botón', clientModule.includes('Notification.requestPermission()') && clientModule.split('Notification.requestPermission()').length === 2);
 check('Mensaje específico para iPhone sin instalar', clientModule.includes('tocá Compartir y elegí Agregar a inicio'));
 check('No escribe el token en Firestore desde el navegador', !/setDoc|updateDoc|addDoc/.test(clientModule));

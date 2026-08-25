@@ -10,7 +10,7 @@
 // /api/push-subscription, que lo guarda con credenciales de servidor.
 // Tampoco se imprime completo en consola ni se manda a analytics.
 
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { auth, app } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
 import { apiUrl } from '../../core/firebase/origen-funciones.js';
@@ -19,7 +19,7 @@ const DEVICE_ID_KEY = 'tt_push_device_id';
 const DEVICE_LABEL_KEY = 'tt_push_device_label';
 const LAST_REGISTER_KEY = 'tt_push_last_register';
 const SW_PATH = '/firebase-messaging-sw.js';
-const MESSAGING_SDK = 'https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js';
+const MESSAGING_SDK = 'https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging.js';
 
 const IOS_INSTALL_MESSAGE =
   'Para recibir notificaciones en iPhone, abrí esta página en Safari, tocá Compartir y elegí Agregar a inicio. ' +
@@ -197,8 +197,11 @@ async function ensureServiceWorker() {
 async function ensureMessaging() {
   if (messagingInstance) return messagingInstance;
   const sdk = await loadMessaging();
-  const { getApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-  messagingInstance = sdk.getMessaging(getApp());
+  // Reutilizar la misma instancia que inicializa firebase.js. Cargar
+  // firebase-app desde otra versión/URL crea otro registro de apps y deja
+  // getApp() sin [DEFAULT], que rompe la activación con el error:
+  // Error típico: Firebase App '[DEFAULT]' no estaba inicializada.
+  messagingInstance = sdk.getMessaging(app);
   sdk.onMessage(messagingInstance, payload => {
     const data = payload?.data || {};
     foregroundCount += 1;
