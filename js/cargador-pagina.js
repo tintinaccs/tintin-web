@@ -83,7 +83,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260824-hero-first-paint-1';
+  const TT_CACHE_VERSION = 'tintin-20260825-scroll-reveal-2';
   // 120ms (fijado en #396 para matar esperas artificiales) resultó por
   // debajo del umbral de percepción humana: en conexiones rápidas el logo y
   // el texto de sección ("Página Principal", "Catálogo", "Producto") no
@@ -793,7 +793,7 @@
 
   function bootScrollReveal() {
     if (!window.TintinGlobalScrollRevealBooted) {
-      importSibling('quality/revelado-desplazamiento-global.js', 'Scroll Reveal');
+      importSibling('quality/revelado-desplazamiento-global.js?tt-reveal=20260825-2', 'Scroll Reveal');
     }
   }
 

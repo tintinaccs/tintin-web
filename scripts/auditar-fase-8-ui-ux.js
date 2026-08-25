@@ -30,7 +30,7 @@ check(
   'La hoja de estilos de UI/UX se inyecta de forma versionada',
   /tt-phase8-ui-ux-css/.test(loader) &&
     /resolveAsset\('css\/quality\/experiencia-interfaz\.css'\)/.test(loader) &&
-  /tintin-20260824-hero-first-paint-1/.test(loader),
+  /tintin-20260825-scroll-reveal-2/.test(loader),
   'El navegador debe recibir la nueva capa aunque tenga caché inmutable.'
 );
 
@@ -38,7 +38,7 @@ check(
   'Todas las páginas HTML usan la nueva versión de page-loader',
   htmlFiles.every(file => {
     const html = read(file);
-  return !html.includes('js/cargador-pagina.js') || html.includes('js/cargador-pagina.js?v=tintin-20260824-hero-first-paint-1');
+  return !html.includes('js/cargador-pagina.js') || html.includes('js/cargador-pagina.js?v=tintin-20260825-scroll-reveal-2');
   }),
   'No debe quedar una página cargando el runtime anterior.'
 );

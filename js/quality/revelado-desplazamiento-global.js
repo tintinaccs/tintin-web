@@ -21,6 +21,7 @@
   const pendingRoots = new Set();
   let observer = null;
   let scheduled = false;
+  const triggerRatio = 0.76;
 
   function injectStyles() {
     if (document.getElementById('tt-global-reveal-style')) return;
@@ -66,10 +67,14 @@
   function revealNow(element) {
     if (element.classList.contains('tt-visible')) return;
     element.classList.add('tt-visible');
-    observer?.unobserve(element);
     const settle = () => element.classList.add('tt-reveal-settled');
     element.addEventListener('transitionend', settle, { once: true });
     window.setTimeout(settle, 900);
+  }
+
+  function hideForRepeat(element) {
+    if (!element.classList.contains('tt-visible')) return;
+    element.classList.remove('tt-visible', 'tt-reveal-settled');
   }
 
   function observe(elements) {
@@ -82,8 +87,9 @@
       observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) revealNow(entry.target);
+          else hideForRepeat(entry.target);
         });
-      }, { rootMargin: '0px 0px -8% 0px', threshold: .05 });
+      }, { rootMargin: '0px 0px -24% 0px', threshold: .01 });
     }
     elements.forEach(element => observer.observe(element));
   }
@@ -111,14 +117,16 @@
       // sea intencional y dure poco — el navegador lo cuenta igual. Se marca
       // visible en el mismo turno síncrono en que se agrega .tt-auto-reveal,
       // así nunca pasa por el estado desplazado y no hay salto que medir.
-      const alreadyInViewport = element.getBoundingClientRect().top < viewportHeight;
+      const rect = element.getBoundingClientRect();
+      const alreadyInViewport = rect.top <= viewportHeight * triggerRatio && rect.bottom > 0;
       element.classList.add('tt-auto-reveal', variantFor(element, index));
       element.style.setProperty('--tt-r-delay', `${Math.min(index % 5, 4) * 28}ms`);
       if (alreadyInViewport) {
         element.classList.add('tt-visible', 'tt-reveal-settled');
-      } else {
-        toObserve.push(element);
       }
+      // También observamos lo que ya estaba visible: así, cuando el usuario
+      // se aleja y vuelve a subir, el bloque puede repetir su entrada.
+      toObserve.push(element);
     });
     observe(toObserve);
   }
