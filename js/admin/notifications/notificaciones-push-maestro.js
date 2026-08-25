@@ -56,8 +56,36 @@ function applySettings(settings = {}) {
   $('push-master-sound').value = settings.foregroundSound || 'default';
   $('push-master-sound-url').value = settings.foregroundSoundUrl || '';
   $('push-master-sound-url').style.display = settings.foregroundSound === 'custom' ? '' : 'none';
+  $('btn-push-master-upload').style.display = settings.foregroundSound === 'custom' ? '' : 'none';
   $('push-master-status').textContent = settings.enabled === false ? 'Pausado' : 'Activo';
   try { localStorage.setItem(SOUND_KEY, JSON.stringify({ mode: settings.foregroundSound || 'default', url: settings.foregroundSoundUrl || '' })); } catch {}
+}
+
+async function uploadTone() {
+  const file = $('push-master-sound-file')?.files?.[0];
+  if (!file) throw new Error('Elegí un archivo MP3 antes de subirlo.');
+  if (!/^audio\/(mpeg|ogg|wav)$/i.test(file.type) && !/\.(mp3|ogg|wav)$/i.test(file.name)) throw new Error('Sólo se aceptan archivos MP3, OGG o WAV.');
+  if (file.size > 1024 * 1024) throw new Error('El tono no puede superar 1 MB.');
+  const button = $('btn-push-master-upload'); button.disabled = true; notice('Subiendo el tono…');
+  try {
+    const user = auth.currentUser;
+    const token = await user.getIdToken();
+    const signedResponse = await fetch(apiUrl('cloudinary-sign-audio-upload'), { method: 'POST', headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' }, body: JSON.stringify({ slot: 'global' }) });
+    const signed = await signedResponse.json().catch(() => ({}));
+    if (!signedResponse.ok || !signed.uploadUrl) throw new Error(signed.error || 'No se pudo preparar la subida.');
+    const form = new FormData();
+    form.append('file', file);
+    form.append('api_key', signed.apiKey);
+    form.append('public_id', signed.publicId);
+    form.append('timestamp', String(signed.timestamp));
+    form.append('signature', signed.signature);
+    form.append('type', 'upload');
+    const uploadResponse = await fetch(signed.uploadUrl, { method: 'POST', body: form });
+    const uploaded = await uploadResponse.json().catch(() => ({}));
+    if (!uploadResponse.ok || !uploaded.secure_url) throw new Error(uploaded?.error?.message || 'Cloudinary no pudo guardar el tono.');
+    $('push-master-sound-url').value = uploaded.secure_url;
+    notice('Tono subido. Guardá las preferencias para aplicarlo.');
+  } finally { button.disabled = false; }
 }
 
 async function refresh() {
@@ -93,7 +121,9 @@ function boot() {
   const card = $('push-master-card');
   if (!card) return;
   installForegroundSound();
-  $('push-master-sound')?.addEventListener('change', event => { $('push-master-sound-url').style.display = event.target.value === 'custom' ? '' : 'none'; });
+  $('push-master-sound')?.addEventListener('change', event => { const custom = event.target.value === 'custom'; $('push-master-sound-url').style.display = custom ? '' : 'none'; $('btn-push-master-upload').style.display = custom ? '' : 'none'; });
+  $('btn-push-master-upload')?.addEventListener('click', () => $('push-master-sound-file')?.click());
+  $('push-master-sound-file')?.addEventListener('change', () => uploadTone().catch(error => notice(error.message, true)));
   $('btn-push-master-save')?.addEventListener('click', () => save().catch(error => notice(error.message, true)));
   $('btn-push-master-revoke-all')?.addEventListener('click', async () => {
     if (!window.confirm('¿Revocar TODOS los dispositivos push? Ninguno recibirá pedidos hasta volver a autorizarlo.')) return;
