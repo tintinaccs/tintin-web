@@ -225,7 +225,7 @@ async function ensureMessaging() {
         notification.onclick = () => {
           notification.close();
           window.focus();
-          window.location.href = '/admin.html?section=pedidos';
+          window.location.href = '/admin?section=pedidos';
         };
       } catch {
         // Some installed-browser shells expose permission but block the
