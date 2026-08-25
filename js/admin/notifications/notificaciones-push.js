@@ -22,8 +22,9 @@ const SW_PATH = '/firebase-messaging-sw.js';
 const MESSAGING_SDK = 'https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging.js';
 
 const IOS_INSTALL_MESSAGE =
-  'Para recibir notificaciones en iPhone, abrí esta página en Safari, tocá Compartir y elegí Agregar a inicio. ' +
-  'Después abrí Tintin Pedidos desde el nuevo ícono.';
+  'En iPhone, las notificaciones web funcionan cuando Tintin está instalado como app. ' +
+  'Abrí esta página en Safari, tocá Compartir y elegí “Agregar a inicio”. Después abrí Tintin Pedidos desde el nuevo ícono y volvé a activar las notificaciones. ' +
+  'Chrome en iPhone usa el mismo motor de iOS y también necesita este paso.';
 
 const STATE_LABELS = {
   unsupported: 'Navegador no compatible',
@@ -283,12 +284,16 @@ async function saveTokenOnServer(token) {
 
 const enableNotifications = withBusy(async () => {
   notice('');
-  if (!(await messagingSupported())) {
-    setState('unsupported', 'Este navegador no admite notificaciones web.');
-    return;
-  }
+  // iOS sólo expone PushManager y el service worker para una PWA instalada.
+  // Comprobarlo antes de cargar Firebase evita mostrar “navegador no
+  // compatible” en Safari/Chrome de iPhone cuando en realidad falta instalar
+  // la app en la pantalla de inicio.
   if (isIos() && !isStandalone()) {
     setState('ios-install', IOS_INSTALL_MESSAGE);
+    return;
+  }
+  if (!(await messagingSupported())) {
+    setState('unsupported', 'Este navegador no admite notificaciones web.');
     return;
   }
   if (Notification.permission === 'denied') {
@@ -343,12 +348,14 @@ const disableNotifications = withBusy(async () => {
 // --- Estado inicial (sin pedir permiso ni reintentar en bucle) -------------
 
 async function refreshInitialState() {
-  if (!(await messagingSupported())) {
-    setState('unsupported', 'Este navegador no admite notificaciones web. Probá con Chrome en Android o Safari en iPhone (iOS 16.4 o posterior).');
-    return;
-  }
+  // Mantener este chequeo antes de messagingSupported(): en iOS no instalado
+  // PushManager suele estar ausente y no debe ocultar la instrucción correcta.
   if (isIos() && !isStandalone()) {
     setState('ios-install', IOS_INSTALL_MESSAGE);
+    return;
+  }
+  if (!(await messagingSupported())) {
+    setState('unsupported', 'Este navegador no admite notificaciones web. Probá con Chrome en Android o Safari en iPhone (iOS 16.4 o posterior).');
     return;
   }
   if (Notification.permission === 'denied') {
