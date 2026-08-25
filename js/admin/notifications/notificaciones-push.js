@@ -232,7 +232,7 @@ async function ensureMessaging() {
         // constructor; the in-panel notice above remains the fallback.
       }
     }
-    window.TintinPushPlayForegroundSound?.(data.foregroundSound || 'default');
+    window.TintinPushPlayForegroundSound?.(data.foregroundSound || 'default', data.foregroundSoundUrl || '');
     if ('setAppBadge' in navigator) {
       navigator.setAppBadge(foregroundCount).catch(() => {});
     }

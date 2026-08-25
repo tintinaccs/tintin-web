@@ -26,7 +26,7 @@ function parseBody(raw) {
   if (raw.length > MAX_BODY_BYTES) throw new Error('Solicitud demasiado grande.');
   const body = raw ? JSON.parse(raw) : {};
   if (!body || typeof body !== 'object' || Array.isArray(body)) throw new Error('Solicitud inválida.');
-  if (Object.keys(body).some(key => !['action', 'deviceId', 'enabled', 'foregroundSound', 'foregroundSoundUrl'].includes(key))) {
+  if (Object.keys(body).some(key => !['action', 'deviceId', 'enabled', 'foregroundSound', 'foregroundSoundUrl', 'foregroundSoundOrder', 'foregroundSoundOrderUrl', 'foregroundSoundReview', 'foregroundSoundReviewUrl', 'foregroundSoundLike', 'foregroundSoundLikeUrl'].includes(key))) {
     throw new Error('La solicitud tiene campos no permitidos.');
   }
   return body;
@@ -61,6 +61,12 @@ export async function onRequest(context) {
       enabled: body.enabled !== false,
       foregroundSound: cleanText(body.foregroundSound, 20),
       foregroundSoundUrl: cleanText(body.foregroundSoundUrl, 500),
+      foregroundSoundOrder: cleanText(body.foregroundSoundOrder, 20),
+      foregroundSoundOrderUrl: cleanText(body.foregroundSoundOrderUrl, 500),
+      foregroundSoundReview: cleanText(body.foregroundSoundReview, 20),
+      foregroundSoundReviewUrl: cleanText(body.foregroundSoundReviewUrl, 500),
+      foregroundSoundLike: cleanText(body.foregroundSoundLike, 20),
+      foregroundSoundLikeUrl: cleanText(body.foregroundSoundLikeUrl, 500),
       updatedBy: user.email
     });
     return jsonResponse({ success: true, settings }, 200, origin, requestUrl);

@@ -192,25 +192,62 @@ export async function readPushSettings(env) {
     enabled: existing?.enabled !== false,
     foregroundSound: ['default', 'none', 'custom'].includes(existing?.foregroundSound) ? existing.foregroundSound : 'default',
     foregroundSoundUrl: cleanText(existing?.foregroundSoundUrl, 500),
+    foregroundSoundOrder: ['default', 'none', 'custom'].includes(existing?.foregroundSoundOrder) ? existing.foregroundSoundOrder : 'default',
+    foregroundSoundOrderUrl: cleanText(existing?.foregroundSoundOrderUrl, 500),
+    foregroundSoundReview: ['default', 'none', 'custom'].includes(existing?.foregroundSoundReview) ? existing.foregroundSoundReview : 'default',
+    foregroundSoundReviewUrl: cleanText(existing?.foregroundSoundReviewUrl, 500),
+    foregroundSoundLike: ['default', 'none', 'custom'].includes(existing?.foregroundSoundLike) ? existing.foregroundSoundLike : 'default',
+    foregroundSoundLikeUrl: cleanText(existing?.foregroundSoundLikeUrl, 500),
     updatedAt: cleanText(existing?.updatedAt, 40),
     updatedBy: cleanText(existing?.updatedBy, 160)
   };
 }
 
-export async function savePushSettings(env, { enabled, foregroundSound, foregroundSoundUrl, updatedBy }) {
+export async function savePushSettings(env, { enabled, foregroundSound, foregroundSoundUrl, foregroundSoundOrder, foregroundSoundOrderUrl, foregroundSoundReview, foregroundSoundReviewUrl, foregroundSoundLike, foregroundSoundLikeUrl, updatedBy }) {
   const mode = ['default', 'none', 'custom'].includes(foregroundSound) ? foregroundSound : 'default';
   const url = mode === 'custom' && /^https:\/\//i.test(String(foregroundSoundUrl || '').trim())
     ? cleanText(foregroundSoundUrl, 500)
     : '';
+  const tone = value => ['default', 'none', 'custom'].includes(value) ? value : 'default';
+  const toneUrl = (value, valueUrl) => tone(value) === 'custom' && /^https:\/\//i.test(String(valueUrl || '').trim()) ? cleanText(valueUrl, 500) : '';
   const now = new Date();
   await patchDocument(env, PUSH_SETTINGS_PATH, {
     enabled: fsBool(enabled !== false),
     foregroundSound: fsString(mode),
     foregroundSoundUrl: fsString(url),
+    foregroundSoundOrder: fsString(tone(foregroundSoundOrder)),
+    foregroundSoundOrderUrl: fsString(toneUrl(foregroundSoundOrder, foregroundSoundOrderUrl)),
+    foregroundSoundReview: fsString(tone(foregroundSoundReview)),
+    foregroundSoundReviewUrl: fsString(toneUrl(foregroundSoundReview, foregroundSoundReviewUrl)),
+    foregroundSoundLike: fsString(tone(foregroundSoundLike)),
+    foregroundSoundLikeUrl: fsString(toneUrl(foregroundSoundLike, foregroundSoundLikeUrl)),
     updatedAt: fsTime(now),
     updatedBy: fsString(cleanText(updatedBy, 160))
   });
   return readPushSettings(env);
+}
+
+function soundForType(settings, type) {
+  const prefix = String(type || '').startsWith('social.review') ? 'Review'
+    : String(type || '').startsWith('social.like') ? 'Like' : 'Order';
+  const mode = settings[`foregroundSound${prefix}`] || settings.foregroundSound || 'default';
+  const url = settings[`foregroundSound${prefix}Url`] || (prefix === 'Order' ? settings.foregroundSoundUrl : '');
+  return { mode, url };
+}
+
+export async function dispatchSocialPushEvent(env, { type, eventId, title, body, url = '/admin.html?section=notificaciones-push' }) {
+  if (!pushEnabled(env)) return { ok: true, skipped: 'disabled' };
+  const settings = await readPushSettings(env);
+  if (!settings.enabled) return { ok: true, skipped: 'paused_by_superadmin' };
+  const id = cleanText(eventId, 260) || `${type}:${crypto.randomUUID()}`;
+  const claim = await claimEvent(env, { eventId: id, type, orderId: '' });
+  if (!claim.claimed) return { ok: true, duplicate: Boolean(claim.duplicate), skipped: claim.inProgress ? 'in_progress' : undefined };
+  const sound = soundForType(settings, type);
+  const content = { title: cleanText(title, 100), body: cleanText(body, 220), foregroundSound: sound.mode, data: { type: cleanText(type, 40), orderId: '', shortId: '', url, eventId: id, tag: id, title: cleanText(title, 100), body: cleanText(body, 220), foregroundSoundUrl: sound.url } };
+  const devices = await listActiveDevices(env);
+  const result = devices.length ? await sendToDevices(env, devices, content) : { attempted: 0, successCount: 0, failureCount: 0, disabledCount: 0, lastError: '' };
+  const status = await closeEvent(env, claim.path, result);
+  return { ok: status === 'sent' || status === 'partial' || status === 'no_devices', status, attempted: result.attempted, successCount: result.successCount, failureCount: result.failureCount };
 }
 
 export async function revokeDeviceByDocumentId(env, deviceDocId, reason = 'revocado_por_superadmin') {
@@ -463,7 +500,8 @@ export async function dispatchOrderPushEvent(env, type, orderId, externalEventId
   }
 
   const devices = await listActiveDevices(env);
-  const content = buildPushContent({ type, orderId, order, eventId, foregroundSound: settings.foregroundSound });
+  const sound = soundForType(settings, type);
+  const content = buildPushContent({ type, orderId, order, eventId, foregroundSound: sound.mode, foregroundSoundUrl: sound.url });
   const result = devices.length
     ? await sendToDevices(env, devices, content)
     : { attempted: 0, successCount: 0, failureCount: 0, disabledCount: 0, lastError: '' };
@@ -486,7 +524,8 @@ export async function sendTestPush(env, { onlyToken }) {
   const settings = await readPushSettings(env);
   if (!settings.enabled) return { ok: false, error: 'push_paused_by_superadmin' };
   const eventId = `push.test:${crypto.randomUUID()}`;
-  const content = buildTestPushContent(eventId, settings.foregroundSound);
+  const sound = soundForType(settings, 'order.created');
+  const content = buildTestPushContent(eventId, sound.mode, sound.url);
   const active = await listActiveDevices(env);
   const devices = onlyToken ? active.filter(device => device.token === onlyToken) : active;
   if (!devices.length) return { ok: false, error: 'no_devices', attempted: 0 };
