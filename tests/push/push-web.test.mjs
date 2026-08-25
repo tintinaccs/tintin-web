@@ -122,10 +122,10 @@ test('el mensaje FCM viaja sólo como data, con TTL y enlace interno', () => {
   assert.equal(message.data.tag, `order.created:${ORDER_ID}`);
 });
 
-test('la notificación de prueba usa contenido fijo del servidor', () => {
+test('la notificación de prueba usa el pedido simulado fijo del servidor', () => {
   const content = buildTestPushContent('push.test:abc');
-  assert.equal(content.title, 'Tintin Pedidos');
-  assert.equal(content.body, 'Las notificaciones están funcionando correctamente.');
+  assert.equal(content.title, 'Nuevo pedido de prueba');
+  assert.equal(content.body, 'Mina menina · Gs. 420.000 · Caaguazú · Encomienda (Caaguazú)');
   assert.equal(content.data.type, 'push.test');
   assert.ok(content.data.url.startsWith('/admin.html?section='));
 });
