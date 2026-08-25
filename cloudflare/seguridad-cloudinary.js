@@ -84,7 +84,7 @@ export async function requireFirebaseUser(request) {
  * Firebase valida la firma, proyecto, vencimiento y existencia de la cuenta.
  * La función comprueba después el correo verificado del único Super Admin.
  */
-export async function requireSuperAdmin(request, deniedMessage = 'Solo el Super Admin puede administrar imágenes') {
+export async function requireSuperAdmin(request) {
   const token = getBearerToken(request);
   const endpoint = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(FIREBASE_WEB_API_KEY)}`;
   const response = await fetch(endpoint, {
@@ -106,7 +106,7 @@ export async function requireSuperAdmin(request, deniedMessage = 'Solo el Super 
   const user = Array.isArray(data.users) ? data.users[0] : null;
   const email = String(user?.email || '').trim().toLowerCase();
   if (!user?.localId || email !== SUPERADMIN_EMAIL || user.emailVerified !== true) {
-    throw new Error(deniedMessage);
+    throw new Error('Solo el Super Admin puede administrar imágenes');
   }
 
   return { uid: String(user.localId), email, idToken: token };

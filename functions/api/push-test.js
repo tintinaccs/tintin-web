@@ -13,7 +13,6 @@ import {
 import { cleanText, sanitizeError } from '../../cloudflare/nucleo-push.js';
 import { pushEnabled, sendTestPush } from '../../cloudflare/servicio-push.js';
 
-const DENIED = 'Solo el Super Admin puede enviar notificaciones de prueba';
 const MAX_BODY_BYTES = 2000;
 const RATE_LIMIT_MS = 20 * 1000;
 
@@ -43,7 +42,7 @@ export async function onRequest(context) {
 
   let user;
   try {
-    user = await requireSuperAdmin(request, DENIED);
+    user = await requireSuperAdmin(request);
   } catch (error) {
     return jsonResponse({ success: false, error: sanitizeError(error, 160) }, 401, origin, requestUrl);
   }

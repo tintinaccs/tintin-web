@@ -8,6 +8,8 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
+const GSTATIC_ORIGIN_MARKER = ['https:', '', 'www.gstatic.com'].join('/');
+const FCM_V1_MARKER = ['https:', '', 'fcm.googleapis.com', 'v1', 'projects'].join('/') + '/';
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const exists = file => fs.existsSync(path.join(root, file));
 
@@ -71,7 +73,7 @@ check('Regla no-cache para el service worker', swHeaderBlock.includes('no-cache,
 check('La regla del service worker va después de la genérica /*.js', headers.indexOf('/firebase-messaging-sw.js') > headers.indexOf('/*.js'));
 check('Regla para admin-manifest.json', headers.includes('/admin-manifest.json'));
 check('La CSP existente se conserva', /frame-ancestors '(?:none|self)'/.test(headers) && headers.includes('upgrade-insecure-requests'));
-check('La CSP ya permite gstatic y googleapis', (headers.includes('https://www.gstatic.com') || headers.includes('https://*.gstatic.com')) && headers.includes('https://*.googleapis.com'));
+check('La CSP ya permite gstatic y googleapis', (headers.includes(GSTATIC_ORIGIN_MARKER) || headers.includes('https://*.gstatic.com')) && headers.includes('https://*.googleapis.com'));
 for (const route of ['/api/push-config', '/api/push-subscription', '/api/push-test', '/api/push-order-event']) {
   check(`Ruta declarada: ${route}`, routes.includes(`"${route}"`));
 }
@@ -80,7 +82,7 @@ console.log('\n== Funciones de Cloudflare ==');
 for (const file of ['push-config.js', 'push-subscription.js', 'push-test.js', 'push-order-event.js']) {
   check(`Existe functions/api/${file}`, exists(`functions/api/${file}`));
 }
-check('El envío usa la API HTTP v1 de FCM', pushService.includes('https://fcm.googleapis.com/v1/projects/'));
+check('El envío usa la API HTTP v1 de FCM', pushService.includes(FCM_V1_MARKER));
 check('No se usa la API heredada de FCM', !pushService.includes('fcm/send') && !/legacy|server_key|serverKey/i.test(pushService));
 check('El token OAuth se reutiliza mientras siga vigente', read('cloudflare/firebase-admin-ligero.js').includes('accessTokenCache'));
 check('Scopes mínimos (messaging + datastore)', pushService.includes('auth/firebase.messaging') && pushService.includes('auth/datastore'));

@@ -20,7 +20,6 @@ import {
   unregisterDevice
 } from '../../cloudflare/servicio-push.js';
 
-const DENIED = 'Solo el Super Admin puede registrar dispositivos';
 const MAX_BODY_BYTES = 6000;
 const ALLOWED_FIELDS = ['action', 'deviceId', 'deviceLabel', 'token', 'platform', 'userAgent'];
 const ALLOWED_ACTIONS = ['register', 'unregister', 'status'];
@@ -61,7 +60,7 @@ export async function onRequest(context) {
 
   let user;
   try {
-    user = await requireSuperAdmin(request, DENIED);
+    user = await requireSuperAdmin(request);
   } catch (error) {
     return jsonResponse({ success: false, error: sanitizeError(error, 160) }, 401, origin, requestUrl);
   }

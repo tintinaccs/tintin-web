@@ -16,7 +16,6 @@ import {
 import { pushEnabled } from '../../cloudflare/servicio-push.js';
 import { cleanText, sanitizeError } from '../../cloudflare/nucleo-push.js';
 
-const DENIED = 'Solo el Super Admin puede configurar las notificaciones';
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -34,7 +33,7 @@ export async function onRequest(context) {
   }
 
   try {
-    await requireSuperAdmin(request, DENIED);
+    await requireSuperAdmin(request);
   } catch (error) {
     return jsonResponse({ success: false, error: sanitizeError(error, 160) }, 401, origin, requestUrl);
   }
