@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-25T15:03:37.284Z",
-  "sourceFingerprint": "3d57b955096c230ad59114b1730c67c71d9fb2e3f0693f6824b451c16198e1e4",
+  "generatedAt": "2026-08-25T15:35:55.519Z",
+  "sourceFingerprint": "ea4580e625fb7e07cc05b0c56d3e577698c20a828f4274f0aeb2b873e94b192b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 731,
     "textFiles": 699,
-    "totalBytes": 8223681,
+    "totalBytes": 8223833,
     "pages": 18,
     "modules": 464
   },
@@ -16550,8 +16550,8 @@
     },
     {
       "path": "cloudflare/nucleo-push.js",
-      "bytes": 11320,
-      "sha256": "40d321199f79aac7d16faee3f39163f665206c7b879df468941634353c2aa3e4",
+      "bytes": 11442,
+      "sha256": "618f2e91f6108127776cfff6e7a54eb238779d8b1ccf9de35f59c462cb7025ab",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27677,8 +27677,8 @@
     },
     {
       "path": "tests/push/push-web.test.mjs",
-      "bytes": 14674,
-      "sha256": "b35ded648e60eb5814dcd58002f3531f4f5b892f7537b4ac8450d1ed9b2e38c6",
+      "bytes": 14704,
+      "sha256": "9b42e5ea228f45466d0c5fce1cf57070267eedb9617d12a7431dde2cc1b2afb4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28938,8 +28938,8 @@
     {
       "path": "cloudflare/nucleo-push.js",
       "extension": ".js",
-      "bytes": 11320,
-      "sha256": "40d321199f79aac7d16faee3f39163f665206c7b879df468941634353c2aa3e4"
+      "bytes": 11442,
+      "sha256": "618f2e91f6108127776cfff6e7a54eb238779d8b1ccf9de35f59c462cb7025ab"
     },
     {
       "path": "cloudflare/participacion-admin.js",
@@ -32622,8 +32622,8 @@
     {
       "path": "tests/push/push-web.test.mjs",
       "extension": ".mjs",
-      "bytes": 14674,
-      "sha256": "b35ded648e60eb5814dcd58002f3531f4f5b892f7537b4ac8450d1ed9b2e38c6"
+      "bytes": 14704,
+      "sha256": "9b42e5ea228f45466d0c5fce1cf57070267eedb9617d12a7431dde2cc1b2afb4"
     },
     {
       "path": "tests/security/csp-cloudinary-upload.test.mjs",

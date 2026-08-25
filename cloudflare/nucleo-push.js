@@ -123,9 +123,13 @@ export function buildPushContent({ type, orderId, order, eventId, foregroundSoun
 
 export function buildTestPushContent(eventId, foregroundSound = 'default') {
   const url = '/admin.html?section=configuracion';
+  // Simulación controlada: no representa un pedido real ni escribe en
+  // Firestore. Sirve para comprobar el formato visible del aviso push.
+  const title = 'Nuevo pedido de prueba';
+  const body = 'Mina menina · Gs. 420.000 · Caaguazú · Encomienda (Caaguazú)';
   return {
-    title: 'Tintin Pedidos',
-      body: 'Las notificaciones están funcionando correctamente.',
+    title,
+      body,
       foregroundSound: cleanText(foregroundSound, 20) || 'default',
     data: {
       type: 'push.test',
@@ -134,8 +138,8 @@ export function buildTestPushContent(eventId, foregroundSound = 'default') {
       url,
       eventId: cleanText(eventId, 260),
       tag: cleanText(eventId, 120) || 'tintin-push-test',
-      title: 'Tintin Pedidos',
-      body: 'Las notificaciones están funcionando correctamente.'
+      title,
+      body
     }
   };
 }
