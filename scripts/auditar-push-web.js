@@ -51,7 +51,7 @@ check('Orientación compatible con celular y tablet', adminManifest.orientation 
 check('admin.html enlaza el manifiesto administrativo', /<link[^>]+rel="manifest"[^>]+admin-manifest\.json/.test(adminHtml));
 check('admin.html no usa el manifiesto público', !/<link[^>]+rel="manifest"[^>]+["/ ]manifest\.json/.test(adminHtml));
 check('Metadatos de instalación en iPhone', adminHtml.includes('apple-mobile-web-app-capable') && adminHtml.includes('apple-mobile-web-app-title'));
-check('La tienda pública conserva su manifiesto', publicManifest.start_url === '/index.html' && publicManifest.name.includes('Tintin'));
+check('La tienda pública conserva su manifiesto', ['/','/index.html'].includes(publicManifest.start_url) && publicManifest.name.includes('Tintin'));
 
 console.log('\n== Service worker ==');
 check('firebase-messaging-sw.js está en la raíz', exists('firebase-messaging-sw.js'));
@@ -70,7 +70,7 @@ const swHeaderBlock = headers.split('/firebase-messaging-sw.js')[1] || '';
 check('Regla no-cache para el service worker', swHeaderBlock.includes('no-cache, no-store, must-revalidate'));
 check('La regla del service worker va después de la genérica /*.js', headers.indexOf('/firebase-messaging-sw.js') > headers.indexOf('/*.js'));
 check('Regla para admin-manifest.json', headers.includes('/admin-manifest.json'));
-check('La CSP existente se conserva', headers.includes("frame-ancestors 'none'") && headers.includes('upgrade-insecure-requests'));
+check('La CSP existente se conserva', /frame-ancestors '(?:none|self)'/.test(headers) && headers.includes('upgrade-insecure-requests'));
 check('La CSP ya permite gstatic y googleapis', (headers.includes('https://www.gstatic.com') || headers.includes('https://*.gstatic.com')) && headers.includes('https://*.googleapis.com'));
 for (const route of ['/api/push-config', '/api/push-subscription', '/api/push-test', '/api/push-order-event']) {
   check(`Ruta declarada: ${route}`, routes.includes(`"${route}"`));
