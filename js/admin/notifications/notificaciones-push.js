@@ -203,6 +203,7 @@ async function ensureMessaging() {
     const data = payload?.data || {};
     foregroundCount += 1;
     notice(`${data.title || 'Tintin Pedidos'} — ${data.body || 'Nuevo aviso'}`);
+    window.TintinPushPlayForegroundSound?.(data.foregroundSound || 'default');
     if ('setAppBadge' in navigator) {
       navigator.setAppBadge(foregroundCount).catch(() => {});
     }

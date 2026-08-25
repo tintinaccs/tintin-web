@@ -1574,6 +1574,10 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    match /pushSettings/{settingId} {
+      allow read, write: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

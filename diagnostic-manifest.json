@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-25T11:18:03.235Z",
-  "sourceFingerprint": "17ba9c57ff0fb87f54366d9a7d76d3873e334838f4f4408f17548d58b8924446",
+  "generatedAt": "2026-08-25T11:40:49.898Z",
+  "sourceFingerprint": "40bc55b705ff31407e50dc741b981a2b0199093d1fb98df23fc0239ccd7cfdc1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 729,
-    "textFiles": 697,
-    "totalBytes": 8206072,
+    "files": 731,
+    "textFiles": 699,
+    "totalBytes": 8224531,
     "pages": 18,
-    "modules": 462
+    "modules": 464
   },
   "viewports": [
     {
@@ -1773,8 +1773,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 180015,
-      "sha256": "31f8be1c03e8a71eaacc7641ade4477185eb345af03ec8ea2b8dbd2160c5c7ac",
+      "bytes": 182485,
+      "sha256": "f48857e09372add8a3115cdc83cbc5fdd361353b4c6b413bff0e1a4b0e185408",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1795,7 +1795,7 @@
           "error": ""
         }
       ],
-      "ids": 506,
+      "ids": 515,
       "scripts": [
         {
           "raw": "js/cargador-pagina.js?v=tintin-20260824-hero-first-paint-1",
@@ -1810,52 +1810,57 @@
         {
           "raw": "js/admin/admin-app.js?v=tintin-20260825-web-push-integration-1",
           "target": "js/admin/admin-app.js",
-          "line": 1928
+          "line": 1938
         },
         {
           "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260818-engagement-master-2",
           "target": "js/admin/participacion/gestion-participacion-admin.js",
-          "line": 1929
+          "line": 1939
         },
         {
           "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/admin/shopify-commerce-admin.js",
-          "line": 1930
+          "line": 1940
         },
         {
           "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/admin/appearance/editor-visual-admin.js",
-          "line": 1931
+          "line": 1941
         },
         {
           "raw": "js/admin/appearance/visual-studio-layout-admin.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/admin/appearance/visual-studio-layout-admin.js",
-          "line": 2141
+          "line": 2151
         },
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 2142
+          "line": 2152
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 2143
+          "line": 2153
         },
         {
           "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/admin/notifications/notificaciones-admin.js",
-          "line": 2144
+          "line": 2154
         },
         {
-          "raw": "js/admin/notifications/notificaciones-push.js?v=tintin-20260825-web-push-2",
+          "raw": "js/admin/notifications/notificaciones-push.js?v=tintin-20260825-web-push-3",
           "target": "js/admin/notifications/notificaciones-push.js",
-          "line": 2145
+          "line": 2155
+        },
+        {
+          "raw": "js/admin/notifications/notificaciones-push-maestro.js?v=tintin-20260825-push-master-1",
+          "target": "js/admin/notifications/notificaciones-push-maestro.js",
+          "line": 2156
         },
         {
           "raw": "js/admin/notifications/enlace-pedido-push.js?v=tintin-20260825-web-push-2",
           "target": "js/admin/notifications/enlace-pedido-push.js",
-          "line": 2146
+          "line": 2157
         }
       ],
       "styles": [
@@ -2029,61 +2034,67 @@
         {
           "raw": "js/admin/admin-app.js?v=tintin-20260825-web-push-integration-1",
           "target": "js/admin/admin-app.js",
-          "line": 1928,
+          "line": 1938,
           "exists": true
         },
         {
           "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260818-engagement-master-2",
           "target": "js/admin/participacion/gestion-participacion-admin.js",
-          "line": 1929,
+          "line": 1939,
           "exists": true
         },
         {
           "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/admin/shopify-commerce-admin.js",
-          "line": 1930,
+          "line": 1940,
           "exists": true
         },
         {
           "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/admin/appearance/editor-visual-admin.js",
-          "line": 1931,
+          "line": 1941,
           "exists": true
         },
         {
           "raw": "js/admin/appearance/visual-studio-layout-admin.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/admin/appearance/visual-studio-layout-admin.js",
-          "line": 2141,
+          "line": 2151,
           "exists": true
         },
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 2142,
+          "line": 2152,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 2143,
+          "line": 2153,
           "exists": true
         },
         {
           "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/admin/notifications/notificaciones-admin.js",
-          "line": 2144,
+          "line": 2154,
           "exists": true
         },
         {
-          "raw": "js/admin/notifications/notificaciones-push.js?v=tintin-20260825-web-push-2",
+          "raw": "js/admin/notifications/notificaciones-push.js?v=tintin-20260825-web-push-3",
           "target": "js/admin/notifications/notificaciones-push.js",
-          "line": 2145,
+          "line": 2155,
+          "exists": true
+        },
+        {
+          "raw": "js/admin/notifications/notificaciones-push-maestro.js?v=tintin-20260825-push-master-1",
+          "target": "js/admin/notifications/notificaciones-push-maestro.js",
+          "line": 2156,
           "exists": true
         },
         {
           "raw": "js/admin/notifications/enlace-pedido-push.js?v=tintin-20260825-web-push-2",
           "target": "js/admin/notifications/enlace-pedido-push.js",
-          "line": 2146,
+          "line": 2157,
           "exists": true
         },
         {
@@ -2266,9 +2277,14 @@
           "line": 1208
         },
         {
+          "id": "",
+          "classes": "",
+          "line": 1635
+        },
+        {
           "id": "csv-preview-table",
           "classes": "adm-table",
-          "line": 1858
+          "line": 1868
         }
       ],
       "modals": [
@@ -2282,37 +2298,37 @@
           "id": "unsaved-modal",
           "role": "dialog",
           "classes": "",
-          "line": 1937
+          "line": 1947
         },
         {
           "id": "order-edit-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 1953
+          "line": 1963
         },
         {
           "id": "client-ficha-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2055
+          "line": 2065
         },
         {
           "id": "tpl-edit-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2068
+          "line": 2078
         },
         {
           "id": "tpl-preview-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2114
+          "line": 2124
         },
         {
           "id": "promo-confirm-overlay",
           "role": "dialog",
           "classes": "",
-          "line": 2127
+          "line": 2137
         }
       ],
       "tabs": [
@@ -2379,12 +2395,12 @@
         {
           "id": "",
           "role": "",
-          "line": 1688
+          "line": 1698
         },
         {
           "id": "",
           "role": "",
-          "line": 1689
+          "line": 1699
         }
       ],
       "sections": [
@@ -2496,37 +2512,37 @@
         {
           "id": "section-permisos",
           "classes": "adm-section",
-          "line": 1630
+          "line": 1640
         },
         {
           "id": "section-apariencia",
           "classes": "adm-section",
-          "line": 1680
+          "line": 1690
         },
         {
           "id": "apar-panel-diseno",
           "classes": "correos-panel active",
-          "line": 1692
+          "line": 1702
         },
         {
           "id": "apar-panel-colores",
           "classes": "correos-panel",
-          "line": 1751
+          "line": 1761
         },
         {
           "id": "section-importar",
           "classes": "adm-section",
-          "line": 1799
+          "line": 1809
         },
         {
           "id": "section-resenas",
           "classes": "adm-section",
-          "line": 1904
+          "line": 1914
         },
         {
           "id": "section-me-gusta",
           "classes": "adm-section",
-          "line": 1916
+          "line": 1926
         }
       ],
       "buttons": [
@@ -4675,6 +4691,38 @@
           "line": 1626
         },
         {
+          "id": "btn-push-master-save",
+          "classes": [
+            "adm-btn",
+            "adm-btn-primary",
+            "adm-btn-sm"
+          ],
+          "type": "button",
+          "text": "Guardar preferencias",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 1633
+        },
+        {
+          "id": "btn-push-master-revoke-all",
+          "classes": [
+            "adm-btn",
+            "adm-btn-danger",
+            "adm-btn-sm"
+          ],
+          "type": "button",
+          "text": "Revocar todos los dispositivos",
+          "ariaLabel": "",
+          "title": "",
+          "inlineHandler": false,
+          "dataAction": {},
+          "hasSourceReference": true,
+          "line": 1633
+        },
+        {
           "id": "btn-perm-restore",
           "classes": [
             "adm-btn",
@@ -4688,7 +4736,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1636
+          "line": 1646
         },
         {
           "id": "btn-perm-save",
@@ -4704,7 +4752,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1637
+          "line": 1647
         },
         {
           "id": "",
@@ -4721,7 +4769,7 @@
             "data-apar-main-tab": "diseno"
           },
           "hasSourceReference": true,
-          "line": 1688
+          "line": 1698
         },
         {
           "id": "",
@@ -4738,7 +4786,7 @@
             "data-appearance-sensitive": "true"
           },
           "hasSourceReference": true,
-          "line": 1689
+          "line": 1699
         },
         {
           "id": "visual-undo",
@@ -4754,7 +4802,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1708
+          "line": 1718
         },
         {
           "id": "visual-redo",
@@ -4770,7 +4818,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1709
+          "line": 1719
         },
         {
           "id": "visual-save",
@@ -4786,7 +4834,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1710
+          "line": 1720
         },
         {
           "id": "visual-cancel",
@@ -4802,7 +4850,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1711
+          "line": 1721
         },
         {
           "id": "visual-publish",
@@ -4818,7 +4866,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1712
+          "line": 1722
         },
         {
           "id": "visual-add",
@@ -4834,7 +4882,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1722
+          "line": 1732
         },
         {
           "id": "",
@@ -4852,7 +4900,7 @@
             "data-visual-device": "mobile"
           },
           "hasSourceReference": true,
-          "line": 1734
+          "line": 1744
         },
         {
           "id": "",
@@ -4870,7 +4918,7 @@
             "data-visual-device": "tablet"
           },
           "hasSourceReference": true,
-          "line": 1735
+          "line": 1745
         },
         {
           "id": "",
@@ -4888,7 +4936,7 @@
             "data-visual-device": "desktop"
           },
           "hasSourceReference": true,
-          "line": 1736
+          "line": 1746
         },
         {
           "id": "",
@@ -4905,7 +4953,7 @@
             "data-apar-scope": "global"
           },
           "hasSourceReference": true,
-          "line": 1760
+          "line": 1770
         },
         {
           "id": "",
@@ -4921,7 +4969,7 @@
             "data-apar-scope": "admin"
           },
           "hasSourceReference": true,
-          "line": 1761
+          "line": 1771
         },
         {
           "id": "btn-exportar",
@@ -4936,7 +4984,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1806
+          "line": 1816
         },
         {
           "id": "btn-exportar-pedidos",
@@ -4951,7 +4999,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1817
+          "line": 1827
         },
         {
           "id": "btn-exportar-usuarios",
@@ -4966,7 +5014,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1828
+          "line": 1838
         },
         {
           "id": "btn-csv-limpiar",
@@ -4982,7 +5030,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1852
+          "line": 1862
         },
         {
           "id": "btn-csv-importar-seleccionados",
@@ -4997,7 +5045,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1853
+          "line": 1863
         },
         {
           "id": "btn-csv-importar",
@@ -5012,7 +5060,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1854
+          "line": 1864
         },
         {
           "id": "btn-importar",
@@ -5027,7 +5075,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1896
+          "line": 1906
         },
         {
           "id": "btn-importar-sample",
@@ -5042,7 +5090,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1897
+          "line": 1907
         },
         {
           "id": "save-review-quick-replies",
@@ -5057,7 +5105,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1912
+          "line": 1922
         },
         {
           "id": "unsaved-modal-save",
@@ -5072,7 +5120,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1943
+          "line": 1953
         },
         {
           "id": "unsaved-modal-discard",
@@ -5087,7 +5135,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1944
+          "line": 1954
         },
         {
           "id": "unsaved-modal-stay",
@@ -5102,7 +5150,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 1945
+          "line": 1955
         },
         {
           "id": "",
@@ -5116,7 +5164,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 1957
+          "line": 1967
         },
         {
           "id": "",
@@ -5130,7 +5178,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2046
+          "line": 2056
         },
         {
           "id": "oe-save-btn",
@@ -5145,7 +5193,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2047
+          "line": 2057
         },
         {
           "id": "",
@@ -5159,7 +5207,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 2059
+          "line": 2069
         },
         {
           "id": "",
@@ -5173,7 +5221,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 2072
+          "line": 2082
         },
         {
           "id": "tpl-edit-restore-btn",
@@ -5189,7 +5237,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2103
+          "line": 2113
         },
         {
           "id": "tpl-edit-preview-btn",
@@ -5205,7 +5253,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2104
+          "line": 2114
         },
         {
           "id": "",
@@ -5219,7 +5267,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2107
+          "line": 2117
         },
         {
           "id": "tpl-edit-save-btn",
@@ -5234,7 +5282,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2108
+          "line": 2118
         },
         {
           "id": "",
@@ -5248,7 +5296,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 2118
+          "line": 2128
         },
         {
           "id": "",
@@ -5262,7 +5310,7 @@
           "inlineHandler": true,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2135
+          "line": 2145
         },
         {
           "id": "promo-confirm-send-btn",
@@ -5277,7 +5325,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 2136
+          "line": 2146
         }
       ],
       "controls": [
@@ -6516,11 +6564,38 @@
         },
         {
           "tag": "input",
+          "id": "push-master-enabled",
+          "name": "",
+          "type": "checkbox",
+          "ariaLabel": "",
+          "line": 1633,
+          "labeled": true
+        },
+        {
+          "tag": "select",
+          "id": "push-master-sound",
+          "name": "",
+          "type": "",
+          "ariaLabel": "",
+          "line": 1633,
+          "labeled": true
+        },
+        {
+          "tag": "input",
+          "id": "push-master-sound-url",
+          "name": "",
+          "type": "url",
+          "ariaLabel": "",
+          "line": 1633,
+          "labeled": true
+        },
+        {
+          "tag": "input",
           "id": "perm-search",
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1647,
+          "line": 1657,
           "labeled": true
         },
         {
@@ -6529,7 +6604,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1649,
+          "line": 1659,
           "labeled": true
         },
         {
@@ -6538,7 +6613,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1652,
+          "line": 1662,
           "labeled": true
         },
         {
@@ -6547,7 +6622,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1719,
+          "line": 1729,
           "labeled": true
         },
         {
@@ -6556,7 +6631,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "Tipo de bloque nuevo",
-          "line": 1721,
+          "line": 1731,
           "labeled": true
         },
         {
@@ -6565,7 +6640,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1769,
+          "line": 1779,
           "labeled": true
         },
         {
@@ -6574,7 +6649,7 @@
           "name": "",
           "type": "file",
           "ariaLabel": "",
-          "line": 1845,
+          "line": 1855,
           "labeled": true
         },
         {
@@ -6583,7 +6658,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 1861,
+          "line": 1871,
           "labeled": true
         },
         {
@@ -6592,7 +6667,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1894,
+          "line": 1904,
           "labeled": true
         },
         {
@@ -6601,7 +6676,7 @@
           "name": "",
           "type": "search",
           "ariaLabel": "",
-          "line": 1906,
+          "line": 1916,
           "labeled": true
         },
         {
@@ -6610,7 +6685,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1907,
+          "line": 1917,
           "labeled": true
         },
         {
@@ -6619,7 +6694,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1912,
+          "line": 1922,
           "labeled": true
         },
         {
@@ -6628,7 +6703,7 @@
           "name": "",
           "type": "search",
           "ariaLabel": "",
-          "line": 1917,
+          "line": 1927,
           "labeled": true
         },
         {
@@ -6637,7 +6712,7 @@
           "name": "",
           "type": "hidden",
           "ariaLabel": "",
-          "line": 1960,
+          "line": 1970,
           "labeled": true
         },
         {
@@ -6646,7 +6721,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1964,
+          "line": 1974,
           "labeled": true
         },
         {
@@ -6655,7 +6730,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1968,
+          "line": 1978,
           "labeled": true
         },
         {
@@ -6664,7 +6739,7 @@
           "name": "",
           "type": "email",
           "ariaLabel": "",
-          "line": 1972,
+          "line": 1982,
           "labeled": true
         },
         {
@@ -6673,7 +6748,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1977,
+          "line": 1987,
           "labeled": true
         },
         {
@@ -6682,7 +6757,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 1981,
+          "line": 1991,
           "labeled": true
         },
         {
@@ -6691,7 +6766,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1989,
+          "line": 1999,
           "labeled": true
         },
         {
@@ -6700,7 +6775,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 1993,
+          "line": 2003,
           "labeled": true
         },
         {
@@ -6709,7 +6784,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2002,
+          "line": 2012,
           "labeled": true
         },
         {
@@ -6718,7 +6793,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2009,
+          "line": 2019,
           "labeled": true
         },
         {
@@ -6727,7 +6802,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2019,
+          "line": 2029,
           "labeled": true
         },
         {
@@ -6736,7 +6811,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2032,
+          "line": 2042,
           "labeled": true
         },
         {
@@ -6745,7 +6820,7 @@
           "name": "",
           "type": "hidden",
           "ariaLabel": "",
-          "line": 2075,
+          "line": 2085,
           "labeled": true
         },
         {
@@ -6754,7 +6829,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2078,
+          "line": 2088,
           "labeled": true
         },
         {
@@ -6763,7 +6838,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2080,
+          "line": 2090,
           "labeled": true
         },
         {
@@ -6772,7 +6847,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2081,
+          "line": 2091,
           "labeled": true
         },
         {
@@ -6781,7 +6856,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2082,
+          "line": 2092,
           "labeled": true
         },
         {
@@ -6790,7 +6865,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2083,
+          "line": 2093,
           "labeled": true
         },
         {
@@ -6799,7 +6874,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2084,
+          "line": 2094,
           "labeled": true
         },
         {
@@ -6808,7 +6883,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2085,
+          "line": 2095,
           "labeled": true
         },
         {
@@ -6817,7 +6892,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2087,
+          "line": 2097,
           "labeled": true
         },
         {
@@ -6826,7 +6901,7 @@
           "name": "",
           "type": "url",
           "ariaLabel": "",
-          "line": 2088,
+          "line": 2098,
           "labeled": true
         },
         {
@@ -6835,7 +6910,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2090,
+          "line": 2100,
           "labeled": true
         },
         {
@@ -6844,7 +6919,7 @@
           "name": "",
           "type": "",
           "ariaLabel": "",
-          "line": 2091,
+          "line": 2101,
           "labeled": true
         },
         {
@@ -6853,7 +6928,7 @@
           "name": "",
           "type": "checkbox",
           "ariaLabel": "",
-          "line": 2093,
+          "line": 2103,
           "labeled": true
         },
         {
@@ -6862,7 +6937,7 @@
           "name": "",
           "type": "text",
           "ariaLabel": "",
-          "line": 2133,
+          "line": 2143,
           "labeled": true
         }
       ]
@@ -16438,8 +16513,8 @@
     },
     {
       "path": "cloudflare/nucleo-push.js",
-      "bytes": 11122,
-      "sha256": "9c6d2c3984a211c31c5b8c5a60f20dd40d43a5c15a1ae698e8cd8072146651b4",
+      "bytes": 11320,
+      "sha256": "40d321199f79aac7d16faee3f39163f665206c7b879df468941634353c2aa3e4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16553,8 +16628,8 @@
     },
     {
       "path": "cloudflare/servicio-push.js",
-      "bytes": 16043,
-      "sha256": "ff97a0ad8e26bfd19ff3c4ed98832f95888a0f5c968fab1f2ab21cad8f7ede3e",
+      "bytes": 19441,
+      "sha256": "21b436065b2809be812b94a38a37becc8e40e3b4d7a450b3bcf09863c9315156",
       "syntax": {
         "ok": true,
         "error": ""
@@ -16584,11 +16659,11 @@
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/$%7BprojectId%7D/databases/(default",
-          "line": 41
+          "line": 42
         },
         {
           "url": "https://fcm.googleapis.com/v1/projects/$%7Bsa.project_id%7D/messages:send",
-          "line": 257
+          "line": 328
         }
       ]
     },
@@ -17591,6 +17666,36 @@
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
           "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "functions/api/push-admin.js",
+      "bytes": 3403,
+      "sha256": "5aab7ab88452c3de22078e6576682d0ba61e8d3429bb270b500031230f7bd9ee",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 12
+        },
+        {
+          "raw": "../../cloudflare/nucleo-push.js",
+          "target": "cloudflare/nucleo-push.js",
+          "dynamic": false,
+          "line": 13
+        },
+        {
+          "raw": "../../cloudflare/servicio-push.js",
+          "target": "cloudflare/servicio-push.js",
+          "dynamic": false,
+          "line": 20
         }
       ],
       "endpoints": []
@@ -18906,9 +19011,50 @@
       ]
     },
     {
+      "path": "js/admin/notifications/notificaciones-push-maestro.js",
+      "bytes": 6168,
+      "sha256": "540174e61bf26b18ba1299294d8b519f6a614f165e55d923a9e43a642137d213",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/core/firebase/firebase.js",
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1",
+          "target": "js/core/auth/roles.js",
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../core/firebase/origen-funciones.js",
+          "target": "js/core/firebase/origen-funciones.js",
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "line": 3
+        }
+      ]
+    },
+    {
       "path": "js/admin/notifications/notificaciones-push.js",
-      "bytes": 14190,
-      "sha256": "719125ab94cfe54c0bdeaa30e4a28603457e61b0a7161851848f00093b13128a",
+      "bytes": 14269,
+      "sha256": "1b658431500c603c139fbe76101eaf50f8d3995472b05580e3f9fdf6b6de981e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25242,8 +25388,8 @@
     },
     {
       "path": "scripts/auditar-push-web.js",
-      "bytes": 14875,
-      "sha256": "3fcbd7fd3c0355a5e517923f1d6cb3446e4187fa16f858661e26e4aaf723e8b2",
+      "bytes": 16118,
+      "sha256": "8bf870038cc4dc07e15e27a3aa60ad5dac9a19ecdd985fca12f1648370caf245",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25252,11 +25398,11 @@
       "endpoints": [
         {
           "url": "https://*.gstatic.com/",
-          "line": 76
+          "line": 77
         },
         {
           "url": "https://*.googleapis.com/",
-          "line": 76
+          "line": 77
         }
       ]
     },
@@ -28459,8 +28605,8 @@
     {
       "path": "_routes.json",
       "extension": ".json",
-      "bytes": 1943,
-      "sha256": "02aa73c1844b48a1c27f867a4a146f29cd1af1ac1c5eb969309cfdd1052aba62"
+      "bytes": 1966,
+      "sha256": "5984ce7d1787c369da72e42f31a142bb20bba3f3d36a305854208ed0f5859f9b"
     },
     {
       "path": "about.html",
@@ -28483,8 +28629,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 180015,
-      "sha256": "31f8be1c03e8a71eaacc7641ade4477185eb345af03ec8ea2b8dbd2160c5c7ac"
+      "bytes": 182485,
+      "sha256": "f48857e09372add8a3115cdc83cbc5fdd361353b4c6b413bff0e1a4b0e185408"
     },
     {
       "path": "apple-touch-icon.png",
@@ -28765,8 +28911,8 @@
     {
       "path": "cloudflare/nucleo-push.js",
       "extension": ".js",
-      "bytes": 11122,
-      "sha256": "9c6d2c3984a211c31c5b8c5a60f20dd40d43a5c15a1ae698e8cd8072146651b4"
+      "bytes": 11320,
+      "sha256": "40d321199f79aac7d16faee3f39163f665206c7b879df468941634353c2aa3e4"
     },
     {
       "path": "cloudflare/participacion-admin.js",
@@ -28795,8 +28941,8 @@
     {
       "path": "cloudflare/servicio-push.js",
       "extension": ".js",
-      "bytes": 16043,
-      "sha256": "ff97a0ad8e26bfd19ff3c4ed98832f95888a0f5c968fab1f2ab21cad8f7ede3e"
+      "bytes": 19441,
+      "sha256": "21b436065b2809be812b94a38a37becc8e40e3b4d7a450b3bcf09863c9315156"
     },
     {
       "path": "cloudflare/servir-admin-con-csp.js",
@@ -29311,8 +29457,8 @@
     {
       "path": "docs/configuracion-push-web-firebase.md",
       "extension": ".md",
-      "bytes": 12189,
-      "sha256": "588407b142fb8c2299a4e8a92126608b6b97f3a64e7b3aac79c974dcfb07cca0"
+      "bytes": 13319,
+      "sha256": "9c6dbaf4da3e7855799fc71196c0ad205f932acb3362516454ee563226c7a482"
     },
     {
       "path": "docs/contenido-fase-6.md",
@@ -29593,8 +29739,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 64658,
-      "sha256": "0b63ba5b7a688a02beabda7c0ff8efb97a1dad48ba0abb652370f8a5f1451274"
+      "bytes": 64738,
+      "sha256": "149b0bf6b5586761c5b76b89070505e1a41c3ee2e605a0583ffd6c3b373cc169"
     },
     {
       "path": "functions/[page].js",
@@ -29769,6 +29915,12 @@
       "extension": ".js",
       "bytes": 3603,
       "sha256": "90457ab616214e44ee5c4a47474bd2d68995a529fdb49f67f1059b6afc68ccf2"
+    },
+    {
+      "path": "functions/api/push-admin.js",
+      "extension": ".js",
+      "bytes": 3403,
+      "sha256": "5aab7ab88452c3de22078e6576682d0ba61e8d3429bb270b500031230f7bd9ee"
     },
     {
       "path": "functions/api/push-config.js",
@@ -30059,10 +30211,16 @@
       "sha256": "40cbba2010bc0ef6b47636e9c5e448204064c4eae5b6f83d2de072070e114660"
     },
     {
+      "path": "js/admin/notifications/notificaciones-push-maestro.js",
+      "extension": ".js",
+      "bytes": 6168,
+      "sha256": "540174e61bf26b18ba1299294d8b519f6a614f165e55d923a9e43a642137d213"
+    },
+    {
       "path": "js/admin/notifications/notificaciones-push.js",
       "extension": ".js",
-      "bytes": 14190,
-      "sha256": "719125ab94cfe54c0bdeaa30e4a28603457e61b0a7161851848f00093b13128a"
+      "bytes": 14269,
+      "sha256": "1b658431500c603c139fbe76101eaf50f8d3995472b05580e3f9fdf6b6de981e"
     },
     {
       "path": "js/admin/orders/eliminacion-pedidos-admin.js",
@@ -31903,8 +32061,8 @@
     {
       "path": "scripts/auditar-push-web.js",
       "extension": ".js",
-      "bytes": 14875,
-      "sha256": "3fcbd7fd3c0355a5e517923f1d6cb3446e4187fa16f858661e26e4aaf723e8b2"
+      "bytes": 16118,
+      "sha256": "8bf870038cc4dc07e15e27a3aa60ad5dac9a19ecdd985fca12f1648370caf245"
     },
     {
       "path": "scripts/auditar-rendimiento-metricas.mjs",
@@ -32023,8 +32181,8 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 551,
-      "sha256": "6218bb12d7f7245774e16340b00e97f416d783d60b36c703c122b414afd8941c"
+      "bytes": 818,
+      "sha256": "b0fe5983cdf4483c01a5b33ceee0bee3af58c43baaaa63b37776dcfcb7da5118"
     },
     {
       "path": "scripts/cache-version-baseline.json",
@@ -35134,6 +35292,7 @@
       "productReviewStats",
       "products",
       "pushEvents",
+      "pushSettings",
       "reviewLikeProducts",
       "reviewRecords",
       "reviews",
@@ -35163,6 +35322,7 @@
       "media",
       "notifications",
       "pushEvents",
+      "pushSettings",
       "reviewLikeProducts",
       "reviews",
       "rolePermissions",
