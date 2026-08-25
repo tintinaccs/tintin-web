@@ -206,8 +206,28 @@ async function ensureMessaging() {
   messagingInstance = sdk.getMessaging(auth.app);
   sdk.onMessage(messagingInstance, payload => {
     const data = payload?.data || {};
+    const title = data.title || 'Tintin Pedidos';
+    const body = data.body || 'Nuevo aviso';
     foregroundCount += 1;
-    notice(`${data.title || 'Tintin Pedidos'} — ${data.body || 'Nuevo aviso'}`);
+    notice(`${title} — ${body}`);
+    if (Notification.permission === 'granted') {
+      try {
+        const notification = new Notification(title, {
+          body,
+          icon: '/favicon-192x192.png',
+          badge: '/favicon-192x192.png',
+          tag: String(data.tag || data.eventId || 'tintin-push'),
+          silent: false
+        });
+        notification.onclick = () => {
+          notification.close();
+          window.focus();
+          window.location.href = '/admin?section=pedidos';
+        };
+      } catch {
+        // The in-panel notice above remains the fallback for restricted shells.
+      }
+    }
     window.TintinPushPlayForegroundSound?.(data.foregroundSound || 'default');
     if ('setAppBadge' in navigator) {
       navigator.setAppBadge(foregroundCount).catch(() => {});
