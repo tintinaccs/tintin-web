@@ -130,8 +130,8 @@ check('Todos los estados visibles están definidos', ['No configuradas', 'Listas
 check('Comprueba isSupported() antes de ofrecer nada', clientModule.includes('isSupported()'));
 check('Registra el service worker con alcance raíz', clientModule.includes("register(SW_PATH, { scope: '/' })"));
 check('No inicializa una segunda aplicación Firebase',
-  clientModule.includes('getMessaging(app)') &&
-  clientModule.includes('import { auth, app }') &&
+  clientModule.includes('getMessaging(auth.app)') &&
+  clientModule.includes('import { auth }') &&
   !clientModule.includes('initializeApp('));
 check('Pide permiso sólo desde el botón', clientModule.includes('Notification.requestPermission()') && clientModule.split('Notification.requestPermission()').length === 2);
 check('Mensaje específico para iPhone sin instalar', clientModule.includes('tocá Compartir y elegí Agregar a inicio'));

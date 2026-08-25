@@ -10,7 +10,7 @@
 // /api/push-subscription, que lo guarda con credenciales de servidor.
 // Tampoco se imprime completo en consola ni se manda a analytics.
 
-import { auth, app } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
 import { apiUrl } from '../../core/firebase/origen-funciones.js';
@@ -201,7 +201,9 @@ async function ensureMessaging() {
   // firebase-app desde otra versión/URL crea otro registro de apps y deja
   // getApp() sin [DEFAULT], que rompe la activación con el error:
   // Error típico: Firebase App '[DEFAULT]' no estaba inicializada.
-  messagingInstance = sdk.getMessaging(app);
+  // Auth pertenece a la app Firebase compartida; reutilizarla evita una
+  // segunda aplicación Firebase y el error de registro [DEFAULT].
+  messagingInstance = sdk.getMessaging(auth.app);
   sdk.onMessage(messagingInstance, payload => {
     const data = payload?.data || {};
     foregroundCount += 1;
