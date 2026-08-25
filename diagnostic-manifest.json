@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-25T11:05:28.280Z",
-  "sourceFingerprint": "0c847e406a661f0df3cb985744712f8ad6e960f9c206aa9029ce42093bad5386",
+  "generatedAt": "2026-08-25T11:13:12.591Z",
+  "sourceFingerprint": "31aa71fa92c015ff14001f93e5e97d2565a2903d73786da491e1924382596769",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 729,
     "textFiles": 697,
-    "totalBytes": 8206125,
+    "totalBytes": 8205990,
     "pages": 18,
     "modules": 462
   },
@@ -16530,8 +16530,8 @@
     },
     {
       "path": "cloudflare/seguridad-cloudinary.js",
-      "bytes": 6449,
-      "sha256": "db2b3ba9996e73c368af90e8789b5070f68d66c550ccf636da89b016681975c2",
+      "bytes": 6418,
+      "sha256": "63aa352ec16bb22c9915ec23b56fb62c32f37626a4e0f91a5e7df949eb717542",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17597,8 +17597,8 @@
     },
     {
       "path": "functions/api/push-config.js",
-      "bytes": 2075,
-      "sha256": "f88e003fe38f1d9e8c0d52594ab2db56214ae9c64f355e4238bc865552e7dcc4",
+      "bytes": 1993,
+      "sha256": "9ff98fcb1c9995f189d7502b825f2b9c583aaf10c33c964a7d4618571fb6cacc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17657,8 +17657,8 @@
     },
     {
       "path": "functions/api/push-subscription.js",
-      "bytes": 4578,
-      "sha256": "63629b6f4bb0bc359a916cff416f10f528288a9eba9ffe2a6c1b06375f92dcca",
+      "bytes": 4503,
+      "sha256": "f43f93e59d3e400b9d2c6a33c60aeec9c116221866569dbc671042ec102a2640",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17687,8 +17687,8 @@
     },
     {
       "path": "functions/api/push-test.js",
-      "bytes": 3833,
-      "sha256": "c73a6ed35b41f7fc2fa427117860f814da334414a039d89c0945ce18f1aa5d7b",
+      "bytes": 3749,
+      "sha256": "8d8eea82b838b9d88e807afccc7c926863dd83f1b4c85e340473e823f3080805",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25242,8 +25242,8 @@
     },
     {
       "path": "scripts/auditar-push-web.js",
-      "bytes": 14738,
-      "sha256": "328a2dc3e1f91e1fae2a8b380b919943ab5869401918675b40735bd14b888937",
+      "bytes": 14875,
+      "sha256": "3fcbd7fd3c0355a5e517923f1d6cb3446e4187fa16f858661e26e4aaf723e8b2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25251,20 +25251,12 @@
       "imports": [],
       "endpoints": [
         {
-          "url": "https://www.gstatic.com/",
-          "line": 74
-        },
-        {
           "url": "https://*.gstatic.com/",
-          "line": 74
+          "line": 76
         },
         {
           "url": "https://*.googleapis.com/",
-          "line": 74
-        },
-        {
-          "url": "https://fcm.googleapis.com/v1/projects/",
-          "line": 83
+          "line": 76
         }
       ]
     },
@@ -28797,8 +28789,8 @@
     {
       "path": "cloudflare/seguridad-cloudinary.js",
       "extension": ".js",
-      "bytes": 6449,
-      "sha256": "db2b3ba9996e73c368af90e8789b5070f68d66c550ccf636da89b016681975c2"
+      "bytes": 6418,
+      "sha256": "63aa352ec16bb22c9915ec23b56fb62c32f37626a4e0f91a5e7df949eb717542"
     },
     {
       "path": "cloudflare/servicio-push.js",
@@ -29781,8 +29773,8 @@
     {
       "path": "functions/api/push-config.js",
       "extension": ".js",
-      "bytes": 2075,
-      "sha256": "f88e003fe38f1d9e8c0d52594ab2db56214ae9c64f355e4238bc865552e7dcc4"
+      "bytes": 1993,
+      "sha256": "9ff98fcb1c9995f189d7502b825f2b9c583aaf10c33c964a7d4618571fb6cacc"
     },
     {
       "path": "functions/api/push-order-event.js",
@@ -29793,14 +29785,14 @@
     {
       "path": "functions/api/push-subscription.js",
       "extension": ".js",
-      "bytes": 4578,
-      "sha256": "63629b6f4bb0bc359a916cff416f10f528288a9eba9ffe2a6c1b06375f92dcca"
+      "bytes": 4503,
+      "sha256": "f43f93e59d3e400b9d2c6a33c60aeec9c116221866569dbc671042ec102a2640"
     },
     {
       "path": "functions/api/push-test.js",
       "extension": ".js",
-      "bytes": 3833,
-      "sha256": "c73a6ed35b41f7fc2fa427117860f814da334414a039d89c0945ce18f1aa5d7b"
+      "bytes": 3749,
+      "sha256": "8d8eea82b838b9d88e807afccc7c926863dd83f1b4c85e340473e823f3080805"
     },
     {
       "path": "functions/api/sheets-admin-webhook.js",
@@ -31911,8 +31903,8 @@
     {
       "path": "scripts/auditar-push-web.js",
       "extension": ".js",
-      "bytes": 14738,
-      "sha256": "328a2dc3e1f91e1fae2a8b380b919943ab5869401918675b40735bd14b888937"
+      "bytes": 14875,
+      "sha256": "3fcbd7fd3c0355a5e517923f1d6cb3446e4187fa16f858661e26e4aaf723e8b2"
     },
     {
       "path": "scripts/auditar-rendimiento-metricas.mjs",
