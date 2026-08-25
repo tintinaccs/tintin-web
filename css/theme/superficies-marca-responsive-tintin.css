@@ -410,10 +410,10 @@ html:has(.ck-body) body {
   }
 }
 
-/* El reveal global agrega .tt-visible una sola vez y luego deja el elemento
-   asentado. Esta regla evita que otra hoja vuelva a esconderlo. */
-.tt-auto-reveal.tt-visible,
-.tt-auto-reveal.tt-reveal-settled {
+/* El reveal global controla la visibilidad mientras el elemento entra y sale
+   del viewport. El estado asentado sólo optimiza will-change; no lo deja
+   permanentemente visible para permitir repetir la animación. */
+.tt-auto-reveal.tt-visible {
   opacity: 1 !important;
   visibility: visible !important;
 }
