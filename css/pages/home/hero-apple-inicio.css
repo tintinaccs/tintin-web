@@ -6,9 +6,12 @@
    acostado), donde el breakpoint general de tablet ya apiló todo en una
    columna y el collage cuadrado ocuparía más alto del que hay disponible:
    ahí se vuelve a poner texto y collage lado a lado.
+   min-width:480px evita que la condición matchee viewports angostos
+   irreales (p. ej. un iframe sin dimensionar), donde el piso de 220px del
+   collage dejaría la columna de texto en minmax(0,...) colapsada a 0px.
    ============================================================= */
 
-@media (max-height: 520px) and (orientation: landscape) and (max-width: 1023px) {
+@media (max-height: 520px) and (orientation: landscape) and (min-width: 480px) and (max-width: 1023px) {
   html body.tt-home-premium .tt-hero-inner {
     grid-template-columns: minmax(0, 1.15fr) minmax(220px, 0.85fr);
     text-align: left;
