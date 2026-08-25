@@ -3,7 +3,7 @@ import { versionedSiteAsset } from './configuracion.js';
 const HEADER_RESPONSIVE_VERSION = 'tintin-20260824-header-responsive-sync-1';
 const NAVIGATION_SHARED_VERSION = 'tintin-20260818-header-dropdowns-solid-3';
 const MOBILE_SOLID_VERSION = 'tintin-20260817-cls-desktop-stable-3';
-const NOTIFICATIONS_VERSION = 'tintin-20260817-notifications-opaque-1';
+const NOTIFICATIONS_VERSION = 'tintin-20260824-notifications-badge-contained-1';
 
 const NAVIGATION_STYLES = Object.freeze([
   ['tt-navigation-desktop-css', 'css/components/navigation/escritorio/encabezado-escritorio.css', HEADER_RESPONSIVE_VERSION],
