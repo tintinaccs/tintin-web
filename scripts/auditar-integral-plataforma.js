@@ -6,6 +6,7 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const files = {
   home: read('index.html'),
   homeFit: read('css/pages/home/ajuste-inicio.css'),
+  heroFit: read('css/pages/home/hero-apple-inicio.css'),
   script: read('tienda.js'),
   productRelated: read('js/pages/product/productos-relacionados.js'),
   productsStore: read('js/core/store/estado-productos.js'),
@@ -45,7 +46,7 @@ check(
     !files.homeFit.includes('170svh') &&
     !files.homeFit.includes('128svh') &&
     files.homeFit.includes('@media(max-width:380px)') &&
-    files.homeFit.includes('(orientation:landscape)'),
+    files.heroFit.includes('orientation: landscape'),
   'mobile y pantallas bajas no deben reservar grandes espacios vacíos'
 );
 
