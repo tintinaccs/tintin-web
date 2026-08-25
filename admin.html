@@ -110,6 +110,9 @@
     <button type="button" class="adm-nav-item" data-section="mensajes">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span> Mensajes
     </button>
+    <button type="button" class="adm-nav-item" data-section="notificaciones-push" id="nav-notificaciones-push">
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></span> Notificaciones push
+    </button>
     <button type="button" class="adm-nav-item" data-section="auditoria" id="nav-auditoria">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span> Auditoría
     </button>
@@ -153,6 +156,7 @@
   <button type="button" class="adm-mobile-tab" data-section="importar"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Import</button>
   <a href="/admin-images" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>Imágenes</a>
   <button type="button" class="adm-mobile-tab" data-section="mensajes"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>Mensajes</button>
+  <button type="button" class="adm-mobile-tab" data-section="notificaciones-push" id="mtab-notificaciones-push"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></span>Push</button>
   <button type="button" class="adm-mobile-tab" data-section="auditoria" id="mtab-auditoria"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span>Auditoría</button>
   <button type="button" class="adm-mobile-tab" data-section="diagnostico" id="mtab-diagnostico"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/><path d="M8 11h6"/></svg></span>Diagnóstico</button>
   <button type="button" class="adm-mobile-tab" data-section="correos" id="mtab-correos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>Correos</button>
@@ -1304,6 +1308,10 @@
 
         <button type="button" class="adm-btn adm-btn-primary" id="btn-save-correos-config" style="font-size:14px;padding:12px 28px">Guardar configuración de correos</button>
       </div>
+    </div>
+
+    <div class="adm-section" id="section-notificaciones-push">
+      <div class="adm-section-head"><h2>Notificaciones push</h2><p>Recibí pedidos al instante y administrá los dispositivos autorizados.</p></div>
     </div>
 
     <div class="adm-section" id="section-configuracion">
