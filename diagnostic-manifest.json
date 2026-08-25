@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-25T20:24:24.938Z",
-  "sourceFingerprint": "64bef9ffc42dd54dc1fcfd18fc029e21b342ef34e6771c61ee61fc039f8a5e75",
+  "generatedAt": "2026-08-25T20:31:26.700Z",
+  "sourceFingerprint": "03a299eeee560ac4f5590bfa732f6aa1bd8c2ed4f374381d9f9c89d2b9006e70",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 732,
     "textFiles": 700,
-    "totalBytes": 8235514,
+    "totalBytes": 8235570,
     "pages": 18,
     "modules": 465
   },
@@ -25195,8 +25195,8 @@
     },
     {
       "path": "scripts/auditar-integral-plataforma.js",
-      "bytes": 8285,
-      "sha256": "06ccb4ea72c01c94c0bc4ae57a9bbd7bf2a6620ed9fa863908df58012dc0b17b",
+      "bytes": 8341,
+      "sha256": "7057fe493203d6467da46a029b6bf73bea1b11d79b79804b40c565cf34b956ce",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25206,13 +25206,13 @@
           "raw": "./js/pages/collections/estado-colecciones.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "scripts/js/pages/collections/estado-colecciones.js",
           "dynamic": false,
-          "line": 36
+          "line": 37
         },
         {
           "raw": "./js/components/images/imagenes.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "scripts/js/components/images/imagenes.js",
           "dynamic": false,
-          "line": 37
+          "line": 38
         }
       ],
       "endpoints": []
@@ -32189,8 +32189,8 @@
     {
       "path": "scripts/auditar-integral-plataforma.js",
       "extension": ".js",
-      "bytes": 8285,
-      "sha256": "06ccb4ea72c01c94c0bc4ae57a9bbd7bf2a6620ed9fa863908df58012dc0b17b"
+      "bytes": 8341,
+      "sha256": "7057fe493203d6467da46a029b6bf73bea1b11d79b79804b40c565cf34b956ce"
     },
     {
       "path": "scripts/auditar-interaccion-latencia.mjs",
