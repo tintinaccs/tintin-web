@@ -89,6 +89,9 @@ async function uploadTone(slot = 'global') {
     form.append('timestamp', String(signed.timestamp));
     form.append('signature', signed.signature);
     form.append('type', 'upload');
+    // `overwrite` forma parte de la cadena firmada por Cloudinary y también
+    // debe viajar en el multipart; si falta, Cloudinary calcula otra firma.
+    form.append('overwrite', 'true');
     const uploadResponse = await fetch(signed.uploadUrl, { method: 'POST', body: form });
     const uploaded = await uploadResponse.json().catch(() => ({}));
     if (!uploadResponse.ok || !uploaded.secure_url) throw new Error(uploaded?.error?.message || 'Cloudinary no pudo guardar el tono.');
