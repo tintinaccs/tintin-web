@@ -22,6 +22,7 @@ const serviceWorker = read('firebase-messaging-sw.js');
 const pushCore = read('cloudflare/nucleo-push.js');
 const pushService = read('cloudflare/servicio-push.js');
 const clientModule = read('js/admin/notifications/notificaciones-push.js');
+const masterModule = read('js/admin/notifications/notificaciones-push-maestro.js');
 const deepLink = read('js/admin/notifications/enlace-pedido-push.js');
 const appsScript = read('apps-script/CrearPedido.gs');
 const orderEmail = read('functions/api/order-email.js');
@@ -74,12 +75,12 @@ check('La regla del service worker va después de la genérica /*.js', headers.i
 check('Regla para admin-manifest.json', headers.includes('/admin-manifest.json'));
 check('La CSP existente se conserva', /frame-ancestors '(?:none|self)'/.test(headers) && headers.includes('upgrade-insecure-requests'));
 check('La CSP ya permite gstatic y googleapis', (headers.includes(GSTATIC_ORIGIN_MARKER) || headers.includes('https://*.gstatic.com')) && headers.includes('https://*.googleapis.com'));
-for (const route of ['/api/push-config', '/api/push-subscription', '/api/push-test', '/api/push-order-event']) {
+for (const route of ['/api/push-config', '/api/push-subscription', '/api/push-test', '/api/push-order-event', '/api/push-admin']) {
   check(`Ruta declarada: ${route}`, routes.includes(`"${route}"`));
 }
 
 console.log('\n== Funciones de Cloudflare ==');
-for (const file of ['push-config.js', 'push-subscription.js', 'push-test.js', 'push-order-event.js']) {
+for (const file of ['push-config.js', 'push-subscription.js', 'push-test.js', 'push-order-event.js', 'push-admin.js']) {
   check(`Existe functions/api/${file}`, exists(`functions/api/${file}`));
 }
 check('El envío usa la API HTTP v1 de FCM', pushService.includes(FCM_V1_MARKER));
@@ -118,6 +119,12 @@ check('Hay campo para nombrar el dispositivo', adminHtml.includes('push-device-l
 check('Se muestra la fecha del último registro', adminHtml.includes('push-last-register'));
 check('Se aclara que no se ven datos privados en la pantalla bloqueada', adminHtml.includes('pantalla bloqueada'));
 check('La tarjeta arranca oculta hasta confirmar Super Admin', /id="push-card"[^>]*display:none/.test(adminHtml));
+check('Existe el centro maestro de push', exists('js/admin/notifications/notificaciones-push-maestro.js') && adminHtml.includes('id="push-master-card"'));
+check('El centro maestro carga sus controles', ['push-master-enabled', 'push-master-sound', 'btn-push-master-save', 'btn-push-master-revoke-all', 'push-master-devices'].every(id => adminHtml.includes(id)));
+check('El centro maestro exige Super Admin', masterModule.includes('SUPER_ADMIN') && masterModule.includes("user?.email === SUPER_ADMIN") && masterModule.includes("apiUrl('push-admin')"));
+check('Permite revocar un dispositivo o todos', masterModule.includes("action: 'revoke'") && masterModule.includes("action: 'revoke-all'"));
+check('Permite pausar el despacho global', masterModule.includes("action: 'save-settings'") && pushService.includes('paused_by_superadmin'));
+check('Expone sonido configurable con limitación de foreground', masterModule.includes('TintinPushPlayForegroundSound') && masterModule.includes('foregroundSoundUrl'));
 check('El módulo la muestra sólo al Super Admin', clientModule.includes('SUPER_ADMIN') && clientModule.includes("user?.email === SUPER_ADMIN"));
 check('Todos los estados visibles están definidos', ['No configuradas', 'Listas para activar', 'Activas en este dispositivo', 'Permiso bloqueado', 'Navegador no compatible', 'Instalación requerida en iPhone', 'Error de configuración'].every(label => clientModule.includes(label)));
 check('Comprueba isSupported() antes de ofrecer nada', clientModule.includes('isSupported()'));
@@ -137,7 +144,7 @@ check('El panel expone sólo lectura de estado de pedidos', read('js/admin/admin
 
 console.log('\n== Privacidad y secretos ==');
 const publicSurfaces = ['admin.html', 'firebase-messaging-sw.js', 'admin-manifest.json',
-  'js/admin/notifications/notificaciones-push.js', 'js/admin/notifications/enlace-pedido-push.js']
+  'js/admin/notifications/notificaciones-push.js', 'js/admin/notifications/notificaciones-push-maestro.js', 'js/admin/notifications/enlace-pedido-push.js']
   .map(read).join('\n');
 check('Ningún secreto de push en archivos públicos', !/FIREBASE_SERVICE_ACCOUNT|TINTIN_PUSH_WEBHOOK_SECRET|private_key/i.test(publicSurfaces));
 check('La clave VAPID no está pegada en el código', !/FIREBASE_WEB_PUSH_VAPID_KEY\s*=\s*['"][A-Za-z0-9_-]{20,}/.test(publicSurfaces + pushCore + pushService));
@@ -146,7 +153,7 @@ check('.env.example documenta las cuatro variables', ['FIREBASE_WEB_PUSH_VAPID_K
 check('.env.example no tiene valores reales', !/FIREBASE_SERVICE_ACCOUNT_JSON=.+/.test(envExample) && !/FIREBASE_WEB_PUSH_VAPID_KEY=.+/.test(envExample));
 check('.gitignore ignora .env, .dev.vars y cuentas de servicio', ['.env', '.env.*', '.dev.vars', '.dev.vars.*', '*service-account*.json'].every(pattern => gitignore.includes(pattern)));
 check('.gitignore no ignora .env.example', gitignore.includes('!.env.example'));
-check('Las reglas niegan el acceso directo a las colecciones de push', firestoreRules.includes('match /adminPushDevices/{deviceId}') && firestoreRules.includes('match /pushEvents/{eventId}'));
+check('Las reglas niegan el acceso directo a las colecciones de push', firestoreRules.includes('match /adminPushDevices/{deviceId}') && firestoreRules.includes('match /pushEvents/{eventId}') && firestoreRules.includes('match /pushSettings/{settingId}'));
 check('La regla general de denegación sigue al final', firestoreRules.trimEnd().endsWith('}') && firestoreRules.includes('match /{document=**}'));
 check('No se usa eval en el código nuevo', ![pushCore, pushService, clientModule, deepLink, serviceWorker].some(source => /\beval\s*\(/.test(source)));
 

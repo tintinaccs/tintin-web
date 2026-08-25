@@ -1,0 +1,102 @@
+// TINTIN — Centro maestro de Web Push (sólo Super Admin)
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
+import { apiUrl } from '../../core/firebase/origen-funciones.js';
+
+const SOUND_KEY = 'tt_push_foreground_sound';
+const $ = id => document.getElementById(id);
+const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+
+async function call(action, init = {}) {
+  const user = auth.currentUser;
+  if (!user) throw new Error('Necesitás iniciar sesión de nuevo.');
+  const token = await user.getIdToken();
+  const response = await fetch(apiUrl('push-admin'), { ...init, headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json', ...(init.headers || {}) } });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.success === false) throw new Error(data.error || 'No se pudo actualizar el centro push.');
+  return data;
+}
+
+function notice(message, error = false) {
+  const node = $('push-master-notice');
+  if (!node) return;
+  node.textContent = message;
+  node.style.display = message ? '' : 'none';
+  node.style.color = error ? 'var(--adm-danger,#c62828)' : 'var(--adm-muted)';
+}
+
+function renderDevices(devices = []) {
+  const body = $('push-master-devices');
+  if (!body) return;
+  if (!devices.length) {
+    body.innerHTML = '<tr><td colspan="5" style="padding:14px;color:var(--adm-muted)">No hay dispositivos registrados.</td></tr>';
+    return;
+  }
+  body.innerHTML = devices.map(device => `<tr><td style="padding:9px"><strong>${esc(device.deviceLabel)}</strong><br><small style="color:var(--adm-muted)">${esc(device.platform)} · ${esc(device.tokenPreview || 'sin token')}</small></td><td style="padding:9px">${esc(device.email || 'Super Admin')}</td><td style="padding:9px">${esc(device.lastSeenAt || device.updatedAt || '—')}</td><td style="padding:9px"><span class="adm-badge">${device.enabled ? 'Activo' : 'Revocado'}</span></td><td style="padding:9px;text-align:right">${device.enabled ? `<button type="button" class="adm-btn adm-btn-danger adm-btn-sm" data-push-revoke="${esc(device.id)}">Revocar</button>` : '—'}</td></tr>`).join('');
+  body.querySelectorAll('[data-push-revoke]').forEach(button => button.addEventListener('click', async () => {
+    if (!window.confirm('¿Revocar este dispositivo? Dejará de recibir pedidos inmediatamente.')) return;
+    button.disabled = true;
+    try { await call('revoke', { method: 'POST', body: JSON.stringify({ action: 'revoke', deviceId: button.dataset.pushRevoke }) }); notice('Dispositivo revocado.'); await refresh(); }
+    catch (error) { notice(error.message, true); button.disabled = false; }
+  }));
+}
+
+function applySettings(settings = {}) {
+  $('push-master-enabled').checked = settings.enabled !== false;
+  $('push-master-sound').value = settings.foregroundSound || 'default';
+  $('push-master-sound-url').value = settings.foregroundSoundUrl || '';
+  $('push-master-sound-url').style.display = settings.foregroundSound === 'custom' ? '' : 'none';
+  $('push-master-status').textContent = settings.enabled === false ? 'Pausado' : 'Activo';
+  try { localStorage.setItem(SOUND_KEY, JSON.stringify({ mode: settings.foregroundSound || 'default', url: settings.foregroundSoundUrl || '' })); } catch {}
+}
+
+async function refresh() {
+  const data = await call('list', { method: 'GET' });
+  applySettings(data.settings);
+  renderDevices(data.devices);
+}
+
+async function save() {
+  const sound = $('push-master-sound').value;
+  const url = $('push-master-sound-url').value.trim();
+  if (sound === 'custom' && !/^https:\/\//i.test(url)) throw new Error('El sonido personalizado debe ser una URL HTTPS.');
+  const button = $('btn-push-master-save'); button.disabled = true;
+  try {
+    const data = await call('save-settings', { method: 'POST', body: JSON.stringify({ action: 'save-settings', enabled: $('push-master-enabled').checked, foregroundSound: sound, foregroundSoundUrl: url }) });
+    applySettings(data.settings); notice('Preferencias push guardadas.');
+  } finally { button.disabled = false; }
+}
+
+function installForegroundSound() {
+  window.TintinPushPlayForegroundSound = mode => {
+    let config = {};
+    try { config = JSON.parse(localStorage.getItem(SOUND_KEY) || '{}'); } catch {}
+    if ((mode || config.mode) === 'none') return;
+    const url = config.mode === 'custom' ? config.url : '';
+    if (!url) return; // El sonido predeterminado lo decide el sistema operativo.
+    const audio = new Audio(url); audio.volume = 0.75; audio.play().catch(() => {});
+  };
+}
+
+function boot() {
+  const card = $('push-master-card');
+  if (!card) return;
+  installForegroundSound();
+  $('push-master-sound')?.addEventListener('change', event => { $('push-master-sound-url').style.display = event.target.value === 'custom' ? '' : 'none'; });
+  $('btn-push-master-save')?.addEventListener('click', () => save().catch(error => notice(error.message, true)));
+  $('btn-push-master-revoke-all')?.addEventListener('click', async () => {
+    if (!window.confirm('¿Revocar TODOS los dispositivos push? Ninguno recibirá pedidos hasta volver a autorizarlo.')) return;
+    const button = $('btn-push-master-revoke-all'); button.disabled = true;
+    try { const result = await call('revoke-all', { method: 'POST', body: JSON.stringify({ action: 'revoke-all' }) }); notice(`${result.count || 0} dispositivo(s) revocado(s).`); await refresh(); }
+    catch (error) { notice(error.message, true); }
+    finally { button.disabled = false; }
+  });
+  onAuthStateChanged(auth, user => {
+    const allowed = user?.email === SUPER_ADMIN;
+    card.style.display = allowed ? '' : 'none';
+    if (allowed) refresh().catch(error => { $('push-master-status').textContent = 'Error'; notice(error.message, true); });
+  });
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true }); else boot();

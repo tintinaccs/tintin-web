@@ -31,6 +31,7 @@ const FCM_SCOPE = 'https://www.googleapis.com/auth/firebase.messaging';
 const PROCESSING_TAKEOVER_MS = 60 * 1000;
 const MAX_EVENT_ATTEMPTS = 5;
 const MAX_DEVICES_PER_SEND = 20;
+const PUSH_SETTINGS_PATH = 'pushSettings/global';
 
 export function pushEnabled(env) {
   const flag = cleanText(env?.TINTIN_PUSH_ENABLED, 10).toLowerCase();
@@ -160,6 +161,76 @@ export async function listActiveDevices(env) {
     limit: MAX_DEVICES_PER_SEND
   });
   return devices.filter(device => cleanText(device.token, 400).length > 20);
+}
+
+/** Lectura administrativa: nunca se expone el token completo al navegador. */
+export async function listAdminDevices(env) {
+  const devices = await runQuery(env, {
+    from: [{ collectionId: PUSH_DEVICES_COLLECTION }],
+    limit: 100
+  });
+  return devices
+    .map(device => ({
+      id: cleanText(device.id, 140),
+      deviceId: cleanText(device.deviceId, 64),
+      deviceLabel: cleanText(device.deviceLabel, 60) || 'Dispositivo de Tintin',
+      platform: cleanText(device.platform, 20) || 'otro',
+      email: cleanText(device.email, 160),
+      uid: cleanText(device.uid, 160),
+      enabled: device.enabled === true,
+      tokenPreview: device.token ? `${String(device.token).slice(0, 6)}…${String(device.token).slice(-4)}` : '',
+      updatedAt: cleanText(device.updatedAt, 40),
+      lastSeenAt: cleanText(device.lastSeenAt, 40),
+      disabledReason: cleanText(device.disabledReason, 80)
+    }))
+    .sort((a, b) => String(b.lastSeenAt || b.updatedAt).localeCompare(String(a.lastSeenAt || a.updatedAt)));
+}
+
+export async function readPushSettings(env) {
+  const existing = await getDocument(env, PUSH_SETTINGS_PATH);
+  return {
+    enabled: existing?.enabled !== false,
+    foregroundSound: ['default', 'none', 'custom'].includes(existing?.foregroundSound) ? existing.foregroundSound : 'default',
+    foregroundSoundUrl: cleanText(existing?.foregroundSoundUrl, 500),
+    updatedAt: cleanText(existing?.updatedAt, 40),
+    updatedBy: cleanText(existing?.updatedBy, 160)
+  };
+}
+
+export async function savePushSettings(env, { enabled, foregroundSound, foregroundSoundUrl, updatedBy }) {
+  const mode = ['default', 'none', 'custom'].includes(foregroundSound) ? foregroundSound : 'default';
+  const url = mode === 'custom' && /^https:\/\//i.test(String(foregroundSoundUrl || '').trim())
+    ? cleanText(foregroundSoundUrl, 500)
+    : '';
+  const now = new Date();
+  await patchDocument(env, PUSH_SETTINGS_PATH, {
+    enabled: fsBool(enabled !== false),
+    foregroundSound: fsString(mode),
+    foregroundSoundUrl: fsString(url),
+    updatedAt: fsTime(now),
+    updatedBy: fsString(cleanText(updatedBy, 160))
+  });
+  return readPushSettings(env);
+}
+
+export async function revokeDeviceByDocumentId(env, deviceDocId, reason = 'revocado_por_superadmin') {
+  const safeId = cleanText(deviceDocId, 140);
+  if (!/^[A-Za-z0-9_-]{16,160}$/.test(safeId)) throw new Error('Identificador de dispositivo inválido.');
+  const existing = await getDocument(env, `${PUSH_DEVICES_COLLECTION}/${safeId}`);
+  if (!existing) return { found: false };
+  await disableDeviceById(env, safeId, reason);
+  await patchDocument(env, `${PUSH_DEVICES_COLLECTION}/${safeId}`, { token: fsString('') });
+  return { found: true };
+}
+
+export async function revokeAllDevices(env, reason = 'revocado_por_superadmin') {
+  const devices = await listAdminDevices(env);
+  let count = 0;
+  for (const device of devices.filter(item => item.enabled)) {
+    await revokeDeviceByDocumentId(env, device.id, reason);
+    count += 1;
+  }
+  return { count };
 }
 
 export async function findDeviceByToken(env, token) {
@@ -377,6 +448,8 @@ async function closeEvent(env, path, result) {
  */
 export async function dispatchOrderPushEvent(env, type, orderId, externalEventId) {
   if (!pushEnabled(env)) return { ok: true, skipped: 'disabled' };
+  const settings = await readPushSettings(env);
+  if (!settings.enabled) return { ok: true, skipped: 'paused_by_superadmin' };
 
   const eventId = cleanText(externalEventId, 260) || `${type}:${orderId}`;
   const order = await readOrder(env, orderId);
@@ -390,7 +463,7 @@ export async function dispatchOrderPushEvent(env, type, orderId, externalEventId
   }
 
   const devices = await listActiveDevices(env);
-  const content = buildPushContent({ type, orderId, order, eventId });
+  const content = buildPushContent({ type, orderId, order, eventId, foregroundSound: settings.foregroundSound });
   const result = devices.length
     ? await sendToDevices(env, devices, content)
     : { attempted: 0, successCount: 0, failureCount: 0, disabledCount: 0, lastError: '' };
@@ -410,8 +483,10 @@ export async function dispatchOrderPushEvent(env, type, orderId, externalEventId
 /** Notificación de prueba: contenido fijo del servidor y eventId siempre único. */
 export async function sendTestPush(env, { onlyToken }) {
   if (!pushEnabled(env)) return { ok: false, error: 'push_disabled' };
+  const settings = await readPushSettings(env);
+  if (!settings.enabled) return { ok: false, error: 'push_paused_by_superadmin' };
   const eventId = `push.test:${crypto.randomUUID()}`;
-  const content = buildTestPushContent(eventId);
+  const content = buildTestPushContent(eventId, settings.foregroundSound);
   const active = await listActiveDevices(env);
   const devices = onlyToken ? active.filter(device => device.token === onlyToken) : active;
   if (!devices.length) return { ok: false, error: 'no_devices', attempted: 0 };

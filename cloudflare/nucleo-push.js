@@ -80,7 +80,7 @@ export function adminOrderLink(orderId) {
  * Contenido visible + datos internos del push. El pedido llega leído desde
  * Firestore con credenciales de servidor — nunca del navegador ni del webhook.
  */
-export function buildPushContent({ type, orderId, order, eventId }) {
+export function buildPushContent({ type, orderId, order, eventId, foregroundSound = 'default' }) {
   const shortId = shortIdFor(order, orderId);
   const total = formatGuarani(order?.total);
   const url = adminOrderLink(orderId);
@@ -104,7 +104,8 @@ export function buildPushContent({ type, orderId, order, eventId }) {
 
   return {
     title,
-    body,
+      body,
+      foregroundSound: cleanText(foregroundSound, 20) || 'default',
     // Sólo identificadores y texto ya construido: ni nombre, ni teléfono, ni
     // correo, ni dirección, ni coordenadas, ni notas, ni detalle de productos.
     data: {
@@ -120,11 +121,12 @@ export function buildPushContent({ type, orderId, order, eventId }) {
   };
 }
 
-export function buildTestPushContent(eventId) {
+export function buildTestPushContent(eventId, foregroundSound = 'default') {
   const url = '/admin.html?section=configuracion';
   return {
     title: 'Tintin Pedidos',
-    body: 'Las notificaciones están funcionando correctamente.',
+      body: 'Las notificaciones están funcionando correctamente.',
+      foregroundSound: cleanText(foregroundSound, 20) || 'default',
     data: {
       type: 'push.test',
       orderId: '',
