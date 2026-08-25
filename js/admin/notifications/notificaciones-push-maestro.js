@@ -8,6 +8,15 @@ const SOUND_KEY = 'tt_push_foreground_sound';
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 
+function movePushModulesToOwnSection() {
+  const section = $('section-notificaciones-push');
+  if (!section) return;
+  for (const id of ['push-card', 'push-master-card']) {
+    const card = $(id);
+    if (card && card.parentElement !== section) section.appendChild(card);
+  }
+}
+
 async function call(action, init = {}) {
   const user = auth.currentUser;
   if (!user) throw new Error('Necesitás iniciar sesión de nuevo.');
@@ -80,6 +89,7 @@ function installForegroundSound() {
 }
 
 function boot() {
+  movePushModulesToOwnSection();
   const card = $('push-master-card');
   if (!card) return;
   installForegroundSound();
@@ -98,5 +108,7 @@ function boot() {
     if (allowed) refresh().catch(error => { $('push-master-status').textContent = 'Error'; notice(error.message, true); });
   });
 }
+
+window.TintinPushMasterRefresh = () => refresh().catch(error => notice(error.message, true));
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true }); else boot();
