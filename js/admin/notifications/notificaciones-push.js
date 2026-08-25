@@ -19,7 +19,7 @@ const DEVICE_ID_KEY = 'tt_push_device_id';
 const DEVICE_LABEL_KEY = 'tt_push_device_label';
 const LAST_REGISTER_KEY = 'tt_push_last_register';
 const SW_PATH = '/firebase-messaging-sw.js';
-const MESSAGING_SDK = 'https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js';
+const MESSAGING_SDK = 'https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging.js';
 
 const IOS_INSTALL_MESSAGE =
   'Para recibir notificaciones en iPhone, abrí esta página en Safari, tocá Compartir y elegí Agregar a inicio. ' +
@@ -197,8 +197,13 @@ async function ensureServiceWorker() {
 async function ensureMessaging() {
   if (messagingInstance) return messagingInstance;
   const sdk = await loadMessaging();
-  const { getApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-  messagingInstance = sdk.getMessaging(getApp());
+  // Reutilizar la misma instancia que inicializa firebase.js. Cargar
+  // firebase-app desde otra versión/URL crea otro registro de apps y deja
+  // getApp() sin [DEFAULT], que rompe la activación con el error:
+  // Error típico: Firebase App '[DEFAULT]' no estaba inicializada.
+  // Auth pertenece a la app Firebase compartida; reutilizarla evita una
+  // segunda aplicación Firebase y el error de registro [DEFAULT].
+  messagingInstance = sdk.getMessaging(auth.app);
   sdk.onMessage(messagingInstance, payload => {
     const data = payload?.data || {};
     foregroundCount += 1;
