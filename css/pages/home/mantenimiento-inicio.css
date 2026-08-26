@@ -4,8 +4,8 @@
    ============================================================= */
 
 body.tt-home-premium {
-  background: var(--color-background-page, #FFF6FA) !important;
-  color: var(--color-text-primary, #2B2B2B) !important;
+  background: var(--color-background-page, #FDF0F5) !important;
+  color: var(--color-text-primary, #EA7EA3) !important;
   overflow-x: clip;
 }
 
@@ -21,7 +21,7 @@ body.tt-home-premium:not(.tt-home-runtime-ready) *::after {
 body.tt-home-premium .tt-hero,
 body.tt-home-premium .tt-hero-media,
 body.tt-home-premium .tt-hero-overlay {
-  background-color: var(--color-brand-secondary, #F6B7C8);
+  background-color: var(--color-brand-secondary, #F6BFD3);
 }
 
 body.tt-home-premium .tt-hero {
@@ -59,7 +59,7 @@ body.tt-home-premium .tt-hero-img {
   height: 100%;
   object-fit: cover;
   object-position: center;
-  background: var(--color-brand-secondary, #F6B7C8);
+  background: var(--color-brand-secondary, #F6BFD3);
 }
 
 /* home-fit aporta un color sólido detrás de imágenes transparentes, pero el
@@ -73,8 +73,8 @@ body.tt-home-premium .tt-hero-media picture {
 body.tt-home-premium .tt-hero-overlay {
   background: linear-gradient(
     90deg,
-    color-mix(in srgb, var(--color-brand-primary-hover, #8B2642) 68%, transparent),
-    color-mix(in srgb, var(--color-brand-primary, #AD3F67) 32%, transparent) 52%,
+    color-mix(in srgb, var(--color-brand-primary-hover, #EA7EA3) 68%, transparent),
+    color-mix(in srgb, var(--color-brand-primary, #EA7EA3) 32%, transparent) 52%,
     transparent 100%
   ) !important;
 }
@@ -84,7 +84,7 @@ body.tt-home-premium .tt-hero-title,
 body.tt-home-premium .tt-hero-eyebrow,
 body.tt-home-premium .tt-hero-subtitle {
   color: var(--color-text-inverse, #FFFFFF) !important;
-  text-shadow: 0 2px 18px color-mix(in srgb, var(--color-brand-primary-hover, #8B2642) 54%, transparent);
+  text-shadow: 0 2px 18px color-mix(in srgb, var(--color-brand-primary-hover, #EA7EA3) 54%, transparent);
 }
 
 body.tt-home-premium .tt-hero-content {
@@ -97,7 +97,7 @@ body.tt-home-premium .tt-collections-section,
 body.tt-home-premium .tt-look-section,
 body.tt-home-premium .tt-products-section,
 body.tt-home-premium .tt-reviews-section {
-  background-color: var(--color-background-page, #FFF6FA) !important;
+  background-color: var(--color-background-page, #FDF0F5) !important;
   background-image: none !important;
 }
 
@@ -108,8 +108,8 @@ body.tt-home-premium .tt-product-card,
 body.tt-home-premium .tt-look-card,
 body.tt-home-premium .tt-trust-item {
   background-color: var(--color-background-surface, #FFFFFF) !important;
-  border-color: var(--color-card-border, #F1E4E7) !important;
-  color: var(--color-text-primary, #2B2B2B) !important;
+  border-color: var(--color-card-border, #FADCE9) !important;
+  color: var(--color-text-primary, #EA7EA3) !important;
 }
 
 body.tt-home-premium .tt-section-title,
@@ -118,7 +118,7 @@ body.tt-home-premium .tt-watch-title,
 body.tt-home-premium .tt-trust-title,
 body.tt-home-premium .tt-review-name,
 body.tt-home-premium .tt-product-name {
-  color: var(--color-text-title, #2B2B2B) !important;
+  color: var(--color-text-title, #EA7EA3) !important;
 }
 
 body.tt-home-premium .tt-section-sub,
@@ -126,7 +126,7 @@ body.tt-home-premium .tt-editorial-eyebrow,
 body.tt-home-premium .tt-watch-eyebrow,
 body.tt-home-premium .tt-product-price,
 body.tt-home-premium .tt-review-stars {
-  color: var(--color-brand-primary, #AD3F67) !important;
+  color: var(--color-brand-primary, #EA7EA3) !important;
 }
 
 body.tt-home-premium .tt-section-desc,
@@ -135,19 +135,19 @@ body.tt-home-premium .tt-watch-desc,
 body.tt-home-premium .tt-trust-desc,
 body.tt-home-premium .tt-review-text,
 body.tt-home-premium .tt-review-product {
-  color: var(--color-text-secondary, #7B6F72) !important;
+  color: var(--color-text-secondary, #EA7EA3) !important;
 }
 
 body.tt-home-premium .tt-btn {
-  background-color: var(--color-button-primary-background, #AD3F67);
-  border-color: var(--color-button-primary-border, #AD3F67);
+  background-color: var(--color-button-primary-background, #EA7EA3);
+  border-color: var(--color-button-primary-border, #EA7EA3);
   color: var(--color-button-primary-text, #FFFFFF) !important;
 }
 
 body.tt-home-premium .tt-btn-outline {
   background-color: var(--color-button-secondary-background, #FFFFFF);
-  border-color: var(--color-button-secondary-border, #AD3F67);
-  color: var(--color-button-secondary-text, #AD3F67) !important;
+  border-color: var(--color-button-secondary-border, #EA7EA3);
+  color: var(--color-button-secondary-text, #EA7EA3) !important;
 }
 
 body.tt-home-premium .tt-btn:focus-visible,
@@ -172,10 +172,10 @@ body.tt-home-premium #look-grid {
   display: grid;
   place-items: center;
   padding: 28px 20px;
-  border: 1.5px solid var(--color-card-border, #F1E4E7);
+  border: 1.5px solid var(--color-card-border, #FADCE9);
   border-radius: 20px;
   background: var(--color-background-surface, #FFFFFF);
-  color: var(--color-text-secondary, #7B6F72);
+  color: var(--color-text-secondary, #EA7EA3);
   text-align: center;
   font: 600 13px/1.6 Montserrat;
 }
@@ -187,7 +187,7 @@ body.tt-home-premium #look-grid {
 .tt-home-runtime-state strong {
   display: block;
   margin-bottom: 6px;
-  color: var(--color-text-title, #2B2B2B);
+  color: var(--color-text-title, #EA7EA3);
   font-size: 15px;
 }
 
@@ -199,7 +199,7 @@ body.tt-home-premium #look-grid {
   margin-top: 14px;
   padding: 10px 22px;
   border-radius: 999px;
-  background: var(--color-button-primary-background, #AD3F67);
+  background: var(--color-button-primary-background, #EA7EA3);
   color: var(--color-button-primary-text, #FFFFFF) !important;
   font-weight: 800;
   text-decoration: none;
@@ -210,8 +210,8 @@ body.tt-home-premium #look-grid {
   width: 28px;
   height: 28px;
   margin-bottom: 12px;
-  border: 3px solid var(--color-progress-track, #F1E4E7);
-  border-top-color: var(--color-progress-fill, #AD3F67);
+  border: 3px solid var(--color-progress-track, #FADCE9);
+  border-top-color: var(--color-progress-fill, #EA7EA3);
   border-radius: 50%;
   animation: tt-home-spin .8s linear infinite;
 }
@@ -224,7 +224,7 @@ body.tt-home-premium .tt-img-placeholder,
 body.tt-home-premium .tt-coll-card-img,
 body.tt-home-premium .tt-product-img,
 body.tt-home-premium .tt-look-card-img {
-  background-color: var(--color-skeleton-base, #F1E4E7) !important;
+  background-color: var(--color-skeleton-base, #FADCE9) !important;
 }
 
 body.tt-home-premium .tt-img-placeholder img,
@@ -237,15 +237,15 @@ body.tt-home-premium .tt-look-card-img img {
 
 body.tt-home-premium .tt-footer {
   background: var(--color-background-footer, #FFFFFF) !important;
-  color: var(--color-text-primary, #2B2B2B) !important;
-  border-top: 1px solid var(--color-border-primary, #F1E4E7);
+  color: var(--color-text-primary, #EA7EA3) !important;
+  border-top: 1px solid var(--color-border-primary, #FADCE9);
 }
 
 body.tt-home-premium .tt-footer a,
 body.tt-home-premium .tt-footer-col-title,
 body.tt-home-premium .tt-footer-bottom,
 body.tt-home-premium .tt-footer-tagline {
-  color: var(--color-text-primary, #2B2B2B) !important;
+  color: var(--color-text-primary, #EA7EA3) !important;
 }
 
 body.tt-home-premium .tt-footer-wa {
@@ -288,9 +288,9 @@ body.tt-home-premium .tt-wa-float * {
   body.tt-home-premium .tt-hero-overlay {
     background: linear-gradient(
       180deg,
-      color-mix(in srgb, var(--color-brand-primary-hover, #8B2642) 20%, transparent),
-      color-mix(in srgb, var(--color-brand-primary-hover, #8B2642) 72%, transparent) 78%,
-      var(--color-brand-primary-hover, #8B2642) 100%
+      color-mix(in srgb, var(--color-brand-primary-hover, #EA7EA3) 20%, transparent),
+      color-mix(in srgb, var(--color-brand-primary-hover, #EA7EA3) 72%, transparent) 78%,
+      var(--color-brand-primary-hover, #EA7EA3) 100%
     ) !important;
   }
 

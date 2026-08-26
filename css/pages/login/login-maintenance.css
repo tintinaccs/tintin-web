@@ -1,13 +1,13 @@
 /* Tintin — capa estable de tokens, accesibilidad y estados del Login. */
 body:has(.login-page) {
-  --login-page-bg: var(--tt-page-bg, #fff8fb);
+  --login-page-bg: var(--tt-page-bg, #FFFFFF);
   --login-surface: var(--tt-surface, #fff);
-  --login-brand: #CA0169;
-  --login-brand-deep: #A00055;
-  --login-copy: #8A2756;
-  --login-muted: #A85B7C;
-  --login-soft: #FFF0F7;
-  --login-border: #F1BDD4;
+  --login-brand: #EA7EA3;
+  --login-brand-deep: #EA7EA3;
+  --login-copy: #EA7EA3;
+  --login-muted: #EA7EA3;
+  --login-soft: #FDF0F5;
+  --login-border: #F6BFD3;
   --header-h: 0px;
   min-height: 100dvh;
   padding-top: 0 !important;
@@ -189,7 +189,7 @@ body:has(.login-page) :is(
 }
 
 body:has(.login-page) .login-email-input::placeholder {
-  color: #BE7898 !important;
+  color: #EA7EA3 !important;
   opacity: 1;
 }
 
@@ -211,7 +211,7 @@ body:has(.login-page) :is(button, a, input, select):focus-visible {
 }
 
 body:has(.login-page) .login-email-btn {
-  background: linear-gradient(135deg, #D20A72, #A00055) !important;
+  background: linear-gradient(135deg, #EA7EA3, #EA7EA3) !important;
   color: #fff !important;
   box-shadow: 0 13px 28px rgba(160, 0, 85, .24);
 }
@@ -230,15 +230,15 @@ body:has(.login-page) .tt-map-canvas {
 }
 
 body:has(.login-page) .login-error {
-  color: #B22653 !important;
-  border-color: #F0A8BF !important;
-  background: #FFF0F4 !important;
+  color: #EA7EA3 !important;
+  border-color: #F19FB9 !important;
+  background: #FDF0F5 !important;
 }
 
 body:has(.login-page) .login-success {
-  color: #8D2854 !important;
-  border-color: #EDB5CB !important;
-  background: #FFF3F8 !important;
+  color: #EA7EA3 !important;
+  border-color: #F6BFD3 !important;
+  background: #FDF0F5 !important;
 }
 
 /* =============================================================
@@ -332,7 +332,7 @@ body:has(.login-page) .login-success {
       max(12px, env(safe-area-inset-right))
       max(18px, env(safe-area-inset-bottom))
       max(12px, env(safe-area-inset-left)) !important;
-    background: linear-gradient(180deg, #FFF8FC 0%, #FFF0F7 100%) !important;
+    background: linear-gradient(180deg, #FFFFFF 0%, #FDF0F5 100%) !important;
   }
 
   body:has(.login-page) .login-shell,

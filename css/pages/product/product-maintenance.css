@@ -1,7 +1,7 @@
 /* TINTIN — Mantenimiento integral de Producto */
 body.tt-product-maintenance {
-  background: var(--color-background-page, #FFF6FA) !important;
-  color: var(--color-text-primary, #2B2B2B) !important;
+  background: var(--color-background-page, #FDF0F5) !important;
+  color: var(--color-text-primary, #EA7EA3) !important;
   overflow-x: clip;
 }
 
@@ -16,7 +16,7 @@ body.tt-product-maintenance .tt-product-page,
 body.tt-product-maintenance .tinben,
 body.tt-product-maintenance .tinsel,
 body.tt-product-maintenance .tt-related-section {
-  background: var(--color-background-page, #FFF6FA) !important;
+  background: var(--color-background-page, #FDF0F5) !important;
   background-image: none !important;
 }
 
@@ -31,8 +31,8 @@ body.tt-product-maintenance .tt-product-state,
 body.tt-product-maintenance #product-loading,
 body.tt-product-maintenance #product-not-found {
   background: var(--color-background-surface, #FFFFFF) !important;
-  border-color: var(--color-card-border, #F1E4E7) !important;
-  color: var(--color-text-primary, #2B2B2B) !important;
+  border-color: var(--color-card-border, #FADCE9) !important;
+  color: var(--color-text-primary, #EA7EA3) !important;
 }
 
 body.tt-product-maintenance .tt-product-info-panel,
@@ -45,7 +45,7 @@ body.tt-product-maintenance .tt-product-state {
 
 body.tt-product-maintenance .tt-product-info-panel {
   padding: clamp(24px, 3vw, 36px);
-  border: 1px solid var(--color-card-border, #F1E4E7);
+  border: 1px solid var(--color-card-border, #FADCE9);
   border-radius: 24px;
 }
 
@@ -59,7 +59,7 @@ body.tt-product-maintenance .tt-related-card-img,
 body.tt-product-maintenance .tt-related-card-img img,
 body.tt-product-maintenance .tt-product-img,
 body.tt-product-maintenance .tt-product-img img {
-  background: var(--color-background-surface-soft, #FFF9FC) !important;
+  background: var(--color-background-surface-soft, #FFFFFF) !important;
   background-image: none !important;
 }
 
@@ -72,7 +72,7 @@ body.tt-product-maintenance .tt-section-title,
 body.tt-product-maintenance .tt-related-card-name,
 body.tt-product-maintenance #product-not-found h2,
 body.tt-product-maintenance .tt-product-state h2 {
-  color: var(--color-text-title, #2B2B2B) !important;
+  color: var(--color-text-title, #EA7EA3) !important;
 }
 
 body.tt-product-maintenance .tt-product-detail-desc,
@@ -86,7 +86,7 @@ body.tt-product-maintenance .tt-related-status,
 body.tt-product-maintenance #product-loading p,
 body.tt-product-maintenance #product-not-found p,
 body.tt-product-maintenance .tt-product-state p {
-  color: var(--color-text-secondary, #7B6F72) !important;
+  color: var(--color-text-secondary, #EA7EA3) !important;
 }
 
 body.tt-product-maintenance .tt-product-detail-cat,
@@ -96,15 +96,15 @@ body.tt-product-maintenance .tinsel-item-price,
 body.tt-product-maintenance .tinsel-footer-amount,
 body.tt-product-maintenance .tt-section-sub,
 body.tt-product-maintenance .tt-related-card-price {
-  color: var(--color-brand-primary, #AD3F67) !important;
+  color: var(--color-brand-primary, #EA7EA3) !important;
 }
 
 body.tt-product-maintenance .tt-product-status,
 body.tt-product-maintenance .tt-product-badge,
 body.tt-product-maintenance .tinsel-badge {
-  background: var(--color-badge-background, #FDECF2) !important;
-  color: var(--color-badge-text, #AD3F67) !important;
-  border: 1px solid var(--color-card-border, #F1E4E7);
+  background: var(--color-badge-background, #FDF0F5) !important;
+  color: var(--color-badge-text, #EA7EA3) !important;
+  border: 1px solid var(--color-card-border, #FADCE9);
 }
 
 body.tt-product-maintenance .tt-product-status[data-stock-state="out"] {
@@ -118,8 +118,8 @@ body.tt-product-maintenance .tt-share-btn,
 body.tt-product-maintenance .tinsel-qty,
 body.tt-product-maintenance .tinsel-btn-secondary {
   background: var(--color-button-secondary-background, #FFFFFF) !important;
-  border-color: var(--color-button-secondary-border, #AD3F67) !important;
-  color: var(--color-button-secondary-text, #AD3F67) !important;
+  border-color: var(--color-button-secondary-border, #EA7EA3) !important;
+  color: var(--color-button-secondary-text, #EA7EA3) !important;
 }
 
 body.tt-product-maintenance .tt-variant-option.active,
@@ -127,8 +127,8 @@ body.tt-product-maintenance .tt-btn-primary-full,
 body.tt-product-maintenance .tinsel-btn-primary,
 body.tt-product-maintenance #tinsel-checkout-btn,
 body.tt-product-maintenance .tt-added-toast-checkout {
-  background: var(--color-button-primary-background, #AD3F67) !important;
-  border-color: var(--color-button-primary-border, #AD3F67) !important;
+  background: var(--color-button-primary-background, #EA7EA3) !important;
+  border-color: var(--color-button-primary-border, #EA7EA3) !important;
   color: var(--color-button-primary-text, #FFFFFF) !important;
 }
 
@@ -146,14 +146,14 @@ body.tt-product-maintenance .tinben-icon,
 body.tt-product-maintenance .tinsel-item,
 body.tt-product-maintenance .tinsel-qty,
 body.tt-product-maintenance .tinsel-item-img {
-  background-color: var(--color-background-surface-soft, #FFF9FC) !important;
+  background-color: var(--color-background-surface-soft, #FFFFFF) !important;
 }
 
 body.tt-product-maintenance .tinsel-toast,
 body.tt-product-maintenance .tt-added-toast {
   background: var(--color-background-elevated, #FFFFFF) !important;
-  color: var(--color-brand-primary, #AD3F67) !important;
-  border-color: var(--color-card-border, #F1E4E7) !important;
+  color: var(--color-brand-primary, #EA7EA3) !important;
+  border-color: var(--color-card-border, #FADCE9) !important;
   box-shadow: 0 12px 40px var(--color-card-shadow, rgba(212,106,138,.16)) !important;
 }
 
@@ -163,17 +163,17 @@ body.tt-product-maintenance .tt-added-toast {
   display: grid;
   place-items: center;
   padding: 36px 20px;
-  border: 1.5px solid var(--color-card-border, #F1E4E7);
+  border: 1.5px solid var(--color-card-border, #FADCE9);
   border-radius: 20px;
   background: var(--color-background-surface, #FFFFFF);
-  color: var(--color-text-secondary, #7B6F72);
+  color: var(--color-text-secondary, #EA7EA3);
   text-align: center;
 }
 
 .tt-product-runtime-state strong {
   display: block;
   margin-bottom: 7px;
-  color: var(--color-text-title, #2B2B2B);
+  color: var(--color-text-title, #EA7EA3);
   font-size: 16px;
 }
 
@@ -196,9 +196,9 @@ body.tt-product-maintenance .tt-added-toast {
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: var(--color-text-secondary, #7B6F72);
-  background: var(--color-badge-background, #FDECF2);
-  border: 1px solid var(--color-card-border, #F1E4E7);
+  color: var(--color-text-secondary, #EA7EA3);
+  background: var(--color-badge-background, #FDF0F5);
+  border: 1px solid var(--color-card-border, #FADCE9);
   border-radius: 999px;
   padding: 4px 10px 4px 8px;
 }
@@ -230,15 +230,15 @@ body.tt-product-maintenance .tt-related-grid:has(> .tt-related-slot:only-child) 
 
 body.tt-product-maintenance .tt-footer {
   background: var(--color-background-footer, #FFFFFF) !important;
-  color: var(--color-text-primary, #2B2B2B) !important;
-  border-top: 1px solid var(--color-border-primary, #F1E4E7);
+  color: var(--color-text-primary, #EA7EA3) !important;
+  border-top: 1px solid var(--color-border-primary, #FADCE9);
 }
 
 body.tt-product-maintenance .tt-footer a,
 body.tt-product-maintenance .tt-footer-col-title,
 body.tt-product-maintenance .tt-footer-bottom,
 body.tt-product-maintenance .tt-footer-tagline {
-  color: var(--color-text-primary, #2B2B2B) !important;
+  color: var(--color-text-primary, #EA7EA3) !important;
 }
 
 @media (min-width: 1025px) {

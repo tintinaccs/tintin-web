@@ -2,11 +2,11 @@
    queda oculto desde el primer frame. El loader puede sobrescribir visibility
    aunque la herede del body; cuando pasa a .tt-out, :has() revela el contenido
    en el mismo recálculo de estilos, sin un frame blanco/rosado intermedio. */
-html.tt-initializing body.tt-home-premium{visibility:hidden!important;background:#FFF6FA!important}
+html.tt-initializing body.tt-home-premium{visibility:hidden!important;background:#FDF0F5!important}
 html.tt-initializing body.tt-home-premium>#tt-loader{visibility:visible!important}
 html.tt-initializing body.tt-home-premium:has(>#tt-loader.tt-out){visibility:visible!important}
 
-.tt-home-premium{overflow-x:clip;background:#FFF6FA!important;min-height:100svh}
+.tt-home-premium{overflow-x:clip;background:#FDF0F5!important;min-height:100svh}
 .tt-home-premium .container{width:min(100%,1280px)}
 .tt-home-premium .tt-hero{min-height:clamp(560px,88svh,880px)}
 
@@ -41,7 +41,7 @@ html body.tt-home-premium #tt-header-desktop-tablet.tt-header.scrolled{
   mix-blend-mode:normal!important;
   backdrop-filter:none!important;
   -webkit-backdrop-filter:none!important;
-  border-bottom:1px solid #F1E4E7!important;
+  border-bottom:1px solid #FADCE9!important;
   box-shadow:0 2px 18px rgba(173,63,103,.10)!important;
 }
 html body.tt-home-premium #tt-privacy-consent.tt-privacy-consent{
@@ -57,17 +57,17 @@ html body.tt-home-premium #tt-privacy-consent.tt-privacy-consent{
   box-shadow:0 24px 64px rgba(38,24,30,.14),0 2px 8px rgba(38,24,30,.05)!important;
 }
 html body.tt-home-premium #tt-privacy-consent .tt-privacy-btn-primary{
-  background:var(--tt-accent,#AD3F67)!important;
-  background-color:var(--tt-accent,#AD3F67)!important;
-  border-color:var(--tt-accent,#AD3F67)!important;
+  background:var(--tt-accent,#EA7EA3)!important;
+  background-color:var(--tt-accent,#EA7EA3)!important;
+  border-color:var(--tt-accent,#EA7EA3)!important;
   color:#FFFFFF!important;
   opacity:1!important;
 }
 html body.tt-home-premium #tt-privacy-consent .tt-privacy-btn-secondary{
   background:#FFFFFF!important;
   background-color:#FFFFFF!important;
-  border-color:var(--tt-accent,#AD3F67)!important;
-  color:var(--tt-accent,#AD3F67)!important;
+  border-color:var(--tt-accent,#EA7EA3)!important;
+  color:var(--tt-accent,#EA7EA3)!important;
   opacity:1!important;
 }
 
@@ -78,8 +78,8 @@ html body.tt-home-premium #tt-privacy-consent .tt-privacy-btn-secondary{
 .tt-home-premium .tt-hero-media,
 .tt-home-premium .tt-hero-media picture,
 .tt-home-premium .tt-hero-img{
-  background:#FFF6FA!important;
-  background-color:#FFF6FA!important;
+  background:#FDF0F5!important;
+  background-color:#FDF0F5!important;
 }
 .tt-home-premium .tt-hero-media picture{
   width:100%;
@@ -119,15 +119,15 @@ body.tt-home-premium #tt-hero-img{
 body.tt-home-premium .tt-hero-actions .tt-btn-outline{
   background:#FFFFFF!important;
   background-color:#FFFFFF!important;
-  border-color:var(--tt-accent,#AD3F67)!important;
-  color:var(--tt-accent,#AD3F67)!important;
+  border-color:var(--tt-accent,#EA7EA3)!important;
+  color:var(--tt-accent,#EA7EA3)!important;
   box-shadow:0 8px 24px rgba(38,24,30,.12)!important;
   opacity:1!important;
 }
 body.tt-home-premium .tt-hero-actions .tt-btn-outline:hover,
 body.tt-home-premium .tt-hero-actions .tt-btn-outline:focus-visible{
-  background:var(--tt-accent,#AD3F67)!important;
-  background-color:var(--tt-accent,#AD3F67)!important;
+  background:var(--tt-accent,#EA7EA3)!important;
+  background-color:var(--tt-accent,#EA7EA3)!important;
   color:#FFFFFF!important;
 }
 .tt-home-premium .tt-trust-bar,
@@ -145,13 +145,13 @@ body.tt-home-premium .tt-hero-actions .tt-btn-outline:focus-visible{
 .tt-home-motion.is-visible{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
 .tt-scroll-up .tt-home-motion:not(.is-visible){transform:translateY(-28px) scale(.985)}
 .tt-home-motion.tt-home-hero{opacity:1;filter:blur(0);transform:none}
-.tt-home-premium .tt-footer,.tt-home-premium .tt-footer *{color:#2B2B2B!important;opacity:1!important;text-shadow:none!important}
-.tt-home-premium .tt-footer a{color:#2B2B2B!important;text-decoration-color:#AD3F67!important}
-.tt-home-premium .tt-footer a:hover{color:#AD3F67!important}
+.tt-home-premium .tt-footer,.tt-home-premium .tt-footer *{color:#EA7EA3!important;opacity:1!important;text-shadow:none!important}
+.tt-home-premium .tt-footer a{color:#EA7EA3!important;text-decoration-color:#EA7EA3!important}
+.tt-home-premium .tt-footer a:hover{color:#EA7EA3!important}
 .tt-home-premium .tt-footer a.tt-footer-wa,.tt-home-premium .tt-footer a.tt-footer-wa *{color:#fff!important;text-decoration-color:transparent!important}
 .tt-home-premium .tt-footer a.tt-footer-wa:hover{color:#fff!important}
-.tt-home-premium .tt-footer-col-title,.tt-home-premium .tt-footer-brand,.tt-home-premium .tt-footer-logo,.tt-home-premium .tt-footer h2,.tt-home-premium .tt-footer h3{color:#2B2B2B!important;font-weight:800!important;opacity:1!important}
-.tt-home-premium .tt-footer-brand strong,.tt-home-premium .tt-footer-logo strong{font-weight:900!important;color:#2B2B2B!important}
+.tt-home-premium .tt-footer-col-title,.tt-home-premium .tt-footer-brand,.tt-home-premium .tt-footer-logo,.tt-home-premium .tt-footer h2,.tt-home-premium .tt-footer h3{color:#EA7EA3!important;font-weight:800!important;opacity:1!important}
+.tt-home-premium .tt-footer-brand strong,.tt-home-premium .tt-footer-logo strong{font-weight:900!important;color:#EA7EA3!important}
 @media(max-width:768px){.tt-home-premium .tt-hero{min-height:max(520px,calc(100svh - 16px))}.tt-home-premium .section{padding:56px 0}.tt-home-premium .section-sm{padding:42px 0}.tt-home-premium .tt-trust-grid,.tt-home-premium .tt-collections-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tt-home-motion{transform:translateY(22px) scale(.99)}}
 @media(max-width:380px){.tt-home-premium .section{padding:44px 0}.tt-home-premium .section-sm{padding:34px 0}.tt-home-premium .tt-hero{min-height:max(500px,100svh)}}
 @media(max-height:520px) and (orientation:landscape){.tt-home-premium .tt-hero{min-height:500px}.tt-home-premium .tt-hero-content{padding-top:86px;padding-bottom:38px}}
@@ -184,13 +184,13 @@ body.tt-home-premium .tt-collections-grid > .tt-phase4-collections-state{
   justify-content:center;
   gap:14px;
   padding:clamp(24px,4vw,42px)!important;
-  border:1px solid var(--color-card-border,#F1E4E7);
+  border:1px solid var(--color-card-border,#FADCE9);
   border-radius:24px;
   background:
     linear-gradient(135deg,rgba(255,255,255,.96),rgba(255,246,250,.96)),
     var(--color-background-surface,#FFFFFF);
   box-shadow:0 12px 34px rgba(173,63,103,.08);
-  color:var(--color-text-secondary,#7B6F72)!important;
+  color:var(--color-text-secondary,#EA7EA3)!important;
   font-size:.86rem!important;
   font-weight:600;
   line-height:1.6;
@@ -199,13 +199,13 @@ body.tt-home-premium .tt-collections-grid > .tt-phase4-collections-state--info::
   content:"";
   width:34px;
   height:34px;
-  border:3px solid var(--color-progress-track,#F1E4E7);
-  border-top-color:var(--color-progress-fill,#AD3F67);
+  border:3px solid var(--color-progress-track,#FADCE9);
+  border-top-color:var(--color-progress-fill,#EA7EA3);
   border-radius:50%;
   animation:tt-home-collections-spin .8s linear infinite;
 }
 body.tt-home-premium .tt-collections-grid > .tt-phase4-collections-state--error{
-  border-color:color-mix(in srgb,var(--color-brand-primary,#AD3F67) 28%,#FFFFFF);
+  border-color:color-mix(in srgb,var(--color-brand-primary,#EA7EA3) 28%,#FFFFFF);
 }
 @keyframes tt-home-collections-spin{to{transform:rotate(360deg)}}
 

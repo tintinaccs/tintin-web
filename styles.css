@@ -4,43 +4,43 @@
 
 /* ── CSS Variables ── */
 :root {
-  --bg:          #fcf0f6;
-  --bg-soft:     #fcf0f6;
-  --card-bg:     #fef5f8;
+  --bg:          #FDF0F5;
+  --bg-soft:     #FDF0F5;
+  --card-bg:     #FDF0F5;
   /* La paleta de marca vive en css/core/tokens-color.css, que se carga antes que
      esta hoja en todas las páginas y es la que el panel de Super Admin
      modifica en tiempo real (js/components/color/esquema-color.js escribe los tokens
      --color-*). Estos nombres se mantienen porque los usa medio sitio, pero
      derivan de esos tokens en vez de repetir un valor propio.
 
-     Antes --pink-dark era #b84c72 y --color-brand-primary #AD3F67: dos rosas
+     Antes --pink-dark era #EA7EA3 y --color-brand-primary #EA7EA3: dos rosas
      distintos para el mismo color de marca. Se notaba en que al cambiar el
      color desde el panel, lo que usaba tokens cambiaba y lo que usaba
-     --pink-dark quedaba con el rosa viejo. Además #AD3F67 contrasta mejor
+     --pink-dark quedaba con el rosa viejo. Además #EA7EA3 contrasta mejor
      sobre blanco (5.70:1 contra 4.87:1).
 
      El valor viejo queda como fallback: si tokens-color.css no cargara, el
      sitio sigue viéndose como antes en vez de quedarse sin color. */
-  --pink-pale:   var(--color-brand-accent, #fce4ec);
-  --pink:        #e8a0b4;
-  --pink-mid:    #d4748e;
-  --pink-dark:   var(--color-brand-primary, #b84c72);
-  --rose:        var(--color-brand-primary-hover, #8b2642);
+  --pink-pale:   var(--color-brand-accent, #FADCE9);
+  --pink:        #F19FB9;
+  --pink-mid:    #EA7EA3;
+  --pink-dark:   var(--color-brand-primary, #EA7EA3);
+  --rose:        var(--color-brand-primary-hover, #EA7EA3);
   /* --gold/--text*: css/core/tema-unificado-tintin.css redeclara estos mismos
      nombres con !important en :root y gana en todas las páginas que la
-     cargan (todas menos admin-images.html) — esos valores (#AD3F67/#2B2B2B/
-     #7B6F72) son los que realmente se ven. Los de acá quedaban desalineados:
-     un texto "gold" #c9a96e y un texto principal #C86B86 dan menos de 2.3:1
+     cargan (todas menos admin-images.html) — esos valores (#EA7EA3/#EA7EA3/
+     #EA7EA3) son los que realmente se ven. Los de acá quedaban desalineados:
+     un texto "gold" #EA7EA3 y un texto principal #EA7EA3 dan menos de 2.3:1
      y 3.6:1 de contraste sobre blanco. Se alinean a los valores reales para
      que no quede una verdad distinta "en el papel" de la que se renderiza. */
-  --gold:        #AD3F67;
-  --gold-hover:  #8B2642;
-  --gold-light:  #FFF9FC;
-  --text:        #2B2B2B;
-  --text-sec:    #7B6F72;
-  --text-muted:  #7B6F72;
-  --text-title:  #2B2B2B;
-  --border:      #f0d8e0;
+  --gold:        #EA7EA3;
+  --gold-hover:  #EA7EA3;
+  --gold-light:  #FFFFFF;
+  --text:        #EA7EA3;
+  --text-sec:    #EA7EA3;
+  --text-muted:  #EA7EA3;
+  --text-title:  #EA7EA3;
+  --border:      #FADCE9;
   --white:       #ffffff;
   --whatsapp:    #25d366;
   --whatsapp-h:  #1fba58;
@@ -86,7 +86,7 @@ html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; max-width: 
   padding: 13px 20px;
   border: 1px solid rgba(255,255,255,.3);
   border-radius: 16px;
-  background: #8f294f;
+  background: #EA7EA3;
   color: #fff !important;
   box-shadow: 0 12px 34px rgba(57,16,31,.28);
   font-size: .84rem;
@@ -99,7 +99,7 @@ html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; max-width: 
   transition: opacity .22s ease, transform .22s ease;
 }
 .tt-cart-feedback.is-visible { opacity: 1; transform: translate(-50%, 0); }
-.tt-cart-feedback[data-state="warning"] { background: #7e2546; }
+.tt-cart-feedback[data-state="warning"] { background: #EA7EA3; }
 @media (max-width: 768px) {
   .tt-cart-feedback {
     bottom: max(84px, calc(76px + env(safe-area-inset-bottom)));
@@ -131,7 +131,7 @@ html {
   border: 2px solid var(--color-scrollbar-track, #FDF0F5);
   background-clip: padding-box;
 }
-::-webkit-scrollbar-thumb:hover { background: #D9648C; }
+::-webkit-scrollbar-thumb:hover { background: #EA7EA3; }
 ::-webkit-scrollbar-corner { background: var(--color-scrollbar-track, #FDF0F5); }
 
 body {
@@ -335,7 +335,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 /* ── Image Placeholders ── */
 .tt-img-placeholder {
   width: 100%;
-  background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 40%, #ede0f0 100%);
+  background: linear-gradient(135deg, #FADCE9 0%, #FADCE9 40%, #FADCE9 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -351,15 +351,15 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 }
 
 .tt-img-placeholder-rose {
-  background: linear-gradient(135deg, #f5d4e0 0%, #e8a0b4 50%, #d4748e 100%);
+  background: linear-gradient(135deg, #FADCE9 0%, #F19FB9 50%, #EA7EA3 100%);
 }
 
 .tt-img-placeholder-nude {
-  background: linear-gradient(135deg, #f5ead0 0%, #f0d8c0 40%, #e8cba8 100%);
+  background: linear-gradient(135deg, #FADCE9 0%, #F6BFD3 40%, #F6BFD3 100%);
 }
 
 .tt-img-placeholder-purple {
-  background: linear-gradient(135deg, #ede0f0 0%, #d4b8e0 50%, #b890c8 100%);
+  background: linear-gradient(135deg, #FADCE9 0%, #F6BFD3 50%, #F19FB9 100%);
 }
 
 /* ═══════════════════════════════════════════════
@@ -647,12 +647,12 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   width: 44px;
   height: 44px;
   border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, #fce4ec, #f5d4e0);
+  background: linear-gradient(135deg, #FADCE9, #FADCE9);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.3rem;
-  color: #b84c72;
+  color: #EA7EA3;
 }
 
 .tt-dropdown-label {
@@ -1091,7 +1091,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   width: 48px;
   height: 48px;
   border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, #fce4ec, #f5d4e0);
+  background: linear-gradient(135deg, #FADCE9, #FADCE9);
   flex-shrink: 0;
 }
 
@@ -1126,7 +1126,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   align-items: center;
   justify-content: flex-start;
   text-align: left;
-  background: #1a0610;
+  background: #EA7EA3;
   /* El primer gesto real puede empezar sobre el fondo del hero — nunca debe
      competir con el scroll vertical nativo. */
   touch-action: pan-y;
@@ -1143,7 +1143,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   z-index: 0;
   width: 100%;
   height: 100%;
-  background: #1a0610;
+  background: #EA7EA3;
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
@@ -1615,7 +1615,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-watch-feature-img .tt-img-placeholder {
   height: 100%;
   min-height: 400px;
-  background: linear-gradient(135deg, #c9a96e 0%, #f5ead0 40%, #fce4ec 70%, #e8a0b4 100%);
+  background: linear-gradient(135deg, #EA7EA3 0%, #FADCE9 40%, #FADCE9 70%, #F19FB9 100%);
 }
 
 .tt-watch-feature-content {
@@ -1717,7 +1717,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-product-img-placeholder {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 40%, #ede0f0 100%);
+  background: linear-gradient(135deg, #FADCE9 0%, #FADCE9 40%, #FADCE9 100%);
   transition: transform 0.4s ease;
 }
 
@@ -1725,7 +1725,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-prod-placeholder {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 40%, #ede0f0 100%);
+  background: linear-gradient(135deg, #FADCE9 0%, #FADCE9 40%, #FADCE9 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1738,7 +1738,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   display: block;
 }
 .tt-prod-ph-svg {
-  background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
+  background: linear-gradient(135deg, #FADCE9 0%, #F6BFD3 100%);
   position: relative;
 }
 .tt-prod-ph-svg::after {
@@ -1904,7 +1904,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   width: 40px;
   height: 40px;
   border-radius: var(--radius-pill);
-  background: linear-gradient(135deg, #fce4ec, #f5d4e0);
+  background: linear-gradient(135deg, #FADCE9, #FADCE9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2522,7 +2522,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-cart-goto-btn {
   display: inline-block;
   padding: 12px 28px;
-  background: var(--acc, #b84c72);
+  background: var(--acc, #EA7EA3);
   color: #fff !important;
   font-size: 13px;
   font-weight: 700;
@@ -2531,7 +2531,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   border-radius: 30px;
   transition: background 0.2s;
 }
-.tt-cart-goto-btn:hover { background: #9b3d5e; }
+.tt-cart-goto-btn:hover { background: #EA7EA3; }
 
 .tt-cart-item {
   display: flex;
@@ -2688,7 +2688,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 }
 .tt-skeleton-line,
 .tt-skeleton-img {
-  background: linear-gradient(90deg, #f0d8e0 25%, #fce4ec 50%, #f0d8e0 75%);
+  background: linear-gradient(90deg, #FADCE9 25%, #FADCE9 50%, #FADCE9 75%);
   background-size: 800px 100%;
   animation: tt-shimmer 1.4s ease-in-out infinite;
   border-radius: var(--radius-sm);
@@ -2705,7 +2705,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
    INNER PAGES HERO
 ═══════════════════════════════════════════════ */
 .tt-page-hero {
-  background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 50%, #ede0f0 100%);
+  background: linear-gradient(135deg, #FADCE9 0%, #FADCE9 50%, #FADCE9 100%);
   padding: calc(var(--header-h) + 40px) 0 40px;
   text-align: center;
 }
@@ -2733,7 +2733,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   border-radius: 16px;
   padding: 28px 32px;
   margin-bottom: 24px;
-  border: 1px solid #f0d8e0;
+  border: 1px solid #FADCE9;
 }
 .tt-info-title {
   font-family:Montserrat;
@@ -2753,7 +2753,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 6px 20px;
-  border-top: 1px dashed #f0d8e0;
+  border-top: 1px dashed #FADCE9;
   padding-top: 16px;
 }
 .tt-city-price-list li {
@@ -2777,7 +2777,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 }
 
 .tt-faq-item {
-  border-bottom: 1px solid #f0d8e0;
+  border-bottom: 1px solid #FADCE9;
   padding: 20px 0;
 }
 .tt-faq-item:last-child { border-bottom: none; }
@@ -3575,7 +3575,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   cursor: pointer;
   margin-top: 4px;
 }
-.tt-product-favorite-icon.is-favorite { background: #f8dce7; border-color: var(--pink-dark); }
+.tt-product-favorite-icon.is-favorite { background: #FADCE9; border-color: var(--pink-dark); }
 
 .tt-product-wa-link {
   min-width: 44px;
@@ -4092,7 +4092,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
     margin: 18px 0 0;
     padding: 12px 0;
     border: 0;
-    border-top: 1px solid var(--border, #eadde2);
+    border-top: 1px solid var(--border, #FADCE9);
     background: none;
     font: inherit;
     font-weight: 700;

@@ -15,21 +15,21 @@
 }
 
 :is(.modal-content, .tt-modal-content, .ck-modal-content, .adm-modal-content) {
-  border: 1px solid var(--tt-brand-border, #efbdd2) !important;
+  border: 1px solid var(--tt-brand-border, #F6BFD3) !important;
   border-radius: clamp(20px, 2.5vw, 30px) !important;
   background: #fff !important;
-  color: var(--tt-brand-copy, #84264f) !important;
+  color: var(--tt-brand-copy, #EA7EA3) !important;
   box-shadow: 0 24px 68px rgba(122, 0, 61, .2) !important;
 }
 
 :is(.modal-content, .tt-modal-content, .ck-modal-content, .adm-modal-content)
 :is(h1,h2,h3,h4,label,strong) {
-  color: var(--tt-brand-copy, #84264f) !important;
+  color: var(--tt-brand-copy, #EA7EA3) !important;
 }
 
 :is(.modal-content, .tt-modal-content, .ck-modal-content, .adm-modal-content)
 :is(p,small,.muted) {
-  color: var(--tt-brand-muted, #a75a7b) !important;
+  color: var(--tt-brand-muted, #EA7EA3) !important;
 }
 
 /* Contenedores reales que existen en perfil y checkout. */
@@ -55,7 +55,7 @@
   .adm-modal-header
 ) {
   border-bottom-color: transparent !important;
-  background: linear-gradient(135deg, #d81779, #9b0051) !important;
+  background: linear-gradient(135deg, #EA7EA3, #EA7EA3) !important;
   color: #fff !important;
 }
 

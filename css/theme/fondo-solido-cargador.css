@@ -1,12 +1,12 @@
 html:has(body #tt-loader:not(.tt-out)),
 html:has(body #tt-loader:not(.tt-out)) body {
-  background: #FFADD1 !important;
-  background-color: #FFADD1 !important;
+  background: #F6BFD3 !important;
+  background-color: #F6BFD3 !important;
 }
 
 html body #tt-loader {
-  background: #FFADD1 !important;
-  background-color: #FFADD1 !important;
+  background: #F6BFD3 !important;
+  background-color: #F6BFD3 !important;
   background-image: none !important;
   background-blend-mode: normal !important;
   backdrop-filter: none !important;
@@ -26,8 +26,8 @@ html body #tt-loader::before {
   inset: 0;
   z-index: 0;
   display: block;
-  background: #FFADD1 !important;
-  background-color: #FFADD1 !important;
+  background: #F6BFD3 !important;
+  background-color: #F6BFD3 !important;
   background-image: none !important;
   opacity: 1 !important;
   pointer-events: none;
@@ -138,8 +138,8 @@ html body:has(.login-page).tt-public-shell-mounted {
    sitio. Esta regla final anula únicamente la excepción visual antigua; el
    estado interno tt-auth-silent-transition conserva su comportamiento. */
 html:has(.login-page) body #tt-loader {
-  background: #FFADD1 !important;
-  background-color: #FFADD1 !important;
+  background: #F6BFD3 !important;
+  background-color: #F6BFD3 !important;
 }
 
 html:has(.login-page) body #tt-loader-spin-wrap {

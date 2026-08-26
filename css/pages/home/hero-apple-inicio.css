@@ -13,7 +13,7 @@ html body.tt-home-premium .tt-hero-content {
   box-shadow:
     0 24px 70px rgba(79, 24, 46, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.72);
-  color: #2b2024 !important;
+  color: #EA7EA3 !important;
   text-shadow: none !important;
   -webkit-backdrop-filter: blur(22px) saturate(1.18);
   backdrop-filter: blur(22px) saturate(1.18);
@@ -24,7 +24,7 @@ html body.tt-home-premium .tt-hero-content :is(
   .tt-hero-title,
   .tt-hero-subtitle
 ) {
-  color: #2b2024 !important;
+  color: #EA7EA3 !important;
   text-shadow: none !important;
 }
 
@@ -85,7 +85,7 @@ html body.tt-home-premium .tt-hero-actions .tt-btn:hover {
     min-height: 0 !important;
     padding: 0 0 clamp(16px, 3vw, 28px);
     background:
-      linear-gradient(180deg, #f9c9d9 0%, #fff6fa 100%) !important;
+      linear-gradient(180deg, #F6BFD3 0%, #FDF0F5 100%) !important;
     overflow: hidden;
   }
 
@@ -130,7 +130,7 @@ html body.tt-home-premium .tt-hero-actions .tt-btn:hover {
   html body.tt-home-premium .tt-hero-eyebrow {
     justify-content: center;
     margin-bottom: 12px;
-    color: #a0335b !important;
+    color: #EA7EA3 !important;
     font-size: clamp(.68rem, 1.5vw, .78rem);
     letter-spacing: .24em;
   }
@@ -138,7 +138,7 @@ html body.tt-home-premium .tt-hero-actions .tt-btn:hover {
   html body.tt-home-premium .tt-hero-title {
     width: 100%;
     margin: 0 0 clamp(20px, 3vw, 28px);
-    color: #2b2024 !important;
+    color: #EA7EA3 !important;
     font-size: clamp(2rem, 5.4vw, 3.15rem) !important;
     line-height: 1.02;
     letter-spacing: -.035em;

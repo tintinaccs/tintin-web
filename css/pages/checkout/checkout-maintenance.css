@@ -1,12 +1,12 @@
 /* TINTIN — Mantenimiento integral 05: Checkout */
 body:has(.ck-body) {
   --ck-surface: var(--tt-surface, #fff);
-  --ck-page: var(--tt-page-bg, #fff8fb);
-  --ck-text: var(--tt-text, #352b2f);
-  --ck-muted: var(--tt-text-muted, #75666c);
-  --ck-accent: var(--tt-accent, #ad3f67);
-  --ck-accent-soft: var(--tt-accent-soft, #f9e8ef);
-  --ck-border: var(--tt-border, #edcbd7);
+  --ck-page: var(--tt-page-bg, #FFFFFF);
+  --ck-text: var(--tt-text, #EA7EA3);
+  --ck-muted: var(--tt-text-muted, #EA7EA3);
+  --ck-accent: var(--tt-accent, #EA7EA3);
+  --ck-accent-soft: var(--tt-accent-soft, #FDF0F5);
+  --ck-border: var(--tt-border, #F6BFD3);
   background: var(--ck-page) !important;
   color: var(--ck-text) !important;
 }

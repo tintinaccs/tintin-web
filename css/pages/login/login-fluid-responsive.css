@@ -2,11 +2,11 @@
    Esta capa se carga después de login.css y login-maintenance.css. */
 
 body:has(.login-page) {
-  --login-accent: var(--tt-brand, #CA0169);
-  --login-accent-deep: var(--tt-brand-deep, #8A2756);
+  --login-accent: var(--tt-brand, #EA7EA3);
+  --login-accent-deep: var(--tt-brand-deep, #EA7EA3);
   --login-surface: var(--tt-surface, #FFFFFF);
-  --login-surface-soft: var(--tt-surface-soft, #FFF5FA);
-  --login-page-fluid: var(--tt-page-bg, #FFF8FC);
+  --login-surface-soft: var(--tt-surface-soft, #FDF0F5);
+  --login-page-fluid: var(--tt-page-bg, #FFFFFF);
   --login-border-fluid: color-mix(in srgb, var(--login-accent) 18%, white);
   --login-gutter: clamp(12px, 2.3vw, 42px);
   --login-section-gap: clamp(14px, 1.6vw, 24px);
@@ -24,7 +24,7 @@ body:has(.login-page) .login-page {
   background:
     radial-gradient(circle at 8% 16%, rgba(202, 1, 105, .10), transparent 31%),
     radial-gradient(circle at 92% 78%, rgba(160, 0, 85, .08), transparent 29%),
-    linear-gradient(145deg, #FFF9FC 0%, #FFF1F7 54%, #FDE9F2 100%) !important;
+    linear-gradient(145deg, #FFFFFF 0%, #FDF0F5 54%, #FDF0F5 100%) !important;
 }
 
 body:has(.login-page) .login-shell {

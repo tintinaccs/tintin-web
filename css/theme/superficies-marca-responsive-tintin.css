@@ -5,12 +5,12 @@
    ============================================================= */
 
 :root {
-  --tt-brand-pink: #ca0169;
-  --tt-brand-pink-deep: #97004f;
-  --tt-brand-pink-soft: #fff0f7;
-  --tt-brand-copy: #84264f;
-  --tt-brand-muted: #a75a7b;
-  --tt-brand-border: #efbdd2;
+  --tt-brand-pink: #EA7EA3;
+  --tt-brand-pink-deep: #EA7EA3;
+  --tt-brand-pink-soft: #FDF0F5;
+  --tt-brand-copy: #EA7EA3;
+  --tt-brand-muted: #EA7EA3;
+  --tt-brand-border: #F6BFD3;
   --tt-brand-white: #ffffff;
   --tt-fit-gutter: clamp(16px, 4vw, 72px);
   --tt-fit-radius: clamp(18px, 2.2vw, 30px);
@@ -59,7 +59,7 @@
   border: 0 !important;
   background:
     radial-gradient(circle at 15% 0%, rgba(255,255,255,.24), transparent 38%),
-    linear-gradient(135deg, #dd1b7e 0%, var(--tt-brand-pink) 48%, var(--tt-brand-pink-deep) 100%) !important;
+    linear-gradient(135deg, #EA7EA3 0%, var(--tt-brand-pink) 48%, var(--tt-brand-pink-deep) 100%) !important;
   box-shadow: 0 14px 34px rgba(111, 0, 55, .22);
 }
 
@@ -147,7 +147,7 @@
   padding: 13px 15px;
   border: 1px solid rgba(255,255,255,.65);
   border-radius: 20px;
-  background: linear-gradient(135deg, #d90f76, #a30057) !important;
+  background: linear-gradient(135deg, #EA7EA3, #EA7EA3) !important;
   color: #fff !important;
   box-shadow: 0 12px 28px rgba(151,0,79,.18);
 }
@@ -183,15 +183,15 @@
 
 .tt-account-drawer .tt-account-item:hover,
 .tt-account-drawer .tt-account-item:focus-visible {
-  border-color: #de75a3 !important;
-  background: #fff8fb !important;
+  border-color: #EA7EA3 !important;
+  background: #FFFFFF !important;
   color: var(--tt-brand-pink-deep) !important;
   transform: translateY(-1px);
 }
 
 .tt-account-drawer .tt-account-logout {
   margin-top: auto;
-  color: #a01e54 !important;
+  color: #EA7EA3 !important;
 }
 
 .tt-account-drawer .tt-account-divider {
@@ -218,13 +218,13 @@
 .tt-collections-sheet,
 .tt-search-panel {
   border-color: var(--tt-brand-border) !important;
-  background: #fff9fc !important;
+  background: #FFFFFF !important;
   box-shadow: var(--tt-fit-shadow) !important;
 }
 
 :is(.tt-cart-header, .tt-sheet-header) {
   border-color: transparent !important;
-  background: linear-gradient(135deg, #dc197c, #a00055) !important;
+  background: linear-gradient(135deg, #EA7EA3, #EA7EA3) !important;
   color: #fff !important;
 }
 
@@ -264,7 +264,7 @@
    CHECKOUT Y FORMULARIOS — ancho útil real y textos de marca
    ============================================================= */
 html:has(.ck-body) body {
-  background: #fff6fa !important;
+  background: #FDF0F5 !important;
   color: var(--tt-brand-copy) !important;
 }
 
@@ -296,12 +296,12 @@ html:has(.ck-body) body {
 }
 
 :is(.ck-panel, .tt-map-block) :is(input, textarea)::placeholder {
-  color: #bd7897 !important;
+  color: #EA7EA3 !important;
   opacity: 1;
 }
 
 :is(.ck-btn-primary, .tt-map-locate, #btn-save-profile) {
-  background: linear-gradient(135deg, #d50d74, #9d0052) !important;
+  background: linear-gradient(135deg, #EA7EA3, #EA7EA3) !important;
   color: #fff !important;
   box-shadow: 0 12px 28px rgba(151,0,79,.22);
 }

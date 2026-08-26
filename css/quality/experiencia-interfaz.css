@@ -8,13 +8,13 @@
   --tt-motion-normal: 240ms;
   --tt-motion-slow: 360ms;
   --tt-motion-ease: cubic-bezier(.22, .61, .36, 1);
-  --tt-state-bg: color-mix(in srgb, var(--tt-page-bg, #fff6fa) 84%, #fff);
-  --tt-state-border: color-mix(in srgb, var(--color-brand-primary, #ad3f67) 20%, transparent);
-  --tt-state-text: var(--tt-text, #2b2b2b);
-  --tt-state-muted: var(--tt-text-muted, #666);
-  --tt-danger: #a12645;
+  --tt-state-bg: color-mix(in srgb, var(--tt-page-bg, #FDF0F5) 84%, #fff);
+  --tt-state-border: color-mix(in srgb, var(--color-brand-primary, #EA7EA3) 20%, transparent);
+  --tt-state-text: var(--tt-text, #EA7EA3);
+  --tt-state-muted: var(--tt-text-muted, #EA7EA3);
+  --tt-danger: #EA7EA3;
   --tt-success: #287a55;
-  --tt-loader-strong: #ca0169;
+  --tt-loader-strong: #EA7EA3;
   --tt-loader-soft: rgba(202, 1, 105, .22);
 }
 
@@ -34,7 +34,7 @@
 
 .tt-interactive-control:focus-visible,
 .tt-state-action:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--color-brand-primary, #ad3f67) 35%, transparent);
+  outline: 3px solid color-mix(in srgb, var(--color-brand-primary, #EA7EA3) 35%, transparent);
   outline-offset: 3px;
 }
 
@@ -128,8 +128,8 @@
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--color-brand-primary, #ad3f67) 12%, #fff);
-  color: var(--color-brand-primary, #ad3f67);
+  background: color-mix(in srgb, var(--color-brand-primary, #EA7EA3) 12%, #fff);
+  color: var(--color-brand-primary, #EA7EA3);
 }
 
 .tt-state-icon::before {
@@ -210,9 +210,9 @@
   justify-content: center;
   margin-top: 4px;
   padding: 10px 20px;
-  border: 1px solid var(--color-brand-primary, #ad3f67);
+  border: 1px solid var(--color-brand-primary, #EA7EA3);
   border-radius: 999px;
-  background: var(--color-brand-primary, #ad3f67);
+  background: var(--color-brand-primary, #EA7EA3);
   color: #fff !important;
   font: inherit;
   font-size: .84rem;
@@ -222,8 +222,8 @@
 }
 
 .tt-state-action:hover {
-  background: var(--color-brand-primary-hover, #8b2642);
-  border-color: var(--color-brand-primary-hover, #8b2642);
+  background: var(--color-brand-primary-hover, #EA7EA3);
+  border-color: var(--color-brand-primary-hover, #EA7EA3);
 }
 
 .tt-skeleton,
@@ -231,7 +231,7 @@
   position: relative;
   overflow: hidden;
   border-radius: 10px;
-  background: color-mix(in srgb, var(--color-brand-primary, #ad3f67) 8%, #fff);
+  background: color-mix(in srgb, var(--color-brand-primary, #EA7EA3) 8%, #fff);
 }
 
 .tt-skeleton::after,
@@ -250,9 +250,9 @@
 
 .tt-img-error {
   min-height: 72px;
-  border: 1px dashed color-mix(in srgb, var(--color-brand-primary, #ad3f67) 28%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--color-brand-primary, #EA7EA3) 28%, transparent);
   border-radius: 10px;
-  background: linear-gradient(135deg, #fff6fa, #f9e5ed);
+  background: linear-gradient(135deg, #FDF0F5, #FADCE9);
   opacity: .58;
   filter: grayscale(.65);
 }

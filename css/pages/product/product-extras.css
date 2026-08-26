@@ -7,9 +7,9 @@
 
 /* ── 02 — BENEFICIOS RÁPIDOS ───────────────────────────────── */
 .tinben{
-  --acc: var(--tt-accent, #AD3F67);
+  --acc: var(--tt-accent, #EA7EA3);
   --bg: #fdf0f5;
-  --fg: #2d2d2d;
+  --fg: #EA7EA3;
   --card-bg: #ffffff;
   --r: 16px;
   background: var(--bg);
@@ -123,10 +123,10 @@
 
 /* ── 05 — TU SELECCIÓN (LISTA RÁPIDA) ──────────────────────── */
 .tinsel{
-  --acc: var(--tt-accent, #AD3F67);
+  --acc: var(--tt-accent, #EA7EA3);
   --bg: #fdf0f5;
-  --fg: #2d2d2d;
-  --pbtn: var(--tt-accent, #AD3F67);
+  --fg: #EA7EA3;
+  --pbtn: var(--tt-accent, #EA7EA3);
   --pbtnT: #ffffff;
   --r: 16px;
   background: var(--bg);
@@ -292,7 +292,7 @@
   box-shadow:0 8px 22px rgba(212,120,154,.3);
 }
 #tinsel-checkout-btn{
-  background:#8B1E47 !important;
+  background:#EA7EA3 !important;
   color:#FFFFFF !important;
 }
 .tinsel-btn-primary:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(212,120,154,.42); }
@@ -307,7 +307,7 @@
   bottom:clamp(80px,10vw,110px); left:50%;
   transform:translateX(-50%) translateY(14px);
   opacity:0;
-  background:#fff; color:var(--acc, #AD3F67);
+  background:#fff; color:var(--acc, #EA7EA3);
   border:1px solid rgba(212,120,154,.2);
   box-shadow:0 12px 40px rgba(0,0,0,.12);
   padding:11px 22px; border-radius:50px;
@@ -356,8 +356,8 @@
   .tinsel-item-name{ font-size:11.5px; }
   .tinsel-qbtn{ font-size:16px; }
 }
-.tt-product-specifications{margin:18px 0 0;border-top:1px solid var(--border,#eadde2)}
+.tt-product-specifications{margin:18px 0 0;border-top:1px solid var(--border,#FADCE9)}
 .tt-product-specifications[hidden]{display:none}
-.tt-product-specifications>div{display:grid;grid-template-columns:minmax(90px,130px) 1fr;gap:14px;padding:10px 0;border-bottom:1px solid var(--border,#eadde2)}
-.tt-product-specifications dt{font-size:12px;font-weight:800;text-transform:uppercase;color:var(--text-muted,#725f66)}
-.tt-product-specifications dd{margin:0;font-size:13px;line-height:1.5;color:var(--text,#30272a)}
+.tt-product-specifications>div{display:grid;grid-template-columns:minmax(90px,130px) 1fr;gap:14px;padding:10px 0;border-bottom:1px solid var(--border,#FADCE9)}
+.tt-product-specifications dt{font-size:12px;font-weight:800;text-transform:uppercase;color:var(--text-muted,#EA7EA3)}
+.tt-product-specifications dd{margin:0;font-size:13px;line-height:1.5;color:var(--text,#EA7EA3)}

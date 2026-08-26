@@ -44,7 +44,7 @@
 
 .tt-address-result span {
   /* Contraste ≥ 4.5:1 sobre blanco para el renglón secundario. */
-  color: #6b5259;
+  color: #EA7EA3;
   font-size: 12.5px;
   line-height: 1.35;
 }
@@ -56,7 +56,7 @@
 
 .tt-address-selected {
   margin: -4px 0 12px;
-  color: #6b5259;
+  color: #EA7EA3;
   font-size: 12.5px;
   line-height: 1.4;
 }
@@ -73,7 +73,7 @@
 
 .tt-map-tip {
   margin: 0 0 8px;
-  color: #6b5259;
+  color: #EA7EA3;
   font-size: 12.5px;
   line-height: 1.45;
 }
@@ -109,20 +109,20 @@
 .tt-map-result:hover { background: rgba(173,63,103,.09); }
 
 .tt-map-result-name {
-  color: var(--login-ink, #2b2b2b);
+  color: var(--login-ink, #EA7EA3);
   font-size: 14px;
   font-weight: 650;
 }
 
 .tt-map-result-addr {
   margin-top: 2px;
-  color: #6b5259;
+  color: #EA7EA3;
   font-size: 12.5px;
   line-height: 1.35;
 }
 
 .tt-map-result-empty {
-  color: #6b5259;
+  color: #EA7EA3;
   font-size: 13px;
   cursor: default;
 }
@@ -137,7 +137,7 @@
   border: 1px solid rgba(125,23,58,.18);
   border-radius: 14px;
   background: #fff;
-  color: var(--color-brand-primary, #ad3f67);
+  color: var(--color-brand-primary, #EA7EA3);
   font: 650 13.5px/1 "Montserrat", sans-serif;
   cursor: pointer;
 }
@@ -154,7 +154,7 @@
 
 .tt-map-coords {
   margin: 0 0 12px;
-  color: #6b5259;
+  color: #EA7EA3;
   font-size: 12.5px;
   line-height: 1.4;
 }

@@ -1,11 +1,11 @@
 /* TINTIN — mantenimiento integral de about.html */
 .tt-about-maintained {
   --about-surface: var(--surface, #fff);
-  --about-soft: var(--pink-pale, #fff6fa);
-  --about-text: var(--text, #2b2b2b);
-  --about-muted: var(--text-muted, #6f6267);
-  --about-accent: var(--pink-dark, #ad3f67);
-  --about-border: var(--border, #f0d6df);
+  --about-soft: var(--pink-pale, #FDF0F5);
+  --about-text: var(--text, #EA7EA3);
+  --about-muted: var(--text-muted, #EA7EA3);
+  --about-accent: var(--pink-dark, #EA7EA3);
+  --about-border: var(--border, #FADCE9);
   background: var(--about-surface);
   color: var(--about-text);
 }

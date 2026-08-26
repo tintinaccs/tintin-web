@@ -1,7 +1,7 @@
 /* TINTIN — Mantenimiento integral del Catálogo */
 body.tt-catalog-maintenance {
-  background: var(--color-background-page, #FFF6FA) !important;
-  color: var(--color-text-primary, #2B2B2B) !important;
+  background: var(--color-background-page, #FDF0F5) !important;
+  color: var(--color-text-primary, #EA7EA3) !important;
   overflow-x: clip;
 }
 
@@ -19,20 +19,20 @@ body.tt-catalog-maintenance .cat-layout {
 }
 
 body.tt-catalog-maintenance .cat-hero {
-  background: var(--color-background-surface-soft, #FFF9FC) !important;
-  border: 1px solid var(--color-border-primary, #F1E4E7);
+  background: var(--color-background-surface-soft, #FFFFFF) !important;
+  border: 1px solid var(--color-border-primary, #FADCE9);
   box-shadow: 0 10px 30px var(--color-card-shadow, rgba(212,106,138,.10));
 }
 
 body.tt-catalog-maintenance .cat-hero-title {
-  color: var(--color-text-title, #2B2B2B) !important;
+  color: var(--color-text-title, #EA7EA3) !important;
 }
 
 body.tt-catalog-maintenance .cat-hero-sub,
 body.tt-catalog-maintenance .cat-count,
 body.tt-catalog-maintenance .cat-filter-count,
 body.tt-catalog-maintenance .cat-range-sep {
-  color: var(--color-text-secondary, #7B6F72) !important;
+  color: var(--color-text-secondary, #EA7EA3) !important;
 }
 
 body.tt-catalog-maintenance .cat-sidebar,
@@ -44,8 +44,8 @@ body.tt-catalog-maintenance .cat-range-input,
 body.tt-catalog-maintenance .tt-filtro-btn,
 body.tt-catalog-maintenance .cat-card-placeholder {
   background: var(--color-background-surface, #FFFFFF) !important;
-  color: var(--color-text-primary, #2B2B2B) !important;
-  border-color: var(--color-border-primary, #F1E4E7) !important;
+  color: var(--color-text-primary, #EA7EA3) !important;
+  border-color: var(--color-border-primary, #FADCE9) !important;
 }
 
 body.tt-catalog-maintenance .cat-sidebar,
@@ -57,7 +57,7 @@ body.tt-catalog-maintenance .tt-card {
 body.tt-catalog-maintenance .tt-card-img-wrap,
 body.tt-catalog-maintenance .tt-card-img-wrap img,
 body.tt-catalog-maintenance .cat-card-placeholder {
-  background-color: var(--color-background-surface-soft, #FFF9FC) !important;
+  background-color: var(--color-background-surface-soft, #FFFFFF) !important;
   background-image: none !important;
 }
 
@@ -65,7 +65,7 @@ body.tt-catalog-maintenance .tt-card-name,
 body.tt-catalog-maintenance .tt-card-name a,
 body.tt-catalog-maintenance .cat-filter-option,
 body.tt-catalog-maintenance .cat-range-label {
-  color: var(--color-text-primary, #2B2B2B) !important;
+  color: var(--color-text-primary, #EA7EA3) !important;
 }
 
 body.tt-catalog-maintenance .tt-card-cat,
@@ -73,23 +73,23 @@ body.tt-catalog-maintenance .tt-card-price,
 body.tt-catalog-maintenance .cat-filter-title,
 body.tt-catalog-maintenance .cat-filter-option.active,
 body.tt-catalog-maintenance .cat-card-placeholder {
-  color: var(--color-brand-primary, #AD3F67) !important;
+  color: var(--color-brand-primary, #EA7EA3) !important;
 }
 
 body.tt-catalog-maintenance .tt-card-btn-cart,
 body.tt-catalog-maintenance .cat-filter-toggle,
 body.tt-catalog-maintenance .tt-filtro-btn.activo,
 body.tt-catalog-maintenance .tt-filtro-btn.active {
-  background: var(--color-button-primary-background, #AD3F67) !important;
-  border-color: var(--color-button-primary-border, #AD3F67) !important;
+  background: var(--color-button-primary-background, #EA7EA3) !important;
+  border-color: var(--color-button-primary-border, #EA7EA3) !important;
   color: var(--color-button-primary-text, #FFFFFF) !important;
 }
 
 body.tt-catalog-maintenance .tt-card-btn-view,
 body.tt-catalog-maintenance .tt-filtro-btn:not(.activo):not(.active) {
   background: var(--color-button-secondary-background, #FFFFFF) !important;
-  border-color: var(--color-button-secondary-border, #AD3F67) !important;
-  color: var(--color-button-secondary-text, #AD3F67) !important;
+  border-color: var(--color-button-secondary-border, #EA7EA3) !important;
+  color: var(--color-button-secondary-text, #EA7EA3) !important;
 }
 
 body.tt-catalog-maintenance .tt-card-btn:focus-visible,
@@ -105,9 +105,9 @@ body.tt-catalog-maintenance a:focus-visible {
 }
 
 body.tt-catalog-maintenance .tt-card-badge {
-  background: var(--color-badge-background, #FDECF2) !important;
-  color: var(--color-badge-text, #AD3F67) !important;
-  border: 1px solid var(--color-card-border, #F1E4E7);
+  background: var(--color-badge-background, #FDF0F5) !important;
+  color: var(--color-badge-text, #EA7EA3) !important;
+  border: 1px solid var(--color-card-border, #FADCE9);
 }
 
 body.tt-catalog-maintenance .tt-card-badge--out {
@@ -117,17 +117,17 @@ body.tt-catalog-maintenance .tt-card-badge--out {
 
 body.tt-catalog-maintenance .tt-skeleton {
   background: linear-gradient(90deg,
-    var(--color-skeleton-base, #F1E4E7) 25%,
-    var(--color-skeleton-shine, #FDECF2) 50%,
-    var(--color-skeleton-base, #F1E4E7) 75%) !important;
+    var(--color-skeleton-base, #FADCE9) 25%,
+    var(--color-skeleton-shine, #FDF0F5) 50%,
+    var(--color-skeleton-base, #FADCE9) 75%) !important;
   background-size: 200% 100% !important;
 }
 
 body.tt-catalog-maintenance .cat-filter-dot {
-  background: var(--color-state-disabled, #6B6367) !important;
+  background: var(--color-state-disabled, #EA7EA3) !important;
 }
 body.tt-catalog-maintenance .cat-filter-option.active .cat-filter-dot {
-  background: var(--color-state-selected, #AD3F67) !important;
+  background: var(--color-state-selected, #EA7EA3) !important;
 }
 
 .tt-catalog-runtime-state {
@@ -136,17 +136,17 @@ body.tt-catalog-maintenance .cat-filter-option.active .cat-filter-dot {
   display: grid;
   place-items: center;
   padding: 30px 20px;
-  border: 1.5px solid var(--color-card-border, #F1E4E7);
+  border: 1.5px solid var(--color-card-border, #FADCE9);
   border-radius: 18px;
   background: var(--color-background-surface, #FFFFFF);
-  color: var(--color-text-secondary, #7B6F72);
+  color: var(--color-text-secondary, #EA7EA3);
   text-align: center;
   font: 600 13px/1.6 Montserrat;
 }
 .tt-catalog-runtime-state strong {
   display: block;
   margin-bottom: 7px;
-  color: var(--color-text-title, #2B2B2B);
+  color: var(--color-text-title, #EA7EA3);
   font-size: 16px;
 }
 .tt-catalog-runtime-state button,
@@ -154,9 +154,9 @@ body.tt-catalog-maintenance .cat-filter-option.active .cat-filter-dot {
   min-height: 44px;
   margin-top: 14px;
   padding: 10px 20px;
-  border: 1.5px solid var(--color-button-primary-border, #AD3F67);
+  border: 1.5px solid var(--color-button-primary-border, #EA7EA3);
   border-radius: 999px;
-  background: var(--color-button-primary-background, #AD3F67);
+  background: var(--color-button-primary-background, #EA7EA3);
   color: var(--color-button-primary-text, #FFFFFF) !important;
   font: 800 12px/1.2 Montserrat;
   text-decoration: none;
@@ -170,7 +170,7 @@ body.tt-catalog-maintenance .cat-filter-option.active .cat-filter-dot {
   align-items: center;
   justify-content: flex-end;
   gap: 7px;
-  color: var(--color-text-secondary, #7B6F72);
+  color: var(--color-text-secondary, #EA7EA3);
   font: 700 11px/1.3 Montserrat;
 }
 #tt-catalog-sync-state::before {
@@ -186,14 +186,14 @@ body.tt-catalog-maintenance .cat-filter-option.active .cat-filter-dot {
 
 body.tt-catalog-maintenance .tt-footer {
   background: var(--color-background-footer, #FFFFFF) !important;
-  color: var(--color-text-primary, #2B2B2B) !important;
-  border-top: 1px solid var(--color-border-primary, #F1E4E7);
+  color: var(--color-text-primary, #EA7EA3) !important;
+  border-top: 1px solid var(--color-border-primary, #FADCE9);
 }
 body.tt-catalog-maintenance .tt-footer a,
 body.tt-catalog-maintenance .tt-footer-col-title,
 body.tt-catalog-maintenance .tt-footer-bottom,
 body.tt-catalog-maintenance .tt-footer-tagline {
-  color: var(--color-text-primary, #2B2B2B) !important;
+  color: var(--color-text-primary, #EA7EA3) !important;
 }
 
 @media (min-width: 1025px) {

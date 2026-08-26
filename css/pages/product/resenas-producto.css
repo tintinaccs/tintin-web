@@ -1,15 +1,15 @@
 .tt-reviews-product {
-  --tt-review-pink: var(--color-brand-primary, #AD3F67);
-  --tt-review-pink-deep: var(--color-brand-primary-hover, #8B2642);
-  --tt-review-pink-soft: #FFF8FB;
-  --tt-review-pink-pale: #FDECF2;
-  --tt-review-pink-border: #EFC9D7;
-  --tt-review-pink-border-strong: #E2AFC2;
-  --tt-review-gold: var(--color-rating-star, #8A6D1F);
-  --tt-review-gold-soft: #C9A44B;
-  --tt-review-gold-pale: #F7EBCB;
-  --tt-review-ink: #704456;
-  --tt-review-muted: #8D707C;
+  --tt-review-pink: var(--color-brand-primary, #EA7EA3);
+  --tt-review-pink-deep: var(--color-brand-primary-hover, #EA7EA3);
+  --tt-review-pink-soft: #FFFFFF;
+  --tt-review-pink-pale: #FDF0F5;
+  --tt-review-pink-border: #F6BFD3;
+  --tt-review-pink-border-strong: #F19FB9;
+  --tt-review-gold: var(--color-rating-star, #EA7EA3);
+  --tt-review-gold-soft: #EA7EA3;
+  --tt-review-gold-pale: #FADCE9;
+  --tt-review-ink: #EA7EA3;
+  --tt-review-muted: #EA7EA3;
   --tt-review-white: #FFFFFF;
   padding: clamp(30px, 5vw, 64px) 0;
   color: var(--tt-review-ink);
@@ -37,7 +37,7 @@
   padding: clamp(18px, 2.5vw, 26px);
   border: 1px solid var(--tt-review-pink-border);
   border-radius: 20px;
-  background: linear-gradient(180deg, #FFFDFE 0%, var(--tt-review-pink-pale) 100%);
+  background: linear-gradient(180deg, #FFFFFF 0%, var(--tt-review-pink-pale) 100%);
 }
 
 .tt-reviews-product .tt-section-sub {
@@ -190,7 +190,7 @@
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: #E5C6D2;
+  color: #F6BFD3;
   font: inherit;
   font-size: 1.75rem;
   line-height: 1;
@@ -262,7 +262,7 @@
 
 .tt-review-textarea::placeholder,
 .tt-review-reply-row input::placeholder {
-  color: #A88996;
+  color: #EA7EA3;
 }
 
 .tt-review-textarea:focus,
@@ -270,7 +270,7 @@
   outline: 0;
   border-color: var(--tt-review-pink);
   box-shadow: 0 0 0 3px rgba(173, 63, 103, 0.12);
-  background: #FFFDFE;
+  background: #FFFFFF;
 }
 
 .tt-review-form-actions {

@@ -1,11 +1,11 @@
 :root {
-  --tt-notif-pink: #b84c72;
-  --tt-notif-pink-strong: #9f315c;
-  --tt-notif-pink-soft: #fff2f7;
-  --tt-notif-pink-border: #efc8d7;
-  --tt-notif-gold: #c79a3b;
-  --tt-notif-ink: #4a3540;
-  --tt-notif-muted: #836d77;
+  --tt-notif-pink: #EA7EA3;
+  --tt-notif-pink-strong: #EA7EA3;
+  --tt-notif-pink-soft: #FDF0F5;
+  --tt-notif-pink-border: #F6BFD3;
+  --tt-notif-gold: #EA7EA3;
+  --tt-notif-ink: #EA7EA3;
+  --tt-notif-muted: #EA7EA3;
   --tt-notif-white: #ffffff;
 }
 
@@ -50,7 +50,7 @@
   height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #fff 0%, #fff9fb 100%);
+  background: linear-gradient(180deg, #fff 0%, #FFFFFF 100%);
   border-left: 1px solid var(--tt-notif-pink-border);
   box-shadow: -22px 0 60px rgba(83, 42, 59, .16);
   clip-path: inset(0 0 0 100%);
@@ -76,7 +76,7 @@
   gap: 16px;
   padding: 24px 22px 18px;
   border-bottom: 1px solid var(--tt-notif-pink-border);
-  background: #fff7fa;
+  background: #FDF0F5;
 }
 
 .tt-notifications-kicker {
@@ -120,7 +120,7 @@
   justify-content: space-between;
   gap: 12px;
   padding: 12px 18px;
-  border-bottom: 1px solid #f5dce5;
+  border-bottom: 1px solid #FADCE9;
 }
 
 .tt-notifications-count {
@@ -176,7 +176,7 @@
 
 .tt-notification-card.is-unread {
   background: var(--tt-notif-pink-soft);
-  border-color: #f3d6e1;
+  border-color: #FADCE9;
 }
 
 .tt-notification-icon {
@@ -192,20 +192,20 @@
 }
 
 .tt-notification-icon[data-icon="heart"] {
-  color: #b94670;
-  background: #fff1f6;
+  color: #EA7EA3;
+  background: #FDF0F5;
 }
 
 .tt-notification-icon[data-icon="order"] {
   color: var(--tt-notif-gold);
-  background: #fffaf0;
-  border-color: #ead7aa;
+  background: #FDF0F5;
+  border-color: #F6BFD3;
 }
 
 .tt-notification-icon[data-icon="comment"],
 .tt-notification-icon[data-icon="review"] {
-  color: #a34569;
-  background: #fff7fa;
+  color: #EA7EA3;
+  background: #FDF0F5;
 }
 
 .tt-notification-copy {
@@ -235,7 +235,7 @@
   align-items: center;
   gap: 7px;
   margin-top: 6px;
-  color: #a48090;
+  color: #EA7EA3;
   font-size: 11px;
 }
 
@@ -253,7 +253,7 @@
   object-fit: cover;
   border-radius: 14px;
   border: 1px solid var(--tt-notif-pink-border);
-  background: #fff7fa;
+  background: #FDF0F5;
 }
 
 .tt-notification-thumb-placeholder {
@@ -263,8 +263,8 @@
   place-items: center;
   border-radius: 14px;
   color: var(--tt-notif-gold);
-  background: #fffaf2;
-  border: 1px solid #efdfbd;
+  background: #FDF0F5;
+  border: 1px solid #F6BFD3;
   font-weight: 800;
 }
 
@@ -281,7 +281,7 @@
 }
 
 .tt-notifications-error {
-  color: #9f315c;
+  color: #EA7EA3;
 }
 
 .tt-review-card.tt-review-deeplink-highlight {

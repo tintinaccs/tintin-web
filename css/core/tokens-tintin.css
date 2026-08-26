@@ -1,16 +1,16 @@
 :root {
-  --tt-page-bg: #FFF6FA;
-  --tt-title: #2B2B2B;
-  --tt-text: #2B2B2B;
-  --tt-muted: #7B6F72;
+  --tt-page-bg: #FDF0F5;
+  --tt-title: #EA7EA3;
+  --tt-text: #EA7EA3;
+  --tt-muted: #EA7EA3;
   --tt-card: #FFFFFF;
   /* Rosa de marca oscurecido lo justo para que texto, iconos y botones
      alcancen contraste AA sobre blanco y sobre el fondo rosa claro. */
-  --tt-primary: #AD3F67;
-  --tt-soft: #FFF9FC;
-  --tt-light: #FDECF2;
-  --tt-border: #F1E4E7;
-  --tt-line: #F7E9ED;
+  --tt-primary: #EA7EA3;
+  --tt-soft: #FFFFFF;
+  --tt-light: #FDF0F5;
+  --tt-border: #FADCE9;
+  --tt-line: #FDF0F5;
   --tt-focus: rgba(173,63,103,0.24);
   --tt-shadow: 0 14px 38px rgba(212,106,138,0.10);
 
@@ -18,8 +18,8 @@
   --bg-soft: var(--tt-soft);
   --card-bg: var(--tt-card);
   --pink-pale: var(--tt-light);
-  --pink: #F6B7C8;
-  --pink-mid: #F6B7C8;
+  --pink: #F6BFD3;
+  --pink-mid: #F6BFD3;
   --pink-dark: var(--tt-primary);
   --rose: var(--tt-primary);
   /* Antes apuntaba a --tt-card (blanco), lo que dejaba invisible cualquier
@@ -27,8 +27,8 @@
      tarjeta blanca, categoría del producto blanca sobre fondo blanco, el
      badge "NUEVO" blanco sobre blanco, etc. Ahora es un dorado real con
      contraste AA (4.9:1) tanto sobre blanco como con texto blanco encima. */
-  --gold: #8a6d1f;
-  --gold-hover: #6f5718;
+  --gold: #EA7EA3;
+  --gold-hover: #EA7EA3;
   --gold-light: var(--tt-soft);
   --ink: var(--tt-title);
   --text: var(--tt-text);
@@ -38,7 +38,7 @@
   --border: var(--tt-border);
   --white: var(--tt-card);
   --whatsapp: var(--tt-primary);
-  --whatsapp-h: #B84C72;
+  --whatsapp-h: #EA7EA3;
   --error: var(--tt-primary);
   --success: var(--tt-primary);
   --shadow-sm: 0 2px 8px rgba(212,106,138,0.08);

@@ -2,12 +2,12 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 :root {
-  --login-wine: #7d173a;
-  --login-rose: #ad3f67;
-  --login-pink: #d8688d;
-  --login-blush: #fff3f7;
-  --login-ink: #2c2226;
-  --login-muted: #75666c;
+  --login-wine: #EA7EA3;
+  --login-rose: #EA7EA3;
+  --login-pink: #EA7EA3;
+  --login-blush: #FDF0F5;
+  --login-ink: #EA7EA3;
+  --login-muted: #EA7EA3;
   --login-border: rgba(125, 23, 58, .13);
   --login-shadow: 0 32px 90px rgba(91, 26, 50, .18);
 }
@@ -15,7 +15,7 @@
 html, body {
   min-height: 100%;
   margin: 0;
-  background: #fff7fa;
+  background: #FDF0F5;
   color: var(--login-ink);
   font-family: "Montserrat", sans-serif;
   overflow-x: clip;
@@ -39,7 +39,7 @@ body:has(.login-page) { min-height: 100dvh; }
   background:
     radial-gradient(circle at 14% 18%, rgba(216, 104, 141, .22), transparent 31%),
     radial-gradient(circle at 88% 82%, rgba(125, 23, 58, .12), transparent 30%),
-    linear-gradient(145deg, #fffafd 0%, #fff2f7 48%, #fce8f0 100%) !important;
+    linear-gradient(145deg, #FFFFFF 0%, #FDF0F5 48%, #FDF0F5 100%) !important;
 }
 
 /* El shell público se monta en segundo plano, pero Login es una pantalla
@@ -322,7 +322,7 @@ body.login-setup-open { --login-shell-width: 560px; }
   align-items: center;
   gap: 15px;
   margin: 23px 0;
-  color: #94858b !important;
+  color: #EA7EA3 !important;
   font-size: 11px;
   font-weight: 650;
 }
@@ -360,7 +360,7 @@ body.login-setup-open { --login-shell-width: 560px; }
   transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
 }
 
-.login-email-input::placeholder { color: #aa9ca1; }
+.login-email-input::placeholder { color: #EA7EA3; }
 .login-email-input:focus {
   border-color: rgba(173,63,103,.72);
   background: #fff !important;
@@ -372,7 +372,7 @@ body.login-setup-open { --login-shell-width: 560px; }
   place-items: center;
   padding: 12px 20px;
   border: 0;
-  background: linear-gradient(135deg, #b84970, #8e274d) !important;
+  background: linear-gradient(135deg, #EA7EA3, #EA7EA3) !important;
   color: #fff !important;
   box-shadow: 0 12px 28px rgba(142,39,77,.24), inset 0 1px 0 rgba(255,255,255,.18);
 }
@@ -546,13 +546,13 @@ body.login-setup-open { --login-shell-width: 560px; }
 /* Ayuda que aparece cuando el teléfono ya está en otra cuenta. */
 .login-phone-help {
   margin: -6px 0 12px;
-  color: #6b5259;
+  color: #EA7EA3;
   font-size: 12.5px;
   line-height: 1.45;
 }
 
 .login-phone-help a {
-  color: var(--color-brand-primary, #ad3f67);
+  color: var(--color-brand-primary, #EA7EA3);
   font-weight: 650;
 }
 
@@ -587,13 +587,13 @@ body.login-exit-open { overflow: hidden; }
 
 .login-exit-title {
   margin: 0 0 10px;
-  color: var(--login-ink, #2b2b2b);
+  color: var(--login-ink, #EA7EA3);
   font: 800 22px/1.2 "Montserrat", sans-serif;
 }
 
 .login-exit-text {
   margin: 0 0 22px;
-  color: #6b5259;
+  color: #EA7EA3;
   font-size: 14px;
   line-height: 1.55;
 }
@@ -610,17 +610,17 @@ body.login-exit-open { overflow: hidden; }
 .login-exit-primary {
   margin-bottom: 10px;
   border: none;
-  background: var(--color-brand-primary, #ad3f67);
+  background: var(--color-brand-primary, #EA7EA3);
   color: #fff;
 }
 
-.login-exit-primary:hover { background: var(--color-brand-primary-hover, #8b2642); }
+.login-exit-primary:hover { background: var(--color-brand-primary-hover, #EA7EA3); }
 
 .login-exit-secondary {
   border: 1px solid rgba(125,23,58,.22);
   background: #fff;
   /* Contraste ≥ 4.5:1 sobre blanco. */
-  color: #6b5259;
+  color: #EA7EA3;
 }
 
 .login-exit-secondary:hover { background: rgba(173,63,103,.06); }

@@ -1,10 +1,10 @@
 :root {
-  --tintin-primary: var(--primary, #ad3f67);
-  --tintin-primary-dark: var(--primary-dark, #7d173a);
-  --tintin-primary-soft: var(--primary-soft, #fde8f0);
+  --tintin-primary: var(--primary, #EA7EA3);
+  --tintin-primary-dark: var(--primary-dark, #EA7EA3);
+  --tintin-primary-soft: var(--primary-soft, #FDF0F5);
   --tintin-surface: #fff;
-  --tintin-text: var(--text, #171217);
-  --tintin-muted: var(--text-muted, #746b70);
+  --tintin-text: var(--text, #EA7EA3);
+  --tintin-muted: var(--text-muted, #EA7EA3);
   --tintin-border: rgba(173, 63, 103, .2);
   --tintin-shadow: 0 24px 70px rgba(58, 13, 31, .18);
   --motion-fast: 160ms;
@@ -190,7 +190,7 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
   justify-content: space-between;
   padding: 18px 22px;
   border-bottom: 1px solid rgba(255,255,255,.32);
-  background: linear-gradient(135deg, #8f204b, #c53f75) !important;
+  background: linear-gradient(135deg, #EA7EA3, #EA7EA3) !important;
   color: #fff !important;
   box-shadow: 0 10px 24px rgba(95,22,51,.16);
 }

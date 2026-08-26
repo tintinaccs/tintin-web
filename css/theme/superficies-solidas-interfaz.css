@@ -8,8 +8,8 @@ body > #tt-loader:not(.tt-out) ~ .ck-body {
 html:has(#ck-steps),
 html:has(#ck-steps) body,
 html:has(#ck-steps) .ck-body {
-  background: #FFF6FA !important;
-  background-color: #FFF6FA !important;
+  background: #FDF0F5 !important;
+  background-color: #FDF0F5 !important;
   background-image: none !important;
   transition-property: none !important;
 }
@@ -35,11 +35,11 @@ html body .ck-steps .ck-step .ck-step-num {
   max-height: 34px !important;
   aspect-ratio: 1 / 1 !important;
   padding: 0 !important;
-  border: 2px solid #F1E4E7 !important;
+  border: 2px solid #FADCE9 !important;
   border-radius: 999px !important;
   background: #FFFFFF !important;
   background-color: #FFFFFF !important;
-  color: #7B6F72 !important;
+  color: #EA7EA3 !important;
   box-shadow: 0 3px 10px rgba(173, 63, 103, 0.08) !important;
   overflow: hidden !important;
   flex: 0 0 34px !important;
@@ -47,11 +47,11 @@ html body .ck-steps .ck-step .ck-step-num {
 
 html body .ck-steps .ck-step.active .ck-step-num,
 html body .ck-steps .ck-step.done .ck-step-num {
-  border-color: var(--tt-accent, #AD3F67) !important;
-  background: var(--tt-accent, #AD3F67) !important;
-  background-color: var(--tt-accent, #AD3F67) !important;
+  border-color: var(--tt-accent, #EA7EA3) !important;
+  background: var(--tt-accent, #EA7EA3) !important;
+  background-color: var(--tt-accent, #EA7EA3) !important;
   color: #FFFFFF !important;
-  box-shadow: 0 0 0 4px #FDECF2, 0 5px 14px rgba(173, 63, 103, 0.18) !important;
+  box-shadow: 0 0 0 4px #FDF0F5, 0 5px 14px rgba(173, 63, 103, 0.18) !important;
 }
 
 html body .ck-steps .ck-step-label {
@@ -62,8 +62,8 @@ html body .ck-steps .ck-step-label {
 }
 
 html body #tt-welcome-tutorial.tt-welcome-overlay {
-  background: #FDECF2 !important;
-  background-color: #FDECF2 !important;
+  background: #FDF0F5 !important;
+  background-color: #FDF0F5 !important;
   background-image: none !important;
   opacity: 1 !important;
   backdrop-filter: none !important;
@@ -76,7 +76,7 @@ html body #tt-welcome-tutorial .tt-welcome-card {
   background: #FFFFFF !important;
   background-color: #FFFFFF !important;
   background-image: none !important;
-  border: 1.5px solid #F1C8D5 !important;
+  border: 1.5px solid #F6BFD3 !important;
   opacity: 1 !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
@@ -86,8 +86,8 @@ html body #tt-welcome-tutorial .tt-welcome-card {
 }
 
 html body #tt-welcome-tutorial .tt-welcome-top {
-  background: linear-gradient(135deg, #F6B7C8 0%, #FDECF2 100%) !important;
-  background-color: #F6B7C8 !important;
+  background: linear-gradient(135deg, #F6BFD3 0%, #FDF0F5 100%) !important;
+  background-color: #F6BFD3 !important;
   opacity: 1 !important;
 }
 
@@ -127,7 +127,7 @@ html body .tt-mobile-user {
   background: #FFFFFF !important;
   background-color: #FFFFFF !important;
   background-image: none !important;
-  border-color: #F1C8D5 !important;
+  border-color: #F6BFD3 !important;
   opacity: 1 !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
@@ -153,7 +153,7 @@ html body #cart-drawer {
   background: #FFFFFF !important;
   background-color: #FFFFFF !important;
   background-image: none !important;
-  border: 1px solid #F1C8D5 !important;
+  border: 1px solid #F6BFD3 !important;
   opacity: 1 !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
@@ -167,7 +167,7 @@ html body #cart-drawer {
     background: #FFFFFF !important;
     background-color: #FFFFFF !important;
     background-image: none !important;
-    border-bottom: 1px solid #F1E4E7 !important;
+    border-bottom: 1px solid #FADCE9 !important;
     box-shadow: 0 8px 24px rgba(173, 63, 103, 0.08) !important;
     opacity: 1 !important;
     backdrop-filter: none !important;
@@ -195,7 +195,7 @@ html body #cart-drawer {
     background: #FFFFFF !important;
     background-color: #FFFFFF !important;
     background-image: none !important;
-    border: 1px solid #F1C8D5 !important;
+    border: 1px solid #F6BFD3 !important;
     opacity: 1 !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -205,8 +205,8 @@ html body #cart-drawer {
 
 html:has(.login-page) #tt-loader,
 html.tt-auth-silent-transition #tt-loader {
-  background: #FFF6FA !important;
-  background-color: #FFF6FA !important;
+  background: #FDF0F5 !important;
+  background-color: #FDF0F5 !important;
   background-image: none !important;
 }
 

@@ -28,7 +28,7 @@
     align-items:center;
     gap:12px;
     min-width:0;
-    color:#8b2642;
+    color:#EA7EA3;
     text-decoration:none;
   }
   .tt-header-desktop .tt-logo-img { width:auto; height:48px; flex:0 0 auto; }
@@ -50,7 +50,7 @@
     height: 44px;
     border: 1px solid rgba(179,36,87,.5);
     border-radius: 999px;
-    background: #fff6f9;
+    background: #FDF0F5;
     box-shadow: 0 6px 18px rgba(139,38,66,.07);
     opacity: 0;
     transform: translateX(var(--tt-pill-x,0));
@@ -66,7 +66,7 @@
     padding: 12px 22px;
     font-weight: 600 !important;
     letter-spacing: .09em !important;
-    color: #8b2642 !important;
+    color: #EA7EA3 !important;
     background: transparent !important;
     border: 1px solid transparent !important;
     box-shadow: none !important;
@@ -76,13 +76,13 @@
   .tt-header-desktop .tt-nav > a::after,
   .tt-header-desktop .tt-nav-dropdown > button::after { display: none; }
   .tt-header-desktop .tt-nav > a:hover,
-  .tt-header-desktop .tt-nav-dropdown > button:hover { color: #a50f4d !important; }
+  .tt-header-desktop .tt-nav-dropdown > button:hover { color: #EA7EA3 !important; }
   .tt-header-desktop .tt-header-actions { justify-self: end; gap: 10px; }
   .tt-header-desktop .tt-header-actions > button,
   .tt-header-desktop .tt-header-actions > .tt-nav-dropdown > button {
     width: 46px;
     height: 46px;
-    color: #242124 !important;
+    color: #EA7EA3 !important;
     background: #fff !important;
     border: 1px solid rgba(139,38,66,.14) !important;
     box-shadow: none;
@@ -91,8 +91,8 @@
 
   .tt-header-desktop .tt-header-actions > button:hover,
   .tt-header-desktop .tt-header-actions > .tt-nav-dropdown > button:hover {
-    color: #a50f4d !important;
-    background: #fff4f8 !important;
+    color: #EA7EA3 !important;
+    background: #FDF0F5 !important;
     border-color: rgba(139,38,66,.22) !important;
     transform: translateY(-1px) !important;
     box-shadow: 0 6px 16px rgba(139,38,66,.09) !important;

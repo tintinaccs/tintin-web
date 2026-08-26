@@ -6,24 +6,24 @@ html.tt-parity-guard{--tt-legacy-parity-disabled:1}html.tt-parity-safe{--tt-resp
   body:not(:has(.adm-main)) :is(.tt-dropdown,.tt-search-panel,.tt-search-results,.tt-account-panel,.tt-cart-drawer){
     background:#fff!important;
     background-color:#fff!important;
-    border-color:#f0d8e0!important;
+    border-color:#FADCE9!important;
   }
   body:not(:has(.adm-main)) :is(.tt-dropdown,.tt-account-panel){
-    border:1px solid #f0d8e0!important;
+    border:1px solid #FADCE9!important;
     box-shadow:0 16px 40px rgba(139,38,66,.16)!important;
   }
   body:not(:has(.adm-main)) .tt-search-panel{
-    border:1px solid #f0d8e0!important;
+    border:1px solid #FADCE9!important;
     border-top:0!important;
     box-shadow:0 14px 34px rgba(139,38,66,.14)!important;
   }
   body:not(:has(.adm-main)) .tt-search-results{
-    border:1px solid #f0d8e0!important;
+    border:1px solid #FADCE9!important;
     border-top:0!important;
     box-shadow:0 16px 36px rgba(139,38,66,.12)!important;
   }
   body:not(:has(.adm-main)) .tt-cart-drawer{
-    border-left:1px solid #f0d8e0!important;
+    border-left:1px solid #FADCE9!important;
     box-shadow:-12px 0 40px rgba(139,38,66,.16)!important;
   }
 }
@@ -102,7 +102,7 @@ body:has(.adm-main) input[type="checkbox"].tt-mini-switch{
   min-width:40px!important;
   padding:0!important;
   margin:0 8px 0 0!important;
-  border:2px solid #e8b6c8!important;
+  border:2px solid #F6BFD3!important;
   border-radius:999px!important;
   background:#fff!important;
   background-color:#fff!important;
@@ -118,9 +118,9 @@ body:has(.adm-main) input[type="checkbox"].tt-mini-switch::before{
   box-shadow:0 1px 4px rgba(57,26,38,.22)!important;
 }
 body:has(.adm-main) input[type="checkbox"].tt-mini-switch:checked{
-  background:var(--admin-color-brand,#ad3f67)!important;
-  background-color:var(--admin-color-brand,#ad3f67)!important;
-  border-color:var(--admin-color-brand,#ad3f67)!important;
+  background:var(--admin-color-brand,#EA7EA3)!important;
+  background-color:var(--admin-color-brand,#EA7EA3)!important;
+  border-color:var(--admin-color-brand,#EA7EA3)!important;
 }
 body:has(.adm-main) input[type="checkbox"].tt-mini-switch:checked::before{
   transform:translateX(16px)!important;
@@ -129,7 +129,7 @@ body:has(.adm-main) .adm-toggle-slider{
   box-sizing:border-box!important;
   background:#fff!important;
   background-color:#fff!important;
-  border:2px solid #e8b6c8!important;
+  border:2px solid #F6BFD3!important;
   box-shadow:0 2px 7px rgba(139,38,66,.10)!important;
 }
 body:has(.adm-main) .adm-toggle-slider::before{
@@ -138,9 +138,9 @@ body:has(.adm-main) .adm-toggle-slider::before{
   box-shadow:0 1px 4px rgba(57,26,38,.22)!important;
 }
 body:has(.adm-main) .adm-toggle input:checked + .adm-toggle-slider{
-  background:var(--admin-color-brand,#ad3f67)!important;
-  background-color:var(--admin-color-brand,#ad3f67)!important;
-  border-color:var(--admin-color-brand,#ad3f67)!important;
+  background:var(--admin-color-brand,#EA7EA3)!important;
+  background-color:var(--admin-color-brand,#EA7EA3)!important;
+  border-color:var(--admin-color-brand,#EA7EA3)!important;
 }
 
 /* Parte 2E: contenido informativo con datos reales de longitud variable.
