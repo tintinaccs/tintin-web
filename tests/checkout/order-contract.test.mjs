@@ -14,7 +14,11 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const phase4Source = fs.readFileSync(path.join(root, 'apps-script', 'CrearPedido.gs'), 'utf8');
 
 function phase4Context() {
-  const context = vm.createContext({ FIRESTORE_PROJECT_ID_: 'demo-tintin', console });
+  const context = vm.createContext({
+    FIRESTORE_PROJECT_ID_: 'demo-tintin',
+    PropertiesService: { getScriptProperties: () => ({ getProperty: () => '' }) },
+    console
+  });
   vm.runInContext(phase4Source, context, { filename: 'CrearPedido.gs' });
   return context;
 }

@@ -5,7 +5,7 @@ import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts
 import {
   CONTENT_PAGE_IDS, SITE_CONTENT_SCHEMA, getNested, getPageDefaults, getPageSchema,
   mergeContent, sanitizeContentHref, setNested,
-} from '../../core/store/esquema-contenido.js?v=tintin-20260815-routes-clean-1';
+} from '../../core/store/esquema-contenido.js?v=tintin-20260826-carousel-order-2';
 import { chooseRandomPreviewProduct, productPreviewTarget } from './preview-dynamic-targets.js?v=tintin-20260812-preview-dinamico-1';
 import { installWorkspaceSplitters } from './workspace-splitters.js?v=tintin-20260813-apariencia-splitters-1';
 
