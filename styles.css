@@ -1317,20 +1317,21 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-hero-link {
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
+  padding: 10px 2px;
   color: var(--text);
   font-weight: 600;
   font-size: 0.86rem;
   letter-spacing: 0.04em;
-  text-decoration: none;
-  border-bottom: 1px solid currentColor;
-  padding-bottom: 2px;
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+  text-underline-offset: 3px;
   opacity: 0.85;
-  transition: opacity 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  transition: opacity 0.25s ease, color 0.25s ease;
 }
 .tt-hero-link:hover {
   opacity: 1;
   color: var(--pink-dark);
-  border-color: var(--pink-dark);
 }
 
 /* Indicador de scroll: invita a bajar, se oculta apenas el usuario scrollea */
