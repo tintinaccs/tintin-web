@@ -1,5 +1,5 @@
-import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-20260815-routes-clean-1';
-import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20260815-routes-clean-1';
+import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-20260826-carousel-order-1';
+import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20260826-carousel-order-1';
 
 const VISUAL_SETTLE_CEILING_MS = 3500;
 
