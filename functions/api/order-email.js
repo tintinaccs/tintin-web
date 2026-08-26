@@ -4,6 +4,7 @@ import {
   preflightResponse,
   SUPERADMIN_EMAIL
 } from '../../cloudflare/seguridad-cloudinary.js';
+import { dispatchOrderPushEvent, pushEnabled } from '../../cloudflare/servicio-push.js';
 
 const FIREBASE_WEB_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
 const FIREBASE_PROJECT_ID = 'tintin-accesorios';
@@ -188,10 +189,10 @@ function customerEmail(order, orderId) {
 
   const html = `<!doctype html>
 <html lang="es">
-<body style="margin:0;background:#fdf1f5;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2226">
+<body style="margin:0;background:#fff6fa;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2b2b">
   <div style="max-width:560px;margin:0 auto;padding:32px 16px">
     <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:20px;overflow:hidden">
-      <div style="background:linear-gradient(135deg,#c6557d,#8e274d);padding:26px 24px;text-align:center">
+      <div style="background:#ad3f67;padding:26px 24px;text-align:center;border-bottom:4px solid #8b2642">
         <div style="width:52px;height:52px;margin:0 auto 12px;border-radius:50%;background:rgba(255,255,255,.16);line-height:52px;font-size:24px">✓</div>
         <div style="font-size:20px;font-weight:750;color:#ffffff;letter-spacing:-.01em">¡Recibimos tu pedido!</div>
         <div style="margin-top:6px;font-size:12.5px;font-weight:600;letter-spacing:.06em;color:rgba(255,255,255,.78)">PEDIDO #${escapeHtml(shortId)}</div>
@@ -261,10 +262,10 @@ function adminEmail(order, orderId) {
 
   const html = `<!doctype html>
 <html lang="es">
-<body style="margin:0;background:#fdf1f5;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2226">
+<body style="margin:0;background:#fff6fa;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2b2b">
   <div style="max-width:640px;margin:0 auto;padding:32px 16px">
     <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:20px;overflow:hidden">
-      <div style="background:linear-gradient(135deg,#c6557d,#8e274d);padding:22px 24px;text-align:center">
+      <div style="background:#ad3f67;padding:22px 24px;text-align:center;border-bottom:4px solid #8b2642">
         <div style="font-size:18px;font-weight:750;color:#ffffff;letter-spacing:-.01em">Nuevo pedido #${escapeHtml(shortId)}</div>
         <div style="margin-top:5px;font-size:12px;color:rgba(255,255,255,.78)">${escapeHtml(fmtDate(order.createdAt))}</div>
       </div>
@@ -460,7 +461,23 @@ export async function onRequest(context) {
       sendCustomer
     });
 
-    return jsonResponse(result, result.success ? 200 : 502, origin, requestUrl);
+    // Respaldo del aviso push: este camino ya validó a la usuaria y leyó el
+    // pedido real desde Firestore, así que sirve para recuperar los casos en
+    // que el webhook de Apps Script falló. Usa exactamente el mismo eventId,
+    // por lo que la idempotencia impide un segundo aviso. Un reenvío manual
+    // de correo NO vuelve a notificar. Que falle el push no impide el correo,
+    // ni al revés: son dos caminos independientes.
+    const pushResult = (!isResend && pushEnabled(env))
+      ? await dispatchOrderPushEvent(env, 'order.created', orderId, `order.created:${orderId}`)
+          .catch(() => ({ ok: false, error: 'push_failed' }))
+      : null;
+
+    // `push` es aditivo: notificationStatusFromResult() y el resto de los
+    // consumidores siguen leyendo success/adminSent/customerSent/error igual.
+    const responseBody = pushResult
+      ? { ...result, push: { attempted: pushResult.attempted || 0, sent: pushResult.successCount || 0, duplicate: Boolean(pushResult.duplicate) } }
+      : result;
+    return jsonResponse(responseBody, result.success ? 200 : 502, origin, requestUrl);
   } catch (error) {
     return jsonResponse({
       success: false,

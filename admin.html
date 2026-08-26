@@ -4,11 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/cargador-pagina.js?v=tintin-20260821-hero-authoritative-1"></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260824-hero-first-paint-1"></script>
   <script src="js/admin/proteccion-cambios-pendientes-admin.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
   <title>Panel Admin | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><meta name="description" content="Panel privado de administración de Tintin Accesorios.">
   <meta name="theme-color" content="#AD3F67">
+  <link rel="manifest" href="admin-manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Tintin Pedidos">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets-tintin/fonts/montserrat-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js" crossorigin>
@@ -33,7 +38,7 @@
   <link rel="stylesheet" href="css/admin/editor-visual.css?v=tintin-20260812-apariencia-responsive-1">
   <link rel="stylesheet" href="css/admin/participacion-admin.css?v=tintin-20260817-engagement-master-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260820-code-editor-1">
+  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260824-contrast-buttons-3">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -105,6 +110,9 @@
     <button type="button" class="adm-nav-item" data-section="mensajes">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span> Mensajes
     </button>
+    <button type="button" class="adm-nav-item" data-section="notificaciones-push" id="nav-notificaciones-push">
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></span> Notificaciones push
+    </button>
     <button type="button" class="adm-nav-item" data-section="auditoria" id="nav-auditoria">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span> Auditoría
     </button>
@@ -148,6 +156,7 @@
   <button type="button" class="adm-mobile-tab" data-section="importar"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Import</button>
   <a href="/admin-images" class="adm-mobile-tab"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>Imágenes</a>
   <button type="button" class="adm-mobile-tab" data-section="mensajes"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>Mensajes</button>
+  <button type="button" class="adm-mobile-tab" data-section="notificaciones-push" id="mtab-notificaciones-push"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></span>Push</button>
   <button type="button" class="adm-mobile-tab" data-section="auditoria" id="mtab-auditoria"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span>Auditoría</button>
   <button type="button" class="adm-mobile-tab" data-section="diagnostico" id="mtab-diagnostico"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/><path d="M8 11h6"/></svg></span>Diagnóstico</button>
   <button type="button" class="adm-mobile-tab" data-section="correos" id="mtab-correos"><span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>Correos</button>
@@ -1301,6 +1310,10 @@
       </div>
     </div>
 
+    <div class="adm-section" id="section-notificaciones-push">
+      <div class="adm-section-head"><h2>Notificaciones push</h2><p>Recibí pedidos al instante y administrá los dispositivos autorizados.</p></div>
+    </div>
+
     <div class="adm-section" id="section-configuracion">
       <!-- Estado de la tienda -->
       <div class="adm-card" style="margin-bottom:20px">
@@ -1599,8 +1612,43 @@
         </div>
       </div>
 
-      <button type="button" class="adm-btn adm-btn-primary" id="btn-save-config" style="font-size:14px;padding:12px 28px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar toda la configuración</button>
+      <div class="adm-card" id="push-card" style="margin-bottom:20px;display:none">
+        <div class="adm-card-head" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <div class="adm-card-title">🔔 Notificaciones de pedidos</div>
+          <span class="adm-badge" id="push-status-pill">No configuradas</span>
+        </div>
+        <div class="adm-card-body">
+          <p style="font-size:12px;color:var(--adm-muted);margin:0 0 14px" id="push-status-detail">Activá las notificaciones para recibir un aviso en este dispositivo cada vez que una clienta completa un pedido, aunque el panel esté cerrado.</p>
+          <label class="adm-label" for="push-device-label">Nombre de este dispositivo</label>
+          <input type="text" class="adm-input" id="push-device-label" maxlength="60" placeholder="Ej: iPhone de Barbi" autocomplete="off">
+          <div style="font-size:12px;color:var(--adm-muted);margin:12px 0">Último registro correcto: <strong id="push-last-register" style="color:var(--adm-text)">—</strong></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="btn-push-enable">Activar notificaciones</button>
+            <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="btn-push-test" disabled>Enviar prueba a todos los dispositivos</button>
+            <button type="button" class="adm-btn adm-btn-danger adm-btn-sm" id="btn-push-disable" style="display:none">Desactivar en este dispositivo</button>
+          </div>
+          <p id="push-notice" style="display:none;font-size:12px;margin:14px 0 0;color:var(--adm-muted)"></p>
+          <p style="font-size:12px;color:var(--adm-muted);margin:14px 0 0;padding-top:14px;border-top:1px solid var(--adm-border)">🔒 La pantalla bloqueada sólo muestra número de pedido, total y tipo de entrega.</p>
+        </div>
+      </div>
+      <button type="button" class="adm-btn adm-btn-primary" id="btn-save-config" style="font-size:14px;padding:12px 28px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M19 21H5a2 2 0 01-2-2V5a2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar toda la configuración</button>
     </div>
+
+      <div class="adm-card" id="push-master-card" style="margin-bottom:20px;display:none">
+        <div class="adm-card-head" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap"><div class="adm-card-title">🛡️ Centro maestro de notificaciones push</div><span class="adm-badge" id="push-master-status">Cargando…</span></div>
+        <div class="adm-card-body">
+          <p style="font-size:12px;color:var(--adm-muted);margin:0 0 16px">Sólo <strong style="color:var(--adm-text)">tintinaccs@gmail.com</strong> puede revocar dispositivos o pausar todos los avisos. Revocar elimina el token del servidor.</p>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px"><label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" id="push-master-enabled" class="tt-mini-switch" role="switch"> Envío global habilitado</label><select class="adm-select" id="push-master-sound" style="max-width:220px"><option value="default">Sonido predeterminado</option><option value="none">Silencioso</option><option value="custom">Sonido personalizado</option></select><input type="url" class="adm-input" id="push-master-sound-url" placeholder="https://…/tono.mp3" style="display:none;max-width:330px" maxlength="500"><input type="file" id="push-master-sound-file" accept="audio/mpeg,audio/ogg,audio/wav,.mp3,.ogg,.wav" style="display:none"><button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="btn-push-master-upload" style="display:none">Subir MP3</button><button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="btn-push-master-save">Guardar preferencias</button><button type="button" class="adm-btn adm-btn-danger adm-btn-sm" id="btn-push-master-revoke-all">Revocar todos los dispositivos</button></div>
+          <p style="font-size:12px;color:var(--adm-muted);margin:0 0 12px">Los tonos se guardan en el almacenamiento de Tintin y quedan disponibles en todos los dispositivos autorizados. Máximo recomendado: 1 MB y 10 segundos.</p>
+          <div style="display:grid;gap:8px;margin:0 0 14px;max-width:900px">
+            <div class="push-tone-row"><strong>Pedidos</strong><select class="adm-select" id="push-tone-order"><option value="default">Predeterminado</option><option value="none">Silencioso</option><option value="custom">Personalizado</option></select><input type="url" class="adm-input" id="push-tone-order-url" placeholder="URL HTTPS del MP3" style="display:none"><input type="file" id="push-tone-order-file" accept="audio/mpeg,audio/ogg,audio/wav,.mp3,.ogg,.wav" style="display:none"><button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-push-tone-upload="order" style="display:none">Subir tono</button></div>
+            <div class="push-tone-row"><strong>Reseñas y comentarios</strong><select class="adm-select" id="push-tone-review"><option value="default">Predeterminado</option><option value="none">Silencioso</option><option value="custom">Personalizado</option></select><input type="url" class="adm-input" id="push-tone-review-url" placeholder="URL HTTPS del MP3" style="display:none"><input type="file" id="push-tone-review-file" accept="audio/mpeg,audio/ogg,audio/wav,.mp3,.ogg,.wav" style="display:none"><button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-push-tone-upload="review" style="display:none">Subir tono</button></div>
+            <div class="push-tone-row"><strong>Me gusta</strong><select class="adm-select" id="push-tone-like"><option value="default">Predeterminado</option><option value="none">Silencioso</option><option value="custom">Personalizado</option></select><input type="url" class="adm-input" id="push-tone-like-url" placeholder="URL HTTPS del MP3" style="display:none"><input type="file" id="push-tone-like-file" accept="audio/mpeg,audio/ogg,audio/wav,.mp3,.ogg,.wav" style="display:none"><button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-push-tone-upload="like" style="display:none">Subir tono</button></div>
+          </div>
+          <p id="push-master-notice" style="display:none;font-size:12px;margin:10px 0;color:var(--adm-muted)"></p>
+          <div style="overflow:auto;border:1px solid var(--adm-border);border-radius:10px"><table style="width:100%;border-collapse:collapse;font-size:12px;min-width:600px"><thead><tr><th style="text-align:left;padding:9px">Dispositivo</th><th style="text-align:left;padding:9px">Cuenta</th><th style="text-align:left;padding:9px">Última actividad</th><th style="text-align:left;padding:9px">Estado</th><th style="padding:9px"></th></tr></thead><tbody id="push-master-devices"><tr><td colspan="5" style="padding:14px;color:var(--adm-muted)">Cargando dispositivos…</td></tr></tbody></table></div>
+        </div>
+      </div>
 
     <!-- ===================== ROLES Y PERMISOS ===================== -->
     <div class="adm-section" id="section-permisos">
@@ -1901,10 +1949,10 @@
 
 <div class="adm-toast" id="adm-toast"></div>
 
-<script type="module" src="js/admin/admin-app.js?v=tintin-20260822-fase16-ficha-1"></script>
+<script type="module" src="js/admin/admin-app.js?v=tintin-20260825-web-push-integration-1"></script>
 <script type="module" src="js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260818-engagement-master-2"></script>
 <script type="module" src="js/admin/shopify-commerce-admin.js?v=tintin-20260821-accounts-phase-a-1"></script>
-<script type="module" src="js/admin/appearance/editor-visual-admin.js?v=tintin-20260821-accounts-phase-a-1"></script>
+<script type="module" src="js/admin/appearance/editor-visual-admin.js?v=tintin-20260826-carousel-order-2"></script>
 
 
 <!-- ══════════════════════════════════════
@@ -2118,5 +2166,8 @@
 <script type="module" src="js/admin/settings/esquema-color-admin.js?v=tintin-20260821-accounts-phase-a-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1"></script>
 <script type="module" src="js/admin/notifications/notificaciones-admin.js?v=tintin-20260821-accounts-phase-a-1"></script>
+<script type="module" src="js/admin/notifications/notificaciones-push.js?v=tintin-20260825-web-push-6"></script>
+<script type="module" src="js/admin/notifications/notificaciones-push-maestro.js?v=tintin-20260825-push-master-2"></script>
+<script type="module" src="js/admin/notifications/enlace-pedido-push.js?v=tintin-20260825-web-push-2"></script>
 </body>
 </html>

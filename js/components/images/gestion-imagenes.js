@@ -39,6 +39,11 @@ if (!window.TintinImagesPhase5Booted) {
       mobile: 'assets-tintin/images/nosotros/foto-principal/foto-principal-mobile.webp',
       alt: 'Tintin Accesorios y Relojes',
     },
+    // Última portada publicada: se muestra desde el primer parseo mientras
+    // Firestore resuelve la configuración y luego se reemplaza si cambió.
+    hero_bg_desktop: 'https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784309046/tintin_media_6ea5859c12554fa9b576a84de5ec53c1_full.webp',
+    hero_bg_tablet: 'https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784315346/tintin_media_9cef2bfbeb1149cd908fc7b1ed81ea1a_full.webp',
+    hero_bg_mobile: 'https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784313313/tintin_media_d4980e04509c435681c1bb5e23dcbfc9_full.webp',
   });
 
   let images = {};
@@ -47,8 +52,8 @@ if (!window.TintinImagesPhase5Booted) {
   // onImagesUpdate entrega el caché local en la primera llamada (síncrona,
   // puede estar vacío o desactualizado) y recién en la segunda llamada en
   // adelante entrega el snapshot real de Firestore. El hero se mantiene
-  // oculto (.tt-hero-pending, ver styles.css) hasta esa segunda llamada, para
-  // no mostrar nunca una imagen que no sea la configurada de verdad.
+  // el HTML ya trae la última portada publicada y no se oculta mientras llega
+  // la confirmación; la segunda llamada solo puede reemplazarla de forma segura.
   let heroDataConfirmed = false;
 
   function revealHero() {
@@ -87,7 +92,10 @@ if (!window.TintinImagesPhase5Booted) {
     };
     const onError = () => {
       cleanup();
-      document.getElementById('tt-hero-media')?.classList.add('tt-hero-pending');
+      // La ruta de respaldo del listener principal conserva una portada válida;
+      // no reactivar el estado pendiente, porque eso volvería a mostrar el
+      // fondo rosa durante un fallo transitorio de red.
+      revealHero();
     };
     image.addEventListener('load', onLoad, { once: true });
     image.addEventListener('error', onError, { once: true });
@@ -217,21 +225,20 @@ if (!window.TintinImagesPhase5Booted) {
     if (!image || !picture) return;
 
     ensureHeroStyle();
-    // La primera entrega de onImagesUpdate es solo el caché del navegador y
-    // puede contener un hero publicado anteriormente. No se asigna siquiera
-    // como src: se espera el snapshot autoritativo de Firestore para impedir
-    // que una imagen vieja se pinte durante un frame antes de la vigente.
+    // La primera entrega puede ser el caché local. El HTML ya trae una portada
+    // publicada para evitar el frame rosa; Firestore la reemplaza si cambió.
     if (!heroDataConfirmed) {
-      media?.classList.add('tt-hero-pending');
+      // El HTML ya trae la última portada válida; no la ocultamos mientras
+      // llega Firestore para evitar un frame rosa entre loader y hero.
+      revealHeroWhenImageReady(image);
       return;
     }
-    // Cloudinary (subido desde Super Admin → Imágenes) es la ÚNICA fuente
-    // permitida para el hero: sin respaldo estático. Si no hay URL guardada,
-    // no se setea ningún src — nunca debe verse una imagen distinta a la
-    // configurada, ni siquiera una de relleno.
-    const desktop = resolveSlotImage(images, 'hero_bg', 'desktop');
-    const tablet = resolveSlotImage(images, 'hero_bg', 'tablet');
-    const mobile = resolveSlotImage(images, 'hero_bg', 'mobile');
+    // Cloudinary (subido desde Super Admin → Imágenes) es la fuente dinámica.
+    // Si Firestore no tiene una URL o tarda en responder, se conserva la última
+    // portada publicada embebida en HTML para que el primer paint sea inmediato.
+    const desktop = resolveSlotImage(images, 'hero_bg', 'desktop') || absolute(STATIC.hero_bg_desktop);
+    const tablet = resolveSlotImage(images, 'hero_bg', 'tablet') || absolute(STATIC.hero_bg_tablet);
+    const mobile = resolveSlotImage(images, 'hero_bg', 'mobile') || absolute(STATIC.hero_bg_mobile);
     const signature = [desktop, tablet, mobile,
       images.hero_bg_desktop_size, images.hero_bg_desktop_pos,
       images.hero_bg_tablet_size, images.hero_bg_tablet_pos,
@@ -292,13 +299,12 @@ if (!window.TintinImagesPhase5Booted) {
     if (!image.dataset.ttHeroPhase5ErrorBound) {
       image.dataset.ttHeroPhase5ErrorBound = '1';
       image.addEventListener('error', () => {
-        // El hero no tiene imagen de demostración ni placeholder. Ante un
-        // error se conserva únicamente el fondo sólido hasta que llegue una
-        // URL publicada válida en una actualización posterior.
-        media?.classList.add('tt-hero-pending');
-        mobileSource.removeAttribute('srcset');
-        tabletSource.removeAttribute('srcset');
-        image.removeAttribute('src');
+        // Si una URL dinámica falla, conserva la última portada válida en vez
+        // de desmontar la imagen y revelar el fondo rosa.
+        mobileSource.srcset = absolute(STATIC.hero_bg_mobile);
+        tabletSource.srcset = absolute(STATIC.hero_bg_tablet);
+        image.src = absolute(STATIC.hero_bg_desktop);
+        media?.classList.remove('tt-hero-pending');
       });
     }
 
@@ -412,11 +418,12 @@ if (!window.TintinImagesPhase5Booted) {
       }));
     },
     error => {
-      // Un error de red no convierte el caché local en fuente autoritativa:
-      // podría contener precisamente el banner anterior que no debe volver
-      // a verse. El loader tiene su propio tope y después deja el fondo sólido.
+      // Un error de red no debe desmontar la portada ya visible: se conserva
+      // el último banner publicado y se deja que el siguiente intento actualice.
       heroDataConfirmed = false;
-      document.getElementById('tt-hero-media')?.classList.add('tt-hero-pending');
+      document.getElementById('tt-hero-media')?.classList.remove('tt-hero-pending');
+      const heroImage = document.getElementById('tt-hero-img');
+      if (heroImage) revealHeroWhenImageReady(heroImage);
       console.warn('[images-phase5] No se pudo actualizar desde Firestore:', error);
       scheduleApply();
       window.dispatchEvent(new CustomEvent('tintin:images-phase5-error', {

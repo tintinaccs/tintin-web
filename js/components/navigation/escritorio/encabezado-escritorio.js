@@ -1,7 +1,10 @@
 import { CATEGORIES, UI_ICONS, categoryIcon, svgIcon } from '../compartido/iconos.js';
 import { logoUrl } from '../compartido/configuracion.js';
 
-const EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
+// Placeholder GIF 1x1 válido. La versión anterior estaba truncada y algunos
+// navegadores disparaban `error` antes de que hydrateSharedLogos() sustituyera
+// el src por el logo real, activando el fallback visual global de imágenes.
+const EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 
 function renderDesktopCategories() {
   return CATEGORIES.map(({ slug, label }) => `
@@ -16,7 +19,7 @@ export function renderDesktopHeader() {
     <header class="tt-header tt-header-desktop" id="tt-header-desktop-tablet" data-header-device="desktop">
       <div class="tt-header-inner">
         <a href="/" class="tt-logo-link" aria-label="Tintin, ir al inicio">
-          <img loading="eager" decoding="async" fetchpriority="high" src="${EMPTY_IMAGE}" data-tt-shared-logo="${logoUrl()}" alt="TINTIN Accesorios &amp; Relojes" class="tt-logo-img">
+          <img loading="eager" decoding="async" fetchpriority="high" src="${EMPTY_IMAGE}" data-tt-shared-logo="${logoUrl()}" data-tt-ux-image="1" alt="TINTIN Accesorios &amp; Relojes" class="tt-logo-img">
         </a>
 
         <nav class="tt-nav tt-nav-desktop" id="tt-nav-desktop-tablet" aria-label="Navegación principal">

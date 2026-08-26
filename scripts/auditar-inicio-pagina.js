@@ -24,12 +24,17 @@ const manifest = JSON.parse(read('diagnostic-manifest.json'));
 [
   ['hero', /id=["']hero["']/],
   ['trust bar', /class=["'][^"']*tt-trust-bar/],
-  ['collections', /class=["'][^"']*tt-collections-section/],
+  ['collections carousel', /class=["'][^"']*tt-collection-carousel/],
   ['look', /id=["']look-grid["']/],
-  ['products', /id=["']products-grid["']/],
   ['reviews', /class=["'][^"']*tt-reviews-section/],
   ['footer', /class=["'][^"']*tt-footer/],
 ].forEach(([label, pattern]) => requireText(html, pattern, `Inicio no contiene ${label}.`));
+
+forbid(
+  html,
+  /(?:class=["'][^"']*tt-products-section|id=["']products-grid["'])/,
+  'Inicio conserva el carrusel/grid viejo de productos.'
+);
 
 requireText(html, /<meta\s+name=["']viewport["']/i, 'Inicio no declara viewport.');
 requireText(html, /<meta\s+name=["']description["']/i, 'Inicio no declara description.');

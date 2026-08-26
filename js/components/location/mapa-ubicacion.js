@@ -63,6 +63,7 @@ function parseCoordinateInput(rawValue) {
   if (!raw) return null;
   const patterns = [
     /@(-?\d{1,3}(?:\.\d+)?),(-?\d{1,3}(?:\.\d+)?)/,
+    /!3d(-?\d{1,3}(?:\.\d+)?)!4d(-?\d{1,3}(?:\.\d+)?)/i,
     /(?:query|q|ll)=(-?\d{1,3}(?:\.\d+)?)(?:%2C|,)(-?\d{1,3}(?:\.\d+)?)/i,
     /^\s*(-?\d{1,3}(?:\.\d+)?)\s*[,;]\s*(-?\d{1,3}(?:\.\d+)?)\s*$/,
   ];
@@ -79,6 +80,24 @@ function parseCoordinateInput(rawValue) {
         address: raw,
       };
     }
+  }
+  return null;
+}
+
+function parseGoogleMapsInput(rawValue) {
+  const raw = String(rawValue || '').trim();
+  if (!raw) return null;
+  const coordinate = parseCoordinateInput(raw);
+  if (coordinate) return coordinate;
+  try {
+    const url = new URL(raw);
+    const placeMatch = decodeURIComponent(url.pathname).match(/\/place\/([^/]+)/i);
+    const query = url.searchParams.get('query') || url.searchParams.get('q') ||
+      (placeMatch ? placeMatch[1].replace(/\+/g, ' ') : '');
+    if (query && !/^-?\d+(?:\.\d+)?\s*,/.test(query)) return { query };
+    if (/maps\.app\.goo\.gl|goo\.gl\/maps/i.test(`${url.hostname}${url.pathname}`)) return { shortGoogleUrl: true };
+  } catch {
+    // Texto libre: se envía al buscador geográfico.
   }
   return null;
 }
@@ -294,15 +313,21 @@ export async function createLocationMap({
 
   const runSearch = async rawQuery => {
     const generation = ++searchGeneration;
-    const coordinate = parseCoordinateInput(rawQuery);
-    if (coordinate) {
-      applyPlace(coordinate);
+    const parsed = parseGoogleMapsInput(rawQuery);
+    if (parsed?.lat != null) {
+      applyPlace(parsed);
       return;
     }
+    if (parsed?.shortGoogleUrl) {
+      renderMessage('Ese enlace corto de Google Maps no se puede leer sin abrirlo. Copiá el enlace completo o buscá el nombre del lugar acá.');
+      return;
+    }
+    const query = parsed?.query || rawQuery;
+    if (parsed?.query && searchInput) searchInput.value = query;
 
     renderMessage('Buscando lugares, negocios, calles y puntos de referencia…');
     try {
-      const places = await searchPlaces(rawQuery);
+      const places = await searchPlaces(query);
       if (generation !== searchGeneration) return;
       renderResults(places);
     } catch {
@@ -334,7 +359,7 @@ export async function createLocationMap({
   };
 
   if (searchInput && resultsEl) {
-    searchInput.placeholder = 'Buscar negocio, local, calle, barrio o referencia…';
+    searchInput.placeholder = 'Buscá un lugar, pegá un enlace de Google Maps o tocá el mapa…';
     searchInput.setAttribute('aria-autocomplete', 'list');
     searchInput.setAttribute('aria-controls', resultsEl.id);
     searchInput.setAttribute('aria-expanded', 'false');

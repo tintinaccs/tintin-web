@@ -46,6 +46,7 @@
     "/api/health",
     "/api/admin-runtime-health",
     "/api/cloudinary-sign-upload",
+    "/api/cloudinary-sign-audio-upload",
     "/api/cloudinary-delete",
     "/api/visitor-geo",
     "/api/geo-search",
@@ -63,6 +64,8 @@
     "/api/sheets-engagement-webhook",
     "/api/sheets-product-sync",
     "/api/sheets-products-webhook",
+    "/api/sheets-sync-snapshot",
+    "/api/sheets-admin-webhook",
     "/api/paypal-config",
     "/api/paypal-create-order",
     "/api/paypal-capture-order",
@@ -72,6 +75,11 @@
     "/api/visual-studio-global",
     "/api/visual-studio-global-public",
     "/api/code-studio/*",
+    "/api/push-config",
+    "/api/push-admin",
+    "/api/push-subscription",
+    "/api/push-test",
+    "/api/push-order-event",
     "/__/auth/*"
   ],
   "exclude": []
