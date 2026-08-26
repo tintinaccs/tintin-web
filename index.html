@@ -84,6 +84,7 @@
        existe (ver js/components/images/imagenes.js). -->
   <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260821-hero-authoritative-1">
   <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/hero-apple-inicio.css?v=tintin-20260826-hero-sin-tarjeta-1">
+  <link rel="stylesheet" href="css/pages/home/carrusel-colecciones.css?v=tintin-20260826-collections-parallax-4">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2">
   <script type="application/ld+json" id="tt-store-jsonld">{"@context":"https://schema.org","@type":"Store","@id":"https://tintinaccesorios.pages.dev/#store","name":"Tintin Accesorios & Relojes","url":"https://tintinaccesorios.pages.dev/","logo":"https://tintinaccesorios.pages.dev/assets-tintin/images/general/logo.png","image":"https://tintinaccesorios.pages.dev/assets/og-cover.jpg","description":"Tintin Accesorios & Relojes — tienda de accesorios femeninos elegantes en Paraguay. Relojes, bolsos, collares, aros, brazaletes y más.","areaServed":{"@type":"Country","name":"Paraguay"},"currenciesAccepted":"PYG"}</script>
@@ -227,6 +228,39 @@
 </section>
 
 <!-- ══════════════════════════════════════
+     COLECCIONES — CARRUSEL INFINITO
+══════════════════════════════════════ -->
+<section class="tt-collection-carousel" aria-labelledby="tt-collection-carousel-title">
+  <div class="tt-collection-carousel__heading">
+    <h2 class="tt-section-title" id="tt-collection-carousel-title">NUESTRAS COLECCIONES</h2>
+    <p class="tt-collection-carousel__description">Descubrí todo lo que tenemos para vos</p>
+  </div>
+  <div class="tt-collection-carousel__stage">
+    <div class="tt-collection-carousel__controls" aria-label="Controles del carrusel">
+      <button class="tt-collection-carousel__button" type="button" data-collection-carousel-prev aria-label="Ver colección anterior">
+        <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M19 12H5M11 6l-6 6 6 6" /></svg>
+      </button>
+      <button class="tt-collection-carousel__button" type="button" data-collection-carousel-next aria-label="Ver colección siguiente">
+        <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+      </button>
+    </div>
+    <div
+      class="tt-collection-carousel__viewport"
+      data-collection-carousel
+      role="region"
+      aria-roledescription="carrusel"
+      aria-label="Colecciones de Tintin"
+      tabindex="0"
+    >
+      <div class="tt-collection-carousel__track" data-collection-carousel-track aria-live="polite">
+        <div class="tt-collection-carousel__state" role="status">Cargando colecciones…</div>
+      </div>
+    </div>
+  </div>
+  <div class="tt-collection-carousel__pagination" data-collection-carousel-pagination aria-hidden="true"></div>
+</section>
+
+<!-- ══════════════════════════════════════
      EDITORIAL — BAG
 ══════════════════════════════════════ -->
 <section class="section-sm" data-tt-editable="index" data-tt-section="editorial_bag">
@@ -254,93 +288,6 @@
         Descubrí nuestra exclusiva colección de bags — el accesorio que transforma cualquier outfit en un look de revista. Diseños únicos pensados para la mujer moderna que quiere brillar sin esfuerzo.
       </p>
       <a href="/catalogo?cat=bolsos" class="tt-btn">LO QUIERO YA!</a>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════
-     COLLECTIONS GRID
-══════════════════════════════════════ -->
-<section class="section tt-collections-section">
-  <div class="container">
-    <div class="tt-collections-header">
-      <p class="tt-section-sub">Explorá todo</p>
-      <h2 class="tt-section-title">NUESTRAS COLECCIONES</h2>
-      <p class="tt-section-desc" style="margin:0 auto;text-align:center;">Descubrí todo lo que tenemos para vos</p>
-    </div>
-    <div class="tt-collections-grid">
-      <a href="/catalogo?cat=bolsos" class="tt-coll-card" data-slug="bolsos">
-        <div class="tt-coll-card-img" data-img-slot="coll_bags">
-          <img src="assets-tintin/images/collections/col-bags.webp" alt="Colección Bags" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
-        </div>
-        <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">BAGS</span></div>
-      </a>
-      <a href="/catalogo?cat=collares" class="tt-coll-card" data-slug="collares">
-        <div class="tt-coll-card-img" data-img-slot="coll_collares">
-          <img src="assets-tintin/images/collections/col-collares.webp" alt="Colección Collares" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
-        </div>
-        <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">COLLARES</span></div>
-      </a>
-      <a href="/catalogo?cat=earcuff" class="tt-coll-card" data-slug="earcuff">
-        <div class="tt-coll-card-img" data-img-slot="coll_earcuff">
-          <img src="assets-tintin/images/collections/col-earcuff.webp" alt="Colección Earcuff" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
-        </div>
-        <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">EARCUFF</span></div>
-      </a>
-      <a href="/catalogo?cat=gafas" class="tt-coll-card" data-slug="gafas">
-        <div class="tt-coll-card-img" data-img-slot="coll_gafas">
-          <img src="assets-tintin/images/collections/col-gafas.webp" alt="Colección Gafas" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
-        </div>
-        <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">GAFAS</span></div>
-      </a>
-      <a href="/catalogo?cat=brazaletes" class="tt-coll-card" data-slug="brazaletes">
-        <div class="tt-coll-card-img" data-img-slot="coll_brazaletes">
-          <img src="assets-tintin/images/collections/col-brazaletes.webp" alt="Colección Brazaletes" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
-        </div>
-        <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">BRAZALETES</span></div>
-      </a>
-      <a href="/catalogo?cat=aros" class="tt-coll-card" data-slug="aros">
-        <div class="tt-coll-card-img" data-img-slot="coll_aros">
-          <img src="assets-tintin/images/collections/col-aros.webp" alt="Colección Aros" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
-        </div>
-        <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">AROS</span></div>
-      </a>
-      <a href="/catalogo?cat=armcuff" class="tt-coll-card" data-slug="armcuff">
-        <div class="tt-coll-card-img" data-img-slot="coll_armcuff">
-          <img src="assets-tintin/images/collections/col-armcuff.webp" alt="Colección Armcuff" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
-        </div>
-        <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">ARMCUFF</span></div>
-      </a>
-      <a href="/catalogo?cat=anillos" class="tt-coll-card" data-slug="anillos">
-        <div class="tt-coll-card-img" data-img-slot="coll_anillos">
-          <img src="assets-tintin/images/collections/col-anillos.webp" alt="Colección Anillos" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
-        </div>
-        <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">ANILLOS</span></div>
-      </a>
-      <a href="/catalogo?cat=joyeros" class="tt-coll-card" data-slug="joyeros">
-        <div class="tt-coll-card-img" data-img-slot="coll_joyeros">
-          <img src="assets-tintin/images/collections/col-joyeros.webp" alt="Colección Joyeros" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
-        </div>
-        <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">JOYEROS</span></div>
-      </a>
-      <a href="/catalogo?cat=pulseras" class="tt-coll-card" data-slug="pulseras">
-        <div class="tt-coll-card-img" data-img-slot="coll_pulseras">
-          <img src="assets-tintin/images/collections/col-pulseras.webp" alt="Colección Pulseras" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
-        </div>
-        <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">PULSERAS</span></div>
-      </a>
-      <a href="/catalogo?cat=relojes" class="tt-coll-card" data-slug="relojes">
-        <div class="tt-coll-card-img" data-img-slot="coll_relojes">
-          <img src="assets-tintin/images/collections/col-relojes.webp" alt="Colección Relojes" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
-        </div>
-        <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">RELOJES</span></div>
-      </a>
-      <a href="/catalogo?cat=tobilleras" class="tt-coll-card" data-slug="tobilleras">
-        <div class="tt-coll-card-img" data-img-slot="coll_tobilleras">
-          <img src="assets-tintin/images/collections/col-tobilleras.webp" alt="Colección Tobilleras" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;display:block;" onerror="this.onerror=null;this.src='assets-tintin/images/collections/col-placeholder.webp';">
-        </div>
-        <div class="tt-coll-card-overlay"><span class="tt-coll-card-label">TOBILLERAS</span></div>
-      </a>
     </div>
   </div>
 </section>
@@ -395,24 +342,6 @@
         Relojes de acero inoxidable de alta calidad de la marca SKMEI y otras marcas de lujo asequible. Diseños elegantes, modernos y femeninos que se adaptan a cada estilo — del casual al más sofisticado.
       </p>
       <a href="/catalogo?cat=relojes" class="tt-btn tt-btn-gold">VER RELOJES →</a>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════
-     PRODUCTS GRID
-══════════════════════════════════════ -->
-<section class="section tt-products-section">
-  <div class="container">
-    <div class="tt-products-header">
-      <p class="tt-section-sub">Nuestros productos</p>
-      <h2 class="tt-section-title">MIRÁ TODO LO MÁS VENDIDO</h2>
-    </div>
-    <div class="tt-products-grid" id="products-grid">
-      <!-- Rendered by JS -->
-    </div>
-    <div style="text-align:center;margin-top:40px;">
-      <a href="/catalogo" class="tt-btn tt-btn-lg tt-btn-outline">Ver todo el catálogo →</a>
     </div>
   </div>
 </section>
@@ -591,7 +520,7 @@
 
     var hero = document.getElementById('hero');
     var trustBar = document.querySelector('.tt-trust-bar');
-    var collections = document.querySelector('.tt-collections-section');
+    var collections = document.querySelector('.tt-collection-carousel');
     var footer = document.querySelector('.tt-footer');
 
     var hasStaticStructure = !!(hero && trustBar && collections && footer);
@@ -617,6 +546,8 @@
 })();
 </script>
 <script src="tienda.js?v=tintin-20260822-checkout-hardening-1" defer></script>
+<script src="js/vendor/gsap.min.js?v=3.13.0"></script>
+<script type="module" src="js/pages/home/carrusel-colecciones.js?v=tintin-20260826-collections-parallax-4"></script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-1"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
