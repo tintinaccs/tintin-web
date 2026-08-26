@@ -148,6 +148,7 @@ jobs:
           # dentro del runner y no deben convertir el guard de limpieza en un rojo.
           git restore -- \
             diagnostic-manifest.json \
+            js/admin/notifications/notificaciones-push.js \
             404.html \
             about.html \
             cambios-devoluciones.html \

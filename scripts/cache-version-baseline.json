@@ -52,20 +52,20 @@
     "sha256": "ba36fabc7e04e62bab031d76b930d17602068383542a5ee218e7255c07c60751"
   },
   "css/components/navigation/escritorio/encabezado-escritorio.css": {
-    "version": "tintin-20260818-header-dropdowns-solid-3",
-    "sha256": "38a682983636303b485ccdfa8ea22889e9d0abb44622df77341abafdbced8d68"
+    "version": "tintin-20260824-header-responsive-sync-1",
+    "sha256": "350de2fe8a37833879c6166c0bc461206af639168670586aa7afbe91abeb8d3c"
   },
   "css/components/navigation/movil/encabezado-movil.css": {
-    "version": "tintin-20260818-header-dropdowns-solid-3",
-    "sha256": "06e8aea5affa20ff5b72885b797691503b98968eda4af03970e9491a698455b5"
+    "version": "tintin-20260824-header-responsive-sync-1",
+    "sha256": "cf5a51b103ed5ba39bac774526f7add93f73c81f439f136708988aba5bf3c78d"
   },
   "css/components/navigation/movil/fondos-solidos-movil.css": {
     "version": "tintin-20260817-cls-desktop-stable-3",
     "sha256": "2acd60dd440d7c0f8f6aef1d59cbe3fd495efa0df05eebb0616ca26b874886bc"
   },
   "css/components/navigation/tableta/encabezado-tableta.css": {
-    "version": "tintin-20260818-header-dropdowns-solid-3",
-    "sha256": "a4df3b74644e1b1f8b61f34e401b07e27aa9136965b24d190347c2cefa127e7c"
+    "version": "tintin-20260824-header-responsive-sync-1",
+    "sha256": "436afc73b1b72dfe10790bf152c8807a2c5be0d8075f89684848b22b4d198077"
   },
   "css/components/notifications/interacciones-sociales.css": {
     "version": "tintin-20260814-social-notifications-1",
@@ -84,8 +84,8 @@
     "sha256": "30037af6ce97934caa62d71c6ed8b1f2136d922364be486c5571362e08609058"
   },
   "css/core/tema-unificado-tintin.css": {
-    "version": "tintin-20260820-code-editor-1",
-    "sha256": "909b9de31d16064547569ace8322a85f04e4c1896aadf44c273156c4fe2979a1"
+    "version": "tintin-20260824-contrast-buttons-3",
+    "sha256": "edbad886674b91a8ad44a1f8baf377f696ed03804dd8a7dc42977a546acc7a43"
   },
   "css/core/tokens-color.css": {
     "version": "tintin-20260811-cls-desktop-stable-2",
@@ -200,8 +200,8 @@
     "sha256": "77f776d5b297ce973fe5ea432f318498d7e9f07a41f183525a79159c6686c12d"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20260822-fase16-ficha-1",
-    "sha256": "7554f4d70cdb5b2b8db8ec28a9d281d1ef8780e07b90f01f37d1824cd504d914"
+    "version": "tintin-20260825-web-push-integration-1",
+    "sha256": "a29b1bf920779c7354bcaad2347df153c49308bdf076d63e6dd24acda0c30910"
   },
   "js/admin/appearance/editor-visual-admin.js": {
     "version": "tintin-20260821-accounts-phase-a-1",
@@ -239,9 +239,21 @@
     "version": "tintin-20260821-code-editor-fit-4",
     "sha256": "504a8aede0fc775fb4ab3c87fc75f8e8fc1c0f9085834e729adf5339299b6539"
   },
+  "js/admin/notifications/enlace-pedido-push.js": {
+    "version": "tintin-20260825-web-push-2",
+    "sha256": "fdb83fb5b8505ed43cc257f8b83e103971b3e799ca259f9441c7957bc6b9a03c"
+  },
   "js/admin/notifications/notificaciones-admin.js": {
     "version": "tintin-20260821-accounts-phase-a-1",
     "sha256": "40cbba2010bc0ef6b47636e9c5e448204064c4eae5b6f83d2de072070e114660"
+  },
+  "js/admin/notifications/notificaciones-push-maestro.js": {
+    "version": "tintin-20260825-push-master-2",
+    "sha256": "d7ee2e7eec8a62ab87c16286ade8289794ea0c4b2221bc8d16aec25860956fd3"
+  },
+  "js/admin/notifications/notificaciones-push.js": {
+    "version": "tintin-20260825-web-push-6",
+    "sha256": "8b6330326f384c20aa7b3a81b70c3d4096332c6d3b37d78da1e051a0f70ce693"
   },
   "js/admin/orders/pedidos-superadmin-crud.js": {
     "version": "tintin-20260821-accounts-phase-a-1",
@@ -300,8 +312,8 @@
     "sha256": "0f18ef99f9c64ed882f65662cfb48d6e34071208eb5ebb823a03bb1c4e732e17"
   },
   "js/cargador-pagina.js": {
-    "version": "tintin-20260821-hero-authoritative-1",
-    "sha256": "8bb6c4f2644f5f854aab64e49bc7bf5da5e0bdf8dbc784ff7895d3673bbddaa0"
+    "version": "tintin-20260824-hero-first-paint-1",
+    "sha256": "5a6c2e2262c0a418bbf7638d8bb4c6f066ff5f1fe42045b63a9e9f599eefdbe6"
   },
   "js/components/cart/politica-persistencia-carrito.js": {
     "version": "tintin-20260808-product-cart-1",
@@ -404,8 +416,8 @@
     "sha256": "20fa4d8143a12b9f45362918402d3469b5db960aa11aa48a7f08e01b9e294ff6"
   },
   "js/components/location/mapa-ubicacion.js": {
-    "version": "tintin-20260818-pin-icon-svg-1",
-    "sha256": "8910e92b31e337c31ae8dd190527ce1f455e32979885b4b2306db662c47d453e"
+    "version": "tintin-20260824-google-maps-input-1",
+    "sha256": "dc039f7e79ab7b2c32fb3ffd5b115072427035829a46178a6171b36946d1bb48"
   },
   "js/components/location/selector-ubicacion.js": {
     "version": "tintin-20260803-location-picker-2",
@@ -428,28 +440,28 @@
     "sha256": "17fd3a687e67b08b1da1bba8b07b69e1bbea3ffd73404d7c1198ab218d4b4d06"
   },
   "js/components/navigation/compartido/carga-navegacion.js": {
-    "version": "tintin-20260821-notifications-lazy-1",
-    "sha256": "785b9f9aaa6707800cf5e4f06ec245220850b64ade0d2a59bfc639e66ac1626f"
+    "version": "tintin-20260824-header-responsive-sync-1",
+    "sha256": "2ace121d0be5199d93f7a69a770cbf6fcb9f420da54a94ccdc71206a2f20e738"
   },
   "js/components/navigation/compatibilidad/inicio-control-paneles.js": {
     "version": "tintin-20260811-cls-desktop-stable-2",
     "sha256": "ee01b238964e47e928d324797b4719a5769ac9712eb246909eab22014a88b16c"
   },
   "js/components/navigation/entrada-navegacion-publica.js": {
-    "version": "tintin-20260821-accounts-phase-a-1",
-    "sha256": "c6ff39765cd208ac1216c3a95dfc4a8fa92c769d474362b028bec650788c047c"
+    "version": "tintin-20260824-header-logo-fallback-1",
+    "sha256": "0131fcda1a7fa80c1e5da675b2781ce3416d0476f72a2b593dbab7b72fdada3d"
   },
   "js/components/navigation/escritorio/encabezado-escritorio.js": {
-    "version": "tintin-20260820-notifications-global-1",
-    "sha256": "c73508a4e481e8a88c9e5fc83c344eaa48f8f44501b5f547803cfbc36e67279e"
+    "version": "tintin-20260824-header-logo-fallback-1",
+    "sha256": "a4d24db59bcc8005b9a47afdb4d34c65be367553acfa7ff011395143455da38d"
   },
   "js/components/navigation/movil/encabezado-movil.js": {
     "version": "tintin-20260820-notifications-global-1",
     "sha256": "e8ba46b23ce5018c300a88874c48b563ccf9c7304c24f010b8957cc4b4b65fe9"
   },
   "js/components/navigation/tableta/encabezado-tableta.js": {
-    "version": "tintin-20260820-notifications-global-1",
-    "sha256": "e8f91e511897b70db2cc7e622dba28a64be072c9a25545f64d37326d1003a35d"
+    "version": "tintin-20260824-header-logo-fallback-1",
+    "sha256": "100120385243156f54181b083f90963f9aa4ea3684c37546b7092a99ad955c09"
   },
   "js/components/reviews/valoraciones-catalogo.js": {
     "version": "tintin-20260813-reviews-1",
@@ -592,8 +604,8 @@
     "sha256": "32c8e2375f1d0895e9dac667c2ed27e2de5fcf7a74cb5a1621b999bbad0ef2d2"
   },
   "js/inicio-navegacion-publica.js": {
-    "version": "tintin-20260821-accounts-phase-a-1",
-    "sha256": "e1d1b5f5626d2e6a57b34dfda93200790e64d13debdeed940833af84b6819630"
+    "version": "tintin-20260824-header-logo-fallback-1",
+    "sha256": "755d6f52e642eaf6014f2433f7d4c775f483c973a74abe068b2d652b348145e9"
   },
   "js/orders/nucleo-metodos-pago.js": {
     "version": "tintin-20260720-payment-crud-1",

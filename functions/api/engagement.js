@@ -9,6 +9,7 @@ import {
   encodeFirestoreFields, firestoreAdminCommit, firestoreAdminGet,
 } from '../../cloudflare/firebase-admin-ligero.js';
 import { syncEngagementToSheets } from '../../cloudflare/sincronizacion-participacion-sheets.js';
+import { dispatchSocialPushEvent } from '../../cloudflare/servicio-push.js';
 
 const MAX_BODY_BYTES = 8 * 1024;
 const REPLY_COOLDOWN_MS = 5000;
@@ -85,6 +86,25 @@ export async function onRequest(context) {
         ? { type: 'like', operation: result.selected ? 'upsert' : 'delete', record: result.record }
         : { type: 'review', operation: 'upsert', record: privateReview };
       context.waitUntil?.(syncEngagementToSheets(env, user.idToken, syncEvent));
+    }
+    const shouldPush = input.action === 'createReview' || input.action === 'replyReview'
+      || (input.action === 'toggleFavorite' && result.selected)
+      || (input.action === 'toggleReviewLike' && result.selected);
+    if (shouldPush) {
+      const type = input.action === 'createReview' ? 'social.review.created'
+        : input.action === 'replyReview' ? 'social.review.reply'
+          : input.action === 'toggleFavorite' ? 'social.like.product' : 'social.like.review';
+      const messages = {
+        'social.review.created': ['Nueva reseña en Tintin', 'Una clienta publicó una nueva reseña.'],
+        'social.review.reply': ['Nuevo comentario en una reseña', 'Una clienta respondió a una reseña.'],
+        'social.like.product': ['Nuevo Me gusta', 'A alguien le gustó un producto.'],
+        'social.like.review': ['Nuevo Me gusta en reseña', 'A alguien le gustó una reseña.'],
+      };
+      const [title, body] = messages[type];
+      context.waitUntil?.(dispatchSocialPushEvent(env, {
+        type, eventId: `${type}:${user.uid}:${Date.now()}`, title, body,
+        url: privateReview ? `/product?id=${encodeURIComponent(privateReview.productId || '')}#reviews` : '/admin.html?section=notificaciones-push'
+      }));
     }
     return jsonResponse({ ok: true, ...result }, 200, origin, request.url);
   } catch (error) {
