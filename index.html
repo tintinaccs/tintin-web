@@ -177,6 +177,23 @@
     </div>
   </div>
 
+  <button type="button" class="tt-hero-scroll-hint" aria-label="Bajar a la siguiente sección" onclick="document.querySelector('.tt-trust-bar')?.scrollIntoView({behavior:'smooth'})">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+  </button>
+  <script>
+    // Se oculta apenas el usuario empieza a scrollear, sin volver a mostrarse.
+    (function () {
+      var hint = document.querySelector('.tt-hero-scroll-hint');
+      if (!hint) return;
+      window.addEventListener('scroll', function onScroll() {
+        if (window.scrollY > 40) {
+          hint.classList.add('tt-hero-scroll-hint-hidden');
+          window.removeEventListener('scroll', onScroll);
+        }
+      }, { passive: true });
+    })();
+  </script>
+
 </section>
 
 <!-- ══════════════════════════════════════

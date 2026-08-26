@@ -1333,6 +1333,35 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   border-color: var(--pink-dark);
 }
 
+/* Indicador de scroll: invita a bajar, se oculta apenas el usuario scrollea */
+.tt-hero-scroll-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+  animation: tt-scroll-hint-bounce 1.8s ease-in-out infinite;
+}
+.tt-hero-scroll-hint.tt-hero-scroll-hint-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+@keyframes tt-scroll-hint-bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(8px); }
+}
+
 /* ═══════════════════════════════════════════════
    TRUST BAR
 ═══════════════════════════════════════════════ */
