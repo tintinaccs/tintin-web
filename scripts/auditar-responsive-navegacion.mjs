@@ -46,6 +46,9 @@ try {
       try { window.TintinLoader?.hide?.(); } catch {}
       document.getElementById('tt-loader')?.remove();
     });
+    if (width > 1024) {
+      await page.waitForFunction(() => (document.querySelector('.tt-desktop-active-pill')?.getBoundingClientRect().width || 0) > 20, null, { timeout:3000 }).catch(() => {});
+    }
     const state = await page.evaluate(() => {
       const visible = node => !!node && getComputedStyle(node).display !== 'none' && getComputedStyle(node).visibility !== 'hidden' && node.getBoundingClientRect().width > 0;
       const solidWhite = node => ['rgb(255, 255, 255)','rgba(255, 255, 255, 1)'].includes(getComputedStyle(node).backgroundColor);
