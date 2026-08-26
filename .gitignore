@@ -5,6 +5,8 @@ js/vendor/monaco/
 .env
 .env.*
 !.env.example
+.dev.vars
+.dev.vars.*
 *.pem
 *.key
 *.p12

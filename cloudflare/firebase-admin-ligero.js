@@ -30,17 +30,26 @@ function pemToDer(pem) {
 }
 
 let cachedServiceAccount = null;
-function parseServiceAccount(env) {
+// Se acepta cualquiera de los dos nombres de variable: FIREBASE_SERVICE_ACCOUNT_KEY
+// es el que ya usaba el login por código, FIREBASE_SERVICE_ACCOUNT_JSON el que
+// documenta docs/FIREBASE_WEB_PUSH_SETUP.md. Con una sola alcanza; si están las
+// dos, tienen que ser la misma cuenta de servicio.
+export function parseServiceAccount(env) {
   if (cachedServiceAccount) return cachedServiceAccount;
-  const raw = env.FIREBASE_SERVICE_ACCOUNT_KEY;
-  if (!raw) throw new Error('FIREBASE_SERVICE_ACCOUNT_KEY no está configurada');
+  const raw = env.FIREBASE_SERVICE_ACCOUNT_JSON || env.FIREBASE_SERVICE_ACCOUNT_KEY;
+  if (!raw) throw new Error('FIREBASE_SERVICE_ACCOUNT_JSON no está configurada');
   let json;
-  try { json = JSON.parse(raw); } catch { throw new Error('FIREBASE_SERVICE_ACCOUNT_KEY no es un JSON válido'); }
+  try { json = JSON.parse(raw); } catch { throw new Error('La cuenta de servicio de Firebase no es un JSON válido'); }
   if (!json.client_email || !json.private_key || !json.project_id) {
-    throw new Error('FIREBASE_SERVICE_ACCOUNT_KEY no tiene el formato esperado (¿se pegó el .json completo?)');
+    throw new Error('La cuenta de servicio de Firebase no tiene el formato esperado (¿se pegó el .json completo?)');
   }
-  cachedServiceAccount = json;
-  return json;
+  // Al pegar el JSON en un panel web los saltos de línea suelen quedar como la
+  // secuencia literal \n; sin normalizarlos, importKey() falla siempre.
+  cachedServiceAccount = {
+    ...json,
+    private_key: String(json.private_key).replace(/\\r\\n/g, '\n').replace(/\\n/g, '\n')
+  };
+  return cachedServiceAccount;
 }
 
 let cachedPrivateKey = null;

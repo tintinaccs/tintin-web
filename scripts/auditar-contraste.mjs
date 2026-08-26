@@ -20,7 +20,9 @@ await new Promise(r => server.listen(port, host, r));
 
 const paginas = fs.readdirSync(root).filter(f => f.endsWith('.html'));
 const pantallas = [['mobile',390,844],['desktop',1440,900]];
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+const browser = await chromium.launch({
+  executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || chromium.executablePath(),
+});
 const fallos = [];
 
 for (const pag of paginas) {

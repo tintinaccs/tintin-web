@@ -18,8 +18,13 @@ const server = http.createServer((rq, rs) => {
 });
 await new Promise(r => server.listen(port, host, r));
 
-const pantallas = [['mobile-chico',320,568],['mobile',390,844],['tablet',768,1024],['tablet-h',1024,768],['desktop',1440,900],['desktop-xl',1920,1080]];
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+const pantallas = [
+  ['mobile-chico', 320, 568], ['mobile-360', 360, 800], ['mobile-375', 375, 812],
+  ['mobile', 390, 844], ['mobile-grande', 430, 932], ['mobile-horizontal', 600, 430],
+  ['tablet', 768, 1024], ['tablet-grande', 820, 1180], ['tablet-h', 1024, 768],
+  ['laptop', 1280, 800], ['desktop', 1366, 768], ['desktop-grande', 1440, 900], ['desktop-xl', 1920, 1080],
+];
+const browser = await chromium.launch();
 const hallazgos = [];
 
 for (const [nombre, w, h] of pantallas) {

@@ -498,6 +498,7 @@ const SECTION_LABELS = {
   auditoria: 'Auditoría',
   diagnostico: 'Diagnóstico',
   correos: 'Correos',
+  'notificaciones-push': 'Notificaciones push',
   configuracion: 'Configuración',
   importar: 'Import / Export',
   // Sin esta entrada el topbar mostraba la clave cruda "permisos" en lugar de
@@ -530,6 +531,7 @@ const SECTION_PERMISSION = {
   // Super Admin (ni admin ni el Modder ven este menú, aunque sus propias
   // acciones en Pedidos puedan disparar un correo automático configurado acá).
   correos:       'manageSettings',
+  'notificaciones-push': 'manageSettings',
   // Apariencia: cambia el esquema de colores de TODA la plataforma (o del
   // panel) — mismo criterio de sensibilidad que Configuración/Correos.
   apariencia:    'manageSettings',
@@ -614,6 +616,7 @@ function switchSection(target) {
   if (target === 'colecciones') loadColecciones();
   if (target === 'auditoria') loadAuditLog();
   if (target === 'correos') loadCorreos();
+  if (target === 'notificaciones-push') window.TintinPushMasterRefresh?.();
   if (target === 'configuracion') loadConfig();
   if (target === 'importar') loadImportar();
   if (target === 'permisos') loadPermisosSection();
@@ -1228,6 +1231,14 @@ function refreshRealtimeConsumers() {
     refreshCorreosClientasFromRealtime();
   }
 }
+
+// Punto de lectura mínimo para el enlace directo de las notificaciones push
+// (js/admin/notifications/push-order-deeplink.js): saber si los pedidos ya
+// están cargados y si un pedido existe, sin exponer ningún dato del pedido.
+window.TintinAdminOrders = {
+  ready: () => adminRealtimeReady.orders === true,
+  has: orderId => allOrders.some(order => order.id === orderId)
+};
 
 function stopAdminRealtimeData() {
   if (adminOrdersUnsubscribe) adminOrdersUnsubscribe();
