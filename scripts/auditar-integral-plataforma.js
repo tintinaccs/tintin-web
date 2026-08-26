@@ -33,7 +33,7 @@ function check(label, condition, detail = '') {
 
 check(
   'La portada no abre listeners duplicados de colecciones o imágenes',
-  !files.home.includes("import { onCollectionsUpdate } from './js/pages/collections/estado-colecciones.js?v=tintin-20260716-cloudinary-fix-1'") &&
+  !files.home.includes("import { onCollectionsUpdate } from './js/pages/collections/estado-colecciones.js?v=tintin-20260821-accounts-phase-a-1'") &&
     !files.home.includes("import { onImagesUpdate } from './js/components/images/imagenes.js?v=tintin-20260716-cloudinary-fix-1'"),
   'la sincronización global debe ser la única propietaria de esas superficies'
 );
@@ -83,16 +83,22 @@ check(
 );
 
 check(
-  // La validación final de stock/precio ahora corre server-side (Apps
-  // Script) en una sola transacción de Firestore — ver
-  // apps-script/CrearPedido.gs. runTransaction() sigue en el
-  // navegador solo para el guard anti-repetición (checkoutGuards).
+  // La validación final de stock/precio corre server-side (Apps Script) en
+  // una sola transacción de Firestore. Las variantes del mismo producto se
+  // agregan antes de validar/descontar stock y el servidor recalcula la
+  // cotización completa antes del commit; runTransaction() en el navegador
+  // queda únicamente para el guard anti-repetición (checkoutGuards).
   'La compra final conserva validación transaccional',
   read('js/orders/pedido-checkout-seguro.js').includes('runTransaction') &&
-    read('apps-script/CrearPedido.gs').includes('qty > stock') &&
-    read('apps-script/CrearPedido.gs').includes('stock - item.qty') &&
-    read('apps-script/CrearPedido.gs').includes("phase4UpdateWrite_('products/' + item.id"),
-  'el servidor debe volver a validar el total solicitado'
+    read('apps-script/CrearPedido.gs').includes('requestedQtyByProduct[line.id] = (requestedQtyByProduct[line.id] || 0) + Number(line.qty || 0)') &&
+    read('apps-script/CrearPedido.gs').includes('requestedQtyByProduct[productId] > stock') &&
+    read('apps-script/CrearPedido.gs').includes('var total = subtotal + shippingCost') &&
+    read('apps-script/CrearPedido.gs').includes('Number(payload.expectedTotal) !== total') &&
+    read('apps-script/CrearPedido.gs').includes("error: 'quote_changed'") &&
+    read('apps-script/CrearPedido.gs').includes('stock: stock - requestedQtyByProduct[productId]') &&
+    read('apps-script/CrearPedido.gs').includes("phase4UpdateWrite_('products/' + productId") &&
+    read('apps-script/CrearPedido.gs').includes('phase4Commit_(writes, transactionId)'),
+  'el servidor debe agregar variantes, recalcular la cotización y validar stock antes del commit'
 );
 
 check(

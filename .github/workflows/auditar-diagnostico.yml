@@ -21,6 +21,9 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Instalar dependencias reproducibles
+        run: npm ci
+
       - name: Validar sintaxis
         run: |
           node --check js/admin/diagnostics/diagnostico-maestro-admin.js

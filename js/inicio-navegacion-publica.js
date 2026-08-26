@@ -6,13 +6,14 @@
   if (window.TintinPublicShellBootstrapStarted) return;
   window.TintinPublicShellBootstrapStarted = true;
 
-  const VERSION = 'tintin-20260816-loader-shell-atomic-1';
+  const ENTRY_VERSION = 'tintin-20260824-header-logo-fallback-1';
+  const BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
   const scriptUrl = document.currentScript?.src
     || new URL('js/inicio-navegacion-publica.js', window.location.href).href;
   const entryUrl = new URL('./components/navigation/entrada-navegacion-publica.js', scriptUrl);
   const barrierUrl = new URL('./components/navigation/compartido/barrera-arranque-shell.js', scriptUrl);
-  entryUrl.searchParams.set('v', VERSION);
-  barrierUrl.searchParams.set('v', VERSION);
+  entryUrl.searchParams.set('v', ENTRY_VERSION);
+  barrierUrl.searchParams.set('v', BARRIER_VERSION);
 
   let waitHeld = false;
   let barrierArmed = false;

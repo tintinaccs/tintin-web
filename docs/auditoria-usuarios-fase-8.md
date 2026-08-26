@@ -31,7 +31,11 @@ Las acciones sensibles son:
 - Eliminar la ficha de Firestore.
 - Acciones masivas equivalentes.
 
-La eliminación desde el navegador no borra la cuenta de Firebase Authentication. Esa operación requiere un backend administrativo y no está disponible en el plan Spark actual.
+La eliminación administrativa usa `/api/admin-delete-user`: deshabilita la cuenta
+de Firebase Authentication y conserva `users/{uid}` como tombstone. No borra
+`customerId`, email histórico, pedidos ni auditoría; libera únicamente la reserva
+telefónica reutilizable. La reactivación vuelve a habilitar el mismo UID y agrega
+otro evento append-only.
 
 ## Auditoría
 

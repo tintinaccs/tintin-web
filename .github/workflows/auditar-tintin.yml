@@ -35,26 +35,15 @@ jobs:
         with:
           node-version: 22
 
-      # Repository audit es un status requerido por el ruleset de main. Estas
-      # comprobaciones viven acá deliberadamente para que Fase 12 y los
-      # headers REALES de Cloudflare no puedan quedar como checks opcionales.
+      # Repository audit es un status requerido por el ruleset de main y se
+      # ejecuta sobre el merge ref efímero para validar la integración con la
+      # versión actual de main. La entrega real del SHA de la rama se valida en
+      # el job dedicado cloudflare-delivered-headers de Fase 11.
       - name: Generar y verificar CSP de entrega
         run: npm run build:csp && npm run verify:csp
 
       - name: Validar contrato estático de Fase 12
         run: node scripts/auditar-fase-12-entrega.mjs
-
-      - name: Validar headers reales del preview de Cloudflare
-        if: github.event_name == 'pull_request'
-        env:
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          TINTIN_TARGET_SHA: ${{ github.event.pull_request.head.sha }}
-          GITHUB_TOKEN: ${{ github.token }}
-          TINTIN_CLOUDFLARE_GATE_ATTEMPTS: 45
-          TINTIN_CLOUDFLARE_GATE_POLL_MS: 20000
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: node scripts/auditar-cloudflare-entrega-real.mjs
 
       - name: Test branch cleanup guard rails
         run: node --test tests/branches/auditar-limpiar-ramas.test.mjs
@@ -130,6 +119,15 @@ jobs:
 
       - name: Audit users, roles and permissions (Super Admin protections)
         run: node scripts/auditar-admin-usuarios-roles.js
+
+      - name: Audit canonical account contract (web, Cloudflare, Rules and Apps Script)
+        run: npm run audit:account-contract
+
+      - name: Test account identity, unified access and tombstones
+        run: npm run test:accounts
+
+      - name: Test canonical Productos sync and Sheets webhook
+        run: npm run test:products-sync
 
       - name: Audit content and appearance (editor safety, color apply)
         run: node scripts/auditar-admin-contenido-apariencia.js

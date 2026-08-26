@@ -85,7 +85,7 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
 
   function normalizeCanonical() {
     const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) canonical.href = new URL('perfil.html', window.location.origin + '/').href;
+    if (canonical) canonical.href = new URL('/perfil', window.location.origin).href;
   }
 
   function improveFormSemantics() {

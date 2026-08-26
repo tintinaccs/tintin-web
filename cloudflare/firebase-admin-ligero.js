@@ -30,17 +30,26 @@ function pemToDer(pem) {
 }
 
 let cachedServiceAccount = null;
-function parseServiceAccount(env) {
+// Se acepta cualquiera de los dos nombres de variable: FIREBASE_SERVICE_ACCOUNT_KEY
+// es el que ya usaba el login por código, FIREBASE_SERVICE_ACCOUNT_JSON el que
+// documenta docs/FIREBASE_WEB_PUSH_SETUP.md. Con una sola alcanza; si están las
+// dos, tienen que ser la misma cuenta de servicio.
+export function parseServiceAccount(env) {
   if (cachedServiceAccount) return cachedServiceAccount;
-  const raw = env.FIREBASE_SERVICE_ACCOUNT_KEY;
-  if (!raw) throw new Error('FIREBASE_SERVICE_ACCOUNT_KEY no está configurada');
+  const raw = env.FIREBASE_SERVICE_ACCOUNT_JSON || env.FIREBASE_SERVICE_ACCOUNT_KEY;
+  if (!raw) throw new Error('FIREBASE_SERVICE_ACCOUNT_JSON no está configurada');
   let json;
-  try { json = JSON.parse(raw); } catch { throw new Error('FIREBASE_SERVICE_ACCOUNT_KEY no es un JSON válido'); }
+  try { json = JSON.parse(raw); } catch { throw new Error('La cuenta de servicio de Firebase no es un JSON válido'); }
   if (!json.client_email || !json.private_key || !json.project_id) {
-    throw new Error('FIREBASE_SERVICE_ACCOUNT_KEY no tiene el formato esperado (¿se pegó el .json completo?)');
+    throw new Error('La cuenta de servicio de Firebase no tiene el formato esperado (¿se pegó el .json completo?)');
   }
-  cachedServiceAccount = json;
-  return json;
+  // Al pegar el JSON en un panel web los saltos de línea suelen quedar como la
+  // secuencia literal \n; sin normalizarlos, importKey() falla siempre.
+  cachedServiceAccount = {
+    ...json,
+    private_key: String(json.private_key).replace(/\\r\\n/g, '\n').replace(/\\n/g, '\n')
+  };
+  return cachedServiceAccount;
 }
 
 let cachedPrivateKey = null;
@@ -199,6 +208,22 @@ export async function deleteFirebaseUser(env, uid) {
   }
 }
 
+/** Habilita/deshabilita una cuenta sin destruir su UID ni su email histórico. */
+export async function setFirebaseUserDisabled(env, uid, disabled) {
+  const safeUid = String(uid || '').trim();
+  if (!/^[A-Za-z0-9_-]{6,128}$/.test(safeUid)) throw new Error('UID inválido');
+  const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
+  const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:update', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify({ localId: safeUid, disableUser: disabled === true })
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error('No se pudo actualizar el acceso de la cuenta: ' + (data?.error?.message || response.status));
+  }
+}
+
 // --- Firestore admin REST ---
 const FIRESTORE_SCOPE = 'https://www.googleapis.com/auth/datastore';
 
@@ -269,6 +294,31 @@ export async function firestoreAdminFindFirstByFields(env, collectionId, fieldPa
     if (document) return document;
   }
   return null;
+}
+
+/**
+ * Resuelve el email de la cuenta dueña de un username, a partir de la
+ * reserva en `usernameReservations/{key}` (ver js/components/forms/reserva-username.js).
+ * Devuelve null si el username no existe o no tiene cuenta asociada —
+ * indistinguible para el llamador de "no se pudo resolver", a propósito:
+ * firestore.rules ya bloquea la lectura pública de esa colección para que
+ * nadie pueda usarla para saber si un username tiene cuenta (ver
+ * scripts/probar-firestore-username-unico.mjs), y esta ruta admin no puede
+ * reabrir ese mismo agujero devolviendo una señal distinta según el caso.
+ * `get` es inyectable (por defecto firestoreAdminGet) para poder testear
+ * sin credenciales reales, mismo patrón que cloudflare/admin-runtime-health.js.
+ */
+export async function resolveEmailFromUsernameKey(env, usernameKey, { get = firestoreAdminGet } = {}) {
+  const key = String(usernameKey || '').trim();
+  if (!key) return null;
+  const reservation = await get(env, `usernameReservations/${encodeURIComponent(key)}`);
+  if (!reservation) return null;
+  const { uid } = decodeFirestoreFields(reservation.fields) || {};
+  if (!uid) return null;
+  const userDoc = await get(env, `users/${encodeURIComponent(String(uid))}`);
+  if (!userDoc) return null;
+  const { email } = decodeFirestoreFields(userDoc.fields) || {};
+  return typeof email === 'string' && email ? email.toLowerCase() : null;
 }
 
 /** Reemplaza el documento completo por `fields` (sin updateMask = set, no merge parcial). */
@@ -382,7 +432,10 @@ export async function firestoreAdminCommit(env, writes) {
         ? { currentDocument: write.currentDocument }
         : {};
       if (write.delete) return { delete: prefix + path, ...currentDocument };
-      return { update: { name: prefix + path, fields: write.fields || {} }, ...currentDocument };
+      const updateMask = Array.isArray(write.mergeFields) && write.mergeFields.length
+        ? { updateMask: { fieldPaths: write.mergeFields.map(field => String(field)) } }
+        : {};
+      return { update: { name: prefix + path, fields: write.fields || {} }, ...updateMask, ...currentDocument };
     })
   };
   if (!body.writes.length || body.writes.length > 20) throw new Error('Cantidad de escrituras inválida');
@@ -423,3 +476,4 @@ export function decodeFirestoreFields(fields) {
 export const fsString = value => ({ stringValue: String(value) });
 export const fsInteger = value => ({ integerValue: String(Math.trunc(Number(value) || 0)) });
 export const fsTimestamp = date => ({ timestampValue: date.toISOString() });
+export const fsBoolean = value => ({ booleanValue: value === true });

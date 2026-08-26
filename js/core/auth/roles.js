@@ -6,6 +6,10 @@ import { auth, db } from "../firebase/firebase.js?v=tintin-20260730-appcheck-sta
 import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import {
+  SUPER_ADMIN_EMAIL,
+  ASSIGNABLE_ROLES,
+} from './contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 
 // Única fuente de verdad para el cliente (importada por todo lo demás en
 // js/ que necesita identificar al Super Admin). Cloudflare Pages Functions
@@ -18,7 +22,7 @@ import {
 // claim requiere el Admin SDK corriendo en un entorno privilegiado (una
 // Cloud Function) — hoy el proyecto está en plan Spark y no las despliega
 // (ver firebase-cloud-functions-inactive/README.md).
-export const SUPER_ADMIN = 'tintinaccs@gmail.com';
+export const SUPER_ADMIN = SUPER_ADMIN_EMAIL;
 
 // El mensaje de cuenta bloqueada (con el enlace de WhatsApp) vive en
 // js/components/modals/modal-bloqueo.js — showBlockedModal() — para que login.html y
@@ -177,7 +181,7 @@ export async function getUserRole(uid, email) {
     const snap = await getDoc(doc(db, 'users', uid));
     if (!snap.exists()) return 'client';
     const role = snap.data().role || 'client';
-    return ['admin', 'agent', 'viewer', 'client'].includes(role) ? role : 'client';
+    return ASSIGNABLE_ROLES.includes(role) ? role : 'client';
   } catch (e) {
     console.error('Error getting user role:', e);
     return 'client';
@@ -190,8 +194,7 @@ export async function getUserRole(uid, email) {
  * @param {string} role
  */
 export async function setUserRole(uid, role) {
-  const allowed = ['admin', 'agent', 'viewer', 'client'];
-  if (!allowed.includes(role)) throw new Error('Rol no permitido');
+  if (!ASSIGNABLE_ROLES.includes(role)) throw new Error('Rol no permitido');
   try {
     await setDoc(doc(db, 'users', uid), {
       role,

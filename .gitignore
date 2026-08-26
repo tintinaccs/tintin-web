@@ -1,9 +1,12 @@
 node_modules/
+js/vendor/monaco/
 
 # Entornos y secretos: nunca deben publicarse ni quedar en el historial.
 .env
 .env.*
 !.env.example
+.dev.vars
+.dev.vars.*
 *.pem
 *.key
 *.p12

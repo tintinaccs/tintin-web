@@ -40,7 +40,10 @@ try {
     check(await page.locator('.tt-cart-sync-status').evaluate(node => getComputedStyle(node).display === 'flex'), `Equipo no puede ver estado de carrito a ${viewport.width}px`);
 
     check(await page.locator('#btn-tienda').getAttribute('aria-current') === 'page', `Header no marca Tienda a ${viewport.width}px`);
-    check(await page.locator('#btn-mobile-tienda').getAttribute('aria-current') === 'page', `Menú tablet no marca Tienda a ${viewport.width}px`);
+    // El header de tablet usa el mismo contrato de ruta que el estado
+    // compartido (`btn-tablet-tienda`). `btn-mobile-tienda` era un id legado
+    // que ya no existe y convertía esta comprobación en un falso negativo.
+    check(await page.locator('#btn-tablet-tienda').getAttribute('aria-current') === 'page', `Menú tablet no marca Tienda a ${viewport.width}px`);
     check(await page.locator('#tabbar-tienda').getAttribute('aria-current') === 'page', `Tabbar no expone la ruta Tienda a ${viewport.width}px`);
     check(await page.locator('#tabbar-tienda').evaluate(node => node.classList.contains('active')), `Tabbar no marca Tienda a ${viewport.width}px`);
   }

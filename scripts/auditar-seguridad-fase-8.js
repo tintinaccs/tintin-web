@@ -9,6 +9,7 @@ const roles = read('js/core/auth/roles.js');
 const rules = read('firestore.rules');
 const pkg = read('package.json');
 const deleteUserEndpoint = read('functions/api/admin-delete-user.js');
+const accountContract = JSON.parse(read('config/account-contract.json'));
 
 let failures = 0;
 function check(label, condition, detail = '') {
@@ -22,14 +23,15 @@ function check(label, condition, detail = '') {
 check(
   'El Super Admin se reconoce por el correo oficial',
   phase.includes("lower(state.user.email) === SUPER_ADMIN") &&
-    roles.includes("export const SUPER_ADMIN = 'tintinaccs@gmail.com'"),
+    roles.includes('export const SUPER_ADMIN = SUPER_ADMIN_EMAIL') &&
+    accountContract.superAdminEmail === 'tintinaccs@gmail.com',
   'No debe depender de un rol editable en Firestore'
 );
 
 check(
   'No se puede asignar superadmin desde el panel',
-  phase.includes("const ALLOWED_ROLES = ['admin', 'agent', 'viewer', 'client']") &&
-    !phase.includes("ALLOWED_ROLES = ['superadmin'"),
+  phase.includes('const ALLOWED_ROLES = ASSIGNABLE_ROLES') &&
+    !accountContract.assignableRoles.includes('superadmin'),
   'Super Admin es una identidad protegida, no una opción de rol'
 );
 
@@ -59,20 +61,23 @@ check(
 );
 
 check(
-  'La restauración masiva vuelve a Cliente',
-  phase.includes('Restauración masiva como Cliente') &&
-    phase.includes("blocked: false") &&
-    phase.includes("role: 'client'"),
-  'No se debe adivinar un rol elevado en una acción masiva'
+  'La restauración masiva recupera el rol previo válido',
+  phase.includes('roleBeforeBlock') &&
+    phase.includes('ALLOWED_ROLES.includes(user.roleBeforeBlock)') &&
+    phase.includes("? user.roleBeforeBlock : 'client'") &&
+    phase.includes('blocked: false'),
+  'Debe recuperar roleBeforeBlock cuando sea válido y usar client solo como respaldo seguro'
 );
 
 check(
-  'La eliminación borra identidad y datos asociados desde el servidor',
+  'La eliminación revoca acceso y conserva una identidad histórica auditada',
   phase.includes("fetch('/api/admin-delete-user'") &&
-    deleteUserEndpoint.includes('deleteFirebaseUser(env, uid)') &&
+    deleteUserEndpoint.includes("profileStatus: fsString('deleted')") &&
+    deleteUserEndpoint.includes('setFirebaseUserDisabled(env, uid') &&
+    deleteUserEndpoint.includes('auditLog/${id}') &&
     deleteUserEndpoint.includes('phoneReservations/') &&
-    deleteUserEndpoint.includes('/cart'),
-  'el navegador no debe limitarse a borrar solo la ficha Firestore'
+    !deleteUserEndpoint.includes('deleteFirebaseUser'),
+  'la cuenta debe quedar como tombstone y no borrarse físicamente'
 );
 
 check(

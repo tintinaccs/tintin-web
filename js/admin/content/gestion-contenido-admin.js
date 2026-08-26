@@ -14,8 +14,8 @@ import {
   serverTimestamp,
   increment,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN, getUserRole } from '../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
-import { loadRolePermissions, canDo } from '../../core/auth/permisos-roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { SUPER_ADMIN, getUserRole } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
+import { loadRolePermissions, canDo } from '../../core/auth/permisos-roles.js?v=tintin-20260821-accounts-phase-a-1';
 import {
   CONTENT_PAGE_IDS,
   SITE_CONTENT_SCHEMA,
@@ -29,7 +29,7 @@ import {
   sanitizeSection,
   sanitizeContentHref,
   normalizeContentValue,
-} from '../../core/store/esquema-contenido.js?v=tintin-20260815-routes-clean-1';
+} from '../../core/store/esquema-contenido.js?v=tintin-20260826-carousel-order-2';
 
 if (!window.TintinAdminContentPhase6Booted) {
   window.TintinAdminContentPhase6Booted = true;

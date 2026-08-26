@@ -748,6 +748,21 @@ function createRuntime() {
     appCheckReady.then(ready => {
       if (generation !== authGeneration || currentUser?.uid !== user.uid) return;
       if (!ready) {
+        // App Check puede quedar bloqueado por el navegador. Aun en ese modo
+        // el carrito agregado antes de resolver Auth debe sobrevivir al cambio
+        // invitada → cuenta; se conserva localmente y queda marcado dirty para
+        // sincronizarlo en una carga posterior donde App Check sí responda.
+        if (guestAtLogin.length) {
+          const recovered = addGuestQuantities(currentLocalCart(), guestAtLogin);
+          const normalized = writeLocal(recovered, { notify: true });
+          desiredCart = normalized;
+          desiredProjection = projection(normalized);
+          pendingRemoteWrite = true;
+          rawStringSet(dirtyKey(currentUser.uid), '1');
+          rawSet(GUEST_CART_KEY, []);
+          rawRemove(GUEST_ACTIVITY_KEY);
+          guestAtLogin = [];
+        }
         setStatus('offline');
         readyResolve?.();
         return;
@@ -1081,7 +1096,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-  import('../../orders/pedido-checkout-seguro.js?v=tintin-20260814-social-notifications-1').catch(error => {
+  import('../../orders/pedido-checkout-seguro.js?v=tintin-20260822-checkout-hardening-2').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

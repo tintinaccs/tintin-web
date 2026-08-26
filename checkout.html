@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1"></script>
-  <script src="js/cargador-pagina.js?v=tintin-20260816-loader-min-show-1"></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260824-hero-first-paint-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20260816-loader-shell-atomic-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20260824-header-logo-fallback-1" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -22,13 +22,11 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
-  <link rel="modulepreload" href="js/core/store-gate/control-tienda.js?v=tintin-20260818-gate-icon-svg-2">
-  <link rel="modulepreload" href="js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260816-loader-shell-atomic-1">
-  <link rel="preload" as="style" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260818-header-dropdowns-solid-3">
-  <link rel="preload" as="style" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260818-header-dropdowns-solid-3">
-  <link rel="preload" as="style" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260818-header-dropdowns-solid-3">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260824-header-logo-fallback-1">
+  <link rel="preload" as="style" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260824-header-responsive-sync-1">
+  <link rel="preload" as="style" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260824-header-responsive-sync-1">
+  <link rel="preload" as="style" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" href="css/components/navigation/compartido/transiciones-navegacion.css?v=tintin-20260818-header-dropdowns-solid-3">
   <link rel="preload" as="style" href="css/components/navigation/compartido/paneles.css?v=tintin-20260818-header-dropdowns-solid-3">
   <link rel="preload" as="style" href="css/components/navigation/compartido/busqueda.css?v=tintin-20260818-header-dropdowns-solid-3">
@@ -41,12 +39,12 @@
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3">
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260818-collections-apple-2">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260826-hero-scroll-hint-1">
   <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20260818-text-icons-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260820-tintin-core-visual-1">
+  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260824-contrast-buttons-3">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -218,7 +216,7 @@
         <div id="ck-map"></div>
         <div class="ck-map-coords ck-map-coords-missing" id="ck-map-coords"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:5px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Todavía no marcaste tu ubicación — es obligatoria para continuar</div>
         <div class="ck-map-name-wrap">
-          <label class="ck-label" for="ck-location-name">Nombre de esta ubicación *</label>
+          <label class="ck-label" for="ck-location-name">Guardá este punto como *</label>
           <input type="text" class="ck-input" id="ck-location-name" placeholder="Ej: Mi casa, Local del trabajo, Casa de mi tía" maxlength="60" />
           <label class="ck-checkbox-row" id="ck-save-location-row">
             <input type="checkbox" id="ck-save-location" checked />
@@ -258,6 +256,29 @@
       <div class="ck-field">
         <label class="ck-label" for="ck-notes">Notas opcionales</label>
         <textarea class="ck-textarea" id="ck-notes" placeholder="Ej: Entregar después de las 17hs, timbre no funciona…"></textarea>
+      </div>
+
+      <div class="ck-field" id="ck-ci-field" style="display:none">
+        <label class="ck-label" for="ck-ci">Cédula de identidad *</label>
+        <input type="text" class="ck-input" id="ck-ci" placeholder="Ej: 4123456" inputmode="numeric" maxlength="8" />
+        <p style="margin:4px 0 0;font-size:11.5px;color:var(--text-muted);line-height:1.4">La transportadora la pide para la encomienda.</p>
+      </div>
+
+      <div class="ck-field">
+        <label class="ck-checkbox-row" id="ck-wants-invoice-row">
+          <input type="checkbox" id="ck-wants-invoice" />
+          <span>Quiero factura</span>
+        </label>
+      </div>
+      <div id="ck-invoice-fields" style="display:none">
+        <div class="ck-field">
+          <label class="ck-label" for="ck-razon-social">Razón social *</label>
+          <input type="text" class="ck-input" id="ck-razon-social" placeholder="Nombre o razón social para la factura" />
+        </div>
+        <div class="ck-field">
+          <label class="ck-label" for="ck-ruc">RUC *</label>
+          <input type="text" class="ck-input" id="ck-ruc" placeholder="Ej: 80012345-6" />
+        </div>
       </div>
 
       <div class="ck-error" id="error-2" role="alert"></div>
@@ -371,15 +392,16 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart
-} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260814-social-notifications-1";
+} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260822-checkout-final-cart-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
+import { isValidCi, normalizeCi, isValidRuc, normalizeRuc, isValidRazonSocial } from "./js/components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
 import {
   isAccessAllowed,
   normalizeStoreAccessConfig,
   renderStoreClosedOverlay,
   removeStoreClosedOverlay
-} from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1";
+} from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260821-accounts-phase-a-1";
 import { cleanText } from "./js/core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=tintin-20260803-location-picker-2";
 import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260803-encomienda-1";
@@ -589,7 +611,11 @@ let orderData = {
   phone: '',
   email: '',
   notes: '',
-  paymentMethod: ''
+  paymentMethod: '',
+  wantsInvoice: false,
+  razonSocial: '',
+  ruc: '',
+  ci: ''
 };
 
 // ---- LABEL FOR A CITY'S SHIPPING COST (null = sin precio cargado) ----
@@ -663,17 +689,18 @@ function populateCitiesForDepartamento(dep, keepCityIfPresent) {
 
   select.disabled = false;
   select.innerHTML = '<option value="">— Seleccioná tu ciudad —</option>';
-  // El retiro en tienda es una ciudad más (la única sin costo de envío),
+  // El retiro coordinado en San Lorenzo es una opción más (la única sin costo de envío),
   // no un departamento aparte — solo existe en Central, que es donde está
   // San Lorenzo, y va arriba de todo el resto de las opciones de esa zona.
   if (dep === 'Central') {
     const retiroOpt = document.createElement('option');
     retiroOpt.value = RETIRO_VALUE;
-    retiroOpt.textContent = '🏪 Retiro en tienda';
+    retiroOpt.textContent = '📍 Retiro en San Lorenzo';
     select.appendChild(retiroOpt);
   }
   if (delivery.length) {
     const group = document.createElement('optgroup');
+    group.id = 'ck-city-delivery-group';
     group.label = '🚚 Delivery a domicilio';
     delivery.forEach(city => {
       const opt = document.createElement('option');
@@ -685,6 +712,7 @@ function populateCitiesForDepartamento(dep, keepCityIfPresent) {
   }
   if (encomienda.length) {
     const group = document.createElement('optgroup');
+    group.id = 'ck-city-encomienda-group';
     group.label = '📦 Encomienda';
     encomienda.forEach(city => {
       const opt = document.createElement('option');
@@ -804,7 +832,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260814-social-notifications-1');
+        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260822-checkout-final-cart-1');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -1030,6 +1058,12 @@ function goToStep(n) {
     if (i < n)  s.classList.add('done');
   });
   currentStep = n;
+  // El CI sólo se pide para encomienda, decidido en el paso anterior (envío)
+  // — se revela recién acá porque es cuando orderData.shippingMethod ya está
+  // definido.
+  if (n === 2) {
+    document.getElementById('ck-ci-field').style.display = orderData.shippingMethod === 'encomienda' ? '' : 'none';
+  }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -1081,12 +1115,20 @@ document.getElementById('ck-city').onchange = function() {
     reminderEl.classList.remove('show');
     document.getElementById('ck-pickup-notice').classList.remove('show');
     hideEncomiendaModes();
+    orderData.city = '';
+    orderData.shippingMethod = '';
+    orderData.encomiendaMode = '';
+    orderData.shippingCost = 0;
+    orderData.mapLocation = null;
+    refreshPaymentOptions();
     return;
   }
 
   infoEl.classList.add('show');
-  const isDelivery = DELIVERY_CITIES.some(c => c.name === val);
-  const isEncomienda = ENCOMIENDA_CITIES.some(c => c.name === val);
+  const selectedOption = this.options[this.selectedIndex];
+  const selectedGroupId = selectedOption?.parentElement?.id || '';
+  const isDelivery = selectedGroupId === 'ck-city-delivery-group' || (!selectedGroupId && DELIVERY_CITIES.some(c => c.name === val) && !ENCOMIENDA_CITIES.some(c => c.name === val));
+  const isEncomienda = selectedGroupId === 'ck-city-encomienda-group' || (!selectedGroupId && ENCOMIENDA_CITIES.some(c => c.name === val) && !DELIVERY_CITIES.some(c => c.name === val));
 
   // Dato guardado en el perfil (perfil.html → "Dirección de entrega") — se
   // usa solo para prellenar, nunca pisa lo que la clienta ya haya escrito.
@@ -1100,6 +1142,10 @@ document.getElementById('ck-city').onchange = function() {
     costEl.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:5px"><polyline points="20 6 9 17 4 12"/></svg>Sin costo de envío';
     orderData.shippingMethod = 'retiro';
     orderData.shippingCost = 0;
+    orderData.encomiendaMode = '';
+    orderData.address = '';
+    orderData.referencia = '';
+    orderData.mapLocation = null;
     addressField.style.display = 'none';
     referenciaField.style.display = 'none';
     mapWrap.classList.remove('show');
@@ -1266,12 +1312,21 @@ phoneCountrySelect.innerHTML = COUNTRIES.map(c =>
 ).join('');
 phoneCountrySelect.value = DEFAULT_COUNTRY.code;
 
+const invoiceFieldsEl = document.getElementById('ck-invoice-fields');
+document.getElementById('ck-wants-invoice').onchange = function() {
+  invoiceFieldsEl.style.display = this.checked ? '' : 'none';
+};
+
 document.getElementById('btn-step3-next').onclick = () => {
   hideErrors();
   const name = document.getElementById('ck-name').value.trim();
   const phoneRaw = document.getElementById('ck-phone-number').value.trim();
   const country = findCountryByCode(phoneCountrySelect.value);
   const email = document.getElementById('ck-email').value.trim();
+  const wantsInvoice = document.getElementById('ck-wants-invoice').checked;
+  const razonSocial = document.getElementById('ck-razon-social').value.trim();
+  const ruc = document.getElementById('ck-ruc').value.trim();
+  const ciRaw = document.getElementById('ck-ci').value.trim();
   if (!name) { showError(2, 'Ingresá tu nombre completo.'); return; }
   if (!phoneRaw) { showError(2, 'Ingresá tu teléfono o WhatsApp.'); return; }
   if (!isValidPhone(phoneRaw, country)) {
@@ -1286,10 +1341,26 @@ document.getElementById('btn-step3-next').onclick = () => {
     showError(2, 'Ingresá un email válido o dejalo en blanco.');
     return;
   }
+  if (orderData.shippingMethod === 'encomienda' && !isValidCi(ciRaw)) {
+    showError(2, 'Ingresá tu cédula de identidad (solo números, 5 a 8 dígitos) — la transportadora la pide para la encomienda.');
+    return;
+  }
+  if (wantsInvoice && !isValidRazonSocial(razonSocial)) {
+    showError(2, 'Ingresá la razón social para la factura.');
+    return;
+  }
+  if (wantsInvoice && !isValidRuc(ruc)) {
+    showError(2, 'Ingresá un RUC válido, con guion y dígito verificador (ej: 80012345-6).');
+    return;
+  }
   orderData.name = name;
   orderData.phone = phone;
   orderData.email = email;
   orderData.notes = document.getElementById('ck-notes').value.trim();
+  orderData.ci = orderData.shippingMethod === 'encomienda' ? normalizeCi(ciRaw) : '';
+  orderData.wantsInvoice = wantsInvoice;
+  orderData.razonSocial = wantsInvoice ? razonSocial : '';
+  orderData.ruc = wantsInvoice ? normalizeRuc(ruc) : '';
   goToStep(3);
 };
 document.getElementById('btn-step3-back').onclick = () => goToStep(1);
@@ -1839,8 +1910,8 @@ onAuthStateChanged(auth, user => {
 });
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260815-profile-routes-1"></script>
-<script src="tienda.js?v=tintin-20260818-product-trust-icons-2" defer></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1"></script>
+<script src="tienda.js?v=tintin-20260822-checkout-hardening-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

@@ -16,17 +16,20 @@ import {
   doc,
   onSnapshot,
   query,
+  where,
   orderBy,
   limit,
   writeBatch,
   serverTimestamp,
+  getDocs,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN, ROLE_LABELS } from '../../core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1';
+import { SUPER_ADMIN, ROLE_LABELS } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
+import { ASSIGNABLE_ROLES } from '../../core/auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 
 if (!window.TintinAdminUsersPhase8Booted) {
   window.TintinAdminUsersPhase8Booted = true;
 
-  const ALLOWED_ROLES = ['admin', 'agent', 'viewer', 'client'];
+  const ALLOWED_ROLES = ASSIGNABLE_ROLES;
   const state = {
     user: null,
     users: [],
@@ -71,6 +74,130 @@ if (!window.TintinAdminUsersPhase8Booted) {
     }).format(date);
   }
 
+  const ORDER_STATUS_LABELS = {
+    pendiente:    'Pendiente',
+    confirmado:   'Confirmado',
+    preparando:   'En preparación',
+    listo_retiro: 'Listo para retirar',
+    en_camino:    'En camino',
+    entregado:    'Entregado',
+    cancelado:    'Cancelado',
+    rechazado:    'Rechazado',
+    enviado:      'En camino', // legado
+  };
+  const COMPLETED_STATUSES = new Set(['entregado']);
+  const CANCELLED_STATUSES = new Set(['cancelado', 'rechazado']);
+
+  function formatPrice(value) {
+    const n = Number(value) || 0;
+    return `Gs. ${n.toLocaleString('es-PY')}`;
+  }
+
+  async function loadClientOrders(uid) {
+    const q = query(collection(db, 'orders'), where('userId', '==', uid));
+    const snap = await getDocs(q);
+    return snap.docs
+      .map(item => ({ id: item.id, ...item.data() }))
+      .sort((a, b) => (b.createdAt?.toDate?.() || new Date(0)) - (a.createdAt?.toDate?.() || new Date(0)));
+  }
+
+  function ficaField(label, value) {
+    const wrap = el('div', 'ficha-field');
+    wrap.appendChild(el('div', 'ficha-field-label', label));
+    wrap.appendChild(el('div', 'ficha-field-value', value || '—'));
+    return wrap;
+  }
+
+  function ficaSection(title) {
+    const section = el('div', 'ficha-section');
+    section.appendChild(el('div', 'ficha-section-title', title));
+    const grid = el('div', 'ficha-grid');
+    section.appendChild(grid);
+    return { section, grid };
+  }
+
+  async function openClientFicha(user) {
+    const overlay = document.getElementById('client-ficha-overlay');
+    const body = document.getElementById('client-ficha-body');
+    if (!overlay || !body) return;
+    body.replaceChildren(el('div', 'adm-loading', 'Cargando ficha…'));
+    overlay.style.display = 'block';
+
+    const identidad = ficaSection('Identidad');
+    identidad.grid.append(
+      ficaField('Nombre', user.name),
+      ficaField('@username', user.username ? `@${user.username}` : ''),
+      ficaField('Customer ID', user.customerId || `CUS_${user.uid}`),
+      ficaField('Rol', ROLE_LABELS[canonicalRole(user)] || canonicalRole(user)),
+      ficaField('Cuenta creada', formatDate(user.createdAt)),
+      ficaField('Estado de perfil', user.profileStatus || '—'),
+    );
+
+    const contacto = ficaSection('Contacto');
+    contacto.grid.append(
+      ficaField('Email', user.email),
+      ficaField('Teléfono', user.phone),
+      ficaField('Ubicación', user.address || user.savedLocation?.name),
+      ficaField('Fecha de nacimiento', user.dob),
+    );
+
+    const seguridad = ficaSection('Seguridad y acceso');
+    seguridad.grid.append(
+      ficaField('Estado', user.blocked ? `Bloqueado (${user.blockReason || 'sin motivo'})` : 'Activo'),
+      ficaField('Cambio de @username usado', user.usernameChangedAt ? 'Sí' : 'No'),
+    );
+
+    let orders = [];
+    try {
+      orders = await loadClientOrders(user.uid);
+    } catch (error) {
+      orders = [];
+    }
+    const pendientes = orders.filter(o => !COMPLETED_STATUSES.has(o.status) && !CANCELLED_STATUSES.has(o.status)).length;
+    const completados = orders.filter(o => COMPLETED_STATUSES.has(o.status)).length;
+    const cancelados = orders.filter(o => CANCELLED_STATUSES.has(o.status)).length;
+    const ultimaCi = orders.find(o => o.ci)?.ci;
+
+    const pedidos = ficaSection(`Pedidos (${orders.length})`);
+    pedidos.grid.append(
+      ficaField('Pendientes', String(pendientes)),
+      ficaField('Completados', String(completados)),
+      ficaField('Cancelados', String(cancelados)),
+      ficaField('Cédula (última encomienda)', ultimaCi),
+    );
+    const ordersList = el('div', 'ficha-orders-list');
+    orders.slice(0, 10).forEach(order => {
+      const row = el('div', 'ficha-order-row');
+      row.appendChild(el('span', '', `#${text(order.id).slice(-6).toUpperCase()} · ${formatDate(order.createdAt)}`));
+      row.appendChild(el('span', 'adm-badge', ORDER_STATUS_LABELS[order.status] || order.status || 'Pendiente'));
+      row.appendChild(el('span', '', formatPrice(order.total)));
+      ordersList.appendChild(row);
+    });
+    if (!orders.length) ordersList.appendChild(el('div', '', 'Sin pedidos registrados'));
+    pedidos.section.appendChild(ordersList);
+
+    const auditoria = ficaSection('Auditoría reciente');
+    const auditList = el('div', 'ficha-orders-list');
+    const relatedLogs = state.logs.filter(log => log.targetId === user.uid).slice(0, 10);
+    relatedLogs.forEach(log => {
+      const row = el('div', 'ficha-order-row');
+      row.appendChild(el('span', '', formatDate(log.createdAt)));
+      row.appendChild(el('span', '', log.action || '—'));
+      row.appendChild(el('span', '', log.details || '—'));
+      auditList.appendChild(row);
+    });
+    if (!relatedLogs.length) auditList.appendChild(el('div', '', 'Sin acciones registradas sobre esta cuenta'));
+    auditoria.section.appendChild(auditList);
+
+    body.replaceChildren(identidad.section, contacto.section, pedidos.section, seguridad.section, auditoria.section);
+  }
+
+  function closeClientFicha() {
+    const overlay = document.getElementById('client-ficha-overlay');
+    if (overlay) overlay.style.display = 'none';
+  }
+  window.closeClientFicha = closeClientFicha;
+
   function auditPayload(action, target, details = '', meta = {}) {
     return {
       action,
@@ -101,6 +228,20 @@ if (!window.TintinAdminUsersPhase8Booted) {
     });
     batch.set(doc(collection(db, 'auditLog')), audit);
     await batch.commit();
+  }
+
+  async function commitAccountStatus(user, action, reason = '') {
+    if (!ensureSuperAdmin()) throw new Error('Solo Super Admin puede gestionar usuarios.');
+    const token = await state.user.getIdToken();
+    const response = await fetch('/api/admin-delete-user', {
+      method: 'POST',
+      cache: 'no-store',
+      headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
+      body: JSON.stringify({ uid: user.uid, action, reason })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo actualizar la cuenta.');
+    return result;
   }
 
   function filteredUsers() {
@@ -200,20 +341,31 @@ if (!window.TintinAdminUsersPhase8Booted) {
   }
 
   async function restoreOne(user) {
-    if (!confirm(`¿Restaurar a ${user.name || user.email} como Cliente?`)) return;
+    if (user.deleted === true || user.profileStatus === 'deleted') {
+      if (!confirm(`¿Reactivar la identidad histórica de ${user.name || user.email} como Cliente?`)) return;
+      try {
+        await commitAccountStatus(user, 'reactivate', 'Reactivación desde Super Admin');
+        toast('Cuenta reactivada y auditada');
+      } catch (error) {
+        toast(error.message || 'No se pudo reactivar', true);
+      }
+      return;
+    }
+    const restoredRole = ALLOWED_ROLES.includes(user.roleBeforeBlock) ? user.roleBeforeBlock : 'client';
+    if (!confirm(`¿Restaurar a ${user.name || user.email} como ${ROLE_LABELS[restoredRole] || restoredRole}?`)) return;
     try {
       await commitUserAction([
         { uid: user.uid, data: {
           blocked: false,
-          role: 'client',
+          role: restoredRole,
           blockedAt: null,
           blockedBy: '',
           blockReason: '',
           roleBeforeBlock: '',
           updatedAt: serverTimestamp(),
         } }
-      ], auditPayload('restaurar_usuario', user, 'Restaurado como Cliente'));
-      toast('Usuario restaurado como Cliente');
+      ], auditPayload('restaurar_usuario', user, `Rol anterior restaurado: ${ROLE_LABELS[restoredRole] || restoredRole}`));
+      toast(`Usuario restaurado como ${ROLE_LABELS[restoredRole] || restoredRole}`);
     } catch (error) {
       toast(error.message || 'No se pudo restaurar', true);
     }
@@ -221,19 +373,12 @@ if (!window.TintinAdminUsersPhase8Booted) {
 
   async function deleteOne(user) {
     if (isSuperRecord(user)) return toast('El perfil del Super Admin no se puede eliminar', true);
-    if (!confirm(`¿Eliminar definitivamente a ${user.name || user.email}?\n\nSe borrarán la cuenta de acceso, el perfil, el carrito y la reserva telefónica. Esta acción no se puede deshacer.`)) return;
+    const reason = prompt('Motivo de la eliminación (queda en auditoría):', '') ?? null;
+    if (reason === null) return;
+    if (!confirm(`¿Eliminar la cuenta de ${user.name || user.email}?\n\nSe revocará el acceso y se liberará el teléfono, pero se conservarán customerId, email, pedidos y auditoría como identidad histórica. Super Admin podrá reactivarla.`)) return;
     try {
-      const token = await state.user.getIdToken();
-      const response = await fetch('/api/admin-delete-user', {
-        method: 'POST',
-        cache: 'no-store',
-        headers: { 'authorization': `Bearer ${token}`, 'content-type': 'application/json' },
-        body: JSON.stringify({ uid: user.uid })
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo eliminar la cuenta.');
-      await commitUserAction([], auditPayload('eliminar_usuario', user, 'Eliminó Auth, perfil, carrito y reserva telefónica'));
-      toast('Cuenta y datos asociados eliminados');
+      await commitAccountStatus(user, 'softDelete', reason);
+      toast('Acceso revocado; identidad histórica conservada y auditada');
     } catch (error) {
       toast(error.message || 'No se pudo eliminar', true);
     }
@@ -300,12 +445,15 @@ if (!window.TintinAdminUsersPhase8Booted) {
       }
 
       const actionsCell = document.createElement('td');
-      if (ensureSuperAdmin() && !protectedUser) {
+      if (ensureSuperAdmin()) {
         const wrap = el('div', 'phase8-actions');
-        wrap.appendChild(user.blocked
-          ? actionButton('Restaurar', 'adm-btn adm-btn-sm adm-btn-outline', () => restoreOne(user))
-          : actionButton('Bloquear', 'adm-btn adm-btn-sm adm-btn-outline', () => blockOne(user)));
-        wrap.appendChild(actionButton('Eliminar ficha', 'adm-btn adm-btn-sm adm-btn-danger', () => deleteOne(user)));
+        wrap.appendChild(actionButton('Ver ficha', 'adm-btn adm-btn-sm adm-btn-outline', () => openClientFicha(user)));
+        if (!protectedUser) {
+          wrap.appendChild(user.blocked
+            ? actionButton('Restaurar', 'adm-btn adm-btn-sm adm-btn-outline', () => restoreOne(user))
+            : actionButton('Bloquear', 'adm-btn adm-btn-sm adm-btn-outline', () => blockOne(user)));
+          wrap.appendChild(actionButton('Eliminar ficha', 'adm-btn adm-btn-sm adm-btn-danger', () => deleteOne(user)));
+        }
         actionsCell.appendChild(wrap);
       } else {
         actionsCell.textContent = protectedUser ? 'Cuenta protegida' : '—';
@@ -353,10 +501,10 @@ if (!window.TintinAdminUsersPhase8Booted) {
     } else if (type === 'restore') {
       const eligible = selectedUsers.filter(user => user.blocked);
       if (!eligible.length) return toast('No hay usuarios bloqueados seleccionados', true);
-      if (!confirm(`¿Restaurar ${eligible.length} usuario(s) como Cliente?`)) return;
+      if (!confirm(`¿Restaurar ${eligible.length} usuario(s) con su rol anterior?`)) return;
       changes = eligible.map(user => ({ uid: user.uid, data: {
         blocked: false,
-        role: 'client',
+        role: ALLOWED_ROLES.includes(user.roleBeforeBlock) ? user.roleBeforeBlock : 'client',
         blockedAt: null,
         blockedBy: '',
         blockReason: '',
@@ -364,7 +512,7 @@ if (!window.TintinAdminUsersPhase8Booted) {
         updatedAt: serverTimestamp(),
       } }));
       action = 'restaurar_usuario';
-      details = 'Restauración masiva como Cliente';
+      details = 'Restauración masiva con rol anterior';
     }
 
     try {
@@ -452,6 +600,12 @@ if (!window.TintinAdminUsersPhase8Booted) {
     style.textContent = `
       .phase8-actions{display:flex;gap:6px;flex-wrap:wrap}.phase8-block-detail{margin-top:6px;font-size:11px;color:#777;line-height:1.55;max-width:260px}.phase8-role-select{min-width:120px}.adm-toast.phase8-error{background:#a52828!important}
       #section-auditoria .adm-table td{white-space:normal;vertical-align:top}.phase8-protected-note{font-size:11px;color:#777}
+      .ficha-section-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-primary);margin-bottom:10px}
+      .ficha-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+      .ficha-field-label{font-size:11px;color:#888;margin-bottom:2px}
+      .ficha-field-value{font-size:13px;color:#222;font-weight:600;word-break:break-word}
+      .ficha-orders-list{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+      .ficha-order-row{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:#444;padding:8px 10px;background:#f7f7f8;border-radius:8px}
     `;
     document.head.appendChild(style);
   }

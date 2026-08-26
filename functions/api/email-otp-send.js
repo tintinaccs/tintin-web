@@ -1,18 +1,18 @@
 import {
   jsonResponse,
   originIsAllowed,
-  preflightResponse,
-  SUPERADMIN_EMAIL
+  preflightResponse
 } from '../../cloudflare/seguridad-cloudinary.js';
 import {
   firestoreAdminGet,
   firestoreAdminReplace,
   decodeFirestoreFields,
-  lookupUserProvidersByEmail,
+  resolveEmailFromUsernameKey,
   fsString,
   fsInteger,
   fsTimestamp
 } from '../../cloudflare/firebase-admin-ligero.js';
+import { usernameKey } from '../../js/components/forms/utilidades-username.js';
 
 const FROM_EMAIL = 'Tintin Accesorios <noreply@tintinaccs.com>';
 const CODE_TTL_MS = 5 * 60 * 1000; // 5 minutos, a pedido: "código de bonificación" con vencimiento corto
@@ -95,10 +95,10 @@ async function sendCodeEmail(apiKey, email, code) {
 
   const html = `<!doctype html>
 <html lang="es">
-<body style="margin:0;background:#fdf1f5;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2226">
+<body style="margin:0;background:#fff6fa;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2b2b">
   <div style="max-width:460px;margin:0 auto;padding:32px 16px">
     <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:20px;overflow:hidden">
-      <div style="background:linear-gradient(135deg,#c6557d,#8e274d);padding:20px 24px;text-align:center">
+      <div style="background:#ad3f67;padding:20px 24px;text-align:center;border-bottom:4px solid #8b2642">
         <div style="font-size:20px;font-weight:800;letter-spacing:.16em;color:#ffffff">TINTIN</div>
         <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.78);margin-top:4px">Accesorios &amp; Relojes</div>
       </div>
@@ -162,10 +162,8 @@ export async function onRequest(context) {
     const rawBody = await request.text();
     if (rawBody.length > 2000) throw new Error('request_too_large');
     const body = JSON.parse(rawBody || '{}');
-    const email = clean(body.email, 254).toLowerCase();
-    if (!emailIsValid(email)) {
-      return jsonResponse({ success: false, error: 'invalid_email' }, 400, origin, requestUrl);
-    }
+    const rawUsername = clean(body.username, 20);
+    const rawEmail = clean(body.email, 254).toLowerCase();
 
     const now = Date.now();
     try {
@@ -181,25 +179,31 @@ export async function onRequest(context) {
       throw rateError;
     }
 
-    // El correo normal no es un segundo camino hacia una cuenta que ya usa
-    // Google — evita confusión ("¿por qué mi cuenta cambió?") y el riesgo
-    // de que alguien intente entrar así a una cuenta ajena si adivina el
-    // código. Excepción: el Super Admin siempre puede usar cualquiera de
-    // los dos métodos, a pedido explícito.
-    if (email !== SUPERADMIN_EMAIL.toLowerCase()) {
-      let account;
-      try {
-        account = await lookupUserProvidersByEmail(env, email);
-      } catch (error) {
-        // Sin poder confirmar el método de la cuenta no se manda el código:
-        // hacerlo igual sería justamente saltear este control.
-        console.error('[email-otp-send] No se pudo verificar el metodo de la cuenta:', error?.message || error);
-        return jsonResponse({ success: false, error: 'storage_unavailable' }, 503, origin, requestUrl);
+    let email;
+    if (rawUsername) {
+      // Login por username: se resuelve al email real de la cuenta ANTES de
+      // rate-limitear/enviar. Si el username no existe, la respuesta tiene
+      // que ser indistinguible de un envío real (mismo success:true, sin
+      // tocar emailOtpCodes ni llamar a Resend) — igual que ya exige
+      // firestore.rules para que usernameReservations no sea un oráculo de
+      // qué usernames tienen cuenta (ver scripts/probar-firestore-username-unico.mjs).
+      const key = usernameKey(rawUsername);
+      const resolved = key ? await resolveEmailFromUsernameKey(env, key) : null;
+      if (!resolved) {
+        return jsonResponse({ success: true }, 200, origin, requestUrl);
       }
-      if (account.exists && account.providers.includes('google.com')) {
-        return jsonResponse({ success: false, error: 'google_account_exists' }, 409, origin, requestUrl);
+      email = resolved;
+    } else {
+      email = rawEmail;
+      if (!emailIsValid(email)) {
+        return jsonResponse({ success: false, error: 'invalid_email' }, 400, origin, requestUrl);
       }
     }
+
+    // El PIN es un segundo método de acceso a la MISMA cuenta, también si la
+    // identidad se creó con Google. findOrCreateUserByEmail() reutiliza el UID
+    // existente de Firebase Auth y solo crea uno cuando el email verificado no
+    // existe, por lo que habilitar este camino no duplica perfiles.
 
     const path = docPath(email);
     const existingDoc = await firestoreAdminGet(env, path);

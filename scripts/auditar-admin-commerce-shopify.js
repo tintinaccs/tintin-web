@@ -13,7 +13,7 @@ const html = read('admin.html');
 const js = read('js/admin/shopify-commerce-admin.js');
 const css = read('css/admin/shopify-commerce-admin.css');
 
-expect(html.includes('js/admin/shopify-commerce-admin.js?v=tintin-20260810-shopify-core-1'), 'admin.html carga la nueva experiencia de comercio versionada.');
+expect(html.includes('js/admin/shopify-commerce-admin.js?v=tintin-20260821-accounts-phase-a-1'), 'admin.html carga la nueva experiencia de comercio versionada.');
 
 for (const section of ['productos', 'colecciones', 'pedidos']) {
   expect(html.includes(`id="section-${section}"`), `sigue existiendo el módulo ${section} original.`);

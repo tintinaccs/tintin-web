@@ -81,6 +81,18 @@ html body.tt-home-premium #tt-privacy-consent .tt-privacy-btn-secondary{
   background:#FFF6FA!important;
   background-color:#FFF6FA!important;
 }
+/* Nunca se pinta el hero procedente del caché local. La clase permanece desde
+   el HTML inicial hasta que Firestore confirma la URL publicada y esa imagen
+   termina de cargar. `visibility` evita que una foto anterior llegue a ocupar
+   un solo frame; no se usa transición para que el cambio sea directo. */
+.tt-home-premium .tt-hero-media.tt-hero-pending{
+  visibility:hidden!important;
+  opacity:0!important;
+}
+.tt-home-premium .tt-hero-media:not(.tt-hero-pending){
+  visibility:visible!important;
+  opacity:1!important;
+}
 .tt-home-premium .tt-hero-media picture{
   width:100%;
   height:100%;

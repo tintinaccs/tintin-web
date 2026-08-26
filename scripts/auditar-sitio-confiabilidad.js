@@ -266,7 +266,8 @@ function sourceFiles(dir) {
     // Este control protege el producto publicado, no la documentación ni las
     // herramientas de ingeniería. AGENTS.md, skills y workflows deben poder
     // nombrar proveedores explícitamente para configurar y auditar su uso.
-    if (dir === root && ['.git', 'node_modules', '.github', '.codex', '.cloudflare-functions', 'artifacts', 'docs', 'public', 'test-results'].includes(entry.name)) return [];
+    if (entry.isDirectory() && entry.name === 'vendor') return [];
+    if (dir === root && ['.git', 'node_modules', '.github', '.claude', '.codex', '.cloudflare-functions', 'artifacts', 'docs', 'public', 'scripts', 'test-results', 'tests'].includes(entry.name)) return [];
     const absolute = path.join(dir, entry.name);
     if (entry.isDirectory()) return sourceFiles(absolute);
     if (!/\.(?:html|css|js|mjs|md|json|rules)$/i.test(entry.name)) return [];
@@ -276,15 +277,20 @@ function sourceFiles(dir) {
     return [absolute];
   });
 }
-check('El repositorio no contiene marcas explícitas de autoría externa',
-  sourceFiles(root).every(file => !forbiddenAuthorship.test(fs.readFileSync(file, 'utf8'))));
+const forbiddenAuthorshipFiles = sourceFiles(root)
+  .filter(file => forbiddenAuthorship.test(fs.readFileSync(file, 'utf8')))
+  .map(file => path.relative(root, file).replaceAll('\\', '/'));
+check('El repositorio no contiene marcas explícitas de autoría externa', forbiddenAuthorshipFiles.length === 0);
+if (forbiddenAuthorshipFiles.length) {
+  console.error(`Archivos con marcas externas: ${forbiddenAuthorshipFiles.join(', ')}`);
+}
 
 const staleVersions = [];
 for (const file of htmlFiles.concat(['tienda.js', 'js/cargador-pagina.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan la versión vigente de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260816-loader-min-show-1'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260824-hero-first-paint-1'"));
 
 check(
   'El runtime público liviano carga imágenes, colecciones, carrito, colores y el fix de auditoría de página (no solo admin-images)',

@@ -15,8 +15,8 @@ import {
   sanitizeContentHref,
   normalizeContentValue,
   detectContentPageId,
-} from './esquema-contenido.js?v=tintin-20260815-routes-clean-1';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260815-routes-clean-1';
+} from './esquema-contenido.js?v=tintin-20260826-carousel-order-2';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260826-carousel-order-2';
 
 const subscriptions = new Map();
 const latestData = new Map();
@@ -50,7 +50,10 @@ function findTarget(root, item) {
     return null;
   }
   const index = item.index == null ? 0 : item.index;
-  return matches[index] || null;
+  const target = matches[index] || null;
+  if (target) return target;
+  if (item.selector === '.tt-footer-wa-text') return root.querySelector('.tt-footer-wa');
+  return null;
 }
 
 function appendPlainLines(element, value) {
@@ -78,7 +81,8 @@ function applyText(element, value, item) {
   const safe = sanitizeContentText(value, item.maxLength);
   const preserveChildren =
     element.id === 'form-success' ||
-    element.classList.contains('tt-contact-wa-link');
+    element.classList.contains('tt-contact-wa-link') ||
+    element.classList.contains('tt-footer-wa');
 
   if (preserveChildren) {
     replaceLabelPreservingChildren(element, safe);

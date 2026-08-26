@@ -101,7 +101,7 @@ body:has(.adm-main) .adm-sidebar{background:var(--admin-color-background-sidebar
 
 h1,h2,h3,h4,h5,h6,.tt-section-title,.tt-page-hero-title,.tt-hero-title,.tt-watch-title,.tt-editorial-title,.tt-cart-title,.perfil-name,.login-heading,.ck-panel-title,.tt-footer-col-title{color:var(--tt-title)!important}
 body:has(.adm-main) .adm-card-title,body:has(.adm-main) .adm-section-header h1,body:has(.adm-main) .adm-topbar-title,body:has(.adm-main) .adm-sidebar-logo-text{color:var(--admin-color-text-title)!important}
-body,p,li,span,small,label,th,td,div,a,input,textarea,select,option,button,.tt-card-text,.tt-card-title,.tt-product-name,.tt-product-price,.tt-dropdown-label,.cat-count,.perfil-email,.login-heading-sub{color:var(--tt-text)!important}
+body,p:not(.cs-shell *),li:not(.cs-shell *),span:not(.cs-shell *),small:not(.cs-shell *),label:not(.cs-shell *),th:not(.cs-shell *),td:not(.cs-shell *),div:not(.cs-shell):not(.cs-shell *),a:not(.cs-shell *),input:not(.cs-shell *),textarea:not(.cs-shell *),select:not(.cs-shell *),option:not(.cs-shell *),button:not(.cs-shell *),.tt-card-text,.tt-card-title,.tt-product-name,.tt-product-price,.tt-dropdown-label,.cat-count,.perfil-email,.login-heading-sub{color:var(--tt-text)!important}
 body:has(.adm-main) .adm-user-email,body:has(.adm-main) .adm-section-header p,body:has(.adm-main) .adm-label,body:has(.adm-main) .adm-table td,body:has(.adm-main) .adm-table th{color:var(--admin-color-text-primary)!important}
 .tt-muted,.text-muted,.tt-section-desc,.tt-section-sub,.tt-card-sub,.tt-product-meta,.tt-footer p,.tt-footer a:not(.tt-footer-wa),.perfil-muted,.ck-muted,.ck-help{color:var(--tt-muted)!important}
 body:has(.adm-main) .adm-muted,body:has(.adm-main) .adm-loading,body:has(.adm-main) .adm-sidebar-logo-sub,body:has(.adm-main) .adm-live-clock{color:var(--admin-color-text-secondary)!important}
@@ -220,6 +220,27 @@ body:not(:has(.adm-main)) :is(.tt-floating-btn,.floating-button,[data-button-var
 body:not(:has(.adm-main)) :is(.tt-sticky-btn,.sticky-button,[data-button-variant="sticky"]){background:var(--color-button-sticky-background)!important;color:var(--color-button-sticky-text)!important}
 body:not(:has(.adm-main)) :is(.tt-btn-outline,[data-button-variant="outline"]){background:var(--color-button-outline-background)!important;color:var(--color-button-outline-text)!important;border-color:var(--color-button-outline-border)}
 body:not(:has(.adm-main)) :is(.tt-btn-transparent,[data-button-variant="transparent"]){background:transparent!important;color:var(--color-button-transparent-text)!important}
+
+/* El selector global de texto de la interfaz también alcanza a los botones.
+   Mantener el texto de las acciones primarias en blanco evita que el token
+   de texto de página (#2B2B2B) reemplace el contraste de la superficie rosa. */
+html body:not(:has(.adm-main)) :is(.tt-btn:not(.tt-btn-outline),.tt-btn-primary,.tt-btn-primary-full,.tt-cart-checkout-btn,.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link,.ck-btn,.login-google,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn,.tt-home-runtime-state-link,.perfil-btn-primary){
+  color:var(--color-button-primary-text,#FFFFFF)!important;
+}
+
+/* Las etiquetas de colecciones viven sobre fotografías: la pastilla oscura
+   mantiene legibilidad estable aunque cambie la imagen o su recorte. */
+html body:not(:has(.adm-main)) .tt-coll-card-label{
+  color:#FFFFFF!important;
+  background:rgba(43,43,43,.72)!important;
+  border-radius:999px;
+  padding:6px 10px;
+  text-shadow:none;
+}
+
+html body:not(:has(.adm-main)) .cat-filter-toggle{
+  color:var(--color-button-primary-text,#FFFFFF)!important;
+}
 
 body:not(:has(.adm-main)) :is(.tt-card,.tt-product-card,.tt-review-card,.tt-category-card,.perfil-card,.ck-panel,.login-box){border-color:var(--color-card-border);box-shadow:0 14px 38px var(--color-card-shadow)}
 body:not(:has(.adm-main)) :is(hr,.divider,.tt-divider){border-color:var(--color-border-secondary)}

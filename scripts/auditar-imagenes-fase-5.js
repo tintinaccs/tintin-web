@@ -31,6 +31,7 @@ const files = {
   cloudinarySetup: read('configuracion-cloudinary.md'),
   loader: read('js/cargador-pagina.js'),
   indexHtml: read('index.html'),
+  homeCss: read('css/pages/home/ajuste-inicio.css'),
 };
 
 let failures = 0;
@@ -121,20 +122,35 @@ check(
 );
 
 check(
-  'El Hero es Cloudinary exclusivo: sin respaldo estático empaquetado',
-  !files.runtime.includes('STATIC.hero') &&
-    files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'desktop');") &&
-    files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'tablet');") &&
-    files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'mobile');") &&
-    files.runtime.includes("if (desktop) image.src = desktop; else image.removeAttribute('src');"),
-  'nunca debe verse una imagen distinta a la guardada en Super Admin → Imágenes, ni siquiera de relleno'
+  'El Hero usa Cloudinary y conserva la última portada publicada como respaldo',
+  files.runtime.includes('STATIC.hero_bg_desktop') &&
+    files.runtime.includes('STATIC.hero_bg_tablet') &&
+    files.runtime.includes('STATIC.hero_bg_mobile') &&
+    files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'desktop') || absolute(STATIC.hero_bg_desktop)") &&
+    files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'tablet') || absolute(STATIC.hero_bg_tablet)") &&
+    files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'mobile') || absolute(STATIC.hero_bg_mobile)"),
+  'el respaldo debe ser la última portada Cloudinary publicada, nunca un archivo local o placeholder'
 );
 
 check(
-  'El Hero se revela recién cuando la imagen real terminó de cargar, no solo cuando Firestore confirma la URL',
+  'El Hero precarga la última portada y no muestra un frame rosa mientras confirma Firestore',
+  files.runtime.includes('if (!heroDataConfirmed) {') &&
+    files.runtime.includes('revealHeroWhenImageReady(image);') &&
+    !files.runtime.includes("media?.classList.add('tt-hero-pending');") &&
+    read('index.html').includes('src="https://res.cloudinary.com/') &&
+    files.homeCss.includes('.tt-home-premium .tt-hero-media.tt-hero-pending') &&
+    files.homeCss.includes('visibility:hidden!important') &&
+    files.homeCss.includes('opacity:0!important') &&
+    !files.homeCss.includes('.tt-hero-media.tt-hero-pending{\n  transition:'),
+  'el HTML debe iniciar con una portada válida y Firestore solo debe reemplazarla cuando confirma datos nuevos'
+);
+
+check(
+  'El Hero se revela recién cuando la imagen real terminó de cargar y un error no muestra placeholder',
   files.runtime.includes('function revealHeroWhenImageReady(image)') &&
-    files.runtime.includes('image.addEventListener(\'load\', onSettle, { once: true });') &&
-    files.runtime.includes('image.addEventListener(\'error\', onSettle, { once: true });') &&
+    files.runtime.includes("image.addEventListener('load', onLoad, { once: true });") &&
+    files.runtime.includes("image.addEventListener('error', onError, { once: true });") &&
+    files.runtime.includes("image.removeAttribute('src');") &&
     (files.runtime.match(/revealHeroWhenImageReady\(image\)/g) || []).length >= 2,
   'sin esto, Firestore puede confirmar la URL antes de que la foto termine de descargarse, dejando ver el fondo de .tt-hero-media un instante'
 );

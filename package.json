@@ -1,5 +1,8 @@
 {
   "scripts": {
+    "sync:account-contract": "node scripts/sincronizar-contrato-cuentas.mjs",
+    "audit:account-contract": "node scripts/sincronizar-contrato-cuentas.mjs --check && node scripts/auditar-contrato-cuentas.mjs",
+    "test:accounts": "node --test tests/accounts/*.test.mjs",
     "audit:typography": "node scripts/auditar-tipografia.js",
     "audit:colors": "node scripts/auditar-esquema-color.js",
     "fix:tintin": "node scripts/corregir-fuente-tintin.js",
@@ -11,6 +14,8 @@
     "audit:navigation-search": "node scripts/auditar-navegacion-busqueda.mjs",
     "audit:unified-navigation": "node scripts/auditar-modular-arquitectura.js && node scripts/auditar-inicio-navegacion-publica.js && node scripts/auditar-unificada-navegacion.js && node scripts/auditar-responsive-navegacion.mjs && node scripts/auditar-navegacion-busqueda.mjs",
     "audit:all-navigation-surfaces": "node scripts/auditar-todas-navegacion-superficies-ci.mjs",
+    "audit:web-push": "node scripts/auditar-push-web.js",
+    "test:web-push": "node --test tests/push/push-web.test.mjs",
     "audit:tintin": "node scripts/auditar-tintin.js",
     "audit:store-gate": "node scripts/auditar-control-tienda.js",
     "audit:secure-orders": "node scripts/auditar-seguro-pedidos.js && npm run test:checkout-contract && npm run test:paypal",
@@ -24,6 +29,7 @@
     "audit:cart": "node scripts/auditar-carrito-fase-7.js",
     "test:cart-persistence": "node --test tests/cart/*.test.mjs",
     "test:engagement": "node --test tests/engagement/*.test.mjs",
+    "test:products-sync": "node --test tests/sync/*.test.mjs",
     "test:visual-builder": "node --test tests/visual-builder/*.test.mjs",
     "test:visual-builder-ui": "playwright test tests/visual-builder/visual-builder-ui.spec.js tests/visual-builder/visual-builder-runtime.spec.js --project=chromium",
     "test:navigation-header": "playwright test tests/navigation/header-responsive.spec.js tests/navigation/loader-shell-wait.spec.js --project=chromium",
@@ -41,7 +47,8 @@
     "verify:diagnostics": "node scripts/verificar-manifiesto-diagnostico.js",
     "cache-versioning:write": "node scripts/auditar-versionado-cache.mjs --write",
     "audit:cache-versioning": "node scripts/auditar-versionado-cache.mjs",
-    "build:pages": "npm run sync:public-shell && npm run build:routes && npm run build:csp && npm run build:diagnostics && npm run sync:public-origin && npm run verify:routes && npm run verify:csp && npm run verify:diagnostics && npm run audit:cache-versioning",
+    "sync:monaco": "node scripts/sincronizar-monaco-local.mjs",
+    "build:pages": "npm run sync:monaco && npm run sync:public-shell && npm run build:routes && npm run build:csp && npm run build:diagnostics && npm run sync:public-origin && npm run verify:routes && npm run verify:csp && npm run verify:diagnostics && npm run audit:cache-versioning",
     "prepare:hosting": "node scripts/preparar-hosting.js",
     "audit:diagnostics": "node scripts/auditar-diagnostico.js",
     "audit:diagnostic-findings": "node scripts/auditar-diagnostico-hallazgos.js",
@@ -69,6 +76,7 @@
     "test:pages": "node scripts/smoke-todas-paginas.mjs",
     "audit:critical-healing": "node scripts/auditar-critico-recuperacion.js && node scripts/probar-modelo-inventario.mjs",
     "test:rules-phone": "firebase emulators:exec --only firestore --project demo-tintin-phone \"node scripts/probar-firestore-telefono-unico.mjs\"",
+    "test:rules-username": "firebase emulators:exec --only firestore --project demo-tintin-username \"node scripts/probar-firestore-username-unico.mjs\"",
     "test:rules-critical": "firebase emulators:exec --only firestore --project demo-tintin-critical \"node scripts/probar-firestore-critico.mjs\"",
     "audit:login-isolation": "node scripts/auditar-acceso-aislamiento.js",
     "audit:login-profile": "node scripts/auditar-acceso-perfil-incorporacion.js && node --test tests/login/profile-onboarding.test.mjs",
@@ -106,6 +114,7 @@
     "@playwright/test": "^1.62.1",
     "firebase": "^12.17.1",
     "firebase-tools": "^15.26.0",
+    "monaco-editor": "0.52.2",
     "playwright": "^1.62.1"
   },
   "overrides": {

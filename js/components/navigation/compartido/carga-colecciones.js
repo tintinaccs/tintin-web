@@ -11,19 +11,12 @@ function text(value) {
   return String(value == null ? '' : value).trim();
 }
 
-// Sin productos cargados todavía no se puede saber qué colecciones están
-// vacías, así que se muestran todas para no ocultar catálogo real por error.
-function hasProducts(slug) {
-  const normalized = text(slug).toLowerCase();
-  return products.some(product =>
-    text(product?.category || product?.cat).toLowerCase() === normalized &&
-    text(product?.name)
-  );
-}
-
+// La membresía del menú debe ser idéntica en todas las páginas y dispositivos.
+// estado-colecciones.js ya entrega únicamente colecciones públicas visibles;
+// los productos se usan aquí solo como respaldo visual para imágenes, nunca
+// para decidir si una colección aparece o desaparece según la ruta visitada.
 function visibleCollections(collections) {
-  if (!products.length) return collections;
-  return collections.filter(item => hasProducts(item.slug));
+  return collections;
 }
 
 // Cuando la colección no tiene imagen propia (o fue eliminada), se usa la
@@ -241,7 +234,7 @@ export function initNavCollections(force = false) {
   started = true;
   renderLoading();
 
-  return import('../../../pages/collections/estado-colecciones.js?v=tintin-20260818-browser-fallback-2')
+  return import('../../../pages/collections/estado-colecciones.js?v=tintin-20260821-accounts-phase-a-1')
     .then(({ onCollectionsUpdate, loadCollections }) => {
       unsubscribe?.();
       unsubscribe = onCollectionsUpdate(collections => {

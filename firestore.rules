@@ -269,8 +269,49 @@ service cloud.firestore {
 
     function loginMetadataOnlyUpdate() {
       return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
-        'lastLogin', 'updatedAt'
-      ]);
+        'lastLogin', 'updatedAt', 'lastAuthMethod', 'authMethods'
+      ]) &&
+      (!('lastAuthMethod' in request.resource.data) ||
+        request.resource.data.lastAuthMethod in ['google', 'emailOtp']) &&
+      (!('authMethods' in request.resource.data) ||
+        (request.resource.data.authMethods is list &&
+          request.resource.data.authMethods.size() >= 1 &&
+          request.resource.data.authMethods.size() <= 2 &&
+          request.resource.data.authMethods.hasOnly(['google', 'emailOtp'])));
+    }
+
+    // Backfill progresivo para perfiles anteriores al contrato de identidad.
+    // El cliente solo puede agregar el customerId determinista ligado a SU UID;
+    // una vez presente, protectedUserFieldsChanged() impide modificarlo.
+    function identityBootstrapOnlyUpdate(userId) {
+      let data = request.resource.data;
+      return !('customerId' in resource.data) &&
+        data.diff(resource.data).affectedKeys().hasOnly([
+          'customerId', 'identityVersion', 'profileStatus',
+          'lastLogin', 'updatedAt', 'lastAuthMethod', 'authMethods'
+        ]) &&
+        data.customerId == 'CUS_' + userId &&
+        data.identityVersion == 1 &&
+        data.profileStatus == 'legacy' &&
+        data.lastAuthMethod in ['google', 'emailOtp'] &&
+        data.authMethods is list &&
+        data.authMethods.size() >= 1 &&
+        data.authMethods.size() <= 2 &&
+        data.authMethods.hasOnly(['google', 'emailOtp']);
+    }
+
+    // El alta inicial guarda nombre, teléfono, username y fecha de nacimiento
+    // en una sola escritura, y recién ahí el perfil puede pasar de
+    // 'incomplete' a 'active' — nunca al revés, nunca desde otro estado, y
+    // nunca junto con campos protegidos de pedidos/rol/bloqueo (esos siguen
+    // bloqueados por protectedUserFieldsChanged() en cualquier otro camino).
+    function onboardingActivationUpdate() {
+      return resource.data.profileStatus == 'incomplete' &&
+        request.resource.data.profileStatus == 'active' &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'name', 'firstName', 'lastName', 'phone', 'username', 'dob',
+          'address', 'savedLocation', 'profileStatus', 'updatedAt'
+        ]);
     }
 
     function checkoutGuardWriteValid(userId) {
@@ -290,6 +331,7 @@ service cloud.firestore {
 
     function protectedUserFieldsChanged() {
       return request.resource.data.diff(resource.data).affectedKeys().hasAny([
+        'customerId', 'identityVersion', 'profileStatus', 'deleted', 'deletedAt', 'deletedBy',
         'email', 'createdAt', 'provider', 'role', 'blocked', 'blockedAt', 'blockedBy', 'blockReason',
         'roleBeforeBlock', 'purchaseCount', 'orderCount', 'totalOrders',
         'totalSpent', 'completedOrders', 'pendingOrders', 'cancelledOrders',
@@ -302,7 +344,14 @@ service cloud.firestore {
       let data = request.resource.data;
       return (!('name' in data) || (data.name is string && data.name.size() <= 120)) &&
         (!('phone' in data) || (data.phone is string && data.phone.size() <= 40)) &&
-        (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 2000));
+        (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 2000)) &&
+        (!('username' in data) || (data.username is string && data.username.size() <= 20 &&
+          data.username.matches('^[a-z0-9_]{0,20}$'))) &&
+        // Igual que en el cliente (validacion-nacimiento.js): edad entre 16 y
+        // 120 años. Nunca se guarda una edad calculada, sólo esta fecha.
+        (!('dob' in data) || (data.dob is timestamp &&
+          data.dob < request.time - duration.value(16 * 365, 'd') &&
+          data.dob > request.time - duration.value(120 * 365, 'd')));
     }
 
     // Un teléfono no puede estar en dos cuentas, y eso tiene que valer también
@@ -334,13 +383,54 @@ service cloud.firestore {
         );
     }
 
+    // El username se puede cambiar una sola vez después del alta inicial
+    // (que lo fija vía onboardingActivationUpdate). `usernameChangedAt` marca
+    // ese único cambio: si ya existe, ningún otro toque a `username` pasa por
+    // este camino general. El campo tampoco se puede tocar de forma aislada
+    // para "resetear" el contador.
+    function usernameChangeValid() {
+      let data = request.resource.data;
+      // Perfiles anteriores a este contrato pueden llegar sin username
+      // (''/ausente): definirlo por primera vez no consume el cambio único,
+      // para no romper el alta progresiva de cuentas legacy.
+      let hadUsername = ('username' in resource.data) && resource.data.username != '';
+      let usernameTouched = ('username' in data) &&
+        (!('username' in resource.data) || data.username != resource.data.username);
+      let changedAtTouched = ('usernameChangedAt' in data) &&
+        (!('usernameChangedAt' in resource.data) || data.usernameChangedAt != resource.data.usernameChangedAt);
+      let isFreeFirstSet = usernameTouched && !hadUsername && !changedAtTouched;
+      return (!usernameTouched && !changedAtTouched) || isFreeFirstSet ||
+        (
+          !('usernameChangedAt' in resource.data) &&
+          ('usernameChangedAt' in data) &&
+          data.usernameChangedAt == request.time
+        );
+    }
+
+    // Mismo mecanismo que phoneIsReservedByCaller(): el username guardado en
+    // el perfil sólo se acepta si existe una reserva en `usernameReservations`
+    // a nombre de esta misma cuenta (ver js/components/forms/reserva-username.js).
+    function usernameIsReservedByCaller() {
+      let data = request.resource.data;
+      return !('username' in data) ||
+        data.username == '' ||
+        (
+          (resource != null && 'username' in resource.data && resource.data.username == data.username) ||
+          (
+            exists(/databases/$(database)/documents/usernameReservations/$(data.username)) &&
+            get(/databases/$(database)/documents/usernameReservations/$(data.username)).data.uid == request.auth.uid
+          )
+        );
+    }
+
     function userCreateValid(userId) {
       let data = request.resource.data;
       return isSignedIn() &&
         request.auth.uid == userId &&
         request.auth.token.email != null &&
         data.keys().hasOnly([
-          'name', 'email', 'phone', 'photoURL', 'role', 'provider',
+          'name', 'email', 'customerId', 'identityVersion', 'profileStatus',
+          'phone', 'photoURL', 'role', 'provider', 'authMethods', 'lastAuthMethod',
           'onboardingCompleted', 'welcomeTutorialSeen',
           'welcomeTutorialPending', 'welcomeTutorialVersion', 'blocked',
           'purchaseCount', 'totalSpent', 'orderCount', 'totalOrders',
@@ -349,6 +439,14 @@ service cloud.firestore {
         ]) &&
         data.email is string &&
         data.email.lower() == request.auth.token.email.lower() &&
+        data.customerId == 'CUS_' + userId &&
+        data.identityVersion == 1 &&
+        data.profileStatus == 'incomplete' &&
+        data.lastAuthMethod in ['google', 'emailOtp'] &&
+        data.authMethods is list &&
+        data.authMethods.size() >= 1 &&
+        data.authMethods.size() <= 2 &&
+        data.authMethods.hasOnly(['google', 'emailOtp']) &&
         data.get('blocked', false) == false &&
         (
           (isSuperAdmin() && data.get('role', 'superadmin') == 'superadmin') ||
@@ -1065,6 +1163,32 @@ service cloud.firestore {
     }
 
     /* ============================================================
+       USERNAME RESERVATIONS
+
+       Mismo patrón que phoneReservations: un username no puede estar en dos
+       cuentas, y eso tiene que valer también para quien escriba directo desde
+       la consola. La clave del documento es el username ya normalizado en
+       minúsculas (ver js/components/forms/utilidades-username.js).
+       ============================================================ */
+
+    match /usernameReservations/{usernameKey} {
+      allow read: if isSuperAdmin();
+
+      allow create: if isSignedIn() &&
+        !isBlockedUser() &&
+        request.resource.data.keys().hasOnly(['uid', 'createdAt']) &&
+        request.resource.data.uid is string &&
+        request.resource.data.uid == request.auth.uid &&
+        request.resource.data.createdAt == request.time &&
+        usernameKey.size() >= 3 && usernameKey.size() <= 20 &&
+        usernameKey.matches('^[a-z0-9_]{3,20}$');
+
+      allow delete: if isSignedIn() && resource.data.uid == request.auth.uid;
+
+      allow update: if false;
+    }
+
+    /* ============================================================
        USERS
        ============================================================ */
 
@@ -1080,12 +1204,16 @@ service cloud.firestore {
           !isBlockedUser() &&
           userProfileFieldsValid() &&
           phoneIsReservedByCaller() &&
+          usernameIsReservedByCaller() &&
           (
             (
               isStoreOpenOrAllowed() &&
-              !protectedUserFieldsChanged()
+              !protectedUserFieldsChanged() &&
+              usernameChangeValid()
             ) ||
-            loginMetadataOnlyUpdate()
+            loginMetadataOnlyUpdate() ||
+            identityBootstrapOnlyUpdate(userId) ||
+            onboardingActivationUpdate()
           )
         ) ||
         (
@@ -1096,6 +1224,7 @@ service cloud.firestore {
         ) ||
         (
           isSuperAdmin() &&
+          !request.resource.data.diff(resource.data).affectedKeys().hasAny(['customerId']) &&
           (
             !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']) ||
             (
@@ -1106,8 +1235,9 @@ service cloud.firestore {
         )
       );
 
-      allow delete: if isSuperAdmin() &&
-        !isSuperAdminAccount(resource.data);
+      // Las cuentas se eliminan mediante tombstone desde Cloudflare; ni el
+      // cliente ni Super Admin borran la identidad histórica desde el SDK.
+      allow delete: if false;
 
       match /cart/{itemId} {
         allow read: if isSignedIn() &&
@@ -1428,6 +1558,24 @@ service cloud.firestore {
     match /emailCampaigns/{campaignId} {
       allow read, create, update: if isSuperAdmin();
       allow delete: if false;
+    }
+
+    // Notificaciones push del panel. Estas dos colecciones se tocan
+    // ÚNICAMENTE desde Cloudflare Pages Functions con la cuenta de servicio
+    // (cloudflare/push-service.js), que no pasa por estas reglas. La regla
+    // explícita está para que quede escrito que ningún cliente — clienta,
+    // admin común ni el propio Super Admin desde el navegador — puede leer
+    // los tokens ni escribir el estado de los eventos.
+    match /adminPushDevices/{deviceId} {
+      allow read, write: if false;
+    }
+
+    match /pushEvents/{eventId} {
+      allow read, write: if false;
+    }
+
+    match /pushSettings/{settingId} {
+      allow read, write: if false;
     }
 
     match /{document=**} {

@@ -26,7 +26,7 @@ const checks = [
   ['Firestore mantiene settings general restringido a Super Admin', /match \/settings\/general/.test(rules) && /allow write: if isSuperAdmin\(\)/.test(rules)],
   ['los identificadores y textos se normalizan y limitan', /paymentMethodId/.test(core) && /cleanPaymentText/.test(core) && /cleanPaymentMultiline/.test(core)],
   ['el catálogo conserva compatibilidad con configuración anterior', /legacyMethods/.test(core) && /paymentMethods/.test(core) && /bankAccounts/.test(core)],
-  ['Checkout carga pagos desde su cargador de página', /checkout[\s\S]*load\('pages\/checkout\/checkout-metodos-pago\.js'\)/.test(loader)],
+  ['Checkout carga pagos desde su cargador de página', /checkout[\s\S]*load\('pages\/checkout\/checkout-metodos-pago\.js',\s*version\)/.test(loader)],
   ['Admin conserva el módulo de métodos en la ruta administrativa', /metodos-pago-admin\.js/.test(store)],
   ['si no hay métodos se bloquea el avance y se informa', /next\.disabled = true/.test(checkout) && /error-3-none/.test(checkout)],
   ['la selección se conserva ante una actualización en tiempo real', /selectedMethodId/.test(checkout) && /preferred/.test(checkout)],

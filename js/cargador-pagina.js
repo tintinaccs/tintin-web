@@ -83,7 +83,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260816-loader-min-show-1';
+  const TT_CACHE_VERSION = 'tintin-20260824-hero-first-paint-1';
   // 120ms (fijado en #396 para matar esperas artificiales) resultó por
   // debajo del umbral de percepción humana: en conexiones rápidas el logo y
   // el texto de sección ("Página Principal", "Catálogo", "Producto") no
@@ -203,8 +203,8 @@
     }
   }
 
-  // Cualquier tarjeta o link que lleve a product.html guarda el nombre del
-  // producto justo antes de navegar, porque el id de la URL no es legible
+  // Cualquier tarjeta o link que lleve a la ficha /product (o al alias
+  // product.html) guarda el nombre antes de navegar, porque el id no es legible
   // y el loader de la página siguiente no tiene los datos del catálogo.
   document.addEventListener(
     'click',
@@ -217,7 +217,8 @@
       } catch {
         return;
       }
-      if (url.pathname.split('/').pop() !== 'product.html') return;
+      const productPath = url.pathname.replace(/\/+$/, '').split('/').pop() || '';
+      if (!/^product(?:\.html)?$/i.test(productPath)) return;
       const card = anchor.closest('.tt-product-card, .tt-card, .tt-look-card');
       let name = '';
       if (card) {

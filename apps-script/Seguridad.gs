@@ -99,6 +99,9 @@ function phase3SanitizeOrder_(rawOrder) {
   const location = shipping.mapLocation && typeof shipping.mapLocation === 'object'
     ? shipping.mapLocation
     : null;
+  const invoice = order.invoice && typeof order.invoice === 'object'
+    ? order.invoice
+    : {};
 
   return {
     requestId: phase3CleanText_(order.requestId, 120),
@@ -128,6 +131,8 @@ function phase3SanitizeOrder_(rawOrder) {
     shipping: {
       method: phase3CleanText_(shipping.method, 40),
       city: phase3CleanText_(shipping.city, 120),
+      departamento: phase3CleanText_(shipping.departamento, 80),
+      encomiendaMode: phase3CleanText_(shipping.encomiendaMode, 20),
       address: phase3CleanText_(shipping.address, 300),
       referencia: phase3CleanText_(shipping.referencia, 300),
       zone: phase3CleanText_(shipping.zone, 40),
@@ -147,6 +152,12 @@ function phase3SanitizeOrder_(rawOrder) {
     paymentStatus: phase3CleanText_(order.paymentStatus, 40),
     status: phase3CleanText_(order.status, 40),
     notes: phase3CleanText_(order.notes, 1000),
+    ci: phase3CleanText_(order.ci, 8),
+    invoice: {
+      wanted: invoice.wanted === true,
+      razonSocial: phase3CleanText_(invoice.razonSocial, 180),
+      ruc: phase3CleanText_(invoice.ruc, 12)
+    },
     notificationStatus: phase3CleanText_(order.notificationStatus, 40),
     createdAt: order.createdAt || '',
     updatedAt: order.updatedAt || ''

@@ -1,12 +1,12 @@
-import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20260818-products-unified-2';
+import './pages/catalog/politica-visibilidad-catalogo.js?v=tintin-20260821-accounts-phase-a-1';
 import './pages/catalog/prioridad-stock-catalogo.js?v=tintin-20260731-stock-priority-1';
 
 function pathName() {
   return location.pathname.toLowerCase().replace(/\/+$/, '');
 }
 
-function load(file) {
-  return import(`./${file}?v=tintin-20260817-mobile-accordion-1`);
+function load(file, version = 'tintin-20260817-mobile-accordion-1') {
+  return import(`./${file}?v=${version}`);
 }
 
 export function loadPageMaintenance() {
@@ -15,10 +15,12 @@ export function loadPageMaintenance() {
   if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js');
   if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js');
   if (/\/checkout(?:\.html)?$/.test(path)) {
+    const version = 'tintin-20260822-checkout-hardening-2';
     return Promise.allSettled([
-      load('pages/checkout/checkout-mantenimiento.js'),
-      load('pages/checkout/checkout-metodos-pago.js'),
-      load('pages/checkout/checkout-control-cuota.js')
+      load('pages/checkout/checkout-hardening.js', version),
+      load('pages/checkout/checkout-mantenimiento.js', version),
+      load('pages/checkout/checkout-metodos-pago.js', version),
+      load('pages/checkout/checkout-control-cuota.js', version)
     ]);
   }
   if (/\/login(?:\.html)?$/.test(path)) return load('pages/login/mantenimiento-acceso.js');

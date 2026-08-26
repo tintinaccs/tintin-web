@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1"></script>
-  <script src="js/cargador-pagina.js?v=tintin-20260816-loader-min-show-1"></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260824-hero-first-paint-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20260816-loader-shell-atomic-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20260824-header-logo-fallback-1" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -20,13 +20,11 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
-  <link rel="modulepreload" href="js/core/store-gate/control-tienda.js?v=tintin-20260818-gate-icon-svg-2">
-  <link rel="modulepreload" href="js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260818-gate-icon-svg-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260816-loader-shell-atomic-1">
-  <link rel="preload" as="style" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260818-header-dropdowns-solid-3">
-  <link rel="preload" as="style" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260818-header-dropdowns-solid-3">
-  <link rel="preload" as="style" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260818-header-dropdowns-solid-3">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260824-header-logo-fallback-1">
+  <link rel="preload" as="style" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260824-header-responsive-sync-1">
+  <link rel="preload" as="style" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260824-header-responsive-sync-1">
+  <link rel="preload" as="style" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" href="css/components/navigation/compartido/transiciones-navegacion.css?v=tintin-20260818-header-dropdowns-solid-3">
   <link rel="preload" as="style" href="css/components/navigation/compartido/paneles.css?v=tintin-20260818-header-dropdowns-solid-3">
   <link rel="preload" as="style" href="css/components/navigation/compartido/busqueda.css?v=tintin-20260818-header-dropdowns-solid-3">
@@ -37,11 +35,11 @@
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3">
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260818-collections-apple-2" />
+  <link rel="stylesheet" href="styles.css?v=tintin-20260826-hero-scroll-hint-1" />
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260820-tintin-core-visual-1">
+  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260824-contrast-buttons-3">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -207,6 +205,11 @@
         <label class="perfil-label">Dirección de entrega (opcional)</label>
         <input type="text" class="perfil-input" id="perfil-dir" placeholder="Ej: Av. España 1234, Asunción" />
       </div>
+      <div class="perfil-field">
+        <label class="perfil-label">Nombre de usuario</label>
+        <input type="text" class="perfil-input" id="perfil-username" placeholder="minusculas_y_numeros" maxlength="20" autocapitalize="off" autocorrect="off" spellcheck="false" />
+        <div id="perfil-username-hint" style="font-size:12px;color:var(--text-muted);margin-top:4px"></div>
+      </div>
     </div>
   </div>
 
@@ -317,7 +320,7 @@
 
 
 <!-- Scripts -->
-<script src="tienda.js?v=tintin-20260818-product-trust-icons-2"></script>
+<script src="tienda.js?v=tintin-20260822-checkout-hardening-1"></script>
 
 <script type="module">
 import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4";
@@ -328,14 +331,16 @@ import {
   doc, getDoc, getDocs, setDoc, serverTimestamp,
   collection, query, where, orderBy, limit
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260716-cloudinary-fix-1";
-import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260814-social-notifications-1";
+import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1";
+import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260822-checkout-final-cart-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachLocationPicker } from "./js/components/location/selector-ubicacion.js?v=tintin-20260803-location-picker-2";
-import { toSavedLocation } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260803-profile-onboarding-2";
-import { getRegisteredMethod, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260803-profile-store-1";
+import { toSavedLocation } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260822-dob-username-onboarding-2";
+import { getRegisteredMethod, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260821-accounts-phase-a-1";
 import { DEFAULT_COUNTRY, phoneKey, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
 import { changeReservedPhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260803-phone-reservation-1";
+import { changeReservedUsername } from "./js/components/forms/reserva-username.js?v=tintin-20260822-dob-username-onboarding-1";
+import { isValidUsernameFormat, isReservedUsername, usernameKey } from "./js/components/forms/utilidades-username.js?v=tintin-20260821-username-unique-1";
 
 const ROLE_COLORS = {
   superadmin: '#8b2642', admin: '#b84c72',
@@ -475,6 +480,16 @@ onAuthStateChanged(auth, async user => {
     document.getElementById('perfil-dir').value    = userData.address || '';
     document.getElementById('perfil-purchase-count').textContent = userData.purchaseCount || 0;
     document.getElementById('perfil-total-spent').textContent    = formatPrice(userData.totalSpent || 0);
+
+    const usernameInput = document.getElementById('perfil-username');
+    const usernameHint  = document.getElementById('perfil-username-hint');
+    usernameInput.value = userData.username || '';
+    if (userData.usernameChangedAt) {
+      usernameInput.disabled = true;
+      usernameHint.textContent = 'Ya usaste tu único cambio de nombre de usuario.';
+    } else {
+      usernameHint.textContent = 'Podés cambiarlo una sola vez. Solo minúsculas, números y guion bajo (3 a 20 caracteres).';
+    }
   }
 
   // Datos de la cuenta — se guardan desde el alta (js/core/store/perfil-usuario.js).
@@ -549,6 +564,19 @@ onAuthStateChanged(auth, async user => {
     const release = () => window.TintinReleaseProfileButton?.('btn-guardar-perfil');
     const nuevoTelefono = document.getElementById('perfil-tel').value.trim();
     const country = DEFAULT_COUNTRY;
+    const usernameInput = document.getElementById('perfil-username');
+    const nuevoUsername = usernameInput.value.trim().toLowerCase();
+    const usernameYaCambiado = !!userData?.usernameChangedAt;
+    const usernameActual = (userData?.username || '').toLowerCase();
+    const cambioUsername = !usernameYaCambiado && nuevoUsername !== usernameActual;
+
+    if (cambioUsername && nuevoUsername) {
+      if (!isValidUsernameFormat(nuevoUsername) || isReservedUsername(nuevoUsername)) {
+        toast('❌ Usuario inválido: 3 a 20 caracteres, minúsculas, números y guion bajo');
+        release();
+        return;
+      }
+    }
 
     try {
       // El teléfono pasa por la misma reserva que el alta: si no, editarlo
@@ -566,18 +594,37 @@ onAuthStateChanged(auth, async user => {
         await changeReservedPhone(db, user.uid, claveAnterior, nuevoTelefono, country);
       }
 
-      await setDoc(ref, {
+      const updates = {
         name:      document.getElementById('perfil-nombre').value.trim(),
         phone:     nuevoTelefono,
         address:   document.getElementById('perfil-dir').value.trim(),
         email:     user.email,
         updatedAt: serverTimestamp(),
-      }, { merge: true });
+      };
+
+      if (cambioUsername && nuevoUsername) {
+        // Mismo patrón que el teléfono: reserva la clave nueva y recién
+        // después libera la vieja. `usernameChangedAt` consume el único
+        // cambio permitido (ver usernameChangeValid() en firestore.rules).
+        await changeReservedUsername(db, user.uid, usernameKey(usernameActual), nuevoUsername);
+        updates.username = nuevoUsername;
+        updates.usernameChangedAt = serverTimestamp();
+      }
+
+      await setDoc(ref, updates, { merge: true });
       if (userData) userData.phone = nuevoTelefono; // para que un segundo guardado no reintente la reserva
+      if (cambioUsername && nuevoUsername) {
+        userData.username = nuevoUsername;
+        userData.usernameChangedAt = true;
+        usernameInput.disabled = true;
+        document.getElementById('perfil-username-hint').textContent = 'Ya usaste tu único cambio de nombre de usuario.';
+      }
       toast('✅ Perfil actualizado');
     } catch (e) {
       if (e?.code === 'phone_already_registered') {
         toast('❌ Ese número ya está en otra cuenta');
+      } else if (cambioUsername && (e?.code === 'username_already_taken' || e?.code === 'permission-denied')) {
+        toast('❌ Ese usuario ya está en uso');
       } else {
         console.error('[perfil] No se pudo guardar:', e);
         toast('❌ Error al guardar');
@@ -648,10 +695,10 @@ async function loadUserOrders(user) {
 }
 </script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260817-heart-icon-1"></script>
+<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260822-checkout-hardening-cascade-1"></script>
 <script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20260815-routes-clean-1"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260815-profile-routes-1"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1"></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>
