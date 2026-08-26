@@ -1209,6 +1209,14 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   margin-bottom: 16px;
 }
 
+.tt-hero-line {
+  width: 48px;
+  height: 2px;
+  margin: 0 0 18px;
+  background: var(--pink-dark);
+  opacity: 0.85;
+}
+
 /* Vacío por defecto (Super Admin → Contenido → Hero → Subtítulo) — :empty
    lo saca del flujo por completo así no deja un hueco cuando nadie lo usa. */
 .tt-hero-subtitle {
@@ -1264,7 +1272,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
 .tt-hero-actions {
   display: flex;
-  gap: 14px;
+  align-items: center;
+  gap: 22px;
   justify-content: flex-start;
   flex-wrap: wrap;
 }
@@ -1289,13 +1298,39 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   0%, 100% { box-shadow: 0 0 0 0 rgba(184,76,114,0); }
   50%       { box-shadow: 0 0 0 8px rgba(184,76,114,0.22); }
 }
-/* Outline hero button: dark border / dark text */
-.tt-hero-actions .tt-btn-outline {
-  border-color: var(--text);
-  color: var(--text);
+
+/* Primary hero CTA: flecha que se desliza al pasar el mouse */
+.tt-hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
-.tt-hero-actions .tt-btn-outline:hover {
-  background: rgba(0,0,0,0.06);
+.tt-hero-cta-arrow {
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tt-hero-cta:hover .tt-hero-cta-arrow {
+  transform: translateX(6px);
+}
+
+/* Link secundario del hero: texto subrayado, sin competir con el CTA principal */
+.tt-hero-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.86rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+  opacity: 0.85;
+  transition: opacity 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+.tt-hero-link:hover {
+  opacity: 1;
+  color: var(--pink-dark);
+  border-color: var(--pink-dark);
 }
 
 /* ═══════════════════════════════════════════════
