@@ -1,7 +1,7 @@
 import {
   detectContentPageId, getNested, getPageSchema, normalizeContentValue,
   sanitizeContentHref, sanitizeContentText,
-} from './esquema-contenido.js?v=tintin-20260826-carousel-order-1';
+} from './esquema-contenido.js?v=tintin-20260826-carousel-order-2';
 import {
   VISUAL_BLOCK_TYPES, VISUAL_STYLE_OPTIONS,
 } from './contratos-visual-builder.js?v=tintin-20260810-visual-studio-v2-1';
@@ -81,6 +81,13 @@ function sanitizeSectionOrderClient(raw, schema) {
   const reorderable = reorderableSectionIds(schema);
   const seen = new Set();
   const order = (Array.isArray(raw) ? raw : []).filter(id => reorderable.includes(id) && !seen.has(id) && seen.add(id));
+  // Older saved configurations predate the homepage carousel. Migrate it into
+  // its intended position instead of appending it after every other section.
+  if (reorderable.includes('collections_carousel') && !seen.has('collections_carousel')) {
+    const trustIndex = order.indexOf('trust');
+    order.splice(trustIndex >= 0 ? trustIndex + 1 : 0, 0, 'collections_carousel');
+    seen.add('collections_carousel');
+  }
   reorderable.forEach(id => { if (!seen.has(id)) { order.push(id); seen.add(id); } });
   return order;
 }
