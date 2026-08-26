@@ -221,6 +221,27 @@ body:not(:has(.adm-main)) :is(.tt-sticky-btn,.sticky-button,[data-button-variant
 body:not(:has(.adm-main)) :is(.tt-btn-outline,[data-button-variant="outline"]){background:var(--color-button-outline-background)!important;color:var(--color-button-outline-text)!important;border-color:var(--color-button-outline-border)}
 body:not(:has(.adm-main)) :is(.tt-btn-transparent,[data-button-variant="transparent"]){background:transparent!important;color:var(--color-button-transparent-text)!important}
 
+/* El selector global de texto de la interfaz también alcanza a los botones.
+   Mantener el texto de las acciones primarias en blanco evita que el token
+   de texto de página (#2B2B2B) reemplace el contraste de la superficie rosa. */
+html body:not(:has(.adm-main)) :is(.tt-btn:not(.tt-btn-outline),.tt-btn-primary,.tt-btn-primary-full,.tt-cart-checkout-btn,.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link,.ck-btn,.login-google,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn,.tt-home-runtime-state-link,.perfil-btn-primary){
+  color:var(--color-button-primary-text,#FFFFFF)!important;
+}
+
+/* Las etiquetas de colecciones viven sobre fotografías: la pastilla oscura
+   mantiene legibilidad estable aunque cambie la imagen o su recorte. */
+html body:not(:has(.adm-main)) .tt-coll-card-label{
+  color:#FFFFFF!important;
+  background:rgba(43,43,43,.72)!important;
+  border-radius:999px;
+  padding:6px 10px;
+  text-shadow:none;
+}
+
+html body:not(:has(.adm-main)) .cat-filter-toggle{
+  color:var(--color-button-primary-text,#FFFFFF)!important;
+}
+
 body:not(:has(.adm-main)) :is(.tt-card,.tt-product-card,.tt-review-card,.tt-category-card,.perfil-card,.ck-panel,.login-box){border-color:var(--color-card-border);box-shadow:0 14px 38px var(--color-card-shadow)}
 body:not(:has(.adm-main)) :is(hr,.divider,.tt-divider){border-color:var(--color-border-secondary)}
 body:not(:has(.adm-main)) :is(input,textarea,select,[tabindex]):focus-visible{border-color:var(--color-border-focus)!important}

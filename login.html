@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1"></script>
-  <script src="js/cargador-pagina.js?v=tintin-20260821-hero-authoritative-1"></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260824-hero-first-paint-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20260821-accounts-phase-a-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20260824-header-logo-fallback-1" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -23,10 +23,10 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260821-accounts-phase-a-1">
-  <link rel="preload" as="style" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260818-header-dropdowns-solid-3">
-  <link rel="preload" as="style" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260818-header-dropdowns-solid-3">
-  <link rel="preload" as="style" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260818-header-dropdowns-solid-3">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260824-header-logo-fallback-1">
+  <link rel="preload" as="style" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260824-header-responsive-sync-1">
+  <link rel="preload" as="style" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260824-header-responsive-sync-1">
+  <link rel="preload" as="style" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" href="css/components/navigation/compartido/transiciones-navegacion.css?v=tintin-20260818-header-dropdowns-solid-3">
   <link rel="preload" as="style" href="css/components/navigation/compartido/paneles.css?v=tintin-20260818-header-dropdowns-solid-3">
   <link rel="preload" as="style" href="css/components/navigation/compartido/busqueda.css?v=tintin-20260818-header-dropdowns-solid-3">
@@ -38,17 +38,19 @@
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3">
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260818-collections-apple-2">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260826-hero-scroll-hint-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260820-code-editor-1">
+  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260824-contrast-buttons-3">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/pages/login/login.css?v=tintin-20260822-dob-username-onboarding-1">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous" />
   <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/pages/login/login-maintenance.css?v=tintin-20260811-cls-desktop-stable-2" data-tt-login-maintenance>
+  <link rel="stylesheet" href="css/pages/login/login-fluid-responsive.css?v=tintin-20260803-login-fluid-1" data-tt-login-fluid>
+  <link rel="stylesheet" href="css/pages/login/login-onboarding-flow.css?v=tintin-20260803-onboarding-flow-1" data-tt-login-onboarding-flow>
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2">
 </head>
@@ -88,9 +90,10 @@
         <div class="login-divider" id="login-divider-section"><span>o usá tu correo</span></div>
 
         <div class="login-email-block" id="login-email-block">
-          <label class="login-email-label" for="login-email-input">Correo electrónico</label>
+          <label class="login-email-label" for="login-email-input" id="login-identifier-label">Correo electrónico</label>
           <input type="email" class="login-email-input" id="login-email-input" placeholder="tu@email.com" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" />
           <button type="button" class="login-email-btn" id="btn-send-otp">Enviar código</button>
+          <button type="button" class="login-email-resend" id="btn-toggle-identifier">¿Preferís entrar con tu @usuario?</button>
           <div class="login-google-nudge-arrow" id="login-email-nudge-arrow" style="display:none" aria-hidden="true">
             <div class="login-google-nudge-point"></div>
             <div class="login-google-nudge-bubble">Esta cuenta se creó con tu correo — entrá por acá <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-left:3px"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div>
@@ -213,7 +216,7 @@ import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tint
 import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260821-accounts-phase-a-1";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260822-dob-username-onboarding-2";
-import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260818-pin-icon-svg-1";
+import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260824-google-maps-input-1";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
 
@@ -268,6 +271,11 @@ function showSuccess(html) {
   hideMessages();
   const el = document.getElementById("login-success");
   el.innerHTML = html; el.classList.add("show");
+}
+function escapeHtml(s) {
+  const div = document.createElement('div');
+  div.textContent = s || '';
+  return div.innerHTML;
 }
 function hideMessages() {
   document.getElementById("login-error").classList.remove("show");
@@ -894,6 +902,7 @@ function showEmailStep() {
   clearInterval(otpResendTimer);
   document.getElementById('login-otp-block').style.display = 'none';
   document.getElementById('login-email-block').style.display = '';
+  setIdentifierMode('email');
 }
 
 // Cuando una cuenta ya está atada a un método (Google o correo) y se
@@ -933,15 +942,49 @@ window.addEventListener('scroll', () => {
   if (googleNudgeBackdrop.style.display !== 'none') hideAccountNudge();
 }, { passive: true });
 
-async function sendOtp(email) {
+let loginIdentifierMode = 'email'; // 'email' | 'username'
+
+function setIdentifierMode(mode) {
+  loginIdentifierMode = mode;
+  hideMessages();
+  const input = document.getElementById('login-email-input');
+  const label = document.getElementById('login-identifier-label');
+  const toggleBtn = document.getElementById('btn-toggle-identifier');
+  input.value = '';
+  if (mode === 'username') {
+    label.textContent = 'Nombre de usuario';
+    input.type = 'text';
+    input.placeholder = '@tu_usuario';
+    input.autocomplete = 'username';
+    toggleBtn.textContent = '¿Preferís entrar con tu correo?';
+  } else {
+    label.textContent = 'Correo electrónico';
+    input.type = 'email';
+    input.placeholder = 'tu@email.com';
+    input.autocomplete = 'email';
+    toggleBtn.textContent = '¿Preferís entrar con tu @usuario?';
+  }
+  input.focus();
+}
+
+document.getElementById('btn-toggle-identifier').onclick = () => {
+  setIdentifierMode(loginIdentifierMode === 'email' ? 'username' : 'email');
+};
+
+async function sendOtp(identifier, mode) {
   hideMessages();
   hideGoogleNudge();
-  const activeBtn = document.getElementById(otpEmail === email && document.getElementById('login-otp-block').style.display !== 'none' ? 'btn-resend-otp' : 'btn-send-otp');
+  const activeBtn = document.getElementById(otpEmail === identifier && document.getElementById('login-otp-block').style.display !== 'none' ? 'btn-resend-otp' : 'btn-send-otp');
   activeBtn.disabled = true;
   try {
-    await requestOtpCode(email);
-    otpEmail = email;
-    showSuccess(`Te mandamos un código de 6 dígitos a ${email}. Vence en 5 minutos.`);
+    await requestOtpCode(identifier);
+    otpEmail = identifier;
+    // Con @usuario nunca revelamos el correo real de la cuenta (evita que el
+    // login sirva para enumerar qué usuario pertenece a qué correo) — mismo
+    // criterio anti-enumeración que ya aplica el backend (email-otp-send.js).
+    showSuccess(mode === 'username'
+      ? 'Si ese usuario existe, mandamos un código de 6 dígitos al correo de esa cuenta. Vence en 5 minutos.'
+      : `Te mandamos un código de 6 dígitos a ${escapeHtml(identifier)}. Vence en 5 minutos.`);
     showOtpStep();
     startOtpResendCooldown();
   } catch (e) {
@@ -956,15 +999,24 @@ async function sendOtp(email) {
 }
 
 document.getElementById('btn-send-otp').onclick = () => {
-  const email = document.getElementById('login-email-input').value.trim();
-  if (!isValidEmailFormat(email)) {
+  const rawValue = document.getElementById('login-email-input').value.trim();
+  if (loginIdentifierMode === 'username') {
+    const value = rawValue.replace(/^@/, '');
+    if (!isValidUsernameFormat(value)) {
+      showError('Escribí un nombre de usuario válido.');
+      return;
+    }
+    sendOtp(value, loginIdentifierMode);
+    return;
+  }
+  if (!isValidEmailFormat(rawValue)) {
     showError('Escribí un correo con formato válido (ej: tu@email.com).');
     return;
   }
-  sendOtp(email);
+  sendOtp(rawValue, loginIdentifierMode);
 };
 
-document.getElementById('btn-resend-otp').onclick = () => sendOtp(otpEmail);
+document.getElementById('btn-resend-otp').onclick = () => sendOtp(otpEmail, loginIdentifierMode);
 document.getElementById('btn-change-email').onclick = () => { hideMessages(); showEmailStep(); };
 
 document.getElementById('login-otp-input').addEventListener('keydown', e => {
@@ -1012,7 +1064,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
 };
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script src="tienda.js?v=tintin-20260822-facturacion-1" defer></script>
+<script src="tienda.js?v=tintin-20260822-checkout-hardening-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 </body>
 </html>

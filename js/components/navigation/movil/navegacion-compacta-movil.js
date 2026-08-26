@@ -7,7 +7,7 @@
 
   const mobile = matchMedia('(max-width: 767px)');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  const OPEN_SURFACE = '.tt-search-panel.open,.tt-cart-drawer.open,.tt-account-drawer.open,.tt-collections-sheet.open';
+  const OPEN_SURFACE = '.tt-search-panel.open,.tt-cart-drawer.open,.tt-account-drawer.open,.tt-collections-sheet.open,.tt-notifications-drawer.open';
   const TOP_THRESHOLD = 36;
   const DIRECTION_THRESHOLD = 10;
   let lastY = Math.max(0, scrollY || 0);

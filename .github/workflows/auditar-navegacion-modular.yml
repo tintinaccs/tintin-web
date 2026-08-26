@@ -19,6 +19,7 @@ on:
       - 'css/components/navigation/movil/fondos-solidos-movil.css'
       - 'scripts/auditar-inicio-navegacion-publica.js'
       - 'scripts/auditar-modular-arquitectura.js'
+      - 'scripts/auditar-unificada-navegacion.js'
       - 'scripts/auditar-todas-navegacion-superficies-ci.mjs'
       - 'scripts/auditar-navegacion-busqueda.mjs'
       - 'package.json'
@@ -49,6 +50,8 @@ jobs:
         run: npm run audit:modular-architecture
       - name: Audit public shell
         run: npm run audit:public-shell
+      - name: Audit unified header contract
+        run: node scripts/auditar-unificada-navegacion.js
 
   navigation-browser:
     runs-on: ubuntu-latest

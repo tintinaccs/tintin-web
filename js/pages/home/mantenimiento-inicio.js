@@ -142,7 +142,7 @@ if (isHome && !window.TintinHomeMaintenanceBooted) {
       navigator.onLine === false
         ? 'Cuando vuelva internet, esta sección se actualizará automáticamente.'
         : 'Podés abrir el catálogo completo mientras reintentamos la sincronización.',
-      { href: 'catalogo.html', label: 'Ver catálogo' },
+      { href: '/catalogo', label: 'Ver catálogo' },
     );
   }
 
@@ -157,7 +157,7 @@ if (isHome && !window.TintinHomeMaintenanceBooted) {
       'empty',
       'Combinaciones temporalmente no disponibles',
       'La página sigue funcionando y podés explorar todos los productos desde el catálogo.',
-      { href: 'catalogo.html', label: 'Explorar accesorios' },
+      { href: '/catalogo', label: 'Explorar accesorios' },
     );
   }
 

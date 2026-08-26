@@ -15,6 +15,18 @@ const files = {
   packageJson: read('package.json'),
   panel: read('admin.html'),
   adminApp: read('js/admin/admin-app.js'),
+  faq: read('preguntas-frecuentes.html'),
+  privacy: read('privacidad.html'),
+  shipping: read('envios.html'),
+  analytics: read('js/analytics/analitica.js'),
+  loginMaintenance: read('js/pages/login/mantenimiento-acceso.js'),
+  checkoutMaintenance: read('js/pages/checkout/checkout-mantenimiento.js'),
+  profileMaintenance: read('js/pages/profile/mantenimiento-perfil.js'),
+  searchController: read('js/components/navigation/compartido/control-busqueda.js'),
+  pageLoader: read('js/cargador-pagina.js'),
+  engagementCustomer: read('cloudflare/participacion-clientes.js'),
+  engagementAdmin: read('cloudflare/participacion-admin.js'),
+  orderEmail: read('functions/api/order-email.js'),
 };
 
 let failures = 0;
@@ -158,6 +170,99 @@ check(
   'El comando de auditoría está disponible',
   files.packageJson.includes('"audit:content"'),
   'Falta npm run audit:content'
+);
+
+
+check(
+  'Las rutas limpias identifican el mismo contenido que sus alias .html',
+  files.schema.includes('PAGE_PATH_TO_ID[`${file}.html`]'),
+  'detectContentPageId debe resolver las rutas públicas limpias'
+);
+
+check(
+  'Defaults restaurados conservan rutas limpias y retiro real',
+  files.schema.includes("'/catalogo'") &&
+    files.schema.includes("'/about'") &&
+    files.schema.includes('Retiro en San Lorenzo — Gratis') &&
+    !files.schema.includes("'catalogo.html', { index: 0, type: 'href'") &&
+    !files.schema.includes("'about.html', { index: 1, type: 'href'"),
+  'Restaurar Apariencia no debe reintroducir aliases .html ni una tienda física'
+);
+
+check(
+  'Footer global actualiza WhatsApp aun sin span auxiliar',
+  files.publicRuntime.includes("item.selector === '.tt-footer-wa-text'") &&
+    files.publicRuntime.includes("element.classList.contains('tt-footer-wa')"),
+  'Debe conservar el SVG y reemplazar solo el texto del enlace'
+);
+
+const faqQuestions = (files.faq.match(/class="tt-faq-q"/g) || []).length;
+const faqAnswers = (files.faq.match(/class="tt-faq-a"/g) || []).length;
+check(
+  'FAQ estática coincide con los once índices editables',
+  faqQuestions === 11 && faqAnswers === 11 &&
+    !files.faq.includes('¿Los relojes son originales?') &&
+    files.faq.includes('Los métodos habilitados aparecen en el checkout al confirmar tu pedido.') &&
+    files.faq.includes('En cada producto indicamos su material y características.'),
+  `Preguntas=${faqQuestions}, respuestas=${faqAnswers}`
+);
+
+check(
+  'Privacidad identifica al proveedor real de geolocalización aproximada',
+  files.privacy.includes('Cloudflare estima la ciudad, región y país') &&
+    files.privacy.includes('Cloudflare, como proveedor técnico') &&
+    !files.privacy.includes('Netlify'),
+  'La política debe coincidir con functions/api/visitor-geo.js'
+);
+
+check(
+  'Envíos describe el retiro como retiro en San Lorenzo',
+  files.shipping.includes('Retiro en San Lorenzo — Gratis') &&
+    !files.shipping.includes('Retiro en Tienda — Gratis'),
+  'La operación es online y el retiro se coordina en San Lorenzo'
+);
+
+check(
+  'Analítica reconoce /checkout y /checkout.html',
+  files.analytics.includes('checkout(?:\\.html)?\\/?$') &&
+    !files.analytics.includes('/\\/checkout\\.html$/i.test'),
+  'begin_checkout no debe depender del alias .html'
+);
+
+check(
+  'Canonical dinámicos de cuenta y checkout permanecen limpios',
+  files.loginMaintenance.includes("new URL('/login', location.origin)") &&
+    files.checkoutMaintenance.includes("new URL('/checkout', location.origin)") &&
+    files.profileMaintenance.includes("new URL('/perfil', window.location.origin)") &&
+    !files.loginMaintenance.includes("new URL('login.html'") &&
+    !files.checkoutMaintenance.includes("new URL('checkout.html'") &&
+    !files.profileMaintenance.includes("new URL('perfil.html'"),
+  'El runtime no debe sobrescribir canonical limpios con .html'
+);
+
+check(
+  'Búsqueda y notificaciones generan links canónicos de producto',
+  files.searchController.includes('`/product?id=${encodeURIComponent') &&
+    !files.searchController.includes('`product.html?id=') &&
+    !files.engagementCustomer.includes('product.html?id=') &&
+    !files.engagementAdmin.includes('product.html?id='),
+  'Los enlaces visibles y notificaciones deben usar /product?id='
+);
+
+check(
+  'Loader reconoce producto tanto por ruta limpia como por alias legado',
+  files.pageLoader.includes('/^product(?:\\.html)?$/i.test(productPath)'),
+  'El nombre del producto debe preservarse al navegar desde /product'
+);
+
+check(
+  'Correo administrativo muestra ciudad y departamento sin duplicar',
+  files.orderEmail.includes('function cityDepartmentLabel(order)') &&
+    files.orderEmail.includes('const cityLabel = cityDepartmentLabel(order);') &&
+    files.orderEmail.includes('${escapeHtml(cityLabel)}</td></tr>') &&
+    files.orderEmail.includes('Ciudad: ${cityLabel}') &&
+    files.orderEmail.includes("/admin';"),
+  'El correo debe mostrar, por ejemplo, Santiago (Misiones)'
 );
 
 if (failures) {

@@ -520,7 +520,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
 
     const help = document.createElement('div');
     help.className = 'tt-map-smart-help';
-    help.textContent = 'Podés buscar por nombre —por ejemplo un negocio o local—, pegar coordenadas o un enlace completo de Google Maps. También podés tocar cualquier punto del mapa y escribir el nombre que prefieras.';
+    help.textContent = 'Buscá el lugar, usá tu ubicación o tocá el punto exacto en el mapa.';
 
     const results = document.createElement('div');
     results.id = 'tt-map-smart-results';

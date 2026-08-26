@@ -380,12 +380,12 @@ try {
             borderColor: style.borderColor,
             borderStyle: style.borderStyle,
             borderWidth: style.borderWidth,
+            boxShadow: style.boxShadow,
             opacity: style.opacity,
           }];
         }));
       });
       const borderedSurfaces = new Set([
-        'btn-tienda',
         'btn-search',
         'btn-cuenta',
         'btn-cart',
@@ -399,9 +399,24 @@ try {
           failures.push(`Header desktop/tablet ${width}px: falta #${id}.`);
           continue;
         }
-        if (style.backgroundColor !== 'rgb(255, 255, 255)') {
+
+        // Tienda pertenece a la navegación principal. Su único realce visual
+        // es el pill móvil del header; el trigger no debe recrear un segundo
+        // botón blanco/rosado alrededor del indicador activo.
+        if (id === 'btn-tienda') {
+          if (style.backgroundColor !== 'rgba(0, 0, 0, 0)') {
+            failures.push(`Header desktop/tablet ${width}px: #btn-tienda conserva fondo propio (${style.backgroundColor}).`);
+          }
+          if (style.borderColor !== 'rgba(0, 0, 0, 0)') {
+            failures.push(`Header desktop/tablet ${width}px: #btn-tienda conserva segundo borde (${style.borderColor}).`);
+          }
+          if (style.boxShadow !== 'none') {
+            failures.push(`Header desktop/tablet ${width}px: #btn-tienda conserva sombra propia (${style.boxShadow}).`);
+          }
+        } else if (style.backgroundColor !== 'rgb(255, 255, 255)') {
           failures.push(`Header desktop/tablet ${width}px: #${id} no es blanco (${style.backgroundColor}).`);
         }
+
         if (style.backgroundImage !== 'none') {
           failures.push(`Header desktop/tablet ${width}px: #${id} conserva imagen o degradado de fondo.`);
         }
@@ -412,7 +427,7 @@ try {
           failures.push(`Header desktop/tablet ${width}px: #${id} no conserva el borde rosado sólido.`);
         }
       }
-      console.log(`OK — Header desktop/tablet ${width}px · Tienda · Buscar · Cuenta · Carrito · fondos blancos`);
+      console.log(`OK — Header desktop/tablet ${width}px · Tienda sin doble marco · Buscar · Cuenta · Carrito · superficies correctas`);
     } catch (error) {
       failures.push(`Header desktop/tablet ${width}px: ${error.message || String(error)}.`);
     } finally {

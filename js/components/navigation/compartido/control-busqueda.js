@@ -101,7 +101,7 @@ function createResult(product, position) {
   const link = document.createElement('a');
   link.className = 'tt-search-result-item';
   link.id = `tt-search-result-${position}`;
-  link.href = `product.html?id=${encodeURIComponent(String(product.id || ''))}`;
+  link.href = `/product?id=${encodeURIComponent(String(product.id || ''))}`;
   link.setAttribute('role', 'option');
   link.setAttribute('aria-selected', 'false');
   link.dataset.searchPosition = String(position);
@@ -244,7 +244,7 @@ async function ensureProducts(force = false) {
     results.replaceChildren(stateNode('Cargando catálogo…'));
   }
 
-  loadPromise = import('../../../core/store/estado-productos.js?v=tintin-20260821-accounts-phase-a-1')
+  loadPromise = import('../../../core/store/estado-productos.js?v=tintin-20260822-checkout-hardening-2')
     .then(module => {
       const load = window.TintinProductsStore?.ensureSearch || module.ensureProductsForSearch || module.loadAllProducts;
       return typeof load === 'function' ? load({ force }) : window.PRODUCTS || [];

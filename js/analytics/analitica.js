@@ -313,7 +313,7 @@ function bindCommerceEvents() {
     }, { dedupeKey: cleanText(detail.dedupeKey, 120) });
   }, { passive: true });
 
-  if (/\/checkout\.html$/i.test(window.location.pathname || '')) {
+  if (/(?:^|\/)checkout(?:\.html)?\/?$/i.test(window.location.pathname || '')) {
     window.setTimeout(() => {
       let items = [];
       try { items = JSON.parse(localStorage.getItem('tt_cart') || '[]'); } catch {}

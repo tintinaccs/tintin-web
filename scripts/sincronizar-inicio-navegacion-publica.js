@@ -5,28 +5,25 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260822-facturacion-1';
+const VERSION = 'tintin-20260822-checkout-hardening-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260816-loader-shell-bridge-1';
-const LOADER_VERSION = 'tintin-20260821-hero-authoritative-1';
+const LOADER_VERSION = 'tintin-20260824-hero-first-paint-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
-const PUBLIC_SHELL_VERSION = 'tintin-20260821-accounts-phase-a-1';
-const NAV_ENTRY_VERSION = 'tintin-20260821-accounts-phase-a-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20260824-header-logo-fallback-1';
+const NAV_ENTRY_VERSION = 'tintin-20260824-header-logo-fallback-1';
 const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
-const VISUAL_BUILDER_VERSION = 'tintin-20260821-layout-stable-1';
+const VISUAL_BUILDER_VERSION = 'tintin-20260826-carousel-order-2';
 const SESSION_PROTECTION_VERSION = 'tintin-20260822-dob-username-onboarding-1';
 const PROFILE_GATE_VERSION = 'tintin-20260822-dob-username-onboarding-1';
-// Debe coincidir con SHELL_VERSION en js/components/navigation/compartido/configuracion.js:
-// esa constante decide la URL exacta (con ?v=) que entrada-navegacion-publica.js y
-// ensureNavigationAssets() piden en tiempo de ejecución. Si difieren, el preload no
-// acierta la cache key exacta y el navegador vuelve a pedir el recurso igual.
-const NAV_SHELL_VERSION = 'tintin-20260818-header-dropdowns-solid-3';
+const NAV_HEADER_VERSION = 'tintin-20260824-header-responsive-sync-1';
+const NAV_SHARED_VERSION = 'tintin-20260818-header-dropdowns-solid-3';
 const NAVIGATION_PRELOAD_STYLES = [
-  'css/components/navigation/escritorio/encabezado-escritorio.css',
-  'css/components/navigation/tableta/encabezado-tableta.css',
-  'css/components/navigation/movil/encabezado-movil.css',
-  'css/components/navigation/compartido/transiciones-navegacion.css',
-  'css/components/navigation/compartido/paneles.css',
-  'css/components/navigation/compartido/busqueda.css',
+  ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION],
+  ['css/components/navigation/tableta/encabezado-tableta.css', NAV_HEADER_VERSION],
+  ['css/components/navigation/movil/encabezado-movil.css', NAV_HEADER_VERSION],
+  ['css/components/navigation/compartido/transiciones-navegacion.css', NAV_SHARED_VERSION],
+  ['css/components/navigation/compartido/paneles.css', NAV_SHARED_VERSION],
+  ['css/components/navigation/compartido/busqueda.css', NAV_SHARED_VERSION],
 ];
 const PUBLIC_PAGES = [
   '404.html',
@@ -120,7 +117,7 @@ function ensureNavigationPreloads(html) {
     `<link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=${NAV_BARRIER_VERSION}">`,
     `<link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=${NAV_ENTRY_VERSION}">`,
     ...NAVIGATION_PRELOAD_STYLES.map(
-      href => `<link rel="preload" as="style" href="${href}?v=${NAV_SHELL_VERSION}">`
+      ([href, version]) => `<link rel="preload" as="style" href="${href}?v=${version}">`
     ),
   ].map(tag => `  ${tag}`).join('\n');
 
@@ -142,10 +139,6 @@ function ensureShellScript(html) {
   const loader = /(<script\b[^>]*src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>)/i;
   if (!loader.test(out)) throw new Error('La pagina no carga js/cargador-pagina.js');
 
-  // La espera temprana del shell se arma desde esquema-color-instantaneo.js,
-  // que ya es parte del camino crítico permitido y corre antes del loader.
-  // Así no agregamos otro request bloqueante ni scripts inline (importante para
-  // la CSP del 404), mientras inicio-navegacion-publica.js puede seguir defer.
   return out.replace(loader, `$1\n  <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=${PANEL_COMPAT_VERSION}" defer></script>\n  <script src="js/inicio-navegacion-publica.js?v=${PUBLIC_SHELL_VERSION}" defer></script>`);
 }
 
@@ -229,9 +222,6 @@ for (const page of PUBLIC_PAGES) {
   }
 }
 
-// Admin y cualquier otra superficie fuera del shell público también pueden
-// cargar proteccion-sesion.js. Se sincroniza únicamente ese tag sin intentar
-// insertar navegación pública en esas páginas.
 for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') && !PUBLIC_PAGES.includes(file))) {
   const file = path.join(ROOT, page);
   const before = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');

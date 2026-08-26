@@ -19,14 +19,14 @@
   };
 
   const current = () =>
-    items.find(item => item.getAttribute('aria-expanded') === 'true') ||
-    items.find(item => item.classList.contains('active')) ||
+    items.find(item => !item.hidden && item.getAttribute('aria-expanded') === 'true') ||
+    items.find(item => !item.hidden && item.classList.contains('active')) ||
     null;
   const sync = () => locate(current());
   const observer = new MutationObserver(sync);
   items.forEach(item => observer.observe(item, {
     attributes: true,
-    attributeFilter: ['class', 'aria-expanded', 'aria-current'],
+    attributeFilter: ['class', 'aria-expanded', 'aria-current', 'hidden'],
   }));
 
   const resizeObserver = new ResizeObserver(sync);

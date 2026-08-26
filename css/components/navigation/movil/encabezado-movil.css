@@ -108,6 +108,21 @@
   #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] svg,
   #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] .tt-tabbar-avatar { transform:translateY(-8px) scale(1.12); }
 
+  /* Configuración combinada: si el editor oculta Inicio solo quedan cuatro
+     tabs para invitado y cinco cuando Auth habilita Alertas. La regla de
+     notificaciones por sí sola reserva seis; aquí se recompone la geometría
+     para respetar ambas configuraciones sin dejar una columna fantasma. */
+  html[data-tt-mobile-home="hidden"] body #tt-tabbar:has(#tabbar-notifications:not([hidden])) {
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+    width:min(420px,calc(100vw - 20px)) !important;
+    padding-inline:10px !important;
+  }
+
+  html[data-tt-mobile-home="hidden"] body #tt-tabbar.tt-tabbar-compact:has(#tabbar-notifications:not([hidden])) {
+    width:min(316px,calc(100vw - 54px)) !important;
+    padding-inline:8px !important;
+  }
+
   .tt-mobile-nav-halo,
   .tt-mobile-nav-indicator {
     position:absolute;
@@ -152,6 +167,14 @@
 @media (max-width: 350px) {
   #tt-tabbar:not(.tt-tabbar-compact) { width:calc(100vw - 12px); padding-inline:5px; }
   #tt-tabbar.tt-tabbar-compact { width:calc(100vw - 42px); padding-inline:6px; }
+  html[data-tt-mobile-home="hidden"] body #tt-tabbar:not(.tt-tabbar-compact):has(#tabbar-notifications:not([hidden])) {
+    width:calc(100vw - 12px) !important;
+    padding-inline:5px !important;
+  }
+  html[data-tt-mobile-home="hidden"] body #tt-tabbar.tt-tabbar-compact:has(#tabbar-notifications:not([hidden])) {
+    width:calc(100vw - 42px) !important;
+    padding-inline:6px !important;
+  }
   #tt-tabbar .tt-tabbar-btn span:last-child { font-size:.52rem; }
 }
 

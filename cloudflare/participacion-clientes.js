@@ -196,7 +196,7 @@ export async function createReview(env, user, input) {
     actorPhotoUrl: context.photoUrl,
     title: `${context.realName} publicó una reseña en ${context.productName}`,
     body: comment, snippet: comment, iconKey: 'review',
-    targetUrl: `product.html?id=${context.productId}#review-${reviewId}`,
+    targetUrl: `/product?id=${context.productId}#review-${reviewId}`,
     productId: context.productId, productName: context.productName, productImageUrl: context.imageUrl,
     reviewId, sourceType: 'review', sourceId: reviewId, createdAt: now,
   }, `review_created:${reviewId}`);
@@ -235,7 +235,7 @@ export async function editOwnReview(env, user, input) {
     actorPhotoUrl: record.actorPhotoUrl,
     title: `${record.realName} editó su reseña en ${record.productName}`,
     body: comment, snippet: comment, iconKey: 'review',
-    targetUrl: `product.html?id=${productId}#review-${reviewId}`,
+    targetUrl: `/product?id=${productId}#review-${reviewId}`,
     productId, productName: record.productName, productImageUrl: record.productImageUrl,
     reviewId, sourceType: 'review', sourceId: reviewId, createdAt: now,
   }, `review_edited:${reviewId}:1`);
@@ -271,7 +271,7 @@ export async function addCustomerReply(env, user, input) {
     actorPhotoUrl: context.photoUrl,
     title: `${context.realName} respondió en ${record.productName}`,
     body: text, snippet: text, iconKey: 'comment',
-    targetUrl: `product.html?id=${productId}#review-${reviewId}`,
+    targetUrl: `/product?id=${productId}#review-${reviewId}`,
     productId, productName: record.productName, productImageUrl: record.productImageUrl,
     reviewId, sourceType: 'review', sourceId: reviewId, createdAt: now,
   }, `review_reply:${reviewId}:${messageId}`);
@@ -286,7 +286,7 @@ export async function addCustomerReply(env, user, input) {
       kind: 'review_reply', actorType: 'customer', actorUid: user.uid, actorName: context.publicName,
       title: `${context.publicName} respondió a tu reseña`,
       body: text, snippet: text, iconKey: 'comment',
-      targetUrl: `product.html?id=${productId}#review-${reviewId}`,
+      targetUrl: `/product?id=${productId}#review-${reviewId}`,
       productId, productName: record.productName, productImageUrl: record.productImageUrl,
       reviewId, sourceType: 'review', sourceId: reviewId, createdAt: now,
     }, `review_reply:${reviewId}:${messageId}`);
@@ -337,7 +337,7 @@ export async function toggleReviewLike(env, user, input) {
       actorPhotoUrl: context.photoUrl,
       title: `${context.realName} indicó que le gusta una reseña de ${record.productName}`,
       body: record.comment, snippet: record.comment, iconKey: 'heart',
-      targetUrl: `product.html?id=${productId}#review-${reviewId}`,
+      targetUrl: `/product?id=${productId}#review-${reviewId}`,
       productId, productName: record.productName, productImageUrl: record.productImageUrl,
       reviewId, sourceType: 'review', sourceId: reviewId, createdAt: now,
     }, `review_like:${reviewId}:${uid}:${now.getTime()}`);
@@ -347,7 +347,7 @@ export async function toggleReviewLike(env, user, input) {
         kind: 'review_like', actorType: 'customer', actorUid: user.uid, actorName: context.publicName,
         title: `${context.publicName} indicó que le gusta tu reseña`,
         body: record.comment, snippet: record.comment, iconKey: 'heart',
-        targetUrl: `product.html?id=${productId}#review-${reviewId}`,
+        targetUrl: `/product?id=${productId}#review-${reviewId}`,
         productId, productName: record.productName, productImageUrl: record.productImageUrl,
         reviewId, sourceType: 'review', sourceId: reviewId, createdAt: now,
       }, `review_like:${reviewId}:${uid}:${now.getTime()}`);
@@ -383,7 +383,7 @@ export async function toggleFavorite(env, user, input) {
     actorPhotoUrl: context.photoUrl,
     title: `${context.realName} indicó que le gusta ${context.productName}`,
     body: `Nuevo Me gusta en ${context.productName}.`, iconKey: 'heart',
-    targetUrl: `product.html?id=${context.productId}`,
+    targetUrl: `/product?id=${context.productId}`,
     productId: context.productId, productName: context.productName, productImageUrl: context.imageUrl,
     sourceType: 'favorite', sourceId: likeId, createdAt: now,
   }, `product_like:${likeId}`);
