@@ -19,15 +19,25 @@ const shell = [
 
 const controller = read('js/components/navigation/compartido/control-paneles.js');
 const runtime = read('tienda.js');
+const desktopStyles = read('css/components/navigation/escritorio/encabezado-escritorio.css');
+const tabletStyles = read('css/components/navigation/tableta/encabezado-tableta.css');
+const mobileStyles = read('css/components/navigation/movil/encabezado-movil.css');
+const mobileSolidStyles = read('css/components/navigation/movil/fondos-solidos-movil.css');
+const notificationStyles = read('css/components/notifications/notificaciones-sociales.css');
+const notificationSurfaceStyles = read('css/components/navigation/compartido/superficie-notificaciones.css');
+const navigationAssets = read('js/components/navigation/compartido/recursos-navegacion.js');
+const sharedRuntime = read('js/components/navigation/compartido/carga-navegacion.js');
+const mobileCompact = read('js/components/navigation/movil/navegacion-compacta-movil.js');
+const mobileIndicator = read('js/components/navigation/movil/indicador-navegacion-movil.js');
 const styles = [
-  'css/components/navigation/escritorio/encabezado-escritorio.css',
-  'css/components/navigation/tableta/encabezado-tableta.css',
-  'css/components/navigation/movil/encabezado-movil.css',
-  'css/components/navigation/movil/fondos-solidos-movil.css',
+  desktopStyles,
+  tabletStyles,
+  mobileStyles,
+  mobileSolidStyles,
   'css/components/navigation/compartido/paneles.css',
   'css/components/navigation/compartido/transiciones-navegacion.css',
   'css/components/navigation/compartido/busqueda.css',
-].map(read).join('\n');
+].map(file => file.endsWith?.('.css') ? read(file) : file).join('\n');
 const collections = read('js/components/navigation/compartido/carga-colecciones.js');
 const navigation = read('js/components/navigation/compartido/enrutador.js');
 
@@ -59,8 +69,92 @@ check(
   'navegación no tiene View Transition segura con fallback'
 );
 
+// Contrato reforzado de headers 2026-08-24: estos checks protegen los fallos
+// que antes podían variar por página, sesión, dispositivo o cascada CSS.
+check(
+  navigationAssets.includes("css/components/navigation/movil/fondos-solidos-movil.css"),
+  'el shell global no carga los fondos sólidos móviles'
+);
+check(
+  navigationAssets.includes("css/components/notifications/notificaciones-sociales.css"),
+  'el shell global no precarga la geometría/estilos de notificaciones'
+);
+check(
+  navigationAssets.includes("css/components/navigation/compartido/superficie-notificaciones.css") &&
+    notificationSurfaceStyles.includes('z-index: 1460 !important') &&
+    notificationSurfaceStyles.includes('background: #FFFFFF !important'),
+  'Alertas no comparte capa y fondo blanco sólido con las demás superficies del header'
+);
+check(
+  navigationAssets.includes('stylesheetForPath(path)') &&
+    navigationAssets.includes('new URL(versionedSiteAsset(path)).pathname') &&
+    navigationAssets.includes('dataset.ttSocialNotifications') &&
+    navigationAssets.includes('waitForStylesheet(link)'),
+  'el cargador global no reutiliza hojas existentes o no limita la espera de CSS'
+);
+check(
+  mobileStyles.includes('@media (max-width: 767px)') &&
+    mobileStyles.includes('@media (min-width: 768px)') &&
+    mobileSolidStyles.includes('@media (max-width: 768px)'),
+  'el contrato móvil principal no protege el corte 767/768 frente a la hoja sólida heredada'
+);
+check(
+  notificationStyles.includes('grid-template-columns: repeat(6, minmax(0, 1fr))'),
+  'mobile no reserva seis columnas cuando Alertas está visible'
+);
+check(
+  mobileStyles.includes('data-tt-mobile-home="hidden"') &&
+    mobileStyles.includes('grid-template-columns:repeat(5,minmax(0,1fr)) !important'),
+  'mobile no recompone cinco columnas cuando Inicio está oculto y Alertas visible'
+);
+check(
+  mobileCompact.includes('.tt-notifications-drawer.open'),
+  'la barra compacta mobile no reconoce Notificaciones como superficie abierta'
+);
+check(
+  mobileIndicator.includes("attributeFilter: ['class', 'aria-expanded', 'aria-current', 'hidden']") &&
+    mobileIndicator.includes('!item.hidden'),
+  'el indicador mobile no se resincroniza cuando Auth muestra u oculta Alertas'
+);
+check(
+  sharedRuntime.includes('void loadAuthRuntime()') && !sharedRuntime.includes('tt_session_started_at'),
+  'el header sigue dependiendo de una marca local de sesión en vez de resolver Auth globalmente'
+);
+check(
+  sharedRuntime.includes('const authenticated = Boolean(event.detail?.authenticated)') &&
+    sharedRuntime.includes('.then(() => setNotificationTriggersVisible(true))') &&
+    sharedRuntime.includes('setNotificationTriggersVisible(false)') &&
+    sharedRuntime.includes('void loadNotificationsRuntime()'),
+  'la visibilidad de Alertas no espera Auth y el registro exitoso de su superficie'
+);
+check(
+  sharedRuntime.includes('scheduleNonCritical(() => {') &&
+    sharedRuntime.includes('Promise.allSettled([loadCollectionsRuntime()]).then(reportRuntimeFailures);'),
+  'las páginas informativas no precargan la configuración canónica de colecciones'
+);
+check(
+  collections.includes('function visibleCollections(collections)') &&
+    collections.includes('return collections;') &&
+    !collections.includes('collections.filter(item => hasProducts(item.slug))'),
+  'las colecciones del header todavía pueden variar según si una página cargó productos'
+);
+check(
+  desktopStyles.includes('#tt-header-desktop-tablet #tt-nav-desktop-tablet #btn-tienda.active') &&
+    desktopStyles.includes('border-color: transparent !important;'),
+  'desktop no neutraliza el segundo marco heredado de Tienda'
+);
+check(
+  desktopStyles.includes('grid-template-columns: 196px minmax(0, 1fr) 196px !important'),
+  'desktop compacto no reserva espacio simétrico para las cuatro acciones autenticadas'
+);
+check(
+  tabletStyles.includes('grid-template-columns: minmax(210px, 1fr) auto minmax(210px, 1fr)') &&
+    tabletStyles.includes('max-width: min(240px, 31vw)'),
+  'tablet no reserva geometría simétrica para impedir colisiones con el logo'
+);
+
 if (failures.length) {
   failures.forEach(message => console.error(`FALTA - ${message}`));
   process.exit(1);
 }
-console.log('Navegación unificada: componentes, controlador, breakpoints, accesibilidad y fuentes compartidas correctos.');
+console.log('Navegación unificada: componentes, controlador, breakpoints, sesión, colecciones, notificaciones y geometría responsive correctos.');

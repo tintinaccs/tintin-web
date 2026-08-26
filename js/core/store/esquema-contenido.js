@@ -90,6 +90,12 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
           field('items.3.desc', 'Beneficio 4 — detalle', '.tt-trust-desc', 'Te ayudamos por WhatsApp', { index: 3, maxLength: 220 }),
         ],
       },
+      collections_carousel: {
+        label: 'Carrusel de colecciones',
+        root: '.tt-collection-carousel',
+        allowVisibility: false,
+        fields: [],
+      },
       editorial_bag: {
         label: 'Editorial Bags',
         root: '[data-tt-section="editorial_bag"]',

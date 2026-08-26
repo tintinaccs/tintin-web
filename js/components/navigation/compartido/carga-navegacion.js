@@ -8,6 +8,7 @@ let notificationsRuntimePromise = null;
 let collectionsRuntimePromise = null;
 
 const FULL_COMMERCE_PAGES = new Set(['home', 'shop', 'cart', 'account']);
+const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar-notifications';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -41,33 +42,39 @@ function bindDemand(selector, loader) {
   });
 }
 
-function hasActiveSessionHint() {
-  try {
-    const startedAt = Number(window.localStorage.getItem('tt_session_started_at'));
-    return Number.isFinite(startedAt) && startedAt > 0;
-  } catch {
-    return false;
-  }
+function setNotificationTriggersVisible(visible) {
+  document.querySelectorAll(NOTIFICATION_TRIGGER_SELECTOR).forEach(trigger => {
+    trigger.hidden = !visible;
+  });
 }
 
 function attachNotificationsDemand() {
-  bindDemand(
-    '[data-nav-action="notifications"],#tabbar-notifications',
-    loadNotificationsRuntime
-  );
+  bindDemand(NOTIFICATION_TRIGGER_SELECTOR, loadNotificationsRuntime);
 
   window.addEventListener('tintin:auth-nav-updated', event => {
-    if (!event.detail?.authenticated) return;
-    void loadNotificationsRuntime().catch(error => {
-      console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
-    });
+    const authenticated = Boolean(event.detail?.authenticated);
+    if (!authenticated) {
+      setNotificationTriggersVisible(false);
+      return;
+    }
+
+    // La campana se muestra solo después de registrar su superficie. Así un
+    // clic inmediato tras resolver Auth nunca cae en un trigger visible que
+    // todavía no tenga drawer/controlador disponible.
+    void loadNotificationsRuntime()
+      .then(() => setNotificationTriggersVisible(true))
+      .catch(error => {
+        setNotificationTriggersVisible(false);
+        console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
+      });
   });
 
-  if (hasActiveSessionHint()) {
-    void loadNotificationsRuntime().catch(error => {
-      console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
-    });
-  }
+  // Auth es una dependencia global del header incluso en páginas informativas.
+  // Resolver la sesión aquí no descarga el feed de notificaciones para un
+  // visitante: ese módulo y sus lecturas se activan solo cuando hay sesión.
+  void loadAuthRuntime().catch(error => {
+    console.warn('[PublicShell] No se pudo resolver la sesión global del header.', error);
+  });
 }
 
 function loadHomeMaintenance() {
@@ -207,11 +214,16 @@ export function loadSharedRuntime() {
   attachNotificationsDemand();
   loadNavigationBehaviors();
 
-  // Las páginas informativas mantienen disponible la bandeja global sin
-  // descargar Firestore para visitantes sin sesión. Las sesiones activas se
-  // hidratan arriba mediante la marca de sesión y el evento de autenticación.
+  // Las páginas informativas resuelven Auth globalmente para que el header
+  // conozca la sesión en cualquier ruta. Catálogo completo, carrito y feed de
+  // notificaciones siguen bajo demanda; la configuración liviana de
+  // colecciones se precarga en idle para que el primer menú ya coincida con
+  // Inicio/Tienda y no dependa del momento en que el usuario lo abra.
   if (!FULL_COMMERCE_PAGES.has(page)) {
     attachLightweightCommerceDemand();
+    scheduleNonCritical(() => {
+      Promise.allSettled([loadCollectionsRuntime()]).then(reportRuntimeFailures);
+    });
     return;
   }
 

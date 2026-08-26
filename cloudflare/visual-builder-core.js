@@ -26,7 +26,38 @@ export const VISUAL_TOP_ANCHOR = '__top__';
 export const VISUAL_DEVICES = Object.freeze(['desktop', 'tablet', 'mobile']);
 
 const SAFE_PAGE_IDS = new Set(CONTENT_PAGE_IDS);
-const SAFE_HREF = /^(?:index|about|nosotros|catalogo|collections|product|checkout|login|perfil|contact|envios|preguntas-frecuentes|cambios-devoluciones|terminos|privacidad)\.html(?:[?#][A-Za-z0-9_=&%.-]*)?$/i;
+const CLEAN_INTERNAL_ROUTES = Object.freeze({
+  index: '/',
+  'index.html': '/',
+  about: '/about',
+  'about.html': '/about',
+  nosotros: '/about',
+  'nosotros.html': '/about',
+  catalogo: '/catalogo',
+  'catalogo.html': '/catalogo',
+  collections: '/collections',
+  'collections.html': '/collections',
+  product: '/product',
+  'product.html': '/product',
+  checkout: '/checkout',
+  'checkout.html': '/checkout',
+  login: '/login',
+  'login.html': '/login',
+  perfil: '/perfil',
+  'perfil.html': '/perfil',
+  contact: '/contact',
+  'contact.html': '/contact',
+  envios: '/envios',
+  'envios.html': '/envios',
+  'preguntas-frecuentes': '/preguntas-frecuentes',
+  'preguntas-frecuentes.html': '/preguntas-frecuentes',
+  'cambios-devoluciones': '/cambios-devoluciones',
+  'cambios-devoluciones.html': '/cambios-devoluciones',
+  terminos: '/terminos',
+  'terminos.html': '/terminos',
+  privacidad: '/privacidad',
+  'privacidad.html': '/privacidad',
+});
 const SAFE_ASSET = /^assets-tintin\/[A-Za-z0-9_./-]+$/;
 const SAFE_YOUTUBE_EMBED = /^https:\/\/www\.youtube(?:-nocookie)?\.com\/embed\/[A-Za-z0-9_-]{6,20}(?:\?[A-Za-z0-9_=&.-]*)?$/i;
 const SAFE_VIMEO_EMBED = /^https:\/\/player\.vimeo\.com\/video\/\d{4,12}(?:\?[A-Za-z0-9_=&.-]*)?$/i;
@@ -48,6 +79,19 @@ function safeIsoDate(value) {
   return date.toISOString();
 }
 
+function normalizeInternalHref(value) {
+  const href = String(value || '').trim();
+  const match = href.match(/^(?:\.\/|\/)?([^/?#]+)([?#][A-Za-z0-9_=&%+.#:-]*)?$/i);
+  if (!match) return '';
+  const route = CLEAN_INTERNAL_ROUTES[match[1].toLowerCase()];
+  return route ? `${route}${match[2] || ''}` : '';
+}
+
+function safeExternalHref(value) {
+  const href = String(value || '').trim();
+  return /^https:\/\/[A-Za-z0-9.-]+(?::\d+)?(?:\/[A-Za-z0-9_~:/?#\[\]@!$&'()*+,;=%.-]*)?$/i.test(href) ? href : '';
+}
+
 export function requireVisualPageId(value) {
   const pageId = String(value || '').trim().toLowerCase();
   if (!SAFE_PAGE_IDS.has(pageId)) throw new Error('La página no está habilitada para el editor visual.');
@@ -59,11 +103,16 @@ export function safeVisualColor(value) {
   return /^#[0-9a-f]{6}$/i.test(color) ? color.toLowerCase() : '';
 }
 
-export function safeVisualHref(value, fallback = 'catalogo.html') {
+export function safeVisualHref(value, fallback = '/catalogo') {
   const href = String(value || '').trim();
-  if (SAFE_HREF.test(href)) return href;
-  if (/^https:\/\/[A-Za-z0-9.-]+(?::\d+)?(?:\/[A-Za-z0-9_~:/?#\[\]@!$&'()*+,;=%.-]*)?$/i.test(href)) return href;
-  return fallback;
+  const internal = normalizeInternalHref(href);
+  if (internal) return internal;
+  const external = safeExternalHref(href);
+  if (external) return external;
+
+  const fallbackValue = String(fallback || '').trim();
+  if (!fallbackValue) return '';
+  return normalizeInternalHref(fallbackValue) || safeExternalHref(fallbackValue) || '/catalogo';
 }
 
 export function safeVisualImage(value) {
