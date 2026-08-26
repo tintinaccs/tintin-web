@@ -1,7 +1,7 @@
 import {
   detectContentPageId, getNested, getPageSchema, normalizeContentValue,
   sanitizeContentHref, sanitizeContentText,
-} from './esquema-contenido.js?v=tintin-20260826-carousel-order-2';
+} from './esquema-contenido.js?v=tintin-20260826-carousel-order-3';
 import {
   VISUAL_BLOCK_TYPES, VISUAL_STYLE_OPTIONS,
 } from './contratos-visual-builder.js?v=tintin-20260810-visual-studio-v2-1';
@@ -81,9 +81,12 @@ function sanitizeSectionOrderClient(raw, schema) {
   const reorderable = reorderableSectionIds(schema);
   const seen = new Set();
   const order = (Array.isArray(raw) ? raw : []).filter(id => reorderable.includes(id) && !seen.has(id) && seen.add(id));
-  // Older saved configurations predate the homepage carousel. Migrate it into
-  // its intended position instead of appending it after every other section.
-  if (reorderable.includes('collections_carousel') && !seen.has('collections_carousel')) {
+  // Keep the homepage carousel immediately after the benefits bar for both
+  // old configs (where it is missing) and newer configs that saved it last.
+  if (reorderable.includes('collections_carousel')) {
+    const existingIndex = order.indexOf('collections_carousel');
+    if (existingIndex >= 0) order.splice(existingIndex, 1);
+    seen.delete('collections_carousel');
     const trustIndex = order.indexOf('trust');
     order.splice(trustIndex >= 0 ? trustIndex + 1 : 0, 0, 'collections_carousel');
     seen.add('collections_carousel');
