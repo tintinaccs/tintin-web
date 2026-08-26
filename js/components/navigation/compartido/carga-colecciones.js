@@ -11,10 +11,10 @@ function text(value) {
   return String(value == null ? '' : value).trim();
 }
 
-// La navegación se rige por las colecciones públicas habilitadas, no por si
-// la página actual ya cargó o no el catálogo de productos. Antes Inicio podía
-// ocultar categorías vacías mientras Nosotros/Contacto mostraban todas,
-// dejando distintos menús para la misma tienda según la ruta visitada.
+// La membresía del menú debe ser idéntica en todas las páginas y dispositivos.
+// estado-colecciones.js ya entrega únicamente colecciones públicas visibles;
+// los productos se usan aquí solo como respaldo visual para imágenes, nunca
+// para decidir si una colección aparece o desaparece según la ruta visitada.
 function visibleCollections(collections) {
   return collections;
 }

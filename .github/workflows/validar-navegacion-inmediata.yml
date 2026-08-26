@@ -35,6 +35,7 @@ jobs:
         run: node scripts/auditar-rendimiento-regresiones.js
       - name: Versionado y manifiesto reproducibles
         run: |
+          npm run build:routes
           npm run audit:cache-versioning
           npm run build:pages
           git diff --exit-code -- diagnostic-manifest.json scripts/cache-version-baseline.json _headers _routes.json

@@ -68,6 +68,29 @@ function productId(value, allowCreate) {
   return crypto.randomUUID().replace(/-/g, '');
 }
 
+const PUBLIC_FIELDS = new Set([
+  'name', 'category', 'price', 'stock', 'active', 'oferta', 'destacado',
+  'priceBefore', 'badge', 'imageUrl', 'description', 'material', 'measurements',
+  'colorFinish', 'care', 'waterResistance', 'warranty', 'sizeFit',
+  'packageContents', 'imagesExtra', 'collection', 'tags', 'variants',
+]);
+const INVENTORY_FIELDS = new Set(['costUnit', 'purchased', 'stockMinimum', 'internalNotes']);
+
+function selectedFields(value, id) {
+  // Sólo un producto existente puede ser actualizado parcialmente. Para crear
+  // una fila nueva se conserva la validación completa de nombre/categoría/precio.
+  if (!id || !Array.isArray(value)) return null;
+  return new Set(value.map(field => text(field, 60)).filter(field => PUBLIC_FIELDS.has(field) || INVENTORY_FIELDS.has(field)));
+}
+
+function has(fields, field) {
+  return !fields || fields.has(field);
+}
+
+function addIf(target, fields, field, value) {
+  if (has(fields, field)) target[field] = value;
+}
+
 export async function onRequestPost({ request, env }) {
   const authState = classifySheetsWebhookAuth(
     request.headers.get('X-Tintin-Sheets-Secret'),
@@ -104,53 +127,56 @@ export async function onRequestPost({ request, env }) {
     }
     if (input.action !== 'saveProduct') throw new Error('Accion no permitida.');
 
+    const fields = selectedFields(input.changedFields, id);
     const name = text(input.name, 180);
     const category = text(input.category, 120);
     const price = optionalInteger(input.price);
-    if (!name || !category || price === null || price <= 0) throw new Error('Nombre, categoria y precio son obligatorios.');
+    if ((!fields || fields.has('name')) && !name) throw new Error('El nombre es obligatorio.');
+    if ((!fields || fields.has('category')) && !category) throw new Error('La categoria es obligatoria.');
+    if ((!fields || fields.has('price')) && (price === null || price <= 0)) throw new Error('El precio debe ser mayor a cero.');
 
-    const publicData = {
-      name,
-      category,
-      price,
-      stock: optionalInteger(input.stock, 1_000_000),
-      active: input.active === true,
-      oferta: input.oferta === true,
-      destacado: input.destacado === true,
-      priceBefore: optionalInteger(input.priceBefore),
-      badge: text(input.badge, 60) || null,
-      imageUrl: text(input.imageUrl, 2000) || null,
-      description: text(input.description, 4000),
-      material: text(input.material, 240),
-      measurements: text(input.measurements, 240),
-      colorFinish: text(input.colorFinish, 240),
-      care: text(input.care, 500),
-      waterResistance: text(input.waterResistance, 240),
-      warranty: text(input.warranty, 240),
-      sizeFit: text(input.sizeFit, 240),
-      packageContents: text(input.packageContents, 500),
-      imagesExtra: stringList(input.imagesExtra, 12, 2000),
-      collection: text(input.collection, 240) || null,
-      tags: stringList(input.tags, 30, 60),
-      variants: variants(input.variants),
-      updatedAt: new Date(),
-    };
-    const inventoryData = {
-      costUnit: optionalInteger(input.costUnit),
-      purchased: optionalInteger(input.purchased, 1_000_000),
-      stockMinimum: optionalInteger(input.stockMinimum, 1_000_000),
-      internalNotes: text(input.internalNotes, 1000),
-      updatedAt: new Date(),
-    };
+    const publicData = {};
+    addIf(publicData, fields, 'name', name);
+    addIf(publicData, fields, 'category', category);
+    addIf(publicData, fields, 'price', price);
+    addIf(publicData, fields, 'stock', optionalInteger(input.stock, 1_000_000));
+    addIf(publicData, fields, 'active', input.active === true);
+    addIf(publicData, fields, 'oferta', input.oferta === true);
+    addIf(publicData, fields, 'destacado', input.destacado === true);
+    addIf(publicData, fields, 'priceBefore', optionalInteger(input.priceBefore));
+    addIf(publicData, fields, 'badge', text(input.badge, 60) || null);
+    addIf(publicData, fields, 'imageUrl', text(input.imageUrl, 2000) || null);
+    addIf(publicData, fields, 'description', text(input.description, 4000));
+    addIf(publicData, fields, 'material', text(input.material, 240));
+    addIf(publicData, fields, 'measurements', text(input.measurements, 240));
+    addIf(publicData, fields, 'colorFinish', text(input.colorFinish, 240));
+    addIf(publicData, fields, 'care', text(input.care, 500));
+    addIf(publicData, fields, 'waterResistance', text(input.waterResistance, 240));
+    addIf(publicData, fields, 'warranty', text(input.warranty, 240));
+    addIf(publicData, fields, 'sizeFit', text(input.sizeFit, 240));
+    addIf(publicData, fields, 'packageContents', text(input.packageContents, 500));
+    addIf(publicData, fields, 'imagesExtra', stringList(input.imagesExtra, 12, 2000));
+    addIf(publicData, fields, 'collection', text(input.collection, 240) || null);
+    addIf(publicData, fields, 'tags', stringList(input.tags, 30, 60));
+    addIf(publicData, fields, 'variants', variants(input.variants));
+    if (Object.keys(publicData).length) publicData.updatedAt = new Date();
+
+    const inventoryData = {};
+    addIf(inventoryData, fields, 'costUnit', optionalInteger(input.costUnit));
+    addIf(inventoryData, fields, 'purchased', optionalInteger(input.purchased, 1_000_000));
+    addIf(inventoryData, fields, 'stockMinimum', optionalInteger(input.stockMinimum, 1_000_000));
+    addIf(inventoryData, fields, 'internalNotes', text(input.internalNotes, 1000));
+    if (Object.keys(inventoryData).length) inventoryData.updatedAt = new Date();
 
     // Un único commit evita que products cambie si falla productInventory (o
     // viceversa). updateMask conserva metadatos que Sheets no administra.
     const publicFields = encodeFirestoreFields(publicData);
     const inventoryFields = encodeFirestoreFields(inventoryData);
-    await firestoreAdminCommit(env, [
-      { path: `products/${id}`, fields: publicFields, mergeFields: Object.keys(publicFields) },
-      { path: `productInventory/${id}`, fields: inventoryFields, mergeFields: Object.keys(inventoryFields) },
-    ]);
+    const writes = [];
+    if (Object.keys(publicFields).length) writes.push({ path: `products/${id}`, fields: publicFields, mergeFields: Object.keys(publicFields) });
+    if (Object.keys(inventoryFields).length) writes.push({ path: `productInventory/${id}`, fields: inventoryFields, mergeFields: Object.keys(inventoryFields) });
+    if (!writes.length) throw new Error('No hay campos de producto permitidos para sincronizar.');
+    await firestoreAdminCommit(env, writes);
     return webhookResponse({ ok: true, productId: id }, 200, request.url);
   } catch (error) {
     const upstreamStatus = Number(error?.status);

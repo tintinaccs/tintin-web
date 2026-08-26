@@ -37,6 +37,8 @@ jobs:
           node-version: 22
       - name: Sync published shell versions
         run: npm run sync:public-shell
+      - name: Normalize published routes before hashing
+        run: npm run build:routes
       - name: Audit cache versioning
         run: npm run audit:cache-versioning
       - name: Enforce immutable cache headers

@@ -81,6 +81,22 @@
     transform: none !important;
   }
 
+  /* Tienda es parte de la navegación principal, no un botón de acción.
+     Esta regla deliberadamente más específica neutraliza capas globales
+     antiguas que le aplicaban un segundo marco blanco/rosado al activarse. */
+  #tt-header-desktop-tablet #tt-nav-desktop-tablet #btn-tienda,
+  #tt-header-desktop-tablet #tt-nav-desktop-tablet #btn-tienda:hover,
+  #tt-header-desktop-tablet #tt-nav-desktop-tablet #btn-tienda:focus-visible,
+  #tt-header-desktop-tablet #tt-nav-desktop-tablet #btn-tienda.active,
+  #tt-header-desktop-tablet #tt-nav-desktop-tablet #btn-tienda[aria-expanded="true"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
   .tt-header-desktop .tt-nav > a::after,
   .tt-header-desktop .tt-nav-dropdown > button::after { display: none; }
   .tt-header-desktop .tt-nav > a:hover,
@@ -179,7 +195,9 @@
 
 @media (min-width: 1025px) and (max-width: 1120px) {
   .tt-header-desktop .tt-header-inner {
-    grid-template-columns: minmax(196px,1fr) minmax(0,auto) minmax(196px,1fr) !important;
+    /* La reserva simétrica mantiene la navegación centrada y deja espacio
+       real para Buscar + Alertas + Cuenta + Carrito en una sesión activa. */
+    grid-template-columns: 196px minmax(0, 1fr) 196px !important;
     gap: 10px !important;
     padding-inline: 14px !important;
   }

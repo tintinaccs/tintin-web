@@ -30,18 +30,19 @@ test('pop-ups globales solo conservan formatos, triggers, páginas y dispositivo
   assert.deepEqual(popup.categories, ['relojes']);
 });
 
-test('enlaces opcionales no inventan destinos', () => {
+test('enlaces opcionales no inventan destinos y canonicalizan rutas legacy', () => {
   assert.equal(sanitizeGlobalCampaign({ href: '' }).href, '');
   assert.equal(sanitizeGlobalPopup({ href: '' }).href, '');
-  assert.equal(sanitizeGlobalCampaign({ href: 'catalogo.html' }).href, 'catalogo.html');
+  assert.equal(sanitizeGlobalCampaign({ href: 'catalogo.html' }).href, '/catalogo');
   assert.equal(sanitizeGlobalPopup({ href: 'https://tintinaccs.com' }).href, 'https://tintinaccs.com');
 });
 
-test('safeVisualHref conserva compatibilidad fuera del centro global', () => {
-  assert.equal(safeVisualHref(''), 'catalogo.html');
-  assert.equal(safeVisualHref('javascript:alert(1)'), 'catalogo.html');
+test('safeVisualHref conserva compatibilidad mediante rutas internas limpias', () => {
+  assert.equal(safeVisualHref(''), '/catalogo');
+  assert.equal(safeVisualHref('javascript:alert(1)'), '/catalogo');
   assert.equal(safeVisualHref('', ''), '');
-  assert.equal(safeVisualHref('about.html', ''), 'about.html');
+  assert.equal(safeVisualHref('about.html', ''), '/about');
+  assert.equal(safeVisualHref('/about', ''), '/about');
 });
 
 test('segmentación global reconoce páginas comerciales además de páginas de contenido', () => {

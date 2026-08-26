@@ -34,11 +34,10 @@ const viewports = [
 const sections = [
   ['hero', '#hero'],
   ['trust', '.tt-trust-bar'],
+  ['colecciones', '.tt-collection-carousel'],
   ['editorial-bolsos', '[data-tt-section="editorial_bag"]'],
-  ['colecciones', '.tt-collections-section'],
   ['look', '#look-section'],
   ['editorial-relojes', '[data-tt-section="editorial_relojes"]'],
-  ['productos', '.tt-products-section'],
   ['resenas', '.tt-reviews-section'],
   ['footer', '.tt-footer'],
 ];
@@ -168,15 +167,15 @@ async function audit(page, width, height) {
       if (Math.max(...heights) - Math.min(...heights) > 28) issues.push(`trust: alturas desparejas ${heights.join('/')}`);
     }
 
-    const collectionCards = [...document.querySelectorAll('.tt-collections-grid .tt-coll-card')].filter(visible);
-    const collectionState = document.querySelector('.tt-collections-grid > .tt-phase4-collections-state');
+    const collectionCards = [...document.querySelectorAll('.tt-collection-carousel .tt-collection-card')].filter(visible);
+    const collectionState = document.querySelector('.tt-collection-carousel .tt-collection-carousel__state');
     if (!collectionCards.length && !visible(collectionState)) issues.push('colecciones: no hay tarjetas ni estado visible');
     collectionCards.forEach((card, index) => {
       const b = rect(card);
       if (b.width < 80 || b.height < 80) issues.push(`colecciones: tarjeta ${index + 1} demasiado pequeña`);
     });
 
-    for (const [label, selector] of [['look', '#look-grid'], ['productos', '#products-grid']]) {
+    for (const [label, selector] of [['look', '#look-grid']]) {
       const grid = document.querySelector(selector);
       if (!visible(grid)) issues.push(`${label}: grilla ausente`);
       else if (grid.scrollWidth > grid.clientWidth + 1) issues.push(`${label}: grilla desborda`);
