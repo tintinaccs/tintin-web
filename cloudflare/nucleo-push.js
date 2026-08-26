@@ -80,7 +80,7 @@ export function adminOrderLink(orderId) {
  * Contenido visible + datos internos del push. El pedido llega leído desde
  * Firestore con credenciales de servidor — nunca del navegador ni del webhook.
  */
-export function buildPushContent({ type, orderId, order, eventId }) {
+export function buildPushContent({ type, orderId, order, eventId, foregroundSound = 'default', foregroundSoundUrl = '' }) {
   const shortId = shortIdFor(order, orderId);
   const total = formatGuarani(order?.total);
   const url = adminOrderLink(orderId);
@@ -104,7 +104,9 @@ export function buildPushContent({ type, orderId, order, eventId }) {
 
   return {
     title,
-    body,
+      body,
+      foregroundSound: cleanText(foregroundSound, 20) || 'default',
+      foregroundSoundUrl: cleanText(foregroundSoundUrl, 500),
     // Sólo identificadores y texto ya construido: ni nombre, ni teléfono, ni
     // correo, ni dirección, ni coordenadas, ni notas, ni detalle de productos.
     data: {
@@ -120,11 +122,17 @@ export function buildPushContent({ type, orderId, order, eventId }) {
   };
 }
 
-export function buildTestPushContent(eventId) {
+export function buildTestPushContent(eventId, foregroundSound = 'default', foregroundSoundUrl = '') {
   const url = '/admin.html?section=configuracion';
+  // Simulación controlada: no representa un pedido real ni escribe en
+  // Firestore. Sirve para comprobar el formato visible del aviso push.
+  const title = 'Nuevo pedido de prueba';
+  const body = 'Mina menina · Gs. 420.000 · Caaguazú · Encomienda (Caaguazú)';
   return {
-    title: 'Tintin Pedidos',
-    body: 'Las notificaciones están funcionando correctamente.',
+    title,
+      body,
+      foregroundSound: cleanText(foregroundSound, 20) || 'default',
+      foregroundSoundUrl: cleanText(foregroundSoundUrl, 500),
     data: {
       type: 'push.test',
       orderId: '',
@@ -132,8 +140,8 @@ export function buildTestPushContent(eventId) {
       url,
       eventId: cleanText(eventId, 260),
       tag: cleanText(eventId, 120) || 'tintin-push-test',
-      title: 'Tintin Pedidos',
-      body: 'Las notificaciones están funcionando correctamente.'
+      title,
+      body
     }
   };
 }

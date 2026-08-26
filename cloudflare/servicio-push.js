@@ -31,6 +31,32 @@ const FCM_SCOPE = 'https://www.googleapis.com/auth/firebase.messaging';
 const PROCESSING_TAKEOVER_MS = 60 * 1000;
 const MAX_EVENT_ATTEMPTS = 5;
 const MAX_DEVICES_PER_SEND = 20;
+const PUSH_SETTINGS_PATH = 'pushSettings/global';
+
+function ntfyConfig(env) {
+  const enabled = ['true', '1', 'on'].includes(cleanText(env?.TINTIN_NTFY_ENABLED, 10).toLowerCase());
+  const topic = cleanText(env?.TINTIN_NTFY_TOPIC, 120);
+  const base = cleanText(env?.TINTIN_NTFY_URL, 300) || 'https://ntfy.sh';
+  return { enabled: enabled && /^[A-Za-z0-9_-]{16,120}$/.test(topic), topic, url: `${base.replace(/\/$/, '')}/${encodeURIComponent(topic)}`, token: cleanText(env?.TINTIN_NTFY_TOKEN, 300) };
+}
+
+function ntfyExclusive(env) {
+  return ntfyConfig(env).enabled;
+}
+
+/** Canal opcional para que los avisos lleguen aunque la web esté cerrada. */
+async function sendNtfy(env, { title, body, url, type, priority = 'high' }) {
+  const config = ntfyConfig(env);
+  if (!config.enabled) return { enabled: false };
+  const headers = { 'content-type': 'text/plain; charset=utf-8', 'x-title': cleanText(title, 120), 'x-priority': priority, 'x-tags': cleanText(type, 40).replace(/[^A-Za-z0-9_-]/g, '_'), 'x-click': cleanText(url, 300) };
+  if (config.token) headers.authorization = `Bearer ${config.token}`;
+  try {
+    const response = await fetch(config.url, { method: 'POST', headers, body: cleanText(body, 1000) });
+    return { enabled: true, ok: response.ok, status: response.status };
+  } catch (error) {
+    return { enabled: true, ok: false, error: sanitizeError(error, 120) };
+  }
+}
 
 export function pushEnabled(env) {
   const flag = cleanText(env?.TINTIN_PUSH_ENABLED, 10).toLowerCase();
@@ -160,6 +186,114 @@ export async function listActiveDevices(env) {
     limit: MAX_DEVICES_PER_SEND
   });
   return devices.filter(device => cleanText(device.token, 400).length > 20);
+}
+
+/** Lectura administrativa: nunca se expone el token completo al navegador. */
+export async function listAdminDevices(env) {
+  const devices = await runQuery(env, {
+    from: [{ collectionId: PUSH_DEVICES_COLLECTION }],
+    limit: 100
+  });
+  return devices
+    .map(device => ({
+      id: cleanText(device.id, 140),
+      deviceId: cleanText(device.deviceId, 64),
+      deviceLabel: cleanText(device.deviceLabel, 60) || 'Dispositivo de Tintin',
+      platform: cleanText(device.platform, 20) || 'otro',
+      email: cleanText(device.email, 160),
+      uid: cleanText(device.uid, 160),
+      enabled: device.enabled === true,
+      tokenPreview: device.token ? `${String(device.token).slice(0, 6)}…${String(device.token).slice(-4)}` : '',
+      updatedAt: cleanText(device.updatedAt, 40),
+      lastSeenAt: cleanText(device.lastSeenAt, 40),
+      disabledReason: cleanText(device.disabledReason, 80)
+    }))
+    .sort((a, b) => String(b.lastSeenAt || b.updatedAt).localeCompare(String(a.lastSeenAt || a.updatedAt)));
+}
+
+export async function readPushSettings(env) {
+  const existing = await getDocument(env, PUSH_SETTINGS_PATH);
+  return {
+    enabled: existing?.enabled !== false,
+    foregroundSound: ['default', 'none', 'custom'].includes(existing?.foregroundSound) ? existing.foregroundSound : 'default',
+    foregroundSoundUrl: cleanText(existing?.foregroundSoundUrl, 500),
+    foregroundSoundOrder: ['default', 'none', 'custom'].includes(existing?.foregroundSoundOrder) ? existing.foregroundSoundOrder : 'default',
+    foregroundSoundOrderUrl: cleanText(existing?.foregroundSoundOrderUrl, 500),
+    foregroundSoundReview: ['default', 'none', 'custom'].includes(existing?.foregroundSoundReview) ? existing.foregroundSoundReview : 'default',
+    foregroundSoundReviewUrl: cleanText(existing?.foregroundSoundReviewUrl, 500),
+    foregroundSoundLike: ['default', 'none', 'custom'].includes(existing?.foregroundSoundLike) ? existing.foregroundSoundLike : 'default',
+    foregroundSoundLikeUrl: cleanText(existing?.foregroundSoundLikeUrl, 500),
+    updatedAt: cleanText(existing?.updatedAt, 40),
+    updatedBy: cleanText(existing?.updatedBy, 160)
+  };
+}
+
+export async function savePushSettings(env, { enabled, foregroundSound, foregroundSoundUrl, foregroundSoundOrder, foregroundSoundOrderUrl, foregroundSoundReview, foregroundSoundReviewUrl, foregroundSoundLike, foregroundSoundLikeUrl, updatedBy }) {
+  const mode = ['default', 'none', 'custom'].includes(foregroundSound) ? foregroundSound : 'default';
+  const url = mode === 'custom' && /^https:\/\//i.test(String(foregroundSoundUrl || '').trim())
+    ? cleanText(foregroundSoundUrl, 500)
+    : '';
+  const tone = value => ['default', 'none', 'custom'].includes(value) ? value : 'default';
+  const toneUrl = (value, valueUrl) => tone(value) === 'custom' && /^https:\/\//i.test(String(valueUrl || '').trim()) ? cleanText(valueUrl, 500) : '';
+  const now = new Date();
+  await patchDocument(env, PUSH_SETTINGS_PATH, {
+    enabled: fsBool(enabled !== false),
+    foregroundSound: fsString(mode),
+    foregroundSoundUrl: fsString(url),
+    foregroundSoundOrder: fsString(tone(foregroundSoundOrder)),
+    foregroundSoundOrderUrl: fsString(toneUrl(foregroundSoundOrder, foregroundSoundOrderUrl)),
+    foregroundSoundReview: fsString(tone(foregroundSoundReview)),
+    foregroundSoundReviewUrl: fsString(toneUrl(foregroundSoundReview, foregroundSoundReviewUrl)),
+    foregroundSoundLike: fsString(tone(foregroundSoundLike)),
+    foregroundSoundLikeUrl: fsString(toneUrl(foregroundSoundLike, foregroundSoundLikeUrl)),
+    updatedAt: fsTime(now),
+    updatedBy: fsString(cleanText(updatedBy, 160))
+  });
+  return readPushSettings(env);
+}
+
+function soundForType(settings, type) {
+  const prefix = String(type || '').startsWith('social.review') ? 'Review'
+    : String(type || '').startsWith('social.like') ? 'Like' : 'Order';
+  const mode = settings[`foregroundSound${prefix}`] || settings.foregroundSound || 'default';
+  const url = settings[`foregroundSound${prefix}Url`] || (prefix === 'Order' ? settings.foregroundSoundUrl : '');
+  return { mode, url };
+}
+
+export async function dispatchSocialPushEvent(env, { type, eventId, title, body, url = '/admin.html?section=notificaciones-push' }) {
+  if (!pushEnabled(env)) return { ok: true, skipped: 'disabled' };
+  const settings = await readPushSettings(env);
+  if (!settings.enabled) return { ok: true, skipped: 'paused_by_superadmin' };
+  const id = cleanText(eventId, 260) || `${type}:${crypto.randomUUID()}`;
+  const claim = await claimEvent(env, { eventId: id, type, orderId: '' });
+  if (!claim.claimed) return { ok: true, duplicate: Boolean(claim.duplicate), skipped: claim.inProgress ? 'in_progress' : undefined };
+  const sound = soundForType(settings, type);
+  const content = { title: cleanText(title, 100), body: cleanText(body, 220), foregroundSound: sound.mode, data: { type: cleanText(type, 40), orderId: '', shortId: '', url, eventId: id, tag: id, title: cleanText(title, 100), body: cleanText(body, 220), foregroundSoundUrl: sound.url } };
+  const devices = ntfyExclusive(env) ? [] : await listActiveDevices(env);
+  const result = devices.length ? await sendToDevices(env, devices, content) : { attempted: 0, successCount: 0, failureCount: 0, disabledCount: 0, lastError: '' };
+  const status = await closeEvent(env, claim.path, result);
+  const ntfy = await sendNtfy(env, { title, body, url, type });
+  return { ok: status === 'sent' || status === 'partial' || status === 'no_devices', status, attempted: result.attempted, successCount: result.successCount, failureCount: result.failureCount, ntfy };
+}
+
+export async function revokeDeviceByDocumentId(env, deviceDocId, reason = 'revocado_por_superadmin') {
+  const safeId = cleanText(deviceDocId, 140);
+  if (!/^[A-Za-z0-9_-]{16,160}$/.test(safeId)) throw new Error('Identificador de dispositivo inválido.');
+  const existing = await getDocument(env, `${PUSH_DEVICES_COLLECTION}/${safeId}`);
+  if (!existing) return { found: false };
+  await disableDeviceById(env, safeId, reason);
+  await patchDocument(env, `${PUSH_DEVICES_COLLECTION}/${safeId}`, { token: fsString('') });
+  return { found: true };
+}
+
+export async function revokeAllDevices(env, reason = 'revocado_por_superadmin') {
+  const devices = await listAdminDevices(env);
+  let count = 0;
+  for (const device of devices.filter(item => item.enabled)) {
+    await revokeDeviceByDocumentId(env, device.id, reason);
+    count += 1;
+  }
+  return { count };
 }
 
 export async function findDeviceByToken(env, token) {
@@ -377,6 +511,8 @@ async function closeEvent(env, path, result) {
  */
 export async function dispatchOrderPushEvent(env, type, orderId, externalEventId) {
   if (!pushEnabled(env)) return { ok: true, skipped: 'disabled' };
+  const settings = await readPushSettings(env);
+  if (!settings.enabled) return { ok: true, skipped: 'paused_by_superadmin' };
 
   const eventId = cleanText(externalEventId, 260) || `${type}:${orderId}`;
   const order = await readOrder(env, orderId);
@@ -389,12 +525,20 @@ export async function dispatchOrderPushEvent(env, type, orderId, externalEventId
     return { ok: false, error: 'attempts_exhausted' };
   }
 
-  const devices = await listActiveDevices(env);
-  const content = buildPushContent({ type, orderId, order, eventId });
+  const devices = ntfyExclusive(env) ? [] : await listActiveDevices(env);
+  const sound = soundForType(settings, type);
+  const content = buildPushContent({ type, orderId, order, eventId, foregroundSound: sound.mode, foregroundSoundUrl: sound.url });
   const result = devices.length
     ? await sendToDevices(env, devices, content)
     : { attempted: 0, successCount: 0, failureCount: 0, disabledCount: 0, lastError: '' };
   const status = await closeEvent(env, claim.path, result);
+  const ntfy = await sendNtfy(env, {
+    title: content.title,
+    body: content.body,
+    url: content.data.url,
+    type,
+    priority: type === 'order.created' ? 'max' : 'high'
+  });
 
   return {
     ok: status === 'sent' || status === 'partial' || status === 'no_devices',
@@ -404,17 +548,22 @@ export async function dispatchOrderPushEvent(env, type, orderId, externalEventId
     successCount: result.successCount,
     failureCount: result.failureCount,
     disabledCount: result.disabledCount
+    ,ntfy
   };
 }
 
 /** Notificación de prueba: contenido fijo del servidor y eventId siempre único. */
 export async function sendTestPush(env, { onlyToken }) {
   if (!pushEnabled(env)) return { ok: false, error: 'push_disabled' };
+  const settings = await readPushSettings(env);
+  if (!settings.enabled) return { ok: false, error: 'push_paused_by_superadmin' };
   const eventId = `push.test:${crypto.randomUUID()}`;
-  const content = buildTestPushContent(eventId);
+  const sound = soundForType(settings, 'order.created');
+  const content = buildTestPushContent(eventId, sound.mode, sound.url);
   const active = await listActiveDevices(env);
   const devices = onlyToken ? active.filter(device => device.token === onlyToken) : active;
   if (!devices.length) return { ok: false, error: 'no_devices', attempted: 0 };
   const result = await sendToDevices(env, devices, content);
-  return { ok: result.successCount > 0, ...result, lastError: undefined };
+  const ntfy = await sendNtfy(env, { title: content.title, body: content.body, url: content.data.url, type: 'order.created', priority: 'max' });
+  return { ok: result.successCount > 0 || ntfy.ok, ...result, ntfy, lastError: undefined };
 }

@@ -1209,6 +1209,14 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   margin-bottom: 16px;
 }
 
+.tt-hero-line {
+  width: 48px;
+  height: 2px;
+  margin: 0 0 18px;
+  background: var(--pink-dark);
+  opacity: 0.85;
+}
+
 /* Vacío por defecto (Super Admin → Contenido → Hero → Subtítulo) — :empty
    lo saca del flujo por completo así no deja un hueco cuando nadie lo usa. */
 .tt-hero-subtitle {
@@ -1264,7 +1272,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
 .tt-hero-actions {
   display: flex;
-  gap: 14px;
+  align-items: center;
+  gap: 22px;
   justify-content: flex-start;
   flex-wrap: wrap;
 }
@@ -1289,13 +1298,69 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   0%, 100% { box-shadow: 0 0 0 0 rgba(184,76,114,0); }
   50%       { box-shadow: 0 0 0 8px rgba(184,76,114,0.22); }
 }
-/* Outline hero button: dark border / dark text */
-.tt-hero-actions .tt-btn-outline {
-  border-color: var(--text);
-  color: var(--text);
+
+/* Primary hero CTA: flecha que se desliza al pasar el mouse */
+.tt-hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
-.tt-hero-actions .tt-btn-outline:hover {
-  background: rgba(0,0,0,0.06);
+.tt-hero-cta-arrow {
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tt-hero-cta:hover .tt-hero-cta-arrow {
+  transform: translateX(6px);
+}
+
+/* Link secundario del hero: texto subrayado, sin competir con el CTA principal */
+.tt-hero-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 2px;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.86rem;
+  letter-spacing: 0.04em;
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+  text-underline-offset: 3px;
+  opacity: 0.85;
+  transition: opacity 0.25s ease, color 0.25s ease;
+}
+.tt-hero-link:hover {
+  opacity: 1;
+  color: var(--pink-dark);
+}
+
+/* Indicador de scroll: invita a bajar, se oculta apenas el usuario scrollea */
+.tt-hero-scroll-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+  animation: tt-scroll-hint-bounce 1.8s ease-in-out infinite;
+}
+.tt-hero-scroll-hint.tt-hero-scroll-hint-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+@keyframes tt-scroll-hint-bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(8px); }
 }
 
 /* ═══════════════════════════════════════════════

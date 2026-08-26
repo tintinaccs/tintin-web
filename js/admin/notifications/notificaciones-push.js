@@ -19,7 +19,7 @@ const DEVICE_ID_KEY = 'tt_push_device_id';
 const DEVICE_LABEL_KEY = 'tt_push_device_label';
 const LAST_REGISTER_KEY = 'tt_push_last_register';
 const SW_PATH = '/firebase-messaging-sw.js';
-const MESSAGING_SDK = 'https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js';
+const MESSAGING_SDK = 'https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging.js';
 
 const IOS_INSTALL_MESSAGE =
   'Para recibir notificaciones en iPhone, abrí esta página en Safari, tocá Compartir y elegí Agregar a inicio. ' +
@@ -197,12 +197,42 @@ async function ensureServiceWorker() {
 async function ensureMessaging() {
   if (messagingInstance) return messagingInstance;
   const sdk = await loadMessaging();
-  const { getApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-  messagingInstance = sdk.getMessaging(getApp());
+  // Reutilizar la misma instancia que inicializa firebase.js. Cargar
+  // firebase-app desde otra versión/URL crea otro registro de apps y deja
+  // getApp() sin [DEFAULT], que rompe la activación con el error:
+  // Error típico: Firebase App '[DEFAULT]' no estaba inicializada.
+  // Auth pertenece a la app Firebase compartida; reutilizarla evita una
+  // segunda aplicación Firebase y el error de registro [DEFAULT].
+  messagingInstance = sdk.getMessaging(auth.app);
   sdk.onMessage(messagingInstance, payload => {
     const data = payload?.data || {};
+    const title = data.title || 'Tintin Pedidos';
+    const body = data.body || 'Nuevo aviso';
     foregroundCount += 1;
-    notice(`${data.title || 'Tintin Pedidos'} — ${data.body || 'Nuevo aviso'}`);
+    notice(`${title} — ${body}`);
+    // FCM data-only messages are deliberately rendered by us. When the
+    // panel is visible, show the same native Chrome notification as the
+    // service worker does in the background (without relying on a toast).
+    if (Notification.permission === 'granted') {
+      try {
+        const notification = new Notification(title, {
+          body,
+          icon: '/favicon-192x192.png',
+          badge: '/favicon-192x192.png',
+          tag: String(data.tag || data.eventId || 'tintin-push'),
+          silent: false
+        });
+        notification.onclick = () => {
+          notification.close();
+          window.focus();
+          window.location.href = '/admin?section=pedidos';
+        };
+      } catch {
+        // Some installed-browser shells expose permission but block the
+        // constructor; the in-panel notice above remains the fallback.
+      }
+    }
+    window.TintinPushPlayForegroundSound?.(data.foregroundSound || 'default', data.foregroundSoundUrl || '');
     if ('setAppBadge' in navigator) {
       navigator.setAppBadge(foregroundCount).catch(() => {});
     }
@@ -283,12 +313,12 @@ const enableNotifications = withBusy(async () => {
 });
 
 const sendTestNotification = withBusy(async () => {
-  notice('Enviando prueba...');
+  notice('Enviando prueba a todos los dispositivos activos...');
   const result = await authorizedFetch('push-test', {
     method: 'POST',
-    body: JSON.stringify({ scope: 'device', token: currentToken })
+    body: JSON.stringify({ scope: 'all' })
   });
-  notice(`Prueba enviada: ${result.successCount} de ${result.attempted} dispositivo(s).`);
+  notice(`Prueba global enviada: ${result.successCount} de ${result.attempted} dispositivo(s).`);
 });
 
 const disableNotifications = withBusy(async () => {
