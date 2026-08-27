@@ -5,6 +5,7 @@ import {
   requireSuperAdmin,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
+import { syncOrderToSheetsBestEffort } from '../../cloudflare/order-sheets-sync.js';
 
 function safeText(value, max = 500) {
   return String(value == null ? '' : value).trim().slice(0, max);
@@ -34,7 +35,12 @@ export async function onRequest(context) {
     const result = body.action === 'createOrder'
       ? await createOrderAdmin(env, body, actorContext)
       : await applyOrderAdminMutation(env, body, actorContext);
-    return jsonResponse({ ok: true, result }, 200, origin, requestUrl);
+
+    // Firestore + inventario son la transacción comercial. Sheets se actualiza
+    // después y en best-effort: una caída de Google nunca convierte en fallido
+    // un pedido que ya fue confirmado por el dominio canónico.
+    const sheetsSync = await syncOrderToSheetsBestEffort(env, result);
+    return jsonResponse({ ok: true, result, sheetsSync }, 200, origin, requestUrl);
   } catch (error) {
     console.error('[admin-order-mutation]', error?.code || '', error?.message || error);
     const message = safeText(error?.message, 300);
