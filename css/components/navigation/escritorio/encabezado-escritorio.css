@@ -1,3 +1,4 @@
+/* Header surfaces bundle 2026-08-27: alignment refinements. */
 /* TINTIN desktop header — source of truth for >=1025px. */
 .tt-header-desktop { display: none !important; }
 
@@ -176,3 +177,4 @@
 @media (prefers-reduced-motion: reduce) {
   .tt-header-desktop .tt-desktop-active-pill { transition: none; }
 }
+/* Header surfaces bundle 2026-08-27: alignment refinements. */

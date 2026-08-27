@@ -15,8 +15,8 @@ const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const VISUAL_BUILDER_VERSION = 'tintin-20260826-carousel-order-3';
 const SESSION_PROTECTION_VERSION = 'tintin-20260822-dob-username-onboarding-1';
 const PROFILE_GATE_VERSION = 'tintin-20260822-dob-username-onboarding-1';
-const NAV_HEADER_VERSION = 'tintin-20260824-header-responsive-sync-1';
-const NAV_SHARED_VERSION = 'tintin-20260818-header-dropdowns-solid-3';
+const NAV_HEADER_VERSION = 'tintin-20260827-header-surfaces-1';
+const NAV_SHARED_VERSION = 'tintin-20260827-header-surfaces-1';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_HEADER_VERSION],

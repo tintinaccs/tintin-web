@@ -321,11 +321,19 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
   }
 
   .tt-collections-sheet {
-    max-height: min(78dvh, 720px) !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    max-height: none !important;
+    border-radius: 0 !important;
+    padding-top: max(8px, env(safe-area-inset-top)) !important;
     padding-bottom: calc(82px + env(safe-area-inset-bottom)) !important;
     overflow: auto;
     overscroll-behavior: contain;
   }
+
+  .tt-collections-sheet .tt-sheet-handle { margin: 10px auto 4px; }
+  .tt-collections-sheet .tt-sheet-header { min-height:68px; padding:14px 16px; }
+  .tt-collections-sheet .tt-sheet-grid { gap:0; }
 
   .tt-sheet-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
 }
