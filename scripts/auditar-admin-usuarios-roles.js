@@ -26,6 +26,7 @@ const ficha = read('js/admin/users/ficha-usuario-admin.js');
 const rules = read('firestore.rules');
 const accountContract = JSON.parse(read('config/account-contract.json'));
 const accountStatusFunction = read('functions/api/admin-delete-user.js');
+const userLifecycle = read('cloudflare/user-lifecycle-domain.js');
 
 // 1. Identidad y techo de roles
 check(
@@ -133,8 +134,9 @@ check(
   /logAudit\('cambiar_rol'/.test(adminApp) &&
     /logAudit\('bloquear_usuario'/.test(adminApp) &&
     /logAudit\('restaurar_usuario'/.test(adminApp) &&
-    /auditLog\/\$\{id\}/.test(accountStatusFunction),
-  'Rol, bloqueo, restauración y soft-delete deben quedar trazados.'
+    /applyUserLifecycle/.test(accountStatusFunction) &&
+    /auditLog\/\$\{eventId\}/.test(userLifecycle),
+  'Rol, bloqueo, restauración y soft-delete deben quedar trazados desde su autoridad canónica.'
 );
 check(
   'La tabla escapa nombre, email y avatar',

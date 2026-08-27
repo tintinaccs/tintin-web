@@ -82,19 +82,23 @@ test('una edición parcial no valida ni reemplaza las demás columnas del produc
   assert.match(appScript, /tintinSendProductRowWithRetry_\(sheet, rowNumber, changedFields\)/);
 });
 
-test('el espejo integral limita las escrituras a los campos administrativos', () => {
+test('el espejo integral limita escrituras a usuarios administrativos; pedidos y auditoría son read-only', () => {
   const appScript = read('apps-script/ProductosUnificados.gs');
   const adminWebhook = read('functions/api/sheets-admin-webhook.js');
   const snapshot = read('functions/api/sheets-sync-snapshot.js');
   assert.match(appScript, /function tintinHandleUserEdit_/);
   assert.match(appScript, /function tintinHandleOrderEdit_/);
+  assert.match(appScript, /Pedidos web es un espejo de solo lectura/);
   assert.match(appScript, /function tintinReconciliarEspejosWeb/);
   assert.match(appScript, /everyMinutes\(5\)/);
   assert.match(appScript, /function doPost\(e\)/);
   assert.match(adminWebhook, /const ROLES = new Set/);
-  assert.match(adminWebhook, /const ORDER_STATUS = new Set/);
-  assert.match(adminWebhook, /const PAYMENT_STATUS = new Set/);
-  assert.match(adminWebhook, /mergeFields: \['status', 'paymentStatus', 'payment', 'updatedAt', 'lastChangeId'\]/);
+  assert.match(adminWebhook, /writableEntities: \['user'\]/);
+  assert.match(adminWebhook, /readOnlyMirrors: \['order', 'audit'\]/);
+  assert.match(adminWebhook, /if \(input\.entity === 'order'\)/);
+  assert.match(adminWebhook, /Pedidos web es un espejo de solo lectura/);
+  assert.doesNotMatch(adminWebhook, /const ORDER_STATUS = new Set/);
+  assert.doesNotMatch(adminWebhook, /mergeFields: \['status', 'paymentStatus', 'payment'/);
   assert.match(snapshot, /ALLOWED_ENTITIES = new Set\(\['products', 'users', 'orders', 'audit'\]\)/);
   assert.match(snapshot, /sameSecret\(request\.headers\.get\('X-Tintin-Sheets-Secret'\)/);
 });

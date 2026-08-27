@@ -7,6 +7,7 @@ const cloudflare = read('cloudflare/seguridad-cloudinary.js');
 const rules = read('firestore.rules');
 const otp = read('functions/api/email-otp-send.js');
 const deletion = read('functions/api/admin-delete-user.js');
+const lifecycle = read('cloudflare/user-lifecycle-domain.js');
 const checks = [];
 const check = (name, condition) => checks.push({ name, ok: Boolean(condition) });
 
@@ -18,7 +19,15 @@ check('Rules acepta la allowlist moderna completa', rules.includes("['client', '
 check('customerId queda inmutable y ligado al UID', rules.includes("'customerId'") && rules.includes("data.customerId == 'CUS_' + userId"));
 check('La auditoría continúa append-only', /match \/auditLog\/\{logId\}[\s\S]{0,260}allow update, delete: if false/.test(rules));
 check('PIN ya no excluye cuentas Google', !otp.includes('google_account_exists') && !otp.includes("providers.includes('google.com')"));
-check('Eliminar cuenta conserva tombstone', deletion.includes("profileStatus: fsString('deleted')") && !deletion.includes('deleteFirebaseUser'));
+check(
+  'Eliminar cuenta conserva tombstone',
+  deletion.includes('applyUserLifecycle') &&
+    lifecycle.includes("profileStatus: fsString('deleted')") &&
+    lifecycle.includes("deleted: fsBoolean(true)") &&
+    lifecycle.includes("setFirebaseUserDisabled(env, uid, action === 'softDelete')") &&
+    !deletion.includes('deleteFirebaseUser') &&
+    !lifecycle.includes('deleteFirebaseUser')
+);
 
 for (const item of checks) console.log(`${item.ok ? 'OK' : 'ERROR'} — ${item.name}`);
 if (checks.some(item => !item.ok)) process.exit(1);
