@@ -2,7 +2,7 @@ import { auth } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
-const HEALTH_URL = '/api/health';
+const HEALTH_URL = '/api/system-health';
 let mounted = false;
 let loaded = false;
 let loading = false;
@@ -24,6 +24,20 @@ function label(value) {
   return 'NO VERIFICADO';
 }
 
+function formatDate(value) {
+  if (!value) return '—';
+  try {
+    return new Intl.DateTimeFormat('es-PY', { dateStyle: 'short', timeStyle: 'medium' }).format(new Date(value));
+  } catch {
+    return String(value);
+  }
+}
+
+function shortSha(value) {
+  const sha = String(value || '');
+  return sha ? sha.slice(0, 10) : '—';
+}
+
 function item(labelText, value, detail = '') {
   const itemState = state(value);
   return `
@@ -42,7 +56,7 @@ function markup() {
       <div class="adm-card-head adm-master-diagnostic-head">
         <div>
           <div class="adm-card-title">Estado del ecosistema</div>
-          <p>Disponibilidad operativa de las autoridades reales de Tintin. No lee ni muestra datos de clientas; ejecuta probes mínimos y no destructivos.</p>
+          <p>Disponibilidad operativa de las autoridades reales de Tintin. No muestra datos de clientas, credenciales ni secretos; ejecuta probes mínimos y no destructivos.</p>
         </div>
         <div class="adm-master-actions">
           <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="btn-refresh-system-health">Actualizar estado</button>
@@ -54,6 +68,7 @@ function markup() {
           <span class="adm-master-freshness" id="system-health-checked">Abrí Diagnóstico para comprobar el sistema.</span>
         </div>
         <div class="adm-master-notice notice-info" id="system-health-notice">El estado operativo se consulta solo cuando abrís esta sección o pulsás Actualizar estado.</div>
+        <div class="adm-master-meta" id="system-health-meta" hidden></div>
         <div class="adm-master-areas" id="system-health-areas"></div>
         <details class="adm-master-history" id="system-health-authorities" hidden>
           <summary>Autoridades y espejos canónicos</summary>
@@ -76,11 +91,20 @@ function setOverall(nextState, checkedAt = '') {
     node.dataset.state = nextState;
     node.textContent = label(nextState);
   }
-  if (checked) {
-    checked.textContent = checkedAt
-      ? `Comprobado ${new Intl.DateTimeFormat('es-PY', { dateStyle: 'short', timeStyle: 'medium' }).format(new Date(checkedAt))}`
-      : 'Sin comprobación reciente';
-  }
+  if (checked) checked.textContent = checkedAt ? `Comprobado ${formatDate(checkedAt)}` : 'Sin comprobación reciente';
+}
+
+function renderMeta(payload) {
+  const node = document.getElementById('system-health-meta');
+  if (!node) return;
+  const deployment = payload?.deployment || {};
+  const sync = payload?.integrations?.appsScript?.summary || {};
+  node.hidden = false;
+  node.innerHTML = `
+    <div class="adm-master-meta-item"><span>Commit desplegado</span><strong title="${escapeHtml(deployment.commitSha || '')}">${escapeHtml(shortSha(deployment.commitSha))}</strong></div>
+    <div class="adm-master-meta-item"><span>Rama</span><strong>${escapeHtml(deployment.branch || '—')}</strong></div>
+    <div class="adm-master-meta-item"><span>Último sync</span><strong>${escapeHtml(sync.lastAt ? `${sync.lastStatus || '—'} · ${formatDate(sync.lastAt)}` : 'sin historial')}</strong></div>
+    <div class="adm-master-meta-item"><span>Errores sync 24 h</span><strong>${escapeHtml(sync.errors24h || 0)}</strong></div>`;
 }
 
 function renderAuthorities(authorities = {}) {
@@ -98,7 +122,6 @@ function renderAuthorities(authorities = {}) {
 }
 
 function render(payload) {
-  const checks = payload?.checks || {};
   const admin = payload?.admin || {};
   const integrations = payload?.integrations || {};
   const appsScript = integrations?.appsScript || {};
@@ -106,7 +129,7 @@ function render(payload) {
   if (!areas) return;
 
   const rows = [
-    ['Firebase / Firestore', checks.firebase, 'Cuenta de servicio y lectura del runtime administrativo'],
+    ['Firebase / Firestore', integrations.firebase, 'Cuenta de servicio y lectura del runtime administrativo'],
     ['Productos', admin.products, 'Firestore products'],
     ['Inventario', admin.productInventory, 'Firestore productInventory'],
     ['Colecciones', admin.collections, 'Firestore collections'],
@@ -116,23 +139,46 @@ function render(payload) {
     ['Configuración global', admin.settings, 'Firestore settings/general'],
     ['Contenido del sitio', admin.siteContent, 'Firestore site_content'],
     ['Visual Builder', admin.visualBuilder, 'Páginas, borradores e historial'],
-    ['Resend', checks.resend, 'Configuración privada de correo'],
-    ['Cloudinary', checks.cloudinary, 'Configuración privada de multimedia'],
-    ['Google Sheets', checks.sheets, 'Secreto del puente + Apps Script alcanzable'],
-    ['Apps Script', appsScript.reachable, appsScript.protocolOk ? `Protocolo ${appsScript.revision || 'actual'} verificado` : 'Endpoint alcanzable; el protocolo health puede seguir en una revisión anterior'],
+    ['Resend', integrations.resend, 'Configuración privada de correo presente'],
+    ['Cloudinary', integrations.cloudinary, 'Configuración privada de multimedia presente'],
+    ['Google Sheets', integrations.sheets, 'Secreto del puente + protocolo de Apps Script verificado'],
+    ['Apps Script', appsScript.protocolOk, appsScript.protocolOk
+      ? `Protocolo ${appsScript.revision || 'actual'} · ${Number(appsScript.ms || 0)} ms`
+      : `Estado ${appsScript.code || 'no_verificado'} · HTTP ${appsScript.httpStatus || 0}`],
   ];
   areas.innerHTML = rows.map(([name, value, detail]) => item(name, value, detail)).join('');
   setOverall(payload?.ok === true ? 'PASS' : 'FAIL', payload?.checkedAt || '');
+  renderMeta(payload);
   renderAuthorities(payload?.authorities || {});
 
   const notice = document.getElementById('system-health-notice');
   if (notice) {
     const failures = rows.filter(([, value]) => value !== true).map(([name]) => name);
+    const sync = appsScript.summary || {};
+    const syncSuffix = Number(sync.errors24h || 0) > 0
+      ? ` Historial sync registra ${Number(sync.errors24h || 0)} error(es) en las últimas 24 h.`
+      : Number(sync.syncing24h || 0) > 0
+        ? ` Hay ${Number(sync.syncing24h || 0)} registro(s) SYNCING en las últimas 24 h para revisar.`
+        : '';
     notice.className = `adm-master-notice ${payload?.ok === true ? 'notice-info' : 'notice-error'}`;
     notice.textContent = payload?.ok === true
-      ? 'Las autoridades operativas y el puente de sincronización respondieron correctamente.'
-      : `Hay componentes que requieren revisión: ${failures.join(', ') || 'estado general'}.`;
+      ? `Las autoridades operativas y el puente de sincronización respondieron correctamente.${syncSuffix}`
+      : `Hay componentes que requieren revisión: ${failures.join(', ') || 'estado general'}.${syncSuffix}`;
   }
+}
+
+async function authorizedFetch(forceToken = false) {
+  const user = auth.currentUser;
+  if (!user || String(user.email || '').toLowerCase() !== String(SUPER_ADMIN).toLowerCase()) {
+    throw new Error('La sesión de Super Admin no está disponible.');
+  }
+  const idToken = await user.getIdToken(forceToken);
+  return fetch(HEALTH_URL, {
+    method: 'GET',
+    cache: 'no-store',
+    credentials: 'same-origin',
+    headers: { authorization: `Bearer ${idToken}` },
+  });
 }
 
 async function load() {
@@ -144,10 +190,13 @@ async function load() {
     button.textContent = 'Comprobando…';
   }
   try {
-    const response = await fetch(HEALTH_URL, { cache: 'no-store', credentials: 'same-origin' });
+    let response = await authorizedFetch(false);
+    if (response.status === 401) response = await authorizedFetch(true);
     const payload = await response.json().catch(() => ({}));
-    if (!payload || typeof payload !== 'object' || !payload.checks) throw new Error('El health endpoint no devolvió el contrato esperado.');
-    render(payload);
+    if (!response.ok || payload?.ok !== true || !payload?.report) {
+      throw new Error(payload?.error || 'El endpoint de estado no devolvió el contrato esperado.');
+    }
+    render(payload.report);
     loaded = true;
   } catch (error) {
     console.error('[Estado ecosistema]', error);
@@ -155,7 +204,7 @@ async function load() {
     const notice = document.getElementById('system-health-notice');
     if (notice) {
       notice.className = 'adm-master-notice notice-error';
-      notice.textContent = 'No se pudo comprobar el estado operativo del ecosistema.';
+      notice.textContent = error?.message || 'No se pudo comprobar el estado operativo del ecosistema.';
     }
   } finally {
     loading = false;
