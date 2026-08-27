@@ -15,9 +15,7 @@ function request(body, secret = '') {
   const headers = { 'content-type': 'application/json' };
   if (secret) headers['X-Tintin-Sheets-Secret'] = secret;
   return new Request('https://tintinaccesorios.pages.dev/api/sheets-products-webhook', {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(body),
+    method: 'POST', headers, body: JSON.stringify(body),
   });
 }
 
@@ -26,7 +24,6 @@ test('clasifica fallos de autenticación sin devolver el secreto', async () => {
   assert.equal(classifySheetsWebhookAuth('client-value', ''), 'server-secret-missing');
   assert.equal(classifySheetsWebhookAuth('client-value', 'server-value'), 'secret-mismatch');
   assert.equal(classifySheetsWebhookAuth('same-value', 'same-value'), 'authenticated');
-
   const response = await onRequestPost({ request: request({ action: 'diagnose' }), env: { SHEETS_ENGAGEMENT_SECRET: 'server-value' } });
   assert.equal(response.status, 401);
   assert.equal(response.headers.get('x-tintin-auth-state'), 'missing-header');
@@ -35,10 +32,7 @@ test('clasifica fallos de autenticación sin devolver el secreto', async () => {
 });
 
 test('diagnóstico autenticado es no destructivo y distingue el deployment', async () => {
-  const response = await onRequestPost({
-    request: request({ action: 'diagnose' }, 'shared-value'),
-    env: { SHEETS_ENGAGEMENT_SECRET: 'shared-value' },
-  });
+  const response = await onRequestPost({ request: request({ action: 'diagnose' }, 'shared-value'), env: { SHEETS_ENGAGEMENT_SECRET: 'shared-value' } });
   const body = await response.json();
   assert.equal(response.status, 200);
   assert.equal(body.ok, true);
@@ -50,10 +44,7 @@ test('diagnóstico autenticado es no destructivo y distingue el deployment', asy
 });
 
 test('una eliminación exige productId y no inventa otro producto', async () => {
-  const response = await onRequestPost({
-    request: request({ action: 'deleteProduct', productId: '' }, 'shared-value'),
-    env: { SHEETS_ENGAGEMENT_SECRET: 'shared-value' },
-  });
+  const response = await onRequestPost({ request: request({ action: 'deleteProduct', productId: '' }, 'shared-value'), env: { SHEETS_ENGAGEMENT_SECRET: 'shared-value' } });
   assert.equal(response.status, 400);
   assert.match((await response.json()).error, /productId/);
 });
@@ -141,10 +132,11 @@ test('los archivos Apps Script versionados no tienen funciones globales duplicad
   assert.deepEqual(duplicates, []);
 });
 
-test('restauración web conserva roleBeforeBlock válido', () => {
-  const legacyAdmin = read('js/admin/admin-app.js');
-  const phase8 = read('js/admin/users/gestion-usuarios-admin.js');
-  assert.match(legacyAdmin, /ASSIGNABLE_ROLES\.includes\(u\?\.roleBeforeBlock\)/);
-  assert.match(phase8, /ALLOWED_ROLES\.includes\(user\.roleBeforeBlock\)/);
-  assert.match(phase8, /role: restoredRole/);
+test('restauración web conserva roleBeforeBlock desde una sola autoridad', () => {
+  const admin = read('js/admin/admin-app.js');
+  const compat = read('js/admin/users/gestion-usuarios-admin.js');
+  assert.match(admin, /ASSIGNABLE_ROLES\.includes\(u\?\.roleBeforeBlock\)/);
+  assert.match(admin, /role: targetRole/);
+  assert.doesNotMatch(compat, /roleBeforeBlock:/);
+  assert.doesNotMatch(compat, /updateDoc\(|writeBatch\(|setDoc\(/);
 });
