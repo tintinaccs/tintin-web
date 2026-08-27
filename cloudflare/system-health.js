@@ -34,7 +34,14 @@ function configured(env, key) {
 }
 
 function emptySyncSummary() {
-  return { lastStatus: '', lastAt: '', errors24h: 0, rejected24h: 0, syncing24h: 0 };
+  return {
+    available: false,
+    lastStatus: '',
+    lastAt: '',
+    errors24h: null,
+    rejected24h: null,
+    syncing24h: null,
+  };
 }
 
 /**
