@@ -1,9 +1,9 @@
 import {
   decodeFirestoreFields,
   encodeFirestoreFields,
-  firestoreAdminCommit,
   firestoreAdminGet,
 } from './firebase-admin-ligero.js';
+import { firestoreAdminBatchCommit } from './firestore-admin-batch.js';
 import {
   computeInventoryDeltas,
   inventoryStateForStatus,
@@ -155,7 +155,12 @@ function auditSummary(order) {
   };
 }
 
-export async function applyOrderAdminMutation(env, input = {}, actor = {}) {
+export async function applyOrderAdminMutation(
+  env,
+  input = {},
+  actor = {},
+  { get = firestoreAdminGet, commit = firestoreAdminBatchCommit } = {},
+) {
   const orderId = clean(input.orderId, 220);
   if (!ORDER_ID_PATTERN.test(orderId)) throw new Error('Pedido inválido.');
   const origin = clean(actor.origin || input.source || 'admin', 120);
@@ -166,7 +171,7 @@ export async function applyOrderAdminMutation(env, input = {}, actor = {}) {
   const nextChangeId = requestedChangeId || makeChangeId(origin.includes('sheets') ? 'sheet' : 'admin');
   const baseChangeId = clean(input.baseChangeId, 120);
 
-  const orderDocument = await firestoreAdminGet(env, `orders/${encodeURIComponent(orderId)}`);
+  const orderDocument = await get(env, `orders/${encodeURIComponent(orderId)}`);
   if (!orderDocument) throw new Error('El pedido ya no existe.');
   const beforeOrder = decodeFirestoreFields(orderDocument.fields || {});
   const currentChangeId = clean(beforeOrder.lastChangeId, 120);
@@ -185,7 +190,7 @@ export async function applyOrderAdminMutation(env, input = {}, actor = {}) {
   const inventory = computeInventoryDeltas(beforeOrder, patch, MAX_ADMIN_DISTINCT_PRODUCTS);
   const productDocuments = new Map();
   for (const productId of inventory.deltas.keys()) {
-    const document = await firestoreAdminGet(env, `products/${encodeURIComponent(productId)}`);
+    const document = await get(env, `products/${encodeURIComponent(productId)}`);
     if (!document) throw new Error(`No se puede reconciliar el stock: el producto ${productId} ya no existe.`);
     productDocuments.set(productId, document);
   }
@@ -267,7 +272,7 @@ export async function applyOrderAdminMutation(env, input = {}, actor = {}) {
     currentDocument: { exists: false },
   });
 
-  await firestoreAdminCommit(env, writes);
+  await commit(env, writes);
   return {
     orderId,
     changeId: nextChangeId,
