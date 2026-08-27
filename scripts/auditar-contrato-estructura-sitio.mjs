@@ -108,7 +108,7 @@ if (!gateway.includes('structural.root')) fail('La fachada debe proyectar el roo
 if (!gateway.includes('SITE_STRUCTURE_MODES.protected')) fail('La fachada debe excluir las páginas protegidas del CMS libre.');
 if (!gateway.includes('zone: structural.zone')) fail('La fachada debe proyectar la zona estructural al Visual Builder.');
 if (!gateway.includes('blockAnchor: structural.blockAnchor')) fail('La fachada debe proyectar las anclas seguras al Visual Builder.');
-if (!visualCore.includes('sectionSchema.zone') && !visualCore.includes('schema.zone')) fail('El backend del Visual Builder debe sanear el orden por zona.');
+if (!visualCore.includes("const zone = entries[cursor][1].zone || 'main'")) fail('El backend del Visual Builder debe sanear el orden por zona.');
 if (!visualCore.includes('blockAnchor === true')) fail('El backend debe limitar los bloques a anclas explícitamente seguras.');
 if (!visualRuntime.includes('sectionSchema.movable !== true')) fail('El runtime público debe ignorar secciones fijas al reordenar.');
 if (!visualRuntime.includes('rootsById')) fail('El runtime debe conservar las referencias DOM antes de retirar nodos para reordenarlos.');
