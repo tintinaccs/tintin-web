@@ -110,26 +110,38 @@ function cleanStyle(raw = {}) {
   };
 }
 
-function reorderableSectionIds(schema) {
-  return Object.entries(schema.sections || {}).filter(([, sectionSchema]) => !sectionSchema.global).map(([id]) => id);
+function structuralEntries(schema) {
+  return Object.entries(schema.sections || {}).filter(([, sectionSchema]) => !sectionSchema.global);
 }
 
 function sanitizeSectionOrderClient(raw, schema) {
-  const reorderable = reorderableSectionIds(schema);
+  const entries = structuralEntries(schema);
+  const canonical = entries.map(([id]) => id);
+  const rawOrder = [];
   const seen = new Set();
-  const order = (Array.isArray(raw) ? raw : []).filter(id => reorderable.includes(id) && !seen.has(id) && seen.add(id));
-  // Keep the homepage carousel immediately after the benefits bar for both
-  // old configs (where it is missing) and newer configs that saved it last.
-  if (reorderable.includes('collections_carousel')) {
-    const existingIndex = order.indexOf('collections_carousel');
-    if (existingIndex >= 0) order.splice(existingIndex, 1);
-    seen.delete('collections_carousel');
-    const trustIndex = order.indexOf('trust');
-    order.splice(trustIndex >= 0 ? trustIndex + 1 : 0, 0, 'collections_carousel');
-    seen.add('collections_carousel');
+  (Array.isArray(raw) ? raw : []).forEach(id => {
+    if (canonical.includes(id) && !seen.has(id)) { seen.add(id); rawOrder.push(id); }
+  });
+  const output = [];
+  let cursor = 0;
+  while (cursor < entries.length) {
+    const zone = entries[cursor][1].zone || 'main';
+    const group = [];
+    while (cursor < entries.length && (entries[cursor][1].zone || 'main') === zone) {
+      group.push(entries[cursor]);
+      cursor += 1;
+    }
+    const movableIds = group.filter(([, sectionSchema]) => sectionSchema.movable === true).map(([id]) => id);
+    const orderedMovable = rawOrder.filter(id => movableIds.includes(id));
+    movableIds.forEach(id => { if (!orderedMovable.includes(id)) orderedMovable.push(id); });
+    let movableIndex = 0;
+    group.forEach(([id, sectionSchema]) => output.push(sectionSchema.movable === true ? orderedMovable[movableIndex++] : id));
   }
-  reorderable.forEach(id => { if (!seen.has(id)) { order.push(id); seen.add(id); } });
-  return order;
+  return output;
+}
+
+function blockAnchorIds(schema) {
+  return structuralEntries(schema).filter(([, sectionSchema]) => sectionSchema.blockAnchor === true).map(([id]) => id);
 }
 
 function cleanItems(raw, max = 16) {
@@ -141,16 +153,20 @@ function cleanItems(raw, max = 16) {
 function sanitizeRuntimeConfig(pageId, raw = {}) {
   const schema = getPageSchema(pageId);
   if (!schema) return { sections: {}, sectionOrder: [], customBlocks: [] };
-  const sections = Object.fromEntries(Object.keys(schema.sections).map(id => [id, cleanStyle(raw?.sections?.[id])]));
+  const sections = Object.fromEntries(Object.entries(schema.sections).map(([id, sectionSchema]) => [id, cleanStyle(sectionSchema.visualEditable === false ? {} : raw?.sections?.[id])]));
   const sectionOrder = sanitizeSectionOrderClient(raw?.sectionOrder, schema);
-  const sectionIds = new Set(Object.keys(schema.sections));
+  const anchors = blockAnchorIds(schema);
+  const topAllowed = schema.allowTopBlocks === true;
+  const fallbackAnchor = anchors[0] || TOP_ANCHOR;
   const seen = new Set();
   const customBlocks = (Array.isArray(raw?.customBlocks) ? raw.customBlocks : []).slice(0, 40).map((item, index) => {
+    if (!anchors.length && !topAllowed) return null;
     const type = BLOCK_TYPES.has(item?.type) ? item.type : 'section';
     const id = plain(item?.id || `${type}-${index + 1}`, 64).replace(/[^a-z0-9_-]/gi, '-').toLowerCase();
+    const validAnchor = anchors.includes(item?.afterSection) || (topAllowed && item?.afterSection === TOP_ANCHOR);
     return {
       id, type, label: plain(item?.label || '', 80),
-      afterSection: item?.afterSection === TOP_ANCHOR || sectionIds.has(item?.afterSection) ? item.afterSection : TOP_ANCHOR,
+      afterSection: validAnchor ? item.afterSection : fallbackAnchor,
       eyebrow: plain(item?.eyebrow || 'TINTÍN', 80), title: plain(item?.title || 'Nueva sección', 180),
       text: plain(item?.text || '', 1200), buttonLabel: plain(item?.buttonLabel || '', 80), href: safeHref(item?.href),
       image: safeImage(item?.image), imageAlt: plain(item?.imageAlt || '', 140), count: Math.max(1, Math.min(12, Number(item?.count) || 4)),
@@ -161,7 +177,7 @@ function sanitizeRuntimeConfig(pageId, raw = {}) {
       marqueeSpeed: ['slow', 'normal', 'fast'].includes(item?.marqueeSpeed) ? item.marqueeSpeed : 'normal',
       spacerSize: ['small', 'medium', 'large', 'xlarge'].includes(item?.spacerSize) ? item.spacerSize : 'medium',
     };
-  }).filter(block => block.id && !seen.has(block.id) && seen.add(block.id));
+  }).filter(block => block && block.id && !seen.has(block.id) && seen.add(block.id));
   return { sections, sectionOrder, customBlocks };
 }
 
@@ -174,31 +190,31 @@ function reorderSections(schema, order) {
   const groups = new Map();
   order.forEach(id => {
     const sectionSchema = schema.sections[id];
-    if (!sectionSchema) return;
+    if (!sectionSchema || sectionSchema.global || sectionSchema.movable !== true) return;
     const roots = findRoots(sectionSchema);
-    if (roots.length) groups.set(id, roots);
-  });
-  if (groups.size < 2) return;
-  const byParent = new Map();
-  groups.forEach((roots, id) => {
+    if (!roots.length) return;
     const parent = roots[0].parentNode;
-    if (!byParent.has(parent)) byParent.set(parent, []);
-    byParent.get(parent).push(id);
+    if (!parent || !roots.every(node => node.parentNode === parent)) return;
+    const key = `${sectionSchema.zone || 'main'}::${[...parent.children].indexOf(roots[0]) >= 0 ? 'same-parent' : 'unknown'}`;
+    if (!groups.has(parent)) groups.set(parent, new Map());
+    const zones = groups.get(parent);
+    if (!zones.has(key)) zones.set(key, []);
+    zones.get(key).push(id);
   });
-  byParent.forEach((ids, parent) => {
+  groups.forEach((zones, parent) => zones.forEach(ids => {
     if (ids.length < 2) return;
     const localOrder = order.filter(id => ids.includes(id));
-    const allNodes = ids.flatMap(id => groups.get(id));
-    if (!allNodes.every(node => node.parentNode === parent)) return;
+    const allNodes = ids.flatMap(id => findRoots(schema.sections[id]));
+    if (!allNodes.length || !allNodes.every(node => node.parentNode === parent)) return;
     const siblings = [...parent.children];
     let anchor = null;
     for (const child of siblings) { if (allNodes.includes(child)) { anchor = child.previousElementSibling; break; } }
     allNodes.forEach(node => node.remove());
     let cursor = anchor;
     localOrder.forEach(id => {
-      groups.get(id).forEach(node => { if (cursor) cursor.after(node); else parent.prepend(node); cursor = node; });
+      findRoots(schema.sections[id]).forEach(node => { if (cursor) cursor.after(node); else parent.prepend(node); cursor = node; });
     });
-  });
+  }));
 }
 
 function findTarget(root, item) {
@@ -415,18 +431,21 @@ function applyPreviewSelection(schema, selected) {
 export function applyVisualBuilderConfig(pageId, rawConfig, selected = null) {
   ensureCss(); const schema = getPageSchema(pageId); if (!schema) return;
   const config = sanitizeRuntimeConfig(pageId, rawConfig); markSections(schema);
-  Object.entries(schema.sections).forEach(([sectionId, sectionSchema]) => findRoots(sectionSchema).forEach(root => applyStyle(root, config.sections[sectionId])));
+  Object.entries(schema.sections).forEach(([sectionId, sectionSchema]) => {
+    if (sectionSchema.visualEditable === false) return;
+    findRoots(sectionSchema).forEach(root => applyStyle(root, config.sections[sectionId]));
+  });
   reorderSections(schema, config.sectionOrder);
   document.querySelectorAll('[data-tt-visual-block]').forEach(node => node.remove());
   const insertionTails = new Map();
   const firstSectionId = config.sectionOrder[0] || Object.keys(schema.sections)[0]; const firstSectionSchema = schema.sections[firstSectionId]; const firstRoot = firstSectionSchema ? findRoots(firstSectionSchema)[0] : null;
   config.customBlocks.forEach(block => {
     const node = buildBlock(block);
-    if (block.afterSection === TOP_ANCHOR) {
+    if (block.afterSection === TOP_ANCHOR && schema.allowTopBlocks === true) {
       const tail = insertionTails.get(TOP_ANCHOR); if (tail?.parentNode) tail.after(node); else if (firstRoot?.parentNode) firstRoot.before(node); else (document.querySelector('main') || document.body).prepend(node);
       insertionTails.set(TOP_ANCHOR, node); return;
     }
-    const targetSchema = schema.sections[block.afterSection]; const target = targetSchema ? findRoots(targetSchema).at(-1) : null; const tail = insertionTails.get(block.afterSection) || target;
+    const targetSchema = schema.sections[block.afterSection]; const target = targetSchema?.blockAnchor ? findRoots(targetSchema).at(-1) : null; const tail = insertionTails.get(block.afterSection) || target;
     if (tail?.parentNode) tail.after(node); else (document.querySelector('main') || document.body).appendChild(node); insertionTails.set(block.afterSection, node);
   });
   applyPreviewSelection(schema, selected);
