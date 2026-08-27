@@ -34,6 +34,7 @@ const section = (id, label, root, options = {}) => Object.freeze({
   visualEditable: options.visualEditable !== false,
   operational: options.operational === true,
   reason: options.reason || '',
+  legacyContentRoots: Object.freeze(options.legacyContentRoots || []),
 });
 
 const page = (label, path, mode, sections, options = {}) => Object.freeze({
@@ -49,11 +50,20 @@ export const SITE_STRUCTURE_CONTRACT = Object.freeze({
   index: page('Inicio', 'index.html', SITE_STRUCTURE_MODES.editable, [
     section('hero', 'Banner principal', '.tt-hero', { hideable: true }),
     section('trust', 'Beneficios y confianza', '.tt-trust-bar', { hideable: true }),
-    section('collections_carousel', 'Carrusel de colecciones', '.tt-collection-carousel', { hideable: true, operational: true }),
+    section('collections_carousel', 'Carrusel de colecciones', '.tt-collection-carousel', {
+      hideable: true, operational: true,
+      reason: 'Las tarjetas se resuelven desde las colecciones activas; no se guardan copias manuales en la página.',
+    }),
     section('editorial_bag', 'Editorial Bags', '[data-tt-section="editorial_bag"]', { hideable: true }),
-    section('look', 'Completá tu look', '.tt-look-section', { hideable: true, operational: true }),
+    section('look', 'Completá tu look', '.tt-look-section', {
+      hideable: true, operational: true,
+      reason: 'Los productos mostrados se resuelven desde el catálogo vigente.',
+    }),
     section('editorial_relojes', 'Editorial Relojes', '[data-tt-section="editorial_relojes"]', { hideable: true }),
-    section('reviews', 'Reseñas', '.tt-reviews-section', { hideable: true, operational: true }),
+    section('reviews', 'Reseñas', '.tt-reviews-section', {
+      hideable: true, operational: true,
+      reason: 'La participación/reseñas tiene datos dinámicos y permisos propios aunque la superficie visual sea administrable.',
+    }),
   ]),
 
   nosotros: page('Nosotros', 'about.html', SITE_STRUCTURE_MODES.editable, [
@@ -64,7 +74,10 @@ export const SITE_STRUCTURE_CONTRACT = Object.freeze({
   ], { legacyPaths: ['nosotros.html'] }),
 
   catalogo: page('Catálogo', 'catalogo.html', SITE_STRUCTURE_MODES.controlled, [
-    section('header', 'Encabezado del catálogo', '.cat-hero', { hideable: false }),
+    section('header', 'Encabezado del catálogo', '.cat-hero', {
+      hideable: false,
+      legacyContentRoots: ['.catalog-header, .tt-page-hero'],
+    }),
     section('catalog_runtime', 'Filtros y resultados', '.cat-layout', {
       kind: 'operational', movable: false, hideable: false, visualEditable: false, operational: true,
       reason: 'La grilla, filtros, stock, búsqueda y paginación dependen del runtime del catálogo.',
@@ -126,7 +139,10 @@ export const SITE_STRUCTURE_CONTRACT = Object.freeze({
 
   contact: page('Contacto', 'contact.html', SITE_STRUCTURE_MODES.editable, [
     section('header', 'Encabezado', '.tt-page-hero'),
-    section('form', 'Formulario y contacto directo', '.tt-contact-section', { hideable: true, operational: true }),
+    section('form', 'Formulario y contacto directo', '.tt-contact-section', {
+      hideable: true, operational: true,
+      reason: 'El contenido visual es administrable, pero el envío y los destinos de contacto vienen de configuración/runtime.',
+    }),
   ]),
 
   envios: page('Envíos', 'envios.html', SITE_STRUCTURE_MODES.controlled, [
