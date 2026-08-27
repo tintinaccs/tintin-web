@@ -22,7 +22,7 @@ export const SYSTEM_AUTHORITIES = Object.freeze({
   inventory: { authority: 'Firestore productInventory', mirror: 'Google Sheets Productos', mode: 'bidirectional' },
   collections: { authority: 'Firestore collections', mirror: null, mode: 'firestore-only' },
   users: { authority: 'Firebase Auth + Firestore users', mirror: 'Google Sheets Usuarios web', mode: 'admin-mirror' },
-  orders: { authority: 'Firestore orders + Superadmin', mirror: 'Google Sheets Pedidos web', mode: 'read-only-mirror' },
+  orders: { authority: 'Firestore orders + canonical order domain', mirror: 'Superadmin + Google Sheets Pedidos web', mode: 'admin-parity' },
   audit: { authority: 'Firestore auditLog', mirror: 'Google Sheets Auditoría web', mode: 'read-only-mirror' },
   content: { authority: 'Firestore site_content', mirror: null, mode: 'firestore-only' },
   visualBuilder: { authority: 'Firestore visualBuilderPages', mirror: null, mode: 'firestore-only' },
