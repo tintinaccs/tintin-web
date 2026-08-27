@@ -41,11 +41,11 @@ check(
   Array.isArray(routes.include) && routes.include.includes('/api/system-health')
 );
 check(
-  'El contrato declara autoridades canónicas y pedidos/auditoría como espejos de solo lectura',
+  'El contrato declara autoridad canónica, paridad administrativa de pedidos y auditoría read-only',
   core.includes("products: { authority: 'Firestore products'") &&
     core.includes("inventory: { authority: 'Firestore productInventory'") &&
-    core.includes("orders: { authority: 'Firestore orders + Superadmin'") &&
-    core.includes("orders: { authority: 'Firestore orders + Superadmin', mirror: 'Google Sheets Pedidos web', mode: 'read-only-mirror' }") &&
+    core.includes("orders: { authority: 'Firestore orders + canonical order domain'") &&
+    core.includes("mirror: 'Superadmin + Google Sheets Pedidos web', mode: 'admin-parity'") &&
     core.includes("audit: { authority: 'Firestore auditLog', mirror: 'Google Sheets Auditoría web', mode: 'read-only-mirror' }")
 );
 check(
