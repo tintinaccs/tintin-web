@@ -1,12 +1,4 @@
-import { compactAdminRuntimeChecks, runAdminRuntimeChecks } from '../../cloudflare/admin-runtime-health.js';
-
-const REQUIRED_CONFIG = [
-  'FIREBASE_SERVICE_ACCOUNT_KEY',
-  'RESEND_API_KEY',
-  'CLOUDINARY_CLOUD_NAME',
-  'CLOUDINARY_API_KEY',
-  'CLOUDINARY_API_SECRET'
-];
+import { runSystemHealth } from '../../cloudflare/system-health.js';
 
 function json(body, status = 200) {
   return Response.json(body, {
@@ -25,44 +17,32 @@ export async function onRequest({ request, env }) {
     return new Response(null, { status: 405, headers: { allow: 'GET, HEAD' } });
   }
 
-  const missingConfig = REQUIRED_CONFIG.filter(name => !String(env?.[name] || '').trim());
-  let runtimeReport = null;
-
-  if (!missingConfig.includes('FIREBASE_SERVICE_ACCOUNT_KEY')) {
-    try {
-      // Smoke no destructivo de las mismas colecciones privadas que sostienen
-      // los módulos del Super Admin. Los probes nunca devuelven documentos ni
-      // datos de clientas: solo disponibilidad booleana por superficie.
-      runtimeReport = await runAdminRuntimeChecks(env);
-    } catch (error) {
-      // runAdminRuntimeChecks ya aísla errores por probe; este catch protege un
-      // fallo inesperado del propio runner para que /api/health siga respondiendo.
-      console.error('[health] Admin runtime no disponible:', error?.message || error);
-    }
-  }
-
-  const adminChecks = compactAdminRuntimeChecks(runtimeReport);
-  const firebaseOk = adminChecks.products === true;
-  const visualBuilderOk = adminChecks.siteContent === true && adminChecks.visualBuilder === true;
-  const adminRuntimeOk = runtimeReport?.ok === true;
-  const ok = missingConfig.length === 0 && firebaseOk && visualBuilderOk && adminRuntimeOk;
+  const report = await runSystemHealth(env);
+  const firebaseOk = report.integrations.firebase === true;
+  const visualBuilderOk = report.admin.siteContent === true && report.admin.visualBuilder === true;
   const payload = {
-    ok,
+    ok: report.ok,
     service: 'tintin-pages-functions',
     checks: {
       runtime: true,
-      configuration: missingConfig.length === 0,
+      configuration: report.missingConfig.length === 0,
       firebase: firebaseOk,
-      adminRuntime: adminRuntimeOk,
+      adminRuntime: firebaseOk,
       visualBuilder: visualBuilderOk,
+      sheets: report.integrations.sheets === true,
+      resend: report.integrations.resend === true,
+      cloudinary: report.integrations.cloudinary === true,
     },
-    admin: adminChecks,
-    checkedAt: new Date().toISOString()
+    admin: report.admin,
+    integrations: report.integrations,
+    authorities: report.authorities,
+    failedRuntimeChecks: report.failedRuntimeChecks,
+    checkedAt: report.checkedAt,
   };
 
   if (request.method === 'HEAD') {
     return new Response(null, {
-      status: ok ? 200 : 503,
+      status: report.ok ? 200 : 503,
       headers: {
         'cache-control': 'no-store, max-age=0',
         'x-content-type-options': 'nosniff',
@@ -71,5 +51,5 @@ export async function onRequest({ request, env }) {
     });
   }
 
-  return json(payload, ok ? 200 : 503);
+  return json(payload, report.ok ? 200 : 503);
 }
