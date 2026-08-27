@@ -1,4 +1,12 @@
-import { runSystemHealth } from '../../cloudflare/system-health.js';
+import { compactAdminRuntimeChecks, runAdminRuntimeChecks } from '../../cloudflare/admin-runtime-health.js';
+
+const REQUIRED_CONFIG = [
+  'FIREBASE_SERVICE_ACCOUNT_KEY',
+  'RESEND_API_KEY',
+  'CLOUDINARY_CLOUD_NAME',
+  'CLOUDINARY_API_KEY',
+  'CLOUDINARY_API_SECRET'
+];
 
 function json(body, status = 200) {
   return Response.json(body, {
@@ -17,32 +25,39 @@ export async function onRequest({ request, env }) {
     return new Response(null, { status: 405, headers: { allow: 'GET, HEAD' } });
   }
 
-  const report = await runSystemHealth(env);
-  const firebaseOk = report.integrations.firebase === true;
-  const visualBuilderOk = report.admin.siteContent === true && report.admin.visualBuilder === true;
+  const missingConfig = REQUIRED_CONFIG.filter(name => !String(env?.[name] || '').trim());
+  let runtimeReport = null;
+
+  if (!missingConfig.includes('FIREBASE_SERVICE_ACCOUNT_KEY')) {
+    try {
+      runtimeReport = await runAdminRuntimeChecks(env);
+    } catch (error) {
+      console.error('[health] Admin runtime no disponible:', error?.message || error);
+    }
+  }
+
+  const adminChecks = compactAdminRuntimeChecks(runtimeReport);
+  const firebaseOk = adminChecks.products === true;
+  const visualBuilderOk = adminChecks.siteContent === true && adminChecks.visualBuilder === true;
+  const adminRuntimeOk = runtimeReport?.ok === true;
+  const ok = missingConfig.length === 0 && firebaseOk && visualBuilderOk && adminRuntimeOk;
   const payload = {
-    ok: report.ok,
+    ok,
     service: 'tintin-pages-functions',
     checks: {
       runtime: true,
-      configuration: report.missingConfig.length === 0,
+      configuration: missingConfig.length === 0,
       firebase: firebaseOk,
-      adminRuntime: firebaseOk,
+      adminRuntime: adminRuntimeOk,
       visualBuilder: visualBuilderOk,
-      sheets: report.integrations.sheets === true,
-      resend: report.integrations.resend === true,
-      cloudinary: report.integrations.cloudinary === true,
     },
-    admin: report.admin,
-    integrations: report.integrations,
-    authorities: report.authorities,
-    failedRuntimeChecks: report.failedRuntimeChecks,
-    checkedAt: report.checkedAt,
+    admin: adminChecks,
+    checkedAt: new Date().toISOString()
   };
 
   if (request.method === 'HEAD') {
     return new Response(null, {
-      status: report.ok ? 200 : 503,
+      status: ok ? 200 : 503,
       headers: {
         'cache-control': 'no-store, max-age=0',
         'x-content-type-options': 'nosniff',
@@ -51,5 +66,5 @@ export async function onRequest({ request, env }) {
     });
   }
 
-  return json(payload, report.ok ? 200 : 503);
+  return json(payload, ok ? 200 : 503);
 }
