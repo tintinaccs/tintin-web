@@ -12,7 +12,7 @@ import {
 import {
   normalizeInventoryItems,
   orderReservesInventory
-} from '../../core/store/modelo-inventario.mjs?v=tintin-20260720-critical-healing-1';
+} from '../../core/store/modelo-inventario.mjs?v=tintin-20260827-admin-parity-1';
 
 function actorEmail() {
   return String(auth.currentUser?.email || '').trim().toLowerCase();
