@@ -33,6 +33,20 @@ function configured(env, key) {
   return Boolean(String(env?.[key] || '').trim());
 }
 
+function safeSyncSummary(value) {
+  const input = value && typeof value === 'object' ? value : {};
+  const lastStatus = String(input.lastStatus || '').slice(0, 40);
+  const lastAt = String(input.lastAt || '').slice(0, 80);
+  const nonNegativeInt = key => Math.max(0, Math.min(10000, Number.parseInt(input[key], 10) || 0));
+  return {
+    lastStatus,
+    lastAt,
+    errors24h: nonNegativeInt('errors24h'),
+    rejected24h: nonNegativeInt('rejected24h'),
+    syncing24h: nonNegativeInt('syncing24h'),
+  };
+}
+
 export async function probeAppsScript({ fetchImpl = fetch } = {}) {
   const started = Date.now();
   try {
@@ -46,14 +60,16 @@ export async function probeAppsScript({ fetchImpl = fetch } = {}) {
     const text = await response.text();
     let body = {};
     try { body = text ? JSON.parse(text) : {}; } catch { body = {}; }
+    const protocolOk = response.ok && body?.ok === true && body?.revision === SHEETS_HEALTH_REVISION;
     return {
       reachable: true,
       httpStatus: response.status,
-      protocolOk: response.ok && body?.ok === true && body?.revision === SHEETS_HEALTH_REVISION,
+      protocolOk,
       revision: String(body?.revision || ''),
-      service: String(body?.service || 'google-apps-script'),
+      service: String(body?.service || 'google-apps-script').slice(0, 80),
+      summary: safeSyncSummary(body?.summary),
       ms: Date.now() - started,
-      code: '',
+      code: protocolOk ? '' : 'revision_mismatch',
     };
   } catch (error) {
     const message = String(error?.message || error || '');
@@ -64,6 +80,7 @@ export async function probeAppsScript({ fetchImpl = fetch } = {}) {
       protocolOk: false,
       revision: '',
       service: 'google-apps-script',
+      summary: safeSyncSummary(null),
       ms: Date.now() - started,
       code,
     };
@@ -90,6 +107,7 @@ export async function runSystemHealth(env, {
     protocolOk: false,
     revision: '',
     service: 'google-apps-script',
+    summary: safeSyncSummary(null),
     ms: 0,
     code: 'probe_failed',
   }));
@@ -98,7 +116,7 @@ export async function runSystemHealth(env, {
     firebase: runtimeReport?.ok === true,
     resend: configured(env, 'RESEND_API_KEY'),
     cloudinary: configured(env, 'CLOUDINARY_CLOUD_NAME') && configured(env, 'CLOUDINARY_API_KEY') && configured(env, 'CLOUDINARY_API_SECRET'),
-    sheets: configured(env, 'SHEETS_ENGAGEMENT_SECRET') && sheets.reachable === true,
+    sheets: configured(env, 'SHEETS_ENGAGEMENT_SECRET') && sheets.protocolOk === true,
     appsScript: sheets,
   };
   const ok = missingConfig.length === 0 && runtimeReport?.ok === true && integrations.sheets === true;
@@ -109,6 +127,11 @@ export async function runSystemHealth(env, {
     admin,
     integrations,
     authorities: SYSTEM_AUTHORITIES,
+    deployment: {
+      commitSha: String(env?.CF_PAGES_COMMIT_SHA || '').slice(0, 64),
+      branch: String(env?.CF_PAGES_BRANCH || '').slice(0, 120),
+      url: String(env?.CF_PAGES_URL || '').slice(0, 300),
+    },
     failedRuntimeChecks: Array.isArray(runtimeReport?.failed) ? runtimeReport.failed : [],
     checkedAt: new Date().toISOString(),
   };
