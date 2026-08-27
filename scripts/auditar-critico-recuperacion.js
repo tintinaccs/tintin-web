@@ -14,6 +14,7 @@ const loader = read('js/cargador-pagina.js');
 const products = read('js/core/store/estado-productos.js');
 const collections = read('js/pages/collections/estado-colecciones.js');
 const inventory = read('js/admin/products/integridad-inventario-admin.js');
+const orderDomain = read('cloudflare/order-admin-domain.js');
 const model = read('js/core/store/modelo-inventario.mjs');
 const deleteFix = read('js/admin/orders/eliminacion-pedidos-admin.js');
 const phase4 = read('apps-script/CrearPedido.gs');
@@ -25,11 +26,6 @@ function check(name, condition, detail) {
 
 check(
   'La analítica pública reactivada exige freno de frecuencia, no escritura libre',
-  // Reactivada tras el incidente de cuota (ver AUDITORIA-CRITICO.txt): ya no
-  // queda cerrada con "if false" a secas, pero tampoco vuelve a la escritura
-  // libre de antes del incidente — cada update exige que hayan pasado al
-  // menos 20s desde el lastSeen anterior, y App Check bloquea scripts que no
-  // sean el sitio real.
   rules.includes('function presenceUpdateNotTooFrequent()') &&
     rules.includes('presenceUpdateNotTooFrequent()') &&
     rules.includes("allow create: if isStoreOpenOrAllowed() && trafficSessionIsValid(dateKey, sessionId);\n      allow update: if false;"),
@@ -43,12 +39,6 @@ check(
   'actividad-sitio.js no debe iniciar escrituras salvo habilitación explícita.'
 );
 check(
-  // Desde la Fase 4, la creación del pedido y el descuento de stock ya no
-  // pasan por un estado "pendiente" intermedio en el navegador: el
-  // servidor (Apps Script) lee stock/precio real y escribe el pedido ya
-  // "reservado" en UNA sola transacción de Firestore (beginTransaction/
-  // batchGet/commit), sin las reglas de por medio — ver
-  // apps-script/CrearPedido.gs.
   'El servidor crea el pedido y descuenta stock sin perder atomicidad',
   checkout.includes('async function createOrderOnServer(draft)') &&
     phase4.includes('phase4BeginTransaction_()') &&
@@ -88,13 +78,18 @@ check(
 );
 check(
   'El panel reconcilia inventario de forma transaccional',
-  inventory.includes('runTransaction') &&
-    inventory.includes('computeInventoryDeltas') &&
+  inventory.includes("fetch('/api/admin-order-mutation'") &&
+    inventory.includes('async function updateEditedOrder') &&
+    inventory.includes('async function transitionStatus') &&
+    orderDomain.includes('computeInventoryDeltas') &&
+    orderDomain.includes('firestoreAdminBatchCommit') &&
+    orderDomain.includes('currentDocument: precondition') &&
+    orderDomain.includes('auditLog') &&
     orderCrud.includes('TintinInventoryIntegrity.updateEditedOrder') &&
     admin.includes('TintinInventoryIntegrity.transitionStatus') &&
     admin.includes('TintinOrderAdmin.trashOrder') &&
     orderCrud.includes("TintinInventoryIntegrity.transitionStatus(safeId, 'cancelado')"),
-  'Edición, estados y papelera deben usar el reconciliador atómico.'
+  'Edición y estados deben pasar por el dominio server-side atómico; la papelera conserva su liberación transaccional segura.'
 );
 check(
   'Cancelar dos veces no devuelve stock dos veces',
@@ -128,11 +123,6 @@ check(
   'El catálogo público no debe permitir enumeraciones ilimitadas.'
 );
 check(
-  // El guard anti-repetición sigue siendo una transacción de Firestore desde
-  // el navegador (única escritura que queda ahí) y limita sus reintentos. La
-  // creación del pedido ya no es una transacción de cliente que Firestore
-  // reintente sola: es una única llamada al servidor que responde éxito o
-  // error puntual, sin bucles de reintento automático que limitar.
   'El guard de checkout limita sus reintentos internos',
   (checkout.match(/maxAttempts: 2/g) || []).length >= 1,
   'reserveCheckoutGuard debe limitar los reintentos automáticos de Firestore.'
