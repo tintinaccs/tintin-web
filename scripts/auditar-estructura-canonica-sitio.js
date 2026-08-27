@@ -23,6 +23,7 @@ const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
+const escapeRegExp = value => String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 function loadSchemaContract() {
   const source = read('js/core/store/esquema-contenido.js')
@@ -35,7 +36,7 @@ function loadSchemaContract() {
 }
 
 function attrValue(tag, name) {
-  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const escaped = escapeRegExp(name);
   const match = tag.match(new RegExp(`\\b${escaped}\\s*=\\s*(["'])(.*?)\\1`, 'i'));
   return match ? match[2] : '';
 }
@@ -77,9 +78,15 @@ function tagMatchesRoot(tag, rootSelector) {
 function selectorExists(html, selector) {
   return String(selector || '').split(',').some(alternative => {
     const atoms = selectorAtoms(alternative);
-    const classChecks = atoms.classes.every(name => new RegExp(`class=["'][^"']*(?:^|\\s)${name}(?:\\s|$)[^"']*["']`, 'i').test(html));
-    const idChecks = atoms.ids.every(id => new RegExp(`id=["']${id}["']`, 'i').test(html));
-    const attrChecks = atoms.attrs.every(([name, value]) => new RegExp(`${name}=["']${value}["']`, 'i').test(html));
+    const classChecks = atoms.classes.every(name =>
+      new RegExp(`class=["'][^"']*\\b${escapeRegExp(name)}\\b[^"']*["']`, 'i').test(html)
+    );
+    const idChecks = atoms.ids.every(id =>
+      new RegExp(`id=["']${escapeRegExp(id)}["']`, 'i').test(html)
+    );
+    const attrChecks = atoms.attrs.every(([name, value]) =>
+      new RegExp(`${escapeRegExp(name)}=["']${escapeRegExp(value)}["']`, 'i').test(html)
+    );
     return classChecks && idChecks && attrChecks && Boolean(atoms.classes.length || atoms.ids.length || atoms.attrs.length || atoms.tag);
   });
 }
