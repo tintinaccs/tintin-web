@@ -48,7 +48,7 @@ test('estado integral pasa solo con runtime y puente Sheets confirmados', async 
   assert.equal(report.admin.settings, true);
   assert.equal(report.integrations.sheets, true);
   assert.equal(report.deployment.commitSha, COMPLETE_ENV.CF_PAGES_COMMIT_SHA);
-  assert.equal(SYSTEM_AUTHORITIES.orders.mode, 'read-only-mirror');
+  assert.equal(SYSTEM_AUTHORITIES.orders.mode, 'admin-parity');
   assert.equal(SYSTEM_AUTHORITIES.products.mode, 'bidirectional');
 });
 
