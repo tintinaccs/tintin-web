@@ -1,0 +1,73 @@
+name: TINTIN autopatch temporal tarea 8
+
+on:
+  push:
+    branches:
+      - feat/system-health-dashboard
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: feat/system-health-dashboard
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Patch large canonical files
+        shell: python
+        run: |
+          from pathlib import Path
+
+          def replace_exact(path, old, new, expected=1):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              count = text.count(old)
+              if count != expected:
+                  raise SystemExit(f'{path}: expected {expected} occurrence(s), found {count}')
+              p.write_text(text.replace(old, new), encoding='utf-8')
+
+          admin = Path('js/admin/admin-app.js')
+          text = admin.read_text(encoding='utf-8')
+          old_import = "import './orders/pedidos-superadmin-crud.js?v=tintin-20260821-accounts-phase-a-1';"
+          if text.count(old_import) != 2:
+              raise SystemExit(f'admin-app: expected duplicated old import twice, found {text.count(old_import)}')
+          text = text.replace(old_import + '\n' + old_import, "import './orders/pedidos-superadmin-crud.js?v=tintin-20260827-admin-orders-sync-1';")
+          admin.write_text(text, encoding='utf-8')
+
+          replace_exact(
+              'apps-script/CrearPedido.gs',
+              "        phase4NotifyOrderCreated_(orderId);\n        return { ok: true, orderId: orderId, order: existingOrder, created: false };",
+              "        phase4NotifyOrderCreated_(orderId);\n        // Idempotencia también repara el espejo si el push de Sheets falló antes.\n        if (typeof tintinParityUpsertCheckoutOrder_ === 'function') {\n          tintinParityUpsertCheckoutOrder_(orderId, existingOrder);\n        }\n        return { ok: true, orderId: orderId, order: existingOrder, created: false };"
+          )
+          replace_exact(
+              'apps-script/CrearPedido.gs',
+              "    phase4NotifyOrderCreated_(orderId);\n\n    return { ok: true, orderId: orderId, order: orderData, created: true };",
+              "    phase4NotifyOrderCreated_(orderId);\n    // Firestore ya confirmó pedido + stock. Sheets es un espejo best-effort:\n    // su indisponibilidad nunca transforma la compra en fallida.\n    if (typeof tintinParityUpsertCheckoutOrder_ === 'function') {\n      tintinParityUpsertCheckoutOrder_(orderId, orderData);\n    }\n\n    return { ok: true, orderId: orderId, order: orderData, created: true };"
+          )
+
+          replace_exact(
+              'apps-script/ProductosUnificados.gs',
+              "  var response = tintinHandleUnifiedProductsPost_(body);\n  if (response) return response;\n  if (body.action === 'syncEngagement' && typeof tintinHandleEngagement_ === 'function') return tintinHandleEngagement_(body);",
+              "  var response = tintinHandleUnifiedProductsPost_(body);\n  if (response) return response;\n  if (typeof tintinParityHandleServerOrderSync_ === 'function') {\n    var orderSyncResponse = tintinParityHandleServerOrderSync_(body);\n    if (orderSyncResponse) return orderSyncResponse;\n  }\n  if (body.action === 'syncEngagement' && typeof tintinHandleEngagement_ === 'function') return tintinHandleEngagement_(body);"
+          )
+
+      - name: Commit patched files
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo 'No changes to commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add js/admin/admin-app.js apps-script/CrearPedido.gs apps-script/ProductosUnificados.gs
+          git commit -m 'feat: cerrar paridad inmediata de pedidos'
+          git push origin HEAD:feat/system-health-dashboard
