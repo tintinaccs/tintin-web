@@ -10,7 +10,7 @@ import { sanitizeVisualConfig } from '../../cloudflare/visual-builder-core.js';
 test('Producto expone todas sus superficies pero conserva barreras comerciales', () => {
   const schema = getPageSchema('product');
   assert.deepEqual(Object.keys(schema.sections), [
-    'product_detail', 'benefits', 'selection', 'related', 'footer',
+    'product_detail', 'benefits', 'selection', 'related',
   ]);
   assert.equal(schema.sections.product_detail.visualEditable, false);
   assert.equal(schema.sections.product_detail.blockAnchor, false);
