@@ -46,6 +46,8 @@ const rules = read('firestore.rules');
 const sitemap = read('sitemap.xml');
 const nosotros = read('nosotros.html');
 const productExtras = read('css/pages/product/product-extras.css');
+const usersCompat = read('js/admin/users/gestion-usuarios-admin.js');
+const userFicha = read('js/admin/users/ficha-usuario-admin.js');
 
 check('El inventario contiene las 18 rutas requeridas', manifest.pages.length === 18);
 check('El inventario contiene las siete resoluciones requeridas', manifest.viewports.length === 7);
@@ -83,13 +85,20 @@ check(
     /onSnapshot\(query\(collection\(db,\s*['"]emailTemplates['"]\),\s*limit\(500\)\)/.test(adminApp)
 );
 check(
+  'Usuarios tiene una sola escucha runtime y la ficha consulta bajo demanda',
+  !usersCompat.includes('onSnapshot(') &&
+    !userFicha.includes('onSnapshot(') &&
+    /getDoc\(doc\(db,\s*['"]users['"],\s*uid\)\)/.test(userFicha) &&
+    /limit\(100\)/.test(userFicha) &&
+    /limit\(50\)/.test(userFicha),
+);
+check(
   'El listado de esquemas de apariencia también está limitado',
   /query\(collection\(db,\s*['"]colorSchemes['"]\),\s*where\(['"]scope['"],\s*['"]==['"],\s*scope\),\s*limit\(100\)\)/.test(adminApp)
 );
 check(
-  'Las lecturas públicas y escuchas administrativas restantes también están limitadas',
-  /onSnapshot\(query\(collection\(db,\s*['"]users['"]\),\s*limit\(10000\)\)/.test(read('js/admin/users/gestion-usuarios-admin.js')) &&
-    /getDocs\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/estado-colecciones.js')) &&
+  'Las lecturas públicas restantes también están limitadas',
+  /getDocs\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/estado-colecciones.js')) &&
     /onSnapshot\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/estado-colecciones.js')) &&
     /getDocs\(query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)\)/.test(read('js/core/store/estado-productos.js'))
 );
