@@ -10,7 +10,7 @@ const escapeRegExp = value => String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&
 
 function loadEsmLike(file, names) {
   const source = read(file).replace(/\bexport\s+(?=(?:const|function)\b)/g, '');
-  return vm.runInNewContext(`${source}\n;({ ${names.join(', ')} })`, { URL, Object, Array, String });
+  return vm.runInNewContext(`${source}\n;({ ${names.join(', ')} })`, { URL, Object, Array, String, Set, Map });
 }
 
 function attrValue(tag, name) {
@@ -87,22 +87,33 @@ function walkFiles(dir, output = []) {
 
 const structure = loadEsmLike('js/core/store/contrato-estructura-sitio.js', [
   'SITE_STRUCTURE_VERSION', 'SITE_PUBLIC_PAGE_IDS', 'SITE_STRUCTURE_MODES', 'SITE_STRUCTURE_CONTRACT',
+  'sanitizeSiteSectionOrder',
 ]);
 const fields = loadEsmLike('js/core/store/definiciones-contenido.js', [
   'CONTENT_PAGE_IDS', 'PAGE_PATH_TO_ID', 'SITE_CONTENT_SCHEMA', 'getPageSchema',
 ]);
 const gateway = read('js/core/store/esquema-contenido.js');
+const visualCore = read('cloudflare/visual-builder-core.js');
+const visualRuntime = read('js/core/store/editor-visual-runtime.js');
+const visualAdmin = read('js/admin/appearance/editor-visual-admin.js');
 
 const errors = [];
 const notes = [];
 const fail = message => errors.push(message);
 
-if (structure.SITE_STRUCTURE_VERSION < 1) fail('SITE_STRUCTURE_VERSION debe ser >= 1.');
+if (structure.SITE_STRUCTURE_VERSION < 2) fail('SITE_STRUCTURE_VERSION debe ser >= 2 para soportar zonas seguras.');
 if (!gateway.includes("from './definiciones-contenido.js'")) fail('La fachada debe importar las definiciones de campos aisladas.');
 if (!gateway.includes("from './contrato-estructura-sitio.js'")) fail('La fachada debe importar el contrato estructural canónico.');
 if (!gateway.includes('structural.root')) fail('La fachada debe proyectar el root desde el contrato estructural.');
 if (!gateway.includes('SITE_STRUCTURE_MODES.protected')) fail('La fachada debe excluir las páginas protegidas del CMS libre.');
-if (!gateway.includes('firstBarrier')) fail('La fachada debe impedir reordenar a través de barreras estructurales fijas.');
+if (!gateway.includes('zone: structural.zone')) fail('La fachada debe proyectar la zona estructural al Visual Builder.');
+if (!gateway.includes('blockAnchor: structural.blockAnchor')) fail('La fachada debe proyectar las anclas seguras al Visual Builder.');
+if (!visualCore.includes("const zone = entries[cursor][1].zone || 'main'")) fail('El backend del Visual Builder debe sanear el orden por zona.');
+if (!visualCore.includes('blockAnchor === true')) fail('El backend debe limitar los bloques a anclas explícitamente seguras.');
+if (!visualRuntime.includes('sectionSchema.movable !== true')) fail('El runtime público debe ignorar secciones fijas al reordenar.');
+if (!visualRuntime.includes('rootsById')) fail('El runtime debe conservar las referencias DOM antes de retirar nodos para reordenarlos.');
+if (!visualAdmin.includes('row.dataset.zone')) fail('Superadmin debe etiquetar cada fila con su zona segura.');
+if (!visualAdmin.includes("schema.visualEditable===false?'Protegida'")) fail('Superadmin debe identificar visualmente las superficies protegidas.');
 
 const contractIds = Object.keys(structure.SITE_STRUCTURE_CONTRACT);
 const declaredIds = [...structure.SITE_PUBLIC_PAGE_IDS];
@@ -125,6 +136,8 @@ for (const pageId of declaredIds) {
   const html = read(page.path);
   const ids = new Set();
   const roots = new Set();
+  const closedZones = new Set();
+  let activeZone = '';
   for (const section of page.sections || []) {
     if (!/^[a-z0-9_]+$/.test(section.id || '')) fail(`${pageId}: id inválido ${section.id}.`);
     if (ids.has(section.id)) fail(`${pageId}: id duplicado ${section.id}.`);
@@ -132,12 +145,21 @@ for (const pageId of declaredIds) {
     if (roots.has(section.root)) fail(`${pageId}: root duplicado ${section.root}.`);
     roots.add(section.root);
     if (!selectorExists(html, section.root)) fail(`${pageId}/${section.id}: root inexistente ${section.root}.`);
+    if (!section.zone) fail(`${pageId}/${section.id}: toda sección debe declarar zone.`);
+    if (section.zone !== activeZone) {
+      if (closedZones.has(section.zone)) fail(`${pageId}: la zona ${section.zone} reaparece después de otra zona.`);
+      if (activeZone) closedZones.add(activeZone);
+      activeZone = section.zone;
+    }
     if (section.operational && !section.reason) fail(`${pageId}/${section.id}: superficie operativa sin razón.`);
-    if (page.mode === structure.SITE_STRUCTURE_MODES.protected && (section.movable || section.hideable || section.visualEditable)) {
+    if (section.visualEditable === false && section.blockAnchor) fail(`${pageId}/${section.id}: una superficie no visual no puede ser ancla de bloques.`);
+    if (!section.movable && section.hideable && section.visualEditable === false) fail(`${pageId}/${section.id}: una superficie totalmente protegida no debe poder ocultarse.`);
+    if (page.mode === structure.SITE_STRUCTURE_MODES.protected && (section.movable || section.hideable || section.visualEditable || section.blockAnchor)) {
       fail(`${pageId}/${section.id}: página protegida expone capacidad CMS libre.`);
     }
   }
 
+  if (page.mode === structure.SITE_STRUCTURE_MODES.protected && page.allowTopBlocks !== false) fail(`${pageId}: una página protegida no puede admitir bloques arriba.`);
   if (page.hasFooter && !/class=["'][^"']*\btt-footer\b/i.test(html)) fail(`${pageId}: falta footer declarado.`);
 
   if (page.mode !== structure.SITE_STRUCTURE_MODES.protected) {
@@ -148,10 +170,16 @@ for (const pageId of declaredIds) {
       if (matches.length > 1) fail(`${pageId}: <section> física ambigua (${matches.map(item => item.id).join(', ')}).`);
     }
   }
+
+  const reversed = [...(page.sections || [])].reverse().map(section => section.id);
+  const cleanOrder = structure.sanitizeSiteSectionOrder(pageId, reversed);
+  (page.sections || []).filter(section => !section.movable).forEach(section => {
+    if (cleanOrder.indexOf(section.id) !== page.sections.indexOf(section)) {
+      fail(`${pageId}/${section.id}: una sección fija cambió de posición al sanear un orden manipulado.`);
+    }
+  });
 }
 
-// Las definiciones antiguas son únicamente campos/defaults. Cada sección de
-// campos debe corresponder a una sección estructural o a un bloque global.
 for (const pageId of fields.CONTENT_PAGE_IDS) {
   const fieldPage = fields.getPageSchema(pageId);
   const structurePage = structure.SITE_STRUCTURE_CONTRACT[pageId];
@@ -173,8 +201,16 @@ for (const protectedId of ['checkout', 'login', 'perfil']) {
   if (fields.CONTENT_PAGE_IDS.includes(protectedId)) fail(`${protectedId}: no debe entrar al CMS libre.`);
 }
 
-// Nadie puede importar directamente las definiciones históricas: solo la
-// fachada canónica tiene permiso de usarlas.
+const product = structure.SITE_STRUCTURE_CONTRACT.product;
+for (const protectedSectionId of ['product_detail', 'selection']) {
+  const section = product?.sections?.find(item => item.id === protectedSectionId);
+  if (!section || section.movable || section.visualEditable || section.blockAnchor) fail(`product/${protectedSectionId}: debe permanecer fijo, no visual y sin ancla libre.`);
+}
+for (const safeSectionId of ['benefits', 'related']) {
+  const section = product?.sections?.find(item => item.id === safeSectionId);
+  if (!section?.visualEditable || !section.blockAnchor) fail(`product/${safeSectionId}: debe estar disponible como superficie visual segura.`);
+}
+
 const directConsumers = walkFiles('js').concat(walkFiles('cloudflare'), walkFiles('functions'))
   .filter(file => file !== 'js/core/store/esquema-contenido.js' && file !== 'js/core/store/definiciones-contenido.js')
   .filter(file => read(file).includes('definiciones-contenido.js'));
@@ -182,6 +218,7 @@ if (directConsumers.length) fail(`Consumidores saltándose la fachada canónica:
 
 console.log(`INFO — contrato estructural v${structure.SITE_STRUCTURE_VERSION}: ${declaredIds.length} páginas.`);
 console.log('INFO — Checkout/Login/Perfil permanecen fuera del CMS libre.');
+console.log('INFO — Visual Builder aplica zonas seguras; precio/stock/carrito/identidad/legal no son anclas libres.');
 notes.forEach(message => console.log(`INFO — ${message}`));
 
 if (errors.length) {
@@ -190,4 +227,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('\nOK — una sola autoridad estructural; definiciones de contenido aisladas como campos.');
+console.log('\nOK — una sola autoridad estructural con zonas seguras; definiciones de contenido aisladas como campos.');

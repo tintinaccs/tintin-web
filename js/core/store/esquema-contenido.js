@@ -4,12 +4,12 @@
    ÚNICA entrada pública para consumidores de contenido/Visual Builder.
 
    Autoridades separadas por responsabilidad:
-   - contrato-estructura-sitio.js: qué páginas/secciones existen y capacidades.
-   - definiciones-contenido.js: campos de texto/enlaces y sus defaults seguros.
+   - contrato-estructura-sitio.js: páginas, secciones, zonas y capacidades.
+   - definiciones-contenido.js: campos de texto/enlaces y defaults seguros.
 
    Las raíces/orden estructurales SIEMPRE salen del contrato canónico. Las
-   definiciones históricas de campos ya no pueden decidir qué sección existe,
-   dónde está ni si puede moverse.
+   definiciones históricas de campos no pueden decidir qué sección existe,
+   dónde está, en qué zona vive ni si puede moverse.
    ============================================================= */
 
 import * as ContentFields from './definiciones-contenido.js';
@@ -20,9 +20,28 @@ import {
   SITE_STRUCTURE_VERSION,
   getSiteStructurePage,
   getSiteStructureSection,
+  getSiteSectionZone,
+  getMovableSiteSectionIds,
+  getProtectedSiteSectionIds,
+  getVisualBlockAnchorIds,
+  isTopVisualAnchorAllowed,
+  sanitizeSiteSectionOrder,
 } from './contrato-estructura-sitio.js';
 
-export { SITE_PUBLIC_PAGE_IDS, SITE_STRUCTURE_CONTRACT, SITE_STRUCTURE_MODES, SITE_STRUCTURE_VERSION, getSiteStructurePage, getSiteStructureSection };
+export {
+  SITE_PUBLIC_PAGE_IDS,
+  SITE_STRUCTURE_CONTRACT,
+  SITE_STRUCTURE_MODES,
+  SITE_STRUCTURE_VERSION,
+  getSiteStructurePage,
+  getSiteStructureSection,
+  getSiteSectionZone,
+  getMovableSiteSectionIds,
+  getProtectedSiteSectionIds,
+  getVisualBlockAnchorIds,
+  isTopVisualAnchorAllowed,
+  sanitizeSiteSectionOrder,
+};
 
 export const CONTENT_MAX_LENGTH = ContentFields.CONTENT_MAX_LENGTH;
 export const CONTENT_PAGE_IDS = Object.freeze([...ContentFields.CONTENT_PAGE_IDS]);
@@ -65,13 +84,6 @@ export function sanitizeContentHref(value, fallback = '') {
   return canonicalizeLegacyContentHref(safe);
 }
 
-/*
- * La fachada es la última frontera antes de Admin/runtime/Cloudflare. Además
- * de delegar las migraciones históricas de bajo nivel, vuelve a garantizar la
- * forma pública canónica del título del Hero. Es una defensa idempotente: si
- * la capa interna ya lo normalizó no cambia nada; si una versión interna vieja
- * reaparece, la salida pública sigue siendo correcta.
- */
 export function normalizeContentValue(pageId, sectionId, key, value) {
   const normalized = ContentFields.normalizeContentValue(pageId, sectionId, key, value);
   const text = String(normalized == null ? '' : normalized);
@@ -94,26 +106,6 @@ function globalContentSections(pageId) {
     .filter(([, section]) => section?.global === true);
 }
 
-/*
- * Compatibilidad segura con el runtime de orden actual:
- *
- * El constructor vigente puede reordenar un conjunto continuo de secciones.
- * Si una página contiene una barrera estructural fija (checkout interno,
- * detalle comercial, cuerpo legal, etc.), solo exponemos al constructor el
- * prefijo editable anterior a la PRIMERA barrera. De esta forma ninguna
- * sección editable puede saltar por encima de una superficie protegida.
- *
- * La Tarea 5 podrá ampliar el editor por zonas sin cambiar la autoridad: esta
- * decisión siempre deriva del mismo contrato estructural.
- */
-function builderSafeStructuralSections(pageId) {
-  const page = getSiteStructurePage(pageId);
-  if (!page || page.mode === SITE_STRUCTURE_MODES.protected) return [];
-  const firstBarrier = page.sections.findIndex(section => !section.movable || !section.visualEditable);
-  const limit = firstBarrier < 0 ? page.sections.length : firstBarrier;
-  return page.sections.slice(0, limit).filter(section => section.movable && section.visualEditable);
-}
-
 function projectStructuralSection(pageId, structural) {
   const content = contentDefinitionSection(pageId, structural.contentSectionId || structural.id);
   return Object.freeze({
@@ -124,9 +116,11 @@ function projectStructuralSection(pageId, structural) {
     global: false,
     structural: true,
     kind: structural.kind,
+    zone: structural.zone,
     movable: structural.movable === true,
     hideable: structural.hideable === true,
     visualEditable: structural.visualEditable === true,
+    blockAnchor: structural.blockAnchor === true,
     operational: structural.operational === true,
     reason: structural.reason || '',
     contentRoot: content?.root || structural.root,
@@ -141,8 +135,10 @@ function projectGlobalSection(section) {
     movable: false,
     hideable: false,
     visualEditable: true,
+    blockAnchor: false,
     structural: false,
     kind: 'global',
+    zone: 'global',
   });
 }
 
@@ -155,7 +151,7 @@ export function getPageSchema(pageIdValue) {
   if (!structure || !contentPage || structure.mode === SITE_STRUCTURE_MODES.protected) return null;
 
   const sections = {};
-  builderSafeStructuralSections(pageId).forEach(structural => {
+  structure.sections.forEach(structural => {
     sections[structural.id] = projectStructuralSection(pageId, structural);
   });
   globalContentSections(pageId).forEach(([sectionId, section]) => {
@@ -167,6 +163,7 @@ export function getPageSchema(pageIdValue) {
     path: structure.path,
     mode: structure.mode,
     structureVersion: SITE_STRUCTURE_VERSION,
+    allowTopBlocks: isTopVisualAnchorAllowed(pageId),
     sections: Object.freeze(sections),
   });
 }
@@ -218,5 +215,9 @@ export function getContentFieldDefinition(pageId, sectionId) {
 }
 
 export function getBuilderSafeSectionIds(pageId) {
-  return builderSafeStructuralSections(pageId).map(section => section.id);
+  return (getSiteStructurePage(pageId)?.sections || []).map(section => section.id);
+}
+
+export function getBuilderVisualSectionIds(pageId) {
+  return (getSiteStructurePage(pageId)?.sections || []).filter(section => section.visualEditable).map(section => section.id);
 }
