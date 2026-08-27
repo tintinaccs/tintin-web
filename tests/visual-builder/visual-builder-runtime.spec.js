@@ -146,7 +146,7 @@ test('las secciones fijas de la página real se reordenan según sectionOrder, y
     frame.contentWindow.postMessage({
       type: 'tintin:visual-preview', pageId: 'index',
       // "reviews" pasa a ir justo después del hero, invirtiendo su posición natural.
-      config: { sections: {}, sectionOrder: ['hero', 'reviews', 'trust', 'editorial_bag', 'collections_header', 'editorial_relojes', 'products_header'], customBlocks: [] },
+      config: { sections: {}, sectionOrder: ['hero', 'reviews', 'trust', 'collections_carousel', 'editorial_bag', 'look', 'editorial_relojes'], customBlocks: [] },
       content: {},
     }, location.origin);
   });
