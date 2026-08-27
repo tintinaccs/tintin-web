@@ -28,6 +28,17 @@ test('contenido editable proyecta aliases históricos como rutas canónicas', ()
   assert.equal(contentContract.sanitizeContentHref('https://example.com/path'), 'https://example.com/path');
 });
 
+test('la fachada conserva la normalización histórica del hero', () => {
+  assert.equal(
+    contentContract.normalizeContentValue('index', 'hero', 'title', 'TU BRILLO, TÚ ESTILO'),
+    'TU BRILLO, TU ESTILO'
+  );
+  assert.equal(
+    contentContract.normalizeContentValue('index', 'hero', 'subtitle', 'TÚ ESTILO'),
+    'TÚ ESTILO'
+  );
+});
+
 test('cliente y backend mantienen allowlists explícitos de rutas visuales', () => {
   assert.match(runtime, /sanitizeContentHref\(href, ''\)/);
   assert.match(serverCore, /CLEAN_INTERNAL_ROUTES/);
