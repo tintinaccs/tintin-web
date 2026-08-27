@@ -5,11 +5,13 @@ on:
     paths:
       - 'index.html'
       - 'js/core/store/esquema-contenido.js'
+      - 'js/core/store/migraciones-secciones.js'
       - 'js/admin/content/gestion-contenido-admin.js'
       - 'js/admin/appearance/editor-visual-admin.js'
       - 'js/core/store/editor-visual-runtime.js'
       - 'cloudflare/visual-builder-core.js'
       - 'scripts/auditar-estructura-canonica-sitio.js'
+      - 'scripts/auditar-migraciones-secciones.mjs'
       - 'tests/visual-builder/**'
       - 'package.json'
       - '.github/workflows/auditar-estructura-canonica-sitio.yml'
@@ -31,11 +33,13 @@ jobs:
       - name: Revisar sintaxis
         run: |
           node --check js/core/store/esquema-contenido.js
+          node --check js/core/store/migraciones-secciones.js
           node --check cloudflare/visual-builder-core.js
           node --check js/admin/content/gestion-contenido-admin.js
           node --check js/admin/appearance/editor-visual-admin.js
           node --check js/core/store/editor-visual-runtime.js
           node --check scripts/auditar-estructura-canonica-sitio.js
+          node --check scripts/auditar-migraciones-secciones.mjs
       - name: Verificar contrato físico y consumidores
         run: npm run audit:site-structure
       - name: Verificar migración del Visual Builder
