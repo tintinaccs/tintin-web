@@ -6,6 +6,10 @@ import {
   sanitizeSection,
 } from '../js/core/store/esquema-contenido.js';
 import {
+  migrateVisualConfigReferences,
+  migrateVisualContentReferences,
+} from '../js/core/store/migraciones-secciones.js';
+import {
   VISUAL_BLOCK_TYPES,
   VISUAL_STYLE_OPTIONS,
 } from '../js/core/store/contratos-visual-builder.js';
@@ -217,22 +221,24 @@ function sanitizeSectionOrder(raw, pageSchema) {
 export function sanitizeVisualConfig(pageIdValue, raw = {}) {
   const pageId = requireVisualPageId(pageIdValue);
   const pageSchema = getPageSchema(pageId);
+  const migrated = migrateVisualConfigReferences(pageId, raw);
   const sections = {};
   Object.keys(pageSchema.sections || {}).forEach(sectionId => {
-    sections[sectionId] = sanitizeVisualStyle(raw?.sections?.[sectionId]);
+    sections[sectionId] = sanitizeVisualStyle(migrated?.sections?.[sectionId]);
   });
   const seen = new Set();
-  const customBlocks = (Array.isArray(raw?.customBlocks) ? raw.customBlocks : [])
+  const customBlocks = (Array.isArray(migrated?.customBlocks) ? migrated.customBlocks : [])
     .slice(0, VISUAL_BUILDER_LIMITS.maxCustomBlocks)
     .map((block, index) => sanitizeBlock(block, index, pageSchema))
     .filter(block => !seen.has(block.id) && seen.add(block.id));
-  return { pageId, sections, sectionOrder: sanitizeSectionOrder(raw?.sectionOrder, pageSchema), customBlocks };
+  return { pageId, sections, sectionOrder: sanitizeSectionOrder(migrated?.sectionOrder, pageSchema), customBlocks };
 }
 
 export function sanitizeVisualContent(pageIdValue, raw = {}) {
   const pageId = requireVisualPageId(pageIdValue);
   const defaults = getPageDefaults(pageId);
-  const merged = mergeContent(defaults, raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {});
+  const migrated = migrateVisualContentReferences(pageId, raw);
+  const merged = mergeContent(defaults, migrated && typeof migrated === 'object' && !Array.isArray(migrated) ? migrated : {});
   return Object.fromEntries(Object.keys(getPageSchema(pageId).sections || {}).map(sectionId => [
     sectionId,
     sanitizeSection(pageId, sectionId, merged[sectionId]),
