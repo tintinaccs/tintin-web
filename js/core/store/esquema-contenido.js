@@ -32,9 +32,39 @@ export const getNested = ContentFields.getNested;
 export const setNested = ContentFields.setNested;
 export const mergeContent = ContentFields.mergeContent;
 export const sanitizeContentText = ContentFields.sanitizeContentText;
-export const sanitizeContentHref = ContentFields.sanitizeContentHref;
 export const normalizeContentValue = ContentFields.normalizeContentValue;
 export const detectContentPageId = ContentFields.detectContentPageId;
+
+const LEGACY_CONTENT_ROUTE_ALIASES = Object.freeze({
+  'index.html': '/',
+  'about.html': '/about',
+  'nosotros.html': '/about',
+  'catalogo.html': '/catalogo',
+  'collections.html': '/collections',
+  'product.html': '/product',
+  'checkout.html': '/checkout',
+  'login.html': '/login',
+  'perfil.html': '/perfil',
+  'contact.html': '/contact',
+  'envios.html': '/envios',
+  'preguntas-frecuentes.html': '/preguntas-frecuentes',
+  'cambios-devoluciones.html': '/cambios-devoluciones',
+  'terminos.html': '/terminos',
+  'privacidad.html': '/privacidad',
+});
+
+function canonicalizeLegacyContentHref(value) {
+  const href = String(value || '').trim();
+  const match = href.match(/^(?:\.\/|\/)?([^/?#]+\.html)([?#][A-Za-z0-9_=&%+.#:-]*)?$/i);
+  if (!match) return href;
+  const route = LEGACY_CONTENT_ROUTE_ALIASES[match[1].toLowerCase()];
+  return route ? `${route}${match[2] || ''}` : href;
+}
+
+export function sanitizeContentHref(value, fallback = '') {
+  const safe = ContentFields.sanitizeContentHref(value, fallback);
+  return canonicalizeLegacyContentHref(safe);
+}
 
 function contentDefinitionPage(pageId) {
   return ContentFields.getPageSchema(pageId);
