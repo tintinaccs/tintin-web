@@ -99,12 +99,13 @@ function renderMeta(payload) {
   if (!node) return;
   const deployment = payload?.deployment || {};
   const sync = payload?.integrations?.appsScript?.summary || {};
+  const syncAvailable = sync.available === true;
   node.hidden = false;
   node.innerHTML = `
     <div class="adm-master-meta-item"><span>Commit desplegado</span><strong title="${escapeHtml(deployment.commitSha || '')}">${escapeHtml(shortSha(deployment.commitSha))}</strong></div>
     <div class="adm-master-meta-item"><span>Rama</span><strong>${escapeHtml(deployment.branch || '—')}</strong></div>
-    <div class="adm-master-meta-item"><span>Último sync</span><strong>${escapeHtml(sync.lastAt ? `${sync.lastStatus || '—'} · ${formatDate(sync.lastAt)}` : 'sin historial')}</strong></div>
-    <div class="adm-master-meta-item"><span>Errores sync 24 h</span><strong>${escapeHtml(sync.errors24h || 0)}</strong></div>`;
+    <div class="adm-master-meta-item"><span>Último sync</span><strong>${escapeHtml(syncAvailable && sync.lastAt ? `${sync.lastStatus || '—'} · ${formatDate(sync.lastAt)}` : 'no verificado')}</strong></div>
+    <div class="adm-master-meta-item"><span>Errores sync 24 h</span><strong>${escapeHtml(syncAvailable && Number.isFinite(Number(sync.errors24h)) ? Number(sync.errors24h) : '—')}</strong></div>`;
 }
 
 function renderAuthorities(authorities = {}) {
@@ -155,10 +156,10 @@ function render(payload) {
   if (notice) {
     const failures = rows.filter(([, value]) => value !== true).map(([name]) => name);
     const sync = appsScript.summary || {};
-    const syncSuffix = Number(sync.errors24h || 0) > 0
-      ? ` Historial sync registra ${Number(sync.errors24h || 0)} error(es) en las últimas 24 h.`
-      : Number(sync.syncing24h || 0) > 0
-        ? ` Hay ${Number(sync.syncing24h || 0)} registro(s) SYNCING en las últimas 24 h para revisar.`
+    const syncSuffix = sync.available === true && Number(sync.errors24h || 0) > 0
+      ? ` Historial sync registra ${Number(sync.errors24h)} error(es) en las últimas 24 h.`
+      : sync.available === true && Number(sync.syncing24h || 0) > 0
+        ? ` Hay ${Number(sync.syncing24h)} registro(s) SYNCING en las últimas 24 h para revisar.`
         : '';
     notice.className = `adm-master-notice ${payload?.ok === true ? 'notice-info' : 'notice-error'}`;
     notice.textContent = payload?.ok === true
