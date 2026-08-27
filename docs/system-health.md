@@ -13,7 +13,7 @@ El estado operativo se consulta únicamente con sesión de Super Admin mediante 
 - Inventario: Firestore `productInventory`; espejo bidireccional `Productos`.
 - Colecciones: Firestore `collections`.
 - Usuarios: Firebase Auth + Firestore `users`; `Usuarios web` es espejo administrativo.
-- Pedidos: Firestore `orders` + Superadmin; `Pedidos web` es solo lectura.
+- Pedidos: Firestore `orders` + dominio canónico de pedidos; Superadmin y `Pedidos web` son superficies administrativas equivalentes para las operaciones permitidas. Precios, TINPED, totales, stock, concurrencia y auditoría se resuelven en el servidor.
 - Auditoría: Firestore `auditLog`; `Auditoría web` es solo lectura.
 - Contenido: Firestore `site_content`.
 - Visual Builder: Firestore `visualBuilderPages` y su historial/borradores.
