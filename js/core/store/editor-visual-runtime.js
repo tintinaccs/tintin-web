@@ -16,6 +16,38 @@ const SAFE_YOUTUBE_EMBED = /^https:\/\/www\.youtube(?:-nocookie)?\.com\/embed\/[
 const SAFE_VIMEO_EMBED = /^https:\/\/player\.vimeo\.com\/video\/\d{4,12}(?:\?[A-Za-z0-9_=&.-]*)?$/i;
 const SAFE_CLOUDINARY_VIDEO = /^https:\/\/res\.cloudinary\.com\/[A-Za-z0-9_./,%~-]+\/video\/upload\/[A-Za-z0-9_./,%~-]+$/i;
 const initializedPages = new Set();
+const CLEAN_VISUAL_ROUTES = Object.freeze({
+  index: '/',
+  'index.html': '/',
+  about: '/about',
+  'about.html': '/about',
+  nosotros: '/about',
+  'nosotros.html': '/about',
+  catalogo: '/catalogo',
+  'catalogo.html': '/catalogo',
+  collections: '/collections',
+  'collections.html': '/collections',
+  product: '/product',
+  'product.html': '/product',
+  checkout: '/checkout',
+  'checkout.html': '/checkout',
+  login: '/login',
+  'login.html': '/login',
+  perfil: '/perfil',
+  'perfil.html': '/perfil',
+  contact: '/contact',
+  'contact.html': '/contact',
+  envios: '/envios',
+  'envios.html': '/envios',
+  'preguntas-frecuentes': '/preguntas-frecuentes',
+  'preguntas-frecuentes.html': '/preguntas-frecuentes',
+  'cambios-devoluciones': '/cambios-devoluciones',
+  'cambios-devoluciones.html': '/cambios-devoluciones',
+  terminos: '/terminos',
+  'terminos.html': '/terminos',
+  privacidad: '/privacidad',
+  'privacidad.html': '/privacidad',
+});
 
 function ensureCss() {
   if (document.getElementById('tt-visual-builder-runtime-css')) return;
@@ -31,9 +63,14 @@ function option(group, value, fallback) { return OPTIONS[group].has(value) ? val
 function plain(value, max) { return String(value ?? '').replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max); }
 function safeHref(value) {
   const href = String(value || '').trim();
-  if (/^(?:index|about|nosotros|catalogo|collections|product|checkout|login|perfil|contact|envios|preguntas-frecuentes|cambios-devoluciones|terminos|privacidad)\.html(?:[?#][A-Za-z0-9_=&%.-]*)?$/i.test(href)) return href;
-  if (/^https:\/\//i.test(href)) return href;
-  return 'catalogo.html';
+  if (href === '/') return '/';
+  const match = href.match(/^(?:\.\/|\/)?([^/?#]+)([?#][A-Za-z0-9_=&%+.#:-]*)?$/i);
+  if (match) {
+    const route = CLEAN_VISUAL_ROUTES[match[1].toLowerCase()];
+    if (route) return `${route}${match[2] || ''}`;
+  }
+  const safe = sanitizeContentHref(href, '');
+  return /^https:\/\//i.test(safe) ? safe : '/catalogo';
 }
 function safeImage(value) {
   const src = String(value || '').trim();
@@ -245,7 +282,7 @@ function renderProductCards(root, block) {
     fallback.href = '/catalogo'; root.appendChild(fallback); return;
   }
   products.forEach(product => {
-    const link = el('a', 'tt-visual-product-card'); link.href = `product.html?id=${encodeURIComponent(String(product.id || ''))}`;
+    const link = el('a', 'tt-visual-product-card'); link.href = `/product?id=${encodeURIComponent(String(product.id || ''))}`;
     const src = safeImage(product.imageUrl);
     if (src) { const image = el('img'); image.src = src; image.alt = plain(product.name || 'Producto TINTÍN', 180); image.loading = 'lazy'; image.decoding = 'async'; link.appendChild(image); }
     else link.appendChild(el('span', 'tt-visual-product-placeholder'));
@@ -259,7 +296,7 @@ function renderCollectionCards(root, block) {
   const labels = [...new Set((Array.isArray(window.PRODUCTS) ? window.PRODUCTS : []).filter(item => item?.active !== false).map(item => plain(item.category || item.cat || '', 120)).filter(Boolean))].slice(0, block.count);
   root.replaceChildren();
   (labels.length ? labels : ['Ver colecciones']).forEach(label => {
-    const link = el('a', '', label); link.href = label === 'Ver colecciones' ? 'collections.html' : `/catalogo?cat=${encodeURIComponent(label)}`; root.appendChild(link);
+    const link = el('a', '', label); link.href = label === 'Ver colecciones' ? '/collections' : `/catalogo?cat=${encodeURIComponent(label)}`; root.appendChild(link);
   });
 }
 
