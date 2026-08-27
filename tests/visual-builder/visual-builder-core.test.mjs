@@ -121,7 +121,7 @@ test('el orden de secciones se sanea: solo ids reales, sin duplicados, nunca pie
   assert.ok(new Set(clean.sectionOrder).size === clean.sectionOrder.length);
 
   const empty = sanitizeVisualConfig('index', {});
-  assert.deepEqual(empty.sectionOrder, ['hero', 'trust', 'collections_carousel', 'editorial_bag', 'collections_header', 'editorial_relojes', 'products_header', 'reviews']);
+  assert.deepEqual(empty.sectionOrder, ['hero', 'trust', 'collections_carousel', 'editorial_bag', 'look', 'editorial_relojes', 'reviews']);
 });
 
 test('draft no puede cambiar de página ni restaurar auditoría no publicada', () => {
