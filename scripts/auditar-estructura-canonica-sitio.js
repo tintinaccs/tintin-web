@@ -1,196 +1,135 @@
 'use strict';
 
 /* =============================================================
-   TINTIN — Auditoría de estructura canónica del sitio
+   TINTIN — Auditoría de consumidores de estructura canónica
 
-   Objetivo: impedir que la estructura física del sitio y la estructura que
-   consumen Super Admin / Visual Builder / runtime público / Cloudflare se
-   separen silenciosamente.
+   La estructura ya NO vive en el esquema histórico de campos. La cadena debe
+   ser siempre:
 
-   Esta primera barrera cubre Inicio, donde ya ocurrió la divergencia:
-   - una sección nueva podía existir en index.html sin aparecer en Admin;
-   - secciones retiradas podían seguir vivas en el esquema y en layouts guardados.
+     contrato-estructura-sitio.js
+                 ↓
+          esquema-contenido.js (fachada)
+        ↙        ↓          ↘
+   Superadmin  runtime    Cloudflare
 
-   El esquema seguro de contenido sigue siendo la autoridad canónica de las
-   secciones nativas. Firestore guarda valores/configuración, no selectores ni
-   HTML arbitrario. Los bloques dinámicos del Visual Builder se mantienen en su
-   registro seguro independiente.
+   definiciones-contenido.js solo aporta campos/defaults/sanitización.
    ============================================================= */
 
 const fs = require('fs');
 const path = require('path');
-const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
-const escapeRegExp = value => String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-function loadSchemaContract() {
-  const source = read('js/core/store/esquema-contenido.js')
-    .replace(/\bexport\s+(?=(?:const|function)\b)/g, '');
-
-  return vm.runInNewContext(
-    `${source}\n;({ CONTENT_PAGE_IDS, PAGE_PATH_TO_ID, SITE_CONTENT_SCHEMA, getPageSchema })`,
-    { URL }
-  );
-}
-
-function attrValue(tag, name) {
-  const escaped = escapeRegExp(name);
-  const match = tag.match(new RegExp(`\\b${escaped}\\s*=\\s*(["'])(.*?)\\1`, 'i'));
-  return match ? match[2] : '';
-}
-
-function classes(tag) {
-  return new Set(attrValue(tag, 'class').split(/\s+/).filter(Boolean));
-}
-
-function selectorAtoms(selector) {
-  return {
-    tag: (selector.trim().match(/^([a-z][a-z0-9-]*)/i) || [])[1]?.toLowerCase() || '',
-    classes: [...selector.matchAll(/\.([A-Za-z0-9_-]+)/g)].map(match => match[1]),
-    ids: [...selector.matchAll(/#([A-Za-z0-9_-]+)/g)].map(match => match[1]),
-    attrs: [...selector.matchAll(/\[([A-Za-z0-9_-]+)=["']([^"']+)["']\]/g)].map(match => [match[1], match[2]]),
-  };
-}
-
-function tagMatchesCompound(tag, compound) {
-  const atoms = selectorAtoms(compound);
-  const tagName = (tag.match(/^<\s*([a-z][a-z0-9-]*)/i) || [])[1]?.toLowerCase() || '';
-  const tagClasses = classes(tag);
-  if (atoms.tag && atoms.tag !== tagName) return false;
-  if (atoms.classes.some(name => !tagClasses.has(name))) return false;
-  if (atoms.ids.some(id => attrValue(tag, 'id') !== id)) return false;
-  if (atoms.attrs.some(([name, value]) => attrValue(tag, name) !== value)) return false;
-  return Boolean(atoms.tag || atoms.classes.length || atoms.ids.length || atoms.attrs.length);
-}
-
-function firstCompound(selector) {
-  return selector.trim().split(/\s+(?:[>+~]\s*)?|\s*[>+~]\s*/)[0].trim();
-}
-
-function tagMatchesRoot(tag, rootSelector) {
-  return String(rootSelector || '').split(',').some(alternative =>
-    tagMatchesCompound(tag, firstCompound(alternative))
-  );
-}
-
-function selectorExists(html, selector) {
-  return String(selector || '').split(',').some(alternative => {
-    const atoms = selectorAtoms(alternative);
-    const classChecks = atoms.classes.every(name =>
-      new RegExp(`class=["'][^"']*\\b${escapeRegExp(name)}\\b[^"']*["']`, 'i').test(html)
-    );
-    const idChecks = atoms.ids.every(id =>
-      new RegExp(`id=["']${escapeRegExp(id)}["']`, 'i').test(html)
-    );
-    const attrChecks = atoms.attrs.every(([name, value]) =>
-      new RegExp(`${escapeRegExp(name)}=["']${escapeRegExp(value)}["']`, 'i').test(html)
-    );
-    return classChecks && idChecks && attrChecks && Boolean(atoms.classes.length || atoms.ids.length || atoms.attrs.length || atoms.tag);
-  });
-}
+const contract = read('js/core/store/contrato-estructura-sitio.js');
+const gateway = read('js/core/store/esquema-contenido.js');
+const definitions = read('js/core/store/definiciones-contenido.js');
+const adminContent = read('js/admin/content/gestion-contenido-admin.js');
+const visualAdmin = read('js/admin/appearance/editor-visual-admin.js');
+const visualRuntime = read('js/core/store/editor-visual-runtime.js');
+const visualCore = read('cloudflare/visual-builder-core.js');
+const publicContent = read('js/core/store/contenido-sitio.js');
+const packageJson = read('package.json');
 
 const checks = [];
 function check(name, condition, problem) {
   checks.push({ name, ok: Boolean(condition), problem });
 }
 
-const contract = loadSchemaContract();
-const indexHtml = read('index.html');
-const adminContent = read('js/admin/content/gestion-contenido-admin.js');
-const visualAdmin = read('js/admin/appearance/editor-visual-admin.js');
-const visualRuntime = read('js/core/store/editor-visual-runtime.js');
-const visualCore = read('cloudflare/visual-builder-core.js');
+check(
+  'Existe una autoridad estructural explícita y versionada',
+  contract.includes('SITE_STRUCTURE_VERSION') &&
+    contract.includes('SITE_STRUCTURE_CONTRACT') &&
+    contract.includes('SITE_PUBLIC_PAGE_IDS'),
+  'La lista de páginas/secciones no debe volver a repartirse entre consumidores.'
+);
 
-const indexSchema = contract.getPageSchema('index');
-const indexSections = Object.entries(indexSchema?.sections || {});
-const nativeIndexSections = indexSections.filter(([, schema]) => !schema.global);
-const nativeIndexIds = nativeIndexSections.map(([id]) => id);
-const indexSectionTags = [...indexHtml.matchAll(/<section\b[^>]*>/gi)].map(match => match[0]);
+check(
+  'La fachada canónica combina estructura y campos por responsabilidad',
+  gateway.includes("from './contrato-estructura-sitio.js'") &&
+    gateway.includes("from './definiciones-contenido.js'") &&
+    gateway.includes('structural.root') &&
+    gateway.includes('content?.fields || []'),
+  'esquema-contenido.js debe proyectar roots del contrato y campos de definiciones-contenido.'
+);
 
-const resolvedDomOrder = [];
-const unresolvedDomSections = [];
-const ambiguousDomSections = [];
+check(
+  'Las definiciones antiguas no son la autoridad estructural pública',
+  !adminContent.includes('definiciones-contenido.js') &&
+    !visualAdmin.includes('definiciones-contenido.js') &&
+    !visualRuntime.includes('definiciones-contenido.js') &&
+    !visualCore.includes('definiciones-contenido.js') &&
+    !publicContent.includes('definiciones-contenido.js'),
+  'Solo la fachada canónica puede importar definiciones-contenido.js.'
+);
 
-for (const tag of indexSectionTags) {
-  const matches = nativeIndexSections.filter(([, schema]) => tagMatchesRoot(tag, schema.root));
-  if (matches.length === 1) resolvedDomOrder.push(matches[0][0]);
-  else if (matches.length === 0) unresolvedDomSections.push(tag.slice(0, 180));
-  else ambiguousDomSections.push({ tag: tag.slice(0, 180), ids: matches.map(([id]) => id) });
+for (const [label, source] of [
+  ['Superadmin Contenido', adminContent],
+  ['Visual Builder Admin', visualAdmin],
+  ['runtime público', visualRuntime],
+  ['backend Cloudflare', visualCore],
+  ['contenido público', publicContent],
+]) {
+  check(
+    `${label} consume la fachada canónica`,
+    source.includes('esquema-contenido.js'),
+    `${label} no debe mantener/importar una estructura paralela.`
+  );
 }
 
 check(
-  'Inicio tiene un esquema canónico registrado',
-  Boolean(indexSchema && indexSchema.path === 'index.html' && indexSchema.sections),
-  'index debe existir en el esquema y apuntar a index.html.'
+  'La fachada excluye páginas protegidas del CMS libre',
+  gateway.includes('SITE_STRUCTURE_MODES.protected') &&
+    gateway.includes('return null'),
+  'Checkout/Login/Perfil no deben convertirse en páginas visuales de libre composición.'
 );
 
 check(
-  'Cada sección nativa registrada de Inicio existe físicamente',
-  nativeIndexSections.every(([, schema]) => selectorExists(indexHtml, schema.root)),
-  'Hay una sección fantasma en el esquema: su selector root ya no existe en index.html.'
+  'El editor vigente no puede atravesar una barrera estructural fija',
+  gateway.includes('firstBarrier') &&
+    gateway.includes('page.sections.slice(0, limit)') &&
+    gateway.includes('section.movable && section.visualEditable'),
+  'Hasta tener orden por zonas, solo se proyecta el prefijo seguro anterior a una barrera fija.'
 );
 
 check(
-  'Cada <section> física de Inicio pertenece a una sección canónica',
-  unresolvedDomSections.length === 0,
-  `Hay secciones físicas no registradas en el esquema: ${unresolvedDomSections.join(' | ')}`
+  'Catálogo usa el root físico actual y conserva trazabilidad del legado',
+  contract.includes("section('header', 'Encabezado del catálogo', '.cat-hero'") &&
+    contract.includes("legacyContentRoots: ['.catalog-header, .tt-page-hero']"),
+  'La conexión antigua debe quedar trazada hasta retirar su último consumidor.'
 );
 
 check(
-  'Ninguna sección física de Inicio coincide con dos contratos distintos',
-  ambiguousDomSections.length === 0,
-  `Hay roots ambiguos: ${ambiguousDomSections.map(item => `${item.ids.join(',')} => ${item.tag}`).join(' | ')}`
+  'Envíos, FAQ y Cambios usan la section física como root estructural',
+  contract.includes("section('details', 'Información de envíos', '.tt-page-hero + .section'") &&
+    contract.includes("section('questions', 'Preguntas y respuestas', '.tt-page-hero + .section'") &&
+    contract.includes("section('policy', 'Política', '.tt-page-hero + .section'"),
+  'No se debe reordenar un .container interno como si fuera una sección completa.'
 );
 
 check(
-  'El orden canónico de Inicio coincide con el DOM actual',
-  JSON.stringify(resolvedDomOrder) === JSON.stringify(nativeIndexIds),
-  `Orden DOM=${JSON.stringify(resolvedDomOrder)}; esquema=${JSON.stringify(nativeIndexIds)}. Actualizá/reemplazá el contrato, no apiles una segunda versión.`
+  'No reaparecen IDs retirados como estructura activa',
+  !gateway.includes("sections: { collections_header") &&
+    !gateway.includes("sections: { products_header") &&
+    !contract.includes("section('collections_header'") &&
+    !contract.includes("section('products_header'"),
+  'Los IDs retirados solo pueden existir en el registro de migración de la Tarea 2.'
 );
 
 check(
-  'Todas las secciones nativas de Inicio se pueden ocultar desde el sistema',
-  nativeIndexSections.every(([, schema]) => schema.allowVisibility === true),
-  'Una sección nativa de Inicio quedó fuera del control de visibilidad del Admin.'
+  'CI ejecuta la auditoría de estructura en la auditoría final',
+  packageJson.includes('"audit:site-structure"') &&
+    packageJson.includes('npm run audit:site-structure'),
+  'Un cambio estructural sin validar no debe poder cerrar la entrega.'
 );
 
 check(
-  'No quedan las secciones retiradas collections_header/products_header',
-  !Object.prototype.hasOwnProperty.call(indexSchema.sections, 'collections_header') &&
-    !Object.prototype.hasOwnProperty.call(indexSchema.sections, 'products_header'),
-  'No dejes versiones retiradas dentro del contrato canónico.'
-);
-
-check(
-  'Completá tu look está conectado al contrato canónico',
-  indexSchema.sections.look?.root === '.tt-look-section' && indexSchema.sections.look?.allowVisibility === true,
-  'La sección física #look-section debe aparecer en Superadmin/Visual Builder mediante el esquema compartido.'
-);
-
-check(
-  'Superadmin Contenido consume el esquema canónico',
-  /getPageSchema/.test(adminContent) && /esquema-contenido\.js/.test(adminContent),
-  'Contenido no debe mantener una lista paralela de secciones.'
-);
-
-check(
-  'Visual Builder Admin consume el esquema canónico',
-  /getPageSchema/.test(visualAdmin) && /esquema-contenido\.js/.test(visualAdmin),
-  'Visual Builder Admin no debe mantener una lista paralela de secciones nativas.'
-);
-
-check(
-  'Runtime público consume el esquema canónico',
-  /getPageSchema/.test(visualRuntime) && /esquema-contenido\.js/.test(visualRuntime),
-  'El runtime público debe resolver el mismo contrato que el Admin.'
-);
-
-check(
-  'Cloudflare sanea usando el mismo esquema canónico',
-  /getPageSchema/.test(visualCore) && /esquema-contenido\.js/.test(visualCore),
-  'El backend no debe aceptar una estructura distinta a la del Admin/runtime.'
+  'La definición de campos conserva sanitización de texto/enlaces',
+  definitions.includes('sanitizeContentText') &&
+    definitions.includes('sanitizeContentHref') &&
+    definitions.includes('javascript|data|vbscript|file') &&
+    definitions.includes('CONTENT_MAX_LENGTH'),
+  'Separar estructura y campos no debe debilitar el saneamiento existente.'
 );
 
 const failed = checks.filter(item => !item.ok);
@@ -200,9 +139,8 @@ checks.forEach(item => {
 });
 
 if (failed.length) {
-  console.error(`\nAuditoría de estructura canónica fallida: ${failed.length} problema(s).`);
+  console.error(`\nAuditoría de consumidores canónicos fallida: ${failed.length} problema(s).`);
   process.exit(1);
 }
 
-console.log(`\nAuditoría de estructura canónica completada (${checks.length} comprobaciones).`);
-console.log(`Inicio canónico: ${nativeIndexIds.join(' → ')}`);
+console.log(`\nAuditoría canónica completada (${checks.length} comprobaciones).`);
