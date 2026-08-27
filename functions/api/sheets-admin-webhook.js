@@ -7,11 +7,11 @@ import {
 } from '../../cloudflare/firebase-admin-ligero.js';
 import { jsonResponse, SUPERADMIN_EMAIL } from '../../cloudflare/seguridad-cloudinary.js';
 import { applyUserLifecycle } from '../../cloudflare/user-lifecycle-domain.js';
-import { applyOrderAdminMutation } from '../../cloudflare/order-admin-domain.js';
+import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
 
-const MAX_BODY_BYTES = 32 * 1024;
+const MAX_BODY_BYTES = 64 * 1024;
 const ROLES = new Set(['client', 'viewer', 'agent', 'admin']);
-const ADMIN_SYNC_REVISION = 'admin-sync-v3';
+const ADMIN_SYNC_REVISION = 'admin-sync-v4';
 
 function sameSecret(provided, expected) {
   const left = new TextEncoder().encode(String(provided || ''));
@@ -146,18 +146,26 @@ async function updateUser(env, input) {
   return { uid, role, blocked, duplicate: false, changeId: nextChangeId };
 }
 
-async function updateOrder(env, input) {
-  if (text(input.action || 'updateOrder', 40) !== 'updateOrder') throw new Error('Acción de pedido no permitida');
-  return applyOrderAdminMutation(env, {
-    ...input,
-    changeId: changeId(input.changeId),
-    baseChangeId: text(input.baseChangeId, 120),
-  }, {
+async function handleOrder(env, input) {
+  const action = text(input.action || 'updateOrder', 40);
+  const actor = {
     uid: 'google-sheets',
     email: 'google-sheets@tintin.internal',
     role: 'sheets-sync',
     origin: text(input.source || 'google-sheets:Pedidos web', 120),
-  });
+  };
+  if (action === 'createOrder') {
+    return createOrderAdmin(env, {
+      ...input,
+      changeId: changeId(input.changeId),
+    }, actor);
+  }
+  if (action !== 'updateOrder') throw new Error('Acción de pedido no permitida');
+  return applyOrderAdminMutation(env, {
+    ...input,
+    changeId: changeId(input.changeId),
+    baseChangeId: text(input.baseChangeId, 120),
+  }, actor);
 }
 
 export async function onRequestPost({ request, env }) {
@@ -177,13 +185,14 @@ export async function onRequestPost({ request, env }) {
         writableEntities: ['user', 'order'],
         readOnlyMirrors: ['audit'],
         orderMutationsUseInventoryDomain: true,
+        orderCreationUsesCanonicalSequence: true,
         revision: ADMIN_SYNC_REVISION,
       }, 200, '', request.url);
     }
 
     let result;
     if (input.entity === 'user') result = await updateUser(env, input);
-    else if (input.entity === 'order') result = await updateOrder(env, input);
+    else if (input.entity === 'order') result = await handleOrder(env, input);
     else throw new Error('Entidad no permitida');
 
     return jsonResponse({ ok: true, result, revision: ADMIN_SYNC_REVISION }, 200, '', request.url);
