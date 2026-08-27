@@ -32,10 +32,15 @@ test('Google y PIN convergen sobre findOrCreateUserByEmail', () => {
 
 test('la eliminación administrativa es tombstone y la auditoría es append-only', () => {
   const endpoint = read('functions/api/admin-delete-user.js');
+  const lifecycle = read('cloudflare/user-lifecycle-domain.js');
   const rules = read('firestore.rules');
-  assert.match(endpoint, /profileStatus: fsString\('deleted'\)/);
-  assert.match(endpoint, /setFirebaseUserDisabled\(env, uid/);
+  assert.match(endpoint, /applyUserLifecycle/);
+  assert.match(lifecycle, /profileStatus: fsString\('deleted'\)/);
+  assert.match(lifecycle, /deleted: fsBoolean\(true\)/);
+  assert.match(lifecycle, /setFirebaseUserDisabled\(env, uid, action === 'softDelete'\)/);
+  assert.match(lifecycle, /auditLog\/\$\{eventId\}/);
   assert.doesNotMatch(endpoint, /deleteFirebaseUser/);
+  assert.doesNotMatch(lifecycle, /deleteFirebaseUser/);
   assert.match(rules, /match \/auditLog\/\{logId\}[\s\S]*?allow update, delete: if false/);
   assert.match(rules, /match \/users\/\{userId\}[\s\S]*?allow delete: if false/);
 });
