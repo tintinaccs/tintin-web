@@ -90,12 +90,15 @@ try {
   if (footerPanelId) check(!(await page.locator(`#${footerPanelId}`).isHidden()), 'El panel del footer sigue oculto');
 
   await page.goto(`${baseURL}/index.html`, { waitUntil: 'domcontentloaded' });
-  await page.waitForFunction(() => {
-    const hero = document.querySelector('.tt-hero-media');
-    return hero && getComputedStyle(hero).backgroundImage.includes('editorial-relojes-mobile.webp');
-  }, null, { timeout: 5000 });
   const heroBackground = await page.locator('.tt-hero-media').evaluate(node => getComputedStyle(node).backgroundImage);
-  check(heroBackground.includes('editorial-relojes-mobile.webp'), 'El hero móvil no usa el respaldo responsive');
+  const heroImage = await page.locator('#tt-hero-img').evaluate(node => ({
+    src: node.currentSrc || node.src,
+    loaded: node.complete && node.naturalWidth > 0,
+  }));
+  check(heroBackground === 'none', 'El hero móvil no debe pintar una foto de muestra detrás de la portada publicada');
+  let heroHost = '';
+  try { heroHost = new URL(heroImage.src).hostname; } catch {}
+  check(heroImage.loaded && (heroHost === 'res.cloudinary.com' || heroHost.endsWith('.res.cloudinary.com')), 'El hero móvil no muestra la portada Cloudinary publicada');
   check(!runtimeErrors.some(message => /appendChild|mobileMoreGrid/i.test(message)),
     `Hay errores de runtime: ${runtimeErrors.join(' | ')}`);
   await context.close();

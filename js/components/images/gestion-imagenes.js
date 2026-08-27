@@ -277,18 +277,15 @@ if (!window.TintinImagesPhase5Booted) {
 
     if (cambiaFuente) {
       // El caché local pinta una imagen antes de que llegue la de Firestore.
-      // Si difieren, cambiar el src en el acto muestra el salto. Se decodifica
-      // la nueva fuera de pantalla y recien ahi se cambia, con un cruce corto.
+      // Se decodifica la nueva fuera de pantalla y recién ahí se cambia, sin
+      // fade ni timeout: la foto nunca desaparece durante el reemplazo.
       const previa = new Image();
       previa.decoding = 'async';
       previa.src = desktop;
       const cambiar = () => {
-        image.style.transition = 'opacity 180ms ease';
-        image.style.opacity = '0';
-        window.setTimeout(() => {
-          aplicarFuentes();
-          requestAnimationFrame(() => { image.style.opacity = '1'; });
-        }, 180);
+        aplicarFuentes();
+        image.style.removeProperty('transition');
+        image.style.removeProperty('opacity');
       };
       if (previa.decode) previa.decode().then(cambiar).catch(cambiar);
       else { previa.onload = cambiar; previa.onerror = cambiar; }
@@ -310,7 +307,8 @@ if (!window.TintinImagesPhase5Booted) {
 
     ['desktop', 'tablet', 'mobile'].forEach(device => {
       const display = heroDisplay(images[`hero_bg_${device}_size`]);
-      const position = String(images[`hero_bg_${device}_pos`] || 'center center');
+      const position = String(images[`hero_bg_${device}_pos`] ||
+        (device === 'mobile' ? 'center 42%' : 'center center'));
       image.style.setProperty(`--tt-hero-fit-${device}`, display.fit);
       image.style.setProperty(`--tt-hero-scale-${device}`, display.scale);
       image.style.setProperty(`--tt-hero-pos-${device}`, position);
