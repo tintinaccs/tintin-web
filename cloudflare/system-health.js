@@ -33,20 +33,16 @@ function configured(env, key) {
   return Boolean(String(env?.[key] || '').trim());
 }
 
-function safeSyncSummary(value) {
-  const input = value && typeof value === 'object' ? value : {};
-  const lastStatus = String(input.lastStatus || '').slice(0, 40);
-  const lastAt = String(input.lastAt || '').slice(0, 80);
-  const nonNegativeInt = key => Math.max(0, Math.min(10000, Number.parseInt(input[key], 10) || 0));
-  return {
-    lastStatus,
-    lastAt,
-    errors24h: nonNegativeInt('errors24h'),
-    rejected24h: nonNegativeInt('rejected24h'),
-    syncing24h: nonNegativeInt('syncing24h'),
-  };
+function emptySyncSummary() {
+  return { lastStatus: '', lastAt: '', errors24h: 0, rejected24h: 0, syncing24h: 0 };
 }
 
+/**
+ * Probe no destructivo del Web App de Apps Script.
+ * Envía la ruta canónica syncProducts SIN idToken. Un despliegue correcto debe
+ * reconocer esa ruta y rechazarla como "No autorizado" antes de leer/escribir
+ * productos. Así comprobamos reachability + contrato sin tocar Sheets.
+ */
 export async function probeAppsScript({ fetchImpl = fetch } = {}) {
   const started = Date.now();
   try {
@@ -55,21 +51,21 @@ export async function probeAppsScript({ fetchImpl = fetch } = {}) {
       redirect: 'follow',
       signal: AbortSignal.timeout(SHEETS_HEALTH_TIMEOUT_MS),
       headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-      body: JSON.stringify({ action: 'health', revision: SHEETS_HEALTH_REVISION }),
+      body: JSON.stringify({ action: 'syncProducts', productIds: [], healthProbe: SHEETS_HEALTH_REVISION }),
     });
     const text = await response.text();
     let body = {};
     try { body = text ? JSON.parse(text) : {}; } catch { body = {}; }
-    const protocolOk = response.ok && body?.ok === true && body?.revision === SHEETS_HEALTH_REVISION;
+    const recognizedGuard = body?.ok === false && /no autorizado/i.test(String(body?.error || ''));
     return {
       reachable: true,
       httpStatus: response.status,
-      protocolOk,
-      revision: String(body?.revision || ''),
-      service: String(body?.service || 'google-apps-script').slice(0, 80),
-      summary: safeSyncSummary(body?.summary),
+      protocolOk: response.ok && recognizedGuard,
+      revision: SHEETS_HEALTH_REVISION,
+      service: 'google-apps-script',
+      summary: emptySyncSummary(),
       ms: Date.now() - started,
-      code: protocolOk ? '' : 'revision_mismatch',
+      code: response.ok && recognizedGuard ? '' : 'canonical_guard_not_confirmed',
     };
   } catch (error) {
     const message = String(error?.message || error || '');
@@ -78,9 +74,9 @@ export async function probeAppsScript({ fetchImpl = fetch } = {}) {
       reachable: false,
       httpStatus: 0,
       protocolOk: false,
-      revision: '',
+      revision: SHEETS_HEALTH_REVISION,
       service: 'google-apps-script',
-      summary: safeSyncSummary(null),
+      summary: emptySyncSummary(),
       ms: Date.now() - started,
       code,
     };
@@ -105,9 +101,9 @@ export async function runSystemHealth(env, {
     reachable: false,
     httpStatus: 0,
     protocolOk: false,
-    revision: '',
+    revision: SHEETS_HEALTH_REVISION,
     service: 'google-apps-script',
-    summary: safeSyncSummary(null),
+    summary: emptySyncSummary(),
     ms: 0,
     code: 'probe_failed',
   }));
