@@ -9,7 +9,7 @@
     "sync:public-shell": "node scripts/sincronizar-inicio-navegacion-publica.js",
     "sync:public-origin": "node scripts/sincronizar-origen-publico.js",
     "audit:public-shell": "node scripts/auditar-inicio-navegacion-publica.js",
-    "audit:site-structure": "node scripts/auditar-estructura-canonica-sitio.js && node scripts/auditar-migraciones-secciones.mjs",
+    "audit:site-structure": "node scripts/auditar-contrato-estructura-sitio.mjs && node scripts/auditar-estructura-canonica-sitio.js && node scripts/auditar-migraciones-secciones.mjs",
     "audit:modular-architecture": "node scripts/auditar-modular-arquitectura.js",
     "audit:responsive-navigation": "node scripts/auditar-responsive-navegacion.mjs",
     "audit:navigation-search": "node scripts/auditar-navegacion-busqueda.mjs",
