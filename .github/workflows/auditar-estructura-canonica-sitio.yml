@@ -4,12 +4,28 @@ on:
   pull_request:
     paths:
       - 'index.html'
+      - 'about.html'
+      - 'catalogo.html'
+      - 'collections.html'
+      - 'product.html'
+      - 'checkout.html'
+      - 'login.html'
+      - 'perfil.html'
+      - 'contact.html'
+      - 'envios.html'
+      - 'preguntas-frecuentes.html'
+      - 'cambios-devoluciones.html'
+      - 'terminos.html'
+      - 'privacidad.html'
+      - '404.html'
+      - 'js/core/store/contrato-estructura-sitio.js'
       - 'js/core/store/esquema-contenido.js'
       - 'js/core/store/migraciones-secciones.js'
       - 'js/admin/content/gestion-contenido-admin.js'
       - 'js/admin/appearance/editor-visual-admin.js'
       - 'js/core/store/editor-visual-runtime.js'
       - 'cloudflare/visual-builder-core.js'
+      - 'scripts/auditar-contrato-estructura-sitio.mjs'
       - 'scripts/auditar-estructura-canonica-sitio.js'
       - 'scripts/auditar-migraciones-secciones.mjs'
       - 'tests/visual-builder/**'
@@ -32,12 +48,14 @@ jobs:
           node-version: '22'
       - name: Revisar sintaxis
         run: |
+          node --check js/core/store/contrato-estructura-sitio.js
           node --check js/core/store/esquema-contenido.js
           node --check js/core/store/migraciones-secciones.js
           node --check cloudflare/visual-builder-core.js
           node --check js/admin/content/gestion-contenido-admin.js
           node --check js/admin/appearance/editor-visual-admin.js
           node --check js/core/store/editor-visual-runtime.js
+          node --check scripts/auditar-contrato-estructura-sitio.mjs
           node --check scripts/auditar-estructura-canonica-sitio.js
           node --check scripts/auditar-migraciones-secciones.mjs
       - name: Verificar contrato físico y consumidores
