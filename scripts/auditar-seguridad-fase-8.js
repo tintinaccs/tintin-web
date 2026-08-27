@@ -11,6 +11,7 @@ const roles = read('js/core/auth/roles.js');
 const rules = read('firestore.rules');
 const pkg = read('package.json');
 const deleteUserEndpoint = read('functions/api/admin-delete-user.js');
+const lifecycle = read('cloudflare/user-lifecycle-domain.js');
 const accountContract = JSON.parse(read('config/account-contract.json'));
 
 let failures = 0;
@@ -97,18 +98,21 @@ check(
   admin.includes("logAudit('cambiar_rol'") &&
     admin.includes("logAudit('bloquear_usuario'") &&
     admin.includes("logAudit('restaurar_usuario'") &&
-    deleteUserEndpoint.includes('auditLog/${id}'),
+    deleteUserEndpoint.includes('applyUserLifecycle') &&
+    lifecycle.includes('auditLog/${eventId}'),
   'Rol, bloqueo, restauración y eliminación deben seguir dejando rastro'
 );
 
 check(
   'La eliminación revoca acceso y conserva identidad histórica auditada',
   admin.includes("fetch('/api/admin-delete-user'") &&
-    deleteUserEndpoint.includes("profileStatus: fsString('deleted')") &&
-    deleteUserEndpoint.includes('setFirebaseUserDisabled(env, uid') &&
-    deleteUserEndpoint.includes('auditLog/${id}') &&
-    deleteUserEndpoint.includes('phoneReservations/') &&
-    !deleteUserEndpoint.includes('deleteFirebaseUser'),
+    deleteUserEndpoint.includes('applyUserLifecycle') &&
+    lifecycle.includes("profileStatus: fsString('deleted')") &&
+    lifecycle.includes("setFirebaseUserDisabled(env, uid, action === 'softDelete')") &&
+    lifecycle.includes('auditLog/${eventId}') &&
+    lifecycle.includes('phoneReservations/') &&
+    !deleteUserEndpoint.includes('deleteFirebaseUser') &&
+    !lifecycle.includes('deleteFirebaseUser'),
   'La cuenta debe quedar como tombstone y no borrarse físicamente'
 );
 
