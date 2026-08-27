@@ -70,10 +70,12 @@ function orderRecord(document) {
     status: order.status || '', paymentMethod: payment.method || order.paymentMethod || '',
     paymentStatus: payment.status || order.paymentStatus || '', shippingMethod: shipping.method || order.shippingMethod || '',
     shippingCity: shipping.city || order.shippingCity || '', departamento: shipping.departamento || order.departamento || '',
-    address: shipping.address || order.address || '', subtotal: order.subtotal ?? '', shippingCost: order.shippingCost ?? '', total: order.total ?? '',
+    address: shipping.address || order.address || '', reference: shipping.referencia || shipping.reference || '',
+    notes: order.notes || '', subtotal: order.subtotal ?? '', shippingCost: order.shippingCost ?? '', total: order.total ?? '',
     invoiceWanted: invoice.wanted === true, razonSocial: invoice.razonSocial || '', ruc: invoice.ruc || '',
     itemsSnapshot: order.items || [], createdAt: asIso(order.createdAt), updatedAt: asIso(order.updatedAt),
     inventoryState: order.inventoryState || '', notificationStatus: order.notificationStatus || '', lastChangeId: order.lastChangeId || '',
+    syncOrigin: order.syncOrigin || '',
   };
 }
 
