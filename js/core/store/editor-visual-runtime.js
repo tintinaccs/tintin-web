@@ -195,16 +195,17 @@ function reorderSections(schema, order) {
     if (!roots.length) return;
     const parent = roots[0].parentNode;
     if (!parent || !roots.every(node => node.parentNode === parent)) return;
-    const key = `${sectionSchema.zone || 'main'}::${[...parent.children].indexOf(roots[0]) >= 0 ? 'same-parent' : 'unknown'}`;
+    const zone = sectionSchema.zone || 'main';
     if (!groups.has(parent)) groups.set(parent, new Map());
     const zones = groups.get(parent);
-    if (!zones.has(key)) zones.set(key, []);
-    zones.get(key).push(id);
+    if (!zones.has(zone)) zones.set(zone, new Map());
+    zones.get(zone).set(id, roots);
   });
-  groups.forEach((zones, parent) => zones.forEach(ids => {
+  groups.forEach((zones, parent) => zones.forEach(rootsById => {
+    const ids = [...rootsById.keys()];
     if (ids.length < 2) return;
     const localOrder = order.filter(id => ids.includes(id));
-    const allNodes = ids.flatMap(id => findRoots(schema.sections[id]));
+    const allNodes = ids.flatMap(id => rootsById.get(id) || []);
     if (!allNodes.length || !allNodes.every(node => node.parentNode === parent)) return;
     const siblings = [...parent.children];
     let anchor = null;
@@ -212,7 +213,7 @@ function reorderSections(schema, order) {
     allNodes.forEach(node => node.remove());
     let cursor = anchor;
     localOrder.forEach(id => {
-      findRoots(schema.sections[id]).forEach(node => { if (cursor) cursor.after(node); else parent.prepend(node); cursor = node; });
+      (rootsById.get(id) || []).forEach(node => { if (cursor) cursor.after(node); else parent.prepend(node); cursor = node; });
     });
   }));
 }
