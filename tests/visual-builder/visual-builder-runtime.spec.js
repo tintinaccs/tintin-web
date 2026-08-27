@@ -50,7 +50,8 @@ test('preview aplica contenido y bloque seguro sobre la página real', async ({ 
         sections: { hero: { background: '#fbe4ec', textColor: '#331122', accentColor: '#ad3f67', spacing: 'compact', width: 'contained', align: 'center', radius: 'none', shadow: 'none', animation: 'none' } },
         customBlocks: [
           { id: 'safe-test', type: 'section', afterSection: 'hero', eyebrow: 'TINTÍN', title: 'Día de las madres', text: 'Una sección segura', buttonLabel: 'Ver catálogo', href: 'catalogo.html', style: { background: '#fff8fa', textColor: '#331122', accentColor: '#ad3f67', spacing: 'normal', width: 'contained', align: 'center', radius: 'medium', shadow: 'soft', animation: 'fade' } },
-          { id: 'safe-second', type: 'text', afterSection: 'hero', eyebrow: '', title: 'Segundo bloque', text: 'Conserva el orden del editor', style: {} }
+          { id: 'safe-second', type: 'text', afterSection: 'hero', eyebrow: '', title: 'Segundo bloque', text: 'Conserva el orden del editor', style: {} },
+          { id: 'unsafe-link', type: 'button', afterSection: 'hero', buttonLabel: 'Enlace inseguro', href: 'javascript:alert(1)', style: {} }
         ]
       },
       content: { hero: { visible: true, eyebrow: 'Especial', title: 'CREADO SIN CÓDIGO', subtitle: '', primaryText: 'Comprar ahora', primaryHref: 'catalogo.html', btnText: 'Conocenos', btnHref: 'about.html' } }
@@ -58,7 +59,8 @@ test('preview aplica contenido y bloque seguro sobre la página real', async ({ 
   });
   await expect(frame.locator('.tt-hero-title')).toContainText('CREADO SIN CÓDIGO');
   await expect(frame.locator('[data-tt-visual-block="safe-test"]')).toContainText('Día de las madres');
-  await expect(frame.locator('[data-tt-visual-block="safe-test"] a')).toHaveAttribute('href', 'catalogo.html');
+  await expect(frame.locator('[data-tt-visual-block="safe-test"] a')).toHaveAttribute('href', '/catalogo');
+  await expect(frame.locator('[data-tt-visual-block="unsafe-link"] a')).toHaveAttribute('href', '/catalogo');
   await expect(frame.locator('#hero + [data-tt-visual-block]')).toHaveAttribute('data-tt-visual-block', 'safe-test');
   await expect(frame.locator('[data-tt-visual-block="safe-test"] + [data-tt-visual-block]')).toHaveAttribute('data-tt-visual-block', 'safe-second');
   await expect(frame.locator('#hero')).toHaveCSS('background-color', 'rgb(251, 228, 236)');
@@ -112,7 +114,6 @@ test('los bloques nuevos (testimonio, video, FAQ, columnas, separador) se render
   await expect(frame.locator('[data-tt-visual-block="faq-1"] summary')).toContainText('¿Envían a todo el país?');
   await expect(frame.locator('[data-tt-visual-block="columns-1"] .tt-visual-columns-right')).toHaveCount(1);
   await expect(frame.locator('[data-tt-visual-block="divider-1"] hr.tt-visual-divider-rule')).toHaveCount(1);
-  // El bloque anclado a "arriba de todo" debe quedar antes de la primera sección real de la página.
   const order = await frame.locator('body > *').evaluateAll(nodes => nodes.map(node => node.getAttribute('data-tt-visual-block') || node.id));
   const topIndex = order.indexOf('top-block');
   const heroIndex = order.indexOf('hero');
@@ -145,7 +146,6 @@ test('las secciones fijas de la página real se reordenan según sectionOrder, y
     const frame = document.getElementById('real-preview');
     frame.contentWindow.postMessage({
       type: 'tintin:visual-preview', pageId: 'index',
-      // "reviews" pasa a ir justo después del hero, invirtiendo su posición natural.
       config: { sections: {}, sectionOrder: ['hero', 'reviews', 'trust', 'collections_carousel', 'editorial_bag', 'look', 'editorial_relojes'], customBlocks: [] },
       content: {},
     }, location.origin);
@@ -154,10 +154,8 @@ test('las secciones fijas de la página real se reordenan según sectionOrder, y
   const orderAfter = await frame.locator('body > *').evaluateAll(labelsOf);
   expect(findIndex(orderAfter, 'hero')).toBeLessThan(findIndex(orderAfter, 'reviews'));
   expect(findIndex(orderAfter, 'reviews')).toBeLessThan(findIndex(orderAfter, 'trust'));
-  // El pie de página (sección "global") sigue después de todas las secciones reordenables, nunca se mueve entre ellas.
   expect(findIndex(orderAfter, 'tt-footer')).toBeGreaterThan(findIndex(orderAfter, 'trust'));
   expect(findIndex(orderAfter, 'tt-footer')).toBeGreaterThan(findIndex(orderAfter, 'reviews'));
-  // El contenido real (título del hero) sigue intacto — reordenar no borra nada.
   await expect(frame.locator('.tt-hero-title')).toBeVisible();
   await expect(frame.locator('.tt-reviews-section')).toBeVisible();
 });
