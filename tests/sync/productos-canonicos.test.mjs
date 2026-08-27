@@ -97,7 +97,9 @@ test('Sheets y Superadmin comparten la autoridad de pedidos; auditoría sigue re
   assert.match(parity, /baseChangeId:/);
   assert.match(parity, /changeId:/);
   assert.match(parity, /tintinPullOrdersParity_/);
-  assert.doesNotMatch(parity, /update.*stock|setValue\([^\n]*stock/i);
+  assert.match(parity, /tintinParityCallWebhook_\(TINTIN_ADMIN_WEBHOOK_PATH, payload\)/);
+  assert.doesNotMatch(parity, /productInventory\//);
+  assert.doesNotMatch(parity, /firestoreAdmin(?:Batch)?Commit|phase4Commit_/);
 
   assert.match(adminWebhook, /writableEntities: \['user', 'order'\]/);
   assert.match(adminWebhook, /readOnlyMirrors: \['audit'\]/);
