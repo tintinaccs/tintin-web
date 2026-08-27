@@ -8,7 +8,7 @@ import { renderCollectionsSheet } from './compartido/panel-colecciones.js';
 import { renderSurfaceLayer } from './compartido/capas-paneles.js';
 import { applyActiveState, currentPage } from './compartido/estado-ruta.js';
 import { ensureNavigationAssets } from './compartido/recursos-navegacion.js';
-import { loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260824-header-responsive-sync-1';
+import { loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260827-responsive-indicators-1';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
 import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260817-footer-contrast-1';
