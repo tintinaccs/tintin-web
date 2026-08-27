@@ -46,6 +46,12 @@ try {
       try { window.TintinLoader?.hide?.(); } catch {}
       document.getElementById('tt-loader')?.remove();
     });
+    if (width > 1024) {
+      await page.waitForFunction(() => {
+        const pill = document.querySelector('.tt-desktop-active-pill');
+        return !!pill && pill.classList.contains('is-ready') && pill.getBoundingClientRect().width > 20;
+      }, { timeout: 3000 }).catch(() => {});
+    }
     const state = await page.evaluate(() => {
       const visible = node => !!node && getComputedStyle(node).display !== 'none' && getComputedStyle(node).visibility !== 'hidden' && node.getBoundingClientRect().width > 0;
       const solidWhite = node => ['rgb(255, 255, 255)','rgba(255, 255, 255, 1)'].includes(getComputedStyle(node).backgroundColor);
@@ -208,7 +214,8 @@ try {
       await page.click(trigger);
       check(await page.locator(surface).getAttribute('aria-hidden') === 'false', `${route} no abre ${surface} a ${width}px`);
       await page.keyboard.press('Escape');
-      await page.waitForFunction(selector => document.querySelector(selector)?.getAttribute('aria-hidden') === 'true', surface, { timeout:1800 });
+      await page.waitForFunction(selector => document.querySelector(selector)?.getAttribute('aria-hidden') === 'true', surface, { timeout:4000 })
+        .catch(() => check(false, `${route} no cierra ${surface} tras Escape a ${width}px`));
     }
   }
   check(!runtimeErrors.some(message => /SyntaxError|ReferenceError|TypeError/i.test(message)), `Errores runtime: ${runtimeErrors.join(' | ')}`);

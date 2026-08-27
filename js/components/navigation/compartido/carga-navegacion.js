@@ -205,6 +205,15 @@ function loadNavigationBehaviors() {
       import(versionedJsModule('components/navigation/compartido/enrutador.js')),
       import(versionedJsModule('components/navigation/compartido/control-busqueda.js')),
     ]))
+    .then(results => {
+      // Dynamic imports are cached, but the shell DOM is remounted on every
+      // navigation. Re-run geometry-dependent indicators against that DOM.
+      const desktop = results[0].status === 'fulfilled' ? results[0].value : null;
+      const mobile = results[2].status === 'fulfilled' ? results[2].value : null;
+      desktop?.initDesktopNavigationIndicator?.();
+      mobile?.initMobileNavigationIndicator?.();
+      return results;
+    })
     .then(reportRuntimeFailures);
 }
 
