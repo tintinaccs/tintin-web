@@ -85,11 +85,15 @@ check(
 );
 
 check(
-  'El editor vigente no puede atravesar una barrera estructural fija',
-  gateway.includes('firstBarrier') &&
-    gateway.includes('page.sections.slice(0, limit)') &&
-    gateway.includes('section.movable && section.visualEditable'),
-  'Hasta tener orden por zonas, solo se proyecta el prefijo seguro anterior a una barrera fija.'
+  'El editor vigente aplica zonas seguras en vez de una barrera global',
+  gateway.includes('zone: structural.zone') &&
+    gateway.includes('movable: structural.movable') &&
+    gateway.includes('blockAnchor: structural.blockAnchor') &&
+    visualCore.includes("const zone = entries[cursor][1].zone || 'main'") &&
+    visualCore.includes('blockAnchor === true') &&
+    visualRuntime.includes('sectionSchema.movable !== true') &&
+    visualAdmin.includes('row.dataset.zone'),
+  'Orden, estilos y bloques deben respetar las capacidades y zonas del contrato tanto en Admin como en backend/runtime.'
 );
 
 check(
