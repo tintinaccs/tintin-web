@@ -1,0 +1,50 @@
+name: Aplicar sync canónica Tarea 7
+
+on:
+  push:
+    branches:
+      - refactor/sync-single-authority
+    paths:
+      - scripts/aplicar-sync-single-authority.mjs
+      - .github/workflows/aplicar-sync-single-authority.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-single-authority-task7
+  cancel-in-progress: true
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: refactor/sync-single-authority
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Aplicar migración exacta
+        run: node scripts/aplicar-sync-single-authority.mjs
+
+      - name: Retirar migrador temporal
+        run: rm scripts/aplicar-sync-single-authority.mjs .github/workflows/aplicar-sync-single-authority.yml
+
+      - name: Verificar diff
+        run: |
+          git diff --check
+          grep -q "softDeleteUser" apps-script/ProductosUnificados.gs
+          grep -q "Pedidos web es un espejo de solo lectura" apps-script/ProductosUnificados.gs
+          ! grep -q "action: String(row\[9\].*'deleteUser'" apps-script/ProductosUnificados.gs
+
+      - name: Guardar Apps Script canónico
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "refactor: alinear Apps Script con autoridad única de sync"
+          git push origin HEAD:refactor/sync-single-authority
