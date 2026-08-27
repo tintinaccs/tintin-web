@@ -89,6 +89,7 @@
     "audit:css-cascade": "node scripts/auditar-css-cascada.mjs",
     "audit:desktop-fixes": "node scripts/auditar-escritorio-correcciones.mjs",
     "audit:mobile-fixes": "node scripts/auditar-movil-correcciones.mjs",
+    "audit:tablet-fixes": "node scripts/auditar-tableta-correcciones.mjs",
     "audit:public-operational-visibility": "node scripts/auditar-publico-operativo-visibilidad.mjs",
     "audit:public-operational-contract": "node scripts/auditar-publico-operativo-contrato.js",
     "audit:part2h": "node scripts/auditar-final-barrido-parte-2h.js",
