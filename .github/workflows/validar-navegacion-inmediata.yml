@@ -14,7 +14,7 @@ on:
       - '.github/workflows/validar-navegacion-inmediata.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   fast-navigation:
@@ -22,6 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.head_ref }}
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
@@ -33,12 +35,19 @@ jobs:
         run: node scripts/auditar-rendimiento-tiempo-real.js
       - name: Tripwire de regresiones de rendimiento
         run: node scripts/auditar-rendimiento-regresiones.js
-      - name: Versionado y manifiesto reproducibles
+      - name: Regenerar manifiesto reproducible una vez
         run: |
           npm run build:routes
           npm run audit:cache-versioning
           npm run build:pages
-          git diff --exit-code -- diagnostic-manifest.json scripts/cache-version-baseline.json _headers _routes.json
+          if ! git diff --quiet -- diagnostic-manifest.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add diagnostic-manifest.json
+            git commit -m "chore: actualizar manifiesto diagnostico reproducible"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
+          git diff --exit-code -- scripts/cache-version-baseline.json _headers _routes.json
       - name: Adjuntar artefactos reproducibles cuando difieran
         if: failure()
         uses: actions/upload-artifact@v6
