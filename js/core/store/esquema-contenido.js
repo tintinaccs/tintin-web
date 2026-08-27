@@ -93,7 +93,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
       collections_carousel: {
         label: 'Carrusel de colecciones',
         root: '.tt-collection-carousel',
-        allowVisibility: false,
+        allowVisibility: true,
         fields: [],
       },
       editorial_bag: {
@@ -108,15 +108,11 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
           field('btnHref', 'Enlace del botón', 'a.tt-btn', '/catalogo?cat=bolsos', { type: 'href', maxLength: 500 }),
         ],
       },
-      collections_header: {
-        label: 'Encabezado de colecciones',
-        root: '.tt-collections-section .tt-collections-header',
-        allowVisibility: false,
-        fields: [
-          field('eyebrow', 'Texto pequeño', '.tt-section-sub', 'Explorá todo', { maxLength: 120 }),
-          field('title', 'Título', '.tt-section-title', 'NUESTRAS COLECCIONES', { maxLength: 180 }),
-          field('desc', 'Descripción', '.tt-section-desc', 'Descubrí todo lo que tenemos para vos', { maxLength: 400 }),
-        ],
+      look: {
+        label: 'Completá tu look',
+        root: '.tt-look-section',
+        allowVisibility: true,
+        fields: [],
       },
       editorial_relojes: {
         label: 'Editorial Relojes',
@@ -128,14 +124,6 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
           field('body', 'Descripción', '.tt-watch-desc', 'Relojes de acero inoxidable de alta calidad. Diseños elegantes, modernos y femeninos que se adaptan a cada estilo — del casual al más sofisticado.', { type: 'multiline', rows: 5, maxLength: 1200 }),
           field('btnText', 'Texto del botón', 'a.tt-btn', 'VER RELOJES →', { maxLength: 80 }),
           field('btnHref', 'Enlace del botón', 'a.tt-btn', '/catalogo?cat=relojes', { type: 'href', maxLength: 500 }),
-        ],
-      },
-      products_header: {
-        label: 'Encabezado de productos',
-        root: '.tt-products-section .tt-products-header',
-        fields: [
-          field('eyebrow', 'Texto pequeño', '.tt-section-sub', 'Nuestros productos', { maxLength: 120 }),
-          field('title', 'Título', '.tt-section-title', 'MIRÁ TODO LO MÁS VENDIDO', { maxLength: 180 }),
         ],
       },
       reviews: {
