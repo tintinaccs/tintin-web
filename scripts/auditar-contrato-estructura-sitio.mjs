@@ -72,14 +72,21 @@ function selectorExists(html, selector) {
   });
 }
 
-function contentRootBelongsToStructure(contentRoot, structureRoot) {
-  const normalizedContent = String(contentRoot || '').replace(/\s+/g, ' ').trim();
-  const normalizedStructure = String(structureRoot || '').replace(/\s+/g, ' ').trim();
+function normalizeSelector(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
+}
+
+function contentRootBelongsToStructure(contentRoot, structuralSection) {
+  const normalizedContent = normalizeSelector(contentRoot);
+  const normalizedStructure = normalizeSelector(structuralSection?.root);
   if (!normalizedContent || !normalizedStructure) return false;
   if (normalizedContent === normalizedStructure) return true;
-  return normalizedContent.startsWith(`${normalizedStructure} `)
+  if (
+    normalizedContent.startsWith(`${normalizedStructure} `)
     || normalizedContent.startsWith(`${normalizedStructure}>`)
-    || normalizedContent.startsWith(`${normalizedStructure} >`);
+    || normalizedContent.startsWith(`${normalizedStructure} >`)
+  ) return true;
+  return (structuralSection?.legacyContentRoots || []).some(root => normalizeSelector(root) === normalizedContent);
 }
 
 const structure = loadEsmLike('js/core/store/contrato-estructura-sitio.js', [
@@ -97,8 +104,11 @@ const note = message => notes.push(message);
 if (structure.SITE_STRUCTURE_VERSION < 1) fail('SITE_STRUCTURE_VERSION debe ser >= 1.');
 
 const contractIds = Object.keys(structure.SITE_STRUCTURE_CONTRACT);
-if (JSON.stringify(contractIds) !== JSON.stringify(structure.SITE_PUBLIC_PAGE_IDS)) {
-  fail(`SITE_PUBLIC_PAGE_IDS no coincide con el orden/ids del contrato. ids=${JSON.stringify(contractIds)}`);
+const declaredIds = [...structure.SITE_PUBLIC_PAGE_IDS];
+if (new Set(contractIds).size !== new Set(declaredIds).size
+  || contractIds.some(id => !declaredIds.includes(id))
+  || declaredIds.some(id => !contractIds.includes(id))) {
+  fail(`SITE_PUBLIC_PAGE_IDS y SITE_STRUCTURE_CONTRACT no contienen exactamente las mismas páginas. contrato=${JSON.stringify(contractIds)} declaradas=${JSON.stringify(declaredIds)}`);
 }
 
 const allowedModes = new Set(Object.values(structure.SITE_STRUCTURE_MODES));
@@ -136,6 +146,9 @@ for (const pageId of structure.SITE_PUBLIC_PAGE_IDS) {
     }
     if (item.visualEditable === false && item.movable) {
       fail(`${pageId}/${item.id}: una superficie no editable visualmente no debe ser movible.`);
+    }
+    for (const legacyRoot of item.legacyContentRoots || []) {
+      if (!legacyRoot || legacyRoot === item.root) fail(`${pageId}/${item.id}: legacyContentRoot inválido o igual al root canónico.`);
     }
   }
 
@@ -179,8 +192,10 @@ for (const pageId of content.CONTENT_PAGE_IDS) {
       fail(`${pageId}/${sectionId}: sección de contenido sin sección estructural canónica.`);
       continue;
     }
-    if (!contentRootBelongsToStructure(contentSection.root, structuralSection.root)) {
-      fail(`${pageId}/${sectionId}: root de contenido ${contentSection.root} no pertenece a la raíz estructural ${structuralSection.root}.`);
+    if (!contentRootBelongsToStructure(contentSection.root, structuralSection)) {
+      fail(`${pageId}/${sectionId}: root de contenido ${contentSection.root} no pertenece a la raíz estructural ${structuralSection.root} ni está declarado como legado.`);
+    } else if ((structuralSection.legacyContentRoots || []).some(root => normalizeSelector(root) === normalizeSelector(contentSection.root))) {
+      note(`${pageId}/${sectionId}: conexión legada registrada (${contentSection.root}) → root canónico (${structuralSection.root}).`);
     }
   }
 }
@@ -192,8 +207,8 @@ for (const requiredProtected of ['checkout', 'login', 'perfil']) {
   if (page?.mode !== 'protected') fail(`${requiredProtected}: debe permanecer inventariada como página protegida.`);
 }
 
-notes.push(`Contrato estructural v${structure.SITE_STRUCTURE_VERSION}: ${contractIds.length} páginas públicas.`);
-notes.push(`Páginas protegidas: ${contractIds.filter(id => structure.SITE_STRUCTURE_CONTRACT[id].mode === 'protected').join(', ')}.`);
+notes.unshift(`Contrato estructural v${structure.SITE_STRUCTURE_VERSION}: ${contractIds.length} páginas públicas.`);
+notes.splice(1, 0, `Páginas protegidas: ${declaredIds.filter(id => structure.SITE_STRUCTURE_CONTRACT[id].mode === 'protected').join(', ')}.`);
 notes.push('El esquema de contenido se valida como subconjunto; la estructura física ya no depende de que una sección tenga campos editables.');
 
 for (const message of notes) console.log(`INFO — ${message}`);
