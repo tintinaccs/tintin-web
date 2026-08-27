@@ -32,7 +32,6 @@ export const getNested = ContentFields.getNested;
 export const setNested = ContentFields.setNested;
 export const mergeContent = ContentFields.mergeContent;
 export const sanitizeContentText = ContentFields.sanitizeContentText;
-export const normalizeContentValue = ContentFields.normalizeContentValue;
 export const detectContentPageId = ContentFields.detectContentPageId;
 
 const LEGACY_CONTENT_ROUTE_ALIASES = Object.freeze({
@@ -64,6 +63,22 @@ function canonicalizeLegacyContentHref(value) {
 export function sanitizeContentHref(value, fallback = '') {
   const safe = ContentFields.sanitizeContentHref(value, fallback);
   return canonicalizeLegacyContentHref(safe);
+}
+
+/*
+ * La fachada es la última frontera antes de Admin/runtime/Cloudflare. Además
+ * de delegar las migraciones históricas de bajo nivel, vuelve a garantizar la
+ * forma pública canónica del título del Hero. Es una defensa idempotente: si
+ * la capa interna ya lo normalizó no cambia nada; si una versión interna vieja
+ * reaparece, la salida pública sigue siendo correcta.
+ */
+export function normalizeContentValue(pageId, sectionId, key, value) {
+  const normalized = ContentFields.normalizeContentValue(pageId, sectionId, key, value);
+  const text = String(normalized == null ? '' : normalized);
+  if (pageId === 'index' && sectionId === 'hero' && key === 'title') {
+    return text.replace(/\bTÚ ESTILO\b/g, 'TU ESTILO');
+  }
+  return normalized;
 }
 
 function contentDefinitionPage(pageId) {
