@@ -33,7 +33,7 @@ jobs:
           node --check functions/api/health.js
           node --check functions/api/sheets-product-sync.js
           node --check js/admin/diagnostics/estado-ecosistema-admin.js
-          node --check scripts/auditar-system-health.mjs
+          node --check scripts/auditar-estado-ecosistema.mjs
 
       - name: Auditar estado integral y seguridad
         run: npm run audit:system-health
