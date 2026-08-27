@@ -21,6 +21,7 @@ const ui = read('js/admin/diagnostics/estado-ecosistema-admin.js');
 const injector = read('cloudflare/inyectar-diagnostico-maestro-admin.js');
 const sheetsSync = read('functions/api/sheets-product-sync.js');
 const sheetsConfig = read('cloudflare/sheets-sync-config.js');
+const routes = JSON.parse(read('_routes.json'));
 const pkg = JSON.parse(read('package.json'));
 
 check(
@@ -34,6 +35,10 @@ check(
   protectedHealth.includes('requireSuperAdmin') &&
     protectedHealth.includes('await requireSuperAdmin(request)') &&
     protectedHealth.includes("runSystemHealth(env)")
+);
+check(
+  'La API protegida está registrada en el middleware de Pages',
+  Array.isArray(routes.include) && routes.include.includes('/api/system-health')
 );
 check(
   'El contrato declara autoridades canónicas y pedidos/auditoría como espejos de solo lectura',
