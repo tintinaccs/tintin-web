@@ -62,6 +62,28 @@ function tintinEstilizarBloques_(sheet, headerRow, blocks) {
   });
 }
 
+// Aplica franjas de color por bloque lógico a "Usuarios web", siguiendo el
+// layout ya documentado en TINTIN_USERS_COL (identidad, contacto, comercial,
+// estado, administración, sincronización/técnico). tintinMigrarUsuariosWebColumnas_
+// solo pone negrita en el encabezado; sin esta función la hoja quedaba sin
+// color en varias columnas (o con color manual viejo desalineado). No
+// reordena ni reescribe valores, solo formato.
+function tintinPulirVisualUsuariosWeb_() {
+  var sheet = tintinProductsSpreadsheet_().getSheetByName(TINTIN_USERS_SHEET);
+  if (!sheet) return { ok: false, reason: 'No existe Usuarios web.' };
+  sheet.setFrozenRows(TINTIN_USERS_HEADER_ROW);
+  sheet.setFrozenColumns(TINTIN_USERS_COL.username);
+  tintinEstilizarBloques_(sheet, TINTIN_USERS_HEADER_ROW, [
+    { from: TINTIN_USERS_COL.uid, to: TINTIN_USERS_COL.customerId, color: '#3f4b8f' },          // identidad
+    { from: TINTIN_USERS_COL.email, to: TINTIN_USERS_COL.ci, color: '#2f7a4f' },                // contacto
+    { from: TINTIN_USERS_COL.orders, to: TINTIN_USERS_COL.totalSpent, color: '#8f6b2f' },       // comercial
+    { from: TINTIN_USERS_COL.role, to: TINTIN_USERS_COL.usernameChangeUsed, color: '#616161' }, // estado
+    { from: TINTIN_USERS_COL.internalNotes, to: TINTIN_USERS_COL.action, color: '#ad3f67' },    // administración
+    { from: TINTIN_USERS_COL.createdAt, to: TINTIN_USERS_COL.lastChangeId, color: '#616161' }   // sincronización/técnico
+  ]);
+  return { ok: true };
+}
+
 // Aplica encabezado congelado + franjas de color por bloque lógico a las
 // hojas cuyo orden de columnas YA sigue identidad→contacto→comercial→
 // estado→administración→sincronización y por eso no requieren mover datos,
@@ -199,6 +221,7 @@ function tintinPulirVisualHojasNoGobernadas_() {
 // tintinPulirEsteticaTodasLasHojas → Ejecutar en el editor de Apps Script.
 function tintinPulirEsteticaTodasLasHojas() {
   var summary = {};
+  summary.usuariosWeb = tintinPulirVisualUsuariosWeb_();
   summary.pedidosWeb = tintinPulirVisualPedidosWeb_();
   summary.productos = tintinPulirVisualProductos_();
   summary.soloLectura = tintinPulirVisualSoloLectura_();
@@ -231,6 +254,7 @@ function tintinReorganizarHojaAdministrativa() {
 
   var summary = {};
   summary.usuariosWeb = tintinMigrarUsuariosWebColumnas_();
+  summary.usuariosWebVisual = tintinPulirVisualUsuariosWeb_();
   summary.pedidosWeb = tintinPulirVisualPedidosWeb_();
   summary.productos = tintinPulirVisualProductos_();
   summary.soloLectura = tintinPulirVisualSoloLectura_();
