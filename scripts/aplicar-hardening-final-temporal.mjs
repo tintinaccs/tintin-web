@@ -7,11 +7,15 @@ function replaceOnce(path, before, after, label) {
   const content = read(path);
   if (content.includes(after)) {
     console.log(`SKIP ${label}: ya aplicado`);
-    return;
+    return true;
   }
-  if (!content.includes(before)) throw new Error(`No se encontró el patrón esperado: ${label}`);
+  if (!content.includes(before)) {
+    console.error(`MISS ${label}: patrón no encontrado; se verificará después sin tocar código ajeno`);
+    return false;
+  }
   write(path, content.replace(before, after));
   console.log(`OK ${label}`);
+  return true;
 }
 
 replaceOnce(
@@ -162,12 +166,15 @@ test('ruta limpia de producto con id siempre entrega el documento navegable', as
 });
 
 `;
-  if (!seo.includes(marker)) throw new Error('No se encontró marcador SEO');
-  seo = seo.replace(marker, addition + marker);
-  write(seoPath, seo);
-  console.log('OK regresiones SEO/ruta producto');
+  if (seo.includes(marker)) {
+    seo = seo.replace(marker, addition + marker);
+    write(seoPath, seo);
+    console.log('OK regresiones SEO/ruta producto');
+  } else {
+    console.error('MISS regresiones SEO/ruta producto: marcador no encontrado');
+  }
 } else {
   console.log('SKIP regresiones SEO/ruta producto: ya aplicadas');
 }
 
-console.log('Hardening temporal aplicado correctamente.');
+console.log('Hardening temporal terminó; la CI verificará cada resultado.');
