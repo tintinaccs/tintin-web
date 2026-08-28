@@ -163,9 +163,14 @@
   }
   body { padding-bottom:max(96px,calc(84px + env(safe-area-inset-bottom))) !important; }
 
-  /* Superficies móviles: la hoja ocupa siempre todo el viewport y la barra
-     queda por encima, con el indicador centrado dentro de cada botón. */
-  #tt-tabbar { bottom:max(16px,env(safe-area-inset-bottom)); z-index:1480 !important; }
+  /* Superficies móviles: la hoja ocupa siempre todo el viewport. La barra
+     debe quedar SIEMPRE por debajo del backdrop compartido (1450) y de las
+     superficies modales (1460), para que un panel abierto (Tienda,
+     notificaciones, carrito, cuenta) la cubra visualmente por completo y
+     bloquee sus clics de forma real (además de `inert`, no solo por z-index).
+     Con la barra en 1480 (por encima de 1450/1460) quedaba visible y activa
+     encima de la hoja abierta: root cause del "clic detrás del panel". */
+  #tt-tabbar { bottom:max(16px,env(safe-area-inset-bottom)); z-index:1400 !important; }
   #tt-tabbar .tt-tabbar-btn { position:relative; z-index:3; }
   #tt-tabbar .tt-tabbar-btn.active svg,
   #tt-tabbar .tt-tabbar-btn.active .tt-tabbar-avatar,

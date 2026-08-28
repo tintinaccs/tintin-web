@@ -133,11 +133,19 @@ function tintinAppendSyncHistory_(status, sheetName, cell, detail) {
   });
   // No adivina columnas: si la fila 7 no expone estado, conserva el historial intacto.
   if (!headers.some(function(header) { return /^(estado|status)$/.test(tintinSyncHeaderKey_(header)); })) return false;
-  history.insertRowBefore(TINTIN_SYNC_HISTORY_FIRST_ROW);
-  history.getRange(TINTIN_SYNC_HISTORY_FIRST_ROW, 1, 1, width).setValues([values]);
-  var firstExcessRow = TINTIN_SYNC_HISTORY_FIRST_ROW + TINTIN_SYNC_HISTORY_MAX_ROWS;
-  if (history.getLastRow() >= firstExcessRow) {
-    history.deleteRows(firstExcessRow, history.getLastRow() - firstExcessRow + 1);
+  // insertRowBefore/deleteRows desplazan filas. Un lock evita que dos onEdit
+  // concurrentes calculen límites incompatibles y pierdan el registro.
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(10000)) throw new Error('No se pudo obtener el lock de Historial sync.');
+  try {
+    history.insertRowBefore(TINTIN_SYNC_HISTORY_FIRST_ROW);
+    history.getRange(TINTIN_SYNC_HISTORY_FIRST_ROW, 1, 1, width).setValues([values]);
+    var firstExcessRow = TINTIN_SYNC_HISTORY_FIRST_ROW + TINTIN_SYNC_HISTORY_MAX_ROWS;
+    if (history.getLastRow() >= firstExcessRow) {
+      history.deleteRows(firstExcessRow, history.getLastRow() - firstExcessRow + 1);
+    }
+  } finally {
+    lock.releaseLock();
   }
   return matched > 0;
 }

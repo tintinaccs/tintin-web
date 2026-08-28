@@ -5,7 +5,9 @@ import {
 import { jsonResponse } from '../../cloudflare/seguridad-cloudinary.js';
 
 const MAX_BODY_BYTES = 8 * 1024;
-const MAX_RECORDS = 1000;
+// El helper ya pagina Firestore; 5000 evita truncar espejos administrativos
+// cuando Usuarios/Pedidos/Auditoría superan 1000 registros.
+const MAX_RECORDS = 5000;
 const ALLOWED_ENTITIES = new Set(['products', 'users', 'orders', 'audit']);
 
 function sameSecret(provided, expected) {
@@ -47,12 +49,13 @@ function publicProduct(document, inventoryById) {
 
 function userRecord(document) {
   const user = decodeFirestoreFields(document.fields || {});
+  const checkoutDefaults = user.checkoutDefaults && typeof user.checkoutDefaults === 'object' ? user.checkoutDefaults : {};
   return {
     uid: documentId(document), name: user.name || user.displayName || '', email: user.email || '',
     createdAt: asIso(user.createdAt || user.registeredAt), role: user.role || 'client', blocked: user.blocked === true,
     orders: Number(user.ordersCount || user.orders || 0), totalSpent: Number(user.totalSpent || 0),
     internalNotes: user.internalNotes || '', customerId: user.customerId || '', username: user.username || '',
-    phone: user.phone || '', ci: user.ci || '', profileStatus: user.profileStatus || '',
+    phone: user.phone || '', ci: user.ci || checkoutDefaults.ci || '', profileStatus: user.profileStatus || '',
     lastAccess: asIso(user.lastAccess || user.lastLoginAt), usernameChangeUsed: user.usernameChangeUsed === true,
     lastChangeId: user.lastChangeId || '', updatedAt: asIso(user.updatedAt),
   };

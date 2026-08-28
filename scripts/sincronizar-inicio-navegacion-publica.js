@@ -17,6 +17,7 @@ const SESSION_PROTECTION_VERSION = 'tintin-20260822-dob-username-onboarding-1';
 const PROFILE_GATE_VERSION = 'tintin-20260822-dob-username-onboarding-1';
 const NAV_HEADER_VERSION = 'tintin-20260827-header-surfaces-1';
 const NAV_SHARED_VERSION = 'tintin-20260827-header-surfaces-1';
+const UNIFIED_THEME_VERSION = 'tintin-20260828-product-header-fixes-1';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_HEADER_VERSION],
@@ -190,6 +191,13 @@ function versionProfileGate(html) {
   );
 }
 
+function versionUnifiedTheme(html) {
+  return html.replace(
+    /(css\/core\/tema-unificado-tintin\.css)(?:\?v=[A-Za-z0-9._-]+)?/gi,
+    `$1?v=${UNIFIED_THEME_VERSION}`
+  );
+}
+
 function normalizeWhitespace(html) {
   return html
     .replace(/\n{4,}/g, '\n\n\n')
@@ -213,6 +221,7 @@ for (const page of PUBLIC_PAGES) {
   html = versionVisualBuilder(html);
   html = versionSessionProtection(html);
   html = versionProfileGate(html);
+  html = versionUnifiedTheme(html);
   html = normalizeWhitespace(html);
 
   if (html !== before) {
@@ -225,7 +234,7 @@ for (const page of PUBLIC_PAGES) {
 for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') && !PUBLIC_PAGES.includes(file))) {
   const file = path.join(ROOT, page);
   const before = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
-  const html = versionVisualBuilder(versionProfileGate(versionSessionProtection(before)));
+  const html = versionUnifiedTheme(versionVisualBuilder(versionProfileGate(versionSessionProtection(before))));
   if (html !== before) {
     fs.writeFileSync(file, html, 'utf8');
     changed += 1;

@@ -5,8 +5,8 @@ export function initMobileNavigationIndicator() {
   if (nav.dataset.ttMobileReady === '1') {
     const active = [...nav.querySelectorAll('.tt-tabbar-btn')]
       .find(item => !item.hidden && (
-        item.getAttribute('aria-current') === 'page' ||
         item.getAttribute('aria-expanded') === 'true' ||
+        item.getAttribute('aria-current') === 'page' ||
         item.classList.contains('active')
       ));
     if (active) {
@@ -36,8 +36,8 @@ export function initMobileNavigationIndicator() {
   };
 
   const current = () =>
-    items.find(item => !item.hidden && item.getAttribute('aria-current') === 'page') ||
     items.find(item => !item.hidden && item.getAttribute('aria-expanded') === 'true') ||
+    items.find(item => !item.hidden && item.getAttribute('aria-current') === 'page') ||
     items.find(item => !item.hidden && item.classList.contains('active')) ||
     null;
   const sync = () => locate(current());

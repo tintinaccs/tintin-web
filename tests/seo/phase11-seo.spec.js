@@ -37,6 +37,22 @@ test('producto llega con canonical, social preview y JSON-LD server-side coheren
   expect(jsonLd.offers.availability).toBe('https://schema.org/OutOfStock');
 });
 
+test('metadata de producto no puede bloquear indefinidamente la respuesta HTML', async () => {
+  const { resolveProductMetadataWithin } = await import('../../functions/product.js');
+  const started = Date.now();
+  await expect(resolveProductMetadataWithin(new Promise(() => {}), 120)).rejects.toThrow('product_metadata_timeout');
+  expect(Date.now() - started).toBeLessThan(800);
+});
+
+test('ruta limpia de producto con id siempre entrega el documento navegable', async ({ page }) => {
+  const response = await page.goto('/product?id=route-probe-inexistente', { waitUntil: 'domcontentloaded' });
+  expect(response?.status()).toBe(200);
+  await expect(page.locator('#product-detail')).toHaveCount(1);
+  await expect(page.locator('#product-loading')).toHaveCount(1);
+  expect(new URL(page.url()).pathname).toBe('/product');
+  expect(new URL(page.url()).searchParams.get('id')).toBe('route-probe-inexistente');
+});
+
 test('superficies privadas y auxiliares permanecen noindex', async ({ browser, baseURL }) => {
   // Las etiquetas robots forman parte del HTML inicial. Se verifican sin
   // JavaScript para que las redirecciones legítimas de autenticación de una

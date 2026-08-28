@@ -318,8 +318,9 @@ function tintinParityPrepareNewOrderSheet_() {
   }
 
   for (var row = TINTIN_PARITY_NEW_ORDER_FIRST_ITEM_ROW; row <= TINTIN_PARITY_NEW_ORDER_LAST_ITEM_ROW; row += 1) {
-    sheet.getRange(row, 2).setFormula('=IFERROR(VLOOKUP(A' + row + ',Productos!$A$7:$F$1000,2,FALSE),"")');
-    sheet.getRange(row, 5).setFormula('=IFERROR(VLOOKUP(A' + row + ',Productos!$A$7:$F$1000,6,FALSE),"")');
+    // Rango abierto: no se corta en la fila 1000. Separadores compatibles con es_PY.
+    sheet.getRange(row, 2).setFormula('=IFERROR(VLOOKUP(A' + row + ';Productos!$A$7:$F;2;FALSE);"")');
+    sheet.getRange(row, 5).setFormula('=IFERROR(VLOOKUP(A' + row + ';Productos!$A$7:$F;6;FALSE);"")');
   }
   sheet.getRange('B20').setNote('Nombre informativo tomado de Productos. El servidor vuelve a leer el producto al crear.');
   sheet.getRange('E20').setNote('Precio informativo. El servidor ignora cualquier precio local y usa Firestore.');
