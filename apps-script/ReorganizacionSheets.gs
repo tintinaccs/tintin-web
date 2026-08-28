@@ -105,23 +105,124 @@ function tintinPulirVisualSoloLectura_() {
     var headerRow = name === TINTIN_SYNC_HISTORY_SHEET ? TINTIN_SYNC_HISTORY_HEADER_ROW : 1;
     sheet.setFrozenRows(headerRow);
     sheet.getRange(headerRow, 1, 1, Math.max(1, sheet.getLastColumn())).setFontWeight('bold').setBackground('#616161').setFontColor('#ffffff');
+    if (sheet.getLastRow() > 0 && sheet.getLastColumn() > 0) {
+      sheet.getRange(headerRow, 1, sheet.getLastRow() - headerRow + 1, sheet.getLastColumn())
+        .setBorder(true, true, true, true, true, true, '#d0d0d0', SpreadsheetApp.BorderStyle.SOLID);
+    }
     results[name] = true;
   });
   return results;
 }
 
-// Punto de entrada único. Ejecutar una sola vez desde el editor de Apps
-// Script (seleccionar esta función → Ejecutar). Reordena físicamente
-// "Usuarios web" (username pasa a estar junto a UID/nombre, ya no
-// enterrado en la columna 13) y aplica organización visual por bloques al
-// resto de las hojas administradas por este proyecto. No toca Listas,
-// Clientes de ventas, Resumen anual, las hojas mensuales ni Buscar: esas
-// pestañas no están gobernadas por este Apps Script y este proyecto no
-// tiene forma confiable de leer su contenido actual antes de reordenarlas,
-// así que reordenarlas a ciegas sería un riesgo innecesario sobre datos de
-// producción. Si también se quiere reorganizar esas hojas, hacerlo a mano
-// siguiendo el mismo criterio de bloques (identidad → contacto → comercial
-// → estado → administración → sincronización → IDs/metadatos técnicos).
+// Estiliza "Nuevo pedido web" (formulario de creación manual de pedidos).
+// tintinParityPrepareNewOrderSheet_ (AdminParity.gs) crea el contenido
+// (títulos, etiquetas, tabla de items) pero nunca le aplicó color ni
+// bordes; esta función solo agrega formato visual, no toca valores.
+function tintinPulirVisualNuevoPedidoWeb_() {
+  var sheet = tintinProductsSpreadsheet_().getSheetByName(TINTIN_PARITY_NEW_ORDER_SHEET);
+  if (!sheet) return { ok: false, reason: 'No existe Nuevo pedido web.' };
+
+  sheet.getRange('A1:E1')
+    .setBackground('#ad3f67')
+    .setFontColor('#ffffff')
+    .setFontWeight('bold')
+    .setFontSize(13)
+    .setVerticalAlignment('middle');
+  sheet.setRowHeight(1, 32);
+
+  sheet.getRange('A2:E2')
+    .setBackground('#f3e6ec')
+    .setFontColor('#4a4a4a')
+    .setFontStyle('italic')
+    .setWrap(true)
+    .setVerticalAlignment('middle');
+  sheet.setRowHeight(2, 34);
+
+  sheet.getRange('A3:A17')
+    .setBackground('#ececec')
+    .setFontWeight('bold')
+    .setHorizontalAlignment('right')
+    .setVerticalAlignment('middle');
+  sheet.getRange('A3:B17')
+    .setBorder(true, true, true, true, true, true, '#c4c4c4', SpreadsheetApp.BorderStyle.SOLID);
+
+  sheet.getRange('A20:E20')
+    .setBackground('#3f4b8f')
+    .setFontColor('#ffffff')
+    .setFontWeight('bold')
+    .setVerticalAlignment('middle');
+  sheet.getRange(20, 1, TINTIN_PARITY_NEW_ORDER_LAST_ITEM_ROW - 20 + 1, 5)
+    .setBorder(true, true, true, true, true, true, '#c4c4c4', SpreadsheetApp.BorderStyle.SOLID);
+
+  return { ok: true };
+}
+
+// Pasada visual genérica para pestañas que este proyecto NO gobierna
+// (Listas, Clientes de ventas, Resumen anual, hojas mensuales, Buscar, o
+// cualquier otra que exista hoy o se agregue después). Solo aplica
+// encabezado congelado + negrita/color + bordes sobre la fila 1 y el
+// rango con datos: nunca lee, reordena ni sobrescribe un valor, así que
+// es seguro de ejecutar sin conocer la estructura interna de cada hoja.
+function tintinPulirVisualHojasNoGobernadas_() {
+  var gobernadas = {};
+  [TINTIN_PRODUCTS_SHEET, TINTIN_USERS_SHEET, TINTIN_ORDERS_SHEET, TINTIN_AUDIT_SHEET,
+    TINTIN_SYNC_HISTORY_SHEET, TINTIN_PARITY_NEW_ORDER_SHEET].forEach(function(name) {
+    gobernadas[name] = true;
+  });
+
+  var results = {};
+  tintinProductsSpreadsheet_().getSheets().forEach(function(sheet) {
+    var name = sheet.getName();
+    if (gobernadas[name]) return;
+    if (sheet.getLastRow() < 1 || sheet.getLastColumn() < 1) { results[name] = false; return; }
+
+    sheet.setFrozenRows(1);
+    sheet.getRange(1, 1, 1, sheet.getLastColumn())
+      .setBackground('#616161')
+      .setFontColor('#ffffff')
+      .setFontWeight('bold')
+      .setVerticalAlignment('middle');
+    sheet.getRange(1, 1, sheet.getLastRow(), sheet.getLastColumn())
+      .setBorder(true, true, true, true, true, true, '#d0d0d0', SpreadsheetApp.BorderStyle.SOLID);
+    results[name] = true;
+  });
+  return results;
+}
+
+// Punto de entrada SOLO estético (no reordena columnas), a diferencia de
+// tintinReorganizarHojaAdministrativa. Seguro de ejecutar cuantas veces se
+// quiera, incluso si la reorganización ya corrió antes (no depende del
+// marcador de Script Properties). Cubre TODAS las pestañas del
+// spreadsheet: las gobernadas por este proyecto con sus bloques de color
+// y cualquier otra (Listas, Clientes de ventas, Resumen anual, mensuales,
+// Buscar, etc.) con un encabezado prolijo genérico. Ejecutar seleccionando
+// tintinPulirEsteticaTodasLasHojas → Ejecutar en el editor de Apps Script.
+function tintinPulirEsteticaTodasLasHojas() {
+  var summary = {};
+  summary.pedidosWeb = tintinPulirVisualPedidosWeb_();
+  summary.productos = tintinPulirVisualProductos_();
+  summary.soloLectura = tintinPulirVisualSoloLectura_();
+  summary.nuevoPedidoWeb = tintinPulirVisualNuevoPedidoWeb_();
+  summary.otrasHojas = tintinPulirVisualHojasNoGobernadas_();
+  summary.ok = true;
+  return summary;
+}
+
+// Punto de entrada único (con reordenamiento de columnas). Ejecutar una
+// sola vez desde el editor de Apps Script (seleccionar esta función →
+// Ejecutar). Reordena físicamente "Usuarios web" (username pasa a estar
+// junto a UID/nombre, ya no enterrado en la columna 13) y aplica
+// organización visual por bloques al resto de las hojas administradas por
+// este proyecto, incluida "Nuevo pedido web". Las pestañas no gobernadas
+// por este Apps Script (Listas, Clientes de ventas, Resumen anual, hojas
+// mensuales, Buscar, etc.) no se reordenan --este proyecto no tiene forma
+// confiable de leer su estructura interna antes de mover columnas, así que
+// hacerlo a ciegas sería un riesgo innecesario sobre datos de producción--
+// pero sí reciben formato visual genérico (encabezado + bordes) vía
+// tintinPulirVisualHojasNoGobernadas_, que no lee ni mueve valores. Si ya
+// se ejecutó esta migración antes y solo se quiere repasar la estética de
+// todas las pestañas, usar tintinPulirEsteticaTodasLasHojas en su lugar
+// (no está bloqueada por el marcador de Script Properties).
 function tintinReorganizarHojaAdministrativa() {
   var properties = PropertiesService.getScriptProperties();
   if (properties.getProperty(TINTIN_REORG_MARKER_PROPERTY_)) {
@@ -133,11 +234,13 @@ function tintinReorganizarHojaAdministrativa() {
   summary.pedidosWeb = tintinPulirVisualPedidosWeb_();
   summary.productos = tintinPulirVisualProductos_();
   summary.soloLectura = tintinPulirVisualSoloLectura_();
+  summary.nuevoPedidoWeb = tintinPulirVisualNuevoPedidoWeb_();
+  summary.otrasHojas = tintinPulirVisualHojasNoGobernadas_();
 
   tintinPrepararHojasParidad_();
   properties.setProperty(TINTIN_REORG_MARKER_PROPERTY_, new Date().toISOString());
 
   summary.ok = true;
-  summary.note = 'No se tocaron Listas, Clientes de ventas, Resumen anual, hojas mensuales ni Buscar: revisarlas manualmente si también se quieren reorganizar.';
+  summary.note = 'Columnas reordenadas solo en Usuarios web. En el resto de pestañas (incluidas Listas, Clientes de ventas, Resumen anual, mensuales, Buscar y cualquier otra) solo se aplicó formato visual (encabezado + bordes): ningún valor de celda fue leído, movido ni sobrescrito.';
   return summary;
 }
