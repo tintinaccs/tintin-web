@@ -179,12 +179,25 @@ function tintinPulirVisualNuevoPedidoWeb_() {
   return { ok: true };
 }
 
-// Pasada visual genérica para pestañas que este proyecto NO gobierna
-// (Listas, Clientes de ventas, Resumen anual, hojas mensuales, Buscar, o
-// cualquier otra que exista hoy o se agregue después). Solo aplica
-// encabezado congelado + negrita/color + bordes sobre la fila 1 y el
-// rango con datos: nunca lee, reordena ni sobrescribe un valor, así que
-// es seguro de ejecutar sin conocer la estructura interna de cada hoja.
+// Pasada para pestañas que este proyecto NO gobierna (Buscar, Índice,
+// Resumen anual 2026, Reporte de ventas por cliente, Listas de apoyo, las
+// 12 hojas mensuales, o cualquier otra que exista hoy o se agregue
+// después). Inspección directa del spreadsheet real confirmó que TODAS
+// estas hojas son paneles armados a mano: fila 1 es siempre el banner
+// combinado "🟢 SINCRONIZADO" (indicador manual, no un encabezado de
+// datos), seguido de filas de título/navegación ("⟵ Volver al Índice") y
+// recién varias filas más abajo aparece el encabezado real de columnas
+// --en las hojas mensuales incluso hay varias mini-tablas lado a lado
+// (VENTAS/GASTOS/COMPRAS) con encabezados propios en filas distintas--.
+// No hay forma confiable de detectar esa fila de encabezado real sin
+// conocer cada hoja de antemano, así que ya no se pinta ni se bordea
+// nada a ciegas: hacerlo sobrescribía el banner de sincronización con
+// gris y agregaba bordes sobre un diseño manual ya terminado. Por la
+// misma razón por la que este proyecto nunca reordena columnas en estas
+// hojas (estructura desconocida), tampoco les reescribe el formato.
+// Esta función solo deja constancia de qué pestañas fueron detectadas y
+// dejadas intactas; no lee, reordena ni sobrescribe ningún valor ni
+// formato.
 function tintinPulirVisualHojasNoGobernadas_() {
   var gobernadas = {};
   [TINTIN_PRODUCTS_SHEET, TINTIN_USERS_SHEET, TINTIN_ORDERS_SHEET, TINTIN_AUDIT_SHEET,
@@ -196,17 +209,7 @@ function tintinPulirVisualHojasNoGobernadas_() {
   tintinProductsSpreadsheet_().getSheets().forEach(function(sheet) {
     var name = sheet.getName();
     if (gobernadas[name]) return;
-    if (sheet.getLastRow() < 1 || sheet.getLastColumn() < 1) { results[name] = false; return; }
-
-    sheet.setFrozenRows(1);
-    sheet.getRange(1, 1, 1, sheet.getLastColumn())
-      .setBackground('#616161')
-      .setFontColor('#ffffff')
-      .setFontWeight('bold')
-      .setVerticalAlignment('middle');
-    sheet.getRange(1, 1, sheet.getLastRow(), sheet.getLastColumn())
-      .setBorder(true, true, true, true, true, true, '#d0d0d0', SpreadsheetApp.BorderStyle.SOLID);
-    results[name] = true;
+    results[name] = 'sin cambios: panel manual (banner de sincronización en fila 1), no se reescribe';
   });
   return results;
 }
@@ -214,11 +217,14 @@ function tintinPulirVisualHojasNoGobernadas_() {
 // Punto de entrada SOLO estético (no reordena columnas), a diferencia de
 // tintinReorganizarHojaAdministrativa. Seguro de ejecutar cuantas veces se
 // quiera, incluso si la reorganización ya corrió antes (no depende del
-// marcador de Script Properties). Cubre TODAS las pestañas del
-// spreadsheet: las gobernadas por este proyecto con sus bloques de color
-// y cualquier otra (Listas, Clientes de ventas, Resumen anual, mensuales,
-// Buscar, etc.) con un encabezado prolijo genérico. Ejecutar seleccionando
-// tintinPulirEsteticaTodasLasHojas → Ejecutar en el editor de Apps Script.
+// marcador de Script Properties). Aplica bloques de color a las pestañas
+// que este proyecto gobierna (Usuarios web, Pedidos web, Productos,
+// Auditoría web, Historial sync, Nuevo pedido web); las hojas no
+// gobernadas (Buscar, Índice, Resumen anual 2026, Reporte de ventas por
+// cliente, Listas de apoyo, mensuales, etc.) son paneles manuales ya
+// diseñados y se dejan intactas --ver tintinPulirVisualHojasNoGobernadas_--.
+// Ejecutar seleccionando tintinPulirEsteticaTodasLasHojas → Ejecutar en el
+// editor de Apps Script.
 function tintinPulirEsteticaTodasLasHojas() {
   var summary = {};
   summary.usuariosWeb = tintinPulirVisualUsuariosWeb_();
@@ -237,15 +243,16 @@ function tintinPulirEsteticaTodasLasHojas() {
 // junto a UID/nombre, ya no enterrado en la columna 13) y aplica
 // organización visual por bloques al resto de las hojas administradas por
 // este proyecto, incluida "Nuevo pedido web". Las pestañas no gobernadas
-// por este Apps Script (Listas, Clientes de ventas, Resumen anual, hojas
-// mensuales, Buscar, etc.) no se reordenan --este proyecto no tiene forma
-// confiable de leer su estructura interna antes de mover columnas, así que
-// hacerlo a ciegas sería un riesgo innecesario sobre datos de producción--
-// pero sí reciben formato visual genérico (encabezado + bordes) vía
-// tintinPulirVisualHojasNoGobernadas_, que no lee ni mueve valores. Si ya
-// se ejecutó esta migración antes y solo se quiere repasar la estética de
-// todas las pestañas, usar tintinPulirEsteticaTodasLasHojas en su lugar
-// (no está bloqueada por el marcador de Script Properties).
+// por este Apps Script (Buscar, Índice, Resumen anual 2026, Reporte de
+// ventas por cliente, Listas de apoyo, hojas mensuales, etc.) no se
+// reordenan ni se reformatean --son paneles armados a mano con su propio
+// banner de sincronización y diseño ya terminado; este proyecto no tiene
+// forma confiable de leer su estructura interna, así que tocarlas a
+// ciegas (columnas o formato) sería un riesgo innecesario sobre un
+// diseño de producción ya correcto--. Si ya se ejecutó esta migración
+// antes y solo se quiere repasar la estética de las pestañas gobernadas,
+// usar tintinPulirEsteticaTodasLasHojas en su lugar (no está bloqueada
+// por el marcador de Script Properties).
 function tintinReorganizarHojaAdministrativa() {
   var properties = PropertiesService.getScriptProperties();
   if (properties.getProperty(TINTIN_REORG_MARKER_PROPERTY_)) {
@@ -265,6 +272,6 @@ function tintinReorganizarHojaAdministrativa() {
   properties.setProperty(TINTIN_REORG_MARKER_PROPERTY_, new Date().toISOString());
 
   summary.ok = true;
-  summary.note = 'Columnas reordenadas solo en Usuarios web. En el resto de pestañas (incluidas Listas, Clientes de ventas, Resumen anual, mensuales, Buscar y cualquier otra) solo se aplicó formato visual (encabezado + bordes): ningún valor de celda fue leído, movido ni sobrescrito.';
+  summary.note = 'Columnas reordenadas solo en Usuarios web. Formato visual por bloques aplicado a Usuarios web, Pedidos web, Productos, Auditoría web, Historial sync y Nuevo pedido web. Las pestañas no gobernadas (Buscar, Índice, Resumen anual 2026, Reporte de ventas por cliente, Listas de apoyo, mensuales y cualquier otra) quedaron intactas: son paneles manuales con banner de sincronización propio y no se les movió ni reescribió ningún valor ni formato.';
   return summary;
 }
