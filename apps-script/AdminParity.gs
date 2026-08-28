@@ -435,6 +435,7 @@ function tintinPrepararHojasParidad_() {
 
 function tintinDespacharEdicionParidad(e) {
   if (!e || !e.range) return;
+  if (tintinIsRowPushInProgress_(e.range.getSheet(), e.range.getRow()) || tintinIsSheetPushInProgress_(e.range.getSheet())) return;
   var sheetName = e.range.getSheet().getName();
   if (sheetName === TINTIN_PRODUCTS_SHEET) return tintinHandleProductEdit_(e);
   if (sheetName === TINTIN_USERS_SHEET) return tintinHandleUserParityEdit_(e);

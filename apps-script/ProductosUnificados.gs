@@ -38,6 +38,7 @@ var TINTIN_ON_EDIT_DISPATCHER = 'tintinDespacharEdicionInstalable';
 var TINTIN_SYNC_HISTORY_HEADER_ROW = 7;
 var TINTIN_SYNC_HISTORY_FIRST_ROW = 8;
 var TINTIN_SYNC_HISTORY_MAX_ROWS = 500;
+var TINTIN_SYNC_HISTORY_COLUMNS = 10;
 var TINTIN_SYNC_GUARD_TTL_SECONDS = 30;
 var TINTIN_SNAPSHOT_PATH = '/api/sheets-sync-snapshot';
 var TINTIN_ADMIN_WEBHOOK_PATH = '/api/sheets-admin-webhook';
@@ -118,7 +119,11 @@ function tintinAppendSyncHistory_(status, sheetName, cell, detail) {
   if (!allowed[status]) throw new Error('Estado de sincronizacion invalido.');
   var history = tintinProductsSpreadsheet_().getSheetByName(TINTIN_SYNC_HISTORY_SHEET);
   if (!history) return false;
-  var width = Math.max(history.getLastColumn(), 1);
+  // Historial sync ocupa solamente A:J. La hoja puede conservar columnas de
+  // layouts anteriores a la derecha (incluidas validaciones estrictas de
+  // Usuarios web); usar getLastColumn() hacía que un registro de historial
+  // intentara desplazar esos metadatos ajenos y ensuciara el reconciliador.
+  var width = TINTIN_SYNC_HISTORY_COLUMNS;
   var headers = history.getRange(TINTIN_SYNC_HISTORY_HEADER_ROW, 1, 1, width).getDisplayValues()[0];
   var values = new Array(width).fill('');
   var matched = 0;
@@ -132,12 +137,14 @@ function tintinAppendSyncHistory_(status, sheetName, cell, detail) {
     else if (/^(detalle|mensaje|descripcion|resultado|error)$/.test(key)) { values[index] = String(detail || '').slice(0, 500); matched += 1; }
   });
   if (!headers.some(function(header) { return /^(estado|status)$/.test(tintinSyncHeaderKey_(header)); })) return false;
-  history.insertRowBefore(TINTIN_SYNC_HISTORY_FIRST_ROW);
-  history.getRange(TINTIN_SYNC_HISTORY_FIRST_ROW, 1, 1, width).setValues([values]);
-  var firstExcessRow = TINTIN_SYNC_HISTORY_FIRST_ROW + TINTIN_SYNC_HISTORY_MAX_ROWS;
-  if (history.getLastRow() >= firstExcessRow) {
-    history.deleteRows(firstExcessRow, history.getLastRow() - firstExcessRow + 1);
+  // Desplaza exclusivamente la tabla canónica, sin insertar una fila de hoja
+  // completa ni tocar columnas ajenas a Historial sync.
+  var retainedRows = Math.max(TINTIN_SYNC_HISTORY_MAX_ROWS - 1, 0);
+  if (retainedRows) {
+    history.getRange(TINTIN_SYNC_HISTORY_FIRST_ROW, 1, retainedRows, width)
+      .copyTo(history.getRange(TINTIN_SYNC_HISTORY_FIRST_ROW + 1, 1), SpreadsheetApp.CopyPasteType.PASTE_VALUES, false);
   }
+  history.getRange(TINTIN_SYNC_HISTORY_FIRST_ROW, 1, 1, width).setValues([values]);
   return matched > 0;
 }
 
@@ -159,6 +166,18 @@ function tintinMarkRowPushInProgress_(sheet, rowNumber) {
 
 function tintinIsRowPushInProgress_(sheet, rowNumber) {
   return CacheService.getScriptCache().get(tintinSyncGuardKey_(sheet, rowNumber)) === '1';
+}
+
+function tintinSheetPushGuardKey_(sheet) {
+  return 'tintin_push_sheet_' + sheet.getParent().getId() + '_' + sheet.getSheetId();
+}
+
+function tintinMarkSheetPushInProgress_(sheet) {
+  CacheService.getScriptCache().put(tintinSheetPushGuardKey_(sheet), '1', TINTIN_SYNC_GUARD_TTL_SECONDS);
+}
+
+function tintinIsSheetPushInProgress_(sheet) {
+  return CacheService.getScriptCache().get(tintinSheetPushGuardKey_(sheet)) === '1';
 }
 
 /** Verifica el token Firebase del usuario que solicita un cambio desde la web. */
@@ -213,7 +232,10 @@ function tintinClaimProductEdit_(event) {
 
 function tintinRecordSyncSafely_(status, sheetName, cell, detail) {
   try { tintinAppendSyncHistory_(status, sheetName, cell, detail); }
-  catch (historyError) { console.error('No se pudo registrar Historial sync: ' + historyError.message); }
+  // Historial sync es observabilidad auxiliar: un problema de formato o de
+  // validación en esa hoja nunca debe declarar fallida una mutación ya
+  // confirmada en el dominio canónico.
+  catch (historyError) { console.warn('No se pudo registrar Historial sync: ' + historyError.message); }
 }
 
 function tintinCallProductsWebhook_(payload) {
@@ -747,6 +769,10 @@ function tintinReplaceTabRows_(sheetName, firstRow, width, rows) {
   // grilla de datos elimina residuos sin alterar encabezados, formatos,
   // fórmulas de otras hojas ni validaciones de la pestaña.
   var existing = Math.max(rows.length, sheet.getMaxRows() - firstRow + 1, 1);
+  // Las escrituras del reconciliador no son ediciones humanas. Marcar las
+  // filas evita que el onEdit instalable las reenvíe al dominio canónico y
+  // genere un ciclo Sheets → web → Sheets.
+  tintinMarkSheetPushInProgress_(sheet);
   sheet.getRange(firstRow, 1, existing, width).clearContent();
   if (rows.length) sheet.getRange(firstRow, 1, rows.length, width).setValues(rows);
   return rows.length;
