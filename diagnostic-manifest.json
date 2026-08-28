@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-28T16:22:45.020Z",
-  "sourceFingerprint": "95d8a7da4424925948ccc3283faf3bfd9375ef49a7ec9ca4dbcb1d39d3a9a1b6",
+  "generatedAt": "2026-08-28T16:26:54.428Z",
+  "sourceFingerprint": "599a521867b86d1d5a60311b8300e5e152cbbecd8247c94e32937eeacb9f301a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 776,
-    "textFiles": 744,
-    "totalBytes": 8553879,
+    "files": 778,
+    "textFiles": 746,
+    "totalBytes": 8561925,
     "pages": 18,
-    "modules": 498
+    "modules": 499
   },
   "viewports": [
     {
@@ -18296,8 +18296,8 @@
     },
     {
       "path": "functions/product.js",
-      "bytes": 9433,
-      "sha256": "41e3beb95a819f02e739e25750f95e562f2f318a484cafac07cffe3c6d8015e8",
+      "bytes": 9475,
+      "sha256": "545b0a49d28e74233b433cc22f51f75159c676c3643485cc2260e0b767762d96",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18317,15 +18317,15 @@
         },
         {
           "url": "https://schema.org/",
-          "line": 100
+          "line": 101
         },
         {
           "url": "https://schema.org/InStock",
-          "line": 117
+          "line": 118
         },
         {
           "url": "https://schema.org/OutOfStock",
-          "line": 118
+          "line": 119
         }
       ]
     },
@@ -25797,6 +25797,22 @@
       "endpoints": []
     },
     {
+      "path": "scripts/auditar-producto-cloudflare-preview.mjs",
+      "bytes": 4576,
+      "sha256": "9c1c15af8da4d60ce7ce2418aa86920e2fe9c52096f92c0ad6383c07b5962d2e",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://api.github.com/repos/$%7Brepository%7D/commits/$%7Bsha%7D/check-runs",
+          "line": 30
+        }
+      ]
+    },
+    {
       "path": "scripts/auditar-producto-pagina.js",
       "bytes": 5005,
       "sha256": "f35a8ffd3d08c244b835efcc1cd34337f4adfb1aa27b20cb822e97911886dd3a",
@@ -28383,8 +28399,8 @@
     },
     {
       "path": "tests/sync/admin-mirrors.test.mjs",
-      "bytes": 2390,
-      "sha256": "825aeda204ed0cc20725ae21245aba96a060df3e233f2aa822e5103015b2816a",
+      "bytes": 3788,
+      "sha256": "0a9055662d5f083f223f72fe8ddbf14de35fb34fc70f12012c020260c6c362a3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29466,8 +29482,8 @@
     {
       "path": ".github/workflows/hardening-final-temporal.yml",
       "extension": ".yml",
-      "bytes": 2011,
-      "sha256": "b8301a47f72c9924137b2a9a939e1544159db6ceb96e57c0a99cd3b6e5e547ba"
+      "bytes": 2875,
+      "sha256": "ef928e9ee8495a05b793bc7157a388b00cc8a3374c34004da95a3254cc82fcc1"
     },
     {
       "path": ".github/workflows/lanzar-diagnostico-maestro.yml",
@@ -29510,6 +29526,12 @@
       "extension": ".yml",
       "bytes": 1732,
       "sha256": "41d7f13a4dd3cf3e68903152b04d0a6b396280dedd057b29836704aeb775885c"
+    },
+    {
+      "path": ".github/workflows/validar-ruta-producto-cloudflare.yml",
+      "extension": ".yml",
+      "bytes": 1166,
+      "sha256": "a05492b7f536c4ed9da8e619ce15bc04d022295a897490ca78887fb8c9e45b13"
     },
     {
       "path": ".github/workflows/validar-tienda-unificada-final.yml",
@@ -31104,8 +31126,8 @@
     {
       "path": "functions/product.js",
       "extension": ".js",
-      "bytes": 9433,
-      "sha256": "41e3beb95a819f02e739e25750f95e562f2f318a484cafac07cffe3c6d8015e8"
+      "bytes": 9475,
+      "sha256": "545b0a49d28e74233b433cc22f51f75159c676c3643485cc2260e0b767762d96"
     },
     {
       "path": "functions/products/[handle].js",
@@ -33136,6 +33158,12 @@
       "sha256": "7583b14ea00e7f4a3f0ee1d0b80de3c73b0fd1ee98eab2d42f642b6fe8e22bf8"
     },
     {
+      "path": "scripts/auditar-producto-cloudflare-preview.mjs",
+      "extension": ".mjs",
+      "bytes": 4576,
+      "sha256": "9c1c15af8da4d60ce7ce2418aa86920e2fe9c52096f92c0ad6383c07b5962d2e"
+    },
+    {
       "path": "scripts/auditar-producto-pagina.js",
       "extension": ".js",
       "bytes": 5005,
@@ -33738,8 +33766,8 @@
     {
       "path": "tests/sync/admin-mirrors.test.mjs",
       "extension": ".mjs",
-      "bytes": 2390,
-      "sha256": "825aeda204ed0cc20725ae21245aba96a060df3e233f2aa822e5103015b2816a"
+      "bytes": 3788,
+      "sha256": "0a9055662d5f083f223f72fe8ddbf14de35fb34fc70f12012c020260c6c362a3"
     },
     {
       "path": "tests/sync/order-admin-domain.test.mjs",

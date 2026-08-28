@@ -6,6 +6,7 @@ import {
 const PUBLIC_ORIGIN = 'https://tintinaccesorios.pages.dev';
 const CLOUDINARY_HOST = 'res.cloudinary.com';
 const CLOUDINARY_UPLOAD = '/upload/';
+const PRODUCT_METADATA_CEILING_MS = 1400;
 const CLOUDINARY_TINTIN_TRANSFORM = /^f_auto,q_auto,c_limit,w_\d+,dpr_auto\//;
 
 function escapeHtml(value) {
