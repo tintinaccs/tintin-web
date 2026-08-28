@@ -47,3 +47,5 @@ jobs:
           git add -A
           git commit -m "chore: sincronizar artefactos reproducibles"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
+
+# Si el build ya está limpio, termina sin generar otro commit.
