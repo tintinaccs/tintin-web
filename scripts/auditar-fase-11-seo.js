@@ -46,7 +46,7 @@ check('Producto genera canonical absoluto y estable', script.includes("new URL('
 check('Producto publica JSON-LD vigente', /'@type': 'Product'/.test(script) && /priceCurrency: 'PYG'/.test(script) && /schema.org\/InStock/.test(script) && /schema.org\/OutOfStock/.test(script) && /canonicalProductUrl.href/.test(script), 'Los datos estructurados deben reflejar precio, moneda, URL y stock.');
 
 const productFunction = read('functions/product.js');
-check('Producto publica metadata social desde Cloudflare', productFunction.includes('env.ASSETS.fetch(request)') && productFunction.includes('firestoreAdminGet') && productFunction.includes('x-tintin-product-meta') && productFunction.includes("'@type': 'Product'"), 'La ficha debe entregar título, OG/Twitter y JSON-LD específicos antes de ejecutar JavaScript del navegador.');
+check('Producto publica metadata social desde Cloudflare', productFunction.includes('env.ASSETS.fetch(new Request(assetUrl, request))') && productFunction.includes("assetUrl.pathname = '/product.html'") && productFunction.includes('firestoreAdminGet') && productFunction.includes('x-tintin-product-meta') && productFunction.includes("'@type': 'Product'"), 'La ficha debe entregar título, OG/Twitter y JSON-LD específicos antes de ejecutar JavaScript del navegador.');
 
 const sitemapIndexLocations = xmlLocations(read('sitemap.xml'));
 const expectedSitemapIndex = [

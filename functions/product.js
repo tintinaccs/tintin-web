@@ -210,10 +210,13 @@ export async function onRequest(context) {
     return new Response(null, { status: 405, headers: { allow: 'GET, HEAD' } });
   }
 
-  // El binding ASSETS resuelve la ruta limpia /product al documento estático.
-  // Pedir /product.html explícitamente hace que Pages lo canonice de vuelta a
-  // /product con 308 y puede producir un rebote. Conservamos la URL pública.
-  const asset = await env.ASSETS.fetch(request);
+  // Este Function ya ocupa /product. Pedir esa misma ruta al binding ASSETS
+  // puede devolver 404 porque el router no vuelve a aplicar las rutas limpias
+  // dentro del binding. Se solicita el archivo estático de forma explícita,
+  // pero la URL visible de la respuesta conserva /product sin redirección.
+  const assetUrl = new URL(request.url);
+  assetUrl.pathname = '/product.html';
+  const asset = await env.ASSETS.fetch(new Request(assetUrl, request));
   if (request.method === 'HEAD') return asset;
   if (!asset.ok || !(asset.headers.get('content-type') || '').includes('text/html')) return asset;
 
