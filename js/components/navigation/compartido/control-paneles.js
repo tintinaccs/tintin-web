@@ -310,6 +310,13 @@
       if (!trigger && this.surface !== 'none') {
         const openConfig = this.registry.get(this.surface);
         if (openConfig && !openConfig.modal && target && !openConfig.element.contains(target)) {
+          // El primer clic fuera de una superficie no modal (ej. el mega menú
+          // de escritorio) solo debe cerrarla, sin además activar lo que
+          // hubiera debajo (un enlace, un botón): si no se bloquea el click
+          // original, un elemento oculto tras el dropdown se activa al mismo
+          // tiempo que este se cierra.
+          event.preventDefault();
+          event.stopImmediatePropagation();
           this.close('outside', { restoreFocus: false });
         }
         return;

@@ -513,6 +513,10 @@ function phase4CreateOrder_(payload, idToken) {
         // intentar el aviso por si el envío anterior falló: Cloudflare
         // descarta el duplicado por eventId.
         phase4NotifyOrderCreated_(orderId);
+        // Idempotencia también repara el espejo si el push de Sheets falló antes.
+        if (typeof tintinParityUpsertCheckoutOrder_ === 'function') {
+          tintinParityUpsertCheckoutOrder_(orderId, existingOrder);
+        }
         return { ok: true, orderId: orderId, order: existingOrder, created: false };
       }
       return { ok: false, error: 'order_state_invalid' };
@@ -736,6 +740,11 @@ function phase4CreateOrder_(payload, idToken) {
     // Recién acá: el pedido y el descuento de stock ya están confirmados.
     // Si el aviso falla, el pedido igual es exitoso para la clienta.
     phase4NotifyOrderCreated_(orderId);
+    // Firestore ya confirmó pedido + stock. Sheets es un espejo best-effort:
+    // su indisponibilidad nunca transforma la compra en fallida.
+    if (typeof tintinParityUpsertCheckoutOrder_ === 'function') {
+      tintinParityUpsertCheckoutOrder_(orderId, orderData);
+    }
 
     return { ok: true, orderId: orderId, order: orderData, created: true };
   } catch (error) {

@@ -121,7 +121,36 @@ test('el orden de secciones se sanea: solo ids reales, sin duplicados, nunca pie
   assert.ok(new Set(clean.sectionOrder).size === clean.sectionOrder.length);
 
   const empty = sanitizeVisualConfig('index', {});
-  assert.deepEqual(empty.sectionOrder, ['hero', 'trust', 'collections_carousel', 'editorial_bag', 'collections_header', 'editorial_relojes', 'products_header', 'reviews']);
+  assert.deepEqual(empty.sectionOrder, ['hero', 'trust', 'collections_carousel', 'editorial_bag', 'look', 'editorial_relojes', 'reviews']);
+});
+
+test('referencias de secciones viejas se reconectan a la implementación canónica sin copiar datos incompatibles', () => {
+  const clean = sanitizeVisualConfig('index', {
+    sections: {
+      products_header: { background: '#123456' },
+      look: { textColor: '#abcdef' },
+    },
+    sectionOrder: ['hero', 'products_header', 'collections_header', 'reviews'],
+    customBlocks: [
+      { id: 'legacy-anchor-products', type: 'text', afterSection: 'products_header', title: 'Bloque legado' },
+      { id: 'legacy-anchor-collections', type: 'text', afterSection: 'collections_header', title: 'Bloque legado 2' },
+    ],
+  });
+
+  assert.deepEqual(clean.sectionOrder.slice(0, 4), ['hero', 'look', 'collections_carousel', 'reviews']);
+  assert.equal(clean.customBlocks[0].afterSection, 'look');
+  assert.equal(clean.customBlocks[1].afterSection, 'collections_carousel');
+  assert.equal(clean.sections.look.textColor, '#abcdef');
+  assert.equal(clean.sections.look.background, '');
+  assert.equal(clean.sections.products_header, undefined);
+  assert.equal(clean.sections.collections_header, undefined);
+
+  const content = sanitizeVisualContent('index', {
+    products_header: { title: 'No debe contaminar la sección nueva' },
+    look: { visible: false },
+  });
+  assert.equal(content.look.visible, false);
+  assert.equal(content.look.title, undefined);
 });
 
 test('draft no puede cambiar de página ni restaurar auditoría no publicada', () => {

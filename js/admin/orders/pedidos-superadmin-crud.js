@@ -16,7 +16,6 @@ import {
 const SEQUENCE_REF = doc(db, 'settings', 'orderSequence');
 const TRASH_COLLECTION = 'orderTrash';
 const ACTIVE_COLLECTION = 'orders';
-const CANCELLED_STATUSES = new Set(['cancelado', 'rechazado']);
 let ensureQueue = Promise.resolve();
 let modalState = null;
 let catalogCache = [];
@@ -41,12 +40,6 @@ function clean(value, max = 500) {
 function money(value) {
   const parsed = Number(String(value == null ? '' : value).replace(/[^\d.-]/g, ''));
   return Number.isFinite(parsed) ? Math.max(0, Math.round(parsed)) : 0;
-}
-
-function stockValue(value) {
-  if (value === null || value === undefined || value === '') return null;
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? Math.max(0, Math.floor(parsed)) : null;
 }
 
 function timestampMs(value) {
@@ -375,52 +368,44 @@ function collectPatch_() {
   };
 }
 
+async function callCanonicalCreate_(patch) {
+  const user = auth.currentUser;
+  if (!user) throw new Error('La sesión administrativa ya no está disponible.');
+  const token = await user.getIdToken();
+  const response = await fetch('/api/admin-order-mutation', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      action: 'createOrder',
+      userName: patch.userName,
+      userPhone: patch.userPhone,
+      contactEmail: patch.contactEmail,
+      status: patch.status,
+      payment: patch.payment,
+      paymentStatus: patch.paymentStatus,
+      shipping: patch.shipping,
+      shippingCost: patch.shippingCost,
+      notes: patch.notes,
+      items: patch.items.map(item => ({ id: item.id, qty: item.qty, variant: item.variant || '' })),
+      changeId: `admin_create_${crypto.randomUUID().replaceAll('-', '')}`,
+      source: 'superadmin'
+    })
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok || body.ok !== true) {
+    const error = new Error(body.error || 'No se pudo crear el pedido.');
+    error.status = response.status;
+    throw error;
+  }
+  return body.result || {};
+}
+
 async function createManualOrder_(patch) {
   assertSuperAdmin();
-  const internalId = `manual_${Date.now()}_${crypto.randomUUID().replace(/-/g, '').slice(0, 12)}`;
-  const orderRef = doc(db, ACTIVE_COLLECTION, internalId);
-  return runTransaction(db, async transaction => {
-    const productIds = [...new Set(patch.items.map(item => item.id).filter(Boolean))];
-    const snapshots = new Map();
-    for (const id of productIds) snapshots.set(id, await transaction.get(doc(db, 'products', id)));
-    const allocated = await allocateSequence_(transaction);
-    const code = patch.orderNumber || allocated.code;
-    const reserves = !CANCELLED_STATUSES.has(patch.status);
-    for (const item of patch.items) {
-      const snap = snapshots.get(item.id);
-      if (!snap?.exists()) throw new Error(`El producto ${item.id} ya no existe.`);
-      const stock = stockValue(snap.data()?.stock);
-      if (reserves && stock !== null && item.qty > stock) throw new Error(`Stock insuficiente para ${item.name}. Disponible: ${stock}.`);
-    }
-    const now = serverTimestamp();
-    transaction.set(orderRef, {
-      ...patch,
-      orderNumber: code,
-      shortId: code,
-      orderSequenceNumber: allocated.number,
-      requestId: internalId,
-      source: 'superadmin-manual-v1',
-      userId: '',
-      shippingPending: false,
-      notificationStatus: 'pending',
-      inventoryState: reserves ? 'reserved' : 'released',
-      inventoryRevision: 1,
-      inventoryUpdatedAt: now,
-      inventoryUpdatedBy: auth.currentUser?.email || SUPER_ADMIN,
-      createdAt: now,
-      updatedAt: now,
-      createdBy: auth.currentUser?.email || SUPER_ADMIN
-    });
-    if (reserves) {
-      for (const item of patch.items) {
-        const snap = snapshots.get(item.id);
-        const stock = stockValue(snap.data()?.stock);
-        if (stock === null) continue;
-        transaction.update(snap.ref, { stock: stock - item.qty, lastInventoryOrderId: internalId, lastInventoryAction: 'reserve', updatedAt: now });
-      }
-    }
-    return { orderId: internalId, orderNumber: code };
-  });
+  return callCanonicalCreate_(patch);
 }
 
 async function saveModal_() {
@@ -464,9 +449,13 @@ async function openManualOrder() {
   modalState = { mode: 'create', orderId: '', baseOrder: null, items: [] };
   const overlay = ensureModal_();
   formEl_('tinped-modal-title').textContent = 'Nuevo pedido manual';
-  formEl_('tinped-modal-subtitle').textContent = 'El código TINPED se asigna al guardar y el stock se reconcilia en la misma transacción.';
+  formEl_('tinped-modal-subtitle').textContent = 'TINPED, precios, total y stock se calculan automáticamente desde Firestore al guardar.';
   fillModal_({ status: 'pendiente', payment: { method: 'efectivo', status: 'pendiente' }, shipping: { method: 'delivery' } });
-  formEl_('tinped-code').placeholder = 'Automático: próximo TINPED';
+  const codeInput = formEl_('tinped-code');
+  codeInput.value = '';
+  codeInput.placeholder = 'Automático: próximo TINPED';
+  codeInput.readOnly = true;
+  codeInput.setAttribute('aria-readonly', 'true');
   renderPicker_();
   renderItems_();
   overlay.style.display = 'block';
@@ -482,6 +471,9 @@ async function openAdvancedOrderEditor(orderId) {
   const overlay = ensureModal_();
   formEl_('tinped-modal-title').textContent = `CRUD completo · ${orderNumberOf(order)}`;
   formEl_('tinped-modal-subtitle').textContent = `ID técnico: ${safeId}`;
+  const codeInput = formEl_('tinped-code');
+  codeInput.readOnly = false;
+  codeInput.removeAttribute('aria-readonly');
   fillModal_(order);
   renderPicker_();
   renderItems_();

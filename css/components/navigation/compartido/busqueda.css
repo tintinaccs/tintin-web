@@ -1,3 +1,4 @@
+/* Header surfaces bundle 2026-08-27: shared cache invalidation marker. */
 /* Shared search content. Panel geometry lives in surfaces.css. */
 #search-panel.tt-search-panel.open {
   display: grid !important;
@@ -156,3 +157,4 @@
 @media (prefers-reduced-motion: reduce) {
   .tt-search-result-item { transition: none; }
 }
+/* Header surfaces bundle 2026-08-27: shared cache invalidation marker. */

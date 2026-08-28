@@ -1,6 +1,6 @@
 /* Canonical y Open Graph de cada producto siempre apuntan al dominio público.
  * El observador corrige también cambios posteriores hechos por el render en vivo. */
-const TT_PUBLIC_PRODUCT_URL = 'https://tintinaccesorios.pages.dev/product.html';
+const TT_PUBLIC_PRODUCT_URL = 'https://tintinaccesorios.pages.dev/product';
 const ttCanonicalProduct = document.getElementById('link-canonical');
 const ttOpenGraphProductUrl = document.getElementById('meta-og-url');
 let ttSyncingProductSeo = false;

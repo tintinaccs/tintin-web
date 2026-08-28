@@ -6,6 +6,10 @@ import {
   sanitizeSection,
 } from '../js/core/store/esquema-contenido.js';
 import {
+  migrateVisualConfigReferences,
+  migrateVisualContentReferences,
+} from '../js/core/store/migraciones-secciones.js';
+import {
   VISUAL_BLOCK_TYPES,
   VISUAL_STYLE_OPTIONS,
 } from '../js/core/store/contratos-visual-builder.js';
@@ -163,16 +167,27 @@ function sanitizeBlockItems(raw, max = VISUAL_BUILDER_LIMITS.maxFeatureItems) {
     .filter(item => item.q || item.a);
 }
 
+function structuralEntries(pageSchema) {
+  return Object.entries(pageSchema.sections || {}).filter(([, schema]) => !schema.global);
+}
+
+function blockAnchorIds(pageSchema) {
+  return structuralEntries(pageSchema).filter(([, schema]) => schema.blockAnchor === true).map(([id]) => id);
+}
+
 function sanitizeBlock(raw, index, pageSchema) {
+  const anchors = blockAnchorIds(pageSchema);
+  const topAllowed = pageSchema.allowTopBlocks === true;
+  if (!anchors.length && !topAllowed) return null;
   const type = VISUAL_BLOCK_TYPES.includes(raw?.type) ? raw.type : 'section';
-  const sectionIds = Object.keys(pageSchema.sections || {});
   const id = text(raw?.id || `${type}-${index + 1}`, 64).replace(/[^a-z0-9_-]/gi, '-').toLowerCase() || `${type}-${index + 1}`;
-  const validAnchor = raw?.afterSection === VISUAL_TOP_ANCHOR || sectionIds.includes(raw?.afterSection);
+  const validAnchor = anchors.includes(raw?.afterSection) || (topAllowed && raw?.afterSection === VISUAL_TOP_ANCHOR);
+  const fallbackAnchor = anchors[0] || VISUAL_TOP_ANCHOR;
   const block = {
     id,
     type,
     label: text(raw?.label || '', 80),
-    afterSection: validAnchor ? raw.afterSection : (sectionIds[0] || VISUAL_TOP_ANCHOR),
+    afterSection: validAnchor ? raw.afterSection : fallbackAnchor,
     eyebrow: text(raw?.eyebrow || 'TINTÍN', 80),
     title: text(raw?.title || 'Nueva sección', 180),
     text: text(raw?.text || '', 1200),
@@ -201,38 +216,54 @@ function sanitizeBlock(raw, index, pageSchema) {
   return block;
 }
 
-function reorderableSectionIds(pageSchema) {
-  return Object.entries(pageSchema.sections || {}).filter(([, schema]) => !schema.global).map(([id]) => id);
-}
-
 function sanitizeSectionOrder(raw, pageSchema) {
-  const reorderable = reorderableSectionIds(pageSchema);
+  const entries = structuralEntries(pageSchema);
+  const canonical = entries.map(([id]) => id);
+  const rawOrder = [];
   const seen = new Set();
-  const order = (Array.isArray(raw) ? raw : [])
-    .filter(id => reorderable.includes(id) && !seen.has(id) && seen.add(id));
-  reorderable.forEach(id => { if (!seen.has(id)) { order.push(id); seen.add(id); } });
-  return order;
+  (Array.isArray(raw) ? raw : []).forEach(id => {
+    if (canonical.includes(id) && !seen.has(id)) { seen.add(id); rawOrder.push(id); }
+  });
+
+  const output = [];
+  let cursor = 0;
+  while (cursor < entries.length) {
+    const zone = entries[cursor][1].zone || 'main';
+    const group = [];
+    while (cursor < entries.length && (entries[cursor][1].zone || 'main') === zone) {
+      group.push(entries[cursor]);
+      cursor += 1;
+    }
+    const movableIds = group.filter(([, schema]) => schema.movable === true).map(([id]) => id);
+    const orderedMovable = rawOrder.filter(id => movableIds.includes(id));
+    movableIds.forEach(id => { if (!orderedMovable.includes(id)) orderedMovable.push(id); });
+    let movableIndex = 0;
+    group.forEach(([id, schema]) => output.push(schema.movable === true ? orderedMovable[movableIndex++] : id));
+  }
+  return output;
 }
 
 export function sanitizeVisualConfig(pageIdValue, raw = {}) {
   const pageId = requireVisualPageId(pageIdValue);
   const pageSchema = getPageSchema(pageId);
+  const migrated = migrateVisualConfigReferences(pageId, raw);
   const sections = {};
-  Object.keys(pageSchema.sections || {}).forEach(sectionId => {
-    sections[sectionId] = sanitizeVisualStyle(raw?.sections?.[sectionId]);
+  Object.entries(pageSchema.sections || {}).forEach(([sectionId, schema]) => {
+    sections[sectionId] = sanitizeVisualStyle(schema.visualEditable === false ? {} : migrated?.sections?.[sectionId]);
   });
   const seen = new Set();
-  const customBlocks = (Array.isArray(raw?.customBlocks) ? raw.customBlocks : [])
+  const customBlocks = (Array.isArray(migrated?.customBlocks) ? migrated.customBlocks : [])
     .slice(0, VISUAL_BUILDER_LIMITS.maxCustomBlocks)
     .map((block, index) => sanitizeBlock(block, index, pageSchema))
-    .filter(block => !seen.has(block.id) && seen.add(block.id));
-  return { pageId, sections, sectionOrder: sanitizeSectionOrder(raw?.sectionOrder, pageSchema), customBlocks };
+    .filter(block => block && !seen.has(block.id) && seen.add(block.id));
+  return { pageId, sections, sectionOrder: sanitizeSectionOrder(migrated?.sectionOrder, pageSchema), customBlocks };
 }
 
 export function sanitizeVisualContent(pageIdValue, raw = {}) {
   const pageId = requireVisualPageId(pageIdValue);
   const defaults = getPageDefaults(pageId);
-  const merged = mergeContent(defaults, raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {});
+  const migrated = migrateVisualContentReferences(pageId, raw);
+  const merged = mergeContent(defaults, migrated && typeof migrated === 'object' && !Array.isArray(migrated) ? migrated : {});
   return Object.fromEntries(Object.keys(getPageSchema(pageId).sections || {}).map(sectionId => [
     sectionId,
     sanitizeSection(pageId, sectionId, merged[sectionId]),

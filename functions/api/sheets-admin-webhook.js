@@ -1,15 +1,17 @@
 import {
-  deleteFirebaseUser,
+  decodeFirestoreFields,
   encodeFirestoreFields,
   firestoreAdminCommit,
+  firestoreAdminGet,
   setFirebaseUserDisabled,
 } from '../../cloudflare/firebase-admin-ligero.js';
-import { jsonResponse } from '../../cloudflare/seguridad-cloudinary.js';
+import { jsonResponse, SUPERADMIN_EMAIL } from '../../cloudflare/seguridad-cloudinary.js';
+import { applyUserLifecycle } from '../../cloudflare/user-lifecycle-domain.js';
+import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
 
-const MAX_BODY_BYTES = 8 * 1024;
+const MAX_BODY_BYTES = 64 * 1024;
 const ROLES = new Set(['client', 'viewer', 'agent', 'admin']);
-const ORDER_STATUS = new Set(['pendiente', 'confirmado', 'preparando', 'enviado', 'entregado', 'cancelado']);
-const PAYMENT_STATUS = new Set(['pendiente', 'señado', 'pagado', 'rechazado', 'reembolsado']);
+const ADMIN_SYNC_REVISION = 'admin-sync-v5';
 
 function sameSecret(provided, expected) {
   const left = new TextEncoder().encode(String(provided || ''));
@@ -30,51 +32,201 @@ function text(value, max) {
   return String(value ?? '').trim().slice(0, max);
 }
 
-async function updateUser(env, input) {
-  const uid = id(input.uid, 'UID');
-  const action = String(input.action || 'updateUser');
-  if (action === 'deleteUser') {
-    await deleteFirebaseUser(env, uid);
-    await firestoreAdminCommit(env, [{ path: `users/${uid}`, delete: true }]);
-    return { uid, deleted: true };
-  }
-  const role = text(input.role, 20).toLowerCase();
-  if (!ROLES.has(role)) throw new Error('Rol no permitido');
-  const blocked = input.blocked === true;
-  await setFirebaseUserDisabled(env, uid, blocked);
-  await firestoreAdminCommit(env, [{
-    path: `users/${uid}`,
-    fields: encodeFirestoreFields({ role, blocked, internalNotes: text(input.internalNotes, 1000), updatedAt: new Date(), lastChangeId: text(input.changeId, 120) }),
-    mergeFields: ['role', 'blocked', 'internalNotes', 'updatedAt', 'lastChangeId'],
-  }]);
-  return { uid, role, blocked };
+function changeId(value) {
+  const normalized = text(value, 120);
+  return /^[A-Za-z0-9:_-]{8,120}$/.test(normalized)
+    ? normalized
+    : `sheet_${crypto.randomUUID().replaceAll('-', '')}`;
 }
 
-async function updateOrder(env, input) {
-  const orderId = id(input.orderId, 'Pedido');
-  const status = text(input.status, 40).toLowerCase();
-  const paymentStatus = text(input.paymentStatus, 40).toLowerCase();
-  if (!ORDER_STATUS.has(status) || !PAYMENT_STATUS.has(paymentStatus)) throw new Error('Estado de pedido o pago no permitido');
-  await firestoreAdminCommit(env, [{
-    path: `orders/${orderId}`,
-    fields: encodeFirestoreFields({ status, paymentStatus, payment: { status: paymentStatus }, updatedAt: new Date(), lastChangeId: text(input.changeId, 120) }),
-    mergeFields: ['status', 'paymentStatus', 'payment', 'updatedAt', 'lastChangeId'],
-  }]);
-  return { orderId, status, paymentStatus };
+function conflict(message) {
+  const error = new Error(message);
+  error.status = 409;
+  return error;
+}
+
+async function restoreAuthStateBestEffort(env, uid, previousDisabled, originalError) {
+  try {
+    await setFirebaseUserDisabled(env, uid, previousDisabled);
+  } catch (rollbackError) {
+    console.error('[sheets-admin] rollback Firebase Auth falló', {
+      uid,
+      original: originalError?.message || originalError,
+      rollback: rollbackError?.message || rollbackError,
+    });
+  }
+}
+
+async function updateUser(env, input) {
+  const uid = id(input.uid, 'UID');
+  const action = text(input.action || 'updateUser', 40);
+  const nextChangeId = changeId(input.changeId);
+  const baseChangeId = text(input.baseChangeId, 120);
+  const origin = text(input.source || 'google-sheets:Usuarios web', 120);
+
+  if (action === 'deleteUser' || action === 'softDeleteUser') {
+    return applyUserLifecycle(env, {
+      uid,
+      action: 'softDelete',
+      actorId: 'google-sheets',
+      actorEmail: 'google-sheets@tintin.internal',
+      actorRole: 'sheets-sync',
+      reason: 'Acción administrativa desde Usuarios web',
+      origin,
+      changeId: nextChangeId,
+      baseChangeId,
+    });
+  }
+  if (action === 'reactivateUser') {
+    return applyUserLifecycle(env, {
+      uid,
+      action: 'reactivate',
+      actorId: 'google-sheets',
+      actorEmail: 'google-sheets@tintin.internal',
+      actorRole: 'sheets-sync',
+      reason: 'Reactivación administrativa desde Usuarios web',
+      origin,
+      changeId: nextChangeId,
+      baseChangeId,
+    });
+  }
+  if (action !== 'updateUser') throw new Error('Acción de usuario no permitida');
+
+  const currentDoc = await firestoreAdminGet(env, `users/${encodeURIComponent(uid)}`);
+  if (!currentDoc) throw new Error('No se encontró la identidad solicitada.');
+  const current = decodeFirestoreFields(currentDoc.fields || {});
+  if (text(current.email, 254).toLowerCase() === SUPERADMIN_EMAIL) throw new Error('La cuenta Super Admin está protegida.');
+  if (current.deleted === true || current.profileStatus === 'deleted') {
+    throw new Error('La cuenta está eliminada; primero debe reactivarse.');
+  }
+
+  const currentChangeId = text(current.lastChangeId, 120);
+  if (currentChangeId && currentChangeId === nextChangeId) {
+    return { uid, duplicate: true, role: current.role || 'client', blocked: current.blocked === true, changeId: currentChangeId };
+  }
+  if (baseChangeId && currentChangeId && baseChangeId !== currentChangeId) {
+    throw conflict('La cuenta cambió después de la última sincronización. Actualizá la hoja antes de volver a editar.');
+  }
+
+  const requestedRole = text(input.role, 20).toLowerCase();
+  if (!ROLES.has(requestedRole)) throw new Error('Rol no permitido');
+  const blocked = input.blocked === true;
+  const previousDisabled = current.blocked === true;
+  const roleBeforeBlock = blocked
+    ? (current.role && current.role !== 'client' ? current.role : current.roleBeforeBlock || '')
+    : '';
+  const role = blocked ? 'client' : requestedRole;
+  const now = new Date();
+  const eventId = `EVT_${crypto.randomUUID().replaceAll('-', '')}`;
+
+  // Firebase Auth y Firestore no comparten una transacción. Si Auth cambia y
+  // el commit Firestore falla, compensamos Auth para no dejar dos autoridades
+  // con estados distintos.
+  await setFirebaseUserDisabled(env, uid, blocked);
+  try {
+    await firestoreAdminCommit(env, [
+      {
+        path: `users/${uid}`,
+        fields: encodeFirestoreFields({
+          role,
+          blocked,
+          roleBeforeBlock,
+          internalNotes: text(input.internalNotes, 1000),
+          updatedAt: now,
+          lastChangeId: nextChangeId,
+          syncOrigin: origin,
+        }),
+        mergeFields: ['role', 'blocked', 'roleBeforeBlock', 'internalNotes', 'updatedAt', 'lastChangeId', 'syncOrigin'],
+      },
+      {
+        path: `auditLog/${eventId}`,
+        fields: encodeFirestoreFields({
+          eventId,
+          timestamp: now,
+          createdAt: now,
+          customerId: current.customerId || `CUS_${uid}`,
+          actorId: 'google-sheets',
+          actorEmail: 'google-sheets@tintin.internal',
+          actorRole: 'sheets-sync',
+          action: blocked ? 'bloquear_usuario' : 'actualizar_usuario',
+          entityType: 'usuario',
+          entityId: uid,
+          before: { role: current.role || 'client', blocked: current.blocked === true },
+          after: { role, blocked },
+          origin,
+          result: 'success',
+          changeId: nextChangeId,
+        }),
+        currentDocument: { exists: false },
+      },
+    ]);
+  } catch (error) {
+    if (previousDisabled !== blocked) {
+      await restoreAuthStateBestEffort(env, uid, previousDisabled, error);
+    }
+    throw error;
+  }
+  return { uid, role, blocked, duplicate: false, changeId: nextChangeId };
+}
+
+async function handleOrder(env, input) {
+  const action = text(input.action || 'updateOrder', 40);
+  const actor = {
+    uid: 'google-sheets',
+    email: 'google-sheets@tintin.internal',
+    role: 'sheets-sync',
+    origin: text(input.source || 'google-sheets:Pedidos web', 120),
+  };
+  if (action === 'createOrder') {
+    return createOrderAdmin(env, {
+      ...input,
+      changeId: changeId(input.changeId),
+    }, actor);
+  }
+  if (action !== 'updateOrder') throw new Error('Acción de pedido no permitida');
+  return applyOrderAdminMutation(env, {
+    ...input,
+    changeId: changeId(input.changeId),
+    baseChangeId: text(input.baseChangeId, 120),
+  }, actor);
 }
 
 export async function onRequestPost({ request, env }) {
   if (!sameSecret(request.headers.get('X-Tintin-Sheets-Secret'), env.SHEETS_ENGAGEMENT_SECRET)) {
-    return jsonResponse({ ok: false, error: 'No autorizado' }, 401, '', request.url);
+    return jsonResponse({ ok: false, error: 'No autorizado', revision: ADMIN_SYNC_REVISION }, 401, '', request.url);
   }
   try {
     const raw = await request.text();
     if (!raw || new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) throw new Error('Solicitud inválida');
     const input = JSON.parse(raw);
-    const result = input.entity === 'user' ? await updateUser(env, input) : input.entity === 'order' ? await updateOrder(env, input) : null;
-    if (!result) throw new Error('Entidad no permitida');
-    return jsonResponse({ ok: true, result }, 200, '', request.url);
+
+    if (input.action === 'diagnose') {
+      return jsonResponse({
+        ok: true,
+        authenticated: true,
+        destructiveUserDelete: false,
+        writableEntities: ['user', 'order'],
+        readOnlyMirrors: ['audit'],
+        orderMutationsUseInventoryDomain: true,
+        orderCreationUsesCanonicalSequence: true,
+        authFirestoreCompensation: true,
+        revision: ADMIN_SYNC_REVISION,
+      }, 200, '', request.url);
+    }
+
+    let result;
+    if (input.entity === 'user') result = await updateUser(env, input);
+    else if (input.entity === 'order') result = await handleOrder(env, input);
+    else throw new Error('Entidad no permitida');
+
+    return jsonResponse({ ok: true, result, revision: ADMIN_SYNC_REVISION }, 200, '', request.url);
   } catch (error) {
-    return jsonResponse({ ok: false, error: String(error?.message || 'No se pudo sincronizar').slice(0, 300) }, 400, '', request.url);
+    const status = Number(error?.status) === 409 ? 409 : 400;
+    return jsonResponse({
+      ok: false,
+      error: String(error?.message || 'No se pudo sincronizar').slice(0, 300),
+      code: String(error?.code || '').slice(0, 80),
+      revision: ADMIN_SYNC_REVISION,
+    }, status, '', request.url);
   }
 }

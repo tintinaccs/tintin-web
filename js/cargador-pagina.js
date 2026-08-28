@@ -1,6 +1,31 @@
 (function () {
   'use strict';
 
+  // Cada entrada de una página comienza arriba. El navegador puede restaurar
+  // el scroll anterior incluso en una navegación normal o desde bfcache;
+  // forzarlo aquí (en head, antes de pintar contenido) evita que cualquier
+  // ruta aparezca a mitad de página.
+  try { history.scrollRestoration = 'manual'; } catch {}
+  function resetEntryScroll() {
+    var root = document.documentElement;
+    var body = document.body;
+    var previous = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
+    window.scrollTo(0, 0);
+    root.scrollTop = 0;
+    if (body) body.scrollTop = 0;
+    requestAnimationFrame(function () {
+      window.scrollTo(0, 0);
+      root.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
+      root.style.scrollBehavior = previous;
+    });
+  }
+  resetEntryScroll();
+  document.addEventListener('DOMContentLoaded', resetEntryScroll, { once: true });
+  window.addEventListener('load', resetEntryScroll, { once: true, passive: true });
+  window.addEventListener('pageshow', resetEntryScroll, { passive: true });
+
   // El sitio oficial vive en Cloudflare Pages. Conserva ruta, parámetros y hash
   // cuando alguien llega desde el dominio histórico de GitHub Pages.
   if (window.location.hostname === 'tintinaccs.github.io') {

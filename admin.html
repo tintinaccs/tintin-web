@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="css/admin/participacion-admin.css?v=tintin-20260817-engagement-master-1">
   <link rel="stylesheet" href="css/admin/paginas-admin.css?v=tintin-20260825-pages-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260824-contrast-buttons-3">
+  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260828-product-header-fixes-1">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -374,6 +374,11 @@
               <span class="adm-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
               <input type="text" class="adm-input" id="user-search" placeholder="Buscar por nombre o email…" />
             </div>
+            <select class="adm-select" id="user-sort" style="width:auto;flex:0 0 auto">
+              <option value="name">Ordenar: Nombre (A-Z)</option>
+              <option value="totalSpent">Ordenar: Total gastado</option>
+              <option value="purchaseCount">Ordenar: Pedidos</option>
+            </select>
           </div>
         </div>
         <!-- Barra de acciones masivas — solo Super Admin la ve (manageUsers) -->
@@ -404,13 +409,16 @@
                   <th>Avatar</th>
                   <th>Nombre</th>
                   <th>Email</th>
+                  <th>Teléfono</th>
                   <th>Rol</th>
                   <th>Estado</th>
+                  <th>Pedidos</th>
+                  <th>Total gastado</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody id="users-tbody">
-                <tr><td colspan="7" class="adm-loading"><span class="adm-spinner"></span> Cargando usuarios...</td></tr>
+                <tr><td colspan="9" class="adm-loading"><span class="adm-spinner"></span> Cargando usuarios...</td></tr>
               </tbody>
             </table>
           </div>

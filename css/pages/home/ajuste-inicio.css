@@ -81,6 +81,11 @@ html body.tt-home-premium #tt-privacy-consent .tt-privacy-btn-secondary{
   background:#FFF6FA!important;
   background-color:#FFF6FA!important;
 }
+/* No usar una foto de muestra detrás del <img>: si la imagen publicada tarda
+   un frame en decodificar, esa segunda foto es el origen del parpadeo. */
+.tt-home-premium .tt-hero-media{
+  background-image:none!important;
+}
 /* Nunca se pinta el hero procedente del caché local. La clase permanece desde
    el HTML inicial hasta que Firestore confirma la URL publicada y esa imagen
    termina de cargar. `visibility` evita que una foto anterior llegue a ocupar

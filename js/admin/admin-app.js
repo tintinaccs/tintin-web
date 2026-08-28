@@ -1600,11 +1600,12 @@ function loadDashboard() {
 // Bloqueados — un usuario bloqueado desaparece de "Usuarios" y solo aparece
 // en "Bloqueados", nunca en las dos a la vez.
 let userStatusFilter = 'active';
+let userSortMode = 'name';
 
 function loadUsers() {
   const tbody = document.getElementById('users-tbody');
   if (!adminRealtimeReady.users) {
-    tbody.innerHTML = '<tr><td colspan="7" class="adm-loading"><span class="adm-spinner"></span> Sincronizando usuarios...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" class="adm-loading"><span class="adm-spinner"></span> Sincronizando usuarios...</td></tr>';
     return;
   }
   applyUserFilters();
@@ -1623,6 +1624,11 @@ function applyUserFilters() {
   filtered = userStatusFilter === 'blocked'
     ? filtered.filter(u => u.blocked)
     : filtered.filter(u => !u.blocked);
+  filtered = userSortMode === 'totalSpent'
+    ? [...filtered].sort((a, b) => (b.totalSpent || 0) - (a.totalSpent || 0))
+    : userSortMode === 'purchaseCount'
+      ? [...filtered].sort((a, b) => (b.purchaseCount || 0) - (a.purchaseCount || 0))
+      : [...filtered].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'es'));
   _lastFilteredUsers = filtered;
   const visibleIds = new Set(filtered.map(u => u.uid));
   [..._selectedUsers].forEach(uid => { if (!visibleIds.has(uid)) _selectedUsers.delete(uid); });
@@ -1648,7 +1654,7 @@ function renderUsersTable(users) {
   const tbody = document.getElementById('users-tbody');
   if (!users.length) {
     const emptyMsg = userStatusFilter === 'blocked' ? 'No hay usuarios bloqueados' : 'Sin usuarios';
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#aaa;padding:24px">${emptyMsg}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:#aaa;padding:24px">${emptyMsg}</td></tr>`;
     return;
   }
   tbody.innerHTML = users.map(u => {
@@ -1723,8 +1729,11 @@ function renderUsersTable(users) {
         <td>${avatar}</td>
         <td><strong>${escapeHtmlAdmin(u.name || '—')}</strong></td>
         <td style="font-size:12px;color:#666">${escapeHtmlAdmin(u.email || '—')}</td>
+        <td style="font-size:12px;color:#666">${escapeHtmlAdmin(u.phone || '—')}</td>
         <td>${roleSelect}</td>
         <td>${blockedBadge}${blockedDetail}</td>
+        <td style="font-size:12px;color:#666">${u.purchaseCount || 0}</td>
+        <td style="font-size:12px;color:#666">${formatPrice(u.totalSpent || 0)}</td>
         <td>${actions}</td>
       </tr>
     `;
@@ -1733,6 +1742,7 @@ function renderUsersTable(users) {
 
 // Búsqueda y pestañas Usuarios/Bloqueados — comparten applyUserFilters()
 document.getElementById('user-search').oninput = applyUserFilters;
+document.getElementById('user-sort').onchange = (e) => { userSortMode = e.target.value; applyUserFilters(); };
 document.querySelectorAll('#section-usuarios .user-tab-btn').forEach(btn => {
   btn.addEventListener('click', () => window.filterUsersByStatus(btn.dataset.userTab));
 });
@@ -2029,10 +2039,10 @@ window.bulkRestoreUsers = async function() {
 };
 
 function userRowsToCsv_(users) {
-  const header = ['Nombre', 'Email', 'Rol', 'Estado', 'Teléfono', 'Compras', 'Total gastado'];
+  const header = ['UID', 'Nombre', 'Email', 'Rol', 'Estado', 'Teléfono', 'Compras', 'Total gastado', 'Notas internas'];
   const rows = users.map(u => [
-    u.name || '', u.email || '', ROLE_LABELS[u.role] || u.role || '',
-    u.blocked ? 'Bloqueado' : 'Activo', u.phone || '', u.purchaseCount || 0, u.totalSpent || 0
+    u.uid || '', u.name || '', u.email || '', ROLE_LABELS[u.role] || u.role || '',
+    u.blocked ? 'Bloqueado' : 'Activo', u.phone || '', u.purchaseCount || 0, u.totalSpent || 0, u.internalNotes || ''
   ]);
   return [header, ...rows];
 }

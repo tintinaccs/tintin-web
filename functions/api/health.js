@@ -30,13 +30,8 @@ export async function onRequest({ request, env }) {
 
   if (!missingConfig.includes('FIREBASE_SERVICE_ACCOUNT_KEY')) {
     try {
-      // Smoke no destructivo de las mismas colecciones privadas que sostienen
-      // los módulos del Super Admin. Los probes nunca devuelven documentos ni
-      // datos de clientas: solo disponibilidad booleana por superficie.
       runtimeReport = await runAdminRuntimeChecks(env);
     } catch (error) {
-      // runAdminRuntimeChecks ya aísla errores por probe; este catch protege un
-      // fallo inesperado del propio runner para que /api/health siga respondiendo.
       console.error('[health] Admin runtime no disponible:', error?.message || error);
     }
   }

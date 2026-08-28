@@ -39,3 +39,14 @@ jobs:
           npm run audit:cache-versioning
           npm run build:pages
           git diff --exit-code -- diagnostic-manifest.json scripts/cache-version-baseline.json _headers _routes.json
+      - name: Adjuntar artefactos reproducibles cuando difieran
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: navegacion-artefactos-reproducibles
+          if-no-files-found: error
+          path: |
+            diagnostic-manifest.json
+            scripts/cache-version-baseline.json
+            _headers
+            _routes.json

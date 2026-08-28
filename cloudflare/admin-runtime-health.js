@@ -7,12 +7,15 @@ const DEFAULT_ACCESS = Object.freeze({
 
 export const ADMIN_RUNTIME_CHECK_IDS = Object.freeze([
   'products',
+  'productInventory',
   'collections',
   'orders',
   'users',
   'reviews',
   'likes',
   'emailLogs',
+  'auditLog',
+  'settings',
   'siteContent',
   'visualBuilder',
 ]);
@@ -62,12 +65,15 @@ export async function runAdminRuntimeChecks(env, { access = DEFAULT_ACCESS } = {
   // se ejecuta secuencialmente para no disparar múltiples intercambios OAuth
   // simultáneos en un isolate nuevo de Cloudflare.
   await probe('products', () => access.list(env, 'products', 1));
+  await probe('productInventory', () => access.list(env, 'productInventory', 1));
   await probe('collections', () => access.list(env, 'collections', 1));
   await probe('orders', () => access.list(env, 'orders', 1));
   await probe('users', () => access.list(env, 'users', 1));
   await probe('reviews', () => access.list(env, 'reviewRecords', 1));
   await probe('likes', () => access.list(env, 'likeRecords', 1));
   await probe('emailLogs', () => access.list(env, 'emailLogs', 1));
+  await probe('auditLog', () => access.list(env, 'auditLog', 1));
+  await probe('settings', () => access.get(env, 'settings/general'));
   await probe('siteContent', () => access.get(env, 'site_content/index'));
   await probe('visualBuilder', async () => {
     await access.get(env, 'visualBuilderPages/index');

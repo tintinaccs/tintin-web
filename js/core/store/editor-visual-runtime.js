@@ -1,7 +1,7 @@
 import {
   detectContentPageId, getNested, getPageSchema, normalizeContentValue,
   sanitizeContentHref, sanitizeContentText,
-} from './esquema-contenido.js?v=tintin-20260826-carousel-order-2';
+} from './esquema-contenido.js?v=tintin-20260826-carousel-order-3';
 import {
   VISUAL_BLOCK_TYPES, VISUAL_STYLE_OPTIONS,
 } from './contratos-visual-builder.js?v=tintin-20260810-visual-studio-v2-1';
@@ -16,6 +16,38 @@ const SAFE_YOUTUBE_EMBED = /^https:\/\/www\.youtube(?:-nocookie)?\.com\/embed\/[
 const SAFE_VIMEO_EMBED = /^https:\/\/player\.vimeo\.com\/video\/\d{4,12}(?:\?[A-Za-z0-9_=&.-]*)?$/i;
 const SAFE_CLOUDINARY_VIDEO = /^https:\/\/res\.cloudinary\.com\/[A-Za-z0-9_./,%~-]+\/video\/upload\/[A-Za-z0-9_./,%~-]+$/i;
 const initializedPages = new Set();
+const CLEAN_VISUAL_ROUTES = Object.freeze({
+  index: '/',
+  'index.html': '/',
+  about: '/about',
+  'about.html': '/about',
+  nosotros: '/about',
+  'nosotros.html': '/about',
+  catalogo: '/catalogo',
+  'catalogo.html': '/catalogo',
+  collections: '/collections',
+  'collections.html': '/collections',
+  product: '/product',
+  'product.html': '/product',
+  checkout: '/checkout',
+  'checkout.html': '/checkout',
+  login: '/login',
+  'login.html': '/login',
+  perfil: '/perfil',
+  'perfil.html': '/perfil',
+  contact: '/contact',
+  'contact.html': '/contact',
+  envios: '/envios',
+  'envios.html': '/envios',
+  'preguntas-frecuentes': '/preguntas-frecuentes',
+  'preguntas-frecuentes.html': '/preguntas-frecuentes',
+  'cambios-devoluciones': '/cambios-devoluciones',
+  'cambios-devoluciones.html': '/cambios-devoluciones',
+  terminos: '/terminos',
+  'terminos.html': '/terminos',
+  privacidad: '/privacidad',
+  'privacidad.html': '/privacidad',
+});
 
 function ensureCss() {
   if (document.getElementById('tt-visual-builder-runtime-css')) return;
@@ -31,9 +63,14 @@ function option(group, value, fallback) { return OPTIONS[group].has(value) ? val
 function plain(value, max) { return String(value ?? '').replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max); }
 function safeHref(value) {
   const href = String(value || '').trim();
-  if (/^(?:index|about|nosotros|catalogo|collections|product|checkout|login|perfil|contact|envios|preguntas-frecuentes|cambios-devoluciones|terminos|privacidad)\.html(?:[?#][A-Za-z0-9_=&%.-]*)?$/i.test(href)) return href;
-  if (/^https:\/\//i.test(href)) return href;
-  return 'catalogo.html';
+  if (href === '/') return '/';
+  const match = href.match(/^(?:\.\/|\/)?([^/?#]+)([?#][A-Za-z0-9_=&%+.#:-]*)?$/i);
+  if (match) {
+    const route = CLEAN_VISUAL_ROUTES[match[1].toLowerCase()];
+    if (route) return `${route}${match[2] || ''}`;
+  }
+  const safe = sanitizeContentHref(href, '');
+  return /^https:\/\//i.test(safe) ? safe : '/catalogo';
 }
 function safeImage(value) {
   const src = String(value || '').trim();
@@ -73,23 +110,38 @@ function cleanStyle(raw = {}) {
   };
 }
 
-function reorderableSectionIds(schema) {
-  return Object.entries(schema.sections || {}).filter(([, sectionSchema]) => !sectionSchema.global).map(([id]) => id);
+function structuralEntries(schema) {
+  return Object.entries(schema.sections || {}).filter(([, sectionSchema]) => !sectionSchema.global);
 }
 
 function sanitizeSectionOrderClient(raw, schema) {
-  const reorderable = reorderableSectionIds(schema);
+  const entries = structuralEntries(schema);
+  const canonical = entries.map(([id]) => id);
+  const rawOrder = [];
   const seen = new Set();
-  const order = (Array.isArray(raw) ? raw : []).filter(id => reorderable.includes(id) && !seen.has(id) && seen.add(id));
-  // Older saved configurations predate the homepage carousel. Migrate it into
-  // its intended position instead of appending it after every other section.
-  if (reorderable.includes('collections_carousel') && !seen.has('collections_carousel')) {
-    const trustIndex = order.indexOf('trust');
-    order.splice(trustIndex >= 0 ? trustIndex + 1 : 0, 0, 'collections_carousel');
-    seen.add('collections_carousel');
+  (Array.isArray(raw) ? raw : []).forEach(id => {
+    if (canonical.includes(id) && !seen.has(id)) { seen.add(id); rawOrder.push(id); }
+  });
+  const output = [];
+  let cursor = 0;
+  while (cursor < entries.length) {
+    const zone = entries[cursor][1].zone || 'main';
+    const group = [];
+    while (cursor < entries.length && (entries[cursor][1].zone || 'main') === zone) {
+      group.push(entries[cursor]);
+      cursor += 1;
+    }
+    const movableIds = group.filter(([, sectionSchema]) => sectionSchema.movable === true).map(([id]) => id);
+    const orderedMovable = rawOrder.filter(id => movableIds.includes(id));
+    movableIds.forEach(id => { if (!orderedMovable.includes(id)) orderedMovable.push(id); });
+    let movableIndex = 0;
+    group.forEach(([id, sectionSchema]) => output.push(sectionSchema.movable === true ? orderedMovable[movableIndex++] : id));
   }
-  reorderable.forEach(id => { if (!seen.has(id)) { order.push(id); seen.add(id); } });
-  return order;
+  return output;
+}
+
+function blockAnchorIds(schema) {
+  return structuralEntries(schema).filter(([, sectionSchema]) => sectionSchema.blockAnchor === true).map(([id]) => id);
 }
 
 function cleanItems(raw, max = 16) {
@@ -101,16 +153,20 @@ function cleanItems(raw, max = 16) {
 function sanitizeRuntimeConfig(pageId, raw = {}) {
   const schema = getPageSchema(pageId);
   if (!schema) return { sections: {}, sectionOrder: [], customBlocks: [] };
-  const sections = Object.fromEntries(Object.keys(schema.sections).map(id => [id, cleanStyle(raw?.sections?.[id])]));
+  const sections = Object.fromEntries(Object.entries(schema.sections).map(([id, sectionSchema]) => [id, cleanStyle(sectionSchema.visualEditable === false ? {} : raw?.sections?.[id])]));
   const sectionOrder = sanitizeSectionOrderClient(raw?.sectionOrder, schema);
-  const sectionIds = new Set(Object.keys(schema.sections));
+  const anchors = blockAnchorIds(schema);
+  const topAllowed = schema.allowTopBlocks === true;
+  const fallbackAnchor = anchors[0] || TOP_ANCHOR;
   const seen = new Set();
   const customBlocks = (Array.isArray(raw?.customBlocks) ? raw.customBlocks : []).slice(0, 40).map((item, index) => {
+    if (!anchors.length && !topAllowed) return null;
     const type = BLOCK_TYPES.has(item?.type) ? item.type : 'section';
     const id = plain(item?.id || `${type}-${index + 1}`, 64).replace(/[^a-z0-9_-]/gi, '-').toLowerCase();
+    const validAnchor = anchors.includes(item?.afterSection) || (topAllowed && item?.afterSection === TOP_ANCHOR);
     return {
       id, type, label: plain(item?.label || '', 80),
-      afterSection: item?.afterSection === TOP_ANCHOR || sectionIds.has(item?.afterSection) ? item.afterSection : TOP_ANCHOR,
+      afterSection: validAnchor ? item.afterSection : fallbackAnchor,
       eyebrow: plain(item?.eyebrow || 'TINTÍN', 80), title: plain(item?.title || 'Nueva sección', 180),
       text: plain(item?.text || '', 1200), buttonLabel: plain(item?.buttonLabel || '', 80), href: safeHref(item?.href),
       image: safeImage(item?.image), imageAlt: plain(item?.imageAlt || '', 140), count: Math.max(1, Math.min(12, Number(item?.count) || 4)),
@@ -121,7 +177,7 @@ function sanitizeRuntimeConfig(pageId, raw = {}) {
       marqueeSpeed: ['slow', 'normal', 'fast'].includes(item?.marqueeSpeed) ? item.marqueeSpeed : 'normal',
       spacerSize: ['small', 'medium', 'large', 'xlarge'].includes(item?.spacerSize) ? item.spacerSize : 'medium',
     };
-  }).filter(block => block.id && !seen.has(block.id) && seen.add(block.id));
+  }).filter(block => block && block.id && !seen.has(block.id) && seen.add(block.id));
   return { sections, sectionOrder, customBlocks };
 }
 
@@ -134,31 +190,32 @@ function reorderSections(schema, order) {
   const groups = new Map();
   order.forEach(id => {
     const sectionSchema = schema.sections[id];
-    if (!sectionSchema) return;
+    if (!sectionSchema || sectionSchema.global || sectionSchema.movable !== true) return;
     const roots = findRoots(sectionSchema);
-    if (roots.length) groups.set(id, roots);
-  });
-  if (groups.size < 2) return;
-  const byParent = new Map();
-  groups.forEach((roots, id) => {
+    if (!roots.length) return;
     const parent = roots[0].parentNode;
-    if (!byParent.has(parent)) byParent.set(parent, []);
-    byParent.get(parent).push(id);
+    if (!parent || !roots.every(node => node.parentNode === parent)) return;
+    const zone = sectionSchema.zone || 'main';
+    if (!groups.has(parent)) groups.set(parent, new Map());
+    const zones = groups.get(parent);
+    if (!zones.has(zone)) zones.set(zone, new Map());
+    zones.get(zone).set(id, roots);
   });
-  byParent.forEach((ids, parent) => {
+  groups.forEach((zones, parent) => zones.forEach(rootsById => {
+    const ids = [...rootsById.keys()];
     if (ids.length < 2) return;
     const localOrder = order.filter(id => ids.includes(id));
-    const allNodes = ids.flatMap(id => groups.get(id));
-    if (!allNodes.every(node => node.parentNode === parent)) return;
+    const allNodes = ids.flatMap(id => rootsById.get(id) || []);
+    if (!allNodes.length || !allNodes.every(node => node.parentNode === parent)) return;
     const siblings = [...parent.children];
     let anchor = null;
     for (const child of siblings) { if (allNodes.includes(child)) { anchor = child.previousElementSibling; break; } }
     allNodes.forEach(node => node.remove());
     let cursor = anchor;
     localOrder.forEach(id => {
-      groups.get(id).forEach(node => { if (cursor) cursor.after(node); else parent.prepend(node); cursor = node; });
+      (rootsById.get(id) || []).forEach(node => { if (cursor) cursor.after(node); else parent.prepend(node); cursor = node; });
     });
-  });
+  }));
 }
 
 function findTarget(root, item) {
@@ -242,7 +299,7 @@ function renderProductCards(root, block) {
     fallback.href = '/catalogo'; root.appendChild(fallback); return;
   }
   products.forEach(product => {
-    const link = el('a', 'tt-visual-product-card'); link.href = `product.html?id=${encodeURIComponent(String(product.id || ''))}`;
+    const link = el('a', 'tt-visual-product-card'); link.href = `/product?id=${encodeURIComponent(String(product.id || ''))}`;
     const src = safeImage(product.imageUrl);
     if (src) { const image = el('img'); image.src = src; image.alt = plain(product.name || 'Producto TINTÍN', 180); image.loading = 'lazy'; image.decoding = 'async'; link.appendChild(image); }
     else link.appendChild(el('span', 'tt-visual-product-placeholder'));
@@ -256,7 +313,7 @@ function renderCollectionCards(root, block) {
   const labels = [...new Set((Array.isArray(window.PRODUCTS) ? window.PRODUCTS : []).filter(item => item?.active !== false).map(item => plain(item.category || item.cat || '', 120)).filter(Boolean))].slice(0, block.count);
   root.replaceChildren();
   (labels.length ? labels : ['Ver colecciones']).forEach(label => {
-    const link = el('a', '', label); link.href = label === 'Ver colecciones' ? 'collections.html' : `/catalogo?cat=${encodeURIComponent(label)}`; root.appendChild(link);
+    const link = el('a', '', label); link.href = label === 'Ver colecciones' ? '/collections' : `/catalogo?cat=${encodeURIComponent(label)}`; root.appendChild(link);
   });
 }
 
@@ -375,18 +432,21 @@ function applyPreviewSelection(schema, selected) {
 export function applyVisualBuilderConfig(pageId, rawConfig, selected = null) {
   ensureCss(); const schema = getPageSchema(pageId); if (!schema) return;
   const config = sanitizeRuntimeConfig(pageId, rawConfig); markSections(schema);
-  Object.entries(schema.sections).forEach(([sectionId, sectionSchema]) => findRoots(sectionSchema).forEach(root => applyStyle(root, config.sections[sectionId])));
+  Object.entries(schema.sections).forEach(([sectionId, sectionSchema]) => {
+    if (sectionSchema.visualEditable === false) return;
+    findRoots(sectionSchema).forEach(root => applyStyle(root, config.sections[sectionId]));
+  });
   reorderSections(schema, config.sectionOrder);
   document.querySelectorAll('[data-tt-visual-block]').forEach(node => node.remove());
   const insertionTails = new Map();
   const firstSectionId = config.sectionOrder[0] || Object.keys(schema.sections)[0]; const firstSectionSchema = schema.sections[firstSectionId]; const firstRoot = firstSectionSchema ? findRoots(firstSectionSchema)[0] : null;
   config.customBlocks.forEach(block => {
     const node = buildBlock(block);
-    if (block.afterSection === TOP_ANCHOR) {
+    if (block.afterSection === TOP_ANCHOR && schema.allowTopBlocks === true) {
       const tail = insertionTails.get(TOP_ANCHOR); if (tail?.parentNode) tail.after(node); else if (firstRoot?.parentNode) firstRoot.before(node); else (document.querySelector('main') || document.body).prepend(node);
       insertionTails.set(TOP_ANCHOR, node); return;
     }
-    const targetSchema = schema.sections[block.afterSection]; const target = targetSchema ? findRoots(targetSchema).at(-1) : null; const tail = insertionTails.get(block.afterSection) || target;
+    const targetSchema = schema.sections[block.afterSection]; const target = targetSchema?.blockAnchor ? findRoots(targetSchema).at(-1) : null; const tail = insertionTails.get(block.afterSection) || target;
     if (tail?.parentNode) tail.after(node); else (document.querySelector('main') || document.body).appendChild(node); insertionTails.set(block.afterSection, node);
   });
   applyPreviewSelection(schema, selected);

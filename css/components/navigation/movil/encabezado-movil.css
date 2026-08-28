@@ -162,6 +162,34 @@
     bottom:max(92px,calc(82px + env(safe-area-inset-bottom))) !important;
   }
   body { padding-bottom:max(96px,calc(84px + env(safe-area-inset-bottom))) !important; }
+
+  /* Superficies móviles: la hoja ocupa siempre todo el viewport. La barra
+     debe quedar SIEMPRE por debajo del backdrop compartido (1450) y de las
+     superficies modales (1460), para que un panel abierto (Tienda,
+     notificaciones, carrito, cuenta) la cubra visualmente por completo y
+     bloquee sus clics de forma real (además de `inert`, no solo por z-index).
+     Con la barra en 1480 (por encima de 1450/1460) quedaba visible y activa
+     encima de la hoja abierta: root cause del "clic detrás del panel". */
+  #tt-tabbar { bottom:max(16px,env(safe-area-inset-bottom)); z-index:1400 !important; }
+  #tt-tabbar .tt-tabbar-btn { position:relative; z-index:3; }
+  #tt-tabbar .tt-tabbar-btn.active svg,
+  #tt-tabbar .tt-tabbar-btn.active .tt-tabbar-avatar,
+  #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] svg,
+  #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] .tt-tabbar-avatar { transform:translateY(-3px) scale(1.06); }
+  .tt-mobile-nav-halo { z-index:1; top:1px; width:52px; height:52px; }
+  .tt-mobile-nav-indicator { z-index:2; bottom:4px; width:52px; }
+  #tt-tabbar .tt-tabbar-btn.active,
+  #tt-tabbar .tt-tabbar-btn[aria-expanded="true"] { z-index:4; }
+  #tt-tabbar.tt-tabbar-compact .tt-mobile-nav-halo { top:0; width:46px; height:46px; }
+  #tt-tabbar.tt-tabbar-compact .tt-mobile-nav-indicator { bottom:3px; width:46px; }
+
+  /* Menú legado y menú hamburguesa comparten la misma superficie limpia. */
+  .tt-mobile-menu { padding:max(16px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom)); }
+  .tt-mobile-menu-header { min-height:52px; margin-bottom:24px; }
+  .tt-mobile-close { width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center; border:1px solid #efcbd8; border-radius:50%; background:#fff; }
+  .tt-mobile-nav { width:min(100%,560px); margin:0 auto; }
+  .tt-mobile-nav a, .tt-mobile-nav button { min-height:58px; padding:16px 18px; border-radius:14px; }
+  .tt-mobile-nav a.active, .tt-mobile-nav button.active { margin:4px 0; padding-inline:18px; background:#fde9f0; box-shadow:none; }
 }
 
 @media (max-width: 350px) {

@@ -1,0 +1,40 @@
+name: Auditoría de contratos arquitectónicos
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'cloudflare/**'
+      - 'functions/**'
+      - 'js/**'
+      - 'apps-script/**'
+      - 'scripts/**'
+      - 'tests/architecture/**'
+      - 'package.json'
+      - '.github/workflows/auditar-contratos-arquitectura.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  architecture-contracts:
+    name: Autoridades, consumidores y componentes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Consumidores de dominio
+        run: npm run audit:domain-consumers
+      - name: Registro de componentes
+        run: npm run audit:component-registry
+      - name: Contratos de sincronización
+        run: npm run audit:sync-contracts
+      - name: Autoridades duplicadas
+        run: npm run audit:no-duplicate-authorities
+      - name: Regresiones de los gates
+        run: npm run test:architecture-gates

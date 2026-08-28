@@ -1,3 +1,4 @@
+/* Header surfaces bundle 2026-08-27: shared cache invalidation marker. */
 /* Shared navigation transitions. Device layout lives in its own component. */
 @view-transition { navigation: auto; }
 ::view-transition-old(root) { animation: tt-page-out var(--motion-fast,160ms) ease both; }

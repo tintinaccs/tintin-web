@@ -34,24 +34,10 @@ body.tt-home-premium .tt-hero-media {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url('../../../assets-tintin/images/home/editorial-relojes/editorial-relojes-desktop.webp') !important;
+  background-image: none !important;
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
-}
-
-/* El layout tablet del home llega hasta 1120px. La imagen editorial debe usar
-   el mismo límite para no cambiar prematuramente a la composición desktop. */
-@media (max-width: 1120px) {
-  body.tt-home-premium .tt-hero-media {
-    background-image: url('../../../assets-tintin/images/home/editorial-relojes/editorial-relojes-tablet.webp') !important;
-  }
-}
-
-@media (max-width: 767px) {
-  body.tt-home-premium .tt-hero-media {
-    background-image: url('../../../assets-tintin/images/home/editorial-relojes/editorial-relojes-mobile.webp') !important;
-  }
 }
 
 body.tt-home-premium .tt-hero-img {
