@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-28T01:16:18.578Z",
-  "sourceFingerprint": "b72af9f6868e1d12f9c2e0459bf15a406ebe367716a553635ba51d1b827b3a48",
+  "generatedAt": "2026-08-28T13:14:58.397Z",
+  "sourceFingerprint": "168f11efce9bf594c7d07af10288d2478e529ed668cbfad37f27e4a0508b49af",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 773,
-    "textFiles": 741,
-    "totalBytes": 8523265,
+    "files": 775,
+    "textFiles": 743,
+    "totalBytes": 8539169,
     "pages": 18,
     "modules": 497
   },
@@ -29433,6 +29433,12 @@
       "sha256": "08a6925aa5f963124e673d1a6f2ea69e58001c2ec59410ff073448329ba0f8ae"
     },
     {
+      "path": ".github/workflows/sincronizar-artefactos-reproducibles.yml",
+      "extension": ".yml",
+      "bytes": 1422,
+      "sha256": "9bf4b8cfa7855e4bcb6f285085eccbbf4378b3f74f20f12f007d7bf4281cd1a2"
+    },
+    {
       "path": ".github/workflows/validar-editor-visual-seguro.yml",
       "extension": ".yml",
       "bytes": 3220,
@@ -29519,8 +29525,8 @@
     {
       "path": "apps-script/AdminParity.gs",
       "extension": ".gs",
-      "bytes": 24754,
-      "sha256": "f3e216c5b5985a9bf0389dbb908160aefd4788e7a39c9da6a2fe82f02a23a0ca"
+      "bytes": 25540,
+      "sha256": "8cf945a96e4be8f8444e4b1c97071d0ced003eebc1170c570d4e7fd8e538990f"
     },
     {
       "path": "apps-script/ContratoCuentas.gs",
@@ -29537,14 +29543,20 @@
     {
       "path": "apps-script/Participacion.gs",
       "extension": ".gs",
-      "bytes": 8475,
-      "sha256": "bd509aeef0927530535ce0eeb07cd38706ee9704fddff208f8c3a00e6ad70830"
+      "bytes": 9249,
+      "sha256": "4c1a30de0debca6f83196ae9fdf82587df1669469f24b3c83687d69f441031fa"
     },
     {
       "path": "apps-script/ProductosUnificados.gs",
       "extension": ".gs",
-      "bytes": 35801,
-      "sha256": "bc6ef79ef08cad030cc5b95099c3a3587c14c2c0bfeaa74bff28aac67f9a7e79"
+      "bytes": 38843,
+      "sha256": "b126cec8eda50b2be44c20bd28655e9ddfea783ac7221ac043f7a41bd3678df6"
+    },
+    {
+      "path": "apps-script/ReorganizacionSheets.gs",
+      "extension": ".gs",
+      "bytes": 9880,
+      "sha256": "dd0325ccfc1f18429a7139365bc32154ac8790f6abb7675f2ebc03fbadeb9647"
     },
     {
       "path": "apps-script/Seguridad.gs",
@@ -35180,13 +35192,13 @@
   "apiCalls": [
     {
       "file": "apps-script/Participacion.gs",
-      "line": 18,
+      "line": 21,
       "target": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
       "method": "POST"
     },
     {
       "file": "apps-script/ProductosUnificados.gs",
-      "line": 146,
+      "line": 173,
       "target": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
       "method": "POST"
     },
