@@ -740,7 +740,13 @@ function tintinReplaceTabRows_(sheetName, firstRow, width, rows) {
   // fallar getLastRow() con un mensaje de validación ajeno a la hoja. El
   // snapshot ya conoce el tamaño exacto a reconciliar; usarlo evita consultar
   // metadatos defectuosos y conserva el layout existente.
-  var existing = Math.max(rows.length, 1);
+  // Las pestañas espejo pueden conservar filas de sincronizaciones anteriores
+  // por debajo del snapshot actual. Esas filas ya no tienen entidad remota,
+  // pero sus valores sí siguen participando en validaciones estrictas (por
+  // ejemplo, roles legacy como `superadmin`). Limpiar hasta el final de la
+  // grilla de datos elimina residuos sin alterar encabezados, formatos,
+  // fórmulas de otras hojas ni validaciones de la pestaña.
+  var existing = Math.max(rows.length, sheet.getMaxRows() - firstRow + 1, 1);
   sheet.getRange(firstRow, 1, existing, width).clearContent();
   if (rows.length) sheet.getRange(firstRow, 1, rows.length, width).setValues(rows);
   return rows.length;
