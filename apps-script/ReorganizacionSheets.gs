@@ -47,7 +47,8 @@ function tintinMigrarUsuariosWebColumnas_() {
   sheet.getRange(TINTIN_USERS_HEADER_ROW, 1, 1, width).setValues([TINTIN_USERS_HEADERS]);
   sheet.getRange(TINTIN_USERS_HEADER_ROW, 1, 1, width).setFontWeight('bold');
   sheet.setFrozenRows(TINTIN_USERS_HEADER_ROW);
-  sheet.setFrozenColumns(TINTIN_USERS_COL.username);
+  // La hoja de producción contiene celdas combinadas; congelar una columna
+  // que atraviesa una combinación hace fallar toda la migración.
 
   return { ok: true, rows: dataRows, width: width };
 }

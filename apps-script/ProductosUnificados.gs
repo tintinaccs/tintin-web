@@ -131,7 +131,6 @@ function tintinAppendSyncHistory_(status, sheetName, cell, detail) {
     else if (/^(celda|rango|cell)$/.test(key)) { values[index] = cell; matched += 1; }
     else if (/^(detalle|mensaje|descripcion|resultado|error)$/.test(key)) { values[index] = String(detail || '').slice(0, 500); matched += 1; }
   });
-  // No adivina columnas: si la fila 7 no expone estado, conserva el historial intacto.
   if (!headers.some(function(header) { return /^(estado|status)$/.test(tintinSyncHeaderKey_(header)); })) return false;
   history.insertRowBefore(TINTIN_SYNC_HISTORY_FIRST_ROW);
   history.getRange(TINTIN_SYNC_HISTORY_FIRST_ROW, 1, 1, width).setValues([values]);
@@ -737,8 +736,12 @@ function tintinDateFromIso_(value) {
 function tintinReplaceTabRows_(sheetName, firstRow, width, rows) {
   var sheet = tintinProductsSpreadsheet_().getSheetByName(sheetName);
   if (!sheet) return 0;
-  var existing = Math.max(0, sheet.getLastRow() - firstRow + 1);
-  if (existing) sheet.getRange(firstRow, 1, existing, width).clearContent();
+  // Algunas pestañas de producción tienen una estructura combinada que hace
+  // fallar getLastRow() con un mensaje de validación ajeno a la hoja. El
+  // snapshot ya conoce el tamaño exacto a reconciliar; usarlo evita consultar
+  // metadatos defectuosos y conserva el layout existente.
+  var existing = Math.max(rows.length, 1);
+  sheet.getRange(firstRow, 1, existing, width).clearContent();
   if (rows.length) sheet.getRange(firstRow, 1, rows.length, width).setValues(rows);
   return rows.length;
 }
