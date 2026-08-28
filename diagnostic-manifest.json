@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-28T16:32:08.394Z",
-  "sourceFingerprint": "467ded20feef7a64cdd95bce320075cb5ab8df07ee55a6c6f777bbc4801e93df",
+  "generatedAt": "2026-08-28T16:38:09.726Z",
+  "sourceFingerprint": "db0309f96e71c77e5f8781dba07960a25d373a9286f318b0318a00d21d52f1af",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 778,
-    "textFiles": 746,
-    "totalBytes": 8562180,
+    "files": 776,
+    "textFiles": 744,
+    "totalBytes": 8551952,
     "pages": 18,
-    "modules": 499
+    "modules": 498
   },
   "viewports": [
     {
@@ -18296,8 +18296,8 @@
     },
     {
       "path": "functions/product.js",
-      "bytes": 9730,
-      "sha256": "7f30ca6e9e5451edc2f79d46b15be67760f4fcfa7093f1cea7fb346606e8bc1a",
+      "bytes": 9386,
+      "sha256": "88d713dfc924e3bc736cdfa9cb5a5111717ae081a1b9535a2f2330c17938e9ab",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23668,39 +23668,6 @@
         {
           "url": "http://127.0.0.1:4173/",
           "line": 10
-        }
-      ]
-    },
-    {
-      "path": "scripts/aplicar-hardening-final-temporal.mjs",
-      "bytes": 7009,
-      "sha256": "2e8cd3821abea2bc19267a8fe18d56e072200ab212cfdb5485aa4430fccc73d4",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:fs",
-          "target": null,
-          "dynamic": false,
-          "line": 1
-        },
-        {
-          "raw": "../../functions/product.js",
-          "target": null,
-          "dynamic": true,
-          "line": 153
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://tintinaccesorios.pages.dev/product.html",
-          "line": 143
-        },
-        {
-          "url": "https://tintinaccesorios.pages.dev/product",
-          "line": 144
         }
       ]
     },
@@ -29480,12 +29447,6 @@
       "sha256": "6a2eca592cb337151a33f84556075cf6a15d7329c7cff4eae016b6e43ce70d2f"
     },
     {
-      "path": ".github/workflows/hardening-final-temporal.yml",
-      "extension": ".yml",
-      "bytes": 2875,
-      "sha256": "ef928e9ee8495a05b793bc7157a388b00cc8a3374c34004da95a3254cc82fcc1"
-    },
-    {
       "path": ".github/workflows/lanzar-diagnostico-maestro.yml",
       "extension": ".yml",
       "bytes": 1139,
@@ -31126,8 +31087,8 @@
     {
       "path": "functions/product.js",
       "extension": ".js",
-      "bytes": 9730,
-      "sha256": "7f30ca6e9e5451edc2f79d46b15be67760f4fcfa7093f1cea7fb346606e8bc1a"
+      "bytes": 9386,
+      "sha256": "88d713dfc924e3bc736cdfa9cb5a5111717ae081a1b9535a2f2330c17938e9ab"
     },
     {
       "path": "functions/products/[handle].js",
@@ -32616,12 +32577,6 @@
       "extension": ".txt",
       "bytes": 692,
       "sha256": "857c7081889b4ad579cf6ed7cf06a5294e845cc355377f2ed651f8483f842a47"
-    },
-    {
-      "path": "scripts/aplicar-hardening-final-temporal.mjs",
-      "extension": ".mjs",
-      "bytes": 7009,
-      "sha256": "2e8cd3821abea2bc19267a8fe18d56e072200ab212cfdb5485aa4430fccc73d4"
     },
     {
       "path": "scripts/auditar-acceso-aislamiento.js",
