@@ -11,7 +11,7 @@ import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/orde
 
 const MAX_BODY_BYTES = 64 * 1024;
 const ROLES = new Set(['client', 'viewer', 'agent', 'admin']);
-const ADMIN_SYNC_REVISION = 'admin-sync-v4';
+const ADMIN_SYNC_REVISION = 'admin-sync-v5';
 
 function sameSecret(provided, expected) {
   const left = new TextEncoder().encode(String(provided || ''));
@@ -43,6 +43,18 @@ function conflict(message) {
   const error = new Error(message);
   error.status = 409;
   return error;
+}
+
+async function restoreAuthStateBestEffort(env, uid, previousDisabled, originalError) {
+  try {
+    await setFirebaseUserDisabled(env, uid, previousDisabled);
+  } catch (rollbackError) {
+    console.error('[sheets-admin] rollback Firebase Auth falló', {
+      uid,
+      original: originalError?.message || originalError,
+      rollback: rollbackError?.message || rollbackError,
+    });
+  }
 }
 
 async function updateUser(env, input) {
@@ -99,6 +111,7 @@ async function updateUser(env, input) {
   const requestedRole = text(input.role, 20).toLowerCase();
   if (!ROLES.has(requestedRole)) throw new Error('Rol no permitido');
   const blocked = input.blocked === true;
+  const previousDisabled = current.blocked === true;
   const roleBeforeBlock = blocked
     ? (current.role && current.role !== 'client' ? current.role : current.roleBeforeBlock || '')
     : '';
@@ -106,43 +119,53 @@ async function updateUser(env, input) {
   const now = new Date();
   const eventId = `EVT_${crypto.randomUUID().replaceAll('-', '')}`;
 
+  // Firebase Auth y Firestore no comparten una transacción. Si Auth cambia y
+  // el commit Firestore falla, compensamos Auth para no dejar dos autoridades
+  // con estados distintos.
   await setFirebaseUserDisabled(env, uid, blocked);
-  await firestoreAdminCommit(env, [
-    {
-      path: `users/${uid}`,
-      fields: encodeFirestoreFields({
-        role,
-        blocked,
-        roleBeforeBlock,
-        internalNotes: text(input.internalNotes, 1000),
-        updatedAt: now,
-        lastChangeId: nextChangeId,
-        syncOrigin: origin,
-      }),
-      mergeFields: ['role', 'blocked', 'roleBeforeBlock', 'internalNotes', 'updatedAt', 'lastChangeId', 'syncOrigin'],
-    },
-    {
-      path: `auditLog/${eventId}`,
-      fields: encodeFirestoreFields({
-        eventId,
-        timestamp: now,
-        createdAt: now,
-        customerId: current.customerId || `CUS_${uid}`,
-        actorId: 'google-sheets',
-        actorEmail: 'google-sheets@tintin.internal',
-        actorRole: 'sheets-sync',
-        action: blocked ? 'bloquear_usuario' : 'actualizar_usuario',
-        entityType: 'usuario',
-        entityId: uid,
-        before: { role: current.role || 'client', blocked: current.blocked === true },
-        after: { role, blocked },
-        origin,
-        result: 'success',
-        changeId: nextChangeId,
-      }),
-      currentDocument: { exists: false },
-    },
-  ]);
+  try {
+    await firestoreAdminCommit(env, [
+      {
+        path: `users/${uid}`,
+        fields: encodeFirestoreFields({
+          role,
+          blocked,
+          roleBeforeBlock,
+          internalNotes: text(input.internalNotes, 1000),
+          updatedAt: now,
+          lastChangeId: nextChangeId,
+          syncOrigin: origin,
+        }),
+        mergeFields: ['role', 'blocked', 'roleBeforeBlock', 'internalNotes', 'updatedAt', 'lastChangeId', 'syncOrigin'],
+      },
+      {
+        path: `auditLog/${eventId}`,
+        fields: encodeFirestoreFields({
+          eventId,
+          timestamp: now,
+          createdAt: now,
+          customerId: current.customerId || `CUS_${uid}`,
+          actorId: 'google-sheets',
+          actorEmail: 'google-sheets@tintin.internal',
+          actorRole: 'sheets-sync',
+          action: blocked ? 'bloquear_usuario' : 'actualizar_usuario',
+          entityType: 'usuario',
+          entityId: uid,
+          before: { role: current.role || 'client', blocked: current.blocked === true },
+          after: { role, blocked },
+          origin,
+          result: 'success',
+          changeId: nextChangeId,
+        }),
+        currentDocument: { exists: false },
+      },
+    ]);
+  } catch (error) {
+    if (previousDisabled !== blocked) {
+      await restoreAuthStateBestEffort(env, uid, previousDisabled, error);
+    }
+    throw error;
+  }
   return { uid, role, blocked, duplicate: false, changeId: nextChangeId };
 }
 
@@ -186,6 +209,7 @@ export async function onRequestPost({ request, env }) {
         readOnlyMirrors: ['audit'],
         orderMutationsUseInventoryDomain: true,
         orderCreationUsesCanonicalSequence: true,
+        authFirestoreCompensation: true,
         revision: ADMIN_SYNC_REVISION,
       }, 200, '', request.url);
     }
