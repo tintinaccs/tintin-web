@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-28T11:38:46.657Z",
-  "sourceFingerprint": "5cc0292f4a7b60b41eb43b6340f0b6e79e417f19510b79dda70db41c6ba2de6e",
+  "generatedAt": "2026-08-28T13:13:43.984Z",
+  "sourceFingerprint": "d2cca3c8efc169d195eb9105683720c45c6d1dde56ee6737f73ef310d2503c9b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 774,
-    "textFiles": 742,
-    "totalBytes": 8535963,
+    "files": 775,
+    "textFiles": 743,
+    "totalBytes": 8544594,
     "pages": 18,
     "modules": 497
   },
@@ -29442,6 +29442,12 @@
       "sha256": "08a6925aa5f963124e673d1a6f2ea69e58001c2ec59410ff073448329ba0f8ae"
     },
     {
+      "path": ".github/workflows/sincronizar-artefactos-reproducibles.yml",
+      "extension": ".yml",
+      "bytes": 1509,
+      "sha256": "07afc85aebbb2508eacb5a0b11ee0fd0c00018b28966c46a1a1bd5c0a8a6f25a"
+    },
+    {
       "path": ".github/workflows/validar-editor-visual-seguro.yml",
       "extension": ".yml",
       "bytes": 3220,
@@ -29558,8 +29564,8 @@
     {
       "path": "apps-script/ReorganizacionSheets.gs",
       "extension": ".gs",
-      "bytes": 7046,
-      "sha256": "8d57552c8d7e08da30f0fbd908c793739cbd08bc5d69bdca010c2ff9c8d78b07"
+      "bytes": 14168,
+      "sha256": "d05dd914bc68a122c639b6f61e653179bb49a791dd5607d7484c5efeefce4f33"
     },
     {
       "path": "apps-script/Seguridad.gs",
