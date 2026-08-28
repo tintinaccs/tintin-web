@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-28T13:16:21.742Z",
-  "sourceFingerprint": "e610c26a3fe8e29cb3b7719a3dea72584430b36780c0749a68bff887b3e71e34",
+  "generatedAt": "2026-08-28T14:28:47.775Z",
+  "sourceFingerprint": "766027a375e9116d54199c537c2014cd6e35cae898943a995c08a4e210291ff1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 775,
-    "textFiles": 743,
-    "totalBytes": 8544671,
+    "files": 774,
+    "textFiles": 742,
+    "totalBytes": 8543085,
     "pages": 18,
     "modules": 497
   },
@@ -29440,12 +29440,6 @@
       "extension": ".yml",
       "bytes": 6236,
       "sha256": "08a6925aa5f963124e673d1a6f2ea69e58001c2ec59410ff073448329ba0f8ae"
-    },
-    {
-      "path": ".github/workflows/sincronizar-artefactos-reproducibles.yml",
-      "extension": ".yml",
-      "bytes": 1586,
-      "sha256": "cd38c996b7c1d709cd3da7785912f95012071c0bbd9aff068b38b76c405b9d22"
     },
     {
       "path": ".github/workflows/validar-editor-visual-seguro.yml",
