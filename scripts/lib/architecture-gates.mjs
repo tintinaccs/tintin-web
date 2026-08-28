@@ -24,6 +24,63 @@ function unique(values) {
   return [...new Set(values)];
 }
 
+function extractFunctionBody(source, functionName) {
+  const declaration = new RegExp(`(?:async\\s+)?function\\s+${functionName}\\s*\\([^)]*\\)\\s*\\{`);
+  const match = declaration.exec(String(source));
+  if (!match) return '';
+
+  const openingBrace = match.index + match[0].lastIndexOf('{');
+  let depth = 0;
+  let quote = '';
+  let escaped = false;
+  let lineComment = false;
+  let blockComment = false;
+
+  for (let index = openingBrace; index < source.length; index += 1) {
+    const char = source[index];
+    const next = source[index + 1];
+
+    if (lineComment) {
+      if (char === '\n') lineComment = false;
+      continue;
+    }
+    if (blockComment) {
+      if (char === '*' && next === '/') {
+        blockComment = false;
+        index += 1;
+      }
+      continue;
+    }
+    if (quote) {
+      if (escaped) {
+        escaped = false;
+      } else if (char === '\\') {
+        escaped = true;
+      } else if (char === quote) {
+        quote = '';
+      }
+      continue;
+    }
+    if (char === '/' && next === '/') {
+      lineComment = true;
+      index += 1;
+      continue;
+    }
+    if (char === '/' && next === '*') {
+      blockComment = true;
+      index += 1;
+      continue;
+    }
+    if (char === '\'' || char === '"' || char === '`') {
+      quote = char;
+      continue;
+    }
+    if (char === '{') depth += 1;
+    if (char === '}' && --depth === 0) return source.slice(match.index, index + 1);
+  }
+  return '';
+}
+
 function quotedValues(fragment = '') {
   return unique([...fragment.matchAll(/['"]([a-z][a-z0-9-]*)['"]/gi)].map(match => match[1]));
 }
@@ -92,12 +149,12 @@ export function auditNoDuplicateAuthoritiesSources(sources) {
     errors.push('Sheets no debe escribir productInventory directamente.');
   }
   if (/transaction\.(?:set|update|delete)\([^\n]*(?:orders|ACTIVE_COLLECTION)/.test(adminCrud) && /function\s+(?:createManualOrder_|saveModal_)/.test(adminCrud)) {
-    const normalMutationBody = adminCrud.match(/async function saveModal_\([\s\S]*?\n}\n/)?.[0] || '';
+    const normalMutationBody = extractFunctionBody(adminCrud, 'saveModal_');
     if (/runTransaction|transaction\.(?:set|update|delete)/.test(normalMutationBody)) {
       errors.push('El guardado normal de pedidos de Superadmin volvió a implementar una autoridad Firestore paralela.');
     }
   }
-  const updateBody = inventoryAdmin.match(/async function updateEditedOrder\([\s\S]*?\n}\n/)?.[0] || '';
+  const updateBody = extractFunctionBody(inventoryAdmin, 'updateEditedOrder');
   if (!/\/api\/admin-order-mutation/.test(updateBody) || /runTransaction/.test(updateBody)) {
     errors.push('updateEditedOrder debe ser consumidor del dominio server-side, no reconciliador paralelo.');
   }
