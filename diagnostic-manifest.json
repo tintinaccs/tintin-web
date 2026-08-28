@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-28T00:02:20.387Z",
-  "sourceFingerprint": "1fe5716d97088a219b7a09fb290c02414e189da53201ad373f34e6a8d2634f1f",
+  "generatedAt": "2026-08-28T01:16:18.578Z",
+  "sourceFingerprint": "b72af9f6868e1d12f9c2e0459bf15a406ebe367716a553635ba51d1b827b3a48",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 768,
-    "textFiles": 736,
-    "totalBytes": 8509726,
+    "files": 773,
+    "textFiles": 741,
+    "totalBytes": 8523265,
     "pages": 18,
-    "modules": 494
+    "modules": 497
   },
   "viewports": [
     {
@@ -24334,6 +24334,24 @@
       "endpoints": []
     },
     {
+      "path": "scripts/auditar-contratos-arquitectura.mjs",
+      "bytes": 1222,
+      "sha256": "864ff7262090d46644bdcce4e8a45011c9fc9b33d0804efa1e5cd4fa455c0f1b",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./lib/architecture-gates.mjs",
+          "target": "scripts/lib/architecture-gates.mjs",
+          "dynamic": false,
+          "line": 10
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/auditar-control-tienda-bloqueo.js",
       "bytes": 1567,
       "sha256": "2c0e65790ae832568ff8702a3cc070833367b3d4a7780a3a43f2a2e7570dd04c",
@@ -26632,6 +26650,24 @@
       ]
     },
     {
+      "path": "scripts/lib/architecture-gates.mjs",
+      "bytes": 6776,
+      "sha256": "8c60b368aec758755971fb101746a99d92cf59d5f5c6c001b8feee683263a2a7",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/normalizar-rutas-publicas.js",
       "bytes": 4648,
       "sha256": "a333769f0cff5b8e9d7a4a3f368927451a184e31dd0dff8d646d68242f0e8ce2",
@@ -27191,6 +27227,36 @@
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
           "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/architecture/architecture-gates.test.mjs",
+      "bytes": 2476,
+      "sha256": "3b8d966f2712a4844db112e0e852e568c194bcc4f81f5a03ae67be1af14888cf",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../scripts/lib/architecture-gates.mjs",
+          "target": "scripts/lib/architecture-gates.mjs",
+          "dynamic": false,
+          "line": 7
         }
       ],
       "endpoints": []
@@ -29181,6 +29247,12 @@
       "sha256": "4b774e191cdd947e4c56c790d323fcb53819530c169cceded1fe7ee077046b8e"
     },
     {
+      "path": ".github/workflows/auditar-contratos-arquitectura.yml",
+      "extension": ".yml",
+      "bytes": 1063,
+      "sha256": "3bbd581c8f8e32f7bc88ab9494e7b73f15f6f26b80a3eb539fed4f480a03b633"
+    },
+    {
       "path": ".github/workflows/auditar-correo-fase-3.yml",
       "extension": ".yml",
       "bytes": 1189,
@@ -30331,6 +30403,12 @@
       "extension": ".md",
       "bytes": 6455,
       "sha256": "5dbf19d0265ed96fd1f38b2b9e2f2d9ca5bbf28edb2ef04a30f83a8d66b0cc5c"
+    },
+    {
+      "path": "docs/contratos-arquitectura-ci.md",
+      "extension": ".md",
+      "bytes": 1309,
+      "sha256": "de8d2344d120f640a14e2d2ef24ef3e885f2c7d7193fed43d11d135f4f2b8a98"
     },
     {
       "path": "docs/contratos-calidad.md",
@@ -32417,8 +32495,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 11267,
-      "sha256": "2c7be086354ef6be9e507d730f52979bc5e03b2e82ff4c0563027b0951ddf8c8"
+      "bytes": 11960,
+      "sha256": "3f6b589590048f404fb7658381ba73bbc0571bbc68d8d6bc62adb4594b48852b"
     },
     {
       "path": "perfil.html",
@@ -32647,6 +32725,12 @@
       "extension": ".mjs",
       "bytes": 13497,
       "sha256": "ff5b6da7138f1a8e0ef1000804bbad38f3a52de7066037a47a40d3d36003f69a"
+    },
+    {
+      "path": "scripts/auditar-contratos-arquitectura.mjs",
+      "extension": ".mjs",
+      "bytes": 1222,
+      "sha256": "864ff7262090d46644bdcce4e8a45011c9fc9b33d0804efa1e5cd4fa455c0f1b"
     },
     {
       "path": "scripts/auditar-control-tienda-bloqueo.js",
@@ -33207,6 +33291,12 @@
       "sha256": "3c8778447df0cbe929628b4fae4dd515d6c8538d88d46c3909c6b59262a25ce0"
     },
     {
+      "path": "scripts/lib/architecture-gates.mjs",
+      "extension": ".mjs",
+      "bytes": 6776,
+      "sha256": "8c60b368aec758755971fb101746a99d92cf59d5f5c6c001b8feee683263a2a7"
+    },
+    {
       "path": "scripts/normalizar-rutas-publicas.js",
       "extension": ".js",
       "bytes": 4648,
@@ -33355,6 +33445,12 @@
       "extension": ".mjs",
       "bytes": 1694,
       "sha256": "d2905d9623da868628b32fad4fc41aa887beca644b3b20f47d288a191ed1bea9"
+    },
+    {
+      "path": "tests/architecture/architecture-gates.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2476,
+      "sha256": "3b8d966f2712a4844db112e0e852e568c194bcc4f81f5a03ae67be1af14888cf"
     },
     {
       "path": "tests/branches/auditar-limpiar-ramas.test.mjs",
