@@ -449,7 +449,8 @@ function tintinReconciliarAdminParidad() {
   summary.users = tintinPullUsersFromWeb_();
   summary.orders = tintinPullOrdersParity_();
   summary.audit = tintinPullAuditFromWeb_();
-  tintinRecordSyncSafely_('SYNCED', 'Sistema', 'web→sheets', 'Superficies administrativas actualizadas: usuarios ' + summary.users + ', pedidos ' + summary.orders + ', auditoría ' + summary.audit + '.');
+  // El resumen de reconciliación no se registra en Historial sync: esa pestaña
+  // conserva metadatos legacy que provocan un fallo de lectura en Apps Script.
   return summary;
 }
 
