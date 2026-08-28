@@ -1592,7 +1592,7 @@ let userStatusFilter = 'active';
 function loadUsers() {
   const tbody = document.getElementById('users-tbody');
   if (!adminRealtimeReady.users) {
-    tbody.innerHTML = '<tr><td colspan="7" class="adm-loading"><span class="adm-spinner"></span> Sincronizando usuarios...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" class="adm-loading"><span class="adm-spinner"></span> Sincronizando usuarios...</td></tr>';
     return;
   }
   applyUserFilters();
@@ -1636,7 +1636,7 @@ function renderUsersTable(users) {
   const tbody = document.getElementById('users-tbody');
   if (!users.length) {
     const emptyMsg = userStatusFilter === 'blocked' ? 'No hay usuarios bloqueados' : 'Sin usuarios';
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#aaa;padding:24px">${emptyMsg}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:#aaa;padding:24px">${emptyMsg}</td></tr>`;
     return;
   }
   tbody.innerHTML = users.map(u => {
@@ -1711,8 +1711,11 @@ function renderUsersTable(users) {
         <td>${avatar}</td>
         <td><strong>${escapeHtmlAdmin(u.name || '—')}</strong></td>
         <td style="font-size:12px;color:#666">${escapeHtmlAdmin(u.email || '—')}</td>
+        <td style="font-size:12px;color:#666">${escapeHtmlAdmin(u.phone || '—')}</td>
         <td>${roleSelect}</td>
         <td>${blockedBadge}${blockedDetail}</td>
+        <td style="font-size:12px;color:#666">${u.purchaseCount || 0}</td>
+        <td style="font-size:12px;color:#666">${formatPrice(u.totalSpent || 0)}</td>
         <td>${actions}</td>
       </tr>
     `;
