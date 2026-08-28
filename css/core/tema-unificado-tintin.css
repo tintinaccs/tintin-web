@@ -224,7 +224,7 @@ body:not(:has(.adm-main)) :is(.tt-btn-transparent,[data-button-variant="transpar
 /* El selector global de texto de la interfaz también alcanza a los botones.
    Mantener el texto de las acciones primarias en blanco evita que el token
    de texto de página (#2B2B2B) reemplace el contraste de la superficie rosa. */
-html body:not(:has(.adm-main)) :is(.tt-btn:not(.tt-btn-outline),.tt-btn-primary,.tt-btn-primary-full,.tt-cart-checkout-btn,.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link,.ck-btn,.login-google,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn,.tt-home-runtime-state-link,.perfil-btn-primary){
+html body:not(:has(.adm-main)) :is(.tt-btn:not(.tt-btn-outline):not(.tt-btn-outline-full),.tt-btn-primary,.tt-btn-primary-full,.tt-cart-checkout-btn,.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link,.ck-btn,.login-google,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn,.tt-home-runtime-state-link,.perfil-btn-primary){
   color:var(--color-button-primary-text,#FFFFFF)!important;
 }
 
