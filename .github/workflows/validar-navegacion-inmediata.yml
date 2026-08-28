@@ -14,7 +14,7 @@ on:
       - '.github/workflows/validar-navegacion-inmediata.yml'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   fast-navigation:
@@ -22,8 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-        with:
-          ref: ${{ github.head_ref }}
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
@@ -35,73 +33,12 @@ jobs:
         run: node scripts/auditar-rendimiento-tiempo-real.js
       - name: Tripwire de regresiones de rendimiento
         run: node scripts/auditar-rendimiento-regresiones.js
-      - name: Restaurar workflow estricto y regenerar manifiesto final
+      - name: Versionado y manifiesto reproducibles
         run: |
-          cat > .github/workflows/validar-navegacion-inmediata.yml <<'WORKFLOW'
-          name: Validar navegación inmediata
-
-          on:
-            pull_request:
-              branches:
-                - main
-              paths:
-                - 'js/components/color/esquema-color-instantaneo.js'
-                - 'scripts/auditar-rendimiento-tiempo-real.js'
-                - 'scripts/auditar-rendimiento-regresiones.js'
-                - 'scripts/cache-version-baseline.json'
-                - 'tests/performance/navegacion-inmediata.test.mjs'
-                - '*.html'
-                - '.github/workflows/validar-navegacion-inmediata.yml'
-
-          permissions:
-            contents: read
-
-          jobs:
-            fast-navigation:
-              name: Fast navigation audit
-              runs-on: ubuntu-latest
-              steps:
-                - uses: actions/checkout@v5
-                - uses: actions/setup-node@v5
-                  with:
-                    node-version: '22'
-                    cache: npm
-                - run: npm ci
-                - name: Contrato de navegación inmediata
-                  run: node --test tests/performance/navegacion-inmediata.test.mjs
-                - name: Auditoría de rendimiento existente
-                  run: node scripts/auditar-rendimiento-tiempo-real.js
-                - name: Tripwire de regresiones de rendimiento
-                  run: node scripts/auditar-rendimiento-regresiones.js
-                - name: Versionado y manifiesto reproducibles
-                  run: |
-                    npm run build:routes
-                    npm run audit:cache-versioning
-                    npm run build:pages
-                    git diff --exit-code -- diagnostic-manifest.json scripts/cache-version-baseline.json _headers _routes.json
-                - name: Adjuntar artefactos reproducibles cuando difieran
-                  if: failure()
-                  uses: actions/upload-artifact@v6
-                  with:
-                    name: navegacion-artefactos-reproducibles
-                    if-no-files-found: error
-                    path: |
-                      diagnostic-manifest.json
-                      scripts/cache-version-baseline.json
-                      _headers
-                      _routes.json
-          WORKFLOW
           npm run build:routes
           npm run audit:cache-versioning
           npm run build:pages
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add .github/workflows/validar-navegacion-inmediata.yml diagnostic-manifest.json
-          if ! git diff --cached --quiet; then
-            git commit -m "chore: estabilizar manifiesto de navegacion"
-            git push origin HEAD:${{ github.head_ref }}
-          fi
-          git diff --exit-code -- diagnostic-manifest.json scripts/cache-version-baseline.json _headers _routes.json .github/workflows/validar-navegacion-inmediata.yml
+          git diff --exit-code -- diagnostic-manifest.json scripts/cache-version-baseline.json _headers _routes.json
       - name: Adjuntar artefactos reproducibles cuando difieran
         if: failure()
         uses: actions/upload-artifact@v6
