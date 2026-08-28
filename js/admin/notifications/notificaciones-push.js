@@ -23,7 +23,7 @@ const MESSAGING_SDK = 'https://www.gstatic.com/firebasejs/10.14.1/firebase-messa
 
 const IOS_INSTALL_MESSAGE =
   'En iPhone, las notificaciones web funcionan cuando Tintin está instalado como app. ' +
-  'Abrí esta página en Safari, tocá Compartir y elegí “Agregar a inicio”. Después abrí Tintin Pedidos desde el nuevo ícono y volvé a activar las notificaciones. ' +
+  'Abrí esta página en Safari, tocá Compartir y elegí Agregar a inicio. Después abrí Tintin Pedidos desde el nuevo ícono y volvé a activar las notificaciones. ' +
   'Chrome en iPhone usa el mismo motor de iOS y también necesita este paso.';
 
 const STATE_LABELS = {
