@@ -1,0 +1,54 @@
+name: Regenerar artefactos finales una vez
+
+on:
+  push:
+    branches:
+      - fix/final-stability-a-z-20260828
+    paths:
+      - '.github/workflows/sync-generated-artifacts-once.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-generated-artifacts-once
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: fix/final-stability-a-z-20260828
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Retirar este workflow antes de calcular fingerprints
+        run: rm -f .github/workflows/sync-generated-artifacts-once.yml
+      - name: Actualizar baseline de caché
+        run: npm run cache-versioning:write
+      - name: Regenerar artefactos reproducibles
+        run: npm run build:pages
+      - name: Verificar árbol reproducible
+        run: |
+          npm run verify:routes
+          npm run verify:csp
+          npm run verify:diagnostics
+          npm run audit:cache-versioning
+      - name: Guardar únicamente el estado reproducible final
+        run: |
+          git config user.name "tintin-stability-bot"
+          git config user.email "tintin-stability-bot@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No hay cambios reproducibles pendientes."
+            exit 0
+          fi
+          git commit -m "chore: sincronizar artefactos reproducibles finales"
+          git push origin HEAD:fix/final-stability-a-z-20260828
