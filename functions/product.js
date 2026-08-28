@@ -210,12 +210,10 @@ export async function onRequest(context) {
     return new Response(null, { status: 405, headers: { allow: 'GET, HEAD' } });
   }
 
-  // La URL pública permanece /product?id=... pero el binding de assets recibe
-  // el archivo físico explícito. Así no dependemos de una segunda resolución
-  // pretty-URL dentro de la propia Pages Function.
-  const assetUrl = new URL(request.url);
-  assetUrl.pathname = '/product.html';
-  const asset = await env.ASSETS.fetch(new Request(assetUrl.toString(), request));
+  // El binding ASSETS ya resuelve la ruta limpia /product al documento estático.
+  // Pedir /product.html explícitamente provoca que Pages lo canonice de vuelta a
+  // /product con 308; por eso conservamos exactamente la URL pública al leer el asset.
+  const asset = await env.ASSETS.fetch(request);
   if (request.method === 'HEAD') return asset;
   if (!asset.ok || !(asset.headers.get('content-type') || '').includes('text/html')) return asset;
 
