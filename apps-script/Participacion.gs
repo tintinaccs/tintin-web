@@ -7,6 +7,9 @@ var TINTIN_REVIEWS_SHEET_ = 'Resenas';
 var TINTIN_LIKES_SHEET_ = 'Me gusta';
 var TINTIN_REVIEW_HEADERS_ = ['reviewId','Estado','Leida','Puntuacion','Comentario','Producto ID','Producto','Nombre real','Correo','Nombre publico','Creada','Actualizada','Editada','Comentario anterior','Me gusta Tintin','Conversacion JSON','Historial JSON','Accion'];
 var TINTIN_LIKE_HEADERS_ = ['likeId','Leido','Producto ID','Producto','Nombre real','Correo','Creado'];
+var TINTIN_ENGAGEMENT_PINK_ = '#FFC5D3';
+var TINTIN_ENGAGEMENT_TEXT_ = '#5B162F';
+var TINTIN_ENGAGEMENT_BORDER_ = '#D6B8C2';
 
 function tintinJson_(body) {
   return ContentService.createTextOutput(JSON.stringify(body)).setMimeType(ContentService.MimeType.JSON);
@@ -29,6 +32,23 @@ function tintinSheet_(name, headers) {
   if (sheet.getLastRow() === 0) sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   sheet.setFrozenRows(1);
   return sheet;
+}
+
+function tintinAplicarEstiloParticipacion_(sheet) {
+  if (!sheet) return;
+  var columns = Math.max(1, sheet.getMaxColumns());
+  var rows = Math.max(1, sheet.getMaxRows());
+  sheet.getRange(1, 1, 1, Math.max(1, sheet.getLastColumn()))
+    .setFontWeight('bold')
+    .setBackground(TINTIN_ENGAGEMENT_PINK_)
+    .setFontColor(TINTIN_ENGAGEMENT_TEXT_)
+    .setVerticalAlignment('middle');
+  sheet.getRange(1, 1, rows, columns).setBorder(
+    true, true, true, true, true, true,
+    TINTIN_ENGAGEMENT_BORDER_,
+    SpreadsheetApp.BorderStyle.SOLID
+  );
+  sheet.setHiddenGridlines(true);
 }
 
 function tintinFindRow_(sheet, id) {
@@ -72,11 +92,13 @@ function tintinHandleEngagement_(payload) {
     if (event.type === 'review') {
       var reviews = tintinSheet_(TINTIN_REVIEWS_SHEET_, TINTIN_REVIEW_HEADERS_);
       tintinUpsert_(reviews, tintinReviewRow_(record));
+      tintinAplicarEstiloParticipacion_(reviews);
     } else if (event.type === 'like') {
       var likes = tintinSheet_(TINTIN_LIKES_SHEET_, TINTIN_LIKE_HEADERS_);
       var row = tintinFindRow_(likes, record.likeId);
       if (event.operation === 'delete') { if (row) likes.deleteRow(row); }
       else tintinUpsert_(likes, tintinLikeRow_(record));
+      tintinAplicarEstiloParticipacion_(likes);
     } else return tintinJson_({ ok: false, error: 'invalid_type' });
     return tintinJson_({ ok: true });
   } finally { lock.releaseLock(); }
@@ -87,7 +109,7 @@ function tintinSetupEngagement() {
   var likes = tintinSheet_(TINTIN_LIKES_SHEET_, TINTIN_LIKE_HEADERS_);
   reviews.getRange('R2:R').setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['Publicar','Ocultar','Eliminar','Restaurar','Me gusta','Quitar Me gusta'], true).build());
   [reviews, likes].forEach(function (sheet) {
-    sheet.getRange(1, 1, 1, sheet.getLastColumn()).setFontWeight('bold').setBackground('#ad3f67').setFontColor('#ffffff');
+    tintinAplicarEstiloParticipacion_(sheet);
     sheet.autoResizeColumns(1, sheet.getLastColumn());
   });
   ScriptApp.getProjectTriggers().filter(function (trigger) { return trigger.getHandlerFunction() === 'tintinDailyEngagementDigest'; }).forEach(ScriptApp.deleteTrigger);
@@ -126,6 +148,7 @@ function tintinEngagementOnEdit(e) {
   var result = JSON.parse(response.getContentText() || '{}');
   if (!result.ok || !result.record) throw new Error(result.error || 'Respuesta de sincronizacion invalida.');
   sheet.getRange(e.range.getRow(), 1, 1, TINTIN_REVIEW_HEADERS_.length).setValues([tintinReviewRow_(result.record)]);
+  tintinAplicarEstiloParticipacion_(sheet);
 }
 
 function tintinDailyEngagementDigest() {
