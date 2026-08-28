@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-28T15:29:43.542Z",
-  "sourceFingerprint": "dcee530ce7aec8120960a77e2ee4e96dda93104e8bba3baf9b17b2d4f9135878",
+  "generatedAt": "2026-08-28T16:22:45.020Z",
+  "sourceFingerprint": "95d8a7da4424925948ccc3283faf3bfd9375ef49a7ec9ca4dbcb1d39d3a9a1b6",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 774,
-    "textFiles": 742,
-    "totalBytes": 8544285,
+    "files": 776,
+    "textFiles": 744,
+    "totalBytes": 8553879,
     "pages": 18,
-    "modules": 497
+    "modules": 498
   },
   "viewports": [
     {
@@ -17941,8 +17941,8 @@
     },
     {
       "path": "functions/api/sheets-admin-webhook.js",
-      "bytes": 7614,
-      "sha256": "d9a03ec5e8c53a002beb42be212034ad13bfcadf94561968f0ad0619d85fbffb",
+      "bytes": 8529,
+      "sha256": "61f09eaac57319743dbc6e2c8e6149bb2b2f501045f7600b34927b06d4dd4265",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18049,8 +18049,8 @@
     },
     {
       "path": "functions/api/sheets-sync-snapshot.js",
-      "bytes": 6741,
-      "sha256": "6c2ba9884291fab02945f31825850e8beabad6ea43130bffb81374079e015eda",
+      "bytes": 7026,
+      "sha256": "3620628101a6675666fca38a2199072ce7e2ce2799761e183a7a3640e4080149",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18296,8 +18296,8 @@
     },
     {
       "path": "functions/product.js",
-      "bytes": 7930,
-      "sha256": "8681c5004de2be87901a02da526145be06651a7554f7ebaa5252e68276add4f8",
+      "bytes": 9433,
+      "sha256": "41e3beb95a819f02e739e25750f95e562f2f318a484cafac07cffe3c6d8015e8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23263,8 +23263,8 @@
     },
     {
       "path": "js/pages/product/productos-relacionados.js",
-      "bytes": 12677,
-      "sha256": "b72488f16be0aa8042812bf1acb24d8b10f8e8cc0dba3a1732e3f7f9ce844024",
+      "bytes": 12672,
+      "sha256": "d093bbdf3e63c240ac385321884be9f4ca92278a7d5826d6f0adcfc0a6012815",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23272,7 +23272,7 @@
       "imports": [],
       "endpoints": [
         {
-          "url": "https://tintinaccesorios.pages.dev/product.html",
+          "url": "https://tintinaccesorios.pages.dev/product",
           "line": 3
         }
       ]
@@ -23668,6 +23668,39 @@
         {
           "url": "http://127.0.0.1:4173/",
           "line": 10
+        }
+      ]
+    },
+    {
+      "path": "scripts/aplicar-hardening-final-temporal.mjs",
+      "bytes": 7009,
+      "sha256": "2e8cd3821abea2bc19267a8fe18d56e072200ab212cfdb5485aa4430fccc73d4",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../../functions/product.js",
+          "target": null,
+          "dynamic": true,
+          "line": 153
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/product.html",
+          "line": 143
+        },
+        {
+          "url": "https://tintinaccesorios.pages.dev/product",
+          "line": 144
         }
       ]
     },
@@ -28319,13 +28352,20 @@
     },
     {
       "path": "tests/seo/phase11-seo.spec.js",
-      "bytes": 3043,
-      "sha256": "2296858ecf0bb8b18e7f7ab368f9df9dbd2457d3a2f90fac29f3ff8b319cadc7",
+      "bytes": 3955,
+      "sha256": "c7df98bdd91c77762b65f2eca9fbe8b841bd429e8ea71532fe729cfa5a5f6f86",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [],
+      "imports": [
+        {
+          "raw": "../../functions/product.js",
+          "target": "functions/product.js",
+          "dynamic": true,
+          "line": 41
+        }
+      ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/",
@@ -29424,6 +29464,12 @@
       "sha256": "6a2eca592cb337151a33f84556075cf6a15d7329c7cff4eae016b6e43ce70d2f"
     },
     {
+      "path": ".github/workflows/hardening-final-temporal.yml",
+      "extension": ".yml",
+      "bytes": 2011,
+      "sha256": "b8301a47f72c9924137b2a9a939e1544159db6ceb96e57c0a99cd3b6e5e547ba"
+    },
+    {
       "path": ".github/workflows/lanzar-diagnostico-maestro.yml",
       "extension": ".yml",
       "bytes": 1139,
@@ -29528,8 +29574,8 @@
     {
       "path": "apps-script/AdminParity.gs",
       "extension": ".gs",
-      "bytes": 25540,
-      "sha256": "8cf945a96e4be8f8444e4b1c97071d0ced003eebc1170c570d4e7fd8e538990f"
+      "bytes": 25616,
+      "sha256": "3158ff8668d8bfe1a3c1c2190c4ea7a0358d433790de93c4c0565306e1049f7b"
     },
     {
       "path": "apps-script/ContratoCuentas.gs",
@@ -29546,20 +29592,20 @@
     {
       "path": "apps-script/Participacion.gs",
       "extension": ".gs",
-      "bytes": 8475,
-      "sha256": "bd509aeef0927530535ce0eeb07cd38706ee9704fddff208f8c3a00e6ad70830"
+      "bytes": 9641,
+      "sha256": "4e93b39355ee89860299f7bb7cce355cb9b5e7f4ef0890d5190f8f91f24ddf9e"
     },
     {
       "path": "apps-script/ProductosUnificados.gs",
       "extension": ".gs",
-      "bytes": 38843,
-      "sha256": "b126cec8eda50b2be44c20bd28655e9ddfea783ac7221ac043f7a41bd3678df6"
+      "bytes": 39192,
+      "sha256": "09018c9bf3e95ad6fd31a97e3543a54fecb3a32710c816f9821075d3e5413658"
     },
     {
       "path": "apps-script/ReorganizacionSheets.gs",
       "extension": ".gs",
-      "bytes": 14168,
-      "sha256": "d05dd914bc68a122c639b6f61e653179bb49a791dd5607d7484c5efeefce4f33"
+      "bytes": 9879,
+      "sha256": "c5bf23f99c6d7a3a8f0435a3b9f67ca0d4e1489b25f800d7bb14606a7474fa90"
     },
     {
       "path": "apps-script/Seguridad.gs",
@@ -30920,8 +30966,8 @@
     {
       "path": "functions/api/sheets-admin-webhook.js",
       "extension": ".js",
-      "bytes": 7614,
-      "sha256": "d9a03ec5e8c53a002beb42be212034ad13bfcadf94561968f0ad0619d85fbffb"
+      "bytes": 8529,
+      "sha256": "61f09eaac57319743dbc6e2c8e6149bb2b2f501045f7600b34927b06d4dd4265"
     },
     {
       "path": "functions/api/sheets-engagement-webhook.js",
@@ -30944,8 +30990,8 @@
     {
       "path": "functions/api/sheets-sync-snapshot.js",
       "extension": ".js",
-      "bytes": 6741,
-      "sha256": "6c2ba9884291fab02945f31825850e8beabad6ea43130bffb81374079e015eda"
+      "bytes": 7026,
+      "sha256": "3620628101a6675666fca38a2199072ce7e2ce2799761e183a7a3640e4080149"
     },
     {
       "path": "functions/api/system-health.js",
@@ -31058,8 +31104,8 @@
     {
       "path": "functions/product.js",
       "extension": ".js",
-      "bytes": 7930,
-      "sha256": "8681c5004de2be87901a02da526145be06651a7554f7ebaa5252e68276add4f8"
+      "bytes": 9433,
+      "sha256": "41e3beb95a819f02e739e25750f95e562f2f318a484cafac07cffe3c6d8015e8"
     },
     {
       "path": "functions/products/[handle].js",
@@ -32210,8 +32256,8 @@
     {
       "path": "js/pages/product/productos-relacionados.js",
       "extension": ".js",
-      "bytes": 12677,
-      "sha256": "b72488f16be0aa8042812bf1acb24d8b10f8e8cc0dba3a1732e3f7f9ce844024"
+      "bytes": 12672,
+      "sha256": "d093bbdf3e63c240ac385321884be9f4ca92278a7d5826d6f0adcfc0a6012815"
     },
     {
       "path": "js/pages/product/resenas-producto.js",
@@ -32548,6 +32594,12 @@
       "extension": ".txt",
       "bytes": 692,
       "sha256": "857c7081889b4ad579cf6ed7cf06a5294e845cc355377f2ed651f8483f842a47"
+    },
+    {
+      "path": "scripts/aplicar-hardening-final-temporal.mjs",
+      "extension": ".mjs",
+      "bytes": 7009,
+      "sha256": "2e8cd3821abea2bc19267a8fe18d56e072200ab212cfdb5485aa4430fccc73d4"
     },
     {
       "path": "scripts/auditar-acceso-aislamiento.js",
@@ -33236,14 +33288,14 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 1037,
-      "sha256": "aca51eb1aaf6a8e984049b41ae865b4aeea77f9a3e8b6a0f127d3ec47051c4c7"
+      "bytes": 38,
+      "sha256": "dd9d3b46a69239cd812969333746634c254684c83bb0c9501af9d578669e38b8"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 33489,
-      "sha256": "e170bc61334a4b557a6d8b4d32b1a2f3ab14b904dc51ad6ff67cd6467fe8f684"
+      "bytes": 34150,
+      "sha256": "c18c7810a636d0b76d4139f4cd5ca5b7709d0386ffe4f9f7140f5525c7f2b933"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -33680,8 +33732,8 @@
     {
       "path": "tests/seo/phase11-seo.spec.js",
       "extension": ".js",
-      "bytes": 3043,
-      "sha256": "2296858ecf0bb8b18e7f7ab368f9df9dbd2457d3a2f90fac29f3ff8b319cadc7"
+      "bytes": 3955,
+      "sha256": "c7df98bdd91c77762b65f2eca9fbe8b841bd429e8ea71532fe729cfa5a5f6f86"
     },
     {
       "path": "tests/sync/admin-mirrors.test.mjs",
@@ -35195,13 +35247,13 @@
   "apiCalls": [
     {
       "file": "apps-script/Participacion.gs",
-      "line": 18,
+      "line": 21,
       "target": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
       "method": "POST"
     },
     {
       "file": "apps-script/ProductosUnificados.gs",
-      "line": 173,
+      "line": 181,
       "target": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
       "method": "POST"
     },
