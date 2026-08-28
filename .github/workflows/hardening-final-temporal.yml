@@ -29,6 +29,23 @@ jobs:
         run: npm ci
       - name: Aplicar correcciones focalizadas
         run: node scripts/aplicar-hardening-final-temporal.mjs
+      - name: Garantizar constante del timeout de producto
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = 'functions/product.js';
+          let source = fs.readFileSync(path, 'utf8');
+          const declaration = 'const PRODUCT_METADATA_CEILING_MS = 1400;';
+          if (!source.includes(declaration)) {
+            const anchor = "const CLOUDINARY_UPLOAD = '/upload/';";
+            if (!source.includes(anchor)) throw new Error('No se encontró ancla para PRODUCT_METADATA_CEILING_MS');
+            source = source.replace(anchor, `${anchor}\n${declaration}`);
+            fs.writeFileSync(path, source);
+            console.log('OK constante PRODUCT_METADATA_CEILING_MS');
+          } else {
+            console.log('SKIP constante PRODUCT_METADATA_CEILING_MS: ya presente');
+          }
+          NODE
       - name: Verificar sintaxis de Functions
         run: |
           node --check functions/api/sheets-sync-snapshot.js
