@@ -47,7 +47,6 @@ function tintinMigrarUsuariosWebColumnas_() {
   sheet.getRange(TINTIN_USERS_HEADER_ROW, 1, 1, width).setValues([TINTIN_USERS_HEADERS]);
   sheet.getRange(TINTIN_USERS_HEADER_ROW, 1, 1, width).setFontWeight('bold');
   sheet.setFrozenRows(TINTIN_USERS_HEADER_ROW);
-  sheet.setFrozenColumns(TINTIN_USERS_COL.username);
 
   return { ok: true, rows: dataRows, width: width };
 }
@@ -68,11 +67,15 @@ function tintinEstilizarBloques_(sheet, headerRow, blocks) {
 // solo pone negrita en el encabezado; sin esta función la hoja quedaba sin
 // color en varias columnas (o con color manual viejo desalineado). No
 // reordena ni reescribe valores, solo formato.
+// No se congelan columnas: la fila 4 (disclaimer "Esta es la única hoja
+// maestra de cuentas web...") es una celda combinada que va de la columna 2
+// a la 10, y cualquier cantidad de columnas congeladas entre medio de ese
+// rango revienta con "No se pueden inmovilizar columnas que solo contengan
+// parte de una celda combinada".
 function tintinPulirVisualUsuariosWeb_() {
   var sheet = tintinProductsSpreadsheet_().getSheetByName(TINTIN_USERS_SHEET);
   if (!sheet) return { ok: false, reason: 'No existe Usuarios web.' };
   sheet.setFrozenRows(TINTIN_USERS_HEADER_ROW);
-  sheet.setFrozenColumns(TINTIN_USERS_COL.username);
   tintinEstilizarBloques_(sheet, TINTIN_USERS_HEADER_ROW, [
     { from: TINTIN_USERS_COL.uid, to: TINTIN_USERS_COL.customerId, color: '#3f4b8f' },          // identidad
     { from: TINTIN_USERS_COL.email, to: TINTIN_USERS_COL.ci, color: '#2f7a4f' },                // contacto
