@@ -216,8 +216,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   padding: 0 24px;
 }
 
-.section { padding: 48px 0; }
-.section-sm { padding: 32px 0; }
+.section { padding: clamp(48px, 7vw, 96px) 0; }
+.section-sm { padding: clamp(32px, 5vw, 64px) 0; }
 .text-center { text-align: center; }
 .flex { display: flex; }
 .flex-col { flex-direction: column; }
@@ -2751,7 +2751,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 ═══════════════════════════════════════════════ */
 .tt-page-hero {
   background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 50%, #ede0f0 100%);
-  padding: calc(var(--header-h) + 40px) 0 40px;
+  padding: calc(var(--header-h) + 40px) 0 clamp(40px, 6vw, 64px);
   text-align: center;
 }
 
