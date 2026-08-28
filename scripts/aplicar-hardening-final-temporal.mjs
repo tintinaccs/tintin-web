@@ -51,8 +51,8 @@ replaceOnce(
 
 replaceOnce(
   'functions/product.js',
-`const CLOUDINARY_TINTIN_TRANSFORM = /^f_auto,q_auto,c_limit,w_\\d+,dpr_auto\\//;`,
-`const CLOUDINARY_TINTIN_TRANSFORM = /^f_auto,q_auto,c_limit,w_\\d+,dpr_auto\\//;
+`const CLOUDINARY_TINTIN_TRANSFORM = /^f_auto,q_auto,c_limit,w_\d+,dpr_auto\//;`,
+`const CLOUDINARY_TINTIN_TRANSFORM = /^f_auto,q_auto,c_limit,w_\d+,dpr_auto\//;
 const PRODUCT_METADATA_CEILING_MS = 1400;`,
   'techo metadata producto'
 );
@@ -111,10 +111,8 @@ replaceOnce(
 
 replaceOnce(
   'functions/product.js',
-`    const document = await firestoreAdminGet(env, \`products/${id}\`);`,
-`    const document = await resolveProductMetadataWithin(
-      firestoreAdminGet(env, \`products/${id}\`)
-    );`,
+  "    const document = await firestoreAdminGet(env, `products/${id}`);",
+  "    const document = await resolveProductMetadataWithin(\n      firestoreAdminGet(env, `products/${id}`)\n    );",
   'timeout aplicado a Firestore producto'
 );
 
