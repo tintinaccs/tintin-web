@@ -123,7 +123,7 @@ if (!window.TintinAdminUserFichaBooted) {
       contact.grid.append(
         field('Email', user.email),
         field('Teléfono', user.phone),
-        field('Cédula', user.checkoutDefaults?.ci),
+        field('Cédula', user.checkoutDefaults?.ci || user.ci),
         field('Ubicación', user.address || user.savedLocation?.name),
         field('Fecha de nacimiento', user.dob),
       );
