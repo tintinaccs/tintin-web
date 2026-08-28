@@ -542,7 +542,7 @@ function normalizeSearch(value) {
 // capitalized as a placeholder (never a hardcoded name).
 let liveCollections = [];
 function catLabel(slug) {
-  const c = liveCollections.find(x => x.slug === slug);
+  const c = liveCollections.find(x => normalizeCategory(x.slug) === normalizeCategory(slug));
   return (c && c.name) || (slug.charAt(0).toUpperCase() + slug.slice(1));
 }
 function renderCollectionButtons(cols) {
@@ -552,31 +552,33 @@ function renderCollectionButtons(cols) {
   if (sidebarGroup) {
     sidebarGroup.querySelectorAll('.cat-filter-option[data-cat]:not([data-cat="todos"])').forEach(b => b.remove());
     cols.forEach(c => {
+      const slug = normalizeCategory(c.slug);
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'cat-filter-option' + (catActual === c.slug ? ' active' : '');
-      btn.dataset.cat = c.slug;
-      btn.setAttribute('aria-pressed', String(catActual === c.slug));
+      btn.className = 'cat-filter-option' + (catActual === slug ? ' active' : '');
+      btn.dataset.cat = slug;
+      btn.setAttribute('aria-pressed', String(catActual === slug));
       const dot = document.createElement('span');
       dot.className = 'cat-filter-dot';
       const count = document.createElement('span');
       count.className = 'cat-filter-count';
-      count.id = 'count-' + c.slug;
+      count.id = 'count-' + slug;
       btn.append(dot, document.createTextNode(' ' + (c.name || c.slug) + ' '), count);
-      btn.onclick = () => seleccionarCat(c.slug);
+      btn.onclick = () => seleccionarCat(slug);
       sidebarGroup.appendChild(btn);
     });
   }
   if (mobileTabs) {
     mobileTabs.querySelectorAll('.tt-filtro-btn[data-cat]:not([data-cat="todos"])').forEach(b => b.remove());
     cols.forEach(c => {
+      const slug = normalizeCategory(c.slug);
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'tt-filtro-btn' + (catActual === c.slug ? ' activo' : '');
-      btn.dataset.cat = c.slug;
-      btn.setAttribute('aria-pressed', String(catActual === c.slug));
+      btn.className = 'tt-filtro-btn' + (catActual === slug ? ' activo' : '');
+      btn.dataset.cat = slug;
+      btn.setAttribute('aria-pressed', String(catActual === slug));
       btn.textContent = c.name || c.slug;
-      btn.onclick = () => seleccionarCat(c.slug);
+      btn.onclick = () => seleccionarCat(slug);
       mobileTabs.appendChild(btn);
     });
   }
@@ -598,13 +600,20 @@ const CAT_ALIASES = {
   anillo: 'anillos', ring: 'anillos',
   tobillera: 'tobilleras', ankle: 'tobilleras',
   brazalete: 'brazaletes',
-  'ear cuff': 'earcuff', earcuffs: 'earcuff',
-  'arm cuff': 'armcuff', armcuffs: 'armcuff',
+  'ear-cuff': 'earcuff', earcuffs: 'earcuff',
+  'arm-cuff': 'armcuff', armcuffs: 'armcuff',
   lente: 'gafas', lentes: 'gafas', sunglasses: 'gafas',
-  joyero: 'joyeros', 'jewelry box': 'joyeros'
+  joyero: 'joyeros', 'jewelry-box': 'joyeros'
 };
 function normalizeCategory(value) {
-  const v = (value || '').toLowerCase().trim();
+  const v = String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
   return CAT_ALIASES[v] || v;
 }
 
@@ -813,7 +822,7 @@ function bootCollections() {
     // hidden, or never existed) must fall back to "Todos" cleanly — never
     // stay selected as a ghost category showing another category's data
     // under its title.
-    if (catActual !== 'todos' && !cols.some(c => c.slug === catActual)) {
+    if (catActual !== 'todos' && !cols.some(c => normalizeCategory(c.slug) === catActual)) {
       catActual = 'todos';
       const url = new URL(location.href);
       url.searchParams.delete('cat');

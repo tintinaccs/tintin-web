@@ -12,3 +12,14 @@
   mix-blend-mode: normal !important;
   isolation: isolate !important;
 }
+
+@media (max-width: 767px) {
+  #notifications-drawer {
+    top: max(12px, env(safe-area-inset-top)) !important;
+    bottom: 0 !important;
+    height: calc(100dvh - max(12px, env(safe-area-inset-top))) !important;
+    width: 100vw !important;
+    border-radius: 24px 24px 0 0;
+    border-left: 0 !important;
+  }
+}

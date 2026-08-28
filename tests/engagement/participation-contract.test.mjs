@@ -27,6 +27,25 @@ test('engagement writes stay behind server APIs', async () => {
   assert.match(rules, /match \/favorites\/\{productId\}[\s\S]*?allow create, update, delete: if false/);
 });
 
+test('los likes de producto usan estado server-side y estadísticas públicas reales', async () => {
+  const [client, route, product, rules] = await Promise.all([
+    read('cloudflare/participacion-clientes.js'),
+    read('functions/api/engagement.js'),
+    read('js/pages/product/resenas-producto.js'),
+    read('firestore.rules'),
+  ]);
+  assert.match(client, /productEngagementStats\//);
+  assert.match(client, /likeCount: count/);
+  assert.match(client, /getOwnFavorite/);
+  assert.match(client, /getProductLikeStats/);
+  assert.match(route, /action === 'ownFavorite'/);
+  assert.match(route, /action === 'productLikes'/);
+  assert.match(product, /action: 'toggleFavorite'/);
+  assert.match(product, /productEngagementStats/);
+  assert.doesNotMatch(product, /localStorage\.getItem\(key\)/);
+  assert.match(rules, /match \/productEngagementStats\/\{productId\}[\s\S]*?allow read: if isStoreOpenOrAllowed\(\);[\s\S]*?allow write: if false/);
+});
+
 test('one review edit and one review per account/product are enforced server-side', async () => {
   const source = await read('cloudflare/participacion-clientes.js');
   assert.match(source, /Number\(record\.editCount\) >= 1/);

@@ -57,6 +57,7 @@
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/pages/product/product-extras.css?v=tintin-20260817-margin-consistency-1">
   <link rel="stylesheet" href="css/pages/product/resenas-producto.css?v=tintin-20260817-mobile-accordion-1">
+  <link rel="stylesheet" href="css/pages/product/product-premium-overhaul.css?v=tintin-20260828-product-premium-2">
   <link rel="stylesheet" href="css/components/notifications/interacciones-sociales.css?v=tintin-20260814-social-notifications-1">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -127,6 +128,7 @@
           </button>
         </div>
         <span id="product-badge-label" class="tt-product-badge" style="display:none;margin-bottom:16px;font-size:0.72rem;padding:5px 14px;"></span>
+        <span class="tt-product-popular-badge" data-product-popular-badge hidden>Favorito de las Tintinas ♡</span>
 
         <div class="tt-product-detail-price" id="product-price"></div>
 
@@ -175,6 +177,16 @@
         <div class="tt-product-share" id="product-share"></div>
 
       </div>
+    </div>
+
+    <div class="tt-product-social-bar" aria-label="Interacción con el producto">
+      <button type="button" id="btn-product-like" class="tt-social-action" aria-pressed="false" aria-label="Me gusta este producto">
+        <span aria-hidden="true" data-product-like-icon>♡</span><span data-product-like-label>Me gusta</span><strong data-product-like-count>0</strong>
+      </button>
+      <a class="tt-social-action" href="#product-reviews" aria-label="Ver comentarios del producto">
+        <span aria-hidden="true">💬</span><span>Comentarios</span><strong data-product-comment-count>0</strong>
+      </a>
+      <button type="button" class="tt-social-share" data-share-product aria-label="Compartir producto">Compartir</button>
     </div>
   </div>
 </section>
@@ -262,13 +274,12 @@
 </div>
 
 <!-- RELATED PRODUCTS -->
-<section class="tt-related-section" data-collapsed="true">
+<section class="tt-related-section" data-collapsed="false">
   <div class="container">
     <div class="tt-related-header">
-      <div class="tt-mobile-accordion-trigger" id="related-trigger" role="button" tabindex="0" aria-expanded="false" aria-controls="related-status related-grid">
+      <div class="tt-related-heading" id="related-trigger">
         <p class="tt-section-sub">También te puede gustar</p>
         <h2 class="tt-section-title">OTROS PRODUCTOS</h2>
-        <svg class="tt-accordion-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <button type="button" class="tt-related-refresh" id="related-refresh" aria-label="Mostrar otros productos" title="Mostrar otros productos">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6v5h-5M4 18v-5h5M18.2 9A7 7 0 0 0 6.1 6.6L4 9m16 6-2.1 2.4A7 7 0 0 1 5.8 15"/></svg>

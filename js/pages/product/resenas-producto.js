@@ -9,9 +9,12 @@ let ownReview = null;
 let reviews = [];
 let likedReviewIds = new Set();
 let stats = { count: 0, average: 0, distribution: {} };
+let productLikeCount = 0;
+let productLiked = false;
 let selectedRating = 0;
 let unsubscribeReviews = null;
 let unsubscribeStats = null;
+let unsubscribeLikes = null;
 let deepLinkHandled = false;
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
@@ -42,12 +45,12 @@ function ensureSection() {
   section = document.createElement('section');
   section.id = 'product-reviews';
   section.className = 'tt-reviews-product';
-  section.dataset.collapsed = 'true';
+  section.dataset.collapsed = 'false';
   section.innerHTML = `
     <div class="container tt-reviews-layout">
       <aside class="tt-reviews-summary" aria-labelledby="product-reviews-title">
-        <p class="tt-section-sub">Opiniones reales</p>
-        <h2 class="tt-section-title tt-mobile-accordion-trigger" id="product-reviews-title" role="button" tabindex="0" aria-expanded="false" aria-controls="product-review-summary product-reviews-content">Reseñas<svg class="tt-accordion-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></h2>
+        <p class="tt-section-sub">La conversación de la comunidad</p>
+        <h2 class="tt-section-title" id="product-reviews-title">Comentarios</h2>
         <div id="product-review-summary" aria-live="polite"></div>
       </aside>
       <div id="product-reviews-content">
@@ -97,7 +100,7 @@ function renderSummary() {
   root.innerHTML = `
     <div class="tt-reviews-score"><strong>${count ? average.toFixed(1).replace('.', ',') : '—'}</strong><span>de 5</span></div>
     <div class="tt-review-stars" aria-label="${average.toFixed(1)} de 5 estrellas">${starText(Math.round(average))}</div>
-    <div class="tt-review-date">${count} reseña${count === 1 ? '' : 's'}</div>
+    <div class="tt-review-date">${count} comentario${count === 1 ? '' : 's'}</div>
     <div class="tt-review-distribution">${[5,4,3,2,1].map(rating => {
       const value = Number(distribution[rating] || 0);
       const percent = count ? Math.round(value * 100 / count) : 0;
@@ -155,8 +158,31 @@ function renderReviews() {
       </div>
       ${renderConversation(review)}
     </article>`;
-  }).join('') : '<div class="tt-review-empty">Todavía no hay reseñas. Podés ser la primera en compartir tu opinión.</div>';
+  }).join('') : '<div class="tt-review-empty">Todavía no hay comentarios. Podés ser la primera en compartir tu opinión.</div>';
   highlightDeepLink();
+  document.querySelectorAll('[data-product-comment-count]').forEach(node => { node.textContent = String(reviews.length); });
+}
+
+function renderProductLike() {
+  const button = document.getElementById('btn-product-like');
+  if (!button) return;
+  button.setAttribute('aria-pressed', String(productLiked));
+  button.setAttribute('aria-label', productLiked ? 'Quitar Me gusta de este producto' : 'Me gusta este producto');
+  button.querySelector('[data-product-like-label]')?.replaceChildren(document.createTextNode(productLiked ? 'Te gusta' : 'Me gusta'));
+  button.querySelector('[data-product-like-count]')?.replaceChildren(document.createTextNode(String(productLikeCount)));
+  button.querySelector('[data-product-like-icon]')?.replaceChildren(document.createTextNode(productLiked ? '♥' : '♡'));
+  document.querySelectorAll('[data-product-popular-badge]').forEach(node => { node.hidden = productLikeCount < 15; });
+}
+
+async function loadPublicLikeStats() {
+  try {
+    const response = await fetch(`/api/engagement?action=productLikes&productId=${encodeURIComponent(productId)}`, { cache: 'no-store' });
+    const result = await response.json().catch(() => ({}));
+    if (response.ok && result.ok === true) {
+      productLikeCount = Number(result.likeCount) || 0;
+      renderProductLike();
+    }
+  } catch {}
 }
 
 function ratingButtons() {
@@ -220,24 +246,30 @@ async function loadSocialState() {
     ownReview = null;
     likedReviewIds = new Set();
     selectedRating = 0;
+    productLiked = false;
     renderForm();
     renderReviews();
+    renderProductLike();
     return;
   }
-  const [own, interactions] = await Promise.all([
+  const [own, interactions, favorite] = await Promise.all([
     api(null, 'GET', 'ownReview'),
     api(null, 'GET', 'reviewInteractions'),
+    api(null, 'GET', 'ownFavorite'),
   ]);
   ownReview = own.review;
   likedReviewIds = new Set(interactions.interactions?.reviewIds || []);
+  productLiked = favorite.favorite === true;
   selectedRating = normalizeRating(ownReview?.rating);
   renderForm();
   renderReviews();
+  renderProductLike();
 }
 
 function subscribePublic() {
   unsubscribeReviews?.();
   unsubscribeStats?.();
+  unsubscribeLikes?.();
   unsubscribeReviews = onSnapshot(collection(db, 'products', productId, 'reviews'), snapshot => {
     reviews = snapshot.docs.map(document => ({ id: document.id, ...document.data() }));
     renderReviews();
@@ -249,7 +281,32 @@ function subscribePublic() {
     stats = snapshot.exists() ? snapshot.data() : { count: 0, average: 0, distribution: {} };
     renderSummary();
   }, renderSummary);
+  unsubscribeLikes = onSnapshot(doc(db, 'productEngagementStats', productId), snapshot => {
+    productLikeCount = snapshot.exists() ? Number(snapshot.data()?.likeCount) || 0 : 0;
+    renderProductLike();
+  }, renderProductLike);
+  loadPublicLikeStats();
 }
+
+document.addEventListener('click', async event => {
+  const button = event.target.closest('#btn-product-like');
+  if (!button || button.disabled) return;
+  if (!currentUser) {
+    window.location.href = `/login?from=${encodeURIComponent(`/product?id=${productId}`)}`;
+    return;
+  }
+  button.disabled = true;
+  try {
+    const result = await api({ action: 'toggleFavorite', productId }, 'POST');
+    productLiked = result.selected === true;
+    if (Number.isFinite(Number(result.likeCount))) productLikeCount = Number(result.likeCount);
+    renderProductLike();
+  } catch (failure) {
+    window.alert(failure.message);
+  } finally {
+    button.disabled = false;
+  }
+});
 
 document.addEventListener('click', async event => {
   const ratingButton = event.target.closest('[data-review-rating]');

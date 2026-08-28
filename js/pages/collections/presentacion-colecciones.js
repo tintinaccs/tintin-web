@@ -23,7 +23,20 @@ if (!window.TintinCollectionsPhase4Booted) {
 
   const clean = value => String(value == null ? '' : value).trim();
 
+  const normalizeSlug = value => clean(value)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/^bags?$/, 'bolsos')
+    .replace(/^ear-cuffs?$/, 'earcuff')
+    .replace(/^arm-cuffs?$/, 'armcuff')
+    .replace(/^jewelry-box$/, 'joyeros');
+
   function catalogHref(slug) {
+    slug = normalizeSlug(slug);
     return `/catalogo?cat=${encodeURIComponent(clean(slug))}`;
   }
 
@@ -70,9 +83,9 @@ if (!window.TintinCollectionsPhase4Booted) {
   // foto del producto más antiguo de esa categoría como respaldo visual.
   // Es puramente de presentación: no se persiste nada en Firestore.
   function firstProductImage(slug) {
-    const normalized = clean(slug).toLowerCase();
+    const normalized = normalizeSlug(slug);
     const matches = products.filter(product =>
-      clean(product?.category || product?.cat).toLowerCase() === normalized &&
+      normalizeSlug(product?.category || product?.cat) === normalized &&
       clean(product?.name) &&
       product?.active !== false &&
       clean(product?.imageUrl)
@@ -179,9 +192,9 @@ if (!window.TintinCollectionsPhase4Booted) {
   }
 
   function categoryCount(slug) {
-    const normalized = clean(slug).toLowerCase();
+    const normalized = normalizeSlug(slug);
     return products.filter(product =>
-      clean(product?.category || product?.cat).toLowerCase() === normalized &&
+      normalizeSlug(product?.category || product?.cat) === normalized &&
       clean(product?.name)
     ).length;
   }
@@ -225,7 +238,10 @@ if (!window.TintinCollectionsPhase4Booted) {
   function renderHomeGrid(target) {
     replaceOwned(
       target,
-      collectionNodesOrState(buildHomeCard, 'No hay colecciones disponibles todavía.', true),
+      // Todas las colecciones publicadas deben poder abrirse, incluso si hoy
+      // todavía no tienen productos asignados. El catálogo comunica ese
+      // estado; ocultarlas acá las volvía imposibles de visitar.
+      collectionNodesOrState(buildHomeCard, 'No hay colecciones disponibles todavía.'),
       'home-grid'
     );
   }
@@ -290,16 +306,18 @@ if (!window.TintinCollectionsPhase4Booted) {
 
   function selectedCatalogSlug() {
     const requested = clean(new URLSearchParams(window.location.search).get('cat'));
-    if (!requested || !collections?.some(item => item.slug === requested)) return 'todos';
-    return requested;
+    const normalized = normalizeSlug(requested);
+    if (!normalized || !collections?.some(item => normalizeSlug(item.slug) === normalized)) return 'todos';
+    return normalized;
   }
 
   function navigateCatalog(slug) {
-    if (slug === 'todos') {
+    const normalized = normalizeSlug(slug);
+    if (normalized === 'todos') {
       window.location.assign('/catalogo');
       return;
     }
-    window.location.assign(catalogHref(slug));
+    window.location.assign(catalogHref(normalized));
   }
 
   function buildCatalogSidebarButton(collection, selected) {

@@ -2,7 +2,7 @@ import {
   jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import {
-  addCustomerReply, createReview, editOwnReview, getOwnReview, getReviewInteractions,
+  addCustomerReply, createReview, editOwnReview, getOwnFavorite, getOwnReview, getProductLikeStats, getReviewInteractions,
   toggleFavorite, toggleReviewLike, engagementOwnReviewView,
 } from '../../cloudflare/participacion-clientes.js';
 import {
@@ -51,6 +51,14 @@ export async function onRequest(context) {
   if (!originIsAllowed(origin, request.url)) return jsonResponse({ ok: false, error: 'Origen no permitido' }, 403, origin, request.url);
   if (request.method === 'OPTIONS') return preflightResponse(origin, request.url, 'GET, POST, OPTIONS');
   try {
+    if (request.method === 'GET') {
+      const url = new URL(request.url);
+      const action = url.searchParams.get('action');
+      const productId = url.searchParams.get('productId');
+      if (action === 'productLikes') {
+        return jsonResponse({ ok: true, ...(await getProductLikeStats(env, productId)) }, 200, origin, request.url);
+      }
+    }
     const user = await requireFirebaseUser(request);
     if (request.method === 'GET') {
       const url = new URL(request.url);
@@ -58,6 +66,9 @@ export async function onRequest(context) {
       const productId = url.searchParams.get('productId');
       if (action === 'ownReview') {
         return jsonResponse({ ok: true, review: await getOwnReview(env, user, productId) }, 200, origin, request.url);
+      }
+      if (action === 'ownFavorite') {
+        return jsonResponse({ ok: true, favorite: await getOwnFavorite(env, user, productId) }, 200, origin, request.url);
       }
       if (action === 'reviewInteractions') {
         return jsonResponse({ ok: true, interactions: await getReviewInteractions(env, user, productId) }, 200, origin, request.url);
