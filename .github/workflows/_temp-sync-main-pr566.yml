@@ -44,12 +44,12 @@ jobs:
             if echo "$conflicts" | grep -qx 'admin.html'; then
               git checkout --theirs admin.html
               python - <<'PY'
-from pathlib import Path
-p = Path('admin.html')
-s = p.read_text()
-s = s.replace('css/core/tema-unificado-tintin.css?v=tintin-20260824-contrast-buttons-3', 'css/core/tema-unificado-tintin.css?v=tintin-20260828-product-header-fixes-1')
-p.write_text(s)
-PY
+          from pathlib import Path
+          p = Path('admin.html')
+          s = p.read_text()
+          s = s.replace('css/core/tema-unificado-tintin.css?v=tintin-20260824-contrast-buttons-3', 'css/core/tema-unificado-tintin.css?v=tintin-20260828-product-header-fixes-1')
+          p.write_text(s)
+          PY
               git add admin.html
             fi
             if echo "$conflicts" | grep -qx 'diagnostic-manifest.json'; then
