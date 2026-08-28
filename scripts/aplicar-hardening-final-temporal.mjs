@@ -136,6 +136,13 @@ replaceOnce(
   'fallback metadata producto'
 );
 
+replaceOnce(
+  'js/pages/product/productos-relacionados.js',
+`const TT_PUBLIC_PRODUCT_URL = 'https://tintinaccesorios.pages.dev/product.html';`,
+`const TT_PUBLIC_PRODUCT_URL = 'https://tintinaccesorios.pages.dev/product';`,
+  'canonical runtime /product'
+);
+
 const seoPath = 'tests/seo/phase11-seo.spec.js';
 let seo = read(seoPath);
 if (!seo.includes("metadata de producto no puede bloquear indefinidamente")) {
