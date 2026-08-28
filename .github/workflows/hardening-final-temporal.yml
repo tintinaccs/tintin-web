@@ -38,6 +38,8 @@ jobs:
         run: npm run test:products-sync
       - name: Probar contratos arquitectónicos
         run: npm run audit:architecture-contracts
+      - name: Actualizar baseline de versionado de caché
+        run: npm run cache-versioning:write
       - name: Regenerar artefactos reproducibles
         run: npm run build:pages
       - name: Guardar hardening y artefactos
