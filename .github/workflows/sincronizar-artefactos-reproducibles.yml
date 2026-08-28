@@ -1,0 +1,39 @@
+name: Sincronizar artefactos reproducibles
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: generated-artifacts-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  sync-generated:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Regenerar artefactos
+        run: npm run build:pages
+      - name: Guardar únicamente artefactos reproducibles
+        shell: bash
+        run: |
+          git add diagnostic-manifest.json scripts/cache-version-baseline.json _headers _routes.json
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: sincronizar artefactos reproducibles"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
