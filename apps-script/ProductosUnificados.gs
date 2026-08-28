@@ -4,6 +4,33 @@ var TINTIN_PRODUCTS_HEADER_ROW = 6;
 var TINTIN_PRODUCTS_FIRST_ROW = 7;
 var TINTIN_PRODUCTS_SPREADSHEET_ID = '106Z1A8veL9fGMc4U7R10NVNMsJiEYt9wiGr4YFAav1U';
 var TINTIN_USERS_SHEET = 'Usuarios web';
+var TINTIN_USERS_HEADER_ROW = 6;
+var TINTIN_USERS_FIRST_ROW = 7;
+// Fuente única de verdad del layout de Usuarios web. Bloques: identidad (2-5),
+// contacto (6-8), comercial (9-10), estado (11-14), administración (15-16),
+// sincronización/técnico (17-19). Cualquier reorganización de columnas debe
+// actualizarse solo acá; el resto del código lee por nombre de campo.
+var TINTIN_USERS_COL = {
+  uid: 2, name: 3, username: 4, customerId: 5,
+  email: 6, phone: 7, ci: 8,
+  orders: 9, totalSpent: 10,
+  role: 11, blocked: 12, profileStatus: 13, usernameChangeUsed: 14,
+  internalNotes: 15, action: 16,
+  createdAt: 17, lastAccess: 18, lastChangeId: 19
+};
+var TINTIN_USERS_HEADERS = (function() {
+  var labels = {
+    uid: 'UID', name: 'Nombre', username: 'Username', customerId: 'ID cliente',
+    email: 'Correo', phone: 'Teléfono', ci: 'Cédula',
+    orders: 'Pedidos', totalSpent: 'Total gastado (Gs.)',
+    role: 'Rol', blocked: 'Bloqueado', profileStatus: 'Estado de perfil', usernameChangeUsed: 'Cambió username',
+    internalNotes: 'Notas internas', action: 'Acción',
+    createdAt: 'Creado', lastAccess: 'Último acceso', lastChangeId: 'Último changeId'
+  };
+  var headerRow = new Array(TINTIN_USERS_COL.lastChangeId).fill('');
+  Object.keys(TINTIN_USERS_COL).forEach(function(key) { headerRow[TINTIN_USERS_COL[key] - 1] = labels[key]; });
+  return headerRow;
+})();
 var TINTIN_SYNC_HISTORY_SHEET = 'Historial sync';
 var TINTIN_PRODUCTS_WEBHOOK_PATH = '/api/sheets-products-webhook';
 var TINTIN_PRODUCTS_WEBHOOK_REVISION = 'products-canonical-v3';
@@ -644,27 +671,28 @@ function tintinCallInternalWebhook_(path, payload) {
 function tintinHandleUserEdit_(e) {
   if (!e || !e.range || e.range.getRow() < 7) return;
   var column = e.range.getColumn();
-  if ([6, 7, 10, 11].indexOf(column) === -1) return;
+  if ([TINTIN_USERS_COL.role, TINTIN_USERS_COL.blocked, TINTIN_USERS_COL.internalNotes, TINTIN_USERS_COL.action].indexOf(column) === -1) return;
   var sheet = e.range.getSheet();
-  var row = sheet.getRange(e.range.getRow(), 2, 1, 10).getValues()[0];
-  var uid = String(row[0] || '').trim();
+  var row = sheet.getRange(e.range.getRow(), 2, 1, TINTIN_USERS_COL.lastChangeId - 1).getValues()[0];
+  var at = function(col) { return row[col - 2]; };
+  var uid = String(at(TINTIN_USERS_COL.uid) || '').trim();
   if (!uid) return;
   var changeId = Utilities.getUuid();
   var payload = {
-    entity: 'user', action: String(row[9] || '').trim() === 'ELIMINAR' ? 'softDeleteUser' : 'updateUser',
-    uid: uid, role: String(row[4] || '').trim().toLowerCase(), blocked: tintinBool_(row[5]),
-    internalNotes: String(row[8] || ''), changeId: changeId,
-    baseChangeId: String(sheet.getRange(e.range.getRow(), 19).getValue() || '').trim(),
+    entity: 'user', action: String(at(TINTIN_USERS_COL.action) || '').trim() === 'ELIMINAR' ? 'softDeleteUser' : 'updateUser',
+    uid: uid, role: String(at(TINTIN_USERS_COL.role) || '').trim().toLowerCase(), blocked: tintinBool_(at(TINTIN_USERS_COL.blocked)),
+    internalNotes: String(at(TINTIN_USERS_COL.internalNotes) || ''), changeId: changeId,
+    baseChangeId: String(sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.lastChangeId).getValue() || '').trim(),
     source: 'google-sheets:Usuarios web', schemaVersion: 4
   };
   tintinRecordSyncSafely_('SYNCING', sheet.getName(), e.range.getA1Notation(), 'Sincronizando cuenta web.');
   try {
     tintinCallInternalWebhook_(TINTIN_ADMIN_WEBHOOK_PATH, payload);
     if (payload.action === 'softDeleteUser') {
-      sheet.getRange(e.range.getRow(), 7).setValue('Sí');
-      sheet.getRange(e.range.getRow(), 11).clearContent();
+      sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.blocked).setValue('Sí');
+      sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.action).clearContent();
     }
-    sheet.getRange(e.range.getRow(), 19).setValue(changeId);
+    sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.lastChangeId).setValue(changeId);
     tintinRecordSyncSafely_('SYNCED', sheet.getName(), e.range.getA1Notation(), 'Cuenta web sincronizada sin eliminar su identidad histórica.');
   } catch (error) {
     tintinRecordSyncSafely_('ERROR', sheet.getName(), e.range.getA1Notation(), String(error && error.message || error));
@@ -687,6 +715,20 @@ function tintinSnapshot_(entity) {
   return tintinCallInternalWebhook_(TINTIN_SNAPSHOT_PATH, { action: 'snapshot', entity: entity }).records || [];
 }
 
+// Convierte un índice de columna 1-based a su letra A1 (1 → 'A', 27 → 'AA').
+// Usado para derivar rangos de validación a partir de TINTIN_*_COL en vez de
+// hardcodear letras que quedarían desincronizadas ante una reorganización.
+function tintinColumnLetter_(column) {
+  var letters = '';
+  var n = column;
+  while (n > 0) {
+    var remainder = (n - 1) % 26;
+    letters = String.fromCharCode(65 + remainder) + letters;
+    n = Math.floor((n - 1) / 26);
+  }
+  return letters;
+}
+
 function tintinDateFromIso_(value) {
   var date = value ? new Date(value) : null;
   return date && !isNaN(date.getTime()) ? date : '';
@@ -703,12 +745,27 @@ function tintinReplaceTabRows_(sheetName, firstRow, width, rows) {
 
 function tintinPullUsersFromWeb_() {
   var rows = tintinSnapshot_('users').map(function(user) {
-    return ['', user.uid, user.name, user.email, tintinDateFromIso_(user.createdAt), tintinSheetUserRole_(user.role),
-      tintinYesNo_(user.blocked), user.orders, user.totalSpent, user.internalNotes, '', user.customerId,
-      user.username, user.phone, user.ci, user.profileStatus, tintinDateFromIso_(user.lastAccess),
-      tintinYesNo_(user.usernameChangeUsed), user.lastChangeId];
+    var row = new Array(TINTIN_USERS_COL.lastChangeId).fill('');
+    row[TINTIN_USERS_COL.uid - 1] = user.uid;
+    row[TINTIN_USERS_COL.name - 1] = user.name;
+    row[TINTIN_USERS_COL.username - 1] = user.username;
+    row[TINTIN_USERS_COL.customerId - 1] = user.customerId;
+    row[TINTIN_USERS_COL.email - 1] = user.email;
+    row[TINTIN_USERS_COL.phone - 1] = user.phone;
+    row[TINTIN_USERS_COL.ci - 1] = user.ci;
+    row[TINTIN_USERS_COL.orders - 1] = user.orders;
+    row[TINTIN_USERS_COL.totalSpent - 1] = user.totalSpent;
+    row[TINTIN_USERS_COL.role - 1] = tintinSheetUserRole_(user.role);
+    row[TINTIN_USERS_COL.blocked - 1] = tintinYesNo_(user.blocked);
+    row[TINTIN_USERS_COL.profileStatus - 1] = user.profileStatus;
+    row[TINTIN_USERS_COL.usernameChangeUsed - 1] = tintinYesNo_(user.usernameChangeUsed);
+    row[TINTIN_USERS_COL.internalNotes - 1] = user.internalNotes;
+    row[TINTIN_USERS_COL.createdAt - 1] = tintinDateFromIso_(user.createdAt);
+    row[TINTIN_USERS_COL.lastAccess - 1] = tintinDateFromIso_(user.lastAccess);
+    row[TINTIN_USERS_COL.lastChangeId - 1] = user.lastChangeId;
+    return row;
   });
-  return tintinReplaceTabRows_(TINTIN_USERS_SHEET, 7, 19, rows);
+  return tintinReplaceTabRows_(TINTIN_USERS_SHEET, TINTIN_USERS_FIRST_ROW, TINTIN_USERS_COL.lastChangeId, rows);
 }
 
 function tintinPullOrdersFromWeb_() {

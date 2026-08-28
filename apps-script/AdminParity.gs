@@ -223,35 +223,36 @@ function tintinHandleOrderParityEdit_(e) {
 }
 
 function tintinHandleUserParityEdit_(e) {
-  if (!e || !e.range || e.range.getRow() < 7) return;
+  if (!e || !e.range || e.range.getRow() < TINTIN_USERS_FIRST_ROW) return;
   var column = e.range.getColumn();
-  if ([6, 7, 10, 11].indexOf(column) === -1) {
+  if ([TINTIN_USERS_COL.role, TINTIN_USERS_COL.blocked, TINTIN_USERS_COL.internalNotes, TINTIN_USERS_COL.action].indexOf(column) === -1) {
     tintinPullUsersFromWeb_();
     tintinRecordSyncSafely_('REJECTED', e.range.getSheet().getName(), e.range.getA1Notation(), 'La columna de usuario es informativa.');
     return;
   }
   var sheet = e.range.getSheet();
-  var row = sheet.getRange(e.range.getRow(), 2, 1, 18).getValues()[0];
-  var uid = String(row[0] || '').trim();
+  var row = sheet.getRange(e.range.getRow(), 2, 1, TINTIN_USERS_COL.lastChangeId - 1).getValues()[0];
+  var at = function(col) { return row[col - 2]; };
+  var uid = String(at(TINTIN_USERS_COL.uid) || '').trim();
   if (!uid) return;
-  var actionValue = String(row[9] || '').trim().toUpperCase();
+  var actionValue = String(at(TINTIN_USERS_COL.action) || '').trim().toUpperCase();
   var action = actionValue === 'ELIMINAR' ? 'softDeleteUser' : actionValue === 'REACTIVAR' ? 'reactivateUser' : 'updateUser';
   var changeId = 'sheet_' + Utilities.getUuid().replace(/-/g, '');
   var payload = {
     entity: 'user', action: action, uid: uid,
-    role: String(row[4] || '').trim().toLowerCase(), blocked: tintinBool_(row[5]),
-    internalNotes: String(row[8] || ''), changeId: changeId,
-    baseChangeId: String(row[17] || '').trim(),
+    role: String(at(TINTIN_USERS_COL.role) || '').trim().toLowerCase(), blocked: tintinBool_(at(TINTIN_USERS_COL.blocked)),
+    internalNotes: String(at(TINTIN_USERS_COL.internalNotes) || ''), changeId: changeId,
+    baseChangeId: String(at(TINTIN_USERS_COL.lastChangeId) || '').trim(),
     source: 'google-sheets:Usuarios web', schemaVersion: 6
   };
   tintinRecordSyncSafely_('SYNCING', sheet.getName(), e.range.getA1Notation(), 'Sincronizando cuenta web.');
   try {
     var response = tintinParityCallWebhook_(TINTIN_ADMIN_WEBHOOK_PATH, payload);
     var result = response.result || {};
-    sheet.getRange(e.range.getRow(), 19).setValue(result.changeId || changeId);
-    if (action === 'softDeleteUser') sheet.getRange(e.range.getRow(), 7).setValue('Sí');
-    if (action === 'reactivateUser') sheet.getRange(e.range.getRow(), 7).setValue('No');
-    if (action !== 'updateUser') sheet.getRange(e.range.getRow(), 11).clearContent();
+    sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.lastChangeId).setValue(result.changeId || changeId);
+    if (action === 'softDeleteUser') sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.blocked).setValue('Sí');
+    if (action === 'reactivateUser') sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.blocked).setValue('No');
+    if (action !== 'updateUser') sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.action).clearContent();
     tintinRecordSyncSafely_('SYNCED', sheet.getName(), e.range.getA1Notation(), 'Cuenta web sincronizada por lifecycle canónico.');
   } catch (error) {
     tintinPullUsersFromWeb_();
@@ -420,10 +421,13 @@ function tintinPrepararHojasParidad_() {
 
   var users = spreadsheet.getSheetByName(TINTIN_USERS_SHEET);
   if (users) {
-    users.getRange('F7:F').setDataValidation(tintinParityValidation_(['client','viewer','agent','admin']));
-    users.getRange('G7:G').setDataValidation(tintinParityValidation_(['Sí','No']));
-    users.getRange('K7:K').setDataValidation(tintinParityValidation_(['ELIMINAR','REACTIVAR']));
-    users.getRange('K6').setNote('Acción administrativa segura: ELIMINAR crea tombstone; REACTIVAR restaura la cuenta. Nunca se destruye el UID histórico desde Sheets.');
+    var roleCol = tintinColumnLetter_(TINTIN_USERS_COL.role);
+    var blockedCol = tintinColumnLetter_(TINTIN_USERS_COL.blocked);
+    var actionCol = tintinColumnLetter_(TINTIN_USERS_COL.action);
+    users.getRange(roleCol + TINTIN_USERS_FIRST_ROW + ':' + roleCol).setDataValidation(tintinParityValidation_(['client','viewer','agent','admin']));
+    users.getRange(blockedCol + TINTIN_USERS_FIRST_ROW + ':' + blockedCol).setDataValidation(tintinParityValidation_(['Sí','No']));
+    users.getRange(actionCol + TINTIN_USERS_FIRST_ROW + ':' + actionCol).setDataValidation(tintinParityValidation_(['ELIMINAR','REACTIVAR']));
+    users.getRange(actionCol + TINTIN_USERS_HEADER_ROW).setNote('Acción administrativa segura: ELIMINAR crea tombstone; REACTIVAR restaura la cuenta. Nunca se destruye el UID histórico desde Sheets.');
   }
   tintinParityPrepareNewOrderSheet_();
   return { ok: true, ordersWidth: TINTIN_PARITY_ORDERS_WIDTH, users: !!users, newOrderSheet: true };
