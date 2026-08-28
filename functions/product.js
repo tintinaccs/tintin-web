@@ -6,6 +6,7 @@ import {
 const PUBLIC_ORIGIN = 'https://tintinaccesorios.pages.dev';
 const CLOUDINARY_HOST = 'res.cloudinary.com';
 const CLOUDINARY_UPLOAD = '/upload/';
+const PRODUCT_METADATA_CEILING_MS = 1400;
 const CLOUDINARY_TINTIN_TRANSFORM = /^f_auto,q_auto,c_limit,w_\d+,dpr_auto\//;
 
 function escapeHtml(value) {
@@ -172,12 +173,46 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
   return { html, canonical, image, mainImage };
 }
 
+/**
+ * La metadata server-side mejora SEO y previews, pero no puede bloquear la ficha.
+ * Si OAuth/Firestore tarda demasiado se entrega el HTML base y el runtime cliente
+ * continúa cargando el producto normalmente.
+ */
+export function resolveProductMetadataWithin(promise, ceilingMs = PRODUCT_METADATA_CEILING_MS) {
+  const limit = Math.max(100, Number(ceilingMs) || PRODUCT_METADATA_CEILING_MS);
+  return new Promise((resolve, reject) => {
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      reject(new Error('product_metadata_timeout'));
+    }, limit);
+    Promise.resolve(promise).then(
+      value => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve(value);
+      },
+      error => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        reject(error);
+      }
+    );
+  });
+}
+
 export async function onRequest(context) {
   const { request, env } = context;
   if (!['GET', 'HEAD'].includes(request.method)) {
     return new Response(null, { status: 405, headers: { allow: 'GET, HEAD' } });
   }
 
+  // El binding ASSETS resuelve la ruta limpia /product al documento estático.
+  // Pedir /product.html explícitamente hace que Pages lo canonice de vuelta a
+  // /product con 308 y puede producir un rebote. Conservamos la URL pública.
   const asset = await env.ASSETS.fetch(request);
   if (request.method === 'HEAD') return asset;
   if (!asset.ok || !(asset.headers.get('content-type') || '').includes('text/html')) return asset;
@@ -187,7 +222,9 @@ export async function onRequest(context) {
   if (!id || !/^[A-Za-z0-9_-]{1,180}$/.test(id)) return asset;
 
   try {
-    const document = await firestoreAdminGet(env, `products/${id}`);
+    const document = await resolveProductMetadataWithin(
+      firestoreAdminGet(env, `products/${id}`)
+    );
     if (!document?.fields) return asset;
     const data = decodeFirestoreFields(document.fields);
     if (data.active === false) return asset;
@@ -200,7 +237,12 @@ export async function onRequest(context) {
     headers.delete('content-length');
     return new Response(rendered.html, { status: asset.status, statusText: asset.statusText, headers });
   } catch (error) {
-    console.error('[product-meta] no se pudo renderizar metadata:', error?.message || error);
+    const reason = error?.message || error;
+    if (reason === 'product_metadata_timeout') {
+      console.warn('[product-meta] metadata omitida por tiempo máximo; se entrega la ficha base.');
+    } else {
+      console.error('[product-meta] no se pudo renderizar metadata:', reason);
+    }
     return asset;
   }
 }
