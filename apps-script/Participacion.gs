@@ -29,7 +29,10 @@ function tintinVerifyUser_(idToken) {
 function tintinSheet_(name, headers) {
   var book = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = book.getSheetByName(name) || book.insertSheet(name);
-  if (sheet.getLastRow() === 0) sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+  if (sheet.getLastRow() === 0) {
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    tintinAplicarEstiloParticipacion_(sheet);
+  }
   sheet.setFrozenRows(1);
   return sheet;
 }
@@ -49,6 +52,15 @@ function tintinAplicarEstiloParticipacion_(sheet) {
     SpreadsheetApp.BorderStyle.SOLID
   );
   sheet.setHiddenGridlines(true);
+}
+
+function tintinAplicarBordeFilaParticipacion_(sheet, rowNumber, width) {
+  if (!sheet || rowNumber < 1 || width < 1) return;
+  sheet.getRange(rowNumber, 1, 1, width).setBorder(
+    true, true, true, true, true, true,
+    TINTIN_ENGAGEMENT_BORDER_,
+    SpreadsheetApp.BorderStyle.SOLID
+  );
 }
 
 function tintinFindRow_(sheet, id) {
@@ -77,6 +89,8 @@ function tintinLikeRow_(record) {
 function tintinUpsert_(sheet, row) {
   var rowNumber = tintinFindRow_(sheet, row[0]) || sheet.getLastRow() + 1;
   sheet.getRange(rowNumber, 1, 1, row.length).setValues([row]);
+  tintinAplicarBordeFilaParticipacion_(sheet, rowNumber, row.length);
+  return rowNumber;
 }
 
 function tintinHandleEngagement_(payload) {
@@ -92,13 +106,11 @@ function tintinHandleEngagement_(payload) {
     if (event.type === 'review') {
       var reviews = tintinSheet_(TINTIN_REVIEWS_SHEET_, TINTIN_REVIEW_HEADERS_);
       tintinUpsert_(reviews, tintinReviewRow_(record));
-      tintinAplicarEstiloParticipacion_(reviews);
     } else if (event.type === 'like') {
       var likes = tintinSheet_(TINTIN_LIKES_SHEET_, TINTIN_LIKE_HEADERS_);
       var row = tintinFindRow_(likes, record.likeId);
       if (event.operation === 'delete') { if (row) likes.deleteRow(row); }
       else tintinUpsert_(likes, tintinLikeRow_(record));
-      tintinAplicarEstiloParticipacion_(likes);
     } else return tintinJson_({ ok: false, error: 'invalid_type' });
     return tintinJson_({ ok: true });
   } finally { lock.releaseLock(); }
@@ -148,7 +160,7 @@ function tintinEngagementOnEdit(e) {
   var result = JSON.parse(response.getContentText() || '{}');
   if (!result.ok || !result.record) throw new Error(result.error || 'Respuesta de sincronizacion invalida.');
   sheet.getRange(e.range.getRow(), 1, 1, TINTIN_REVIEW_HEADERS_.length).setValues([tintinReviewRow_(result.record)]);
-  tintinAplicarEstiloParticipacion_(sheet);
+  tintinAplicarBordeFilaParticipacion_(sheet, e.range.getRow(), TINTIN_REVIEW_HEADERS_.length);
 }
 
 function tintinDailyEngagementDigest() {
