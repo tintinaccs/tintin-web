@@ -1,0 +1,77 @@
+name: Sincronizar PR566 con main (temporal)
+
+on:
+  push:
+    branches:
+      - claude/tintin-product-header-redesign-b0py9n
+
+permissions:
+  contents: write
+
+jobs:
+  sync-main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: claude/tintin-product-header-redesign-b0py9n
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Sincronizar main y resolver únicamente conflictos conocidos
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          set +e
+          git merge origin/main --no-commit --no-ff
+          merge_status=$?
+          set -e
+          if [ "$merge_status" -ne 0 ]; then
+            conflicts="$(git diff --name-only --diff-filter=U)"
+            echo "Conflictos detectados:"
+            echo "$conflicts"
+            unexpected="$(echo "$conflicts" | grep -vE '^(admin\.html|diagnostic-manifest\.json)$' || true)"
+            if [ -n "$unexpected" ]; then
+              echo "Conflictos inesperados; no se auto-resuelven:"
+              echo "$unexpected"
+              exit 1
+            fi
+            if echo "$conflicts" | grep -qx 'admin.html'; then
+              git checkout --theirs admin.html
+              python - <<'PY'
+from pathlib import Path
+p = Path('admin.html')
+s = p.read_text()
+s = s.replace('css/core/tema-unificado-tintin.css?v=tintin-20260824-contrast-buttons-3', 'css/core/tema-unificado-tintin.css?v=tintin-20260828-product-header-fixes-1')
+p.write_text(s)
+PY
+              git add admin.html
+            fi
+            if echo "$conflicts" | grep -qx 'diagnostic-manifest.json'; then
+              git checkout --theirs diagnostic-manifest.json
+              git add diagnostic-manifest.json
+            fi
+          fi
+          git add -A
+          git commit -m "chore: sincronizar main en PR566"
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Regenerar artefactos reproducibles
+        run: |
+          npm run build:diagnostics
+          npm run audit:cache-versioning
+      - name: Guardar artefactos y retirar workflow temporal
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/_temp-sync-main-pr566.yml
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: regenerar artefactos tras sincronizar main"
+          fi
+          git push origin HEAD:claude/tintin-product-header-redesign-b0py9n
