@@ -29,10 +29,11 @@ export function orderReservesInventory(order) {
   return statusReservesInventory(order?.status);
 }
 
-export function computeInventoryDeltas(beforeOrder, patch = {}) {
-  const beforeItems = normalizeInventoryItems(beforeOrder?.items || []);
+export function computeInventoryDeltas(beforeOrder, patch = {}, maxDistinct = 4) {
+  const beforeItems = normalizeInventoryItems(beforeOrder?.items || [], maxDistinct);
   const afterItems = normalizeInventoryItems(
-    Object.prototype.hasOwnProperty.call(patch, 'items') ? patch.items : beforeOrder?.items || []
+    Object.prototype.hasOwnProperty.call(patch, 'items') ? patch.items : beforeOrder?.items || [],
+    maxDistinct
   );
   const beforeReserved = orderReservesInventory(beforeOrder);
   const afterStatus = Object.prototype.hasOwnProperty.call(patch, 'status')

@@ -28,17 +28,21 @@ test('el carrito agrega líneas sin reemplazar las existentes', async () => {
 });
 
 test('favoritos está conectado y se conserva al desactivar una cuenta', async () => {
-  const [favorites, product, cart, rules, deletion] = await Promise.all([
+  const [favorites, product, cart, rules, deletion, lifecycle] = await Promise.all([
     read('js/components/favorites/sincronizacion-favoritos.js'),
     read('product.html'),
     read('tienda.js'),
     read('firestore.rules'),
     read('functions/api/admin-delete-user.js'),
+    read('cloudflare/user-lifecycle-domain.js'),
   ]);
   assert.match(favorites, /users', currentUser\.uid, 'favorites'/);
   assert.match(product, /btn-product-favorite/);
   assert.match(cart, /tt-cart-favorites/);
   assert.match(rules, /match \/favorites\/\{productId\}/);
-  assert.match(deletion, /tombstone/);
+  assert.match(deletion, /applyUserLifecycle/);
+  assert.match(lifecycle, /tombstone/);
+  assert.match(lifecycle, /deleted:\s*fsBoolean\(true\)/);
   assert.doesNotMatch(deletion, /favoriteDocs|favorites\//);
+  assert.doesNotMatch(lifecycle, /favoriteDocs|favorites\//);
 });

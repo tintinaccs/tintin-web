@@ -59,15 +59,18 @@ test('Products e inventario se guardan en un commit atómico', () => {
   assert.doesNotMatch(source, /firestoreAdminMerge/);
 });
 
-test('Apps Script usa Productos y un solo dispatcher instalable', () => {
+test('Apps Script conserva Productos y agrega un dispatcher de paridad instalable', () => {
   const source = read('apps-script/ProductosUnificados.gs');
+  const parity = read('apps-script/AdminParity.gs');
   assert.match(source, /TINTIN_PRODUCTS_SHEET = 'Productos'/);
   assert.match(source, /TINTIN_USERS_SHEET = 'Usuarios web'/);
-  assert.match(source, /TINTIN_ON_EDIT_DISPATCHER = 'tintinDespacharEdicionInstalable'/);
-  assert.match(source, /ScriptApp\.newTrigger\(TINTIN_ON_EDIT_DISPATCHER\)/);
-  assert.match(source, /sheetName === TINTIN_PRODUCTS_SHEET/);
-  assert.match(source, /sheetName === TINTIN_USERS_SHEET/);
-  assert.doesNotMatch(source, /insertSheet\(['"]Catálogo web['"]\)/);
+  assert.match(source, /function tintinHandleProductEdit_/);
+  assert.match(parity, /TINTIN_PARITY_DISPATCHER = 'tintinDespacharEdicionParidad'/);
+  assert.match(parity, /ScriptApp\.newTrigger\(TINTIN_PARITY_DISPATCHER\)/);
+  assert.match(parity, /sheetName === TINTIN_PRODUCTS_SHEET/);
+  assert.match(parity, /sheetName === TINTIN_USERS_SHEET/);
+  assert.match(parity, /sheetName === TINTIN_ORDERS_SHEET/);
+  assert.doesNotMatch(source + parity, /insertSheet\(['"]Catálogo web['"]\)/);
 });
 
 test('una edición parcial no valida ni reemplaza las demás columnas del producto', () => {
@@ -82,25 +85,45 @@ test('una edición parcial no valida ni reemplaza las demás columnas del produc
   assert.match(appScript, /tintinSendProductRowWithRetry_\(sheet, rowNumber, changedFields\)/);
 });
 
-test('el espejo integral limita escrituras a usuarios administrativos; pedidos y auditoría son read-only', () => {
-  const appScript = read('apps-script/ProductosUnificados.gs');
+test('Sheets y Superadmin comparten la autoridad de pedidos; auditoría sigue read-only', () => {
+  const parity = read('apps-script/AdminParity.gs');
   const adminWebhook = read('functions/api/sheets-admin-webhook.js');
+  const adminRuntime = read('js/admin/products/integridad-inventario-admin.js');
+  const orderDomain = read('cloudflare/order-admin-domain.js');
   const snapshot = read('functions/api/sheets-sync-snapshot.js');
-  assert.match(appScript, /function tintinHandleUserEdit_/);
-  assert.match(appScript, /function tintinHandleOrderEdit_/);
-  assert.match(appScript, /Pedidos web es un espejo de solo lectura/);
-  assert.match(appScript, /function tintinReconciliarEspejosWeb/);
-  assert.match(appScript, /everyMinutes\(5\)/);
-  assert.match(appScript, /function doPost\(e\)/);
-  assert.match(adminWebhook, /const ROLES = new Set/);
-  assert.match(adminWebhook, /writableEntities: \['user'\]/);
-  assert.match(adminWebhook, /readOnlyMirrors: \['order', 'audit'\]/);
-  assert.match(adminWebhook, /if \(input\.entity === 'order'\)/);
-  assert.match(adminWebhook, /Pedidos web es un espejo de solo lectura/);
-  assert.doesNotMatch(adminWebhook, /const ORDER_STATUS = new Set/);
-  assert.doesNotMatch(adminWebhook, /mergeFields: \['status', 'paymentStatus', 'payment'/);
+
+  assert.match(parity, /entity: 'order'/);
+  assert.match(parity, /action: 'updateOrder'/);
+  assert.match(parity, /baseChangeId:/);
+  assert.match(parity, /changeId:/);
+  assert.match(parity, /tintinPullOrdersParity_/);
+  assert.match(parity, /tintinParityCallWebhook_\(TINTIN_ADMIN_WEBHOOK_PATH, payload\)/);
+  assert.doesNotMatch(parity, /productInventory\//);
+  assert.doesNotMatch(parity, /firestoreAdmin(?:Batch)?Commit|phase4Commit_/);
+
+  assert.match(adminWebhook, /writableEntities: \['user', 'order'\]/);
+  assert.match(adminWebhook, /readOnlyMirrors: \['audit'\]/);
+  assert.match(adminWebhook, /orderMutationsUseInventoryDomain: true/);
+  assert.match(adminWebhook, /applyOrderAdminMutation/);
+  assert.match(orderDomain, /computeInventoryDeltas/);
+  assert.match(orderDomain, /firestoreAdminBatchCommit/);
+  assert.match(orderDomain, /currentDocument: precondition/);
+  assert.match(orderDomain, /auditLog/);
+
+  assert.match(adminRuntime, /fetch\('\/api\/admin-order-mutation'/);
+  assert.match(adminRuntime, /TintinInventoryIntegrity/);
   assert.match(snapshot, /ALLOWED_ENTITIES = new Set\(\['products', 'users', 'orders', 'audit'\]\)/);
-  assert.match(snapshot, /sameSecret\(request\.headers\.get\('X-Tintin-Sheets-Secret'\)/);
+  assert.match(snapshot, /reference:/);
+  assert.match(snapshot, /notes:/);
+});
+
+test('Usuarios web permite lifecycle seguro desde Sheets sin destruir identidades', () => {
+  const parity = read('apps-script/AdminParity.gs');
+  const adminWebhook = read('functions/api/sheets-admin-webhook.js');
+  assert.match(parity, /'ELIMINAR' \? 'softDeleteUser'/);
+  assert.match(parity, /'REACTIVAR' \? 'reactivateUser'/);
+  assert.match(adminWebhook, /applyUserLifecycle/);
+  assert.doesNotMatch(adminWebhook, /deleteFirebaseUser/);
 });
 
 test('Historial sync conserva el contrato de estados, fila 8 y máximo 500', () => {

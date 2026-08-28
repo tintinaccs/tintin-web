@@ -10,11 +10,9 @@ import {
   where
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import {
-  computeInventoryDeltas,
-  inventoryStateForStatus,
   normalizeInventoryItems,
   orderReservesInventory
-} from '../../core/store/modelo-inventario.mjs?v=tintin-20260720-critical-healing-1';
+} from '../../core/store/modelo-inventario.mjs?v=tintin-20260827-admin-parity-1';
 
 function actorEmail() {
   return String(auth.currentUser?.email || '').trim().toLowerCase();
@@ -33,60 +31,30 @@ function finiteStock(value) {
 async function updateEditedOrder(orderId, patch) {
   const safeOrderId = String(orderId || '').trim();
   if (!safeOrderId) throw new Error('Pedido inválido.');
-
-  return runTransaction(db, async transaction => {
-    const orderRef = doc(db, 'orders', safeOrderId);
-    const orderSnapshot = await transaction.get(orderRef);
-    if (!orderSnapshot.exists()) throw new Error('El pedido ya no existe.');
-
-    const beforeOrder = orderSnapshot.data() || {};
-    const nextPatch = patch && typeof patch === 'object' ? { ...patch } : {};
-    const inventory = computeInventoryDeltas(beforeOrder, nextPatch);
-    const refs = [...inventory.deltas.keys()].map(id => [id, productRef(id)]);
-    const productSnapshots = new Map();
-
-    for (const [id, ref] of refs) {
-      productSnapshots.set(id, await transaction.get(ref));
-    }
-
-    for (const [id, reserveDelta] of inventory.deltas) {
-      const snapshot = productSnapshots.get(id);
-      if (!snapshot?.exists()) {
-        throw new Error(`No se puede reconciliar el stock: el producto ${id} ya no existe.`);
-      }
-      const stock = finiteStock(snapshot.data()?.stock);
-      if (stock === null) continue;
-      const nextStock = stock - reserveDelta;
-      if (nextStock < 0) {
-        throw new Error(`Stock insuficiente para volver a activar o ampliar el pedido (${id}).`);
-      }
-      transaction.update(snapshot.ref, {
-        stock: nextStock,
-        lastInventoryOrderId: safeOrderId,
-        lastInventoryAction: reserveDelta > 0 ? 'reserve' : 'release',
-        updatedAt: serverTimestamp()
-      });
-    }
-
-    const nextStatus = inventory.afterStatus;
-    const nextRevision = Math.max(0, Number(beforeOrder.inventoryRevision || 0)) + 1;
-    transaction.update(orderRef, {
-      ...nextPatch,
-      status: nextStatus,
-      inventoryState: inventoryStateForStatus(nextStatus),
-      inventoryRevision: nextRevision,
-      inventoryUpdatedAt: serverTimestamp(),
-      inventoryUpdatedBy: actorEmail(),
-      updatedAt: serverTimestamp()
-    });
-
-    return {
+  const user = auth.currentUser;
+  if (!user) throw new Error('La sesión administrativa ya no está disponible.');
+  const token = await user.getIdToken();
+  const response = await fetch('/api/admin-order-mutation', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({
       orderId: safeOrderId,
-      status: nextStatus,
-      inventoryState: inventoryStateForStatus(nextStatus),
-      changedProducts: inventory.deltas.size
-    };
-  }, { maxAttempts: 2 });
+      ...(patch && typeof patch === 'object' ? patch : {}),
+      changeId: `admin_${crypto.randomUUID().replaceAll('-', '')}`,
+      source: 'superadmin'
+    })
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok || body.ok !== true) {
+    const error = new Error(body.error || 'No se pudo actualizar el pedido.');
+    error.status = response.status;
+    error.code = body.code || '';
+    throw error;
+  }
+  return body.result || {};
 }
 
 async function transitionStatus(orderId, status) {
@@ -100,11 +68,10 @@ async function deleteOrder(orderId) {
     throw new Error('Solo Super Admin puede eliminar pedidos definitivamente.');
   }
 
-  // Se hace en dos transacciones deliberadamente. Primero el pedido queda
-  // marcado como released junto con la devolución de stock. Solo después se
-  // elimina. Si la segunda operación falla o la pestaña se cierra, un reintento
-  // ve inventoryState=released y no puede devolver el stock dos veces. Además,
-  // este orden funciona con las reglas que ya están publicadas en producción.
+  // La eliminación definitiva conserva su flujo de dos transacciones: primero
+  // libera stock y marca el pedido como released; después elimina el documento.
+  // Las ediciones normales y transiciones de estado usan el dominio server-side
+  // compartido con Google Sheets.
   const releaseResult = await runTransaction(db, async transaction => {
     const orderRef = doc(db, 'orders', safeOrderId);
     const orderSnapshot = await transaction.get(orderRef);
@@ -113,7 +80,7 @@ async function deleteOrder(orderId) {
     }
 
     const order = orderSnapshot.data() || {};
-    const items = normalizeInventoryItems(order.items || []);
+    const items = normalizeInventoryItems(order.items || [], 100);
     const shouldRestore = orderReservesInventory(order);
     const refs = shouldRestore ? [...items.keys()].map(id => [id, productRef(id)]) : [];
     const snapshots = new Map();
@@ -125,10 +92,6 @@ async function deleteOrder(orderId) {
       for (const [id, qty] of items) {
         const snapshot = snapshots.get(id);
         if (!snapshot?.exists()) {
-          // Los pedidos históricos deben poder eliminarse aunque uno de sus
-          // productos ya haya sido retirado del catálogo. No hay documento de
-          // stock que restaurar en ese caso; el resto sí se reconcilia dentro
-          // de la misma transacción.
           missingProducts.push(id);
           continue;
         }
@@ -182,17 +145,6 @@ async function deleteOrder(orderId) {
   };
 }
 
-// Antes de la Fase 4 (creación de pedidos server-side), un pedido quedaba
-// en inventoryState='pending' (status='inventory_pending') mientras el
-// checkout hacía dos escrituras de cliente seguidas; si la clienta cerraba
-// la pestaña justo entre esas dos escrituras, el borrador quedaba huérfano
-// en Firestore para siempre — nadie volvía a referenciarlo porque el
-// requestId vivía solo en el sessionStorage de esa pestaña. El checkout
-// actual ya no genera este estado (el servidor crea el pedido directo como
-// 'reserved' en una sola transacción), pero esta limpieza queda para los
-// pedidos 'pending' que hayan quedado de antes de la migración — se borran
-// directo (sin la reconciliación de stock de deleteOrder(), porque un
-// pedido 'pending' nunca llegó a descontar nada).
 async function cleanupStalePendingOrders(hoursOld = 2) {
   if (actorEmail() !== SUPER_ADMIN_EMAIL) {
     throw new Error('Solo Super Admin puede limpiar pedidos abandonados.');
@@ -212,9 +164,6 @@ async function cleanupStalePendingOrders(hoursOld = 2) {
         const fresh = await transaction.get(orderSnap.ref);
         if (!fresh.exists()) return;
         const freshData = fresh.data() || {};
-        // Re-chequeado dentro de la transacción: si en el momento de borrar
-        // ya avanzó a 'reserved' (la clienta volvió y confirmó su pedido
-        // real), no se toca — solo se limpian los que siguen abandonados.
         if (freshData.inventoryState !== 'pending') return;
         transaction.delete(orderSnap.ref);
       }, { maxAttempts: 2 });

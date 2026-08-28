@@ -756,6 +756,10 @@ function doPost(e) {
   catch (error) { return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'JSON inválido' })).setMimeType(ContentService.MimeType.JSON); }
   var response = tintinHandleUnifiedProductsPost_(body);
   if (response) return response;
+  if (typeof tintinParityHandleServerOrderSync_ === 'function') {
+    var orderSyncResponse = tintinParityHandleServerOrderSync_(body);
+    if (orderSyncResponse) return orderSyncResponse;
+  }
   if (body.action === 'syncEngagement' && typeof tintinHandleEngagement_ === 'function') return tintinHandleEngagement_(body);
   return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'Acción no permitida' })).setMimeType(ContentService.MimeType.JSON);
 }
