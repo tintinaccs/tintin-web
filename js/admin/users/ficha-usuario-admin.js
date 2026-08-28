@@ -113,6 +113,7 @@ if (!window.TintinAdminUserFichaBooted) {
         field('Nombre', user.name),
         field('@username', user.username ? `@${user.username}` : ''),
         field('Customer ID', user.customerId || `CUS_${user.uid}`),
+        field('UID', user.uid),
         field('Rol', ROLE_LABELS[canonicalRole(user)] || canonicalRole(user)),
         field('Cuenta creada', formatDate(user.createdAt)),
         field('Estado de perfil', user.profileStatus || '—'),
@@ -122,9 +123,21 @@ if (!window.TintinAdminUserFichaBooted) {
       contact.grid.append(
         field('Email', user.email),
         field('Teléfono', user.phone),
+        field('Cédula', user.checkoutDefaults?.ci || user.ci),
         field('Ubicación', user.address || user.savedLocation?.name),
         field('Fecha de nacimiento', user.dob),
       );
+
+      const commercial = section('Comercial');
+      commercial.grid.append(
+        field('Total gastado', formatPrice(user.totalSpent)),
+        field('Compras registradas', String(user.purchaseCount || 0)),
+      );
+      if (text(user.internalNotes)) {
+        const notes = el('div', 'ficha-field');
+        notes.append(el('div', 'ficha-field-label', 'Notas internas'), el('div', 'ficha-field-value', user.internalNotes));
+        commercial.wrapper.appendChild(notes);
+      }
 
       const security = section('Seguridad y acceso');
       security.grid.append(
@@ -175,7 +188,7 @@ if (!window.TintinAdminUserFichaBooted) {
       if (!logs.length) auditList.appendChild(el('div', '', auditResult.status === 'rejected' ? 'Auditoría no disponible' : 'Sin acciones registradas sobre esta cuenta'));
       auditSection.wrapper.appendChild(auditList);
 
-      body.replaceChildren(identity.wrapper, contact.wrapper, ordersSection.wrapper, security.wrapper, auditSection.wrapper);
+      body.replaceChildren(identity.wrapper, contact.wrapper, commercial.wrapper, ordersSection.wrapper, security.wrapper, auditSection.wrapper);
     } catch (error) {
       showError(error?.message || 'No se pudo cargar la ficha de la cuenta.');
     }
