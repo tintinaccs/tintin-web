@@ -45,22 +45,22 @@
   },
   "css/components/navigation/compartido/busqueda.css": {
     "version": "tintin-20260825-responsive-css-budget-2",
-    "sha256": "7d1cf2359550691b56b397957ba397d1ec1a395d2f299c93b9e6f7017de8706f"
+    "sha256": "b9a162bcdbbd423b2d6dd618ecef18413436bfbabffd43e84b1669af9aae9307"
   },
   "css/components/navigation/compartido/paneles.css": {
     "version": "tintin-20260825-responsive-css-budget-2",
-    "sha256": "5910c4f57eb31081fe42a1ec4ed8a18a710dca90d37cfd6b8eb54ff1b719d546"
+    "sha256": "4b65a4e2e5fd560380e91b946c12fd34f372b82bcad6f1b0a9e7757c74e3b1f9"
   },
   "css/components/navigation/compartido/transiciones-navegacion.css": {
     "version": "tintin-20260825-responsive-css-budget-2",
-    "sha256": "212e9dba7d27f5c1ccab55e609574353941a1a2c85eb5d9b6d623c33787eee22"
+    "sha256": "02fab083188072b4b0d5873904c935908f929537b36fa69547f5a880b5c1de2d"
   },
   "css/components/navigation/escritorio/encabezado-escritorio.css": {
-    "version": "tintin-20260827-header-surfaces-1",
+    "version": "tintin-20260824-header-responsive-sync-1",
     "sha256": "e1d35cfb28b1f2da47e8c1b127782ff0e2ad2ab0e8e29fc1a408334d2dc1aa56"
   },
   "css/components/navigation/movil/encabezado-movil.css": {
-    "version": "tintin-20260827-header-surfaces-1",
+    "version": "tintin-20260824-header-responsive-sync-1",
     "sha256": "278404b3444255ba0d045f8663a66a5bbf3c3749c394c5fa295cd070a5e92270"
   },
   "css/components/navigation/movil/fondos-solidos-movil.css": {
@@ -68,7 +68,7 @@
     "sha256": "2acd60dd440d7c0f8f6aef1d59cbe3fd495efa0df05eebb0616ca26b874886bc"
   },
   "css/components/navigation/tableta/encabezado-tableta.css": {
-    "version": "tintin-20260827-header-surfaces-1",
+    "version": "tintin-20260824-header-responsive-sync-1",
     "sha256": "2bf16613213413930fb26862b3b766a42c02e53919a6df272a3863a6521542cb"
   },
   "css/components/notifications/interacciones-sociales.css": {
@@ -116,15 +116,15 @@
     "sha256": "6fa87a8f948850ef32034ec3131014a8b2bce3c31ea29f5bb247ee7e36e63f0e"
   },
   "css/pages/home/ajuste-inicio.css": {
-    "version": "tintin-20260821-hero-authoritative-1",
-    "sha256": "a8eb6a89c7e629f6a0094c0f963ebce58cb5ce0d0db38c041a7ca8f2bd516dea"
+    "version": "tintin-20260827-hero-no-flicker-1",
+    "sha256": "7c9fe9821c808abcab12083513fedc4f16c45adcb03ba464da156d1384dc7562"
   },
   "css/pages/home/carrusel-colecciones.css": {
     "version": "tintin-20260826-collections-parallax-4",
     "sha256": "5124eafa36448545ce269672b2094ca6ac4f4152a355821b52f97495039a4c44"
   },
   "css/pages/home/hero-apple-inicio.css": {
-    "version": "tintin-20260826-hero-sin-tarjeta-1",
+    "version": "tintin-20260827-hero-no-flicker-1",
     "sha256": "3b42c73dec8e89d33748a24c6ff4830f40603720b333155a402585d0157f0a5f"
   },
   "css/pages/institutional/about-maintenance.css": {
@@ -213,11 +213,11 @@
   },
   "js/admin/admin-app.js": {
     "version": "tintin-20260825-pages-2",
-    "sha256": "ef12f03310f33fd0d08efbbc51f3efa36d7ecba9b18e2a3b0f3329a3bfa859fc"
+    "sha256": "cc08bb2bc169461d2ecfb78b184ef5c34cb3e47fa63c18912bceef504c9beaf8"
   },
   "js/admin/appearance/editor-visual-admin.js": {
     "version": "tintin-20260826-carousel-order-2",
-    "sha256": "363edf35c4b652a1293f4f43d81af9433f607f90145dc2ffdc7813f161d9d7d3"
+    "sha256": "1fc759bb2b5b2428a140229d8da80b42a1444fbabe327ff658ac2852bdd660b9"
   },
   "js/admin/appearance/preview-dynamic-targets.js": {
     "version": "tintin-20260812-preview-dinamico-1",
@@ -268,7 +268,7 @@
     "sha256": "b91674ce5e1f12a0800b6cc00af5a96b88e286f8594ecbb7904b5f6a8d766b0d"
   },
   "js/admin/orders/pedidos-superadmin-crud.js": {
-    "version": "tintin-20260827-admin-orders-sync-1",
+    "version": "tintin-20260821-accounts-phase-a-1",
     "sha256": "67d59c7a939da0d3ad93392cd8d6dfb145926c9868822f6bbcac76a338416e37"
   },
   "js/admin/pages/paginas-admin.js": {
@@ -333,7 +333,7 @@
   },
   "js/cargador-pagina.js": {
     "version": "tintin-20260825-scroll-reveal-2",
-    "sha256": "b68a52647b9a895b797344914ce9257c65cfbe977ae893994face8f5eb4f474c"
+    "sha256": "7de12fffa9d8e1cbb8e8741b59db36119d88be1b77fbaed3882c352cd84c420e"
   },
   "js/components/cart/politica-persistencia-carrito.js": {
     "version": "tintin-20260808-product-cart-1",
@@ -552,8 +552,8 @@
     "sha256": "f72ea8b5eb2e49265a550947d9acd96fe9002d5178860d5ae7dcf7eb03b71073"
   },
   "js/core/store/contenido-sitio.js": {
-    "version": "tintin-20260826-carousel-order-2",
-    "sha256": "88ae9ae2e20ad0b4f1ca7a8b7cef98679ea64e64ae1a644654911eb1c5448258"
+    "version": "tintin-20260826-carousel-order-3",
+    "sha256": "0ed9f8790e213dd24f37a67bdb509853768e66f4e3ecf2ffb3aa50b0c421195e"
   },
   "js/core/store/contratos-visual-builder.js": {
     "version": "tintin-20260810-visual-studio-v2-1",
@@ -564,12 +564,12 @@
     "sha256": "0f2f73f97a7373d32ff17cdae2ff86f389746459dc97803862824205194e74ba"
   },
   "js/core/store/editor-visual-runtime.js": {
-    "version": "tintin-20260826-carousel-order-2",
-    "sha256": "37e16d9b33da7bdd72e99e53ee77c083b2a25d328a7c36be055755a0b5cdc705"
+    "version": "tintin-20260826-carousel-order-3",
+    "sha256": "3d040953277243b108a6ff8fa491c1df9a9b07fff6d1e6d1bff3583b0027f0e8"
   },
   "js/core/store/esquema-contenido.js": {
-    "version": "tintin-20260826-carousel-order-2",
-    "sha256": "ad6d6f626538df7a1886db1e10ca28063a1889d92eed734099e6b142852c3356"
+    "version": "tintin-20260826-carousel-order-3",
+    "sha256": "6c8c20dc03af8b87b502058a679b639dda95b7447001ba5f8ced636590478cd7"
   },
   "js/core/store/estadisticas-pedidos.js": {
     "version": "tintin-20260716-cloudinary-fix-1",
@@ -732,8 +732,8 @@
     "sha256": "96c01b81f44a3290e2b4532f55e2c9534b2adc43273a19f3756b2cb41f0fd0b6"
   },
   "js/visual-builder-bootstrap.js": {
-    "version": "tintin-20260826-carousel-order-2",
-    "sha256": "d512be2755fda13bf33967625e39e10c805a635d8fffe98dde6597f2802a37be"
+    "version": "tintin-20260826-carousel-order-3",
+    "sha256": "8d1e784c6309bddc07c22c0f5108f9e2ed31d0a28a2bca00e8a7b7daa93b33e5"
   },
   "styles.css": {
     "version": "tintin-20260826-hero-scroll-hint-1",
