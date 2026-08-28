@@ -65,11 +65,20 @@
 
   function revealNow(element) {
     if (element.classList.contains('tt-visible')) return;
+    element.classList.remove('tt-reveal-reset');
     element.classList.add('tt-visible');
-    observer?.unobserve(element);
     const settle = () => element.classList.add('tt-reveal-settled');
     element.addEventListener('transitionend', settle, { once: true });
     window.setTimeout(settle, 900);
+  }
+
+  // El revelado es reversible: al salir completamente del viewport se
+  // restablece el estado inicial para que al volver a entrar se reproduzca
+  // la animación. No se modifica el layout, sólo opacity/transform.
+  function hideNow(element) {
+    if (!element.classList.contains('tt-visible')) return;
+    element.classList.remove('tt-visible', 'tt-reveal-settled');
+    element.classList.add('tt-reveal-reset');
   }
 
   function observe(elements) {
@@ -82,8 +91,9 @@
       observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) revealNow(entry.target);
+          else hideNow(entry.target);
         });
-      }, { rootMargin: '0px 0px -8% 0px', threshold: .05 });
+      }, { rootMargin: '10% 0px -10% 0px', threshold: .05 });
     }
     elements.forEach(element => observer.observe(element));
   }
@@ -116,9 +126,10 @@
       element.style.setProperty('--tt-r-delay', `${Math.min(index % 5, 4) * 28}ms`);
       if (alreadyInViewport) {
         element.classList.add('tt-visible', 'tt-reveal-settled');
-      } else {
-        toObserve.push(element);
       }
+      // También observamos los elementos ya visibles: cuando salen del
+      // viewport deben resetearse para poder revelarse nuevamente al volver.
+      toObserve.push(element);
     });
     observe(toObserve);
   }

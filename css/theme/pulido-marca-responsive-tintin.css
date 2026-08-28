@@ -62,9 +62,9 @@
   padding-inline: clamp(16px, 4vw, 78px);
 }
 
-/* Los elementos ya revelados nunca vuelven al estado invisible. */
-html.tt-reveal-ready .tt-auto-reveal.tt-visible,
-html.tt-reveal-ready .tt-auto-reveal.tt-reveal-settled {
+/* La visibilidad se alterna al entrar/salir del viewport para repetir el
+   revelado sin alterar el flujo del documento. */
+html.tt-reveal-ready .tt-auto-reveal.tt-visible {
   opacity: 1 !important;
   transform: none !important;
   visibility: visible !important;
