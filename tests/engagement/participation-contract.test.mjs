@@ -27,6 +27,18 @@ test('engagement writes stay behind server APIs', async () => {
   assert.match(rules, /match \/favorites\/\{productId\}[\s\S]*?allow create, update, delete: if false/);
 });
 
+test('comentar renueva una credencial vencida sin cerrar la sesión de la clienta', async () => {
+  const [product, route] = await Promise.all([
+    read('js/pages/product/resenas-producto.js'),
+    read('functions/api/engagement.js'),
+  ]);
+  assert.match(product, /getIdToken\(forceRefresh\)/);
+  assert.match(product, /requestApi\(input, method, action, true\)/);
+  assert.match(product, /nunca llamamos a signOut aquí/);
+  assert.doesNotMatch(product, /signOut\(/);
+  assert.match(route, /isClientError \? status : 400/);
+});
+
 test('los likes de producto usan estado server-side y estadísticas públicas reales', async () => {
   const [client, route, product, rules] = await Promise.all([
     read('cloudflare/participacion-clientes.js'),

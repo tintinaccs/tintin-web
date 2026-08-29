@@ -74,9 +74,17 @@ function ensureSection() {
   return section;
 }
 
-async function api(input, method = 'POST', action = 'ownReview') {
-  if (!currentUser) throw new Error('Iniciá sesión para participar');
-  const token = await currentUser.getIdToken();
+async function requestApi(input, method = 'POST', action = 'ownReview', forceRefresh = false) {
+  const user = auth.currentUser || currentUser;
+  if (!user) throw new Error('Iniciá sesión para participar');
+  let token;
+  try {
+    token = await user.getIdToken(forceRefresh);
+  } catch {
+    const error = new Error('No se pudo renovar tu sesión. Volvé a intentar.');
+    error.status = 401;
+    throw error;
+  }
   const url = method === 'GET'
     ? `/api/engagement?action=${encodeURIComponent(action)}&productId=${encodeURIComponent(productId)}`
     : '/api/engagement';
@@ -87,8 +95,32 @@ async function api(input, method = 'POST', action = 'ownReview') {
     body: method === 'POST' ? JSON.stringify(input) : undefined,
   });
   const result = await response.json().catch(() => ({}));
-  if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo completar la acción');
+  if (!response.ok || result.ok !== true) {
+    const error = new Error(result.error || 'No se pudo completar la acción');
+    error.status = response.status;
+    throw error;
+  }
   return result;
+}
+
+async function api(input, method = 'POST', action = 'ownReview') {
+  try {
+    return await requestApi(input, method, action);
+  } catch (error) {
+    if (error?.status !== 401 || !auth.currentUser) throw error;
+
+    // Firebase conserva la sesión local: sólo pedimos un token nuevo y nunca llamamos a signOut aquí.
+    try {
+      return await requestApi(input, method, action, true);
+    } catch (retryError) {
+      if (retryError?.status === 401) {
+        const preservedSessionError = new Error('No pudimos renovar tu sesión automáticamente. No cerramos tu sesión; probá otra vez en unos segundos.');
+        preservedSessionError.status = 401;
+        throw preservedSessionError;
+      }
+      throw retryError;
+    }
+  }
 }
 
 function renderSummary() {
