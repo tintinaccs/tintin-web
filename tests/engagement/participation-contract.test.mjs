@@ -162,6 +162,35 @@ test('own social activity is visible to the actor without broadcasting private i
   assert.doesNotMatch(route, /if \(!engagementIsSuperAdmin\(user\)\)/);
 });
 
+test('product comments render immediately with profile photo or Tintin logo fallback', async () => {
+  const [product, route] = await Promise.all([
+    read('js/pages/product/resenas-producto.js'),
+    read('functions/api/engagement.js'),
+  ]);
+  assert.match(product, /PROFILE_AVATAR_FALLBACK/);
+  assert.match(product, /upsertLocalReview/);
+  assert.match(product, /result\.publicReview/);
+  assert.match(route, /publicReview: engagementReviewPublic\(privateReview\)/);
+  assert.doesNotMatch(product, /await updateReviewStats/);
+});
+
+test('headers and admin notification feeds recover their live subscriptions', async () => {
+  const [navigation, client, admin] = await Promise.all([
+    read('js/components/navigation/compartido/carga-navegacion.js'),
+    read('js/components/notifications/notificaciones-clientes.js'),
+    read('js/admin/notifications/notificaciones-admin.js'),
+  ]);
+  assert.match(navigation, /loadNotificationsRuntime/);
+  assert.match(navigation, /tintin:auth-nav-updated/);
+  assert.match(client, /subscribeRetryTimer/);
+  assert.match(client, /setTimeout\(\(\) => subscribe\(currentUser\), 1400\)/);
+  assert.match(admin, /notificationsRetryTimer/);
+  assert.match(admin, /setTimeout\(\(\) => subscribeNotifications\(\), 1400\)/);
+  assert.match(admin, /ordersRetryTimer/);
+  assert.match(admin, /setTimeout\(\(\) => subscribeOrderStatusChanges\(\), 1400\)/);
+  assert.match(admin, /PROFILE_AVATAR_FALLBACK/);
+});
+
 test('opening notifications marks current unread alerts as seen automatically', async () => {
   const notifications = await read('js/components/notifications/notificaciones-clientes.js');
   assert.match(notifications, /markVisibleNotificationsRead/);

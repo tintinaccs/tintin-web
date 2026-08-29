@@ -18,6 +18,8 @@ import {
 } from "../core/store/perfil-usuario.js?v=tintin-20260821-accounts-phase-a-1";
 import { apiUrl } from "../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
 
+const LOCAL_FUNCTIONS_ORIGIN = 'https://tintinaccesorios.pages.dev';
+
 export function isValidEmailFormat(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || '').trim());
 }
@@ -32,7 +34,12 @@ async function postJson(name, body) {
   // apiUrl() y no una ruta relativa: el sitio también se publica en GitHub
   // Pages, donde las funciones /api/* no existen y un fetch relativo da 404
   // (ver js/core/firebase/origen-funciones.js).
-  const path = apiUrl(name);
+  const relativePath = apiUrl(name);
+  // El servidor local de pruebas publica HTML/JS, pero no ejecuta Pages
+  // Functions. Mantener el fallback acá evita que el login por correo o
+  // username intente llamar a un /api inexistente en localhost.
+  const localHost = typeof window !== 'undefined' && /^(?:localhost|127\.0\.0\.1)$/.test(window.location.hostname);
+  const path = localHost ? `${LOCAL_FUNCTIONS_ORIGIN}/api/${name}` : relativePath;
   let response;
   try {
     response = await fetch(path, {
