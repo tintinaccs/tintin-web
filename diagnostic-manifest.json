@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-29T11:48:58.101Z",
-  "sourceFingerprint": "b2ba19be6872dd3401c2a4be8354b455ac70d864935c8b46dc6b0c444830cf29",
+  "generatedAt": "2026-08-29T12:19:17.657Z",
+  "sourceFingerprint": "f2b24db0f68ea3af2abc9ae49748760b7a1072064bbf5ce5e4b682a8fa2bfd87",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 781,
     "textFiles": 749,
-    "totalBytes": 8642685,
+    "totalBytes": 8647901,
     "pages": 18,
     "modules": 501
   },
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 11839,
-      "sha256": "36c4a88d81eaf8fd8d1b9b62c177a1e6bda57433ac7ec6cdc88734064c609787",
+      "bytes": 11833,
+      "sha256": "bce08163cc124019671ee3880d26df8ee7c31e51794eb38a75827b0b318751a0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -129,12 +129,12 @@
           "line": 173
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 174
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 175
         },
@@ -531,13 +531,13 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 174,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 175,
           "exists": true
@@ -780,8 +780,8 @@
         "guest",
         "client"
       ],
-      "bytes": 21824,
-      "sha256": "6653581a4bbb1ea09a96c9afb7c6b7de1b9b65b45ef3cf6e728ce686facf20d4",
+      "bytes": 21818,
+      "sha256": "eeba60d86ac11ab94f6c942251b3fa396138accbabf8349ec96a986875a9f054",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -831,7 +831,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 265
         },
@@ -846,7 +846,7 @@
           "line": 267
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 268
         },
@@ -1224,7 +1224,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 265,
           "exists": true
@@ -1242,7 +1242,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 268,
           "exists": true
@@ -1499,8 +1499,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 40978,
-      "sha256": "ca72bf1b129f4bc1e97f8b4436c33e4b1a90e44a41f859d38bd1d9872a3635f6",
+      "bytes": 40973,
+      "sha256": "ad41efd60437e1d93c2dfa282b34174b81b6641fc6e3ec43051dc7129c939d1a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1545,7 +1545,7 @@
           "line": 752
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 753
         }
@@ -1655,7 +1655,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 753,
           "exists": true
@@ -2046,8 +2046,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 187147,
-      "sha256": "0eab21a0295940268a3f830e4a16c4c5afb9072f993d23c1d77c4587b2cb79c3",
+      "bytes": 187142,
+      "sha256": "ce560a9cd2b333590025da9801753c40dab554007ab6a15f95d3be732f278782",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2111,7 +2111,7 @@
           "line": 2183
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 2184
         },
@@ -2346,7 +2346,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 2184,
           "exists": true
@@ -7482,8 +7482,8 @@
         "guest",
         "client"
       ],
-      "bytes": 13307,
-      "sha256": "ba4b1776efe4108ae41a7999a22144851614b760139615ec2a312f1669c331c8",
+      "bytes": 13301,
+      "sha256": "ec482d167b9073fbb05dbc3828e9f1f16c75b124b59469756eb3ad49bf70ab8a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7527,7 +7527,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 174
         },
@@ -7542,7 +7542,7 @@
           "line": 176
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 177
         },
@@ -7862,7 +7862,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 174,
           "exists": true
@@ -7880,7 +7880,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 177,
           "exists": true
@@ -8087,8 +8087,8 @@
         "guest",
         "client"
       ],
-      "bytes": 52925,
-      "sha256": "3b60d89c4b4bc86eac1fb8b0cdcbdd45e6bae234760b0006d5edd20ecff32b88",
+      "bytes": 52908,
+      "sha256": "edb31adf257ca43038b368bcac09b57e3197e53bdc4c109ea08af1f399c455f1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8144,7 +8144,7 @@
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 505
         },
@@ -8169,7 +8169,7 @@
           "line": 980
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 981
         },
@@ -8474,7 +8474,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 505,
           "exists": true
@@ -8504,7 +8504,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 981,
           "exists": true
@@ -8831,8 +8831,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 113368,
-      "sha256": "d6e0d072fb576889895338a3214d64afb632b3d7325a867eada8e46465ae7fa2",
+      "bytes": 113362,
+      "sha256": "6c6b7169c968d804dc237c6832d0f2217647e5f8a20a67a84f418cc90292e241",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8887,12 +8887,12 @@
           "line": 1917
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 1918
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 1919
         },
@@ -9233,13 +9233,13 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 1918,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 1919,
           "exists": true
@@ -9804,8 +9804,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15186,
-      "sha256": "6c691db6d236bff12b28e7325d506ad4cd27b8d766f4a5696bec74d6db7a4762",
+      "bytes": 15180,
+      "sha256": "1855bb6b327c5c141f8fb6df59b8ca82417e5a492a52fadf9d4d7a6dfd2dcc85",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9855,7 +9855,7 @@
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 196
         },
@@ -9875,7 +9875,7 @@
           "line": 199
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 200
         },
@@ -10210,7 +10210,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 196,
           "exists": true
@@ -10234,7 +10234,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 200,
           "exists": true
@@ -10453,8 +10453,8 @@
         "guest",
         "client"
       ],
-      "bytes": 19489,
-      "sha256": "63126f089c64a05ce8797e8df58aa3c6953cab139c51dee8bd75b4d7baa6c5ae",
+      "bytes": 19483,
+      "sha256": "ea332478645e563de062d2a30d491aac1ecec55aa235ed58df184c71923723a9",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10504,7 +10504,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 215
         },
@@ -10519,7 +10519,7 @@
           "line": 248
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 249
         },
@@ -10879,7 +10879,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 215,
           "exists": true
@@ -10897,7 +10897,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 249,
           "exists": true
@@ -11164,8 +11164,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16685,
-      "sha256": "992c9d5f492bd6deb8ff3f28c9c9fbbbe99214bf87a12ccaddf32783f6192f6f",
+      "bytes": 16679,
+      "sha256": "ab11227d9f675611b6d874c92d88fa09c11a5452f79a50432846b19b5ca0ea97",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11215,7 +11215,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 181
         },
@@ -11230,7 +11230,7 @@
           "line": 183
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 184
         },
@@ -11550,7 +11550,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 181,
           "exists": true
@@ -11568,7 +11568,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 184,
           "exists": true
@@ -11775,8 +11775,8 @@
         "guest",
         "client"
       ],
-      "bytes": 36161,
-      "sha256": "4e772e394364ba35661e95563c5bc167996505887939b3641df1e2324031a55f",
+      "bytes": 36155,
+      "sha256": "43e775b5141be4baf60da3ece2c1dfdce787b3b717d10bc9abb589758339859f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11844,7 +11844,7 @@
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 534
         },
@@ -11874,7 +11874,7 @@
           "line": 539
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 540
         },
@@ -12316,7 +12316,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 534,
           "exists": true
@@ -12352,7 +12352,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 540,
           "exists": true
@@ -12719,8 +12719,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 61043,
-      "sha256": "5ee6c44c5c80af2c246593aaaafb6f877cbfa46965db28d456e208e72daded79",
+      "bytes": 61298,
+      "sha256": "cb975000534ccbab3332ac6d05028834a1bab3229fe6bfefb1482a29e39458e3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12772,17 +12772,17 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 1118
+          "line": 1124
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
-          "line": 1119
+          "line": 1125
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1120
+          "line": 1126
         }
       ],
       "styles": [
@@ -12899,7 +12899,7 @@
           "target": "assets-tintin/images/general/logo.png",
           "alt": "TINTIN",
           "hasAlt": true,
-          "line": 1127
+          "line": 1133
         }
       ],
       "links": [
@@ -12931,7 +12931,7 @@
           "ariaLabel": "Ir al inicio de TINTIN",
           "title": "",
           "imageAlt": "TINTIN",
-          "line": 1126
+          "line": 1132
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -12941,7 +12941,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1130
+          "line": 1136
         },
         {
           "raw": "/catalogo",
@@ -12951,7 +12951,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1138
+          "line": 1144
         },
         {
           "raw": "/collections",
@@ -12961,7 +12961,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1139
+          "line": 1145
         },
         {
           "raw": "/catalogo?cat=relojes",
@@ -12971,7 +12971,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1140
+          "line": 1146
         },
         {
           "raw": "/catalogo?cat=bolsos",
@@ -12981,7 +12981,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1141
+          "line": 1147
         },
         {
           "raw": "/about",
@@ -12991,7 +12991,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1148
+          "line": 1154
         },
         {
           "raw": "/envios",
@@ -13001,7 +13001,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1149
+          "line": 1155
         },
         {
           "raw": "/cambios-devoluciones",
@@ -13011,7 +13011,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1150
+          "line": 1156
         },
         {
           "raw": "/preguntas-frecuentes",
@@ -13021,7 +13021,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1151
+          "line": 1157
         },
         {
           "raw": "/terminos",
@@ -13031,7 +13031,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1152
+          "line": 1158
         },
         {
           "raw": "/privacidad",
@@ -13041,7 +13041,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1153
+          "line": 1159
         },
         {
           "raw": "/sitemap.xml",
@@ -13051,7 +13051,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1154
+          "line": 1160
         },
         {
           "raw": "/contact",
@@ -13061,7 +13061,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1161
+          "line": 1167
         },
         {
           "raw": "tel:+595981299331",
@@ -13071,7 +13071,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1162
+          "line": 1168
         },
         {
           "raw": "mailto:tintinaccs@gmail.com",
@@ -13081,7 +13081,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1163
+          "line": 1169
         },
         {
           "raw": "https://instagram.com/tintinaccs",
@@ -13091,7 +13091,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1164
+          "line": 1170
         }
       ],
       "references": [
@@ -13122,19 +13122,19 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 1118,
+          "line": 1124,
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
-          "line": 1119,
+          "line": 1125,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1120,
+          "line": 1126,
           "exists": true
         },
         {
@@ -13260,79 +13260,79 @@
         {
           "raw": "assets-tintin/images/general/logo.png?v=tintin-20260715-15",
           "target": "assets-tintin/images/general/logo.png",
-          "line": 1127,
+          "line": 1133,
           "exists": true
         },
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 1138,
+          "line": 1144,
           "exists": true
         },
         {
           "raw": "/collections",
           "target": "collections.html",
-          "line": 1139,
+          "line": 1145,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
           "target": "catalogo.html",
-          "line": 1140,
+          "line": 1146,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
           "target": "catalogo.html",
-          "line": 1141,
+          "line": 1147,
           "exists": true
         },
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 1148,
+          "line": 1154,
           "exists": true
         },
         {
           "raw": "/envios",
           "target": "envios.html",
-          "line": 1149,
+          "line": 1155,
           "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
           "target": "cambios-devoluciones.html",
-          "line": 1150,
+          "line": 1156,
           "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
           "target": "preguntas-frecuentes.html",
-          "line": 1151,
+          "line": 1157,
           "exists": true
         },
         {
           "raw": "/terminos",
           "target": "terminos.html",
-          "line": 1152,
+          "line": 1158,
           "exists": true
         },
         {
           "raw": "/privacidad",
           "target": "privacidad.html",
-          "line": 1153,
+          "line": 1159,
           "exists": true
         },
         {
           "raw": "/sitemap.xml",
           "target": "sitemap.xml",
-          "line": 1154,
+          "line": 1160,
           "exists": true
         },
         {
           "raw": "/contact",
           "target": "contact.html",
-          "line": 1161,
+          "line": 1167,
           "exists": true
         }
       ],
@@ -13730,8 +13730,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 41957,
-      "sha256": "7e76035cbeb5fe5262492a11eb32dc57a03040a4c520f5c149b284c44789d95e",
+      "bytes": 41951,
+      "sha256": "737dbdbe117f3e18a748faae1f864b0a9d5b4112f3e3763f92037d8a89798c2a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13781,7 +13781,7 @@
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 323
         },
@@ -13806,7 +13806,7 @@
           "line": 700
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 701
         },
@@ -14161,7 +14161,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 323,
           "exists": true
@@ -14191,7 +14191,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 701,
           "exists": true
@@ -14531,8 +14531,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14478,
-      "sha256": "67eead26ed8debd0406f48cc6ab091ad9de0a4c7100ceee44d916d8d1b174313",
+      "bytes": 14472,
+      "sha256": "ced2941976ac7a34bc238e6357e85ffa46c73ae8d1d3008fd4f6d609c81ce165",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14576,7 +14576,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 199
         },
@@ -14591,7 +14591,7 @@
           "line": 201
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 202
         },
@@ -14911,7 +14911,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 199,
           "exists": true
@@ -14929,7 +14929,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 202,
           "exists": true
@@ -15136,8 +15136,8 @@
         "guest",
         "client"
       ],
-      "bytes": 17183,
-      "sha256": "89af1e4c954a023bc7ba55fb719db289d1cbf71cef69eefa22638837fba2da71",
+      "bytes": 17177,
+      "sha256": "7e1ac3a3e67517da7aa84715fed1eec3d96f89d1e2f2087019b7628a2bd266cd",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15181,7 +15181,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 212
         },
@@ -15196,7 +15196,7 @@
           "line": 214
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 215
         },
@@ -15541,7 +15541,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 212,
           "exists": true
@@ -15559,7 +15559,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 215,
           "exists": true
@@ -15777,8 +15777,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24802,
-      "sha256": "b4c33eea59831ae8c34ef1ac2cd8bed780554193439aa97b8c260c8eed65cc92",
+      "bytes": 24804,
+      "sha256": "4a2c5a4035b7de7791c1ee55de0997e59d5ca3b42200a9cbc4b335548971e745",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15799,7 +15799,7 @@
           "error": ""
         }
       ],
-      "ids": 57,
+      "ids": 56,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1",
@@ -15822,59 +15822,59 @@
           "line": 10
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
-          "line": 349
+          "line": 346
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 350
+          "line": 347
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 351
+          "line": 348
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 352
+          "line": 349
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 353
+          "line": 350
         },
         {
           "raw": "js/pages/product/beneficios-producto.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/pages/product/beneficios-producto.js",
-          "line": 354
+          "line": 351
         },
         {
           "raw": "js/pages/product/seleccion-producto.js?v=tintin-20260818-product-trust-icons-1",
           "target": "js/pages/product/seleccion-producto.js",
-          "line": 355
+          "line": 352
         },
         {
           "raw": "js/pages/product/productos-relacionados.js?v=tintin-20260817-related-fix-1",
           "target": "js/pages/product/productos-relacionados.js",
-          "line": 356
+          "line": 353
         },
         {
-          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260829-product-community-1",
+          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260829-community-actions-1",
           "target": "js/pages/product/resenas-producto.js",
-          "line": 357
+          "line": 354
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 358
+          "line": 355
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260826-carousel-order-3",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 359
+          "line": 356
         }
       ],
       "styles": [
@@ -15944,12 +15944,12 @@
           "line": 58
         },
         {
-          "raw": "css/pages/product/resenas-producto.css?v=tintin-20260829-product-community-1",
+          "raw": "css/pages/product/resenas-producto.css?v=tintin-20260829-community-actions-1",
           "target": "css/pages/product/resenas-producto.css",
           "line": 59
         },
         {
-          "raw": "css/pages/product/product-premium-overhaul.css?v=tintin-20260829-product-community-1",
+          "raw": "css/pages/product/product-premium-overhaul.css?v=tintin-20260829-community-actions-1",
           "target": "css/pages/product/product-premium-overhaul.css",
           "line": 60
         },
@@ -15976,7 +15976,7 @@
           "target": "assets-tintin/images/general/logo.png",
           "alt": "TINTIN",
           "hasAlt": true,
-          "line": 300
+          "line": 297
         }
       ],
       "links": [
@@ -16018,7 +16018,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 270
+          "line": 267
         },
         {
           "raw": "/",
@@ -16028,7 +16028,7 @@
           "ariaLabel": "Ir al inicio de TINTIN",
           "title": "",
           "imageAlt": "TINTIN",
-          "line": 299
+          "line": 296
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -16038,7 +16038,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 303
+          "line": 300
         },
         {
           "raw": "/catalogo",
@@ -16048,7 +16048,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 311
+          "line": 308
         },
         {
           "raw": "/collections",
@@ -16058,7 +16058,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 312
+          "line": 309
         },
         {
           "raw": "/catalogo?cat=relojes",
@@ -16068,7 +16068,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 313
+          "line": 310
         },
         {
           "raw": "/catalogo?cat=bolsos",
@@ -16078,7 +16078,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 314
+          "line": 311
         },
         {
           "raw": "/about",
@@ -16088,7 +16088,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 321
+          "line": 318
         },
         {
           "raw": "/envios",
@@ -16098,7 +16098,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 322
+          "line": 319
         },
         {
           "raw": "/cambios-devoluciones",
@@ -16108,7 +16108,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 323
+          "line": 320
         },
         {
           "raw": "/preguntas-frecuentes",
@@ -16118,7 +16118,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 324
+          "line": 321
         },
         {
           "raw": "/terminos",
@@ -16128,7 +16128,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 325
+          "line": 322
         },
         {
           "raw": "/privacidad",
@@ -16138,7 +16138,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 326
+          "line": 323
         },
         {
           "raw": "/sitemap.xml",
@@ -16148,7 +16148,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 327
+          "line": 324
         },
         {
           "raw": "/contact",
@@ -16158,7 +16158,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 334
+          "line": 331
         },
         {
           "raw": "tel:+595981299331",
@@ -16168,7 +16168,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 335
+          "line": 332
         },
         {
           "raw": "mailto:tintinaccs@gmail.com",
@@ -16178,7 +16178,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 336
+          "line": 333
         },
         {
           "raw": "https://instagram.com/tintinaccs",
@@ -16188,7 +16188,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 337
+          "line": 334
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -16198,7 +16198,7 @@
           "ariaLabel": "WhatsApp",
           "title": "",
           "imageAlt": "",
-          "line": 346
+          "line": 343
         }
       ],
       "references": [
@@ -16227,69 +16227,69 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
-          "line": 349,
+          "line": 346,
           "exists": true
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 350,
+          "line": 347,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 351,
+          "line": 348,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 352,
+          "line": 349,
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 353,
+          "line": 350,
           "exists": true
         },
         {
           "raw": "js/pages/product/beneficios-producto.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/pages/product/beneficios-producto.js",
-          "line": 354,
+          "line": 351,
           "exists": true
         },
         {
           "raw": "js/pages/product/seleccion-producto.js?v=tintin-20260818-product-trust-icons-1",
           "target": "js/pages/product/seleccion-producto.js",
-          "line": 355,
+          "line": 352,
           "exists": true
         },
         {
           "raw": "js/pages/product/productos-relacionados.js?v=tintin-20260817-related-fix-1",
           "target": "js/pages/product/productos-relacionados.js",
-          "line": 356,
+          "line": 353,
           "exists": true
         },
         {
-          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260829-product-community-1",
+          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260829-community-actions-1",
           "target": "js/pages/product/resenas-producto.js",
-          "line": 357,
+          "line": 354,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 358,
+          "line": 355,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260826-carousel-order-3",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 359,
+          "line": 356,
           "exists": true
         },
         {
@@ -16371,13 +16371,13 @@
           "exists": true
         },
         {
-          "raw": "css/pages/product/resenas-producto.css?v=tintin-20260829-product-community-1",
+          "raw": "css/pages/product/resenas-producto.css?v=tintin-20260829-community-actions-1",
           "target": "css/pages/product/resenas-producto.css",
           "line": 59,
           "exists": true
         },
         {
-          "raw": "css/pages/product/product-premium-overhaul.css?v=tintin-20260829-product-community-1",
+          "raw": "css/pages/product/product-premium-overhaul.css?v=tintin-20260829-community-actions-1",
           "target": "css/pages/product/product-premium-overhaul.css",
           "line": 60,
           "exists": true
@@ -16403,7 +16403,7 @@
         {
           "raw": "assets-tintin/images/general/logo.png?v=tintin-20260715-15",
           "target": "assets-tintin/images/general/logo.png",
-          "line": 300,
+          "line": 297,
           "exists": true
         },
         {
@@ -16421,79 +16421,79 @@
         {
           "raw": "/checkout",
           "target": "checkout.html",
-          "line": 270,
+          "line": 267,
           "exists": true
         },
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 311,
+          "line": 308,
           "exists": true
         },
         {
           "raw": "/collections",
           "target": "collections.html",
-          "line": 312,
+          "line": 309,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
           "target": "catalogo.html",
-          "line": 313,
+          "line": 310,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
           "target": "catalogo.html",
-          "line": 314,
+          "line": 311,
           "exists": true
         },
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 321,
+          "line": 318,
           "exists": true
         },
         {
           "raw": "/envios",
           "target": "envios.html",
-          "line": 322,
+          "line": 319,
           "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
           "target": "cambios-devoluciones.html",
-          "line": 323,
+          "line": 320,
           "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
           "target": "preguntas-frecuentes.html",
-          "line": 324,
+          "line": 321,
           "exists": true
         },
         {
           "raw": "/terminos",
           "target": "terminos.html",
-          "line": 325,
+          "line": 322,
           "exists": true
         },
         {
           "raw": "/privacidad",
           "target": "privacidad.html",
-          "line": 326,
+          "line": 323,
           "exists": true
         },
         {
           "raw": "/sitemap.xml",
           "target": "sitemap.xml",
-          "line": 327,
+          "line": 324,
           "exists": true
         },
         {
           "raw": "/contact",
           "target": "contact.html",
-          "line": 334,
+          "line": 331,
           "exists": true
         }
       ],
@@ -16532,22 +16532,6 @@
           "line": 109
         },
         {
-          "id": "btn-product-favorite",
-          "classes": [
-            "tt-product-favorite-icon"
-          ],
-          "type": "button",
-          "text": "",
-          "ariaLabel": "Guardar en favoritos",
-          "title": "",
-          "inlineHandler": false,
-          "dataAction": {
-            "data-favorite-id": ""
-          },
-          "hasSourceReference": true,
-          "line": 126
-        },
-        {
           "id": "specs-trigger",
           "classes": [
             "tt-mobile-accordion-trigger"
@@ -16559,7 +16543,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 137
+          "line": 134
         },
         {
           "id": "btn-qty-minus",
@@ -16573,7 +16557,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 151
+          "line": 148
         },
         {
           "id": "btn-qty-plus",
@@ -16587,7 +16571,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 153
+          "line": 150
         },
         {
           "id": "btn-product-add-cart",
@@ -16603,7 +16587,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 160
+          "line": 157
         },
         {
           "id": "btn-product-buy-now",
@@ -16619,7 +16603,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 163
+          "line": 160
         },
         {
           "id": "btn-product-wa",
@@ -16633,7 +16617,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 167
+          "line": 164
         },
         {
           "id": "btn-product-like",
@@ -16647,7 +16631,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 183
+          "line": 180
         },
         {
           "id": "",
@@ -16661,7 +16645,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 186
+          "line": 183
         },
         {
           "id": "",
@@ -16675,7 +16659,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 187
+          "line": 184
         },
         {
           "id": "tinsel-cart-btn",
@@ -16690,7 +16674,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 253
+          "line": 250
         },
         {
           "id": "tinsel-checkout-btn",
@@ -16705,7 +16689,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 254
+          "line": 251
         },
         {
           "id": "tt-added-toast-continue",
@@ -16720,7 +16704,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 269
+          "line": 266
         },
         {
           "id": "related-refresh",
@@ -16734,7 +16718,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 282
+          "line": 279
         }
       ],
       "controls": []
@@ -16752,8 +16736,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14978,
-      "sha256": "135df92b44d5960fa59419d98b6e60b783a676a05caa93e0e60e321121d200c7",
+      "bytes": 14972,
+      "sha256": "dcf8f11ae839b081c85e43bd967358074c2c6f846c2d963ec96a8104a9ed4f14",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16790,7 +16774,7 @@
           "line": 9
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 193
         },
@@ -16805,7 +16789,7 @@
           "line": 195
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 196
         },
@@ -17160,7 +17144,7 @@
           "exists": true
         },
         {
-          "raw": "tienda.js?v=tintin-20260822-checkout-hardening-1",
+          "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
           "line": 193,
           "exists": true
@@ -17178,7 +17162,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 196,
           "exists": true
@@ -22821,8 +22805,8 @@
     },
     {
       "path": "js/core/auth/proteccion-sesion.js",
-      "bytes": 3611,
-      "sha256": "90e18c928b24db24489417ec4752647f5803df3dbaf305845f213be19703c4cb",
+      "bytes": 3457,
+      "sha256": "605d6fb0a052d0f1372a6bdae719daa0e3c009a324f1503e3567ac1540b3f6d2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22832,37 +22816,37 @@
           "raw": "../firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
           "target": "js/core/firebase/firebase.js",
           "dynamic": false,
-          "line": 9
+          "line": 7
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
           "target": null,
           "dynamic": false,
-          "line": 12
+          "line": 8
         },
         {
           "raw": "./roles.js?v=tintin-20260821-accounts-phase-a-1",
           "target": "js/core/auth/roles.js",
           "dynamic": false,
-          "line": 13
+          "line": 9
         },
         {
           "raw": "./contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1",
           "target": "js/core/auth/contrato-cuentas-generado.js",
           "dynamic": false,
-          "line": 14
+          "line": 10
         },
         {
           "raw": "../../pages/profile/control-acceso-perfil.js?v=tintin-20260822-dob-username-onboarding-1",
           "target": "js/pages/profile/control-acceso-perfil.js",
           "dynamic": false,
-          "line": 15
+          "line": 11
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 12
+          "line": 8
         }
       ]
     },
@@ -24514,8 +24498,8 @@
     },
     {
       "path": "js/pages/product/resenas-producto.js",
-      "bytes": 21382,
-      "sha256": "09aac3b60e7ee6c60eed11996724062aa455d01d512506b80670775455a764bd",
+      "bytes": 25069,
+      "sha256": "1f098c318fdb37e80d635cfdce6b594fd581bd85c2093a396bfa00efb1a14993",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30413,8 +30397,8 @@
     },
     {
       "path": "tienda.js",
-      "bytes": 95085,
-      "sha256": "2e1f93e0c8ab683b8c82bbc82fe406c401791cec1c2160dd542d1a0aabdce669",
+      "bytes": 95148,
+      "sha256": "4c35484db50ed0cf3f7b2c164d85406ba87e826b3b687ae61386a873c3833e1a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30777,8 +30761,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 11839,
-      "sha256": "36c4a88d81eaf8fd8d1b9b62c177a1e6bda57433ac7ec6cdc88734064c609787"
+      "bytes": 11833,
+      "sha256": "bce08163cc124019671ee3880d26df8ee7c31e51794eb38a75827b0b318751a0"
     },
     {
       "path": "AGENTS.md",
@@ -30801,14 +30785,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 21824,
-      "sha256": "6653581a4bbb1ea09a96c9afb7c6b7de1b9b65b45ef3cf6e728ce686facf20d4"
+      "bytes": 21818,
+      "sha256": "eeba60d86ac11ab94f6c942251b3fa396138accbabf8349ec96a986875a9f054"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 40978,
-      "sha256": "ca72bf1b129f4bc1e97f8b4436c33e4b1a90e44a41f859d38bd1d9872a3635f6"
+      "bytes": 40973,
+      "sha256": "ad41efd60437e1d93c2dfa282b34174b81b6641fc6e3ec43051dc7129c939d1a"
     },
     {
       "path": "admin-manifest.json",
@@ -30819,8 +30803,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 187147,
-      "sha256": "0eab21a0295940268a3f830e4a16c4c5afb9072f993d23c1d77c4587b2cb79c3"
+      "bytes": 187142,
+      "sha256": "ce560a9cd2b333590025da9801753c40dab554007ab6a15f95d3be732f278782"
     },
     {
       "path": "apple-touch-icon.png",
@@ -31041,20 +31025,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 13307,
-      "sha256": "ba4b1776efe4108ae41a7999a22144851614b760139615ec2a312f1669c331c8"
+      "bytes": 13301,
+      "sha256": "ec482d167b9073fbb05dbc3828e9f1f16c75b124b59469756eb3ad49bf70ab8a"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 52925,
-      "sha256": "3b60d89c4b4bc86eac1fb8b0cdcbdd45e6bae234760b0006d5edd20ecff32b88"
+      "bytes": 52908,
+      "sha256": "edb31adf257ca43038b368bcac09b57e3197e53bdc4c109ea08af1f399c455f1"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 113368,
-      "sha256": "d6e0d072fb576889895338a3214d64afb632b3d7325a867eada8e46465ae7fa2"
+      "bytes": 113362,
+      "sha256": "6c6b7169c968d804dc237c6832d0f2217647e5f8a20a67a84f418cc90292e241"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -31209,8 +31193,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 15186,
-      "sha256": "6c691db6d236bff12b28e7325d506ad4cd27b8d766f4a5696bec74d6db7a4762"
+      "bytes": 15180,
+      "sha256": "1855bb6b327c5c141f8fb6df59b8ca82417e5a492a52fadf9d4d7a6dfd2dcc85"
     },
     {
       "path": "config/account-contract.json",
@@ -31245,8 +31229,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 19489,
-      "sha256": "63126f089c64a05ce8797e8df58aa3c6953cab139c51dee8bd75b4d7baa6c5ae"
+      "bytes": 19483,
+      "sha256": "ea332478645e563de062d2a30d491aac1ecec55aa235ed58df184c71923723a9"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -31563,14 +31547,14 @@
     {
       "path": "css/pages/product/product-premium-overhaul.css",
       "extension": ".css",
-      "bytes": 6141,
-      "sha256": "e603f48b69a63c0da74ab2e05cbbda654b1c51b96205a6519bc32be582fb857e"
+      "bytes": 7288,
+      "sha256": "f06c194967223e47cc2eecaff2077351c32343905f33c27561aa794d9b6197d4"
     },
     {
       "path": "css/pages/product/resenas-producto.css",
       "extension": ".css",
-      "bytes": 14019,
-      "sha256": "10040ba891ba246cbcb35c99af4978de31697c4e97b8318e233ef22f52e0a359"
+      "bytes": 14334,
+      "sha256": "74b08c3e2b15fe1866faa3ef457db301a6276a654a149b5cec136ff40ca42fef"
     },
     {
       "path": "css/quality/accesibilidad-global.css",
@@ -31923,8 +31907,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 16685,
-      "sha256": "992c9d5f492bd6deb8ff3f28c9c9fbbbe99214bf87a12ccaddf32783f6192f6f"
+      "bytes": 16679,
+      "sha256": "ab11227d9f675611b6d874c92d88fa09c11a5452f79a50432846b19b5ca0ea97"
     },
     {
       "path": "favicon-16x16.png",
@@ -32403,8 +32387,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 36161,
-      "sha256": "4e772e394364ba35661e95563c5bc167996505887939b3641df1e2324031a55f"
+      "bytes": 36155,
+      "sha256": "43e775b5141be4baf60da3ece2c1dfdce787b3b717d10bc9abb589758339859f"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -33123,8 +33107,8 @@
     {
       "path": "js/core/auth/proteccion-sesion.js",
       "extension": ".js",
-      "bytes": 3611,
-      "sha256": "90e18c928b24db24489417ec4752647f5803df3dbaf305845f213be19703c4cb"
+      "bytes": 3457,
+      "sha256": "605d6fb0a052d0f1372a6bdae719daa0e3c009a324f1503e3567ac1540b3f6d2"
     },
     {
       "path": "js/core/auth/roles.js",
@@ -33543,8 +33527,8 @@
     {
       "path": "js/pages/product/resenas-producto.js",
       "extension": ".js",
-      "bytes": 21382,
-      "sha256": "09aac3b60e7ee6c60eed11996724062aa455d01d512506b80670775455a764bd"
+      "bytes": 25069,
+      "sha256": "1f098c318fdb37e80d635cfdce6b594fd581bd85c2093a396bfa00efb1a14993"
     },
     {
       "path": "js/pages/product/seleccion-producto.js",
@@ -33639,8 +33623,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 61043,
-      "sha256": "5ee6c44c5c80af2c246593aaaafb6f877cbfa46965db28d456e208e72daded79"
+      "bytes": 61298,
+      "sha256": "cb975000534ccbab3332ac6d05028834a1bab3229fe6bfefb1482a29e39458e3"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -33843,8 +33827,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 41957,
-      "sha256": "7e76035cbeb5fe5262492a11eb32dc57a03040a4c520f5c149b284c44789d95e"
+      "bytes": 41951,
+      "sha256": "737dbdbe117f3e18a748faae1f864b0a9d5b4112f3e3763f92037d8a89798c2a"
     },
     {
       "path": "playwright.config.js",
@@ -33855,20 +33839,20 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 14478,
-      "sha256": "67eead26ed8debd0406f48cc6ab091ad9de0a4c7100ceee44d916d8d1b174313"
+      "bytes": 14472,
+      "sha256": "ced2941976ac7a34bc238e6357e85ffa46c73ae8d1d3008fd4f6d609c81ce165"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 17183,
-      "sha256": "89af1e4c954a023bc7ba55fb719db289d1cbf71cef69eefa22638837fba2da71"
+      "bytes": 17177,
+      "sha256": "7e1ac3a3e67517da7aa84715fed1eec3d96f89d1e2f2087019b7628a2bd266cd"
     },
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 24802,
-      "sha256": "b4c33eea59831ae8c34ef1ac2cd8bed780554193439aa97b8c260c8eed65cc92"
+      "bytes": 24804,
+      "sha256": "4a2c5a4035b7de7791c1ee55de0997e59d5ca3b42200a9cbc4b335548971e745"
     },
     {
       "path": "robots.txt",
@@ -34785,8 +34769,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 14978,
-      "sha256": "135df92b44d5960fa59419d98b6e60b783a676a05caa93e0e60e321121d200c7"
+      "bytes": 14972,
+      "sha256": "dcf8f11ae839b081c85e43bd967358074c2c6f846c2d963ec96a8104a9ed4f14"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -35163,8 +35147,8 @@
     {
       "path": "tienda.js",
       "extension": ".js",
-      "bytes": 95085,
-      "sha256": "2e1f93e0c8ab683b8c82bbc82fe406c401791cec1c2160dd542d1a0aabdce669"
+      "bytes": 95148,
+      "sha256": "4c35484db50ed0cf3f7b2c164d85406ba87e826b3b687ae61386a873c3833e1a"
     }
   ],
   "sitemapRoutes": [],
@@ -35676,14 +35660,14 @@
     },
     {
       "file": "js/core/auth/proteccion-sesion.js",
-      "line": 42,
+      "line": 71,
       "raw": "/login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/core/auth/proteccion-sesion.js",
-      "line": 42,
+      "line": 71,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
@@ -36509,28 +36493,70 @@
     },
     {
       "file": "login.html",
-      "line": 325,
+      "line": 308,
+      "raw": "/index.html",
+      "target": "index.html",
+      "exists": true
+    },
+    {
+      "file": "login.html",
+      "line": 308,
+      "raw": "/product.html",
+      "target": "product.html",
+      "exists": true
+    },
+    {
+      "file": "login.html",
+      "line": 308,
+      "raw": "/catalogo.html",
+      "target": "catalogo.html",
+      "exists": true
+    },
+    {
+      "file": "login.html",
+      "line": 308,
+      "raw": "/collections.html",
+      "target": "collections.html",
+      "exists": true
+    },
+    {
+      "file": "login.html",
+      "line": 308,
+      "raw": "/perfil.html",
+      "target": "perfil.html",
+      "exists": true
+    },
+    {
+      "file": "login.html",
+      "line": 308,
+      "raw": "/checkout.html",
+      "target": "checkout.html",
+      "exists": true
+    },
+    {
+      "file": "login.html",
+      "line": 331,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 328,
+      "line": 334,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 328,
+      "line": 334,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 420,
+      "line": 426,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -36607,7 +36633,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 328
+          "line": 334
         }
       ]
     },
@@ -36730,7 +36756,7 @@
     },
     {
       "file": "login.html",
-      "line": 479,
+      "line": 485,
       "target": "/api/username-availability",
       "method": "POST"
     }
@@ -37332,7 +37358,7 @@
         "references": [
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 329,
+            "line": 364,
             "operation": "doc"
           }
         ]
@@ -37372,7 +37398,7 @@
           },
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 325,
+            "line": 360,
             "operation": "doc"
           }
         ]
@@ -37522,7 +37548,7 @@
           },
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 318,
+            "line": 353,
             "operation": "collection"
           },
           {
@@ -38117,12 +38143,12 @@
           },
           {
             "file": "login.html",
-            "line": 349,
+            "line": 355,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 809,
+            "line": 815,
             "operation": "doc"
           },
           {

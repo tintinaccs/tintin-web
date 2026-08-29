@@ -16,6 +16,34 @@ let unsubscribeReviews = null;
 let unsubscribeStats = null;
 let unsubscribeLikes = null;
 let deepLinkHandled = false;
+const PENDING_INTENT_KEY = 'tt_product_community_intent_v1';
+
+function productReturnPath() {
+  return `/product?id=${encodeURIComponent(productId)}#product-reviews`;
+}
+
+function savePendingIntent(action, payload = {}) {
+  try {
+    sessionStorage.setItem(PENDING_INTENT_KEY, JSON.stringify({ productId, action, payload, createdAt: Date.now() }));
+  } catch {}
+}
+
+function takePendingIntent() {
+  try {
+    const parsed = JSON.parse(sessionStorage.getItem(PENDING_INTENT_KEY) || 'null');
+    if (!parsed || parsed.productId !== productId || Date.now() - Number(parsed.createdAt || 0) > 2 * 60 * 60 * 1000) return null;
+    return parsed;
+  } catch { return null; }
+}
+
+function clearPendingIntent() {
+  try { sessionStorage.removeItem(PENDING_INTENT_KEY); } catch {}
+}
+
+function requestCommunityLogin(action, payload = {}) {
+  savePendingIntent(action, payload);
+  window.location.assign(`/login?from=${encodeURIComponent(productReturnPath())}`);
+}
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -97,19 +125,23 @@ function ensureSection() {
 
 async function requestApi(input, method = 'POST', action = 'ownReview', forceRefresh = false) {
   const user = auth.currentUser || currentUser;
-  if (!user) throw new Error('Iniciá sesión para participar');
+  if (!user) {
+    const error = new Error('Iniciá sesión para participar');
+    error.requiresLogin = true;
+    throw error;
+  }
   let token;
   try {
+    if (typeof auth.authStateReady === 'function') await auth.authStateReady();
     token = await user.getIdToken(forceRefresh);
-  } catch {
-    // Una sesión local puede seguir siendo válida mientras Firebase renueva
-    // credenciales. Reintentamos sin cerrar ni redirigir a la clienta.
+  } catch (cause) {
+    // Reintento único sin recargar el perfil ni cerrar la sesión local.
     try {
-      await user.reload();
       token = await (auth.currentUser || user).getIdToken(true);
     } catch {
-      const error = new Error('No pudimos renovar tu sesión todavía. Tu cuenta sigue iniciada; probá otra vez en unos segundos.');
+      const error = new Error('Para confirmar esta acción necesitás volver a iniciar sesión. Conservamos lo que escribiste y te devolvemos aquí.');
       error.status = 401;
+      error.requiresLogin = true;
       throw error;
     }
   }
@@ -126,6 +158,7 @@ async function requestApi(input, method = 'POST', action = 'ownReview', forceRef
   if (!response.ok || result.ok !== true) {
     const error = new Error(result.error || 'No se pudo completar la acción');
     error.status = response.status;
+    error.requiresLogin = response.status === 401;
     throw error;
   }
   return result;
@@ -142,8 +175,9 @@ async function api(input, method = 'POST', action = 'ownReview') {
       return await requestApi(input, method, action, true);
     } catch (retryError) {
       if (retryError?.status === 401) {
-        const preservedSessionError = new Error('No pudimos renovar tu sesión automáticamente. No cerramos tu sesión; probá otra vez en unos segundos.');
+        const preservedSessionError = new Error('Para confirmar esta acción necesitás volver a iniciar sesión. Conservamos lo que escribiste y te devolvemos aquí.');
         preservedSessionError.status = 401;
+        preservedSessionError.requiresLogin = true;
         throw preservedSessionError;
       }
       throw retryError;
@@ -230,9 +264,9 @@ async function loadPublicLikeStats() {
 function ratingButtons() {
   return `<div class="tt-rating-field">
     <span class="tt-rating-label">Tu puntuación</span>
-    <div class="tt-rating-input" role="radiogroup" aria-label="Puntuación de la reseña" data-rating-value="${selectedRating}">${[1,2,3,4,5].map(value => `
-      <button type="button" role="radio" aria-checked="${selectedRating === value}" tabindex="${selectedRating ? (selectedRating === value ? 0 : -1) : (value === 1 ? 0 : -1)}" class="${selectedRating >= value ? 'is-active' : ''}${selectedRating === value ? ' is-current' : ''}" data-review-rating="${value}" aria-label="${value} estrella${value === 1 ? '' : 's'}">★</button>`).join('')}</div>
-    <span class="tt-rating-status" data-rating-status aria-live="polite">${selectedRating ? `${selectedRating} de 5 estrellas seleccionadas` : 'Sin puntuación seleccionada'}</span>
+    <div class="tt-rating-scale"><div class="tt-rating-input" role="radiogroup" aria-label="Puntuación de la reseña" data-rating-value="${selectedRating}">${[1,2,3,4,5].map(value => `
+      <button type="button" role="radio" aria-checked="${selectedRating === value}" tabindex="${selectedRating ? (selectedRating === value ? 0 : -1) : (value === 1 ? 0 : -1)}" class="${selectedRating >= value ? 'is-active' : ''}${selectedRating === value ? ' is-current' : ''}" data-review-rating="${value}" aria-label="${value} estrella${value === 1 ? '' : 's'}">★</button>`).join('')}</div><div class="tt-rating-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div></div>
+    <span class="tt-rating-status" data-rating-status aria-live="polite">${selectedRating ? `${selectedRating} de 5 estrellas seleccionadas` : 'Elegí de 1 a 5 estrellas'}</span>
   </div>`;
 }
 
@@ -250,7 +284,7 @@ function syncRatingButtons(previewRating = null) {
     button.tabIndex = selectedRating ? (selectedRating === value ? 0 : -1) : (value === 1 ? 0 : -1);
   });
   const status = group.parentElement?.querySelector('[data-rating-status]');
-  if (status) status.textContent = selectedRating ? `${selectedRating} de 5 estrellas seleccionadas` : 'Sin puntuación seleccionada';
+  if (status) status.textContent = selectedRating ? `${selectedRating} de 5 estrellas seleccionadas` : 'Elegí de 1 a 5 estrellas';
 }
 
 function setSelectedRating(value, { focus = false } = {}) {
@@ -265,7 +299,8 @@ function renderForm() {
   const root = document.getElementById('product-review-form');
   if (!root) return;
   if (!currentUser) {
-    root.innerHTML = `<div class="tt-review-form tt-community-composer"><div class="tt-community-avatar" aria-hidden="true">T</div><div class="tt-community-composer-body"><h3>Decí tu primera opinión</h3><p>Iniciá sesión para puntuar, comentar y participar. Tu identidad se muestra protegida a otras personas.</p><a class="tt-btn" href="/login?from=${encodeURIComponent(`/product?id=${productId}`)}">Iniciar sesión</a></div></div>`;
+    root.innerHTML = `<form class="tt-review-form tt-community-composer" id="tt-review-editor"><div class="tt-community-avatar" aria-hidden="true">T</div><div class="tt-community-composer-body"><h3>Decí tu primera opinión</h3><p>Podés escribir y elegir tu puntuación ahora. Te pediremos iniciar sesión solo al publicar y volverás a este mismo lugar.</p>${ratingButtons()}<textarea class="tt-review-textarea" name="comment" maxlength="1600" required placeholder="Escribí tu opinión…"></textarea><div class="tt-review-form-actions"><small>Tu identidad se muestra protegida para otras personas.</small><button type="submit" class="tt-btn">Iniciar sesión y publicar</button></div><div role="alert" data-review-error></div></div></form>`;
+    syncRatingButtons();
     return;
   }
   if (ownReview && Number(ownReview.editCount) >= 1) {
@@ -345,7 +380,7 @@ document.addEventListener('click', async event => {
   const button = event.target.closest('#btn-product-like');
   if (!button || button.disabled) return;
   if (!currentUser) {
-    window.location.href = `/login?from=${encodeURIComponent(`/product?id=${productId}`)}`;
+    requestCommunityLogin('productLike');
     return;
   }
   button.disabled = true;
@@ -355,6 +390,10 @@ document.addEventListener('click', async event => {
     if (Number.isFinite(Number(result.likeCount))) productLikeCount = Number(result.likeCount);
     renderProductLike();
   } catch (failure) {
+    if (failure.requiresLogin) {
+      requestCommunityLogin('productLike');
+      return;
+    }
     showCommunityNotice(failure.message || 'No pudimos actualizar tu Me gusta. Tu sesión sigue abierta.');
   } finally {
     button.disabled = false;
@@ -382,6 +421,10 @@ document.addEventListener('click', async event => {
       if (review) review.likeCount = result.likeCount;
       renderReviews();
     } catch (failure) {
+      if (failure.requiresLogin) {
+        requestCommunityLogin('reviewLike', { reviewId });
+        return;
+      }
       showCommunityNotice(failure.message || 'No pudimos actualizar este Me gusta. Tu sesión sigue abierta.');
       loadSocialState().catch(() => {});
     } finally {
@@ -431,13 +474,21 @@ document.addEventListener('submit', async event => {
     }
     submit.disabled = true;
     try {
-      const comment = new FormData(event.target).get('comment');
+      const comment = String(new FormData(event.target).get('comment') || '').trim();
+      if (!currentUser) {
+        requestCommunityLogin('review', { rating: selectedRating, comment });
+        return;
+      }
       const action = ownReview ? 'editReview' : 'createReview';
       const result = await api({ action, productId, rating: selectedRating, comment });
       ownReview = result.review;
       selectedRating = normalizeRating(result.review?.rating) || selectedRating;
       renderForm();
     } catch (failure) {
+      if (failure.requiresLogin) {
+        requestCommunityLogin('review', { rating: selectedRating, comment: String(new FormData(event.target).get('comment') || '').trim() });
+        return;
+      }
       error.textContent = failure.message;
       submit.disabled = false;
     }
@@ -446,6 +497,35 @@ document.addEventListener('submit', async event => {
 
 });
 
+async function resumePendingIntent() {
+  const intent = takePendingIntent();
+  if (!intent || !currentUser) return;
+  try {
+    if (intent.action === 'productLike') {
+      const result = await api({ action: 'toggleFavorite', productId });
+      productLiked = result.selected === true;
+      productLikeCount = Number(result.likeCount) || productLikeCount;
+      renderProductLike();
+      showCommunityNotice(productLiked ? 'Tu Me gusta quedó guardado.' : 'Actualizamos tu Me gusta.');
+    } else if (intent.action === 'reviewLike' && intent.payload?.reviewId) {
+      const result = await api({ action: 'toggleReviewLike', productId, reviewId: intent.payload.reviewId });
+      if (result.selected) likedReviewIds.add(intent.payload.reviewId);
+      else likedReviewIds.delete(intent.payload.reviewId);
+      renderReviews();
+      showCommunityNotice('Tu Me gusta quedó guardado.');
+    } else if (intent.action === 'review') {
+      const result = await api({ action: ownReview ? 'editReview' : 'createReview', productId, rating: normalizeRating(intent.payload?.rating), comment: String(intent.payload?.comment || '') });
+      ownReview = result.review;
+      selectedRating = normalizeRating(result.review?.rating);
+      renderForm();
+      showCommunityNotice('Tu opinión se publicó correctamente.');
+    }
+    clearPendingIntent();
+  } catch (error) {
+    if (!error.requiresLogin) showCommunityNotice(error.message || 'No pudimos retomar tu acción todavía.');
+  }
+}
+
 if (productId) {
   ensureSection();
   renderSummary();
@@ -453,7 +533,7 @@ if (productId) {
   appCheckReady.then(subscribePublic);
   onAuthStateChanged(auth, user => {
     currentUser = user || null;
-    loadSocialState().catch(error => {
+    loadSocialState().then(() => resumePendingIntent()).catch(error => {
       console.warn('[reviews] No se pudo cargar el estado social de la reseña.', error);
       renderForm();
       renderReviews();

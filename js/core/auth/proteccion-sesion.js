@@ -1,15 +1,11 @@
 // =============================================
 // TINTIN ACCESORIOS — Expiración de sesión
 // =============================================
-// Firebase Auth mantiene la sesión y renueva su token. La política adicional
-// de TINTIN se aplica solo al personal y mide INACTIVIDAD real: una clienta no
-// es expulsada mientras mira productos ni 30 minutos después del login. El
-// Super Admin también tiene límite (más amplio), sin excepción eterna.
+// Firebase Auth mantiene la sesión y renueva su token. Las clientas no tienen
+// expiración fija; solo el personal conserva un límite de inactividad seguro.
 
 import { auth } from "../firebase/firebase.js?v=tintin-20260730-appcheck-stable-4";
-import {
-  onAuthStateChanged, signOut
-} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getUserRole } from "./roles.js?v=tintin-20260821-accounts-phase-a-1";
 import { STAFF_ROLES } from './contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 import { startProfileGate } from "../../pages/profile/control-acceso-perfil.js?v=tintin-20260822-dob-username-onboarding-1";
@@ -36,11 +32,6 @@ function readSessionStart() {
   try { raw = localStorage.getItem(STORAGE_KEY); } catch {}
   const value = Number(raw);
   return Number.isFinite(value) && value > 0 ? value : null;
-}
-
-function goToExpiredLogin() {
-  if (location.pathname === '/login' || location.pathname.endsWith('/login.html') || location.pathname.endsWith('login.html')) return;
-  location.href = '/login?expired=1';
 }
 
 function recordActivity() {
@@ -74,6 +65,11 @@ async function enforce(user) {
     try { await signOut(auth); } catch {}
     goToExpiredLogin();
   }
+}
+
+function goToExpiredLogin() {
+  if (location.pathname === '/login' || location.pathname.endsWith('/login.html') || location.pathname.endsWith('login.html')) return;
+  location.href = '/login?expired=1';
 }
 
 onAuthStateChanged(auth, enforce);
