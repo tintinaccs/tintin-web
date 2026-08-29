@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-29T10:40:21.119Z",
-  "sourceFingerprint": "4af40c7e85766068a44b2e45222c1e3fd4f0ecd87e7d5d950ffc69e2624ad5df",
+  "generatedAt": "2026-08-29T11:37:03.464Z",
+  "sourceFingerprint": "bec3bf158cf67a994dd020338a8c4a03b07474afecc15d2849eea31fb0913c8b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 780,
-    "textFiles": 748,
-    "totalBytes": 8636792,
+    "files": 781,
+    "textFiles": 749,
+    "totalBytes": 8641954,
     "pages": 18,
-    "modules": 500
+    "modules": 501
   },
   "viewports": [
     {
@@ -25259,6 +25259,36 @@
       "endpoints": []
     },
     {
+      "path": "scripts/auditar-catalogo-navegador-produccion.mjs",
+      "bytes": 4097,
+      "sha256": "0fa12e08ec36d0dd01fd7371b09fee7359a0e41a685a7f3019723465dc51c29c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "playwright",
+          "target": "scripts/playwright",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/auditar-catalogo-pagina.js",
       "bytes": 3676,
       "sha256": "c28e3735a69f3b9fc92638b9ff656caf1d5dbf37c2696dfd34761fd188263283",
@@ -26096,8 +26126,8 @@
     },
     {
       "path": "scripts/auditar-fase-11-seo.js",
-      "bytes": 9529,
-      "sha256": "45600d398221f35a895243c3c6563ae0e4c1679b35f1e949015b0ac285a1b3a4",
+      "bytes": 9973,
+      "sha256": "7394a7b415acea7a7ed6116f1af38e256b6df47e14291c074e7481083f3f0eee",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30705,8 +30735,8 @@
     {
       "path": ".github/workflows/seo-produccion-fase-11.yml",
       "extension": ".yml",
-      "bytes": 6236,
-      "sha256": "08a6925aa5f963124e673d1a6f2ea69e58001c2ec59410ff073448329ba0f8ae"
+      "bytes": 6857,
+      "sha256": "b7ef9000290d95652ccee0c392daede334edb704691abf684e557ab3480f2498"
     },
     {
       "path": ".github/workflows/validar-editor-visual-seguro.yml",
@@ -33967,6 +33997,12 @@
       "sha256": "c996ec7755aed7934d36e887d7a09dc4588d3a0414efee899e91c29b44ccc7c2"
     },
     {
+      "path": "scripts/auditar-catalogo-navegador-produccion.mjs",
+      "extension": ".mjs",
+      "bytes": 4097,
+      "sha256": "0fa12e08ec36d0dd01fd7371b09fee7359a0e41a685a7f3019723465dc51c29c"
+    },
+    {
       "path": "scripts/auditar-catalogo-pagina.js",
       "extension": ".js",
       "bytes": 3676,
@@ -34155,8 +34191,8 @@
     {
       "path": "scripts/auditar-fase-11-seo.js",
       "extension": ".js",
-      "bytes": 9529,
-      "sha256": "45600d398221f35a895243c3c6563ae0e4c1679b35f1e949015b0ac285a1b3a4"
+      "bytes": 9973,
+      "sha256": "7394a7b415acea7a7ed6116f1af38e256b6df47e14291c074e7481083f3f0eee"
     },
     {
       "path": "scripts/auditar-fase-12-entrega.mjs",
