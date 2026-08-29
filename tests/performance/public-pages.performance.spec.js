@@ -7,7 +7,12 @@ const {
 } = require('./_helpers');
 
 function productionRoute(pageName) {
-  return pageName === 'index.html' ? '' : pageName.replace(/\.html$/i, '');
+  if (pageName === 'index.html') return '';
+  // La ficha de producto necesita un ID real para completar su loader. CI ya
+  // expone este fixture determinista en el servidor local, así que medimos la
+  // experiencia real de una ficha cargable y no la ruta incompleta /product.
+  if (pageName === 'product.html') return 'product?id=seo-prueba';
+  return pageName.replace(/\.html$/i, '');
 }
 
 for (const pageName of PUBLIC_PAGES) {
