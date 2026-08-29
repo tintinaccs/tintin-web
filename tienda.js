@@ -1441,6 +1441,18 @@ function _renderProductDetail(product) {
     });
   }
 
+  const compactShare = document.querySelector('[data-share-product]');
+  if (compactShare && !compactShare.dataset.ttBound) {
+    compactShare.dataset.ttBound = '1';
+    compactShare.addEventListener('click', async () => {
+      if (!_pdProduct) return;
+      const url = window.location.href;
+      const text = `¡Mirá este accesorio de TINTIN! ${_pdProduct.name}`;
+      if (navigator.share) { await navigator.share({ title: _pdProduct.name, text, url }).catch(() => {}); return; }
+      try { await navigator.clipboard?.writeText(url); compactShare.textContent = 'Enlace copiado'; window.setTimeout(() => { if (compactShare.isConnected) compactShare.textContent = 'Compartir'; }, 1800); } catch {}
+    });
+  }
+
   // Add to cart. Stock-driven enable/disable state is safe to re-run on every
   // render; the click listener itself is bound exactly once and reads
   // _pdProduct/_pdQty fresh at click time, so it always acts on the latest
@@ -1589,11 +1601,12 @@ function _openLightbox(images, startIdx) {
     lb.setAttribute('aria-modal', 'true');
     lb.setAttribute('aria-label', 'Imagen ampliada');
     lb.innerHTML = `
+      <div class="tt-lightbox-zoom" aria-label="Controles de zoom"><button type="button" id="lb-zoom-out" aria-label="Alejar">−</button><button type="button" id="lb-zoom-in" aria-label="Acercar">+</button></div>
       <button type="button" class="tt-lightbox-close" id="lb-close" aria-label="Cerrar">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
       <button type="button" class="tt-lightbox-nav tt-lightbox-prev" id="lb-prev" aria-label="Anterior">‹</button>
-      <img class="tt-lightbox-img" id="lb-img" src="" alt="Vista de producto" draggable="false">
+      <div class="tt-lightbox-stage"><img class="tt-lightbox-img" id="lb-img" src="" alt="Vista de producto" draggable="false"></div>
       <button type="button" class="tt-lightbox-nav tt-lightbox-next" id="lb-next" aria-label="Siguiente">›</button>
       <div class="tt-lightbox-counter" id="lb-counter"></div>
     `;
@@ -1603,12 +1616,18 @@ function _openLightbox(images, startIdx) {
     lb.addEventListener('click', (e) => { if (e.target === lb) _closeLightbox(); });
     document.getElementById('lb-prev').addEventListener('click', (e) => { e.stopPropagation(); _lbNav(-1); });
     document.getElementById('lb-next').addEventListener('click', (e) => { e.stopPropagation(); _lbNav(1); });
+    document.getElementById('lb-zoom-in').addEventListener('click', () => _lbZoom(.25));
+    document.getElementById('lb-zoom-out').addEventListener('click', () => _lbZoom(-.25));
 
     document.addEventListener('keydown', (e) => {
       if (!lb.classList.contains('open')) return;
       if (e.key === 'Escape') _closeLightbox();
       if (e.key === 'ArrowLeft') _lbNav(-1);
       if (e.key === 'ArrowRight') _lbNav(1);
+      if (e.key === 'Tab') {
+        const focusable = [...lb.querySelectorAll('button')].filter(node => !node.disabled);
+        if (focusable.length) { e.preventDefault(); focusable[(focusable.indexOf(document.activeElement) + (e.shiftKey ? focusable.length - 1 : 1)) % focusable.length].focus(); }
+      }
     });
 
     // Swipe support (mobile)
@@ -1618,6 +1637,24 @@ function _openLightbox(images, startIdx) {
       const dx = e.changedTouches[0].clientX - _tsx;
       if (Math.abs(dx) > 50) _lbNav(dx < 0 ? 1 : -1);
     }, { passive: true });
+    let panStart = null;
+    lb.addEventListener('pointerdown', event => {
+      if (event.target.id !== 'lb-img' || _lbScale <= 1) return;
+      panStart = { x: event.clientX, y: event.clientY, tx: _lbTranslateX, ty: _lbTranslateY };
+      event.target.classList.add('is-panning');
+      event.target.setPointerCapture?.(event.pointerId);
+    });
+    lb.addEventListener('pointermove', event => {
+      if (!panStart) return;
+      _lbTranslateX = panStart.tx + event.clientX - panStart.x;
+      _lbTranslateY = panStart.ty + event.clientY - panStart.y;
+      _lbApplyTransform();
+    });
+    lb.addEventListener('pointerup', event => {
+      if (!panStart) return;
+      panStart = null;
+      event.target.classList.remove('is-panning');
+    });
   }
 
   _lbUpdate();
@@ -1625,15 +1662,21 @@ function _openLightbox(images, startIdx) {
     lb.classList.add('open');
     document.getElementById('lb-close')?.focus();
   });
-  document.body.style.overflow = 'hidden';
+  window.TintinSurfaceController?.lockScroll?.();
+  document.documentElement.classList.add('tt-lightbox-open');
 }
+
+let _lbScale = 1;
+let _lbTranslateX = 0, _lbTranslateY = 0;
+function _lbApplyTransform() { const img = document.getElementById('lb-img'); if (img) img.style.transform = `translate3d(${_lbTranslateX}px,${_lbTranslateY}px,0) scale(${_lbScale})`; }
+function _lbZoom(delta) { _lbScale = Math.max(1, Math.min(3, _lbScale + delta)); if (_lbScale === 1) { _lbTranslateX = 0; _lbTranslateY = 0; } _lbApplyTransform(); }
 
 function _lbUpdate() {
   const img = document.getElementById('lb-img');
   const counter = document.getElementById('lb-counter');
   const prev = document.getElementById('lb-prev');
   const next = document.getElementById('lb-next');
-  if (img) img.src = _lbImages[_lbCur];
+  if (img) { img.src = _lbImages[_lbCur]; _lbScale = 1; _lbTranslateX = 0; _lbTranslateY = 0; _lbApplyTransform(); }
   if (counter) counter.textContent = _lbImages.length > 1 ? `${_lbCur + 1} / ${_lbImages.length}` : '';
   if (prev) prev.style.display = _lbImages.length > 1 ? '' : 'none';
   if (next) next.style.display = _lbImages.length > 1 ? '' : 'none';
@@ -1647,7 +1690,8 @@ function _lbNav(dir) {
 function _closeLightbox() {
   const lb = document.getElementById('tt-lightbox');
   if (lb) lb.classList.remove('open');
-  document.body.style.overflow = '';
+  document.documentElement.classList.remove('tt-lightbox-open');
+  window.TintinSurfaceController?.unlockScroll?.();
   if (_lbReturnFocus instanceof HTMLElement) _lbReturnFocus.focus();
   _lbReturnFocus = null;
 }

@@ -7,7 +7,7 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260822-checkout-hardening-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260816-loader-shell-bridge-1';
-const LOADER_VERSION = 'tintin-20260827-navigation-top-1';
+const LOADER_VERSION = 'tintin-20260825-scroll-reveal-2';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260827-navigation-bootstrap-1';
 const NAV_ENTRY_VERSION = 'tintin-20260827-responsive-indicators-1';
@@ -15,16 +15,16 @@ const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const VISUAL_BUILDER_VERSION = 'tintin-20260826-carousel-order-3';
 const SESSION_PROTECTION_VERSION = 'tintin-20260822-dob-username-onboarding-1';
 const PROFILE_GATE_VERSION = 'tintin-20260822-dob-username-onboarding-1';
-const NAV_HEADER_VERSION = 'tintin-20260827-header-surfaces-1';
-const NAV_SHARED_VERSION = 'tintin-20260827-header-surfaces-1';
-const UNIFIED_THEME_VERSION = 'tintin-20260828-product-header-fixes-1';
+const NAV_HEADER_VERSION = 'tintin-20260824-header-responsive-sync-1';
+const NAV_SHARED_VERSION = 'tintin-20260825-responsive-css-budget-2';
+const UNIFIED_THEME_VERSION = 'tintin-20260828-unified-footer-1';
 const NAVIGATION_PRELOAD_STYLES = [
-  ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION],
-  ['css/components/navigation/tableta/encabezado-tableta.css', NAV_HEADER_VERSION],
-  ['css/components/navigation/movil/encabezado-movil.css', NAV_HEADER_VERSION],
-  ['css/components/navigation/compartido/transiciones-navegacion.css', NAV_SHARED_VERSION],
-  ['css/components/navigation/compartido/paneles.css', NAV_SHARED_VERSION],
-  ['css/components/navigation/compartido/busqueda.css', NAV_SHARED_VERSION],
+  ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
+  ['css/components/navigation/tableta/encabezado-tableta.css', NAV_HEADER_VERSION, '(min-width: 768px) and (max-width: 1024px)'],
+  ['css/components/navigation/movil/encabezado-movil.css', NAV_HEADER_VERSION, '(max-width: 767px)'],
+  ['css/components/navigation/compartido/transiciones-navegacion.css', NAV_SHARED_VERSION, ''],
+  ['css/components/navigation/compartido/paneles.css', NAV_SHARED_VERSION, ''],
+  ['css/components/navigation/compartido/busqueda.css', NAV_SHARED_VERSION, ''],
 ];
 const PUBLIC_PAGES = [
   '404.html',
@@ -95,6 +95,81 @@ function removeLegacyComments(html) {
   });
 }
 
+function sharedFooter() {
+  return `<!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
+<footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">
+  <div class="container tt-footer-shell">
+    <div class="tt-footer-grid">
+      <div class="tt-footer-brand" aria-label="TINTIN Accesorios">
+        <a href="/" class="tt-logo-link" aria-label="Ir al inicio de TINTIN">
+          <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20260715-15" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
+        </a>
+        <p class="tt-footer-tagline">Accesorios que acompañan tu brillo. Comprá online con atención cercana desde Paraguay.</p>
+        <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-footer-wa">
+          <span aria-hidden="true">↗</span><span class="tt-footer-wa-text">Escribirnos por WhatsApp</span>
+        </a>
+      </div>
+
+      <nav class="tt-footer-col" aria-label="Tienda">
+        <div class="tt-footer-col-title">Tienda</div>
+        <ul>
+          <li><a href="/catalogo">Catálogo</a></li>
+          <li><a href="/collections">Colecciones</a></li>
+          <li><a href="/catalogo?cat=relojes">Relojes</a></li>
+          <li><a href="/catalogo?cat=bolsos">Bags</a></li>
+        </ul>
+      </nav>
+
+      <nav class="tt-footer-col" aria-label="Más información">
+        <div class="tt-footer-col-title">Más información</div>
+        <ul>
+          <li><a href="/about">Quiénes somos</a></li>
+          <li><a href="/envios">Envíos</a></li>
+          <li><a href="/cambios-devoluciones">Cambios y devoluciones</a></li>
+          <li><a href="/preguntas-frecuentes">Preguntas frecuentes</a></li>
+          <li><a href="/terminos">Términos y condiciones</a></li>
+          <li><a href="/privacidad">Privacidad</a></li>
+          <li><a href="/sitemap.xml">Mapa del sitio</a></li>
+        </ul>
+      </nav>
+
+      <nav class="tt-footer-col tt-footer-contact" aria-label="Contacto">
+        <div class="tt-footer-col-title">Contacto</div>
+        <ul>
+          <li><a href="/contact">Atención al cliente</a></li>
+          <li><a href="tel:+595981299331" class="tt-contact-phone">+595 981 299 331</a></li>
+          <li><a href="mailto:tintinaccs@gmail.com" class="tt-contact-email">tintinaccs@gmail.com</a></li>
+          <li><a href="https://instagram.com/tintinaccs" target="_blank" rel="noopener">@tintinaccs</a></li>
+          <li class="tt-contact-addr">Paraguay</li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div class="tt-footer-bottom">© 2024-2026 TINTIN ACCESORIOS · TODOS LOS DERECHOS RESERVADOS</div>
+</footer>`;
+}
+
+function replaceSharedFooter(html) {
+  const opener = /<footer\b[^>]*\bclass=["'][^"']*\btt-footer\b[^"']*["'][^>]*>/i;
+  const match = opener.exec(html);
+  const footerMarker = /(?:\s*<!-- Footer público único: sincronizado por scripts\/sincronizar-inicio-navegacion-publica\.js -->)+\s*$/;
+  if (!match) return html.replace('</body>', `${sharedFooter()}\n</body>`);
+
+  const token = /<\/?footer\b[^>]*>/gi;
+  token.lastIndex = match.index;
+  let depth = 0;
+  let part;
+  while ((part = token.exec(html))) {
+    if (/^<\//.test(part[0])) depth -= 1;
+    else depth += 1;
+    if (depth === 0) {
+      const beforeFooter = html.slice(0, match.index).replace(footerMarker, '\n');
+      return beforeFooter + sharedFooter() + html.slice(token.lastIndex);
+    }
+  }
+  throw new Error('No se encontró el cierre del footer .tt-footer.');
+}
+
 function ensureStyles(html) {
   if (/href=["']styles\.css(?:\?|["'])/i.test(html)) return html;
   const tokens = /(<link\b[^>]*href=["']css\/tokens-tintin\.css[^"']*["'][^>]*>)/i;
@@ -118,7 +193,7 @@ function ensureNavigationPreloads(html) {
     `<link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=${NAV_BARRIER_VERSION}">`,
     `<link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=${NAV_ENTRY_VERSION}">`,
     ...NAVIGATION_PRELOAD_STYLES.map(
-      ([href, version]) => `<link rel="preload" as="style" href="${href}?v=${version}">`
+      ([href, version, media]) => `<link rel="preload" as="style"${media ? ` media="${media}"` : ''} href="${href}?v=${version}">`
     ),
   ].map(tag => `  ${tag}`).join('\n');
 
@@ -212,6 +287,7 @@ for (const page of PUBLIC_PAGES) {
 
   for (const id of SHELL_IDS) html = removeElementById(html, id);
   html = removeLegacyComments(html);
+  html = replaceSharedFooter(html);
   html = ensureStyles(html);
   html = ensureNavigationPreloads(html);
   html = ensureShellScript(html);

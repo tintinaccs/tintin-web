@@ -129,6 +129,30 @@ body:has(.ck-body).tt-checkout-submitting #ck-confirm-btn {
   pointer-events: none;
 }
 
+/* Confirmación: información corta, ordenada y reutilizable en los tres
+   tamaños. Las acciones ya no dependen de estilos inline. */
+body:has(.ck-body) .ck-confirm-check { padding:8px 0 24px; }
+body:has(.ck-body) .ck-confirm-icon { width:60px; height:60px; margin-bottom:14px; box-shadow:none; }
+body:has(.ck-body) .ck-confirm-title { font-size:clamp(1.35rem,3vw,1.65rem); }
+body:has(.ck-body) .ck-confirm-sub { max-width:470px; line-height:1.6; }
+body:has(.ck-body) .ck-confirm-next {
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px;
+  max-width:620px; margin:20px auto 0; padding:0; list-style:none; counter-reset:step;
+}
+body:has(.ck-body) .ck-confirm-next li {
+  min-width:0; padding:11px 10px; border:1px solid var(--ck-border); border-radius:12px;
+  color:var(--ck-muted); font-size:.72rem; line-height:1.4; text-align:left;
+}
+body:has(.ck-body) .ck-confirm-next li::before { counter-increment:step; content:counter(step); display:inline-grid; place-items:center; width:18px; height:18px; margin:0 6px 4px 0; border-radius:50%; background:var(--ck-accent-soft); color:var(--ck-accent); font-size:.68rem; font-weight:800; }
+body:has(.ck-body) .ck-post-confirm { margin-top:18px; text-align:center; }
+body:has(.ck-body) .ck-post-confirm-card { padding:16px; border:1px solid var(--ck-border); border-radius:16px; background:var(--ck-surface); }
+body:has(.ck-body) .ck-post-confirm-card p { margin:0 0 8px; color:var(--ck-muted); font-size:.78rem; }
+body:has(.ck-body) .ck-post-confirm-card a { color:#267a41!important; font-size:.82rem; font-weight:750; text-decoration:none; }
+body:has(.ck-body) .ck-post-confirm-card a:hover,.ck-post-confirm-back a:hover { text-decoration:underline; }
+body:has(.ck-body) .ck-post-confirm-back { margin-top:16px; }
+body:has(.ck-body) .ck-post-confirm-back a { color:var(--ck-muted)!important; font-size:.78rem; font-weight:650; text-decoration:none; }
+@media (max-width:560px) { body:has(.ck-body) .ck-confirm-next { grid-template-columns:1fr; gap:6px; } body:has(.ck-body) .ck-confirm-next li { padding:10px 12px; } }
+
 @media (min-width: 1440px) {
   body:has(.ck-body) .ck-body,
   body:has(.ck-body) .ck-steps { width: min(860px, calc(100% - 64px)); }

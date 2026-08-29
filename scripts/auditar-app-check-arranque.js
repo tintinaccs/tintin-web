@@ -110,7 +110,7 @@ const checks = [
   [
     'Todas las páginas fuerzan el loader corregido',
     htmlFiles.every(file =>
-      read(file).includes('cargador-pagina.js?v=tintin-20260827-navigation-top-1')
+      read(file).includes('cargador-pagina.js?v=tintin-20260825-scroll-reveal-2')
     )
   ],
   [

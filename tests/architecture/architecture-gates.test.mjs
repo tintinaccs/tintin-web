@@ -53,3 +53,23 @@ test('si Superadmin vuelve a reconciliar updateEditedOrder localmente CI lo dete
   });
   assert.match(errors.join('\n'), /reconciliador paralelo/i);
 });
+
+test('el gate reconoce consumidores server-side con CRLF y bloques anidados', () => {
+  const errors = auditNoDuplicateAuthoritiesSources({
+    sheetsAdminWebhook: '',
+    appsScriptParity: '',
+    adminOrderCrud: '',
+    inventoryAdmin: [
+      'async function updateEditedOrder(orderId, patch) {',
+      "  const response = await fetch('/api/admin-order-mutation', {",
+      "    method: 'POST',",
+      '    headers: { authorization: token }',
+      '  });',
+      "  if (!response.ok) { throw new Error('fallo'); }",
+      '  return response.json();',
+      '}',
+      '',
+    ].join('\r\n'),
+  });
+  assert.deepEqual(errors, []);
+});

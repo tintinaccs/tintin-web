@@ -73,7 +73,7 @@ for (const [pageId, migrations] of Object.entries(VISUAL_SECTION_MIGRATIONS)) {
 
 const files = SCAN_ROOTS.flatMap(walk)
   .filter(relative => CODE_EXTENSIONS.has(path.extname(relative)))
-  .filter(relative => !ALLOWED_LEGACY_FIXTURES.has(relative));
+  .filter(relative => !ALLOWED_LEGACY_FIXTURES.has(relative.replaceAll('\\', '/')));
 
 for (const relative of files) {
   const source = fs.readFileSync(path.join(root, relative), 'utf8');

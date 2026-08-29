@@ -321,12 +321,11 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
   }
 
   .tt-collections-sheet {
-    top: 0 !important;
+    top: max(12px, env(safe-area-inset-top)) !important;
     bottom: 0 !important;
     max-height: none !important;
-    border-radius: 0 !important;
-    padding-top: max(8px, env(safe-area-inset-top)) !important;
-    padding-bottom: calc(82px + env(safe-area-inset-bottom)) !important;
+    height: calc(100dvh - max(12px, env(safe-area-inset-top))) !important;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom)) !important;
     overflow: auto;
     overscroll-behavior: contain;
   }

@@ -1,4 +1,4 @@
-export const SHELL_VERSION = 'tintin-20260827-responsive-indicators-1';
+export const SHELL_VERSION = 'tintin-20260825-responsive-css-budget-2';
 
 export const BREAKPOINTS = Object.freeze({
   mobileMax: 767,

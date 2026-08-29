@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1"></script>
-  <script src="js/cargador-pagina.js?v=tintin-20260827-navigation-top-1"></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260825-scroll-reveal-2"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260827-navigation-bootstrap-1" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
@@ -24,12 +24,12 @@
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
   <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260827-responsive-indicators-1">
-  <link rel="preload" as="style" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260827-header-surfaces-1">
-  <link rel="preload" as="style" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260827-header-surfaces-1">
-  <link rel="preload" as="style" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260827-header-surfaces-1">
-  <link rel="preload" as="style" href="css/components/navigation/compartido/transiciones-navegacion.css?v=tintin-20260827-header-surfaces-1">
-  <link rel="preload" as="style" href="css/components/navigation/compartido/paneles.css?v=tintin-20260827-header-surfaces-1">
-  <link rel="preload" as="style" href="css/components/navigation/compartido/busqueda.css?v=tintin-20260827-header-surfaces-1">
+  <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260824-header-responsive-sync-1">
+  <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260824-header-responsive-sync-1">
+  <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260824-header-responsive-sync-1">
+  <link rel="preload" as="style" href="css/components/navigation/compartido/transiciones-navegacion.css?v=tintin-20260825-responsive-css-budget-2">
+  <link rel="preload" as="style" href="css/components/navigation/compartido/paneles.css?v=tintin-20260825-responsive-css-budget-2">
+  <link rel="preload" as="style" href="css/components/navigation/compartido/busqueda.css?v=tintin-20260825-responsive-css-budget-2">
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
   <meta name="description" content="Finalizar tu pedido en Tintin Accesorios — envío a todo Paraguay" />
   <link rel="canonical" href="https://tintinaccesorios.pages.dev/checkout.html" />
@@ -44,7 +44,7 @@
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260828-product-header-fixes-1">
+  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260828-unified-footer-1">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -348,7 +348,12 @@
     <div id="ck-success-head" class="ck-confirm-check" style="display:none">
       <div class="ck-confirm-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div class="ck-confirm-title">¡Pedido confirmado!</div>
-      <div class="ck-confirm-sub">Ya lo tenemos. Ahora verificamos disponibilidad y te escribimos por WhatsApp para coordinar el pago y la entrega — normalmente dentro de las próximas horas hábiles.</div>
+      <div class="ck-confirm-sub">Tu pedido quedó registrado. Te confirmaremos disponibilidad, pago y entrega por WhatsApp dentro del próximo horario hábil.</div>
+      <ol class="ck-confirm-next" aria-label="Próximos pasos">
+        <li>Revisamos la disponibilidad.</li>
+        <li>Coordinamos pago y entrega.</li>
+        <li>Te avisamos por WhatsApp.</li>
+      </ol>
     </div>
     <div class="ck-panel-body">
       <div id="ck-confirm-summary"></div>
@@ -362,15 +367,15 @@
 
 
       <!-- Post-confirmación: soporte WA y volver al inicio (oculto hasta confirmar) -->
-      <div id="ck-post-confirm" style="display:none;margin-top:18px">
-        <div style="text-align:center;padding:16px;background:#fdf6f9;border-radius:14px;">
-          <p style="font-size:12px;color:var(--text-muted);margin:0 0 8px;">Tu pedido ya quedó registrado acá. Si querés consultar algo, escribinos y ya llevás los datos.</p>
-          <a id="ck-wa-support" href="https://wa.me/595981299331" target="_blank" rel="noopener" style="font-size:13px;color:#267a41;font-weight:700;text-decoration:none;">
+      <div id="ck-post-confirm" class="ck-post-confirm" style="display:none">
+        <div class="ck-post-confirm-card">
+          <p>¿Necesitás ayuda con este pedido?</p>
+          <a id="ck-wa-support" href="https://wa.me/595981299331" target="_blank" rel="noopener">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:5px"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>Consultar por mi pedido
           </a>
         </div>
-        <div style="text-align:center;margin-top:16px">
-          <a href="/" style="font-size:12.5px;color:var(--text-muted);font-weight:600;text-decoration:none">
+        <div class="ck-post-confirm-back">
+          <a href="/">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px;margin-right:5px"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Volver al inicio
           </a>
         </div>
@@ -1913,5 +1918,56 @@ onAuthStateChanged(auth, user => {
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1"></script>
 <script src="tienda.js?v=tintin-20260822-checkout-hardening-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
+<footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">
+  <div class="container tt-footer-shell">
+    <div class="tt-footer-grid">
+      <div class="tt-footer-brand" aria-label="TINTIN Accesorios">
+        <a href="/" class="tt-logo-link" aria-label="Ir al inicio de TINTIN">
+          <img loading="lazy" decoding="async" src="assets-tintin/images/general/logo.png?v=tintin-20260715-15" alt="TINTIN" class="tt-logo-img tt-logo-img--menu">
+        </a>
+        <p class="tt-footer-tagline">Accesorios que acompañan tu brillo. Comprá online con atención cercana desde Paraguay.</p>
+        <a href="https://wa.me/595981299331" target="_blank" rel="noopener" class="tt-footer-wa">
+          <span aria-hidden="true">↗</span><span class="tt-footer-wa-text">Escribirnos por WhatsApp</span>
+        </a>
+      </div>
+
+      <nav class="tt-footer-col" aria-label="Tienda">
+        <div class="tt-footer-col-title">Tienda</div>
+        <ul>
+          <li><a href="/catalogo">Catálogo</a></li>
+          <li><a href="/collections">Colecciones</a></li>
+          <li><a href="/catalogo?cat=relojes">Relojes</a></li>
+          <li><a href="/catalogo?cat=bolsos">Bags</a></li>
+        </ul>
+      </nav>
+
+      <nav class="tt-footer-col" aria-label="Más información">
+        <div class="tt-footer-col-title">Más información</div>
+        <ul>
+          <li><a href="/about">Quiénes somos</a></li>
+          <li><a href="/envios">Envíos</a></li>
+          <li><a href="/cambios-devoluciones">Cambios y devoluciones</a></li>
+          <li><a href="/preguntas-frecuentes">Preguntas frecuentes</a></li>
+          <li><a href="/terminos">Términos y condiciones</a></li>
+          <li><a href="/privacidad">Privacidad</a></li>
+          <li><a href="/sitemap.xml">Mapa del sitio</a></li>
+        </ul>
+      </nav>
+
+      <nav class="tt-footer-col tt-footer-contact" aria-label="Contacto">
+        <div class="tt-footer-col-title">Contacto</div>
+        <ul>
+          <li><a href="/contact">Atención al cliente</a></li>
+          <li><a href="tel:+595981299331" class="tt-contact-phone">+595 981 299 331</a></li>
+          <li><a href="mailto:tintinaccs@gmail.com" class="tt-contact-email">tintinaccs@gmail.com</a></li>
+          <li><a href="https://instagram.com/tintinaccs" target="_blank" rel="noopener">@tintinaccs</a></li>
+          <li class="tt-contact-addr">Paraguay</li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div class="tt-footer-bottom">© 2024-2026 TINTIN ACCESORIOS · TODOS LOS DERECHOS RESERVADOS</div>
+</footer>
 </body>
 </html>

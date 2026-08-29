@@ -12,6 +12,8 @@ body:has(.login-page).login-setup-open #login-profile-block {
   grid-template-columns: minmax(0, 1fr) !important;
   grid-template-areas:
     "confirm"
+    "username"
+    "dob"
     "name"
     "phone"
     "address"
@@ -25,6 +27,9 @@ body:has(.login-page).login-setup-open #login-profile-block {
 body:has(.login-page).login-setup-open #login-profile-name-confirmation {
   grid-area: confirm !important;
 }
+
+body:has(.login-page).login-setup-open #login-profile-username-field { grid-area: username; }
+body:has(.login-page).login-setup-open #login-profile-dob-field { grid-area: dob; }
 
 body:has(.login-page).login-setup-open #login-profile-name-field {
   grid-area: name !important;
@@ -47,6 +52,8 @@ body:has(.login-page).login-setup-open #btn-save-profile {
 body:has(.login-page).login-setup-open :is(
   #login-profile-name-confirmation,
   #login-profile-name-field,
+  #login-profile-username-field,
+  #login-profile-dob-field,
   #login-profile-phone-field,
   #login-profile-address-field
 ) {
@@ -54,6 +61,26 @@ body:has(.login-page).login-setup-open :is(
   height: auto !important;
   align-self: start !important;
 }
+
+body:has(.login-page).login-setup-open :is(#login-profile-name-field,#login-profile-phone-field,#login-profile-address-field) {
+  border:1px solid color-mix(in srgb,var(--login-border) 78%,transparent);
+  border-radius:20px;
+  background:linear-gradient(145deg,#fff 0%,#fff9fc 100%);
+  padding:clamp(16px,2vw,24px);
+}
+
+.login-username-control { position:relative; }
+.login-username-control .login-email-input { padding-right:148px; margin-bottom:7px; }
+.login-username-status {
+  position:absolute; right:14px; top:50%; transform:translateY(-50%);
+  display:inline-flex; align-items:center; gap:6px; max-width:135px;
+  color:var(--login-muted); font-size:11px; font-weight:700; line-height:1.2; text-align:right;
+}
+.login-username-status[data-state="available"] { color:#1f7a50; }
+.login-username-status[data-state="available"]::before { content:"✓"; display:grid; place-items:center; width:18px; height:18px; border-radius:50%; background:#e7f7ee; font-size:12px; }
+.login-username-status[data-state="taken"],.login-username-status[data-state="invalid"] { color:#b3264c; }
+.login-username-status[data-state="taken"]::before,.login-username-status[data-state="invalid"]::before { content:"×"; display:grid; place-items:center; width:18px; height:18px; border-radius:50%; background:#fff0f3; font-size:15px; }
+.login-username-status[data-state="checking"] { color:var(--login-muted); }
 
 body:has(.login-page).login-setup-open #login-profile-address-field {
   padding: clamp(16px, 2vw, 28px) !important;
@@ -80,12 +107,16 @@ body:has(.login-page).login-setup-open .tt-map-canvas {
     grid-template-columns: minmax(0, 1.12fr) minmax(300px, .88fr) !important;
     grid-template-areas:
       "confirm confirm"
+      "username dob"
       "name phone"
       "address address"
       "save save" !important;
     column-gap: clamp(18px, 2.4vw, 38px) !important;
     row-gap: clamp(16px, 1.8vw, 26px) !important;
   }
+
+  body:has(.login-page).login-setup-open #login-profile-username-field,
+  body:has(.login-page).login-setup-open #login-profile-dob-field { min-width:0; }
 
   body:has(.login-page).login-setup-open #login-profile-name-field,
   body:has(.login-page).login-setup-open #login-profile-phone-field {
@@ -118,6 +149,17 @@ body:has(.login-page).login-setup-open .tt-map-canvas {
 
 /* Mobile: experiencia de app, sin tarjetas comprimidas ni espacios muertos. */
 @media (max-width: 599px) {
+  body:has(.login-page) .login-page {
+    min-height:100dvh;
+    padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left)) !important;
+  }
+  body:has(.login-page) .login-shell,
+  body:has(.login-page).login-setup-open .login-shell {
+    min-height:calc(100dvh - 30px);
+    border:1px solid rgba(202,1,105,.10) !important;
+    border-radius:22px !important;
+    box-shadow:0 16px 40px rgba(160,0,85,.09) !important;
+  }
   body:has(.login-page).login-setup-open #login-profile-block {
     gap: 13px !important;
   }
@@ -138,6 +180,9 @@ body:has(.login-page).login-setup-open .tt-map-canvas {
   body:has(.login-page).login-setup-open #login-profile-address-field {
     padding: 14px !important;
   }
+
+  .login-username-control .login-email-input { padding-right:16px; margin-bottom:8px; }
+  .login-username-status { position:static; transform:none; justify-content:flex-start; max-width:none; min-height:20px; text-align:left; }
 
   body:has(.login-page).login-setup-open .tt-map-canvas {
     height: clamp(270px, 39vh, 350px) !important;
