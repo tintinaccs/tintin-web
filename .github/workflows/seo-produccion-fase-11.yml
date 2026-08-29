@@ -20,6 +20,7 @@ on:
       - 'scripts/auditar-cloudflare-entrega-real.mjs'
       - 'scripts/auditar-fase-11-seo.js'
       - 'scripts/auditar-produccion-salud.mjs'
+      - 'scripts/auditar-catalogo-navegador-produccion.mjs'
       - 'scripts/servidor-local-pruebas.mjs'
       - 'tests/seo/**'
       - 'package.json'
@@ -118,19 +119,27 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Instalar Chromium para verificar el catálogo público real
+        run: npx playwright install --with-deps chromium
       - name: Monitorear producción
         id: production_monitor
         continue-on-error: true
         run: npm run monitor:production
+      - name: Confirmar que el navegador pinta productos reales
+        id: catalog_browser_smoke
+        continue-on-error: true
+        run: node scripts/auditar-catalogo-navegador-produccion.mjs
       - uses: actions/upload-artifact@v6
         if: always()
         with:
           name: phase11-production-health
-          path: artifacts/phase11-production-health.json
+          path: |
+            artifacts/phase11-production-health.json
+            artifacts/catalog-browser-smoke.json
           if-no-files-found: warn
           retention-days: 30
       - name: Abrir o actualizar alerta visible si producción falla
-        if: steps.production_monitor.outcome == 'failure'
+        if: steps.production_monitor.outcome == 'failure' || steps.catalog_browser_smoke.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
           RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -146,7 +155,7 @@ jobs:
             gh issue create --title "$title" --body "$body"
           fi
       - name: Cerrar alerta cuando producción se recupera
-        if: steps.production_monitor.outcome == 'success'
+        if: steps.production_monitor.outcome == 'success' && steps.catalog_browser_smoke.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
           RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -159,4 +168,4 @@ jobs:
             gh issue close "$issue" --reason completed
           fi
       - name: Hacer fallar el run si producción sigue en rojo
-        run: test "${{ steps.production_monitor.outcome }}" = "success"
+        run: test "${{ steps.production_monitor.outcome }}" = "success" && test "${{ steps.catalog_browser_smoke.outcome }}" = "success"
