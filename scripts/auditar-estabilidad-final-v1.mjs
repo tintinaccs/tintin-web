@@ -1,0 +1,92 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
+const root = process.cwd();
+const read = file => fs.readFileSync(path.join(root, file), 'utf8');
+const failures = [];
+const ok = (condition, message) => { if (!condition) failures.push(message); };
+const has = (source, pattern) => typeof pattern === 'string' ? source.includes(pattern) : pattern.test(source);
+
+const publicEntry = read('js/components/navigation/entrada-navegacion-publica.js');
+const stability = read('js/quality/estabilidad-final-publica.js');
+const product = read('product.html');
+const cart = read('js/components/cart/sincronizacion-carrito.js');
+const rules = read('firestore.rules');
+const adminLoader = read('js/admin/users/gestion-usuarios-admin.js');
+const adminProfile = read('js/admin/users/perfil-usuario-superadmin.js');
+const adminFicha = read('js/admin/users/ficha-usuario-admin.js');
+const avatarApi = read('functions/api/profile-avatar-upload.js');
+const socialBackend = read('cloudflare/participacion-clientes.js');
+const socialApi = read('functions/api/engagement.js');
+const notifications = read('cloudflare/notificaciones-participacion.js');
+const sheetsSync = read('cloudflare/sincronizacion-participacion-sheets.js');
+const appsScript = read('apps-script/Participacion.gs');
+const systemHealth = read('functions/api/system-health.js');
+
+// 1. Producto: contenido visible y sin acordeón obligatorio.
+ok(has(publicEntry, "estabilidad-final-publica.js?v=tintin-20260829-final-stability-1"), 'El shell público no carga la estabilización final canónica.');
+ok(has(stability, "body.dataset.ttProductStable = '1'"), 'Producto no activa el contrato estable.');
+ok(has(stability, "specsBlock.dataset.collapsed = 'false'"), 'Características no se fuerzan abiertas.');
+ok(has(stability, "related.dataset.collapsed = 'false'"), 'Otros productos no se fuerzan abiertos.');
+ok(has(stability, "document.getElementById('product-reviews')"), 'La comunidad no está incluida en la apertura permanente.');
+ok(has(stability, 'white-space:nowrap!important'), 'Los CTA de productos relacionados no protegen palabras completas.');
+ok(has(product, 'class="tt-related-section" data-collapsed="false"'), 'La fuente HTML de relacionados no parte abierta.');
+
+// 2. Header mobile: jerarquía inequívoca halo -> indicador -> botón -> badge.
+ok(has(stability, '.tt-mobile-nav-halo{z-index:0!important'), 'El halo móvil no está fijado detrás de los iconos.');
+ok(has(stability, '.tt-mobile-nav-indicator{z-index:1!important'), 'El indicador móvil no tiene nivel independiente.');
+ok(has(stability, '.tt-tabbar-btn{position:relative!important;z-index:2!important'), 'Los botones móviles no están por encima de las capas decorativas.');
+ok(has(stability, '.tt-notification-badge,#tt-tabbar .tt-cart-badge{z-index:5!important'), 'Los badges móviles pueden quedar detrás de capas decorativas.');
+
+// 3. Notificaciones / push: arquitectura social actual y destinatarios server-side.
+ok(has(socialApi, /addUserNotification|adminNotification/i), 'Engagement no conserva notificaciones por actor/destinatario.');
+ok(has(notifications, /listUserNotifications|markUserNotificationsRead/), 'No existe contrato interno de notificaciones de clientes.');
+ok(has(notifications, /SUPER_ADMIN_EMAIL|superadmin/i), 'La capa de notificaciones no identifica al Super Admin.');
+
+// 4. Sheets / Apps Script: sincronización server-to-server y diagnóstico operativo.
+ok(has(sheetsSync, /SHEETS_ENGAGEMENT_SECRET|secret/i), 'La sincronización social con Sheets no conserva secreto servidor-a-servidor.');
+ok(has(appsScript, /secret|SHEETS/i), 'Apps Script no conserva frontera de confianza por secreto.');
+ok(has(systemHealth, /sheets|apps.?script/i), 'Estado del ecosistema no comprueba Sheets/Apps Script.');
+
+// 5. Carrito: múltiples líneas y autoridad única sincronizada.
+ok(has(cart, 'MAX_CART_LINES = 100'), 'El carrito no admite un conjunto real de múltiples líneas.');
+ok(has(cart, /lineIdFor\(/), 'El carrito no identifica líneas por producto/variante.');
+ok(has(cart, /normalizeCart\(items\)/), 'El carrito no normaliza múltiples artículos.');
+ok(has(cart, /users\/\{uid\}\/cart|users\/\$\{uid\}/) || has(cart, "collection(db, 'users'"), 'El carrito no conserva sincronización por cuenta.');
+ok(has(rules, 'function cartItemValid'), 'Firestore no conserva validación server-side del carrito.');
+
+// 6. Super Admin: ficha integral reutilizando autoridad canónica.
+ok(has(adminLoader, 'perfil-usuario-superadmin.js?v=tintin-20260829-final-stability-1'), 'Usuarios no carga la ficha integral nueva.');
+ok(!has(adminProfile, /onSnapshot\s*\(/), 'La ficha integral crea un listener paralelo de users.');
+ok(!has(adminProfile, /setDoc\s*\(|updateDoc\s*\(|deleteDoc\s*\(/), 'La ficha integral crea mutaciones paralelas a admin-app.js.');
+ok(has(adminProfile, 'Ir a gestión del usuario'), 'La ficha integral no devuelve a la gestión canónica CRUD.');
+ok(has(adminFicha, "field('@username'"), 'La ficha Super Admin no muestra username.');
+ok(has(adminFicha, "section('Pedidos"), 'La ficha Super Admin no integra pedidos.');
+ok(has(adminFicha, "section('Auditoría reciente')"), 'La ficha Super Admin no integra auditoría.');
+
+// Perfil cliente completo y foto segura.
+ok(has(stability, "{ id: 'resumen', label: 'Resumen'"), 'Perfil no tiene pestaña Resumen.');
+ok(has(stability, "{ id: 'datos', label: 'Mis datos'"), 'Perfil no tiene pestaña Mis datos.');
+ok(has(stability, "{ id: 'pedidos', label: 'Pedidos'"), 'Perfil no tiene pestaña Pedidos.');
+ok(has(stability, "{ id: 'favoritos', label: 'Favoritos'"), 'Perfil no tiene pestaña Favoritos.');
+ok(has(stability, "{ id: 'cuenta', label: 'Cuenta y seguridad'"), 'Perfil no tiene pestaña Cuenta y seguridad.');
+ok(has(stability, 'data-profile-orders-badge'), 'Perfil no muestra badge interno de pedidos.');
+ok(has(stability, '/api/profile-avatar-upload'), 'Perfil no integra subida de foto.');
+ok(has(avatarApi, 'requireFirebaseUser'), 'La subida de avatar no exige sesión Firebase.');
+ok(has(avatarApi, '5 * 1024 * 1024'), 'La subida de avatar no limita tamaño.');
+ok(has(avatarApi, "['image/jpeg', 'image/png', 'image/webp']"), 'La subida de avatar no limita formatos.');
+ok(!has(avatarApi, 'requireSuperAdmin'), 'La subida de avatar depende indebidamente del Super Admin.');
+
+// Social v4 debe permanecer conectado: no se permite regresión mientras se estabiliza UI.
+ok(has(socialBackend, /REVIEW_RATE|RATE_LIMIT|30 \* 60|30\s*\*\s*60/i), 'Social v4 perdió el límite/cooldown de reseñas.');
+ok(has(socialBackend, /replyLike|likeReply|REPLY_LIKE/i), 'Social v4 perdió likes de respuestas.');
+ok(has(socialBackend, /alreadySelected|alreadyLiked|selected:\s*true/i), 'Social v4 perdió semántica idempotente/permanente de likes.');
+
+if (failures.length) {
+  console.error('\nAUDITORÍA ESTABILIDAD FINAL V1: FALLÓ');
+  failures.forEach((failure, index) => console.error(`${index + 1}. ${failure}`));
+  process.exit(1);
+}
+
+console.log('AUDITORÍA ESTABILIDAD FINAL V1: OK');
+console.log('Cobertura: Producto abierto · header móvil · notificaciones/push · Sheets · carrito multi-línea · Super Admin · perfil cliente · avatar seguro · Social v4.');
