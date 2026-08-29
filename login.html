@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3">
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260829-spacing-clamp-2">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260829-merge-favorite-clamp-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -216,7 +216,7 @@ import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260821-accounts-phase-a-1";
 import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260822-dob-username-onboarding-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
-import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260822-dob-username-onboarding-1";
+import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260821-accounts-phase-a-1";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260822-dob-username-onboarding-2";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260824-google-maps-input-1";
@@ -297,14 +297,17 @@ function errMsg(code) {
   return msgs[code] || ("Ocurrió un error. Intentá de nuevo. (" + code + ")");
 }
 
-// Único destino real de "from" hoy es checkout.html (ver checkout.html:729),
-// pero el valor llega desde la URL, así que un enlace armado por un tercero
-// podría poner cualquier cosa ahí. Solo se acepta un nombre de archivo .html
-// local (sin protocolo, sin "//", sin barras) — cualquier otra cosa cae al
-// destino por defecto en vez de redirigir a un sitio ajeno tras un login real.
+// `from` puede volver a una página pública con query/hash (por ejemplo una
+// opinión pendiente en /product?id=...). Se acepta solo una ruta local segura.
 function safeLocalRedirect(value) {
-  const v = String(value || '');
-  return /^[a-zA-Z0-9_-]+\.html(?:\?[a-zA-Z0-9_=&%.-]*)?$/.test(v) ? v : '';
+  const raw = String(value || '').trim();
+  if (!raw || /^(?:[a-z][a-z0-9+.-]*:|\/\/|\\\\)/i.test(raw)) return '';
+  try {
+    const target = new URL(raw, window.location.origin);
+    if (target.origin !== window.location.origin || target.pathname.includes('..')) return '';
+    const allowed = new Set(['/', '/index', '/index.html', '/product', '/product.html', '/catalogo', '/catalogo.html', '/collections', '/collections.html', '/perfil', '/perfil.html', '/checkout', '/checkout.html']);
+    return allowed.has(target.pathname) ? `${target.pathname}${target.search}${target.hash}` : '';
+  } catch { return ''; }
 }
 
 async function redirectByRole(role, email, options = {}) {
@@ -318,14 +321,17 @@ async function redirectByRole(role, email, options = {}) {
   markSessionStart(); // para staff inicia el reloj de inactividad; clientes conservan sesión normal
   const from = safeLocalRedirect(new URLSearchParams(window.location.search).get('from'));
   const normalizedEmail = String(email || '').trim().toLowerCase();
-  // Única regla de destino del login: solo el correo oficial entra
-  // automáticamente al panel. Cualquier otra cuenta vuelve a la tienda,
-  // aunque tenga un rol interno y luego disponga de un acceso manual.
+  // Una acción iniciada en tienda vuelve al mismo producto también para la
+  // cuenta Super Admin; sin una intención pendiente conserva su panel.
+  if (from) {
+    window.location.replace(from);
+    return;
+  }
   if (normalizedEmail === SUPER_ADMIN.toLowerCase()) {
     window.location.replace('admin.html');
     return;
   }
-  window.location.replace(from || (options.welcomePending ? 'index.html?welcome=1' : 'index.html'));
+  window.location.replace(options.welcomePending ? 'index.html?welcome=1' : 'index.html');
 }
 
 // Crea el perfil la primera vez que alguien entra con Google, o solo
@@ -1116,7 +1122,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
 };
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script src="tienda.js?v=tintin-20260822-checkout-hardening-1" defer></script>
+<script src="tienda.js?v=tintin-20260829-community-actions-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">

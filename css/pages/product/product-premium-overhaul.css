@@ -2,3 +2,21 @@
 .tt-product-social-bar{justify-content:flex-start;text-align:left}.tinben,.tinsel,.tt-product-trust-badges{display:block!important}@media(max-width:767px){.tt-product-social-bar{justify-content:flex-start;overflow-x:auto}.tt-social-action,.tt-social-share{white-space:nowrap}}
 body.tt-product-page .tt-product-social-bar{justify-content:flex-start!important;text-align:left}body.tt-product-maintenance .tinben,body.tt-product-maintenance .tinsel,body.tt-product-maintenance .tt-product-trust-badges{display:block!important}
 html body .tt-product-social-bar{justify-content:flex-start!important;text-align:left}html body .tinben,html body .tinsel,html body .tt-product-trust-badges{display:block!important}
+
+/* Acciones principales y favoritos: áreas amplias y centro geométrico real. */
+.tt-product-actions-panel .tt-btn { min-height: 56px; font-size: .9rem; }
+.tt-product-favorite-icon { display: inline-grid; place-items: center; line-height: 1; }
+.tt-product-favorite-icon > span { display: grid; place-items: center; width: 1.1em; height: 1.1em; }
+.tt-product-favorite-icon svg { display: block; }
+.tt-product-social-bar { max-width: 1180px; margin: 26px auto 20px; padding-inline: clamp(0px, 2vw, 24px); }
+.tt-social-action, .tt-social-share { min-height: 44px; }
+@media (max-width:767px){.tt-product-actions-panel .tt-btn{min-height:54px;font-size:.92rem}.tt-product-social-bar{justify-content:center!important;padding-inline:0}}
+
+/* Comunidad: acciones legibles, iconos centrados y escala táctil coherente. */
+.tt-product-social-bar{display:flex;justify-content:flex-start!important;align-items:center;gap:8px}
+.tt-social-action,.tt-social-share{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:9px 15px;border:1px solid transparent;background:transparent;cursor:pointer;line-height:1;white-space:nowrap}
+.tt-social-action:hover,.tt-social-action:focus-visible,.tt-social-action[aria-pressed="true"],.tt-social-share:hover,.tt-social-share:focus-visible{background:#fff7fa;border-color:#efd5df;color:var(--pink-dark);outline:0}
+.tt-social-icon{width:18px;height:18px;display:block;flex:0 0 18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#btn-product-like[aria-pressed="true"] .tt-social-icon{fill:currentColor}
+.tt-product-name-row{display:block}.tt-product-favorite-icon{display:none!important}
+@media(max-width:767px){.tt-product-social-bar{justify-content:center!important;flex-wrap:wrap;overflow:visible}.tt-social-action,.tt-social-share{min-height:44px;padding-inline:12px}}

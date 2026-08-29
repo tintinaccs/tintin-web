@@ -1737,7 +1737,19 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   font-size: 1.45rem;
   cursor: pointer;
   box-shadow: 0 5px 16px rgba(86,32,51,.12);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  line-height: 0;
 }
+.tt-product-favorite-button [data-favorite-icon],
+.tt-product-favorite-icon [data-favorite-icon] {
+  display: grid;
+  place-items: center;
+  line-height: 0;
+}
+.tt-product-favorite-button svg,
+.tt-product-favorite-icon svg { display: block; }
 
 .tt-product-favorite-button.is-favorite { background: var(--pink-pale); }
 
@@ -3609,9 +3621,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   flex: none;
   width: 44px;
   height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   border: 1px solid var(--pink);
   border-radius: 50%;
   background: var(--pink-pale);
@@ -3619,6 +3630,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   font-size: 1.3rem;
   cursor: pointer;
   margin-top: 4px;
+  padding: 0;
+  line-height: 0;
 }
 .tt-product-favorite-icon.is-favorite { background: #f8dce7; border-color: var(--pink-dark); }
 
