@@ -21,7 +21,8 @@ const socialApi = read('functions/api/engagement.js');
 const notifications = read('cloudflare/notificaciones-participacion.js');
 const sheetsSync = read('cloudflare/sincronizacion-participacion-sheets.js');
 const appsScript = read('apps-script/Participacion.gs');
-const systemHealth = read('functions/api/system-health.js');
+const systemHealthApi = read('functions/api/system-health.js');
+const systemHealth = read('cloudflare/system-health.js');
 
 // 1. Producto: contenido visible y sin acordeón obligatorio.
 ok(has(publicEntry, "estabilidad-final-publica.js?v=tintin-20260829-final-stability-1"), 'El shell público no carga la estabilización final canónica.');
@@ -46,7 +47,8 @@ ok(has(notifications, /SUPER_ADMIN_EMAIL|superadmin/i), 'La capa de notificacion
 // 4. Sheets / Apps Script: sincronización server-to-server y diagnóstico operativo.
 ok(has(sheetsSync, /SHEETS_ENGAGEMENT_SECRET|secret/i), 'La sincronización social con Sheets no conserva secreto servidor-a-servidor.');
 ok(has(appsScript, /secret|SHEETS/i), 'Apps Script no conserva frontera de confianza por secreto.');
-ok(has(systemHealth, /sheets|apps.?script/i), 'Estado del ecosistema no comprueba Sheets/Apps Script.');
+ok(has(systemHealthApi, 'runSystemHealth'), 'La API de diagnóstico no delega en la autoridad operativa canónica.');
+ok(has(systemHealth, /SHEETS_ENGAGEMENT_SECRET/) && has(systemHealth, /probeAppsScript/) && has(systemHealth, /appsScript:\s*sheets/), 'Estado del ecosistema no comprueba de forma canónica Sheets/Apps Script.');
 
 // 5. Carrito: múltiples líneas y autoridad única sincronizada.
 ok(has(cart, 'MAX_CART_LINES = 100'), 'El carrito no admite un conjunto real de múltiples líneas.');
@@ -61,7 +63,7 @@ ok(!has(adminProfile, /onSnapshot\s*\(/), 'La ficha integral crea un listener pa
 ok(!has(adminProfile, /setDoc\s*\(|updateDoc\s*\(|deleteDoc\s*\(/), 'La ficha integral crea mutaciones paralelas a admin-app.js.');
 ok(has(adminProfile, 'Ir a gestión del usuario'), 'La ficha integral no devuelve a la gestión canónica CRUD.');
 ok(has(adminFicha, "field('@username'"), 'La ficha Super Admin no muestra username.');
-ok(has(adminFicha, "section('Pedidos"), 'La ficha Super Admin no integra pedidos.');
+ok(has(adminFicha, "section(`Pedidos"), 'La ficha Super Admin no integra pedidos.');
 ok(has(adminFicha, "section('Auditoría reciente')"), 'La ficha Super Admin no integra auditoría.');
 
 // Perfil cliente completo y foto segura.
