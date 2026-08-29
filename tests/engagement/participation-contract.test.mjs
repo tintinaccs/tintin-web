@@ -186,6 +186,8 @@ test('headers and admin notification feeds recover their live subscriptions', as
   assert.match(client, /setTimeout\(\(\) => subscribe\(currentUser\), 1400\)/);
   assert.match(admin, /notificationsRetryTimer/);
   assert.match(admin, /setTimeout\(\(\) => subscribeNotifications\(\), 1400\)/);
+  assert.match(admin, /ordersRetryTimer/);
+  assert.match(admin, /setTimeout\(\(\) => subscribeOrderStatusChanges\(\), 1400\)/);
   assert.match(admin, /PROFILE_AVATAR_FALLBACK/);
 });
 

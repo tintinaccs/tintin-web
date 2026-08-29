@@ -5,7 +5,7 @@ import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-const ASSET_VERSION = 'tintin-20260829-notifications-connected-1';
+const ASSET_VERSION = 'tintin-20260829-notifications-connected-2';
 const PROFILE_AVATAR_FALLBACK = '/assets-tintin/images/general/logo.png';
 const ORDER_RECOVERY_WINDOW_MS = 2 * 60 * 60 * 1000;
 const ORDER_NOTIFY_RETRY_DELAYS_MS = [700, 1800];
@@ -17,6 +17,7 @@ let unsubscribeOrders = null;
 let orderState = new Map();
 let ordersPrimed = false;
 let notificationsRetryTimer = 0;
+let ordersRetryTimer = 0;
 const orderNotificationInFlight = new Set();
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -271,6 +272,8 @@ function subscribeOrderStatusChanges() {
   unsubscribeOrders?.();
   orderState = new Map();
   ordersPrimed = false;
+  if (ordersRetryTimer) window.clearTimeout(ordersRetryTimer);
+  ordersRetryTimer = 0;
   const source = query(collection(db, 'orders'), orderBy('updatedAt', 'desc'), limit(150));
   unsubscribeOrders = onSnapshot(source, snapshot => {
     const next = new Map();
@@ -290,7 +293,10 @@ function subscribeOrderStatusChanges() {
       return;
     }
     changed.forEach(orderId => { void notifyOrderStatusWithRetry(orderId); });
-  }, error => console.warn('[admin-notifications] No se pudieron observar estados de pedidos:', error));
+  }, error => {
+    console.warn('[admin-notifications] No se pudieron observar estados de pedidos:', error);
+    if (user) ordersRetryTimer = window.setTimeout(() => subscribeOrderStatusChanges(), 1400);
+  });
 }
 
 function wireEvents() {
@@ -355,6 +361,8 @@ onAuthStateChanged(auth, current => {
     unsubscribeOrders?.();
     if (notificationsRetryTimer) window.clearTimeout(notificationsRetryTimer);
     notificationsRetryTimer = 0;
+    if (ordersRetryTimer) window.clearTimeout(ordersRetryTimer);
+    ordersRetryTimer = 0;
     orderNotificationInFlight.clear();
     return;
   }
