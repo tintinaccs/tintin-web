@@ -89,6 +89,30 @@ async function readContext(env, user, productId) {
   };
 }
 
+function activityActor(context, uid) {
+  return {
+    actorType: context.isSuperAdmin ? 'store' : 'customer',
+    actorUid: uid,
+    actorName: context.isSuperAdmin ? 'Tintin Accesorios' : context.publicName,
+    actorUsername: context.username,
+    actorPhotoUrl: context.photoUrl,
+  };
+}
+
+async function buildOwnActivityNotification(uid, context, event, dedupeKey) {
+  return buildUserNotificationWrite(uid, {
+    ...activityActor(context, uid),
+    ...event,
+  }, dedupeKey);
+}
+
+async function buildOwnAdminActivityNotification(context, uid, event, dedupeKey) {
+  return buildAdminNotificationWrite({
+    ...activityActor(context, uid),
+    ...event,
+  }, dedupeKey);
+}
+
 function publicReply(message) {
   const replyId = clean(message?.replyId || message?.id, 180);
   if (!replyId) return null;
@@ -324,6 +348,19 @@ export async function createReview(env, user, input) {
       { path: `users/${uid}/reviews/${reviewId}`, fields: encodeFirestoreFields(ownerReviewMapping(record)), currentDocument: { exists: false } },
     ];
 
+    const ownNotification = await buildOwnActivityNotification(uid, context, {
+      kind: 'review_created_self',
+      title: context.isSuperAdmin ? 'Publicaste una reseña' : 'Publicaste tu reseña',
+      body: `${rating} estrellas · ${context.productName}: ${comment}`,
+      snippet: comment,
+      iconKey: 'review',
+      targetUrl: `/product?id=${context.productId}#review-${reviewId}`,
+      targetType: 'review', targetId: reviewId,
+      productId: context.productId, productName: context.productName, productImageUrl: context.imageUrl,
+      reviewId, sourceType: 'review', sourceId: reviewId, createdAt: now,
+    }, `review_created_self:${reviewId}`);
+    writes.push(ownNotification.write);
+
     if (!context.isSuperAdmin) {
       writes.push({
         path: limitPath,
@@ -352,6 +389,18 @@ export async function createReview(env, user, input) {
         sourceId: reviewId,
         createdAt: now,
       }, `review_created:${reviewId}`);
+      writes.push(adminNotification.write);
+    } else {
+      const adminNotification = await buildOwnAdminActivityNotification(context, uid, {
+        kind: 'store_review_created',
+        title: 'Publicaste una reseña desde Tintin',
+        body: `${rating} estrellas · ${context.productName}: ${comment}`,
+        snippet: comment, iconKey: 'review',
+        targetUrl: `/product?id=${context.productId}#review-${reviewId}`,
+        targetType: 'review', targetId: reviewId,
+        productId: context.productId, productName: context.productName, productImageUrl: context.imageUrl,
+        reviewId, sourceType: 'review', sourceId: reviewId, createdAt: now,
+      }, `store_review_created:${reviewId}`);
       writes.push(adminNotification.write);
     }
 
@@ -430,6 +479,16 @@ export async function addCustomerReply(env, user, input) {
         sourceType: 'reply', sourceId: replyId, createdAt: now,
       }, `review_reply:${reviewId}:${replyId}`);
       writes.push(adminNotification.write);
+    } else {
+      const adminNotification = await buildOwnAdminActivityNotification(context, uid, {
+        kind: 'store_review_reply',
+        title: 'Respondiste una reseña desde Tintin',
+        body: text, snippet: text, iconKey: 'comment',
+        targetUrl: `/product?id=${productId}#reply-${replyId}`,
+        targetType: 'reply', targetId: replyId, productId, productName: record.productName,
+        productImageUrl: record.productImageUrl, reviewId, replyId, sourceType: 'reply', sourceId: replyId, createdAt: now,
+      }, `store_review_reply:${reviewId}:${replyId}`);
+      writes.push(adminNotification.write);
     }
 
     if (record.ownerUid !== uid) {
@@ -447,6 +506,14 @@ export async function addCustomerReply(env, user, input) {
         sourceType: 'reply', sourceId: replyId, createdAt: now,
       }, `review_reply:${reviewId}:${replyId}`);
       writes.push(ownerNotification.write);
+    } else {
+      const ownNotification = await buildOwnActivityNotification(uid, context, {
+        kind: 'review_reply_self', title: 'Respondiste tu reseña', body: text, snippet: text, iconKey: 'comment',
+        targetUrl: `/product?id=${productId}#reply-${replyId}`,
+        targetType: 'reply', targetId: replyId, productId, productName: record.productName,
+        productImageUrl: record.productImageUrl, reviewId, replyId, sourceType: 'reply', sourceId: replyId, createdAt: now,
+      }, `review_reply_self:${reviewId}:${replyId}`);
+      writes.push(ownNotification.write);
     }
 
     try {
@@ -533,6 +600,18 @@ export async function toggleReviewLike(env, user, input) {
         sourceType: 'review_like', sourceId: likeId, createdAt: now,
       }, `review_like:${reviewId}:${uid}`);
       writes.push(adminNotification.write);
+    } else {
+      const adminNotification = await buildOwnAdminActivityNotification(context, uid, {
+        kind: 'store_review_like', actorUid: uid,
+        title: 'Marcaste Me gusta en tu reseña desde Tintin',
+        body: record.comment, snippet: record.comment, iconKey: 'heart',
+        targetUrl: `/product?id=${productId}#review-${reviewId}`,
+        targetType: 'review', targetId: reviewId, targetOwnerUid: record.ownerUid,
+        targetOwnerName: record.realName, productId, productName: record.productName,
+        productImageUrl: record.productImageUrl, reviewId,
+        sourceType: 'review_like', sourceId: likeId, createdAt: now,
+      }, `store_review_like:${reviewId}:${uid}`);
+      writes.push(adminNotification.write);
     }
 
     if (record.ownerUid !== uid && record.ownerUid) {
@@ -548,6 +627,16 @@ export async function toggleReviewLike(env, user, input) {
         sourceType: 'review_like', sourceId: likeId, createdAt: now,
       }, `review_like:${reviewId}:${uid}`);
       writes.push(ownerNotification.write);
+    } else if (record.ownerUid === uid) {
+      const ownNotification = await buildOwnActivityNotification(uid, context, {
+        kind: 'review_like_self', title: 'Marcaste Me gusta en tu reseña',
+        body: record.comment, snippet: record.comment, iconKey: 'heart',
+        targetUrl: `/product?id=${productId}#review-${reviewId}`,
+        targetType: 'review', targetId: reviewId, productId, productName: record.productName,
+        productImageUrl: record.productImageUrl, reviewId,
+        sourceType: 'review_like', sourceId: likeId, createdAt: now,
+      }, `review_like_self:${reviewId}:${uid}`);
+      writes.push(ownNotification.write);
     }
 
     try {
@@ -633,6 +722,18 @@ export async function likeReply(env, user, input) {
         sourceType: 'reply_like', sourceId: likeId, createdAt: now,
       }, `reply_like:${replyId}:${uid}`);
       writes.push(adminNotification.write);
+    } else {
+      const adminNotification = await buildOwnAdminActivityNotification(context, uid, {
+        kind: 'store_reply_like', actorUid: uid,
+        title: 'Marcaste Me gusta en una respuesta desde Tintin',
+        body: currentReply.text, snippet: currentReply.text, iconKey: 'heart',
+        targetUrl: `/product?id=${productId}#reply-${replyId}`,
+        targetType: 'reply', targetId: replyId, targetOwnerUid: replyOwnerUid,
+        targetOwnerName: replyOwnerName, productId, productName: record.productName,
+        productImageUrl: record.productImageUrl, reviewId, replyId,
+        sourceType: 'reply_like', sourceId: likeId, createdAt: now,
+      }, `store_reply_like:${replyId}:${uid}`);
+      writes.push(adminNotification.write);
     }
 
     if (replyOwnerUid && replyOwnerUid !== uid && currentReply.authorType !== 'store') {
@@ -648,6 +749,16 @@ export async function likeReply(env, user, input) {
         sourceType: 'reply_like', sourceId: likeId, createdAt: now,
       }, `reply_like:${replyId}:${uid}`);
       writes.push(ownerNotification.write);
+    } else if (replyOwnerUid === uid) {
+      const ownNotification = await buildOwnActivityNotification(uid, context, {
+        kind: 'reply_like_self', title: 'Marcaste Me gusta en tu respuesta',
+        body: currentReply.text, snippet: currentReply.text, iconKey: 'heart',
+        targetUrl: `/product?id=${productId}#reply-${replyId}`,
+        targetType: 'reply', targetId: replyId, productId, productName: record.productName,
+        productImageUrl: record.productImageUrl, reviewId, replyId,
+        sourceType: 'reply_like', sourceId: likeId, createdAt: now,
+      }, `reply_like_self:${replyId}:${uid}`);
+      writes.push(ownNotification.write);
     }
 
     try {
@@ -709,7 +820,27 @@ export async function toggleFavorite(env, user, input) {
       sourceType: 'product_like', sourceId: likeId, createdAt: now,
     }, `product_like:${likeId}`);
     writes.push(adminNotification.write);
+  } else {
+    const adminNotification = await buildOwnAdminActivityNotification(context, uid, {
+      kind: 'store_product_like', actorUid: uid,
+      title: `Marcaste Me gusta en ${context.productName} desde Tintin`,
+      body: `Te gustó ${context.productName}.`, snippet: context.productName, iconKey: 'heart',
+      targetUrl: `/product?id=${context.productId}`,
+      targetType: 'product', targetId: context.productId,
+      productId: context.productId, productName: context.productName, productImageUrl: context.imageUrl,
+      sourceType: 'product_like', sourceId: likeId, createdAt: now,
+    }, `store_product_like:${likeId}`);
+    writes.push(adminNotification.write);
   }
+  const ownNotification = await buildOwnActivityNotification(uid, context, {
+    kind: 'product_like_self', title: 'Marcaste Me gusta',
+    body: `Te gustó ${context.productName}.`, snippet: context.productName, iconKey: 'heart',
+    targetUrl: `/product?id=${context.productId}`,
+    targetType: 'product', targetId: context.productId,
+    productId: context.productId, productName: context.productName, productImageUrl: context.imageUrl,
+    sourceType: 'product_like', sourceId: likeId, createdAt: now,
+  }, `product_like_self:${likeId}`);
+  writes.push(ownNotification.write);
   try {
     await firestoreAdminCommit(env, writes);
   } catch (error) {

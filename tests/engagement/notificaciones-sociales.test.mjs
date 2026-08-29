@@ -75,12 +75,27 @@ test('la participación entre clientas genera actividad social y protege identid
   assert.match(customerEngagement, /publicCustomerName/);
 });
 
+test('cada acción social conserva aviso propio y el Super Admin no queda fuera del push', () => {
+  for (const token of [
+    'buildOwnActivityNotification', 'buildOwnAdminActivityNotification',
+    "kind: 'review_created_self'", "kind: 'review_reply_self'",
+    "kind: 'review_like_self'", "kind: 'reply_like_self'",
+    "kind: 'product_like_self'", "kind: 'store_review_created'",
+    "kind: 'store_review_reply'", "kind: 'store_review_like'",
+  ]) assert.match(customerEngagement, new RegExp(token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  assert.match(engagementApi, /dispatchSocialPushEvent/);
+  assert.match(engagementApi, /const push = pushDetails/);
+  assert.doesNotMatch(engagementApi, /if \(!engagementIsSuperAdmin\(user\)\)/);
+});
+
 test('las acciones de Tintin notifican a la autora de la reseña', () => {
   assert.match(adminEngagement, /kind: 'store_review_like'/);
   assert.match(adminEngagement, /A Tintin le gustó tu reseña/);
   assert.match(adminEngagement, /kind: 'store_review_reply'/);
   assert.match(adminEngagement, /Tintin respondió a tu reseña/);
   assert.match(adminEngagement, /buildUserNotificationWrite/);
+  assert.match(adminEngagement, /store_review_like_self/);
+  assert.match(adminEngagement, /store_review_reply_self/);
 });
 
 test('la ficha de producto admite Me gusta, respuestas y reseñas públicas con identidad protegida', () => {
