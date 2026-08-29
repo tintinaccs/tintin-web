@@ -49,21 +49,7 @@ function safeImageUrl(value) {
 }
 
 function normalizeDedupeKey(value) {
-  let key = clean(value, 500);
-  if (!key) return '';
-
-  // Dar/quitar/dar Me gusta repetidamente no debe bombardear a la autora.
-  // El estado del like sigue cambiando en tiempo real, pero la notificación
-  // para el mismo actor/reseña se agrupa como máximo una vez por día UTC.
-  const reviewLike = key.match(/^(review_like:[A-Za-z0-9_-]{1,180}:[A-Za-z0-9_-]{1,180}):(\d{10,})$/);
-  if (reviewLike) {
-    const timestamp = Number(reviewLike[2]);
-    const day = Number.isFinite(timestamp)
-      ? new Date(timestamp).toISOString().slice(0, 10)
-      : new Date().toISOString().slice(0, 10);
-    key = `${reviewLike[1]}:${day}`;
-  }
-  return key;
+  return clean(value, 500);
 }
 
 async function hashId(seed) {
@@ -74,21 +60,27 @@ async function hashId(seed) {
 function normalizeEvent(event = {}) {
   const now = event.createdAt instanceof Date ? event.createdAt : new Date();
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     kind: clean(event.kind || 'activity', 60),
     actorType: ['customer', 'store', 'system'].includes(event.actorType) ? event.actorType : 'system',
     actorUid: clean(event.actorUid, 180),
     actorName: clean(event.actorName || 'Tintin', 160),
+    actorUsername: clean(event.actorUsername, 80),
     actorPhotoUrl: safeImageUrl(event.actorPhotoUrl),
     title: clean(event.title, MAX_TITLE),
     body: clean(event.body, MAX_BODY),
     snippet: clean(event.snippet, MAX_SNIPPET),
     iconKey: clean(event.iconKey || 'bell', 40),
     targetUrl: safeTargetUrl(event.targetUrl),
+    targetType: clean(event.targetType, 60),
+    targetId: clean(event.targetId, 220),
+    targetOwnerUid: clean(event.targetOwnerUid, 180),
+    targetOwnerName: clean(event.targetOwnerName, 160),
     productId: clean(event.productId, 180),
     productName: clean(event.productName, 180),
     productImageUrl: safeImageUrl(event.productImageUrl),
     reviewId: clean(event.reviewId, 180),
+    replyId: clean(event.replyId, 180),
     orderId: clean(event.orderId, 220),
     orderNumber: clean(event.orderNumber, 80),
     status: clean(event.status, 80),
@@ -171,7 +163,7 @@ export async function markNotificationRead(env, { uid, notificationId, admin = f
 function firestoreProjectId(env) {
   let serviceAccount;
   try {
-    serviceAccount = JSON.parse(env.FIREBASE_SERVICE_ACCOUNT_KEY || '{}');
+    serviceAccount = JSON.parse(env.FIREBASE_SERVICE_ACCOUNT_KEY || env.FIREBASE_SERVICE_ACCOUNT_JSON || '{}');
   } catch {
     throw new Error('FIREBASE_SERVICE_ACCOUNT_KEY no es un JSON válido');
   }

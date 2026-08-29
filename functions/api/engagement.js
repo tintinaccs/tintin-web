@@ -2,8 +2,20 @@ import {
   jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import {
-  addCustomerReply, createReview, editOwnReview, getOwnFavorite, getOwnReview, getProductLikeStats, getReviewInteractions,
-  toggleFavorite, toggleReviewLike, engagementOwnReviewView,
+  addCustomerReply,
+  createReview,
+  editOwnReview,
+  engagementIsSuperAdmin,
+  engagementOwnReviewView,
+  engagementReviewPublic,
+  getOwnFavorite,
+  getOwnReview,
+  getProductLikeStats,
+  getProductReviewStats,
+  getReviewInteractions,
+  likeReply,
+  toggleFavorite,
+  toggleReviewLike,
 } from '../../cloudflare/participacion-clientes.js';
 import {
   encodeFirestoreFields, firestoreAdminCommit, firestoreAdminGet,
@@ -20,6 +32,7 @@ async function hashKey(value) {
 }
 
 async function reserveReplyWindow(env, user, input) {
+  if (engagementIsSuperAdmin(user)) return;
   const reviewId = String(input.reviewId || '').trim();
   if (!reviewId) return;
   const guardId = await hashKey(`reply:${user.uid}:${reviewId}`);
@@ -30,19 +43,83 @@ async function reserveReplyWindow(env, user, input) {
     : 0;
   const now = Date.now();
   if (Number.isFinite(lastAt) && lastAt > 0 && now - lastAt < REPLY_COOLDOWN_MS) {
-    throw new Error('Esperá unos segundos antes de enviar otra respuesta.');
+    const error = new Error('Esperá unos segundos antes de enviar otra respuesta.');
+    error.status = 429;
+    error.code = 'social/reply-rate-limit';
+    error.retryAfterMs = REPLY_COOLDOWN_MS - (now - lastAt);
+    throw error;
   }
 
-  await firestoreAdminCommit(env, [{
-    path,
-    fields: encodeFirestoreFields({
-      kind: 'review_reply',
-      uid: user.uid,
-      reviewId,
-      lastAt: new Date(now),
-    }),
-    currentDocument: existing ? { updateTime: existing.updateTime } : { exists: false },
-  }]);
+  try {
+    await firestoreAdminCommit(env, [{
+      path,
+      fields: encodeFirestoreFields({
+        kind: 'review_reply',
+        uid: user.uid,
+        reviewId,
+        lastAt: new Date(now),
+      }),
+      currentDocument: existing ? { updateTime: existing.updateTime } : { exists: false },
+    }]);
+  } catch (error) {
+    if (error?.code === 'version_conflict') {
+      const limited = new Error('Esperá unos segundos antes de enviar otra respuesta.');
+      limited.status = 429;
+      limited.code = 'social/reply-rate-limit';
+      limited.retryAfterMs = REPLY_COOLDOWN_MS;
+      throw limited;
+    }
+    throw error;
+  }
+}
+
+function pushDetails(action, result, privateReview) {
+  if (action === 'createReview') {
+    return {
+      type: 'social.review.created',
+      title: `${privateReview.realName} publicó una reseña`,
+      body: `${privateReview.rating} estrellas · ${privateReview.productName}: ${privateReview.comment}`,
+      url: `/product?id=${encodeURIComponent(privateReview.productId)}#review-${encodeURIComponent(privateReview.reviewId)}`,
+    };
+  }
+  if (action === 'replyReview') {
+    const reply = result?.reply || {};
+    const review = result?.review || {};
+    return {
+      type: 'social.review.reply',
+      title: `${reply.actorRealName || 'Una clienta'} respondió en ${review.productName || 'un producto'}`,
+      body: String(reply.text || 'Nueva respuesta.'),
+      url: `/product?id=${encodeURIComponent(review.productId || '')}#reply-${encodeURIComponent(reply.replyId || '')}`,
+    };
+  }
+  if (action === 'toggleFavorite') {
+    const record = result?.record || {};
+    return {
+      type: 'social.like.product',
+      title: `${record.realName || 'Una clienta'} dio Me gusta`,
+      body: record.productName ? `Le gustó ${record.productName}.` : 'Nuevo Me gusta en un producto.',
+      url: `/product?id=${encodeURIComponent(record.productId || '')}`,
+    };
+  }
+  if (action === 'toggleReviewLike') {
+    const record = result?.record || {};
+    return {
+      type: 'social.like.review',
+      title: `${record.realName || 'Una clienta'} dio Me gusta a una reseña`,
+      body: record.targetOwnerName ? `Le gustó el comentario de ${record.targetOwnerName}.` : 'Nuevo Me gusta en una reseña.',
+      url: `/product?id=${encodeURIComponent(record.productId || '')}#review-${encodeURIComponent(record.reviewId || '')}`,
+    };
+  }
+  if (action === 'likeReply') {
+    const record = result?.record || {};
+    return {
+      type: 'social.like.reply',
+      title: `${record.realName || 'Una clienta'} dio Me gusta a una respuesta`,
+      body: record.targetOwnerName ? `Le gustó la respuesta de ${record.targetOwnerName}.` : 'Nuevo Me gusta en una respuesta.',
+      url: `/product?id=${encodeURIComponent(record.productId || '')}#reply-${encodeURIComponent(record.replyId || '')}`,
+    };
+  }
+  return null;
 }
 
 export async function onRequest(context) {
@@ -58,7 +135,11 @@ export async function onRequest(context) {
       if (action === 'productLikes') {
         return jsonResponse({ ok: true, ...(await getProductLikeStats(env, productId)) }, 200, origin, request.url);
       }
+      if (action === 'reviewStats') {
+        return jsonResponse({ ok: true, stats: await getProductReviewStats(env, productId) }, 200, origin, request.url);
+      }
     }
+
     const user = await requireFirebaseUser(request);
     if (request.method === 'GET') {
       const url = new URL(request.url);
@@ -73,58 +154,84 @@ export async function onRequest(context) {
       if (action === 'reviewInteractions') {
         return jsonResponse({ ok: true, interactions: await getReviewInteractions(env, user, productId) }, 200, origin, request.url);
       }
-      throw new Error('Acción no permitida');
+      throw Object.assign(new Error('Acción no permitida'), { status: 400 });
     }
+
     if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido' }, 405, origin, request.url);
     const raw = await request.text();
     if (!raw || new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) throw new Error('Solicitud vacía o demasiado grande');
     const input = JSON.parse(raw);
-    let result;
+    let result = {};
     let privateReview = null;
-    if (input.action === 'createReview') privateReview = await createReview(env, user, input);
-    else if (input.action === 'editReview') privateReview = await editOwnReview(env, user, input);
-    else if (input.action === 'replyReview') {
-      await reserveReplyWindow(env, user, input);
-      privateReview = await addCustomerReply(env, user, input);
-    }
-    else if (input.action === 'toggleFavorite') result = await toggleFavorite(env, user, input);
-    else if (input.action === 'toggleReviewLike') result = await toggleReviewLike(env, user, input);
-    else throw new Error('Acción no permitida');
-    if (privateReview) result = { review: engagementOwnReviewView(privateReview) };
 
-    if (input.action !== 'toggleReviewLike') {
-      const syncEvent = input.action === 'toggleFavorite'
-        ? { type: 'like', operation: result.selected ? 'upsert' : 'delete', record: result.record }
-        : { type: 'review', operation: 'upsert', record: privateReview };
-      context.waitUntil?.(syncEngagementToSheets(env, user.idToken, syncEvent));
-    }
-    const shouldPush = input.action === 'createReview' || input.action === 'replyReview'
-      || (input.action === 'toggleFavorite' && result.selected)
-      || (input.action === 'toggleReviewLike' && result.selected);
-    if (shouldPush) {
-      const type = input.action === 'createReview' ? 'social.review.created'
-        : input.action === 'replyReview' ? 'social.review.reply'
-          : input.action === 'toggleFavorite' ? 'social.like.product' : 'social.like.review';
-      const messages = {
-        'social.review.created': ['Nueva reseña en Tintin', 'Una clienta publicó una nueva reseña.'],
-        'social.review.reply': ['Nuevo comentario en una reseña', 'Una clienta respondió a una reseña.'],
-        'social.like.product': ['Nuevo Me gusta', 'A alguien le gustó un producto.'],
-        'social.like.review': ['Nuevo Me gusta en reseña', 'A alguien le gustó una reseña.'],
+    if (input.action === 'createReview') {
+      privateReview = await createReview(env, user, input);
+      result = { review: engagementOwnReviewView(privateReview), rateLimit: privateReview.rateLimit || null };
+    } else if (input.action === 'editReview') {
+      privateReview = await editOwnReview(env, user, input);
+      result = { review: engagementOwnReviewView(privateReview) };
+    } else if (input.action === 'replyReview') {
+      await reserveReplyWindow(env, user, input);
+      const replyResult = await addCustomerReply(env, user, input);
+      result = {
+        review: engagementReviewPublic(replyResult.review),
+        reply: {
+          replyId: replyResult.reply.replyId,
+          authorType: replyResult.reply.authorType,
+          publicName: replyResult.reply.actorPublicName,
+          publicPhotoUrl: replyResult.reply.actorPhotoUrl,
+          text: replyResult.reply.text,
+          likeCount: replyResult.reply.likeCount,
+          createdAt: replyResult.reply.createdAt,
+        },
       };
-      const [title, body] = messages[type];
-      context.waitUntil?.(dispatchSocialPushEvent(env, {
-        type, eventId: `${type}:${user.uid}:${Date.now()}`, title, body,
-        url: privateReview ? `/product?id=${encodeURIComponent(privateReview.productId || '')}#reviews` : '/admin.html?section=notificaciones-push'
-      }));
+    } else if (input.action === 'toggleFavorite') {
+      result = await toggleFavorite(env, user, input);
+    } else if (input.action === 'toggleReviewLike') {
+      result = await toggleReviewLike(env, user, input);
+    } else if (input.action === 'likeReply') {
+      result = await likeReply(env, user, input);
+    } else {
+      throw Object.assign(new Error('Acción no permitida'), { status: 400 });
     }
+
+    let syncEvent = null;
+    if (input.action === 'createReview') syncEvent = { type: 'review', operation: 'upsert', record: privateReview };
+    if (input.action === 'replyReview') syncEvent = { type: 'review', operation: 'upsert', record: result.review };
+    if (input.action === 'toggleFavorite' && !result.alreadyLiked) syncEvent = { type: 'like', operation: 'upsert', record: result.record };
+    if ((input.action === 'toggleReviewLike' || input.action === 'likeReply') && !result.alreadyLiked) {
+      syncEvent = { type: 'like', operation: 'upsert', record: result.record };
+    }
+    if (syncEvent) context.waitUntil?.(syncEngagementToSheets(env, user.idToken, syncEvent));
+
+    if (!engagementIsSuperAdmin(user)) {
+      const push = pushDetails(input.action, result, privateReview);
+      const isNewEvent = input.action === 'createReview' || input.action === 'replyReview' || result.alreadyLiked !== true;
+      if (push && isNewEvent) {
+        context.waitUntil?.(dispatchSocialPushEvent(env, {
+          type: push.type,
+          eventId: `${push.type}:${user.uid}:${result?.record?.likeId || result?.reply?.replyId || privateReview?.reviewId || Date.now()}`,
+          title: push.title,
+          body: push.body,
+          url: push.url,
+        }));
+      }
+    }
+
     return jsonResponse({ ok: true, ...result }, 200, origin, request.url);
   } catch (error) {
-    const conflict = error?.code === 'version_conflict';
     const status = Number(error?.status);
-    const isClientError = Number.isInteger(status) && status >= 400 && status < 500;
+    const resolvedStatus = error?.code === 'version_conflict'
+      ? 409
+      : (Number.isInteger(status) && status >= 400 && status <= 599 ? status : 400);
     return jsonResponse(
-      { ok: false, error: String(error?.message || 'No se pudo completar la acción').slice(0, 300) },
-      conflict ? 409 : (isClientError ? status : 400),
+      {
+        ok: false,
+        error: String(error?.message || 'No se pudo completar la acción').slice(0, 300),
+        code: String(error?.code || '').slice(0, 120),
+        retryAfterMs: Math.max(0, Number(error?.retryAfterMs) || 0),
+      },
+      resolvedStatus,
       origin,
       request.url
     );
