@@ -293,6 +293,9 @@ function errMsg(code) {
     "auth/network-request-failed":    "Sin conexión — revisá tu internet e intentá de nuevo.",
     "auth/too-many-requests":         "Demasiados intentos. Esperá un momento e intentá de nuevo.",
     "auth/user-disabled":             "Esta cuenta fue deshabilitada. Escribinos por WhatsApp.",
+    "auth/unauthorized-domain":       "Este dominio todavía no está autorizado para entrar con Google. Usá el acceso por correo o avisá al equipo de Tintin.",
+    "auth/operation-not-allowed":     "El acceso con Google está temporalmente deshabilitado. Usá el acceso por correo e intentá más tarde.",
+    "auth/internal-error":            "Google no pudo completar el ingreso. Recargá la página e intentá de nuevo.",
   };
   return msgs[code] || ("Ocurrió un error. Intentá de nuevo. (" + code + ")");
 }
