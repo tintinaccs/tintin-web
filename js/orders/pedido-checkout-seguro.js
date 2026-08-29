@@ -29,7 +29,7 @@ import {
   isValidRazonSocial
 } from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1';
 import { createOrderViaServer } from '../create-order-client.js?v=tintin-20260822-checkout-hardening-2';
-import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-checkout-hardening-2';
+import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260829-coupons-1';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
   window.TintinSecureCheckoutOrderBooted = true;
@@ -66,6 +66,22 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     error.code = code;
     error.details = { code, ...details };
     return error;
+  }
+
+  // El cupón se aplica visualmente en checkout.html (paso 1, junto al
+  // subtotal); acá sólo lo leemos vía window.__ckAppliedCoupon y recalculamos
+  // el descuento contra el subtotal ACTUAL del carrito — así expectedDiscount
+  // siempre coincide con lo que el servidor va a recalcular, aunque la
+  // cantidad de algún producto haya cambiado después de aplicar el cupón. El
+  // servidor (CrearPedido.gs) es quien valida de verdad vigencia/límite/monto
+  // mínimo dentro de la misma transacción que crea el pedido.
+  function couponDiscountFor(coupon, subtotal) {
+    if (!coupon) return 0;
+    if (coupon.type === 'percent') {
+      const pct = Math.min(100, Math.max(0, Number(coupon.value) || 0));
+      return Math.min(subtotal, Math.round((subtotal * pct) / 100));
+    }
+    return Math.min(subtotal, Math.max(0, Math.round(Number(coupon.value) || 0)));
   }
 
   function parseMoney(value) {
@@ -581,6 +597,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }
 
     const localSubtotal = cartTotal(items);
+    const appliedCoupon = typeof window.__ckAppliedCoupon === 'function' ? window.__ckAppliedCoupon() : null;
     return composeCheckoutDraft({
       requestId: requestId(),
       items,
@@ -595,6 +612,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       shipping,
       paymentMethod,
       subtotal: localSubtotal,
+      couponCode: appliedCoupon?.code || '',
+      discount: couponDiscountFor(appliedCoupon, localSubtotal),
       ci: shipping.method === 'encomienda' ? normalizeCi(ciRaw) : '',
       wantsInvoice,
       razonSocial: wantsInvoice ? razonSocial : '',
@@ -632,6 +651,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
           <span style="font-weight:700">${formatPrice(item.price * item.qty)}</span>
         </div>`).join('')}</div>
       <div class="ck-summary-total" style="margin-top:16px"><span>Subtotal</span><span class="ck-summary-total-val">${formatPrice(quote.subtotal)}</span></div>
+      ${quote.discount > 0 ? `<div class="ck-summary-total" style="color:#2e7d32"><span>Descuento</span><span class="ck-summary-total-val">- ${formatPrice(quote.discount)}</span></div>` : ''}
       <div class="ck-summary-total"><span>Costo de envío</span><span class="ck-summary-total-val">${quote.shippingPending ? 'A confirmar' : formatPrice(quote.shippingCost || 0)}</span></div>
       <div class="ck-summary-total" style="font-size:18px"><span>TOTAL${quote.shippingPending ? ' (+ envío)' : ''}</span><span class="ck-summary-total-val">${formatPrice(quote.total)}</span></div>`;
   }
@@ -806,6 +826,13 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       invalid_cart: error?.message,
       invalid_price: 'No pudimos comprobar el precio de uno de los productos.',
       quote_changed: 'Cambió un precio o el costo de envío. Confirmá de nuevo para continuar con los valores actuales.',
+      coupon_not_found: 'Ese código no existe.',
+      coupon_inactive: 'Ese cupón ya no está activo.',
+      coupon_expired: 'Ese cupón venció.',
+      coupon_limit_reached: 'Ese cupón alcanzó su límite de usos.',
+      coupon_min_purchase: 'Necesitás una compra mínima mayor para usar este cupón.',
+      coupon_changed: 'El descuento del cupón cambió. Revisá el resumen actualizado y confirmá nuevamente.',
+      coupon_invalid: 'Ingresá un código de cupón válido.',
       order_state_invalid: 'Este pedido ya no puede reanudarse. Volvé a intentar desde el carrito.',
       checkout_guard_missing: 'No pudimos confirmar tu turno de compra. Volvé a intentar.',
       checkout_guard_expired: 'Pasó demasiado tiempo desde que confirmaste. Volvé a intentar.',
@@ -857,9 +884,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     } catch (error) {
       console.error('[spark-checkout]', error);
       const code = error?.details?.code || error?.code;
-      if (code === 'quote_changed' && error.details?.quote) {
+      if ((code === 'quote_changed' || code === 'coupon_changed') && error.details?.quote) {
         renderQuote(error.details.quote);
-        showError('Cambió un precio o el costo de envío. Revisá el resumen actualizado y confirmá nuevamente.');
+        showError(message(error));
         button.disabled = false;
         button.textContent = '✓ Confirmar pedido actualizado';
       } else if (code === 'insufficient_stock') {

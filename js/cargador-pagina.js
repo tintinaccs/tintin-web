@@ -808,6 +808,7 @@
     if (current.endsWith('/admin.html') || current.endsWith('/admin')) {
       importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix');
       importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control');
+      importSibling('admin/coupons/gestion-cupones-admin.js', 'Admin Coupons');
       importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix');
       importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync');
     }

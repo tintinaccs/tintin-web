@@ -1066,6 +1066,21 @@ service cloud.firestore {
     }
 
     /* ============================================================
+       CUPONES / DESCUENTOS (Super Admin → Cupones)
+       El documento vive en coupons/{CODE} (id = código en mayúsculas) para
+       que Apps Script (CrearPedido.gs) lo resuelva con un GET directo, sin
+       query. No hay lectura pública: list() expondría todos los códigos y
+       sus montos a cualquiera. La vista previa del descuento en el checkout
+       se sirve desde functions/api/coupon-validate.js (credencial de
+       servicio, igual que public-catalog.js), y el descuento sólo se aplica
+       de verdad — y se descuenta el usedCount — dentro de la misma
+       transacción atómica que crea el pedido.
+       ============================================================ */
+    match /coupons/{code} {
+      allow read, write: if isSuperAdmin();
+    }
+
+    /* ============================================================
        BIBLIOTECA MULTIMEDIA (Super Admin → Imágenes)
        Los archivos en sí viven en Storage con su propia download URL
        pública; estos documentos son solo la metadata de administración
