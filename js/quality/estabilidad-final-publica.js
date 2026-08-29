@@ -217,7 +217,7 @@ async function enhanceProfile() {
         const photoURL = String(uploaded.secure_url);
         await authApi.updateProfile(user, { photoURL });
         await firestoreApi.setDoc(firestoreApi.doc(db, 'users', user.uid), {
-          photoUrl: photoURL,
+          photoURL,
           updatedAt: firestoreApi.serverTimestamp(),
         }, { merge: true });
         const avatar = document.getElementById('perfil-avatar');
@@ -316,11 +316,6 @@ async function enhanceProfile() {
     if (countNode) countNode.textContent = String(count);
     if (spentNode) spentNode.textContent = spent;
     if (locationNode) locationNode.textContent = location.slice(0, 90);
-    const badge = document.querySelector('[data-profile-orders-badge]');
-    if (badge) {
-      badge.hidden = count < 1;
-      badge.textContent = count > 99 ? '99+' : String(count);
-    }
   }
   const summaryObserver = new MutationObserver(updateSummary);
   [document.getElementById('perfil-purchase-count'), document.getElementById('perfil-total-spent'), document.getElementById('perfil-location-content'), document.getElementById('perfil-orders-list')]
@@ -328,6 +323,7 @@ async function enhanceProfile() {
   updateSummary();
   window.addEventListener('pagehide', () => summaryObserver.disconnect(), { once: true });
 
+  await import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20260829-final-stability-1');
   const initial = location.hash.replace('#', '');
   if (panels.has(initial)) activate(initial);
 }
