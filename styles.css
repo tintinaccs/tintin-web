@@ -1703,7 +1703,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
 .tt-products-header {
   text-align: center;
-  margin-bottom: 48px;
+  margin-bottom: clamp(48px, 5vw, 72px);
 }
 
 .tt-products-grid {
@@ -2776,8 +2776,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-info-block {
   background: #fff;
   border-radius: 16px;
-  padding: 28px 32px;
-  margin-bottom: 24px;
+  padding: clamp(28px, 3vw, 40px) clamp(32px, 3vw, 44px);
+  margin-bottom: clamp(24px, 3vw, 36px);
   border: 1px solid #f0d8e0;
 }
 .tt-info-title {
@@ -2835,7 +2835,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  gap: clamp(80px, 6vw, 104px);
   align-items: center;
 }
 
@@ -2997,7 +2997,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 64px;
+  gap: clamp(64px, 5vw, 88px);
   align-items: start;
 }
 
