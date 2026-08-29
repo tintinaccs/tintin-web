@@ -9,6 +9,7 @@ const has = (source, pattern) => typeof pattern === 'string' ? source.includes(p
 
 const publicEntry = read('js/components/navigation/entrada-navegacion-publica.js');
 const stability = read('js/quality/estabilidad-final-publica.js');
+const orderProfileState = read('js/pages/profile/estado-pedidos-perfil.js');
 const product = read('product.html');
 const cart = read('js/components/cart/sincronizacion-carrito.js');
 const rules = read('firestore.rules');
@@ -72,8 +73,11 @@ ok(has(stability, "{ id: 'datos', label: 'Mis datos'"), 'Perfil no tiene pestañ
 ok(has(stability, "{ id: 'pedidos', label: 'Pedidos'"), 'Perfil no tiene pestaña Pedidos.');
 ok(has(stability, "{ id: 'favoritos', label: 'Favoritos'"), 'Perfil no tiene pestaña Favoritos.');
 ok(has(stability, "{ id: 'cuenta', label: 'Cuenta y seguridad'"), 'Perfil no tiene pestaña Cuenta y seguridad.');
-ok(has(stability, 'data-profile-orders-badge'), 'Perfil no muestra badge interno de pedidos.');
+ok(has(stability, "estado-pedidos-perfil.js?v=tintin-20260829-final-stability-1"), 'Perfil no carga el estado canónico de pedidos no vistos.');
+ok(has(orderProfileState, 'tt_profile_orders_seen_v1_') && has(orderProfileState, 'numericCount() - seenCount()'), 'El badge de Pedidos no representa pedidos nuevos/no vistos.');
+ok(has(orderProfileState, '[data-profile-tab="pedidos"]') && has(orderProfileState, 'localStorage.setItem'), 'Abrir Pedidos no marca el contador como visto.');
 ok(has(stability, '/api/profile-avatar-upload'), 'Perfil no integra subida de foto.');
+ok(has(stability, /photoURL,\s*updatedAt:/), 'Perfil no persiste la foto con el campo canónico photoURL.');
 ok(has(avatarApi, 'requireFirebaseUser'), 'La subida de avatar no exige sesión Firebase.');
 ok(has(avatarApi, '5 * 1024 * 1024'), 'La subida de avatar no limita tamaño.');
 ok(has(avatarApi, "['image/jpeg', 'image/png', 'image/webp']"), 'La subida de avatar no limita formatos.');
@@ -91,4 +95,4 @@ if (failures.length) {
 }
 
 console.log('AUDITORÍA ESTABILIDAD FINAL V1: OK');
-console.log('Cobertura: Producto abierto · header móvil · notificaciones/push · Sheets · carrito multi-línea · Super Admin · perfil cliente · avatar seguro · Social v4.');
+console.log('Cobertura: Producto abierto · header móvil · notificaciones/push · Sheets · carrito multi-línea · Super Admin · perfil cliente · pedidos no vistos · avatar seguro · Social v4.');
