@@ -5,8 +5,8 @@
 // de Cloudinary se leen desde context.env y nunca se envían al navegador.
 
 import { SUPER_ADMIN_EMAIL } from './contrato-cuentas-generado.js';
+import { verifyFirebaseIdToken } from './firebase-id-token.js';
 
-const FIREBASE_WEB_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
 export const SUPERADMIN_EMAIL = SUPER_ADMIN_EMAIL;
 
 // Las funciones privadas solo aceptan el mismo origen que las sirve. Un futuro
@@ -64,63 +64,31 @@ function getBearerToken(request) {
   return match[1].trim();
 }
 
+/**
+ * Verifica el Firebase ID token directamente en el backend contra las claves
+ * públicas de Firebase Secure Token. No usa accounts:lookup: esa API pertenece
+ * al flujo cliente de Firebase Auth y, con App Check Enforcement activo, puede
+ * rechazar llamadas servidor-a-servidor aunque el ID token sea válido.
+ */
 export async function requireFirebaseUser(request) {
   const token = getBearerToken(request);
-  const endpoint = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(FIREBASE_WEB_API_KEY)}`;
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ idToken: token })
-  });
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    console.error(JSON.stringify({ message: 'identitytoolkit lookup falló', reason: data?.error?.message || 'sin detalle', status: response.status }));
-    const error = new Error('La sesión necesita renovarse. Reintentá.');
-    error.status = 401;
-    error.code = 'auth/invalid-token';
-    throw error;
-  }
-  const user = Array.isArray(data.users) ? data.users[0] : null;
-  const email = String(user?.email || '').trim().toLowerCase();
-  if (!user?.localId || !email || user.emailVerified !== true) {
-    const error = new Error('La cuenta debe tener un correo verificado');
-    error.status = 403;
-    error.code = 'auth/email-not-verified';
-    throw error;
-  }
-  return { uid: String(user.localId), email, idToken: token };
+  return verifyFirebaseIdToken(token);
 }
 
 /**
- * Firebase valida la firma, proyecto, vencimiento y existencia de la cuenta.
- * La función comprueba después el correo verificado del único Super Admin.
+ * Usa exactamente la misma validación criptográfica que las rutas de clientas
+ * y, después, restringe la operación al único correo de Super Admin.
  */
 export async function requireSuperAdmin(request) {
   const token = getBearerToken(request);
-  const endpoint = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(FIREBASE_WEB_API_KEY)}`;
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ idToken: token })
-  });
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    const reason = data?.error?.message || 'INVALID_ID_TOKEN';
-    console.error(JSON.stringify({ message: 'identitytoolkit lookup falló (Super Admin)', reason, status: response.status }));
-    if (/INVALID_ID_TOKEN|TOKEN_EXPIRED|USER_NOT_FOUND/i.test(reason)) {
-      throw new Error('La sesión venció; volvé a iniciar sesión');
-    }
-    throw new Error('No se pudo validar la sesión de Super Admin');
+  const user = await verifyFirebaseIdToken(token);
+  if (user.email !== SUPERADMIN_EMAIL) {
+    const error = new Error('Solo el Super Admin puede realizar esta acción');
+    error.status = 403;
+    error.code = 'auth/superadmin-required';
+    throw error;
   }
-
-  const user = Array.isArray(data.users) ? data.users[0] : null;
-  const email = String(user?.email || '').trim().toLowerCase();
-  if (!user?.localId || email !== SUPERADMIN_EMAIL || user.emailVerified !== true) {
-    throw new Error('Solo el Super Admin puede administrar imágenes');
-  }
-
-  return { uid: String(user.localId), email, idToken: token };
+  return user;
 }
 
 export function getCloudinaryConfig(env = {}) {
