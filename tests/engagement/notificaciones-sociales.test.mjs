@@ -33,7 +33,10 @@ test('el núcleo social usa notificaciones dirigidas, idempotentes y saneadas', 
   assert.match(core, /buildAdminNotificationWrite/);
   assert.match(core, /dedupeKey/);
   assert.match(core, /normalizeDedupeKey/);
-  assert.match(core, /review_like/);
+  assert.match(core, /targetType/);
+  assert.match(core, /targetOwnerUid/);
+  assert.match(core, /reviewId/);
+  assert.match(core, /replyId/);
   assert.match(core, /safeImageUrl/);
   assert.match(core, /markNotificationRead/);
   assert.match(core, /markAllNotificationsRead/);
@@ -63,6 +66,8 @@ test('las respuestas entre clientas tienen ventana anti-ráfaga server-side', ()
 
 test('la participación entre clientas genera actividad social y protege identidad pública', () => {
   assert.match(customerEngagement, /toggleReviewLike/);
+  assert.match(customerEngagement, /kind: 'review_like'/);
+  assert.match(customerEngagement, /kind: 'reply_like'/);
   assert.match(customerEngagement, /actorPublicName/);
   assert.match(customerEngagement, /buildUserNotificationWrite/);
   assert.match(customerEngagement, /buildAdminNotificationWrite/);
@@ -71,29 +76,39 @@ test('la participación entre clientas genera actividad social y protege identid
 });
 
 test('las acciones de Tintin notifican a la autora de la reseña', () => {
-  assert.match(adminEngagement, /A TINTIN le gustó tu reseña/);
-  assert.match(adminEngagement, /Tintin Accesorios respondió a tu reseña/);
+  assert.match(adminEngagement, /kind: 'store_review_like'/);
+  assert.match(adminEngagement, /A Tintin le gustó tu reseña/);
+  assert.match(adminEngagement, /kind: 'store_review_reply'/);
+  assert.match(adminEngagement, /Tintin respondió a tu reseña/);
   assert.match(adminEngagement, /buildUserNotificationWrite/);
 });
 
-test('la ficha de producto admite Me gusta y reseñas públicas con identidad protegida', () => {
+test('la ficha de producto admite Me gusta, respuestas y reseñas públicas con identidad protegida', () => {
   assert.match(productReviews, /toggleReviewLike/);
+  assert.match(productReviews, /likeReply/);
   assert.match(productReviews, /data-review-like/);
+  assert.match(productReviews, /data-reply-like/);
+  assert.match(productReviews, /data-reply-toggle/);
   assert.match(productReviews, /id="review-/);
-  assert.match(productReviews, /#review-/);
+  assert.match(productReviews, /id="reply-/);
+  assert.match(productReviews, /location\.hash/);
   assert.match(productReviews, /relativeDate/);
-  assert.match(productReviews, /function publicAlias/);
-  assert.doesNotMatch(productReviews, /data-review-reply/);
+  assert.match(productReviews, /displayPublicName/);
+  assert.match(productReviews, /raw\.includes\('\*\*\*'\)/);
 });
 
-test('clientas tienen bandeja de 100, saneado y reintentos de acciones importantes', () => {
+test('clientas tienen bandeja de 100, saneado, autolectura al abrir y reintentos', () => {
   assert.match(clientUi, /data-notification-badge/);
   assert.match(clientUi, /users'.*notifications|users.*,.*notifications/s);
   assert.match(clientUi, /notificationSeen/);
+  assert.match(clientUi, /notificationsSeenAll/);
   assert.match(clientUi, /limit\(100\)/);
   assert.match(clientUi, /safeImageUrl/);
+  assert.match(clientUi, /markVisibleNotificationsRead/);
+  assert.match(clientUi, /\[data-nav-action="notifications"\],#tabbar-notifications/);
   assert.match(clientUi, /apiWithRetry\('notificationsSeenAll'/);
   assert.match(clientUi, /apiWithRetry\('profileCreated'/);
+  assert.doesNotMatch(clientUi, /id="tt-notifications-mark-all"/);
 });
 
 test('la campana pública evita Firestore para visitas livianas y se hidrata con sesión o demanda', () => {
