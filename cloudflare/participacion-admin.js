@@ -23,13 +23,12 @@ const MAX_ADMIN_TAGS = 8;
 
 function mapping(record) {
   return {
-    schemaVersion: 2,
+    schemaVersion: 4,
     reviewId: record.reviewId,
     productId: record.productId,
     productName: record.productName,
     rating: record.rating,
     comment: record.comment,
-    editCount: record.editCount,
     visible: Boolean(record.visible),
     deleted: Boolean(record.deleted),
     likeCount: Math.max(0, Number(record.likeCount) || 0),
@@ -55,7 +54,7 @@ async function saveReview(env, document, record, extraWrites = []) {
       currentDocument: { updateTime: document.updateTime },
     },
     {
-      path: `users/${safeId(record.ownerUid, 'Cuenta')}/reviews/${safeId(record.productId, 'Producto')}`,
+      path: `users/${safeId(record.ownerUid, 'Cuenta')}/reviews/${safeId(record.reviewId, 'Reseña')}`,
       fields: encodeFirestoreFields(mapping(record)),
     },
   ];
@@ -91,7 +90,7 @@ export async function adminReviewAction(env, actor, input) {
   const extraWrites = [];
   let updated = {
     ...record,
-    schemaVersion: 2,
+    schemaVersion: 4,
     likeCount: Math.max(0, Number(record.likeCount) || 0),
     updatedAt: now,
     lastAdminEmail: actor.email,
@@ -120,9 +119,16 @@ export async function adminReviewAction(env, actor, input) {
     if (!text) throw new Error('La respuesta está vacía');
     const messageId = crypto.randomUUID();
     updated.conversation = [...(record.conversation || []), {
-      id: messageId, authorType: 'store', actorUid: actor.uid,
-      actorEmail: actor.email, text, createdAt: now,
-    }].slice(-50);
+      id: messageId,
+      replyId: messageId,
+      authorType: 'store',
+      actorUid: actor.uid,
+      actorEmail: actor.email,
+      actorPublicName: 'Tintin Accesorios',
+      text,
+      likeCount: 0,
+      createdAt: now,
+    }].slice(-80);
     updated.unread = false;
     history.push({ action: 'store_reply', text, changedAt: now, changedBy: actor.email });
     const notification = await buildUserNotificationWrite(record.ownerUid, {
