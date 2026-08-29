@@ -24,6 +24,7 @@ const files = {
   packageJson: read('package.json'),
   firebaseJson: read('firebase.json'),
   cloudinarySecurity: read('cloudflare/seguridad-cloudinary.js'),
+  firebaseIdToken: read('cloudflare/firebase-id-token.js'),
   cloudinarySign: read('functions/api/cloudinary-sign-upload.js'),
   cloudinaryDelete: read('functions/api/cloudinary-delete.js'),
   geoFunction: read('functions/api/visitor-geo.js'),
@@ -299,10 +300,14 @@ check(
 
 check(
   'Cloudflare valida el ID token con Firebase Auth en el servidor',
-  files.cloudinarySecurity.includes('identitytoolkit.googleapis.com/v1/accounts:lookup') &&
-    files.cloudinarySecurity.includes('JSON.stringify({ idToken: token })') &&
-    files.cloudinarySecurity.includes("email !== SUPERADMIN_EMAIL") &&
-    files.cloudinarySecurity.includes('user.emailVerified !== true'),
+  files.cloudinarySecurity.includes("import { verifyFirebaseIdToken } from './firebase-id-token.js'") &&
+    files.cloudinarySecurity.includes('return verifyFirebaseIdToken(token)') &&
+    files.cloudinarySecurity.includes('const user = await verifyFirebaseIdToken(token)') &&
+    files.cloudinarySecurity.includes('user.email !== SUPERADMIN_EMAIL') &&
+    files.firebaseIdToken.includes("crypto.subtle.verify(") &&
+    files.firebaseIdToken.includes('payload?.aud !== FIREBASE_PROJECT_ID') &&
+    files.firebaseIdToken.includes('payload?.iss !== FIREBASE_ISSUER') &&
+    files.firebaseIdToken.includes('payload?.email_verified !== true'),
   'no alcanza con confiar en un correo enviado por el navegador'
 );
 
