@@ -61,25 +61,29 @@ function ensureSection() {
   if (section) return section;
   section = document.createElement('section');
   section.id = 'product-reviews';
-  section.className = 'tt-reviews-product';
+  section.className = 'tt-reviews-product tt-product-community';
   section.dataset.collapsed = 'false';
   section.innerHTML = `
     <div class="container tt-reviews-layout">
       <aside class="tt-reviews-summary" aria-labelledby="product-reviews-title">
-        <p class="tt-section-sub">Opiniones de la comunidad</p>
-        <h2 class="tt-section-title" id="product-reviews-title">Comentarios</h2>
+        <p class="tt-section-sub">Comunidad Tintin</p>
+        <h2 class="tt-section-title" id="product-reviews-title">Opiniones y comentarios</h2>
         <div id="product-review-summary" aria-live="polite"></div>
       </aside>
       <div id="product-reviews-content">
+        <div class="tt-community-notice" id="product-community-notice" role="status" aria-live="polite" hidden></div>
         <div id="product-review-form"></div>
         <div class="tt-review-list" id="product-review-list" aria-live="polite"></div>
       </div>
     </div>`;
 
+  const socialBar = document.querySelector('.tt-product-social-bar');
   const related = document.querySelector('.tt-related-section, .tt-related-products, #related-products');
   const tinsel = document.querySelector('.tinsel, #tinsel-root');
   const productDetail = document.getElementById('product-detail');
-  if (related?.parentNode) {
+  if (socialBar?.parentNode) {
+    socialBar.insertAdjacentElement('afterend', section);
+  } else if (related?.parentNode) {
     related.parentNode.insertBefore(section, related);
   } else if (tinsel?.parentNode) {
     tinsel.insertAdjacentElement('afterend', section);
@@ -98,9 +102,16 @@ async function requestApi(input, method = 'POST', action = 'ownReview', forceRef
   try {
     token = await user.getIdToken(forceRefresh);
   } catch {
-    const error = new Error('No se pudo renovar tu sesión. Volvé a intentar.');
-    error.status = 401;
-    throw error;
+    // Una sesión local puede seguir siendo válida mientras Firebase renueva
+    // credenciales. Reintentamos sin cerrar ni redirigir a la clienta.
+    try {
+      await user.reload();
+      token = await (auth.currentUser || user).getIdToken(true);
+    } catch {
+      const error = new Error('No pudimos renovar tu sesión todavía. Tu cuenta sigue iniciada; probá otra vez en unos segundos.');
+      error.status = 401;
+      throw error;
+    }
   }
   const url = method === 'GET'
     ? `/api/engagement?action=${encodeURIComponent(action)}&productId=${encodeURIComponent(productId)}`
@@ -145,16 +156,15 @@ function renderSummary() {
   if (!root) return;
   const count = Number(stats.count) || 0;
   const average = Number(stats.average) || 0;
-  const distribution = stats.distribution || {};
   root.innerHTML = `
-    <div class="tt-reviews-score"><strong>${count ? average.toFixed(1).replace('.', ',') : '—'}</strong><span>de 5</span></div>
-    <div class="tt-review-stars" aria-label="${average.toFixed(1)} de 5 estrellas">${starText(Math.round(average))}</div>
-    <div class="tt-review-date">${count} comentario${count === 1 ? '' : 's'}</div>
-    <div class="tt-review-distribution">${[5,4,3,2,1].map(rating => {
-      const value = Number(distribution[rating] || 0);
-      const percent = count ? Math.round(value * 100 / count) : 0;
-      return `<div class="tt-review-bar"><span>${rating}★</span><span class="tt-review-bar-track"><span class="tt-review-bar-fill" style="width:${percent}%"></span></span><span>${value}</span></div>`;
-    }).join('')}</div>`;
+    <div class="tt-community-metrics"><div class="tt-reviews-score"><strong>${count ? average.toFixed(1).replace('.', ',') : '—'}</strong><span>de 5</span></div><div><div class="tt-review-stars" aria-label="${average.toFixed(1)} de 5 estrellas">${starText(Math.round(average))}</div><div class="tt-review-date">${count} opinión${count === 1 ? '' : 'es'}</div></div></div>`;
+}
+
+function showCommunityNotice(message) {
+  const notice = document.getElementById('product-community-notice');
+  if (!notice) return;
+  notice.textContent = message || '';
+  notice.hidden = !message;
 }
 
 function highlightDeepLink() {
@@ -203,7 +213,6 @@ function renderProductLike() {
   button.setAttribute('aria-label', productLiked ? 'Quitar Me gusta de este producto' : 'Me gusta este producto');
   button.querySelector('[data-product-like-label]')?.replaceChildren(document.createTextNode(productLiked ? 'Te gusta' : 'Me gusta'));
   button.querySelector('[data-product-like-count]')?.replaceChildren(document.createTextNode(String(productLikeCount)));
-  button.querySelector('[data-product-like-icon]')?.replaceChildren(document.createTextNode(productLiked ? '♥' : '♡'));
   document.querySelectorAll('[data-product-popular-badge]').forEach(node => { node.hidden = productLikeCount < 15; });
 }
 
@@ -256,7 +265,7 @@ function renderForm() {
   const root = document.getElementById('product-review-form');
   if (!root) return;
   if (!currentUser) {
-    root.innerHTML = `<div class="tt-review-form"><h3>Compartí tu opinión</h3><p>Iniciá sesión para dejar una reseña distinta para este producto.</p><a class="tt-btn" href="/login?from=${encodeURIComponent(`/product?id=${productId}`)}">Iniciar sesión</a></div>`;
+    root.innerHTML = `<div class="tt-review-form tt-community-composer"><div class="tt-community-avatar" aria-hidden="true">T</div><div class="tt-community-composer-body"><h3>Decí tu primera opinión</h3><p>Iniciá sesión para puntuar, comentar y participar. Tu identidad se muestra protegida a otras personas.</p><a class="tt-btn" href="/login?from=${encodeURIComponent(`/product?id=${productId}`)}">Iniciar sesión</a></div></div>`;
     return;
   }
   if (ownReview && Number(ownReview.editCount) >= 1) {
@@ -264,12 +273,13 @@ function renderForm() {
     return;
   }
   selectedRating = selectedRating || normalizeRating(ownReview?.rating);
-  root.innerHTML = `<form class="tt-review-form" id="tt-review-editor">
-    <h3>${ownReview ? 'Editar mi reseña' : 'Compartí tu opinión'}</h3>
+  const initial = String(currentUser.displayName || currentUser.email || 'T').trim().slice(0, 1).toUpperCase();
+  root.innerHTML = `<form class="tt-review-form tt-community-composer" id="tt-review-editor">
+    <div class="tt-community-avatar" aria-hidden="true">${escapeHtml(initial)}</div><div class="tt-community-composer-body"><h3>${ownReview ? 'Editar mi opinión' : '¿Qué te pareció este producto?'}</h3><p>Tu nombre se verá de forma protegida para otras personas.</p>
     ${ratingButtons()}
-    <textarea class="tt-review-textarea" name="comment" maxlength="1600" required placeholder="¿Qué te pareció este producto?">${escapeHtml(ownReview?.comment || '')}</textarea>
-    <div class="tt-review-form-actions"><small>${ownReview ? 'Esta es tu única edición disponible.' : 'Tu nombre se mostrará de forma protegida.'}</small><button type="submit" class="tt-btn">${ownReview ? 'Guardar edición' : 'Publicar reseña'}</button></div>
-    <div role="alert" data-review-error></div>
+    <textarea class="tt-review-textarea" name="comment" maxlength="1600" required placeholder="Escribí tu opinión…">${escapeHtml(ownReview?.comment || '')}</textarea>
+    <div class="tt-review-form-actions"><small>${ownReview ? 'Esta es tu única edición disponible.' : 'Sé amable: tu opinión ayuda a la comunidad.'}</small><button type="submit" class="tt-btn">${ownReview ? 'Guardar edición' : 'Publicar opinión'}</button></div>
+    <div role="alert" data-review-error></div></div>
   </form>`;
   syncRatingButtons();
 }
@@ -283,6 +293,7 @@ async function loadSocialState() {
     renderForm();
     renderReviews();
     renderProductLike();
+    showCommunityNotice('');
     return;
   }
   const [own, interactions, favorite] = await Promise.all([
@@ -297,6 +308,7 @@ async function loadSocialState() {
   renderForm();
   renderReviews();
   renderProductLike();
+  showCommunityNotice('');
 }
 
 function subscribePublic() {
@@ -322,6 +334,14 @@ function subscribePublic() {
 }
 
 document.addEventListener('click', async event => {
+  const openCommunity = event.target.closest('[data-open-community]');
+  if (openCommunity) {
+    event.preventDefault();
+    const section = ensureSection();
+    section.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    window.setTimeout(() => document.querySelector('#tt-review-editor textarea')?.focus(), 350);
+    return;
+  }
   const button = event.target.closest('#btn-product-like');
   if (!button || button.disabled) return;
   if (!currentUser) {
@@ -335,7 +355,7 @@ document.addEventListener('click', async event => {
     if (Number.isFinite(Number(result.likeCount))) productLikeCount = Number(result.likeCount);
     renderProductLike();
   } catch (failure) {
-    window.alert(failure.message);
+    showCommunityNotice(failure.message || 'No pudimos actualizar tu Me gusta. Tu sesión sigue abierta.');
   } finally {
     button.disabled = false;
   }
@@ -362,7 +382,7 @@ document.addEventListener('click', async event => {
       if (review) review.likeCount = result.likeCount;
       renderReviews();
     } catch (failure) {
-      window.alert(failure.message);
+      showCommunityNotice(failure.message || 'No pudimos actualizar este Me gusta. Tu sesión sigue abierta.');
       loadSocialState().catch(() => {});
     } finally {
       document.querySelector(`[data-review-like="${reviewId}"]`)?.removeAttribute('disabled');

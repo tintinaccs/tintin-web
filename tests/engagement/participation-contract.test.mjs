@@ -46,6 +46,18 @@ test('comentar renueva una credencial vencida sin cerrar la sesión de la client
   assert.match(route, /isClientError \? status : 400/);
 });
 
+test('la comunidad vive junto a la ficha y no interrumpe con alertas bloqueantes', async () => {
+  const [product, markup] = await Promise.all([
+    read('js/pages/product/resenas-producto.js'),
+    read('product.html'),
+  ]);
+  assert.match(product, /socialBar\.insertAdjacentElement\('afterend', section\)/);
+  assert.match(product, /showCommunityNotice\(/);
+  assert.doesNotMatch(product, /window\.alert\(/);
+  assert.match(markup, /data-open-community/);
+  assert.doesNotMatch(markup, /data-product-like-icon/);
+});
+
 test('los likes de producto usan estado server-side y estadísticas públicas reales', async () => {
   const [client, route, product, rules] = await Promise.all([
     read('cloudflare/participacion-clientes.js'),
