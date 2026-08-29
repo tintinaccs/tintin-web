@@ -37,7 +37,10 @@ test('favoritos está conectado y se conserva al desactivar una cuenta', async (
     read('cloudflare/user-lifecycle-domain.js'),
   ]);
   assert.match(favorites, /users', currentUser\.uid, 'favorites'/);
-  assert.match(product, /btn-product-favorite/);
+  // La ficha usa el control social canónico de producto. No se permite
+  // reintroducir el antiguo btn-product-favorite como segunda capa paralela.
+  assert.match(product, /id="btn-product-like"/);
+  assert.doesNotMatch(product, /btn-product-favorite/);
   assert.match(cart, /tt-cart-favorites/);
   assert.match(rules, /match \/favorites\/\{productId\}/);
   assert.match(deletion, /applyUserLifecycle/);
