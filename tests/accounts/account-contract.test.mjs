@@ -30,6 +30,12 @@ test('Google y PIN convergen sobre findOrCreateUserByEmail', () => {
   assert.match(verify, /findOrCreateUserByEmail\(env, email\)/);
 });
 
+test('el login por correo y username usa Pages Functions también desde localhost', () => {
+  const auth = read('js/email/correo-autenticacion.js');
+  assert.match(auth, /LOCAL_FUNCTIONS_ORIGIN/);
+  assert.match(auth, /hostname/);
+});
+
 test('la eliminación administrativa es tombstone y la auditoría es append-only', () => {
   const endpoint = read('functions/api/admin-delete-user.js');
   const lifecycle = read('cloudflare/user-lifecycle-domain.js');
