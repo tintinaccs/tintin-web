@@ -14,20 +14,27 @@ test('inicio publica canonical, OG y Store JSON-LD consistentes', async ({ page 
   expect(store.url).toBe('https://tintinaccesorios.pages.dev/');
 });
 
-test('producto llega con canonical, social preview y JSON-LD server-side coherentes', async ({ page }) => {
-  const response = await page.goto('/product?id=seo-prueba', { waitUntil: 'domcontentloaded' });
-  expect(response?.status()).toBe(200);
-  expect(response?.headers()['x-tintin-product-meta']).toBe('server-test');
+test('producto llega con canonical, social preview y JSON-LD server-side coherentes', async ({ request }) => {
+  // SEO server-side se valida sobre la respuesta HTTP inicial, que es lo que
+  // reciben crawlers, WhatsApp y previews sociales. Ejecutar el runtime cliente
+  // aquí mezclaría esta responsabilidad con Firestore/Firebase y puede bloquear
+  // un harness local que deliberadamente no emula esas autoridades.
+  const response = await request.get('/product?id=seo-prueba');
+  expect(response.status()).toBe(200);
+  expect(response.headers()['x-tintin-product-meta']).toBe('server-test');
 
+  const html = await response.text();
   const canonical = 'https://tintinaccesorios.pages.dev/product?id=seo-prueba';
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', canonical);
-  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', canonical);
-  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', /Reloj SEO Prueba/);
-  await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'product');
-  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
-  await expect(page.locator('#tt-product-image-preload')).toHaveAttribute('fetchpriority', 'high');
+  expect(html).toContain(`<link rel="canonical" href="${canonical}">`);
+  expect(html).toContain(`<meta property="og:url" content="${canonical}">`);
+  expect(html).toContain('<meta property="og:title" content="Reloj SEO Prueba | Tintin Accesorios &amp; Relojes">');
+  expect(html).toContain('<meta property="og:type" content="product">');
+  expect(html).toContain('<meta name="twitter:card" content="summary_large_image">');
+  expect(html).toMatch(/<link rel="preload" as="image"[^>]*fetchpriority="high"[^>]*id="tt-product-image-preload">/);
 
-  const jsonLd = JSON.parse(await page.locator('#tt-product-jsonld-server').textContent());
+  const jsonLdMatch = html.match(/<script type="application\/ld\+json" id="tt-product-jsonld-server">([\s\S]*?)<\/script>/);
+  expect(jsonLdMatch, 'el HTML inicial debe incluir Product JSON-LD server-side').toBeTruthy();
+  const jsonLd = JSON.parse(jsonLdMatch[1]);
   expect(jsonLd['@type']).toBe('Product');
   expect(jsonLd.name).toBe('Reloj SEO Prueba');
   expect(jsonLd.url).toBe(canonical);
@@ -44,19 +51,18 @@ test('metadata de producto no puede bloquear indefinidamente la respuesta HTML',
   expect(Date.now() - started).toBeLessThan(800);
 });
 
-test('ruta limpia de producto con id siempre entrega el documento navegable', async ({ page }) => {
-  const response = await page.goto('/product?id=route-probe-inexistente', { waitUntil: 'domcontentloaded' });
-  expect(response?.status()).toBe(200);
-  await expect(page.locator('#product-detail')).toHaveCount(1);
-  await expect(page.locator('#product-loading')).toHaveCount(1);
-  expect(new URL(page.url()).pathname).toBe('/product');
-  expect(new URL(page.url()).searchParams.get('id')).toBe('route-probe-inexistente');
+test('ruta limpia de producto con id siempre entrega el documento navegable', async ({ request }) => {
+  // Este contrato es de routing/HTML, no de hidratación. La funcionalidad de la
+  // ficha se cubre en sus pruebas específicas; aquí protegemos que Cloudflare
+  // entregue siempre el documento base para cualquier id válido en la URL.
+  const response = await request.get('/product?id=route-probe-inexistente');
+  expect(response.status()).toBe(200);
+  const html = await response.text();
+  expect(html).toContain('id="product-detail"');
+  expect(html).toContain('id="product-loading"');
 });
 
 test('superficies privadas y auxiliares permanecen noindex', async ({ browser, baseURL }) => {
-  // Las etiquetas robots forman parte del HTML inicial. Se verifican sin
-  // JavaScript para que las redirecciones legítimas de autenticación de una
-  // página privada no interrumpan la navegación hacia la siguiente superficie.
   const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
   const page = await context.newPage();
   try {

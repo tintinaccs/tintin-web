@@ -38,5 +38,8 @@ jobs:
       - name: Auditar estado integral y seguridad
         run: npm run audit:system-health
 
+      - name: Normalizar shell público antes del contrato immutable
+        run: npm run sync:public-shell
+
       - name: Verificar versionado de caché
         run: npm run audit:cache-versioning
