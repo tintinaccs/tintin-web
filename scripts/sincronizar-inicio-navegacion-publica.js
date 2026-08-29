@@ -152,6 +152,7 @@ function sharedFooter() {
 function replaceSharedFooter(html) {
   const opener = /<footer\b[^>]*\bclass=["'][^"']*\btt-footer\b[^"']*["'][^>]*>/i;
   const match = opener.exec(html);
+  const footerMarker = /(?:\s*<!-- Footer público único: sincronizado por scripts\/sincronizar-inicio-navegacion-publica\.js -->)+\s*$/;
   if (!match) return html.replace('</body>', `${sharedFooter()}\n</body>`);
 
   const token = /<\/?footer\b[^>]*>/gi;
@@ -161,7 +162,10 @@ function replaceSharedFooter(html) {
   while ((part = token.exec(html))) {
     if (/^<\//.test(part[0])) depth -= 1;
     else depth += 1;
-    if (depth === 0) return html.slice(0, match.index) + sharedFooter() + html.slice(token.lastIndex);
+    if (depth === 0) {
+      const beforeFooter = html.slice(0, match.index).replace(footerMarker, '\n');
+      return beforeFooter + sharedFooter() + html.slice(token.lastIndex);
+    }
   }
   throw new Error('No se encontró el cierre del footer .tt-footer.');
 }
