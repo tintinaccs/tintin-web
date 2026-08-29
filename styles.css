@@ -3177,7 +3177,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 /* ═══════════════════════════════════════════════
    PRODUCT DETAIL PAGE
 ═══════════════════════════════════════════════ */
-.tt-product-page { background: var(--bg); padding: 32px 0 44px; }
+.tt-product-page { background: var(--bg); padding: clamp(32px, 4vw, 56px) 0 clamp(44px, 5vw, 72px); }
 
 /* #product-loading, #product-not-found y #product-load-error son estados
    transitorios que se muestran antes de que #product-grid (con la galería
@@ -3196,7 +3196,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-product-detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 48px;
+  gap: clamp(48px, 5vw, 72px);
   align-items: start;
 }
 
