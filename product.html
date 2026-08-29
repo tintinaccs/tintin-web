@@ -56,8 +56,8 @@
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/pages/product/product-extras.css?v=tintin-20260817-margin-consistency-1">
-  <link rel="stylesheet" href="css/pages/product/resenas-producto.css?v=tintin-20260817-mobile-accordion-1">
-  <link rel="stylesheet" href="css/pages/product/product-premium-overhaul.css?v=tintin-20260828-product-premium-2">
+  <link rel="stylesheet" href="css/pages/product/resenas-producto.css?v=tintin-20260829-product-community-1">
+  <link rel="stylesheet" href="css/pages/product/product-premium-overhaul.css?v=tintin-20260829-product-community-1">
   <link rel="stylesheet" href="css/components/notifications/interacciones-sociales.css?v=tintin-20260814-social-notifications-1">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -181,11 +181,9 @@
 
     <div class="tt-product-social-bar" aria-label="Interacción con el producto">
       <button type="button" id="btn-product-like" class="tt-social-action" aria-pressed="false" aria-label="Me gusta este producto">
-        <span aria-hidden="true" data-product-like-icon>♡</span><span data-product-like-label>Me gusta</span><strong data-product-like-count>0</strong>
+        <span data-product-like-label>Me gusta</span><strong data-product-like-count>0</strong>
       </button>
-      <a class="tt-social-action" href="#product-reviews" aria-label="Ver comentarios del producto">
-        <span aria-hidden="true">💬</span><span>Comentarios</span><strong data-product-comment-count>0</strong>
-      </a>
+      <button type="button" class="tt-social-action" data-open-community aria-controls="product-reviews" aria-label="Ver comentarios del producto"><span>Comentarios</span><strong data-product-comment-count>0</strong></button>
       <button type="button" class="tt-social-share" data-share-product aria-label="Compartir producto">Compartir</button>
     </div>
   </div>
@@ -356,7 +354,7 @@
 <script type="module" src="js/pages/product/beneficios-producto.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/pages/product/seleccion-producto.js?v=tintin-20260818-product-trust-icons-1"></script>
 <script type="module" src="js/pages/product/productos-relacionados.js?v=tintin-20260817-related-fix-1"></script>
-<script type="module" src="js/pages/product/resenas-producto.js?v=tintin-20260829-review-privacy-1"></script>
+<script type="module" src="js/pages/product/resenas-producto.js?v=tintin-20260829-product-community-1"></script>
 <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <script type="module" src="js/visual-builder-bootstrap.js?v=tintin-20260826-carousel-order-3"></script>
 </body>
