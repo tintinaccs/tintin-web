@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-29T02:03:52.782Z",
-  "sourceFingerprint": "a78cf4d9bce507acc5e357592740282473eabeff445c6486d9c2ef62e477d494",
+  "generatedAt": "2026-08-29T10:22:48.104Z",
+  "sourceFingerprint": "9a60adf7e006751db9516c706b0adc4ed9b11fdb830e0bc63ef938d25ee524a0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 780,
     "textFiles": 748,
-    "totalBytes": 8631258,
+    "totalBytes": 8631368,
     "pages": 18,
     "modules": 500
   },
@@ -8831,8 +8831,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 113363,
-      "sha256": "baccd7fcf4926c84c207041ce47342ad7cfa1303173dc3668245ff03efca7584",
+      "bytes": 113369,
+      "sha256": "2a68816eec71ab8dece134fefadb00c836db79b9e188c81fb6959d1d4129e3b1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8944,7 +8944,7 @@
           "line": 42
         },
         {
-          "raw": "css/pages/checkout/checkout.css?v=tintin-20260818-text-icons-1",
+          "raw": "css/pages/checkout/checkout.css?v=tintin-20260829-checkout-spacing-1",
           "target": "css/pages/checkout/checkout.css",
           "line": 43
         },
@@ -9293,7 +9293,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/checkout/checkout.css?v=tintin-20260818-text-icons-1",
+          "raw": "css/pages/checkout/checkout.css?v=tintin-20260829-checkout-spacing-1",
           "target": "css/pages/checkout/checkout.css",
           "line": 43,
           "exists": true
@@ -13730,8 +13730,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 41952,
-      "sha256": "871c104cac1c94d28bb5e4367cc4c94c591ab860f9e5a0fa52fe58cbd1e45319",
+      "bytes": 42011,
+      "sha256": "d09c60351969118b82113b82575d2079deb880dbc5c2622b8ff83e982c322340",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -31019,8 +31019,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 113363,
-      "sha256": "baccd7fcf4926c84c207041ce47342ad7cfa1303173dc3668245ff03efca7584"
+      "bytes": 113369,
+      "sha256": "2a68816eec71ab8dece134fefadb00c836db79b9e188c81fb6959d1d4129e3b1"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -31451,8 +31451,8 @@
     {
       "path": "css/pages/checkout/checkout.css",
       "extension": ".css",
-      "bytes": 24827,
-      "sha256": "9dc525fdff32b5a125acf929d299b13b34fe3ed628586ab9bd45bb59cdafa81d"
+      "bytes": 24866,
+      "sha256": "71a13fc2d7fb3be18a7e9528da5a559a49b77fff3a60db1d64103c98038e2e2c"
     },
     {
       "path": "css/pages/collections/collections-page.css",
@@ -33809,8 +33809,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 41952,
-      "sha256": "871c104cac1c94d28bb5e4367cc4c94c591ab860f9e5a0fa52fe58cbd1e45319"
+      "bytes": 42011,
+      "sha256": "d09c60351969118b82113b82575d2079deb880dbc5c2622b8ff83e982c322340"
     },
     {
       "path": "playwright.config.js",
@@ -34541,8 +34541,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 34734,
-      "sha256": "feaf29bb83fa90118ce2686fc72136c3d29218b16de3b21671c2d6cd38778f24"
+      "bytes": 34740,
+      "sha256": "9a65fc4555496a6b24524fef85e3bdaa31a92d2927180099311fcec1e85ef25a"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",

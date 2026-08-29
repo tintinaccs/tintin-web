@@ -61,7 +61,7 @@
     /* Profile layout */
     .perfil-wrap {
       max-width: 700px; margin: 0 auto;
-      padding: 100px 24px 120px;
+      padding: clamp(100px, 9vw, 128px) 24px clamp(120px, 10vw, 152px);
     }
 
     .perfil-back {
@@ -75,7 +75,7 @@
 
     .perfil-card {
       background: #fff; border-radius: var(--radius);
-      border: 1.5px solid var(--border); overflow: hidden; margin-bottom: 20px;
+      border: 1.5px solid var(--border); overflow: hidden; margin-bottom: clamp(20px, 2.5vw, 28px);
     }
 
     .perfil-header {
