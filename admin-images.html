@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/cargador-pagina.js?v=tintin-20260827-navigation-top-1"></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260825-scroll-reveal-2"></script>
   <script src="js/admin/proteccion-cambios-pendientes-admin.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
   <title>Tintin — Gestión de Imágenes</title>
   <meta name="robots" content="noindex, nofollow, noarchive">
@@ -405,8 +405,8 @@ import { SUPER_ADMIN as SUPERADMIN_EMAIL } from "./js/core/auth/roles.js?v=tinti
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/components/images/imagenes.js?v=tintin-20260716-cloudinary-fix-1";
-import { attachImageUploadWidget } from "./js/components/images/carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
-import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySection } from "./js/admin/products/biblioteca-multimedia-admin.js?v=tintin-20260818-icon-svg-2";
+import { attachImageUploadWidget } from "./js/components/images/carga-imagenes.js?v=tintin-20260825-media-library-meta-1";
+import { openMediaLibraryPicker, mountMediaLibrarySection, unmountMediaLibrarySection } from "./js/admin/products/biblioteca-multimedia-admin.js?v=tintin-20260825-media-library-ui-1";
 
 // firestore.rules solo deja escribir settings/images a Super Admin
 // (js/core/auth/roles.js: manageImages:false para "admin") — dejar entrar a Admin acá

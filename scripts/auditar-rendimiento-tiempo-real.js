@@ -220,13 +220,22 @@ check(
 
 // A stylesheet can appear once as a preload and once as the real stylesheet.
 // Browsers reuse that same response, so count each identical URL only once.
-const homeCssUrls = new Set(
-  [...read('index.html').matchAll(/href="([^"]+\.css(?:\?[^"]*)?)"/g)]
-    .map(match => match[1])
-    .filter(file => !/^https?:/.test(file))
-);
-const homeCssKB = [...homeCssUrls]
-  .reduce((sum, url) => sum + sizeKB(url.split(/[?#]/)[0]), 0);
+const homeCssLinks = [...read('index.html').matchAll(/<link\b([^>]*?)href="([^"]+\.css(?:\?[^"]*)?)"[^>]*>/g)]
+  .map(match => ({ attrs: match[1], url: match[2] }))
+  .filter(({ url }) => !/^https?:/.test(url));
+const cssMediaMatches = (media, width) => {
+  if (!media) return true;
+  const min = media.match(/min-width\s*:\s*(\d+)px/i)?.[1];
+  const max = media.match(/max-width\s*:\s*(\d+)px/i)?.[1];
+  return (!min || width >= Number(min)) && (!max || width <= Number(max));
+};
+const homeCssByViewport = [390, 768, 1440].map(width => {
+  const urls = new Set(homeCssLinks
+    .filter(({ attrs }) => cssMediaMatches(attrs.match(/\bmedia="([^"]+)"/i)?.[1], width))
+    .map(({ url }) => url.split(/[?#]/)[0]));
+  return [...urls].reduce((sum, url) => sum + sizeKB(url), 0);
+});
+const homeCssKB = Math.max(...homeCssByViewport);
 budget('Presupuesto CSS del inicio', homeCssKB <= 260, `${homeCssKB} KB sin comprimir.`);
 
 const homeJsKB = [...read('index.html').matchAll(/src="([^"]+\.js)(?:\?[^"]*)?"/g)]

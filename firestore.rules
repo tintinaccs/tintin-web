@@ -1341,6 +1341,11 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /productEngagementStats/{productId} {
+      allow read: if isStoreOpenOrAllowed();
+      allow write: if false;
+    }
+
     // Costos, compras, stock mÃ­nimo y notas nunca forman parte del producto
     // pÃºblico. La hoja Productos y el panel superadmin los reflejan aquÃ­.
     match /productInventory/{productId} {

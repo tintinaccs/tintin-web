@@ -189,18 +189,18 @@ function customerEmail(order, orderId) {
 
   const html = `<!doctype html>
 <html lang="es">
-<body style="margin:0;background:#fff6fa;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2b2b">
-  <div style="max-width:560px;margin:0 auto;padding:32px 16px">
-    <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:20px;overflow:hidden">
-      <div style="background:#ad3f67;padding:26px 24px;text-align:center;border-bottom:4px solid #8b2642">
-        <div style="width:52px;height:52px;margin:0 auto 12px;border-radius:50%;background:rgba(255,255,255,.16);line-height:52px;font-size:24px">✓</div>
-        <div style="font-size:20px;font-weight:750;color:#ffffff;letter-spacing:-.01em">¡Recibimos tu pedido!</div>
-        <div style="margin-top:6px;font-size:12.5px;font-weight:600;letter-spacing:.06em;color:rgba(255,255,255,.78)">PEDIDO #${escapeHtml(shortId)}</div>
+<body style="margin:0;background:#fffafb;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2226">
+  <div style="max-width:560px;margin:0 auto;padding:40px 16px">
+    <div style="background:#ffffff;border:1px solid #f1dce5;border-radius:16px;overflow:hidden">
+      <div style="padding:28px 24px 22px;text-align:center;border-bottom:1px solid #f4e7ed">
+        <div style="width:42px;height:42px;margin:0 auto 12px;border-radius:50%;background:#fff0f7;color:#a00055;line-height:42px;font-size:21px">✓</div>
+        <div style="font-size:20px;font-weight:760;color:#2b2226;letter-spacing:-.02em">Recibimos tu pedido</div>
+        <div style="margin-top:7px;font-size:11px;font-weight:750;letter-spacing:.1em;color:#a00055">PEDIDO #${escapeHtml(shortId)}</div>
       </div>
-      <div style="padding:30px 28px">
+      <div style="padding:28px">
         <p style="margin:0 0 16px;font-size:14.5px">Hola <strong>${escapeHtml(order.userName || 'Tintina')}</strong>,</p>
         <p style="margin:0 0 22px;font-size:14px;line-height:1.65;color:#5e5357">
-          Tu pedido fue registrado correctamente. En breve nos comunicaremos contigo para confirmar los detalles de entrega y pago.
+          Tu pedido quedó registrado. Te escribiremos para confirmar disponibilidad, pago y entrega.
         </p>
         <table style="width:100%;border-collapse:collapse;margin:0 0 18px">${rows}</table>
         <table style="width:100%;border-collapse:collapse;background:#fdf6f9;border-radius:14px">
@@ -262,12 +262,12 @@ function adminEmail(order, orderId) {
 
   const html = `<!doctype html>
 <html lang="es">
-<body style="margin:0;background:#fff6fa;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2b2b">
-  <div style="max-width:640px;margin:0 auto;padding:32px 16px">
-    <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:20px;overflow:hidden">
-      <div style="background:#ad3f67;padding:22px 24px;text-align:center;border-bottom:4px solid #8b2642">
-        <div style="font-size:18px;font-weight:750;color:#ffffff;letter-spacing:-.01em">Nuevo pedido #${escapeHtml(shortId)}</div>
-        <div style="margin-top:5px;font-size:12px;color:rgba(255,255,255,.78)">${escapeHtml(fmtDate(order.createdAt))}</div>
+<body style="margin:0;background:#fffafb;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2226">
+  <div style="max-width:640px;margin:0 auto;padding:40px 16px">
+    <div style="background:#ffffff;border:1px solid #f1dce5;border-radius:16px;overflow:hidden">
+      <div style="padding:22px 24px;text-align:center;border-bottom:1px solid #f4e7ed">
+        <div style="font-size:18px;font-weight:760;color:#2b2226;letter-spacing:-.01em">Nuevo pedido #${escapeHtml(shortId)}</div>
+        <div style="margin-top:5px;font-size:12px;color:#8a6575">${escapeHtml(fmtDate(order.createdAt))}</div>
       </div>
       <div style="padding:28px">
       <table style="width:100%;border-collapse:collapse;font-size:13.5px;line-height:1.5">

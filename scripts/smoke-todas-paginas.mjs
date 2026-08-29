@@ -92,6 +92,14 @@ const server = http.createServer((request, response) => {
     response.end(JSON.stringify({ ok: true, resource, items: [], count: 0 }));
     return;
   }
+  if (pathname === '/api/engagement') {
+    const action = new URL(request.url || '/', baseURL).searchParams.get('action');
+    if (action === 'productLikes') {
+      response.writeHead(200, { 'cache-control': 'no-store', 'content-type': 'application/json; charset=utf-8' });
+      response.end('{"ok":true,"likeCount":0}');
+      return;
+    }
+  }
   if (pathname === '/api/visual-builder-public') {
     response.writeHead(200, { 'cache-control': 'no-store', 'content-type': 'application/json; charset=utf-8' });
     response.end('{"ok":true,"config":null,"version":0}');

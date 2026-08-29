@@ -505,21 +505,22 @@ check(
   'sin el origen del rechazo en el mensaje no se puede saber si hay que revisar la función de Cloudflare o la cuenta de Cloudinary'
 );
 
-const CURRENT_VERSION_QUERY = 'v=tintin-20260716-cloudinary-fix-1';
-const MEDIA_LIBRARY_ADMIN_VERSION_QUERY = 'v=tintin-20260818-icon-svg-2';
+const PROCESSING_VERSION_QUERY = 'v=tintin-20260716-cloudinary-fix-1';
+const MEDIA_LIBRARY_VERSION_QUERY = 'v=tintin-20260825-media-library-meta-1';
+const MEDIA_LIBRARY_ADMIN_VERSION_QUERY = 'v=tintin-20260825-media-library-ui-1';
 check(
   'Los archivos del flujo de subida se importan con versión de caché, no sin ella',
-  files.uploadWidget.includes(`./procesamiento-imagenes.js?${CURRENT_VERSION_QUERY}`) &&
-    files.uploadWidget.includes(`./biblioteca-multimedia.js?${CURRENT_VERSION_QUERY}`) &&
-    files.mediaLibrary.includes(`./procesamiento-imagenes.js?${CURRENT_VERSION_QUERY}`) &&
-    files.adminHtml.includes(`./js/components/images/carga-imagenes.js?${CURRENT_VERSION_QUERY}`) &&
+  files.uploadWidget.includes(`./procesamiento-imagenes.js?${PROCESSING_VERSION_QUERY}`) &&
+    files.uploadWidget.includes(`./biblioteca-multimedia.js?${MEDIA_LIBRARY_VERSION_QUERY}`) &&
+    files.mediaLibrary.includes(`./procesamiento-imagenes.js?${PROCESSING_VERSION_QUERY}`) &&
+    files.adminHtml.includes(`./js/components/images/carga-imagenes.js?v=tintin-20260825-media-library-meta-1`) &&
     files.adminHtml.includes(`./js/admin/products/biblioteca-multimedia-admin.js?${MEDIA_LIBRARY_ADMIN_VERSION_QUERY}`),
   'un import sin ?v= puede quedar cacheado para siempre por el navegador o el CDN y nunca actualizarse'
 );
 
 check(
   'admin.html (Productos/Colecciones) importa el mismo widget con versión de caché',
-  read('js/admin/admin-app.js').includes(`../components/images/carga-imagenes.js?${CURRENT_VERSION_QUERY}`) &&
+  read('js/admin/admin-app.js').includes(`../components/images/carga-imagenes.js?v=tintin-20260825-media-library-meta-1`) &&
     read('js/admin/admin-app.js').includes(`./products/biblioteca-multimedia-admin.js?${MEDIA_LIBRARY_ADMIN_VERSION_QUERY}`),
   'el editor de productos/colecciones usa el mismo componente y debe versionarse igual'
 );

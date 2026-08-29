@@ -90,24 +90,25 @@ async function sendCodeEmail(apiKey, email, code) {
   // sola y dejar que el cliente caiga en su serif genérica.
   const digitCells = code
     .split('')
-    .map(digit => `<td style="width:40px;height:52px;border:1.5px solid #f1c4d4;border-radius:10px;background:#fff6fa;font-size:26px;font-weight:800;color:#ad3f67;text-align:center;vertical-align:middle">${digit}</td>`)
+    .map(digit => `<td style="width:40px;height:52px;border:1px solid #efc7d8;border-radius:10px;background:#ffffff;font-size:25px;font-weight:800;color:#a00055;text-align:center;vertical-align:middle">${digit}</td>`)
     .join('<td style="width:8px"></td>');
 
   const html = `<!doctype html>
 <html lang="es">
-<body style="margin:0;background:#fff6fa;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2b2b">
-  <div style="max-width:460px;margin:0 auto;padding:32px 16px">
-    <div style="background:#ffffff;border:1px solid #f1e4e7;border-radius:20px;overflow:hidden">
-      <div style="background:#ad3f67;padding:20px 24px;text-align:center;border-bottom:4px solid #8b2642">
-        <div style="font-size:20px;font-weight:800;letter-spacing:.16em;color:#ffffff">TINTIN</div>
-        <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.78);margin-top:4px">Accesorios &amp; Relojes</div>
+<body style="margin:0;background:#fffafb;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2226">
+  <div style="max-width:460px;margin:0 auto;padding:40px 16px">
+    <div style="background:#ffffff;border:1px solid #f1dce5;border-radius:16px;overflow:hidden">
+      <div style="padding:22px 24px;text-align:center;border-bottom:1px solid #f4e7ed">
+        <div style="font-size:18px;font-weight:800;letter-spacing:.12em;color:#a00055">TINTIN</div>
+        <div style="font-size:10px;font-weight:650;letter-spacing:.12em;text-transform:uppercase;color:#a85b7c;margin-top:5px">Accesorios &amp; Relojes</div>
       </div>
-      <div style="padding:32px 28px;text-align:center">
-        <p style="margin:0 0 22px;font-size:14px;color:#5e5357;line-height:1.6">Usá este código para entrar a tu cuenta:</p>
+      <div style="padding:30px 28px;text-align:center">
+        <p style="margin:0 0 8px;font-size:16px;font-weight:750;color:#2b2226">Tu código de acceso</p>
+        <p style="margin:0 0 22px;font-size:13px;color:#765d67;line-height:1.6">Usalo para ingresar de forma segura a tu cuenta.</p>
         <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 22px">
           <tr>${digitCells}</tr>
         </table>
-        <p style="margin:0;font-size:12.5px;color:#8a7d81;line-height:1.65">
+        <p style="margin:0;font-size:12px;color:#8a7d81;line-height:1.65">
           Vence en 5 minutos. Si no pediste este código, podés ignorar este correo — nadie puede entrar a tu cuenta sin él.
         </p>
       </div>

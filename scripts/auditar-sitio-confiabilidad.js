@@ -103,7 +103,7 @@ check('Cookies y estadísticas comparten una sola elección revocable',
   privacy.includes('id="tt-open-privacy-settings"'));
 check('La tarjeta de privacidad no bloquea ni cubre toda la página',
   styles.includes('.tt-privacy-consent') &&
-  styles.includes('width: min(400px, calc(100vw - 36px))') &&
+  /width\s*:\s*min\(400px,\s*calc\(100vw\s*-\s*36px\)\)/.test(styles) &&
   !/\.tt-privacy-consent\s*\{[^}]*\binset\s*:\s*0/i.test(styles));
 check('La actividad propia y Google Analytics esperan el permiso opcional',
   activity.includes("from './consentimiento-privacidad.js?v=tintin-20260716-cloudinary-fix-1'") &&
@@ -185,8 +185,9 @@ check('El rosa principal cumple contraste AA sobre blanco',
 check('Los renderers principales escapan texto almacenado',
   main.includes('function escapeHtml(value)') &&
   admin.includes('function escapeHtmlAdmin(value)'));
-check('El reveal es irreversible, liviano y procesa solo nodos agregados',
-  scrollReveal.includes('observer?.unobserve(element)') &&
+check('El reveal se repite al volver al viewport, es liviano y procesa solo nodos agregados',
+  scrollReveal.includes('function hideForRepeat(element)') &&
+  scrollReveal.includes('else hideForRepeat(entry.target)') &&
   scrollReveal.includes("element.classList.add('tt-visible')") &&
   scrollReveal.includes('scheduleScan(node)') &&
   !scrollReveal.includes('filter:blur'));
@@ -290,7 +291,7 @@ for (const file of htmlFiles.concat(['tienda.js', 'js/cargador-pagina.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan la versión vigente de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260827-navigation-top-1'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260825-scroll-reveal-2'"));
 
 check(
   'El runtime público liviano carga imágenes, colecciones, carrito, colores y el fix de auditoría de página (no solo admin-images)',

@@ -157,11 +157,38 @@ async function updateReviewStats(env, productId) {
   }));
 }
 
+async function updateProductLikeStats(env, productId) {
+  const documents = await firestoreAdminList(env, 'likeRecords', 1000);
+  const count = documents
+    .map(decoded)
+    .filter(record => record?.productId === productId && record.archived !== true)
+    .length;
+  await firestoreAdminReplace(env, `productEngagementStats/${productId}`, encodeFirestoreFields({
+    schemaVersion: 1,
+    productId,
+    likeCount: count,
+    updatedAt: new Date(),
+  }));
+  return count;
+}
+
+export async function getProductLikeStats(env, productId) {
+  const id = safeId(productId, 'Producto');
+  const existing = decoded(await firestoreAdminGet(env, `productEngagementStats/${id}`));
+  return { productId: id, likeCount: existing ? Math.max(0, Number(existing.likeCount) || 0) : await updateProductLikeStats(env, id) };
+}
+
 export async function getOwnReview(env, user, productId) {
   const id = safeId(productId, 'Producto');
   const mapping = decoded(await firestoreAdminGet(env, `users/${safeId(user.uid, 'Cuenta')}/reviews/${id}`));
   if (!mapping) return null;
   return ownReviewView(mapping);
+}
+
+export async function getOwnFavorite(env, user, productId) {
+  const id = safeId(productId, 'Producto');
+  const likeId = await opaqueId(user.uid, id, 'favorite');
+  return Boolean(await firestoreAdminGet(env, `likeRecords/${likeId}`));
 }
 
 export async function getReviewInteractions(env, user, productId) {
@@ -369,7 +396,8 @@ export async function toggleFavorite(env, user, input) {
       { path: `likeRecords/${likeId}`, delete: true },
       { path: favoritePath, delete: true },
     ]);
-    return { selected: false, record: existing };
+    const likeCount = await updateProductLikeStats(env, context.productId);
+    return { selected: false, likeCount, record: existing };
   }
   const now = new Date();
   const record = {
@@ -396,7 +424,8 @@ export async function toggleFavorite(env, user, input) {
     }) },
     adminNotification.write,
   ]);
-  return { selected: true, record };
+  const likeCount = await updateProductLikeStats(env, context.productId);
+  return { selected: true, likeCount, record };
 }
 
 export const engagementClean = clean;
