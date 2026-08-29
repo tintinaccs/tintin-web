@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-29T01:15:26.326Z",
-  "sourceFingerprint": "66caa2f2aef1ad21e146b1168a0d8dc758f74198b1633bfdce8db40f6f2abda0",
+  "generatedAt": "2026-08-29T02:17:34.409Z",
+  "sourceFingerprint": "df4c6a0b6abb93ee54f263931a1ff7403e0ada485a48cfece33072d8296b0edb",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 780,
     "textFiles": 748,
-    "totalBytes": 8630955,
+    "totalBytes": 8632154,
     "pages": 18,
     "modules": 500
   },
@@ -15777,8 +15777,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24848,
-      "sha256": "3ae2480e121d33517180f986f5928d795675df91431a34c5c45ebf4000eed336",
+      "bytes": 24852,
+      "sha256": "5bd8edccca036b7e8f2a9776e3aa8f6b3047f204768073854e28863ed1899add",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15862,7 +15862,7 @@
           "line": 358
         },
         {
-          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260817-heart-icon-1",
+          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260829-review-privacy-1",
           "target": "js/pages/product/resenas-producto.js",
           "line": 359
         },
@@ -16285,7 +16285,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260817-heart-icon-1",
+          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260829-review-privacy-1",
           "target": "js/pages/product/resenas-producto.js",
           "line": 359,
           "exists": true
@@ -17689,8 +17689,8 @@
     },
     {
       "path": "cloudflare/participacion-clientes.js",
-      "bytes": 20651,
-      "sha256": "acf0bdefadd27dcabfbce3c33f21e934ba467675efde973843afe0de68c4dd64",
+      "bytes": 20117,
+      "sha256": "211b25646868bec21a6da0a2a3fbf7fd7c9b9d60b01cb1dfd7f8e499e96e5d6d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17740,8 +17740,8 @@
     },
     {
       "path": "cloudflare/seguridad-cloudinary.js",
-      "bytes": 6418,
-      "sha256": "63aa352ec16bb22c9915ec23b56fb62c32f37626a4e0f91a5e7df949eb717542",
+      "bytes": 6680,
+      "sha256": "5c132b93a3915e08080feb85a335121fc1c96b50039403f22d41e2525ade0d6e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17757,7 +17757,7 @@
       "endpoints": [
         {
           "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
-          "line": 64
+          "line": 69
         }
       ]
     },
@@ -18611,8 +18611,8 @@
     },
     {
       "path": "functions/api/engagement.js",
-      "bytes": 6462,
-      "sha256": "f6e69e0fdfaa64d0e8d3fdd22d529e79a69b257b321e7cb7259687ef2cc653ae",
+      "bytes": 6646,
+      "sha256": "85253cdac375e9b90c008b1749ff4c5046704c47cd64da471eb1ed407c8f68bf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24510,8 +24510,8 @@
     },
     {
       "path": "js/pages/product/resenas-producto.js",
-      "bytes": 19711,
-      "sha256": "782cfcc9ded8939c96d191abffd0c0302bca4ad41d40d101598ac21267bc1036",
+      "bytes": 19984,
+      "sha256": "e42b2a92f7dc9bc5cc3ca197914d45093c889cb569590486572673521c3952e6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29085,8 +29085,8 @@
     },
     {
       "path": "tests/engagement/notificaciones-sociales.test.mjs",
-      "bytes": 6882,
-      "sha256": "f1eb90d6800d3592256db085601294b076bc797a675bc68fdb792a79941cfbbe",
+      "bytes": 7010,
+      "sha256": "bb6caa6dd4f5e35912be589a4cf7ab7248a4cf1b53fff775b724ee55c47f5065",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29115,8 +29115,8 @@
     },
     {
       "path": "tests/engagement/participation-contract.test.mjs",
-      "bytes": 5133,
-      "sha256": "b00e2b9b3bd1f3f853a953527bbca05d7844d7fd54bc81076bd8f5f595e01107",
+      "bytes": 6015,
+      "sha256": "d9ada3553b064fea0bc3fcea8bb707036be0fe58fbea8de7e07a3c31183acf1b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31109,8 +31109,8 @@
     {
       "path": "cloudflare/participacion-clientes.js",
       "extension": ".js",
-      "bytes": 20651,
-      "sha256": "acf0bdefadd27dcabfbce3c33f21e934ba467675efde973843afe0de68c4dd64"
+      "bytes": 20117,
+      "sha256": "211b25646868bec21a6da0a2a3fbf7fd7c9b9d60b01cb1dfd7f8e499e96e5d6d"
     },
     {
       "path": "cloudflare/paypal-seguro.js",
@@ -31121,8 +31121,8 @@
     {
       "path": "cloudflare/seguridad-cloudinary.js",
       "extension": ".js",
-      "bytes": 6418,
-      "sha256": "63aa352ec16bb22c9915ec23b56fb62c32f37626a4e0f91a5e7df949eb717542"
+      "bytes": 6680,
+      "sha256": "5c132b93a3915e08080feb85a335121fc1c96b50039403f22d41e2525ade0d6e"
     },
     {
       "path": "cloudflare/servicio-push.js",
@@ -32099,8 +32099,8 @@
     {
       "path": "functions/api/engagement.js",
       "extension": ".js",
-      "bytes": 6462,
-      "sha256": "f6e69e0fdfaa64d0e8d3fdd22d529e79a69b257b321e7cb7259687ef2cc653ae"
+      "bytes": 6646,
+      "sha256": "85253cdac375e9b90c008b1749ff4c5046704c47cd64da471eb1ed407c8f68bf"
     },
     {
       "path": "functions/api/geo-search.js",
@@ -33509,8 +33509,8 @@
     {
       "path": "js/pages/product/resenas-producto.js",
       "extension": ".js",
-      "bytes": 19711,
-      "sha256": "782cfcc9ded8939c96d191abffd0c0302bca4ad41d40d101598ac21267bc1036"
+      "bytes": 19984,
+      "sha256": "e42b2a92f7dc9bc5cc3ca197914d45093c889cb569590486572673521c3952e6"
     },
     {
       "path": "js/pages/product/seleccion-producto.js",
@@ -33833,8 +33833,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 24848,
-      "sha256": "3ae2480e121d33517180f986f5928d795675df91431a34c5c45ebf4000eed336"
+      "bytes": 24852,
+      "sha256": "5bd8edccca036b7e8f2a9776e3aa8f6b3047f204768073854e28863ed1899add"
     },
     {
       "path": "robots.txt",
@@ -34859,14 +34859,14 @@
     {
       "path": "tests/engagement/notificaciones-sociales.test.mjs",
       "extension": ".mjs",
-      "bytes": 6882,
-      "sha256": "f1eb90d6800d3592256db085601294b076bc797a675bc68fdb792a79941cfbbe"
+      "bytes": 7010,
+      "sha256": "bb6caa6dd4f5e35912be589a4cf7ab7248a4cf1b53fff775b724ee55c47f5065"
     },
     {
       "path": "tests/engagement/participation-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 5133,
-      "sha256": "b00e2b9b3bd1f3f853a953527bbca05d7844d7fd54bc81076bd8f5f595e01107"
+      "bytes": 6015,
+      "sha256": "d9ada3553b064fea0bc3fcea8bb707036be0fe58fbea8de7e07a3c31183acf1b"
     },
     {
       "path": "tests/import/phase9-import-normalization.test.mjs",
@@ -37292,7 +37292,7 @@
         "references": [
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 284,
+            "line": 317,
             "operation": "doc"
           }
         ]
@@ -37332,7 +37332,7 @@
           },
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 280,
+            "line": 313,
             "operation": "doc"
           }
         ]
@@ -37482,7 +37482,7 @@
           },
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 273,
+            "line": 306,
             "operation": "collection"
           },
           {

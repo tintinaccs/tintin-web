@@ -21,9 +21,26 @@ const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
 })[char]);
 
+function publicAlias(value) {
+  const parts = String(value || 'Clienta Tintin').trim().split(/\s+/).filter(Boolean);
+  return parts.slice(0, 2).map(part => `${Array.from(part)[0] || 'C'}***`).join(' ');
+}
+
 function dateValue(value) {
   const date = value?.toDate?.() || new Date(value || 0);
   return Number.isFinite(date.getTime()) ? date : new Date(0);
+}
+
+function relativeDate(value) {
+  const date = dateValue(value);
+  const elapsedMinutes = Math.max(0, Math.floor((Date.now() - date.getTime()) / 60000));
+  if (elapsedMinutes < 1) return 'Recién publicado';
+  if (elapsedMinutes < 60) return `Hace ${elapsedMinutes} min`;
+  const elapsedHours = Math.floor(elapsedMinutes / 60);
+  if (elapsedHours < 24) return `Hace ${elapsedHours} h`;
+  const elapsedDays = Math.floor(elapsedHours / 24);
+  if (elapsedDays < 14) return `Hace ${elapsedDays} d`;
+  return date.toLocaleDateString('es-PY');
 }
 
 function normalizeRating(value) {
@@ -49,7 +66,7 @@ function ensureSection() {
   section.innerHTML = `
     <div class="container tt-reviews-layout">
       <aside class="tt-reviews-summary" aria-labelledby="product-reviews-title">
-        <p class="tt-section-sub">La conversación de la comunidad</p>
+        <p class="tt-section-sub">Opiniones de la comunidad</p>
         <h2 class="tt-section-title" id="product-reviews-title">Comentarios</h2>
         <div id="product-review-summary" aria-live="polite"></div>
       </aside>
@@ -74,9 +91,17 @@ function ensureSection() {
   return section;
 }
 
-async function api(input, method = 'POST', action = 'ownReview') {
-  if (!currentUser) throw new Error('Iniciá sesión para participar');
-  const token = await currentUser.getIdToken();
+async function requestApi(input, method = 'POST', action = 'ownReview', forceRefresh = false) {
+  const user = auth.currentUser || currentUser;
+  if (!user) throw new Error('Iniciá sesión para participar');
+  let token;
+  try {
+    token = await user.getIdToken(forceRefresh);
+  } catch {
+    const error = new Error('No se pudo renovar tu sesión. Volvé a intentar.');
+    error.status = 401;
+    throw error;
+  }
   const url = method === 'GET'
     ? `/api/engagement?action=${encodeURIComponent(action)}&productId=${encodeURIComponent(productId)}`
     : '/api/engagement';
@@ -87,8 +112,32 @@ async function api(input, method = 'POST', action = 'ownReview') {
     body: method === 'POST' ? JSON.stringify(input) : undefined,
   });
   const result = await response.json().catch(() => ({}));
-  if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo completar la acción');
+  if (!response.ok || result.ok !== true) {
+    const error = new Error(result.error || 'No se pudo completar la acción');
+    error.status = response.status;
+    throw error;
+  }
   return result;
+}
+
+async function api(input, method = 'POST', action = 'ownReview') {
+  try {
+    return await requestApi(input, method, action);
+  } catch (error) {
+    if (error?.status !== 401 || !auth.currentUser) throw error;
+
+    // Firebase conserva la sesión local: sólo pedimos un token nuevo y nunca llamamos a signOut aquí.
+    try {
+      return await requestApi(input, method, action, true);
+    } catch (retryError) {
+      if (retryError?.status === 401) {
+        const preservedSessionError = new Error('No pudimos renovar tu sesión automáticamente. No cerramos tu sesión; probá otra vez en unos segundos.');
+        preservedSessionError.status = 401;
+        throw preservedSessionError;
+      }
+      throw retryError;
+    }
+  }
 }
 
 function renderSummary() {
@@ -106,21 +155,6 @@ function renderSummary() {
       const percent = count ? Math.round(value * 100 / count) : 0;
       return `<div class="tt-review-bar"><span>${rating}★</span><span class="tt-review-bar-track"><span class="tt-review-bar-fill" style="width:${percent}%"></span></span><span>${value}</span></div>`;
     }).join('')}</div>`;
-}
-
-function renderConversation(review) {
-  const conversation = Array.isArray(review.conversation) ? review.conversation : [];
-  const messages = conversation.map(message => `
-    <div class="tt-review-message ${message.authorType === 'store' ? 'tt-review-message--store' : ''}">
-      <strong>${escapeHtml(message.authorName || (message.authorType === 'store' ? 'Tintin Accesorios' : review.publicName))}</strong>
-      <span>${escapeHtml(message.text)}</span>
-    </div>`).join('');
-  const id = reviewIdOf(review);
-  return `${conversation.length ? `<div class="tt-review-conversation">${messages}</div>` : ''}${currentUser ? `
-    <form class="tt-review-reply-row" data-review-reply data-review-id="${escapeHtml(id)}">
-      <input type="text" name="reply" maxlength="1200" placeholder="Responder a esta reseña" aria-label="Responder a esta reseña">
-      <button type="submit" class="tt-btn">Responder</button>
-    </form>` : ''}`;
 }
 
 function highlightDeepLink() {
@@ -148,15 +182,14 @@ function renderReviews() {
     return `
     <article class="tt-review-card" id="review-${escapeHtml(id)}" data-review-card="${escapeHtml(id)}">
       <div class="tt-review-head">
-        <div><div class="tt-review-author">${escapeHtml(review.publicName || 'Clienta Tintin')}</div><div class="tt-review-stars" aria-label="${Number(review.rating)} de 5 estrellas">${starText(review.rating)}</div></div>
-        <time class="tt-review-date">${dateValue(review.createdAt).toLocaleDateString('es-PY')}</time>
+        <div><div class="tt-review-author">${escapeHtml(publicAlias(review.publicName))}</div><div class="tt-review-stars" aria-label="${Number(review.rating)} de 5 estrellas">${starText(review.rating)}</div></div>
+        <time class="tt-review-date" datetime="${dateValue(review.createdAt).toISOString()}" title="${dateValue(review.createdAt).toLocaleDateString('es-PY')}">${relativeDate(review.createdAt)}</time>
       </div>
       <p class="tt-review-comment">${escapeHtml(review.comment)}</p>
       ${review.storeLiked ? `<div class="tt-review-store-like">${heartIconMarkup(true)} A Tintin Accesorios le gustó esta reseña</div>` : ''}
       <div class="tt-review-social-actions">
         ${currentUser ? `<button type="button" class="tt-review-like-button${liked ? ' is-liked' : ''}" data-review-like="${escapeHtml(id)}" aria-pressed="${liked}" aria-label="${liked ? 'Quitar Me gusta' : 'Dar Me gusta'} a esta reseña"><span aria-hidden="true">${heartIconMarkup(liked)}</span><span>${likeCount ? `${likeCount} Me gusta` : 'Me gusta'}</span></button>` : `<span class="tt-review-like-count">${likeCount ? `${heartIconMarkup(true)} ${likeCount} Me gusta` : 'Todavía sin Me gusta'}</span>`}
       </div>
-      ${renderConversation(review)}
     </article>`;
   }).join('') : '<div class="tt-review-empty">Todavía no hay comentarios. Podés ser la primera en compartir tu opinión.</div>';
   highlightDeepLink();
@@ -391,22 +424,6 @@ document.addEventListener('submit', async event => {
     return;
   }
 
-  if (event.target.matches('[data-review-reply]')) {
-    event.preventDefault();
-    const reviewId = event.target.dataset.reviewId;
-    const input = event.target.elements.reply;
-    const text = input.value.trim();
-    if (!text) return;
-    const button = event.target.querySelector('button');
-    button.disabled = true;
-    try {
-      const result = await api({ action: 'replyReview', productId, reviewId, text });
-      if (ownReview?.reviewId === reviewId) ownReview = result.review;
-      input.value = '';
-    } catch (failure) {
-      window.alert(failure.message);
-    } finally { button.disabled = false; }
-  }
 });
 
 if (productId) {
