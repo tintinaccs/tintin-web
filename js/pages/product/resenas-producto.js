@@ -17,6 +17,7 @@ let unsubscribeStats = null;
 let unsubscribeLikes = null;
 let deepLinkHandled = false;
 const PENDING_INTENT_KEY = 'tt_product_community_intent_v2';
+const PROFILE_AVATAR_FALLBACK = '/assets-tintin/images/general/logo.png';
 
 function productReturnPath() {
   return `/product?id=${encodeURIComponent(productId)}#product-reviews`;
@@ -110,8 +111,16 @@ function replyIdOf(reply) {
 function avatarMarkup(photoUrl, name, extraClass = '') {
   const url = safeImageUrl(photoUrl);
   const label = displayPublicName(name);
-  if (url) return `<span class="tt-community-avatar ${extraClass}"><img src="${escapeHtml(url)}" alt="" loading="lazy" referrerpolicy="no-referrer"></span>`;
-  return `<span class="tt-community-avatar is-fallback ${extraClass}" aria-hidden="true"><span>T</span></span>`;
+  const source = url || PROFILE_AVATAR_FALLBACK;
+  return `<span class="tt-community-avatar${url ? '' : ' is-fallback'} ${extraClass}"><img src="${escapeHtml(source)}" alt="${escapeHtml(url ? '' : label)}" loading="lazy" decoding="async" referrerpolicy="no-referrer"></span>`;
+}
+
+function upsertLocalReview(review) {
+  const id = reviewIdOf(review);
+  if (!id) return;
+  const index = reviews.findIndex(item => reviewIdOf(item) === id);
+  if (index >= 0) reviews[index] = { ...reviews[index], ...review };
+  else reviews.push(review);
 }
 
 function ensureSection() {
@@ -579,6 +588,10 @@ document.addEventListener('submit', async event => {
     try {
       if (!currentUser) return requestCommunityLogin('review', { rating: selectedRating, comment });
       const result = await api({ action: 'createReview', productId, rating: selectedRating, comment });
+      if (result.publicReview) {
+        upsertLocalReview(result.publicReview);
+        renderReviews();
+      }
       event.target.reset();
       selectedRating = 0;
       renderForm();
@@ -641,7 +654,11 @@ async function resumePendingIntent() {
       });
       renderReviews();
     } else if (intent.action === 'review') {
-      await api({ action: 'createReview', productId, rating: normalizeRating(intent.payload?.rating), comment: String(intent.payload?.comment || '') });
+      const result = await api({ action: 'createReview', productId, rating: normalizeRating(intent.payload?.rating), comment: String(intent.payload?.comment || '') });
+      if (result.publicReview) {
+        upsertLocalReview(result.publicReview);
+        renderReviews();
+      }
       selectedRating = 0;
       renderForm();
     } else if (intent.action === 'reply' && intent.payload?.reviewId) {
