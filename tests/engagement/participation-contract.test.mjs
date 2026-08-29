@@ -149,6 +149,19 @@ test('social notifications retain actor-target-product relationships', async () 
   assert.match(client, /#review-/);
 });
 
+test('own social activity is visible to the actor without broadcasting private in-app alerts', async () => {
+  const [client, route] = await Promise.all([
+    read('cloudflare/participacion-clientes.js'),
+    read('functions/api/engagement.js'),
+  ]);
+  for (const kind of ['review_created_self', 'review_reply_self', 'review_like_self', 'reply_like_self', 'product_like_self']) {
+    assert.match(client, new RegExp(`kind: '${kind}'`));
+  }
+  assert.match(client, /buildUserNotificationWrite\(uid/);
+  assert.match(route, /dispatchSocialPushEvent/);
+  assert.doesNotMatch(route, /if \(!engagementIsSuperAdmin\(user\)\)/);
+});
+
 test('opening notifications marks current unread alerts as seen automatically', async () => {
   const notifications = await read('js/components/notifications/notificaciones-clientes.js');
   assert.match(notifications, /markVisibleNotificationsRead/);

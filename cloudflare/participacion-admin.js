@@ -128,6 +128,17 @@ export async function adminReviewAction(env, actor, input) {
         reviewId: record.reviewId, sourceType: 'review', sourceId: record.reviewId, createdAt: now,
       }, `store_review_like:${record.reviewId}`);
       extraWrites.push(notification.write);
+    } else if (updated.storeLiked && record.ownerUid === actor.uid) {
+      const notification = await buildUserNotificationWrite(record.ownerUid, {
+        kind: 'store_review_like_self', actorType: 'store', actorUid: actor.uid, actorName: 'Tintin Accesorios',
+        title: 'Marcaste Me gusta en tu reseña desde Tintin',
+        body: clean(record.comment, 420), snippet: clean(record.comment, 260), iconKey: 'heart',
+        targetUrl: `/product?id=${record.productId}#review-${record.reviewId}`,
+        targetType: 'review', targetId: record.reviewId,
+        productId: record.productId, productName: record.productName, productImageUrl: record.productImageUrl,
+        reviewId: record.reviewId, sourceType: 'review', sourceId: record.reviewId, createdAt: now,
+      }, `store_review_like_self:${record.reviewId}`);
+      extraWrites.push(notification.write);
     }
   } else if (action === 'reviewReply') {
     const text = clean(input.text, MAX_REPLY);
@@ -159,6 +170,17 @@ export async function adminReviewAction(env, actor, input) {
         productId: record.productId, productName: record.productName, productImageUrl: record.productImageUrl,
         reviewId: record.reviewId, replyId, sourceType: 'reply', sourceId: replyId, createdAt: now,
       }, `store_review_reply:${record.reviewId}:${replyId}`);
+      extraWrites.push(notification.write);
+    } else {
+      const notification = await buildUserNotificationWrite(record.ownerUid, {
+        kind: 'store_review_reply_self', actorType: 'store', actorUid: actor.uid, actorName: 'Tintin Accesorios',
+        title: 'Respondiste tu reseña desde Tintin',
+        body: text, snippet: text, iconKey: 'comment',
+        targetUrl: `/product?id=${record.productId}#reply-${replyId}`,
+        targetType: 'reply', targetId: replyId,
+        productId: record.productId, productName: record.productName, productImageUrl: record.productImageUrl,
+        reviewId: record.reviewId, replyId, sourceType: 'reply', sourceId: replyId, createdAt: now,
+      }, `store_review_reply_self:${record.reviewId}:${replyId}`);
       extraWrites.push(notification.write);
     }
   } else if (action === 'reviewEdit') {

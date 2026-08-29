@@ -5,7 +5,6 @@ import {
   addCustomerReply,
   createReview,
   editOwnReview,
-  engagementIsSuperAdmin,
   engagementOwnReviewView,
   engagementReviewPublic,
   getOwnFavorite,
@@ -16,6 +15,7 @@ import {
   likeReply,
   toggleFavorite,
   toggleReviewLike,
+  engagementIsSuperAdmin,
 } from '../../cloudflare/participacion-clientes.js';
 import {
   encodeFirestoreFields, firestoreAdminCommit, firestoreAdminGet,
@@ -204,18 +204,16 @@ export async function onRequest(context) {
     }
     if (syncEvent) context.waitUntil?.(syncEngagementToSheets(env, user.idToken, syncEvent));
 
-    if (!engagementIsSuperAdmin(user)) {
-      const push = pushDetails(input.action, result, privateReview);
-      const isNewEvent = input.action === 'createReview' || input.action === 'replyReview' || result.alreadyLiked !== true;
-      if (push && isNewEvent) {
-        context.waitUntil?.(dispatchSocialPushEvent(env, {
-          type: push.type,
-          eventId: `${push.type}:${user.uid}:${result?.record?.likeId || result?.reply?.replyId || privateReview?.reviewId || Date.now()}`,
-          title: push.title,
-          body: push.body,
-          url: push.url,
-        }));
-      }
+    const push = pushDetails(input.action, result, privateReview);
+    const isNewEvent = input.action === 'createReview' || input.action === 'replyReview' || result.alreadyLiked !== true;
+    if (push && isNewEvent) {
+      context.waitUntil?.(dispatchSocialPushEvent(env, {
+        type: push.type,
+        eventId: `${push.type}:${user.uid}:${result?.record?.likeId || result?.reply?.replyId || privateReview?.reviewId || Date.now()}`,
+        title: push.title,
+        body: push.body,
+        url: push.url,
+      }));
     }
 
     return jsonResponse({ ok: true, ...result }, 200, origin, request.url);
