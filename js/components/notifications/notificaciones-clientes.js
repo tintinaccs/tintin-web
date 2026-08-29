@@ -4,13 +4,14 @@ import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-const ASSET_VERSION = 'tintin-20260817-notifications-opaque-1';
+const ASSET_VERSION = 'tintin-20260829-notifications-autoread-2';
 const API_RETRY_DELAYS_MS = [450, 1200];
 let initialized = false;
 let currentUser = null;
 let notifications = [];
 let unsubscribe = null;
 let authUnsubscribe = null;
+let markingVisibleRead = false;
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -63,7 +64,8 @@ function timeValue(value) {
 }
 
 function relativeTime(value) {
-  const diff = Math.max(0, Date.now() - timeValue(value).getTime());
+  const date = timeValue(value);
+  const diff = Math.max(0, Date.now() - date.getTime());
   const minutes = Math.floor(diff / 60000);
   if (minutes < 1) return 'Ahora';
   if (minutes < 60) return `Hace ${minutes} min`;
@@ -71,7 +73,11 @@ function relativeTime(value) {
   if (hours < 24) return `Hace ${hours} h`;
   const days = Math.floor(hours / 24);
   if (days < 7) return `Hace ${days} d`;
-  return timeValue(value).toLocaleDateString('es-PY', { day: '2-digit', month: 'short' });
+  if (days < 14) return date.toLocaleDateString('es-PY', { weekday: 'long' });
+  return date.toLocaleString('es-PY', {
+    day: '2-digit', month: 'short', year: date.getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined,
+    hour: '2-digit', minute: '2-digit',
+  });
 }
 
 function ensureDrawer() {
@@ -91,7 +97,7 @@ function ensureDrawer() {
     </div>
     <div class="tt-notifications-toolbar">
       <span class="tt-notifications-count" id="tt-notifications-count">Sin novedades</span>
-      <button type="button" class="tt-notifications-mark-all" id="tt-notifications-mark-all">Marcar todo como leído</button>
+      <span class="tt-notifications-auto-read">Al abrir, las novedades quedan vistas</span>
     </div>
     <div class="tt-notifications-list" id="tt-notifications-list" aria-live="polite"><div class="tt-notifications-loading">Cargando tu actividad…</div></div>`;
   document.body.appendChild(drawer);
@@ -123,8 +129,6 @@ function updateBadge() {
   });
   const count = document.getElementById('tt-notifications-count');
   if (count) count.textContent = unread ? `${unread} sin leer` : 'Todo al día';
-  const markAll = document.getElementById('tt-notifications-mark-all');
-  if (markAll) markAll.disabled = unread === 0;
 }
 
 function render() {
@@ -213,8 +217,32 @@ function optimisticRead(id) {
   render();
 }
 
+async function markVisibleNotificationsRead() {
+  if (!currentUser || markingVisibleRead || !notifications.some(item => item.read !== true)) return;
+  markingVisibleRead = true;
+  const snapshot = notifications.filter(item => item.read !== true).map(item => item.id);
+  notifications.forEach(item => {
+    if (snapshot.includes(item.id)) item.read = true;
+  });
+  render();
+  try {
+    await apiWithRetry('notificationsSeenAll');
+  } catch (error) {
+    console.warn('[notifications] No se pudieron confirmar como vistas:', error);
+    subscribe(currentUser);
+  } finally {
+    markingVisibleRead = false;
+  }
+}
+
 function wireEvents() {
   document.addEventListener('click', event => {
+    const notificationTrigger = event.target.closest?.('[data-nav-action="notifications"],#tabbar-notifications');
+    if (notificationTrigger) {
+      window.setTimeout(() => markVisibleNotificationsRead(), 0);
+      return;
+    }
+
     const card = event.target.closest?.('[data-notification-id]');
     if (card) {
       event.preventDefault();
@@ -224,17 +252,6 @@ function wireEvents() {
       const work = api('notificationSeen', { notificationId: id }).catch(error => console.warn('[notifications] No se pudo marcar como leída:', error));
       Promise.race([work, new Promise(resolve => setTimeout(resolve, 220))]).finally(() => {
         window.location.href = target;
-      });
-      return;
-    }
-
-    if (event.target.closest?.('#tt-notifications-mark-all')) {
-      event.preventDefault();
-      notifications.forEach(item => { item.read = true; });
-      render();
-      apiWithRetry('notificationsSeenAll').catch(error => {
-        console.warn('[notifications] No se pudieron marcar todas como leídas:', error);
-        subscribe(currentUser);
       });
     }
   }, true);
