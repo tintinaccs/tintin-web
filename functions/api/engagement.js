@@ -16,7 +16,6 @@ import {
   toggleFavorite,
   toggleReviewLike,
   engagementIsSuperAdmin,
-  engagementReviewPublic,
   engagementUpdateReviewStats,
 } from '../../cloudflare/participacion-clientes.js';
 import {
