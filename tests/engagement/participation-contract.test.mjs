@@ -6,7 +6,8 @@ import { engagementOwnReviewView, publicCustomerName } from '../../cloudflare/pa
 const read = path => readFile(new URL(`../../${path}`, import.meta.url), 'utf8');
 
 test('public review names follow the required mask', () => {
-  assert.equal(publicCustomerName('Antonia Peralta'), 'A***a P*****a');
+  assert.equal(publicCustomerName('Antonia Peralta'), 'A*** P***');
+  assert.equal(publicCustomerName('Antonia'), 'A***');
 });
 
 test('customer responses never expose private review fields', () => {
@@ -18,6 +19,12 @@ test('customer responses never expose private review fields', () => {
   assert.equal(view.realName, undefined);
   assert.equal(view.email, undefined);
   assert.equal(view.history, undefined);
+});
+
+test('las reseñas públicas no incluyen hilos de respuestas', async () => {
+  const source = await read('cloudflare/participacion-clientes.js');
+  const publicView = source.match(/function reviewPublic\(record\) \{[\s\S]*?\n\}/)?.[0] || '';
+  assert.doesNotMatch(publicView, /conversation:/);
 });
 
 test('engagement writes stay behind server APIs', async () => {

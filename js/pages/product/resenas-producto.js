@@ -21,9 +21,26 @@ const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
 })[char]);
 
+function publicAlias(value) {
+  const parts = String(value || 'Clienta Tintin').trim().split(/\s+/).filter(Boolean);
+  return parts.slice(0, 2).map(part => `${Array.from(part)[0] || 'C'}***`).join(' ');
+}
+
 function dateValue(value) {
   const date = value?.toDate?.() || new Date(value || 0);
   return Number.isFinite(date.getTime()) ? date : new Date(0);
+}
+
+function relativeDate(value) {
+  const date = dateValue(value);
+  const elapsedMinutes = Math.max(0, Math.floor((Date.now() - date.getTime()) / 60000));
+  if (elapsedMinutes < 1) return 'Recién publicado';
+  if (elapsedMinutes < 60) return `Hace ${elapsedMinutes} min`;
+  const elapsedHours = Math.floor(elapsedMinutes / 60);
+  if (elapsedHours < 24) return `Hace ${elapsedHours} h`;
+  const elapsedDays = Math.floor(elapsedHours / 24);
+  if (elapsedDays < 14) return `Hace ${elapsedDays} d`;
+  return date.toLocaleDateString('es-PY');
 }
 
 function normalizeRating(value) {
@@ -49,7 +66,7 @@ function ensureSection() {
   section.innerHTML = `
     <div class="container tt-reviews-layout">
       <aside class="tt-reviews-summary" aria-labelledby="product-reviews-title">
-        <p class="tt-section-sub">La conversación de la comunidad</p>
+        <p class="tt-section-sub">Opiniones de la comunidad</p>
         <h2 class="tt-section-title" id="product-reviews-title">Comentarios</h2>
         <div id="product-review-summary" aria-live="polite"></div>
       </aside>
@@ -140,21 +157,6 @@ function renderSummary() {
     }).join('')}</div>`;
 }
 
-function renderConversation(review) {
-  const conversation = Array.isArray(review.conversation) ? review.conversation : [];
-  const messages = conversation.map(message => `
-    <div class="tt-review-message ${message.authorType === 'store' ? 'tt-review-message--store' : ''}">
-      <strong>${escapeHtml(message.authorName || (message.authorType === 'store' ? 'Tintin Accesorios' : review.publicName))}</strong>
-      <span>${escapeHtml(message.text)}</span>
-    </div>`).join('');
-  const id = reviewIdOf(review);
-  return `${conversation.length ? `<div class="tt-review-conversation">${messages}</div>` : ''}${currentUser ? `
-    <form class="tt-review-reply-row" data-review-reply data-review-id="${escapeHtml(id)}">
-      <input type="text" name="reply" maxlength="1200" placeholder="Responder a esta reseña" aria-label="Responder a esta reseña">
-      <button type="submit" class="tt-btn">Responder</button>
-    </form>` : ''}`;
-}
-
 function highlightDeepLink() {
   if (deepLinkHandled) return;
   const match = String(location.hash || '').match(/^#review-([A-Za-z0-9_-]+)$/);
@@ -180,15 +182,14 @@ function renderReviews() {
     return `
     <article class="tt-review-card" id="review-${escapeHtml(id)}" data-review-card="${escapeHtml(id)}">
       <div class="tt-review-head">
-        <div><div class="tt-review-author">${escapeHtml(review.publicName || 'Clienta Tintin')}</div><div class="tt-review-stars" aria-label="${Number(review.rating)} de 5 estrellas">${starText(review.rating)}</div></div>
-        <time class="tt-review-date">${dateValue(review.createdAt).toLocaleDateString('es-PY')}</time>
+        <div><div class="tt-review-author">${escapeHtml(publicAlias(review.publicName))}</div><div class="tt-review-stars" aria-label="${Number(review.rating)} de 5 estrellas">${starText(review.rating)}</div></div>
+        <time class="tt-review-date" datetime="${dateValue(review.createdAt).toISOString()}" title="${dateValue(review.createdAt).toLocaleDateString('es-PY')}">${relativeDate(review.createdAt)}</time>
       </div>
       <p class="tt-review-comment">${escapeHtml(review.comment)}</p>
       ${review.storeLiked ? `<div class="tt-review-store-like">${heartIconMarkup(true)} A Tintin Accesorios le gustó esta reseña</div>` : ''}
       <div class="tt-review-social-actions">
         ${currentUser ? `<button type="button" class="tt-review-like-button${liked ? ' is-liked' : ''}" data-review-like="${escapeHtml(id)}" aria-pressed="${liked}" aria-label="${liked ? 'Quitar Me gusta' : 'Dar Me gusta'} a esta reseña"><span aria-hidden="true">${heartIconMarkup(liked)}</span><span>${likeCount ? `${likeCount} Me gusta` : 'Me gusta'}</span></button>` : `<span class="tt-review-like-count">${likeCount ? `${heartIconMarkup(true)} ${likeCount} Me gusta` : 'Todavía sin Me gusta'}</span>`}
       </div>
-      ${renderConversation(review)}
     </article>`;
   }).join('') : '<div class="tt-review-empty">Todavía no hay comentarios. Podés ser la primera en compartir tu opinión.</div>';
   highlightDeepLink();
@@ -423,22 +424,6 @@ document.addEventListener('submit', async event => {
     return;
   }
 
-  if (event.target.matches('[data-review-reply]')) {
-    event.preventDefault();
-    const reviewId = event.target.dataset.reviewId;
-    const input = event.target.elements.reply;
-    const text = input.value.trim();
-    if (!text) return;
-    const button = event.target.querySelector('button');
-    button.disabled = true;
-    try {
-      const result = await api({ action: 'replyReview', productId, reviewId, text });
-      if (ownReview?.reviewId === reviewId) ownReview = result.review;
-      input.value = '';
-    } catch (failure) {
-      window.alert(failure.message);
-    } finally { button.disabled = false; }
-  }
 });
 
 if (productId) {
