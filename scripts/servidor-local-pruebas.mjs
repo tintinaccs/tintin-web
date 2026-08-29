@@ -77,8 +77,9 @@ const server = http.createServer((request, response) => {
       response.end('{"ok":false,"error":"resource_invalid"}');
       return;
     }
+    const items = resource === 'products' ? [SEO_PRODUCT_FIXTURE] : [];
     response.writeHead(200, { 'cache-control': 'no-store', 'content-type': 'application/json; charset=utf-8', 'x-tintin-cache': 'test' });
-    response.end(JSON.stringify({ ok: true, resource, items: [], count: 0 }));
+    response.end(JSON.stringify({ ok: true, resource, items, count: items.length }));
     return;
   }
   if (url.pathname === '/api/visual-builder-public') {
