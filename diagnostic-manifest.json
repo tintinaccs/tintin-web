@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-29T12:38:04.330Z",
-  "sourceFingerprint": "6f6f29516697a336882461fd93544ed45ebe0ed062c93a6f22bf72c2b43f3254",
+  "generatedAt": "2026-08-29T12:48:09.375Z",
+  "sourceFingerprint": "8cc73a6e384015a746e870215ed016d26beb8407b49fd894d42ae6802d4a22a9",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 784,
     "textFiles": 752,
-    "totalBytes": 8688746,
+    "totalBytes": 8688801,
     "pages": 18,
     "modules": 504
   },
@@ -17991,7 +17991,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 342971,
-      "sha256": "c4dfd7873fd9f9b63bf0cb6ad9839688dcfa1a7aa2604dd14c66afea8166742d",
+      "sha256": "76791d55181d53321aaafa656fc50483a1116f30f4f44164a953c56d8725fc80",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28388,8 +28388,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 12942,
-      "sha256": "e753468578b47ce38dba0bc05be4ef4cfc27fea27115c7118b830132fdb047c6",
+      "bytes": 12936,
+      "sha256": "785503bc85f9767985fe10abd48e4333e94eb422084bfc813d46e773dfdfaf49",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30899,8 +30899,8 @@
     {
       "path": "_routes.json",
       "extension": ".json",
-      "bytes": 2100,
-      "sha256": "d40d16d3663ff00a8ff0154d8f74c087a6d6ed96d58db15120b255f424460b36"
+      "bytes": 2154,
+      "sha256": "530842f551aecef198e6cab708e7d3914fd176b8a8b24355a0cb00bba574a602"
     },
     {
       "path": "about.html",
@@ -31326,13 +31326,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 342971,
-      "sha256": "c4dfd7873fd9f9b63bf0cb6ad9839688dcfa1a7aa2604dd14c66afea8166742d"
+      "sha256": "76791d55181d53321aaafa656fc50483a1116f30f4f44164a953c56d8725fc80"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 342886,
-      "sha256": "1e87bff53fadf4b585a5a74ee819949757c2c403159e62c17df45989a494e456"
+      "sha256": "9a91422237dcf7c2f455a71e1146b7c29b7516ac914cff2ac0d26551a535b7d2"
     },
     {
       "path": "config/public-site.json",
@@ -34703,8 +34703,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 34722,
-      "sha256": "7c4118fe219a6981a1870540c20f88967649ced6ac5e1950e7fc614473dd1f28"
+      "bytes": 34729,
+      "sha256": "31f4e0283722a56cf9718d688a8fc8c69459d440ca48df8dc33abcb5e76e5986"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -34847,8 +34847,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 12942,
-      "sha256": "e753468578b47ce38dba0bc05be4ef4cfc27fea27115c7118b830132fdb047c6"
+      "bytes": 12936,
+      "sha256": "785503bc85f9767985fe10abd48e4333e94eb422084bfc813d46e773dfdfaf49"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
