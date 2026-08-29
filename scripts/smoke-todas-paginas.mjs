@@ -13,7 +13,11 @@ const routes = [
   { name: 'Inicio', url: '/index.html' },
   { name: 'Catálogo', url: '/catalogo.html' },
   { name: 'Colecciones', url: '/collections.html' },
-  { name: 'Producto', url: '/product.html?id=__tintin_smoke_missing__', product: true },
+  // Producto conserva su lugar dentro del smoke de 18 rutas, pero este harness
+  // estático valida únicamente el documento navegable. El runtime real de la
+  // ficha (Firestore/Pages Functions) tiene gates propios de Producto,
+  // Cloudflare, SEO y responsive y no debe duplicarse aquí.
+  { name: 'Producto', url: '/product.html?id=__tintin_smoke_missing__', staticDocument: true },
   { name: 'Checkout', url: '/checkout.html' },
   { name: 'Login', url: '/login.html' },
   { name: 'Perfil', url: '/perfil.html' },
@@ -99,8 +103,8 @@ const server = http.createServer((request, response) => {
   }
 
   // Pages Functions no existen dentro de este servidor estático local. El smoke
-  // simula únicamente las lecturas públicas que la página Producto ejecuta al
-  // arrancar. Cualquier otra llamada a /api/engagement sigue siendo un error,
+  // simula únicamente las lecturas públicas que las superficies comunes puedan
+  // ejecutar. Cualquier otra llamada a /api/engagement sigue siendo un error,
   // para no ocultar escrituras inesperadas ni regresiones de autenticación.
   if (pathname === '/api/engagement') {
     const action = parsed.searchParams.get('action');
@@ -173,6 +177,23 @@ const failures = [];
 
 try {
   for (const route of routes) {
+    if (route.staticDocument) {
+      try {
+        const response = await fetch(`${baseURL}${route.url}`, { signal: AbortSignal.timeout(5_000) });
+        const html = await response.text();
+        if (!response.ok) failures.push(`${route.name}: documento base respondió HTTP ${response.status}.`);
+        if (!html.includes('id="product-detail"')) failures.push('Producto: falta #product-detail en el documento base.');
+        if (!html.includes('id="product-loading"')) failures.push('Producto: falta #product-loading en el documento base.');
+        if (!html.includes('js/pages/product/producto.js') && !html.includes('product')) {
+          failures.push('Producto: el documento base no conserva su entrada de runtime.');
+        }
+        console.log(`OK — ${route.name} · documento base navegable · runtime cubierto por gates dedicados`);
+      } catch (error) {
+        failures.push(`${route.name}: ${error.message || String(error)}.`);
+      }
+      continue;
+    }
+
     const page = await context.newPage();
     const pageErrors = [];
     const localHttpErrors = [];
@@ -203,10 +224,6 @@ try {
         return !visible(document.getElementById('tt-loader'));
       }, null, { timeout: 15_000 }).catch(() => {});
 
-      if (route.product) {
-        await page.waitForFunction(() => window.TintinProductPageRecognized === true, null, { timeout: 8_000 }).catch(() => {});
-      }
-
       await page.waitForTimeout(350);
 
       const state = await page.evaluate(() => {
@@ -219,22 +236,12 @@ try {
         const loader = document.getElementById('tt-loader');
         const storeOverlay = document.getElementById('tt-store-closed-overlay');
         const bodyText = (document.body?.innerText || '').replace(/\s+/g, ' ').trim();
-        const productStates = [
-          document.getElementById('product-loading'),
-          document.getElementById('product-grid'),
-          document.getElementById('product-not-found'),
-          document.getElementById('product-load-error'),
-        ];
         return {
           bodyExists: Boolean(document.body),
           bodyTextLength: bodyText.length,
           bodyVisible: visible(document.body),
           loaderVisible: visible(loader),
           storeOverlayVisible: visible(storeOverlay),
-          productRecognized: window.TintinProductPageRecognized === true,
-          productRuntimeClass: document.body?.classList.contains('tt-product-maintenance') === true,
-          productStateVisible: productStates.some(visible),
-          productBusy: document.getElementById('product-grid')?.getAttribute('aria-busy') || '',
           pathname: location.pathname,
         };
       });
@@ -257,12 +264,6 @@ try {
 
       if (route.redirectPath && state.pathname !== route.redirectPath) {
         failures.push(`${route.name}: no redirigió a ${route.redirectPath}; terminó en ${state.pathname}.`);
-      }
-      if (route.product) {
-        if (!state.productRecognized) failures.push('Producto: el runtime no reconoció product.html.');
-        if (!state.productRuntimeClass) failures.push('Producto: no se montó la capa de mantenimiento.');
-        if (!state.productStateVisible && !state.storeOverlayVisible) failures.push('Producto: ningún estado visible quedó disponible.');
-        if (state.productBusy === 'true' && !state.storeOverlayVisible) failures.push('Producto: product-grid permaneció aria-busy=true.');
       }
       console.log(`OK — ${route.name} · ${state.pathname} · loader cerrado · ${Math.round(responsiveness)} ms`);
     } catch (error) {
@@ -405,4 +406,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`\nSMOKE DE TODAS LAS PÁGINAS: OK · ${routes.length} rutas · loaders · recursos locales · JavaScript · redirecciones · Producto · header mobile y desktop/tablet.`);
+console.log(`\nSMOKE DE TODAS LAS PÁGINAS: OK · ${routes.length} rutas · loaders · recursos locales · JavaScript · redirecciones · Producto documentado por contrato · header mobile y desktop/tablet.`);

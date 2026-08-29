@@ -8,10 +8,11 @@
 
    Este archivo conserva la ruta histórica que todavía carga UI Quality para
    no romper cachés ni despliegues escalonados, pero ya NO mantiene estado,
-   listeners ni mutaciones paralelas. Solo delega la ficha detallada al helper
-   de solo lectura.
+   listeners ni mutaciones paralelas. Solo delega la ficha detallada y su
+   presentación integral, sin crear una segunda autoridad de datos.
    ============================================================= */
 
 window.TintinAdminUsersPhase8Booted = true;
 
 await import('./ficha-usuario-admin.js?v=tintin-20260828-clientes-ficha-completa-2');
+await import('./perfil-usuario-superadmin.js?v=tintin-20260829-final-stability-1');

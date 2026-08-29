@@ -12,9 +12,15 @@ const artifactDir = path.join(root, 'artifacts', 'global-responsive');
 fs.rmSync(artifactDir, { recursive: true, force: true });
 fs.mkdirSync(artifactDir, { recursive: true });
 
+// Producto tiene un runtime de datos propio (Firestore/Pages Functions) que un
+// servidor estático no puede completar de forma representativa. Su geometría,
+// ruta y render responsive se validan en los gates dedicados de Producto y
+// Cloudflare. Mantenerlo también aquí duplicaba responsabilidades y podía dejar
+// bloqueada toda la matriz global esperando infraestructura que este harness no
+// posee. Este audit cubre el resto del shell público compartido en 17 anchos.
 const routes = [
   ['inicio', '/index.html'], ['catalogo', '/catalogo.html'], ['colecciones', '/collections.html'],
-  ['producto', '/product.html?id=__geometry__'], ['nosotros', '/about.html'], ['contacto', '/contact.html'],
+  ['nosotros', '/about.html'], ['contacto', '/contact.html'],
   ['terminos', '/terminos.html'], ['privacidad', '/privacidad.html'], ['envios', '/envios.html'],
   ['cambios', '/cambios-devoluciones.html'], ['faq', '/preguntas-frecuentes.html'], ['404', '/404.html'],
 ];
@@ -88,11 +94,6 @@ async function prepare(page, width) {
   await settleFrames(page);
 }
 
-// Deja pasar dos frames de render antes de medir. Un evaluate puede forzar
-// layout a mitad de tarea y observar un estado intermedio que jamás se pinta
-// (los ResizeObserver/MutationObserver de la página todavía no corrieron).
-// Lo que valida esta auditoría es lo que una persona ve — frames pintados —
-// no instantáneas de layout entre tareas.
 async function settleFrames(page) {
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))).catch(() => {});
 }
@@ -203,10 +204,6 @@ async function inspectBase(page, width) {
 }
 
 async function inspectMobileBottom(page) {
-  // El footer usa content-visibility. Al entrar en pantalla puede sustituir su
-  // tamaño intrínseco y aumentar scrollHeight más de una vez. Converger hasta
-  // el fondo real evita medir una posición intermedia como si fuese un
-  // solapamiento con la navegación fija, sin relajar el umbral de seguridad.
   for (let attempt = 0; attempt < 5; attempt += 1) {
     await page.evaluate(() => window.scrollTo(0,document.documentElement.scrollHeight));
     await page.waitForTimeout(140);

@@ -203,6 +203,7 @@ function mountPublicShell() {
     enhanceMobileFooter();
     await registerNavigationSurfaces();
     loadSharedRuntime();
+    await import('../../quality/estabilidad-final-publica.js?v=tintin-20260829-final-stability-1');
 
     document.dispatchEvent(new CustomEvent('tintin:public-shell-ready', {
       detail: {
@@ -210,6 +211,7 @@ function mountPublicShell() {
         socialNotifications: 'global',
         globalConfigRequests: 1,
         sharedLogoRequests: 1,
+        finalStability: 'tintin-20260829-final-stability-1',
       },
     }));
   }).catch(error => {
