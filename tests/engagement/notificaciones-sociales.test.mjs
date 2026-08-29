@@ -76,12 +76,14 @@ test('las acciones de Tintin notifican a la autora de la reseña', () => {
   assert.match(adminEngagement, /buildUserNotificationWrite/);
 });
 
-test('la ficha de producto admite Me gusta, respuestas y deep links de reseña', () => {
+test('la ficha de producto admite Me gusta y reseñas públicas con identidad protegida', () => {
   assert.match(productReviews, /toggleReviewLike/);
-  assert.match(productReviews, /replyReview/);
-  assert.match(productReviews, /data-review-id/);
+  assert.match(productReviews, /data-review-like/);
   assert.match(productReviews, /id="review-/);
   assert.match(productReviews, /#review-/);
+  assert.match(productReviews, /relativeDate/);
+  assert.match(productReviews, /function publicAlias/);
+  assert.doesNotMatch(productReviews, /data-review-reply/);
 });
 
 test('clientas tienen bandeja de 100, saneado y reintentos de acciones importantes', () => {

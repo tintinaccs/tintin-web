@@ -120,6 +120,13 @@ export async function onRequest(context) {
     return jsonResponse({ ok: true, ...result }, 200, origin, request.url);
   } catch (error) {
     const conflict = error?.code === 'version_conflict';
-    return jsonResponse({ ok: false, error: String(error?.message || 'No se pudo completar la acción').slice(0, 300) }, conflict ? 409 : 400, origin, request.url);
+    const status = Number(error?.status);
+    const isClientError = Number.isInteger(status) && status >= 400 && status < 500;
+    return jsonResponse(
+      { ok: false, error: String(error?.message || 'No se pudo completar la acción').slice(0, 300) },
+      conflict ? 409 : (isClientError ? status : 400),
+      origin,
+      request.url
+    );
   }
 }

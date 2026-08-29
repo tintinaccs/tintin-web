@@ -6,7 +6,8 @@ import { engagementOwnReviewView, publicCustomerName } from '../../cloudflare/pa
 const read = path => readFile(new URL(`../../${path}`, import.meta.url), 'utf8');
 
 test('public review names follow the required mask', () => {
-  assert.equal(publicCustomerName('Antonia Peralta'), 'A***a P*****a');
+  assert.equal(publicCustomerName('Antonia Peralta'), 'A*** P***');
+  assert.equal(publicCustomerName('Antonia'), 'A***');
 });
 
 test('customer responses never expose private review fields', () => {
@@ -20,11 +21,29 @@ test('customer responses never expose private review fields', () => {
   assert.equal(view.history, undefined);
 });
 
+test('las reseñas públicas no incluyen hilos de respuestas', async () => {
+  const source = await read('cloudflare/participacion-clientes.js');
+  const publicView = source.match(/function reviewPublic\(record\) \{[\s\S]*?\n\}/)?.[0] || '';
+  assert.doesNotMatch(publicView, /conversation:/);
+});
+
 test('engagement writes stay behind server APIs', async () => {
   const rules = await read('firestore.rules');
   assert.match(rules, /match \/reviewRecords\/\{reviewId\}[\s\S]*?allow create, update, delete: if false/);
   assert.match(rules, /match \/likeRecords\/\{likeId\}[\s\S]*?allow create, update, delete: if false/);
   assert.match(rules, /match \/favorites\/\{productId\}[\s\S]*?allow create, update, delete: if false/);
+});
+
+test('comentar renueva una credencial vencida sin cerrar la sesión de la clienta', async () => {
+  const [product, route] = await Promise.all([
+    read('js/pages/product/resenas-producto.js'),
+    read('functions/api/engagement.js'),
+  ]);
+  assert.match(product, /getIdToken\(forceRefresh\)/);
+  assert.match(product, /requestApi\(input, method, action, true\)/);
+  assert.match(product, /nunca llamamos a signOut aquí/);
+  assert.doesNotMatch(product, /signOut\(/);
+  assert.match(route, /isClientError \? status : 400/);
 });
 
 test('los likes de producto usan estado server-side y estadísticas públicas reales', async () => {

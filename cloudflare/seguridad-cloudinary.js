@@ -55,7 +55,12 @@ export function preflightResponse(origin, requestUrl = '', methods = 'POST, OPTI
 function getBearerToken(request) {
   const authorization = request.headers.get('authorization') || '';
   const match = authorization.match(/^Bearer\s+(.+)$/i);
-  if (!match) throw new Error('Falta la autenticación de Super Admin');
+  if (!match) {
+    const error = new Error('Falta la autenticación');
+    error.status = 401;
+    error.code = 'auth/missing-token';
+    throw error;
+  }
   return match[1].trim();
 }
 
@@ -70,12 +75,18 @@ export async function requireFirebaseUser(request) {
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
     console.error(JSON.stringify({ message: 'identitytoolkit lookup falló', reason: data?.error?.message || 'sin detalle', status: response.status }));
-    throw new Error('La sesión venció; volvé a iniciar sesión');
+    const error = new Error('La sesión necesita renovarse. Reintentá.');
+    error.status = 401;
+    error.code = 'auth/invalid-token';
+    throw error;
   }
   const user = Array.isArray(data.users) ? data.users[0] : null;
   const email = String(user?.email || '').trim().toLowerCase();
   if (!user?.localId || !email || user.emailVerified !== true) {
-    throw new Error('La cuenta debe tener un correo verificado');
+    const error = new Error('La cuenta debe tener un correo verificado');
+    error.status = 403;
+    error.code = 'auth/email-not-verified';
+    throw error;
   }
   return { uid: String(user.localId), email, idToken: token };
 }

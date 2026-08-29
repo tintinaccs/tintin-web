@@ -44,15 +44,12 @@ function customerName(profile, email) {
     clean(String(email || '').split('@')[0], 120) || 'Clienta Tintin';
 }
 
-function maskWord(word, compact = false) {
-  const chars = Array.from(clean(word, 80));
-  if (!chars.length) return '';
-  if (chars.length <= 2) return `${chars[0]}*`;
-  return `${chars[0]}${'*'.repeat(compact ? 3 : Math.max(3, chars.length - 2))}${chars.at(-1)}`;
-}
-
 export function publicCustomerName(realName) {
-  return clean(realName, 160).split(/\s+/).filter(Boolean).map((word, index) => maskWord(word, index === 0)).join(' ');
+  const parts = clean(realName, 160).split(/\s+/).filter(Boolean);
+  if (!parts.length) return 'Clienta Tintin';
+  // La vista pública nunca muestra un nombre real: sólo iniciales con una máscara de longitud fija.
+  // El nombre completo queda exclusivamente en reviewRecords, accesible para Super Admin.
+  return parts.slice(0, 2).map(part => `${Array.from(part)[0]}***`).join(' ');
 }
 
 async function readContext(env, user, productId) {
@@ -79,7 +76,7 @@ async function readContext(env, user, productId) {
 
 function reviewPublic(record) {
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     reviewId: record.reviewId,
     productId: record.productId,
     productName: record.productName,
@@ -88,15 +85,6 @@ function reviewPublic(record) {
     publicName: record.publicName,
     storeLiked: Boolean(record.storeLiked),
     likeCount: Math.max(0, Number(record.likeCount) || 0),
-    conversation: Array.isArray(record.conversation) ? record.conversation.map(message => ({
-      id: clean(message.id, 80),
-      authorType: message.authorType === 'store' ? 'store' : 'customer',
-      authorName: message.authorType === 'store'
-        ? 'Tintin Accesorios'
-        : clean(message.actorPublicName || record.publicName || 'Clienta Tintin', 160),
-      text: clean(message.text, MAX_REPLY),
-      createdAt: message.createdAt,
-    })).slice(-MAX_REPLIES) : [],
     createdAt: record.createdAt,
     updatedAt: record.updatedAt,
   };
@@ -113,7 +101,6 @@ function ownReviewView(record) {
     visible: Boolean(record.visible),
     deleted: Boolean(record.deleted),
     likeCount: Math.max(0, Number(record.likeCount) || 0),
-    conversation: reviewPublic(record).conversation,
   };
 }
 
