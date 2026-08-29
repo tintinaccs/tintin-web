@@ -19,7 +19,9 @@ const adminFicha = read('js/admin/users/ficha-usuario-admin.js');
 const avatarApi = read('functions/api/profile-avatar-upload.js');
 const socialBackend = read('cloudflare/participacion-clientes.js');
 const socialApi = read('functions/api/engagement.js');
-const notifications = read('cloudflare/notificaciones-participacion.js');
+const notificationApi = read('functions/api/notifications.js');
+const notifications = read('cloudflare/notificaciones-sociales.js');
+const pushService = read('cloudflare/servicio-push.js');
 const sheetsSync = read('cloudflare/sincronizacion-participacion-sheets.js');
 const appsScript = read('apps-script/Participacion.gs');
 const systemHealthApi = read('functions/api/system-health.js');
@@ -40,10 +42,10 @@ ok(has(stability, '.tt-mobile-nav-indicator{z-index:1!important'), 'El indicador
 ok(has(stability, '.tt-tabbar-btn{position:relative!important;z-index:2!important'), 'Los botones móviles no están por encima de las capas decorativas.');
 ok(has(stability, '.tt-notification-badge,#tt-tabbar .tt-cart-badge{z-index:5!important'), 'Los badges móviles pueden quedar detrás de capas decorativas.');
 
-// 3. Notificaciones / push: arquitectura social actual y destinatarios server-side.
-ok(has(socialApi, /addUserNotification|adminNotification/i), 'Engagement no conserva notificaciones por actor/destinatario.');
-ok(has(notifications, /listUserNotifications|markUserNotificationsRead/), 'No existe contrato interno de notificaciones de clientes.');
-ok(has(notifications, /SUPER_ADMIN_EMAIL|superadmin/i), 'La capa de notificaciones no identifica al Super Admin.');
+// 3. Notificaciones / push: usa el núcleo social canónico actual, sin capa histórica paralela.
+ok(has(notificationApi, 'notificaciones-sociales.js') && has(notificationApi, 'notifyUserIfAbsent') && has(notificationApi, 'markAllNotificationsRead'), 'La API de notificaciones no delega al núcleo social canónico.');
+ok(has(notifications, /export\s+async\s+function\s+notifyUserIfAbsent|notifyUserIfAbsent/) && has(notifications, /notifyAdminIfAbsent/) && has(notifications, /markAllNotificationsRead/), 'El núcleo social no conserva destinatarios y lectura de notificaciones.');
+ok(has(socialApi, 'dispatchSocialPushEvent') && has(pushService, /pushEnabled|dispatchSocialPushEvent/), 'Engagement no conserva el puente Web Push server-side.');
 
 // 4. Sheets / Apps Script: sincronización server-to-server y diagnóstico operativo.
 ok(has(sheetsSync, /SHEETS_ENGAGEMENT_SECRET|secret/i), 'La sincronización social con Sheets no conserva secreto servidor-a-servidor.');
