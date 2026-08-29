@@ -85,7 +85,9 @@ for (const file of fs.readdirSync(root).filter(file => file.endsWith('.html'))) 
 
 const pkg = JSON.parse(read('package.json'));
 check('Fase 11 forma parte del cierre', pkg.scripts['audit:phase11'] === 'node scripts/auditar-fase-11-seo.js' && pkg.scripts['test:phase11-seo'] === 'playwright test tests/seo/phase11-seo.spec.js --project=chromium' && pkg.scripts['audit:final'].includes('audit:phase11'), 'Las verificaciones SEO deben quedar permanentes.');
-check('Existe monitor de producción', fs.existsSync(path.join(root, 'scripts/auditar-produccion-salud.mjs')) && fs.existsSync(path.join(root, '.github/workflows/seo-produccion-fase-11.yml')), 'La disponibilidad pública debe revisarse de forma recurrente.');
+const productionWorkflow = read('.github/workflows/seo-produccion-fase-11.yml');
+check('Existe monitor de producción', fs.existsSync(path.join(root, 'scripts/auditar-produccion-salud.mjs')) && productionWorkflow.includes('production-health:'), 'La disponibilidad pública debe revisarse de forma recurrente.');
+check('El monitor abre el catálogo en un navegador real', fs.existsSync(path.join(root, 'scripts/auditar-catalogo-navegador-produccion.mjs')) && productionWorkflow.includes('auditar-catalogo-navegador-produccion.mjs') && productionWorkflow.includes('playwright install --with-deps chromium'), 'La API puede responder aun cuando la grilla no pinta; producción debe comprobar ambas capas.');
 check('Origen se sincroniza antes de CSP', read('scripts/generar-csp-cloudflare.js').includes('scripts/sincronizar-origen-publico.js') && read('scripts/generar-csp-cloudflare.js').includes('config/public-site.json'), 'El build debe aplicar una sola fuente de dominio antes de generar hashes y CSP.');
 
 const failed = checks.filter(item => !item.ok);
