@@ -1449,7 +1449,7 @@ function _renderProductDetail(product) {
       const url = window.location.href;
       const text = `¡Mirá este accesorio de TINTIN! ${_pdProduct.name}`;
       if (navigator.share) { await navigator.share({ title: _pdProduct.name, text, url }).catch(() => {}); return; }
-      try { await navigator.clipboard?.writeText(url); compactShare.textContent = 'Enlace copiado'; window.setTimeout(() => { if (compactShare.isConnected) compactShare.textContent = 'Compartir'; }, 1800); } catch {}
+      try { await navigator.clipboard?.writeText(url); const label = compactShare.querySelector('[data-share-product-label]'); if (label) label.textContent = 'Enlace copiado'; window.setTimeout(() => { if (label?.isConnected) label.textContent = 'Compartir'; }, 1800); } catch {}
     });
   }
 
