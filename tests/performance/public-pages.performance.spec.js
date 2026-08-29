@@ -13,7 +13,10 @@ function productionRoute(pageName) {
 for (const pageName of PUBLIC_PAGES) {
   test(`[público] ${pageName}: carga, estabilidad y Web Vitals`, async ({ page }) => {
     await installVitalsObserver(page);
-    await page.goto(url(productionRoute(pageName)), { waitUntil: 'load', timeout: 45000 });
+    // Medimos el documento navegable y la experiencia usable. El evento `load`
+    // puede quedar retenido por SDK/terceros y no representa ni DCL, ni LCP,
+    // ni el cierre del loader que este gate realmente protege.
+    await page.goto(url(productionRoute(pageName)), { waitUntil: 'domcontentloaded', timeout: 45000 });
     await waitLoaderGone(page, BUDGETS.loaderMaxMs);
 
     const loaderGone = await page.evaluate(() => {
