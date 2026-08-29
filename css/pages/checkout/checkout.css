@@ -123,7 +123,7 @@
     .ck-body {
       max-width: 700px;
       margin: 0 auto;
-      padding: 8px 16px 80px;
+      padding: 8px 16px clamp(80px, 8vw, 104px);
     }
 
     /* ---- PANELS ---- */
@@ -158,7 +158,7 @@
       color: var(--text-muted);
       margin-top: 2px;
     }
-    .ck-panel-body { padding: 24px; }
+    .ck-panel-body { padding: clamp(24px, 2.5vw, 32px); }
 
     /* ---- CART ITEMS ---- */
     /* Reserva el alto de una fila mientras carga: evita que el botón se mueva. */
@@ -263,6 +263,44 @@
       font-weight: 800;
     }
     .ck-subtotal-val { color: var(--acc); font-size: 16px; }
+
+    .ck-coupon { margin-top: 14px; }
+    .ck-coupon-row { display: flex; gap: 8px; }
+    .ck-coupon-row .ck-input { flex: 1; text-transform: uppercase; }
+    .ck-coupon-apply {
+      flex: 0 0 auto;
+      padding: 0 20px;
+      background: var(--acc);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      cursor: pointer;
+      font-family: Montserrat;
+      transition: background .2s;
+    }
+    .ck-coupon-apply:hover { background: var(--acc-dark); }
+    .ck-coupon-apply:disabled { background: #ccc; cursor: not-allowed; }
+    .ck-coupon-msg { font-size: 12px; margin-top: 6px; min-height: 16px; }
+    .ck-coupon-msg.ck-coupon-msg-error { color: #c0392b; }
+    .ck-coupon-msg.ck-coupon-msg-ok { color: #2e7d32; font-weight: 700; }
+    .ck-discount-row { color: #2e7d32; }
+    .ck-discount-row .ck-subtotal-val { color: #2e7d32; }
+    .ck-discount-remove {
+      background: none;
+      border: none;
+      color: #c0392b;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      cursor: pointer;
+      margin-left: 8px;
+      padding: 0;
+    }
 
     .ck-empty {
       text-align: center;

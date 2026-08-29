@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1"></script>
-  <script src="js/cargador-pagina.js?v=tintin-20260825-scroll-reveal-2"></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260829-admin-coupons-2"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260827-navigation-bootstrap-1" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
@@ -39,8 +39,8 @@
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3">
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260829-favorite-alignment-1">
-  <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20260818-text-icons-1">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260829-merge-favorite-clamp-1">
+  <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20260829-checkout-coupons-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -96,6 +96,17 @@
       <div class="ck-subtotal">
         <span>Subtotal:</span>
         <span class="ck-subtotal-val" id="ck-subtotal-val">Gs. 0</span>
+      </div>
+      <div class="ck-subtotal ck-discount-row" id="ck-discount-row" style="display:none">
+        <span>Descuento <span id="ck-discount-code-label"></span><button type="button" class="ck-discount-remove" id="ck-coupon-remove">Quitar</button></span>
+        <span class="ck-subtotal-val" id="ck-discount-val">- Gs. 0</span>
+      </div>
+      <div class="ck-coupon" id="ck-coupon-block">
+        <div class="ck-coupon-row">
+          <input type="text" class="ck-input" id="ck-coupon-code" placeholder="Código de cupón" maxlength="40" autocomplete="off" />
+          <button type="button" class="ck-coupon-apply" id="ck-coupon-apply">Aplicar</button>
+        </div>
+        <div class="ck-coupon-msg" id="ck-coupon-msg" role="status" aria-live="polite"></div>
       </div>
       <div class="ck-error" id="error-0" role="alert"></div>
       <button type="button" class="ck-btn" id="btn-step1-next">Elegir cómo lo recibo →</button>
@@ -833,6 +844,8 @@ async function renderCart() {
       </div>` : ''}`;
 
     subtotalEl.textContent = 'Gs. 0';
+    appliedCoupon = null;
+    renderAppliedCoupon();
 
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
@@ -879,7 +892,115 @@ async function renderCart() {
   }).join('');
 
   subtotalEl.textContent = formatPrice(cartTotal(cartItems));
+  await refreshAppliedCoupon(cartTotal(cartItems));
 }
+
+// ---- CUPÓN / DESCUENTO ----
+// appliedCoupon vive sólo acá (paso 1); pedido-checkout-seguro.js lo lee vía
+// window.__ckAppliedCoupon al armar el draft. El monto que se ve acá es sólo
+// una vista previa (functions/api/coupon-validate.js, sin autoridad) — el
+// descuento real se aplica y se descuenta el usedCount dentro de la misma
+// transacción que crea el pedido, en CrearPedido.gs.
+let appliedCoupon = null;
+window.__ckAppliedCoupon = () => appliedCoupon;
+
+function couponMsg(text, kind) {
+  const el = document.getElementById('ck-coupon-msg');
+  if (!el) return;
+  el.textContent = text || '';
+  el.className = 'ck-coupon-msg' + (kind ? ` ck-coupon-msg-${kind}` : '');
+}
+
+const COUPON_ERROR_MESSAGES = {
+  coupon_not_found: 'Ese código no existe.',
+  coupon_inactive: 'Ese cupón ya no está activo.',
+  coupon_expired: 'Ese cupón venció.',
+  coupon_limit_reached: 'Ese cupón alcanzó su límite de usos.',
+  coupon_min_purchase: minPurchase => `Necesitás una compra mínima de ${formatPrice(minPurchase || 0)} para este cupón.`,
+  coupon_invalid: 'Ingresá un código válido.',
+  coupon_validate_failed: 'No pudimos validar el cupón. Intentá de nuevo.'
+};
+
+function renderAppliedCoupon() {
+  const row = document.getElementById('ck-discount-row');
+  const block = document.getElementById('ck-coupon-block');
+  const label = document.getElementById('ck-discount-code-label');
+  const val = document.getElementById('ck-discount-val');
+  if (!row || !block) return;
+  if (appliedCoupon) {
+    row.style.display = 'flex';
+    block.style.display = 'none';
+    if (label) label.textContent = `(${appliedCoupon.code})`;
+    if (val) val.textContent = `- ${formatPrice(appliedCoupon.discount)}`;
+  } else {
+    row.style.display = 'none';
+    block.style.display = 'block';
+  }
+}
+
+async function requestCouponPreview(code, subtotal) {
+  const token = await auth.currentUser.getIdToken();
+  const response = await fetch('/api/coupon-validate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ code, subtotal })
+  });
+  return response.json().catch(() => ({ ok: false, error: 'coupon_validate_failed' }));
+}
+
+async function applyCoupon() {
+  const input = document.getElementById('ck-coupon-code');
+  const code = String(input?.value || '').trim().toUpperCase();
+  if (!code) { couponMsg('Ingresá un código.', 'error'); return; }
+  if (!currentUser) { couponMsg('Iniciá sesión para aplicar un cupón.', 'error'); return; }
+
+  const button = document.getElementById('ck-coupon-apply');
+  if (button) { button.disabled = true; button.textContent = 'Aplicando…'; }
+  try {
+    const subtotal = cartTotal(cartItems);
+    const result = await requestCouponPreview(code, subtotal);
+    if (!result.ok) {
+      const entry = COUPON_ERROR_MESSAGES[result.error];
+      couponMsg(typeof entry === 'function' ? entry(result.minPurchase) : (entry || 'No pudimos aplicar ese cupón.'), 'error');
+      return;
+    }
+    appliedCoupon = { code: result.code, type: result.type, value: result.value, discount: result.discount };
+    if (input) input.value = '';
+    couponMsg('', '');
+    renderAppliedCoupon();
+  } catch (error) {
+    console.warn('[checkout] coupon apply error:', error);
+    couponMsg('No pudimos validar el cupón. Intentá de nuevo.', 'error');
+  } finally {
+    if (button) { button.disabled = false; button.textContent = 'Aplicar'; }
+  }
+}
+
+function removeCoupon() {
+  appliedCoupon = null;
+  couponMsg('', '');
+  renderAppliedCoupon();
+}
+
+// Si cambia el subtotal (qty +/-, quitar producto) con un cupón aplicado,
+// se revalida en silencio contra el subtotal actual — el server es la única
+// fuente de verdad, así que nunca mostramos un descuento ya vencido/inválido.
+async function refreshAppliedCoupon(subtotal) {
+  if (!appliedCoupon || !currentUser) { renderAppliedCoupon(); return; }
+  try {
+    const result = await requestCouponPreview(appliedCoupon.code, subtotal);
+    appliedCoupon = result.ok ? { code: result.code, type: result.type, value: result.value, discount: result.discount } : null;
+  } catch (error) {
+    console.warn('[checkout] coupon refresh error:', error);
+  }
+  renderAppliedCoupon();
+}
+
+document.getElementById('ck-coupon-apply')?.addEventListener('click', applyCoupon);
+document.getElementById('ck-coupon-code')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); applyCoupon(); }
+});
+document.getElementById('ck-coupon-remove')?.addEventListener('click', removeCoupon);
 
 function showCkToast(message) {
   let toast = document.getElementById('ck-toast');

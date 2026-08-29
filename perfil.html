@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1"></script>
-  <script src="js/cargador-pagina.js?v=tintin-20260825-scroll-reveal-2"></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260829-admin-coupons-2"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260827-navigation-bootstrap-1" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3">
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260829-favorite-alignment-1" />
+  <link rel="stylesheet" href="styles.css?v=tintin-20260829-merge-favorite-clamp-1" />
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -61,7 +61,7 @@
     /* Profile layout */
     .perfil-wrap {
       max-width: 700px; margin: 0 auto;
-      padding: 100px 24px 120px;
+      padding: clamp(100px, 9vw, 128px) 24px clamp(120px, 10vw, 152px);
     }
 
     .perfil-back {
@@ -75,7 +75,7 @@
 
     .perfil-card {
       background: #fff; border-radius: var(--radius);
-      border: 1.5px solid var(--border); overflow: hidden; margin-bottom: 20px;
+      border: 1.5px solid var(--border); overflow: hidden; margin-bottom: clamp(20px, 2.5vw, 28px);
     }
 
     .perfil-header {

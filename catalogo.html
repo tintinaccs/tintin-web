@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1"></script>
-  <script src="js/cargador-pagina.js?v=tintin-20260825-scroll-reveal-2"></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260829-admin-coupons-2"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260827-navigation-bootstrap-1" defer></script>
   <title>Catálogo de Accesorios | TINTIN Accesorios & Relojes</title>
@@ -48,7 +48,7 @@
 <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3">
 <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260811-cls-desktop-stable-2">
 <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260829-favorite-alignment-1">
+  <link rel="stylesheet" href="styles.css?v=tintin-20260829-merge-favorite-clamp-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -177,7 +177,8 @@
 
     .cat-hero {
       background: #fce4ec; border-radius: 20px;
-      padding: 34px 32px; margin-bottom: 28px; text-align: center;
+      padding: clamp(34px, 4vw, 56px) clamp(32px, 3vw, 48px);
+      margin-bottom: clamp(28px, 3vw, 40px); text-align: center;
       margin-top: var(--header-h);
     }
     .cat-hero-title {
@@ -189,7 +190,7 @@
       margin-top: 8px; letter-spacing: .1em; text-transform: uppercase;
     }
 
-    .cat-layout { display: grid; grid-template-columns: 240px 1fr; gap: 28px; align-items: start; }
+    .cat-layout { display: grid; grid-template-columns: 240px 1fr; gap: clamp(28px, 3vw, 40px); align-items: start; }
 
     .cat-sidebar {
       background: #fce4ec; border-radius: 14px; border: 1.5px solid #f5d0de;
@@ -259,7 +260,7 @@
     }
     .cat-search:focus { border-color: var(--acc); }
 
-    .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(18px, 2vw, 28px); }
     .cat-controls { display: flex; flex: 1 1 460px; min-width: 0; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 
     .cat-filter-toggle {

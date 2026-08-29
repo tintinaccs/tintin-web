@@ -39,8 +39,10 @@ var PHASE4_ALLOWED_PAYLOAD_KEYS_ = [
   'referencia', 'mapLocation', 'shippingMethod', 'encomiendaMode',
   'paymentMethod', 'expectedSubtotal', 'expectedShippingCost',
   'expectedShippingPending', 'expectedTotal',
-  'wantsInvoice', 'razonSocial', 'ruc', 'ci'
+  'wantsInvoice', 'razonSocial', 'ruc', 'ci',
+  'couponCode', 'expectedDiscount'
 ];
+var PHASE4_COUPON_CODE_PATTERN_ = /^[A-Z0-9_-]{3,40}$/;
 // Mismo formato que valida el cliente en
 // js/components/forms/validacion-documentos-py.js — no se recalcula el
 // dígito verificador real del RUC (eso es responsabilidad de la DNIT).
@@ -390,6 +392,32 @@ function phase4ResolveShipping_(shippingRates, selectedCity, selectedDepartment,
   return { ok: false, error: 'shipping_invalid' };
 }
 
+// Misma validación que corre en functions/api/coupon-validate.js para la
+// vista previa del checkout, pero acá es la única que realmente autoriza el
+// descuento: coupons/{code} no tiene lectura pública (ver firestore.rules),
+// y usedCount se descuenta en la MISMA transacción que crea el pedido, para
+// que dos compras concurrentes con el mismo código de un solo uso no puedan
+// pasar las dos.
+function phase4ResolveCoupon_(coupon, code, subtotal) {
+  if (!coupon) return { ok: false, error: 'coupon_not_found' };
+  if (coupon.active !== true) return { ok: false, error: 'coupon_inactive' };
+  if (coupon.expiresAt && Date.parse(coupon.expiresAt) < Date.now()) {
+    return { ok: false, error: 'coupon_expired' };
+  }
+  var maxUses = coupon.maxUses;
+  if (maxUses !== null && maxUses !== undefined && Number(coupon.usedCount || 0) >= Number(maxUses)) {
+    return { ok: false, error: 'coupon_limit_reached' };
+  }
+  var minPurchase = Math.max(0, phase4ParseMoney_(coupon.minPurchase) || 0);
+  if (subtotal < minPurchase) return { ok: false, error: 'coupon_min_purchase' };
+
+  var discount = coupon.type === 'percent'
+    ? Math.round((subtotal * Math.min(100, Math.max(0, Number(coupon.value) || 0))) / 100)
+    : Math.max(0, Math.round(Number(coupon.value) || 0));
+  discount = Math.min(subtotal, discount);
+  return { ok: true, code: code, type: coupon.type === 'percent' ? 'percent' : 'fixed', value: Number(coupon.value) || 0, discount: discount };
+}
+
 /**
  * action: 'createOrder'. payload es el mismo "draft" que ya arma
  * buildDraft() en js/pedido-checkout-seguro.js: requestId, cartLines
@@ -466,6 +494,14 @@ function phase4CreateOrder_(payload, idToken) {
     return { ok: false, error: 'invalid_quote' };
   }
 
+  var couponCode = phase4CleanText_(payload.couponCode, 40).toUpperCase();
+  if (couponCode && !PHASE4_COUPON_CODE_PATTERN_.test(couponCode)) return { ok: false, error: 'coupon_not_found' };
+  var expectedDiscount = 0;
+  if (couponCode) {
+    if (!phase4ExpectedMoneyValid_(payload.expectedDiscount)) return { ok: false, error: 'invalid_quote' };
+    expectedDiscount = payload.expectedDiscount;
+  }
+
   var mapLocation = null;
   if (payload.mapLocation !== null && payload.mapLocation !== undefined) {
     if (!phase4HasOnlyKeys_(payload.mapLocation, ['lat', 'lng', 'name', 'address'])) {
@@ -501,6 +537,7 @@ function phase4CreateOrder_(payload, idToken) {
       'checkoutGuards/' + uid
     ];
     var productPaths = cartLines.map(function (line) { return 'products/' + phase4CleanText_(line.id, 180); });
+    if (couponCode) readPaths.push('coupons/' + couponCode);
     var batch = phase4BatchGet_(readPaths.concat(productPaths), transactionId);
     if (!batch.ok) { phase4Rollback_(transactionId); return batch; }
     var docs = batch.documents;
@@ -653,7 +690,26 @@ function phase4CreateOrder_(payload, idToken) {
     }
 
     var shippingCost = shipping.cost === null ? 0 : shipping.cost;
-    var total = subtotal + shippingCost;
+
+    var appliedCoupon = null;
+    var discount = 0;
+    if (couponCode) {
+      var couponResolution = phase4ResolveCoupon_(docs['coupons/' + couponCode], couponCode, subtotal);
+      if (!couponResolution.ok) { phase4Rollback_(transactionId); return couponResolution; }
+      appliedCoupon = couponResolution;
+      discount = couponResolution.discount;
+      if (Number(expectedDiscount) !== discount) {
+        phase4Rollback_(transactionId);
+        return {
+          ok: false,
+          error: 'coupon_changed',
+          discount: discount,
+          quote: { items: resolvedItems, subtotal: subtotal, discount: discount, shippingCost: shippingCost, shippingPending: shipping.pending, total: subtotal - discount + shippingCost }
+        };
+      }
+    }
+
+    var total = subtotal - discount + shippingCost;
     if (
       Number(payload.expectedSubtotal) !== subtotal ||
       Number(payload.expectedShippingCost) !== shippingCost ||
@@ -664,7 +720,7 @@ function phase4CreateOrder_(payload, idToken) {
       return {
         ok: false,
         error: 'quote_changed',
-        quote: { items: resolvedItems, subtotal: subtotal, shippingCost: shippingCost, shippingPending: shipping.pending, total: total }
+        quote: { items: resolvedItems, subtotal: subtotal, discount: discount, shippingCost: shippingCost, shippingPending: shipping.pending, total: total }
       };
     }
 
@@ -689,6 +745,8 @@ function phase4CreateOrder_(payload, idToken) {
       userPhone: phone,
       items: resolvedItems,
       subtotal: subtotal,
+      discount: discount,
+      coupon: appliedCoupon ? { code: appliedCoupon.code, type: appliedCoupon.type, value: appliedCoupon.value } : null,
       shippingCost: shippingCost,
       shippingPending: shipping.pending,
       total: total,
@@ -733,6 +791,13 @@ function phase4CreateOrder_(payload, idToken) {
       }, ['stock', 'lastStockOrderId', 'updatedAt']));
     }
   });
+    if (appliedCoupon) {
+      var couponBefore = docs['coupons/' + couponCode];
+      writes.push(phase4UpdateWrite_('coupons/' + couponCode, {
+        usedCount: Number(couponBefore.usedCount || 0) + 1,
+        updatedAt: nowIso
+      }, ['usedCount', 'updatedAt']));
+    }
 
     var commit = phase4Commit_(writes, transactionId);
     if (!commit.ok) return commit;

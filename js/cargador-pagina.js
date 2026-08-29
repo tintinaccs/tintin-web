@@ -108,7 +108,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260825-scroll-reveal-2';
+  const TT_CACHE_VERSION = 'tintin-20260829-admin-coupons-2';
   // 120ms (fijado en #396 para matar esperas artificiales) resultó por
   // debajo del umbral de percepción humana: en conexiones rápidas el logo y
   // el texto de sección ("Página Principal", "Catálogo", "Producto") no
@@ -808,6 +808,7 @@
     if (current.endsWith('/admin.html') || current.endsWith('/admin')) {
       importSibling('admin/orders/eliminacion-pedidos-admin.js', 'Admin Order Delete Fix');
       importSibling('admin/content/control-bienvenida-admin.js', 'Admin Welcome Control');
+      importSibling('admin/coupons/gestion-cupones-admin.js', 'Admin Coupons');
       importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix');
       importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync');
     }

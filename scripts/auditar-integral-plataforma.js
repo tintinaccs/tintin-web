@@ -92,7 +92,7 @@ check(
   read('js/orders/pedido-checkout-seguro.js').includes('runTransaction') &&
     read('apps-script/CrearPedido.gs').includes('requestedQtyByProduct[line.id] = (requestedQtyByProduct[line.id] || 0) + Number(line.qty || 0)') &&
     read('apps-script/CrearPedido.gs').includes('requestedQtyByProduct[productId] > stock') &&
-    read('apps-script/CrearPedido.gs').includes('var total = subtotal + shippingCost') &&
+    read('apps-script/CrearPedido.gs').includes('var total = subtotal - discount + shippingCost') &&
     read('apps-script/CrearPedido.gs').includes('Number(payload.expectedTotal) !== total') &&
     read('apps-script/CrearPedido.gs').includes("error: 'quote_changed'") &&
     read('apps-script/CrearPedido.gs').includes('stock: stock - requestedQtyByProduct[productId]') &&

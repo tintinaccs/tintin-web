@@ -216,8 +216,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
   padding: 0 24px;
 }
 
-.section { padding: 48px 0; }
-.section-sm { padding: 32px 0; }
+.section { padding: clamp(48px, 7vw, 96px) 0; }
+.section-sm { padding: clamp(32px, 5vw, 64px) 0; }
 .text-center { text-align: center; }
 .flex { display: flex; }
 .flex-col { flex-direction: column; }
@@ -1703,7 +1703,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 
 .tt-products-header {
   text-align: center;
-  margin-bottom: 48px;
+  margin-bottom: clamp(48px, 5vw, 72px);
 }
 
 .tt-products-grid {
@@ -2763,7 +2763,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 ═══════════════════════════════════════════════ */
 .tt-page-hero {
   background: linear-gradient(135deg, #fce4ec 0%, #f5d4e0 50%, #ede0f0 100%);
-  padding: calc(var(--header-h) + 40px) 0 40px;
+  padding: calc(var(--header-h) + 40px) 0 clamp(40px, 6vw, 64px);
   text-align: center;
 }
 
@@ -2788,8 +2788,8 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-info-block {
   background: #fff;
   border-radius: 16px;
-  padding: 28px 32px;
-  margin-bottom: 24px;
+  padding: clamp(28px, 3vw, 40px) clamp(32px, 3vw, 44px);
+  margin-bottom: clamp(24px, 3vw, 36px);
   border: 1px solid #f0d8e0;
 }
 .tt-info-title {
@@ -2847,7 +2847,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  gap: clamp(80px, 6vw, 104px);
   align-items: center;
 }
 
@@ -3009,7 +3009,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 64px;
+  gap: clamp(64px, 5vw, 88px);
   align-items: start;
 }
 
@@ -3189,7 +3189,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 /* ═══════════════════════════════════════════════
    PRODUCT DETAIL PAGE
 ═══════════════════════════════════════════════ */
-.tt-product-page { background: var(--bg); padding: 32px 0 44px; }
+.tt-product-page { background: var(--bg); padding: clamp(32px, 4vw, 56px) 0 clamp(44px, 5vw, 72px); }
 
 /* #product-loading, #product-not-found y #product-load-error son estados
    transitorios que se muestran antes de que #product-grid (con la galería
@@ -3208,7 +3208,7 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-product-detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 48px;
+  gap: clamp(48px, 5vw, 72px);
   align-items: start;
 }
 
