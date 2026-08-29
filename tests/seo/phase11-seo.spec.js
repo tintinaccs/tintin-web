@@ -19,15 +19,21 @@ test('producto llega con canonical, social preview y JSON-LD server-side coheren
   expect(response?.status()).toBe(200);
   expect(response?.headers()['x-tintin-product-meta']).toBe('server-test');
 
+  // Esta prueba protege específicamente lo que recibe un crawler/preview antes
+  // de ejecutar JavaScript. Por eso valida el HTML de la respuesta y no un
+  // <head> vivo que el runtime cliente puede actualizar después de navegar.
+  const html = await response.text();
   const canonical = 'https://tintinaccesorios.pages.dev/product?id=seo-prueba';
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', canonical);
-  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', canonical);
-  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', /Reloj SEO Prueba/);
-  await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'product');
-  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
-  await expect(page.locator('#tt-product-image-preload')).toHaveAttribute('fetchpriority', 'high');
+  expect(html).toContain(`<link rel="canonical" href="${canonical}">`);
+  expect(html).toContain(`<meta property="og:url" content="${canonical}">`);
+  expect(html).toContain('<meta property="og:title" content="Reloj SEO Prueba | Tintin Accesorios &amp; Relojes">');
+  expect(html).toContain('<meta property="og:type" content="product">');
+  expect(html).toContain('<meta name="twitter:card" content="summary_large_image">');
+  expect(html).toMatch(/<link rel="preload" as="image"[^>]*fetchpriority="high"[^>]*id="tt-product-image-preload">/);
 
-  const jsonLd = JSON.parse(await page.locator('#tt-product-jsonld-server').textContent());
+  const jsonLdMatch = html.match(/<script type="application\/ld\+json" id="tt-product-jsonld-server">([\s\S]*?)<\/script>/);
+  expect(jsonLdMatch, 'el HTML inicial debe incluir Product JSON-LD server-side').toBeTruthy();
+  const jsonLd = JSON.parse(jsonLdMatch[1]);
   expect(jsonLd['@type']).toBe('Product');
   expect(jsonLd.name).toBe('Reloj SEO Prueba');
   expect(jsonLd.url).toBe(canonical);
