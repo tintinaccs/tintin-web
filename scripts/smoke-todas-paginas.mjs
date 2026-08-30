@@ -124,6 +124,14 @@ const server = http.createServer((request, response) => {
       });
       return;
     }
+    if (request.method === 'GET' && action === 'reviewInteractions') {
+      sendJson(response, 200, { ok: true, interactions: { reviewIds: [], replyIds: [] } });
+      return;
+    }
+    if (request.method === 'GET' && action === 'ownFavorite') {
+      sendJson(response, 200, { ok: true, favorite: false });
+      return;
+    }
     sendJson(response, 404, { ok: false, error: 'smoke_api_action_not_mocked', action: action || null });
     return;
   }
