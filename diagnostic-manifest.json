@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-30T00:09:21.540Z",
-  "sourceFingerprint": "485b9fe25967ea6035e887866497c2b6ba2b06da4eccb3285326997095eb3e45",
+  "generatedAt": "2026-08-30T14:55:57.047Z",
+  "sourceFingerprint": "f3003033ac32fa6f422ab7143d79f0bc9d43b0d0810ab3d269f73782c42b1f95",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 789,
     "textFiles": 757,
-    "totalBytes": 8746828,
+    "totalBytes": 8747059,
     "pages": 18,
     "modules": 509
   },
@@ -8087,8 +8087,8 @@
         "guest",
         "client"
       ],
-      "bytes": 53364,
-      "sha256": "9ad1c197e4cb69c281e505fa97b645fbcadcbc8c3800a0a371c6c72d53024f45",
+      "bytes": 53366,
+      "sha256": "696ead260091a43a79183d0059ea06c4fb8048518adcb04d4a1b19ed474b87f6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17975,7 +17975,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 342971,
-      "sha256": "230f8eb5661fa12419706667598480c6d32b2206d5abdf3e1645a053eb588d7c",
+      "sha256": "26e39a4b77cb21445c2677f17a22e342063384db53638d57f97788147676c213",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21229,8 +21229,8 @@
     },
     {
       "path": "js/cargador-mantenimiento-pagina.js",
-      "bytes": 1752,
-      "sha256": "0f18ef99f9c64ed882f65662cfb48d6e34071208eb5ebb823a03bb1c4e732e17",
+      "bytes": 1751,
+      "sha256": "c818a7d718f20acaaf1dcfe836a5fd7e0047eab6d7506ec00515138ebaabb192",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22113,15 +22113,15 @@
     },
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
-      "bytes": 10539,
-      "sha256": "9ec0fcf4a9409b81e4900012448c792e41f236c19433b671d8783d7356e06455",
+      "bytes": 10536,
+      "sha256": "c365b4fcd1bf8b1eaf3e15f0bb684da3fd2efa41b0b384b2723c463abd89e10d",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../../core/store/estado-productos.js?v=tintin-20260822-checkout-hardening-2",
+          "raw": "../../../core/store/estado-productos.js?v=tintin-20260830-instant-loading-1",
           "target": "js/core/store/estado-productos.js",
           "dynamic": true,
           "line": 247
@@ -23399,8 +23399,8 @@
     },
     {
       "path": "js/core/store/estado-productos.js",
-      "bytes": 20118,
-      "sha256": "b31ed25f3c2c813ee01f8af2b394e15a8dcbc15e576fb8425f219c982297152d",
+      "bytes": 20115,
+      "sha256": "67f30aa33df21a47bb3a444b470a86416836623ce4fba01a5ddff599c6b787c1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23455,7 +23455,7 @@
           "line": 24
         },
         {
-          "raw": "../../cargador-mantenimiento-pagina.js?v=tintin-20260822-checkout-hardening-2",
+          "raw": "../../cargador-mantenimiento-pagina.js?v=tintin-20260830-instant-loading-1",
           "target": "js/cargador-mantenimiento-pagina.js",
           "dynamic": false,
           "line": 1
@@ -23961,8 +23961,8 @@
     },
     {
       "path": "js/pages/catalog/mantenimiento-catalogo.js",
-      "bytes": 9895,
-      "sha256": "a751755cd61b8a63c19d00a7d7c3d9e5ce8acf7b579ead3177a4e8c311c4db07",
+      "bytes": 10131,
+      "sha256": "322ce51357d4cf7d19107c40ad7836dbb86b9518a848acf65fb67ba1c44d55fb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31266,8 +31266,8 @@
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 53364,
-      "sha256": "9ad1c197e4cb69c281e505fa97b645fbcadcbc8c3800a0a371c6c72d53024f45"
+      "bytes": 53366,
+      "sha256": "696ead260091a43a79183d0059ea06c4fb8048518adcb04d4a1b19ed474b87f6"
     },
     {
       "path": "checkout.html",
@@ -31447,13 +31447,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 342971,
-      "sha256": "230f8eb5661fa12419706667598480c6d32b2206d5abdf3e1645a053eb588d7c"
+      "sha256": "26e39a4b77cb21445c2677f17a22e342063384db53638d57f97788147676c213"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 342886,
-      "sha256": "12a4ccc041377b5ffca3a336449e8eb593f5787b3bbd09ec080f06153b891070"
+      "sha256": "47f4b5b9501d81bfa992526f1858d50d87dc73974c43f7bcda900998db9ddc2c"
     },
     {
       "path": "config/public-site.json",
@@ -32892,8 +32892,8 @@
     {
       "path": "js/cargador-mantenimiento-pagina.js",
       "extension": ".js",
-      "bytes": 1752,
-      "sha256": "0f18ef99f9c64ed882f65662cfb48d6e34071208eb5ebb823a03bb1c4e732e17"
+      "bytes": 1751,
+      "sha256": "c818a7d718f20acaaf1dcfe836a5fd7e0047eab6d7506ec00515138ebaabb192"
     },
     {
       "path": "js/cargador-pagina.js",
@@ -33150,8 +33150,8 @@
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
       "extension": ".js",
-      "bytes": 10539,
-      "sha256": "9ec0fcf4a9409b81e4900012448c792e41f236c19433b671d8783d7356e06455"
+      "bytes": 10536,
+      "sha256": "c365b4fcd1bf8b1eaf3e15f0bb684da3fd2efa41b0b384b2723c463abd89e10d"
     },
     {
       "path": "js/components/navigation/compartido/control-paneles.js",
@@ -33480,8 +33480,8 @@
     {
       "path": "js/core/store/estado-productos.js",
       "extension": ".js",
-      "bytes": 20118,
-      "sha256": "b31ed25f3c2c813ee01f8af2b394e15a8dcbc15e576fb8425f219c982297152d"
+      "bytes": 20115,
+      "sha256": "67f30aa33df21a47bb3a444b470a86416836623ce4fba01a5ddff599c6b787c1"
     },
     {
       "path": "js/core/store/migraciones-secciones.js",
@@ -33612,8 +33612,8 @@
     {
       "path": "js/pages/catalog/mantenimiento-catalogo.js",
       "extension": ".js",
-      "bytes": 9895,
-      "sha256": "a751755cd61b8a63c19d00a7d7c3d9e5ce8acf7b579ead3177a4e8c311c4db07"
+      "bytes": 10131,
+      "sha256": "322ce51357d4cf7d19107c40ad7836dbb86b9518a848acf65fb67ba1c44d55fb"
     },
     {
       "path": "js/pages/catalog/politica-exhibicion-catalogo.js",
