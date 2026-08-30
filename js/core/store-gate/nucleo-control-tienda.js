@@ -687,6 +687,20 @@ export function getDesiredStoreOverlay() {
 }
 
 export async function getStoreAccessConfigFromRest() {
+  try {
+    const response = await fetch('/api/public-catalog?resource=storeGate', {
+      method: 'GET',
+      cache: 'no-store',
+      credentials: 'omit'
+    });
+    if (response.ok) {
+      const payload = await response.json();
+      if (payload?.ok === true && payload.resource === 'storeGate') {
+        return rememberConfig(normalizeStoreAccessConfig(payload.data, 'ok'));
+      }
+    }
+  } catch {}
+
   const document = await getPublicDocumentRest('settings/storeGate');
   if (!document) return null;
   return rememberConfig(normalizeStoreAccessConfig(document.data, 'ok'));
