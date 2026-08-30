@@ -4,6 +4,7 @@
  * el estado operativo usa una versión inmutable propia.
  */
 const SYSTEM_HEALTH_RUNTIME_URL = '/js/admin/diagnostics/estado-ecosistema-admin.js?v=tintin-20260827-system-health-1';
+const PROCESS_INTEGRITY_RUNTIME_URL = '/api/admin-process-integrity-runtime';
 
 export async function injectMasterDiagnosticsRuntime(response, requestMethod = 'GET', runtimeUrl = '') {
   if (!response || requestMethod === 'HEAD' || !response.ok) return response;
@@ -23,6 +24,9 @@ export async function injectMasterDiagnosticsRuntime(response, requestMethod = '
   if (!html.includes(SYSTEM_HEALTH_RUNTIME_URL) && !html.includes('/js/admin/diagnostics/estado-ecosistema-admin.js')) {
     tags.push(`<script type="module" src="${SYSTEM_HEALTH_RUNTIME_URL}"></script>`);
   }
+  if (!html.includes(PROCESS_INTEGRITY_RUNTIME_URL)) {
+    tags.push(`<script src="${PROCESS_INTEGRITY_RUNTIME_URL}" defer></script>`);
+  }
   if (!tags.length) {
     return new Response(html, {
       status: response.status,
@@ -40,6 +44,7 @@ export async function injectMasterDiagnosticsRuntime(response, requestMethod = '
   headers.set('cache-control', 'no-cache, no-store, must-revalidate');
   headers.set('x-tintin-master-diagnostics', 'edge-runtime');
   headers.set('x-tintin-system-health', 'edge-runtime');
+  headers.set('x-tintin-process-integrity', 'diagnostics-derived');
 
   return new Response(output, {
     status: response.status,
