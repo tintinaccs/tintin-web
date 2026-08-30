@@ -39,7 +39,7 @@ try {
 
   for (const width of widths) {
     await page.setViewportSize({ width,height:Math.max(760,Math.round(width * .72)) });
-    await page.goto(`${baseURL}/index.html`,{ waitUntil:'domcontentloaded' });
+    await page.goto(`${baseURL}/index.html`,{ waitUntil:'domcontentloaded', timeout:10000 });
     await page.waitForTimeout(550);
     await page.evaluate(() => {
       document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');
@@ -103,7 +103,7 @@ try {
 
   for (const width of [768,820,1023,1024]) {
     await page.setViewportSize({ width,height:900 });
-    await page.goto(`${baseURL}/index.html`,{ waitUntil:'domcontentloaded' });
+    await page.goto(`${baseURL}/index.html`,{ waitUntil:'domcontentloaded', timeout:10000 });
     await page.waitForTimeout(450);
     await page.evaluate(() => document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending'));
     await page.click('#btn-menu-tablet');
@@ -131,7 +131,7 @@ try {
   }
 
   await page.setViewportSize({ width:1440,height:900 });
-  await page.goto(`${baseURL}/catalogo.html`,{ waitUntil:'domcontentloaded' });
+  await page.goto(`${baseURL}/catalogo.html`,{ waitUntil:'domcontentloaded', timeout:10000 });
   await page.waitForTimeout(500);
   await page.evaluate(() => document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending'));
   await page.click('#btn-tienda');
@@ -140,16 +140,16 @@ try {
   await page.evaluate(() => window.TintinSurfaceController.open('search', document.getElementById('btn-search')));
   check(await page.locator('#search-panel').getAttribute('aria-hidden') === 'false', 'Desktop no abre Buscar');
   await page.keyboard.press('Escape');
-  await page.waitForFunction(() => document.querySelector('#search-panel')?.getAttribute('aria-hidden') === 'true');
+  await page.waitForFunction(() => document.querySelector('#search-panel')?.getAttribute('aria-hidden') === 'true', null, { timeout: 4000 });
   await page.click('#btn-cuenta');
-  await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'false');
+  await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'false', null, { timeout: 4000 });
   check(await page.locator('#account-drawer').evaluate(node => {
     const panel = node.querySelector('#account-panel');
     const controls = [...panel.querySelectorAll('a,button')];
     return getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto' && getComputedStyle(panel).pointerEvents === 'auto' && controls.length > 0 && controls.every(control => getComputedStyle(control).pointerEvents !== 'none');
   }), 'Desktop Cuenta muestra controles bloqueados o fondo no sólido');
   await page.click('#btn-account-close');
-  await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'true');
+  await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'true', null, { timeout: 4000 });
   const rapidState = await page.evaluate(async () => {
     const controller = window.TintinSurfaceController;
     await Promise.allSettled([
@@ -167,10 +167,10 @@ try {
   check(rapidState.surface === 'search' && rapidState.state === 'open', `Cambio rápido deja estado incorrecto (${JSON.stringify(rapidState)})`);
   check(rapidState.backdrops === 1 && rapidState.cartHidden === 'true' && rapidState.searchHidden === 'false', `Cambio rápido deja superficies solapadas (${JSON.stringify(rapidState)})`);
   await page.setViewportSize({ width:820,height:900 });
-  await page.waitForFunction(() => window.TintinSurfaceController.surface === 'none');
+  await page.waitForFunction(() => window.TintinSurfaceController.surface === 'none', null, { timeout: 4000 });
 
   await page.setViewportSize({ width:390,height:844 });
-  await page.goto(`${baseURL}/catalogo.html`,{ waitUntil:'domcontentloaded' });
+  await page.goto(`${baseURL}/catalogo.html`,{ waitUntil:'domcontentloaded', timeout:10000 });
   await page.waitForTimeout(500);
   await page.evaluate(() => document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending'));
   await page.click('#tabbar-tienda');
@@ -185,7 +185,7 @@ try {
   check(await page.locator('#cart-drawer').getAttribute('aria-hidden') === 'false', 'Mobile no abre Carrito');
   check(await page.locator('#cart-drawer').evaluate(node => getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto'), 'Mobile Carrito no es sólido o clicable');
   await page.keyboard.press('Escape');
-  await page.waitForFunction(() => document.querySelector('#cart-drawer')?.getAttribute('aria-hidden') === 'true');
+  await page.waitForFunction(() => document.querySelector('#cart-drawer')?.getAttribute('aria-hidden') === 'true', null, { timeout: 4000 });
   await page.click('#tabbar-cuenta');
   check(await page.locator('#account-drawer').getAttribute('aria-hidden') === 'false', 'Mobile no abre Cuenta compartida');
   check(await page.locator('#account-drawer').evaluate(node => {
@@ -198,7 +198,7 @@ try {
   for (const route of routes) {
     for (const width of [360,820,1280]) {
       await page.setViewportSize({ width,height:820 });
-      await page.goto(`${baseURL}/${route}`,{ waitUntil:'domcontentloaded' });
+      await page.goto(`${baseURL}/${route}`,{ waitUntil:'domcontentloaded', timeout:10000 });
       await page.waitForTimeout(240);
       await page.evaluate(() => {
         document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');
@@ -211,7 +211,13 @@ try {
       if (loginSurface) continue;
       const trigger = width === 360 ? '#tabbar-tienda' : width === 820 ? '#btn-menu-tablet' : '#btn-tienda';
       const surface = width === 360 ? '#collections-sheet' : width === 820 ? '#tt-tablet-menu' : '#tt-tienda-dropdown-panel';
-      await page.click(trigger);
+      const triggerReady = await page.locator(trigger).count()
+        && await page.locator(trigger).isVisible({ timeout: 4000 }).catch(() => false);
+      if (!triggerReady) {
+        check(false, `${route} no montó ${trigger} a ${width}px dentro del tiempo esperado`);
+        continue;
+      }
+      await page.click(trigger, { timeout: 4000 });
       check(await page.locator(surface).getAttribute('aria-hidden') === 'false', `${route} no abre ${surface} a ${width}px`);
       await page.keyboard.press('Escape');
       await page.waitForFunction(selector => document.querySelector(selector)?.getAttribute('aria-hidden') === 'true', surface, { timeout:4000 })
