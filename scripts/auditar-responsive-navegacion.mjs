@@ -40,6 +40,7 @@ try {
   const routes = ['index.html','catalogo.html','collections.html','product.html','about.html','contact.html','checkout.html','perfil.html','envios.html','cambios-devoluciones.html','preguntas-frecuentes.html','terminos.html','privacidad.html'];
 
   for (const width of widths) {
+    console.error(`[responsive] ancho ${width}px`);
     await page.setViewportSize({ width,height:Math.max(760,Math.round(width * .72)) });
     await page.goto(`${baseURL}/index.html`,{ waitUntil:'domcontentloaded', timeout:10000 });
     await page.waitForTimeout(550);
@@ -199,6 +200,7 @@ try {
 
   for (const route of routes) {
     for (const width of [360,820,1280]) {
+      console.error(`[responsive] ruta ${route} · ${width}px`);
       await page.setViewportSize({ width,height:820 });
       await page.goto(`${baseURL}/${route}`,{ waitUntil:'domcontentloaded', timeout:10000 });
       await page.waitForTimeout(240);
