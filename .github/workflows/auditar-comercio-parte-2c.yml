@@ -17,6 +17,7 @@ jobs:
   commerce:
     name: Catálogo, Colecciones y Producto
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5

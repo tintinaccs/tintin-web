@@ -153,7 +153,7 @@ async function auditSearch(label, viewport, triggerSelector) {
     await page.waitForFunction(() => document.body.classList.contains('tt-public-shell-mounted'), null, { timeout:10000 });
 
     await page.locator(triggerSelector).click();
-    await page.waitForFunction(() => document.getElementById('search-panel')?.getAttribute('aria-hidden') === 'false');
+    await page.waitForFunction(() => document.getElementById('search-panel')?.getAttribute('aria-hidden') === 'false', null, { timeout: 4000 });
     await installSeededCatalog(page);
 
     const input = page.locator('#search-input');
@@ -165,7 +165,7 @@ async function auditSearch(label, viewport, triggerSelector) {
     check(keyboardState.selected === 'true', `[${label}] el resultado activo no anunció aria-selected=true`);
 
     await page.locator('#btn-search-close').click();
-    await page.waitForFunction(() => document.getElementById('search-panel')?.getAttribute('aria-hidden') === 'true');
+    await page.waitForFunction(() => document.getElementById('search-panel')?.getAttribute('aria-hidden') === 'true', null, { timeout: 4000 });
     await page.waitForFunction(() => {
       const inputNode = document.getElementById('search-input');
       const resultsNode = document.getElementById('search-results');
