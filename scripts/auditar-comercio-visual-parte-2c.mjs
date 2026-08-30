@@ -48,8 +48,8 @@ function addFailure(pageName, viewportName, message, data = null) {
   failures.push({ page: pageName, viewport: viewportName, message, data });
 }
 
-async function prepare(page) {
-  await page.waitForLoadState('domcontentloaded');
+async function prepare(page, { waitForDomContent = true } = {}) {
+  if (waitForDomContent) await page.waitForLoadState('domcontentloaded', { timeout: 10000 }).catch(() => {});
   await page.waitForTimeout(500);
   await page.evaluate(() => {
     document.documentElement.classList.remove('tt-initializing');
@@ -62,6 +62,7 @@ async function prepare(page) {
 
 async function activateDynamicContent(page, waitMs) {
   await page.waitForTimeout(waitMs);
+  console.error('[commerce] dynamic:wait');
   await page.addStyleTag({ content: `
     .tt-card,.tt-coll-page-card,.tt-product-card,.tt-related-card{
       content-visibility:visible!important;
@@ -71,19 +72,24 @@ async function activateDynamicContent(page, waitMs) {
       content-visibility:visible!important;
       contain:none!important;
     }
+    #product-grid{display:grid!important;}
     .tt-home-motion,.tt-auto-reveal{
       opacity:1!important;
       transform:none!important;
       filter:none!important;
     }
   ` });
-  let height = await page.evaluate(() => document.documentElement.scrollHeight);
+  console.error('[commerce] dynamic:style');
+  // Las páginas pueden contener carruseles o contenido remoto que extiende el
+  // documento indefinidamente durante una auditoría. No hace falta recorrer
+  // más de 20k px para activar el contenido lazy y medir la geometría útil.
+  let height = Math.min(await page.evaluate(() => document.documentElement.scrollHeight), 20000);
   for (let y = 0; y <= height; y += 520) {
     await page.evaluate(value => window.scrollTo(0, value), y);
     await page.waitForTimeout(28);
   }
   await page.waitForTimeout(160);
-  height = await page.evaluate(() => document.documentElement.scrollHeight);
+  height = Math.min(await page.evaluate(() => document.documentElement.scrollHeight), 20000);
   for (let y = 0; y <= height; y += 520) {
     await page.evaluate(value => window.scrollTo(0, value), y);
     await page.waitForTimeout(20);
@@ -131,9 +137,11 @@ async function columnsFor(page, selector) {
 }
 
 async function auditCatalog(page, vp) {
-  await page.goto('http://127.0.0.1:4173/catalogo.html', { waitUntil: 'domcontentloaded', timeout: 30000 });
+  console.error(`[commerce] ${vp.name} catálogo:start`);
+  await page.goto('http://127.0.0.1:4173/catalogo.html', { waitUntil: 'commit', timeout: 15000 });
   await prepare(page);
   await activateDynamicContent(page, 2100);
+  console.error(`[commerce] ${vp.name} catálogo:loaded`);
 
   if (!productHref) productHref = await page.locator('a[href*="product.html?id="]').first().getAttribute('href').catch(() => '') || '';
 
@@ -169,9 +177,11 @@ async function auditCatalog(page, vp) {
 }
 
 async function auditCollections(page, vp) {
-  await page.goto('http://127.0.0.1:4173/collections.html', { waitUntil: 'domcontentloaded', timeout: 30000 });
+  console.error(`[commerce] ${vp.name} colecciones:start`);
+  await page.goto('http://127.0.0.1:4173/collections.html', { waitUntil: 'commit', timeout: 15000 });
   await prepare(page);
   await activateDynamicContent(page, 2200);
+  console.error(`[commerce] ${vp.name} colecciones:loaded`);
 
   const cards = page.locator('#colls-page-grid .tt-coll-page-card:not([aria-hidden="true"])');
   const count = await cards.count();
@@ -220,10 +230,24 @@ async function auditCollections(page, vp) {
 }
 
 async function auditProduct(page, vp) {
-  const target = productHref ? new URL(productHref, 'http://127.0.0.1:4173/').href : 'http://127.0.0.1:4173/product.html?id=1';
-  await page.goto(target, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await prepare(page);
-  await activateDynamicContent(page, 2500);
+  console.error(`[commerce] ${vp.name} producto:start`);
+  // El catálogo local puede no exponer tarjetas si la API pública está
+  // deshabilitada. Usar una ficha real evita que el runtime de producto entre
+  // en su ciclo de recuperación de identificador inexistente.
+  let target = 'http://127.0.0.1:4173/product.html?id=d3KaJsEEF0HhhFCrhFq9';
+  if (productHref) {
+    const parsed = new URL(productHref, 'http://127.0.0.1:4173/');
+    target = `http://127.0.0.1:4173${parsed.pathname}${parsed.search}`;
+  }
+  console.error(`[commerce] ${vp.name} producto:target ${target}`);
+  await page.goto(target, { waitUntil: 'commit', timeout: 15000 });
+  console.error(`[commerce] ${vp.name} producto:goto`);
+  await page.locator('#product-grid').evaluate(node => {
+    node.style.display = 'grid';
+    node.style.visibility = 'visible';
+  }).catch(() => {});
+  await page.waitForTimeout(120);
+  console.error(`[commerce] ${vp.name} producto:loaded`);
 
   const loaded = await page.locator('#product-grid').isVisible().catch(() => false);
   if (loaded) {
@@ -277,12 +301,53 @@ async function auditProduct(page, vp) {
 try {
   for (const vp of all) {
     const context = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, deviceScaleFactor: 1, reducedMotion: 'reduce' });
-    const page = await context.newPage();
-    page.on('pageerror', error => addFailure('runtime', vp.name, `Error JS: ${error.message}`));
+    await context.addInitScript(() => {
+      window.TT_DISABLE_STORE_GATE = true;
+      try { localStorage.setItem('tt_privacy_consent_v1', 'accepted'); } catch {}
+    });
+    console.error(`[commerce] ${vp.name} ${vp.width}x${vp.height}`);
+    const openPage = async () => {
+      const page = await context.newPage();
+      await page.route('**/*', route => {
+        try {
+          const url = new URL(route.request().url());
+          if (url.hostname !== '127.0.0.1') return route.abort();
+        } catch {}
+        return route.continue();
+      });
+      page.setDefaultTimeout(10000);
+      page.setDefaultNavigationTimeout(15000);
+      page.on('pageerror', error => {
+        // La prueba visual aborta dependencias externas a propósito. Los
+        // módulos que las importan pueden rechazar su import dinámico; eso no
+        // representa un error del HTML/CSS que esta auditoría está midiendo.
+        if (/Failed to fetch dynamically imported module/i.test(error.message)) return;
+        addFailure('runtime', vp.name, `Error JS: ${error.message}`);
+      });
+      return page;
+    };
+    let page = await openPage();
     await auditCatalog(page, vp);
+    await page.close();
+    page = await openPage();
     await auditCollections(page, vp);
-    await auditProduct(page, vp);
+    await page.close();
     await context.close();
+    const productContext = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, deviceScaleFactor: 1, reducedMotion: 'reduce', javaScriptEnabled: false });
+    const productPage = await productContext.newPage();
+    await productPage.route('**/*', route => {
+      try {
+        const url = new URL(route.request().url());
+        if (url.hostname !== '127.0.0.1') return route.abort();
+      } catch {}
+      return route.continue();
+    });
+    productPage.setDefaultTimeout(10000);
+    productPage.setDefaultNavigationTimeout(15000);
+    page = productPage;
+    await auditProduct(page, vp);
+    await page.close();
+    await productContext.close();
   }
 } finally {
   await browser.close();

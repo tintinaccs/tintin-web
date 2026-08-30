@@ -1,6 +1,13 @@
 (function () {
   'use strict';
 
+  // Las rutas legacy que solo redirigen conservan el contrato global del head
+  // sin pintar una pantalla de carga antes de completar la redirección.
+  if (document.currentScript && document.currentScript.dataset.ttNoLoader === 'true') {
+    window.TintinLoader = window.TintinLoader || { hide: function () {} };
+    return;
+  }
+
   // Cada entrada de una página comienza arriba. El navegador puede restaurar
   // el scroll anterior incluso en una navegación normal o desde bfcache;
   // forzarlo aquí (en head, antes de pintar contenido) evita que cualquier
@@ -108,7 +115,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260830-store-gate-api-1';
+  const TT_CACHE_VERSION = 'tintin-20260830-loader-pointer-events-2';
   // 120ms (fijado en #396 para matar esperas artificiales) resultó por
   // debajo del umbral de percepción humana: en conexiones rápidas el logo y
   // el texto de sección ("Página Principal", "Catálogo", "Producto") no
@@ -360,7 +367,7 @@
     'html.tt-store-gate-pending body,html.tt-store-gate-blocked body{overflow:hidden!important;overscroll-behavior:none!important}',
     '#tt-store-closed-overlay{visibility:visible!important;pointer-events:auto!important;user-select:auto!important}',
     '#tt-loader{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#FFADD1;transition:opacity .01s linear,visibility .01s linear;overflow:hidden;overscroll-behavior:none;touch-action:none;padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));box-sizing:border-box}',
-    '#tt-loader.tt-out{opacity:0;visibility:hidden;pointer-events:none}',
+    '#tt-loader.tt-out,#tt-loader[aria-hidden="true"]{opacity:0;visibility:hidden;pointer-events:none}',
     '#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(210px,21vw,270px);--tt-loader-spinner-size:46px;--tt-loader-spinner-border:9px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:min(100%,360px);max-width:calc(100vw - 36px);box-sizing:border-box;text-align:center}',
     '#tt-loader-logo{position:relative;z-index:1;display:block;width:var(--tt-loader-brand-width);max-width:100%;height:auto;object-fit:contain;opacity:1;transform:none;clip-path:none;filter:drop-shadow(0 8px 20px rgba(202,1,105,.14));user-select:none;pointer-events:none}',
     '#tt-loader-wordmark{position:relative;z-index:1;margin-top:clamp(6px,1vw,10px);font-family:Montserrat;font-weight:800;font-size:clamp(19px,2.5vw,27px);line-height:1;letter-spacing:.01em;color:#CA0169!important;white-space:nowrap;opacity:0;transform:scale(1.09)}',

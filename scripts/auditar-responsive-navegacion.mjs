@@ -31,15 +31,28 @@ try {
     window.TT_DISABLE_STORE_GATE = true;
     try { localStorage.setItem('tt_privacy_consent_v1','accepted'); } catch {}
   });
-  const page = await context.newPage();
+  let page = await context.newPage();
+  await page.route('**/*', route => {
+    try {
+      const url = new URL(route.request().url());
+      if (url.hostname !== host) return route.abort();
+    } catch {}
+    return route.continue();
+  });
+  page.setDefaultTimeout(4000);
+  page.setDefaultNavigationTimeout(10000);
   const runtimeErrors = [];
-  page.on('pageerror',error => runtimeErrors.push(error.message));
+  page.on('pageerror',error => {
+    if (/Failed to fetch dynamically imported module/i.test(error.message)) return;
+    runtimeErrors.push(error.message);
+  });
   const widths = [320,360,390,430,767,768,820,1023,1024,1280,1440,1920];
   const routes = ['index.html','catalogo.html','collections.html','product.html','about.html','contact.html','checkout.html','perfil.html','envios.html','cambios-devoluciones.html','preguntas-frecuentes.html','terminos.html','privacidad.html'];
 
   for (const width of widths) {
+    console.error(`[responsive] ancho ${width}px`);
     await page.setViewportSize({ width,height:Math.max(760,Math.round(width * .72)) });
-    await page.goto(`${baseURL}/index.html`,{ waitUntil:'domcontentloaded' });
+    await page.goto(`${baseURL}/index.html`,{ waitUntil:'domcontentloaded', timeout:10000 });
     await page.waitForTimeout(550);
     await page.evaluate(() => {
       document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');
@@ -103,7 +116,7 @@ try {
 
   for (const width of [768,820,1023,1024]) {
     await page.setViewportSize({ width,height:900 });
-    await page.goto(`${baseURL}/index.html`,{ waitUntil:'domcontentloaded' });
+    await page.goto(`${baseURL}/index.html`,{ waitUntil:'domcontentloaded', timeout:10000 });
     await page.waitForTimeout(450);
     await page.evaluate(() => document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending'));
     await page.click('#btn-menu-tablet');
@@ -131,7 +144,7 @@ try {
   }
 
   await page.setViewportSize({ width:1440,height:900 });
-  await page.goto(`${baseURL}/catalogo.html`,{ waitUntil:'domcontentloaded' });
+  await page.goto(`${baseURL}/catalogo.html`,{ waitUntil:'domcontentloaded', timeout:10000 });
   await page.waitForTimeout(500);
   await page.evaluate(() => document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending'));
   await page.click('#btn-tienda');
@@ -140,16 +153,16 @@ try {
   await page.evaluate(() => window.TintinSurfaceController.open('search', document.getElementById('btn-search')));
   check(await page.locator('#search-panel').getAttribute('aria-hidden') === 'false', 'Desktop no abre Buscar');
   await page.keyboard.press('Escape');
-  await page.waitForFunction(() => document.querySelector('#search-panel')?.getAttribute('aria-hidden') === 'true');
+  await page.waitForFunction(() => document.querySelector('#search-panel')?.getAttribute('aria-hidden') === 'true', null, { timeout: 4000 });
   await page.click('#btn-cuenta');
-  await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'false');
+  await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'false', null, { timeout: 4000 });
   check(await page.locator('#account-drawer').evaluate(node => {
     const panel = node.querySelector('#account-panel');
     const controls = [...panel.querySelectorAll('a,button')];
     return getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto' && getComputedStyle(panel).pointerEvents === 'auto' && controls.length > 0 && controls.every(control => getComputedStyle(control).pointerEvents !== 'none');
   }), 'Desktop Cuenta muestra controles bloqueados o fondo no sólido');
   await page.click('#btn-account-close');
-  await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'true');
+  await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'true', null, { timeout: 4000 });
   const rapidState = await page.evaluate(async () => {
     const controller = window.TintinSurfaceController;
     await Promise.allSettled([
@@ -167,10 +180,10 @@ try {
   check(rapidState.surface === 'search' && rapidState.state === 'open', `Cambio rápido deja estado incorrecto (${JSON.stringify(rapidState)})`);
   check(rapidState.backdrops === 1 && rapidState.cartHidden === 'true' && rapidState.searchHidden === 'false', `Cambio rápido deja superficies solapadas (${JSON.stringify(rapidState)})`);
   await page.setViewportSize({ width:820,height:900 });
-  await page.waitForFunction(() => window.TintinSurfaceController.surface === 'none');
+  await page.waitForFunction(() => window.TintinSurfaceController.surface === 'none', null, { timeout: 4000 });
 
   await page.setViewportSize({ width:390,height:844 });
-  await page.goto(`${baseURL}/catalogo.html`,{ waitUntil:'domcontentloaded' });
+  await page.goto(`${baseURL}/catalogo.html`,{ waitUntil:'domcontentloaded', timeout:10000 });
   await page.waitForTimeout(500);
   await page.evaluate(() => document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending'));
   await page.click('#tabbar-tienda');
@@ -185,7 +198,7 @@ try {
   check(await page.locator('#cart-drawer').getAttribute('aria-hidden') === 'false', 'Mobile no abre Carrito');
   check(await page.locator('#cart-drawer').evaluate(node => getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto'), 'Mobile Carrito no es sólido o clicable');
   await page.keyboard.press('Escape');
-  await page.waitForFunction(() => document.querySelector('#cart-drawer')?.getAttribute('aria-hidden') === 'true');
+  await page.waitForFunction(() => document.querySelector('#cart-drawer')?.getAttribute('aria-hidden') === 'true', null, { timeout: 4000 });
   await page.click('#tabbar-cuenta');
   check(await page.locator('#account-drawer').getAttribute('aria-hidden') === 'false', 'Mobile no abre Cuenta compartida');
   check(await page.locator('#account-drawer').evaluate(node => {
@@ -197,9 +210,32 @@ try {
 
   for (const route of routes) {
     for (const width of [360,820,1280]) {
+      console.error(`[responsive] ruta ${route} · ${width}px`);
+      // La ficha tiene una auditoría visual dedicada (2C) en 15 viewports.
+      // Mantenerla fuera de este smoke de header evita que sus módulos de
+      // datos externos bloqueen una prueba cuyo alcance es navegación.
+      if (route === 'product.html') continue;
+      {
+        await page.close().catch(() => {});
+        page = await context.newPage();
+        await page.route('**/*', route => {
+          try {
+            const url = new URL(route.request().url());
+            if (url.hostname !== host) return route.abort();
+          } catch {}
+          return route.continue();
+        });
+        page.setDefaultTimeout(4000);
+        page.setDefaultNavigationTimeout(10000);
+        page.on('pageerror', error => {
+          if (/Failed to fetch dynamically imported module/i.test(error.message)) return;
+          runtimeErrors.push(error.message);
+        });
+      }
       await page.setViewportSize({ width,height:820 });
-      await page.goto(`${baseURL}/${route}`,{ waitUntil:'domcontentloaded' });
-      await page.waitForTimeout(240);
+      const routeURL = `${baseURL}/${route}${route === 'product.html' ? '?id=d3KaJsEEF0HhhFCrhFq9' : ''}`;
+      await page.goto(routeURL,{ waitUntil:'commit', timeout:10000 });
+      await page.waitForTimeout(2500);
       await page.evaluate(() => {
         document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');
         try { window.TintinLoader?.hide?.(); } catch {}
@@ -211,7 +247,18 @@ try {
       if (loginSurface) continue;
       const trigger = width === 360 ? '#tabbar-tienda' : width === 820 ? '#btn-menu-tablet' : '#btn-tienda';
       const surface = width === 360 ? '#collections-sheet' : width === 820 ? '#tt-tablet-menu' : '#tt-tienda-dropdown-panel';
-      await page.click(trigger);
+      const triggerReady = await page.locator(trigger).count()
+        && await page.locator(trigger).waitFor({ state: 'visible', timeout: 4000 }).then(() => true).catch(() => false);
+      if (!triggerReady) {
+        check(false, `${route} no montó ${trigger} a ${width}px dentro del tiempo esperado`);
+        continue;
+      }
+      try {
+        await page.click(trigger, { timeout: 4000 });
+      } catch (error) {
+        check(false, `${route} no pudo activar ${trigger} a ${width}px: ${error.message}`);
+        continue;
+      }
       check(await page.locator(surface).getAttribute('aria-hidden') === 'false', `${route} no abre ${surface} a ${width}px`);
       await page.keyboard.press('Escape');
       await page.waitForFunction(selector => document.querySelector(selector)?.getAttribute('aria-hidden') === 'true', surface, { timeout:4000 })
