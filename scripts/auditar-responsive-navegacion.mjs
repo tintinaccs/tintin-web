@@ -211,7 +211,7 @@ try {
       await page.setViewportSize({ width,height:820 });
       const routeURL = `${baseURL}/${route}${route === 'product.html' ? '?id=d3KaJsEEF0HhhFCrhFq9' : ''}`;
       await page.goto(routeURL,{ waitUntil:'commit', timeout:10000 });
-      await page.waitForTimeout(240);
+      await page.waitForTimeout(1000);
       await page.evaluate(() => {
         document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');
         try { window.TintinLoader?.hide?.(); } catch {}
