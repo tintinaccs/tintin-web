@@ -8,7 +8,7 @@ import { renderCollectionsSheet } from './compartido/panel-colecciones.js';
 import { renderSurfaceLayer } from './compartido/capas-paneles.js';
 import { applyActiveState, currentPage } from './compartido/estado-ruta.js';
 import { ensureNavigationAssets } from './compartido/recursos-navegacion.js';
-import { loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260827-responsive-indicators-1';
+import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260827-responsive-indicators-1';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
 import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260817-footer-contrast-1';
@@ -173,6 +173,17 @@ function mountPublicShell() {
   document.body.classList.add('tt-public-shell-mounting');
   window.TintinLoader?.beginWait?.();
 
+  // Producto y catálogo tienen una dependencia de datos crítica propia. Se
+  // inicia antes del montaje visual del shell para que una demora de logo,
+  // configuración o paneles no deje la ficha detrás del loader indefinido.
+  // `loadSharedRuntime()` reutiliza la misma promesa y no duplica lecturas.
+  const pageDataPromise = currentPage() === 'shop'
+    ? loadProductsRuntime().catch(error => {
+      console.warn('[PublicShell] No se pudo iniciar el catálogo crítico.', error);
+      return null;
+    })
+    : Promise.resolve(null);
+
   const navigationAssetsPromise = ensureNavigationAssets();
   const globalConfigPromise = resolveWithCeiling(
     fetchGlobalVisualStudioConfig(),
@@ -203,6 +214,7 @@ function mountPublicShell() {
     enhanceMobileFooter();
     await registerNavigationSurfaces();
     loadSharedRuntime();
+    void pageDataPromise;
     await import('../../quality/estabilidad-final-publica.js?v=tintin-20260829-final-stability-1');
 
     document.dispatchEvent(new CustomEvent('tintin:public-shell-ready', {

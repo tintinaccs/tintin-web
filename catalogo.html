@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1"></script>
-  <script src="js/cargador-pagina.js?v=tintin-20260825-scroll-reveal-2"></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260830-store-gate-api-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20260827-navigation-bootstrap-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20260829-final-stability-2" defer></script>
   <title>Catálogo de Accesorios | TINTIN Accesorios & Relojes</title>
   <meta name="description" content="Explorá el catálogo de Tintin: relojes, aros, collares, pulseras, anillos y accesorios femeninos con envíos a todo Paraguay.">
   <meta name="robots" content="index, follow, max-image-preview:large">
@@ -37,7 +37,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260827-responsive-indicators-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260829-final-stability-2">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260824-header-responsive-sync-1">
@@ -852,9 +852,11 @@ function bootCollections() {
 // every later update (real-time Firestore listener) just refreshes the product
 // list and re-applies whatever filter the user currently has selected.
 let _catalogInitialized = false;
+let _catalogErrorTimer = 0;
 function handleProductsUpdate(products) {
   if (!_catalogInitialized) {
     _catalogInitialized = true;
+    window.clearTimeout(_catalogErrorTimer);
     init(products);
     window.ttPageReady && window.ttPageReady();
   } else {
@@ -867,18 +869,25 @@ function handleProductsUpdate(products) {
 window.addEventListener('tintin:products-loaded', e => handleProductsUpdate(e.detail.products));
 
 function _showCatalogLoadError() {
-  if (_catalogInitialized) return;
-  const grid = document.getElementById('cat-grid');
-  if (!grid) return;
-  grid.setAttribute('aria-busy', 'false');
-  document.getElementById('cat-count').textContent = 'Catálogo no disponible';
-  grid.innerHTML = `
-    <div class="cat-empty">
-      <p style="margin-bottom:14px;font-size:0.95rem">No pudimos cargar los productos. Revisá tu conexión e intentá de nuevo.</p>
-      <button type="button" class="tt-btn" id="cat-retry">Reintentar</button>
-    </div>`;
-  document.getElementById('cat-retry')?.addEventListener('click', () => location.reload());
-  window.ttPageReady && window.ttPageReady();
+  if (_catalogInitialized || _catalogErrorTimer) return;
+  // Un fallo de una fuente (App Check, listener o edge) puede llegar antes
+  // que el respaldo REST. No reemplazar el skeleton durante esa ventana:
+  // esperar a que terminen los fallbacks y reintentar sin parpadear error.
+  _catalogErrorTimer = window.setTimeout(() => {
+    _catalogErrorTimer = 0;
+    if (_catalogInitialized) return;
+    const grid = document.getElementById('cat-grid');
+    if (!grid) return;
+    grid.setAttribute('aria-busy', 'false');
+    document.getElementById('cat-count').textContent = 'Actualizando catálogo';
+    grid.innerHTML = `
+      <div class="cat-empty">
+        <p style="margin-bottom:14px;font-size:0.95rem">Estamos actualizando el catálogo. Intentá nuevamente en unos instantes.</p>
+        <button type="button" class="tt-btn" id="cat-retry">Reintentar</button>
+      </div>`;
+    document.getElementById('cat-retry')?.addEventListener('click', () => location.reload());
+    window.ttPageReady && window.ttPageReady();
+  }, 10000);
 }
 
 // Array.isArray (not truthiness) tells "Firestore already answered, zero
@@ -891,7 +900,7 @@ if (Array.isArray(window.PRODUCTS)) {
   (function poll() {
     if (_catalogInitialized) return;
     if (Array.isArray(window.PRODUCTS)) { handleProductsUpdate(window.PRODUCTS); return; }
-    if (Date.now() - _pollStart < 4000) setTimeout(poll, 200);
+    if (Date.now() - _pollStart < 12000) setTimeout(poll, 200);
     else _showCatalogLoadError();
   })();
   window.addEventListener('tintin:products-error', _showCatalogLoadError);

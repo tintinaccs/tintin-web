@@ -5,7 +5,8 @@ import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-const ASSET_VERSION = 'tintin-20260817-notification-actor-profile-1';
+const ASSET_VERSION = 'tintin-20260829-notifications-connected-2';
+const PROFILE_AVATAR_FALLBACK = '/assets-tintin/images/general/logo.png';
 const ORDER_RECOVERY_WINDOW_MS = 2 * 60 * 60 * 1000;
 const ORDER_NOTIFY_RETRY_DELAYS_MS = [700, 1800];
 const MAX_RECOVERY_ORDERS = 60;
@@ -15,6 +16,8 @@ let unsubscribeNotifications = null;
 let unsubscribeOrders = null;
 let orderState = new Map();
 let ordersPrimed = false;
+let notificationsRetryTimer = 0;
+let ordersRetryTimer = 0;
 const orderNotificationInFlight = new Set();
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -112,13 +115,11 @@ function trailingMarkup(notification) {
   const hasActor = notification.actorType === 'customer' && notification.actorUid;
   if (hasActor) {
     const photo = safeImageUrl(notification.actorPhotoUrl);
-    if (photo) return `<img class="adm-notification-avatar" src="${escapeHtml(photo)}" alt="" loading="lazy" decoding="async">`;
-    const initial = (String(notification.actorName || '?').trim()[0] || '?').toUpperCase();
-    return `<span class="adm-notification-avatar adm-notification-avatar-fallback" aria-hidden="true">${escapeHtml(initial)}</span>`;
+    return `<img class="adm-notification-avatar${photo ? '' : ' adm-notification-avatar-fallback'}" src="${escapeHtml(photo || PROFILE_AVATAR_FALLBACK)}" alt="${escapeHtml(photo ? '' : 'Tintin')}" loading="lazy" decoding="async">`;
   }
   const image = safeImageUrl(notification.productImageUrl);
   if (image) return `<img class="adm-notification-thumb" src="${escapeHtml(image)}" alt="" loading="lazy" decoding="async">`;
-  return '<span class="adm-notification-placeholder" aria-hidden="true">T</span>';
+  return `<img class="adm-notification-placeholder" src="${PROFILE_AVATAR_FALLBACK}" alt="Tintin" loading="lazy" decoding="async">`;
 }
 
 function render() {
@@ -210,6 +211,8 @@ function closePanel() {
 function subscribeNotifications() {
   unsubscribeNotifications?.();
   const source = query(collection(db, 'adminNotifications'), orderBy('createdAt', 'desc'), limit(100));
+  if (notificationsRetryTimer) window.clearTimeout(notificationsRetryTimer);
+  notificationsRetryTimer = 0;
   unsubscribeNotifications = onSnapshot(source, snapshot => {
     notifications = snapshot.docs.map(document => ({ id: document.id, ...document.data() }));
     render();
@@ -217,6 +220,7 @@ function subscribeNotifications() {
     console.warn('[admin-notifications] No se pudo escuchar actividad:', error);
     const root = document.getElementById('adm-notifications-list');
     if (root) root.innerHTML = '<div class="adm-notifications-error">No se pudo cargar la actividad.</div>';
+    if (user) notificationsRetryTimer = window.setTimeout(() => subscribeNotifications(), 1400);
   });
 }
 
@@ -268,6 +272,8 @@ function subscribeOrderStatusChanges() {
   unsubscribeOrders?.();
   orderState = new Map();
   ordersPrimed = false;
+  if (ordersRetryTimer) window.clearTimeout(ordersRetryTimer);
+  ordersRetryTimer = 0;
   const source = query(collection(db, 'orders'), orderBy('updatedAt', 'desc'), limit(150));
   unsubscribeOrders = onSnapshot(source, snapshot => {
     const next = new Map();
@@ -287,7 +293,10 @@ function subscribeOrderStatusChanges() {
       return;
     }
     changed.forEach(orderId => { void notifyOrderStatusWithRetry(orderId); });
-  }, error => console.warn('[admin-notifications] No se pudieron observar estados de pedidos:', error));
+  }, error => {
+    console.warn('[admin-notifications] No se pudieron observar estados de pedidos:', error);
+    if (user) ordersRetryTimer = window.setTimeout(() => subscribeOrderStatusChanges(), 1400);
+  });
 }
 
 function wireEvents() {
@@ -350,6 +359,10 @@ onAuthStateChanged(auth, current => {
     document.getElementById('adm-notifications-wrap')?.remove();
     unsubscribeNotifications?.();
     unsubscribeOrders?.();
+    if (notificationsRetryTimer) window.clearTimeout(notificationsRetryTimer);
+    notificationsRetryTimer = 0;
+    if (ordersRetryTimer) window.clearTimeout(ordersRetryTimer);
+    ordersRetryTimer = 0;
     orderNotificationInFlight.clear();
     return;
   }

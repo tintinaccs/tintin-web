@@ -5,7 +5,7 @@ function pathName() {
   return location.pathname.toLowerCase().replace(/\/+$/, '');
 }
 
-function load(file, version = 'tintin-20260817-mobile-accordion-1') {
+function load(file, version = 'tintin-20260830-instant-loading-1') {
   return import(`./${file}?v=${version}`);
 }
 

@@ -4,7 +4,7 @@ import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-const ASSET_VERSION = 'tintin-20260829-notifications-autoread-2';
+const ASSET_VERSION = 'tintin-20260829-notifications-connected-1';
 const API_RETRY_DELAYS_MS = [450, 1200];
 let initialized = false;
 let currentUser = null;
@@ -12,6 +12,7 @@ let notifications = [];
 let unsubscribe = null;
 let authUnsubscribe = null;
 let markingVisibleRead = false;
+let subscribeRetryTimer = 0;
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -197,6 +198,8 @@ async function apiWithRetry(action, payload = {}, attempts = 3) {
 function subscribe(user) {
   unsubscribe?.();
   unsubscribe = null;
+  if (subscribeRetryTimer) window.clearTimeout(subscribeRetryTimer);
+  subscribeRetryTimer = 0;
   notifications = [];
   render();
   if (!user) return;
@@ -208,6 +211,7 @@ function subscribe(user) {
     console.warn('[notifications] No se pudo escuchar la actividad:', error);
     const root = document.getElementById('tt-notifications-list');
     if (root) root.innerHTML = '<div class="tt-notifications-error">No pudimos cargar las notificaciones. Volvé a intentar en unos segundos.</div>';
+    if (currentUser) subscribeRetryTimer = window.setTimeout(() => subscribe(currentUser), 1400);
   });
 }
 
@@ -277,4 +281,5 @@ export function initClientNotifications() {
 window.addEventListener('pagehide', () => {
   unsubscribe?.();
   authUnsubscribe?.();
+  if (subscribeRetryTimer) window.clearTimeout(subscribeRetryTimer);
 }, { once: true });

@@ -16,6 +16,7 @@ import {
   toggleFavorite,
   toggleReviewLike,
   engagementIsSuperAdmin,
+  engagementUpdateReviewStats,
 } from '../../cloudflare/participacion-clientes.js';
 import {
   encodeFirestoreFields, firestoreAdminCommit, firestoreAdminGet,
@@ -166,7 +167,11 @@ export async function onRequest(context) {
 
     if (input.action === 'createReview') {
       privateReview = await createReview(env, user, input);
-      result = { review: engagementOwnReviewView(privateReview), rateLimit: privateReview.rateLimit || null };
+      result = {
+        review: engagementOwnReviewView(privateReview),
+        publicReview: engagementReviewPublic(privateReview),
+        rateLimit: privateReview.rateLimit || null,
+      };
     } else if (input.action === 'editReview') {
       privateReview = await editOwnReview(env, user, input);
       result = { review: engagementOwnReviewView(privateReview) };
@@ -203,6 +208,12 @@ export async function onRequest(context) {
       syncEvent = { type: 'like', operation: 'upsert', record: result.record };
     }
     if (syncEvent) context.waitUntil?.(syncEngagementToSheets(env, user.idToken, syncEvent));
+    if (input.action === 'createReview') {
+      const refreshStats = engagementUpdateReviewStats(env, privateReview.productId).catch(error => {
+        console.warn('[engagement] No se pudieron actualizar las estadísticas de reseñas:', error);
+      });
+      context.waitUntil?.(refreshStats);
+    }
 
     const push = pushDetails(input.action, result, privateReview);
     const isNewEvent = input.action === 'createReview' || input.action === 'replyReview' || result.alreadyLiked !== true;

@@ -108,7 +108,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260825-scroll-reveal-2';
+  const TT_CACHE_VERSION = 'tintin-20260830-store-gate-api-1';
   // 120ms (fijado en #396 para matar esperas artificiales) resultó por
   // debajo del umbral de percepción humana: en conexiones rápidas el logo y
   // el texto de sección ("Página Principal", "Catálogo", "Producto") no
@@ -715,10 +715,7 @@
     const controller =
       typeof AbortController === 'function' ? new AbortController() : null;
     const timer = window.setTimeout(() => controller?.abort(), 7000);
-    const url =
-      'https://firestore.googleapis.com/v1/projects/tintin-accesorios/' +
-      'databases/(default)/documents/settings/storeGate' +
-      '?key=AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
+    const url = '/api/public-catalog?resource=storeGate';
 
     window
       .fetch(url, {
@@ -730,8 +727,14 @@
       })
       .then(response => (response.ok ? response.json() : null))
       .then(payload => {
+        // Acepta el contrato del endpoint protegido y conserva el formato
+        // Firestore anterior para despliegues que todavía lo entreguen.
+        const storeOpen = payload?.data?.storeOpen === true ||
+          payload?.fields?.storeOpen?.booleanValue === true;
         if (
-          payload?.fields?.storeOpen?.booleanValue !== true ||
+          payload?.ok !== true && payload?.fields?.storeOpen?.booleanValue !== true ||
+          payload?.resource && payload.resource !== 'storeGate' ||
+          storeOpen !== true ||
           gateResolved
         ) {
           return;

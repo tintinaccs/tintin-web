@@ -229,15 +229,18 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
     loadingTimer = setTimeout(() => {
       if (!hasRealCards()) {
         if (navigator.onLine === false) {
-          renderState('offline', 'Sin conexión', 'No pudimos descargar productos nuevos. Revisá tu conexión y volvé a intentar.');
+          renderState('loading', 'Actualizando catálogo', 'Mostramos el catálogo apenas se recupere la conexión.');
           setSync('offline');
         } else {
-          renderState('error', 'El catálogo tardó demasiado', 'Podés reintentar sin perder los filtros elegidos.');
-          setSync('error');
+          // Las fuentes públicas pueden responder después de App Check o del
+          // primer fallback. Nunca reemplazar la carga por un error visual
+          // durante una espera normal; el runtime seguirá reintentando.
+          renderState('loading', 'Actualizando catálogo', 'Estamos preparando los productos disponibles.');
+          setSync('loading');
         }
-        setReady();
+        grid?.setAttribute('aria-busy', 'true');
       }
-    }, 6500);
+    }, 20000);
 
     recoveryTimer = setInterval(guardCatalogSurface, 1200);
     window.addEventListener('pagehide', () => clearInterval(recoveryTimer), { once: true });

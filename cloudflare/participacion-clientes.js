@@ -406,7 +406,6 @@ export async function createReview(env, user, input) {
 
     try {
       await firestoreAdminCommit(env, writes);
-      await updateReviewStats(env, context.productId);
       return {
         ...record,
         rateLimit: context.isSuperAdmin ? { unlimited: true } : {
