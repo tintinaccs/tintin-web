@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-30T18:41:04.662Z",
-  "sourceFingerprint": "e7cd0871d187f4118243861fe19882a72944951a9261ba13d6431d1bb581f1d4",
+  "generatedAt": "2026-08-30T19:52:14.511Z",
+  "sourceFingerprint": "9a73f2c9c6ac7d3e28851a13a355ae1f75842fdae6a4381687a7c5bada50ea92",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 789,
     "textFiles": 757,
-    "totalBytes": 8752921,
+    "totalBytes": 8756973,
     "pages": 18,
     "modules": 509
   },
@@ -25498,8 +25498,8 @@
     },
     {
       "path": "scripts/auditar-comercio-visual-parte-2c.mjs",
-      "bytes": 15714,
-      "sha256": "8a5059cef39d8a137bf534c919ec63dc59ca66928733f097ee33f2d1744e709d",
+      "bytes": 18833,
+      "sha256": "9d4010924249a50dbd539ca265773a04784ccbea3e9f1458baaf8f0fc95e39eb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25543,19 +25543,19 @@
         },
         {
           "url": "http://127.0.0.1:4173/catalogo.html",
-          "line": 134
+          "line": 141
         },
         {
           "url": "http://127.0.0.1:4173/collections.html",
-          "line": 172
-        },
-        {
-          "url": "http://127.0.0.1:4173/",
-          "line": 223
+          "line": 181
         },
         {
           "url": "http://127.0.0.1:4173/product.html",
-          "line": 223
+          "line": 237
+        },
+        {
+          "url": "http://127.0.0.1:4173/",
+          "line": 239
         }
       ]
     },
@@ -27361,8 +27361,8 @@
     },
     {
       "path": "scripts/auditar-responsive-navegacion.mjs",
-      "bytes": 18784,
-      "sha256": "9a016bfe18723eb9741913ccba8f7714ee6311df9b5dc1930c48adeaea78d80f",
+      "bytes": 19693,
+      "sha256": "4c3b32ceaa751920d94b4700d70a7df56e08f2b2b1dd460ba7a15cabc0563689",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30747,8 +30747,8 @@
     {
       "path": ".github/workflows/auditar-comercio-parte-2c.yml",
       "extension": ".yml",
-      "bytes": 1359,
-      "sha256": "cb98656edea528db7aa47d60d2756f7e7b84f4ca1c018554842ba28abdedd14d"
+      "bytes": 1383,
+      "sha256": "ac08ae180c99618a63580bae815d76a12caa8eb55a98bbb70ede73cb842b7135"
     },
     {
       "path": ".github/workflows/auditar-contenido-fase-6.yml",
@@ -34275,8 +34275,8 @@
     {
       "path": "scripts/auditar-comercio-visual-parte-2c.mjs",
       "extension": ".mjs",
-      "bytes": 15714,
-      "sha256": "8a5059cef39d8a137bf534c919ec63dc59ca66928733f097ee33f2d1744e709d"
+      "bytes": 18833,
+      "sha256": "9d4010924249a50dbd539ca265773a04784ccbea3e9f1458baaf8f0fc95e39eb"
     },
     {
       "path": "scripts/auditar-contacto-pagina.js",
@@ -34713,8 +34713,8 @@
     {
       "path": "scripts/auditar-responsive-navegacion.mjs",
       "extension": ".mjs",
-      "bytes": 18784,
-      "sha256": "9a016bfe18723eb9741913ccba8f7714ee6311df9b5dc1930c48adeaea78d80f"
+      "bytes": 19693,
+      "sha256": "4c3b32ceaa751920d94b4700d70a7df56e08f2b2b1dd460ba7a15cabc0563689"
     },
     {
       "path": "scripts/auditar-seguridad-fase-8.js",

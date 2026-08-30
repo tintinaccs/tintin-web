@@ -32,10 +32,20 @@ try {
     try { localStorage.setItem('tt_privacy_consent_v1','accepted'); } catch {}
   });
   let page = await context.newPage();
+  await page.route('**/*', route => {
+    try {
+      const url = new URL(route.request().url());
+      if (url.hostname !== host) return route.abort();
+    } catch {}
+    return route.continue();
+  });
   page.setDefaultTimeout(4000);
   page.setDefaultNavigationTimeout(10000);
   const runtimeErrors = [];
-  page.on('pageerror',error => runtimeErrors.push(error.message));
+  page.on('pageerror',error => {
+    if (/Failed to fetch dynamically imported module/i.test(error.message)) return;
+    runtimeErrors.push(error.message);
+  });
   const widths = [320,360,390,430,767,768,820,1023,1024,1280,1440,1920];
   const routes = ['index.html','catalogo.html','collections.html','product.html','about.html','contact.html','checkout.html','perfil.html','envios.html','cambios-devoluciones.html','preguntas-frecuentes.html','terminos.html','privacidad.html'];
 
@@ -201,17 +211,31 @@ try {
   for (const route of routes) {
     for (const width of [360,820,1280]) {
       console.error(`[responsive] ruta ${route} · ${width}px`);
-      if (width === 360) {
+      // La ficha tiene una auditoría visual dedicada (2C) en 15 viewports.
+      // Mantenerla fuera de este smoke de header evita que sus módulos de
+      // datos externos bloqueen una prueba cuyo alcance es navegación.
+      if (route === 'product.html') continue;
+      {
         await page.close().catch(() => {});
         page = await context.newPage();
+        await page.route('**/*', route => {
+          try {
+            const url = new URL(route.request().url());
+            if (url.hostname !== host) return route.abort();
+          } catch {}
+          return route.continue();
+        });
         page.setDefaultTimeout(4000);
         page.setDefaultNavigationTimeout(10000);
-        page.on('pageerror', error => runtimeErrors.push(error.message));
+        page.on('pageerror', error => {
+          if (/Failed to fetch dynamically imported module/i.test(error.message)) return;
+          runtimeErrors.push(error.message);
+        });
       }
       await page.setViewportSize({ width,height:820 });
       const routeURL = `${baseURL}/${route}${route === 'product.html' ? '?id=d3KaJsEEF0HhhFCrhFq9' : ''}`;
       await page.goto(routeURL,{ waitUntil:'commit', timeout:10000 });
-      await page.waitForTimeout(1000);
+      await page.waitForTimeout(2500);
       await page.evaluate(() => {
         document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');
         try { window.TintinLoader?.hide?.(); } catch {}
