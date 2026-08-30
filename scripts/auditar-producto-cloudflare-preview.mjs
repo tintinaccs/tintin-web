@@ -47,12 +47,18 @@ async function fetchStable(url, options = {}) {
   let lastError;
   for (let attempt = 1; attempt <= 8; attempt += 1) {
     try {
-      return await fetch(url, {
+      const response = await fetch(url, {
         redirect: 'manual',
         headers: { 'user-agent': 'TintinProductRouteGate/1.0', ...(options.headers || {}) },
         method: options.method || 'GET',
         signal: AbortSignal.timeout(timeoutMs)
       });
+      if (response.status === 404 && attempt < 8) {
+        console.log(`Ruta de producto aún no propagada (${attempt}/8): HTTP 404`);
+        await sleep(Math.min(10000, attempt * 1500));
+        continue;
+      }
+      return response;
     } catch (error) {
       lastError = error;
       console.log(`Ruta de producto aún no estable (${attempt}/8): ${error?.message || error}`);
