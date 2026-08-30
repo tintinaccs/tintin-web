@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-30T16:37:49.256Z",
-  "sourceFingerprint": "441cd9c084736c5eeafe4d841da3acda282050cbe1a37482c1b7134e92723228",
+  "generatedAt": "2026-08-30T20:20:01.422Z",
+  "sourceFingerprint": "fe5a998ff02fb2675d2a1c6b7ace9f506cc224196016fe18d2a401f283e44aef",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 789,
-    "textFiles": 757,
-    "totalBytes": 8751013,
+    "files": 791,
+    "textFiles": 759,
+    "totalBytes": 8768164,
     "pages": 18,
-    "modules": 509
+    "modules": 511
   },
   "viewports": [
     {
@@ -17548,8 +17548,8 @@
     },
     {
       "path": "cloudflare/inyectar-diagnostico-maestro-admin.js",
-      "bytes": 2075,
-      "sha256": "12229cde1c96e17513aea7a8ee3e859edb151d2b88666d34e2324d23cd13f3d7",
+      "bytes": 2361,
+      "sha256": "eb895933b4490ddccf309d143660ca480d349fc1a08a155f36097788319173c1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18273,6 +18273,17 @@
           "line": 8
         }
       ],
+      "endpoints": []
+    },
+    {
+      "path": "functions/api/admin-process-integrity-runtime.js",
+      "bytes": 14155,
+      "sha256": "25fb8fd4ca6b5911c01ce02a8b185141983cffde6c0ed91714e414163430a9f1",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
       "endpoints": []
     },
     {
@@ -30034,6 +30045,36 @@
       ]
     },
     {
+      "path": "tests/system-health/integridad-procesos.test.mjs",
+      "bytes": 2665,
+      "sha256": "51d17645aa81a9877362137daa2c0bfc9d25b6bb1d75b79d87aed0df7b02a819",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/system-health/order-admin-domain.test.mjs",
       "bytes": 371,
       "sha256": "ef67dd00516c6b653952e84283e6ffe1c4de02bd98eae995d39aaaaabbe75eb8",
@@ -30999,8 +31040,8 @@
     {
       "path": "_routes.json",
       "extension": ".json",
-      "bytes": 2133,
-      "sha256": "e11050dc0ae21d257d645927c962de0cd2bc5a5e312a48d8103eb43d946875e5"
+      "bytes": 2178,
+      "sha256": "b4a87b5b1bfb157e32b21cf5407934b7d8d952457f5c4a02c48408aaade9bfc5"
     },
     {
       "path": "about.html",
@@ -31311,8 +31352,8 @@
     {
       "path": "cloudflare/inyectar-diagnostico-maestro-admin.js",
       "extension": ".js",
-      "bytes": 2075,
-      "sha256": "12229cde1c96e17513aea7a8ee3e859edb151d2b88666d34e2324d23cd13f3d7"
+      "bytes": 2361,
+      "sha256": "eb895933b4490ddccf309d143660ca480d349fc1a08a155f36097788319173c1"
     },
     {
       "path": "cloudflare/inyectar-estudio-codigo-admin.js",
@@ -32273,6 +32314,12 @@
       "extension": ".js",
       "bytes": 2909,
       "sha256": "703e4c265f7963f2c2f315c66a6ab3740d807b52a8c160a67e00a7b834ac40c5"
+    },
+    {
+      "path": "functions/api/admin-process-integrity-runtime.js",
+      "extension": ".js",
+      "bytes": 14155,
+      "sha256": "25fb8fd4ca6b5911c01ce02a8b185141983cffde6c0ed91714e414163430a9f1"
     },
     {
       "path": "functions/api/admin-runtime-health.js",
@@ -35303,6 +35350,12 @@
       "extension": ".mjs",
       "bytes": 8955,
       "sha256": "f8eaefb4bf316fba85c0b2bb86cacf9766ee6a7849f7ad5d1f5ef433c3f7b200"
+    },
+    {
+      "path": "tests/system-health/integridad-procesos.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2665,
+      "sha256": "51d17645aa81a9877362137daa2c0bfc9d25b6bb1d75b79d87aed0df7b02a819"
     },
     {
       "path": "tests/system-health/order-admin-domain.test.mjs",
