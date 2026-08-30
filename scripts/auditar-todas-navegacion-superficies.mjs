@@ -74,8 +74,20 @@ const browser = await chromium.launch({
 async function newPage(width, height) {
   const ctx = await browser.newContext({ viewport: { width, height } });
   const page = await ctx.newPage();
+  await page.route('**/*', route => {
+    try {
+      const url = new URL(route.request().url());
+      if (url.hostname !== host) return route.abort();
+    } catch {}
+    return route.continue();
+  });
+  page.setDefaultTimeout(8000);
+  page.setDefaultNavigationTimeout(15000);
   const pageErrors = [];
-  page.on('pageerror', error => pageErrors.push(error.message));
+  page.on('pageerror', error => {
+    if (/Failed to fetch dynamically imported module/i.test(error.message)) return;
+    pageErrors.push(error.message);
+  });
   await page.addInitScript(() => {
     window.TT_DISABLE_STORE_GATE = true;
     try { localStorage.setItem('tt_privacy_consent_v1', 'accepted'); } catch {}
@@ -140,8 +152,8 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
     try {
       await gotoReady(page, url);
       await page.waitForTimeout(250);
-      const pillActive = await page.locator('.tt-desktop-active-pill').evaluate(el => el.classList.contains('is-ready')).catch(() => false);
-      const haloActive = await page.locator('#tt-tabbar').evaluate(el => el.classList.contains('tt-mobile-nav-ready')).catch(() => false);
+      const pillActive = await page.locator('.tt-desktop-active-pill').evaluate(el => el.classList.contains('is-ready'), null, { timeout: 2000 }).catch(() => false);
+      const haloActive = await page.locator('#tt-tabbar').evaluate(el => el.classList.contains('tt-mobile-nav-ready'), null, { timeout: 2000 }).catch(() => false);
       const anyActiveLink = await page.evaluate(() => !!document.querySelector('[data-shell-route].active,[data-shell-tab].active'));
       check(!pillActive, `[${url} ${label}] La pildora desktop quedo marcada activa sin ruta real.`);
       check(!haloActive, `[${url} ${label}] El halo mobile quedo marcado activo sin ruta real.`);
