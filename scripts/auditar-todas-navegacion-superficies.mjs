@@ -136,6 +136,14 @@ async function gotoReady(page, url) {
 for (const url of PUBLIC_PAGES) {
   for (const [label, width, height] of BREAKPOINTS) {
     const { ctx, page, pageErrors } = await newPage(width, height);
+    // product.html sin ?id= (el unico caso que esta auditoria visita) nunca resuelve
+    // un producto real bajo la politica de red solo-localhost de newPage() (Firestore
+    // queda abortado), asi que siempre cae en la rama "no encontrado" de
+    // mantenimiento-producto.js, cuyo propio fallback de relacionados vence a los
+    // 8500ms. Bajo carga de CI ese margen puede no alcanzar contra el limite
+    // generico de 12000ms; se le da a esta pagina un techo mayor en vez de subir el
+    // default para todas las demas paginas, que no tienen ese temporizador interno.
+    const evalTimeoutMs = url.startsWith('product') ? 20000 : undefined;
     try {
       await gotoReady(page, url);
       check(pageErrors.length === 0, `[${url} ${label}] Errores de runtime: ${pageErrors.join(' | ')}`);
@@ -144,7 +152,7 @@ for (const url of PUBLIC_PAGES) {
         const seen = new Map();
         document.querySelectorAll('[id]').forEach(el => seen.set(el.id, (seen.get(el.id) || 0) + 1));
         return [...seen.entries()].filter(([, count]) => count > 1).map(([id]) => id);
-      });
+      }, evalTimeoutMs);
       check(dupIds.length === 0, `[${url} ${label}] IDs duplicados: ${dupIds.join(', ')}`);
 
       if (!url.startsWith('login') && !url.startsWith('perfil')) {
@@ -154,11 +162,11 @@ for (const url of PUBLIC_PAGES) {
           const tablet = document.getElementById('tt-header-tablet');
           const mobile = document.getElementById('tt-tabbar');
           return [desktop, tablet, mobile].filter(visible).length;
-        });
+        }, evalTimeoutMs);
         check(navCount === 1, `[${url} ${label}] Se esperaba exactamente una navegacion visible, se encontraron ${navCount}`);
       }
 
-      const overflow = await safeEvaluate(page, () => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      const overflow = await safeEvaluate(page, () => document.documentElement.scrollWidth - document.documentElement.clientWidth, evalTimeoutMs);
       check(overflow <= 2, `[${url} ${label}] Desborde horizontal de ${overflow}px`);
     } catch (error) {
       failures.push(`[${url} ${label}] Excepcion durante el audit: ${error.message}`);
