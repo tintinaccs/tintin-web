@@ -71,6 +71,25 @@ const browser = await chromium.launch({
   executablePath: process.env.TT_CHROMIUM_PATH || undefined,
 });
 
+function withTimeout(promise, ms, label) {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`Timeout de ${ms}ms esperando ${label}`)), ms);
+  });
+  return Promise.race([Promise.resolve(promise), timeout]).finally(() => clearTimeout(timer));
+}
+
+// page.evaluate()/$$eval() no respetan page.setDefaultTimeout() (a diferencia de
+// waitForFunction/locator().evaluate()): si el JS de la pagina queda bloqueado
+// (p. ej. un guard de auth reintentando contra peticiones ya abortadas por la
+// regla de red de newPage()), estas llamadas cuelgan para siempre sin este limite.
+function safeEvaluate(page, fn, timeoutMs = 8000) {
+  return withTimeout(page.evaluate(fn), timeoutMs, 'page.evaluate');
+}
+function safeEvalAll(page, selector, fn, timeoutMs = 8000) {
+  return withTimeout(page.$$eval(selector, fn), timeoutMs, 'page.$$eval');
+}
+
 async function newPage(width, height) {
   const ctx = await browser.newContext({ viewport: { width, height } });
   const page = await ctx.newPage();
@@ -102,10 +121,10 @@ async function gotoReady(page, url) {
     page.waitForFunction(() => document.body?.classList.contains('tt-public-shell-mounted'), { timeout: 6000 }),
     page.waitForTimeout(1500),
   ]).catch(() => {});
-  await page.evaluate(() => {
+  await safeEvaluate(page, () => {
     document.documentElement.classList.remove('tt-color-scheme-pending', 'tt-store-gate-pending', 'tt-store-gate-blocked', 'tt-store-gate-degraded');
     document.getElementById('tt-loader')?.remove();
-  });
+  }).catch(() => {});
   await page.waitForFunction(() => document.fonts ? document.fonts.status !== 'loading' : true, { timeout: 4000 }).catch(() => {});
 }
 
@@ -117,7 +136,7 @@ for (const url of PUBLIC_PAGES) {
       await gotoReady(page, url);
       check(pageErrors.length === 0, `[${url} ${label}] Errores de runtime: ${pageErrors.join(' | ')}`);
 
-      const dupIds = await page.evaluate(() => {
+      const dupIds = await safeEvaluate(page, () => {
         const seen = new Map();
         document.querySelectorAll('[id]').forEach(el => seen.set(el.id, (seen.get(el.id) || 0) + 1));
         return [...seen.entries()].filter(([, count]) => count > 1).map(([id]) => id);
@@ -125,7 +144,7 @@ for (const url of PUBLIC_PAGES) {
       check(dupIds.length === 0, `[${url} ${label}] IDs duplicados: ${dupIds.join(', ')}`);
 
       if (!url.startsWith('login') && !url.startsWith('perfil')) {
-        const navCount = await page.evaluate(() => {
+        const navCount = await safeEvaluate(page, () => {
           const visible = el => !!el && getComputedStyle(el).display !== 'none' && getComputedStyle(el).visibility !== 'hidden' && el.getBoundingClientRect().width > 0;
           const desktop = document.getElementById('tt-header-desktop-tablet');
           const tablet = document.getElementById('tt-header-tablet');
@@ -135,7 +154,7 @@ for (const url of PUBLIC_PAGES) {
         check(navCount === 1, `[${url} ${label}] Se esperaba exactamente una navegacion visible, se encontraron ${navCount}`);
       }
 
-      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      const overflow = await safeEvaluate(page, () => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       check(overflow <= 2, `[${url} ${label}] Desborde horizontal de ${overflow}px`);
     } catch (error) {
       failures.push(`[${url} ${label}] Excepcion durante el audit: ${error.message}`);
@@ -154,7 +173,7 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
       await page.waitForTimeout(250);
       const pillActive = await page.locator('.tt-desktop-active-pill').evaluate(el => el.classList.contains('is-ready'), null, { timeout: 2000 }).catch(() => false);
       const haloActive = await page.locator('#tt-tabbar').evaluate(el => el.classList.contains('tt-mobile-nav-ready'), null, { timeout: 2000 }).catch(() => false);
-      const anyActiveLink = await page.evaluate(() => !!document.querySelector('[data-shell-route].active,[data-shell-tab].active'));
+      const anyActiveLink = await safeEvaluate(page, () => !!document.querySelector('[data-shell-route].active,[data-shell-tab].active'));
       check(!pillActive, `[${url} ${label}] La pildora desktop quedo marcada activa sin ruta real.`);
       check(!haloActive, `[${url} ${label}] El halo mobile quedo marcado activo sin ruta real.`);
       check(!anyActiveLink, `[${url} ${label}] Un link de navegacion quedo .active sin ser la ruta real.`);
@@ -175,7 +194,7 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
 
     await page.click('#btn-tienda');
     await page.waitForTimeout(400);
-    const mouseOpenState = await page.evaluate(() => ({
+    const mouseOpenState = await safeEvaluate(page, () => ({
       surface: window.TintinSurfaceController?.surface,
       scrollLocked: document.documentElement.classList.contains('tt-surface-locked'),
       bodyInert: [...document.body.children].some(node => node.inert),
@@ -188,7 +207,7 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
 
     await page.mouse.click(5, 5);
     await page.waitForTimeout(300);
-    check(await page.evaluate(() => window.TintinSurfaceController?.surface) === 'none', 'El dropdown Tienda no cerro al tocar afuera.');
+    check(await safeEvaluate(page, () => window.TintinSurfaceController?.surface) === 'none', 'El dropdown Tienda no cerro al tocar afuera.');
 
     // colecciones.js reemplaza el contenido estatico del grid por datos
     // en vivo (y de paso lo vacia un instante); se espera a que haya al
@@ -198,7 +217,7 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
     await page.locator('#btn-tienda').focus();
     await page.keyboard.press('Enter');
     await page.waitForTimeout(400);
-    const keyboardOpenState = await page.evaluate(() => ({
+    const keyboardOpenState = await safeEvaluate(page, () => ({
       surface: window.TintinSurfaceController?.surface,
       activeElClass: document.activeElement?.className || '',
     }));
@@ -207,7 +226,7 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
 
     await page.keyboard.press('Escape');
     await page.waitForTimeout(300);
-    check(await page.evaluate(() => window.TintinSurfaceController?.surface) === 'none', 'Escape no cerro el dropdown Tienda.');
+    check(await safeEvaluate(page, () => window.TintinSurfaceController?.surface) === 'none', 'Escape no cerro el dropdown Tienda.');
   } catch (error) {
     failures.push(`[dropdown Tienda] Excepcion: ${error.message}`);
   } finally {
@@ -223,9 +242,9 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
     await page.waitForFunction(() => document.documentElement.dataset.ttSurfacesReady === '1', { timeout: 8000 }).catch(() => {});
     await page.click('#btn-menu-tablet');
     await page.waitForTimeout(400);
-    check(await page.evaluate(() => window.TintinSurfaceController?.surface) === 'tablet-menu', 'El menu tablet no abrio.');
+    check(await safeEvaluate(page, () => window.TintinSurfaceController?.surface) === 'tablet-menu', 'El menu tablet no abrio.');
 
-    await page.evaluate(() => {
+    await safeEvaluate(page, () => {
       sessionStorage.setItem('tt_audit_close_calls', '0');
       const controller = window.TintinSurfaceController;
       const original = controller.close.bind(controller);
@@ -236,7 +255,7 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
     });
     await page.click('#tt-tablet-menu a[href="contact.html"]', { timeout: 5000, noWaitAfter: true }).catch(() => {});
     await page.waitForTimeout(500);
-    const closeCalls = Number(await page.evaluate(() => sessionStorage.getItem('tt_audit_close_calls')));
+    const closeCalls = Number(await safeEvaluate(page, () => sessionStorage.getItem('tt_audit_close_calls')));
     check(closeCalls === 1, `El menu tablet llamo close() ${closeCalls} veces por un solo click de link (se esperaba 1).`);
   } catch (error) {
     failures.push(`[menu tablet] Excepcion: ${error.message}`);
@@ -250,7 +269,7 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
   const { ctx, page } = await newPage(1440, 900);
   try {
     await gotoReady(page, 'about.html');
-    await page.evaluate(() => { document.body.style.minHeight = '3000px'; });
+    await safeEvaluate(page, () => { document.body.style.minHeight = '3000px'; });
     let hiddenAfterScroll = false;
     for (let attempt = 0; attempt < 5 && !hiddenAfterScroll; attempt++) {
       await page.mouse.wheel(0, 400);
@@ -260,7 +279,7 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
     await page.mouse.move(700, 700);
     check(hiddenAfterScroll, 'El header no se ocultaba al bajar (precondicion del test no se cumplio).');
 
-    await page.evaluate(() => document.getElementById('btn-tienda').focus());
+    await safeEvaluate(page, () => document.getElementById('btn-tienda').focus());
     await page.waitForTimeout(250);
     const hiddenAfterFocus = await page.locator('#tt-header-desktop-tablet').evaluate(el => el.classList.contains('tt-header-hidden-desktop'));
     check(!hiddenAfterFocus, 'El header siguio oculto tras enfocar un control interno con teclado.');
@@ -286,7 +305,7 @@ for (const [url, selectors] of [
     await gotoReady(page, url);
     await page.waitForTimeout(600);
     for (const selector of selectors) {
-      const heights = await page.$$eval(selector, nodes => nodes.map(node => node.getBoundingClientRect().height).filter(h => h > 0));
+      const heights = await safeEvalAll(page, selector, nodes => nodes.map(node => node.getBoundingClientRect().height).filter(h => h > 0));
       const tooSmall = heights.filter(h => h < 43.5);
       check(tooSmall.length === 0, `[${url}] ${selector}: ${tooSmall.length} control(es) con menos de 44px de alto (${tooSmall.map(h => h.toFixed(1)).join(', ')}).`);
     }
