@@ -83,10 +83,14 @@ function withTimeout(promise, ms, label) {
 // waitForFunction/locator().evaluate()): si el JS de la pagina queda bloqueado
 // (p. ej. un guard de auth reintentando contra peticiones ya abortadas por la
 // regla de red de newPage()), estas llamadas cuelgan para siempre sin este limite.
-function safeEvaluate(page, fn, timeoutMs = 8000) {
+// 12000ms (no 8000ms) porque product.html sin ?id= dispara su propio fallback
+// interno de "related products" a los 8500ms (mantenimiento-producto.js) bajo la
+// politica de red solo-localhost de newPage(); un limite mas corto compite con
+// ese temporizador legitimo de la pagina y falla en falso.
+function safeEvaluate(page, fn, timeoutMs = 12000) {
   return withTimeout(page.evaluate(fn), timeoutMs, 'page.evaluate');
 }
-function safeEvalAll(page, selector, fn, timeoutMs = 8000) {
+function safeEvalAll(page, selector, fn, timeoutMs = 12000) {
   return withTimeout(page.$$eval(selector, fn), timeoutMs, 'page.$$eval');
 }
 
