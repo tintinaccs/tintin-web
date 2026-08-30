@@ -85,7 +85,7 @@ function walk(directory) {
     const relativePath = path.relative(ROOT, absolute).replace(/\\/g, '/');
     // Monaco es una dependencia generada y versionada; sus fuentes de iconos y
     // editor no forman parte del sistema tipográfico visual de Tintin.
-    if (entry.isDirectory() && relativePath === 'js/vendor/monaco') continue;
+    if (entry.isDirectory() && (relativePath === 'js/vendor/monaco' || relativePath === 'public/js/vendor/monaco')) continue;
     if (entry.isDirectory()) {
       files.push(...walk(absolute));
       continue;
