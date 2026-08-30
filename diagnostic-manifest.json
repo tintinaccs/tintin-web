@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-30T19:52:14.511Z",
-  "sourceFingerprint": "9a73f2c9c6ac7d3e28851a13a355ae1f75842fdae6a4381687a7c5bada50ea92",
+  "generatedAt": "2026-08-30T20:55:12.172Z",
+  "sourceFingerprint": "25a370f270b377a58bf92027b245e01f643285614f2459945e73ba612f85e51d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 789,
     "textFiles": 757,
-    "totalBytes": 8756973,
+    "totalBytes": 8757321,
     "pages": 18,
     "modules": 509
   },
@@ -15766,8 +15766,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24798,
-      "sha256": "cb07cf9edb8098495c68f200bec107ddb1a849ade8603abe4e9411962a9f2042",
+      "bytes": 25146,
+      "sha256": "37f7263c66506e7174dc55a1a628138fb4f64a250478d89efa195b26da33ac23",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15811,59 +15811,64 @@
           "line": 10
         },
         {
+          "raw": "js/core/store/estado-productos.js?v=tintin-20260830-instant-loading-1",
+          "target": "js/core/store/estado-productos.js",
+          "line": 349
+        },
+        {
           "raw": "tienda.js?v=tintin-20260829-community-actions-1",
           "target": "tienda.js",
-          "line": 346
+          "line": 350
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 347
+          "line": 351
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 348
+          "line": 352
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/analytics/analitica.js",
-          "line": 349
+          "line": 353
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260829-persistent-session-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 350
+          "line": 354
         },
         {
           "raw": "js/pages/product/beneficios-producto.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/pages/product/beneficios-producto.js",
-          "line": 351
+          "line": 355
         },
         {
           "raw": "js/pages/product/seleccion-producto.js?v=tintin-20260818-product-trust-icons-1",
           "target": "js/pages/product/seleccion-producto.js",
-          "line": 352
+          "line": 356
         },
         {
           "raw": "js/pages/product/productos-relacionados.js?v=tintin-20260817-related-fix-1",
           "target": "js/pages/product/productos-relacionados.js",
-          "line": 353
+          "line": 357
         },
         {
           "raw": "js/pages/product/resenas-producto.js?v=tintin-20260829-community-fast-1",
           "target": "js/pages/product/resenas-producto.js",
-          "line": 354
+          "line": 358
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 355
+          "line": 359
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260826-carousel-order-3",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 356
+          "line": 360
         }
       ],
       "styles": [
@@ -34101,8 +34106,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 24798,
-      "sha256": "cb07cf9edb8098495c68f200bec107ddb1a849ade8603abe4e9411962a9f2042"
+      "bytes": 25146,
+      "sha256": "37f7263c66506e7174dc55a1a628138fb4f64a250478d89efa195b26da33ac23"
     },
     {
       "path": "robots.txt",
