@@ -1,10 +1,25 @@
 import { onCollectionsUpdate } from '../collections/estado-colecciones.js?v=tintin-20260821-accounts-phase-a-1';
 
-const GSAP = window.gsap || null;
 const IMAGE_BASE = '/assets-tintin/images/collections/';
 const PLACEHOLDER = `${IMAGE_BASE}col-placeholder.webp`;
 const SLUG_FILE_MAP = Object.freeze({ bolsos: 'bags' });
 const COPIES = 5;
+const GSAP_URL = '/js/vendor/gsap.min.js?v=3.13.0';
+let gsapPromise = null;
+
+function loadGsap() {
+  if (window.gsap) return Promise.resolve(window.gsap);
+  if (gsapPromise) return gsapPromise;
+  gsapPromise = new Promise(resolve => {
+    const script = document.createElement('script');
+    script.src = GSAP_URL;
+    script.async = true;
+    script.onload = () => resolve(window.gsap || null);
+    script.onerror = () => resolve(null);
+    document.head.appendChild(script);
+  });
+  return gsapPromise;
+}
 
 function clean(value) {
   return String(value == null ? '' : value).trim();
@@ -160,6 +175,19 @@ class InfiniteCollectionCarousel {
     this.render();
   }
 
+  async enhanceMotion() {
+    if (this.reducedMotion.matches || this.collections.length <= 1) return;
+    const gsap = await loadGsap();
+    if (!gsap || !this.collections.length || this.reducedMotion.matches) return;
+    this.gsap = gsap;
+    this.viewport.classList.remove('tt-collection-carousel__viewport--native');
+    requestAnimationFrame(() => {
+      if (!this.gsap || this.reducedMotion.matches || !this.cards.length) return;
+      this.measure(false);
+      this.gsap.ticker.add(this.tick);
+    });
+  }
+
   showState(message, kind = 'status') {
     this.destroyMotion();
     const state = document.createElement('div');
@@ -200,18 +228,8 @@ class InfiniteCollectionCarousel {
       return;
     }
 
-    if (!GSAP) {
-      this.viewport.classList.add('tt-collection-carousel__viewport--native');
-      return;
-    }
-
-    this.viewport.classList.remove('tt-collection-carousel__viewport--native');
-    this.gsap = GSAP;
-    requestAnimationFrame(() => {
-      if (!this.gsap || this.reducedMotion.matches || !this.cards.length) return;
-      this.measure(false);
-      this.gsap.ticker.add(this.tick);
-    });
+    this.viewport.classList.add('tt-collection-carousel__viewport--native');
+    this.enhanceMotion();
   }
 
   destroyMotion() {
