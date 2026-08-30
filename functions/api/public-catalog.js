@@ -1,5 +1,6 @@
 import {
   decodeFirestoreFields,
+  firestoreAdminGet,
   firestoreAdminListAll
 } from '../../cloudflare/firebase-admin-ligero.js';
 
@@ -20,7 +21,13 @@ function pickKnownFields(data, allowed) {
 }
 
 function normalizeResource(value) {
-  return value === 'collections' ? 'collections' : value === 'products' ? 'products' : '';
+  return value === 'collections'
+    ? 'collections'
+    : value === 'products'
+      ? 'products'
+      : value === 'storeGate'
+        ? 'storeGate'
+        : '';
 }
 
 function documentId(document) {
@@ -28,6 +35,20 @@ function documentId(document) {
 }
 
 async function buildPayload(env, resource) {
+  if (resource === 'storeGate') {
+    const document = await firestoreAdminGet(env, 'settings/storeGate');
+    const data = decodeFirestoreFields(document?.fields || {});
+    return {
+      ok: true,
+      resource,
+      data: {
+        storeOpen: data.storeOpen === true,
+        maintenanceAccess: data.maintenanceAccess && typeof data.maintenanceAccess === 'object'
+          ? data.maintenanceAccess
+          : {}
+      }
+    };
+  }
   const docs = await firestoreAdminListAll(env, resource, resource === 'products' ? 1000 : 300);
   const allowed = resource === 'products' ? PRODUCT_FIELDS : COLLECTION_FIELDS;
   const items = docs.map(document => ({

@@ -94,6 +94,10 @@ const server = http.createServer((request, response) => {
 
   if (pathname === '/api/public-catalog') {
     const resource = parsed.searchParams.get('resource');
+    if (resource === 'storeGate') {
+      sendJson(response, 200, { ok: true, resource, data: { storeOpen: true, maintenanceAccess: {} } }, { 'x-tintin-cache': 'test' });
+      return;
+    }
     if (!['products', 'collections'].includes(resource)) {
       sendJson(response, 400, { ok: false, error: 'resource_invalid' });
       return;
@@ -118,6 +122,14 @@ const server = http.createServer((request, response) => {
         productId: parsed.searchParams.get('productId') || '',
         stats: { count: 0, average: 0, distribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 } },
       });
+      return;
+    }
+    if (request.method === 'GET' && action === 'reviewInteractions') {
+      sendJson(response, 200, { ok: true, interactions: { reviewIds: [], replyIds: [] } });
+      return;
+    }
+    if (request.method === 'GET' && action === 'ownFavorite') {
+      sendJson(response, 200, { ok: true, favorite: false });
       return;
     }
     sendJson(response, 404, { ok: false, error: 'smoke_api_action_not_mocked', action: action || null });
@@ -197,6 +209,13 @@ try {
     const page = await context.newPage();
     const pageErrors = [];
     const localHttpErrors = [];
+
+    // Perfil es una superficie protegida: en este smoke sin credenciales debe
+    // poder resolver su redirección a login sin quedar supeditado al gate
+    // público (el gate tiene auditorías dedicadas y no se omite en producción).
+    if (route.name === 'Perfil' || route.name === 'Admin imágenes') {
+      await page.addInitScript(() => { window.TT_DISABLE_STORE_GATE = true; });
+    }
 
     page.on('pageerror', error => {
       const message = error.message || String(error);

@@ -7,7 +7,8 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260829-community-actions-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260816-loader-shell-bridge-1';
-const LOADER_VERSION = 'tintin-20260825-scroll-reveal-2';
+const LOADER_VERSION = 'tintin-20260830-store-gate-api-1';
+const STORE_GATE_VERSION = 'tintin-20260830-store-gate-api-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260829-final-stability-2';
 const NAV_ENTRY_VERSION = 'tintin-20260829-final-stability-2';
@@ -245,6 +246,13 @@ function versionRuntimeLoader(html) {
   );
 }
 
+function versionStoreGate(html) {
+  return html.replace(
+    /(js\/core\/store-gate\/nucleo-control-tienda\.js)(?:\?[^"']*)?/gi,
+    `$1?v=${STORE_GATE_VERSION}`
+  );
+}
+
 function versionVisualBuilder(html) {
   return html.replace(
     /(<script\b[^>]*src=["']js\/visual-builder-bootstrap\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi,
@@ -294,6 +302,7 @@ for (const page of PUBLIC_PAGES) {
   html = centralizeRuntime(html);
   html = versionFirstPaint(html);
   html = versionRuntimeLoader(html);
+  html = versionStoreGate(html);
   html = versionVisualBuilder(html);
   html = versionSessionProtection(html);
   html = versionProfileGate(html);
