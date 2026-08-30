@@ -948,8 +948,14 @@ function initProductPage() {
       else _showProductNotFound();
     }
     function onProductsError() {
-      cleanup();
-      _showProductLoadError();
+      // App Check/Firestore puede emitir un error transitorio mientras el
+      // respaldo REST todavía está resolviendo. No ocultar la ficha por ese
+      // evento: conservar el loading y dejar que products-loaded gane.
+      window.clearTimeout(_pdLoadTimer);
+      _pdLoadTimer = window.setTimeout(() => {
+        cleanup();
+        if (!_pdProduct) _showProductLoadError();
+      }, 10000);
     }
     window.addEventListener('tintin:products-loaded', onProductsLoaded);
     window.addEventListener('tintin:products-error', onProductsError);
@@ -958,7 +964,7 @@ function initProductPage() {
         cleanup();
         _showProductLoadError();
       }
-    }, 8000);
+    }, 12000);
   }
 }
 
