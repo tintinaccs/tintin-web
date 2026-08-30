@@ -202,7 +202,8 @@ try {
     for (const width of [360,820,1280]) {
       console.error(`[responsive] ruta ${route} · ${width}px`);
       await page.setViewportSize({ width,height:820 });
-      await page.goto(`${baseURL}/${route}`,{ waitUntil:'commit', timeout:10000 });
+      const routeURL = `${baseURL}/${route}${route === 'product.html' ? '?id=d3KaJsEEF0HhhFCrhFq9' : ''}`;
+      await page.goto(routeURL,{ waitUntil:'commit', timeout:10000 });
       await page.waitForTimeout(240);
       await page.evaluate(() => {
         document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');
@@ -221,7 +222,12 @@ try {
         check(false, `${route} no montó ${trigger} a ${width}px dentro del tiempo esperado`);
         continue;
       }
-      await page.click(trigger, { timeout: 4000 });
+      try {
+        await page.click(trigger, { timeout: 4000 });
+      } catch (error) {
+        check(false, `${route} no pudo activar ${trigger} a ${width}px: ${error.message}`);
+        continue;
+      }
       check(await page.locator(surface).getAttribute('aria-hidden') === 'false', `${route} no abre ${surface} a ${width}px`);
       await page.keyboard.press('Escape');
       await page.waitForFunction(selector => document.querySelector(selector)?.getAttribute('aria-hidden') === 'true', surface, { timeout:4000 })
