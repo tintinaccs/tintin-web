@@ -202,7 +202,7 @@ try {
     for (const width of [360,820,1280]) {
       console.error(`[responsive] ruta ${route} · ${width}px`);
       await page.setViewportSize({ width,height:820 });
-      await page.goto(`${baseURL}/${route}`,{ waitUntil:'domcontentloaded', timeout:10000 });
+      await page.goto(`${baseURL}/${route}`,{ waitUntil:'commit', timeout:10000 });
       await page.waitForTimeout(240);
       await page.evaluate(() => {
         document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');
