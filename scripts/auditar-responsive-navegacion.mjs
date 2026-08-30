@@ -31,7 +31,7 @@ try {
     window.TT_DISABLE_STORE_GATE = true;
     try { localStorage.setItem('tt_privacy_consent_v1','accepted'); } catch {}
   });
-  const page = await context.newPage();
+  let page = await context.newPage();
   page.setDefaultTimeout(4000);
   page.setDefaultNavigationTimeout(10000);
   const runtimeErrors = [];
@@ -201,6 +201,13 @@ try {
   for (const route of routes) {
     for (const width of [360,820,1280]) {
       console.error(`[responsive] ruta ${route} · ${width}px`);
+      if (width === 360) {
+        await page.close().catch(() => {});
+        page = await context.newPage();
+        page.setDefaultTimeout(4000);
+        page.setDefaultNavigationTimeout(10000);
+        page.on('pageerror', error => runtimeErrors.push(error.message));
+      }
       await page.setViewportSize({ width,height:820 });
       const routeURL = `${baseURL}/${route}${route === 'product.html' ? '?id=d3KaJsEEF0HhhFCrhFq9' : ''}`;
       await page.goto(routeURL,{ waitUntil:'commit', timeout:10000 });
