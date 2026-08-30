@@ -32,6 +32,8 @@ try {
     try { localStorage.setItem('tt_privacy_consent_v1','accepted'); } catch {}
   });
   const page = await context.newPage();
+  page.setDefaultTimeout(4000);
+  page.setDefaultNavigationTimeout(10000);
   const runtimeErrors = [];
   page.on('pageerror',error => runtimeErrors.push(error.message));
   const widths = [320,360,390,430,767,768,820,1023,1024,1280,1440,1920];
