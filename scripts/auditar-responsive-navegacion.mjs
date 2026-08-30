@@ -217,7 +217,7 @@ try {
       const trigger = width === 360 ? '#tabbar-tienda' : width === 820 ? '#btn-menu-tablet' : '#btn-tienda';
       const surface = width === 360 ? '#collections-sheet' : width === 820 ? '#tt-tablet-menu' : '#tt-tienda-dropdown-panel';
       const triggerReady = await page.locator(trigger).count()
-        && await page.locator(trigger).isVisible({ timeout: 4000 }).catch(() => false);
+        && await page.locator(trigger).waitFor({ state: 'visible', timeout: 4000 }).then(() => true).catch(() => false);
       if (!triggerReady) {
         check(false, `${route} no montó ${trigger} a ${width}px dentro del tiempo esperado`);
         continue;
