@@ -213,7 +213,7 @@ try {
     // Perfil es una superficie protegida: en este smoke sin credenciales debe
     // poder resolver su redirección a login sin quedar supeditado al gate
     // público (el gate tiene auditorías dedicadas y no se omite en producción).
-    if (route.name === 'Perfil' || route.name === 'Admin imágenes') {
+    if (route.name === 'Perfil' || route.name === 'Super Admin' || route.name === 'Admin imágenes') {
       await page.addInitScript(() => { window.TT_DISABLE_STORE_GATE = true; });
     }
 
