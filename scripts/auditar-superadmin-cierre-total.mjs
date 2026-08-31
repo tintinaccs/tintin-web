@@ -72,6 +72,14 @@ const pushSource = [
   safeRead('cloudflare/servicio-push.js'),
   firestoreRules,
 ].join('\n');
+const codeStudioSource = [
+  safeRead('js/admin/estudio-codigo/estudio-codigo-admin.js'),
+  safeRead('functions/api/code-studio/[[path]].js'),
+  safeRead('functions/api/code-studio/merge.js'),
+  safeRead('functions/api/code-studio/restore.js'),
+  safeRead('cloudflare/estudio-codigo-core.js'),
+  safeRead('cloudflare/estudio-codigo-github.js'),
+].join('\n');
 const emailSource = [
   adminHtml,
   adminApp,
@@ -139,6 +147,19 @@ const connectionContracts = {
   mensajes: () => hasAny(fullAdminSource + publicSources, ['whatsappNumber', 'WhatsApp', 'wa.me']),
   'notificaciones-push': () => hasAll(pushSource, ['push-config', 'push-subscription', 'push-test', 'adminPushDevices', 'dispatchOrderPushEvent'])
     && ['/api/push-config', '/api/push-subscription', '/api/push-test', '/api/push-order-event', '/api/push-admin'].every(route => routes.include.includes(route)),
+  'estudio-codigo': () => hasAll(codeStudioSource, [
+  "const API = '/api/code-studio'",
+  'SUPER_ADMIN',
+  "headers.set('authorization', `Bearer ${token}`)",
+  "api('commit'",
+  "api('merge'",
+  'requireSuperAdmin(request)',
+  'validateChanges',
+  'commitWorkspaceChanges',
+  'openPullRequest',
+  'mergePullRequestWithHumanApproval',
+  'directMainWrite: false',
+]) && routeCovered('/api/code-studio'),
   correos: () => hasAll(emailSource, ['correos-panel-pedidos', 'correos-panel-plantillas', 'correos-panel-historial'])
     && hasAll(emailSource, ['order-email', 'test-email', 'RESEND_API_KEY', 'emailLogs'])
     && routes.include.includes('/api/order-email') && routes.include.includes('/api/test-email'),
