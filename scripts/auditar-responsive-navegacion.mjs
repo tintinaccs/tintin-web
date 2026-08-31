@@ -136,7 +136,10 @@ try {
   console.log('Responsive audit: validando navegación base en 12 anchos...');
   for (const width of widths) {
     await gotoRoute(page, 'index.html', width);
-    if (width > 1024) {
+    if (width < 768) {
+      await page.waitForFunction(() => document.getElementById('tt-tabbar')?.classList.contains('tt-mobile-nav-ready'), null, { timeout: 3000 })
+        .catch(() => check(false, `${width}px no prepara el halo mobile dentro de 3 s`));
+    } else if (width > 1024) {
       await page.waitForFunction(() => {
         const pill = document.querySelector('.tt-desktop-active-pill');
         return !!pill && pill.classList.contains('is-ready') && pill.getBoundingClientRect().width > 20;
