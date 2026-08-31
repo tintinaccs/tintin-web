@@ -325,6 +325,19 @@ try {
       window.TINTIN_ENABLE_PUBLIC_ACTIVITY = false;
       try { localStorage.setItem('tt_privacy_consent_v1', 'accepted'); } catch {}
     });
+    // Sin esto, páginas que importan módulos de Firebase desde
+    // https://www.gstatic.com (p. ej. product.html vía proteccion-sesion.js y
+    // resenas-producto.js) dependen de red real: en el runner de CI esas
+    // peticiones pueden tardar más que el timeout de navegación y cuelgan
+    // domcontentloaded. Se aborta todo lo que no sea el propio servidor local,
+    // igual que ya hace auditar-todas-navegacion-superficies.mjs.
+    await context.route('**/*', route => {
+      try {
+        const url = new URL(route.request().url());
+        if (url.hostname !== host) return route.abort();
+      } catch {}
+      return route.continue();
+    });
 
     for (const pageInfo of pages) {
       currentStep = `${pageInfo.path} ${viewport.width}×${viewport.height}`;
