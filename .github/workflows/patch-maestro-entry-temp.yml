@@ -37,9 +37,16 @@ jobs:
           let connections = fs.readFileSync(connectionsPath, 'utf8');
           const oldBootstrapCheck = "check('maestro-bootstrap', 'Maestro está conectado al bootstrap administrativo', has(files.maestroBootstrap, './maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-1'));";
           const newBootstrapCheck = "check('maestro-entry', 'Maestro tiene entrada versionada directa desde admin.html', has(files.admin, 'js/admin/maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-1'));\ncheck('maestro-bootstrap-clean', 'El bootstrap responsive histórico conserva su responsabilidad original', !has(files.maestroBootstrap, 'maestro/panel-maestro'));";
-          if (!connections.includes(oldBootstrapCheck)) throw new Error('No se encontró el contrato bootstrap Maestro esperado');
-          connections = connections.replace(oldBootstrapCheck, newBootstrapCheck);
+          if (connections.includes(oldBootstrapCheck)) connections = connections.replace(oldBootstrapCheck, newBootstrapCheck);
+          if (!connections.includes("check('maestro-entry'")) throw new Error('No quedó configurado el contrato de entrada directa Maestro');
           connections = connections.replace("has(files.maestroBootstrap, 'tintin-20260831-superadmin-maestro-1') &&", "has(files.admin, 'js/admin/maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-1') &&");
+
+          const oldEngagement = "check('engagement-admin-api', 'Reseñas y Me gusta mutan por API administrativa protegida', has(files.participation, '/api/admin-engagement') && has(files.adminEngagementApi, 'SUPER_ADMIN'));";
+          const newEngagement = "check('engagement-admin-api', 'Reseñas y Me gusta mutan por API administrativa protegida', has(files.participation, '/api/admin-engagement') && hasAll(files.adminEngagementApi, ['requireSuperAdmin', 'originIsAllowed', 'request.method !== \'POST\'']));";
+          if (connections.includes(oldEngagement)) connections = connections.replace(oldEngagement, newEngagement);
+          if (!connections.includes("['requireSuperAdmin', 'originIsAllowed', 'request.method !== \\'POST\\'']")) {
+            throw new Error('No quedó configurado el contrato real de autorización de engagement');
+          }
           fs.writeFileSync(connectionsPath, connections);
           NODE
       - name: Retirar workflow temporal antes de generar inventarios
