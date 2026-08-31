@@ -90,6 +90,33 @@ const listen = () => new Promise((resolve, reject) => {
 });
 const closeServer = () => new Promise(resolve => server.close(resolve));
 
+let currentStep = 'inicio';
+const WATCHDOG_MS = 480000;
+const watchdogTimer = setTimeout(() => {
+  console.error(`\nAUDIT COLGADO: sin progreso tras ${WATCHDOG_MS}ms. Ultimo paso: ${currentStep}`);
+  process.exit(1);
+}, WATCHDOG_MS);
+
+// page.evaluate() no respeta page.setDefaultTimeout() (a diferencia de
+// waitForFunction/waitForSelector, que ya tienen timeout explícito abajo): si
+// el JS de la página queda bloqueado — p. ej. product.html sin ?id= disparando
+// su propio fallback interno de "related products", que reintenta contra
+// peticiones que este servidor local no puede responder (no expone /api/*) —
+// esta llamada cuelga para siempre sin este límite, tal como ya se documentó
+// y corrigió para auditar-todas-navegacion-superficies.mjs en este mismo PR.
+function safeEvaluate(page, fn, arg, timeoutMs = 12000) {
+  const evaluation = arg === undefined ? page.evaluate(fn) : page.evaluate(fn, arg);
+  return withTimeout(evaluation, timeoutMs, 'page.evaluate');
+}
+
+function withTimeout(promise, ms, label) {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`Timeout de ${ms}ms esperando ${label}`)), ms);
+  });
+  return Promise.race([Promise.resolve(promise), timeout]).finally(() => clearTimeout(timer));
+}
+
 async function waitForVisibleBodyContent(page) {
   await page.waitForFunction(() => {
     const visible = node => {
@@ -112,7 +139,7 @@ async function prepare(page, width, pageInfo) {
     ), null, { timeout: 4000 }).catch(() => {});
   }
 
-  await page.evaluate(() => {
+  await safeEvaluate(page, () => {
     try { window.TintinLoader?.hide?.(); } catch {}
     const root = document.documentElement;
     const body = document.body;
@@ -152,7 +179,7 @@ async function prepare(page, width, pageInfo) {
 }
 
 async function inspect(page, width, pageInfo) {
-  return page.evaluate(({ width, pageInfo, shellExpected }) => {
+  return safeEvaluate(page, ({ width, pageInfo, shellExpected }) => {
     const issues = [];
     const visible = node => {
       if (!node) return false;
@@ -300,6 +327,7 @@ try {
     });
 
     for (const pageInfo of pages) {
+      currentStep = `${pageInfo.path} ${viewport.width}×${viewport.height}`;
       const page = await context.newPage();
       const entry = { page: pageInfo.path, viewport: viewport.id, width: viewport.width, height: viewport.height, issues: [] };
       try {
@@ -324,6 +352,7 @@ try {
     await context.close();
   }
 } finally {
+  clearTimeout(watchdogTimer);
   await browser.close();
   await closeServer();
 }
