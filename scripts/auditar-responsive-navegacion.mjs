@@ -145,7 +145,9 @@ try {
   await page.click('#btn-tienda');
   check(await page.locator('#tt-tienda-dropdown-panel').getAttribute('aria-hidden') === 'false', 'Desktop no abre el dropdown Tienda');
   check(await page.locator('#tt-tienda-dropdown-panel').evaluate(node => getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto' && [...node.querySelectorAll('a[href]')].every(link => getComputedStyle(link).pointerEvents !== 'none')), 'Desktop dropdown Tienda no es sólido o clicable');
-  await page.evaluate(() => window.TintinSurfaceController.open('search', document.getElementById('btn-search')));
+  await page.evaluate(() => { void window.TintinSurfaceController.open('search', document.getElementById('btn-search')); });
+  await page.waitForFunction(() => document.querySelector('#search-panel')?.getAttribute('aria-hidden') === 'false', null, { timeout: UI_WAIT_MS })
+    .catch(() => check(false, 'Desktop Buscar no abre dentro del límite'));
   check(await page.locator('#search-panel').getAttribute('aria-hidden') === 'false', 'Desktop no abre Buscar');
   await page.keyboard.press('Escape');
   await page.waitForFunction(() => document.querySelector('#search-panel')?.getAttribute('aria-hidden') === 'true', null, { timeout: UI_WAIT_MS })
@@ -161,12 +163,17 @@ try {
   await page.click('#btn-account-close');
   await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'true', null, { timeout: UI_WAIT_MS })
     .catch(() => check(false, 'Desktop Cuenta no cierra dentro del límite'));
-  const rapidState = await page.evaluate(async () => {
+  await page.evaluate(() => {
     const controller = window.TintinSurfaceController;
-    await Promise.allSettled([
-      controller.open('cart', document.getElementById('btn-cart')),
-      controller.open('search', document.getElementById('btn-search')),
-    ]);
+    void controller.open('cart', document.getElementById('btn-cart'));
+    void controller.open('search', document.getElementById('btn-search'));
+  });
+  await page.waitForFunction(() => {
+    const controller = window.TintinSurfaceController;
+    return controller?.surface === 'search' && controller?.state === 'open';
+  }, null, { timeout: UI_WAIT_MS }).catch(() => check(false, 'Cambio rápido cart→search no estabiliza dentro del límite'));
+  const rapidState = await page.evaluate(() => {
+    const controller = window.TintinSurfaceController;
     return {
       surface: controller.surface,
       state: controller.state,
