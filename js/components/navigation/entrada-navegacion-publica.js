@@ -166,6 +166,15 @@ function hydrateSharedLogos(root = document) {
   });
 }
 
+async function loadFinalStability() {
+  if (document.getElementById('product-detail')) {
+    await import('../../quality/estabilidad-producto.js?v=tintin-20260831-product-stability-2');
+    return 'tintin-20260831-product-stability-2';
+  }
+  await import('../../quality/estabilidad-final-publica.js?v=tintin-20260829-final-stability-1');
+  return 'tintin-20260829-final-stability-1';
+}
+
 function mountPublicShell() {
   if (!document.body || document.body.classList.contains('tt-public-shell-mounted')) return Promise.resolve();
   if (mountPromise) return mountPromise;
@@ -215,7 +224,7 @@ function mountPublicShell() {
     await registerNavigationSurfaces();
     loadSharedRuntime();
     void pageDataPromise;
-    await import('../../quality/estabilidad-final-publica.js?v=tintin-20260829-final-stability-1');
+    const finalStability = await loadFinalStability();
 
     document.dispatchEvent(new CustomEvent('tintin:public-shell-ready', {
       detail: {
@@ -223,7 +232,7 @@ function mountPublicShell() {
         socialNotifications: 'global',
         globalConfigRequests: 1,
         sharedLogoRequests: 1,
-        finalStability: 'tintin-20260829-final-stability-1',
+        finalStability,
       },
     }));
   }).catch(error => {
