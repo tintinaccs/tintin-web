@@ -20,7 +20,7 @@ import {
   writeCached
 } from '../firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
 import { listPublicCollectionRest } from '../firebase/respaldo-rest-firestore.js?v=tintin-20260726-browser-fallback-1';
-import { fetchPublicCatalogResource, fetchPublicProduct } from '../firebase/catalogo-publico-api.js?v=tintin-20260831-product-loading-1';
+import { fetchPublicCatalogResource } from '../firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1';
 import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1';
 
 const ALL_CACHE_KEY = 'products:cards';
@@ -32,6 +32,8 @@ const HOME_PRODUCT_LIMIT = 18;
 // de precio, stock o estado durante diez minutos en otros dispositivos.
 const ALL_CACHE_TTL = 60 * 1000;
 const PRODUCT_CACHE_TTL = 15 * 60 * 1000;
+const PUBLIC_CATALOG_ENDPOINT = '/api/public-catalog';
+const PUBLIC_PRODUCT_TIMEOUT_MS = 8000;
 let publicProductsUnsubscribe = null;
 let publicProductsReady = null;
 let publicProductUnsubscribe = null;
@@ -336,12 +338,32 @@ async function fetchSingleProduct(id) {
 }
 
 async function fetchSingleProductFromEdge(id) {
-  const item = await fetchPublicProduct(id);
-  if (!item) return null;
-  const product = mapProduct(item.id, item.data);
-  if (window.TintinCatalogPolicy?.isCatalogVisible && !window.TintinCatalogPolicy.isCatalogVisible(product)) return null;
-  writeCached(`product:${id}`, product);
-  return product;
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), PUBLIC_PRODUCT_TIMEOUT_MS);
+  try {
+    const params = new URLSearchParams({ resource: 'products', id: String(id) });
+    const response = await fetch(`${PUBLIC_CATALOG_ENDPOINT}?${params.toString()}`, {
+      method: 'GET',
+      credentials: 'omit',
+      cache: 'default',
+      signal: controller.signal
+    });
+    if (!response.ok) throw new Error('API pública de producto respondió ' + response.status);
+    const payload = await response.json();
+    if (!payload?.ok || payload.resource !== 'products' || !Object.prototype.hasOwnProperty.call(payload, 'item')) {
+      throw new Error('Respuesta pública de producto inválida');
+    }
+    if (payload.item == null) return null;
+    if (!payload.item.id || !payload.item.data || typeof payload.item.data !== 'object') {
+      throw new Error('Producto público inválido');
+    }
+    const product = mapProduct(payload.item.id, payload.item.data);
+    if (window.TintinCatalogPolicy?.isCatalogVisible && !window.TintinCatalogPolicy.isCatalogVisible(product)) return null;
+    writeCached(`product:${id}`, product);
+    return product;
+  } finally {
+    window.clearTimeout(timer);
+  }
 }
 
 async function fetchRelatedProducts(product) {
