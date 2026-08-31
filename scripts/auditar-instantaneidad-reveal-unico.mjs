@@ -48,6 +48,8 @@ check('reveal-no-repeat-function', 'El reveal global ya no contiene lógica de o
 check('reveal-unobserve', 'Cada elemento revelado se desuscribe del IntersectionObserver', reveal.includes('observer?.unobserve(element)'));
 check('reveal-done-marker', 'Cada elemento conserva marca irreversible durante la carga', reveal.includes("element.dataset.ttRevealDone = '1'"));
 check('reveal-no-exit-reset', 'Salir del viewport no vuelve a ocultar elementos', !/else\s+[^\n]*remove\(['"]tt-visible/.test(reveal));
+check('reveal-admin-enabled', 'Super Admin participa del mismo reveal único global', !reveal.includes('tt-reveal-admin-disabled') && reveal.includes('.adm-section.active .adm-card'));
+check('reveal-admin-dynamic', 'Al cambiar módulos Admin se escanea solo la sección activa', reveal.includes("document.querySelector('.adm-section.active')"));
 check('brand-reveal-once', 'La extensión de marca también revela una sola vez', brandReveal.includes('observer&&observer.unobserve(el)'));
 check('reveal-versioned-loader', 'El loader usa la versión irreversible del reveal', pageLoader.includes('tt-reveal=20260831-irreversible-1'));
 check('shell-version', 'El runtime público está versionado para identidad/reveal nuevos', config.includes("tintin-20260831-instant-auth-reveal-once-1"));
