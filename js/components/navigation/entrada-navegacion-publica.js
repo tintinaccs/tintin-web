@@ -8,7 +8,12 @@ import { renderCollectionsSheet } from './compartido/panel-colecciones.js';
 import { renderSurfaceLayer } from './compartido/capas-paneles.js';
 import { applyActiveState, currentPage } from './compartido/estado-ruta.js';
 import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20260831-notifications-auto-read-1';
-import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260831-notifications-auto-read-1';
+import {
+  activateIdentityNotifications,
+  loadProductsRuntime,
+  loadSharedRuntime,
+  primeAuthRuntime,
+} from './compartido/carga-navegacion.js?v=tintin-20260831-instant-auth-reveal-once-1';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
 import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260817-footer-contrast-1';
@@ -182,10 +187,10 @@ function mountPublicShell() {
   document.body.classList.add('tt-public-shell-mounting');
   window.TintinLoader?.beginWait?.();
 
-  // Producto y catálogo tienen una dependencia de datos crítica propia. Se
-  // inicia antes del montaje visual del shell para que una demora de logo,
-  // configuración o paneles no deje la ficha detrás del loader indefinido.
-  // `loadSharedRuntime()` reutiliza la misma promesa y no duplica lecturas.
+  // Auth empieza en paralelo con el primer trabajo del shell. No espera logo,
+  // configuración visual, catálogo ni rol para saber si existe una sesión.
+  void primeAuthRuntime().catch(() => {});
+
   const pageDataPromise = currentPage() === 'shop'
     ? loadProductsRuntime().catch(error => {
       console.warn('[PublicShell] No se pudo iniciar el catálogo crítico.', error);
@@ -206,6 +211,12 @@ function mountPublicShell() {
     removeLegacyShell();
     document.body.insertAdjacentHTML('afterbegin', renderTopShell());
     document.body.insertAdjacentHTML('beforeend', renderBottomShell());
+
+    // Apenas existen los tres headers/tabbar se aplica el estado de identidad
+    // ya conocido. Si hay sesión arranca el feed real ahora mismo; si no hay,
+    // las campanas siguen ocultas y el módulo de notificaciones no se importa.
+    void activateIdentityNotifications();
+
     await hydrateSharedLogos();
 
     const globalConfig = await globalConfigPromise;
@@ -229,7 +240,7 @@ function mountPublicShell() {
     document.dispatchEvent(new CustomEvent('tintin:public-shell-ready', {
       detail: {
         architecture: 'modular-navigation-v1',
-        socialNotifications: 'global',
+        socialNotifications: 'identity-realtime',
         globalConfigRequests: 1,
         sharedLogoRequests: 1,
         finalStability,
