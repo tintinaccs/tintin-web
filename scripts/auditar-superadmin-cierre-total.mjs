@@ -54,8 +54,9 @@ const serverSources = [
 const collectionSource = [adminHtml, safeRead('js/admin/collections/gestion-colecciones-admin.js'), catalogDeleteCore, publicSources].join('\n');
 const imageSource = [
   adminImagesHtml,
-  safeRead('js/admin/products/biblioteca-multimedia-admin.js'),
-  safeRead('js/admin/products/gestion-imagenes-admin.js'),
+  safeRead('js/components/images/biblioteca-multimedia.js'),
+  safeRead('js/components/images/procesamiento-imagenes.js'),
+  safeRead('js/components/images/utilidades-imagenes.js'),
   safeRead('functions/api/cloudinary-sign-upload.js'),
   safeRead('functions/api/cloudinary-delete.js'),
 ].join('\n');
@@ -67,6 +68,8 @@ const pushSource = [
   safeRead('functions/api/push-subscription.js'),
   safeRead('functions/api/push-test.js'),
   safeRead('functions/api/push-order-event.js'),
+  safeRead('cloudflare/nucleo-push.js'),
+  safeRead('cloudflare/servicio-push.js'),
   firestoreRules,
 ].join('\n');
 const emailSource = [
@@ -129,13 +132,13 @@ const connectionContracts = {
   paginas: () => hasAll(fullAdminSource, ['tt-pages-admin-root', 'paginas-admin.js'])
     && hasAny(fullAdminSource + publicSources, ['site_content', 'siteContent', 'site-content']),
   importar: () => hasAll(fullAdminSource, ['importacion-admin.js', 'Exportar']) && hasAny(fullAdminSource, ['products', 'audit']),
-  imagenes: () => hasAny(imageSource, ['cloudinary-sign-upload', 'Cloudinary'])
-    && hasAny(imageSource, ['cloudinary-delete', 'huérfan', 'orphan'])
-    && hasAny(imageSource, ['authorization', 'Bearer', 'requireSuperAdmin']),
+  imagenes: () => hasAll(imageSource, ["callSecureFunction('cloudinary-sign-upload'", 'deleteMediaByUrlIfUnused', 'deleteCloudinaryAssets', 'withTimeout'])
+    && hasAny(imageSource, ['requireSuperAdmin', 'cloudinary-delete'])
+    && routes.include.includes('/api/cloudinary-sign-upload')
+    && routes.include.includes('/api/cloudinary-delete'),
   mensajes: () => hasAny(fullAdminSource + publicSources, ['whatsappNumber', 'WhatsApp', 'wa.me']),
-  'notificaciones-push': () => hasAll(pushSource, ['push-config', 'push-subscription', 'push-test'])
-    && hasAny(pushSource, ['pushSubscriptions', 'push-subscriptions'])
-    && routes.include.includes('/api/push-subscription') && routes.include.includes('/api/push-test'),
+  'notificaciones-push': () => hasAll(pushSource, ['push-config', 'push-subscription', 'push-test', 'adminPushDevices', 'dispatchOrderPushEvent'])
+    && ['/api/push-config', '/api/push-subscription', '/api/push-test', '/api/push-order-event', '/api/push-admin'].every(route => routes.include.includes(route)),
   correos: () => hasAll(emailSource, ['correos-panel-pedidos', 'correos-panel-plantillas', 'correos-panel-historial'])
     && hasAll(emailSource, ['order-email', 'test-email', 'RESEND_API_KEY', 'emailLogs'])
     && routes.include.includes('/api/order-email') && routes.include.includes('/api/test-email'),
