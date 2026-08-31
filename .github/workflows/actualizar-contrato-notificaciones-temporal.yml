@@ -1,0 +1,56 @@
+name: Actualizar contrato notificaciones temporal
+
+on:
+  push:
+    branches: [feat/instant-auth-notifications-reveal-once]
+    paths:
+      - '.github/workflows/actualizar-contrato-notificaciones-temporal.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: feat/instant-auth-notifications-reveal-once
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Actualizar contrato social al modelo por identidad
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('tests/engagement/notificaciones-sociales.test.mjs')
+          s = p.read_text()
+          start = "test('la campana pública evita Firestore para visitas livianas y se hidrata con sesión o demanda', () => {"
+          end = "\n\ntest('superadmin recupera estados, auto-marca al abrir y resuelve snapshots tardíos', () => {"
+          i = s.find(start)
+          j = s.find(end, i)
+          if i < 0 or j < 0:
+              raise SystemExit('No se encontró el contrato social anterior')
+          replacement = """test('la campana pública evita Firestore para visitas y arranca al instante con identidad autenticada', () => {\n  assert.doesNotMatch(navigationRuntime, /function attachNotificationsDemand\\(\\)/);\n  assert.match(navigationRuntime, /NOTIFICATION_TRIGGER_SELECTOR/);\n  assert.match(navigationRuntime, /tintin:auth-identity/);\n  assert.match(navigationRuntime, /window\\.TintinAuthIdentity\\?\\.resolved/);\n  assert.match(navigationRuntime, /applyNotificationIdentity\\(Boolean\\(event\\.detail\\?\\.authenticated\\)\\)/);\n  assert.match(navigationRuntime, /if \\(!authenticated\\) \\{\\s*setNotificationTriggersVisible\\(false\\);\\s*return;/s);\n  assert.match(navigationRuntime, /void loadNotificationsRuntime\\(\\)\\s*\\.then\\(\\(\\) => setNotificationTriggersVisible\\(true\\)\\)/s);\n  assert.match(navigationRuntime, /return primeAuthRuntime\\(\\)/);\n  assert.doesNotMatch(navigationRuntime, /tt_session_started_at|hasActiveSessionHint\\(\\)/);\n  assert.match(sharedIcons, /bell:\\s*'<path/);\n  assert.match(desktopHeader, /svgIcon\\(UI_ICONS\\.bell/);\n  assert.match(tabletHeader, /svgIcon\\(UI_ICONS\\.bell/);\n  assert.match(mobileHeader, /svgIcon\\(UI_ICONS\\.bell/);\n  for (const source of [desktopHeader, tabletHeader, mobileHeader]) {\n    assert.match(source, /data-nav-action=\"notifications\"/);\n    assert.match(source, /data-notification-badge/);\n    assert.match(source, /\\shidden/);\n  }\n});"""
+          p.write_text(s[:i] + replacement + s[j:])
+          PY
+      - name: Quitar workflow temporal
+        run: git rm .github/workflows/actualizar-contrato-notificaciones-temporal.yml
+      - name: Regenerar diagnóstico
+        run: npm run build:diagnostics
+      - name: Validar realtime, caché y manifiesto
+        run: |
+          node --test tests/engagement/notificaciones-sociales.test.mjs
+          node scripts/auditar-instantaneidad-reveal-unico.mjs
+          node scripts/auditar-versionado-cache.mjs
+          npm run verify:diagnostics
+      - name: Commit reproducible
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "test: exigir notificaciones realtime por identidad" || exit 0
+          git push origin HEAD:feat/instant-auth-notifications-reveal-once
