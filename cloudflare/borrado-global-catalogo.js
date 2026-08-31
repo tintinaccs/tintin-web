@@ -15,6 +15,7 @@ const MAX_PRODUCTS = 5000;
 const QUERY_CHUNK = 30;
 const COMMIT_CHUNK = 20;
 const PRODUCT_SYNC_CHUNK = 100;
+const SOCIAL_SYNC_CONCURRENCY = 8;
 
 const clean = (value, max = 180) => String(value ?? '').trim().slice(0, max);
 const docId = document => String(document?.name || '').split('/').pop();
@@ -114,16 +115,55 @@ async function syncProductsToSheets(idToken, productIds) {
   return { ok: true, batches };
 }
 
-async function syncSocialPurgeToSheets(env, productIds) {
-  const ids = unique(productIds);
-  if (!ids.length) return { ok: true };
-  const ok = await syncEngagementToSheets(env, {
-    type: 'productPurge',
-    operation: 'delete',
-    record: { productIds: ids },
-  });
-  if (!ok) throw new Error('No se pudo purgar Resenas/Me gusta en Google Sheets.');
-  return { ok: true };
+async function runSocialEvents(env, events) {
+  for (let i = 0; i < events.length; i += SOCIAL_SYNC_CONCURRENCY) {
+    const results = await Promise.all(events.slice(i, i + SOCIAL_SYNC_CONCURRENCY).map(event => syncEngagementToSheets(env, event)));
+    if (results.some(ok => ok !== true)) throw new Error('Una o más filas sociales no pudieron sincronizarse con Google Sheets.');
+  }
+}
+
+// Participacion.gs desplegado ya soporta:
+// - review: upsert de una fila por reviewId
+// - like + operation delete: borrado físico de la fila por likeId
+// Para no depender de un deploy externo nuevo, las reseñas se convierten en
+// tombstones sin Producto ID/nombre ni PII, y los likes se borran por completo.
+async function syncSocialPurgeToSheets(env, social) {
+  const reviewEvents = social.privateReviews.map(document => {
+    const record = decoded(document) || {};
+    return {
+      type: 'review',
+      operation: 'upsert',
+      record: {
+        reviewId: clean(record.reviewId || record.id),
+        deleted: true,
+        visible: false,
+        unread: false,
+        rating: 0,
+        comment: '',
+        productId: '',
+        productName: '',
+        realName: '',
+        username: '',
+        email: '',
+        publicName: '',
+        createdAt: record.createdAt || new Date(),
+        updatedAt: new Date(),
+        storeLiked: false,
+        conversation: [],
+        history: [],
+      },
+    };
+  }).filter(event => event.record.reviewId);
+  const likeEvents = social.likes.map(document => {
+    const record = decoded(document) || {};
+    return {
+      type: 'like',
+      operation: 'delete',
+      record: { likeId: clean(record.likeId || record.id) },
+    };
+  }).filter(event => event.record.likeId);
+  await runSocialEvents(env, [...reviewEvents, ...likeEvents]);
+  return { ok: true, reviews: reviewEvents.length, likes: likeEvents.length };
 }
 
 async function appendAudit(env, actor, action, result) {
@@ -185,6 +225,11 @@ export async function deleteProductsGlobally(env, { scope = 'selected', productI
   if (!ids.length) return { dryRun: false, deletedProducts: 0, impact, sheets: { products: true, social: true } };
 
   const social = await collectSocialReferences(env, ids);
+  // Primero se eliminan/sanitizan las referencias del producto en las hojas
+  // sociales usando datos que todavía existen. Si Google falla, NO se toca
+  // Firestore y la operación se puede reintentar sin quedar a medias.
+  await syncSocialPurgeToSheets(env, social);
+
   const deletePaths = new Set();
   social.privateReviews.forEach(document => deletePaths.add(firestorePathFromName(document.name)));
   social.reviewCopies.forEach(document => deletePaths.add(firestorePathFromName(document.name)));
@@ -211,13 +256,10 @@ export async function deleteProductsGlobally(env, { scope = 'selected', productI
   };
 
   let productsSheets = false;
-  let socialSheets = false;
   const errors = [];
   try { await syncProductsToSheets(idToken, ids); productsSheets = true; }
   catch (error) { errors.push(clean(error?.message, 500)); }
-  try { await syncSocialPurgeToSheets(env, ids); socialSheets = true; }
-  catch (error) { errors.push(clean(error?.message, 500)); }
-  result.sheets = { products: productsSheets, social: socialSheets };
+  result.sheets = { products: productsSheets, social: true };
   result.partial = errors.length > 0;
   result.errors = errors;
   await appendAudit(env, actor, 'eliminar_producto_global', result);
