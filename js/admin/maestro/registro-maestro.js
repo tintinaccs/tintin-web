@@ -1,4 +1,4 @@
-export const MAESTRO_SCHEMA_VERSION = 1;
+export const MAESTRO_SCHEMA_VERSION = 2;
 
 export const BASE_ADMIN_SECTIONS = Object.freeze([
   'dashboard', 'estadisticas', 'usuarios', 'pedidos', 'productos', 'resenas',
@@ -117,6 +117,14 @@ export const MAESTRO_MODULES = Object.freeze([
   }, {
     quickAction: { type: 'selector', selector: '#btn-run-site-diagnostics', label: 'Ejecutar diagnóstico' },
     evidence: ['btn-run-site-diagnostics', 'Modo de solo lectura']
+  }),
+
+  moduleDef('estudio-codigo', 'Editor de Código', 'code-governance', 'Edición del repositorio con rama, commit, PR, checks y merge protegidos; nunca publica directamente sin el flujo GitHub.', {
+    create: GUARDED, read: YES, update: GUARDED, archive: NO, delete: GUARDED, search: YES, export: NO, sync: GUARDED
+  }, {
+    section: 'estudio-codigo',
+    surface: 'dynamic',
+    evidence: ['section-estudio-codigo', 'nav-estudio-codigo', '/api/code-studio', 'cs-commit', 'cs-merge']
   }),
 
   moduleDef('correos', 'Correos', 'content-crud', 'Configuración, plantillas, promociones e historial del canal de correo.', {
