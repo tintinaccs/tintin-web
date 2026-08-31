@@ -1,0 +1,44 @@
+name: Validar puntuación obligatoria de reseñas
+
+on:
+  pull_request:
+    paths:
+      - 'product.html'
+      - 'js/pages/product/resenas-producto.js'
+      - 'js/pages/product/validacion-puntuacion-resena.js'
+      - 'scripts/auditar-puntuacion-resena-producto.mjs'
+      - 'tests/ui-ux/product-review-rating-required.spec.js'
+      - '.github/workflows/auditar-resena-producto-puntuacion.yml'
+      - 'scripts/cache-version-approvals.json'
+  push:
+    branches: [main]
+    paths:
+      - 'product.html'
+      - 'js/pages/product/resenas-producto.js'
+      - 'js/pages/product/validacion-puntuacion-resena.js'
+      - 'scripts/auditar-puntuacion-resena-producto.mjs'
+      - 'tests/ui-ux/product-review-rating-required.spec.js'
+      - '.github/workflows/auditar-resena-producto-puntuacion.yml'
+      - 'scripts/cache-version-approvals.json'
+
+permissions:
+  contents: read
+
+jobs:
+  rating-required:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Auditar contrato de puntuación
+        run: node scripts/auditar-puntuacion-resena-producto.mjs
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Probar Desktop Tablet Mobile
+        run: npx playwright test tests/ui-ux/product-review-rating-required.spec.js --project=chromium
+      - name: Verificar caché immutable
+        run: node scripts/auditar-versionado-cache.mjs
