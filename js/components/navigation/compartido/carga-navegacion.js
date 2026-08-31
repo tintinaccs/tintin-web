@@ -93,7 +93,7 @@ function loadHomeMaintenance() {
 
 export function loadProductsRuntime({ forSearch = false } = {}) {
   if (!productsRuntimePromise) {
-    productsRuntimePromise = import(versionedJsModule('core/store/estado-productos.js')).catch(error => {
+    productsRuntimePromise = import('../../../core/store/estado-productos.js?v=tintin-20260831-product-loading-2').catch(error => {
       productsRuntimePromise = null;
       document.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
       throw error;
@@ -203,7 +203,7 @@ function loadNavigationBehaviors() {
       import(versionedJsModule('components/navigation/movil/indicador-navegacion-movil.js')),
       import(versionedJsModule('components/navigation/movil/navegacion-compacta-movil.js')),
       import(versionedJsModule('components/navigation/compartido/enrutador.js')),
-      import(versionedJsModule('components/navigation/compartido/control-busqueda.js')),
+      import('./control-busqueda.js?v=tintin-20260831-product-loading-2'),
     ]))
     .then(results => {
       // Dynamic imports are cached, but the shell DOM is remounted on every
