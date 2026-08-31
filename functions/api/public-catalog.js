@@ -32,20 +32,12 @@ function normalizeResource(value) {
 
 function normalizeProductId(value) {
   const id = String(value || '').trim();
-  return /^[A-Za-z0-9_-]{1,128}$/.test(id) ? id : '';
+  if (!id || id.length > 256 || /[\/?#\u0000-\u001f\u007f]/.test(id)) return '';
+  return id;
 }
 
 function documentId(document) {
   return String(document?.name || '').split('/').pop() || '';
-}
-
-function productItem(document) {
-  if (!document) return null;
-  const id = documentId(document);
-  if (!id) return null;
-  const data = pickKnownFields(decodeFirestoreFields(document?.fields || {}), PRODUCT_FIELDS);
-  if (data.active === false) return null;
-  return { id, data };
 }
 
 async function buildPayload(env, resource, productId = '') {
@@ -65,9 +57,12 @@ async function buildPayload(env, resource, productId = '') {
   }
 
   if (resource === 'products' && productId) {
-    const item = productItem(await firestoreAdminGet(env, `products/${productId}`));
-    const items = item ? [item] : [];
-    return { ok: true, resource, items, count: items.length, lookup: 'single' };
+    const document = await firestoreAdminGet(env, `products/${productId}`);
+    if (!document) return { ok: true, resource, item: null, items: [], count: 0, lookup: 'single' };
+    const data = pickKnownFields(decodeFirestoreFields(document?.fields || {}), PRODUCT_FIELDS);
+    if (data.active === false) return { ok: true, resource, item: null, items: [], count: 0, lookup: 'single' };
+    const item = { id: documentId(document) || productId, data };
+    return { ok: true, resource, item, items: [item], count: 1, lookup: 'single' };
   }
 
   const docs = await firestoreAdminListAll(env, resource, resource === 'products' ? 1000 : 300);
@@ -97,9 +92,9 @@ export async function onRequest({ request, env, waitUntil }) {
     });
   }
 
-  const hasProductId = resource === 'products' && url.searchParams.has('id');
-  const productId = hasProductId ? normalizeProductId(url.searchParams.get('id')) : '';
-  if (hasProductId && !productId) {
+  const requestedProductId = url.searchParams.get('id');
+  const productId = requestedProductId == null ? '' : normalizeProductId(requestedProductId);
+  if (requestedProductId != null && (resource !== 'products' || !productId)) {
     return Response.json({ ok: false, error: 'product_id_invalid' }, {
       status: 400,
       headers: { 'cache-control': 'no-store', 'x-content-type-options': 'nosniff' }

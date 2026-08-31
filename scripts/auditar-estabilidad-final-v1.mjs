@@ -9,6 +9,7 @@ const has = (source, pattern) => typeof pattern === 'string' ? source.includes(p
 
 const publicEntry = read('js/components/navigation/entrada-navegacion-publica.js');
 const stability = read('js/quality/estabilidad-final-publica.js');
+const productStability = read('js/quality/estabilidad-producto.js');
 const orderProfileState = read('js/pages/profile/estado-pedidos-perfil.js');
 const product = read('product.html');
 const cart = read('js/components/cart/sincronizacion-carrito.js');
@@ -27,20 +28,24 @@ const appsScript = read('apps-script/Participacion.gs');
 const systemHealthApi = read('functions/api/system-health.js');
 const systemHealth = read('cloudflare/system-health.js');
 
-// 1. Producto: contenido visible y sin acordeón obligatorio.
-ok(has(publicEntry, "estabilidad-final-publica.js?v=tintin-20260829-final-stability-1"), 'El shell público no carga la estabilización final canónica.');
-ok(has(stability, "body.dataset.ttProductStable = '1'"), 'Producto no activa el contrato estable.');
-ok(has(stability, "specsBlock.dataset.collapsed = 'false'"), 'Características no se fuerzan abiertas.');
-ok(has(stability, "related.dataset.collapsed = 'false'"), 'Otros productos no se fuerzan abiertos.');
-ok(has(stability, "document.getElementById('product-reviews')"), 'La comunidad no está incluida en la apertura permanente.');
-ok(has(stability, 'white-space:nowrap!important'), 'Los CTA de productos relacionados no protegen palabras completas.');
+// 1. Producto: contenido visible y sin acordeón obligatorio, sin observer recursivo.
+ok(has(publicEntry, "estabilidad-producto.js?v=tintin-20260831-product-stability-2"), 'Producto no carga su estabilización acotada y segura.');
+ok(has(publicEntry, "estabilidad-final-publica.js?v=tintin-20260831-observer-loop-fix-1"), 'El shell público no conserva la estabilización final para las demás superficies.');
+ok(has(productStability, "document.body.dataset.ttProductStable"), 'Producto no activa el contrato estable.');
+ok(has(productStability, "setDataIfChanged(specsBlock, 'collapsed', 'false')"), 'Características no se fuerzan abiertas de forma idempotente.');
+ok(has(productStability, "setDataIfChanged(related, 'collapsed', 'false')"), 'Otros productos no se fuerzan abiertos de forma idempotente.');
+ok(has(productStability, "document.getElementById('product-reviews')"), 'La comunidad no está incluida en la apertura permanente.');
+ok(has(productStability, 'white-space:nowrap!important'), 'Los CTA de productos relacionados no protegen palabras completas.');
+ok(!has(productStability, 'new MutationObserver(openAll)'), 'Producto volvió a conectar un MutationObserver directamente a la función que reescribe sus atributos.');
+ok(!has(productStability, "attributeFilter: ['hidden', 'data-collapsed', 'style']"), 'Producto volvió a observar style mientras normaliza estilos, lo que puede bloquear el renderer.');
+ok(has(productStability, 'records.some(needsNormalization)') && has(productStability, 'queueMicrotask'), 'El observer de Producto no filtra ni agrupa mutaciones antes de normalizar.');
 ok(has(product, 'class="tt-related-section" data-collapsed="false"'), 'La fuente HTML de relacionados no parte abierta.');
 
 // 2. Header mobile: jerarquía inequívoca halo -> indicador -> botón -> badge.
-ok(has(stability, '.tt-mobile-nav-halo{z-index:0!important'), 'El halo móvil no está fijado detrás de los iconos.');
-ok(has(stability, '.tt-mobile-nav-indicator{z-index:1!important'), 'El indicador móvil no tiene nivel independiente.');
-ok(has(stability, '.tt-tabbar-btn{position:relative!important;z-index:2!important'), 'Los botones móviles no están por encima de las capas decorativas.');
-ok(has(stability, '.tt-notification-badge,#tt-tabbar .tt-cart-badge{z-index:5!important'), 'Los badges móviles pueden quedar detrás de capas decorativas.');
+ok(has(productStability, '.tt-mobile-nav-halo{z-index:0!important'), 'El halo móvil de Producto no está fijado detrás de los iconos.');
+ok(has(productStability, '.tt-mobile-nav-indicator{z-index:1!important'), 'El indicador móvil de Producto no tiene nivel independiente.');
+ok(has(productStability, '.tt-tabbar-btn{position:relative!important;z-index:2!important'), 'Los botones móviles de Producto no están por encima de las capas decorativas.');
+ok(has(productStability, '.tt-notification-badge,#tt-tabbar .tt-cart-badge{z-index:5!important'), 'Los badges móviles de Producto pueden quedar detrás de capas decorativas.');
 
 // 3. Notificaciones / push: usa el núcleo social canónico actual, sin capa histórica paralela.
 ok(has(notificationApi, 'notificaciones-sociales.js') && has(notificationApi, 'notifyUserIfAbsent') && has(notificationApi, 'markAllNotificationsRead'), 'La API de notificaciones no delega al núcleo social canónico.');
@@ -97,4 +102,4 @@ if (failures.length) {
 }
 
 console.log('AUDITORÍA ESTABILIDAD FINAL V1: OK');
-console.log('Cobertura: Producto abierto · header móvil · notificaciones/push · Sheets · carrito multi-línea · Super Admin · perfil cliente · pedidos no vistos · avatar seguro · Social v4.');
+console.log('Cobertura: Producto estable sin observer recursivo · header móvil · notificaciones/push · Sheets · carrito multi-línea · Super Admin · perfil cliente · pedidos no vistos · avatar seguro · Social v4.');

@@ -1,0 +1,142 @@
+name: Super Admin Maestro
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'admin.html'
+      - 'admin-images.html'
+      - 'admin-manifest.json'
+      - 'js/admin/**'
+      - 'js/core/auth/**'
+      - 'js/core/store/**'
+      - 'js/components/images/**'
+      - 'js/components/notifications/**'
+      - 'js/components/contact/**'
+      - 'js/components/navigation/compartido/control-paneles.js'
+      - 'js/components/navigation/compartido/carga-navegacion.js'
+      - 'js/components/navigation/compartido/configuracion.js'
+      - 'js/email/**'
+      - 'js/pages/checkout/**'
+      - 'functions/**'
+      - 'cloudflare/**'
+      - 'apps-script/**'
+      - 'tienda.js'
+      - 'catalogo.html'
+      - 'collections.html'
+      - 'product.html'
+      - 'checkout.html'
+      - 'perfil.html'
+      - '_routes.json'
+      - '_headers'
+      - 'firestore.rules'
+      - 'firebase-messaging-sw.js'
+      - 'scripts/auditar-superadmin*.mjs'
+      - 'scripts/auditar-admin-*.js'
+      - 'scripts/auditar-push-web.js'
+      - 'scripts/auditar-borrado-global-catalogo.mjs'
+      - 'scripts/cache-version-approvals.json'
+      - 'diagnostic-manifest.json'
+      - '.github/workflows/auditar-superadmin-maestro.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'admin.html'
+      - 'admin-images.html'
+      - 'admin-manifest.json'
+      - 'js/admin/**'
+      - 'js/core/auth/**'
+      - 'js/core/store/**'
+      - 'js/components/images/**'
+      - 'js/components/notifications/**'
+      - 'js/components/contact/**'
+      - 'js/components/navigation/compartido/control-paneles.js'
+      - 'js/components/navigation/compartido/carga-navegacion.js'
+      - 'js/components/navigation/compartido/configuracion.js'
+      - 'js/email/**'
+      - 'js/pages/checkout/**'
+      - 'functions/**'
+      - 'cloudflare/**'
+      - 'apps-script/**'
+      - 'tienda.js'
+      - 'catalogo.html'
+      - 'collections.html'
+      - 'product.html'
+      - 'checkout.html'
+      - 'perfil.html'
+      - '_routes.json'
+      - '_headers'
+      - 'firestore.rules'
+      - 'firebase-messaging-sw.js'
+      - 'scripts/auditar-superadmin*.mjs'
+      - 'scripts/auditar-admin-*.js'
+      - 'scripts/auditar-push-web.js'
+      - 'scripts/auditar-borrado-global-catalogo.mjs'
+      - 'scripts/cache-version-approvals.json'
+      - 'diagnostic-manifest.json'
+      - '.github/workflows/auditar-superadmin-maestro.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  maestro-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Instalar Chromium para Maestro responsive
+        run: npx playwright install --with-deps chromium
+      - name: Auditar contrato Maestro y cobertura CRUD
+        run: node scripts/auditar-superadmin-maestro.mjs
+      - name: Auditar interconexión completa Maestro
+        run: node scripts/auditar-superadmin-maestro-conexiones.mjs
+      - name: Auditar cierre total y propagación global
+        run: node scripts/auditar-superadmin-cierre-total.mjs
+      - name: Auditar Maestro Desktop Tablet Mobile
+        run: node scripts/auditar-superadmin-maestro-responsive.mjs
+      - name: Validar contrato de notificaciones y autolectura persistente
+        run: node --test tests/engagement/notificaciones-sociales.test.mjs tests/engagement/participation-contract.test.mjs
+      - name: Validar Web Push completo
+        run: node scripts/auditar-push-web.js
+      - name: Validar Correos y Mensajería
+        run: node scripts/auditar-admin-correo-mensajeria.js
+      - name: Validar Apariencia y Contenido
+        run: node scripts/auditar-admin-contenido-apariencia.js
+      - name: Validar Analítica Auditoría y Diagnóstico
+        run: node scripts/auditar-admin-analitica-auditar.js
+      - name: Validar versiones immutable actuales
+        run: npm run audit:cache-versioning
+      - name: Validar fundación y permisos del Admin
+        run: npm run audit:admin-foundation
+      - name: Validar Pedidos y ciclo operativo
+        run: npm run audit:admin-orders
+      - name: Validar Usuarios roles y autorizaciones
+        run: npm run audit:users-roles
+      - name: Validar Productos colecciones multimedia e importación
+        run: npm run audit:products-media
+      - name: Validar borrado global del catálogo
+        run: node scripts/auditar-borrado-global-catalogo.mjs
+      - name: Validar métodos de pago y configuración comercial
+        run: node scripts/auditar-pago-metodos.js
+      - name: Validar sincronización Admin a sitio público
+        run: npm run audit:admin-sync
+      - name: Guardar evidencia Maestro
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: superadmin-maestro-audit
+          path: |
+            artifacts/superadmin-maestro-audit.json
+            artifacts/superadmin-maestro-connections.json
+            artifacts/superadmin-maestro-responsive.json
+            artifacts/superadmin-cierre-total.json
+          if-no-files-found: warn
+          retention-days: 30

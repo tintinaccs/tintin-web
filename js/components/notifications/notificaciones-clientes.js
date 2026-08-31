@@ -195,6 +195,15 @@ async function apiWithRetry(action, payload = {}, attempts = 3) {
   throw lastError || new Error('No se pudo completar la operación');
 }
 
+function notificationsSurfaceIsOpen() {
+  const drawer = document.getElementById('notifications-drawer');
+  if (!drawer) return false;
+  return drawer.getAttribute('aria-hidden') === 'false'
+    || drawer.classList.contains('open')
+    || (window.TintinSurfaceController?.surface === 'notifications'
+      && ['opening', 'open'].includes(window.TintinSurfaceController?.state));
+}
+
 function subscribe(user) {
   unsubscribe?.();
   unsubscribe = null;
@@ -207,6 +216,7 @@ function subscribe(user) {
   unsubscribe = onSnapshot(source, snapshot => {
     notifications = snapshot.docs.map(document => ({ id: document.id, ...document.data() }));
     render();
+    if (notificationsSurfaceIsOpen()) void markVisibleNotificationsRead();
   }, error => {
     console.warn('[notifications] No se pudo escuchar la actividad:', error);
     const root = document.getElementById('tt-notifications-list');
@@ -224,10 +234,7 @@ function optimisticRead(id) {
 async function markVisibleNotificationsRead() {
   if (!currentUser || markingVisibleRead || !notifications.some(item => item.read !== true)) return;
   markingVisibleRead = true;
-  const snapshot = notifications.filter(item => item.read !== true).map(item => item.id);
-  notifications.forEach(item => {
-    if (snapshot.includes(item.id)) item.read = true;
-  });
+  notifications.forEach(item => { if (item.read !== true) item.read = true; });
   render();
   try {
     await apiWithRetry('notificationsSeenAll');
@@ -240,13 +247,15 @@ async function markVisibleNotificationsRead() {
 }
 
 function wireEvents() {
-  document.addEventListener('click', event => {
-    const notificationTrigger = event.target.closest?.('[data-nav-action="notifications"],#tabbar-notifications');
-    if (notificationTrigger) {
-      window.setTimeout(() => markVisibleNotificationsRead(), 0);
-      return;
+  window.addEventListener('tintin:surface-change', event => {
+    const surface = String(event.detail?.surface || '');
+    const state = String(event.detail?.state || '');
+    if (surface === 'notifications' && (state === 'opening' || state === 'open')) {
+      void markVisibleNotificationsRead();
     }
+  });
 
+  document.addEventListener('click', event => {
     const card = event.target.closest?.('[data-notification-id]');
     if (card) {
       event.preventDefault();

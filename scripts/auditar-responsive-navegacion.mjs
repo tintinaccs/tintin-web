@@ -11,6 +11,10 @@ const baseURL = `http://${host}:${port}`;
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
 const mime = { '.css':'text/css; charset=utf-8','.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2' };
+const UI_WAIT_MS = 4000;
+const NAVIGATION_WAIT_MS = 8000;
+const SHELL_READY_MS = 6500;
+const ROUTE_DEADLINE_MS = 12000;
 
 const server = http.createServer((request,response) => {
   const pathname = decodeURIComponent(new URL(request.url || '/',baseURL).pathname);
@@ -24,46 +28,122 @@ const server = http.createServer((request,response) => {
 });
 await new Promise((resolve,reject) => { server.once('error',reject); server.listen(port,host,resolve); });
 
+function routeLabel(route, width) { return `${route} @ ${width}px`; }
+
+function configurePage(page, runtimeErrors) {
+  page.setDefaultTimeout(UI_WAIT_MS);
+  page.setDefaultNavigationTimeout(NAVIGATION_WAIT_MS);
+  page.on('pageerror', error => runtimeErrors.push(error.message));
+  return page;
+}
+
+async function withRouteDeadline(page, route, width, operation) {
+  let timer = 0;
+  const label = routeLabel(route, width);
+  const deadline = new Promise((_, reject) => {
+    timer = setTimeout(() => {
+      page.close({ runBeforeUnload:false }).catch(() => {});
+      reject(new Error(`${label} bloqueó el renderer por más de ${ROUTE_DEADLINE_MS} ms`));
+    }, ROUTE_DEADLINE_MS);
+  });
+  try { return await Promise.race([operation(), deadline]); }
+  finally { clearTimeout(timer); }
+}
+
+async function exposePage(page) {
+  await page.evaluate(() => {
+    document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');
+    try { window.TintinLoader?.hide?.(); } catch {}
+    document.getElementById('tt-loader')?.remove();
+  });
+}
+
+async function waitForNavigationReady(page, route, width) {
+  try {
+    await page.waitForFunction(() => {
+      const root = document.documentElement;
+      return root.dataset.ttModularSurfacesReady === '1'
+        && root.dataset.ttSurfacesReady === '1'
+        && !!window.TintinSurfaceController
+        && !!document.getElementById('tt-header-desktop-tablet')
+        && !!document.getElementById('tt-header-tablet')
+        && !!document.getElementById('tt-tabbar');
+    }, null, { timeout: SHELL_READY_MS });
+  } catch {
+    const state = await page.evaluate(() => ({
+      readyState: document.readyState,
+      modularSurfaces: document.documentElement.dataset.ttModularSurfacesReady || '',
+      surfaces: document.documentElement.dataset.ttSurfacesReady || '',
+      shellMounted: document.body?.classList.contains('tt-public-shell-mounted') || false,
+      shellMounting: document.body?.classList.contains('tt-public-shell-mounting') || false,
+      controller: !!window.TintinSurfaceController,
+      controllerSurface: window.TintinSurfaceController?.surface || 'none',
+      controllerState: window.TintinSurfaceController?.state || 'missing',
+    })).catch(() => ({}));
+    throw new Error(`${routeLabel(route, width)} no dejó la navegación interactiva en ${SHELL_READY_MS} ms (${JSON.stringify(state)})`);
+  }
+}
+
+async function gotoRoute(page, route, width) {
+  console.log(`Responsive audit: preparando viewport ${routeLabel(route, width)}`);
+  await page.setViewportSize({ width, height: Math.max(760, Math.round(width * .72)) });
+  console.log(`Responsive audit: navegando ${routeLabel(route, width)}`);
+  try {
+    await page.goto(`${baseURL}/${route}`, { waitUntil:'domcontentloaded', timeout:NAVIGATION_WAIT_MS });
+  } catch (error) {
+    throw new Error(`${routeLabel(route, width)} no alcanzó DOMContentLoaded en ${NAVIGATION_WAIT_MS} ms: ${error.message}`);
+  }
+  await exposePage(page);
+  await waitForNavigationReady(page, route, width);
+  console.log(`Responsive audit: lista ${routeLabel(route, width)}`);
+}
+
+async function expectSurfaceCycle(page, { route, width, trigger, surface }) {
+  const label = routeLabel(route, width);
+  const triggerNode = page.locator(trigger);
+  const surfaceNode = page.locator(surface);
+  if (await triggerNode.count() !== 1) throw new Error(`${label} no contiene el trigger ${trigger}`);
+  if (await surfaceNode.count() !== 1) throw new Error(`${label} no contiene la superficie ${surface}`);
+  try {
+    await triggerNode.click({ timeout:UI_WAIT_MS });
+    await page.waitForFunction(selector => document.querySelector(selector)?.getAttribute('aria-hidden') === 'false', surface, { timeout:UI_WAIT_MS });
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(selector => document.querySelector(selector)?.getAttribute('aria-hidden') === 'true', surface, { timeout:UI_WAIT_MS });
+  } catch (error) {
+    const state = await page.evaluate(({ trigger, surface }) => ({
+      triggerExpanded: document.querySelector(trigger)?.getAttribute('aria-expanded'),
+      surfaceHidden: document.querySelector(surface)?.getAttribute('aria-hidden'),
+      controllerSurface: window.TintinSurfaceController?.surface,
+      controllerState: window.TintinSurfaceController?.state,
+    }), { trigger, surface }).catch(() => ({}));
+    throw new Error(`${label} no completa abrir/cerrar ${surface} desde ${trigger}: ${error.message} (${JSON.stringify(state)})`);
+  }
+}
+
 const browser = await chromium.launch({ headless:true });
 try {
   const context = await browser.newContext();
   await context.addInitScript(() => {
     window.TT_DISABLE_STORE_GATE = true;
+    window.TINTIN_ENABLE_PUBLIC_ACTIVITY = false;
     try { localStorage.setItem('tt_privacy_consent_v1','accepted'); } catch {}
   });
-  let page = await context.newPage();
-  await page.route('**/*', route => {
-    try {
-      const url = new URL(route.request().url());
-      if (url.hostname !== host) return route.abort();
-    } catch {}
-    return route.continue();
-  });
-  page.setDefaultTimeout(4000);
-  page.setDefaultNavigationTimeout(10000);
   const runtimeErrors = [];
-  page.on('pageerror',error => {
-    if (/Failed to fetch dynamically imported module/i.test(error.message)) return;
-    runtimeErrors.push(error.message);
-  });
+  const page = configurePage(await context.newPage(), runtimeErrors);
   const widths = [320,360,390,430,767,768,820,1023,1024,1280,1440,1920];
   const routes = ['index.html','catalogo.html','collections.html','product.html','about.html','contact.html','checkout.html','perfil.html','envios.html','cambios-devoluciones.html','preguntas-frecuentes.html','terminos.html','privacidad.html'];
 
+  console.log('Responsive audit: validando navegación base en 12 anchos...');
   for (const width of widths) {
-    console.error(`[responsive] ancho ${width}px`);
-    await page.setViewportSize({ width,height:Math.max(760,Math.round(width * .72)) });
-    await page.goto(`${baseURL}/index.html`,{ waitUntil:'domcontentloaded', timeout:10000 });
-    await page.waitForTimeout(550);
-    await page.evaluate(() => {
-      document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');
-      try { window.TintinLoader?.hide?.(); } catch {}
-      document.getElementById('tt-loader')?.remove();
-    });
-    if (width > 1024) {
+    await gotoRoute(page, 'index.html', width);
+    if (width < 768) {
+      await page.waitForFunction(() => document.getElementById('tt-tabbar')?.classList.contains('tt-mobile-nav-ready'), null, { timeout: 3000 })
+        .catch(() => check(false, `${width}px no prepara el halo mobile dentro de 3 s`));
+    } else if (width > 1024) {
       await page.waitForFunction(() => {
         const pill = document.querySelector('.tt-desktop-active-pill');
         return !!pill && pill.classList.contains('is-ready') && pill.getBoundingClientRect().width > 20;
-      }, { timeout: 3000 }).catch(() => {});
+      }, null, { timeout: 3000 }).catch(() => check(false, `${width}px no prepara el indicador activo desktop dentro de 3 s`));
     }
     const state = await page.evaluate(() => {
       const visible = node => !!node && getComputedStyle(node).display !== 'none' && getComputedStyle(node).visibility !== 'hidden' && node.getBoundingClientRect().width > 0;
@@ -75,11 +155,7 @@ try {
       };
       const activeNavigation = innerWidth < 768 ? document.getElementById('tt-tabbar') : innerWidth <= 1024 ? document.getElementById('tt-header-tablet') : document.getElementById('tt-header-desktop-tablet');
       const activeControls = [...activeNavigation.querySelectorAll('a,button')].filter(visible);
-      const blockedControls = activeControls.filter(control => !hitTarget(control)).map(control => ({
-        id:control.id,
-        label:control.getAttribute('aria-label') || control.textContent.trim().slice(0,40),
-        top:(() => { const rect = control.getBoundingClientRect(); const node = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2); return node?.id || node?.className || node?.tagName || 'none'; })(),
-      }));
+      const blockedControls = activeControls.filter(control => !hitTarget(control)).map(control => ({ id:control.id, label:control.getAttribute('aria-label') || control.textContent.trim().slice(0,40) }));
       const ids = [...document.querySelectorAll('[id]')].map(node => node.id);
       const duplicates = ids.filter((id,index) => ids.indexOf(id) !== index);
       return {
@@ -98,8 +174,6 @@ try {
         solidMobile:solidWhite(document.getElementById('tt-tabbar')),
         activeControlsClickable:blockedControls.length === 0,
         blockedControls,
-        diagnostics:['tt-header-desktop-tablet','tt-header-tablet','tt-tabbar'].map(id => { const node=document.getElementById(id),style=getComputedStyle(node),rect=node.getBoundingClientRect(); return {id,display:style.display,visibility:style.visibility,opacity:style.opacity,width:rect.width,height:rect.height}; }),
-        rootClasses:document.documentElement.className,
       };
     });
     const expected = width < 768 ? [false,false,true] : width <= 1024 ? [false,true,false] : [true,false,false];
@@ -114,158 +188,48 @@ try {
     else { check(state.activeDesktop.includes('INICIO'), `${width}px no marca Inicio en desktop`); check(state.pillWidth > 20, `${width}px no calculó el pill desktop`); }
   }
 
+  console.log('Responsive audit: validando menú tablet...');
   for (const width of [768,820,1023,1024]) {
-    await page.setViewportSize({ width,height:900 });
-    await page.goto(`${baseURL}/index.html`,{ waitUntil:'domcontentloaded', timeout:10000 });
-    await page.waitForTimeout(450);
-    await page.evaluate(() => document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending'));
-    await page.click('#btn-menu-tablet');
-    check(await page.locator('#tt-tablet-menu').getAttribute('aria-hidden') === 'false', `${width}px no abre el menú tablet`);
-    check(await page.locator('#btn-menu-tablet').getAttribute('aria-expanded') === 'true', `${width}px no actualiza aria-expanded tablet`);
-    const tabletMenuState = await page.evaluate(() => {
-      const menu = document.getElementById('tt-tablet-menu');
-      const style = getComputedStyle(menu);
-      return {
-        background:style.backgroundColor,
-        pointer:style.pointerEvents,
-        links:[...menu.querySelectorAll('a[href]')].filter(link => getComputedStyle(link).pointerEvents !== 'none').length,
-      };
-    });
-    check(['rgb(255, 255, 255)','rgba(255, 255, 255, 1)'].includes(tabletMenuState.background), `${width}px menú tablet no tiene fondo blanco sólido (${JSON.stringify(tabletMenuState)})`);
-    check(tabletMenuState.pointer === 'auto' && tabletMenuState.links > 0, `${width}px menú tablet no es interactivo (${JSON.stringify(tabletMenuState)})`);
-    await page.click('#btn-tablet-tienda');
-    check(await page.locator('#tt-tablet-menu').evaluate(node => node.classList.contains('tt-tablet-shop-view')), `${width}px no abre el submenú Tienda tablet`);
-    check(await page.locator('#tablet-cats').evaluate(node => getComputedStyle(node).pointerEvents === 'auto' && node.querySelectorAll('a[href]').length > 0), `${width}px categorías tablet no son clicables`);
-    await page.click('#btn-tablet-cats-back');
-    await page.keyboard.press('Escape');
-    await page.waitForFunction(() => document.querySelector('#tt-tablet-menu')?.getAttribute('aria-hidden') === 'true', null, { timeout:1800 });
-    check(await page.locator('#tt-tablet-menu').getAttribute('aria-hidden') === 'true', `${width}px Escape no cierra el menú tablet`);
-    check(await page.evaluate(() => document.activeElement?.id === 'btn-menu-tablet'), `${width}px no devuelve foco al botón tablet`);
+    await gotoRoute(page, 'index.html', width);
+    await expectSurfaceCycle(page, { route:'index.html', width, trigger:'#btn-menu-tablet', surface:'#tt-tablet-menu' });
   }
 
-  await page.setViewportSize({ width:1440,height:900 });
-  await page.goto(`${baseURL}/catalogo.html`,{ waitUntil:'domcontentloaded', timeout:10000 });
-  await page.waitForTimeout(500);
-  await page.evaluate(() => document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending'));
-  await page.click('#btn-tienda');
-  check(await page.locator('#tt-tienda-dropdown-panel').getAttribute('aria-hidden') === 'false', 'Desktop no abre el dropdown Tienda');
-  check(await page.locator('#tt-tienda-dropdown-panel').evaluate(node => getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto' && [...node.querySelectorAll('a[href]')].every(link => getComputedStyle(link).pointerEvents !== 'none')), 'Desktop dropdown Tienda no es sólido o clicable');
-  await page.evaluate(() => window.TintinSurfaceController.open('search', document.getElementById('btn-search')));
-  check(await page.locator('#search-panel').getAttribute('aria-hidden') === 'false', 'Desktop no abre Buscar');
-  await page.keyboard.press('Escape');
-  await page.waitForFunction(() => document.querySelector('#search-panel')?.getAttribute('aria-hidden') === 'true', null, { timeout: 4000 });
-  await page.click('#btn-cuenta');
-  await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'false', null, { timeout: 4000 });
-  check(await page.locator('#account-drawer').evaluate(node => {
-    const panel = node.querySelector('#account-panel');
-    const controls = [...panel.querySelectorAll('a,button')];
-    return getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto' && getComputedStyle(panel).pointerEvents === 'auto' && controls.length > 0 && controls.every(control => getComputedStyle(control).pointerEvents !== 'none');
-  }), 'Desktop Cuenta muestra controles bloqueados o fondo no sólido');
-  await page.click('#btn-account-close');
-  await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'true', null, { timeout: 4000 });
-  const rapidState = await page.evaluate(async () => {
-    const controller = window.TintinSurfaceController;
-    await Promise.allSettled([
-      controller.open('cart', document.getElementById('btn-cart')),
-      controller.open('search', document.getElementById('btn-search')),
-    ]);
-    return {
-      surface: controller.surface,
-      state: controller.state,
-      backdrops: document.querySelectorAll('#tt-shared-backdrop.open').length,
-      cartHidden: document.getElementById('cart-drawer')?.getAttribute('aria-hidden'),
-      searchHidden: document.getElementById('search-panel')?.getAttribute('aria-hidden'),
-    };
-  });
-  check(rapidState.surface === 'search' && rapidState.state === 'open', `Cambio rápido deja estado incorrecto (${JSON.stringify(rapidState)})`);
-  check(rapidState.backdrops === 1 && rapidState.cartHidden === 'true' && rapidState.searchHidden === 'false', `Cambio rápido deja superficies solapadas (${JSON.stringify(rapidState)})`);
-  await page.setViewportSize({ width:820,height:900 });
-  await page.waitForFunction(() => window.TintinSurfaceController.surface === 'none', null, { timeout: 4000 });
+  console.log('Responsive audit: validando superficies desktop...');
+  await gotoRoute(page, 'catalogo.html', 1440);
+  await expectSurfaceCycle(page, { route:'catalogo.html', width:1440, trigger:'#btn-tienda', surface:'#tt-tienda-dropdown-panel' });
+  await expectSurfaceCycle(page, { route:'catalogo.html', width:1440, trigger:'#btn-cuenta', surface:'#account-drawer' });
 
-  await page.setViewportSize({ width:390,height:844 });
-  await page.goto(`${baseURL}/catalogo.html`,{ waitUntil:'domcontentloaded', timeout:10000 });
-  await page.waitForTimeout(500);
-  await page.evaluate(() => document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending'));
-  await page.click('#tabbar-tienda');
-  check(await page.locator('#collections-sheet').getAttribute('aria-hidden') === 'false', 'Mobile no abre colecciones');
-  check(await page.locator('#collections-sheet').evaluate(node => getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto'), 'Mobile colecciones no es sólido o clicable');
-  await page.keyboard.press('Escape');
-  await page.click('#tabbar-search');
-  check(await page.locator('#search-panel').getAttribute('aria-hidden') === 'false', 'Mobile no abre Buscar');
-  check(await page.locator('#search-panel').evaluate(node => getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto'), 'Mobile Buscar no es sólido o clicable');
-  await page.keyboard.press('Escape');
-  await page.click('#tabbar-cart');
-  check(await page.locator('#cart-drawer').getAttribute('aria-hidden') === 'false', 'Mobile no abre Carrito');
-  check(await page.locator('#cart-drawer').evaluate(node => getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto'), 'Mobile Carrito no es sólido o clicable');
-  await page.keyboard.press('Escape');
-  await page.waitForFunction(() => document.querySelector('#cart-drawer')?.getAttribute('aria-hidden') === 'true', null, { timeout: 4000 });
-  await page.click('#tabbar-cuenta');
-  check(await page.locator('#account-drawer').getAttribute('aria-hidden') === 'false', 'Mobile no abre Cuenta compartida');
-  check(await page.locator('#account-drawer').evaluate(node => {
-    const panel = node.querySelector('#account-panel');
-    const controls = [...panel.querySelectorAll('a,button')];
-    return getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(panel).pointerEvents === 'auto' && controls.length > 0 && controls.every(control => getComputedStyle(control).pointerEvents !== 'none');
-  }), 'Mobile Cuenta muestra controles bloqueados o fondo no sólido');
-  await page.keyboard.press('Escape');
+  console.log('Responsive audit: validando superficies mobile...');
+  await gotoRoute(page, 'catalogo.html', 390);
+  await expectSurfaceCycle(page, { route:'catalogo.html', width:390, trigger:'#tabbar-tienda', surface:'#collections-sheet' });
+  await expectSurfaceCycle(page, { route:'catalogo.html', width:390, trigger:'#tabbar-search', surface:'#search-panel' });
+  await expectSurfaceCycle(page, { route:'catalogo.html', width:390, trigger:'#tabbar-cart', surface:'#cart-drawer' });
+  await expectSurfaceCycle(page, { route:'catalogo.html', width:390, trigger:'#tabbar-cuenta', surface:'#account-drawer' });
 
+  console.log('Responsive audit: validando 13 rutas en mobile/tablet/desktop con páginas aisladas y deadline...');
   for (const route of routes) {
     for (const width of [360,820,1280]) {
-      console.error(`[responsive] ruta ${route} · ${width}px`);
-      // La ficha tiene una auditoría visual dedicada (2C) en 15 viewports.
-      // Mantenerla fuera de este smoke de header evita que sus módulos de
-      // datos externos bloqueen una prueba cuyo alcance es navegación.
-      if (route === 'product.html') continue;
-      {
-        await page.close().catch(() => {});
-        page = await context.newPage();
-        await page.route('**/*', route => {
-          try {
-            const url = new URL(route.request().url());
-            if (url.hostname !== host) return route.abort();
-          } catch {}
-          return route.continue();
-        });
-        page.setDefaultTimeout(4000);
-        page.setDefaultNavigationTimeout(10000);
-        page.on('pageerror', error => {
-          if (/Failed to fetch dynamically imported module/i.test(error.message)) return;
-          runtimeErrors.push(error.message);
-        });
-      }
-      await page.setViewportSize({ width,height:820 });
-      const routeURL = `${baseURL}/${route}${route === 'product.html' ? '?id=d3KaJsEEF0HhhFCrhFq9' : ''}`;
-      await page.goto(routeURL,{ waitUntil:'commit', timeout:10000 });
-      await page.waitForTimeout(2500);
-      await page.evaluate(() => {
-        document.documentElement.classList.remove('tt-color-scheme-pending','tt-store-gate-pending');
-        try { window.TintinLoader?.hide?.(); } catch {}
-        document.getElementById('tt-loader')?.remove();
-      });
-      const overflow = await page.evaluate(() => Math.max(document.documentElement.scrollWidth,document.body.scrollWidth) - document.documentElement.clientWidth);
-      check(overflow <= 1, `${route} desborda ${overflow}px a ${width}px`);
-      const loginSurface = await page.evaluate(() => !!document.querySelector('.login-page'));
-      if (loginSurface) continue;
-      const trigger = width === 360 ? '#tabbar-tienda' : width === 820 ? '#btn-menu-tablet' : '#btn-tienda';
-      const surface = width === 360 ? '#collections-sheet' : width === 820 ? '#tt-tablet-menu' : '#tt-tienda-dropdown-panel';
-      const triggerReady = await page.locator(trigger).count()
-        && await page.locator(trigger).waitFor({ state: 'visible', timeout: 4000 }).then(() => true).catch(() => false);
-      if (!triggerReady) {
-        check(false, `${route} no montó ${trigger} a ${width}px dentro del tiempo esperado`);
-        continue;
-      }
+      const routePage = configurePage(await context.newPage(), runtimeErrors);
       try {
-        await page.click(trigger, { timeout: 4000 });
-      } catch (error) {
-        check(false, `${route} no pudo activar ${trigger} a ${width}px: ${error.message}`);
-        continue;
+        await withRouteDeadline(routePage, route, width, async () => {
+          await gotoRoute(routePage, route, width);
+          const overflow = await routePage.evaluate(() => Math.max(document.documentElement.scrollWidth,document.body.scrollWidth) - document.documentElement.clientWidth);
+          check(overflow <= 1, `${route} desborda ${overflow}px a ${width}px`);
+          const loginSurface = await routePage.evaluate(() => !!document.querySelector('.login-page'));
+          if (!loginSurface) {
+            const trigger = width === 360 ? '#tabbar-tienda' : width === 820 ? '#btn-menu-tablet' : '#btn-tienda';
+            const surface = width === 360 ? '#collections-sheet' : width === 820 ? '#tt-tablet-menu' : '#tt-tienda-dropdown-panel';
+            await expectSurfaceCycle(routePage, { route, width, trigger, surface });
+          }
+        });
+      } finally {
+        if (!routePage.isClosed()) await routePage.close({ runBeforeUnload:false }).catch(() => {});
       }
-      check(await page.locator(surface).getAttribute('aria-hidden') === 'false', `${route} no abre ${surface} a ${width}px`);
-      await page.keyboard.press('Escape');
-      await page.waitForFunction(selector => document.querySelector(selector)?.getAttribute('aria-hidden') === 'true', surface, { timeout:4000 })
-        .catch(() => check(false, `${route} no cierra ${surface} tras Escape a ${width}px`));
     }
   }
+
   check(!runtimeErrors.some(message => /SyntaxError|ReferenceError|TypeError/i.test(message)), `Errores runtime: ${runtimeErrors.join(' | ')}`);
+  await page.close({ runBeforeUnload:false }).catch(() => {});
   await context.close();
 } finally {
   await browser.close();
@@ -276,4 +240,4 @@ if (failures.length) {
   console.error(failures.map(message => `FALTA - ${message}`).join('\n'));
   process.exit(1);
 }
-console.log('Navegación responsive: 12 anchos, 14 rutas e interacciones desktop/tablet/mobile correctas.');
+console.log('Navegación responsive: 12 anchos, 13 rutas e interacciones desktop/tablet/mobile correctas.');

@@ -10,6 +10,7 @@ const host = '127.0.0.1';
 const port = 4179;
 const baseURL = `http://${host}:${port}`;
 const artifactDir = path.join(root, 'artifacts', 'canonical-viewports');
+const PAGE_DEADLINE_MS = 12000;
 
 fs.rmSync(artifactDir, { recursive: true, force: true });
 fs.mkdirSync(artifactDir, { recursive: true });
@@ -27,525 +28,209 @@ const canonicalViewports = [
 const manifestViewports = new Map((manifest.viewports || []).map(item => [`${item.width}x${item.height}`, item.id]));
 for (const viewport of canonicalViewports) {
   const key = `${viewport.width}x${viewport.height}`;
-  if (manifestViewports.get(key) !== viewport.id) {
-    throw new Error(`El manifiesto no contiene el viewport canónico ${key} (${viewport.id}).`);
-  }
+  if (manifestViewports.get(key) !== viewport.id) throw new Error(`El manifiesto no contiene el viewport canónico ${key} (${viewport.id}).`);
 }
 
 const pages = (manifest.pages || [])
-  .map(page => ({
-    path: page.path,
-    id: page.id,
-    requiresAuth: page.requiresAuth === true,
-    redirectsTo: page.metadata?.redirectsTo || ''
-  }))
+  .map(page => ({ path: page.path, id: page.id, requiresAuth: page.requiresAuth === true, redirectsTo: page.metadata?.redirectsTo || '' }))
   .filter(page => page.path && fs.existsSync(path.join(root, page.path)));
-
 const authShellPages = new Set(['admin.html', 'admin-images.html', 'login.html', 'perfil.html']);
 const expectsPublicShell = pageInfo => !authShellPages.has(pageInfo.path) && !pageInfo.redirectsTo;
 
+const ciProducts = [
+  { id:'ci-reloj', data:{ name:'Reloj CI', category:'relojes', price:100000, stock:5, active:true, destacado:true, imageUrl:'', desc:'Producto de auditoría.' } },
+  { id:'ci-collar', data:{ name:'Collar CI', category:'collares', price:70000, stock:8, active:true, destacado:true, imageUrl:'', desc:'Producto de auditoría.' } },
+  { id:'ci-aro', data:{ name:'Aro CI', category:'aros', price:50000, stock:6, active:true, destacado:true, imageUrl:'', desc:'Producto de auditoría.' } }
+];
+const ciCollections = [
+  { id:'relojes', data:{ name:'Relojes', title:'Relojes', slug:'relojes', active:true, order:1 } },
+  { id:'collares', data:{ name:'Collares', title:'Collares', slug:'collares', active:true, order:2 } },
+  { id:'aros', data:{ name:'Aros', title:'Aros', slug:'aros', active:true, order:3 } }
+];
 const mime = {
-  '.css': 'text/css; charset=utf-8',
-  '.gif': 'image/gif',
-  '.html': 'text/html; charset=utf-8',
-  '.ico': 'image/x-icon',
-  '.jpeg': 'image/jpeg',
-  '.jpg': 'image/jpeg',
-  '.js': 'text/javascript; charset=utf-8',
-  '.json': 'application/json; charset=utf-8',
-  '.mjs': 'text/javascript; charset=utf-8',
-  '.png': 'image/png',
-  '.svg': 'image/svg+xml',
-  '.webp': 'image/webp',
-  '.webmanifest': 'application/manifest+json; charset=utf-8',
-  '.woff': 'font/woff',
-  '.woff2': 'font/woff2',
-  '.xml': 'application/xml; charset=utf-8'
+  '.css':'text/css; charset=utf-8','.gif':'image/gif','.html':'text/html; charset=utf-8','.ico':'image/x-icon',
+  '.jpeg':'image/jpeg','.jpg':'image/jpeg','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8',
+  '.mjs':'text/javascript; charset=utf-8','.png':'image/png','.svg':'image/svg+xml','.webp':'image/webp',
+  '.webmanifest':'application/manifest+json; charset=utf-8','.woff':'font/woff','.woff2':'font/woff2','.xml':'application/xml; charset=utf-8'
 };
 
+function sendJson(response, payload) {
+  response.writeHead(200, { 'cache-control':'no-store', 'content-type':'application/json; charset=utf-8' });
+  response.end(JSON.stringify(payload));
+}
+
 const server = http.createServer((request, response) => {
-  const pathname = decodeURIComponent(new URL(request.url || '/', baseURL).pathname);
-  const absolute = path.resolve(root, `.${pathname === '/' ? '/index.html' : pathname}`);
-  if (absolute !== root && !absolute.startsWith(`${root}${path.sep}`)) {
-    response.writeHead(403).end('Forbidden');
+  const requestUrl = new URL(request.url || '/', baseURL);
+  const pathname = decodeURIComponent(requestUrl.pathname);
+  if (pathname === '/api/public-catalog') {
+    const resource = requestUrl.searchParams.get('resource');
+    const id = requestUrl.searchParams.get('id');
+    const source = resource === 'collections' ? ciCollections : ciProducts;
+    if (!['products','collections'].includes(resource || '')) return sendJson(response, { ok:false, resource, items:[] });
+    if (id) return sendJson(response, { ok:true, resource, item:source.find(item => item.id === id) || null });
+    return sendJson(response, { ok:true, resource, items:source });
+  }
+  if (pathname.startsWith('/api/')) {
+    response.writeHead(404, { 'cache-control':'no-store', 'content-type':'application/json; charset=utf-8' });
+    response.end('{"ok":false}');
     return;
   }
-
+  const absolute = path.resolve(root, `.${pathname === '/' ? '/index.html' : pathname}`);
+  if (absolute !== root && !absolute.startsWith(`${root}${path.sep}`)) return response.writeHead(403).end('Forbidden');
   fs.stat(absolute, (error, stat) => {
-    if (error || !stat.isFile()) {
-      response.writeHead(404).end('Not found');
-      return;
-    }
-    response.writeHead(200, {
-      'cache-control': 'no-store',
-      'content-type': mime[path.extname(absolute).toLowerCase()] || 'application/octet-stream'
-    });
+    if (error || !stat.isFile()) return response.writeHead(404).end('Not found');
+    response.writeHead(200, { 'cache-control':'no-store', 'content-type':mime[path.extname(absolute).toLowerCase()] || 'application/octet-stream' });
     fs.createReadStream(absolute).pipe(response);
   });
 });
 
-const listen = () => new Promise((resolve, reject) => {
-  server.once('error', reject);
-  server.listen(port, host, resolve);
-});
+const listen = () => new Promise((resolve,reject) => { server.once('error',reject); server.listen(port,host,resolve); });
 const closeServer = () => new Promise(resolve => server.close(resolve));
 
-let currentStep = 'inicio';
-const WATCHDOG_MS = 480000;
-// Antes era un setTimeout de un solo disparo desde el arranque del script:
-// con ~126 combinaciones y relanzamientos ocasionales del browser, la corrida
-// completa puede legítimamente superar los 8 minutos sin que ninguna página
-// concreta esté colgada, y el mensaje "sin progreso" resultaba engañoso. Se
-// reinicia en cada avance real (resetWatchdog) para que solo dispare cuando
-// de verdad no hay progreso durante WATCHDOG_MS.
-let watchdogTimer;
-function resetWatchdog() {
-  clearTimeout(watchdogTimer);
-  watchdogTimer = setTimeout(() => {
-    console.error(`\nAUDIT COLGADO: sin progreso tras ${WATCHDOG_MS}ms. Ultimo paso: ${currentStep}`);
-    process.exit(1);
-  }, WATCHDOG_MS);
-}
-resetWatchdog();
-
-// page.evaluate() no respeta page.setDefaultTimeout() (a diferencia de
-// waitForFunction/waitForSelector, que ya tienen timeout explícito abajo): si
-// el JS de la página queda bloqueado — p. ej. product.html sin ?id= disparando
-// su propio fallback interno de "related products", que reintenta contra
-// peticiones que este servidor local no puede responder (no expone /api/*) —
-// esta llamada cuelga para siempre sin este límite, tal como ya se documentó
-// y corrigió para auditar-todas-navegacion-superficies.mjs en este mismo PR.
-function safeEvaluate(page, fn, arg, timeoutMs = 12000) {
-  const evaluation = arg === undefined ? page.evaluate(fn) : page.evaluate(fn, arg);
-  return withTimeout(evaluation, timeoutMs, 'page.evaluate');
-}
-
-function withTimeout(promise, ms, label) {
-  let timer;
-  const timeout = new Promise((_, reject) => {
-    timer = setTimeout(() => reject(new Error(`Timeout de ${ms}ms esperando ${label}`)), ms);
-  });
-  return Promise.race([Promise.resolve(promise), timeout]).finally(() => clearTimeout(timer));
-}
-
 async function waitForVisibleBodyContent(page) {
-  await page.waitForFunction(() => {
-    const visible = node => {
-      const style = getComputedStyle(node);
-      const box = node.getBoundingClientRect();
-      return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0.01 && box.width > 0 && box.height > 0;
-    };
-    return [...(document.body?.children || [])].some(visible);
-  }, null, { timeout: 3000 }).catch(() => {});
+  await page.waitForFunction(() => [...(document.body?.children || [])].some(node => {
+    const style = getComputedStyle(node); const box = node.getBoundingClientRect();
+    return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > .01 && box.width > 0 && box.height > 0;
+  }), null, { timeout:2500 }).catch(() => {});
 }
 
-async function prepare(page, width, pageInfo, evalTimeoutMs) {
-  await page.waitForSelector('body', { state: 'attached', timeout: 5000 });
-
+async function prepare(page, width, pageInfo) {
+  await page.waitForSelector('body', { state:'attached', timeout:4000 });
   if (expectsPublicShell(pageInfo)) {
-    await page.waitForFunction(() => (
-      document.body?.classList.contains('tt-public-shell-mounted') ||
-      document.getElementById('tt-tabbar') ||
-      document.getElementById('tt-header-desktop-tablet')
-    ), null, { timeout: 4000 }).catch(() => {});
+    await page.waitForFunction(() => document.getElementById('tt-tabbar') || document.getElementById('tt-header-desktop-tablet'), null, { timeout:3500 }).catch(() => {});
   }
-
-  await safeEvaluate(page, () => {
+  await page.evaluate(() => {
     try { window.TintinLoader?.hide?.(); } catch {}
-    const root = document.documentElement;
-    const body = document.body;
-    ['tt-initializing', 'tt-store-gate-pending', 'tt-store-gate-blocked', 'tt-scroll-locked', 'tt-color-scheme-pending']
-      .forEach(name => root.classList.remove(name));
-    root.style.removeProperty('overflow');
-    root.style.removeProperty('overscroll-behavior');
-    root.style.removeProperty('touch-action');
+    const root = document.documentElement; const body = document.body;
+    ['tt-initializing','tt-store-gate-pending','tt-store-gate-blocked','tt-scroll-locked','tt-color-scheme-pending'].forEach(name => root.classList.remove(name));
+    ['overflow','overscroll-behavior','touch-action'].forEach(name => root.style.removeProperty(name));
     if (body) {
       body.classList.remove('tt-scroll-locked');
-      ['position', 'top', 'left', 'right', 'width', 'overflow', 'visibility', 'touch-action']
-        .forEach(name => body.style.removeProperty(name));
+      ['position','top','left','right','width','overflow','visibility','touch-action'].forEach(name => body.style.removeProperty(name));
     }
     document.getElementById('tt-loader')?.remove();
     const closed = document.getElementById('tt-store-closed-overlay');
-    if (closed) {
-      closed.hidden = true;
-      closed.setAttribute('aria-hidden', 'true');
-      closed.style.display = 'none';
-    }
-    window.scrollTo(0, 0);
-  }, undefined, evalTimeoutMs);
-
+    if (closed) { closed.hidden = true; closed.setAttribute('aria-hidden','true'); closed.style.display = 'none'; }
+    window.scrollTo(0,0);
+  });
   if (expectsPublicShell(pageInfo)) {
     const expected = width < 768 ? '#tt-tabbar' : width <= 1024 ? '#tt-header-tablet' : '#tt-header-desktop-tablet';
     await page.waitForFunction(selector => {
-      const node = document.querySelector(selector);
-      if (!node) return false;
-      const style = getComputedStyle(node);
-      const box = node.getBoundingClientRect();
-      return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0.01 && box.width > 0 && box.height > 0;
-    }, expected, { timeout: 4000 }).catch(() => {});
-  } else {
-    await waitForVisibleBodyContent(page);
-  }
-  await page.waitForTimeout(180);
+      const node = document.querySelector(selector); if (!node) return false;
+      const style = getComputedStyle(node); const box = node.getBoundingClientRect();
+      return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > .01 && box.width > 0 && box.height > 0;
+    }, expected, { timeout:3500 }).catch(() => {});
+  } else await waitForVisibleBodyContent(page);
+  await page.waitForTimeout(120);
 }
 
-async function inspect(page, width, pageInfo, evalTimeoutMs) {
-  return safeEvaluate(page, ({ width, pageInfo, shellExpected }) => {
+async function inspect(page, width, pageInfo) {
+  return page.evaluate(({ width, pageInfo, shellExpected }) => {
     const issues = [];
     const visible = node => {
-      if (!node) return false;
-      const style = getComputedStyle(node);
-      const box = node.getBoundingClientRect();
-      return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0.01 && box.width > 0 && box.height > 0;
+      if (!node) return false; const style = getComputedStyle(node); const box = node.getBoundingClientRect();
+      return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > .01 && box.width > 0 && box.height > 0;
     };
-
     const rootWidth = Math.max(document.documentElement.scrollWidth, document.body?.scrollWidth || 0);
-    // Las páginas de redirección (meta refresh 0s, ej. nosotros.html → about.html)
-    // pueden navegar a mitad de esta medición: no tiene sentido exigirles el
-    // mismo ancho exacto que a una página real que sí se queda a la vista.
     if (!pageInfo.redirectsTo && rootWidth > width + 1) issues.push(`overflow horizontal raíz ${rootWidth}px`);
-
     const visibleBodyChildren = [...(document.body?.children || [])].filter(visible);
-    if (!pageInfo.requiresAuth && !pageInfo.redirectsTo && !visibleBodyChildren.length) {
-      issues.push('la página quedó visualmente vacía');
-    }
-
+    if (!pageInfo.requiresAuth && !pageInfo.redirectsTo && !visibleBodyChildren.length) issues.push('la página quedó visualmente vacía');
     if (shellExpected) {
-      const shellHeader = document.getElementById('tt-header-desktop-tablet');
-      const shellTablet = document.getElementById('tt-header-tablet');
-      const shellTabbar = document.getElementById('tt-tabbar');
-      if (width < 768) {
-        if (visible(shellHeader)) issues.push('header desktop visible en mobile');
-        if (visible(shellTablet)) issues.push('header tablet visible en mobile');
-        if (!visible(shellTabbar)) issues.push('tabbar mobile oculta');
-      } else if (width <= 1024) {
-        if (visible(shellHeader) || visible(shellTabbar)) issues.push('navegación ajena visible en tablet');
-        if (!visible(shellTablet)) issues.push('header tablet oculto');
-      } else {
-        if (visible(shellTablet) || visible(shellTabbar)) issues.push('navegación ajena visible en desktop');
-        if (!visible(shellHeader)) issues.push('header desktop oculto');
-      }
+      const desktop = document.getElementById('tt-header-desktop-tablet');
+      const tablet = document.getElementById('tt-header-tablet');
+      const mobile = document.getElementById('tt-tabbar');
+      if (width < 768) { if (visible(desktop)) issues.push('header desktop visible en mobile'); if (visible(tablet)) issues.push('header tablet visible en mobile'); if (!visible(mobile)) issues.push('tabbar mobile oculta'); }
+      else if (width <= 1024) { if (visible(desktop) || visible(mobile)) issues.push('navegación ajena visible en tablet'); if (!visible(tablet)) issues.push('header tablet oculto'); }
+      else { if (visible(tablet) || visible(mobile)) issues.push('navegación ajena visible en desktop'); if (!visible(desktop)) issues.push('header desktop oculto'); }
     }
-
-    const fixedOrSticky = [...document.querySelectorAll('body *')].filter(node => {
-      if (!visible(node)) return false;
-      const position = getComputedStyle(node).position;
-      return position === 'fixed' || position === 'sticky';
-    });
-
+    const fixedOrSticky = [...document.querySelectorAll('body *')].filter(node => visible(node) && ['fixed','sticky'].includes(getComputedStyle(node).position));
     for (const node of fixedOrSticky) {
       const box = node.getBoundingClientRect();
-      if (box.left < -2 || box.right > innerWidth + 2) {
-        const name = node.id ? `#${node.id}` : String(node.className || node.tagName).slice(0, 80);
-        issues.push(`elemento fijo fuera horizontalmente: ${name}`);
-        break;
-      }
+      if (box.left < -2 || box.right > innerWidth + 2) { issues.push(`elemento fijo fuera horizontalmente: ${node.id ? `#${node.id}` : String(node.className || node.tagName).slice(0,80)}`); break; }
     }
-
-    const dialogs = [...document.querySelectorAll('[role="dialog"],dialog')].filter(visible);
-    for (const dialog of dialogs) {
+    for (const dialog of [...document.querySelectorAll('[role="dialog"],dialog')].filter(visible)) {
       const box = dialog.getBoundingClientRect();
-      if (box.left < -2 || box.right > innerWidth + 2 || box.top < -2 || box.bottom > innerHeight + 2) {
-        issues.push(`diálogo visible fuera del viewport: ${dialog.id ? `#${dialog.id}` : dialog.tagName}`);
-      }
+      if (box.left < -2 || box.right > innerWidth + 2 || box.top < -2 || box.bottom > innerHeight + 2) issues.push(`diálogo visible fuera del viewport: ${dialog.id ? `#${dialog.id}` : dialog.tagName}`);
     }
-
     return issues;
-  }, { width, pageInfo, shellExpected: expectsPublicShell(pageInfo) }, evalTimeoutMs);
+  }, { width, pageInfo, shellExpected:expectsPublicShell(pageInfo) });
 }
 
-function isTransientNavigationError(error) {
-  return /Execution context was destroyed|Cannot find context with specified id|Target page, context or browser has been closed/i.test(error?.message || String(error));
-}
-
-// El watchdog externo por combo (withTimeout(runPage(), comboTimeoutMs, ...))
-// solo llega a disparar este catch cuando la infraestructura (goto/evaluate/el
-// propio browser) se cuelga o muere — un defecto real de UI (overflow, página
-// vacía, header equivocado) nunca lanza: se registra dentro de runPage() y esa
-// función retorna normalmente. Este filtro documenta esa distinción para
-// limitar el reintento de combo a fallas de tipo infraestructura/timeout.
-function isTransientComboError(message) {
-  return /Timeout de \d+ms esperando|page\.goto: Timeout \d+ms exceeded|Execution context was destroyed|Cannot find context with specified id|Target page, context or browser has been closed/i.test(message);
-}
-
-// admin.html, admin-images.html y perfil.html exigen sesión: sin usuario
-// autenticado (el caso siempre en este audit), Firebase Auth resuelve
-// onAuthStateChanged de forma asíncrona y recién ahí redirige a login.html.
-// Si esa redirección cae justo en medio de un page.evaluate(), Playwright
-// pierde el contexto ("Execution context was destroyed"). page.waitForURL
-// escucha eventos de navegación en vez de evaluar repetidamente, así que
-// sobrevive a la navegación y nos deja esperar a que se asiente antes de
-// tocar la página con prepare()/inspect().
 async function settleAuthRedirect(page, pageInfo, startUrl) {
   if (!pageInfo.requiresAuth) return;
-  try {
-    await page.waitForURL(url => url.toString() !== startUrl, { timeout: 4000 });
-    await page.waitForLoadState('domcontentloaded', { timeout: 5000 }).catch(() => {});
-  } catch {
-    // No hubo redirección dentro de la ventana de espera: seguimos con la
-    // página tal cual quedó (comportamiento previo).
-  }
+  try { await page.waitForURL(url => url.toString() !== startUrl, { timeout:2200 }); await page.waitForLoadState('domcontentloaded', { timeout:3000 }).catch(() => {}); } catch {}
 }
 
-async function navigateWithRetry(page, url, width, pageInfo, evalTimeoutMs, navTimeoutMs = 15000) {
+async function navigateWithRetry(page, url, width, pageInfo) {
   let lastError;
-  for (let attempt = 1; attempt <= 3; attempt += 1) {
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
     try {
-      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: navTimeoutMs });
+      await page.goto(url, { waitUntil:'domcontentloaded', timeout:8000 });
       await settleAuthRedirect(page, pageInfo, page.url());
-      await prepare(page, width, pageInfo, evalTimeoutMs);
+      await prepare(page, width, pageInfo);
       return;
-    } catch (error) {
-      lastError = error;
-      if (attempt < 3) await page.waitForTimeout(500);
-    }
+    } catch (error) { lastError = error; if (attempt < 2) await page.waitForTimeout(250); }
   }
   throw lastError;
 }
 
-async function inspectWithRetry(page, width, pageInfo, evalTimeoutMs) {
-  let lastError;
-  for (let attempt = 1; attempt <= 3; attempt += 1) {
-    try {
-      const issues = await inspect(page, width, pageInfo, evalTimeoutMs);
-      const onlyTransientBlank = issues.length === 1 && issues[0] === 'la página quedó visualmente vacía';
-      if (!onlyTransientBlank || attempt >= 3) return issues;
-      await page.waitForTimeout(500);
-      await prepare(page, width, pageInfo, evalTimeoutMs);
-    } catch (error) {
-      lastError = error;
-      if (!isTransientNavigationError(error) || attempt >= 3) break;
-      await settleAuthRedirect(page, pageInfo, page.url());
-      await page.waitForTimeout(400);
-      await prepare(page, width, pageInfo, evalTimeoutMs);
-    }
-  }
-  throw lastError;
+async function inspectWithRetry(page, width, pageInfo) {
+  try { return await inspect(page, width, pageInfo); }
+  catch { await page.waitForTimeout(180); return inspect(page, width, pageInfo); }
+}
+
+async function withPageDeadline(page, label, operation) {
+  let timer = 0;
+  const deadline = new Promise((_, reject) => {
+    timer = setTimeout(() => {
+      page.close({ runBeforeUnload:false }).catch(() => {});
+      reject(new Error(`${label} excedió el límite duro de ${PAGE_DEADLINE_MS} ms`));
+    }, PAGE_DEADLINE_MS);
+  });
+  try { return await Promise.race([operation(), deadline]); }
+  finally { clearTimeout(timer); }
 }
 
 await listen();
-
-const PREINSTALLED_CHROMIUM = '/opt/pw-browsers/chromium';
-
-function resolveExecutablePath() {
-  // chromium.launch({headless:true}) y chromium.executablePath() resuelven la
-  // ruta según la revisión que espera el paquete npm de playwright instalado,
-  // que en este sandbox no coincide con la única revisión de Chromium
-  // preinstalada (el paquete pide una revisión más nueva que la presente en
-  // /opt/pw-browsers). El binario preinstalado sigue siendo un Chromium válido,
-  // así que se usa directamente cuando existe.
-  if (process.env.PLAYWRIGHT_EXECUTABLE_PATH) return process.env.PLAYWRIGHT_EXECUTABLE_PATH;
-  if (fs.existsSync(PREINSTALLED_CHROMIUM)) return PREINSTALLED_CHROMIUM;
-  return chromium.executablePath();
-}
-
-function launchBrowser() {
-  return chromium.launch({
-    headless: true,
-    executablePath: resolveExecutablePath(),
-    args: [
-      // El runner de CI monta /dev/shm con un tamaño reducido; Chromium usa esa
-      // memoria compartida para buffers de compositing/GPU y, al agotarla bajo
-      // carga (decenas de páginas con canvas/imágenes/observers como
-      // product.html), el proceso de render se cuelga o muere de forma no
-      // determinística en vez de fallar con un error claro — coincide con el
-      // patrón ya documentado (cuelgue solo en CI, nunca en un goto aislado
-      // local). '--disable-dev-shm-usage' hace que use /tmp en su lugar.
-      '--disable-dev-shm-usage',
-      // context.route() aborta toda petición a un host que no sea 127.0.0.1,
-      // pero esa intercepción ocurre después de la resolución DNS real. Este
-      // sandbox de CI enruta la red saliente por un proxy con handshakes TLS
-      // fallidos de fondo (ver comentario más abajo sobre gstatic.com): si esa
-      // resolución/conexión real se demora, el bloqueo ocurre antes de que
-      // route() pueda intervenir. product.html es la página con más imports
-      // externos (varios submódulos de firebasejs vía gstatic.com), por lo que
-      // es la más expuesta. Mapear cualquier host a loopback hace que la
-      // resolución sea instantánea y el intento de conexión falle de inmediato
-      // (nada escucha ese puerto ahí) en vez de depender del proxy/DNS real.
-      // El servidor local ya se referencia por IP literal (127.0.0.1), así que
-      // esta regla no lo afecta.
-      "--host-resolver-rules=MAP * 127.0.0.1"
-    ]
-  });
-}
-
+const browser = await chromium.launch({ headless:true, ...(process.env.PLAYWRIGHT_EXECUTABLE_PATH ? { executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH } : {}) });
 const failures = [];
 const report = [];
 
 try {
   for (const viewport of canonicalViewports) {
-    // Un browser nuevo por viewport (en vez de uno solo para las ~126
-    // combinaciones de la corrida completa) evita que el proceso de Chromium
-    // acumule degradación (procesos de render huérfanos, presión de memoria)
-    // tras varias decenas de páginas cargadas: reproducido de forma estable
-    // en local como un cuelgue o cierre del propio browser en product.html,
-    // siempre alrededor de la página ~50 de la corrida sin importar el orden
-    // ni el reuso de context — es decir, ligado a la vida del proceso del
-    // browser, no a un context ni a una página concreta.
-    let browser = await launchBrowser();
+    const context = await browser.newContext({ viewport:{ width:viewport.width, height:viewport.height }, ignoreHTTPSErrors:true, serviceWorkers:'block', reducedMotion:'reduce' });
+    await context.addInitScript(() => {
+      window.TT_DISABLE_STORE_GATE = true;
+      window.TINTIN_ENABLE_PUBLIC_ACTIVITY = false;
+      try { localStorage.setItem('tt_privacy_consent_v1','accepted'); } catch {}
+    });
     for (const pageInfo of pages) {
-      currentStep = `${pageInfo.path} ${viewport.width}×${viewport.height}`;
-      resetWatchdog();
-      // product.html sin ?id= (el unico caso que este audit visita) nunca resuelve
-      // un producto real bajo la politica de red solo-localhost de arriba, asi que
-      // siempre cae en el fallback de "related products" de mantenimiento-producto.js,
-      // cuyo propio temporizador interno vence a los ~8500ms y, bajo carga de CI,
-      // tambien retrasa el propio page.goto/domcontentloaded. Se le da a esta pagina
-      // mas margen en cada capa (evaluate y watchdog del combo completo) en vez de
-      // subir el default para el resto de paginas, que no tienen ese temporizador
-      // interno — mismo criterio ya aplicado en auditar-todas-navegacion-superficies.mjs.
-      // NOTA: hasta este commit ese margen nunca alcanzaba al propio page.goto —
-      // su timeout seguia hardcodeado en 15000ms en navigateWithRetry sin importar
-      // esta pagina, que es exactamente el error observado en CI en 2 de los 7
-      // viewports ("page.goto: Timeout 15000ms exceeded"). Se sube tambien aqui.
-      const evalTimeoutMs = pageInfo.path.startsWith('product') ? 20000 : undefined;
-      const navTimeoutMs = pageInfo.path.startsWith('product') ? 30000 : 15000;
-      const comboTimeoutMs = pageInfo.path.startsWith('product') ? 90000 : 60000;
-      if (pageInfo.path.startsWith('product')) {
-        // Verificado de forma aislada (browser recién lanzado, un solo goto): esta
-        // misma página navega en <500ms. Verificado también con más timeout
-        // (evalTimeoutMs/comboTimeoutMs mucho mayores): no cambió ni un solo
-        // resultado, y falla igual en el primer viewport de la corrida que en el
-        // último — descarta degradación acumulada como única causa y apunta a
-        // contención de recursos puntual del sandbox/proxy. Se le da un proceso
-        // de Chromium recién lanzado en cada intento (ver maxAttempts abajo) en
-        // vez de perseguir el síntoma con más margen.
-        const stalledProcess = browser.process ? browser.process() : null;
-        await withTimeout(browser.close(), 5000, 'browser.close (prelanzamiento product.html)').catch(() => {});
-        try { stalledProcess?.kill('SIGKILL'); } catch {}
-        browser = await launchBrowser();
-      }
-      // product.html cuelga de forma no determinista incluso con un browser
-      // recién lanzado (falla tanto en el primer como en el último viewport de
-      // la corrida). Se reintenta el combo completo, con otro browser recién
-      // lanzado, cuando la falla es de infraestructura (isTransientComboError):
-      // un defecto real de UI nunca llega a este catch (ver comentario de la
-      // función), así que nunca se reintenta por error.
-      const maxAttempts = pageInfo.path.startsWith('product') ? 2 : 1;
-      for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
-      const entry = { page: pageInfo.path, viewport: viewport.id, width: viewport.width, height: viewport.height, issues: [] };
-      // Promise.race (usado por withTimeout) no cancela la promesa perdedora:
-      // si el watchdog de 60s gana la carrera, runPage() sigue ejecutándose en
-      // segundo plano (reproducido en local: navigateWithRetry termina sus
-      // reintentos varios segundos después y duplica el log/reporte de este
-      // mismo combo usando un browser que la rama de recuperación ya cerró).
-      // Este flag evita que ese resultado tardío se reporte dos veces. Al ser
-      // declarado dentro del bucle de reintentos, cada intento tiene su propio
-      // `entry`/`handled`: un zombie de un intento anterior nunca puede tocar
-      // el `entry` del intento vigente.
-      let handled = false;
+      const page = await context.newPage();
+      const label = `${pageInfo.path} ${viewport.width}×${viewport.height}`;
+      const entry = { page:pageInfo.path, viewport:viewport.id, width:viewport.width, height:viewport.height, issues:[] };
+      console.log(`START — ${label}`);
       try {
-        async function runPage() {
-          // Un context nuevo por página (en vez de reutilizar uno para las ~18
-          // páginas del viewport) replica el patrón ya usado en
-          // auditar-todas-navegacion-superficies.mjs: reutilizar un solo context
-          // para navegaciones sucesivas acumula recursos del motor (listeners,
-          // observers, timers de páginas ya cerradas) hasta saturar el hilo
-          // principal del renderer, lo que hace colgar page.evaluate() en una
-          // página posterior de la secuencia (reproducido de forma aislada en
-          // product.html tras ~16 navegaciones previas en el mismo context).
-          const context = await browser.newContext({
-            viewport: { width: viewport.width, height: viewport.height },
-            ignoreHTTPSErrors: true,
-            serviceWorkers: 'block',
-            reducedMotion: 'reduce'
-          });
-          await context.addInitScript(() => {
-            window.TT_DISABLE_STORE_GATE = true;
-            window.TINTIN_ENABLE_PUBLIC_ACTIVITY = false;
-            try { localStorage.setItem('tt_privacy_consent_v1', 'accepted'); } catch {}
-          });
-          // Sin esto, páginas que importan módulos de Firebase desde
-          // https://www.gstatic.com (p. ej. product.html vía proteccion-sesion.js y
-          // resenas-producto.js) dependen de red real: en el runner de CI esas
-          // peticiones pueden tardar más que el timeout de navegación y cuelgan
-          // domcontentloaded. Se aborta todo lo que no sea el propio servidor local,
-          // igual que ya hace auditar-todas-navegacion-superficies.mjs.
-          await context.route('**/*', route => {
-            try {
-              const url = new URL(route.request().url());
-              if (url.hostname !== host) return route.abort();
-            } catch {}
-            return route.continue();
-          });
-
-          const page = await context.newPage();
-          try {
-            await navigateWithRetry(page, `${baseURL}/${pageInfo.path}`, viewport.width, pageInfo, evalTimeoutMs, navTimeoutMs);
-            entry.issues.push(...await inspectWithRetry(page, viewport.width, pageInfo, evalTimeoutMs));
-          } catch (error) {
-            // Si el watchdog externo ya decidió este combo mientras
-            // navigateWithRetry/inspectWithRetry seguían pendientes, no se
-            // agrega este mensaje tardío al `entry` ya reportado.
-            if (!handled) entry.issues.push(error?.message || String(error));
-          }
-
-          // Se revisa aquí y otra vez después del await de abajo: ese await
-          // (screenshot) es un punto de reanudación donde el watchdog externo
-          // puede ganarle la carrera a esta misma ejecución abandonada — si solo
-          // se revisara una vez antes del await, el catch externo podía mutar el
-          // `entry` compartido y marcar `handled` DURANTE el await, y esta
-          // función seguía igual hasta su propio log/report ya con handled=true.
-          if (handled) return;
-
-          if (entry.issues.length) {
-            await page.screenshot({
-              path: path.join(artifactDir, `${pageInfo.id || pageInfo.path}-${viewport.width}x${viewport.height}.png`),
-              fullPage: false
-            }).catch(() => {});
-          }
-
-          if (handled) return;
-
-          if (entry.issues.length) {
-            failures.push(`${pageInfo.path} ${viewport.width}×${viewport.height}: ${entry.issues.join(' | ')}`);
-          }
-          console.log(`${entry.issues.length ? 'ERROR' : 'OK'} — ${pageInfo.path} ${viewport.width}×${viewport.height}${entry.issues.length ? ` — ${entry.issues.join(' | ')}` : ''}`);
-          report.push(entry);
-          await page.close().catch(() => {});
-          await context.close().catch(() => {});
-        }
-
-        // Watchdog de reloj real (setTimeout de Node, no depende de que el
-        // navegador responda) para el combo completo: si Chromium se queda
-        // colgado sin cerrarse ni lanzar error (reproducido en local: el pipe
-        // CDP deja de responder y ni page.goto ni sus timeouts internos de
-        // Playwright llegan a dispararse), esto evita que el watchdog global
-        // (WATCHDOG_MS) sea la única red de seguridad y aborte toda la corrida.
-        await withTimeout(runPage(), comboTimeoutMs, `combo ${currentStep}`);
-        break;
-      } catch (error) {
-        // El proceso de Chromium puede morir o colgarse de forma abrupta bajo
-        // este sandbox (sin dbus, red vía proxy con handshakes TLS fallidos de
-        // fondo), lo cual antes propagaba una excepción no capturada que
-        // abortaba TODA la corrida (perdiendo el resto de páginas/viewports
-        // pendientes) o dependía únicamente del watchdog global de 8 minutos.
-        // Se fuerza el cierre del proceso de Chromium (por si quedó colgado)
-        // antes de relanzarlo, y solo se registra el fallo del combo cuando ya
-        // no quedan reintentos (o la falla no es de tipo transitorio).
-        handled = true;
-        const message = error?.message || String(error);
-        const stalledProcess = browser.process ? browser.process() : null;
-        await withTimeout(browser.close(), 5000, 'browser.close').catch(() => {});
-        try { stalledProcess?.kill('SIGKILL'); } catch {}
-        browser = await launchBrowser();
-        if (attempt < maxAttempts && isTransientComboError(message)) continue;
-        entry.issues.push(message);
-        failures.push(`${pageInfo.path} ${viewport.width}×${viewport.height}: ${message}`);
-        console.log(`ERROR — ${pageInfo.path} ${viewport.width}×${viewport.height} — ${message}`);
-        report.push(entry);
+        await withPageDeadline(page, label, async () => {
+          await navigateWithRetry(page, `${baseURL}/${pageInfo.path}`, viewport.width, pageInfo);
+          entry.issues.push(...await inspectWithRetry(page, viewport.width, pageInfo));
+        });
+      } catch (error) { entry.issues.push(error?.message || String(error)); }
+      if (entry.issues.length) {
+        failures.push(`${label}: ${entry.issues.join(' | ')}`);
+        if (!page.isClosed()) await page.screenshot({ path:path.join(artifactDir, `${pageInfo.id || pageInfo.path}-${viewport.width}x${viewport.height}.png`), fullPage:false, timeout:3000 }).catch(() => {});
       }
-      }
+      console.log(`${entry.issues.length ? 'ERROR' : 'OK'} — ${label}${entry.issues.length ? ` — ${entry.issues.join(' | ')}` : ''}`);
+      report.push(entry);
+      if (!page.isClosed()) await page.close({ runBeforeUnload:false }).catch(() => {});
     }
-    await browser.close().catch(() => {});
+    await context.close().catch(() => {});
   }
 } finally {
-  clearTimeout(watchdogTimer);
+  await browser.close().catch(() => {});
   await closeServer();
 }
 
-fs.writeFileSync(path.join(artifactDir, 'report.json'), JSON.stringify({ failures, report }, null, 2));
-fs.writeFileSync(path.join(artifactDir, 'report.txt'), failures.length ? failures.join('\n') : 'Todas las páginas pasaron en los siete viewports canónicos.\n');
-
+fs.writeFileSync(path.join(artifactDir,'report.json'), JSON.stringify({ failures,report }, null,2));
+fs.writeFileSync(path.join(artifactDir,'report.txt'), failures.length ? failures.join('\n') : 'Todas las páginas pasaron en los siete viewports canónicos.\n');
 console.log(`\nResultado canónico: ${report.length - failures.length}/${report.length} combinaciones correctas.`);
 if (failures.length) process.exit(1);

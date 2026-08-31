@@ -32,6 +32,9 @@ const HOME_PRODUCT_LIMIT = 18;
 // de precio, stock o estado durante diez minutos en otros dispositivos.
 const ALL_CACHE_TTL = 60 * 1000;
 const PRODUCT_CACHE_TTL = 15 * 60 * 1000;
+const PUBLIC_CATALOG_ENDPOINT = '/api/public-catalog';
+const PUBLIC_PRODUCT_TIMEOUT_MS = 8000;
+const PRODUCT_APP_CHECK_TIMEOUT_MS = 1200;
 let publicProductsUnsubscribe = null;
 let publicProductsReady = null;
 let publicProductUnsubscribe = null;
@@ -40,6 +43,7 @@ let publicProductId = '';
 let publicProductRelated = [];
 let publicProductCategory = '';
 let publicProductCurrent = null;
+let publicProductRequestVersion = 0;
 
 function sanitizeProductImage(img) {
   return sanitizeImageUrl(img);
@@ -335,6 +339,35 @@ async function fetchSingleProduct(id) {
   return product;
 }
 
+async function fetchSingleProductFromEdge(id) {
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), PUBLIC_PRODUCT_TIMEOUT_MS);
+  try {
+    const params = new URLSearchParams({ resource: 'products', id: String(id) });
+    const response = await fetch(`${PUBLIC_CATALOG_ENDPOINT}?${params.toString()}`, {
+      method: 'GET',
+      credentials: 'omit',
+      cache: 'default',
+      signal: controller.signal
+    });
+    if (!response.ok) throw new Error('API pública de producto respondió ' + response.status);
+    const payload = await response.json();
+    if (!payload?.ok || payload.resource !== 'products' || !Object.prototype.hasOwnProperty.call(payload, 'item')) {
+      throw new Error('Respuesta pública de producto inválida');
+    }
+    if (payload.item == null) return null;
+    if (!payload.item.id || !payload.item.data || typeof payload.item.data !== 'object') {
+      throw new Error('Producto público inválido');
+    }
+    const product = mapProduct(payload.item.id, payload.item.data);
+    if (window.TintinCatalogPolicy?.isCatalogVisible && !window.TintinCatalogPolicy.isCatalogVisible(product)) return null;
+    writeCached(`product:${id}`, product);
+    return product;
+  } finally {
+    window.clearTimeout(timer);
+  }
+}
+
 async function fetchRelatedProducts(product) {
   if (!product?.category) return [];
   if (!await appCheckReady) return [];
@@ -353,6 +386,10 @@ async function fetchRelatedProducts(product) {
 }
 
 function stopProductRealtime() {
+  // onSnapshot puede entregar un callback que ya estaba en cola después de
+  // unsubscribe(). La versión invalida esa entrega para que nunca pinte otro
+  // producto al navegar rápido entre fichas.
+  publicProductRequestVersion += 1;
   publicProductUnsubscribe?.();
   publicProductUnsubscribe = null;
   publicProductReady = null;
@@ -362,22 +399,61 @@ function stopProductRealtime() {
   publicProductCurrent = null;
 }
 
+function isCurrentProductRequest(id, requestVersion) {
+  return publicProductId === id && publicProductRequestVersion === requestVersion;
+}
+
+function waitForProductAppCheck() {
+  let timer = 0;
+  const timeout = new Promise(resolve => {
+    timer = window.setTimeout(() => resolve(false), PRODUCT_APP_CHECK_TIMEOUT_MS);
+  });
+  return Promise.race([
+    Promise.resolve(appCheckReady).catch(() => false),
+    timeout,
+  ]).finally(() => window.clearTimeout(timer));
+}
+
 async function startProductRealtime(id) {
   const normalizedId = String(id || '').trim();
   if (!normalizedId) return Promise.resolve(publish([], 'missing-id'));
   if (publicProductReady && publicProductId === normalizedId) return publicProductReady;
 
-  if (!await appCheckReady) {
-    const products = await loadAllProducts();
-    const product = products.find(item => String(item.id) === normalizedId);
-    return publish(product ? [product] : [], product ? 'rest-fallback' : 'rest-fallback-missing');
-  }
-
   stopProductRealtime();
   publicProductId = normalizedId;
+  const requestVersion = publicProductRequestVersion;
 
   const cachedProduct = readCached(`product:${normalizedId}`, PRODUCT_CACHE_TTL);
   if (cachedProduct) publish([cachedProduct], 'cache');
+
+  // La ficha no debe esperar a App Check ni descargar los ~1000 productos del
+  // catálogo para resolver uno solo. La API pública canónica consulta el mismo
+  // documento por ID y queda en paralelo mientras App Check prepara realtime.
+  // Si responde primero, el producto se pinta de inmediato; si App Check está
+  // disponible, el listener SDK toma luego el control y mantiene precio/stock vivo.
+  const edgeResultPromise = runSingleFlight(
+    `product:edge:${normalizedId}`,
+    () => fetchSingleProductFromEdge(normalizedId)
+  ).then(product => {
+    if (!isCurrentProductRequest(normalizedId, requestVersion)) return { ok: true, product, published: null };
+    if (product) {
+      publicProductCurrent = product;
+      return { ok: true, product, published: publish([product], 'edge-product') };
+    }
+    return { ok: true, product: null, published: publish([], 'edge-product-missing') };
+  }).catch(error => ({ ok: false, error, product: null, published: null }));
+
+  // App Check mejora la protección del listener realtime, pero no puede
+  // retener la ficha: la API pública ya está resolviendo en paralelo.
+  const appCheckAvailable = await waitForProductAppCheck();
+  if (!isCurrentProductRequest(normalizedId, requestVersion)) return [];
+  if (!appCheckAvailable) {
+    const edgeResult = await edgeResultPromise;
+    if (!isCurrentProductRequest(normalizedId, requestVersion)) return [];
+    if (edgeResult.ok) return edgeResult.published || publish(edgeResult.product ? [edgeResult.product] : [], edgeResult.product ? 'edge-product' : 'edge-product-missing');
+    if (cachedProduct) return publish([cachedProduct], 'stale-cache');
+    throw edgeResult.error;
+  }
 
   publicProductReady = new Promise((resolve, reject) => {
     let settled = false;
@@ -390,6 +466,7 @@ async function startProductRealtime(id) {
     publicProductUnsubscribe = onSnapshot(
       doc(db, 'products', normalizedId),
       snapshot => {
+        if (!isCurrentProductRequest(normalizedId, requestVersion)) return;
         recordFirestoreRead('products:single-realtime', 1);
         if (!snapshot.exists()) {
           settle(publish([], 'realtime-product-missing'));
@@ -418,7 +495,7 @@ async function startProductRealtime(id) {
           `products:related:${product.category}`,
           () => fetchRelatedProducts(product)
         ).then(related => {
-          if (publicProductId !== normalizedId) return;
+          if (!isCurrentProductRequest(normalizedId, requestVersion)) return;
           publicProductRelated = related;
           const latestProduct = publicProductCurrent;
           if (!latestProduct) return;
@@ -431,14 +508,39 @@ async function startProductRealtime(id) {
         });
       },
       async error => {
+        if (!isCurrentProductRequest(normalizedId, requestVersion)) {
+          settle([]);
+          return;
+        }
         publicProductUnsubscribe = null;
         publicProductReady = null;
-        window.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
+        // No se emite products-error todavía: ese evento es terminal para la
+        // ficha y antes reiniciaba su watchdog aun cuando el fallback seguía vivo.
+        // Primero agotamos las autoridades ya existentes; recién el rechazo final
+        // de loadProductPage se transforma en un único error visible.
+        const edgeResult = await edgeResultPromise;
+        if (!isCurrentProductRequest(normalizedId, requestVersion)) {
+          settle([]);
+          return;
+        }
+        if (edgeResult.ok) {
+          if (edgeResult.product) {
+            settle(edgeResult.published || publish([edgeResult.product], 'edge-product-fallback'));
+          } else {
+            settle(edgeResult.published || publish([], 'edge-product-missing'));
+          }
+          return;
+        }
+
         try {
           const product = await runSingleFlight(
             `product:${normalizedId}`,
             () => fetchSingleProduct(normalizedId)
           );
+          if (!isCurrentProductRequest(normalizedId, requestVersion)) {
+            settle([]);
+            return;
+          }
           if (product && product.active !== false && product.name) {
             settle(publish([product], 'server-fallback'));
           } else if (cachedProduct) {
@@ -448,7 +550,7 @@ async function startProductRealtime(id) {
           }
         } catch (fallbackError) {
           if (cachedProduct) settle(publish([cachedProduct], 'stale-cache'));
-          else reject(fallbackError);
+          else reject(fallbackError || error);
         }
       }
     );
