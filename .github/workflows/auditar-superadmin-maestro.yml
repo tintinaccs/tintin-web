@@ -1,0 +1,75 @@
+name: Super Admin Maestro
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'admin.html'
+      - 'admin-images.html'
+      - 'js/admin/**'
+      - 'js/core/auth/**'
+      - 'functions/**'
+      - 'firestore.rules'
+      - 'scripts/auditar-superadmin-maestro*.mjs'
+      - 'scripts/cache-version-approvals.json'
+      - '.github/workflows/auditar-superadmin-maestro.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'admin.html'
+      - 'admin-images.html'
+      - 'js/admin/**'
+      - 'js/core/auth/**'
+      - 'functions/**'
+      - 'firestore.rules'
+      - 'scripts/auditar-superadmin-maestro*.mjs'
+      - 'scripts/cache-version-approvals.json'
+      - '.github/workflows/auditar-superadmin-maestro.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  maestro-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Instalar Chromium para Maestro responsive
+        run: npx playwright install --with-deps chromium
+      - name: Auditar contrato Maestro y cobertura CRUD
+        run: node scripts/auditar-superadmin-maestro.mjs
+      - name: Auditar interconexión completa Maestro
+        run: node scripts/auditar-superadmin-maestro-conexiones.mjs
+      - name: Auditar Maestro Desktop Tablet Mobile
+        run: node scripts/auditar-superadmin-maestro-responsive.mjs
+      - name: Validar versiones immutable actuales
+        run: npm run audit:cache-versioning
+      - name: Validar fundación y permisos del Admin
+        run: npm run audit:admin-foundation
+      - name: Validar Pedidos y ciclo operativo
+        run: npm run audit:admin-orders
+      - name: Validar Usuarios, roles y autorizaciones
+        run: npm run audit:users-roles
+      - name: Validar Productos, colecciones y multimedia
+        run: npm run audit:products-media
+      - name: Validar sincronización Admin a sitio público
+        run: npm run audit:admin-sync
+      - name: Guardar evidencia Maestro
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: superadmin-maestro-audit
+          path: |
+            artifacts/superadmin-maestro-audit.json
+            artifacts/superadmin-maestro-connections.json
+            artifacts/superadmin-maestro-responsive.json
+          if-no-files-found: warn
+          retention-days: 30

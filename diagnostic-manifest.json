@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-31T17:40:49.113Z",
-  "sourceFingerprint": "ed3bfb0283783316e7201ca217af32b69dc85ea228579147649a8ac0a5012e11",
+  "generatedAt": "2026-08-31T18:50:39.840Z",
+  "sourceFingerprint": "19fb5a5879acf5f1d48568bfd533edaa5793c797f75b0b64a7d8ebf546c1d4e3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 791,
-    "textFiles": 759,
-    "totalBytes": 8765955,
+    "files": 797,
+    "textFiles": 765,
+    "totalBytes": 8827629,
     "pages": 18,
-    "modules": 511
+    "modules": 516
   },
   "viewports": [
     {
@@ -2046,8 +2046,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 187163,
-      "sha256": "78a703ffe6d0d8d43fb7d68d1bdd5dd63fcde357080e414eeaf08d27c8a1e0e9",
+      "bytes": 187274,
+      "sha256": "7cc6075cdfe9467b6d217c78ba3410e8faff1b8985da0512a0ef888dc4e3e51e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2134,6 +2134,11 @@
           "raw": "js/admin/notifications/enlace-pedido-push.js?v=tintin-20260825-web-push-2",
           "target": "js/admin/notifications/enlace-pedido-push.js",
           "line": 2188
+        },
+        {
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-1",
+          "target": "js/admin/maestro/panel-maestro.js",
+          "line": 2189
         }
       ],
       "styles": [
@@ -2373,6 +2378,12 @@
           "raw": "js/admin/notifications/enlace-pedido-push.js?v=tintin-20260825-web-push-2",
           "target": "js/admin/notifications/enlace-pedido-push.js",
           "line": 2188,
+          "exists": true
+        },
+        {
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-1",
+          "target": "js/admin/maestro/panel-maestro.js",
+          "line": 2189,
           "exists": true
         },
         {
@@ -20353,6 +20364,58 @@
       ]
     },
     {
+      "path": "js/admin/maestro/panel-maestro.js",
+      "bytes": 26383,
+      "sha256": "7e18e892a0be7a9db3f708a40a4374b7d7dc9e963c57cb3ffff710a7b0d5667b",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/core/firebase/firebase.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1",
+          "target": "js/core/auth/roles.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "./registro-maestro.js?v=tintin-20260831-superadmin-maestro-1",
+          "target": "js/admin/maestro/registro-maestro.js",
+          "dynamic": false,
+          "line": 8
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "path": "js/admin/maestro/registro-maestro.js",
+      "bytes": 8586,
+      "sha256": "d6d1ce8a5d3e53a5f60612d0ae73f0d7db2a8d2a27b721ee18b54b58c9e7be97",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "js/admin/notifications/enlace-pedido-push.js",
       "bytes": 3460,
       "sha256": "fdb83fb5b8505ed43cc257f8b83e103971b3e799ca259f9441c7957bc6b9a03c",
@@ -27562,6 +27625,96 @@
       ]
     },
     {
+      "path": "scripts/auditar-superadmin-maestro-conexiones.mjs",
+      "bytes": 7645,
+      "sha256": "385128b2e3378aab400ec88b15de8296b94461b650eaa1009e13f4de65ae8184",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/auditar-superadmin-maestro-responsive.mjs",
+      "bytes": 7582,
+      "sha256": "5b7deff09a295c8ac8e3f6a2d9b82d051bb395c7c3cf4b3214f4138b06c93981",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "playwright",
+          "target": "scripts/playwright",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/auditar-superadmin-maestro.mjs",
+      "bytes": 8525,
+      "sha256": "86f9fdeb6a65894950065009611f2ad31dde54f3d385f02fdd0cce4c58045789",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/auditar-sync-authority.mjs",
       "bytes": 2862,
       "sha256": "a687619443625aa394a6be2dcee711c7f7640153272c7ed83f1562d8335cfdf1",
@@ -30911,6 +31064,12 @@
       "sha256": "c3c40759c7ad79c1fcdda91b5a5eb50713de1de652a8da0549a53555a86aa847"
     },
     {
+      "path": ".github/workflows/auditar-superadmin-maestro.yml",
+      "extension": ".yml",
+      "bytes": 2499,
+      "sha256": "bc34048391acc957c2d25102df4edb6e12c0a78bb75a64691d8b685151a57124"
+    },
+    {
       "path": ".github/workflows/auditar-sync-authority.yml",
       "extension": ".yml",
       "bytes": 951,
@@ -31081,8 +31240,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 187163,
-      "sha256": "78a703ffe6d0d8d43fb7d68d1bdd5dd63fcde357080e414eeaf08d27c8a1e0e9"
+      "bytes": 187274,
+      "sha256": "7cc6075cdfe9467b6d217c78ba3410e8faff1b8985da0512a0ef888dc4e3e51e"
     },
     {
       "path": "apple-touch-icon.png",
@@ -32775,6 +32934,18 @@
       "extension": ".js",
       "bytes": 33679,
       "sha256": "ef722088bd12fff587fadd57f4106fa5e310fdccd06501d9181741b7c668cffc"
+    },
+    {
+      "path": "js/admin/maestro/panel-maestro.js",
+      "extension": ".js",
+      "bytes": 26383,
+      "sha256": "7e18e892a0be7a9db3f708a40a4374b7d7dc9e963c57cb3ffff710a7b0d5667b"
+    },
+    {
+      "path": "js/admin/maestro/registro-maestro.js",
+      "extension": ".js",
+      "bytes": 8586,
+      "sha256": "d6d1ce8a5d3e53a5f60612d0ae73f0d7db2a8d2a27b721ee18b54b58c9e7be97"
     },
     {
       "path": "js/admin/notifications/enlace-pedido-push.js",
@@ -34811,6 +34982,24 @@
       "sha256": "bd4354faf937672b2c6fedda27a773235b108be94df02a6e603dc9b8c36c6c7b"
     },
     {
+      "path": "scripts/auditar-superadmin-maestro-conexiones.mjs",
+      "extension": ".mjs",
+      "bytes": 7645,
+      "sha256": "385128b2e3378aab400ec88b15de8296b94461b650eaa1009e13f4de65ae8184"
+    },
+    {
+      "path": "scripts/auditar-superadmin-maestro-responsive.mjs",
+      "extension": ".mjs",
+      "bytes": 7582,
+      "sha256": "5b7deff09a295c8ac8e3f6a2d9b82d051bb395c7c3cf4b3214f4138b06c93981"
+    },
+    {
+      "path": "scripts/auditar-superadmin-maestro.mjs",
+      "extension": ".mjs",
+      "bytes": 8525,
+      "sha256": "86f9fdeb6a65894950065009611f2ad31dde54f3d385f02fdd0cce4c58045789"
+    },
+    {
       "path": "scripts/auditar-sync-authority.mjs",
       "extension": ".mjs",
       "bytes": 2862,
@@ -34879,8 +35068,8 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 399,
-      "sha256": "3884639860b767d20fd9ef8a033774aea6164a2f85d4ff304bea70bda9533294"
+      "bytes": 742,
+      "sha256": "b494187f5cd00e21f34ad31dbad5dd66a1437ee8a9817a74e4097e63314ce1b1"
     },
     {
       "path": "scripts/cache-version-baseline.json",
