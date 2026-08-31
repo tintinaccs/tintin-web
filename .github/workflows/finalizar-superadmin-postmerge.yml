@@ -71,12 +71,22 @@ jobs:
 
           approval_path = Path('scripts/cache-version-approvals.json')
           approval = json.loads(approval_path.read_text(encoding='utf-8'))
-          registry_bytes = Path('js/admin/maestro/registro-maestro.js').read_bytes()
-          header = f'blob {len(registry_bytes)}\0'.encode()
-          blob_sha = hashlib.sha1(header + registry_bytes).hexdigest()
-          approval['approved']['js/admin/maestro/registro-maestro.js']['gitBlobSha'] = blob_sha
+          versions = {
+              'js/admin/maestro/registro-maestro.js': 'tintin-20260831-superadmin-maestro-1',
+              'js/components/navigation/compartido/configuracion.js': 'tintin-20260831-notifications-auto-read-1',
+              'js/components/navigation/compartido/recursos-navegacion.js': 'tintin-20260831-notifications-auto-read-1',
+          }
+          for file_path, version in versions.items():
+              raw = Path(file_path).read_bytes()
+              git_blob = hashlib.sha1(f'blob {len(raw)}\0'.encode() + raw).hexdigest()
+              sha256 = hashlib.sha256(raw).hexdigest()
+              approval['approved'][file_path] = {
+                  'version': version,
+                  'gitBlobSha': git_blob,
+                  'sha256': sha256,
+              }
+              print(f'Aprobado {file_path}: {git_blob} / {sha256}')
           approval_path.write_text(json.dumps(approval, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-          print('Registro Maestro aprobado:', blob_sha)
           PY
       - name: Reconstruir diagnóstico reproducible
         run: npm run build:diagnostics
