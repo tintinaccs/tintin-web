@@ -14,6 +14,7 @@ const mime = { '.css':'text/css; charset=utf-8','.html':'text/html; charset=utf-
 const UI_WAIT_MS = 4000;
 const NAVIGATION_WAIT_MS = 8000;
 const SHELL_READY_MS = 6500;
+const ROUTE_DEADLINE_MS = 12000;
 
 const server = http.createServer((request,response) => {
   const pathname = decodeURIComponent(new URL(request.url || '/',baseURL).pathname);
@@ -34,6 +35,19 @@ function configurePage(page, runtimeErrors) {
   page.setDefaultNavigationTimeout(NAVIGATION_WAIT_MS);
   page.on('pageerror', error => runtimeErrors.push(error.message));
   return page;
+}
+
+async function withRouteDeadline(page, route, width, operation) {
+  let timer = 0;
+  const label = routeLabel(route, width);
+  const deadline = new Promise((_, reject) => {
+    timer = setTimeout(() => {
+      page.close({ runBeforeUnload:false }).catch(() => {});
+      reject(new Error(`${label} bloqueó el renderer por más de ${ROUTE_DEADLINE_MS} ms`));
+    }, ROUTE_DEADLINE_MS);
+  });
+  try { return await Promise.race([operation(), deadline]); }
+  finally { clearTimeout(timer); }
 }
 
 async function exposePage(page) {
@@ -189,26 +203,24 @@ try {
   await expectSurfaceCycle(page, { route:'catalogo.html', width:390, trigger:'#tabbar-cart', surface:'#cart-drawer' });
   await expectSurfaceCycle(page, { route:'catalogo.html', width:390, trigger:'#tabbar-cuenta', surface:'#account-drawer' });
 
-  // La matriz extensa usa una página limpia por combinación. Reutilizar la
-  // misma pestaña hacía que el resize de la ruta anterior (por ejemplo
-  // collections 1280 -> product 360) pudiera bloquear el renderer antes de
-  // que page.goto siquiera empezara, atribuyendo el cuelgue a la ruta siguiente.
-  console.log('Responsive audit: validando 13 rutas en mobile/tablet/desktop con páginas aisladas...');
+  console.log('Responsive audit: validando 13 rutas en mobile/tablet/desktop con páginas aisladas y deadline...');
   for (const route of routes) {
     for (const width of [360,820,1280]) {
       const routePage = configurePage(await context.newPage(), runtimeErrors);
       try {
-        await gotoRoute(routePage, route, width);
-        const overflow = await routePage.evaluate(() => Math.max(document.documentElement.scrollWidth,document.body.scrollWidth) - document.documentElement.clientWidth);
-        check(overflow <= 1, `${route} desborda ${overflow}px a ${width}px`);
-        const loginSurface = await routePage.evaluate(() => !!document.querySelector('.login-page'));
-        if (!loginSurface) {
-          const trigger = width === 360 ? '#tabbar-tienda' : width === 820 ? '#btn-menu-tablet' : '#btn-tienda';
-          const surface = width === 360 ? '#collections-sheet' : width === 820 ? '#tt-tablet-menu' : '#tt-tienda-dropdown-panel';
-          await expectSurfaceCycle(routePage, { route, width, trigger, surface });
-        }
+        await withRouteDeadline(routePage, route, width, async () => {
+          await gotoRoute(routePage, route, width);
+          const overflow = await routePage.evaluate(() => Math.max(document.documentElement.scrollWidth,document.body.scrollWidth) - document.documentElement.clientWidth);
+          check(overflow <= 1, `${route} desborda ${overflow}px a ${width}px`);
+          const loginSurface = await routePage.evaluate(() => !!document.querySelector('.login-page'));
+          if (!loginSurface) {
+            const trigger = width === 360 ? '#tabbar-tienda' : width === 820 ? '#btn-menu-tablet' : '#btn-tienda';
+            const surface = width === 360 ? '#collections-sheet' : width === 820 ? '#tt-tablet-menu' : '#tt-tienda-dropdown-panel';
+            await expectSurfaceCycle(routePage, { route, width, trigger, surface });
+          }
+        });
       } finally {
-        await routePage.close({ runBeforeUnload:false }).catch(() => {});
+        if (!routePage.isClosed()) await routePage.close({ runBeforeUnload:false }).catch(() => {});
       }
     }
   }
