@@ -41,6 +41,8 @@ check('guest-tablet-hidden', 'Tablet nace sin campana para visitante', /data-nav
 check('guest-mobile-hidden', 'Mobile nace sin campana para visitante', /data-nav-action="notifications"[\s\S]{0,260}\shidden/.test(mobileHeader));
 check('client-realtime', 'Cliente escucha notificaciones con Firestore onSnapshot', clientNotifications.includes('onSnapshot(source'));
 check('admin-realtime', 'Super Admin escucha notificaciones con Firestore onSnapshot', adminNotifications.includes('onSnapshot(source'));
+check('client-current-user-immediate', 'Cliente consume auth.currentUser sin esperar un segundo callback', clientNotifications.includes('if (auth.currentUser) applyClientAuthState(auth.currentUser)') && clientNotifications.includes('appliedAuthKey'));
+check('admin-current-user-immediate', 'Super Admin consume auth.currentUser y deduplica por UID', adminNotifications.includes('if (auth.currentUser) applyAdminAuthState(auth.currentUser)') && adminNotifications.includes('appliedAdminAuthKey'));
 check('admin-auto-read', 'Super Admin mantiene autolectura al abrir y al recibir snapshot tardío', adminNotifications.includes('panelIsOpen()') && adminNotifications.includes('markVisibleNotificationsRead'));
 check('client-auto-read', 'Cliente mantiene autolectura al abrir y al recibir snapshot tardío', clientNotifications.includes('notificationsSurfaceIsOpen()') && clientNotifications.includes('markVisibleNotificationsRead'));
 
