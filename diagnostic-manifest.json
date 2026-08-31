@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-31T19:51:57.906Z",
-  "sourceFingerprint": "71ca1b29e9f0eed6b0f28cb05681828100d3404817861c8c79a45f3a529080d0",
+  "generatedAt": "2026-08-31T20:03:22.030Z",
+  "sourceFingerprint": "6a22c4edaaa883e9bfecc000f83bdc1923cf49c2f0d3c3821de8aa416ef68e49",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 803,
-    "textFiles": 771,
-    "totalBytes": 8868049,
+    "files": 804,
+    "textFiles": 772,
+    "totalBytes": 8878080,
     "pages": 18,
-    "modules": 521
+    "modules": 522
   },
   "viewports": [
     {
@@ -17797,6 +17797,30 @@
       ]
     },
     {
+      "path": "cloudflare/resiliencia-sync-catalogo.js",
+      "bytes": 5417,
+      "sha256": "8f7adebef84b0f85a7b3ad19bacba844cc8b8caa5acf3475be3932d3dab3f8f1",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "./sheets-sync-config.js",
+          "target": "cloudflare/sheets-sync-config.js",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "cloudflare/seguridad-cloudinary.js",
       "bytes": 5057,
       "sha256": "bb3399bbd7754cf5ea86ed004ad9555af966fc61e8fc5cb6478cc9a22b12b6b4",
@@ -18254,8 +18278,8 @@
     },
     {
       "path": "functions/api/admin-catalog-delete.js",
-      "bytes": 3547,
-      "sha256": "54f7bb44252b1030eeb4a85530128c6ed45ae68a48ec16ab364d91ffccbe4925",
+      "bytes": 5995,
+      "sha256": "eeda0b92bd63b4e0303014921ea73e17ea54e6b8a6ae43882af6bfe215ae29ca",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18272,6 +18296,12 @@
           "target": "cloudflare/borrado-global-catalogo.js",
           "dynamic": false,
           "line": 10
+        },
+        {
+          "raw": "../../cloudflare/resiliencia-sync-catalogo.js",
+          "target": "cloudflare/resiliencia-sync-catalogo.js",
+          "dynamic": false,
+          "line": 15
         }
       ],
       "endpoints": []
@@ -25524,8 +25554,8 @@
     },
     {
       "path": "scripts/auditar-borrado-global-catalogo.mjs",
-      "bytes": 4735,
-      "sha256": "0817f9f684737dd168860495b9379ff8a0ca55de3e4799c2011fb1d3a8c48a16",
+      "bytes": 6580,
+      "sha256": "5968cf2159b78701baea4af34660bd0ebb231b120faf7cb9548b67cb30e1f738",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31103,8 +31133,8 @@
     {
       "path": ".github/workflows/auditar-borrado-global-catalogo.yml",
       "extension": ".yml",
-      "bytes": 1907,
-      "sha256": "28bbc45d3297fe41bd3782ef47df60c2603a310eeff73bac7674c6235c2e8382"
+      "bytes": 2228,
+      "sha256": "242b9695765c3015156388953548c77db47ee88082ada59b2c13a095d5d7517a"
     },
     {
       "path": ".github/workflows/auditar-calidad-nivel-3.yml",
@@ -31759,6 +31789,12 @@
       "extension": ".js",
       "bytes": 9934,
       "sha256": "c20e470623c994a00a975c3c59629c763162069a65e02556b322726df53b7b93"
+    },
+    {
+      "path": "cloudflare/resiliencia-sync-catalogo.js",
+      "extension": ".js",
+      "bytes": 5417,
+      "sha256": "8f7adebef84b0f85a7b3ad19bacba844cc8b8caa5acf3475be3932d3dab3f8f1"
     },
     {
       "path": "cloudflare/seguridad-cloudinary.js",
@@ -32657,8 +32693,8 @@
     {
       "path": "functions/api/admin-catalog-delete.js",
       "extension": ".js",
-      "bytes": 3547,
-      "sha256": "54f7bb44252b1030eeb4a85530128c6ed45ae68a48ec16ab364d91ffccbe4925"
+      "bytes": 5995,
+      "sha256": "eeda0b92bd63b4e0303014921ea73e17ea54e6b8a6ae43882af6bfe215ae29ca"
     },
     {
       "path": "functions/api/admin-delete-user.js",
@@ -34649,8 +34685,8 @@
     {
       "path": "scripts/auditar-borrado-global-catalogo.mjs",
       "extension": ".mjs",
-      "bytes": 4735,
-      "sha256": "0817f9f684737dd168860495b9379ff8a0ca55de3e4799c2011fb1d3a8c48a16"
+      "bytes": 6580,
+      "sha256": "5968cf2159b78701baea4af34660bd0ebb231b120faf7cb9548b67cb30e1f738"
     },
     {
       "path": "scripts/auditar-canonicos-viewports.mjs",
