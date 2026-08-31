@@ -139,7 +139,7 @@ async function waitForVisibleBodyContent(page) {
   }, null, { timeout: 3000 }).catch(() => {});
 }
 
-async function prepare(page, width, pageInfo) {
+async function prepare(page, width, pageInfo, evalTimeoutMs) {
   await page.waitForSelector('body', { state: 'attached', timeout: 5000 });
 
   if (expectsPublicShell(pageInfo)) {
@@ -172,7 +172,7 @@ async function prepare(page, width, pageInfo) {
       closed.style.display = 'none';
     }
     window.scrollTo(0, 0);
-  });
+  }, undefined, evalTimeoutMs);
 
   if (expectsPublicShell(pageInfo)) {
     const expected = width < 768 ? '#tt-tabbar' : width <= 1024 ? '#tt-header-tablet' : '#tt-header-desktop-tablet';
@@ -189,7 +189,7 @@ async function prepare(page, width, pageInfo) {
   await page.waitForTimeout(180);
 }
 
-async function inspect(page, width, pageInfo) {
+async function inspect(page, width, pageInfo, evalTimeoutMs) {
   return safeEvaluate(page, ({ width, pageInfo, shellExpected }) => {
     const issues = [];
     const visible = node => {
@@ -251,11 +251,21 @@ async function inspect(page, width, pageInfo) {
     }
 
     return issues;
-  }, { width, pageInfo, shellExpected: expectsPublicShell(pageInfo) });
+  }, { width, pageInfo, shellExpected: expectsPublicShell(pageInfo) }, evalTimeoutMs);
 }
 
 function isTransientNavigationError(error) {
   return /Execution context was destroyed|Cannot find context with specified id|Target page, context or browser has been closed/i.test(error?.message || String(error));
+}
+
+// El watchdog externo por combo (withTimeout(runPage(), comboTimeoutMs, ...))
+// solo llega a disparar este catch cuando la infraestructura (goto/evaluate/el
+// propio browser) se cuelga o muere — un defecto real de UI (overflow, página
+// vacía, header equivocado) nunca lanza: se registra dentro de runPage() y esa
+// función retorna normalmente. Este filtro documenta esa distinción para
+// limitar el reintento de combo a fallas de tipo infraestructura/timeout.
+function isTransientComboError(message) {
+  return /Timeout de \d+ms esperando|page\.goto: Timeout \d+ms exceeded|Execution context was destroyed|Cannot find context with specified id|Target page, context or browser has been closed/i.test(message);
 }
 
 // admin.html, admin-images.html y perfil.html exigen sesión: sin usuario
@@ -277,13 +287,13 @@ async function settleAuthRedirect(page, pageInfo, startUrl) {
   }
 }
 
-async function navigateWithRetry(page, url, width, pageInfo) {
+async function navigateWithRetry(page, url, width, pageInfo, evalTimeoutMs) {
   let lastError;
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     try {
       await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
       await settleAuthRedirect(page, pageInfo, page.url());
-      await prepare(page, width, pageInfo);
+      await prepare(page, width, pageInfo, evalTimeoutMs);
       return;
     } catch (error) {
       lastError = error;
@@ -293,21 +303,21 @@ async function navigateWithRetry(page, url, width, pageInfo) {
   throw lastError;
 }
 
-async function inspectWithRetry(page, width, pageInfo) {
+async function inspectWithRetry(page, width, pageInfo, evalTimeoutMs) {
   let lastError;
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     try {
-      const issues = await inspect(page, width, pageInfo);
+      const issues = await inspect(page, width, pageInfo, evalTimeoutMs);
       const onlyTransientBlank = issues.length === 1 && issues[0] === 'la página quedó visualmente vacía';
       if (!onlyTransientBlank || attempt >= 3) return issues;
       await page.waitForTimeout(500);
-      await prepare(page, width, pageInfo);
+      await prepare(page, width, pageInfo, evalTimeoutMs);
     } catch (error) {
       lastError = error;
       if (!isTransientNavigationError(error) || attempt >= 3) break;
       await settleAuthRedirect(page, pageInfo, page.url());
       await page.waitForTimeout(400);
-      await prepare(page, width, pageInfo);
+      await prepare(page, width, pageInfo, evalTimeoutMs);
     }
   }
   throw lastError;
@@ -353,13 +363,48 @@ try {
     for (const pageInfo of pages) {
       currentStep = `${pageInfo.path} ${viewport.width}×${viewport.height}`;
       resetWatchdog();
+      // product.html sin ?id= (el unico caso que este audit visita) nunca resuelve
+      // un producto real bajo la politica de red solo-localhost de arriba, asi que
+      // siempre cae en el fallback de "related products" de mantenimiento-producto.js,
+      // cuyo propio temporizador interno vence a los ~8500ms y, bajo carga de CI,
+      // tambien retrasa el propio page.goto/domcontentloaded. Se le da a esta pagina
+      // mas margen en cada capa (evaluate y watchdog del combo completo) en vez de
+      // subir el default para el resto de paginas, que no tienen ese temporizador
+      // interno — mismo criterio ya aplicado en auditar-todas-navegacion-superficies.mjs.
+      const evalTimeoutMs = pageInfo.path.startsWith('product') ? 20000 : undefined;
+      const comboTimeoutMs = pageInfo.path.startsWith('product') ? 90000 : 60000;
+      if (pageInfo.path.startsWith('product')) {
+        // Verificado de forma aislada (browser recién lanzado, un solo goto): esta
+        // misma página navega en <500ms. Verificado también con más timeout
+        // (evalTimeoutMs/comboTimeoutMs mucho mayores): no cambió ni un solo
+        // resultado, y falla igual en el primer viewport de la corrida que en el
+        // último — descarta degradación acumulada como única causa y apunta a
+        // contención de recursos puntual del sandbox/proxy. Se le da un proceso
+        // de Chromium recién lanzado en cada intento (ver maxAttempts abajo) en
+        // vez de perseguir el síntoma con más margen.
+        const stalledProcess = browser.process ? browser.process() : null;
+        await withTimeout(browser.close(), 5000, 'browser.close (prelanzamiento product.html)').catch(() => {});
+        try { stalledProcess?.kill('SIGKILL'); } catch {}
+        browser = await launchBrowser();
+      }
+      // product.html cuelga de forma no determinista incluso con un browser
+      // recién lanzado (falla tanto en el primer como en el último viewport de
+      // la corrida). Se reintenta el combo completo, con otro browser recién
+      // lanzado, cuando la falla es de infraestructura (isTransientComboError):
+      // un defecto real de UI nunca llega a este catch (ver comentario de la
+      // función), así que nunca se reintenta por error.
+      const maxAttempts = pageInfo.path.startsWith('product') ? 2 : 1;
+      for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
       const entry = { page: pageInfo.path, viewport: viewport.id, width: viewport.width, height: viewport.height, issues: [] };
       // Promise.race (usado por withTimeout) no cancela la promesa perdedora:
       // si el watchdog de 60s gana la carrera, runPage() sigue ejecutándose en
       // segundo plano (reproducido en local: navigateWithRetry termina sus
       // reintentos varios segundos después y duplica el log/reporte de este
       // mismo combo usando un browser que la rama de recuperación ya cerró).
-      // Este flag evita que ese resultado tardío se reporte dos veces.
+      // Este flag evita que ese resultado tardío se reporte dos veces. Al ser
+      // declarado dentro del bucle de reintentos, cada intento tiene su propio
+      // `entry`/`handled`: un zombie de un intento anterior nunca puede tocar
+      // el `entry` del intento vigente.
       let handled = false;
       try {
         async function runPage() {
@@ -398,8 +443,8 @@ try {
 
           const page = await context.newPage();
           try {
-            await navigateWithRetry(page, `${baseURL}/${pageInfo.path}`, viewport.width, pageInfo);
-            entry.issues.push(...await inspectWithRetry(page, viewport.width, pageInfo));
+            await navigateWithRetry(page, `${baseURL}/${pageInfo.path}`, viewport.width, pageInfo, evalTimeoutMs);
+            entry.issues.push(...await inspectWithRetry(page, viewport.width, pageInfo, evalTimeoutMs));
           } catch (error) {
             // Si el watchdog externo ya decidió este combo mientras
             // navigateWithRetry/inspectWithRetry seguían pendientes, no se
@@ -439,25 +484,29 @@ try {
         // CDP deja de responder y ni page.goto ni sus timeouts internos de
         // Playwright llegan a dispararse), esto evita que el watchdog global
         // (WATCHDOG_MS) sea la única red de seguridad y aborte toda la corrida.
-        await withTimeout(runPage(), 60000, `combo ${currentStep}`);
+        await withTimeout(runPage(), comboTimeoutMs, `combo ${currentStep}`);
+        break;
       } catch (error) {
         // El proceso de Chromium puede morir o colgarse de forma abrupta bajo
         // este sandbox (sin dbus, red vía proxy con handshakes TLS fallidos de
         // fondo), lo cual antes propagaba una excepción no capturada que
         // abortaba TODA la corrida (perdiendo el resto de páginas/viewports
         // pendientes) o dependía únicamente del watchdog global de 8 minutos.
-        // Se registra el fallo puntual de este combo y se fuerza el cierre del
-        // proceso de Chromium (por si quedó colgado) antes de relanzarlo.
+        // Se fuerza el cierre del proceso de Chromium (por si quedó colgado)
+        // antes de relanzarlo, y solo se registra el fallo del combo cuando ya
+        // no quedan reintentos (o la falla no es de tipo transitorio).
         handled = true;
         const message = error?.message || String(error);
-        entry.issues.push(message);
-        failures.push(`${pageInfo.path} ${viewport.width}×${viewport.height}: ${message}`);
-        console.log(`ERROR — ${pageInfo.path} ${viewport.width}×${viewport.height} — ${message}`);
-        report.push(entry);
         const stalledProcess = browser.process ? browser.process() : null;
         await withTimeout(browser.close(), 5000, 'browser.close').catch(() => {});
         try { stalledProcess?.kill('SIGKILL'); } catch {}
         browser = await launchBrowser();
+        if (attempt < maxAttempts && isTransientComboError(message)) continue;
+        entry.issues.push(message);
+        failures.push(`${pageInfo.path} ${viewport.width}×${viewport.height}: ${message}`);
+        console.log(`ERROR — ${pageInfo.path} ${viewport.width}×${viewport.height} — ${message}`);
+        report.push(entry);
+      }
       }
     }
     await browser.close().catch(() => {});
