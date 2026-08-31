@@ -7,7 +7,7 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260831-product-loading-4';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260816-loader-shell-bridge-1';
-const LOADER_VERSION = 'tintin-20260830-store-gate-api-1';
+const LOADER_VERSION = 'tintin-20260831-instant-auth-reveal-once-1';
 const STORE_GATE_VERSION = 'tintin-20260830-store-gate-api-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260831-instant-auth-reveal-once-1';
@@ -325,6 +325,18 @@ for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') &&
     changed += 1;
     console.log(`session version synced ${page}`);
   }
+}
+
+const bootstrapFile = path.join(ROOT, 'js', 'inicio-navegacion-publica.js');
+const bootstrapBefore = fs.readFileSync(bootstrapFile, 'utf8').replace(/\r\n?/g, '\n');
+const bootstrapAfter = bootstrapBefore.replace(
+  /const ENTRY_VERSION = '[^']+';/,
+  `const ENTRY_VERSION = '${NAV_ENTRY_VERSION}';`
+);
+if (bootstrapAfter !== bootstrapBefore) {
+  fs.writeFileSync(bootstrapFile, bootstrapAfter, 'utf8');
+  changed += 1;
+  console.log('synced js/inicio-navegacion-publica.js');
 }
 
 console.log(`Public shell sync completed. Changed files: ${changed}`);
