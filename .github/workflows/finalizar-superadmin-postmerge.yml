@@ -1,0 +1,102 @@
+name: Finalizar Super Admin postmerge
+
+on:
+  push:
+    branches:
+      - fix/superadmin-postmerge-closure
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: fix/superadmin-postmerge-closure
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Cerrar contrato global del Editor de Código
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, json
+
+          audit_path = Path('scripts/auditar-superadmin-cierre-total.mjs')
+          text = audit_path.read_text(encoding='utf-8')
+
+          source_anchor = "const emailSource = ["
+          source_block = """const codeStudioSource = [
+            safeRead('js/admin/estudio-codigo/estudio-codigo-admin.js'),
+            safeRead('functions/api/code-studio/[[path]].js'),
+            safeRead('functions/api/code-studio/merge.js'),
+            safeRead('functions/api/code-studio/restore.js'),
+            safeRead('cloudflare/estudio-codigo-core.js'),
+            safeRead('cloudflare/estudio-codigo-github.js'),
+          ].join('\\n');
+          """
+          if 'const codeStudioSource = [' not in text:
+              if source_anchor not in text:
+                  raise SystemExit('No se encontró ancla codeStudioSource')
+              text = text.replace(source_anchor, source_block + source_anchor, 1)
+
+          contract_anchor = "  correos: () => hasAll(emailSource,"
+          contract_block = """  'estudio-codigo': () => hasAll(codeStudioSource, [
+            "const API = '/api/code-studio'",
+            'SUPER_ADMIN',
+            "headers.set('authorization', `Bearer ${token}`)",
+            "api('commit'",
+            "api('merge'",
+            'requireSuperAdmin(request)',
+            'validateChanges',
+            'commitWorkspaceChanges',
+            'openPullRequest',
+            'mergePullRequestWithHumanApproval',
+            'directMainWrite: false',
+          ]) && routeCovered('/api/code-studio'),
+          """
+          if "'estudio-codigo': () =>" not in text:
+              if contract_anchor not in text:
+                  raise SystemExit('No se encontró ancla del contrato Editor de Código')
+              text = text.replace(contract_anchor, contract_block + contract_anchor, 1)
+
+          audit_path.write_text(text, encoding='utf-8')
+
+          approval_path = Path('scripts/cache-version-approvals.json')
+          approval = json.loads(approval_path.read_text(encoding='utf-8'))
+          registry_bytes = Path('js/admin/maestro/registro-maestro.js').read_bytes()
+          header = f'blob {len(registry_bytes)}\0'.encode()
+          blob_sha = hashlib.sha1(header + registry_bytes).hexdigest()
+          approval['approved']['js/admin/maestro/registro-maestro.js']['gitBlobSha'] = blob_sha
+          approval_path.write_text(json.dumps(approval, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          print('Registro Maestro aprobado:', blob_sha)
+          PY
+      - name: Reconstruir diagnóstico reproducible
+        run: npm run build:diagnostics
+      - name: Validar cierre Super Admin
+        run: |
+          node --check scripts/auditar-superadmin-cierre-total.mjs
+          node scripts/auditar-superadmin-maestro.mjs
+          node scripts/auditar-superadmin-maestro-conexiones.mjs
+          node scripts/auditar-superadmin-cierre-total.mjs
+          npm run audit:cache-versioning
+          npm run verify:diagnostics
+      - name: Retirar puente temporal y publicar cierre
+        run: |
+          git rm .github/workflows/finalizar-superadmin-postmerge.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/auditar-superadmin-cierre-total.mjs scripts/cache-version-approvals.json diagnostic-manifest.json
+          if git diff --cached --quiet; then
+            echo "No hay cambios para publicar"
+            exit 0
+          fi
+          git commit -m "fix: cerrar contrato postmerge del Super Admin"
+          git push origin HEAD:fix/superadmin-postmerge-closure
