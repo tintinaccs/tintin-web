@@ -14,6 +14,7 @@ const admin = read('admin.html');
 const ui = read('js/admin/products/borrado-global-catalogo-admin.js');
 const api = read('functions/api/admin-catalog-delete.js');
 const domain = read('cloudflare/borrado-global-catalogo.js');
+const resilience = read('cloudflare/resiliencia-sync-catalogo.js');
 const appsScript = read('apps-script/ProductosUnificados.gs');
 const engagement = read('apps-script/Participacion.gs');
 
@@ -46,9 +47,23 @@ expect(!domain.includes("deletePaths.add(`auditLog/"), 'La purga no debe borrar 
 expect(domain.includes("['unassign', 'reassign', 'delete'].includes(productMode)") && domain.includes("productMode === 'delete'") && domain.includes("productMode === 'reassign'"), 'Colecciones no cubre eliminar/reasignar/desasignar productos.');
 expect(domain.includes("mergeFields: ['category', 'collection', 'updatedAt']"), 'La eliminación de colección no limpia ambas referencias category/collection.');
 
+// Garantías de resiliencia entre sistemas: no hay transacción distribuida real
+// entre Firestore y Google Sheets, así que se exige preflight antes del delete,
+// reintentos posteriores y una cola persistente para no esconder un fallo.
+expect(api.includes('preflightProductsSheet(idToken, affectedProductIds)'), 'La API no hace preflight real de Google Sheets antes del borrado.');
+expect(api.indexOf('await preflightProductsSheet(idToken, affectedProductIds);') < api.indexOf('const result = await runCatalogAction(action, env, body, scope, false'), 'El preflight de Sheets debe ocurrir antes de la destrucción real.');
+expect(api.includes('finalizeProductsSheet(env, idToken, affectedProductIds'), 'La API no reintenta el cierre de la hoja Productos después de Firestore.');
+expect(api.includes('retryPendingCatalogSheets(env, idToken)'), 'La API no reconcilia tareas pendientes de Sheets.');
+expect(resilience.includes('const MAX_ATTEMPTS = 4'), 'La resiliencia no conserva cuatro intentos de cierre.');
+expect(resilience.includes("const QUEUE_COLLECTION = 'catalogSheetSyncQueue'"), 'Falta cola persistente de reconciliación de catálogo.');
+expect(resilience.includes("status: 'pending'"), 'La cola de Sheets no registra estado pendiente explícito.');
+expect(resilience.includes('await syncProductsWithRetry(idToken, [ids[0]], { attempts: 2 })'), 'El preflight no prueba el Apps Script real con un producto canónico.');
+expect(resilience.includes('await syncProductsWithRetry(idToken, ids, { attempts: MAX_ATTEMPTS })'), 'El cierre no reintenta la sincronización completa.');
+expect(resilience.includes('firestoreAdminListAll(env, QUEUE_COLLECTION, MAX_PENDING)'), 'Las reconciliaciones pendientes no se vuelven a leer para su cierre.');
+
 if (failures.length) {
   console.error(`Borrado global de catálogo: ${failures.length} fallo(s):`);
   failures.forEach(item => console.error(`  - ${item}`));
   process.exit(1);
 }
-console.log('Borrado global de catálogo: contrato completo (Super Admin, Firebase, social, Sheets, Productos y Colecciones).');
+console.log('Borrado global de catálogo: contrato completo (Super Admin, Firebase, social, Sheets, preflight, reintentos, Productos y Colecciones).');
