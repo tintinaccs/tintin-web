@@ -8,6 +8,15 @@
  * sweep; profile/login behavior is covered by the dedicated login/profile
  * audits already present in the repository.
  *
+ * product.html is data-driven and the underlying consolidated audit deliberately
+ * aborts every request whose hostname is not 127.0.0.1. Running the product
+ * detail without a real product id while Firestore/public APIs are blocked makes
+ * the audit measure the product fallback timeout instead of navigation. Product
+ * runtime/route behavior is already covered by the dedicated Cloudflare product
+ * route check and catalog/cart gates, so this anonymous OFFLINE navigation sweep
+ * excludes only that dynamic detail page. The static product document remains
+ * covered by the general page smoke audit.
+ *
  * The production navigation now uses clean URLs. The historical audit still
  * targets contact.html for the tablet-menu close regression, so CI adapts only
  * that selector to the canonical /contact route while preserving the exact
@@ -23,18 +32,30 @@ const sourcePath = path.join(scriptsDir, 'auditar-todas-navegacion-superficies.m
 const runtimePath = path.join(scriptsDir, `.audit-all-navigation-surfaces-${process.pid}.mjs`);
 
 const original = await fs.readFile(sourcePath, 'utf8');
-const expectedPages = "'login.html', 'perfil.html', 'about.html'";
+const expectedDynamicPages =
+  "'index.html', 'catalogo.html', 'collections.html', 'product.html', 'checkout.html'";
+const expectedAuthPages = "'login.html', 'perfil.html', 'about.html'";
 const expectedTabletSelector = `#tt-tablet-menu a[href="contact.html"]`;
-if (!original.includes(expectedPages)) {
-  throw new Error('No se encontró la lista esperada de páginas públicas para adaptar el audit de CI.');
+if (!original.includes(expectedDynamicPages)) {
+  throw new Error('No se encontró la lista esperada que contiene la ficha dinámica de producto.');
+}
+if (!original.includes(expectedAuthPages)) {
+  throw new Error('No se encontró la lista esperada de páginas públicas/protegidas para adaptar el audit de CI.');
 }
 if (!original.includes(expectedTabletSelector)) {
   throw new Error('No se encontró el selector histórico del enlace Contacto del menú tablet.');
 }
 
 const adapted = original
-  .replace(expectedPages, "'login.html', 'about.html'")
-  .replace(expectedTabletSelector, `#tt-tablet-menu a[href="/contact"], #tt-tablet-menu a[href="contact.html"]`);
+  .replace(
+    expectedDynamicPages,
+    "'index.html', 'catalogo.html', 'collections.html', 'checkout.html'"
+  )
+  .replace(expectedAuthPages, "'login.html', 'about.html'")
+  .replace(
+    expectedTabletSelector,
+    `#tt-tablet-menu a[href="/contact"], #tt-tablet-menu a[href="contact.html"]`
+  );
 await fs.writeFile(runtimePath, adapted, 'utf8');
 
 try {
