@@ -287,11 +287,11 @@ async function settleAuthRedirect(page, pageInfo, startUrl) {
   }
 }
 
-async function navigateWithRetry(page, url, width, pageInfo, evalTimeoutMs) {
+async function navigateWithRetry(page, url, width, pageInfo, evalTimeoutMs, navTimeoutMs = 15000) {
   let lastError;
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     try {
-      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
+      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: navTimeoutMs });
       await settleAuthRedirect(page, pageInfo, page.url());
       await prepare(page, width, pageInfo, evalTimeoutMs);
       return;
@@ -379,7 +379,12 @@ try {
       // mas margen en cada capa (evaluate y watchdog del combo completo) en vez de
       // subir el default para el resto de paginas, que no tienen ese temporizador
       // interno — mismo criterio ya aplicado en auditar-todas-navegacion-superficies.mjs.
+      // NOTA: hasta este commit ese margen nunca alcanzaba al propio page.goto —
+      // su timeout seguia hardcodeado en 15000ms en navigateWithRetry sin importar
+      // esta pagina, que es exactamente el error observado en CI en 2 de los 7
+      // viewports ("page.goto: Timeout 15000ms exceeded"). Se sube tambien aqui.
       const evalTimeoutMs = pageInfo.path.startsWith('product') ? 20000 : undefined;
+      const navTimeoutMs = pageInfo.path.startsWith('product') ? 30000 : 15000;
       const comboTimeoutMs = pageInfo.path.startsWith('product') ? 90000 : 60000;
       if (pageInfo.path.startsWith('product')) {
         // Verificado de forma aislada (browser recién lanzado, un solo goto): esta
@@ -451,7 +456,7 @@ try {
 
           const page = await context.newPage();
           try {
-            await navigateWithRetry(page, `${baseURL}/${pageInfo.path}`, viewport.width, pageInfo, evalTimeoutMs);
+            await navigateWithRetry(page, `${baseURL}/${pageInfo.path}`, viewport.width, pageInfo, evalTimeoutMs, navTimeoutMs);
             entry.issues.push(...await inspectWithRetry(page, viewport.width, pageInfo, evalTimeoutMs));
           } catch (error) {
             // Si el watchdog externo ya decidió este combo mientras
