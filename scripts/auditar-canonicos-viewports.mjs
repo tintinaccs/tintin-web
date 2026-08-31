@@ -92,10 +92,21 @@ const closeServer = () => new Promise(resolve => server.close(resolve));
 
 let currentStep = 'inicio';
 const WATCHDOG_MS = 480000;
-const watchdogTimer = setTimeout(() => {
-  console.error(`\nAUDIT COLGADO: sin progreso tras ${WATCHDOG_MS}ms. Ultimo paso: ${currentStep}`);
-  process.exit(1);
-}, WATCHDOG_MS);
+// Antes era un setTimeout de un solo disparo desde el arranque del script:
+// con ~126 combinaciones y relanzamientos ocasionales del browser, la corrida
+// completa puede legítimamente superar los 8 minutos sin que ninguna página
+// concreta esté colgada, y el mensaje "sin progreso" resultaba engañoso. Se
+// reinicia en cada avance real (resetWatchdog) para que solo dispare cuando
+// de verdad no hay progreso durante WATCHDOG_MS.
+let watchdogTimer;
+function resetWatchdog() {
+  clearTimeout(watchdogTimer);
+  watchdogTimer = setTimeout(() => {
+    console.error(`\nAUDIT COLGADO: sin progreso tras ${WATCHDOG_MS}ms. Ultimo paso: ${currentStep}`);
+    process.exit(1);
+  }, WATCHDOG_MS);
+}
+resetWatchdog();
 
 // page.evaluate() no respeta page.setDefaultTimeout() (a diferencia de
 // waitForFunction/waitForSelector, que ya tienen timeout explícito abajo): si
@@ -303,70 +314,156 @@ async function inspectWithRetry(page, width, pageInfo) {
 }
 
 await listen();
-const browser = await chromium.launch({
-  headless: true,
-  ...(process.env.PLAYWRIGHT_EXECUTABLE_PATH
-    ? { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH }
-    : {})
-});
+
+const PREINSTALLED_CHROMIUM = '/opt/pw-browsers/chromium';
+
+function resolveExecutablePath() {
+  // chromium.launch({headless:true}) y chromium.executablePath() resuelven la
+  // ruta según la revisión que espera el paquete npm de playwright instalado,
+  // que en este sandbox no coincide con la única revisión de Chromium
+  // preinstalada (el paquete pide una revisión más nueva que la presente en
+  // /opt/pw-browsers). El binario preinstalado sigue siendo un Chromium válido,
+  // así que se usa directamente cuando existe.
+  if (process.env.PLAYWRIGHT_EXECUTABLE_PATH) return process.env.PLAYWRIGHT_EXECUTABLE_PATH;
+  if (fs.existsSync(PREINSTALLED_CHROMIUM)) return PREINSTALLED_CHROMIUM;
+  return chromium.executablePath();
+}
+
+function launchBrowser() {
+  return chromium.launch({
+    headless: true,
+    executablePath: resolveExecutablePath()
+  });
+}
+
 const failures = [];
 const report = [];
 
 try {
   for (const viewport of canonicalViewports) {
-    const context = await browser.newContext({
-      viewport: { width: viewport.width, height: viewport.height },
-      ignoreHTTPSErrors: true,
-      serviceWorkers: 'block',
-      reducedMotion: 'reduce'
-    });
-    await context.addInitScript(() => {
-      window.TT_DISABLE_STORE_GATE = true;
-      window.TINTIN_ENABLE_PUBLIC_ACTIVITY = false;
-      try { localStorage.setItem('tt_privacy_consent_v1', 'accepted'); } catch {}
-    });
-    // Sin esto, páginas que importan módulos de Firebase desde
-    // https://www.gstatic.com (p. ej. product.html vía proteccion-sesion.js y
-    // resenas-producto.js) dependen de red real: en el runner de CI esas
-    // peticiones pueden tardar más que el timeout de navegación y cuelgan
-    // domcontentloaded. Se aborta todo lo que no sea el propio servidor local,
-    // igual que ya hace auditar-todas-navegacion-superficies.mjs.
-    await context.route('**/*', route => {
-      try {
-        const url = new URL(route.request().url());
-        if (url.hostname !== host) return route.abort();
-      } catch {}
-      return route.continue();
-    });
-
+    // Un browser nuevo por viewport (en vez de uno solo para las ~126
+    // combinaciones de la corrida completa) evita que el proceso de Chromium
+    // acumule degradación (procesos de render huérfanos, presión de memoria)
+    // tras varias decenas de páginas cargadas: reproducido de forma estable
+    // en local como un cuelgue o cierre del propio browser en product.html,
+    // siempre alrededor de la página ~50 de la corrida sin importar el orden
+    // ni el reuso de context — es decir, ligado a la vida del proceso del
+    // browser, no a un context ni a una página concreta.
+    let browser = await launchBrowser();
     for (const pageInfo of pages) {
       currentStep = `${pageInfo.path} ${viewport.width}×${viewport.height}`;
-      const page = await context.newPage();
+      resetWatchdog();
       const entry = { page: pageInfo.path, viewport: viewport.id, width: viewport.width, height: viewport.height, issues: [] };
+      // Promise.race (usado por withTimeout) no cancela la promesa perdedora:
+      // si el watchdog de 60s gana la carrera, runPage() sigue ejecutándose en
+      // segundo plano (reproducido en local: navigateWithRetry termina sus
+      // reintentos varios segundos después y duplica el log/reporte de este
+      // mismo combo usando un browser que la rama de recuperación ya cerró).
+      // Este flag evita que ese resultado tardío se reporte dos veces.
+      let handled = false;
       try {
-        await navigateWithRetry(page, `${baseURL}/${pageInfo.path}`, viewport.width, pageInfo);
-        entry.issues.push(...await inspectWithRetry(page, viewport.width, pageInfo));
+        async function runPage() {
+          // Un context nuevo por página (en vez de reutilizar uno para las ~18
+          // páginas del viewport) replica el patrón ya usado en
+          // auditar-todas-navegacion-superficies.mjs: reutilizar un solo context
+          // para navegaciones sucesivas acumula recursos del motor (listeners,
+          // observers, timers de páginas ya cerradas) hasta saturar el hilo
+          // principal del renderer, lo que hace colgar page.evaluate() en una
+          // página posterior de la secuencia (reproducido de forma aislada en
+          // product.html tras ~16 navegaciones previas en el mismo context).
+          const context = await browser.newContext({
+            viewport: { width: viewport.width, height: viewport.height },
+            ignoreHTTPSErrors: true,
+            serviceWorkers: 'block',
+            reducedMotion: 'reduce'
+          });
+          await context.addInitScript(() => {
+            window.TT_DISABLE_STORE_GATE = true;
+            window.TINTIN_ENABLE_PUBLIC_ACTIVITY = false;
+            try { localStorage.setItem('tt_privacy_consent_v1', 'accepted'); } catch {}
+          });
+          // Sin esto, páginas que importan módulos de Firebase desde
+          // https://www.gstatic.com (p. ej. product.html vía proteccion-sesion.js y
+          // resenas-producto.js) dependen de red real: en el runner de CI esas
+          // peticiones pueden tardar más que el timeout de navegación y cuelgan
+          // domcontentloaded. Se aborta todo lo que no sea el propio servidor local,
+          // igual que ya hace auditar-todas-navegacion-superficies.mjs.
+          await context.route('**/*', route => {
+            try {
+              const url = new URL(route.request().url());
+              if (url.hostname !== host) return route.abort();
+            } catch {}
+            return route.continue();
+          });
+
+          const page = await context.newPage();
+          try {
+            await navigateWithRetry(page, `${baseURL}/${pageInfo.path}`, viewport.width, pageInfo);
+            entry.issues.push(...await inspectWithRetry(page, viewport.width, pageInfo));
+          } catch (error) {
+            // Si el watchdog externo ya decidió este combo mientras
+            // navigateWithRetry/inspectWithRetry seguían pendientes, no se
+            // agrega este mensaje tardío al `entry` ya reportado.
+            if (!handled) entry.issues.push(error?.message || String(error));
+          }
+
+          // Se revisa aquí y otra vez después del await de abajo: ese await
+          // (screenshot) es un punto de reanudación donde el watchdog externo
+          // puede ganarle la carrera a esta misma ejecución abandonada — si solo
+          // se revisara una vez antes del await, el catch externo podía mutar el
+          // `entry` compartido y marcar `handled` DURANTE el await, y esta
+          // función seguía igual hasta su propio log/report ya con handled=true.
+          if (handled) return;
+
+          if (entry.issues.length) {
+            await page.screenshot({
+              path: path.join(artifactDir, `${pageInfo.id || pageInfo.path}-${viewport.width}x${viewport.height}.png`),
+              fullPage: false
+            }).catch(() => {});
+          }
+
+          if (handled) return;
+
+          if (entry.issues.length) {
+            failures.push(`${pageInfo.path} ${viewport.width}×${viewport.height}: ${entry.issues.join(' | ')}`);
+          }
+          console.log(`${entry.issues.length ? 'ERROR' : 'OK'} — ${pageInfo.path} ${viewport.width}×${viewport.height}${entry.issues.length ? ` — ${entry.issues.join(' | ')}` : ''}`);
+          report.push(entry);
+          await page.close().catch(() => {});
+          await context.close().catch(() => {});
+        }
+
+        // Watchdog de reloj real (setTimeout de Node, no depende de que el
+        // navegador responda) para el combo completo: si Chromium se queda
+        // colgado sin cerrarse ni lanzar error (reproducido en local: el pipe
+        // CDP deja de responder y ni page.goto ni sus timeouts internos de
+        // Playwright llegan a dispararse), esto evita que el watchdog global
+        // (WATCHDOG_MS) sea la única red de seguridad y aborte toda la corrida.
+        await withTimeout(runPage(), 60000, `combo ${currentStep}`);
       } catch (error) {
-        entry.issues.push(error?.message || String(error));
+        // El proceso de Chromium puede morir o colgarse de forma abrupta bajo
+        // este sandbox (sin dbus, red vía proxy con handshakes TLS fallidos de
+        // fondo), lo cual antes propagaba una excepción no capturada que
+        // abortaba TODA la corrida (perdiendo el resto de páginas/viewports
+        // pendientes) o dependía únicamente del watchdog global de 8 minutos.
+        // Se registra el fallo puntual de este combo y se fuerza el cierre del
+        // proceso de Chromium (por si quedó colgado) antes de relanzarlo.
+        handled = true;
+        const message = error?.message || String(error);
+        entry.issues.push(message);
+        failures.push(`${pageInfo.path} ${viewport.width}×${viewport.height}: ${message}`);
+        console.log(`ERROR — ${pageInfo.path} ${viewport.width}×${viewport.height} — ${message}`);
+        report.push(entry);
+        const stalledProcess = browser.process ? browser.process() : null;
+        await withTimeout(browser.close(), 5000, 'browser.close').catch(() => {});
+        try { stalledProcess?.kill('SIGKILL'); } catch {}
+        browser = await launchBrowser();
       }
-
-      if (entry.issues.length) {
-        failures.push(`${pageInfo.path} ${viewport.width}×${viewport.height}: ${entry.issues.join(' | ')}`);
-        await page.screenshot({
-          path: path.join(artifactDir, `${pageInfo.id || pageInfo.path}-${viewport.width}x${viewport.height}.png`),
-          fullPage: false
-        }).catch(() => {});
-      }
-
-      console.log(`${entry.issues.length ? 'ERROR' : 'OK'} — ${pageInfo.path} ${viewport.width}×${viewport.height}${entry.issues.length ? ` — ${entry.issues.join(' | ')}` : ''}`);
-      report.push(entry);
-      await page.close();
     }
-    await context.close();
+    await browser.close().catch(() => {});
   }
 } finally {
   clearTimeout(watchdogTimer);
-  await browser.close();
   await closeServer();
 }
 
