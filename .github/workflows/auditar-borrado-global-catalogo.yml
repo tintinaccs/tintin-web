@@ -1,0 +1,58 @@
+name: Borrado global de catálogo
+
+on:
+  pull_request:
+    paths:
+      - 'admin.html'
+      - 'js/admin/products/**'
+      - 'functions/api/admin-catalog-delete.js'
+      - 'cloudflare/borrado-global-catalogo.js'
+      - 'scripts/auditar-borrado-global-catalogo*'
+      - 'apps-script/**'
+      - '.github/workflows/auditar-borrado-global-catalogo.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'admin.html'
+      - 'js/admin/products/**'
+      - 'functions/api/admin-catalog-delete.js'
+      - 'cloudflare/borrado-global-catalogo.js'
+      - 'scripts/auditar-borrado-global-catalogo*'
+      - 'apps-script/**'
+      - '.github/workflows/auditar-borrado-global-catalogo.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  catalog-global-delete:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Validar sintaxis
+        run: |
+          node --check functions/api/admin-catalog-delete.js
+          node --check cloudflare/borrado-global-catalogo.js
+          node --check js/admin/products/borrado-global-catalogo-admin.js
+      - name: Auditar contrato global
+        run: node scripts/auditar-borrado-global-catalogo.mjs
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Validar Desktop Tablet Mobile
+        run: node scripts/auditar-borrado-global-catalogo-responsive.mjs
+      - name: Validar caché immutable
+        run: node scripts/auditar-versionado-cache.mjs
+      - name: Guardar evidencia responsive
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: catalog-global-delete-responsive
+          path: artifacts/catalog-global-delete-responsive.json
+          if-no-files-found: ignore
