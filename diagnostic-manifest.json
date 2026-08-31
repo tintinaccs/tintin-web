@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-31T20:03:22.030Z",
-  "sourceFingerprint": "6a22c4edaaa883e9bfecc000f83bdc1923cf49c2f0d3c3821de8aa416ef68e49",
+  "generatedAt": "2026-08-31T20:10:59.114Z",
+  "sourceFingerprint": "1f98ceb7573e5122bde8277134e532d2ac1c4da18c8140cd79b6806dff3da6e1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 804,
-    "textFiles": 772,
-    "totalBytes": 8878080,
+    "files": 805,
+    "textFiles": 773,
+    "totalBytes": 8879397,
     "pages": 18,
     "modules": 522
   },
@@ -25518,8 +25518,8 @@
     },
     {
       "path": "scripts/auditar-borrado-global-catalogo-responsive.mjs",
-      "bytes": 4334,
-      "sha256": "6f6983ba63cb3ae97129387cce0a69f48dc24ba672fdc4a01af179046730a460",
+      "bytes": 4328,
+      "sha256": "bfa58399f1a9d6b1b182d1c3669e8638ec88167b87098fb1121014d42ed37105",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31353,6 +31353,12 @@
       "sha256": "f224696da578a2907249a4b78ba4829c3ac3e891cb752a6570b328130de04719"
     },
     {
+      "path": ".github/workflows/regenerar-manifiesto-borrado-global-fix.yml",
+      "extension": ".yml",
+      "bytes": 1323,
+      "sha256": "355c4d8c895d45c5019520ad4afce3e5a71c63f5d1cef629af757db48f573f05"
+    },
+    {
       "path": ".github/workflows/respaldo-repositorio.yml",
       "extension": ".yml",
       "bytes": 1741,
@@ -34679,8 +34685,8 @@
     {
       "path": "scripts/auditar-borrado-global-catalogo-responsive.mjs",
       "extension": ".mjs",
-      "bytes": 4334,
-      "sha256": "6f6983ba63cb3ae97129387cce0a69f48dc24ba672fdc4a01af179046730a460"
+      "bytes": 4328,
+      "sha256": "bfa58399f1a9d6b1b182d1c3669e8638ec88167b87098fb1121014d42ed37105"
     },
     {
       "path": "scripts/auditar-borrado-global-catalogo.mjs",
