@@ -1,4 +1,4 @@
-name: Regenerar manifiesto final Maestro
+name: Regenerar manifiesto final Maestro v2
 
 on:
   push:
@@ -18,22 +18,22 @@ jobs:
         with:
           ref: feat/superadmin-maestro-crud
           fetch-depth: 0
-      - name: Eliminar utilidades temporales antes del inventario
-        run: rm -f .github/workflows/regen-maestro-manifest-final.yml .github/workflows/regen-maestro-manifest-temp.yml
+      - name: Eliminar esta utilidad antes del inventario
+        run: rm -f .github/workflows/regen-maestro-manifest-final.yml
       - name: Regenerar manifiesto exacto
         run: node scripts/construir-manifiesto-diagnostico.js
       - name: Verificar contratos finales
         run: |
+          node scripts/auditar-tipografia.js
           node scripts/verificar-manifiesto-diagnostico.js
           node scripts/auditar-superadmin-maestro.mjs
           node scripts/auditar-superadmin-maestro-conexiones.mjs
           node scripts/auditar-versionado-cache.mjs
           git diff --check
-      - name: Guardar árbol final
+      - name: Guardar árbol final limpio
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "chore: regenerar manifiesto final Super Admin Maestro"
-          git pull --rebase origin feat/superadmin-maestro-crud
+          git commit -m "chore: cerrar manifiesto final Super Admin Maestro"
           git push origin HEAD:feat/superadmin-maestro-crud
