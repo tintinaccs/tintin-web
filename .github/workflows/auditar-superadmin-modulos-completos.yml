@@ -1,0 +1,61 @@
+name: Super Admin — módulos completos
+
+on:
+  pull_request:
+    paths:
+      - 'admin.html'
+      - 'admin-images.html'
+      - 'js/admin/**'
+      - 'js/pages/**'
+      - 'js/components/**'
+      - 'functions/api/**'
+      - 'cloudflare/**'
+      - 'firestore.rules'
+      - '_routes.json'
+      - 'scripts/auditar-superadmin-modulos-completos.mjs'
+      - '.github/workflows/auditar-superadmin-modulos-completos.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'admin.html'
+      - 'admin-images.html'
+      - 'js/admin/**'
+      - 'js/pages/**'
+      - 'js/components/**'
+      - 'functions/api/**'
+      - 'cloudflare/**'
+      - 'firestore.rules'
+      - '_routes.json'
+      - 'scripts/auditar-superadmin-modulos-completos.mjs'
+      - '.github/workflows/auditar-superadmin-modulos-completos.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  domain-completeness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Auditar cada módulo como dueño de su dominio
+        run: node scripts/auditar-superadmin-modulos-completos.mjs
+      - name: Validar cierre global existente
+        run: node scripts/auditar-superadmin-cierre-total.mjs
+      - name: Validar Maestro como gobierno, no sustituto
+        run: node scripts/auditar-superadmin-maestro.mjs
+      - name: Verificar caché y diagnóstico
+        run: |
+          node scripts/auditar-versionado-cache.mjs
+          npm run verify:diagnostics
+      - name: Guardar evidencia por módulo
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: superadmin-modulos-completos
+          path: artifacts/superadmin-modulos-completos.json
+          if-no-files-found: warn
