@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-31T18:50:39.840Z",
-  "sourceFingerprint": "19fb5a5879acf5f1d48568bfd533edaa5793c797f75b0b64a7d8ebf546c1d4e3",
+  "generatedAt": "2026-08-31T19:51:57.906Z",
+  "sourceFingerprint": "71ca1b29e9f0eed6b0f28cb05681828100d3404817861c8c79a45f3a529080d0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 797,
-    "textFiles": 765,
-    "totalBytes": 8827629,
+    "files": 803,
+    "textFiles": 771,
+    "totalBytes": 8868049,
     "pages": 18,
-    "modules": 516
+    "modules": 521
   },
   "viewports": [
     {
@@ -2046,8 +2046,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 187274,
-      "sha256": "7cc6075cdfe9467b6d217c78ba3410e8faff1b8985da0512a0ef888dc4e3e51e",
+      "bytes": 187405,
+      "sha256": "8bc354abf2ab082007f553565715afacee215ca3dc9c948876f6bc6b567ddc1f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2136,9 +2136,14 @@
           "line": 2188
         },
         {
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260831-catalog-global-delete-1",
+          "target": "js/admin/products/borrado-global-catalogo-admin.js",
+          "line": 2189
+        },
+        {
           "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-1",
           "target": "js/admin/maestro/panel-maestro.js",
-          "line": 2189
+          "line": 2190
         }
       ],
       "styles": [
@@ -2381,9 +2386,15 @@
           "exists": true
         },
         {
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260831-catalog-global-delete-1",
+          "target": "js/admin/products/borrado-global-catalogo-admin.js",
+          "line": 2189,
+          "exists": true
+        },
+        {
           "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-1",
           "target": "js/admin/maestro/panel-maestro.js",
-          "line": 2189,
+          "line": 2190,
           "exists": true
         },
         {
@@ -17389,6 +17400,45 @@
       "endpoints": []
     },
     {
+      "path": "cloudflare/borrado-global-catalogo.js",
+      "bytes": 14049,
+      "sha256": "4073e136931d373ba87b833c0e51de46a131b98262df3ed9b4917b718f5b966d",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 9
+        },
+        {
+          "raw": "./sheets-sync-config.js",
+          "target": "cloudflare/sheets-sync-config.js",
+          "dynamic": false,
+          "line": 10
+        },
+        {
+          "raw": "./sincronizacion-participacion-sheets.js",
+          "target": "cloudflare/sincronizacion-participacion-sheets.js",
+          "dynamic": false,
+          "line": 11
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.googleapis.com/auth/datastore",
+          "line": 13
+        },
+        {
+          "url": "https://firestore.googleapis.com/v1/projects/$%7Bsa.project_id%7D/databases/(default",
+          "line": 49
+        }
+      ]
+    },
+    {
       "path": "cloudflare/contrato-cuentas-generado.js",
       "bytes": 769,
       "sha256": "5f8b3140a95a0c686faa43b343098f31b4c9726eab814196f213153b4a1e5d70",
@@ -18198,6 +18248,30 @@
           "target": "cloudflare/inyectar-estudio-codigo-admin.js",
           "dynamic": false,
           "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "functions/api/admin-catalog-delete.js",
+      "bytes": 3547,
+      "sha256": "54f7bb44252b1030eeb4a85530128c6ed45ae68a48ec16ab364d91ffccbe4925",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "../../cloudflare/borrado-global-catalogo.js",
+          "target": "cloudflare/borrado-global-catalogo.js",
+          "dynamic": false,
+          "line": 10
         }
       ],
       "endpoints": []
@@ -20723,6 +20797,35 @@
         }
       ],
       "endpoints": []
+    },
+    {
+      "path": "js/admin/products/borrado-global-catalogo-admin.js",
+      "bytes": 11507,
+      "sha256": "9bfd52a09b2dc42990afa619e8da38bb1d6fb1851ca6a87fe2a65e032f7edbbb",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
+          "target": "js/core/firebase/firebase.js",
+          "dynamic": false,
+          "line": 7
+        },
+        {
+          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
+          "target": null,
+          "dynamic": false,
+          "line": 8
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
+          "line": 8
+        }
+      ]
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -25382,6 +25485,72 @@
           "line": 73
         }
       ]
+    },
+    {
+      "path": "scripts/auditar-borrado-global-catalogo-responsive.mjs",
+      "bytes": 4334,
+      "sha256": "6f6983ba63cb3ae97129387cce0a69f48dc24ba672fdc4a01af179046730a460",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "playwright",
+          "target": "scripts/playwright",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/auditar-borrado-global-catalogo.mjs",
+      "bytes": 4735,
+      "sha256": "0817f9f684737dd168860495b9379ff8a0ca55de3e4799c2011fb1d3a8c48a16",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "scripts/auditar-canonicos-viewports.mjs",
@@ -30932,6 +31101,12 @@
       "sha256": "e3da226ea01fe7111f0123d5f518f96c6d372e4b8f481a5f607d175304e69009"
     },
     {
+      "path": ".github/workflows/auditar-borrado-global-catalogo.yml",
+      "extension": ".yml",
+      "bytes": 1907,
+      "sha256": "28bbc45d3297fe41bd3782ef47df60c2603a310eeff73bac7674c6235c2e8382"
+    },
+    {
       "path": ".github/workflows/auditar-calidad-nivel-3.yml",
       "extension": ".yml",
       "bytes": 5409,
@@ -31240,8 +31415,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 187274,
-      "sha256": "7cc6075cdfe9467b6d217c78ba3410e8faff1b8985da0512a0ef888dc4e3e51e"
+      "bytes": 187405,
+      "sha256": "8bc354abf2ab082007f553565715afacee215ca3dc9c948876f6bc6b567ddc1f"
     },
     {
       "path": "apple-touch-icon.png",
@@ -31482,6 +31657,12 @@
       "extension": ".js",
       "bytes": 3655,
       "sha256": "108f248a16155c32b9c167d42989c764d353046256f7433c35591dea15ed5e7b"
+    },
+    {
+      "path": "cloudflare/borrado-global-catalogo.js",
+      "extension": ".js",
+      "bytes": 14049,
+      "sha256": "4073e136931d373ba87b833c0e51de46a131b98262df3ed9b4917b718f5b966d"
     },
     {
       "path": "cloudflare/contrato-cuentas-generado.js",
@@ -32474,6 +32655,12 @@
       "sha256": "d98f6866b917dcf2c2000c609c2f67858460cafbb841f2146ea9cc713a02df96"
     },
     {
+      "path": "functions/api/admin-catalog-delete.js",
+      "extension": ".js",
+      "bytes": 3547,
+      "sha256": "54f7bb44252b1030eeb4a85530128c6ed45ae68a48ec16ab364d91ffccbe4925"
+    },
+    {
       "path": "functions/api/admin-delete-user.js",
       "extension": ".js",
       "bytes": 2141,
@@ -33006,6 +33193,12 @@
       "extension": ".js",
       "bytes": 12450,
       "sha256": "19e4cf12a619415aec15b7a60590bad248116c5065f2d2a180b3b7cd82ade5d4"
+    },
+    {
+      "path": "js/admin/products/borrado-global-catalogo-admin.js",
+      "extension": ".js",
+      "bytes": 11507,
+      "sha256": "9bfd52a09b2dc42990afa619e8da38bb1d6fb1851ca6a87fe2a65e032f7edbbb"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -34448,6 +34641,18 @@
       "sha256": "57d71f1af343586ac19bb7990be38d1eaf0e496748a2a736d0a63e6116c58d4d"
     },
     {
+      "path": "scripts/auditar-borrado-global-catalogo-responsive.mjs",
+      "extension": ".mjs",
+      "bytes": 4334,
+      "sha256": "6f6983ba63cb3ae97129387cce0a69f48dc24ba672fdc4a01af179046730a460"
+    },
+    {
+      "path": "scripts/auditar-borrado-global-catalogo.mjs",
+      "extension": ".mjs",
+      "bytes": 4735,
+      "sha256": "0817f9f684737dd168860495b9379ff8a0ca55de3e4799c2011fb1d3a8c48a16"
+    },
+    {
       "path": "scripts/auditar-canonicos-viewports.mjs",
       "extension": ".mjs",
       "bytes": 13739,
@@ -35068,8 +35273,8 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 742,
-      "sha256": "b494187f5cd00e21f34ad31dbad5dd66a1437ee8a9817a74e4097e63314ce1b1"
+      "bytes": 952,
+      "sha256": "d654a5bcad16a73b1957ed75a16692d90f840d4983b7d1cfad02fcf8f700cd3e"
     },
     {
       "path": "scripts/cache-version-baseline.json",
