@@ -343,14 +343,29 @@ function launchBrowser() {
   return chromium.launch({
     headless: true,
     executablePath: resolveExecutablePath(),
-    // El runner de CI monta /dev/shm con un tamaño reducido; Chromium usa esa
-    // memoria compartida para buffers de compositing/GPU y, al agotarla bajo
-    // carga (decenas de páginas con canvas/imágenes/observers como
-    // product.html), el proceso de render se cuelga o muere de forma no
-    // determinística en vez de fallar con un error claro — coincide con el
-    // patrón ya documentado (cuelgue solo en CI, nunca en un goto aislado
-    // local). '--disable-dev-shm-usage' hace que use /tmp en su lugar.
-    args: ['--disable-dev-shm-usage']
+    args: [
+      // El runner de CI monta /dev/shm con un tamaño reducido; Chromium usa esa
+      // memoria compartida para buffers de compositing/GPU y, al agotarla bajo
+      // carga (decenas de páginas con canvas/imágenes/observers como
+      // product.html), el proceso de render se cuelga o muere de forma no
+      // determinística en vez de fallar con un error claro — coincide con el
+      // patrón ya documentado (cuelgue solo en CI, nunca en un goto aislado
+      // local). '--disable-dev-shm-usage' hace que use /tmp en su lugar.
+      '--disable-dev-shm-usage',
+      // context.route() aborta toda petición a un host que no sea 127.0.0.1,
+      // pero esa intercepción ocurre después de la resolución DNS real. Este
+      // sandbox de CI enruta la red saliente por un proxy con handshakes TLS
+      // fallidos de fondo (ver comentario más abajo sobre gstatic.com): si esa
+      // resolución/conexión real se demora, el bloqueo ocurre antes de que
+      // route() pueda intervenir. product.html es la página con más imports
+      // externos (varios submódulos de firebasejs vía gstatic.com), por lo que
+      // es la más expuesta. Mapear cualquier host a loopback hace que la
+      // resolución sea instantánea y el intento de conexión falle de inmediato
+      // (nada escucha ese puerto ahí) en vez de depender del proxy/DNS real.
+      // El servidor local ya se referencia por IP literal (127.0.0.1), así que
+      // esta regla no lo afecta.
+      "--host-resolver-rules=MAP * 127.0.0.1"
+    ]
   });
 }
 
