@@ -51,13 +51,14 @@ const requiredSections = [
 ];
 check('admin-sections', 'Las superficies base del Admin siguen presentes', requiredSections.every(section => has(files.admin, `section-${section}`)), requiredSections.join(', '));
 
-check('maestro-bootstrap', 'Maestro está conectado al bootstrap administrativo', has(files.maestroBootstrap, './maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-1'));
+check('maestro-entry', 'Maestro tiene entrada versionada directa desde admin.html', has(files.admin, 'js/admin/maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-1'));
+check('maestro-bootstrap-clean', 'El bootstrap responsive histórico conserva su responsabilidad original', !has(files.maestroBootstrap, 'maestro/panel-maestro'));
 check('maestro-registry', 'Maestro consume un registro único de módulos y capacidades', hasAll(files.maestro, ['MAESTRO_MODULES', 'BASE_ADMIN_SECTIONS', 'capabilityLabel']));
 check('maestro-no-direct-firestore', 'Maestro no salta los contratos escribiendo directo en Firestore', !/\b(addDoc|setDoc|updateDoc|deleteDoc|writeBatch|runTransaction)\b/.test(files.maestro));
-check('maestro-version-lock', 'Panel, registro y bootstrap usan la misma versión Maestro',
+check('maestro-version-lock', 'Panel, registro y entrada HTML usan la misma versión Maestro',
   (files.maestro.match(/tintin-20260831-superadmin-maestro-1/g) || []).length >= 2 &&
-  has(files.maestroBootstrap, 'tintin-20260831-superadmin-maestro-1') &&
-  !/superadmin-maestro-(?!1\b)\d+/.test(files.maestro + files.maestroRegistry + files.maestroBootstrap));
+  has(files.admin, 'js/admin/maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-1') &&
+  !/superadmin-maestro-(?!1\b)\d+/.test(files.maestro + files.maestroRegistry + files.admin));
 
 check('orders-canonical-api', 'Crear pedidos desde Super Admin usa el endpoint canónico', has(files.orders, '/api/admin-order-mutation') && has(files.orderApi, 'createOrder'));
 check('orders-inventory', 'Editar pedidos está interconectado con integridad de inventario', hasAll(files.orders, ['TintinInventoryIntegrity', 'updateEditedOrder', 'transitionStatus']));
@@ -70,7 +71,9 @@ check('users-governance', 'Usuarios conservan gestión, roles, bloqueo, restaura
 check('permissions-real', 'Navegación sensible está gobernada por permisos reales', hasAll(files.adminApp, ['SECTION_PERMISSION', 'requiredPerm', 'SUPER_ADMIN']));
 check('rules-present', 'Firestore Rules forman parte de la conexión de datos', /match\s+\/databases\/\{database\}\/documents/.test(files.firestoreRules));
 
-check('engagement-admin-api', 'Reseñas y Me gusta mutan por API administrativa protegida', has(files.participation, '/api/admin-engagement') && has(files.adminEngagementApi, 'SUPER_ADMIN'));
+check('engagement-admin-api', 'Reseñas y Me gusta mutan por API administrativa protegida',
+  has(files.participation, '/api/admin-engagement') &&
+  hasAll(files.adminEngagementApi, ['requireSuperAdmin', 'originIsAllowed', "request.method !== 'POST'"]));
 check('engagement-public-api', 'La participación pública usa el endpoint social canónico', has(files.engagementApi, 'onRequest') || has(files.engagementApi, 'export'));
 check('engagement-product', 'Producto mantiene la superficie social conectada', /review|reseña|comment|comentario|like|me-gusta/i.test(files.publicProduct));
 
@@ -82,8 +85,7 @@ check('pages-root', 'Páginas está interconectado con el root administrable rea
 check('email-center', 'Centro de Correos conserva paneles de pedidos, plantillas, promociones e historial', hasAll(files.admin, ['correos-panel-pedidos', 'correos-panel-plantillas', 'correos-panel-promociones', 'correos-panel-historial']));
 check('store-gate', 'Configuración de tienda está conectada al estado público', /store|tienda/i.test(files.storeSettings) && has(files.admin, 'cfg-store-open'));
 check('audit-log', 'El Admin mantiene registro de auditoría para mutaciones sensibles', /audit/i.test(files.adminApp) && has(files.admin, 'audit-tbody'));
-check('diagnostics', 'Diagnóstico integral permanece conectado y en modo de solo lectura', hasAll(files.admin, ['btn-run-site-diagnostics', 'Modo de solo lectura']))
-;
+check('diagnostics', 'Diagnóstico integral permanece conectado y en modo de solo lectura', hasAll(files.admin, ['btn-run-site-diagnostics', 'Modo de solo lectura']));
 
 const failed = checks.filter(item => !item.ok);
 const payload = {
