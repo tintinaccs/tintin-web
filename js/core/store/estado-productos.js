@@ -20,7 +20,7 @@ import {
   writeCached
 } from '../firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
 import { listPublicCollectionRest } from '../firebase/respaldo-rest-firestore.js?v=tintin-20260726-browser-fallback-1';
-import { fetchPublicCatalogResource } from '../firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1';
+import { fetchPublicCatalogResource, fetchPublicProduct } from '../firebase/catalogo-publico-api.js?v=tintin-20260831-product-loading-1';
 import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1';
 
 const ALL_CACHE_KEY = 'products:cards';
@@ -335,6 +335,15 @@ async function fetchSingleProduct(id) {
   return product;
 }
 
+async function fetchSingleProductFromEdge(id) {
+  const item = await fetchPublicProduct(id);
+  if (!item) return null;
+  const product = mapProduct(item.id, item.data);
+  if (window.TintinCatalogPolicy?.isCatalogVisible && !window.TintinCatalogPolicy.isCatalogVisible(product)) return null;
+  writeCached(`product:${id}`, product);
+  return product;
+}
+
 async function fetchRelatedProducts(product) {
   if (!product?.category) return [];
   if (!await appCheckReady) return [];
@@ -367,17 +376,36 @@ async function startProductRealtime(id) {
   if (!normalizedId) return Promise.resolve(publish([], 'missing-id'));
   if (publicProductReady && publicProductId === normalizedId) return publicProductReady;
 
-  if (!await appCheckReady) {
-    const products = await loadAllProducts();
-    const product = products.find(item => String(item.id) === normalizedId);
-    return publish(product ? [product] : [], product ? 'rest-fallback' : 'rest-fallback-missing');
-  }
-
   stopProductRealtime();
   publicProductId = normalizedId;
 
   const cachedProduct = readCached(`product:${normalizedId}`, PRODUCT_CACHE_TTL);
   if (cachedProduct) publish([cachedProduct], 'cache');
+
+  // La ficha no debe esperar a App Check ni descargar los ~1000 productos del
+  // catálogo para resolver uno solo. La API pública canónica consulta el mismo
+  // documento por ID y queda en paralelo mientras App Check prepara realtime.
+  // Si responde primero, el producto se pinta de inmediato; si App Check está
+  // disponible, el listener SDK toma luego el control y mantiene precio/stock vivo.
+  const edgeResultPromise = runSingleFlight(
+    `product:edge:${normalizedId}`,
+    () => fetchSingleProductFromEdge(normalizedId)
+  ).then(product => {
+    if (publicProductId !== normalizedId) return { ok: true, product, published: null };
+    if (product) {
+      publicProductCurrent = product;
+      return { ok: true, product, published: publish([product], 'edge-product') };
+    }
+    return { ok: true, product: null, published: publish([], 'edge-product-missing') };
+  }).catch(error => ({ ok: false, error, product: null, published: null }));
+
+  const appCheckAvailable = await appCheckReady;
+  if (!appCheckAvailable) {
+    const edgeResult = await edgeResultPromise;
+    if (edgeResult.ok) return edgeResult.published || publish(edgeResult.product ? [edgeResult.product] : [], edgeResult.product ? 'edge-product' : 'edge-product-missing');
+    if (cachedProduct) return publish([cachedProduct], 'stale-cache');
+    throw edgeResult.error;
+  }
 
   publicProductReady = new Promise((resolve, reject) => {
     let settled = false;
@@ -433,7 +461,20 @@ async function startProductRealtime(id) {
       async error => {
         publicProductUnsubscribe = null;
         publicProductReady = null;
-        window.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
+        // No se emite products-error todavía: ese evento es terminal para la
+        // ficha y antes reiniciaba su watchdog aun cuando el fallback seguía vivo.
+        // Primero agotamos las autoridades ya existentes; recién el rechazo final
+        // de loadProductPage se transforma en un único error visible.
+        const edgeResult = await edgeResultPromise;
+        if (edgeResult.ok) {
+          if (edgeResult.product) {
+            settle(edgeResult.published || publish([edgeResult.product], 'edge-product-fallback'));
+          } else {
+            settle(edgeResult.published || publish([], 'edge-product-missing'));
+          }
+          return;
+        }
+
         try {
           const product = await runSingleFlight(
             `product:${normalizedId}`,
@@ -448,7 +489,7 @@ async function startProductRealtime(id) {
           }
         } catch (fallbackError) {
           if (cachedProduct) settle(publish([cachedProduct], 'stale-cache'));
-          else reject(fallbackError);
+          else reject(fallbackError || error);
         }
       }
     );
