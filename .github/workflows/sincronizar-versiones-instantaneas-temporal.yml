@@ -1,0 +1,56 @@
+name: Sincronizar versiones instantáneas temporal
+
+on:
+  push:
+    branches: [feat/instant-auth-notifications-reveal-once]
+    paths:
+      - '.github/workflows/sincronizar-versiones-instantaneas-temporal.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: feat/instant-auth-notifications-reveal-once
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Actualizar sincronizador canónico
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/sincronizar-inicio-navegacion-publica.js')
+          s = p.read_text()
+          s = s.replace("const LOADER_VERSION = 'tintin-20260830-store-gate-api-1';", "const LOADER_VERSION = 'tintin-20260831-instant-auth-reveal-once-1';")
+          marker = "console.log(`Public shell sync completed. Changed files: ${changed}`);"
+          insertion = """const bootstrapFile = path.join(ROOT, 'js', 'inicio-navegacion-publica.js');\nconst bootstrapBefore = fs.readFileSync(bootstrapFile, 'utf8').replace(/\\r\\n?/g, '\\n');\nconst bootstrapAfter = bootstrapBefore.replace(\n  /const ENTRY_VERSION = '[^']+';/,\n  `const ENTRY_VERSION = '${NAV_ENTRY_VERSION}';`\n);\nif (bootstrapAfter !== bootstrapBefore) {\n  fs.writeFileSync(bootstrapFile, bootstrapAfter, 'utf8');\n  changed += 1;\n  console.log('synced js/inicio-navegacion-publica.js');\n}\n\nconsole.log(`Public shell sync completed. Changed files: ${changed}`);"""
+          if marker not in s:
+              raise SystemExit('No se encontró final del sincronizador')
+          s = s.replace(marker, insertion)
+          p.write_text(s)
+          PY
+      - name: Sincronizar todas las páginas
+        run: node scripts/sincronizar-inicio-navegacion-publica.js
+      - name: Quitar workflow temporal
+        run: git rm .github/workflows/sincronizar-versiones-instantaneas-temporal.yml
+      - name: Regenerar diagnóstico
+        run: npm run build:diagnostics
+      - name: Verificar funcionalidad nueva
+        run: |
+          node scripts/auditar-instantaneidad-reveal-unico.mjs
+          node scripts/auditar-sitio-confiabilidad.js
+          npm run verify:diagnostics
+      - name: Commit reproducible
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: sincronizar versiones de identidad y reveal" || exit 0
+          git push origin HEAD:feat/instant-auth-notifications-reveal-once
