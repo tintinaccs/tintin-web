@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-31T20:56:25.020Z",
-  "sourceFingerprint": "9ee7d67c7607bb3cbcec3a0dcb4214b3c19136ac3a4a172ee88f361a28ecc3b8",
+  "generatedAt": "2026-08-31T22:24:10.570Z",
+  "sourceFingerprint": "b2668e122aec409180c01b55a6bc382c9d7ae127e90698711ba05d176d4a0f00",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 806,
-    "textFiles": 774,
-    "totalBytes": 8899984,
+    "files": 807,
+    "textFiles": 775,
+    "totalBytes": 8906696,
     "pages": 18,
     "modules": 523
   },
@@ -20510,8 +20510,8 @@
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
-      "bytes": 8586,
-      "sha256": "d6d1ce8a5d3e53a5f60612d0ae73f0d7db2a8d2a27b721ee18b54b58c9e7be97",
+      "bytes": 9077,
+      "sha256": "f421cb358314a57e4a5d2714c1f7c2dfae7d695d2cc2587c26446623669b4f8b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27825,8 +27825,8 @@
     },
     {
       "path": "scripts/auditar-superadmin-cierre-total.mjs",
-      "bytes": 15489,
-      "sha256": "5e0dc63135c040503106d0a72c95fbbd1ac9732de7aa245c1b111328400c4fe8",
+      "bytes": 16251,
+      "sha256": "e69dc83df0385158da6e0dc3dd17bfe7f5eaa8df857477d56c70cbf1ecffc8c8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31377,6 +31377,12 @@
       "sha256": "6a2eca592cb337151a33f84556075cf6a15d7329c7cff4eae016b6e43ce70d2f"
     },
     {
+      "path": ".github/workflows/finalizar-superadmin-postmerge.yml",
+      "extension": ".yml",
+      "bytes": 4813,
+      "sha256": "3434ccd8d6d4ccf2434c5fffc71c9ecd08a445ecf1b063b669578a20e0bd0c75"
+    },
+    {
       "path": ".github/workflows/lanzar-diagnostico-maestro.yml",
       "extension": ".yml",
       "bytes": 1139,
@@ -33203,8 +33209,8 @@
     {
       "path": "js/admin/maestro/registro-maestro.js",
       "extension": ".js",
-      "bytes": 8586,
-      "sha256": "d6d1ce8a5d3e53a5f60612d0ae73f0d7db2a8d2a27b721ee18b54b58c9e7be97"
+      "bytes": 9077,
+      "sha256": "f421cb358314a57e4a5d2714c1f7c2dfae7d695d2cc2587c26446623669b4f8b"
     },
     {
       "path": "js/admin/notifications/enlace-pedido-push.js",
@@ -35261,8 +35267,8 @@
     {
       "path": "scripts/auditar-superadmin-cierre-total.mjs",
       "extension": ".mjs",
-      "bytes": 15489,
-      "sha256": "5e0dc63135c040503106d0a72c95fbbd1ac9732de7aa245c1b111328400c4fe8"
+      "bytes": 16251,
+      "sha256": "e69dc83df0385158da6e0dc3dd17bfe7f5eaa8df857477d56c70cbf1ecffc8c8"
     },
     {
       "path": "scripts/auditar-superadmin-maestro-conexiones.mjs",
@@ -35351,8 +35357,8 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 952,
-      "sha256": "d654a5bcad16a73b1957ed75a16692d90f840d4983b7d1cfad02fcf8f700cd3e"
+      "bytes": 1598,
+      "sha256": "69a733d83ff9675fd44eb2d46f2a3629593819a2aca67ee2fb89b76529a7760f"
     },
     {
       "path": "scripts/cache-version-baseline.json",
