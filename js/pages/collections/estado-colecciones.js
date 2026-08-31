@@ -78,53 +78,40 @@ function attachProductsReactivity() {
 function publishPublic(collections, source) {
   latestVisibleCollections = collections.filter(item => item.visible !== false);
   republishToPublicSubscribers(source);
-}
-
-async function fetchPublicCollectionsSdk() {
-  const snapshot = await getDocs(query(collection(db, 'collections'), limit(300)));
-  recordFirestoreRead('collections:public', snapshot.size);
-  return snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data()));
-}
-
-async function fetchPublicCollectionsRest() {
-  const documents = await listPublicCollectionRest('collections', 300);
-  recordFirestoreRead('collections:public-rest-fallback', documents.length);
-  return documents.map(item => normalizeCollectionDoc(item.id, item.data));
+  return sortCols(withResolvedImages(latestVisibleCollections));
 }
 
 async function fetchPublicCollections() {
-  let collections;
+  let list;
   try {
-    const items = await fetchPublicCatalogResource('collections');
-    collections = items.map(item => normalizeCollectionDoc(item.id, item.data));
+    const documents = await fetchPublicCatalogResource('collections');
+    list = documents.map(item => normalizeCollectionDoc(item.id, item.data));
   } catch (edgeError) {
     try {
-      collections = await fetchPublicCollectionsRest();
+      const documents = await listPublicCollectionRest('collections', 200);
+      recordFirestoreRead('collections:public-rest-fallback', documents.length);
+      list = documents.map(item => normalizeCollectionDoc(item.id, item.data));
     } catch (restError) {
       if (!await appCheckReady) throw restError;
-      collections = await fetchPublicCollectionsSdk();
+      const snapshot = await getDocs(query(collection(db, 'collections'), limit(200)));
+      recordFirestoreRead('collections:public', snapshot.size);
+      list = snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data()));
     }
   }
-  const normalized = sortCols(collections.filter(item => item.visible));
-  if (normalized.length) writeCached(CACHE_KEY, normalized);
-  publishPublic(normalized, 'edge-or-firestore-fallback');
-  return normalized;
+  writeCached(CACHE_KEY, list);
+  return publishPublic(list, 'edge-or-firestore-fallback');
 }
 
-export async function loadPublicCollections(options = {}) {
-  attachProductsReactivity();
+export async function loadCollections(options = {}) {
   const force = options.force === true;
   if (!force) {
     const cached = readCached(CACHE_KEY, CACHE_TTL);
-    if (Array.isArray(cached) && cached.length) {
-      const normalized = sortCols(cached.filter(item => item.visible !== false));
-      publishPublic(normalized, 'cache');
-      return normalized;
-    }
+    if (Array.isArray(cached)) return publishPublic(cached, 'cache');
   }
 
   const stale = readStaleCached(CACHE_KEY);
   if (!force && Array.isArray(stale) && stale.length) publishPublic(stale, 'stale-cache');
+
   try {
     return await runSingleFlight('collections:public', fetchPublicCollections);
   } catch (error) {
@@ -133,73 +120,42 @@ export async function loadPublicCollections(options = {}) {
   }
 }
 
-export async function startPublicCollectionsRealtime(callback) {
+export function onCollectionsUpdate(cb, onError) {
   attachProductsReactivity();
-  const subscriber = typeof callback === 'function' ? callback : () => {};
-  publicSubscribers.add(subscriber);
-  const initial = await loadPublicCollections();
-  if (latestVisibleCollections) subscriber(sortCols(withResolvedImages(latestVisibleCollections)), { source: 'initial' });
-
-  if (!await appCheckReady) {
-    return () => publicSubscribers.delete(subscriber);
-  }
-
-  let unsubscribe = null;
-  try {
-    unsubscribe = onSnapshot(
-      query(collection(db, 'collections'), limit(300)),
-      snapshot => {
-        recordFirestoreRead('collections:realtime', snapshot.size);
-        const collections = sortCols(snapshot.docs
-          .map(item => normalizeCollectionDoc(item.id, item.data()))
-          .filter(item => item.visible));
-        if (collections.length) writeCached(CACHE_KEY, collections);
-        publishPublic(collections, 'realtime');
-      },
-      () => {
-        // El cache/fallback ya mantiene la vista útil; no rompemos la experiencia pública.
-      }
-    );
-  } catch {
-    unsubscribe = null;
-  }
-
-  return () => {
-    publicSubscribers.delete(subscriber);
-    unsubscribe?.();
-  };
+  publicSubscribers.add(cb);
+  if (latestVisibleCollections) republishToPublicSubscribers('memory');
+  loadCollections().catch(error => {
+    console.error('[collections-store] load failed:', error.code || '', error.message || error);
+    if (typeof onError === 'function') onError(error);
+  });
+  return () => publicSubscribers.delete(cb);
 }
 
-export async function startAdminCollectionsRealtime(callback) {
-  const subscriber = typeof callback === 'function' ? callback : () => {};
-  adminSubscribers.add(subscriber);
-  if (!await appCheckReady) return () => adminSubscribers.delete(subscriber);
+function startAdminListener() {
+  if (adminUnsubscribe) return;
+  adminUnsubscribe = onSnapshot(query(collection(db, 'collections'), limit(200)), snapshot => {
+    recordFirestoreRead('collections:admin-live', snapshot.size);
+    const list = sortCols(snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data())));
+    adminSubscribers.forEach(cb => cb(list, null));
+    writeCached(CACHE_KEY, list);
+  }, error => {
+    adminSubscribers.forEach(cb => cb([], error));
+  });
+}
 
-  if (!adminUnsubscribe) {
-    adminUnsubscribe = onSnapshot(
-      query(collection(db, 'collections'), limit(300)),
-      snapshot => {
-        recordFirestoreRead('collections:admin-realtime', snapshot.size);
-        const collections = sortCols(snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data())));
-        adminSubscribers.forEach(cb => {
-          try {
-            cb(collections, { source: 'realtime' });
-          } catch (error) {
-            console.warn('[collections-store] admin subscriber error:', error);
-          }
-        });
-      },
-      error => {
-        console.warn('[collections-store] admin realtime error:', error);
-      }
-    );
-  }
-
+export function onAllCollectionsUpdate(cb) {
+  adminSubscribers.add(cb);
+  startAdminListener();
   return () => {
-    adminSubscribers.delete(subscriber);
+    adminSubscribers.delete(cb);
     if (!adminSubscribers.size && adminUnsubscribe) {
       adminUnsubscribe();
       adminUnsubscribe = null;
     }
   };
 }
+
+window.TintinCollectionsStore = {
+  load: loadCollections,
+  refresh: () => loadCollections({ force: true })
+};
