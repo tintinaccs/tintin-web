@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-31T18:47:54.519Z",
-  "sourceFingerprint": "1b5056815cb183fb266924c0b193eace3be54c4d6d409aab8b3074ff182fd0c7",
+  "generatedAt": "2026-08-31T18:50:39.840Z",
+  "sourceFingerprint": "19fb5a5879acf5f1d48568bfd533edaa5793c797f75b0b64a7d8ebf546c1d4e3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 798,
-    "textFiles": 766,
-    "totalBytes": 8829052,
+    "files": 797,
+    "textFiles": 765,
+    "totalBytes": 8827629,
     "pages": 18,
     "modules": 516
   },
@@ -31146,12 +31146,6 @@
       "extension": ".yml",
       "bytes": 1139,
       "sha256": "f224696da578a2907249a4b78ba4829c3ac3e891cb752a6570b328130de04719"
-    },
-    {
-      "path": ".github/workflows/regen-maestro-manifest-final.yml",
-      "extension": ".yml",
-      "bytes": 1423,
-      "sha256": "d4f65d3dddd2cb0805f8cef328ee2246ca4952cb255f3b708da1fa8b718f3b14"
     },
     {
       "path": ".github/workflows/respaldo-repositorio.yml",
