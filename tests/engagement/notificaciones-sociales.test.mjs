@@ -112,7 +112,7 @@ test('la ficha de producto admite Me gusta, respuestas y reseñas públicas con 
   assert.match(productReviews, /raw\.includes\('\*\*\*'\)/);
 });
 
-test('clientas tienen bandeja de 100, saneado, autolectura al abrir y reintentos', () => {
+test('clientas tienen bandeja de 100, saneado, autolectura canónica y reintentos', () => {
   assert.match(clientUi, /data-notification-badge/);
   assert.match(clientUi, /users'.*notifications|users.*,.*notifications/s);
   assert.match(clientUi, /notificationSeen/);
@@ -120,7 +120,11 @@ test('clientas tienen bandeja de 100, saneado, autolectura al abrir y reintentos
   assert.match(clientUi, /limit\(100\)/);
   assert.match(clientUi, /safeImageUrl/);
   assert.match(clientUi, /markVisibleNotificationsRead/);
-  assert.match(clientUi, /\[data-nav-action="notifications"\],#tabbar-notifications/);
+  assert.match(clientUi, /notificationsSurfaceIsOpen/);
+  assert.match(clientUi, /tintin:surface-change/);
+  assert.match(clientUi, /surface === 'notifications'/);
+  assert.match(clientUi, /state === 'opening' \|\| state === 'open'/);
+  assert.match(clientUi, /if \(notificationsSurfaceIsOpen\(\)\) void markVisibleNotificationsRead\(\)/);
   assert.match(clientUi, /apiWithRetry\('notificationsSeenAll'/);
   assert.match(clientUi, /apiWithRetry\('profileCreated'/);
   assert.doesNotMatch(clientUi, /id="tt-notifications-mark-all"/);
@@ -146,7 +150,7 @@ test('la campana pública evita Firestore para visitas livianas y se hidrata con
   }
 });
 
-test('superadmin recupera estados recientes y reintenta sin carreras', () => {
+test('superadmin recupera estados, auto-marca al abrir y resuelve snapshots tardíos', () => {
   assert.match(adminUi, /adminNotifications/);
   assert.match(adminUi, /adminOrderStatusChanged/);
   assert.match(adminUi, /adm-notifications-badge/);
@@ -156,6 +160,12 @@ test('superadmin recupera estados recientes y reintenta sin carreras', () => {
   assert.match(adminUi, /notifyOrderStatusWithRetry/);
   assert.match(adminUi, /recoverRecentOrderStatuses/);
   assert.match(adminUi, /safeImageUrl/);
+  assert.match(adminUi, /markVisibleNotificationsRead/);
+  assert.match(adminUi, /panelIsOpen/);
+  assert.match(adminUi, /apiWithRetry\('adminNotificationsSeenAll'/);
+  assert.match(adminUi, /if \(panelIsOpen\(\)\) void markVisibleNotificationsRead\(\)/);
+  assert.match(adminUi, /if \(opening\) window\.setTimeout\(\(\) => \{ void markVisibleNotificationsRead\(\); \}, 0\)/);
+  assert.doesNotMatch(adminUi, /adm-notifications-mark-all|Marcar todo leído/);
 });
 
 test('pedido nuevo registra actividad social en paralelo y con reintentos', () => {
