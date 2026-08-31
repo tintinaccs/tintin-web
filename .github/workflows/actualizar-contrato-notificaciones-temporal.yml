@@ -1,4 +1,4 @@
-name: Diagnosticar realtime y cache temporal
+name: Finalizar realtime sin doble suscripcion
 
 on:
   push:
@@ -7,21 +7,22 @@ on:
       - '.github/workflows/actualizar-contrato-notificaciones-temporal.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  diagnose:
+  finalize:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
         with:
           ref: feat/instant-auth-notifications-reveal-once
+          fetch-depth: 0
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
           cache: npm
       - run: npm ci
-      - name: Preparar contrato social nuevo solo en runner
+      - name: Persistir contrato social por identidad
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -36,38 +37,75 @@ jobs:
           replacement = """test('la campana pública evita Firestore para visitas y arranca al instante con identidad autenticada', () => {\n  assert.doesNotMatch(navigationRuntime, /function attachNotificationsDemand\\(\\)/);\n  assert.match(navigationRuntime, /NOTIFICATION_TRIGGER_SELECTOR/);\n  assert.match(navigationRuntime, /tintin:auth-identity/);\n  assert.match(navigationRuntime, /window\\.TintinAuthIdentity\\?\\.resolved/);\n  assert.match(navigationRuntime, /applyNotificationIdentity\\(Boolean\\(event\\.detail\\?\\.authenticated\\)\\)/);\n  assert.match(navigationRuntime, /if \\(!authenticated\\) \\{\\s*setNotificationTriggersVisible\\(false\\);\\s*return;/s);\n  assert.match(navigationRuntime, /void loadNotificationsRuntime\\(\\)\\s*\\.then\\(\\(\\) => setNotificationTriggersVisible\\(true\\)\\)/s);\n  assert.match(navigationRuntime, /return primeAuthRuntime\\(\\)/);\n  assert.doesNotMatch(navigationRuntime, /tt_session_started_at|hasActiveSessionHint\\(\\)/);\n  assert.match(sharedIcons, /bell:\\s*'<path/);\n  assert.match(desktopHeader, /svgIcon\\(UI_ICONS\\.bell/);\n  assert.match(tabletHeader, /svgIcon\\(UI_ICONS\\.bell/);\n  assert.match(mobileHeader, /svgIcon\\(UI_ICONS\\.bell/);\n  for (const source of [desktopHeader, tabletHeader, mobileHeader]) {\n    assert.match(source, /data-nav-action=\"notifications\"/);\n    assert.match(source, /data-notification-badge/);\n    assert.match(source, /\\shidden/);\n  }\n});"""
           p.write_text(s[:i] + replacement + s[j:])
           PY
-      - name: Test social actualizado
-        id: social
-        continue-on-error: true
+      - name: Deduplicar Auth cliente y Super Admin
         run: |
-          mkdir -p artifacts
-          set -o pipefail
-          node --test tests/engagement/notificaciones-sociales.test.mjs 2>&1 | tee artifacts/social-debug.log
-      - name: Test instantaneidad
-        id: instant
-        continue-on-error: true
+          python - <<'PY'
+          from pathlib import Path
+
+          client = Path('js/components/notifications/notificaciones-clientes.js')
+          s = client.read_text()
+          old_vars = "let authUnsubscribe = null;\nlet markingVisibleRead = false;\nlet subscribeRetryTimer = 0;"
+          new_vars = "let authUnsubscribe = null;\nlet markingVisibleRead = false;\nlet subscribeRetryTimer = 0;\nlet appliedAuthKey = '';\nlet profileRegisteredUid = '';"
+          if old_vars not in s:
+              raise SystemExit('No se encontró bloque de estado cliente')
+          s = s.replace(old_vars, new_vars, 1)
+          old_init = """export function initClientNotifications() {\n  if (initialized) return;\n  initialized = true;\n  ensureStyles();\n  ensureDrawer();\n  wireEvents();\n  setTriggersVisible(false);\n  authUnsubscribe = onAuthStateChanged(auth, user => {\n    currentUser = user || null;\n    setTriggersVisible(Boolean(user));\n    subscribe(currentUser);\n    if (currentUser) {\n      apiWithRetry('profileCreated').catch(error => console.warn('[notifications] No se pudo registrar el alta social:', error));\n    }\n  });\n}\n"""
+          new_init = """function applyClientAuthState(nextUser) {\n  const next = nextUser || null;\n  const nextKey = next?.uid ? `uid:${next.uid}` : 'guest';\n  const alreadyApplied = appliedAuthKey === nextKey;\n  currentUser = next;\n  setTriggersVisible(Boolean(next));\n\n  if (alreadyApplied && (next ? Boolean(unsubscribe || subscribeRetryTimer) : true)) return;\n  appliedAuthKey = nextKey;\n  subscribe(currentUser);\n\n  if (!currentUser) {\n    profileRegisteredUid = '';\n    return;\n  }\n  if (profileRegisteredUid === currentUser.uid) return;\n  profileRegisteredUid = currentUser.uid;\n  apiWithRetry('profileCreated').catch(error => console.warn('[notifications] No se pudo registrar el alta social:', error));\n}\n\nexport function initClientNotifications() {\n  if (initialized) return;\n  initialized = true;\n  ensureStyles();\n  ensureDrawer();\n  wireEvents();\n  setTriggersVisible(false);\n\n  // El shell ya hizo resolver Firebase Auth. Consumir currentUser evita esperar\n  // un segundo callback para abrir el listener realtime. El callback siguiente\n  // queda deduplicado por UID y solo sirve para cambios reales de sesión.\n  if (auth.currentUser) applyClientAuthState(auth.currentUser);\n  authUnsubscribe = onAuthStateChanged(auth, applyClientAuthState);\n}\n"""
+          if old_init not in s:
+              raise SystemExit('No se encontró init cliente')
+          client.write_text(s.replace(old_init, new_init, 1))
+
+          admin = Path('js/admin/notifications/notificaciones-admin.js')
+          s = admin.read_text()
+          old_vars = "const orderNotificationInFlight = new Set();"
+          new_vars = "const orderNotificationInFlight = new Set();\nlet appliedAdminAuthKey = '';"
+          if old_vars not in s:
+              raise SystemExit('No se encontró estado admin')
+          s = s.replace(old_vars, new_vars, 1)
+          start = s.find('ensureStyles();\nwireEvents();\nonAuthStateChanged(auth, current => {')
+          if start < 0:
+              raise SystemExit('No se encontró bootstrap admin')
+          new_tail = """function clearAdminNotificationSession() {\n  document.getElementById('adm-notifications-wrap')?.remove();\n  unsubscribeNotifications?.();\n  unsubscribeNotifications = null;\n  unsubscribeOrders?.();\n  unsubscribeOrders = null;\n  if (notificationsRetryTimer) window.clearTimeout(notificationsRetryTimer);\n  notificationsRetryTimer = 0;\n  if (ordersRetryTimer) window.clearTimeout(ordersRetryTimer);\n  ordersRetryTimer = 0;\n  notifications = [];\n  orderState = new Map();\n  ordersPrimed = false;\n  markingVisibleRead = false;\n  orderNotificationInFlight.clear();\n}\n\nfunction applyAdminAuthState(current) {\n  const currentEmail = String(current?.email || '').trim().toLowerCase();\n  const allowed = currentEmail === String(SUPER_ADMIN || '').trim().toLowerCase();\n  const nextKey = allowed && current?.uid ? `uid:${current.uid}` : 'unauthorized';\n  const alreadyApplied = appliedAdminAuthKey === nextKey;\n\n  if (!allowed) {\n    if (alreadyApplied && !user) return;\n    appliedAdminAuthKey = nextKey;\n    user = null;\n    clearAdminNotificationSession();\n    return;\n  }\n\n  user = current;\n  ensureUi();\n  if (alreadyApplied && unsubscribeNotifications && unsubscribeOrders) return;\n  appliedAdminAuthKey = nextKey;\n  subscribeNotifications();\n  subscribeOrderStatusChanges();\n}\n\nensureStyles();\nwireEvents();\n\n// Si el guard de Admin ya resolvió Auth, conectamos ambos listeners Firestore\n// en este mismo tick. onAuthStateChanged queda como fuente futura y se deduplica.\nif (auth.currentUser) applyAdminAuthState(auth.currentUser);\nonAuthStateChanged(auth, applyAdminAuthState);\n"""
+          admin.write_text(s[:start] + new_tail)
+
+          html = Path('admin.html')
+          h = html.read_text()
+          old = 'js/admin/notifications/notificaciones-admin.js?v=tintin-20260831-notifications-auto-read-1'
+          new = 'js/admin/notifications/notificaciones-admin.js?v=tintin-20260831-notifications-instant-1'
+          if old not in h:
+              raise SystemExit('No se encontró versión Admin anterior')
+          html.write_text(h.replace(old, new))
+          PY
+      - name: Endurecer auditor de cero doble carga
         run: |
-          set -o pipefail
-          node scripts/auditar-instantaneidad-reveal-unico.mjs 2>&1 | tee artifacts/instant-debug.log
-      - name: Test cache
-        id: cache
-        continue-on-error: true
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/auditar-instantaneidad-reveal-unico.mjs')
+          s = p.read_text()
+          marker = "check('admin-realtime', 'Super Admin escucha notificaciones con Firestore onSnapshot', adminNotifications.includes('onSnapshot(source')));"
+          insert = marker + "\ncheck('client-current-user-immediate', 'Cliente consume auth.currentUser sin esperar un segundo callback', clientNotifications.includes('if (auth.currentUser) applyClientAuthState(auth.currentUser)') && clientNotifications.includes('appliedAuthKey'));\ncheck('admin-current-user-immediate', 'Super Admin consume auth.currentUser y deduplica por UID', adminNotifications.includes('if (auth.currentUser) applyAdminAuthState(auth.currentUser)') && adminNotifications.includes('appliedAdminAuthKey'));"
+          if marker not in s:
+              raise SystemExit('No se encontró punto de inserción del auditor')
+          p.write_text(s.replace(marker, insert, 1))
+          PY
+      - name: Quitar workflow temporal
+        run: git rm .github/workflows/actualizar-contrato-notificaciones-temporal.yml
+      - name: Regenerar diagnostico
+        run: npm run build:diagnostics
+      - name: Validar cierre funcional
         run: |
-          set -o pipefail
-          node scripts/auditar-versionado-cache.mjs 2>&1 | tee artifacts/cache-debug.log
-      - name: Guardar diagnostico
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: realtime-cache-debug
-          path: artifacts/*-debug.log
-          if-no-files-found: error
-      - name: Resumen
-        if: always()
+          node --check js/components/notifications/notificaciones-clientes.js
+          node --check js/admin/notifications/notificaciones-admin.js
+          node --test tests/engagement/notificaciones-sociales.test.mjs
+          node scripts/auditar-instantaneidad-reveal-unico.mjs
+          node scripts/auditar-sitio-confiabilidad.js
+          node scripts/auditar-superadmin-cierre-total.mjs
+          node scripts/auditar-versionado-cache.mjs
+          npm run verify:diagnostics
+      - name: Commit final reproducible
         run: |
-          echo "social=${{ steps.social.outcome }}"
-          echo "instant=${{ steps.instant.outcome }}"
-          echo "cache=${{ steps.cache.outcome }}"
-          test "${{ steps.social.outcome }}" = success
-          test "${{ steps.instant.outcome }}" = success
-          test "${{ steps.cache.outcome }}" = success
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: cerrar notificaciones instantaneas y reveal unico" || exit 0
+          git push origin HEAD:feat/instant-auth-notifications-reveal-once
