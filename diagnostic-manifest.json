@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-31T10:12:37.981Z",
-  "sourceFingerprint": "ccbee43a448f661f24f12e1be6d989f5158e3c7dfad5b99d2eb0d7257247e0fe",
+  "generatedAt": "2026-08-31T22:54:02.114Z",
+  "sourceFingerprint": "106da407b2ebe31fe6ae51643378ebc66398201bf760dfb0219853a6a4d9673f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 790,
     "textFiles": 758,
-    "totalBytes": 8784498,
+    "totalBytes": 8783994,
     "pages": 18,
     "modules": 510
   },
@@ -24865,8 +24865,8 @@
     },
     {
       "path": "js/quality/estabilidad-final-publica.js",
-      "bytes": 19124,
-      "sha256": "9dd44199fca3253bff54810e8f033f6ce8802456a6106988c4dcc10c604260f4",
+      "bytes": 19549,
+      "sha256": "77d4bdda534fe8c70fcf896859034e32fa4e1175ed1e79fa5aace19657251ba8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24876,35 +24876,35 @@
           "raw": "../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4",
           "target": "js/core/firebase/firebase.js",
           "dynamic": true,
-          "line": 192
+          "line": 200
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
           "target": null,
           "dynamic": true,
-          "line": 193
+          "line": 201
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": true,
-          "line": 194
+          "line": 202
         },
         {
           "raw": "../pages/profile/estado-pedidos-perfil.js?v=tintin-20260829-final-stability-1",
           "target": "js/pages/profile/estado-pedidos-perfil.js",
           "dynamic": true,
-          "line": 326
+          "line": 334
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 193
+          "line": 201
         },
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 194
+          "line": 202
         }
       ]
     },
@@ -25310,8 +25310,8 @@
     },
     {
       "path": "scripts/auditar-canonicos-viewports.mjs",
-      "bytes": 28477,
-      "sha256": "fbc7e3b0c307cc11250c91f20e72b2c0286ee9a2b592a4ebf247611575d9f233",
+      "bytes": 27548,
+      "sha256": "53ae591efbdb082f83147eda18f3c468215778ba3b61208fa9b7f4f9ed41caf0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33859,8 +33859,8 @@
     {
       "path": "js/quality/estabilidad-final-publica.js",
       "extension": ".js",
-      "bytes": 19124,
-      "sha256": "9dd44199fca3253bff54810e8f033f6ce8802456a6106988c4dcc10c604260f4"
+      "bytes": 19549,
+      "sha256": "77d4bdda534fe8c70fcf896859034e32fa4e1175ed1e79fa5aace19657251ba8"
     },
     {
       "path": "js/quality/experiencia-interfaz.js",
@@ -34237,8 +34237,8 @@
     {
       "path": "scripts/auditar-canonicos-viewports.mjs",
       "extension": ".mjs",
-      "bytes": 28477,
-      "sha256": "fbc7e3b0c307cc11250c91f20e72b2c0286ee9a2b592a4ebf247611575d9f233"
+      "bytes": 27548,
+      "sha256": "53ae591efbdb082f83147eda18f3c468215778ba3b61208fa9b7f4f9ed41caf0"
     },
     {
       "path": "scripts/auditar-cargador-solid.js",
@@ -36783,14 +36783,14 @@
     },
     {
       "file": "js/quality/estabilidad-final-publica.js",
-      "line": 333,
+      "line": 341,
       "raw": "/product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "js/quality/estabilidad-final-publica.js",
-      "line": 334,
+      "line": 342,
       "raw": "/perfil.html",
       "target": "perfil.html",
       "exists": true
@@ -37066,7 +37066,7 @@
     },
     {
       "file": "js/quality/estabilidad-final-publica.js",
-      "line": 200,
+      "line": 208,
       "target": "/api/profile-avatar-upload",
       "method": "POST"
     },
@@ -38459,7 +38459,7 @@
           },
           {
             "file": "js/quality/estabilidad-final-publica.js",
-            "line": 219,
+            "line": 227,
             "operation": "doc"
           },
           {
