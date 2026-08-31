@@ -11,6 +11,8 @@ const baseURL = `http://${host}:${port}`;
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
 const mime = { '.css':'text/css; charset=utf-8','.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2' };
+const UI_WAIT_MS = 4000;
+const NAVIGATION_WAIT_MS = 8000;
 
 const server = http.createServer((request,response) => {
   const pathname = decodeURIComponent(new URL(request.url || '/',baseURL).pathname);
@@ -32,11 +34,14 @@ try {
     try { localStorage.setItem('tt_privacy_consent_v1','accepted'); } catch {}
   });
   const page = await context.newPage();
+  page.setDefaultTimeout(UI_WAIT_MS);
+  page.setDefaultNavigationTimeout(NAVIGATION_WAIT_MS);
   const runtimeErrors = [];
   page.on('pageerror',error => runtimeErrors.push(error.message));
   const widths = [320,360,390,430,767,768,820,1023,1024,1280,1440,1920];
   const routes = ['index.html','catalogo.html','collections.html','product.html','about.html','contact.html','checkout.html','perfil.html','envios.html','cambios-devoluciones.html','preguntas-frecuentes.html','terminos.html','privacidad.html'];
 
+  console.log('Responsive audit: validando navegación base en 12 anchos...');
   for (const width of widths) {
     await page.setViewportSize({ width,height:Math.max(760,Math.round(width * .72)) });
     await page.goto(`${baseURL}/index.html`,{ waitUntil:'domcontentloaded' });
@@ -50,7 +55,7 @@ try {
       await page.waitForFunction(() => {
         const pill = document.querySelector('.tt-desktop-active-pill');
         return !!pill && pill.classList.contains('is-ready') && pill.getBoundingClientRect().width > 20;
-      }, { timeout: 3000 }).catch(() => {});
+      }, null, { timeout: 3000 }).catch(() => check(false, `${width}px no prepara el indicador activo desktop dentro de 3 s`));
     }
     const state = await page.evaluate(() => {
       const visible = node => !!node && getComputedStyle(node).display !== 'none' && getComputedStyle(node).visibility !== 'hidden' && node.getBoundingClientRect().width > 0;
@@ -101,6 +106,7 @@ try {
     else { check(state.activeDesktop.includes('INICIO'), `${width}px no marca Inicio en desktop`); check(state.pillWidth > 20, `${width}px no calculó el pill desktop`); }
   }
 
+  console.log('Responsive audit: validando menú tablet...');
   for (const width of [768,820,1023,1024]) {
     await page.setViewportSize({ width,height:900 });
     await page.goto(`${baseURL}/index.html`,{ waitUntil:'domcontentloaded' });
@@ -125,11 +131,13 @@ try {
     check(await page.locator('#tablet-cats').evaluate(node => getComputedStyle(node).pointerEvents === 'auto' && node.querySelectorAll('a[href]').length > 0), `${width}px categorías tablet no son clicables`);
     await page.click('#btn-tablet-cats-back');
     await page.keyboard.press('Escape');
-    await page.waitForFunction(() => document.querySelector('#tt-tablet-menu')?.getAttribute('aria-hidden') === 'true', null, { timeout:1800 });
+    await page.waitForFunction(() => document.querySelector('#tt-tablet-menu')?.getAttribute('aria-hidden') === 'true', null, { timeout:1800 })
+      .catch(() => check(false, `${width}px Escape no cierra el menú tablet dentro de 1,8 s`));
     check(await page.locator('#tt-tablet-menu').getAttribute('aria-hidden') === 'true', `${width}px Escape no cierra el menú tablet`);
     check(await page.evaluate(() => document.activeElement?.id === 'btn-menu-tablet'), `${width}px no devuelve foco al botón tablet`);
   }
 
+  console.log('Responsive audit: validando superficies desktop y cambio de breakpoint...');
   await page.setViewportSize({ width:1440,height:900 });
   await page.goto(`${baseURL}/catalogo.html`,{ waitUntil:'domcontentloaded' });
   await page.waitForTimeout(500);
@@ -140,16 +148,19 @@ try {
   await page.evaluate(() => window.TintinSurfaceController.open('search', document.getElementById('btn-search')));
   check(await page.locator('#search-panel').getAttribute('aria-hidden') === 'false', 'Desktop no abre Buscar');
   await page.keyboard.press('Escape');
-  await page.waitForFunction(() => document.querySelector('#search-panel')?.getAttribute('aria-hidden') === 'true');
+  await page.waitForFunction(() => document.querySelector('#search-panel')?.getAttribute('aria-hidden') === 'true', null, { timeout: UI_WAIT_MS })
+    .catch(() => check(false, 'Desktop Buscar no cierra tras Escape dentro del límite'));
   await page.click('#btn-cuenta');
-  await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'false');
+  await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'false', null, { timeout: UI_WAIT_MS })
+    .catch(() => check(false, 'Desktop Cuenta no abre dentro del límite'));
   check(await page.locator('#account-drawer').evaluate(node => {
     const panel = node.querySelector('#account-panel');
     const controls = [...panel.querySelectorAll('a,button')];
     return getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto' && getComputedStyle(panel).pointerEvents === 'auto' && controls.length > 0 && controls.every(control => getComputedStyle(control).pointerEvents !== 'none');
   }), 'Desktop Cuenta muestra controles bloqueados o fondo no sólido');
   await page.click('#btn-account-close');
-  await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'true');
+  await page.waitForFunction(() => document.querySelector('#account-drawer')?.getAttribute('aria-hidden') === 'true', null, { timeout: UI_WAIT_MS })
+    .catch(() => check(false, 'Desktop Cuenta no cierra dentro del límite'));
   const rapidState = await page.evaluate(async () => {
     const controller = window.TintinSurfaceController;
     await Promise.allSettled([
@@ -167,8 +178,17 @@ try {
   check(rapidState.surface === 'search' && rapidState.state === 'open', `Cambio rápido deja estado incorrecto (${JSON.stringify(rapidState)})`);
   check(rapidState.backdrops === 1 && rapidState.cartHidden === 'true' && rapidState.searchHidden === 'false', `Cambio rápido deja superficies solapadas (${JSON.stringify(rapidState)})`);
   await page.setViewportSize({ width:820,height:900 });
-  await page.waitForFunction(() => window.TintinSurfaceController.surface === 'none');
+  await page.waitForFunction(() => window.TintinSurfaceController.surface === 'none', null, { timeout: UI_WAIT_MS })
+    .catch(async () => {
+      const surfaceState = await page.evaluate(() => ({
+        surface: window.TintinSurfaceController?.surface,
+        state: window.TintinSurfaceController?.state,
+        breakpoint: window.TintinSurfaceController?.breakpoint,
+      })).catch(() => ({}));
+      check(false, `Cambio desktop→tablet no cierra la superficie activa (${JSON.stringify(surfaceState)})`);
+    });
 
+  console.log('Responsive audit: validando superficies mobile...');
   await page.setViewportSize({ width:390,height:844 });
   await page.goto(`${baseURL}/catalogo.html`,{ waitUntil:'domcontentloaded' });
   await page.waitForTimeout(500);
@@ -185,7 +205,8 @@ try {
   check(await page.locator('#cart-drawer').getAttribute('aria-hidden') === 'false', 'Mobile no abre Carrito');
   check(await page.locator('#cart-drawer').evaluate(node => getComputedStyle(node).backgroundColor === 'rgb(255, 255, 255)' && getComputedStyle(node).pointerEvents === 'auto'), 'Mobile Carrito no es sólido o clicable');
   await page.keyboard.press('Escape');
-  await page.waitForFunction(() => document.querySelector('#cart-drawer')?.getAttribute('aria-hidden') === 'true');
+  await page.waitForFunction(() => document.querySelector('#cart-drawer')?.getAttribute('aria-hidden') === 'true', null, { timeout: UI_WAIT_MS })
+    .catch(() => check(false, 'Mobile Carrito no cierra tras Escape dentro del límite'));
   await page.click('#tabbar-cuenta');
   check(await page.locator('#account-drawer').getAttribute('aria-hidden') === 'false', 'Mobile no abre Cuenta compartida');
   check(await page.locator('#account-drawer').evaluate(node => {
@@ -195,6 +216,7 @@ try {
   }), 'Mobile Cuenta muestra controles bloqueados o fondo no sólido');
   await page.keyboard.press('Escape');
 
+  console.log('Responsive audit: validando 13 rutas en mobile/tablet/desktop...');
   for (const route of routes) {
     for (const width of [360,820,1280]) {
       await page.setViewportSize({ width,height:820 });
@@ -214,7 +236,7 @@ try {
       await page.click(trigger);
       check(await page.locator(surface).getAttribute('aria-hidden') === 'false', `${route} no abre ${surface} a ${width}px`);
       await page.keyboard.press('Escape');
-      await page.waitForFunction(selector => document.querySelector(selector)?.getAttribute('aria-hidden') === 'true', surface, { timeout:4000 })
+      await page.waitForFunction(selector => document.querySelector(selector)?.getAttribute('aria-hidden') === 'true', surface, { timeout:UI_WAIT_MS })
         .catch(() => check(false, `${route} no cierra ${surface} tras Escape a ${width}px`));
     }
   }
