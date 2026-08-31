@@ -43,7 +43,7 @@ expect(engagement.includes("event.operation === 'delete'") && engagement.include
 expect(domain.includes("preservedHistory: ['orders', 'auditLog']"), 'La política de preservación histórica no está explícita.');
 expect(!domain.includes("deletePaths.add(`orders/"), 'La purga no debe borrar pedidos históricos.');
 expect(!domain.includes("deletePaths.add(`auditLog/"), 'La purga no debe borrar auditLog histórico.');
-expect(domain.includes("productMode === 'delete'") && domain.includes("productMode === 'reassign'") && domain.includes("productMode === 'unassign'"), 'Colecciones no cubre eliminar/reasignar/desasignar productos.');
+expect(domain.includes("['unassign', 'reassign', 'delete'].includes(productMode)") && domain.includes("productMode === 'delete'") && domain.includes("productMode === 'reassign'"), 'Colecciones no cubre eliminar/reasignar/desasignar productos.');
 expect(domain.includes("mergeFields: ['category', 'collection', 'updatedAt']"), 'La eliminación de colección no limpia ambas referencias category/collection.');
 
 if (failures.length) {
