@@ -1,0 +1,51 @@
+name: Patch Maestro entry temporary v3
+
+on:
+  push:
+    branches: [feat/superadmin-maestro-crud]
+    paths:
+      - '.github/workflows/patch-maestro-entry-temp-v3.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: feat/superadmin-maestro-crud
+          fetch-depth: 0
+      - name: Consolidar entrada directa Maestro
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const entry = '<script type="module" src="js/admin/maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-1"></script>';
+          let html = fs.readFileSync('admin.html', 'utf8');
+          if (!html.includes(entry)) {
+            if (!html.includes('</body>')) throw new Error('admin.html no contiene </body>');
+            html = html.replace('</body>', `${entry}\n</body>`);
+            fs.writeFileSync('admin.html', html);
+          }
+          const originalBootstrap = `(function(){\n'use strict';\nif(window.TintinAdminMobileSidebarFixBooted)return;\nwindow.TintinAdminMobileSidebarFixBooted=true;\nvar path=(location.pathname||'').toLowerCase();\nif(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;\ndocument.documentElement.classList.add('adm-sidebar-responsive-ready');\n})();\n`;
+          fs.writeFileSync('js/admin/ajuste-barra-lateral-movil-admin.js', originalBootstrap);
+          NODE
+      - name: Eliminar utilidades temporales
+        run: rm -f .github/workflows/patch-maestro-entry-temp.yml .github/workflows/patch-maestro-entry-temp-v2.yml .github/workflows/patch-maestro-entry-temp-v3.yml
+      - name: Regenerar manifiesto final de la rama
+        run: node scripts/construir-manifiesto-diagnostico.js
+      - name: Validar antes de guardar
+        run: |
+          node scripts/auditar-superadmin-maestro-conexiones.mjs
+          node scripts/auditar-versionado-cache.mjs
+          git diff --check
+      - name: Commit final de consolidación
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix: consolidar entrada directa versionada de Maestro"
+          git pull --rebase origin feat/superadmin-maestro-crud
+          git push origin HEAD:feat/superadmin-maestro-crud
