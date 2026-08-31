@@ -48,7 +48,7 @@
   }
 
   function canReveal(element) {
-    if (!element?.isConnected || element.classList.contains('tt-visible') || element.classList.contains('tt-auto-reveal')) return false;
+    if (!element?.isConnected || element.dataset.ttRevealDone === '1' || element.classList.contains('tt-visible') || element.classList.contains('tt-auto-reveal')) return false;
     if (element.closest(fixedExclusions)) return false;
     if (element.closest('[hidden],.tt-no-reveal,.no-reveal,[data-no-reveal="true"]')) return false;
     if (element.getClientRects().length === 0) return false;
@@ -64,17 +64,21 @@
     return 'tt-reveal-soft';
   }
 
-  function revealNow(element) {
-    if (element.classList.contains('tt-visible')) return;
-    element.classList.add('tt-visible');
-    const settle = () => element.classList.add('tt-reveal-settled');
-    element.addEventListener('transitionend', settle, { once: true });
-    window.setTimeout(settle, 900);
+  function settleReveal(element) {
+    element.classList.add('tt-reveal-settled');
+    element.dataset.ttRevealDone = '1';
   }
 
-  function hideForRepeat(element) {
-    if (!element.classList.contains('tt-visible')) return;
-    element.classList.remove('tt-visible', 'tt-reveal-settled');
+  function revealNow(element) {
+    if (!element || element.dataset.ttRevealDone === '1') {
+      if (element) observer?.unobserve(element);
+      return;
+    }
+    if (!element.classList.contains('tt-visible')) element.classList.add('tt-visible');
+    observer?.unobserve(element);
+    const settle = () => settleReveal(element);
+    element.addEventListener('transitionend', settle, { once: true });
+    window.setTimeout(settle, 900);
   }
 
   function observe(elements) {
@@ -87,7 +91,6 @@
       observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) revealNow(entry.target);
-          else hideForRepeat(entry.target);
         });
       }, { rootMargin: '0px 0px -24% 0px', threshold: .01 });
     }
@@ -111,21 +114,15 @@
     const toObserve = [];
     candidates.forEach((element, index) => {
       if (element.matches(hoverSelectors)) element.classList.add('tt-premium-hover');
-      // Lo que ya está a la vista al cargar no necesita "aparecer": animarlo
-      // igual desde el estado oculto (opacity:0 + translateY) es exactamente
-      // el patrón que produce Cumulative Layout Shift real, aunque el salto
-      // sea intencional y dure poco — el navegador lo cuenta igual. Se marca
-      // visible en el mismo turno síncrono en que se agrega .tt-auto-reveal,
-      // así nunca pasa por el estado desplazado y no hay salto que medir.
       const rect = element.getBoundingClientRect();
       const alreadyInViewport = rect.top <= viewportHeight * triggerRatio && rect.bottom > 0;
       element.classList.add('tt-auto-reveal', variantFor(element, index));
       element.style.setProperty('--tt-r-delay', `${Math.min(index % 5, 4) * 28}ms`);
       if (alreadyInViewport) {
-        element.classList.add('tt-visible', 'tt-reveal-settled');
+        element.classList.add('tt-visible');
+        settleReveal(element);
+        return;
       }
-      // También observamos lo que ya estaba visible: así, cuando el usuario
-      // se aleja y vuelve a subir, el bloque puede repetir su entrada.
       toObserve.push(element);
     });
     observe(toObserve);
