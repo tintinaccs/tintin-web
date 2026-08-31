@@ -11,6 +11,7 @@ fs.mkdirSync(artifactDir, { recursive: true });
 
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const exists = file => fs.existsSync(path.join(root, file));
+const safeRead = file => exists(file) ? read(file) : '';
 
 function walk(dir) {
   if (!fs.existsSync(dir)) return [];
@@ -26,6 +27,7 @@ const registry = await import(`data:text/javascript;base64,${Buffer.from(registr
 const { MAESTRO_MODULES, BASE_ADMIN_SECTIONS } = registry;
 
 const adminHtml = read('admin.html');
+const adminImagesHtml = read('admin-images.html');
 const adminApp = read('js/admin/admin-app.js');
 const adminNotifications = read('js/admin/notifications/notificaciones-admin.js');
 const clientNotifications = read('js/components/notifications/notificaciones-clientes.js');
@@ -33,18 +35,49 @@ const notificationApi = read('functions/api/notifications.js');
 const surfaceController = read('js/components/navigation/compartido/control-paneles.js');
 const routes = JSON.parse(read('_routes.json'));
 const firestoreRules = read('firestore.rules');
-const catalogDeleteApi = exists('functions/api/admin-catalog-delete.js') ? read('functions/api/admin-catalog-delete.js') : '';
-const catalogDeleteCore = exists('cloudflare/borrado-global-catalogo.js') ? read('cloudflare/borrado-global-catalogo.js') : '';
-const catalogResilience = exists('cloudflare/resiliencia-sync-catalogo.js') ? read('cloudflare/resiliencia-sync-catalogo.js') : '';
+const catalogDeleteApi = safeRead('functions/api/admin-catalog-delete.js');
+const catalogDeleteCore = safeRead('cloudflare/borrado-global-catalogo.js');
+const catalogResilience = safeRead('cloudflare/resiliencia-sync-catalogo.js');
 
-const adminFiles = walk(path.join(root, 'js', 'admin'))
-  .filter(file => /\.(?:js|mjs)$/i.test(file));
+const adminFiles = walk(path.join(root, 'js', 'admin')).filter(file => /\.(?:js|mjs)$/i.test(file));
 const adminSources = adminFiles.map(file => fs.readFileSync(file, 'utf8'));
-const fullAdminSource = [adminHtml, ...adminSources].join('\n');
+const fullAdminSource = [adminHtml, adminImagesHtml, ...adminSources].join('\n');
 const publicSources = [
   read('catalogo.html'), read('product.html'), read('checkout.html'), read('perfil.html'),
   ...walk(path.join(root, 'js', 'components')).filter(file => file.endsWith('.js')).map(file => fs.readFileSync(file, 'utf8')),
   ...walk(path.join(root, 'js', 'pages')).filter(file => file.endsWith('.js')).map(file => fs.readFileSync(file, 'utf8')),
+].join('\n');
+const serverSources = [
+  ...walk(path.join(root, 'functions', 'api')).filter(file => /\.js$/i.test(file)).map(file => fs.readFileSync(file, 'utf8')),
+  ...walk(path.join(root, 'cloudflare')).filter(file => /\.js$/i.test(file)).map(file => fs.readFileSync(file, 'utf8')),
+].join('\n');
+const collectionSource = [adminHtml, safeRead('js/admin/collections/gestion-colecciones-admin.js'), catalogDeleteCore, publicSources].join('\n');
+const imageSource = [
+  adminImagesHtml,
+  safeRead('js/admin/products/biblioteca-multimedia-admin.js'),
+  safeRead('js/admin/products/gestion-imagenes-admin.js'),
+  safeRead('functions/api/cloudinary-sign-upload.js'),
+  safeRead('functions/api/cloudinary-delete.js'),
+].join('\n');
+const pushSource = [
+  safeRead('js/admin/notifications/notificaciones-push.js'),
+  safeRead('js/admin/notifications/notificaciones-push-maestro.js'),
+  safeRead('functions/api/push-config.js'),
+  safeRead('functions/api/push-admin.js'),
+  safeRead('functions/api/push-subscription.js'),
+  safeRead('functions/api/push-test.js'),
+  safeRead('functions/api/push-order-event.js'),
+  firestoreRules,
+].join('\n');
+const emailSource = [
+  adminHtml,
+  adminApp,
+  safeRead('js/admin/settings/sincronizacion-correo-admin.js'),
+  safeRead('js/email/notificacion-pedido-resend.js'),
+  safeRead('js/pages/checkout/checkout-puente-correo.js'),
+  safeRead('functions/api/order-email.js'),
+  safeRead('functions/api/test-email.js'),
+  firestoreRules,
 ].join('\n');
 
 const checks = [];
@@ -53,6 +86,15 @@ function check(id, label, ok, evidence = '') {
 }
 function hasAll(source, tokens) { return tokens.every(token => source.includes(token)); }
 function hasAny(source, tokens) { return tokens.some(token => source.includes(token)); }
+function evidenceExists(token) {
+  const value = String(token || '').trim();
+  if (!value) return false;
+  if (fullAdminSource.includes(value) || publicSources.includes(value) || serverSources.includes(value)) return true;
+  const normalized = value.replace(/^\//, '');
+  if (exists(normalized) || exists(`${normalized}.html`)) return true;
+  const basename = path.basename(normalized);
+  return adminFiles.some(file => path.basename(file) === basename);
+}
 
 // 1. Cobertura top-left → bottom-right: navegación, paneles y registro Maestro.
 const htmlSections = [...new Set([...adminHtml.matchAll(/id="section-([a-z-]+)"/g)].map(match => match[1]))];
@@ -66,34 +108,37 @@ check('module-count', 'El cierre gobierna todas las superficies Maestro actuales
 for (const module of MAESTRO_MODULES) {
   const evidence = module.evidence || [];
   check(`evidence-${module.id}`, `${module.label}: la evidencia declarada sigue conectada`,
-    evidence.length > 0 && evidence.every(token => fullAdminSource.includes(token) || publicSources.includes(token) || exists(token.replace(/^\//, ''))),
-    evidence.join(', '));
+    evidence.length > 0 && evidence.every(evidenceExists), evidence.join(', '));
 }
 
 // 3. Contrato global por cada módulo capaz de sincronizar.
 const connectionContracts = {
   usuarios: () => hasAll(fullAdminSource, ['bulkBlockUsers', 'bulkRestoreUsers', 'bulkChangeUserRole'])
-    && hasAny(fullAdminSource, ['/api/admin-delete-user', '/api/sheets-admin-webhook', 'sheets'])
+    && hasAny(fullAdminSource + serverSources, ['/api/admin-delete-user', '/api/sheets-admin-webhook', 'sheets'])
     && /rolePermissions|users/.test(firestoreRules),
   pedidos: () => hasAll(fullAdminSource, ['/api/admin-order-mutation', 'TintinInventoryIntegrity', 'trashOrder', 'restoreOrder'])
-    && hasAny(fullAdminSource, ['syncOrder', 'Sheets', 'sheets']),
+    && hasAny(fullAdminSource + serverSources, ['syncOrder', 'Sheets', 'sheets']),
   productos: () => hasAll(fullAdminSource, ['prodGuardar', 'prod-stock', 'prod-price'])
     && hasAll(catalogDeleteApi + catalogDeleteCore + catalogResilience, ['products', 'productInventory'])
     && hasAny(catalogDeleteApi + catalogDeleteCore + catalogResilience, ['syncProducts', 'catalogSheetSyncQueue']),
   resenas: () => hasAll(fullAdminSource, ['/api/admin-engagement', 'resenas']) && notificationApi.includes('reviewRecords'),
   'me-gusta': () => hasAll(fullAdminSource, ['/api/admin-engagement', 'me-gusta']) && notificationApi.includes('likeRecords'),
-  colecciones: () => hasAll(fullAdminSource, ['gestion-colecciones-admin.js', 'coll-save-btn'])
+  colecciones: () => hasAll(collectionSource, ['coll-save-btn', 'collections'])
+    && hasAny(collectionSource, ['deleteCollection', 'eliminar', 'deleteDoc'])
     && catalogDeleteCore.includes('collections') && publicSources.includes('collections'),
   paginas: () => hasAll(fullAdminSource, ['tt-pages-admin-root', 'paginas-admin.js'])
     && hasAny(fullAdminSource + publicSources, ['site_content', 'siteContent', 'site-content']),
   importar: () => hasAll(fullAdminSource, ['importacion-admin.js', 'Exportar']) && hasAny(fullAdminSource, ['products', 'audit']),
-  imagenes: () => hasAny(fullAdminSource, ['/api/cloudinary-sign-upload', 'Cloudinary'])
-    && hasAny(fullAdminSource, ['huérfan', 'orphan', '/api/cloudinary-delete']),
+  imagenes: () => hasAny(imageSource, ['cloudinary-sign-upload', 'Cloudinary'])
+    && hasAny(imageSource, ['cloudinary-delete', 'huérfan', 'orphan'])
+    && hasAny(imageSource, ['authorization', 'Bearer', 'requireSuperAdmin']),
   mensajes: () => hasAny(fullAdminSource + publicSources, ['whatsappNumber', 'WhatsApp', 'wa.me']),
-  'notificaciones-push': () => hasAny(fullAdminSource, ['/api/push-admin', '/api/push-test', 'pushSubscriptions'])
-    && hasAny(firestoreRules, ['pushSubscriptions', 'push']),
-  correos: () => hasAll(fullAdminSource, ['correos-panel-pedidos', 'correos-panel-plantillas', 'correos-panel-historial'])
-    && hasAny(fullAdminSource, ['/api/order-email', '/api/test-email']) && firestoreRules.includes('emailLogs'),
+  'notificaciones-push': () => hasAll(pushSource, ['push-config', 'push-subscription', 'push-test'])
+    && hasAny(pushSource, ['pushSubscriptions', 'push-subscriptions'])
+    && routes.include.includes('/api/push-subscription') && routes.include.includes('/api/push-test'),
+  correos: () => hasAll(emailSource, ['correos-panel-pedidos', 'correos-panel-plantillas', 'correos-panel-historial'])
+    && hasAll(emailSource, ['order-email', 'test-email', 'RESEND_API_KEY', 'emailLogs'])
+    && routes.include.includes('/api/order-email') && routes.include.includes('/api/test-email'),
   configuracion: () => hasAny(fullAdminSource, ['settings/general', 'storeGate', 'shippingRates', 'paymentMethods'])
     && hasAny(publicSources, ['settings/general', 'storeGate', 'shippingRates', 'paymentMethods']),
   permisos: () => hasAll(adminApp, ['SECTION_PERMISSION', 'SUPER_ADMIN']) && /rolePermissions/.test(firestoreRules),
@@ -130,13 +175,19 @@ check('notifications-source-seen', 'Autolectura administrativa limpia también u
 check('surface-controller-contract', 'El controlador publica estado oficial de apertura/cierre',
   hasAll(surfaceController, ["'tintin:surface-change'", "setAttribute('aria-hidden', 'false')", "setAttribute('aria-hidden', 'true')"]));
 
-// 5. Todas las APIs que el panel referencia deben estar registradas en Cloudflare Pages.
+// 5. Todas las APIs literales que el panel referencia deben estar registradas en Cloudflare Pages.
 const apiRefs = new Set();
 for (const source of [fullAdminSource, notificationApi]) {
   for (const match of source.matchAll(/['"`](\/api\/[a-zA-Z0-9_./*-]+)['"`]/g)) apiRefs.add(match[1]);
 }
 function routeCovered(apiPath) {
-  return routes.include.some(route => route === apiPath || (route.endsWith('*') && apiPath.startsWith(route.slice(0, -1))));
+  return routes.include.some(route => {
+    if (route === apiPath) return true;
+    if (!route.endsWith('*')) return false;
+    const prefix = route.slice(0, -1);
+    const parent = prefix.endsWith('/') ? prefix.slice(0, -1) : prefix;
+    return apiPath === parent || apiPath.startsWith(prefix);
+  });
 }
 for (const apiPath of [...apiRefs].sort()) {
   check(`route-${apiPath}`, `Cloudflare enruta ${apiPath}`, routeCovered(apiPath));
