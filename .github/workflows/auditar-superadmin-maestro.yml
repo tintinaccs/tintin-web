@@ -1,0 +1,62 @@
+name: Super Admin Maestro
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'admin.html'
+      - 'admin-images.html'
+      - 'js/admin/**'
+      - 'js/core/auth/**'
+      - 'functions/**'
+      - 'firestore.rules'
+      - 'scripts/auditar-superadmin-maestro.mjs'
+      - '.github/workflows/auditar-superadmin-maestro.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'admin.html'
+      - 'admin-images.html'
+      - 'js/admin/**'
+      - 'js/core/auth/**'
+      - 'functions/**'
+      - 'firestore.rules'
+      - 'scripts/auditar-superadmin-maestro.mjs'
+      - '.github/workflows/auditar-superadmin-maestro.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  maestro-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Auditar contrato Maestro y cobertura CRUD
+        run: node scripts/auditar-superadmin-maestro.mjs
+      - name: Validar fundación y permisos del Admin
+        run: npm run audit:admin-foundation
+      - name: Validar Pedidos y ciclo operativo
+        run: npm run audit:admin-orders
+      - name: Validar Usuarios, roles y autorizaciones
+        run: npm run audit:users-roles
+      - name: Validar Productos, colecciones y multimedia
+        run: npm run audit:products-media
+      - name: Validar sincronización Admin a sitio público
+        run: npm run audit:admin-sync
+      - name: Guardar evidencia Maestro
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: superadmin-maestro-audit
+          path: artifacts/superadmin-maestro-audit.json
+          if-no-files-found: warn
+          retention-days: 30
