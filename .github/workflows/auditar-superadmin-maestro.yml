@@ -8,10 +8,18 @@ on:
       - 'admin-images.html'
       - 'js/admin/**'
       - 'js/core/auth/**'
+      - 'js/components/notifications/**'
+      - 'js/components/navigation/compartido/control-paneles.js'
+      - 'js/components/navigation/compartido/carga-navegacion.js'
+      - 'js/components/navigation/compartido/configuracion.js'
       - 'functions/**'
+      - 'cloudflare/**'
+      - 'apps-script/**'
+      - '_routes.json'
       - 'firestore.rules'
-      - 'scripts/auditar-superadmin-maestro*.mjs'
+      - 'scripts/auditar-superadmin*.mjs'
       - 'scripts/cache-version-approvals.json'
+      - 'diagnostic-manifest.json'
       - '.github/workflows/auditar-superadmin-maestro.yml'
   push:
     branches: [main]
@@ -20,10 +28,18 @@ on:
       - 'admin-images.html'
       - 'js/admin/**'
       - 'js/core/auth/**'
+      - 'js/components/notifications/**'
+      - 'js/components/navigation/compartido/control-paneles.js'
+      - 'js/components/navigation/compartido/carga-navegacion.js'
+      - 'js/components/navigation/compartido/configuracion.js'
       - 'functions/**'
+      - 'cloudflare/**'
+      - 'apps-script/**'
+      - '_routes.json'
       - 'firestore.rules'
-      - 'scripts/auditar-superadmin-maestro*.mjs'
+      - 'scripts/auditar-superadmin*.mjs'
       - 'scripts/cache-version-approvals.json'
+      - 'diagnostic-manifest.json'
       - '.github/workflows/auditar-superadmin-maestro.yml'
   workflow_dispatch:
 
@@ -33,7 +49,7 @@ permissions:
 jobs:
   maestro-contract:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -48,8 +64,12 @@ jobs:
         run: node scripts/auditar-superadmin-maestro.mjs
       - name: Auditar interconexión completa Maestro
         run: node scripts/auditar-superadmin-maestro-conexiones.mjs
+      - name: Auditar cierre total y propagación global
+        run: node scripts/auditar-superadmin-cierre-total.mjs
       - name: Auditar Maestro Desktop Tablet Mobile
         run: node scripts/auditar-superadmin-maestro-responsive.mjs
+      - name: Validar contrato de notificaciones y autolectura persistente
+        run: node --test tests/engagement/notificaciones-sociales.test.mjs tests/engagement/participation-contract.test.mjs
       - name: Validar versiones immutable actuales
         run: npm run audit:cache-versioning
       - name: Validar fundación y permisos del Admin
@@ -71,5 +91,6 @@ jobs:
             artifacts/superadmin-maestro-audit.json
             artifacts/superadmin-maestro-connections.json
             artifacts/superadmin-maestro-responsive.json
+            artifacts/superadmin-cierre-total.json
           if-no-files-found: warn
           retention-days: 30
