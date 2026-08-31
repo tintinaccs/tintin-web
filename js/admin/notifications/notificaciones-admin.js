@@ -9,6 +9,7 @@ const ASSET_VERSION = 'tintin-20260829-notifications-connected-2';
 const PROFILE_AVATAR_FALLBACK = '/assets-tintin/images/general/logo.png';
 const ORDER_RECOVERY_WINDOW_MS = 2 * 60 * 60 * 1000;
 const ORDER_NOTIFY_RETRY_DELAYS_MS = [700, 1800];
+const API_RETRY_DELAYS_MS = [450, 1200];
 const MAX_RECOVERY_ORDERS = 60;
 let user = null;
 let notifications = [];
@@ -18,6 +19,7 @@ let orderState = new Map();
 let ordersPrimed = false;
 let notificationsRetryTimer = 0;
 let ordersRetryTimer = 0;
+let markingVisibleRead = false;
 const orderNotificationInFlight = new Set();
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -92,7 +94,7 @@ function ensureUi() {
       ${bellSvg()}<span class="tt-notification-badge" id="adm-notifications-badge" hidden>0</span>
     </button>
     <section class="adm-notifications-panel" id="adm-notifications-panel" aria-label="Actividad de Tintin">
-      <div class="adm-notifications-header"><div><span class="adm-notifications-kicker">Actividad en vivo</span><h3>Notificaciones</h3></div><button type="button" class="adm-notifications-mark-all" id="adm-notifications-mark-all">Marcar todo leído</button></div>
+      <div class="adm-notifications-header"><div><span class="adm-notifications-kicker">Actividad en vivo</span><h3>Notificaciones</h3></div><span class="adm-notifications-auto-read">Al abrir, las novedades quedan vistas</span></div>
       <div class="adm-notifications-list" id="adm-notifications-list" aria-live="polite"><div class="adm-notifications-empty">Cargando actividad…</div></div>
     </section>`;
   const newOrder = topbar.querySelector('.adm-topbar-btn');
@@ -107,8 +109,6 @@ function updateBadge() {
     badge.hidden = unread === 0;
     badge.textContent = unread > 99 ? '99+' : String(unread);
   }
-  const button = document.getElementById('adm-notifications-mark-all');
-  if (button) button.disabled = unread === 0;
 }
 
 function trailingMarkup(notification) {
@@ -161,6 +161,41 @@ async function api(action, payload = {}, forceRefresh = false) {
     throw error;
   }
   return result;
+}
+
+async function apiWithRetry(action, payload = {}, attempts = 3) {
+  let lastError = null;
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    try {
+      return await api(action, payload, attempt > 0 && lastError?.status === 401);
+    } catch (error) {
+      lastError = error;
+      const status = Number(error?.status || 0);
+      const retryable = !status || status === 401 || [408, 425, 429].includes(status) || status >= 500;
+      if (!retryable || attempt >= attempts - 1) break;
+      await sleep(API_RETRY_DELAYS_MS[Math.min(attempt, API_RETRY_DELAYS_MS.length - 1)]);
+    }
+  }
+  throw lastError || new Error('No se pudo completar la operación');
+}
+
+function panelIsOpen() {
+  return document.getElementById('adm-notifications-panel')?.classList.contains('open') === true;
+}
+
+async function markVisibleNotificationsRead() {
+  if (!user || markingVisibleRead || !notifications.some(item => item.read !== true)) return;
+  markingVisibleRead = true;
+  notifications.forEach(item => { if (item.read !== true) item.read = true; });
+  render();
+  try {
+    await apiWithRetry('adminNotificationsSeenAll');
+  } catch (error) {
+    console.warn('[admin-notifications] No se pudieron confirmar como vistas:', error);
+    subscribeNotifications();
+  } finally {
+    markingVisibleRead = false;
+  }
 }
 
 function openSection(section, sourceId = '') {
@@ -216,6 +251,7 @@ function subscribeNotifications() {
   unsubscribeNotifications = onSnapshot(source, snapshot => {
     notifications = snapshot.docs.map(document => ({ id: document.id, ...document.data() }));
     render();
+    if (panelIsOpen()) void markVisibleNotificationsRead();
   }, error => {
     console.warn('[admin-notifications] No se pudo escuchar actividad:', error);
     const root = document.getElementById('adm-notifications-list');
@@ -308,6 +344,7 @@ function wireEvents() {
       const opening = !panel?.classList.contains('open');
       panel?.classList.toggle('open', opening);
       button.setAttribute('aria-expanded', String(opening));
+      if (opening) window.setTimeout(() => { void markVisibleNotificationsRead(); }, 0);
       return;
     }
 
@@ -334,14 +371,6 @@ function wireEvents() {
       return;
     }
 
-    if (event.target.closest?.('#adm-notifications-mark-all')) {
-      event.preventDefault();
-      notifications.forEach(item => { item.read = true; });
-      render();
-      api('adminNotificationsSeenAll').catch(error => console.warn('[admin-notifications] No se pudieron marcar todas como leídas:', error));
-      return;
-    }
-
     const panel = document.getElementById('adm-notifications-panel');
     if (panel?.classList.contains('open') && !event.target.closest?.('#adm-notifications-wrap')) closePanel();
   });
@@ -363,6 +392,7 @@ onAuthStateChanged(auth, current => {
     notificationsRetryTimer = 0;
     if (ordersRetryTimer) window.clearTimeout(ordersRetryTimer);
     ordersRetryTimer = 0;
+    markingVisibleRead = false;
     orderNotificationInFlight.clear();
     return;
   }
