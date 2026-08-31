@@ -1,0 +1,79 @@
+name: Finalizar Producto temporal
+
+on:
+  push:
+    branches:
+      - fix/product-loading-no-hang
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout de la rama
+        uses: actions/checkout@v5
+        with:
+          ref: fix/product-loading-no-hang
+          fetch-depth: 0
+
+      - name: Configurar Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Subir versión del shell final
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          entry = Path('js/inicio-navegacion-publica.js')
+          text = entry.read_text(encoding='utf-8')
+          old = "const ENTRY_VERSION = 'tintin-20260831-product-loading-4';"
+          new = "const ENTRY_VERSION = 'tintin-20260831-product-loading-5';"
+          if text.count(old) != 1:
+              raise SystemExit('No se encontró exactamente una ENTRY_VERSION product-loading-4')
+          entry.write_text(text.replace(old, new), encoding='utf-8')
+
+          sync = Path('scripts/sincronizar-inicio-navegacion-publica.js')
+          text = sync.read_text(encoding='utf-8')
+          replacements = {
+              "const PUBLIC_SHELL_VERSION = 'tintin-20260831-product-loading-4';": "const PUBLIC_SHELL_VERSION = 'tintin-20260831-product-loading-5';",
+              "const NAV_ENTRY_VERSION = 'tintin-20260831-product-loading-4';": "const NAV_ENTRY_VERSION = 'tintin-20260831-product-loading-5';",
+          }
+          for old, new in replacements.items():
+              if text.count(old) != 1:
+                  raise SystemExit(f'No se encontró exactamente una constante: {old}')
+              text = text.replace(old, new)
+          sync.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Sincronizar páginas públicas
+        run: node scripts/sincronizar-inicio-navegacion-publica.js
+
+      - name: Retirar workflow temporal antes del manifiesto
+        run: rm .github/workflows/finalizar-producto-temporal.yml
+
+      - name: Construir y verificar artefacto final
+        run: npm run build:pages
+
+      - name: Verificar estabilidad final
+        run: node scripts/auditar-estabilidad-final-v1.mjs
+
+      - name: Commit reproducible final
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: publicar versión final de Producto"
+          git push origin HEAD:fix/product-loading-no-hang
