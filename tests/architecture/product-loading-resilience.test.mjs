@@ -5,7 +5,6 @@ import path from 'node:path';
 
 const root = path.resolve(import.meta.dirname, '../..');
 const store = fs.readFileSync(path.join(root, 'js/core/store/estado-productos.js'), 'utf8');
-const publicApiClient = fs.readFileSync(path.join(root, 'js/core/firebase/catalogo-publico-api.js'), 'utf8');
 const publicApi = fs.readFileSync(path.join(root, 'functions/api/public-catalog.js'), 'utf8');
 
 function functionBlock(source, startMarker, endMarker) {
@@ -17,9 +16,17 @@ function functionBlock(source, startMarker, endMarker) {
 }
 
 test('Producto tiene fallback público individual y acotado', () => {
-  assert.match(publicApiClient, /export async function fetchPublicProduct\(id\)/);
-  assert.match(publicApiClient, /AbortController/);
-  assert.match(publicApiClient, /TIMEOUT_MS\s*=\s*8000/);
+  const edgeFetch = functionBlock(
+    store,
+    'async function fetchSingleProductFromEdge(id)',
+    'async function fetchRelatedProducts'
+  );
+
+  assert.match(store, /PUBLIC_CATALOG_ENDPOINT\s*=\s*'\/api\/public-catalog'/);
+  assert.match(store, /PUBLIC_PRODUCT_TIMEOUT_MS\s*=\s*8000/);
+  assert.match(edgeFetch, /AbortController/);
+  assert.match(edgeFetch, /new URLSearchParams\(\{ resource: 'products', id: String\(id\) \}\)/);
+  assert.match(edgeFetch, /signal:\s*controller\.signal/);
   assert.match(publicApi, /firestoreAdminGet\(env, `products\/\$\{productId\}`\)/);
   assert.match(publicApi, /item:\s*null/);
   assert.match(publicApi, /\?resource=' \+ resource \+ \(productId \? '&id='/);
