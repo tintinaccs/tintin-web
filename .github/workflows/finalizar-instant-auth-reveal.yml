@@ -1,0 +1,69 @@
+name: Finalizar instant auth y reveal
+
+on:
+  push:
+    branches: [feat/instant-auth-notifications-reveal-once]
+    paths:
+      - '.github/workflows/finalizar-instant-auth-reveal.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: feat/instant-auth-notifications-reveal-once
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Actualizar versiones y contrato irreversible
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          loader = Path('js/cargador-pagina.js')
+          text = loader.read_text()
+          old = "quality/revelado-desplazamiento-global.js?tt-reveal=20260825-2"
+          new = "quality/revelado-desplazamiento-global.js?tt-reveal=20260831-irreversible-1"
+          if old not in text:
+              raise SystemExit('No se encontró versión anterior del reveal')
+          loader.write_text(text.replace(old, new))
+
+          sync = Path('scripts/sincronizar-inicio-navegacion-publica.js')
+          text = sync.read_text()
+          text = text.replace("const PUBLIC_SHELL_VERSION = 'tintin-20260831-notifications-auto-read-1';", "const PUBLIC_SHELL_VERSION = 'tintin-20260831-instant-auth-reveal-once-1';")
+          text = text.replace("const NAV_ENTRY_VERSION = 'tintin-20260831-notifications-auto-read-1';", "const NAV_ENTRY_VERSION = 'tintin-20260831-instant-auth-reveal-once-1';")
+          sync.write_text(text)
+
+          audit = Path('scripts/auditar-sitio-confiabilidad.js')
+          text = audit.read_text()
+          old_block = """check('El reveal se repite al volver al viewport, es liviano y procesa solo nodos agregados',\n  scrollReveal.includes('function hideForRepeat(element)') &&\n  scrollReveal.includes('else hideForRepeat(entry.target)') &&\n  scrollReveal.includes(\"element.classList.add('tt-visible')\") &&\n  scrollReveal.includes('scheduleScan(node)') &&\n  !scrollReveal.includes('filter:blur'));"""
+          new_block = """check('El reveal ocurre una sola vez por carga, se desuscribe y procesa solo nodos agregados',\n  !scrollReveal.includes('hideForRepeat') &&\n  scrollReveal.includes('observer?.unobserve(element)') &&\n  scrollReveal.includes(\"element.dataset.ttRevealDone = '1'\") &&\n  scrollReveal.includes('scheduleScan(node)') &&\n  !scrollReveal.includes('filter:blur'));"""
+          if old_block not in text:
+              raise SystemExit('No se encontró contrato anterior de reveal')
+          audit.write_text(text.replace(old_block, new_block))
+          PY
+      - name: Sincronizar páginas públicas
+        run: node scripts/sincronizar-inicio-navegacion-publica.js
+      - name: Quitar workflow temporal
+        run: git rm .github/workflows/finalizar-instant-auth-reveal.yml
+      - name: Reconstruir diagnóstico
+        run: npm run build:diagnostics
+      - name: Validar contrato nuevo
+        run: |
+          node scripts/auditar-instantaneidad-reveal-unico.mjs
+          node scripts/auditar-sitio-confiabilidad.js
+          npm run verify:diagnostics
+      - name: Commit final reproducible
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: sincronizar identidad instantánea y reveal único" || exit 0
+          git push origin HEAD:feat/instant-auth-notifications-reveal-once
