@@ -342,7 +342,15 @@ function resolveExecutablePath() {
 function launchBrowser() {
   return chromium.launch({
     headless: true,
-    executablePath: resolveExecutablePath()
+    executablePath: resolveExecutablePath(),
+    // El runner de CI monta /dev/shm con un tamaño reducido; Chromium usa esa
+    // memoria compartida para buffers de compositing/GPU y, al agotarla bajo
+    // carga (decenas de páginas con canvas/imágenes/observers como
+    // product.html), el proceso de render se cuelga o muere de forma no
+    // determinística en vez de fallar con un error claro — coincide con el
+    // patrón ya documentado (cuelgue solo en CI, nunca en un goto aislado
+    // local). '--disable-dev-shm-usage' hace que use /tmp en su lugar.
+    args: ['--disable-dev-shm-usage']
   });
 }
 
