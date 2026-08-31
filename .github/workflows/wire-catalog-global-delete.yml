@@ -52,11 +52,12 @@ jobs:
       - name: Eliminar workflow temporal antes del manifiesto
         run: git rm .github/workflows/wire-catalog-global-delete.yml
       - name: Regenerar manifiesto diagnóstico
-        run: node scripts/generar-manifiesto-diagnostico.js
+        run: npm run build:diagnostics
       - name: Verificar contrato y caché
         run: |
           node scripts/auditar-borrado-global-catalogo.mjs
           node scripts/auditar-versionado-cache.mjs
+          npm run verify:diagnostics
       - name: Commit final reproducible
         run: |
           git config user.name "github-actions[bot]"
