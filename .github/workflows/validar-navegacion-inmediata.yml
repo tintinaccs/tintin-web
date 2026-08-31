@@ -39,12 +39,14 @@ jobs:
         shell: bash
         env:
           HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+          SOURCE_HEAD: 762a6ea5dc8e83947d86fd8d1749e78ea5c305e5
         run: |
           set -euo pipefail
-          # Este commit es un puente temporal. Restauramos la versión anterior
+          # Este commit es un puente temporal. Restauramos la versión estable
           # del propio workflow ANTES de generar el inventario, de modo que el
           # commit resultante solo conserve los artefactos reproducibles reales.
-          git checkout HEAD^ -- .github/workflows/validar-navegacion-inmediata.yml
+          git fetch --no-tags --depth=1 origin "${SOURCE_HEAD}"
+          git checkout "${SOURCE_HEAD}" -- .github/workflows/validar-navegacion-inmediata.yml
           npm run build:routes
           npm run audit:cache-versioning
           npm run build:pages
