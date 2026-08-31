@@ -17,7 +17,7 @@ import {
   writeCached
 } from '../../core/firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
 import { listPublicCollectionRest } from '../../core/firebase/respaldo-rest-firestore.js?v=tintin-20260726-browser-fallback-1';
-import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1';
+import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20260831-product-loading-1';
 
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   Promise.allSettled([
@@ -78,40 +78,53 @@ function attachProductsReactivity() {
 function publishPublic(collections, source) {
   latestVisibleCollections = collections.filter(item => item.visible !== false);
   republishToPublicSubscribers(source);
-  return sortCols(withResolvedImages(latestVisibleCollections));
+}
+
+async function fetchPublicCollectionsSdk() {
+  const snapshot = await getDocs(query(collection(db, 'collections'), limit(300)));
+  recordFirestoreRead('collections:public', snapshot.size);
+  return snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data()));
+}
+
+async function fetchPublicCollectionsRest() {
+  const documents = await listPublicCollectionRest('collections', 300);
+  recordFirestoreRead('collections:public-rest-fallback', documents.length);
+  return documents.map(item => normalizeCollectionDoc(item.id, item.data));
 }
 
 async function fetchPublicCollections() {
-  let list;
+  let collections;
   try {
-    const documents = await fetchPublicCatalogResource('collections');
-    list = documents.map(item => normalizeCollectionDoc(item.id, item.data));
+    const items = await fetchPublicCatalogResource('collections');
+    collections = items.map(item => normalizeCollectionDoc(item.id, item.data));
   } catch (edgeError) {
     try {
-      const documents = await listPublicCollectionRest('collections', 200);
-      recordFirestoreRead('collections:public-rest-fallback', documents.length);
-      list = documents.map(item => normalizeCollectionDoc(item.id, item.data));
+      collections = await fetchPublicCollectionsRest();
     } catch (restError) {
       if (!await appCheckReady) throw restError;
-      const snapshot = await getDocs(query(collection(db, 'collections'), limit(200)));
-      recordFirestoreRead('collections:public', snapshot.size);
-      list = snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data()));
+      collections = await fetchPublicCollectionsSdk();
     }
   }
-  writeCached(CACHE_KEY, list);
-  return publishPublic(list, 'edge-or-firestore-fallback');
+  const normalized = sortCols(collections.filter(item => item.visible));
+  if (normalized.length) writeCached(CACHE_KEY, normalized);
+  publishPublic(normalized, 'edge-or-firestore-fallback');
+  return normalized;
 }
 
-export async function loadCollections(options = {}) {
+export async function loadPublicCollections(options = {}) {
+  attachProductsReactivity();
   const force = options.force === true;
   if (!force) {
     const cached = readCached(CACHE_KEY, CACHE_TTL);
-    if (Array.isArray(cached)) return publishPublic(cached, 'cache');
+    if (Array.isArray(cached) && cached.length) {
+      const normalized = sortCols(cached.filter(item => item.visible !== false));
+      publishPublic(normalized, 'cache');
+      return normalized;
+    }
   }
 
   const stale = readStaleCached(CACHE_KEY);
   if (!force && Array.isArray(stale) && stale.length) publishPublic(stale, 'stale-cache');
-
   try {
     return await runSingleFlight('collections:public', fetchPublicCollections);
   } catch (error) {
@@ -120,42 +133,73 @@ export async function loadCollections(options = {}) {
   }
 }
 
-export function onCollectionsUpdate(cb, onError) {
+export async function startPublicCollectionsRealtime(callback) {
   attachProductsReactivity();
-  publicSubscribers.add(cb);
-  if (latestVisibleCollections) republishToPublicSubscribers('memory');
-  loadCollections().catch(error => {
-    console.error('[collections-store] load failed:', error.code || '', error.message || error);
-    if (typeof onError === 'function') onError(error);
-  });
-  return () => publicSubscribers.delete(cb);
-}
+  const subscriber = typeof callback === 'function' ? callback : () => {};
+  publicSubscribers.add(subscriber);
+  const initial = await loadPublicCollections();
+  if (latestVisibleCollections) subscriber(sortCols(withResolvedImages(latestVisibleCollections)), { source: 'initial' });
 
-function startAdminListener() {
-  if (adminUnsubscribe) return;
-  adminUnsubscribe = onSnapshot(query(collection(db, 'collections'), limit(200)), snapshot => {
-    recordFirestoreRead('collections:admin-live', snapshot.size);
-    const list = sortCols(snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data())));
-    adminSubscribers.forEach(cb => cb(list, null));
-    writeCached(CACHE_KEY, list);
-  }, error => {
-    adminSubscribers.forEach(cb => cb([], error));
-  });
-}
+  if (!await appCheckReady) {
+    return () => publicSubscribers.delete(subscriber);
+  }
 
-export function onAllCollectionsUpdate(cb) {
-  adminSubscribers.add(cb);
-  startAdminListener();
+  let unsubscribe = null;
+  try {
+    unsubscribe = onSnapshot(
+      query(collection(db, 'collections'), limit(300)),
+      snapshot => {
+        recordFirestoreRead('collections:realtime', snapshot.size);
+        const collections = sortCols(snapshot.docs
+          .map(item => normalizeCollectionDoc(item.id, item.data()))
+          .filter(item => item.visible));
+        if (collections.length) writeCached(CACHE_KEY, collections);
+        publishPublic(collections, 'realtime');
+      },
+      () => {
+        // El cache/fallback ya mantiene la vista útil; no rompemos la experiencia pública.
+      }
+    );
+  } catch {
+    unsubscribe = null;
+  }
+
   return () => {
-    adminSubscribers.delete(cb);
+    publicSubscribers.delete(subscriber);
+    unsubscribe?.();
+  };
+}
+
+export async function startAdminCollectionsRealtime(callback) {
+  const subscriber = typeof callback === 'function' ? callback : () => {};
+  adminSubscribers.add(subscriber);
+  if (!await appCheckReady) return () => adminSubscribers.delete(subscriber);
+
+  if (!adminUnsubscribe) {
+    adminUnsubscribe = onSnapshot(
+      query(collection(db, 'collections'), limit(300)),
+      snapshot => {
+        recordFirestoreRead('collections:admin-realtime', snapshot.size);
+        const collections = sortCols(snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data())));
+        adminSubscribers.forEach(cb => {
+          try {
+            cb(collections, { source: 'realtime' });
+          } catch (error) {
+            console.warn('[collections-store] admin subscriber error:', error);
+          }
+        });
+      },
+      error => {
+        console.warn('[collections-store] admin realtime error:', error);
+      }
+    );
+  }
+
+  return () => {
+    adminSubscribers.delete(subscriber);
     if (!adminSubscribers.size && adminUnsubscribe) {
       adminUnsubscribe();
       adminUnsubscribe = null;
     }
   };
 }
-
-window.TintinCollectionsStore = {
-  load: loadCollections,
-  refresh: () => loadCollections({ force: true })
-};
