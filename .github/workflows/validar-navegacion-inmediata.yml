@@ -14,7 +14,7 @@ on:
       - '.github/workflows/validar-navegacion-inmediata.yml'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   fast-navigation:
@@ -22,33 +22,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-        with:
-          ref: ${{ github.head_ref }}
-          fetch-depth: 1
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
           cache: npm
       - run: npm ci
-      - name: Restaurar workflow estable antes de generar
-        env:
-          SOURCE_HEAD: 332858c8297f3d9a0956522b1da7e48f7cb33f93
-        run: |
-          git fetch --no-tags --depth=1 origin "${SOURCE_HEAD}"
-          git checkout "${SOURCE_HEAD}" -- .github/workflows/validar-navegacion-inmediata.yml
-      - name: Regenerar artefactos reproducibles
+      - name: Contrato de navegación inmediata
+        run: node --test tests/performance/navegacion-inmediata.test.mjs
+      - name: Auditoría de rendimiento existente
+        run: node scripts/auditar-rendimiento-tiempo-real.js
+      - name: Tripwire de regresiones de rendimiento
+        run: node scripts/auditar-rendimiento-regresiones.js
+      - name: Versionado y manifiesto reproducibles
         run: |
           npm run build:routes
           npm run audit:cache-versioning
           npm run build:pages
-      - name: Confirmar artefactos y restaurar workflow
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add diagnostic-manifest.json scripts/cache-version-baseline.json _headers _routes.json .github/workflows/validar-navegacion-inmediata.yml
-          if git diff --cached --quiet; then
-            echo "Artefactos ya sincronizados."
-            exit 0
-          fi
-          git commit -m "chore: actualizar manifiesto tras acotar auditoría responsive"
-          git push origin "HEAD:${GITHUB_HEAD_REF}"
+          git diff --exit-code -- diagnostic-manifest.json scripts/cache-version-baseline.json _headers _routes.json
+      - name: Adjuntar artefactos reproducibles cuando difieran
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: navegacion-artefactos-reproducibles
+          if-no-files-found: error
+          path: |
+            diagnostic-manifest.json
+            scripts/cache-version-baseline.json
+            _headers
+            _routes.json
