@@ -26,7 +26,7 @@ for (const required of ['@media(max-width:1050px)', '@media(max-width:600px)', '
 }
 
 const fixture = `<!doctype html><html><head><meta charset="utf-8"><style>
-*{box-sizing:border-box}html,body{margin:0;max-width:100%;overflow-x:hidden}body{font-family:Montserrat,sans-serif;background:#faf8f9;color:#2b2b2b}.adm-content{width:100%;padding:24px;--adm-muted:#786d72;--adm-border:#eadde2}.adm-btn{min-height:42px;border:1px solid #ded2d7;background:#fff;border-radius:12px;padding:9px 13px;font:inherit}.adm-btn-primary{background:#AD3F67;color:#fff}.adm-input{min-height:42px;width:100%;border:1px solid #ded2d7;border-radius:10px;padding:8px 10px}
+*{box-sizing:border-box}html,body{margin:0;max-width:100%;overflow-x:hidden}body{font-family:Montserrat;background:#faf8f9;color:#2b2b2b}.adm-content{width:100%;padding:24px;--adm-muted:#786d72;--adm-border:#eadde2}.adm-btn{min-height:42px;border:1px solid #ded2d7;background:#fff;border-radius:12px;padding:9px 13px;font:inherit}.adm-btn-primary{background:#AD3F67;color:#fff}.adm-input{min-height:42px;width:100%;border:1px solid #ded2d7;border-radius:10px;padding:8px 10px}
 ${maestroCss}
 </style></head><body><main class="adm-content"><section id="section-maestro" class="adm-section active"><div class="tt-maestro-shell">
 <div class="tt-maestro-hero"><div class="tt-maestro-eyebrow">Super Admin · Control integral</div><h1>Maestro Tintin</h1><p>Centro maestro para gobernar módulos, CRUD, permisos, sincronización y estado general.</p><div class="tt-maestro-actions"><button class="adm-btn adm-btn-primary">Ejecutar comprobación</button><button class="adm-btn">Nuevo pedido</button><button class="adm-btn">Nuevo producto</button><button class="adm-btn">Nueva colección</button></div></div>
