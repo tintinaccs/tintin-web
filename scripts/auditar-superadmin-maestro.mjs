@@ -81,7 +81,8 @@ check('El panel Maestro no escribe directamente en Firestore', !/\b(?:setDoc|upd
 check('El panel Maestro usa la navegación nativa para abrir módulos existentes', panelSource.includes('nativeTrigger') && panelSource.includes('trigger.click()'));
 check('El panel Maestro verifica cobertura, paridad, CRUD crítico y guard de cambios', ['runtimeChecks','nav-parity','products','collections','users','orders','AdminUnsaved'].every(token => panelSource.includes(token)));
 check('Maestro puede exportar su matriz sin mutar producción', panelSource.includes('exportMatrix') && panelSource.includes('application/json'));
-check('El bootstrap del Admin carga el Maestro con versión explícita', bootstrapSource.includes('maestro/panel-maestro.js') && bootstrapSource.includes('tintin-20260831-superadmin-maestro-1'));
+check('Admin carga Maestro directamente con versión explícita', adminHtml.includes('js/admin/maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-1'));
+check('El bootstrap responsive conserva su responsabilidad original y no carga Maestro', !bootstrapSource.includes('maestro/panel-maestro.js'));
 
 const failed = checks.filter(item => !item.ok);
 fs.mkdirSync(path.join(root, 'artifacts'), { recursive: true });
