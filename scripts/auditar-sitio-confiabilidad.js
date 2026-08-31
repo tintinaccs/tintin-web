@@ -185,10 +185,10 @@ check('El rosa principal cumple contraste AA sobre blanco',
 check('Los renderers principales escapan texto almacenado',
   main.includes('function escapeHtml(value)') &&
   admin.includes('function escapeHtmlAdmin(value)'));
-check('El reveal se repite al volver al viewport, es liviano y procesa solo nodos agregados',
-  scrollReveal.includes('function hideForRepeat(element)') &&
-  scrollReveal.includes('else hideForRepeat(entry.target)') &&
-  scrollReveal.includes("element.classList.add('tt-visible')") &&
+check('El reveal ocurre una sola vez por carga, se desuscribe y procesa solo nodos agregados',
+  !scrollReveal.includes('hideForRepeat') &&
+  scrollReveal.includes('observer?.unobserve(element)') &&
+  scrollReveal.includes("element.dataset.ttRevealDone = '1'") &&
   scrollReveal.includes('scheduleScan(node)') &&
   !scrollReveal.includes('filter:blur'));
 check('Las imágenes dinámicas reciben carga diferida y prioridad automática',

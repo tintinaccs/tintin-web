@@ -1,0 +1,63 @@
+name: Instantaneidad de sesión, notificaciones y reveal
+
+on:
+  pull_request:
+    paths:
+      - 'js/core/auth/**'
+      - 'js/core/firebase/**'
+      - 'js/components/notifications/**'
+      - 'js/admin/notifications/**'
+      - 'js/components/navigation/**'
+      - 'js/quality/revelado-desplazamiento-global.js'
+      - 'js/quality/extension-revelado-marca.js'
+      - 'js/cargador-pagina.js'
+      - 'scripts/auditar-instantaneidad-reveal-unico.mjs'
+      - 'scripts/auditar-sitio-confiabilidad.js'
+      - 'scripts/cache-version-approvals.json'
+      - 'scripts/sincronizar-inicio-navegacion-publica.js'
+      - '*.html'
+  push:
+    branches: [main]
+    paths:
+      - 'js/core/auth/**'
+      - 'js/core/firebase/**'
+      - 'js/components/notifications/**'
+      - 'js/admin/notifications/**'
+      - 'js/components/navigation/**'
+      - 'js/quality/revelado-desplazamiento-global.js'
+      - 'js/quality/extension-revelado-marca.js'
+      - 'js/cargador-pagina.js'
+      - 'scripts/auditar-instantaneidad-reveal-unico.mjs'
+      - 'scripts/auditar-sitio-confiabilidad.js'
+      - 'scripts/cache-version-approvals.json'
+      - 'scripts/sincronizar-inicio-navegacion-publica.js'
+      - '*.html'
+
+permissions:
+  contents: read
+
+jobs:
+  instant-realtime-reveal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Auditar identidad, notificaciones y reveal
+        run: node scripts/auditar-instantaneidad-reveal-unico.mjs
+      - name: Auditar confiabilidad global
+        run: node scripts/auditar-sitio-confiabilidad.js
+      - name: Verificar caché immutable
+        run: node scripts/auditar-versionado-cache.mjs
+      - name: Verificar manifiesto diagnóstico
+        run: npm run verify:diagnostics
+      - name: Guardar evidencia
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: instant-auth-reveal-audit
+          path: artifacts/instant-auth-reveal-audit.json
+          if-no-files-found: warn

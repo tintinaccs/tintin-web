@@ -821,7 +821,7 @@
 
   function bootScrollReveal() {
     if (!window.TintinGlobalScrollRevealBooted) {
-      importSibling('quality/revelado-desplazamiento-global.js?tt-reveal=20260825-2', 'Scroll Reveal');
+      importSibling('quality/revelado-desplazamiento-global.js?tt-reveal=20260831-irreversible-1', 'Scroll Reveal');
     }
   }
 

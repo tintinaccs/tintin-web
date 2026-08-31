@@ -4,7 +4,6 @@ import { auth } from '../firebase/firebase.js?v=tintin-20260730-appcheck-stable-
 import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { getUserRole, can, SUPER_ADMIN } from './roles.js?v=tintin-20260821-accounts-phase-a-1';
 
-
 const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');
 let silentLogoutStarted = false;
 
@@ -35,6 +34,19 @@ function publishStaffVisibility(user,role){
  document.documentElement.classList.toggle('tt-staff-session',staff);
  window.dispatchEvent(new CustomEvent('tintin:staff-visibility-ready',{detail:{staff}}));
 }
+function publishAuthIdentity(user){
+ const detail=Object.freeze({
+  resolved:true,
+  authenticated:Boolean(user),
+  uid:user?.uid||'',
+  email:user?.email||'',
+  detectedAt:Date.now()
+ });
+ window.TintinAuthIdentity=detail;
+ document.documentElement.classList.toggle('tt-authenticated-session',detail.authenticated);
+ document.documentElement.classList.toggle('tt-guest-session',!detail.authenticated);
+ window.dispatchEvent(new CustomEvent('tintin:auth-identity',{detail}));
+}
 function roleLabel(role){if(role==='superadmin')return 'Panel Super Admin';if(role==='admin')return 'Panel Admin';if(role==='agent')return 'Panel Agente';if(role==='viewer')return 'Panel Viewer';return 'Panel interno';}
 
 const accountBtnDefaults=new Map();
@@ -56,9 +68,12 @@ window.addEventListener('tintin:login-cancelled',endSilentAuthTransition);
 window.addEventListener('tintin:login-failed',endSilentAuthTransition);
 
 onAuthStateChanged(auth,async user=>{
- // login.html es el único dueño del alta, bloqueo y destino posterior al
- // acceso. Evita dos redirecciones paralelas compitiendo por la misma sesión.
+ // La identidad se publica ANTES de cualquier lectura de rol. Notificaciones,
+ // avatar y otras superficies que solo necesitan saber si hay sesión pueden
+ // reaccionar en el mismo tick de Firebase sin esperar Firestore/permisos.
  if(IS_LOGIN_PAGE)return;
+ publishAuthIdentity(user);
+
  let role='client';
  try{if(user)role=await getUserRole(user.uid,user.email);}catch(e){console.warn('[auth-nav] No se pudo leer rol:',e);}
  publishStaffVisibility(user,role);
@@ -66,7 +81,7 @@ onAuthStateChanged(auth,async user=>{
  renderMobileTabbarPhoto(user);
  renderAccountPanel(user,role);
  window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated',{
-  detail:{authenticated:Boolean(user),role}
+  detail:{authenticated:Boolean(user),role,identityResolved:true}
  }));
 });
 

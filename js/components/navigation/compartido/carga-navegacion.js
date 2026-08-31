@@ -1,11 +1,12 @@
 import { currentPage } from './estado-ruta.js';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260831-notifications-auto-read-1';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260831-instant-auth-reveal-once-1';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;
 let cartRuntimePromise = null;
 let notificationsRuntimePromise = null;
 let collectionsRuntimePromise = null;
+let notificationsIdentityBound = false;
 
 const FULL_COMMERCE_PAGES = new Set(['home', 'shop', 'cart', 'account']);
 const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar-notifications';
@@ -48,33 +49,47 @@ function setNotificationTriggersVisible(visible) {
   });
 }
 
-function attachNotificationsDemand() {
-  bindDemand(NOTIFICATION_TRIGGER_SELECTOR, loadNotificationsRuntime);
+function applyNotificationIdentity(authenticated) {
+  if (!authenticated) {
+    setNotificationTriggersVisible(false);
+    return;
+  }
 
-  window.addEventListener('tintin:auth-nav-updated', event => {
-    const authenticated = Boolean(event.detail?.authenticated);
-    if (!authenticated) {
+  // La identidad ya está confirmada. El feed se inicia inmediatamente, sin
+  // esperar rol, hover, click ni requestIdleCallback. La campana se muestra
+  // únicamente cuando el drawer/runtime ya quedó registrado para evitar un
+  // trigger visible que todavía no tenga superficie asociada.
+  void loadNotificationsRuntime()
+    .then(() => setNotificationTriggersVisible(true))
+    .catch(error => {
       setNotificationTriggersVisible(false);
-      return;
-    }
+      console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
+    });
+}
 
-    // La campana se muestra solo después de registrar su superficie. Así un
-    // clic inmediato tras resolver Auth nunca cae en un trigger visible que
-    // todavía no tenga drawer/controlador disponible.
-    void loadNotificationsRuntime()
-      .then(() => setNotificationTriggersVisible(true))
-      .catch(error => {
-        setNotificationTriggersVisible(false);
-        console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
-      });
-  });
+export function activateIdentityNotifications() {
+  if (!notificationsIdentityBound) {
+    notificationsIdentityBound = true;
+    window.addEventListener('tintin:auth-identity', event => {
+      applyNotificationIdentity(Boolean(event.detail?.authenticated));
+    });
+    // Compatibilidad defensiva: si otro runtime solo publica el evento
+    // enriquecido de rol, no perdemos el estado de sesión.
+    window.addEventListener('tintin:auth-nav-updated', event => {
+      if (window.TintinAuthIdentity?.resolved) return;
+      applyNotificationIdentity(Boolean(event.detail?.authenticated));
+    });
+  }
 
-  // Auth es una dependencia global del header incluso en páginas informativas.
-  // Resolver la sesión aquí no descarga el feed de notificaciones para un
-  // visitante: ese módulo y sus lecturas se activan solo cuando hay sesión.
-  void loadAuthRuntime().catch(error => {
-    console.warn('[PublicShell] No se pudo resolver la sesión global del header.', error);
-  });
+  // Auth puede haber resuelto mientras el shell todavía montaba logo/config.
+  // Consumir el snapshot global evita esperar un segundo evento que no llegará.
+  if (window.TintinAuthIdentity?.resolved) {
+    applyNotificationIdentity(Boolean(window.TintinAuthIdentity.authenticated));
+  } else {
+    setNotificationTriggersVisible(false);
+  }
+
+  return primeAuthRuntime();
 }
 
 function loadHomeMaintenance() {
@@ -107,7 +122,7 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
   });
 }
 
-function loadAuthRuntime() {
+export function loadAuthRuntime() {
   if (!authRuntimePromise) {
     authRuntimePromise = import(versionedJsModule('core/auth/navegacion-autenticacion.js')).catch(error => {
       authRuntimePromise = null;
@@ -115,6 +130,13 @@ function loadAuthRuntime() {
     });
   }
   return authRuntimePromise;
+}
+
+export function primeAuthRuntime() {
+  return loadAuthRuntime().catch(error => {
+    console.warn('[PublicShell] No se pudo resolver la sesión global del header.', error);
+    throw error;
+  });
 }
 
 function loadCartRuntime() {
@@ -206,8 +228,6 @@ function loadNavigationBehaviors() {
       import('./control-busqueda.js?v=tintin-20260831-product-loading-3'),
     ]))
     .then(results => {
-      // Dynamic imports are cached, but the shell DOM is remounted on every
-      // navigation. Re-run geometry-dependent indicators against that DOM.
       const desktop = results[0].status === 'fulfilled' ? results[0].value : null;
       const mobile = results[2].status === 'fulfilled' ? results[2].value : null;
       desktop?.initDesktopNavigationIndicator?.();
@@ -220,14 +240,9 @@ function loadNavigationBehaviors() {
 export function loadSharedRuntime() {
   const page = currentPage();
   attachProductsDemand();
-  attachNotificationsDemand();
+  activateIdentityNotifications();
   loadNavigationBehaviors();
 
-  // Las páginas informativas resuelven Auth globalmente para que el header
-  // conozca la sesión en cualquier ruta. Catálogo completo, carrito y feed de
-  // notificaciones siguen bajo demanda; la configuración liviana de
-  // colecciones se precarga en idle para que el primer menú ya coincida con
-  // Inicio/Tienda y no dependa del momento en que el usuario lo abra.
   if (!FULL_COMMERCE_PAGES.has(page)) {
     attachLightweightCommerceDemand();
     scheduleNonCritical(() => {
