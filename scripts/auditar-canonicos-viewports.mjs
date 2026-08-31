@@ -455,6 +455,19 @@ try {
           });
 
           const page = await context.newPage();
+          if (pageInfo.path.startsWith('product')) {
+            // Diagnóstico temporal: los tres intentos previos (margen de
+            // reintento/relanzamiento, --disable-dev-shm-usage, navTimeoutMs)
+            // no movieron el resultado en 4 de los 7 viewports — siguen
+            // fallando de forma idéntica en page.evaluate. Estos listeners
+            // capturan evidencia real (error de JS, crash del renderer o
+            // mensajes de consola) del próximo run de CI para dejar de
+            // adivinar la causa.
+            const tag = `${pageInfo.path} ${viewport.width}x${viewport.height}`;
+            page.on('console', msg => console.log(`[diag console ${tag}] ${msg.type()}: ${msg.text()}`));
+            page.on('pageerror', err => console.log(`[diag pageerror ${tag}] ${err?.stack || err?.message || err}`));
+            page.on('crash', () => console.log(`[diag CRASH ${tag}]`));
+          }
           try {
             await navigateWithRetry(page, `${baseURL}/${pageInfo.path}`, viewport.width, pageInfo, evalTimeoutMs, navTimeoutMs);
             entry.issues.push(...await inspectWithRetry(page, viewport.width, pageInfo, evalTimeoutMs));
