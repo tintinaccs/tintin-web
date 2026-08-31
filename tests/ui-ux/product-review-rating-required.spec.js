@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import fs from 'node:fs';
+const { test, expect } = require('@playwright/test');
+const fs = require('node:fs');
 
 const helperSource = `${fs.readFileSync('js/pages/product/validacion-puntuacion-resena.js', 'utf8').replace(/^export\s+/gm, '')}\nwindow.__ratingGuard = { isValidReviewRating, syncReviewPublishState, reportMissingReviewRating };`;
 
