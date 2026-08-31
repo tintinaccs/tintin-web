@@ -5,8 +5,6 @@
   window.TintinGlobalScrollRevealBooted = true;
 
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
-  const currentPath = (window.location.pathname || '').toLowerCase().replace(/\/+$/, '');
-  const isAdminPage = /\/(?:admin|admin-images)(?:\.html)?$/.test(currentPath);
   const fixedExclusions = '#tt-loader,#tt-intro,#tt-welcome-tutorial,#tt-privacy-consent,.tt-header,.tt-tabbar,.tt-mobile-tabs,.tt-mobile-menu,.tt-cart-drawer,.tt-search-panel,.tt-collections-sheet,.tt-account-panel,.adm-overlay,.modal,.adm-modal';
   const revealSelectors = [
     'main>section', '.section', '.section-sm', '.tt-section', '.tt-page-hero', '.tt-hero', '.tt-trust-bar', '.tt-editorial', '.tt-products-section', '.tt-reviews-section', '.tt-footer',
@@ -149,10 +147,6 @@
   function boot() {
     injectStyles();
     bindPressFeedback();
-    if (isAdminPage) {
-      document.documentElement.classList.add('tt-reveal-admin-disabled');
-      return;
-    }
     if (reducedMotion) {
       document.documentElement.classList.add('tt-reveal-reduced-motion');
       return;
