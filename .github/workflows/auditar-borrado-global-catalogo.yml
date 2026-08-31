@@ -58,7 +58,7 @@ jobs:
         run: node scripts/auditar-versionado-cache.mjs
       - name: Guardar evidencia responsive
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: catalog-global-delete-responsive
           path: artifacts/catalog-global-delete-responsive.json
