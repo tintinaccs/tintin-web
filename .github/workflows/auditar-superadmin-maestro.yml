@@ -10,7 +10,8 @@ on:
       - 'js/core/auth/**'
       - 'functions/**'
       - 'firestore.rules'
-      - 'scripts/auditar-superadmin-maestro.mjs'
+      - 'scripts/auditar-superadmin-maestro*.mjs'
+      - 'scripts/cache-version-approvals.json'
       - '.github/workflows/auditar-superadmin-maestro.yml'
   push:
     branches: [main]
@@ -21,7 +22,8 @@ on:
       - 'js/core/auth/**'
       - 'functions/**'
       - 'firestore.rules'
-      - 'scripts/auditar-superadmin-maestro.mjs'
+      - 'scripts/auditar-superadmin-maestro*.mjs'
+      - 'scripts/cache-version-approvals.json'
       - '.github/workflows/auditar-superadmin-maestro.yml'
   workflow_dispatch:
 
@@ -31,7 +33,7 @@ permissions:
 jobs:
   maestro-contract:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -40,8 +42,16 @@ jobs:
           cache: npm
       - name: Instalar dependencias
         run: npm ci
+      - name: Instalar Chromium para Maestro responsive
+        run: npx playwright install --with-deps chromium
       - name: Auditar contrato Maestro y cobertura CRUD
         run: node scripts/auditar-superadmin-maestro.mjs
+      - name: Auditar interconexión completa Maestro
+        run: node scripts/auditar-superadmin-maestro-conexiones.mjs
+      - name: Auditar Maestro Desktop Tablet Mobile
+        run: node scripts/auditar-superadmin-maestro-responsive.mjs
+      - name: Validar versiones immutable actuales
+        run: npm run audit:cache-versioning
       - name: Validar fundación y permisos del Admin
         run: npm run audit:admin-foundation
       - name: Validar Pedidos y ciclo operativo
@@ -57,6 +67,9 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: superadmin-maestro-audit
-          path: artifacts/superadmin-maestro-audit.json
+          path: |
+            artifacts/superadmin-maestro-audit.json
+            artifacts/superadmin-maestro-connections.json
+            artifacts/superadmin-maestro-responsive.json
           if-no-files-found: warn
           retention-days: 30
