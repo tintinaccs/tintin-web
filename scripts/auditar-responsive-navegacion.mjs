@@ -27,8 +27,13 @@ const server = http.createServer((request,response) => {
 });
 await new Promise((resolve,reject) => { server.once('error',reject); server.listen(port,host,resolve); });
 
-function routeLabel(route, width) {
-  return `${route} @ ${width}px`;
+function routeLabel(route, width) { return `${route} @ ${width}px`; }
+
+function configurePage(page, runtimeErrors) {
+  page.setDefaultTimeout(UI_WAIT_MS);
+  page.setDefaultNavigationTimeout(NAVIGATION_WAIT_MS);
+  page.on('pageerror', error => runtimeErrors.push(error.message));
+  return page;
 }
 
 async function exposePage(page) {
@@ -66,7 +71,9 @@ async function waitForNavigationReady(page, route, width) {
 }
 
 async function gotoRoute(page, route, width) {
+  console.log(`Responsive audit: preparando viewport ${routeLabel(route, width)}`);
   await page.setViewportSize({ width, height: Math.max(760, Math.round(width * .72)) });
+  console.log(`Responsive audit: navegando ${routeLabel(route, width)}`);
   try {
     await page.goto(`${baseURL}/${route}`, { waitUntil:'domcontentloaded', timeout:NAVIGATION_WAIT_MS });
   } catch (error) {
@@ -74,6 +81,7 @@ async function gotoRoute(page, route, width) {
   }
   await exposePage(page);
   await waitForNavigationReady(page, route, width);
+  console.log(`Responsive audit: lista ${routeLabel(route, width)}`);
 }
 
 async function expectSurfaceCycle(page, { route, width, trigger, surface }) {
@@ -103,13 +111,11 @@ try {
   const context = await browser.newContext();
   await context.addInitScript(() => {
     window.TT_DISABLE_STORE_GATE = true;
+    window.TINTIN_ENABLE_PUBLIC_ACTIVITY = false;
     try { localStorage.setItem('tt_privacy_consent_v1','accepted'); } catch {}
   });
-  const page = await context.newPage();
-  page.setDefaultTimeout(UI_WAIT_MS);
-  page.setDefaultNavigationTimeout(NAVIGATION_WAIT_MS);
   const runtimeErrors = [];
-  page.on('pageerror',error => runtimeErrors.push(error.message));
+  const page = configurePage(await context.newPage(), runtimeErrors);
   const widths = [320,360,390,430,767,768,820,1023,1024,1280,1440,1920];
   const routes = ['index.html','catalogo.html','collections.html','product.html','about.html','contact.html','checkout.html','perfil.html','envios.html','cambios-devoluciones.html','preguntas-frecuentes.html','terminos.html','privacidad.html'];
 
@@ -183,22 +189,32 @@ try {
   await expectSurfaceCycle(page, { route:'catalogo.html', width:390, trigger:'#tabbar-cart', surface:'#cart-drawer' });
   await expectSurfaceCycle(page, { route:'catalogo.html', width:390, trigger:'#tabbar-cuenta', surface:'#account-drawer' });
 
-  console.log('Responsive audit: validando 13 rutas en mobile/tablet/desktop...');
+  // La matriz extensa usa una página limpia por combinación. Reutilizar la
+  // misma pestaña hacía que el resize de la ruta anterior (por ejemplo
+  // collections 1280 -> product 360) pudiera bloquear el renderer antes de
+  // que page.goto siquiera empezara, atribuyendo el cuelgue a la ruta siguiente.
+  console.log('Responsive audit: validando 13 rutas en mobile/tablet/desktop con páginas aisladas...');
   for (const route of routes) {
     for (const width of [360,820,1280]) {
-      console.log(`Responsive audit: ${route} @ ${width}px`);
-      await gotoRoute(page, route, width);
-      const overflow = await page.evaluate(() => Math.max(document.documentElement.scrollWidth,document.body.scrollWidth) - document.documentElement.clientWidth);
-      check(overflow <= 1, `${route} desborda ${overflow}px a ${width}px`);
-      const loginSurface = await page.evaluate(() => !!document.querySelector('.login-page'));
-      if (loginSurface) continue;
-      const trigger = width === 360 ? '#tabbar-tienda' : width === 820 ? '#btn-menu-tablet' : '#btn-tienda';
-      const surface = width === 360 ? '#collections-sheet' : width === 820 ? '#tt-tablet-menu' : '#tt-tienda-dropdown-panel';
-      await expectSurfaceCycle(page, { route, width, trigger, surface });
+      const routePage = configurePage(await context.newPage(), runtimeErrors);
+      try {
+        await gotoRoute(routePage, route, width);
+        const overflow = await routePage.evaluate(() => Math.max(document.documentElement.scrollWidth,document.body.scrollWidth) - document.documentElement.clientWidth);
+        check(overflow <= 1, `${route} desborda ${overflow}px a ${width}px`);
+        const loginSurface = await routePage.evaluate(() => !!document.querySelector('.login-page'));
+        if (!loginSurface) {
+          const trigger = width === 360 ? '#tabbar-tienda' : width === 820 ? '#btn-menu-tablet' : '#btn-tienda';
+          const surface = width === 360 ? '#collections-sheet' : width === 820 ? '#tt-tablet-menu' : '#tt-tienda-dropdown-panel';
+          await expectSurfaceCycle(routePage, { route, width, trigger, surface });
+        }
+      } finally {
+        await routePage.close({ runBeforeUnload:false }).catch(() => {});
+      }
     }
   }
 
   check(!runtimeErrors.some(message => /SyntaxError|ReferenceError|TypeError/i.test(message)), `Errores runtime: ${runtimeErrors.join(' | ')}`);
+  await page.close({ runBeforeUnload:false }).catch(() => {});
   await context.close();
 } finally {
   await browser.close();
