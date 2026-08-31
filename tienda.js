@@ -936,10 +936,19 @@ function initProductPage() {
   } else {
     // Wait for the first real Firestore response. A connection/rules failure
     // is a load error, not evidence that the product does not exist.
+    const deadlineAt = Date.now() + PRODUCT_PAGE_LOAD_DEADLINE_MS;
     function cleanup() {
       window.removeEventListener('tintin:products-loaded', onProductsLoaded);
       window.removeEventListener('tintin:products-error', onProductsError);
       window.clearTimeout(_pdLoadTimer);
+    }
+    function finishAtDeadline() {
+      cleanup();
+      if (!_pdProduct) _showProductLoadError();
+    }
+    function armDeadline() {
+      window.clearTimeout(_pdLoadTimer);
+      _pdLoadTimer = window.setTimeout(finishAtDeadline, Math.max(0, deadlineAt - Date.now()));
     }
     function onProductsLoaded() {
       cleanup();
@@ -948,23 +957,14 @@ function initProductPage() {
       else _showProductNotFound();
     }
     function onProductsError() {
-      // App Check/Firestore puede emitir un error transitorio mientras el
-      // respaldo REST todavía está resolviendo. No ocultar la ficha por ese
-      // evento: conservar el loading y dejar que products-loaded gane.
-      window.clearTimeout(_pdLoadTimer);
-      _pdLoadTimer = window.setTimeout(() => {
-        cleanup();
-        if (!_pdProduct) _showProductLoadError();
-      }, 10000);
+      // Un error intermedio puede llegar mientras el respaldo por API sigue
+      // vivo. Conservamos la ficha hasta el plazo original, sin reiniciarlo:
+      // ningún evento externo puede prolongar el loading indefinidamente.
+      if (Date.now() >= deadlineAt) finishAtDeadline();
     }
     window.addEventListener('tintin:products-loaded', onProductsLoaded);
     window.addEventListener('tintin:products-error', onProductsError);
-    _pdLoadTimer = window.setTimeout(() => {
-      if (!_pdProduct) {
-        cleanup();
-        _showProductLoadError();
-      }
-    }, 12000);
+    armDeadline();
   }
 }
 
@@ -981,6 +981,7 @@ let _pdQty = 1;
 let _pdMaxQty = 99;
 let _pdGalleryIndex = 0;
 let _pdLoadTimer = 0;
+const PRODUCT_PAGE_LOAD_DEADLINE_MS = 12000;
 
 function _pdUpdateQtyUI() {
   const qtyVal = document.getElementById('qty-val');

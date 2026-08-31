@@ -5,13 +5,13 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260829-community-actions-1';
+const VERSION = 'tintin-20260831-product-loading-4';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260816-loader-shell-bridge-1';
 const LOADER_VERSION = 'tintin-20260830-store-gate-api-1';
 const STORE_GATE_VERSION = 'tintin-20260830-store-gate-api-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
-const PUBLIC_SHELL_VERSION = 'tintin-20260831-product-loading-2';
-const NAV_ENTRY_VERSION = 'tintin-20260831-product-loading-2';
+const PUBLIC_SHELL_VERSION = 'tintin-20260831-product-loading-4';
+const NAV_ENTRY_VERSION = 'tintin-20260831-product-loading-4';
 const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const VISUAL_BUILDER_VERSION = 'tintin-20260826-carousel-order-3';
 const SESSION_PROTECTION_VERSION = 'tintin-20260829-persistent-session-1';
