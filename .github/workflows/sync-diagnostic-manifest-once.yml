@@ -1,0 +1,45 @@
+name: One-shot diagnostic manifest sync
+
+on:
+  push:
+    branches:
+      - claude/tintin-technical-audit-b7w1m9
+    paths:
+      - '.github/workflows/sync-diagnostic-manifest-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target branch
+        uses: actions/checkout@v5
+        with:
+          ref: claude/tintin-technical-audit-b7w1m9
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Regenerate final manifest without this helper
+        run: |
+          rm -f .github/workflows/sync-diagnostic-manifest-once.yml
+          node scripts/construir-manifiesto-diagnostico.js
+          node scripts/verificar-manifiesto-diagnostico.js
+          git diff --check
+
+      - name: Commit generated manifest and self-remove
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostic-manifest.json .github/workflows/sync-diagnostic-manifest-once.yml
+          if git diff --cached --quiet; then
+            echo "No generated changes to commit."
+            exit 0
+          fi
+          git commit -m "chore: sync diagnostic manifest"
+          git push origin HEAD:claude/tintin-technical-audit-b7w1m9
