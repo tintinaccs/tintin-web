@@ -93,7 +93,7 @@ function loadHomeMaintenance() {
 
 export function loadProductsRuntime({ forSearch = false } = {}) {
   if (!productsRuntimePromise) {
-    productsRuntimePromise = import('../../../core/store/estado-productos.js?v=tintin-20260831-product-loading-3').catch(error => {
+    productsRuntimePromise = import(versionedJsModule('core/store/estado-productos.js')).catch(error => {
       productsRuntimePromise = null;
       document.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
       throw error;
