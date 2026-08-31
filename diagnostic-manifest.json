@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-31T02:28:33.312Z",
-  "sourceFingerprint": "58177ba5de5815f279e8ee42cfe219d4ac1f8d6bdb8d23938393308ad3725c0d",
+  "generatedAt": "2026-08-31T02:33:53.571Z",
+  "sourceFingerprint": "44220ff25c9ecd7de43eb613e5f09a6b5906a2bb515f27bed870e00b375e9906",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 791,
-    "textFiles": 759,
-    "totalBytes": 8771212,
+    "files": 790,
+    "textFiles": 758,
+    "totalBytes": 8769877,
     "pages": 18,
     "modules": 510
   },
@@ -30952,12 +30952,6 @@
       "extension": ".yml",
       "bytes": 6857,
       "sha256": "b7ef9000290d95652ccee0c392daede334edb704691abf684e557ab3480f2498"
-    },
-    {
-      "path": ".github/workflows/sync-diagnostic-manifest-once.yml",
-      "extension": ".yml",
-      "bytes": 1335,
-      "sha256": "adae6e13d761f41e1a4525f5f18cb20dcf255bd9dbdb256f555bb98661e72948"
     },
     {
       "path": ".github/workflows/validar-editor-visual-seguro.yml",
