@@ -1,0 +1,36 @@
+name: Regenerar manifiesto Maestro temporal
+
+on:
+  push:
+    branches: [feat/superadmin-maestro-crud]
+    paths:
+      - '.github/workflows/regen-maestro-manifest-temp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: feat/superadmin-maestro-crud
+          fetch-depth: 0
+      - name: Eliminar utilidad temporal
+        run: rm .github/workflows/regen-maestro-manifest-temp.yml
+      - name: Regenerar manifiesto diagnóstico
+        run: node scripts/construir-manifiesto-diagnostico.js
+      - name: Validar tipografía y manifiesto
+        run: |
+          node scripts/auditar-tipografia.js
+          npm run verify:diagnostics
+          git diff --check
+      - name: Guardar manifiesto actualizado
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: actualizar manifiesto de Maestro"
+          git push origin HEAD:feat/superadmin-maestro-crud
