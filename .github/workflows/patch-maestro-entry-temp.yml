@@ -32,22 +32,6 @@ jobs:
 
           const originalBootstrap = `(function(){\n'use strict';\nif(window.TintinAdminMobileSidebarFixBooted)return;\nwindow.TintinAdminMobileSidebarFixBooted=true;\nvar path=(location.pathname||'').toLowerCase();\nif(!(path.endsWith('/admin.html')||path.endsWith('/admin')))return;\ndocument.documentElement.classList.add('adm-sidebar-responsive-ready');\n})();\n`;
           fs.writeFileSync('js/admin/ajuste-barra-lateral-movil-admin.js', originalBootstrap);
-
-          const connectionsPath = 'scripts/auditar-superadmin-maestro-conexiones.mjs';
-          let connections = fs.readFileSync(connectionsPath, 'utf8');
-          const oldBootstrapCheck = "check('maestro-bootstrap', 'Maestro está conectado al bootstrap administrativo', has(files.maestroBootstrap, './maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-1'));";
-          const newBootstrapCheck = "check('maestro-entry', 'Maestro tiene entrada versionada directa desde admin.html', has(files.admin, 'js/admin/maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-1'));\ncheck('maestro-bootstrap-clean', 'El bootstrap responsive histórico conserva su responsabilidad original', !has(files.maestroBootstrap, 'maestro/panel-maestro'));";
-          if (connections.includes(oldBootstrapCheck)) connections = connections.replace(oldBootstrapCheck, newBootstrapCheck);
-          if (!connections.includes("check('maestro-entry'")) throw new Error('No quedó configurado el contrato de entrada directa Maestro');
-          connections = connections.replace("has(files.maestroBootstrap, 'tintin-20260831-superadmin-maestro-1') &&", "has(files.admin, 'js/admin/maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-1') &&");
-
-          const oldEngagement = "check('engagement-admin-api', 'Reseñas y Me gusta mutan por API administrativa protegida', has(files.participation, '/api/admin-engagement') && has(files.adminEngagementApi, 'SUPER_ADMIN'));";
-          const newEngagement = "check('engagement-admin-api', 'Reseñas y Me gusta mutan por API administrativa protegida', has(files.participation, '/api/admin-engagement') && hasAll(files.adminEngagementApi, ['requireSuperAdmin', 'originIsAllowed', 'request.method !== \'POST\'']));";
-          if (connections.includes(oldEngagement)) connections = connections.replace(oldEngagement, newEngagement);
-          if (!connections.includes("['requireSuperAdmin', 'originIsAllowed', 'request.method !== \\'POST\\'']")) {
-            throw new Error('No quedó configurado el contrato real de autorización de engagement');
-          }
-          fs.writeFileSync(connectionsPath, connections);
           NODE
       - name: Retirar workflow temporal antes de generar inventarios
         run: rm .github/workflows/patch-maestro-entry-temp.yml
