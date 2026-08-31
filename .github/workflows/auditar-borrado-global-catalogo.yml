@@ -7,8 +7,10 @@ on:
       - 'js/admin/products/**'
       - 'functions/api/admin-catalog-delete.js'
       - 'cloudflare/borrado-global-catalogo.js'
+      - 'cloudflare/resiliencia-sync-catalogo.js'
       - 'scripts/auditar-borrado-global-catalogo*'
       - 'apps-script/**'
+      - 'diagnostic-manifest.json'
       - '.github/workflows/auditar-borrado-global-catalogo.yml'
   push:
     branches: [main]
@@ -17,8 +19,10 @@ on:
       - 'js/admin/products/**'
       - 'functions/api/admin-catalog-delete.js'
       - 'cloudflare/borrado-global-catalogo.js'
+      - 'cloudflare/resiliencia-sync-catalogo.js'
       - 'scripts/auditar-borrado-global-catalogo*'
       - 'apps-script/**'
+      - 'diagnostic-manifest.json'
       - '.github/workflows/auditar-borrado-global-catalogo.yml'
 
 permissions:
@@ -40,9 +44,12 @@ jobs:
         run: |
           node --check functions/api/admin-catalog-delete.js
           node --check cloudflare/borrado-global-catalogo.js
+          node --check cloudflare/resiliencia-sync-catalogo.js
           node --check js/admin/products/borrado-global-catalogo-admin.js
       - name: Auditar contrato global
         run: node scripts/auditar-borrado-global-catalogo.mjs
+      - name: Verificar manifiesto diagnóstico
+        run: npm run verify:diagnostics
       - name: Instalar Chromium
         run: npx playwright install --with-deps chromium
       - name: Validar Desktop Tablet Mobile
