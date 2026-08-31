@@ -30,11 +30,25 @@ function normalizeResource(value) {
         : '';
 }
 
+function normalizeProductId(value) {
+  const id = String(value || '').trim();
+  return /^[A-Za-z0-9_-]{1,128}$/.test(id) ? id : '';
+}
+
 function documentId(document) {
   return String(document?.name || '').split('/').pop() || '';
 }
 
-async function buildPayload(env, resource) {
+function productItem(document) {
+  if (!document) return null;
+  const id = documentId(document);
+  if (!id) return null;
+  const data = pickKnownFields(decodeFirestoreFields(document?.fields || {}), PRODUCT_FIELDS);
+  if (data.active === false) return null;
+  return { id, data };
+}
+
+async function buildPayload(env, resource, productId = '') {
   if (resource === 'storeGate') {
     const document = await firestoreAdminGet(env, 'settings/storeGate');
     const data = decodeFirestoreFields(document?.fields || {});
@@ -49,6 +63,13 @@ async function buildPayload(env, resource) {
       }
     };
   }
+
+  if (resource === 'products' && productId) {
+    const item = productItem(await firestoreAdminGet(env, `products/${productId}`));
+    const items = item ? [item] : [];
+    return { ok: true, resource, items, count: items.length, lookup: 'single' };
+  }
+
   const docs = await firestoreAdminListAll(env, resource, resource === 'products' ? 1000 : 300);
   const allowed = resource === 'products' ? PRODUCT_FIELDS : COLLECTION_FIELDS;
   const items = docs.map(document => ({
@@ -76,8 +97,17 @@ export async function onRequest({ request, env, waitUntil }) {
     });
   }
 
+  const hasProductId = resource === 'products' && url.searchParams.has('id');
+  const productId = hasProductId ? normalizeProductId(url.searchParams.get('id')) : '';
+  if (hasProductId && !productId) {
+    return Response.json({ ok: false, error: 'product_id_invalid' }, {
+      status: 400,
+      headers: { 'cache-control': 'no-store', 'x-content-type-options': 'nosniff' }
+    });
+  }
+
   const cacheUrl = new URL(request.url);
-  cacheUrl.search = '?resource=' + resource;
+  cacheUrl.search = '?resource=' + resource + (productId ? '&id=' + encodeURIComponent(productId) : '');
   const cacheKey = new Request(cacheUrl.toString(), { method: 'GET' });
   const cache = caches.default;
   const cached = await cache.match(cacheKey);
@@ -88,7 +118,7 @@ export async function onRequest({ request, env, waitUntil }) {
   }
 
   try {
-    const payload = await buildPayload(env, resource);
+    const payload = await buildPayload(env, resource, productId);
     const response = Response.json(payload, {
       headers: {
         'cache-control': 'public, max-age=30, s-maxage=60',
@@ -101,7 +131,12 @@ export async function onRequest({ request, env, waitUntil }) {
     else await task;
     return response;
   } catch (error) {
-    console.error(JSON.stringify({ message: 'public-catalog failed', resource, error: error?.message || String(error) }));
+    console.error(JSON.stringify({
+      message: 'public-catalog failed',
+      resource,
+      productId: productId || undefined,
+      error: error?.message || String(error)
+    }));
     return Response.json({ ok: false, error: 'catalog_unavailable' }, {
       status: 502,
       headers: { 'cache-control': 'no-store', 'x-content-type-options': 'nosniff' }
