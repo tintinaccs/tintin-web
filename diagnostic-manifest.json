@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-31T01:21:51.982Z",
-  "sourceFingerprint": "d62a6b38e6e5eeb62e69e85a99bf62e2e3e29cf17d6ba46065b71fd3746bb288",
+  "generatedAt": "2026-08-31T01:40:23.315Z",
+  "sourceFingerprint": "191534413dc2832063a5b991c35a2730b0138d765421dfbabf8099bb42ec11d3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 789,
     "textFiles": 757,
-    "totalBytes": 8760655,
+    "totalBytes": 8761653,
     "pages": 18,
     "modules": 509
   },
@@ -21242,8 +21242,8 @@
     },
     {
       "path": "js/cargador-pagina.js",
-      "bytes": 41299,
-      "sha256": "edba2672380b687d287f0c724be25fa1545397fd9706ce7c73b979830027cbb2",
+      "bytes": 41268,
+      "sha256": "7b907c9aa447ad25b37418db47afb777f1adb9b5d823b61a4642f38adeae589f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27634,8 +27634,8 @@
     },
     {
       "path": "scripts/auditar-todas-navegacion-superficies-ci.mjs",
-      "bytes": 2360,
-      "sha256": "41db3cbf6650785c520cdd27cd50c298ac8dfd76e2a7911ae0666c5c0860868b",
+      "bytes": 3389,
+      "sha256": "fb51fd06e997d58a765dd640a7c6d90d59d758e5a6e306a2997777670886ae6b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27645,25 +27645,25 @@
           "raw": "node:fs/promises",
           "target": null,
           "dynamic": false,
-          "line": 16
+          "line": 25
         },
         {
           "raw": "node:path",
           "target": null,
           "dynamic": false,
-          "line": 17
+          "line": 26
         },
         {
           "raw": "node:child_process",
           "target": null,
           "dynamic": false,
-          "line": 18
+          "line": 27
         },
         {
           "raw": "node:url",
           "target": null,
           "dynamic": false,
-          "line": 19
+          "line": 28
         }
       ],
       "endpoints": []
@@ -32883,8 +32883,8 @@
     {
       "path": "js/cargador-pagina.js",
       "extension": ".js",
-      "bytes": 41299,
-      "sha256": "edba2672380b687d287f0c724be25fa1545397fd9706ce7c73b979830027cbb2"
+      "bytes": 41268,
+      "sha256": "7b907c9aa447ad25b37418db47afb777f1adb9b5d823b61a4642f38adeae589f"
     },
     {
       "path": "js/components/cart/politica-persistencia-carrito.js",
@@ -34779,8 +34779,8 @@
     {
       "path": "scripts/auditar-todas-navegacion-superficies-ci.mjs",
       "extension": ".mjs",
-      "bytes": 2360,
-      "sha256": "41db3cbf6650785c520cdd27cd50c298ac8dfd76e2a7911ae0666c5c0860868b"
+      "bytes": 3389,
+      "sha256": "fb51fd06e997d58a765dd640a7c6d90d59d758e5a6e306a2997777670886ae6b"
     },
     {
       "path": "scripts/auditar-todas-navegacion-superficies.mjs",
