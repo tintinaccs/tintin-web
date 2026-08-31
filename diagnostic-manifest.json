@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-31T03:40:43.440Z",
-  "sourceFingerprint": "ba4c4afdc007c4b4a9922fdcb3b803ea6064ef5de36a6d328f9a232239af1823",
+  "generatedAt": "2026-08-31T06:18:35.149Z",
+  "sourceFingerprint": "1049aefe3f4e15e3a5bcc62cf92945d9f6f2536a7acfe339a24cf7220d7c9830",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 790,
     "textFiles": 758,
-    "totalBytes": 8771288,
+    "totalBytes": 8777835,
     "pages": 18,
     "modules": 510
   },
@@ -25310,8 +25310,8 @@
     },
     {
       "path": "scripts/auditar-canonicos-viewports.mjs",
-      "bytes": 15267,
-      "sha256": "84db9d38e64cafed6a53ea9af586db80c7b2df37ac1709297d33d6d000474322",
+      "bytes": 21814,
+      "sha256": "7b7db5958cbd82f50c82b3677a5c654aa66e87bf3b0d56ebd1de1a35ba0d2b8b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25348,7 +25348,12 @@
           "line": 5
         }
       ],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://www.gstatic.com/",
+          "line": 386
+        }
+      ]
     },
     {
       "path": "scripts/auditar-cargador-solid.js",
@@ -34232,8 +34237,8 @@
     {
       "path": "scripts/auditar-canonicos-viewports.mjs",
       "extension": ".mjs",
-      "bytes": 15267,
-      "sha256": "84db9d38e64cafed6a53ea9af586db80c7b2df37ac1709297d33d6d000474322"
+      "bytes": 21814,
+      "sha256": "7b7db5958cbd82f50c82b3677a5c654aa66e87bf3b0d56ebd1de1a35ba0d2b8b"
     },
     {
       "path": "scripts/auditar-cargador-solid.js",
