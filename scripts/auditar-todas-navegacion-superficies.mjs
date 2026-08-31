@@ -79,6 +79,23 @@ function withTimeout(promise, ms, label) {
   return Promise.race([Promise.resolve(promise), timeout]).finally(() => clearTimeout(timer));
 }
 
+// context.close()/browser.close() son las unicas esperas del script sin timeout
+// propio: si Chromium queda colgado al cerrar (visto en CI como un job entero
+// sin ninguna salida hasta el timeout-minutes del workflow), el script entero
+// se cuelga sin diagnostico. Se acotan igual que evaluate/waitForFunction.
+function safeClose(closeable, ms, label) {
+  return withTimeout(closeable.close(), ms, label).catch(error => {
+    console.error(`Aviso: ${label} no cerro dentro de ${ms}ms (${error.message}); se continua.`);
+  });
+}
+
+let currentStep = 'inicio';
+const WATCHDOG_MS = 480000;
+const watchdogTimer = setTimeout(() => {
+  console.error(`\nAUDIT COLGADO: sin progreso tras ${WATCHDOG_MS}ms. Ultimo paso: ${currentStep}`);
+  process.exit(1);
+}, WATCHDOG_MS);
+
 // page.evaluate()/$$eval() no respetan page.setDefaultTimeout() (a diferencia de
 // waitForFunction/locator().evaluate()): si el JS de la pagina queda bloqueado
 // (p. ej. un guard de auth reintentando contra peticiones ya abortadas por la
@@ -135,6 +152,7 @@ async function gotoReady(page, url) {
 /* ---------- 1. Cada pagina publica: sin pageerror, sin IDs duplicados, exactamente una navegacion visible por breakpoint ---------- */
 for (const url of PUBLIC_PAGES) {
   for (const [label, width, height] of BREAKPOINTS) {
+    currentStep = `seccion 1: ${url} ${label}`;
     const { ctx, page, pageErrors } = await newPage(width, height);
     // product.html sin ?id= (el unico caso que esta auditoria visita) nunca resuelve
     // un producto real bajo la politica de red solo-localhost de newPage() (Firestore
@@ -171,7 +189,7 @@ for (const url of PUBLIC_PAGES) {
     } catch (error) {
       failures.push(`[${url} ${label}] Excepcion durante el audit: ${error.message}`);
     } finally {
-      await ctx.close();
+      await safeClose(ctx, 8000, 'context.close');
     }
   }
 }
@@ -179,6 +197,7 @@ for (const url of PUBLIC_PAGES) {
 /* ---------- 2. Paginas auxiliares: ningun indicador activo falso (sin fallback a "Inicio") ---------- */
 for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
   for (const [label, width, height] of [['desktop', 1440, 900], ['tablet', 820, 1180], ['mobile', 390, 844]]) {
+    currentStep = `seccion 2: ${url} ${label}`;
     const { ctx, page } = await newPage(width, height);
     try {
       await gotoReady(page, url);
@@ -192,13 +211,14 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
     } catch (error) {
       failures.push(`[${url} ${label}] Excepcion en chequeo de indicador activo: ${error.message}`);
     } finally {
-      await ctx.close();
+      await safeClose(ctx, 8000, 'context.close');
     }
   }
 }
 
 /* ---------- 3. Dropdown "Tienda" desktop: no modal, foco correcto por dispositivo de entrada, cierre por click afuera ---------- */
 {
+  currentStep = 'seccion 3: dropdown Tienda';
   const { ctx, page } = await newPage(1440, 900);
   try {
     await gotoReady(page, 'index.html');
@@ -242,12 +262,13 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
   } catch (error) {
     failures.push(`[dropdown Tienda] Excepcion: ${error.message}`);
   } finally {
-    await ctx.close();
+    await safeClose(ctx, 8000, 'context.close');
   }
 }
 
 /* ---------- 4. Menu tablet: un solo close() por click de link (sin doble cierre) ---------- */
 {
+  currentStep = 'seccion 4: menu tablet';
   const { ctx, page } = await newPage(820, 1180);
   try {
     await gotoReady(page, 'about.html');
@@ -272,12 +293,13 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
   } catch (error) {
     failures.push(`[menu tablet] Excepcion: ${error.message}`);
   } finally {
-    await ctx.close();
+    await safeClose(ctx, 8000, 'context.close');
   }
 }
 
 /* ---------- 5. Header oculto por scroll: reaparece con foco interno y no se re-oculta mientras dure ---------- */
 {
+  currentStep = 'seccion 5: header scroll-hide';
   const { ctx, page } = await newPage(1440, 900);
   try {
     await gotoReady(page, 'about.html');
@@ -303,7 +325,7 @@ for (const url of AUX_PAGES_NO_ACTIVE_ROUTE) {
   } catch (error) {
     failures.push(`[header scroll-hide] Excepcion: ${error.message}`);
   } finally {
-    await ctx.close();
+    await safeClose(ctx, 8000, 'context.close');
   }
 }
 
@@ -312,6 +334,7 @@ for (const [url, selectors] of [
   ['admin.html', ['.adm-nav-item', '.adm-topbar-btn']],
   ['admin-images.html', ['.adm-back-btn']],
 ]) {
+  currentStep = `seccion 6: ${url}`;
   const { ctx, page } = await newPage(1440, 900);
   try {
     await gotoReady(page, url);
@@ -324,11 +347,13 @@ for (const [url, selectors] of [
   } catch (error) {
     failures.push(`[${url}] Excepcion en chequeo de touch targets: ${error.message}`);
   } finally {
-    await ctx.close();
+    await safeClose(ctx, 8000, 'context.close');
   }
 }
 
-await browser.close();
+currentStep = 'cierre final';
+await safeClose(browser, 10000, 'browser.close');
+clearTimeout(watchdogTimer);
 server.close();
 
 console.log(`Auditoria de navegacion: ${PUBLIC_PAGES.length} paginas publicas x ${BREAKPOINTS.length} breakpoints + dropdown Tienda + menu tablet + header scroll-hide + admin.`);
