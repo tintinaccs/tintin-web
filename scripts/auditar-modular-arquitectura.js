@@ -87,7 +87,9 @@ if (requiredFiles.every(exists)) {
   check(registrations.includes("controller.connect({"), 'registro: falta conectar backdrop y morph');
   check(surfaces.includes('preserveEnvironment'), 'controlador: el cambio modal a modal no preserva su entorno');
   check(surfaces.includes("this.close('outside', { restoreFocus: false })"), 'controlador: Tienda escritorio puede reabrirse por foco');
-  check(runtime.includes('components/navigation/compartido/control-busqueda.js'), 'runtime: no carga el buscador modular');
+  const modularSearchRefs = runtime.match(/control-busqueda\.js/g) || [];
+  const loadsModularSearch = /import\(\s*(?:versionedJsModule\(['"]components\/navigation\/compartido\/control-busqueda\.js['"]\)|['"]\.\/control-busqueda\.js(?:\?v=[^'"]+)?['"])\s*\)/.test(runtime);
+  check(modularSearchRefs.length === 1 && loadsModularSearch, 'runtime: debe cargar exactamente una vez el buscador modular');
   check(search.includes('aria-activedescendant'), 'buscar: falta navegación accesible de resultados');
   check(search.includes('productSearchText'), 'buscar: falta índice normalizado reutilizable');
   check(search.includes('tintin:products-error'), 'buscar: falta estado de error del catálogo');
