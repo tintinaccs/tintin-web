@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-31T01:40:23.315Z",
-  "sourceFingerprint": "191534413dc2832063a5b991c35a2730b0138d765421dfbabf8099bb42ec11d3",
+  "generatedAt": "2026-08-31T02:28:33.312Z",
+  "sourceFingerprint": "58177ba5de5815f279e8ee42cfe219d4ac1f8d6bdb8d23938393308ad3725c0d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 789,
-    "textFiles": 757,
-    "totalBytes": 8761653,
+    "files": 791,
+    "textFiles": 759,
+    "totalBytes": 8771212,
     "pages": 18,
-    "modules": 509
+    "modules": 510
   },
   "viewports": [
     {
@@ -18127,8 +18127,8 @@
     },
     {
       "path": "functions/_middleware.js",
-      "bytes": 2673,
-      "sha256": "39fd9f9c59bc74263913f3350277de08d8550cc3596790e012f8abe76e26e06a",
+      "bytes": 3688,
+      "sha256": "f1465388c04bb3f90c2cc2e6fb932e945a30f69df8a99aa9f416b4ce168d11d8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18943,8 +18943,8 @@
     },
     {
       "path": "functions/api/public-catalog.js",
-      "bytes": 4137,
-      "sha256": "1d27e8b7b4a55beeafa3cfddc8516e45437ec33130ef3147b2fefff701ad9543",
+      "bytes": 5352,
+      "sha256": "37b4eaf99c441c9f1ec45ededfceafc3ffc8db8424149d90d3adb61d9827261c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24494,6 +24494,17 @@
       "path": "js/pages/product/beneficios-producto.js",
       "bytes": 891,
       "sha256": "705888ed8de0ef0ac70a3579d1dd68002ebaf95e7357c407b3ab36f9bfa36b32",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/pages/product/carga-producto-publico.js",
+      "bytes": 5729,
+      "sha256": "098e21d10737f06362b69a2b2fd18f73505468b8d1386b8023edbddd5ab81196",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30943,6 +30954,12 @@
       "sha256": "b7ef9000290d95652ccee0c392daede334edb704691abf684e557ab3480f2498"
     },
     {
+      "path": ".github/workflows/sync-diagnostic-manifest-once.yml",
+      "extension": ".yml",
+      "bytes": 1335,
+      "sha256": "adae6e13d761f41e1a4525f5f18cb20dcf255bd9dbdb256f555bb98661e72948"
+    },
+    {
       "path": ".github/workflows/validar-editor-visual-seguro.yml",
       "extension": ".yml",
       "bytes": 3220,
@@ -32241,8 +32258,8 @@
     {
       "path": "functions/_middleware.js",
       "extension": ".js",
-      "bytes": 2673,
-      "sha256": "39fd9f9c59bc74263913f3350277de08d8550cc3596790e012f8abe76e26e06a"
+      "bytes": 3688,
+      "sha256": "f1465388c04bb3f90c2cc2e6fb932e945a30f69df8a99aa9f416b4ce168d11d8"
     },
     {
       "path": "functions/admin-images.js",
@@ -32415,8 +32432,8 @@
     {
       "path": "functions/api/public-catalog.js",
       "extension": ".js",
-      "bytes": 4137,
-      "sha256": "1d27e8b7b4a55beeafa3cfddc8516e45437ec33130ef3147b2fefff701ad9543"
+      "bytes": 5352,
+      "sha256": "37b4eaf99c441c9f1ec45ededfceafc3ffc8db8424149d90d3adb61d9827261c"
     },
     {
       "path": "functions/api/push-admin.js",
@@ -33751,6 +33768,12 @@
       "sha256": "705888ed8de0ef0ac70a3579d1dd68002ebaf95e7357c407b3ab36f9bfa36b32"
     },
     {
+      "path": "js/pages/product/carga-producto-publico.js",
+      "extension": ".js",
+      "bytes": 5729,
+      "sha256": "098e21d10737f06362b69a2b2fd18f73505468b8d1386b8023edbddd5ab81196"
+    },
+    {
       "path": "js/pages/product/mantenimiento-producto.js",
       "extension": ".js",
       "bytes": 10868,
@@ -34815,8 +34838,8 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 38,
-      "sha256": "dd9d3b46a69239cd812969333746634c254684c83bb0c9501af9d578669e38b8"
+      "bytes": 303,
+      "sha256": "73e78a82644a3e3f507b5e58840dfb8ec4dc5ae9a6c2b1a404d52e48f516cc17"
     },
     {
       "path": "scripts/cache-version-baseline.json",
@@ -37034,6 +37057,12 @@
       "file": "js/core/store/visual-studio-global-runtime.js",
       "line": 228,
       "target": "/api/visual-studio-global-public",
+      "method": "GET"
+    },
+    {
+      "file": "js/pages/product/carga-producto-publico.js",
+      "line": 107,
+      "target": "/api/public-catalog",
       "method": "GET"
     },
     {
