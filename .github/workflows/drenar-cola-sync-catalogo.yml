@@ -1,0 +1,38 @@
+name: Drenar cola de sincronización de catálogo a Sheets
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Cada 15 minutos. Procesa catalogSheetSyncQueue aunque nadie abra el panel.
+    - cron: '*/15 * * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: drenar-cola-sync-catalogo
+  cancel-in-progress: false
+
+jobs:
+  drenar:
+    name: Procesar cola pendiente con límite, backoff y dead-letter
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v5
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Drenar catalogSheetSyncQueue
+        env:
+          FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+          SHEETS_ENGAGEMENT_SECRET: ${{ secrets.SHEETS_ENGAGEMENT_SECRET }}
+        run: node scripts/drenar-cola-sync-catalogo.mjs

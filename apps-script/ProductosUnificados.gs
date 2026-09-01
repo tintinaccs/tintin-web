@@ -482,6 +482,52 @@ function tintinPrepareNewProductRow_(sheet, rowNumber) {
   });
 }
 
+// Compartido entre el sincronizador con idToken (tintinSyncProductsFromFirestore_)
+// y el worker programado con secreto (tintinSyncProductsFromPayload_): escribe
+// una fila de Productos a partir de un producto/inventario ya resueltos.
+function tintinWriteProductRow_(sheet, rowNumber, product, inventory) {
+  product = product || {};
+  inventory = inventory || {};
+  tintinPrepareNewProductRow_(sheet, rowNumber);
+  tintinMarkRowPushInProgress_(sheet, rowNumber);
+  var current = sheet.getRange(rowNumber, 1, 1, 35).getValues()[0];
+  var sold = Number(current[9] || 0);
+  var purchased = inventory.purchased == null
+    ? (product.stock == null ? current[8] : Number(product.stock) + sold)
+    : inventory.purchased;
+
+  sheet.getRange(rowNumber, 4, 1, 3).setValues([[
+    product.category || '',
+    inventory.costUnit == null ? '' : inventory.costUnit,
+    product.price == null ? '' : product.price
+  ]]);
+  sheet.getRange(rowNumber, 9).setValue(purchased == null ? '' : purchased);
+  sheet.getRange(rowNumber, 12).setValue(inventory.stockMinimum == null ? '' : inventory.stockMinimum);
+  sheet.getRange(rowNumber, 14, 1, 21).setValues([[
+    inventory.internalNotes || '',
+    tintinYesNo_(product.active !== false),
+    tintinYesNo_(product.oferta === true),
+    tintinYesNo_(product.destacado === true),
+    product.priceBefore == null ? '' : product.priceBefore,
+    product.badge || '',
+    product.imageUrl || '',
+    product.description || '',
+    new Date(),
+    product.material || '',
+    product.measurements || '',
+    product.colorFinish || '',
+    product.care || '',
+    product.waterResistance || '',
+    product.warranty || '',
+    product.sizeFit || '',
+    product.packageContents || '',
+    Array.isArray(product.imagesExtra) ? product.imagesExtra.join('\n') : '',
+    product.collection || '',
+    Array.isArray(product.tags) ? product.tags.join(', ') : '',
+    product.variants ? JSON.stringify(product.variants) : ''
+  ]]);
+}
+
 function tintinSyncProductsFromFirestore_(body) {
   var auth = verifyFirebaseIdToken_(body && body.idToken);
   if (!auth || auth.ok !== true || !phase3EmailMatches_(auth.email, SUPER_ADMIN_EMAIL)) {
@@ -504,56 +550,52 @@ function tintinSyncProductsFromFirestore_(body) {
     var product = productResult.data || {};
     var inventoryResult = phase3FetchDocument_('productInventory/' + encodeURIComponent(id), body.idToken);
     var inventory = inventoryResult.ok ? inventoryResult.data || {} : {};
-    tintinPrepareNewProductRow_(sheet, rowNumber);
-    tintinMarkRowPushInProgress_(sheet, rowNumber);
-    var current = sheet.getRange(rowNumber, 1, 1, 35).getValues()[0];
-    var sold = Number(current[9] || 0);
-    var purchased = inventory.purchased == null
-      ? (product.stock == null ? current[8] : Number(product.stock) + sold)
-      : inventory.purchased;
-
     sheet.getRange(rowNumber, 1, 1, 2).setValues([[id, product.name || '']]);
-    sheet.getRange(rowNumber, 4, 1, 3).setValues([[
-      product.category || '',
-      inventory.costUnit == null ? '' : inventory.costUnit,
-      product.price == null ? '' : product.price
-    ]]);
-    sheet.getRange(rowNumber, 9).setValue(purchased == null ? '' : purchased);
-    sheet.getRange(rowNumber, 12).setValue(inventory.stockMinimum == null ? '' : inventory.stockMinimum);
-    sheet.getRange(rowNumber, 14, 1, 21).setValues([[
-      inventory.internalNotes || '',
-      tintinYesNo_(product.active !== false),
-      tintinYesNo_(product.oferta === true),
-      tintinYesNo_(product.destacado === true),
-      product.priceBefore == null ? '' : product.priceBefore,
-      product.badge || '',
-      product.imageUrl || '',
-      product.description || '',
-      new Date(),
-      product.material || '',
-      product.measurements || '',
-      product.colorFinish || '',
-      product.care || '',
-      product.waterResistance || '',
-      product.warranty || '',
-      product.sizeFit || '',
-      product.packageContents || '',
-      Array.isArray(product.imagesExtra) ? product.imagesExtra.join('\n') : '',
-      product.collection || '',
-      Array.isArray(product.tags) ? product.tags.join(', ') : '',
-      product.variants ? JSON.stringify(product.variants) : ''
-    ]]);
+    tintinWriteProductRow_(sheet, rowNumber, product, inventory);
   });
 
   return ContentService.createTextOutput(JSON.stringify({ ok: true, sheetName: TINTIN_PRODUCTS_SHEET, synced: ids.length }))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+// Worker programado (catalogSheetSyncQueue): Cloudflare ya resolvió products/
+// productInventory con su propia credencial de servicio y empuja el payload
+// completo, porque un cron no dispone de un idToken de usuario vivo para que
+// Apps Script tire de Firestore por sí mismo. Autenticación por secreto
+// compartido, igual que tintinParityHandleServerOrderSync_ para syncOrder.
+function tintinSyncProductsFromPayload_(body) {
+  if (!tintinParitySecretMatches_(body.secret)) {
+    return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'No autorizado' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  var items = Array.isArray(body.items) ? body.items.slice(0, 100) : [];
+  var sheet = tintinProductsSpreadsheet_().getSheetByName(TINTIN_PRODUCTS_SHEET);
+  if (!sheet) throw new Error('No existe la hoja Productos.');
+
+  items.forEach(function(item) {
+    var id = String((item && item.id) || '').trim();
+    if (!/^[A-Za-z0-9_-]{1,128}$/.test(id)) return;
+    var rowNumber = tintinFindProductRow_(sheet, id);
+    if (!item.exists) {
+      if (rowNumber <= sheet.getLastRow()) sheet.deleteRow(rowNumber);
+      return;
+    }
+    var product = item.product || {};
+    sheet.getRange(rowNumber, 1, 1, 2).setValues([[id, product.name || '']]);
+    tintinWriteProductRow_(sheet, rowNumber, product, item.inventory || {});
+  });
+
+  return ContentService.createTextOutput(JSON.stringify({ ok: true, sheetName: TINTIN_PRODUCTS_SHEET, synced: items.length }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
 // Llamar desde el doPost existente. Devuelve null cuando la solicitud no
 // pertenece al sincronizador de productos y permite continuar las demás rutas.
 function tintinHandleUnifiedProductsPost_(body) {
-  if (!body || body.action !== 'syncProducts') return null;
-  return tintinSyncProductsFromFirestore_(body);
+  if (!body) return null;
+  if (body.action === 'syncProducts') return tintinSyncProductsFromFirestore_(body);
+  if (body.action === 'syncProductsPayload') return tintinSyncProductsFromPayload_(body);
+  return null;
 }
 
 function tintinDiagnosticarWebhookProductos() {
