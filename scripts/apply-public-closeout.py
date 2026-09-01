@@ -20,6 +20,30 @@ def regex_once(path, pattern, replacement, flags=0):
     p.write_text(updated, encoding='utf-8')
 
 
+def replace_token_everywhere(old, new):
+    changed = 0
+    skip_dirs = {'.git', 'node_modules', 'dist', 'coverage'}
+    allowed_suffixes = {'.js', '.mjs', '.html', '.md', '.yml', '.yaml', '.json', '.txt', '.py'}
+    for p in Path('.').rglob('*'):
+        if not p.is_file() or p.suffix.lower() not in allowed_suffixes:
+            continue
+        if any(part in skip_dirs for part in p.parts):
+            continue
+        if p.as_posix() == 'scripts/apply-public-closeout.py':
+            continue
+        try:
+            text = p.read_text(encoding='utf-8')
+        except UnicodeDecodeError:
+            continue
+        if old not in text:
+            continue
+        p.write_text(text.replace(old, new), encoding='utf-8')
+        changed += 1
+    if changed == 0:
+        raise SystemExit(f'No se encontró token de versión para reemplazar: {old}')
+    print(f'cache-bump: {old} -> {new} ({changed} archivo(s))')
+
+
 replace_once(
     'js/core/store/estado-productos.js',
     "  if (/(^|\\/)(?:catalogo|collections)(?:\\.html)?$/.test(path)) {\n    return loadAllProducts();\n  }",
@@ -223,3 +247,23 @@ if text.count(old) != 1:
     raise SystemExit('No se encontró publishPublic de colecciones')
 text = text.replace(old, "  latestVisibleCollections = uniquePublishedCollections(collections);", 1)
 p.write_text(text, encoding='utf-8')
+
+# Cache-busting: los módulos cambiados no pueden conservar URLs inmutables viejas.
+# Se reemplazan también las aserciones/scripts que fijan el contrato de versión,
+# para que el CI siga comprobando una única versión canónica en todo el repo.
+replace_token_everywhere(
+    'estado-productos.js?v=tintin-20260831-product-loading-3',
+    'estado-productos.js?v=tintin-20260901-catalog-realtime-1'
+)
+replace_token_everywhere(
+    'estado-colecciones.js?v=tintin-20260821-accounts-phase-a-1',
+    'estado-colecciones.js?v=tintin-20260901-collections-policy-1'
+)
+replace_token_everywhere(
+    'tintin-20260830-instant-loading-1',
+    'tintin-20260901-public-maintenance-1'
+)
+replace_token_everywhere(
+    'tintin-20260830-store-gate-api-1',
+    'tintin-20260901-public-commerce-closeout-1'
+)
