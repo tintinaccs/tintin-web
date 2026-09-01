@@ -7,6 +7,8 @@ import {
   SHEETS_HEALTH_REVISION,
   SHEETS_HEALTH_TIMEOUT_MS,
 } from './sheets-sync-config.js';
+import { getCatalogSyncQueueStats } from './resiliencia-sync-catalogo.js';
+import { pushEnabled } from './servicio-push.js';
 
 const REQUIRED_CONFIG = Object.freeze([
   'FIREBASE_SERVICE_ACCOUNT_KEY',
@@ -93,6 +95,7 @@ export async function probeAppsScript({ fetchImpl = fetch } = {}) {
 export async function runSystemHealth(env, {
   runtimeRunner = runAdminRuntimeChecks,
   sheetsProbe = probeAppsScript,
+  queueStats = getCatalogSyncQueueStats,
 } = {}) {
   const missingConfig = REQUIRED_CONFIG.filter(key => !configured(env, key));
   let runtimeReport = null;
@@ -114,6 +117,25 @@ export async function runSystemHealth(env, {
     ms: 0,
     code: 'probe_failed',
   }));
+
+  let catalogQueue = {
+    total: null,
+    pending: null,
+    due: null,
+    deferred: null,
+    dead: null,
+    oldestPendingAt: '',
+    capped: false,
+    available: false,
+  };
+  if (!missingConfig.includes('FIREBASE_SERVICE_ACCOUNT_KEY')) {
+    try {
+      catalogQueue = { ...(await queueStats(env)), available: true };
+    } catch (error) {
+      console.error('[system-health] Cola de reconciliación no disponible:', error?.message || error);
+    }
+  }
+
   const admin = compactAdminRuntimeChecks(runtimeReport);
   const integrations = {
     firebase: runtimeReport?.ok === true,
@@ -121,14 +143,22 @@ export async function runSystemHealth(env, {
     cloudinary: configured(env, 'CLOUDINARY_CLOUD_NAME') && configured(env, 'CLOUDINARY_API_KEY') && configured(env, 'CLOUDINARY_API_SECRET'),
     sheets: configured(env, 'SHEETS_ENGAGEMENT_SECRET') && sheets.protocolOk === true,
     appsScript: sheets,
+    push: pushEnabled(env),
   };
-  const ok = missingConfig.length === 0 && runtimeReport?.ok === true && integrations.sheets === true;
+  const queueHealthy = catalogQueue.available === true && Number(catalogQueue.dead || 0) === 0;
+  const ok = missingConfig.length === 0
+    && runtimeReport?.ok === true
+    && integrations.sheets === true
+    && queueHealthy;
 
   return {
     ok,
     missingConfig,
     admin,
     integrations,
+    operations: {
+      catalogSheetSyncQueue: catalogQueue,
+    },
     authorities: SYSTEM_AUTHORITIES,
     deployment: {
       commitSha: String(env?.CF_PAGES_COMMIT_SHA || '').slice(0, 64),
