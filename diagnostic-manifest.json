@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-01T20:31:13.002Z",
-  "sourceFingerprint": "d5c9151cd6eeb19b1ab62eae8f7c934ee380046248472d4e95651f4a02294dc8",
+  "generatedAt": "2026-09-01T20:33:49.687Z",
+  "sourceFingerprint": "7c8df4064998f0b0506408c1b6ae5b31090344903c1afab2ccb8cfb7019e7ad1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 815,
     "textFiles": 782,
-    "totalBytes": 9843558,
+    "totalBytes": 9843697,
     "pages": 18,
     "modules": 530
   },
@@ -25830,8 +25830,8 @@
     },
     {
       "path": "scripts/auditar-control-tienda.js",
-      "bytes": 13467,
-      "sha256": "e6e01083bc14f2b8bc07b4bceeab31f73fb6888bcf552d733c480862e05dfa0b",
+      "bytes": 13621,
+      "sha256": "76a84e316ff2d73feabe7a04a518ad9f37334b47f9313a2b474f55ac0019b1c0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34820,8 +34820,8 @@
     {
       "path": "scripts/auditar-control-tienda.js",
       "extension": ".js",
-      "bytes": 13467,
-      "sha256": "e6e01083bc14f2b8bc07b4bceeab31f73fb6888bcf552d733c480862e05dfa0b"
+      "bytes": 13621,
+      "sha256": "76a84e316ff2d73feabe7a04a518ad9f37334b47f9313a2b474f55ac0019b1c0"
     },
     {
       "path": "scripts/auditar-convenciones-nombres.mjs",
@@ -35354,8 +35354,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 36890,
-      "sha256": "eb2c0db4e59b9a08fd41842797503a8efa01e19d9af0648a0297ba33e4ef7386"
+      "bytes": 36875,
+      "sha256": "3a578c614c34bea1a51b781e36561b2bb237dfe0bf24f0be2a26d47a906c3d38"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -38654,7 +38654,7 @@
           },
           {
             "file": "scripts/auditar-control-tienda.js",
-            "line": 197,
+            "line": 199,
             "operation": "doc"
           },
           {
