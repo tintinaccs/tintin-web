@@ -33,31 +33,6 @@ const MAX_EVENT_ATTEMPTS = 5;
 const MAX_DEVICES_PER_SEND = 20;
 const PUSH_SETTINGS_PATH = 'pushSettings/global';
 
-function ntfyConfig(env) {
-  const enabled = ['true', '1', 'on'].includes(cleanText(env?.TINTIN_NTFY_ENABLED, 10).toLowerCase());
-  const topic = cleanText(env?.TINTIN_NTFY_TOPIC, 120);
-  const base = cleanText(env?.TINTIN_NTFY_URL, 300) || 'https://ntfy.sh';
-  return { enabled: enabled && /^[A-Za-z0-9_-]{16,120}$/.test(topic), topic, url: `${base.replace(/\/$/, '')}/${encodeURIComponent(topic)}`, token: cleanText(env?.TINTIN_NTFY_TOKEN, 300) };
-}
-
-function ntfyExclusive(env) {
-  return ntfyConfig(env).enabled;
-}
-
-/** Canal opcional para que los avisos lleguen aunque la web esté cerrada. */
-async function sendNtfy(env, { title, body, url, type, priority = 'high' }) {
-  const config = ntfyConfig(env);
-  if (!config.enabled) return { enabled: false };
-  const headers = { 'content-type': 'text/plain; charset=utf-8', 'x-title': cleanText(title, 120), 'x-priority': priority, 'x-tags': cleanText(type, 40).replace(/[^A-Za-z0-9_-]/g, '_'), 'x-click': cleanText(url, 300) };
-  if (config.token) headers.authorization = `Bearer ${config.token}`;
-  try {
-    const response = await fetch(config.url, { method: 'POST', headers, body: cleanText(body, 1000) });
-    return { enabled: true, ok: response.ok, status: response.status };
-  } catch (error) {
-    return { enabled: true, ok: false, error: sanitizeError(error, 120) };
-  }
-}
-
 export function pushEnabled(env) {
   const flag = cleanText(env?.TINTIN_PUSH_ENABLED, 10).toLowerCase();
   return flag === 'true' || flag === '1' || flag === 'on';
@@ -270,11 +245,18 @@ export async function dispatchSocialPushEvent(env, { type, eventId, title, body,
   if (!claim.claimed) return { ok: true, duplicate: Boolean(claim.duplicate), skipped: claim.inProgress ? 'in_progress' : undefined };
   const sound = soundForType(settings, type);
   const content = { title: cleanText(title, 100), body: cleanText(body, 220), foregroundSound: sound.mode, data: { type: cleanText(type, 40), orderId: '', shortId: '', url, eventId: id, tag: id, title: cleanText(title, 100), body: cleanText(body, 220), foregroundSoundUrl: sound.url } };
-  const devices = ntfyExclusive(env) ? [] : await listActiveDevices(env);
+  const devices = await listActiveDevices(env);
   const result = devices.length ? await sendToDevices(env, devices, content) : { attempted: 0, successCount: 0, failureCount: 0, disabledCount: 0, lastError: '' };
   const status = await closeEvent(env, claim.path, result);
-  const ntfy = await sendNtfy(env, { title, body, url, type });
-  return { ok: status === 'sent' || status === 'partial' || status === 'no_devices', status, attempted: result.attempted, successCount: result.successCount, failureCount: result.failureCount, ntfy };
+  return {
+    ok: status === 'sent' || status === 'partial' || status === 'no_devices',
+    status,
+    attempted: result.attempted,
+    successCount: result.successCount,
+    failureCount: result.failureCount,
+    disabledCount: result.disabledCount,
+    lastError: sanitizeError(result.lastError, 120)
+  };
 }
 
 export async function revokeDeviceByDocumentId(env, deviceDocId, reason = 'revocado_por_superadmin') {
@@ -526,21 +508,13 @@ export async function dispatchOrderPushEvent(env, type, orderId, externalEventId
     return { ok: false, error: 'attempts_exhausted' };
   }
 
-  const devices = ntfyExclusive(env) ? [] : await listActiveDevices(env);
+  const devices = await listActiveDevices(env);
   const sound = soundForType(settings, type);
   const content = buildPushContent({ type, orderId, order, eventId, foregroundSound: sound.mode, foregroundSoundUrl: sound.url });
   const result = devices.length
     ? await sendToDevices(env, devices, content)
     : { attempted: 0, successCount: 0, failureCount: 0, disabledCount: 0, lastError: '' };
   const status = await closeEvent(env, claim.path, result);
-  const ntfy = await sendNtfy(env, {
-    title: content.title,
-    body: content.body,
-    url: content.data.url,
-    type,
-    priority: type === 'order.created' ? 'max' : 'high'
-  });
-
   return {
     ok: status === 'sent' || status === 'partial' || status === 'no_devices',
     duplicate: false,
@@ -548,8 +522,8 @@ export async function dispatchOrderPushEvent(env, type, orderId, externalEventId
     attempted: result.attempted,
     successCount: result.successCount,
     failureCount: result.failureCount,
-    disabledCount: result.disabledCount
-    ,ntfy
+    disabledCount: result.disabledCount,
+    lastError: sanitizeError(result.lastError, 120)
   };
 }
 
@@ -565,6 +539,7 @@ export async function sendTestPush(env, { onlyToken }) {
   const devices = onlyToken ? active.filter(device => device.token === onlyToken) : active;
   if (!devices.length) return { ok: false, error: 'no_devices', attempted: 0 };
   const result = await sendToDevices(env, devices, content);
-  const ntfy = await sendNtfy(env, { title: content.title, body: content.body, url: content.data.url, type: 'order.created', priority: 'max' });
-  return { ok: result.successCount > 0 || ntfy.ok, ...result, ntfy, lastError: undefined };
+  // Una prueba sólo se considera exitosa si FCM llegó a por lo menos un
+  // dispositivo activo.
+  return { ok: result.successCount > 0, ...result, lastError: sanitizeError(result.lastError, 120) };
 }

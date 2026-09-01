@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-01T13:40:25.155Z",
-  "sourceFingerprint": "50ab3af91f09703a4b6c280da3c5699b9828463001b54760788b91ef130bc4ff",
+  "generatedAt": "2026-09-01T14:41:27.060Z",
+  "sourceFingerprint": "5c1c8828ce8209bd060385ed48d51b93eb9ead46242b968dfb01b2cb9d2e7f62",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 811,
     "textFiles": 779,
-    "totalBytes": 8924280,
+    "totalBytes": 8922859,
     "pages": 18,
     "modules": 528
   },
@@ -17664,8 +17664,8 @@
     },
     {
       "path": "cloudflare/nucleo-push.js",
-      "bytes": 11740,
-      "sha256": "2ae983f346dade1ca5b4fb01b5d9c2811aada2981f7358639ba39835be0a061f",
+      "bytes": 12000,
+      "sha256": "4a8eeef53f26f7679a7f3411e74daf6a38c38dc4786e9a66f2b0d7de1d1c0c5d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17852,8 +17852,8 @@
     },
     {
       "path": "cloudflare/servicio-push.js",
-      "bytes": 24796,
-      "sha256": "bd342817ffc1c523f24fdfd3b810bca586fbc25e9b0f897bc5a386a2dfa82927",
+      "bytes": 23274,
+      "sha256": "96deb80c05e49477eb03d27c63ac06ea8c12b4c489d5211f400f9870d7ddbc2a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17882,16 +17882,12 @@
           "line": 29
         },
         {
-          "url": "https://ntfy.sh/",
-          "line": 39
-        },
-        {
           "url": "https://firestore.googleapis.com/v1/projects/$%7BprojectId%7D/databases/(default",
-          "line": 67
+          "line": 42
         },
         {
           "url": "https://fcm.googleapis.com/v1/projects/$%7Bsa.project_id%7D/messages:send",
-          "line": 392
+          "line": 374
         }
       ]
     },
@@ -18165,7 +18161,7 @@
     {
       "path": "firebase-messaging-sw.js",
       "bytes": 4819,
-      "sha256": "54ecf3b19ee6f6e0e651abad83c1a6d45d4bdebe5b6ac6a077551c013a081325",
+      "sha256": "fbdff164c26929f16c12b05e218a4cc544186daf74b1117f0a538aac6a3ef19d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19136,8 +19132,8 @@
     },
     {
       "path": "functions/api/push-order-event.js",
-      "bytes": 3455,
-      "sha256": "a57fe572f0d2363d93d0a53b72dac5149dade2822f1c41247643d6ce3cdee7f8",
+      "bytes": 3496,
+      "sha256": "c0b75f0478d1b55c9ce829677ee6d5fbcca7561d75fe165b247b9ac5e84ca350",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19196,8 +19192,8 @@
     },
     {
       "path": "functions/api/push-test.js",
-      "bytes": 3792,
-      "sha256": "130a3c0a0bf76854fa364eaf2f5afd74a76c9c05ab83d45a6796ca787e4c2b08",
+      "bytes": 3990,
+      "sha256": "813c60d3e997e68e33eda2aeaccaf7cf6afacfe4690b1d1bc862ef798f407193",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27578,8 +27574,8 @@
     },
     {
       "path": "scripts/auditar-push-web.js",
-      "bytes": 16182,
-      "sha256": "a4a05cdc6763c895f9334224deafd3a7351d612544486a5eb42ddb339702beb5",
+      "bytes": 16335,
+      "sha256": "689ca480d8071dd4bbc504a9fdd2903e17c29fee46ce0e85aeca1cc487a67ff2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30220,8 +30216,8 @@
     },
     {
       "path": "tests/push/push-web.test.mjs",
-      "bytes": 15605,
-      "sha256": "845aa479b0c4e9bc047746fc562192f61f88dc28ffa625cc00aa2ee340a4ab89",
+      "bytes": 16278,
+      "sha256": "814af5a9b0291b8ee719fc93af9f8e002edebb35cd71d29d3c205cedef7427f1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30273,11 +30269,11 @@
       "endpoints": [
         {
           "url": "https://www.googleapis.com/auth/firebase.messaging",
-          "line": 308
+          "line": 315
         },
         {
           "url": "https://oauth2.googleapis.com/token",
-          "line": 309
+          "line": 316
         }
       ]
     },
@@ -31905,8 +31901,8 @@
     {
       "path": "cloudflare/nucleo-push.js",
       "extension": ".js",
-      "bytes": 11740,
-      "sha256": "2ae983f346dade1ca5b4fb01b5d9c2811aada2981f7358639ba39835be0a061f"
+      "bytes": 12000,
+      "sha256": "4a8eeef53f26f7679a7f3411e74daf6a38c38dc4786e9a66f2b0d7de1d1c0c5d"
     },
     {
       "path": "cloudflare/order-admin-domain.js",
@@ -31953,8 +31949,8 @@
     {
       "path": "cloudflare/servicio-push.js",
       "extension": ".js",
-      "bytes": 24796,
-      "sha256": "bd342817ffc1c523f24fdfd3b810bca586fbc25e9b0f897bc5a386a2dfa82927"
+      "bytes": 23274,
+      "sha256": "96deb80c05e49477eb03d27c63ac06ea8c12b4c489d5211f400f9870d7ddbc2a"
     },
     {
       "path": "cloudflare/servir-admin-con-csp.js",
@@ -32511,8 +32507,8 @@
     {
       "path": "docs/configuracion-push-web-firebase.md",
       "extension": ".md",
-      "bytes": 14543,
-      "sha256": "964925b4594499088fc7238c5ac48e188a7245188cf5e898f0d55617d4bac7d2"
+      "bytes": 13319,
+      "sha256": "9c6dbaf4da3e7855799fc71196c0ad205f932acb3362516454ee563226c7a482"
     },
     {
       "path": "docs/contenido-fase-6.md",
@@ -32794,7 +32790,7 @@
       "path": "firebase-messaging-sw.js",
       "extension": ".js",
       "bytes": 4819,
-      "sha256": "54ecf3b19ee6f6e0e651abad83c1a6d45d4bdebe5b6ac6a077551c013a081325"
+      "sha256": "fbdff164c26929f16c12b05e218a4cc544186daf74b1117f0a538aac6a3ef19d"
     },
     {
       "path": "firebase.json",
@@ -33021,8 +33017,8 @@
     {
       "path": "functions/api/push-order-event.js",
       "extension": ".js",
-      "bytes": 3455,
-      "sha256": "a57fe572f0d2363d93d0a53b72dac5149dade2822f1c41247643d6ce3cdee7f8"
+      "bytes": 3496,
+      "sha256": "c0b75f0478d1b55c9ce829677ee6d5fbcca7561d75fe165b247b9ac5e84ca350"
     },
     {
       "path": "functions/api/push-subscription.js",
@@ -33033,8 +33029,8 @@
     {
       "path": "functions/api/push-test.js",
       "extension": ".js",
-      "bytes": 3792,
-      "sha256": "130a3c0a0bf76854fa364eaf2f5afd74a76c9c05ab83d45a6796ca787e4c2b08"
+      "bytes": 3990,
+      "sha256": "813c60d3e997e68e33eda2aeaccaf7cf6afacfe4690b1d1bc862ef798f407193"
     },
     {
       "path": "functions/api/sheets-admin-webhook.js",
@@ -35325,8 +35321,8 @@
     {
       "path": "scripts/auditar-push-web.js",
       "extension": ".js",
-      "bytes": 16182,
-      "sha256": "a4a05cdc6763c895f9334224deafd3a7351d612544486a5eb42ddb339702beb5"
+      "bytes": 16335,
+      "sha256": "689ca480d8071dd4bbc504a9fdd2903e17c29fee46ce0e85aeca1cc487a67ff2"
     },
     {
       "path": "scripts/auditar-rendimiento-metricas.mjs",
@@ -35931,8 +35927,8 @@
     {
       "path": "tests/push/push-web.test.mjs",
       "extension": ".mjs",
-      "bytes": 15605,
-      "sha256": "845aa479b0c4e9bc047746fc562192f61f88dc28ffa625cc00aa2ee340a4ab89"
+      "bytes": 16278,
+      "sha256": "814af5a9b0291b8ee719fc93af9f8e002edebb35cd71d29d3c205cedef7427f1"
     },
     {
       "path": "tests/security/admin-http-contract.test.mjs",

@@ -239,19 +239,3 @@ Además, en todos los casos:
   PayPal (monto, moneda, order ID, capture ID y firma), nunca desde
   `onApprove` en el navegador, y su `eventId` deberá incluir el capture ID.
 - Auditoría: `npm run audit:web-push`. Pruebas: `npm run test:web-push`.
-
-## Canal ntfy para recibir avisos con la web cerrada
-
-Si se activa ntfy, Tintin deja de enviar el mismo aviso por Firebase Web Push y usa ntfy como canal exclusivo. Así no hay duplicados.
-
-1. Instalá [ntfy para iPhone](https://apps.apple.com/app/ntfy/id1625396347), [ntfy para Android](https://play.google.com/store/apps/details?id=io.heckel.ntfy) o la [versión de escritorio/web](https://ntfy.sh/).
-2. Elegí un tópico largo y privado, por ejemplo `tintin-pedidos-7f2c9a...`.
-3. Suscribí cada dispositivo al mismo tópico.
-4. En Cloudflare Pages → Settings → Environment variables, agregá:
-   - `TINTIN_NTFY_ENABLED=true`
-   - `TINTIN_NTFY_URL=https://ntfy.sh`
-   - `TINTIN_NTFY_TOPIC=` el tópico privado
-   - `TINTIN_NTFY_TOKEN=` opcional, si usás un token de acceso
-5. Hacé un nuevo deploy y enviá una prueba desde el panel.
-
-Los eventos de pedido, reseña, comentario y Me gusta usan el mismo canal. En Android podés asignar sonidos distintos a las prioridades/canales de ntfy; configurá `pedido.mp3`, `reseña.mp3` y `me-gusta.mp3` desde los ajustes de notificaciones de la app. En iPhone el sonido exacto queda sujeto a las reglas de iOS y a la app ntfy; el aviso sí puede llegar con la web cerrada.
