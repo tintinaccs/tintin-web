@@ -3,9 +3,11 @@ import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
 const HEALTH_URL = '/api/system-health';
+const RETRY_CATALOG_SYNC_URL = '/api/catalog-sync-retry';
 let mounted = false;
 let loaded = false;
 let loading = false;
+let retrying = false;
 let observer = null;
 
 function escapeHtml(value) {
@@ -56,9 +58,10 @@ function markup() {
       <div class="adm-card-head adm-master-diagnostic-head">
         <div>
           <div class="adm-card-title">Estado del ecosistema</div>
-          <p>Disponibilidad operativa de las autoridades reales de Tintin. No muestra datos de clientas, credenciales ni secretos; ejecuta probes mínimos y no destructivos.</p>
+          <p>Centro operativo del Super Admin: integraciones, trabajos pendientes, errores de reconciliación y reintentos seguros. No muestra datos de clientas, credenciales ni secretos.</p>
         </div>
         <div class="adm-master-actions">
+          <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="btn-retry-catalog-sync">Reintentar Sheets</button>
           <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="btn-refresh-system-health">Actualizar estado</button>
         </div>
       </div>
@@ -99,13 +102,14 @@ function renderMeta(payload) {
   if (!node) return;
   const deployment = payload?.deployment || {};
   const sync = payload?.integrations?.appsScript?.summary || {};
+  const queue = payload?.operations?.catalogSheetSyncQueue || {};
   const syncAvailable = sync.available === true;
   node.hidden = false;
   node.innerHTML = `
     <div class="adm-master-meta-item"><span>Commit desplegado</span><strong title="${escapeHtml(deployment.commitSha || '')}">${escapeHtml(shortSha(deployment.commitSha))}</strong></div>
     <div class="adm-master-meta-item"><span>Rama</span><strong>${escapeHtml(deployment.branch || '—')}</strong></div>
     <div class="adm-master-meta-item"><span>Último sync</span><strong>${escapeHtml(syncAvailable && sync.lastAt ? `${sync.lastStatus || '—'} · ${formatDate(sync.lastAt)}` : 'no verificado')}</strong></div>
-    <div class="adm-master-meta-item"><span>Errores sync 24 h</span><strong>${escapeHtml(syncAvailable && Number.isFinite(Number(sync.errors24h)) ? Number(sync.errors24h) : '—')}</strong></div>`;
+    <div class="adm-master-meta-item"><span>Cola Sheets</span><strong>${escapeHtml(queue.available === true ? `${Number(queue.pending || 0)} pendiente(s) · ${Number(queue.dead || 0)} agotado(s)` : 'no verificada')}</strong></div>`;
 }
 
 function renderAuthorities(authorities = {}) {
@@ -126,8 +130,15 @@ function render(payload) {
   const admin = payload?.admin || {};
   const integrations = payload?.integrations || {};
   const appsScript = integrations?.appsScript || {};
+  const queue = payload?.operations?.catalogSheetSyncQueue || {};
+  const queueAvailable = queue.available === true;
+  const queueHealthy = queueAvailable && Number(queue.dead || 0) === 0;
   const areas = document.getElementById('system-health-areas');
   if (!areas) return;
+
+  const queueDetail = queueAvailable
+    ? `${Number(queue.pending || 0)} pendiente(s) · ${Number(queue.due || 0)} vencido(s) · ${Number(queue.deferred || 0)} en espera · ${Number(queue.dead || 0)} agotado(s)${queue.oldestPendingAt ? ` · más antiguo ${formatDate(queue.oldestPendingAt)}` : ''}`
+    : 'No se pudo leer catalogSheetSyncQueue';
 
   const rows = [
     ['Firebase / Firestore', integrations.firebase, 'Cuenta de servicio y lectura del runtime administrativo'],
@@ -142,40 +153,50 @@ function render(payload) {
     ['Visual Builder', admin.visualBuilder, 'Páginas, borradores e historial'],
     ['Resend', integrations.resend, 'Configuración privada de correo presente'],
     ['Cloudinary', integrations.cloudinary, 'Configuración privada de multimedia presente'],
+    ['Push', integrations.push, 'Firebase Cloud Messaging + configuración Web Push'],
     ['Google Sheets', integrations.sheets, 'Secreto del puente + protocolo de Apps Script verificado'],
     ['Apps Script', appsScript.protocolOk, appsScript.protocolOk
       ? `Protocolo ${appsScript.revision || 'actual'} · ${Number(appsScript.ms || 0)} ms`
       : `Estado ${appsScript.code || 'no_verificado'} · HTTP ${appsScript.httpStatus || 0}`],
+    ['Trabajos pendientes de Sheets', queueHealthy, queueDetail],
   ];
   areas.innerHTML = rows.map(([name, value, detail]) => item(name, value, detail)).join('');
   setOverall(payload?.ok === true ? 'PASS' : 'FAIL', payload?.checkedAt || '');
   renderMeta(payload);
   renderAuthorities(payload?.authorities || {});
 
+  const retryButton = document.getElementById('btn-retry-catalog-sync');
+  if (retryButton) {
+    retryButton.disabled = retrying || !queueAvailable || Number(queue.pending || 0) === 0;
+    retryButton.title = Number(queue.dead || 0) > 0
+      ? 'Las tareas agotadas quedan visibles para revisión; el reintento manual procesa las pendientes activas.'
+      : '';
+  }
+
   const notice = document.getElementById('system-health-notice');
   if (notice) {
     const failures = rows.filter(([, value]) => value !== true).map(([name]) => name);
-    const sync = appsScript.summary || {};
-    const syncSuffix = sync.available === true && Number(sync.errors24h || 0) > 0
-      ? ` Historial sync registra ${Number(sync.errors24h)} error(es) en las últimas 24 h.`
-      : sync.available === true && Number(sync.syncing24h || 0) > 0
-        ? ` Hay ${Number(sync.syncing24h)} registro(s) SYNCING en las últimas 24 h para revisar.`
-        : '';
+    const queueSuffix = queueAvailable && Number(queue.pending || 0) > 0
+      ? ` Hay ${Number(queue.pending || 0)} reconciliación(es) de Sheets pendiente(s); ${Number(queue.due || 0)} ya pueden reintentarse.`
+      : '';
+    const deadSuffix = queueAvailable && Number(queue.dead || 0) > 0
+      ? ` ${Number(queue.dead || 0)} tarea(s) agotaron los reintentos y requieren revisión.`
+      : '';
     notice.className = `adm-master-notice ${payload?.ok === true ? 'notice-info' : 'notice-error'}`;
     notice.textContent = payload?.ok === true
-      ? `Las autoridades operativas y el puente de sincronización respondieron correctamente.${syncSuffix}`
-      : `Hay componentes que requieren revisión: ${failures.join(', ') || 'estado general'}.${syncSuffix}`;
+      ? `Las autoridades operativas y las integraciones respondieron correctamente.${queueSuffix}`
+      : `Hay componentes que requieren revisión: ${failures.join(', ') || 'estado general'}.${queueSuffix}${deadSuffix}`;
   }
 }
 
-async function authorizedFetch(forceToken = false) {
+async function authorizedRequest(url, { method = 'GET' } = {}, forceToken = false) {
   const user = auth.currentUser;
   if (!user || String(user.email || '').toLowerCase() !== String(SUPER_ADMIN).toLowerCase()) {
     throw new Error('La sesión de Super Admin no está disponible.');
   }
   const idToken = await user.getIdToken(forceToken);
-  return fetch(HEALTH_URL, {
-    method: 'GET',
+  return fetch(url, {
+    method,
     cache: 'no-store',
     credentials: 'same-origin',
     headers: { authorization: `Bearer ${idToken}` },
@@ -191,8 +212,8 @@ async function load() {
     button.textContent = 'Comprobando…';
   }
   try {
-    let response = await authorizedFetch(false);
-    if (response.status === 401) response = await authorizedFetch(true);
+    let response = await authorizedRequest(HEALTH_URL);
+    if (response.status === 401) response = await authorizedRequest(HEALTH_URL, {}, true);
     const payload = await response.json().catch(() => ({}));
     if (!response.ok || payload?.ok !== true || !payload?.report) {
       throw new Error(payload?.error || 'El endpoint de estado no devolvió el contrato esperado.');
@@ -216,6 +237,45 @@ async function load() {
   }
 }
 
+async function retryCatalogSync() {
+  if (retrying) return;
+  retrying = true;
+  const button = document.getElementById('btn-retry-catalog-sync');
+  if (button) {
+    button.disabled = true;
+    button.textContent = 'Reintentando…';
+  }
+  try {
+    let response = await authorizedRequest(RETRY_CATALOG_SYNC_URL, { method: 'POST' });
+    if (response.status === 401) response = await authorizedRequest(RETRY_CATALOG_SYNC_URL, { method: 'POST' }, true);
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || payload?.ok !== true) {
+      throw new Error(payload?.error || 'No se pudo ejecutar el reintento.');
+    }
+    loaded = false;
+    await load();
+    const result = payload.result || {};
+    const notice = document.getElementById('system-health-notice');
+    if (notice) {
+      const base = notice.textContent || '';
+      notice.textContent = `${base} Reintento: ${Number(result.resolved || 0)} resuelto(s), ${Number(result.failed || 0)} fallido(s), ${Number(result.remaining || 0)} restante(s).`;
+    }
+  } catch (error) {
+    console.error('[Estado ecosistema] retry', error);
+    const notice = document.getElementById('system-health-notice');
+    if (notice) {
+      notice.className = 'adm-master-notice notice-error';
+      notice.textContent = error?.message || 'No se pudo reintentar la cola de Google Sheets.';
+    }
+  } finally {
+    retrying = false;
+    if (button) {
+      button.textContent = 'Reintentar Sheets';
+      button.disabled = false;
+    }
+  }
+}
+
 function maybeLoad(section) {
   if (!loaded && isVisible(section)) load();
 }
@@ -235,6 +295,7 @@ function mount() {
     else section.prepend(wrapper.firstElementChild);
   }
   document.getElementById('btn-refresh-system-health')?.addEventListener('click', load);
+  document.getElementById('btn-retry-catalog-sync')?.addEventListener('click', retryCatalogSync);
   observer?.disconnect();
   observer = new MutationObserver(() => maybeLoad(section));
   observer.observe(section, { attributes: true, attributeFilter: ['class', 'hidden', 'style'] });
