@@ -14,7 +14,8 @@ import {
 } from '../../cloudflare/firebase-admin-ligero.js';
 import { usernameKey } from '../../js/components/forms/utilidades-username.js';
 
-const FROM_EMAIL = 'Tintin Accesorios <noreply@tintinaccs.com>';
+const FROM_EMAIL = 'No Reply · Tintin <noreply@tintinaccs.com>';
+const EMAIL_MARK = 'https://tintinaccesorios.pages.dev/assets-tintin/images/general/email-avatar-tintin.png';
 const CODE_TTL_MS = 5 * 60 * 1000; // 5 minutos, a pedido: "código de bonificación" con vencimiento corto
 const RESEND_COOLDOWN_MS = 45 * 1000;
 const MAX_CODES_PER_DAY = 8;
@@ -98,9 +99,8 @@ async function sendCodeEmail(apiKey, email, code) {
 <body style="margin:0;background:#fffafb;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2226">
   <div style="max-width:460px;margin:0 auto;padding:40px 16px">
     <div style="background:#ffffff;border:1px solid #f1dce5;border-radius:16px;overflow:hidden">
-      <div style="padding:22px 24px;text-align:center;border-bottom:1px solid #f4e7ed">
-        <div style="font-size:18px;font-weight:800;letter-spacing:.12em;color:#a00055">TINTIN</div>
-        <div style="font-size:10px;font-weight:650;letter-spacing:.12em;text-transform:uppercase;color:#a85b7c;margin-top:5px">Accesorios &amp; Relojes</div>
+      <div style="padding:22px 24px;text-align:center;background:#ffd4e2">
+        <img src="${EMAIL_MARK}" width="64" height="64" alt="Tintin" style="display:block;width:64px;height:64px;margin:0 auto;border:0;outline:none">
       </div>
       <div style="padding:30px 28px;text-align:center">
         <p style="margin:0 0 8px;font-size:16px;font-weight:750;color:#2b2226">Tu código de acceso</p>

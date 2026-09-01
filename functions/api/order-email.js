@@ -9,7 +9,8 @@ import { dispatchOrderPushEvent, pushEnabled } from '../../cloudflare/servicio-p
 const FIREBASE_WEB_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
 const FIREBASE_PROJECT_ID = 'tintin-accesorios';
 const ADMIN_EMAIL = SUPERADMIN_EMAIL;
-const FROM_EMAIL = 'Tintin Pedidos <pedidos@tintinaccs.com>';
+const FROM_EMAIL = 'No Reply · Tintin <noreply@tintinaccs.com>';
+const EMAIL_MARK = 'https://tintinaccesorios.pages.dev/assets-tintin/images/general/email-avatar-tintin.png';
 const REPLY_TO = ADMIN_EMAIL;
 const ADMIN_PANEL = 'https://tintinaccesorios.pages.dev/admin';
 const STORE_NAME = 'Tintin Accesorios';
@@ -192,8 +193,8 @@ function customerEmail(order, orderId) {
 <body style="margin:0;background:#fffafb;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2226">
   <div style="max-width:560px;margin:0 auto;padding:40px 16px">
     <div style="background:#ffffff;border:1px solid #f1dce5;border-radius:16px;overflow:hidden">
-      <div style="padding:28px 24px 22px;text-align:center;border-bottom:1px solid #f4e7ed">
-        <div style="width:42px;height:42px;margin:0 auto 12px;border-radius:50%;background:#fff0f7;color:#a00055;line-height:42px;font-size:21px">✓</div>
+      <div style="padding:22px 24px;text-align:center;background:#ffd4e2">
+        <img src="${EMAIL_MARK}" width="64" height="64" alt="Tintin" style="display:block;width:64px;height:64px;margin:0 auto 14px;border:0;outline:none">
         <div style="font-size:20px;font-weight:760;color:#2b2226;letter-spacing:-.02em">Recibimos tu pedido</div>
         <div style="margin-top:7px;font-size:11px;font-weight:750;letter-spacing:.1em;color:#a00055">PEDIDO #${escapeHtml(shortId)}</div>
       </div>
@@ -265,7 +266,8 @@ function adminEmail(order, orderId) {
 <body style="margin:0;background:#fffafb;font-family:Montserrat,Helvetica,Arial,sans-serif;color:#2b2226">
   <div style="max-width:640px;margin:0 auto;padding:40px 16px">
     <div style="background:#ffffff;border:1px solid #f1dce5;border-radius:16px;overflow:hidden">
-      <div style="padding:22px 24px;text-align:center;border-bottom:1px solid #f4e7ed">
+      <div style="padding:22px 24px;text-align:center;background:#ffd4e2">
+        <img src="${EMAIL_MARK}" width="64" height="64" alt="Tintin" style="display:block;width:64px;height:64px;margin:0 auto 14px;border:0;outline:none">
         <div style="font-size:18px;font-weight:760;color:#2b2226;letter-spacing:-.01em">Nuevo pedido #${escapeHtml(shortId)}</div>
         <div style="margin-top:5px;font-size:12px;color:#8a6575">${escapeHtml(fmtDate(order.createdAt))}</div>
       </div>
