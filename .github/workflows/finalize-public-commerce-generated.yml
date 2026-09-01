@@ -1,0 +1,64 @@
+name: Finalize public commerce generated artifacts
+
+on:
+  push:
+    branches:
+      - fix/catalog-checkout-collections-closeout
+    paths:
+      - '.github/workflows/finalize-public-commerce-generated.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/catalog-checkout-collections-closeout
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Align generator and rebuild CSP
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/sincronizar-inicio-navegacion-publica.js')
+          text = p.read_text(encoding='utf-8')
+          old = "const NAV_ENTRY_VERSION = 'tintin-20260831-notifications-auto-read-1';"
+          new = "const NAV_ENTRY_VERSION = 'tintin-20260901-closeout-entrada-navegacion-publica-3-1';"
+          if text.count(old) != 1:
+              raise SystemExit(f'NAV_ENTRY_VERSION esperado aparece {text.count(old)} veces')
+          p.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+          npm run sync:public-shell
+          npm run build:csp
+          npm run cache-versioning:write
+      - name: Commit generated source before idempotency check
+        run: |
+          rm .github/workflows/finalize-public-commerce-generated.yml
+          git config user.name 'Tintin Repair Bot'
+          git config user.email 'tintinaccs@gmail.com'
+          git add -A
+          git commit -m 'fix: align public shell generator and regenerate CSP'
+      - name: Generator and CSP are reproducible
+        run: |
+          npm run sync:public-shell
+          npm run verify:csp
+          npm run audit:cache-versioning
+          git diff --exit-code
+      - name: Full final audit
+        run: npm run audit:final
+      - name: Audit leaves generated tree stable
+        run: |
+          npm run build:csp
+          npm run sync:public-shell
+          npm run audit:cache-versioning
+          git diff --exit-code
+      - name: Push verified commit
+        run: git push origin HEAD:fix/catalog-checkout-collections-closeout
