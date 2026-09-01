@@ -31,8 +31,8 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Test social notification contract
-        run: node --test tests/engagement/notificaciones-sociales.test.mjs
+      - name: Test complete engagement contract
+        run: npm run test:engagement
 
       - name: Test notification Firestore rules in emulator
         run: npx firebase emulators:exec --only firestore --project demo-tintin-social-notifications "node scripts/probar-firestore-notificaciones.mjs"
