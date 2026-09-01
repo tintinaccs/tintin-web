@@ -103,6 +103,12 @@ async function loadOrder(env, orderId) {
   return { id: safeId, ...decodeFirestoreFields(document.fields || {}) };
 }
 
+async function assertAccountNotBlocked(env, uid) {
+  const document = await firestoreAdminGet(env, `users/${uid}`);
+  const profile = document ? decodeFirestoreFields(document.fields || {}) : {};
+  if (profile.blocked === true) throw new Error('La cuenta está bloqueada y no puede completar pagos');
+}
+
 function validatePayableOrder(order, uid) {
   if (clean(order.userId, 128) !== uid) throw new Error('El pedido no pertenece a la cuenta iniciada');
   if (clean(order?.payment?.method, 30) !== 'paypal') throw new Error('El pedido no seleccionó PayPal');
@@ -116,6 +122,7 @@ function validatePayableOrder(order, uid) {
 export async function createPaypalOrder(env, { orderId, uid }) {
   const config = paypalConfig(env);
   if (!config.enabled) throw new Error(`PayPal no está habilitado: ${config.missing.join(',')}`);
+  await assertAccountNotBlocked(env, uid);
   const order = await loadOrder(env, orderId);
   const amount = paypalAmountFromPyg(validatePayableOrder(order, uid), config.rate);
   const provider = await paypalRequest(config, '/v2/checkout/orders', {
@@ -190,6 +197,7 @@ export async function capturePaypalOrder(env, { providerOrderId, uid }) {
   if (!config.enabled) throw new Error('PayPal no está habilitado');
   const mapping = await loadMapping(env, providerOrderId);
   if (mapping.uid !== uid) throw new Error('La orden PayPal no pertenece a la cuenta iniciada');
+  await assertAccountNotBlocked(env, uid);
   const provider = await paypalRequest(config, `/v2/checkout/orders/${encodeURIComponent(mapping.id)}/capture`, {
     method: 'POST', headers: { 'PayPal-Request-Id': `tintin-capture-${mapping.orderId}` }, body: '{}',
   });
