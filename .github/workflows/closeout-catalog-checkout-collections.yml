@@ -1,0 +1,39 @@
+name: Closeout catalog checkout collections
+
+on:
+  push:
+    branches:
+      - fix/catalog-checkout-collections-closeout
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Catalog contracts
+        run: |
+          node scripts/auditar-catalogo-pagina.js
+          npm run audit:phase7-catalog
+      - name: Collections contracts
+        run: |
+          node scripts/auditar-colecciones-pagina.js
+          npm run audit:collections
+      - name: Checkout contracts
+        run: |
+          npm run audit:secure-orders
+          npm run audit:checkout-delivery
+          npm run test:checkout-contract
+          npm run test:paypal
+      - name: Public page smoke
+        run: npm run test:pages
+      - name: Cache contract
+        run: npm run audit:cache-versioning
