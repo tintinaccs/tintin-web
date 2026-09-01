@@ -15,6 +15,16 @@ function runtimeReport(ok = true) {
   };
 }
 
+const healthyQueue = async () => ({
+  total: 0,
+  pending: 0,
+  due: 0,
+  deferred: 0,
+  dead: 0,
+  oldestPendingAt: '',
+  capped: false,
+});
+
 const COMPLETE_ENV = {
   FIREBASE_SERVICE_ACCOUNT_KEY: '{}',
   RESEND_API_KEY: 'configured',
@@ -27,7 +37,7 @@ const COMPLETE_ENV = {
   CF_PAGES_URL: 'https://example.pages.dev',
 };
 
-test('estado integral pasa solo con runtime y puente Sheets confirmados', async () => {
+test('estado integral pasa solo con runtime, puente Sheets y cola operativa confirmados', async () => {
   const report = await runSystemHealth(COMPLETE_ENV, {
     runtimeRunner: async () => runtimeReport(true),
     sheetsProbe: async () => ({
@@ -40,6 +50,7 @@ test('estado integral pasa solo con runtime y puente Sheets confirmados', async 
       ms: 20,
       code: '',
     }),
+    queueStats: healthyQueue,
   });
 
   assert.equal(report.ok, true);
@@ -47,9 +58,21 @@ test('estado integral pasa solo con runtime y puente Sheets confirmados', async 
   assert.equal(report.admin.auditLog, true);
   assert.equal(report.admin.settings, true);
   assert.equal(report.integrations.sheets, true);
+  assert.equal(report.operations.catalogSheetSyncQueue.available, true);
+  assert.equal(report.operations.catalogSheetSyncQueue.dead, 0);
   assert.equal(report.deployment.commitSha, COMPLETE_ENV.CF_PAGES_COMMIT_SHA);
   assert.equal(SYSTEM_AUTHORITIES.orders.mode, 'admin-parity');
   assert.equal(SYSTEM_AUTHORITIES.products.mode, 'bidirectional');
+});
+
+test('dead-letter en la cola mantiene FAIL aunque las integraciones respondan', async () => {
+  const report = await runSystemHealth(COMPLETE_ENV, {
+    runtimeRunner: async () => runtimeReport(true),
+    sheetsProbe: async () => ({ reachable: true, httpStatus: 200, protocolOk: true, summary: {}, ms: 5, code: '' }),
+    queueStats: async () => ({ total: 1, pending: 0, due: 0, deferred: 0, dead: 1, oldestPendingAt: '', capped: false }),
+  });
+  assert.equal(report.ok, false);
+  assert.equal(report.operations.catalogSheetSyncQueue.dead, 1);
 });
 
 test('configuración faltante o protocolo Sheets no verificado mantiene FAIL', async () => {
@@ -66,6 +89,7 @@ test('configuración faltante o protocolo Sheets no verificado mantiene FAIL', a
       ms: 15,
       code: 'canonical_guard_not_confirmed',
     }),
+    queueStats: healthyQueue,
   });
 
   assert.equal(report.ok, false);
