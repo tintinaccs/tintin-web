@@ -119,17 +119,21 @@ check(rootPages.length === 18, `Se esperaban 18 páginas HTML raíz y se encontr
 
 for (const page of rootPages) {
   const source = fs.readFileSync(path.join(ROOT, page), 'utf8');
+  // 404.html es servida verbatim por Cloudflare Pages en cualquier
+  // profundidad de ruta no encontrada, así que sus assets usan rutas
+  // absolutas (/css/..., /assets-tintin/...) en vez de las relativas del
+  // resto de páginas públicas — de ahí el "/?" opcional en estos patrones.
   const stylesheetCount = countMatches(
     source,
-    new RegExp(`href=["']css/core/montserrat\\.css\\?v=${VERSION}["']`, 'gi')
+    new RegExp(`href=["']\\/?css/core/montserrat\\.css\\?v=${VERSION}["']`, 'gi')
   );
   const normalPreloadCount = countMatches(
     source,
-    /rel=["']preload["'][^>]*href=["']assets-tintin\/fonts\/montserrat-latin-wght-normal\.woff2["']|href=["']assets-tintin\/fonts\/montserrat-latin-wght-normal\.woff2["'][^>]*rel=["']preload["']/gi
+    /rel=["']preload["'][^>]*href=["']\/?assets-tintin\/fonts\/montserrat-latin-wght-normal\.woff2["']|href=["']\/?assets-tintin\/fonts\/montserrat-latin-wght-normal\.woff2["'][^>]*rel=["']preload["']/gi
   );
   const italicPreloadCount = countMatches(
     source,
-    /rel=["']preload["'][^>]*href=["']assets-tintin\/fonts\/montserrat-latin-wght-italic\.woff2["']|href=["']assets-tintin\/fonts\/montserrat-latin-wght-italic\.woff2["'][^>]*rel=["']preload["']/gi
+    /rel=["']preload["'][^>]*href=["']\/?assets-tintin\/fonts\/montserrat-latin-wght-italic\.woff2["']|href=["']\/?assets-tintin\/fonts\/montserrat-latin-wght-italic\.woff2["'][^>]*rel=["']preload["']/gi
   );
   const preloadExpected = page !== 'perfil.html';
   const expectedPreloadCount = preloadExpected ? 1 : 0;
@@ -147,7 +151,7 @@ for (const page of rootPages) {
     const href = match[1];
     if (/^(?:https?:)?\/\//i.test(href)) continue;
     const cacheVersion = match[2] || '';
-    if (href === 'css/core/montserrat.css') {
+    if (href.replace(/^\//, '') === 'css/core/montserrat.css') {
       check(cacheVersion === VERSION, `${page}: Montserrat debe conservar la versión ${VERSION}.`);
     } else {
       check(Boolean(cacheVersion), `${page}: ${href} debe incluir una versión de caché ?v=.`);

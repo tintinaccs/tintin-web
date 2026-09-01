@@ -207,7 +207,10 @@ publicPages.forEach(page => {
   [...head.matchAll(/<script\b([^>]*)\ssrc="([^"]+?)(?:\?[^"]*)?"([^>]*)>/g)].forEach(match => {
     const attributes = match[1] + match[3];
     const source = match[2];
-    if (!/type="module"/.test(attributes) && !/\bdefer\b|\basync\b/.test(attributes) && !allowedBlocking.includes(source)) {
+    // 404.html usa rutas absolutas (/js/...) porque Cloudflare Pages la
+    // sirve verbatim en cualquier profundidad de ruta no encontrada.
+    const normalizedSource = source.replace(/^\//, '');
+    if (!/type="module"/.test(attributes) && !/\bdefer\b|\basync\b/.test(attributes) && !allowedBlocking.includes(normalizedSource)) {
       blockingOffenders.push(`${page}:${source}`);
     }
   });
