@@ -11,7 +11,6 @@ import { STAFF_ROLES } from './contrato-cuentas-generado.js?v=tintin-20260821-ac
 import { startProfileGate } from "../../pages/profile/control-acceso-perfil.js?v=tintin-20260822-dob-username-onboarding-1";
 
 const STAFF_INACTIVITY_MS = 30 * 60 * 1000;
-const SUPERADMIN_INACTIVITY_MS = 2 * 60 * 60 * 1000;
 const STORAGE_KEY = 'tt_session_last_activity_at';
 const CHECK_INTERVAL_MS = 30 * 1000;
 const ACTIVITY_WRITE_INTERVAL_MS = 15 * 1000;
@@ -54,13 +53,15 @@ async function enforce(user) {
     }
   }
   if (!STAFF_ROLES.includes(currentRole)) { clearSessionStart(); return; }
+  // La sesión que inicia el Super Admin es persistente. No se debe cerrar
+  // automáticamente por inactividad ni expulsar a tintinaccs del panel.
+  if (currentRole === 'superadmin') return;
   const startedAt = readSessionStart();
   if (startedAt === null) {
     markSessionStart();
     return;
   }
-  const timeout = currentRole === 'superadmin' ? SUPERADMIN_INACTIVITY_MS : STAFF_INACTIVITY_MS;
-  if (Date.now() - startedAt > timeout) {
+  if (Date.now() - startedAt > STAFF_INACTIVITY_MS) {
     clearSessionStart();
     try { await signOut(auth); } catch {}
     goToExpiredLogin();

@@ -55,6 +55,7 @@ test('clientes no tienen expiración fija y staff usa inactividad', () => {
   const session = read('js/core/auth/proteccion-sesion.js');
   assert.match(session, /if \(!STAFF_ROLES\.includes\(currentRole\)\) \{ clearSessionStart\(\); return; \}/);
   assert.match(session, /STAFF_INACTIVITY_MS = 30 \* 60 \* 1000/);
-  assert.match(session, /SUPERADMIN_INACTIVITY_MS = 2 \* 60 \* 60 \* 1000/);
+  assert.match(session, /currentRole === 'superadmin'\) return/);
+  assert.doesNotMatch(session, /SUPERADMIN_INACTIVITY_MS/);
   assert.match(session, /window\.addEventListener\(eventName, recordActivity/);
 });
