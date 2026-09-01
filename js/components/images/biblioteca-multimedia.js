@@ -9,6 +9,7 @@
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { apiUrl } from '../../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
 import {
+  addDoc,
   collection,
   doc,
   deleteDoc,
@@ -262,12 +263,32 @@ export async function findImageUsage(url) {
   return usages;
 }
 
+/** Registra el borrado en auditLog, igual que las demás acciones sensibles del panel. */
+async function logMediaDeletion(mediaId, data, reason) {
+  try {
+    await addDoc(collection(db, 'auditLog'), {
+      action: 'eliminar_imagen_biblioteca',
+      targetType: 'media',
+      targetId: mediaId,
+      targetLabel: data.originalName || data.publicId || mediaId,
+      details: `${reason} · publicId=${data.publicId || ''} · url=${data.url || ''}`,
+      bulk: false,
+      bulkCount: 0,
+      actorEmail: auth.currentUser?.email || '',
+      actorRole: '',
+      createdAt: serverTimestamp(),
+    });
+  } catch (error) {
+    console.warn('[media-library] No se pudo registrar el borrado en auditLog:', error);
+  }
+}
+
 /**
  * Borra un elemento de la biblioteca: primero revisa uso real (salvo force),
  * después elimina los assets de Cloudinary y por último borra la metadata de
  * Firestore. Así nunca queda un documento apuntando a un archivo inexistente.
  */
-export async function deleteMediaItem(mediaId, { force = false } = {}) {
+export async function deleteMediaItem(mediaId, { force = false, reason = 'manual' } = {}) {
   const mediaRef = doc(db, MEDIA_COLLECTION, mediaId);
   const snap = await getDoc(mediaRef);
   if (!snap.exists()) return false;
@@ -284,6 +305,7 @@ export async function deleteMediaItem(mediaId, { force = false } = {}) {
 
   await deleteCloudinaryAssets([data.publicId, data.thumbPublicId]);
   await deleteDoc(mediaRef);
+  await logMediaDeletion(mediaId, data, reason);
   return true;
 }
 
@@ -308,10 +330,28 @@ export async function deleteMediaByUrlIfUnused(url) {
   const snap = await getDocs(query(collection(db, MEDIA_COLLECTION), where('url', '==', url), limit(10)));
   let deleted = false;
   for (const item of snap.docs) {
-    await deleteMediaItem(item.id, { force: true });
+    await deleteMediaItem(item.id, { force: true, reason: 'auto-reemplazo' });
     deleted = true;
   }
   return deleted;
+}
+
+/**
+ * Reconciliador Firestore↔Cloudinary: recorre toda la biblioteca (hasta 500
+ * elementos, igual que el listado en vivo) y devuelve los que ya no tienen
+ * ninguna referencia real en settings/images, products ni collections — es
+ * decir, archivos que siguen en Cloudinary pero quedaron huérfanos (por
+ * ejemplo, tras borrar el producto o la colección que los usaba).
+ */
+export async function findOrphanedMedia() {
+  const snap = await getDocs(query(collection(db, MEDIA_COLLECTION), orderBy('uploadedAt', 'desc'), limit(500)));
+  const items = snap.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+  const orphans = [];
+  for (const item of items) {
+    const usage = await findImageUsage(item.url);
+    if (!usage.length) orphans.push(item);
+  }
+  return orphans;
 }
 
 /** Suscripción en vivo a toda la biblioteca, más recientes primero. */
