@@ -21,6 +21,13 @@ jobs:
       - run: npm ci
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
+      - name: Syntax and closeout regression contracts
+        run: |
+          node --check cloudflare/checkout-operational-health.js
+          node --check cloudflare/system-health.js
+          node --check js/admin/diagnostics/estado-ecosistema-admin.js
+          node --test tests/public-commerce/closeout-contracts.test.mjs
+          node --test tests/system-health/*.test.mjs
       - name: Catalog contracts
         run: |
           node scripts/auditar-catalogo-pagina.js
@@ -41,3 +48,5 @@ jobs:
         run: node scripts/auditar-catalogo-navegador-produccion.mjs
       - name: Cache contract
         run: npm run audit:cache-versioning
+      - name: Full delivery audit
+        run: npm run audit:final
