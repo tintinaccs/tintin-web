@@ -175,6 +175,13 @@ function replaceSharedFooter(html) {
   throw new Error('No se encontró el cierre del footer .tt-footer.');
 }
 
+function removeSharedFooter(html) {
+  return html.replace(
+    /\s*<!-- Footer público único: sincronizado por scripts\/sincronizar-inicio-navegacion-publica\.js -->\s*<footer\b[^>]*\btt-footer\b[^>]*>[\s\S]*?<\/footer>\s*/i,
+    '\n'
+  );
+}
+
 function ensureStyles(html) {
   if (/href=["']styles\.css(?:\?|["'])/i.test(html)) return html;
   const tokens = /(<link\b[^>]*href=["']css\/tokens-tintin\.css[^"']*["'][^>]*>)/i;
@@ -299,7 +306,8 @@ for (const page of PUBLIC_PAGES) {
 
   for (const id of SHELL_IDS) html = removeElementById(html, id);
   html = removeLegacyComments(html);
-  html = replaceSharedFooter(html);
+  // Login es una pantalla de acceso aislada: no comparte el pie público.
+  html = page === 'login.html' ? removeSharedFooter(html) : replaceSharedFooter(html);
   html = ensureStyles(html);
   html = ensureNavigationPreloads(html);
   html = ensureShellScript(html);
