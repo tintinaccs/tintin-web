@@ -14,6 +14,7 @@ import {
 import { cleanText, sanitizeError } from '../../cloudflare/nucleo-push.js';
 import {
   listAdminDevices,
+  listRecentEvents,
   readPushSettings,
   revokeAllDevices,
   revokeDeviceByDocumentId,
@@ -44,12 +45,12 @@ export async function onRequest(context) {
   try {
     const user = await requireSuperAdmin(request);
     if (request.method === 'GET') {
-      return jsonResponse({ success: true, devices: await listAdminDevices(env), settings: await readPushSettings(env) }, 200, origin, requestUrl);
+      return jsonResponse({ success: true, devices: await listAdminDevices(env), settings: await readPushSettings(env), events: await listRecentEvents(env) }, 200, origin, requestUrl);
     }
     const body = parseBody(await request.text());
     const action = cleanText(body.action, 20);
     if (!ALLOWED_ACTIONS.includes(action)) throw new Error('Acción no permitida.');
-    if (action === 'list') return jsonResponse({ success: true, devices: await listAdminDevices(env), settings: await readPushSettings(env) }, 200, origin, requestUrl);
+    if (action === 'list') return jsonResponse({ success: true, devices: await listAdminDevices(env), settings: await readPushSettings(env), events: await listRecentEvents(env) }, 200, origin, requestUrl);
     if (action === 'revoke') {
       const result = await revokeDeviceByDocumentId(env, body.deviceId);
       return jsonResponse({ success: true, ...result }, 200, origin, requestUrl);

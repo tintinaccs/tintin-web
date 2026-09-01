@@ -27,6 +27,15 @@ async function call(action, init = {}) {
   return data;
 }
 
+async function callApi(name, init = {}) {
+  const user = auth.currentUser;
+  if (!user) throw new Error('Necesitás iniciar sesión de nuevo.');
+  const token = await user.getIdToken();
+  const response = await fetch(apiUrl(name), { ...init, headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json', ...(init.headers || {}) } });
+  const data = await response.json().catch(() => ({}));
+  return { ok: response.ok, data };
+}
+
 function notice(message, error = false) {
   const node = $('push-master-notice');
   if (!node) return;
@@ -49,6 +58,36 @@ function renderDevices(devices = []) {
     try { await call('revoke', { method: 'POST', body: JSON.stringify({ action: 'revoke', deviceId: button.dataset.pushRevoke }) }); notice('Dispositivo revocado.'); await refresh(); }
     catch (error) { notice(error.message, true); button.disabled = false; }
   }));
+}
+
+function renderDiagnostics(devices = [], settings = {}, config = null) {
+  const activeCount = devices.filter(device => device.enabled).length;
+  const devicesBadge = $('push-diag-devices');
+  if (devicesBadge) devicesBadge.textContent = `Dispositivos activos: ${activeCount}`;
+  const firebaseBadge = $('push-diag-firebase');
+  const vapidBadge = $('push-diag-vapid');
+  if (settings.enabled === false) {
+    if (firebaseBadge) firebaseBadge.textContent = 'Firebase: pausado por Super Admin';
+  } else if (config?.ok) {
+    if (firebaseBadge) firebaseBadge.textContent = config.data.enabled ? 'Firebase: activo' : 'Firebase: desactivado (TINTIN_PUSH_ENABLED)';
+  } else if (firebaseBadge) {
+    firebaseBadge.textContent = `Firebase: error (${esc(config?.data?.error || 'sin respuesta')})`;
+  }
+  if (vapidBadge) {
+    vapidBadge.textContent = config?.ok && config.data.vapidKey !== undefined
+      ? 'VAPID: configurada'
+      : `VAPID: ${esc(config?.data?.error || 'no configurada')}`;
+  }
+}
+
+function renderEvents(events = []) {
+  const body = $('push-master-events');
+  if (!body) return;
+  if (!events.length) {
+    body.innerHTML = '<tr><td colspan="5" style="padding:14px;color:var(--adm-muted)">Todavía no hay eventos de push registrados.</td></tr>';
+    return;
+  }
+  body.innerHTML = events.map(event => `<tr><td style="padding:9px"><strong>${esc(event.type || '—')}</strong><br><small style="color:var(--adm-muted)">${esc(event.eventId || '')}</small></td><td style="padding:9px"><span class="adm-badge">${esc(event.status || '—')}</span></td><td style="padding:9px">${esc(event.successCount ?? 0)} / ${esc(event.failureCount ?? 0)}</td><td style="padding:9px;max-width:260px;overflow-wrap:anywhere">${esc(event.lastError || '—')}</td><td style="padding:9px">${esc(event.updatedAt || '—')}</td></tr>`).join('');
 }
 
 function applySettings(settings = {}) {
@@ -104,6 +143,24 @@ async function refresh() {
   const data = await call('list', { method: 'GET' });
   applySettings(data.settings);
   renderDevices(data.devices);
+  renderEvents(data.events);
+  const config = await callApi('push-config', { method: 'GET' }).catch(error => ({ ok: false, data: { error: error.message } }));
+  renderDiagnostics(data.devices, data.settings, config);
+}
+
+async function sendGlobalTest() {
+  const button = $('btn-push-master-test'); button.disabled = true;
+  notice('Enviando prueba a todos los dispositivos activos...');
+  try {
+    const { ok, data } = await callApi('push-test', { method: 'POST', body: JSON.stringify({ scope: 'all' }) });
+    if (!ok || data.success === false) throw new Error(data.error || 'No se pudo enviar la prueba global.');
+    notice(`Prueba global enviada: ${data.successCount} de ${data.attempted} dispositivo(s).`);
+    await refresh();
+  } catch (error) {
+    notice(error.message, true);
+  } finally {
+    button.disabled = false;
+  }
 }
 
 async function save() {
@@ -153,6 +210,7 @@ function boot() {
   $('btn-push-master-upload')?.addEventListener('click', () => $('push-master-sound-file')?.click());
   $('push-master-sound-file')?.addEventListener('change', () => uploadTone().catch(error => notice(error.message, true)));
   $('btn-push-master-save')?.addEventListener('click', () => save().catch(error => notice(error.message, true)));
+  $('btn-push-master-test')?.addEventListener('click', sendGlobalTest);
   $('btn-push-master-revoke-all')?.addEventListener('click', async () => {
     if (!window.confirm('¿Revocar TODOS los dispositivos push? Ninguno recibirá pedidos hasta volver a autorizarlo.')) return;
     const button = $('btn-push-master-revoke-all'); button.disabled = true;

@@ -40,10 +40,6 @@ function ntfyConfig(env) {
   return { enabled: enabled && /^[A-Za-z0-9_-]{16,120}$/.test(topic), topic, url: `${base.replace(/\/$/, '')}/${encodeURIComponent(topic)}`, token: cleanText(env?.TINTIN_NTFY_TOKEN, 300) };
 }
 
-function ntfyExclusive(env) {
-  return ntfyConfig(env).enabled;
-}
-
 /** Canal opcional para que los avisos lleguen aunque la web esté cerrada. */
 async function sendNtfy(env, { title, body, url, type, priority = 'high' }) {
   const config = ntfyConfig(env);
@@ -269,7 +265,7 @@ export async function dispatchSocialPushEvent(env, { type, eventId, title, body,
   if (!claim.claimed) return { ok: true, duplicate: Boolean(claim.duplicate), skipped: claim.inProgress ? 'in_progress' : undefined };
   const sound = soundForType(settings, type);
   const content = { title: cleanText(title, 100), body: cleanText(body, 220), foregroundSound: sound.mode, data: { type: cleanText(type, 40), orderId: '', shortId: '', url, eventId: id, tag: id, title: cleanText(title, 100), body: cleanText(body, 220), foregroundSoundUrl: sound.url } };
-  const devices = ntfyExclusive(env) ? [] : await listActiveDevices(env);
+  const devices = await listActiveDevices(env);
   const result = devices.length ? await sendToDevices(env, devices, content) : { attempted: 0, successCount: 0, failureCount: 0, disabledCount: 0, lastError: '' };
   const status = await closeEvent(env, claim.path, result);
   const ntfy = await sendNtfy(env, { title, body, url, type });
@@ -500,6 +496,51 @@ async function closeEvent(env, path, result) {
 }
 
 /**
+ * Deja constancia en `pushEvents` de un intento de push que ni siquiera llegó
+ * a ejecutar `dispatch*PushEvent` (por ejemplo, porque tiró una excepción
+ * antes de eso). Sin esto ese fallo sólo quedaba en el console.warn del
+ * llamador y era invisible en el panel de Super Admin.
+ */
+export async function recordPushFailure(env, { eventId, type, orderId = '', error }) {
+  const id = cleanText(eventId, 260) || `${type}:${crypto.randomUUID()}`;
+  const path = `${PUSH_EVENTS_COLLECTION}/${await eventDocumentId(id)}`;
+  const now = new Date();
+  const fields = {
+    eventId: fsString(id),
+    type: fsString(type),
+    orderId: fsString(orderId),
+    status: fsString('failed'),
+    updatedAt: fsTime(now),
+    successCount: fsInt(0),
+    failureCount: fsInt(1),
+    lastError: fsString(sanitizeError(error, 200))
+  };
+  const created = await createDocumentIfAbsent(env, path, { ...fields, attempts: fsInt(1), createdAt: fsTime(now) }).catch(() => ({ created: false }));
+  if (!created.created) await patchDocument(env, path, fields).catch(() => {});
+}
+
+/** Últimos eventos de push, para el panel de diagnóstico del Push Center. */
+export async function listRecentEvents(env, limit = 20) {
+  const events = await runQuery(env, {
+    from: [{ collectionId: PUSH_EVENTS_COLLECTION }],
+    orderBy: [{ field: { fieldPath: 'updatedAt' }, direction: 'DESCENDING' }],
+    limit: Math.min(Math.max(Number(limit) || 20, 1), 50)
+  });
+  return events.map(event => ({
+    eventId: cleanText(event.eventId, 260),
+    type: cleanText(event.type, 40),
+    orderId: cleanText(event.orderId, 220),
+    status: cleanText(event.status, 20),
+    attempts: Number(event.attempts) || 0,
+    successCount: Number(event.successCount) || 0,
+    failureCount: Number(event.failureCount) || 0,
+    lastError: cleanText(event.lastError, 200),
+    updatedAt: cleanText(event.updatedAt, 40),
+    createdAt: cleanText(event.createdAt, 40)
+  }));
+}
+
+/**
  * Punto de entrada server-side reutilizable. Lo llaman el webhook firmado de
  * Apps Script y, como respaldo, functions/api/order-email.js — siempre con el
  * mismo eventId (`order.created:<orderId>`), así que el segundo camino no
@@ -525,7 +566,7 @@ export async function dispatchOrderPushEvent(env, type, orderId, externalEventId
     return { ok: false, error: 'attempts_exhausted' };
   }
 
-  const devices = ntfyExclusive(env) ? [] : await listActiveDevices(env);
+  const devices = await listActiveDevices(env);
   const sound = soundForType(settings, type);
   const content = buildPushContent({ type, orderId, order, eventId, foregroundSound: sound.mode, foregroundSoundUrl: sound.url });
   const result = devices.length

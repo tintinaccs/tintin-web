@@ -7,6 +7,8 @@ import {
   fsString,
   fsTimestamp,
 } from './firebase-admin-ligero.js';
+import { notifyAdminIfAbsent } from './notificaciones-sociales.js';
+import { dispatchOrderPushEvent, recordPushFailure } from './servicio-push.js';
 
 const MAX_RATE_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 const ORDER_ID_RE = /^[A-Za-z0-9_-]{12,220}$/;
@@ -190,6 +192,37 @@ async function markPaid(env, mapping, capture) {
   await firestoreAdminMerge(env, `paypalOrders/${mapping.id}`, {
     status: fsString('COMPLETED'), captureId: fsString(clean(capture.id, 100)), updatedAt: fsTimestamp(confirmedAt),
   });
+
+  await notifyOrderConfirmed(env, mapping, cents, currency);
+}
+
+async function notifyOrderConfirmed(env, mapping, cents, currency) {
+  try {
+    const orderDoc = await firestoreAdminGet(env, `orders/${mapping.orderId}`);
+    const order = orderDoc ? decodeFirestoreFields(orderDoc.fields || {}) : {};
+    const orderNumber = clean(order.orderNumber || order.shortId || mapping.orderId, 80);
+    const customerName = clean(order.userName || 'Una clienta', 160);
+    const totalText = `Gs. ${(cents / 100).toLocaleString('es-PY')}`;
+
+    await notifyAdminIfAbsent(env, {
+      kind: 'order_confirmed', actorType: 'system', actorName: 'PayPal',
+      title: `Pago confirmado del pedido ${orderNumber}`,
+      body: `${customerName} pagó ${totalText} por PayPal.`,
+      iconKey: 'order', targetUrl: 'admin.html#section-pedidos',
+      orderId: mapping.orderId, orderNumber, status: 'pagado',
+      sourceType: 'order', sourceId: mapping.orderId, createdAt: new Date(),
+    }, `payment_completed:${mapping.orderId}`);
+  } catch (error) {
+    console.warn('[paypal] No se pudo registrar la notificación de pago confirmado:', error);
+  }
+
+  const pushEventId = `payment.completed:${mapping.orderId}`;
+  try {
+    await dispatchOrderPushEvent(env, 'payment.completed', mapping.orderId, pushEventId);
+  } catch (error) {
+    console.warn('[paypal] No se pudo enviar el push de pago confirmado:', error);
+    await recordPushFailure(env, { eventId: pushEventId, type: 'payment.completed', orderId: mapping.orderId, error }).catch(() => {});
+  }
 }
 
 export async function capturePaypalOrder(env, { providerOrderId, uid }) {

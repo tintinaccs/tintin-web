@@ -22,7 +22,7 @@ import {
   encodeFirestoreFields, firestoreAdminCommit, firestoreAdminGet,
 } from '../../cloudflare/firebase-admin-ligero.js';
 import { syncEngagementToSheets } from '../../cloudflare/sincronizacion-participacion-sheets.js';
-import { dispatchSocialPushEvent } from '../../cloudflare/servicio-push.js';
+import { dispatchSocialPushEvent, recordPushFailure } from '../../cloudflare/servicio-push.js';
 
 const MAX_BODY_BYTES = 8 * 1024;
 const REPLY_COOLDOWN_MS = 5000;
@@ -217,21 +217,24 @@ export async function onRequest(context) {
 
     const push = pushDetails(input.action, result, privateReview);
     const isNewEvent = input.action === 'createReview' || input.action === 'replyReview' || result.alreadyLiked !== true;
-    if (push && isNewEvent) {
+    if (push && isNewEvent && !engagementIsSuperAdmin(user)) {
       // En Pages normalmente existe waitUntil, pero no se debe perder el
       // aviso si el handler se ejecuta en un runtime/test que no lo expone.
       // El pedido tiene webhook dedicado; los eventos sociales deben tener la
       // misma garantía de que el intento de envío ocurra antes de terminar la
       // solicitud cuando no hay background execution disponible.
+      const pushEventId = `${push.type}:${user.uid}:${result?.record?.likeId || result?.reply?.replyId || privateReview?.reviewId || Date.now()}`;
       const socialPush = dispatchSocialPushEvent(env, {
         type: push.type,
-        eventId: `${push.type}:${user.uid}:${result?.record?.likeId || result?.reply?.replyId || privateReview?.reviewId || Date.now()}`,
+        eventId: pushEventId,
         title: push.title,
         body: push.body,
         url: push.url,
       }).catch(error => {
         console.warn('[engagement] No se pudo enviar el push social:', error);
-        return { ok: false, error: String(error?.message || 'social_push_failed').slice(0, 180) };
+        return recordPushFailure(env, { eventId: pushEventId, type: push.type, error })
+          .catch(() => {})
+          .then(() => ({ ok: false, error: String(error?.message || 'social_push_failed').slice(0, 180) }));
       });
       if (typeof context.waitUntil === 'function') context.waitUntil(socialPush);
       else await socialPush;

@@ -318,12 +318,13 @@ const enableNotifications = withBusy(async () => {
 });
 
 const sendTestNotification = withBusy(async () => {
-  notice('Enviando prueba a todos los dispositivos activos...');
+  if (!currentToken) throw new Error('Activá las notificaciones en este dispositivo antes de probarlas.');
+  notice('Enviando prueba a este dispositivo...');
   const result = await authorizedFetch('push-test', {
     method: 'POST',
-    body: JSON.stringify({ scope: 'all' })
+    body: JSON.stringify({ scope: 'device', token: currentToken })
   });
-  notice(`Prueba global enviada: ${result.successCount} de ${result.attempted} dispositivo(s).`);
+  notice(`Prueba enviada: ${result.successCount} de ${result.attempted} dispositivo(s).`);
 });
 
 const disableNotifications = withBusy(async () => {

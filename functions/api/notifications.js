@@ -12,6 +12,7 @@ import {
   socialNotificationClean as clean,
   socialNotificationSafeId as safeId,
 } from '../../cloudflare/notificaciones-sociales.js';
+import { dispatchSocialPushEvent, recordPushFailure } from '../../cloudflare/servicio-push.js';
 
 const MAX_BODY_BYTES = 6 * 1024;
 const PROFILE_RECOVERY_WINDOW_MS = 24 * 60 * 60 * 1000;
@@ -54,6 +55,20 @@ async function registerProfileNotification(env, user) {
     iconKey: 'user', targetUrl: 'admin.html#section-usuarios',
     sourceType: 'user', sourceId: uid, createdAt,
   }, `user_joined:${uid}`);
+
+  if (adminResult.created) {
+    const pushEventId = `social.account.created:${uid}`;
+    await dispatchSocialPushEvent(env, {
+      type: 'social.account.created',
+      eventId: pushEventId,
+      title: `${name} se sumó a Tintin Accesorios`,
+      body: 'Hay una nueva cuenta registrada en Tintin.',
+      url: 'admin.html#section-usuarios',
+    }).catch(error => {
+      console.warn('[notifications] No se pudo enviar el push de cuenta nueva:', error);
+      return recordPushFailure(env, { eventId: pushEventId, type: 'social.account.created', error }).catch(() => {});
+    });
+  }
 
   await notifyUserIfAbsent(env, uid, {
     kind: 'welcome', actorType: 'store', actorName: 'Tintin Accesorios',
