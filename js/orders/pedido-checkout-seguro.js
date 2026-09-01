@@ -15,12 +15,12 @@ import {
   cartTotal,
   formatPrice,
   awaitCartReady
-} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260822-checkout-final-cart-1';
+} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260901-phone-py-only-1';
 import {
   findCountryByCode,
   normalizePhone,
   isValidPhone
-} from '../components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1';
+} from '../components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1';
 import {
   isValidCi,
   normalizeCi,

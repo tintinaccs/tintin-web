@@ -82,6 +82,55 @@ body:has(.login-page).login-setup-open :is(#login-profile-name-field,#login-prof
 .login-username-status[data-state="taken"]::before,.login-username-status[data-state="invalid"]::before { content:"×"; display:grid; place-items:center; width:18px; height:18px; border-radius:50%; background:#fff0f3; font-size:15px; }
 .login-username-status[data-state="checking"] { color:var(--login-muted); }
 
+/* Cierre visual minimalista del alta: rosa sereno, logo oficial adaptable y
+   una jerarquía limpia sin elementos que invadan las ayudas del formulario. */
+body:has(.login-page) .login-page {
+  background: linear-gradient(135deg, #f8dce5 0%, #fceff3 52%, #f7d6e2 100%) !important;
+  overflow: auto;
+}
+body:has(.login-page) .login-shell {
+  border-color: rgba(126, 59, 85, .12) !important;
+  border-radius: 24px !important;
+  background: rgba(255,255,255,.94) !important;
+  box-shadow: 0 18px 48px rgba(125, 64, 88, .12) !important;
+}
+body:has(.login-page) .login-mobile-logo { margin-bottom: clamp(18px, 3vw, 30px); }
+body:has(.login-page) .login-mobile-logo img {
+  display:block; width:clamp(104px, 16vw, 196px); height:auto; margin:auto;
+  filter: brightness(0) invert(1); object-fit:contain;
+}
+body:has(.login-page) .login-mobile-logo-text,
+body:has(.login-page) .login-mobile-logo-sub { display:none !important; }
+body:has(.login-page).login-setup-open :is(#login-profile-name-field,#login-profile-phone-field,#login-profile-address-field) {
+  border-color: rgba(160, 104, 128, .16); border-radius:16px;
+  background:#fff; padding:clamp(16px,2vw,22px);
+}
+body:has(.login-page) .login-email-btn {
+  background:#d84f86 !important; color:#fff !important; border:0 !important;
+  box-shadow:0 8px 18px rgba(216,79,134,.22) !important;
+}
+body:has(.login-page) .login-email-btn:hover,
+body:has(.login-page) .login-email-btn:focus-visible { background:#c94378 !important; }
+body:has(.login-page) .login-field-hint { margin:10px 0 0 !important; min-height:18px; line-height:1.45; }
+body:has(.login-page) .login-username-control { margin-bottom:0; }
+body:has(.login-page) .login-username-control .login-email-input { padding-right:16px; }
+body:has(.login-page) .login-username-status {
+  position:static;
+  transform:none;
+  justify-content:flex-start;
+  max-width:none;
+  margin-top:8px;
+  min-height:20px;
+  text-align:left;
+}
+body:has(.login-page) .login-phone-country {
+  flex-basis:88px !important; color:#604653 !important; background:#f9edf1 !important;
+  opacity:1; cursor:default;
+}
+@media (max-width:599px) {
+  body:has(.login-page) .login-mobile-logo img { width:clamp(78px, 27vw, 108px); }
+}
+
 body:has(.login-page).login-setup-open #login-profile-address-field {
   padding: clamp(16px, 2vw, 28px) !important;
 }

@@ -50,7 +50,7 @@
   <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/pages/login/login-maintenance.css?v=tintin-20260811-cls-desktop-stable-2" data-tt-login-maintenance>
   <link rel="stylesheet" href="css/pages/login/login-fluid-responsive.css?v=tintin-20260803-login-fluid-1" data-tt-login-fluid>
-  <link rel="stylesheet" href="css/pages/login/login-onboarding-flow.css?v=tintin-20260828-minimal-account-flow-2" data-tt-login-onboarding-flow>
+  <link rel="stylesheet" href="css/pages/login/login-onboarding-flow.css?v=tintin-20260901-login-py-minimal-1" data-tt-login-onboarding-flow>
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2">
 </head>
@@ -61,8 +61,7 @@
 
     <section class="login-form-side">
       <div class="login-mobile-logo" aria-label="Tintin Accesorios y Relojes">
-        <div class="login-mobile-logo-text">TINTIN</div>
-        <div class="login-mobile-logo-sub">Accesorios &amp; Relojes</div>
+        <img src="assets-tintin/images/general/logo.png" alt="Tintin Accesorios y Relojes" />
       </div>
 
       <div class="login-box">
@@ -131,8 +130,8 @@
           <div id="login-profile-phone-field">
             <label class="login-email-label" for="login-profile-phone">Teléfono / WhatsApp</label>
             <div class="login-phone-row">
-              <select class="login-email-input login-phone-country" id="login-profile-country" aria-label="País del teléfono"></select>
-              <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="Ej: 0981 123 456" autocomplete="tel" maxlength="40" />
+              <select class="login-email-input login-phone-country" id="login-profile-country" aria-label="Prefijo de Paraguay" disabled><option value="PY">+595</option></select>
+              <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="Ej: 0981 336 401" autocomplete="tel-national" inputmode="numeric" maxlength="10" />
             </div>
             <p class="login-phone-help" id="login-phone-help" style="display:none">
               <a id="login-phone-wa" href="https://wa.me/595981299331?text=Hola%2C%20mi%20n%C3%BAmero%20ya%20figura%20en%20otra%20cuenta%20y%20no%20puedo%20completar%20mi%20registro." target="_blank" rel="noopener">Escribinos por WhatsApp</a> y te ayudamos a recuperar tu cuenta.
@@ -207,8 +206,8 @@ import {
   isValidEmailFormat, requestOtpCode, verifyOtpCode,
   ensureUserDocForEmailLogin, otpErrorMessage
 } from "./js/email/correo-autenticacion.js?v=tintin-20260829-local-api-fallback-1";
-import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260803-phone-unique-1";
-import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260803-phone-reservation-1";
+import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
+import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { isValidUsernameFormat, isReservedUsername, normalizeUsername } from "./js/components/forms/utilidades-username.js?v=tintin-20260821-username-unique-1";
 import { reserveUsername } from "./js/components/forms/reserva-username.js?v=tintin-20260822-dob-username-onboarding-1";
 import { isValidDob } from "./js/components/forms/validacion-nacimiento.js?v=tintin-20260822-dob-username-onboarding-1";
@@ -346,7 +345,7 @@ async function guardarUsuario(user) {
 }
 
 function populateCountrySelect(selectEl) {
-  selectEl.innerHTML = COUNTRIES.map(c => `<option value="${c.code}">${c.flag} +${c.dial}</option>`).join('');
+  selectEl.innerHTML = '<option value="PY">+595</option>';
   selectEl.value = DEFAULT_COUNTRY.code;
 }
 

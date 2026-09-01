@@ -6,16 +6,6 @@
 
 export const COUNTRIES = [
   { code: 'PY', name: 'Paraguay',        dial: '595', flag: '🇵🇾', minDigits: 9,  maxDigits: 9  },
-  { code: 'AR', name: 'Argentina',       dial: '54',  flag: '🇦🇷', minDigits: 10, maxDigits: 11 },
-  { code: 'BR', name: 'Brasil',          dial: '55',  flag: '🇧🇷', minDigits: 10, maxDigits: 11 },
-  { code: 'UY', name: 'Uruguay',         dial: '598', flag: '🇺🇾', minDigits: 8,  maxDigits: 9  },
-  { code: 'CL', name: 'Chile',           dial: '56',  flag: '🇨🇱', minDigits: 9,  maxDigits: 9  },
-  { code: 'BO', name: 'Bolivia',         dial: '591', flag: '🇧🇴', minDigits: 8,  maxDigits: 8  },
-  { code: 'PE', name: 'Perú',            dial: '51',  flag: '🇵🇪', minDigits: 9,  maxDigits: 9  },
-  { code: 'CO', name: 'Colombia',        dial: '57',  flag: '🇨🇴', minDigits: 10, maxDigits: 10 },
-  { code: 'MX', name: 'México',          dial: '52',  flag: '🇲🇽', minDigits: 10, maxDigits: 10 },
-  { code: 'ES', name: 'España',          dial: '34',  flag: '🇪🇸', minDigits: 9,  maxDigits: 9  },
-  { code: 'US', name: 'Estados Unidos',  dial: '1',   flag: '🇺🇸', minDigits: 10, maxDigits: 10 },
 ];
 
 export const DEFAULT_COUNTRY = COUNTRIES[0]; // Paraguay
