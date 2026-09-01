@@ -96,9 +96,22 @@ body:has(.login-page) .login-shell {
 }
 body:has(.login-page) .login-mobile-logo { margin-bottom: clamp(18px, 3vw, 30px); }
 body:has(.login-page) .login-mobile-logo img {
-  display:block; width:clamp(104px, 16vw, 196px); height:auto; margin:auto;
+  display:block; width:clamp(92px, 10vw, 132px); height:auto; margin:auto;
   filter: brightness(0) invert(1); object-fit:contain;
 }
+body:has(.login-page) .login-mobile-logo {
+  width:max-content;
+  min-width:132px;
+  margin-inline:auto;
+  padding:14px 20px !important;
+  background:#d84f86 !important;
+  background-image:none !important;
+  background-position:initial !important;
+  background-size:auto !important;
+  border-radius:999px;
+}
+body:has(.login-page).login-setup-open .login-shell { width:min(100%, 980px) !important; }
+body:has(.login-page).login-setup-open .login-form-side { padding-top:clamp(28px,4vw,46px) !important; }
 body:has(.login-page) .login-mobile-logo-text,
 body:has(.login-page) .login-mobile-logo-sub { display:none !important; }
 body:has(.login-page).login-setup-open :is(#login-profile-name-field,#login-profile-phone-field,#login-profile-address-field) {
@@ -128,7 +141,8 @@ body:has(.login-page) .login-phone-country {
   opacity:1; cursor:default;
 }
 @media (max-width:599px) {
-  body:has(.login-page) .login-mobile-logo img { width:clamp(78px, 27vw, 108px); }
+  body:has(.login-page) .login-mobile-logo { min-width:106px; padding:11px 16px !important; }
+  body:has(.login-page) .login-mobile-logo img { width:clamp(72px, 22vw, 94px); }
 }
 
 body:has(.login-page).login-setup-open #login-profile-address-field {
