@@ -19,7 +19,6 @@ import {
   runSingleFlight,
   writeCached
 } from '../firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
-import { listPublicCollectionRest } from '../firebase/respaldo-rest-firestore.js?v=tintin-20260726-browser-fallback-1';
 import { fetchPublicCatalogResource } from '../firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1';
 import { sortCatalogProducts, timestampToMillis } from '../../pages/catalog/politica-exhibicion-catalogo.js?v=tintin-20260731-unified-store-1';
 
@@ -182,12 +181,6 @@ async function fetchAllProductsFromSdk() {
   return snapshot.docs.map(item => mapProduct(item.id, item.data()));
 }
 
-async function fetchAllProductsFromRest() {
-  const documents = await listPublicCollectionRest('products', 1000);
-  recordFirestoreRead('products:all-rest-fallback', documents.length);
-  return documents.map(item => mapProduct(item.id, item.data));
-}
-
 async function fetchHomeProductsFromSdk() {
   const featuredSnapshot = await getDocs(query(
     collection(db, 'products'),
@@ -204,23 +197,14 @@ async function fetchHomeProductsFromSdk() {
   return fallbackSnapshot.docs.map(item => mapProduct(item.id, item.data()));
 }
 
-async function fetchHomeProductsFromRest() {
-  const documents = await listPublicCollectionRest('products', HOME_PRODUCT_LIMIT);
-  recordFirestoreRead('products:home-rest-fallback', documents.length);
-  return documents.map(item => mapProduct(item.id, item.data));
-}
-
 async function fetchHomeProducts() {
-  // La API REST pública evita bloquear el primer render esperando a que
-  // App Check y el canal persistente del SDK terminen de inicializarse.
-  // Las reglas de Firestore siguen aplicándose exactamente igual.
-  let products;
-  try {
-    products = await fetchHomeProductsFromRest();
-  } catch (restError) {
-    if (!await appCheckReady) throw restError;
-    products = await fetchHomeProductsFromSdk();
-  }
+  // El catálogo público debe pasar siempre por la API edge cacheada. No se
+  // permite un fallback automático desde cada navegador a Firestore: un bot
+  // podría provocar miles de lecturas cambiando de red o forzando errores de
+  // caché. El caché local/stale de loadHomeProducts mantiene la UX cuando la
+  // API está temporalmente fuera de servicio.
+  const items = await fetchPublicCatalogResource('products');
+  let products = items.map(item => mapProduct(item.id, item.data));
 
   products = normalizeList(products);
   const cards = products.map(compactProduct);
@@ -229,67 +213,25 @@ async function fetchHomeProducts() {
 }
 
 async function fetchAllProducts() {
-  let products;
-  try {
-    const items = await fetchPublicCatalogResource('products');
-    products = items.map(item => mapProduct(item.id, item.data));
-  } catch (edgeError) {
-    try {
-      products = await fetchAllProductsFromRest();
-    } catch (restError) {
-      if (!await appCheckReady) throw restError;
-      products = await fetchAllProductsFromSdk();
-    }
-  }
+  const items = await fetchPublicCatalogResource('products');
+  let products = items.map(item => mapProduct(item.id, item.data));
   products = normalizeList(products);
   const cards = products.map(compactProduct);
   // Un catálogo vacío no es una caché útil. Una lectura transitoria bloqueada
   // por red o un despliegue nunca debe dejar al navegador mostrando "0 productos".
   if (cards.length) writeCached(ALL_CACHE_KEY, cards);
-  return publish(products, 'edge-or-firestore-fallback');
+  return publish(products, 'edge-cache');
 }
 
 async function startPublicProductsRealtime() {
   if (publicProductsReady) return publicProductsReady;
-  if (!await appCheckReady) return loadAllProducts({ force: true });
-
-  const cached = readCached(ALL_CACHE_KEY, ALL_CACHE_TTL);
-  if (Array.isArray(cached) && cached.length) {
-    publish(cached, 'cache');
-  } else {
-    // Primer contenido útil antes de abrir el listener persistente.
-    await loadAllProducts();
-  }
-
-  publicProductsReady = new Promise((resolve, reject) => {
-    publicProductsUnsubscribe = onSnapshot(
-      query(collection(db, 'products'), limit(1000)),
-      snapshot => {
-        const products = normalizeList(snapshot.docs.map(item => mapProduct(item.id, item.data())));
-        const cards = products.map(compactProduct);
-        recordFirestoreRead('products:realtime', snapshot.size);
-        if (cards.length) writeCached(ALL_CACHE_KEY, cards);
-        resolve(publish(products, 'realtime'));
-      },
-      async error => {
-        publicProductsUnsubscribe = null;
-        publicProductsReady = null;
-        window.dispatchEvent(new CustomEvent('tintin:products-error', { detail: { error } }));
-        try {
-          resolve(await loadAllProducts({ force: true }));
-        } catch (fallbackError) {
-          reject(fallbackError);
-        }
-      }
-    );
-  });
-
-  window.addEventListener('pagehide', () => {
-    publicProductsUnsubscribe?.();
-    publicProductsUnsubscribe = null;
+  // La superficie pública se actualiza por TTL/caché edge. Un listener de
+  // colección completa aquí multiplicaba lecturas por cada visitante y podía
+  // volver a disparar el costo aunque el catálogo no hubiera cambiado.
+  publicProductsReady = loadAllProducts();
+  publicProductsReady.finally(() => {
     publicProductsReady = null;
-  }, { once: true });
-
+  });
   return publicProductsReady;
 }
 

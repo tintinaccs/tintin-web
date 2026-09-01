@@ -46,6 +46,10 @@ let allUsers = [];
 let allOrders = [];
 let adminOrdersUnsubscribe = null;
 let adminUsersUnsubscribe = null;
+// Nunca volver a descargar miles de documentos al abrir el panel. El panel
+// debe trabajar con la ventana operativa reciente; las fichas y exportaciones
+// consultan el documento o la página concreta que se necesita.
+const ADMIN_REALTIME_LIMIT = 250;
 // Cada bandera indica si esa consulta ya resolvió al menos una vez con éxito.
 // Sirve para NO mostrar "0" cuando en realidad la consulta está cargando o
 // falló (permisos/conexión) — en ese caso el indicador muestra "—", igual que
@@ -1269,7 +1273,7 @@ function startAdminRealtimeData() {
   stopAdminRealtimeData();
   adminRealtimeReady = { orders: false, users: currentRole !== 'superadmin' };
   if (can(currentRole, 'viewOrders') && roleCanDo('pedidos', 'ver')) {
-    adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), limit(10000)), snapshot => {
+    adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), limit(ADMIN_REALTIME_LIMIT)), snapshot => {
       allOrders = snapshot.docs
         .map(item => ({ id: item.id, ...item.data() }))
         .sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
@@ -1284,7 +1288,7 @@ function startAdminRealtimeData() {
     adminRealtimeReady.orders = true;
   }
   if (currentRole === 'superadmin') {
-    adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), limit(10000)), snapshot => {
+    adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), limit(ADMIN_REALTIME_LIMIT)), snapshot => {
       allUsers = snapshot.docs.map(item => ({ uid: item.id, ...item.data() }));
       adminRealtimeReady.users = true;
       refreshRealtimeConsumers();

@@ -15,6 +15,31 @@ const PRODUCT_FIELDS = new Set([
   'Variant Inventory Qty', 'Product Category', 'Category', 'Title', 'Handle', 'Body (HTML)'
 ]);
 const COLLECTION_FIELDS = new Set(['name', 'title', 'description', 'image', 'imageUrl', 'order', 'visible']);
+const RATE_WINDOW_MS = 10_000;
+const RATE_MAX_REQUESTS = 60;
+const requestCounters = new Map();
+
+function rateLimitKey(request) {
+  return String(request.headers.get('CF-Connecting-IP') || request.headers.get('x-forwarded-for') || 'unknown')
+    .split(',')[0].trim().slice(0, 80) || 'unknown';
+}
+
+function allowRequest(request) {
+  const now = Date.now();
+  if (requestCounters.size > 2000) {
+    for (const [key, value] of requestCounters) {
+      if (now - value.startedAt >= RATE_WINDOW_MS) requestCounters.delete(key);
+    }
+  }
+  const key = rateLimitKey(request);
+  const current = requestCounters.get(key);
+  if (!current || now - current.startedAt >= RATE_WINDOW_MS) {
+    requestCounters.set(key, { startedAt: now, count: 1 });
+    return true;
+  }
+  current.count += 1;
+  return current.count <= RATE_MAX_REQUESTS;
+}
 
 function pickKnownFields(data, allowed) {
   return Object.fromEntries(Object.entries(data || {}).filter(([key]) => allowed.has(key)));
@@ -87,6 +112,17 @@ async function buildPayload(env, resource, productId = '') {
 export async function onRequest({ request, env, waitUntil }) {
   if (request.method !== 'GET') {
     return new Response(null, { status: 405, headers: { allow: 'GET' } });
+  }
+
+  if (!allowRequest(request)) {
+    return Response.json({ ok: false, error: 'rate_limited' }, {
+      status: 429,
+      headers: {
+        'cache-control': 'no-store',
+        'retry-after': '10',
+        'x-content-type-options': 'nosniff'
+      }
+    });
   }
 
   const url = new URL(request.url);
