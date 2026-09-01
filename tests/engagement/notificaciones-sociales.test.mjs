@@ -88,6 +88,15 @@ test('cada acción social conserva aviso propio y el Super Admin no queda fuera 
   assert.doesNotMatch(engagementApi, /if \(!engagementIsSuperAdmin\(user\)\)/);
 });
 
+test('cada evento social usa el mismo canal Web Push que el pedido nuevo', () => {
+  for (const type of [
+    'social.review.created', 'social.review.reply',
+    'social.like.product', 'social.like.review', 'social.like.reply'
+  ]) assert.match(engagementApi, new RegExp(`type: '${type}'`));
+  assert.match(engagementApi, /if \(typeof context\.waitUntil === 'function'\) context\.waitUntil\(socialPush\);/);
+  assert.match(engagementApi, /else await socialPush;/);
+});
+
 test('las acciones de Tintin notifican a la autora de la reseña', () => {
   assert.match(adminEngagement, /kind: 'store_review_like'/);
   assert.match(adminEngagement, /A Tintin le gustó tu reseña/);
