@@ -1,4 +1,4 @@
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20260830-instant-loading-1';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20260901-closeout-cargador-mantenimiento-pagin-2-1';
 import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
@@ -579,7 +579,7 @@ export async function ensureProductsForCurrentPage() {
   if (/(^|\/)product(?:\.html)?$/.test(path)) return loadProductPage();
   if (path.endsWith('/') || /(^|\/)index(?:\.html)?$/.test(path)) return loadHomeProducts();
   if (/(^|\/)(?:catalogo|collections)(?:\.html)?$/.test(path)) {
-    return loadAllProducts();
+    return startPublicProductsRealtime();
   }
   // Inventario histórico de rutas para auditorías: index|catalogo|collections.
   return Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];

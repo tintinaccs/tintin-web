@@ -46,6 +46,35 @@ function sortCols(list) {
   return list.slice().sort((a, b) => a.order - b.order || a.name.localeCompare(b.name, 'es'));
 }
 
+function canonicalCollectionSlug(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/^bags?$/, 'bolsos')
+    .replace(/^ear-cuffs?$/, 'earcuff')
+    .replace(/^arm-cuffs?$/, 'armcuff')
+    .replace(/^jewelry-box$/, 'joyeros');
+}
+
+function uniquePublishedCollections(list) {
+  const seen = new Set();
+  return sortCols((Array.isArray(list) ? list : []).filter(item => item?.visible !== false))
+    .filter(item => {
+      const key = canonicalCollectionSlug(item?.slug);
+      if (!key || seen.has(key)) {
+        if (key) console.warn('[collections-store] Slug publicado duplicado ignorado:', item?.slug, '→', key);
+        return false;
+      }
+      seen.add(key);
+      return true;
+    });
+}
+
 function withResolvedImages(cols) {
   const products = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
   return cols.map(col => ({ ...col, image: resolveCollectionImage(col, products) }));
@@ -76,7 +105,7 @@ function attachProductsReactivity() {
 }
 
 function publishPublic(collections, source) {
-  latestVisibleCollections = collections.filter(item => item.visible !== false);
+  latestVisibleCollections = uniquePublishedCollections(collections);
   republishToPublicSubscribers(source);
   return sortCols(withResolvedImages(latestVisibleCollections));
 }

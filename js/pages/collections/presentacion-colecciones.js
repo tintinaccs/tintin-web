@@ -7,7 +7,7 @@
    renderer legado vuelva a dejar categorías antiguas después del snapshot.
    ============================================================= */
 
-import { onCollectionsUpdate } from './estado-colecciones.js?v=tintin-20260821-accounts-phase-a-1';
+import { onCollectionsUpdate } from './estado-colecciones.js?v=tintin-20260901-collections-policy-1';
 
 if (!window.TintinCollectionsPhase4Booted) {
   window.TintinCollectionsPhase4Booted = true;
@@ -194,6 +194,7 @@ if (!window.TintinCollectionsPhase4Booted) {
   function categoryCount(slug) {
     const normalized = normalizeSlug(slug);
     return products.filter(product =>
+      product?.active !== false &&
       normalizeSlug(product?.category || product?.cat) === normalized &&
       clean(product?.name)
     ).length;
@@ -298,7 +299,7 @@ if (!window.TintinCollectionsPhase4Booted) {
       collectionNodesOrState(
         buildCollectionsPageCard,
         'No hay colecciones disponibles todavía.',
-        true
+        false
       ),
       'collections-page'
     );

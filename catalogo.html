@@ -37,7 +37,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260831-notifications-auto-read-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260901-closeout-entrada-navegacion-publica-3-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260824-header-responsive-sync-1">
@@ -517,7 +517,7 @@ import { heartIconMarkup } from './js/components/favorites/icono-corazon.js?v=ti
 // incluido el polling/fallback de productos más abajo, que es justo lo que
 // tiene que seguir funcionando pase lo que pase con las colecciones.
 let onCollectionsUpdate = () => {};
-import('./js/pages/collections/estado-colecciones.js?v=tintin-20260821-accounts-phase-a-1')
+import('./js/pages/collections/estado-colecciones.js?v=tintin-20260901-collections-policy-1')
   .then(m => { onCollectionsUpdate = m.onCollectionsUpdate; bootCollections(); })
   .catch(e => console.warn('[catalogo] No se pudieron actualizar las colecciones:', e));
 
@@ -870,22 +870,33 @@ window.addEventListener('tintin:products-loaded', e => handleProductsUpdate(e.de
 
 function _showCatalogLoadError() {
   if (_catalogInitialized || _catalogErrorTimer) return;
-  // Un fallo de una fuente (App Check, listener o edge) puede llegar antes
-  // que el respaldo REST. No reemplazar el skeleton durante esa ventana:
-  // esperar a que terminen los fallbacks y reintentar sin parpadear error.
   _catalogErrorTimer = window.setTimeout(() => {
     _catalogErrorTimer = 0;
     if (_catalogInitialized) return;
     const grid = document.getElementById('cat-grid');
     if (!grid) return;
     grid.setAttribute('aria-busy', 'false');
-    document.getElementById('cat-count').textContent = 'Actualizando catálogo';
+    document.getElementById('cat-count').textContent = 'Catálogo no disponible';
     grid.innerHTML = `
-      <div class="cat-empty">
-        <p style="margin-bottom:14px;font-size:0.95rem">Estamos actualizando el catálogo. Intentá nuevamente en unos instantes.</p>
-        <button type="button" class="tt-btn" id="cat-retry">Reintentar</button>
+      <div class="tt-catalog-runtime-state" data-state="error" role="alert">
+        <div>
+          <strong>No pudimos actualizar el catálogo</strong>
+          <span>Revisá tu conexión e intentá nuevamente. No mostraremos un catálogo vacío si la fuente real falló.</span>
+          <button type="button" class="tt-btn" id="cat-retry">Reintentar</button>
+        </div>
       </div>`;
-    document.getElementById('cat-retry')?.addEventListener('click', () => location.reload());
+    document.getElementById('cat-retry')?.addEventListener('click', async event => {
+      const button = event.currentTarget;
+      button.disabled = true;
+      button.textContent = 'Reintentando…';
+      try {
+        await window.TintinProductsStore?.loadAll?.({ force: true });
+      } catch (error) {
+        console.error('[catalogo] Reintento falló:', error);
+        button.disabled = false;
+        button.textContent = 'Reintentar';
+      }
+    });
     window.ttPageReady && window.ttPageReady();
   }, 10000);
 }

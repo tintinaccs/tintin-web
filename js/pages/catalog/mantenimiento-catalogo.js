@@ -17,6 +17,7 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
   let loadingTimer = 0;
   let recoveryTimer = 0;
   let lastGridSignature = '';
+  let lastSyncAt = 0;
 
   function appendStylesheet() {
     if (document.querySelector('link[data-tt-catalog-maintenance]')) return;
@@ -77,10 +78,7 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
     grid.innerHTML = `<div class="tt-catalog-runtime-state" data-state="${state}">
       <div><strong>${title}</strong><span>${message}</span>${state === 'error' ? '<button type="button" id="tt-catalog-retry">Reintentar</button>' : ''}</div>
     </div>`;
-    document.getElementById('tt-catalog-retry')?.addEventListener('click', () => {
-      setSync('loading');
-      location.reload();
-    });
+    document.getElementById('tt-catalog-retry')?.addEventListener('click', refreshCatalog);
   }
 
   function guardCatalogSurface() {
@@ -187,30 +185,81 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
     node.textContent = `© 2024-${new Date().getFullYear()} TINTIN ACCESORIOS — TODOS LOS DERECHOS RESERVADOS`;
   }
 
+  function formatLastSync(timestamp) {
+    if (!timestamp) return '';
+    try {
+      return new Intl.DateTimeFormat('es-PY', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(timestamp));
+    } catch {
+      return '';
+    }
+  }
+
+  function markCatalogSynced() {
+    lastSyncAt = Date.now();
+    const formatted = formatLastSync(lastSyncAt);
+    const node = ensureSyncNode();
+    if (node) node.dataset.lastSyncAt = new Date(lastSyncAt).toISOString();
+    setSync('synced', formatted ? `Catálogo actualizado · Última sincronización ${formatted}` : 'Catálogo actualizado');
+  }
+
+  function showCatalogError(error) {
+    clearTimeout(loadingTimer);
+    console.error('[catalogo] Fuente canónica no disponible:', error?.message || error || 'error');
+    if (hasRealCards()) {
+      setSync('error', 'No se pudo actualizar · mostrando la última versión disponible');
+      setReady();
+      return;
+    }
+    renderState('error', 'No pudimos actualizar el catálogo', 'Revisá tu conexión e intentá nuevamente.');
+    setSync('error');
+    setReady();
+  }
+
+  async function refreshCatalog() {
+    setSync('loading');
+    const load = window.TintinProductsStore?.loadAll;
+    if (typeof load !== 'function') {
+      setTimeout(guardCatalogSurface, 250);
+      return;
+    }
+    try {
+      await load({ force: true });
+      guardCatalogSurface();
+    } catch (error) {
+      showCatalogError(error);
+    }
+  }
+
   function installObservers() {
     if (grid) {
       new MutationObserver(guardCatalogSurface).observe(grid, { childList: true, subtree: true, characterData: true });
     }
-    ['tintin:products-loaded', 'tintin:collections-updated', 'tt_cart_updated', 'tintin:cart-sync-status', 'tintin:color-scheme-applied'].forEach(name => {
-      window.addEventListener(name, () => {
-        setSync('loading');
-        setTimeout(guardCatalogSurface, 0);
-      });
+    window.addEventListener('tintin:products-loaded', () => {
+      markCatalogSynced();
+      setTimeout(guardCatalogSurface, 0);
+    });
+    window.addEventListener('tintin:products-error', event => showCatalogError(event.detail?.error));
+    ['tintin:collections-updated', 'tt_cart_updated', 'tintin:cart-sync-status', 'tintin:color-scheme-applied'].forEach(name => {
+      window.addEventListener(name, () => setTimeout(guardCatalogSurface, 0));
     });
     window.addEventListener('online', () => {
       setSync('loading', 'Conexión recuperada · actualizando catálogo…');
-      setTimeout(guardCatalogSurface, 250);
+      refreshCatalog();
     });
     window.addEventListener('offline', () => setSync('offline'));
     window.addEventListener('popstate', replayUrlState);
     window.addEventListener('pageshow', event => {
-      if (event.persisted) replayUrlState();
-      guardCatalogSurface();
+      if (event.persisted) {
+        replayUrlState();
+        refreshCatalog();
+      } else {
+        guardCatalogSurface();
+      }
     });
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) {
-        setSync(navigator.onLine === false ? 'offline' : 'loading');
-        setTimeout(guardCatalogSurface, 150);
+        if (navigator.onLine === false) setSync('offline');
+        else refreshCatalog();
       }
     });
   }

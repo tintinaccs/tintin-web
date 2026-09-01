@@ -203,7 +203,7 @@ function loadNavigationBehaviors() {
       import(versionedJsModule('components/navigation/movil/indicador-navegacion-movil.js')),
       import(versionedJsModule('components/navigation/movil/navegacion-compacta-movil.js')),
       import(versionedJsModule('components/navigation/compartido/enrutador.js')),
-      import('./control-busqueda.js?v=tintin-20260831-product-loading-3'),
+      import('./control-busqueda.js?v=tintin-20260901-closeout-control-busqueda-1-3'),
     ]))
     .then(results => {
       // Dynamic imports are cached, but the shell DOM is remounted on every
