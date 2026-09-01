@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-01T11:27:03.621Z",
-  "sourceFingerprint": "7603debeef1b9a1647a54060b81fa8cac829d127c586bef03920c765c2806c1d",
+  "generatedAt": "2026-09-01T13:37:37.435Z",
+  "sourceFingerprint": "1edbc45ea7028ebf2d0e61ee0920b8e38d7ff79d344d711203ec02681daa7210",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 811,
     "textFiles": 779,
-    "totalBytes": 8917307,
+    "totalBytes": 8918767,
     "pages": 18,
     "modules": 528
   },
@@ -17631,8 +17631,8 @@
     },
     {
       "path": "cloudflare/notificaciones-sociales.js",
-      "bytes": 8441,
-      "sha256": "35a4431a50021872c8648bca3452e08877c6cb14ee5a9fb5fd565d43dca6db48",
+      "bytes": 9912,
+      "sha256": "85776cba7b016d99d2f39aea1beeb782547988abf8ba602cedde8b0a21c3f7f8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17643,16 +17643,22 @@
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
           "line": 7
+        },
+        {
+          "raw": "./servicio-push.js",
+          "target": "cloudflare/servicio-push.js",
+          "dynamic": false,
+          "line": 8
         }
       ],
       "endpoints": [
         {
           "url": "https://www.googleapis.com/auth/datastore",
-          "line": 14
+          "line": 15
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/$%7BencodeURIComponent(projectId",
-          "line": 178
+          "line": 210
         }
       ]
     },
@@ -17747,8 +17753,8 @@
     },
     {
       "path": "cloudflare/participacion-clientes.js",
-      "bytes": 41305,
-      "sha256": "4f1c189ecc46b120569cbce4ad8859d682f175699bc1ecdfe38ecc48d2fcfd31",
+      "bytes": 42310,
+      "sha256": "7bccd14b111ed059f7a89501acb43d94586778b57cbdcb208532859c17241bb6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17764,7 +17770,7 @@
           "raw": "./notificaciones-sociales.js",
           "target": "cloudflare/notificaciones-sociales.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         }
       ],
       "endpoints": []
@@ -17846,8 +17852,8 @@
     },
     {
       "path": "cloudflare/servicio-push.js",
-      "bytes": 24737,
-      "sha256": "dec3491fd9160f7f9b561234769f16e891ac553d97ffc6a79e34f9f4ce55f3b9",
+      "bytes": 24796,
+      "sha256": "bd342817ffc1c523f24fdfd3b810bca586fbc25e9b0f897bc5a386a2dfa82927",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17885,7 +17891,7 @@
         },
         {
           "url": "https://fcm.googleapis.com/v1/projects/$%7Bsa.project_id%7D/messages:send",
-          "line": 391
+          "line": 392
         }
       ]
     },
@@ -18724,8 +18730,8 @@
     },
     {
       "path": "functions/api/engagement.js",
-      "bytes": 11333,
-      "sha256": "430999c21faadf12b324482d2b4560cb6c44ed00b841c1ab00cfad91f6deab28",
+      "bytes": 10034,
+      "sha256": "c719b5b46ba2e718de7b47ea3d4a71057d28e24d8a92f4b8891f20f45ecbed80",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18754,12 +18760,6 @@
           "target": "cloudflare/sincronizacion-participacion-sheets.js",
           "dynamic": false,
           "line": 24
-        },
-        {
-          "raw": "../../cloudflare/servicio-push.js",
-          "target": "cloudflare/servicio-push.js",
-          "dynamic": false,
-          "line": 25
         }
       ],
       "endpoints": []
@@ -26413,8 +26413,8 @@
     },
     {
       "path": "scripts/auditar-estabilidad-final-v1.mjs",
-      "bytes": 9478,
-      "sha256": "60d29b8f260e67bc23fc032dfacb5fc869c2cc1ef6372957d03042d55fb1596d",
+      "bytes": 9543,
+      "sha256": "3adee659bc2832c1329e33cc074fcb0ff7e7c0767a9bd090fad0b30a32681ac4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29828,8 +29828,8 @@
     },
     {
       "path": "tests/engagement/notificaciones-sociales.test.mjs",
-      "bytes": 9881,
-      "sha256": "5799a6e9aaad45dbeefede72dbeafc0248a18028ea9cecc8c089a8092fbd3bdd",
+      "bytes": 9873,
+      "sha256": "db49644593667017d0c6c8d7881f15264c26cfd842fce40afd970a1473259c3e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29858,8 +29858,8 @@
     },
     {
       "path": "tests/engagement/participation-contract.test.mjs",
-      "bytes": 11995,
-      "sha256": "6adf3890001dc38456bc1ff3531f389ac7a90cf78a7d98dfd0aa30d0235f11c5",
+      "bytes": 12002,
+      "sha256": "b4994cc41dbe5e65c63dd8c676843d67dcef466a45beff4dae492d8dd0ae2dfb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30220,8 +30220,8 @@
     },
     {
       "path": "tests/push/push-web.test.mjs",
-      "bytes": 15445,
-      "sha256": "7963288c568bb99243bcba2e0114e576ba00bdfd4598a9a7c20f2167fb81555e",
+      "bytes": 15605,
+      "sha256": "845aa479b0c4e9bc047746fc562192f61f88dc28ffa625cc00aa2ee340a4ab89",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30273,11 +30273,11 @@
       "endpoints": [
         {
           "url": "https://www.googleapis.com/auth/firebase.messaging",
-          "line": 306
+          "line": 308
         },
         {
           "url": "https://oauth2.googleapis.com/token",
-          "line": 307
+          "line": 309
         }
       ]
     },
@@ -31899,8 +31899,8 @@
     {
       "path": "cloudflare/notificaciones-sociales.js",
       "extension": ".js",
-      "bytes": 8441,
-      "sha256": "35a4431a50021872c8648bca3452e08877c6cb14ee5a9fb5fd565d43dca6db48"
+      "bytes": 9912,
+      "sha256": "85776cba7b016d99d2f39aea1beeb782547988abf8ba602cedde8b0a21c3f7f8"
     },
     {
       "path": "cloudflare/nucleo-push.js",
@@ -31929,8 +31929,8 @@
     {
       "path": "cloudflare/participacion-clientes.js",
       "extension": ".js",
-      "bytes": 41305,
-      "sha256": "4f1c189ecc46b120569cbce4ad8859d682f175699bc1ecdfe38ecc48d2fcfd31"
+      "bytes": 42310,
+      "sha256": "7bccd14b111ed059f7a89501acb43d94586778b57cbdcb208532859c17241bb6"
     },
     {
       "path": "cloudflare/paypal-seguro.js",
@@ -31953,8 +31953,8 @@
     {
       "path": "cloudflare/servicio-push.js",
       "extension": ".js",
-      "bytes": 24737,
-      "sha256": "dec3491fd9160f7f9b561234769f16e891ac553d97ffc6a79e34f9f4ce55f3b9"
+      "bytes": 24796,
+      "sha256": "bd342817ffc1c523f24fdfd3b810bca586fbc25e9b0f897bc5a386a2dfa82927"
     },
     {
       "path": "cloudflare/servir-admin-con-csp.js",
@@ -32931,8 +32931,8 @@
     {
       "path": "functions/api/engagement.js",
       "extension": ".js",
-      "bytes": 11333,
-      "sha256": "430999c21faadf12b324482d2b4560cb6c44ed00b841c1ab00cfad91f6deab28"
+      "bytes": 10034,
+      "sha256": "c719b5b46ba2e718de7b47ea3d4a71057d28e24d8a92f4b8891f20f45ecbed80"
     },
     {
       "path": "functions/api/geo-search.js",
@@ -35031,8 +35031,8 @@
     {
       "path": "scripts/auditar-estabilidad-final-v1.mjs",
       "extension": ".mjs",
-      "bytes": 9478,
-      "sha256": "60d29b8f260e67bc23fc032dfacb5fc869c2cc1ef6372957d03042d55fb1596d"
+      "bytes": 9543,
+      "sha256": "3adee659bc2832c1329e33cc074fcb0ff7e7c0767a9bd090fad0b30a32681ac4"
     },
     {
       "path": "scripts/auditar-estado-ecosistema.mjs",
@@ -35823,14 +35823,14 @@
     {
       "path": "tests/engagement/notificaciones-sociales.test.mjs",
       "extension": ".mjs",
-      "bytes": 9881,
-      "sha256": "5799a6e9aaad45dbeefede72dbeafc0248a18028ea9cecc8c089a8092fbd3bdd"
+      "bytes": 9873,
+      "sha256": "db49644593667017d0c6c8d7881f15264c26cfd842fce40afd970a1473259c3e"
     },
     {
       "path": "tests/engagement/participation-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 11995,
-      "sha256": "6adf3890001dc38456bc1ff3531f389ac7a90cf78a7d98dfd0aa30d0235f11c5"
+      "bytes": 12002,
+      "sha256": "b4994cc41dbe5e65c63dd8c676843d67dcef466a45beff4dae492d8dd0ae2dfb"
     },
     {
       "path": "tests/import/phase9-import-normalization.test.mjs",
@@ -35931,8 +35931,8 @@
     {
       "path": "tests/push/push-web.test.mjs",
       "extension": ".mjs",
-      "bytes": 15445,
-      "sha256": "7963288c568bb99243bcba2e0114e576ba00bdfd4598a9a7c20f2167fb81555e"
+      "bytes": 15605,
+      "sha256": "845aa479b0c4e9bc047746fc562192f61f88dc28ffa625cc00aa2ee340a4ab89"
     },
     {
       "path": "tests/security/admin-http-contract.test.mjs",
