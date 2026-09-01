@@ -163,6 +163,12 @@ async function markPaid(env, mapping, capture) {
   const currency = clean(capture?.amount?.currency_code, 3).toUpperCase();
   const cents = Math.round(Number(capture?.amount?.value) * 100);
   if (currency !== mapping.currency || cents !== Number(mapping.expectedCents)) {
+    await firestoreAdminMerge(env, `paypalOrders/${mapping.id}`, {
+      status: fsString('DISCREPANCY'),
+      discrepancyAt: fsTimestamp(new Date()),
+      discrepancyCurrency: fsString(currency),
+      discrepancyCents: fsInteger(Number.isSafeInteger(cents) ? cents : 0),
+    });
     throw new Error('El importe confirmado por PayPal no coincide con el pedido');
   }
   const confirmedAt = new Date();
