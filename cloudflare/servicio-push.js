@@ -254,7 +254,8 @@ export async function savePushSettings(env, { enabled, foregroundSound, foregrou
 
 function soundForType(settings, type) {
   const prefix = String(type || '').startsWith('social.review') ? 'Review'
-    : String(type || '').startsWith('social.like') ? 'Like' : 'Order';
+    : String(type || '').startsWith('social.like') ? 'Like'
+      : String(type || '').startsWith('admin.') ? 'Review' : 'Order';
   const mode = settings[`foregroundSound${prefix}`] || settings.foregroundSound || 'default';
   const url = settings[`foregroundSound${prefix}Url`] || (prefix === 'Order' ? settings.foregroundSoundUrl : '');
   return { mode, url };

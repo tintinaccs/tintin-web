@@ -233,14 +233,16 @@ test('los tipos de pago quedan declarados pero no se emiten hoy', () => {
 
 test('los cinco eventos sociales tienen emisor server-side y fallback sin waitUntil', () => {
   const engagement = read('functions/api/engagement.js');
+  const social = read('cloudflare/notificaciones-sociales.js');
+  const participation = read('cloudflare/participacion-clientes.js');
   for (const type of [
     'social.review.created', 'social.review.reply',
     'social.like.product', 'social.like.review', 'social.like.reply'
-  ]) assert.ok(engagement.includes(`type: '${type}'`), `${type} debe tener payload push`);
-  assert.match(engagement, /dispatchSocialPushEvent/);
-  assert.match(engagement, /typeof context\.waitUntil === 'function'/);
-  assert.match(engagement, /else await socialPush/);
-  assert.match(engagement, /\}\)\.catch/);
+  ]) assert.ok(social.includes(type), `${type} debe tener payload push`);
+  assert.match(social, /dispatchAdminNotificationPush/);
+  assert.match(social, /dispatchSocialPushEvent/);
+  assert.match(participation, /await dispatchAdminNotificationPush\(env, adminNotification\)/);
+  assert.doesNotMatch(engagement, /dispatchSocialPushEvent/);
 });
 
 // --- Idempotencia y limpieza de tokens -------------------------------------
