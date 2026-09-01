@@ -99,13 +99,17 @@ function renderMeta(payload) {
   if (!node) return;
   const deployment = payload?.deployment || {};
   const sync = payload?.integrations?.appsScript?.summary || {};
+  const checkout = payload?.checkout || {};
   const syncAvailable = sync.available === true;
+  const checkoutAvailable = checkout.available === true;
   node.hidden = false;
   node.innerHTML = `
     <div class="adm-master-meta-item"><span>Commit desplegado</span><strong title="${escapeHtml(deployment.commitSha || '')}">${escapeHtml(shortSha(deployment.commitSha))}</strong></div>
     <div class="adm-master-meta-item"><span>Rama</span><strong>${escapeHtml(deployment.branch || '—')}</strong></div>
     <div class="adm-master-meta-item"><span>Último sync</span><strong>${escapeHtml(syncAvailable && sync.lastAt ? `${sync.lastStatus || '—'} · ${formatDate(sync.lastAt)}` : 'no verificado')}</strong></div>
-    <div class="adm-master-meta-item"><span>Errores sync 24 h</span><strong>${escapeHtml(syncAvailable && Number.isFinite(Number(sync.errors24h)) ? Number(sync.errors24h) : '—')}</strong></div>`;
+    <div class="adm-master-meta-item"><span>Errores sync 24 h</span><strong>${escapeHtml(syncAvailable && Number.isFinite(Number(sync.errors24h)) ? Number(sync.errors24h) : '—')}</strong></div>
+    <div class="adm-master-meta-item"><span>Pagos revisados</span><strong>${escapeHtml(checkoutAvailable ? Number(checkout.paidOrders || 0) : '—')}</strong></div>
+    <div class="adm-master-meta-item"><span>Alertas checkout</span><strong>${escapeHtml(checkoutAvailable ? Number(checkout.paidWithoutEmail || 0) + Number(checkout.paidAtRiskSheets || 0) : '—')}</strong></div>`;
 }
 
 function renderAuthorities(authorities = {}) {
@@ -126,6 +130,11 @@ function render(payload) {
   const admin = payload?.admin || {};
   const integrations = payload?.integrations || {};
   const appsScript = integrations?.appsScript || {};
+  const checkout = payload?.checkout || {};
+  const checkoutState = checkout.available === true ? checkout.ok === true : null;
+  const checkoutDetail = checkout.available === true
+    ? `${Number(checkout.paidOrders || 0)} pago(s) aprobado(s) revisado(s) · ${Number(checkout.paidWithoutEmail || 0)} sin correo confirmado · ${Number(checkout.paidAtRiskSheets || 0)} con riesgo de espejo Sheets`
+    : 'Conciliación de pagos no verificada';
   const areas = document.getElementById('system-health-areas');
   if (!areas) return;
 
@@ -135,6 +144,7 @@ function render(payload) {
     ['Inventario', admin.productInventory, 'Firestore productInventory'],
     ['Colecciones', admin.collections, 'Firestore collections'],
     ['Pedidos', admin.orders, 'Firestore orders'],
+    ['Checkout / conciliación', checkoutState, checkoutDetail],
     ['Usuarios', admin.users, 'Firebase Auth + Firestore users'],
     ['Auditoría', admin.auditLog, 'Firestore auditLog'],
     ['Configuración global', admin.settings, 'Firestore settings/general'],
@@ -154,17 +164,20 @@ function render(payload) {
 
   const notice = document.getElementById('system-health-notice');
   if (notice) {
-    const failures = rows.filter(([, value]) => value !== true).map(([name]) => name);
+    const failures = rows.filter(([, value]) => value === false).map(([name]) => name);
     const sync = appsScript.summary || {};
     const syncSuffix = sync.available === true && Number(sync.errors24h || 0) > 0
       ? ` Historial sync registra ${Number(sync.errors24h)} error(es) en las últimas 24 h.`
       : sync.available === true && Number(sync.syncing24h || 0) > 0
         ? ` Hay ${Number(sync.syncing24h)} registro(s) SYNCING en las últimas 24 h para revisar.`
         : '';
+    const checkoutSuffix = checkout.available === true && checkout.ok === false
+      ? ` Checkout detectó ${Number(checkout.paidWithoutEmail || 0)} pago(s) aprobado(s) sin correo confirmado y ${Number(checkout.paidAtRiskSheets || 0)} con riesgo de no estar reflejados en Sheets.`
+      : '';
     notice.className = `adm-master-notice ${payload?.ok === true ? 'notice-info' : 'notice-error'}`;
     notice.textContent = payload?.ok === true
-      ? `Las autoridades operativas y el puente de sincronización respondieron correctamente.${syncSuffix}`
-      : `Hay componentes que requieren revisión: ${failures.join(', ') || 'estado general'}.${syncSuffix}`;
+      ? `Las autoridades operativas y el puente de sincronización respondieron correctamente.${syncSuffix}${checkoutSuffix}`
+      : `Hay componentes que requieren revisión: ${failures.join(', ') || 'estado general'}.${syncSuffix}${checkoutSuffix}`;
   }
 }
 
