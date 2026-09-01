@@ -33,18 +33,22 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 
 for (const page of PUBLIC_PAGES) {
   const html = read(page);
-  const shellScripts = html.match(/<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^"']*["'][^>]*><\/script>/gi) || [];
-  const controllerScripts = html.match(/<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js[^"']*["'][^>]*><\/script>/gi) || [];
-  const classicScripts = html.match(/<script\b[^>]*src=["']tienda\.js[^"']*["'][^>]*><\/script>/gi) || [];
-  const loaderScripts = html.match(/<script\b[^>]*src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>/gi) || [];
+  // 404.html es servida verbatim por Cloudflare Pages en cualquier profundidad
+  // de ruta no encontrada, así que sus assets usan rutas absolutas (/js/...,
+  // /tienda.js, /styles.css) en vez de las relativas del resto de páginas
+  // públicas — de ahí el "/?" opcional en estos patrones.
+  const shellScripts = html.match(/<script\b[^>]*src=["']\/?js\/inicio-navegacion-publica\.js[^"']*["'][^>]*><\/script>/gi) || [];
+  const controllerScripts = html.match(/<script\b[^>]*src=["']\/?js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js[^"']*["'][^>]*><\/script>/gi) || [];
+  const classicScripts = html.match(/<script\b[^>]*src=["']\/?tienda\.js[^"']*["'][^>]*><\/script>/gi) || [];
+  const loaderScripts = html.match(/<script\b[^>]*src=["']\/?js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>/gi) || [];
 
   check(shellScripts.length === 1, `${page}: debe cargar inicio-navegacion-publica.js exactamente una vez`);
-  check(/<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^>]*\bdefer\b/i.test(html), `${page}: inicio-navegacion-publica.js debe ser defer`);
+  check(/<script\b[^>]*src=["']\/?js\/inicio-navegacion-publica\.js[^>]*\bdefer\b/i.test(html), `${page}: inicio-navegacion-publica.js debe ser defer`);
   check(controllerScripts.length === 1, `${page}: debe cargar inicio-control-paneles.js exactamente una vez`);
-  check(/<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js[^>]*\bdefer\b/i.test(html), `${page}: inicio-control-paneles.js debe ser defer`);
+  check(/<script\b[^>]*src=["']\/?js\/components\/navigation\/compatibilidad\/inicio-control-paneles\.js[^>]*\bdefer\b/i.test(html), `${page}: inicio-control-paneles.js debe ser defer`);
   check(classicScripts.length === 1, `${page}: debe cargar tienda.js exactamente una vez`);
   check(loaderScripts.length === 1, `${page}: debe cargar cargador-pagina.js exactamente una vez`);
-  check(/href=["']styles\.css\?v=tintin-[^"']+["']/i.test(html), `${page}: falta styles.css compartido`);
+  check(/href=["']\/?styles\.css\?v=tintin-[^"']+["']/i.test(html), `${page}: falta styles.css compartido`);
   check(!/src=["']js\/(?:auth-nav|nav-collections|products-store|cart-sync)\.js/i.test(html), `${page}: conserva un runtime de navegación duplicado`);
 
   for (const id of SHELL_IDS) {

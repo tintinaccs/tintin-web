@@ -24,8 +24,8 @@ import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260716-cloudinary-fix-1";
-import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260825-media-library-meta-1";
-import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260825-media-library-ui-1";
+import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260901-media-orphan-log-2";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260901-media-orphan-scan-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260821-accounts-phase-a-1";
 import "./pages/paginas-admin.js?v=tintin-20260825-pages-2";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
@@ -275,7 +275,8 @@ const AUDIT_ACTION_LABELS = {
   editar_permiso:         '🔐 Cambió permiso de rol',
   cambiar_estado_tienda:  '🏬 Cambió estado de la tienda',
   cambiar_acceso_tienda_cerrada: '🔑 Cambió accesos con tienda cerrada',
-  cambiar_header_dispositivo: '🖥️ Cambió header por dispositivo'
+  cambiar_header_dispositivo: '🖥️ Cambió header por dispositivo',
+  eliminar_imagen_biblioteca: '🗑️ Eliminó imagen de biblioteca'
 };
 
 let _allAuditLogs = [];
