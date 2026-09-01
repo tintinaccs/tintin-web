@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-01T11:13:31.386Z",
-  "sourceFingerprint": "b4d3400b8cce90c643674e713baaf61c6c64e701fe092a462a313fa7df9b3c74",
+  "generatedAt": "2026-09-01T11:27:03.621Z",
+  "sourceFingerprint": "7603debeef1b9a1647a54060b81fa8cac829d127c586bef03920c765c2806c1d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 812,
-    "textFiles": 780,
-    "totalBytes": 8919056,
+    "files": 811,
+    "textFiles": 779,
+    "totalBytes": 8917307,
     "pages": 18,
     "modules": 528
   },
@@ -17658,8 +17658,8 @@
     },
     {
       "path": "cloudflare/nucleo-push.js",
-      "bytes": 11616,
-      "sha256": "119b9524f2c64006a8cbb563101dfe80229e5eecd8a1d027943d2ab580757908",
+      "bytes": 11740,
+      "sha256": "2ae983f346dade1ca5b4fb01b5d9c2811aada2981f7358639ba39835be0a061f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18724,8 +18724,8 @@
     },
     {
       "path": "functions/api/engagement.js",
-      "bytes": 10643,
-      "sha256": "f3fac05aaebcbc8f2eb30cf4031bc106bc09be32222c206f2e06be788d94bc4d",
+      "bytes": 11333,
+      "sha256": "430999c21faadf12b324482d2b4560cb6c44ed00b841c1ab00cfad91f6deab28",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29828,8 +29828,8 @@
     },
     {
       "path": "tests/engagement/notificaciones-sociales.test.mjs",
-      "bytes": 9411,
-      "sha256": "e9e2017877cbb58c79a08dd846d42790f92ba9dff7fa77e1af27d37490db67ad",
+      "bytes": 9881,
+      "sha256": "5799a6e9aaad45dbeefede72dbeafc0248a18028ea9cecc8c089a8092fbd3bdd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30220,8 +30220,8 @@
     },
     {
       "path": "tests/push/push-web.test.mjs",
-      "bytes": 14704,
-      "sha256": "9b42e5ea228f45466d0c5fce1cf57070267eedb9617d12a7431dde2cc1b2afb4",
+      "bytes": 15445,
+      "sha256": "7963288c568bb99243bcba2e0114e576ba00bdfd4598a9a7c20f2167fb81555e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30273,11 +30273,11 @@
       "endpoints": [
         {
           "url": "https://www.googleapis.com/auth/firebase.messaging",
-          "line": 291
+          "line": 306
         },
         {
           "url": "https://oauth2.googleapis.com/token",
-          "line": 292
+          "line": 307
         }
       ]
     },
@@ -31501,12 +31501,6 @@
       "sha256": "f224696da578a2907249a4b78ba4829c3ac3e891cb752a6570b328130de04719"
     },
     {
-      "path": ".github/workflows/repair-superadmin-production-closeout.yml",
-      "extension": ".yml",
-      "bytes": 3774,
-      "sha256": "8dbe3b8b940af4e55a9e7240ddb45f061dd8990f6868ccf2fcb8b1cee2286820"
-    },
-    {
       "path": ".github/workflows/respaldo-repositorio.yml",
       "extension": ".yml",
       "bytes": 1741,
@@ -31911,8 +31905,8 @@
     {
       "path": "cloudflare/nucleo-push.js",
       "extension": ".js",
-      "bytes": 11616,
-      "sha256": "119b9524f2c64006a8cbb563101dfe80229e5eecd8a1d027943d2ab580757908"
+      "bytes": 11740,
+      "sha256": "2ae983f346dade1ca5b4fb01b5d9c2811aada2981f7358639ba39835be0a061f"
     },
     {
       "path": "cloudflare/order-admin-domain.js",
@@ -32937,8 +32931,8 @@
     {
       "path": "functions/api/engagement.js",
       "extension": ".js",
-      "bytes": 10643,
-      "sha256": "f3fac05aaebcbc8f2eb30cf4031bc106bc09be32222c206f2e06be788d94bc4d"
+      "bytes": 11333,
+      "sha256": "430999c21faadf12b324482d2b4560cb6c44ed00b841c1ab00cfad91f6deab28"
     },
     {
       "path": "functions/api/geo-search.js",
@@ -35829,8 +35823,8 @@
     {
       "path": "tests/engagement/notificaciones-sociales.test.mjs",
       "extension": ".mjs",
-      "bytes": 9411,
-      "sha256": "e9e2017877cbb58c79a08dd846d42790f92ba9dff7fa77e1af27d37490db67ad"
+      "bytes": 9881,
+      "sha256": "5799a6e9aaad45dbeefede72dbeafc0248a18028ea9cecc8c089a8092fbd3bdd"
     },
     {
       "path": "tests/engagement/participation-contract.test.mjs",
@@ -35937,8 +35931,8 @@
     {
       "path": "tests/push/push-web.test.mjs",
       "extension": ".mjs",
-      "bytes": 14704,
-      "sha256": "9b42e5ea228f45466d0c5fce1cf57070267eedb9617d12a7431dde2cc1b2afb4"
+      "bytes": 15445,
+      "sha256": "7963288c568bb99243bcba2e0114e576ba00bdfd4598a9a7c20f2167fb81555e"
     },
     {
       "path": "tests/security/admin-http-contract.test.mjs",

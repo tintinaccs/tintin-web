@@ -15,6 +15,11 @@ export const PUSH_EVENTS_COLLECTION = 'pushEvents';
 
 export const PUSH_EVENT_TYPES = Object.freeze([
   'order.created',
+  'social.review.created',
+  'social.review.reply',
+  'social.like.product',
+  'social.like.review',
+  'social.like.reply',
   // Preparados para cuando exista una verificación server-side real del
   // webhook oficial de PayPal. Hoy ningún camino del repositorio los emite.
   'payment.completed',
