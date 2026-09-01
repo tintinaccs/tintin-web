@@ -50,7 +50,7 @@
   <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/pages/login/login-maintenance.css?v=tintin-20260811-cls-desktop-stable-2" data-tt-login-maintenance>
   <link rel="stylesheet" href="css/pages/login/login-fluid-responsive.css?v=tintin-20260803-login-fluid-1" data-tt-login-fluid>
-  <link rel="stylesheet" href="css/pages/login/login-onboarding-flow.css?v=tintin-20260901-login-session-visual-1" data-tt-login-onboarding-flow>
+  <link rel="stylesheet" href="css/pages/login/login-onboarding-flow.css?v=tintin-20260901-login-pink-canvas-1" data-tt-login-onboarding-flow>
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2">
   <style>html.login-auth-pending .login-page,html.login-auth-pending .tt-footer{visibility:hidden!important}</style>
@@ -215,11 +215,11 @@ import { reserveUsername } from "./js/components/forms/reserva-username.js?v=tin
 import { isValidDob } from "./js/components/forms/validacion-nacimiento.js?v=tintin-20260822-dob-username-onboarding-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260821-accounts-phase-a-1";
-import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260822-dob-username-onboarding-1";
+import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260901-username-visible-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
-import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260901-superadmin-persistent-1";
+import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260901-superadmin-profile-gate-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260830-store-gate-api-1";
-import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260822-dob-username-onboarding-2";
+import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260901-username-required-1";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260824-google-maps-input-1";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
@@ -403,7 +403,7 @@ async function ensureProfileComplete(user, role) {
   // Intentar irse con el alta a medias abre una decisión explícita, no una
   // salida silenciosa: o completa, o cierra sesión y sigue mirando la tienda
   // sin cuenta. Sin esto quedaría encerrada — el guardia de
-  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260822-dob-username-onboarding-1 la traería de vuelta acá desde cualquier página,
+  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260901-username-visible-1 la traería de vuelta acá desde cualquier página,
   // porque su perfil sigue incompleto.
   const exitModal = document.getElementById('login-exit-modal');
 
@@ -466,9 +466,10 @@ async function ensureProfileComplete(user, role) {
   phoneInput.value = '';
   usernameInput.value = '';
   dobInput.value = '';
+  const usernameMissing = !isValidUsernameFormat(data.username || '');
   phoneField.style.display = plan.needsPhone ? '' : 'none';
   addressField.style.display = plan.needsAddress ? '' : 'none';
-  usernameField.style.display = plan.needsUsername ? '' : 'none';
+  usernameField.style.display = (plan.needsUsername || usernameMissing) ? '' : 'none';
   dobField.style.display = plan.needsDob ? '' : 'none';
 
   let usernameAvailability = 'idle';
@@ -503,7 +504,7 @@ async function ensureProfileComplete(user, role) {
       if (requestId === usernameCheckSequence) setUsernameStatus('unknown', 'Lo confirmaremos al continuar.');
     }
   };
-  if (plan.needsUsername) {
+  if (plan.needsUsername || usernameMissing) {
     usernameInput.addEventListener('input', () => {
       window.clearTimeout(usernameCheckTimer);
       const raw = usernameInput.value.trim();
@@ -604,7 +605,7 @@ async function ensureProfileComplete(user, role) {
         if (!isValidNamePart(firstName)) { showError('Ingresá tu nombre real (al menos dos letras, sin números ni símbolos).'); firstNameInput.focus(); return; }
         if (!isValidNamePart(lastName)) { showError('Ingresá tu apellido real (al menos dos letras, sin números ni símbolos).'); lastNameInput.focus(); return; }
       }
-      if (plan.needsUsername) {
+      if (plan.needsUsername || usernameRaw) {
         if (!isValidUsernameFormat(usernameRaw)) {
           showError('El nombre de usuario debe tener entre 3 y 20 letras/números en minúscula (podés usar guion bajo).');
           usernameInput.focus();
@@ -663,7 +664,7 @@ async function ensureProfileComplete(user, role) {
         // Mismo patrón que el teléfono: se reserva ANTES de guardar el
         // perfil, y la unicidad real la garantizan las reglas de Firestore
         // (usernameIsReservedByCaller), no esta comprobación del navegador.
-        if (plan.needsUsername) {
+        if (plan.needsUsername || usernameRaw) {
           await reserveUsername(db, user.uid, usernameRaw);
         }
 
@@ -676,7 +677,7 @@ async function ensureProfileComplete(user, role) {
             submittedLastName: lastName,
             submittedPhone: normalizedPhone,
             submittedAddress: point ? { ...point, name: locationName } : null,
-            submittedUsername: plan.needsUsername ? normalizeUsername(usernameRaw) : '',
+            submittedUsername: usernameRaw ? normalizeUsername(usernameRaw) : '',
             submittedDob: plan.needsDob ? dobRaw : '',
             explicitNameChange,
           });

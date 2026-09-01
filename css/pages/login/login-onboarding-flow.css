@@ -85,31 +85,33 @@ body:has(.login-page).login-setup-open :is(#login-profile-name-field,#login-prof
 /* Cierre visual minimalista del alta: rosa sereno, logo oficial adaptable y
    una jerarquía limpia sin elementos que invadan las ayudas del formulario. */
 body:has(.login-page) .login-page {
-  background: linear-gradient(135deg, #f8dce5 0%, #fceff3 52%, #f7d6e2 100%) !important;
+  background: #ffd4e2 !important;
   overflow: auto;
 }
+body:has(.login-page) .login-page::before,
+body:has(.login-page) .login-page::after { display:none !important; }
 body:has(.login-page) .login-shell {
-  border-color: rgba(126, 59, 85, .12) !important;
-  border-radius: 24px !important;
-  background: rgba(255,255,255,.94) !important;
-  box-shadow: 0 18px 48px rgba(125, 64, 88, .12) !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  margin-top:clamp(84px, 11vw, 132px);
+  overflow:visible !important;
 }
-body:has(.login-page) .login-mobile-logo { margin-bottom: clamp(18px, 3vw, 30px); }
+body:has(.login-page) .login-form-side { background:transparent !important; }
+body:has(.login-page) .login-mobile-logo {
+  position:absolute;
+  top:clamp(-92px, -9vw, -68px);
+  left:50%;
+  z-index:2;
+  margin:0;
+  transform:translateX(-50%);
+}
 body:has(.login-page) .login-mobile-logo img {
-  display:block; width:clamp(92px, 10vw, 132px); height:auto; margin:auto;
+  display:block; width:clamp(86px, 10vw, 128px); height:auto; margin:auto;
   filter: brightness(0) invert(1); object-fit:contain;
 }
-body:has(.login-page) .login-mobile-logo {
-  width:max-content;
-  min-width:132px;
-  margin-inline:auto;
-  padding:14px 20px !important;
-  background:#d84f86 !important;
-  background-image:none !important;
-  background-position:initial !important;
-  background-size:auto !important;
-  border-radius:999px;
-}
+body:has(.login-page) .login-mobile-logo { padding:0 !important; background:none !important; background-image:none !important; }
 body:has(.login-page).login-setup-open .login-shell { width:min(100%, 980px) !important; }
 body:has(.login-page).login-setup-open .login-form-side { padding-top:clamp(28px,4vw,46px) !important; }
 body:has(.login-page) .login-mobile-logo-text,
@@ -124,7 +126,7 @@ body:has(.login-page) .login-email-btn {
 }
 body:has(.login-page) .login-email-btn:hover,
 body:has(.login-page) .login-email-btn:focus-visible { background:#c94378 !important; }
-body:has(.login-page) .login-field-hint { margin:10px 0 0 !important; min-height:18px; line-height:1.45; }
+body:has(.login-page) .login-field-hint { margin:4px 0 0 !important; min-height:0; line-height:1.35; }
 body:has(.login-page) .login-username-control { margin-bottom:0; }
 body:has(.login-page) .login-username-control .login-email-input { padding-right:16px; }
 body:has(.login-page) .login-username-status {
@@ -136,13 +138,15 @@ body:has(.login-page) .login-username-status {
   min-height:20px;
   text-align:left;
 }
+body:has(.login-page) .login-username-status[data-state="idle"] { display:none; }
 body:has(.login-page) .login-phone-country {
   flex-basis:88px !important; color:#604653 !important; background:#f9edf1 !important;
   opacity:1; cursor:default;
 }
 @media (max-width:599px) {
-  body:has(.login-page) .login-mobile-logo { min-width:106px; padding:11px 16px !important; }
-  body:has(.login-page) .login-mobile-logo img { width:clamp(72px, 22vw, 94px); }
+  body:has(.login-page) .login-shell { margin-top:82px; }
+  body:has(.login-page) .login-mobile-logo { top:-66px; }
+  body:has(.login-page) .login-mobile-logo img { width:clamp(68px, 21vw, 90px); }
 }
 
 body:has(.login-page).login-setup-open #login-profile-address-field {
@@ -219,9 +223,9 @@ body:has(.login-page).login-setup-open .tt-map-canvas {
   body:has(.login-page) .login-shell,
   body:has(.login-page).login-setup-open .login-shell {
     min-height:calc(100dvh - 30px);
-    border:1px solid rgba(202,1,105,.10) !important;
-    border-radius:22px !important;
-    box-shadow:0 16px 40px rgba(160,0,85,.09) !important;
+    border:0 !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
   }
   body:has(.login-page).login-setup-open #login-profile-block {
     gap: 13px !important;

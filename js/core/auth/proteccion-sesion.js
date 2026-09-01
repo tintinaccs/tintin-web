@@ -8,7 +8,7 @@ import { auth } from "../firebase/firebase.js?v=tintin-20260730-appcheck-stable-
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getUserRole } from "./roles.js?v=tintin-20260821-accounts-phase-a-1";
 import { STAFF_ROLES } from './contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
-import { startProfileGate } from "../../pages/profile/control-acceso-perfil.js?v=tintin-20260822-dob-username-onboarding-1";
+import { startProfileGate } from "../../pages/profile/control-acceso-perfil.js?v=tintin-20260901-username-visible-1";
 
 const STAFF_INACTIVITY_MS = 30 * 60 * 1000;
 const STORAGE_KEY = 'tt_session_last_activity_at';

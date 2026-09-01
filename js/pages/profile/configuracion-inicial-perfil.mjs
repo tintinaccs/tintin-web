@@ -143,11 +143,9 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
   const needsName = !storedNameIsValid;
   const needsPhone = !storedPhone;
   const addressMissing = !addressOk;
-  // Username y fecha de nacimiento sólo se piden a cuentas nuevas marcadas
-  // explícitamente `incomplete` (creadas después de este cambio). Cuentas
-  // `legacy` o sin `profileStatus` (anteriores al contrato de identidad) no
-  // los tenían antes y no se les inventa ninguno acá — mismo criterio que ya
-  // aplica al nombre/teléfono/dirección para esas cuentas.
+  // Username y fecha de nacimiento sólo se exigen a cuentas nuevas marcadas
+  // explícitamente `incomplete`. En perfiles anteriores se ofrece el campo
+  // durante el alta si falta, sin bloquearles el acceso por ese dato.
   const needsUsername = profile.profileStatus === 'incomplete' && !isValidUsername(profile.username);
   const needsDob = profile.profileStatus === 'incomplete' && !profile.dob;
   const onboardingRequired = needsName || needsPhone || addressMissing || needsUsername || needsDob;
