@@ -220,12 +220,27 @@ test('el webhook rechaza JSON inválido, campos extra y tipos desconocidos', () 
 
 test('los tipos de pago quedan declarados pero no se emiten hoy', () => {
   assert.deepEqual([...PUSH_EVENT_TYPES], [
-    'order.created', 'payment.completed', 'payment.failed', 'payment.refunded'
+    'order.created',
+    'social.review.created', 'social.review.reply',
+    'social.like.product', 'social.like.review', 'social.like.reply',
+    'payment.completed', 'payment.failed', 'payment.refunded'
   ]);
   const emitters = ['apps-script/CrearPedido.gs', 'functions/api/order-email.js']
     .map(read)
     .join('\n');
   assert.ok(!emitters.includes('payment.completed'), 'ningún camino actual dispara un aviso de pago');
+});
+
+test('los cinco eventos sociales tienen emisor server-side y fallback sin waitUntil', () => {
+  const engagement = read('functions/api/engagement.js');
+  for (const type of [
+    'social.review.created', 'social.review.reply',
+    'social.like.product', 'social.like.review', 'social.like.reply'
+  ]) assert.ok(engagement.includes(`type: '${type}'`), `${type} debe tener payload push`);
+  assert.match(engagement, /dispatchSocialPushEvent/);
+  assert.match(engagement, /typeof context\.waitUntil === 'function'/);
+  assert.match(engagement, /else await socialPush/);
+  assert.match(engagement, /\}\)\.catch/);
 });
 
 // --- Idempotencia y limpieza de tokens -------------------------------------

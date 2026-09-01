@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-01T10:58:14.358Z",
-  "sourceFingerprint": "5e6ce3303ab8f6910c063da14651ee625dbfe156888933c8742d47ef9744301b",
+  "generatedAt": "2026-09-01T11:27:03.621Z",
+  "sourceFingerprint": "7603debeef1b9a1647a54060b81fa8cac829d127c586bef03920c765c2806c1d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 811,
     "textFiles": 779,
-    "totalBytes": 8915279,
+    "totalBytes": 8917307,
     "pages": 18,
     "modules": 528
   },
@@ -17658,8 +17658,8 @@
     },
     {
       "path": "cloudflare/nucleo-push.js",
-      "bytes": 11616,
-      "sha256": "119b9524f2c64006a8cbb563101dfe80229e5eecd8a1d027943d2ab580757908",
+      "bytes": 11740,
+      "sha256": "2ae983f346dade1ca5b4fb01b5d9c2811aada2981f7358639ba39835be0a061f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18049,7 +18049,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 342971,
-      "sha256": "1ede996ba527f722f67a5fe455124aecffa4bd724e92700ccfd4d8a40c3d1a95",
+      "sha256": "71024038f0638ef89fa45a36228741dcc1c1cbaca368a7f061ce5190c2591bfa",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18724,8 +18724,8 @@
     },
     {
       "path": "functions/api/engagement.js",
-      "bytes": 10643,
-      "sha256": "f3fac05aaebcbc8f2eb30cf4031bc106bc09be32222c206f2e06be788d94bc4d",
+      "bytes": 11333,
+      "sha256": "430999c21faadf12b324482d2b4560cb6c44ed00b841c1ab00cfad91f6deab28",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28886,8 +28886,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 13206,
-      "sha256": "343233873d80e98f253547fd85c0a2d0bdb4453de3181cc5bda4e8d8b1721690",
+      "bytes": 13209,
+      "sha256": "9ceaded5154dc560ee4c3cdb7d8a2e248b872dc6f56ac14bc9c86578fa65d73b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29828,8 +29828,8 @@
     },
     {
       "path": "tests/engagement/notificaciones-sociales.test.mjs",
-      "bytes": 9411,
-      "sha256": "e9e2017877cbb58c79a08dd846d42790f92ba9dff7fa77e1af27d37490db67ad",
+      "bytes": 9881,
+      "sha256": "5799a6e9aaad45dbeefede72dbeafc0248a18028ea9cecc8c089a8092fbd3bdd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30220,8 +30220,8 @@
     },
     {
       "path": "tests/push/push-web.test.mjs",
-      "bytes": 14704,
-      "sha256": "9b42e5ea228f45466d0c5fce1cf57070267eedb9617d12a7431dde2cc1b2afb4",
+      "bytes": 15445,
+      "sha256": "7963288c568bb99243bcba2e0114e576ba00bdfd4598a9a7c20f2167fb81555e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30273,11 +30273,11 @@
       "endpoints": [
         {
           "url": "https://www.googleapis.com/auth/firebase.messaging",
-          "line": 291
+          "line": 306
         },
         {
           "url": "https://oauth2.googleapis.com/token",
-          "line": 292
+          "line": 307
         }
       ]
     },
@@ -31905,8 +31905,8 @@
     {
       "path": "cloudflare/nucleo-push.js",
       "extension": ".js",
-      "bytes": 11616,
-      "sha256": "119b9524f2c64006a8cbb563101dfe80229e5eecd8a1d027943d2ab580757908"
+      "bytes": 11740,
+      "sha256": "2ae983f346dade1ca5b4fb01b5d9c2811aada2981f7358639ba39835be0a061f"
     },
     {
       "path": "cloudflare/order-admin-domain.js",
@@ -32014,13 +32014,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 342971,
-      "sha256": "1ede996ba527f722f67a5fe455124aecffa4bd724e92700ccfd4d8a40c3d1a95"
+      "sha256": "71024038f0638ef89fa45a36228741dcc1c1cbaca368a7f061ce5190c2591bfa"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 342886,
-      "sha256": "92f56ee09a707c9e6e75ffe57b07fbfadf7829370da8347b0a4b33ccdd6f2665"
+      "sha256": "edbab53310966ea960b80ffc0bce170e8ebbb6653fe5ccc37e8858edd04db46c"
     },
     {
       "path": "config/public-site.json",
@@ -32931,8 +32931,8 @@
     {
       "path": "functions/api/engagement.js",
       "extension": ".js",
-      "bytes": 10643,
-      "sha256": "f3fac05aaebcbc8f2eb30cf4031bc106bc09be32222c206f2e06be788d94bc4d"
+      "bytes": 11333,
+      "sha256": "430999c21faadf12b324482d2b4560cb6c44ed00b841c1ab00cfad91f6deab28"
     },
     {
       "path": "functions/api/geo-search.js",
@@ -35631,8 +35631,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 13206,
-      "sha256": "343233873d80e98f253547fd85c0a2d0bdb4453de3181cc5bda4e8d8b1721690"
+      "bytes": 13209,
+      "sha256": "9ceaded5154dc560ee4c3cdb7d8a2e248b872dc6f56ac14bc9c86578fa65d73b"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -35823,8 +35823,8 @@
     {
       "path": "tests/engagement/notificaciones-sociales.test.mjs",
       "extension": ".mjs",
-      "bytes": 9411,
-      "sha256": "e9e2017877cbb58c79a08dd846d42790f92ba9dff7fa77e1af27d37490db67ad"
+      "bytes": 9881,
+      "sha256": "5799a6e9aaad45dbeefede72dbeafc0248a18028ea9cecc8c089a8092fbd3bdd"
     },
     {
       "path": "tests/engagement/participation-contract.test.mjs",
@@ -35931,8 +35931,8 @@
     {
       "path": "tests/push/push-web.test.mjs",
       "extension": ".mjs",
-      "bytes": 14704,
-      "sha256": "9b42e5ea228f45466d0c5fce1cf57070267eedb9617d12a7431dde2cc1b2afb4"
+      "bytes": 15445,
+      "sha256": "7963288c568bb99243bcba2e0114e576ba00bdfd4598a9a7c20f2167fb81555e"
     },
     {
       "path": "tests/security/admin-http-contract.test.mjs",
