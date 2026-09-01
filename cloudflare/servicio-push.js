@@ -236,7 +236,7 @@ function soundForType(settings, type) {
   return { mode, url };
 }
 
-export async function dispatchSocialPushEvent(env, { type, eventId, title, body, url = '/admin.html?section=notificaciones-push' }) {
+export async function dispatchSocialPushEvent(env, { type, eventId, title, body, tag = '', url = '/admin.html?section=notificaciones-push' }) {
   if (!pushEnabled(env)) return { ok: true, skipped: 'disabled' };
   const settings = await readPushSettings(env);
   if (!settings.enabled) return { ok: true, skipped: 'paused_by_superadmin' };
@@ -244,7 +244,8 @@ export async function dispatchSocialPushEvent(env, { type, eventId, title, body,
   const claim = await claimEvent(env, { eventId: id, type, orderId: '' });
   if (!claim.claimed) return { ok: true, duplicate: Boolean(claim.duplicate), skipped: claim.inProgress ? 'in_progress' : undefined };
   const sound = soundForType(settings, type);
-  const content = { title: cleanText(title, 100), body: cleanText(body, 220), foregroundSound: sound.mode, data: { type: cleanText(type, 40), orderId: '', shortId: '', url, eventId: id, tag: id, title: cleanText(title, 100), body: cleanText(body, 220), foregroundSoundUrl: sound.url } };
+  const notificationTag = cleanText(tag, 120) || id;
+  const content = { title: cleanText(title, 100), body: cleanText(body, 220), foregroundSound: sound.mode, data: { type: cleanText(type, 40), orderId: '', shortId: '', url, eventId: id, tag: notificationTag, title: cleanText(title, 100), body: cleanText(body, 220), foregroundSoundUrl: sound.url } };
   const devices = await listActiveDevices(env);
   const result = devices.length ? await sendToDevices(env, devices, content) : { attempted: 0, successCount: 0, failureCount: 0, disabledCount: 0, lastError: '' };
   const status = await closeEvent(env, claim.path, result);
