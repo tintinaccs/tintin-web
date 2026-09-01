@@ -3,6 +3,7 @@ import {
   originIsAllowed,
   preflightResponse,
   requireSuperAdmin,
+  statusFromError,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import {
   deleteCollectionsGlobally,
@@ -133,6 +134,6 @@ export async function onRequest(context) {
     return jsonResponse({ ok: result?.partial !== true, partial: result?.partial === true, result }, status, origin, requestUrl);
   } catch (error) {
     console.error('[admin-catalog-delete]', error?.message || error);
-    return jsonResponse({ ok: false, error: safeMessage(error) }, 400, origin, requestUrl);
+    return jsonResponse({ ok: false, error: safeMessage(error) }, statusFromError(error, 400), origin, requestUrl);
   }
 }

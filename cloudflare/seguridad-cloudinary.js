@@ -91,6 +91,12 @@ export async function requireSuperAdmin(request) {
   return user;
 }
 
+/** Conserva códigos HTTP ya clasificados por autenticación o dominio. */
+export function statusFromError(error, fallback = 500) {
+  const status = Number(error?.status);
+  return Number.isInteger(status) && status >= 400 && status <= 599 ? status : fallback;
+}
+
 export function getCloudinaryConfig(env = {}) {
   const cloudName = String(env.CLOUDINARY_CLOUD_NAME || '').trim();
   const apiKey = String(env.CLOUDINARY_API_KEY || '').trim();

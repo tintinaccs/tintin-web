@@ -8,7 +8,8 @@ import {
   jsonResponse,
   originIsAllowed,
   preflightResponse,
-  requireSuperAdmin
+  requireSuperAdmin,
+  statusFromError
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { cleanText, sanitizeError } from '../../cloudflare/nucleo-push.js';
 import { pushEnabled, sendTestPush } from '../../cloudflare/servicio-push.js';
@@ -44,7 +45,7 @@ export async function onRequest(context) {
   try {
     user = await requireSuperAdmin(request);
   } catch (error) {
-    return jsonResponse({ success: false, error: sanitizeError(error, 160) }, 401, origin, requestUrl);
+    return jsonResponse({ success: false, error: sanitizeError(error, 160) }, statusFromError(error, 401), origin, requestUrl);
   }
 
   const now = Date.now();

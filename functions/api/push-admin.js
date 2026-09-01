@@ -8,7 +8,8 @@ import {
   jsonResponse,
   originIsAllowed,
   preflightResponse,
-  requireSuperAdmin
+  requireSuperAdmin,
+  statusFromError
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { cleanText, sanitizeError } from '../../cloudflare/nucleo-push.js';
 import {
@@ -71,7 +72,7 @@ export async function onRequest(context) {
     });
     return jsonResponse({ success: true, settings }, 200, origin, requestUrl);
   } catch (error) {
-    const status = /Super Admin|autenticación|sesión|verificado/i.test(String(error?.message || '')) ? 401 : 400;
+    const status = statusFromError(error, /Super Admin|autenticación|sesión|verificado/i.test(String(error?.message || '')) ? 401 : 400);
     return jsonResponse({ success: false, error: sanitizeError(error, 220) }, status, origin, requestUrl);
   }
 }
