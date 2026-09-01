@@ -100,6 +100,8 @@ jobs:
         run: node scripts/auditar-superadmin-maestro-conexiones.mjs
       - name: Auditar cierre total y propagación global
         run: node scripts/auditar-superadmin-cierre-total.mjs
+      - name: Validar cada módulo como dominio completo e independiente
+        run: node scripts/auditar-superadmin-modulos-completos.mjs
       - name: Auditar Maestro Desktop Tablet Mobile
         run: node scripts/auditar-superadmin-maestro-responsive.mjs
       - name: Validar contrato de notificaciones y autolectura persistente
@@ -138,5 +140,6 @@ jobs:
             artifacts/superadmin-maestro-connections.json
             artifacts/superadmin-maestro-responsive.json
             artifacts/superadmin-cierre-total.json
+            artifacts/superadmin-modulos-completos.json
           if-no-files-found: warn
           retention-days: 30
