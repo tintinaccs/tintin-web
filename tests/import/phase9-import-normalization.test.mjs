@@ -1,11 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  addOperationalBackupIntegrity,
   detectCsvDelimiter,
   parseDelimitedRows,
   parseLocalizedNumber,
   parseOptionalStock,
   validateOperationalBackupEnvelope,
+  verifyOperationalBackupIntegrity,
 } from '../../js/core/store/normalizacion-importacion.mjs';
 
 test('parsea números localizados sin confundir miles y decimales', () => {
@@ -55,4 +57,21 @@ test('valida proyecto, formato y versión de copias operativas', () => {
   assert.throws(() => validateOperationalBackupEnvelope({ ...valid, projectId: 'otro' }), /otro proyecto/i);
   assert.throws(() => validateOperationalBackupEnvelope({ ...valid, schemaVersion: 2 }), /versión/i);
   assert.throws(() => validateOperationalBackupEnvelope({ ...valid, format: 'otro' }), /formato/i);
+});
+
+test('SHA-256 detecta una copia operativa modificada', async () => {
+  const base = {
+    format: 'tintin-operational-backup',
+    projectId: 'tintin-accesorios',
+    schemaVersion: 1,
+    exportedAt: '2026-09-01T12:00:00.000Z',
+    counts: { products: 1 },
+    data: { products: [{ id: 'p1', name: 'Reloj', price: 100000 }] },
+  };
+  const signed = await addOperationalBackupIntegrity(base);
+  assert.match(signed.integrity.checksum, /^[a-f0-9]{64}$/);
+  assert.deepEqual(await verifyOperationalBackupIntegrity(signed), { verified: true, legacy: false });
+  const tampered = structuredClone(signed);
+  tampered.data.products[0].price = 1;
+  await assert.rejects(() => verifyOperationalBackupIntegrity(tampered), /checksum SHA-256 no coincide/i);
 });
