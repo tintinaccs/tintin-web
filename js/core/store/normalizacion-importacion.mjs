@@ -146,3 +146,41 @@ export function validateOperationalBackupEnvelope(value, {
   }
   return value.data.products;
 }
+
+export function operationalBackupIntegrityPayload(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    throw new Error('La copia operativa debe ser un objeto JSON.');
+  }
+  const { integrity: _ignored, ...payload } = value;
+  return JSON.stringify(payload);
+}
+
+export async function sha256Hex(value, { cryptoImpl = globalThis.crypto } = {}) {
+  if (!cryptoImpl?.subtle?.digest) throw new Error('SHA-256 no está disponible en este entorno.');
+  const bytes = new TextEncoder().encode(String(value ?? ''));
+  const digest = await cryptoImpl.subtle.digest('SHA-256', bytes);
+  return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
+export async function addOperationalBackupIntegrity(value, options = {}) {
+  const payload = operationalBackupIntegrityPayload(value);
+  const checksum = await sha256Hex(payload, options);
+  return {
+    ...value,
+    integrity: { algorithm: 'SHA-256', checksum },
+  };
+}
+
+export async function verifyOperationalBackupIntegrity(value, options = {}) {
+  // Backups previos a esta mejora siguen siendo importables. Los nuevos que
+  // declaran integridad deben validarla antes de procesar cualquier producto.
+  if (!value?.integrity) return { verified: false, legacy: true };
+  if (value.integrity.algorithm !== 'SHA-256' || !/^[a-f0-9]{64}$/i.test(String(value.integrity.checksum || ''))) {
+    throw new Error('La firma de integridad de la copia operativa no es válida.');
+  }
+  const expected = await sha256Hex(operationalBackupIntegrityPayload(value), options);
+  if (expected.toLowerCase() !== String(value.integrity.checksum).toLowerCase()) {
+    throw new Error('La copia operativa fue modificada o está dañada (checksum SHA-256 no coincide).');
+  }
+  return { verified: true, legacy: false };
+}
