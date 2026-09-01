@@ -100,7 +100,7 @@ check(
 );
 check(
   'Remitente y reply-to son fijos',
-  testEmailFn.includes("const FROM_EMAIL = 'Tintin Pedidos <pedidos@tintinaccs.com>'") &&
+  testEmailFn.includes("const FROM_EMAIL = 'No Reply · Tintin <noreply@tintinaccs.com>'") &&
     testEmailFn.includes("const REPLY_TO = SUPERADMIN_EMAIL") &&
     adminSync.includes("const SENDER_EMAIL = 'pedidos@tintinaccs.com'"),
   'El proveedor real no debe quedar editable a valores inválidos.'

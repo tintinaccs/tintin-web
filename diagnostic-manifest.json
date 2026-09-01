@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-01T18:47:56.448Z",
-  "sourceFingerprint": "fff02cea7749fee2ff842358826cbc16d4e97ac6171b91193f3cdb0e6fe8f827",
+  "generatedAt": "2026-09-01T19:22:31.823Z",
+  "sourceFingerprint": "e583cb168b920d6b693c980c9f53bae63f79e99c0eb2086dcbc933ef84523ec3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 814,
+    "files": 815,
     "textFiles": 782,
-    "totalBytes": 8965379,
+    "totalBytes": 9843253,
     "pages": 18,
     "modules": 530
   },
@@ -18464,8 +18464,8 @@
     },
     {
       "path": "functions/api/email-otp-send.js",
-      "bytes": 10601,
-      "sha256": "522e85d6d7c469aca62b5ac80c21e12f08ca052050ccb4b16febfcadaf7893c6",
+      "bytes": 10592,
+      "sha256": "cf8f4dbddc02222804100e3d8a697ae8166d4ab4e4edaece194e64c899823e50",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18491,6 +18491,10 @@
         }
       ],
       "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/assets-tintin/images/general/email-avatar-tintin.png",
+          "line": 18
+        },
         {
           "url": "https://api.resend.com/emails",
           "line": 122
@@ -18693,8 +18697,8 @@
     },
     {
       "path": "functions/api/order-email.js",
-      "bytes": 21457,
-      "sha256": "a649275008a9817e8f96b2eedd87f23caa414488bd78a2aa39203bc75ff0f158",
+      "bytes": 21696,
+      "sha256": "dc82ee49d372a9845b22afa90cb2ad57641ef4693eebaf0d68c024677d52ccc3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18715,24 +18719,28 @@
       ],
       "endpoints": [
         {
+          "url": "https://tintinaccesorios.pages.dev/assets-tintin/images/general/email-avatar-tintin.png",
+          "line": 13
+        },
+        {
           "url": "https://tintinaccesorios.pages.dev/admin",
-          "line": 14
+          "line": 15
         },
         {
           "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
-          "line": 42
+          "line": 43
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/$%7BFIREBASE_PROJECT_ID%7D/databases/(default",
-          "line": 100
+          "line": 101
         },
         {
           "url": "https://maps.google.com/",
-          "line": 260
+          "line": 261
         },
         {
           "url": "https://api.resend.com/emails",
-          "line": 333
+          "line": 335
         }
       ]
     },
@@ -19181,8 +19189,8 @@
     },
     {
       "path": "functions/api/test-email.js",
-      "bytes": 5308,
-      "sha256": "b2aaeb74797d1dc152eac604675a824fdc3c331f43973cbd86676ceb033d9320",
+      "bytes": 5312,
+      "sha256": "72d451db8ed7c791b998b4f82769bf89ea79c3acaa72420c7a05340e6eedeee1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25130,8 +25138,8 @@
     },
     {
       "path": "scripts/auditar-admin-correo-mensajeria.js",
-      "bytes": 9156,
-      "sha256": "0b0f125ce0c55b24f14b936839366b8b29144f7174cf739f815da25f3cc16cc8",
+      "bytes": 9160,
+      "sha256": "9e83c137baa3d365df7fc3281d58145c2b0b3d51e302dec446c77f272ac29cf5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31600,6 +31608,12 @@
       "sha256": "b9de4df4eee16453ac9915d5b737acf927b70a79610f33214b9857fa1f81311f"
     },
     {
+      "path": "assets-tintin/images/general/email-avatar-tintin.png",
+      "extension": ".png",
+      "bytes": 877636,
+      "sha256": "dfb80f141ea2aefa2e49a981a80d141a50e5d986966fe43b05cece1b9b84863a"
+    },
+    {
       "path": "assets-tintin/images/general/logo.png",
       "extension": ".png",
       "bytes": 47755,
@@ -32784,8 +32798,8 @@
     {
       "path": "functions/api/email-otp-send.js",
       "extension": ".js",
-      "bytes": 10601,
-      "sha256": "522e85d6d7c469aca62b5ac80c21e12f08ca052050ccb4b16febfcadaf7893c6"
+      "bytes": 10592,
+      "sha256": "cf8f4dbddc02222804100e3d8a697ae8166d4ab4e4edaece194e64c899823e50"
     },
     {
       "path": "functions/api/email-otp-verify.js",
@@ -32832,8 +32846,8 @@
     {
       "path": "functions/api/order-email.js",
       "extension": ".js",
-      "bytes": 21457,
-      "sha256": "a649275008a9817e8f96b2eedd87f23caa414488bd78a2aa39203bc75ff0f158"
+      "bytes": 21696,
+      "sha256": "dc82ee49d372a9845b22afa90cb2ad57641ef4693eebaf0d68c024677d52ccc3"
     },
     {
       "path": "functions/api/paypal-capture-order.js",
@@ -32940,8 +32954,8 @@
     {
       "path": "functions/api/test-email.js",
       "extension": ".js",
-      "bytes": 5308,
-      "sha256": "b2aaeb74797d1dc152eac604675a824fdc3c331f43973cbd86676ceb033d9320"
+      "bytes": 5312,
+      "sha256": "72d451db8ed7c791b998b4f82769bf89ea79c3acaa72420c7a05340e6eedeee1"
     },
     {
       "path": "functions/api/username-availability.js",
@@ -34638,8 +34652,8 @@
     {
       "path": "scripts/auditar-admin-correo-mensajeria.js",
       "extension": ".js",
-      "bytes": 9156,
-      "sha256": "0b0f125ce0c55b24f14b936839366b8b29144f7174cf739f815da25f3cc16cc8"
+      "bytes": 9160,
+      "sha256": "9e83c137baa3d365df7fc3281d58145c2b0b3d51e302dec446c77f272ac29cf5"
     },
     {
       "path": "scripts/auditar-admin-fundamentos.js",

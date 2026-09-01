@@ -6,7 +6,7 @@ import {
   SUPERADMIN_EMAIL
 } from '../../cloudflare/seguridad-cloudinary.js';
 
-const FROM_EMAIL = 'Tintin Pedidos <pedidos@tintinaccs.com>';
+const FROM_EMAIL = 'No Reply · Tintin <noreply@tintinaccs.com>';
 const REPLY_TO = SUPERADMIN_EMAIL;
 
 function clean(value, maxLength = 1000) {
