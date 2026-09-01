@@ -42,7 +42,7 @@
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260828-unified-footer-1">
+  <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260901-footer-light-1">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/pages/login/login.css?v=tintin-20260822-dob-username-onboarding-1">
@@ -50,9 +50,11 @@
   <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/pages/login/login-maintenance.css?v=tintin-20260811-cls-desktop-stable-2" data-tt-login-maintenance>
   <link rel="stylesheet" href="css/pages/login/login-fluid-responsive.css?v=tintin-20260803-login-fluid-1" data-tt-login-fluid>
-  <link rel="stylesheet" href="css/pages/login/login-onboarding-flow.css?v=tintin-20260901-login-py-minimal-1" data-tt-login-onboarding-flow>
+  <link rel="stylesheet" href="css/pages/login/login-onboarding-flow.css?v=tintin-20260901-login-session-visual-1" data-tt-login-onboarding-flow>
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2">
+  <style>html.login-auth-pending .login-page,html.login-auth-pending .tt-footer{visibility:hidden!important}</style>
+  <script>document.documentElement.classList.add('login-auth-pending');</script>
 </head>
 <body>
 
@@ -262,6 +264,10 @@ function hideLoginOverlay() {
   window.TintinLoader && window.TintinLoader.hide();
   setOverlayText('Cargando…');
 }
+function revealLoginSurface() {
+  document.documentElement.classList.remove('login-auth-pending');
+  window.ttPageReady && window.ttPageReady();
+}
 function setOverlayText(text) { window.TintinLoader && window.TintinLoader.setText(text); }
 
 function showError(html) {
@@ -366,7 +372,7 @@ async function ensureProfileComplete(user, role) {
   if (plan.skip) return;
 
   hideLoginOverlay();
-  window.ttPageReady && window.ttPageReady();
+  revealLoginSurface();
 
   const missingCount = [plan.needsName, plan.needsPhone, plan.needsAddress, plan.needsUsername, plan.needsDob].filter(Boolean).length;
   document.getElementById('login-heading').textContent = missingCount > 1 ? 'Últimos datos' : 'Un dato más';
@@ -762,7 +768,7 @@ async function handleGoogleRedirectReturn(observedUser) {
     } catch (finishError) {
       explicitLoginInProgress = false;
       hideLoginOverlay();
-      window.ttPageReady && window.ttPageReady();
+      revealLoginSurface();
       showError(errMsg(finishError.code));
     }
     return true;
@@ -775,7 +781,7 @@ async function handleGoogleRedirectReturn(observedUser) {
   // formulario y el acceso por correo como camino seguro.
   explicitLoginInProgress = false;
   hideLoginOverlay();
-  window.ttPageReady && window.ttPageReady();
+  revealLoginSurface();
   showError(error
     ? errMsg(error.code)
     : 'Google no pudo completar el ingreso en este navegador. Probá otra vez o usá el acceso por correo.');
@@ -797,7 +803,7 @@ onAuthStateChanged(auth, async user => {
 
   if (!user) {
     hideLoginOverlay();
-    window.ttPageReady && window.ttPageReady(); // recién acá se sabe que se queda mostrando el formulario
+    revealLoginSurface(); // recién acá se sabe que se queda mostrando el formulario
     // Llegó acá redirigida por perfil.html/checkout.html/admin.html tras
     // detectar una cuenta bloqueada (Fase E).
     const params = new URLSearchParams(window.location.search);
@@ -823,7 +829,7 @@ onAuthStateChanged(auth, async user => {
     console.warn('[login] No se pudo verificar el perfil de la sesión:', profileResult.error);
     await signOut(auth);
     hideLoginOverlay();
-    window.ttPageReady && window.ttPageReady();
+    revealLoginSurface();
     showError('No pudimos verificar tu cuenta de forma segura. Revisá tu conexión e intentá de nuevo.');
     return;
   }
