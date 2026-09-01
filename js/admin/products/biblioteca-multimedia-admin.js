@@ -10,7 +10,7 @@
      "Biblioteca" del panel de Imágenes.
    ============================================================= */
 
-import { onMediaLibraryUpdate, uploadImageToLibrary, deleteMediaItem, updateMediaMetadata } from '../../components/images/biblioteca-multimedia.js?v=tintin-20260825-media-library-meta-1';
+import { onMediaLibraryUpdate, uploadImageToLibrary, deleteMediaItem, updateMediaMetadata, findOrphanedMedia } from '../../components/images/biblioteca-multimedia.js?v=tintin-20260901-media-orphan-log-1';
 
 function ensureStyles() {
   if (document.getElementById('tt-media-library-style')) return;
@@ -41,6 +41,8 @@ function ensureStyles() {
     .tt-mlib-empty{padding:30px;text-align:center;color:#9a9a9a;font:500 12px Montserrat,sans-serif}
     .tt-mlib-del{margin:0 8px 8px;border:1px solid #e8c3c3;background:#fff;color:#b23a3a;border-radius:7px;font:600 10.5px Montserrat,sans-serif;padding:4px 0;cursor:pointer}
     .tt-mlib-del:hover{background:#fdf2f2}
+    .tt-mlib-orphan-status{width:100%;margin-top:4px;padding:8px 10px;border:1px solid #f2d9a8;background:#fff8e8;color:#8a6a2b;border-radius:8px;font:600 11px Montserrat,sans-serif;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .tt-mlib-orphan-status button{border:0;background:none;color:#ad3f67;font:700 10.5px Montserrat,sans-serif;cursor:pointer;padding:0;white-space:nowrap}
   `;
   document.head.appendChild(style);
 }
@@ -70,8 +72,10 @@ function matchesQuery(item, needle) {
   return haystack.includes(needle.toLowerCase());
 }
 
-function renderGrid(grid, items, query, { onSelect, onDelete }) {
-  const filtered = items.filter(item => matchesQuery(item, query));
+function renderGrid(grid, items, query, { onSelect, onDelete, onlyIds }) {
+  const filtered = items
+    .filter(item => matchesQuery(item, query))
+    .filter(item => !onlyIds || onlyIds.has(item.id));
   if (!filtered.length) {
     grid.innerHTML = '<div class="tt-mlib-empty">No hay imágenes que coincidan.</div>';
     return;
@@ -121,10 +125,11 @@ function renderGrid(grid, items, query, { onSelect, onDelete }) {
   }));
 }
 
-function mountLibraryUI(host, { title, onSelect, showDelete }) {
+function mountLibraryUI(host, { title, onSelect, showDelete, showOrphanScan }) {
   ensureStyles();
   let items = [];
   let query = '';
+  let orphanIds = null;
 
   const head = document.createElement('div');
   head.className = 'tt-mlib-head';
@@ -141,7 +146,48 @@ function mountLibraryUI(host, { title, onSelect, showDelete }) {
   uploadBtn.type = 'button'; uploadBtn.className = 'tt-mlib-btn primary'; uploadBtn.textContent = 'Subir imágenes';
   uploadBtn.addEventListener('click', () => fileInput.click());
   actions.append(uploadBtn, fileInput);
+
+  let orphanBtn = null;
+  let orphanStatus = null;
+  if (showOrphanScan) {
+    orphanBtn = document.createElement('button');
+    orphanBtn.type = 'button'; orphanBtn.className = 'tt-mlib-btn'; orphanBtn.textContent = 'Buscar huérfanos';
+    orphanBtn.title = 'Reconcilia la biblioteca con productos, colecciones y configuración: detecta imágenes sin ninguna referencia real.';
+    orphanBtn.addEventListener('click', async () => {
+      orphanBtn.disabled = true;
+      orphanBtn.textContent = 'Buscando…';
+      try {
+        const orphans = await findOrphanedMedia();
+        orphanIds = new Set(orphans.map(item => item.id));
+        orphanStatus.textContent = orphanIds.size
+          ? `${orphanIds.size} imagen(es) sin referencias. Mostrando solo huérfanas — podés borrarlas o volver a ver todas.`
+          : 'No se encontraron imágenes huérfanas.';
+        orphanStatus.hidden = false;
+        renderGrid(grid, items, query, { onSelect, onDelete: showDelete ? handleDelete : null, onlyIds: orphanIds.size ? orphanIds : null });
+      } catch (error) {
+        window.alert(error?.message || 'No se pudo completar el reconciliador de huérfanos.');
+      } finally {
+        orphanBtn.disabled = false;
+        orphanBtn.textContent = 'Buscar huérfanos';
+      }
+    });
+    actions.appendChild(orphanBtn);
+
+    orphanStatus = document.createElement('div');
+    orphanStatus.className = 'tt-mlib-orphan-status';
+    orphanStatus.hidden = true;
+    const clearBtn = document.createElement('button');
+    clearBtn.type = 'button';
+    clearBtn.textContent = 'Ver todas';
+    clearBtn.addEventListener('click', () => {
+      orphanIds = null;
+      orphanStatus.hidden = true;
+      renderGrid(grid, items, query, { onSelect, onDelete: showDelete ? handleDelete : null, onlyIds: null });
+    });
+    orphanStatus.appendChild(clearBtn);
+  }
   head.appendChild(actions);
+  if (orphanStatus) head.appendChild(orphanStatus);
 
   const search = document.createElement('input');
   search.type = 'search';
@@ -188,12 +234,12 @@ function mountLibraryUI(host, { title, onSelect, showDelete }) {
 
   search.addEventListener('input', () => {
     query = search.value.trim();
-    renderGrid(grid, items, query, { onSelect, onDelete: showDelete ? handleDelete : null });
+    renderGrid(grid, items, query, { onSelect, onDelete: showDelete ? handleDelete : null, onlyIds: orphanIds });
   });
 
   const unsubscribe = onMediaLibraryUpdate(nextItems => {
     items = nextItems;
-    renderGrid(grid, items, query, { onSelect, onDelete: showDelete ? handleDelete : null });
+    renderGrid(grid, items, query, { onSelect, onDelete: showDelete ? handleDelete : null, onlyIds: orphanIds });
   });
 
   return { head, unsubscribe };
@@ -252,7 +298,7 @@ export function mountMediaLibrarySection(container) {
   unmountMediaLibrarySection();
   container.replaceChildren();
   const wrap = document.createElement('div');
-  const { unsubscribe } = mountLibraryUI(wrap, { title: 'Biblioteca multimedia', showDelete: true, onSelect: null });
+  const { unsubscribe } = mountLibraryUI(wrap, { title: 'Biblioteca multimedia', showDelete: true, onSelect: null, showOrphanScan: true });
   activeSectionUnsubscribe = unsubscribe;
   container.appendChild(wrap);
 }

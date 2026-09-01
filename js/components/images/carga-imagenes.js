@@ -12,7 +12,7 @@ import {
   deleteMediaByUrlIfUnused,
   deleteMediaItem,
   uploadImageToLibrary
-} from './biblioteca-multimedia.js?v=tintin-20260825-media-library-meta-1';
+} from './biblioteca-multimedia.js?v=tintin-20260901-media-orphan-log-1';
 
 const STAGE_LABELS = {
   validating: 'Validando archivo…',

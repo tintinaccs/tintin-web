@@ -28,7 +28,11 @@ const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/compartido/busqueda.css', NAV_SHARED_VERSION, ''],
 ];
 const PUBLIC_PAGES = [
-  '404.html',
+  // 404.html se excluye a propósito: Cloudflare Pages la sirve verbatim en
+  // cualquier profundidad de ruta no encontrada, así que sus assets usan
+  // rutas absolutas (/js/..., /styles.css...) en vez de las relativas que
+  // este generador produce para el resto de páginas públicas. Sincronizarla
+  // aquí revertiría ese fix y duplicaría scripts del shell.
   'about.html',
   'cambios-devoluciones.html',
   'catalogo.html',
