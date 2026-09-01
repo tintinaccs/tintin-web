@@ -5,6 +5,7 @@ import {
   firestoreAdminMerge,
   getGoogleAccessToken,
 } from './firebase-admin-ligero.js';
+import { dispatchSocialPushEvent } from './servicio-push.js';
 
 const MAX_TITLE = 180;
 const MAX_BODY = 420;
@@ -131,6 +132,30 @@ export async function buildAdminNotificationWrite(event, dedupeKey) {
   };
 }
 
+function pushTypeForAdminNotification(record = {}) {
+  const kind = String(record.kind || '');
+  if (kind.includes('review_reply')) return 'social.review.reply';
+  if (kind.includes('review_like')) return 'social.like.review';
+  if (kind.includes('reply_like')) return 'social.like.reply';
+  if (kind.includes('product_like')) return 'social.like.product';
+  if (kind.includes('review_created')) return 'social.review.created';
+  if (kind === 'order_created' || kind === 'new_order') return 'order.created';
+  if (kind === 'user_joined' || kind === 'profile_created') return 'admin.user.joined';
+  return 'admin.activity';
+}
+
+export async function dispatchAdminNotificationPush(env, built) {
+  if (!built?.id || !built?.record) return { ok: false, skipped: 'invalid_notification' };
+  const record = built.record;
+  return dispatchSocialPushEvent(env, {
+    type: pushTypeForAdminNotification(record),
+    eventId: `admin-notification:${built.id}`,
+    title: record.title || 'Nueva notificación',
+    body: record.body || record.snippet || 'Hay una nueva actividad en Tintin.',
+    url: record.targetUrl || '/admin.html?section=notificaciones-push',
+  });
+}
+
 async function persistIfAbsent(env, built) {
   const existing = await firestoreAdminGet(env, built.path);
   if (existing) return { created: false, id: built.id };
@@ -148,7 +173,14 @@ export async function notifyUserIfAbsent(env, recipientUid, event, dedupeKey) {
 }
 
 export async function notifyAdminIfAbsent(env, event, dedupeKey) {
-  return persistIfAbsent(env, await buildAdminNotificationWrite(event, dedupeKey));
+  const built = await buildAdminNotificationWrite(event, dedupeKey);
+  const result = await persistIfAbsent(env, built);
+  if (result.created) {
+    await dispatchAdminNotificationPush(env, built).catch(error => {
+      console.warn('[notifications] No se pudo enviar el push del aviso admin:', error);
+    });
+  }
+  return result;
 }
 
 export async function markNotificationRead(env, { uid, notificationId, admin = false }) {
