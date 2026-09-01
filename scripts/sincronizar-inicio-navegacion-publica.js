@@ -18,7 +18,7 @@ const SESSION_PROTECTION_VERSION = 'tintin-20260901-superadmin-persistent-1';
 const PROFILE_GATE_VERSION = 'tintin-20260822-dob-username-onboarding-1';
 const NAV_HEADER_VERSION = 'tintin-20260824-header-responsive-sync-1';
 const NAV_SHARED_VERSION = 'tintin-20260825-responsive-css-budget-2';
-const UNIFIED_THEME_VERSION = 'tintin-20260828-unified-footer-1';
+const UNIFIED_THEME_VERSION = 'tintin-20260901-footer-light-1';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_HEADER_VERSION, '(min-width: 768px) and (max-width: 1024px)'],
