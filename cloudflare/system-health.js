@@ -7,6 +7,7 @@ import {
   SHEETS_HEALTH_REVISION,
   SHEETS_HEALTH_TIMEOUT_MS,
 } from './sheets-sync-config.js';
+import { getCatalogSheetSyncQueueStatus } from './resiliencia-sync-catalogo.js';
 
 const REQUIRED_CONFIG = Object.freeze([
   'FIREBASE_SERVICE_ACCOUNT_KEY',
@@ -93,6 +94,7 @@ export async function probeAppsScript({ fetchImpl = fetch } = {}) {
 export async function runSystemHealth(env, {
   runtimeRunner = runAdminRuntimeChecks,
   sheetsProbe = probeAppsScript,
+  catalogSheetQueueStatus = getCatalogSheetSyncQueueStatus,
 } = {}) {
   const missingConfig = REQUIRED_CONFIG.filter(key => !configured(env, key));
   let runtimeReport = null;
@@ -101,6 +103,14 @@ export async function runSystemHealth(env, {
       runtimeReport = await runtimeRunner(env);
     } catch (error) {
       console.error('[system-health] Admin runtime no disponible:', error?.message || error);
+    }
+  }
+  let catalogSheetQueue = null;
+  if (!missingConfig.includes('FIREBASE_SERVICE_ACCOUNT_KEY')) {
+    try {
+      catalogSheetQueue = await catalogSheetQueueStatus(env);
+    } catch (error) {
+      console.error('[system-health] Estado de catalogSheetSyncQueue no disponible:', error?.message || error);
     }
   }
 
@@ -121,6 +131,7 @@ export async function runSystemHealth(env, {
     cloudinary: configured(env, 'CLOUDINARY_CLOUD_NAME') && configured(env, 'CLOUDINARY_API_KEY') && configured(env, 'CLOUDINARY_API_SECRET'),
     sheets: configured(env, 'SHEETS_ENGAGEMENT_SECRET') && sheets.protocolOk === true,
     appsScript: sheets,
+    catalogSheetQueue,
   };
   const ok = missingConfig.length === 0 && runtimeReport?.ok === true && integrations.sheets === true;
 

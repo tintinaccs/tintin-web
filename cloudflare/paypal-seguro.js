@@ -7,6 +7,7 @@ import {
   fsString,
   fsTimestamp,
 } from './firebase-admin-ligero.js';
+import { notifyAdminIfAbsent } from './notificaciones-sociales.js';
 
 const MAX_RATE_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 const ORDER_ID_RE = /^[A-Za-z0-9_-]{12,220}$/;
@@ -103,6 +104,12 @@ async function loadOrder(env, orderId) {
   return { id: safeId, ...decodeFirestoreFields(document.fields || {}) };
 }
 
+async function assertAccountNotBlocked(env, uid) {
+  const document = await firestoreAdminGet(env, `users/${uid}`);
+  const profile = document ? decodeFirestoreFields(document.fields || {}) : {};
+  if (profile.blocked === true) throw new Error('La cuenta está bloqueada y no puede completar pagos');
+}
+
 function validatePayableOrder(order, uid) {
   if (clean(order.userId, 128) !== uid) throw new Error('El pedido no pertenece a la cuenta iniciada');
   if (clean(order?.payment?.method, 30) !== 'paypal') throw new Error('El pedido no seleccionó PayPal');
@@ -116,6 +123,7 @@ function validatePayableOrder(order, uid) {
 export async function createPaypalOrder(env, { orderId, uid }) {
   const config = paypalConfig(env);
   if (!config.enabled) throw new Error(`PayPal no está habilitado: ${config.missing.join(',')}`);
+  await assertAccountNotBlocked(env, uid);
   const order = await loadOrder(env, orderId);
   const amount = paypalAmountFromPyg(validatePayableOrder(order, uid), config.rate);
   const provider = await paypalRequest(config, '/v2/checkout/orders', {
@@ -163,6 +171,12 @@ async function markPaid(env, mapping, capture) {
   const currency = clean(capture?.amount?.currency_code, 3).toUpperCase();
   const cents = Math.round(Number(capture?.amount?.value) * 100);
   if (currency !== mapping.currency || cents !== Number(mapping.expectedCents)) {
+    await firestoreAdminMerge(env, `paypalOrders/${mapping.id}`, {
+      status: fsString('DISCREPANCY'),
+      discrepancyAt: fsTimestamp(new Date()),
+      discrepancyCurrency: fsString(currency),
+      discrepancyCents: fsInteger(Number.isSafeInteger(cents) ? cents : 0),
+    });
     throw new Error('El importe confirmado por PayPal no coincide con el pedido');
   }
   const confirmedAt = new Date();
@@ -177,6 +191,29 @@ async function markPaid(env, mapping, capture) {
   await firestoreAdminMerge(env, `paypalOrders/${mapping.id}`, {
     status: fsString('COMPLETED'), captureId: fsString(clean(capture.id, 100)), updatedAt: fsTimestamp(confirmedAt),
   });
+
+  await notifyOrderConfirmed(env, mapping, cents, currency);
+}
+
+async function notifyOrderConfirmed(env, mapping, cents, currency) {
+  try {
+    const orderDoc = await firestoreAdminGet(env, `orders/${mapping.orderId}`);
+    const order = orderDoc ? decodeFirestoreFields(orderDoc.fields || {}) : {};
+    const orderNumber = clean(order.orderNumber || order.shortId || mapping.orderId, 80);
+    const customerName = clean(order.userName || 'Una clienta', 160);
+    const totalText = `Gs. ${(cents / 100).toLocaleString('es-PY')}`;
+
+    await notifyAdminIfAbsent(env, {
+      kind: 'order_confirmed', actorType: 'system', actorName: 'PayPal',
+      title: `Pago confirmado del pedido ${orderNumber}`,
+      body: `${customerName} pagó ${totalText} por PayPal.`,
+      iconKey: 'order', targetUrl: 'admin.html#section-pedidos',
+      orderId: mapping.orderId, orderNumber, status: 'pagado',
+      sourceType: 'order', sourceId: mapping.orderId, createdAt: new Date(),
+    }, `payment_completed:${mapping.orderId}`);
+  } catch (error) {
+    console.warn('[paypal] No se pudo registrar la notificación de pago confirmado:', error);
+  }
 }
 
 export async function capturePaypalOrder(env, { providerOrderId, uid }) {
@@ -184,6 +221,7 @@ export async function capturePaypalOrder(env, { providerOrderId, uid }) {
   if (!config.enabled) throw new Error('PayPal no está habilitado');
   const mapping = await loadMapping(env, providerOrderId);
   if (mapping.uid !== uid) throw new Error('La orden PayPal no pertenece a la cuenta iniciada');
+  await assertAccountNotBlocked(env, uid);
   const provider = await paypalRequest(config, `/v2/checkout/orders/${encodeURIComponent(mapping.id)}/capture`, {
     method: 'POST', headers: { 'PayPal-Request-Id': `tintin-capture-${mapping.orderId}` }, body: '{}',
   });

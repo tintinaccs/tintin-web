@@ -484,6 +484,51 @@ async function closeEvent(env, path, result) {
 }
 
 /**
+ * Deja constancia en `pushEvents` de un intento de push que ni siquiera llegó
+ * a ejecutar `dispatch*PushEvent` (por ejemplo, porque tiró una excepción
+ * antes de eso). Sin esto ese fallo sólo quedaba en el console.warn del
+ * llamador y era invisible en el panel de Super Admin.
+ */
+export async function recordPushFailure(env, { eventId, type, orderId = '', error }) {
+  const id = cleanText(eventId, 260) || `${type}:${crypto.randomUUID()}`;
+  const path = `${PUSH_EVENTS_COLLECTION}/${await eventDocumentId(id)}`;
+  const now = new Date();
+  const fields = {
+    eventId: fsString(id),
+    type: fsString(type),
+    orderId: fsString(orderId),
+    status: fsString('failed'),
+    updatedAt: fsTime(now),
+    successCount: fsInt(0),
+    failureCount: fsInt(1),
+    lastError: fsString(sanitizeError(error, 200))
+  };
+  const created = await createDocumentIfAbsent(env, path, { ...fields, attempts: fsInt(1), createdAt: fsTime(now) }).catch(() => ({ created: false }));
+  if (!created.created) await patchDocument(env, path, fields).catch(() => {});
+}
+
+/** Últimos eventos de push, para el panel de diagnóstico del Push Center. */
+export async function listRecentEvents(env, limit = 20) {
+  const events = await runQuery(env, {
+    from: [{ collectionId: PUSH_EVENTS_COLLECTION }],
+    orderBy: [{ field: { fieldPath: 'updatedAt' }, direction: 'DESCENDING' }],
+    limit: Math.min(Math.max(Number(limit) || 20, 1), 50)
+  });
+  return events.map(event => ({
+    eventId: cleanText(event.eventId, 260),
+    type: cleanText(event.type, 40),
+    orderId: cleanText(event.orderId, 220),
+    status: cleanText(event.status, 20),
+    attempts: Number(event.attempts) || 0,
+    successCount: Number(event.successCount) || 0,
+    failureCount: Number(event.failureCount) || 0,
+    lastError: cleanText(event.lastError, 200),
+    updatedAt: cleanText(event.updatedAt, 40),
+    createdAt: cleanText(event.createdAt, 40)
+  }));
+}
+
+/**
  * Punto de entrada server-side reutilizable. Lo llaman el webhook firmado de
  * Apps Script y, como respaldo, functions/api/order-email.js — siempre con el
  * mismo eventId (`order.created:<orderId>`), así que el segundo camino no

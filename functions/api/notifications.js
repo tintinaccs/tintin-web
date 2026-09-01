@@ -83,6 +83,10 @@ async function registerOrderCreated(env, user, orderId) {
   const createdAt = order.createdAt ? new Date(order.createdAt) : new Date();
   const totalText = total ? `${total.toLocaleString('es-PY')} Gs.` : 'Monto a confirmar.';
 
+  // El push de "pedido creado" ya lo garantiza dispatchOrderPushEvent (webhook
+  // firmado de Apps Script y, como respaldo, order-email.js), ambos con el
+  // mismo eventId order.created:<orderId>. Este aviso solo escribe la campana
+  // del panel; enviar push acá también duplicaría la notificación real.
   const adminResult = await notifyAdminIfAbsent(env, {
     kind: 'order_created', actorType: 'customer', actorUid: user.uid, actorName: customerName,
     actorPhotoUrl: profile.photoURL,
@@ -91,7 +95,7 @@ async function registerOrderCreated(env, user, orderId) {
     iconKey: 'order', targetUrl: 'admin.html#section-pedidos',
     orderId: id, orderNumber, status: clean(order.status || 'pendiente', 80),
     sourceType: 'order', sourceId: id, createdAt,
-  }, `order_created:${id}`);
+  }, `order_created:${id}`, { skipPush: true });
 
   await notifyUserIfAbsent(env, user.uid, {
     kind: 'order_created', actorType: 'store', actorName: 'Tintin Accesorios',

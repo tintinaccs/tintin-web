@@ -227,7 +227,7 @@ check('admin-script-versioned', 'Todos los scripts locales del Admin tienen vers
 check('admin-script-unique', 'Admin no carga dos versiones del mismo módulo', new Set(scriptPaths).size === scriptPaths.length);
 check('admin-script-exists', 'Todos los scripts locales referenciados existen', scriptPaths.every(file => exists(file)));
 check('admin-notifications-versioned', 'La autolectura Admin está servida con versión propia actual',
-  localScripts.some(item => item.path === 'js/admin/notifications/notificaciones-admin.js' && /notifications-auto-read/.test(item.version)));
+  localScripts.some(item => item.path === 'js/admin/notifications/notificaciones-admin.js' && /notifications-(auto-read|rich)/.test(item.version)));
 
 // 7. Mutaciones sensibles deben conservar gobierno y trazabilidad.
 check('superadmin-auth', 'El panel conserva guard de autenticación y Super Admin real',

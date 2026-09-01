@@ -5,7 +5,7 @@ import {
   firestoreAdminMerge,
   getGoogleAccessToken,
 } from './firebase-admin-ligero.js';
-import { dispatchSocialPushEvent } from './servicio-push.js';
+import { dispatchSocialPushEvent, recordPushFailure } from './servicio-push.js';
 
 const MAX_TITLE = 180;
 const MAX_BODY = 420;
@@ -190,6 +190,7 @@ function pushTypeForAdminNotification(record = {}) {
   if (kind.includes('product_like')) return 'social.like.product';
   if (kind.includes('review_created')) return 'social.review.created';
   if (kind === 'order_created' || kind === 'new_order') return 'order.created';
+  if (kind === 'order_confirmed' || kind === 'payment_completed') return 'payment.completed';
   if (kind === 'user_joined' || kind === 'profile_created') return 'admin.user.joined';
   return 'admin.activity';
 }
@@ -224,12 +225,17 @@ export async function notifyUserIfAbsent(env, recipientUid, event, dedupeKey) {
   return persistIfAbsent(env, await buildUserNotificationWrite(recipientUid, event, dedupeKey));
 }
 
-export async function notifyAdminIfAbsent(env, event, dedupeKey) {
+export async function notifyAdminIfAbsent(env, event, dedupeKey, { skipPush = false } = {}) {
   const built = await buildAdminNotificationWrite(event, dedupeKey);
   const result = await persistIfAbsent(env, built);
-  if (result.created) {
+  if (result.created && !skipPush) {
     await dispatchAdminNotificationPush(env, built).catch(error => {
       console.warn('[notifications] No se pudo enviar el push del aviso admin:', error);
+      return recordPushFailure(env, {
+        eventId: `admin-notification:${built.id}`,
+        type: pushTypeForAdminNotification(built.record),
+        error,
+      }).catch(() => {});
     });
   }
   return result;

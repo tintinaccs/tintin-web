@@ -95,7 +95,7 @@ test('cada evento social usa el mismo canal Web Push que el pedido nuevo', () =>
     'social.like.product', 'social.like.review', 'social.like.reply'
   ]) assert.match(core, new RegExp(type.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   assert.match(core, /pushTypeForAdminNotification/);
-  assert.match(core, /if \(result\.created\)/);
+  assert.match(core, /if \(result\.created && !skipPush\)/);
 });
 
 test('las acciones de Tintin notifican a la autora de la reseña', () => {
