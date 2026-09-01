@@ -19,6 +19,8 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
       - name: Catalog contracts
         run: |
           node scripts/auditar-catalogo-pagina.js
@@ -35,5 +37,7 @@ jobs:
           npm run test:paypal
       - name: Public page smoke
         run: npm run test:pages
+      - name: Production catalog browser smoke
+        run: node scripts/auditar-catalogo-navegador-produccion.mjs
       - name: Cache contract
         run: npm run audit:cache-versioning
