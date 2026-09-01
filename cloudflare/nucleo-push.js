@@ -155,6 +155,11 @@ export function buildTestPushContent(eventId, foregroundSound = 'default', foreg
  * Mensaje FCM HTTP v1. Se manda sólo `data` (sin bloque `notification`) para
  * que la única notificación visible la cree firebase-messaging-sw.js: así no
  * hay dos avisos por el mismo mensaje y el `tag` queda bajo nuestro control.
+ *
+ * No se incluye `webpush.fcm_options.link`: Firebase exige que ese campo sea
+ * una URL HTTPS absoluta y el Service Worker ya controla el clic usando el
+ * destino interno que viaja en `data.url`. Mantenerlo fuera evita que FCM
+ * rechace todo el mensaje por recibir una ruta relativa como `/admin.html`.
  */
 export function buildFcmMessage({ token, content, ttlSeconds = 3600, urgency = 'normal' }) {
   return {
@@ -165,8 +170,7 @@ export function buildFcmMessage({ token, content, ttlSeconds = 3600, urgency = '
         headers: {
           TTL: String(Math.max(0, Math.trunc(ttlSeconds))),
           Urgency: urgency
-        },
-        fcm_options: { link: content.data.url }
+        }
       }
     }
   };

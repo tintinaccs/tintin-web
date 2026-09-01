@@ -104,7 +104,7 @@ test('el payload no contiene ningún dato personal del pedido', () => {
   assert.deepEqual(Object.keys(content.data).sort(), [...allowedKeys].sort());
 });
 
-test('el mensaje FCM viaja sólo como data, con TTL y enlace interno', () => {
+test('el mensaje FCM viaja sólo como data, con TTL y sin enlace FCM relativo', () => {
   const content = buildPushContent({
     type: 'order.created',
     orderId: ORDER_ID,
@@ -118,7 +118,7 @@ test('el mensaje FCM viaja sólo como data, con TTL y enlace interno', () => {
   assert.equal(message.notification, undefined);
   assert.equal(message.webpush.notification, undefined);
   assert.equal(message.webpush.headers.TTL, '3600');
-  assert.ok(message.webpush.fcm_options.link.startsWith('/admin.html?section=pedidos'));
+  assert.equal(message.webpush.fcm_options, undefined);
   assert.equal(message.data.tag, `order.created:${ORDER_ID}`);
 });
 
