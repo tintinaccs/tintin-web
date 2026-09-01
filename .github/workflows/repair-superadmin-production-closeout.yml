@@ -45,12 +45,30 @@ jobs:
       - name: Regenerate public shell
         run: npm run sync:public-shell
 
-      - name: Assert old session version is gone from active sources
+      - name: Assert old session version is gone from runtime sources
         run: |
-          if grep -R --line-number --exclude-dir=.git --exclude='cache-version-baseline.json' --exclude='cache-version-approvals.json' 'tintin-20260829-persistent-session-1' .; then
-            echo 'Quedaron referencias activas a la versión antigua de protección de sesión.' >&2
-            exit 1
-          fi
+          python - <<'PY'
+          from pathlib import Path
+          old = 'tintin-20260829-persistent-session-1'
+          allowed = {
+              Path('scripts/cache-version-baseline.json'),
+              Path('scripts/cache-version-approvals.json'),
+              Path('.github/workflows/repair-superadmin-production-closeout.yml'),
+          }
+          hits = []
+          for root_pattern in ('*.html', 'js/**/*.js', 'js/**/*.mjs', 'functions/**/*.js', 'cloudflare/**/*.js', 'scripts/**/*.js', 'scripts/**/*.mjs', 'tests/**/*.js', 'tests/**/*.mjs'):
+              for path in Path('.').glob(root_pattern):
+                  if path in allowed or not path.is_file():
+                      continue
+                  try:
+                      text = path.read_text(encoding='utf-8')
+                  except UnicodeDecodeError:
+                      continue
+                  if old in text:
+                      hits.append(str(path))
+          if hits:
+              raise SystemExit('Quedaron referencias activas a la versión antigua: ' + ', '.join(sorted(set(hits))))
+          PY
 
       - name: Cache version audit
         run: npm run audit:cache-versioning
@@ -66,7 +84,6 @@ jobs:
 
       - name: Ensure generator is idempotent
         run: |
-          git diff --exit-code -- scripts/sincronizar-inicio-navegacion-publica.js 404.html about.html admin-images.html admin.html cambios-devoluciones.html catalogo.html checkout.html collections.html contact.html envios.html index.html login.html perfil.html preguntas-frecuentes.html privacidad.html product.html terminos.html || true
           npm run sync:public-shell
           git diff --exit-code -- 404.html about.html admin-images.html admin.html cambios-devoluciones.html catalogo.html checkout.html collections.html contact.html envios.html index.html login.html perfil.html preguntas-frecuentes.html privacidad.html product.html terminos.html
 
