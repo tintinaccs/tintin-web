@@ -122,6 +122,41 @@ function trailingMarkup(notification) {
   return `<img class="adm-notification-placeholder" src="${PROFILE_AVATAR_FALLBACK}" alt="Tintin" loading="lazy" decoding="async">`;
 }
 
+function notificationGroupKey(notification) {
+  const stored = String(notification.aggregateKey || '').trim();
+  if (stored) return stored;
+  const kind = String(notification.kind || '').replace(/^store_/, '');
+  if (!kind.includes('like')) return '';
+  const targetType = String(notification.targetType || 'product').trim();
+  const targetId = String(notification.targetId || notification.replyId || notification.reviewId || notification.productId || '').trim();
+  return targetId ? `like:${targetType}:${targetId}` : '';
+}
+
+function groupedNotifications(items) {
+  const groups = new Map();
+  items.forEach(item => {
+    const key = notificationGroupKey(item) || `single:${item.id}`;
+    const group = groups.get(key) || [];
+    group.push(item);
+    groups.set(key, group);
+  });
+  return [...groups.values()].map(group => {
+    const newest = group[0];
+    if (group.length === 1 && Math.max(0, Number(newest.aggregateCount) || 0) <= 1) return newest;
+    const count = Math.max(group.length, ...group.map(item => Math.max(0, Number(item.aggregateCount) || 0)));
+    const actor = String(newest.actorName || 'Una clienta').trim();
+    const kind = String(newest.kind || '').replace(/^store_/, '');
+    const target = newest.targetType === 'reply' ? 'una respuesta' : newest.targetType === 'review' ? 'una reseña' : (newest.productName || 'un producto');
+    return {
+      ...newest,
+      aggregateCount: count,
+      title: kind.includes('like') ? `${actor} y ${Math.max(1, count - 1)} persona${count === 2 ? '' : 's'} más dieron Me gusta` : newest.title,
+      body: kind.includes('like') ? `${target}${newest.productName && newest.targetType !== 'product' ? ` · ${newest.productName}` : ''} · ${count} Me gusta en total` : newest.body,
+      read: group.every(item => item.read === true),
+    };
+  });
+}
+
 function render() {
   const root = document.getElementById('adm-notifications-list');
   if (!root) return;
@@ -130,7 +165,7 @@ function render() {
     updateBadge();
     return;
   }
-  root.innerHTML = notifications.map(notification => {
+  root.innerHTML = groupedNotifications(notifications).map(notification => {
     const trailing = trailingMarkup(notification);
     const hasActor = notification.actorType === 'customer' && notification.actorUid;
     const profileButton = hasActor

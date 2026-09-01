@@ -606,6 +606,7 @@ export async function toggleReviewLike(env, user, input) {
         targetType: 'review', targetId: reviewId, targetOwnerUid: record.ownerUid,
         targetOwnerName: record.realName, productId, productName: record.productName,
         productImageUrl: record.productImageUrl, reviewId,
+        aggregateCount: updated.likeCount,
         sourceType: 'review_like', sourceId: likeId, createdAt: now,
       }, `review_like:${reviewId}:${uid}`);
       writes.push(adminNotification.write);
@@ -732,6 +733,7 @@ export async function likeReply(env, user, input) {
         targetType: 'reply', targetId: replyId, targetOwnerUid: replyOwnerUid,
         targetOwnerName: replyOwnerName, productId, productName: record.productName,
         productImageUrl: record.productImageUrl, reviewId, replyId,
+        aggregateCount: updatedReply.likeCount,
         sourceType: 'reply_like', sourceId: likeId, createdAt: now,
       }, `reply_like:${replyId}:${uid}`);
       writes.push(adminNotification.write);
@@ -834,6 +836,7 @@ export async function toggleFavorite(env, user, input) {
       targetUrl: `/product?id=${context.productId}`,
       targetType: 'product', targetId: context.productId,
       productId: context.productId, productName: context.productName, productImageUrl: context.imageUrl,
+      aggregateCount: 1,
       sourceType: 'product_like', sourceId: likeId, createdAt: now,
     }, `product_like:${likeId}`);
     writes.push(adminNotification.write);
@@ -845,6 +848,7 @@ export async function toggleFavorite(env, user, input) {
       targetUrl: `/product?id=${context.productId}`,
       targetType: 'product', targetId: context.productId,
       productId: context.productId, productName: context.productName, productImageUrl: context.imageUrl,
+      aggregateCount: 1,
       sourceType: 'product_like', sourceId: likeId, createdAt: now,
     }, `store_product_like:${likeId}`);
     writes.push(adminNotification.write);
@@ -860,9 +864,17 @@ export async function toggleFavorite(env, user, input) {
   writes.push(ownNotification.write);
   try {
     await firestoreAdminCommit(env, writes);
+    const likeCount = await updateProductLikeStats(env, context.productId);
+    adminNotification.record.aggregateCount = likeCount;
+    await firestoreAdminCommit(env, [{
+      path: adminNotification.path,
+      fields: encodeFirestoreFields({ aggregateCount: likeCount, updatedAt: new Date() }),
+      mergeFields: ['aggregateCount', 'updatedAt'],
+    }]);
     await dispatchAdminNotificationPush(env, adminNotification).catch(error => {
       console.warn('[engagement] No se pudo enviar el push del aviso admin:', error);
     });
+    return { selected: true, alreadyLiked: false, likeCount, record };
   } catch (error) {
     if (error?.code === 'version_conflict') {
       const likeCount = await updateProductLikeStats(env, context.productId);
@@ -870,8 +882,6 @@ export async function toggleFavorite(env, user, input) {
     }
     throw error;
   }
-  const likeCount = await updateProductLikeStats(env, context.productId);
-  return { selected: true, alreadyLiked: false, likeCount, record };
 }
 
 export const engagementClean = clean;
