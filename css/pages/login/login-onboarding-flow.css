@@ -95,17 +95,18 @@ body:has(.login-page) .login-shell {
   border-radius:0 !important;
   background:transparent !important;
   box-shadow:none !important;
-  margin-top:clamp(84px, 11vw, 132px);
+  margin:0 auto !important;
   overflow:visible !important;
 }
 body:has(.login-page) .login-form-side { background:transparent !important; }
 body:has(.login-page) .login-mobile-logo {
-  position:absolute;
-  top:clamp(-92px, -9vw, -68px);
-  left:50%;
-  z-index:2;
-  margin:0;
-  transform:translateX(-50%);
+  position:static !important;
+  inset:auto !important;
+  display:flex !important;
+  width:100% !important;
+  justify-content:center;
+  margin:0 0 clamp(24px, 3vw, 34px) !important;
+  transform:none !important;
 }
 body:has(.login-page) .login-mobile-logo img {
   display:block; width:clamp(86px, 10vw, 128px); height:auto; margin:auto;
@@ -144,8 +145,8 @@ body:has(.login-page) .login-phone-country {
   opacity:1; cursor:default;
 }
 @media (max-width:599px) {
-  body:has(.login-page) .login-shell { margin-top:82px; }
-  body:has(.login-page) .login-mobile-logo { top:-66px; }
+  body:has(.login-page) .login-shell { margin:0 auto !important; }
+  body:has(.login-page) .login-mobile-logo { margin-bottom:24px !important; }
   body:has(.login-page) .login-mobile-logo img { width:clamp(68px, 21vw, 90px); }
 }
 
