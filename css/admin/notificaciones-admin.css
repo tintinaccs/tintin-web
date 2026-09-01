@@ -5,23 +5,24 @@
 
 .adm-notifications-button {
   position: relative;
-  width: 42px;
-  height: 42px;
+  width: 46px;
+  height: 46px;
   display: grid;
   place-items: center;
-  border: 1px solid #efc8d7;
-  border-radius: 13px;
-  background: #fff;
-  color: #9f315c;
+  border: 0;
+  border-radius: 50%;
+  background: #eef1f4;
+  color: #101114;
   cursor: pointer;
-  box-shadow: 0 5px 14px rgba(120, 55, 80, .07);
+  box-shadow: none;
 }
 
 .adm-notifications-button:hover,
 .adm-notifications-button:focus-visible,
 .adm-notifications-button[aria-expanded="true"] {
-  background: #fff2f7;
-  border-color: #d99bb2;
+  background: #e1e6eb;
+  border-color: transparent;
+  color: #101114;
   outline: none;
 }
 

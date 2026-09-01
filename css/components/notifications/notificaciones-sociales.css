@@ -14,6 +14,36 @@
   overflow: visible !important;
 }
 
+/* El aviso debe leerse como una única unidad visual en cualquier cabecera:
+   campana limpia sobre círculo neutro y contador rojo por encima.  Los
+   encabezados conservan sus tamaños propios; esta capa sólo normaliza los
+   botones de actividad y carrito. */
+.tt-header-actions .tt-notification-trigger,
+.tt-header-actions :is(#btn-cart, #btn-cart-tablet),
+.tt-tablet-actions .tt-notification-trigger,
+.tt-tablet-actions :is(#btn-cart-tablet),
+#tt-tabbar :is(.tt-notification-trigger, #tabbar-cart) {
+  background: #eef1f4 !important;
+  color: #101114 !important;
+  border-color: transparent !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
+}
+
+.tt-header-actions .tt-notification-trigger:hover,
+.tt-header-actions .tt-notification-trigger:focus-visible,
+.tt-header-actions :is(#btn-cart, #btn-cart-tablet):hover,
+.tt-header-actions :is(#btn-cart, #btn-cart-tablet):focus-visible,
+.tt-tablet-actions .tt-notification-trigger:hover,
+.tt-tablet-actions .tt-notification-trigger:focus-visible,
+.tt-tablet-actions #btn-cart-tablet:hover,
+.tt-tablet-actions #btn-cart-tablet:focus-visible,
+#tt-tabbar :is(.tt-notification-trigger, #tabbar-cart):hover,
+#tt-tabbar :is(.tt-notification-trigger, #tabbar-cart):focus-visible {
+  background: #e1e6eb !important;
+  color: #101114 !important;
+}
+
 .tt-notification-trigger[hidden] {
   display: none !important;
 }
@@ -22,22 +52,22 @@
   position: absolute;
   /* Keep the count outside the icon's circle so it remains legible and never
      gets clipped by the header button. */
-  top: -6px;
-  right: -6px;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
+  top: -5px;
+  right: -5px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: 2px solid #fff;
   border-radius: 999px;
-  background: var(--tt-notif-pink-strong);
+  background: #e52d4f;
   color: #fff;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
   line-height: 1;
-  box-shadow: 0 4px 10px rgba(159, 49, 92, .22);
+  box-shadow: 0 3px 8px rgba(156, 25, 49, .26);
   z-index: 3;
 }
 
@@ -57,23 +87,23 @@
 .tt-cart-badge,
 #cart-badge-mobile {
   position: absolute;
-  top: -6px;
-  right: -6px;
-  min-width: 16px;
+  top: -5px;
+  right: -5px;
+  min-width: 19px;
   width: auto;
-  height: 16px;
-  padding: 0 4px;
+  height: 19px;
+  padding: 0 5px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: 2px solid #fff;
   border-radius: 999px;
-  background: var(--tt-notif-pink-strong);
+  background: #e52d4f;
   color: #fff;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
   line-height: 1;
-  box-shadow: 0 4px 10px rgba(159, 49, 92, .22);
+  box-shadow: 0 3px 8px rgba(156, 25, 49, .26);
   z-index: 3;
 }
 
