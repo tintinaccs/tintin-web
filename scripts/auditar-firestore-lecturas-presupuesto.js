@@ -52,6 +52,15 @@ check(
     routesConfig.includes('"/api/public-catalog"'),
   'La lectura masiva debe concentrarse en Cloudflare y publicar únicamente campos permitidos.'
 );
+check(
+  'Catálogo público no abre fallback directo a Firestore',
+    !products.includes("listPublicCollectionRest('products'") &&
+    !collections.includes("listPublicCollectionRest('collections'") &&
+    products.includes("fetchPublicCatalogResource('products')") &&
+    collections.includes("fetchPublicCatalogResource('collections')") &&
+    !/onSnapshot\(\s*query\(collection\(db, 'products'\),\s*limit\(1000\)/.test(products),
+  'Las páginas públicas deben mostrar caché local/stale o error controlado; nunca abrir una lectura masiva directa ante un fallo edge.'
+);
 check('Catálogo usa caché TTL compacta', products.includes("ALL_CACHE_KEY = 'products:cards'") && products.includes('compactProduct') && products.includes('readCached(ALL_CACHE_KEY') && products.includes('writeCached(ALL_CACHE_KEY'), 'La caché debe guardar solo datos de tarjetas.');
 check('Solicitudes simultáneas se deduplican', products.includes("runSingleFlight('products:all'") && readCache.includes('const flights = new Map()'), 'Dos módulos no deben repetir la misma consulta.');
 check('Producto consulta su documento y limita relacionados', /getDoc\(doc\(db, 'products', id\)\)/.test(products) && /limit\(12\)/.test(products), 'La ficha no debe descargar el catálogo completo.');
@@ -63,7 +72,7 @@ check(
 );
 check('Páginas sin catálogo no cargan productos', /(?:index\|catalogo\|collections)/.test(products) && /return Array\.isArray\(window\.PRODUCTS\)/.test(products), 'Perfil, login, contacto, legales y checkout deben quedar sin lectura de productos.');
 check('La búsqueda carga productos solo al abrirse', products.includes("['btn-search', 'tabbar-search']") && products.includes('ensureProductsForSearch') && products.includes("control.addEventListener('click', load, { once: true })"), 'La lupa no debe consultar antes de usarse.');
-check('Colecciones públicas usan edge y conservan fallback acotado', collections.includes("fetchPublicCatalogResource('collections')") && collections.includes('getDocs') && collections.includes('loadCollections') && collections.includes('CACHE_TTL'), 'El menú público debe preferir edge y conservar Firestore solo como respaldo.');
+check('Colecciones públicas usan edge sin fallback directo', collections.includes("fetchPublicCatalogResource('collections')") && collections.includes('loadCollections') && collections.includes('CACHE_TTL') && !collections.includes("listPublicCollectionRest('collections'"), 'El menú público debe usar edge y caché local; no debe abrir Firestore como respaldo del navegador.');
 check('Colecciones en vivo quedan reservadas al Admin', collections.includes('startAdminListener') && collections.includes('adminSubscribers') && collections.includes('onSnapshot'), 'El CRUD Admin debe conservar tiempo real.');
 check(
   'Menú Tienda carga colecciones por demanda',

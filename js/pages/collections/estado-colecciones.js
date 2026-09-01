@@ -1,4 +1,4 @@
-import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { db } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import {
   collection,
   getDocs,
@@ -16,7 +16,6 @@ import {
   runSingleFlight,
   writeCached
 } from '../../core/firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
-import { listPublicCollectionRest } from '../../core/firebase/respaldo-rest-firestore.js?v=tintin-20260726-browser-fallback-1';
 import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico-api.js?v=tintin-20260814-edge-catalog-1';
 
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
@@ -82,24 +81,12 @@ function publishPublic(collections, source) {
 }
 
 async function fetchPublicCollections() {
-  let list;
-  try {
-    const documents = await fetchPublicCatalogResource('collections');
-    list = documents.map(item => normalizeCollectionDoc(item.id, item.data));
-  } catch (edgeError) {
-    try {
-      const documents = await listPublicCollectionRest('collections', 200);
-      recordFirestoreRead('collections:public-rest-fallback', documents.length);
-      list = documents.map(item => normalizeCollectionDoc(item.id, item.data));
-    } catch (restError) {
-      if (!await appCheckReady) throw restError;
-      const snapshot = await getDocs(query(collection(db, 'collections'), limit(200)));
-      recordFirestoreRead('collections:public', snapshot.size);
-      list = snapshot.docs.map(item => normalizeCollectionDoc(item.id, item.data()));
-    }
-  }
+  // Igual que el catálogo: la superficie pública no debe poder abrir una
+  // lectura directa a Firestore como fallback ante cada error del navegador.
+  const documents = await fetchPublicCatalogResource('collections');
+  const list = documents.map(item => normalizeCollectionDoc(item.id, item.data));
   writeCached(CACHE_KEY, list);
-  return publishPublic(list, 'edge-or-firestore-fallback');
+  return publishPublic(list, 'edge-cache');
 }
 
 export async function loadCollections(options = {}) {

@@ -160,11 +160,13 @@ check(
 );
 check(
   'Catálogo y colecciones tienen lectura pública compatible',
-  productsStore.includes("listPublicCollectionRest('products', 1000)") &&
-    collectionsStore.includes("listPublicCollectionRest('collections', 200)") &&
-    productsStore.includes('products:all-rest-fallback') &&
-    collectionsStore.includes('collections:public-rest-fallback'),
-  'bloquear reCAPTCHA o el canal de Firestore no debe vaciar las grillas públicas'
+  productsStore.includes("fetchPublicCatalogResource('products')") &&
+    collectionsStore.includes("fetchPublicCatalogResource('collections')") &&
+    productsStore.includes('readStaleCached') &&
+    collectionsStore.includes('readStaleCached') &&
+    !productsStore.includes("listPublicCollectionRest('products'") &&
+    !collectionsStore.includes("listPublicCollectionRest('collections'"),
+  'bloquear reCAPTCHA o el canal de Firestore debe conservar caché local/stale sin abrir lecturas masivas desde el navegador'
 );
 check(
   'Respaldo REST es estrictamente de solo lectura',

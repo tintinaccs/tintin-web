@@ -1,6 +1,6 @@
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { collection, doc, onSnapshot, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { collection, doc, limit, onSnapshot, query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const SUPER_ADMIN = 'tintinaccs@gmail.com';
 const DEFAULT_SETTINGS = {
@@ -20,6 +20,7 @@ const DEFAULT_QUICK_REPLIES = [
   'Nos alegra mucho que te haya gustado.',
   'Gracias por avisarnos. Te escribiremos para ayudarte.',
 ];
+const ENGAGEMENT_REALTIME_LIMIT = 250;
 
 let user = null;
 let reviews = [];
@@ -1068,16 +1069,16 @@ onAuthStateChanged(auth, async current => {
   user = current;
   await appCheckReady;
 
-  onSnapshot(collection(db, 'users'), snapshot => {
+  onSnapshot(query(collection(db, 'users'), limit(ENGAGEMENT_REALTIME_LIMIT)), snapshot => {
     usersByUid = new Map(snapshot.docs.map(item => [item.id, item.data()]));
     renderReviews(); renderLikes(); refreshDrawer();
   });
-  onSnapshot(collection(db, 'reviewRecords'), snapshot => {
+  onSnapshot(query(collection(db, 'reviewRecords'), limit(ENGAGEMENT_REALTIME_LIMIT)), snapshot => {
     reviews = snapshot.docs.map(item => ({ ...item.data(), reviewId: item.data().reviewId || item.id })).sort((a,b) => timeValue(b.createdAt) - timeValue(a.createdAt));
     setBadge('reviews-unread-badge', reviews.filter(item => item.unread).length);
     renderReviews(); refreshDrawer();
   });
-  onSnapshot(collection(db, 'likeRecords'), snapshot => {
+  onSnapshot(query(collection(db, 'likeRecords'), limit(ENGAGEMENT_REALTIME_LIMIT)), snapshot => {
     likes = snapshot.docs.map(item => ({ ...item.data(), likeId: item.data().likeId || item.id })).sort((a,b) => timeValue(b.createdAt) - timeValue(a.createdAt));
     setBadge('likes-unread-badge', likes.filter(item => item.unread).length);
     renderLikes(); refreshDrawer();

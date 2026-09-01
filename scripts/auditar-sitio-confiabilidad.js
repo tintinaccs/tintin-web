@@ -146,8 +146,8 @@ check('El centro estadístico general está reservado a Super Admin',
   admin.includes('id="statistics-revenue-trend"') &&
   admin.includes('id="statistics-visit-locations"'));
 check('Pedidos, usuarios, auditoría y correos se actualizan sin F5',
-  admin.includes("adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), limit(10000))") &&
-  admin.includes("adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), limit(10000))") &&
+  admin.includes("adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), limit(ADMIN_REALTIME_LIMIT))") &&
+  admin.includes("adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), limit(ADMIN_REALTIME_LIMIT))") &&
   admin.includes('_auditUnsubscribe = onSnapshot(') &&
   admin.includes('function startCorreosRealtimeListeners()'));
 check('Las estadísticas combinan pedidos, usuarios, catálogo, visitas y páginas',
