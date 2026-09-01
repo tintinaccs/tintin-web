@@ -58,17 +58,11 @@ async function buildPayload(env, resource, productId = '') {
 
   if (resource === 'products' && productId) {
     const document = await firestoreAdminGet(env, `products/${productId}`);
-    if (!document) return { ok: true, resource, item: null };
+    if (!document) return { ok: true, resource, item: null, items: [], count: 0, lookup: 'single' };
     const data = pickKnownFields(decodeFirestoreFields(document?.fields || {}), PRODUCT_FIELDS);
-    if (data.active === false) return { ok: true, resource, item: null };
-    return {
-      ok: true,
-      resource,
-      item: {
-        id: documentId(document) || productId,
-        data
-      }
-    };
+    if (data.active === false) return { ok: true, resource, item: null, items: [], count: 0, lookup: 'single' };
+    const item = { id: documentId(document) || productId, data };
+    return { ok: true, resource, item, items: [item], count: 1, lookup: 'single' };
   }
 
   const docs = await firestoreAdminListAll(env, resource, resource === 'products' ? 1000 : 300);

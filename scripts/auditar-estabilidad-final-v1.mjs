@@ -30,7 +30,7 @@ const systemHealth = read('cloudflare/system-health.js');
 
 // 1. Producto: contenido visible y sin acordeón obligatorio, sin observer recursivo.
 ok(has(publicEntry, "estabilidad-producto.js?v=tintin-20260831-product-stability-2"), 'Producto no carga su estabilización acotada y segura.');
-ok(has(publicEntry, "estabilidad-final-publica.js?v=tintin-20260829-final-stability-1"), 'El shell público no conserva la estabilización final para las demás superficies.');
+ok(has(publicEntry, "estabilidad-final-publica.js?v=tintin-20260831-observer-loop-fix-1"), 'El shell público no conserva la estabilización final para las demás superficies.');
 ok(has(productStability, "document.body.dataset.ttProductStable"), 'Producto no activa el contrato estable.');
 ok(has(productStability, "setDataIfChanged(specsBlock, 'collapsed', 'false')"), 'Características no se fuerzan abiertas de forma idempotente.');
 ok(has(productStability, "setDataIfChanged(related, 'collapsed', 'false')"), 'Otros productos no se fuerzan abiertos de forma idempotente.');

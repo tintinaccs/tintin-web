@@ -1,6 +1,13 @@
 (function () {
   'use strict';
 
+  // Las rutas legacy que solo redirigen conservan el contrato global del head
+  // sin pintar una pantalla de carga antes de completar la redirección.
+  if (document.currentScript && document.currentScript.dataset.ttNoLoader === 'true') {
+    window.TintinLoader = window.TintinLoader || { hide: function () {} };
+    return;
+  }
+
   // Cada entrada de una página comienza arriba. El navegador puede restaurar
   // el scroll anterior incluso en una navegación normal o desde bfcache;
   // forzarlo aquí (en head, antes de pintar contenido) evita que cualquier
@@ -108,7 +115,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260830-store-gate-api-1';
+  const TT_CACHE_VERSION = 'tintin-20260830-loader-pointer-events-2';
   // 120ms (fijado en #396 para matar esperas artificiales) resultó por
   // debajo del umbral de percepción humana: en conexiones rápidas el logo y
   // el texto de sección ("Página Principal", "Catálogo", "Producto") no

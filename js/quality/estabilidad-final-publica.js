@@ -97,7 +97,14 @@ function forceVisible(element) {
 
 function stabilizeProduct() {
   document.body.dataset.ttProductStable = '1';
+  const observerConfig = { subtree: true, attributes: true, attributeFilter: ['hidden', 'data-collapsed', 'style'] };
+  let observer = null;
   const openAll = () => {
+    // Se desconecta antes de mutar y se reconecta después: openAll() es el
+    // propio callback del observer, y sin este guard sus mutaciones
+    // (data-collapsed/style) generan nuevos MutationRecord que reinvocan
+    // openAll() de forma infinita y bloquean el hilo principal.
+    observer?.disconnect();
     const specsBlock = document.querySelector('.tt-specs-block');
     const specs = document.getElementById('product-specifications');
     const reviews = document.getElementById('product-reviews');
@@ -106,10 +113,11 @@ function stabilizeProduct() {
     if (related) related.dataset.collapsed = 'false';
     [specs, reviews, related, document.getElementById('related-grid')].forEach(forceVisible);
     document.getElementById('specs-trigger')?.setAttribute('aria-expanded', 'true');
+    observer?.observe(document.body, observerConfig);
   };
   openAll();
-  const observer = new MutationObserver(openAll);
-  observer.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['hidden', 'data-collapsed', 'style'] });
+  observer = new MutationObserver(openAll);
+  observer.observe(document.body, observerConfig);
   window.addEventListener('pagehide', () => observer.disconnect(), { once: true });
 
   document.addEventListener('click', event => {

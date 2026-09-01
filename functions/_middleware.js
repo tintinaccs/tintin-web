@@ -1,6 +1,7 @@
 import cspRuntime from '../config/csp-runtime.js';
 
 const GENERATED_BY = 'scripts/generar-csp-cloudflare.js';
+const PRODUCT_PRIME_SRC = '/js/pages/product/carga-producto-publico.js?v=tintin-20260830-product-edge-prime-1';
 const SECURITY_HEADERS = Object.freeze({
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
   'X-Content-Type-Options': 'nosniff',
@@ -36,6 +37,24 @@ function failClosed() {
   });
 }
 
+function isProductRoute(pathname) {
+  const normalized = String(pathname || '').replace(/\/+$/, '').toLowerCase();
+  return normalized === '/product' || normalized === '/product.html';
+}
+
+function injectProductPrime(response) {
+  return new HTMLRewriter()
+    .on('head', {
+      element(element) {
+        element.append(
+          `<script src="${PRODUCT_PRIME_SRC}" defer></script>`,
+          { html: true }
+        );
+      }
+    })
+    .transform(response);
+}
+
 export async function onRequest(context) {
   const pathname = new URL(context.request.url).pathname;
 
@@ -59,9 +78,17 @@ export async function onRequest(context) {
   headers.set('X-Frame-Options', policy.includes("frame-ancestors 'self'") ? 'SAMEORIGIN' : 'DENY');
   headers.set('X-Tintin-CSP', 'edge-runtime');
 
-  return new Response(response.body, {
+  const securedResponse = new Response(response.body, {
     status: response.status,
     statusText: response.statusText,
     headers
   });
+
+  // La ficha pública no debe esperar App Check/reCAPTCHA para mostrar datos
+  // que ya son públicos. En /product se adelanta una lectura server-side por
+  // ID desde la API edge; el runtime normal de Firestore permanece activo en
+  // segundo plano para stock/actualizaciones y como fallback si el edge falla.
+  if (isProductRoute(pathname)) return injectProductPrime(securedResponse);
+
+  return securedResponse;
 }
