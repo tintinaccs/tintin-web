@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-01T14:30:22.169Z",
-  "sourceFingerprint": "e394673210a0a485f615ee3f390d6fe3c93fa9aae89482ce05748863f1b5a42d",
+  "generatedAt": "2026-09-01T14:41:27.060Z",
+  "sourceFingerprint": "5c1c8828ce8209bd060385ed48d51b93eb9ead46242b968dfb01b2cb9d2e7f62",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 811,
     "textFiles": 779,
-    "totalBytes": 8925349,
+    "totalBytes": 8922859,
     "pages": 18,
     "modules": 528
   },
@@ -17852,8 +17852,8 @@
     },
     {
       "path": "cloudflare/servicio-push.js",
-      "bytes": 25024,
-      "sha256": "23d58d4bb46557f5cb954da99e050366fc1c297a5c9c0a4b585280c871b92557",
+      "bytes": 23274,
+      "sha256": "96deb80c05e49477eb03d27c63ac06ea8c12b4c489d5211f400f9870d7ddbc2a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17882,16 +17882,12 @@
           "line": 29
         },
         {
-          "url": "https://ntfy.sh/",
-          "line": 39
-        },
-        {
           "url": "https://firestore.googleapis.com/v1/projects/$%7BprojectId%7D/databases/(default",
-          "line": 63
+          "line": 42
         },
         {
           "url": "https://fcm.googleapis.com/v1/projects/$%7Bsa.project_id%7D/messages:send",
-          "line": 390
+          "line": 374
         }
       ]
     },
@@ -19136,8 +19132,8 @@
     },
     {
       "path": "functions/api/push-order-event.js",
-      "bytes": 3455,
-      "sha256": "a57fe572f0d2363d93d0a53b72dac5149dade2822f1c41247643d6ce3cdee7f8",
+      "bytes": 3496,
+      "sha256": "c0b75f0478d1b55c9ce829677ee6d5fbcca7561d75fe165b247b9ac5e84ca350",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19196,8 +19192,8 @@
     },
     {
       "path": "functions/api/push-test.js",
-      "bytes": 3792,
-      "sha256": "130a3c0a0bf76854fa364eaf2f5afd74a76c9c05ab83d45a6796ca787e4c2b08",
+      "bytes": 3990,
+      "sha256": "813c60d3e997e68e33eda2aeaccaf7cf6afacfe4690b1d1bc862ef798f407193",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27578,8 +27574,8 @@
     },
     {
       "path": "scripts/auditar-push-web.js",
-      "bytes": 16353,
-      "sha256": "f20472d9509cc55c072300e9e802c97b688d31df61547b4c5bed4d1ad14c142a",
+      "bytes": 16335,
+      "sha256": "689ca480d8071dd4bbc504a9fdd2903e17c29fee46ce0e85aeca1cc487a67ff2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30220,8 +30216,8 @@
     },
     {
       "path": "tests/push/push-web.test.mjs",
-      "bytes": 16015,
-      "sha256": "94da0b0d04422f52191c9a3d9c8009790912b784afea292997ebdcc98eb84969",
+      "bytes": 16278,
+      "sha256": "814af5a9b0291b8ee719fc93af9f8e002edebb35cd71d29d3c205cedef7427f1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30273,11 +30269,11 @@
       "endpoints": [
         {
           "url": "https://www.googleapis.com/auth/firebase.messaging",
-          "line": 316
+          "line": 315
         },
         {
           "url": "https://oauth2.googleapis.com/token",
-          "line": 317
+          "line": 316
         }
       ]
     },
@@ -31953,8 +31949,8 @@
     {
       "path": "cloudflare/servicio-push.js",
       "extension": ".js",
-      "bytes": 25024,
-      "sha256": "23d58d4bb46557f5cb954da99e050366fc1c297a5c9c0a4b585280c871b92557"
+      "bytes": 23274,
+      "sha256": "96deb80c05e49477eb03d27c63ac06ea8c12b4c489d5211f400f9870d7ddbc2a"
     },
     {
       "path": "cloudflare/servir-admin-con-csp.js",
@@ -32511,8 +32507,8 @@
     {
       "path": "docs/configuracion-push-web-firebase.md",
       "extension": ".md",
-      "bytes": 14543,
-      "sha256": "964925b4594499088fc7238c5ac48e188a7245188cf5e898f0d55617d4bac7d2"
+      "bytes": 13319,
+      "sha256": "9c6dbaf4da3e7855799fc71196c0ad205f932acb3362516454ee563226c7a482"
     },
     {
       "path": "docs/contenido-fase-6.md",
@@ -33021,8 +33017,8 @@
     {
       "path": "functions/api/push-order-event.js",
       "extension": ".js",
-      "bytes": 3455,
-      "sha256": "a57fe572f0d2363d93d0a53b72dac5149dade2822f1c41247643d6ce3cdee7f8"
+      "bytes": 3496,
+      "sha256": "c0b75f0478d1b55c9ce829677ee6d5fbcca7561d75fe165b247b9ac5e84ca350"
     },
     {
       "path": "functions/api/push-subscription.js",
@@ -33033,8 +33029,8 @@
     {
       "path": "functions/api/push-test.js",
       "extension": ".js",
-      "bytes": 3792,
-      "sha256": "130a3c0a0bf76854fa364eaf2f5afd74a76c9c05ab83d45a6796ca787e4c2b08"
+      "bytes": 3990,
+      "sha256": "813c60d3e997e68e33eda2aeaccaf7cf6afacfe4690b1d1bc862ef798f407193"
     },
     {
       "path": "functions/api/sheets-admin-webhook.js",
@@ -35325,8 +35321,8 @@
     {
       "path": "scripts/auditar-push-web.js",
       "extension": ".js",
-      "bytes": 16353,
-      "sha256": "f20472d9509cc55c072300e9e802c97b688d31df61547b4c5bed4d1ad14c142a"
+      "bytes": 16335,
+      "sha256": "689ca480d8071dd4bbc504a9fdd2903e17c29fee46ce0e85aeca1cc487a67ff2"
     },
     {
       "path": "scripts/auditar-rendimiento-metricas.mjs",
@@ -35931,8 +35927,8 @@
     {
       "path": "tests/push/push-web.test.mjs",
       "extension": ".mjs",
-      "bytes": 16015,
-      "sha256": "94da0b0d04422f52191c9a3d9c8009790912b784afea292997ebdcc98eb84969"
+      "bytes": 16278,
+      "sha256": "814af5a9b0291b8ee719fc93af9f8e002edebb35cd71d29d3c205cedef7427f1"
     },
     {
       "path": "tests/security/admin-http-contract.test.mjs",
