@@ -1,0 +1,155 @@
+name: Apply admin operational hardening v2
+
+on:
+  push:
+    branches:
+      - fix/admin-operational-hardening
+
+permissions:
+  contents: write
+
+jobs:
+  harden:
+    if: ${{ !contains(github.event.head_commit.message, '[hardening-done]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/admin-operational-hardening
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+
+      - name: Apply structured patches
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          def sub_once(path, pattern, replacement, flags=0):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              updated, count = re.subn(pattern, replacement, text, count=1, flags=flags)
+              if count != 1:
+                  raise SystemExit(f'Parche no aplicable en {path}: {pattern[:90]}')
+              p.write_text(updated, encoding='utf-8')
+
+          sub_once(
+            'apps-script/AdminParity.gs',
+            r"function tintinReconciliarAdminParidad\(\) \{.*?\n\}",
+            '''function tintinReconciliarAdminParidad() {
+            var summary = {};
+            summary.users = tintinPullUsersFromWeb_();
+            summary.orders = tintinPullOrdersParity_();
+            summary.audit = tintinPullAuditFromWeb_();
+            try {
+              var catalogResponse = tintinParityCallWebhook_('/api/catalog-sync-reconcile', {
+                action: 'reconcileCatalogSheetQueue',
+                source: 'google-apps-script:parity'
+              });
+              summary.catalogQueue = catalogResponse.result || {};
+            } catch (catalogError) {
+              summary.catalogQueue = { ok: false, error: String(catalogError && catalogError.message || catalogError) };
+              tintinRecordSyncSafely_('ERROR', 'Productos', 'catalogSheetSyncQueue', 'La reconciliación programada de catálogo falló: ' + summary.catalogQueue.error);
+            }
+            tintinRecordSyncSafely_('SYNCED', 'Sistema', 'web→sheets', 'Superficies administrativas actualizadas: usuarios ' + summary.users + ', pedidos ' + summary.orders + ', auditoría ' + summary.audit + '. Cola catálogo: ' + JSON.stringify(summary.catalogQueue) + '.');
+            return summary;
+          }''',
+            re.S,
+          )
+
+          p = Path('js/admin/importacion-admin.js')
+          text = p.read_text(encoding='utf-8')
+          old_url = "../core/store/normalizacion-importacion.mjs?v=tintin-20260731-phase9-import-1"
+          if old_url not in text:
+              raise SystemExit('Versión antigua de normalizacion-importacion no encontrada')
+          text = text.replace(old_url, "../core/store/normalizacion-importacion.mjs?v=tintin-20260901-backup-integrity-1", 1)
+          text, count = re.subn(
+            r"(\n\s*validateOperationalBackupEnvelope,)(\n\} from '../core/store/normalizacion-importacion\.mjs\?v=tintin-20260901-backup-integrity-1';)",
+            r"\1\n  addOperationalBackupIntegrity,\n  verifyOperationalBackupIntegrity,\2",
+            text,
+            count=1,
+          )
+          if count != 1:
+              raise SystemExit('No se pudieron agregar imports de integridad')
+          p.write_text(text, encoding='utf-8')
+
+          sub_once(
+            'js/admin/importacion-admin.js',
+            r"  function productsFromJson\(textValue\) \{.*?\n  \}\n\n  function markDuplicates",
+            '''  async function productsFromJson(textValue) {
+            const parsed = JSON.parse(textValue);
+            if (!Array.isArray(parsed)) {
+              validateOperationalBackupEnvelope(parsed, { projectId: PROJECT_ID, schemaVersion: 1 });
+              await verifyOperationalBackupIntegrity(parsed);
+            }
+            const list = Array.isArray(parsed) ? parsed : parsed.data.products;
+            return list.map((item, index) => normalizeProduct(item, {
+              source: Array.isArray(parsed) ? 'json' : 'tintin-backup',
+              sourceKey: item?.id || item?.importFingerprint || `${item?.name || 'producto'}-${index + 1}`,
+            }));
+          }
+
+          function markDuplicates''',
+            re.S,
+          )
+
+          sub_once(
+            'js/admin/importacion-admin.js',
+            r"\s*downloadJson\(`tintin-copia-operativa-\$\{new Date\(\)\.toISOString\(\)\.slice\(0, 10\)\}\.json`, backup\);\n\s*toast\('Copia operativa descargada'\);",
+            "\n      const signedBackup = await addOperationalBackupIntegrity(backup);\n      downloadJson(`tintin-copia-operativa-${new Date().toISOString().slice(0, 10)}.json`, signedBackup);\n      toast('Copia operativa descargada y firmada con checksum SHA-256');",
+          )
+
+          p = Path('js/admin/importacion-admin.js')
+          text = p.read_text(encoding='utf-8')
+          exact = [
+            ("let records = extension === 'csv' ? productsFromCsv(content) : productsFromJson(content);", "let records = extension === 'csv' ? productsFromCsv(content) : await productsFromJson(content);"),
+            ("node('strong', '', 'Copia operativa sin datos de clientas'),", "node('strong', '', 'Copia operativa verificada con SHA-256'),"),
+            ("node('p', '', 'Incluye productos, colecciones, contenido, configuración y permisos. Excluye usuarios, pedidos, carritos y auditoría.')", "node('p', '', 'Incluye productos, colecciones, contenido, configuración y permisos. Excluye datos personales; cada copia nueva lleva checksum SHA-256 y se verifica antes de importar.')"),
+          ]
+          for old, new in exact:
+              if old not in text:
+                  raise SystemExit(f'Texto esperado no encontrado: {old[:90]}')
+              text = text.replace(old, new, 1)
+          p.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Syntax checks
+        run: |
+          node --check cloudflare/resiliencia-sync-catalogo.js
+          node --check cloudflare/sesion-servicio-superadmin.js
+          node --check cloudflare/system-health.js
+          node --check functions/api/catalog-sync-reconcile.js
+          node --check functions/api/catalog-sync-retry.js
+          node --check js/admin/diagnostics/estado-ecosistema-admin.js
+          node --check js/admin/importacion-admin.js
+          node --check js/core/store/normalizacion-importacion.mjs
+
+      - name: Targeted tests
+        run: node --test tests/import/phase9-import-normalization.test.mjs tests/system-health/*.test.mjs
+
+      - name: Cache version contract
+        run: npm run audit:cache-versioning
+
+      - name: Account/session contract
+        run: npm run test:accounts
+
+      - name: Build Pages
+        run: npm run build:pages
+
+      - name: Final audit
+        run: npm run audit:final
+
+      - name: Remove workflow and commit verified changes
+        run: |
+          rm .github/workflows/apply-admin-operational-hardening-v2.yml
+          git config user.name 'Tintin Repair Bot'
+          git config user.email 'tintinaccs@gmail.com'
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m 'fix: harden admin operations and reconciliation [hardening-done]'
+          git push origin HEAD:fix/admin-operational-hardening
