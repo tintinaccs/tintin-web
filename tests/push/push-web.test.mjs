@@ -26,6 +26,7 @@ import {
   webhookSigningPayload
 } from '../../cloudflare/nucleo-push.js';
 import { pushEnabled } from '../../cloudflare/servicio-push.js';
+import { adminNotificationPushPresentation } from '../../cloudflare/notificaciones-sociales.js';
 
 test('Push queda cerrado por defecto y sólo acepta una habilitación explícita', () => {
   assert.equal(pushEnabled({}), false);
@@ -349,6 +350,16 @@ test('el endpoint de prueba no acepta título ni cuerpo del navegador', () => {
   assert.ok(!source.includes('body.title'));
   assert.ok(!source.includes('body.body'));
   assert.ok(source.includes('buildTestPushContent') || source.includes('sendTestPush'));
+});
+
+test('los Me gusta agrupados conservan el nombre y reemplazan el aviso anterior', () => {
+  const presentation = adminNotificationPushPresentation({
+    kind: 'product_like', actorName: 'María López', productName: 'Bag Noir',
+    targetType: 'product', targetId: 'bag-noir', aggregateCount: 3,
+  });
+  assert.equal(presentation.title, 'María López y 2 personas más dieron Me gusta');
+  assert.equal(presentation.body, 'Bag Noir · 3 Me gusta en total');
+  assert.equal(presentation.tag, 'like:product:bag-noir');
 });
 
 test('la prueba Push devuelve un diagnóstico seguro cuando FCM no entrega', () => {

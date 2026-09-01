@@ -87,10 +87,60 @@ function normalizeEvent(event = {}) {
     status: clean(event.status, 80),
     sourceType: clean(event.sourceType, 60),
     sourceId: clean(event.sourceId, 220),
+    aggregateCount: Math.max(0, Math.min(9999, Math.trunc(Number(event.aggregateCount) || 0))),
+    aggregateKey: clean(event.aggregateKey || notificationAggregateKey(event), 220),
     read: false,
     createdAt: now,
     updatedAt: now,
   };
+}
+
+function notificationAggregateKey(event = {}) {
+  const kind = clean(event.kind, 60).replace(/^store_/, '');
+  const isLike = kind.includes('_like') || kind === 'product_like';
+  if (!isLike) return '';
+  const targetType = clean(event.targetType, 60) || (kind.includes('reply') ? 'reply' : kind.includes('review') ? 'review' : 'product');
+  const targetId = clean(event.targetId || event.replyId || event.reviewId || event.productId, 180);
+  return targetId ? `like:${targetType}:${targetId}` : '';
+}
+
+export function adminNotificationPushPresentation(record = {}) {
+  const count = Math.max(1, Number(record.aggregateCount) || 1);
+  const actor = clean(record.actorName || 'Una clienta', 100);
+  const kind = clean(record.kind, 60).replace(/^store_/, '');
+  const product = clean(record.productName, 120);
+  const owner = clean(record.targetOwnerName, 100);
+  const isLike = kind.includes('_like') || kind === 'product_like';
+  const groupKey = clean(record.aggregateKey || notificationAggregateKey(record), 220);
+
+  if (isLike) {
+    const target = record.targetType === 'reply'
+      ? `una respuesta${owner ? ` de ${owner}` : ''}`
+      : record.targetType === 'review'
+        ? `una reseña${owner ? ` de ${owner}` : ''}`
+        : (product ? product : 'un producto');
+    return {
+      title: count === 1 ? `${actor} dio Me gusta` : `${actor} y ${count - 1} persona${count === 2 ? '' : 's'} más dieron Me gusta`,
+      body: `${target}${product && record.targetType !== 'product' ? ` · ${product}` : ''} · ${count} Me gusta en total`,
+      tag: groupKey,
+    };
+  }
+
+  if (kind.includes('review_created')) {
+    return {
+      title: `${actor} publicó una reseña${product ? ` en ${product}` : ''}`,
+      body: record.body || record.snippet || 'Nueva reseña para revisar.',
+      tag: '',
+    };
+  }
+  if (kind.includes('review_reply')) {
+    return {
+      title: `${actor} respondió${product ? ` en ${product}` : ''}`,
+      body: record.body || record.snippet || 'Nueva respuesta para revisar.',
+      tag: '',
+    };
+  }
+  return { title: record.title || 'Nueva notificación', body: record.body || record.snippet || 'Hay una nueva actividad en Tintin.', tag: groupKey };
 }
 
 export async function buildUserNotificationWrite(recipientUid, event, dedupeKey) {
@@ -147,11 +197,13 @@ function pushTypeForAdminNotification(record = {}) {
 export async function dispatchAdminNotificationPush(env, built) {
   if (!built?.id || !built?.record) return { ok: false, skipped: 'invalid_notification' };
   const record = built.record;
+  const presentation = adminNotificationPushPresentation(record);
   return dispatchSocialPushEvent(env, {
     type: pushTypeForAdminNotification(record),
     eventId: `admin-notification:${built.id}`,
-    title: record.title || 'Nueva notificación',
-    body: record.body || record.snippet || 'Hay una nueva actividad en Tintin.',
+    title: presentation.title,
+    body: presentation.body,
+    tag: presentation.tag,
     url: record.targetUrl || '/admin.html?section=notificaciones-push',
   });
 }
