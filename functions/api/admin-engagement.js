@@ -1,5 +1,5 @@
 import {
-  jsonResponse, originIsAllowed, preflightResponse, requireSuperAdmin,
+  jsonResponse, originIsAllowed, preflightResponse, requireSuperAdmin, statusFromError,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { adminDeleteLike, adminLikeAction, adminReviewAction } from '../../cloudflare/participacion-admin.js';
 import { syncEngagementToSheets } from '../../cloudflare/sincronizacion-participacion-sheets.js';
@@ -42,7 +42,7 @@ export async function onRequest(context) {
   } catch (error) {
     return jsonResponse(
       { ok: false, error: String(error?.message || 'No se pudo completar la acción').slice(0, 300) },
-      error?.code === 'version_conflict' ? 409 : 400,
+      statusFromError(error, error?.code === 'version_conflict' ? 409 : 400),
       origin,
       request.url,
     );

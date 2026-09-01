@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-31T23:40:39.001Z",
-  "sourceFingerprint": "527361d6bb19117b60236a211890c38e95492657c4c8ab5fc8208f878935d4e7",
+  "generatedAt": "2026-09-01T10:49:05.228Z",
+  "sourceFingerprint": "1faf3cc3c80756992905141849bff62ccdf9c2fe1c8be21b1e71564b28dbffeb",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 809,
-    "textFiles": 777,
-    "totalBytes": 8908157,
+    "files": 811,
+    "textFiles": 779,
+    "totalBytes": 8915274,
     "pages": 18,
-    "modules": 526
+    "modules": 528
   },
   "viewports": [
     {
@@ -17822,8 +17822,8 @@
     },
     {
       "path": "cloudflare/seguridad-cloudinary.js",
-      "bytes": 5057,
-      "sha256": "bb3399bbd7754cf5ea86ed004ad9555af966fc61e8fc5cb6478cc9a22b12b6b4",
+      "bytes": 5322,
+      "sha256": "e3f294703ad40a5c264434962d567f245878d97c20fed98757609ed9c0a18bd5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18278,8 +18278,8 @@
     },
     {
       "path": "functions/api/admin-catalog-delete.js",
-      "bytes": 5995,
-      "sha256": "eeda0b92bd63b4e0303014921ea73e17ea54e6b8a6ae43882af6bfe215ae29ca",
+      "bytes": 6038,
+      "sha256": "7b3fe01a205dd76421c0f3949861e7ee248b79a1c1a7101c7403f361e0228915",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18289,27 +18289,27 @@
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 6
+          "line": 7
         },
         {
           "raw": "../../cloudflare/borrado-global-catalogo.js",
           "target": "cloudflare/borrado-global-catalogo.js",
           "dynamic": false,
-          "line": 10
+          "line": 11
         },
         {
           "raw": "../../cloudflare/resiliencia-sync-catalogo.js",
           "target": "cloudflare/resiliencia-sync-catalogo.js",
           "dynamic": false,
-          "line": 15
+          "line": 16
         }
       ],
       "endpoints": []
     },
     {
       "path": "functions/api/admin-delete-user.js",
-      "bytes": 2141,
-      "sha256": "4abb75cae73f7d67a9eb416d97815eec97cf512fecd2519e3c2c3a917d9d6783",
+      "bytes": 2146,
+      "sha256": "6dfe93b7d1c0380e6105cdb916b22adf5bf1d1768c94fa616547cb81e5949494",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18319,21 +18319,21 @@
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 6
+          "line": 7
         },
         {
           "raw": "../../cloudflare/user-lifecycle-domain.js",
           "target": "cloudflare/user-lifecycle-domain.js",
           "dynamic": false,
-          "line": 7
+          "line": 8
         }
       ],
       "endpoints": []
     },
     {
       "path": "functions/api/admin-engagement.js",
-      "bytes": 2380,
-      "sha256": "d1c4dc8732672425b38a7bd54ca4133d51b1c6c8260a733c22c408b83ac584ca",
+      "bytes": 2421,
+      "sha256": "524f9b90b224866386ffd3956432ba3bc5b278d6c3801a88490f70c531ff241d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18362,8 +18362,8 @@
     },
     {
       "path": "functions/api/admin-order-mutation.js",
-      "bytes": 2909,
-      "sha256": "703e4c265f7963f2c2f315c66a6ab3740d807b52a8c160a67e00a7b834ac40c5",
+      "bytes": 2914,
+      "sha256": "25199f66f5b58dd71252d100dfe1294a15410542f2bef2ce68e6ee23e7329072",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18373,19 +18373,19 @@
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 6
+          "line": 7
         },
         {
           "raw": "../../cloudflare/order-admin-domain.js",
           "target": "cloudflare/order-admin-domain.js",
           "dynamic": false,
-          "line": 7
+          "line": 8
         },
         {
           "raw": "../../cloudflare/order-sheets-sync.js",
           "target": "cloudflare/order-sheets-sync.js",
           "dynamic": false,
-          "line": 8
+          "line": 9
         }
       ],
       "endpoints": []
@@ -18864,8 +18864,8 @@
     },
     {
       "path": "functions/api/notifications.js",
-      "bytes": 9980,
-      "sha256": "dd6335e469b4e8ac869596c19d743b9c2e1f2d28f4b6b3b669029ca25fa02b2a",
+      "bytes": 10021,
+      "sha256": "fa69bfe9765e38b4fdc880a6307b5730ebcccd78c26df576978880a230093b2b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19076,8 +19076,8 @@
     },
     {
       "path": "functions/api/push-admin.js",
-      "bytes": 3997,
-      "sha256": "2952532ed2ffb2a34d9ff69c0225ae6edbd1f6224183b1691470edadff5a287f",
+      "bytes": 4040,
+      "sha256": "e585287949ddd13a8b9a67096e037e524ce2dbe2571a155fba5aa8d9cae6a5b4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19087,19 +19087,19 @@
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         },
         {
           "raw": "../../cloudflare/nucleo-push.js",
           "target": "cloudflare/nucleo-push.js",
           "dynamic": false,
-          "line": 13
+          "line": 14
         },
         {
           "raw": "../../cloudflare/servicio-push.js",
           "target": "cloudflare/servicio-push.js",
           "dynamic": false,
-          "line": 20
+          "line": 21
         }
       ],
       "endpoints": []
@@ -19196,8 +19196,8 @@
     },
     {
       "path": "functions/api/push-test.js",
-      "bytes": 3749,
-      "sha256": "8d8eea82b838b9d88e807afccc7c926863dd83f1b4c85e340473e823f3080805",
+      "bytes": 3792,
+      "sha256": "130a3c0a0bf76854fa364eaf2f5afd74a76c9c05ab83d45a6796ca787e4c2b08",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19207,19 +19207,19 @@
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         },
         {
           "raw": "../../cloudflare/nucleo-push.js",
           "target": "cloudflare/nucleo-push.js",
           "dynamic": false,
-          "line": 13
+          "line": 14
         },
         {
           "raw": "../../cloudflare/servicio-push.js",
           "target": "cloudflare/servicio-push.js",
           "dynamic": false,
-          "line": 14
+          "line": 15
         }
       ],
       "endpoints": []
@@ -27979,6 +27979,36 @@
       "endpoints": []
     },
     {
+      "path": "scripts/auditar-superadmin-modulos-completos.mjs",
+      "bytes": 5325,
+      "sha256": "9c6b4e09477075278047c1ef0b003648325f869e34a31475e7651017e90248aa",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/auditar-sync-authority.mjs",
       "bytes": 2862,
       "sha256": "a687619443625aa394a6be2dcee711c7f7640153272c7ed83f1562d8335cfdf1",
@@ -30252,6 +30282,42 @@
       ]
     },
     {
+      "path": "tests/security/admin-http-contract.test.mjs",
+      "bytes": 1110,
+      "sha256": "c1a8f4542e5b4bf69a4239cd966cfa04db5b6109b798e5de823e27322d850e36",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs/promises",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/security/csp-cloudinary-upload.test.mjs",
       "bytes": 3720,
       "sha256": "0916b00eb76401fa2a2c0acc6f5f913e1f5e4e9f3045fcd62bd15ef45239ff7d",
@@ -31353,8 +31419,8 @@
     {
       "path": ".github/workflows/auditar-superadmin-maestro.yml",
       "extension": ".yml",
-      "bytes": 5200,
-      "sha256": "8aa8d919aaa7219dbcdd6aa982f79d038be2ec2bcf0b73889fe62e1c14443acf"
+      "bytes": 5396,
+      "sha256": "a059bdda5fd62456fc364c2a2400c011543a41c0490071fec967d4a30aba68ef"
     },
     {
       "path": ".github/workflows/auditar-sync-authority.yml",
@@ -31881,8 +31947,8 @@
     {
       "path": "cloudflare/seguridad-cloudinary.js",
       "extension": ".js",
-      "bytes": 5057,
-      "sha256": "bb3399bbd7754cf5ea86ed004ad9555af966fc61e8fc5cb6478cc9a22b12b6b4"
+      "bytes": 5322,
+      "sha256": "e3f294703ad40a5c264434962d567f245878d97c20fed98757609ed9c0a18bd5"
     },
     {
       "path": "cloudflare/servicio-push.js",
@@ -32775,26 +32841,26 @@
     {
       "path": "functions/api/admin-catalog-delete.js",
       "extension": ".js",
-      "bytes": 5995,
-      "sha256": "eeda0b92bd63b4e0303014921ea73e17ea54e6b8a6ae43882af6bfe215ae29ca"
+      "bytes": 6038,
+      "sha256": "7b3fe01a205dd76421c0f3949861e7ee248b79a1c1a7101c7403f361e0228915"
     },
     {
       "path": "functions/api/admin-delete-user.js",
       "extension": ".js",
-      "bytes": 2141,
-      "sha256": "4abb75cae73f7d67a9eb416d97815eec97cf512fecd2519e3c2c3a917d9d6783"
+      "bytes": 2146,
+      "sha256": "6dfe93b7d1c0380e6105cdb916b22adf5bf1d1768c94fa616547cb81e5949494"
     },
     {
       "path": "functions/api/admin-engagement.js",
       "extension": ".js",
-      "bytes": 2380,
-      "sha256": "d1c4dc8732672425b38a7bd54ca4133d51b1c6c8260a733c22c408b83ac584ca"
+      "bytes": 2421,
+      "sha256": "524f9b90b224866386ffd3956432ba3bc5b278d6c3801a88490f70c531ff241d"
     },
     {
       "path": "functions/api/admin-order-mutation.js",
       "extension": ".js",
-      "bytes": 2909,
-      "sha256": "703e4c265f7963f2c2f315c66a6ab3740d807b52a8c160a67e00a7b834ac40c5"
+      "bytes": 2914,
+      "sha256": "25199f66f5b58dd71252d100dfe1294a15410542f2bef2ce68e6ee23e7329072"
     },
     {
       "path": "functions/api/admin-runtime-health.js",
@@ -32895,8 +32961,8 @@
     {
       "path": "functions/api/notifications.js",
       "extension": ".js",
-      "bytes": 9980,
-      "sha256": "dd6335e469b4e8ac869596c19d743b9c2e1f2d28f4b6b3b669029ca25fa02b2a"
+      "bytes": 10021,
+      "sha256": "fa69bfe9765e38b4fdc880a6307b5730ebcccd78c26df576978880a230093b2b"
     },
     {
       "path": "functions/api/order-email.js",
@@ -32943,8 +33009,8 @@
     {
       "path": "functions/api/push-admin.js",
       "extension": ".js",
-      "bytes": 3997,
-      "sha256": "2952532ed2ffb2a34d9ff69c0225ae6edbd1f6224183b1691470edadff5a287f"
+      "bytes": 4040,
+      "sha256": "e585287949ddd13a8b9a67096e037e524ce2dbe2571a155fba5aa8d9cae6a5b4"
     },
     {
       "path": "functions/api/push-config.js",
@@ -32967,8 +33033,8 @@
     {
       "path": "functions/api/push-test.js",
       "extension": ".js",
-      "bytes": 3749,
-      "sha256": "8d8eea82b838b9d88e807afccc7c926863dd83f1b4c85e340473e823f3080805"
+      "bytes": 3792,
+      "sha256": "130a3c0a0bf76854fa364eaf2f5afd74a76c9c05ab83d45a6796ca787e4c2b08"
     },
     {
       "path": "functions/api/sheets-admin-webhook.js",
@@ -35341,6 +35407,12 @@
       "sha256": "86f9fdeb6a65894950065009611f2ad31dde54f3d385f02fdd0cce4c58045789"
     },
     {
+      "path": "scripts/auditar-superadmin-modulos-completos.mjs",
+      "extension": ".mjs",
+      "bytes": 5325,
+      "sha256": "9c6b4e09477075278047c1ef0b003648325f869e34a31475e7651017e90248aa"
+    },
+    {
       "path": "scripts/auditar-sync-authority.mjs",
       "extension": ".mjs",
       "bytes": 2862,
@@ -35861,6 +35933,12 @@
       "extension": ".mjs",
       "bytes": 14704,
       "sha256": "9b42e5ea228f45466d0c5fce1cf57070267eedb9617d12a7431dde2cc1b2afb4"
+    },
+    {
+      "path": "tests/security/admin-http-contract.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1110,
+      "sha256": "c1a8f4542e5b4bf69a4239cd966cfa04db5b6109b798e5de823e27322d850e36"
     },
     {
       "path": "tests/security/csp-cloudinary-upload.test.mjs",

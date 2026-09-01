@@ -1,5 +1,5 @@
 import {
-  jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser, requireSuperAdmin,
+  jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser, requireSuperAdmin, statusFromError,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import {
   decodeFirestoreFields, firestoreAdminGet, firestoreAdminMerge,
@@ -193,7 +193,7 @@ export async function onRequest(context) {
     }
     throw new Error('Acción no permitida');
   } catch (error) {
-    const status = error?.code === 'version_conflict' ? 409 : 400;
+    const status = statusFromError(error, error?.code === 'version_conflict' ? 409 : 400);
     return jsonResponse({ ok: false, error: String(error?.message || 'No se pudo completar la acción').slice(0, 300) }, status, origin, request.url);
   }
 }

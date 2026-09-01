@@ -3,6 +3,7 @@ import {
   originIsAllowed,
   preflightResponse,
   requireSuperAdmin,
+  statusFromError,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { applyUserLifecycle } from '../../cloudflare/user-lifecycle-domain.js';
 
@@ -44,6 +45,6 @@ export async function onRequest(context) {
     const safeMessage = /^(Solicitud inválida|Usuario o acción inválidos|No se encontró la identidad solicitada|La cuenta Super Admin está protegida|La cuenta no está eliminada|La cuenta cambió después de la última sincronización\. Actualizá la hoja antes de volver a editar)\.?$/.test(message)
       ? message
       : 'No se pudo actualizar el estado de la cuenta.';
-    return jsonResponse({ ok: false, error: safeMessage }, Number(error?.status) === 409 ? 409 : 400, origin, requestUrl);
+    return jsonResponse({ ok: false, error: safeMessage }, statusFromError(error, 400), origin, requestUrl);
   }
 }
