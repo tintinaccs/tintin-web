@@ -158,7 +158,7 @@ test('own social activity is visible to the actor without broadcasting private i
     assert.match(client, new RegExp(`kind: '${kind}'`));
   }
   assert.match(client, /buildUserNotificationWrite\(uid/);
-  assert.match(route, /dispatchSocialPushEvent/);
+  assert.match(client, /dispatchAdminNotificationPush/);
   assert.doesNotMatch(route, /if \(!engagementIsSuperAdmin\(user\)\)/);
 });
 

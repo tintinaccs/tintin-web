@@ -50,7 +50,7 @@ ok(has(productStability, '.tt-notification-badge,#tt-tabbar .tt-cart-badge{z-ind
 // 3. Notificaciones / push: usa el núcleo social canónico actual, sin capa histórica paralela.
 ok(has(notificationApi, 'notificaciones-sociales.js') && has(notificationApi, 'notifyUserIfAbsent') && has(notificationApi, 'markAllNotificationsRead'), 'La API de notificaciones no delega al núcleo social canónico.');
 ok(has(notifications, /export\s+async\s+function\s+notifyUserIfAbsent|notifyUserIfAbsent/) && has(notifications, /notifyAdminIfAbsent/) && has(notifications, /markAllNotificationsRead/), 'El núcleo social no conserva destinatarios y lectura de notificaciones.');
-ok(has(socialApi, 'dispatchSocialPushEvent') && has(pushService, /pushEnabled|dispatchSocialPushEvent/), 'Engagement no conserva el puente Web Push server-side.');
+ok(has(notifications, 'dispatchAdminNotificationPush') && has(socialBackend, 'dispatchAdminNotificationPush') && has(pushService, /pushEnabled|dispatchSocialPushEvent/), 'Engagement no conserva el puente Web Push server-side.');
 
 // 4. Sheets / Apps Script: sincronización server-to-server y diagnóstico operativo.
 ok(has(sheetsSync, /SHEETS_ENGAGEMENT_SECRET|secret/i), 'La sincronización social con Sheets no conserva secreto servidor-a-servidor.');

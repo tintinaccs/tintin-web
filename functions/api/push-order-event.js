@@ -79,7 +79,8 @@ export async function onRequest(context) {
       attempted: result.attempted,
       successCount: result.successCount,
       failureCount: result.failureCount,
-      disabledCount: result.disabledCount
+      disabledCount: result.disabledCount,
+      lastError: result.lastError || ''
     }, result.ok ? 200 : 502, origin, requestUrl);
   } catch (error) {
     // 500 para que Apps Script pueda reintentar; el pedido ya está creado y

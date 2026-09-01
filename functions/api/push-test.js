@@ -86,10 +86,12 @@ export async function onRequest(context) {
 
     return jsonResponse({
       success: result.ok,
+      error: result.ok ? '' : (result.lastError || 'Firebase no pudo entregar la notificación. Revisá el dispositivo activo y la configuración de FCM.'),
       attempted: result.attempted || 0,
       successCount: result.successCount || 0,
       failureCount: result.failureCount || 0,
-      disabledCount: result.disabledCount || 0
+      disabledCount: result.disabledCount || 0,
+      lastError: result.lastError || ''
     }, result.ok ? 200 : 502, origin, requestUrl);
   } catch (error) {
     return jsonResponse({ success: false, error: sanitizeError(error, 200) }, 400, origin, requestUrl);

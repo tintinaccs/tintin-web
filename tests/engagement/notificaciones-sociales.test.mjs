@@ -83,8 +83,9 @@ test('cada acción social conserva aviso propio y el Super Admin no queda fuera 
     "kind: 'product_like_self'", "kind: 'store_review_created'",
     "kind: 'store_review_reply'", "kind: 'store_review_like'",
   ]) assert.match(customerEngagement, new RegExp(token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-  assert.match(engagementApi, /dispatchSocialPushEvent/);
-  assert.match(engagementApi, /const push = pushDetails/);
+  assert.match(customerEngagement, /dispatchAdminNotificationPush/);
+  assert.match(core, /dispatchSocialPushEvent/);
+  assert.match(core, /admin-notification:/);
   assert.doesNotMatch(engagementApi, /if \(!engagementIsSuperAdmin\(user\)\)/);
 });
 
@@ -92,9 +93,9 @@ test('cada evento social usa el mismo canal Web Push que el pedido nuevo', () =>
   for (const type of [
     'social.review.created', 'social.review.reply',
     'social.like.product', 'social.like.review', 'social.like.reply'
-  ]) assert.match(engagementApi, new RegExp(`type: '${type}'`));
-  assert.match(engagementApi, /if \(typeof context\.waitUntil === 'function'\) context\.waitUntil\(socialPush\);/);
-  assert.match(engagementApi, /else await socialPush;/);
+  ]) assert.match(core, new RegExp(type.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  assert.match(core, /pushTypeForAdminNotification/);
+  assert.match(core, /if \(result\.created && !skipPush\)/);
 });
 
 test('las acciones de Tintin notifican a la autora de la reseña', () => {

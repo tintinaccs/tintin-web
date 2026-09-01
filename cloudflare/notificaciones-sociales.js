@@ -5,6 +5,7 @@ import {
   firestoreAdminMerge,
   getGoogleAccessToken,
 } from './firebase-admin-ligero.js';
+import { dispatchSocialPushEvent, recordPushFailure } from './servicio-push.js';
 
 const MAX_TITLE = 180;
 const MAX_BODY = 420;
@@ -86,10 +87,60 @@ function normalizeEvent(event = {}) {
     status: clean(event.status, 80),
     sourceType: clean(event.sourceType, 60),
     sourceId: clean(event.sourceId, 220),
+    aggregateCount: Math.max(0, Math.min(9999, Math.trunc(Number(event.aggregateCount) || 0))),
+    aggregateKey: clean(event.aggregateKey || notificationAggregateKey(event), 220),
     read: false,
     createdAt: now,
     updatedAt: now,
   };
+}
+
+function notificationAggregateKey(event = {}) {
+  const kind = clean(event.kind, 60).replace(/^store_/, '');
+  const isLike = kind.includes('_like') || kind === 'product_like';
+  if (!isLike) return '';
+  const targetType = clean(event.targetType, 60) || (kind.includes('reply') ? 'reply' : kind.includes('review') ? 'review' : 'product');
+  const targetId = clean(event.targetId || event.replyId || event.reviewId || event.productId, 180);
+  return targetId ? `like:${targetType}:${targetId}` : '';
+}
+
+export function adminNotificationPushPresentation(record = {}) {
+  const count = Math.max(1, Number(record.aggregateCount) || 1);
+  const actor = clean(record.actorName || 'Una clienta', 100);
+  const kind = clean(record.kind, 60).replace(/^store_/, '');
+  const product = clean(record.productName, 120);
+  const owner = clean(record.targetOwnerName, 100);
+  const isLike = kind.includes('_like') || kind === 'product_like';
+  const groupKey = clean(record.aggregateKey || notificationAggregateKey(record), 220);
+
+  if (isLike) {
+    const target = record.targetType === 'reply'
+      ? `una respuesta${owner ? ` de ${owner}` : ''}`
+      : record.targetType === 'review'
+        ? `una reseña${owner ? ` de ${owner}` : ''}`
+        : (product ? product : 'un producto');
+    return {
+      title: count === 1 ? `${actor} dio Me gusta` : `${actor} y ${count - 1} persona${count === 2 ? '' : 's'} más dieron Me gusta`,
+      body: `${target}${product && record.targetType !== 'product' ? ` · ${product}` : ''} · ${count} Me gusta en total`,
+      tag: groupKey,
+    };
+  }
+
+  if (kind.includes('review_created')) {
+    return {
+      title: `${actor} publicó una reseña${product ? ` en ${product}` : ''}`,
+      body: record.body || record.snippet || 'Nueva reseña para revisar.',
+      tag: '',
+    };
+  }
+  if (kind.includes('review_reply')) {
+    return {
+      title: `${actor} respondió${product ? ` en ${product}` : ''}`,
+      body: record.body || record.snippet || 'Nueva respuesta para revisar.',
+      tag: '',
+    };
+  }
+  return { title: record.title || 'Nueva notificación', body: record.body || record.snippet || 'Hay una nueva actividad en Tintin.', tag: groupKey };
 }
 
 export async function buildUserNotificationWrite(recipientUid, event, dedupeKey) {
@@ -131,6 +182,33 @@ export async function buildAdminNotificationWrite(event, dedupeKey) {
   };
 }
 
+function pushTypeForAdminNotification(record = {}) {
+  const kind = String(record.kind || '');
+  if (kind.includes('review_reply')) return 'social.review.reply';
+  if (kind.includes('review_like')) return 'social.like.review';
+  if (kind.includes('reply_like')) return 'social.like.reply';
+  if (kind.includes('product_like')) return 'social.like.product';
+  if (kind.includes('review_created')) return 'social.review.created';
+  if (kind === 'order_created' || kind === 'new_order') return 'order.created';
+  if (kind === 'order_confirmed' || kind === 'payment_completed') return 'payment.completed';
+  if (kind === 'user_joined' || kind === 'profile_created') return 'admin.user.joined';
+  return 'admin.activity';
+}
+
+export async function dispatchAdminNotificationPush(env, built) {
+  if (!built?.id || !built?.record) return { ok: false, skipped: 'invalid_notification' };
+  const record = built.record;
+  const presentation = adminNotificationPushPresentation(record);
+  return dispatchSocialPushEvent(env, {
+    type: pushTypeForAdminNotification(record),
+    eventId: `admin-notification:${built.id}`,
+    title: presentation.title,
+    body: presentation.body,
+    tag: presentation.tag,
+    url: record.targetUrl || '/admin.html?section=notificaciones-push',
+  });
+}
+
 async function persistIfAbsent(env, built) {
   const existing = await firestoreAdminGet(env, built.path);
   if (existing) return { created: false, id: built.id };
@@ -147,8 +225,20 @@ export async function notifyUserIfAbsent(env, recipientUid, event, dedupeKey) {
   return persistIfAbsent(env, await buildUserNotificationWrite(recipientUid, event, dedupeKey));
 }
 
-export async function notifyAdminIfAbsent(env, event, dedupeKey) {
-  return persistIfAbsent(env, await buildAdminNotificationWrite(event, dedupeKey));
+export async function notifyAdminIfAbsent(env, event, dedupeKey, { skipPush = false } = {}) {
+  const built = await buildAdminNotificationWrite(event, dedupeKey);
+  const result = await persistIfAbsent(env, built);
+  if (result.created && !skipPush) {
+    await dispatchAdminNotificationPush(env, built).catch(error => {
+      console.warn('[notifications] No se pudo enviar el push del aviso admin:', error);
+      return recordPushFailure(env, {
+        eventId: `admin-notification:${built.id}`,
+        type: pushTypeForAdminNotification(built.record),
+        error,
+      }).catch(() => {});
+    });
+  }
+  return result;
 }
 
 export async function markNotificationRead(env, { uid, notificationId, admin = false }) {

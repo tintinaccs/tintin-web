@@ -1,5 +1,5 @@
 import { currentPage } from './estado-ruta.js';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260831-notifications-auto-read-1';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260901-notifications-rich-1';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;

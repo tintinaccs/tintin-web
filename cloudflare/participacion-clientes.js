@@ -9,6 +9,7 @@ import {
 import {
   buildAdminNotificationWrite,
   buildUserNotificationWrite,
+  dispatchAdminNotificationPush,
 } from './notificaciones-sociales.js';
 
 const MAX_COMMENT = 1600;
@@ -361,13 +362,14 @@ export async function createReview(env, user, input) {
     }, `review_created_self:${reviewId}`);
     writes.push(ownNotification.write);
 
+    let adminNotification;
     if (!context.isSuperAdmin) {
       writes.push({
         path: limitPath,
         fields: encodeFirestoreFields(nextLimit),
         currentDocument: limitDoc ? { updateTime: limitDoc.updateTime } : { exists: false },
       });
-      const adminNotification = await buildAdminNotificationWrite({
+      adminNotification = await buildAdminNotificationWrite({
         kind: 'review_created',
         actorType: 'customer',
         actorUid: uid,
@@ -391,7 +393,7 @@ export async function createReview(env, user, input) {
       }, `review_created:${reviewId}`);
       writes.push(adminNotification.write);
     } else {
-      const adminNotification = await buildOwnAdminActivityNotification(context, uid, {
+      adminNotification = await buildOwnAdminActivityNotification(context, uid, {
         kind: 'store_review_created',
         title: 'Publicaste una reseña desde Tintin',
         body: `${rating} estrellas · ${context.productName}: ${comment}`,
@@ -406,6 +408,9 @@ export async function createReview(env, user, input) {
 
     try {
       await firestoreAdminCommit(env, writes);
+      await dispatchAdminNotificationPush(env, adminNotification).catch(error => {
+        console.warn('[engagement] No se pudo enviar el push del aviso admin:', error);
+      });
       return {
         ...record,
         rateLimit: context.isSuperAdmin ? { unlimited: true } : {
@@ -465,8 +470,9 @@ export async function addCustomerReply(env, user, input) {
       { path: `products/${productId}/reviews/${reviewId}`, fields: encodeFirestoreFields(reviewPublic(updated)) },
     ];
 
+    let adminNotification;
     if (!context.isSuperAdmin) {
-      const adminNotification = await buildAdminNotificationWrite({
+      adminNotification = await buildAdminNotificationWrite({
         kind: 'review_reply', actorType: 'customer', actorUid: uid, actorName: context.realName,
         actorUsername: context.username, actorPhotoUrl: context.photoUrl,
         title: `${context.realName} respondió en ${record.productName}`,
@@ -479,7 +485,7 @@ export async function addCustomerReply(env, user, input) {
       }, `review_reply:${reviewId}:${replyId}`);
       writes.push(adminNotification.write);
     } else {
-      const adminNotification = await buildOwnAdminActivityNotification(context, uid, {
+      adminNotification = await buildOwnAdminActivityNotification(context, uid, {
         kind: 'store_review_reply',
         title: 'Respondiste una reseña desde Tintin',
         body: text, snippet: text, iconKey: 'comment',
@@ -517,6 +523,9 @@ export async function addCustomerReply(env, user, input) {
 
     try {
       await firestoreAdminCommit(env, writes);
+      await dispatchAdminNotificationPush(env, adminNotification).catch(error => {
+        console.warn('[engagement] No se pudo enviar el push del aviso admin:', error);
+      });
       return { review: updated, reply };
     } catch (error) {
       if (error?.code === 'version_conflict' && attempt + 1 < MAX_COMMIT_RETRIES) continue;
@@ -586,8 +595,9 @@ export async function toggleReviewLike(env, user, input) {
       },
     ];
 
+    let adminNotification;
     if (!context.isSuperAdmin) {
-      const adminNotification = await buildAdminNotificationWrite({
+      adminNotification = await buildAdminNotificationWrite({
         kind: 'review_like', actorType: 'customer', actorUid: uid, actorName: context.realName,
         actorUsername: context.username, actorPhotoUrl: context.photoUrl,
         title: `${context.realName} dio Me gusta al comentario de ${record.realName} en ${record.productName}`,
@@ -596,11 +606,12 @@ export async function toggleReviewLike(env, user, input) {
         targetType: 'review', targetId: reviewId, targetOwnerUid: record.ownerUid,
         targetOwnerName: record.realName, productId, productName: record.productName,
         productImageUrl: record.productImageUrl, reviewId,
+        aggregateCount: updated.likeCount,
         sourceType: 'review_like', sourceId: likeId, createdAt: now,
       }, `review_like:${reviewId}:${uid}`);
       writes.push(adminNotification.write);
     } else {
-      const adminNotification = await buildOwnAdminActivityNotification(context, uid, {
+      adminNotification = await buildOwnAdminActivityNotification(context, uid, {
         kind: 'store_review_like', actorUid: uid,
         title: 'Marcaste Me gusta en tu reseña desde Tintin',
         body: record.comment, snippet: record.comment, iconKey: 'heart',
@@ -640,6 +651,9 @@ export async function toggleReviewLike(env, user, input) {
 
     try {
       await firestoreAdminCommit(env, writes);
+      await dispatchAdminNotificationPush(env, adminNotification).catch(error => {
+        console.warn('[engagement] No se pudo enviar el push del aviso admin:', error);
+      });
       return { selected: true, alreadyLiked: false, likeCount: updated.likeCount, review: updated, record: likeRecord };
     } catch (error) {
       if (error?.code === 'version_conflict' && attempt + 1 < MAX_COMMIT_RETRIES) continue;
@@ -707,9 +721,10 @@ export async function likeReply(env, user, input) {
       },
     ];
 
+    let adminNotification;
     if (!context.isSuperAdmin) {
       const targetLabel = currentReply.authorType === 'store' ? 'la respuesta de Tintin' : `la respuesta de ${replyOwnerName}`;
-      const adminNotification = await buildAdminNotificationWrite({
+      adminNotification = await buildAdminNotificationWrite({
         kind: 'reply_like', actorType: 'customer', actorUid: uid, actorName: context.realName,
         actorUsername: context.username, actorPhotoUrl: context.photoUrl,
         title: `${context.realName} dio Me gusta a ${targetLabel} en ${record.productName}`,
@@ -718,11 +733,12 @@ export async function likeReply(env, user, input) {
         targetType: 'reply', targetId: replyId, targetOwnerUid: replyOwnerUid,
         targetOwnerName: replyOwnerName, productId, productName: record.productName,
         productImageUrl: record.productImageUrl, reviewId, replyId,
+        aggregateCount: updatedReply.likeCount,
         sourceType: 'reply_like', sourceId: likeId, createdAt: now,
       }, `reply_like:${replyId}:${uid}`);
       writes.push(adminNotification.write);
     } else {
-      const adminNotification = await buildOwnAdminActivityNotification(context, uid, {
+      adminNotification = await buildOwnAdminActivityNotification(context, uid, {
         kind: 'store_reply_like', actorUid: uid,
         title: 'Marcaste Me gusta en una respuesta desde Tintin',
         body: currentReply.text, snippet: currentReply.text, iconKey: 'heart',
@@ -762,6 +778,9 @@ export async function likeReply(env, user, input) {
 
     try {
       await firestoreAdminCommit(env, writes);
+      await dispatchAdminNotificationPush(env, adminNotification).catch(error => {
+        console.warn('[engagement] No se pudo enviar el push del aviso admin:', error);
+      });
       return { selected: true, alreadyLiked: false, likeCount: updatedReply.likeCount, replyId, review: updated, record: likeRecord };
     } catch (error) {
       if (error?.code === 'version_conflict' && attempt + 1 < MAX_COMMIT_RETRIES) continue;
@@ -807,8 +826,9 @@ export async function toggleFavorite(env, user, input) {
       imageUrl: context.imageUrl, createdAt: now, updatedAt: now,
     }) },
   ];
+  let adminNotification;
   if (!context.isSuperAdmin) {
-    const adminNotification = await buildAdminNotificationWrite({
+    adminNotification = await buildAdminNotificationWrite({
       kind: 'product_like', actorType: 'customer', actorUid: uid, actorName: context.realName,
       actorUsername: context.username, actorPhotoUrl: context.photoUrl,
       title: `${context.realName} dio Me gusta a ${context.productName}`,
@@ -816,17 +836,19 @@ export async function toggleFavorite(env, user, input) {
       targetUrl: `/product?id=${context.productId}`,
       targetType: 'product', targetId: context.productId,
       productId: context.productId, productName: context.productName, productImageUrl: context.imageUrl,
+      aggregateCount: 1,
       sourceType: 'product_like', sourceId: likeId, createdAt: now,
     }, `product_like:${likeId}`);
     writes.push(adminNotification.write);
   } else {
-    const adminNotification = await buildOwnAdminActivityNotification(context, uid, {
+    adminNotification = await buildOwnAdminActivityNotification(context, uid, {
       kind: 'store_product_like', actorUid: uid,
       title: `Marcaste Me gusta en ${context.productName} desde Tintin`,
       body: `Te gustó ${context.productName}.`, snippet: context.productName, iconKey: 'heart',
       targetUrl: `/product?id=${context.productId}`,
       targetType: 'product', targetId: context.productId,
       productId: context.productId, productName: context.productName, productImageUrl: context.imageUrl,
+      aggregateCount: 1,
       sourceType: 'product_like', sourceId: likeId, createdAt: now,
     }, `store_product_like:${likeId}`);
     writes.push(adminNotification.write);
@@ -842,6 +864,17 @@ export async function toggleFavorite(env, user, input) {
   writes.push(ownNotification.write);
   try {
     await firestoreAdminCommit(env, writes);
+    const likeCount = await updateProductLikeStats(env, context.productId);
+    adminNotification.record.aggregateCount = likeCount;
+    await firestoreAdminCommit(env, [{
+      path: adminNotification.path,
+      fields: encodeFirestoreFields({ aggregateCount: likeCount, updatedAt: new Date() }),
+      mergeFields: ['aggregateCount', 'updatedAt'],
+    }]);
+    await dispatchAdminNotificationPush(env, adminNotification).catch(error => {
+      console.warn('[engagement] No se pudo enviar el push del aviso admin:', error);
+    });
+    return { selected: true, alreadyLiked: false, likeCount, record };
   } catch (error) {
     if (error?.code === 'version_conflict') {
       const likeCount = await updateProductLikeStats(env, context.productId);
@@ -849,8 +882,6 @@ export async function toggleFavorite(env, user, input) {
     }
     throw error;
   }
-  const likeCount = await updateProductLikeStats(env, context.productId);
-  return { selected: true, alreadyLiked: false, likeCount, record };
 }
 
 export const engagementClean = clean;

@@ -1,4 +1,4 @@
-export const SHELL_VERSION = 'tintin-20260831-notifications-auto-read-1';
+export const SHELL_VERSION = 'tintin-20260901-notifications-rich-1';
 
 export const BREAKPOINTS = Object.freeze({
   mobileMax: 767,

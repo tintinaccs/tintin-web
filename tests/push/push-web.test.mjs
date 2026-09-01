@@ -26,11 +26,19 @@ import {
   webhookSigningPayload
 } from '../../cloudflare/nucleo-push.js';
 import { pushEnabled } from '../../cloudflare/servicio-push.js';
+import { adminNotificationPushPresentation } from '../../cloudflare/notificaciones-sociales.js';
 
 test('Push queda cerrado por defecto y sólo acepta una habilitación explícita', () => {
   assert.equal(pushEnabled({}), false);
   assert.equal(pushEnabled({ TINTIN_PUSH_ENABLED: 'false' }), false);
   assert.equal(pushEnabled({ TINTIN_PUSH_ENABLED: 'true' }), true);
+});
+
+test('Web Push se entrega únicamente por Firebase FCM', () => {
+  const service = read('cloudflare/servicio-push.js');
+  assert.doesNotMatch(service, /ntfy/i);
+  assert.match(service, /const devices = await listActiveDevices\(env\);/);
+  assert.match(service, /ok: result\.successCount > 0, \.\.\.result, lastError: sanitizeError\(result\.lastError, 120\)/);
 });
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -104,7 +112,7 @@ test('el payload no contiene ningún dato personal del pedido', () => {
   assert.deepEqual(Object.keys(content.data).sort(), [...allowedKeys].sort());
 });
 
-test('el mensaje FCM viaja sólo como data, con TTL y enlace interno', () => {
+test('el mensaje FCM viaja sólo como data, con TTL y sin enlace FCM relativo', () => {
   const content = buildPushContent({
     type: 'order.created',
     orderId: ORDER_ID,
@@ -118,7 +126,7 @@ test('el mensaje FCM viaja sólo como data, con TTL y enlace interno', () => {
   assert.equal(message.notification, undefined);
   assert.equal(message.webpush.notification, undefined);
   assert.equal(message.webpush.headers.TTL, '3600');
-  assert.ok(message.webpush.fcm_options.link.startsWith('/admin.html?section=pedidos'));
+  assert.equal(message.webpush.fcm_options, undefined);
   assert.equal(message.data.tag, `order.created:${ORDER_ID}`);
 });
 
@@ -233,14 +241,16 @@ test('los tipos de pago quedan declarados pero no se emiten hoy', () => {
 
 test('los cinco eventos sociales tienen emisor server-side y fallback sin waitUntil', () => {
   const engagement = read('functions/api/engagement.js');
+  const social = read('cloudflare/notificaciones-sociales.js');
+  const participation = read('cloudflare/participacion-clientes.js');
   for (const type of [
     'social.review.created', 'social.review.reply',
     'social.like.product', 'social.like.review', 'social.like.reply'
-  ]) assert.ok(engagement.includes(`type: '${type}'`), `${type} debe tener payload push`);
-  assert.match(engagement, /dispatchSocialPushEvent/);
-  assert.match(engagement, /typeof context\.waitUntil === 'function'/);
-  assert.match(engagement, /else await socialPush/);
-  assert.match(engagement, /\}\)\.catch/);
+  ]) assert.ok(social.includes(type), `${type} debe tener payload push`);
+  assert.match(social, /dispatchAdminNotificationPush/);
+  assert.match(social, /dispatchSocialPushEvent/);
+  assert.match(participation, /await dispatchAdminNotificationPush\(env, adminNotification\)/);
+  assert.doesNotMatch(engagement, /dispatchSocialPushEvent/);
 });
 
 // --- Idempotencia y limpieza de tokens -------------------------------------
@@ -340,6 +350,23 @@ test('el endpoint de prueba no acepta título ni cuerpo del navegador', () => {
   assert.ok(!source.includes('body.title'));
   assert.ok(!source.includes('body.body'));
   assert.ok(source.includes('buildTestPushContent') || source.includes('sendTestPush'));
+});
+
+test('los Me gusta agrupados conservan el nombre y reemplazan el aviso anterior', () => {
+  const presentation = adminNotificationPushPresentation({
+    kind: 'product_like', actorName: 'María López', productName: 'Bag Noir',
+    targetType: 'product', targetId: 'bag-noir', aggregateCount: 3,
+  });
+  assert.equal(presentation.title, 'María López y 2 personas más dieron Me gusta');
+  assert.equal(presentation.body, 'Bag Noir · 3 Me gusta en total');
+  assert.equal(presentation.tag, 'like:product:bag-noir');
+});
+
+test('la prueba Push devuelve un diagnóstico seguro cuando FCM no entrega', () => {
+  const endpoint = read('functions/api/push-test.js');
+  assert.match(endpoint, /lastError: result\.lastError \|\| ''/);
+  assert.match(endpoint, /Firebase no pudo entregar la notificación/);
+  assert.match(endpoint, /success: result\.ok/);
 });
 
 test('el registro de dispositivos guarda sólo los campos previstos', () => {

@@ -8,7 +8,6 @@ import {
   fsTimestamp,
 } from './firebase-admin-ligero.js';
 import { notifyAdminIfAbsent } from './notificaciones-sociales.js';
-import { dispatchOrderPushEvent, recordPushFailure } from './servicio-push.js';
 
 const MAX_RATE_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 const ORDER_ID_RE = /^[A-Za-z0-9_-]{12,220}$/;
@@ -214,14 +213,6 @@ async function notifyOrderConfirmed(env, mapping, cents, currency) {
     }, `payment_completed:${mapping.orderId}`);
   } catch (error) {
     console.warn('[paypal] No se pudo registrar la notificación de pago confirmado:', error);
-  }
-
-  const pushEventId = `payment.completed:${mapping.orderId}`;
-  try {
-    await dispatchOrderPushEvent(env, 'payment.completed', mapping.orderId, pushEventId);
-  } catch (error) {
-    console.warn('[paypal] No se pudo enviar el push de pago confirmado:', error);
-    await recordPushFailure(env, { eventId: pushEventId, type: 'payment.completed', orderId: mapping.orderId, error }).catch(() => {});
   }
 }
 
