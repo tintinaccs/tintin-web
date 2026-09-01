@@ -248,7 +248,15 @@ export async function dispatchSocialPushEvent(env, { type, eventId, title, body,
   const devices = await listActiveDevices(env);
   const result = devices.length ? await sendToDevices(env, devices, content) : { attempted: 0, successCount: 0, failureCount: 0, disabledCount: 0, lastError: '' };
   const status = await closeEvent(env, claim.path, result);
-  return { ok: status === 'sent' || status === 'partial' || status === 'no_devices', status, attempted: result.attempted, successCount: result.successCount, failureCount: result.failureCount };
+  return {
+    ok: status === 'sent' || status === 'partial' || status === 'no_devices',
+    status,
+    attempted: result.attempted,
+    successCount: result.successCount,
+    failureCount: result.failureCount,
+    disabledCount: result.disabledCount,
+    lastError: sanitizeError(result.lastError, 120)
+  };
 }
 
 export async function revokeDeviceByDocumentId(env, deviceDocId, reason = 'revocado_por_superadmin') {
@@ -514,7 +522,8 @@ export async function dispatchOrderPushEvent(env, type, orderId, externalEventId
     attempted: result.attempted,
     successCount: result.successCount,
     failureCount: result.failureCount,
-    disabledCount: result.disabledCount
+    disabledCount: result.disabledCount,
+    lastError: sanitizeError(result.lastError, 120)
   };
 }
 
@@ -532,5 +541,5 @@ export async function sendTestPush(env, { onlyToken }) {
   const result = await sendToDevices(env, devices, content);
   // Una prueba sólo se considera exitosa si FCM llegó a por lo menos un
   // dispositivo activo.
-  return { ok: result.successCount > 0, ...result, lastError: undefined };
+  return { ok: result.successCount > 0, ...result, lastError: sanitizeError(result.lastError, 120) };
 }

@@ -37,7 +37,7 @@ test('Web Push se entrega únicamente por Firebase FCM', () => {
   const service = read('cloudflare/servicio-push.js');
   assert.doesNotMatch(service, /ntfy/i);
   assert.match(service, /const devices = await listActiveDevices\(env\);/);
-  assert.match(service, /ok: result\.successCount > 0, \.\.\.result, lastError: undefined/);
+  assert.match(service, /ok: result\.successCount > 0, \.\.\.result, lastError: sanitizeError\(result\.lastError, 120\)/);
 });
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -349,6 +349,13 @@ test('el endpoint de prueba no acepta título ni cuerpo del navegador', () => {
   assert.ok(!source.includes('body.title'));
   assert.ok(!source.includes('body.body'));
   assert.ok(source.includes('buildTestPushContent') || source.includes('sendTestPush'));
+});
+
+test('la prueba Push devuelve un diagnóstico seguro cuando FCM no entrega', () => {
+  const endpoint = read('functions/api/push-test.js');
+  assert.match(endpoint, /lastError: result\.lastError \|\| ''/);
+  assert.match(endpoint, /Firebase no pudo entregar la notificación/);
+  assert.match(endpoint, /success: result\.ok/);
 });
 
 test('el registro de dispositivos guarda sólo los campos previstos', () => {
