@@ -2,6 +2,7 @@ import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tinti
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { collection, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { heartIconMarkup } from '../../components/favorites/icono-corazon.js?v=tintin-20260817-heart-icon-1';
+import { isValidReviewRating, syncReviewPublishState, reportMissingReviewRating } from './validacion-puntuacion-resena.js?v=tintin-20260831-review-rating-required-1';
 
 const productId = String(new URLSearchParams(location.search).get('id') || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 180);
 let currentUser = null;
@@ -360,6 +361,7 @@ function syncRatingButtons(previewRating = null) {
   });
   const status = group.parentElement?.querySelector('[data-rating-status]');
   if (status) status.textContent = selectedRating ? `${selectedRating} de 5 estrellas seleccionadas` : 'Elegí de 1 a 5 estrellas';
+  syncReviewPublishState(document.getElementById('tt-review-editor'), selectedRating);
 }
 
 function setSelectedRating(value, { focus = false } = {}) {
@@ -382,7 +384,7 @@ function renderForm() {
       <p>${logged ? 'Cada publicación es independiente. La puntuación es obligatoria.' : 'Podés escribir ahora; al publicar te pediremos iniciar sesión y volverás acá.'}</p>
       ${ratingButtons()}
       <textarea class="tt-review-textarea" name="comment" maxlength="1600" required placeholder="Escribí tu opinión…"></textarea>
-      <div class="tt-review-form-actions"><small>${logged ? 'Hasta 10 publicaciones seguidas; luego se activa una pausa de 30 minutos. Tu identidad pública se protege.' : 'Tu texto y puntuación se conservarán al iniciar sesión.'}</small><button type="submit" class="tt-btn">${logged ? 'Publicar opinión' : 'Iniciar sesión y publicar'}</button></div>
+      <div class="tt-review-form-actions"><small>${logged ? 'Hasta 10 publicaciones seguidas; luego se activa una pausa de 30 minutos. Tu identidad pública se protege.' : 'Tu texto y puntuación se conservarán al iniciar sesión.'}</small><button type="submit" class="tt-btn" data-review-submit ${isValidReviewRating(selectedRating) ? '' : 'disabled aria-disabled="true"'}>${logged ? 'Publicar opinión' : 'Iniciar sesión y publicar'}</button></div>
       <div role="alert" data-review-error></div>
     </div>
   </form>`;
@@ -575,9 +577,9 @@ document.addEventListener('submit', async event => {
     const errorNode = event.target.querySelector('[data-review-error]');
     errorNode.textContent = '';
     const comment = String(new FormData(event.target).get('comment') || '').trim();
-    if (selectedRating < 1 || selectedRating > 5) {
-      errorNode.textContent = 'Elegí de 1 a 5 estrellas antes de publicar tu comentario.';
-      event.target.querySelector('[data-review-rating]')?.focus();
+    if (!isValidReviewRating(selectedRating)) {
+      reportMissingReviewRating(event.target);
+      syncReviewPublishState(event.target, selectedRating);
       return;
     }
     if (comment.length < 3) {
