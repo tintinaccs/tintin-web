@@ -88,13 +88,17 @@ body:has(.login-page) .login-page {
   background: #ffd4e2 !important;
   overflow: auto;
 }
+body:has(.login-page) .login-page::before,
+body:has(.login-page) .login-page::after { display:none !important; }
 body:has(.login-page) .login-shell {
-  border-color: rgba(126, 59, 85, .12) !important;
-  border-radius: 24px !important;
-  background: rgba(255,255,255,.94) !important;
-  box-shadow: 0 18px 48px rgba(125, 64, 88, .12) !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
   margin-top:clamp(84px, 11vw, 132px);
+  overflow:visible !important;
 }
+body:has(.login-page) .login-form-side { background:transparent !important; }
 body:has(.login-page) .login-mobile-logo {
   position:absolute;
   top:clamp(-92px, -9vw, -68px);
@@ -122,7 +126,7 @@ body:has(.login-page) .login-email-btn {
 }
 body:has(.login-page) .login-email-btn:hover,
 body:has(.login-page) .login-email-btn:focus-visible { background:#c94378 !important; }
-body:has(.login-page) .login-field-hint { margin:10px 0 0 !important; min-height:18px; line-height:1.45; }
+body:has(.login-page) .login-field-hint { margin:4px 0 0 !important; min-height:0; line-height:1.35; }
 body:has(.login-page) .login-username-control { margin-bottom:0; }
 body:has(.login-page) .login-username-control .login-email-input { padding-right:16px; }
 body:has(.login-page) .login-username-status {
@@ -134,6 +138,7 @@ body:has(.login-page) .login-username-status {
   min-height:20px;
   text-align:left;
 }
+body:has(.login-page) .login-username-status[data-state="idle"] { display:none; }
 body:has(.login-page) .login-phone-country {
   flex-basis:88px !important; color:#604653 !important; background:#f9edf1 !important;
   opacity:1; cursor:default;
@@ -218,9 +223,9 @@ body:has(.login-page).login-setup-open .tt-map-canvas {
   body:has(.login-page) .login-shell,
   body:has(.login-page).login-setup-open .login-shell {
     min-height:calc(100dvh - 30px);
-    border:1px solid rgba(202,1,105,.10) !important;
-    border-radius:22px !important;
-    box-shadow:0 16px 40px rgba(160,0,85,.09) !important;
+    border:0 !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
   }
   body:has(.login-page).login-setup-open #login-profile-block {
     gap: 13px !important;
