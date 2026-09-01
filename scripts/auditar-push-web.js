@@ -95,6 +95,7 @@ check('Idempotencia por evento', pushService.includes('claimEvent') && pushServi
 check('Estados de evento previstos', ['processing', 'sent', 'partial', 'failed', 'no_devices'].every(state => pushService.includes(`'${state}'`)));
 check('Dispatcher reutilizable documentado', pushService.includes('export async function dispatchOrderPushEvent'));
 check('El interruptor TINTIN_PUSH_ENABLED se respeta', pushService.includes('TINTIN_PUSH_ENABLED'));
+check('El envío Push usa solamente Firebase FCM', !/ntfy/i.test(pushService) && pushService.includes('const devices = await listActiveDevices(env);'));
 
 console.log('\n== Fuente confiable del evento ==');
 check('El webhook verifica firma HMAC en tiempo constante', pushCore.includes('constantTimeEqual') && pushCore.includes('HMAC'));

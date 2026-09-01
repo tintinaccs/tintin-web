@@ -33,6 +33,13 @@ test('Push queda cerrado por defecto y sólo acepta una habilitación explícita
   assert.equal(pushEnabled({ TINTIN_PUSH_ENABLED: 'true' }), true);
 });
 
+test('Web Push se entrega únicamente por Firebase FCM', () => {
+  const service = read('cloudflare/servicio-push.js');
+  assert.doesNotMatch(service, /ntfy/i);
+  assert.match(service, /const devices = await listActiveDevices\(env\);/);
+  assert.match(service, /ok: result\.successCount > 0, \.\.\.result, lastError: undefined/);
+});
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
