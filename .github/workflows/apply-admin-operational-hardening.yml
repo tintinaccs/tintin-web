@@ -1,0 +1,148 @@
+name: Apply admin operational hardening
+
+on:
+  push:
+    branches:
+      - fix/admin-operational-hardening
+
+permissions:
+  contents: write
+
+jobs:
+  harden:
+    if: ${{ !contains(github.event.head_commit.message, '[hardening-done]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/admin-operational-hardening
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+
+      - name: Patch scheduled reconciliation and backup integrity UI
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              if old not in text:
+                  raise SystemExit(f'No se encontró el bloque esperado en {path}')
+              if text.count(old) != 1:
+                  raise SystemExit(f'El bloque esperado aparece {text.count(old)} veces en {path}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          # Apps Script: el reconciliador de un minuto ya existe. Ahora también
+          # drena catalogSheetSyncQueue mediante el endpoint server-to-server.
+          replace_once('apps-script/AdminParity.gs', '''function tintinReconciliarAdminParidad() {
+            var summary = {};
+            summary.users = tintinPullUsersFromWeb_();
+            summary.orders = tintinPullOrdersParity_();
+            summary.audit = tintinPullAuditFromWeb_();
+            tintinRecordSyncSafely_('SYNCED', 'Sistema', 'web→sheets', 'Superficies administrativas actualizadas: usuarios ' + summary.users + ', pedidos ' + summary.orders + ', auditoría ' + summary.audit + '.');
+            return summary;
+          }''', '''function tintinReconciliarAdminParidad() {
+            var summary = {};
+            summary.users = tintinPullUsersFromWeb_();
+            summary.orders = tintinPullOrdersParity_();
+            summary.audit = tintinPullAuditFromWeb_();
+            try {
+              var catalogResponse = tintinParityCallWebhook_('/api/catalog-sync-reconcile', {
+                action: 'reconcileCatalogSheetQueue',
+                source: 'google-apps-script:parity'
+              });
+              summary.catalogQueue = catalogResponse.result || {};
+            } catch (catalogError) {
+              summary.catalogQueue = { ok: false, error: String(catalogError && catalogError.message || catalogError) };
+              tintinRecordSyncSafely_('ERROR', 'Productos', 'catalogSheetSyncQueue', 'La reconciliación programada de catálogo falló: ' + summary.catalogQueue.error);
+            }
+            tintinRecordSyncSafely_('SYNCED', 'Sistema', 'web→sheets', 'Superficies administrativas actualizadas: usuarios ' + summary.users + ', pedidos ' + summary.orders + ', auditoría ' + summary.audit + '. Cola catálogo: ' + JSON.stringify(summary.catalogQueue) + '.');
+            return summary;
+          }''')
+
+          # Backup operativo: checksum SHA-256 nuevo y verificación al importar.
+          replace_once('js/admin/importacion-admin.js', '''  parseOptionalStock,
+            validateOperationalBackupEnvelope,
+          } from '../core/store/normalizacion-importacion.mjs?v=tintin-20260731-phase9-import-1';''', '''  parseOptionalStock,
+            validateOperationalBackupEnvelope,
+            addOperationalBackupIntegrity,
+            verifyOperationalBackupIntegrity,
+          } from '../core/store/normalizacion-importacion.mjs?v=tintin-20260901-backup-integrity-1';''')
+
+          replace_once('js/admin/importacion-admin.js', '''  function productsFromJson(textValue) {
+            const parsed = JSON.parse(textValue);
+            const list = Array.isArray(parsed)
+              ? parsed
+              : validateOperationalBackupEnvelope(parsed, { projectId: PROJECT_ID, schemaVersion: 1 });
+            return list.map((item, index) => normalizeProduct(item, {
+              source: Array.isArray(parsed) ? 'json' : 'tintin-backup',
+              sourceKey: item?.id || item?.importFingerprint || `${item?.name || 'producto'}-${index + 1}`,
+            }));
+          }''', '''  async function productsFromJson(textValue) {
+            const parsed = JSON.parse(textValue);
+            if (!Array.isArray(parsed)) {
+              validateOperationalBackupEnvelope(parsed, { projectId: PROJECT_ID, schemaVersion: 1 });
+              await verifyOperationalBackupIntegrity(parsed);
+            }
+            const list = Array.isArray(parsed) ? parsed : parsed.data.products;
+            return list.map((item, index) => normalizeProduct(item, {
+              source: Array.isArray(parsed) ? 'json' : 'tintin-backup',
+              sourceKey: item?.id || item?.importFingerprint || `${item?.name || 'producto'}-${index + 1}`,
+            }));
+          }''')
+
+          replace_once('js/admin/importacion-admin.js', '''      downloadJson(`tintin-copia-operativa-${new Date().toISOString().slice(0, 10)}.json`, backup);
+            toast('Copia operativa descargada');''', '''      const signedBackup = await addOperationalBackupIntegrity(backup);
+            downloadJson(`tintin-copia-operativa-${new Date().toISOString().slice(0, 10)}.json`, signedBackup);
+            toast('Copia operativa descargada y firmada con checksum SHA-256');''')
+
+          replace_once('js/admin/importacion-admin.js', '''      let records = extension === 'csv' ? productsFromCsv(content) : productsFromJson(content);''', '''      let records = extension === 'csv' ? productsFromCsv(content) : await productsFromJson(content);''')
+
+          replace_once('js/admin/importacion-admin.js', '''      node('strong', '', 'Copia operativa sin datos de clientas'),
+            node('p', '', 'Incluye productos, colecciones, contenido, configuración y permisos. Excluye usuarios, pedidos, carritos y auditoría.')''', '''      node('strong', '', 'Copia operativa verificada con SHA-256'),
+            node('p', '', 'Incluye productos, colecciones, contenido, configuración y permisos. Excluye datos personales; cada copia nueva lleva checksum SHA-256 y se verifica antes de importar.')''')
+          PY
+
+      - name: Syntax checks
+        run: |
+          node --check cloudflare/resiliencia-sync-catalogo.js
+          node --check cloudflare/sesion-servicio-superadmin.js
+          node --check cloudflare/system-health.js
+          node --check functions/api/catalog-sync-reconcile.js
+          node --check functions/api/catalog-sync-retry.js
+          node --check js/admin/diagnostics/estado-ecosistema-admin.js
+          node --check js/admin/importacion-admin.js
+          node --check js/core/store/normalizacion-importacion.mjs
+
+      - name: Targeted tests
+        run: node --test tests/import/phase9-import-normalization.test.mjs tests/system-health/*.test.mjs
+
+      - name: Cache version contract
+        run: npm run audit:cache-versioning
+
+      - name: Accounts/session tests
+        run: npm run test:accounts
+
+      - name: Reproducible Pages build
+        run: npm run build:pages
+
+      - name: Full audit
+        run: npm run audit:final
+
+      - name: Remove temporary workflow
+        run: rm .github/workflows/apply-admin-operational-hardening.yml
+
+      - name: Commit verified hardening
+        run: |
+          git config user.name 'Tintin Repair Bot'
+          git config user.email 'tintinaccs@gmail.com'
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m 'fix: harden admin operations and reconciliation [hardening-done]'
+          git push origin HEAD:fix/admin-operational-hardening
