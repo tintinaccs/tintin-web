@@ -3,7 +3,7 @@
  * La URL del Maestro se recibe versionada desde los handlers de Functions y
  * el estado operativo usa una versión inmutable propia.
  */
-const SYSTEM_HEALTH_RUNTIME_URL = '/js/admin/diagnostics/estado-ecosistema-admin.js?v=tintin-20260827-system-health-1';
+const SYSTEM_HEALTH_RUNTIME_URL = '/js/admin/diagnostics/estado-ecosistema-admin.js?v=tintin-20260901-operations-center-1';
 
 export async function injectMasterDiagnosticsRuntime(response, requestMethod = 'GET', runtimeUrl = '') {
   if (!response || requestMethod === 'HEAD' || !response.ok) return response;
