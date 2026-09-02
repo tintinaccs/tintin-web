@@ -13,7 +13,7 @@ const SECURITY_HEADERS = Object.freeze({
 const MUTATION_LIMITS = Object.freeze([
   [/^\/api\/email-otp-(send|verify)$/, 10, 60_000, 'auth'],
   [/^\/api\/engagement$/, 45, 60_000, 'engagement'],
-  [/^\/api\/(order-email|paypal-create-order|paypal-capture-order)$/, 12, 60_000, 'checkout'],
+  [/^\/api\/(order-email|apps-script-bridge|paypal-create-order|paypal-capture-order)$/, 12, 60_000, 'checkout'],
   [/^\/api\/push-(subscription|order-event|test|admin)$/, 20, 60_000, 'push'],
   [/^\/api\/(profile-avatar-upload|cloudinary-sign-upload|cloudinary-sign-audio-upload)$/, 20, 60_000, 'upload'],
   [/^\/api\/admin-/, 60, 60_000, 'admin']
@@ -58,11 +58,15 @@ function enforceMutationLimit(request, pathname) {
   });
 }
 
-function withObservability(response) {
+function withRuntimeScripts(response) {
   if (typeof HTMLRewriter !== 'function') return response;
   return new HTMLRewriter()
     .on('head', {
       element(element) {
+        // Debe cargarse antes que los módulos de negocio: intercepta únicamente
+        // el deployment histórico de Apps Script y lo fuerza a pasar por el
+        // gateway /api/apps-script-bridge de Cloudflare.
+        element.append('<script src="/js/quality/integration-router.js" data-tintin-integration-router="1"></script>', { html: true });
         element.append('<script src="/js/quality/observability.js" defer data-tintin-observability="1"></script>', { html: true });
       }
     })
@@ -91,5 +95,5 @@ export async function onRequest(context) {
   headers.set('X-Tintin-CSP', 'edge-runtime');
 
   const secured = new Response(response.body, { status: response.status, statusText: response.statusText, headers });
-  return withObservability(secured);
+  return withRuntimeScripts(secured);
 }
