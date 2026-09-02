@@ -59,7 +59,11 @@ export const PERMISSION_MODULES = {
     label: 'Pedidos',
     actions: {
       ver:               { label: 'Ver pedidos',                defaultFrom: 'viewOrders',       rolesEditable: ['admin','agent','viewer'] },
-      crearManual:       { label: 'Crear pedido manual',         implemented: false, note: 'No existe hoy una función para crear un pedido a mano desde el Admin — no se agrega un switch falso.' },
+      // El alta manual sí existe y está implementada en el CRUD canónico de
+      // pedidos. Sigue siendo exclusiva del Super Admin: no se ofrece como
+      // toggle a roles editables, pero tampoco debe aparecer como faltante en
+      // la matriz de permisos.
+      crearManual:       { label: 'Crear pedido manual',         defaultFrom: 'manageOrdersFull', rolesEditable: [] },
       editarCompleto:    { label: 'Editar pedido completo',      defaultFrom: 'manageOrdersFull', rolesEditable: ['admin','agent'] },
       cambiarEstado:     { label: 'Cambiar estado de pedido',    defaultFrom: 'manageOrders',     rolesEditable: ['admin','agent'] },
       cambiarPago:       { label: 'Cambiar estado de pago',      defaultFrom: 'manageOrders',     rolesEditable: ['admin','agent'] },
