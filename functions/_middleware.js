@@ -1,4 +1,5 @@
 import cspRuntime from '../config/csp-runtime.js';
+import { jsonResponse, rateLimit } from './lib/operational-guard.js';
 
 const GENERATED_BY = 'scripts/generar-csp-cloudflare.js';
 const SECURITY_HEADERS = Object.freeze({
@@ -9,6 +10,14 @@ const SECURITY_HEADERS = Object.freeze({
   'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
   'X-Permitted-Cross-Domain-Policies': 'none'
 });
+const MUTATION_LIMITS = Object.freeze([
+  [/^\/api\/email-otp-(send|verify)$/, 10, 60_000, 'auth'],
+  [/^\/api\/engagement$/, 45, 60_000, 'engagement'],
+  [/^\/api\/(order-email|paypal-create-order|paypal-capture-order)$/, 12, 60_000, 'checkout'],
+  [/^\/api\/push-(subscription|order-event|test|admin)$/, 20, 60_000, 'push'],
+  [/^\/api\/(profile-avatar-upload|cloudinary-sign-upload|cloudinary-sign-audio-upload)$/, 20, 60_000, 'upload'],
+  [/^\/api\/admin-/, 60, 60_000, 'admin']
+]);
 
 function policyForPath(pathname) {
   const routes = cspRuntime?.routes || {};
@@ -36,14 +45,36 @@ function failClosed() {
   });
 }
 
+function enforceMutationLimit(request, pathname) {
+  if (!['POST','PUT','PATCH','DELETE'].includes(request.method)) return null;
+  const config = MUTATION_LIMITS.find(([pattern]) => pattern.test(pathname));
+  if (!config) return null;
+  const [, limit, windowMs, id] = config;
+  const result = rateLimit(request, { id, limit, windowMs });
+  if (result.allowed) return null;
+  return jsonResponse({ ok: false, code: 'rate_limited' }, 429, {
+    ...result.headers,
+    'retry-after': String(result.retryAfter)
+  });
+}
+
+function withObservability(response) {
+  if (typeof HTMLRewriter !== 'function') return response;
+  return new HTMLRewriter()
+    .on('head', {
+      element(element) {
+        element.append('<script src="/js/quality/observability.js" defer data-tintin-observability="1"></script>', { html: true });
+      }
+    })
+    .transform(response);
+}
+
 export async function onRequest(context) {
   const pathname = new URL(context.request.url).pathname;
-
-  // /__/auth/* es un proxy transparente hacia Firebase Authentication. Sus
-  // páginas auxiliares e iframes tienen su propio runtime y el proxy elimina
-  // CSP/X-Frame-Options del upstream deliberadamente para conservar el flujo
-  // same-origin. No se debe superponer la CSP de las páginas de la tienda.
   if (pathname.startsWith('/__/auth/')) return context.next();
+
+  const blocked = enforceMutationLimit(context.request, pathname);
+  if (blocked) return blocked;
 
   const response = await context.next();
   const contentType = response.headers.get('content-type') || '';
@@ -59,9 +90,6 @@ export async function onRequest(context) {
   headers.set('X-Frame-Options', policy.includes("frame-ancestors 'self'") ? 'SAMEORIGIN' : 'DENY');
   headers.set('X-Tintin-CSP', 'edge-runtime');
 
-  return new Response(response.body, {
-    status: response.status,
-    statusText: response.statusText,
-    headers
-  });
+  const secured = new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+  return withObservability(secured);
 }
