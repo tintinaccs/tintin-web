@@ -41,8 +41,9 @@ const requiredFiles = [
   'docs/respaldo-recuperacion.md',
   'firestore.rules',
   'firebase.json',
-  '.github/workflows/desplegar-pages.yml',
-  '.github/workflows/auditar-barrido-final-parte-2h.yml'
+  '.github/workflows/auditar-tintin.yml',
+  '.github/workflows/auditoria-visual.yml',
+  '.github/workflows/desplegar-pages.yml'
 ];
 
 for (const file of requiredFiles) {
@@ -172,14 +173,34 @@ check(
   findings.join('; ')
 );
 
+const ciWorkflow = read('.github/workflows/auditar-tintin.yml');
+check(
+  'Existe un único gate central de repositorio para PR',
+  /pull_request\s*:/.test(ciWorkflow) && ciWorkflow.includes('Repository audit')
+);
+
+const visualWorkflow = read('.github/workflows/auditoria-visual.yml');
+check(
+  'El barrido visual final permanece cubierto después de consolidar workflows',
+  visualWorkflow.includes('audit:part2h')
+);
+
 const deployWorkflow = read('.github/workflows/desplegar-pages.yml');
 check(
-  'El despliegue publica únicamente después de regenerar diagnósticos',
-  deployWorkflow.includes('npm run build:pages') && deployWorkflow.indexOf('npm run build:pages') < deployWorkflow.indexOf('actions/upload-pages-artifact')
+  'El fallback de GitHub Pages publica únicamente después de regenerar diagnósticos',
+  deployWorkflow.includes('npm run build:pages') &&
+    deployWorkflow.indexOf('npm run build:pages') < deployWorkflow.indexOf('actions/upload-pages-artifact')
 );
 check(
-  'Los despliegues no se pisan entre sí',
-  deployWorkflow.includes('cancel-in-progress: false') && deployWorkflow.includes('group: "pages"')
+  'GitHub Pages no compite con Cloudflare como despliegue automático',
+  deployWorkflow.includes('workflow_dispatch:') &&
+    deployWorkflow.includes("PUBLICAR_FALLBACK") &&
+    !/(^|\n)\s*push\s*:/.test(deployWorkflow)
+);
+check(
+  'Los despliegues fallback de GitHub Pages no se pisan entre sí',
+  deployWorkflow.includes('cancel-in-progress: false') &&
+    deployWorkflow.includes('group: github-pages-fallback')
 );
 
 if (failures > 0) {
