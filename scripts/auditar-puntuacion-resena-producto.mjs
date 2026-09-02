@@ -14,7 +14,7 @@ const checks = [
   ['disabled nativo', guard.includes('submit.disabled = !valid')],
   ['aria-disabled', guard.includes("setAttribute('aria-disabled', String(!valid))")],
   ['mensaje claro', guard.includes('Elegí de 1 a 5 estrellas antes de publicar tu comentario.')],
-  ['Producto usa versión nueva', product.includes('resenas-producto.js?v=tintin-20260831-review-rating-required-1')],
+  ['Producto usa versión nueva', product.includes('resenas-producto.js?v=tintin-20260902-reviews-pagination-1')],
 ];
 
 const failed = checks.filter(([, ok]) => !ok);
