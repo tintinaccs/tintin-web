@@ -1,5 +1,5 @@
 import { currentPage } from './estado-ruta.js';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260901-notification-badge-unified-1';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260902-customer-notification-audience-1';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;

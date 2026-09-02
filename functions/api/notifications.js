@@ -55,13 +55,6 @@ async function registerProfileNotification(env, user) {
     sourceType: 'user', sourceId: uid, createdAt,
   }, `user_joined:${uid}`);
 
-  await notifyUserIfAbsent(env, uid, {
-    kind: 'welcome', actorType: 'store', actorName: 'Tintin Accesorios',
-    title: 'Bienvenida a Tintin ✨',
-    body: 'Tu cuenta ya está lista. Desde acá vas a recibir novedades de tus pedidos, respuestas y actividad relacionada con vos.',
-    iconKey: 'sparkle', targetUrl: 'index.html', sourceType: 'user', sourceId: uid, createdAt,
-  }, `welcome:${uid}`);
-
   return adminResult;
 }
 

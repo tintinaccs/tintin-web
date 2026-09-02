@@ -18,6 +18,15 @@ const MUTATION_LIMITS = Object.freeze([
   [/^\/api\/(profile-avatar-upload|cloudinary-sign-upload|cloudinary-sign-audio-upload)$/, 20, 60_000, 'upload'],
   [/^\/api\/admin-/, 60, 60_000, 'admin']
 ]);
+// Endpoints de lectura que disparan consultas externas o respuestas dinámicas.
+// Se limitan en el borde para que un bot no convierta búsquedas de direcciones,
+// geolocalización o configuración de pago en consumo innecesario. Los límites
+// son deliberadamente amplios para no afectar la navegación normal.
+const READ_LIMITS = Object.freeze([
+  [/^\/api\/(geo-search|location-search)$/, 30, 60_000, 'geo-search'],
+  [/^\/api\/visitor-geo$/, 60, 60_000, 'visitor-geo'],
+  [/^\/api\/paypal-config$/, 60, 60_000, 'paypal-config']
+]);
 
 function policyForPath(pathname) {
   const routes = cspRuntime?.routes || {};
@@ -58,6 +67,19 @@ function enforceMutationLimit(request, pathname) {
   });
 }
 
+function enforceReadLimit(request, pathname) {
+  if (request.method !== 'GET') return null;
+  const config = READ_LIMITS.find(([pattern]) => pattern.test(pathname));
+  if (!config) return null;
+  const [, limit, windowMs, id] = config;
+  const result = rateLimit(request, { id, limit, windowMs });
+  if (result.allowed) return null;
+  return jsonResponse({ ok: false, code: 'rate_limited' }, 429, {
+    ...result.headers,
+    'retry-after': String(result.retryAfter)
+  });
+}
+
 function withRuntimeScripts(response) {
   if (typeof HTMLRewriter !== 'function') return response;
   return new HTMLRewriter()
@@ -79,6 +101,8 @@ export async function onRequest(context) {
 
   const blocked = enforceMutationLimit(context.request, pathname);
   if (blocked) return blocked;
+  const readBlocked = enforceReadLimit(context.request, pathname);
+  if (readBlocked) return readBlocked;
 
   const response = await context.next();
   const contentType = response.headers.get('content-type') || '';

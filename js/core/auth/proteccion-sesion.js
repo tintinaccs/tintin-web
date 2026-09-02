@@ -1,13 +1,13 @@
 // =============================================
 // TINTIN ACCESORIOS — Expiración de sesión
 // =============================================
-// Firebase Auth mantiene la sesión y renueva su token. Las clientas no tienen
-// expiración fija; solo el personal conserva un límite de inactividad seguro.
+// Firebase Auth mantiene la sesión y renueva su token. El Super Admin conserva
+// su sesión hasta cerrar manualmente; el resto de las cuentas debe volver a
+// autenticarse después de 30 minutos sin actividad.
 
 import { auth } from "../firebase/firebase.js?v=tintin-20260730-appcheck-stable-4";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getUserRole } from "./roles.js?v=tintin-20260821-accounts-phase-a-1";
-import { STAFF_ROLES } from './contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 import { startProfileGate } from "../../pages/profile/control-acceso-perfil.js?v=tintin-20260901-username-visible-1";
 
 const STAFF_INACTIVITY_MS = 30 * 60 * 1000;
@@ -34,7 +34,7 @@ function readSessionStart() {
 }
 
 function recordActivity() {
-  if (!STAFF_ROLES.includes(currentRole)) return;
+  if (!currentRole || currentRole === 'superadmin') return;
   const now = Date.now();
   if (now - lastActivityWrite < ACTIVITY_WRITE_INTERVAL_MS) return;
   lastActivityWrite = now;
@@ -52,7 +52,6 @@ async function enforce(user) {
       return;
     }
   }
-  if (!STAFF_ROLES.includes(currentRole)) { clearSessionStart(); return; }
   // La sesión que inicia el Super Admin es persistente. No se debe cerrar
   // automáticamente por inactividad ni expulsar a tintinaccs del panel.
   if (currentRole === 'superadmin') return;

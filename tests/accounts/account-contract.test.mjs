@@ -51,11 +51,19 @@ test('la eliminación administrativa es tombstone y la auditoría es append-only
   assert.match(rules, /match \/users\/\{userId\}[\s\S]*?allow delete: if false/);
 });
 
-test('clientes no tienen expiración fija y staff usa inactividad', () => {
+test('Super Admin no expira y el resto usa inactividad', () => {
   const session = read('js/core/auth/proteccion-sesion.js');
-  assert.match(session, /if \(!STAFF_ROLES\.includes\(currentRole\)\) \{ clearSessionStart\(\); return; \}/);
   assert.match(session, /STAFF_INACTIVITY_MS = 30 \* 60 \* 1000/);
   assert.match(session, /currentRole === 'superadmin'\) return/);
   assert.doesNotMatch(session, /SUPERADMIN_INACTIVITY_MS/);
+  assert.match(session, /if \(currentRole === 'superadmin'\) return;/);
   assert.match(session, /window\.addEventListener\(eventName, recordActivity/);
+});
+
+test('el login ofrece pegar el código OTP desde el portapapeles', () => {
+  const login = read('login.html');
+  assert.match(login, /id="btn-paste-otp"/);
+  assert.match(login, /Pegar código/);
+  assert.match(login, /navigator\.clipboard\?\.readText/);
+  assert.match(login, /login-otp-clipboard-status/);
 });

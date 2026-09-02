@@ -100,13 +100,6 @@ function activityActor(context, uid) {
   };
 }
 
-async function buildOwnActivityNotification(uid, context, event, dedupeKey) {
-  return buildUserNotificationWrite(uid, {
-    ...activityActor(context, uid),
-    ...event,
-  }, dedupeKey);
-}
-
 async function buildOwnAdminActivityNotification(context, uid, event, dedupeKey) {
   return buildAdminNotificationWrite({
     ...activityActor(context, uid),
@@ -349,19 +342,6 @@ export async function createReview(env, user, input) {
       { path: `users/${uid}/reviews/${reviewId}`, fields: encodeFirestoreFields(ownerReviewMapping(record)), currentDocument: { exists: false } },
     ];
 
-    const ownNotification = await buildOwnActivityNotification(uid, context, {
-      kind: 'review_created_self',
-      title: context.isSuperAdmin ? 'Publicaste una reseña' : 'Publicaste tu reseña',
-      body: `${rating} estrellas · ${context.productName}: ${comment}`,
-      snippet: comment,
-      iconKey: 'review',
-      targetUrl: `/product?id=${context.productId}#review-${reviewId}`,
-      targetType: 'review', targetId: reviewId,
-      productId: context.productId, productName: context.productName, productImageUrl: context.imageUrl,
-      reviewId, sourceType: 'review', sourceId: reviewId, createdAt: now,
-    }, `review_created_self:${reviewId}`);
-    writes.push(ownNotification.write);
-
     let adminNotification;
     if (!context.isSuperAdmin) {
       writes.push({
@@ -496,10 +476,10 @@ export async function addCustomerReply(env, user, input) {
       writes.push(adminNotification.write);
     }
 
-    if (record.ownerUid !== uid) {
+    if (record.ownerUid !== uid && context.isSuperAdmin) {
       const ownerNotification = await buildUserNotificationWrite(record.ownerUid, {
         kind: 'review_reply',
-        actorType: context.isSuperAdmin ? 'store' : 'customer',
+        actorType: 'store',
         actorUid: uid,
         actorName: context.isSuperAdmin ? 'Tintin Accesorios' : context.publicName,
         actorPhotoUrl: context.photoUrl,
@@ -511,14 +491,6 @@ export async function addCustomerReply(env, user, input) {
         sourceType: 'reply', sourceId: replyId, createdAt: now,
       }, `review_reply:${reviewId}:${replyId}`);
       writes.push(ownerNotification.write);
-    } else {
-      const ownNotification = await buildOwnActivityNotification(uid, context, {
-        kind: 'review_reply_self', title: 'Respondiste tu reseña', body: text, snippet: text, iconKey: 'comment',
-        targetUrl: `/product?id=${productId}#reply-${replyId}`,
-        targetType: 'reply', targetId: replyId, productId, productName: record.productName,
-        productImageUrl: record.productImageUrl, reviewId, replyId, sourceType: 'reply', sourceId: replyId, createdAt: now,
-      }, `review_reply_self:${reviewId}:${replyId}`);
-      writes.push(ownNotification.write);
     }
 
     try {
@@ -624,12 +596,12 @@ export async function toggleReviewLike(env, user, input) {
       writes.push(adminNotification.write);
     }
 
-    if (record.ownerUid !== uid && record.ownerUid) {
+    if (record.ownerUid !== uid && record.ownerUid && context.isSuperAdmin) {
       const ownerNotification = await buildUserNotificationWrite(record.ownerUid, {
-        kind: 'review_like', actorType: context.isSuperAdmin ? 'store' : 'customer', actorUid: uid,
-        actorName: context.isSuperAdmin ? 'Tintin Accesorios' : context.publicName,
+        kind: 'review_like', actorType: 'store', actorUid: uid,
+        actorName: 'Tintin Accesorios',
         actorPhotoUrl: context.photoUrl,
-        title: context.isSuperAdmin ? 'A Tintin le gustó tu reseña' : `${context.publicName} dio Me gusta a tu reseña`,
+        title: 'A Tintin le gustó tu reseña',
         body: record.comment, snippet: record.comment, iconKey: 'heart',
         targetUrl: `/product?id=${productId}#review-${reviewId}`,
         targetType: 'review', targetId: reviewId, productId, productName: record.productName,
@@ -637,16 +609,6 @@ export async function toggleReviewLike(env, user, input) {
         sourceType: 'review_like', sourceId: likeId, createdAt: now,
       }, `review_like:${reviewId}:${uid}`);
       writes.push(ownerNotification.write);
-    } else if (record.ownerUid === uid) {
-      const ownNotification = await buildOwnActivityNotification(uid, context, {
-        kind: 'review_like_self', title: 'Marcaste Me gusta en tu reseña',
-        body: record.comment, snippet: record.comment, iconKey: 'heart',
-        targetUrl: `/product?id=${productId}#review-${reviewId}`,
-        targetType: 'review', targetId: reviewId, productId, productName: record.productName,
-        productImageUrl: record.productImageUrl, reviewId,
-        sourceType: 'review_like', sourceId: likeId, createdAt: now,
-      }, `review_like_self:${reviewId}:${uid}`);
-      writes.push(ownNotification.write);
     }
 
     try {
@@ -751,12 +713,12 @@ export async function likeReply(env, user, input) {
       writes.push(adminNotification.write);
     }
 
-    if (replyOwnerUid && replyOwnerUid !== uid && currentReply.authorType !== 'store') {
+    if (replyOwnerUid && replyOwnerUid !== uid && currentReply.authorType !== 'store' && context.isSuperAdmin) {
       const ownerNotification = await buildUserNotificationWrite(replyOwnerUid, {
-        kind: 'reply_like', actorType: context.isSuperAdmin ? 'store' : 'customer', actorUid: uid,
-        actorName: context.isSuperAdmin ? 'Tintin Accesorios' : context.publicName,
+        kind: 'reply_like', actorType: 'store', actorUid: uid,
+        actorName: 'Tintin Accesorios',
         actorPhotoUrl: context.photoUrl,
-        title: context.isSuperAdmin ? 'A Tintin le gustó tu respuesta' : `${context.publicName} dio Me gusta a tu respuesta`,
+        title: 'A Tintin le gustó tu respuesta',
         body: currentReply.text, snippet: currentReply.text, iconKey: 'heart',
         targetUrl: `/product?id=${productId}#reply-${replyId}`,
         targetType: 'reply', targetId: replyId, productId, productName: record.productName,
@@ -764,16 +726,6 @@ export async function likeReply(env, user, input) {
         sourceType: 'reply_like', sourceId: likeId, createdAt: now,
       }, `reply_like:${replyId}:${uid}`);
       writes.push(ownerNotification.write);
-    } else if (replyOwnerUid === uid) {
-      const ownNotification = await buildOwnActivityNotification(uid, context, {
-        kind: 'reply_like_self', title: 'Marcaste Me gusta en tu respuesta',
-        body: currentReply.text, snippet: currentReply.text, iconKey: 'heart',
-        targetUrl: `/product?id=${productId}#reply-${replyId}`,
-        targetType: 'reply', targetId: replyId, productId, productName: record.productName,
-        productImageUrl: record.productImageUrl, reviewId, replyId,
-        sourceType: 'reply_like', sourceId: likeId, createdAt: now,
-      }, `reply_like_self:${replyId}:${uid}`);
-      writes.push(ownNotification.write);
     }
 
     try {
@@ -853,15 +805,6 @@ export async function toggleFavorite(env, user, input) {
     }, `store_product_like:${likeId}`);
     writes.push(adminNotification.write);
   }
-  const ownNotification = await buildOwnActivityNotification(uid, context, {
-    kind: 'product_like_self', title: 'Marcaste Me gusta',
-    body: `Te gustó ${context.productName}.`, snippet: context.productName, iconKey: 'heart',
-    targetUrl: `/product?id=${context.productId}`,
-    targetType: 'product', targetId: context.productId,
-    productId: context.productId, productName: context.productName, productImageUrl: context.imageUrl,
-    sourceType: 'product_like', sourceId: likeId, createdAt: now,
-  }, `product_like_self:${likeId}`);
-  writes.push(ownNotification.write);
   try {
     await firestoreAdminCommit(env, writes);
     const likeCount = await updateProductLikeStats(env, context.productId);

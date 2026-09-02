@@ -163,6 +163,10 @@
     "version": "tintin-20260829-community-actions-1",
     "sha256": "74888904388d50de9dd9805bb005f2be206ca96ef8656e44815f51ac03cee67f"
   },
+  "css/pages/product/reviews-cards-polish.css": {
+    "version": "tintin-20260902-product-review-cards-1",
+    "sha256": "8c1c7731c80ca874c23350df9c0de2ff9580484ccc9d1c7542dd84bfb9b7dc1b"
+  },
   "css/pages/secundarias-minimal.css": {
     "version": "tintin-20260902-secondary-layout-1",
     "sha256": "db425f4f42e8e851ccfdd0c9409cf3ea27c84af65a629091d07c26693dcdc36f"
@@ -480,28 +484,28 @@
     "sha256": "17fd3a687e67b08b1da1bba8b07b69e1bbea3ffd73404d7c1198ab218d4b4d06"
   },
   "js/components/navigation/compartido/carga-navegacion.js": {
-    "version": "tintin-20260901-notification-badge-unified-1",
-    "sha256": "9bad90984e6ea330345ec58578c33526353ed5c362ee55932d894638a296a7f7"
+    "version": "tintin-20260902-customer-notification-audience-1",
+    "sha256": "4ced5c97d645dc00200b0b4bd40140eb61b7cd5ead7b06621516855b88191c8b"
   },
   "js/components/navigation/compartido/configuracion.js": {
-    "version": "tintin-20260901-notification-badge-unified-1",
-    "sha256": "1800a5c7de50484a3a1a7cca82eca7becbfabd256f5c49a8a0956a89df4e3b82"
+    "version": "tintin-20260902-customer-notification-audience-1",
+    "sha256": "16207f40e7f8b5272cffc57d8a26ce9252919c227def7dd3cc919f3ae68567db"
   },
   "js/components/navigation/compartido/control-busqueda.js": {
     "version": "tintin-20260831-product-loading-3",
     "sha256": "2abc65eb46bac6ef98b0492696502d6610afc6bca8307312b346b0a4c061ae8a"
   },
   "js/components/navigation/compartido/recursos-navegacion.js": {
-    "version": "tintin-20260901-notification-badge-unified-1",
-    "sha256": "7aec9a24dcb617bc97137e5d8df4ade22190c7c8e20994d5526d90578b968248"
+    "version": "tintin-20260902-customer-notification-audience-1",
+    "sha256": "308e19a25557de8e1b09427e53cc957ae06945b00fae108e3c32a0f9943fa7a3"
   },
   "js/components/navigation/compatibilidad/inicio-control-paneles.js": {
     "version": "tintin-20260811-cls-desktop-stable-2",
     "sha256": "ee01b238964e47e928d324797b4719a5769ac9712eb246909eab22014a88b16c"
   },
   "js/components/navigation/entrada-navegacion-publica.js": {
-    "version": "tintin-20260901-notification-badge-unified-1",
-    "sha256": "e56f68db40d672b16520930a76d1dd7807a8f36db45b99b94c4ab5d3dfb5c5ec"
+    "version": "tintin-20260902-customer-notification-audience-1",
+    "sha256": "87769152cf469fec6d966452b1e54450a4d2081b24e58d3de30bfc90e76c38d7"
   },
   "js/components/navigation/escritorio/encabezado-escritorio.js": {
     "version": "tintin-20260824-header-logo-fallback-1",
@@ -656,8 +660,8 @@
     "sha256": "32c8e2375f1d0895e9dac667c2ed27e2de5fcf7a74cb5a1621b999bbad0ef2d2"
   },
   "js/inicio-navegacion-publica.js": {
-    "version": "tintin-20260901-notification-badge-unified-1",
-    "sha256": "ced08c824d778e30aaa727204710f86e30e8dfb75cdbb2970489b870810ae578"
+    "version": "tintin-20260902-customer-notification-audience-1",
+    "sha256": "f91324b756e6b55d3268952a1048adbd27fc7c808da6a3b0d5f60da17ff9e9b9"
   },
   "js/orders/nucleo-metodos-pago.js": {
     "version": "tintin-20260720-payment-crud-1",
