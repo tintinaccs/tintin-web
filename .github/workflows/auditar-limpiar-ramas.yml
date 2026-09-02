@@ -1,18 +1,8 @@
-name: Auditoría y limpieza segura de ramas
+name: Mantenimiento — ramas
 
 on:
-  pull_request:
-    paths:
-      - scripts/auditar-limpiar-ramas.mjs
-      - tests/branches/auditar-limpiar-ramas.test.mjs
-      - .github/workflows/auditar-limpiar-ramas.yml
-  push:
-    branches:
-      - main
-    paths:
-      - scripts/auditar-limpiar-ramas.mjs
-      - tests/branches/auditar-limpiar-ramas.test.mjs
-      - .github/workflows/auditar-limpiar-ramas.yml
+  schedule:
+    - cron: '45 4 * * 0'
   workflow_dispatch:
     inputs:
       mode:
@@ -20,9 +10,7 @@ on:
         required: true
         default: audit
         type: choice
-        options:
-          - audit
-          - delete
+        options: [audit, delete]
       confirmation:
         description: Para eliminar, escribir ELIMINAR_SOLO_RAMAS_SEGURAS
         required: false
@@ -38,51 +26,31 @@ concurrency:
 
 jobs:
   audit:
-    if: github.event_name == 'pull_request' || github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'audit')
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'audit')
     name: Clasificar ramas sin borrar
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    permissions:
-      contents: read
-      pull-requests: read
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
-
-      - name: Configurar Node.js
-        uses: actions/setup-node@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
-
-      - name: Probar protecciones del limpiador
-        run: node --test tests/branches/auditar-limpiar-ramas.test.mjs
-
+      - run: node --test tests/branches/auditar-limpiar-ramas.test.mjs
       - name: Auditar ramas
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH_CLEANUP_MODE: audit
           BRANCH_CLEANUP_CONFIRMATION: ''
-          # Auditar significa clasificar e informar. Tener ramas que requieren
-          # revisión manual es un estado operativo válido y no debe dejar main
-          # permanentemente rojo. El modo delete conserva abajo el gate duro
-          # de cero ramas en revisión antes de permitir cualquier borrado.
           BRANCH_AUDIT_REQUIRE_ZERO_REVIEW: 'false'
         run: node scripts/auditar-limpiar-ramas.mjs
-
-      - name: Publicar resumen
+      - if: always()
+        run: test ! -f branch-audit.md || cat branch-audit.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v6
         if: always()
-        run: |
-          if [ -f branch-audit.md ]; then
-            cat branch-audit.md >> "$GITHUB_STEP_SUMMARY"
-          fi
-
-      - name: Guardar informe
-        if: always()
-        uses: actions/upload-artifact@v6
         with:
-          name: auditoria-ramas-audit-${{ github.run_id }}
+          name: auditoria-ramas-${{ github.run_id }}
           path: |
             branch-audit.json
             branch-audit.md
@@ -98,19 +66,13 @@ jobs:
       contents: write
       pull-requests: read
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
-
-      - name: Configurar Node.js
-        uses: actions/setup-node@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
-
-      - name: Probar protecciones antes de borrar
-        run: node --test tests/branches/auditar-limpiar-ramas.test.mjs
-
+      - run: node --test tests/branches/auditar-limpiar-ramas.test.mjs
       - name: Eliminar ramas seguras
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -118,21 +80,3 @@ jobs:
           BRANCH_CLEANUP_CONFIRMATION: ${{ inputs.confirmation }}
           BRANCH_AUDIT_REQUIRE_ZERO_REVIEW: 'true'
         run: node scripts/auditar-limpiar-ramas.mjs
-
-      - name: Publicar resumen
-        if: always()
-        run: |
-          if [ -f branch-audit.md ]; then
-            cat branch-audit.md >> "$GITHUB_STEP_SUMMARY"
-          fi
-
-      - name: Guardar informe
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: auditoria-ramas-delete-${{ github.run_id }}
-          path: |
-            branch-audit.json
-            branch-audit.md
-          retention-days: 30
-          if-no-files-found: error

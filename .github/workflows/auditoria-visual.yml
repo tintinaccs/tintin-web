@@ -1,0 +1,45 @@
+name: Operación — auditoría visual consolidada
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 5 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: visual-consolidated
+  cancel-in-progress: true
+
+jobs:
+  visual:
+    name: Público y Super Admin
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build:pages
+      - run: npx playwright install --with-deps chromium
+      - name: Viewports y geometría global
+        run: |
+          npm run audit:canonical-viewports
+          npm run audit:global-responsive-geometry
+          npm run test:pages
+      - name: Super Admin responsive
+        run: node scripts/auditar-superadmin-maestro-responsive.mjs
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: visual-consolidated-${{ github.run_id }}
+          path: |
+            artifacts/**
+            playwright-report/**
+            test-results/**
+          if-no-files-found: warn
+          retention-days: 14

@@ -1,12 +1,13 @@
 import { jsonResponse, rateLimit, safePath, sanitizeText } from '../lib/operational-guard.js';
 
 const ALLOWED_KINDS = new Set(['js_error','promise_error','resource_error','api_error','performance','offline','recovered']);
-const ALLOWED_METRICS = new Set(['LCP','CLS','INP','FCP','TTFB','request_ms']);
+const ALLOWED_METRICS = new Set(['LCP','CLS','INP','FCP','TTFB','request_ms','request_ms_avg','request_ms_max']);
 
 function normalizeEvent(input) {
   const kind = ALLOWED_KINDS.has(input?.kind) ? input.kind : 'js_error';
   const metric = ALLOWED_METRICS.has(input?.metric) ? input.metric : '';
   const numericValue = Number(input?.value);
+  const numericCount = Number(input?.count);
   return {
     kind,
     route: safePath(input?.route),
@@ -14,6 +15,7 @@ function normalizeEvent(input) {
     message: sanitizeText(input?.message, 220),
     metric,
     value: Number.isFinite(numericValue) ? Math.round(numericValue * 100) / 100 : null,
+    count: Number.isFinite(numericCount) ? Math.max(0, Math.min(10_000, Math.round(numericCount))) : null,
     online: input?.online !== false,
     at: new Date().toISOString()
   };

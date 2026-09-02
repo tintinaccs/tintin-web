@@ -1,63 +1,45 @@
-name: Deploy to GitHub Pages
+name: Fallback manual — GitHub Pages
 
 on:
-  push:
-    branches: ["main"]
-  # Permite reintentar el deploy a mano desde la pestaña Actions sin
-  # necesitar un commit vacío.
   workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Escribir PUBLICAR_FALLBACK para usar GitHub Pages como respaldo temporal
+        required: true
+        type: string
 
-# Sitio 100% estático (HTML/CSS/JS de mano, sin Jekyll). Antes de crear el
-# artifact se regenera y verifica el inventario de diagnóstico contra los
-# mismos archivos exactos que se publicarán.
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Evita que dos deploys se pisen: si se dispara uno nuevo mientras otro está
-# en curso, el nuevo espera en cola en vez de correr en paralelo.
 concurrency:
-  group: "pages"
+  group: github-pages-fallback
   cancel-in-progress: false
 
 jobs:
   build:
+    if: inputs.confirmation == 'PUBLICAR_FALLBACK'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Configurar Node.js
-        uses: actions/setup-node@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
-
-      - name: Instalar dependencias reproducibles
-        run: npm ci
-
-      - name: Regenerar y verificar inventario de diagnóstico
-        run: npm run build:pages
-
-      - name: Preparar artefacto público sin archivos internos
-        run: npm run prepare:hosting
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      # Publica la misma lista permitida que Firebase Hosting. Así no quedan
-      # accesibles docs internos, workflows, pruebas, reglas ni herramientas.
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+          cache: npm
+      - run: npm ci
+      - name: Construir artefacto público reproducible
+        run: npm run build:pages && npm run prepare:hosting
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
         with:
-          path: "public"
+          path: public
 
   deploy:
+    if: inputs.confirmation == 'PUBLICAR_FALLBACK'
     needs: build
     runs-on: ubuntu-latest
-    # Cota de seguridad del job: por encima del timeout máximo de la acción
-    # (10 min) para que sea la acción quien reporte el motivo real del fallo
-    # y no un corte seco del runner.
     timeout-minutes: 20
     permissions:
       pages: write
@@ -66,27 +48,8 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      # Si este paso falla con "Timeout reached, aborting!" tras 10 minutos en
-      # `deployment_queued`, el problema es la cola de GitHub Pages, no el
-      # repositorio: el build y el artifact ya están correctos. Qué hacer:
-      #
-      #   1. Relanzar el WORKFLOW COMPLETO desde la pestaña Actions
-      #      ("Run workflow"), nunca el job suelto con "Re-run failed jobs".
-      #      En Pages el ID del deployment ES el SHA del commit: al re-ejecutar
-      #      solo el job, la acción vuelve a apuntar al mismo registro y, si el
-      #      intento anterior quedó cancelado, lee ese estado y aborta en
-      #      segundos con "Deployment cancelled.". Un run nuevo crea un
-      #      registro limpio.
-      #   2. Si el run nuevo también se cuelga 10 minutos, esperar. La cola
-      #      está degradada y reintentar solo gasta minutos de runner.
-      #
-      # NO subir `timeout` por encima de 600000: la acción lo capa a ese
-      # máximo y solo emite el warning "timeout value is greater than the
-      # allowed maximum", dando una falsa sensación de margen extra.
-      - name: Deploy to GitHub Pages
+      - name: Deploy fallback
         id: deployment
         uses: actions/deploy-pages@v5
         with:
-          # Tolera picos de errores transitorios del backend de Pages antes de
-          # darse por vencida (por defecto 10). No afecta al tiempo de cola.
           error_count: 20
