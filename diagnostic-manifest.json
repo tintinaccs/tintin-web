@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-02T13:31:12.419Z",
-  "sourceFingerprint": "d70e6302d1bdb330a398189ebef1856f97087d1dcd849a68fece923cbfabf79d",
+  "generatedAt": "2026-09-02T15:17:39.069Z",
+  "sourceFingerprint": "be9ca39cac1a4d5d7de1a533b0491f8cd49346a8657095a10b78d322a1142c2b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 816,
-    "textFiles": 783,
-    "totalBytes": 9850488,
+    "files": 825,
+    "textFiles": 792,
+    "totalBytes": 9880934,
     "pages": 18,
-    "modules": 530
+    "modules": 536
   },
   "viewports": [
     {
@@ -15661,8 +15661,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24924,
-      "sha256": "39bc3c6900bf554ce853b9419aefbf98002f6552271b2ebe890bec014bc2527a",
+      "bytes": 24920,
+      "sha256": "73b008eca2271cd3ad8bf2eb0fd81cf6c6aea973f78ae3d5f24bf65cb23ea387",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15746,7 +15746,7 @@
           "line": 354
         },
         {
-          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260831-review-rating-required-1",
+          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260902-reviews-pagination-1",
           "target": "js/pages/product/resenas-producto.js",
           "line": 355
         },
@@ -16164,7 +16164,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260831-review-rating-required-1",
+          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260902-reviews-pagination-1",
           "target": "js/pages/product/resenas-producto.js",
           "line": 355,
           "exists": true
@@ -18127,8 +18127,8 @@
     },
     {
       "path": "functions/_middleware.js",
-      "bytes": 2673,
-      "sha256": "39fd9f9c59bc74263913f3350277de08d8550cc3596790e012f8abe76e26e06a",
+      "bytes": 3912,
+      "sha256": "ca6e417ff7c3b4d99e8c2db8050340453cc4e6b8acc08488fd5fec3dd5a7ae62",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18139,6 +18139,12 @@
           "target": "config/csp-runtime.js",
           "dynamic": false,
           "line": 1
+        },
+        {
+          "raw": "./lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 2
         }
       ],
       "endpoints": []
@@ -19298,6 +19304,24 @@
       "endpoints": []
     },
     {
+      "path": "functions/api/telemetry.js",
+      "bytes": 2599,
+      "sha256": "0d049cd2b6296ff3088fbb5ea6d7e7aaf8a492724ee52c83957f16a77055046f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "functions/api/test-email.js",
       "bytes": 5312,
       "sha256": "72d451db8ed7c791b998b4f82769bf89ea79c3acaa72420c7a05340e6eedeee1",
@@ -19503,6 +19527,22 @@
       },
       "imports": [],
       "endpoints": []
+    },
+    {
+      "path": "functions/lib/operational-guard.js",
+      "bytes": 2465,
+      "sha256": "c8f66805218d50f4c83922d9df157f0f18ab0efa546dfeda7e2d16b0fd288685",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://tintin.invalid/",
+          "line": 61
+        }
+      ]
     },
     {
       "path": "functions/pages/[slug].js",
@@ -24667,8 +24707,8 @@
     },
     {
       "path": "js/pages/product/resenas-producto.js",
-      "bytes": 33783,
-      "sha256": "83e85ab045cbfd4cf98d31a3f2a8587fcc662d8db8db4daacd2b3d5740c3c647",
+      "bytes": 35758,
+      "sha256": "38a1ed527527a8e32f948d5df21e0d9d74008f3421e1b2e049cb30e37b58b40a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24907,8 +24947,8 @@
     },
     {
       "path": "js/pages/profile/mantenimiento-perfil.js",
-      "bytes": 18250,
-      "sha256": "d4882d2fef47340fd38bb3b7df7d696111bd48699a02976e1edd99f6e1703037",
+      "bytes": 19915,
+      "sha256": "e6e8dbf25ce919cf559243fc7ec578c70f2fba6bbb8f5dcc6a55f0e27bd28311",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24918,23 +24958,23 @@
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": true,
-          "line": 212
+          "line": 241
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
           "target": null,
           "dynamic": true,
-          "line": 213
+          "line": 242
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 212
+          "line": 241
         },
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 213
+          "line": 242
         }
       ]
     },
@@ -25060,6 +25100,17 @@
       "path": "js/quality/extension-revelado-marca.js",
       "bytes": 3816,
       "sha256": "a3e764c94507a810e69bbba31c401a932c1f11109a3647ad104b85e2e5e9b980",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "js/quality/observability.js",
+      "bytes": 6163,
+      "sha256": "1d7f2b2a51207409356fb0e07f43cafff78d93fa5f64adfd3ade61d0f2de099a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27465,8 +27516,8 @@
     },
     {
       "path": "scripts/auditar-puntuacion-resena-producto.mjs",
-      "bytes": 1391,
-      "sha256": "f033805ad717782a961900fc6fbbd1b4d838f5368b096a12f98beaa265ffddde",
+      "bytes": 1387,
+      "sha256": "b18adef619a2e5abe1a3a7b655ef8406c83a6d27229a37c57a4602478fe20e8b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28154,6 +28205,24 @@
       "endpoints": []
     },
     {
+      "path": "scripts/backup-firestore.mjs",
+      "bytes": 1197,
+      "sha256": "e245b5deae5f540d09deb111d6886859aabfbc6151d540b49842bd45d6f849e7",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/construir-manifiesto-diagnostico.js",
       "bytes": 25742,
       "sha256": "f9ab3cd210daa6e1ce269835e2394280645a28f8a097f6d98ad02970eaac8eec",
@@ -28705,6 +28774,24 @@
           "line": 4
         }
       ]
+    },
+    {
+      "path": "scripts/restore-firestore.mjs",
+      "bytes": 1111,
+      "sha256": "5b79a1a61405cc15228dd05cb422f6f40d2b288474f791eb888407653d4dd474",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "scripts/resumir-auditoria-dependencias.mjs",
@@ -29968,6 +30055,45 @@
       },
       "imports": [],
       "endpoints": []
+    },
+    {
+      "path": "tests/operations/operational-guard.test.mjs",
+      "bytes": 1344,
+      "sha256": "d592b6674a43668f006d831d3d1f0fb04e6f7e8162decc029785e78f54bb9617",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../functions/lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://example.com/checkout",
+          "line": 15
+        },
+        {
+          "url": "https://example.com/api/test",
+          "line": 19
+        }
+      ]
     },
     {
       "path": "tests/orders/order-admin-domain.test.mjs",
@@ -31318,8 +31444,8 @@
     {
       "path": ".github/workflows/auditar-inicio-parte-2b.yml",
       "extension": ".yml",
-      "bytes": 1330,
-      "sha256": "bc68cc8cf1ed100e4b231974dbc9b8dd520643bb52980ee8fc50fceac82fbf18"
+      "bytes": 2762,
+      "sha256": "e5c2d0576971185099ee65384d9a0cb5ac45c871d94f82d72611be15f2e08062"
     },
     {
       "path": ".github/workflows/auditar-institucional-ayuda-legal-parte-2e.yml",
@@ -31430,6 +31556,12 @@
       "sha256": "12a86a85e094dccbc2dad253f2be0f0df8cdc0fc3692ce5f2ad704707a20fe05"
     },
     {
+      "path": ".github/workflows/backup-firestore.yml",
+      "extension": ".yml",
+      "bytes": 1214,
+      "sha256": "c71c10fa69a4b03bbc52bf7825747165bf47c3ca0056867d09bcfed7b2f3849d"
+    },
+    {
       "path": ".github/workflows/corregir-esquema-checkout.yml",
       "extension": ".yml",
       "bytes": 662,
@@ -31452,6 +31584,12 @@
       "extension": ".yml",
       "bytes": 971,
       "sha256": "ec4f076caba9d5bf9a585ebf2ca55e4cfbd49ac18fa3de153034d6db635ec6a4"
+    },
+    {
+      "path": ".github/workflows/e2e-critical.yml",
+      "extension": ".yml",
+      "bytes": 2737,
+      "sha256": "48c5bd9b8bba29e723f5b328a9116d7d2fd47b317f0864bb8c270eb7a3a6a1ca"
     },
     {
       "path": ".github/workflows/entrega-final-fase-12.yml",
@@ -31540,8 +31678,8 @@
     {
       "path": "_routes.json",
       "extension": ".json",
-      "bytes": 2166,
-      "sha256": "468595b7fcc2c17d6d7bd23a9a9e0329625bc5c49d6d309bf62a3b97a1692844"
+      "bytes": 2189,
+      "sha256": "42ea203f11dcb6f66d1e140a940e3ec805b39667aafe50b03e632c9e5d664cc8"
     },
     {
       "path": "about.html",
@@ -32648,6 +32786,12 @@
       "sha256": "5f991c8a7bd9046e1da4baaf8991e132f2f072ded1c3d31c214523acfaff1c39"
     },
     {
+      "path": "docs/production-hardening.md",
+      "extension": ".md",
+      "bytes": 5294,
+      "sha256": "cd12cbfb1caf0c12624546d42412e484921fa5093e35bc77eb1c93751707351d"
+    },
+    {
       "path": "docs/prueba-compra-real.md",
       "extension": ".md",
       "bytes": 6390,
@@ -32806,8 +32950,8 @@
     {
       "path": "functions/_middleware.js",
       "extension": ".js",
-      "bytes": 2673,
-      "sha256": "39fd9f9c59bc74263913f3350277de08d8550cc3596790e012f8abe76e26e06a"
+      "bytes": 3912,
+      "sha256": "ca6e417ff7c3b4d99e8c2db8050340453cc4e6b8acc08488fd5fec3dd5a7ae62"
     },
     {
       "path": "functions/admin-images.js",
@@ -33056,6 +33200,12 @@
       "sha256": "d6d02d8daf312f69d4050add8c23912cf2ce6fcc524b6186b648558af8677489"
     },
     {
+      "path": "functions/api/telemetry.js",
+      "extension": ".js",
+      "bytes": 2599,
+      "sha256": "0d049cd2b6296ff3088fbb5ea6d7e7aaf8a492724ee52c83957f16a77055046f"
+    },
+    {
       "path": "functions/api/test-email.js",
       "extension": ".js",
       "bytes": 5312,
@@ -33150,6 +33300,12 @@
       "extension": ".js",
       "bytes": 1865,
       "sha256": "35fd76b3282db70c06d6aea39fe4bbf192fc51165a36b1054093e74933df31e9"
+    },
+    {
+      "path": "functions/lib/operational-guard.js",
+      "extension": ".js",
+      "bytes": 2465,
+      "sha256": "c8f66805218d50f4c83922d9df157f0f18ab0efa546dfeda7e2d16b0fd288685"
     },
     {
       "path": "functions/pages/[slug].js",
@@ -34354,8 +34510,8 @@
     {
       "path": "js/pages/product/resenas-producto.js",
       "extension": ".js",
-      "bytes": 33783,
-      "sha256": "83e85ab045cbfd4cf98d31a3f2a8587fcc662d8db8db4daacd2b3d5740c3c647"
+      "bytes": 35758,
+      "sha256": "38a1ed527527a8e32f948d5df21e0d9d74008f3421e1b2e049cb30e37b58b40a"
     },
     {
       "path": "js/pages/product/seleccion-producto.js",
@@ -34402,8 +34558,8 @@
     {
       "path": "js/pages/profile/mantenimiento-perfil.js",
       "extension": ".js",
-      "bytes": 18250,
-      "sha256": "d4882d2fef47340fd38bb3b7df7d696111bd48699a02976e1edd99f6e1703037"
+      "bytes": 19915,
+      "sha256": "e6e8dbf25ce919cf559243fc7ec578c70f2fba6bbb8f5dcc6a55f0e27bd28311"
     },
     {
       "path": "js/quality/accesibilidad-global.js",
@@ -34452,6 +34608,12 @@
       "extension": ".js",
       "bytes": 3816,
       "sha256": "a3e764c94507a810e69bbba31c401a932c1f11109a3647ad104b85e2e5e9b980"
+    },
+    {
+      "path": "js/quality/observability.js",
+      "extension": ".js",
+      "bytes": 6163,
+      "sha256": "1d7f2b2a51207409356fb0e07f43cafff78d93fa5f64adfd3ade61d0f2de099a"
     },
     {
       "path": "js/quality/revelado-desplazamiento-global.js",
@@ -34702,8 +34864,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 24924,
-      "sha256": "39bc3c6900bf554ce853b9419aefbf98002f6552271b2ebe890bec014bc2527a"
+      "bytes": 24920,
+      "sha256": "73b008eca2271cd3ad8bf2eb0fd81cf6c6aea973f78ae3d5f24bf65cb23ea387"
     },
     {
       "path": "robots.txt",
@@ -35302,8 +35464,8 @@
     {
       "path": "scripts/auditar-puntuacion-resena-producto.mjs",
       "extension": ".mjs",
-      "bytes": 1391,
-      "sha256": "f033805ad717782a961900fc6fbbd1b4d838f5368b096a12f98beaa265ffddde"
+      "bytes": 1387,
+      "sha256": "b18adef619a2e5abe1a3a7b655ef8406c83a6d27229a37c57a4602478fe20e8b"
     },
     {
       "path": "scripts/auditar-push-web.js",
@@ -35462,6 +35624,12 @@
       "sha256": "f0146ccee7f24a1078696fc5d35f67261ed29be3680583244fc626ab197c3acc"
     },
     {
+      "path": "scripts/backup-firestore.mjs",
+      "extension": ".mjs",
+      "bytes": 1197,
+      "sha256": "e245b5deae5f540d09deb111d6886859aabfbc6151d540b49842bd45d6f849e7"
+    },
+    {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
       "bytes": 38,
@@ -35470,8 +35638,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 37055,
-      "sha256": "e3f44951acf6de5ed34da6433b7ce07d0b56f18fa2b75bc78971d1b013f13e52"
+      "bytes": 37051,
+      "sha256": "a902a3de6d43d3209063483c7a6cae8a776930a20b3c687ef300fca327facef7"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -35598,6 +35766,12 @@
       "extension": ".mjs",
       "bytes": 6934,
       "sha256": "aba8ccb0ae521eddc43228e09248ef8911ce37355166e75fa1175572a7732ac9"
+    },
+    {
+      "path": "scripts/restore-firestore.mjs",
+      "extension": ".mjs",
+      "bytes": 1111,
+      "sha256": "5b79a1a61405cc15228dd05cb422f6f40d2b288474f791eb888407653d4dd474"
     },
     {
       "path": "scripts/resumir-auditoria-dependencias.mjs",
@@ -35856,6 +36030,12 @@
       "extension": ".js",
       "bytes": 7944,
       "sha256": "9562aba2cb84cdd4f88f956cecb96514ef67fbc0e99e4640837fc684e60fdc35"
+    },
+    {
+      "path": "tests/operations/operational-guard.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1344,
+      "sha256": "d592b6674a43668f006d831d3d1f0fb04e6f7e8162decc029785e78f54bb9617"
     },
     {
       "path": "tests/orders/order-admin-domain.test.mjs",
@@ -38250,7 +38430,7 @@
           },
           {
             "file": "js/pages/profile/mantenimiento-perfil.js",
-            "line": 219,
+            "line": 251,
             "operation": "collection"
           },
           {
@@ -38325,7 +38505,7 @@
         "references": [
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 431,
+            "line": 470,
             "operation": "doc"
           }
         ]
@@ -38365,7 +38545,7 @@
           },
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 427,
+            "line": 466,
             "operation": "doc"
           }
         ]
@@ -38510,7 +38690,12 @@
           },
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 423,
+            "line": 323,
+            "operation": "collection"
+          },
+          {
+            "file": "js/pages/product/resenas-producto.js",
+            "line": 457,
             "operation": "collection"
           },
           {

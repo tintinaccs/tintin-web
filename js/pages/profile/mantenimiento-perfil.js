@@ -4,7 +4,14 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
   window.TintinProfileMaintenanceBooted = true;
 
   const VERSION = 'tintin-20260718-profile-maintenance-1';
+  const PROFILE_ORDERS_LIMIT = 100;
   let unsubscribeOrders = null;
+  let orderFirestore = null;
+  let orderDb = null;
+  let orderCursor = null;
+  let ordersHaveMore = false;
+  let ordersLoadingMore = false;
+  const loadedOrders = new Map();
   let startingOrders = false;
   let retryTimer = 0;
 
@@ -133,17 +140,16 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
     return Number.isFinite(date.getTime()) ? date.getTime() : 0;
   }
 
-  function renderOrders(orders) {
+  function renderOrders() {
     const list = document.getElementById('perfil-orders-list');
     if (!list) return;
     list.setAttribute('aria-busy', 'false');
-    const sorted = [...orders].sort((a,b) => orderTimestamp(b) - orderTimestamp(a));
+    const sorted = [...loadedOrders.values()].sort((a,b) => orderTimestamp(b) - orderTimestamp(a));
     if (!sorted.length) {
       list.innerHTML = `<div class="tt-profile-state">Todavía no tenés pedidos.<br><a href="/catalogo" class="perfil-btn perfil-btn-outline">Ver productos →</a></div>`;
       return;
     }
-    const visible = sorted.slice(0, 10);
-    list.innerHTML = visible.map(order => {
+    list.innerHTML = sorted.map(order => {
       const date = new Date(orderTimestamp(order) || Date.now());
       const dateText = date.toLocaleDateString('es-PY',{day:'2-digit',month:'2-digit',year:'numeric'});
       const items = Array.isArray(order.items) ? order.items : [];
@@ -169,7 +175,7 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
           <div class="tt-profile-order-grid"><div><strong>Pago</strong>${payment}</div><div><strong>Entrega</strong>${delivery}</div><div><strong>Direcci&oacute;n</strong>${address}</div><div><strong>N&uacute;mero de pedido</strong>${escapeHtml(order.id)}</div><div class="tt-profile-order-lines"><strong>Productos</strong>${itemLines || 'Sin detalle de productos'}<div class="tt-profile-order-line"><span>Total</span><strong>${formatPrice(order.total)}</strong></div></div></div>
         </details>
       </article>`;
-    }).join('') + (sorted.length > visible.length ? `<div class="tt-profile-state">Mostrando los 10 pedidos más recientes de ${sorted.length}.</div>` : '');
+    }).join('') + (ordersHaveMore ? '<button type="button" class="perfil-btn perfil-btn-outline tt-profile-orders-more" id="tt-profile-orders-more">Cargar más pedidos</button>' : '');
 
     const requested = String(location.hash || '').match(/^#pedido-([A-Za-z0-9_-]+)$/)?.[1];
     if (requested) {
@@ -181,6 +187,29 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
         target.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
         window.setTimeout(() => target.classList.remove('tt-profile-order-focus'), 2200);
       });
+    }
+  }
+
+  async function loadMoreOrders(button) {
+    if (ordersLoadingMore || !ordersHaveMore || !orderCursor || !orderFirestore || !orderDb || !auth.currentUser) return;
+    ordersLoadingMore = true;
+    if (button) { button.disabled = true; button.setAttribute('aria-busy', 'true'); }
+    try {
+      const q = orderFirestore.query(
+        orderFirestore.collection(orderDb, 'orders'),
+        orderFirestore.where('userId','==',auth.currentUser.uid),
+        orderFirestore.startAfter(orderCursor),
+        orderFirestore.limit(PROFILE_ORDERS_LIMIT)
+      );
+      const snapshot = await orderFirestore.getDocs(q);
+      snapshot.docs.forEach(doc => loadedOrders.set(doc.id, { id: doc.id, ...doc.data() }));
+      orderCursor = snapshot.docs.at(-1) || orderCursor;
+      ordersHaveMore = snapshot.size === PROFILE_ORDERS_LIMIT;
+      renderOrders();
+    } catch {
+      renderOrdersError('No pudimos cargar más pedidos ahora. Volvé a intentar.');
+    } finally {
+      ordersLoadingMore = false;
     }
   }
 
@@ -212,13 +241,22 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
         import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
         import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),
       ]);
+      orderFirestore = firestore;
+      orderDb = db;
       const user = auth.currentUser || await new Promise(resolve => {
         const stop = authApi.onAuthStateChanged(auth, current => { stop(); resolve(current); });
       });
       if (!user) return;
-      const q = firestore.query(firestore.collection(db,'orders'), firestore.where('userId','==',user.uid));
+      const q = firestore.query(
+        firestore.collection(db,'orders'),
+        firestore.where('userId','==',user.uid),
+        firestore.limit(PROFILE_ORDERS_LIMIT)
+      );
       unsubscribeOrders = firestore.onSnapshot(q, snapshot => {
-        renderOrders(snapshot.docs.map(doc => ({ id:doc.id,...doc.data() })));
+        snapshot.docs.forEach(doc => loadedOrders.set(doc.id, { id:doc.id,...doc.data() }));
+        orderCursor = snapshot.docs.at(-1) || null;
+        ordersHaveMore = snapshot.size === PROFILE_ORDERS_LIMIT;
+        renderOrders();
         ensureNetworkState();
       }, error => {
         console.warn('[profile-maintenance] orders listener failed', error);
@@ -270,6 +308,10 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
     improveFormSemantics();
     ensureNetworkState();
     guardAsyncActions();
+    document.addEventListener('click', event => {
+      const button = event.target.closest('#tt-profile-orders-more');
+      if (button) void loadMoreOrders(button);
+    });
     startRealtimeOrders();
     window.addEventListener('online', () => { ensureNetworkState(); startRealtimeOrders(true); });
     window.addEventListener('offline', ensureNetworkState);
