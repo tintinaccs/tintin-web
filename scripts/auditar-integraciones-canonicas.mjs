@@ -44,7 +44,7 @@ for (const entry of fs.readdirSync(apiDir, { withFileTypes: true })) {
   const route = `/api/${entry.name.slice(0, -3)}`;
   assert(include.has(route), `Cloudflare: ${route} existe en functions/api pero falta en _routes.json.`);
 }
-for (const route of ['/api/telemetry','/api/system-health','/api/sheets-product-sync','/api/sheets-products-webhook','/api/sheets-sync-snapshot','/api/sheets-admin-webhook','/api/sheets-engagement-webhook']) {
+for (const route of ['/api/apps-script-bridge','/api/telemetry','/api/system-health','/api/sheets-product-sync','/api/sheets-products-webhook','/api/sheets-sync-snapshot','/api/sheets-admin-webhook','/api/sheets-engagement-webhook']) {
   assert(include.has(route), `Cloudflare/Sheets: falta ruta canónica ${route}.`);
 }
 assert(functionOrigin.includes(primaryOrigin.origin), 'Frontend: el fallback de funciones debe coincidir con config/public-site.json.');
@@ -63,10 +63,28 @@ const publicFiles = [
   ...walk(path.join(root, 'js')),
   ...fs.readdirSync(root).filter(name => name.endsWith('.html') || name === 'tienda.js' || name === 'firebase-messaging-sw.js').map(name => path.join(root, name)),
 ];
-for (const file of publicFiles) {
-  const text = fs.readFileSync(file, 'utf8');
-  assert(!text.includes('script.google.com/macros/s/'), `Sheets: URL de Apps Script expuesta al navegador en ${path.relative(root, file)}.`);
-}
+
+// El checkout histórico necesita todavía el proceso privilegiado de Apps Script
+// para la transacción de stock/pedido. Ya no se permite que esa dependencia sea
+// una salida de red directa del navegador: integration-router.js intercepta el
+// único deployment heredado y lo envía a /api/apps-script-bridge. Cualquier URL
+// de Apps Script en otro archivo público vuelve a ser un error.
+const directAppsScript = publicFiles
+  .filter(file => fs.readFileSync(file, 'utf8').includes('script.google.com/macros/s/'))
+  .map(file => path.relative(root, file).split(path.sep).join('/'));
+const allowedLegacyAppsScript = new Set(['js/email/configuracion-correo.js']);
+const unexpectedAppsScript = directAppsScript.filter(file => !allowedLegacyAppsScript.has(file));
+assert(unexpectedAppsScript.length === 0, `Apps Script: dependencia directa inesperada en ${unexpectedAppsScript.join(', ') || 'archivo desconocido'}.`);
+assert(directAppsScript.length === 1 && directAppsScript[0] === 'js/email/configuracion-correo.js', `Apps Script: la única referencia pública transitoria debe ser js/email/configuracion-correo.js; encontradas: ${directAppsScript.join(', ') || 'ninguna'}.`);
+
+const integrationRouter = read('js/quality/integration-router.js');
+const middleware = read('functions/_middleware.js');
+const appsScriptBridge = read('functions/api/apps-script-bridge.js');
+const createOrderClient = read('js/create-order-client.js');
+assert(integrationRouter.includes("appsScriptMode: 'cloudflare-bridge'") && integrationRouter.includes('/api/apps-script-bridge'), 'Apps Script: falta el router cliente que fuerza el gateway Cloudflare.');
+assert(middleware.includes('/js/quality/integration-router.js') && middleware.includes('apps-script-bridge'), 'Apps Script: middleware debe cargar el router antes del runtime de negocio y limitar el bridge.');
+assert(appsScriptBridge.includes('APPS_SCRIPT_ORDER_WEBHOOK_URL') && appsScriptBridge.includes('ALLOWED_ACTIONS') && appsScriptBridge.includes('originIsAllowed'), 'Apps Script: el bridge debe fijar upstream, lista blanca de acciones y control de origen.');
+assert(createOrderClient.includes('EMAIL_WEBHOOK_URL'), 'Checkout: create-order-client debe seguir entrando por la ruta interceptable mientras se conserva el backend transaccional heredado.');
 
 const secretKeys = [
   'EMAIL_PROVIDER_API_KEY','ORDER_WEBHOOK_SHARED_SECRET','PAYMENT_PRIVATE_KEY','PAYMENT_WEBHOOK_SECRET',
@@ -90,7 +108,8 @@ assert(fs.existsSync(path.join(root, 'firebase-cloud-functions-inactive')), 'Arc
 
 notes.push(`Firebase=${firebaserc.projects.default}`);
 notes.push(`Web=${primaryOrigin.origin}`);
-notes.push(`API=Cloudflare Pages Functions`);
+notes.push('API=Cloudflare Pages Functions');
+notes.push('AppsScript=backend transaccional detras de Cloudflare bridge');
 notes.push(`Workflows=${workflows.length}; PR=${prWorkflows.length}`);
 notes.push(`Routes=${include.size}`);
 
