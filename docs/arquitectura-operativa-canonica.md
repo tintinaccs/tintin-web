@@ -26,12 +26,20 @@ GitHub Pages queda únicamente como fallback manual. No se publica en cada push 
 
 ## Firebase y Google Cloud
 
-`firebase.json` solo registra las reglas de Firestore. El directorio `firebase-cloud-functions-inactive/` es histórico y no forma parte del runtime. No debe existir un workflow que despliegue Firebase Functions. Las credenciales de servicio se inyectan como secretos de GitHub/Cloudflare y nunca se versionan.
+`firebase.json` solo registra las reglas de Firestore. El directorio `firebase-cloud-functions-inactive/` es histórico y no forma parte del runtime. No debe existir un workflow que despliegue Firebase Functions.
+
+La cuenta de servicio Firebase permanece en el backend Cloudflare, donde ya se necesita para las operaciones administrativas. El scheduler de GitHub no debe duplicar esa clave privada en Actions: para tareas server-to-server se usa identidad federada OIDC de GitHub y el backend valida repositorio, rama, workflow, evento, audiencia, vigencia y firma antes de ejecutar.
 
 ## Sheets
 
-La URL de Apps Script vive del lado servidor en `cloudflare/sheets-sync-config.js`. El navegador no debe llamar directamente al deployment de Apps Script. La cola `catalogSheetSyncQueue` se drena mediante el workflow operativo programado y acepta temporalmente ambos nombres de credencial Firebase (`FIREBASE_SERVICE_ACCOUNT_JSON` y el alias heredado `FIREBASE_SERVICE_ACCOUNT_KEY`) durante la transición.
+La URL de Apps Script vive del lado servidor en `cloudflare/sheets-sync-config.js`. El navegador no debe llamar directamente al deployment de Apps Script.
+
+La cola `catalogSheetSyncQueue` se drena cada 15 minutos desde `.github/workflows/drenar-cola-sync-catalogo.yml`, pero GitHub actúa únicamente como reloj. El workflow obtiene un token OIDC efímero y llama a `/api/catalog-sheet-sync-drain`; Cloudflare verifica la identidad de GitHub y ejecuta el drenaje con sus propias credenciales Firebase y `SHEETS_ENGAGEMENT_SECRET`.
+
+Esto evita mantener una segunda copia de `FIREBASE_SERVICE_ACCOUNT_JSON`/`FIREBASE_SERVICE_ACCOUNT_KEY` en GitHub Actions y elimina los fallos programados causados por secretos Firebase ausentes en GitHub.
 
 ## Regla de cambio
 
 No crear un workflow nuevo para una auditoría que pueda agregarse al gate central o al Diagnóstico Maestro. Un workflow nuevo solo se justifica si tiene una cadencia/permiso/efecto operativo distinto. El contrato canónico limita la cantidad total de workflows y exige que solo `auditar-tintin.yml` responda a `pull_request`.
+
+Las tareas programadas que necesiten privilegios del backend deben preferir OIDC o una identidad federada de corta duración antes que duplicar claves privadas estáticas entre plataformas.

@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 concurrency:
   group: drenar-cola-sync-catalogo
@@ -14,19 +15,43 @@ concurrency:
 
 jobs:
   drenar:
-    name: Procesar cola con límite, backoff y dead-letter
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+    name: Drenar cola vía Cloudflare con OIDC
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - name: Drenar catalogSheetSyncQueue
+      - name: Descargar configuración canónica
+        uses: actions/checkout@v5
+
+      - name: Obtener identidad GitHub OIDC y drenar cola
+        shell: bash
         env:
-          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
-          FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
-          SHEETS_ENGAGEMENT_SECRET: ${{ secrets.SHEETS_ENGAGEMENT_SECRET }}
-        run: node scripts/drenar-cola-sync-catalogo.mjs
+          OIDC_AUDIENCE: tintin-catalog-sheet-sync
+        run: |
+          set -euo pipefail
+
+          oidc_json="$(
+            curl --fail --silent --show-error \
+              -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+              "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${OIDC_AUDIENCE}"
+          )"
+
+          oidc_token="$(
+            python3 -c 'import json,sys; data=json.load(sys.stdin); token=data.get("value",""); assert token; print(token, end="")' \
+              <<<"${oidc_json}"
+          )"
+          echo "::add-mask::${oidc_token}"
+
+          public_origin="$(
+            python3 -c 'import json; data=json.load(open("config/public-site.json", encoding="utf-8")); print(data["origin"].rstrip("/"), end="")'
+          )"
+
+          response="$(
+            curl --fail-with-body --silent --show-error \
+              --request POST \
+              --header "Authorization: Bearer ${oidc_token}" \
+              --header "Accept: application/json" \
+              "${public_origin}/api/catalog-sheet-sync-drain"
+          )"
+
+          printf '%s\n' "${response}"
+          python3 -c 'import json,sys; data=json.load(sys.stdin); assert data.get("ok") is True, data' <<<"${response}"
