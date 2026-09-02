@@ -1,0 +1,45 @@
+name: Backup Firestore
+
+on:
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: firestore-backup-production
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production-backup
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}'
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Verificar configuración
+        env:
+          FIRESTORE_BACKUP_BUCKET: '${{ secrets.FIRESTORE_BACKUP_BUCKET }}'
+        run: |
+          test -n "$FIRESTORE_BACKUP_BUCKET"
+          gcloud --quiet auth list --filter=status:ACTIVE --format='value(account)' | grep -q .
+
+      - name: Exportar Firestore
+        env:
+          FIREBASE_PROJECT_ID: tintin-accesorios
+          FIRESTORE_BACKUP_BUCKET: '${{ secrets.FIRESTORE_BACKUP_BUCKET }}'
+          FIRESTORE_BACKUP_PREFIX: production
+        run: node scripts/backup-firestore.mjs
+
+      - name: Registrar resultado
+        if: always()
+        run: echo "Backup Firestore finalizado con estado ${{ job.status }}"
