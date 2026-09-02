@@ -7,12 +7,28 @@
   const originalFetch = window.fetch.bind(window);
   const APPS_SCRIPT_HOST = 'script.google.com';
   const APPS_SCRIPT_PATH = /^\/macros\/s\/[^/]+\/exec$/;
+  const LEGACY_EDGE_DOMAINS = new Set(['github.io', 'netlify.app']);
+
+  function isDomainOrSubdomain(hostname, domain) {
+    const hostLabels = String(hostname || '').toLowerCase().split('.').filter(Boolean);
+    const domainLabels = String(domain || '').toLowerCase().split('.').filter(Boolean);
+    if (!domainLabels.length || hostLabels.length < domainLabels.length) return false;
+    const offset = hostLabels.length - domainLabels.length;
+    return domainLabels.every((label, index) => hostLabels[offset + index] === label);
+  }
+
+  function isLegacyEdgeHost(hostname) {
+    for (const domain of LEGACY_EDGE_DOMAINS) {
+      if (isDomainOrSubdomain(hostname, domain)) return true;
+    }
+    return false;
+  }
 
   function functionOrigin() {
     const configured = String(window.TINTIN_FUNCTION_ORIGIN || '').trim().replace(/\/$/, '');
     if (configured) return configured;
     const hostname = String(window.location.hostname || '').toLowerCase();
-    if (hostname.endsWith('github.io') || hostname.endsWith('netlify.app')) {
+    if (isLegacyEdgeHost(hostname)) {
       return 'https://tintinaccesorios.pages.dev';
     }
     return '';
