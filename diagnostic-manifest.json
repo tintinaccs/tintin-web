@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-02T13:10:53.072Z",
-  "sourceFingerprint": "c6bac4ea932c5ca4de5ccf40d06b7cb6a4404756b215cd8017b5d403edd0eca2",
+  "generatedAt": "2026-09-02T13:31:12.419Z",
+  "sourceFingerprint": "d70e6302d1bdb330a398189ebef1856f97087d1dcd849a68fece923cbfabf79d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 816,
     "textFiles": 783,
-    "totalBytes": 9849042,
+    "totalBytes": 9850488,
     "pages": 18,
     "modules": 530
   },
@@ -22756,8 +22756,8 @@
     },
     {
       "path": "js/components/reviews/valoraciones-catalogo.js",
-      "bytes": 1404,
-      "sha256": "88a0576320cd148d4f536a5176532c1229253d50f28c52fee263d0b621364ad9",
+      "bytes": 2664,
+      "sha256": "588bb5b057b251e67c4ce4835bc2ec474f2b398844515a9f7be1a7c6e9288a68",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22941,8 +22941,8 @@
     },
     {
       "path": "js/core/auth/permisos-roles.js",
-      "bytes": 11948,
-      "sha256": "ea828c286ca53fbfb9025220161ad35d6fa2bf7a769c63f0a8d2aff48503b03c",
+      "bytes": 12134,
+      "sha256": "58bf6c87d3e2e3776493730b8efc7d35892632139809bd57229415dcc1af46de",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33892,8 +33892,8 @@
     {
       "path": "js/components/reviews/valoraciones-catalogo.js",
       "extension": ".js",
-      "bytes": 1404,
-      "sha256": "88a0576320cd148d4f536a5176532c1229253d50f28c52fee263d0b621364ad9"
+      "bytes": 2664,
+      "sha256": "588bb5b057b251e67c4ce4835bc2ec474f2b398844515a9f7be1a7c6e9288a68"
     },
     {
       "path": "js/components/welcome/configuracion-bienvenida.js",
@@ -33928,8 +33928,8 @@
     {
       "path": "js/core/auth/permisos-roles.js",
       "extension": ".js",
-      "bytes": 11948,
-      "sha256": "ea828c286ca53fbfb9025220161ad35d6fa2bf7a769c63f0a8d2aff48503b03c"
+      "bytes": 12134,
+      "sha256": "58bf6c87d3e2e3776493730b8efc7d35892632139809bd57229415dcc1af46de"
     },
     {
       "path": "js/core/auth/proteccion-sesion.js",
@@ -35471,7 +35471,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 37055,
-      "sha256": "aeccc392e13927b1fb036de047704305f85fac9759206072040d922ef8ecdb43"
+      "sha256": "e3f44951acf6de5ed34da6433b7ce07d0b56f18fa2b75bc78971d1b013f13e52"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -38360,7 +38360,7 @@
         "references": [
           {
             "file": "js/components/reviews/valoraciones-catalogo.js",
-            "line": 21,
+            "line": 31,
             "operation": "collection"
           },
           {
