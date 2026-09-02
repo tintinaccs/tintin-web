@@ -4,7 +4,7 @@ import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-const ASSET_VERSION = 'tintin-20260901-notification-badge-unified-1';
+const ASSET_VERSION = 'tintin-20260902-customer-notification-audience-1';
 const API_RETRY_DELAYS_MS = [450, 1200];
 let initialized = false;
 let currentUser = null;
@@ -142,6 +142,16 @@ function notificationGroupKey(notification) {
   return targetId ? `like:${targetType}:${targetId}` : '';
 }
 
+function isVisibleCustomerNotification(notification = {}) {
+  const kind = String(notification.kind || '').trim().toLowerCase();
+  const actorType = String(notification.actorType || '').trim().toLowerCase();
+  if (!kind || kind.endsWith('_self') || kind === 'welcome') return false;
+  if (kind.includes('review_like') || kind.includes('reply_like') || kind.includes('review_reply')) {
+    return actorType === 'store';
+  }
+  return !['review_created', 'review_reply', 'review_like', 'reply_like', 'product_like'].includes(kind);
+}
+
 function groupedNotifications(items) {
   const groups = new Map();
   items.forEach(item => {
@@ -248,7 +258,9 @@ function subscribe(user) {
   if (!user) return;
   const source = query(collection(db, 'users', user.uid, 'notifications'), orderBy('createdAt', 'desc'), limit(100));
   unsubscribe = onSnapshot(source, snapshot => {
-    notifications = snapshot.docs.map(document => ({ id: document.id, ...document.data() }));
+    notifications = snapshot.docs
+      .map(document => ({ id: document.id, ...document.data() }))
+      .filter(isVisibleCustomerNotification);
     render();
     if (notificationsSurfaceIsOpen()) void markVisibleNotificationsRead();
   }, error => {

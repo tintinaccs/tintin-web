@@ -1,4 +1,4 @@
-export const SHELL_VERSION = 'tintin-20260901-notification-badge-unified-1';
+export const SHELL_VERSION = 'tintin-20260902-customer-notification-audience-1';
 
 export const BREAKPOINTS = Object.freeze({
   mobileMax: 767,

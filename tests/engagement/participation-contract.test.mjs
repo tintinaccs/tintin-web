@@ -149,15 +149,15 @@ test('social notifications retain actor-target-product relationships', async () 
   assert.match(client, /#review-/);
 });
 
-test('own social activity is visible to the actor without broadcasting private in-app alerts', async () => {
+test('own social activity stays out of the customer alert feed', async () => {
   const [client, route] = await Promise.all([
     read('cloudflare/participacion-clientes.js'),
     read('functions/api/engagement.js'),
   ]);
   for (const kind of ['review_created_self', 'review_reply_self', 'review_like_self', 'reply_like_self', 'product_like_self']) {
-    assert.match(client, new RegExp(`kind: '${kind}'`));
+    assert.doesNotMatch(client, new RegExp(`kind: '${kind}'`));
   }
-  assert.match(client, /buildUserNotificationWrite\(uid/);
+  assert.match(client, /context\.isSuperAdmin/);
   assert.match(client, /dispatchAdminNotificationPush/);
   assert.doesNotMatch(route, /if \(!engagementIsSuperAdmin\(user\)\)/);
 });

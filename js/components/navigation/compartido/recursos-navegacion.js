@@ -1,4 +1,4 @@
-import { versionedSiteAsset } from './configuracion.js?v=tintin-20260901-notification-badge-unified-1';
+import { versionedSiteAsset } from './configuracion.js?v=tintin-20260902-customer-notification-audience-1';
 
 const HEADER_RESPONSIVE_VERSION = 'tintin-20260824-header-responsive-sync-1';
 const NAVIGATION_SHARED_VERSION = 'tintin-20260825-responsive-css-budget-2';
