@@ -179,10 +179,19 @@ check(
   /pull_request\s*:/.test(ciWorkflow) && ciWorkflow.includes('Repository audit')
 );
 
+const packageJson = JSON.parse(read('package.json'));
+const finalAuditScript = String(packageJson?.scripts?.['audit:final'] || '');
+check(
+  'El barrido final permanece cubierto después de consolidar workflows',
+  ciWorkflow.includes('npm run audit:final') && finalAuditScript.includes('npm run audit:part2h')
+);
+
 const visualWorkflow = read('.github/workflows/auditoria-visual.yml');
 check(
-  'El barrido visual final permanece cubierto después de consolidar workflows',
-  visualWorkflow.includes('audit:part2h')
+  'La auditoría visual consolidada conserva viewports y geometría global',
+  visualWorkflow.includes('audit:canonical-viewports') &&
+    visualWorkflow.includes('audit:global-responsive-geometry') &&
+    visualWorkflow.includes('test:pages')
 );
 
 const deployWorkflow = read('.github/workflows/desplegar-pages.yml');
