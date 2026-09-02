@@ -108,6 +108,7 @@ async function sendCodeEmail(apiKey, email, code) {
         <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 22px">
           <tr>${digitCells}</tr>
         </table>
+        <p style="margin:0 0 18px;font-size:12px;color:#765d67;line-height:1.55">Volvé a Tintin y tocá «Pegar código» para completarlo sin escribir los números.</p>
         <p style="margin:0;font-size:12px;color:#8a7d81;line-height:1.65">
           Vence en 5 minutos. Si no pediste este código, podés ignorar este correo — nadie puede entrar a tu cuenta sin él.
         </p>
@@ -117,7 +118,7 @@ async function sendCodeEmail(apiKey, email, code) {
   </div>
 </body>
 </html>`;
-  const text = `Tu código de acceso a Tintin Accesorios: ${code}\n\nVence en 5 minutos. Si no pediste este código, ignorá este correo.`;
+  const text = `Tu código de acceso a Tintin Accesorios: ${code}\n\nVolvé a Tintin y tocá «Pegar código» para completarlo sin escribir los números.\n\nVence en 5 minutos. Si no pediste este código, ignorá este correo.`;
 
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',

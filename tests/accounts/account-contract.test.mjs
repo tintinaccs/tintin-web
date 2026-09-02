@@ -59,3 +59,11 @@ test('Super Admin no expira y el resto usa inactividad', () => {
   assert.match(session, /if \(currentRole === 'superadmin'\) return;/);
   assert.match(session, /window\.addEventListener\(eventName, recordActivity/);
 });
+
+test('el login ofrece pegar el código OTP desde el portapapeles', () => {
+  const login = read('login.html');
+  assert.match(login, /id="btn-paste-otp"/);
+  assert.match(login, /Pegar código/);
+  assert.match(login, /navigator\.clipboard\?\.readText/);
+  assert.match(login, /login-otp-clipboard-status/);
+});
