@@ -58,7 +58,7 @@ check('La tienda pública conserva su manifiesto', ['/','/index.html'].includes(
 
 console.log('\n== Service worker ==');
 check('firebase-messaging-sw.js está en la raíz', exists('firebase-messaging-sw.js'));
-check('Usa Firebase 10.12.0', serviceWorker.includes('firebasejs/10.12.0/firebase-app-compat.js') && serviceWorker.includes('firebasejs/10.12.0/firebase-messaging-compat.js'));
+check('Usa Firebase 10.14.1', serviceWorker.includes('firebasejs/10.14.1/firebase-app-compat.js') && serviceWorker.includes('firebasejs/10.14.1/firebase-messaging-compat.js'));
 check('Usa la configuración pública del proyecto', serviceWorker.includes("projectId: 'tintin-accesorios'") && serviceWorker.includes("messagingSenderId: '207918562502'"));
 check('Maneja mensajes en segundo plano', serviceWorker.includes('onBackgroundMessage'));
 check('Maneja el clic de la notificación', serviceWorker.includes("addEventListener('notificationclick'"));
