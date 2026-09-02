@@ -1,0 +1,36 @@
+/* Product community: defined cards with generous, quiet spacing. */
+.tt-reviews-product .tt-review-card {
+  border: 1px solid #f0d8e0;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(173, 63, 103, .07);
+  background: #fff;
+  padding-inline: clamp(17px, 2.4vw, 23px);
+}
+
+.tt-reviews-product .tt-review-list {
+  gap: 16px;
+}
+
+.tt-reviews-product .tt-review-thread {
+  margin-left: 22px;
+  padding-left: 14px;
+  border-left: 1px solid #f1d9e2;
+}
+
+.tt-reviews-product .tt-review-thread-message {
+  border-color: #f1d9e2;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(173, 63, 103, .04);
+}
+
+@media (max-width: 767px) {
+  .tt-reviews-product .tt-review-card {
+    border-radius: 16px;
+    padding-inline: 16px;
+  }
+
+  .tt-reviews-product .tt-review-thread {
+    margin-left: 10px;
+    padding-left: 10px;
+  }
+}
