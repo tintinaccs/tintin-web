@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-02T21:49:35.644Z",
-  "sourceFingerprint": "f6912fd4af14fc16d27ebf0482b7fd8266ccc51cfca3d2941aa12f223f7cd952",
+  "generatedAt": "2026-09-02T21:58:25.175Z",
+  "sourceFingerprint": "92ba65e5b866fd59ee7808731c623cf9e246963be8a2c053cee6d755ee939c1a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 791,
     "textFiles": 758,
-    "totalBytes": 9818776,
+    "totalBytes": 9820090,
     "pages": 18,
     "modules": 543
   },
@@ -17975,7 +17975,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 343133,
-      "sha256": "6fe4ebe8119a29869247e7d6992bdd7263d26e2b4fc5d79df92cf227778fab6a",
+      "sha256": "a6a69ec0f55e43f246a7f9f11f5185903bc64032384e841f4be5fc149a5dd3dd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18138,8 +18138,8 @@
     },
     {
       "path": "functions/_middleware.js",
-      "bytes": 4288,
-      "sha256": "50cc3419f64e8a599c7007db535d7f883f7d839f3d71568269b5a79ca9b4dd37",
+      "bytes": 5409,
+      "sha256": "488d1e5fcd2e91fca1b554dca60b16f8272ce23125a25d7d74dccb1de30f70ea",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32111,13 +32111,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 343133,
-      "sha256": "6fe4ebe8119a29869247e7d6992bdd7263d26e2b4fc5d79df92cf227778fab6a"
+      "sha256": "a6a69ec0f55e43f246a7f9f11f5185903bc64032384e841f4be5fc149a5dd3dd"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 343048,
-      "sha256": "bee547b96925a25574888b749d62d6428fe7f9352539f6333bea6e31b7800b37"
+      "sha256": "31ac9c61ccbe77ac24bdcaa4441bc11aa6a03725373e0244b295ea9454f9b84d"
     },
     {
       "path": "config/public-site.json",
@@ -32944,8 +32944,8 @@
     {
       "path": "functions/_middleware.js",
       "extension": ".js",
-      "bytes": 4288,
-      "sha256": "50cc3419f64e8a599c7007db535d7f883f7d839f3d71568269b5a79ca9b4dd37"
+      "bytes": 5409,
+      "sha256": "488d1e5fcd2e91fca1b554dca60b16f8272ce23125a25d7d74dccb1de30f70ea"
     },
     {
       "path": "functions/admin-images.js",
@@ -35668,8 +35668,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 37073,
-      "sha256": "8244c04b1635aba0dd354fb4c667ca6840d112780c0db52b47a0714ec3584f5f"
+      "bytes": 37266,
+      "sha256": "15882d406c18afd4d5410935ea1e04402e5b22159b444d17b6d8525f027922ea"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
