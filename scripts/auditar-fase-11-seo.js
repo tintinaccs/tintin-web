@@ -85,9 +85,28 @@ for (const file of fs.readdirSync(root).filter(file => file.endsWith('.html'))) 
 
 const pkg = JSON.parse(read('package.json'));
 check('Fase 11 forma parte del cierre', pkg.scripts['audit:phase11'] === 'node scripts/auditar-fase-11-seo.js' && pkg.scripts['test:phase11-seo'] === 'playwright test tests/seo/phase11-seo.spec.js --project=chromium' && pkg.scripts['audit:final'].includes('audit:phase11'), 'Las verificaciones SEO deben quedar permanentes.');
-const productionWorkflow = read('.github/workflows/seo-produccion-fase-11.yml');
-check('Existe monitor de producción', fs.existsSync(path.join(root, 'scripts/auditar-produccion-salud.mjs')) && productionWorkflow.includes('production-health:'), 'La disponibilidad pública debe revisarse de forma recurrente.');
-check('El monitor abre el catálogo en un navegador real', fs.existsSync(path.join(root, 'scripts/auditar-catalogo-navegador-produccion.mjs')) && productionWorkflow.includes('auditar-catalogo-navegador-produccion.mjs') && productionWorkflow.includes('playwright install --with-deps chromium'), 'La API puede responder aun cuando la grilla no pinta; producción debe comprobar ambas capas.');
+
+// La Fase 11 ya no posee un workflow de PR separado. El monitoreo de producción
+// quedó consolidado en monitor-produccion.yml; aquí se verifica la cobertura real
+// sin volver a exigir el YAML legado seo-produccion-fase-11.yml.
+const productionWorkflowPath = '.github/workflows/monitor-produccion.yml';
+const productionWorkflowExists = fs.existsSync(path.join(root, productionWorkflowPath));
+const productionWorkflow = productionWorkflowExists ? read(productionWorkflowPath) : '';
+check(
+  'Existe monitor consolidado de producción',
+  productionWorkflowExists &&
+    productionWorkflow.includes('schedule:') &&
+    productionWorkflow.includes('npm run monitor:production') &&
+    fs.existsSync(path.join(root, 'scripts/auditar-produccion-salud.mjs')),
+  'La disponibilidad pública debe revisarse de forma recurrente desde monitor-produccion.yml.'
+);
+check(
+  'El monitor abre el catálogo en un navegador real',
+  fs.existsSync(path.join(root, 'scripts/auditar-catalogo-navegador-produccion.mjs')) &&
+    productionWorkflow.includes('auditar-catalogo-navegador-produccion.mjs') &&
+    productionWorkflow.includes('playwright install --with-deps chromium'),
+  'La API puede responder aun cuando la grilla no pinta; el monitor consolidado debe comprobar ambas capas.'
+);
 check('Origen se sincroniza antes de CSP', read('scripts/generar-csp-cloudflare.js').includes('scripts/sincronizar-origen-publico.js') && read('scripts/generar-csp-cloudflare.js').includes('config/public-site.json'), 'El build debe aplicar una sola fuente de dominio antes de generar hashes y CSP.');
 
 const failed = checks.filter(item => !item.ok);
