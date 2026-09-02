@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-02T12:57:02.936Z",
-  "sourceFingerprint": "e53020f7b2bbbeca6dcbb340ec2c609649d2ccc040770e6e470e12f8877de4da",
+  "generatedAt": "2026-09-02T13:10:53.072Z",
+  "sourceFingerprint": "c6bac4ea932c5ca4de5ccf40d06b7cb6a4404756b215cd8017b5d403edd0eca2",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -18074,7 +18074,7 @@
     {
       "path": "firebase-messaging-sw.js",
       "bytes": 4819,
-      "sha256": "fbdff164c26929f16c12b05e218a4cc544186daf74b1117f0a538aac6a3ef19d",
+      "sha256": "dccfe1a80e663b94c387cde25de42cab60b629116f0cb7aa7d3239289b35018f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18082,11 +18082,11 @@
       "imports": [],
       "endpoints": [
         {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js",
+          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js",
           "line": 26
         },
         {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js",
+          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js",
           "line": 27
         }
       ]
@@ -20495,7 +20495,7 @@
     {
       "path": "js/admin/notifications/notificaciones-push-maestro.js",
       "bytes": 13958,
-      "sha256": "9198042755baf3fd626e425b88856b36bba73175152376351a5dd0a1cc87a794",
+      "sha256": "4c2e28b0a7120e1510fbbab2a41211309ef53fc7fcae6c0070fa40f43f8da988",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20508,7 +20508,7 @@
           "line": 2
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
           "target": null,
           "dynamic": false,
           "line": 3
@@ -20528,7 +20528,7 @@
       ],
       "endpoints": [
         {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
           "line": 3
         }
       ]
@@ -20536,7 +20536,7 @@
     {
       "path": "js/admin/notifications/notificaciones-push.js",
       "bytes": 16270,
-      "sha256": "0d3a53dcd2101665f3cc6411dc84d4ced0d758f3e9f9d93c363a0c22afb89f40",
+      "sha256": "73ec88e0f786ebb754ea7689c6aa2eaa76e41a39790d1157b6cc971cbc96f9ba",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20549,7 +20549,7 @@
           "line": 13
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
           "target": null,
           "dynamic": false,
           "line": 14
@@ -20569,7 +20569,7 @@
       ],
       "endpoints": [
         {
-          "url": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
+          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
           "line": 14
         },
         {
@@ -27484,7 +27484,7 @@
     {
       "path": "scripts/auditar-push-web.js",
       "bytes": 16335,
-      "sha256": "689ca480d8071dd4bbc504a9fdd2903e17c29fee46ce0e85aeca1cc487a67ff2",
+      "sha256": "112d9ba360729c9466f2e837568d60dc3025aae399d6abfb6635c169a0640b9a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32777,7 +32777,7 @@
       "path": "firebase-messaging-sw.js",
       "extension": ".js",
       "bytes": 4819,
-      "sha256": "fbdff164c26929f16c12b05e218a4cc544186daf74b1117f0a538aac6a3ef19d"
+      "sha256": "dccfe1a80e663b94c387cde25de42cab60b629116f0cb7aa7d3239289b35018f"
     },
     {
       "path": "firebase.json",
@@ -33317,13 +33317,13 @@
       "path": "js/admin/notifications/notificaciones-push-maestro.js",
       "extension": ".js",
       "bytes": 13958,
-      "sha256": "9198042755baf3fd626e425b88856b36bba73175152376351a5dd0a1cc87a794"
+      "sha256": "4c2e28b0a7120e1510fbbab2a41211309ef53fc7fcae6c0070fa40f43f8da988"
     },
     {
       "path": "js/admin/notifications/notificaciones-push.js",
       "extension": ".js",
       "bytes": 16270,
-      "sha256": "0d3a53dcd2101665f3cc6411dc84d4ced0d758f3e9f9d93c363a0c22afb89f40"
+      "sha256": "73ec88e0f786ebb754ea7689c6aa2eaa76e41a39790d1157b6cc971cbc96f9ba"
     },
     {
       "path": "js/admin/orders/eliminacion-pedidos-admin.js",
@@ -35309,7 +35309,7 @@
       "path": "scripts/auditar-push-web.js",
       "extension": ".js",
       "bytes": 16335,
-      "sha256": "689ca480d8071dd4bbc504a9fdd2903e17c29fee46ce0e85aeca1cc487a67ff2"
+      "sha256": "112d9ba360729c9466f2e837568d60dc3025aae399d6abfb6635c169a0640b9a"
     },
     {
       "path": "scripts/auditar-rendimiento-metricas.mjs",
@@ -35471,7 +35471,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 37055,
-      "sha256": "e5d2067422933ea3c220663183f6d8cd75f6e7ba11d932bdbd3568b8db9a0aee"
+      "sha256": "aeccc392e13927b1fb036de047704305f85fac9759206072040d922ef8ecdb43"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
