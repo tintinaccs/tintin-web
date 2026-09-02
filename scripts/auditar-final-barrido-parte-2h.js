@@ -90,93 +90,91 @@ check(
   `Roles esperados: ${expectedRoles.join(', ')}`
 );
 
+const pkg = JSON.parse(read('package.json'));
+const finalAudit = String(pkg.scripts?.['audit:final'] || '');
+const centralWorkflowPath = '.github/workflows/auditar-tintin.yml';
+const visualWorkflowPath = '.github/workflows/auditoria-visual.yml';
+const centralWorkflow = exists(centralWorkflowPath) ? read(centralWorkflowPath) : '';
+const visualWorkflow = exists(visualWorkflowPath) ? read(visualWorkflowPath) : '';
+
+// Las antiguas Partes 2A–2G ya no tienen un workflow por separado. Su cobertura
+// se conserva como contratos dentro del único gate de PR y del barrido visual
+// consolidado. Esto evita siete runners duplicados sin bajar la protección.
 const partContracts = [
   {
     part: '2A',
-    workflow: '.github/workflows/auditar-responsive-global.yml',
-    scripts: ['scripts/auditar-global-responsive-final.mjs'],
-    workflowNeedles: ['npm run audit:global-responsive-geometry']
+    area: 'responsive global',
+    packageScripts: ['audit:global-responsive-geometry', 'audit:canonical-viewports'],
+    finalNeedles: [],
+    ciNeedles: ['npm run audit:canonical-viewports', 'npm run audit:global-responsive-geometry'],
+    visualNeedles: ['npm run audit:canonical-viewports', 'npm run audit:global-responsive-geometry']
   },
   {
     part: '2B',
-    workflow: '.github/workflows/auditar-inicio-parte-2b.yml',
-    scripts: ['scripts/auditar-inicio-visual-parte-2b-v3.mjs'],
-    workflowNeedles: ['scripts/auditar-inicio-visual-parte-2b-v3.mjs']
+    area: 'inicio y navegación',
+    packageScripts: ['test:navigation-header', 'test:pages', 'audit:public-shell'],
+    finalNeedles: ['npm run audit:public-shell'],
+    ciNeedles: ['npm run test:navigation-header', 'npm run test:pages'],
+    visualNeedles: ['npm run test:pages']
   },
   {
     part: '2C',
-    workflow: '.github/workflows/auditar-comercio-parte-2c.yml',
-    scripts: ['scripts/auditar-comercio-visual-parte-2c.mjs'],
-    workflowNeedles: ['scripts/auditar-comercio-visual-parte-2c.mjs']
+    area: 'catálogo, colecciones y producto',
+    packageScripts: ['audit:collections', 'audit:cart', 'audit:products-media', 'test:pages'],
+    finalNeedles: ['npm run audit:collections', 'npm run audit:cart', 'npm run audit:products-media'],
+    ciNeedles: ['npm run test:pages'],
+    visualNeedles: ['npm run test:pages']
   },
   {
     part: '2D',
-    workflow: '.github/workflows/auditar-flujo-cuenta-parte-2d.yml',
-    scripts: [
-      'scripts/auditar-cuenta-flujo-visual-parte-2d.mjs',
-      'scripts/exigir-cuenta-flujo-parte-2d.mjs',
-      'scripts/auditar-cuenta-flujo-compacto-parte-2d.mjs'
-    ],
-    workflowNeedles: [
-      'scripts/auditar-cuenta-flujo-visual-parte-2d.mjs',
-      'scripts/exigir-cuenta-flujo-parte-2d.mjs',
-      'scripts/auditar-cuenta-flujo-compacto-parte-2d.mjs'
-    ]
+    area: 'checkout, login y perfil',
+    packageScripts: ['audit:secure-orders', 'audit:checkout-delivery', 'audit:login-profile', 'test:phase8-ui'],
+    finalNeedles: ['npm run audit:secure-orders', 'npm run audit:checkout-delivery', 'npm run audit:login-profile'],
+    ciNeedles: ['npm run test:phase8-ui'],
+    visualNeedles: []
   },
   {
     part: '2E',
-    workflow: '.github/workflows/auditar-institucional-ayuda-legal-parte-2e.yml',
-    scripts: [
-      'scripts/auditar-institucional-ayuda-legal-parte-2e-v2.mjs',
-      'scripts/exigir-institucional-ayuda-legal-parte-2e.mjs',
-      'scripts/auditar-faq-interaccion-parte-2e.mjs'
-    ],
-    workflowNeedles: [
-      'scripts/auditar-institucional-ayuda-legal-parte-2e-v2.mjs',
-      'scripts/exigir-institucional-ayuda-legal-parte-2e.mjs',
-      'scripts/auditar-faq-interaccion-parte-2e.mjs'
-    ]
+    area: 'institucionales, ayuda y legales',
+    packageScripts: ['audit:help-pages', 'audit:aux-pages', 'audit:phase10', 'test:phase10-a11y'],
+    finalNeedles: ['npm run audit:help-pages', 'npm run audit:aux-pages', 'npm run audit:phase10'],
+    ciNeedles: ['npm run test:phase10-a11y'],
+    visualNeedles: []
   },
   {
     part: '2F',
-    workflow: '.github/workflows/auditar-admin-parte-2f.yml',
-    scripts: [
-      'scripts/auditar-admin-visual-parte-2f-v3.mjs',
-      'scripts/auditar-global-fit-parte-2f.mjs'
-    ],
-    workflowNeedles: [
-      'scripts/auditar-admin-visual-parte-2f-v3.mjs',
-      'scripts/auditar-global-fit-parte-2f.mjs'
-    ]
+    area: 'Admin y Super Admin',
+    packageScripts: ['audit:admin-foundation', 'audit:users-roles', 'audit:appearance-unified'],
+    finalNeedles: ['npm run audit:admin-foundation', 'npm run audit:users-roles', 'npm run audit:appearance-unified'],
+    ciNeedles: ['node scripts/auditar-superadmin-maestro.mjs', 'node scripts/auditar-superadmin-maestro-responsive.mjs'],
+    visualNeedles: ['node scripts/auditar-superadmin-maestro-responsive.mjs']
   },
   {
     part: '2G',
-    workflow: '.github/workflows/auditar-sistema-especial-parte-2g.yml',
-    scripts: [
-      'scripts/auditar-sistema-especial-estados-parte-2g-v2.mjs',
-      'scripts/exigir-sistema-especial-parte-2g.mjs'
-    ],
-    workflowNeedles: [
-      'scripts/auditar-sistema-especial-estados-parte-2g-v2.mjs',
-      'scripts/exigir-sistema-especial-parte-2g.mjs'
-    ]
+    area: 'sistema y estados especiales',
+    packageScripts: ['audit:reliability', 'audit:storegate-deadlock', 'audit:app-check-bootstrap', 'test:phase8-ui'],
+    finalNeedles: ['npm run audit:reliability', 'npm run audit:storegate-deadlock', 'npm run audit:app-check-bootstrap'],
+    ciNeedles: ['npm run test:phase8-ui'],
+    visualNeedles: []
   }
 ];
 
+check(
+  'El CI consolidado y la auditoría visual existen',
+  exists(centralWorkflowPath) && exists(visualWorkflowPath),
+  'Falta el gate central de PR o la auditoría visual consolidada.'
+);
+
 for (const contract of partContracts) {
-  const workflowExists = exists(contract.workflow);
-  const workflow = workflowExists ? read(contract.workflow) : '';
+  const commandsExist = contract.packageScripts.every(name => typeof pkg.scripts?.[name] === 'string');
+  const finalConnected = contract.finalNeedles.every(needle => finalAudit.includes(needle));
+  const ciConnected = contract.ciNeedles.every(needle => centralWorkflow.includes(needle));
+  const visualConnected = contract.visualNeedles.every(needle => visualWorkflow.includes(needle));
+
   check(
-    `Parte ${contract.part}: auditorías y workflow presentes`,
-    workflowExists && contract.scripts.every(exists),
-    `Falta el workflow o un script obligatorio de la Parte ${contract.part}.`
-  );
-  check(
-    `Parte ${contract.part}: workflow conectado a sus auditorías`,
-    workflow.includes('pull_request:') &&
-      workflow.includes('- main') &&
-      contract.workflowNeedles.every(needle => workflow.includes(needle)),
-    `El workflow de la Parte ${contract.part} perdió su disparador o una auditoría.`
+    `Parte ${contract.part}: cobertura ${contract.area} preservada`,
+    commandsExist && finalConnected && ciConnected && visualConnected,
+    `La Parte ${contract.part} perdió un comando o su conexión al CI/visual consolidado.`
   );
 }
 
@@ -208,25 +206,36 @@ check(
   `Referencias faltantes: ${JSON.stringify(diagnostics?.missingReferences || [])}`
 );
 
-const pkg = JSON.parse(read('package.json'));
 check(
   'La Parte 2H está conectada a la auditoría final',
   pkg.scripts?.['audit:part2h'] === 'node scripts/auditar-final-barrido-parte-2h.js' &&
-    pkg.scripts?.['audit:final']?.includes('npm run audit:part2h'),
+    finalAudit.includes('npm run audit:part2h'),
   'Falta audit:part2h o no forma parte de audit:final.'
 );
 
-const part2hWorkflow = '.github/workflows/auditar-barrido-final-parte-2h.yml';
-const part2hWorkflowText = exists(part2hWorkflow) ? read(part2hWorkflow) : '';
 check(
-  'La protección continua de la Parte 2H está activa',
-  part2hWorkflowText.includes('pull_request:') &&
-    part2hWorkflowText.includes('push:') &&
-    part2hWorkflowText.includes('npm run build:pages') &&
-    part2hWorkflowText.includes('npm run audit:deep') &&
-    part2hWorkflowText.includes('npm run audit:final') &&
-    part2hWorkflowText.includes('auditar-firestore-lecturas-presupuesto.js'),
-  'El workflow 2H no ejecuta toda la protección estática final.'
+  'La protección continua de la Parte 2H está activa en el CI único',
+  centralWorkflow.includes('pull_request:') &&
+    centralWorkflow.includes('push:') &&
+    centralWorkflow.includes('npm run build:pages') &&
+    centralWorkflow.includes('node scripts/auditar-integraciones-canonicas.mjs') &&
+    centralWorkflow.includes('npm run audit:final') &&
+    centralWorkflow.includes('npm run test:phase10-a11y') &&
+    centralWorkflow.includes('npm run test:phase11-seo') &&
+    centralWorkflow.includes('npm run test:performance') &&
+    centralWorkflow.includes('npm run audit:global-responsive-geometry'),
+  'El gate central dejó de ejecutar alguna protección estática o de navegador obligatoria.'
+);
+
+check(
+  'La protección visual programada sigue activa sin duplicar el gate de PR',
+  visualWorkflow.includes('schedule:') &&
+    visualWorkflow.includes('workflow_dispatch:') &&
+    !/(^|\n)\s*pull_request\s*:/.test(visualWorkflow) &&
+    visualWorkflow.includes('npm run audit:canonical-viewports') &&
+    visualWorkflow.includes('npm run audit:global-responsive-geometry') &&
+    visualWorkflow.includes('npm run test:pages'),
+  'La auditoría visual consolidada debe ser programada/manual y conservar viewports, geometría y smoke.'
 );
 
 const failed = checks.filter(item => !item.ok);
