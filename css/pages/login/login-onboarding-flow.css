@@ -82,6 +82,33 @@ body:has(.login-page).login-setup-open :is(#login-profile-name-field,#login-prof
 .login-username-status[data-state="taken"]::before,.login-username-status[data-state="invalid"]::before { content:"×"; display:grid; place-items:center; width:18px; height:18px; border-radius:50%; background:#fff0f3; font-size:15px; }
 .login-username-status[data-state="checking"] { color:var(--login-muted); }
 
+/* Los conflictos pertenecen al campo exacto: el contenedor crece de forma
+   natural y no superpone el aviso sobre el siguiente pill. */
+.login-profile-field-error {
+  display:none;
+  margin:7px 0 12px;
+  color:#a1264b;
+  font-size:12px;
+  font-weight:700;
+  line-height:1.35;
+}
+.login-profile-field-error.show { display:block; }
+body:has(.login-page).login-setup-open #login-profile-name-field .login-profile-field-error {
+  grid-column:1 / -1;
+  margin-top:-2px;
+  margin-bottom:6px;
+}
+body:has(.login-page).login-setup-open #login-profile-phone-field .login-profile-field-error {
+  margin-top:8px;
+  margin-bottom:2px;
+}
+body:has(.login-page) .login-username-status.show {
+  display:flex !important;
+  color:#a1264b;
+  margin-top:8px;
+  min-height:20px;
+}
+
 /* Cierre visual minimalista del alta: rosa sereno, logo oficial adaptable y
    una jerarquía limpia sin elementos que invadan las ayudas del formulario. */
 body:has(.login-page) .login-page {
