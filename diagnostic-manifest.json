@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-02T15:06:30.874Z",
-  "sourceFingerprint": "24f0ef5490c688351e3d7379115dffaa9c77c0672a7f9b69c17cb5b979c36681",
+  "generatedAt": "2026-09-02T15:17:39.069Z",
+  "sourceFingerprint": "be9ca39cac1a4d5d7de1a533b0491f8cd49346a8657095a10b78d322a1142c2b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 816,
-    "textFiles": 783,
-    "totalBytes": 9854116,
+    "files": 825,
+    "textFiles": 792,
+    "totalBytes": 9880934,
     "pages": 18,
-    "modules": 530
+    "modules": 536
   },
   "viewports": [
     {
@@ -18127,8 +18127,8 @@
     },
     {
       "path": "functions/_middleware.js",
-      "bytes": 2673,
-      "sha256": "39fd9f9c59bc74263913f3350277de08d8550cc3596790e012f8abe76e26e06a",
+      "bytes": 3912,
+      "sha256": "ca6e417ff7c3b4d99e8c2db8050340453cc4e6b8acc08488fd5fec3dd5a7ae62",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18139,6 +18139,12 @@
           "target": "config/csp-runtime.js",
           "dynamic": false,
           "line": 1
+        },
+        {
+          "raw": "./lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 2
         }
       ],
       "endpoints": []
@@ -19298,6 +19304,24 @@
       "endpoints": []
     },
     {
+      "path": "functions/api/telemetry.js",
+      "bytes": 2599,
+      "sha256": "0d049cd2b6296ff3088fbb5ea6d7e7aaf8a492724ee52c83957f16a77055046f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "functions/api/test-email.js",
       "bytes": 5312,
       "sha256": "72d451db8ed7c791b998b4f82769bf89ea79c3acaa72420c7a05340e6eedeee1",
@@ -19503,6 +19527,22 @@
       },
       "imports": [],
       "endpoints": []
+    },
+    {
+      "path": "functions/lib/operational-guard.js",
+      "bytes": 2465,
+      "sha256": "c8f66805218d50f4c83922d9df157f0f18ab0efa546dfeda7e2d16b0fd288685",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://tintin.invalid/",
+          "line": 61
+        }
+      ]
     },
     {
       "path": "functions/pages/[slug].js",
@@ -25068,6 +25108,17 @@
       "endpoints": []
     },
     {
+      "path": "js/quality/observability.js",
+      "bytes": 6163,
+      "sha256": "1d7f2b2a51207409356fb0e07f43cafff78d93fa5f64adfd3ade61d0f2de099a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "js/quality/revelado-desplazamiento-global.js",
       "bytes": 10540,
       "sha256": "93e60eee272f9cdc0da35b42a5bf018acee09c01d3812e84e58f45ad728a65b3",
@@ -28154,6 +28205,24 @@
       "endpoints": []
     },
     {
+      "path": "scripts/backup-firestore.mjs",
+      "bytes": 1197,
+      "sha256": "e245b5deae5f540d09deb111d6886859aabfbc6151d540b49842bd45d6f849e7",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/construir-manifiesto-diagnostico.js",
       "bytes": 25742,
       "sha256": "f9ab3cd210daa6e1ce269835e2394280645a28f8a097f6d98ad02970eaac8eec",
@@ -28705,6 +28774,24 @@
           "line": 4
         }
       ]
+    },
+    {
+      "path": "scripts/restore-firestore.mjs",
+      "bytes": 1111,
+      "sha256": "5b79a1a61405cc15228dd05cb422f6f40d2b288474f791eb888407653d4dd474",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:child_process",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "scripts/resumir-auditoria-dependencias.mjs",
@@ -29968,6 +30055,45 @@
       },
       "imports": [],
       "endpoints": []
+    },
+    {
+      "path": "tests/operations/operational-guard.test.mjs",
+      "bytes": 1344,
+      "sha256": "d592b6674a43668f006d831d3d1f0fb04e6f7e8162decc029785e78f54bb9617",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../functions/lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://example.com/checkout",
+          "line": 15
+        },
+        {
+          "url": "https://example.com/api/test",
+          "line": 19
+        }
+      ]
     },
     {
       "path": "tests/orders/order-admin-domain.test.mjs",
@@ -31318,8 +31444,8 @@
     {
       "path": ".github/workflows/auditar-inicio-parte-2b.yml",
       "extension": ".yml",
-      "bytes": 1330,
-      "sha256": "bc68cc8cf1ed100e4b231974dbc9b8dd520643bb52980ee8fc50fceac82fbf18"
+      "bytes": 2762,
+      "sha256": "e5c2d0576971185099ee65384d9a0cb5ac45c871d94f82d72611be15f2e08062"
     },
     {
       "path": ".github/workflows/auditar-institucional-ayuda-legal-parte-2e.yml",
@@ -31430,6 +31556,12 @@
       "sha256": "12a86a85e094dccbc2dad253f2be0f0df8cdc0fc3692ce5f2ad704707a20fe05"
     },
     {
+      "path": ".github/workflows/backup-firestore.yml",
+      "extension": ".yml",
+      "bytes": 1214,
+      "sha256": "c71c10fa69a4b03bbc52bf7825747165bf47c3ca0056867d09bcfed7b2f3849d"
+    },
+    {
       "path": ".github/workflows/corregir-esquema-checkout.yml",
       "extension": ".yml",
       "bytes": 662,
@@ -31452,6 +31584,12 @@
       "extension": ".yml",
       "bytes": 971,
       "sha256": "ec4f076caba9d5bf9a585ebf2ca55e4cfbd49ac18fa3de153034d6db635ec6a4"
+    },
+    {
+      "path": ".github/workflows/e2e-critical.yml",
+      "extension": ".yml",
+      "bytes": 2737,
+      "sha256": "48c5bd9b8bba29e723f5b328a9116d7d2fd47b317f0864bb8c270eb7a3a6a1ca"
     },
     {
       "path": ".github/workflows/entrega-final-fase-12.yml",
@@ -31540,8 +31678,8 @@
     {
       "path": "_routes.json",
       "extension": ".json",
-      "bytes": 2166,
-      "sha256": "468595b7fcc2c17d6d7bd23a9a9e0329625bc5c49d6d309bf62a3b97a1692844"
+      "bytes": 2189,
+      "sha256": "42ea203f11dcb6f66d1e140a940e3ec805b39667aafe50b03e632c9e5d664cc8"
     },
     {
       "path": "about.html",
@@ -32648,6 +32786,12 @@
       "sha256": "5f991c8a7bd9046e1da4baaf8991e132f2f072ded1c3d31c214523acfaff1c39"
     },
     {
+      "path": "docs/production-hardening.md",
+      "extension": ".md",
+      "bytes": 5294,
+      "sha256": "cd12cbfb1caf0c12624546d42412e484921fa5093e35bc77eb1c93751707351d"
+    },
+    {
       "path": "docs/prueba-compra-real.md",
       "extension": ".md",
       "bytes": 6390,
@@ -32806,8 +32950,8 @@
     {
       "path": "functions/_middleware.js",
       "extension": ".js",
-      "bytes": 2673,
-      "sha256": "39fd9f9c59bc74263913f3350277de08d8550cc3596790e012f8abe76e26e06a"
+      "bytes": 3912,
+      "sha256": "ca6e417ff7c3b4d99e8c2db8050340453cc4e6b8acc08488fd5fec3dd5a7ae62"
     },
     {
       "path": "functions/admin-images.js",
@@ -33056,6 +33200,12 @@
       "sha256": "d6d02d8daf312f69d4050add8c23912cf2ce6fcc524b6186b648558af8677489"
     },
     {
+      "path": "functions/api/telemetry.js",
+      "extension": ".js",
+      "bytes": 2599,
+      "sha256": "0d049cd2b6296ff3088fbb5ea6d7e7aaf8a492724ee52c83957f16a77055046f"
+    },
+    {
       "path": "functions/api/test-email.js",
       "extension": ".js",
       "bytes": 5312,
@@ -33150,6 +33300,12 @@
       "extension": ".js",
       "bytes": 1865,
       "sha256": "35fd76b3282db70c06d6aea39fe4bbf192fc51165a36b1054093e74933df31e9"
+    },
+    {
+      "path": "functions/lib/operational-guard.js",
+      "extension": ".js",
+      "bytes": 2465,
+      "sha256": "c8f66805218d50f4c83922d9df157f0f18ab0efa546dfeda7e2d16b0fd288685"
     },
     {
       "path": "functions/pages/[slug].js",
@@ -34454,6 +34610,12 @@
       "sha256": "a3e764c94507a810e69bbba31c401a932c1f11109a3647ad104b85e2e5e9b980"
     },
     {
+      "path": "js/quality/observability.js",
+      "extension": ".js",
+      "bytes": 6163,
+      "sha256": "1d7f2b2a51207409356fb0e07f43cafff78d93fa5f64adfd3ade61d0f2de099a"
+    },
+    {
       "path": "js/quality/revelado-desplazamiento-global.js",
       "extension": ".js",
       "bytes": 10540,
@@ -35462,6 +35624,12 @@
       "sha256": "f0146ccee7f24a1078696fc5d35f67261ed29be3680583244fc626ab197c3acc"
     },
     {
+      "path": "scripts/backup-firestore.mjs",
+      "extension": ".mjs",
+      "bytes": 1197,
+      "sha256": "e245b5deae5f540d09deb111d6886859aabfbc6151d540b49842bd45d6f849e7"
+    },
+    {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
       "bytes": 38,
@@ -35598,6 +35766,12 @@
       "extension": ".mjs",
       "bytes": 6934,
       "sha256": "aba8ccb0ae521eddc43228e09248ef8911ce37355166e75fa1175572a7732ac9"
+    },
+    {
+      "path": "scripts/restore-firestore.mjs",
+      "extension": ".mjs",
+      "bytes": 1111,
+      "sha256": "5b79a1a61405cc15228dd05cb422f6f40d2b288474f791eb888407653d4dd474"
     },
     {
       "path": "scripts/resumir-auditoria-dependencias.mjs",
@@ -35856,6 +36030,12 @@
       "extension": ".js",
       "bytes": 7944,
       "sha256": "9562aba2cb84cdd4f88f956cecb96514ef67fbc0e99e4640837fc684e60fdc35"
+    },
+    {
+      "path": "tests/operations/operational-guard.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1344,
+      "sha256": "d592b6674a43668f006d831d3d1f0fb04e6f7e8162decc029785e78f54bb9617"
     },
     {
       "path": "tests/orders/order-admin-domain.test.mjs",
