@@ -16,7 +16,10 @@ if (!bucket.startsWith('gs://')) {
 
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const destination = `${bucket}/${prefix}/${stamp}`;
-const args = ['firestore', 'export', destination, '--project', project, '--async=false'];
+// `gcloud firestore export` waits for the operation by default.  The CLI only
+// accepts `--async` as a flag, so passing `--async=false` breaks current
+// Cloud SDK versions before the export can begin.
+const args = ['firestore', 'export', destination, '--project', project];
 
 console.log(JSON.stringify({ operation: 'backup', project, destination, dryRun }, null, 2));
 if (dryRun) process.exit(0);
