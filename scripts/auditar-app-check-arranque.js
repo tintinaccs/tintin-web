@@ -99,7 +99,10 @@ const checks = [
       images.includes('if (!await appCheckReady)') &&
       publicSettings.includes('appCheckReady.then(ready =>') &&
       products.includes('if (!await appCheckReady)') &&
-      collections.includes('if (!await appCheckReady)') &&
+      // Colecciones públicas llegan por la API edge cacheada y no abren
+      // Firestore desde el navegador; por eso no necesitan encadenar App Check.
+      collections.includes("fetchPublicCatalogResource('collections')") &&
+      !collections.includes("listPublicCollectionRest('collections'") &&
       siteContent.includes('appCheckReady.then(ready =>')
   ],
   [
