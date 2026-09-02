@@ -80,8 +80,9 @@ check(
 check('El panel administrativo conserva exactamente un H1', (adminHtml.match(/<h1\b/gi) || []).length === 1);
 check(
   'Las escuchas en tiempo real de pedidos, usuarios y plantillas están limitadas',
-  /onSnapshot\(query\(collection\(db,\s*['"]orders['"]\),\s*limit\(10000\)\)/.test(adminApp) &&
-    /onSnapshot\(query\(collection\(db,\s*['"]users['"]\),\s*limit\(10000\)\)/.test(adminApp) &&
+  adminApp.includes('const ADMIN_REALTIME_LIMIT = 250') &&
+    /onSnapshot\(query\(collection\(db,\s*['"]orders['"]\),\s*limit\(ADMIN_REALTIME_LIMIT\)\)/.test(adminApp) &&
+    /onSnapshot\(query\(collection\(db,\s*['"]users['"]\),\s*limit\(ADMIN_REALTIME_LIMIT\)\)/.test(adminApp) &&
     /onSnapshot\(query\(collection\(db,\s*['"]emailTemplates['"]\),\s*limit\(500\)\)/.test(adminApp)
 );
 check(
@@ -98,9 +99,9 @@ check(
 );
 check(
   'Las lecturas públicas restantes también están limitadas',
-  /getDocs\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/estado-colecciones.js')) &&
-    /onSnapshot\(query\(collection\(db,\s*['"]collections['"]\),\s*limit\(200\)\)/.test(read('js/pages/collections/estado-colecciones.js')) &&
-    /getDocs\(query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)\)/.test(read('js/core/store/estado-productos.js'))
+  read('js/pages/collections/estado-colecciones.js').includes("fetchPublicCatalogResource('collections')") &&
+    read('js/core/store/estado-productos.js').includes("fetchPublicCatalogResource('products')") &&
+    !/onSnapshot\(\s*query\(collection\(db,\s*['"]products['"]\),\s*limit\(1000\)/.test(read('js/core/store/estado-productos.js'))
 );
 
 check(
