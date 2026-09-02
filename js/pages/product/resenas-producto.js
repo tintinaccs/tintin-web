@@ -1,6 +1,6 @@
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { collection, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { collection, doc, getDocs, limit, onSnapshot, orderBy, query, startAfter } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { heartIconMarkup } from '../../components/favorites/icono-corazon.js?v=tintin-20260817-heart-icon-1';
 import { isValidReviewRating, syncReviewPublishState, reportMissingReviewRating } from './validacion-puntuacion-resena.js?v=tintin-20260831-review-rating-required-1';
 
@@ -19,6 +19,10 @@ let unsubscribeLikes = null;
 let deepLinkHandled = false;
 const PENDING_INTENT_KEY = 'tt_product_community_intent_v2';
 const PROFILE_AVATAR_FALLBACK = '/assets-tintin/images/general/logo.png';
+const PUBLIC_REVIEWS_LIMIT = 100;
+let publicReviewCursor = null;
+let publicReviewsHaveMore = false;
+let publicReviewsLoadingMore = false;
 
 function productReturnPath() {
   return `/product?id=${encodeURIComponent(productId)}#product-reviews`;
@@ -303,8 +307,35 @@ function renderReviews() {
   root.innerHTML = sorted.length
     ? sorted.map(renderReview).join('')
     : '<div class="tt-review-empty">Todavía no hay comentarios. Podés ser la primera en compartir tu opinión.</div>';
+  if (sorted.length && publicReviewsHaveMore) {
+    root.insertAdjacentHTML('beforeend', '<button type="button" class="tt-btn tt-review-load-more" data-review-load-more>Cargar más opiniones</button>');
+  }
   document.querySelectorAll('[data-product-comment-count]').forEach(node => { node.textContent = String(reviews.length); });
   highlightDeepLink();
+}
+
+async function loadMorePublicReviews(button) {
+  if (publicReviewsLoadingMore || !publicReviewsHaveMore || !publicReviewCursor) return;
+  publicReviewsLoadingMore = true;
+  if (button) { button.disabled = true; button.setAttribute('aria-busy', 'true'); }
+  try {
+    const snapshot = await getDocs(query(
+      collection(db, 'products', productId, 'reviews'),
+      orderBy('createdAt', 'desc'),
+      startAfter(publicReviewCursor),
+      limit(PUBLIC_REVIEWS_LIMIT)
+    ));
+    reviews = [...reviews, ...snapshot.docs.map(document => ({ id: document.id, ...document.data() }))]
+      .filter((review, index, list) => reviewIdOf(review) && list.findIndex(item => reviewIdOf(item) === reviewIdOf(review)) === index);
+    publicReviewCursor = snapshot.docs.at(-1) || publicReviewCursor;
+    publicReviewsHaveMore = snapshot.size === PUBLIC_REVIEWS_LIMIT;
+    renderReviews();
+  } catch {
+    showCommunityNotice('No pudimos cargar más opiniones. Volvé a intentar en unos segundos.');
+    if (button) { button.disabled = false; button.removeAttribute('aria-busy'); }
+  } finally {
+    publicReviewsLoadingMore = false;
+  }
 }
 
 function renderProductLike() {
@@ -420,8 +451,16 @@ function subscribePublic() {
   unsubscribeReviews?.();
   unsubscribeStats?.();
   unsubscribeLikes?.();
-  unsubscribeReviews = onSnapshot(collection(db, 'products', productId, 'reviews'), snapshot => {
+  publicReviewCursor = null;
+  publicReviewsHaveMore = false;
+  unsubscribeReviews = onSnapshot(query(
+    collection(db, 'products', productId, 'reviews'),
+    orderBy('createdAt', 'desc'),
+    limit(PUBLIC_REVIEWS_LIMIT)
+  ), snapshot => {
     reviews = snapshot.docs.map(document => ({ id: document.id, ...document.data() }));
+    publicReviewCursor = snapshot.docs.at(-1) || null;
+    publicReviewsHaveMore = snapshot.size === PUBLIC_REVIEWS_LIMIT;
     renderReviews();
   }, () => renderReviews());
   unsubscribeStats = onSnapshot(doc(db, 'productReviewStats', productId), snapshot => {
@@ -454,6 +493,13 @@ document.addEventListener('click', async event => {
   if (ratingButton) {
     event.preventDefault();
     setSelectedRating(ratingButton.dataset.reviewRating);
+    return;
+  }
+
+  const reviewLoadMore = event.target.closest('[data-review-load-more]');
+  if (reviewLoadMore) {
+    event.preventDefault();
+    await loadMorePublicReviews(reviewLoadMore);
     return;
   }
 
