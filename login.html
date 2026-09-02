@@ -118,8 +118,10 @@
           <div id="login-profile-name-field">
             <label class="login-email-label" for="login-profile-first-name">Nombre</label>
             <input type="text" class="login-email-input" id="login-profile-first-name" placeholder="Ej: María" autocomplete="given-name" maxlength="60" />
+            <p class="login-profile-field-error" id="login-first-name-error" aria-live="polite"></p>
             <label class="login-email-label" for="login-profile-last-name">Apellido</label>
             <input type="text" class="login-email-input" id="login-profile-last-name" placeholder="Ej: González" autocomplete="family-name" maxlength="60" />
+            <p class="login-profile-field-error" id="login-last-name-error" aria-live="polite"></p>
           </div>
           <div id="login-profile-username-field">
             <label class="login-email-label" for="login-profile-username">Nombre de usuario</label>
@@ -135,6 +137,7 @@
               <select class="login-email-input login-phone-country" id="login-profile-country" aria-label="Prefijo de Paraguay" disabled><option value="PY">+595</option></select>
               <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="Ej: 0981 336 401" autocomplete="tel-national" inputmode="numeric" maxlength="10" />
             </div>
+            <p class="login-profile-field-error" id="login-phone-error" aria-live="polite"></p>
             <p class="login-phone-help" id="login-phone-help" style="display:none">
               <a id="login-phone-wa" href="https://wa.me/595981299331?text=Hola%2C%20mi%20n%C3%BAmero%20ya%20figura%20en%20otra%20cuenta%20y%20no%20puedo%20completar%20mi%20registro." target="_blank" rel="noopener">Escribinos por WhatsApp</a> y te ayudamos a recuperar tu cuenta.
             </p>
@@ -476,6 +479,28 @@ async function ensureProfileComplete(user, role) {
   let usernameCheckTimer = 0;
   let usernameCheckSequence = 0;
   const usernameStatus = document.getElementById('login-username-status');
+  const profileFieldErrors = {
+    firstName: document.getElementById('login-first-name-error'),
+    lastName: document.getElementById('login-last-name-error'),
+    username: usernameStatus,
+    phone: document.getElementById('login-phone-error'),
+  };
+  const clearProfileFieldErrors = () => {
+    Object.values(profileFieldErrors).forEach(el => {
+      if (!el) return;
+      el.textContent = '';
+      el.classList.remove('show');
+      if (el === usernameStatus) el.dataset.state = 'idle';
+    });
+    usernameAvailability = 'idle';
+  };
+  const setProfileFieldError = (key, message) => {
+    const el = profileFieldErrors[key];
+    if (!el) return;
+    el.textContent = message;
+    el.classList.add('show');
+    if (el === usernameStatus) el.dataset.state = 'taken';
+  };
   const setUsernameStatus = (state, message = '') => {
     usernameAvailability = state;
     usernameStatus.dataset.state = state;
@@ -502,6 +527,22 @@ async function ensureProfileComplete(user, role) {
       setUsernameStatus(result.available ? 'available' : 'taken', result.available ? 'Disponible' : 'Ese nombre ya está en uso.');
     } catch {
       if (requestId === usernameCheckSequence) setUsernameStatus('unknown', 'Lo confirmaremos al continuar.');
+    }
+  };
+
+  const checkPhoneAvailability = async (rawPhone, country) => {
+    try {
+      const token = await user.getIdToken();
+      const response = await fetch('/api/phone-availability', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: rawPhone, country: country.code }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) return { known: false };
+      return { known: true, available: result.available !== false };
+    } catch {
+      return { known: false };
     }
   };
   if (plan.needsUsername || usernameMissing) {
@@ -593,6 +634,7 @@ async function ensureProfileComplete(user, role) {
   await new Promise(resolve => {
     document.getElementById('btn-save-profile').onclick = async () => {
       hideMessages();
+      clearProfileFieldErrors();
       const firstName = firstNameInput.value.trim();
       const lastName = lastNameInput.value.trim();
       const country = findCountryByCode(countrySelect.value);
@@ -602,22 +644,22 @@ async function ensureProfileComplete(user, role) {
       const usernameRaw = usernameInput.value.trim();
       const dobRaw = dobInput.value.trim();
       if (plan.needsName) {
-        if (!isValidNamePart(firstName)) { showError('Ingresá tu nombre real (al menos dos letras, sin números ni símbolos).'); firstNameInput.focus(); return; }
-        if (!isValidNamePart(lastName)) { showError('Ingresá tu apellido real (al menos dos letras, sin números ni símbolos).'); lastNameInput.focus(); return; }
+        if (!isValidNamePart(firstName)) { setProfileFieldError('firstName', 'Ingresá un nombre válido.'); firstNameInput.focus(); return; }
+        if (!isValidNamePart(lastName)) { setProfileFieldError('lastName', 'Ingresá un apellido válido.'); lastNameInput.focus(); return; }
       }
       if (plan.needsUsername || usernameRaw) {
         if (!isValidUsernameFormat(usernameRaw)) {
-          showError('El nombre de usuario debe tener entre 3 y 20 letras/números en minúscula (podés usar guion bajo).');
+          setProfileFieldError('username', 'Usá entre 3 y 20 caracteres válidos.');
           usernameInput.focus();
           return;
         }
         if (isReservedUsername(usernameRaw)) {
-          showError('Ese nombre de usuario no está disponible. Elegí otro.');
+          setProfileFieldError('username', 'Ese nombre de usuario no está disponible.');
           usernameInput.focus();
           return;
         }
         if (usernameAvailability === 'taken') {
-          showError('Ese nombre de usuario ya está en uso. Elegí otro.');
+          setProfileFieldError('username', `El nombre de usuario @${normalizeUsername(usernameRaw)} ya está registrado.`);
           usernameInput.focus();
           return;
         }
@@ -628,16 +670,47 @@ async function ensureProfileComplete(user, role) {
         return;
       }
       if (plan.needsPhone && (!phoneRaw || !isValidPhone(phoneRaw, country))) {
-        showError(`Ingresá un teléfono válido para ${country.flag} ${country.name}.`);
+        setProfileFieldError('phone', `Ingresá un teléfono válido para ${country.flag} ${country.name}.`);
         phoneInput.focus();
         return;
       }
       if (plan.needsPhone && !isRealisticPhone(phoneRaw, country)) {
-        showError(country.code === 'PY'
+        setProfileFieldError('phone', country.code === 'PY'
           ? 'Ese número no parece un celular paraguayo. Escribilo así: 0981 123 456.'
           : 'Ese número no parece válido. Revisalo e intentá de nuevo.');
         phoneInput.focus();
         return;
+      }
+      if (plan.needsPhone || (plan.needsUsername && usernameRaw)) {
+        const [phoneAvailability, usernameAvailabilityResult] = await Promise.all([
+          plan.needsPhone ? checkPhoneAvailability(phoneRaw, country) : Promise.resolve({ known: true, available: true }),
+          (plan.needsUsername && usernameRaw) ? (async () => {
+            try {
+              const token = await user.getIdToken();
+              const response = await fetch('/api/username-availability', {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: normalizeUsername(usernameRaw) }),
+              });
+              const result = await response.json().catch(() => ({}));
+              return response.ok ? { known: true, available: result.available !== false } : { known: false };
+            } catch { return { known: false }; }
+          })() : Promise.resolve({ known: true, available: true }),
+        ]);
+        let availabilityBlocked = false;
+        if (phoneAvailability.known && !phoneAvailability.available) {
+          setProfileFieldError('phone', `El teléfono ${phoneRaw} ya está registrado.`);
+          document.getElementById('login-phone-help').style.display = '';
+          availabilityBlocked = true;
+        }
+        if (usernameAvailabilityResult.known && !usernameAvailabilityResult.available) {
+          setProfileFieldError('username', `El nombre de usuario @${normalizeUsername(usernameRaw)} ya está registrado.`);
+          availabilityBlocked = true;
+        }
+        if (availabilityBlocked) {
+          (phoneAvailability.known && !phoneAvailability.available ? phoneInput : usernameInput).focus();
+          return;
+        }
       }
       if (plan.needsAddress && !point) {
         showError('Marcá tu ubicación en el mapa —buscala o tocá el punto— para poder entregarte el pedido.');
@@ -696,7 +769,7 @@ async function ensureProfileComplete(user, role) {
           // Puede ser suyo de verdad (cambió de cuenta, se registró antes con
           // otro correo). No hay forma de resolverlo sola sin exponer datos de
           // la otra cuenta, así que se le ofrece escribir.
-          showError('Ese número ya está registrado en otra cuenta. Si es tuyo, escribinos por WhatsApp y lo resolvemos.');
+          setProfileFieldError('phone', `El teléfono ${phoneRaw} ya está registrado.`);
           document.getElementById('login-phone-help').style.display = '';
           phoneInput.focus();
         } else if (e?.code === 'permission-denied' && (plan.needsPhone || plan.needsUsername)) {
@@ -705,11 +778,27 @@ async function ensureProfileComplete(user, role) {
           // rechazar el guardado del perfil, se sabe que alguno de los dos ya
           // estaba en uso. No hay forma de saber cuál sin exponer datos de la
           // otra cuenta, así que se avisan los dos campos posibles.
-          showError(plan.needsPhone && plan.needsUsername
-            ? 'Ese teléfono o ese nombre de usuario ya está en uso en otra cuenta. Si alguno es tuyo, escribinos por WhatsApp y lo resolvemos.'
-            : plan.needsPhone
-              ? 'Ese número ya está registrado en otra cuenta. Si es tuyo, escribinos por WhatsApp y lo resolvemos.'
-              : 'Ese nombre de usuario ya está en uso en otra cuenta. Elegí otro, o si es tuyo escribinos por WhatsApp.');
+          const [phoneAvailability, usernameAvailabilityResult] = await Promise.all([
+            plan.needsPhone ? checkPhoneAvailability(phoneRaw, country) : Promise.resolve({ known: true, available: true }),
+            (plan.needsUsername && usernameRaw) ? (async () => {
+              try {
+                const token = await user.getIdToken();
+                const response = await fetch('/api/username-availability', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ username: normalizeUsername(usernameRaw) }) });
+                const result = await response.json().catch(() => ({}));
+                return response.ok ? { known: true, available: result.available !== false } : { known: false };
+              } catch { return { known: false }; }
+            })() : Promise.resolve({ known: true, available: true }),
+          ]);
+          if (phoneAvailability.known && !phoneAvailability.available) {
+            setProfileFieldError('phone', `El teléfono ${phoneRaw} ya está registrado.`);
+            document.getElementById('login-phone-help').style.display = '';
+          }
+          if (usernameAvailabilityResult.known && !usernameAvailabilityResult.available) {
+            setProfileFieldError('username', `El nombre de usuario @${normalizeUsername(usernameRaw)} ya está registrado.`);
+          }
+          if (!(phoneAvailability.known && !phoneAvailability.available) && !(usernameAvailabilityResult.known && !usernameAvailabilityResult.available)) {
+            showError('No pudimos confirmar cuál dato está registrado. Revisá el teléfono y el nombre de usuario e intentá nuevamente.');
+          }
           if (plan.needsPhone) document.getElementById('login-phone-help').style.display = '';
           (plan.needsUsername ? usernameInput : phoneInput).focus();
         } else {
