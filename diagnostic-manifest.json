@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-02T13:31:12.419Z",
-  "sourceFingerprint": "d70e6302d1bdb330a398189ebef1856f97087d1dcd849a68fece923cbfabf79d",
+  "generatedAt": "2026-09-02T15:01:43.750Z",
+  "sourceFingerprint": "98c6a9d119e1eeb60b48bacbae255c259799e30c15f7d027b339e1a4e33a54e4",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 816,
     "textFiles": 783,
-    "totalBytes": 9850488,
+    "totalBytes": 9854120,
     "pages": 18,
     "modules": 530
   },
@@ -15661,8 +15661,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24924,
-      "sha256": "39bc3c6900bf554ce853b9419aefbf98002f6552271b2ebe890bec014bc2527a",
+      "bytes": 24920,
+      "sha256": "73b008eca2271cd3ad8bf2eb0fd81cf6c6aea973f78ae3d5f24bf65cb23ea387",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -24667,8 +24667,8 @@
     },
     {
       "path": "js/pages/product/resenas-producto.js",
-      "bytes": 33783,
-      "sha256": "83e85ab045cbfd4cf98d31a3f2a8587fcc662d8db8db4daacd2b3d5740c3c647",
+      "bytes": 35758,
+      "sha256": "38a1ed527527a8e32f948d5df21e0d9d74008f3421e1b2e049cb30e37b58b40a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24907,8 +24907,8 @@
     },
     {
       "path": "js/pages/profile/mantenimiento-perfil.js",
-      "bytes": 18250,
-      "sha256": "d4882d2fef47340fd38bb3b7df7d696111bd48699a02976e1edd99f6e1703037",
+      "bytes": 19915,
+      "sha256": "e6e8dbf25ce919cf559243fc7ec578c70f2fba6bbb8f5dcc6a55f0e27bd28311",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24918,23 +24918,23 @@
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": true,
-          "line": 212
+          "line": 241
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
           "target": null,
           "dynamic": true,
-          "line": 213
+          "line": 242
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 212
+          "line": 241
         },
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 213
+          "line": 242
         }
       ]
     },
@@ -34354,8 +34354,8 @@
     {
       "path": "js/pages/product/resenas-producto.js",
       "extension": ".js",
-      "bytes": 33783,
-      "sha256": "83e85ab045cbfd4cf98d31a3f2a8587fcc662d8db8db4daacd2b3d5740c3c647"
+      "bytes": 35758,
+      "sha256": "38a1ed527527a8e32f948d5df21e0d9d74008f3421e1b2e049cb30e37b58b40a"
     },
     {
       "path": "js/pages/product/seleccion-producto.js",
@@ -34402,8 +34402,8 @@
     {
       "path": "js/pages/profile/mantenimiento-perfil.js",
       "extension": ".js",
-      "bytes": 18250,
-      "sha256": "d4882d2fef47340fd38bb3b7df7d696111bd48699a02976e1edd99f6e1703037"
+      "bytes": 19915,
+      "sha256": "e6e8dbf25ce919cf559243fc7ec578c70f2fba6bbb8f5dcc6a55f0e27bd28311"
     },
     {
       "path": "js/quality/accesibilidad-global.js",
@@ -34702,8 +34702,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 24924,
-      "sha256": "39bc3c6900bf554ce853b9419aefbf98002f6552271b2ebe890bec014bc2527a"
+      "bytes": 24920,
+      "sha256": "73b008eca2271cd3ad8bf2eb0fd81cf6c6aea973f78ae3d5f24bf65cb23ea387"
     },
     {
       "path": "robots.txt",
@@ -35470,8 +35470,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 37055,
-      "sha256": "e3f44951acf6de5ed34da6433b7ce07d0b56f18fa2b75bc78971d1b013f13e52"
+      "bytes": 37051,
+      "sha256": "a902a3de6d43d3209063483c7a6cae8a776930a20b3c687ef300fca327facef7"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -38250,7 +38250,7 @@
           },
           {
             "file": "js/pages/profile/mantenimiento-perfil.js",
-            "line": 219,
+            "line": 251,
             "operation": "collection"
           },
           {
@@ -38325,7 +38325,7 @@
         "references": [
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 431,
+            "line": 470,
             "operation": "doc"
           }
         ]
@@ -38365,7 +38365,7 @@
           },
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 427,
+            "line": 466,
             "operation": "doc"
           }
         ]
@@ -38510,7 +38510,12 @@
           },
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 423,
+            "line": 323,
+            "operation": "collection"
+          },
+          {
+            "file": "js/pages/product/resenas-producto.js",
+            "line": 457,
             "operation": "collection"
           },
           {
