@@ -16,12 +16,12 @@ test('catálogo público pasa por caché edge y usa lista blanca', () => {
   assert.match(routes, /\/api\/public-catalog/);
 });
 
-test('clientes prefieren edge y conservan fallback Firestore', () => {
+test('clientes usan edge sin fallback Firestore de colección completa', () => {
   assert.match(products, /fetchPublicCatalogResource\('products'\)/);
-  assert.match(products, /fetchAllProductsFromRest\(\)/);
   assert.match(products, /fetchAllProductsFromSdk\(\)/);
+  assert.doesNotMatch(products, /fetchAllProductsFromRest\(\)/);
   assert.match(collections, /fetchPublicCatalogResource\('collections'\)/);
-  assert.match(collections, /listPublicCollectionRest\('collections'/);
+  assert.doesNotMatch(collections, /listPublicCollectionRest\('collections'/);
 });
 
 test('catálogo comercial no abre automáticamente el listener completo', () => {
