@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-02T15:17:39.069Z",
-  "sourceFingerprint": "be9ca39cac1a4d5d7de1a533b0491f8cd49346a8657095a10b78d322a1142c2b",
+  "generatedAt": "2026-09-02T18:09:02.841Z",
+  "sourceFingerprint": "d0a2f24af20d7d10aa56ad63c9c70efce5425959a5eee3485f23fda9222b4adf",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 825,
-    "textFiles": 792,
-    "totalBytes": 9880934,
+    "files": 789,
+    "textFiles": 756,
+    "totalBytes": 9813897,
     "pages": 18,
-    "modules": 536
+    "modules": 542
   },
   "viewports": [
     {
@@ -18127,8 +18127,8 @@
     },
     {
       "path": "functions/_middleware.js",
-      "bytes": 3912,
-      "sha256": "ca6e417ff7c3b4d99e8c2db8050340453cc4e6b8acc08488fd5fec3dd5a7ae62",
+      "bytes": 4288,
+      "sha256": "50cc3419f64e8a599c7007db535d7f883f7d839f3d71568269b5a79ca9b4dd37",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18331,6 +18331,59 @@
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
           "line": 2
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "functions/api/apps-script-bridge.js",
+      "bytes": 3152,
+      "sha256": "3d00326e2ddd121bf99dd5abcc26275afa780ca68247fc1a83e6360b1f9e2465",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://script.google.com/macros/s/AKfycbyh9I5aPp9d3lMSnYRNfrHcSCCobCoDOif9CqtXmMe4FgwSjzlKf4kjQZqvKDRmEY6S/exec",
+          "line": 12
+        }
+      ]
+    },
+    {
+      "path": "functions/api/catalog-sheet-sync-drain.js",
+      "bytes": 2825,
+      "sha256": "06dba307a91722d79d034899ff18cbb14da779f2720e705b374a67b79ae1e790",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/resiliencia-sync-catalogo.js",
+          "target": "cloudflare/resiliencia-sync-catalogo.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../lib/github-actions-oidc.js",
+          "target": "functions/lib/github-actions-oidc.js",
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 7
         }
       ],
       "endpoints": []
@@ -19305,8 +19358,8 @@
     },
     {
       "path": "functions/api/telemetry.js",
-      "bytes": 2599,
-      "sha256": "0d049cd2b6296ff3088fbb5ea6d7e7aaf8a492724ee52c83957f16a77055046f",
+      "bytes": 2785,
+      "sha256": "63fc25fef3f72840ced7eb88c252ebd7e177464ee1e80e270d2459b69795a543",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19527,6 +19580,22 @@
       },
       "imports": [],
       "endpoints": []
+    },
+    {
+      "path": "functions/lib/github-actions-oidc.js",
+      "bytes": 4980,
+      "sha256": "7a80756ec697e4e5015e317535e860b886ac53df1faf41aa1ba771d206b6f303",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://token.actions.githubusercontent.com/",
+          "line": 1
+        }
+      ]
     },
     {
       "path": "functions/lib/operational-guard.js",
@@ -25108,6 +25177,22 @@
       "endpoints": []
     },
     {
+      "path": "js/quality/integration-router.js",
+      "bytes": 2073,
+      "sha256": "cd15d4091fb84423b82f255c9df0ad01feafaf08fac212f45ff2b1ba850bce52",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/",
+          "line": 32
+        }
+      ]
+    },
+    {
       "path": "js/quality/observability.js",
       "bytes": 6163,
       "sha256": "1d7f2b2a51207409356fb0e07f43cafff78d93fa5f64adfd3ade61d0f2de099a",
@@ -26503,8 +26588,8 @@
     },
     {
       "path": "scripts/auditar-fase-11-seo.js",
-      "bytes": 9973,
-      "sha256": "7394a7b415acea7a7ed6116f1af38e256b6df47e14291c074e7481083f3f0eee",
+      "bytes": 10547,
+      "sha256": "3cfc5d22149acec1864d3b0eb38cb9c8d2845e730a7d59ec0fb6ad3d63046705",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26613,8 +26698,8 @@
     },
     {
       "path": "scripts/auditar-final-barrido-parte-2h.js",
-      "bytes": 8232,
-      "sha256": "280eef61908230e915630f62c9000f2677f7082bf8624c676964f47de00ad871",
+      "bytes": 9791,
+      "sha256": "460de62eb4b062909c964acac9eca209be4ae2067446249179b7f3a69e0c3ec2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27016,6 +27101,30 @@
       ]
     },
     {
+      "path": "scripts/auditar-integraciones-canonicas.mjs",
+      "bytes": 8628,
+      "sha256": "f9c7140e6732d25891ee568e1e7a3fa5adbdee62431df59488c21607cb9b3e7c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/auditar-integral-plataforma.js",
       "bytes": 8285,
       "sha256": "06ccb4ea72c01c94c0bc4ae57a9bbd7bf2a6620ed9fa863908df58012dc0b17b",
@@ -27279,8 +27388,8 @@
     },
     {
       "path": "scripts/auditar-nivel-1-fundamentos.js",
-      "bytes": 6006,
-      "sha256": "8ad335231aff68ad9162dfcc0427ce44a19bf54997d9148d4c01bce6c2757c9b",
+      "bytes": 7182,
+      "sha256": "a5a0f20158c3387ca13a53ec5e0d44412a7dee605680d8f03f1b3b830fcfe7b6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28281,24 +28390,6 @@
       "endpoints": []
     },
     {
-      "path": "scripts/drenar-cola-sync-catalogo.mjs",
-      "bytes": 1260,
-      "sha256": "74251928cc0a75a0fea3bb75a38c625af933c378c6a84f33b2c17c04fe53291e",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../cloudflare/resiliencia-sync-catalogo.js",
-          "target": "cloudflare/resiliencia-sync-catalogo.js",
-          "dynamic": false,
-          "line": 1
-        }
-      ],
-      "endpoints": []
-    },
-    {
       "path": "scripts/ejecutar-auditoria-responsive-con-reintento.mjs",
       "bytes": 1203,
       "sha256": "009fdda057952e348dfb3763cee79767256522d9d02bf46809cfcb9daa41a7f3",
@@ -28960,8 +29051,8 @@
     },
     {
       "path": "scripts/smoke-todas-paginas.mjs",
-      "bytes": 19939,
-      "sha256": "bd1a10a3f93c50a86b40b69854cd803665ebd9e1dbe96fc6e4c65af5693595a5",
+      "bytes": 20804,
+      "sha256": "22498c318b3d6e34bf519249148bcf822e4af065933d7aeda9e00a9b04109381",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30055,6 +30146,114 @@
       },
       "imports": [],
       "endpoints": []
+    },
+    {
+      "path": "tests/operations/github-actions-oidc.test.mjs",
+      "bytes": 4840,
+      "sha256": "221d5c5f2b388601235041005839d1f10d8e8f825a1c47824c88b09ac4ffa07d",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../functions/lib/github-actions-oidc.js",
+          "target": "functions/lib/github-actions-oidc.js",
+          "dynamic": false,
+          "line": 7
+        },
+        {
+          "raw": "node:fs/promises",
+          "target": null,
+          "dynamic": true,
+          "line": 120
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": true,
+          "line": 121
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": true,
+          "line": 122
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://token.actions.githubusercontent.com/",
+          "line": 47
+        }
+      ]
+    },
+    {
+      "path": "tests/operations/integration-router-security.test.mjs",
+      "bytes": 1743,
+      "sha256": "417d42ed1eacda25d70c10c11e3cefec6741b57f4943d6f020730d2ca12612c3",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:fs/promises",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://${hostname}/",
+          "line": 16
+        },
+        {
+          "url": "https://script.google.com/macros/s/test-deployment/exec",
+          "line": 24
+        },
+        {
+          "url": "https://tintinaccesorios.pages.dev/api/apps-script-bridge",
+          "line": 31
+        }
+      ]
     },
     {
       "path": "tests/operations/operational-guard.test.mjs",
@@ -31340,220 +31539,28 @@
       "sha256": "d008c5817e008af8ffaa08493bd5ad4244d7d10505958f30c0f91f14706b1a80"
     },
     {
-      "path": ".github/workflows/aplicar-logica-tienda-unificada.yml",
-      "extension": ".yml",
-      "bytes": 2568,
-      "sha256": "1eee36f3c13f4900986ee6c8ed2efeff12a68e67e684b90663cb509e37cc72ab"
-    },
-    {
-      "path": ".github/workflows/auditar-actions-soportadas.yml",
-      "extension": ".yml",
-      "bytes": 672,
-      "sha256": "94a1dc93d18b531b4e76375ae7b158e00ec4cff5c48eb7659bbba187a5a4cec2"
-    },
-    {
-      "path": ".github/workflows/auditar-admin-parte-2f.yml",
-      "extension": ".yml",
-      "bytes": 1232,
-      "sha256": "db2466495fd92f01ed7b2b238819a58d9f97b9abcc8bd60d99149e16cd91bf2c"
-    },
-    {
-      "path": ".github/workflows/auditar-barrido-final-parte-2h.yml",
-      "extension": ".yml",
-      "bytes": 1075,
-      "sha256": "e3da226ea01fe7111f0123d5f518f96c6d372e4b8f481a5f607d175304e69009"
-    },
-    {
-      "path": ".github/workflows/auditar-borrado-global-catalogo.yml",
-      "extension": ".yml",
-      "bytes": 2228,
-      "sha256": "b0382e5375d62b8da2ca907080b98516ae21e8d4446d29defaf18ec061c64cdb"
-    },
-    {
-      "path": ".github/workflows/auditar-calidad-nivel-3.yml",
-      "extension": ".yml",
-      "bytes": 5409,
-      "sha256": "c6709976692a470dea2b68d4eb9faa2b1f1c74288152ef3871b7136c587ef331"
-    },
-    {
-      "path": ".github/workflows/auditar-carrito-fase-7.yml",
-      "extension": ".yml",
-      "bytes": 2991,
-      "sha256": "9c48d8d74c22e46777c28e695448bdd220c9d6f4757766bd083796a74c3d88e4"
-    },
-    {
-      "path": ".github/workflows/auditar-colecciones-fase-4.yml",
-      "extension": ".yml",
-      "bytes": 1225,
-      "sha256": "91bdb9d4eddb4e0c4a500afdd4950057e9d6e2794419fedd2378ce208f6acbe0"
-    },
-    {
-      "path": ".github/workflows/auditar-comercio-nivel-2.yml",
-      "extension": ".yml",
-      "bytes": 944,
-      "sha256": "f26f35847fa117aefc97b8a7b98bf76c43476eb09ad257ac377525e76137b46f"
-    },
-    {
-      "path": ".github/workflows/auditar-comercio-parte-2c.yml",
-      "extension": ".yml",
-      "bytes": 1359,
-      "sha256": "cb98656edea528db7aa47d60d2756f7e7b84f4ca1c018554842ba28abdedd14d"
-    },
-    {
-      "path": ".github/workflows/auditar-contenido-fase-6.yml",
-      "extension": ".yml",
-      "bytes": 1663,
-      "sha256": "4b774e191cdd947e4c56c790d323fcb53819530c169cceded1fe7ee077046b8e"
-    },
-    {
-      "path": ".github/workflows/auditar-contratos-arquitectura.yml",
-      "extension": ".yml",
-      "bytes": 1063,
-      "sha256": "3bbd581c8f8e32f7bc88ab9494e7b73f15f6f26b80a3eb539fed4f480a03b633"
-    },
-    {
-      "path": ".github/workflows/auditar-correo-fase-3.yml",
-      "extension": ".yml",
-      "bytes": 1189,
-      "sha256": "3c0ad249742ff80ae0ee1ea5b7678d04b2eabe67689ab9e66e525ddd01a11a05"
-    },
-    {
-      "path": ".github/workflows/auditar-diagnostico.yml",
-      "extension": ".yml",
-      "bytes": 2046,
-      "sha256": "f4ce9ce5db05184f8b5b1d959dc6c73d90238f9ed09fdded91334e120ac24eed"
-    },
-    {
-      "path": ".github/workflows/auditar-estructura-canonica-sitio.yml",
-      "extension": ".yml",
-      "bytes": 2365,
-      "sha256": "803dbca4553ed253057ac8294627acd041d5bca6bea93c42de58d8727ed87213"
-    },
-    {
-      "path": ".github/workflows/auditar-flujo-cuenta-parte-2d.yml",
-      "extension": ".yml",
-      "bytes": 2025,
-      "sha256": "a5b26039224127ca0b428b3b2d8dbfc979742a7b2a89a21d8518a0be1a3a2986"
-    },
-    {
-      "path": ".github/workflows/auditar-imagenes-fase-5.yml",
-      "extension": ".yml",
-      "bytes": 4806,
-      "sha256": "1c561dca9a2a7c6f0633a0d34641fc3797932c35a27a283a3c6eb38a109a968f"
-    },
-    {
-      "path": ".github/workflows/auditar-inicio-parte-2b.yml",
-      "extension": ".yml",
-      "bytes": 2762,
-      "sha256": "e5c2d0576971185099ee65384d9a0cb5ac45c871d94f82d72611be15f2e08062"
-    },
-    {
-      "path": ".github/workflows/auditar-institucional-ayuda-legal-parte-2e.yml",
-      "extension": ".yml",
-      "bytes": 2428,
-      "sha256": "9f51d03a158d29469fbdea6df760ca854dc4f4fc1f7ad793ee29e0821d80dc49"
-    },
-    {
       "path": ".github/workflows/auditar-limpiar-ramas.yml",
       "extension": ".yml",
-      "bytes": 4044,
-      "sha256": "0b59684129f0951f74b3fa796ad5c28195a1ac8133ebed00fa3a84366ff3b5d0"
-    },
-    {
-      "path": ".github/workflows/auditar-navegacion-modular.yml",
-      "extension": ".yml",
-      "bytes": 2819,
-      "sha256": "4bdfbe9f6028aebbfd54bdcc6e8e87360f43c4555419ccaeb5c2a2790cdc923a"
-    },
-    {
-      "path": ".github/workflows/auditar-notificaciones-sociales.yml",
-      "extension": ".yml",
-      "bytes": 990,
-      "sha256": "1c6fdb01de5f325a7ffedac0baf8ab7ecda4f801419c6eed7f3cf1706aaac5e4"
-    },
-    {
-      "path": ".github/workflows/auditar-pedidos-seguros.yml",
-      "extension": ".yml",
-      "bytes": 1558,
-      "sha256": "7d3b2ba56511019ef8bf792169ae35e92130dc2e18ef9ef8d85cafc42da070ea"
-    },
-    {
-      "path": ".github/workflows/auditar-push-web.yml",
-      "extension": ".yml",
-      "bytes": 1085,
-      "sha256": "71f99e9f8198996254a6f302a63166021ffc887d1f73b2c04dbea259d4501a6e"
-    },
-    {
-      "path": ".github/workflows/auditar-resena-producto-puntuacion.yml",
-      "extension": ".yml",
-      "bytes": 1535,
-      "sha256": "68b31ef61e1d72cfb3677adbb32be29d206b859f8340d618955229a5b3352c07"
-    },
-    {
-      "path": ".github/workflows/auditar-responsive-global.yml",
-      "extension": ".yml",
-      "bytes": 2111,
-      "sha256": "1670b898687d30366c4bd42c959668ad0151311126b583cb178a97087568e97e"
-    },
-    {
-      "path": ".github/workflows/auditar-seguridad-fase-8.yml",
-      "extension": ".yml",
-      "bytes": 4421,
-      "sha256": "fedc01f119452d64529974a2e331dba137753633054610fde127b950d570daf8"
-    },
-    {
-      "path": ".github/workflows/auditar-sistema-especial-parte-2g.yml",
-      "extension": ".yml",
-      "bytes": 1303,
-      "sha256": "c3c40759c7ad79c1fcdda91b5a5eb50713de1de652a8da0549a53555a86aa847"
-    },
-    {
-      "path": ".github/workflows/auditar-superadmin-maestro.yml",
-      "extension": ".yml",
-      "bytes": 5396,
-      "sha256": "a059bdda5fd62456fc364c2a2400c011543a41c0490071fec967d4a30aba68ef"
-    },
-    {
-      "path": ".github/workflows/auditar-sync-authority.yml",
-      "extension": ".yml",
-      "bytes": 951,
-      "sha256": "35bad4e48898486d3e549cd66c04cb9209d0b33894b1f83845e8547e1262ac66"
-    },
-    {
-      "path": ".github/workflows/auditar-system-health.yml",
-      "extension": ".yml",
-      "bytes": 1262,
-      "sha256": "03a1581f941e871848e236a3a8f9a82ca9f548eb9a877c10b552e035f88b86c4"
+      "bytes": 2452,
+      "sha256": "e5033c1c29b3b963c144c6f184da0211d6e886155f0640759048a3aa5bd7b602"
     },
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 7912,
-      "sha256": "3d2b2ae04915bf5dff7228d0ccda8b1dc4aed956c4a4cc50e21500257ea8b80f"
-    },
-    {
-      "path": ".github/workflows/auditar-tipografia.yml",
-      "extension": ".yml",
-      "bytes": 1178,
-      "sha256": "cfd7af10c1d9eaa4c0c12f1df800d022759916e1c6f4cab97a5beef8c9c84184"
-    },
-    {
-      "path": ".github/workflows/auditar-versionado-cache.yml",
-      "extension": ".yml",
-      "bytes": 1262,
-      "sha256": "e5869d45df389c515dd96d81157aa10b169d6f065cc88e236e1a963c1b5d17f8"
+      "bytes": 3922,
+      "sha256": "e4e98d48681c02c03d4e2de631a0434e70d4391cf8803c1f7d641e55c814648f"
     },
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
       "extension": ".yml",
-      "bytes": 1635,
-      "sha256": "07a46797fd092770ab8cf781f6da4071531cab8d5aa2fc70f8cd536251f6c5d9"
+      "bytes": 1125,
+      "sha256": "67455d5ccd8da6cdbc38e6fc191666d3f484798427d73bcde0d97b860b1a497d"
     },
     {
-      "path": ".github/workflows/auditoria-tooling.yml",
+      "path": ".github/workflows/auditoria-visual.yml",
       "extension": ".yml",
-      "bytes": 1598,
-      "sha256": "12a86a85e094dccbc2dad253f2be0f0df8cdc0fc3692ce5f2ad704707a20fe05"
+      "bytes": 1156,
+      "sha256": "2812fe22aeb94c3c440f2ee587d6a26cc48e6eb1a721dfbcd6ed0a8aa19b23d3"
     },
     {
       "path": ".github/workflows/backup-firestore.yml",
@@ -31562,16 +31569,10 @@
       "sha256": "c71c10fa69a4b03bbc52bf7825747165bf47c3ca0056867d09bcfed7b2f3849d"
     },
     {
-      "path": ".github/workflows/corregir-esquema-checkout.yml",
-      "extension": ".yml",
-      "bytes": 662,
-      "sha256": "c70faaca8f9fd0e0be6ca49aef02944e0dcee832da1a488759ebd843a07af9e3"
-    },
-    {
       "path": ".github/workflows/desplegar-pages.yml",
       "extension": ".yml",
-      "bytes": 3315,
-      "sha256": "e1b30e961dde9f501c5e7ba017093265ac853bbe9e4af2df3eefda0f72640fb7"
+      "bytes": 1320,
+      "sha256": "295d1106180bbfef7a0b854ceeb15b8492a2decaabe6015d8488ab4b43e993eb"
     },
     {
       "path": ".github/workflows/diagnostico-maestro.yml",
@@ -31582,80 +31583,20 @@
     {
       "path": ".github/workflows/drenar-cola-sync-catalogo.yml",
       "extension": ".yml",
-      "bytes": 971,
-      "sha256": "ec4f076caba9d5bf9a585ebf2ca55e4cfbd49ac18fa3de153034d6db635ec6a4"
+      "bytes": 1776,
+      "sha256": "7775c194a94eef9b0bd7edf2639d5dab3a9676c9fea36c6ad9331cfc9ad8a66b"
     },
     {
-      "path": ".github/workflows/e2e-critical.yml",
+      "path": ".github/workflows/monitor-produccion.yml",
       "extension": ".yml",
-      "bytes": 2737,
-      "sha256": "48c5bd9b8bba29e723f5b328a9116d7d2fd47b317f0864bb8c270eb7a3a6a1ca"
-    },
-    {
-      "path": ".github/workflows/entrega-final-fase-12.yml",
-      "extension": ".yml",
-      "bytes": 4508,
-      "sha256": "2bc521c676d5731074ff916fd5115d131babd634e421950293c9f6fe7ddabb31"
-    },
-    {
-      "path": ".github/workflows/entrega-final-fase-9.yml",
-      "extension": ".yml",
-      "bytes": 2521,
-      "sha256": "6a2eca592cb337151a33f84556075cf6a15d7329c7cff4eae016b6e43ce70d2f"
-    },
-    {
-      "path": ".github/workflows/lanzar-diagnostico-maestro.yml",
-      "extension": ".yml",
-      "bytes": 1139,
-      "sha256": "f224696da578a2907249a4b78ba4829c3ac3e891cb752a6570b328130de04719"
+      "bytes": 2752,
+      "sha256": "a5021957b0e77bc816fd7b21fe82e34000a549dd6578883eedd47c8887b8e673"
     },
     {
       "path": ".github/workflows/respaldo-repositorio.yml",
       "extension": ".yml",
-      "bytes": 1741,
-      "sha256": "aba3c2acc96e842af823d1595c08750e897bea27d060d4f69d07d28670d151ad"
-    },
-    {
-      "path": ".github/workflows/seo-produccion-fase-11.yml",
-      "extension": ".yml",
-      "bytes": 6857,
-      "sha256": "b7ef9000290d95652ccee0c392daede334edb704691abf684e557ab3480f2498"
-    },
-    {
-      "path": ".github/workflows/validar-editor-visual-seguro.yml",
-      "extension": ".yml",
-      "bytes": 3220,
-      "sha256": "698cb3487c10042cd84616c3769cbfa05b6bcfa1e69cdbd3b2ca1a5821c3c371"
-    },
-    {
-      "path": ".github/workflows/validar-estudio-codigo.yml",
-      "extension": ".yml",
-      "bytes": 1746,
-      "sha256": "77d1ea94f8b6b82d579fda157e070f9f3c565250e894f558fae0acc3d6b749bb"
-    },
-    {
-      "path": ".github/workflows/validar-header-responsive.yml",
-      "extension": ".yml",
-      "bytes": 2509,
-      "sha256": "23bf55bfaaea83ddc9d9e773d80cf57df269ff1f8e9ea17af07813e7178412e5"
-    },
-    {
-      "path": ".github/workflows/validar-navegacion-inmediata.yml",
-      "extension": ".yml",
-      "bytes": 1732,
-      "sha256": "41d7f13a4dd3cf3e68903152b04d0a6b396280dedd057b29836704aeb775885c"
-    },
-    {
-      "path": ".github/workflows/validar-ruta-producto-cloudflare.yml",
-      "extension": ".yml",
-      "bytes": 1166,
-      "sha256": "a05492b7f536c4ed9da8e619ce15bc04d022295a897490ca78887fb8c9e45b13"
-    },
-    {
-      "path": ".github/workflows/validar-tienda-unificada-final.yml",
-      "extension": ".yml",
-      "bytes": 2472,
-      "sha256": "749bbfd077e857567e85de7fe415bb7768f5fdc00cb3af39449b5ed829ddf73a"
+      "bytes": 1134,
+      "sha256": "bae175b6a39564988b1ad28c876c934ad1f5fbb8127345ec407c6c6017640c47"
     },
     {
       "path": "404.html",
@@ -31678,8 +31619,8 @@
     {
       "path": "_routes.json",
       "extension": ".json",
-      "bytes": 2189,
-      "sha256": "42ea203f11dcb6f66d1e140a940e3ec805b39667aafe50b03e632c9e5d664cc8"
+      "bytes": 2257,
+      "sha256": "ce428bfb000fac3c87b5db301d5d9cadbc48c326ca6ce085b9f110e1a807394e"
     },
     {
       "path": "about.html",
@@ -32576,6 +32517,12 @@
       "sha256": "f503cfee692f5564f67853c5632db3f58bac5c9f8226930b8efb80b04f48cce9"
     },
     {
+      "path": "docs/arquitectura-operativa-canonica.md",
+      "extension": ".md",
+      "bytes": 3947,
+      "sha256": "2291a4f1618f7100abde864a84c2cac23e092dd3ce2494666cd4e4d1b65abf24"
+    },
+    {
       "path": "docs/arquitectura-tecnica.md",
       "extension": ".md",
       "bytes": 5225,
@@ -32950,8 +32897,8 @@
     {
       "path": "functions/_middleware.js",
       "extension": ".js",
-      "bytes": 3912,
-      "sha256": "ca6e417ff7c3b4d99e8c2db8050340453cc4e6b8acc08488fd5fec3dd5a7ae62"
+      "bytes": 4288,
+      "sha256": "50cc3419f64e8a599c7007db535d7f883f7d839f3d71568269b5a79ca9b4dd37"
     },
     {
       "path": "functions/admin-images.js",
@@ -32994,6 +32941,18 @@
       "extension": ".js",
       "bytes": 2530,
       "sha256": "b9208a54b440ea5b17ab90d3f7eb8b33bb518628aad1b84ee401520577908ce6"
+    },
+    {
+      "path": "functions/api/apps-script-bridge.js",
+      "extension": ".js",
+      "bytes": 3152,
+      "sha256": "3d00326e2ddd121bf99dd5abcc26275afa780ca68247fc1a83e6360b1f9e2465"
+    },
+    {
+      "path": "functions/api/catalog-sheet-sync-drain.js",
+      "extension": ".js",
+      "bytes": 2825,
+      "sha256": "06dba307a91722d79d034899ff18cbb14da779f2720e705b374a67b79ae1e790"
     },
     {
       "path": "functions/api/cloudinary-delete.js",
@@ -33202,8 +33161,8 @@
     {
       "path": "functions/api/telemetry.js",
       "extension": ".js",
-      "bytes": 2599,
-      "sha256": "0d049cd2b6296ff3088fbb5ea6d7e7aaf8a492724ee52c83957f16a77055046f"
+      "bytes": 2785,
+      "sha256": "63fc25fef3f72840ced7eb88c252ebd7e177464ee1e80e270d2459b69795a543"
     },
     {
       "path": "functions/api/test-email.js",
@@ -33300,6 +33259,12 @@
       "extension": ".js",
       "bytes": 1865,
       "sha256": "35fd76b3282db70c06d6aea39fe4bbf192fc51165a36b1054093e74933df31e9"
+    },
+    {
+      "path": "functions/lib/github-actions-oidc.js",
+      "extension": ".js",
+      "bytes": 4980,
+      "sha256": "7a80756ec697e4e5015e317535e860b886ac53df1faf41aa1ba771d206b6f303"
     },
     {
       "path": "functions/lib/operational-guard.js",
@@ -34610,6 +34575,12 @@
       "sha256": "a3e764c94507a810e69bbba31c401a932c1f11109a3647ad104b85e2e5e9b980"
     },
     {
+      "path": "js/quality/integration-router.js",
+      "extension": ".js",
+      "bytes": 2073,
+      "sha256": "cd15d4091fb84423b82f255c9df0ad01feafaf08fac212f45ff2b1ba850bce52"
+    },
+    {
       "path": "js/quality/observability.js",
       "extension": ".js",
       "bytes": 6163,
@@ -35206,8 +35177,8 @@
     {
       "path": "scripts/auditar-fase-11-seo.js",
       "extension": ".js",
-      "bytes": 9973,
-      "sha256": "7394a7b415acea7a7ed6116f1af38e256b6df47e14291c074e7481083f3f0eee"
+      "bytes": 10547,
+      "sha256": "3cfc5d22149acec1864d3b0eb38cb9c8d2845e730a7d59ec0fb6ad3d63046705"
     },
     {
       "path": "scripts/auditar-fase-12-entrega.mjs",
@@ -35242,8 +35213,8 @@
     {
       "path": "scripts/auditar-final-barrido-parte-2h.js",
       "extension": ".js",
-      "bytes": 8232,
-      "sha256": "280eef61908230e915630f62c9000f2677f7082bf8624c676964f47de00ad871"
+      "bytes": 9791,
+      "sha256": "460de62eb4b062909c964acac9eca209be4ae2067446249179b7f3a69e0c3ec2"
     },
     {
       "path": "scripts/auditar-final-entrega.js",
@@ -35324,6 +35295,12 @@
       "sha256": "8bbd4942090b7eb7cb4954b09195f50c21a39149b589780303180ab06f9957e3"
     },
     {
+      "path": "scripts/auditar-integraciones-canonicas.mjs",
+      "extension": ".mjs",
+      "bytes": 8628,
+      "sha256": "f9c7140e6732d25891ee568e1e7a3fa5adbdee62431df59488c21607cb9b3e7c"
+    },
+    {
       "path": "scripts/auditar-integral-plataforma.js",
       "extension": ".js",
       "bytes": 8285,
@@ -35374,8 +35351,8 @@
     {
       "path": "scripts/auditar-nivel-1-fundamentos.js",
       "extension": ".js",
-      "bytes": 6006,
-      "sha256": "8ad335231aff68ad9162dfcc0427ce44a19bf54997d9148d4c01bce6c2757c9b"
+      "bytes": 7182,
+      "sha256": "a5a0f20158c3387ca13a53ec5e0d44412a7dee605680d8f03f1b3b830fcfe7b6"
     },
     {
       "path": "scripts/auditar-nivel-2-comercio.js",
@@ -35660,12 +35637,6 @@
       "sha256": "258aa91331c0c2ffff924ad4ee6f0852cf7edf6dc49029a8f4cb1719468de726"
     },
     {
-      "path": "scripts/drenar-cola-sync-catalogo.mjs",
-      "extension": ".mjs",
-      "bytes": 1260,
-      "sha256": "74251928cc0a75a0fea3bb75a38c625af933c378c6a84f33b2c17c04fe53291e"
-    },
-    {
       "path": "scripts/ejecutar-auditoria-responsive-con-reintento.mjs",
       "extension": ".mjs",
       "bytes": 1203,
@@ -35812,8 +35783,8 @@
     {
       "path": "scripts/smoke-todas-paginas.mjs",
       "extension": ".mjs",
-      "bytes": 19939,
-      "sha256": "bd1a10a3f93c50a86b40b69854cd803665ebd9e1dbe96fc6e4c65af5693595a5"
+      "bytes": 20804,
+      "sha256": "22498c318b3d6e34bf519249148bcf822e4af065933d7aeda9e00a9b04109381"
     },
     {
       "path": "scripts/verificar-manifiesto-diagnostico.js",
@@ -36030,6 +36001,18 @@
       "extension": ".js",
       "bytes": 7944,
       "sha256": "9562aba2cb84cdd4f88f956cecb96514ef67fbc0e99e4640837fc684e60fdc35"
+    },
+    {
+      "path": "tests/operations/github-actions-oidc.test.mjs",
+      "extension": ".mjs",
+      "bytes": 4840,
+      "sha256": "221d5c5f2b388601235041005839d1f10d8e8f825a1c47824c88b09ac4ffa07d"
+    },
+    {
+      "path": "tests/operations/integration-router-security.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1743,
+      "sha256": "417d42ed1eacda25d70c10c11e3cefec6741b57f4943d6f020730d2ca12612c3"
     },
     {
       "path": "tests/operations/operational-guard.test.mjs",

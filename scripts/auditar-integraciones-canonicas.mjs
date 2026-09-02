@@ -99,6 +99,10 @@ for (const key of secretKeys) {
 const workflowDir = path.join(root, '.github/workflows');
 const workflows = fs.readdirSync(workflowDir).filter(name => /\.ya?ml$/.test(name));
 const prWorkflows = workflows.filter(name => /(^|\n)\s*pull_request\s*:/.test(read(`.github/workflows/${name}`)));
+const sheetsScheduler = read('.github/workflows/drenar-cola-sync-catalogo.yml');
+assert(!fs.existsSync(path.join(root, 'scripts/drenar-cola-sync-catalogo.mjs')), 'Sheets: no debe existir un drenador local alternativo con secretos estáticos.');
+assert(/id-token:\s*write/.test(sheetsScheduler) && /catalog-sheet-sync-drain/.test(sheetsScheduler), 'Sheets: el scheduler debe usar OIDC y el endpoint Cloudflare canónico.');
+assert(!/FIREBASE_SERVICE_ACCOUNT_(?:JSON|KEY)|SHEETS_ENGAGEMENT_SECRET/.test(sheetsScheduler), 'Sheets: el scheduler no debe transportar secretos estáticos.');
 assert(workflows.length <= 12, `GitHub Actions: hay ${workflows.length} workflows; el presupuesto de desfragmentación es 12.`);
 assert(prWorkflows.length === 1 && prWorkflows[0] === 'auditar-tintin.yml', `GitHub Actions: solo auditar-tintin.yml debe dispararse en PR; encontrados: ${prWorkflows.join(', ') || 'ninguno'}.`);
 
