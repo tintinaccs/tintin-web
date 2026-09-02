@@ -1,0 +1,71 @@
+name: Operación — salud de producción
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 * * * *'
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: production-health
+  cancel-in-progress: true
+
+jobs:
+  health:
+    name: Producción real
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Monitor operativo
+        id: monitor
+        continue-on-error: true
+        run: npm run monitor:production
+      - name: Catálogo visible en navegador
+        id: catalog
+        continue-on-error: true
+        run: node scripts/auditar-catalogo-navegador-produccion.mjs
+      - name: Smoke de entrega final
+        id: smoke
+        continue-on-error: true
+        run: node scripts/produccion-smoke-fase-12.mjs
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: production-health-${{ github.run_id }}
+          path: artifacts/**
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Abrir o actualizar alerta
+        if: steps.monitor.outcome == 'failure' || steps.catalog.outcome == 'failure' || steps.smoke.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        shell: bash
+        run: |
+          title='[Producción] Monitor en rojo'
+          issue="$(gh issue list --state open --limit 100 --json number,title --jq '.[] | select(.title == "[Producción] Monitor en rojo") | .number' | head -n 1)"
+          body="El monitor de producción detectó un fallo. Run: $RUN_URL"
+          if [ -n "$issue" ]; then gh issue comment "$issue" --body "$body"; else gh issue create --title "$title" --body "$body"; fi
+      - name: Cerrar alerta al recuperar
+        if: steps.monitor.outcome == 'success' && steps.catalog.outcome == 'success' && steps.smoke.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          issue="$(gh issue list --state open --limit 100 --json number,title --jq '.[] | select(.title == "[Producción] Monitor en rojo") | .number' | head -n 1)"
+          if [ -n "$issue" ]; then gh issue comment "$issue" --body 'Producción volvió a estado saludable.'; gh issue close "$issue" --reason completed; fi
+      - name: Enforce production health
+        run: |
+          test "${{ steps.monitor.outcome }}" = success
+          test "${{ steps.catalog.outcome }}" = success
+          test "${{ steps.smoke.outcome }}" = success

@@ -1,14 +1,7 @@
-name: Auditoría de dependencias
+name: Mantenimiento — dependencias
 
 on:
   workflow_dispatch:
-  pull_request:
-    paths:
-      - 'package.json'
-      - 'package-lock.json'
-      - '.github/dependabot.yml'
-      - '.github/workflows/auditoria-dependencias.yml'
-      - 'scripts/resumir-auditoria-dependencias.mjs'
   schedule:
     - cron: '15 12 * * 1'
 
@@ -16,44 +9,32 @@ permissions:
   contents: read
 
 concurrency:
-  group: dependency-audit-${{ github.ref }}
+  group: dependency-maintenance
   cancel-in-progress: true
 
 jobs:
-  npm-audit:
-    name: npm audit reproducible
+  audit:
+    name: Dependencias npm
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
-
-      - name: Install locked dependencies
-        run: npm ci
-
-      - name: Capture full audit JSON
-        run: npm audit --json > npm-audit-full.json || true
-
-      - name: Capture production audit JSON
-        run: npm audit --omit=dev --json > npm-audit-production.json || true
-
-      - name: Summarize audit
-        run: node scripts/resumir-auditoria-dependencias.mjs
-
-      - name: Reject high or critical vulnerabilities anywhere
-        run: npm audit --audit-level=high
-
-      - name: Reject moderate or worse production vulnerabilities
-        run: npm audit --omit=dev --audit-level=moderate
-
-      - name: Upload audit evidence
+      - run: npm ci
+      - name: Capture audit evidence
+        run: |
+          npm audit --json > npm-audit-full.json || true
+          npm audit --omit=dev --json > npm-audit-production.json || true
+          node scripts/resumir-auditoria-dependencias.mjs
+      - name: Enforce dependency policy
+        run: |
+          npm audit --audit-level=high
+          npm audit --omit=dev --audit-level=moderate
+      - uses: actions/upload-artifact@v6
         if: always()
-        uses: actions/upload-artifact@v6
         with:
           name: npm-audit-${{ github.run_id }}
           path: |

@@ -1,17 +1,11 @@
-name: Auditoría integral Tintin
+name: CI Tintin — contrato único
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - main
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -25,208 +19,109 @@ concurrency:
 jobs:
   audit:
     name: Repository audit
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
           node-version: 22
+          cache: npm
 
-      # Repository audit es un status requerido por el ruleset de main y se
-      # ejecuta sobre el merge ref efímero para validar la integración con la
-      # versión actual de main. La entrega real del SHA de la rama se valida en
-      # el job dedicado cloudflare-delivered-headers de Fase 11.
-      - name: Generar y verificar CSP de entrega
-        run: npm run build:csp && npm run verify:csp
-
-      - name: Validar contrato estático de Fase 12
-        run: node scripts/auditar-fase-12-entrega.mjs
-
-      - name: Test branch cleanup guard rails
-        run: node --test tests/branches/auditar-limpiar-ramas.test.mjs
-
-      - name: Audit load contracts for every HTML page
-        id: page_load_audit
-        continue-on-error: true
-        run: npm run audit:page-loading > page-loading-audit.log 2>&1
-
-      - name: Upload page-load audit log
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: page-loading-audit-log
-          path: page-loading-audit.log
-          retention-days: 7
-
-      - name: Enforce page-load audit result
-        run: |
-          cat page-loading-audit.log
-          test "${{ steps.page_load_audit.outcome }}" = "success"
-
-      - name: Run Tintin audit
-        run: npm run audit:tintin
-
-      - name: Verify solid loader background
-        run: node scripts/auditar-cargador-solid.js
-
-      - name: Audit home page on all viewports
-        run: node scripts/auditar-inicio-pagina.js
-
-      - name: Audit catalog page on all viewports
-        run: node scripts/auditar-catalogo-pagina.js
-
-      - name: Audit collections page on all viewports
-        run: node scripts/auditar-colecciones-pagina.js
-
-      - name: Audit product page on all viewports
-        run: node scripts/auditar-producto-pagina.js
-
-      - name: Audit checkout page on all viewports
-        run: node scripts/auditar-checkout-pagina.js
-
-      - name: Audit payment selection and Super Admin CRUD
-        run: node scripts/auditar-pago-metodos.js
-
-      - name: Audit login page on all viewports
-        run: node scripts/auditar-acceso-pagina.js
-
-      - name: Audit profile and orders on all viewports
-        run: node scripts/auditar-perfil-pedidos-pagina.js
-
-      - name: Audit about page on all viewports
-        run: node scripts/auditar-nosotros-pagina.js
-
-      - name: Audit contact page on all viewports
-        run: node scripts/auditar-contacto-pagina.js
-
-      - name: Audit terms and privacy pages on all viewports
-        run: node scripts/auditar-legal-paginas.js
-
-      - name: Audit Super Admin configuration to public site sync
-        run: node scripts/auditar-admin-publico-sincronizar.js
-
-      - name: Audit Super Admin foundation (auth, nav, a11y, modals)
-        run: node scripts/auditar-admin-fundamentos.js
-
-      - name: Audit products, collections and images (admin + storefront)
-        run: node scripts/auditar-admin-productos-multimedia.js
-
-      - name: Audit orders lifecycle (admin edit, status, integrity)
-        run: node scripts/auditar-admin-pedidos.js
-
-      - name: Audit users, roles and permissions (Super Admin protections)
-        run: node scripts/auditar-admin-usuarios-roles.js
-
-      - name: Audit canonical account contract (web, Cloudflare, Rules and Apps Script)
-        run: npm run audit:account-contract
-
-      - name: Test account identity, unified access and tombstones
-        run: npm run test:accounts
-
-      - name: Test canonical Productos sync and Sheets webhook
-        run: npm run test:products-sync
-
-      - name: Audit content and appearance (editor safety, color apply)
-        run: node scripts/auditar-admin-contenido-apariencia.js
-
-      - name: Audit emails and messaging (single Resend channel, no frontend secrets, WhatsApp)
-        run: node scripts/auditar-admin-correo-mensajeria.js
-
-      - name: Audit statistics, audit log and diagnostics (no false zeros, privacy, immutable audit)
-        run: node scripts/auditar-admin-analitica-auditar.js
-
-      - name: Audit help pages (envíos, cambios/devoluciones, preguntas frecuentes)
-        run: node scripts/auditar-ayuda-paginas.js
-
-      - name: Audit auxiliary pages (404 error page + legacy nosotros redirect)
-        run: node scripts/auditar-auxiliares-paginas.js
-
-      - name: Final integration audit (single sources of truth, admin↔public, SEO, PWA, no obsolete)
-        run: node scripts/auditar-final-integracion.js
-
-      - name: Performance & realtime audit (FOIT, loader timeout, live listeners, budgets)
-        run: node scripts/auditar-rendimiento-tiempo-real.js
-
-      - name: Firestore read budget audit
-        run: node scripts/auditar-firestore-lecturas-presupuesto.js
-
-      - name: Audit critical inventory and quota healing
-        run: npm run audit:critical-healing
-
-      - name: Configurar Java para emuladores Firebase
+      - name: Setup Java for Firestore emulator
         uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
 
-      - name: Install locked Firestore rules test dependencies
+      - name: Install locked dependencies once
         run: npm ci
 
-      - name: Run adversarial Firestore emulator tests
-        id: critical_rules
-        continue-on-error: true
-        run: npm run test:rules-critical > firestore-critical.log 2>&1
+      - name: Build exact public artifact
+        run: npm run build:pages
 
-      - name: Upload adversarial Firestore report
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: firestore-critical-report
-          path: firestore-critical.log
-          retention-days: 7
+      - name: Canonical integrations and authority map
+        run: node scripts/auditar-integraciones-canonicas.mjs
 
-      - name: Enforce adversarial Firestore result
+      - name: Full static contract
+        run: npm run audit:final
+
+      - name: Operational, account and sync contracts
+        env:
+          FIREBASE_PROJECT_ID: demo-tintin-backup-contract
+          FIRESTORE_BACKUP_BUCKET: gs://example-backups
+          FIRESTORE_RESTORE_SOURCE: gs://example-backups/snapshot
         run: |
-          cat firestore-critical.log
-          test "${{ steps.critical_rules.outcome }}" = "success"
+          node --test tests/operations/*.test.mjs
+          node scripts/backup-firestore.mjs --dry-run
+          node scripts/restore-firestore.mjs --dry-run
+          npm run test:accounts
+          npm run test:cart-persistence
+          npm run test:web-push
+          npm run test:engagement
+          npm run test:products-sync
+          npm run test:visual-builder
+          node --test tests/code-studio/*.test.mjs
 
-      - name: Post-optimization regression tripwire (all domains intact after perf changes)
-        run: node scripts/auditar-rendimiento-regresiones.js
+      - name: Firestore identity and adversarial rules
+        run: |
+          npm run test:rules-critical
+          npm run test:rules-phone
+          npm run test:rules-username
 
-      - name: Install Playwright for browser smoke
-        run: npm install --no-save --package-lock=false
-
-      - name: Install Chromium for browser smoke
+      - name: Install Chromium once
         run: npx playwright install --with-deps chromium
 
-      - name: Audit global responsive geometry
-        id: global_geometry
-        continue-on-error: true
-        run: npm run audit:global-responsive-geometry > global-responsive-geometry.log 2>&1
+      - name: Super Admin master contracts
+        run: |
+          node scripts/auditar-superadmin-maestro.mjs
+          node scripts/auditar-superadmin-maestro-conexiones.mjs
+          node scripts/auditar-superadmin-cierre-total.mjs
+          node scripts/auditar-superadmin-modulos-completos.mjs
+          node scripts/auditar-superadmin-maestro-responsive.mjs
+          node scripts/auditar-borrado-global-catalogo.mjs
 
-      - name: Upload global responsive report and failure screenshots
-        if: always()
+      - name: Serve exact commit for browser gates
+        run: |
+          node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-ci-http.log 2>&1 &
+          echo $! > /tmp/tintin-ci-http.pid
+          for attempt in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/tintin-ci-http.log || true
+          exit 1
+
+      - name: Browser, accessibility, SEO and performance gates
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+          PERF_BASE_URL: http://127.0.0.1:4173
+        run: |
+          npm run test:navigation-header
+          npm run test:phase8-ui
+          npm run test:phase10-a11y
+          npm run test:phase11-seo
+          npm run test:performance
+          npm run audit:canonical-viewports
+          npm run audit:global-responsive-geometry
+          npm run test:pages
+
+      - name: Save failure evidence
+        if: failure()
         uses: actions/upload-artifact@v6
         with:
-          name: global-responsive-geometry
+          name: repository-audit-failure-${{ github.run_id }}
           path: |
-            global-responsive-geometry.log
-            artifacts/global-responsive
+            artifacts/**
+            playwright-report/**
+            test-results/**
+            firebase-debug.log
+            firestore-debug.log
+            /tmp/tintin-ci-http.log
           if-no-files-found: warn
-          retention-days: 7
-
-      - name: Enforce global responsive geometry
-        run: |
-          cat global-responsive-geometry.log
-          test "${{ steps.global_geometry.outcome }}" = "success"
-
-      - name: Smoke test every page in Chromium
-        id: browser_smoke
-        continue-on-error: true
-        run: npm run test:pages > chromium-smoke.log 2>&1
-
-      - name: Upload Chromium smoke report
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: chromium-smoke-report
-          path: chromium-smoke.log
-          retention-days: 7
-
-      - name: Enforce Chromium smoke result
-        run: |
-          cat chromium-smoke.log
-          test "${{ steps.browser_smoke.outcome }}" = "success"
+          retention-days: 14

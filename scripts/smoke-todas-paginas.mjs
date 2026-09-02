@@ -165,14 +165,37 @@ const server = http.createServer((request, response) => {
   });
 });
 
-function listen() {
+let ownsServer = false;
+
+async function listen() {
   return new Promise((resolve, reject) => {
-    server.once('error', reject);
-    server.listen(port, host, resolve);
+    const onError = async error => {
+      server.removeListener('listening', onListening);
+      if (error.code !== 'EADDRINUSE') {
+        reject(error);
+        return;
+      }
+      try {
+        const response = await fetch(`${baseURL}/index.html`, { signal: AbortSignal.timeout(5_000) });
+        if (!response.ok) throw new Error(`el puerto ${port} está ocupado y no sirve index.html (HTTP ${response.status})`);
+        resolve(false);
+      } catch (probeError) {
+        reject(new Error(`no se pudo reutilizar el servidor existente en ${baseURL}: ${probeError.message || String(probeError)}`));
+      }
+    };
+    const onListening = () => {
+      ownsServer = true;
+      server.removeListener('error', onError);
+      resolve(true);
+    };
+    server.once('error', onError);
+    server.once('listening', onListening);
+    server.listen(port, host);
   });
 }
 
 function closeServer() {
+  if (!ownsServer) return Promise.resolve();
   return new Promise(resolve => server.close(resolve));
 }
 
