@@ -30,7 +30,7 @@ check(
   'La hoja de estilos de UI/UX se inyecta de forma versionada',
   /tt-phase8-ui-ux-css/.test(loader) &&
     /resolveAsset\('css\/quality\/experiencia-interfaz\.css'\)/.test(loader) &&
-  /tintin-20260830-store-gate-api-2/.test(loader),
+  /tintin-20260903-store-gate-fast-rest-1/.test(loader),
   'El navegador debe recibir la nueva capa aunque tenga caché inmutable.'
 );
 
