@@ -1,4 +1,4 @@
-import { db } from '../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-2';
+import { db } from '../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-3';
 import {
   collection,
   getDocs,

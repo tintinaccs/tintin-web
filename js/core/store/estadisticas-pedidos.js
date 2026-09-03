@@ -6,7 +6,7 @@
    Nunca resta manualmente: vuelve a contar desde los pedidos existentes.
    ============================================================= */
 
-import { db } from '../firebase/firebase.js?v=tintin-20260903-app-check-singleton-2';
+import { db } from '../firebase/firebase.js?v=tintin-20260903-app-check-singleton-3';
 import {
   collection, doc, getDoc, getDocs, query, where, setDoc, writeBatch, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';

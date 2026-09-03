@@ -7,7 +7,7 @@
  *
  * Ante cualquier error queda bloqueada. Nunca supone que la tienda está abierta.
  */
-import { auth, db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260903-app-check-singleton-2';
+import { auth, db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260903-app-check-singleton-3';
 import {
   onAuthStateChanged
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';

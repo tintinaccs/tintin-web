@@ -6,7 +6,7 @@
    collections/{slug}.image; esos dos sistemas ya no se duplican acá.
    ============================================================ */
 
-import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-2';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-3';
 import {
   doc,
   getDoc,

@@ -6,7 +6,7 @@
    HTML recibido desde la base.
    ============================================================= */
 
-import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260903-app-check-singleton-2';
+import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260903-app-check-singleton-3';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import {
   getPageSchema,
