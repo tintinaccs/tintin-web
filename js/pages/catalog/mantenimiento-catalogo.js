@@ -17,6 +17,7 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
   let loadingTimer = 0;
   let recoveryTimer = 0;
   let lastGridSignature = '';
+  let gridObserver = null;
 
   function appendStylesheet() {
     if (document.querySelector('link[data-tt-catalog-maintenance]')) return;
@@ -88,6 +89,8 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
     const signature = currentSignature();
     if (hasRealCards()) {
       clearTimeout(loadingTimer);
+      gridObserver?.disconnect();
+      gridObserver = null;
       setSync(navigator.onLine === false ? 'offline' : 'synced');
       setReady();
     }
@@ -189,7 +192,8 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
 
   function installObservers() {
     if (grid) {
-      new MutationObserver(guardCatalogSurface).observe(grid, { childList: true, subtree: true, characterData: true });
+      gridObserver = new MutationObserver(guardCatalogSurface);
+      gridObserver.observe(grid, { childList: true, subtree: true, characterData: true });
     }
     ['tintin:products-loaded', 'tintin:collections-updated', 'tt_cart_updated', 'tintin:cart-sync-status', 'tintin:color-scheme-applied'].forEach(name => {
       window.addEventListener(name, () => {
@@ -242,8 +246,17 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
       }
     }, 20000);
 
-    recoveryTimer = setInterval(guardCatalogSurface, 1200);
-    window.addEventListener('pagehide', () => clearInterval(recoveryTimer), { once: true });
+    const recoverUntilReady = () => {
+      if (document.hidden || hasRealCards()) { recoveryTimer = 0; return; }
+      guardCatalogSurface();
+      recoveryTimer = window.setTimeout(recoverUntilReady, 1200);
+    };
+    recoverUntilReady();
+    window.addEventListener('pagehide', () => window.clearTimeout(recoveryTimer), { once: true });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { window.clearTimeout(recoveryTimer); recoveryTimer = 0; }
+      else if (!hasRealCards() && !recoveryTimer) recoverUntilReady();
+    });
     setTimeout(setReady, 900);
   }
 

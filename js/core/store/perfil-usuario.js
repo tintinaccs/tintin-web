@@ -49,9 +49,10 @@ export function getRegisteredMethod(profileData) {
 export async function ensureUserProfile(db, user, method) {
   const ref = doc(db, 'users', user.uid);
   const snap = await getDoc(ref);
+  const normalizedEmail = String(user.email || '').trim().toLowerCase();
 
   if (!snap.exists()) {
-    const role = user.email === SUPER_ADMIN ? 'superadmin' : 'client';
+    const role = normalizedEmail === SUPER_ADMIN.toLowerCase() ? 'superadmin' : 'client';
     const welcomePending = role === 'client';
     await setDoc(ref, {
       // Google entrega un nombre; el correo no entrega ninguno. En los dos
@@ -88,7 +89,7 @@ export async function ensureUserProfile(db, user, method) {
     return { role: 'client', blocked: true, deleted: true, isNew: false, welcomePending: false, method };
   }
 
-  if (user.email === SUPER_ADMIN && data.role !== 'superadmin') {
+  if (normalizedEmail === SUPER_ADMIN.toLowerCase() && data.role !== 'superadmin') {
     await setDoc(ref, { role: 'superadmin', updatedAt: serverTimestamp(), lastLogin: serverTimestamp() }, { merge: true });
     return { role: 'superadmin', blocked: false, isNew: false, welcomePending: false, method };
   }

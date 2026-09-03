@@ -12,6 +12,8 @@ if (COLLECTIONS_PATH_RE.test(location.pathname || '') && !window.TintinCollectio
   let collectionsResolved = false;
   let featuredResolved = false;
   let watchdog = 0;
+  let collectionsObserver = null;
+  let featuredObserver = null;
 
   function hasRealCollections() {
     return !!collectionsGrid?.querySelector('.tt-coll-page-card:not([aria-hidden="true"]), .tt-collections-state');
@@ -116,6 +118,10 @@ if (COLLECTIONS_PATH_RE.test(location.pathname || '') && !window.TintinCollectio
     inspectCollections();
     inspectFeatured();
     if (collectionsResolved && featuredResolved) {
+      collectionsObserver?.disconnect();
+      featuredObserver?.disconnect();
+      collectionsObserver = null;
+      featuredObserver = null;
       setSync(navigator.onLine === false ? 'offline' : 'synced');
       releasePage();
     }
@@ -123,10 +129,12 @@ if (COLLECTIONS_PATH_RE.test(location.pathname || '') && !window.TintinCollectio
 
   function installObservers() {
     if (collectionsGrid) {
-      new MutationObserver(inspectAll).observe(collectionsGrid, { childList: true, subtree: true, characterData: true });
+      collectionsObserver = new MutationObserver(inspectAll);
+      collectionsObserver.observe(collectionsGrid, { childList: true, subtree: true, characterData: true });
     }
     if (featuredGrid) {
-      new MutationObserver(inspectAll).observe(featuredGrid, { childList: true, subtree: true, characterData: true });
+      featuredObserver = new MutationObserver(inspectAll);
+      featuredObserver.observe(featuredGrid, { childList: true, subtree: true, characterData: true });
     }
 
     ['tintin:collections-phase4-ready', 'tintin:products-loaded', 'tintin:color-scheme-applied', 'tt_cart_updated'].forEach(name => {
@@ -194,8 +202,17 @@ if (COLLECTIONS_PATH_RE.test(location.pathname || '') && !window.TintinCollectio
       inspectAll();
     }, 8000);
 
-    watchdog = setInterval(inspectAll, 1400);
-    window.addEventListener('pagehide', () => clearInterval(watchdog), { once: true });
+    const inspectUntilReady = () => {
+      if (document.hidden || (collectionsResolved && featuredResolved)) { watchdog = 0; return; }
+      inspectAll();
+      watchdog = window.setTimeout(inspectUntilReady, 1400);
+    };
+    inspectUntilReady();
+    window.addEventListener('pagehide', () => window.clearTimeout(watchdog), { once: true });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { window.clearTimeout(watchdog); watchdog = 0; }
+      else if (!(collectionsResolved && featuredResolved) && !watchdog) inspectUntilReady();
+    });
     setTimeout(releasePage, 1100);
   }
 

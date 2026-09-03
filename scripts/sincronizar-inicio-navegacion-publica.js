@@ -5,16 +5,17 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260903-identity-cache-sync-2';
+const VERSION = 'tintin-20260903-css-shell-min-1';
+const TIENDA_VERSION = 'tintin-20260903-identity-cache-sync-2';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260816-loader-shell-bridge-1';
 const LOADER_VERSION = 'tintin-20260903-loader-store-gate-fast-rest-1';
-const STORE_GATE_VERSION = 'tintin-20260903-store-gate-fast-rest-1';
+const STORE_GATE_VERSION = 'tintin-20260903-store-gate-fast-rest-2';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260902-customer-notification-audience-1';
 const NAV_ENTRY_VERSION = 'tintin-20260902-customer-notification-audience-1';
 const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const VISUAL_BUILDER_VERSION = 'tintin-20260826-carousel-order-3';
-const SESSION_PROTECTION_VERSION = 'tintin-20260901-session-inactivity-30m-1';
+const SESSION_PROTECTION_VERSION = 'tintin-20260903-session-pause-race-1';
 const PROFILE_GATE_VERSION = 'tintin-20260901-username-visible-1';
 const NAV_HEADER_VERSION = 'tintin-20260824-header-responsive-sync-1';
 const NAV_SHARED_VERSION = 'tintin-20260825-responsive-css-budget-2';
@@ -183,12 +184,23 @@ function removeSharedFooter(html) {
 }
 
 function ensureStyles(html) {
-  if (/href=["']styles\.css(?:\?|["'])/i.test(html)) return html;
-  const tokens = /(<link\b[^>]*href=["']css\/tokens-tintin\.css[^"']*["'][^>]*>)/i;
-  if (tokens.test(html)) {
-    return html.replace(tokens, `$1\n  <link rel="stylesheet" href="styles.css?v=${VERSION}">`);
+  const existing = /(<link\b[^>]*href=["'])(\/?styles\.css)(\?[^"']*)?(["'][^>]*>)/i;
+  if (existing.test(html)) {
+    html = html.replace(existing, `$1styles.min.css?v=${VERSION}$4`);
   }
-  return html.replace('</head>', `  <link rel="stylesheet" href="styles.css?v=${VERSION}">\n</head>`);
+  if (!/href=["']\/?styles\.min\.css\?v=/i.test(html)) {
+    const tokens = /(<link\b[^>]*href=["']css\/tokens-tintin\.css[^"']*["'][^>]*>)/i;
+    if (tokens.test(html)) {
+      html = html.replace(tokens, `$1\n  <link rel="stylesheet" href="styles.min.css?v=${VERSION}">`);
+    } else {
+      html = html.replace('</head>', `  <link rel="stylesheet" href="styles.min.css?v=${VERSION}">\n</head>`);
+    }
+  }
+  let seen = 0;
+  return html.replace(/\s*<link\b[^>]*href=["']\/?styles\.min\.css\?v=[^"']+["'][^>]*>/gi, tag => {
+    seen += 1;
+    return seen === 1 ? tag : '';
+  });
 }
 
 function ensureNavigationPreloads(html) {
@@ -236,9 +248,9 @@ function centralizeRuntime(html) {
     ''
   );
   if (!/<script\b[^>]*src=["']tienda\.js(?:\?|["'])/i.test(out)) {
-    out = out.replace('</body>', `<script src="tienda.js?v=tintin-20260903-identity-cache-sync-2" defer></script>\n</body>`);
+    out = out.replace('</body>', `<script src="tienda.js?v=${TIENDA_VERSION}" defer></script>\n</body>`);
   } else {
-    out = out.replace(/(<script\b[^>]*src=["']tienda\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi, `$1?v=${VERSION}$2`);
+    out = out.replace(/(<script\b[^>]*src=["']tienda\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi, `$1?v=${TIENDA_VERSION}$2`);
   }
   return out;
 }

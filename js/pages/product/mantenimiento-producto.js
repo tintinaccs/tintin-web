@@ -29,6 +29,7 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
   let inspectQueued = false;
   let pageReleased = false;
   let watchdog = 0;
+  let pageObserver = null;
   let isSuperAdmin = false;
 
   function setAttributeIfChanged(node, name, value) {
@@ -126,6 +127,10 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
   function inspectProduct() {
     productResolved = isVisible(detailGrid) || isVisible(notFound) || isVisible(loadError);
     if (productResolved) {
+      if (relatedResolved && selectionResolved) {
+        pageObserver?.disconnect();
+        pageObserver = null;
+      }
       setAttributeIfChanged(loading, 'aria-hidden', 'true');
       setAttributeIfChanged(detailGrid, 'aria-busy', 'false');
     }
@@ -210,6 +215,7 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
 
   function installObservers() {
     const observer = new MutationObserver(queueInspect);
+    pageObserver = observer;
     const commonConfig = {
       childList: true,
       subtree: true,
@@ -289,8 +295,17 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
       }
     }, 5000);
 
-    watchdog = setInterval(queueInspect, 1300);
-    window.addEventListener('pagehide', () => clearInterval(watchdog), { once: true });
+    const inspectUntilReady = () => {
+      if (document.hidden || (productResolved && relatedResolved && selectionResolved)) { watchdog = 0; return; }
+      queueInspect();
+      watchdog = window.setTimeout(inspectUntilReady, 1300);
+    };
+    inspectUntilReady();
+    window.addEventListener('pagehide', () => window.clearTimeout(watchdog), { once: true });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { window.clearTimeout(watchdog); watchdog = 0; }
+      else if (!(productResolved && relatedResolved && selectionResolved) && !watchdog) inspectUntilReady();
+    });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });

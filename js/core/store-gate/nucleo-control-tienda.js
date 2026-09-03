@@ -5,7 +5,7 @@
  * La configuración completa permanece en settings/general y no se entrega
  * cuando la tienda está cerrada.
  */
-import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260903-app-check-singleton-5';
+import { db } from '../firebase/firebase.js?v=tintin-20260903-app-check-singleton-5';
 import {
   doc,
   getDoc
@@ -690,7 +690,9 @@ export async function getStoreAccessConfigFromRest() {
   try {
     const sharedRequest = window.__TINTIN_STORE_GATE_REST_PROMISE__ || fetch('/api/public-catalog?resource=storeGate', {
       method: 'GET',
-      cache: 'no-store',
+      // El endpoint público puede aprovechar la caché del navegador y del
+      // edge; las operaciones protegidas mantienen sus propias garantías.
+      cache: 'default',
       credentials: 'omit'
     }).then(response => response.ok ? response.json() : null);
     if (!window.__TINTIN_STORE_GATE_REST_PROMISE__) {
@@ -712,13 +714,6 @@ export async function getStoreAccessConfigFromRest() {
  * Si el documento falta o la lectura falla, nunca se asume "abierta".
  */
 export async function getStoreAccessConfig() {
-  // No se lanzan SDK y REST en paralelo si App Check no pudo certificar el
-  // origen. Así el arranque falla una sola vez, de forma cerrada y explícita,
-  // en lugar de producir una cascada de permission-denied.
-  if (!await appCheckReady) {
-    return rememberConfig(normalizeStoreAccessConfig({}, 'app-check-error'));
-  }
-
   let primaryStatus = 'missing';
 
   // Ambos caminos arrancan juntos. El SDK conserva tiempo real y sesión;
