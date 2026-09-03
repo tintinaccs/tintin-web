@@ -81,9 +81,9 @@ check('El panel administrativo conserva exactamente un H1', (adminHtml.match(/<h
 check(
   'Las escuchas en tiempo real de pedidos, usuarios y plantillas están limitadas',
   adminApp.includes('const ADMIN_REALTIME_LIMIT = 250') &&
-    /onSnapshot\(query\(collection\(db,\s*['"]orders['"]\),\s*limit\(ADMIN_REALTIME_LIMIT\)\)/.test(adminApp) &&
-    /onSnapshot\(query\(collection\(db,\s*['"]users['"]\),\s*limit\(ADMIN_REALTIME_LIMIT\)\)/.test(adminApp) &&
-    /onSnapshot\(query\(collection\(db,\s*['"]emailTemplates['"]\),\s*limit\(500\)\)/.test(adminApp)
+    adminApp.includes("onSnapshot(query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT))") &&
+    adminApp.includes("onSnapshot(query(collection(db, 'users'), orderBy('updatedAt', 'desc'), limit(ADMIN_REALTIME_LIMIT))") &&
+    adminApp.includes("onSnapshot(query(collection(db, 'emailTemplates'), limit(500))")
 );
 check(
   'Usuarios tiene una sola escucha runtime y la ficha consulta bajo demanda',
