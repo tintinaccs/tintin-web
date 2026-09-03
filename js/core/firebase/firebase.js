@@ -65,7 +65,7 @@ if (FIREBASE_APP_CHECK_SITE_KEY) {
           // El SDK obtiene el primer token y administra su renovación. Forzar
           // getToken() y luego activar el refresco vuelve a inicializar el widget
           // Enterprise en algunos navegadores y produce "already been rendered".
-          isTokenAutoRefreshEnabled: true
+          isTokenAutoRefreshEnabled: false
         });
         appCheck = sharedAppCheck.appCheck;
         return true;

@@ -6,7 +6,7 @@ const STORAGE_PREFIX = 'tt_profile_orders_seen_v1_';
 
 async function currentUserKey() {
   try {
-    const { auth } = await import('../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-2');
+    const { auth } = await import('../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-3');
     if (typeof auth.authStateReady === 'function') await auth.authStateReady();
     return auth.currentUser?.uid ? `${STORAGE_PREFIX}${auth.currentUser.uid}` : `${STORAGE_PREFIX}guest`;
   } catch {
