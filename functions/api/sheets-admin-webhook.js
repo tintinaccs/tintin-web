@@ -8,10 +8,15 @@ import {
 import { jsonResponse, SUPERADMIN_EMAIL } from '../../cloudflare/seguridad-cloudinary.js';
 import { applyUserLifecycle } from '../../cloudflare/user-lifecycle-domain.js';
 import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
+import {
+  syncAuditToSheetsBestEffort,
+  syncUserToSheetsBestEffort,
+} from '../../cloudflare/admin-mirror-sheets-sync.js';
+import { syncProductIdsToSheetsBestEffort } from '../../cloudflare/product-mirror-sheets-sync.js';
 
 const MAX_BODY_BYTES = 64 * 1024;
 const ROLES = new Set(['client', 'viewer', 'agent', 'admin']);
-const ADMIN_SYNC_REVISION = 'admin-sync-v5';
+const ADMIN_SYNC_REVISION = 'admin-sync-v6-immediate-parity';
 
 function sameSecret(provided, expected) {
   const left = new TextEncoder().encode(String(provided || ''));
@@ -43,6 +48,16 @@ function conflict(message) {
   const error = new Error(message);
   error.status = 409;
   return error;
+}
+
+function itemIds(order) {
+  const items = Array.isArray(order?.items) ? order.items : [];
+  return items.map(item => String(item?.id || '').trim()).filter(Boolean);
+}
+
+function changedInventoryIds(result, beforeOrder) {
+  if (Number(result?.changedProducts || 0) <= 0) return [];
+  return [...new Set([...itemIds(beforeOrder), ...itemIds(result?.order)])];
 }
 
 async function restoreAuthStateBestEffort(env, uid, previousDisabled, originalError) {
@@ -119,9 +134,6 @@ async function updateUser(env, input) {
   const now = new Date();
   const eventId = `EVT_${crypto.randomUUID().replaceAll('-', '')}`;
 
-  // Firebase Auth y Firestore no comparten una transacción. Si Auth cambia y
-  // el commit Firestore falla, compensamos Auth para no dejar dos autoridades
-  // con estados distintos.
   await setFirebaseUserDisabled(env, uid, blocked);
   try {
     await firestoreAdminCommit(env, [
@@ -166,7 +178,20 @@ async function updateUser(env, input) {
     }
     throw error;
   }
-  return { uid, role, blocked, duplicate: false, changeId: nextChangeId };
+
+  const [userMirror, auditMirror] = await Promise.all([
+    syncUserToSheetsBestEffort(env, uid),
+    syncAuditToSheetsBestEffort(env, eventId),
+  ]);
+  return {
+    uid,
+    role,
+    blocked,
+    duplicate: false,
+    changeId: nextChangeId,
+    auditEventId: eventId,
+    mirrors: { user: userMirror, audit: auditMirror },
+  };
 }
 
 async function handleOrder(env, input) {
@@ -177,18 +202,39 @@ async function handleOrder(env, input) {
     role: 'sheets-sync',
     origin: text(input.source || 'google-sheets:Pedidos web', 120),
   };
-  if (action === 'createOrder') {
-    return createOrderAdmin(env, {
-      ...input,
-      changeId: changeId(input.changeId),
-    }, actor);
+  let beforeOrder = null;
+  if (action !== 'createOrder') {
+    const orderId = String(input.orderId || '').trim();
+    if (/^[A-Za-z0-9_-]{6,220}$/.test(orderId)) {
+      const beforeDoc = await firestoreAdminGet(env, `orders/${encodeURIComponent(orderId)}`);
+      beforeOrder = beforeDoc ? decodeFirestoreFields(beforeDoc.fields || {}) : null;
+    }
   }
-  if (action !== 'updateOrder') throw new Error('Acción de pedido no permitida');
-  return applyOrderAdminMutation(env, {
-    ...input,
-    changeId: changeId(input.changeId),
-    baseChangeId: text(input.baseChangeId, 120),
-  }, actor);
+
+  const result = action === 'createOrder'
+    ? await createOrderAdmin(env, { ...input, changeId: changeId(input.changeId) }, actor)
+    : action === 'updateOrder'
+      ? await applyOrderAdminMutation(env, {
+          ...input,
+          changeId: changeId(input.changeId),
+          baseChangeId: text(input.baseChangeId, 120),
+        }, actor)
+      : (() => { throw new Error('Acción de pedido no permitida'); })();
+
+  // La fila de Pedidos la actualiza inmediatamente el propio Apps Script que
+  // hizo esta llamada usando `result.order`. Acá se empujan las dependencias
+  // que esa ejecución no conoce: auditoría y todos los productos cuyo stock
+  // cambió, incluidos los que fueron quitados de un pedido editado.
+  const [auditMirror, productsMirror] = await Promise.all([
+    result?.auditEventId
+      ? syncAuditToSheetsBestEffort(env, result.auditEventId)
+      : Promise.resolve({ ok: true, skipped: true }),
+    syncProductIdsToSheetsBestEffort(env, changedInventoryIds(result, beforeOrder), {
+      email: actor.email,
+      source: actor.origin,
+    }),
+  ]);
+  return { ...result, mirrors: { audit: auditMirror, products: productsMirror } };
 }
 
 export async function onRequestPost({ request, env }) {
@@ -210,6 +256,8 @@ export async function onRequestPost({ request, env }) {
         orderMutationsUseInventoryDomain: true,
         orderCreationUsesCanonicalSequence: true,
         authFirestoreCompensation: true,
+        immediateDependentMirrors: true,
+        reconciliationFallbackMinutes: 1,
         revision: ADMIN_SYNC_REVISION,
       }, 200, '', request.url);
     }
