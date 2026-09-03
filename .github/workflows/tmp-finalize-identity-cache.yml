@@ -23,7 +23,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Propagate immutable cache versions
+      - name: Propagate immutable cache versions from canonical sources
         shell: bash
         run: |
           set -euo pipefail
@@ -31,7 +31,6 @@ jobs:
           const fs = require('fs');
           const path = require('path');
           const cp = require('child_process');
-          const root = process.cwd();
           const textExt = new Set(['.html','.js','.mjs','.css','.json']);
           const skip = new Set(['.git','node_modules','js/vendor']);
           function files(dir='.') {
@@ -75,6 +74,22 @@ jobs:
               if (/\.(?:js|mjs|css)$/.test(rel)) enqueue(rel);
             }
           }
+
+          // Las páginas públicas no son la autoridad de estos tags: el build
+          // las regenera desde este script. Alinear la fuente evita que
+          // sync:public-shell restaure versiones antiguas después del bump.
+          const shellPath='scripts/sincronizar-inicio-navegacion-publica.js';
+          let shell=fs.readFileSync(shellPath,'utf8');
+          shell=shell.replace(
+            /const VERSION = '[^']+';/,
+            `const VERSION = '${cascadeVersion}';`
+          );
+          shell=shell.replace(
+            /const STORE_GATE_VERSION = '[^']+';/,
+            `const STORE_GATE_VERSION = '${cascadeVersion}';`
+          );
+          fs.writeFileSync(shellPath,shell);
+
           const approvalPath='scripts/cache-version-approvals.json';
           const approvals=JSON.parse(fs.readFileSync(approvalPath,'utf8'));
           approvals.approved ||= {};
