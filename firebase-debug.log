@@ -1,0 +1,36 @@
+[debug] [2026-09-03T19:35:33.129Z] ----------------------------------------------------------------------
+[debug] [2026-09-03T19:35:33.133Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\TI\tintin-web\node_modules\firebase-tools\lib\bin\firebase.js emulators:exec --only firestore --project demo-tintin-critical node scripts/probar-firestore-critico.mjs
+[debug] [2026-09-03T19:35:33.133Z] CLI Version:   15.28.2
+[debug] [2026-09-03T19:35:33.133Z] Platform:      win32
+[debug] [2026-09-03T19:35:33.133Z] Node Version:  v24.19.0
+[debug] [2026-09-03T19:35:33.133Z] Detected Agent: claude-code_2-1-252_agent
+[debug] [2026-09-03T19:35:33.133Z] Time:          Thu Sep 03 2026 16:35:33 GMT-0300 (hora estándar de Paraguay)
+[debug] [2026-09-03T19:35:33.134Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-09-03T19:36:09.045Z] Could not find VSCode notification endpoint: TypeError: fetch failed. If you are not running the Firebase SQL Connect VSCode extension, this is expected and not an issue.
+[info] i  emulators: Shutting down emulators. {"metadata":{"emulator":{"name":"hub"},"message":"Shutting down emulators."}}
+[debug] [2026-09-03T19:36:09.049Z] Could not find VSCode notification endpoint: TypeError: fetch failed. If you are not running the Firebase SQL Connect VSCode extension, this is expected and not an issue.
+[debug] [2026-09-03T19:36:09.052Z] Error: spawn java ENOENT
+    at ChildProcess._handle.onexit (node:internal/child_process:287:19)
+    at onErrorNT (node:internal/child_process:525:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+[error] 
+[error] Error: Could not spawn `java -version`. Please make sure Java is installed and on your system PATH.
+[debug] [2026-09-03T19:36:10.438Z] ----------------------------------------------------------------------
+[debug] [2026-09-03T19:36:10.440Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\TI\tintin-web\node_modules\firebase-tools\lib\bin\firebase.js emulators:exec --only firestore --project demo-tintin-phone node scripts/probar-firestore-telefono-unico.mjs
+[debug] [2026-09-03T19:36:10.440Z] CLI Version:   15.28.2
+[debug] [2026-09-03T19:36:10.440Z] Platform:      win32
+[debug] [2026-09-03T19:36:10.440Z] Node Version:  v24.19.0
+[debug] [2026-09-03T19:36:10.440Z] Detected Agent: claude-code_2-1-252_agent
+[debug] [2026-09-03T19:36:10.440Z] Time:          Thu Sep 03 2026 16:36:10 GMT-0300 (hora estándar de Paraguay)
+[debug] [2026-09-03T19:36:10.441Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-09-03T19:36:11.267Z] Could not find VSCode notification endpoint: TypeError: fetch failed. If you are not running the Firebase SQL Connect VSCode extension, this is expected and not an issue.
+[info] i  emulators: Shutting down emulators. {"metadata":{"emulator":{"name":"hub"},"message":"Shutting down emulators."}}
+[debug] [2026-09-03T19:36:11.269Z] Could not find VSCode notification endpoint: TypeError: fetch failed. If you are not running the Firebase SQL Connect VSCode extension, this is expected and not an issue.
+[debug] [2026-09-03T19:36:11.271Z] Error: spawn java ENOENT
+    at ChildProcess._handle.onexit (node:internal/child_process:287:19)
+    at onErrorNT (node:internal/child_process:525:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+[error] 
+[error] Error: Could not spawn `java -version`. Please make sure Java is installed and on your system PATH.
