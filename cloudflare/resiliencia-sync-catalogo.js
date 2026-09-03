@@ -11,6 +11,7 @@ import {
 } from './firebase-admin-ligero.js';
 import { APPS_SCRIPT_SYNC_URL, SHEETS_TIMEOUT_MS } from './sheets-sync-config.js';
 import { notifyAdminIfAbsent } from './notificaciones-sociales.js';
+import { fetchAppsScript } from './apps-script-fetch.js';
 
 const PRODUCT_SYNC_CHUNK = 100;
 const MAX_ATTEMPTS = 4;
@@ -46,7 +47,7 @@ const REAL_QUEUE_DEPS = {
   firestoreAdminListAll,
   firestoreAdminMerge,
   notifyAdminIfAbsent,
-  fetchImpl: fetch,
+  fetchImpl: fetchAppsScript,
 };
 
 async function syncProductsOnce(idToken, productIds) {
@@ -54,7 +55,7 @@ async function syncProductsOnce(idToken, productIds) {
   if (!ids.length) return { ok: true, batches: 0 };
   let batches = 0;
   for (let i = 0; i < ids.length; i += PRODUCT_SYNC_CHUNK) {
-    const response = await fetch(APPS_SCRIPT_SYNC_URL, {
+    const response = await fetchAppsScript(APPS_SCRIPT_SYNC_URL, {
       method: 'POST',
       redirect: 'follow',
       signal: AbortSignal.timeout(SHEETS_TIMEOUT_MS),

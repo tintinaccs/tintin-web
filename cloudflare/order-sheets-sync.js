@@ -1,4 +1,5 @@
 import { APPS_SCRIPT_SYNC_URL, SHEETS_TIMEOUT_MS } from './sheets-sync-config.js';
+import { fetchAppsScript } from './apps-script-fetch.js';
 
 function clean(value, max = 500) {
   return String(value == null ? '' : value).trim().slice(0, max);
@@ -16,7 +17,7 @@ function errorMessage(error) {
  * El reconciliador periódico de Apps Script es la red de seguridad si este
  * push inmediato falla.
  */
-export async function syncOrderToSheetsBestEffort(env, result, fetchImpl = fetch) {
+export async function syncOrderToSheetsBestEffort(env, result, fetchImpl = fetchAppsScript) {
   const orderId = clean(result?.orderId, 220);
   const order = result?.order && typeof result.order === 'object' ? result.order : null;
   if (!orderId || !order) {

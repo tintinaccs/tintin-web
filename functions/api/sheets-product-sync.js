@@ -7,6 +7,7 @@ import {
   APPS_SCRIPT_SYNC_URL,
   SHEETS_TIMEOUT_MS,
 } from '../../cloudflare/sheets-sync-config.js';
+import { fetchAppsScript } from '../../cloudflare/apps-script-fetch.js';
 
 const MAX_BODY_BYTES = 64 * 1024;
 
@@ -45,7 +46,7 @@ export async function onRequest(context) {
   }
 
   try {
-    const response = await fetch(APPS_SCRIPT_SYNC_URL, {
+    const response = await fetchAppsScript(APPS_SCRIPT_SYNC_URL, {
       method: 'POST',
       redirect: 'follow',
       signal: AbortSignal.timeout(SHEETS_TIMEOUT_MS),
