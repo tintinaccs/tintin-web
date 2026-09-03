@@ -75,8 +75,8 @@ check(
 );
 check('La ficha lee un producto y limita relacionados', /getDoc\(doc\(db, 'products', id\)\)/.test(products) && /limit\(12\)/.test(products), 'Producto descarga demasiado.');
 check('Colecciones públicas usan caché y Admin tiempo real', collections.includes('loadCollections') && collections.includes('readCached') && collections.includes('startAdminListener') && collections.includes('onSnapshot'), 'Las estrategias pública y administrativa se mezclaron.');
-check('Pedidos Admin siguen en vivo y acotados', /onSnapshot\(query\(collection\(db, 'orders'\), limit\(/.test(read('js/admin/admin-app.js')), 'Pedidos perdió su listener limitado.');
-check('Usuarios Admin siguen en vivo y acotados', /onSnapshot\(query\(collection\(db, 'users'\), limit\(/.test(read('js/admin/admin-app.js')), 'Usuarios perdió su listener limitado.');
+check('Pedidos Admin siguen en vivo y acotados', /onSnapshot\(query\(collection\(db, 'orders'\),[\s\S]*?limit\(/.test(read('js/admin/admin-app.js')), 'Pedidos perdió su listener limitado.');
+check('Usuarios Admin siguen en vivo y acotados', /onSnapshot\(query\(collection\(db, 'users'\),[\s\S]*?limit\(/.test(read('js/admin/admin-app.js')), 'Usuarios perdió su listener limitado.');
 check('Checkout conserva Resend', read('js/pages/checkout/checkout-puente-correo.js').includes("from '../../email/notificacion-pedido-resend.js") && !read('checkout.html').includes('notificaciones-correo.js') && !read('checkout.html').includes('notificacion-pedido-resend.js'), 'Checkout volvió al canal antiguo.');
 check('Checkout protege reintentos después de agotar cuota', read('js/pages/checkout/checkout-control-cuota.js').includes('resource-exhausted') && read('js/pages/checkout/checkout-control-cuota.js').includes('COOLDOWN_MS') && read('js/cargador-mantenimiento-pagina.js').includes('checkout-control-cuota.js'), 'Un 429 permite clics repetidos.');
 check('Clientas no consultan permisos administrativos', read('js/core/auth/insignia-edicion.js').includes('if (!EDITABLE_ROLES.includes(role)) return false;') && !read('js/core/auth/insignia-edicion.js').includes('loadRolePermissions(true)'), 'Una cuenta client lee rolePermissions/main.');

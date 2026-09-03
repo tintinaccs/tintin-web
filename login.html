@@ -21,7 +21,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js" crossorigin>
-  <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4">
+  <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260903-auth-persistence-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
   <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260902-customer-notification-audience-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260824-header-responsive-sync-1">
@@ -119,27 +119,27 @@
             <span id="login-profile-confirmation-value" class="login-profile-confirmation-value"></span>
             <button type="button" id="btn-change-profile-name" class="login-profile-change">Cambiar</button>
           </div>
-          <div id="login-profile-name-field">
-            <label class="login-email-label" for="login-profile-first-name">Nombre</label>
-            <input type="text" class="login-email-input" id="login-profile-first-name" placeholder="Ej: María" autocomplete="given-name" maxlength="60" />
-            <p class="login-profile-field-error" id="login-first-name-error" aria-live="polite"></p>
-            <label class="login-email-label" for="login-profile-last-name">Apellido</label>
-            <input type="text" class="login-email-input" id="login-profile-last-name" placeholder="Ej: González" autocomplete="family-name" maxlength="60" />
-            <p class="login-profile-field-error" id="login-last-name-error" aria-live="polite"></p>
-          </div>
           <div id="login-profile-username-field">
             <label class="login-email-label" for="login-profile-username">Nombre de usuario</label>
             <div class="login-username-control">
-              <input type="text" class="login-email-input" id="login-profile-username" placeholder="Ej: maria_98" autocomplete="off" maxlength="20" autocapitalize="off" autocorrect="off" spellcheck="false" aria-describedby="login-username-hint login-username-status" />
+              <input type="text" class="login-email-input" id="login-profile-username" placeholder="Ej: maria_98" autocomplete="off" maxlength="20" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="next" aria-describedby="login-username-hint login-username-status" />
               <span class="login-username-status" id="login-username-status" aria-live="polite" data-state="idle"></span>
             </div>
             <p class="login-field-hint" id="login-username-hint">De 3 a 20 caracteres: minúsculas, números o guion bajo.</p>
+          </div>
+          <div id="login-profile-name-field">
+            <label class="login-email-label" for="login-profile-first-name">Nombre</label>
+            <input type="text" class="login-email-input" id="login-profile-first-name" placeholder="Ej: María" autocomplete="given-name" maxlength="60" enterkeyhint="next" />
+            <p class="login-profile-field-error" id="login-first-name-error" aria-live="polite"></p>
+            <label class="login-email-label" for="login-profile-last-name">Apellido</label>
+            <input type="text" class="login-email-input" id="login-profile-last-name" placeholder="Ej: González" autocomplete="family-name" maxlength="60" enterkeyhint="next" />
+            <p class="login-profile-field-error" id="login-last-name-error" aria-live="polite"></p>
           </div>
           <div id="login-profile-phone-field">
             <label class="login-email-label" for="login-profile-phone">Teléfono / WhatsApp</label>
             <div class="login-phone-row">
               <select class="login-email-input login-phone-country" id="login-profile-country" aria-label="Prefijo de Paraguay" disabled><option value="PY">+595</option></select>
-              <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="Ej: 0981 336 401" autocomplete="tel-national" inputmode="numeric" maxlength="10" />
+              <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="Ej: 0981 336 401" autocomplete="tel-national" inputmode="numeric" maxlength="10" enterkeyhint="next" />
             </div>
             <p class="login-profile-field-error" id="login-phone-error" aria-live="polite"></p>
             <p class="login-phone-help" id="login-phone-help" style="display:none">
@@ -198,7 +198,7 @@
 </div>
 
 <script type="module">
-import { auth, db, provider } from "./js/core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4";
+import { auth, db, provider } from "./js/core/firebase/firebase.js?v=tintin-20260903-auth-persistence-1";
 import {
   signInWithPopup,
   signInWithRedirect,
@@ -227,7 +227,7 @@ import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tint
 import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260901-session-inactivity-30m-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260830-store-gate-api-1";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260901-username-required-1";
-import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260824-google-maps-input-1";
+import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260903-google-maps-coordinates-1";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
 

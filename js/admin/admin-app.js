@@ -1,4 +1,4 @@
-import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4";
+import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260903-auth-persistence-1";
 import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -1273,7 +1273,7 @@ function startAdminRealtimeData() {
   stopAdminRealtimeData();
   adminRealtimeReady = { orders: false, users: currentRole !== 'superadmin' };
   if (can(currentRole, 'viewOrders') && roleCanDo('pedidos', 'ver')) {
-    adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), limit(ADMIN_REALTIME_LIMIT)), snapshot => {
+    adminOrdersUnsubscribe = onSnapshot(query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT)), snapshot => {
       allOrders = snapshot.docs
         .map(item => ({ id: item.id, ...item.data() }))
         .sort((a, b) => activityTimestampMillis(b.createdAt) - activityTimestampMillis(a.createdAt));
@@ -1288,7 +1288,7 @@ function startAdminRealtimeData() {
     adminRealtimeReady.orders = true;
   }
   if (currentRole === 'superadmin') {
-    adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), limit(ADMIN_REALTIME_LIMIT)), snapshot => {
+    adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), orderBy('updatedAt', 'desc'), limit(ADMIN_REALTIME_LIMIT)), snapshot => {
       allUsers = snapshot.docs.map(item => ({ uid: item.id, ...item.data() }));
       adminRealtimeReady.users = true;
       refreshRealtimeConsumers();

@@ -1,4 +1,4 @@
-import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260903-auth-persistence-1';
 import { collection, documentId, onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 let ratings = new Map();

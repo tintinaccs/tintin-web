@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import {
   buildMissingProfilePatch,
   getProfileCompletionPlan,
@@ -13,6 +14,7 @@ import {
 const superAdminEmail = 'tintinaccs@gmail.com';
 const ADDRESS = { savedLocation: { lat: -25.29, lng: -57.63, name: 'Av. España 1234', address: 'Av. España 1234, Asunción' }, address: 'Av. España 1234, Asunción' };
 const COMPLETE = { name: 'Juan Pérez', phone: '+595981123456', ...ADDRESS };
+const readLogin = () => fs.readFileSync(new URL('../../login.html', import.meta.url), 'utf8');
 
 test('el superadmin nunca entra al onboarding aunque no tenga datos', () => {
   const plan = getProfileCompletionPlan({
@@ -38,6 +40,24 @@ test('una cuenta completa entra directo sin volver a abrir el onboarding', () =>
   assert.equal(plan.needsName, false);
   assert.equal(plan.needsPhone, false);
   assert.equal(plan.needsAddress, false);
+});
+
+test('el alta respeta el orden de foco usuario, nombre, apellido y teléfono', () => {
+  const login = readLogin();
+  const fields = [
+    'login-profile-username',
+    'login-profile-first-name',
+    'login-profile-last-name',
+    'login-profile-phone',
+  ];
+  const positions = fields.map((id) => login.indexOf(`id="${id}"`));
+
+  assert.ok(positions.every((position) => position >= 0));
+  assert.ok(positions.every((position, index) => index === 0 || position > positions[index - 1]));
+  assert.match(login, /id="login-profile-username"[^>]*enterkeyhint="next"/);
+  assert.match(login, /id="login-profile-first-name"[^>]*enterkeyhint="next"/);
+  assert.match(login, /id="login-profile-last-name"[^>]*enterkeyhint="next"/);
+  assert.match(login, /id="login-profile-phone"[^>]*enterkeyhint="next"/);
 });
 
 test('si falta solo el teléfono conserva el nombre y muestra la ubicación ya guardada', () => {

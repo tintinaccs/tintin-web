@@ -1,4 +1,4 @@
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260903-auth-persistence-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
 

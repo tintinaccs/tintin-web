@@ -77,3 +77,15 @@ test('un cuerpo inesperado no rompe el buscador', async () => {
     assert.deepEqual(await searchPlaces('Av. España'), []);
   } finally { restore(); }
 });
+
+test('el parser compartido acepta resultados de Google Maps por coordenadas', () => {
+  const source = fs.readFileSync(path.join(root, 'js/components/location/mapa-ubicacion.js'), 'utf8');
+  assert.match(source, /!3d/);
+  assert.match(source, /center\|destination\|origin/);
+});
+
+test('checkout acepta enlaces completos de Google Maps con coordenadas', () => {
+  const source = fs.readFileSync(path.join(root, 'js/pages/checkout/checkout-confiabilidad.js'), 'utf8');
+  assert.match(source, /!3d/);
+  assert.match(source, /center\|destination\|origin/);
+});

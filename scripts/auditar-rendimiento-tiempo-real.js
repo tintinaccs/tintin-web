@@ -137,8 +137,8 @@ check(
 
 check(
   'Los listeners de pedidos y usuarios del panel tienen límite',
-  /onSnapshot\(query\(collection\(db, 'orders'\), limit\(/.test(read('js/admin/admin-app.js')) &&
-    /onSnapshot\(query\(collection\(db, 'users'\), limit\(/.test(read('js/admin/admin-app.js')),
+  /onSnapshot\(query\(collection\(db, 'orders'\),[\s\S]*?limit\(/.test(read('js/admin/admin-app.js')) &&
+    /onSnapshot\(query\(collection\(db, 'users'\),[\s\S]*?limit\(/.test(read('js/admin/admin-app.js')),
   'Los listados administrativos deben estar acotados.'
 );
 
