@@ -36,7 +36,9 @@ function tintinEnsureHeaders_(sheet, headers) {
 }
 
 function tintinSheet_(name, headers) {
-  var book = SpreadsheetApp.getActiveSpreadsheet();
+  var book = typeof tintinProductsSpreadsheet_ === 'function'
+    ? tintinProductsSpreadsheet_()
+    : SpreadsheetApp.getActiveSpreadsheet();
   var sheet = book.getSheetByName(name) || book.insertSheet(name);
   tintinEnsureHeaders_(sheet, headers);
   return sheet;
@@ -78,6 +80,16 @@ function tintinFindRow_(sheet, id) {
 function tintinDate_(value) {
   var date = value ? new Date(value) : null;
   return date && !isNaN(date.getTime()) ? date : '';
+}
+
+function tintinSortNewestFirst_(records, fields, idField) {
+  return records.map(function(record, index) { return { record: record, index: index }; }).sort(function(left, right) {
+    var leftTime = 0;
+    var rightTime = 0;
+    fields.some(function(field) { var value = new Date(left.record[field] || '').getTime(); if (!isNaN(value) && value) { leftTime = value; return true; } return false; });
+    fields.some(function(field) { var value = new Date(right.record[field] || '').getTime(); if (!isNaN(value) && value) { rightTime = value; return true; } return false; });
+    return rightTime - leftTime || String(left.record[idField] || '').localeCompare(String(right.record[idField] || '')) || left.index - right.index;
+  }).map(function(item) { return item.record; });
 }
 
 function tintinReviewRow_(record) {
@@ -126,6 +138,24 @@ function tintinUpsert_(sheet, row) {
   return rowNumber;
 }
 
+function tintinMoveRowToTop_(sheet, rowNumber, width) {
+  if (!sheet || rowNumber <= 2) return;
+  sheet.moveRows(sheet.getRange(rowNumber, 1, 1, width), 2);
+}
+
+function tintinSortEngagementSheetNewestFirst_(sheet, dateColumn, width) {
+  if (!sheet || sheet.getLastRow() < 3) return;
+  sheet.getRange(2, 1, sheet.getLastRow() - 1, width).sort({ column: dateColumn, ascending: false });
+}
+
+function tintinOrdenarParticipacionExistente() {
+  var reviews = tintinSheet_(TINTIN_REVIEWS_SHEET_, TINTIN_REVIEW_HEADERS_);
+  var likes = tintinSheet_(TINTIN_LIKES_SHEET_, TINTIN_LIKE_HEADERS_);
+  tintinSortEngagementSheetNewestFirst_(reviews, 12, TINTIN_REVIEW_HEADERS_.length);
+  tintinSortEngagementSheetNewestFirst_(likes, 12, TINTIN_LIKE_HEADERS_.length);
+  return { ok: true, reviews: Math.max(0, reviews.getLastRow() - 1), likes: Math.max(0, likes.getLastRow() - 1) };
+}
+
 function tintinHandleEngagement_(payload) {
   var expectedSecret = PropertiesService.getScriptProperties().getProperty('SHEETS_ENGAGEMENT_SECRET');
   if (!expectedSecret || String(payload.syncSecret || '') !== expectedSecret) {
@@ -140,14 +170,14 @@ function tintinHandleEngagement_(payload) {
   try {
     if (event.type === 'review') {
       var reviews = tintinSheet_(TINTIN_REVIEWS_SHEET_, TINTIN_REVIEW_HEADERS_);
-      tintinUpsert_(reviews, tintinReviewRow_(record));
+      tintinMoveRowToTop_(reviews, tintinUpsert_(reviews, tintinReviewRow_(record)), TINTIN_REVIEW_HEADERS_.length);
     } else if (event.type === 'like') {
       var likes = tintinSheet_(TINTIN_LIKES_SHEET_, TINTIN_LIKE_HEADERS_);
       var row = tintinFindRow_(likes, record.likeId);
       if (event.operation === 'delete' || event.operation === 'trash') {
         if (row) likes.deleteRow(row);
       } else {
-        tintinUpsert_(likes, tintinLikeRow_(record));
+        tintinMoveRowToTop_(likes, tintinUpsert_(likes, tintinLikeRow_(record)), TINTIN_LIKE_HEADERS_.length);
       }
     } else {
       return tintinJson_({ ok: false, error: 'invalid_type' });

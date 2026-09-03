@@ -1288,8 +1288,9 @@ function startAdminRealtimeData() {
     adminRealtimeReady.orders = true;
   }
   if (currentRole === 'superadmin') {
-    adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), orderBy('updatedAt', 'desc'), limit(ADMIN_REALTIME_LIMIT)), snapshot => {
-      allUsers = snapshot.docs.map(item => ({ uid: item.id, ...item.data() }));
+    adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT)), snapshot => {
+      allUsers = snapshot.docs.map(item => ({ uid: item.id, ...item.data() }))
+        .sort((a, b) => activityTimestampMillis(b.createdAt || b.updatedAt || b.lastAccess) - activityTimestampMillis(a.createdAt || a.updatedAt || a.lastAccess) || String(a.uid || '').localeCompare(String(b.uid || '')));
       adminRealtimeReady.users = true;
       refreshRealtimeConsumers();
     }, error => {
@@ -1605,7 +1606,7 @@ function loadDashboard() {
 // Bloqueados — un usuario bloqueado desaparece de "Usuarios" y solo aparece
 // en "Bloqueados", nunca en las dos a la vez.
 let userStatusFilter = 'active';
-let userSortMode = 'name';
+let userSortMode = 'recent';
 
 function loadUsers() {
   const tbody = document.getElementById('users-tbody');
@@ -1633,7 +1634,9 @@ function applyUserFilters() {
     ? [...filtered].sort((a, b) => (b.totalSpent || 0) - (a.totalSpent || 0))
     : userSortMode === 'purchaseCount'
       ? [...filtered].sort((a, b) => (b.purchaseCount || 0) - (a.purchaseCount || 0))
-      : [...filtered].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'es'));
+      : userSortMode === 'name'
+        ? [...filtered].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'es'))
+        : [...filtered].sort((a, b) => activityTimestampMillis(b.createdAt || b.updatedAt || b.lastAccess) - activityTimestampMillis(a.createdAt || a.updatedAt || a.lastAccess) || String(a.uid || '').localeCompare(String(b.uid || '')));
   _lastFilteredUsers = filtered;
   const visibleIds = new Set(filtered.map(u => u.uid));
   [..._selectedUsers].forEach(uid => { if (!visibleIds.has(uid)) _selectedUsers.delete(uid); });
