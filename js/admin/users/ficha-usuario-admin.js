@@ -48,8 +48,24 @@ if (!window.TintinAdminUserFichaBooted) {
     return new Intl.DateTimeFormat('es-PY', { dateStyle: 'short', timeStyle: 'medium' }).format(date);
   }
 
+  function formatDateOnly(value) {
+    if (!value) return '—';
+    const date = value?.toDate ? value.toDate() : new Date(value);
+    if (Number.isNaN(date.getTime())) return text(value) || '—';
+    return new Intl.DateTimeFormat('es-PY', { dateStyle: 'medium' }).format(date);
+  }
+
   function formatPrice(value) {
     return `Gs. ${(Number(value) || 0).toLocaleString('es-PY')}`;
+  }
+
+  function formatCoordinate(value) {
+    const number = Number(value);
+    return Number.isFinite(number) ? String(number) : '—';
+  }
+
+  function yesNo(value) {
+    return value === true ? 'Sí' : 'No';
   }
 
   function field(label, value) {
@@ -93,6 +109,14 @@ if (!window.TintinAdminUserFichaBooted) {
       .slice(0, 10);
   }
 
+  function latestOrderValue(orders, getter) {
+    for (const order of orders) {
+      const value = getter(order);
+      if (value !== undefined && value !== null && value !== '') return value;
+    }
+    return '';
+  }
+
   async function openClientFicha(uid) {
     const overlay = document.getElementById('client-ficha-overlay');
     const body = document.getElementById('client-ficha-body');
@@ -108,30 +132,70 @@ if (!window.TintinAdminUserFichaBooted) {
       const orders = ordersResult.status === 'fulfilled' ? ordersResult.value : [];
       const logs = auditResult.status === 'fulfilled' ? auditResult.value : [];
 
+      const checkoutDefaults = user.checkoutDefaults && typeof user.checkoutDefaults === 'object' ? user.checkoutDefaults : {};
+      const savedLocation = user.savedLocation && typeof user.savedLocation === 'object' ? user.savedLocation : {};
+      const profileInvoice = user.invoice && typeof user.invoice === 'object' ? user.invoice : {};
+
+      const firstName = user.firstName || text(user.name).trim().split(/\s+/)[0] || '';
+      const lastName = user.lastName || text(user.name).trim().split(/\s+/).slice(1).join(' ');
+      const ci = user.ci || checkoutDefaults.ci || latestOrderValue(orders, order => order.ci);
+      const departamento = user.departamento || checkoutDefaults.departamento || latestOrderValue(orders, order => order.shipping?.departamento || order.departamento);
+      const city = user.city || checkoutDefaults.city || latestOrderValue(orders, order => order.shipping?.city || order.shippingCity);
+      const address = user.address || savedLocation.address || latestOrderValue(orders, order => order.shipping?.address || order.address);
+      const locationName = savedLocation.name || latestOrderValue(orders, order => order.mapLocation?.name || order.shipping?.locationName);
+      const lat = savedLocation.lat ?? latestOrderValue(orders, order => order.mapLocation?.lat ?? order.shipping?.lat);
+      const lng = savedLocation.lng ?? latestOrderValue(orders, order => order.mapLocation?.lng ?? order.shipping?.lng);
+      const reference = checkoutDefaults.reference || checkoutDefaults.referencia || latestOrderValue(orders, order => order.shipping?.referencia || order.shipping?.reference || order.reference);
+
+      const lastInvoiceOrder = orders.find(order => order.invoice?.wanted === true || order.invoiceWanted === true || order.ruc || order.razonSocial);
+      const lastInvoice = lastInvoiceOrder?.invoice && typeof lastInvoiceOrder.invoice === 'object' ? lastInvoiceOrder.invoice : {};
+      const invoiceWanted = profileInvoice.wanted === true || user.wantsInvoice === true || lastInvoice.wanted === true || lastInvoiceOrder?.invoiceWanted === true;
+      const razonSocial = profileInvoice.razonSocial || user.razonSocial || lastInvoice.razonSocial || lastInvoiceOrder?.razonSocial || '';
+      const ruc = profileInvoice.ruc || user.ruc || lastInvoice.ruc || lastInvoiceOrder?.ruc || '';
+
       const identity = section('Identidad');
       identity.grid.append(
-        field('Nombre', user.name),
+        field('Nombre completo', user.name),
+        field('Nombre', firstName),
+        field('Apellido', lastName),
         field('@username', user.username ? `@${user.username}` : ''),
         field('Customer ID', user.customerId || `CUS_${user.uid}`),
         field('UID', user.uid),
         field('Rol', ROLE_LABELS[canonicalRole(user)] || canonicalRole(user)),
-        field('Cuenta creada', formatDate(user.createdAt)),
+        field('Cuenta creada', formatDate(user.createdAt || user.registeredAt)),
         field('Estado de perfil', user.profileStatus || '—'),
       );
 
       const contact = section('Contacto');
       contact.grid.append(
         field('Email', user.email),
-        field('Teléfono', user.phone),
-        field('Cédula', user.checkoutDefaults?.ci || user.ci),
-        field('Ubicación', user.address || user.savedLocation?.name),
-        field('Fecha de nacimiento', user.dob),
+        field('Teléfono', user.phone || checkoutDefaults.phone),
+        field('Cédula', ci),
+        field('Fecha de nacimiento', formatDateOnly(user.dob || user.birthDate)),
+      );
+
+      const location = section('Ubicación y entrega');
+      location.grid.append(
+        field('Nombre de ubicación', locationName),
+        field('Dirección', address),
+        field('Departamento', departamento),
+        field('Ciudad', city),
+        field('Referencia', reference),
+        field('Latitud', formatCoordinate(lat)),
+        field('Longitud', formatCoordinate(lng)),
+      );
+
+      const invoice = section('Facturación');
+      invoice.grid.append(
+        field('Solicita factura', yesNo(invoiceWanted)),
+        field('Razón social', razonSocial),
+        field('RUC', ruc),
       );
 
       const commercial = section('Comercial');
       commercial.grid.append(
         field('Total gastado', formatPrice(user.totalSpent)),
-        field('Compras registradas', String(user.purchaseCount || 0)),
+        field('Compras registradas', String(user.purchaseCount || user.ordersCount || user.orders || 0)),
       );
       if (text(user.internalNotes)) {
         const notes = el('div', 'ficha-field');
@@ -142,8 +206,8 @@ if (!window.TintinAdminUserFichaBooted) {
       const security = section('Seguridad y acceso');
       security.grid.append(
         field('Estado', user.blocked ? `Bloqueado (${user.blockReason || 'sin motivo'})` : 'Activo'),
-        field('Cambio de @username usado', user.usernameChangedAt ? 'Sí' : 'No'),
-        field('Última actividad', formatDate(user.lastLogin)),
+        field('Cambio de @username usado', user.usernameChangeUsed === true || user.usernameChangedAt ? 'Sí' : 'No'),
+        field('Última actividad', formatDate(user.lastAccess || user.lastLoginAt || user.lastLogin)),
         field('Rol anterior', user.roleBeforeBlock ? (ROLE_LABELS[user.roleBeforeBlock] || user.roleBeforeBlock) : '—'),
       );
 
@@ -152,7 +216,7 @@ if (!window.TintinAdminUserFichaBooted) {
       const pendingCount = orders.filter(order => !completed.has(order.status) && !cancelled.has(order.status)).length;
       const completedCount = orders.filter(order => completed.has(order.status)).length;
       const cancelledCount = orders.filter(order => cancelled.has(order.status)).length;
-      const lastCi = orders.find(order => order.ci)?.ci;
+      const lastCi = latestOrderValue(orders, order => order.ci);
 
       const ordersSection = section(`Pedidos (${orders.length})`);
       ordersSection.grid.append(
@@ -188,7 +252,16 @@ if (!window.TintinAdminUserFichaBooted) {
       if (!logs.length) auditList.appendChild(el('div', '', auditResult.status === 'rejected' ? 'Auditoría no disponible' : 'Sin acciones registradas sobre esta cuenta'));
       auditSection.wrapper.appendChild(auditList);
 
-      body.replaceChildren(identity.wrapper, contact.wrapper, commercial.wrapper, ordersSection.wrapper, security.wrapper, auditSection.wrapper);
+      body.replaceChildren(
+        identity.wrapper,
+        contact.wrapper,
+        location.wrapper,
+        invoice.wrapper,
+        commercial.wrapper,
+        ordersSection.wrapper,
+        security.wrapper,
+        auditSection.wrapper,
+      );
     } catch (error) {
       showError(error?.message || 'No se pudo cargar la ficha de la cuenta.');
     }
@@ -222,6 +295,7 @@ if (!window.TintinAdminUserFichaBooted) {
     const style = document.createElement('style');
     style.id = 'user-ficha-styles';
     style.textContent = `
+      .ficha-section{margin-bottom:20px}
       .ficha-section-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--adm-primary);margin-bottom:10px}
       .ficha-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
       .ficha-field-label{font-size:11px;color:#888;margin-bottom:2px}

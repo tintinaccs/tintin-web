@@ -7,9 +7,47 @@ import {
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
 import { syncOrderToSheetsBestEffort } from '../../cloudflare/order-sheets-sync.js';
+import { syncAuditToSheetsBestEffort } from '../../cloudflare/admin-mirror-sheets-sync.js';
+import { syncProductIdsToSheetsBestEffort } from '../../cloudflare/product-mirror-sheets-sync.js';
+import { decodeFirestoreFields, firestoreAdminGet } from '../../cloudflare/firebase-admin-ligero.js';
 
 function safeText(value, max = 500) {
   return String(value == null ? '' : value).trim().slice(0, max);
+}
+
+function itemIds(order) {
+  const items = Array.isArray(order?.items) ? order.items : [];
+  return items.map(item => String(item?.id || '').trim()).filter(Boolean);
+}
+
+function inventoryProductIds(result, beforeOrder) {
+  // Si el dominio no cambió inventario, no hace falta tocar Productos. Si sí
+  // cambió, se usa la unión antes/después: así un producto quitado del pedido
+  // también recibe el stock liberado inmediatamente en Sheets.
+  if (Number(result?.changedProducts || 0) <= 0) return [];
+  return [...new Set([...itemIds(beforeOrder), ...itemIds(result?.order)])];
+}
+
+async function readOrderBeforeMutation(env, body) {
+  if (body?.action === 'createOrder') return null;
+  const orderId = String(body?.orderId || '').trim();
+  if (!/^[A-Za-z0-9_-]{6,220}$/.test(orderId)) return null;
+  const document = await firestoreAdminGet(env, `orders/${encodeURIComponent(orderId)}`);
+  return document ? decodeFirestoreFields(document.fields || {}) : null;
+}
+
+async function syncOrderDependencies(env, result, beforeOrder, actor) {
+  const [order, audit, products] = await Promise.all([
+    syncOrderToSheetsBestEffort(env, result),
+    result?.auditEventId
+      ? syncAuditToSheetsBestEffort(env, result.auditEventId)
+      : Promise.resolve({ ok: true, skipped: true }),
+    syncProductIdsToSheetsBestEffort(env, inventoryProductIds(result, beforeOrder), {
+      email: actor?.email,
+      source: 'superadmin-order-mutation',
+    }),
+  ]);
+  return { order, audit, products };
 }
 
 export async function onRequest(context) {
@@ -33,15 +71,16 @@ export async function onRequest(context) {
       role: 'superadmin',
       origin: 'superadmin',
     };
+    const beforeOrder = await readOrderBeforeMutation(env, body);
     const result = body.action === 'createOrder'
       ? await createOrderAdmin(env, body, actorContext)
       : await applyOrderAdminMutation(env, body, actorContext);
 
-    // Firestore + inventario son la transacción comercial. Sheets se actualiza
-    // después y en best-effort: una caída de Google nunca convierte en fallido
-    // un pedido que ya fue confirmado por el dominio canónico.
-    const sheetsSync = await syncOrderToSheetsBestEffort(env, result);
-    return jsonResponse({ ok: true, result, sheetsSync }, 200, origin, requestUrl);
+    // Firestore + inventario son la transacción comercial. Después se empujan
+    // en paralelo todos los espejos dependientes: pedido, auditoría y TODOS los
+    // productos cuyo stock pudo cambiar, incluidos los retirados del pedido.
+    const mirrors = await syncOrderDependencies(env, result, beforeOrder, actorContext);
+    return jsonResponse({ ok: true, result, sheetsSync: mirrors.order, mirrors }, 200, origin, requestUrl);
   } catch (error) {
     console.error('[admin-order-mutation]', error?.code || '', error?.message || error);
     const message = safeText(error?.message, 300);

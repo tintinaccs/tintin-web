@@ -1,4 +1,17 @@
 {
-  "approved": {},
+  "approved": {
+    "js/admin/sincronizacion-paridad-admin.js": {
+      "version": "tintin-20260903-admin-parity-push-1",
+      "gitBlobSha": "f44194aab3d9a172cd9f755c5846a07f496519ba"
+    },
+    "js/core/sync/sincronizacion-usuario.js": {
+      "version": "tintin-20260903-user-mirror-push-1",
+      "gitBlobSha": "68759c74f533ecabcf82f1a309a5b333aa181d61"
+    },
+    "js/pages/checkout/checkout-facturacion-estable.js": {
+      "version": "tintin-20260903-checkout-invoice-stable-1",
+      "gitBlobSha": "098b78d6bfe37b876f5f637155c5e661ac325175"
+    }
+  },
   "removed": []
 }

@@ -50,7 +50,7 @@ test('Usuarios administrativos usa changeId, baseChangeId y origen', () => {
   assert.match(parity, /schemaVersion: 6/);
 });
 
-test('Snapshot administrativo pagina hasta 5000 y recupera cédula de checkout', () => {
+test('Snapshot administrativo pagina hasta 5000, ordena por llegada y recupera datos completos del perfil', () => {
   const snapshot = read('functions/api/sheets-sync-snapshot.js');
   assert.match(snapshot, /const MAX_RECORDS = 5000;/);
   assert.match(snapshot, /checkoutDefaults/);
@@ -59,7 +59,9 @@ test('Snapshot administrativo pagina hasta 5000 y recupera cédula de checkout',
   assert.match(snapshot, /firstName: user\.firstName/);
   assert.match(snapshot, /locationName: savedLocation\.name/);
   assert.match(snapshot, /ruc: invoice\.ruc/);
+  assert.match(snapshot, /lastAccess: asIso\(user\.lastAccess \|\| user\.lastLoginAt \|\| user\.lastLogin\)/);
   assert.match(snapshot, /return \{ \.\.\.record, eventId: documentId\(document\), timestamp: asIso/);
+  assert.match(snapshot, /function newestFirst\(/);
 });
 
 test('Bloqueo desde Sheets compensa Firebase Auth si falla Firestore', () => {

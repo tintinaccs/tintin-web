@@ -8,12 +8,26 @@
 var TINTIN_PARITY_DISPATCHER = 'tintinDespacharEdicionParidad';
 var TINTIN_PARITY_RECONCILER = 'tintinReconciliarAdminParidad';
 var TINTIN_PARITY_ORDERS_WIDTH = 31;
+var TINTIN_PARITY_USERS_WIDTH = 33;
+var TINTIN_PARITY_AUDIT_WIDTH = 14;
 var TINTIN_PARITY_ORDER_NOTES_COLUMN = 30;
 var TINTIN_PARITY_ORDER_REFERENCE_COLUMN = 31;
 var TINTIN_PARITY_NEW_ORDER_SHEET = 'Nuevo pedido web';
 var TINTIN_PARITY_NEW_ORDER_ACTION_CELL = 'B17';
 var TINTIN_PARITY_NEW_ORDER_FIRST_ITEM_ROW = 21;
 var TINTIN_PARITY_NEW_ORDER_LAST_ITEM_ROW = 40;
+
+var TINTIN_PARITY_USER_COL = {
+  uid: 2, name: 3, username: 4, customerId: 5,
+  email: 6, phone: 7, ci: 8,
+  orders: 9, totalSpent: 10,
+  role: 11, blocked: 12, profileStatus: 13, usernameChangeUsed: 14,
+  internalNotes: 15, action: 16,
+  createdAt: 17, lastAccess: 18, lastChangeId: 19,
+  firstName: 20, lastName: 21, dob: 22, address: 23, locationName: 24,
+  addressLat: 25, addressLng: 26, departamento: 27, city: 28, reference: 29,
+  invoiceWanted: 30, razonSocial: 31, ruc: 32, updatedAt: 33
+};
 
 function tintinParityCallWebhook_(path, payload) {
   var response = UrlFetchApp.fetch(tintinStoreOrigin_() + path, {
@@ -91,6 +105,140 @@ function tintinParityUpsertOrder_(orderId, order) {
   return rowNumber;
 }
 
+function tintinParityUserHeaders_() {
+  var headers = new Array(TINTIN_PARITY_USERS_WIDTH).fill('');
+  var labels = {
+    uid: 'UID', name: 'Nombre', username: 'Username', customerId: 'ID cliente',
+    email: 'Correo', phone: 'Teléfono', ci: 'Cédula', orders: 'Pedidos', totalSpent: 'Total gastado (Gs.)',
+    role: 'Rol', blocked: 'Bloqueado', profileStatus: 'Estado de perfil', usernameChangeUsed: 'Cambió username',
+    internalNotes: 'Notas internas', action: 'Acción', createdAt: 'Creado', lastAccess: 'Último acceso',
+    lastChangeId: 'Último changeId', firstName: 'Nombre/s', lastName: 'Apellido/s', dob: 'Fecha de nacimiento',
+    address: 'Dirección', locationName: 'Nombre ubicación', addressLat: 'Latitud', addressLng: 'Longitud',
+    departamento: 'Departamento', city: 'Ciudad', reference: 'Referencia', invoiceWanted: 'Solicita factura',
+    razonSocial: 'Razón social', ruc: 'RUC', updatedAt: 'Actualizado'
+  };
+  Object.keys(TINTIN_PARITY_USER_COL).forEach(function(key) {
+    headers[TINTIN_PARITY_USER_COL[key] - 1] = labels[key] || key;
+  });
+  return headers;
+}
+
+function tintinParityPrepareUsersSheet_() {
+  var sheet = tintinProductsSpreadsheet_().getSheetByName(TINTIN_USERS_SHEET);
+  if (!sheet) return null;
+  if (sheet.getMaxColumns() < TINTIN_PARITY_USERS_WIDTH) {
+    sheet.insertColumnsAfter(sheet.getMaxColumns(), TINTIN_PARITY_USERS_WIDTH - sheet.getMaxColumns());
+  }
+  sheet.getRange(TINTIN_USERS_HEADER_ROW, 1, 1, TINTIN_PARITY_USERS_WIDTH)
+    .setValues([tintinParityUserHeaders_()])
+    .setFontWeight('bold');
+  sheet.getRange(TINTIN_USERS_HEADER_ROW, TINTIN_PARITY_USER_COL.lastChangeId).setNote('Versión canónica usada para detectar conflictos entre Superadmin, Sheets y Firestore.');
+  sheet.getRange(TINTIN_USERS_HEADER_ROW, TINTIN_PARITY_USER_COL.addressLat, 1, 2).setNote('Coordenadas informativas de la ubicación guardada por el cliente.');
+  sheet.getRange(TINTIN_USERS_HEADER_ROW, TINTIN_PARITY_USER_COL.invoiceWanted, 1, 3).setNote('Datos de facturación reflejados desde el perfil/checkout; son informativos en Sheets.');
+  return sheet;
+}
+
+function tintinParityUserRow_(user) {
+  user = user && typeof user === 'object' ? user : {};
+  var row = new Array(TINTIN_PARITY_USERS_WIDTH).fill('');
+  var set = function(key, value) { row[TINTIN_PARITY_USER_COL[key] - 1] = value == null ? '' : value; };
+  set('uid', user.uid);
+  set('name', user.name);
+  set('username', user.username);
+  set('customerId', user.customerId);
+  set('email', user.email);
+  set('phone', user.phone);
+  set('ci', user.ci);
+  set('orders', user.orders);
+  set('totalSpent', user.totalSpent);
+  set('role', tintinSheetUserRole_(user.role));
+  set('blocked', tintinYesNo_(user.blocked));
+  set('profileStatus', user.profileStatus);
+  set('usernameChangeUsed', tintinYesNo_(user.usernameChangeUsed));
+  set('internalNotes', user.internalNotes);
+  set('action', '');
+  set('createdAt', tintinDateFromIso_(user.createdAt));
+  set('lastAccess', tintinDateFromIso_(user.lastAccess));
+  set('lastChangeId', user.lastChangeId);
+  set('firstName', user.firstName);
+  set('lastName', user.lastName);
+  set('dob', tintinDateFromIso_(user.dob));
+  set('address', user.address);
+  set('locationName', user.locationName);
+  set('addressLat', user.addressLat);
+  set('addressLng', user.addressLng);
+  set('departamento', user.departamento);
+  set('city', user.city);
+  set('reference', user.reference);
+  set('invoiceWanted', tintinYesNo_(user.invoiceWanted));
+  set('razonSocial', user.razonSocial);
+  set('ruc', user.ruc);
+  set('updatedAt', tintinDateFromIso_(user.updatedAt));
+  return row;
+}
+
+function tintinPullUsersParity_() {
+  tintinParityPrepareUsersSheet_();
+  var rows = tintinSnapshot_('users').map(tintinParityUserRow_);
+  return tintinReplaceTabRows_(TINTIN_USERS_SHEET, TINTIN_USERS_FIRST_ROW, TINTIN_PARITY_USERS_WIDTH, rows);
+}
+
+function tintinParityUpsertUser_(user) {
+  user = user && typeof user === 'object' ? user : {};
+  var uid = String(user.uid || '').trim();
+  if (!uid) throw new Error('Usuario inválido para reflejar en Sheets.');
+  var sheet = tintinParityPrepareUsersSheet_();
+  if (!sheet) throw new Error('No existe Usuarios web.');
+  var lastRow = Math.max(sheet.getLastRow(), TINTIN_USERS_HEADER_ROW);
+  var found = lastRow >= TINTIN_USERS_FIRST_ROW
+    ? sheet.getRange(TINTIN_USERS_FIRST_ROW, TINTIN_PARITY_USER_COL.uid, lastRow - TINTIN_USERS_FIRST_ROW + 1, 1)
+        .createTextFinder(uid).matchEntireCell(true).findNext()
+    : null;
+  var rowNumber = found ? found.getRow() : Math.max(TINTIN_USERS_FIRST_ROW, lastRow + 1);
+  sheet.getRange(rowNumber, 1, 1, TINTIN_PARITY_USERS_WIDTH).setValues([tintinParityUserRow_(user)]);
+  return rowNumber;
+}
+
+function tintinParityAuditRow_(audit) {
+  audit = audit && typeof audit === 'object' ? audit : {};
+  return [
+    audit.eventId || '',
+    tintinDateFromIso_(audit.timestamp),
+    audit.customerId || '',
+    audit.actorId || '',
+    audit.actorEmail || '',
+    audit.actorRole || '',
+    audit.action || '',
+    audit.entityType || '',
+    audit.entityId || '',
+    JSON.stringify(audit.before || {}),
+    JSON.stringify(audit.after || {}),
+    audit.origin || '',
+    audit.result || '',
+    audit.changeId || ''
+  ];
+}
+
+function tintinPullAuditParity_() {
+  var rows = tintinSnapshot_('audit').map(tintinParityAuditRow_);
+  return tintinReplaceTabRows_(TINTIN_AUDIT_SHEET, 2, TINTIN_PARITY_AUDIT_WIDTH, rows);
+}
+
+function tintinParityUpsertAudit_(audit) {
+  audit = audit && typeof audit === 'object' ? audit : {};
+  var eventId = String(audit.eventId || '').trim();
+  if (!eventId) throw new Error('Evento de auditoría inválido para reflejar en Sheets.');
+  var sheet = tintinProductsSpreadsheet_().getSheetByName(TINTIN_AUDIT_SHEET);
+  if (!sheet) throw new Error('No existe Auditoría web.');
+  var lastRow = Math.max(sheet.getLastRow(), 1);
+  var found = lastRow >= 2
+    ? sheet.getRange(2, 1, lastRow - 1, 1).createTextFinder(eventId).matchEntireCell(true).findNext()
+    : null;
+  var rowNumber = found ? found.getRow() : Math.max(2, lastRow + 1);
+  sheet.getRange(rowNumber, 1, 1, TINTIN_PARITY_AUDIT_WIDTH).setValues([tintinParityAuditRow_(audit)]);
+  return rowNumber;
+}
+
 // Se llama desde CrearPedido.gs DESPUÉS del commit de Firestore. Si Sheets
 // falla, el checkout no se revierte: el reconciliador de un minuto recupera el
 // pedido desde Firestore en el siguiente ciclo.
@@ -114,22 +262,32 @@ function tintinParitySecretMatches_(provided) {
   return difference === 0;
 }
 
-// Helper para el router doPost: Cloudflare puede empujar el pedido confirmado
-// inmediatamente. El secreto viaja server-to-server en el body porque Apps
-// Script no expone headers arbitrarios de forma fiable en el evento doPost.
+// Router server-to-server único para los espejos administrativos inmediatos.
+// El nombre histórico se conserva porque doPost ya lo llama; además de pedidos
+// ahora acepta usuarios y auditoría. El reconciliador de un minuto es fallback.
 function tintinParityHandleServerOrderSync_(body) {
-  if (!body || body.action !== 'syncOrder') return null;
+  if (!body || ['syncOrder', 'syncUser', 'syncAudit'].indexOf(body.action) === -1) return null;
   if (!tintinParitySecretMatches_(body.secret)) {
     return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'No autorizado' }))
       .setMimeType(ContentService.MimeType.JSON);
   }
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(10000)) {
+    return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'Sincronización ocupada; reintentará el reconciliador.' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
   try {
-    var row = tintinParityUpsertOrder_(String(body.orderId || ''), body.order || {});
+    var row = 0;
+    if (body.action === 'syncOrder') row = tintinParityUpsertOrder_(String(body.orderId || ''), body.order || {});
+    else if (body.action === 'syncUser') row = tintinParityUpsertUser_(body.user || {});
+    else row = tintinParityUpsertAudit_(body.audit || {});
     return ContentService.createTextOutput(JSON.stringify({ ok: true, row: row }))
       .setMimeType(ContentService.MimeType.JSON);
   } catch (error) {
     return ContentService.createTextOutput(JSON.stringify({ ok: false, error: String(error && error.message || error).slice(0, 300) }))
       .setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    lock.releaseLock();
   }
 }
 
@@ -226,7 +384,7 @@ function tintinHandleUserParityEdit_(e) {
   if (!e || !e.range || e.range.getRow() < TINTIN_USERS_FIRST_ROW) return;
   var column = e.range.getColumn();
   if ([TINTIN_USERS_COL.role, TINTIN_USERS_COL.blocked, TINTIN_USERS_COL.internalNotes, TINTIN_USERS_COL.action].indexOf(column) === -1) {
-    tintinPullUsersFromWeb_();
+    tintinPullUsersParity_();
     tintinRecordSyncSafely_('REJECTED', e.range.getSheet().getName(), e.range.getA1Notation(), 'La columna de usuario es informativa.');
     return;
   }
@@ -253,9 +411,10 @@ function tintinHandleUserParityEdit_(e) {
     if (action === 'softDeleteUser') sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.blocked).setValue('Sí');
     if (action === 'reactivateUser') sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.blocked).setValue('No');
     if (action !== 'updateUser') sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.action).clearContent();
+    tintinPullUsersParity_();
     tintinRecordSyncSafely_('SYNCED', sheet.getName(), e.range.getA1Notation(), 'Cuenta web sincronizada por lifecycle canónico.');
   } catch (error) {
-    tintinPullUsersFromWeb_();
+    tintinPullUsersParity_();
     var status = [400, 409].indexOf(Number(error && error.tintinHttpStatus || 0)) >= 0 ? 'REJECTED' : 'ERROR';
     tintinRecordSyncSafely_(status, sheet.getName(), e.range.getA1Notation(), String(error && error.message || error));
     throw error;
@@ -271,7 +430,7 @@ function tintinPullOrdersParity_() {
     return tintinParityOrderRow_(order.orderId, order);
   });
   var count = tintinReplaceTabRows_(TINTIN_ORDERS_SHEET, 2, TINTIN_PARITY_ORDERS_WIDTH, rows);
-  if (ordersSheet && typeof tintinParityValidation_ === 'function') {
+  if (ordersSheet) {
     ordersSheet.getRange('K2:K').setDataValidation(tintinParityValidation_(['pendiente','confirmado','preparando','listo_retiro','en_camino','entregado','cancelado','rechazado']));
     ordersSheet.getRange('L2:L').setDataValidation(tintinParityValidation_(['efectivo','transferencia','paypal']));
     ordersSheet.getRange('M2:M').setDataValidation(tintinParityValidation_(['pendiente','pagado','rechazado','cancelado','reembolsado']));
@@ -308,7 +467,6 @@ function tintinParityPrepareNewOrderSheet_() {
     sheet.setColumnWidth(4, 100);
     sheet.setColumnWidth(5, 180);
   }
-
   sheet.getRange('B7').setDataValidation(tintinParityValidation_(['pendiente','confirmado','preparando','listo_retiro','en_camino','entregado','cancelado','rechazado']));
   sheet.getRange('B8').setDataValidation(tintinParityValidation_(['efectivo','transferencia','paypal']));
   sheet.getRange('B9').setDataValidation(tintinParityValidation_(['pendiente','pagado','rechazado','cancelado','reembolsado']));
@@ -431,15 +589,8 @@ function tintinPrepararHojasParidad_() {
   orders.getRange('AD1').setNote('Notas internas administrativas. Editable desde Sheets y Superadmin.');
   orders.getRange('AE1').setNote('Referencia de entrega. Editable desde Sheets y Superadmin.');
 
-  var users = spreadsheet.getSheetByName(TINTIN_USERS_SHEET);
+  var users = tintinParityPrepareUsersSheet_();
   if (users) {
-    if (users.getMaxColumns() < TINTIN_USERS_COL.updatedAt) {
-      users.insertColumnsAfter(users.getMaxColumns(), TINTIN_USERS_COL.updatedAt - users.getMaxColumns());
-    }
-    // Mantener el encabezado alineado con el espejo real, incluso después de
-    // una migración única ya ejecutada anteriormente.
-    users.getRange(TINTIN_USERS_HEADER_ROW, 1, 1, TINTIN_USERS_COL.updatedAt).setValues([TINTIN_USERS_HEADERS]);
-    users.getRange(TINTIN_USERS_HEADER_ROW, 1, 1, TINTIN_USERS_COL.updatedAt).setFontWeight('bold');
     var roleCol = tintinColumnLetter_(TINTIN_USERS_COL.role);
     var blockedCol = tintinColumnLetter_(TINTIN_USERS_COL.blocked);
     var actionCol = tintinColumnLetter_(TINTIN_USERS_COL.action);
@@ -449,7 +600,7 @@ function tintinPrepararHojasParidad_() {
     users.getRange(actionCol + TINTIN_USERS_HEADER_ROW).setNote('Acción administrativa segura: ELIMINAR crea tombstone; REACTIVAR restaura la cuenta. Nunca se destruye el UID histórico desde Sheets.');
   }
   tintinParityPrepareNewOrderSheet_();
-  return { ok: true, ordersWidth: TINTIN_PARITY_ORDERS_WIDTH, users: !!users, newOrderSheet: true };
+  return { ok: true, ordersWidth: TINTIN_PARITY_ORDERS_WIDTH, usersWidth: TINTIN_PARITY_USERS_WIDTH, users: !!users, newOrderSheet: true };
 }
 
 function tintinDespacharEdicionParidad(e) {
@@ -465,9 +616,9 @@ function tintinDespacharEdicionParidad(e) {
 
 function tintinReconciliarAdminParidad() {
   var summary = {};
-  summary.users = tintinPullUsersFromWeb_();
+  summary.users = tintinPullUsersParity_();
   summary.orders = tintinPullOrdersParity_();
-  summary.audit = tintinPullAuditFromWeb_();
+  summary.audit = tintinPullAuditParity_();
   tintinRecordSyncSafely_('SYNCED', 'Sistema', 'web→sheets', 'Superficies administrativas actualizadas: usuarios ' + summary.users + ', pedidos ' + summary.orders + ', auditoría ' + summary.audit + '.');
   return summary;
 }

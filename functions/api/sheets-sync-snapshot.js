@@ -71,15 +71,18 @@ function userRecord(document) {
   return {
     uid: documentId(document), name: user.name || user.displayName || '', firstName: user.firstName || '', lastName: user.lastName || '', email: user.email || '',
     createdAt: asIso(user.createdAt || user.registeredAt), role: user.role || 'client', blocked: user.blocked === true,
-    orders: Number(user.ordersCount || user.orders || 0), totalSpent: Number(user.totalSpent || 0),
+    orders: Number(user.ordersCount || user.orders || user.purchaseCount || 0), totalSpent: Number(user.totalSpent || 0),
     internalNotes: user.internalNotes || '', customerId: user.customerId || '', username: user.username || '',
     phone: user.phone || '', ci: user.ci || checkoutDefaults.ci || '', profileStatus: user.profileStatus || '',
     dob: asIso(user.dob || user.birthDate), address: user.address || savedLocation.address || '',
     locationName: savedLocation.name || '', addressLat: Number.isFinite(Number(savedLocation.lat)) ? Number(savedLocation.lat) : '',
     addressLng: Number.isFinite(Number(savedLocation.lng)) ? Number(savedLocation.lng) : '', departamento: user.departamento || checkoutDefaults.departamento || '',
+    city: user.city || checkoutDefaults.city || '',
+    reference: user.reference || user.referencia || checkoutDefaults.reference || checkoutDefaults.referencia || '',
     invoiceWanted: invoice.wanted === true || user.wantsInvoice === true, razonSocial: invoice.razonSocial || user.razonSocial || '',
     ruc: invoice.ruc || user.ruc || '',
-    lastAccess: asIso(user.lastAccess || user.lastLoginAt), usernameChangeUsed: user.usernameChangeUsed === true,
+    lastAccess: asIso(user.lastAccess || user.lastLoginAt || user.lastLogin),
+    usernameChangeUsed: user.usernameChangeUsed === true || Boolean(user.usernameChangedAt),
     lastChangeId: user.lastChangeId || '', updatedAt: asIso(user.updatedAt),
   };
 }
