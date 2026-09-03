@@ -10,6 +10,10 @@ import {
   fsString,
   fsTimestamp,
 } from './firebase-admin-ligero.js';
+import {
+  syncAuditToSheetsBestEffort,
+  syncUserToSheetsBestEffort,
+} from './admin-mirror-sheets-sync.js';
 
 const UID_PATTERN = /^[A-Za-z0-9_-]{6,128}$/;
 const ACTIONS = new Set(['softDelete', 'reactivate']);
@@ -22,6 +26,10 @@ function makeEventId() {
   return `EVT_${crypto.randomUUID().replaceAll('-', '')}`;
 }
 
+function hasCompletedIdentity(user) {
+  return Boolean(user?.username && (user?.dob || user?.birthDate));
+}
+
 function lifecyclePatch(action, user, actorEmail, now, changeId, origin) {
   if (action === 'reactivate') {
     return {
@@ -32,7 +40,7 @@ function lifecyclePatch(action, user, actorEmail, now, changeId, origin) {
       blockReason: fsString(''),
       role: fsString('client'),
       roleBeforeBlock: fsString(''),
-      profileStatus: fsString(user.username && user.birthDate ? 'active' : 'incomplete'),
+      profileStatus: fsString(hasCompletedIdentity(user) ? 'active' : 'incomplete'),
       lastChangeId: fsString(changeId),
       syncOrigin: fsString(origin),
       updatedAt: fsTimestamp(now),
@@ -94,7 +102,7 @@ export async function applyUserLifecycle(env, options = {}) {
   const now = new Date();
   const eventId = makeEventId();
   const patch = lifecyclePatch(action, user, actorEmail, now, changeId, origin);
-  const afterStatus = action === 'softDelete' ? 'deleted' : (user.username && user.birthDate ? 'active' : 'incomplete');
+  const afterStatus = action === 'softDelete' ? 'deleted' : (hasCompletedIdentity(user) ? 'active' : 'incomplete');
   const audit = encodeFirestoreFields({
     eventId,
     timestamp: now,
@@ -123,6 +131,13 @@ export async function applyUserLifecycle(env, options = {}) {
   const phone = clean(user.phone || user.phoneNormalized, 40).replace(/\D/g, '');
   if (action === 'softDelete' && phone) await firestoreAdminDelete(env, `phoneReservations/${encodeURIComponent(phone)}`);
 
+  // Firestore/Auth ya son canónicos. Los dos espejos se actualizan en paralelo;
+  // una caída de Google no revierte el lifecycle y el reconciliador recupera.
+  const [userMirror, auditMirror] = await Promise.all([
+    syncUserToSheetsBestEffort(env, uid),
+    syncAuditToSheetsBestEffort(env, eventId),
+  ]);
+
   return {
     uid,
     action,
@@ -132,5 +147,6 @@ export async function applyUserLifecycle(env, options = {}) {
     authDisabled: action === 'softDelete',
     phoneReleased: action === 'softDelete' && Boolean(phone),
     auditEventId: eventId,
+    mirrors: { user: userMirror, audit: auditMirror },
   };
 }
