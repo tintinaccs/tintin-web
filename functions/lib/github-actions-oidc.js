@@ -71,13 +71,23 @@ export async function verifyGitHubActionsOidc(token, {
   try {
     jwksResponse = await fetchImpl(JWKS_URL, {
       method: 'GET',
-      headers: { accept: 'application/json' },
-      redirect: 'error',
+      headers: {
+        accept: 'application/json',
+        'user-agent': 'tintin-web-github-actions-oidc',
+      },
+      redirect: 'follow',
     });
   } catch {
     throw new GitHubActionsOidcError('oidc_jwks_unavailable');
   }
-  if (!jwksResponse?.ok) throw new GitHubActionsOidcError('oidc_jwks_unavailable');
+  if (!jwksResponse?.ok) {
+    const status = Number(jwksResponse?.status);
+    throw new GitHubActionsOidcError(
+      Number.isInteger(status) && status >= 400 && status <= 599
+        ? `oidc_jwks_http_${status}`
+        : 'oidc_jwks_unavailable',
+    );
+  }
 
   let jwks;
   try {
