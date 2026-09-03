@@ -36,7 +36,9 @@ function tintinEnsureHeaders_(sheet, headers) {
 }
 
 function tintinSheet_(name, headers) {
-  var book = SpreadsheetApp.getActiveSpreadsheet();
+  var book = typeof tintinProductsSpreadsheet_ === 'function'
+    ? tintinProductsSpreadsheet_()
+    : SpreadsheetApp.getActiveSpreadsheet();
   var sheet = book.getSheetByName(name) || book.insertSheet(name);
   tintinEnsureHeaders_(sheet, headers);
   return sheet;
