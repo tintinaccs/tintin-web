@@ -20,5 +20,11 @@
   "git.rebaseWhenSync": true,
   "git.pruneOnFetch": true,
   "git.branchProtection": ["main"],
-  "git.branchProtectionPrompt": "alwaysCommitToNewBranch"
+  "git.branchProtectionPrompt": "alwaysCommitToNewBranch",
+
+  // --- Preview local del sitio (extension ms-vscode.live-server) ---
+  "livePreview.serverRoot": "/",
+  "livePreview.defaultPreviewPath": "/index.html",
+  "livePreview.openPreviewTarget": "Embedded Preview",
+  "livePreview.portNumber": 3000
 }
