@@ -3,7 +3,7 @@ const PROFILE_PATH_RE = /(?:^|\/)perfil(?:\.html)?\/?$/i;
 if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfileMaintenanceBooted) {
   window.TintinProfileMaintenanceBooted = true;
 
-  const VERSION = 'tintin-20260718-profile-maintenance-1';
+  const VERSION = 'tintin-20260903-app-check-singleton-3';
   const PROFILE_ORDERS_LIMIT = 100;
   let unsubscribeOrders = null;
   let orderFirestore = null;
@@ -237,7 +237,7 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
     if (list) { list.setAttribute('aria-busy','true'); list.innerHTML = '<div class="tt-profile-state">Sincronizando pedidos…</div>'; }
     try {
       const [{ auth, db }, firestore, authApi] = await Promise.all([
-        import(`./firebase.js?v=${VERSION}`),
+        import(`../../core/firebase/firebase.js?v=${VERSION}`),
         import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
         import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),
       ]);
