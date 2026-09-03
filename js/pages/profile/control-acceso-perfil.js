@@ -19,7 +19,7 @@
 // Quien no quiera completarlo tiene salida: el modal del alta cierra la
 // sesión y la devuelve a la tienda, donde puede seguir mirando.
 
-import { auth, db } from "../../core/firebase/firebase.js?v=tintin-20260903-auth-persistence-1";
+import { auth, db } from "../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-1";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20260901-username-required-1";

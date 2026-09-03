@@ -135,7 +135,7 @@ if (supported.has(page) && !window.TintinLegalMaintenanceBooted) {
   // Nada de lo de arriba necesita datos remotos (solo reordena HTML ya
   // presente), así que el SDK de Firebase se carga después del contenido.
   Promise.all([
-    import('../../core/firebase/firebase.js?v=tintin-20260903-auth-persistence-1'),
+    import('../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-1'),
     import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
   ]).then(([{ db }, { doc, onSnapshot }]) => {
     onSnapshot(doc(db, 'settings', 'general'), snap => {

@@ -76,7 +76,7 @@
 
   (async function () {
     try {
-      var fbMod = await import('../../../core/firebase/firebase.js?v=tintin-20260903-auth-persistence-1');
+      var fbMod = await import('../../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-1');
       var fs = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js');
       fs.onSnapshot(fs.doc(fbMod.db, 'settings', 'general'), function (snap) {
         var mode = normalize(snap.exists() ? snap.data() : {});
