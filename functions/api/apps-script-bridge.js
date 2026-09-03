@@ -206,7 +206,7 @@ export async function onRequest(context) {
       headers
     });
   } catch (error) {
-    console.error('[apps-script-bridge]', error?.code || '', error?.message || error);
+    console.error('[apps-script-bridge]', clean(error?.code, 120), clean(error?.message, 200));
     return jsonResponse({
       ok: false,
       error: clean(error?.code, 120) || 'upstream_unavailable'
