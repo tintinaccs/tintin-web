@@ -238,12 +238,7 @@ export function loadSharedRuntime() {
 
   const critical = [loadAuthRuntime(), loadCartRuntime()];
   if (page === 'home' || page === 'shop') critical.push(loadProductsRuntime());
-  if (page === 'cart') {
-    critical.push(
-      import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')),
-      import(versionedJsModule('pages/checkout/checkout-facturacion-estable.js')),
-    );
-  }
+  if (page === 'cart') critical.push(import(versionedJsModule('pages/checkout/checkout-confiabilidad.js')));
 
   Promise.allSettled(critical).then(reportRuntimeFailures);
 
