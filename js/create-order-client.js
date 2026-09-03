@@ -1,13 +1,16 @@
 /**
  * TINTIN — Cliente del endpoint server-side de pedidos (Fase 4).
  *
- * Llama a la acción `createOrder` del mismo Apps Script que ya manda los
- * correos, autenticado con el idToken real de quien compra.
+ * El navegador habla únicamente con Cloudflare Pages. Cloudflare valida la
+ * sesión antes de reenviar la transacción heredada a Apps Script, de modo que
+ * la URL privilegiada de Apps Script no forme parte del contrato público del
+ * checkout.
  */
-import { EMAIL_WEBHOOK_URL } from './email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1';
 import { auth } from './core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-1';
+import { apiUrl } from './core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
 
 const CREATE_ORDER_TIMEOUT_MS = 35000;
+const CREATE_ORDER_ENDPOINT = apiUrl('apps-script-bridge');
 
 function phoneForOrderServer(value) {
   // El Apps Script valida 8–20 dígitos; la UI puede conservar el +595.
@@ -27,7 +30,7 @@ export async function createOrderViaServer(draft) {
   const timeout = window.setTimeout(() => controller.abort(), CREATE_ORDER_TIMEOUT_MS);
 
   try {
-    const response = await fetch(EMAIL_WEBHOOK_URL, {
+    const response = await fetch(CREATE_ORDER_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action: 'createOrder', idToken, ...serverDraft }),
