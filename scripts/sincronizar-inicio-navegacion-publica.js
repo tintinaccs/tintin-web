@@ -6,6 +6,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260903-css-shell-min-1';
+const TIENDA_VERSION = 'tintin-20260831-product-loading-4';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260816-loader-shell-bridge-1';
 const LOADER_VERSION = 'tintin-20260903-loader-store-gate-fast-rest-1';
 const STORE_GATE_VERSION = 'tintin-20260903-store-gate-fast-rest-1';
@@ -183,7 +184,10 @@ function removeSharedFooter(html) {
 }
 
 function ensureStyles(html) {
-  if (/href=["']styles\.css(?:\?|["'])/i.test(html)) return html;
+  const existing = /(<link\b[^>]*href=["'])(\/?styles\.css)(\?[^"']*)?(["'][^>]*>)/i;
+  if (existing.test(html)) {
+    return html.replace(existing, `$1styles.min.css?v=${VERSION}$4`);
+  }
   const tokens = /(<link\b[^>]*href=["']css\/tokens-tintin\.css[^"']*["'][^>]*>)/i;
   if (tokens.test(html)) {
     return html.replace(tokens, `$1\n  <link rel="stylesheet" href="styles.min.css?v=${VERSION}">`);
@@ -236,9 +240,9 @@ function centralizeRuntime(html) {
     ''
   );
   if (!/<script\b[^>]*src=["']tienda\.js(?:\?|["'])/i.test(out)) {
-    out = out.replace('</body>', `<script src="tienda.js?v=${VERSION}" defer></script>\n</body>`);
+    out = out.replace('</body>', `<script src="tienda.js?v=${TIENDA_VERSION}" defer></script>\n</body>`);
   } else {
-    out = out.replace(/(<script\b[^>]*src=["']tienda\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi, `$1?v=${VERSION}$2`);
+    out = out.replace(/(<script\b[^>]*src=["']tienda\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi, `$1?v=${TIENDA_VERSION}$2`);
   }
   return out;
 }
