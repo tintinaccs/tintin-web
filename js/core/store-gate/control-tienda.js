@@ -24,7 +24,7 @@ import {
   getStoreAccessConfig,
   getStoreAccessConfigFromRest,
   normalizeStoreAccessConfig
-} from './nucleo-control-tienda.js?v=tintin-20260903-store-gate-fast-rest-1';
+} from './nucleo-control-tienda.js?v=tintin-20260903-store-gate-fast-rest-2';
 
 export {
   isAccessAllowed,
