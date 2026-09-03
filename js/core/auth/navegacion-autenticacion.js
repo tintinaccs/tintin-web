@@ -1,6 +1,6 @@
 // cargador-pagina.js es el único responsable de iniciar los módulos globales de
 // interfaz. auth-nav solo administra sesión y navegación de la cuenta.
-import { auth } from '../firebase/firebase.js?v=tintin-20260903-app-check-singleton-1';
+import { auth } from '../firebase/firebase.js?v=tintin-20260903-app-check-singleton-2';
 import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { getUserRole, can, SUPER_ADMIN } from './roles.js?v=tintin-20260821-accounts-phase-a-1';
 
