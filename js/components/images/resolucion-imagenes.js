@@ -9,7 +9,7 @@
    reimplementar esta cascada — todas deben importar de acá.
    ============================================================= */
 
-import { db } from '../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-4';
+import { db } from '../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-5';
 import {
   doc,
   getDoc,

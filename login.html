@@ -20,7 +20,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
-  <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-4">
+  <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-5">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
   <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260902-customer-notification-audience-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260824-header-responsive-sync-1">
@@ -198,7 +198,7 @@
 </div>
 
 <script type="module">
-import { auth, db, provider } from "./js/core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-4";
+import { auth, db, provider, authPersistenceReady } from "./js/core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-5";
 import {
   signInWithPopup,
   signInWithRedirect,
@@ -214,7 +214,7 @@ import { ASSIGNABLE_ROLES } from './js/core/auth/contrato-cuentas-generado.js?v=
 import {
   isValidEmailFormat, requestOtpCode, verifyOtpCode,
   ensureUserDocForEmailLogin, otpErrorMessage
-} from "./js/email/correo-autenticacion.js?v=tintin-20260829-local-api-fallback-1";
+} from "./js/email/correo-autenticacion.js?v=tintin-20260903-auth-persistence-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { isValidUsernameFormat, isReservedUsername, normalizeUsername } from "./js/components/forms/utilidades-username.js?v=tintin-20260821-username-unique-1";
@@ -253,7 +253,7 @@ const googleRedirectWasExpected = hasGoogleRedirectPending();
 // Solo se consulta Firebase por un resultado de redirect cuando este navegador
 // realmente inició uno. La carga normal deja de esperar una red que no necesita.
 const googleRedirectResultPromise = googleRedirectWasExpected
-  ? getRedirectResult(auth)
+  ? authPersistenceReady.then(() => getRedirectResult(auth))
       .then(result => ({ result, error: null }))
       .catch(error => ({ result: null, error }))
   : Promise.resolve({ result: null, error: null });
@@ -988,6 +988,7 @@ const loginConGoogle = async () => {
   setOverlayText('Esperando que completes el inicio de sesión con Google…');
   const myAttempt = ++_googleLoginToken; // si se reintenta, el intento viejo se ignora al resolver
   try {
+    await authPersistenceReady;
     const cred = await signInWithPopup(auth, provider);
     if (myAttempt !== _googleLoginToken) return; // ya se lanzó un intento más nuevo
     googleButtonLabel.textContent = 'Entrando…';

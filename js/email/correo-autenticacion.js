@@ -9,7 +9,7 @@
 // Functions) — Firebase Auth solo entra al final, para firmar la sesión real
 // con el Custom Token que devuelve la verificación.
 // =============================================================
-import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-4";
+import { auth, db, authPersistenceReady } from "../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-5";
 import {
   signInWithCustomToken
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -89,6 +89,7 @@ export async function requestOtpCode(identifier) {
  */
 export async function verifyOtpCode(identifier, code) {
   const data = await postJson('email-otp-verify', { ...identifierBody(identifier), code });
+  await authPersistenceReady;
   const cred = await signInWithCustomToken(auth, data.customToken);
   return cred.user;
 }
