@@ -47,7 +47,7 @@ check(
 );
 
 const staleShell = html.filter(([, source]) => source.includes('js/inicio-navegacion-publica.js?v=tintin-20260726-login-session-1'));
-const staleScript = html.filter(([, source]) => source.includes('tienda.js?v=tintin-20260716-cloudinary-fix-1'));
+const staleScript = html.filter(([, source]) => source.includes('tienda.js?v=tintin-20260903-identity-cache-sync-2'));
 const italicPreloads = html.filter(([, source]) => source.includes('montserrat-latin-wght-italic.woff2" as="font"'));
 check('Public shell tiene cache bust nuevo en todos los HTML', staleShell.length === 0, staleShell.map(([file]) => file).join(', '));
 check('tienda.js optimizado por Cloudinary tiene cache bust nuevo', staleScript.length === 0, staleScript.map(([file]) => file).join(', '));

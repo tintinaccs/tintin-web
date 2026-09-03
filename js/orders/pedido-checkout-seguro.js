@@ -34,7 +34,7 @@ import {
   normalizeRuc,
   isValidRazonSocial
 } from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1';
-import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20260903-canonical-order-bridge-1';
+import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20260903-canonical-order-bridge-2';
 import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-checkout-hardening-2';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
