@@ -129,7 +129,9 @@ function tintinParityPrepareUsersSheet_() {
   if (sheet.getMaxColumns() < TINTIN_PARITY_USERS_WIDTH) {
     sheet.insertColumnsAfter(sheet.getMaxColumns(), TINTIN_PARITY_USERS_WIDTH - sheet.getMaxColumns());
   }
-  sheet.getRange(TINTIN_USERS_HEADER_ROW, 1, 1, TINTIN_PARITY_USERS_WIDTH).setValues([tintinParityUserHeaders_()]);
+  sheet.getRange(TINTIN_USERS_HEADER_ROW, 1, 1, TINTIN_PARITY_USERS_WIDTH)
+    .setValues([tintinParityUserHeaders_()])
+    .setFontWeight('bold');
   sheet.getRange(TINTIN_USERS_HEADER_ROW, TINTIN_PARITY_USER_COL.lastChangeId).setNote('Versión canónica usada para detectar conflictos entre Superadmin, Sheets y Firestore.');
   sheet.getRange(TINTIN_USERS_HEADER_ROW, TINTIN_PARITY_USER_COL.addressLat, 1, 2).setNote('Coordenadas informativas de la ubicación guardada por el cliente.');
   sheet.getRange(TINTIN_USERS_HEADER_ROW, TINTIN_PARITY_USER_COL.invoiceWanted, 1, 3).setNote('Datos de facturación reflejados desde el perfil/checkout; son informativos en Sheets.');
@@ -420,10 +422,21 @@ function tintinHandleUserParityEdit_(e) {
 }
 
 function tintinPullOrdersParity_() {
+  var ordersSheet = tintinProductsSpreadsheet_().getSheetByName(TINTIN_ORDERS_SHEET);
+  // El espejo se reemplaza desde Firestore; una validación histórica no debe
+  // bloquear la actualización completa de pedidos.
+  if (ordersSheet) ordersSheet.getRange(2, 1, Math.max(1, ordersSheet.getMaxRows() - 1), TINTIN_PARITY_ORDERS_WIDTH).clearDataValidations();
   var rows = tintinSnapshot_('orders').map(function(order) {
     return tintinParityOrderRow_(order.orderId, order);
   });
-  return tintinReplaceTabRows_(TINTIN_ORDERS_SHEET, 2, TINTIN_PARITY_ORDERS_WIDTH, rows);
+  var count = tintinReplaceTabRows_(TINTIN_ORDERS_SHEET, 2, TINTIN_PARITY_ORDERS_WIDTH, rows);
+  if (ordersSheet) {
+    ordersSheet.getRange('K2:K').setDataValidation(tintinParityValidation_(['pendiente','confirmado','preparando','listo_retiro','en_camino','entregado','cancelado','rechazado']));
+    ordersSheet.getRange('L2:L').setDataValidation(tintinParityValidation_(['efectivo','transferencia','paypal']));
+    ordersSheet.getRange('M2:M').setDataValidation(tintinParityValidation_(['pendiente','pagado','rechazado','cancelado','reembolsado']));
+    ordersSheet.getRange('N2:N').setDataValidation(tintinParityValidation_(['delivery','encomienda','retiro']));
+  }
+  return count;
 }
 
 function tintinParityValidation_(values) {
