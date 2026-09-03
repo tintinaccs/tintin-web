@@ -2,13 +2,10 @@
  * TINTIN — Documentos paraguayos (CI y RUC)
  *
  * CI (cédula de identidad): sólo dígitos, 5 a 8 (el rango real emitido).
- * RUC: dígitos + guion + dígito verificador (ej: 80012345-6). Para evitar
- * rechazos innecesarios al escribir, también se aceptan puntos, espacios o el
- * número completo sin guion y se normaliza al formato canónico que ya valida
- * el servidor de pedidos.
- *
- * No se recalcula el dígito verificador real: esa validación corresponde a la
- * DNIT; acá sólo se valida/normaliza la estructura del dato.
+ * RUC: dígitos + guion + dígito verificador (ej: 80012345-6). El RUC de una
+ * persona física suele coincidir con su CI seguida del dígito verificador;
+ * acá sólo se valida el formato, no se recalcula el dígito verificador real
+ * (ese cálculo es responsabilidad de la DNIT, no de este checkout).
  */
 
 const CI_PATTERN = /^\d{5,8}$/;
@@ -23,12 +20,7 @@ export function isValidCi(rawInput) {
 }
 
 export function normalizeRuc(rawInput) {
-  const value = String(rawInput || '').trim().replace(/[.\s]/g, '');
-  // Si escribió todos los dígitos juntos, el último es el DV. No eliminamos
-  // letras u otros símbolos: deben seguir siendo inválidos en vez de quedar
-  // silenciosamente convertidos en otro RUC.
-  if (/^\d{6,9}$/.test(value)) return `${value.slice(0, -1)}-${value.slice(-1)}`;
-  return value;
+  return String(rawInput || '').trim().replace(/\s+/g, '');
 }
 
 export function isValidRuc(rawInput) {
