@@ -5,16 +5,16 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260831-product-loading-4';
+const VERSION = 'tintin-20260903-css-shell-min-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260816-loader-shell-bridge-1';
-const LOADER_VERSION = 'tintin-20260903-loader-white-brand-2';
+const LOADER_VERSION = 'tintin-20260903-loader-store-gate-fast-rest-1';
 const STORE_GATE_VERSION = 'tintin-20260903-store-gate-fast-rest-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260902-customer-notification-audience-1';
 const NAV_ENTRY_VERSION = 'tintin-20260902-customer-notification-audience-1';
 const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const VISUAL_BUILDER_VERSION = 'tintin-20260826-carousel-order-3';
-const SESSION_PROTECTION_VERSION = 'tintin-20260901-session-inactivity-30m-1';
+const SESSION_PROTECTION_VERSION = 'tintin-20260903-session-pause-race-1';
 const PROFILE_GATE_VERSION = 'tintin-20260901-username-visible-1';
 const NAV_HEADER_VERSION = 'tintin-20260824-header-responsive-sync-1';
 const NAV_SHARED_VERSION = 'tintin-20260825-responsive-css-budget-2';
@@ -186,9 +186,9 @@ function ensureStyles(html) {
   if (/href=["']styles\.css(?:\?|["'])/i.test(html)) return html;
   const tokens = /(<link\b[^>]*href=["']css\/tokens-tintin\.css[^"']*["'][^>]*>)/i;
   if (tokens.test(html)) {
-    return html.replace(tokens, `$1\n  <link rel="stylesheet" href="styles.css?v=${VERSION}">`);
+    return html.replace(tokens, `$1\n  <link rel="stylesheet" href="styles.min.css?v=${VERSION}">`);
   }
-  return html.replace('</head>', `  <link rel="stylesheet" href="styles.css?v=${VERSION}">\n</head>`);
+  return html.replace('</head>', `  <link rel="stylesheet" href="styles.min.css?v=${VERSION}">\n</head>`);
 }
 
 function ensureNavigationPreloads(html) {
