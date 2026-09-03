@@ -1,0 +1,24 @@
+{
+  // --- Sincronización automática entre equipos (GitDoc) ---
+  // Solo actúa en la rama de sincronización. NUNCA en main (ver excludeBranches).
+  "gitdoc.enabled": true,
+  "gitdoc.excludeBranches": ["main", "master"],
+  "gitdoc.autoCommitDelay": 45000,
+  "gitdoc.autoPush": "onCommit",
+  "gitdoc.autoPull": "afterDelay",
+  "gitdoc.autoPullDelay": 45000,
+  "gitdoc.pullOnOpen": true,
+  "gitdoc.commitOnClose": true,
+  "gitdoc.commitValidationLevel": "none",
+  "gitdoc.commitMessageFormat": "\"sync:\" lll",
+
+  // --- Git nativo de VS Code ---
+  "git.autofetch": true,
+  "git.autofetchPeriod": 60,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "git.rebaseWhenSync": true,
+  "git.pruneOnFetch": true,
+  "git.branchProtection": ["main"],
+  "git.branchProtectionPrompt": "alwaysCommitToNewBranch"
+}
