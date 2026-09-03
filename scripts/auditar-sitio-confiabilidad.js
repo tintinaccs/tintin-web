@@ -268,7 +268,7 @@ function sourceFiles(dir) {
     // herramientas de ingeniería. AGENTS.md, skills y workflows deben poder
     // nombrar proveedores explícitamente para configurar y auditar su uso.
     if (entry.isDirectory() && entry.name === 'vendor') return [];
-    if (dir === root && ['.git', 'node_modules', '.github', '.claude', '.codex', '.cloudflare-functions', 'artifacts', 'docs', 'public', 'scripts', 'test-results', 'tests'].includes(entry.name)) return [];
+    if (dir === root && ['.git', 'node_modules', '.github', '.claude', '.codex', '.vscode', '.cloudflare-functions', 'artifacts', 'docs', 'public', 'scripts', 'test-results', 'tests'].includes(entry.name)) return [];
     const absolute = path.join(dir, entry.name);
     if (entry.isDirectory()) return sourceFiles(absolute);
     if (!/\.(?:html|css|js|mjs|md|json|rules)$/i.test(entry.name)) return [];
