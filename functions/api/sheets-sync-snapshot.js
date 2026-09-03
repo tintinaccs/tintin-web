@@ -63,7 +63,7 @@ function userRecord(document) {
     addressLng: Number.isFinite(Number(savedLocation.lng)) ? Number(savedLocation.lng) : '', departamento: user.departamento || checkoutDefaults.departamento || '',
     invoiceWanted: invoice.wanted === true || user.wantsInvoice === true, razonSocial: invoice.razonSocial || user.razonSocial || '',
     ruc: invoice.ruc || user.ruc || '',
-    lastAccess: asIso(user.lastAccess || user.lastLoginAt), usernameChangeUsed: user.usernameChangeUsed === true,
+    lastAccess: asIso(user.lastAccess || user.lastLoginAt || user.lastLogin), usernameChangeUsed: user.usernameChangeUsed === true,
     lastChangeId: user.lastChangeId || '', updatedAt: asIso(user.updatedAt),
   };
 }
