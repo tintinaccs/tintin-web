@@ -8,14 +8,20 @@ import {
   serverTimestamp,
   setDoc
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import {
-  getCartLocal,
-  setCartLocal,
-  clearCart,
-  cartTotal,
-  formatPrice,
-  awaitCartReady
-} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260901-phone-py-only-1';
+function requireCartRuntime() {
+  const runtime = window.TintinCartRuntime;
+  if (!runtime) {
+    throw new Error('[secure-checkout-order] El runtime canónico del carrito no está disponible.');
+  }
+  return runtime;
+}
+
+const getCartLocal = (...args) => requireCartRuntime().getCartLocal(...args);
+const setCartLocal = (...args) => requireCartRuntime().setCartLocal(...args);
+const clearCart = (...args) => requireCartRuntime().clearCart(...args);
+const cartTotal = (...args) => requireCartRuntime().cartTotal(...args);
+const formatPrice = (...args) => requireCartRuntime().formatPrice(...args);
+const awaitCartReady = (...args) => requireCartRuntime().awaitCartReady(...args);
 import {
   findCountryByCode,
   normalizePhone,
@@ -28,7 +34,7 @@ import {
   normalizeRuc,
   isValidRazonSocial
 } from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1';
-import { createOrderViaServer } from '../create-order-client.js?v=tintin-20260822-checkout-hardening-2';
+import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20260903-canonical-order-bridge-2';
 import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-checkout-hardening-2';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
@@ -746,7 +752,6 @@ if (!window.TintinSecureCheckoutOrderBooted) {
 
     const payment = text(draft?.paymentMethod);
     if (payment) lines.push(`💳 Pago: ${PAYMENT_LABELS[payment] || payment}`);
-
     const ci = text(draft?.ci);
     if (ci) lines.push(`🪪 CI: ${ci}`);
     if (draft?.wantsInvoice) {
