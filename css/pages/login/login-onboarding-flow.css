@@ -305,3 +305,112 @@ body:has(.login-page).login-setup-open .tt-map-canvas {
     grid-template-columns: minmax(0, 1fr) !important;
   }
 }
+
+/* Marca y geometría finales: la identidad no depende del PNG transparente y
+   ambos estados (login y alta) conservan aire, ancho útil y lectura fluida. */
+body:has(.login-page) .login-page {
+  place-items: center !important;
+  padding: clamp(18px, 3vw, 42px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  background: #f7bfd3 !important;
+}
+
+body:has(.login-page) .login-shell,
+body:has(.login-page).login-setup-open .login-shell {
+  width: min(100%, 700px) !important;
+  max-width: 700px !important;
+  margin: auto !important;
+  border: 1px solid rgba(173, 63, 103, .16) !important;
+  border-radius: clamp(22px, 2vw, 30px) !important;
+  background: #f7bfd3 !important;
+  box-shadow: 0 24px 70px rgba(91, 26, 50, .15) !important;
+  overflow: hidden !important;
+}
+
+body:has(.login-page).login-setup-open .login-shell {
+  width: min(100%, 1120px) !important;
+  max-width: 1120px !important;
+}
+
+body:has(.login-page) .login-form-side,
+body:has(.login-page).login-setup-open .login-form-side {
+  padding: clamp(24px, 3.2vw, 52px) !important;
+}
+
+body:has(.login-page) .login-mobile-logo {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% + clamp(48px, 6.4vw, 104px)) !important;
+  min-height: clamp(150px, 17vw, 210px);
+  margin: calc(-1 * clamp(24px, 3.2vw, 52px)) calc(-1 * clamp(24px, 3.2vw, 52px)) clamp(24px, 3vw, 38px) !important;
+  padding: clamp(18px, 2.4vw, 28px) 16px 20px !important;
+  background: #f7bfd3 !important;
+  border-radius: clamp(22px, 2vw, 30px) clamp(22px, 2vw, 30px) 0 0 !important;
+  box-sizing: content-box !important;
+}
+
+body:has(.login-page) .login-mobile-logo img {
+  display: block !important;
+  width: clamp(116px, 15vw, 180px) !important;
+  height: clamp(84px, 10vw, 126px) !important;
+  margin: 0 !important;
+  object-fit: cover !important;
+  object-position: center 58% !important;
+  filter: brightness(0) invert(1) drop-shadow(0 6px 12px rgba(125, 23, 58, .12)) !important;
+}
+
+body:has(.login-page) .login-mobile-logo-text {
+  display: block !important;
+  margin: clamp(-4px, -.2vw, 0px) 0 0 !important;
+  color: #fff !important;
+  font-family: Montserrat !important;
+  font-size: clamp(30px, 4vw, 48px) !important;
+  font-weight: 400 !important;
+  line-height: .9 !important;
+  letter-spacing: .045em !important;
+  text-transform: lowercase !important;
+  text-shadow: 0 3px 10px rgba(125, 23, 58, .1);
+}
+
+body:has(.login-page) .login-heading-sub {
+  max-width: 620px;
+}
+
+@media (max-width: 599px) {
+  body:has(.login-page) .login-page {
+    padding: 14px !important;
+  }
+  body:has(.login-page) .login-shell,
+  body:has(.login-page).login-setup-open .login-shell {
+    width: 100% !important;
+    max-width: none !important;
+    border-radius: 22px !important;
+  }
+  body:has(.login-page) .login-form-side,
+  body:has(.login-page).login-setup-open .login-form-side {
+    padding: 22px 18px 28px !important;
+  }
+  body:has(.login-page) .login-mobile-logo {
+    width: calc(100% + 36px) !important;
+    min-height: 134px;
+    margin: -22px -18px 24px !important;
+    border-radius: 22px 22px 0 0 !important;
+  }
+  body:has(.login-page) .login-mobile-logo img {
+    width: 104px !important;
+    height: 72px !important;
+  }
+  body:has(.login-page) .login-mobile-logo-text {
+    font-size: 34px !important;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 959px) {
+  body:has(.login-page).login-setup-open .login-shell {
+    width: min(100%, 860px) !important;
+    max-width: 860px !important;
+  }
+}
