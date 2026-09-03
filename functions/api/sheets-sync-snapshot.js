@@ -107,7 +107,7 @@ function orderRecord(document) {
 
 function auditRecord(document) {
   const record = decodeFirestoreFields(document.fields || {});
-  return { eventId: documentId(document), timestamp: asIso(record.createdAt || record.timestamp), ...record };
+  return { ...record, eventId: documentId(document), timestamp: asIso(record.createdAt || record.timestamp) };
 }
 
 async function snapshot(env, entity) {

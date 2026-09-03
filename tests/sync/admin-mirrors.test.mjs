@@ -59,6 +59,7 @@ test('Snapshot administrativo pagina hasta 5000 y recupera cédula de checkout',
   assert.match(snapshot, /firstName: user\.firstName/);
   assert.match(snapshot, /locationName: savedLocation\.name/);
   assert.match(snapshot, /ruc: invoice\.ruc/);
+  assert.match(snapshot, /return \{ \.\.\.record, eventId: documentId\(document\), timestamp: asIso/);
 });
 
 test('Bloqueo desde Sheets compensa Firebase Auth si falla Firestore', () => {
