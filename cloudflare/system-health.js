@@ -8,6 +8,7 @@ import {
   SHEETS_HEALTH_TIMEOUT_MS,
 } from './sheets-sync-config.js';
 import { getCatalogSheetSyncQueueStatus } from './resiliencia-sync-catalogo.js';
+import { fetchAppsScript } from './apps-script-fetch.js';
 
 const REQUIRED_CONFIG = Object.freeze([
   'FIREBASE_SERVICE_ACCOUNT_KEY',
@@ -51,7 +52,7 @@ function emptySyncSummary() {
  * reconocer esa ruta y rechazarla como "No autorizado" antes de leer/escribir
  * productos. Así comprobamos reachability + contrato sin tocar Sheets.
  */
-export async function probeAppsScript({ fetchImpl = fetch } = {}) {
+export async function probeAppsScript({ fetchImpl = fetchAppsScript } = {}) {
   const started = Date.now();
   try {
     const response = await fetchImpl(APPS_SCRIPT_SYNC_URL, {

@@ -4,6 +4,7 @@ import {
   originIsAllowed,
   preflightResponse
 } from '../../cloudflare/seguridad-cloudinary.js';
+import { fetchAppsScript } from '../../cloudflare/apps-script-fetch.js';
 
 // Apps Script sigue ejecutando únicamente la transacción privilegiada heredada
 // de creación de pedidos y las rutas de correo antiguas que aún puedan invocarse
@@ -66,7 +67,7 @@ export async function onRequest(context) {
       return jsonResponse({ ok: false, error: 'missing_id_token' }, 401, origin, requestUrl);
     }
 
-    const upstream = await fetch(APPS_SCRIPT_ORDER_WEBHOOK_URL, {
+    const upstream = await fetchAppsScript(APPS_SCRIPT_ORDER_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'content-type': 'text/plain;charset=utf-8' },
       body: rawBody,

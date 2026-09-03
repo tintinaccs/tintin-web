@@ -1,6 +1,7 @@
 const APPS_SCRIPT_SYNC_URL =
   'https://script.google.com/macros/s/AKfycbwiBvdkkEeWMHLnj57st2nBKwx9Xci88J0hAMlkkJ1j7vkpzn0A0f4DhPDqh8KkL947/exec';
 const SYNC_TIMEOUT_MS = 12_000;
+import { fetchAppsScript } from './apps-script-fetch.js';
 
 // Compatibilidad temporal: acepta la firma vieja (env, idToken, event) y la
 // nueva (env, event). El ID token ya fue validado por Cloudflare y no debe
@@ -11,7 +12,7 @@ export async function syncEngagementToSheets(env, idTokenOrEvent, maybeEvent) {
   const syncSecret = String(env?.SHEETS_ENGAGEMENT_SECRET || '');
   if (!syncSecret || !event?.type) return false;
   try {
-    const response = await fetch(APPS_SCRIPT_SYNC_URL, {
+    const response = await fetchAppsScript(APPS_SCRIPT_SYNC_URL, {
       method: 'POST',
       redirect: 'follow',
       signal: AbortSignal.timeout(SYNC_TIMEOUT_MS),
