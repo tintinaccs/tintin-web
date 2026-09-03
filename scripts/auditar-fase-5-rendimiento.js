@@ -19,6 +19,7 @@ const routeState = read('js/components/navigation/compartido/estado-ruta.js');
 const products = read('js/core/store/estado-productos.js');
 const publicShellGenerator = read('scripts/sincronizar-inicio-navegacion-publica.js');
 const publicRuntimeVersion = publicShellGenerator.match(/const VERSION = '([^']+)'\s*;/)?.[1] || '';
+const tiendaRuntimeVersion = publicShellGenerator.match(/const TIENDA_VERSION = '([^']+)'\s*;/)?.[1] || '';
 const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
 const html = htmlFiles.map(file => [file, read(file)]);
 
@@ -50,14 +51,14 @@ check(
 
 const staleShell = html.filter(([, source]) => source.includes('js/inicio-navegacion-publica.js?v=tintin-20260726-login-session-1'));
 const tiendaConsumers = html.filter(([, source]) => /(?:^|["'/])tienda\.js\?v=/.test(source));
-const staleTiendaConsumers = tiendaConsumers.filter(([, source]) => !source.includes(`tienda.js?v=${publicRuntimeVersion}`));
+const staleTiendaConsumers = tiendaConsumers.filter(([, source]) => !source.includes(`tienda.js?v=${tiendaRuntimeVersion}`));
 const italicPreloads = html.filter(([, source]) => source.includes('montserrat-latin-wght-italic.woff2" as="font"'));
 check('Public shell tiene cache bust nuevo en todos los HTML', staleShell.length === 0, staleShell.map(([file]) => file).join(', '));
 check(
   'tienda.js usa la revisión canónica del generador público',
-  Boolean(publicRuntimeVersion) && tiendaConsumers.length > 0 && staleTiendaConsumers.length === 0,
-  !publicRuntimeVersion
-    ? 'No se pudo leer VERSION desde scripts/sincronizar-inicio-navegacion-publica.js.'
+  Boolean(tiendaRuntimeVersion) && tiendaConsumers.length > 0 && staleTiendaConsumers.length === 0,
+  !tiendaRuntimeVersion
+    ? 'No se pudo leer TIENDA_VERSION desde scripts/sincronizar-inicio-navegacion-publica.js.'
     : staleTiendaConsumers.map(([file]) => file).join(', ')
 );
 check('Montserrat italic conserva el preload contractual', italicPreloads.length === html.filter(([, source]) => source.includes('montserrat-latin-wght-normal.woff2\" as=\"font\"')).length, html.filter(([file, source]) => source.includes('montserrat-latin-wght-normal.woff2\" as=\"font\"') && !source.includes('montserrat-latin-wght-italic.woff2\" as=\"font\"')).map(([file]) => file).join(', '));
