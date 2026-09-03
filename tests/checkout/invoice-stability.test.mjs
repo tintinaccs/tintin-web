@@ -13,9 +13,10 @@ test('Factura usa un único listener idempotente y deshabilita los campos oculto
   assert.match(moduleSource, /aria-hidden/);
 });
 
-test('RUC se normaliza antes del onclick canónico del checkout', () => {
+test('RUC se normaliza localmente antes del onclick canónico del checkout', () => {
   assert.match(moduleSource, /next\.addEventListener\('click',\s*normalizeRucField,\s*\{\s*capture:\s*true\s*\}\)/);
-  assert.match(moduleSource, /normalizeRuc\(input\.value\)/);
+  assert.match(moduleSource, /normalizeCheckoutRuc\(input\.value\)/);
+  assert.match(moduleSource, /if \(\/\^\\d\{6,9\}\$\/\.test\(value\)\) return `\$\{value\.slice\(0, -1\)\}-\$\{value\.slice\(-1\)\}`/);
 });
 
 test('Persistencia del perfil ocurre solo después de que el paso de datos fue validado', () => {
