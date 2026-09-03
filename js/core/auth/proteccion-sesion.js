@@ -22,6 +22,7 @@ let roleUid = '';
 let lastActivityWrite = 0;
 let unsubscribeUserMirror = null;
 let mirrorUid = '';
+let adminParityModulePromise = null;
 
 export function markSessionStart() {
   try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch {}
@@ -99,11 +100,39 @@ function startUserMirrorObserver(user) {
   });
 }
 
+function isAdminPage() {
+  return /(?:^|\/)admin(?:\.html)?\/?$/i.test(location.pathname || '');
+}
+
+function stopAdminParityObserver() {
+  if (!adminParityModulePromise) return;
+  void adminParityModulePromise
+    .then(module => module.stopAdminParityObservers?.())
+    .catch(() => {});
+}
+
+function syncAdminParityObserver(user) {
+  if (!user || currentRole !== 'superadmin' || !isAdminPage()) {
+    stopAdminParityObserver();
+    return;
+  }
+  if (!adminParityModulePromise) {
+    adminParityModulePromise = import('../../admin/sincronizacion-paridad-admin.js?v=tintin-20260903-admin-parity-push-1')
+      .catch(error => {
+        adminParityModulePromise = null;
+        console.warn('[admin-parity] No se pudo iniciar la paridad inmediata:', error);
+        throw error;
+      });
+  }
+  void adminParityModulePromise.then(module => module.startAdminParityObservers?.(user));
+}
+
 async function enforce(user) {
   if (!user) {
     currentRole = '';
     roleUid = '';
     stopUserMirrorObserver();
+    stopAdminParityObserver();
     clearSessionStart();
     return;
   }
@@ -117,6 +146,7 @@ async function enforce(user) {
       return;
     }
   }
+  syncAdminParityObserver(user);
   // La sesión que inicia el Super Admin es persistente. No se debe cerrar
   // automáticamente por inactividad ni expulsar a tintinaccs del panel.
   if (currentRole === 'superadmin') return;
