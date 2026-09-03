@@ -186,13 +186,21 @@ function removeSharedFooter(html) {
 function ensureStyles(html) {
   const existing = /(<link\b[^>]*href=["'])(\/?styles\.css)(\?[^"']*)?(["'][^>]*>)/i;
   if (existing.test(html)) {
-    return html.replace(existing, `$1styles.min.css?v=${VERSION}$4`);
+    html = html.replace(existing, `$1styles.min.css?v=${VERSION}$4`);
   }
-  const tokens = /(<link\b[^>]*href=["']css\/tokens-tintin\.css[^"']*["'][^>]*>)/i;
-  if (tokens.test(html)) {
-    return html.replace(tokens, `$1\n  <link rel="stylesheet" href="styles.min.css?v=${VERSION}">`);
+  if (!/href=["']\/?styles\.min\.css\?v=/i.test(html)) {
+    const tokens = /(<link\b[^>]*href=["']css\/tokens-tintin\.css[^"']*["'][^>]*>)/i;
+    if (tokens.test(html)) {
+      html = html.replace(tokens, `$1\n  <link rel="stylesheet" href="styles.min.css?v=${VERSION}">`);
+    } else {
+      html = html.replace('</head>', `  <link rel="stylesheet" href="styles.min.css?v=${VERSION}">\n</head>`);
+    }
   }
-  return html.replace('</head>', `  <link rel="stylesheet" href="styles.min.css?v=${VERSION}">\n</head>`);
+  let seen = 0;
+  return html.replace(/\s*<link\b[^>]*href=["']\/?styles\.min\.css\?v=[^"']+["'][^>]*>/gi, tag => {
+    seen += 1;
+    return seen === 1 ? tag : '';
+  });
 }
 
 function ensureNavigationPreloads(html) {
