@@ -688,16 +688,17 @@ export function getDesiredStoreOverlay() {
 
 export async function getStoreAccessConfigFromRest() {
   try {
-    const response = await fetch('/api/public-catalog?resource=storeGate', {
+    const sharedRequest = window.__TINTIN_STORE_GATE_REST_PROMISE__ || fetch('/api/public-catalog?resource=storeGate', {
       method: 'GET',
       cache: 'no-store',
       credentials: 'omit'
-    });
-    if (response.ok) {
-      const payload = await response.json();
-      if (payload?.ok === true && payload.resource === 'storeGate') {
-        return rememberConfig(normalizeStoreAccessConfig(payload.data, 'ok'));
-      }
+    }).then(response => response.ok ? response.json() : null);
+    if (!window.__TINTIN_STORE_GATE_REST_PROMISE__) {
+      window.__TINTIN_STORE_GATE_REST_PROMISE__ = sharedRequest;
+    }
+    const payload = await sharedRequest;
+    if (payload?.ok === true && payload.resource === 'storeGate') {
+      return rememberConfig(normalizeStoreAccessConfig(payload.data, 'ok'));
     }
   } catch {}
 
