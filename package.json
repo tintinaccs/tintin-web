@@ -6,7 +6,7 @@
     "audit:typography": "node scripts/auditar-tipografia.js",
     "audit:colors": "node scripts/auditar-esquema-color.js",
     "fix:tintin": "node scripts/corregir-fuente-tintin.js",
-    "sync:public-shell": "node scripts/sincronizar-inicio-navegacion-publica.js",
+    "sync:public-shell": "node scripts/sincronizar-inicio-navegacion-publica.js && node scripts/sincronizar-version-sesion-publica.mjs",
     "sync:public-origin": "node scripts/sincronizar-origen-publico.js",
     "audit:public-shell": "node scripts/auditar-inicio-navegacion-publica.js",
     "audit:site-structure": "node scripts/auditar-contrato-estructura-sitio.mjs && node scripts/auditar-estructura-canonica-sitio.js && node scripts/auditar-migraciones-secciones.mjs",
