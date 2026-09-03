@@ -48,6 +48,16 @@ test('el espejo inmediato a Sheets recibe el pedido ya canonizado', () => {
   assert.match(bridge, /parsed\.sheetsSync = sheetsSync/);
 });
 
+test('los fallos internos del bridge no exponen mensajes ni stack al navegador', () => {
+  const bridge = read('functions/api/apps-script-bridge.js');
+  const catchBlock = bridge.slice(bridge.lastIndexOf('} catch (error)'));
+
+  assert.match(catchBlock, /console\.error\(/);
+  assert.doesNotMatch(catchBlock, /detail\s*:/);
+  assert.doesNotMatch(catchBlock, /stack/);
+  assert.doesNotMatch(catchBlock, /error\?\.message\s*\|\|\s*error\s*[,}]/);
+});
+
 test('Apps Script deriva userId desde el token y no desde el payload', () => {
   const appsScript = read('apps-script/CrearPedido.gs');
 
