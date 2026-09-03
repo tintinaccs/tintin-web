@@ -17,7 +17,7 @@
 // que ni siquiera Admin tiene hoy (no estaban en el "sugerido" para Admin del
 // pedido original). Se dejan protegidas y se explica en el reporte final.
 
-import { db } from "../firebase/firebase.js?v=tintin-20260730-appcheck-stable-4";
+import { db } from "../firebase/firebase.js?v=tintin-20260903-auth-persistence-1";
 import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";

@@ -5,7 +5,7 @@
  * La configuración completa permanece en settings/general y no se entrega
  * cuando la tienda está cerrada.
  */
-import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260903-auth-persistence-1';
 import {
   doc,
   getDoc
