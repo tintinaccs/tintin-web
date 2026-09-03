@@ -5,10 +5,10 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = 'tintin-20260831-product-loading-4';
+const VERSION = 'tintin-20260903-identity-cache-sync-2';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260816-loader-shell-bridge-1';
-const LOADER_VERSION = 'tintin-20260903-loader-white-brand-2';
-const STORE_GATE_VERSION = 'tintin-20260830-store-gate-api-2';
+const LOADER_VERSION = 'tintin-20260903-loader-store-gate-fast-rest-1';
+const STORE_GATE_VERSION = 'tintin-20260903-store-gate-fast-rest-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260902-customer-notification-audience-1';
 const NAV_ENTRY_VERSION = 'tintin-20260902-customer-notification-audience-1';
@@ -236,7 +236,7 @@ function centralizeRuntime(html) {
     ''
   );
   if (!/<script\b[^>]*src=["']tienda\.js(?:\?|["'])/i.test(out)) {
-    out = out.replace('</body>', `<script src="tienda.js?v=${VERSION}" defer></script>\n</body>`);
+    out = out.replace('</body>', `<script src="tienda.js?v=tintin-20260903-identity-cache-sync-2" defer></script>\n</body>`);
   } else {
     out = out.replace(/(<script\b[^>]*src=["']tienda\.js)(?:\?[^"']*)?(["'][^>]*><\/script>)/gi, `$1?v=${VERSION}$2`);
   }
