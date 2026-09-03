@@ -40,19 +40,19 @@ const checks = [
       !firebase.includes('APP_BOOT_ABORTED')
   ],
   [
-    'App Check Enterprise obtiene un primer token antes del refresco automático',
+    'App Check Enterprise deja que el SDK administre el token y su refresco',
     firebase.includes("6LdhrGAtAAAAAIPJJ2nTT9300Vor--Wlq0PRCP9m") &&
       firebase.includes('ReCaptchaEnterpriseProvider') &&
       firebase.includes('new ReCaptchaEnterpriseProvider(FIREBASE_APP_CHECK_SITE_KEY)') &&
       !firebase.includes('ReCaptchaV3Provider') &&
-      firebase.includes('isTokenAutoRefreshEnabled: false') &&
-      firebase.includes('getAppCheckToken(appCheck, false)') &&
-      firebase.includes('setTokenAutoRefreshEnabled(appCheck, true)')
+      firebase.includes('isTokenAutoRefreshEnabled: true') &&
+      !firebase.includes('getAppCheckToken(appCheck, false)') &&
+      !firebase.includes('setTokenAutoRefreshEnabled(appCheck, true)')
   ],
   [
-    'El estado público solo marca App Check activo después del token',
+    'El estado público marca App Check activo después de inicializar el SDK',
     firebase.indexOf("window.TintinAppCheckStatus = 'enabled'") >
-      firebase.indexOf('getAppCheckToken(appCheck, false)')
+      firebase.indexOf('initializeAppCheck')
   ],
   [
     'El control de tienda espera la certificación del origen',
