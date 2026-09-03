@@ -7,9 +7,30 @@ import {
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
 import { syncOrderToSheetsBestEffort } from '../../cloudflare/order-sheets-sync.js';
+import { syncAuditToSheetsBestEffort } from '../../cloudflare/admin-mirror-sheets-sync.js';
+import { syncProductIdsToSheetsBestEffort } from '../../cloudflare/product-mirror-sheets-sync.js';
 
 function safeText(value, max = 500) {
   return String(value == null ? '' : value).trim().slice(0, max);
+}
+
+function orderProductIds(result) {
+  const items = Array.isArray(result?.order?.items) ? result.order.items : [];
+  return [...new Set(items.map(item => String(item?.id || '').trim()).filter(Boolean))];
+}
+
+async function syncOrderDependencies(env, result, actor) {
+  const [order, audit, products] = await Promise.all([
+    syncOrderToSheetsBestEffort(env, result),
+    result?.auditEventId
+      ? syncAuditToSheetsBestEffort(env, result.auditEventId)
+      : Promise.resolve({ ok: true, skipped: true }),
+    syncProductIdsToSheetsBestEffort(env, orderProductIds(result), {
+      email: actor?.email,
+      source: 'superadmin-order-mutation',
+    }),
+  ]);
+  return { order, audit, products };
 }
 
 export async function onRequest(context) {
@@ -37,11 +58,12 @@ export async function onRequest(context) {
       ? await createOrderAdmin(env, body, actorContext)
       : await applyOrderAdminMutation(env, body, actorContext);
 
-    // Firestore + inventario son la transacción comercial. Sheets se actualiza
-    // después y en best-effort: una caída de Google nunca convierte en fallido
-    // un pedido que ya fue confirmado por el dominio canónico.
-    const sheetsSync = await syncOrderToSheetsBestEffort(env, result);
-    return jsonResponse({ ok: true, result, sheetsSync }, 200, origin, requestUrl);
+    // Firestore + inventario son la transacción comercial. Después se empujan
+    // en paralelo todos los espejos dependientes: pedido, auditoría y los
+    // productos cuyo stock pudo cambiar. Ninguna caída de Google revierte el
+    // commit comercial; Productos deja además una cola persistente de rescate.
+    const mirrors = await syncOrderDependencies(env, result, actorContext);
+    return jsonResponse({ ok: true, result, sheetsSync: mirrors.order, mirrors }, 200, origin, requestUrl);
   } catch (error) {
     console.error('[admin-order-mutation]', error?.code || '', error?.message || error);
     const message = safeText(error?.message, 300);
