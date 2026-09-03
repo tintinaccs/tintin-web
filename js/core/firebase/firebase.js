@@ -4,7 +4,7 @@
 
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
   initializeAppCheck,
   ReCaptchaEnterpriseProvider,
@@ -102,6 +102,11 @@ window.TintinAppCheckReady = appCheckReady;
 const db = getFirestore(app);
 
 const auth = getAuth(app);
+// La sesión sobrevive al cierre, duplicado y reapertura de pestañas. La
+// expiración de 30 minutos la controla proteccion-sesion.js.
+setPersistence(auth, browserLocalPersistence).catch(error => {
+  console.warn('[firebase-auth] No se pudo establecer persistencia local:', error?.code || error);
+});
 // Idioma para cualquier mensaje/UI de Firebase Auth — se fija una sola vez
 auth.languageCode = "es";
 const provider = new GoogleAuthProvider();

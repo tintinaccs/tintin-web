@@ -67,3 +67,8 @@ test('el login ofrece pegar el código OTP desde el portapapeles', () => {
   assert.match(login, /navigator\.clipboard\?\.readText/);
   assert.match(login, /login-otp-clipboard-status/);
 });
+
+test('Firebase conserva la sesión entre pestañas y reaperturas', () => {
+  const firebase = read('js/core/firebase/firebase.js');
+  assert.match(firebase, /setPersistence\(auth, browserLocalPersistence\)/);
+});

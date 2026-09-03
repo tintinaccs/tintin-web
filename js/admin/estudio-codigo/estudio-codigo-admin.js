@@ -3,7 +3,7 @@
 // Super Admin only. GitHub es la fuente oficial; ningún secreto vive acá.
 // =============================================================
 
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260903-auth-persistence-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js';
 
 const API = '/api/code-studio';

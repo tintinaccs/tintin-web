@@ -189,7 +189,7 @@ async function enhanceProfile() {
       photoButton.textContent = 'Subiendo…';
       try {
         const [{ auth, db }, authApi, firestoreApi] = await Promise.all([
-          import('../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4'),
+          import('../core/firebase/firebase.js?v=tintin-20260903-auth-persistence-1'),
           import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),
           import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
         ]);

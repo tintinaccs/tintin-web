@@ -1,4 +1,4 @@
-import { db, auth } from '../core/firebase/firebase.js?v=tintin-20260730-appcheck-stable-4';
+import { db, auth } from '../core/firebase/firebase.js?v=tintin-20260903-auth-persistence-1';
 import { apiUrl } from '../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   collection,
