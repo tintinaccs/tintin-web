@@ -10,7 +10,7 @@
 // /api/push-subscription, que lo guarda con credenciales de servidor.
 // Tampoco se imprime completo en consola ni se manda a analytics.
 
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-2';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-3';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
 import { apiUrl } from '../../core/firebase/origen-funciones.js';
