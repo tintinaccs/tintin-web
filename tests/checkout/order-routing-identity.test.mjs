@@ -35,6 +35,14 @@ test('un pedido exitoso debe quedar ligado a CUS_<UID> antes de responder éxito
   assert.match(bridge, /enforceCanonicalOrderIdentity\(env, parsed\.orderId, authenticatedUser\)/);
 });
 
+test('el espejo inmediato a Sheets recibe el pedido ya canonizado', () => {
+  const bridge = read('functions/api/apps-script-bridge.js');
+
+  assert.match(bridge, /syncOrderToSheetsBestEffort/);
+  assert.match(bridge, /order: identity\.order/);
+  assert.match(bridge, /parsed\.sheetsSync = sheetsSync/);
+});
+
 test('Apps Script deriva userId desde el token y no desde el payload', () => {
   const appsScript = read('apps-script/CrearPedido.gs');
 
