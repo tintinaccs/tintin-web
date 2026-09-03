@@ -61,18 +61,18 @@ export function buildAuditSheetRecord(eventId, raw = {}) {
   return {
     eventId: clean(eventId, 220),
     timestamp: asIso(record.createdAt || record.timestamp),
+    customerId: clean(record.customerId, 220),
+    actorId: clean(record.actorId || record.actorUid, 220),
     actorEmail: clean(record.actorEmail, 320),
-    actorUid: clean(record.actorUid, 220),
+    actorRole: clean(record.actorRole, 80),
     action: clean(record.action, 160),
-    entity: clean(record.entity, 120),
-    targetId: clean(record.targetId, 220),
-    source: clean(record.source || record.syncOrigin, 220),
-    changeId: clean(record.changeId || record.lastChangeId, 220),
-    details: clean(record.details || record.reason || record.message, 2000),
+    entityType: clean(record.entityType || record.entity, 120),
+    entityId: clean(record.entityId || record.targetId, 220),
     before: record.before ?? null,
     after: record.after ?? null,
-    metadata: record.metadata ?? null,
-    raw: record,
+    origin: clean(record.origin || record.source || record.syncOrigin, 220),
+    result: clean(record.result || record.details || record.reason || record.message, 2000),
+    changeId: clean(record.changeId || record.lastChangeId, 220),
   };
 }
 
