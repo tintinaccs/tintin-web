@@ -14,6 +14,8 @@ test('el checkout público usa únicamente el bridge de Cloudflare para crear pe
 
   assert.match(checkout, /create-order-public-client\.js\?v=/);
   assert.doesNotMatch(checkout, /create-order-client\.js\?v=/);
+  assert.doesNotMatch(checkout, /components\/cart\/sincronizacion-carrito\.js\?v=/);
+  assert.match(checkout, /window\.TintinCartRuntime/);
   assert.match(client, /apiUrl\(['"]apps-script-bridge['"]\)/);
   assert.doesNotMatch(client, /EMAIL_WEBHOOK_URL/);
   assert.doesNotMatch(client, /script\.google\.com/);

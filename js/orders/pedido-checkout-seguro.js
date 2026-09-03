@@ -1,4 +1,4 @@
-import { auth, db } from '../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-1';
+import { auth, db } from '../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-2';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
@@ -8,14 +8,20 @@ import {
   serverTimestamp,
   setDoc
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import {
-  getCartLocal,
-  setCartLocal,
-  clearCart,
-  cartTotal,
-  formatPrice,
-  awaitCartReady
-} from '../components/cart/sincronizacion-carrito.js?v=tintin-20260901-phone-py-only-1';
+function requireCartRuntime() {
+  const runtime = window.TintinCartRuntime;
+  if (!runtime) {
+    throw new Error('[secure-checkout-order] El runtime canónico del carrito no está disponible.');
+  }
+  return runtime;
+}
+
+const getCartLocal = (...args) => requireCartRuntime().getCartLocal(...args);
+const setCartLocal = (...args) => requireCartRuntime().setCartLocal(...args);
+const clearCart = (...args) => requireCartRuntime().clearCart(...args);
+const cartTotal = (...args) => requireCartRuntime().cartTotal(...args);
+const formatPrice = (...args) => requireCartRuntime().formatPrice(...args);
+const awaitCartReady = (...args) => requireCartRuntime().awaitCartReady(...args);
 import {
   findCountryByCode,
   normalizePhone,
