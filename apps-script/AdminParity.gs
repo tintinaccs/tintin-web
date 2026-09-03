@@ -263,10 +263,21 @@ function tintinHandleUserParityEdit_(e) {
 }
 
 function tintinPullOrdersParity_() {
+  var ordersSheet = tintinProductsSpreadsheet_().getSheetByName(TINTIN_ORDERS_SHEET);
+  // El espejo se reemplaza desde Firestore; una validación histórica no debe
+  // bloquear la actualización completa de pedidos.
+  if (ordersSheet) ordersSheet.getRange(2, 1, Math.max(1, ordersSheet.getMaxRows() - 1), TINTIN_PARITY_ORDERS_WIDTH).clearDataValidations();
   var rows = tintinSnapshot_('orders').map(function(order) {
     return tintinParityOrderRow_(order.orderId, order);
   });
-  return tintinReplaceTabRows_(TINTIN_ORDERS_SHEET, 2, TINTIN_PARITY_ORDERS_WIDTH, rows);
+  var count = tintinReplaceTabRows_(TINTIN_ORDERS_SHEET, 2, TINTIN_PARITY_ORDERS_WIDTH, rows);
+  if (ordersSheet && typeof tintinParityValidation_ === 'function') {
+    ordersSheet.getRange('K2:K').setDataValidation(tintinParityValidation_(['pendiente','confirmado','preparando','listo_retiro','en_camino','entregado','cancelado','rechazado']));
+    ordersSheet.getRange('L2:L').setDataValidation(tintinParityValidation_(['efectivo','transferencia','paypal']));
+    ordersSheet.getRange('M2:M').setDataValidation(tintinParityValidation_(['pendiente','pagado','rechazado','cancelado','reembolsado']));
+    ordersSheet.getRange('N2:N').setDataValidation(tintinParityValidation_(['delivery','encomienda','retiro']));
+  }
+  return count;
 }
 
 function tintinParityValidation_(values) {
@@ -422,6 +433,13 @@ function tintinPrepararHojasParidad_() {
 
   var users = spreadsheet.getSheetByName(TINTIN_USERS_SHEET);
   if (users) {
+    if (users.getMaxColumns() < TINTIN_USERS_COL.updatedAt) {
+      users.insertColumnsAfter(users.getMaxColumns(), TINTIN_USERS_COL.updatedAt - users.getMaxColumns());
+    }
+    // Mantener el encabezado alineado con el espejo real, incluso después de
+    // una migración única ya ejecutada anteriormente.
+    users.getRange(TINTIN_USERS_HEADER_ROW, 1, 1, TINTIN_USERS_COL.updatedAt).setValues([TINTIN_USERS_HEADERS]);
+    users.getRange(TINTIN_USERS_HEADER_ROW, 1, 1, TINTIN_USERS_COL.updatedAt).setFontWeight('bold');
     var roleCol = tintinColumnLetter_(TINTIN_USERS_COL.role);
     var blockedCol = tintinColumnLetter_(TINTIN_USERS_COL.blocked);
     var actionCol = tintinColumnLetter_(TINTIN_USERS_COL.action);
