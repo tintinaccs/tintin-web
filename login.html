@@ -119,27 +119,27 @@
             <span id="login-profile-confirmation-value" class="login-profile-confirmation-value"></span>
             <button type="button" id="btn-change-profile-name" class="login-profile-change">Cambiar</button>
           </div>
-          <div id="login-profile-name-field">
-            <label class="login-email-label" for="login-profile-first-name">Nombre</label>
-            <input type="text" class="login-email-input" id="login-profile-first-name" placeholder="Ej: María" autocomplete="given-name" maxlength="60" />
-            <p class="login-profile-field-error" id="login-first-name-error" aria-live="polite"></p>
-            <label class="login-email-label" for="login-profile-last-name">Apellido</label>
-            <input type="text" class="login-email-input" id="login-profile-last-name" placeholder="Ej: González" autocomplete="family-name" maxlength="60" />
-            <p class="login-profile-field-error" id="login-last-name-error" aria-live="polite"></p>
-          </div>
           <div id="login-profile-username-field">
             <label class="login-email-label" for="login-profile-username">Nombre de usuario</label>
             <div class="login-username-control">
-              <input type="text" class="login-email-input" id="login-profile-username" placeholder="Ej: maria_98" autocomplete="off" maxlength="20" autocapitalize="off" autocorrect="off" spellcheck="false" aria-describedby="login-username-hint login-username-status" />
+              <input type="text" class="login-email-input" id="login-profile-username" placeholder="Ej: maria_98" autocomplete="off" maxlength="20" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="next" aria-describedby="login-username-hint login-username-status" />
               <span class="login-username-status" id="login-username-status" aria-live="polite" data-state="idle"></span>
             </div>
             <p class="login-field-hint" id="login-username-hint">De 3 a 20 caracteres: minúsculas, números o guion bajo.</p>
+          </div>
+          <div id="login-profile-name-field">
+            <label class="login-email-label" for="login-profile-first-name">Nombre</label>
+            <input type="text" class="login-email-input" id="login-profile-first-name" placeholder="Ej: María" autocomplete="given-name" maxlength="60" enterkeyhint="next" />
+            <p class="login-profile-field-error" id="login-first-name-error" aria-live="polite"></p>
+            <label class="login-email-label" for="login-profile-last-name">Apellido</label>
+            <input type="text" class="login-email-input" id="login-profile-last-name" placeholder="Ej: González" autocomplete="family-name" maxlength="60" enterkeyhint="next" />
+            <p class="login-profile-field-error" id="login-last-name-error" aria-live="polite"></p>
           </div>
           <div id="login-profile-phone-field">
             <label class="login-email-label" for="login-profile-phone">Teléfono / WhatsApp</label>
             <div class="login-phone-row">
               <select class="login-email-input login-phone-country" id="login-profile-country" aria-label="Prefijo de Paraguay" disabled><option value="PY">+595</option></select>
-              <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="Ej: 0981 336 401" autocomplete="tel-national" inputmode="numeric" maxlength="10" />
+              <input type="tel" class="login-email-input login-phone-number" id="login-profile-phone" placeholder="Ej: 0981 336 401" autocomplete="tel-national" inputmode="numeric" maxlength="10" enterkeyhint="next" />
             </div>
             <p class="login-profile-field-error" id="login-phone-error" aria-live="polite"></p>
             <p class="login-phone-help" id="login-phone-help" style="display:none">
