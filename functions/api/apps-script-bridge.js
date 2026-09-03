@@ -209,8 +209,7 @@ export async function onRequest(context) {
     console.error('[apps-script-bridge]', error?.code || '', error?.message || error);
     return jsonResponse({
       ok: false,
-      error: clean(error?.code, 120) || 'upstream_unavailable',
-      detail: clean(error?.message || error, 240)
+      error: clean(error?.code, 120) || 'upstream_unavailable'
     }, Number(error?.status) || 502, origin, requestUrl);
   }
 }
