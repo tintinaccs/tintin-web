@@ -114,6 +114,7 @@
     "test:phase11-seo": "playwright test tests/seo/phase11-seo.spec.js --project=chromium",
     "monitor:production": "node scripts/auditar-produccion-salud.mjs",
     "audit:headers": "node scripts/auditar-encabezados.mjs",
+    "audit:headers:production": "node scripts/auditar-headers-produccion.mjs",
     "audit:contraste": "node scripts/auditar-contraste.mjs",
     "audit:names": "node scripts/auditar-convenciones-nombres.mjs",
     "audit:appearance-unified": "node scripts/auditar-admin-apariencia-unificada.js"

@@ -29,6 +29,8 @@
   <link rel="preload" as="style" href="css/components/navigation/compartido/transiciones-navegacion.css?v=tintin-20260825-responsive-css-budget-2">
   <link rel="preload" as="style" href="css/components/navigation/compartido/paneles.css?v=tintin-20260825-responsive-css-budget-2">
   <link rel="preload" as="style" href="css/components/navigation/compartido/busqueda.css?v=tintin-20260825-responsive-css-budget-2">
+  <link rel="preconnect" href="https://www.google.com" crossorigin>
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link rel="stylesheet" href="css/core/montserrat.css?v=tintin-20260811-cls-desktop-stable-2">
   <meta name="description" content="Ingresá a tu cuenta de Tintin Accesorios para ver tus pedidos y favoritos." />
   <link rel="canonical" href="https://tintinaccesorios.pages.dev/login.html" />
@@ -37,7 +39,7 @@
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3">
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260903-loader-white-brand-2">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260829-favorite-alignment-1">
+  <link rel="stylesheet" href="styles.min.css?v=tintin-20260903-css-shell-min-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -49,7 +51,7 @@
   <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/pages/login/login-maintenance.css?v=tintin-20260811-cls-desktop-stable-2" data-tt-login-maintenance>
   <link rel="stylesheet" href="css/pages/login/login-fluid-responsive.css?v=tintin-20260803-login-fluid-1" data-tt-login-fluid>
-  <link rel="stylesheet" href="css/pages/login/login-onboarding-flow.css?v=tintin-20260903-loader-white-brand-2" data-tt-login-onboarding-flow>
+  <link rel="stylesheet" href="css/pages/login/login-onboarding-flow.css?v=tintin-20260903-login-surface-1" data-tt-login-onboarding-flow>
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2">
   <style>html.login-auth-pending .login-page,html.login-auth-pending .tt-footer{visibility:hidden!important}</style>
@@ -224,8 +226,8 @@ import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260821-accounts-phase-a-1";
 import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260901-username-visible-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
-import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260901-session-inactivity-30m-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260830-store-gate-api-2";
+import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260903-session-pause-race-1";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260903-store-gate-fast-rest-1";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260901-username-required-1";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260903-google-maps-coordinates-1";
 

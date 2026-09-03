@@ -17,6 +17,9 @@ const ACTIVITY_WRITE_INTERVAL_MS = 15 * 1000;
 let currentRole = '';
 let roleUid = '';
 let lastActivityWrite = 0;
+let sessionCheckTimer = 0;
+let enforceSequence = 0;
+let redirectingToLogin = false;
 
 export function markSessionStart() {
   try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch {}
@@ -42,10 +45,13 @@ function recordActivity() {
 }
 
 async function enforce(user) {
+  const sequence = ++enforceSequence;
   if (!user) { currentRole = ''; roleUid = ''; clearSessionStart(); return; }
   if (roleUid !== user.uid) {
     try {
-      currentRole = await getUserRole(user.uid, user.email);
+      const nextRole = await getUserRole(user.uid, user.email);
+      if (sequence !== enforceSequence || auth.currentUser?.uid !== user.uid) return;
+      currentRole = nextRole;
       roleUid = user.uid;
     } catch {
       // Un fallo transitorio leyendo el rol no debe expulsar a una clienta.
@@ -61,6 +67,8 @@ async function enforce(user) {
     return;
   }
   if (Date.now() - startedAt > STAFF_INACTIVITY_MS) {
+    if (redirectingToLogin) return;
+    redirectingToLogin = true;
     clearSessionStart();
     try { await signOut(auth); } catch {}
     goToExpiredLogin();
@@ -68,17 +76,44 @@ async function enforce(user) {
 }
 
 function goToExpiredLogin() {
+  if (redirectingToLogin === false) return;
   if (location.pathname === '/login' || location.pathname.endsWith('/login.html') || location.pathname.endsWith('login.html')) return;
   location.href = '/login?expired=1';
 }
 
-onAuthStateChanged(auth, enforce);
-setInterval(() => { if (auth.currentUser) enforce(auth.currentUser); }, CHECK_INTERVAL_MS);
+function stopSessionChecks() {
+  if (sessionCheckTimer) window.clearInterval(sessionCheckTimer);
+  sessionCheckTimer = 0;
+}
+
+function startSessionChecks() {
+  stopSessionChecks();
+  if (document.hidden || !auth.currentUser) return;
+  sessionCheckTimer = window.setInterval(() => {
+    if (document.hidden || !auth.currentUser) return;
+    void enforce(auth.currentUser);
+  }, CHECK_INTERVAL_MS);
+}
+
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    redirectingToLogin = false;
+    stopSessionChecks();
+  } else {
+    void enforce(user);
+    startSessionChecks();
+  }
+});
 ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(eventName => {
   window.addEventListener(eventName, recordActivity, { passive: true });
 });
 document.addEventListener('visibilitychange', () => {
-  if (!document.hidden) recordActivity();
+  if (document.hidden) stopSessionChecks();
+  else {
+    recordActivity();
+    startSessionChecks();
+    if (auth.currentUser) void enforce(auth.currentUser);
+  }
 });
 
 // Una cuenta sin nombre, teléfono ni ubicación no puede navegar logueada:

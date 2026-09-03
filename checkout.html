@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="css/components/navigation/movil/fondos-solidos-movil.css?v=tintin-20260817-cls-desktop-stable-3">
   <link rel="stylesheet" href="css/theme/fondo-solido-cargador.css?v=tintin-20260903-loader-white-brand-2">
   <link rel="stylesheet" href="css/core/tokens-color.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="styles.css?v=tintin-20260829-favorite-alignment-1">
+  <link rel="stylesheet" href="styles.min.css?v=tintin-20260903-css-shell-min-1">
   <link rel="stylesheet" href="css/pages/checkout/checkout.css?v=tintin-20260818-text-icons-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -405,7 +405,7 @@ import {
   normalizeStoreAccessConfig,
   renderStoreClosedOverlay,
   removeStoreClosedOverlay
-} from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260830-store-gate-api-2";
+} from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260903-store-gate-fast-rest-1";
 import { cleanText } from "./js/core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=tintin-20260803-location-picker-2";
 import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260803-encomienda-1";
@@ -1912,7 +1912,7 @@ onAuthStateChanged(auth, user => {
 });
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260901-session-inactivity-30m-1"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260903-session-pause-race-1"></script>
 <script src="tienda.js?v=tintin-20260831-product-loading-4" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->

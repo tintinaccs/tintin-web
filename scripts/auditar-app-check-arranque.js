@@ -55,9 +55,10 @@ const checks = [
       firebase.indexOf('initializeAppCheck')
   ],
   [
-    'El control de tienda espera la certificación del origen',
-    storeGate.includes('if (!await appCheckReady)') &&
-      storeGate.indexOf('if (!await appCheckReady)') < storeGate.indexOf("let primaryStatus = 'missing'") &&
+    'El control de tienda resuelve el gate público sin esperar App Check',
+    storeGate.includes("fetch('/api/public-catalog?resource=storeGate'") &&
+      storeGate.includes("cache: 'default'") &&
+      !storeGate.includes('if (!await appCheckReady)') &&
       storeGateRuntime.includes('const appCheckAvailable = await appCheckReady') &&
       storeGateRuntime.indexOf('const appCheckAvailable = await appCheckReady') <
         storeGateRuntime.indexOf('onSnapshot(')
