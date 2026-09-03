@@ -11,12 +11,21 @@
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260903-auth-persistence-1';
 import { doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { DEFAULT_COUNTRY, normalizePhone } from '../../components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1';
-import { normalizeCi, normalizeRuc } from '../../components/forms/validacion-documentos-py.js?v=tintin-20260903-ruc-normalization-1';
+import { normalizeCi } from '../../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1';
 
 const CHECKOUT_PATH_RE = /(?:^|\/)checkout(?:\.html)?\/?$/i;
 
 function clean(value, max = 500) {
   return String(value == null ? '' : value).trim().replace(/\s+/g, ' ').slice(0, max);
+}
+
+// El contrato compartido sigue exigiendo el formato canónico 80012345-6.
+// Solo esta UI acepta que la persona escriba puntos/espacios o todos los
+// dígitos juntos y lo transforma ANTES de que el validador canónico lo vea.
+export function normalizeCheckoutRuc(rawInput) {
+  const value = String(rawInput || '').trim().replace(/[.\s]/g, '');
+  if (/^\d{6,9}$/.test(value)) return `${value.slice(0, -1)}-${value.slice(-1)}`;
+  return value;
 }
 
 function setInvoiceVisibility(checkbox, fields) {
@@ -33,7 +42,7 @@ function setInvoiceVisibility(checkbox, fields) {
 function normalizeRucField() {
   const input = document.getElementById('ck-ruc');
   if (!input) return;
-  const normalized = normalizeRuc(input.value);
+  const normalized = normalizeCheckoutRuc(input.value);
   if (normalized && normalized !== input.value) input.value = normalized;
 }
 
@@ -58,7 +67,7 @@ async function persistConfirmedCheckoutProfile() {
   const reference = clean(document.getElementById('ck-referencia')?.value, 500);
   const wantsInvoice = document.getElementById('ck-wants-invoice')?.checked === true;
   const razonSocial = clean(document.getElementById('ck-razon-social')?.value, 220);
-  const ruc = normalizeRuc(document.getElementById('ck-ruc')?.value || '');
+  const ruc = normalizeCheckoutRuc(document.getElementById('ck-ruc')?.value || '');
 
   const checkoutDefaults = {};
   if (ci) checkoutDefaults.ci = ci;
