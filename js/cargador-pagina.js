@@ -108,7 +108,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260830-store-gate-api-1';
+  const TT_CACHE_VERSION = 'tintin-20260830-store-gate-api-2';
   // 120ms (fijado en #396 para matar esperas artificiales) resultó por
   // debajo del umbral de percepción humana: en conexiones rápidas el logo y
   // el texto de sección ("Página Principal", "Catálogo", "Producto") no
@@ -714,7 +714,8 @@
     const timer = window.setTimeout(() => controller?.abort(), 7000);
     const url = '/api/public-catalog?resource=storeGate';
 
-    window
+    const existingRequest = window.__TINTIN_STORE_GATE_REST_PROMISE__;
+    const request = existingRequest || window
       .fetch(url, {
         method: 'GET',
         mode: 'cors',
@@ -722,7 +723,10 @@
         credentials: 'omit',
         ...(controller ? { signal: controller.signal } : {})
       })
-      .then(response => (response.ok ? response.json() : null))
+      .then(response => (response.ok ? response.json() : null));
+    if (!existingRequest) window.__TINTIN_STORE_GATE_REST_PROMISE__ = request;
+
+    request
       .then(payload => {
         // Acepta el contrato del endpoint protegido y conserva el formato
         // Firestore anterior para despliegues que todavía lo entreguen.
@@ -938,7 +942,9 @@
     window.setTimeout(() => {
       if (!gateResolved) showEmergencyStoreGate();
     }, STORE_GATE_TIMEOUT_MS);
-    bootEarlyStoreGateFallback();
+  // El módulo único de Store Gate administra el fallback REST. No se dispara
+  // una segunda consulta desde el loader: mantener ambos caminos separados
+  // duplicaba /api/public-catalog?resource=storeGate en cada página pública.
   }
 
   bootStoreGate();
