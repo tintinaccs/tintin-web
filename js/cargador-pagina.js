@@ -359,14 +359,14 @@
     'html.tt-store-gate-pending body> *:not(#tt-loader):not(#tt-store-closed-overlay),html.tt-store-gate-blocked body> *:not(#tt-loader):not(#tt-store-closed-overlay){visibility:hidden!important;pointer-events:none!important;user-select:none!important}',
     'html.tt-store-gate-pending body,html.tt-store-gate-blocked body{overflow:hidden!important;overscroll-behavior:none!important}',
     '#tt-store-closed-overlay{visibility:visible!important;pointer-events:auto!important;user-select:auto!important}',
-    '#tt-loader{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#FFADD1;transition:opacity .01s linear,visibility .01s linear;overflow:hidden;overscroll-behavior:none;touch-action:none;padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));box-sizing:border-box}',
+    '#tt-loader{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#F7BFD3;transition:opacity .01s linear,visibility .01s linear;overflow:hidden;overscroll-behavior:none;touch-action:none;padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));box-sizing:border-box}',
     '#tt-loader.tt-out{opacity:0;visibility:hidden;pointer-events:none}',
     '#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(210px,21vw,270px);--tt-loader-spinner-size:46px;--tt-loader-spinner-border:9px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:min(100%,360px);max-width:calc(100vw - 36px);box-sizing:border-box;text-align:center}',
-    '#tt-loader-logo{position:relative;z-index:1;display:block;width:var(--tt-loader-brand-width);max-width:100%;height:auto;object-fit:contain;opacity:1;transform:none;clip-path:none;filter:drop-shadow(0 8px 20px rgba(202,1,105,.14));user-select:none;pointer-events:none}',
-    '#tt-loader-wordmark{position:relative;z-index:1;margin-top:clamp(6px,1vw,10px);font-family:Montserrat;font-weight:800;font-size:clamp(19px,2.5vw,27px);line-height:1;letter-spacing:.01em;color:#CA0169!important;white-space:nowrap;opacity:0;transform:scale(1.09)}',
+    '#tt-loader-logo{position:relative;z-index:1;display:block;width:var(--tt-loader-brand-width);max-width:100%;height:auto;object-fit:contain;opacity:1;transform:none;clip-path:none;filter:brightness(0) invert(1) drop-shadow(0 8px 20px rgba(125,23,58,.14));user-select:none;pointer-events:none}',
+    '#tt-loader-wordmark{position:relative;z-index:1;margin-top:clamp(-2px,-.2vw,0px);font-family:Montserrat;font-weight:400;font-size:clamp(28px,3.5vw,46px);line-height:.9;letter-spacing:.045em;color:#fff!important;white-space:nowrap;opacity:0;transform:scale(1.09)}',
     '#tt-loader-spin-wrap.tt-ready #tt-loader-wordmark{animation:tt-logo-fade-scale-in .6s cubic-bezier(.22,.61,.36,1) both}',
-    '#tt-loader-wordmark .tt-loader-wordmark-i{position:relative;display:inline-block;color:#CA0169!important}',
-    '#tt-loader-wordmark .tt-loader-wordmark-i::before,#tt-loader-wordmark .tt-loader-wordmark-i::after{content:"";position:absolute;top:-.24em;width:.15em;height:.24em;background:#CA0169;border-radius:.15em .15em 0 0}',
+    '#tt-loader-wordmark .tt-loader-wordmark-i{position:relative;display:inline-block;color:#fff!important}',
+    '#tt-loader-wordmark .tt-loader-wordmark-i::before,#tt-loader-wordmark .tt-loader-wordmark-i::after{content:"";position:absolute;top:-.24em;width:.15em;height:.24em;background:#fff;border-radius:.15em .15em 0 0}',
     '#tt-loader-wordmark .tt-loader-wordmark-i::before{left:50%;transform:rotate(-45deg);transform-origin:0 100%}',
     '#tt-loader-wordmark .tt-loader-wordmark-i::after{right:50%;transform:rotate(45deg);transform-origin:100% 100%}',
     '#tt-loader-brand-subtitle{margin-top:clamp(6px,1vw,9px);max-width:100%;padding:0 6px;box-sizing:border-box;color:#CA0169!important;font-family:Montserrat;font-size:clamp(12px,1.3vw,14px);font-weight:500;line-height:1.25;letter-spacing:.055em;text-align:center;opacity:0;transform:scale(1.09);white-space:normal}',
@@ -503,7 +503,7 @@
     '<img id="tt-loader-logo" src="' +
     LOGO_SRC +
     '" alt="" draggable="false" fetchpriority="high" width="882" height="431">' +
-    '<div id="tt-loader-wordmark" aria-hidden="true">T<span class="tt-loader-wordmark-i">I</span>NT<span class="tt-loader-wordmark-i">I</span>N</div>' +
+    '<div id="tt-loader-wordmark" aria-hidden="true">t<span class="tt-loader-wordmark-i">i</span>nt<span class="tt-loader-wordmark-i">i</span>n</div>' +
     '<div id="tt-loader-brand-subtitle">' +
     escText(BRAND_LABEL) +
     '</div>' +
