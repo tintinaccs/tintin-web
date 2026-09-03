@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
 const moduleSource = fs.readFileSync(new URL('../../js/pages/checkout/checkout-facturacion-estable.js', import.meta.url), 'utf8');
-const loaderSource = fs.readFileSync(new URL('../../js/components/navigation/compartido/carga-navegacion.js', import.meta.url), 'utf8');
+const sessionSource = fs.readFileSync(new URL('../../js/core/auth/proteccion-sesion.js', import.meta.url), 'utf8');
 
 test('Factura usa un único listener idempotente y deshabilita los campos ocultos', () => {
   assert.match(moduleSource, /checkbox\.onchange\s*=\s*null/);
@@ -26,6 +26,8 @@ test('Persistencia del perfil ocurre solo después de que el paso de datos fue v
   assert.match(moduleSource, /setDoc\(doc\(db, 'users', user\.uid\), patch, \{ merge: true \}\)/);
 });
 
-test('La capa de facturación estable se carga junto al runtime del checkout', () => {
-  assert.match(loaderSource, /pages\/checkout\/checkout-facturacion-estable\.js/);
+test('La capa de facturación estable se carga desde el runtime que checkout ya incluye', () => {
+  assert.match(sessionSource, /function isCheckoutPage\(\)/);
+  assert.match(sessionSource, /pages\/checkout\/checkout-facturacion-estable\.js\?v=tintin-20260903-checkout-invoice-stable-1/);
+  assert.match(sessionSource, /startCheckoutInvoiceStability\(\);/);
 });
