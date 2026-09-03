@@ -7,7 +7,7 @@
      reales de Firestore, incluidas las ocultas para gestión interna.
    ============================================================= */
 
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-1';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-2';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { onAllCollectionsUpdate } from '../../pages/collections/estado-colecciones.js?v=tintin-20260901-firestore-budget-1';
 

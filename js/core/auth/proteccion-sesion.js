@@ -5,7 +5,7 @@
 // su sesión hasta cerrar manualmente; el resto de las cuentas debe volver a
 // autenticarse después de 30 minutos sin actividad.
 
-import { auth } from "../firebase/firebase.js?v=tintin-20260903-app-check-singleton-1";
+import { auth } from "../firebase/firebase.js?v=tintin-20260903-app-check-singleton-2";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getUserRole } from "./roles.js?v=tintin-20260821-accounts-phase-a-1";
 import { startProfileGate } from "../../pages/profile/control-acceso-perfil.js?v=tintin-20260901-username-visible-1";

@@ -2,7 +2,7 @@
 // TINTIN ACCESORIOS — Roles & Permissions
 // =============================================
 
-import { auth, db } from "../firebase/firebase.js?v=tintin-20260903-app-check-singleton-1";
+import { auth, db } from "../firebase/firebase.js?v=tintin-20260903-app-check-singleton-2";
 import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
