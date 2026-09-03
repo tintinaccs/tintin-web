@@ -1,6 +1,6 @@
 /* Ajustes finales cargados después de superficies-marca-responsive-tintin.css. */
 
-/* Wordmark correcto: TINTIN completo, con corazones por encima de las I. */
+/* Wordmark correcto: TINTIN completo, sin adornos que invadan el encabezado. */
 .tt-account-drawer-header h2 {
   position: relative;
 }
@@ -19,17 +19,8 @@
 }
 
 .tt-account-drawer-header h2::after {
-  content: "♥  ♥";
-  position: absolute;
-  left: .61em;
-  top: -.56em;
-  color: #fff;
-  font-size: .42em;
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: 2.18em;
-  pointer-events: none;
-  text-shadow: 0 3px 8px rgba(75,0,36,.2);
+  content: none !important;
+  display: none !important;
 }
 
 /* El título y la marca deben conservarse legibles aun con nombres largos. */
@@ -83,16 +74,7 @@ html.tt-reveal-ready .tt-auto-reveal.tt-reveal-settled {
     padding-inline: clamp(14px, 4vw, 22px);
   }
 
-  .tt-account-drawer-header h2::after {
-    left: .58em;
-    letter-spacing: 2.12em;
-  }
 }
 
 @media (max-width: 380px) {
-  .tt-account-drawer-header h2::after {
-    left: .55em;
-    top: -.54em;
-    letter-spacing: 2.02em;
-  }
 }
