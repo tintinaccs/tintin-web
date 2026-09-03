@@ -12,6 +12,7 @@ import {
 } from '../../cloudflare/firebase-admin-ligero.js';
 import { firestoreAdminBatchCommit } from '../../cloudflare/firestore-admin-batch.js';
 import { fetchAppsScript } from '../../cloudflare/apps-script-fetch.js';
+import { syncOrderToSheetsBestEffort } from '../../cloudflare/order-sheets-sync.js';
 
 // Apps Script sigue ejecutando únicamente la transacción privilegiada heredada
 // de creación de pedidos y las rutas de correo antiguas que aún puedan invocarse
@@ -77,7 +78,9 @@ async function enforceCanonicalOrderIdentity(env, orderId, authenticatedUser) {
     }
 
     const existingCustomerId = clean(order.customerId, 180);
-    if (existingCustomerId === customerId) return { customerId, repaired: false };
+    if (existingCustomerId === customerId) {
+      return { customerId, repaired: false, order };
+    }
     if (existingCustomerId && existingCustomerId !== customerId) {
       throw Object.assign(new Error('El pedido contiene un Customer ID incompatible.'), {
         status: 502,
@@ -92,7 +95,7 @@ async function enforceCanonicalOrderIdentity(env, orderId, authenticatedUser) {
         mergeFields: ['customerId'],
         currentDocument: versionPrecondition(orderDocument),
       }]);
-      return { customerId, repaired: true };
+      return { customerId, repaired: true, order: { ...order, customerId } };
     } catch (error) {
       if (Number(error?.status) === 409 && attempt < 2) continue;
       throw error;
@@ -182,7 +185,12 @@ export async function onRequest(context) {
       try { parsed = JSON.parse(body); } catch {}
       if (parsed?.ok === true) {
         const identity = await enforceCanonicalOrderIdentity(env, parsed.orderId, authenticatedUser);
+        const sheetsSync = await syncOrderToSheetsBestEffort(env, {
+          orderId: parsed.orderId,
+          order: identity.order,
+        });
         parsed.customerId = identity.customerId;
+        parsed.sheetsSync = sheetsSync;
         if (parsed.order && typeof parsed.order === 'object') {
           parsed.order.customerId = identity.customerId;
         }
