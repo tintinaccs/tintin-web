@@ -8,7 +8,7 @@ var TINTIN_USERS_HEADER_ROW = 6;
 var TINTIN_USERS_FIRST_ROW = 7;
 // Fuente única de verdad del layout de Usuarios web. Bloques: identidad (2-5),
 // contacto (6-8), comercial (9-10), estado (11-14), administración (15-16),
-// sincronización/técnico (17-19). Cualquier reorganización de columnas debe
+// sincronización/técnico (17-19) y perfil/checkout (20-31). Cualquier reorganización de columnas debe
 // actualizarse solo acá; el resto del código lee por nombre de campo.
 var TINTIN_USERS_COL = {
   uid: 2, name: 3, username: 4, customerId: 5,
@@ -16,7 +16,10 @@ var TINTIN_USERS_COL = {
   orders: 9, totalSpent: 10,
   role: 11, blocked: 12, profileStatus: 13, usernameChangeUsed: 14,
   internalNotes: 15, action: 16,
-  createdAt: 17, lastAccess: 18, lastChangeId: 19
+  createdAt: 17, lastAccess: 18, lastChangeId: 19,
+  firstName: 20, lastName: 21, dob: 22, address: 23, locationName: 24,
+  addressLat: 25, addressLng: 26, departamento: 27, invoiceWanted: 28,
+  razonSocial: 29, ruc: 30, updatedAt: 31
 };
 var TINTIN_USERS_HEADERS = (function() {
   var labels = {
@@ -25,9 +28,12 @@ var TINTIN_USERS_HEADERS = (function() {
     orders: 'Pedidos', totalSpent: 'Total gastado (Gs.)',
     role: 'Rol', blocked: 'Bloqueado', profileStatus: 'Estado de perfil', usernameChangeUsed: 'Cambió username',
     internalNotes: 'Notas internas', action: 'Acción',
-    createdAt: 'Creado', lastAccess: 'Último acceso', lastChangeId: 'Último changeId'
+    createdAt: 'Creado', lastAccess: 'Último acceso', lastChangeId: 'Último changeId',
+    firstName: 'Nombre', lastName: 'Apellido', dob: 'Fecha nacimiento', address: 'Dirección', locationName: 'Ubicación mapa',
+    addressLat: 'Latitud', addressLng: 'Longitud', departamento: 'Departamento', invoiceWanted: 'Solicita factura',
+    razonSocial: 'Razón social', ruc: 'RUC', updatedAt: 'Actualizado'
   };
-  var headerRow = new Array(TINTIN_USERS_COL.lastChangeId).fill('');
+  var headerRow = new Array(TINTIN_USERS_COL.updatedAt).fill('');
   Object.keys(TINTIN_USERS_COL).forEach(function(key) { headerRow[TINTIN_USERS_COL[key] - 1] = labels[key]; });
   return headerRow;
 })();
@@ -794,8 +800,19 @@ function tintinReplaceTabRows_(sheetName, firstRow, width, rows) {
 }
 
 function tintinPullUsersFromWeb_() {
+  var usersSheet = tintinProductsSpreadsheet_().getSheetByName(TINTIN_USERS_SHEET);
+  // Firestore es la fuente de verdad. Las validaciones antiguas de la hoja no
+  // deben impedir que se repinte el espejo completo cuando cambió el catálogo
+  // de roles o quedó una fila histórica con un valor anterior.
+  if (usersSheet) {
+    if (usersSheet.getMaxColumns() < TINTIN_USERS_COL.updatedAt) {
+      usersSheet.insertColumnsAfter(usersSheet.getMaxColumns(), TINTIN_USERS_COL.updatedAt - usersSheet.getMaxColumns());
+    }
+    var roleColumn = tintinColumnLetter_(TINTIN_USERS_COL.role);
+    usersSheet.getRange(TINTIN_USERS_FIRST_ROW, 1, Math.max(1, usersSheet.getMaxRows() - TINTIN_USERS_FIRST_ROW + 1), TINTIN_USERS_COL.updatedAt).clearDataValidations();
+  }
   var rows = tintinSnapshot_('users').map(function(user) {
-    var row = new Array(TINTIN_USERS_COL.lastChangeId).fill('');
+    var row = new Array(TINTIN_USERS_COL.updatedAt).fill('');
     row[TINTIN_USERS_COL.uid - 1] = user.uid;
     row[TINTIN_USERS_COL.name - 1] = user.name;
     row[TINTIN_USERS_COL.username - 1] = user.username;
@@ -813,9 +830,29 @@ function tintinPullUsersFromWeb_() {
     row[TINTIN_USERS_COL.createdAt - 1] = tintinDateFromIso_(user.createdAt);
     row[TINTIN_USERS_COL.lastAccess - 1] = tintinDateFromIso_(user.lastAccess);
     row[TINTIN_USERS_COL.lastChangeId - 1] = user.lastChangeId;
+    row[TINTIN_USERS_COL.firstName - 1] = user.firstName;
+    row[TINTIN_USERS_COL.lastName - 1] = user.lastName;
+    row[TINTIN_USERS_COL.dob - 1] = tintinDateFromIso_(user.dob);
+    row[TINTIN_USERS_COL.address - 1] = user.address;
+    row[TINTIN_USERS_COL.locationName - 1] = user.locationName;
+    row[TINTIN_USERS_COL.addressLat - 1] = user.addressLat;
+    row[TINTIN_USERS_COL.addressLng - 1] = user.addressLng;
+    row[TINTIN_USERS_COL.departamento - 1] = user.departamento;
+    row[TINTIN_USERS_COL.invoiceWanted - 1] = tintinYesNo_(user.invoiceWanted);
+    row[TINTIN_USERS_COL.razonSocial - 1] = user.razonSocial;
+    row[TINTIN_USERS_COL.ruc - 1] = user.ruc;
+    row[TINTIN_USERS_COL.updatedAt - 1] = tintinDateFromIso_(user.updatedAt);
     return row;
   });
-  return tintinReplaceTabRows_(TINTIN_USERS_SHEET, TINTIN_USERS_FIRST_ROW, TINTIN_USERS_COL.lastChangeId, rows);
+  var count = tintinReplaceTabRows_(TINTIN_USERS_SHEET, TINTIN_USERS_FIRST_ROW, TINTIN_USERS_COL.updatedAt, rows);
+  if (usersSheet && typeof tintinParityValidation_ === 'function') {
+    var blockedColumn = tintinColumnLetter_(TINTIN_USERS_COL.blocked);
+    var actionColumn = tintinColumnLetter_(TINTIN_USERS_COL.action);
+    usersSheet.getRange(roleColumn + TINTIN_USERS_FIRST_ROW + ':' + roleColumn).setDataValidation(tintinParityValidation_(['client', 'viewer', 'agent', 'admin']));
+    usersSheet.getRange(blockedColumn + TINTIN_USERS_FIRST_ROW + ':' + blockedColumn).setDataValidation(tintinParityValidation_(['Sí', 'No']));
+    usersSheet.getRange(actionColumn + TINTIN_USERS_FIRST_ROW + ':' + actionColumn).setDataValidation(tintinParityValidation_(['ELIMINAR', 'REACTIVAR']));
+  }
+  return count;
 }
 
 function tintinPullOrdersFromWeb_() {
