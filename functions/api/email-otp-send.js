@@ -231,6 +231,17 @@ export async function onRequest(context) {
     const code = generateCode();
     const codeHash = await hashCode(code);
 
+    // Primero confirmamos que el proveedor de correo acepta el envío. Antes
+    // se guardaba el OTP y recién después se llamaba a Resend: si Resend
+    // fallaba, la persona no recibía nada y además quedaba atrapada en el
+    // cooldown como si el mensaje sí hubiera salido.
+    try {
+      await sendCodeEmail(apiKey, email, code);
+    } catch (sendError) {
+      console.error('[email-otp-send] Resend rechazó el correo:', sendError?.message || sendError);
+      return jsonResponse({ success: false, error: 'send_failed' }, 502, origin, requestUrl);
+    }
+
     await firestoreAdminReplace(env, path, {
       codeHash: fsString(codeHash),
       expiresAt: fsTimestamp(new Date(now + CODE_TTL_MS)),
@@ -239,8 +250,6 @@ export async function onRequest(context) {
       dateKey: fsString(dateKey),
       sendCountToday: fsInteger(sendCountToday + 1)
     });
-
-    await sendCodeEmail(apiKey, email, code);
 
     return jsonResponse({ success: true }, 200, origin, requestUrl);
   } catch (error) {

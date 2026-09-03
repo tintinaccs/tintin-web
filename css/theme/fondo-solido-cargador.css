@@ -1,12 +1,12 @@
 html:has(body #tt-loader:not(.tt-out)),
 html:has(body #tt-loader:not(.tt-out)) body {
-  background: #FFADD1 !important;
-  background-color: #FFADD1 !important;
+  background: #F7BFD3 !important;
+  background-color: #F7BFD3 !important;
 }
 
 html body #tt-loader {
-  background: #FFADD1 !important;
-  background-color: #FFADD1 !important;
+  background: #F7BFD3 !important;
+  background-color: #F7BFD3 !important;
   background-image: none !important;
   background-blend-mode: normal !important;
   backdrop-filter: none !important;
@@ -26,8 +26,8 @@ html body #tt-loader::before {
   inset: 0;
   z-index: 0;
   display: block;
-  background: #FFADD1 !important;
-  background-color: #FFADD1 !important;
+  background: #F7BFD3 !important;
+  background-color: #F7BFD3 !important;
   background-image: none !important;
   opacity: 1 !important;
   pointer-events: none;
@@ -51,6 +51,7 @@ html body #tt-loader-spin-wrap::before {
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
+  filter: brightness(0) invert(1) drop-shadow(0 8px 18px rgba(125, 23, 58, .16));
   opacity: 0;
   transform: scale(1.09);
   pointer-events: none;
@@ -100,6 +101,33 @@ html body #tt-loader-brand-subtitle {
   visibility: visible !important;
 }
 
+/* El cargador usa una sola marca blanca, sin corazones decorativos ni tonos
+   rosas mezclados: así conserva contraste sobre el fondo de marca en cada
+   página y en todos los tamaños. */
+html body #tt-loader-wordmark,
+html body #tt-loader-wordmark .tt-loader-wordmark-i,
+html body #tt-loader-brand-subtitle,
+html body #tt-loader-title,
+html body #tt-loader-subtitle {
+  color: #fff !important;
+}
+
+html body #tt-loader-wordmark .tt-loader-wordmark-i::before,
+html body #tt-loader-wordmark .tt-loader-wordmark-i::after {
+  content: none !important;
+  display: none !important;
+}
+
+html body #tt-loader .tt-loader-spinner::before {
+  border-color: #fff #fff transparent transparent !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #tt-loader .tt-loader-spinner::after {
+  border-color: transparent transparent rgba(255,255,255,.38) rgba(255,255,255,.38) !important;
+  mix-blend-mode: normal !important;
+}
+
 /* Login funciona como pantalla independiente. El shell público puede montarse
    técnicamente mientras cargan los scripts, pero jamás debe verse ni reservar
    espacio alrededor del formulario. */
@@ -138,8 +166,8 @@ html body:has(.login-page).tt-public-shell-mounted {
    sitio. Esta regla final anula únicamente la excepción visual antigua; el
    estado interno tt-auth-silent-transition conserva su comportamiento. */
 html:has(.login-page) body #tt-loader {
-  background: #FFADD1 !important;
-  background-color: #FFADD1 !important;
+  background: #F7BFD3 !important;
+  background-color: #F7BFD3 !important;
 }
 
 html:has(.login-page) body #tt-loader-spin-wrap {

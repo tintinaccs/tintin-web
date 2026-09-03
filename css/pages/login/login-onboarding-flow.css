@@ -313,7 +313,7 @@ body:has(.login-page) .login-page {
   padding: clamp(18px, 3vw, 42px) !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
-  background: #f7bfd3 !important;
+  background: #fff7fb !important;
 }
 
 body:has(.login-page) .login-shell,
@@ -323,7 +323,7 @@ body:has(.login-page).login-setup-open .login-shell {
   margin: auto !important;
   border: 1px solid rgba(173, 63, 103, .16) !important;
   border-radius: clamp(22px, 2vw, 30px) !important;
-  background: #f7bfd3 !important;
+  background: #ffe0eb !important;
   box-shadow: 0 24px 70px rgba(91, 26, 50, .15) !important;
   overflow: hidden !important;
 }
@@ -347,7 +347,7 @@ body:has(.login-page) .login-mobile-logo {
   min-height: clamp(150px, 17vw, 210px);
   margin: calc(-1 * clamp(24px, 3.2vw, 52px)) calc(-1 * clamp(24px, 3.2vw, 52px)) clamp(24px, 3vw, 38px) !important;
   padding: clamp(18px, 2.4vw, 28px) 16px 20px !important;
-  background: #f7bfd3 !important;
+  background: #f4b8ce !important;
   border-radius: clamp(22px, 2vw, 30px) clamp(22px, 2vw, 30px) 0 0 !important;
   box-sizing: content-box !important;
 }
@@ -373,6 +373,20 @@ body:has(.login-page) .login-mobile-logo-text {
   letter-spacing: .045em !important;
   text-transform: lowercase !important;
   text-shadow: 0 3px 10px rgba(125, 23, 58, .1);
+}
+
+/* La marca se mantiene limpia: los corazones decorativos no forman parte del
+   logo solicitado y tampoco deben reservar espacio sobre el wordmark. */
+body:has(.login-page) .login-mobile-logo-text::before,
+body:has(.login-page) .login-mobile-logo-text::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* El formulario contrasta suavemente con el fondo general sin quedar pegado
+   a los bordes en desktop, tablet ni mobile. */
+body:has(.login-page) .login-form-side {
+  background: #ffe0eb !important;
 }
 
 body:has(.login-page) .login-heading-sub {

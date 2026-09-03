@@ -25,7 +25,7 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
     );
     ensureStyle(
       'link[data-tt-login-onboarding-flow]',
-      '../../../css/pages/login/login-onboarding-flow.css?v=tintin-20260903-login-brand-responsive-2',
+      '../../../css/pages/login/login-onboarding-flow.css?v=tintin-20260903-loader-white-brand-2',
       'ttLoginOnboardingFlow'
     );
   }
