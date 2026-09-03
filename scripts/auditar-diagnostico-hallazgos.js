@@ -82,7 +82,7 @@ check(
   'Las escuchas en tiempo real de pedidos, usuarios y plantillas están limitadas',
   adminApp.includes('const ADMIN_REALTIME_LIMIT = 250') &&
     adminApp.includes("onSnapshot(query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT))") &&
-    adminApp.includes("onSnapshot(query(collection(db, 'users'), orderBy('updatedAt', 'desc'), limit(ADMIN_REALTIME_LIMIT))") &&
+    adminApp.includes("onSnapshot(query(collection(db, 'users'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT))") &&
     adminApp.includes("onSnapshot(query(collection(db, 'emailTemplates'), limit(500))")
 );
 check(
