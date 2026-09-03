@@ -8,13 +8,15 @@
 // llegó a guardar el método de registro. Acá vive una sola versión, con el
 // método de acceso como parámetro.
 //
-// Los perfiles viven en Firestore (colección `users`), que es donde el resto
-// del sitio los lee: rol, cuenta bloqueada, reglas de seguridad, checkout y
-// pedidos. Google Sheets en este proyecto sincroniza productos, no usuarios.
+// Los perfiles viven en Firestore (colección `users`), que es la autoridad
+// canónica. Superadmin los escucha en tiempo real y Sheets mantiene un espejo:
+// después de cada commit se dispara una réplica best-effort de la versión que
+// el servidor vuelve a leer desde Firestore.
 
 import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { SUPER_ADMIN } from "../auth/roles.js?v=tintin-20260821-accounts-phase-a-1";
 import { customerIdForUid, ACCOUNT_CONTRACT } from '../auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
+import { pushUserProfileToMirrorsSoon } from '../sync/sincronizacion-usuario.js?v=tintin-20260903-user-mirror-push-1';
 
 /** Métodos de acceso válidos, tal como quedan guardados en `users.provider`. */
 export const AUTH_METHOD = {
@@ -79,6 +81,7 @@ export async function ensureUserProfile(db, user, method) {
       updatedAt: serverTimestamp(),
       lastLogin: serverTimestamp(),
     });
+    pushUserProfileToMirrorsSoon(user);
     return { role, blocked: false, isNew: true, welcomePending, method };
   }
 
@@ -90,6 +93,7 @@ export async function ensureUserProfile(db, user, method) {
 
   if (user.email === SUPER_ADMIN && data.role !== 'superadmin') {
     await setDoc(ref, { role: 'superadmin', updatedAt: serverTimestamp(), lastLogin: serverTimestamp() }, { merge: true });
+    pushUserProfileToMirrorsSoon(user);
     return { role: 'superadmin', blocked: false, isNew: false, welcomePending: false, method };
   }
 
@@ -113,6 +117,7 @@ export async function ensureUserProfile(db, user, method) {
     identityPatch.profileStatus = 'legacy';
   }
   setDoc(ref, identityPatch, { merge: true })
+    .then(() => pushUserProfileToMirrorsSoon(user))
     .catch(error => console.warn('[user-profile] No se pudo actualizar lastLogin:', error));
 
   const role = data.role || 'client';
