@@ -23,6 +23,7 @@ let lastActivityWrite = 0;
 let unsubscribeUserMirror = null;
 let mirrorUid = '';
 let adminParityModulePromise = null;
+let checkoutInvoiceModulePromise = null;
 
 export function markSessionStart() {
   try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch {}
@@ -104,6 +105,20 @@ function isAdminPage() {
   return /(?:^|\/)admin(?:\.html)?\/?$/i.test(location.pathname || '');
 }
 
+function isCheckoutPage() {
+  return /(?:^|\/)checkout(?:\.html)?\/?$/i.test(location.pathname || '');
+}
+
+function startCheckoutInvoiceStability() {
+  if (!isCheckoutPage() || checkoutInvoiceModulePromise) return;
+  checkoutInvoiceModulePromise = import('../../pages/checkout/checkout-facturacion-estable.js?v=tintin-20260903-checkout-invoice-stable-1')
+    .catch(error => {
+      checkoutInvoiceModulePromise = null;
+      console.warn('[checkout-invoice] No se pudo iniciar la capa estable de facturación:', error);
+      throw error;
+    });
+}
+
 function stopAdminParityObserver() {
   if (!adminParityModulePromise) return;
   void adminParityModulePromise
@@ -166,6 +181,11 @@ function goToExpiredLogin() {
   if (location.pathname === '/login' || location.pathname.endsWith('/login.html') || location.pathname.endsWith('login.html')) return;
   location.href = '/login?expired=1';
 }
+
+// Checkout carga esta hoja directamente en su HTML. La capa de facturación se
+// activa desde acá para no acoplarla al shell global ni a un evento posterior.
+// Su propio boot es idempotente y sólo toca la ruta /checkout.
+startCheckoutInvoiceStability();
 
 onAuthStateChanged(auth, enforce);
 setInterval(() => { if (auth.currentUser) enforce(auth.currentUser); }, CHECK_INTERVAL_MS);
