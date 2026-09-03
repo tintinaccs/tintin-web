@@ -7,9 +7,7 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.1/firebas
 import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
   initializeAppCheck,
-  ReCaptchaEnterpriseProvider,
-  getToken as getAppCheckToken,
-  setTokenAutoRefreshEnabled
+  ReCaptchaEnterpriseProvider
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js";
 
 // El dominio de autenticación es el mismo dominio público de la tienda.
@@ -64,16 +62,15 @@ if (FIREBASE_APP_CHECK_SITE_KEY) {
       .then(() => {
         sharedAppCheck.appCheck = initializeAppCheck(app, {
           provider: new ReCaptchaEnterpriseProvider(FIREBASE_APP_CHECK_SITE_KEY),
-          // Se activa después de obtener el primer token. Si la configuración del
-          // dominio falla, evita un refresco proactivo que repita errores cada pocos
-          // segundos sin posibilidad de recuperarse.
-          isTokenAutoRefreshEnabled: false
+          // El SDK obtiene el primer token y administra su renovación. Forzar
+          // getToken() y luego activar el refresco vuelve a inicializar el widget
+          // Enterprise en algunos navegadores y produce "already been rendered".
+          isTokenAutoRefreshEnabled: true
         });
         appCheck = sharedAppCheck.appCheck;
-        return getAppCheckToken(appCheck, false);
+        return true;
       })
     .then(() => {
-      setTokenAutoRefreshEnabled(appCheck, true);
       window.TintinAppCheckStatus = 'enabled';
       window.dispatchEvent(new CustomEvent('tintin:app-check-ready', {
         detail: { ready: true }
