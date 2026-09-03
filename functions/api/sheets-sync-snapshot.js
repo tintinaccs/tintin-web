@@ -29,6 +29,22 @@ function asIso(value) {
   return Number.isNaN(date.getTime()) ? '' : date.toISOString();
 }
 
+function timestampMillis(value) {
+  const parsed = new Date(value || '').getTime();
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+// Firestore REST no promete el orden de una colección. La sincronización
+// administrativa sí debe prometerlo: lo último recibido/actualizado va arriba
+// y los empates quedan estables por identificador.
+function newestFirst(records, timestampFields, idField) {
+  return [...records].sort((left, right) => {
+    const leftTime = timestampFields.reduce((found, field) => found || timestampMillis(left?.[field]), 0);
+    const rightTime = timestampFields.reduce((found, field) => found || timestampMillis(right?.[field]), 0);
+    return rightTime - leftTime || String(left?.[idField] || '').localeCompare(String(right?.[idField] || ''));
+  });
+}
+
 function publicProduct(document, inventoryById) {
   const product = decodeFirestoreFields(document.fields || {});
   const inventory = inventoryById.get(documentId(document)) || {};
@@ -101,13 +117,13 @@ async function snapshot(env, entity) {
       firestoreAdminListAll(env, 'productInventory', MAX_RECORDS),
     ]);
     const inventoryById = new Map(inventory.map(document => [documentId(document), decodeFirestoreFields(document.fields || {})]));
-    return products.map(document => publicProduct(document, inventoryById));
+    return newestFirst(products.map(document => publicProduct(document, inventoryById)), ['updatedAt'], 'id');
   }
   const collection = entity === 'users' ? 'users' : entity === 'orders' ? 'orders' : 'auditLog';
   const documents = await firestoreAdminListAll(env, collection, MAX_RECORDS);
-  if (entity === 'users') return documents.map(userRecord);
-  if (entity === 'orders') return documents.map(orderRecord);
-  return documents.map(auditRecord);
+  if (entity === 'users') return newestFirst(documents.map(userRecord), ['createdAt', 'updatedAt', 'lastAccess'], 'uid');
+  if (entity === 'orders') return newestFirst(documents.map(orderRecord), ['createdAt', 'updatedAt'], 'orderId');
+  return newestFirst(documents.map(auditRecord), ['timestamp'], 'eventId');
 }
 
 export async function onRequestPost({ request, env }) {
