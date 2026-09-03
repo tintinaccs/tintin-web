@@ -38,7 +38,7 @@ check(
   'Todas las páginas HTML usan la nueva versión de page-loader',
   htmlFiles.every(file => {
     const html = read(file);
-  return !html.includes('js/cargador-pagina.js') || html.includes('js/cargador-pagina.js?v=tintin-20260903-loader-white-brand-2');
+  return !html.includes('js/cargador-pagina.js') || html.includes('js/cargador-pagina.js?v=tintin-20260903-loader-store-gate-fast-rest-1');
   }),
   'No debe quedar una página cargando el runtime anterior.'
 );
