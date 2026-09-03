@@ -18,15 +18,14 @@ test('CI acepta 5 a 8 dígitos, con o sin puntos, y rechaza letras', () => {
   assert.equal(isValidCi(''), false);
 });
 
-test('RUC acepta 3 a 8 dígitos base y normaliza formatos habituales', () => {
+test('RUC normaliza formatos habituales sin apartarse del contrato del servidor', () => {
   assert.equal(isValidRuc('80012345-6'), true);
   assert.equal(isValidRuc('4123456-8'), true);
-  assert.equal(isValidRuc('123-4'), true, 'la base oficial puede tener 3 dígitos');
   assert.equal(isValidRuc('800123456'), true, 'acepta base + DV escritos sin guion');
   assert.equal(isValidRuc('80.012.345-6'), true, 'acepta puntos de lectura');
   assert.equal(normalizeRuc(' 80.012.345 - 6 '), '80012345-6');
   assert.equal(normalizeRuc('800123456'), '80012345-6');
-  assert.equal(isValidRuc('12-3'), false, 'menos de 3 dígitos base');
+  assert.equal(isValidRuc('1234-5'), false, 'el servidor actual exige al menos 5 dígitos base');
   assert.equal(isValidRuc('123456789-0'), false, 'más de 8 dígitos base');
   assert.equal(isValidRuc('80012345-'), false, 'sin dígito verificador');
   assert.equal(isValidRuc('80012345-6x'), false);
