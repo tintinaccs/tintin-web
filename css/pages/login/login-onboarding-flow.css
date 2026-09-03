@@ -132,17 +132,28 @@ body:has(.login-page) .login-mobile-logo {
   display:flex !important;
   width:100% !important;
   justify-content:center;
-  margin:0 0 clamp(12px, 1.8vw, 20px) !important;
+  margin:0 0 clamp(7px, 1vw, 12px) !important;
   padding-top:0 !important;
   transform:none !important;
 }
 body:has(.login-page) .login-mobile-logo img {
-  display:block; width:clamp(86px, 10vw, 128px); height:auto; margin:auto;
-  filter: brightness(0) invert(1); object-fit:contain;
+  display:block;
+  width:clamp(86px, 10vw, 128px);
+  height:clamp(72px, 7vw, 90px);
+  margin:auto;
+  filter:brightness(0) invert(1);
+  object-fit:cover;
+  object-position:center 58%;
 }
 body:has(.login-page) .login-mobile-logo { padding:0 !important; background:none !important; background-image:none !important; }
 body:has(.login-page).login-setup-open .login-shell { width:min(100%, 980px) !important; }
-body:has(.login-page).login-setup-open .login-form-side { padding-top:clamp(28px,4vw,46px) !important; }
+/* El PNG de marca tiene transparencia interna arriba y abajo; se recorta con
+   object-fit y el bloque superior queda corto para que el formulario empiece
+   cerca del logo en cualquier pantalla. */
+body:has(.login-page) .login-form-side,
+body:has(.login-page).login-setup-open .login-form-side {
+  padding-top:clamp(10px, 1.6vw, 18px) !important;
+}
 body:has(.login-page) .login-mobile-logo-text,
 body:has(.login-page) .login-mobile-logo-sub { display:none !important; }
 body:has(.login-page).login-setup-open :is(#login-profile-name-field,#login-profile-phone-field,#login-profile-address-field) {
@@ -174,8 +185,11 @@ body:has(.login-page) .login-phone-country {
 }
 @media (max-width:599px) {
   body:has(.login-page) .login-shell { margin:0 auto !important; }
-  body:has(.login-page) .login-mobile-logo { margin-bottom:14px !important; }
-  body:has(.login-page) .login-mobile-logo img { width:clamp(68px, 21vw, 90px); }
+  body:has(.login-page) .login-mobile-logo { margin-bottom:8px !important; }
+  body:has(.login-page) .login-mobile-logo img {
+    width:clamp(68px, 21vw, 90px);
+    height:clamp(58px, 18vw, 72px);
+  }
 }
 
 body:has(.login-page).login-setup-open #login-profile-address-field {
