@@ -1,0 +1,100 @@
+name: Temporary finalize identity cache graph
+
+on:
+  push:
+    branches:
+      - fix/unificar-identidad-y-pedidos
+    paths:
+      - .github/workflows/tmp-finalize-identity-cache.yml
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: fix/unificar-identidad-y-pedidos
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Propagate immutable cache versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const cp = require('child_process');
+          const root = process.cwd();
+          const textExt = new Set(['.html','.js','.mjs','.css','.json']);
+          const skip = new Set(['.git','node_modules','js/vendor']);
+          function files(dir='.') {
+            const out=[];
+            for (const ent of fs.readdirSync(dir,{withFileTypes:true})) {
+              const rel=path.join(dir,ent.name);
+              const norm=rel.replaceAll('\\','/').replace(/^\.\//,'');
+              if (ent.isDirectory()) {
+                if ([...skip].some(s => norm===s || norm.startsWith(s+'/'))) continue;
+                out.push(...files(rel));
+              } else if (textExt.has(path.extname(ent.name))) out.push(rel);
+            }
+            return out;
+          }
+          const all=files();
+          const queue=[];
+          const queued=new Set();
+          const processed=new Set();
+          const explicitVersions=new Map([
+            ['js/create-order-public-client.js','tintin-20260903-canonical-order-bridge-2'],
+          ]);
+          const cascadeVersion='tintin-20260903-identity-cache-sync-2';
+          function enqueue(file) {
+            file=file.replaceAll('\\','/');
+            if (!queued.has(file)) { queued.add(file); queue.push(file); }
+          }
+          enqueue('js/create-order-public-client.js');
+          while(queue.length) {
+            const target=queue.shift();
+            if (processed.has(target)) continue;
+            processed.add(target);
+            const basename=path.basename(target).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+            const version=explicitVersions.get(target)||cascadeVersion;
+            const re=new RegExp(`(${basename}\\?v=)[^'"\\s)<>]+`,'g');
+            for (const file of all) {
+              const before=fs.readFileSync(file,'utf8');
+              const after=before.replace(re,`$1${version}`);
+              if (after===before) continue;
+              fs.writeFileSync(file,after);
+              const rel=file.replaceAll('\\','/').replace(/^\.\//,'');
+              if (/\.(?:js|mjs|css)$/.test(rel)) enqueue(rel);
+            }
+          }
+          const approvalPath='scripts/cache-version-approvals.json';
+          const approvals=JSON.parse(fs.readFileSync(approvalPath,'utf8'));
+          approvals.approved ||= {};
+          approvals.approved['js/create-order-public-client.js']={
+            version:'tintin-20260903-canonical-order-bridge-2',
+            gitBlobSha:cp.execFileSync('git',['hash-object','js/create-order-public-client.js'],{encoding:'utf8'}).trim()
+          };
+          fs.writeFileSync(approvalPath,JSON.stringify(approvals,null,2)+'\n');
+          NODE
+      - name: Build and verify exact artifact
+        run: npm run build:pages
+      - name: Verify cache contract again
+        run: npm run audit:cache-versioning
+      - name: Commit verified graph and remove temporary workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm .github/workflows/tmp-finalize-identity-cache.yml
+          git add -A
+          git commit -m "fix: finalize identity cache dependency graph"
+          git push origin HEAD:fix/unificar-identidad-y-pedidos
