@@ -4,6 +4,7 @@ import {
   originIsAllowed,
   preflightResponse
 } from '../../cloudflare/seguridad-cloudinary.js';
+import { verifyFirebaseIdToken } from '../../cloudflare/firebase-id-token.js';
 import { fetchAppsScript } from '../../cloudflare/apps-script-fetch.js';
 
 // Apps Script sigue ejecutando únicamente la transacción privilegiada heredada
@@ -23,6 +24,17 @@ const ALLOWED_ACTIONS = new Set([
 
 function clean(value, maxLength = 500) {
   return String(value == null ? '' : value).trim().slice(0, maxLength);
+}
+
+function authFailure(error) {
+  const status = Number(error?.status) || 401;
+  if (status === 403 || error?.code === 'auth/email-not-verified') {
+    return { status: 403, error: 'email_not_verified' };
+  }
+  if (status >= 500) {
+    return { status, error: 'token_verify_failed' };
+  }
+  return { status: 401, error: 'invalid_id_token' };
 }
 
 export async function onRequest(context) {
@@ -67,10 +79,28 @@ export async function onRequest(context) {
       return jsonResponse({ ok: false, error: 'missing_id_token' }, 401, origin, requestUrl);
     }
 
+    // La creación de un pedido es una operación comercial: Cloudflare valida
+    // el mismo token que Apps Script volverá a comprobar. Ningún userId,
+    // customerId ni userEmail enviado por el navegador atraviesa esta frontera;
+    // Apps Script deriva esos datos del UID/correo autenticados.
+    const forwardedPayload = { ...payload };
+    if (action === 'createOrder') {
+      try {
+        await verifyFirebaseIdToken(idToken);
+      } catch (error) {
+        const failure = authFailure(error);
+        return jsonResponse({ ok: false, error: failure.error }, failure.status, origin, requestUrl);
+      }
+      delete forwardedPayload.userId;
+      delete forwardedPayload.customerId;
+      delete forwardedPayload.userEmail;
+      forwardedPayload.idToken = idToken;
+    }
+
     const upstream = await fetchAppsScript(APPS_SCRIPT_ORDER_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'content-type': 'text/plain;charset=utf-8' },
-      body: rawBody,
+      body: JSON.stringify(forwardedPayload),
       redirect: 'follow'
     });
     const body = await upstream.text();
