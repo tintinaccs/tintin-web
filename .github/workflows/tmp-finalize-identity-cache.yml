@@ -53,6 +53,7 @@ jobs:
             ['js/create-order-public-client.js','tintin-20260903-canonical-order-bridge-2'],
           ]);
           const cascadeVersion='tintin-20260903-identity-cache-sync-2';
+          const STORE_GATE_STABLE_VERSION='tintin-20260830-store-gate-api-2';
           function enqueue(file) {
             file=file.replaceAll('\\','/');
             if (!queued.has(file)) { queued.add(file); queue.push(file); }
@@ -75,9 +76,20 @@ jobs:
             }
           }
 
-          // Las páginas públicas no son la autoridad de estos tags: el build
+          // El recorrido puede atravesar un consumidor que referencia el
+          // núcleo del Store Gate aunque sus bytes no hayan cambiado. Ese
+          // módulo conserva su versión estable: un bump sin bytes nuevos es
+          // justamente una inconsistencia que el auditor debe rechazar.
+          const storeGateRef=/((?:nucleo-control-tienda\.js)\?v=)[^'"\s)<>]+/g;
+          for (const file of all) {
+            const before=fs.readFileSync(file,'utf8');
+            const after=before.replace(storeGateRef,`$1${STORE_GATE_STABLE_VERSION}`);
+            if (after!==before) fs.writeFileSync(file,after);
+          }
+
+          // Las páginas públicas no son la autoridad de tienda.js: el build
           // las regenera desde este script. Alinear la fuente evita que
-          // sync:public-shell restaure versiones antiguas después del bump.
+          // sync:public-shell restaure la versión antigua después del bump.
           const shellPath='scripts/sincronizar-inicio-navegacion-publica.js';
           let shell=fs.readFileSync(shellPath,'utf8');
           shell=shell.replace(
@@ -86,7 +98,7 @@ jobs:
           );
           shell=shell.replace(
             /const STORE_GATE_VERSION = '[^']+';/,
-            `const STORE_GATE_VERSION = '${cascadeVersion}';`
+            `const STORE_GATE_VERSION = '${STORE_GATE_STABLE_VERSION}';`
           );
           fs.writeFileSync(shellPath,shell);
 
