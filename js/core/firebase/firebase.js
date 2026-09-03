@@ -40,21 +40,38 @@ const FIREBASE_APP_CHECK_SITE_KEY = '6LdhrGAtAAAAAIPJJ2nTT9300Vor--Wlq0PRCP9m';
 let appCheck = null;
 let appCheckReady = Promise.resolve(false);
 if (FIREBASE_APP_CHECK_SITE_KEY) {
-  window.TintinAppCheckStatus = 'checking';
-  const appCheckDomReady = document.body
-    ? Promise.resolve()
-    : new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve, { once: true }));
-  const appCheckTokenSettled = appCheckDomReady
-    .then(() => {
-      appCheck = initializeAppCheck(app, {
-        provider: new ReCaptchaEnterpriseProvider(FIREBASE_APP_CHECK_SITE_KEY),
-        // Se activa después de obtener el primer token. Si la configuración del
-        // dominio falla, evita un refresco proactivo que repita errores cada pocos
-        // segundos sin posibilidad de recuperarse.
-        isTokenAutoRefreshEnabled: false
-      });
-      return getAppCheckToken(appCheck, false);
-    })
+  // Algunas páginas cargan este módulo desde más de un importador dinámico. La
+  // caché de módulos no cubre todas las variantes de URL que puede generar el
+  // hosting, por lo que el guardado debe vivir en window. Sin este candado cada
+  // copia llama initializeAppCheck y reCAPTCHA intenta renderizar dos widgets
+  // en el mismo elemento ("already been rendered").
+  const sharedAppCheck = window.__TINTIN_APP_CHECK_STATE__ || {
+    appCheck: null,
+    ready: Promise.resolve(false),
+    initialized: false
+  };
+  window.__TINTIN_APP_CHECK_STATE__ = sharedAppCheck;
+  appCheck = sharedAppCheck.appCheck;
+  appCheckReady = sharedAppCheck.ready;
+
+  if (!sharedAppCheck.initialized) {
+    sharedAppCheck.initialized = true;
+    window.TintinAppCheckStatus = 'checking';
+    const appCheckDomReady = document.body
+      ? Promise.resolve()
+      : new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve, { once: true }));
+    const appCheckTokenSettled = appCheckDomReady
+      .then(() => {
+        sharedAppCheck.appCheck = initializeAppCheck(app, {
+          provider: new ReCaptchaEnterpriseProvider(FIREBASE_APP_CHECK_SITE_KEY),
+          // Se activa después de obtener el primer token. Si la configuración del
+          // dominio falla, evita un refresco proactivo que repita errores cada pocos
+          // segundos sin posibilidad de recuperarse.
+          isTokenAutoRefreshEnabled: false
+        });
+        appCheck = sharedAppCheck.appCheck;
+        return getAppCheckToken(appCheck, false);
+      })
     .then(() => {
       setTokenAutoRefreshEnabled(appCheck, true);
       window.TintinAppCheckStatus = 'enabled';
@@ -84,7 +101,9 @@ if (FIREBASE_APP_CHECK_SITE_KEY) {
   const appCheckTimeout = new Promise(resolve => {
     setTimeout(() => resolve(false), 8000);
   });
-  appCheckReady = Promise.race([appCheckTokenSettled, appCheckTimeout]);
+    sharedAppCheck.ready = Promise.race([appCheckTokenSettled, appCheckTimeout]);
+    appCheckReady = sharedAppCheck.ready;
+  }
 } else {
   window.TintinAppCheckStatus = 'configuration-required';
 }

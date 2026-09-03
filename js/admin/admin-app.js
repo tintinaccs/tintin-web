@@ -1,4 +1,4 @@
-import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260903-auth-persistence-1";
+import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-1";
 import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";

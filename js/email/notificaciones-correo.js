@@ -6,7 +6,7 @@
  * en nombres, precios, destinatarios ni totales enviados por el navegador.
  */
 import { EMAIL_WEBHOOK_URL } from './configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1';
-import { db, auth } from '../core/firebase/firebase.js?v=tintin-20260903-auth-persistence-1';
+import { db, auth } from '../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-1';
 import {
   doc,
   getDoc,

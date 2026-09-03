@@ -1,4 +1,4 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260903-auth-persistence-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
 import {
   collection,
