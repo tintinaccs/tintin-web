@@ -336,16 +336,19 @@ async function redirectByRole(role, email, options = {}) {
     return;
   }
   markSessionStart(); // inicia el reloj de inactividad para toda cuenta salvo Super Admin
-  const from = safeLocalRedirect(new URLSearchParams(window.location.search).get('from'));
   const normalizedEmail = String(email || '').trim().toLowerCase();
-  // Una acción iniciada en tienda vuelve al mismo producto también para la
-  // cuenta Super Admin; sin una intención pendiente conserva su panel.
-  if (from) {
-    window.location.replace(from);
+  const internalRole = normalizedEmail === SUPER_ADMIN.toLowerCase() ||
+    ['superadmin', 'admin', 'agent', 'viewer'].includes(String(role || '').toLowerCase());
+  // Las cuentas internas siempre aterrizan en el panel. Así un logout/login
+  // repetido no las devuelve accidentalmente a la tienda ni deja al usuario
+  // esperando que encuentre el acceso administrativo en el menú.
+  if (internalRole) {
+    window.location.replace('admin.html');
     return;
   }
-  if (normalizedEmail === SUPER_ADMIN.toLowerCase()) {
-    window.location.replace('admin.html');
+  const from = safeLocalRedirect(new URLSearchParams(window.location.search).get('from'));
+  if (from) {
+    window.location.replace(from);
     return;
   }
   window.location.replace(options.welcomePending ? 'index.html?welcome=1' : 'index.html');

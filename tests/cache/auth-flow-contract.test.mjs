@@ -26,3 +26,15 @@ test('guard de perfil solo redirige checkout y no encadena from', () => {
   assert.match(profile, /const GUARDED_PAGES = \['checkout'\]/);
   assert.match(profileCode, /const from = `\/\$\{page\}`/);
 });
+
+test('el destino post-login separa cuentas internas, clientes existentes y altas nuevas', () => {
+  assert.match(login, /\['superadmin', 'admin', 'agent', 'viewer'\]\.includes/);
+  assert.match(login, /if \(internalRole\) \{[\s\S]*?window\.location\.replace\('admin\.html'\)/);
+  assert.match(login, /window\.location\.replace\(options\.welcomePending \? 'index\.html\?welcome=1' : 'index\.html'\)/);
+  assert.match(login, /await ensureProfileComplete\(user, role\)/);
+});
+
+test('la identidad del SuperAdmin es insensible a mayúsculas al crear o reparar perfil', () => {
+  const profileStore = fs.readFileSync(new URL('../../js/core/store/perfil-usuario.js', import.meta.url), 'utf8');
+  assert.match(profileStore, /normalizedEmail === SUPER_ADMIN\.toLowerCase\(\)/g);
+});
