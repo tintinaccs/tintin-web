@@ -662,9 +662,7 @@ try {
 
 const manifest = {
   schemaVersion: 2,
-  generatedAt: previousManifest?.sourceFingerprint === sourceFingerprint
-    ? previousManifest.generatedAt
-    : new Date().toISOString(),
+  generatedAt: previousManifest?.generatedAt || new Date().toISOString(),
   sourceFingerprint,
   safety: {
     mode: 'read-only',
