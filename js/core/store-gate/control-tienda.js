@@ -15,7 +15,7 @@ import {
   doc,
   onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { getUserRole } from '../auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
+import { getUserRole } from '../auth/roles.js?v=tintin-20260821-accounts-phase-a-2';
 import {
   isAccessAllowed,
   renderStoreClosedOverlay,
