@@ -35,7 +35,7 @@ function publishStaffVisibility(user,role){
  document.documentElement.classList.toggle('tt-staff-session',staff);
  window.dispatchEvent(new CustomEvent('tintin:staff-visibility-ready',{detail:{staff}}));
 }
-function roleLabel(role){if(role==='superadmin')return 'Panel Super Admin';if(role==='admin')return 'Panel Admin';if(role==='agent')return 'Panel Agente';if(role==='viewer')return 'Panel Viewer';return 'Panel interno';}
+function roleLabel(role){if(role==='superadmin')return 'Panel Super Admin';if(role==='admin')return 'Panel Admin';if(role==='agent')return 'Panel Moderador';if(role==='viewer')return 'Panel Viewer';return 'Panel interno';}
 
 const accountBtnDefaults=new Map();
 

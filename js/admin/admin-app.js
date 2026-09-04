@@ -1712,7 +1712,7 @@ function renderUsersTable(users) {
         ${isSuperAdmin ? 'disabled' : ''}>
         <option value="superadmin" ${u.role==='superadmin'?'selected':''} ${!isSuperAdmin?'style="display:none"':''}>Super Admin</option>
         <option value="admin"      ${u.role==='admin'?'selected':''}>Admin</option>
-        <option value="agent"      ${u.role==='agent'?'selected':''}>Agente</option>
+        <option value="agent"      ${u.role==='agent'?'selected':''}>Moderador</option>
         <option value="viewer"     ${u.role==='viewer'?'selected':''}>Viewer</option>
         <option value="client"     ${u.role==='client'?'selected':''}>Cliente</option>
       </select>
@@ -6587,7 +6587,7 @@ function updateCsvBulkCount() {
 // ══════════════════════════════════════════════
 // ROLES Y PERMISOS
 // ══════════════════════════════════════════════
-const PERM_ROLE_LABELS = { admin: 'Admin', agent: 'Agente / Modder', viewer: 'Viewer' };
+const PERM_ROLE_LABELS = { admin: 'Admin', agent: 'Moderador', viewer: 'Viewer' };
 let _permPending = null;   // copia editable en memoria — no se guarda hasta "Guardar cambios"
 let _permOriginal = null;  // último estado guardado/cargado — para calcular el diff al guardar
 let _permInited = false;
@@ -6720,7 +6720,7 @@ function updatePermDirtyState() {
 }
 
 window.restorePermisosDefaults = function restorePermisosDefaults() {
-  if (!confirm('¿Restaurar los permisos por defecto para Admin, Agente/Modder y Viewer? Esto NO se guarda todavía — vas a poder revisar los cambios antes de confirmar con "Guardar cambios".')) return;
+  if (!confirm('¿Restaurar los permisos por defecto para Admin, Moderador y Viewer? Esto NO se guarda todavía — vas a poder revisar los cambios antes de confirmar con "Guardar cambios".')) return;
   _permPending = buildDefaultRolePermissions();
   renderPermisosMatrix();
   updatePermDirtyState();
