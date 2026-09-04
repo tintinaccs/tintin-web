@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T15:29:19.932Z",
-  "sourceFingerprint": "5ada0f3f73d89100ed966e6d356187ebd6e2fab978db7bb00581198a57081493",
+  "generatedAt": "2026-09-04T18:50:48.617Z",
+  "sourceFingerprint": "92367a07e2ed6e29249700697e4bff71318903a2acba41af63abdc59be60b3d8",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 804,
     "textFiles": 771,
-    "totalBytes": 9963204,
+    "totalBytes": 9963634,
     "pages": 18,
     "modules": 553
   },
@@ -1521,8 +1521,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 41001,
-      "sha256": "5937bc2d29659bdabca28f9ebfa7f74e613bbfb257b15a2cb30e962473c73de0",
+      "bytes": 41013,
+      "sha256": "ac1df29972cbd0dcf8e4f2d7e82a2695467f1d84c93528b52fae48fc8634061d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 188158,
-      "sha256": "bd0ad5e4260cbbbe18ed93bb807ec4bf7157279a6c0fcbabe418febbe27ed204",
+      "bytes": 188230,
+      "sha256": "bfdd4a9a682355aa2951b6e7bd9b33d5021d924c7eb743b30849758cc78c4bc6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13590,8 +13590,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 41870,
-      "sha256": "f1502aa68e68456211b4ab64b5d913bdc476926fed6169df94e4d5c4032ad03c",
+      "bytes": 41882,
+      "sha256": "a8ac9dda3dbe9785afed6777862f856f342be629e9d4baf227f3f9e18a22d3e3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18009,7 +18009,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 341027,
-      "sha256": "8f7ce8f3b2b881270b0539bb63255518139e653b91f668578bfc9b0607b7052f",
+      "sha256": "35356588357e896ba986c2b5af9e625109f6a524e49e4226fa483d8074200944",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19901,8 +19901,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 426331,
-      "sha256": "4acddbdad2a66cc1f85f6d1fca264acd68ffdd7040b833a9f8b487b7a1d3384b",
+      "bytes": 426346,
+      "sha256": "c8865bc0be629fc808d7c4458eeafe68d723cf69a44da2678cf10cefb79ca4f9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22521,8 +22521,8 @@
     },
     {
       "path": "js/components/navigation/compartido/iconos.js",
-      "bytes": 4338,
-      "sha256": "1b21d5d9c8d88c7b389f79263bc22904f21f7006de9f34e927bab3d3c8a32ea9",
+      "bytes": 4341,
+      "sha256": "2c5ab486a2895d76d103190bd3cf0ec2e1cb2dfb77019c10f0bd209275d512ed",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28548,8 +28548,8 @@
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
-      "bytes": 25742,
-      "sha256": "f9ab3cd210daa6e1ce269835e2394280645a28f8a097f6d98ad02970eaac8eec",
+      "bytes": 26058,
+      "sha256": "800257f02b0665d0d2b292315c4a0e4d5487dac2ef77423d4237f01f965dca04",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32051,8 +32051,8 @@
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 41001,
-      "sha256": "5937bc2d29659bdabca28f9ebfa7f74e613bbfb257b15a2cb30e962473c73de0"
+      "bytes": 41013,
+      "sha256": "ac1df29972cbd0dcf8e4f2d7e82a2695467f1d84c93528b52fae48fc8634061d"
     },
     {
       "path": "admin-manifest.json",
@@ -32063,8 +32063,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 188158,
-      "sha256": "bd0ad5e4260cbbbe18ed93bb807ec4bf7157279a6c0fcbabe418febbe27ed204"
+      "bytes": 188230,
+      "sha256": "bfdd4a9a682355aa2951b6e7bd9b33d5021d924c7eb743b30849758cc78c4bc6"
     },
     {
       "path": "apple-touch-icon.png",
@@ -32496,13 +32496,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 341027,
-      "sha256": "8f7ce8f3b2b881270b0539bb63255518139e653b91f668578bfc9b0607b7052f"
+      "sha256": "35356588357e896ba986c2b5af9e625109f6a524e49e4226fa483d8074200944"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 340942,
-      "sha256": "73df66cab04e59f32f7fcf71275257c90104d21094ee966fa485b62947e8437a"
+      "sha256": "25416608205fe26f5609004b21e02f09f9c093924af6516ec15e1e552eec03f6"
     },
     {
       "path": "config/public-site.json",
@@ -33761,8 +33761,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 426331,
-      "sha256": "4acddbdad2a66cc1f85f6d1fca264acd68ffdd7040b833a9f8b487b7a1d3384b"
+      "bytes": 426346,
+      "sha256": "c8865bc0be629fc808d7c4458eeafe68d723cf69a44da2678cf10cefb79ca4f9"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -34313,8 +34313,8 @@
     {
       "path": "js/components/navigation/compartido/iconos.js",
       "extension": ".js",
-      "bytes": 4338,
-      "sha256": "1b21d5d9c8d88c7b389f79263bc22904f21f7006de9f34e927bab3d3c8a32ea9"
+      "bytes": 4341,
+      "sha256": "2c5ab486a2895d76d103190bd3cf0ec2e1cb2dfb77019c10f0bd209275d512ed"
     },
     {
       "path": "js/components/navigation/compartido/ocultar-encabezado-al-desplazar.js",
@@ -35261,8 +35261,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 41870,
-      "sha256": "f1502aa68e68456211b4ab64b5d913bdc476926fed6169df94e4d5c4032ad03c"
+      "bytes": 41882,
+      "sha256": "a8ac9dda3dbe9785afed6777862f856f342be629e9d4baf227f3f9e18a22d3e3"
     },
     {
       "path": "playwright.config.js",
@@ -36083,8 +36083,8 @@
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
       "extension": ".js",
-      "bytes": 25742,
-      "sha256": "f9ab3cd210daa6e1ce269835e2394280645a28f8a097f6d98ad02970eaac8eec"
+      "bytes": 26058,
+      "sha256": "800257f02b0665d0d2b292315c4a0e4d5487dac2ef77423d4237f01f965dca04"
     },
     {
       "path": "scripts/corregir-fuente-tintin.js",
