@@ -1655,15 +1655,16 @@ async function loadProfilePhotos() {
     if (!response.ok || data.ok !== true) throw new Error(data.error || 'No se pudieron cargar las fotos.');
     const users = Array.isArray(data.users) ? data.users : [];
     const withPhotos = users.filter(user => user.photoURL);
-    if (status) status.textContent = `${withPhotos.length} foto${withPhotos.length === 1 ? '' : 's'} registrada${withPhotos.length === 1 ? '' : 's'}`;
-    if (list) list.innerHTML = withPhotos.length ? withPhotos.map(user => {
+    if (status) status.textContent = `${withPhotos.length} foto${withPhotos.length === 1 ? '' : 's'} registrada${withPhotos.length === 1 ? '' : 's'} · ${users.length} cuenta${users.length === 1 ? '' : 's'} gestionable${users.length === 1 ? '' : 's'}`;
+    if (list) list.innerHTML = users.length ? users.map(user => {
       const name = user.name || user.username || 'Cuenta sin nombre';
       const avatar = sanitizeImageUrl(user.photoURL);
       const canRemove = user.role !== 'superadmin';
-      const removeButton = canRemove ? `<button type="button" class="adm-btn adm-btn-outline adm-btn-sm adm-profile-photo-remove" data-profile-remove="${escapeHtmlAdmin(user.uid)}" data-profile-photo="${escapeHtmlAdmin(user.photoURL)}" aria-label="Quitar foto de ${escapeHtmlAdmin(name)}">Quitar</button>` : '';
-      const replaceButton = canRemove ? `<label class="adm-btn adm-btn-outline adm-btn-sm adm-profile-photo-replace">Reemplazar<input type="file" data-profile-replace="${escapeHtmlAdmin(user.uid)}" data-profile-photo="${escapeHtmlAdmin(user.photoURL)}" accept="image/jpeg,image/png,image/webp" hidden></label>` : '';
+      const removeButton = canRemove && avatar ? `<button type="button" class="adm-btn adm-btn-outline adm-btn-sm adm-profile-photo-remove" data-profile-remove="${escapeHtmlAdmin(user.uid)}" data-profile-photo="${escapeHtmlAdmin(user.photoURL)}" aria-label="Quitar foto de ${escapeHtmlAdmin(name)}">Quitar</button>` : '';
+      const replaceLabel = avatar ? 'Reemplazar' : 'Agregar foto';
+      const replaceButton = canRemove ? `<label class="adm-btn adm-btn-outline adm-btn-sm adm-profile-photo-replace">${replaceLabel}<input type="file" data-profile-replace="${escapeHtmlAdmin(user.uid)}" data-profile-photo="${escapeHtmlAdmin(user.photoURL || '')}" accept="image/jpeg,image/png,image/webp" hidden></label>` : '';
       return `<article class="adm-profile-photo-row"><div class="adm-profile-photo-avatar">${avatar ? `<img src="${escapeHtmlAdmin(avatar)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='/assets-tintin/images/general/logo.png'">` : `<img src="/assets-tintin/images/general/logo.png" alt="" loading="lazy">`}</div><div class="adm-profile-photo-meta"><strong>${escapeHtmlAdmin(name)}</strong><span>${escapeHtmlAdmin(user.username ? `@${user.username}` : 'Sin username')} · ${escapeHtmlAdmin(ROLE_LABELS[user.role] || 'Cliente')}</span><small>Actualizada: ${escapeHtmlAdmin(formatDate(user.updatedAt || user.createdAt))}</small></div><div class="adm-profile-photo-actions">${replaceButton}${removeButton}</div></article>`;
-    }).join('') : '<div class="adm-analytics-empty">Todavía no hay fotos de perfil registradas.</div>';
+    }).join('') : '<div class="adm-analytics-empty">Todavía no hay cuentas de usuario registradas.</div>';
   } catch (error) {
     if (status) status.textContent = error?.message || 'No se pudieron cargar las fotos.';
     if (list) list.innerHTML = '';
@@ -1846,7 +1847,7 @@ document.getElementById('profile-photos-list')?.addEventListener('change', async
     toast(committed.authSync === 'pending' ? 'Foto reemplazada; la sincronización de identidad quedó pendiente para reintento.' : 'Foto reemplazada y registrada en auditoría.');
     profilePhotosLoading = false; await loadProfilePhotos();
   } catch (error) { toast(error?.message || 'No se pudo reemplazar la foto.'); }
-  finally { input.value = ''; if (label) { label.style.pointerEvents = ''; label.childNodes[0].textContent = 'Reemplazar'; } }
+  finally { input.value = ''; if (label) { label.style.pointerEvents = ''; label.childNodes[0].textContent = input.dataset.profilePhoto ? 'Reemplazar' : 'Agregar foto'; } }
 });
 document.getElementById('profile-photos-refresh')?.addEventListener('click', loadProfilePhotos);
 document.getElementById('profile-photos-list')?.addEventListener('click', async (event) => {
