@@ -170,6 +170,21 @@ async function lookupUserByEmail(accessToken, email) {
   return Array.isArray(lookupData.users) ? lookupData.users[0] : null;
 }
 
+/** Devuelve los proveedores Auth de una cuenta existente sin crearla. */
+export async function getAuthProvidersByEmail(env, email) {
+  const normalized = String(email || '').trim().toLowerCase();
+  if (!normalized) return { exists: false, uid: '', providers: [] };
+  const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
+  const existing = await lookupUserByEmail(accessToken, normalized);
+  return {
+    exists: !!existing?.localId,
+    uid: existing?.localId || '',
+    providers: Array.isArray(existing?.providerUserInfo)
+      ? existing.providerUserInfo.map(item => String(item?.providerId || '')).filter(Boolean)
+      : []
+  };
+}
+
 /** Busca una cuenta de Firebase Auth por email; si no existe, la crea (ya verificada). */
 export async function findOrCreateUserByEmail(env, email) {
   const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);

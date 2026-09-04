@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T20:40:30.836Z",
-  "sourceFingerprint": "47c5417653f1d15dcee913badf9960d75041c3eb5c5113d2ce2d4f2bbe265eb8",
+  "generatedAt": "2026-09-04T20:46:46.220Z",
+  "sourceFingerprint": "6100ede44929e118b032809a067da7a269d2acea45103aac3b72b278ba69afa1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 809,
-    "textFiles": 776,
-    "totalBytes": 10004227,
+    "files": 810,
+    "textFiles": 777,
+    "totalBytes": 10006284,
     "pages": 18,
-    "modules": 558
+    "modules": 559
   },
   "viewports": [
     {
@@ -12838,8 +12838,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 66315,
-      "sha256": "c85c3ef2bf7b55dab3c4051cb1aa3cd2728a03f4158c88dc15b966d855c9bd4d",
+      "bytes": 66319,
+      "sha256": "88c0f2897867bc1f9533dd968cb19511dfb475eabefb0074aba13b5f19dcd859",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17466,8 +17466,8 @@
     },
     {
       "path": "cloudflare/firebase-admin-ligero.js",
-      "bytes": 21855,
-      "sha256": "f0e6bcbfafd826fdde9b364f84e65dd8b5ae98c0d91875c2c2d204beb64b0def",
+      "bytes": 22546,
+      "sha256": "092698e3ec9d48157da7b62558ad8916176bce1de570943b681c24c54b2e682e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17492,23 +17492,23 @@
         },
         {
           "url": "https://identitytoolkit.googleapis.com/v1/accounts:signUp",
-          "line": 179
+          "line": 194
         },
         {
           "url": "https://identitytoolkit.googleapis.com/v1/accounts:delete",
-          "line": 199
+          "line": 214
         },
         {
           "url": "https://identitytoolkit.googleapis.com/v1/accounts:update",
-          "line": 216
+          "line": 231
         },
         {
           "url": "https://www.googleapis.com/auth/datastore",
-          "line": 228
+          "line": 243
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/$%7Bsa.project_id%7D/databases/(default",
-          "line": 231
+          "line": 246
         }
       ]
     },
@@ -18790,47 +18790,8 @@
     },
     {
       "path": "functions/api/email-otp-send.js",
-      "bytes": 11614,
-      "sha256": "73db72873d23cb1a221a16dff7dd3e4c9f52b2db724b860189183bc5e0117b8b",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "../../cloudflare/seguridad-cloudinary.js",
-          "target": "cloudflare/seguridad-cloudinary.js",
-          "dynamic": false,
-          "line": 5
-        },
-        {
-          "raw": "../../cloudflare/firebase-admin-ligero.js",
-          "target": "cloudflare/firebase-admin-ligero.js",
-          "dynamic": false,
-          "line": 14
-        },
-        {
-          "raw": "../../js/components/forms/utilidades-username.js",
-          "target": "js/components/forms/utilidades-username.js",
-          "dynamic": false,
-          "line": 15
-        }
-      ],
-      "endpoints": [
-        {
-          "url": "https://tintinaccesorios.pages.dev/assets-tintin/images/general/logo.png",
-          "line": 18
-        },
-        {
-          "url": "https://api.resend.com/emails",
-          "line": 123
-        }
-      ]
-    },
-    {
-      "path": "functions/api/email-otp-verify.js",
-      "bytes": 5756,
-      "sha256": "4cd3d59de9d1ed6477835813be1a9ef413fb3cedd8e26bb85aa512a6acdc3526",
+      "bytes": 11568,
+      "sha256": "8dacbd5398525e3af7158f3aba8bf89f0c25e2fce9fe2f9c0108dadb6def5a83",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18853,6 +18814,45 @@
           "target": "js/components/forms/utilidades-username.js",
           "dynamic": false,
           "line": 16
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/assets-tintin/images/general/logo.png",
+          "line": 19
+        },
+        {
+          "url": "https://api.resend.com/emails",
+          "line": 124
+        }
+      ]
+    },
+    {
+      "path": "functions/api/email-otp-verify.js",
+      "bytes": 6021,
+      "sha256": "2ed172fc06566a322ab20190466babc0de93acf2e6e752782fbdfa8b8d06c084",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 16
+        },
+        {
+          "raw": "../../js/components/forms/utilidades-username.js",
+          "target": "js/components/forms/utilidades-username.js",
+          "dynamic": false,
+          "line": 17
         }
       ],
       "endpoints": []
@@ -24223,8 +24223,8 @@
     },
     {
       "path": "js/email/correo-autenticacion.js",
-      "bytes": 7207,
-      "sha256": "1379ed2e9f4ce83bd46feaaafdbd80c0a14d30e7b5069950016fe1f19dd31381",
+      "bytes": 7325,
+      "sha256": "5db2c009794c152f153cc0e5cfd057cf97a8879e43e0c738cdc1a3446beb8b77",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29703,6 +29703,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/auth/google-provider-otp-gate.test.mjs",
+      "bytes": 1025,
+      "sha256": "9b898db0f1878ab3cf18590161ec65b2cebdb48620e78e714a4b69b52a5d76e7",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/branches/auditar-limpiar-ramas.test.mjs",
       "bytes": 10341,
       "sha256": "2a888c58fa610693dddc1fc20bcd5fae3ea95beffd850e957d269d64b14c1248",
@@ -32527,8 +32557,8 @@
     {
       "path": "cloudflare/firebase-admin-ligero.js",
       "extension": ".js",
-      "bytes": 21855,
-      "sha256": "f0e6bcbfafd826fdde9b364f84e65dd8b5ae98c0d91875c2c2d204beb64b0def"
+      "bytes": 22546,
+      "sha256": "092698e3ec9d48157da7b62558ad8916176bce1de570943b681c24c54b2e682e"
     },
     {
       "path": "cloudflare/firebase-id-token.js",
@@ -33619,14 +33649,14 @@
     {
       "path": "functions/api/email-otp-send.js",
       "extension": ".js",
-      "bytes": 11614,
-      "sha256": "73db72873d23cb1a221a16dff7dd3e4c9f52b2db724b860189183bc5e0117b8b"
+      "bytes": 11568,
+      "sha256": "8dacbd5398525e3af7158f3aba8bf89f0c25e2fce9fe2f9c0108dadb6def5a83"
     },
     {
       "path": "functions/api/email-otp-verify.js",
       "extension": ".js",
-      "bytes": 5756,
-      "sha256": "4cd3d59de9d1ed6477835813be1a9ef413fb3cedd8e26bb85aa512a6acdc3526"
+      "bytes": 6021,
+      "sha256": "2ed172fc06566a322ab20190466babc0de93acf2e6e752782fbdfa8b8d06c084"
     },
     {
       "path": "functions/api/engagement.js",
@@ -34909,8 +34939,8 @@
     {
       "path": "js/email/correo-autenticacion.js",
       "extension": ".js",
-      "bytes": 7207,
-      "sha256": "1379ed2e9f4ce83bd46feaaafdbd80c0a14d30e7b5069950016fe1f19dd31381"
+      "bytes": 7325,
+      "sha256": "5db2c009794c152f153cc0e5cfd057cf97a8879e43e0c738cdc1a3446beb8b77"
     },
     {
       "path": "js/email/notificacion-pedido-resend.js",
@@ -35251,8 +35281,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 66315,
-      "sha256": "c85c3ef2bf7b55dab3c4051cb1aa3cd2728a03f4158c88dc15b966d855c9bd4d"
+      "bytes": 66319,
+      "sha256": "88c0f2897867bc1f9533dd968cb19511dfb475eabefb0074aba13b5f19dcd859"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -36531,6 +36561,12 @@
       "extension": ".mjs",
       "bytes": 3900,
       "sha256": "734556b4e4ea145ff87e803b0e16626838f2223c603dcd2ddae622bdea842105"
+    },
+    {
+      "path": "tests/auth/google-provider-otp-gate.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1025,
+      "sha256": "9b898db0f1878ab3cf18590161ec65b2cebdb48620e78e714a4b69b52a5d76e7"
     },
     {
       "path": "tests/branches/auditar-limpiar-ramas.test.mjs",
