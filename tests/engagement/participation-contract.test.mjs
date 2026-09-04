@@ -247,6 +247,22 @@ test('admin multi-review CRUD maps by reviewId and keeps private controls server
   assert.match(route, /adminReviewAction/);
 });
 
+test('staff review replies are permission-gated and retain public role identity', async () => {
+  const [route, security, adminSource, permissions] = await Promise.all([
+    read('functions/api/admin-engagement.js'),
+    read('cloudflare/seguridad-cloudinary.js'),
+    read('cloudflare/participacion-admin.js'),
+    read('js/core/auth/permisos-roles.js'),
+  ]);
+  assert.match(route, /input\.action === 'reviewReply'[\s\S]*requireStaffPermission/);
+  assert.match(security, /eligibleStaffRole/);
+  assert.match(security, /\['admin', 'agent'\]\.includes\(role\)/);
+  assert.match(adminSource, /const isOfficial = actor\.role === 'superadmin'/);
+  assert.match(adminSource, /authorType = isOfficial \? 'store' : 'staff'/);
+  assert.match(adminSource, /actorRole/);
+  assert.match(permissions, /comunidad:[\s\S]*responder:/);
+});
+
 test('archiving a like is administrative and does not remove customer favorite', async () => {
   const source = await read('cloudflare/participacion-admin.js');
   const archiveBlock = source.match(/export async function adminLikeAction[\s\S]*?export async function markLikeSeen/)?.[0] || '';

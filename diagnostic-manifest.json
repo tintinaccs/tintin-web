@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T19:21:27.580Z",
-  "sourceFingerprint": "15a1ce3a6cb2e22234c52cbd31d0c1d859d7e9309089b1916951a7eb9cb75315",
+  "generatedAt": "2026-09-04T19:29:13.880Z",
+  "sourceFingerprint": "dc509a9d4170177ca9503668af052785fe8ad29caf8e91602a0d8726d003e4cc",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 804,
     "textFiles": 771,
-    "totalBytes": 9965697,
+    "totalBytes": 9970609,
     "pages": 18,
     "modules": 553
   },
@@ -17644,8 +17644,8 @@
     },
     {
       "path": "cloudflare/participacion-admin.js",
-      "bytes": 13042,
-      "sha256": "cd351f5694a147ec6c4840ed47afa2d02461868ac93765676e3da92e19f5b8c3",
+      "bytes": 14217,
+      "sha256": "5b882de495726b0d21c1620fb751a2f1d0347e2e7a89f5dd467ad61c418d536d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17767,8 +17767,8 @@
     },
     {
       "path": "cloudflare/seguridad-cloudinary.js",
-      "bytes": 5322,
-      "sha256": "e3f294703ad40a5c264434962d567f245878d97c20fed98757609ed9c0a18bd5",
+      "bytes": 7354,
+      "sha256": "7edaf39d3e871d7dd82cfe72a4f756c7d4470df31e3d3eee96ae11732221853b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17785,6 +17785,12 @@
           "target": "cloudflare/firebase-id-token.js",
           "dynamic": false,
           "line": 8
+        },
+        {
+          "raw": "./firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 9
         }
       ],
       "endpoints": []
@@ -18337,8 +18343,8 @@
     },
     {
       "path": "functions/api/admin-engagement.js",
-      "bytes": 2421,
-      "sha256": "524f9b90b224866386ffd3956432ba3bc5b278d6c3801a88490f70c531ff241d",
+      "bytes": 2561,
+      "sha256": "f58544dbf769b5acecbd57f22eb7868c40000658109b2ae4eb1c9c0ee17fdce2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23194,8 +23200,8 @@
     },
     {
       "path": "js/core/auth/permisos-roles.js",
-      "bytes": 12143,
-      "sha256": "449d20e1c6dcec4674c3780435b9e6d81e34937b7d91ff904dd03bb1b2ca1637",
+      "bytes": 12334,
+      "sha256": "c19c68ddea968d7c975a11a606cb96626e3ca74415570056a630845705496334",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30324,8 +30330,8 @@
     },
     {
       "path": "tests/engagement/participation-contract.test.mjs",
-      "bytes": 11973,
-      "sha256": "ddf4f6343259dcba5541d5770e7e7b6047107b028183527ca362aeadc1e7b3b4",
+      "bytes": 13347,
+      "sha256": "ac15cf0a230afa07b42abc036f8aad62bafdeab56ac1fd7dcd0e4847c10bd5b5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32405,8 +32411,8 @@
     {
       "path": "cloudflare/participacion-admin.js",
       "extension": ".js",
-      "bytes": 13042,
-      "sha256": "cd351f5694a147ec6c4840ed47afa2d02461868ac93765676e3da92e19f5b8c3"
+      "bytes": 14217,
+      "sha256": "5b882de495726b0d21c1620fb751a2f1d0347e2e7a89f5dd467ad61c418d536d"
     },
     {
       "path": "cloudflare/participacion-clientes.js",
@@ -32429,8 +32435,8 @@
     {
       "path": "cloudflare/seguridad-cloudinary.js",
       "extension": ".js",
-      "bytes": 5322,
-      "sha256": "e3f294703ad40a5c264434962d567f245878d97c20fed98757609ed9c0a18bd5"
+      "bytes": 7354,
+      "sha256": "7edaf39d3e871d7dd82cfe72a4f756c7d4470df31e3d3eee96ae11732221853b"
     },
     {
       "path": "cloudflare/servicio-push.js",
@@ -33365,8 +33371,8 @@
     {
       "path": "functions/api/admin-engagement.js",
       "extension": ".js",
-      "bytes": 2421,
-      "sha256": "524f9b90b224866386ffd3956432ba3bc5b278d6c3801a88490f70c531ff241d"
+      "bytes": 2561,
+      "sha256": "f58544dbf769b5acecbd57f22eb7868c40000658109b2ae4eb1c9c0ee17fdce2"
     },
     {
       "path": "functions/api/admin-order-mutation.js",
@@ -34493,8 +34499,8 @@
     {
       "path": "js/core/auth/permisos-roles.js",
       "extension": ".js",
-      "bytes": 12143,
-      "sha256": "449d20e1c6dcec4674c3780435b9e6d81e34937b7d91ff904dd03bb1b2ca1637"
+      "bytes": 12334,
+      "sha256": "c19c68ddea968d7c975a11a606cb96626e3ca74415570056a630845705496334"
     },
     {
       "path": "js/core/auth/proteccion-sesion.js",
@@ -36078,7 +36084,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 37310,
-      "sha256": "8ff73c6f54ffa74e8b35b985e79969968c0b339cdbd744528381ce886c3f35e3"
+      "sha256": "5f23f2e548572b7f49ee62d14185b54639d82649216e1422fcb7f38c7f90fabe"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -36461,8 +36467,8 @@
     {
       "path": "tests/engagement/participation-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 11973,
-      "sha256": "ddf4f6343259dcba5541d5770e7e7b6047107b028183527ca362aeadc1e7b3b4"
+      "bytes": 13347,
+      "sha256": "ac15cf0a230afa07b42abc036f8aad62bafdeab56ac1fd7dcd0e4847c10bd5b5"
     },
     {
       "path": "tests/import/phase9-import-normalization.test.mjs",
