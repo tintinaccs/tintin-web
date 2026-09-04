@@ -86,11 +86,43 @@ export function readProfileName(profile = {}) {
  * `maybeApplySavedLocation()` del checkout además exige `name`.
  */
 export function hasUsableAddress(profile = {}) {
-  const saved = profile.savedLocation;
+  const saved = storedLocation(profile);
   if (!saved || !clean(saved.name)) return false;
   const lat = Number(saved.lat);
   const lng = Number(saved.lng);
   return Number.isFinite(lat) && Number.isFinite(lng) && (lat !== 0 || lng !== 0);
+}
+
+function storedLocation(profile = {}) {
+  return profile.savedLocation && typeof profile.savedLocation === 'object'
+    ? profile.savedLocation
+    : {
+        lat: profile.addressLat,
+        lng: profile.addressLng,
+        name: profile.locationName,
+        address: profile.address,
+      };
+}
+
+function asDate(value) {
+  if (!value) return null;
+  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
+  if (typeof value.toDate === 'function') {
+    const date = value.toDate();
+    return date instanceof Date && !Number.isNaN(date.getTime()) ? date : null;
+  }
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+/** Acepta el campo canónico `dob` y los nombres históricos del panel. */
+export function hasUsableDob(profile = {}) {
+  const date = asDate(profile.dob || profile.birthDate || profile.dateOfBirth || profile.fechaNacimiento);
+  return !!date && isValidDob(date.toISOString().slice(0, 10));
+}
+
+function storedUsername(profile = {}) {
+  return clean(profile.username || profile.userName);
 }
 
 /** Convierte un resultado del buscador al formato `savedLocation`. */
@@ -106,7 +138,7 @@ export function toSavedLocation(place = {}) {
 function exposeSavedLocationForOnboarding(profile = {}) {
   if (typeof globalThis === 'undefined') return;
   const savedLocation = hasUsableAddress(profile)
-    ? toSavedLocation(profile.savedLocation)
+    ? toSavedLocation(storedLocation(profile))
     : null;
   globalThis.TintinOnboardingSavedLocation = savedLocation;
 }
@@ -146,8 +178,8 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
   const addressOk = !requireAddress || hasUsableAddress(profile);
   const needsName = !storedNameIsValid;
   const needsPhone = !storedPhone;
-  const needsUsername = !isValidUsername(profile.username);
-  const needsDob = !profile.dob;
+  const needsUsername = !isValidUsername(storedUsername(profile));
+  const needsDob = !hasUsableDob(profile);
   const addressMissing = !addressOk;
   const onboardingRequired = needsName || needsPhone || addressMissing || needsUsername || needsDob;
 
@@ -192,7 +224,7 @@ export function buildMissingProfilePatch({
   const current = readProfileName(currentProfile);
   const currentNameIsValid = isValidFullName(current.firstName, current.lastName);
   const currentPhone = clean(currentProfile.phone);
-  const currentUsername = clean(currentProfile.username);
+  const currentUsername = storedUsername(currentProfile);
 
   // Compatibilidad: quien todavía mande `submittedName` entero se separa acá.
   const fallback = splitFullName(submittedName);
@@ -214,7 +246,7 @@ export function buildMissingProfilePatch({
   if (submittedAddress) {
     const savedLocation = toSavedLocation(submittedAddress);
     const currentSavedLocation = hasUsableAddress(currentProfile)
-      ? toSavedLocation(currentProfile.savedLocation)
+      ? toSavedLocation(storedLocation(currentProfile))
       : null;
 
     if (savedLocation && !locationsAreEqual(savedLocation, currentSavedLocation)) {
@@ -233,7 +265,7 @@ export function buildMissingProfilePatch({
 
   // La edad no se persiste calculada — sólo la fecha de nacimiento. Se
   // recalcula desde `dob` cada vez que hace falta (ver validacion-nacimiento.js).
-  if (!currentProfile.dob && isValidDob(submittedDob)) {
+  if (!hasUsableDob(currentProfile) && isValidDob(submittedDob)) {
     patch.dob = parseDob(submittedDob);
   }
 
@@ -245,12 +277,12 @@ export function buildMissingProfilePatch({
     const finalLastName = patch.lastName || current.lastName;
     const finalPhone = patch.phone || currentPhone;
     const finalUsername = patch.username || currentUsername;
-    const finalDob = patch.dob || currentProfile.dob;
     const finalProfile = patch.savedLocation
       ? { ...currentProfile, savedLocation: patch.savedLocation }
       : currentProfile;
+    const finalDobProfile = patch.dob ? { ...finalProfile, dob: patch.dob } : finalProfile;
     if (isValidFullName(finalFirstName, finalLastName) && finalPhone &&
-        isValidUsername(finalUsername) && finalDob && hasUsableAddress(finalProfile)) {
+        isValidUsername(finalUsername) && hasUsableDob(finalDobProfile) && hasUsableAddress(finalProfile)) {
       patch.profileStatus = 'active';
     }
   }

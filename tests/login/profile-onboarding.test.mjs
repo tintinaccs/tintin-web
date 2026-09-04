@@ -9,12 +9,13 @@ import {
   splitFullName,
   readProfileName,
   hasUsableAddress,
+  hasUsableDob,
 } from '../../js/pages/profile/configuracion-inicial-perfil.mjs';
 
 const superAdminEmail = 'tintinaccs@gmail.com';
 const ADDRESS = { savedLocation: { lat: -25.29, lng: -57.63, name: 'Av. España 1234', address: 'Av. España 1234, Asunción' }, address: 'Av. España 1234, Asunción' };
 const CORE = { name: 'Juan Pérez', phone: '+595981123456', ...ADDRESS };
-const COMPLETE = { ...CORE, username: 'juan.perez', dob: new Date('2000-01-01') };
+const COMPLETE = { ...CORE, username: 'juan_perez', dob: new Date('2000-01-01') };
 const readLogin = () => fs.readFileSync(new URL('../../login.html', import.meta.url), 'utf8');
 
 test('el superadmin nunca entra al onboarding aunque no tenga datos', () => {
@@ -45,6 +46,46 @@ test('una cuenta completa entra directo sin volver a abrir el onboarding', () =>
   assert.equal(plan.needsAddress, false);
   assert.equal(plan.needsUsername, false);
   assert.equal(plan.needsDob, false);
+});
+
+test('un perfil histórico del panel no repite username, fecha ni ubicación ya guardados', () => {
+  const historical = {
+    name: 'Juan Pérez',
+    phone: '+595981123456',
+    userName: 'juan_perez',
+    birthDate: '2000-01-01',
+    locationName: 'Casa',
+    address: 'Av. España 1234',
+    addressLat: -25.29,
+    addressLng: -57.63,
+  };
+  const plan = getProfileCompletionPlan({
+    profile: historical,
+    user: { email: 'juan@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(hasUsableDob(historical), true);
+  assert.equal(hasUsableAddress(historical), true);
+  assert.equal(plan.skip, true);
+  assert.equal(plan.needsUsername, false);
+  assert.equal(plan.needsDob, false);
+  assert.equal(plan.needsAddress, false);
+});
+
+test('una fecha histórica inválida sí se considera faltante', () => {
+  const plan = getProfileCompletionPlan({
+    profile: { ...COMPLETE, dob: 'not-a-date' },
+    user: { email: 'juan@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(plan.skip, false);
+  assert.equal(plan.needsDob, true);
+  assert.equal(plan.needsName, false);
+  assert.equal(plan.needsPhone, false);
+  assert.equal(plan.needsUsername, false);
+  assert.equal(plan.needsAddress, false);
 });
 
 test('el alta respeta el orden de foco usuario, nombre, apellido y teléfono', () => {
@@ -105,7 +146,7 @@ test('si falta solo el username no vuelve a pedir nombre, teléfono, fecha ni ub
 
 test('si falta solo la fecha de nacimiento no vuelve a pedir los demás datos', () => {
   const plan = getProfileCompletionPlan({
-    profile: { ...CORE, username: 'juan.perez' },
+    profile: { ...CORE, username: 'juan_perez' },
     user: { email: 'juan@hotmail.com' },
     role: 'client',
     superAdminEmail,
@@ -175,7 +216,7 @@ test('un perfil con un solo nombre vuelve a pedir el apellido pero no repite la 
 
 test('falta la ubicación aunque todos los demás datos estén completos', () => {
   const plan = getProfileCompletionPlan({
-    profile: { name: 'Juan Pérez', phone: '+595981123456', username: 'juan.perez', dob: new Date('2000-01-01') },
+    profile: { name: 'Juan Pérez', phone: '+595981123456', username: 'juan_perez', dob: new Date('2000-01-01') },
     user: { email: 'juan@hotmail.com' },
     role: 'client',
     superAdminEmail,
