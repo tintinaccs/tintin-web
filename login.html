@@ -996,10 +996,10 @@ const loginConGoogle = async () => {
     // La apertura debe ocurrir dentro del gesto original del clic. Esperar
     // authPersistenceReady antes de invocar Firebase hace que Safari/Chrome
     // consideren el popup una apertura asíncrona y lo bloqueen. La persistencia
-    // se inicia en firebase.js; la esperamos en paralelo sin romper el gesto.
-    const popupPromise = signInWithPopup(auth, provider);
+    // ya se inicia al cargar firebase.js; se espera después del popup para no
+    // romper la activación del usuario.
+    const cred = await signInWithPopup(auth, provider);
     await authPersistenceReady.catch(() => {});
-    const cred = await popupPromise;
     if (myAttempt !== _googleLoginToken) return; // ya se lanzó un intento más nuevo
     googleButtonLabel.textContent = 'Entrando…';
     setOverlayText('Redireccionando a tu cuenta…');
