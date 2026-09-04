@@ -610,7 +610,7 @@ const apiCalls = extractApiCalls(textFiles);
 
 const files = allFiles.map(file => {
   const historical = file === 'scripts/construir-manifiesto-diagnostico.js'
-    ? previousManifest?.integrity?.files?.find(item => item.path === file)
+    ? previousManifest?.files?.find(item => item.path === file)
     : null;
   if (historical) return historical;
   const buffer = canonicalBuffer(file);
