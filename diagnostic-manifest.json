@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T13:38:51.621Z",
-  "sourceFingerprint": "acf6319540ead63042854424664924a97ae8aa2c40bad2c7446aeb96912c8f9d",
+  "generatedAt": "2026-09-04T13:46:43.356Z",
+  "sourceFingerprint": "cbd6e5997da24e591885594ec92527fee8fa2f6a41699d9a07e871392f959494",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 804,
     "textFiles": 771,
-    "totalBytes": 9961473,
+    "totalBytes": 9961505,
     "pages": 18,
     "modules": 553
   },
@@ -29308,8 +29308,8 @@
     },
     {
       "path": "scripts/verificar-integridad-estilos.mjs",
-      "bytes": 1094,
-      "sha256": "09c8f235c3c1b7379958a99fcba39ccd5ac6a2c33f58e967ad877acaf773acd7",
+      "bytes": 1126,
+      "sha256": "8fd721fd5a1cca061a9cfc90a133cb7842dd676e12f80e5ac241f681ea86a9fc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36252,13 +36252,13 @@
       "path": "scripts/styles-integrity.json",
       "extension": ".json",
       "bytes": 235,
-      "sha256": "e21278b629522b373b2c94382758ba14559ee819a8ef590295af4d9addd3ba44"
+      "sha256": "4e7db8bead1ed86a8e8f97909d9f16e6a00a71f851a1e7a42e4cf3d9f1bad501"
     },
     {
       "path": "scripts/verificar-integridad-estilos.mjs",
       "extension": ".mjs",
-      "bytes": 1094,
-      "sha256": "09c8f235c3c1b7379958a99fcba39ccd5ac6a2c33f58e967ad877acaf773acd7"
+      "bytes": 1126,
+      "sha256": "8fd721fd5a1cca061a9cfc90a133cb7842dd676e12f80e5ac241f681ea86a9fc"
     },
     {
       "path": "scripts/verificar-manifiesto-diagnostico.js",
