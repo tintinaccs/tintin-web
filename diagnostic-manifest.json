@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T15:29:19.932Z",
-  "sourceFingerprint": "5ada0f3f73d89100ed966e6d356187ebd6e2fab978db7bb00581198a57081493",
+  "generatedAt": "2026-09-04T19:10:27.327Z",
+  "sourceFingerprint": "afa5a4e405298a9bd09e96cf0ea733e29aa8fec9c2da842d183bd5903608b587",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 804,
-    "textFiles": 771,
-    "totalBytes": 9963204,
+    "files": 805,
+    "textFiles": 772,
+    "totalBytes": 9970794,
     "pages": 18,
-    "modules": 553
+    "modules": 554
   },
   "viewports": [
     {
@@ -18214,8 +18214,8 @@
     },
     {
       "path": "functions/admin.js",
-      "bytes": 1139,
-      "sha256": "d98f6866b917dcf2c2000c609c2f67858460cafbb841f2146ea9cc713a02df96",
+      "bytes": 2423,
+      "sha256": "6feff1c50b00bd56e7b24fc9876e8f9233df2113b79bca6c928209b300400a13",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19718,6 +19718,30 @@
         "error": ""
       },
       "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "functions/js/admin/admin-app-runtime.js",
+      "bytes": 6306,
+      "sha256": "2ef6a99e298e1e27f79a0a7e43505d7359acbcda32853d53fadd5b05b22f71d4",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "${FIREBASE_MODULE_URL}",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "${FIREBASE_MODULE_URL}",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        }
+      ],
       "endpoints": []
     },
     {
@@ -33341,8 +33365,8 @@
     {
       "path": "functions/admin.js",
       "extension": ".js",
-      "bytes": 1139,
-      "sha256": "d98f6866b917dcf2c2000c609c2f67858460cafbb841f2146ea9cc713a02df96"
+      "bytes": 2423,
+      "sha256": "6feff1c50b00bd56e7b24fc9876e8f9233df2113b79bca6c928209b300400a13"
     },
     {
       "path": "functions/api/admin-backfill-canonical-identity.js",
@@ -33691,6 +33715,12 @@
       "extension": ".md",
       "bytes": 3038,
       "sha256": "8fdbc16cbd92e7d9bd06fb42abbab34e0f43ab964150d7c7fe30ea49ded1f12a"
+    },
+    {
+      "path": "functions/js/admin/admin-app-runtime.js",
+      "extension": ".js",
+      "bytes": 6306,
+      "sha256": "2ef6a99e298e1e27f79a0a7e43505d7359acbcda32853d53fadd5b05b22f71d4"
     },
     {
       "path": "functions/js/package.json",
