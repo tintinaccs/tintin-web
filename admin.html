@@ -387,7 +387,7 @@
           <select class="adm-select" id="users-bulk-role" style="width:auto;font-size:12px;padding:6px 8px">
             <option value="">— Cambiar rol —</option>
             <option value="admin">Admin</option>
-            <option value="agent">Agente (Modder)</option>
+            <option value="agent">Moderador</option>
             <option value="viewer">Viewer</option>
             <option value="client">Cliente</option>
           </select>
@@ -402,7 +402,7 @@
         </div>
         <div style="padding:0">
           <div class="adm-table-wrap">
-            <table class="adm-table">
+            <table class="adm-table adm-table-users">
               <thead>
                 <tr>
                   <th class="col-select"><input type="checkbox" id="check-all-users" title="Seleccionar todos" onclick="toggleSelectAllUsers(this)"></th>
@@ -418,7 +418,7 @@
                 </tr>
               </thead>
               <tbody id="users-tbody">
-                <tr><td colspan="9" class="adm-loading"><span class="adm-spinner"></span> Cargando usuarios...</td></tr>
+                <tr><td colspan="10" class="adm-loading"><span class="adm-spinner"></span> Cargando usuarios...</td></tr>
               </tbody>
             </table>
           </div>
