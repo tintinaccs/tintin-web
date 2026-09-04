@@ -112,6 +112,7 @@ function renderMeta(payload) {
   const sync = payload?.integrations?.appsScript?.summary || {};
   const syncAvailable = sync.available === true;
   const queue = payload?.integrations?.catalogSheetQueue || null;
+  const emailQueue = payload?.integrations?.orderEmailQueue || null;
   node.hidden = false;
   node.innerHTML = `
     <div class="adm-master-meta-item"><span>Commit desplegado</span><strong title="${escapeHtml(deployment.commitSha || '')}">${escapeHtml(shortSha(deployment.commitSha))}</strong></div>
@@ -120,7 +121,10 @@ function renderMeta(payload) {
     <div class="adm-master-meta-item"><span>Errores sync 24 h</span><strong>${escapeHtml(syncAvailable && Number.isFinite(Number(sync.errors24h)) ? Number(sync.errors24h) : '—')}</strong></div>
     <div class="adm-master-meta-item"><span>Cola Sheets pendiente</span><strong>${escapeHtml(queue ? `${Number(queue.pendingCount ?? 0)} (dead-letter: ${Number(queue.deadLetterCount ?? 0)})` : 'no verificado')}</strong></div>
     <div class="adm-master-meta-item"><span>Tarea más antigua en cola</span><strong>${escapeHtml(queue ? formatAgeMs(queue.oldestPendingAgeMs) : '—')}</strong></div>
-    <div class="adm-master-meta-item"><span>Último éxito de cola</span><strong>${escapeHtml(queue?.lastSuccessAt ? formatDate(queue.lastSuccessAt) : 'no verificado')}</strong></div>`;
+    <div class="adm-master-meta-item"><span>Último éxito de cola</span><strong>${escapeHtml(queue?.lastSuccessAt ? formatDate(queue.lastSuccessAt) : 'no verificado')}</strong></div>
+    <div class="adm-master-meta-item"><span>Cola de correos pendiente</span><strong>${escapeHtml(emailQueue ? `${Number(emailQueue.pendingCount ?? 0)} (dead-letter: ${Number(emailQueue.deadLetterCount ?? 0)})` : 'no verificado')}</strong></div>
+    <div class="adm-master-meta-item"><span>Tarea más antigua en cola de correos</span><strong>${escapeHtml(emailQueue ? formatAgeMs(emailQueue.oldestPendingAgeMs) : '—')}</strong></div>
+    <div class="adm-master-meta-item"><span>Último éxito de reintento de correo</span><strong>${escapeHtml(emailQueue?.lastSuccessAt ? formatDate(emailQueue.lastSuccessAt) : 'no verificado')}</strong></div>`;
 }
 
 function renderAuthorities(authorities = {}) {
