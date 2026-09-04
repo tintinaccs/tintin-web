@@ -6,7 +6,7 @@
  * la URL privilegiada de Apps Script no forme parte del contrato público del
  * checkout.
  */
-import { auth } from './core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-5';
+import { auth } from './core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
 import { apiUrl } from './core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
 
 const CREATE_ORDER_TIMEOUT_MS = 35000;

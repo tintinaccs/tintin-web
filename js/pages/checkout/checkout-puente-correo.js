@@ -1,4 +1,4 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260903-app-check-singleton-5';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
 import {
   collection,
   query,
