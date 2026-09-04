@@ -1,4 +1,4 @@
-import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1";
+import { auth, db, appCheckReady, authPersistenceReady } from "../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1";
 import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -820,6 +820,10 @@ function hideOverlay() { window.ttPageReady && window.ttPageReady(); }
 
 onAuthStateChanged(auth, async user => {
   try {
+    // Esperar la selección de persistencia evita que una pestaña nueva vea
+    // el estado inicial vacío y redirija a login antes de recuperar la sesión
+    // local que ya existe en otra pestaña.
+    await authPersistenceReady.catch(() => {});
     // El loader de marca se mantiene arriba (no se llama a hideOverlay) en
     // todo camino que termine navegando a otra página. Antes se ocultaba
     // siempre en un finally, así que en conexiones lentas el loader podía
