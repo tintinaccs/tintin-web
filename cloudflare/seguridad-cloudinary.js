@@ -128,7 +128,10 @@ export async function requireStaffPermission(request, env, moduleKey, actionKey)
   ) || (
     moduleKey === 'usuarios' && actionKey === 'gestionarFotos' && ['admin', 'agent'].includes(role)
   );
-  if (!eligibleStaffRole || configured === false || (configured !== true && !eligibleStaffRole)) {
+  // Las acciones delegables son opt-in: si la matriz no tiene true todavía,
+  // no se concede acceso por accidente durante una migración o documento
+  // incompleto.
+  if (!eligibleStaffRole || configured !== true) {
     const error = new Error('El rol no tiene habilitada esta acción');
     error.status = 403;
     error.code = 'auth/staff-permission-required';

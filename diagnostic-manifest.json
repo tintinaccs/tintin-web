@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T20:25:24.556Z",
-  "sourceFingerprint": "a057d9473618b118d62dc9763896487a3a6a4f1fba3bae722e288a28664b2e8c",
+  "generatedAt": "2026-09-04T20:27:23.130Z",
+  "sourceFingerprint": "61aa0fe25caa644592a7c2df0a1eb7dd2700766f6a3294634a1e14432a1ae3f8",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 808,
     "textFiles": 775,
-    "totalBytes": 10002919,
+    "totalBytes": 10003446,
     "pages": 18,
     "modules": 557
   },
@@ -17804,8 +17804,8 @@
     },
     {
       "path": "cloudflare/seguridad-cloudinary.js",
-      "bytes": 7473,
-      "sha256": "6960ee6b5e58f4ca22bec6a35a7e39e594f0872b5da95096de485d67b787163e",
+      "bytes": 7595,
+      "sha256": "7024980a9d4fc35ed43d952ecabe5e6c14d7099275b866247e0dc4fc43155ab8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19252,8 +19252,8 @@
     },
     {
       "path": "functions/api/profile-avatar-moderate.js",
-      "bytes": 6768,
-      "sha256": "cf47f59f33b0a7f136e70b3e7680dd4513935a3653656f9751092dfa916d603f",
+      "bytes": 6802,
+      "sha256": "753c509004cfde513b20f741ae636f3ac29e4a86ba69f46bb99930aa9bd2044b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30998,8 +30998,8 @@
     },
     {
       "path": "tests/profile/profile-avatar-consistency.test.mjs",
-      "bytes": 3278,
-      "sha256": "e59bc4224519928d768bb9b27c33d8cc8453aa4ed8292a3bf3717e4191ec2701",
+      "bytes": 3649,
+      "sha256": "bc8b50e9a4c34ed07210354860ca2fa9ca4b9b5d2243415202b3da83d2946f0b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32575,8 +32575,8 @@
     {
       "path": "cloudflare/seguridad-cloudinary.js",
       "extension": ".js",
-      "bytes": 7473,
-      "sha256": "6960ee6b5e58f4ca22bec6a35a7e39e594f0872b5da95096de485d67b787163e"
+      "bytes": 7595,
+      "sha256": "7024980a9d4fc35ed43d952ecabe5e6c14d7099275b866247e0dc4fc43155ab8"
     },
     {
       "path": "cloudflare/servicio-push.js",
@@ -33685,8 +33685,8 @@
     {
       "path": "functions/api/profile-avatar-moderate.js",
       "extension": ".js",
-      "bytes": 6768,
-      "sha256": "cf47f59f33b0a7f136e70b3e7680dd4513935a3653656f9751092dfa916d603f"
+      "bytes": 6802,
+      "sha256": "753c509004cfde513b20f741ae636f3ac29e4a86ba69f46bb99930aa9bd2044b"
     },
     {
       "path": "functions/api/profile-avatar-upload.js",
@@ -36751,8 +36751,8 @@
     {
       "path": "tests/profile/profile-avatar-consistency.test.mjs",
       "extension": ".mjs",
-      "bytes": 3278,
-      "sha256": "e59bc4224519928d768bb9b27c33d8cc8453aa4ed8292a3bf3717e4191ec2701"
+      "bytes": 3649,
+      "sha256": "bc8b50e9a4c34ed07210354860ca2fa9ca4b9b5d2243415202b3da83d2946f0b"
     },
     {
       "path": "tests/push/push-web.test.mjs",

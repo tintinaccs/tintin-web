@@ -9,6 +9,7 @@ const client = fs.readFileSync(new URL('../../js/quality/estabilidad-final-publi
 const adminHtml = fs.readFileSync(new URL('../../admin.html', import.meta.url), 'utf8');
 const adminApp = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
 const sessionGuard = fs.readFileSync(new URL('../../js/core/auth/proteccion-sesion.js', import.meta.url), 'utf8');
+const permissionGuard = fs.readFileSync(new URL('../../cloudflare/seguridad-cloudinary.js', import.meta.url), 'utf8');
 
 test('la foto de perfil se consolida server-side y deja historial/auditoría', () => {
   assert.match(endpoint, /requireFirebaseUser/);
@@ -52,4 +53,9 @@ test('la vuelta a una pestaña no falsifica actividad y respeta la expiración',
   assert.match(sessionGuard, /Volver a enfocar una pestaña no es actividad/);
   assert.doesNotMatch(sessionGuard, /else \{\s*recordActivity\(\);\s*startSessionChecks\(\);/);
   assert.match(sessionGuard, /if \(auth\.currentUser\) void enforce\(auth\.currentUser\);\s*startSessionChecks\(\);/);
+});
+
+test('la gestión delegada de fotos es opt-in y nunca afecta una cuenta superadmin', () => {
+  assert.match(permissionGuard, /if \(!eligibleStaffRole \|\| configured !== true\)/);
+  assert.match(moderateEndpoint, /before\.role === 'superadmin'/);
 });

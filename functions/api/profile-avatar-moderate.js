@@ -64,7 +64,7 @@ export async function onRequest(context) {
     if (!currentDocument) throw new Error('El perfil no existe');
     const before = decodeFirestoreFields(currentDocument.fields || {});
     const targetEmail = clean(before.email, 254).toLowerCase();
-    if (targetEmail && targetEmail === String(SUPERADMIN_EMAIL).toLowerCase()) {
+    if (before.role === 'superadmin' || (targetEmail && targetEmail === String(SUPERADMIN_EMAIL).toLowerCase())) {
       const error = new Error('La cuenta oficial no puede ser moderada');
       error.status = 403;
       throw error;
