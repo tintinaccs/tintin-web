@@ -109,7 +109,8 @@ const checks = [
   [
     'Todos los consumidores usan una sola versión de Firebase',
     !allRuntime.includes('firebase.js?v=tintin-20260716-cloudinary-fix-1') &&
-      allRuntime.includes('firebase.js?v=tintin-20260903-app-check-singleton-5')
+      !allRuntime.includes('firebase.js?v=tintin-20260903-app-check-singleton-5') &&
+      allRuntime.includes('firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1')
   ],
   [
     'Todas las páginas fuerzan el loader corregido',

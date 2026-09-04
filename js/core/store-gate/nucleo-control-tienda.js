@@ -5,7 +5,7 @@
  * La configuración completa permanece en settings/general y no se entrega
  * cuando la tienda está cerrada.
  */
-import { db } from '../firebase/firebase.js?v=tintin-20260903-app-check-singleton-5';
+import { db } from '../firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
 import {
   doc,
   getDoc

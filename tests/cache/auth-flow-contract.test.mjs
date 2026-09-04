@@ -34,6 +34,19 @@ test('el destino post-login separa cuentas internas, clientes existentes y altas
   assert.match(login, /await ensureProfileComplete\(user, role\)/);
 });
 
+test('los tres accesos conservan el mismo cierre de sesión y Google abre dentro del clic', () => {
+  const emailAuth = fs.readFileSync(new URL('../../js/email/correo-autenticacion.js', import.meta.url), 'utf8');
+  const popupIndex = login.indexOf('const cred = await signInWithPopup(auth, provider);');
+  const persistenceAfterPopup = login.indexOf('await authPersistenceReady.catch(() => {});', popupIndex);
+
+  assert.ok(popupIndex >= 0, 'Google debe abrir la ventana emergente');
+  assert.ok(persistenceAfterPopup > popupIndex, 'Google no debe esperar persistencia antes de abrir el popup');
+  assert.match(login, /await finishGoogleLogin\(cred\.user\)/);
+  assert.match(login, /const user = await verifyOtpCode\(otpEmail, code\);[\s\S]*?await finishOtpLogin\(user\)/);
+  assert.match(emailAuth, /await authPersistenceReady;[\s\S]*?signInWithCustomToken\(auth, data\.customToken\)/);
+  assert.match(emailAuth, /identifierBody\(identifier\)/);
+});
+
 test('la identidad del SuperAdmin es insensible a mayúsculas al crear o reparar perfil', () => {
   const profileStore = fs.readFileSync(new URL('../../js/core/store/perfil-usuario.js', import.meta.url), 'utf8');
   assert.match(profileStore, /normalizedEmail === SUPER_ADMIN\.toLowerCase\(\)/g);
