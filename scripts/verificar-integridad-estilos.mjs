@@ -11,7 +11,7 @@ const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 
 function sha256(relativePath) {
   return crypto.createHash('sha256')
-    .update(fs.readFileSync(path.join(root, relativePath)))
+    .update(fs.readFileSync(path.join(root, relativePath), 'utf8').replace(/\r\n?/g, '\n'))
     .digest('hex');
 }
 
