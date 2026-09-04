@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T20:33:06.612Z",
-  "sourceFingerprint": "618aacfcf32cc39807321f7f330aaeb0cf2bf4ba66930f80e3a9529efcbffad7",
+  "generatedAt": "2026-09-04T20:40:30.836Z",
+  "sourceFingerprint": "47c5417653f1d15dcee913badf9960d75041c3eb5c5113d2ce2d4f2bbe265eb8",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 808,
-    "textFiles": 775,
-    "totalBytes": 10003446,
+    "files": 809,
+    "textFiles": 776,
+    "totalBytes": 10004227,
     "pages": 18,
-    "modules": 557
+    "modules": 558
   },
   "viewports": [
     {
@@ -20959,15 +20959,15 @@
     },
     {
       "path": "js/admin/orders/eliminacion-pedidos-admin.js",
-      "bytes": 4277,
-      "sha256": "dd9daa4ab56924d434abc34082c3f90a51d38590047d3d52b24a7b25619c73b8",
+      "bytes": 4290,
+      "sha256": "04fdb4d087c22f0034510e0a482ec929331f6fa3ed582667fad7712015b0bb66",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../core/store/estadisticas-pedidos.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "../../core/store/estadisticas-pedidos.js?v=tintin-20260904-order-stats-valid-purchases-1",
           "target": "js/core/store/estadisticas-pedidos.js",
           "dynamic": false,
           "line": 10
@@ -23847,8 +23847,8 @@
     },
     {
       "path": "js/core/store/estadisticas-pedidos.js",
-      "bytes": 8754,
-      "sha256": "c3c70bb7986791b6f905621dc119a83a225eb000037a333fb69cc65c7f787100",
+      "bytes": 8997,
+      "sha256": "f4c50b8eec21810c3ff09f166ce15dc4fad5672ccb4b1f14e3a4b0198dc7b185",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23858,25 +23858,25 @@
           "raw": "../firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1",
           "target": "js/core/firebase/firebase.js",
           "dynamic": false,
-          "line": 9
+          "line": 10
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 12
+          "line": 13
         },
         {
           "raw": "../firebase/paginacion-firestore.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "js/core/firebase/paginacion-firestore.js",
           "dynamic": false,
-          "line": 13
+          "line": 14
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 12
+          "line": 13
         }
       ]
     },
@@ -25206,8 +25206,8 @@
     },
     {
       "path": "js/pages/profile/correccion-estadisticas-pedidos-perfil.js",
-      "bytes": 5099,
-      "sha256": "d5707a93cec62ed3eadaf74818c79a3eb4c0e44dc7eae92bc6f23e2861b3f01a",
+      "bytes": 5112,
+      "sha256": "8873af5030b8cffbc456b7ea1c7ded53e07210a69bcc068fcf11433581f31646",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25226,7 +25226,7 @@
           "line": 2
         },
         {
-          "raw": "../../core/store/estadisticas-pedidos.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "../../core/store/estadisticas-pedidos.js?v=tintin-20260904-order-stats-valid-purchases-1",
           "target": "js/core/store/estadisticas-pedidos.js",
           "dynamic": false,
           "line": 3
@@ -30997,6 +30997,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/profile/order-stats-valid-purchases.test.mjs",
+      "bytes": 512,
+      "sha256": "d94fb8c5f9a65a571917cfe62440d78a714652de9199a0145e4baad1a6f39892",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/profile/profile-avatar-consistency.test.mjs",
       "bytes": 3649,
       "sha256": "bc8b50e9a4c34ed07210354860ca2fa9ca4b9b5d2243415202b3da83d2946f0b",
@@ -34057,8 +34087,8 @@
     {
       "path": "js/admin/orders/eliminacion-pedidos-admin.js",
       "extension": ".js",
-      "bytes": 4277,
-      "sha256": "dd9daa4ab56924d434abc34082c3f90a51d38590047d3d52b24a7b25619c73b8"
+      "bytes": 4290,
+      "sha256": "04fdb4d087c22f0034510e0a482ec929331f6fa3ed582667fad7712015b0bb66"
     },
     {
       "path": "js/admin/orders/pedidos-superadmin-crud.js",
@@ -34777,8 +34807,8 @@
     {
       "path": "js/core/store/estadisticas-pedidos.js",
       "extension": ".js",
-      "bytes": 8754,
-      "sha256": "c3c70bb7986791b6f905621dc119a83a225eb000037a333fb69cc65c7f787100"
+      "bytes": 8997,
+      "sha256": "f4c50b8eec21810c3ff09f166ce15dc4fad5672ccb4b1f14e3a4b0198dc7b185"
     },
     {
       "path": "js/core/store/estado-productos.js",
@@ -35119,8 +35149,8 @@
     {
       "path": "js/pages/profile/correccion-estadisticas-pedidos-perfil.js",
       "extension": ".js",
-      "bytes": 5099,
-      "sha256": "d5707a93cec62ed3eadaf74818c79a3eb4c0e44dc7eae92bc6f23e2861b3f01a"
+      "bytes": 5112,
+      "sha256": "8873af5030b8cffbc456b7ea1c7ded53e07210a69bcc068fcf11433581f31646"
     },
     {
       "path": "js/pages/profile/estado-pedidos-perfil.js",
@@ -36747,6 +36777,12 @@
       "extension": ".js",
       "bytes": 1561,
       "sha256": "f952d54a623413dca31482a04a549fab78d7affef5d37fde615419fe00698f40"
+    },
+    {
+      "path": "tests/profile/order-stats-valid-purchases.test.mjs",
+      "extension": ".mjs",
+      "bytes": 512,
+      "sha256": "d94fb8c5f9a65a571917cfe62440d78a714652de9199a0145e4baad1a6f39892"
     },
     {
       "path": "tests/profile/profile-avatar-consistency.test.mjs",
@@ -39103,17 +39139,17 @@
           },
           {
             "file": "js/core/store/estadisticas-pedidos.js",
-            "line": 74,
+            "line": 75,
             "operation": "collection"
           },
           {
             "file": "js/core/store/estadisticas-pedidos.js",
-            "line": 196,
+            "line": 199,
             "operation": "collection"
           },
           {
             "file": "js/core/store/estadisticas-pedidos.js",
-            "line": 236,
+            "line": 239,
             "operation": "doc"
           },
           {
@@ -39938,22 +39974,22 @@
           },
           {
             "file": "js/core/store/estadisticas-pedidos.js",
-            "line": 168,
+            "line": 171,
             "operation": "collection"
           },
           {
             "file": "js/core/store/estadisticas-pedidos.js",
-            "line": 195,
+            "line": 198,
             "operation": "collection"
           },
           {
             "file": "js/core/store/estadisticas-pedidos.js",
-            "line": 146,
+            "line": 149,
             "operation": "doc"
           },
           {
             "file": "js/core/store/estadisticas-pedidos.js",
-            "line": 226,
+            "line": 229,
             "operation": "doc"
           },
           {

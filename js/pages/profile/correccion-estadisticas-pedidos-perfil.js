@@ -1,6 +1,6 @@
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { getOrdersForUserIdentity, calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20260716-cloudinary-fix-1';
+import { getOrdersForUserIdentity, calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20260904-order-stats-valid-purchases-1';
 
 (function () {
   'use strict';
