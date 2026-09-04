@@ -9,11 +9,13 @@ import {
   splitFullName,
   readProfileName,
   hasUsableAddress,
+  hasUsableDob,
 } from '../../js/pages/profile/configuracion-inicial-perfil.mjs';
 
 const superAdminEmail = 'tintinaccs@gmail.com';
 const ADDRESS = { savedLocation: { lat: -25.29, lng: -57.63, name: 'Av. España 1234', address: 'Av. España 1234, Asunción' }, address: 'Av. España 1234, Asunción' };
-const COMPLETE = { name: 'Juan Pérez', phone: '+595981123456', ...ADDRESS };
+const CORE = { name: 'Juan Pérez', phone: '+595981123456', ...ADDRESS };
+const COMPLETE = { ...CORE, username: 'juan_perez', dob: new Date('2000-01-01') };
 const readLogin = () => fs.readFileSync(new URL('../../login.html', import.meta.url), 'utf8');
 
 test('el superadmin nunca entra al onboarding aunque no tenga datos', () => {
@@ -27,6 +29,8 @@ test('el superadmin nunca entra al onboarding aunque no tenga datos', () => {
   assert.equal(plan.needsName, false);
   assert.equal(plan.needsPhone, false);
   assert.equal(plan.needsAddress, false);
+  assert.equal(plan.needsUsername, false);
+  assert.equal(plan.needsDob, false);
 });
 
 test('una cuenta completa entra directo sin volver a abrir el onboarding', () => {
@@ -39,6 +43,48 @@ test('una cuenta completa entra directo sin volver a abrir el onboarding', () =>
   assert.equal(plan.skip, true);
   assert.equal(plan.needsName, false);
   assert.equal(plan.needsPhone, false);
+  assert.equal(plan.needsAddress, false);
+  assert.equal(plan.needsUsername, false);
+  assert.equal(plan.needsDob, false);
+});
+
+test('un perfil histórico del panel no repite username, fecha ni ubicación ya guardados', () => {
+  const historical = {
+    name: 'Juan Pérez',
+    phone: '+595981123456',
+    userName: 'juan_perez',
+    birthDate: '2000-01-01',
+    locationName: 'Casa',
+    address: 'Av. España 1234',
+    addressLat: -25.29,
+    addressLng: -57.63,
+  };
+  const plan = getProfileCompletionPlan({
+    profile: historical,
+    user: { email: 'juan@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(hasUsableDob(historical), true);
+  assert.equal(hasUsableAddress(historical), true);
+  assert.equal(plan.skip, true);
+  assert.equal(plan.needsUsername, false);
+  assert.equal(plan.needsDob, false);
+  assert.equal(plan.needsAddress, false);
+});
+
+test('una fecha histórica inválida sí se considera faltante', () => {
+  const plan = getProfileCompletionPlan({
+    profile: { ...COMPLETE, dob: 'not-a-date' },
+    user: { email: 'juan@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(plan.skip, false);
+  assert.equal(plan.needsDob, true);
+  assert.equal(plan.needsName, false);
+  assert.equal(plan.needsPhone, false);
+  assert.equal(plan.needsUsername, false);
   assert.equal(plan.needsAddress, false);
 });
 
@@ -60,17 +106,19 @@ test('el alta respeta el orden de foco usuario, nombre, apellido y teléfono', (
   assert.match(login, /id="login-profile-phone"[^>]*enterkeyhint="next"/);
 });
 
-test('si falta solo el teléfono conserva el nombre y muestra la ubicación ya guardada', () => {
-  const profile = { name: 'Juan Pérez', phone: '', ...ADDRESS };
+test('si falta solo el teléfono conserva los demás datos y no vuelve a pedir la ubicación', () => {
+  const profile = { ...COMPLETE, phone: '' };
   const plan = getProfileCompletionPlan({
     profile,
     user: { email: 'juan@hotmail.com' },
-    role: 'agent',
+    role: 'client',
     superAdminEmail,
   });
   assert.equal(plan.needsName, false);
   assert.equal(plan.needsPhone, true);
-  assert.equal(plan.needsAddress, true);
+  assert.equal(plan.needsAddress, false);
+  assert.equal(plan.needsUsername, false);
+  assert.equal(plan.needsDob, false);
   assert.equal(plan.addressAlreadySaved, true);
   assert.deepEqual(buildMissingProfilePatch({
     currentProfile: profile,
@@ -79,6 +127,36 @@ test('si falta solo el teléfono conserva el nombre y muestra la ubicación ya g
     submittedPhone: '+595981123456',
     submittedAddress: ADDRESS.savedLocation,
   }), { phone: '+595981123456' });
+});
+
+test('si falta solo el username no vuelve a pedir nombre, teléfono, fecha ni ubicación', () => {
+  const plan = getProfileCompletionPlan({
+    profile: { ...CORE, dob: new Date('2000-01-01') },
+    user: { email: 'juan@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(plan.skip, false);
+  assert.equal(plan.needsUsername, true);
+  assert.equal(plan.needsName, false);
+  assert.equal(plan.needsPhone, false);
+  assert.equal(plan.needsDob, false);
+  assert.equal(plan.needsAddress, false);
+});
+
+test('si falta solo la fecha de nacimiento no vuelve a pedir los demás datos', () => {
+  const plan = getProfileCompletionPlan({
+    profile: { ...CORE, username: 'juan_perez' },
+    user: { email: 'juan@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(plan.skip, false);
+  assert.equal(plan.needsDob, true);
+  assert.equal(plan.needsUsername, false);
+  assert.equal(plan.needsName, false);
+  assert.equal(plan.needsPhone, false);
+  assert.equal(plan.needsAddress, false);
 });
 
 test('si Google entrega un nombre completo se propone para confirmarlo', () => {
@@ -92,6 +170,8 @@ test('si Google entrega un nombre completo se propone para confirmarlo', () => {
   assert.equal(plan.needsName, true);
   assert.equal(plan.needsPhone, true);
   assert.equal(plan.needsAddress, true);
+  assert.equal(plan.needsUsername, true);
+  assert.equal(plan.needsDob, true);
   assert.equal(plan.suggestedFirstName, 'Juan');
   assert.equal(plan.suggestedLastName, 'Pérez');
   assert.equal(plan.suggestedName, 'Juan Pérez');
@@ -121,22 +201,22 @@ test('si Google entrega solo el nombre se propone y se sigue pidiendo el apellid
   assert.equal(plan.suggestedLastName, '');
 });
 
-test('un perfil viejo con un solo nombre vuelve a pedir el apellido', () => {
+test('un perfil con un solo nombre vuelve a pedir el apellido pero no repite la ubicación', () => {
   const plan = getProfileCompletionPlan({
-    profile: { name: 'Juan', phone: '+595981123456', ...ADDRESS },
+    profile: { ...COMPLETE, name: 'Juan', firstName: '', lastName: '' },
     user: { email: 'juan@hotmail.com' },
     role: 'client',
     superAdminEmail,
   });
   assert.equal(plan.needsName, true);
   assert.equal(plan.suggestedFirstName, 'Juan');
-  assert.equal(plan.needsAddress, true);
+  assert.equal(plan.needsAddress, false);
   assert.equal(plan.addressAlreadySaved, true);
 });
 
-test('falta la ubicación aunque el nombre y el teléfono estén completos', () => {
+test('falta la ubicación aunque todos los demás datos estén completos', () => {
   const plan = getProfileCompletionPlan({
-    profile: { name: 'Juan Pérez', phone: '+595981123456' },
+    profile: { name: 'Juan Pérez', phone: '+595981123456', username: 'juan_perez', dob: new Date('2000-01-01') },
     user: { email: 'juan@hotmail.com' },
     role: 'client',
     superAdminEmail,
@@ -144,6 +224,8 @@ test('falta la ubicación aunque el nombre y el teléfono estén completos', () 
   assert.equal(plan.skip, false);
   assert.equal(plan.needsName, false);
   assert.equal(plan.needsPhone, false);
+  assert.equal(plan.needsUsername, false);
+  assert.equal(plan.needsDob, false);
   assert.equal(plan.needsAddress, true);
   assert.equal(plan.addressAlreadySaved, false);
 });
@@ -206,9 +288,9 @@ test('una ubicación sin coordenadas no se guarda', () => {
   }), {});
 });
 
-test('una ubicación guardada desde checkout no abre el onboarding por sí sola', () => {
+test('una ubicación guardada desde checkout no abre el onboarding si el resto del perfil está completo', () => {
   const plan = getProfileCompletionPlan({
-    profile: { name: 'Juan Pérez', phone: '+595981123456', savedLocation: { lat: -25.29, lng: -57.63, name: 'Casa' } },
+    profile: { ...COMPLETE, savedLocation: { lat: -25.29, lng: -57.63, name: 'Casa' } },
     user: { email: 'juan@hotmail.com' },
     role: 'client',
     superAdminEmail,
@@ -217,9 +299,9 @@ test('una ubicación guardada desde checkout no abre el onboarding por sí sola'
   assert.equal(plan.skip, true);
 });
 
-test('una cuenta nueva (incomplete) también necesita username y fecha de nacimiento', () => {
+test('una cuenta incomplete necesita username y fecha de nacimiento cuando faltan', () => {
   const plan = getProfileCompletionPlan({
-    profile: { profileStatus: 'incomplete', ...COMPLETE },
+    profile: { profileStatus: 'incomplete', ...CORE },
     user: { email: 'nueva@hotmail.com' },
     role: 'client',
     superAdminEmail,
@@ -227,32 +309,26 @@ test('una cuenta nueva (incomplete) también necesita username y fecha de nacimi
   assert.equal(plan.skip, false);
   assert.equal(plan.needsUsername, true);
   assert.equal(plan.needsDob, true);
+  assert.equal(plan.needsAddress, false);
 });
 
-test('una cuenta legacy o sin profileStatus no pide username ni DOB', () => {
-  const legacy = getProfileCompletionPlan({
-    profile: { profileStatus: 'legacy', ...COMPLETE },
-    user: { email: 'legacy@hotmail.com' },
-    role: 'client',
-    superAdminEmail,
-  });
-  assert.equal(legacy.needsUsername, false);
-  assert.equal(legacy.needsDob, false);
-  assert.equal(legacy.skip, true);
-
-  const sinEstado = getProfileCompletionPlan({
-    profile: COMPLETE,
-    user: { email: 'viejo@hotmail.com' },
-    role: 'client',
-    superAdminEmail,
-  });
-  assert.equal(sinEstado.needsUsername, false);
-  assert.equal(sinEstado.needsDob, false);
+test('profileStatus no exime username ni DOB: todos los clientes deben tenerlos', () => {
+  for (const profileStatus of ['active', 'legacy', undefined]) {
+    const plan = getProfileCompletionPlan({
+      profile: { ...CORE, ...(profileStatus ? { profileStatus } : {}) },
+      user: { email: 'cliente@hotmail.com' },
+      role: 'client',
+      superAdminEmail,
+    });
+    assert.equal(plan.needsUsername, true, `username debería faltar con estado ${profileStatus}`);
+    assert.equal(plan.needsDob, true, `dob debería faltar con estado ${profileStatus}`);
+    assert.equal(plan.skip, false);
+  }
 });
 
 test('una cuenta incomplete con username y DOB ya guardados no vuelve a pedirlos', () => {
   const plan = getProfileCompletionPlan({
-    profile: { profileStatus: 'incomplete', username: 'maria_98', dob: new Date('2000-01-01'), ...COMPLETE },
+    profile: { ...COMPLETE, profileStatus: 'incomplete', username: 'maria_98', dob: new Date('2000-01-01') },
     user: { email: 'maria@hotmail.com' },
     role: 'client',
     superAdminEmail,
@@ -262,9 +338,9 @@ test('una cuenta incomplete con username y DOB ya guardados no vuelve a pedirlos
   assert.equal(plan.skip, true);
 });
 
-test('completar username y DOB de una cuenta incomplete la pasa a active', () => {
+test('completar username y DOB de una cuenta incomplete la pasa a active si la ubicación ya existe', () => {
   const patch = buildMissingProfilePatch({
-    currentProfile: { profileStatus: 'incomplete', ...COMPLETE },
+    currentProfile: { profileStatus: 'incomplete', ...CORE },
     submittedUsername: 'Maria_98',
     submittedDob: '2000-05-15',
   });
@@ -273,9 +349,20 @@ test('completar username y DOB de una cuenta incomplete la pasa a active', () =>
   assert.equal(patch.profileStatus, 'active');
 });
 
+test('una cuenta incomplete no pasa a active mientras falte la ubicación', () => {
+  const patch = buildMissingProfilePatch({
+    currentProfile: { profileStatus: 'incomplete', name: 'Juan Pérez', phone: '+595981123456' },
+    submittedUsername: 'maria_98',
+    submittedDob: '2000-05-15',
+  });
+  assert.equal(patch.username, 'maria_98');
+  assert.ok(patch.dob instanceof Date);
+  assert.equal('profileStatus' in patch, false);
+});
+
 test('un username inválido o reservado no se guarda ni activa la cuenta', () => {
   const patchInvalido = buildMissingProfilePatch({
-    currentProfile: { profileStatus: 'incomplete', ...COMPLETE },
+    currentProfile: { profileStatus: 'incomplete', ...CORE },
     submittedUsername: 'ab',
     submittedDob: '2000-05-15',
   });
@@ -283,7 +370,7 @@ test('un username inválido o reservado no se guarda ni activa la cuenta', () =>
   assert.equal('profileStatus' in patchInvalido, false);
 
   const patchReservado = buildMissingProfilePatch({
-    currentProfile: { profileStatus: 'incomplete', ...COMPLETE },
+    currentProfile: { profileStatus: 'incomplete', ...CORE },
     submittedUsername: 'admin',
     submittedDob: '2000-05-15',
   });
@@ -292,7 +379,7 @@ test('un username inválido o reservado no se guarda ni activa la cuenta', () =>
 
 test('una fecha de nacimiento fuera de 16-120 años no se guarda ni activa la cuenta', () => {
   const patch = buildMissingProfilePatch({
-    currentProfile: { profileStatus: 'incomplete', ...COMPLETE },
+    currentProfile: { profileStatus: 'incomplete', ...CORE },
     submittedUsername: 'maria_98',
     submittedDob: '2020-01-01',
   });
@@ -302,7 +389,7 @@ test('una fecha de nacimiento fuera de 16-120 años no se guarda ni activa la cu
 
 test('completar sólo el username sin DOB no activa la cuenta todavía', () => {
   const patch = buildMissingProfilePatch({
-    currentProfile: { profileStatus: 'incomplete', ...COMPLETE },
+    currentProfile: { profileStatus: 'incomplete', ...CORE },
     submittedUsername: 'maria_98',
     submittedDob: '',
   });
@@ -311,9 +398,9 @@ test('completar sólo el username sin DOB no activa la cuenta todavía', () => {
   assert.equal('profileStatus' in patch, false);
 });
 
-test('una cuenta legacy no se activa aunque se le manden username y DOB', () => {
+test('una cuenta legacy no se activa automáticamente desde esta transacción', () => {
   const patch = buildMissingProfilePatch({
-    currentProfile: { profileStatus: 'legacy', ...COMPLETE },
+    currentProfile: { profileStatus: 'legacy', ...CORE },
     submittedUsername: 'maria_98',
     submittedDob: '2000-05-15',
   });

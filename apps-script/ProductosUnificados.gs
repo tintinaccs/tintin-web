@@ -396,6 +396,13 @@ function tintinInstalarProductosUnificados() {
 
 function tintinInstalarDispatcherUnificado() {
   var spreadsheet = tintinProductsSpreadsheet_();
+  // Desde este punto la paridad administrativa es el único dispatcher válido.
+  // El dispatcher heredado podía encontrar funciones antiguas en el proyecto
+  // y escribir datos de usuarios desde Sheets sin pasar por la autoridad de
+  // Firestore.
+  var dispatcher = typeof TINTIN_PARITY_DISPATCHER !== 'undefined'
+    ? TINTIN_PARITY_DISPATCHER
+    : TINTIN_ON_EDIT_DISPATCHER;
   ScriptApp.getProjectTriggers().forEach(function(trigger) {
     var handler = trigger.getHandlerFunction();
     var isEdit = trigger.getEventType && trigger.getEventType() === ScriptApp.EventType.ON_EDIT;
@@ -405,9 +412,14 @@ function tintinInstalarDispatcherUnificado() {
     }
     var sameSource = !sourceId || sourceId === spreadsheet.getId();
     if (isEdit && sameSource) ScriptApp.deleteTrigger(trigger);
-    else if (handler === 'tintinProductosOnEdit' || handler === TINTIN_ON_EDIT_DISPATCHER) ScriptApp.deleteTrigger(trigger);
+    else if (handler === 'tintinProductosOnEdit' || handler === TINTIN_ON_EDIT_DISPATCHER || handler === 'tintinDespacharEdicionParidad' || handler === 'tintinReconciliarEspejosWeb' || handler === 'tintinReconciliarAdminParidad') ScriptApp.deleteTrigger(trigger);
   });
-  ScriptApp.newTrigger(TINTIN_ON_EDIT_DISPATCHER).forSpreadsheet(spreadsheet).onEdit().create();
+  ScriptApp.newTrigger(dispatcher).forSpreadsheet(spreadsheet).onEdit().create();
+  if (typeof TINTIN_PARITY_RECONCILER !== 'undefined') {
+    ScriptApp.newTrigger(TINTIN_PARITY_RECONCILER).timeBased().everyMinutes(1).create();
+  } else {
+    ScriptApp.newTrigger('tintinReconciliarEspejosWeb').timeBased().everyMinutes(5).create();
+  }
   return tintinDiagnosticarActivadores();
 }
 
@@ -416,16 +428,6 @@ function tintinDespacharEdicionInstalable(e) {
   var sheetName = e.range.getSheet().getName();
   if (sheetName === TINTIN_PRODUCTS_SHEET) {
     tintinHandleProductEdit_(e);
-    return;
-  }
-  if (sheetName === TINTIN_USERS_SHEET && typeof alEditarClientas === 'function') {
-    try {
-      alEditarClientas(e);
-    } catch (userError) {
-      var userStatus = /super.?admin|valor|rol|rechaz|invalid/i.test(String(userError && userError.message || userError)) ? 'REJECTED' : 'ERROR';
-      tintinRecordSyncSafely_(userStatus, sheetName, e.range.getA1Notation(), String(userError && userError.message || userError));
-      throw userError;
-    }
     return;
   }
   if (sheetName === TINTIN_USERS_SHEET) {
@@ -646,6 +648,8 @@ function tintinRevisarProductosUnificados() {
   var spreadsheet = tintinProductsSpreadsheet_();
   var properties = PropertiesService.getScriptProperties();
   var triggers = tintinDiagnosticarActivadores();
+  var dispatcherHandlers = [TINTIN_ON_EDIT_DISPATCHER, 'tintinDespacharEdicionParidad'];
+  var reconcileHandlers = ['tintinReconciliarEspejosWeb', 'tintinReconciliarAdminParidad'];
   return {
     ok: !!spreadsheet.getSheetByName(TINTIN_PRODUCTS_SHEET),
     spreadsheetId: spreadsheet.getId(),
@@ -655,7 +659,9 @@ function tintinRevisarProductosUnificados() {
     legacyCatalogSheetPresent: !!spreadsheet.getSheetByName('Catálogo web'),
     sheetsSecretConfigured: !!String(properties.getProperty('SHEETS_ENGAGEMENT_SECRET') || ''),
     storeUrlConfigured: !!String(properties.getProperty('TINTIN_STORE_URL') || '').trim(),
-    dispatcherTriggers: triggers.filter(function(item) { return item.handler === TINTIN_ON_EDIT_DISPATCHER; }).length,
+    dispatcherTriggers: triggers.filter(function(item) { return dispatcherHandlers.indexOf(item.handler) >= 0; }).length,
+    canonicalDispatcher: triggers.filter(function(item) { return item.handler === 'tintinDespacharEdicionParidad'; }).length,
+    reconciliationTriggers: triggers.filter(function(item) { return reconcileHandlers.indexOf(item.handler) >= 0; }).length,
     editTriggers: triggers.filter(function(item) { return item.eventType.indexOf('ON_EDIT') !== -1; }),
     triggers: triggers
   };
@@ -665,7 +671,7 @@ function tintinRevisarConfiguracionTintin() {
   var products = tintinRevisarProductosUnificados();
   var webhook = tintinDiagnosticarWebhookProductos();
   return {
-    ok: products.ok && products.usersSheet && products.historySheet && products.dispatcherTriggers === 1 && webhook.ok,
+    ok: products.ok && products.usersSheet && products.historySheet && products.dispatcherTriggers === 1 && products.reconciliationTriggers === 1 && webhook.ok,
     products: products,
     webhook: webhook,
     superAdminProtected: String(PropertiesService.getScriptProperties().getProperty('SUPER_ADMIN_EMAIL') || '').trim().toLowerCase() === 'tintinaccs@gmail.com'
@@ -727,7 +733,14 @@ function tintinCallInternalWebhook_(path, payload) {
 function tintinHandleUserEdit_(e) {
   if (!e || !e.range || e.range.getRow() < 7) return;
   var column = e.range.getColumn();
-  if ([TINTIN_USERS_COL.role, TINTIN_USERS_COL.blocked, TINTIN_USERS_COL.internalNotes, TINTIN_USERS_COL.action].indexOf(column) === -1) return;
+  if ([TINTIN_USERS_COL.role, TINTIN_USERS_COL.blocked, TINTIN_USERS_COL.internalNotes, TINTIN_USERS_COL.action].indexOf(column) === -1) {
+    // Toda la información de perfil es un espejo de Firestore. Si alguien
+    // la edita manualmente, se descarta de inmediato y se restaura el valor
+    // canónico; nunca debe quedar un dato que exista solo en Sheets.
+    tintinPullUsersFromWeb_();
+    tintinRecordSyncSafely_('REJECTED', e.range.getSheet().getName(), e.range.getA1Notation(), 'La columna de usuario es informativa; Firestore conserva la autoridad del dato.');
+    return;
+  }
   var sheet = e.range.getSheet();
   var row = sheet.getRange(e.range.getRow(), 2, 1, TINTIN_USERS_COL.lastChangeId - 1).getValues()[0];
   var at = function(col) { return row[col - 2]; };
@@ -887,10 +900,7 @@ function tintinReconciliarEspejosWeb() {
 
 function tintinInstalarSincronizacionCompleta() {
   tintinInstalarDispatcherUnificado();
-  ScriptApp.getProjectTriggers().filter(function(trigger) {
-    return trigger.getHandlerFunction() === 'tintinReconciliarEspejosWeb';
-  }).forEach(function(trigger) { ScriptApp.deleteTrigger(trigger); });
-  ScriptApp.newTrigger('tintinReconciliarEspejosWeb').timeBased().everyMinutes(5).create();
+  if (typeof tintinReconciliarAdminParidad === 'function') return tintinReconciliarAdminParidad();
   return tintinReconciliarEspejosWeb();
 }
 

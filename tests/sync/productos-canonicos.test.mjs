@@ -126,6 +126,19 @@ test('Usuarios web permite lifecycle seguro desde Sheets sin destruir identidade
   assert.doesNotMatch(adminWebhook, /deleteFirebaseUser/);
 });
 
+test('Usuarios web es un espejo estricto de Firestore y no conserva dispatcher heredado', () => {
+  const productsScript = read('apps-script/ProductosUnificados.gs');
+  const parity = read('apps-script/AdminParity.gs');
+
+  assert.match(productsScript, /function tintinPullUsersFromWeb_\(\)/);
+  assert.match(productsScript, /tintinSnapshot_\('users'\)/);
+  assert.match(productsScript, /tintinPullUsersFromWeb_\(\);[\s\S]{0,260}La columna de usuario es informativa/);
+  assert.doesNotMatch(productsScript, /alEditarClientas\s*\(/);
+  assert.match(productsScript, /TINTIN_PARITY_DISPATCHER/);
+  assert.match(productsScript, /TINTIN_PARITY_RECONCILER/);
+  assert.match(parity, /summary\.users\s*=\s*tintinPullUsersFromWeb_\(\)/);
+});
+
 test('Historial sync conserva el contrato de estados, fila 8 y máximo 500', () => {
   const source = read('apps-script/ProductosUnificados.gs');
   assert.match(source, /TINTIN_SYNC_HISTORY_FIRST_ROW = 8/);

@@ -31,6 +31,15 @@ check(/auditLog/.test(webhook) || /auditLog/.test(orderDomain), 'Cambios adminis
 check(/tintinParityHandleServerOrderSync_/.test(appsScript), 'Apps Script debe aceptar el espejo inmediato Firestore→Pedidos web.');
 check(!/action:\s*'deleteOrder'/.test(parity), 'Sheets no debe ofrecer borrado físico de pedidos.');
 
+// Firestore es la autoridad única también para Usuarios web. La planilla no
+// puede conservar una ruta heredada que escriba perfiles directamente ni una
+// instalación que deje activo un dispatcher paralelo.
+check(/function tintinPullUsersFromWeb_\(\)/.test(appsScript) && /tintinSnapshot_\('users'\)/.test(appsScript), 'Usuarios web debe reconstruirse exclusivamente desde el snapshot de Firestore.');
+check(/tintinPullUsersFromWeb_\(\);[\s\S]{0,260}La columna de usuario es informativa/.test(appsScript), 'Una edición informativa de usuario debe restaurarse inmediatamente desde Firestore.');
+check(!/alEditarClientas\s*\(/.test(appsScript), 'No debe existir una ruta heredada alEditarClientas que pueda saltarse la paridad canónica.');
+check(/TINTIN_PARITY_DISPATCHER/.test(appsScript) && /TINTIN_PARITY_RECONCILER/.test(appsScript), 'La instalación unificada debe usar el dispatcher y reconciliador canónicos.');
+check(/summary\.users\s*=\s*tintinPullUsersFromWeb_\(\)/.test(parity), 'La reconciliación administrativa debe repintar Usuarios web desde Firestore.');
+
 if (errors.length) {
   console.error(`Auditoría de autoridad de sincronización: ${errors.length} problema(s):`);
   errors.forEach(error => console.error(`  - ${error}`));
