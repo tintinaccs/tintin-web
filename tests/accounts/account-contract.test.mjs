@@ -30,6 +30,17 @@ test('Google y PIN convergen sobre findOrCreateUserByEmail', () => {
   assert.match(verify, /findOrCreateUserByEmail\(env, email\)/);
 });
 
+test('OTP por correo conserva trazabilidad y detecta fallos de entrega de Resend', () => {
+  const send = read('functions/api/email-otp-send.js');
+  assert.match(send, /idempotency-key/);
+  assert.match(send, /tintin-otp-/);
+  assert.match(send, /tags: \[\{ name: 'category', value: 'auth_otp' \}\]/);
+  assert.match(send, /getResendEmailStatus/);
+  assert.match(send, /TERMINAL_DELIVERY_FAILURES/);
+  assert.match(send, /providerEmailId: fsString\(providerEmailId\)/);
+  assert.match(send, /providerLastEvent: fsString\(providerLastEvent\)/);
+});
+
 test('el login por correo y username usa Pages Functions también desde localhost', () => {
   const auth = read('js/email/correo-autenticacion.js');
   assert.match(auth, /LOCAL_FUNCTIONS_ORIGIN/);
