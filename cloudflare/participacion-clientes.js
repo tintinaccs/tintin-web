@@ -77,8 +77,10 @@ function isInvalidPurchase(order = {}) {
 
 async function readValidPurchaseCount(env, uid, email) {
   const queries = [firestoreAdminQueryEqual(env, 'orders', 'userId', uid)];
-  const normalizedEmail = clean(email, 254).toLowerCase();
-  if (normalizedEmail) queries.push(firestoreAdminQueryEqual(env, 'orders', 'userEmail', normalizedEmail));
+  const rawEmail = clean(email, 254);
+  const normalizedEmail = rawEmail.toLowerCase();
+  if (rawEmail) queries.push(firestoreAdminQueryEqual(env, 'orders', 'userEmail', normalizedEmail));
+  if (rawEmail && rawEmail !== normalizedEmail) queries.push(firestoreAdminQueryEqual(env, 'orders', 'userEmail', rawEmail));
   const results = await Promise.all(queries);
   const unique = new Map();
   results.flat().forEach(document => {

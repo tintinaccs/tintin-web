@@ -14,6 +14,7 @@ test('la fidelidad usa compras válidas y niveles explícitos', () => {
   assert.match(participation, /resolveCustomerTier\(\{ purchaseCount \}, settings\.loyaltyTiers\)/);
   assert.match(participation, /settings\/general/);
   assert.match(participation, /firestoreAdminQueryEqual\(env, 'orders', 'userId', uid\)/);
+  assert.match(participation, /rawEmail !== normalizedEmail/);
   assert.match(participation, /No se pudo verificar compras válidas; se omite el pin/);
 });
 
