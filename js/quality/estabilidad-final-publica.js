@@ -2,7 +2,7 @@
  * No crea autoridades paralelas: solo fortalece las superficies ya renderizadas
  * por Producto, Perfil y el shell modular de navegación. */
 
-const VERSION = 'tintin-20260904-profile-consistency-1';
+const VERSION = 'tintin-20260904-profile-reconcile-1';
 const path = window.location.pathname.replace(/\/+$/, '') || '/';
 
 function injectStyles() {
@@ -326,6 +326,26 @@ async function enhanceProfile() {
   window.addEventListener('pagehide', () => summaryObserver.disconnect(), { once: true });
 
   await import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20260904-profile-consistency-1');
+  // Reintenta cerrar cualquier divergencia Auth–Firestore pendiente, sin
+  // escribir datos desde el navegador: el servidor usa Firestore como fuente
+  // canónica y solo actúa sobre la cuenta autenticada.
+  try {
+    const [{ auth }] = await Promise.all([
+      import('../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1'),
+    ]);
+    if (typeof auth.authStateReady === 'function') await auth.authStateReady();
+    const user = auth.currentUser;
+    if (user) {
+      const token = await user.getIdToken();
+      await fetch('/api/profile-avatar-reconcile', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        cache: 'no-store',
+      });
+    }
+  } catch (error) {
+    console.warn('[Perfil] Reconciliación Auth–Firestore pendiente:', error);
+  }
   const initial = location.hash.replace('#', '');
   if (panels.has(initial)) activate(initial);
 }

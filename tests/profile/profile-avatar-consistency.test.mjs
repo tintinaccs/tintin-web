@@ -20,6 +20,13 @@ test('la foto de perfil se consolida server-side y deja historial/auditoría', (
   assert.match(endpoint, /updateFirebaseUserProfile/);
   assert.match(endpoint, /profilePhotoReconciliations/);
   assert.match(endpoint, /reconciliacion_auth_pendiente/);
+  assert.match(endpoint, /authSync === 'pending' \? 202 : 200/);
+});
+
+test('el perfil reintenta la reconciliación sin mutar Firestore desde el navegador', () => {
+  assert.match(client, /profile-avatar-reconcile/);
+  assert.match(client, /Reconciliación Auth–Firestore pendiente/);
+  assert.doesNotMatch(client, /setDoc\(.*users/);
 });
 
 test('el navegador no escribe directamente users/{uid} para cerrar la foto', () => {
