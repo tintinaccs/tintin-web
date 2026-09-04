@@ -387,7 +387,7 @@
           <select class="adm-select" id="users-bulk-role" style="width:auto;font-size:12px;padding:6px 8px">
             <option value="">— Cambiar rol —</option>
             <option value="admin">Admin</option>
-            <option value="agent">Agente (Modder)</option>
+            <option value="agent">Moderador</option>
             <option value="viewer">Viewer</option>
             <option value="client">Cliente</option>
           </select>
@@ -832,7 +832,7 @@
         </div>
         <div class="adm-card-body">
           <p style="font-size:13px;color:var(--adm-muted);margin-bottom:16px">
-            Quién editó un pedido, cambió su estado, editó un producto o su stock, cambió un rol, o bloqueó/restauró una cuenta — las últimas 200 acciones, más recientes primero. Solo Super Admin puede ver esta sección; el Modder no tiene acceso, aunque sus propias acciones sí queden registradas acá.
+            Quién editó un pedido, cambió su estado, editó un producto o su stock, cambió un rol, o bloqueó/restauró una cuenta — las últimas 200 acciones, más recientes primero. Solo Super Admin puede ver esta sección; el Moderador no tiene acceso, aunque sus propias acciones sí queden registradas acá.
           </p>
           <div id="audit-bulk-toolbar" class="adm-bulk-toolbar">
             <span class="adm-bulk-count" id="audit-bulk-count">0 seleccionados</span>
@@ -1368,7 +1368,7 @@
               <label class="tt-access-pill-toggle"><input type="checkbox" class="tt-access-pill-input" id="ma-admin" data-maintenance-role="admin"><span class="tt-access-pill-track"><span class="tt-access-pill-text tt-access-pill-text-on">Activado</span><span class="tt-access-pill-text tt-access-pill-text-off">Desactivado</span></span></label>
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--adm-border)">
-              <span style="font-size:13px;font-weight:600">Agente / Modder</span>
+              <span style="font-size:13px;font-weight:600">Moderador</span>
               <label class="tt-access-pill-toggle"><input type="checkbox" class="tt-access-pill-input" id="ma-agent" data-maintenance-role="agent"><span class="tt-access-pill-track"><span class="tt-access-pill-text tt-access-pill-text-on">Activado</span><span class="tt-access-pill-text tt-access-pill-text-off">Desactivado</span></span></label>
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--adm-border)">
@@ -1702,7 +1702,7 @@
             <select class="adm-select" id="perm-filter-role" style="flex:1">
               <option value="">Todos los roles</option>
               <option value="admin">Admin</option>
-              <option value="agent">Agente / Modder</option>
+              <option value="agent">Moderador</option>
               <option value="viewer">Viewer</option>
             </select>
           </div>

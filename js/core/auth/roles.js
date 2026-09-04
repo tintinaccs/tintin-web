@@ -39,7 +39,7 @@ export const ROLES = {
 export const ROLE_LABELS = {
   superadmin: 'Super Admin',
   admin:      'Admin',
-  agent:      'Agente',
+  agent:      'Moderador',
   viewer:     'Viewer',
   client:     'Cliente'
 };
