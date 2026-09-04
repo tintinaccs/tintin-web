@@ -8,6 +8,7 @@ const moderateEndpoint = fs.readFileSync(new URL('../../functions/api/profile-av
 const client = fs.readFileSync(new URL('../../js/quality/estabilidad-final-publica.js', import.meta.url), 'utf8');
 const adminHtml = fs.readFileSync(new URL('../../admin.html', import.meta.url), 'utf8');
 const adminApp = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
+const sessionGuard = fs.readFileSync(new URL('../../js/core/auth/proteccion-sesion.js', import.meta.url), 'utf8');
 
 test('la foto de perfil se consolida server-side y deja historial/auditoría', () => {
   assert.match(endpoint, /requireFirebaseUser/);
@@ -45,4 +46,10 @@ test('la moderación de fotos es específica, versionada, auditable y protege la
   assert.match(moderateEndpoint, /limpieza_foto_perfil_fallida/);
   assert.match(moderateEndpoint, /destroyProfileAsset/);
   assert.match(adminApp, /profile-avatar-moderate/);
+});
+
+test('la vuelta a una pestaña no falsifica actividad y respeta la expiración', () => {
+  assert.match(sessionGuard, /Volver a enfocar una pestaña no es actividad/);
+  assert.doesNotMatch(sessionGuard, /else \{\s*recordActivity\(\);\s*startSessionChecks\(\);/);
+  assert.match(sessionGuard, /if \(auth\.currentUser\) void enforce\(auth\.currentUser\);\s*startSessionChecks\(\);/);
 });

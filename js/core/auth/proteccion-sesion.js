@@ -113,9 +113,12 @@ onAuthStateChanged(auth, user => {
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) stopSessionChecks();
   else {
-    recordActivity();
-    startSessionChecks();
+    // Volver a enfocar una pestaña no es actividad del usuario. Primero se
+    // comprueba el tiempo real transcurrido; de lo contrario una pestaña
+    // abierta durante días se renovaría sola al volver a primer plano y nunca
+    // aplicaría la expiración configurada para cuentas no oficiales.
     if (auth.currentUser) void enforce(auth.currentUser);
+    startSessionChecks();
   }
 });
 
