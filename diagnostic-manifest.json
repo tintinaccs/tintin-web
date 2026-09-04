@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T19:53:53.680Z",
-  "sourceFingerprint": "d1c378a3688ecece25b6ad5e3e13a21f14bcd2242d7b7f231fa90c0650d395c2",
+  "generatedAt": "2026-09-04T20:01:06.406Z",
+  "sourceFingerprint": "9ab2ce9d30cbb1dbcc24416525b8a6190fdbc2f257a4d11e59de28faaa3c9404",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 806,
-    "textFiles": 773,
-    "totalBytes": 9978641,
+    "files": 807,
+    "textFiles": 774,
+    "totalBytes": 9982289,
     "pages": 18,
-    "modules": 555
+    "modules": 556
   },
   "viewports": [
     {
@@ -17767,8 +17767,8 @@
     },
     {
       "path": "cloudflare/seguridad-cloudinary.js",
-      "bytes": 7354,
-      "sha256": "7edaf39d3e871d7dd82cfe72a4f756c7d4470df31e3d3eee96ae11732221853b",
+      "bytes": 7473,
+      "sha256": "6960ee6b5e58f4ca22bec6a35a7e39e594f0872b5da95096de485d67b787163e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19160,6 +19160,30 @@
       "endpoints": []
     },
     {
+      "path": "functions/api/profile-avatar-admin.js",
+      "bytes": 2649,
+      "sha256": "002e00f28828608e83dd201c4d29cd2240380a982130039c004dcca2fed85c6a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "functions/api/profile-avatar-commit.js",
       "bytes": 5250,
       "sha256": "d5b1d8fa15b4770662748d82eb34dbbbffd57fdaf5a8c1dd10ac8a3454e4ccfe",
@@ -19937,8 +19961,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 426674,
-      "sha256": "3fa5b6509ff0cd199d5dbbd51fe56fb2ad1f053f30037e742c563d311879debc",
+      "bytes": 426677,
+      "sha256": "791b5663807952923cebf59b3ebe901730d34f02f49ce413c0473d8857222ab2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19987,7 +20011,7 @@
           "line": 16
         },
         {
-          "raw": "../core/auth/permisos-roles.js?v=tintin-20260821-accounts-phase-a-1",
+          "raw": "../core/auth/permisos-roles.js?v=tintin-20260904-profile-consistency-1",
           "target": "js/core/auth/permisos-roles.js",
           "dynamic": false,
           "line": 20
@@ -20378,8 +20402,8 @@
     },
     {
       "path": "js/admin/content/gestion-contenido-admin.js",
-      "bytes": 21947,
-      "sha256": "3214ef44e2a9caa6ab38c3ad1e68b59aedc83fa0d3993f1d8d3353342a3fff38",
+      "bytes": 21950,
+      "sha256": "1b4d0e1e6b30ef3b7f508fb2b2f80358558ce2ef32f62918f3190c9e3f6ab886",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20410,7 +20434,7 @@
           "line": 17
         },
         {
-          "raw": "../../core/auth/permisos-roles.js?v=tintin-20260821-accounts-phase-a-1",
+          "raw": "../../core/auth/permisos-roles.js?v=tintin-20260904-profile-consistency-1",
           "target": "js/core/auth/permisos-roles.js",
           "dynamic": false,
           "line": 18
@@ -21351,8 +21375,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 68352,
-      "sha256": "a6ac481685e5af45f3ae6e87ded189ab12a1bf1561fff57d8217e2eea930304a",
+      "bytes": 68355,
+      "sha256": "2937c393e97714f2bef1e21a7330015aee83cdc86847a4bc8b9be7159a277451",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21383,7 +21407,7 @@
           "line": 20
         },
         {
-          "raw": "../core/auth/permisos-roles.js?v=tintin-20260821-accounts-phase-a-1",
+          "raw": "../core/auth/permisos-roles.js?v=tintin-20260904-profile-consistency-1",
           "target": "js/core/auth/permisos-roles.js",
           "dynamic": false,
           "line": 21
@@ -23154,8 +23178,8 @@
     },
     {
       "path": "js/core/auth/insignia-edicion.js",
-      "bytes": 5263,
-      "sha256": "d40ed8ced77fe2c722d934876767de9d66da2e22a622950f12c976c44ca4a2fd",
+      "bytes": 5266,
+      "sha256": "83d2545aded0d6493e57acfdc631c3fc0235f720200240c8fea86249a97784c8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23180,7 +23204,7 @@
           "line": 3
         },
         {
-          "raw": "./permisos-roles.js?v=tintin-20260821-accounts-phase-a-1",
+          "raw": "./permisos-roles.js?v=tintin-20260904-profile-consistency-1",
           "target": "js/core/auth/permisos-roles.js",
           "dynamic": false,
           "line": 4
@@ -23230,8 +23254,8 @@
     },
     {
       "path": "js/core/auth/permisos-roles.js",
-      "bytes": 12334,
-      "sha256": "c19c68ddea968d7c975a11a606cb96626e3ca74415570056a630845705496334",
+      "bytes": 12694,
+      "sha256": "000245d2d342d8a3c712e9c8b67b3a1d853bf5596edbc36883e1baeee00d7d9b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30908,8 +30932,8 @@
     },
     {
       "path": "tests/profile/profile-avatar-consistency.test.mjs",
-      "bytes": 1019,
-      "sha256": "92641b1aa2279fa77d136f4b53d029dea056526b337a06958a5664830f1cf30d",
+      "bytes": 1524,
+      "sha256": "cc3380656da46439f22f99cb91c9cc840980cfe904577fc9a167fe323d97f17d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32485,8 +32509,8 @@
     {
       "path": "cloudflare/seguridad-cloudinary.js",
       "extension": ".js",
-      "bytes": 7354,
-      "sha256": "7edaf39d3e871d7dd82cfe72a4f756c7d4470df31e3d3eee96ae11732221853b"
+      "bytes": 7473,
+      "sha256": "6960ee6b5e58f4ca22bec6a35a7e39e594f0872b5da95096de485d67b787163e"
     },
     {
       "path": "cloudflare/servicio-push.js",
@@ -33581,6 +33605,12 @@
       "sha256": "dd39845ce53a14c2ca5135e05ab0365d380c067743a4c19f3ba0107b7471ff58"
     },
     {
+      "path": "functions/api/profile-avatar-admin.js",
+      "extension": ".js",
+      "bytes": 2649,
+      "sha256": "002e00f28828608e83dd201c4d29cd2240380a982130039c004dcca2fed85c6a"
+    },
+    {
       "path": "functions/api/profile-avatar-commit.js",
       "extension": ".js",
       "bytes": 5250,
@@ -33823,8 +33853,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 426674,
-      "sha256": "3fa5b6509ff0cd199d5dbbd51fe56fb2ad1f053f30037e742c563d311879debc"
+      "bytes": 426677,
+      "sha256": "791b5663807952923cebf59b3ebe901730d34f02f49ce413c0473d8857222ab2"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -33877,8 +33907,8 @@
     {
       "path": "js/admin/content/gestion-contenido-admin.js",
       "extension": ".js",
-      "bytes": 21947,
-      "sha256": "3214ef44e2a9caa6ab38c3ad1e68b59aedc83fa0d3993f1d8d3353342a3fff38"
+      "bytes": 21950,
+      "sha256": "1b4d0e1e6b30ef3b7f508fb2b2f80358558ce2ef32f62918f3190c9e3f6ab886"
     },
     {
       "path": "js/admin/diagnostics/diagnostico-maestro-admin.js",
@@ -34051,8 +34081,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 68352,
-      "sha256": "a6ac481685e5af45f3ae6e87ded189ab12a1bf1561fff57d8217e2eea930304a"
+      "bytes": 68355,
+      "sha256": "2937c393e97714f2bef1e21a7330015aee83cdc86847a4bc8b9be7159a277451"
     },
     {
       "path": "js/admin/users/ficha-usuario-admin.js",
@@ -34543,8 +34573,8 @@
     {
       "path": "js/core/auth/insignia-edicion.js",
       "extension": ".js",
-      "bytes": 5263,
-      "sha256": "d40ed8ced77fe2c722d934876767de9d66da2e22a622950f12c976c44ca4a2fd"
+      "bytes": 5266,
+      "sha256": "83d2545aded0d6493e57acfdc631c3fc0235f720200240c8fea86249a97784c8"
     },
     {
       "path": "js/core/auth/navegacion-autenticacion.js",
@@ -34555,8 +34585,8 @@
     {
       "path": "js/core/auth/permisos-roles.js",
       "extension": ".js",
-      "bytes": 12334,
-      "sha256": "c19c68ddea968d7c975a11a606cb96626e3ca74415570056a630845705496334"
+      "bytes": 12694,
+      "sha256": "000245d2d342d8a3c712e9c8b67b3a1d853bf5596edbc36883e1baeee00d7d9b"
     },
     {
       "path": "js/core/auth/proteccion-sesion.js",
@@ -36139,8 +36169,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 37322,
-      "sha256": "c34f43a73966ad433267fd0c9e465a36d8942e611bcdc8268c5682911b9bb84c"
+      "bytes": 37325,
+      "sha256": "84c1d77e2fa64c5512c6d6221cb9fbc2fd2e1830ca9e500741185016d383f6fa"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -36649,8 +36679,8 @@
     {
       "path": "tests/profile/profile-avatar-consistency.test.mjs",
       "extension": ".mjs",
-      "bytes": 1019,
-      "sha256": "92641b1aa2279fa77d136f4b53d029dea056526b337a06958a5664830f1cf30d"
+      "bytes": 1524,
+      "sha256": "cc3380656da46439f22f99cb91c9cc840980cfe904577fc9a167fe323d97f17d"
     },
     {
       "path": "tests/push/push-web.test.mjs",

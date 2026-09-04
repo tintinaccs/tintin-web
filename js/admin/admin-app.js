@@ -17,7 +17,7 @@ import { ASSIGNABLE_ROLES } from '../core/auth/contrato-cuentas-generado.js?v=ti
 import {
   PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
   canDo, saveRolePermissions, buildDefaultRolePermissions
-} from "../core/auth/permisos-roles.js?v=tintin-20260821-accounts-phase-a-1";
+} from "../core/auth/permisos-roles.js?v=tintin-20260904-profile-consistency-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260903-store-gate-fast-rest-2";
 import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260901-firestore-budget-1";

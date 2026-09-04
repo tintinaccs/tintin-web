@@ -123,7 +123,11 @@ export async function requireStaffPermission(request, env, moduleKey, actionKey)
   const permissionsDocument = await firestoreAdminGet(env, 'rolePermissions/main');
   const permissions = decodeFirestoreFields(permissionsDocument?.fields || {});
   const configured = permissions?.[role]?.[moduleKey]?.[actionKey];
-  const eligibleStaffRole = moduleKey === 'comunidad' && actionKey === 'responder' && ['admin', 'agent'].includes(role);
+  const eligibleStaffRole = (
+    moduleKey === 'comunidad' && actionKey === 'responder' && ['admin', 'agent'].includes(role)
+  ) || (
+    moduleKey === 'usuarios' && actionKey === 'gestionarFotos' && ['admin', 'agent'].includes(role)
+  );
   if (!eligibleStaffRole || configured === false || (configured !== true && !eligibleStaffRole)) {
     const error = new Error('El rol no tiene habilitada esta acción');
     error.status = 403;
