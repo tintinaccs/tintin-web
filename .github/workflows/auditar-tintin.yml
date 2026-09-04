@@ -123,6 +123,7 @@ jobs:
         with:
           name: repository-audit-failure-${{ github.run_id }}
           path: |
+            diagnostic-manifest.json
             artifacts/**
             playwright-report/**
             test-results/**
