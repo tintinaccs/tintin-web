@@ -1,5 +1,5 @@
 import {
-  jsonResponse, originIsAllowed, preflightResponse, requireSuperAdmin, statusFromError,
+  jsonResponse, originIsAllowed, preflightResponse, requireStaffPermission, requireSuperAdmin, statusFromError,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { adminDeleteLike, adminLikeAction, adminReviewAction } from '../../cloudflare/participacion-admin.js';
 import { syncEngagementToSheets } from '../../cloudflare/sincronizacion-participacion-sheets.js';
@@ -13,10 +13,12 @@ export async function onRequest(context) {
   if (request.method === 'OPTIONS') return preflightResponse(origin, request.url, 'POST, OPTIONS');
   if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido' }, 405, origin, request.url);
   try {
-    const actor = await requireSuperAdmin(request);
     const raw = await request.text();
     if (!raw || new TextEncoder().encode(raw).byteLength > 16 * 1024) throw new Error('Solicitud vacía o demasiado grande');
     const input = JSON.parse(raw);
+    const actor = input.action === 'reviewReply'
+      ? await requireStaffPermission(request, env, 'comunidad', 'responder')
+      : await requireSuperAdmin(request);
 
     if (LIKE_ADMIN_ACTIONS.has(input.action)) {
       const record = await adminLikeAction(env, actor, input);

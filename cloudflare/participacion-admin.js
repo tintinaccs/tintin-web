@@ -133,32 +133,54 @@ export async function adminReviewAction(env, actor, input) {
     const text = clean(input.text, MAX_REPLY);
     if (!text) throw new Error('La respuesta está vacía');
     const replyId = safeId(crypto.randomUUID(), 'Respuesta');
+    const isOfficial = actor.role === 'superadmin' || actor.isSuperAdmin === true;
+    const authorType = isOfficial ? 'store' : 'staff';
+    const actorRole = isOfficial ? 'official' : actor.role;
+    const roleLabel = isOfficial
+      ? 'Cuenta oficial'
+      : ({ admin: 'Admin', agent: 'Moderador', viewer: 'Viewer' }[actor.role] || 'Equipo Tintin');
+    const actorPublicName = isOfficial
+      ? 'Tintin Accesorios'
+      : clean(actor.profile?.name || actor.profile?.displayName || actor.name || actor.email || 'Equipo Tintin', 160);
     updated.conversation = [...(record.conversation || []), {
       id: replyId,
       replyId,
-      authorType: 'store',
+      authorType,
       actorUid: actor.uid,
       actorEmail: actor.email,
-      actorRealName: 'Tintin Accesorios',
-      actorUsername: 'tintin',
-      actorPublicName: 'Tintin Accesorios',
-      actorPhotoUrl: '',
+      actorRealName: actorPublicName,
+      actorUsername: isOfficial ? 'tintin' : clean(actor.profile?.username || '', 80),
+      actorPublicName,
+      actorRole,
+      roleLabel,
+      isOfficial,
+      actorPhotoUrl: clean(actor.profile?.photoURL || actor.profile?.photoUrl || '', 200),
       text,
       likeCount: 0,
       createdAt: now,
     }].slice(-80);
     updated.unread = false;
-    history.push({ action: 'store_reply', replyId, text, changedAt: now, changedBy: actor.email });
+    history.push({ action: isOfficial ? 'store_reply' : 'staff_reply', replyId, text, changedAt: now, changedBy: actor.email });
     if (record.ownerUid !== actor.uid) {
-      const notification = await buildUserNotificationWrite(record.ownerUid, {
-        kind: 'store_review_reply', actorType: 'store', actorUid: actor.uid, actorName: 'Tintin Accesorios',
+      const notificationPayload = {
+        // Se conserva el tipo histórico para la cuenta oficial; el equipo usa
+        // un tipo separado para que cada consumidor pueda distinguirlo.
+        kind: 'store_review_reply',
+        actorType: authorType, actorUid: actor.uid, actorName: actorPublicName,
+        actorRole, roleLabel, isOfficial,
         title: 'Tintin respondió a tu reseña',
         body: text, snippet: text, iconKey: 'comment',
         targetUrl: `/product?id=${record.productId}#reply-${replyId}`,
         targetType: 'reply', targetId: replyId,
         productId: record.productId, productName: record.productName, productImageUrl: record.productImageUrl,
         reviewId: record.reviewId, replyId, sourceType: 'reply', sourceId: replyId, createdAt: now,
-      }, `store_review_reply:${record.reviewId}:${replyId}`);
+      };
+      if (!isOfficial) {
+        notificationPayload.kind = 'staff_review_reply';
+        notificationPayload.title = `${actorPublicName} respondió a tu reseña`;
+      }
+      const notification = await buildUserNotificationWrite(record.ownerUid, notificationPayload,
+        `${isOfficial ? 'store' : 'staff'}_review_reply:${record.reviewId}:${replyId}`);
       extraWrites.push(notification.write);
     }
   } else if (action === 'reviewEdit') {

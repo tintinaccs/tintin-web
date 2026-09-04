@@ -109,6 +109,12 @@ export const PERMISSION_MODULES = {
       eliminar:                  { label: 'Eliminar contenido',             implemented: false, note: 'Contenido no tiene una acción de "eliminar una sección" — solo se edita, no se borra.' },
     }
   },
+  comunidad: {
+    label: 'Comunidad',
+    actions: {
+      responder: { label: 'Responder reseñas como equipo', defaultFrom: 'manageContent', rolesEditable: ['admin','agent'] },
+    }
+  },
 };
 
 // ---- Valores por defecto: derivados de PERMISSIONS (roles.js) ----
