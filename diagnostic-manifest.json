@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T17:54:36.024Z",
-  "sourceFingerprint": "8cd75089cc93721baa4bceccce694815fd54708f95fcf27b85324764bb583ed7",
+  "generatedAt": "2026-09-04T18:21:19.029Z",
+  "sourceFingerprint": "7c39fdba37ccf10119c1f75db950093049d22665727258cf6164da818bfe1278",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 804,
     "textFiles": 771,
-    "totalBytes": 9963591,
+    "totalBytes": 9963426,
     "pages": 18,
     "modules": 553
   },
@@ -20640,7 +20640,7 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "bytes": 26388,
-      "sha256": "13fa671be8deb2bd4313ed3283f658c01f8eb72f4e6e61e95826a97a5c600999",
+      "sha256": "df7a3e3f809943e2afe8d5fa3fdaed9ed637120e2e34cd3391cef47b89d924a8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25507,7 +25507,7 @@
     {
       "path": "scripts/auditar-admin-commerce-shopify.js",
       "bytes": 3148,
-      "sha256": "46a9cbed9c779c9783b92911e1627c415475ecdf302f0eba1f21f2b62ecbe673",
+      "sha256": "718ea664a22757116c225221ddaec455a6c4f22bc2614637b2b828d7268d2ce5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25529,7 +25529,7 @@
     {
       "path": "scripts/auditar-admin-correo-mensajeria.js",
       "bytes": 9160,
-      "sha256": "9e83c137baa3d365df7fc3281d58145c2b0b3d51e302dec446c77f272ac29cf5",
+      "sha256": "8f09423e7e68213d797a780c69649e33ad67633b302cf4c67c1f61e891f7d7fd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25548,7 +25548,7 @@
           "line": 51
         },
         {
-          "raw": "../../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-1",
+          "raw": "../../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-2",
           "target": null,
           "dynamic": false,
           "line": 58
@@ -25799,7 +25799,7 @@
     {
       "path": "scripts/auditar-borrado-global-catalogo.mjs",
       "bytes": 6580,
-      "sha256": "5968cf2159b78701baea4af34660bd0ebb231b120faf7cb9548b67cb30e1f738",
+      "sha256": "4306c8126366748eb5dd1a5c3efb8e2506993fbd9a22e4661f7aaa2ec1e00d20",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26083,7 +26083,7 @@
     {
       "path": "scripts/auditar-contacto-pagina.js",
       "bytes": 2276,
-      "sha256": "a32e89465d4fae843a02e811d2ec6490b2bdc104d7ad855e5d76a0345756899c",
+      "sha256": "afde027145788a0e6b0ae211e211a09e1b1fc85c976fb6787160e9b48b963ec3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26304,14 +26304,14 @@
     {
       "path": "scripts/auditar-correo-fase-3.js",
       "bytes": 5179,
-      "sha256": "ac18428b9d1177f6d0af9cd1dd214ca0035f86b8da054f1ea3a50e2cc001508a",
+      "sha256": "ec0d6052cb8cd4faf6181db89398258e39aa6166a239c1be97d79c9965598cf7",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./sincronizacion-correo-admin.js?v=tintin-20260821-accounts-phase-a-1",
+          "raw": "./sincronizacion-correo-admin.js?v=tintin-20260821-accounts-phase-a-2",
           "target": "scripts/sincronizacion-correo-admin.js",
           "dynamic": true,
           "line": 79
@@ -26641,7 +26641,7 @@
     {
       "path": "scripts/auditar-estabilidad-final-v1.mjs",
       "bytes": 9543,
-      "sha256": "3adee659bc2832c1329e33cc074fcb0ff7e7c0767a9bd090fad0b30a32681ac4",
+      "sha256": "636a2ced83001083120c11176b3aa531fd362b0d72048994b95136ed1401c252",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27109,14 +27109,14 @@
     {
       "path": "scripts/auditar-imagenes-fase-5.js",
       "bytes": 26342,
-      "sha256": "d5cc7beef79fc21069e963a9bbb65b766aa9a5b62c1109ac42a6b2a6618b7869",
+      "sha256": "e04f269c4b16ef5a77052999aa7fea1039d2eeceb11bebda0786834a8956933d",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./imagenes.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "./imagenes.js?v=tintin-20260716-cloudinary-fix-2",
           "target": "scripts/imagenes.js",
           "dynamic": false,
           "line": 208
@@ -27402,7 +27402,7 @@
     {
       "path": "scripts/auditar-legal-paginas.js",
       "bytes": 2616,
-      "sha256": "b52f9567329ae958a660888746bfe97365a8c4409f245076af4c177c92795fa5",
+      "sha256": "4ccfabf9f0478c0c00d6dbd4fa3e6fe060a77b339ed275ca7eb1282f7037046f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27841,7 +27841,7 @@
     {
       "path": "scripts/auditar-puntuacion-resena-producto.mjs",
       "bytes": 1387,
-      "sha256": "b18adef619a2e5abe1a3a7b655ef8406c83a6d27229a37c57a4602478fe20e8b",
+      "sha256": "5070cbe8c08cb3da080a2f5e232f9a5b975c62176730086779aa60d0e6e84a5d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28170,8 +28170,8 @@
     },
     {
       "path": "scripts/auditar-superadmin-maestro-conexiones.mjs",
-      "bytes": 7645,
-      "sha256": "385128b2e3378aab400ec88b15de8296b94461b650eaa1009e13f4de65ae8184",
+      "bytes": 7480,
+      "sha256": "5c9c3a653b9b1f0ab750142b41468c1f6cd691089298d4cb10e960180a701579",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28237,7 +28237,7 @@
     {
       "path": "scripts/auditar-superadmin-maestro.mjs",
       "bytes": 8525,
-      "sha256": "86f9fdeb6a65894950065009611f2ad31dde54f3d385f02fdd0cce4c58045789",
+      "sha256": "59a57d7e464024c0c9a83da6a84d8cf05ac7a74283e2dcda1ca6f159fb095e90",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33858,7 +33858,7 @@
       "path": "js/admin/maestro/panel-maestro.js",
       "extension": ".js",
       "bytes": 26388,
-      "sha256": "13fa671be8deb2bd4313ed3283f658c01f8eb72f4e6e61e95826a97a5c600999"
+      "sha256": "df7a3e3f809943e2afe8d5fa3fdaed9ed637120e2e34cd3391cef47b89d924a8"
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
@@ -35328,7 +35328,7 @@
       "path": "scripts/auditar-admin-commerce-shopify.js",
       "extension": ".js",
       "bytes": 3148,
-      "sha256": "46a9cbed9c779c9783b92911e1627c415475ecdf302f0eba1f21f2b62ecbe673"
+      "sha256": "718ea664a22757116c225221ddaec455a6c4f22bc2614637b2b828d7268d2ce5"
     },
     {
       "path": "scripts/auditar-admin-contenido-apariencia.js",
@@ -35340,7 +35340,7 @@
       "path": "scripts/auditar-admin-correo-mensajeria.js",
       "extension": ".js",
       "bytes": 9160,
-      "sha256": "9e83c137baa3d365df7fc3281d58145c2b0b3d51e302dec446c77f272ac29cf5"
+      "sha256": "8f09423e7e68213d797a780c69649e33ad67633b302cf4c67c1f61e891f7d7fd"
     },
     {
       "path": "scripts/auditar-admin-fundamentos.js",
@@ -35412,7 +35412,7 @@
       "path": "scripts/auditar-borrado-global-catalogo.mjs",
       "extension": ".mjs",
       "bytes": 6580,
-      "sha256": "5968cf2159b78701baea4af34660bd0ebb231b120faf7cb9548b67cb30e1f738"
+      "sha256": "4306c8126366748eb5dd1a5c3efb8e2506993fbd9a22e4661f7aaa2ec1e00d20"
     },
     {
       "path": "scripts/auditar-canonicos-viewports.mjs",
@@ -35484,7 +35484,7 @@
       "path": "scripts/auditar-contacto-pagina.js",
       "extension": ".js",
       "bytes": 2276,
-      "sha256": "a32e89465d4fae843a02e811d2ec6490b2bdc104d7ad855e5d76a0345756899c"
+      "sha256": "afde027145788a0e6b0ae211e211a09e1b1fc85c976fb6787160e9b48b963ec3"
     },
     {
       "path": "scripts/auditar-contenido-fase-6.js",
@@ -35538,7 +35538,7 @@
       "path": "scripts/auditar-correo-fase-3.js",
       "extension": ".js",
       "bytes": 5179,
-      "sha256": "ac18428b9d1177f6d0af9cd1dd214ca0035f86b8da054f1ea3a50e2cc001508a"
+      "sha256": "ec0d6052cb8cd4faf6181db89398258e39aa6166a239c1be97d79c9965598cf7"
     },
     {
       "path": "scripts/auditar-critico-recuperacion.js",
@@ -35604,7 +35604,7 @@
       "path": "scripts/auditar-estabilidad-final-v1.mjs",
       "extension": ".mjs",
       "bytes": 9543,
-      "sha256": "3adee659bc2832c1329e33cc074fcb0ff7e7c0767a9bd090fad0b30a32681ac4"
+      "sha256": "636a2ced83001083120c11176b3aa531fd362b0d72048994b95136ed1401c252"
     },
     {
       "path": "scripts/auditar-estado-ecosistema.mjs",
@@ -35724,7 +35724,7 @@
       "path": "scripts/auditar-imagenes-fase-5.js",
       "extension": ".js",
       "bytes": 26342,
-      "sha256": "d5cc7beef79fc21069e963a9bbb65b766aa9a5b62c1109ac42a6b2a6618b7869"
+      "sha256": "e04f269c4b16ef5a77052999aa7fea1039d2eeceb11bebda0786834a8956933d"
     },
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
@@ -35778,7 +35778,7 @@
       "path": "scripts/auditar-legal-paginas.js",
       "extension": ".js",
       "bytes": 2616,
-      "sha256": "b52f9567329ae958a660888746bfe97365a8c4409f245076af4c177c92795fa5"
+      "sha256": "4ccfabf9f0478c0c00d6dbd4fa3e6fe060a77b339ed275ca7eb1282f7037046f"
     },
     {
       "path": "scripts/auditar-limpiar-ramas.mjs",
@@ -35904,7 +35904,7 @@
       "path": "scripts/auditar-puntuacion-resena-producto.mjs",
       "extension": ".mjs",
       "bytes": 1387,
-      "sha256": "b18adef619a2e5abe1a3a7b655ef8406c83a6d27229a37c57a4602478fe20e8b"
+      "sha256": "5070cbe8c08cb3da080a2f5e232f9a5b975c62176730086779aa60d0e6e84a5d"
     },
     {
       "path": "scripts/auditar-push-web.js",
@@ -35975,8 +35975,8 @@
     {
       "path": "scripts/auditar-superadmin-maestro-conexiones.mjs",
       "extension": ".mjs",
-      "bytes": 7645,
-      "sha256": "385128b2e3378aab400ec88b15de8296b94461b650eaa1009e13f4de65ae8184"
+      "bytes": 7480,
+      "sha256": "5c9c3a653b9b1f0ab750142b41468c1f6cd691089298d4cb10e960180a701579"
     },
     {
       "path": "scripts/auditar-superadmin-maestro-responsive.mjs",
@@ -35988,7 +35988,7 @@
       "path": "scripts/auditar-superadmin-maestro.mjs",
       "extension": ".mjs",
       "bytes": 8525,
-      "sha256": "86f9fdeb6a65894950065009611f2ad31dde54f3d385f02fdd0cce4c58045789"
+      "sha256": "59a57d7e464024c0c9a83da6a84d8cf05ac7a74283e2dcda1ca6f159fb095e90"
     },
     {
       "path": "scripts/auditar-superadmin-modulos-completos.mjs",

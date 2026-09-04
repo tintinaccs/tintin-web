@@ -18,7 +18,7 @@ const resilience = read('cloudflare/resiliencia-sync-catalogo.js');
 const appsScript = read('apps-script/ProductosUnificados.gs');
 const engagement = read('apps-script/Participacion.gs');
 
-expect(admin.includes('js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260831-catalog-global-delete-1'), 'admin.html no carga el módulo versionado de borrado global.');
+expect(admin.includes('js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260831-catalog-global-delete-2'), 'admin.html no carga el módulo versionado de borrado global.');
 expect(api.includes('requireSuperAdmin(request)'), 'La API destructiva no exige Super Admin.');
 expect(api.includes("ALL_PRODUCTS_CONFIRM = 'ELIMINAR TODOS LOS PRODUCTOS'"), 'Falta confirmación exacta para borrar todos los productos.');
 expect(api.includes("ALL_COLLECTIONS_CONFIRM = 'ELIMINAR TODAS LAS COLECCIONES'"), 'Falta confirmación exacta para borrar todas las colecciones.');

@@ -39,7 +39,7 @@ if (!/terminos\|privacidad[\s\S]*load\('pages\/institutional\/mantenimiento-lega
 }
 
 const pageFunction = fs.readFileSync('functions/[page].js', 'utf8');
-if (!pageFunction.includes('mantenimiento-legal.js?v=tintin-20260815-legal-clean-1')) errors.push('Pages Function no inyecta runtime legal versionado');
+if (!pageFunction.includes('mantenimiento-legal.js?v=tintin-20260815-legal-clean-2')) errors.push('Pages Function no inyecta runtime legal versionado');
 if (!pageFunction.includes("page === 'terminos' || page === 'privacidad'")) errors.push('Pages Function no limita runtime legal a rutas legales');
 
 const workflow = fs.readFileSync('.github/workflows/auditar-tintin.yml', 'utf8');
