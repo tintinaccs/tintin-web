@@ -1,4 +1,4 @@
-import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1";
+import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1";
 import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -827,6 +827,13 @@ onAuthStateChanged(auth, async user => {
     // rato en que la navegación todavía no terminaba de cargar el destino.
     if (!user) { window.location.href = 'login.html'; return; }
     currentUser = user;
+
+    // Sin esto, la primera lectura a Firestore (chequeo de bloqueo más abajo
+    // y getUserRole) puede salir antes de que App Check tenga token listo.
+    // Con Enforcement activo, Firestore la rechaza (permission-denied), el
+    // catch de más abajo la toma como sesión inválida y manda a login.html
+    // — un rebote admin→login que no depende del método de login usado.
+    await appCheckReady;
 
     const role = await getUserRole(user.uid, user.email);
     currentRole = role;
