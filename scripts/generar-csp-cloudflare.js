@@ -23,6 +23,8 @@ const runtimePoliciesPath = path.join(root, 'config/csp-runtime.json');
 const runtimeModulePath = path.join(root, 'config/csp-runtime.js');
 const startMarker = '# CSP_ROUTE_POLICIES_START';
 const endMarker = '# CSP_ROUTE_POLICIES_END';
+const cacheStartMarker = '# CLEAN_ROUTE_CACHE_CONTROL_START';
+const cacheEndMarker = '# CLEAN_ROUTE_CACHE_CONTROL_END';
 const baseScriptOrigins = ['https://*.gstatic.com', 'https://*.google.com', 'https://www.googletagmanager.com'];
 const baseConnectOrigins = [
   'https://*.googleapis.com',
@@ -187,6 +189,28 @@ function routesForFile(file) {
   return [clean, `/${file}`];
 }
 
+function cleanRoutes() {
+  const routes = new Set();
+  for (const file of fs.readdirSync(root).filter(name => name.endsWith('.html')).sort()) {
+    const [clean] = routesForFile(file);
+    if (clean !== '/') routes.add(clean);
+  }
+  return [...routes].sort();
+}
+
+// Las rutas "limpias" (sin .html) que sirve Cloudflare Pages no matchean
+// /*.html ni /, así que sin un bloque propio quedan sin Cache-Control: una
+// respuesta HTML servida por functions/_middleware.js para /login o /admin
+// puede entonces cachearse (borde o navegador) con headers desactualizados,
+// incluyendo la CSP corta de fallback en vez de la dinámica. No se agrega
+// esto al bloque global /* porque auditar-headers-produccion.mjs verifica
+// que ese bloque nunca vuelva a imponer no-store sobre los assets estáticos.
+function cleanRouteCacheControlBlock() {
+  return cleanRoutes()
+    .map(route => `${route}\n  Cache-Control: no-cache, no-store, must-revalidate`)
+    .join('\n\n');
+}
+
 function runtimePolicies() {
   const routes = {};
   for (const file of fs.readdirSync(root).filter(name => name.endsWith('.html')).sort()) {
@@ -211,6 +235,10 @@ function expectedHeaders() {
     '# TINTIN — seguridad y caché para Cloudflare Pages\n# CSP completa de HTML se entrega desde functions/_middleware.js.\n# _headers conserva una CSP fallback corta para respuestas estáticas/404.\n\n'
   );
   headers = headers.replace(/\/\*\n/, `/*\n  Content-Security-Policy: ${staticFallbackPolicy()}\n`);
+  headers = headers.replace(
+    new RegExp(`${cacheStartMarker}[\\s\\S]*?${cacheEndMarker}`),
+    `${cacheStartMarker}\n${cleanRouteCacheControlBlock()}\n${cacheEndMarker}`
+  );
   headers = headers.replace(/\n{3,}/g, '\n\n');
   const oversized = headers.split('\n').filter(line => line.length > 2000);
   if (oversized.length) {

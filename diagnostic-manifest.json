@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T14:40:56.138Z",
-  "sourceFingerprint": "d97db08d1de526c2273d4ebaaf9c803e6c79917376e4596736fd704488109a98",
+  "generatedAt": "2026-09-04T15:29:19.932Z",
+  "sourceFingerprint": "5ada0f3f73d89100ed966e6d356187ebd6e2fab978db7bb00581198a57081493",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 804,
     "textFiles": 771,
-    "totalBytes": 9961938,
+    "totalBytes": 9963204,
     "pages": 18,
     "modules": 553
   },
@@ -28781,8 +28781,8 @@
     },
     {
       "path": "scripts/generar-csp-cloudflare.js",
-      "bytes": 11669,
-      "sha256": "3c8778447df0cbe929628b4fae4dd515d6c8538d88d46c3909c6b59262a25ce0",
+      "bytes": 12935,
+      "sha256": "bcb8e55b7c220c37711c5a91f6d78d30ca52a12431164c394d03afba28f31324",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28791,51 +28791,51 @@
       "endpoints": [
         {
           "url": "https://*.gstatic.com/",
-          "line": 26
-        },
-        {
-          "url": "https://*.google.com/",
-          "line": 26
-        },
-        {
-          "url": "https://www.googletagmanager.com/",
-          "line": 26
-        },
-        {
-          "url": "https://*.googleapis.com/",
           "line": 28
         },
         {
+          "url": "https://*.google.com/",
+          "line": 28
+        },
+        {
+          "url": "https://www.googletagmanager.com/",
+          "line": 28
+        },
+        {
+          "url": "https://*.googleapis.com/",
+          "line": 30
+        },
+        {
           "url": "https://*.googleusercontent.com/",
-          "line": 31
-        },
-        {
-          "url": "https://*.google-analytics.com/",
-          "line": 32
-        },
-        {
-          "url": "https://*.analytics.google.com/",
           "line": 33
         },
         {
-          "url": "https://unpkg.com/",
+          "url": "https://*.google-analytics.com/",
+          "line": 34
+        },
+        {
+          "url": "https://*.analytics.google.com/",
           "line": 35
         },
         {
+          "url": "https://unpkg.com/",
+          "line": 37
+        },
+        {
           "url": "https://www.youtube.com/",
-          "line": 40
-        },
-        {
-          "url": "https://www.youtube-nocookie.com/",
-          "line": 41
-        },
-        {
-          "url": "https://player.vimeo.com/",
           "line": 42
         },
         {
+          "url": "https://www.youtube-nocookie.com/",
+          "line": 43
+        },
+        {
+          "url": "https://player.vimeo.com/",
+          "line": 44
+        },
+        {
           "url": "https://api.cloudinary.com/",
-          "line": 164
+          "line": 166
         }
       ]
     },
@@ -36137,8 +36137,8 @@
     {
       "path": "scripts/generar-csp-cloudflare.js",
       "extension": ".js",
-      "bytes": 11669,
-      "sha256": "3c8778447df0cbe929628b4fae4dd515d6c8538d88d46c3909c6b59262a25ce0"
+      "bytes": 12935,
+      "sha256": "bcb8e55b7c220c37711c5a91f6d78d30ca52a12431164c394d03afba28f31324"
     },
     {
       "path": "scripts/lib/architecture-gates.mjs",
