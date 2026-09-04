@@ -154,6 +154,10 @@ body:has(.login-page) .login-form-side,
 body:has(.login-page).login-setup-open .login-form-side {
   padding-top:clamp(10px, 1.6vw, 18px) !important;
 }
+body:has(.login-page) .login-box,
+body:has(.login-page).login-setup-open .login-box {
+  box-shadow:none !important;
+}
 body:has(.login-page) .login-mobile-logo-text,
 body:has(.login-page) .login-mobile-logo-sub { display:none !important; }
 body:has(.login-page).login-setup-open :is(#login-profile-name-field,#login-profile-phone-field,#login-profile-address-field) {
