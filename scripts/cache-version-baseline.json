@@ -220,8 +220,8 @@
     "sha256": "77f776d5b297ce973fe5ea432f318498d7e9f07a41f183525a79159c6686c12d"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20260903-users-order-2",
-    "sha256": "aeed651a0988d675e4e4c65b44866a88462c6618fc70019f9e1b9e6f133097fc"
+    "version": "tintin-20260904-appcheck-guard-1",
+    "sha256": "4acddbdad2a66cc1f85f6d1fca264acd68ffdd7040b833a9f8b487b7a1d3384b"
   },
   "js/admin/appearance/editor-visual-admin.js": {
     "version": "tintin-20260903-pr427-cache-1",
@@ -541,7 +541,7 @@
   },
   "js/core/auth/proteccion-sesion.js": {
     "version": "tintin-20260904-auth-provider-session-fix-1",
-    "sha256": "cbcebca76b1bf30e91c68bf5919cf4738d24d7d4ad36927ce00332deafc54a57"
+    "sha256": "0830e25d445192b3902abe187d683638c87a6f0f523fb4d3998aec4a3cc12602"
   },
   "js/core/auth/roles.js": {
     "version": "tintin-20260821-accounts-phase-a-1",
@@ -560,7 +560,7 @@
     "sha256": "e98ac9378f8d53cfc80a2528fc75de0c29dffc053aa705cba29bb3a656e91177"
   },
   "js/core/firebase/firebase.js": {
-    "version": "tintin-20260904-auth-provider-session-fix-1",
+    "version": "tintin-20260904-auth-runtime-cache-reset-1",
     "sha256": "196b130b154b93b6e969c8ac9da0376cea5fccf105cfac0fe8b7c6d53cfda0fd"
   },
   "js/core/firebase/origen-funciones.js": {
@@ -631,10 +631,6 @@
     "version": "tintin-20260815-global-studio-10",
     "sha256": "168a1776a152e8f7b5dfae2c5417b438f96bff585034c74d584cd4603622f090"
   },
-  "js/create-order-client.js": {
-    "version": "tintin-20260822-checkout-hardening-2",
-    "sha256": "5498bee1605e307a331d4583adbd7c611691abae60ee7399c5e42caf9dacc680"
-  },
   "js/create-order-public-client.js": {
     "version": "tintin-20260903-canonical-order-bridge-2",
     "sha256": "3879a87106ef68928f292cb9cced849d75ae13cafdca2b1fc9b638610989fdc6"
@@ -653,7 +649,7 @@
   },
   "js/email/correo-autenticacion.js": {
     "version": "tintin-20260904-auth-provider-session-fix-1",
-    "sha256": "1379ed2e9f4ce83bd46feaaafdbd80c0a14d30e7b5069950016fe1f19dd31381"
+    "sha256": "34f355965e3d1a1af77948f7822f60e0070cf8691175db59aba59ab664485b56"
   },
   "js/email/notificacion-pedido-resend.js": {
     "version": "tintin-20260814-social-notifications-1",
@@ -800,3 +796,4 @@
     "sha256": "0960b457cc93ca0fba130e272b21b8d3fe14bd34192ea53838e3706a6391c8bd"
   }
 }
+
