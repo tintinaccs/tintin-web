@@ -1,6 +1,12 @@
 const ADMIN_APP_SOURCE = '/js/admin/admin-app.js?v=tintin-20260904-appcheck-guard-1';
-const FIREBASE_IMPORT_BEFORE = 'import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1";';
-const FIREBASE_IMPORT_AFTER = 'import { auth, db, appCheckReady, authPersistenceReady } from "../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1";';
+const FIREBASE_MODULE_URL = [
+  '..',
+  'core',
+  'firebase',
+  'firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1'
+].join('/');
+const FIREBASE_IMPORT_BEFORE = `import { auth, db, appCheckReady } from "${FIREBASE_MODULE_URL}";`;
+const FIREBASE_IMPORT_AFTER = `import { auth, db, appCheckReady, authPersistenceReady } from "${FIREBASE_MODULE_URL}";`;
 const HIDE_OVERLAY_NEEDLE = 'function hideOverlay() { window.ttPageReady && window.ttPageReady(); }';
 const AUTH_GUARD_NEEDLE = 'onAuthStateChanged(auth, async user => {';
 const AUTH_INIT_ERROR_MARKER = "console.error('[Admin] Auth init error:', e);";
