@@ -7,7 +7,6 @@ import {
 import {
   firestoreAdminGet,
   firestoreAdminReplace,
-  firestoreAdminMerge,
   decodeFirestoreFields,
   resolveEmailFromUsernameKey,
   fsString,
@@ -24,7 +23,6 @@ const MAX_CODES_PER_DAY = 8;
 const MAX_CODES_PER_IP_DAY = 30;
 const IP_COOLDOWN_MS = 10 * 1000;
 const DELIVERY_PROBE_DELAY_MS = 450;
-const DELIVERY_BACKGROUND_DELAY_MS = 2500;
 const TERMINAL_DELIVERY_FAILURES = new Set(['bounced', 'failed', 'suppressed', 'canceled']);
 
 function clean(value, maxLength = 254) {
@@ -158,20 +156,6 @@ async function sendCodeEmail(apiKey, email, code, requestId) {
   return emailId;
 }
 
-async function refreshDeliveryStatus(env, apiKey, path, providerEmailId) {
-  try {
-    await sleep(DELIVERY_BACKGROUND_DELAY_MS);
-    const lastEvent = await getResendEmailStatus(apiKey, providerEmailId);
-    if (!lastEvent) return;
-    await firestoreAdminMerge(env, path, {
-      providerLastEvent: fsString(lastEvent),
-      providerStatusCheckedAt: fsTimestamp(new Date())
-    });
-  } catch (error) {
-    console.warn('[email-otp-send] No se pudo refrescar estado de entrega:', error?.message || error);
-  }
-}
-
 export async function onRequest(context) {
   const { request, env } = context;
   const origin = request.headers.get('origin') || '';
@@ -290,10 +274,6 @@ export async function onRequest(context) {
       providerAcceptedAt: fsTimestamp(new Date()),
       providerStatusCheckedAt: fsTimestamp(new Date())
     });
-
-    if (typeof context.waitUntil === 'function') {
-      context.waitUntil(refreshDeliveryStatus(env, apiKey, path, providerEmailId));
-    }
 
     return jsonResponse({ success: true }, 200, origin, requestUrl);
   } catch (error) {
