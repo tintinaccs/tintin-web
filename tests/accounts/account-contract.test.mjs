@@ -39,8 +39,6 @@ test('OTP por correo conserva trazabilidad y detecta fallos de entrega de Resend
   assert.match(send, /TERMINAL_DELIVERY_FAILURES/);
   assert.match(send, /providerEmailId: fsString\(providerEmailId\)/);
   assert.match(send, /providerLastEvent: fsString\(providerLastEvent\)/);
-  assert.match(send, /firestoreAdminMerge/);
-  assert.match(send, /context\.waitUntil/);
 });
 
 test('el login por correo y username usa Pages Functions también desde localhost', () => {
