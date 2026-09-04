@@ -19,11 +19,11 @@
 // Quien no quiera completarlo tiene salida: el modal del alta cierra la
 // sesión y la devuelve a la tienda, donde puede seguir mirando.
 
-import { auth, db } from "../../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1";
+import { auth, db } from "../../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20260904-profile-aliases-2";
-import { SUPER_ADMIN } from "../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1";
+import { SUPER_ADMIN } from "../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-2";
 
 // Evita releer el perfil en cada navegación de la misma sesión. Se guarda el
 // uid y no un simple `true`: si se cambia de cuenta en la misma pestaña, el
