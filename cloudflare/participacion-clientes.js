@@ -61,7 +61,9 @@ function customerUsername(profile, email) {
 export function publicCustomerName(realName) {
   const parts = clean(realName, 160).split(/\s+/).filter(Boolean);
   if (!parts.length) return 'Clienta Tintin';
-  return parts.slice(0, 2).map(part => `${Array.from(part)[0]}***`).join(' ');
+  const firstName = parts[0];
+  const lastInitial = parts.length > 1 ? ` ${Array.from(parts[parts.length - 1])[0]}.` : '';
+  return `${firstName}${lastInitial}`;
 }
 
 async function readContext(env, user, productId) {
