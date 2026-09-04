@@ -34,6 +34,20 @@ test('public reviews expose only public conversation data', async () => {
   assert.doesNotMatch(publicReply, /actorUsername:/);
 });
 
+test('public identity metadata distinguishes official account and staff safely', async () => {
+  const [client, product] = await Promise.all([
+    read('cloudflare/participacion-clientes.js'),
+    read('js/pages/product/resenas-producto.js'),
+  ]);
+  assert.match(client, /authorRole/);
+  assert.match(client, /isOfficial: authorType === 'store'/);
+  assert.match(client, /Cuenta oficial/);
+  assert.match(client, /agent: 'Moderador'/);
+  assert.match(product, /authorType === 'staff'/);
+  assert.match(product, /tt-public-badge-official/);
+  assert.match(product, /Nombre I/);
+});
+
 test('engagement writes stay behind server APIs', async () => {
   const rules = await read('firestore.rules');
   assert.match(rules, /match \/reviewRecords\/\{reviewId\}[\s\S]*?allow create, update, delete: if false/);
