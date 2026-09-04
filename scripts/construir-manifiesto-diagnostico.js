@@ -663,8 +663,12 @@ const sitemapRoutes = [...sitemap.matchAll(/<loc>[^<]*\/([^/]+\.html)<\/loc>/g)]
 const firestoreUsed = extractFirestoreCollections(allFiles);
 const firestoreRules = extractRuleCollections();
 const unboundedReads = extractUnboundedReads(allFiles);
+// El manifiesto se incluye en el inventario, pero no puede incluirse en su
+// propia huella: su generatedAt y sourceFingerprint cambian al regenerarlo y
+// provocan drift infinito en CI aunque el resto del repositorio sea idéntico.
 const sourceFingerprint = hash(Buffer.from(
-  files.map(file => `${file.path}:${file.sha256}`).join('\n'),
+  files.filter(file => file.path !== 'diagnostic-manifest.json')
+    .map(file => `${file.path}:${file.sha256}`).join('\n'),
   'utf8'
 ));
 
