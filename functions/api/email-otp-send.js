@@ -10,7 +10,8 @@ import {
   resolveEmailFromUsernameKey,
   fsString,
   fsInteger,
-  fsTimestamp
+  fsTimestamp,
+  lookupUserProvidersByEmail
 } from '../../cloudflare/firebase-admin-ligero.js';
 import { usernameKey } from '../../js/components/forms/utilidades-username.js';
 
@@ -202,10 +203,19 @@ export async function onRequest(context) {
       }
     }
 
-    // El PIN es un segundo método de acceso a la MISMA cuenta, también si la
-    // identidad se creó con Google. findOrCreateUserByEmail() reutiliza el UID
-    // existente de Firebase Auth y solo crea uno cuando el email verificado no
-    // existe, por lo que habilitar este camino no duplica perfiles.
+    // Una cuenta cuya identidad de acceso es Google debe volver a entrar por
+    // Google. No se permite convertir el OTP en una segunda puerta para esa
+    // cuenta: además de contradecir la política de acceso, puede producir una
+    // experiencia distinta entre username y email. La consulta es de solo
+    // lectura y ocurre antes de crear/guardar cualquier código.
+    const providerInfo = await lookupUserProvidersByEmail(env, email);
+    if (providerInfo.exists && providerInfo.providers.includes('google.com')) {
+      return jsonResponse({
+        success: false,
+        error: 'google_account_exists',
+        loginMethod: 'google'
+      }, 409, origin, requestUrl);
+    }
 
     const path = docPath(email);
     const existingDoc = await firestoreAdminGet(env, path);
