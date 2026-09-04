@@ -2,7 +2,7 @@ import {
   jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import {
-  decodeFirestoreFields, encodeFirestoreFields, firestoreAdminCommit, firestoreAdminGet,
+  decodeFirestoreFields, encodeFirestoreFields, firestoreAdminCommit, firestoreAdminGet, updateFirebaseUserProfile,
 } from '../../cloudflare/firebase-admin-ligero.js';
 import { notifyAdminIfAbsent } from '../../cloudflare/notificaciones-sociales.js';
 
@@ -77,6 +77,33 @@ export async function onRequest(context) {
       { path: auditPath, fields: encodeFirestoreFields(audit), currentDocument: { exists: false } },
     ]);
 
+    let authSync = 'synchronized';
+    try {
+      await updateFirebaseUserProfile(env, user.uid, { photoURL });
+    } catch (authError) {
+      authSync = 'pending';
+      const reconciliationPath = `${userPath}/profilePhotoReconciliations/${auditId}`;
+      const reconciliationAuditId = eventId();
+      await firestoreAdminCommit(env, [
+        { path: reconciliationPath, fields: encodeFirestoreFields({
+          eventId: auditId, uid: user.uid, photoURL, state: 'pending', attempts: 0,
+          lastError: clean(authError?.message || 'Error desconocido', 300), createdAt: now,
+          updatedAt: now, nextAttemptAt: new Date(now.getTime() + 60_000),
+        }), currentDocument: { exists: false } },
+        { path: `auditLog/${reconciliationAuditId}`, fields: encodeFirestoreFields({
+          eventId: reconciliationAuditId, timestamp: now, createdAt: now,
+          customerId: before.customerId || `CUS_${user.uid}`, username: before.username || '',
+          actorId: user.uid, actorEmail: clean(user.email, 254).toLowerCase(),
+          actorRole: before.role || 'client', action: 'reconciliacion_auth_pendiente',
+          entityType: 'usuario', entityId: user.uid,
+          before: { photoURL: before.photoURL || '' }, after: { photoURL },
+          origin: 'profile-avatar-reconciliation', result: 'pending', changeId: auditId,
+          error: clean(authError?.message || 'Error desconocido', 300),
+        }), currentDocument: { exists: false } },
+      ]);
+      console.error('[profile-avatar] Auth quedó pendiente de reconciliación', { uid: user.uid, auditId, error: authError });
+    }
+
     await notifyAdminIfAbsent(env, {
       kind: 'profile_photo_updated', actorType: 'customer', actorUid: user.uid,
       actorName: before.name || before.displayName || before.username || user.email?.split('@')[0] || 'Una clienta',
@@ -85,7 +112,7 @@ export async function onRequest(context) {
       targetUrl: 'admin.html#section-usuarios', sourceType: 'user', sourceId: user.uid, createdAt: now,
     }, `profile_photo_updated:${user.uid}:${auditId}`).catch(error => console.warn('[profile-avatar] aviso admin no enviado:', error));
 
-    return jsonResponse({ ok: true, photoURL, auditId }, 200, origin, request.url);
+    return jsonResponse({ ok: true, photoURL, auditId, authSync }, authSync === 'pending' ? 202 : 200, origin, request.url);
   } catch (error) {
     const status = Number(error?.status) || (error?.code === 'version_conflict' ? 409 : 400);
     return jsonResponse({ ok: false, error: String(error?.message || 'No se pudo consolidar la foto').slice(0, 300) }, status, origin, request.url);

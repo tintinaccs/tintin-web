@@ -239,6 +239,25 @@ export async function setFirebaseUserDisabled(env, uid, disabled) {
   }
 }
 
+/** Actualiza atributos de perfil Auth desde el servidor, sin confiar en el navegador. */
+export async function updateFirebaseUserProfile(env, uid, { photoURL = '' } = {}) {
+  const safeUid = String(uid || '').trim();
+  if (!/^[A-Za-z0-9_-]{6,128}$/.test(safeUid)) throw new Error('UID inválido');
+  const normalizedPhotoURL = String(photoURL || '').trim();
+  if (normalizedPhotoURL && normalizedPhotoURL.length > 2000) throw new Error('URL de perfil demasiado larga');
+  const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
+  const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:update', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify({ localId: safeUid, photoUrl: normalizedPhotoURL, deleteAttribute: normalizedPhotoURL ? [] : ['PHOTO_URL'] })
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error('No se pudo sincronizar el perfil de Firebase Auth: ' + (data?.error?.message || response.status));
+  }
+  return { uid: safeUid, photoURL: normalizedPhotoURL };
+}
+
 // --- Firestore admin REST ---
 const FIRESTORE_SCOPE = 'https://www.googleapis.com/auth/datastore';
 

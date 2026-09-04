@@ -11,6 +11,7 @@ import {
   buildUserNotificationWrite,
   dispatchAdminNotificationPush,
 } from './notificaciones-sociales.js';
+import { resolveCustomerTier } from './fidelidad-clientes.js';
 
 const MAX_COMMENT = 1600;
 const MAX_REPLY = 1200;
@@ -88,6 +89,7 @@ async function readContext(env, user, productId) {
     username: customerUsername(profile, user.email),
     publicName: admin ? 'Tintin Accesorios' : publicCustomerName(realName),
     photoUrl: clean(profile.photoURL || profile.photoUrl || '', 1200),
+    customerTier: admin ? null : resolveCustomerTier(profile),
     isSuperAdmin: admin,
   };
 }
@@ -124,6 +126,9 @@ function publicReply(message) {
     isOfficial: authorType === 'store',
     publicName: clean(message?.actorPublicName || message?.publicName || (authorType === 'store' ? 'Tintin Accesorios' : 'Clienta Tintin'), 160),
     publicPhotoUrl: clean(message?.actorPhotoUrl || message?.publicPhotoUrl, 1200),
+    customerTier: message?.customerTier && typeof message.customerTier === 'object'
+      ? { id: clean(message.customerTier.id, 40), label: clean(message.customerTier.label, 60) }
+      : null,
     text: clean(message?.text, MAX_REPLY),
     likeCount: Math.max(0, Number(message?.likeCount) || 0),
     createdAt: message?.createdAt || new Date(),
@@ -142,6 +147,9 @@ function reviewPublic(record) {
     comment: record.comment,
     publicName: record.publicName,
     publicPhotoUrl: clean(record.actorPhotoUrl, 1200),
+    customerTier: authorType === 'customer' && record.customerTier
+      ? { id: clean(record.customerTier.id, 40), label: clean(record.customerTier.label, 60) }
+      : null,
     authorType,
     authorRole,
     roleLabel: authorType === 'store' ? 'Cuenta oficial' : authorType === 'staff' ? ({ admin: 'Admin', agent: 'Moderador', viewer: 'Viewer' }[authorRole] || 'Equipo Tintin') : '',
@@ -333,6 +341,7 @@ export async function createReview(env, user, input) {
       username: context.username,
       publicName: context.publicName,
       actorPhotoUrl: context.photoUrl,
+      customerTier: context.customerTier,
       authorType: context.isSuperAdmin ? 'store' : 'customer',
       productId: context.productId,
       productName: context.productName,
@@ -452,6 +461,7 @@ export async function addCustomerReply(env, user, input) {
       actorUsername: context.username,
       actorPublicName: context.publicName,
       actorPhotoUrl: context.photoUrl,
+      customerTier: context.customerTier,
       text,
       likeCount: 0,
       createdAt: now,

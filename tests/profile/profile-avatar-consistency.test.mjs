@@ -17,6 +17,9 @@ test('la foto de perfil se consolida server-side y deja historial/auditoría', (
   assert.match(endpoint, /auditLog/);
   assert.match(endpoint, /currentDocument: \{ updateTime: currentDocument\.updateTime \}/);
   assert.match(endpoint, /profile_photo_updated/);
+  assert.match(endpoint, /updateFirebaseUserProfile/);
+  assert.match(endpoint, /profilePhotoReconciliations/);
+  assert.match(endpoint, /reconciliacion_auth_pendiente/);
 });
 
 test('el navegador no escribe directamente users/{uid} para cerrar la foto', () => {
