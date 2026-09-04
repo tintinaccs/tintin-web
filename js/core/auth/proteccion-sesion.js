@@ -76,7 +76,9 @@ async function enforce(user) {
 }
 
 function goToExpiredLogin() {
-  if (redirectingToLogin === false) return;
+  // signOut() dispara onAuthStateChanged(null), que limpia el flag de
+  // redirección antes de que termine este await. La navegación no puede
+  // depender de ese flag o el vencimiento queda silenciosamente en la página.
   if (location.pathname === '/login' || location.pathname.endsWith('/login.html') || location.pathname.endsWith('login.html')) return;
   location.href = '/login?expired=1';
 }
@@ -110,9 +112,16 @@ onAuthStateChanged(auth, user => {
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) stopSessionChecks();
   else {
-    recordActivity();
+    // Primero comprobar el reloj persistido y recién después aceptar una
+    // interacción posterior. Volver a enfocar/recargar una pestaña no cuenta
+    // como actividad: evita revivir sesiones que estuvieron inactivas más de
+    // 30 minutos.
     startSessionChecks();
-    if (auth.currentUser) void enforce(auth.currentUser);
+    if (auth.currentUser) {
+      void enforce(auth.currentUser).then(() => {
+        if (auth.currentUser && !redirectingToLogin) recordActivity();
+      });
+    }
   }
 });
 
