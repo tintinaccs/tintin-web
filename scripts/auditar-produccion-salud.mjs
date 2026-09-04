@@ -38,7 +38,7 @@ function assertStrongCsp(value, route) {
 
 function assertInlineHashes(body, csp, route) {
   const allowed = new Set(String(csp || '').match(/'sha256-[^']+'/g) || []);
-  for (const match of String(body || '').replace(/\r\n?/g, '\n').matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+  for (const match of String(body || '').replace(/\r\n?/g, '\n').matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script(?:\s[^>]*)?>/gi)) {
     if (/\bsrc\s*=/i.test(match[1])) continue;
     const digest = crypto.createHash('sha256').update(match[2], 'utf8').digest('base64');
     const hash = `'sha256-${digest}'`;
