@@ -848,6 +848,14 @@
     .adm-table-users .adm-user-contact { white-space: nowrap; }
     .adm-table-users .adm-user-actions { min-width: 190px; }
     .adm-table-users .adm-user-actions > div { flex-wrap: nowrap; }
+    .adm-profile-photos-list { display:flex; flex-direction:column; gap:1px; border:1px solid var(--adm-border); border-radius:14px; overflow:hidden; background:var(--adm-border); }
+    .adm-profile-photo-row { display:flex; align-items:center; gap:14px; min-width:0; padding:13px 15px; background:#fff; }
+    .adm-profile-photo-avatar { width:48px; height:48px; flex:0 0 48px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background:#f7d8e4; color:#a83a64; font-weight:800; }
+    .adm-profile-photo-avatar img { width:100%; height:100%; object-fit:cover; display:block; }
+    .adm-profile-photo-meta { min-width:0; display:flex; flex-direction:column; gap:3px; }
+    .adm-profile-photo-meta strong { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .adm-profile-photo-meta span, .adm-profile-photo-meta small { color:var(--adm-muted); font-size:12px; overflow-wrap:anywhere; }
+    @media (max-width:600px) { .adm-profile-photo-row { padding:11px; gap:10px; } .adm-profile-photo-avatar { width:42px; height:42px; flex-basis:42px; } }
     #prod-table-wrap > table { min-width: 980px; }
     #prod-list-card > .adm-card-head {
       align-items: flex-start;

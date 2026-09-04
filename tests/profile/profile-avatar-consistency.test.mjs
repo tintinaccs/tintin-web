@@ -5,6 +5,8 @@ import fs from 'node:fs';
 const endpoint = fs.readFileSync(new URL('../../functions/api/profile-avatar-commit.js', import.meta.url), 'utf8');
 const adminEndpoint = fs.readFileSync(new URL('../../functions/api/profile-avatar-admin.js', import.meta.url), 'utf8');
 const client = fs.readFileSync(new URL('../../js/quality/estabilidad-final-publica.js', import.meta.url), 'utf8');
+const adminHtml = fs.readFileSync(new URL('../../admin.html', import.meta.url), 'utf8');
+const adminApp = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
 
 test('la foto de perfil se consolida server-side y deja historial/auditoría', () => {
   assert.match(endpoint, /requireFirebaseUser/);
@@ -25,4 +27,12 @@ test('la bandeja futura de fotos usa una proyección server-side y permiso deleg
   assert.match(adminEndpoint, /firestoreAdminListAll\(env, 'users', MAX_USERS\)/);
   assert.doesNotMatch(adminEndpoint, /profile\.email/);
   assert.match(adminEndpoint, /photoURL/);
+});
+
+test('Usuarios integra la pestaña de fotos sin exponer el CRUD de cuentas', () => {
+  assert.match(adminHtml, /data-user-tab="photos"/);
+  assert.match(adminHtml, /id="profile-photos-card"/);
+  assert.match(adminApp, /profile-avatar-admin/);
+  assert.match(adminApp, /roleCanDo\('usuarios', 'gestionarFotos'\)/);
+  assert.match(adminApp, /getElementById\('users-management-card'\)/);
 });

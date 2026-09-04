@@ -564,7 +564,9 @@ function switchSection(target) {
   const requiredPerm = SECTION_PERMISSION[target];
   const allowedByPermission = target === 'apariencia'
     ? canAccessUnifiedAppearance()
-    : (!requiredPerm || can(currentRole, requiredPerm));
+    : target === 'usuarios'
+      ? (can(currentRole, 'manageUsers') || roleCanDo('usuarios', 'gestionarFotos'))
+      : (!requiredPerm || can(currentRole, requiredPerm));
   if (requiredPerm && !allowedByPermission) {
     toast('No tenés permiso para ver esta sección');
     target = 'dashboard';
@@ -928,7 +930,9 @@ function setupPermissions(role) {
       ? (role === 'superadmin' && currentUser?.email === SUPER_ADMIN)
       : section === 'apariencia'
         ? canAccessUnifiedAppearance(role)
-        : can(role, perm);
+        : section === 'usuarios'
+          ? (can(role, 'manageUsers') || roleCanDo('usuarios', 'gestionarFotos'))
+          : can(role, perm);
     document.querySelectorAll(`[data-section="${section}"]`).forEach(el => {
       el.style.display = allowed ? '' : 'none';
     });
@@ -1619,12 +1623,50 @@ let userStatusFilter = 'active';
 let userSortMode = 'recent';
 
 function loadUsers() {
+  const managementCard = document.getElementById('users-management-card');
+  const photosCard = document.getElementById('profile-photos-card');
+  const canPhotos = roleCanDo('usuarios', 'gestionarFotos');
+  if (canPhotos && !can(currentRole, 'manageUsers')) {
+    if (managementCard) managementCard.hidden = true;
+    if (photosCard) photosCard.hidden = false;
+    loadProfilePhotos();
+    return;
+  }
+  if (managementCard) managementCard.hidden = false;
   const tbody = document.getElementById('users-tbody');
   if (!adminRealtimeReady.users) {
     tbody.innerHTML = '<tr><td colspan="9" class="adm-loading"><span class="adm-spinner"></span> Sincronizando usuarios...</td></tr>';
     return;
   }
   applyUserFilters();
+}
+
+let profilePhotosLoading = false;
+async function loadProfilePhotos() {
+  if (profilePhotosLoading || !currentUser) return;
+  profilePhotosLoading = true;
+  const status = document.getElementById('profile-photos-status');
+  const list = document.getElementById('profile-photos-list');
+  if (status) status.textContent = 'Cargando fotos…';
+  try {
+    const token = await currentUser.getIdToken();
+    const response = await fetch('/api/profile-avatar-admin', { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || data.ok !== true) throw new Error(data.error || 'No se pudieron cargar las fotos.');
+    const users = Array.isArray(data.users) ? data.users : [];
+    const withPhotos = users.filter(user => user.photoURL);
+    if (status) status.textContent = `${withPhotos.length} foto${withPhotos.length === 1 ? '' : 's'} registrada${withPhotos.length === 1 ? '' : 's'}`;
+    if (list) list.innerHTML = withPhotos.length ? withPhotos.map(user => {
+      const name = user.name || user.username || 'Cuenta sin nombre';
+      const avatar = sanitizeImageUrl(user.photoURL);
+      return `<article class="adm-profile-photo-row"><div class="adm-profile-photo-avatar">${avatar ? `<img src="${escapeHtmlAdmin(avatar)}" alt="" loading="lazy">` : escapeHtmlAdmin(name[0].toUpperCase())}</div><div class="adm-profile-photo-meta"><strong>${escapeHtmlAdmin(name)}</strong><span>${escapeHtmlAdmin(user.username ? `@${user.username}` : 'Sin username')} · ${escapeHtmlAdmin(ROLE_LABELS[user.role] || 'Cliente')}</span><small>Actualizada: ${escapeHtmlAdmin(formatDate(user.updatedAt || user.createdAt))}</small></div></article>`;
+    }).join('') : '<div class="adm-analytics-empty">Todavía no hay fotos de perfil registradas.</div>';
+  } catch (error) {
+    if (status) status.textContent = error?.message || 'No se pudieron cargar las fotos.';
+    if (list) list.innerHTML = '';
+  } finally {
+    profilePhotosLoading = false;
+  }
 }
 
 // Única fuente de verdad para lo que se ve en la tabla: combina el texto de
@@ -1762,8 +1804,20 @@ function renderUsersTable(users) {
 document.getElementById('user-search').oninput = applyUserFilters;
 document.getElementById('user-sort').onchange = (e) => { userSortMode = e.target.value; applyUserFilters(); };
 document.querySelectorAll('#section-usuarios .user-tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => window.filterUsersByStatus(btn.dataset.userTab));
+  btn.addEventListener('click', () => {
+    if (btn.dataset.userTab === 'photos') {
+      document.querySelectorAll('#section-usuarios .user-tab-btn').forEach(item => item.classList.toggle('active', item === btn));
+      document.getElementById('users-management-card')?.setAttribute('hidden', '');
+      document.getElementById('profile-photos-card')?.removeAttribute('hidden');
+      loadProfilePhotos();
+      return;
+    }
+    document.getElementById('users-management-card')?.removeAttribute('hidden');
+    document.getElementById('profile-photos-card')?.setAttribute('hidden', '');
+    window.filterUsersByStatus(btn.dataset.userTab);
+  });
 });
+document.getElementById('profile-photos-refresh')?.addEventListener('click', loadProfilePhotos);
 
 window.updateUserRole = async (uid, role, email) => {
   // El rol del Super Admin real está protegido de raíz — no solo se oculta el
