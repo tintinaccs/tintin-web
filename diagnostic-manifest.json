@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T13:07:24.910Z",
-  "sourceFingerprint": "e46f10a48a861601363134118eb86b4d558755957d247b72e9e22da226e8d57d",
+  "generatedAt": "2026-09-04T13:38:51.621Z",
+  "sourceFingerprint": "acf6319540ead63042854424664924a97ae8aa2c40bad2c7446aeb96912c8f9d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 803,
-    "textFiles": 770,
-    "totalBytes": 9959780,
+    "files": 804,
+    "textFiles": 771,
+    "totalBytes": 9961473,
     "pages": 18,
     "modules": 553
   },
@@ -31989,6 +31989,12 @@
       "sha256": "295d1106180bbfef7a0b854ceeb15b8492a2decaabe6015d8488ab4b43e993eb"
     },
     {
+      "path": ".github/workflows/desplegar-reglas-firestore.yml",
+      "extension": ".yml",
+      "bytes": 1219,
+      "sha256": "3a812b238b43a2e9cbca889570a663ee761491d46693d36620e9d64e7a132af3"
+    },
+    {
       "path": ".github/workflows/diagnostico-maestro.yml",
       "extension": ".yml",
       "bytes": 14619,
@@ -32933,8 +32939,8 @@
     {
       "path": "despliegue-firebase.md",
       "extension": ".md",
-      "bytes": 926,
-      "sha256": "20c571151aec9c1d908bf6a7c8eb9372bbd5bd1eb26e1dc2f32395fe041130c9"
+      "bytes": 1374,
+      "sha256": "c319fa385326beb60828347489fa124a4578a244c0715c2d040ce033da5f44bb"
     },
     {
       "path": "docs/accesibilidad-fase-10.md",
@@ -35243,8 +35249,8 @@
     {
       "path": "package-lock.json",
       "extension": ".json",
-      "bytes": 331013,
-      "sha256": "d4fe6d5c0f044905b6989ae1708717c049d215ce646683d9cd0a53fbe621b005"
+      "bytes": 331039,
+      "sha256": "4bf3564f5aba687a575fd0dd2d1502cc77c73fa1ef891134b702833840521ea8"
     },
     {
       "path": "package.json",
