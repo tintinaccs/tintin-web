@@ -993,8 +993,13 @@ const loginConGoogle = async () => {
   setOverlayText('Esperando que completes el inicio de sesión con Google…');
   const myAttempt = ++_googleLoginToken; // si se reintenta, el intento viejo se ignora al resolver
   try {
-    await authPersistenceReady;
+    // La apertura debe ocurrir dentro del gesto original del clic. Esperar
+    // authPersistenceReady antes de invocar Firebase hace que Safari/Chrome
+    // consideren el popup una apertura asíncrona y lo bloqueen. La persistencia
+    // ya se inicia al cargar firebase.js; se espera después del popup para no
+    // romper la activación del usuario.
     const cred = await signInWithPopup(auth, provider);
+    await authPersistenceReady.catch(() => {});
     if (myAttempt !== _googleLoginToken) return; // ya se lanzó un intento más nuevo
     googleButtonLabel.textContent = 'Entrando…';
     setOverlayText('Redireccionando a tu cuenta…');
