@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T20:54:25.887Z",
-  "sourceFingerprint": "a801a5961a0f9afc1cf9b6dedf6a4fa9eb1d6c62563537bd4427da86e406ea8f",
+  "generatedAt": "2026-09-04T20:57:06.085Z",
+  "sourceFingerprint": "7a446a29d129a7cc01c44400f52a70ae296d572235c96c6c6d639089d6a850a1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 810,
-    "textFiles": 777,
-    "totalBytes": 10006322,
+    "files": 811,
+    "textFiles": 778,
+    "totalBytes": 10006726,
     "pages": 18,
-    "modules": 559
+    "modules": 560
   },
   "viewports": [
     {
@@ -30404,6 +30404,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/diagnostics/master-diagnostics-auth-status.test.mjs",
+      "bytes": 404,
+      "sha256": "553f25a51b3112e617c00e165282790c8d6a4a4a4259f932e744eb84f30585e9",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/engagement/firebase-id-token.test.mjs",
       "bytes": 3019,
       "sha256": "0ef15d51d73ea8e0c8edc0d4e978a6f1f2b1ec9aaa7d34ab0e3e420356d8e008",
@@ -36675,6 +36705,12 @@
       "extension": ".mjs",
       "bytes": 919,
       "sha256": "cd147ea0599730dc24b97a521aed18dac71d60a6733b79e4a8066b1af4afa8df"
+    },
+    {
+      "path": "tests/diagnostics/master-diagnostics-auth-status.test.mjs",
+      "extension": ".mjs",
+      "bytes": 404,
+      "sha256": "553f25a51b3112e617c00e165282790c8d6a4a4a4259f932e744eb84f30585e9"
     },
     {
       "path": "tests/engagement/firebase-id-token.test.mjs",
