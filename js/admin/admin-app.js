@@ -1,4 +1,4 @@
-import { auth, db, appCheckReady, authPersistenceReady } from "../core/firebase/firebase.js?v=tintin-20260904-admin-auth-guard-2";
+import { auth, db, appCheckReady, authPersistenceReady } from "../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1";
 import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -873,7 +873,7 @@ async function startAdminAuthGuard() {
       // Cuenta bloqueada: esta sí es una invalidación explícita de acceso y
       // por eso cierra sesión antes de volver al login. Super Admin queda
       // protegido por identidad y no entra en este chequeo.
-      if (user.email !== SUPER_ADMIN) {
+      if (String(user.email || '').trim().toLowerCase() !== SUPER_ADMIN.toLowerCase()) {
         const selfSnap = await getDoc(doc(db, 'users', user.uid));
         if (selfSnap.exists() && selfSnap.data().blocked) {
           await signOut(auth);
@@ -900,7 +900,7 @@ async function startAdminAuthGuard() {
 
       setupUserInfo(user, role);
       setupPermissions(role);
-      if (role === 'superadmin' && user.email === SUPER_ADMIN) {
+      if (role === 'superadmin' && String(user.email || '').trim().toLowerCase() === SUPER_ADMIN.toLowerCase()) {
         initSiteDiagnostics({ role });
       }
       startAdminRealtimeData();
