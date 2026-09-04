@@ -824,7 +824,7 @@ function showAdminInitFailure() {
     overlay = document.createElement('div');
     overlay.id = 'adm-init-error';
     overlay.setAttribute('role', 'alert');
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat,Arial,sans-serif;color:#44222d';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#44222d';
     overlay.innerHTML = '<div style="max-width:560px;text-align:center">' +
       '<h1 style="font-size:22px;margin:0 0 10px">No se pudo iniciar el panel</h1>' +
       '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">Tu sesión sigue activa. Hubo un problema al cargar datos o componentes del panel; no se cerró la sesión ni se volvió al login.</p>' +
