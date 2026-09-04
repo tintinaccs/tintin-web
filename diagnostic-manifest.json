@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T23:41:37.415Z",
-  "sourceFingerprint": "9ab087aff7525aebc3c099ea64d3b702188d400872a111b895e976fdbcc7ee21",
+  "generatedAt": "2026-09-04T23:44:26.904Z",
+  "sourceFingerprint": "0944891185394603cd9f0fde1f2ca9081c767e8c28675f48400f089d2f3e2f94",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 805,
     "textFiles": 772,
-    "totalBytes": 9971431,
+    "totalBytes": 9971564,
     "pages": 18,
     "modules": 553
   },
@@ -27924,8 +27924,8 @@
     },
     {
       "path": "scripts/auditar-rendimiento-regresiones.js",
-      "bytes": 9588,
-      "sha256": "726444ea6dbdfb612468c7795aade39951fded42b3e56bff2e0140aa977103c9",
+      "bytes": 9721,
+      "sha256": "f84a5a2f26b3c0772fa25982bce588e8477b95f1629aab9922808b7bd02019c4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27935,13 +27935,13 @@
           "raw": "../../email/notificacion-pedido-resend.js",
           "target": null,
           "dynamic": false,
-          "line": 80
+          "line": 87
         },
         {
           "raw": "./nucleo-control-tienda.js",
           "target": "scripts/nucleo-control-tienda.js",
           "dynamic": false,
-          "line": 86
+          "line": 93
         }
       ],
       "endpoints": []
@@ -35931,8 +35931,8 @@
     {
       "path": "scripts/auditar-rendimiento-regresiones.js",
       "extension": ".js",
-      "bytes": 9588,
-      "sha256": "726444ea6dbdfb612468c7795aade39951fded42b3e56bff2e0140aa977103c9"
+      "bytes": 9721,
+      "sha256": "f84a5a2f26b3c0772fa25982bce588e8477b95f1629aab9922808b7bd02019c4"
     },
     {
       "path": "scripts/auditar-rendimiento-tiempo-real.js",
@@ -39503,12 +39503,12 @@
           },
           {
             "file": "scripts/auditar-rendimiento-regresiones.js",
-            "line": 84,
+            "line": 91,
             "operation": "doc"
           },
           {
             "file": "scripts/auditar-rendimiento-regresiones.js",
-            "line": 86,
+            "line": 93,
             "operation": "doc"
           }
         ]
