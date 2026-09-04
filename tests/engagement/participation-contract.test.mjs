@@ -45,7 +45,7 @@ test('public identity metadata distinguishes official account and staff safely',
   assert.match(client, /agent: 'Moderador'/);
   assert.match(product, /authorType === 'staff'/);
   assert.match(product, /tt-public-badge-official/);
-  assert.match(product, /Nombre I/);
+  assert.match(product, /\[A-ZÁÉÍÓÚÑ\]\\\.\$/u/);
 });
 
 test('engagement writes stay behind server APIs', async () => {
