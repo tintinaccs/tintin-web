@@ -70,14 +70,16 @@ export function publicCustomerName(realName) {
 async function readContext(env, user, productId) {
   const id = safeId(productId, 'Producto');
   const uid = safeId(user.uid, 'Cuenta');
-  const [productDoc, userDoc] = await Promise.all([
+  const [productDoc, userDoc, settingsDoc] = await Promise.all([
     firestoreAdminGet(env, `products/${id}`),
     firestoreAdminGet(env, `users/${uid}`),
+    firestoreAdminGet(env, 'settings/general'),
   ]);
   if (!productDoc) throw new Error('El producto ya no existe');
   const product = decoded(productDoc);
   if (product.active === false) throw new Error('El producto no está disponible');
   const profile = decoded(userDoc) || {};
+  const settings = decoded(settingsDoc) || {};
   if (profile.blocked === true) throw new Error('La cuenta no puede realizar esta acción');
   const realName = customerName(profile, user.email);
   const admin = isSuperAdminUser(user);
@@ -89,7 +91,7 @@ async function readContext(env, user, productId) {
     username: customerUsername(profile, user.email),
     publicName: admin ? 'Tintin Accesorios' : publicCustomerName(realName),
     photoUrl: clean(profile.photoURL || profile.photoUrl || '', 1200),
-    customerTier: admin ? null : resolveCustomerTier(profile),
+    customerTier: admin ? null : resolveCustomerTier(profile, settings.loyaltyTiers),
     isSuperAdmin: admin,
   };
 }

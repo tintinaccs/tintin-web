@@ -2743,6 +2743,7 @@ function serializeGeneralConfig_() {
     'cfg-facebook', 'cfg-tiktok', 'cfg-ga4-id', 'cfg-store-open',
     'cfg-header-desktop-tablet', 'cfg-header-mobile', 'cfg-pay-efectivo',
     'cfg-pay-transferencia', 'cfg-bank-ueno', 'cfg-bank-atlas',
+    'cfg-loyalty-fiel', 'cfg-loyalty-frecuente', 'cfg-loyalty-destacado',
     ...MAINTENANCE_ROLE_KEYS.map(role => 'ma-' + role),
   ];
   return JSON.stringify(ids.map(id => {
@@ -2785,6 +2786,11 @@ async function loadConfig() {
     const bankAccounts = d.bankAccounts || {};
     document.getElementById('cfg-bank-ueno').value = bankAccounts.ueno || '';
     document.getElementById('cfg-bank-atlas').value = bankAccounts.atlas || '';
+    const loyaltyTiers = Array.isArray(d.loyaltyTiers) ? d.loyaltyTiers : [];
+    const loyaltyById = Object.fromEntries(loyaltyTiers.map(tier => [String(tier?.id || ''), tier]));
+    document.getElementById('cfg-loyalty-fiel').value = Number(loyaltyById.fiel?.minPurchases) > 0 ? Number(loyaltyById.fiel.minPurchases) : 5;
+    document.getElementById('cfg-loyalty-frecuente').value = Number(loyaltyById.frecuente?.minPurchases) > 0 ? Number(loyaltyById.frecuente.minPurchases) : 10;
+    document.getElementById('cfg-loyalty-destacado').value = Number(loyaltyById.destacado?.minPurchases) > 0 ? Number(loyaltyById.destacado.minPurchases) : 20;
     // Accesos con tienda cerrada
     const maintenanceAccess = d.maintenanceAccess || {};
     _lastKnownMaintenanceAccess = {};
@@ -2829,6 +2835,11 @@ document.getElementById('btn-save-config').onclick = async () => {
       const input = document.getElementById('ma-' + role);
       maintenanceAccess[role] = !!(input && input.checked);
     });
+    const loyaltyTiers = [
+      { id: 'destacado', label: 'Cliente destacado', minPurchases: Math.max(1, Math.min(9999, parseInt(document.getElementById('cfg-loyalty-destacado').value, 10) || 20)) },
+      { id: 'frecuente', label: 'Cliente frecuente', minPurchases: Math.max(1, Math.min(9999, parseInt(document.getElementById('cfg-loyalty-frecuente').value, 10) || 10)) },
+      { id: 'fiel', label: 'Cliente fiel', minPurchases: Math.max(1, Math.min(9999, parseInt(document.getElementById('cfg-loyalty-fiel').value, 10) || 5)) },
+    ];
     const generalRef = doc(db, 'settings', 'general');
     const storeGateRef = doc(db, 'settings', 'storeGate');
     const settingsBatch = writeBatch(db);
@@ -2862,6 +2873,7 @@ document.getElementById('btn-save-config').onclick = async () => {
         ueno:  document.getElementById('cfg-bank-ueno').value.trim(),
         atlas: document.getElementById('cfg-bank-atlas').value.trim(),
       },
+      loyaltyTiers,
       updatedAt: serverTimestamp()
     }, { merge: true });
 
@@ -2891,6 +2903,7 @@ document.getElementById('btn-save-config').onclick = async () => {
     if (JSON.stringify(_lastKnownHeaderMode) !== JSON.stringify(newHeaderMode)) {
       await logAudit('cambiar_header_dispositivo', 'settings', 'general', 'Header por dispositivo', JSON.stringify(newHeaderMode));
     }
+    await logAudit('config_fidelidad_clientes', 'settings', 'general', 'Niveles de fidelidad', JSON.stringify(loyaltyTiers));
     _lastKnownStoreOpen = willBeOpen;
     _lastKnownMaintenanceAccess = maintenanceAccess;
     _lastKnownHeaderMode = newHeaderMode;

@@ -11,7 +11,8 @@ test('la fidelidad usa compras válidas y niveles explícitos', () => {
   assert.match(source, /minPurchases: 5/);
   assert.match(source, /minPurchases: 10/);
   assert.match(source, /minPurchases: 20/);
-  assert.match(participation, /resolveCustomerTier\(profile\)/);
+  assert.match(participation, /resolveCustomerTier\(profile, settings\.loyaltyTiers\)/);
+  assert.match(participation, /settings\/general/);
 });
 
 test('el nivel de cliente es solo una identidad pública, no un permiso', () => {

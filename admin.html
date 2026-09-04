@@ -1661,6 +1661,18 @@
           <p style="font-size:12px;color:var(--adm-muted);margin:14px 0 0;padding-top:14px;border-top:1px solid var(--adm-border)">🔒 La pantalla bloqueada sólo muestra número de pedido, total y tipo de entrega.</p>
         </div>
       </div>
+      <div class="adm-card" style="margin-bottom:20px">
+        <div class="adm-card-head"><div class="adm-card-title">🏷️ Niveles de fidelidad</div></div>
+        <div class="adm-card-body">
+          <p style="font-size:12px;color:var(--adm-muted);margin:0 0 14px">Definí cuántas compras válidas necesita una clienta para recibir cada pin. Las compras canceladas, rechazadas y reembolsadas no cuentan.</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px">
+            <label class="adm-label">Cliente fiel<input class="adm-input" id="cfg-loyalty-fiel" type="number" min="1" max="9999" step="1" value="5"></label>
+            <label class="adm-label">Cliente frecuente<input class="adm-input" id="cfg-loyalty-frecuente" type="number" min="1" max="9999" step="1" value="10"></label>
+            <label class="adm-label">Cliente destacado<input class="adm-input" id="cfg-loyalty-destacado" type="number" min="1" max="9999" step="1" value="20"></label>
+          </div>
+          <p style="font-size:11px;color:var(--adm-muted);margin:12px 0 0">La cuenta oficial de Tintin es independiente y no se modifica desde acá.</p>
+        </div>
+      </div>
       <button type="button" class="adm-btn adm-btn-primary" id="btn-save-config" style="font-size:14px;padding:12px 28px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M19 21H5a2 2 0 01-2-2V5a2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar toda la configuración</button>
     </div>
 
