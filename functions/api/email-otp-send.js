@@ -1,7 +1,8 @@
 import {
   jsonResponse,
   originIsAllowed,
-  preflightResponse
+  preflightResponse,
+  SUPERADMIN_EMAIL
 } from '../../cloudflare/seguridad-cloudinary.js';
 import {
   firestoreAdminGet,
@@ -16,11 +17,13 @@ import { usernameKey } from '../../js/components/forms/utilidades-username.js';
 
 const FROM_EMAIL = 'No Reply · Tintin <noreply@tintinaccs.com>';
 const EMAIL_MARK = 'https://tintinaccesorios.pages.dev/assets-tintin/images/general/logo.png';
-const CODE_TTL_MS = 5 * 60 * 1000; // 5 minutos, a pedido: "código de bonificación" con vencimiento corto
+const CODE_TTL_MS = 5 * 60 * 1000;
 const RESEND_COOLDOWN_MS = 45 * 1000;
 const MAX_CODES_PER_DAY = 8;
 const MAX_CODES_PER_IP_DAY = 30;
 const IP_COOLDOWN_MS = 10 * 1000;
+const DELIVERY_PROBE_DELAY_MS = 450;
+const TERMINAL_DELIVERY_FAILURES = new Set(['bounced', 'failed', 'suppressed', 'canceled']);
 
 function clean(value, maxLength = 254) {
   return String(value == null ? '' : value).trim().slice(0, maxLength);
@@ -36,6 +39,10 @@ function todayKey() {
 
 function docPath(email) {
   return `emailOtpCodes/${encodeURIComponent(email)}`;
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function hashCode(code) {
@@ -74,21 +81,24 @@ async function enforceIpRateLimit(request, env, now) {
 }
 
 function generateCode() {
-  // Rechaza el sesgo del módulo relanzando si cae fuera del rango exacto de
-  // 6 dígitos parejos (0..999999 son 1.000.000 valores, ya exacto para
-  // Uint32 % 1e6 sin sesgo real — se mantiene simple).
   const value = crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000;
   return String(value).padStart(6, '0');
 }
 
-async function sendCodeEmail(apiKey, email, code) {
-  // Tabla en vez de flex/grid para las 6 cifras: Outlook de escritorio
-  // renderiza con el motor de Word y no soporta flexbox/grid de forma
-  // confiable — una tabla con <td> es lo único que se ve igual en todos
-  // los clientes de correo. La fuente declara Montserrat primero (se ve
-  // así en los pocos clientes que sí la cargan) con una pila web-safe de
-  // respaldo (Helvetica/Arial) para el resto, en vez de forzar Montserrat
-  // sola y dejar que el cliente caiga en su serif genérica.
+async function getResendEmailStatus(apiKey, emailId) {
+  const safeId = clean(emailId, 120);
+  if (!safeId) return '';
+  const response = await fetch(`https://api.resend.com/emails/${encodeURIComponent(safeId)}`, {
+    headers: { authorization: `Bearer ${apiKey}` }
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(clean(data?.message || data?.error || `Resend status HTTP ${response.status}`, 300));
+  }
+  return clean(data?.last_event, 40).toLowerCase();
+}
+
+async function sendCodeEmail(apiKey, email, code, requestId) {
   const digitCells = code
     .split('')
     .map(digit => `<td style="width:40px;height:52px;border:1px solid #efc7d8;border-radius:10px;background:#ffffff;font-size:25px;font-weight:800;color:#a00055;text-align:center;vertical-align:middle">${digit}</td>`)
@@ -124,20 +134,26 @@ async function sendCodeEmail(apiKey, email, code) {
     method: 'POST',
     headers: {
       authorization: `Bearer ${apiKey}`,
-      'content-type': 'application/json'
+      'content-type': 'application/json',
+      'idempotency-key': `tintin-otp-${requestId}`
     },
     body: JSON.stringify({
       from: FROM_EMAIL,
       to: [email],
+      reply_to: SUPERADMIN_EMAIL,
       subject: `${code} es tu código de acceso a Tintin`,
       html,
-      text
+      text,
+      tags: [{ name: 'category', value: 'auth_otp' }]
     })
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
     throw new Error(clean(data?.message || data?.error || `Resend HTTP ${response.status}`, 300));
   }
+  const emailId = clean(data?.id, 120);
+  if (!emailId) throw new Error('Resend aceptó la solicitud sin devolver email id');
+  return emailId;
 }
 
 export async function onRequest(context) {
@@ -183,12 +199,6 @@ export async function onRequest(context) {
 
     let email;
     if (rawUsername) {
-      // Login por username: se resuelve al email real de la cuenta ANTES de
-      // rate-limitear/enviar. Si el username no existe, la respuesta tiene
-      // que ser indistinguible de un envío real (mismo success:true, sin
-      // tocar emailOtpCodes ni llamar a Resend) — igual que ya exige
-      // firestore.rules para que usernameReservations no sea un oráculo de
-      // qué usernames tienen cuenta (ver scripts/probar-firestore-username-unico.mjs).
       const key = usernameKey(rawUsername);
       const resolved = key ? await resolveEmailFromUsernameKey(env, key) : null;
       if (!resolved) {
@@ -201,11 +211,6 @@ export async function onRequest(context) {
         return jsonResponse({ success: false, error: 'invalid_email' }, 400, origin, requestUrl);
       }
     }
-
-    // El PIN es un segundo método de acceso a la MISMA cuenta, también si la
-    // identidad se creó con Google. findOrCreateUserByEmail() reutiliza el UID
-    // existente de Firebase Auth y solo crea uno cuando el email verificado no
-    // existe, por lo que habilitar este camino no duplica perfiles.
 
     const path = docPath(email);
     const existingDoc = await firestoreAdminGet(env, path);
@@ -230,13 +235,27 @@ export async function onRequest(context) {
 
     const code = generateCode();
     const codeHash = await hashCode(code);
+    const requestId = crypto.randomUUID();
+    let providerEmailId = '';
+    let providerLastEvent = 'accepted';
 
-    // Primero confirmamos que el proveedor de correo acepta el envío. Antes
-    // se guardaba el OTP y recién después se llamaba a Resend: si Resend
-    // fallaba, la persona no recibía nada y además quedaba atrapada en el
-    // cooldown como si el mensaje sí hubiera salido.
     try {
-      await sendCodeEmail(apiKey, email, code);
+      providerEmailId = await sendCodeEmail(apiKey, email, code, requestId);
+
+      await sleep(DELIVERY_PROBE_DELAY_MS);
+      try {
+        providerLastEvent = await getResendEmailStatus(apiKey, providerEmailId) || providerLastEvent;
+      } catch (statusError) {
+        console.warn('[email-otp-send] Resend aceptó el correo pero no se pudo consultar su estado inicial:', statusError?.message || statusError);
+      }
+
+      if (TERMINAL_DELIVERY_FAILURES.has(providerLastEvent)) {
+        console.error('[email-otp-send] Entrega OTP rechazada tras aceptación:', {
+          providerEmailId,
+          providerLastEvent
+        });
+        return jsonResponse({ success: false, error: 'send_failed' }, 502, origin, requestUrl);
+      }
     } catch (sendError) {
       console.error('[email-otp-send] Resend rechazó el correo:', sendError?.message || sendError);
       return jsonResponse({ success: false, error: 'send_failed' }, 502, origin, requestUrl);
@@ -248,14 +267,16 @@ export async function onRequest(context) {
       attempts: fsInteger(0),
       lastSentAt: fsTimestamp(new Date(now)),
       dateKey: fsString(dateKey),
-      sendCountToday: fsInteger(sendCountToday + 1)
+      sendCountToday: fsInteger(sendCountToday + 1),
+      provider: fsString('resend'),
+      providerEmailId: fsString(providerEmailId),
+      providerLastEvent: fsString(providerLastEvent),
+      providerAcceptedAt: fsTimestamp(new Date()),
+      providerStatusCheckedAt: fsTimestamp(new Date())
     });
 
     return jsonResponse({ success: true }, 200, origin, requestUrl);
   } catch (error) {
-    // Mismo criterio que email-otp-verify: el detalle interno va a los logs,
-    // nunca al cliente como código de error (no lo sabe traducir y expone
-    // información del servidor).
     console.error('[email-otp-send] Error inesperado:', error?.message || error);
     const badRequest = error?.message === 'request_too_large' || error instanceof SyntaxError;
     return jsonResponse(

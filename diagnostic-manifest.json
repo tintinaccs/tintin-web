@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T21:50:36.744Z",
-  "sourceFingerprint": "050d3d0d30a594fed5e0329a325d1773ccead28e0106e213b799e75cefb812e5",
+  "generatedAt": "2026-09-04T22:30:27.269Z",
+  "sourceFingerprint": "d65e8ff3dd01e0860b149bcaf3dbb5dbe4320406465bbb799b5f84b5d7c7bcbd",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 809,
-    "textFiles": 776,
-    "totalBytes": 9991692,
+    "files": 810,
+    "textFiles": 777,
+    "totalBytes": 9999889,
     "pages": 18,
-    "modules": 557
+    "modules": 558
   },
   "viewports": [
     {
@@ -18250,8 +18250,8 @@
     },
     {
       "path": "functions/admin.js",
-      "bytes": 1139,
-      "sha256": "b91796b539d2f78b88210515422d72246b50b6eafeb0bf535287ead0d1ec529b",
+      "bytes": 2423,
+      "sha256": "6bb2f7791222e31bf305319a8243566d003958aae018fa7b09ef3e772d495886",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18783,8 +18783,8 @@
     },
     {
       "path": "functions/api/email-otp-send.js",
-      "bytes": 11614,
-      "sha256": "73db72873d23cb1a221a16dff7dd3e4c9f52b2db724b860189183bc5e0117b8b",
+      "bytes": 11672,
+      "sha256": "38ba58fcd984468550f88c0c6c949240779e8e95b7a28915811de8e04647074c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18794,29 +18794,33 @@
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 5
+          "line": 6
         },
         {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 14
+          "line": 15
         },
         {
           "raw": "../../js/components/forms/utilidades-username.js",
           "target": "js/components/forms/utilidades-username.js",
           "dynamic": false,
-          "line": 15
+          "line": 16
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/assets-tintin/images/general/logo.png",
-          "line": 18
+          "line": 19
+        },
+        {
+          "url": "https://api.resend.com/emails/$%7BencodeURIComponent(safeId",
+          "line": 91
         },
         {
           "url": "https://api.resend.com/emails",
-          "line": 123
+          "line": 133
         }
       ]
     },
@@ -19790,6 +19794,30 @@
         "error": ""
       },
       "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "functions/js/admin/admin-app-runtime.js",
+      "bytes": 6306,
+      "sha256": "2ef6a99e298e1e27f79a0a7e43505d7359acbcda32853d53fadd5b05b22f71d4",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "${FIREBASE_MODULE_URL}",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "${FIREBASE_MODULE_URL}",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        }
+      ],
       "endpoints": []
     },
     {
@@ -29492,8 +29520,8 @@
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
-      "bytes": 3430,
-      "sha256": "e8df578cf061d30787c2f526c52d0f3cf8fa02632a36d3b31d7ccb72289cb0b3",
+      "bytes": 3979,
+      "sha256": "460f9ce80fe186efeed549956e09f6953b9dab2f81638bd5c4f39bb0d5ee9a64",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33503,8 +33531,8 @@
     {
       "path": "functions/admin.js",
       "extension": ".js",
-      "bytes": 1139,
-      "sha256": "b91796b539d2f78b88210515422d72246b50b6eafeb0bf535287ead0d1ec529b"
+      "bytes": 2423,
+      "sha256": "6bb2f7791222e31bf305319a8243566d003958aae018fa7b09ef3e772d495886"
     },
     {
       "path": "functions/api/admin-backfill-canonical-identity.js",
@@ -33605,8 +33633,8 @@
     {
       "path": "functions/api/email-otp-send.js",
       "extension": ".js",
-      "bytes": 11614,
-      "sha256": "73db72873d23cb1a221a16dff7dd3e4c9f52b2db724b860189183bc5e0117b8b"
+      "bytes": 11672,
+      "sha256": "38ba58fcd984468550f88c0c6c949240779e8e95b7a28915811de8e04647074c"
     },
     {
       "path": "functions/api/email-otp-verify.js",
@@ -33859,6 +33887,12 @@
       "extension": ".md",
       "bytes": 3038,
       "sha256": "8fdbc16cbd92e7d9bd06fb42abbab34e0f43ab964150d7c7fe30ea49ded1f12a"
+    },
+    {
+      "path": "functions/js/admin/admin-app-runtime.js",
+      "extension": ".js",
+      "bytes": 6306,
+      "sha256": "2ef6a99e298e1e27f79a0a7e43505d7359acbcda32853d53fadd5b05b22f71d4"
     },
     {
       "path": "functions/js/package.json",
@@ -36479,8 +36513,8 @@
     {
       "path": "tests/accounts/account-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 3430,
-      "sha256": "e8df578cf061d30787c2f526c52d0f3cf8fa02632a36d3b31d7ccb72289cb0b3"
+      "bytes": 3979,
+      "sha256": "460f9ce80fe186efeed549956e09f6953b9dab2f81638bd5c4f39bb0d5ee9a64"
     },
     {
       "path": "tests/accounts/username-login.test.mjs",
