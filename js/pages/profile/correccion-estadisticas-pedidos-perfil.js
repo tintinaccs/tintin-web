@@ -47,7 +47,7 @@ import { getOrdersForUserIdentity, calculateOrderStats } from '../../core/store/
     if (card) card.style.display = 'block';
 
     const stats = calculateOrderStats(orders);
-    if (count) count.textContent = String(Math.max(0, stats.totalOrders || 0));
+    if (count) count.textContent = String(Math.max(0, stats.purchaseCount || 0));
     if (total) total.textContent = formatPrice(Math.max(0, stats.totalSpent || 0));
 
     if (!orders.length) {

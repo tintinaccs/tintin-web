@@ -49,7 +49,8 @@ function normalizeStatus(status) {
 function isCancelled(order) {
   const s = normalizeStatus(order.status);
   const p = normalizeStatus(order.payment?.status || order.paymentStatus);
-  return s === 'cancelado' || s === 'rechazado' || p === 'cancelado' || p === 'rechazado' || p === 'reembolsado';
+  const cancelledStatuses = new Set(['cancelado', 'rechazado', 'reembolsado', 'refunded', 'refund']);
+  return cancelledStatuses.has(s) || cancelledStatuses.has(p);
 }
 
 function isCompleted(order) {
