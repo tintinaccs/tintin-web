@@ -3,7 +3,7 @@ const PROFILE_PATH_RE = /(?:^|\/)perfil(?:\.html)?\/?$/i;
 if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfileMaintenanceBooted) {
   window.TintinProfileMaintenanceBooted = true;
 
-  const VERSION = 'tintin-20260903-auth-persistence-1';
+  const VERSION = 'tintin-20260904-auth-runtime-cache-reset-1';
   const PROFILE_ORDERS_LIMIT = 100;
   let unsubscribeOrders = null;
   let orderFirestore = null;

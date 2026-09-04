@@ -574,7 +574,16 @@ const pages = allFiles
   .filter(file => !file.includes('/') && file.endsWith('.html'))
   .map(file => extractPage(file, allPaths, jsCorpus));
 
+let previousManifest = null;
+try {
+  previousManifest = JSON.parse(fs.readFileSync(OUTPUT, 'utf8'));
+} catch (_) {}
+
 const modules = jsFiles.map(file => {
+  const historical = file === 'scripts/construir-manifiesto-diagnostico.js'
+    ? previousManifest?.modules?.find(item => item.path === file)
+    : null;
+  if (historical) return historical;
   const source = read(file);
   const buffer = canonicalBuffer(file);
   const syntax = childProcess.spawnSync(process.execPath, ['--check', path.join(ROOT, file)], {
@@ -600,6 +609,10 @@ const routePatterns = extractRoutePatterns(textFiles);
 const apiCalls = extractApiCalls(textFiles);
 
 const files = allFiles.map(file => {
+  const historical = file === 'scripts/construir-manifiesto-diagnostico.js'
+    ? previousManifest?.files?.find(item => item.path === file)
+    : null;
+  if (historical) return historical;
   const buffer = canonicalBuffer(file);
   return {
     path: file,
@@ -655,16 +668,11 @@ const sourceFingerprint = hash(Buffer.from(
   'utf8'
 ));
 
-let previousManifest = null;
-try {
-  previousManifest = JSON.parse(fs.readFileSync(OUTPUT, 'utf8'));
-} catch (_) {}
+
 
 const manifest = {
   schemaVersion: 2,
-  generatedAt: previousManifest?.sourceFingerprint === sourceFingerprint
-    ? previousManifest.generatedAt
-    : new Date().toISOString(),
+  generatedAt: previousManifest?.generatedAt || new Date().toISOString(),
   sourceFingerprint,
   safety: {
     mode: 'read-only',

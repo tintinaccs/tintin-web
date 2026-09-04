@@ -216,7 +216,7 @@ import { ASSIGNABLE_ROLES } from './js/core/auth/contrato-cuentas-generado.js?v=
 import {
   isValidEmailFormat, requestOtpCode, verifyOtpCode,
   ensureUserDocForEmailLogin, otpErrorMessage
-} from "./js/email/correo-autenticacion.js?v=tintin-20260903-auth-persistence-2";
+} from "./js/email/correo-autenticacion.js?v=tintin-20260904-auth-provider-session-fix-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { isValidUsernameFormat, isReservedUsername, normalizeUsername } from "./js/components/forms/utilidades-username.js?v=tintin-20260821-username-unique-1";
@@ -226,7 +226,7 @@ import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260903-accounts-phase-a-2";
 import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260901-username-visible-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
-import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260903-session-pause-race-1";
+import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260904-auth-provider-session-fix-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260903-store-gate-fast-rest-2";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260904-profile-aliases-2";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260903-google-maps-coordinates-1";
