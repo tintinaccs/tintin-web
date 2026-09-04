@@ -1,0 +1,147 @@
+from pathlib import Path
+
+admin_path = Path('js/admin/admin-app.js')
+html_path = Path('admin.html')
+
+src = admin_path.read_text(encoding='utf-8')
+old_import = 'import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1";'
+new_import = 'import { auth, db, appCheckReady, authPersistenceReady } from "../core/firebase/firebase.js?v=tintin-20260904-admin-auth-guard-2";'
+if src.count(old_import) != 1:
+    raise SystemExit(f'Expected exactly one Firebase import, found {src.count(old_import)}')
+src = src.replace(old_import, new_import, 1)
+
+marker = '// ======== AUTH GUARD ========'
+suffix = 'function setupUserInfo(user, role) {'
+start = src.find(marker)
+end = src.find(suffix, start)
+if start < 0 or end < 0:
+    raise SystemExit('Could not locate the admin auth guard boundaries')
+
+guard = r'''// ======== AUTH GUARD ========
+// El panel no toma decisiones de navegación hasta que Firebase terminó de
+// restaurar la persistencia y resolvió el estado inicial de Auth. Esto evita
+// interpretar transitoriamente una sesión válida como user=null al entrar a
+// /admin después del login o de una recarga.
+function hideOverlay() { window.ttPageReady && window.ttPageReady(); }
+
+function showAdminInitFailure() {
+  document.documentElement.classList.remove('adm-auth-ready');
+  let overlay = document.getElementById('adm-init-error');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'adm-init-error';
+    overlay.setAttribute('role', 'alert');
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat,Arial,sans-serif;color:#44222d';
+    overlay.innerHTML = '<div style="max-width:560px;text-align:center">' +
+      '<h1 style="font-size:22px;margin:0 0 10px">No se pudo iniciar el panel</h1>' +
+      '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">Tu sesión sigue activa. Hubo un problema al cargar datos o componentes del panel; no se cerró la sesión ni se volvió al login.</p>' +
+      '<button type="button" id="adm-init-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#ad3f67;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    overlay.querySelector('#adm-init-retry')?.addEventListener('click', () => window.location.reload());
+  }
+  hideOverlay();
+}
+
+async function startAdminAuthGuard() {
+  try {
+    await authPersistenceReady;
+  } catch (error) {
+    // firebase.js ya intentó local -> session. Aunque ambos fallen, Auth puede
+    // seguir con persistencia en memoria; no convertimos un fallo de storage
+    // en un bucle de navegación.
+    console.warn('[Admin] Auth persistence unavailable:', error);
+  }
+
+  if (typeof auth.authStateReady === 'function') {
+    try {
+      await auth.authStateReady();
+    } catch (error) {
+      console.warn('[Admin] Auth initial state did not settle cleanly:', error);
+    }
+  }
+
+  onAuthStateChanged(auth, async user => {
+    // Este es el único caso de sesión ausente que manda al login. replace()
+    // evita dejar /admin en el historial y elimina el ping-pong con Atrás.
+    if (!user) {
+      window.location.replace('login.html');
+      return;
+    }
+
+    currentUser = user;
+
+    try {
+      await appCheckReady;
+
+      const role = await getUserRole(user.uid, user.email);
+      currentRole = role;
+
+      // Cuenta bloqueada: esta sí es una invalidación explícita de acceso y
+      // por eso cierra sesión antes de volver al login. Super Admin queda
+      // protegido por identidad y no entra en este chequeo.
+      if (user.email !== SUPER_ADMIN) {
+        const selfSnap = await getDoc(doc(db, 'users', user.uid));
+        if (selfSnap.exists() && selfSnap.data().blocked) {
+          await signOut(auth);
+          window.location.replace('login.html?blocked=1');
+          return;
+        }
+      }
+
+      // Una cuenta autenticada pero sin rol interno no es un error de Auth:
+      // va a su perfil, nunca al login.
+      if (role === 'client' || !role) {
+        window.location.replace('perfil.html');
+        return;
+      }
+
+      const storeCfg = await getStoreAccessConfig();
+      if (!isAccessAllowed(storeCfg, role, user.email)) {
+        renderStoreClosedOverlay();
+        hideOverlay();
+        return;
+      }
+
+      await loadRolePermissions();
+
+      setupUserInfo(user, role);
+      setupPermissions(role);
+      if (role === 'superadmin' && user.email === SUPER_ADMIN) {
+        initSiteDiagnostics({ role });
+      }
+      startAdminRealtimeData();
+      loadDashboard();
+      loadProductos();
+      loadColecciones();
+      applyInitialSectionFromUrl();
+      document.documentElement.classList.add('adm-auth-ready');
+      hideOverlay();
+    } catch (error) {
+      // Un fallo de Firestore, App Check, permisos dinámicos o UI NO significa
+      // que Firebase Auth haya perdido la sesión. Antes cualquier excepción
+      // terminaba en login.html y podía crear /admin <-> /login infinito.
+      console.error('[Admin] Init error; authenticated session preserved:', error);
+      showAdminInitFailure();
+    }
+  });
+}
+
+void startAdminAuthGuard();'''
+
+src = src[:start] + guard + '\n\n' + src[end:]
+admin_path.write_text(src, encoding='utf-8')
+
+html = html_path.read_text(encoding='utf-8')
+replacements = {
+    'js/core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1':
+        'js/core/firebase/firebase.js?v=tintin-20260904-admin-auth-guard-2',
+    'js/admin/admin-app.js?v=tintin-20260904-appcheck-guard-1':
+        'js/admin/admin-app.js?v=tintin-20260904-auth-guard-harden-2',
+}
+for old, new in replacements.items():
+    count = html.count(old)
+    if count != 1:
+        raise SystemExit(f'Expected exactly one occurrence of {old!r}, found {count}')
+    html = html.replace(old, new, 1)
+html_path.write_text(html, encoding='utf-8')
