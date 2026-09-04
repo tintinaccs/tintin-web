@@ -1661,7 +1661,8 @@ async function loadProfilePhotos() {
       const avatar = sanitizeImageUrl(user.photoURL);
       const canRemove = user.role !== 'superadmin';
       const removeButton = canRemove ? `<button type="button" class="adm-btn adm-btn-outline adm-btn-sm adm-profile-photo-remove" data-profile-remove="${escapeHtmlAdmin(user.uid)}" data-profile-photo="${escapeHtmlAdmin(user.photoURL)}" aria-label="Quitar foto de ${escapeHtmlAdmin(name)}">Quitar</button>` : '';
-      return `<article class="adm-profile-photo-row"><div class="adm-profile-photo-avatar">${avatar ? `<img src="${escapeHtmlAdmin(avatar)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='/assets-tintin/images/general/logo.png'">` : `<img src="/assets-tintin/images/general/logo.png" alt="" loading="lazy">`}</div><div class="adm-profile-photo-meta"><strong>${escapeHtmlAdmin(name)}</strong><span>${escapeHtmlAdmin(user.username ? `@${user.username}` : 'Sin username')} · ${escapeHtmlAdmin(ROLE_LABELS[user.role] || 'Cliente')}</span><small>Actualizada: ${escapeHtmlAdmin(formatDate(user.updatedAt || user.createdAt))}</small></div><div class="adm-profile-photo-actions">${removeButton}</div></article>`;
+      const replaceButton = canRemove ? `<label class="adm-btn adm-btn-outline adm-btn-sm adm-profile-photo-replace">Reemplazar<input type="file" data-profile-replace="${escapeHtmlAdmin(user.uid)}" data-profile-photo="${escapeHtmlAdmin(user.photoURL)}" accept="image/jpeg,image/png,image/webp" hidden></label>` : '';
+      return `<article class="adm-profile-photo-row"><div class="adm-profile-photo-avatar">${avatar ? `<img src="${escapeHtmlAdmin(avatar)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='/assets-tintin/images/general/logo.png'">` : `<img src="/assets-tintin/images/general/logo.png" alt="" loading="lazy">`}</div><div class="adm-profile-photo-meta"><strong>${escapeHtmlAdmin(name)}</strong><span>${escapeHtmlAdmin(user.username ? `@${user.username}` : 'Sin username')} · ${escapeHtmlAdmin(ROLE_LABELS[user.role] || 'Cliente')}</span><small>Actualizada: ${escapeHtmlAdmin(formatDate(user.updatedAt || user.createdAt))}</small></div><div class="adm-profile-photo-actions">${replaceButton}${removeButton}</div></article>`;
     }).join('') : '<div class="adm-analytics-empty">Todavía no hay fotos de perfil registradas.</div>';
   } catch (error) {
     if (status) status.textContent = error?.message || 'No se pudieron cargar las fotos.';
@@ -1818,6 +1819,34 @@ document.querySelectorAll('#section-usuarios .user-tab-btn').forEach(btn => {
     document.getElementById('profile-photos-card')?.setAttribute('hidden', '');
     window.filterUsersByStatus(btn.dataset.userTab);
   });
+});
+
+document.getElementById('profile-photos-list')?.addEventListener('change', async (event) => {
+  const input = event.target.closest?.('[data-profile-replace]');
+  const file = input?.files?.[0];
+  if (!input || !file || !currentUser) return;
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size <= 0 || file.size > 5 * 1024 * 1024) {
+    toast('La foto debe ser JPG, PNG o WebP y pesar como máximo 5 MB.'); input.value = ''; return;
+  }
+  const label = input.closest('label');
+  if (label) { label.style.pointerEvents = 'none'; label.dataset.originalText = label.textContent; label.childNodes[0].textContent = 'Subiendo…'; }
+  try {
+    const token = await currentUser.getIdToken();
+    const signResponse = await fetch('/api/profile-avatar-admin-upload', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ uid: input.dataset.profileReplace, contentType: file.type, size: file.size }) });
+    const signed = await signResponse.json().catch(() => ({}));
+    if (!signResponse.ok || signed.ok !== true) throw new Error(signed.error || 'No se pudo autorizar el reemplazo.');
+    const form = new FormData();
+    form.append('file', file); form.append('api_key', signed.apiKey); form.append('timestamp', String(signed.timestamp)); form.append('signature', signed.signature); form.append('public_id', signed.publicId); form.append('overwrite', 'true');
+    const uploadResponse = await fetch(signed.uploadUrl, { method: 'POST', body: form });
+    const uploaded = await uploadResponse.json().catch(() => ({}));
+    if (!uploadResponse.ok || !uploaded.secure_url) throw new Error(uploaded.error?.message || 'Cloudinary no confirmó la subida.');
+    const commitResponse = await fetch('/api/profile-avatar-admin-commit', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ uid: input.dataset.profileReplace, publicId: signed.publicId, photoURL: uploaded.secure_url, expectedPhotoURL: input.dataset.profilePhoto || '' }) });
+    const committed = await commitResponse.json().catch(() => ({}));
+    if (!commitResponse.ok || committed.ok !== true) throw new Error(committed.error || 'No se pudo consolidar el reemplazo.');
+    toast(committed.authSync === 'pending' ? 'Foto reemplazada; la sincronización de identidad quedó pendiente para reintento.' : 'Foto reemplazada y registrada en auditoría.');
+    profilePhotosLoading = false; await loadProfilePhotos();
+  } catch (error) { toast(error?.message || 'No se pudo reemplazar la foto.'); }
+  finally { input.value = ''; if (label) { label.style.pointerEvents = ''; label.childNodes[0].textContent = 'Reemplazar'; } }
 });
 document.getElementById('profile-photos-refresh')?.addEventListener('click', loadProfilePhotos);
 document.getElementById('profile-photos-list')?.addEventListener('click', async (event) => {

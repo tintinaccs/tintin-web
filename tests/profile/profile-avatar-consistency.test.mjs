@@ -5,6 +5,9 @@ import fs from 'node:fs';
 const endpoint = fs.readFileSync(new URL('../../functions/api/profile-avatar-commit.js', import.meta.url), 'utf8');
 const adminEndpoint = fs.readFileSync(new URL('../../functions/api/profile-avatar-admin.js', import.meta.url), 'utf8');
 const moderateEndpoint = fs.readFileSync(new URL('../../functions/api/profile-avatar-moderate.js', import.meta.url), 'utf8');
+const adminUploadEndpoint = fs.readFileSync(new URL('../../functions/api/profile-avatar-admin-upload.js', import.meta.url), 'utf8');
+const adminCommitEndpoint = fs.readFileSync(new URL('../../functions/api/profile-avatar-admin-commit.js', import.meta.url), 'utf8');
+const routes = fs.readFileSync(new URL('../../_routes.json', import.meta.url), 'utf8');
 const client = fs.readFileSync(new URL('../../js/quality/estabilidad-final-publica.js', import.meta.url), 'utf8');
 const adminHtml = fs.readFileSync(new URL('../../admin.html', import.meta.url), 'utf8');
 const adminApp = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
@@ -68,4 +71,15 @@ test('la vuelta a una pestaña no falsifica actividad y respeta la expiración',
 test('la gestión delegada de fotos es opt-in y nunca afecta una cuenta superadmin', () => {
   assert.match(permissionGuard, /if \(!eligibleStaffRole \|\| configured !== true\)/);
   assert.match(moderateEndpoint, /before\.role === 'superadmin'/);
+});
+
+test('el reemplazo administrativo usa permiso, identidad determinista, historial y rutas explícitas', () => {
+  assert.match(adminUploadEndpoint, /requireStaffPermission/);
+  assert.match(adminUploadEndpoint, /gestionarFotos/);
+  assert.match(adminUploadEndpoint, /5 \* 1024 \* 1024/);
+  assert.match(adminCommitEndpoint, /reemplazar_foto_perfil/);
+  assert.match(adminCommitEndpoint, /updateFirebaseUserProfile\(env, uid/);
+  assert.match(adminCommitEndpoint, /profilePhotoHistory/);
+  assert.match(routes, /profile-avatar-admin-upload/);
+  assert.match(routes, /profile-avatar-admin-commit/);
 });
