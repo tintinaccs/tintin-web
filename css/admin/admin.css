@@ -840,6 +840,14 @@
     .adm-table-pedidos td:nth-child(2),
     .adm-table-pedidos td:nth-child(5),
     .adm-table-pedidos td:nth-child(9) { white-space: nowrap; }
+
+    /* Usuarios conserva una fila legible: contactos y acciones no se parten
+       en columnas estrechas; el contenedor ya ofrece desplazamiento horizontal
+       en tablet/mobile sin deformar los botones. */
+    .adm-table-users { min-width: 1120px; }
+    .adm-table-users .adm-user-contact { white-space: nowrap; }
+    .adm-table-users .adm-user-actions { min-width: 190px; }
+    .adm-table-users .adm-user-actions > div { flex-wrap: nowrap; }
     #prod-table-wrap > table { min-width: 980px; }
     #prod-list-card > .adm-card-head {
       align-items: flex-start;

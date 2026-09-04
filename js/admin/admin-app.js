@@ -1672,7 +1672,7 @@ function renderUsersTable(users) {
   const tbody = document.getElementById('users-tbody');
   if (!users.length) {
     const emptyMsg = userStatusFilter === 'blocked' ? 'No hay usuarios bloqueados' : 'Sin usuarios';
-    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:#aaa;padding:24px">${emptyMsg}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:#aaa;padding:24px">${emptyMsg}</td></tr>`;
     return;
   }
   tbody.innerHTML = users.map(u => {
@@ -1716,7 +1716,7 @@ function renderUsersTable(users) {
         ${isSuperAdmin ? 'disabled' : ''}>
         <option value="superadmin" ${u.role==='superadmin'?'selected':''} ${!isSuperAdmin?'style="display:none"':''}>Super Admin</option>
         <option value="admin"      ${u.role==='admin'?'selected':''}>Admin</option>
-        <option value="agent"      ${u.role==='agent'?'selected':''}>Agente</option>
+        <option value="agent"      ${u.role==='agent'?'selected':''}>Moderador</option>
         <option value="viewer"     ${u.role==='viewer'?'selected':''}>Viewer</option>
         <option value="client"     ${u.role==='client'?'selected':''}>Cliente</option>
       </select>
@@ -1746,13 +1746,13 @@ function renderUsersTable(users) {
         <td class="col-select">${!isSuperAdmin ? `<input type="checkbox" class="user-row-check" data-id="${safeUid}" onclick="toggleUserSelect(this)" ${_selectedUsers.has(u.uid) ? 'checked' : ''}>` : ''}</td>
         <td>${avatar}</td>
         <td><strong>${escapeHtmlAdmin(u.name || '—')}</strong></td>
-        <td style="font-size:12px;color:#666">${escapeHtmlAdmin(u.email || '—')}</td>
-        <td style="font-size:12px;color:#666">${escapeHtmlAdmin(u.phone || '—')}</td>
+        <td class="adm-user-contact" style="font-size:12px;color:#666">${escapeHtmlAdmin(u.email || '—')}</td>
+        <td class="adm-user-contact" style="font-size:12px;color:#666">${escapeHtmlAdmin(u.phone || '—')}</td>
         <td>${roleSelect}</td>
         <td>${blockedBadge}${blockedDetail}</td>
         <td style="font-size:12px;color:#666">${u.purchaseCount || 0}</td>
         <td style="font-size:12px;color:#666">${formatPrice(u.totalSpent || 0)}</td>
-        <td>${actions}</td>
+        <td class="adm-user-actions">${actions}</td>
       </tr>
     `;
   }).join('');
@@ -6591,7 +6591,7 @@ function updateCsvBulkCount() {
 // ══════════════════════════════════════════════
 // ROLES Y PERMISOS
 // ══════════════════════════════════════════════
-const PERM_ROLE_LABELS = { admin: 'Admin', agent: 'Agente / Modder', viewer: 'Viewer' };
+const PERM_ROLE_LABELS = { admin: 'Admin', agent: 'Moderador', viewer: 'Viewer' };
 let _permPending = null;   // copia editable en memoria — no se guarda hasta "Guardar cambios"
 let _permOriginal = null;  // último estado guardado/cargado — para calcular el diff al guardar
 let _permInited = false;
@@ -6724,7 +6724,7 @@ function updatePermDirtyState() {
 }
 
 window.restorePermisosDefaults = function restorePermisosDefaults() {
-  if (!confirm('¿Restaurar los permisos por defecto para Admin, Agente/Modder y Viewer? Esto NO se guarda todavía — vas a poder revisar los cambios antes de confirmar con "Guardar cambios".')) return;
+  if (!confirm('¿Restaurar los permisos por defecto para Admin, Moderador y Viewer? Esto NO se guarda todavía — vas a poder revisar los cambios antes de confirmar con "Guardar cambios".')) return;
   _permPending = buildDefaultRolePermissions();
   renderPermisosMatrix();
   updatePermDirtyState();

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T19:35:47.178Z",
-  "sourceFingerprint": "76a8822d41cb30d350dd5cffa70ba981f754422557f0e67dd0a9dfd9681a867a",
+  "generatedAt": "2026-09-04T19:42:01.222Z",
+  "sourceFingerprint": "cfa417a8e397442b39f6008e202221dbc36a3f1d58002d2374fcff19589d881f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 804,
     "textFiles": 771,
-    "totalBytes": 9971633,
+    "totalBytes": 9972161,
     "pages": 18,
     "modules": 553
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 188158,
-      "sha256": "bd0ad5e4260cbbbe18ed93bb807ec4bf7157279a6c0fcbabe418febbe27ed204",
+      "bytes": 188169,
+      "sha256": "dcb3b7829fa3809daec080d53ecf01d0492f0563188f7ac29726678d91e61323",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2572,7 +2572,7 @@
         },
         {
           "id": "",
-          "classes": "adm-table",
+          "classes": "adm-table adm-table-users",
           "line": 405
         },
         {
@@ -19907,8 +19907,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 426605,
-      "sha256": "d8ddef3fd02b89cb7400e509fe1c339d6e5a96013e28ee213205b69566b82794",
+      "bytes": 426674,
+      "sha256": "3fa5b6509ff0cd199d5dbbd51fe56fb2ad1f053f30037e742c563d311879debc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32069,8 +32069,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 188158,
-      "sha256": "bd0ad5e4260cbbbe18ed93bb807ec4bf7157279a6c0fcbabe418febbe27ed204"
+      "bytes": 188169,
+      "sha256": "dcb3b7829fa3809daec080d53ecf01d0492f0563188f7ac29726678d91e61323"
     },
     {
       "path": "apple-touch-icon.png",
@@ -32537,8 +32537,8 @@
     {
       "path": "css/admin/admin.css",
       "extension": ".css",
-      "bytes": 78591,
-      "sha256": "8a3083aa88dd1d987494c18321b2cab33f5f5728ada2e7890b155d6d1d80f0b4"
+      "bytes": 79039,
+      "sha256": "1677f2a49f2685a0e5498d6412189058f0833187bf40fe2603c5b4bc53b9e0e7"
     },
     {
       "path": "css/admin/diagnostico-maestro.css",
@@ -33767,8 +33767,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 426605,
-      "sha256": "d8ddef3fd02b89cb7400e509fe1c339d6e5a96013e28ee213205b69566b82794"
+      "bytes": 426674,
+      "sha256": "3fa5b6509ff0cd199d5dbbd51fe56fb2ad1f053f30037e742c563d311879debc"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -36084,7 +36084,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 37310,
-      "sha256": "e5aeb6db7c35ab6321cb1caad55a57fd5ce3559bb4d5bcc367a6f0a19da090e6"
+      "sha256": "d768321c70d53daff3f73362e3b6764f5401ab282d2b8336398d3eddc2ecfd66"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
