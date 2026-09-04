@@ -574,6 +574,11 @@ const pages = allFiles
   .filter(file => !file.includes('/') && file.endsWith('.html'))
   .map(file => extractPage(file, allPaths, jsCorpus));
 
+let previousManifest = null;
+try {
+  previousManifest = JSON.parse(fs.readFileSync(OUTPUT, 'utf8'));
+} catch (_) {}
+
 const modules = jsFiles.map(file => {
   const historical = file === 'scripts/construir-manifiesto-diagnostico.js'
     ? previousManifest?.modules?.find(item => item.path === file)
@@ -658,11 +663,6 @@ const sitemapRoutes = [...sitemap.matchAll(/<loc>[^<]*\/([^/]+\.html)<\/loc>/g)]
 const firestoreUsed = extractFirestoreCollections(allFiles);
 const firestoreRules = extractRuleCollections();
 const unboundedReads = extractUnboundedReads(allFiles);
-let previousManifest = null;
-try {
-  previousManifest = JSON.parse(fs.readFileSync(OUTPUT, 'utf8'));
-} catch (_) {}
-
 const sourceFingerprint = hash(Buffer.from(
   files.map(file => `${file.path}:${file.sha256}`).join('\n'),
   'utf8'
