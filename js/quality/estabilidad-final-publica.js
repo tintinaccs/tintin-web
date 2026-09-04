@@ -323,7 +323,7 @@ async function enhanceProfile() {
   updateSummary();
   window.addEventListener('pagehide', () => summaryObserver.disconnect(), { once: true });
 
-  await import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20260829-final-stability-1');
+  await import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20260829-final-stability-2');
   const initial = location.hash.replace('#', '');
   if (panels.has(initial)) activate(initial);
 }

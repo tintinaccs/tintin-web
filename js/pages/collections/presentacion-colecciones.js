@@ -7,7 +7,7 @@
    renderer legado vuelva a dejar categorías antiguas después del snapshot.
    ============================================================= */
 
-import { onCollectionsUpdate } from './estado-colecciones.js?v=tintin-20260901-firestore-budget-1';
+import { onCollectionsUpdate } from './estado-colecciones.js?v=tintin-20260901-firestore-budget-2';
 
 if (!window.TintinCollectionsPhase4Booted) {
   window.TintinCollectionsPhase4Booted = true;

@@ -15,7 +15,7 @@ import {
   increment,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { SUPER_ADMIN, getUserRole } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-2';
-import { loadRolePermissions, canDo } from '../../core/auth/permisos-roles.js?v=tintin-20260821-accounts-phase-a-1';
+import { loadRolePermissions, canDo } from '../../core/auth/permisos-roles.js?v=tintin-20260821-accounts-phase-a-2';
 import {
   CONTENT_PAGE_IDS,
   SITE_CONTENT_SCHEMA,

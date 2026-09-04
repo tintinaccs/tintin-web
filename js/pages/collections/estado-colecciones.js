@@ -8,7 +8,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { cleanText, cleanMultilineText } from '../../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
-import { resolveCollectionImage } from '../../components/images/resolucion-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
+import { resolveCollectionImage } from '../../components/images/resolucion-imagenes.js?v=tintin-20260716-cloudinary-fix-2';
 import {
   readCached,
   readStaleCached,
@@ -21,7 +21,7 @@ import { fetchPublicCatalogResource } from '../../core/firebase/catalogo-publico
 if (/(^|\/)admin(?:\.html)?$/i.test(location.pathname)) {
   Promise.allSettled([
     import('../../admin/settings/compatibilidad-pagos-anteriores-admin.js?v=tintin-20260720-payment-crud-1'),
-    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20260821-accounts-phase-a-1')
+    import('../../admin/settings/metodos-pago-admin.js?v=tintin-20260821-accounts-phase-a-2')
   ]);
 }
 

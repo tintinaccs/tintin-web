@@ -11,7 +11,7 @@ import {
 import {
   sendOrderNotification,
   notificationStatusFromResult
-} from '../../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-1';
+} from '../../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-2';
 
 if (!window.TintinCheckoutEmailBridgeBooted) {
   window.TintinCheckoutEmailBridgeBooted = true;
