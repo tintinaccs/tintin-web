@@ -1,4 +1,4 @@
-import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1";
+import { auth, db, appCheckReady, authPersistenceReady } from "../core/firebase/firebase.js?v=tintin-20260904-admin-auth-guard-2";
 import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -811,88 +811,116 @@ document.getElementById('adm-logout').onclick = () => {
 };
 
 // ======== AUTH GUARD ========
-// El loader de marca (js/cargador-pagina.js) cubre la pantalla mientras se
-// resuelve esta función, pero además el CSS de <head> mantiene el sidebar,
-// la tabbar mobile y .adm-main en visibility:hidden hasta que se agregue
-// html.adm-auth-ready — eso solo pasa al final del único camino que
-// realmente muestra el panel real (ver más abajo).
+// El panel no toma decisiones de navegación hasta que Firebase terminó de
+// restaurar la persistencia y resolvió el estado inicial de Auth. Esto evita
+// interpretar transitoriamente una sesión válida como user=null al entrar a
+// /admin después del login o de una recarga.
 function hideOverlay() { window.ttPageReady && window.ttPageReady(); }
 
-onAuthStateChanged(auth, async user => {
+function showAdminInitFailure() {
+  document.documentElement.classList.remove('adm-auth-ready');
+  let overlay = document.getElementById('adm-init-error');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'adm-init-error';
+    overlay.setAttribute('role', 'alert');
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat,Arial,sans-serif;color:#44222d';
+    overlay.innerHTML = '<div style="max-width:560px;text-align:center">' +
+      '<h1 style="font-size:22px;margin:0 0 10px">No se pudo iniciar el panel</h1>' +
+      '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">Tu sesión sigue activa. Hubo un problema al cargar datos o componentes del panel; no se cerró la sesión ni se volvió al login.</p>' +
+      '<button type="button" id="adm-init-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#ad3f67;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    overlay.querySelector('#adm-init-retry')?.addEventListener('click', () => window.location.reload());
+  }
+  hideOverlay();
+}
+
+async function startAdminAuthGuard() {
   try {
-    // El loader de marca se mantiene arriba (no se llama a hideOverlay) en
-    // todo camino que termine navegando a otra página. Antes se ocultaba
-    // siempre en un finally, así que en conexiones lentas el loader podía
-    // desaparecer y dejar ver el panel real (sidebar, secciones) durante el
-    // rato en que la navegación todavía no terminaba de cargar el destino.
-    if (!user) { window.location.href = 'login.html'; return; }
+    await authPersistenceReady;
+  } catch (error) {
+    // firebase.js ya intentó local -> session. Aunque ambos fallen, Auth puede
+    // seguir con persistencia en memoria; no convertimos un fallo de storage
+    // en un bucle de navegación.
+    console.warn('[Admin] Auth persistence unavailable:', error);
+  }
+
+  if (typeof auth.authStateReady === 'function') {
+    try {
+      await auth.authStateReady();
+    } catch (error) {
+      console.warn('[Admin] Auth initial state did not settle cleanly:', error);
+    }
+  }
+
+  onAuthStateChanged(auth, async user => {
+    // Este es el único caso de sesión ausente que manda al login. replace()
+    // evita dejar /admin en el historial y elimina el ping-pong con Atrás.
+    if (!user) {
+      window.location.replace('login.html');
+      return;
+    }
+
     currentUser = user;
 
-    // Sin esto, la primera lectura a Firestore (chequeo de bloqueo más abajo
-    // y getUserRole) puede salir antes de que App Check tenga token listo.
-    // Con Enforcement activo, Firestore la rechaza (permission-denied), el
-    // catch de más abajo la toma como sesión inválida y manda a login.html
-    // — un rebote admin→login que no depende del método de login usado.
-    await appCheckReady;
+    try {
+      await appCheckReady;
 
-    const role = await getUserRole(user.uid, user.email);
-    currentRole = role;
+      const role = await getUserRole(user.uid, user.email);
+      currentRole = role;
 
-    // Cuenta bloqueada (Fase E): afuera del panel con mensaje claro, sin
-    // esperar a que el rol demovido a 'client' la saque por la vía indirecta
-    // de perfil.html. tintinaccs@gmail.com nunca puede estar bloqueada.
-    if (user.email !== SUPER_ADMIN) {
-      const selfSnap = await getDoc(doc(db, 'users', user.uid));
-      if (selfSnap.exists() && selfSnap.data().blocked) {
-        await signOut(auth);
-        window.location.href = 'login.html?blocked=1';
+      // Cuenta bloqueada: esta sí es una invalidación explícita de acceso y
+      // por eso cierra sesión antes de volver al login. Super Admin queda
+      // protegido por identidad y no entra en este chequeo.
+      if (user.email !== SUPER_ADMIN) {
+        const selfSnap = await getDoc(doc(db, 'users', user.uid));
+        if (selfSnap.exists() && selfSnap.data().blocked) {
+          await signOut(auth);
+          window.location.replace('login.html?blocked=1');
+          return;
+        }
+      }
+
+      // Una cuenta autenticada pero sin rol interno no es un error de Auth:
+      // va a su perfil, nunca al login.
+      if (role === 'client' || !role) {
+        window.location.replace('perfil.html');
         return;
       }
-    }
 
-    if (role === 'client' || !role) {
-      window.location.href = 'perfil.html';
-      return;
-    }
+      const storeCfg = await getStoreAccessConfig();
+      if (!isAccessAllowed(storeCfg, role, user.email)) {
+        renderStoreClosedOverlay();
+        hideOverlay();
+        return;
+      }
 
-    // Tienda cerrada: un rol sin excepción configurada en Configuración →
-    // "Permitir acceso con tienda cerrada" se queda afuera del panel — no se
-    // le cierra la sesión (Super Admin puede reabrir la tienda y su sesión
-    // sigue intacta), solo se tapa la pantalla con el mismo aviso público.
-    const storeCfg = await getStoreAccessConfig();
-    if (!isAccessAllowed(storeCfg, role, user.email)) {
-      renderStoreClosedOverlay();
+      await loadRolePermissions();
+
+      setupUserInfo(user, role);
+      setupPermissions(role);
+      if (role === 'superadmin' && user.email === SUPER_ADMIN) {
+        initSiteDiagnostics({ role });
+      }
+      startAdminRealtimeData();
+      loadDashboard();
+      loadProductos();
+      loadColecciones();
+      applyInitialSectionFromUrl();
+      document.documentElement.classList.add('adm-auth-ready');
       hideOverlay();
-      return;
+    } catch (error) {
+      // Un fallo de Firestore, App Check, permisos dinámicos o UI NO significa
+      // que Firebase Auth haya perdido la sesión. Antes cualquier excepción
+      // terminaba en login.html y podía crear /admin <-> /login infinito.
+      console.error('[Admin] Init error; authenticated session preserved:', error);
+      showAdminInitFailure();
     }
+  });
+}
 
-    // Permisos dinámicos (Roles y Permisos) — se cargan ANTES de armar la UI
-    // para que canDo() ya tenga datos reales desde el primer render, no solo
-    // el techo fijo de roles.js.
-    await loadRolePermissions();
-
-    // Set up UI and reveal page
-    setupUserInfo(user, role);
-    setupPermissions(role);
-    if (role === 'superadmin' && user.email === SUPER_ADMIN) {
-      initSiteDiagnostics({ role });
-    }
-    startAdminRealtimeData();
-    loadDashboard();
-    // Load eagerly (not just on nav click) so category/collection selects in
-    // Productos stay correct even if the admin never opens Colecciones first.
-    loadProductos();
-    loadColecciones();
-    applyInitialSectionFromUrl();
-    document.documentElement.classList.add('adm-auth-ready');
-    hideOverlay();
-  } catch(e) {
-    console.error('[Admin] Auth init error:', e);
-    // No se sabe si el usuario es válido: mismo destino seguro que "sin
-    // sesión", en vez de dejar el panel real armado detrás del loader.
-    window.location.href = 'login.html';
-  }
-});
+void startAdminAuthGuard();
 
 function setupUserInfo(user, role) {
   const avatarEl = document.getElementById('adm-avatar');
