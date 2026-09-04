@@ -44,6 +44,13 @@ firebase deploy --only firestore:rules --project tintin-accesorios
 
 Después de tocar `firestore.rules`, publicar solo reglas primero. No hace falta publicar hosting ni functions si solo se cambió seguridad.
 
+## Publicación desde GitHub Actions
+
+También existe el workflow manual `Publicar reglas Firestore`. Requiere escribir
+`PUBLICAR_REGLAS`, aprobación del environment `production-rules` y el secreto
+`FIREBASE_SERVICE_ACCOUNT_JSON`. El workflow publica exclusivamente
+`firestore:rules`; no despliega Hosting, Functions ni datos.
+
 ## Recordatorio importante
 
-Los cambios en `firestore.rules` dentro de GitHub no protegen la base de datos hasta que se publican en Firebase.
+Los cambios en `firestore.rules` dentro de GitHub no protegen la base de datos hasta que se publican en Firebase. El workflow manual deja esa publicación reproducible y auditable, pero no se ejecuta automáticamente en cada commit.

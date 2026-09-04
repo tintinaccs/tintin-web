@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 
 const publicSite = JSON.parse(fs.readFileSync(path.resolve('config/public-site.json'), 'utf8'));
 const origin = String(process.env.TINTIN_PUBLIC_ORIGIN || publicSite.origin || '').replace(/\/$/, '');
@@ -7,7 +8,7 @@ const timeoutMs = Number(process.env.TINTIN_HEALTH_TIMEOUT_MS || 15000);
 const attempts = 3;
 const results = [];
 const failures = [];
-const corePages = ['/', '/catalogo', '/collections', '/product'];
+const corePages = ['/', '/catalogo', '/collections', '/product', '/login', '/perfil'];
 
 async function fetchWithRetry(url, options = {}) {
   let lastError;
@@ -32,6 +33,16 @@ function assertStrongCsp(value, route) {
   const csp = String(value || '');
   for (const directive of ["default-src 'self'", "object-src 'none'", "base-uri 'self'", "form-action 'self'", 'frame-ancestors', 'upgrade-insecure-requests']) {
     if (!csp.includes(directive)) throw new Error(route + ': CSP débil o incompleta; falta ' + directive + '.');
+  }
+}
+
+function assertInlineHashes(body, csp, route) {
+  const allowed = new Set(String(csp || '').match(/'sha256-[^']+'/g) || []);
+  for (const match of String(body || '').replace(/\r\n?/g, '\n').matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+    if (/\bsrc\s*=/i.test(match[1])) continue;
+    const digest = crypto.createHash('sha256').update(match[2], 'utf8').digest('base64');
+    const hash = `'sha256-${digest}'`;
+    if (!allowed.has(hash)) throw new Error(`${route}: CSP no autoriza el script inline ${hash}.`);
   }
 }
 
@@ -91,6 +102,7 @@ for (const route of corePages) {
     const result = await inspect(route, 'text/html');
     if (result.response.url !== origin + route) throw new Error(route + ': la URL final no coincide con la canónica limpia.');
     assertStrongCsp(result.headers['content-security-policy'], route);
+    assertInlineHashes(result.body, result.headers['content-security-policy'], route);
   });
 }
 

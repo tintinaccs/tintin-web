@@ -526,7 +526,6 @@
             </select>
             <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="prod-export-all-btn" onclick="bulkExportProducts('all')" title="Exportar todos los productos a CSV"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><line x1="4" y1="21" x2="20" y2="21"/></svg> Exportar CSV</button>
             <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="prod-fix-legacy-numbers-btn" onclick="fixLegacyProductNumbers()" title="Corrige productos viejos con precio, precio anterior o stock guardados como texto en vez de número"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><path d="M14.7 6.3a4 4 0 00-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 005.4-5.4l-2.6 2.6-2-2z"/></svg>Corregir precios</button>
-            <button type="button" class="adm-btn adm-btn-outline adm-btn-sm" id="prod-test-server-order-btn" onclick="testServerCreateOrder()" title="Prueba el nuevo endpoint de pedidos sin límite de productos (Apps Script). No toca el checkout real."><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><path d="M9 2v6L4 18a3 3 0 003 4h10a3 3 0 003-4l-5-10V2"/><line x1="8" y1="2" x2="16" y2="2"/></svg>Probar pedido servidor</button>
             <button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="btn-nuevo-producto" onclick="prodNuevo()">+ Nuevo producto</button>
           </div>
         </div>
@@ -1976,7 +1975,7 @@
 
 <div class="adm-toast" id="adm-toast"></div>
 
-<script type="module" src="js/admin/admin-app.js?v=tintin-20260903-users-order-2"></script>
+<script type="module" src="js/admin/admin-app.js?v=tintin-20260904-remove-real-order-test-1"></script>
 <script type="module" src="js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260818-engagement-master-2"></script>
 <script type="module" src="js/admin/shopify-commerce-admin.js?v=tintin-20260825-orders-ops-1"></script>
 <script type="module" src="js/admin/appearance/editor-visual-admin.js?v=tintin-20260903-pr427-cache-1"></script>
