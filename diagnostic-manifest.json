@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T19:42:01.222Z",
-  "sourceFingerprint": "cfa417a8e397442b39f6008e202221dbc36a3f1d58002d2374fcff19589d881f",
+  "generatedAt": "2026-09-04T19:50:20.155Z",
+  "sourceFingerprint": "445c27375688a594c07af92784e79c6d76a0bc03869f07cdf945e91bc8560e8a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 804,
-    "textFiles": 771,
-    "totalBytes": 9972161,
+    "files": 806,
+    "textFiles": 773,
+    "totalBytes": 9978629,
     "pages": 18,
-    "modules": 553
+    "modules": 555
   },
   "viewports": [
     {
@@ -19160,6 +19160,36 @@
       "endpoints": []
     },
     {
+      "path": "functions/api/profile-avatar-commit.js",
+      "bytes": 5250,
+      "sha256": "d5b1d8fa15b4770662748d82eb34dbbbffd57fdaf5a8c1dd10ac8a3454e4ccfe",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "../../cloudflare/notificaciones-sociales.js",
+          "target": "cloudflare/notificaciones-sociales.js",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "functions/api/profile-avatar-upload.js",
       "bytes": 2727,
       "sha256": "0facbb552807bda6444c44442135ec4b4b567dae3b01da600da8cde1bb7cbf52",
@@ -21439,8 +21469,8 @@
     },
     {
       "path": "js/admin/users/gestion-usuarios-admin.js",
-      "bytes": 991,
-      "sha256": "5d456535df76a6d83813353b80d93ae922736336d4f13afeb700af761085147e",
+      "bytes": 996,
+      "sha256": "5c64d15b501d84c447c0a521669188e93a9fd44893f9b2095d9d20be2df8c09b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21453,7 +21483,7 @@
           "line": 17
         },
         {
-          "raw": "./perfil-usuario-superadmin.js?v=tintin-20260829-final-stability-1",
+          "raw": "./perfil-usuario-superadmin.js?v=tintin-20260904-profile-consistency-1",
           "target": "js/admin/users/perfil-usuario-superadmin.js",
           "dynamic": true,
           "line": 18
@@ -22752,8 +22782,8 @@
     },
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
-      "bytes": 9060,
-      "sha256": "87769152cf469fec6d966452b1e54450a4d2081b24e58d3de30bfc90e76c38d7",
+      "bytes": 9068,
+      "sha256": "3eeedbfd683d56f7b09c068546482622156cd65b1805d4705bbfba08812227c5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22856,7 +22886,7 @@
           "line": 171
         },
         {
-          "raw": "../../quality/estabilidad-final-publica.js?v=tintin-20260829-final-stability-1",
+          "raw": "../../quality/estabilidad-final-publica.js?v=tintin-20260904-profile-consistency-1",
           "target": "js/quality/estabilidad-final-publica.js",
           "dynamic": true,
           "line": 174
@@ -25255,8 +25285,8 @@
     },
     {
       "path": "js/quality/estabilidad-final-publica.js",
-      "bytes": 19133,
-      "sha256": "b4724484438ac1e29425589f4e113a4a12b60482a6c9684d5b7840f454497150",
+      "bytes": 19340,
+      "sha256": "465730e45672da910ba9a7420344062c7d36100a6d8ac807cff28b34cba48be2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25275,26 +25305,16 @@
           "line": 193
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "target": null,
-          "dynamic": true,
-          "line": 194
-        },
-        {
-          "raw": "../pages/profile/estado-pedidos-perfil.js?v=tintin-20260829-final-stability-1",
+          "raw": "../pages/profile/estado-pedidos-perfil.js?v=tintin-20260904-profile-consistency-1",
           "target": "js/pages/profile/estado-pedidos-perfil.js",
           "dynamic": true,
-          "line": 326
+          "line": 328
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
           "line": 193
-        },
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 194
         }
       ]
     },
@@ -30887,6 +30907,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/profile/profile-avatar-consistency.test.mjs",
+      "bytes": 1019,
+      "sha256": "92641b1aa2279fa77d136f4b53d029dea056526b337a06958a5664830f1cf30d",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/push/push-web.test.mjs",
       "bytes": 16898,
       "sha256": "9e1b20186ef0833aa1f4d5db58de5488f383c9ece162b02c1899458f31ac070b",
@@ -31967,8 +32017,8 @@
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 4107,
-      "sha256": "3e2c06f34da9cb4df171e9691e97cc12c05a6fc6195e4a579e259067c9366e73"
+      "bytes": 4086,
+      "sha256": "f3d75468f8f15a1c33d3d9b5c724afa623a79132c567dc0d9e18f66701796e00"
     },
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
@@ -33531,6 +33581,12 @@
       "sha256": "dd39845ce53a14c2ca5135e05ab0365d380c067743a4c19f3ba0107b7471ff58"
     },
     {
+      "path": "functions/api/profile-avatar-commit.js",
+      "extension": ".js",
+      "bytes": 5250,
+      "sha256": "d5b1d8fa15b4770662748d82eb34dbbbffd57fdaf5a8c1dd10ac8a3454e4ccfe"
+    },
+    {
       "path": "functions/api/profile-avatar-upload.js",
       "extension": ".js",
       "bytes": 2727,
@@ -34007,8 +34063,8 @@
     {
       "path": "js/admin/users/gestion-usuarios-admin.js",
       "extension": ".js",
-      "bytes": 991,
-      "sha256": "5d456535df76a6d83813353b80d93ae922736336d4f13afeb700af761085147e"
+      "bytes": 996,
+      "sha256": "5c64d15b501d84c447c0a521669188e93a9fd44893f9b2095d9d20be2df8c09b"
     },
     {
       "path": "js/admin/users/perfil-usuario-superadmin.js",
@@ -34409,8 +34465,8 @@
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 9060,
-      "sha256": "87769152cf469fec6d966452b1e54450a4d2081b24e58d3de30bfc90e76c38d7"
+      "bytes": 9068,
+      "sha256": "3eeedbfd683d56f7b09c068546482622156cd65b1805d4705bbfba08812227c5"
     },
     {
       "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
@@ -35009,8 +35065,8 @@
     {
       "path": "js/quality/estabilidad-final-publica.js",
       "extension": ".js",
-      "bytes": 19133,
-      "sha256": "b4724484438ac1e29425589f4e113a4a12b60482a6c9684d5b7840f454497150"
+      "bytes": 19340,
+      "sha256": "465730e45672da910ba9a7420344062c7d36100a6d8ac807cff28b34cba48be2"
     },
     {
       "path": "js/quality/estabilidad-producto.js",
@@ -36591,6 +36647,12 @@
       "sha256": "f952d54a623413dca31482a04a549fab78d7affef5d37fde615419fe00698f40"
     },
     {
+      "path": "tests/profile/profile-avatar-consistency.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1019,
+      "sha256": "92641b1aa2279fa77d136f4b53d029dea056526b337a06958a5664830f1cf30d"
+    },
+    {
       "path": "tests/push/push-web.test.mjs",
       "extension": ".mjs",
       "bytes": 16898,
@@ -38113,14 +38175,14 @@
     },
     {
       "file": "js/quality/estabilidad-final-publica.js",
-      "line": 333,
+      "line": 335,
       "raw": "/product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "js/quality/estabilidad-final-publica.js",
-      "line": 334,
+      "line": 336,
       "raw": "/perfil.html",
       "target": "perfil.html",
       "exists": true
@@ -38390,8 +38452,14 @@
     },
     {
       "file": "js/quality/estabilidad-final-publica.js",
-      "line": 200,
+      "line": 199,
       "target": "/api/profile-avatar-upload",
+      "method": "POST"
+    },
+    {
+      "file": "js/quality/estabilidad-final-publica.js",
+      "line": 217,
+      "target": "/api/profile-avatar-commit",
       "method": "POST"
     },
     {
@@ -39808,11 +39876,6 @@
             "file": "js/pages/profile/favoritos-perfil.js",
             "line": 38,
             "operation": "collection"
-          },
-          {
-            "file": "js/quality/estabilidad-final-publica.js",
-            "line": 219,
-            "operation": "doc"
           },
           {
             "file": "login.html",

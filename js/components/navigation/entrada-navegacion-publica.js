@@ -171,8 +171,8 @@ async function loadFinalStability() {
     await import('../../quality/estabilidad-producto.js?v=tintin-20260831-product-stability-2');
     return 'tintin-20260831-product-stability-2';
   }
-  await import('../../quality/estabilidad-final-publica.js?v=tintin-20260829-final-stability-1');
-  return 'tintin-20260829-final-stability-1';
+  await import('../../quality/estabilidad-final-publica.js?v=tintin-20260904-profile-consistency-1');
+  return 'tintin-20260904-profile-consistency-1';
 }
 
 function mountPublicShell() {
