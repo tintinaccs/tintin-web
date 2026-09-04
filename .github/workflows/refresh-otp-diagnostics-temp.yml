@@ -1,0 +1,33 @@
+name: Temporary OTP diagnostic manifest refresh
+
+on:
+  push:
+    branches:
+      - fix/otp-deliverability-observability-20260904
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v5
+        with:
+          ref: fix/otp-deliverability-observability-20260904
+          fetch-depth: 0
+      - name: Remove temporary workflow before fingerprinting
+        run: rm -f .github/workflows/refresh-otp-diagnostics-temp.yml
+      - name: Regenerate diagnostic manifest
+        run: node scripts/construir-manifiesto-diagnostico.js
+      - name: Commit final manifest and self-delete
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostic-manifest.json .github/workflows/refresh-otp-diagnostics-temp.yml
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "ci: refresh diagnostic manifest after OTP delivery fix"
+          git push origin HEAD:fix/otp-deliverability-observability-20260904
