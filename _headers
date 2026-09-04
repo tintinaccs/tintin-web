@@ -18,6 +18,59 @@
 /*.html
   Cache-Control: no-cache, no-store, must-revalidate
 
+# CLEAN_ROUTE_CACHE_CONTROL_START
+/404
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/about
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/admin
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/admin-images
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/cambios-devoluciones
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/catalogo
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/checkout
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/collections
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/contact
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/envios
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/login
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/nosotros
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/perfil
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/preguntas-frecuentes
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/privacidad
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/product
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/terminos
+  Cache-Control: no-cache, no-store, must-revalidate
+# CLEAN_ROUTE_CACHE_CONTROL_END
+
 /*.css
   Cache-Control: public, max-age=31536000, immutable
 
