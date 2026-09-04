@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T23:38:40.948Z",
-  "sourceFingerprint": "93955aa26649cbdf0e80d47fec2f831d5636d23bb937f16ec1c5a9cbb2334c96",
+  "generatedAt": "2026-09-04T23:41:37.415Z",
+  "sourceFingerprint": "9ab087aff7525aebc3c099ea64d3b702188d400872a111b895e976fdbcc7ee21",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 805,
     "textFiles": 772,
-    "totalBytes": 9971358,
+    "totalBytes": 9971431,
     "pages": 18,
     "modules": 553
   },
@@ -25481,8 +25481,8 @@
     },
     {
       "path": "scripts/auditar-admin-analitica-auditar.js",
-      "bytes": 14672,
-      "sha256": "66a8b31301ab31e5249beaa2b4d8c568d96c214c70db5356dc75e9e8e86458e6",
+      "bytes": 14745,
+      "sha256": "86fafdc5d5a7db60093da6521578b974ab59375f28c5f990cb97cd5182d6fcd2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35325,8 +35325,8 @@
     {
       "path": "scripts/auditar-admin-analitica-auditar.js",
       "extension": ".js",
-      "bytes": 14672,
-      "sha256": "66a8b31301ab31e5249beaa2b4d8c568d96c214c70db5356dc75e9e8e86458e6"
+      "bytes": 14745,
+      "sha256": "86fafdc5d5a7db60093da6521578b974ab59375f28c5f990cb97cd5182d6fcd2"
     },
     {
       "path": "scripts/auditar-admin-apariencia-unificada.js",
@@ -38423,7 +38423,7 @@
         "references": [
           {
             "file": "scripts/auditar-admin-analitica-auditar.js",
-            "line": 261,
+            "line": 263,
             "operation": "collection"
           }
         ]
@@ -38433,7 +38433,7 @@
         "references": [
           {
             "file": "scripts/auditar-admin-analitica-auditar.js",
-            "line": 267,
+            "line": 269,
             "operation": "collection"
           }
         ]
