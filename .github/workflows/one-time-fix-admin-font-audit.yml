@@ -32,7 +32,7 @@ jobs:
           p = Path('js/admin/admin-app.js')
           s = p.read_text(encoding='utf-8')
           old = 'font-family:Montserrat,Arial,sans-serif'
-          new = 'font-family:Montserrat,sans-serif'
+          new = 'font-family:Montserrat'
           if s.count(old) != 1:
               raise SystemExit(f'Expected exactly one forbidden font stack, found {s.count(old)}')
           p.write_text(s.replace(old, new, 1), encoding='utf-8')
