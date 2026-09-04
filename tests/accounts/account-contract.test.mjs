@@ -23,10 +23,10 @@ test('el contrato mantiene Super Admin efectivo pero no asignable', () => {
   assert.equal(ASSIGNABLE_ROLES.includes('superadmin'), false);
 });
 
-test('Google y PIN convergen sobre findOrCreateUserByEmail', () => {
+test('Google y PIN respetan el proveedor original de la cuenta', () => {
   const send = read('functions/api/email-otp-send.js');
   const verify = read('functions/api/email-otp-verify.js');
-  assert.equal(send.includes('google_account_exists'), false);
+  assert.equal(send.includes('google_account_exists'), true);
   assert.match(verify, /findOrCreateUserByEmail\(env, email\)/);
 });
 
