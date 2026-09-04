@@ -112,11 +112,17 @@ async function buildOwnAdminActivityNotification(context, uid, event, dedupeKey)
 function publicReply(message) {
   const replyId = clean(message?.replyId || message?.id, 180);
   if (!replyId) return null;
+  const authorType = message?.authorType === 'store' ? 'store' : message?.authorType === 'staff' ? 'staff' : 'customer';
+  const authorRole = authorType === 'store' ? 'official' : authorType === 'staff' ? clean(message?.actorRole || message?.role, 40) : 'customer';
+  const roleLabel = authorType === 'store' ? 'Cuenta oficial' : authorType === 'staff' ? ({ admin: 'Admin', agent: 'Moderador', viewer: 'Viewer' }[authorRole] || 'Equipo Tintin') : '';
   return {
     replyId,
     id: replyId,
-    authorType: message?.authorType === 'store' ? 'store' : 'customer',
-    publicName: clean(message?.actorPublicName || message?.publicName || (message?.authorType === 'store' ? 'Tintin Accesorios' : 'Clienta Tintin'), 160),
+    authorType,
+    authorRole,
+    roleLabel,
+    isOfficial: authorType === 'store',
+    publicName: clean(message?.actorPublicName || message?.publicName || (authorType === 'store' ? 'Tintin Accesorios' : 'Clienta Tintin'), 160),
     publicPhotoUrl: clean(message?.actorPhotoUrl || message?.publicPhotoUrl, 1200),
     text: clean(message?.text, MAX_REPLY),
     likeCount: Math.max(0, Number(message?.likeCount) || 0),
@@ -125,6 +131,8 @@ function publicReply(message) {
 }
 
 function reviewPublic(record) {
+  const authorType = record.authorType === 'store' ? 'store' : record.authorType === 'staff' ? 'staff' : 'customer';
+  const authorRole = authorType === 'store' ? 'official' : authorType === 'staff' ? clean(record.actorRole || record.role, 40) : 'customer';
   return {
     schemaVersion: 4,
     reviewId: record.reviewId,
@@ -134,6 +142,10 @@ function reviewPublic(record) {
     comment: record.comment,
     publicName: record.publicName,
     publicPhotoUrl: clean(record.actorPhotoUrl, 1200),
+    authorType,
+    authorRole,
+    roleLabel: authorType === 'store' ? 'Cuenta oficial' : authorType === 'staff' ? ({ admin: 'Admin', agent: 'Moderador', viewer: 'Viewer' }[authorRole] || 'Equipo Tintin') : '',
+    isOfficial: authorType === 'store',
     storeLiked: Boolean(record.storeLiked),
     likeCount: Math.max(0, Number(record.likeCount) || 0),
     conversation: (Array.isArray(record.conversation) ? record.conversation : []).map(publicReply).filter(Boolean),
