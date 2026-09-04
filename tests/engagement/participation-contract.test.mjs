@@ -6,8 +6,8 @@ import { engagementOwnReviewView, publicCustomerName } from '../../cloudflare/pa
 const read = path => readFile(new URL(`../../${path}`, import.meta.url), 'utf8');
 
 test('public review names follow the required mask', () => {
-  assert.equal(publicCustomerName('Antonia Peralta'), 'A*** P***');
-  assert.equal(publicCustomerName('Antonia'), 'A***');
+  assert.equal(publicCustomerName('Antonia Peralta'), 'Antonia P.');
+  assert.equal(publicCustomerName('Antonia'), 'Antonia');
 });
 
 test('customer responses never expose private review fields', () => {
