@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T23:19:03.016Z",
-  "sourceFingerprint": "9a43979bd01705c16cc656718107269ee74e56734a72d86efba9e94613791d45",
+  "generatedAt": "2026-09-04T23:30:15.165Z",
+  "sourceFingerprint": "5497f6ff01c87651bf195b7ae27977e29b1678493e3d0719818e7b488ba45175",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 804,
-    "textFiles": 771,
-    "totalBytes": 9964898,
+    "files": 805,
+    "textFiles": 772,
+    "totalBytes": 9971079,
     "pages": 18,
     "modules": 553
   },
@@ -32015,6 +32015,12 @@
       "extension": ".yml",
       "bytes": 3048,
       "sha256": "01d0024fea4c849277c935ff095a598b165f09dcfb9c2d4eebc9920b38ec73d0"
+    },
+    {
+      "path": ".github/workflows/one-time-update-admin-foundation-contract.yml",
+      "extension": ".yml",
+      "bytes": 6181,
+      "sha256": "2d7e5b62fc40b101f546d778c2d5a0a46c1e72c75366d0539c051098c81bbc12"
     },
     {
       "path": ".github/workflows/respaldo-repositorio.yml",
