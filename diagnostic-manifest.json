@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T18:21:19.029Z",
-  "sourceFingerprint": "7c39fdba37ccf10119c1f75db950093049d22665727258cf6164da818bfe1278",
+  "generatedAt": "2026-09-04T21:50:36.744Z",
+  "sourceFingerprint": "050d3d0d30a594fed5e0329a325d1773ccead28e0106e213b799e75cefb812e5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 804,
-    "textFiles": 771,
-    "totalBytes": 9963426,
+    "files": 809,
+    "textFiles": 776,
+    "totalBytes": 9991692,
     "pages": 18,
-    "modules": 553
+    "modules": 557
   },
   "viewports": [
     {
@@ -17730,6 +17730,36 @@
       ]
     },
     {
+      "path": "cloudflare/resiliencia-correo-pedido.js",
+      "bytes": 9266,
+      "sha256": "0324180d5a63dd2735fec65cac82cb5e637b83928a67d7eb2d3d21fec570c2d3",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 11
+        },
+        {
+          "raw": "./notificaciones-sociales.js",
+          "target": "cloudflare/notificaciones-sociales.js",
+          "dynamic": false,
+          "line": 12
+        },
+        {
+          "raw": "../functions/api/order-email.js",
+          "target": "functions/api/order-email.js",
+          "dynamic": false,
+          "line": 13
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "cloudflare/resiliencia-sync-catalogo.js",
       "bytes": 15915,
       "sha256": "f8ef8d479a20220f9997c421b2543eea243e92cdff3fe311457b0a29e3f2314c",
@@ -17894,8 +17924,8 @@
     },
     {
       "path": "cloudflare/system-health.js",
-      "bytes": 5748,
-      "sha256": "1ff014b34151157cf4b6db8d34060d40f99409aa5bccd344afc6e96093aaed73",
+      "bytes": 6197,
+      "sha256": "de0dfd8be5dce816e810abe19fdf22adbb45309ad31066259eeca603a7791441",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17920,10 +17950,16 @@
           "line": 10
         },
         {
+          "raw": "./resiliencia-correo-pedido.js",
+          "target": "cloudflare/resiliencia-correo-pedido.js",
+          "dynamic": false,
+          "line": 11
+        },
+        {
           "raw": "./apps-script-fetch.js",
           "target": "cloudflare/apps-script-fetch.js",
           "dynamic": false,
-          "line": 11
+          "line": 12
         }
       ],
       "endpoints": []
@@ -18979,9 +19015,39 @@
       "endpoints": []
     },
     {
+      "path": "functions/api/order-email-drain.js",
+      "bytes": 2937,
+      "sha256": "3722b109cf6770d206629272b74d7e9ffffcb1db503bca8d169651f1105e7c58",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/resiliencia-correo-pedido.js",
+          "target": "cloudflare/resiliencia-correo-pedido.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../lib/github-actions-oidc.js",
+          "target": "functions/lib/github-actions-oidc.js",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "functions/api/order-email.js",
-      "bytes": 22027,
-      "sha256": "0a7772c3d517707075da741f6ca58bc5e771fb35996974a4df6d0b34ef5a5ce4",
+      "bytes": 22687,
+      "sha256": "a6e2df77652e8cf46efc8aaa83efbd4446dcd7a51496332db3094d6d469c1829",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18998,32 +19064,38 @@
           "target": "cloudflare/servicio-push.js",
           "dynamic": false,
           "line": 7
+        },
+        {
+          "raw": "../../cloudflare/resiliencia-correo-pedido.js",
+          "target": "cloudflare/resiliencia-correo-pedido.js",
+          "dynamic": false,
+          "line": 8
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/assets-tintin/images/general/logo.png",
-          "line": 13
+          "line": 14
         },
         {
           "url": "https://tintinaccesorios.pages.dev/admin",
-          "line": 15
+          "line": 16
         },
         {
           "url": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
-          "line": 43
+          "line": 44
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/$%7BFIREBASE_PROJECT_ID%7D/databases/(default",
-          "line": 101
+          "line": 102
         },
         {
           "url": "https://maps.google.com/",
-          "line": 261
+          "line": 262
         },
         {
           "url": "https://api.resend.com/emails",
-          "line": 335
+          "line": 336
         }
       ]
     },
@@ -20499,8 +20571,8 @@
     },
     {
       "path": "js/admin/diagnostics/estado-ecosistema-admin.js",
-      "bytes": 12070,
-      "sha256": "e9eff18e69436b3cb0338a174fec957add04a377bf29ff77f9924423c1091839",
+      "bytes": 12783,
+      "sha256": "3eac2a35b68ab4a0bde687e7f2988da127316cb6d023fb5483670bf2fa97320c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30709,6 +30781,48 @@
       ]
     },
     {
+      "path": "tests/operations/order-email-drain.test.mjs",
+      "bytes": 1366,
+      "sha256": "88064fd4e09e614e0a4f7e4cc302adf60a25fcee03386319c6dd4153aae82c16",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs/promises",
+          "target": null,
+          "dynamic": true,
+          "line": 5
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": true,
+          "line": 6
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": true,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/orders/order-admin-domain.test.mjs",
       "bytes": 6829,
       "sha256": "54b3170598183eb2be0401bf4456196e7132a4d0a6bb13bed7195fff6f45e6e5",
@@ -31155,6 +31269,42 @@
           "target": "cloudflare/order-admin-domain.js",
           "dynamic": false,
           "line": 5
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/sync/order-email-queue.test.mjs",
+      "bytes": 9442,
+      "sha256": "149d4beb6127dc1337126cfd40b1098999f252a5c62a8ff1be21487fb63cde0a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/resiliencia-correo-pedido.js",
+          "target": "cloudflare/resiliencia-correo-pedido.js",
+          "dynamic": false,
+          "line": 7
+        },
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 8
         }
       ],
       "endpoints": []
@@ -32001,6 +32151,12 @@
       "sha256": "eaf36bce49f5b93485bc128a506e1f3394aed9b2f879cc4e9905d2399a2605d0"
     },
     {
+      "path": ".github/workflows/drenar-cola-correo-pedidos.yml",
+      "extension": ".yml",
+      "bytes": 2272,
+      "sha256": "4c3abc1543e4f0d692c7245233bd90c8de0881a7220e265148afbf2acfa638c6"
+    },
+    {
       "path": ".github/workflows/drenar-cola-sync-catalogo.yml",
       "extension": ".yml",
       "bytes": 2297,
@@ -32039,8 +32195,8 @@
     {
       "path": "_routes.json",
       "extension": ".json",
-      "bytes": 2334,
-      "sha256": "5c77c38025b5e014cb02ba31105d5ece3921fc778a49a83753dfdbc93a101ebd"
+      "bytes": 2364,
+      "sha256": "e6c3cec4d2a70cbfda2e81ddd51173fa1bef6bdbc6d8314474fddd679325fab2"
     },
     {
       "path": "about.html",
@@ -32421,6 +32577,12 @@
       "sha256": "0fa41e9583738a5ddf5adbff8cb8202b7c41e0f28af4051703c0a7ef5933752d"
     },
     {
+      "path": "cloudflare/resiliencia-correo-pedido.js",
+      "extension": ".js",
+      "bytes": 9266,
+      "sha256": "0324180d5a63dd2735fec65cac82cb5e637b83928a67d7eb2d3d21fec570c2d3"
+    },
+    {
       "path": "cloudflare/resiliencia-sync-catalogo.js",
       "extension": ".js",
       "bytes": 15915,
@@ -32459,8 +32621,8 @@
     {
       "path": "cloudflare/system-health.js",
       "extension": ".js",
-      "bytes": 5748,
-      "sha256": "1ff014b34151157cf4b6db8d34060d40f99409aa5bccd344afc6e96093aaed73"
+      "bytes": 6197,
+      "sha256": "de0dfd8be5dce816e810abe19fdf22adbb45309ad31066259eeca603a7791441"
     },
     {
       "path": "cloudflare/user-lifecycle-domain.js",
@@ -32951,8 +33113,8 @@
     {
       "path": "docs/arquitectura-operativa-canonica.md",
       "extension": ".md",
-      "bytes": 3947,
-      "sha256": "2291a4f1618f7100abde864a84c2cac23e092dd3ce2494666cd4e4d1b65abf24"
+      "bytes": 5078,
+      "sha256": "65de6dab0a44946201247562fae7da4ab724138afc00975c49193f5a32ade78b"
     },
     {
       "path": "docs/arquitectura-tecnica.md",
@@ -33489,10 +33651,16 @@
       "sha256": "7ac8ee5b55e548150367282249893edae25960a99a49c65f27603de0bfba5130"
     },
     {
+      "path": "functions/api/order-email-drain.js",
+      "extension": ".js",
+      "bytes": 2937,
+      "sha256": "3722b109cf6770d206629272b74d7e9ffffcb1db503bca8d169651f1105e7c58"
+    },
+    {
       "path": "functions/api/order-email.js",
       "extension": ".js",
-      "bytes": 22027,
-      "sha256": "0a7772c3d517707075da741f6ca58bc5e771fb35996974a4df6d0b34ef5a5ce4"
+      "bytes": 22687,
+      "sha256": "a6e2df77652e8cf46efc8aaa83efbd4446dcd7a51496332db3094d6d469c1829"
     },
     {
       "path": "functions/api/paypal-capture-order.js",
@@ -33833,8 +34001,8 @@
     {
       "path": "js/admin/diagnostics/estado-ecosistema-admin.js",
       "extension": ".js",
-      "bytes": 12070,
-      "sha256": "e9eff18e69436b3cb0338a174fec957add04a377bf29ff77f9924423c1091839"
+      "bytes": 12783,
+      "sha256": "3eac2a35b68ab4a0bde687e7f2988da127316cb6d023fb5483670bf2fa97320c"
     },
     {
       "path": "js/admin/estudio-codigo/estudio-codigo-admin.js",
@@ -36525,6 +36693,12 @@
       "sha256": "d592b6674a43668f006d831d3d1f0fb04e6f7e8162decc029785e78f54bb9617"
     },
     {
+      "path": "tests/operations/order-email-drain.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1366,
+      "sha256": "88064fd4e09e614e0a4f7e4cc302adf60a25fcee03386319c6dd4153aae82c16"
+    },
+    {
       "path": "tests/orders/order-admin-domain.test.mjs",
       "extension": ".mjs",
       "bytes": 6829,
@@ -36625,6 +36799,12 @@
       "extension": ".mjs",
       "bytes": 6256,
       "sha256": "5ac8759c2f5f67c18606cfa09922a841458be8922abdd1d40957b91d1a96d994"
+    },
+    {
+      "path": "tests/sync/order-email-queue.test.mjs",
+      "extension": ".mjs",
+      "bytes": 9442,
+      "sha256": "149d4beb6127dc1337126cfd40b1098999f252a5c62a8ff1be21487fb63cde0a"
     },
     {
       "path": "tests/sync/order-sheets-sync.test.mjs",
