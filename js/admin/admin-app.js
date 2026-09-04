@@ -1659,7 +1659,9 @@ async function loadProfilePhotos() {
     if (list) list.innerHTML = withPhotos.length ? withPhotos.map(user => {
       const name = user.name || user.username || 'Cuenta sin nombre';
       const avatar = sanitizeImageUrl(user.photoURL);
-      return `<article class="adm-profile-photo-row"><div class="adm-profile-photo-avatar">${avatar ? `<img src="${escapeHtmlAdmin(avatar)}" alt="" loading="lazy">` : escapeHtmlAdmin(name[0].toUpperCase())}</div><div class="adm-profile-photo-meta"><strong>${escapeHtmlAdmin(name)}</strong><span>${escapeHtmlAdmin(user.username ? `@${user.username}` : 'Sin username')} · ${escapeHtmlAdmin(ROLE_LABELS[user.role] || 'Cliente')}</span><small>Actualizada: ${escapeHtmlAdmin(formatDate(user.updatedAt || user.createdAt))}</small></div></article>`;
+      const canRemove = user.role !== 'superadmin';
+      const removeButton = canRemove ? `<button type="button" class="adm-btn adm-btn-outline adm-btn-sm adm-profile-photo-remove" data-profile-remove="${escapeHtmlAdmin(user.uid)}" data-profile-photo="${escapeHtmlAdmin(user.photoURL)}" aria-label="Quitar foto de ${escapeHtmlAdmin(name)}">Quitar</button>` : '';
+      return `<article class="adm-profile-photo-row"><div class="adm-profile-photo-avatar">${avatar ? `<img src="${escapeHtmlAdmin(avatar)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='/assets-tintin/images/general/logo.png'">` : `<img src="/assets-tintin/images/general/logo.png" alt="" loading="lazy">`}</div><div class="adm-profile-photo-meta"><strong>${escapeHtmlAdmin(name)}</strong><span>${escapeHtmlAdmin(user.username ? `@${user.username}` : 'Sin username')} · ${escapeHtmlAdmin(ROLE_LABELS[user.role] || 'Cliente')}</span><small>Actualizada: ${escapeHtmlAdmin(formatDate(user.updatedAt || user.createdAt))}</small></div><div class="adm-profile-photo-actions">${removeButton}</div></article>`;
     }).join('') : '<div class="adm-analytics-empty">Todavía no hay fotos de perfil registradas.</div>';
   } catch (error) {
     if (status) status.textContent = error?.message || 'No se pudieron cargar las fotos.';
@@ -1818,6 +1820,32 @@ document.querySelectorAll('#section-usuarios .user-tab-btn').forEach(btn => {
   });
 });
 document.getElementById('profile-photos-refresh')?.addEventListener('click', loadProfilePhotos);
+document.getElementById('profile-photos-list')?.addEventListener('click', async (event) => {
+  const button = event.target.closest?.('[data-profile-remove]');
+  if (!button || button.disabled || !currentUser) return;
+  const name = button.closest('.adm-profile-photo-row')?.querySelector('strong')?.textContent || 'esta cuenta';
+  if (!window.confirm(`¿Quitar la foto de ${name}? La operación quedará registrada en auditoría.`)) return;
+  button.disabled = true;
+  const previous = button.textContent;
+  button.textContent = 'Quitando…';
+  try {
+    const token = await currentUser.getIdToken();
+    const response = await fetch('/api/profile-avatar-moderate', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'remove', uid: button.dataset.profileRemove, photoURL: button.dataset.profilePhoto }),
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || data.ok !== true) throw new Error(data.error || 'No se pudo quitar la foto.');
+    toast(data.cleanup === 'error' ? 'Foto quitada; la limpieza externa quedó registrada para revisar' : 'Foto quitada y registrada en auditoría');
+    profilePhotosLoading = false;
+    await loadProfilePhotos();
+  } catch (error) {
+    toast(error?.message || 'No se pudo quitar la foto.');
+    button.disabled = false;
+    button.textContent = previous;
+  }
+});
 
 window.updateUserRole = async (uid, role, email) => {
   // El rol del Super Admin real está protegido de raíz — no solo se oculta el

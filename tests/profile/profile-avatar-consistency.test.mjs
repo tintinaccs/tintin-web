@@ -4,6 +4,7 @@ import fs from 'node:fs';
 
 const endpoint = fs.readFileSync(new URL('../../functions/api/profile-avatar-commit.js', import.meta.url), 'utf8');
 const adminEndpoint = fs.readFileSync(new URL('../../functions/api/profile-avatar-admin.js', import.meta.url), 'utf8');
+const moderateEndpoint = fs.readFileSync(new URL('../../functions/api/profile-avatar-moderate.js', import.meta.url), 'utf8');
 const client = fs.readFileSync(new URL('../../js/quality/estabilidad-final-publica.js', import.meta.url), 'utf8');
 const adminHtml = fs.readFileSync(new URL('../../admin.html', import.meta.url), 'utf8');
 const adminApp = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
@@ -35,4 +36,13 @@ test('Usuarios integra la pestaña de fotos sin exponer el CRUD de cuentas', () 
   assert.match(adminApp, /profile-avatar-admin/);
   assert.match(adminApp, /roleCanDo\('usuarios', 'gestionarFotos'\)/);
   assert.match(adminApp, /getElementById\('users-management-card'\)/);
+});
+
+test('la moderación de fotos es específica, versionada, auditable y protege la cuenta oficial', () => {
+  assert.match(moderateEndpoint, /requireStaffPermission\(request, env, 'usuarios', 'gestionarFotos'\)/);
+  assert.match(moderateEndpoint, /SUPERADMIN_EMAIL/);
+  assert.match(moderateEndpoint, /currentDocument: \{ updateTime: currentDocument\.updateTime \}/);
+  assert.match(moderateEndpoint, /limpieza_foto_perfil_fallida/);
+  assert.match(moderateEndpoint, /destroyProfileAsset/);
+  assert.match(adminApp, /profile-avatar-moderate/);
 });

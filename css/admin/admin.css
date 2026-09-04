@@ -855,6 +855,7 @@
     .adm-profile-photo-meta { min-width:0; display:flex; flex-direction:column; gap:3px; }
     .adm-profile-photo-meta strong { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .adm-profile-photo-meta span, .adm-profile-photo-meta small { color:var(--adm-muted); font-size:12px; overflow-wrap:anywhere; }
+    .adm-profile-photo-actions { margin-left:auto; flex:0 0 auto; }
     @media (max-width:600px) { .adm-profile-photo-row { padding:11px; gap:10px; } .adm-profile-photo-avatar { width:42px; height:42px; flex-basis:42px; } }
     #prod-table-wrap > table { min-width: 980px; }
     #prod-list-card > .adm-card-head {
