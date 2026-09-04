@@ -1,0 +1,85 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+
+const endpoint = fs.readFileSync(new URL('../../functions/api/profile-avatar-commit.js', import.meta.url), 'utf8');
+const adminEndpoint = fs.readFileSync(new URL('../../functions/api/profile-avatar-admin.js', import.meta.url), 'utf8');
+const moderateEndpoint = fs.readFileSync(new URL('../../functions/api/profile-avatar-moderate.js', import.meta.url), 'utf8');
+const adminUploadEndpoint = fs.readFileSync(new URL('../../functions/api/profile-avatar-admin-upload.js', import.meta.url), 'utf8');
+const adminCommitEndpoint = fs.readFileSync(new URL('../../functions/api/profile-avatar-admin-commit.js', import.meta.url), 'utf8');
+const routes = fs.readFileSync(new URL('../../_routes.json', import.meta.url), 'utf8');
+const client = fs.readFileSync(new URL('../../js/quality/estabilidad-final-publica.js', import.meta.url), 'utf8');
+const adminHtml = fs.readFileSync(new URL('../../admin.html', import.meta.url), 'utf8');
+const adminApp = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
+const sessionGuard = fs.readFileSync(new URL('../../js/core/auth/proteccion-sesion.js', import.meta.url), 'utf8');
+const permissionGuard = fs.readFileSync(new URL('../../cloudflare/seguridad-cloudinary.js', import.meta.url), 'utf8');
+
+test('la foto de perfil se consolida server-side y deja historial/auditoría', () => {
+  assert.match(endpoint, /requireFirebaseUser/);
+  assert.match(endpoint, /profilePhotoHistory/);
+  assert.match(endpoint, /auditLog/);
+  assert.match(endpoint, /currentDocument: \{ updateTime: currentDocument\.updateTime \}/);
+  assert.match(endpoint, /profile_photo_updated/);
+  assert.match(endpoint, /updateFirebaseUserProfile/);
+  assert.match(endpoint, /profilePhotoReconciliations/);
+  assert.match(endpoint, /reconciliacion_auth_pendiente/);
+  assert.match(endpoint, /authSync === 'pending' \? 202 : 200/);
+});
+
+test('el perfil reintenta la reconciliación sin mutar Firestore desde el navegador', () => {
+  assert.match(client, /profile-avatar-reconcile/);
+  assert.match(client, /Reconciliación Auth–Firestore pendiente/);
+  assert.doesNotMatch(client, /setDoc\(.*users/);
+});
+
+test('el navegador no escribe directamente users/{uid} para cerrar la foto', () => {
+  assert.match(client, /profile-avatar-commit/);
+  assert.match(client, /await authApi\.updateProfile\(user, \{ photoURL \}\)/);
+  assert.doesNotMatch(client, /firestoreApi\.setDoc\(firestoreApi\.doc\(db, 'users', user\.uid\)/);
+});
+
+test('la bandeja futura de fotos usa una proyección server-side y permiso delegable', () => {
+  assert.match(adminEndpoint, /requireStaffPermission\(request, env, 'usuarios', 'gestionarFotos'\)/);
+  assert.match(adminEndpoint, /firestoreAdminListAll\(env, 'users', MAX_USERS\)/);
+  assert.doesNotMatch(adminEndpoint, /profile\.email/);
+  assert.match(adminEndpoint, /photoURL/);
+});
+
+test('Usuarios integra la pestaña de fotos sin exponer el CRUD de cuentas', () => {
+  assert.match(adminHtml, /data-user-tab="photos"/);
+  assert.match(adminHtml, /id="profile-photos-card"/);
+  assert.match(adminApp, /profile-avatar-admin/);
+  assert.match(adminApp, /roleCanDo\('usuarios', 'gestionarFotos'\)/);
+  assert.match(adminApp, /getElementById\('users-management-card'\)/);
+});
+
+test('la moderación de fotos es específica, versionada, auditable y protege la cuenta oficial', () => {
+  assert.match(moderateEndpoint, /requireStaffPermission\(request, env, 'usuarios', 'gestionarFotos'\)/);
+  assert.match(moderateEndpoint, /SUPERADMIN_EMAIL/);
+  assert.match(moderateEndpoint, /currentDocument: \{ updateTime: currentDocument\.updateTime \}/);
+  assert.match(moderateEndpoint, /limpieza_foto_perfil_fallida/);
+  assert.match(moderateEndpoint, /destroyProfileAsset/);
+  assert.match(adminApp, /profile-avatar-moderate/);
+});
+
+test('la vuelta a una pestaña no falsifica actividad y respeta la expiración', () => {
+  assert.match(sessionGuard, /Volver a enfocar una pestaña no es actividad/);
+  assert.doesNotMatch(sessionGuard, /else \{\s*recordActivity\(\);\s*startSessionChecks\(\);/);
+  assert.match(sessionGuard, /if \(auth\.currentUser\) void enforce\(auth\.currentUser\);\s*startSessionChecks\(\);/);
+});
+
+test('la gestión delegada de fotos es opt-in y nunca afecta una cuenta superadmin', () => {
+  assert.match(permissionGuard, /if \(!eligibleStaffRole \|\| configured !== true\)/);
+  assert.match(moderateEndpoint, /before\.role === 'superadmin'/);
+});
+
+test('el reemplazo administrativo usa permiso, identidad determinista, historial y rutas explícitas', () => {
+  assert.match(adminUploadEndpoint, /requireStaffPermission/);
+  assert.match(adminUploadEndpoint, /gestionarFotos/);
+  assert.match(adminUploadEndpoint, /5 \* 1024 \* 1024/);
+  assert.match(adminCommitEndpoint, /reemplazar_foto_perfil/);
+  assert.match(adminCommitEndpoint, /updateFirebaseUserProfile\(env, uid/);
+  assert.match(adminCommitEndpoint, /profilePhotoHistory/);
+  assert.match(routes, /profile-avatar-admin-upload/);
+  assert.match(routes, /profile-avatar-admin-commit/);
+});

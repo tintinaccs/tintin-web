@@ -115,6 +115,14 @@ export const PERMISSION_MODULES = {
       responder: { label: 'Responder reseñas como equipo', defaultFrom: 'manageContent', rolesEditable: ['admin','agent'] },
     }
   },
+  usuarios: {
+    label: 'Usuarios',
+    actions: {
+      // Permite delegar la moderación de fotos sin delegar roles, bloqueo,
+      // eliminación de cuentas ni lectura irrestricta del documento users.
+      gestionarFotos: { label: 'Gestionar fotos de usuarios', defaultFrom: 'manageUsers', rolesEditable: ['admin','agent'], dangerous: true },
+    }
+  },
 };
 
 // ---- Valores por defecto: derivados de PERMISSIONS (roles.js) ----

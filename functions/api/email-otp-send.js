@@ -10,7 +10,8 @@ import {
   resolveEmailFromUsernameKey,
   fsString,
   fsInteger,
-  fsTimestamp
+  fsTimestamp,
+  getAuthProvidersByEmail
 } from '../../cloudflare/firebase-admin-ligero.js';
 import { usernameKey } from '../../js/components/forms/utilidades-username.js';
 
@@ -202,10 +203,10 @@ export async function onRequest(context) {
       }
     }
 
-    // El PIN es un segundo método de acceso a la MISMA cuenta, también si la
-    // identidad se creó con Google. findOrCreateUserByEmail() reutiliza el UID
-    // existente de Firebase Auth y solo crea uno cuando el email verificado no
-    // existe, por lo que habilitar este camino no duplica perfiles.
+    const authIdentity = await getAuthProvidersByEmail(env, email);
+    if (authIdentity.providers.includes('google.com')) {
+      return jsonResponse({ success: false, error: 'google_account_required' }, 403, origin, requestUrl);
+    }
 
     const path = docPath(email);
     const existingDoc = await firestoreAdminGet(env, path);

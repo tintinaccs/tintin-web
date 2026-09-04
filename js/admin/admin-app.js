@@ -17,7 +17,7 @@ import { ASSIGNABLE_ROLES } from '../core/auth/contrato-cuentas-generado.js?v=ti
 import {
   PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
   canDo, saveRolePermissions, buildDefaultRolePermissions
-} from "../core/auth/permisos-roles.js?v=tintin-20260821-accounts-phase-a-1";
+} from "../core/auth/permisos-roles.js?v=tintin-20260904-profile-consistency-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260903-store-gate-fast-rest-2";
 import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260901-firestore-budget-1";
@@ -564,7 +564,9 @@ function switchSection(target) {
   const requiredPerm = SECTION_PERMISSION[target];
   const allowedByPermission = target === 'apariencia'
     ? canAccessUnifiedAppearance()
-    : (!requiredPerm || can(currentRole, requiredPerm));
+    : target === 'usuarios'
+      ? (can(currentRole, 'manageUsers') || roleCanDo('usuarios', 'gestionarFotos'))
+      : (!requiredPerm || can(currentRole, requiredPerm));
   if (requiredPerm && !allowedByPermission) {
     toast('No tenés permiso para ver esta sección');
     target = 'dashboard';
@@ -928,7 +930,9 @@ function setupPermissions(role) {
       ? (role === 'superadmin' && currentUser?.email === SUPER_ADMIN)
       : section === 'apariencia'
         ? canAccessUnifiedAppearance(role)
-        : can(role, perm);
+        : section === 'usuarios'
+          ? (can(role, 'manageUsers') || roleCanDo('usuarios', 'gestionarFotos'))
+          : can(role, perm);
     document.querySelectorAll(`[data-section="${section}"]`).forEach(el => {
       el.style.display = allowed ? '' : 'none';
     });
@@ -1619,12 +1623,54 @@ let userStatusFilter = 'active';
 let userSortMode = 'recent';
 
 function loadUsers() {
+  const managementCard = document.getElementById('users-management-card');
+  const photosCard = document.getElementById('profile-photos-card');
+  const canPhotos = roleCanDo('usuarios', 'gestionarFotos');
+  if (canPhotos && !can(currentRole, 'manageUsers')) {
+    if (managementCard) managementCard.hidden = true;
+    if (photosCard) photosCard.hidden = false;
+    loadProfilePhotos();
+    return;
+  }
+  if (managementCard) managementCard.hidden = false;
   const tbody = document.getElementById('users-tbody');
   if (!adminRealtimeReady.users) {
     tbody.innerHTML = '<tr><td colspan="9" class="adm-loading"><span class="adm-spinner"></span> Sincronizando usuarios...</td></tr>';
     return;
   }
   applyUserFilters();
+}
+
+let profilePhotosLoading = false;
+async function loadProfilePhotos() {
+  if (profilePhotosLoading || !currentUser) return;
+  profilePhotosLoading = true;
+  const status = document.getElementById('profile-photos-status');
+  const list = document.getElementById('profile-photos-list');
+  if (status) status.textContent = 'Cargando fotos…';
+  try {
+    const token = await currentUser.getIdToken();
+    const response = await fetch('/api/profile-avatar-admin', { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || data.ok !== true) throw new Error(data.error || 'No se pudieron cargar las fotos.');
+    const users = Array.isArray(data.users) ? data.users : [];
+    const withPhotos = users.filter(user => user.photoURL);
+    if (status) status.textContent = `${withPhotos.length} foto${withPhotos.length === 1 ? '' : 's'} registrada${withPhotos.length === 1 ? '' : 's'} · ${users.length} cuenta${users.length === 1 ? '' : 's'} gestionable${users.length === 1 ? '' : 's'}`;
+    if (list) list.innerHTML = users.length ? users.map(user => {
+      const name = user.name || user.username || 'Cuenta sin nombre';
+      const avatar = sanitizeImageUrl(user.photoURL);
+      const canRemove = user.role !== 'superadmin';
+      const removeButton = canRemove && avatar ? `<button type="button" class="adm-btn adm-btn-outline adm-btn-sm adm-profile-photo-remove" data-profile-remove="${escapeHtmlAdmin(user.uid)}" data-profile-photo="${escapeHtmlAdmin(user.photoURL)}" aria-label="Quitar foto de ${escapeHtmlAdmin(name)}">Quitar</button>` : '';
+      const replaceLabel = avatar ? 'Reemplazar' : 'Agregar foto';
+      const replaceButton = canRemove ? `<label class="adm-btn adm-btn-outline adm-btn-sm adm-profile-photo-replace">${replaceLabel}<input type="file" data-profile-replace="${escapeHtmlAdmin(user.uid)}" data-profile-photo="${escapeHtmlAdmin(user.photoURL || '')}" accept="image/jpeg,image/png,image/webp" hidden></label>` : '';
+      return `<article class="adm-profile-photo-row"><div class="adm-profile-photo-avatar">${avatar ? `<img src="${escapeHtmlAdmin(avatar)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='/assets-tintin/images/general/logo.png'">` : `<img src="/assets-tintin/images/general/logo.png" alt="" loading="lazy">`}</div><div class="adm-profile-photo-meta"><strong>${escapeHtmlAdmin(name)}</strong><span>${escapeHtmlAdmin(user.username ? `@${user.username}` : 'Sin username')} · ${escapeHtmlAdmin(ROLE_LABELS[user.role] || 'Cliente')}</span><small>Actualizada: ${escapeHtmlAdmin(formatDate(user.updatedAt || user.createdAt))}</small></div><div class="adm-profile-photo-actions">${replaceButton}${removeButton}</div></article>`;
+    }).join('') : '<div class="adm-analytics-empty">Todavía no hay cuentas de usuario registradas.</div>';
+  } catch (error) {
+    if (status) status.textContent = error?.message || 'No se pudieron cargar las fotos.';
+    if (list) list.innerHTML = '';
+  } finally {
+    profilePhotosLoading = false;
+  }
 }
 
 // Única fuente de verdad para lo que se ve en la tabla: combina el texto de
@@ -1762,7 +1808,73 @@ function renderUsersTable(users) {
 document.getElementById('user-search').oninput = applyUserFilters;
 document.getElementById('user-sort').onchange = (e) => { userSortMode = e.target.value; applyUserFilters(); };
 document.querySelectorAll('#section-usuarios .user-tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => window.filterUsersByStatus(btn.dataset.userTab));
+  btn.addEventListener('click', () => {
+    if (btn.dataset.userTab === 'photos') {
+      document.querySelectorAll('#section-usuarios .user-tab-btn').forEach(item => item.classList.toggle('active', item === btn));
+      document.getElementById('users-management-card')?.setAttribute('hidden', '');
+      document.getElementById('profile-photos-card')?.removeAttribute('hidden');
+      loadProfilePhotos();
+      return;
+    }
+    document.getElementById('users-management-card')?.removeAttribute('hidden');
+    document.getElementById('profile-photos-card')?.setAttribute('hidden', '');
+    window.filterUsersByStatus(btn.dataset.userTab);
+  });
+});
+
+document.getElementById('profile-photos-list')?.addEventListener('change', async (event) => {
+  const input = event.target.closest?.('[data-profile-replace]');
+  const file = input?.files?.[0];
+  if (!input || !file || !currentUser) return;
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size <= 0 || file.size > 5 * 1024 * 1024) {
+    toast('La foto debe ser JPG, PNG o WebP y pesar como máximo 5 MB.'); input.value = ''; return;
+  }
+  const label = input.closest('label');
+  if (label) { label.style.pointerEvents = 'none'; label.dataset.originalText = label.textContent; label.childNodes[0].textContent = 'Subiendo…'; }
+  try {
+    const token = await currentUser.getIdToken();
+    const signResponse = await fetch('/api/profile-avatar-admin-upload', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ uid: input.dataset.profileReplace, contentType: file.type, size: file.size }) });
+    const signed = await signResponse.json().catch(() => ({}));
+    if (!signResponse.ok || signed.ok !== true) throw new Error(signed.error || 'No se pudo autorizar el reemplazo.');
+    const form = new FormData();
+    form.append('file', file); form.append('api_key', signed.apiKey); form.append('timestamp', String(signed.timestamp)); form.append('signature', signed.signature); form.append('public_id', signed.publicId); form.append('overwrite', 'true');
+    const uploadResponse = await fetch(signed.uploadUrl, { method: 'POST', body: form });
+    const uploaded = await uploadResponse.json().catch(() => ({}));
+    if (!uploadResponse.ok || !uploaded.secure_url) throw new Error(uploaded.error?.message || 'Cloudinary no confirmó la subida.');
+    const commitResponse = await fetch('/api/profile-avatar-admin-commit', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ uid: input.dataset.profileReplace, publicId: signed.publicId, photoURL: uploaded.secure_url, expectedPhotoURL: input.dataset.profilePhoto || '' }) });
+    const committed = await commitResponse.json().catch(() => ({}));
+    if (!commitResponse.ok || committed.ok !== true) throw new Error(committed.error || 'No se pudo consolidar el reemplazo.');
+    toast(committed.authSync === 'pending' ? 'Foto reemplazada; la sincronización de identidad quedó pendiente para reintento.' : 'Foto reemplazada y registrada en auditoría.');
+    profilePhotosLoading = false; await loadProfilePhotos();
+  } catch (error) { toast(error?.message || 'No se pudo reemplazar la foto.'); }
+  finally { input.value = ''; if (label) { label.style.pointerEvents = ''; label.childNodes[0].textContent = input.dataset.profilePhoto ? 'Reemplazar' : 'Agregar foto'; } }
+});
+document.getElementById('profile-photos-refresh')?.addEventListener('click', loadProfilePhotos);
+document.getElementById('profile-photos-list')?.addEventListener('click', async (event) => {
+  const button = event.target.closest?.('[data-profile-remove]');
+  if (!button || button.disabled || !currentUser) return;
+  const name = button.closest('.adm-profile-photo-row')?.querySelector('strong')?.textContent || 'esta cuenta';
+  if (!window.confirm(`¿Quitar la foto de ${name}? La operación quedará registrada en auditoría.`)) return;
+  button.disabled = true;
+  const previous = button.textContent;
+  button.textContent = 'Quitando…';
+  try {
+    const token = await currentUser.getIdToken();
+    const response = await fetch('/api/profile-avatar-moderate', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'remove', uid: button.dataset.profileRemove, photoURL: button.dataset.profilePhoto }),
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || data.ok !== true) throw new Error(data.error || 'No se pudo quitar la foto.');
+    toast(data.cleanup === 'error' ? 'Foto quitada; la limpieza externa quedó registrada para revisar' : 'Foto quitada y registrada en auditoría');
+    profilePhotosLoading = false;
+    await loadProfilePhotos();
+  } catch (error) {
+    toast(error?.message || 'No se pudo quitar la foto.');
+    button.disabled = false;
+    button.textContent = previous;
+  }
 });
 
 window.updateUserRole = async (uid, role, email) => {
@@ -2661,6 +2773,7 @@ function serializeGeneralConfig_() {
     'cfg-facebook', 'cfg-tiktok', 'cfg-ga4-id', 'cfg-store-open',
     'cfg-header-desktop-tablet', 'cfg-header-mobile', 'cfg-pay-efectivo',
     'cfg-pay-transferencia', 'cfg-bank-ueno', 'cfg-bank-atlas',
+    'cfg-loyalty-fiel', 'cfg-loyalty-frecuente', 'cfg-loyalty-destacado',
     ...MAINTENANCE_ROLE_KEYS.map(role => 'ma-' + role),
   ];
   return JSON.stringify(ids.map(id => {
@@ -2703,6 +2816,11 @@ async function loadConfig() {
     const bankAccounts = d.bankAccounts || {};
     document.getElementById('cfg-bank-ueno').value = bankAccounts.ueno || '';
     document.getElementById('cfg-bank-atlas').value = bankAccounts.atlas || '';
+    const loyaltyTiers = Array.isArray(d.loyaltyTiers) ? d.loyaltyTiers : [];
+    const loyaltyById = Object.fromEntries(loyaltyTiers.map(tier => [String(tier?.id || ''), tier]));
+    document.getElementById('cfg-loyalty-fiel').value = Number(loyaltyById.fiel?.minPurchases) > 0 ? Number(loyaltyById.fiel.minPurchases) : 5;
+    document.getElementById('cfg-loyalty-frecuente').value = Number(loyaltyById.frecuente?.minPurchases) > 0 ? Number(loyaltyById.frecuente.minPurchases) : 10;
+    document.getElementById('cfg-loyalty-destacado').value = Number(loyaltyById.destacado?.minPurchases) > 0 ? Number(loyaltyById.destacado.minPurchases) : 20;
     // Accesos con tienda cerrada
     const maintenanceAccess = d.maintenanceAccess || {};
     _lastKnownMaintenanceAccess = {};
@@ -2747,6 +2865,11 @@ document.getElementById('btn-save-config').onclick = async () => {
       const input = document.getElementById('ma-' + role);
       maintenanceAccess[role] = !!(input && input.checked);
     });
+    const loyaltyTiers = [
+      { id: 'destacado', label: 'Cliente destacado', minPurchases: Math.max(1, Math.min(9999, parseInt(document.getElementById('cfg-loyalty-destacado').value, 10) || 20)) },
+      { id: 'frecuente', label: 'Cliente frecuente', minPurchases: Math.max(1, Math.min(9999, parseInt(document.getElementById('cfg-loyalty-frecuente').value, 10) || 10)) },
+      { id: 'fiel', label: 'Cliente fiel', minPurchases: Math.max(1, Math.min(9999, parseInt(document.getElementById('cfg-loyalty-fiel').value, 10) || 5)) },
+    ];
     const generalRef = doc(db, 'settings', 'general');
     const storeGateRef = doc(db, 'settings', 'storeGate');
     const settingsBatch = writeBatch(db);
@@ -2780,6 +2903,7 @@ document.getElementById('btn-save-config').onclick = async () => {
         ueno:  document.getElementById('cfg-bank-ueno').value.trim(),
         atlas: document.getElementById('cfg-bank-atlas').value.trim(),
       },
+      loyaltyTiers,
       updatedAt: serverTimestamp()
     }, { merge: true });
 
@@ -2809,6 +2933,7 @@ document.getElementById('btn-save-config').onclick = async () => {
     if (JSON.stringify(_lastKnownHeaderMode) !== JSON.stringify(newHeaderMode)) {
       await logAudit('cambiar_header_dispositivo', 'settings', 'general', 'Header por dispositivo', JSON.stringify(newHeaderMode));
     }
+    await logAudit('config_fidelidad_clientes', 'settings', 'general', 'Niveles de fidelidad', JSON.stringify(loyaltyTiers));
     _lastKnownStoreOpen = willBeOpen;
     _lastKnownMaintenanceAccess = maintenanceAccess;
     _lastKnownHeaderMode = newHeaderMode;

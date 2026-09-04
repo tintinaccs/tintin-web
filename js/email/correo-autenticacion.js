@@ -118,6 +118,7 @@ export function otpErrorMessage(code) {
     // Correo
     'invalid_email': 'Escribí un correo con formato válido (ej: tu@email.com).',
     'email_not_allowed': 'Ese correo no puede recibir el código. Probá con otro o entrá con Google.',
+    'google_account_required': 'Esta cuenta se creó con Google. Tocá «Continuar con Google» arriba para entrar.',
 
     // Código
     'invalid_code_format': 'El código son 6 dígitos, sin letras ni espacios.',

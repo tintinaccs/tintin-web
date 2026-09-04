@@ -5,12 +5,14 @@ import {
   firestoreAdminGet,
   firestoreAdminList,
   firestoreAdminReplace,
+  firestoreAdminQueryEqual,
 } from './firebase-admin-ligero.js';
 import {
   buildAdminNotificationWrite,
   buildUserNotificationWrite,
   dispatchAdminNotificationPush,
 } from './notificaciones-sociales.js';
+import { resolveCustomerTier } from './fidelidad-clientes.js';
 
 const MAX_COMMENT = 1600;
 const MAX_REPLY = 1200;
@@ -66,20 +68,55 @@ export function publicCustomerName(realName) {
   return `${firstName}${lastInitial}`;
 }
 
+function isInvalidPurchase(order = {}) {
+  const status = clean(order.status, 40).toLowerCase();
+  const payment = clean(order.paymentStatus || order.payment?.status, 40).toLowerCase();
+  const invalid = new Set(['cancelado', 'rechazado', 'reembolsado', 'refunded', 'refund']);
+  return invalid.has(status) || invalid.has(payment);
+}
+
+async function readValidPurchaseCount(env, uid, email) {
+  const queries = [firestoreAdminQueryEqual(env, 'orders', 'userId', uid)];
+  const rawEmail = clean(email, 254);
+  const normalizedEmail = rawEmail.toLowerCase();
+  if (rawEmail) queries.push(firestoreAdminQueryEqual(env, 'orders', 'userEmail', normalizedEmail));
+  if (rawEmail && rawEmail !== normalizedEmail) queries.push(firestoreAdminQueryEqual(env, 'orders', 'userEmail', rawEmail));
+  const results = await Promise.all(queries);
+  const unique = new Map();
+  results.flat().forEach(document => {
+    const order = decoded(document);
+    if (order?.id) unique.set(order.id, order);
+  });
+  return [...unique.values()].filter(order => !isInvalidPurchase(order)).length;
+}
+
 async function readContext(env, user, productId) {
   const id = safeId(productId, 'Producto');
   const uid = safeId(user.uid, 'Cuenta');
-  const [productDoc, userDoc] = await Promise.all([
+  const [productDoc, userDoc, settingsDoc] = await Promise.all([
     firestoreAdminGet(env, `products/${id}`),
     firestoreAdminGet(env, `users/${uid}`),
+    firestoreAdminGet(env, 'settings/general'),
   ]);
   if (!productDoc) throw new Error('El producto ya no existe');
   const product = decoded(productDoc);
   if (product.active === false) throw new Error('El producto no está disponible');
   const profile = decoded(userDoc) || {};
+  const settings = decoded(settingsDoc) || {};
   if (profile.blocked === true) throw new Error('La cuenta no puede realizar esta acción');
   const realName = customerName(profile, user.email);
   const admin = isSuperAdminUser(user);
+  let customerTier = null;
+  if (!admin) {
+    // El pin público no depende de un contador persistido que pueda quedar
+    // atrasado después de una edición en admin, checkout o Sheets.
+    try {
+      const purchaseCount = await readValidPurchaseCount(env, uid, user.email);
+      customerTier = resolveCustomerTier({ purchaseCount }, settings.loyaltyTiers);
+    } catch (error) {
+      console.warn('[participacion] No se pudo verificar compras válidas; se omite el pin:', error);
+    }
+  }
   return {
     productId: id,
     productName: clean(product.name || 'Producto', 180),
@@ -88,6 +125,7 @@ async function readContext(env, user, productId) {
     username: customerUsername(profile, user.email),
     publicName: admin ? 'Tintin Accesorios' : publicCustomerName(realName),
     photoUrl: clean(profile.photoURL || profile.photoUrl || '', 1200),
+    customerTier,
     isSuperAdmin: admin,
   };
 }
@@ -124,6 +162,9 @@ function publicReply(message) {
     isOfficial: authorType === 'store',
     publicName: clean(message?.actorPublicName || message?.publicName || (authorType === 'store' ? 'Tintin Accesorios' : 'Clienta Tintin'), 160),
     publicPhotoUrl: clean(message?.actorPhotoUrl || message?.publicPhotoUrl, 1200),
+    customerTier: message?.customerTier && typeof message.customerTier === 'object'
+      ? { id: clean(message.customerTier.id, 40), label: clean(message.customerTier.label, 60) }
+      : null,
     text: clean(message?.text, MAX_REPLY),
     likeCount: Math.max(0, Number(message?.likeCount) || 0),
     createdAt: message?.createdAt || new Date(),
@@ -142,6 +183,9 @@ function reviewPublic(record) {
     comment: record.comment,
     publicName: record.publicName,
     publicPhotoUrl: clean(record.actorPhotoUrl, 1200),
+    customerTier: authorType === 'customer' && record.customerTier
+      ? { id: clean(record.customerTier.id, 40), label: clean(record.customerTier.label, 60) }
+      : null,
     authorType,
     authorRole,
     roleLabel: authorType === 'store' ? 'Cuenta oficial' : authorType === 'staff' ? ({ admin: 'Admin', agent: 'Moderador', viewer: 'Viewer' }[authorRole] || 'Equipo Tintin') : '',
@@ -333,6 +377,7 @@ export async function createReview(env, user, input) {
       username: context.username,
       publicName: context.publicName,
       actorPhotoUrl: context.photoUrl,
+      customerTier: context.customerTier,
       authorType: context.isSuperAdmin ? 'store' : 'customer',
       productId: context.productId,
       productName: context.productName,
@@ -452,6 +497,7 @@ export async function addCustomerReply(env, user, input) {
       actorUsername: context.username,
       actorPublicName: context.publicName,
       actorPhotoUrl: context.photoUrl,
+      customerTier: context.customerTier,
       text,
       likeCount: 0,
       createdAt: now,
