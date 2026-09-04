@@ -11,8 +11,10 @@ test('la fidelidad usa compras válidas y niveles explícitos', () => {
   assert.match(source, /minPurchases: 5/);
   assert.match(source, /minPurchases: 10/);
   assert.match(source, /minPurchases: 20/);
-  assert.match(participation, /resolveCustomerTier\(profile, settings\.loyaltyTiers\)/);
+  assert.match(participation, /resolveCustomerTier\(\{ purchaseCount \}, settings\.loyaltyTiers\)/);
   assert.match(participation, /settings\/general/);
+  assert.match(participation, /firestoreAdminQueryEqual\(env, 'orders', 'userId', uid\)/);
+  assert.match(participation, /No se pudo verificar compras válidas; se omite el pin/);
 });
 
 test('el nivel de cliente es solo una identidad pública, no un permiso', () => {

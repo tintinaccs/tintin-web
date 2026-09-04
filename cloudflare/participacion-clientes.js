@@ -5,6 +5,7 @@ import {
   firestoreAdminGet,
   firestoreAdminList,
   firestoreAdminReplace,
+  firestoreAdminQueryEqual,
 } from './firebase-admin-ligero.js';
 import {
   buildAdminNotificationWrite,
@@ -67,6 +68,26 @@ export function publicCustomerName(realName) {
   return `${firstName}${lastInitial}`;
 }
 
+function isInvalidPurchase(order = {}) {
+  const status = clean(order.status, 40).toLowerCase();
+  const payment = clean(order.paymentStatus || order.payment?.status, 40).toLowerCase();
+  const invalid = new Set(['cancelado', 'rechazado', 'reembolsado', 'refunded', 'refund']);
+  return invalid.has(status) || invalid.has(payment);
+}
+
+async function readValidPurchaseCount(env, uid, email) {
+  const queries = [firestoreAdminQueryEqual(env, 'orders', 'userId', uid)];
+  const normalizedEmail = clean(email, 254).toLowerCase();
+  if (normalizedEmail) queries.push(firestoreAdminQueryEqual(env, 'orders', 'userEmail', normalizedEmail));
+  const results = await Promise.all(queries);
+  const unique = new Map();
+  results.flat().forEach(document => {
+    const order = decoded(document);
+    if (order?.id) unique.set(order.id, order);
+  });
+  return [...unique.values()].filter(order => !isInvalidPurchase(order)).length;
+}
+
 async function readContext(env, user, productId) {
   const id = safeId(productId, 'Producto');
   const uid = safeId(user.uid, 'Cuenta');
@@ -83,6 +104,17 @@ async function readContext(env, user, productId) {
   if (profile.blocked === true) throw new Error('La cuenta no puede realizar esta acción');
   const realName = customerName(profile, user.email);
   const admin = isSuperAdminUser(user);
+  let customerTier = null;
+  if (!admin) {
+    // El pin público no depende de un contador persistido que pueda quedar
+    // atrasado después de una edición en admin, checkout o Sheets.
+    try {
+      const purchaseCount = await readValidPurchaseCount(env, uid, user.email);
+      customerTier = resolveCustomerTier({ purchaseCount }, settings.loyaltyTiers);
+    } catch (error) {
+      console.warn('[participacion] No se pudo verificar compras válidas; se omite el pin:', error);
+    }
+  }
   return {
     productId: id,
     productName: clean(product.name || 'Producto', 180),
@@ -91,7 +123,7 @@ async function readContext(env, user, productId) {
     username: customerUsername(profile, user.email),
     publicName: admin ? 'Tintin Accesorios' : publicCustomerName(realName),
     photoUrl: clean(profile.photoURL || profile.photoUrl || '', 1200),
-    customerTier: admin ? null : resolveCustomerTier(profile, settings.loyaltyTiers),
+    customerTier,
     isSuperAdmin: admin,
   };
 }

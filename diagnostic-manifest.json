@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T22:52:10.686Z",
-  "sourceFingerprint": "a67c0dcb23d1eb537f83080b6fde6089d5ecf6e15b28a5ef3d1016d3b230ca34",
+  "generatedAt": "2026-09-04T23:06:19.645Z",
+  "sourceFingerprint": "28b37f8bf7e7ec10889a2b399a5a9dab4b124f26256f180977ad98a9c6ccdc44",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 816,
     "textFiles": 783,
-    "totalBytes": 10033596,
+    "totalBytes": 10036829,
     "pages": 18,
     "modules": 565
   },
@@ -17504,8 +17504,8 @@
     },
     {
       "path": "cloudflare/firebase-admin-ligero.js",
-      "bytes": 23737,
-      "sha256": "49b12fdd8a8f1dd77bf4b45659bd87a812828a68e6dc8f792c33803cfb8e0b28",
+      "bytes": 25397,
+      "sha256": "841dfe77c24f3be156bf9fe886d3b8f2eaeabf4fe11a38d3b6d0c748cadd7a99",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17749,8 +17749,8 @@
     },
     {
       "path": "cloudflare/participacion-clientes.js",
-      "bytes": 40851,
-      "sha256": "9c7c34d29f6e20a318f40a626f61aa8390c2f22f0c6dd49b910569ed9a299a6d",
+      "bytes": 42232,
+      "sha256": "80ef9e3c0258382f4670b8dc83ea8e64c9a598fad4eea226d8c3f6d440c0840a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17760,19 +17760,19 @@
           "raw": "./firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 8
+          "line": 9
         },
         {
           "raw": "./notificaciones-sociales.js",
           "target": "cloudflare/notificaciones-sociales.js",
           "dynamic": false,
-          "line": 13
+          "line": 14
         },
         {
           "raw": "./fidelidad-clientes.js",
           "target": "cloudflare/fidelidad-clientes.js",
           "dynamic": false,
-          "line": 14
+          "line": 15
         }
       ],
       "endpoints": []
@@ -30556,8 +30556,8 @@
     },
     {
       "path": "tests/engagement/customer-loyalty-tier.test.mjs",
-      "bytes": 1103,
-      "sha256": "edeba7a3405b27c5538c2b9fc89a4bea8aa653dd96d18ee292c3134c1c8ca96e",
+      "bytes": 1295,
+      "sha256": "c9fddcb7aac3352cf0f85778e7b6c3440bce8d94cf83958f6ed262f9a4c8894a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32744,8 +32744,8 @@
     {
       "path": "cloudflare/firebase-admin-ligero.js",
       "extension": ".js",
-      "bytes": 23737,
-      "sha256": "49b12fdd8a8f1dd77bf4b45659bd87a812828a68e6dc8f792c33803cfb8e0b28"
+      "bytes": 25397,
+      "sha256": "841dfe77c24f3be156bf9fe886d3b8f2eaeabf4fe11a38d3b6d0c748cadd7a99"
     },
     {
       "path": "cloudflare/firebase-id-token.js",
@@ -32804,8 +32804,8 @@
     {
       "path": "cloudflare/participacion-clientes.js",
       "extension": ".js",
-      "bytes": 40851,
-      "sha256": "9c7c34d29f6e20a318f40a626f61aa8390c2f22f0c6dd49b910569ed9a299a6d"
+      "bytes": 42232,
+      "sha256": "80ef9e3c0258382f4670b8dc83ea8e64c9a598fad4eea226d8c3f6d440c0840a"
     },
     {
       "path": "cloudflare/paypal-seguro.js",
@@ -36890,8 +36890,8 @@
     {
       "path": "tests/engagement/customer-loyalty-tier.test.mjs",
       "extension": ".mjs",
-      "bytes": 1103,
-      "sha256": "edeba7a3405b27c5538c2b9fc89a4bea8aa653dd96d18ee292c3134c1c8ca96e"
+      "bytes": 1295,
+      "sha256": "c9fddcb7aac3352cf0f85778e7b6c3440bce8d94cf83958f6ed262f9a4c8894a"
     },
     {
       "path": "tests/engagement/firebase-id-token.test.mjs",

@@ -331,6 +331,38 @@ export async function firestoreAdminFindFirstByFields(env, collectionId, fieldPa
 }
 
 /**
+ * Ejecuta una consulta acotada de igualdad contra una colección. Se usa para
+ * lecturas públicas derivadas que deben salir de una autoridad server-side;
+ * nunca descarga una colección completa ni acepta un campo arbitrario sin
+ * validar.
+ */
+export async function firestoreAdminQueryEqual(env, collectionId, fieldPath, value, pageSize = 300) {
+  const safeCollection = String(collectionId || '').trim();
+  const safeField = String(fieldPath || '').trim();
+  if (!/^[A-Za-z0-9_-]{1,120}$/.test(safeCollection)) throw new Error('Colección inválida para query Firestore');
+  if (!/^[A-Za-z0-9_. -]{1,120}$/.test(safeField)) throw new Error('Campo inválido para query Firestore');
+  const sa = parseServiceAccount(env);
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const response = await fetch(`${firestoreDatabaseUrl(sa)}/documents:runQuery`, {
+    method: 'POST',
+    headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify({
+      structuredQuery: {
+        from: [{ collectionId: safeCollection }],
+        where: { fieldFilter: { field: { fieldPath: safeField }, op: 'EQUAL', value: { stringValue: String(value ?? '') } } },
+        limit: Math.max(1, Math.min(300, Number(pageSize) || 300)),
+      },
+    }),
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(`Firestore RUN QUERY falló (${response.status}): ${data?.error?.message || ''}`);
+  }
+  const rows = await response.json().catch(() => []);
+  return Array.isArray(rows) ? rows.filter(row => row?.document).map(row => row.document) : [];
+}
+
+/**
  * Resuelve el email de la cuenta dueña de un username, a partir de la
  * reserva en `usernameReservations/{key}` (ver js/components/forms/reserva-username.js).
  * Devuelve null si el username no existe o no tiene cuenta asociada —
