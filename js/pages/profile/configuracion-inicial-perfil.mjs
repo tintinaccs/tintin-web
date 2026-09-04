@@ -53,7 +53,8 @@ export function isValidFullName(first, last) {
 
 /**
  * Separa en nombre y apellido lo que haya entregado Google (o lo que ya esté
- * guardado en el campo `name` de los perfiles viejos).
+ * guardado en el campo `name` de perfiles creados antes de separar ambos
+ * campos).
  *
  * La primera palabra es el nombre y el resto el apellido: "María José Pérez
  * Duarte" queda como "María" + "José Pérez Duarte". Puede no ser el corte
@@ -121,10 +122,13 @@ function locationsAreEqual(first, second) {
 /**
  * Qué le falta a este perfil para estar completo.
  *
- * Cuando el alta se abre por nombre o teléfono faltante, también se muestra
- * la ubicación. Si ya estaba guardada se carga marcada y no se vuelve a pedir;
- * así la persona confirma todos los datos útiles para comprar en una sola
- * pantalla y checkout puede reutilizarlos sin otro paso obligatorio.
+ * Una cuenta client sólo queda completa cuando ya tiene TODOS los datos del
+ * formulario de alta: username, nombre, apellido, teléfono, fecha de
+ * nacimiento y ubicación reutilizable por checkout. El email no se vuelve a
+ * pedir acá porque ya lo garantiza Firebase Auth en `user.email`.
+ *
+ * Si falta un único dato, sólo ese campo vuelve a mostrarse. Los datos que ya
+ * están guardados no se solicitan otra vez.
  */
 export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', superAdminEmail = '', requireAddress = true } = {}) {
   if (isSuperAdminProfile({ email: user.email, role }, superAdminEmail)) {
@@ -142,12 +146,9 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
   const addressOk = !requireAddress || hasUsableAddress(profile);
   const needsName = !storedNameIsValid;
   const needsPhone = !storedPhone;
+  const needsUsername = !isValidUsername(profile.username);
+  const needsDob = !profile.dob;
   const addressMissing = !addressOk;
-  // Username y fecha de nacimiento sólo se exigen a cuentas nuevas marcadas
-  // explícitamente `incomplete`. En perfiles anteriores se ofrece el campo
-  // durante el alta si falta, sin bloquearles el acceso por ese dato.
-  const needsUsername = profile.profileStatus === 'incomplete' && !isValidUsername(profile.username);
-  const needsDob = profile.profileStatus === 'incomplete' && !profile.dob;
   const onboardingRequired = needsName || needsPhone || addressMissing || needsUsername || needsDob;
 
   exposeSavedLocationForOnboarding(profile);
@@ -163,9 +164,7 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
     skip: !onboardingRequired,
     needsName,
     needsPhone,
-    // Si el alta está abierta, se muestra el mapa aunque la ubicación ya esté
-    // guardada. mapa-ubicacion.js la precarga y permite continuar sin tocarla.
-    needsAddress: onboardingRequired && requireAddress,
+    needsAddress: addressMissing,
     addressAlreadySaved: addressOk,
     needsUsername,
     needsDob,
@@ -238,20 +237,20 @@ export function buildMissingProfilePatch({
     patch.dob = parseDob(submittedDob);
   }
 
-  // Perfiles nuevos ('incomplete') pasan a 'active' en cuanto tienen nombre,
-  // teléfono, username y fecha de nacimiento válidos, ya sea porque ya los
-  // tenían guardados o porque se acaban de completar en este mismo alta. La
-  // dirección ayuda a comprar pero no bloquea el pasaje a 'active': checkout
-  // la vuelve a pedir si todavía falta. Los perfiles 'legacy' no se tocan acá
-  // — no se les exige username ni DOB retroactivamente.
+  // Un perfil `incomplete` pasa a `active` sólo cuando ya reúne todos los
+  // datos obligatorios del alta. La misma definición se usa arriba para no
+  // crear estados contradictorios del tipo "active pero onboarding pendiente".
   if (currentProfile.profileStatus === 'incomplete') {
     const finalFirstName = patch.firstName || current.firstName;
     const finalLastName = patch.lastName || current.lastName;
     const finalPhone = patch.phone || currentPhone;
     const finalUsername = patch.username || currentUsername;
     const finalDob = patch.dob || currentProfile.dob;
+    const finalProfile = patch.savedLocation
+      ? { ...currentProfile, savedLocation: patch.savedLocation }
+      : currentProfile;
     if (isValidFullName(finalFirstName, finalLastName) && finalPhone &&
-        isValidUsername(finalUsername) && finalDob) {
+        isValidUsername(finalUsername) && finalDob && hasUsableAddress(finalProfile)) {
       patch.profileStatus = 'active';
     }
   }
