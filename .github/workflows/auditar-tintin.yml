@@ -45,6 +45,12 @@ jobs:
       - name: Build exact public artifact
         run: npm run build:pages
 
+      - name: Reject generated artifact drift
+        run: git diff --exit-code -- .
+
+      - name: Verify CSS source and minified artifact integrity
+        run: npm run audit:styles
+
       - name: Canonical integrations and authority map
         run: node scripts/auditar-integraciones-canonicas.mjs
 

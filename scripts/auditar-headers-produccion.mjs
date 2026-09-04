@@ -1,4 +1,3 @@
-import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 
 const site = String(process.env.TINTIN_PUBLIC_ORIGIN || 'https://tintinaccesorios.pages.dev').replace(/\/$/, '');
@@ -10,20 +9,17 @@ const targets = [
   ['storeGate', '/api/public-catalog?resource=storeGate', /(?:public,\s*)?max-age=(?:[1-9]\d*)/i],
 ];
 
-function headersFor(path) {
-  return execFileSync('curl.exe', ['-sS', '-L', '-D', '-', '-o', 'NUL', `${site}${path}`], { encoding: 'utf8' });
-}
-
 const failures = [];
 for (const [name, path, expected] of targets) {
-  let raw;
-  try { raw = headersFor(path); } catch (error) {
-    failures.push(`${name}: curl no pudo consultar ${site}${path}: ${error.message}`);
+  let response;
+  try {
+    response = await fetch(`${site}${path}`, { redirect: 'follow', signal: AbortSignal.timeout(15000) });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  } catch (error) {
+    failures.push(`${name}: no pudo consultar ${site}${path}: ${error.message}`);
     continue;
   }
-  const blocks = raw.split(/\r?\n\r?\n/).filter(Boolean);
-  const block = blocks.at(-1) || raw;
-  const cache = block.match(/^cache-control:\s*(.+)$/im)?.[1] || '';
+  const cache = response.headers.get('cache-control') || '';
   if (!expected.test(cache)) failures.push(`${name}: Cache-Control inesperado: ${cache || '(ausente)'}`);
   if (name !== 'html' && /no-store/i.test(cache)) failures.push(`${name}: producción todavía combina no-store con el caché del asset (${cache})`);
   if (name === 'html' && !/no-store/i.test(cache)) failures.push('html: producción no conserva no-store para HTML');

@@ -36,7 +36,6 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20260716-cloudinary-fix-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260716-cloudinary-fix-1";
-import { createOrderViaServer } from "../create-order-client.js?v=tintin-20260822-checkout-hardening-2";
 import './orders/pedidos-superadmin-crud.js?v=tintin-20260821-accounts-phase-a-1';
 
 // ---- GLOBALS ----
@@ -4770,67 +4769,6 @@ window.fixLegacyProductNumbers = async function() {
     toast(`Listo — ${fixed} producto(s) corregido(s)${skipped ? `, ${skipped} necesitan revisión manual (sin precio numérico legible)` : ''}.`);
   } catch (e) {
     toast('Error al corregir productos: ' + e.message);
-  }
-};
-
-// Prueba manual y aislada del nuevo endpoint server-side de pedidos (Fase
-// 4, apps-script/CrearPedido.gs) — NO toca checkout.html ni
-// js/orders/pedido-checkout-seguro.js. Crea un pedido real (retiro en tienda,
-// efectivo) con un producto real para confirmar que el Apps Script
-// funciona antes de migrar el checkout de verdad. Requiere que
-// CrearPedido.gs ya esté pegado en el proyecto y que doPost(e) en
-// Código.gs rutee action === 'createOrder' hacia phase4CreateOrder_.
-window.testServerCreateOrder = async function() {
-  if (currentRole !== 'superadmin') {
-    toast('Solo Super Admin puede usar esta prueba.');
-    return;
-  }
-  const wanted = Math.max(1, parseInt(window.prompt('¿Con cuántos productos distintos armamos el pedido de prueba? (justamente para confirmar que ya NO hay tope de 4)', '20'), 10) || 20);
-
-  // Toma productos reales activos y con stock (o sin control de stock) del
-  // catálogo ya cargado en el panel — evita tipear 20 IDs a mano. Ojo: esto
-  // crea un pedido REAL y descuenta stock REAL de cada producto elegido.
-  const candidates = (_allProducts || []).filter(p =>
-    p.active !== false && (p.stock == null || Number(p.stock) >= 1)
-  );
-  if (!candidates.length) { toast('No hay productos activos con stock para probar.'); return; }
-  const chosen = candidates.slice(0, wanted);
-  if (chosen.length < wanted) {
-    toast(`Solo hay ${chosen.length} producto(s) activo(s) con stock disponible — se usan esos.`);
-  }
-  if (!confirm(`Se va a crear un pedido REAL con ${chosen.length} producto(s) distinto(s) (1 unidad c/u, retiro en tienda, efectivo) y se va a descontar su stock real. ¿Continuar?`)) return;
-
-  try {
-    const cartLines = chosen.map(p => ({ id: p._docId, qty: 1, variants: [] }));
-    const subtotal = chosen.reduce((sum, p) => sum + (Number(p.price) || 0), 0);
-    const requestId = `test_${Date.now().toString(36)}_${Math.random().toString(36).slice(2)}`;
-
-    const draft = {
-      requestId,
-      cartLines,
-      name: auth.currentUser?.displayName || 'Prueba Super Admin',
-      phone: '595981000000',
-      contactEmail: auth.currentUser?.email || '',
-      notes: `Pedido de prueba — Fase 4 createOrder (${chosen.length} productos, sin tope de 4)`,
-      selectedCity: '__retiro__',
-      departamento: '',
-      address: '',
-      referencia: '',
-      mapLocation: null,
-      paymentMethod: 'efectivo',
-      expectedSubtotal: subtotal,
-      expectedShippingCost: 0,
-      expectedShippingPending: false,
-      expectedTotal: subtotal
-    };
-
-    toast(`Enviando pedido de prueba con ${chosen.length} producto(s) al servidor…`);
-    const result = await createOrderViaServer(draft);
-    console.log('[testServerCreateOrder]', result);
-    alert(JSON.stringify(result, null, 2));
-  } catch (e) {
-    console.error('[testServerCreateOrder]', e);
-    toast('Error: ' + e.message);
   }
 };
 

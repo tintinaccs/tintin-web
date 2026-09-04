@@ -8,6 +8,8 @@ const rules = read('firestore.rules');
 const otp = read('functions/api/email-otp-send.js');
 const deletion = read('functions/api/admin-delete-user.js');
 const lifecycle = read('cloudflare/user-lifecycle-domain.js');
+const participation = read('cloudflare/participacion-clientes.js');
+const superAdminLiteral = contract.superAdminEmail;
 const checks = [];
 const check = (name, condition) => checks.push({ name, ok: Boolean(condition) });
 
@@ -28,6 +30,8 @@ check(
     !deletion.includes('deleteFirebaseUser') &&
     !lifecycle.includes('deleteFirebaseUser')
 );
+check('Participación usa el email del contrato de cuentas', participation.includes(`const SUPER_ADMIN_EMAIL = '${superAdminLiteral}';`));
+check('Firestore Rules usa el email del contrato de cuentas', rules.includes(`== "${superAdminLiteral}"`));
 
 for (const item of checks) console.log(`${item.ok ? 'OK' : 'ERROR'} — ${item.name}`);
 if (checks.some(item => !item.ok)) process.exit(1);

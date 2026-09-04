@@ -34,6 +34,10 @@ jobs:
         id: catalog
         continue-on-error: true
         run: node scripts/auditar-catalogo-navegador-produccion.mjs
+      - name: Login y perfil en navegador
+        id: auth_browser
+        continue-on-error: true
+        run: npm run test:auth-browser-production
       - name: Smoke de entrega final
         id: smoke
         continue-on-error: true
@@ -46,7 +50,7 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
       - name: Abrir o actualizar alerta
-        if: steps.monitor.outcome == 'failure' || steps.catalog.outcome == 'failure' || steps.smoke.outcome == 'failure'
+        if: steps.monitor.outcome == 'failure' || steps.catalog.outcome == 'failure' || steps.auth_browser.outcome == 'failure' || steps.smoke.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
           RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -57,7 +61,7 @@ jobs:
           body="El monitor de producción detectó un fallo. Run: $RUN_URL"
           if [ -n "$issue" ]; then gh issue comment "$issue" --body "$body"; else gh issue create --title "$title" --body "$body"; fi
       - name: Cerrar alerta al recuperar
-        if: steps.monitor.outcome == 'success' && steps.catalog.outcome == 'success' && steps.smoke.outcome == 'success'
+        if: steps.monitor.outcome == 'success' && steps.catalog.outcome == 'success' && steps.auth_browser.outcome == 'success' && steps.smoke.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -68,4 +72,5 @@ jobs:
         run: |
           test "${{ steps.monitor.outcome }}" = success
           test "${{ steps.catalog.outcome }}" = success
+          test "${{ steps.auth_browser.outcome }}" = success
           test "${{ steps.smoke.outcome }}" = success
