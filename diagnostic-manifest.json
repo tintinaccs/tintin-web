@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T23:06:19.645Z",
-  "sourceFingerprint": "28b37f8bf7e7ec10889a2b399a5a9dab4b124f26256f180977ad98a9c6ccdc44",
+  "generatedAt": "2026-09-04T23:14:45.385Z",
+  "sourceFingerprint": "074308418cb103910c4af429ce1a1b4871c658e289ce3878cffa3e32c0848aad",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 816,
     "textFiles": 783,
-    "totalBytes": 10036829,
+    "totalBytes": 10037040,
     "pages": 18,
     "modules": 565
   },
@@ -17749,8 +17749,8 @@
     },
     {
       "path": "cloudflare/participacion-clientes.js",
-      "bytes": 42232,
-      "sha256": "80ef9e3c0258382f4670b8dc83ea8e64c9a598fad4eea226d8c3f6d440c0840a",
+      "bytes": 42380,
+      "sha256": "cc2fe91b645f99db517040de1d18fcd9fb93edeb4d21f830c6528dcf8e037319",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30556,8 +30556,8 @@
     },
     {
       "path": "tests/engagement/customer-loyalty-tier.test.mjs",
-      "bytes": 1295,
-      "sha256": "c9fddcb7aac3352cf0f85778e7b6c3440bce8d94cf83958f6ed262f9a4c8894a",
+      "bytes": 1358,
+      "sha256": "01f000dd44110a57b5fe06d287a423f9b8ee9fbbe204bf089d6816c136d12dc9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32804,8 +32804,8 @@
     {
       "path": "cloudflare/participacion-clientes.js",
       "extension": ".js",
-      "bytes": 42232,
-      "sha256": "80ef9e3c0258382f4670b8dc83ea8e64c9a598fad4eea226d8c3f6d440c0840a"
+      "bytes": 42380,
+      "sha256": "cc2fe91b645f99db517040de1d18fcd9fb93edeb4d21f830c6528dcf8e037319"
     },
     {
       "path": "cloudflare/paypal-seguro.js",
@@ -36890,8 +36890,8 @@
     {
       "path": "tests/engagement/customer-loyalty-tier.test.mjs",
       "extension": ".mjs",
-      "bytes": 1295,
-      "sha256": "c9fddcb7aac3352cf0f85778e7b6c3440bce8d94cf83958f6ed262f9a4c8894a"
+      "bytes": 1358,
+      "sha256": "01f000dd44110a57b5fe06d287a423f9b8ee9fbbe204bf089d6816c136d12dc9"
     },
     {
       "path": "tests/engagement/firebase-id-token.test.mjs",
