@@ -6,8 +6,8 @@ import { engagementOwnReviewView, publicCustomerName } from '../../cloudflare/pa
 const read = path => readFile(new URL(`../../${path}`, import.meta.url), 'utf8');
 
 test('public review names follow the required mask', () => {
-  assert.equal(publicCustomerName('Antonia Peralta'), 'A*** P***');
-  assert.equal(publicCustomerName('Antonia'), 'A***');
+  assert.equal(publicCustomerName('Antonia Peralta'), 'Antonia P.');
+  assert.equal(publicCustomerName('Antonia'), 'Antonia');
 });
 
 test('customer responses never expose private review fields', () => {
@@ -32,6 +32,19 @@ test('public reviews expose only public conversation data', async () => {
   assert.doesNotMatch(publicReply, /actorEmail:/);
   assert.doesNotMatch(publicReply, /actorRealName:/);
   assert.doesNotMatch(publicReply, /actorUsername:/);
+});
+
+test('public identity metadata distinguishes official account and staff safely', async () => {
+  const [client, product] = await Promise.all([
+    read('cloudflare/participacion-clientes.js'),
+    read('js/pages/product/resenas-producto.js'),
+  ]);
+  assert.match(client, /authorRole/);
+  assert.match(client, /isOfficial: authorType === 'store'/);
+  assert.match(client, /Cuenta oficial/);
+  assert.match(client, /agent: 'Moderador'/);
+  assert.match(product, /authorType === 'staff'/);
+  assert.match(product, /tt-public-badge-official/);
 });
 
 test('engagement writes stay behind server APIs', async () => {
