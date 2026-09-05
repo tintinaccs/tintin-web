@@ -208,6 +208,21 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
     };
   }
 
+  // `profileStatus: active` es la marca canónica que escribe el alta cuando
+  // ya validó nombre, teléfono, username, fecha y ubicación en una misma
+  // transición. No volver a inferir lo contrario en cada login: hacerlo
+  // reabría el formulario para perfiles históricos aunque sus campos ya
+  // estuvieran aprobados por Firestore.
+  if (clean(profile.profileStatus).toLowerCase() === 'active') {
+    exposeSavedLocationForOnboarding(profile);
+    return {
+      skip: true, needsName: false, needsPhone: false, needsAddress: false,
+      needsUsername: false, needsDob: false,
+      addressAlreadySaved: hasUsableAddress(profile),
+      suggestedName: '', suggestedFirstName: '', suggestedLastName: '',
+    };
+  }
+
   const stored = readProfileName(profile);
   const storedNameIsValid = isValidFullName(stored.firstName, stored.lastName);
   const storedPhone = storedPhoneValue(profile);
