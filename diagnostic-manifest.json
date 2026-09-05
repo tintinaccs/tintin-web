@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-05T01:31:57.031Z",
-  "sourceFingerprint": "4ea3af9a334d4c55e45fd1713081706b869087e7633f8382d2a94a067a53e38e",
+  "generatedAt": "2026-09-05T01:40:03.079Z",
+  "sourceFingerprint": "f70649e4f36d844bcfb7df3ac9120dc97366e516596104b81f591b51961aa01d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 818,
+    "files": 819,
     "textFiles": 785,
-    "totalBytes": 10048778,
+    "totalBytes": 10009944,
     "pages": 18,
     "modules": 566
   },
@@ -32496,8 +32496,8 @@
     {
       "path": "apple-touch-icon.png",
       "extension": ".png",
-      "bytes": 9749,
-      "sha256": "1b889167c29be8b8b7c377d7302db517243d5aa829545032e05fdfd52f7ec332"
+      "bytes": 5198,
+      "sha256": "e0839cd9578ec46dd961111a7db8680bb87ea8d3985147d10ee8728e985a6960"
     },
     {
       "path": "apps-script/AdminParity.gs",
@@ -33660,32 +33660,38 @@
     {
       "path": "favicon-16x16.png",
       "extension": ".png",
-      "bytes": 484,
-      "sha256": "54574ec8324b7d20ab7fc5529d886b8e6c78b3d8b45d6e9a4e38f22516889050"
+      "bytes": 169,
+      "sha256": "b47762366b4f75d499dfbf8d2339adbc599419f79fb5f9d9974c235e3bdf3f56"
+    },
+    {
+      "path": "favicon-180x180.png",
+      "extension": ".png",
+      "bytes": 5198,
+      "sha256": "e0839cd9578ec46dd961111a7db8680bb87ea8d3985147d10ee8728e985a6960"
     },
     {
       "path": "favicon-192x192.png",
       "extension": ".png",
-      "bytes": 12702,
-      "sha256": "2a7d2dfb00b5de7a75dd8f06d8a1c5cf430532d5fa4d6cb80676e530173c876b"
+      "bytes": 5938,
+      "sha256": "543abdf75e5ffb39a3a11c449b60b17d9d6de4ec1570a941b427a1d26790a146"
     },
     {
       "path": "favicon-32x32.png",
       "extension": ".png",
-      "bytes": 1110,
-      "sha256": "73bf9a8c869805e7f067501d9876127850a3090ffb8965b5c03a5f822500999d"
+      "bytes": 443,
+      "sha256": "31186f6eab58379a9dabe748d2cdcacf6c708bea1fcd0a20e1c52b8f8950fbef"
     },
     {
       "path": "favicon-512x512.png",
       "extension": ".png",
-      "bytes": 59591,
-      "sha256": "05d639b6f515a9b23be3041963dc2c827e8dd11a075397d51a4b01ac80783701"
+      "bytes": 27897,
+      "sha256": "bfb4e1cb7e17e9f80b9be8572c5ab188d04afd5e3c625812439c65ec570aa5cf"
     },
     {
       "path": "favicon.ico",
       "extension": ".ico",
-      "bytes": 506,
-      "sha256": "f8660f47cf91630501b3fe2af7a35d91fb4b555ff782dbc4f29432376693b8ba"
+      "bytes": 465,
+      "sha256": "76048acec524e31051dbe99fe89062b76aa5035fd42fd003876a34d9af3a5c72"
     },
     {
       "path": "firebase-cloud-functions-inactive/DEPLOY.md",
