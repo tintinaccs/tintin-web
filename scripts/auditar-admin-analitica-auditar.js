@@ -248,7 +248,9 @@ check(
 );
 check(
   'El diagnóstico del sitio se inicia solo para el Super Admin real',
-  admin.includes("role === 'superadmin' && user.email === SUPER_ADMIN") &&
+  /role === 'superadmin'/.test(admin) &&
+    (admin.includes("user.email === SUPER_ADMIN") ||
+      admin.includes("SUPER_ADMIN.toLowerCase()")) &&
     admin.includes('initSiteDiagnostics({ role })'),
   'El diagnóstico no debe ejecutarse para un rol que no sea el Super Admin real.'
 );
