@@ -25,7 +25,19 @@ test('resolveEmailFromUsernameKey devuelve el email de la cuenta dueña del user
 
 test('resolveEmailFromUsernameKey devuelve null cuando el username no tiene reserva', async () => {
   const get = async () => null;
-  assert.equal(await resolveEmailFromUsernameKey({}, 'nadie', { get }), null);
+  const find = async () => null;
+  assert.equal(await resolveEmailFromUsernameKey({}, 'nadie', { get, find }), null);
+});
+
+test('resolveEmailFromUsernameKey recupera perfiles históricos sin reserva', async () => {
+  const get = async () => null;
+  const find = async (_env, collection, fields, key) => {
+    assert.equal(collection, 'users');
+    assert.deepEqual(fields, ['username']);
+    assert.equal(key, 'ana98');
+    return { fields: { email: { stringValue: 'ana@ejemplo.com' } } };
+  };
+  assert.equal(await resolveEmailFromUsernameKey({}, 'ana98', { get, find }), 'ana@ejemplo.com');
 });
 
 test('resolveEmailFromUsernameKey devuelve null cuando la reserva no tiene cuenta con email', async () => {
