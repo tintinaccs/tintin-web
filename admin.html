@@ -52,6 +52,15 @@
     html.adm-auth-ready #adm-sidebar,
     html.adm-auth-ready #adm-mobile-tabs,
     html.adm-auth-ready .adm-main { visibility: visible; }
+    #adm-init-error { display:none; }
+    html.adm-auth-error #adm-sidebar,
+    html.adm-auth-error #adm-mobile-tabs,
+    html.adm-auth-error .adm-main { visibility:hidden; }
+    html.adm-auth-error #adm-init-error { display:flex; }
+    .adm-init-error { position:fixed; inset:0; z-index:5000; align-items:center; justify-content:center; padding:24px; background:var(--admin-color-background-page,#fff6fa); }
+    .adm-init-error-card { width:min(100%,520px); padding:28px; border:1px solid var(--admin-color-border,#f1e4e7); border-radius:18px; background:#fff; box-shadow:0 18px 50px rgba(70,25,45,.12); text-align:center; }
+    .adm-init-error-card h1 { margin:0 0 10px; font-size:20px; color:var(--admin-color-text-primary,#2b2b2b); }
+    .adm-init-error-card p { margin:0 0 20px; color:var(--admin-color-text-secondary,#7b6f72); font-size:13px; line-height:1.55; }
   </style>
 </head>
 <body>
@@ -1974,6 +1983,14 @@
 </main>
 
 <div class="adm-toast" id="adm-toast"></div>
+<div id="adm-init-error" class="adm-init-error" role="alert" aria-live="assertive">
+  <div class="adm-init-error-card">
+    <h1>No se pudo cargar el Super Admin</h1>
+    <p>La sesión está protegida. Firebase no terminó de validar el acceso, por eso no mostramos un panel incompleto. Probá nuevamente; si continúa, revisaremos la conexión de Firebase.</p>
+    <button type="button" class="adm-btn adm-btn-primary" id="adm-init-retry">Reintentar</button>
+    <a class="adm-btn adm-btn-outline" href="/login" style="margin-left:8px">Volver al login</a>
+  </div>
+</div>
 
 <script type="module" src="js/admin/admin-app.js?v=tintin-20260904-appcheck-guard-1"></script>
 <script type="module" src="js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260818-engagement-master-3"></script>
