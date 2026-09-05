@@ -125,6 +125,20 @@ Sheets no debe competir con Firestore ni crear una segunda identidad. La sincron
 **Resultado local:** 22 pruebas de perfiles y fidelidad aprobadas. No equivale a una prueba con proveedores reales.  
 **Pendiente:** pruebas funcionales de carga/moderación concurrente, propagación pública y login entre pestañas con proveedores reales.
 
+### H10 — Validación parcial de URL al guardar fotos
+
+**Severidad:** alta de integridad de identidad.
+
+**Evidencia y causa raíz:** ambos endpoints de commit aceptaban una URL si su ruta contenía el nombre del almacenamiento y el identificador esperado. Una URL de otro almacenamiento, con esos fragmentos dentro de una carpeta, cumplía la condición. La prueba `profile-avatar-url.test.mjs` reproduce la aceptación anterior y el rechazo nuevo.
+
+**Corrección del candidato:** validación compartida de origen, almacenamiento, tipo de recurso, versión y nombre de archivo completo. Se rechazan credenciales, parámetros, fragmentos, transformaciones arbitrarias, sufijos y subcarpetas. Se conserva el formato de `secure_url` que usan los dos flujos de subida existentes, conforme a la [respuesta de subida de Cloudinary](https://cloudinary.com/documentation/upload_images#upload_response).
+
+**Pruebas:** 35 casos nuevos de URL y metadatos; suites de perfiles y fidelidad: 57 aprobados localmente, con respuestas del proveedor simuladas.
+
+**Comprobación adicional:** ambos commits consultan ahora los metadatos del recurso en la [Admin API de Cloudinary](https://cloudinary.com/documentation/admin_api) antes de escribir el perfil. Exigen identificador, URL actual, tipo imagen/upload, formato autorizado y tamaño real entre 1 byte y 5 MB. Un recurso inexistente o no verificable no se consolida. La consulta tiene timeout, no sigue redirecciones y no expone detalles de errores del proveedor.
+
+**Dependencias y límites:** verificar las credenciales/permisos y la cuota de Admin API en preview con una cuenta de prueba; cada intento de consolidación autorizado realiza una consulta adicional. Sigue pendiente limitar abuso/reintentos con una autorización de subida de un solo uso. Verificar metadatos no impide una sobrescritura posterior del identificador mutable: H7 continúa abierto. No se migraron ni borraron archivos existentes.
+
 ## Mapa de reparación
 
 \`\`\`text

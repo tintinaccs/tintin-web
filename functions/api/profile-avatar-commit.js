@@ -1,10 +1,11 @@
 import {
-  jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser,
+  jsonResponse, originIsAllowed, preflightResponse, requireFirebaseUser, getCloudinaryConfig,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import {
   decodeFirestoreFields, encodeFirestoreFields, firestoreAdminCommit, firestoreAdminGet, updateFirebaseUserProfile,
 } from '../../cloudflare/firebase-admin-ligero.js';
 import { notifyAdminIfAbsent } from '../../cloudflare/notificaciones-sociales.js';
+import { validateProfileAvatarUrl, verifyProfileAvatarAsset } from '../../cloudflare/profile-avatar-url.js';
 
 const MAX_BODY_BYTES = 8 * 1024;
 const UID_PATTERN = /^[A-Za-z0-9_-]{6,128}$/;
@@ -44,20 +45,13 @@ export async function onRequest(context) {
     if (!PUBLIC_ID_PATTERN.test(publicId) || publicId !== expectedPublicId) throw new Error('Identificador de foto inválido');
 
     const configName = clean(env.CLOUDINARY_CLOUD_NAME, 80);
-    let parsed;
-    try { parsed = new URL(photoURL); } catch { throw new Error('URL de foto inválida'); }
-    if (parsed.protocol !== 'https:' || parsed.hostname !== 'res.cloudinary.com' || !configName || parsed.pathname.includes('..')) {
-      throw new Error('La foto no pertenece al almacenamiento autorizado');
-    }
-    const path = parsed.pathname.replace(/^\//, '');
-    if (!path.includes(`${configName}/image/upload/`) || !path.includes(`/${publicId}`)) {
-      throw new Error('La foto no coincide con el archivo autorizado');
-    }
+    validateProfileAvatarUrl(photoURL, configName, publicId);
 
     const userPath = `users/${user.uid}`;
     const currentDocument = await firestoreAdminGet(env, userPath);
     if (!currentDocument) throw new Error('El perfil todavía no existe');
     const before = decodeFirestoreFields(currentDocument.fields || {});
+    await verifyProfileAvatarAsset(photoURL, publicId, getCloudinaryConfig(env));
     const now = new Date();
     const auditId = eventId();
     const historyPath = `${userPath}/profilePhotoHistory/${auditId}`;

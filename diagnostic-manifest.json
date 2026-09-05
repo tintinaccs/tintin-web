@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-05T10:24:34.887Z",
-  "sourceFingerprint": "99f647ac00c1c0932845384c4abf1ca8ea1f1693d11370f880f76bbdaf7c54b7",
+  "generatedAt": "2026-09-05T10:30:29.368Z",
+  "sourceFingerprint": "7206226b57619750431256c36a8206c6012ac6959dbc2d12efd6ffa87cd5f335",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 822,
-    "textFiles": 788,
-    "totalBytes": 10032711,
+    "files": 824,
+    "textFiles": 790,
+    "totalBytes": 10042161,
     "pages": 18,
-    "modules": 569
+    "modules": 571
   },
   "viewports": [
     {
@@ -17847,6 +17847,30 @@
       ]
     },
     {
+      "path": "cloudflare/profile-avatar-url.js",
+      "bytes": 2961,
+      "sha256": "93ba1ebe3a81ca54e4b354eb12bff2f2228bdd4826445254c0c8636008b8312a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "https://cloudinary.com/documentation/upload_images",
+          "line": 3
+        },
+        {
+          "url": "https://res.cloudinary.com/",
+          "line": 12
+        },
+        {
+          "url": "https://api.cloudinary.com/v1_1/$%7BencodeURIComponent(config.cloudName",
+          "line": 30
+        }
+      ]
+    },
+    {
       "path": "cloudflare/resiliencia-sync-catalogo.js",
       "bytes": 15915,
       "sha256": "f8ef8d479a20220f9997c421b2543eea243e92cdff3fe311457b0a29e3f2314c",
@@ -19294,8 +19318,8 @@
     },
     {
       "path": "functions/api/profile-avatar-admin-commit.js",
-      "bytes": 5849,
-      "sha256": "7b685cb1f872cc7580eee1e270dab413ccad108b252b5a4e33f4460885462af3",
+      "bytes": 5710,
+      "sha256": "4c1b9ba9cf15cd9e106a9a656b835341bad193ea28d8b57391a5897df565c771",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19308,10 +19332,16 @@
           "line": 1
         },
         {
+          "raw": "../../cloudflare/profile-avatar-url.js",
+          "target": "cloudflare/profile-avatar-url.js",
+          "dynamic": false,
+          "line": 2
+        },
+        {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 5
+          "line": 6
         }
       ],
       "endpoints": []
@@ -19365,8 +19395,8 @@
     },
     {
       "path": "functions/api/profile-avatar-commit.js",
-      "bytes": 6933,
-      "sha256": "b364377357486412b42444e4373ac24ed8f49c6fd7bd5ec8f9eaa919be30d02e",
+      "bytes": 6662,
+      "sha256": "530475508dff96a5cb9eb8855d62a2ed9b127909df1c6ac7234b0aa163ba2aab",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19389,6 +19419,12 @@
           "target": "cloudflare/notificaciones-sociales.js",
           "dynamic": false,
           "line": 7
+        },
+        {
+          "raw": "../../cloudflare/profile-avatar-url.js",
+          "target": "cloudflare/profile-avatar-url.js",
+          "dynamic": false,
+          "line": 8
         }
       ],
       "endpoints": []
@@ -31439,6 +31475,53 @@
       ]
     },
     {
+      "path": "tests/profile/profile-avatar-url.test.mjs",
+      "bytes": 4951,
+      "sha256": "971fe3ec2b1aad934caf6479522b5293f168cb1c4de98b734d9e151e6a62c841",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/profile-avatar-url.js",
+          "target": "cloudflare/profile-avatar-url.js",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://res.cloudinary.com/$%7Bcloud%7D/image/upload",
+          "line": 7
+        },
+        {
+          "url": "https://res.cloudinary.com/attacker/image/upload/v1/$%7Bcloud%7D/image/upload/$%7Bid%7D.png",
+          "line": 18
+        },
+        {
+          "url": "https://api.cloudinary.com/v1_1/$%7Bcloud%7D/resources/image/upload/$%7Bid%7D",
+          "line": 56
+        },
+        {
+          "url": "https://attacker.test/photo.png",
+          "line": 101
+        }
+      ]
+    },
+    {
       "path": "tests/push/push-web.test.mjs",
       "bytes": 16898,
       "sha256": "9e1b20186ef0833aa1f4d5db58de5488f383c9ece162b02c1899458f31ac070b",
@@ -32991,6 +33074,12 @@
       "sha256": "f77094c5ac775016b25613335aa5a2c622ba9c4ea7788bc46049546b48528af9"
     },
     {
+      "path": "cloudflare/profile-avatar-url.js",
+      "extension": ".js",
+      "bytes": 2961,
+      "sha256": "93ba1ebe3a81ca54e4b354eb12bff2f2228bdd4826445254c0c8636008b8312a"
+    },
+    {
       "path": "cloudflare/resiliencia-sync-catalogo.js",
       "extension": ".js",
       "bytes": 15915,
@@ -33539,8 +33628,8 @@
     {
       "path": "docs/auditoria-integral-remota-2026-09-05.md",
       "extension": ".md",
-      "bytes": 10713,
-      "sha256": "e986c0b2648fb984939123eb6b97906d155239f546ffef92c23bec8f7de52723"
+      "bytes": 12661,
+      "sha256": "40c7589ac0a77e224f872d6cfae52241295c7466988e9a36a23fd04656a27c29"
     },
     {
       "path": "docs/auditoria-usuarios-fase-8.md",
@@ -34109,8 +34198,8 @@
     {
       "path": "functions/api/profile-avatar-admin-commit.js",
       "extension": ".js",
-      "bytes": 5849,
-      "sha256": "7b685cb1f872cc7580eee1e270dab413ccad108b252b5a4e33f4460885462af3"
+      "bytes": 5710,
+      "sha256": "4c1b9ba9cf15cd9e106a9a656b835341bad193ea28d8b57391a5897df565c771"
     },
     {
       "path": "functions/api/profile-avatar-admin-upload.js",
@@ -34127,8 +34216,8 @@
     {
       "path": "functions/api/profile-avatar-commit.js",
       "extension": ".js",
-      "bytes": 6933,
-      "sha256": "b364377357486412b42444e4373ac24ed8f49c6fd7bd5ec8f9eaa919be30d02e"
+      "bytes": 6662,
+      "sha256": "530475508dff96a5cb9eb8855d62a2ed9b127909df1c6ac7234b0aa163ba2aab"
     },
     {
       "path": "functions/api/profile-avatar-moderate.js",
@@ -37249,6 +37338,12 @@
       "extension": ".mjs",
       "bytes": 4521,
       "sha256": "0138f38581c5db9aa28c497f184dd67f4380cc3a0785f316c25642e5b2029cc4"
+    },
+    {
+      "path": "tests/profile/profile-avatar-url.test.mjs",
+      "extension": ".mjs",
+      "bytes": 4951,
+      "sha256": "971fe3ec2b1aad934caf6479522b5293f168cb1c4de98b734d9e151e6a62c841"
     },
     {
       "path": "tests/push/push-web.test.mjs",

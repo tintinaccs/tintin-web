@@ -1,4 +1,5 @@
-import { jsonResponse, originIsAllowed, preflightResponse, requireStaffPermission } from '../../cloudflare/seguridad-cloudinary.js';
+import { jsonResponse, originIsAllowed, preflightResponse, requireStaffPermission, getCloudinaryConfig } from '../../cloudflare/seguridad-cloudinary.js';
+import { validateProfileAvatarUrl, verifyProfileAvatarAsset } from '../../cloudflare/profile-avatar-url.js';
 import {
   decodeFirestoreFields, encodeFirestoreFields, firestoreAdminCommit, firestoreAdminGet,
   updateFirebaseUserProfile,
@@ -30,10 +31,8 @@ export async function onRequest(context) {
     const photoURL = clean(body.photoURL, 1200);
     const publicId = clean(body.publicId, 120);
     if (!UID_PATTERN.test(uid) || !PUBLIC_ID_PATTERN.test(publicId) || publicId !== await profilePublicId(uid)) throw new Error('Identificador de foto inválido');
-    let parsed;
-    try { parsed = new URL(photoURL); } catch { throw new Error('URL de foto inválida'); }
     const cloudName = clean(env.CLOUDINARY_CLOUD_NAME, 80);
-    if (parsed.protocol !== 'https:' || parsed.hostname !== 'res.cloudinary.com' || !cloudName || parsed.pathname.includes('..') || !parsed.pathname.includes(`${cloudName}/image/upload/`) || !parsed.pathname.includes(`/${publicId}`)) throw new Error('La foto no pertenece al almacenamiento autorizado');
+    validateProfileAvatarUrl(photoURL, cloudName, publicId);
     const currentDocument = await firestoreAdminGet(env, `users/${uid}`);
     if (!currentDocument) throw new Error('El perfil no existe');
     const before = decodeFirestoreFields(currentDocument.fields || {});
@@ -42,6 +41,7 @@ export async function onRequest(context) {
     const expected = clean(body.expectedPhotoURL);
     const currentPhotoURL = clean(before.photoURL || before.photoUrl);
     if (expected !== currentPhotoURL) { const e = new Error('La foto cambió mientras se editaba; actualizá la lista'); e.status = 409; throw e; }
+    await verifyProfileAvatarAsset(photoURL, publicId, getCloudinaryConfig(env));
     const now = new Date();
     const auditId = eventId();
     const audit = {
