@@ -102,10 +102,14 @@ function allInlineScriptHashes() {
 const handlerHashes = eventHandlerHashes();
 const globalInlineHashes = allInlineScriptHashes();
 // La CSP corta de _headers es el último cinturón de seguridad cuando una
-// respuesta HTML no atraviesa el middleware de Pages. El catálogo depende de
-// tres módulos inline para arrancar; autorizar únicamente sus hashes exactos
-// mantiene el fallback funcional sin reabrir 'unsafe-inline'.
-const fallbackInlineHashes = inlineHashes('catalogo.html');
+// respuesta HTML no atraviesa el middleware de Pages. Las rutas de entrada
+// críticas (catálogo y login) dependen de módulos inline para arrancar;
+// autorizar únicamente sus hashes exactos mantiene el fallback funcional sin
+// reabrir 'unsafe-inline'.
+const fallbackInlineHashes = [...new Set([
+  ...inlineHashes('catalogo.html'),
+  ...inlineHashes('login.html')
+])].sort();
 const scriptAttrDirective = handlerHashes.length
   ? `script-src-attr 'unsafe-hashes' ${handlerHashes.join(' ')}`
   : "script-src-attr 'none'";
@@ -261,7 +265,7 @@ function validateRuntimePolicies(policies) {
     throw new Error('CSP fallback estática abrió capacidades que solo corresponden al runtime específico.');
   }
   for (const hash of fallbackInlineHashes) {
-    if (!fallback.includes(hash)) throw new Error(`CSP fallback perdió el hash requerido por catalogo.html: ${hash}.`);
+    if (!fallback.includes(hash)) throw new Error(`CSP fallback perdió un hash requerido por una ruta crítica: ${hash}.`);
   }
 }
 

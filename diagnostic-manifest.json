@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-05T15:12:15.788Z",
-  "sourceFingerprint": "780aab5098de121730850ee2533df3d177f52ea510be60303ada3e42cef61810",
+  "generatedAt": "2026-09-05T18:30:00.925Z",
+  "sourceFingerprint": "c32654eb83fe4708f0d15b56ba7070feeaf7069eaac4a8472b38b0c4d01641aa",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 809,
     "textFiles": 776,
-    "totalBytes": 9999712,
+    "totalBytes": 9999816,
     "pages": 18,
     "modules": 557
   },
@@ -28857,8 +28857,8 @@
     },
     {
       "path": "scripts/generar-csp-cloudflare.js",
-      "bytes": 12917,
-      "sha256": "ff854158406ddca195ff4b08375cad427c6b936b03e7dac0c5ac5d49d825c21f",
+      "bytes": 13021,
+      "sha256": "db94e92a88ce625d274a48b3678ca7e10c46ee9a2037d34641c30596a0e43ee1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28911,7 +28911,7 @@
         },
         {
           "url": "https://api.cloudinary.com/",
-          "line": 166
+          "line": 170
         }
       ]
     },
@@ -36309,8 +36309,8 @@
     {
       "path": "scripts/generar-csp-cloudflare.js",
       "extension": ".js",
-      "bytes": 12917,
-      "sha256": "ff854158406ddca195ff4b08375cad427c6b936b03e7dac0c5ac5d49d825c21f"
+      "bytes": 13021,
+      "sha256": "db94e92a88ce625d274a48b3678ca7e10c46ee9a2037d34641c30596a0e43ee1"
     },
     {
       "path": "scripts/lib/architecture-gates.mjs",
