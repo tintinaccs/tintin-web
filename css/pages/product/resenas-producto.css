@@ -16,6 +16,12 @@
   border: 0;
 }
 
+.tt-reviews-product .tt-public-badge-customer-tier {
+  background: #fff4d9;
+  color: #8a6418;
+  border-color: #efd28a;
+}
+
 .tt-product-social-bar + .tt-product-community {
   margin-top: clamp(8px, 1.5vw, 16px) !important;
 }
@@ -586,4 +592,27 @@
   .tt-rating-input button,
   .tt-review-stats-fill { transition: none; }
   .tt-review-deeplink-highlight { animation: none; }
+}
+.tt-public-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 5px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: .68rem;
+  font-weight: 700;
+  line-height: 1.2;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.tt-public-badge-official {
+  color: #fff;
+  background: #b84c72;
+}
+
+.tt-public-badge-staff {
+  color: #7d3f59;
+  background: #f8dce7;
 }

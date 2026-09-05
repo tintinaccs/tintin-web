@@ -4,6 +4,8 @@ import fs from 'node:fs';
 
 const login = fs.readFileSync(new URL('../../login.html', import.meta.url), 'utf8');
 const session = fs.readFileSync(new URL('../../js/core/auth/proteccion-sesion.js', import.meta.url), 'utf8');
+const admin = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
+const navigation = fs.readFileSync(new URL('../../js/core/auth/navegacion-autenticacion.js', import.meta.url), 'utf8');
 const profile = fs.readFileSync(new URL('../../js/pages/profile/control-acceso-perfil.js', import.meta.url), 'utf8');
 const profileCode = profile.replace(/\/\/.*$/gm, '');
 
@@ -20,6 +22,12 @@ test('protección de sesión pausa el polling oculto y evita carreras de usuario
   assert.match(session, /document\.hidden/);
   assert.match(session, /enforceSequence/);
   assert.match(session, /auth\.currentUser\?\.uid !== user\.uid/);
+});
+
+test('las superficies autenticadas esperan persistencia antes de redirigir', () => {
+  assert.match(admin, /await authPersistenceReady\.catch\(\(\) => \{\}\)/);
+  assert.match(navigation, /await authPersistenceReady\.catch\(\(\)=>\{\}\)/);
+  assert.match(session, /authPersistenceReady\.catch\(\(\) => \{\}\)/);
 });
 
 test('guard de perfil solo redirige checkout y no encadena from', () => {

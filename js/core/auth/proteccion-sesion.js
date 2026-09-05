@@ -5,7 +5,7 @@
 // su sesión hasta cerrar manualmente; el resto de las cuentas debe volver a
 // autenticarse después de 30 minutos sin actividad.
 
-import { auth } from "../firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1";
+import { auth, authPersistenceReady } from "../firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getUserRole } from "./roles.js?v=tintin-20260821-accounts-phase-a-1";
 import { startProfileGate } from "../../pages/profile/control-acceso-perfil.js?v=tintin-20260901-username-visible-1";
@@ -96,13 +96,16 @@ function startSessionChecks() {
 }
 
 onAuthStateChanged(auth, user => {
-  if (!user) {
-    redirectingToLogin = false;
-    stopSessionChecks();
-  } else {
-    void enforce(user);
-    startSessionChecks();
-  }
+  void authPersistenceReady.catch(() => {}).then(() => {
+    if (auth.currentUser?.uid !== user?.uid) return;
+    if (!user) {
+      redirectingToLogin = false;
+      stopSessionChecks();
+    } else {
+      void enforce(user);
+      startSessionChecks();
+    }
+  });
 });
 ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(eventName => {
   window.addEventListener(eventName, recordActivity, { passive: true });
@@ -110,9 +113,12 @@ onAuthStateChanged(auth, user => {
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) stopSessionChecks();
   else {
-    recordActivity();
-    startSessionChecks();
+    // Volver a enfocar una pestaña no es actividad del usuario. Primero se
+    // comprueba el tiempo real transcurrido; de lo contrario una pestaña
+    // abierta durante días se renovaría sola al volver a primer plano y nunca
+    // aplicaría la expiración configurada para cuentas no oficiales.
     if (auth.currentUser) void enforce(auth.currentUser);
+    startSessionChecks();
   }
 });
 

@@ -6,8 +6,8 @@ import { engagementOwnReviewView, publicCustomerName } from '../../cloudflare/pa
 const read = path => readFile(new URL(`../../${path}`, import.meta.url), 'utf8');
 
 test('public review names follow the required mask', () => {
-  assert.equal(publicCustomerName('Antonia Peralta'), 'A*** P***');
-  assert.equal(publicCustomerName('Antonia'), 'A***');
+  assert.equal(publicCustomerName('Antonia Peralta'), 'Antonia P.');
+  assert.equal(publicCustomerName('Antonia'), 'Antonia');
 });
 
 test('customer responses never expose private review fields', () => {
@@ -32,6 +32,19 @@ test('public reviews expose only public conversation data', async () => {
   assert.doesNotMatch(publicReply, /actorEmail:/);
   assert.doesNotMatch(publicReply, /actorRealName:/);
   assert.doesNotMatch(publicReply, /actorUsername:/);
+});
+
+test('public identity metadata distinguishes official account and staff safely', async () => {
+  const [client, product] = await Promise.all([
+    read('cloudflare/participacion-clientes.js'),
+    read('js/pages/product/resenas-producto.js'),
+  ]);
+  assert.match(client, /authorRole/);
+  assert.match(client, /isOfficial: authorType === 'store'/);
+  assert.match(client, /Cuenta oficial/);
+  assert.match(client, /agent: 'Moderador'/);
+  assert.match(product, /authorType === 'staff'/);
+  assert.match(product, /tt-public-badge-official/);
 });
 
 test('engagement writes stay behind server APIs', async () => {
@@ -232,6 +245,22 @@ test('admin multi-review CRUD maps by reviewId and keeps private controls server
     assert.match(adminSource, new RegExp(action));
   }
   assert.match(route, /adminReviewAction/);
+});
+
+test('staff review replies are permission-gated and retain public role identity', async () => {
+  const [route, security, adminSource, permissions] = await Promise.all([
+    read('functions/api/admin-engagement.js'),
+    read('cloudflare/seguridad-cloudinary.js'),
+    read('cloudflare/participacion-admin.js'),
+    read('js/core/auth/permisos-roles.js'),
+  ]);
+  assert.match(route, /input\.action === 'reviewReply'[\s\S]*requireStaffPermission/);
+  assert.match(security, /eligibleStaffRole/);
+  assert.match(security, /\['admin', 'agent'\]\.includes\(role\)/);
+  assert.match(adminSource, /const isOfficial = actor\.role === 'superadmin'/);
+  assert.match(adminSource, /authorType = isOfficial \? 'store' : 'staff'/);
+  assert.match(adminSource, /actorRole/);
+  assert.match(permissions, /comunidad:[\s\S]*responder:/);
 });
 
 test('archiving a like is administrative and does not remove customer favorite', async () => {

@@ -6,6 +6,7 @@
 
 import { SUPER_ADMIN_EMAIL } from './contrato-cuentas-generado.js';
 import { verifyFirebaseIdToken } from './firebase-id-token.js';
+import { decodeFirestoreFields, firestoreAdminGet } from './firebase-admin-ligero.js';
 
 export const SUPERADMIN_EMAIL = SUPER_ADMIN_EMAIL;
 
@@ -89,6 +90,60 @@ export async function requireSuperAdmin(request) {
     throw error;
   }
   return user;
+}
+
+/**
+ * Autoriza una acción operativa delegable sin convertir el navegador en una
+ * autoridad. El rol y la matriz se leen server-side; si faltan, se aplica un
+ * default cerrado salvo las acciones explícitamente permitidas por contrato.
+ */
+export async function requireStaffPermission(request, env, moduleKey, actionKey) {
+  const actor = await requireFirebaseUser(request);
+  if (String(actor.email || '').toLowerCase() === String(SUPERADMIN_EMAIL).toLowerCase()) {
+    return { ...actor, role: 'superadmin', isSuperAdmin: true };
+  }
+
+  const uid = String(actor.uid || '');
+  if (!/^[A-Za-z0-9_-]{6,128}$/.test(uid)) {
+    const error = new Error('La identidad autenticada no es válida');
+    error.status = 403;
+    error.code = 'auth/invalid-identity';
+    throw error;
+  }
+  const userDocument = await firestoreAdminGet(env, `users/${uid}`);
+  const profile = decodeFirestoreFields(userDocument?.fields || {});
+  const role = ['admin', 'agent', 'viewer'].includes(profile.role) ? profile.role : 'client';
+  if (profile.blocked === true || role === 'client') {
+    const error = new Error('La cuenta no tiene permiso para esta acción');
+    error.status = 403;
+    error.code = 'auth/staff-permission-required';
+    throw error;
+  }
+
+  const permissionsDocument = await firestoreAdminGet(env, 'rolePermissions/main');
+  const permissions = decodeFirestoreFields(permissionsDocument?.fields || {});
+  const configured = permissions?.[role]?.[moduleKey]?.[actionKey];
+  const eligibleStaffRole = (
+    moduleKey === 'comunidad' && actionKey === 'responder' && ['admin', 'agent'].includes(role)
+  ) || (
+    moduleKey === 'usuarios' && actionKey === 'gestionarFotos' && ['admin', 'agent'].includes(role)
+  );
+  // Las acciones delegables son opt-in: si la matriz no tiene true todavía,
+  // no se concede acceso por accidente durante una migración o documento
+  // incompleto.
+  if (!eligibleStaffRole || configured !== true) {
+    const error = new Error('El rol no tiene habilitada esta acción');
+    error.status = 403;
+    error.code = 'auth/staff-permission-required';
+    throw error;
+  }
+
+  return {
+    ...actor,
+    role,
+    isSuperAdmin: false,
+    profile,
+  };
 }
 
 /** Conserva códigos HTTP ya clasificados por autenticación o dominio. */

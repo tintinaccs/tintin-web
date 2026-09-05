@@ -170,6 +170,21 @@ async function lookupUserByEmail(accessToken, email) {
   return Array.isArray(lookupData.users) ? lookupData.users[0] : null;
 }
 
+/** Devuelve los proveedores Auth de una cuenta existente sin crearla. */
+export async function getAuthProvidersByEmail(env, email) {
+  const normalized = String(email || '').trim().toLowerCase();
+  if (!normalized) return { exists: false, uid: '', providers: [] };
+  const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
+  const existing = await lookupUserByEmail(accessToken, normalized);
+  return {
+    exists: !!existing?.localId,
+    uid: existing?.localId || '',
+    providers: Array.isArray(existing?.providerUserInfo)
+      ? existing.providerUserInfo.map(item => String(item?.providerId || '')).filter(Boolean)
+      : []
+  };
+}
+
 /** Busca una cuenta de Firebase Auth por email; si no existe, la crea (ya verificada). */
 export async function findOrCreateUserByEmail(env, email) {
   const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
@@ -222,6 +237,25 @@ export async function setFirebaseUserDisabled(env, uid, disabled) {
     const data = await response.json().catch(() => ({}));
     throw new Error('No se pudo actualizar el acceso de la cuenta: ' + (data?.error?.message || response.status));
   }
+}
+
+/** Actualiza atributos de perfil Auth desde el servidor, sin confiar en el navegador. */
+export async function updateFirebaseUserProfile(env, uid, { photoURL = '' } = {}) {
+  const safeUid = String(uid || '').trim();
+  if (!/^[A-Za-z0-9_-]{6,128}$/.test(safeUid)) throw new Error('UID inválido');
+  const normalizedPhotoURL = String(photoURL || '').trim();
+  if (normalizedPhotoURL && normalizedPhotoURL.length > 2000) throw new Error('URL de perfil demasiado larga');
+  const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
+  const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:update', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify({ localId: safeUid, photoUrl: normalizedPhotoURL, deleteAttribute: normalizedPhotoURL ? [] : ['PHOTO_URL'] })
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error('No se pudo sincronizar el perfil de Firebase Auth: ' + (data?.error?.message || response.status));
+  }
+  return { uid: safeUid, photoURL: normalizedPhotoURL };
 }
 
 // --- Firestore admin REST ---
@@ -294,6 +328,38 @@ export async function firestoreAdminFindFirstByFields(env, collectionId, fieldPa
     if (document) return document;
   }
   return null;
+}
+
+/**
+ * Ejecuta una consulta acotada de igualdad contra una colección. Se usa para
+ * lecturas públicas derivadas que deben salir de una autoridad server-side;
+ * nunca descarga una colección completa ni acepta un campo arbitrario sin
+ * validar.
+ */
+export async function firestoreAdminQueryEqual(env, collectionId, fieldPath, value, pageSize = 300) {
+  const safeCollection = String(collectionId || '').trim();
+  const safeField = String(fieldPath || '').trim();
+  if (!/^[A-Za-z0-9_-]{1,120}$/.test(safeCollection)) throw new Error('Colección inválida para query Firestore');
+  if (!/^[A-Za-z0-9_. -]{1,120}$/.test(safeField)) throw new Error('Campo inválido para query Firestore');
+  const sa = parseServiceAccount(env);
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const response = await fetch(`${firestoreDatabaseUrl(sa)}/documents:runQuery`, {
+    method: 'POST',
+    headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify({
+      structuredQuery: {
+        from: [{ collectionId: safeCollection }],
+        where: { fieldFilter: { field: { fieldPath: safeField }, op: 'EQUAL', value: { stringValue: String(value ?? '') } } },
+        limit: Math.max(1, Math.min(300, Number(pageSize) || 300)),
+      },
+    }),
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(`Firestore RUN QUERY falló (${response.status}): ${data?.error?.message || ''}`);
+  }
+  const rows = await response.json().catch(() => []);
+  return Array.isArray(rows) ? rows.filter(row => row?.document).map(row => row.document) : [];
 }
 
 /**

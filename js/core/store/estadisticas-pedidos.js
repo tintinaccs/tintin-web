@@ -3,6 +3,7 @@
    =============================================================
    Fuente de verdad: colección `orders`.
    Recalcula contadores del perfil por uid y, si hace falta, por email.
+   Los pedidos cancelados/rechazados/reembolsados no cuentan como compras válidas.
    Nunca resta manualmente: vuelve a contar desde los pedidos existentes.
    ============================================================= */
 
@@ -48,7 +49,8 @@ function normalizeStatus(status) {
 function isCancelled(order) {
   const s = normalizeStatus(order.status);
   const p = normalizeStatus(order.payment?.status || order.paymentStatus);
-  return s === 'cancelado' || s === 'rechazado' || p === 'cancelado' || p === 'rechazado' || p === 'reembolsado';
+  const cancelledStatuses = new Set(['cancelado', 'rechazado', 'reembolsado', 'refunded', 'refund']);
+  return cancelledStatuses.has(s) || cancelledStatuses.has(p);
 }
 
 function isCompleted(order) {
@@ -103,7 +105,9 @@ export function calculateOrderStats(orders = []) {
 
   return {
     orderCount: Math.max(0, clean.length),
-    purchaseCount: Math.max(0, clean.length),
+    // El histórico de pedidos permanece completo, pero una compra válida
+    // no puede incluir una operación cancelada, rechazada o reembolsada.
+    purchaseCount: Math.max(0, validForSpent.length),
     totalOrders: Math.max(0, clean.length),
     totalSpent,
     completedOrders: Math.max(0, completed.length),
