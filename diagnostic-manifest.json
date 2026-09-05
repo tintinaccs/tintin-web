@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-05T02:01:59.255Z",
-  "sourceFingerprint": "1a39b71403970e6fcda1ecdddd9eb3f9e820cb723091c938941b8c4c5628460a",
+  "generatedAt": "2026-09-05T02:20:40.355Z",
+  "sourceFingerprint": "8e5fcaa3c77559c8a8568a44ba8fe22b7cb0732cd6e6019fceb369f7ef1e0349",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 819,
-    "textFiles": 785,
-    "totalBytes": 10011343,
+    "files": 820,
+    "textFiles": 786,
+    "totalBytes": 10018884,
     "pages": 18,
-    "modules": 566
+    "modules": 567
   },
   "viewports": [
     {
@@ -17503,6 +17503,36 @@
       "endpoints": []
     },
     {
+      "path": "cloudflare/fidelidad-notificaciones.js",
+      "bytes": 5742,
+      "sha256": "5703cbe0bde3292d492febfa8b5976ee1433f42fd4be641ca5711058acfe2461",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "./notificaciones-sociales.js",
+          "target": "cloudflare/notificaciones-sociales.js",
+          "dynamic": false,
+          "line": 6
+        },
+        {
+          "raw": "./fidelidad-clientes.js",
+          "target": "cloudflare/fidelidad-clientes.js",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "cloudflare/firebase-admin-ligero.js",
       "bytes": 25397,
       "sha256": "841dfe77c24f3be156bf9fe886d3b8f2eaeabf4fe11a38d3b6d0c748cadd7a99",
@@ -17665,8 +17695,8 @@
     },
     {
       "path": "cloudflare/order-admin-domain.js",
-      "bytes": 20561,
-      "sha256": "6581e738c3db11eafa4b42e65e747687b989a7bbc2016a140da828676a78ef64",
+      "bytes": 20601,
+      "sha256": "077afdba24cbbe3225b67826b8081624d674575f77568bcfd1b5b9a11b5cff0f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17779,8 +17809,8 @@
     },
     {
       "path": "cloudflare/paypal-seguro.js",
-      "bytes": 11810,
-      "sha256": "0fa41e9583738a5ddf5adbff8cb8202b7c41e0f28af4051703c0a7ef5933752d",
+      "bytes": 12407,
+      "sha256": "f77094c5ac775016b25613335aa5a2c622ba9c4ea7788bc46049546b48528af9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17797,16 +17827,22 @@
           "target": "cloudflare/notificaciones-sociales.js",
           "dynamic": false,
           "line": 10
+        },
+        {
+          "raw": "./fidelidad-notificaciones.js",
+          "target": "cloudflare/fidelidad-notificaciones.js",
+          "dynamic": false,
+          "line": 11
         }
       ],
       "endpoints": [
         {
           "url": "https://api-m.paypal.com/",
-          "line": 44
+          "line": 45
         },
         {
           "url": "https://api-m.sandbox.paypal.com/",
-          "line": 44
+          "line": 45
         }
       ]
     },
@@ -18454,8 +18490,8 @@
     },
     {
       "path": "functions/api/admin-order-mutation.js",
-      "bytes": 3315,
-      "sha256": "d56a26d153370ceeab57b3bc126920b0611f333effa06204f9b3fbdc211eeb53",
+      "bytes": 3688,
+      "sha256": "d62a1ed41542fc593dfda73a135bfe16d55525b3b5270b148407869eb27baefc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18478,6 +18514,12 @@
           "target": "cloudflare/order-sheets-sync.js",
           "dynamic": false,
           "line": 10
+        },
+        {
+          "raw": "../../cloudflare/fidelidad-notificaciones.js",
+          "target": "cloudflare/fidelidad-notificaciones.js",
+          "dynamic": false,
+          "line": 11
         }
       ],
       "endpoints": []
@@ -18508,8 +18550,8 @@
     },
     {
       "path": "functions/api/apps-script-bridge.js",
-      "bytes": 7951,
-      "sha256": "e6b5fef3b081e9464f6ecad736ef3aaa8e190e9e08211267baafe816b82b640e",
+      "bytes": 8314,
+      "sha256": "a7f0b087dfb7d427a0083c1634c9937eb6b26a9951e7f400de0a5d274c043991",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18550,12 +18592,18 @@
           "target": "cloudflare/order-sheets-sync.js",
           "dynamic": false,
           "line": 15
+        },
+        {
+          "raw": "../../cloudflare/fidelidad-notificaciones.js",
+          "target": "cloudflare/fidelidad-notificaciones.js",
+          "dynamic": false,
+          "line": 16
         }
       ],
       "endpoints": [
         {
           "url": "https://script.google.com/macros/s/AKfycbyh9I5aPp9d3lMSnYRNfrHcSCCobCoDOif9CqtXmMe4FgwSjzlKf4kjQZqvKDRmEY6S/exec",
-          "line": 21
+          "line": 22
         }
       ]
     },
@@ -19591,8 +19639,8 @@
     },
     {
       "path": "functions/api/sheets-admin-webhook.js",
-      "bytes": 8529,
-      "sha256": "61f09eaac57319743dbc6e2c8e6149bb2b2f501045f7600b34927b06d4dd4265",
+      "bytes": 8955,
+      "sha256": "01d941d884fd08d574ce62611584d74aaafdcf0d8df846ceef1d3895e3f4fb90",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19621,6 +19669,12 @@
           "target": "cloudflare/order-admin-domain.js",
           "dynamic": false,
           "line": 10
+        },
+        {
+          "raw": "../../cloudflare/fidelidad-notificaciones.js",
+          "target": "cloudflare/fidelidad-notificaciones.js",
+          "dynamic": false,
+          "line": 11
         }
       ],
       "endpoints": []
@@ -32782,6 +32836,12 @@
       "sha256": "bc54d487b39a6fff3e89feb6cf56898940dcefeaacf5f5c87aea5a43e3515ada"
     },
     {
+      "path": "cloudflare/fidelidad-notificaciones.js",
+      "extension": ".js",
+      "bytes": 5742,
+      "sha256": "5703cbe0bde3292d492febfa8b5976ee1433f42fd4be641ca5711058acfe2461"
+    },
+    {
       "path": "cloudflare/firebase-admin-ligero.js",
       "extension": ".js",
       "bytes": 25397,
@@ -32826,8 +32886,8 @@
     {
       "path": "cloudflare/order-admin-domain.js",
       "extension": ".js",
-      "bytes": 20561,
-      "sha256": "6581e738c3db11eafa4b42e65e747687b989a7bbc2016a140da828676a78ef64"
+      "bytes": 20601,
+      "sha256": "077afdba24cbbe3225b67826b8081624d674575f77568bcfd1b5b9a11b5cff0f"
     },
     {
       "path": "cloudflare/order-sheets-sync.js",
@@ -32850,8 +32910,8 @@
     {
       "path": "cloudflare/paypal-seguro.js",
       "extension": ".js",
-      "bytes": 11810,
-      "sha256": "0fa41e9583738a5ddf5adbff8cb8202b7c41e0f28af4051703c0a7ef5933752d"
+      "bytes": 12407,
+      "sha256": "f77094c5ac775016b25613335aa5a2c622ba9c4ea7788bc46049546b48528af9"
     },
     {
       "path": "cloudflare/resiliencia-sync-catalogo.js",
@@ -33810,8 +33870,8 @@
     {
       "path": "functions/api/admin-order-mutation.js",
       "extension": ".js",
-      "bytes": 3315,
-      "sha256": "d56a26d153370ceeab57b3bc126920b0611f333effa06204f9b3fbdc211eeb53"
+      "bytes": 3688,
+      "sha256": "d62a1ed41542fc593dfda73a135bfe16d55525b3b5270b148407869eb27baefc"
     },
     {
       "path": "functions/api/admin-runtime-health.js",
@@ -33822,8 +33882,8 @@
     {
       "path": "functions/api/apps-script-bridge.js",
       "extension": ".js",
-      "bytes": 7951,
-      "sha256": "e6b5fef3b081e9464f6ecad736ef3aaa8e190e9e08211267baafe816b82b640e"
+      "bytes": 8314,
+      "sha256": "a7f0b087dfb7d427a0083c1634c9937eb6b26a9951e7f400de0a5d274c043991"
     },
     {
       "path": "functions/api/catalog-sheet-sync-drain.js",
@@ -34044,8 +34104,8 @@
     {
       "path": "functions/api/sheets-admin-webhook.js",
       "extension": ".js",
-      "bytes": 8529,
-      "sha256": "61f09eaac57319743dbc6e2c8e6149bb2b2f501045f7600b34927b06d4dd4265"
+      "bytes": 8955,
+      "sha256": "01d941d884fd08d574ce62611584d74aaafdcf0d8df846ceef1d3895e3f4fb90"
     },
     {
       "path": "functions/api/sheets-engagement-webhook.js",

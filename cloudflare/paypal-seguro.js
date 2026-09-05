@@ -8,6 +8,7 @@ import {
   fsTimestamp,
 } from './firebase-admin-ligero.js';
 import { notifyAdminIfAbsent } from './notificaciones-sociales.js';
+import { reconcileLoyaltyTierNotification } from './fidelidad-notificaciones.js';
 
 const MAX_RATE_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 const ORDER_ID_RE = /^[A-Za-z0-9_-]{12,220}$/;
@@ -180,6 +181,8 @@ async function markPaid(env, mapping, capture) {
     throw new Error('El importe confirmado por PayPal no coincide con el pedido');
   }
   const confirmedAt = new Date();
+  const orderDocument = await firestoreAdminGet(env, `orders/${mapping.orderId}`);
+  const beforeOrder = orderDocument ? decodeFirestoreFields(orderDocument.fields || {}) : null;
   await firestoreAdminMerge(env, `orders/${mapping.orderId}`, {
     payment: { mapValue: { fields: {
       method: fsString('paypal'), status: fsString('pagado'), providerOrderId: fsString(mapping.id),
@@ -193,6 +196,11 @@ async function markPaid(env, mapping, capture) {
   });
 
   await notifyOrderConfirmed(env, mapping, cents, currency);
+  await reconcileLoyaltyTierNotification(env, {
+    orderId: mapping.orderId,
+    beforeOrder,
+    afterOrder: { ...beforeOrder, paymentStatus: 'pagado', payment: { ...(beforeOrder?.payment || {}), status: 'pagado' }, updatedAt: confirmedAt },
+  }).catch(error => console.warn('[paypal] fidelidad diferida:', error?.message || error));
 }
 
 async function notifyOrderConfirmed(env, mapping, cents, currency) {
