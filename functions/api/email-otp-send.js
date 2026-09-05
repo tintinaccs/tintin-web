@@ -209,7 +209,8 @@ export async function onRequest(context) {
     // experiencia distinta entre username y email. La consulta es de solo
     // lectura y ocurre antes de crear/guardar cualquier código.
     const providerInfo = await lookupUserProvidersByEmail(env, email);
-    if (providerInfo.exists && providerInfo.providers.includes('google.com')) {
+    const hasGoogleProvider = providerInfo.providers.some(provider => provider === 'google.com');
+    if (providerInfo.exists && hasGoogleProvider) {
       return jsonResponse({
         success: false,
         error: 'google_account_exists',
