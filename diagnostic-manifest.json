@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T20:31:58.922Z",
-  "sourceFingerprint": "d9172d5ca2d8bca77d386b14ea3a0422ba76273fd34539afed0971ad88f29416",
+  "generatedAt": "2026-09-05T00:20:15.954Z",
+  "sourceFingerprint": "26d6acf5ac6b17e4c5cc86220f8e1e561fca1e478598a827f00c0b475a24e034",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 805,
     "textFiles": 772,
-    "totalBytes": 9971401,
+    "totalBytes": 9973271,
     "pages": 18,
     "modules": 554
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 188158,
-      "sha256": "bd0ad5e4260cbbbe18ed93bb807ec4bf7157279a6c0fcbabe418febbe27ed204",
+      "bytes": 188176,
+      "sha256": "49f1b802a2f99f8f5745de8fc2d4a2f424bc22b80f20b6c64afe6d7fde4abd70",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2114,7 +2114,7 @@
           "line": 8
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260904-appcheck-guard-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20260904-users-responsive-1",
           "target": "js/admin/admin-app.js",
           "line": 1978
         },
@@ -2353,7 +2353,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260904-appcheck-guard-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20260904-users-responsive-1",
           "target": "js/admin/admin-app.js",
           "line": 1978,
           "exists": true
@@ -2572,7 +2572,7 @@
         },
         {
           "id": "",
-          "classes": "adm-table",
+          "classes": "adm-table adm-table-users",
           "line": 405
         },
         {
@@ -19726,8 +19726,8 @@
     },
     {
       "path": "functions/js/admin/admin-app-runtime.js",
-      "bytes": 6306,
-      "sha256": "2ef6a99e298e1e27f79a0a7e43505d7359acbcda32853d53fadd5b05b22f71d4",
+      "bytes": 6308,
+      "sha256": "1e93480a62bd807d0ced3c24b4feea327be09e3834d49783241a623e59f1792f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19929,8 +19929,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 426331,
-      "sha256": "4acddbdad2a66cc1f85f6d1fca264acd68ffdd7040b833a9f8b487b7a1d3384b",
+      "bytes": 426539,
+      "sha256": "1928d36316e59771fead9f0eb0b4298178fce647f744aed6589fcd5e1e4b91c9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32091,8 +32091,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 188158,
-      "sha256": "bd0ad5e4260cbbbe18ed93bb807ec4bf7157279a6c0fcbabe418febbe27ed204"
+      "bytes": 188176,
+      "sha256": "49f1b802a2f99f8f5745de8fc2d4a2f424bc22b80f20b6c64afe6d7fde4abd70"
     },
     {
       "path": "apple-touch-icon.png",
@@ -32559,8 +32559,8 @@
     {
       "path": "css/admin/admin.css",
       "extension": ".css",
-      "bytes": 78591,
-      "sha256": "8a3083aa88dd1d987494c18321b2cab33f5f5728ada2e7890b155d6d1d80f0b4"
+      "bytes": 80402,
+      "sha256": "6a859f8758bb3086ad6f03c3bc4a0ceaba10619b253b13743de1cef410072ad3"
     },
     {
       "path": "css/admin/diagnostico-maestro.css",
@@ -33723,8 +33723,8 @@
     {
       "path": "functions/js/admin/admin-app-runtime.js",
       "extension": ".js",
-      "bytes": 6306,
-      "sha256": "2ef6a99e298e1e27f79a0a7e43505d7359acbcda32853d53fadd5b05b22f71d4"
+      "bytes": 6308,
+      "sha256": "1e93480a62bd807d0ced3c24b4feea327be09e3834d49783241a623e59f1792f"
     },
     {
       "path": "functions/js/package.json",
@@ -33795,8 +33795,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 426331,
-      "sha256": "4acddbdad2a66cc1f85f6d1fca264acd68ffdd7040b833a9f8b487b7a1d3384b"
+      "bytes": 426539,
+      "sha256": "1928d36316e59771fead9f0eb0b4298178fce647f744aed6589fcd5e1e4b91c9"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -36111,8 +36111,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 37481,
-      "sha256": "6d120b36b78f29f98d465affe9952a1fbe10be436c3dabfe51149940878ca37f"
+      "bytes": 37312,
+      "sha256": "c1bb642b33af0021020a86db2346df10f6bb04ff019bc6db0cf6695351150cc8"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
