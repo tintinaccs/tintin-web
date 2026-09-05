@@ -86,22 +86,53 @@ export function readProfileName(profile = {}) {
  * `maybeApplySavedLocation()` del checkout además exige `name`.
  */
 export function hasUsableAddress(profile = {}) {
-  const saved = storedLocation(profile);
-  if (!saved || !clean(saved.name)) return false;
-  const lat = Number(saved.lat);
-  const lng = Number(saved.lng);
-  return Number.isFinite(lat) && Number.isFinite(lng) && (lat !== 0 || lng !== 0);
+  return locationCandidates(profile).some(candidate => {
+    const saved = normalizeStoredLocation(candidate, profile);
+    if (!saved || !clean(saved.name)) return false;
+    const lat = Number(saved.lat);
+    const lng = Number(saved.lng);
+    return Number.isFinite(lat) && Number.isFinite(lng) && (lat !== 0 || lng !== 0);
+  });
+}
+
+function locationCandidates(profile = {}) {
+  const candidates = [
+    profile.savedLocation,
+    profile.location,
+    profile.mapLocation,
+    profile.deliveryLocation,
+    profile.defaultLocation,
+    profile.coordinates,
+    profile.coords,
+    {
+      lat: profile.addressLat ?? profile.latitude,
+      lng: profile.addressLng ?? profile.longitude,
+      name: profile.locationName ?? profile.addressName,
+      address: profile.address,
+    },
+  ];
+  return candidates.filter(candidate => candidate && typeof candidate === 'object');
+}
+
+function normalizeStoredLocation(candidate = {}, profile = {}) {
+  const geoPoint = candidate.geoPoint || candidate.geopoint || candidate.point || {};
+  const coordinates = candidate.coordinates || candidate.coords || {};
+  const lat = candidate.lat ?? candidate.latitude ?? candidate.addressLat ??
+    coordinates.lat ?? coordinates.latitude ?? geoPoint.latitude;
+  const lng = candidate.lng ?? candidate.longitude ?? candidate.addressLng ??
+    coordinates.lng ?? coordinates.longitude ?? geoPoint.longitude;
+  const name = clean(candidate.name ?? candidate.locationName ?? candidate.addressName ??
+    candidate.label ?? candidate.title ?? profile.locationName ?? profile.addressName);
+  const address = clean(candidate.address ?? candidate.formattedAddress ?? candidate.displayName ?? profile.address);
+  return { lat, lng, name, ...(address ? { address } : {}) };
 }
 
 function storedLocation(profile = {}) {
-  return profile.savedLocation && typeof profile.savedLocation === 'object'
-    ? profile.savedLocation
-    : {
-        lat: profile.addressLat,
-        lng: profile.addressLng,
-        name: profile.locationName,
-        address: profile.address,
-      };
+  const candidates = locationCandidates(profile);
+  return candidates.map(candidate => normalizeStoredLocation(candidate, profile))
+    .find(candidate => clean(candidate.name) && Number.isFinite(Number(candidate.lat)) &&
+      Number.isFinite(Number(candidate.lng)) && (Number(candidate.lat) !== 0 || Number(candidate.lng) !== 0)) ||
+    normalizeStoredLocation(candidates[0] || {}, profile);
 }
 
 function asDate(value) {
@@ -131,10 +162,11 @@ function storedUsername(profile = {}) {
 
 /** Convierte un resultado del buscador al formato `savedLocation`. */
 export function toSavedLocation(place = {}) {
-  const lat = Number(place.addressLat ?? place.lat);
-  const lng = Number(place.addressLng ?? place.lng);
-  const name = clean(place.addressName || place.name);
-  const address = clean(place.address);
+  const normalized = normalizeStoredLocation(place);
+  const lat = Number(normalized.lat);
+  const lng = Number(normalized.lng);
+  const name = clean(normalized.name);
+  const address = clean(normalized.address);
   if (!name || !Number.isFinite(lat) || !Number.isFinite(lng)) return null;
   return { lat, lng, name, ...(address ? { address } : {}) };
 }
