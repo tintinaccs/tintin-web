@@ -121,6 +121,10 @@ export function hasUsableDob(profile = {}) {
   return !!date && isValidDob(date.toISOString().slice(0, 10));
 }
 
+function storedPhoneValue(profile = {}) {
+  return clean(profile.phone || profile.phoneNumber || profile.whatsapp || profile.whatsappNumber);
+}
+
 function storedUsername(profile = {}) {
   return clean(profile.username || profile.userName);
 }
@@ -174,7 +178,7 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
 
   const stored = readProfileName(profile);
   const storedNameIsValid = isValidFullName(stored.firstName, stored.lastName);
-  const storedPhone = clean(profile.phone);
+  const storedPhone = storedPhoneValue(profile);
   const addressOk = !requireAddress || hasUsableAddress(profile);
   const needsName = !storedNameIsValid;
   const needsPhone = !storedPhone;
@@ -223,7 +227,7 @@ export function buildMissingProfilePatch({
   const patch = {};
   const current = readProfileName(currentProfile);
   const currentNameIsValid = isValidFullName(current.firstName, current.lastName);
-  const currentPhone = clean(currentProfile.phone);
+  const currentPhone = storedPhoneValue(currentProfile);
   const currentUsername = storedUsername(currentProfile);
 
   // Compatibilidad: quien todavía mande `submittedName` entero se separa acá.

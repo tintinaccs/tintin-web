@@ -836,6 +836,15 @@ function showAdminInitFailure() {
   hideOverlay();
 }
 
+async function waitForAdminUserAfterAuthRestore(user) {
+  if (user) return user;
+  // authStateReady() ya se espera arriba, pero en una navegación inmediata
+  // desde el popup Firebase puede emitir un null transitorio antes de copiar
+  // la sesión persistida a esta pestaña. No mandar al login por ese estado.
+  await new Promise(resolve => window.setTimeout(resolve, 1200));
+  return auth.currentUser || null;
+}
+
 async function startAdminAuthGuard() {
   try {
     await authPersistenceReady;
@@ -854,7 +863,8 @@ async function startAdminAuthGuard() {
     }
   }
 
-  onAuthStateChanged(auth, async user => {
+  onAuthStateChanged(auth, async observedUser => {
+    const user = await waitForAdminUserAfterAuthRestore(observedUser);
     // Este es el único caso de sesión ausente que manda al login. replace()
     // evita dejar /admin en el historial y elimina el ping-pong con Atrás.
     if (!user) {

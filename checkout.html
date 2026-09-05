@@ -1292,8 +1292,10 @@ document.getElementById('btn-step2-next').onclick = () => {
     const phoneEl = document.getElementById('ck-phone-number');
     if (!nameEl.value)  nameEl.value  = currentUserProfile?.name || currentUser.displayName || '';
     if (!emailEl.value) emailEl.value = currentUser.email || '';
-    if (!phoneEl.value && currentUserProfile?.phone) {
-      const digits  = currentUserProfile.phone.replace(/\D/g, '');
+    const storedPhone = currentUserProfile?.phone || currentUserProfile?.phoneNumber ||
+      currentUserProfile?.whatsapp || currentUserProfile?.whatsappNumber || '';
+    if (!phoneEl.value && storedPhone) {
+      const digits  = String(storedPhone).replace(/\D/g, '');
       const country = detectCountryFromDigits(digits) || DEFAULT_COUNTRY;
       phoneCountrySelect.value = country.code;
       phoneEl.value = digits.slice(country.dial.length);
