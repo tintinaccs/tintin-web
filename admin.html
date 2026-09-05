@@ -37,6 +37,7 @@
   <link rel="stylesheet" href="css/admin/editor-visual.css?v=tintin-20260812-apariencia-responsive-1">
   <link rel="stylesheet" href="css/admin/participacion-admin.css?v=tintin-20260817-engagement-master-1">
   <link rel="stylesheet" href="css/admin/paginas-admin.css?v=tintin-20260825-pages-1">
+  <link rel="stylesheet" href="css/admin/flujo-decisiones-admin.css?v=tintin-20260905-access-1">
   <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260901-footer-light-1">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -121,6 +122,9 @@
     </button>
     <button type="button" class="adm-nav-item" data-section="diagnostico" id="nav-diagnostico">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/><path d="M8 11h6M11 8v6"/></svg></span> Diagnóstico
+    </button>
+    <button type="button" class="adm-nav-item" data-section="flujos-decision" id="nav-flujos-decision">
+      <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="12" cy="19" r="2"/><path d="M7 6.3l3.7 10.2M17 6.3l-3.7 10.2M7 5h10"/></svg></span> Flujos de decisión
     </button>
     <button type="button" class="adm-nav-item" data-section="correos" id="nav-correos">
       <span class="adm-nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span> Correos
@@ -971,6 +975,10 @@
           <div id="site-diagnostic-history" class="adm-diagnostic-history" hidden></div>
         </div>
       </div>
+    </div>
+
+    <div class="adm-section" id="section-flujos-decision">
+      <div id="decision-flow-admin-root" aria-live="polite"></div>
     </div>
 
     <!-- ===================== CONFIGURACIÓN ===================== -->
@@ -1976,6 +1984,7 @@
 <div class="adm-toast" id="adm-toast"></div>
 
 <script type="module" src="js/admin/admin-app.js?v=tintin-20260904-appcheck-guard-1"></script>
+<script type="module" src="js/admin/flujo-decisiones/flujo-decisiones-admin.js?v=tintin-20260905-access-1"></script>
 <script type="module" src="js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260818-engagement-master-3"></script>
 <script type="module" src="js/admin/shopify-commerce-admin.js?v=tintin-20260825-orders-ops-2"></script>
 <script type="module" src="js/admin/appearance/editor-visual-admin.js?v=tintin-20260903-pr427-cache-2"></script>
