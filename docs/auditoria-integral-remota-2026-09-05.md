@@ -1,0 +1,142 @@
+# Auditoría técnica integral remota — Tintin
+
+**Fecha de corte:** 2026-09-05  
+**Repositorio:** \`tintinaccs/tintin-web\`  
+**Versión candidata:** PR #692, commit \`983e450045905c804da95884321012bfb499738f\`  
+**Producción observada:** \`https://tintinaccesorios.pages.dev\` (rama \`main\`)
+
+## Alcance
+
+La revisión cubre el repositorio completo, no solo el PR #666: páginas públicas, checkout, autenticación, perfil, panel administrativo, Cloudflare Functions, Firestore, Cloudinary, Sheets/Apps Script, CI/CD, artefactos generados, seguridad, accesibilidad, responsive, SEO, rendimiento, sincronización y observabilidad.
+
+No se eliminó una función de negocio por apariencia o duplicación. Los cambios se contrastaron con rutas, consumidores, contratos y artefactos generados. Producción y operaciones destructivas no fueron modificadas.
+
+## Estado ejecutivo
+
+| Área | Estado | Evidencia o límite |
+|---|---|---|
+| Código candidato | Verificado | Auditoría estática, contratos y sintaxis aprobados |
+| CI/CD | Verificado | Repository audit y Cloudflare Pages aprobados sobre el commit indicado |
+| Navegación | Verificado automáticamente | Smoke de 18 páginas aprobado |
+| Responsive/UI | Verificado automáticamente | Viewports, geometría y UI aprobados |
+| Seguridad/Firestore | Verificado en código y emulador | Reglas adversariales aprobadas |
+| Auth real | Pendiente de prueba | Requiere credenciales y cuentas reales |
+| Compra real | Pendiente de prueba | Requiere ejecución controlada |
+| Producción | Sin cambios | \`main\` no fue fusionada ni desplegada |
+
+## Fuentes de verdad
+
+| Dominio | Autoridad canónica | Proyección/consumidor |
+|---|---|---|
+| Identidad y acceso | Firebase Auth | UI, backend y perfil |
+| Roles y permisos | Firestore/backend | Panel, endpoints y visibilidad |
+| Usuarios, pedidos y fidelidad | Firestore/backend | Admin, cliente y Apps Script |
+| Binarios de fotos | Cloudinary | URL transformada en UI |
+| Metadatos y moderación de fotos | Firestore | Admin y auditoría |
+| Historial inmutable | \`auditLog\` | Diagnóstico |
+| Operación tabular | Google Sheets | Espejo/reconciliación |
+| Automatización | Apps Script | Puente controlado al backend |
+
+Sheets no debe competir con Firestore ni crear una segunda identidad. La sincronización debe ser dirigida, idempotente y auditable; copiar todo en todo produciría ciclos y conflictos.
+
+## Correcciones integradas
+
+- Persistencia local de Firebase Auth y espera antes de redirects protegidos.
+- Coordinación de actividad entre pestañas, expiración de cuentas regulares y excepción permanente del Super Admin.
+- OTP sin sesgo modular y rechazo de OTP para cuentas Google.
+- Mensajes diferenciados para popup bloqueado, Google, OTP vencido, almacenamiento no disponible y sesión inválida.
+- Identidad pública segura y anonimización de clientes según rol.
+- Permisos server-side para respuestas de staff.
+- Fotos con Cloudinary, metadatos Firestore, moderación, reemplazo administrativo y auditoría append-only.
+- Reconciliación de perfiles sin documentos duplicados.
+- Fidelidad basada solo en compras válidas; cancelados y reembolsados excluidos.
+- Niveles configurables y notificaciones idempotentes de ascenso/descenso.
+- Cambios de pago administrativo protegidos por autorización del servidor.
+- Favicon de libélula y referencias cache-versionadas.
+- Manifesto diagnóstico reproducible y CI dividido en etapas observables.
+- Retiro del workflow temporal que fallaba sin jobs.
+
+## Hallazgos y riesgos
+
+### H1 — Producción aún no contiene la versión auditada
+
+**Severidad:** alta operativa.  
+**Causa:** #692 sigue abierto y no hubo merge/deploy.  
+**Impacto:** los arreglos todavía no están activos para clientes reales.  
+**Solución:** fusionar #691 y luego #692, esperar Pages y ejecutar smoke autenticado.  
+**Riesgo:** medio; requiere ventana controlada y rollback.
+
+### H2 — Auth real multi-entorno sin evidencia empírica
+
+**Severidad:** alta de validación.  
+**Causa:** CI sin credenciales no puede probar Google, OTP, cookies ni restricciones de cada navegador.  
+**Impacto:** popup/redirect, pestaña nueva, Brave, móvil, incógnito y cambio de red siguen sin certificación real.  
+**Solución:** ejecutar \`docs/prueba-compra-real.md\` y registrar resultados sin secretos.
+
+### H3 — Proveedores externos requieren comprobación operativa
+
+**Severidad:** alta de continuidad.  
+**Causa:** el repositorio no puede leer secretos, cuotas, 2FA, webhooks ni backups privados.  
+**Impacto:** configuración externa incorrecta puede producir 401/403/502 aunque el código sea correcto.  
+**Solución:** seguir \`docs/inventario-recuperacion-servicios.md\` y \`docs/recuperacion-firestore.md\`.
+
+### H4 — Candidatos antiguos abiertos en GitHub
+
+**Severidad:** media de gobernanza.  
+**Causa:** propuestas históricas no fueron cerradas al consolidar.  
+**Impacto:** riesgo de fusionar una versión vieja o interpretar varias fuentes activas.  
+**Solución:** cerrar después los PR absorbidos con trazabilidad; no borrar ramas automáticamente.
+
+### H5 — Dependencia transitoria vulnerable en tooling
+
+**Severidad:** media, limitada a desarrollo.  
+**Causa:** \`firebase-tools\` aún solicita un rango antiguo de \`stream-json\`; el override global rompe imports internos.  
+**Impacto:** riesgo potencial al procesar entradas anidadas durante tooling, no un módulo servido al navegador.  
+**Solución:** actualizar Firebase CLI cuando publique un rango compatible y probarlo antes de cambiar el lockfile.
+
+### H6 — Ruido histórico del navegador
+
+**Severidad:** baja/no confirmada.  
+**Evidencia:** \`requestStorageAccess\`, \`browsing-topics\` y el SVG fueron reportados; el SVG fue normalizado en el candidato.  
+**Solución:** repetir en producción después del deploy y clasificar cada mensaje por request y reproducción.
+
+## Mapa de reparación
+
+\`\`\`text
+PR #691 (base sobre main)
+        ↓
+PR #692 (integración completa)
+        ↓
+CI + CodeQL + Cloudflare Pages
+        ↓
+merge autorizado a main
+        ↓
+deploy de producción
+        ↓
+smoke Auth real + compra controlada
+        ↓
+revalidación de Firebase/Cloudinary/Sheets/Apps Script
+        ↓
+cierre de PRs absorbidos
+\`\`\`
+
+## Evidencia automatizada
+
+El CI del candidato aprobó build exacto, ausencia de drift, CSS, mapa de integraciones, contratos estáticos, cuentas/sincronización, reglas de Firestore con emulador, Super Admin, navegación, responsive, accesibilidad, SEO, rendimiento, viewports, geometría y smoke de todas las páginas.
+
+Las suites locales cubren cuentas, login/perfil, checkout, carrito, push, imágenes, arquitectura, roles, sincronización, engagement, fidelidad, pedidos y diagnósticos.
+
+## Orden recomendado de cierre
+
+1. Ejecutar la matriz autenticada real con cuenta Google, cuenta OTP y cuenta bloqueada.
+2. Fusionar #691 y #692 en ese orden.
+3. Confirmar deploy y repetir navegación, admin, sesión multi-pestaña y compra controlada.
+4. Confirmar logs de Cloudflare, Firebase, Cloudinary, Sheets y Apps Script.
+5. Cerrar PRs absorbidos con trazabilidad.
+6. Resolver \`stream-json\` mediante actualización compatible y pruebas de Firebase CLI.
+7. Completar 2FA, backups independientes, cuotas, webhooks y revisión externa/legal.
+
+## Criterio de cierre
+
+Checks verdes no bastan. El cierre exige que el commit desplegado coincida con el candidato, Auth y compra real funcionen, no haya duplicados, los roles se respeten en backend/UI y cada pendiente manual tenga evidencia segura o una decisión explícita.
+
