@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-05T20:09:14.232Z",
-  "sourceFingerprint": "a850e7a35947b4277888437e28832113694f17839c1c9e5c717e8bbb31b0b951",
+  "generatedAt": "2026-09-05T20:41:07.161Z",
+  "sourceFingerprint": "58a652eeb9657e6c9b6c560326964277c3316622db0a3eb43aaadf63df2c2dec",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 809,
     "textFiles": 776,
-    "totalBytes": 10001394,
+    "totalBytes": 10001635,
     "pages": 18,
     "modules": 557
   },
@@ -8902,8 +8902,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 113526,
-      "sha256": "c696c2683ddfd540399be2fbb2ccbce916b75bfe00c4b01aadba095f07e256a7",
+      "bytes": 113535,
+      "sha256": "10c8331202981dccbf75e0f8d3493c91089e4327c1b227883c3055b9a60947dd",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12801,8 +12801,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 67233,
-      "sha256": "88eb040278b26a5cdd39c23673a925bb9c037c61c0cd8f5c1a74bc720eef9691",
+      "bytes": 67234,
+      "sha256": "12594f7cf874cc1b528a3cecda1fa80d998058403e835493e199def000277c92",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13590,8 +13590,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 41855,
-      "sha256": "3aed64bdc97b58045efdd7c36ead37515065436daedaf833c912144b9b19ff56",
+      "bytes": 41864,
+      "sha256": "0cff6542f447b0c7a84f7ffea08a32346143d7e89f0a3733eb79796a8426d87a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18045,7 +18045,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 341027,
-      "sha256": "89791604bdc3d1df84bdf238f949873c345e73436af796db2418e5b08f88de0e",
+      "sha256": "4301340df3058c7d21c3d4fdd9c9f91e5ee994c15d42f8d886df5a2acf5ac11d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18892,8 +18892,8 @@
     },
     {
       "path": "functions/api/geo-search.js",
-      "bytes": 5995,
-      "sha256": "95b1e3759cecc93d9263ba5ac171ec5417608b8c21b5a1fff45743cdd35b6297",
+      "bytes": 6114,
+      "sha256": "2fdfec81997363c8a796bfe95a9614a39a66c531e9fe0bcbaa917a708721351d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18913,15 +18913,15 @@
         },
         {
           "url": "https://nominatim.openstreetmap.org/search",
-          "line": 60
+          "line": 61
         },
         {
           "url": "https://photon.komoot.io/api/",
-          "line": 70
+          "line": 71
         },
         {
-          "url": "https://geo-search-v2.cache.internal/",
-          "line": 115
+          "url": "https://geo-search-v3.cache.internal/",
+          "line": 116
         }
       ]
     },
@@ -21458,8 +21458,8 @@
     },
     {
       "path": "js/admin/users/ficha-usuario-admin.js",
-      "bytes": 11158,
-      "sha256": "b2ff8ba22c3bf6e166cb2f87ad189605702465fa4e4a0432e1ee6e5e6759e93e",
+      "bytes": 11566,
+      "sha256": "a292c5abca09a9d4127cd701e638b6e31519fbf9c9d65c4a1458df6a912ea4e0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21509,15 +21509,15 @@
     },
     {
       "path": "js/admin/users/gestion-usuarios-admin.js",
-      "bytes": 991,
-      "sha256": "e86066e2130fa1b336fed93af7638c993564f5af9b976721e8b981b328676fa7",
+      "bytes": 992,
+      "sha256": "1c415dae5f1ccbc765ca2bfc4d370053da5bccd22d625b6f34444420f8766c4f",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./ficha-usuario-admin.js?v=tintin-20260828-clientes-ficha-completa-3",
+          "raw": "./ficha-usuario-admin.js?v=tintin-20260905-clientes-ficha-location-1",
           "target": "js/admin/users/ficha-usuario-admin.js",
           "dynamic": true,
           "line": 17
@@ -22338,15 +22338,15 @@
     },
     {
       "path": "js/components/location/mapa-ubicacion.js",
-      "bytes": 14657,
-      "sha256": "f95704c766c8eaa309db31095486d606c1e2ecf43e4e3086043674458a6c0818",
+      "bytes": 13129,
+      "sha256": "fa27b282765029d659d19881b61dd9b90ca67a01cbd576942568149b526b079a",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./selector-ubicacion.js?v=tintin-20260803-location-picker-2",
+          "raw": "./selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1",
           "target": "js/components/location/selector-ubicacion.js",
           "dynamic": false,
           "line": 7
@@ -22359,18 +22359,18 @@
         },
         {
           "url": "https://{s}.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png",
-          "line": 124
+          "line": 80
         },
         {
           "url": "https://www.openstreetmap.org/copyright",
-          "line": 125
+          "line": 81
         }
       ]
     },
     {
       "path": "js/components/location/selector-ubicacion.js",
-      "bytes": 7580,
-      "sha256": "37497e7f6bd38acb0a09bdefa00e5fbbfe2b6618cd92d0ccd012c8213ff14329",
+      "bytes": 9695,
+      "sha256": "aa8122c5c693ce1858c91d6c82918d76df3e1e7c402a3c9940f2b4305ecd00dc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24476,16 +24476,16 @@
     },
     {
       "path": "js/pages/checkout/checkout-confiabilidad.js",
-      "bytes": 28372,
-      "sha256": "1237a710f84a0567e8abd6ca24f5ad3c64676a7702e374f8634497c067ddc510",
+      "bytes": 26623,
+      "sha256": "e736c40be8767ed9e61ebd44eca2950b30696a745ba70d6a0e73833d5457cbbb",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1",
-          "target": "js/core/firebase/origen-funciones.js",
+          "raw": "../../components/location/selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1",
+          "target": "js/components/location/selector-ubicacion.js",
           "dynamic": false,
           "line": 12
         }
@@ -24493,7 +24493,7 @@
       "endpoints": [
         {
           "url": "https://www.google.com/maps/search/",
-          "line": 520
+          "line": 478
         }
       ]
     },
@@ -30466,8 +30466,8 @@
     },
     {
       "path": "tests/login/location-picker.test.mjs",
-      "bytes": 3729,
-      "sha256": "462eb7a6b52cde638c0de59e641fe3bdf04c3872ba09293bbcdb66e6a0ff04bf",
+      "bytes": 4585,
+      "sha256": "24a2d92b13774d815e88b39001777a5df81b059e6c8909ffd5ad7ddcf9283979",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30504,7 +30504,16 @@
           "line": 5
         }
       ],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://www.google.com/maps/search/Shopping+del+Sol,+Asunci%C3%B3n",
+          "line": 88
+        },
+        {
+          "url": "https://www.google.com/maps/search/Shopping+del+Sol/@-25.2867,-57.6467,17z",
+          "line": 93
+        }
+      ]
     },
     {
       "path": "tests/login/phone-utils.test.mjs",
@@ -32463,8 +32472,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 113526,
-      "sha256": "c696c2683ddfd540399be2fbb2ccbce916b75bfe00c4b01aadba095f07e256a7"
+      "bytes": 113535,
+      "sha256": "10c8331202981dccbf75e0f8d3493c91089e4327c1b227883c3055b9a60947dd"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -32662,13 +32671,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 341027,
-      "sha256": "89791604bdc3d1df84bdf238f949873c345e73436af796db2418e5b08f88de0e"
+      "sha256": "4301340df3058c7d21c3d4fdd9c9f91e5ee994c15d42f8d886df5a2acf5ac11d"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 340942,
-      "sha256": "c2ef32a3d3779d660b6f5a2938576e45c864b9b1f7c78ca8d2252ef443af560b"
+      "sha256": "b80fde98870528573c51035866f0e39819518167e6df1df9973de7daeff98a11"
     },
     {
       "path": "config/public-site.json",
@@ -33627,8 +33636,8 @@
     {
       "path": "functions/api/geo-search.js",
       "extension": ".js",
-      "bytes": 5995,
-      "sha256": "95b1e3759cecc93d9263ba5ac171ec5417608b8c21b5a1fff45743cdd35b6297"
+      "bytes": 6114,
+      "sha256": "2fdfec81997363c8a796bfe95a9614a39a66c531e9fe0bcbaa917a708721351d"
     },
     {
       "path": "functions/api/health.js",
@@ -34167,14 +34176,14 @@
     {
       "path": "js/admin/users/ficha-usuario-admin.js",
       "extension": ".js",
-      "bytes": 11158,
-      "sha256": "b2ff8ba22c3bf6e166cb2f87ad189605702465fa4e4a0432e1ee6e5e6759e93e"
+      "bytes": 11566,
+      "sha256": "a292c5abca09a9d4127cd701e638b6e31519fbf9c9d65c4a1458df6a912ea4e0"
     },
     {
       "path": "js/admin/users/gestion-usuarios-admin.js",
       "extension": ".js",
-      "bytes": 991,
-      "sha256": "e86066e2130fa1b336fed93af7638c993564f5af9b976721e8b981b328676fa7"
+      "bytes": 992,
+      "sha256": "1c415dae5f1ccbc765ca2bfc4d370053da5bccd22d625b6f34444420f8766c4f"
     },
     {
       "path": "js/admin/users/perfil-usuario-superadmin.js",
@@ -34383,14 +34392,14 @@
     {
       "path": "js/components/location/mapa-ubicacion.js",
       "extension": ".js",
-      "bytes": 14657,
-      "sha256": "f95704c766c8eaa309db31095486d606c1e2ecf43e4e3086043674458a6c0818"
+      "bytes": 13129,
+      "sha256": "fa27b282765029d659d19881b61dd9b90ca67a01cbd576942568149b526b079a"
     },
     {
       "path": "js/components/location/selector-ubicacion.js",
       "extension": ".js",
-      "bytes": 7580,
-      "sha256": "37497e7f6bd38acb0a09bdefa00e5fbbfe2b6618cd92d0ccd012c8213ff14329"
+      "bytes": 9695,
+      "sha256": "aa8122c5c693ce1858c91d6c82918d76df3e1e7c402a3c9940f2b4305ecd00dc"
     },
     {
       "path": "js/components/location/ubicaciones-paraguay.js",
@@ -34953,8 +34962,8 @@
     {
       "path": "js/pages/checkout/checkout-confiabilidad.js",
       "extension": ".js",
-      "bytes": 28372,
-      "sha256": "1237a710f84a0567e8abd6ca24f5ad3c64676a7702e374f8634497c067ddc510"
+      "bytes": 26623,
+      "sha256": "e736c40be8767ed9e61ebd44eca2950b30696a745ba70d6a0e73833d5457cbbb"
     },
     {
       "path": "js/pages/checkout/checkout-control-cuota.js",
@@ -35229,8 +35238,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 67233,
-      "sha256": "88eb040278b26a5cdd39c23673a925bb9c037c61c0cd8f5c1a74bc720eef9691"
+      "bytes": 67234,
+      "sha256": "12594f7cf874cc1b528a3cecda1fa80d998058403e835493e199def000277c92"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -35433,8 +35442,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 41855,
-      "sha256": "3aed64bdc97b58045efdd7c36ead37515065436daedaf833c912144b9b19ff56"
+      "bytes": 41864,
+      "sha256": "0cff6542f447b0c7a84f7ffea08a32346143d7e89f0a3733eb79796a8426d87a"
     },
     {
       "path": "playwright.config.js",
@@ -36645,8 +36654,8 @@
     {
       "path": "tests/login/location-picker.test.mjs",
       "extension": ".mjs",
-      "bytes": 3729,
-      "sha256": "462eb7a6b52cde638c0de59e641fe3bdf04c3872ba09293bbcdb66e6a0ff04bf"
+      "bytes": 4585,
+      "sha256": "24a2d92b13774d815e88b39001777a5df81b059e6c8909ffd5ad7ddcf9283979"
     },
     {
       "path": "tests/login/phone-utils.test.mjs",

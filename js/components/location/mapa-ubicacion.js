@@ -4,7 +4,7 @@
 // Registro y checkout usan el mismo formato {lat,lng,name,address}, el mismo
 // zoom, la misma precisión y el mismo backend de búsqueda.
 
-import { searchPlaces } from "./selector-ubicacion.js?v=tintin-20260803-location-picker-2";
+import { searchPlaces, parseLocationSearchInput } from "./selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
 
 const LEAFLET_JS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
 const LEAFLET_JS_INTEGRITY = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
@@ -56,50 +56,6 @@ function geolocationErrorMessage(error) {
     return 'La ubicación tardó demasiado. Volvé a intentarlo o marcá el punto manualmente.';
   }
   return 'No pudimos obtener tu ubicación. Revisá el permiso del navegador o marcá el punto manualmente.';
-}
-
-function parseCoordinateInput(rawValue) {
-  const raw = String(rawValue || '').trim();
-  if (!raw) return null;
-  const patterns = [
-    /@(-?\d{1,3}(?:\.\d+)?),(-?\d{1,3}(?:\.\d+)?)/,
-    /!3d(-?\d{1,3}(?:\.\d+)?)!4d(-?\d{1,3}(?:\.\d+)?)/i,
-    /(?:query|q|ll|center|destination|origin)=(-?\d{1,3}(?:\.\d+)?)(?:%2C|,|%252C)(-?\d{1,3}(?:\.\d+)?)/i,
-    /^\s*(-?\d{1,3}(?:\.\d+)?)\s*[,;]\s*(-?\d{1,3}(?:\.\d+)?)\s*$/,
-  ];
-  for (const pattern of patterns) {
-    const match = raw.match(pattern);
-    if (!match) continue;
-    const lat = Number(match[1]);
-    const lng = Number(match[2]);
-    if (Number.isFinite(lat) && Number.isFinite(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180) {
-      return {
-        lat,
-        lng,
-        name: 'Ubicación elegida',
-        address: raw,
-      };
-    }
-  }
-  return null;
-}
-
-function parseGoogleMapsInput(rawValue) {
-  const raw = String(rawValue || '').trim();
-  if (!raw) return null;
-  const coordinate = parseCoordinateInput(raw);
-  if (coordinate) return coordinate;
-  try {
-    const url = new URL(raw);
-    const placeMatch = decodeURIComponent(url.pathname).match(/\/place\/([^/]+)/i);
-    const query = url.searchParams.get('query') || url.searchParams.get('q') ||
-      (placeMatch ? placeMatch[1].replace(/\+/g, ' ') : '');
-    if (query && !/^-?\d+(?:\.\d+)?\s*,/.test(query)) return { query };
-    if (/maps\.app\.goo\.gl|goo\.gl\/maps/i.test(`${url.hostname}${url.pathname}`)) return { shortGoogleUrl: true };
-  } catch {
-    // Texto libre: se envía al buscador geográfico.
-  }
-  return null;
 }
 
 function usablePlace(place) {
@@ -313,7 +269,7 @@ export async function createLocationMap({
 
   const runSearch = async rawQuery => {
     const generation = ++searchGeneration;
-    const parsed = parseGoogleMapsInput(rawQuery);
+    const parsed = parseLocationSearchInput(rawQuery);
     if (parsed?.lat != null) {
       applyPlace(parsed);
       return;
