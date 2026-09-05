@@ -1,8 +1,9 @@
 import fs from 'node:fs';
 
 const site = String(process.env.TINTIN_PUBLIC_ORIGIN || 'https://tintinaccesorios.pages.dev').replace(/\/$/, '');
+const runtime = JSON.parse(fs.readFileSync(new URL('../config/csp-runtime.json', import.meta.url), 'utf8'));
 const targets = [
-  ['html', '/', /no-cache,\s*no-store,\s*must-revalidate/i],
+  ['html', '/', /no-cache,\s*must-revalidate/i],
   ['css', '/css/pages/login/login.css?v=header-audit', /public,\s*max-age=31536000,\s*immutable/i],
   ['js', '/js/cargador-pagina.js?v=header-audit', /public,\s*max-age=31536000,\s*immutable/i],
   ['font', '/assets-tintin/fonts/montserrat-latin-wght-normal.woff2', /public,\s*max-age=31536000,\s*immutable/i],
@@ -22,7 +23,13 @@ for (const [name, path, expected] of targets) {
   const cache = response.headers.get('cache-control') || '';
   if (!expected.test(cache)) failures.push(`${name}: Cache-Control inesperado: ${cache || '(ausente)'}`);
   if (name !== 'html' && /no-store/i.test(cache)) failures.push(`${name}: producción todavía combina no-store con el caché del asset (${cache})`);
-  if (name === 'html' && !/no-store/i.test(cache)) failures.push('html: producción no conserva no-store para HTML');
+  if (name === 'html' && /no-store/i.test(cache)) failures.push('html: producción todavía fuerza no-store y bloquea la revalidación eficiente');
+  if (name === 'html') {
+    const actualCsp = response.headers.get('content-security-policy') || '';
+    const expectedCsp = runtime.routes?.['/'] || runtime.public || '';
+    if (!actualCsp) failures.push('html: producción no entrega Content-Security-Policy');
+    else if (actualCsp !== expectedCsp) failures.push('html: producción entrega una CSP distinta a la generada por este commit');
+  }
   else console.log(`OK — ${name}: ${cache}`);
 }
 

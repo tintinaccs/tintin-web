@@ -51,3 +51,12 @@ test('la identidad del SuperAdmin es insensible a mayúsculas al crear o reparar
   const profileStore = fs.readFileSync(new URL('../../js/core/store/perfil-usuario.js', import.meta.url), 'utf8');
   assert.match(profileStore, /normalizedEmail === SUPER_ADMIN\.toLowerCase\(\)/g);
 });
+
+test('login conserva la sesión si falla transitoriamente la lectura del perfil', () => {
+  const profileReadError = login.match(/if \(profileResult\.error\) \{[\s\S]*?\n  \}/)?.[0] || '';
+
+  assert.match(login, /await authPersistenceReady\.catch\(\(\) => \{\}\)/);
+  assert.match(login, /auth\.authStateReady\?\./);
+  assert.doesNotMatch(profileReadError, /signOut\(auth\)/);
+  assert.match(profileReadError, /Tu sesión sigue activa/);
+});

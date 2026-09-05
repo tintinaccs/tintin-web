@@ -48,6 +48,22 @@ test('community auth refreshes credentials without client sign-out', async () =>
   assert.doesNotMatch(product, /signOut\(/);
 });
 
+test('a social 401 never sends an authenticated customer back to login', async () => {
+  const [product, favorites] = await Promise.all([
+    read('js/pages/product/resenas-producto.js'),
+    read('js/components/favorites/sincronizacion-favoritos.js'),
+  ]);
+  assert.match(product, /authPersistenceReady/);
+  assert.match(product, /auth\.authStateReady\?\./);
+  assert.match(product, /preserved\.requiresLogin = false/);
+  assert.match(product, /Tu cuenta sigue iniciada/);
+  assert.equal((product.match(/if \(!await stableAuthUser\(\)\)/g) || []).length, 4);
+  assert.match(product, /const user = await stableAuthUser\(\);[\s\S]*?requestCommunityLogin\('review'/);
+  assert.match(favorites, /authPersistenceReady/);
+  assert.match(favorites, /auth\.authStateReady\?\./);
+  assert.match(favorites, /for \(const forceRefresh of \[false, true\]\)/);
+});
+
 test('community lives beside product and avoids blocking alerts', async () => {
   const [product, markup] = await Promise.all([
     read('js/pages/product/resenas-producto.js'),
