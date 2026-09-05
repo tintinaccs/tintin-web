@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T20:31:58.922Z",
-  "sourceFingerprint": "d9172d5ca2d8bca77d386b14ea3a0422ba76273fd34539afed0971ad88f29416",
+  "generatedAt": "2026-09-05T01:11:00.930Z",
+  "sourceFingerprint": "f4505cd54f5d8d32e931927e23d0b39bceadffc3986c9f6832d7997e7052a9d1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 805,
-    "textFiles": 772,
-    "totalBytes": 9971401,
+    "files": 806,
+    "textFiles": 773,
+    "totalBytes": 9972716,
     "pages": 18,
-    "modules": 554
+    "modules": 555
   },
   "viewports": [
     {
@@ -18927,8 +18927,8 @@
     },
     {
       "path": "functions/api/master-diagnostics.js",
-      "bytes": 12618,
-      "sha256": "36a3b3bb020e9f78ec5e5f8353df3f7238891b85bd282929677f7f7e38c6d850",
+      "bytes": 13176,
+      "sha256": "ba1800cbf5d60a00ff52050b7da8d8308aa0a96db6fe43153e40df803232dc38",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18938,17 +18938,17 @@
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 6
+          "line": 7
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 12
+          "line": 13
         },
         {
           "url": "https://api.github.com/",
-          "line": 13
+          "line": 14
         }
       ]
     },
@@ -30286,6 +30286,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/diagnostics/master-diagnostics-contract.test.mjs",
+      "bytes": 757,
+      "sha256": "cc22db272611eeebc7ca8330f344caecf696120abc4f47114b3ec61d528a32aa",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/engagement/firebase-id-token.test.mjs",
       "bytes": 3019,
       "sha256": "0ef15d51d73ea8e0c8edc0d4e978a6f1f2b1ec9aaa7d34ab0e3e420356d8e008",
@@ -33507,8 +33537,8 @@
     {
       "path": "functions/api/master-diagnostics.js",
       "extension": ".js",
-      "bytes": 12618,
-      "sha256": "36a3b3bb020e9f78ec5e5f8353df3f7238891b85bd282929677f7f7e38c6d850"
+      "bytes": 13176,
+      "sha256": "ba1800cbf5d60a00ff52050b7da8d8308aa0a96db6fe43153e40df803232dc38"
     },
     {
       "path": "functions/api/notifications.js",
@@ -36479,6 +36509,12 @@
       "extension": ".mjs",
       "bytes": 919,
       "sha256": "cd147ea0599730dc24b97a521aed18dac71d60a6733b79e4a8066b1af4afa8df"
+    },
+    {
+      "path": "tests/diagnostics/master-diagnostics-contract.test.mjs",
+      "extension": ".mjs",
+      "bytes": 757,
+      "sha256": "cc22db272611eeebc7ca8330f344caecf696120abc4f47114b3ec61d528a32aa"
     },
     {
       "path": "tests/engagement/firebase-id-token.test.mjs",
