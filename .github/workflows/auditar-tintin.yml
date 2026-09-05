@@ -102,19 +102,46 @@ jobs:
           cat /tmp/tintin-ci-http.log || true
           exit 1
 
-      - name: Browser, accessibility, SEO and performance gates
+      - name: Browser — navigation and loader
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+        run: npm run test:navigation-header
+
+      - name: Browser — UI responsive
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+        run: npm run test:phase8-ui
+
+      - name: Browser — accessibility
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+        run: npm run test:phase10-a11y
+
+      - name: Browser — SEO
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+        run: npm run test:phase11-seo
+
+      - name: Browser — performance
         env:
           PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
           PERF_BASE_URL: http://127.0.0.1:4173
-        run: |
-          npm run test:navigation-header
-          npm run test:phase8-ui
-          npm run test:phase10-a11y
-          npm run test:phase11-seo
-          npm run test:performance
-          npm run audit:canonical-viewports
-          npm run audit:global-responsive-geometry
-          npm run test:pages
+        run: npm run test:performance
+
+      - name: Browser — canonical viewports
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+        run: npm run audit:canonical-viewports
+
+      - name: Browser — responsive geometry
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+        run: npm run audit:global-responsive-geometry
+
+      - name: Browser — all pages smoke
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
+        run: npm run test:pages
 
       - name: Save failure evidence
         if: failure()
