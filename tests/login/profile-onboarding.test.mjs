@@ -95,6 +95,38 @@ test('aliases históricos de teléfono y username no reabren el onboarding', () 
   assert.equal(plan.needsUsername, false);
 });
 
+test('si savedLocation quedó parcial, conserva la ubicación válida de una versión anterior', () => {
+  const historical = {
+    ...COMPLETE,
+    savedLocation: { address: 'Av. España 1234' },
+    location: { latitude: -25.29, longitude: -57.63, label: 'Casa', formattedAddress: 'Av. España 1234, Asunción' },
+  };
+  assert.equal(hasUsableAddress(historical), true);
+  assert.equal(getProfileCompletionPlan({
+    profile: historical,
+    user: { email: 'juan@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  }).skip, true);
+});
+
+test('acepta ubicación histórica guardada como coordenadas o mapLocation', () => {
+  const coordinateProfile = {
+    ...COMPLETE,
+    savedLocation: null,
+    coordinates: { lat: -25.29, lng: -57.63 },
+    locationName: 'Casa',
+    address: 'Av. España 1234, Asunción',
+  };
+  const mapProfile = {
+    ...COMPLETE,
+    savedLocation: null,
+    mapLocation: { latitude: -25.29, longitude: -57.63, name: 'Casa' },
+  };
+  assert.equal(hasUsableAddress(coordinateProfile), true);
+  assert.equal(hasUsableAddress(mapProfile), true);
+});
+
 test('una fecha histórica inválida sí se considera faltante', () => {
   const plan = getProfileCompletionPlan({
     profile: { ...COMPLETE, dob: 'not-a-date' },

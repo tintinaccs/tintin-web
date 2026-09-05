@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-05T21:33:08.778Z",
-  "sourceFingerprint": "23fa3113605fb02455bdd8e60193e22c42203105f746a240024f182943011884",
+  "generatedAt": "2026-09-05T22:03:25.980Z",
+  "sourceFingerprint": "1d171e6d0d4ac4e000a7e7ba8eef914c0962b6a4884b9e774d8cec10aed4bb8c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 809,
     "textFiles": 776,
-    "totalBytes": 10001793,
+    "totalBytes": 10004532,
     "pages": 18,
     "modules": 557
   },
@@ -12802,7 +12802,7 @@
         "viewer"
       ],
       "bytes": 67234,
-      "sha256": "12594f7cf874cc1b528a3cecda1fa80d998058403e835493e199def000277c92",
+      "sha256": "94663103767ff4287a633c995ebb221e639ec0b9758fdc48c2596c8db8c056fd",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13591,7 +13591,7 @@
         "viewer"
       ],
       "bytes": 41864,
-      "sha256": "0cff6542f447b0c7a84f7ffea08a32346143d7e89f0a3733eb79796a8426d87a",
+      "sha256": "ff11f1648d43b9792cb730004f3e987689f52c7bb2b34caccfc6ce273bff82ec",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -25081,8 +25081,8 @@
     },
     {
       "path": "js/pages/profile/configuracion-inicial-perfil.mjs",
-      "bytes": 12440,
-      "sha256": "00f5381492420c79c2f05adc4065e0a08ae093f3490423f1c59f47bd4feb4265",
+      "bytes": 14097,
+      "sha256": "bf62c4f76af132f0931dfe8dd09fb735eae7d4db47f7480d39e40ba0247609c6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25106,7 +25106,7 @@
     {
       "path": "js/pages/profile/control-acceso-perfil.js",
       "bytes": 5886,
-      "sha256": "0835238a554de96737e1ee860c077ba1f1fe8b6c4196eca0e32a0dc88ec24613",
+      "sha256": "ffa2a2ad12d91f6624f127dfa7017f952c7f4017acdb114d494aa45fa3f7a183",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25131,7 +25131,7 @@
           "line": 24
         },
         {
-          "raw": "./configuracion-inicial-perfil.mjs?v=tintin-20260905-profile-aliases-3",
+          "raw": "./configuracion-inicial-perfil.mjs?v=tintin-20260905-profile-aliases-4",
           "target": "js/pages/profile/configuracion-inicial-perfil.mjs",
           "dynamic": false,
           "line": 25
@@ -30547,8 +30547,8 @@
     },
     {
       "path": "tests/login/profile-onboarding.test.mjs",
-      "bytes": 17903,
-      "sha256": "26395492dabf7a96fcc4ca56f9a80e50155a4654bc8450680f9af8bb54ea78ec",
+      "bytes": 18985,
+      "sha256": "b4cf39c1f0da721e0648e73bc28672d983d8ba1aaa3af2249de8404644bc3187",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35124,14 +35124,14 @@
     {
       "path": "js/pages/profile/configuracion-inicial-perfil.mjs",
       "extension": ".mjs",
-      "bytes": 12440,
-      "sha256": "00f5381492420c79c2f05adc4065e0a08ae093f3490423f1c59f47bd4feb4265"
+      "bytes": 14097,
+      "sha256": "bf62c4f76af132f0931dfe8dd09fb735eae7d4db47f7480d39e40ba0247609c6"
     },
     {
       "path": "js/pages/profile/control-acceso-perfil.js",
       "extension": ".js",
       "bytes": 5886,
-      "sha256": "0835238a554de96737e1ee860c077ba1f1fe8b6c4196eca0e32a0dc88ec24613"
+      "sha256": "ffa2a2ad12d91f6624f127dfa7017f952c7f4017acdb114d494aa45fa3f7a183"
     },
     {
       "path": "js/pages/profile/correccion-estadisticas-pedidos-perfil.js",
@@ -35239,7 +35239,7 @@
       "path": "login.html",
       "extension": ".html",
       "bytes": 67234,
-      "sha256": "12594f7cf874cc1b528a3cecda1fa80d998058403e835493e199def000277c92"
+      "sha256": "94663103767ff4287a633c995ebb221e639ec0b9758fdc48c2596c8db8c056fd"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -35443,7 +35443,7 @@
       "path": "perfil.html",
       "extension": ".html",
       "bytes": 41864,
-      "sha256": "0cff6542f447b0c7a84f7ffea08a32346143d7e89f0a3733eb79796a8426d87a"
+      "sha256": "ff11f1648d43b9792cb730004f3e987689f52c7bb2b34caccfc6ce273bff82ec"
     },
     {
       "path": "playwright.config.js",
@@ -36666,8 +36666,8 @@
     {
       "path": "tests/login/profile-onboarding.test.mjs",
       "extension": ".mjs",
-      "bytes": 17903,
-      "sha256": "26395492dabf7a96fcc4ca56f9a80e50155a4654bc8450680f9af8bb54ea78ec"
+      "bytes": 18985,
+      "sha256": "b4cf39c1f0da721e0648e73bc28672d983d8ba1aaa3af2249de8404644bc3187"
     },
     {
       "path": "tests/navigation/header-responsive.spec.js",
