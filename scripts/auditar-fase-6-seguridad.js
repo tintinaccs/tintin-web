@@ -214,7 +214,7 @@ check(
 
 check(
   'HTML no se almacena como versión inmutable',
-  headers.includes('/*.html\n  Cache-Control: no-cache, no-store, must-revalidate')
+  headers.includes('/*.html\n  Cache-Control: no-cache, must-revalidate')
 );
 check(
   'CSS y JavaScript versionados conservan caché inmutable',
