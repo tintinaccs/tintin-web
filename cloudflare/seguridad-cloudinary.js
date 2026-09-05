@@ -14,6 +14,7 @@ export const SUPERADMIN_EMAIL = SUPER_ADMIN_EMAIL;
 // las funciones continúan alojadas en Cloudflare Pages; se mantienen explícitos
 // para no convertir el CORS en un comodín.
 const TRUSTED_CROSS_ORIGINS = new Set([
+  'https://tintinaccesorios.pages.dev',
   `https://${'tintinaccs.com'}`,
   `https://${'www.tintinaccs.com'}`
 ]);
