@@ -73,6 +73,28 @@ test('un perfil histórico del panel no repite username, fecha ni ubicación ya 
   assert.equal(plan.needsAddress, false);
 });
 
+test('aliases históricos de teléfono y username no reabren el onboarding', () => {
+  const historical = {
+    name: 'Juan Pérez',
+    phoneNumber: '+595981123456',
+    userName: 'juan_perez',
+    birthDate: '2000-01-01',
+    locationName: 'Casa',
+    address: 'Av. España 1234',
+    addressLat: -25.29,
+    addressLng: -57.63,
+  };
+  const plan = getProfileCompletionPlan({
+    profile: historical,
+    user: { email: 'juan@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(plan.skip, true);
+  assert.equal(plan.needsPhone, false);
+  assert.equal(plan.needsUsername, false);
+});
+
 test('una fecha histórica inválida sí se considera faltante', () => {
   const plan = getProfileCompletionPlan({
     profile: { ...COMPLETE, dob: 'not-a-date' },
