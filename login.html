@@ -1016,6 +1016,12 @@ const loginConGoogle = async () => {
       markGoogleRedirectPending();
       setOverlayText('Abriendo Google en esta pestaña…');
       try {
+        // El popup se abre dentro del gesto original, pero el redirect no
+        // tiene esa restricción. Esperar acá garantiza que la persistencia
+        // local quedó elegida antes de que Firebase abandone esta página;
+        // de lo contrario el retorno puede restaurar user=null y el guard
+        // de /admin vuelve a mandar a /login.
+        await authPersistenceReady.catch(() => {});
         await signInWithRedirect(auth, provider);
         return;
       } catch (redirectError) {
