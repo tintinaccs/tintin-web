@@ -28,7 +28,9 @@ export async function onRequest(context) {
     const profileDocument = await firestoreAdminGet(env, `users/${uid}`);
     if (!profileDocument) throw new Error('El perfil todavía no existe');
     const profile = decodeFirestoreFields(profileDocument.fields || {});
-    const photoURL = clean(profile.photoURL || profile.photoUrl);
+    // Un valor canónico vacío representa una retirada explícita. Solo perfiles
+    // antiguos sin ese campo pueden recuperar la variante histórica.
+    const photoURL = clean(profile.photoURL ?? profile.photoUrl);
     await updateFirebaseUserProfile(env, uid, { photoURL });
 
     const pendingPath = `users/${uid}/profilePhotoReconciliations`;

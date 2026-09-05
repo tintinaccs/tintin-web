@@ -99,8 +99,8 @@ export async function onRequest(context) {
     await firestoreAdminCommit(env, [
       {
         path: `users/${uid}`,
-        fields: encodeFirestoreFields({ photoURL: '', updatedAt: now, lastChangeId: auditId }),
-        mergeFields: ['photoURL', 'updatedAt', 'lastChangeId'],
+        fields: encodeFirestoreFields({ photoURL: '', photoUrl: '', updatedAt: now, lastChangeId: auditId }),
+        mergeFields: ['photoURL', 'photoUrl', 'updatedAt', 'lastChangeId'],
         currentDocument: { updateTime: currentDocument.updateTime },
       },
       {

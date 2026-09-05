@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-05T03:23:11.645Z",
-  "sourceFingerprint": "c65c6008a88e2e176463699fcb3577db7b9f6fca99d1c849a103a2c511926bd4",
+  "generatedAt": "2026-09-05T10:16:39.027Z",
+  "sourceFingerprint": "018222474a38bcd79f7169d5af6fd9a0c97cd9eb695b94f4377d47d229237c6b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 821,
     "textFiles": 787,
-    "totalBytes": 10024126,
+    "totalBytes": 10024306,
     "pages": 18,
     "modules": 568
   },
@@ -19395,8 +19395,8 @@
     },
     {
       "path": "functions/api/profile-avatar-moderate.js",
-      "bytes": 6802,
-      "sha256": "753c509004cfde513b20f741ae636f3ac29e4a86ba69f46bb99930aa9bd2044b",
+      "bytes": 6828,
+      "sha256": "866f9e82169245c91c61a521072635f6ebeb43d44b555c16ac7971d6982cc453",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19424,8 +19424,8 @@
     },
     {
       "path": "functions/api/profile-avatar-reconcile.js",
-      "bytes": 3359,
-      "sha256": "d6e1c21b530c8f3948562e201a41200763fefa527f46537d219778ca5c32cab5",
+      "bytes": 3513,
+      "sha256": "4d46d5acc75be95ca1e3f7e4c11bc9f7f461cdae73baa0a6946ca0451c42ed7e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34080,14 +34080,14 @@
     {
       "path": "functions/api/profile-avatar-moderate.js",
       "extension": ".js",
-      "bytes": 6802,
-      "sha256": "753c509004cfde513b20f741ae636f3ac29e4a86ba69f46bb99930aa9bd2044b"
+      "bytes": 6828,
+      "sha256": "866f9e82169245c91c61a521072635f6ebeb43d44b555c16ac7971d6982cc453"
     },
     {
       "path": "functions/api/profile-avatar-reconcile.js",
       "extension": ".js",
-      "bytes": 3359,
-      "sha256": "d6e1c21b530c8f3948562e201a41200763fefa527f46537d219778ca5c32cab5"
+      "bytes": 3513,
+      "sha256": "4d46d5acc75be95ca1e3f7e4c11bc9f7f461cdae73baa0a6946ca0451c42ed7e"
     },
     {
       "path": "functions/api/profile-avatar-upload.js",
