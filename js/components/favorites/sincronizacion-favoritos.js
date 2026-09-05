@@ -1,4 +1,4 @@
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
+import { auth, db, appCheckReady, authPersistenceReady } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { heartIconMarkup } from './icono-corazon.js?v=tintin-20260817-heart-icon-1';
@@ -68,23 +68,39 @@ function loginForCurrentPage() {
   location.href = `login.html?from=${encodeURIComponent(target)}`;
 }
 
+async function stableAuthUser() {
+  try { await authPersistenceReady; } catch {}
+  try { await auth.authStateReady?.(); } catch {}
+  const user = auth.currentUser || currentUser || null;
+  if (user) currentUser = user;
+  return user;
+}
+
 async function toggle(raw) {
   const item = normalize(raw);
   if (!item) return { selected: false, changed: false };
-  if (!currentUser) {
+  const user = await stableAuthUser();
+  if (!user) {
     loginForCurrentPage();
     return { selected: false, changed: false, loginRequired: true };
   }
-  const token = await currentUser.getIdToken();
-  const response = await fetch('/api/engagement', {
-    method: 'POST',
-    cache: 'no-store',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'toggleFavorite', productId: item.id, ...item }),
-  });
-  const result = await response.json().catch(() => ({}));
-  if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo actualizar favoritos');
-  return { selected: Boolean(result.selected), changed: true, item };
+  for (const forceRefresh of [false, true]) {
+    const token = await user.getIdToken(forceRefresh);
+    const response = await fetch('/api/engagement', {
+      method: 'POST',
+      cache: 'no-store',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'toggleFavorite', productId: item.id, ...item }),
+    });
+    const result = await response.json().catch(() => ({}));
+    if (response.ok && result.ok === true) {
+      return { selected: Boolean(result.selected), changed: true, item };
+    }
+    if (response.status !== 401 || forceRefresh) {
+      throw new Error(result.error || 'No se pudo actualizar favoritos');
+    }
+  }
+  throw new Error('No pudimos validar tu sesión en este momento. Tu cuenta sigue iniciada; volvé a intentar en unos segundos.');
 }
 
 function subscribe(user) {
@@ -116,7 +132,7 @@ document.addEventListener('click', async event => {
   if (!addButton) return;
   const item = items.find(entry => entry.id === String(addButton.dataset.favoriteAddCart || ''));
   if (!item) return;
-  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20260903-identity-cache-sync-3');
+  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20260903-identity-cache-sync-2');
   await cart.addToCart({ ...item, qty: 1 });
 }, true);
 

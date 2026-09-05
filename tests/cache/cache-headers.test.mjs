@@ -11,9 +11,11 @@ function expectImmutable(route) {
 
 test('HTML conserva no-cache para permitir publicaciones inmediatas', () => {
   assert.ok(
-    headers.includes('/*.html\n  Cache-Control: no-cache, no-store, must-revalidate'),
+    headers.includes('/*.html\n  Cache-Control: no-cache, must-revalidate'),
     'HTML no debe quedar cacheado como asset inmutable'
   );
+  const globalBlock = headers.split(/\r?\n\s*\r?\n/)[1] || '';
+  assert.doesNotMatch(globalBlock, /Cache-Control:.*no-store/i, 'El bloque global no debe desactivar el caché de assets');
 });
 
 test('assets versionables conservan caché inmutable', () => {

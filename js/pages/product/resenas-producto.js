@@ -1,4 +1,4 @@
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
+import { auth, db, appCheckReady, authPersistenceReady } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { collection, doc, getDocs, limit, onSnapshot, orderBy, query, startAfter } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { heartIconMarkup } from '../../components/favorites/icono-corazon.js?v=tintin-20260817-heart-icon-1';
@@ -46,7 +46,24 @@ function clearPendingIntent() {
   try { sessionStorage.removeItem(PENDING_INTENT_KEY); } catch {}
 }
 
-function requestCommunityLogin(action, payload = {}) {
+async function stableAuthUser() {
+  // La persistencia local y la restauración inicial de Firebase son
+  // asíncronas. Si la persona toca un control social durante esa ventana,
+  // `currentUser` todavía puede ser null aunque Firebase ya tenga la sesión.
+  // Esperamos el estado canónico antes de decidir que hay que ir al login.
+  try { await authPersistenceReady; } catch {}
+  try { await auth.authStateReady?.(); } catch {}
+  const user = auth.currentUser || currentUser || null;
+  if (user) currentUser = user;
+  return user;
+}
+
+async function requestCommunityLogin(action, payload = {}) {
+  const user = await stableAuthUser();
+  if (user) {
+    showCommunityNotice('Tu sesión sigue activa. No pudimos validar esta acción todavía; volvé a intentar en unos segundos.');
+    return;
+  }
   savePendingIntent(action, payload);
   window.location.assign(`/login?from=${encodeURIComponent(productReturnPath())}`);
 }
@@ -163,7 +180,7 @@ function ensureSection() {
 }
 
 async function requestApi(input, method = 'POST', action = 'reviewInteractions', forceRefresh = false) {
-  const user = auth.currentUser || currentUser;
+  const user = await stableAuthUser();
   if (!user) {
     const error = new Error('Iniciá sesión para participar');
     error.requiresLogin = true;
@@ -206,13 +223,23 @@ async function requestApi(input, method = 'POST', action = 'reviewInteractions',
 async function api(input, method = 'POST', action = 'reviewInteractions') {
   try { return await requestApi(input, method, action); }
   catch (error) {
-    if (error?.status !== 401 || !auth.currentUser) throw error;
+    if (error?.status !== 401) throw error;
+    // Un 401 no significa automáticamente que la cuenta haya desaparecido:
+    // puede ser un token vencido mientras la sesión sigue viva en Firebase.
+    // Renovamos una sola vez y, si el backend todavía rechaza el token,
+    // conservamos la sesión y devolvemos un error reintentable en la página.
+    const user = await stableAuthUser();
+    if (!user) {
+      error.requiresLogin = true;
+      throw error;
+    }
     try { return await requestApi(input, method, action, true); }
     catch (retryError) {
       if (retryError?.status === 401) {
-        const preserved = new Error('Para confirmar esta acción necesitás volver a iniciar sesión. Conservamos lo que escribiste y te devolvemos aquí.');
+        const preserved = new Error('No pudimos validar tu sesión en este momento. Tu cuenta sigue iniciada; volvé a intentar en unos segundos.');
         preserved.status = 401;
-        preserved.requiresLogin = true;
+        preserved.requiresLogin = false;
+        preserved.authenticated = true;
         throw preserved;
       }
       throw retryError;
@@ -507,7 +534,7 @@ document.addEventListener('click', async event => {
   if (productButton) {
     event.preventDefault();
     if (productLiked) return;
-    if (!currentUser) return requestCommunityLogin('productLike');
+    if (!await stableAuthUser()) return requestCommunityLogin('productLike');
     productButton.disabled = true;
     try {
       const result = await api({ action: 'toggleFavorite', productId });
@@ -528,7 +555,7 @@ document.addEventListener('click', async event => {
     event.preventDefault();
     const reviewId = reviewLike.dataset.reviewLike;
     if (likedReviewIds.has(reviewId)) return;
-    if (!currentUser) return requestCommunityLogin('reviewLike', { reviewId });
+    if (!await stableAuthUser()) return requestCommunityLogin('reviewLike', { reviewId });
     reviewLike.disabled = true;
     try {
       const result = await api({ action: 'toggleReviewLike', productId, reviewId });
@@ -549,7 +576,7 @@ document.addEventListener('click', async event => {
     const replyId = replyLike.dataset.replyLike;
     const reviewId = replyLike.dataset.reviewId;
     if (likedReplyIds.has(replyId)) return;
-    if (!currentUser) return requestCommunityLogin('replyLike', { reviewId, replyId });
+    if (!await stableAuthUser()) return requestCommunityLogin('replyLike', { reviewId, replyId });
     replyLike.disabled = true;
     try {
       const result = await api({ action: 'likeReply', productId, reviewId, replyId });
@@ -632,9 +659,10 @@ document.addEventListener('submit', async event => {
       errorNode.textContent = 'Escribí un comentario de al menos 3 caracteres.';
       return;
     }
+    const user = await stableAuthUser();
+    if (!user) return requestCommunityLogin('review', { rating: selectedRating, comment });
     submit.disabled = true;
     try {
-      if (!currentUser) return requestCommunityLogin('review', { rating: selectedRating, comment });
       const result = await api({ action: 'createReview', productId, rating: selectedRating, comment });
       if (result.publicReview) {
         upsertLocalReview(result.publicReview);
@@ -664,7 +692,7 @@ document.addEventListener('submit', async event => {
     const submit = replyForm.querySelector('[type="submit"]');
     errorNode.textContent = '';
     if (!text) { errorNode.textContent = 'Escribí una respuesta.'; return; }
-    if (!currentUser) return requestCommunityLogin('reply', { reviewId, text });
+    if (!await stableAuthUser()) return requestCommunityLogin('reply', { reviewId, text });
     submit.disabled = true;
     try {
       const result = await api({ action: 'replyReview', productId, reviewId, text });
