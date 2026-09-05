@@ -27,6 +27,44 @@ function normalizePlaces(data) {
     }));
 }
 
+/**
+ * Acepta texto libre, coordenadas y los formatos habituales que entrega
+ * Google Maps al copiar un lugar. La búsqueda no debe mandar la URL completa
+ * al geocodificador: eso casi siempre termina en una lista vacía.
+ */
+export function parseLocationSearchInput(rawValue) {
+  const raw = String(rawValue || '').trim();
+  if (!raw) return null;
+  const coordinatePatterns = [
+    /@(-?\d{1,3}(?:\.\d+)?),(-?\d{1,3}(?:\.\d+)?)/,
+    /!3d(-?\d{1,3}(?:\.\d+)?)!4d(-?\d{1,3}(?:\.\d+)?)/i,
+    /(?:query|q|ll|center|destination|origin)=(-?\d{1,3}(?:\.\d+)?)(?:%2C|,|%252C)(-?\d{1,3}(?:\.\d+)?)/i,
+    /^\s*(-?\d{1,3}(?:\.\d+)?)\s*[,;]\s*(-?\d{1,3}(?:\.\d+)?)\s*$/,
+  ];
+  for (const pattern of coordinatePatterns) {
+    const match = raw.match(pattern);
+    if (!match) continue;
+    const lat = Number(match[1]);
+    const lng = Number(match[2]);
+    if (Number.isFinite(lat) && Number.isFinite(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180) {
+      return { lat, lng, name: 'Ubicación de Google Maps', address: raw, source: 'Google Maps' };
+    }
+  }
+
+  try {
+    const url = new URL(raw);
+    const decodedPath = decodeURIComponent(url.pathname).replace(/\+/g, ' ');
+    const placeMatch = decodedPath.match(/\/maps\/(?:place|search)\/([^/]+?)(?:\/@|\/|$)/i);
+    const pathQuery = placeMatch ? placeMatch[1].replace(/\+/g, ' ').trim() : '';
+    const query = url.searchParams.get('query') || url.searchParams.get('q') || pathQuery;
+    if (query && !/^-?\d+(?:\.\d+)?\s*,/.test(query)) return { query: query.trim() };
+    if (/maps\.app\.goo\.gl|goo\.gl\/maps/i.test(`${url.hostname}${url.pathname}`)) return { shortGoogleUrl: true };
+  } catch {
+    // Texto libre: se envía al buscador geográfico.
+  }
+  return null;
+}
+
 function endpointCandidates(query) {
   const encoded = encodeURIComponent(query);
   return [
@@ -37,10 +75,14 @@ function endpointCandidates(query) {
 
 /** Consulta el mismo buscador usado por checkout, con una ruta alternativa. */
 export async function searchPlaces(query, { signal } = {}) {
-  const q = String(query || '').trim();
+  const parsed = parseLocationSearchInput(query);
+  if (parsed?.lat != null) return [parsed];
+  if (parsed?.shortGoogleUrl) return [];
+  const q = String(parsed?.query || query || '').trim();
   if (q.length < MIN_QUERY_LENGTH) return [];
 
   let lastError = null;
+  let sawSuccessfulResponse = false;
   for (const url of endpointCandidates(q)) {
     try {
       const response = await fetch(url, {
@@ -49,18 +91,22 @@ export async function searchPlaces(query, { signal } = {}) {
         cache: 'no-store',
         signal,
       });
-      if (!response.ok) {
-        lastError = new Error(`location-search ${response.status}`);
-        continue;
-      }
-      const data = await response.json();
-      return normalizePlaces(data);
+        if (!response.ok) {
+          lastError = new Error(`location-search ${response.status}`);
+          continue;
+        }
+        sawSuccessfulResponse = true;
+        const data = await response.json();
+      const places = normalizePlaces(data);
+      if (places.length) return places;
+      lastError = new Error('location_search_empty');
     } catch (error) {
       if (error?.name === 'AbortError') return [];
       lastError = error;
     }
   }
 
+  if (sawSuccessfulResponse) return [];
   console.error('[location-picker] No se pudo buscar la dirección:', lastError);
   throw lastError || new Error('location_search_unavailable');
 }
