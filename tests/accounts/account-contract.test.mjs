@@ -32,6 +32,8 @@ test('Google y PIN convergen sobre findOrCreateUserByEmail', () => {
 
 test('OTP por correo conserva trazabilidad y detecta fallos de entrega de Resend', () => {
   const send = read('functions/api/email-otp-send.js');
+  assert.match(send, /acceptedLimit = Math\.floor\(0x1_0000_0000 \/ codeSpace\) \* codeSpace/);
+  assert.match(send, /while \(value >= acceptedLimit\)/);
   assert.match(send, /idempotency-key/);
   assert.match(send, /tintin-otp-/);
   assert.match(send, /tags: \[\{ name: 'category', value: 'auth_otp' \}\]/);
