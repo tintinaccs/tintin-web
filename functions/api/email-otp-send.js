@@ -81,8 +81,17 @@ async function enforceIpRateLimit(request, env, now) {
 }
 
 function generateCode() {
-  const value = crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000;
-  return String(value).padStart(6, '0');
+  // Rechazo los valores fuera del mayor múltiplo de 1.000.000 que cabe en
+  // uint32 para no introducir sesgo modular en los códigos OTP.
+  const codeSpace = 1_000_000;
+  const acceptedLimit = Math.floor(0x1_0000_0000 / codeSpace) * codeSpace;
+  const random = new Uint32Array(1);
+  let value;
+  do {
+    crypto.getRandomValues(random);
+    value = random[0];
+  } while (value >= acceptedLimit);
+  return String(value % codeSpace).padStart(6, '0');
 }
 
 async function getResendEmailStatus(apiKey, emailId) {
