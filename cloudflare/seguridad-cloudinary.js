@@ -127,6 +127,8 @@ export async function requireStaffPermission(request, env, moduleKey, actionKey)
     moduleKey === 'comunidad' && actionKey === 'responder' && ['admin', 'agent'].includes(role)
   ) || (
     moduleKey === 'usuarios' && actionKey === 'gestionarFotos' && ['admin', 'agent'].includes(role)
+  ) || (
+    moduleKey === 'pedidos' && actionKey === 'cambiarPago' && ['admin', 'agent'].includes(role)
   );
   // Las acciones delegables son opt-in: si la matriz no tiene true todavía,
   // no se concede acceso por accidente durante una migración o documento

@@ -2,6 +2,7 @@ import {
   jsonResponse,
   originIsAllowed,
   preflightResponse,
+  requireStaffPermission,
   requireSuperAdmin,
   statusFromError,
 } from '../../cloudflare/seguridad-cloudinary.js';
@@ -23,10 +24,15 @@ export async function onRequest(context) {
   if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido.' }, 405, origin, requestUrl);
 
   try {
-    const actor = await requireSuperAdmin(request);
     const raw = await request.text();
     if (!raw || new TextEncoder().encode(raw).byteLength > 64 * 1024) throw new Error('Solicitud inválida.');
     const body = JSON.parse(raw);
+    const paymentOnly = body.action !== 'createOrder'
+      && Object.keys(body).filter(key => !['orderId', 'paymentStatus', 'paymentMethod', 'changeId', 'baseChangeId', 'source'].includes(key)).length === 0
+      && Object.prototype.hasOwnProperty.call(body, 'paymentStatus');
+    const actor = paymentOnly
+      ? await requireStaffPermission(request, env, 'pedidos', 'cambiarPago')
+      : await requireSuperAdmin(request);
     const actorContext = {
       uid: actor.uid,
       email: actor.email,

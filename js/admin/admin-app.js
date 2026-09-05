@@ -2453,10 +2453,9 @@ window.updatePayStatus = async (orderId, status) => {
   const o = allOrders.find(o => o.id === orderId);
   const prevStatus = o?.paymentStatus || o?.payment?.status || 'pendiente';
   try {
-    await updateDoc(doc(db, 'orders', orderId), {
-      'payment.status': status,
+    await window.TintinInventoryIntegrity.updateEditedOrder(orderId, {
       paymentStatus: status,
-      updatedAt: serverTimestamp()
+      paymentMethod: o?.payment?.method || o?.paymentMethod || 'efectivo'
     });
     if (o) { if (o.payment) o.payment.status = status; o.paymentStatus = status; }
     logAudit('cambiar_estado_pago', 'pedido', orderId, o?.shortId || orderId,
@@ -2646,7 +2645,13 @@ window.bulkChangePayStatus = async function() {
   if (!confirm(`¿Cambiar el pago a "${PAY_STATUS_LABELS[status]}" en ${n} pedido(s)?`)) return;
   try {
     const ids = [..._selectedOrders];
-    await batchUpdateChunked(ids, () => ({ 'payment.status': status, paymentStatus: status, updatedAt: serverTimestamp() }), 'orders');
+    for (const id of ids) {
+      const order = allOrders.find(item => item.id === id);
+      await window.TintinInventoryIntegrity.updateEditedOrder(id, {
+        paymentStatus: status,
+        paymentMethod: order?.payment?.method || order?.paymentMethod || 'efectivo'
+      });
+    }
     ids.forEach(id => { const o = allOrders.find(x => x.id === id); if (o) { if (o.payment) o.payment.status = status; o.paymentStatus = status; } });
     logAudit('cambiar_estado_pago', 'pedido', '', '', `Pago → ${PAY_STATUS_LABELS[status]}`, { bulk: true, count: n });
     toast(`Estado de pago actualizado en ${n} pedido(s)`);

@@ -48,6 +48,18 @@ const secureOrder = read('js/orders/pedido-checkout-seguro.js');
 const phase4Order = read('apps-script/CrearPedido.gs');
 const inventoryIntegrity = read('js/admin/products/integridad-inventario-admin.js');
 const deleteFix = read('js/admin/orders/eliminacion-pedidos-admin.js');
+const orderMutationApi = read('functions/api/admin-order-mutation.js');
+const security = read('cloudflare/seguridad-cloudinary.js');
+
+check(
+  'Los cambios de pago pasan por el dominio server-side y conservan la matriz de permisos',
+  /requireStaffPermission\(request, env, 'pedidos', 'cambiarPago'\)/.test(orderMutationApi) &&
+    /paymentOnly/.test(orderMutationApi) &&
+    /moduleKey === 'pedidos' && actionKey === 'cambiarPago'/.test(security) &&
+    /TintinInventoryIntegrity\.updateEditedOrder\(orderId/.test(adminApp) &&
+    /TintinInventoryIntegrity\.updateEditedOrder\(id/.test(adminApp),
+  'El estado de pago no debe escribir directamente desde el navegador ni saltarse la autorización server-side.'
+);
 
 // ===========================================================================
 // 1. EDICIÓN COMPLETA EN EL PANEL (saveOrderEdit)
