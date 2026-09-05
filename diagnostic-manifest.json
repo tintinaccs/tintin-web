@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-05T14:42:47.335Z",
-  "sourceFingerprint": "850cd78ab6db2598331f06d373c51937db12849c4b82fcfc8ed0b9021c03bd86",
+  "generatedAt": "2026-09-05T15:12:15.788Z",
+  "sourceFingerprint": "780aab5098de121730850ee2533df3d177f52ea510be60303ada3e42cef61810",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 809,
     "textFiles": 776,
-    "totalBytes": 9998849,
+    "totalBytes": 9999712,
     "pages": 18,
     "modules": 557
   },
@@ -12801,8 +12801,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 66679,
-      "sha256": "d79ae2fb1fe9ed8abe3bf4c913f9a5574b0c54fe3aa0bff44b598eb0e3f6f2bc",
+      "bytes": 67083,
+      "sha256": "4669d3ce6caa951f463448b1bd916a5a2487ade41b413e9a370778a308f8dd8b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12860,17 +12860,17 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-2",
           "target": "js/analytics/analitica.js",
-          "line": 1265
+          "line": 1271
         },
         {
           "raw": "tienda.js?v=tintin-20260903-identity-cache-sync-2",
           "target": "tienda.js",
-          "line": 1266
+          "line": 1272
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-2",
           "target": "js/components/color/esquema-color.js",
-          "line": 1267
+          "line": 1273
         }
       ],
       "styles": [
@@ -13040,19 +13040,19 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-2",
           "target": "js/analytics/analitica.js",
-          "line": 1265,
+          "line": 1271,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20260903-identity-cache-sync-2",
           "target": "tienda.js",
-          "line": 1266,
+          "line": 1272,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-2",
           "target": "js/components/color/esquema-color.js",
-          "line": 1267,
+          "line": 1273,
           "exists": true
         },
         {
@@ -18045,7 +18045,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 341027,
-      "sha256": "facf88b507ecc777321056f94c935e7c10808e734f99ae81bcf19ec6e9c78672",
+      "sha256": "dcd5054a195c97236d61755d0d138f055e49e20bf6d151a13bc99b1e41d794e1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29730,8 +29730,8 @@
     },
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
-      "bytes": 3539,
-      "sha256": "78ef2ebfd5a3c9d819015cca5c97c8fe0f1f14cc008ad61895ef26de60d2e9e8",
+      "bytes": 3998,
+      "sha256": "389cc96005aac02b81a3edada9229353e56f67ca166c2db06dbce25a081d2c95",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32662,13 +32662,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 341027,
-      "sha256": "facf88b507ecc777321056f94c935e7c10808e734f99ae81bcf19ec6e9c78672"
+      "sha256": "dcd5054a195c97236d61755d0d138f055e49e20bf6d151a13bc99b1e41d794e1"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 340942,
-      "sha256": "b57ee19408eea4ea2cfdfc7a907ab12be80a4671ec842048bb199b96c7c76ed8"
+      "sha256": "df021cdd8d1709921ffcc62ba0871d7a9b0cc527d01e98277445a7a5299e94b8"
     },
     {
       "path": "config/public-site.json",
@@ -35229,8 +35229,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 66679,
-      "sha256": "d79ae2fb1fe9ed8abe3bf4c913f9a5574b0c54fe3aa0bff44b598eb0e3f6f2bc"
+      "bytes": 67083,
+      "sha256": "4669d3ce6caa951f463448b1bd916a5a2487ade41b413e9a370778a308f8dd8b"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -36519,8 +36519,8 @@
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 3539,
-      "sha256": "78ef2ebfd5a3c9d819015cca5c97c8fe0f1f14cc008ad61895ef26de60d2e9e8"
+      "bytes": 3998,
+      "sha256": "389cc96005aac02b81a3edada9229353e56f67ca166c2db06dbce25a081d2c95"
     },
     {
       "path": "tests/cache/cache-headers.test.mjs",

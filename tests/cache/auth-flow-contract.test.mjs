@@ -42,6 +42,10 @@ test('los tres accesos conservan el mismo cierre de sesión y Google abre dentro
   assert.ok(popupIndex >= 0, 'Google debe abrir la ventana emergente');
   assert.ok(persistenceAfterPopup > popupIndex, 'Google no debe esperar persistencia antes de abrir el popup');
   assert.match(login, /await finishGoogleLogin\(cred\.user\)/);
+  const redirectIndex = login.indexOf('await signInWithRedirect(auth, provider);');
+  const persistenceBeforeRedirect = login.lastIndexOf('await authPersistenceReady.catch(() => {});', redirectIndex);
+  assert.ok(persistenceBeforeRedirect > popupIndex, 'El fallback redirect debe esperar persistencia después del intento de popup');
+  assert.ok(persistenceBeforeRedirect < redirectIndex, 'El fallback redirect debe persistir antes de abandonar la página');
   assert.match(login, /const user = await verifyOtpCode\(otpEmail, code\);[\s\S]*?await finishOtpLogin\(user\)/);
   assert.match(emailAuth, /await authPersistenceReady;[\s\S]*?signInWithCustomToken\(auth, data\.customToken\)/);
   assert.match(emailAuth, /identifierBody\(identifier\)/);
