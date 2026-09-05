@@ -182,7 +182,7 @@ check(
 );
 check(
   'client o rol ausente no entra al panel',
-  /if \(role === 'client' \|\| !role\) \{\s*\n\s*window\.location\.href = 'perfil\.html'/.test(adminApp),
+  /if \(role === 'client' \|\| !role\) \{\s*\n\s*window\.location\.(?:href|replace)\('perfil\.html'\)/.test(adminApp),
   'Una clienta autenticada nunca debe entrar al panel.'
 );
 
