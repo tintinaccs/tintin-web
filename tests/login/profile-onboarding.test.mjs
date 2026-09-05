@@ -366,8 +366,20 @@ test('una cuenta incomplete necesita username y fecha de nacimiento cuando falta
   assert.equal(plan.needsAddress, false);
 });
 
-test('profileStatus no exime username ni DOB: todos los clientes deben tenerlos', () => {
-  for (const profileStatus of ['active', 'legacy', undefined]) {
+test('profileStatus active es la marca canónica y no reabre el alta', () => {
+  const plan = getProfileCompletionPlan({
+    profile: { ...CORE, profileStatus: 'active' },
+    user: { email: 'cliente@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(plan.skip, true);
+  assert.equal(plan.needsUsername, false);
+  assert.equal(plan.needsDob, false);
+});
+
+test('profileStatus legacy o ausente no exime username ni DOB', () => {
+  for (const profileStatus of ['legacy', undefined]) {
     const plan = getProfileCompletionPlan({
       profile: { ...CORE, ...(profileStatus ? { profileStatus } : {}) },
       user: { email: 'cliente@hotmail.com' },
