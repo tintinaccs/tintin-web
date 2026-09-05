@@ -111,7 +111,7 @@ export async function reconcileLoyaltyTierNotification(
       : `Tu nivel actual es ${nextTier.label}, según tus compras válidas.`)
     : 'Tu nivel de fidelidad quedó sin insignia activa por el estado actual de tus compras.';
   const event = {
-    kind: 'loyalty_tier_awarded',
+    kind: gained ? 'loyalty_tier_awarded' : 'loyalty_tier_updated',
     actorType: 'system',
     actorUid: uid,
     actorName: customerName(afterOrder),
@@ -131,7 +131,8 @@ export async function reconcileLoyaltyTierNotification(
     createdAt: new Date(),
   };
   const [user, admin] = await Promise.all([
-    notifyUser(env, uid, event, dedupeKey),
+    // Las bajadas se reflejan en el perfil, sin notificación al cliente.
+    gained ? notifyUser(env, uid, event, dedupeKey) : Promise.resolve({ skipped: 'silent_downgrade' }),
     notifyAdmin(env, { ...event, title: `Fidelidad actualizada: ${customerName(afterOrder)}`, body: `${customerName(afterOrder)}: ${nextTier?.label || 'sin nivel activo'}.`, targetUrl: '/admin.html#section-usuarios' }, `admin:${dedupeKey}`),
   ]);
   return { ok: true, changed: true, previousTier, nextTier, user, admin };

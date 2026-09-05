@@ -66,6 +66,8 @@ jobs:
           node scripts/backup-firestore.mjs --dry-run
           node scripts/restore-firestore.mjs --dry-run
           npm run test:accounts
+          node --test tests/profile/*.test.mjs
+          node --test tests/loyalty/*.test.mjs
           npm run test:cart-persistence
           npm run test:web-push
           npm run test:engagement

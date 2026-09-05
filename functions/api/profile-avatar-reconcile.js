@@ -14,7 +14,13 @@ function clean(value, max = 1200) {
   return String(value == null ? '' : value).trim().slice(0, max);
 }
 
-export async function onRequest(context) {
+async function reconcileProfileAvatar(context, {
+  authenticate = requireFirebaseUser,
+  getProfile = firestoreAdminGet,
+  listPending = firestoreAdminList,
+  updateAuth = updateFirebaseUserProfile,
+  commit = firestoreAdminCommit,
+}) {
   const { request, env } = context;
   const origin = request.headers.get('origin') || '';
   const requestUrl = request.url;
@@ -23,18 +29,18 @@ export async function onRequest(context) {
   if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido' }, 405, origin, requestUrl);
 
   try {
-    const user = await requireFirebaseUser(request);
+    const user = await authenticate(request);
     const uid = clean(user.uid, 128);
-    const profileDocument = await firestoreAdminGet(env, `users/${uid}`);
+    const profileDocument = await getProfile(env, `users/${uid}`);
     if (!profileDocument) throw new Error('El perfil todavía no existe');
     const profile = decodeFirestoreFields(profileDocument.fields || {});
     // Un valor canónico vacío representa una retirada explícita. Solo perfiles
     // antiguos sin ese campo pueden recuperar la variante histórica.
     const photoURL = clean(profile.photoURL ?? profile.photoUrl);
-    await updateFirebaseUserProfile(env, uid, { photoURL });
+    await updateAuth(env, uid, { photoURL });
 
     const pendingPath = `users/${uid}/profilePhotoReconciliations`;
-    const pendingDocuments = await firestoreAdminList(env, pendingPath, 20);
+    const pendingDocuments = await listPending(env, pendingPath, 20);
     const writes = [];
     let resolved = 0;
     for (const document of pendingDocuments) {
@@ -62,7 +68,7 @@ export async function onRequest(context) {
         }),
         currentDocument: { exists: false },
       });
-      await firestoreAdminCommit(env, writes);
+      await commit(env, writes);
     }
     return jsonResponse({ ok: true, authSync: 'synchronized', resolved }, 200, origin, requestUrl);
   } catch (error) {
@@ -70,3 +76,9 @@ export async function onRequest(context) {
     return jsonResponse({ ok: false, error: String(error?.message || 'No se pudo reconciliar el perfil').slice(0, 300) }, status, origin, requestUrl);
   }
 }
+
+export function createProfileAvatarReconciler(dependencies = {}) {
+  return context => reconcileProfileAvatar(context, dependencies);
+}
+
+export const onRequest = createProfileAvatarReconciler();

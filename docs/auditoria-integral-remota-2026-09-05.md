@@ -2,12 +2,12 @@
 
 **Fecha de corte:** 2026-09-05  
 **Repositorio:** \`tintinaccs/tintin-web\`  
-**Versión candidata:** PR #692, commit \`cd3c3e2b865e84568643cd726d9efb86dc49dc65\`  
+**Versión candidata:** PR #692 en borrador; consultar su HEAD y los checks del mismo commit.  
 **Producción observada:** \`https://tintinaccesorios.pages.dev\` (rama \`main\`)
 
 ## Alcance
 
-La revisión cubre el repositorio completo, no solo el PR #666: páginas públicas, checkout, autenticación, perfil, panel administrativo, Cloudflare Functions, Firestore, Cloudinary, Sheets/Apps Script, CI/CD, artefactos generados, seguridad, accesibilidad, responsive, SEO, rendimiento, sincronización y observabilidad.
+El alcance solicitado comprende el repositorio completo, no solo el PR #666: páginas públicas, checkout, autenticación, perfil, panel administrativo, Cloudflare Functions, Firestore, Cloudinary, Sheets/Apps Script, CI/CD, artefactos generados, seguridad, accesibilidad, responsive, SEO, rendimiento, sincronización y observabilidad. La revisión sigue en curso: este documento no certifica cobertura funcional exhaustiva ni ausencia de defectos.
 
 No se eliminó una función de negocio por apariencia o duplicación. Los cambios se contrastaron con rutas, consumidores, contratos y artefactos generados. Producción y operaciones destructivas no fueron modificadas.
 
@@ -15,8 +15,8 @@ No se eliminó una función de negocio por apariencia o duplicación. Los cambio
 
 | Área | Estado | Evidencia o límite |
 |---|---|---|
-| Código candidato | Verificado | Auditoría estática, contratos y sintaxis aprobados |
-| CI/CD | Verificado | Repository audit y Cloudflare Pages aprobados sobre el commit indicado |
+| Código candidato | Incompleto | Persisten defectos de conservación de fotos e identidad pública |
+| CI/CD | Consultar por commit | Los checks de commits anteriores no validan automáticamente el HEAD actual |
 | Navegación | Verificado automáticamente | Smoke de 18 páginas aprobado |
 | Responsive/UI | Verificado automáticamente | Viewports, geometría y UI aprobados |
 | Seguridad/Firestore | Verificado en código y emulador | Reglas adversariales aprobadas |
@@ -39,7 +39,7 @@ No se eliminó una función de negocio por apariencia o duplicación. Los cambio
 
 Sheets no debe competir con Firestore ni crear una segunda identidad. La sincronización debe ser dirigida, idempotente y auditable; copiar todo en todo produciría ciclos y conflictos.
 
-## Correcciones integradas
+## Cambios incorporados al candidato, sujetos a validación funcional
 
 - Persistencia local de Firebase Auth y espera antes de redirects protegidos.
 - Coordinación de actividad entre pestañas, expiración de cuentas regulares y excepción permanente del Super Admin.
@@ -50,7 +50,7 @@ Sheets no debe competir con Firestore ni crear una segunda identidad. La sincron
 - Fotos con Cloudinary, metadatos Firestore, moderación, reemplazo administrativo y auditoría append-only.
 - Reconciliación de perfiles sin documentos duplicados.
 - Fidelidad basada solo en compras válidas; cancelados y reembolsados excluidos.
-- Niveles configurables y notificaciones idempotentes de ascenso/descenso.
+- Niveles configurables; notificaciones de ascenso al cliente y administrador. Las bajadas solo avisan al administrador.
 - Cambios de pago administrativo protegidos por autorización del servidor.
 - Favicon de libélula y referencias cache-versionadas.
 - Manifesto diagnóstico reproducible y CI dividido en etapas observables.
@@ -63,7 +63,7 @@ Sheets no debe competir con Firestore ni crear una segunda identidad. La sincron
 **Severidad:** alta operativa.  
 **Causa:** #692 sigue abierto y no hubo merge/deploy.  
 **Impacto:** los arreglos todavía no están activos para clientes reales.  
-**Solución:** fusionar #691 y luego #692, esperar Pages y ejecutar smoke autenticado.  
+**Solución:** resolver primero los bloqueantes H7–H9 y completar pruebas del candidato; solo después considerar una fusión autorizada y smoke autenticado.  
 **Riesgo:** medio; requiere ventana controlada y rollback.
 
 ### H2 — Auth real multi-entorno sin evidencia empírica
@@ -100,12 +100,37 @@ Sheets no debe competir con Firestore ni crear una segunda identidad. La sincron
 **Evidencia:** \`requestStorageAccess\`, \`browsing-topics\` y el SVG fueron reportados; el SVG fue normalizado en el candidato.  
 **Solución:** repetir en producción después del deploy y clasificar cada mensaje por request y reproducción.
 
+### H7 — Historial de fotos sin conservación de los archivos
+
+**Severidad:** alta; bloquea la aprobación del candidato.  
+**Evidencia:** `functions/api/profile-avatar-upload.js` y `profile-avatar-admin-upload.js` reutilizan un identificador con `overwrite: true`; `profile-avatar-moderate.js` llama a la destrucción del recurso. Guardar URLs en `profilePhotoHistory` no conserva el binario eliminado o sobrescrito.  
+**Causa raíz:** identidad del recurso mutable, compartida entre distintas revisiones de foto.  
+**Impacto:** pérdida del historial solicitado; una retirada concurrente puede afectar un reemplazo reciente.  
+**Solución pendiente:** revisiones inmutables, archivo privado con acceso administrativo, validación del recurso en servidor y transición versionada. La retirada pública debe conservar el archivo de auditoría sin mantenerlo públicamente accesible.  
+**Dependencias y riesgo:** comprobar capacidades/configuración de Cloudinary antes de migrar recursos. No ejecutar borrados ni migraciones masivas en producción.
+
+### H8 — Identidad pública copiada en registros históricos
+
+**Severidad:** alta de consistencia/privacidad.  
+**Evidencia:** `cloudflare/participacion-clientes.js` conserva nombres y fotos en registros de participación; todavía falta probar su actualización al cambiar o retirar una foto y al modificar un rol.  
+**Impacto:** reseñas o comentarios antiguos pueden mostrar identidad desactualizada; la identidad oficial y de staff no está certificada en todos los flujos.  
+**Solución pendiente:** separar identidad actual autorizada de la evidencia histórica privada; revisar proyecciones y consumidores, evitando publicar datos que solo debe ver el staff.  
+**Dependencias y riesgo:** contrato de permisos, UID canónico y estrategia de fotos H7; migración compatible y pruebas por rol antes de publicar.
+
+### H9 — Cobertura automática insuficiente para afirmar finalización
+
+**Severidad:** alta de validación.  
+**Evidencia:** varias pruebas de perfiles solo buscan cadenas en archivos. Las suites de perfiles y fidelidad no estaban incluidas explícitamente en el workflow principal.  
+**Corrección del candidato:** incorporadas ambas suites a CI; ocho pruebas nuevas ejecutan el manejador real de reconciliación con Auth/Firestore simulados. Comprueban retirada, compatibilidad heredada, fallo de Auth, ausencia de perfil, reconciliaciones antiguas y escritura versionada con auditoría.  
+**Resultado local:** 22 pruebas de perfiles y fidelidad aprobadas. No equivale a una prueba con proveedores reales.  
+**Pendiente:** pruebas funcionales de carga/moderación concurrente, propagación pública y login entre pestañas con proveedores reales.
+
 ## Mapa de reparación
 
 \`\`\`text
 PR #691 (base sobre main)
         ↓
-PR #692 (integración completa)
+PR #692 (borrador: resolver H7–H9)
         ↓
 CI + CodeQL + Cloudflare Pages
         ↓
@@ -122,14 +147,14 @@ cierre de PRs absorbidos
 
 ## Evidencia automatizada
 
-El CI del candidato aprobó build exacto, ausencia de drift, CSS, mapa de integraciones, contratos estáticos, cuentas/sincronización, reglas de Firestore con emulador, Super Admin, navegación, responsive, accesibilidad, SEO, rendimiento, viewports, geometría y smoke de todas las páginas.
+Commits anteriores obtuvieron checks aprobados de build, contratos, emulador y navegador. El resultado del HEAD debe verificarse por separado en GitHub. Las pruebas estáticas y de interfaz no sustituyen pruebas funcionales de integraciones ni garantizan que cada requisito esté implementado.
 
 Las suites locales cubren cuentas, login/perfil, checkout, carrito, push, imágenes, arquitectura, roles, sincronización, engagement, fidelidad, pedidos y diagnósticos.
 
 ## Orden recomendado de cierre
 
-1. Ejecutar la matriz autenticada real con cuenta Google, cuenta OTP y cuenta bloqueada.
-2. Fusionar #691 y #692 en ese orden.
+1. Resolver H7–H9 y ejecutar la matriz autenticada real con cuenta Google, cuenta OTP y cuenta bloqueada.
+2. Solo con evidencia suficiente y autorización, fusionar #691 y #692 en ese orden.
 3. Confirmar deploy y repetir navegación, admin, sesión multi-pestaña y compra controlada.
 4. Confirmar logs de Cloudflare, Firebase, Cloudinary, Sheets y Apps Script.
 5. Cerrar PRs absorbidos con trazabilidad.

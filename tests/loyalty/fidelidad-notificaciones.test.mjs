@@ -32,7 +32,7 @@ test('notifica el ascenso al superar el umbral y usa una clave estable', async (
   assert.equal(h.calls.admin[0][2], 'admin:loyalty-tier:u-1:none:fiel:change-1');
 });
 
-test('notifica la pérdida del nivel cuando una compra deja de ser válida', async () => {
+test('la pérdida de nivel es silenciosa para el cliente y avisa al administrador', async () => {
   const rows = [1, 2, 3, 4].map(id => firestoreOrder(`old-${id}`, { userId: 'u-2', userEmail: 'u2@example.com', status: 'entregado' }));
   const h = harness(rows);
   const result = await reconcileLoyaltyTierNotification({}, {
@@ -43,7 +43,10 @@ test('notifica la pérdida del nivel cuando una compra deja de ser válida', asy
   });
   assert.equal(result.changed, true);
   assert.equal(result.nextTier, null);
-  assert.match(h.calls.user[0][2].title, /actualizado/i);
+  assert.equal(h.calls.user.length, 0);
+  assert.equal(h.calls.admin.length, 1);
+  assert.equal(h.calls.admin[0][1].kind, 'loyalty_tier_updated');
+  assert.deepEqual(result.user, { skipped: 'silent_downgrade' });
 });
 
 test('no vuelve a notificar cuando el nivel no cambia', async () => {
