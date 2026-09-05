@@ -20,7 +20,7 @@ check('Cloudflare consume el mismo contrato generado', cloudflare.includes("from
 check('Rules acepta la allowlist moderna completa', rules.includes("['client', 'admin', 'agent', 'viewer']"));
 check('customerId queda inmutable y ligado al UID', rules.includes("'customerId'") && rules.includes("data.customerId == 'CUS_' + userId"));
 check('La auditoría continúa append-only', /match \/auditLog\/\{logId\}[\s\S]{0,260}allow update, delete: if false/.test(rules));
-check('PIN ya no excluye cuentas Google', !otp.includes('google_account_exists') && !otp.includes("providers.includes('google.com')"));
+check('OTP exige Google para cuentas Google', otp.includes("providers.includes('google.com')") && otp.includes("google_account_required"));
 check(
   'Eliminar cuenta conserva tombstone',
   deletion.includes('applyUserLifecycle') &&
