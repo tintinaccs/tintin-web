@@ -2,7 +2,7 @@
 
 **Fecha de corte:** 2026-09-05  
 **Repositorio:** \`tintinaccs/tintin-web\`  
-**Versión candidata:** PR #692, commit \`983e450045905c804da95884321012bfb499738f\`  
+**Versión candidata:** PR #692, commit \`cd3c3e2b865e84568643cd726d9efb86dc49dc65\`  
 **Producción observada:** \`https://tintinaccesorios.pages.dev\` (rama \`main\`)
 
 ## Alcance
@@ -139,4 +139,3 @@ Las suites locales cubren cuentas, login/perfil, checkout, carrito, push, imáge
 ## Criterio de cierre
 
 Checks verdes no bastan. El cierre exige que el commit desplegado coincida con el candidato, Auth y compra real funcionen, no haya duplicados, los roles se respeten en backend/UI y cada pendiente manual tenga evidencia segura o una decisión explícita.
-
