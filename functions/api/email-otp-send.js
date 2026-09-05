@@ -11,7 +11,8 @@ import {
   resolveEmailFromUsernameKey,
   fsString,
   fsInteger,
-  fsTimestamp
+  fsTimestamp,
+  getAuthProvidersByEmail
 } from '../../cloudflare/firebase-admin-ligero.js';
 import { usernameKey } from '../../js/components/forms/utilidades-username.js';
 
@@ -219,6 +220,11 @@ export async function onRequest(context) {
       if (!emailIsValid(email)) {
         return jsonResponse({ success: false, error: 'invalid_email' }, 400, origin, requestUrl);
       }
+    }
+
+    const authIdentity = await getAuthProvidersByEmail(env, email);
+    if (authIdentity.providers.includes('google.com')) {
+      return jsonResponse({ success: false, error: 'google_account_required' }, 403, origin, requestUrl);
     }
 
     const path = docPath(email);

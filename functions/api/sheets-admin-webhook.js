@@ -8,6 +8,7 @@ import {
 import { jsonResponse, SUPERADMIN_EMAIL } from '../../cloudflare/seguridad-cloudinary.js';
 import { applyUserLifecycle } from '../../cloudflare/user-lifecycle-domain.js';
 import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
+import { reconcileLoyaltyTierNotification } from '../../cloudflare/fidelidad-notificaciones.js';
 
 const MAX_BODY_BYTES = 64 * 1024;
 const ROLES = new Set(['client', 'viewer', 'agent', 'admin']);
@@ -219,6 +220,13 @@ export async function onRequestPost({ request, env }) {
     else if (input.entity === 'order') result = await handleOrder(env, input);
     else throw new Error('Entidad no permitida');
 
+    if (input.entity === 'order') {
+      await reconcileLoyaltyTierNotification(env, {
+        orderId: result.orderId,
+        beforeOrder: result.beforeOrder || null,
+        afterOrder: result.order || null,
+      }).catch(error => console.warn('[sheets-admin-webhook] fidelidad diferida:', error?.message || error));
+    }
     return jsonResponse({ ok: true, result, revision: ADMIN_SYNC_REVISION }, 200, '', request.url);
   } catch (error) {
     const status = Number(error?.status) === 409 ? 409 : 400;

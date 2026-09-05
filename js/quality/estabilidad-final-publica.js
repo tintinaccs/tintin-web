@@ -2,7 +2,7 @@
  * No crea autoridades paralelas: solo fortalece las superficies ya renderizadas
  * por Producto, Perfil y el shell modular de navegación. */
 
-const VERSION = 'tintin-20260829-final-stability-1';
+const VERSION = 'tintin-20260904-profile-reconcile-1';
 const path = window.location.pathname.replace(/\/+$/, '') || '/';
 
 function injectStyles() {
@@ -188,10 +188,9 @@ async function enhanceProfile() {
       photoButton.disabled = true;
       photoButton.textContent = 'Subiendo…';
       try {
-        const [{ auth, db }, authApi, firestoreApi] = await Promise.all([
+        const [{ auth }, authApi] = await Promise.all([
           import('../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1'),
           import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),
-          import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
         ]);
         if (typeof auth.authStateReady === 'function') await auth.authStateReady();
         const user = auth.currentUser;
@@ -215,11 +214,14 @@ async function enhanceProfile() {
         const uploaded = await upload.json().catch(() => ({}));
         if (!upload.ok || !uploaded.secure_url) throw new Error(uploaded.error?.message || 'No se pudo subir la foto.');
         const photoURL = String(uploaded.secure_url);
+        const commitResponse = await fetch('/api/profile-avatar-commit', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ publicId: signed.publicId, photoURL }),
+        });
+        const committed = await commitResponse.json().catch(() => ({}));
+        if (!commitResponse.ok || !committed.ok) throw new Error(committed.error || 'No se pudo guardar la foto en el perfil.');
         await authApi.updateProfile(user, { photoURL });
-        await firestoreApi.setDoc(firestoreApi.doc(db, 'users', user.uid), {
-          photoURL,
-          updatedAt: firestoreApi.serverTimestamp(),
-        }, { merge: true });
         const avatar = document.getElementById('perfil-avatar');
         if (avatar) {
           avatar.textContent = '';
@@ -324,6 +326,26 @@ async function enhanceProfile() {
   window.addEventListener('pagehide', () => summaryObserver.disconnect(), { once: true });
 
   await import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20260829-final-stability-1');
+  // Reintenta cerrar cualquier divergencia Auth–Firestore pendiente, sin
+  // escribir datos desde el navegador: el servidor usa Firestore como fuente
+  // canónica y solo actúa sobre la cuenta autenticada.
+  try {
+    const [{ auth }] = await Promise.all([
+      import('../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1'),
+    ]);
+    if (typeof auth.authStateReady === 'function') await auth.authStateReady();
+    const user = auth.currentUser;
+    if (user) {
+      const token = await user.getIdToken();
+      await fetch('/api/profile-avatar-reconcile', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        cache: 'no-store',
+      });
+    }
+  } catch (error) {
+    console.warn('[Perfil] Reconciliación Auth–Firestore pendiente:', error);
+  }
   const initial = location.hash.replace('#', '');
   if (panels.has(initial)) activate(initial);
 }

@@ -1,6 +1,6 @@
 // cargador-pagina.js es el único responsable de iniciar los módulos globales de
 // interfaz. auth-nav solo administra sesión y navegación de la cuenta.
-import { auth } from '../firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
+import { auth, authPersistenceReady } from '../firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
 import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { getUserRole, can, SUPER_ADMIN } from './roles.js?v=tintin-20260821-accounts-phase-a-1';
 
@@ -56,6 +56,7 @@ window.addEventListener('tintin:login-cancelled',endSilentAuthTransition);
 window.addEventListener('tintin:login-failed',endSilentAuthTransition);
 
 onAuthStateChanged(auth,async user=>{
+ await authPersistenceReady.catch(()=>{});
  // login.html es el único dueño del alta, bloqueo y destino posterior al
  // acceso. Evita dos redirecciones paralelas compitiendo por la misma sesión.
  if(IS_LOGIN_PAGE)return;

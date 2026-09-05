@@ -67,9 +67,17 @@ function safeImageUrl(value) {
 function displayPublicName(value, authorType = 'customer') {
   if (authorType === 'store') return 'Tintin Accesorios';
   const raw = String(value || 'Clienta Tintin').trim();
+  if (authorType === 'staff' || /^[^\s]+\s+[A-ZÁÉÍÓÚÑ]\.$/u.test(raw)) return raw;
   if (raw.includes('***')) return raw;
   const parts = raw.split(/\s+/).filter(Boolean);
   return parts.slice(0, 2).map(part => `${Array.from(part)[0] || 'C'}***`).join(' ') || 'Clienta Tintin';
+}
+
+function publicRoleBadge(authorType, roleLabel, isOfficial = false, customerTier = null) {
+  if (isOfficial || authorType === 'store') return '<span class="tt-public-badge tt-public-badge-official" title="Cuenta oficial">✓ Cuenta oficial</span>';
+  if (authorType === 'staff' && roleLabel) return `<span class="tt-public-badge tt-public-badge-staff">${escapeHtml(roleLabel)}</span>`;
+  if (authorType === 'customer' && customerTier?.label) return `<span class="tt-public-badge tt-public-badge-customer-tier" title="Nivel calculado desde compras válidas">${escapeHtml(customerTier.label)}</span>`;
+  return '';
 }
 
 function dateValue(value) {
@@ -264,12 +272,12 @@ function renderReply(reviewId, reply) {
   const replyId = replyIdOf(reply);
   const liked = likedReplyIds.has(replyId);
   const count = Math.max(0, Number(reply.likeCount) || 0);
-  const authorType = reply.authorType === 'store' ? 'store' : 'customer';
+  const authorType = reply.authorType === 'store' ? 'store' : reply.authorType === 'staff' ? 'staff' : 'customer';
   const name = displayPublicName(reply.publicName, authorType);
-  return `<div class="tt-review-thread-message${authorType === 'store' ? ' is-store' : ''}" id="reply-${escapeHtml(replyId)}">
+  return `<div class="tt-review-thread-message${authorType === 'store' ? ' is-store' : authorType === 'staff' ? ' is-staff' : ''}" id="reply-${escapeHtml(replyId)}">
     ${avatarMarkup(reply.publicPhotoUrl, name, 'is-small')}
     <div class="tt-review-thread-body">
-      <div class="tt-review-thread-meta"><strong class="tt-review-thread-author">${escapeHtml(name)}</strong><time title="${escapeHtml(fullDateTitle(reply.createdAt))}">${escapeHtml(relativeDate(reply.createdAt))}</time></div>
+      <div class="tt-review-thread-meta"><strong class="tt-review-thread-author">${escapeHtml(name)} ${publicRoleBadge(authorType, reply.roleLabel, reply.isOfficial, reply.customerTier)}</strong><time title="${escapeHtml(fullDateTitle(reply.createdAt))}">${escapeHtml(relativeDate(reply.createdAt))}</time></div>
       <p class="tt-review-thread-text">${escapeHtml(reply.text)}</p>
       <div class="tt-review-social-actions">
         ${currentUser ? `<button type="button" class="tt-review-like-button${liked ? ' is-liked is-locked' : ''}" data-reply-like="${escapeHtml(replyId)}" data-review-id="${escapeHtml(reviewId)}" aria-pressed="${liked}" ${liked ? 'disabled' : ''}><span aria-hidden="true">${heartIconMarkup(liked)}</span><span>${liked ? 'Te gusta' : (count ? `${count} Me gusta` : 'Me gusta')}</span></button>` : `<span class="tt-review-like-count">${count ? `${heartIconMarkup(true)} ${count} Me gusta` : ''}</span>`}
@@ -283,11 +291,12 @@ function renderReview(review) {
   const liked = likedReviewIds.has(id);
   const likeCount = Math.max(0, Number(review.likeCount) || 0);
   const conversation = Array.isArray(review.conversation) ? review.conversation : [];
-  const isStore = review.publicName === 'Tintin Accesorios';
-  const name = displayPublicName(review.publicName, isStore ? 'store' : 'customer');
+  const authorType = review.authorType === 'store' ? 'store' : review.authorType === 'staff' ? 'staff' : review.publicName === 'Tintin Accesorios' ? 'store' : 'customer';
+  const isStore = authorType === 'store';
+  const name = displayPublicName(review.publicName, authorType);
   return `<article class="tt-review-card" id="review-${escapeHtml(id)}" data-review-card="${escapeHtml(id)}">
     <div class="tt-review-head">
-      <div class="tt-review-author-wrap">${avatarMarkup(review.publicPhotoUrl, name)}<div><div class="tt-review-author">${escapeHtml(name)}</div><div class="tt-review-stars" aria-label="${Number(review.rating)} de 5 estrellas">${starText(review.rating)}</div></div></div>
+      <div class="tt-review-author-wrap">${avatarMarkup(review.publicPhotoUrl, name)}<div><div class="tt-review-author">${escapeHtml(name)} ${publicRoleBadge(authorType, review.roleLabel, review.isOfficial || isStore, review.customerTier)}</div><div class="tt-review-stars" aria-label="${Number(review.rating)} de 5 estrellas">${starText(review.rating)}</div></div></div>
       <time class="tt-review-date" datetime="${dateValue(review.createdAt).toISOString()}" title="${escapeHtml(fullDateTitle(review.createdAt))}">${escapeHtml(relativeDate(review.createdAt))}</time>
     </div>
     <p class="tt-review-comment">${escapeHtml(review.comment)}</p>

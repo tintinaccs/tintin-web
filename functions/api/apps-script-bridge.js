@@ -13,6 +13,7 @@ import {
 import { firestoreAdminBatchCommit } from '../../cloudflare/firestore-admin-batch.js';
 import { fetchAppsScript } from '../../cloudflare/apps-script-fetch.js';
 import { syncOrderToSheetsBestEffort } from '../../cloudflare/order-sheets-sync.js';
+import { reconcileLoyaltyTierNotification } from '../../cloudflare/fidelidad-notificaciones.js';
 
 // Apps Script sigue ejecutando únicamente la transacción privilegiada heredada
 // de creación de pedidos y las rutas de correo antiguas que aún puedan invocarse
@@ -194,6 +195,11 @@ export async function onRequest(context) {
         if (parsed.order && typeof parsed.order === 'object') {
           parsed.order.customerId = identity.customerId;
         }
+        await reconcileLoyaltyTierNotification(env, {
+          orderId: parsed.orderId,
+          beforeOrder: null,
+          afterOrder: identity.order,
+        }).catch(error => console.warn('[apps-script-bridge] fidelidad diferida:', error?.message || error));
         return new Response(JSON.stringify(parsed), {
           status: upstream.status,
           headers

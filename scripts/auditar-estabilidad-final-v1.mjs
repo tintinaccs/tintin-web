@@ -18,6 +18,7 @@ const adminLoader = read('js/admin/users/gestion-usuarios-admin.js');
 const adminProfile = read('js/admin/users/perfil-usuario-superadmin.js');
 const adminFicha = read('js/admin/users/ficha-usuario-admin.js');
 const avatarApi = read('functions/api/profile-avatar-upload.js');
+const avatarCommitApi = read('functions/api/profile-avatar-commit.js');
 const socialBackend = read('cloudflare/participacion-clientes.js');
 const socialApi = read('functions/api/engagement.js');
 const notificationApi = read('functions/api/notifications.js');
@@ -30,7 +31,7 @@ const systemHealth = read('cloudflare/system-health.js');
 
 // 1. Producto: contenido visible y sin acordeón obligatorio, sin observer recursivo.
 ok(has(publicEntry, "estabilidad-producto.js?v=tintin-20260831-product-stability-2"), 'Producto no carga su estabilización acotada y segura.');
-ok(has(publicEntry, "estabilidad-final-publica.js?v=tintin-20260829-final-stability-1"), 'El shell público no conserva la estabilización final para las demás superficies.');
+ok(has(publicEntry, "estabilidad-final-publica.js?v=tintin-20260904-profile-reconcile-1"), 'El shell público no conserva la estabilización final para las demás superficies.');
 ok(has(productStability, "document.body.dataset.ttProductStable"), 'Producto no activa el contrato estable.');
 ok(has(productStability, "setDataIfChanged(specsBlock, 'collapsed', 'false')"), 'Características no se fuerzan abiertas de forma idempotente.');
 ok(has(productStability, "setDataIfChanged(related, 'collapsed', 'false')"), 'Otros productos no se fuerzan abiertos de forma idempotente.');
@@ -84,7 +85,7 @@ ok(has(stability, "estado-pedidos-perfil.js?v=tintin-20260829-final-stability-1"
 ok(has(orderProfileState, 'tt_profile_orders_seen_v1_') && has(orderProfileState, 'numericCount() - seenCount()'), 'El badge de Pedidos no representa pedidos nuevos/no vistos.');
 ok(has(orderProfileState, '[data-profile-tab="pedidos"]') && has(orderProfileState, 'localStorage.setItem'), 'Abrir Pedidos no marca el contador como visto.');
 ok(has(stability, '/api/profile-avatar-upload'), 'Perfil no integra subida de foto.');
-ok(has(stability, /photoURL,\s*updatedAt:/), 'Perfil no persiste la foto con el campo canónico photoURL.');
+ok(has(stability, '/api/profile-avatar-commit') && has(avatarCommitApi, 'photoURL') && has(avatarCommitApi, 'profilePhotoHistory'), 'Perfil no persiste la foto con el campo canónico photoURL y su historial.');
 ok(has(avatarApi, 'requireFirebaseUser'), 'La subida de avatar no exige sesión Firebase.');
 ok(has(avatarApi, '5 * 1024 * 1024'), 'La subida de avatar no limita tamaño.');
 ok(has(avatarApi, "['image/jpeg', 'image/png', 'image/webp']"), 'La subida de avatar no limita formatos.');

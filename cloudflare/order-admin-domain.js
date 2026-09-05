@@ -375,6 +375,7 @@ async function createOrderAttempt(env, input, actor, { get, commit }) {
     changeId,
     changedProducts: reserves ? byProduct.size : 0,
     auditEventId: eventId,
+    beforeOrder: null,
     order,
     ...auditSummary(order),
   };
@@ -519,6 +520,7 @@ export async function applyOrderAdminMutation(
     duplicate: false,
     changedProducts: inventory.deltas.size,
     auditEventId: eventId,
+    beforeOrder,
     order: nextOrder,
     ...auditSummary(nextOrder),
   };
