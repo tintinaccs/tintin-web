@@ -33,6 +33,7 @@ Revisar orientación, scroll, foco, teclado, modales, menús, tablas, formulario
 - [ ] Cliente.
 - [ ] Viewer.
 - [ ] Agente.
+- [ ] Moderador.
 - [ ] Admin.
 - [ ] Super Admin.
 - [ ] Cuenta bloqueada.
