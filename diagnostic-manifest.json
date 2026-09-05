@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-05T11:23:02.442Z",
-  "sourceFingerprint": "1c18eaa0c807acc903bd002a65664da3f0bb462c9851a8f03d42522942d7508d",
+  "generatedAt": "2026-09-05T13:00:20.940Z",
+  "sourceFingerprint": "cf0d5da2cacc92dfd3a4bf50b1b19326f3c6e67a37ae999ba72df06f20c7f555",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 810,
     "textFiles": 777,
-    "totalBytes": 10004377,
+    "totalBytes": 10004570,
     "pages": 18,
     "modules": 558
   },
@@ -17797,8 +17797,8 @@
     },
     {
       "path": "cloudflare/seguridad-cloudinary.js",
-      "bytes": 5322,
-      "sha256": "e3f294703ad40a5c264434962d567f245878d97c20fed98757609ed9c0a18bd5",
+      "bytes": 5515,
+      "sha256": "d2c1b266b2d9b01b55c65fd8ba26e1b3c8c78a5ebe139df8d07d987b46908ccd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17817,7 +17817,12 @@
           "line": 8
         }
       ],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://${/",
+          "line": 17
+        }
+      ]
     },
     {
       "path": "cloudflare/servicio-push.js",
@@ -32619,8 +32624,8 @@
     {
       "path": "cloudflare/seguridad-cloudinary.js",
       "extension": ".js",
-      "bytes": 5322,
-      "sha256": "e3f294703ad40a5c264434962d567f245878d97c20fed98757609ed9c0a18bd5"
+      "bytes": 5515,
+      "sha256": "d2c1b266b2d9b01b55c65fd8ba26e1b3c8c78a5ebe139df8d07d987b46908ccd"
     },
     {
       "path": "cloudflare/servicio-push.js",
