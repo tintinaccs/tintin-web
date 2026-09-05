@@ -9,9 +9,14 @@ import { verifyFirebaseIdToken } from './firebase-id-token.js';
 
 export const SUPERADMIN_EMAIL = SUPER_ADMIN_EMAIL;
 
-// Las funciones privadas solo aceptan el mismo origen que las sirve. Un futuro
-// dominio propio funcionará sin otra lista porque requestUrl y Origin coincidirán.
-const TRUSTED_CROSS_ORIGINS = new Set();
+// Las funciones privadas solo aceptan el mismo origen que las sirve. Estos son
+// los dos dominios públicos de Tintin que pueden cargar el frontend mientras
+// las funciones continúan alojadas en Cloudflare Pages; se mantienen explícitos
+// para no convertir el CORS en un comodín.
+const TRUSTED_CROSS_ORIGINS = new Set([
+  'https://tintinaccs.com',
+  'https://www.tintinaccs.com'
+]);
 
 export function originIsAllowed(origin, requestUrl = '') {
   if (!origin) return true;
