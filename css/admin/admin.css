@@ -851,6 +851,40 @@
       justify-content: flex-end;
     }
 
+    /* En tablet y móvil Usuarios se presenta como tarjetas para evitar que
+       email, teléfono y acciones queden comprimidos o requieran desplazar
+       toda la tabla. Desktop conserva la tabla completa. */
+    @media (max-width: 900px) {
+      .adm-table-users { min-width: 0; }
+      .adm-table-users thead { display: none; }
+      .adm-table-users, .adm-table-users tbody,
+      .adm-table-users tr, .adm-table-users td { display: block; width: 100%; }
+      .adm-table-users tr {
+        margin-bottom: 12px; padding: 10px 12px;
+        border: 1px solid var(--adm-border); border-radius: var(--adm-radius-md, 14px);
+        background: var(--adm-card);
+      }
+      .adm-table-users td {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 12px; min-width: 0; padding: 8px 2px;
+        border-bottom: 1px dashed #f0d8e0; text-align: right;
+      }
+      .adm-table-users tr td:last-child { border-bottom: none; }
+      .adm-table-users td[data-label]::before {
+        content: attr(data-label); flex: 0 0 auto; text-align: left;
+        color: var(--adm-muted); font-size: 10px; font-weight: 800;
+        letter-spacing: .06em; text-transform: uppercase;
+      }
+      .adm-table-users td[data-label="Email"],
+      .adm-table-users td[data-label="Teléfono"] { overflow-wrap: anywhere; }
+      .adm-table-users td[data-label="Estado"] { align-items: flex-start; }
+      .adm-table-users td[data-label="Estado"] > div { max-width: 70%; }
+      .adm-table-users td[data-label="Acciones"] { justify-content: flex-end; }
+      .adm-table-users td[data-label="Acciones"]::before { margin-right: auto; }
+      .adm-table-users .adm-user-actions { min-width: 0; }
+      .adm-table-users .adm-user-actions > div { flex-wrap: wrap; justify-content: flex-end; }
+    }
+
     /* ======== BADGES — TCG ======== */
     .adm-badge {
       display: inline-flex;

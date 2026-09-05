@@ -88,7 +88,7 @@ for (const viewport of [
   check(`La matriz contempla ${viewport}`, impact.includes(viewport));
 }
 
-for (const role of ['Invitado', 'Cliente', 'Viewer', 'Agente', 'Admin', 'Super Admin']) {
+for (const role of ['Invitado', 'Cliente', 'Viewer', 'Agente', 'Moderador', 'Admin', 'Super Admin']) {
   check(`La matriz contempla el rol ${role}`, impact.includes(role));
 }
 
