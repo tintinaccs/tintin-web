@@ -1739,16 +1739,16 @@ function renderUsersTable(users) {
 
     return `
       <tr>
-        <td class="col-select">${!isSuperAdmin ? `<input type="checkbox" class="user-row-check" data-id="${safeUid}" onclick="toggleUserSelect(this)" ${_selectedUsers.has(u.uid) ? 'checked' : ''}>` : ''}</td>
-        <td>${avatar}</td>
-        <td><strong>${escapeHtmlAdmin(u.name || '—')}</strong></td>
-        <td style="font-size:12px;color:#666">${escapeHtmlAdmin(u.email || '—')}</td>
-        <td style="font-size:12px;color:#666">${escapeHtmlAdmin(u.phone || '—')}</td>
-        <td>${roleSelect}</td>
-        <td>${blockedBadge}${blockedDetail}</td>
-        <td style="font-size:12px;color:#666">${u.purchaseCount || 0}</td>
-        <td style="font-size:12px;color:#666">${formatPrice(u.totalSpent || 0)}</td>
-        <td>${actions}</td>
+        <td class="col-select" data-label="Seleccionar">${!isSuperAdmin ? `<input type="checkbox" class="user-row-check" data-id="${safeUid}" onclick="toggleUserSelect(this)" ${_selectedUsers.has(u.uid) ? 'checked' : ''}>` : ''}</td>
+        <td data-label="Avatar">${avatar}</td>
+        <td data-label="Nombre"><strong>${escapeHtmlAdmin(u.name || '—')}</strong></td>
+        <td data-label="Email" style="font-size:12px;color:#666">${escapeHtmlAdmin(u.email || '—')}</td>
+        <td data-label="Teléfono" style="font-size:12px;color:#666">${escapeHtmlAdmin(u.phone || '—')}</td>
+        <td data-label="Rol">${roleSelect}</td>
+        <td data-label="Estado">${blockedBadge}${blockedDetail}</td>
+        <td data-label="Pedidos" style="font-size:12px;color:#666">${u.purchaseCount || 0}</td>
+        <td data-label="Gastado" style="font-size:12px;color:#666">${formatPrice(u.totalSpent || 0)}</td>
+        <td data-label="Acciones">${actions}</td>
       </tr>
     `;
   }).join('');

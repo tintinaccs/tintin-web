@@ -1,4 +1,4 @@
-const ADMIN_APP_SOURCE = '/js/admin/admin-app.js?v=tintin-20260904-appcheck-guard-1';
+const ADMIN_APP_SOURCE = '/js/admin/admin-app.js?v=tintin-20260904-users-responsive-1';
 const FIREBASE_FILE = ['firebase', 'js?v=tintin-20260904-auth-runtime-cache-reset-1'].join('.');
 const FIREBASE_MODULE_URL = ['..', 'core', 'firebase', FIREBASE_FILE].join('/');
 const FIREBASE_IMPORT_BEFORE = `import { auth, db, appCheckReady } from "${FIREBASE_MODULE_URL}";`;
