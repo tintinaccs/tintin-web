@@ -3,7 +3,7 @@ export const MAESTRO_SCHEMA_VERSION = 2;
 export const BASE_ADMIN_SECTIONS = Object.freeze([
   'dashboard', 'estadisticas', 'usuarios', 'pedidos', 'productos', 'resenas',
   'me-gusta', 'colecciones', 'paginas', 'importar', 'mensajes',
-  'notificaciones-push', 'auditoria', 'diagnostico', 'correos',
+  'notificaciones-push', 'auditoria', 'diagnostico', 'flujos-decision', 'correos',
   'configuracion', 'permisos', 'apariencia'
 ]);
 
@@ -118,6 +118,10 @@ export const MAESTRO_MODULES = Object.freeze([
     quickAction: { type: 'selector', selector: '#btn-run-site-diagnostics', label: 'Ejecutar diagnóstico' },
     evidence: ['btn-run-site-diagnostics', 'Modo de solo lectura']
   }),
+
+  moduleDef('flujos-decision', 'Flujos de decisión', 'code-governance', 'Mapa verificable de flujos reales. El diseño visual puede ordenarse; las reglas de acceso se cambian únicamente mediante código, PR y CI.', {
+    read: YES, update: GUARDED, audit: YES
+  }, { evidence: ['section-flujos-decision', 'data/flujo-decisiones-acceso.json', 'js/admin/flujo-decisiones/flujo-decisiones-admin.js', 'scripts/auditar-acceso-perfil-incorporacion.js'] }),
 
   moduleDef('estudio-codigo', 'Editor de Código', 'code-governance', 'Edición del repositorio con rama, commit, PR, checks y merge protegidos; nunca publica directamente sin el flujo GitHub.', {
     create: GUARDED, read: YES, update: GUARDED, archive: NO, delete: GUARDED, search: YES, export: NO, sync: GUARDED

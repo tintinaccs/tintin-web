@@ -35,6 +35,7 @@ const SPECIALIZED_VALIDATORS = {
   'notificaciones-push': ['scripts/auditar-push-web.js'],
   auditoria: ['scripts/auditar-admin-analitica-auditar.js'],
   diagnostico: ['scripts/auditar-admin-analitica-auditar.js'],
+  'flujos-decision': ['scripts/generar-flujo-decisiones-acceso.mjs'],
   'estudio-codigo': ['scripts/auditar-superadmin-cierre-total.mjs'],
   correos: ['scripts/auditar-admin-correo-mensajeria.js'],
   configuracion: ['scripts/auditar-superadmin-cierre-total.mjs', 'scripts/auditar-pago-metodos.js'],
