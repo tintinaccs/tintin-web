@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-05T02:20:40.355Z",
-  "sourceFingerprint": "8e5fcaa3c77559c8a8568a44ba8fe22b7cb0732cd6e6019fceb369f7ef1e0349",
+  "generatedAt": "2026-09-05T02:33:22.225Z",
+  "sourceFingerprint": "37881acafe25c2d47f4b091ccd1fbf79f238c061218dcd49c1b7c6708894baf6",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 820,
-    "textFiles": 786,
-    "totalBytes": 10018884,
+    "files": 821,
+    "textFiles": 787,
+    "totalBytes": 10021969,
     "pages": 18,
-    "modules": 567
+    "modules": 568
   },
   "viewports": [
     {
@@ -17504,8 +17504,8 @@
     },
     {
       "path": "cloudflare/fidelidad-notificaciones.js",
-      "bytes": 5742,
-      "sha256": "5703cbe0bde3292d492febfa8b5976ee1433f42fd4be641ca5711058acfe2461",
+      "bytes": 5828,
+      "sha256": "b31e878f1c59bb28b138c427fd334d3fd6f99375061db19bec64cdd5f982ea46",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30912,6 +30912,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/loyalty/fidelidad-notificaciones.test.mjs",
+      "bytes": 2999,
+      "sha256": "d2787b05f4fd0cbcd827d874298974ccd48336be15ecc9a5f1e65906d3b0b176",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/fidelidad-notificaciones.js",
+          "target": "cloudflare/fidelidad-notificaciones.js",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/navigation/header-responsive.spec.js",
       "bytes": 11407,
       "sha256": "d2233ee58ffe47e9980282efa4251fdaed05d60b756196a8a4a96b38b397cfaa",
@@ -32838,8 +32868,8 @@
     {
       "path": "cloudflare/fidelidad-notificaciones.js",
       "extension": ".js",
-      "bytes": 5742,
-      "sha256": "5703cbe0bde3292d492febfa8b5976ee1433f42fd4be641ca5711058acfe2461"
+      "bytes": 5828,
+      "sha256": "b31e878f1c59bb28b138c427fd334d3fd6f99375061db19bec64cdd5f982ea46"
     },
     {
       "path": "cloudflare/firebase-admin-ligero.js",
@@ -37046,6 +37076,12 @@
       "extension": ".mjs",
       "bytes": 17291,
       "sha256": "5b533f9b5030c02156b4f4c130244c5af1fa09778a789360beb940fbd0138cac"
+    },
+    {
+      "path": "tests/loyalty/fidelidad-notificaciones.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2999,
+      "sha256": "d2787b05f4fd0cbcd827d874298974ccd48336be15ecc9a5f1e65906d3b0b176"
     },
     {
       "path": "tests/navigation/header-responsive.spec.js",

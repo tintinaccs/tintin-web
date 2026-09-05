@@ -69,7 +69,15 @@ function tierFor(orders, settings) {
  */
 export async function reconcileLoyaltyTierNotification(
   env,
-  { orderId: explicitOrderId = '', beforeOrder = null, afterOrder = null, get = firestoreAdminGet, query = firestoreAdminQueryEqual } = {},
+  {
+    orderId: explicitOrderId = '',
+    beforeOrder = null,
+    afterOrder = null,
+    get = firestoreAdminGet,
+    query = firestoreAdminQueryEqual,
+    notifyUser = notifyUserIfAbsent,
+    notifyAdmin = notifyAdminIfAbsent,
+  } = {},
 ) {
   const order = afterOrder || beforeOrder || {};
   const uid = orderCustomerUid(order);
@@ -86,7 +94,7 @@ export async function reconcileLoyaltyTierNotification(
   const afterOrders = orders.map(item => orderId(item) === currentOrderId ? afterWithId : item).filter(Boolean);
   if (afterWithId && !afterOrders.some(item => orderId(item) === currentOrderId)) afterOrders.push(afterWithId);
   const beforeOrders = afterOrders.filter(item => orderId(item) !== currentOrderId);
-  if (beforeOrder && orderId(beforeOrder)) beforeOrders.push(beforeOrder);
+  if (beforeOrder) beforeOrders.push({ id: currentOrderId, ...beforeOrder });
 
   const previousTier = tierFor(beforeOrders, settings);
   const nextTier = tierFor(afterOrders, settings);
@@ -123,8 +131,8 @@ export async function reconcileLoyaltyTierNotification(
     createdAt: new Date(),
   };
   const [user, admin] = await Promise.all([
-    notifyUserIfAbsent(env, uid, event, dedupeKey),
-    notifyAdminIfAbsent(env, { ...event, title: `Fidelidad actualizada: ${customerName(afterOrder)}`, body: `${customerName(afterOrder)}: ${nextTier?.label || 'sin nivel activo'}.`, targetUrl: '/admin.html#section-usuarios' }, `admin:${dedupeKey}`),
+    notifyUser(env, uid, event, dedupeKey),
+    notifyAdmin(env, { ...event, title: `Fidelidad actualizada: ${customerName(afterOrder)}`, body: `${customerName(afterOrder)}: ${nextTier?.label || 'sin nivel activo'}.`, targetUrl: '/admin.html#section-usuarios' }, `admin:${dedupeKey}`),
   ]);
   return { ok: true, changed: true, previousTier, nextTier, user, admin };
 }
