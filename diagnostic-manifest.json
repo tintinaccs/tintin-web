@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T20:31:58.922Z",
-  "sourceFingerprint": "d9172d5ca2d8bca77d386b14ea3a0422ba76273fd34539afed0971ad88f29416",
+  "generatedAt": "2026-09-05T01:04:40.875Z",
+  "sourceFingerprint": "5659c913239b57278d13e03db0715f6482fe0c52cc2b0d291b0f360282cf7413",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 805,
     "textFiles": 772,
-    "totalBytes": 9971401,
+    "totalBytes": 9971892,
     "pages": 18,
     "modules": 554
   },
@@ -18747,8 +18747,8 @@
     },
     {
       "path": "functions/api/email-otp-send.js",
-      "bytes": 11672,
-      "sha256": "38ba58fcd984468550f88c0c6c949240779e8e95b7a28915811de8e04647074c",
+      "bytes": 12009,
+      "sha256": "fb374265df69f3b91cdaa5a8148b5bff2bf9a4ab7fbd9dda81c5795c2b85f218",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18780,11 +18780,11 @@
         },
         {
           "url": "https://api.resend.com/emails/$%7BencodeURIComponent(safeId",
-          "line": 91
+          "line": 100
         },
         {
           "url": "https://api.resend.com/emails",
-          "line": 133
+          "line": 142
         }
       ]
     },
@@ -29448,8 +29448,8 @@
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
-      "bytes": 3979,
-      "sha256": "460f9ce80fe186efeed549956e09f6953b9dab2f81638bd5c4f39bb0d5ee9a64",
+      "bytes": 4133,
+      "sha256": "e48d7fbc8446b6153abee3d19dcc13498002928839956c4fdf06564172a4c27a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33471,8 +33471,8 @@
     {
       "path": "functions/api/email-otp-send.js",
       "extension": ".js",
-      "bytes": 11672,
-      "sha256": "38ba58fcd984468550f88c0c6c949240779e8e95b7a28915811de8e04647074c"
+      "bytes": 12009,
+      "sha256": "fb374265df69f3b91cdaa5a8148b5bff2bf9a4ab7fbd9dda81c5795c2b85f218"
     },
     {
       "path": "functions/api/email-otp-verify.js",
@@ -36345,8 +36345,8 @@
     {
       "path": "tests/accounts/account-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 3979,
-      "sha256": "460f9ce80fe186efeed549956e09f6953b9dab2f81638bd5c4f39bb0d5ee9a64"
+      "bytes": 4133,
+      "sha256": "e48d7fbc8446b6153abee3d19dcc13498002928839956c4fdf06564172a4c27a"
     },
     {
       "path": "tests/accounts/username-login.test.mjs",
