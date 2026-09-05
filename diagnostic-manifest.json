@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-05T13:00:20.940Z",
-  "sourceFingerprint": "cf0d5da2cacc92dfd3a4bf50b1b19326f3c6e67a37ae999ba72df06f20c7f555",
+  "generatedAt": "2026-09-05T13:05:02.488Z",
+  "sourceFingerprint": "f7d3fcea83983a23f8d99482f05a2728cf3aa1813dfe418377efea6ea3682b0d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 810,
     "textFiles": 777,
-    "totalBytes": 10004570,
+    "totalBytes": 10004610,
     "pages": 18,
     "modules": 558
   },
@@ -17797,8 +17797,8 @@
     },
     {
       "path": "cloudflare/seguridad-cloudinary.js",
-      "bytes": 5515,
-      "sha256": "d2c1b266b2d9b01b55c65fd8ba26e1b3c8c78a5ebe139df8d07d987b46908ccd",
+      "bytes": 5555,
+      "sha256": "998f048e32e6485f644fe9c4c5428e2e3f8fd859e4b61a211adec7519f4703ab",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17819,8 +17819,12 @@
       ],
       "endpoints": [
         {
-          "url": "https://${/",
+          "url": "https://tintinaccesorios.pages.dev/",
           "line": 17
+        },
+        {
+          "url": "https://${/",
+          "line": 18
         }
       ]
     },
@@ -32624,8 +32628,8 @@
     {
       "path": "cloudflare/seguridad-cloudinary.js",
       "extension": ".js",
-      "bytes": 5515,
-      "sha256": "d2c1b266b2d9b01b55c65fd8ba26e1b3c8c78a5ebe139df8d07d987b46908ccd"
+      "bytes": 5555,
+      "sha256": "998f048e32e6485f644fe9c4c5428e2e3f8fd859e4b61a211adec7519f4703ab"
     },
     {
       "path": "cloudflare/servicio-push.js",
