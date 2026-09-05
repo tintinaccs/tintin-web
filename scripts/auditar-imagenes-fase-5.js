@@ -205,7 +205,7 @@ check(
   files.resolver.includes('export function resolveDeviceImage') &&
     files.resolver.includes('export function resolveCollectionImage') &&
     files.resolver.includes('export function firstEligibleProductImage') &&
-    files.runtime.includes("from './imagenes.js?v=tintin-20260716-cloudinary-fix-1'") &&
+    files.runtime.includes("from './imagenes.js?v=tintin-20260716-cloudinary-fix-2'") &&
     files.runtime.includes('resolveSlotImage'),
   'ninguna página debe reimplementar la prioridad responsive'
 );
@@ -511,9 +511,9 @@ check(
 );
 
 const PROCESSING_VERSION_QUERY = 'v=tintin-20260716-cloudinary-fix-1';
-const MEDIA_LIBRARY_VERSION_QUERY = 'v=tintin-20260901-media-orphan-log-1';
-const MEDIA_LIBRARY_ADMIN_VERSION_QUERY = 'v=tintin-20260901-media-orphan-scan-1';
-const CARGA_IMAGENES_VERSION_QUERY = 'v=tintin-20260901-media-orphan-log-2';
+const MEDIA_LIBRARY_VERSION_QUERY = 'v=tintin-20260901-media-orphan-log-2';
+const MEDIA_LIBRARY_ADMIN_VERSION_QUERY = 'v=tintin-20260901-media-orphan-scan-2';
+const CARGA_IMAGENES_VERSION_QUERY = 'v=tintin-20260901-media-orphan-log-3';
 check(
   'Los archivos del flujo de subida se importan con versión de caché, no sin ella',
   files.uploadWidget.includes(`./procesamiento-imagenes.js?${PROCESSING_VERSION_QUERY}`) &&

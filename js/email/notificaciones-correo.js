@@ -6,7 +6,7 @@
  * en nombres, precios, destinatarios ni totales enviados por el navegador.
  */
 import { EMAIL_WEBHOOK_URL } from './configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1';
-import { db, auth } from '../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
+import { db, auth } from '../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
 import {
   doc,
   getDoc,
@@ -232,7 +232,7 @@ if (
   !window.TintinCheckoutEmailBridgeLoading
 ) {
   window.TintinCheckoutEmailBridgeLoading = true;
-  import('../pages/checkout/checkout-puente-correo.js?v=tintin-20260814-social-notifications-1').catch(error => {
+  import('../pages/checkout/checkout-puente-correo.js?v=tintin-20260814-social-notifications-2').catch(error => {
     console.error('[email-notify] No se pudo cargar el puente del checkout:', error);
   });
 }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1"></script>
+  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-2"></script>
   <script src="js/cargador-pagina.js?v=tintin-20260903-loader-store-gate-fast-rest-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260902-customer-notification-audience-1" defer></script>
@@ -18,9 +18,9 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
-  <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1">
+  <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260902-customer-notification-audience-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260902-customer-notification-audience-2">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260824-header-responsive-sync-1">
@@ -322,7 +322,7 @@
 <script src="tienda.js?v=tintin-20260903-identity-cache-sync-2"></script>
 
 <script type="module">
-import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1";
+import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1";
 import {
   signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -330,12 +330,12 @@ import {
   doc, getDoc, getDocs, setDoc, serverTimestamp,
   collection, query, where, orderBy, limit
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1";
-import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260903-identity-cache-sync-2";
+import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260821-accounts-phase-a-2";
+import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260903-identity-cache-sync-3";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachLocationPicker } from "./js/components/location/selector-ubicacion.js?v=tintin-20260803-location-picker-2";
 import { toSavedLocation } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260904-profile-aliases-2";
-import { getRegisteredMethod, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260903-accounts-phase-a-2";
+import { getRegisteredMethod, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260903-accounts-phase-a-3";
 import { DEFAULT_COUNTRY, phoneKey, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { changeReservedPhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { changeReservedUsername } from "./js/components/forms/reserva-username.js?v=tintin-20260822-dob-username-onboarding-1";
@@ -693,12 +693,12 @@ async function loadUserOrders(user) {
   }
 }
 </script>
-<script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260903-identity-cache-sync-2"></script>
-<script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20260815-routes-clean-1"></script>
-<script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260903-session-pause-race-1"></script>
-  <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-2"></script>
+<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260903-identity-cache-sync-3"></script>
+<script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20260815-routes-clean-2"></script>
+<script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-2"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260903-session-pause-race-2"></script>
+  <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-2"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">
   <div class="container tt-footer-shell">

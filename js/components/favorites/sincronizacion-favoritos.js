@@ -1,4 +1,4 @@
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { heartIconMarkup } from './icono-corazon.js?v=tintin-20260817-heart-icon-1';
@@ -116,7 +116,7 @@ document.addEventListener('click', async event => {
   if (!addButton) return;
   const item = items.find(entry => entry.id === String(addButton.dataset.favoriteAddCart || ''));
   if (!item) return;
-  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20260903-identity-cache-sync-2');
+  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20260903-identity-cache-sync-3');
   await cart.addToCart({ ...item, qty: 1 });
 }, true);
 

@@ -5,6 +5,7 @@ import {
   SUPERADMIN_EMAIL
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { dispatchOrderPushEvent, pushEnabled } from '../../cloudflare/servicio-push.js';
+import { queuePendingOrderEmail } from '../../cloudflare/resiliencia-correo-pedido.js';
 
 const FIREBASE_WEB_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
 const FIREBASE_PROJECT_ID = 'tintin-accesorios';
@@ -348,7 +349,7 @@ async function sendResendEmail(apiKey, payload, idempotencyKey) {
   return data;
 }
 
-async function sendOrderEmails({ apiKey, orderId, order, isResend, sendAdmin, sendCustomer }) {
+export async function sendOrderEmails({ apiKey, orderId, order, isResend, sendAdmin, sendCustomer }) {
   const suffix = isResend ? `resend-${Date.now()}` : 'new-v1';
   let adminSent = null;
   let customerSent = null;
@@ -462,6 +463,19 @@ export async function onRequest(context) {
       sendAdmin,
       sendCustomer
     });
+
+    // Encolado de reintento: si el envío inmediato falló para algún canal,
+    // se registra en la cola para que el drenado programado lo reintente.
+    // Nunca bloquea ni rompe la respuesta al cliente; un reenvío manual
+    // (isResend) no se encola porque ya es la vía de reintento explícita.
+    if (!isResend && !result.success) {
+      queuePendingOrderEmail(env, {
+        orderId,
+        retryAdmin: result.adminSent === false,
+        retryCustomer: result.customerSent === false,
+        lastError: result.error
+      }).catch(() => {});
+    }
 
     // Respaldo del aviso push: este camino ya validó a la usuaria y leyó el
     // pedido real desde Firestore, así que sirve para recuperar los casos en

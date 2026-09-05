@@ -14,7 +14,7 @@
 // - Precio/nombre/imagen son solo datos visuales; checkout vuelve a validarlos.
 // =============================================================
 
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
 import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { GUEST_CART_TTL_MS, guestCartIsExpired } from './politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
@@ -1096,7 +1096,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-  import('../../orders/pedido-checkout-seguro.js?v=tintin-20260903-identity-cache-sync-2').catch(error => {
+  import('../../orders/pedido-checkout-seguro.js?v=tintin-20260903-identity-cache-sync-3').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

@@ -234,7 +234,7 @@ export function initNavCollections(force = false) {
   started = true;
   renderLoading();
 
-  return import('../../../pages/collections/estado-colecciones.js?v=tintin-20260901-firestore-budget-1')
+  return import('../../../pages/collections/estado-colecciones.js?v=tintin-20260901-firestore-budget-2')
     .then(({ onCollectionsUpdate, loadCollections }) => {
       unsubscribe?.();
       unsubscribe = onCollectionsUpdate(collections => {

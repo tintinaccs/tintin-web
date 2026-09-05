@@ -1,6 +1,6 @@
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-2';
 import {
   BASE_ADMIN_SECTIONS,
   MAESTRO_MODULES,
@@ -15,7 +15,7 @@ import {
   const isAdminRoute = /(^|\/)admin(?:\.html)?$/i.test(location.pathname.replace(/\/$/, ''));
   if (!isAdminRoute) return;
 
-  const VERSION = 'tintin-20260831-superadmin-maestro-1';
+  const VERSION = 'tintin-20260831-superadmin-maestro-2';
   const CAP_COLUMNS = [
     ['create', 'C'], ['read', 'R'], ['update', 'U'], ['archive', 'Arch.'],
     ['delete', 'D'], ['search', 'Buscar'], ['export', 'Exportar'],

@@ -30,7 +30,7 @@ const systemHealth = read('cloudflare/system-health.js');
 
 // 1. Producto: contenido visible y sin acordeón obligatorio, sin observer recursivo.
 ok(has(publicEntry, "estabilidad-producto.js?v=tintin-20260831-product-stability-2"), 'Producto no carga su estabilización acotada y segura.');
-ok(has(publicEntry, "estabilidad-final-publica.js?v=tintin-20260829-final-stability-1"), 'El shell público no conserva la estabilización final para las demás superficies.');
+ok(has(publicEntry, "estabilidad-final-publica.js?v=tintin-20260829-final-stability-2"), 'El shell público no conserva la estabilización final para las demás superficies.');
 ok(has(productStability, "document.body.dataset.ttProductStable"), 'Producto no activa el contrato estable.');
 ok(has(productStability, "setDataIfChanged(specsBlock, 'collapsed', 'false')"), 'Características no se fuerzan abiertas de forma idempotente.');
 ok(has(productStability, "setDataIfChanged(related, 'collapsed', 'false')"), 'Otros productos no se fuerzan abiertos de forma idempotente.');
@@ -80,7 +80,7 @@ ok(has(stability, "{ id: 'datos', label: 'Mis datos'"), 'Perfil no tiene pestañ
 ok(has(stability, "{ id: 'pedidos', label: 'Pedidos'"), 'Perfil no tiene pestaña Pedidos.');
 ok(has(stability, "{ id: 'favoritos', label: 'Favoritos'"), 'Perfil no tiene pestaña Favoritos.');
 ok(has(stability, "{ id: 'cuenta', label: 'Cuenta y seguridad'"), 'Perfil no tiene pestaña Cuenta y seguridad.');
-ok(has(stability, "estado-pedidos-perfil.js?v=tintin-20260829-final-stability-1"), 'Perfil no carga el estado canónico de pedidos no vistos.');
+ok(has(stability, "estado-pedidos-perfil.js?v=tintin-20260829-final-stability-2"), 'Perfil no carga el estado canónico de pedidos no vistos.');
 ok(has(orderProfileState, 'tt_profile_orders_seen_v1_') && has(orderProfileState, 'numericCount() - seenCount()'), 'El badge de Pedidos no representa pedidos nuevos/no vistos.');
 ok(has(orderProfileState, '[data-profile-tab="pedidos"]') && has(orderProfileState, 'localStorage.setItem'), 'Abrir Pedidos no marca el contador como visto.');
 ok(has(stability, '/api/profile-avatar-upload'), 'Perfil no integra subida de foto.');

@@ -7,7 +7,7 @@
  * admin.html y admin-images.html. Un esquema del panel nunca toca
  * --color-* (el esquema público), así que jamás se "filtra" hacia afuera.
  */
-import { db } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
+import { db } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { ADMIN_TOKENS, buildDefaultTokenMap } from '../../components/color/esquema-color-catalogo.js?v=tintin-20260716-cloudinary-fix-1';
 
@@ -71,5 +71,5 @@ onSnapshot(
 // admin-images.html comparte este motor de colores, pero no debe cargar ese
 // editor ni dejar observadores esperando una interfaz que allí no existe.
 if (document.getElementById('visual-editor')) {
-  import('../appearance/visual-studio-global-admin.js?v=tintin-20260821-accounts-phase-a-1');
+  import('../appearance/visual-studio-global-admin.js?v=tintin-20260821-accounts-phase-a-2');
 }

@@ -2,10 +2,10 @@ import { serveAdminWithCsp } from '../cloudflare/servir-admin-con-csp.js';
 import { injectMasterDiagnosticsRuntime } from '../cloudflare/inyectar-diagnostico-maestro-admin.js';
 import { injectCodeStudioRuntime } from '../cloudflare/inyectar-estudio-codigo-admin.js';
 
-const MASTER_DIAGNOSTICS_RUNTIME = '/js/admin/diagnostics/diagnostico-maestro-admin.js?v=tintin-20260821-accounts-phase-a-1';
-const CODE_STUDIO_RUNTIME = '/js/admin/estudio-codigo/estudio-codigo-admin.js?v=tintin-20260821-code-problems-1';
+const MASTER_DIAGNOSTICS_RUNTIME = '/js/admin/diagnostics/diagnostico-maestro-admin.js?v=tintin-20260821-accounts-phase-a-2';
+const CODE_STUDIO_RUNTIME = '/js/admin/estudio-codigo/estudio-codigo-admin.js?v=tintin-20260821-code-problems-2';
 const CODE_STUDIO_STYLES = '/css/admin/estudio-codigo.css?v=tintin-20260821-code-problems-1';
-const CODE_STUDIO_RESTORE_RUNTIME = '/js/admin/estudio-codigo/restaurar-estudio-codigo-admin.js?v=tintin-20260821-code-editor-fit-4';
+const CODE_STUDIO_RESTORE_RUNTIME = '/js/admin/estudio-codigo/restaurar-estudio-codigo-admin.js?v=tintin-20260821-code-editor-fit-5';
 const ADMIN_APP_RUNTIME = '/js/admin/admin-app-runtime?v=tintin-20260904-admin-auth-guard-1';
 
 async function injectAdminAuthRuntime(response, requestMethod = 'GET') {

@@ -1,4 +1,4 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
 import {
   collection,
   query,
@@ -11,7 +11,7 @@ import {
 import {
   sendOrderNotification,
   notificationStatusFromResult
-} from '../../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-1';
+} from '../../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-2';
 
 if (!window.TintinCheckoutEmailBridgeBooted) {
   window.TintinCheckoutEmailBridgeBooted = true;
