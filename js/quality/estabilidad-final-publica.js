@@ -325,7 +325,7 @@ async function enhanceProfile() {
   updateSummary();
   window.addEventListener('pagehide', () => summaryObserver.disconnect(), { once: true });
 
-  await import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20260904-profile-consistency-1');
+  await import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20260829-final-stability-1');
   // Reintenta cerrar cualquier divergencia Auth–Firestore pendiente, sin
   // escribir datos desde el navegador: el servidor usa Firestore como fuente
   // canónica y solo actúa sobre la cuenta autenticada.
