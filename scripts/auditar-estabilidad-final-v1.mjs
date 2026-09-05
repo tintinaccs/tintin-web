@@ -67,7 +67,7 @@ ok(has(cart, /users\/\{uid\}\/cart|users\/\$\{uid\}/) || has(cart, "collection(d
 ok(has(rules, 'function cartItemValid'), 'Firestore no conserva validación server-side del carrito.');
 
 // 6. Super Admin: ficha integral reutilizando autoridad canónica.
-ok(has(adminLoader, 'perfil-usuario-superadmin.js?v=tintin-20260904-profile-consistency-1'), 'Usuarios no carga la ficha integral nueva.');
+ok(has(adminLoader, 'perfil-usuario-superadmin.js?v=tintin-20260829-final-stability-1'), 'Usuarios no carga la ficha integral nueva.');
 ok(!has(adminProfile, /onSnapshot\s*\(/), 'La ficha integral crea un listener paralelo de users.');
 ok(!has(adminProfile, /setDoc\s*\(|updateDoc\s*\(|deleteDoc\s*\(/), 'La ficha integral crea mutaciones paralelas a admin-app.js.');
 ok(has(adminProfile, 'Ir a gestión del usuario'), 'La ficha integral no devuelve a la gestión canónica CRUD.');
@@ -81,7 +81,7 @@ ok(has(stability, "{ id: 'datos', label: 'Mis datos'"), 'Perfil no tiene pestañ
 ok(has(stability, "{ id: 'pedidos', label: 'Pedidos'"), 'Perfil no tiene pestaña Pedidos.');
 ok(has(stability, "{ id: 'favoritos', label: 'Favoritos'"), 'Perfil no tiene pestaña Favoritos.');
 ok(has(stability, "{ id: 'cuenta', label: 'Cuenta y seguridad'"), 'Perfil no tiene pestaña Cuenta y seguridad.');
-ok(has(stability, "estado-pedidos-perfil.js?v=tintin-20260904-profile-consistency-1"), 'Perfil no carga el estado canónico de pedidos no vistos.');
+ok(has(stability, "estado-pedidos-perfil.js?v=tintin-20260829-final-stability-1"), 'Perfil no carga el estado canónico de pedidos no vistos.');
 ok(has(orderProfileState, 'tt_profile_orders_seen_v1_') && has(orderProfileState, 'numericCount() - seenCount()'), 'El badge de Pedidos no representa pedidos nuevos/no vistos.');
 ok(has(orderProfileState, '[data-profile-tab="pedidos"]') && has(orderProfileState, 'localStorage.setItem'), 'Abrir Pedidos no marca el contador como visto.');
 ok(has(stability, '/api/profile-avatar-upload'), 'Perfil no integra subida de foto.');
