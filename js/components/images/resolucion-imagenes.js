@@ -9,7 +9,7 @@
    reimplementar esta cascada — todas deben importar de acá.
    ============================================================= */
 
-import { db } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
+import { db } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
 import {
   doc,
   getDoc,

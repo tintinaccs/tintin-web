@@ -4,7 +4,7 @@
    coordinar Firestore + inventario + social + Google Sheets.
    ============================================================= */
 
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
 const API = '/api/admin-catalog-delete';

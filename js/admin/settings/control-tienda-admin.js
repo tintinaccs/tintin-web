@@ -12,8 +12,8 @@
    completos dejan de ser públicos.
    ============================================================= */
 
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
-import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
+import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-2';
 import {
   onAuthStateChanged
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
@@ -409,6 +409,6 @@ boot();
 
 // El mismo panel ya está protegido para Super Admin. Desde acá se carga el
 // sincronizador del documento público mínimo de correos.
-import('./sincronizacion-correo-admin.js?v=tintin-20260821-accounts-phase-a-1').catch(error => {
+import('./sincronizacion-correo-admin.js?v=tintin-20260821-accounts-phase-a-2').catch(error => {
   console.error('[admin-store-control] No se pudo iniciar la sincronización de correos:', error);
 });

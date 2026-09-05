@@ -12,9 +12,9 @@ const LIGHTWEIGHT_PAGES = new Set([
 ]);
 
 const ABOUT_CANONICAL_GUARD = '/js/pages/institutional/about-canonical-clean-v1.js';
-const CONTACT_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-contacto.js?v=tintin-20260818-contact-clock-svg-1';
-const LEGAL_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-legal.js?v=tintin-20260815-legal-clean-1';
-const MASTER_DIAGNOSTICS_RUNTIME = '/js/admin/diagnostics/diagnostico-maestro-admin.js?v=tintin-20260821-accounts-phase-a-1';
+const CONTACT_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-contacto.js?v=tintin-20260818-contact-clock-svg-2';
+const LEGAL_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-legal.js?v=tintin-20260815-legal-clean-2';
+const MASTER_DIAGNOSTICS_RUNTIME = '/js/admin/diagnostics/diagnostico-maestro-admin.js?v=tintin-20260821-accounts-phase-a-2';
 const VISUAL_LAYOUT_GUARD = '<style id="tt-vb-layout-guard">html.tt-vb-layout-pending body>section,html.tt-vb-layout-pending body>main{visibility:hidden;animation:tt-vb-layout-release 0s linear 3.5s forwards}@keyframes tt-vb-layout-release{to{visibility:visible}}</style>';
 
 function pageName(request) {

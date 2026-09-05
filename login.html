@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-1"></script>
+  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-2"></script>
   <script src="js/cargador-pagina.js?v=tintin-20260903-loader-store-gate-fast-rest-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260902-customer-notification-audience-1" defer></script>
@@ -20,9 +20,9 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js" crossorigin>
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
-  <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1">
+  <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260902-customer-notification-audience-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260902-customer-notification-audience-2">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260824-header-responsive-sync-1">
@@ -200,7 +200,7 @@
 </div>
 
 <script type="module">
-import { auth, db, provider, authPersistenceReady } from "./js/core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1";
+import { auth, db, provider, authPersistenceReady } from "./js/core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1";
 import {
   signInWithPopup,
   signInWithRedirect,
@@ -211,23 +211,23 @@ import {
 import {
   doc, setDoc, getDoc, runTransaction, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260821-accounts-phase-a-1";
+import { SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260821-accounts-phase-a-2";
 import { ASSIGNABLE_ROLES } from './js/core/auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 import {
   isValidEmailFormat, requestOtpCode, verifyOtpCode,
   ensureUserDocForEmailLogin, otpErrorMessage
-} from "./js/email/correo-autenticacion.js?v=tintin-20260903-auth-persistence-2";
+} from "./js/email/correo-autenticacion.js?v=tintin-20260905-auth-session-2";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { isValidUsernameFormat, isReservedUsername, normalizeUsername } from "./js/components/forms/utilidades-username.js?v=tintin-20260821-username-unique-1";
 import { reserveUsername } from "./js/components/forms/reserva-username.js?v=tintin-20260822-dob-username-onboarding-1";
 import { isValidDob } from "./js/components/forms/validacion-nacimiento.js?v=tintin-20260822-dob-username-onboarding-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
-import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260903-accounts-phase-a-2";
-import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260901-username-visible-1";
+import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260903-accounts-phase-a-3";
+import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260901-username-visible-2";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
-import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260903-session-pause-race-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260903-store-gate-fast-rest-2";
+import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260903-session-pause-race-2";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260903-store-gate-fast-rest-3";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260904-profile-aliases-2";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260903-google-maps-coordinates-1";
 
@@ -415,7 +415,7 @@ async function ensureProfileComplete(user, role) {
   // Intentar irse con el alta a medias abre una decisión explícita, no una
   // salida silenciosa: o completa, o cierra sesión y sigue mirando la tienda
   // sin cuenta. Sin esto quedaría encerrada — el guardia de
-  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260901-username-visible-1 la traería de vuelta acá desde cualquier página,
+  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260901-username-visible-2 la traería de vuelta acá desde cualquier página,
   // porque su perfil sigue incompleto.
   const exitModal = document.getElementById('login-exit-modal');
 
@@ -890,6 +890,12 @@ async function handleGoogleRedirectReturn(observedUser) {
 // Si ya está logueada, redirige sin mostrar el botón. Con Google no existe
 // un estado "correo sin verificar" — Google ya lo entrega verificado.
 onAuthStateChanged(auth, async user => {
+  // Firebase puede emitir el primer estado antes de terminar de restaurar la
+  // persistencia local. Esperar acá evita mostrar el login (y permitir que una
+  // acción parezca una cuenta nueva) mientras la sesión existente todavía se
+  // está resolviendo.
+  await authPersistenceReady.catch(() => {});
+  try { await auth.authStateReady?.(); } catch {}
   // OJO: ttPageReady() ya no se llama acá arriba a propósito — revela el
   // formulario "Continuar con Google" de abajo, y si esta persona en
   // realidad ya tiene sesión (o recién volvió de Google) eso se ve como un
@@ -926,10 +932,9 @@ onAuthStateChanged(auth, async user => {
   ]);
   if (profileResult.error) {
     console.warn('[login] No se pudo verificar el perfil de la sesión:', profileResult.error);
-    await signOut(auth);
     hideLoginOverlay();
     revealLoginSurface();
-    showError('No pudimos verificar tu cuenta de forma segura. Revisá tu conexión e intentá de nuevo.');
+    showError('No pudimos verificar tu cuenta en este momento. Tu sesión sigue activa; recargá la página y no hace falta volver a registrarte.');
     return;
   }
   const profileSnapshot = profileResult.snapshot;
@@ -1257,8 +1262,8 @@ document.getElementById('btn-verify-otp').onclick = async () => {
   }
 };
 </script>
-<script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-1"></script>
+<script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-2"></script>
 <script src="tienda.js?v=tintin-20260903-identity-cache-sync-2" defer></script>
-  <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-1"></script>
+  <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-2"></script>
 </body>
 </html>

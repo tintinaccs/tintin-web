@@ -5,7 +5,7 @@
  * correos, autenticado con el idToken real de quien compra.
  */
 import { EMAIL_WEBHOOK_URL } from './email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1';
-import { auth } from './core/firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1';
+import { auth } from './core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
 
 const CREATE_ORDER_TIMEOUT_MS = 35000;
 

@@ -17,11 +17,11 @@
 // que ni siquiera Admin tiene hoy (no estaban en el "sugerido" para Admin del
 // pedido original). Se dejan protegidas y se explica en el reporte final.
 
-import { db } from "../firebase/firebase.js?v=tintin-20260904-auth-runtime-cache-reset-1";
+import { db } from "../firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1";
 import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { PERMISSIONS } from "./roles.js?v=tintin-20260821-accounts-phase-a-1";
+import { PERMISSIONS } from "./roles.js?v=tintin-20260821-accounts-phase-a-2";
 import { EDITABLE_PERMISSION_ROLES } from './contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 
 export const ROLE_PERM_DOC = { col: 'rolePermissions', id: 'main' };

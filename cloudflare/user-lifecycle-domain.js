@@ -32,7 +32,7 @@ function lifecyclePatch(action, user, actorEmail, now, changeId, origin) {
       blockReason: fsString(''),
       role: fsString('client'),
       roleBeforeBlock: fsString(''),
-      profileStatus: fsString(user.username && user.birthDate ? 'active' : 'incomplete'),
+      profileStatus: fsString(user.username && user.dob ? 'active' : 'incomplete'),
       lastChangeId: fsString(changeId),
       syncOrigin: fsString(origin),
       updatedAt: fsTimestamp(now),
@@ -94,7 +94,7 @@ export async function applyUserLifecycle(env, options = {}) {
   const now = new Date();
   const eventId = makeEventId();
   const patch = lifecyclePatch(action, user, actorEmail, now, changeId, origin);
-  const afterStatus = action === 'softDelete' ? 'deleted' : (user.username && user.birthDate ? 'active' : 'incomplete');
+  const afterStatus = action === 'softDelete' ? 'deleted' : (user.username && user.dob ? 'active' : 'incomplete');
   const audit = encodeFirestoreFields({
     eventId,
     timestamp: now,

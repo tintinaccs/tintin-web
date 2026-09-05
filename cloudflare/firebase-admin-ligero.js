@@ -308,16 +308,19 @@ export async function firestoreAdminFindFirstByFields(env, collectionId, fieldPa
  * `get` es inyectable (por defecto firestoreAdminGet) para poder testear
  * sin credenciales reales, mismo patrón que cloudflare/admin-runtime-health.js.
  */
-export async function resolveEmailFromUsernameKey(env, usernameKey, { get = firestoreAdminGet } = {}) {
+export async function resolveEmailFromUsernameKey(
+  env,
+  usernameKey,
+  { get = firestoreAdminGet, find = firestoreAdminFindFirstByFields } = {}
+) {
   const key = String(usernameKey || '').trim();
   if (!key) return null;
   const reservation = await get(env, `usernameReservations/${encodeURIComponent(key)}`);
-  if (!reservation) return null;
-  const { uid } = decodeFirestoreFields(reservation.fields) || {};
-  if (!uid) return null;
-  const userDoc = await get(env, `users/${encodeURIComponent(String(uid))}`);
-  if (!userDoc) return null;
-  const { email } = decodeFirestoreFields(userDoc.fields) || {};
+  const { uid } = decodeFirestoreFields(reservation?.fields) || {};
+  const userDoc = uid
+    ? await get(env, `users/${encodeURIComponent(String(uid))}`)
+    : await find(env, 'users', ['username'], key);
+  const { email } = decodeFirestoreFields(userDoc?.fields) || {};
   return typeof email === 'string' && email ? email.toLowerCase() : null;
 }
 

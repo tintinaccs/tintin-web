@@ -8,6 +8,7 @@ import {
   SHEETS_HEALTH_TIMEOUT_MS,
 } from './sheets-sync-config.js';
 import { getCatalogSheetSyncQueueStatus } from './resiliencia-sync-catalogo.js';
+import { getOrderEmailQueueStatus } from './resiliencia-correo-pedido.js';
 import { fetchAppsScript } from './apps-script-fetch.js';
 
 const REQUIRED_CONFIG = Object.freeze([
@@ -96,6 +97,7 @@ export async function runSystemHealth(env, {
   runtimeRunner = runAdminRuntimeChecks,
   sheetsProbe = probeAppsScript,
   catalogSheetQueueStatus = getCatalogSheetSyncQueueStatus,
+  orderEmailQueueStatus = getOrderEmailQueueStatus,
 } = {}) {
   const missingConfig = REQUIRED_CONFIG.filter(key => !configured(env, key));
   let runtimeReport = null;
@@ -112,6 +114,14 @@ export async function runSystemHealth(env, {
       catalogSheetQueue = await catalogSheetQueueStatus(env);
     } catch (error) {
       console.error('[system-health] Estado de catalogSheetSyncQueue no disponible:', error?.message || error);
+    }
+  }
+  let orderEmailQueue = null;
+  if (!missingConfig.includes('FIREBASE_SERVICE_ACCOUNT_KEY')) {
+    try {
+      orderEmailQueue = await orderEmailQueueStatus(env);
+    } catch (error) {
+      console.error('[system-health] Estado de orderEmailQueue no disponible:', error?.message || error);
     }
   }
 
@@ -133,6 +143,7 @@ export async function runSystemHealth(env, {
     sheets: configured(env, 'SHEETS_ENGAGEMENT_SECRET') && sheets.protocolOk === true,
     appsScript: sheets,
     catalogSheetQueue,
+    orderEmailQueue,
   };
   const ok = missingConfig.length === 0 && runtimeReport?.ok === true && integrations.sheets === true;
 

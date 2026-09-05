@@ -38,6 +38,14 @@ La cola `catalogSheetSyncQueue` se drena cada 15 minutos desde `.github/workflow
 
 Esto evita mantener una segunda copia de `FIREBASE_SERVICE_ACCOUNT_JSON`/`FIREBASE_SERVICE_ACCOUNT_KEY` en GitHub Actions y elimina los fallos programados causados por secretos Firebase ausentes en GitHub.
 
+## Correos
+
+`/api/order-email` envía la confirmación de pedido de forma síncrona a la solicitud del cliente. Si un canal (admin o cliente) falla, el intento fallido se encola en `orderEmailQueue` sin bloquear ni romper la respuesta al cliente.
+
+La cola `orderEmailQueue` se drena cada 15 minutos desde `.github/workflows/drenar-cola-correo-pedidos.yml`, con el mismo patrón que `catalogSheetSyncQueue`: GitHub actúa únicamente como reloj, obtiene un token OIDC efímero y llama a `/api/order-email-drain`; Cloudflare verifica la identidad de GitHub (repositorio, rama, workflow, audiencia `tintin-order-email-retry`) y ejecuta el drenaje con sus propias credenciales Firebase y `RESEND_API_KEY`.
+
+Cada tarea de la cola se reclama con bloqueo optimista sobre `updateTime` para evitar reenvíos duplicados en paralelo, reintenta con backoff creciente y pasa a `dead_letter` (con alerta idempotente al admin) tras 8 intentos. El reintento llama a `sendOrderEmails` con `isResend:false`, reutilizando el mismo sufijo de idempotencia del intento original para que Resend no duplique un envío que en realidad sí llegó a salir.
+
 ## Regla de cambio
 
 No crear un workflow nuevo para una auditoría que pueda agregarse al gate central o al Diagnóstico Maestro. Un workflow nuevo solo se justifica si tiene una cadencia/permiso/efecto operativo distinto. El contrato canónico limita la cantidad total de workflows y exige que solo `auditar-tintin.yml` responda a `pull_request`.

@@ -118,17 +118,27 @@ window.TintinAppCheckReady = appCheckReady;
 const db = getFirestore(app);
 
 const auth = getAuth(app);
-// La sesión sobrevive al cierre, duplicado y reapertura de pestañas. La
-// expiración de 30 minutos la controla proteccion-sesion.js.
-export const authPersistenceReady = setPersistence(auth, browserLocalPersistence)
-  .catch(error => {
-    console.warn('[firebase-auth] No se pudo establecer persistencia local; se usa la de pestaña:', error?.code || error);
-    return setPersistence(auth, browserSessionPersistence);
-  })
-  .catch(error => {
-    console.warn('[firebase-auth] No se pudo establecer persistencia de pestaña:', error?.code || error);
-    throw error;
-  });
+// La sesión sobrevive al cierre, duplicado y reapertura de pestañas gracias a
+// la jerarquía de persistencia por defecto del SDK (indexedDB primero). Fijar
+// explícitamente setPersistence solo es necesario en login.html, justo antes
+// de completar un inicio de sesión (popup, OTP o link por correo) — es el uso
+// que documenta Firebase. Llamarlo en cada carga de pestaña en el resto de
+// páginas compite con la resolución de la sesión ya persistida: setPersistence
+// no es idempotente y puede pisar la sesión válida que ya vive en IndexedDB,
+// dejando a una pestaña nueva sin detectar que la cuenta sigue logueada.
+// La expiración de 30 minutos la controla proteccion-sesion.js.
+const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');
+export const authPersistenceReady = IS_LOGIN_PAGE
+  ? setPersistence(auth, browserLocalPersistence)
+      .catch(error => {
+        console.warn('[firebase-auth] No se pudo establecer persistencia local; se usa la de pestaña:', error?.code || error);
+        return setPersistence(auth, browserSessionPersistence);
+      })
+      .catch(error => {
+        console.warn('[firebase-auth] No se pudo establecer persistencia de pestaña:', error?.code || error);
+        throw error;
+      })
+  : Promise.resolve(true);
 // Idioma para cualquier mensaje/UI de Firebase Auth — se fija una sola vez
 auth.languageCode = "es";
 const provider = new GoogleAuthProvider();

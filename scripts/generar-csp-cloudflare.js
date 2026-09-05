@@ -203,11 +203,11 @@ function cleanRoutes() {
 // respuesta HTML servida por functions/_middleware.js para /login o /admin
 // puede entonces cachearse (borde o navegador) con headers desactualizados,
 // incluyendo la CSP corta de fallback en vez de la dinámica. No se agrega
-// esto al bloque global /* porque auditar-headers-produccion.mjs verifica
-// que ese bloque nunca vuelva a imponer no-store sobre los assets estáticos.
+// esto al bloque global /* porque ese bloque también alcanza los assets y debe
+// permitir que sus reglas de caché inmutable tengan prioridad.
 function cleanRouteCacheControlBlock() {
   return cleanRoutes()
-    .map(route => `${route}\n  Cache-Control: no-cache, no-store, must-revalidate`)
+    .map(route => `${route}\n  Cache-Control: no-cache, must-revalidate`)
     .join('\n\n');
 }
 
