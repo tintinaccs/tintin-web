@@ -55,7 +55,11 @@ export async function onRequestPost({ request, env, waitUntil }) {
   const events = Array.isArray(body?.events) ? body.events.slice(0, 20) : [body];
   const normalized = events.map(normalizeEvent);
 
-  for (const event of normalized) console.log('[telemetry]', JSON.stringify(event));
+  const kindCounts = normalized.reduce((counts, event) => {
+    counts[event.kind] = (counts[event.kind] || 0) + 1;
+    return counts;
+  }, {});
+  console.log('[telemetry]', JSON.stringify({ accepted: normalized.length, kinds: kindCounts }));
   if (typeof waitUntil === 'function') {
     for (const event of normalized) waitUntil(forward(env, event));
   }
