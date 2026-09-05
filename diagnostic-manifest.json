@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-05T20:05:30.420Z",
-  "sourceFingerprint": "3e70d300b52790dd6db363e7d73763fa725c87722a38b4288fa39ab3925d3f77",
+  "generatedAt": "2026-09-05T20:09:14.232Z",
+  "sourceFingerprint": "a850e7a35947b4277888437e28832113694f17839c1c9e5c717e8bbb31b0b951",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 809,
     "textFiles": 776,
-    "totalBytes": 10001415,
+    "totalBytes": 10001394,
     "pages": 18,
     "modules": 557
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 188157,
-      "sha256": "7d0df4591c55006d5202225570c323fdb2be0bf963c4012e2923b62154bba81a",
+      "bytes": 188158,
+      "sha256": "71671c8e1fc4804691f2c27f2e7a185b35d5961b3c8ff490bca79aa686428fc3",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2114,7 +2114,7 @@
           "line": 8
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260904-auth-guard-harden-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20260905-auth-restore-grace-1",
           "target": "js/admin/admin-app.js",
           "line": 1978
         },
@@ -2353,7 +2353,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260904-auth-guard-harden-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20260905-auth-restore-grace-1",
           "target": "js/admin/admin-app.js",
           "line": 1978,
           "exists": true
@@ -19977,8 +19977,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 427705,
-      "sha256": "87ee28e867047af41e60cbbf74094deb37c8cd9e398e74bd6beffaa5ebc53705",
+      "bytes": 427683,
+      "sha256": "9feac5b55102175a2908e27296dacd69f302524388944f70a86c1d71377306b0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32223,8 +32223,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 188157,
-      "sha256": "7d0df4591c55006d5202225570c323fdb2be0bf963c4012e2923b62154bba81a"
+      "bytes": 188158,
+      "sha256": "71671c8e1fc4804691f2c27f2e7a185b35d5961b3c8ff490bca79aa686428fc3"
     },
     {
       "path": "apple-touch-icon.png",
@@ -33933,8 +33933,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 427705,
-      "sha256": "87ee28e867047af41e60cbbf74094deb37c8cd9e398e74bd6beffaa5ebc53705"
+      "bytes": 427683,
+      "sha256": "9feac5b55102175a2908e27296dacd69f302524388944f70a86c1d71377306b0"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",

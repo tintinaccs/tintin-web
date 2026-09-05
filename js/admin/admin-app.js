@@ -863,8 +863,8 @@ async function startAdminAuthGuard() {
     }
   }
 
-  onAuthStateChanged(auth, async observedUser => {
-    const user = await waitForAdminUserAfterAuthRestore(observedUser);
+  onAuthStateChanged(auth, async user => {
+    user = await waitForAdminUserAfterAuthRestore(user);
     // Este es el único caso de sesión ausente que manda al login. replace()
     // evita dejar /admin en el historial y elimina el ping-pong con Atrás.
     if (!user) {
