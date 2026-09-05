@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-04T23:44:26.904Z",
-  "sourceFingerprint": "0944891185394603cd9f0fde1f2ca9081c767e8c28675f48400f089d2f3e2f94",
+  "generatedAt": "2026-09-05T01:19:10.463Z",
+  "sourceFingerprint": "eb5e7797d0192d2575685ab1d63059e7bf8af4b86310ddc1518aed304853c509",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 805,
-    "textFiles": 772,
-    "totalBytes": 9971564,
+    "files": 806,
+    "textFiles": 773,
+    "totalBytes": 9975270,
     "pages": 18,
-    "modules": 553
+    "modules": 554
   },
   "viewports": [
     {
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 188161,
-      "sha256": "5f63810646dce0b202f78013c892bb3a441e9cbb5bd08d36c4bbafe0d46ede73",
+      "bytes": 188181,
+      "sha256": "d5fd23c154193cfc38dac54ec6b7f97418ba39e3f497af8491f278bd3189a9c2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2114,7 +2114,7 @@
           "line": 8
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260904-auth-guard-harden-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20260905-admin-auth-responsive-1",
           "target": "js/admin/admin-app.js",
           "line": 1978
         },
@@ -2353,7 +2353,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260904-auth-guard-harden-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20260905-admin-auth-responsive-1",
           "target": "js/admin/admin-app.js",
           "line": 1978,
           "exists": true
@@ -2572,7 +2572,7 @@
         },
         {
           "id": "",
-          "classes": "adm-table",
+          "classes": "adm-table adm-table-users",
           "line": 405
         },
         {
@@ -18747,8 +18747,8 @@
     },
     {
       "path": "functions/api/email-otp-send.js",
-      "bytes": 11672,
-      "sha256": "38ba58fcd984468550f88c0c6c949240779e8e95b7a28915811de8e04647074c",
+      "bytes": 12009,
+      "sha256": "fb374265df69f3b91cdaa5a8148b5bff2bf9a4ab7fbd9dda81c5795c2b85f218",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18780,11 +18780,11 @@
         },
         {
           "url": "https://api.resend.com/emails/$%7BencodeURIComponent(safeId",
-          "line": 91
+          "line": 100
         },
         {
           "url": "https://api.resend.com/emails",
-          "line": 133
+          "line": 142
         }
       ]
     },
@@ -18927,8 +18927,8 @@
     },
     {
       "path": "functions/api/master-diagnostics.js",
-      "bytes": 12618,
-      "sha256": "36a3b3bb020e9f78ec5e5f8353df3f7238891b85bd282929677f7f7e38c6d850",
+      "bytes": 13176,
+      "sha256": "ba1800cbf5d60a00ff52050b7da8d8308aa0a96db6fe43153e40df803232dc38",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18938,17 +18938,17 @@
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 6
+          "line": 7
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 12
+          "line": 13
         },
         {
           "url": "https://api.github.com/",
-          "line": 13
+          "line": 14
         }
       ]
     },
@@ -19905,8 +19905,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 427211,
-      "sha256": "a0e8e831c77721820c8159dea46656769cc1cd0096a0fd84414e299cd1840f5d",
+      "bytes": 427419,
+      "sha256": "596471b2403e0b327511b002df3fdf7c377669603f14116e76172b8094109176",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27601,8 +27601,8 @@
     },
     {
       "path": "scripts/auditar-nivel-1-fundamentos.js",
-      "bytes": 7182,
-      "sha256": "a5a0f20158c3387ca13a53ec5e0d44412a7dee605680d8f03f1b3b830fcfe7b6",
+      "bytes": 7195,
+      "sha256": "ff1c467c57c3726cbd67ac656b6b4b9f7f644477b1d7c95cfbc37938f515f922",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29424,8 +29424,8 @@
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
-      "bytes": 3979,
-      "sha256": "460f9ce80fe186efeed549956e09f6953b9dab2f81638bd5c4f39bb0d5ee9a64",
+      "bytes": 4133,
+      "sha256": "e48d7fbc8446b6153abee3d19dcc13498002928839956c4fdf06564172a4c27a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30257,6 +30257,36 @@
           "target": null,
           "dynamic": false,
           "line": 5
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/diagnostics/master-diagnostics-contract.test.mjs",
+      "bytes": 757,
+      "sha256": "cc22db272611eeebc7ca8330f344caecf696120abc4f47114b3ec61d528a32aa",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
         }
       ],
       "endpoints": []
@@ -32073,8 +32103,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 188161,
-      "sha256": "5f63810646dce0b202f78013c892bb3a441e9cbb5bd08d36c4bbafe0d46ede73"
+      "bytes": 188181,
+      "sha256": "d5fd23c154193cfc38dac54ec6b7f97418ba39e3f497af8491f278bd3189a9c2"
     },
     {
       "path": "apple-touch-icon.png",
@@ -32541,8 +32571,8 @@
     {
       "path": "css/admin/admin.css",
       "extension": ".css",
-      "bytes": 78591,
-      "sha256": "8a3083aa88dd1d987494c18321b2cab33f5f5728ada2e7890b155d6d1d80f0b4"
+      "bytes": 80402,
+      "sha256": "6a859f8758bb3086ad6f03c3bc4a0ceaba10619b253b13743de1cef410072ad3"
     },
     {
       "path": "css/admin/diagnostico-maestro.css",
@@ -33135,8 +33165,8 @@
     {
       "path": "docs/lista-impacto-cambios.md",
       "extension": ".md",
-      "bytes": 4581,
-      "sha256": "b845dbee37fa025ab60908c35bf09ca4e27be31d1cdaf87af2ecabe4edade79a"
+      "bytes": 4598,
+      "sha256": "87dd53d35856a7a04b81ea0e39fb4fc7b17385d33c5220d297365b1f2f67e20c"
     },
     {
       "path": "docs/maintenance/05-checkout.txt",
@@ -33453,8 +33483,8 @@
     {
       "path": "functions/api/email-otp-send.js",
       "extension": ".js",
-      "bytes": 11672,
-      "sha256": "38ba58fcd984468550f88c0c6c949240779e8e95b7a28915811de8e04647074c"
+      "bytes": 12009,
+      "sha256": "fb374265df69f3b91cdaa5a8148b5bff2bf9a4ab7fbd9dda81c5795c2b85f218"
     },
     {
       "path": "functions/api/email-otp-verify.js",
@@ -33489,8 +33519,8 @@
     {
       "path": "functions/api/master-diagnostics.js",
       "extension": ".js",
-      "bytes": 12618,
-      "sha256": "36a3b3bb020e9f78ec5e5f8353df3f7238891b85bd282929677f7f7e38c6d850"
+      "bytes": 13176,
+      "sha256": "ba1800cbf5d60a00ff52050b7da8d8308aa0a96db6fe43153e40df803232dc38"
     },
     {
       "path": "functions/api/notifications.js",
@@ -33771,8 +33801,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 427211,
-      "sha256": "a0e8e831c77721820c8159dea46656769cc1cd0096a0fd84414e299cd1840f5d"
+      "bytes": 427419,
+      "sha256": "596471b2403e0b327511b002df3fdf7c377669603f14116e76172b8094109176"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -35823,8 +35853,8 @@
     {
       "path": "scripts/auditar-nivel-1-fundamentos.js",
       "extension": ".js",
-      "bytes": 7182,
-      "sha256": "a5a0f20158c3387ca13a53ec5e0d44412a7dee605680d8f03f1b3b830fcfe7b6"
+      "bytes": 7195,
+      "sha256": "ff1c467c57c3726cbd67ac656b6b4b9f7f644477b1d7c95cfbc37938f515f922"
     },
     {
       "path": "scripts/auditar-nivel-2-comercio.js",
@@ -36087,8 +36117,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 37481,
-      "sha256": "6d120b36b78f29f98d465affe9952a1fbe10be436c3dabfe51149940878ca37f"
+      "bytes": 37312,
+      "sha256": "c1bb642b33af0021020a86db2346df10f6bb04ff019bc6db0cf6695351150cc8"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -36321,8 +36351,8 @@
     {
       "path": "tests/accounts/account-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 3979,
-      "sha256": "460f9ce80fe186efeed549956e09f6953b9dab2f81638bd5c4f39bb0d5ee9a64"
+      "bytes": 4133,
+      "sha256": "e48d7fbc8446b6153abee3d19dcc13498002928839956c4fdf06564172a4c27a"
     },
     {
       "path": "tests/accounts/username-login.test.mjs",
@@ -36455,6 +36485,12 @@
       "extension": ".mjs",
       "bytes": 919,
       "sha256": "cd147ea0599730dc24b97a521aed18dac71d60a6733b79e4a8066b1af4afa8df"
+    },
+    {
+      "path": "tests/diagnostics/master-diagnostics-contract.test.mjs",
+      "extension": ".mjs",
+      "bytes": 757,
+      "sha256": "cc22db272611eeebc7ca8330f344caecf696120abc4f47114b3ec61d528a32aa"
     },
     {
       "path": "tests/engagement/firebase-id-token.test.mjs",
