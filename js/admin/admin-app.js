@@ -27,6 +27,7 @@ import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tin
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260901-media-orphan-log-3";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260901-media-orphan-scan-2";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260821-accounts-phase-a-2";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260906-flujo-conexiones-1";
 import "./pages/paginas-admin.js?v=tintin-20260825-pages-3";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
@@ -502,6 +503,7 @@ const SECTION_LABELS = {
   mensajes: 'Mensajes',
   auditoria: 'Auditoría',
   diagnostico: 'Diagnóstico',
+  'flujo-conexiones': 'Flujo de conexiones',
   correos: 'Correos',
   'notificaciones-push': 'Notificaciones push',
   configuracion: 'Configuración',
@@ -533,6 +535,9 @@ const SECTION_PERMISSION = {
   // acciones se anotan igual), pero no puede abrir esta sección a verlo.
   auditoria:     'manageSettings',
   diagnostico:   'manageSettings',
+  // Flujo de conexiones: mismo criterio que Diagnóstico — expone evidencia
+  // real de arquitectura/seguridad del ecosistema, exclusivo Super Admin.
+  'flujo-conexiones': 'manageSettings',
   // Correos: mismo criterio que Usuarios/Configuración/Auditoría — exclusivo
   // Super Admin (ni admin ni el Modder ven este menú, aunque sus propias
   // acciones en Pedidos puedan disparar un correo automático configurado acá).
@@ -588,6 +593,10 @@ function switchSection(target) {
   }
   if (target === 'diagnostico' && (currentRole !== 'superadmin' || currentUser?.email !== SUPER_ADMIN)) {
     toast('Diagnóstico es exclusivo de Super Admin');
+    target = 'dashboard';
+  }
+  if (target === 'flujo-conexiones' && (currentRole !== 'superadmin' || currentUser?.email !== SUPER_ADMIN)) {
+    toast('Flujo de conexiones es exclusivo de Super Admin');
     target = 'dashboard';
   }
   // IMPORTANTE: se consultan en vivo (no las NodeList estáticas navItems /
@@ -931,6 +940,7 @@ async function startAdminAuthGuard() {
       setupPermissions(role);
       if (role === 'superadmin' && String(user.email || '').trim().toLowerCase() === SUPER_ADMIN.toLowerCase()) {
         initSiteDiagnostics({ role });
+        initConnectionsFlow({ role });
       }
       startAdminRealtimeData();
       loadDashboard();
@@ -995,6 +1005,9 @@ function setupPermissions(role) {
 
   if (role !== 'superadmin' || currentUser?.email !== SUPER_ADMIN) {
     document.querySelectorAll('[data-section="diagnostico"]').forEach(el => {
+      el.style.display = 'none';
+    });
+    document.querySelectorAll('[data-section="flujo-conexiones"]').forEach(el => {
       el.style.display = 'none';
     });
   }
