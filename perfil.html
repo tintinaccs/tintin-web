@@ -322,7 +322,7 @@
 <script src="tienda.js?v=tintin-20260903-identity-cache-sync-2"></script>
 
 <script type="module">
-import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1";
+import { auth, db, authPersistenceReady } from "./js/core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1";
 import {
   signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -417,24 +417,61 @@ function statusBadge(status) {
   return `<span style="display:inline-block;padding:2px 8px;border-radius:50px;font-size:10px;font-weight:700;background:${c}20;color:${c};text-transform:uppercase">${escapeHtmlPerfil(status)}</span>`;
 }
 
-onAuthStateChanged(auth, async user => {
-  if (!user) {
-    window.location.href = 'login.html';
-    return;
+// Un null transitorio puede llegar antes de que Firebase termine de restaurar
+// la sesión persistida (misma condición de carrera que en admin-app.js): sin
+// esta espera, una recarga de esta pestaña rebota a login.html aunque la
+// cuenta siga logueada.
+async function waitForProfileUserAfterAuthRestore(user) {
+  if (user) return user;
+  const RETRY_DELAY_MS = 300;
+  const MAX_ATTEMPTS = 6;
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
+    await new Promise(resolve => window.setTimeout(resolve, RETRY_DELAY_MS));
+    if (auth.currentUser) return auth.currentUser;
   }
-  // Cuenta bloqueada (Fase E): afuera de Mi Cuenta antes de pintar nada, con
-  // mensaje claro en login.html. Se aprovecha esta misma lectura más abajo
-  // para no duplicar el getDoc.
-  const ref  = doc(db, 'users', user.uid);
-  const snap = await getDoc(ref);
-  const userData = snap.exists() ? snap.data() : null;
-  if (userData?.blocked) {
-    await signOut(auth);
-    window.location.href = 'login.html?blocked=1';
-    return;
+  return null;
+}
+
+async function startProfileAuthGuard() {
+  try {
+    await authPersistenceReady;
+  } catch (error) {
+    console.warn('[Perfil] Auth persistence unavailable:', error);
+  }
+  if (typeof auth.authStateReady === 'function') {
+    try {
+      await auth.authStateReady();
+    } catch (error) {
+      console.warn('[Perfil] Auth initial state did not settle cleanly:', error);
+    }
   }
 
-  hideLoading();
+  onAuthStateChanged(auth, async user => {
+    user = await waitForProfileUserAfterAuthRestore(user);
+    if (!user) {
+      window.location.href = 'login.html';
+      return;
+    }
+    // Cuenta bloqueada (Fase E): afuera de Mi Cuenta antes de pintar nada, con
+    // mensaje claro en login.html. Se aprovecha esta misma lectura más abajo
+    // para no duplicar el getDoc. Un fallo de Firestore (red, App Check aún
+    // no listo) no debe dejar a una cuenta legítima sin poder ver su perfil:
+    // se trata como "no bloqueada" y se sigue cargando la página.
+    const ref = doc(db, 'users', user.uid);
+    let userData = null;
+    try {
+      const snap = await getDoc(ref);
+      userData = snap.exists() ? snap.data() : null;
+    } catch (error) {
+      console.warn('[Perfil] No se pudo verificar el estado de bloqueo:', error);
+    }
+    if (userData?.blocked) {
+      await signOut(auth);
+      window.location.href = 'login.html?blocked=1';
+      return;
+    }
+
+    hideLoading();
 
   // Avatar
   const avatarEl = document.getElementById('perfil-avatar');
@@ -636,7 +673,10 @@ onAuthStateChanged(auth, async user => {
     signOut(auth).then(() => { window.location.href = 'index.html'; })
       .catch(() => window.TintinReleaseProfileButton?.('btn-logout'));
 
-});
+  });
+}
+
+startProfileAuthGuard();
 
 async function loadUserOrders(user) {
   const listEl = document.getElementById('perfil-orders-list');
