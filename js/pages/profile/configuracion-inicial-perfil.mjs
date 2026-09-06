@@ -70,10 +70,10 @@ export function splitFullName(value) {
 
 /** Lee nombre/apellido de un perfil, tolerando los que sólo tienen `name`. */
 export function readProfileName(profile = {}) {
-  const first = clean(profile.firstName);
-  const last = clean(profile.lastName);
+  const first = clean(profile.firstName || profile.first_name || profile.nombre);
+  const last = clean(profile.lastName || profile.last_name || profile.apellido);
   if (first || last) return { firstName: first, lastName: last };
-  return splitFullName(profile.name);
+  return splitFullName(profile.name || profile.fullName || profile.nombreCompleto);
 }
 
 /**
@@ -106,9 +106,9 @@ function locationCandidates(profile = {}) {
     profile.coords,
     {
       lat: profile.addressLat ?? profile.latitude,
-      lng: profile.addressLng ?? profile.longitude,
-      name: profile.locationName ?? profile.addressName,
-      address: profile.address,
+      lng: profile.addressLng ?? profile.longitude ?? profile.longitud,
+      name: profile.locationName ?? profile.addressName ?? profile.nombreUbicacion,
+      address: profile.address ?? profile.direccion,
     },
   ];
   return candidates.filter(candidate => candidate && typeof candidate === 'object');
@@ -117,13 +117,13 @@ function locationCandidates(profile = {}) {
 function normalizeStoredLocation(candidate = {}, profile = {}) {
   const geoPoint = candidate.geoPoint || candidate.geopoint || candidate.point || {};
   const coordinates = candidate.coordinates || candidate.coords || {};
-  const lat = candidate.lat ?? candidate.latitude ?? candidate.addressLat ??
+  const lat = candidate.lat ?? candidate.latitude ?? candidate.latitud ?? candidate.addressLat ??
     coordinates.lat ?? coordinates.latitude ?? geoPoint.latitude;
   const lng = candidate.lng ?? candidate.longitude ?? candidate.addressLng ??
     coordinates.lng ?? coordinates.longitude ?? geoPoint.longitude;
   const name = clean(candidate.name ?? candidate.locationName ?? candidate.addressName ??
     candidate.label ?? candidate.title ?? profile.locationName ?? profile.addressName);
-  const address = clean(candidate.address ?? candidate.formattedAddress ?? candidate.displayName ?? profile.address);
+  const address = clean(candidate.address ?? candidate.formattedAddress ?? candidate.displayName ?? profile.address ?? profile.direccion);
   return { lat, lng, name, ...(address ? { address } : {}) };
 }
 
@@ -148,16 +148,16 @@ function asDate(value) {
 
 /** Acepta el campo canónico `dob` y los nombres históricos del panel. */
 export function hasUsableDob(profile = {}) {
-  const date = asDate(profile.dob || profile.birthDate || profile.dateOfBirth || profile.fechaNacimiento);
+  const date = asDate(profile.dob || profile.birthDate || profile.dateOfBirth || profile.fechaNacimiento || profile.fecha_nacimiento);
   return !!date && isValidDob(date.toISOString().slice(0, 10));
 }
 
 function storedPhoneValue(profile = {}) {
-  return clean(profile.phone || profile.phoneNumber || profile.whatsapp || profile.whatsappNumber);
+  return clean(profile.phone || profile.phoneNumber || profile.whatsapp || profile.whatsappNumber || profile.telefono || profile.celular);
 }
 
 function storedUsername(profile = {}) {
-  return clean(profile.username || profile.userName);
+  return clean(profile.username || profile.userName || profile.nombreUsuario || profile.nombre_usuario);
 }
 
 /** Convierte un resultado del buscador al formato `savedLocation`. */
@@ -214,6 +214,20 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
   // reabría el formulario para perfiles históricos aunque sus campos ya
   // estuvieran aprobados por Firestore.
   if (clean(profile.profileStatus).toLowerCase() === 'active') {
+    exposeSavedLocationForOnboarding(profile);
+    return {
+      skip: true, needsName: false, needsPhone: false, needsAddress: false,
+      needsUsername: false, needsDob: false,
+      addressAlreadySaved: hasUsableAddress(profile),
+      suggestedName: '', suggestedFirstName: '', suggestedLastName: '',
+    };
+  }
+
+  // Las cuentas creadas antes del formulario actual ya marcaban el alta como
+  // terminada con `onboardingCompleted`. Es una confirmación persistida de
+  // que no son cuentas nuevas: jamás se les debe reabrir "Últimos datos" por
+  // cambios posteriores de nombres internos de campos.
+  if (profile.onboardingCompleted === true) {
     exposeSavedLocationForOnboarding(profile);
     return {
       skip: true, needsName: false, needsPhone: false, needsAddress: false,
