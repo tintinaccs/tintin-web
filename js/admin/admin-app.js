@@ -41,6 +41,7 @@ import './orders/pedidos-superadmin-crud.js?v=tintin-20260821-accounts-phase-a-2
 // ---- GLOBALS ----
 let currentUser = null;
 let currentRole = null;
+let adminGuardInitializedUid = '';
 let allUsers = [];
 let allOrders = [];
 let adminOrdersUnsubscribe = null;
@@ -838,11 +839,20 @@ function showAdminInitFailure() {
 
 async function waitForAdminUserAfterAuthRestore(user) {
   if (user) return user;
-  // authStateReady() ya se espera arriba, pero en una navegación inmediata
-  // desde el popup Firebase puede emitir un null transitorio antes de copiar
-  // la sesión persistida a esta pestaña. No mandar al login por ese estado.
-  await new Promise(resolve => window.setTimeout(resolve, 1200));
-  return auth.currentUser || null;
+  // authStateReady() ya se espera arriba, pero un null transitorio puede llegar
+  // en más de un momento: en la navegación inmediata desde el popup de Google
+  // (antes de copiar la sesión persistida a esta pestaña) o más tarde, ya con
+  // el panel cargado, por una renovación de token/sync de persistencia. Un
+  // único chequeo a los 1200ms sólo cubría el primer caso; acá se reintenta
+  // varias veces para no rebotar al login por un estado pasajero en cualquiera
+  // de los dos momentos.
+  const RETRY_DELAY_MS = 300;
+  const MAX_ATTEMPTS = 6;
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
+    await new Promise(resolve => window.setTimeout(resolve, RETRY_DELAY_MS));
+    if (auth.currentUser) return auth.currentUser;
+  }
+  return null;
 }
 
 async function startAdminAuthGuard() {
@@ -873,6 +883,15 @@ async function startAdminAuthGuard() {
     }
 
     currentUser = user;
+
+    // El guard puede volver a dispararse con el mismo usuario ya inicializado
+    // (por ejemplo, tras absorber un null transitorio de arriba). Repetir toda
+    // la carga (dashboard, productos, colecciones, listeners en tiempo real)
+    // no aporta nada y sólo genera parpadeo; alcanza con seguir mostrando el
+    // panel ya activo.
+    if (adminGuardInitializedUid === user.uid && document.documentElement.classList.contains('adm-auth-ready')) {
+      return;
+    }
 
     try {
       await appCheckReady;
@@ -919,6 +938,7 @@ async function startAdminAuthGuard() {
       loadColecciones();
       applyInitialSectionFromUrl();
       document.documentElement.classList.add('adm-auth-ready');
+      adminGuardInitializedUid = user.uid;
       hideOverlay();
     } catch (error) {
       // Un fallo de Firestore, App Check, permisos dinámicos o UI NO significa
