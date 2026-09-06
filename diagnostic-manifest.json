@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-06T15:23:41.774Z",
-  "sourceFingerprint": "8e8bebfa00a73dba840f0ee494d5ead5451d939d2f4355b90ea2bad25b0d2331",
+  "generatedAt": "2026-09-06T15:46:08.619Z",
+  "sourceFingerprint": "40a8cb80643c03ff860c2e01d1e57663461addb6652139890c58cd17da843b18",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 812,
     "textFiles": 779,
-    "totalBytes": 10044553,
+    "totalBytes": 10044979,
     "pages": 18,
     "modules": 559
   },
@@ -2080,7 +2080,7 @@
         "viewer"
       ],
       "bytes": 189230,
-      "sha256": "396ff952ba8111fbec789438b8e9430ba3d2616b2e2b8090214c1c9b9ef56dcc",
+      "sha256": "a6cc199036c46d7984024b393053c3bcb07406dd5d55d9a7ff14d9b9119def0b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2174,7 +2174,7 @@
           "line": 2206
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-2",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260906-superadmin-maestro-3",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2207
         }
@@ -2430,7 +2430,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-2",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260906-superadmin-maestro-3",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2207,
           "exists": true
@@ -20813,7 +20813,7 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "bytes": 26388,
-      "sha256": "df7a3e3f809943e2afe8d5fa3fdaed9ed637120e2e34cd3391cef47b89d924a8",
+      "sha256": "8f6ed2320b6bffae3fb596702bfdd3fbfc831d46546c7e7fa8635ba502094459",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20838,7 +20838,7 @@
           "line": 3
         },
         {
-          "raw": "./registro-maestro.js?v=tintin-20260831-superadmin-maestro-1",
+          "raw": "./registro-maestro.js?v=tintin-20260906-superadmin-maestro-2",
           "target": "js/admin/maestro/registro-maestro.js",
           "dynamic": false,
           "line": 8
@@ -20853,8 +20853,8 @@
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
-      "bytes": 9077,
-      "sha256": "f421cb358314a57e4a5d2714c1f7c2dfae7d695d2cc2587c26446623669b4f8b",
+      "bytes": 9426,
+      "sha256": "092d4c4ac3da21342cab39f4011e2521a4ee36639ae33846f78f152504e9b0bf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28344,7 +28344,7 @@
     {
       "path": "scripts/auditar-superadmin-maestro-conexiones.mjs",
       "bytes": 7480,
-      "sha256": "5c9c3a653b9b1f0ab750142b41468c1f6cd691089298d4cb10e960180a701579",
+      "sha256": "ec56aaa69405dc404763decfb95915e3cd69c015cf8b4e59f45b75425727db62",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28410,7 +28410,7 @@
     {
       "path": "scripts/auditar-superadmin-maestro.mjs",
       "bytes": 8525,
-      "sha256": "59a57d7e464024c0c9a83da6a84d8cf05ac7a74283e2dcda1ca6f159fb095e90",
+      "sha256": "1df531157e190b64a5b550eee5cba0479cbec9ae810596579d12444df9ef1f22",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28433,8 +28433,8 @@
     },
     {
       "path": "scripts/auditar-superadmin-modulos-completos.mjs",
-      "bytes": 5325,
-      "sha256": "9c6b4e09477075278047c1ef0b003648325f869e34a31475e7651017e90248aa",
+      "bytes": 5402,
+      "sha256": "2dfe47965fe9ad264bde98e4c92ae943bc5e58889781054a8e50d5347c2fda17",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32330,7 +32330,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 189230,
-      "sha256": "396ff952ba8111fbec789438b8e9430ba3d2616b2e2b8090214c1c9b9ef56dcc"
+      "sha256": "a6cc199036c46d7984024b393053c3bcb07406dd5d55d9a7ff14d9b9119def0b"
     },
     {
       "path": "apple-touch-icon.png",
@@ -34154,13 +34154,13 @@
       "path": "js/admin/maestro/panel-maestro.js",
       "extension": ".js",
       "bytes": 26388,
-      "sha256": "df7a3e3f809943e2afe8d5fa3fdaed9ed637120e2e34cd3391cef47b89d924a8"
+      "sha256": "8f6ed2320b6bffae3fb596702bfdd3fbfc831d46546c7e7fa8635ba502094459"
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
       "extension": ".js",
-      "bytes": 9077,
-      "sha256": "f421cb358314a57e4a5d2714c1f7c2dfae7d695d2cc2587c26446623669b4f8b"
+      "bytes": 9426,
+      "sha256": "092d4c4ac3da21342cab39f4011e2521a4ee36639ae33846f78f152504e9b0bf"
     },
     {
       "path": "js/admin/notifications/enlace-pedido-push.js",
@@ -36272,7 +36272,7 @@
       "path": "scripts/auditar-superadmin-maestro-conexiones.mjs",
       "extension": ".mjs",
       "bytes": 7480,
-      "sha256": "5c9c3a653b9b1f0ab750142b41468c1f6cd691089298d4cb10e960180a701579"
+      "sha256": "ec56aaa69405dc404763decfb95915e3cd69c015cf8b4e59f45b75425727db62"
     },
     {
       "path": "scripts/auditar-superadmin-maestro-responsive.mjs",
@@ -36284,13 +36284,13 @@
       "path": "scripts/auditar-superadmin-maestro.mjs",
       "extension": ".mjs",
       "bytes": 8525,
-      "sha256": "59a57d7e464024c0c9a83da6a84d8cf05ac7a74283e2dcda1ca6f159fb095e90"
+      "sha256": "1df531157e190b64a5b550eee5cba0479cbec9ae810596579d12444df9ef1f22"
     },
     {
       "path": "scripts/auditar-superadmin-modulos-completos.mjs",
       "extension": ".mjs",
-      "bytes": 5325,
-      "sha256": "9c6b4e09477075278047c1ef0b003648325f869e34a31475e7651017e90248aa"
+      "bytes": 5402,
+      "sha256": "2dfe47965fe9ad264bde98e4c92ae943bc5e58889781054a8e50d5347c2fda17"
     },
     {
       "path": "scripts/auditar-sync-authority.mjs",
