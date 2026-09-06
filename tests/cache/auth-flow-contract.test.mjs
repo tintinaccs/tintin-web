@@ -15,11 +15,11 @@ test('login mantiene un único dueño del listener de Auth y evita redirecciones
   assert.match(login, /window\.location\.replace\(/);
 });
 
-test('protección de sesión pausa el polling oculto y evita carreras de usuario', () => {
-  assert.match(session, /stopSessionChecks\(\)/);
-  assert.match(session, /document\.hidden/);
-  assert.match(session, /enforceSequence/);
-  assert.match(session, /auth\.currentUser\?\.uid !== user\.uid/);
+test('arranque global no vence ni cierra sesiones automáticamente', () => {
+  assert.match(session, /startProfileGate\(\)/);
+  assert.doesNotMatch(session, /signOut\(/);
+  assert.doesNotMatch(session, /setInterval\(/);
+  assert.doesNotMatch(session, /localStorage\.(?:setItem|removeItem)/);
 });
 
 test('guard de perfil solo redirige checkout y no encadena from', () => {

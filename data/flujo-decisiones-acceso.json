@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "scripts/generar-flujo-decisiones-acceso.mjs",
+  "authority": {
+    "sourceOfTruth": "Firestore",
+    "sheets": "presentación/sincronización de productos; no decide acceso",
+    "admin": "presentación y edición gobernada"
+  },
+  "verified": [
+    {
+      "file": "login.html",
+      "tokens": [
+        "ensureProfileComplete",
+        "redirectByRole",
+        "getProfileCompletionPlan"
+      ]
+    },
+    {
+      "file": "js/core/store/perfil-usuario.js",
+      "tokens": [
+        "profileStatus",
+        "Google Sheets en este proyecto sincroniza productos, no usuarios"
+      ]
+    },
+    {
+      "file": "js/pages/profile/configuracion-inicial-perfil.mjs",
+      "tokens": [
+        "getProfileCompletionPlan",
+        "profileStatus = 'active'"
+      ]
+    },
+    {
+      "file": "functions/api/email-otp-send.js",
+      "tokens": [
+        "resolveEmailFromUsernameKey"
+      ]
+    },
+    {
+      "file": "cloudflare/firebase-admin-ligero.js",
+      "tokens": [
+        "usernameReservations",
+        "users"
+      ]
+    }
+  ],
+  "tabs": [
+    {
+      "id": "acceso-perfil",
+      "label": "Acceso y perfil",
+      "status": "verified"
+    }
+  ]
+}
