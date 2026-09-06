@@ -46,7 +46,7 @@
   <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260901-footer-light-1">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="css/pages/login/login.css?v=tintin-20260902-otp-paste-1">
+  <link rel="stylesheet" href="css/pages/login/login.css?v=tintin-20260906-login-mode-toggle-1">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous" />
   <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/pages/login/login-maintenance.css?v=tintin-20260811-cls-desktop-stable-2" data-tt-login-maintenance>
@@ -90,7 +90,7 @@
         </div>
         <div class="login-google-nudge-backdrop" id="login-google-nudge-backdrop" style="display:none" role="button" tabindex="0" aria-label="Cerrar aviso"></div>
 
-        <div class="login-divider" id="login-divider-section"><span>o usá tu correo</span></div>
+        <div class="login-divider" id="login-divider-section"><span id="login-divider-label">o usá tu correo</span></div>
 
         <div class="login-email-block" id="login-email-block">
           <label class="login-email-label" for="login-email-input" id="login-identifier-label">Correo electrónico</label>
@@ -171,6 +171,10 @@
         </div>
 
         <p class="login-hint" id="login-hint">Sin contraseñas: Google o un código de acceso enviado a tu correo.</p>
+
+        <p class="login-mode-toggle" id="login-mode-toggle-wrap">
+          <button type="button" class="login-mode-toggle-btn" id="login-mode-toggle">¿Tenés cuenta? Si no la tenés, registrate aquí ahora</button>
+        </p>
 
         <div class="login-back" id="login-back-link">
           <a href="/" aria-label="Volver a la tienda">
@@ -1035,7 +1039,7 @@ const loginConGoogle = async () => {
     explicitLoginInProgress = false;
     googleButton.disabled = false;
     document.body.classList.remove('tt-login-busy');
-    googleButtonLabel.textContent = 'Continuar con Google';
+    googleButtonLabel.textContent = googleIdleLabel();
     hideLoginOverlay();
     window.dispatchEvent(new CustomEvent(
       e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request'
@@ -1046,6 +1050,33 @@ const loginConGoogle = async () => {
   }
 };
 document.getElementById("btn-google").onclick = loginConGoogle;
+
+// ======== TOGGLE INGRESAR / REGISTRARSE (solo texto, mismo flujo) ========
+// Google y el código por correo ya crean la cuenta la primera vez que se
+// usan (ver ensureUserProfile en perfil-usuario.js): no existe un "modo
+// registro" técnico distinto de "modo login". Este toggle sólo cambia las
+// etiquetas para que alguien sin cuenta entienda que puede entrar por el
+// mismo botón; el clic dispara siempre el mismo handler de siempre.
+let isSignupMode = false;
+
+function googleIdleLabel() {
+  return isSignupMode ? 'Registrarte con Google' : 'Continuar con Google';
+}
+
+function applyLoginMode() {
+  document.getElementById('btn-google-label').textContent = googleIdleLabel();
+  document.getElementById('login-divider-label').textContent = isSignupMode
+    ? 'o registrate con tu correo'
+    : 'o usá tu correo';
+  document.getElementById('login-mode-toggle').textContent = isSignupMode
+    ? '¿Ya tenés cuenta? Ingresá aquí'
+    : '¿Tenés cuenta? Si no la tenés, registrate aquí ahora';
+}
+
+document.getElementById('login-mode-toggle').onclick = () => {
+  isSignupMode = !isSignupMode;
+  applyLoginMode();
+};
 
 // ======== OPCIÓN 2: INGRESAR CON CORREO (código de 6 dígitos) ========
 // La clienta escribe su correo, le mandamos un código de 6 dígitos que

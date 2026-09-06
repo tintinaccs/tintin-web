@@ -50,13 +50,13 @@ const requiredSections = [
 ];
 check('admin-sections', 'Las superficies base del Admin siguen presentes', requiredSections.every(section => has(files.admin, `section-${section}`)), requiredSections.join(', '));
 
-check('maestro-entry', 'Maestro tiene entrada versionada directa desde admin.html', has(files.admin, 'js/admin/maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-2'));
+check('maestro-entry', 'Maestro tiene entrada versionada directa desde admin.html', has(files.admin, 'js/admin/maestro/panel-maestro.js?v=tintin-20260906-superadmin-maestro-3'));
 check('maestro-bootstrap-clean', 'El bootstrap responsive histórico conserva su responsabilidad original', !has(files.maestroBootstrap, 'maestro/panel-maestro'));
 check('maestro-registry', 'Maestro consume un registro único de módulos y capacidades', hasAll(files.maestro, ['MAESTRO_MODULES', 'BASE_ADMIN_SECTIONS', 'capabilityLabel']));
 check('maestro-no-direct-firestore', 'Maestro no salta los contratos escribiendo directo en Firestore', !/\b(addDoc|setDoc|updateDoc|deleteDoc|writeBatch|runTransaction)\b/.test(files.maestro));
 check('maestro-version-lock', 'Panel y entrada HTML usan la misma versión propia de Maestro',
-  has(files.maestro, "const VERSION = 'tintin-20260831-superadmin-maestro-2'") &&
-  has(files.admin, 'js/admin/maestro/panel-maestro.js?v=tintin-20260831-superadmin-maestro-2'));
+  has(files.maestro, "const VERSION = 'tintin-20260906-superadmin-maestro-3'") &&
+  has(files.admin, 'js/admin/maestro/panel-maestro.js?v=tintin-20260906-superadmin-maestro-3'));
 
 check('orders-canonical-api', 'Crear pedidos desde Super Admin usa el endpoint canónico', has(files.orders, '/api/admin-order-mutation') && has(files.orderApi, 'createOrder'));
 check('orders-inventory', 'Editar pedidos está interconectado con integridad de inventario', hasAll(files.orders, ['TintinInventoryIntegrity', 'updateEditedOrder', 'transitionStatus']));
