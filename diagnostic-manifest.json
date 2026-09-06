@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-06T21:54:35.360Z",
-  "sourceFingerprint": "99da107df5ff724696505e615a0531c4d824c673ba073f0d3a7453b026762001",
+  "generatedAt": "2026-09-06T21:58:40.014Z",
+  "sourceFingerprint": "43946041abe889bfb10cb9c9cfcbcfcdc2d765af5b216125b1a624a2e6f124b4",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 816,
     "textFiles": 783,
-    "totalBytes": 10055762,
+    "totalBytes": 10055765,
     "pages": 18,
     "modules": 561
   },
@@ -12849,8 +12849,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 68297,
-      "sha256": "ae329611568eb2cc0511c3a350af63b420bd09706e4c89332a8614519de2e85a",
+      "bytes": 68298,
+      "sha256": "670d2725c92205a0a26f2304ea9711cca5d4a2cdc9f80c86fe73e56c1a5c01ec",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13652,8 +13652,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 43335,
-      "sha256": "e203e9b43152470c5b779d9f9c88fefdd6532e87134f6cbe577c84c43f46720f",
+      "bytes": 43336,
+      "sha256": "e0e62957baf9303d585b99e70dce3f94b6ac3aa7e870f34ac8a62283e089eb93",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18107,7 +18107,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 341027,
-      "sha256": "036d05816bdd48af0bebeef7637bc06d1fc26c4c506b8a6ed955dcb89a91172b",
+      "sha256": "0947dcabc944bf93f152b22ab132eb398229a0de3fcf4debadeee07cd43de1b2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25190,8 +25190,8 @@
     },
     {
       "path": "js/pages/profile/control-acceso-perfil.js",
-      "bytes": 5886,
-      "sha256": "d74763f591d3a24f33a8d9e9b1a3f0d42ed5cd04a1507c61c46d0c6754da01b7",
+      "bytes": 5887,
+      "sha256": "7584cb6836e9ab1b1d72ff23fde074fe789459effa8a0e07b921ade6223b9556",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25216,7 +25216,7 @@
           "line": 24
         },
         {
-          "raw": "./configuracion-inicial-perfil.mjs?v=tintin-20260905-profile-aliases-5",
+          "raw": "./configuracion-inicial-perfil.mjs?v=tintin-20260906-profile-complete-1",
           "target": "js/pages/profile/configuracion-inicial-perfil.mjs",
           "dynamic": false,
           "line": 25
@@ -32780,13 +32780,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 341027,
-      "sha256": "036d05816bdd48af0bebeef7637bc06d1fc26c4c506b8a6ed955dcb89a91172b"
+      "sha256": "0947dcabc944bf93f152b22ab132eb398229a0de3fcf4debadeee07cd43de1b2"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 340942,
-      "sha256": "f0de74b7b19984c73cf6f24782867c6edeb8a64e33625588c262443eaf5d8307"
+      "sha256": "3cb76a71b6995b9475a38680973c28e109e839a8dc2598f00df953b69333bf13"
     },
     {
       "path": "config/public-site.json",
@@ -35275,8 +35275,8 @@
     {
       "path": "js/pages/profile/control-acceso-perfil.js",
       "extension": ".js",
-      "bytes": 5886,
-      "sha256": "d74763f591d3a24f33a8d9e9b1a3f0d42ed5cd04a1507c61c46d0c6754da01b7"
+      "bytes": 5887,
+      "sha256": "7584cb6836e9ab1b1d72ff23fde074fe789459effa8a0e07b921ade6223b9556"
     },
     {
       "path": "js/pages/profile/correccion-estadisticas-pedidos-perfil.js",
@@ -35383,8 +35383,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 68297,
-      "sha256": "ae329611568eb2cc0511c3a350af63b420bd09706e4c89332a8614519de2e85a"
+      "bytes": 68298,
+      "sha256": "670d2725c92205a0a26f2304ea9711cca5d4a2cdc9f80c86fe73e56c1a5c01ec"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -35587,8 +35587,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 43335,
-      "sha256": "e203e9b43152470c5b779d9f9c88fefdd6532e87134f6cbe577c84c43f46720f"
+      "bytes": 43336,
+      "sha256": "e0e62957baf9303d585b99e70dce3f94b6ac3aa7e870f34ac8a62283e089eb93"
     },
     {
       "path": "playwright.config.js",
