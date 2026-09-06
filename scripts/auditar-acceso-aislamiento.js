@@ -8,6 +8,7 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const css = read('css/theme/fondo-solido-cargador.css');
 const login = read('login.html');
 const authNav = read('js/core/auth/navegacion-autenticacion.js');
+const session = read('js/core/auth/proteccion-sesion.js');
 
 const loginLoaderVisible =
   css.includes('html:has(.login-page) body #tt-loader-spin-wrap') &&
@@ -31,7 +32,8 @@ const checks = [
   ['Popup bloqueado cambia automáticamente de camino', login.includes("if (e.code === 'auth/popup-blocked')") && login.includes('await signInWithRedirect(auth, provider)')],
   ['Retorno de Google se completa una sola vez y sin bucle', login.includes('getRedirectResult(auth)') && login.includes('GOOGLE_REDIRECT_PENDING_KEY') && login.includes('handleGoogleRedirectReturn(user)')],
   ['Solo el correo oficial entra automáticamente al panel', login.includes("normalizedEmail === SUPER_ADMIN.toLowerCase()") && login.includes("window.location.replace('admin.html')")],
-  ['Auth compartido no compite con el Login', authNav.includes('if(IS_LOGIN_PAGE)return;') && !authNav.includes('redirectAuthenticatedLogin')]
+  ['Auth compartido no compite con el Login', authNav.includes('if(IS_LOGIN_PAGE)return;') && !authNav.includes('redirectAuthenticatedLogin')],
+  ['Ningún rol vence la sesión automáticamente', !session.includes('signOut(') && !/INACTIVITY|inactividad|expired/i.test(session)]
 ];
 
 let failed = 0;

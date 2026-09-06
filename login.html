@@ -230,7 +230,6 @@ import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260903-accounts-phase-a-3";
 import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260901-username-visible-2";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
-import { markSessionStart } from "./js/core/auth/proteccion-sesion.js?v=tintin-20260903-session-pause-race-2";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260903-store-gate-fast-rest-3";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260905-profile-aliases-5";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
@@ -339,7 +338,6 @@ async function redirectByRole(role, email, options = {}) {
     renderStoreClosedOverlay();
     return;
   }
-  markSessionStart(); // inicia el reloj de inactividad para toda cuenta salvo Super Admin
   const normalizedEmail = String(email || '').trim().toLowerCase();
   const internalRole = normalizedEmail === SUPER_ADMIN.toLowerCase() ||
     ['superadmin', 'admin', 'agent', 'viewer'].includes(String(role || '').toLowerCase());
@@ -920,8 +918,6 @@ onAuthStateChanged(auth, async user => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('blocked') === '1') {
       showBlockedModal();
-    } else if (params.get('expired') === '1') {
-      showSuccess('Tu sesión expiró por seguridad. Volvé a ingresar.');
     }
     return;
   }
