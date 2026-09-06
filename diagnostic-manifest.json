@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-06T17:45:24.542Z",
-  "sourceFingerprint": "a39b08df5922b0585c163c5a5b83b33151102e6eb639f07db65d94c359375be5",
+  "generatedAt": "2026-09-06T19:16:25.779Z",
+  "sourceFingerprint": "d5bf8ffaccd128c3ee789b8ac2a4e47fc262add02a4d6fb1d4a124695caed2aa",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 812,
     "textFiles": 779,
-    "totalBytes": 10044979,
+    "totalBytes": 10046454,
     "pages": 18,
     "modules": 559
   },
@@ -13652,8 +13652,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 41864,
-      "sha256": "befcde07ea7a4158a075a06f50c5dc64bd7a88140f1d7c81a654012e9390837e",
+      "bytes": 43339,
+      "sha256": "080da55d3d94dde44e3473b4f96b0a69c138a9c358cdd059121650fc24119dc2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13710,32 +13710,32 @@
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-2",
           "target": "js/components/contact/whatsapp.js",
-          "line": 696
+          "line": 736
         },
         {
           "raw": "js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260905-auth-session-1",
           "target": "js/components/favorites/sincronizacion-favoritos.js",
-          "line": 697
+          "line": 737
         },
         {
           "raw": "js/pages/profile/favoritos-perfil.js?v=tintin-20260905-auth-session-2",
           "target": "js/pages/profile/favoritos-perfil.js",
-          "line": 698
+          "line": 738
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-2",
           "target": "js/analytics/analitica.js",
-          "line": 699
+          "line": 739
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260903-session-pause-race-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 700
+          "line": 740
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-2",
           "target": "js/components/color/esquema-color.js",
-          "line": 701
+          "line": 741
         }
       ],
       "styles": [
@@ -13822,7 +13822,7 @@
           "target": "assets-tintin/images/general/logo.png",
           "alt": "TINTIN",
           "hasAlt": true,
-          "line": 708
+          "line": 748
         }
       ],
       "links": [
@@ -13894,7 +13894,7 @@
           "ariaLabel": "Ir al inicio de TINTIN",
           "title": "",
           "imageAlt": "TINTIN",
-          "line": 707
+          "line": 747
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -13904,7 +13904,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 711
+          "line": 751
         },
         {
           "raw": "/catalogo",
@@ -13914,7 +13914,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 719
+          "line": 759
         },
         {
           "raw": "/collections",
@@ -13924,7 +13924,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 720
+          "line": 760
         },
         {
           "raw": "/catalogo?cat=relojes",
@@ -13934,7 +13934,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 721
+          "line": 761
         },
         {
           "raw": "/catalogo?cat=bolsos",
@@ -13944,7 +13944,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 722
+          "line": 762
         },
         {
           "raw": "/about",
@@ -13954,7 +13954,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 729
+          "line": 769
         },
         {
           "raw": "/envios",
@@ -13964,7 +13964,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 730
+          "line": 770
         },
         {
           "raw": "/cambios-devoluciones",
@@ -13974,7 +13974,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 731
+          "line": 771
         },
         {
           "raw": "/preguntas-frecuentes",
@@ -13984,7 +13984,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 732
+          "line": 772
         },
         {
           "raw": "/terminos",
@@ -13994,7 +13994,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 733
+          "line": 773
         },
         {
           "raw": "/privacidad",
@@ -14004,7 +14004,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 734
+          "line": 774
         },
         {
           "raw": "/sitemap.xml",
@@ -14014,7 +14014,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 735
+          "line": 775
         },
         {
           "raw": "/contact",
@@ -14024,7 +14024,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 742
+          "line": 782
         },
         {
           "raw": "tel:+595981299331",
@@ -14034,7 +14034,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 743
+          "line": 783
         },
         {
           "raw": "mailto:tintinaccs@gmail.com",
@@ -14044,7 +14044,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 744
+          "line": 784
         },
         {
           "raw": "https://instagram.com/tintinaccs",
@@ -14054,7 +14054,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 745
+          "line": 785
         }
       ],
       "references": [
@@ -14091,37 +14091,37 @@
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-2",
           "target": "js/components/contact/whatsapp.js",
-          "line": 696,
+          "line": 736,
           "exists": true
         },
         {
           "raw": "js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260905-auth-session-1",
           "target": "js/components/favorites/sincronizacion-favoritos.js",
-          "line": 697,
+          "line": 737,
           "exists": true
         },
         {
           "raw": "js/pages/profile/favoritos-perfil.js?v=tintin-20260905-auth-session-2",
           "target": "js/pages/profile/favoritos-perfil.js",
-          "line": 698,
+          "line": 738,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-2",
           "target": "js/analytics/analitica.js",
-          "line": 699,
+          "line": 739,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260903-session-pause-race-2",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 700,
+          "line": 740,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-2",
           "target": "js/components/color/esquema-color.js",
-          "line": 701,
+          "line": 741,
           "exists": true
         },
         {
@@ -14217,7 +14217,7 @@
         {
           "raw": "assets-tintin/images/general/logo.png?v=tintin-20260715-15",
           "target": "assets-tintin/images/general/logo.png",
-          "line": 708,
+          "line": 748,
           "exists": true
         },
         {
@@ -14241,73 +14241,73 @@
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 719,
+          "line": 759,
           "exists": true
         },
         {
           "raw": "/collections",
           "target": "collections.html",
-          "line": 720,
+          "line": 760,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
           "target": "catalogo.html",
-          "line": 721,
+          "line": 761,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
           "target": "catalogo.html",
-          "line": 722,
+          "line": 762,
           "exists": true
         },
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 729,
+          "line": 769,
           "exists": true
         },
         {
           "raw": "/envios",
           "target": "envios.html",
-          "line": 730,
+          "line": 770,
           "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
           "target": "cambios-devoluciones.html",
-          "line": 731,
+          "line": 771,
           "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
           "target": "preguntas-frecuentes.html",
-          "line": 732,
+          "line": 772,
           "exists": true
         },
         {
           "raw": "/terminos",
           "target": "terminos.html",
-          "line": 733,
+          "line": 773,
           "exists": true
         },
         {
           "raw": "/privacidad",
           "target": "privacidad.html",
-          "line": 734,
+          "line": 774,
           "exists": true
         },
         {
           "raw": "/sitemap.xml",
           "target": "sitemap.xml",
-          "line": 735,
+          "line": 775,
           "exists": true
         },
         {
           "raw": "/contact",
           "target": "contact.html",
-          "line": 742,
+          "line": 782,
           "exists": true
         }
       ],
@@ -18107,7 +18107,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 341027,
-      "sha256": "7ef38b653f7623b660e2606bb5ed6221393e2287931c0212987bcaeff76e1783",
+      "sha256": "8c3c397458a6f28df4182b8546302bec771f5db6c22e62e31a20d9c1f037792c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32768,13 +32768,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 341027,
-      "sha256": "7ef38b653f7623b660e2606bb5ed6221393e2287931c0212987bcaeff76e1783"
+      "sha256": "8c3c397458a6f28df4182b8546302bec771f5db6c22e62e31a20d9c1f037792c"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 340942,
-      "sha256": "5475e6de7c3dca5a528d46b8de91942534e75e58f3adb04ff109a2ad3250d6df"
+      "sha256": "f42de85c8a43921ffb80a9af85af154290bb16c4e98dfec0a429ddf3625e1282"
     },
     {
       "path": "config/public-site.json",
@@ -35557,8 +35557,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 41864,
-      "sha256": "befcde07ea7a4158a075a06f50c5dc64bd7a88140f1d7c81a654012e9390837e"
+      "bytes": 43339,
+      "sha256": "080da55d3d94dde44e3473b4f96b0a69c138a9c358cdd059121650fc24119dc2"
     },
     {
       "path": "playwright.config.js",
@@ -38618,21 +38618,21 @@
     },
     {
       "file": "perfil.html",
-      "line": 422,
+      "line": 452,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 433,
+      "line": 470,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "perfil.html",
-      "line": 636,
+      "line": 673,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -38701,7 +38701,7 @@
         },
         {
           "file": "perfil.html",
-          "line": 433
+          "line": 470
         }
       ]
     },
@@ -39384,12 +39384,12 @@
           },
           {
             "file": "perfil.html",
-            "line": 647,
+            "line": 687,
             "operation": "collection"
           },
           {
             "file": "perfil.html",
-            "line": 655,
+            "line": 695,
             "operation": "collection"
           },
           {
@@ -40264,7 +40264,7 @@
           },
           {
             "file": "perfil.html",
-            "line": 428,
+            "line": 460,
             "operation": "doc"
           },
           {
