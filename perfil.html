@@ -322,7 +322,7 @@
 <script src="tienda.js?v=tintin-20260903-identity-cache-sync-2"></script>
 
 <script type="module">
-import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1";
+import { auth, db, authPersistenceReady } from "./js/core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1";
 import {
   signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -333,8 +333,8 @@ import {
 import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260821-accounts-phase-a-2";
 import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260903-identity-cache-sync-3";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
-import { attachLocationPicker } from "./js/components/location/selector-ubicacion.js?v=tintin-20260803-location-picker-2";
-import { toSavedLocation } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260904-profile-aliases-2";
+import { attachLocationPicker } from "./js/components/location/selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
+import { toSavedLocation } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260905-profile-aliases-5";
 import { getRegisteredMethod, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260903-accounts-phase-a-3";
 import { DEFAULT_COUNTRY, phoneKey, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { changeReservedPhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260901-phone-py-only-1";
@@ -417,24 +417,61 @@ function statusBadge(status) {
   return `<span style="display:inline-block;padding:2px 8px;border-radius:50px;font-size:10px;font-weight:700;background:${c}20;color:${c};text-transform:uppercase">${escapeHtmlPerfil(status)}</span>`;
 }
 
-onAuthStateChanged(auth, async user => {
-  if (!user) {
-    window.location.href = 'login.html';
-    return;
+// Un null transitorio puede llegar antes de que Firebase termine de restaurar
+// la sesión persistida (misma condición de carrera que en el panel admin): sin
+// esta espera, una recarga de esta pestaña rebota a login.html aunque la
+// cuenta siga logueada.
+async function waitForProfileUserAfterAuthRestore(user) {
+  if (user) return user;
+  const RETRY_DELAY_MS = 300;
+  const MAX_ATTEMPTS = 6;
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
+    await new Promise(resolve => window.setTimeout(resolve, RETRY_DELAY_MS));
+    if (auth.currentUser) return auth.currentUser;
   }
-  // Cuenta bloqueada (Fase E): afuera de Mi Cuenta antes de pintar nada, con
-  // mensaje claro en login.html. Se aprovecha esta misma lectura más abajo
-  // para no duplicar el getDoc.
-  const ref  = doc(db, 'users', user.uid);
-  const snap = await getDoc(ref);
-  const userData = snap.exists() ? snap.data() : null;
-  if (userData?.blocked) {
-    await signOut(auth);
-    window.location.href = 'login.html?blocked=1';
-    return;
+  return null;
+}
+
+async function startProfileAuthGuard() {
+  try {
+    await authPersistenceReady;
+  } catch (error) {
+    console.warn('[Perfil] Auth persistence unavailable:', error);
+  }
+  if (typeof auth.authStateReady === 'function') {
+    try {
+      await auth.authStateReady();
+    } catch (error) {
+      console.warn('[Perfil] Auth initial state did not settle cleanly:', error);
+    }
   }
 
-  hideLoading();
+  onAuthStateChanged(auth, async user => {
+    user = await waitForProfileUserAfterAuthRestore(user);
+    if (!user) {
+      window.location.href = 'login.html';
+      return;
+    }
+    // Cuenta bloqueada (Fase E): afuera de Mi Cuenta antes de pintar nada, con
+    // mensaje claro en login.html. Se aprovecha esta misma lectura más abajo
+    // para no duplicar el getDoc. Un fallo de Firestore (red, App Check aún
+    // no listo) no debe dejar a una cuenta legítima sin poder ver su perfil:
+    // se trata como "no bloqueada" y se sigue cargando la página.
+    const ref = doc(db, 'users', user.uid);
+    let userData = null;
+    try {
+      const snap = await getDoc(ref);
+      userData = snap.exists() ? snap.data() : null;
+    } catch (error) {
+      console.warn('[Perfil] No se pudo verificar el estado de bloqueo:', error);
+    }
+    if (userData?.blocked) {
+      await signOut(auth);
+      window.location.href = 'login.html?blocked=1';
+      return;
+    }
+
+    hideLoading();
 
   // Avatar
   const avatarEl = document.getElementById('perfil-avatar');
@@ -636,7 +673,10 @@ onAuthStateChanged(auth, async user => {
     signOut(auth).then(() => { window.location.href = 'index.html'; })
       .catch(() => window.TintinReleaseProfileButton?.('btn-logout'));
 
-});
+  });
+}
+
+startProfileAuthGuard();
 
 async function loadUserOrders(user) {
   const listEl = document.getElementById('perfil-orders-list');
@@ -697,7 +737,7 @@ async function loadUserOrders(user) {
 <script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260905-auth-session-1"></script>
 <script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20260905-auth-session-2"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-2"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260903-session-pause-race-2"></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-1"></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-2"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">

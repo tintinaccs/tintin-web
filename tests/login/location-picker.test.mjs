@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { searchPlaces } from '../../js/components/location/selector-ubicacion.js';
+import { parseLocationSearchInput, searchPlaces } from '../../js/components/location/selector-ubicacion.js';
 
 const root = path.resolve(import.meta.dirname, '../..');
 
@@ -79,13 +79,27 @@ test('un cuerpo inesperado no rompe el buscador', async () => {
 });
 
 test('el parser compartido acepta resultados de Google Maps por coordenadas', () => {
-  const source = fs.readFileSync(path.join(root, 'js/components/location/mapa-ubicacion.js'), 'utf8');
+  const source = fs.readFileSync(path.join(root, 'js/components/location/selector-ubicacion.js'), 'utf8');
   assert.match(source, /!3d/);
   assert.match(source, /center\|destination\|origin/);
 });
 
+test('el parser convierte enlaces reales de Google Maps en una búsqueda legible', () => {
+  const parsed = parseLocationSearchInput('https://www.google.com/maps/search/Shopping+del+Sol,+Asunci%C3%B3n');
+  assert.deepEqual(parsed, { query: 'Shopping del Sol, Asunción' });
+});
+
+test('el buscador convierte un enlace de Google Maps con coordenadas en un lugar seleccionable', async () => {
+  const place = (await searchPlaces('https://www.google.com/maps/search/Shopping+del+Sol/@-25.2867,-57.6467,17z'))[0];
+  assert.equal(place.lat, -25.2867);
+  assert.equal(place.lng, -57.6467);
+  assert.equal(place.source, 'Google Maps');
+});
+
 test('checkout acepta enlaces completos de Google Maps con coordenadas', () => {
-  const source = fs.readFileSync(path.join(root, 'js/pages/checkout/checkout-confiabilidad.js'), 'utf8');
-  assert.match(source, /!3d/);
-  assert.match(source, /center\|destination\|origin/);
+    const source = fs.readFileSync(path.join(root, 'js/pages/checkout/checkout-confiabilidad.js'), 'utf8');
+    const selectorSource = fs.readFileSync(path.join(root, 'js/components/location/selector-ubicacion.js'), 'utf8');
+    assert.match(selectorSource, /!3d/);
+    assert.match(selectorSource, /center\|destination\|origin/);
+    assert.match(source, /parseLocationSearchInput/);
 });

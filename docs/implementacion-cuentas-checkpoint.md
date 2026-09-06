@@ -99,8 +99,8 @@ mismo endpoint protegido mientras se prepara su consolidación.
   Script desplegado no puede verificarse desde el repositorio.
 - El PIN rechazaba cuentas creadas con Google y el perfil rechazaba el segundo
   método, aunque Firebase puede reutilizar el mismo UID.
-- La sesión vencía 30 minutos desde login, no por inactividad, y Super Admin
-  estaba exento indefinidamente.
+- La sesión no vence automáticamente: toda cuenta permanece activa hasta que
+  la persona elige cerrar sesión o Firebase revoca su acceso por seguridad.
 - Había dos rutas de eliminación: una borraba solo Firestore y otra eliminaba
   Auth, perfil, carrito y favoritos. Ambas destruían continuidad histórica.
 - `auditLog` ya era inmutable en Rules y se reutilizó; no se creó otro log.
@@ -123,8 +123,8 @@ mismo endpoint protegido mientras se prepara su consolidación.
   y `authMethods`/`lastAuthMethod` registran accesos compatibles.
 - Eliminar es soft delete: deshabilita Auth, conserva documento e historia,
   libera teléfono y agrega auditoría. Reactivar reutiliza UID.
-- Clientes conservan sesión Firebase razonable. Staff vence tras 30 minutos de
-  inactividad y Super Admin tras 2 horas; la actividad renueva el reloj.
+- Todas las cuentas conservan la sesión Firebase local, sin un reloj de
+  inactividad que las cierre.
 
 ## Archivos principales
 

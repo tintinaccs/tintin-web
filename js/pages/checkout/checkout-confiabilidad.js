@@ -9,7 +9,7 @@
      completos de Google Maps sin reemplazar la validación original del checkout.
    ============================================================= */
 
-import { apiUrl } from '../../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
+import { parseLocationSearchInput, searchPlaces } from '../../components/location/selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1';
 
 const BAG_ICON_SVG = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>';
 const PIN_ICON_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-2px"><path d="M12 2C7.6 2 4 5.6 4 10c0 5.5 7 12 8 12s8-6.5 8-12c0-4.4-3.6-8-8-8z"/><circle cx="12" cy="10" r="3" fill="#fff"/></svg>';
@@ -372,48 +372,6 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
     });
   }
 
-  function parseGoogleMapsInput(rawValue) {
-    const raw = String(rawValue || '').trim();
-    if (!raw) return null;
-    const coordinatePatterns = [
-      /@(-?\d{1,3}(?:\.\d+)?),(-?\d{1,3}(?:\.\d+)?)/,
-      /!3d(-?\d{1,3}(?:\.\d+)?)!4d(-?\d{1,3}(?:\.\d+)?)/i,
-      /(?:query|q|ll|center|destination|origin)=(-?\d{1,3}(?:\.\d+)?)(?:%2C|,|%252C)(-?\d{1,3}(?:\.\d+)?)/i,
-      /^\s*(-?\d{1,3}(?:\.\d+)?)\s*[,;]\s*(-?\d{1,3}(?:\.\d+)?)\s*$/,
-    ];
-    for (const pattern of coordinatePatterns) {
-      const match = raw.match(pattern);
-      if (!match) continue;
-      const lat = Number(match[1]);
-      const lng = Number(match[2]);
-      if (Number.isFinite(lat) && Number.isFinite(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180) {
-        return { lat, lng, label: 'Ubicación de Google Maps', address: raw };
-      }
-    }
-    try {
-      const url = new URL(raw);
-      const placeMatch = decodeURIComponent(url.pathname).match(/\/place\/([^/]+)/i);
-      const query = url.searchParams.get('query') || url.searchParams.get('q') || (placeMatch ? placeMatch[1].replace(/\+/g, ' ') : '');
-      if (query && !/^-?\d+(?:\.\d+)?\s*,/.test(query)) return { query };
-      if (/maps\.app\.goo\.gl|goo\.gl\/maps/i.test(url.hostname + url.pathname)) return { shortGoogleUrl: true };
-    } catch {}
-    return null;
-  }
-
-  async function searchPlaces(query) {
-    try {
-      const response = await fetch(`${apiUrl('geo-search')}?q=${encodeURIComponent(query)}`, {
-        headers: { Accept: 'application/json' }
-      });
-      if (!response.ok) return [];
-      const data = await response.json();
-      return Array.isArray(data?.places) ? data.places : [];
-    } catch (error) {
-      console.warn('[Checkout] No se pudo buscar direcciones:', error?.code || error);
-      return [];
-    }
-  }
-
   async function applyMapPlace(place) {
     const map = await waitForCheckoutMap();
     const results = document.getElementById('tt-map-smart-results');
@@ -479,7 +437,7 @@ if (!CHECKOUT_PATH_RE.test(window.location.pathname || '') || window.TintinCheck
       return;
     }
 
-    const parsed = parseGoogleMapsInput(raw);
+    const parsed = parseLocationSearchInput(raw);
     if (parsed?.lat != null) {
       await applyMapPlace(parsed);
       return;

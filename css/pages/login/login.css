@@ -504,6 +504,22 @@ body.login-setup-open { --login-shell-width: 560px; }
   text-align: center;
 }
 
+.login-mode-toggle { margin: 12px auto 0; text-align: center; }
+.login-mode-toggle-btn {
+  background: none;
+  border: 0;
+  padding: 6px 4px;
+  min-height: 44px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--login-rose);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.login-mode-toggle-btn:hover { color: var(--login-wine); }
+
 .login-back { margin-top: 20px; text-align: center; }
 .login-back a {
   min-height: 44px;

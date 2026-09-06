@@ -73,7 +73,9 @@ check(
 );
 check(
   'Un rol de cliente/sin rol se saca del panel a perfil.html',
-  /role === 'client' \|\| !role/.test(adminApp) && adminApp.includes("window.location.href = 'perfil.html'"),
+  /role === 'client' \|\| !role/.test(adminApp) &&
+    (adminApp.includes("window.location.href = 'perfil.html'") ||
+      adminApp.includes("window.location.replace('perfil.html')")),
   'Solo roles de staff pueden ver el panel; el resto va a perfil.html.'
 );
 check(
@@ -83,13 +85,15 @@ check(
 );
 check(
   'El Super Admin nunca queda bloqueado ni pierde acceso',
-  /user\.email !== SUPER_ADMIN/.test(adminApp),
+  (/user\.email\s*!==\s*SUPER_ADMIN/.test(adminApp) ||
+    /SUPER_ADMIN\.toLowerCase\(\)/.test(adminApp)),
   'El chequeo de bloqueo debe exceptuar a SUPER_ADMIN para que conserve acceso total.'
 );
 check(
-  'Un error inesperado en el init termina en el destino seguro (login)',
-  /catch\s*\(e\)\s*\{[\s\S]{0,220}window\.location\.href = 'login\.html'/.test(adminApp),
-  'Si el init falla, el panel real no debe quedar armado detrás del loader.'
+  'Un error inesperado en el init conserva la sesión y muestra recuperación',
+  /catch\s*\(error\)\s*\{[\s\S]{0,420}showAdminInitFailure\(\)/.test(adminApp) &&
+    !/catch\s*\(error\)\s*\{[\s\S]{0,420}window\.location\.(?:href|replace)\s*=\s*['"]login\.html/.test(adminApp),
+  'Si el init falla, se conserva Auth y se muestra Reintentar; no se crea un loop hacia login.'
 );
 check(
   'La tienda cerrada tapa el panel sin cerrar la sesión del Super Admin',

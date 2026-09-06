@@ -111,7 +111,7 @@ if (!window.TintinAdminUserFichaBooted) {
       const identity = section('Identidad');
       identity.grid.append(
         field('Nombre', user.name),
-        field('@username', user.username ? `@${user.username}` : ''),
+        field('@username', user.username || user.userName ? `@${user.username || user.userName}` : ''),
         field('Customer ID', user.customerId || `CUS_${user.uid}`),
         field('UID', user.uid),
         field('Rol', ROLE_LABELS[canonicalRole(user)] || canonicalRole(user)),
@@ -120,11 +120,14 @@ if (!window.TintinAdminUserFichaBooted) {
       );
 
       const contact = section('Contacto');
+      const savedLocation = user.savedLocation || {};
       contact.grid.append(
         field('Email', user.email),
-        field('Teléfono', user.phone),
+        field('Teléfono', user.phone || user.phoneNumber || user.whatsapp || user.whatsappNumber),
         field('Cédula', user.checkoutDefaults?.ci || user.ci),
-        field('Ubicación', user.address || user.savedLocation?.name),
+        field('Ubicación', user.address || savedLocation.address || savedLocation.name || user.locationName),
+        field('Coordenadas', Number.isFinite(Number(savedLocation.lat)) && Number.isFinite(Number(savedLocation.lng))
+          ? `${Number(savedLocation.lat).toFixed(6)}, ${Number(savedLocation.lng).toFixed(6)}` : ''),
         field('Fecha de nacimiento', user.dob),
       );
 

@@ -15,11 +15,11 @@ test('login mantiene un único dueño del listener de Auth y evita redirecciones
   assert.match(login, /window\.location\.replace\(/);
 });
 
-test('protección de sesión pausa el polling oculto y evita carreras de usuario', () => {
-  assert.match(session, /stopSessionChecks\(\)/);
-  assert.match(session, /document\.hidden/);
-  assert.match(session, /enforceSequence/);
-  assert.match(session, /auth\.currentUser\?\.uid !== user\.uid/);
+test('arranque global no vence ni cierra sesiones automáticamente', () => {
+  assert.match(session, /startProfileGate\(\)/);
+  assert.doesNotMatch(session, /signOut\(/);
+  assert.doesNotMatch(session, /setInterval\(/);
+  assert.doesNotMatch(session, /localStorage\.(?:setItem|removeItem)/);
 });
 
 test('guard de perfil solo redirige checkout y no encadena from', () => {
@@ -42,6 +42,10 @@ test('los tres accesos conservan el mismo cierre de sesión y Google abre dentro
   assert.ok(popupIndex >= 0, 'Google debe abrir la ventana emergente');
   assert.ok(persistenceAfterPopup > popupIndex, 'Google no debe esperar persistencia antes de abrir el popup');
   assert.match(login, /await finishGoogleLogin\(cred\.user\)/);
+  const redirectIndex = login.indexOf('await signInWithRedirect(auth, provider);');
+  const persistenceBeforeRedirect = login.lastIndexOf('await authPersistenceReady.catch(() => {});', redirectIndex);
+  assert.ok(persistenceBeforeRedirect > popupIndex, 'El fallback redirect debe esperar persistencia después del intento de popup');
+  assert.ok(persistenceBeforeRedirect < redirectIndex, 'El fallback redirect debe persistir antes de abandonar la página');
   assert.match(login, /const user = await verifyOtpCode\(otpEmail, code\);[\s\S]*?await finishOtpLogin\(user\)/);
   assert.match(emailAuth, /await authPersistenceReady;[\s\S]*?signInWithCustomToken\(auth, data\.customToken\)/);
   assert.match(emailAuth, /identifierBody\(identifier\)/);

@@ -86,22 +86,53 @@ export function readProfileName(profile = {}) {
  * `maybeApplySavedLocation()` del checkout además exige `name`.
  */
 export function hasUsableAddress(profile = {}) {
-  const saved = storedLocation(profile);
-  if (!saved || !clean(saved.name)) return false;
-  const lat = Number(saved.lat);
-  const lng = Number(saved.lng);
-  return Number.isFinite(lat) && Number.isFinite(lng) && (lat !== 0 || lng !== 0);
+  return locationCandidates(profile).some(candidate => {
+    const saved = normalizeStoredLocation(candidate, profile);
+    if (!saved || !clean(saved.name)) return false;
+    const lat = Number(saved.lat);
+    const lng = Number(saved.lng);
+    return Number.isFinite(lat) && Number.isFinite(lng) && (lat !== 0 || lng !== 0);
+  });
+}
+
+function locationCandidates(profile = {}) {
+  const candidates = [
+    profile.savedLocation,
+    profile.location,
+    profile.mapLocation,
+    profile.deliveryLocation,
+    profile.defaultLocation,
+    profile.coordinates,
+    profile.coords,
+    {
+      lat: profile.addressLat ?? profile.latitude,
+      lng: profile.addressLng ?? profile.longitude,
+      name: profile.locationName ?? profile.addressName,
+      address: profile.address,
+    },
+  ];
+  return candidates.filter(candidate => candidate && typeof candidate === 'object');
+}
+
+function normalizeStoredLocation(candidate = {}, profile = {}) {
+  const geoPoint = candidate.geoPoint || candidate.geopoint || candidate.point || {};
+  const coordinates = candidate.coordinates || candidate.coords || {};
+  const lat = candidate.lat ?? candidate.latitude ?? candidate.addressLat ??
+    coordinates.lat ?? coordinates.latitude ?? geoPoint.latitude;
+  const lng = candidate.lng ?? candidate.longitude ?? candidate.addressLng ??
+    coordinates.lng ?? coordinates.longitude ?? geoPoint.longitude;
+  const name = clean(candidate.name ?? candidate.locationName ?? candidate.addressName ??
+    candidate.label ?? candidate.title ?? profile.locationName ?? profile.addressName);
+  const address = clean(candidate.address ?? candidate.formattedAddress ?? candidate.displayName ?? profile.address);
+  return { lat, lng, name, ...(address ? { address } : {}) };
 }
 
 function storedLocation(profile = {}) {
-  return profile.savedLocation && typeof profile.savedLocation === 'object'
-    ? profile.savedLocation
-    : {
-        lat: profile.addressLat,
-        lng: profile.addressLng,
-        name: profile.locationName,
-        address: profile.address,
-      };
+  const candidates = locationCandidates(profile);
+  return candidates.map(candidate => normalizeStoredLocation(candidate, profile))
+    .find(candidate => clean(candidate.name) && Number.isFinite(Number(candidate.lat)) &&
+      Number.isFinite(Number(candidate.lng)) && (Number(candidate.lat) !== 0 || Number(candidate.lng) !== 0)) ||
+    normalizeStoredLocation(candidates[0] || {}, profile);
 }
 
 function asDate(value) {
@@ -121,16 +152,21 @@ export function hasUsableDob(profile = {}) {
   return !!date && isValidDob(date.toISOString().slice(0, 10));
 }
 
+function storedPhoneValue(profile = {}) {
+  return clean(profile.phone || profile.phoneNumber || profile.whatsapp || profile.whatsappNumber);
+}
+
 function storedUsername(profile = {}) {
   return clean(profile.username || profile.userName);
 }
 
 /** Convierte un resultado del buscador al formato `savedLocation`. */
 export function toSavedLocation(place = {}) {
-  const lat = Number(place.addressLat ?? place.lat);
-  const lng = Number(place.addressLng ?? place.lng);
-  const name = clean(place.addressName || place.name);
-  const address = clean(place.address);
+  const normalized = normalizeStoredLocation(place);
+  const lat = Number(normalized.lat);
+  const lng = Number(normalized.lng);
+  const name = clean(normalized.name);
+  const address = clean(normalized.address);
   if (!name || !Number.isFinite(lat) || !Number.isFinite(lng)) return null;
   return { lat, lng, name, ...(address ? { address } : {}) };
 }
@@ -172,9 +208,24 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
     };
   }
 
+  // `profileStatus: active` es la marca canónica que escribe el alta cuando
+  // ya validó nombre, teléfono, username, fecha y ubicación en una misma
+  // transición. No volver a inferir lo contrario en cada login: hacerlo
+  // reabría el formulario para perfiles históricos aunque sus campos ya
+  // estuvieran aprobados por Firestore.
+  if (clean(profile.profileStatus).toLowerCase() === 'active') {
+    exposeSavedLocationForOnboarding(profile);
+    return {
+      skip: true, needsName: false, needsPhone: false, needsAddress: false,
+      needsUsername: false, needsDob: false,
+      addressAlreadySaved: hasUsableAddress(profile),
+      suggestedName: '', suggestedFirstName: '', suggestedLastName: '',
+    };
+  }
+
   const stored = readProfileName(profile);
   const storedNameIsValid = isValidFullName(stored.firstName, stored.lastName);
-  const storedPhone = clean(profile.phone);
+  const storedPhone = storedPhoneValue(profile);
   const addressOk = !requireAddress || hasUsableAddress(profile);
   const needsName = !storedNameIsValid;
   const needsPhone = !storedPhone;
@@ -223,7 +274,7 @@ export function buildMissingProfilePatch({
   const patch = {};
   const current = readProfileName(currentProfile);
   const currentNameIsValid = isValidFullName(current.firstName, current.lastName);
-  const currentPhone = clean(currentProfile.phone);
+  const currentPhone = storedPhoneValue(currentProfile);
   const currentUsername = storedUsername(currentProfile);
 
   // Compatibilidad: quien todavía mande `submittedName` entero se separa acá.

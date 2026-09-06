@@ -73,6 +73,60 @@ test('un perfil histórico del panel no repite username, fecha ni ubicación ya 
   assert.equal(plan.needsAddress, false);
 });
 
+test('aliases históricos de teléfono y username no reabren el onboarding', () => {
+  const historical = {
+    name: 'Juan Pérez',
+    phoneNumber: '+595981123456',
+    userName: 'juan_perez',
+    birthDate: '2000-01-01',
+    locationName: 'Casa',
+    address: 'Av. España 1234',
+    addressLat: -25.29,
+    addressLng: -57.63,
+  };
+  const plan = getProfileCompletionPlan({
+    profile: historical,
+    user: { email: 'juan@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(plan.skip, true);
+  assert.equal(plan.needsPhone, false);
+  assert.equal(plan.needsUsername, false);
+});
+
+test('si savedLocation quedó parcial, conserva la ubicación válida de una versión anterior', () => {
+  const historical = {
+    ...COMPLETE,
+    savedLocation: { address: 'Av. España 1234' },
+    location: { latitude: -25.29, longitude: -57.63, label: 'Casa', formattedAddress: 'Av. España 1234, Asunción' },
+  };
+  assert.equal(hasUsableAddress(historical), true);
+  assert.equal(getProfileCompletionPlan({
+    profile: historical,
+    user: { email: 'juan@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  }).skip, true);
+});
+
+test('acepta ubicación histórica guardada como coordenadas o mapLocation', () => {
+  const coordinateProfile = {
+    ...COMPLETE,
+    savedLocation: null,
+    coordinates: { lat: -25.29, lng: -57.63 },
+    locationName: 'Casa',
+    address: 'Av. España 1234, Asunción',
+  };
+  const mapProfile = {
+    ...COMPLETE,
+    savedLocation: null,
+    mapLocation: { latitude: -25.29, longitude: -57.63, name: 'Casa' },
+  };
+  assert.equal(hasUsableAddress(coordinateProfile), true);
+  assert.equal(hasUsableAddress(mapProfile), true);
+});
+
 test('una fecha histórica inválida sí se considera faltante', () => {
   const plan = getProfileCompletionPlan({
     profile: { ...COMPLETE, dob: 'not-a-date' },
@@ -312,8 +366,20 @@ test('una cuenta incomplete necesita username y fecha de nacimiento cuando falta
   assert.equal(plan.needsAddress, false);
 });
 
-test('profileStatus no exime username ni DOB: todos los clientes deben tenerlos', () => {
-  for (const profileStatus of ['active', 'legacy', undefined]) {
+test('profileStatus active es la marca canónica y no reabre el alta', () => {
+  const plan = getProfileCompletionPlan({
+    profile: { ...CORE, profileStatus: 'active' },
+    user: { email: 'cliente@hotmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(plan.skip, true);
+  assert.equal(plan.needsUsername, false);
+  assert.equal(plan.needsDob, false);
+});
+
+test('profileStatus legacy o ausente no exime username ni DOB', () => {
+  for (const profileStatus of ['legacy', undefined]) {
     const plan = getProfileCompletionPlan({
       profile: { ...CORE, ...(profileStatus ? { profileStatus } : {}) },
       user: { email: 'cliente@hotmail.com' },

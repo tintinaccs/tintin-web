@@ -51,7 +51,14 @@ check(
 check('El loader conserva salida de emergencia', /STORE_GATE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/cargador-pagina.js')) && /RELEASE_TIMEOUT_MS\s*=\s*\d{2,}/.test(instantColor), 'El loader puede quedar infinito.');
 check('Autenticación pública y administrativa siguen activas', read('js/core/store-gate/control-tienda.js').includes('onAuthStateChanged') && read('js/admin/admin-app.js').includes('onAuthStateChanged'), 'La sesión dejó de controlar el acceso.');
 check('Super Admin conserva acceso total', read('js/admin/admin-app.js').includes("currentRole === 'superadmin' || canDo(currentRole, moduleKey, actionKey)"), 'El bypass total se perdió.');
-check('Panel Admin mantiene arranque protegido', read('admin.html').includes('js/admin/admin-app.js') && read('js/admin/admin-app.js').includes("role === 'superadmin' && user.email === SUPER_ADMIN"), 'El panel perdió su gate.');
+check(
+  'Panel Admin mantiene arranque protegido',
+  read('admin.html').includes('js/admin/admin-app.js') &&
+    /role === 'superadmin'/.test(read('js/admin/admin-app.js')) &&
+    (read('js/admin/admin-app.js').includes("user.email === SUPER_ADMIN") ||
+      read('js/admin/admin-app.js').includes('SUPER_ADMIN.toLowerCase()')),
+  'El panel perdió su gate.'
+);
 check(
   'Catálogo público combina canal en vivo acotado y caché de respaldo',
   products.includes('onSnapshot') &&
