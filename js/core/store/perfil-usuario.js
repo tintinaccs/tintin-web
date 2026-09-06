@@ -90,7 +90,16 @@ export async function ensureUserProfile(db, user, method) {
   }
 
   if (normalizedEmail === SUPER_ADMIN.toLowerCase() && data.role !== 'superadmin') {
-    await setDoc(ref, { role: 'superadmin', updatedAt: serverTimestamp(), lastLogin: serverTimestamp() }, { merge: true });
+    // firestore.rules nunca permite escribir `role` en el propio documento del
+    // Super Admin (isSuperAdminAccount(resource.data) siempre es true, así que
+    // tanto la rama de auto-actualización como la de isSuperAdmin() la
+    // rechazan) — es un bloqueo intencional contra manipular ese campo. La
+    // identidad elevada ya sale exclusivamente del email autenticado (ver
+    // roles.js), así que este intento es solo un best-effort informativo para
+    // que la ficha en Firestore quede prolija; si Firestore lo rechaza, el
+    // login no puede depender de esa escritura ni cortarse por su error.
+    setDoc(ref, { role: 'superadmin', updatedAt: serverTimestamp(), lastLogin: serverTimestamp() }, { merge: true })
+      .catch(error => console.warn('[user-profile] No se pudo reparar el rol del Super Admin en Firestore:', error));
     return { role: 'superadmin', blocked: false, isNew: false, welcomePending: false, method };
   }
 
