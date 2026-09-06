@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-06T19:12:51.521Z",
-  "sourceFingerprint": "2aee704e45912676505e3545e0b42c1d68ef2f07a4ad9e15c388ec340e925584",
+  "generatedAt": "2026-09-06T19:16:25.779Z",
+  "sourceFingerprint": "d5bf8ffaccd128c3ee789b8ac2a4e47fc262add02a4d6fb1d4a124695caed2aa",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 812,
     "textFiles": 779,
-    "totalBytes": 10046452,
+    "totalBytes": 10046454,
     "pages": 18,
     "modules": 559
   },
@@ -13652,8 +13652,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 43337,
-      "sha256": "1b50a538d2762efdc2afe3da2d3d76187db8e584f5029ae025d12fae3f8bd8af",
+      "bytes": 43339,
+      "sha256": "080da55d3d94dde44e3473b4f96b0a69c138a9c358cdd059121650fc24119dc2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18107,7 +18107,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 341027,
-      "sha256": "f9000cf5c46a6f0284715b09aa1e5c30c501e2210f3db071691957187c0684d1",
+      "sha256": "8c3c397458a6f28df4182b8546302bec771f5db6c22e62e31a20d9c1f037792c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32768,13 +32768,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 341027,
-      "sha256": "f9000cf5c46a6f0284715b09aa1e5c30c501e2210f3db071691957187c0684d1"
+      "sha256": "8c3c397458a6f28df4182b8546302bec771f5db6c22e62e31a20d9c1f037792c"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 340942,
-      "sha256": "be512936032fc9b81817357bb9b06249fb754a41bba19086d5be26f359deb780"
+      "sha256": "f42de85c8a43921ffb80a9af85af154290bb16c4e98dfec0a429ddf3625e1282"
     },
     {
       "path": "config/public-site.json",
@@ -35557,8 +35557,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 43337,
-      "sha256": "1b50a538d2762efdc2afe3da2d3d76187db8e584f5029ae025d12fae3f8bd8af"
+      "bytes": 43339,
+      "sha256": "080da55d3d94dde44e3473b4f96b0a69c138a9c358cdd059121650fc24119dc2"
     },
     {
       "path": "playwright.config.js",

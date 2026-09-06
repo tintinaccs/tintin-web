@@ -418,7 +418,7 @@ function statusBadge(status) {
 }
 
 // Un null transitorio puede llegar antes de que Firebase termine de restaurar
-// la sesión persistida (misma condición de carrera que en admin-app.js): sin
+// la sesión persistida (misma condición de carrera que en el panel admin): sin
 // esta espera, una recarga de esta pestaña rebota a login.html aunque la
 // cuenta siga logueada.
 async function waitForProfileUserAfterAuthRestore(user) {
