@@ -53,6 +53,13 @@ test('el traspaso de Google al panel espera la restauración de la sesión del S
   assert.match(admin, /sessionStorage\.removeItem\('tt_auth_handoff_uid'\)/);
 });
 
+test('el panel ya iniciado no expulsa al SuperAdmin por un null transitorio de Firebase', () => {
+  const admin = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
+
+  assert.match(admin, /if \(!user && \(currentUser\?\.uid \|\| adminGuardInitializedUid\)\)/);
+  assert.match(admin, /Estado de Auth transitorio ignorado/);
+});
+
 test('los tres accesos conservan el mismo cierre de sesión y Google abre dentro del clic', () => {
   const emailAuth = fs.readFileSync(new URL('../../js/email/correo-autenticacion.js', import.meta.url), 'utf8');
   const popupIndex = login.indexOf('const cred = await signInWithPopup(auth, provider);');

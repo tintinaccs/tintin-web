@@ -891,6 +891,15 @@ async function startAdminAuthGuard() {
 
   onAuthStateChanged(auth, async user => {
     user = await waitForAdminUserAfterAuthRestore(user);
+    // Si el panel ya reconoció una cuenta válida, un `null` posterior puede
+    // ser solamente un instante de renovación/sincronización de Firebase.
+    // Nunca debe expulsar a SuperAdmin de un panel que ya estaba iniciado.
+    // El cierre voluntario sigue funcionando porque sus botones llaman a
+    // signOut() y navegan explícitamente al login por su propia ruta.
+    if (!user && (currentUser?.uid || adminGuardInitializedUid)) {
+      console.warn('[Admin] Estado de Auth transitorio ignorado; la sesión del panel se conserva.');
+      return;
+    }
     // Este es el único caso de sesión ausente que manda al login. replace()
     // evita dejar /admin en el historial y elimina el ping-pong con Atrás.
     if (!user) {
