@@ -18,7 +18,11 @@ function phoneForOrderServer(value) {
 }
 
 export async function createOrderViaServer(draft) {
-  const idToken = await auth.currentUser?.getIdToken(true);
+  // Firebase renueva automáticamente los ID tokens cuando hace falta.
+  // Forzar la renovación en cada confirmación puede invalidar una sesión que
+  // seguía siendo utilizable y hacer que el checkout parezca cerrar la cuenta
+  // justo después de crear el pedido.
+  const idToken = await auth.currentUser?.getIdToken();
   if (!idToken) return { ok: false, error: 'missing_id_token' };
 
   const serverDraft = {

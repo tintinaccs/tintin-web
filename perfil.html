@@ -319,7 +319,7 @@
 
 
 <!-- Scripts -->
-<script src="tienda.js?v=tintin-20260903-identity-cache-sync-2"></script>
+<script src="tienda.js?v=tintin-20260907-session-preserved-4"></script>
 
 <script type="module">
 import { auth, db, authPersistenceReady } from "./js/core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1";
@@ -331,7 +331,7 @@ import {
   collection, query, where, orderBy, limit
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260821-accounts-phase-a-2";
-import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260903-identity-cache-sync-3";
+import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260907-session-preserved-4";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachLocationPicker } from "./js/components/location/selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
 import { toSavedLocation } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260906-profile-complete-1";
@@ -734,7 +734,7 @@ async function loadUserOrders(user) {
 }
 </script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-2"></script>
-<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260905-auth-session-1"></script>
+<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260907-session-preserved-4"></script>
 <script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20260905-auth-session-2"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-2"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-2"></script>
