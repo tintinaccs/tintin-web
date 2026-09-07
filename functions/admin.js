@@ -2,10 +2,10 @@ import { serveAdminWithCsp } from '../cloudflare/servir-admin-con-csp.js';
 import { injectMasterDiagnosticsRuntime } from '../cloudflare/inyectar-diagnostico-maestro-admin.js';
 import { injectCodeStudioRuntime } from '../cloudflare/inyectar-estudio-codigo-admin.js';
 
-const MASTER_DIAGNOSTICS_RUNTIME = '/js/admin/diagnostics/diagnostico-maestro-admin.js?v=tintin-20260821-accounts-phase-a-2';
-const CODE_STUDIO_RUNTIME = '/js/admin/estudio-codigo/estudio-codigo-admin.js?v=tintin-20260821-code-problems-2';
+const MASTER_DIAGNOSTICS_RUNTIME = '/js/admin/diagnostics/diagnostico-maestro-admin.js?v=tintin-20260821-accounts-phase-a-3';
+const CODE_STUDIO_RUNTIME = '/js/admin/estudio-codigo/estudio-codigo-admin.js?v=tintin-20260821-code-problems-3';
 const CODE_STUDIO_STYLES = '/css/admin/estudio-codigo.css?v=tintin-20260821-code-problems-1';
-const CODE_STUDIO_RESTORE_RUNTIME = '/js/admin/estudio-codigo/restaurar-estudio-codigo-admin.js?v=tintin-20260821-code-editor-fit-5';
+const CODE_STUDIO_RESTORE_RUNTIME = '/js/admin/estudio-codigo/restaurar-estudio-codigo-admin.js?v=tintin-20260821-code-editor-fit-6';
 
 // Auth del panel vive en js/admin/admin-app.js. Esta función solo compone el
 // HTML/CSP y los runtimes auxiliares; no reescribe ni duplica el auth guard.

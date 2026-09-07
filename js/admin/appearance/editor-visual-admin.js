@@ -1,7 +1,7 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { collection, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-2';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-3';
 import {
   CONTENT_PAGE_IDS, getNested, getPageDefaults, getPageSchema,
   mergeContent, sanitizeContentHref, setNested,

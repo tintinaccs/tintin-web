@@ -7,7 +7,7 @@
 
 import {
   recalculateOrderOwnerStats
-} from '../../core/store/estadisticas-pedidos.js?v=tintin-20260716-cloudinary-fix-2';
+} from '../../core/store/estadisticas-pedidos.js?v=tintin-20260716-cloudinary-fix-3';
 
 (function () {
   'use strict';

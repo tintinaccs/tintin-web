@@ -189,7 +189,7 @@ async function enhanceProfile() {
       photoButton.textContent = 'Subiendo…';
       try {
         const [{ auth, db }, authApi, firestoreApi] = await Promise.all([
-          import('../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1'),
+          import('../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3'),
           import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),
           import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
         ]);
@@ -323,7 +323,7 @@ async function enhanceProfile() {
   updateSummary();
   window.addEventListener('pagehide', () => summaryObserver.disconnect(), { once: true });
 
-  await import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20260829-final-stability-2');
+  await import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20260829-final-stability-3');
   const initial = location.hash.replace('#', '');
   if (panels.has(initial)) activate(initial);
 }

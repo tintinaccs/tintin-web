@@ -45,8 +45,8 @@ const checks = [
       firebase.includes('ReCaptchaEnterpriseProvider') &&
       firebase.includes('new ReCaptchaEnterpriseProvider(FIREBASE_APP_CHECK_SITE_KEY)') &&
       !firebase.includes('ReCaptchaV3Provider') &&
-      firebase.includes('isTokenAutoRefreshEnabled: false') &&
-      !firebase.includes('getAppCheckToken(appCheck, false)') &&
+      firebase.includes('isTokenAutoRefreshEnabled: true') &&
+      firebase.includes('getAppCheckToken(sharedAppCheck.appCheck, false)') &&
       !firebase.includes('setTokenAutoRefreshEnabled(appCheck, true)')
   ],
   [
@@ -110,7 +110,7 @@ const checks = [
     'Todos los consumidores usan una sola versión de Firebase',
     !allRuntime.includes('firebase.js?v=tintin-20260716-cloudinary-fix-1') &&
       !allRuntime.includes('firebase.js?v=tintin-20260903-app-check-singleton-5') &&
-      allRuntime.includes('firebase.js?v=tintin-20260904-auth-tab-session-fix-1')
+      allRuntime.includes('firebase.js?v=tintin-20260907-appcheck-token-3')
   ],
   [
     'Todas las páginas fuerzan el loader corregido',
