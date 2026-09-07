@@ -29,6 +29,12 @@ test('profile must load and not be blocked before forward navigation', () => {
   assert.match(hardening, /const state = await profilePromise/);
 });
 
+test('profile read errors do not strand the cart before the shipping step', () => {
+  assert.match(hardening, /control\.id === 'btn-step1-next'/);
+  assert.match(hardening, /state\.reason === 'profile_error'/);
+  assert.match(hardening, /await replay\(control\);\s*return;/);
+});
+
 test('resume target is backed up against lifecycle layers that clear the legacy key', () => {
   assert.match(hardening, /tt_checkout_resume_step_backup_v2/);
   assert.match(hardening, /restoreResumeState/);

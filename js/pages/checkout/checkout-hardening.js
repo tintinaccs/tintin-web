@@ -214,6 +214,14 @@ async function guardForwardClick(event, control) {
 
   const state = await profilePromise;
   if (!state.ok) {
+    // El primer avance solo abre el formulario de envío. Si la lectura
+    // secundaria del perfil falla (red, reglas o timeout de Firestore), no
+    // hay motivo para dejar el carrito inutilizable: el control de cuenta
+    // bloqueada/login se mantiene en el flujo original y en la confirmación.
+    if (control.id === 'btn-step1-next' && state.reason === 'profile_error') {
+      await replay(control);
+      return;
+    }
     if (state.reason === 'signed_out') {
       // Dejar que el checkout original abra su modal de acceso, pero con el
       // carrito ya resuelto y sin permitir que una carga incompleta lo saltee.
