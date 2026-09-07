@@ -932,6 +932,21 @@ function isCheckoutAuthorized() {
   );
 }
 
+// El primer paso sólo necesita una identidad Firebase real y verificada. La
+// lectura de users/{uid} es complementaria (sirve para autocompletar datos y
+// validar bloqueos), pero puede llegar después o fallar temporalmente. No
+// debemos dejar inutilizado "Elegir cómo lo recibo" por esa lectura secundaria;
+// los pasos posteriores y la creación segura del pedido vuelven a exigir el
+// perfil completo en el servidor.
+function canEnterShippingStep() {
+  return !!(
+    currentUser &&
+    !currentUser.isAnonymous &&
+    currentUser.emailVerified &&
+    currentUserProfile?.blocked !== true
+  );
+}
+
 // Modal obligatorio (Fase F): no tiene "Continuar como invitada" a propósito.
 // Cerrarlo (X o click afuera) deja al carrito y al paso 1 completamente
 // intactos — no toca localStorage ni el estado del carrito para nada.
@@ -1047,7 +1062,7 @@ document.getElementById('ck-items').addEventListener('click', async e => {
 // a propósito — así también corta el paso si alguien llama a goToStep(n) a
 // mano desde la consola para saltarse el paso 1, no solo con clicks reales.
 function goToStep(n) {
-  if (n >= 1 && !isCheckoutAuthorized()) {
+  if (n >= 1 && (n === 1 ? !canEnterShippingStep() : !isCheckoutAuthorized())) {
     showLoginRequiredModal(n);
     n = 0;
   }
