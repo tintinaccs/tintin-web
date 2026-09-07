@@ -7,7 +7,8 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.1/firebas
 import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
   initializeAppCheck,
-  ReCaptchaEnterpriseProvider
+  ReCaptchaEnterpriseProvider,
+  getToken as getAppCheckToken
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js";
 
 // El dominio de autenticación es el mismo dominio público de la tienda.
@@ -62,12 +63,15 @@ if (FIREBASE_APP_CHECK_SITE_KEY) {
       .then(() => {
         sharedAppCheck.appCheck = initializeAppCheck(app, {
           provider: new ReCaptchaEnterpriseProvider(FIREBASE_APP_CHECK_SITE_KEY),
-          // El SDK obtiene el primer token y administra su renovación. Forzar
-          // getToken() y luego activar el refresco vuelve a inicializar el widget
-          // Enterprise en algunos navegadores y produce "already been rendered".
-          isTokenAutoRefreshEnabled: false
+          // Mantiene el token válido durante toda la sesión. La renovación la
+          // administra el SDK y no vuelve a renderizar el widget Enterprise.
+          isTokenAutoRefreshEnabled: true
         });
         appCheck = sharedAppCheck.appCheck;
+        // Firestore puede iniciar listeners inmediatamente después de Auth.
+        // Resolver sólo cuando existe un token evita que App Check en modo
+        // enforcement convierta el primer lote de lecturas en permission-denied.
+        await getAppCheckToken(sharedAppCheck.appCheck, false);
         return true;
       })
     .then(() => {
