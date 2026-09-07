@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-07T15:09:55.872Z",
-  "sourceFingerprint": "a55fc9ee66f94421b4d4217ce15a29faa86fb018070acaa98ea6d22f7f2a16a9",
+  "generatedAt": "2026-09-07T15:23:19.436Z",
+  "sourceFingerprint": "3b7d16d399adfdf9a3095fd46b60e7000bb1148434fb11ff2dc8d77113bb813b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 816,
     "textFiles": 783,
-    "totalBytes": 10065779,
+    "totalBytes": 10066556,
     "pages": 18,
     "modules": 561
   },
@@ -20737,8 +20737,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 13245,
-      "sha256": "0c421b9e4699d8af122bf7e60cc5d1768e193293c274633ad196a361f381bd91",
+      "bytes": 13598,
+      "sha256": "e58dfb381c285719919407800966edff149360181cb9326158a37dca388321a7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20749,6 +20749,12 @@
           "target": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
           "dynamic": false,
           "line": 10
+        },
+        {
+          "raw": "../../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1",
+          "target": "js/core/firebase/firebase.js",
+          "dynamic": false,
+          "line": 11
         }
       ],
       "endpoints": []
@@ -31712,8 +31718,8 @@
     },
     {
       "path": "tests/visual-builder/admin-runtime-health.test.mjs",
-      "bytes": 3381,
-      "sha256": "e9d73805badecadb53586f2dff96135b84e90bdcbb2bf2be0b32bea081737924",
+      "bytes": 3805,
+      "sha256": "8a5fbda1c7ef1e2ded65b06ebce6cd2e51cd2794f2f7afb981c45a844a1cb4ba",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31732,26 +31738,32 @@
           "line": 2
         },
         {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
           "raw": "../../cloudflare/admin-runtime-health.js",
           "target": "cloudflare/admin-runtime-health.js",
           "dynamic": false,
-          "line": 8
+          "line": 9
         },
         {
           "raw": "../../functions/api/admin-runtime-health.js",
           "target": "functions/api/admin-runtime-health.js",
           "dynamic": false,
-          "line": 9
+          "line": 10
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/api/admin-runtime-health",
-          "line": 69
+          "line": 70
         },
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 71
+          "line": 72
         }
       ]
     },
@@ -34165,8 +34177,8 @@
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 13245,
-      "sha256": "0c421b9e4699d8af122bf7e60cc5d1768e193293c274633ad196a361f381bd91"
+      "bytes": 13598,
+      "sha256": "e58dfb381c285719919407800966edff149360181cb9326158a37dca388321a7"
     },
     {
       "path": "js/admin/flujo-decisiones/flujo-decisiones-admin.js",
@@ -37027,8 +37039,8 @@
     {
       "path": "tests/visual-builder/admin-runtime-health.test.mjs",
       "extension": ".mjs",
-      "bytes": 3381,
-      "sha256": "e9d73805badecadb53586f2dff96135b84e90bdcbb2bf2be0b32bea081737924"
+      "bytes": 3805,
+      "sha256": "8a5fbda1c7ef1e2ded65b06ebce6cd2e51cd2794f2f7afb981c45a844a1cb4ba"
     },
     {
       "path": "tests/visual-builder/apariencia-preview-abajo.spec.js",
@@ -38807,13 +38819,13 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 240,
+      "line": 245,
       "target": "/api/system-health",
       "method": "GET"
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 241,
+      "line": 246,
       "target": "/api/admin-runtime-health",
       "method": "GET"
     },
