@@ -69,6 +69,18 @@ test('un perfil existente ya confirmado nunca vuelve a Últimos datos', () => {
   assert.equal(plan.needsAddress, false);
 });
 
+test('una cuenta histórica confirmada por la bienvenida no vuelve a Últimos datos', () => {
+  const plan = getProfileCompletionPlan({
+    profile: { welcomeTutorialCompletedAt: new Date('2026-01-10') },
+    user: { email: 'cliente@ejemplo.com' },
+    role: 'client',
+  });
+
+  assert.equal(plan.skip, true);
+  assert.equal(plan.needsUsername, false);
+  assert.equal(plan.needsDob, false);
+});
+
 test('un perfil histórico del panel no repite username, fecha ni ubicación ya guardados', () => {
   const historical = {
     name: 'Juan Pérez',
