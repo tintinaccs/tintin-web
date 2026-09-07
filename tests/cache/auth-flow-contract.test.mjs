@@ -34,6 +34,16 @@ test('el destino post-login separa cuentas internas, clientes existentes y altas
   assert.match(login, /await ensureProfileComplete\(user, role\)/);
 });
 
+test('el traspaso de Google al panel espera la restauración de la sesión del SuperAdmin', () => {
+  const admin = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
+
+  assert.match(login, /tt_auth_handoff_uid/);
+  assert.match(login, /options\.user\?\.uid/);
+  assert.match(admin, /tt_auth_handoff_uid/);
+  assert.match(admin, /const MAX_ATTEMPTS = handoffUid \? 30 : 6/);
+  assert.match(admin, /sessionStorage\.removeItem\('tt_auth_handoff_uid'\)/);
+});
+
 test('los tres accesos conservan el mismo cierre de sesión y Google abre dentro del clic', () => {
   const emailAuth = fs.readFileSync(new URL('../../js/email/correo-autenticacion.js', import.meta.url), 'utf8');
   const popupIndex = login.indexOf('const cred = await signInWithPopup(auth, provider);');
