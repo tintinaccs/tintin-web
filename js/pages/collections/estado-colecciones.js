@@ -1,4 +1,4 @@
-import { db } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
+import { db } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-2';
 import {
   collection,
   getDocs,

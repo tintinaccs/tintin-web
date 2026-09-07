@@ -5,7 +5,7 @@
  * La configuración completa permanece en settings/general y no se entrega
  * cuando la tienda está cerrada.
  */
-import { db } from '../firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
+import { db } from '../firebase/firebase.js?v=tintin-20260907-appcheck-token-2';
 import {
   doc,
   getDoc

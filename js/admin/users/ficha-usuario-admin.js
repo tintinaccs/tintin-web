@@ -11,7 +11,7 @@
    solicitado bajo demanda.
    ============================================================= */
 
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-2';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
   collection,

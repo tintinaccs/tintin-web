@@ -8,7 +8,7 @@
 // monitoreo nueva: reutiliza lo que ya prueba conectividad real sin escribir
 // datos. Nada de lo que hace este módulo crea, actualiza ni borra documentos.
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js';
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-2';
 
 const CATEGORY_LABELS = {
   entrada: 'Entrada',
