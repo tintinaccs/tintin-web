@@ -512,6 +512,11 @@
     '</div>';
 
   const logo = loader.querySelector('#tt-loader-logo');
+  // Se aplica directamente al elemento antes de insertarlo. Así Safari no
+  // alcanza a mostrar el PNG negro durante el primer fotograma mientras aún
+  // llegan las hojas de estilo: sobre el fondo rosa la marca siempre nace
+  // blanca, igual que el texto y el indicador de carga.
+  logo?.style.setProperty('filter', 'brightness(0) invert(1) drop-shadow(0 8px 20px rgba(125,23,58,.14))', 'important');
 
   function markLogoReady() {
     logoReady = true;
