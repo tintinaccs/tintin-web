@@ -338,3 +338,17 @@ for (const page of PUBLIC_PAGES) {
     changed += 1;
     console.log(`synced ${page}`);
   }
+}
+
+for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') && !PUBLIC_PAGES.includes(file))) {
+  const file = path.join(ROOT, page);
+  const before = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
+  const html = versionUnifiedTheme(versionVisualBuilder(versionProfileGate(versionSessionProtection(before))));
+  if (html !== before) {
+    fs.writeFileSync(file, html, 'utf8');
+    changed += 1;
+    console.log(`session version synced ${page}`);
+  }
+}
+
+console.log(`Public shell sync completed. Changed files: ${changed}`);
