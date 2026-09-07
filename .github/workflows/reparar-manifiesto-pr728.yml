@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          ref: ee380bf2b528fec0eff68dda1ab69f5a16f36536
+          ref: 65ac2500bf36719362de95a00b382b0fac41c2cc
           persist-credentials: true
       - uses: actions/setup-node@v5
         with:
@@ -39,7 +39,7 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git switch -c pr728-manifest-fix
           git add -- diagnostic-manifest.json
-          git commit -m 'chore(diagnostics): regenerate manifest for admin recovery'
+          git commit -m 'chore(diagnostics): regenerate manifest after workflow consolidation'
           git fetch origin refs/heads/fix/admin-auth-data-recovery-20260907
-          test "$(git rev-parse FETCH_HEAD)" = 'ee380bf2b528fec0eff68dda1ab69f5a16f36536'
+          test "$(git rev-parse FETCH_HEAD)" = '65ac2500bf36719362de95a00b382b0fac41c2cc'
           git push origin HEAD:refs/heads/fix/admin-auth-data-recovery-20260907
