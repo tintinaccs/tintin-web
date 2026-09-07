@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-07T17:56:07.814Z",
-  "sourceFingerprint": "5e03add93b19fa7d820cd2f3bfbd0165492dbc4c7d2582fdb356dda7b64b85a4",
+  "generatedAt": "2026-09-07T20:57:49.118Z",
+  "sourceFingerprint": "1c0d266b826292630c7135625f98c5b9b2421f5f714341e1b5c2423b07fe6cf0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 816,
-    "textFiles": 783,
-    "totalBytes": 10067083,
+    "files": 820,
+    "textFiles": 787,
+    "totalBytes": 10073964,
     "pages": 18,
-    "modules": 561
+    "modules": 562
   },
   "viewports": [
     {
@@ -23443,8 +23443,8 @@
     },
     {
       "path": "js/core/auth/roles.js",
-      "bytes": 6670,
-      "sha256": "7045440fc693680b3bea080294a658167ac8354b0204a80154ad46871c97fcb3",
+      "bytes": 5935,
+      "sha256": "14c5b28b523881bbb5e6d043364d06de3380ebd7ef13c2564cce9f674a90992e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29646,6 +29646,42 @@
       "endpoints": []
     },
     {
+      "path": "tests/accounts/admin-role-recovery.test.mjs",
+      "bytes": 3140,
+      "sha256": "053a5e8990e4a7a1463301b7436d2a7944d627cdbd6bcab3408d87f84c8853ba",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/accounts/username-login.test.mjs",
       "bytes": 2208,
       "sha256": "0b20102c5db50ef403aee8cede239fc783f66819b5127fb99e39d882b441249a",
@@ -32309,6 +32345,12 @@
       "sha256": "bae175b6a39564988b1ad28c876c934ad1f5fbb8127345ec407c6c6017640c47"
     },
     {
+      "path": ".github/workflows/verificar-recuperacion-admin.yml",
+      "extension": ".yml",
+      "bytes": 671,
+      "sha256": "1fcb268046f553905c99d0c514b31b131b8b9f33876413d35b5be03c56c1183e"
+    },
+    {
       "path": "404.html",
       "extension": ".html",
       "bytes": 11891,
@@ -33495,6 +33537,12 @@
       "extension": ".md",
       "bytes": 3853,
       "sha256": "ece8000cef82a4fac7ca754de721a2571a3dfb8d3e92be538c63b24a8fc7b4f8"
+    },
+    {
+      "path": "docs/recuperacion-admin-20260907.md",
+      "extension": ".md",
+      "bytes": 3090,
+      "sha256": "f82f4f12e7ef38c359d93ec7c38b9195ed92d95d87e613be62a92d3d7a4e7afe"
     },
     {
       "path": "docs/recuperacion-firestore.md",
@@ -34843,8 +34891,8 @@
     {
       "path": "js/core/auth/roles.js",
       "extension": ".js",
-      "bytes": 6670,
-      "sha256": "7045440fc693680b3bea080294a658167ac8354b0204a80154ad46871c97fcb3"
+      "bytes": 5935,
+      "sha256": "14c5b28b523881bbb5e6d043364d06de3380ebd7ef13c2564cce9f674a90992e"
     },
     {
       "path": "js/core/auth/utilidades-seguridad.js",
@@ -36653,10 +36701,22 @@
       "sha256": "99b0fe4374ed22418395e68c3d4fe230cac3df8fa30a5df1b65d342ccdd1aed5"
     },
     {
+      "path": "tests/accounts/README-admin-recovery.md",
+      "extension": ".md",
+      "bytes": 715,
+      "sha256": "285d9d4a9091c31a17807cdc58fa0d7be43132872b0d15bd585f230236ad0b90"
+    },
+    {
       "path": "tests/accounts/account-contract.test.mjs",
       "extension": ".mjs",
       "bytes": 3795,
       "sha256": "802a38ff147b8128e14182909cabd8a7ff133e9a6cc22d815736190cc25beb95"
+    },
+    {
+      "path": "tests/accounts/admin-role-recovery.test.mjs",
+      "extension": ".mjs",
+      "bytes": 3140,
+      "sha256": "053a5e8990e4a7a1463301b7436d2a7944d627cdbd6bcab3408d87f84c8853ba"
     },
     {
       "path": "tests/accounts/username-login.test.mjs",
@@ -40246,12 +40306,12 @@
           },
           {
             "file": "js/core/auth/roles.js",
-            "line": 181,
+            "line": 125,
             "operation": "doc"
           },
           {
             "file": "js/core/auth/roles.js",
-            "line": 199,
+            "line": 139,
             "operation": "doc"
           },
           {
