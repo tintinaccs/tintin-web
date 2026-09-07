@@ -856,7 +856,14 @@ async function waitForAdminUserAfterAuthRestore(user) {
   // varias veces para no rebotar al login por un estado pasajero en cualquiera
   // de los dos momentos.
   const RETRY_DELAY_MS = 300;
-  const MAX_ATTEMPTS = 6;
+  // Al llegar desde login.html con Google se registra un puente efímero en
+  // sessionStorage. Ese caso merece más margen: Firebase puede tardar varios
+  // segundos en exponer la misma sesión a admin.html, especialmente en Safari
+  // móvil. Sin este margen, un null transitorio se veía como un logout apenas
+  // después de entrar.
+  let handoffUid = '';
+  try { handoffUid = String(sessionStorage.getItem('tt_auth_handoff_uid') || ''); } catch {}
+  const MAX_ATTEMPTS = handoffUid ? 30 : 6;
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
     await new Promise(resolve => window.setTimeout(resolve, RETRY_DELAY_MS));
     if (auth.currentUser) return auth.currentUser;
@@ -890,6 +897,14 @@ async function startAdminAuthGuard() {
       window.location.replace('login.html');
       return;
     }
+
+    // La sesión sí llegó: el puente ya cumplió su función y no puede afectar
+    // futuros ingresos ni un cambio real de cuenta.
+    try {
+      if (sessionStorage.getItem('tt_auth_handoff_uid') === user.uid) {
+        sessionStorage.removeItem('tt_auth_handoff_uid');
+      }
+    } catch {}
 
     currentUser = user;
 

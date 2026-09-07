@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-2"></script>
-  <script src="js/cargador-pagina.js?v=tintin-20260903-loader-store-gate-fast-rest-1"></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260907-loader-logo-white-first-frame-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260902-customer-notification-audience-1" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
@@ -228,10 +228,10 @@ import { reserveUsername } from "./js/components/forms/reserva-username.js?v=tin
 import { isValidDob } from "./js/components/forms/validacion-nacimiento.js?v=tintin-20260822-dob-username-onboarding-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260903-accounts-phase-a-3";
-import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260901-username-visible-2";
+import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260906-profile-complete-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260903-store-gate-fast-rest-3";
-import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260905-profile-aliases-5";
+import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260906-profile-complete-1";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
@@ -345,6 +345,12 @@ async function redirectByRole(role, email, options = {}) {
   // repetido no las devuelve accidentalmente a la tienda ni deja al usuario
   // esperando que encuentre el acceso administrativo en el menú.
   if (internalRole) {
+    // El popup de Google puede resolver antes de que la pestaña nueva del
+    // panel termine de observar la persistencia local de Firebase. Dejamos
+    // una marca efímera (solo de esta pestaña) para que admin.html espere la
+    // restauración real en vez de confundir ese instante con un cierre de
+    // sesión y devolver a la persona al login.
+    try { sessionStorage.setItem('tt_auth_handoff_uid', String(options.user?.uid || '')); } catch {}
     window.location.replace('admin.html');
     return;
   }
@@ -417,7 +423,7 @@ async function ensureProfileComplete(user, role) {
   // Intentar irse con el alta a medias abre una decisión explícita, no una
   // salida silenciosa: o completa, o cierra sesión y sigue mirando la tienda
   // sin cuenta. Sin esto quedaría encerrada — el guardia de
-  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260901-username-visible-2 la traería de vuelta acá desde cualquier página,
+  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260906-profile-complete-1 la traería de vuelta acá desde cualquier página,
   // porque su perfil sigue incompleto.
   const exitModal = document.getElementById('login-exit-modal');
 
@@ -838,7 +844,7 @@ async function finishGoogleLogin(user) {
     return;
   }
   await ensureProfileComplete(user, role);
-  await redirectByRole(role, user.email, { welcomePending, storeAccessConfig });
+  await redirectByRole(role, user.email, { welcomePending, storeAccessConfig, user });
 }
 
 async function finishOtpLogin(user) {
@@ -854,7 +860,7 @@ async function finishOtpLogin(user) {
     return;
   }
   await ensureProfileComplete(user, role);
-  await redirectByRole(role, user.email, { welcomePending, storeAccessConfig });
+  await redirectByRole(role, user.email, { welcomePending, storeAccessConfig, user });
 }
 
 async function handleGoogleRedirectReturn(observedUser) {
@@ -958,7 +964,7 @@ onAuthStateChanged(auth, async user => {
     !profileData.welcomeTutorialSeen &&
     profileData.onboardingCompleted !== true;
   await ensureProfileComplete(user, role);
-  await redirectByRole(role, user.email, { welcomePending, storeAccessConfig });
+  await redirectByRole(role, user.email, { welcomePending, storeAccessConfig, user });
 });
 
 // GOOGLE — primera opción de ingreso. El mismo botón sirve tanto

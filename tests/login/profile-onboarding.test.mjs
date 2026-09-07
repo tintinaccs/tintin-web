@@ -48,6 +48,39 @@ test('una cuenta completa entra directo sin volver a abrir el onboarding', () =>
   assert.equal(plan.needsDob, false);
 });
 
+test('un perfil existente ya confirmado nunca vuelve a Últimos datos', () => {
+  const historical = {
+    nombre: 'Bárbara',
+    apellido: 'Ruiz',
+    telefono: '+595981123456',
+    fecha_nacimiento: '1997-05-02',
+    direccion: 'San Lorenzo',
+    onboardingCompleted: true,
+  };
+  const plan = getProfileCompletionPlan({
+    profile: historical,
+    user: { email: 'barbieeruiz123@gmail.com' },
+    role: 'client',
+    superAdminEmail,
+  });
+  assert.equal(plan.skip, true);
+  assert.equal(plan.needsUsername, false);
+  assert.equal(plan.needsDob, false);
+  assert.equal(plan.needsAddress, false);
+});
+
+test('una cuenta histórica confirmada por la bienvenida no vuelve a Últimos datos', () => {
+  const plan = getProfileCompletionPlan({
+    profile: { welcomeTutorialCompletedAt: new Date('2026-01-10') },
+    user: { email: 'cliente@ejemplo.com' },
+    role: 'client',
+  });
+
+  assert.equal(plan.skip, true);
+  assert.equal(plan.needsUsername, false);
+  assert.equal(plan.needsDob, false);
+});
+
 test('un perfil histórico del panel no repite username, fecha ni ubicación ya guardados', () => {
   const historical = {
     name: 'Juan Pérez',
