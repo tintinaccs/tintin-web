@@ -67,3 +67,9 @@ test('Apps Script deriva userId desde el token y no desde el payload', () => {
   assert.match(appsScript, /userId: uid/);
   assert.doesNotMatch(appsScript, /userId:\s*payload\./);
 });
+
+test('el webhook público enruta createOrder a la transacción privilegiada de Fase 4', () => {
+  const router = read('apps-script/ProductosUnificados.gs');
+  assert.match(router, /body\.action === 'createOrder'/);
+  assert.match(router, /phase4CreateOrder_\(body, body\.idToken\)/);
+});
