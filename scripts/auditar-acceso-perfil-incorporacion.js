@@ -6,7 +6,10 @@ const login = fs.readFileSync(path.join(root, 'login.html'), 'utf8');
 const moduleSource = fs.readFileSync(path.join(root, 'js/pages/profile/configuracion-inicial-perfil.mjs'), 'utf8');
 
 const checks = [
-  ['el login pasa el rol a las tres validaciones de perfil', (login.match(/await ensureProfileComplete\(user, role\)/g) || []).length === 3],
+  ['el alta se valida solo al crear y los reingresos continúan directo',
+    (login.match(/firstLogin: profile\.isNew === true/g) || []).length === 2 &&
+    (login.match(/firstLogin: false/g) || []).length === 1 &&
+    login.includes('if (!firstLogin) return;')],
   ['el guardado usa una transacción', login.includes('await runTransaction(db')],
   ['el nombre del proveedor se confirma antes de editar', login.includes('login-profile-name-confirmation')],
   ['el teléfono se puede solicitar independientemente', login.includes("phoneField.style.display = plan.needsPhone ? '' : 'none'")],
