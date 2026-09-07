@@ -16,7 +16,7 @@ const NAV_ENTRY_VERSION = 'tintin-20260902-customer-notification-audience-2';
 const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
 const VISUAL_BUILDER_VERSION = 'tintin-20260826-carousel-order-3';
 const SESSION_PROTECTION_VERSION = 'tintin-20260906-no-auto-logout-2';
-const PROFILE_GATE_VERSION = 'tintin-20260901-username-visible-2';
+const PROFILE_GATE_VERSION = 'tintin-20260906-profile-complete-1';
 const NAV_HEADER_VERSION = 'tintin-20260824-header-responsive-sync-1';
 const NAV_SHARED_VERSION = 'tintin-20260825-responsive-css-budget-2';
 const UNIFIED_THEME_VERSION = 'tintin-20260901-footer-light-1';
@@ -338,17 +338,3 @@ for (const page of PUBLIC_PAGES) {
     changed += 1;
     console.log(`synced ${page}`);
   }
-}
-
-for (const page of fs.readdirSync(ROOT).filter(file => file.endsWith('.html') && !PUBLIC_PAGES.includes(file))) {
-  const file = path.join(ROOT, page);
-  const before = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
-  const html = versionUnifiedTheme(versionVisualBuilder(versionProfileGate(versionSessionProtection(before))));
-  if (html !== before) {
-    fs.writeFileSync(file, html, 'utf8');
-    changed += 1;
-    console.log(`session version synced ${page}`);
-  }
-}
-
-console.log(`Public shell sync completed. Changed files: ${changed}`);
