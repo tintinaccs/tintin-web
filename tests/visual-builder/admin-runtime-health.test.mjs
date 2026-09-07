@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import {
   ADMIN_RUNTIME_CHECK_IDS,
   classifyAdminRuntimeError,
@@ -76,4 +77,11 @@ test('el health privado exige una sesión real de Super Admin', async () => {
   assert.equal(payload.ok, false);
   assert.equal(payload.code, 'authentication_required');
   assert.match(payload.requestId, /^admin-health-/);
+});
+
+test('el flujo de conexiones envía Bearer Firebase a sus probes protegidos', () => {
+  const source = readFileSync(new URL('../../js/admin/flujo-conexiones/flujo-conexiones-admin.js', import.meta.url), 'utf8');
+  assert.match(source, /user\.getIdToken\(\)/);
+  assert.match(source, /authorization: `Bearer \$\{idToken\}`/);
+  assert.match(source, /credentials: 'same-origin'/);
 });
