@@ -6,6 +6,8 @@ const login = fs.readFileSync(new URL('../../login.html', import.meta.url), 'utf
 const session = fs.readFileSync(new URL('../../js/core/auth/proteccion-sesion.js', import.meta.url), 'utf8');
 const profile = fs.readFileSync(new URL('../../js/pages/profile/control-acceso-perfil.js', import.meta.url), 'utf8');
 const profileCode = profile.replace(/\/\/.*$/gm, '');
+const publicAuthNav = fs.readFileSync(new URL('../../js/core/auth/navegacion-autenticacion.js', import.meta.url), 'utf8');
+const publicCart = fs.readFileSync(new URL('../../js/components/cart/sincronizacion-carrito.js', import.meta.url), 'utf8');
 
 test('login mantiene un único dueño del listener de Auth y evita redirecciones repetidas', () => {
   assert.equal((login.match(/onAuthStateChanged\(auth/g) || []).length, 1);
@@ -89,4 +91,11 @@ test('login conserva la sesión si falla transitoriamente la lectura del perfil'
   assert.match(login, /auth\.authStateReady\?\./);
   assert.doesNotMatch(profileReadError, /signOut\(auth\)/);
   assert.match(profileReadError, /Tu sesión sigue activa/);
+});
+
+test('rutas públicas esperan Auth antes de pintar visitante o activar carrito', () => {
+  assert.match(publicAuthNav, /auth\.authStateReady\(\)/);
+  assert.match(publicAuthNav, /authStateReady\.then\(\(\)=>onAuthStateChanged/);
+  assert.match(publicCart, /auth\.authStateReady\(\)/);
+  assert.match(publicCart, /authStateReady\.then\(\(\) => onAuthStateChanged/);
 });

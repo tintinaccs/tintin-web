@@ -55,7 +55,15 @@ document.addEventListener('click',event=>{
 window.addEventListener('tintin:login-cancelled',endSilentAuthTransition);
 window.addEventListener('tintin:login-failed',endSilentAuthTransition);
 
-onAuthStateChanged(auth,async user=>{
+// En rutas públicas Firebase puede estar restaurando IndexedDB al mismo
+// tiempo que se monta el header. Esperar el estado inicial evita pintar una
+// cuenta como visitante durante esa ventana y que la navegación parezca un
+// cierre de sesión.
+const authStateReady = typeof auth.authStateReady === 'function'
+  ? auth.authStateReady().catch(() => {})
+  : Promise.resolve();
+
+authStateReady.then(()=>onAuthStateChanged(auth,async user=>{
  // login.html es el único dueño del alta, bloqueo y destino posterior al
  // acceso. Evita dos redirecciones paralelas compitiendo por la misma sesión.
  if(IS_LOGIN_PAGE)return;
@@ -68,7 +76,7 @@ onAuthStateChanged(auth,async user=>{
  window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated',{
   detail:{authenticated:Boolean(user),role}
  }));
-});
+}));
 
 function renderAccountButtonPhoto(user){
  document.querySelectorAll('[data-auth-account-button]').forEach(btn=>{

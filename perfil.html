@@ -20,7 +20,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260904-auth-tab-session-fix-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260902-customer-notification-audience-2">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260907-auth-state-ready-public-routes-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260824-header-responsive-sync-1">
@@ -331,7 +331,7 @@ import {
   collection, query, where, orderBy, limit
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260821-accounts-phase-a-2";
-import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260907-session-preserved-4";
+import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260907-auth-state-ready-public-routes-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachLocationPicker } from "./js/components/location/selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
 import { toSavedLocation } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260906-profile-complete-1";
