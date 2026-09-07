@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { aggregateCheckoutCart } from '../../js/orders/politica-checkout.js';
 
 const hardening = readFileSync(new URL('../../js/pages/checkout/checkout-hardening.js', import.meta.url), 'utf8');
+const checkoutPage = readFileSync(new URL('../../checkout.html', import.meta.url), 'utf8');
 const loader = readFileSync(new URL('../../js/cargador-mantenimiento-pagina.js', import.meta.url), 'utf8');
 const quota = readFileSync(new URL('../../js/pages/checkout/checkout-control-cuota.js', import.meta.url), 'utf8');
 const maintenance = readFileSync(new URL('../../js/pages/checkout/checkout-mantenimiento.js', import.meta.url), 'utf8');
@@ -33,6 +34,12 @@ test('profile read errors do not strand the cart before the shipping step', () =
   assert.match(hardening, /control\.id === 'btn-step1-next'/);
   assert.match(hardening, /state\.reason === 'profile_error'/);
   assert.match(hardening, /await replay\(control\);\s*return;/);
+});
+
+test('shipping step accepts a verified session while profile hydration is pending', () => {
+  assert.match(checkoutPage, /function canEnterShippingStep\(\)/);
+  assert.match(checkoutPage, /currentUserProfile\?\.blocked !== true/);
+  assert.match(checkoutPage, /n === 1 \? !canEnterShippingStep\(\) : !isCheckoutAuthorized\(\)/);
 });
 
 test('resume target is backed up against lifecycle layers that clear the legacy key', () => {
