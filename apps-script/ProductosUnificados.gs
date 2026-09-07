@@ -908,6 +908,15 @@ function doPost(e) {
   var body = {};
   try { body = JSON.parse(e && e.postData && e.postData.contents || '{}'); }
   catch (error) { return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'JSON inválido' })).setMimeType(ContentService.MimeType.JSON); }
+  // La creación pública de pedidos usa la transacción privilegiada de Fase 4.
+  // Esta ruta debe resolverse antes del router de Sheets: ambos usan `createOrder`
+  // como nombre de acción, pero sólo Fase 4 recibe el draft del checkout y el
+  // idToken para validar la sesión y reservar stock atómicamente.
+  if (body.action === 'createOrder' && typeof phase4CreateOrder_ === 'function') {
+    return ContentService.createTextOutput(JSON.stringify(
+      phase4CreateOrder_(body, body.idToken)
+    )).setMimeType(ContentService.MimeType.JSON);
+  }
   var response = tintinHandleUnifiedProductsPost_(body);
   if (response) return response;
   if (typeof tintinParityHandleServerOrderSync_ === 'function') {

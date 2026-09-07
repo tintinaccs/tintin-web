@@ -6,7 +6,7 @@ const SECURITY_HEADERS = Object.freeze({
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
-  'Permissions-Policy': 'camera=(), microphone=(), geolocation=(self), payment=(self), usb=(), browsing-topics=()',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=(self), payment=(self), usb=()',
   'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
   'X-Permitted-Cross-Domain-Policies': 'none'
 });
