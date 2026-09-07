@@ -1,4 +1,4 @@
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-2';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
 (function () {

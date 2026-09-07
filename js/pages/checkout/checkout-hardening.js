@@ -1,10 +1,10 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-2';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
 import {
   awaitCartReady,
   getCartLocal,
   updateQty,
   removeFromCart,
-} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20260907-auth-state-ready-public-routes-1';
+} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20260907-auth-state-ready-public-routes-2';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 

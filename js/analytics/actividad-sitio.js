@@ -7,7 +7,7 @@
  *   código postal, navegador, nombre, correo ni referidor.
  * - El identificador aleatorio rota cada día y no se vincula con la cuenta.
  */
-import { db, appCheckReady } from '../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-2';
+import { db, appCheckReady } from '../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
 import { apiUrl } from '../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   doc,

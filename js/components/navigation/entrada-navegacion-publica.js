@@ -8,7 +8,7 @@ import { renderCollectionsSheet } from './compartido/panel-colecciones.js';
 import { renderSurfaceLayer } from './compartido/capas-paneles.js';
 import { applyActiveState, currentPage } from './compartido/estado-ruta.js';
 import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20260907-auth-state-ready-public-routes-1';
-import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260907-auth-state-ready-public-routes-1';
+import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260907-auth-state-ready-public-routes-2';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
 import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260817-footer-contrast-1';
@@ -171,7 +171,7 @@ async function loadFinalStability() {
     await import('../../quality/estabilidad-producto.js?v=tintin-20260831-product-stability-2');
     return 'tintin-20260831-product-stability-2';
   }
-  await import('../../quality/estabilidad-final-publica.js?v=tintin-20260829-final-stability-2');
+  await import('../../quality/estabilidad-final-publica.js?v=tintin-20260829-final-stability-3');
   return 'tintin-20260829-final-stability-1';
 }
 

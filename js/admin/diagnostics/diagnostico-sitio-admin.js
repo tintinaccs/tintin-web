@@ -1,5 +1,5 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-2';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-2';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-3';
 import {
   collection,
   doc,

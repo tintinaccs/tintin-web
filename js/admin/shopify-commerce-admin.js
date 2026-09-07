@@ -11,15 +11,15 @@
    vistas, filtros, selección, panel lateral, búsqueda y navegación rápida.
    ======================================================================== */
 
-import { auth, db } from '../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-2';
+import { auth, db } from '../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
   collection,
   onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-2';
-import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20260821-accounts-phase-a-2';
-import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20260901-firestore-budget-2';
+import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-3';
+import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20260821-accounts-phase-a-3';
+import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20260901-firestore-budget-3';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 const VERSION = 'tintin-20260825-orders-ops-1';

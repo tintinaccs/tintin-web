@@ -60,7 +60,7 @@ if (FIREBASE_APP_CHECK_SITE_KEY) {
       ? Promise.resolve()
       : new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve, { once: true }));
     const appCheckTokenSettled = appCheckDomReady
-      .then(() => {
+      .then(async () => {
         sharedAppCheck.appCheck = initializeAppCheck(app, {
           provider: new ReCaptchaEnterpriseProvider(FIREBASE_APP_CHECK_SITE_KEY),
           // Mantiene el token válido durante toda la sesión. La renovación la

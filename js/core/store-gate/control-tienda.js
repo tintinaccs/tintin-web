@@ -7,7 +7,7 @@
  *
  * Ante cualquier error queda bloqueada. Nunca supone que la tienda está abierta.
  */
-import { auth, db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260907-appcheck-token-2';
+import { auth, db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
 import {
   onAuthStateChanged
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
@@ -15,7 +15,7 @@ import {
   doc,
   onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { getUserRole } from '../auth/roles.js?v=tintin-20260821-accounts-phase-a-2';
+import { getUserRole } from '../auth/roles.js?v=tintin-20260821-accounts-phase-a-3';
 import {
   isAccessAllowed,
   renderStoreClosedOverlay,
@@ -24,7 +24,7 @@ import {
   getStoreAccessConfig,
   getStoreAccessConfigFromRest,
   normalizeStoreAccessConfig
-} from './nucleo-control-tienda.js?v=tintin-20260903-store-gate-fast-rest-3';
+} from './nucleo-control-tienda.js?v=tintin-20260903-store-gate-fast-rest-4';
 
 export {
   isAccessAllowed,
