@@ -169,9 +169,18 @@ const BUDGETS = {
   homeRequests: 177,
   lightweightRequests: 120,
   // Las páginas informativas comparten el shell público (CSS, navegación,
-  // fuentes y runtime de tienda). En CI el payload estable medido es ~1.66 MB;
-  // este margen evita falsos rojos sin relajar el presupuesto general de 6.5 MB.
-  lightweightTransferKB: 1800,
+  // fuentes y runtime de tienda) y también leen 'site_content' vía onSnapshot
+  // en contenido-sitio.js, gateado por appCheckReady. Desde #725, firebase.js
+  // espera (await) el intercambio de token de App Check/reCAPTCHA Enterprise
+  // antes de resolver appCheckReady en TODAS las páginas -incluidas las
+  // informativas-, precisamente para evitar el permission-denied que #725
+  // corrigió en los listeners de Firestore que arrancan justo después de Auth.
+  // Eso adelanta la carga del script de reCAPTCHA Enterprise (~480 KB) a la
+  // ventana de medición del test, subiendo el piso estable de ~1.66 MB a
+  // ~1.77-1.83 MB (medido en CI: 1815 KB en contact/envios/cambios-devoluciones/
+  // preguntas-frecuentes, 1877 KB en about.html). Este presupuesto refleja ese
+  // piso legítimo con margen, sin relajar el presupuesto general de 6.5 MB.
+  lightweightTransferKB: 2000,
   homeFirestoreReads: 30,
   loaderMaxMs: 11000
 };
