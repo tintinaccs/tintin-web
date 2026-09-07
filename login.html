@@ -345,6 +345,12 @@ async function redirectByRole(role, email, options = {}) {
   // repetido no las devuelve accidentalmente a la tienda ni deja al usuario
   // esperando que encuentre el acceso administrativo en el menú.
   if (internalRole) {
+    // El popup de Google puede resolver antes de que la pestaña nueva del
+    // panel termine de observar la persistencia local de Firebase. Dejamos
+    // una marca efímera (solo de esta pestaña) para que admin.html espere la
+    // restauración real en vez de confundir ese instante con un cierre de
+    // sesión y devolver a la persona al login.
+    try { sessionStorage.setItem('tt_auth_handoff_uid', String(options.user?.uid || '')); } catch {}
     window.location.replace('admin.html');
     return;
   }
@@ -838,7 +844,7 @@ async function finishGoogleLogin(user) {
     return;
   }
   await ensureProfileComplete(user, role);
-  await redirectByRole(role, user.email, { welcomePending, storeAccessConfig });
+  await redirectByRole(role, user.email, { welcomePending, storeAccessConfig, user });
 }
 
 async function finishOtpLogin(user) {
@@ -854,7 +860,7 @@ async function finishOtpLogin(user) {
     return;
   }
   await ensureProfileComplete(user, role);
-  await redirectByRole(role, user.email, { welcomePending, storeAccessConfig });
+  await redirectByRole(role, user.email, { welcomePending, storeAccessConfig, user });
 }
 
 async function handleGoogleRedirectReturn(observedUser) {
@@ -958,7 +964,7 @@ onAuthStateChanged(auth, async user => {
     !profileData.welcomeTutorialSeen &&
     profileData.onboardingCompleted !== true;
   await ensureProfileComplete(user, role);
-  await redirectByRole(role, user.email, { welcomePending, storeAccessConfig });
+  await redirectByRole(role, user.email, { welcomePending, storeAccessConfig, user });
 });
 
 // GOOGLE — primera opción de ingreso. El mismo botón sirve tanto
