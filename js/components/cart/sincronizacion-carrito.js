@@ -1025,7 +1025,12 @@ function createRuntime() {
       const enriched = currentLocalCart().map(richerFromCatalog);
       writeLocal(enriched, { notify: true });
     });
-    onAuthStateChanged(auth, activateIdentity);
+    // No activar el carrito como invitado mientras Firebase todavía restaura
+    // la sesión persistida al cambiar de catálogo/producto.
+    const authStateReady = typeof auth.authStateReady === 'function'
+      ? auth.authStateReady().catch(() => {})
+      : Promise.resolve();
+    authStateReady.then(() => onAuthStateChanged(auth, activateIdentity));
   }
 
   const api = {

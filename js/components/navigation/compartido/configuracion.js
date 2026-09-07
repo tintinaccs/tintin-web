@@ -1,4 +1,4 @@
-export const SHELL_VERSION = 'tintin-20260902-customer-notification-audience-1';
+export const SHELL_VERSION = 'tintin-20260907-auth-state-ready-public-routes-1';
 
 export const BREAKPOINTS = Object.freeze({
   mobileMax: 767,
