@@ -45,8 +45,8 @@ const checks = [
       firebase.includes('ReCaptchaEnterpriseProvider') &&
       firebase.includes('new ReCaptchaEnterpriseProvider(FIREBASE_APP_CHECK_SITE_KEY)') &&
       !firebase.includes('ReCaptchaV3Provider') &&
-      firebase.includes('isTokenAutoRefreshEnabled: false') &&
-      !firebase.includes('getAppCheckToken(appCheck, false)') &&
+      firebase.includes('isTokenAutoRefreshEnabled: true') &&
+      firebase.includes('getAppCheckToken(sharedAppCheck.appCheck, false)') &&
       !firebase.includes('setTokenAutoRefreshEnabled(appCheck, true)')
   ],
   [
