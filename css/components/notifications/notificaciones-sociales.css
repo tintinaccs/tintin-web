@@ -79,7 +79,8 @@
    header buttons historically clipped their children, so explicitly opt both
    actions out of clipping here. */
 .tt-header-actions :is(#btn-notifications, #btn-cart, #btn-notifications-tablet, #btn-cart-tablet),
-#tt-tabbar :is(#tabbar-notifications, #tabbar-cart) {
+#tt-tabbar :is(#tabbar-notifications, #tabbar-cart),
+.tt-tablet-actions :is(#btn-notifications-tablet, #btn-cart-tablet) {
   position: relative;
   overflow: visible !important;
 }
