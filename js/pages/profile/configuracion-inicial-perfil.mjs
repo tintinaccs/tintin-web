@@ -227,7 +227,16 @@ export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', s
   // terminada con `onboardingCompleted`. Es una confirmación persistida de
   // que no son cuentas nuevas: jamás se les debe reabrir "Últimos datos" por
   // cambios posteriores de nombres internos de campos.
-  if (profile.onboardingCompleted === true) {
+  // Algunas cuentas existentes fueron confirmadas por la bienvenida antes de
+  // que existiera `profileStatus: active`. Todas estas marcas significan lo
+  // mismo: ya terminaron su alta. No se las puede tratar como altas nuevas
+  // ni volver a pedirles datos por haber cambiado la forma interna de
+  // guardarlos.
+  const hasPersistedCompletion = profile.onboardingCompleted === true ||
+    profile.profileCompleted === true ||
+    Boolean(profile.onboardingCompletedAt || profile.profileCompletedAt ||
+      profile.welcomeTutorialCompletedAt || profile.welcomeTutorialSeen);
+  if (hasPersistedCompletion) {
     exposeSavedLocationForOnboarding(profile);
     return {
       skip: true, needsName: false, needsPhone: false, needsAddress: false,
