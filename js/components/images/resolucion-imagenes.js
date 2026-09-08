@@ -9,7 +9,7 @@
    reimplementar esta cascada — todas deben importar de acá.
    ============================================================= */
 
-import { db } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
+import { db } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import {
   doc,
   getDoc,

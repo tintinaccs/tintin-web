@@ -5,7 +5,7 @@
    incluidos en esquema-contenido.js. No acepta HTML ni selectores desde Firestore.
    ============================================================= */
 
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
   doc,
