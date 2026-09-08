@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-08T12:03:03.009Z",
-  "sourceFingerprint": "2dc865f977160ce825ddc11b6744225a62a8c589789379b8e83da9689f0a47f9",
+  "generatedAt": "2026-09-08T12:29:10.378Z",
+  "sourceFingerprint": "dc777c57330fefef576850e00bb9dcff4c9f0cac3510b459cfedbad145eabb67",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 816,
     "textFiles": 783,
-    "totalBytes": 10067904,
+    "totalBytes": 10067927,
     "pages": 18,
     "modules": 561
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 189230,
-      "sha256": "27a2a8f8a62a747abd1d46c7ecbd8a5231c4e4039155d0bec751f0981b1bb6e4",
+      "bytes": 189234,
+      "sha256": "52f78f5d3c71bcec88376b2d5bf5888f7e2beef0f9461b543c952c24d08fd59f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2124,7 +2124,7 @@
           "line": 1987
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260825-orders-ops-3",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260908-appcheck-ready-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 1988
         },
@@ -2370,7 +2370,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260825-orders-ops-3",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260908-appcheck-ready-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 1988,
           "exists": true
@@ -21505,8 +21505,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 68378,
-      "sha256": "07db0cad71abb5f4476a42a84a02044973ec2768835233a1d420460b7ff89c0e",
+      "bytes": 68397,
+      "sha256": "16a5e6ebbe19b9754be72479acf9621ec86ccd0e53c41fa6e88c9bc34050f01f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32353,8 +32353,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 189230,
-      "sha256": "27a2a8f8a62a747abd1d46c7ecbd8a5231c4e4039155d0bec751f0981b1bb6e4"
+      "bytes": 189234,
+      "sha256": "52f78f5d3c71bcec88376b2d5bf5888f7e2beef0f9461b543c952c24d08fd59f"
     },
     {
       "path": "apple-touch-icon.png",
@@ -34327,8 +34327,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 68378,
-      "sha256": "07db0cad71abb5f4476a42a84a02044973ec2768835233a1d420460b7ff89c0e"
+      "bytes": 68397,
+      "sha256": "16a5e6ebbe19b9754be72479acf9621ec86ccd0e53c41fa6e88c9bc34050f01f"
     },
     {
       "path": "js/admin/users/ficha-usuario-admin.js",
