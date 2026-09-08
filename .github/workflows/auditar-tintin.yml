@@ -116,6 +116,7 @@ jobs:
           npm run audit:canonical-viewports
           npm run audit:global-responsive-geometry
           npm run test:pages
+          node scripts/auditar-legal-paginas.js
 
       - name: Save failure evidence
         if: failure()
