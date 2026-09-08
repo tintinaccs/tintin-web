@@ -132,7 +132,7 @@ document.addEventListener('click', async event => {
   if (!addButton) return;
   const item = items.find(entry => entry.id === String(addButton.dataset.favoriteAddCart || ''));
   if (!item) return;
-  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20260907-auth-state-ready-public-routes-2');
+  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20260908-public-activity-auth-2');
   await cart.addToCart({ ...item, qty: 1 });
 }, true);
 

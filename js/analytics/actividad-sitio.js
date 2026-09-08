@@ -334,7 +334,10 @@ if (
   const hostname = String(window.location.hostname || '').toLowerCase();
   const localHost = /^(?:localhost|127\.0\.0\.1|0\.0\.0\.0)$/i.test(hostname);
   const netlifyPreview = /^deploy-preview-/i.test(hostname);
-  const cloudflarePreview = /\.tintinaccesorios\.pages\.dev$/i.test(hostname) || hostname === 'tintinaccesorios.pages.dev';
+  // La raíz del proyecto es producción. Sólo los subdominios de Pages son
+  // despliegues de vista previa; incluir la raíz aquí desactivaba toda la
+  // actividad pública precisamente en el sitio que debe contabilizarla.
+  const cloudflarePreview = /.+\.tintinaccesorios\.pages\.dev$/i.test(hostname);
   const trackablePage = !isAdminPage();
   analyticsWritable = !localHost && !netlifyPreview && !cloudflarePreview;
 

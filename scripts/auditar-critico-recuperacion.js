@@ -35,8 +35,10 @@ check(
   'La actividad pública arranca sola en cada página (ya no depende de un interruptor apagado)',
   activity.includes('TINTIN_ENABLE_PUBLIC_ACTIVITY === true') &&
     activity.includes("ttActivityState = 'disabled-quota-protection'") &&
-    loader.includes('window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true'),
-  'actividad-sitio.js no debe iniciar escrituras salvo habilitación explícita.'
+    loader.includes('window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true') &&
+    activity.includes("const cloudflarePreview = /.+\\.tintinaccesorios\\.pages\\.dev$/i.test(hostname);") &&
+    !activity.includes("hostname === 'tintinaccesorios.pages.dev'"),
+  'La actividad debe arrancar sólo con habilitación explícita y nunca confundir producción con una vista previa de Pages.'
 );
 check(
   'El servidor crea el pedido y descuenta stock sin perder atomicidad',
