@@ -7,7 +7,7 @@
  * admin.html y admin-images.html. Un esquema del panel nunca toca
  * --color-* (el esquema público), así que jamás se "filtra" hacia afuera.
  */
-import { db } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { ADMIN_TOKENS, buildDefaultTokenMap } from '../../components/color/esquema-color-catalogo.js?v=tintin-20260716-cloudinary-fix-1';
 
@@ -46,8 +46,9 @@ function applyScheme(schemeData) {
   cacheToLocalStorage();
 }
 
-function subscribeToScheme(schemeId) {
+async function subscribeToScheme(schemeId) {
   if (unsubScheme) { unsubScheme(); unsubScheme = null; }
+  if (!await appCheckReady) return;
   unsubScheme = onSnapshot(
     doc(db, 'colorSchemes', schemeId || DEFAULT_SCHEME_ID),
     snap => { if (snap.exists()) applyScheme(snap.data()); },
@@ -55,17 +56,20 @@ function subscribeToScheme(schemeId) {
   );
 }
 
-onSnapshot(
-  doc(db, APPEARANCE_DOC.col, APPEARANCE_DOC.id),
-  snap => {
-    const cfg = snap.exists() ? snap.data() : {};
-    subscribeToScheme(cfg.activeAdminSchemeId || DEFAULT_SCHEME_ID);
-  },
-  err => {
-    console.warn('[admin-color-scheme] settings/appearance no disponible, se usa el esquema del panel por defecto:', err);
-    subscribeToScheme(DEFAULT_SCHEME_ID);
-  }
-);
+(async () => {
+  if (!await appCheckReady) return;
+  onSnapshot(
+    doc(db, APPEARANCE_DOC.col, APPEARANCE_DOC.id),
+    snap => {
+      const cfg = snap.exists() ? snap.data() : {};
+      subscribeToScheme(cfg.activeAdminSchemeId || DEFAULT_SCHEME_ID);
+    },
+    err => {
+      console.warn('[admin-color-scheme] settings/appearance no disponible, se usa el esquema del panel por defecto:', err);
+      subscribeToScheme(DEFAULT_SCHEME_ID);
+    }
+  );
+})();
 
 // El Centro de campañas pertenece al constructor Apariencia de admin.html.
 // admin-images.html comparte este motor de colores, pero no debe cargar ese

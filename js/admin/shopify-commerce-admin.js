@@ -1079,6 +1079,7 @@ async function bootForUser(user) {
   state.ready = true;
   mountShells();
   observeLegacyForms();
+  if (!await appCheckReady) return;
   subscribeData();
 }
 

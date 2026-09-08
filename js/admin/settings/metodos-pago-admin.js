@@ -1,4 +1,4 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-3';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
@@ -116,7 +116,7 @@ function rootHtml() {
   `;
 }
 
-function boot() {
+async function boot() {
   if (!ADMIN_PATH.test(location.pathname) && !document.getElementById('section-configuracion')) return;
   ensureStyle();
   const oldInput = document.getElementById('cfg-pay-efectivo');
@@ -428,6 +428,8 @@ function boot() {
     // quedar pegados al primer render.
     renderList();
   });
+
+  if (!await appCheckReady) return;
 
   onSnapshot(SETTINGS_REF, snapshot => {
     if (!snapshot.exists()) return;

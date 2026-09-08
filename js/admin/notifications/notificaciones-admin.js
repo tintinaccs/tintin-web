@@ -1,4 +1,4 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-3';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
@@ -278,8 +278,9 @@ function closePanel() {
   button?.setAttribute('aria-expanded', 'false');
 }
 
-function subscribeNotifications() {
+async function subscribeNotifications() {
   unsubscribeNotifications?.();
+  if (!await appCheckReady) return;
   const source = query(collection(db, 'adminNotifications'), orderBy('createdAt', 'desc'), limit(100));
   if (notificationsRetryTimer) window.clearTimeout(notificationsRetryTimer);
   notificationsRetryTimer = 0;
@@ -339,12 +340,13 @@ async function recoverRecentOrderStatuses(orderIds) {
   }
 }
 
-function subscribeOrderStatusChanges() {
+async function subscribeOrderStatusChanges() {
   unsubscribeOrders?.();
   orderState = new Map();
   ordersPrimed = false;
   if (ordersRetryTimer) window.clearTimeout(ordersRetryTimer);
   ordersRetryTimer = 0;
+  if (!await appCheckReady) return;
   const source = query(collection(db, 'orders'), orderBy('updatedAt', 'desc'), limit(150));
   unsubscribeOrders = onSnapshot(source, snapshot => {
     const next = new Map();

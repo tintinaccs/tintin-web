@@ -1,4 +1,4 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-3';
 import { apiUrl } from '../../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
@@ -318,8 +318,9 @@ if (!window.TintinAdminEmailGateSyncBooted) {
     uiObserver = null;
   }
 
-  function start() {
+  async function start() {
     if (unsubPrivate || unsubPublic) return;
+    if (!await appCheckReady) return;
 
     unsubPrivate = onSnapshot(
       PRIVATE_REF,
