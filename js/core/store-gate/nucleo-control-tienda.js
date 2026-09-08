@@ -5,7 +5,7 @@
  * La configuración completa permanece en settings/general y no se entrega
  * cuando la tienda está cerrada.
  */
-import { db } from '../firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
+import { db } from '../firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import {
   doc,
   getDoc
