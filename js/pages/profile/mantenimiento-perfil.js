@@ -3,7 +3,10 @@ const PROFILE_PATH_RE = /(?:^|\/)perfil(?:\.html)?\/?$/i;
 if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfileMaintenanceBooted) {
   window.TintinProfileMaintenanceBooted = true;
 
-  const VERSION = 'tintin-20260903-auth-persistence-1';
+  // Debe coincidir con cada import estático del bootstrap compartido. Usar
+  // otra query convierte firebase.js en un módulo distinto para el navegador
+  // y puede intentar inicializar App Check/reCAPTCHA una segunda vez.
+  const FIREBASE_BOOTSTRAP_VERSION = 'tintin-20260907-appcheck-token-3';
   const PROFILE_ORDERS_LIMIT = 100;
   let unsubscribeOrders = null;
   let orderFirestore = null;
@@ -237,7 +240,7 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
     if (list) { list.setAttribute('aria-busy','true'); list.innerHTML = '<div class="tt-profile-state">Sincronizando pedidos…</div>'; }
     try {
       const [{ auth, db }, firestore, authApi] = await Promise.all([
-        import(`../../core/firebase/firebase.js?v=${VERSION}`),
+          import(`../../core/firebase/firebase.js?v=${FIREBASE_BOOTSTRAP_VERSION}`),
         import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
         import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),
       ]);
