@@ -14,7 +14,10 @@ const checks = [
   ['disabled nativo', guard.includes('submit.disabled = !valid')],
   ['aria-disabled', guard.includes("setAttribute('aria-disabled', String(!valid))")],
   ['mensaje claro', guard.includes('Elegí de 1 a 5 estrellas antes de publicar tu comentario.')],
-  ['Producto usa versión nueva', product.includes('resenas-producto.js?v=tintin-20260905-auth-session-2')],
+  // Keep this contract aligned with the current cache-busted module shipped
+  // by product.html. The old 20260905 token made a healthy product page fail
+  // the audit even though it was already on the current auth/session build.
+  ['Producto usa versión nueva', product.includes('resenas-producto.js?v=tintin-20260908-public-activity-auth-1')],
 ];
 
 const failed = checks.filter(([, ok]) => !ok);
