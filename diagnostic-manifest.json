@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-08T20:40:53.182Z",
-  "sourceFingerprint": "19df56bdda4a4e1766fd262df7a2d416a1a2e809261852bf579d624746e0b2ae",
+  "generatedAt": "2026-09-08T20:58:59.489Z",
+  "sourceFingerprint": "aa2487a78a9ab49945bea3b1dad011dd1d13c3116d8b6293c99080429ab8a5a6",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 818,
     "textFiles": 785,
-    "totalBytes": 10083008,
+    "totalBytes": 10083867,
     "pages": 18,
     "modules": 563
   },
@@ -22414,8 +22414,8 @@
     },
     {
       "path": "js/components/images/inicio-carga-imagenes.js",
-      "bytes": 1779,
-      "sha256": "80441ff2d04eaba69c1667ca21130b9ce250dcab4ead0ae1bb362a28e978145f",
+      "bytes": 1884,
+      "sha256": "fefe2dff2fdec2ac82ba93082bae6a0972c2a3e70002c551a7879ba4818fa196",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32245,8 +32245,8 @@
     },
     {
       "path": "tienda.js",
-      "bytes": 96400,
-      "sha256": "5839e358e499f3fd0b4262aab6ba83f8da48143577a2e411837ef906b12cec97",
+      "bytes": 97154,
+      "sha256": "7a48b1acdc15bc02be0d0cb7689ba3e40730aa3c37255a6823b0ad4372bb6d29",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32262,13 +32262,13 @@
           "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260908-public-activity-auth-2",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
-          "line": 901
+          "line": 928
         },
         {
           "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260908-public-activity-auth-2",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
-          "line": 1563
+          "line": 1590
         }
       ],
       "endpoints": [
@@ -32282,31 +32282,31 @@
         },
         {
           "url": "https://schema.org/",
-          "line": 1099
+          "line": 1126
         },
         {
           "url": "https://schema.org/InStock",
-          "line": 1112
+          "line": 1139
         },
         {
           "url": "https://schema.org/OutOfStock",
-          "line": 1112
+          "line": 1139
         },
         {
           "url": "https://schema.org/NewCondition",
-          "line": 1113
+          "line": 1140
         },
         {
           "url": "https://tintinaccesorios.pages.dev/assets/og-cover.jpg",
-          "line": 1138
+          "line": 1165
         },
         {
           "url": "http://www.w3.org/2000/svg",
-          "line": 1268
+          "line": 1295
         },
         {
           "url": "https://wa.me/",
-          "line": 1396
+          "line": 1423
         }
       ]
     }
@@ -34607,8 +34607,8 @@
     {
       "path": "js/components/images/inicio-carga-imagenes.js",
       "extension": ".js",
-      "bytes": 1779,
-      "sha256": "80441ff2d04eaba69c1667ca21130b9ce250dcab4ead0ae1bb362a28e978145f"
+      "bytes": 1884,
+      "sha256": "fefe2dff2fdec2ac82ba93082bae6a0972c2a3e70002c551a7879ba4818fa196"
     },
     {
       "path": "js/components/images/procesamiento-imagenes.js",
@@ -36510,7 +36510,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 38056,
-      "sha256": "5883b734e7b4390d7dba8c480a0613edbc27887e69e4090546af5872ad7edb18"
+      "sha256": "0023ae5e536be246ff1cbcb204ef78a88b76d090421d63ca2cfd8dca4d086530"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -37217,8 +37217,8 @@
     {
       "path": "tienda.js",
       "extension": ".js",
-      "bytes": 96400,
-      "sha256": "5839e358e499f3fd0b4262aab6ba83f8da48143577a2e411837ef906b12cec97"
+      "bytes": 97154,
+      "sha256": "7a48b1acdc15bc02be0d0cb7689ba3e40730aa3c37255a6823b0ad4372bb6d29"
     }
   ],
   "sitemapRoutes": [],

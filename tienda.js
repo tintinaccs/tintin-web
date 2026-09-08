@@ -814,9 +814,17 @@ function renderProductsGrid(containerId, products) {
 
 // Home discovery carousel: choose a fresh, duplicate-free selection while
 // reusing the canonical product-card renderer (links, favorites and cart).
-function renderRandomHomeProducts() {
+let homeRandomProductsObserver = null;
+let homeRandomProductsPending = false;
+
+function renderRandomHomeProducts(force = false) {
   const grid = document.getElementById('products-grid');
   if (!grid) return;
+  if (!force) {
+    homeRandomProductsPending = true;
+    return;
+  }
+  homeRandomProductsPending = false;
   const seen = new Set();
   const pool = (window.PRODUCTS || []).filter(isFeaturable).filter(product => {
     const key = String(product.id ?? product.slug ?? product.name);
@@ -827,6 +835,25 @@ function renderRandomHomeProducts() {
   renderProductsGrid('products-grid', pickRandom(pool, Math.min(5, pool.length)));
 }
 window.renderRandomHomeProducts = renderRandomHomeProducts;
+
+function initRandomHomeProducts() {
+  const section = document.getElementById('home-random-products');
+  const refresh = document.getElementById('btn-home-random-products');
+  if (!section) return;
+  if (refresh) refresh.addEventListener('click', () => renderRandomHomeProducts(true));
+  if ('IntersectionObserver' in window) {
+    homeRandomProductsObserver = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        renderRandomHomeProducts(true);
+        homeRandomProductsObserver?.disconnect();
+        homeRandomProductsObserver = null;
+      }
+    }, { rootMargin: '0px' });
+    homeRandomProductsObserver.observe(section);
+  } else {
+    renderRandomHomeProducts(true);
+  }
+}
 
 /* ──────────────────────────────────────
    COMPLETÁ TU LOOK COMBINATOR
@@ -1926,6 +1953,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // "Firestore already answered, zero products" apart from "hasn't answered
   // yet" — both are otherwise falsy-length.
   if (document.getElementById('products-grid')) {
+    initRandomHomeProducts();
     if (Array.isArray(window.PRODUCTS)) {
       renderRandomHomeProducts();
     } else {
@@ -2000,11 +2028,6 @@ window.addEventListener('tintin:products-loaded', () => {
   }
 
   renderCart();
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  const refresh = document.getElementById('btn-home-random-products');
-  if (refresh) refresh.addEventListener('click', renderRandomHomeProducts);
 });
 
 /* expose for inline onclick usage and module re-render */

@@ -20,7 +20,8 @@ loadImages().then(() => {
       if (document.getElementById(id)) window.renderProductsGrid(id, featuredProducts);
     });
     if (document.getElementById('products-grid')) {
-      window.renderProductsGrid('products-grid', featuredProducts.slice(0, 5));
+      if (typeof window.renderRandomHomeProducts === 'function') window.renderRandomHomeProducts();
+      else window.renderProductsGrid('products-grid', featuredProducts.slice(0, 5));
     }
   }
   if (typeof window.initLookCombinator === 'function' && document.getElementById('look-grid')) {
