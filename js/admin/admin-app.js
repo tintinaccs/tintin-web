@@ -2408,11 +2408,18 @@ window.updatePayStatus = async (orderId, status) => {
   const o = allOrders.find(o => o.id === orderId);
   const prevStatus = o?.paymentStatus || o?.payment?.status || 'pendiente';
   try {
-    await updateDoc(doc(db, 'orders', orderId), {
-      'payment.status': status,
-      paymentStatus: status,
-      updatedAt: serverTimestamp()
+    const user = auth.currentUser;
+    if (!user) throw new Error('La sesión administrativa ya no está disponible.');
+    const token = await user.getIdToken();
+    const response = await fetch('/api/admin-order-mutation', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` },
+      body: JSON.stringify({ action: 'updatePayment', orderId, paymentStatus: status,
+        paymentMethod: o?.payment?.method || o?.paymentMethod || 'efectivo',
+        baseChangeId: o?.lastChangeId || '', changeId: `admin_payment_${crypto.randomUUID().replaceAll('-', '')}` })
     });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok || body.ok !== true) throw new Error(body.error || 'No se pudo guardar el estado de pago.');
     if (o) { if (o.payment) o.payment.status = status; o.paymentStatus = status; }
     logAudit('cambiar_estado_pago', 'pedido', orderId, o?.shortId || orderId,
       `Estado de pago: ${PAY_STATUS_LABELS[prevStatus] || prevStatus} → ${PAY_STATUS_LABELS[status] || status}`);
@@ -2601,7 +2608,7 @@ window.bulkChangePayStatus = async function() {
   if (!confirm(`¿Cambiar el pago a "${PAY_STATUS_LABELS[status]}" en ${n} pedido(s)?`)) return;
   try {
     const ids = [..._selectedOrders];
-    await batchUpdateChunked(ids, () => ({ 'payment.status': status, paymentStatus: status, updatedAt: serverTimestamp() }), 'orders');
+    for (const id of ids) await window.updatePayStatus(id, status);
     ids.forEach(id => { const o = allOrders.find(x => x.id === id); if (o) { if (o.payment) o.payment.status = status; o.paymentStatus = status; } });
     logAudit('cambiar_estado_pago', 'pedido', '', '', `Pago → ${PAY_STATUS_LABELS[status]}`, { bulk: true, count: n });
     toast(`Estado de pago actualizado en ${n} pedido(s)`);

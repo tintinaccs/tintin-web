@@ -6,6 +6,7 @@
 
 import { SUPER_ADMIN_EMAIL } from './contrato-cuentas-generado.js';
 import { verifyFirebaseIdToken } from './firebase-id-token.js';
+import { decodeFirestoreFields, firestoreAdminGet } from './firebase-admin-ligero.js';
 
 export const SUPERADMIN_EMAIL = SUPER_ADMIN_EMAIL;
 
@@ -89,6 +90,21 @@ export async function requireSuperAdmin(request) {
     throw error;
   }
   return user;
+}
+
+export async function requireOrderStaff(request, env) {
+  const user = await requireFirebaseUser(request);
+  if (user.email === SUPERADMIN_EMAIL) return { ...user, role: 'superadmin' };
+  const document = await firestoreAdminGet(env, `users/${encodeURIComponent(user.uid)}`);
+  const profile = decodeFirestoreFields(document?.fields || {});
+  const role = String(profile?.role || '').trim().toLowerCase();
+  if (!['admin', 'agent'].includes(role) || profile?.blocked === true) {
+    const error = new Error('No tenés permiso para actualizar pedidos');
+    error.status = 403;
+    error.code = 'auth/order-staff-required';
+    throw error;
+  }
+  return { ...user, role };
 }
 
 /** Conserva códigos HTTP ya clasificados por autenticación o dominio. */
