@@ -812,6 +812,22 @@ function renderProductsGrid(containerId, products) {
   container.innerHTML = products.map(renderProductCardMarkup).join('');
 }
 
+// Home discovery carousel: choose a fresh, duplicate-free selection while
+// reusing the canonical product-card renderer (links, favorites and cart).
+function renderRandomHomeProducts() {
+  const grid = document.getElementById('products-grid');
+  if (!grid) return;
+  const seen = new Set();
+  const pool = (window.PRODUCTS || []).filter(isFeaturable).filter(product => {
+    const key = String(product.id ?? product.slug ?? product.name);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  renderProductsGrid('products-grid', pickRandom(pool, Math.min(5, pool.length)));
+}
+window.renderRandomHomeProducts = renderRandomHomeProducts;
+
 /* ──────────────────────────────────────
    COMPLETÁ TU LOOK COMBINATOR
 ────────────────────────────────────── */
@@ -1911,7 +1927,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // yet" — both are otherwise falsy-length.
   if (document.getElementById('products-grid')) {
     if (Array.isArray(window.PRODUCTS)) {
-      renderProductsGrid('products-grid', window.PRODUCTS.filter(isFeaturable).slice(0, 5));
+      renderRandomHomeProducts();
     } else {
       _showProductsSkeleton('products-grid');
       const _fallbackHome = () => {
@@ -1968,7 +1984,7 @@ window.addEventListener('tintin:products-loaded', () => {
   renderCart();
   updateCartBadge();
   if (document.getElementById('products-grid')) {
-    renderProductsGrid('products-grid', (window.PRODUCTS || []).filter(isFeaturable).slice(0, 5));
+    renderRandomHomeProducts();
   }
 
   if (document.getElementById('colls-products-grid')) {
@@ -1984,6 +2000,11 @@ window.addEventListener('tintin:products-loaded', () => {
   }
 
   renderCart();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const refresh = document.getElementById('btn-home-random-products');
+  if (refresh) refresh.addEventListener('click', renderRandomHomeProducts);
 });
 
 /* expose for inline onclick usage and module re-render */

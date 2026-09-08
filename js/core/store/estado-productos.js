@@ -155,7 +155,10 @@ function publish(products, source) {
   }));
   if (typeof window.renderProductsGrid === 'function') {
     if (document.getElementById('colls-products-grid')) window.renderProductsGrid('colls-products-grid', normalized);
-    if (document.getElementById('products-grid')) window.renderProductsGrid('products-grid', featuredProducts.slice(0, 5));
+    if (document.getElementById('products-grid')) {
+      if (typeof window.renderRandomHomeProducts === 'function') window.renderRandomHomeProducts();
+      else window.renderProductsGrid('products-grid', featuredProducts.slice(0, 5));
+    }
   }
   if (typeof window.initLookCombinator === 'function' && document.getElementById('look-grid')) {
     window.initLookCombinator();
