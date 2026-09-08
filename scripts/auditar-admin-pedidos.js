@@ -41,7 +41,7 @@ function check(name, condition, problem) {
 }
 
 const adminApp   = read('js/admin/admin-app.js');
-const perfil     = read('perfil.html');
+const perfil     = read('js/pages/profile/pedidos-perfil.js');
 const orderStats = read('js/core/store/estadisticas-pedidos.js');
 const rules      = read('firestore.rules');
 const secureOrder = read('js/orders/pedido-checkout-seguro.js');
@@ -203,9 +203,9 @@ check(
 );
 check(
   'El perfil del cliente lee los datos guardados del pedido (no el producto en vivo)',
-  /o\.total/.test(perfil) &&
-    /o\.items/.test(perfil) &&
-    /escapeHtmlPerfil\(/.test(perfil),
+  /order\.total/.test(perfil) &&
+    /order\.items/.test(perfil) &&
+    /escapeHtml\(/.test(perfil),
   'El historial del cliente debe mostrar el total e ítems guardados, escapados.'
 );
 check(

@@ -38,7 +38,7 @@ check(
   'Todas las páginas HTML usan la nueva versión de page-loader',
   htmlFiles.every(file => {
     const html = read(file);
-  return !html.includes('js/cargador-pagina.js') || html.includes('js/cargador-pagina.js?v=tintin-20260907-loader-logo-white-first-frame-1');
+  return !html.includes('js/cargador-pagina.js') || html.includes('js/cargador-pagina.js?v=tintin-20260908-profile-orders-consolidation-1');
   }),
   'No debe quedar una página cargando el runtime anterior.'
 );

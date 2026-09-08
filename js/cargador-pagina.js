@@ -820,9 +820,6 @@
       importSibling('admin/ajuste-barra-lateral-movil-admin.js', 'Admin Mobile Sidebar Fix');
       importSibling('admin/settings/control-tienda-admin.js', 'Admin Store State Sync');
     }
-    if (current.endsWith('/perfil.html') || current.endsWith('/perfil')) {
-      importSibling('pages/profile/correccion-estadisticas-pedidos-perfil.js', 'Profile Order Stats Fix');
-    }
   }
 
   function bootScrollReveal() {
