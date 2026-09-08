@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-08T11:21:25.599Z",
-  "sourceFingerprint": "7a5f1473011027cca8a66b3caef301e2969def7a5ab80490df4e01f274222d3b",
+  "generatedAt": "2026-09-08T12:03:03.009Z",
+  "sourceFingerprint": "2dc865f977160ce825ddc11b6744225a62a8c589789379b8e83da9689f0a47f9",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 816,
     "textFiles": 783,
-    "totalBytes": 10067639,
+    "totalBytes": 10067904,
     "pages": 18,
     "modules": 561
   },
@@ -25339,8 +25339,8 @@
     },
     {
       "path": "js/pages/profile/mantenimiento-perfil.js",
-      "bytes": 19930,
-      "sha256": "d6f0d80f825eabd5721eff24d1d6472399762a3dd594e26a77bdf2b2c6217974",
+      "bytes": 20195,
+      "sha256": "91b2a6d561e8a4bdcf5795a911c1d6fd35ef87ca51d15496a2a3fe12cdaf4543",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25350,23 +25350,23 @@
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": true,
-          "line": 241
+          "line": 244
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
           "target": null,
           "dynamic": true,
-          "line": 242
+          "line": 245
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 241
+          "line": 244
         },
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 242
+          "line": 245
         }
       ]
     },
@@ -35311,8 +35311,8 @@
     {
       "path": "js/pages/profile/mantenimiento-perfil.js",
       "extension": ".js",
-      "bytes": 19930,
-      "sha256": "d6f0d80f825eabd5721eff24d1d6472399762a3dd594e26a77bdf2b2c6217974"
+      "bytes": 20195,
+      "sha256": "91b2a6d561e8a4bdcf5795a911c1d6fd35ef87ca51d15496a2a3fe12cdaf4543"
     },
     {
       "path": "js/quality/accesibilidad-global.js",
@@ -39441,7 +39441,7 @@
           },
           {
             "file": "js/pages/profile/mantenimiento-perfil.js",
-            "line": 251,
+            "line": 254,
             "operation": "collection"
           },
           {
