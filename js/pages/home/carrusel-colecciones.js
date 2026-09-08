@@ -151,6 +151,17 @@ class InfiniteCollectionCarousel {
     this.viewport.addEventListener('pointerup', event => this.onPointerUp(event));
     this.viewport.addEventListener('pointercancel', event => this.onPointerUp(event));
     this.viewport.addEventListener('click', event => {
+      const card = event.target instanceof Element ? event.target.closest('.tt-collection-card') : null;
+      if (card && Date.now() >= this.suppressClickUntil && !event.defaultPrevented) {
+        // GSAP transforma el track y algunos navegadores móviles pueden
+        // entregar el click a la capa transformada sin ejecutar el default
+        // nativo del <a>. Forzamos la navegación canónica para que todas las
+        // copias visibles del carrusel funcionen igual en touch, mouse y teclado.
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        window.location.assign(card.href);
+        return;
+      }
       if (Date.now() < this.suppressClickUntil) event.preventDefault();
     }, true);
     this.viewport.addEventListener('mouseenter', () => { this.paused = true; });
