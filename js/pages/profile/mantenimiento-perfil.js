@@ -3,29 +3,6 @@ const PROFILE_PATH_RE = /(?:^|\/)perfil(?:\.html)?\/?$/i;
 if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfileMaintenanceBooted) {
   window.TintinProfileMaintenanceBooted = true;
 
-  // Debe coincidir con cada import estático del bootstrap compartido. Usar
-  // otra query convierte firebase.js en un módulo distinto para el navegador
-  // y puede intentar inicializar App Check/reCAPTCHA una segunda vez.
-  const FIREBASE_BOOTSTRAP_VERSION = 'tintin-20260907-appcheck-token-3';
-  const PROFILE_ORDERS_LIMIT = 100;
-  let unsubscribeOrders = null;
-  let orderFirestore = null;
-  let orderDb = null;
-  let orderCursor = null;
-  let ordersHaveMore = false;
-  let ordersLoadingMore = false;
-  const loadedOrders = new Map();
-  let startingOrders = false;
-  let retryTimer = 0;
-
-  const escapeHtml = value => {
-    const node = document.createElement('div');
-    node.textContent = String(value ?? '');
-    return node.innerHTML;
-  };
-
-  const formatPrice = value => `Gs. ${Math.round(Number(value) || 0).toLocaleString('es-PY')}`;
-
   function injectStyles() {
     if (document.getElementById('tt-profile-maintenance-style')) return;
     const style = document.createElement('style');
@@ -111,8 +88,6 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
     });
     const toast = document.getElementById('perfil-toast');
     if (toast) { toast.setAttribute('role', 'status'); toast.setAttribute('aria-live', 'polite'); }
-    const orders = document.getElementById('perfil-orders-list');
-    if (orders) { orders.setAttribute('aria-live', 'polite'); orders.setAttribute('aria-busy', 'true'); }
   }
 
   function ensureNetworkState() {
@@ -129,150 +104,6 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
     node.dataset.state = offline ? 'offline' : 'online';
     node.textContent = offline ? 'Sin conexión · mostraremos la información guardada y reintentaremos automáticamente' : 'Perfil y pedidos sincronizados';
     return node;
-  }
-
-  function statusClass(status) {
-    const value = String(status || 'pendiente').toLowerCase().trim();
-    return ['pendiente','confirmado','enviado','entregado','cancelado'].includes(value) ? value : 'pendiente';
-  }
-
-  function orderTimestamp(order) {
-    const raw = order?.createdAt;
-    if (raw?.toDate) return raw.toDate().getTime();
-    const date = raw instanceof Date ? raw : new Date(raw || 0);
-    return Number.isFinite(date.getTime()) ? date.getTime() : 0;
-  }
-
-  function renderOrders() {
-    const list = document.getElementById('perfil-orders-list');
-    if (!list) return;
-    list.setAttribute('aria-busy', 'false');
-    const sorted = [...loadedOrders.values()].sort((a,b) => orderTimestamp(b) - orderTimestamp(a));
-    if (!sorted.length) {
-      list.innerHTML = `<div class="tt-profile-state">Todavía no tenés pedidos.<br><a href="/catalogo" class="perfil-btn perfil-btn-outline">Ver productos →</a></div>`;
-      return;
-    }
-    list.innerHTML = sorted.map(order => {
-      const date = new Date(orderTimestamp(order) || Date.now());
-      const dateText = date.toLocaleDateString('es-PY',{day:'2-digit',month:'2-digit',year:'numeric'});
-      const items = Array.isArray(order.items) ? order.items : [];
-      const itemsText = items.slice(0,3).map(item => `${Math.max(1,Number(item.qty)||1)}x ${escapeHtml(item.name || 'Producto')}`).join(', ');
-      const more = items.length > 3 ? ` +${items.length - 3} más` : '';
-      const status = statusClass(order.status);
-      const shortId = escapeHtml(String(order.id || '').slice(-6).toUpperCase() || 'PEDIDO');
-      const stages = ['pendiente','confirmado','enviado','entregado'];
-      const currentIndex = order.status === 'cancelado' ? -1 : Math.max(0, stages.indexOf(status));
-      const timeline = stages.map((stage,index) => `<span class="tt-profile-step ${index <= currentIndex ? 'is-done' : ''}">${stage}</span>`).join('');
-      const itemLines = items.map(item => `<div class="tt-profile-order-line"><span>${Math.max(1,Number(item.qty)||1)}x ${escapeHtml(item.name || 'Producto')}</span><strong>${formatPrice((Number(item.price)||0) * Math.max(1,Number(item.qty)||1))}</strong></div>`).join('');
-      const payment = escapeHtml(order.paymentMethod || order.payment || 'A confirmar');
-      const delivery = escapeHtml(order.shippingMethod || order.deliveryMethod || 'A coordinar');
-      const address = escapeHtml(order.address || order.deliveryAddress || order.city || 'Sin direccion registrada');
-      const orderAnchor = String(order.id || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 220);
-      return `<article class="perfil-order-row" id="pedido-${orderAnchor}" data-order-id="${orderAnchor}">
-        <div class="tt-profile-order-head"><span class="tt-profile-order-meta">#${shortId} · ${dateText}</span><span class="tt-profile-status tt-profile-status--${status}">${escapeHtml(order.status || 'pendiente')}</span></div>
-        <div class="tt-profile-order-items">${itemsText || 'Sin detalle de productos'}${more}</div>
-        <div class="tt-profile-order-total">Total: ${formatPrice(order.total)}</div>
-        <details class="tt-profile-order-details"><summary>Ver seguimiento y detalle</summary>
-          <div class="tt-profile-timeline" aria-label="Seguimiento del pedido">${timeline}</div>
-          ${status === 'cancelado' ? '<p class="tt-profile-status tt-profile-status--cancelado">Pedido cancelado</p>' : ''}
-          <div class="tt-profile-order-grid"><div><strong>Pago</strong>${payment}</div><div><strong>Entrega</strong>${delivery}</div><div><strong>Direcci&oacute;n</strong>${address}</div><div><strong>N&uacute;mero de pedido</strong>${escapeHtml(order.id)}</div><div class="tt-profile-order-lines"><strong>Productos</strong>${itemLines || 'Sin detalle de productos'}<div class="tt-profile-order-line"><span>Total</span><strong>${formatPrice(order.total)}</strong></div></div></div>
-        </details>
-      </article>`;
-    }).join('') + (ordersHaveMore ? '<button type="button" class="perfil-btn perfil-btn-outline tt-profile-orders-more" id="tt-profile-orders-more">Cargar más pedidos</button>' : '');
-
-    const requested = String(location.hash || '').match(/^#pedido-([A-Za-z0-9_-]+)$/)?.[1];
-    if (requested) {
-      requestAnimationFrame(() => {
-        const target = document.getElementById(`pedido-${requested}`);
-        if (!target) return;
-        target.querySelector('details')?.setAttribute('open', '');
-        target.classList.add('tt-profile-order-focus');
-        target.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
-        window.setTimeout(() => target.classList.remove('tt-profile-order-focus'), 2200);
-      });
-    }
-  }
-
-  async function loadMoreOrders(button) {
-    if (ordersLoadingMore || !ordersHaveMore || !orderCursor || !orderFirestore || !orderDb || !auth.currentUser) return;
-    ordersLoadingMore = true;
-    if (button) { button.disabled = true; button.setAttribute('aria-busy', 'true'); }
-    try {
-      const q = orderFirestore.query(
-        orderFirestore.collection(orderDb, 'orders'),
-        orderFirestore.where('userId','==',auth.currentUser.uid),
-        orderFirestore.startAfter(orderCursor),
-        orderFirestore.limit(PROFILE_ORDERS_LIMIT)
-      );
-      const snapshot = await orderFirestore.getDocs(q);
-      snapshot.docs.forEach(doc => loadedOrders.set(doc.id, { id: doc.id, ...doc.data() }));
-      orderCursor = snapshot.docs.at(-1) || orderCursor;
-      ordersHaveMore = snapshot.size === PROFILE_ORDERS_LIMIT;
-      renderOrders();
-    } catch {
-      renderOrdersError('No pudimos cargar más pedidos ahora. Volvé a intentar.');
-    } finally {
-      ordersLoadingMore = false;
-    }
-  }
-
-  function renderOrdersError(message) {
-    const list = document.getElementById('perfil-orders-list');
-    if (!list) return;
-    list.setAttribute('aria-busy','false');
-    list.innerHTML = `<div class="tt-profile-state" role="alert">${escapeHtml(message)}<br><button type="button" class="perfil-btn perfil-btn-outline" id="tt-profile-orders-retry">Reintentar</button></div>`;
-    document.getElementById('tt-profile-orders-retry')?.addEventListener('click', () => startRealtimeOrders(true), { once:true });
-  }
-
-  async function startRealtimeOrders(force = false) {
-    if (unsubscribeOrders && !force) return;
-    // Sin esto, dos llamadas casi simultáneas (online + visibilitychange +
-    // pageshow disparan varias, todas con force:false) pasaban el chequeo de
-    // arriba a la vez, porque unsubscribeOrders recién se asigna después de
-    // dos await (imports dinámicos + esperar el estado de auth) — cada una
-    // terminaba abriendo su propio onSnapshot, y solo el último se guardaba
-    // para poder cerrarlo después.
-    if (startingOrders && !force) return;
-    if (unsubscribeOrders) { unsubscribeOrders(); unsubscribeOrders = null; }
-    startingOrders = true;
-    clearTimeout(retryTimer);
-    const list = document.getElementById('perfil-orders-list');
-    if (list) { list.setAttribute('aria-busy','true'); list.innerHTML = '<div class="tt-profile-state">Sincronizando pedidos…</div>'; }
-    try {
-      const [{ auth, db }, firestore, authApi] = await Promise.all([
-          import(`../../core/firebase/firebase.js?v=${FIREBASE_BOOTSTRAP_VERSION}`),
-        import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
-        import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),
-      ]);
-      orderFirestore = firestore;
-      orderDb = db;
-      const user = auth.currentUser || await new Promise(resolve => {
-        const stop = authApi.onAuthStateChanged(auth, current => { stop(); resolve(current); });
-      });
-      if (!user) return;
-      const q = firestore.query(
-        firestore.collection(db,'orders'),
-        firestore.where('userId','==',user.uid),
-        firestore.limit(PROFILE_ORDERS_LIMIT)
-      );
-      unsubscribeOrders = firestore.onSnapshot(q, snapshot => {
-        snapshot.docs.forEach(doc => loadedOrders.set(doc.id, { id:doc.id,...doc.data() }));
-        orderCursor = snapshot.docs.at(-1) || null;
-        ordersHaveMore = snapshot.size === PROFILE_ORDERS_LIMIT;
-        renderOrders();
-        ensureNetworkState();
-      }, error => {
-        console.warn('[profile-maintenance] orders listener failed', error);
-        renderOrdersError(navigator.onLine === false ? 'No podemos actualizar tus pedidos sin conexión.' : 'No pudimos sincronizar tus pedidos ahora.');
-        ensureNetworkState().dataset.state = 'error';
-        retryTimer = window.setTimeout(() => startRealtimeOrders(true), 6000);
-      });
-    } catch (error) {
-      console.warn('[profile-maintenance] runtime failed', error);
-      renderOrdersError('No pudimos preparar la actualización de pedidos.');
-    } finally {
-      startingOrders = false;
-    }
   }
 
   function guardAsyncActions() {
@@ -311,16 +142,8 @@ if (PROFILE_PATH_RE.test(window.location.pathname || '') && !window.TintinProfil
     improveFormSemantics();
     ensureNetworkState();
     guardAsyncActions();
-    document.addEventListener('click', event => {
-      const button = event.target.closest('#tt-profile-orders-more');
-      if (button) void loadMoreOrders(button);
-    });
-    startRealtimeOrders();
-    window.addEventListener('online', () => { ensureNetworkState(); startRealtimeOrders(true); });
+    window.addEventListener('online', ensureNetworkState);
     window.addEventListener('offline', ensureNetworkState);
-    window.addEventListener('pageshow', event => { if (event.persisted) startRealtimeOrders(true); });
-    document.addEventListener('visibilitychange', () => { if (!document.hidden) startRealtimeOrders(true); });
-    window.addEventListener('beforeunload', () => unsubscribeOrders?.(), { once:true });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once:true });

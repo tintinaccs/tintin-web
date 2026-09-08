@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-3"></script>
-  <script src="js/cargador-pagina.js?v=tintin-20260907-loader-logo-white-first-frame-1"></script>
+  <script src="js/cargador-pagina.js?v=tintin-20260908-profile-orders-consolidation-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260902-customer-notification-audience-1" defer></script>
   <title>Mi Perfil | Tintin Accesorios &amp; Relojes</title>
@@ -327,8 +327,7 @@ import {
   signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
-  doc, getDoc, getDocs, setDoc, serverTimestamp,
-  collection, query, where, orderBy, limit
+  doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260821-accounts-phase-a-3";
 import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260907-auth-state-ready-public-routes-2";
@@ -337,9 +336,10 @@ import { attachLocationPicker } from "./js/components/location/selector-ubicacio
 import { toSavedLocation } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260906-profile-complete-1";
 import { getRegisteredMethod, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260903-accounts-phase-a-4";
 import { DEFAULT_COUNTRY, phoneKey, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
-import { changeReservedPhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260901-phone-py-only-1";
-import { changeReservedUsername } from "./js/components/forms/reserva-username.js?v=tintin-20260822-dob-username-onboarding-1";
+import { reservePhone, releasePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260901-phone-py-only-1";
+import { reserveUsername, releaseUsername } from "./js/components/forms/reserva-username.js?v=tintin-20260822-dob-username-onboarding-1";
 import { isValidUsernameFormat, isReservedUsername, usernameKey } from "./js/components/forms/utilidades-username.js?v=tintin-20260821-username-unique-1";
+import { readAccountIdentity, accountReadState } from "./js/pages/profile/estado-canonico-perfil.mjs?v=tintin-20260908-profile-canonical-1";
 
 const ROLE_COLORS = {
   superadmin: '#8b2642', admin: '#b84c72',
@@ -405,18 +405,6 @@ function formatProfileDate(value) {
   return date.toLocaleDateString('es-PY', { day: '2-digit', month: 'long', year: 'numeric' });
 }
 
-function statusBadge(status) {
-  const map = {
-    pendiente:  '#f59e0b',
-    confirmado: '#3b82f6',
-    enviado:    '#8b5cf6',
-    entregado:  '#10b981',
-    cancelado:  '#ef4444'
-  };
-  const c = map[status] || '#888';
-  return `<span style="display:inline-block;padding:2px 8px;border-radius:50px;font-size:10px;font-weight:700;background:${c}20;color:${c};text-transform:uppercase">${escapeHtmlPerfil(status)}</span>`;
-}
-
 // Un null transitorio puede llegar antes de que Firebase termine de restaurar
 // la sesión persistida (misma condición de carrera que en el panel admin): sin
 // esta espera, una recarga de esta pestaña rebota a login.html aunque la
@@ -459,11 +447,13 @@ async function startProfileAuthGuard() {
     // se trata como "no bloqueada" y se sigue cargando la página.
     const ref = doc(db, 'users', user.uid);
     let userData = null;
+    let profileReadError = null;
     try {
       const snap = await getDoc(ref);
       userData = snap.exists() ? snap.data() : null;
     } catch (error) {
       console.warn('[Perfil] No se pudo verificar el estado de bloqueo:', error);
+      profileReadError = error;
     }
     if (userData?.blocked) {
       await signOut(auth);
@@ -473,10 +463,14 @@ async function startProfileAuthGuard() {
 
     hideLoading();
 
+  // Identidad canónica: Firestore (users/{uid}) prevalece sobre Auth para
+  // nombre/avatar, con Auth solo como respaldo cuando aún no hay perfil.
+  const identity = readAccountIdentity(userData || {}, user);
+
   // Avatar
   const avatarEl = document.getElementById('perfil-avatar');
-  const avatarInitial = (user.displayName || user.email || '?')[0].toUpperCase();
-  const avatarUrl = sanitizeImageUrl(user.photoURL || '');
+  const avatarInitial = (identity.name || identity.email || '?')[0].toUpperCase();
+  const avatarUrl = sanitizeImageUrl(identity.photoURL || '');
   if (avatarUrl) {
     const avatarImg = document.createElement('img');
     avatarImg.src = avatarUrl;
@@ -489,8 +483,8 @@ async function startProfileAuthGuard() {
   } else {
     avatarEl.textContent = avatarInitial;
   }
-  document.getElementById('perfil-nombre-display').textContent = user.displayName || user.email;
-  document.getElementById('perfil-email-display').textContent  = user.email;
+  document.getElementById('perfil-nombre-display').textContent = identity.name || identity.email;
+  document.getElementById('perfil-email-display').textContent  = identity.email;
 
   // Sync cart
   await syncCartToFirestore(user.uid);
@@ -509,17 +503,45 @@ async function startProfileAuthGuard() {
     document.getElementById('link-admin-panel').style.display = 'inline-flex';
   }
 
-  // Load Firestore user data (ya la trajimos arriba para el chequeo de bloqueo)
-  if (userData) {
-    document.getElementById('perfil-nombre').value = userData.name    || user.displayName || '';
-    document.getElementById('perfil-tel').value    = userData.phone   || '';
-    document.getElementById('perfil-dir').value    = userData.address || '';
+  // Load Firestore user data (ya la trajimos arriba para el chequeo de bloqueo).
+  // Un error de lectura NUNCA se trata como perfil vacío: mostrar campos en
+  // blanco habilitados podría terminar guardando (merge) valores vacíos
+  // encima de datos históricos reales. Se deshabilita edición y se ofrece
+  // reintentar en su lugar.
+  const nombreInput   = document.getElementById('perfil-nombre');
+  const telInput      = document.getElementById('perfil-tel');
+  const dirInput      = document.getElementById('perfil-dir');
+  const usernameInput = document.getElementById('perfil-username');
+  const usernameHint  = document.getElementById('perfil-username-hint');
+
+  if (profileReadError) {
+    const messages = {
+      offline: 'Estás sin conexión. No mostramos tus datos para evitar guardar información incompleta.',
+      'permission-denied': 'No pudimos verificar tu perfil por un problema de permisos. Reintentá en unos segundos.',
+      'not-found': 'No pudimos cargar tu perfil todavía. Reintentá en unos segundos.',
+      unavailable: 'No pudimos cargar tu perfil. Revisá tu conexión y reintentá.',
+    };
+    const state = accountReadState(profileReadError, navigator.onLine);
+    const notice = document.createElement('div');
+    notice.className = 'tt-profile-state';
+    notice.setAttribute('role', 'alert');
+    notice.innerHTML = `${messages[state] || messages.unavailable}<br><button type="button" class="perfil-btn perfil-btn-outline" id="btn-reintentar-perfil">Reintentar</button>`;
+    const datosBody = nombreInput.closest('.perfil-body');
+    datosBody.insertBefore(notice, datosBody.querySelector('.perfil-field'));
+    document.getElementById('btn-reintentar-perfil').onclick = () => window.location.reload();
+
+    [nombreInput, telInput, dirInput, usernameInput].forEach(el => { el.disabled = true; });
+    document.getElementById('btn-guardar-perfil').disabled = true;
+    document.getElementById('btn-cambiar-ubicacion').disabled = true;
+    usernameHint.textContent = '';
+  } else if (userData) {
+    nombreInput.value = identity.name    || '';
+    telInput.value    = identity.phone   || '';
+    dirInput.value    = identity.address || '';
     document.getElementById('perfil-purchase-count').textContent = userData.purchaseCount || 0;
     document.getElementById('perfil-total-spent').textContent    = formatPrice(userData.totalSpent || 0);
 
-    const usernameInput = document.getElementById('perfil-username');
-    const usernameHint  = document.getElementById('perfil-username-hint');
-    usernameInput.value = userData.username || '';
+    usernameInput.value = identity.username || '';
     if (userData.usernameChangedAt) {
       usernameInput.disabled = true;
       usernameHint.textContent = 'Ya usaste tu único cambio de nombre de usuario.';
@@ -591,19 +613,16 @@ async function startProfileAuthGuard() {
     finally { window.TintinReleaseProfileButton?.('btn-guardar-ubicacion'); }
   };
 
-  // Orders
-  document.getElementById('perfil-orders-card').style.display = 'block';
-  await loadUserOrders(user);
-
   // Save
   document.getElementById('btn-guardar-perfil').onclick = async () => {
     const release = () => window.TintinReleaseProfileButton?.('btn-guardar-perfil');
+    const nuevoNombre = document.getElementById('perfil-nombre').value.trim();
     const nuevoTelefono = document.getElementById('perfil-tel').value.trim();
     const country = DEFAULT_COUNTRY;
     const usernameInput = document.getElementById('perfil-username');
     const nuevoUsername = usernameInput.value.trim().toLowerCase();
     const usernameYaCambiado = !!userData?.usernameChangedAt;
-    const usernameActual = (userData?.username || '').toLowerCase();
+    const usernameActual = (identity.username || '').toLowerCase();
     const cambioUsername = !usernameYaCambiado && nuevoUsername !== usernameActual;
 
     if (cambioUsername && nuevoUsername) {
@@ -614,52 +633,82 @@ async function startProfileAuthGuard() {
       }
     }
 
-    try {
-      // El teléfono pasa por la misma reserva que el alta: si no, editarlo
-      // desde acá sería la forma de saltear la unicidad. Sólo se toca la
-      // reserva cuando el número realmente cambió.
-      const claveAnterior = phoneKey(userData?.phone || '', country);
-      const claveNueva = phoneKey(nuevoTelefono, country);
+    // El teléfono y el username pasan por la misma reserva que el alta: si
+    // no, editarlos desde acá sería la forma de saltear la unicidad. La
+    // reserva NUEVA se crea antes de escribir el perfil (así lo exige
+    // firestore.rules) y la reserva VIEJA solo se libera después de un
+    // `setDoc` exitoso, para que un fallo nunca deje la cuenta sin su
+    // reserva anterior ni el perfil inconsistente.
+    const claveAnterior = phoneKey(identity.phone || '', country);
+    const claveNueva = phoneKey(nuevoTelefono, country);
+    const cambioTelefono = !!nuevoTelefono && claveNueva !== claveAnterior;
+    const usernameClaveAnterior = usernameKey(usernameActual);
 
-      if (nuevoTelefono && claveNueva !== claveAnterior) {
-        if (!isRealisticPhone(nuevoTelefono, country)) {
-          toast('❌ Ese número no parece un celular válido');
-          release();
-          return;
-        }
-        await changeReservedPhone(db, user.uid, claveAnterior, nuevoTelefono, country);
+    if (cambioTelefono && !isRealisticPhone(nuevoTelefono, country)) {
+      toast('❌ Ese número no parece un celular válido');
+      release();
+      return;
+    }
+
+    try {
+      if (cambioTelefono) {
+        await reservePhone(db, user.uid, nuevoTelefono, country);
+      }
+      if (cambioUsername && nuevoUsername) {
+        await reserveUsername(db, user.uid, nuevoUsername);
       }
 
       const updates = {
-        name:      document.getElementById('perfil-nombre').value.trim(),
+        name:      nuevoNombre,
         phone:     nuevoTelefono,
         address:   document.getElementById('perfil-dir').value.trim(),
         email:     user.email,
         updatedAt: serverTimestamp(),
       };
 
+      if (nuevoNombre) {
+        const partes = nuevoNombre.split(' ');
+        updates.firstName = partes[0];
+        updates.lastName = partes.slice(1).join(' ');
+      }
+
       if (cambioUsername && nuevoUsername) {
-        // Mismo patrón que el teléfono: reserva la clave nueva y recién
-        // después libera la vieja. `usernameChangedAt` consume el único
-        // cambio permitido (ver usernameChangeValid() en firestore.rules).
-        await changeReservedUsername(db, user.uid, usernameKey(usernameActual), nuevoUsername);
+        // `usernameChangedAt` consume el único cambio permitido (ver
+        // usernameChangeValid() en firestore.rules).
         updates.username = nuevoUsername;
         updates.usernameChangedAt = serverTimestamp();
       }
 
       await setDoc(ref, updates, { merge: true });
-      if (userData) userData.phone = nuevoTelefono; // para que un segundo guardado no reintente la reserva
+
+      // Recién ahora, con el perfil ya guardado, se libera la reserva vieja.
+      if (cambioTelefono) await releasePhone(db, claveAnterior);
+      if (cambioUsername && nuevoUsername) await releaseUsername(db, usernameClaveAnterior);
+
+      if (userData) {
+        userData.phone = nuevoTelefono; // para que un segundo guardado no reintente la reserva
+        userData.name = nuevoNombre;
+        if (updates.firstName !== undefined) userData.firstName = updates.firstName;
+        if (updates.lastName !== undefined) userData.lastName = updates.lastName;
+      }
+      // `identity` también se cachea al cargar: si no se actualiza acá, un
+      // segundo guardado sin recargar comparería contra el valor viejo y
+      // reintentaría la reserva de teléfono/usuario innecesariamente.
+      identity.phone = nuevoTelefono;
+      identity.name = nuevoNombre;
+      document.getElementById('perfil-nombre-display').textContent = nuevoNombre || user.email;
       if (cambioUsername && nuevoUsername) {
         userData.username = nuevoUsername;
         userData.usernameChangedAt = true;
+        identity.username = nuevoUsername;
         usernameInput.disabled = true;
         document.getElementById('perfil-username-hint').textContent = 'Ya usaste tu único cambio de nombre de usuario.';
       }
       toast('✅ Perfil actualizado');
     } catch (e) {
-      if (e?.code === 'phone_already_registered') {
+      if (e?.code === 'phone_already_registered' || (cambioTelefono && e?.code === 'permission-denied' && !cambioUsername)) {
         toast('❌ Ese número ya está en otra cuenta');
-      } else if (cambioUsername && (e?.code === 'username_already_taken' || e?.code === 'permission-denied')) {
+      } else if (e?.code === 'username_already_taken' || (cambioUsername && e?.code === 'permission-denied')) {
         toast('❌ Ese usuario ya está en uso');
       } else {
         console.error('[perfil] No se pudo guardar:', e);
@@ -677,65 +726,11 @@ async function startProfileAuthGuard() {
 }
 
 startProfileAuthGuard();
-
-async function loadUserOrders(user) {
-  const listEl = document.getElementById('perfil-orders-list');
-  try {
-    let orders = [];
-    try {
-      const q = query(
-        collection(db, 'orders'),
-        where('userId', '==', user.uid),
-        orderBy('createdAt', 'desc'),
-        limit(5)
-      );
-      const snap = await getDocs(q);
-      orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    } catch {
-      const q2 = query(collection(db, 'orders'), where('userId', '==', user.uid));
-      const snap2 = await getDocs(q2);
-      orders = snap2.docs
-        .map(d => ({ id: d.id, ...d.data() }))
-        .sort((a, b) => {
-          const da = a.createdAt?.toDate?.() || new Date(0);
-          const db_ = b.createdAt?.toDate?.() || new Date(0);
-          return db_ - da;
-        })
-        .slice(0, 5);
-    }
-
-    if (!orders.length) {
-      listEl.innerHTML = `
-        <div style="text-align:center;color:var(--text-muted);padding:16px 0;font-size:13px">
-          Todavía no tenés pedidos<br>
-          <a href="/catalogo" style="color:var(--pink-dark);font-weight:700;margin-top:8px;display:inline-block">Ver productos →</a>
-        </div>`;
-      return;
-    }
-
-    listEl.innerHTML = orders.map(o => {
-      const d = o.createdAt?.toDate ? o.createdAt.toDate() : new Date();
-      const dateStr = d.toLocaleDateString('es-PY', { day:'2-digit', month:'2-digit', year:'numeric' });
-      const itemsText = (o.items || []).slice(0, 2).map(i => `${Number(i.qty) || 0}x ${escapeHtmlPerfil(i.name || "Producto")}`).join(', ')
-        + ((o.items?.length || 0) > 2 ? ` +${o.items.length - 2} más` : '');
-      return `
-        <div class="perfil-order-row">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-            <span style="font-size:11px;color:var(--text-muted);font-weight:700">#${escapeHtmlPerfil(o.id.slice(-6).toUpperCase())} · ${dateStr}</span>
-            ${statusBadge(o.status || 'pendiente')}
-          </div>
-          <div style="font-size:13px;color:var(--text)">${itemsText || '—'}</div>
-          <div style="font-size:14px;font-weight:800;color:var(--pink-dark);margin-top:2px">Total: ${formatPrice(o.total || 0)}</div>
-        </div>`;
-    }).join('');
-  } catch(e) {
-    listEl.innerHTML = '<div style="color:#ef4444;font-size:12px;padding:12px">Error al cargar pedidos</div>';
-  }
-}
 </script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3"></script>
 <script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260907-session-preserved-5"></script>
-<script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20260905-auth-session-3"></script>
+<script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20260908-profile-favorites-cleanup-1"></script>
+<script type="module" src="js/pages/profile/pedidos-perfil.js?v=tintin-20260908-profile-canonical-1"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-3"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3"></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3"></script>

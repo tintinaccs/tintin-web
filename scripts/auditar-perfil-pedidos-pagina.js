@@ -2,7 +2,7 @@ const fs = require('fs');
 
 const html = fs.readFileSync('perfil.html', 'utf8');
 const runtime = fs.readFileSync('js/pages/profile/mantenimiento-perfil.js', 'utf8');
-const statsRuntime = fs.readFileSync('js/pages/profile/correccion-estadisticas-pedidos-perfil.js', 'utf8');
+const ordersRuntime = fs.readFileSync('js/pages/profile/pedidos-perfil.js', 'utf8');
 const rules = fs.readFileSync('firestore.rules', 'utf8');
 const loader = fs.readFileSync('js/cargador-mantenimiento-pagina.js', 'utf8');
 
@@ -12,16 +12,17 @@ const checks = [
   ['runtime se limita a perfil', /PROFILE_PATH_RE/.test(runtime) && /perfil/.test(runtime)],
   ['canonical se normaliza dinámicamente', /normalizeCanonical/.test(runtime)],
   ['labels se asocian a inputs', /improveFormSemantics/.test(runtime) && /htmlFor/.test(runtime)],
-  ['pedidos usan listener en tiempo real', /onSnapshot/.test(runtime) && /where\('userId'/.test(runtime)],
-  ['pedidos tienen estados loading empty error offline', ['Sincronizando pedidos', 'Todavía no tenés pedidos', 'No pudimos sincronizar', 'Sin conexión'].every(text => runtime.includes(text))],
+  ['pedidos usan listener en tiempo real por identidad de cuenta', /onSnapshot/.test(ordersRuntime) && /reconcileAccountOrders/.test(ordersRuntime)],
+  ['pedidos tienen estados loading empty error offline', ['Sincronizando pedidos', 'Todavía no tenés pedidos', 'No pudimos sincronizar', 'Sin conexión'].every(text => ordersRuntime.includes(text))],
   ['acciones remotas tienen bloqueo', /guardAsyncActions/.test(runtime) && /aria-busy/.test(runtime)],
-  ['recuperación por conexión, visibilidad y bfcache', /addEventListener\('online'/.test(runtime) && /visibilitychange/.test(runtime) && /pageshow/.test(runtime)],
+  ['pedidos se recuperan por conexión, visibilidad y bfcache', /addEventListener\('online'/.test(ordersRuntime) && /visibilitychange/.test(ordersRuntime) && /pagehide/.test(ordersRuntime)],
   ['superficies usan tokens configurables', /var\(--surface/.test(runtime) && /var\(--pink-dark/.test(runtime)],
   ['responsive cubre siete viewports', [1440, 1024, 769, 601, 600, 360].every(value => runtime.includes(String(value)))],
-  ['runtime está cargado por el cargador de página', /perfil[\s\S]*load\('pages\/profile\/mantenimiento-perfil\.js'\)/.test(loader)],
-  ['estadísticas visibles se calculan desde orders', /getOrdersForUserIdentity/.test(statsRuntime) && /calculateOrderStats/.test(statsRuntime)],
-  ['el perfil no intenta escribir estadísticas protegidas', !/recalculateUserOrderStats/.test(statsRuntime) && !/setDoc\s*\(/.test(statsRuntime)],
-  ['listeners de refresco se registran una sola vez', (statsRuntime.match(/addEventListener\('storage'/g) || []).length === 1 && (statsRuntime.match(/visibilitychange/g) || []).length === 1 && /scheduleRefresh/.test(statsRuntime)],
+  ['runtime de mantenimiento está cargado por el cargador de página', /perfil[\s\S]*load\('pages\/profile\/mantenimiento-perfil\.js'/.test(loader)],
+  ['pedidos-perfil.js se carga en perfil.html', /pedidos-perfil\.js/.test(html)],
+  ['estadísticas visibles se calculan desde el dataset completo de pedidos', /calculateOrderStats/.test(ordersRuntime) && /reconcileAccountOrders/.test(ordersRuntime)],
+  ['el perfil no intenta escribir estadísticas protegidas', !/recalculateUserOrderStats/.test(ordersRuntime) && !/setDoc\s*\(/.test(ordersRuntime)],
+  ['listeners de pedidos se cierran al salir y se protegen contra respuestas tardías', /generation\+\+/.test(ordersRuntime) && /pagehide/.test(ordersRuntime)],
   ['las reglas mantienen protegidos los campos de estadísticas', /protectedUserFieldsChanged/.test(rules) && /profileStatsUpdatedAt/.test(rules) && /orderStats/.test(rules)],
   ['Perfil no precarga fuentes que no son críticas', !/rel="preload"[^>]+montserrat-latin-wght-(?:normal|italic)\.woff2/.test(html)],
   ['registro técnico existe', fs.existsSync('docs/maintenance/07-profile-orders.txt')]

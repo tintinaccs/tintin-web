@@ -19,6 +19,13 @@ function render(items) {
   </article>`).join('');
 }
 
+function renderError() {
+  const root = document.getElementById('perfil-favorites-list');
+  if (!root) return;
+  root.innerHTML = `<div class="tt-profile-state" role="alert">No pudimos sincronizar tus favoritos.<br><button type="button" class="perfil-btn perfil-btn-outline" id="btn-reintentar-favoritos">Reintentar</button></div>`;
+  document.getElementById('btn-reintentar-favoritos')?.addEventListener('click', () => window.location.reload());
+}
+
 document.getElementById('perfil-favorites-list')?.addEventListener('click', async event => {
   const button = event.target.closest('[data-remove-favorite]');
   if (!button) return;
@@ -32,10 +39,17 @@ document.getElementById('perfil-favorites-list')?.addEventListener('click', asyn
   }
 });
 
+let unsubscribe = null;
+let generation = 0;
+
 onAuthStateChanged(auth, async user => {
+  const myGeneration = ++generation;
+  if (unsubscribe) { unsubscribe(); unsubscribe = null; }
   if (!user) return;
   await appCheckReady;
-  onSnapshot(collection(db, 'users', user.uid, 'favorites'), snapshot => {
+  if (myGeneration !== generation) return;
+  unsubscribe = onSnapshot(collection(db, 'users', user.uid, 'favorites'), snapshot => {
+    if (myGeneration !== generation) return;
     render(snapshot.docs.map(item => item.data()).sort((a,b) => String(a.name).localeCompare(String(b.name), 'es')));
-  }, () => render([]));
+  }, () => { if (myGeneration === generation) renderError(); });
 });
