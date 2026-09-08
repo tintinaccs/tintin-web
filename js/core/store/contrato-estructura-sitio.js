@@ -56,10 +56,14 @@ export const SITE_STRUCTURE_CONTRACT = Object.freeze({
       zone: 'home-main', hideable: true, operational: true,
       reason: 'Las tarjetas se resuelven desde las colecciones activas; no se guardan copias manuales en la página.',
     }),
-    section('editorial_bag', 'Editorial Bags', '[data-tt-section="editorial_bag"]', { zone: 'home-main', hideable: true }),
     section('look', 'Completá tu look', '.tt-look-section', {
       zone: 'home-main', hideable: true, operational: true,
       reason: 'Los productos mostrados se resuelven desde el catálogo vigente.',
+    }),
+    section('editorial_bag', 'Editorial Bags', '[data-tt-section="editorial_bag"]', { zone: 'home-main', hideable: true }),
+    section('random_products', 'Productos para descubrir', '#home-random-products', {
+      zone: 'home-main', hideable: true, operational: true,
+      reason: 'La selección se resuelve aleatoriamente desde el catálogo vigente, sin duplicados y con el renderer canónico.',
     }),
     section('editorial_relojes', 'Editorial Relojes', '[data-tt-section="editorial_relojes"]', { zone: 'home-main', hideable: true }),
     section('reviews', 'Reseñas', '.tt-reviews-section', {

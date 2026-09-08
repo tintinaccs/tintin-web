@@ -258,3 +258,137 @@ body.tt-home-premium #products-grid > .tt-home-runtime-state{
     animation:none;
   }
 }
+
+/* =============================================================
+   JERARQUÍA HOME — recorrido visual y de compra
+   El DOM conserva la lógica existente; estas reglas solo ordenan el peso
+   visual de cada bloque y mantienen el mismo lenguaje en todos los viewports.
+   ============================================================= */
+body.tt-home-premium .tt-trust-bar {
+  position: relative;
+  z-index: 1;
+  padding: clamp(18px, 2.4vw, 30px) 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-card-border, #F1E4E7) 72%, transparent);
+}
+
+body.tt-home-premium .tt-trust-grid {
+  max-width: 1120px;
+  margin-inline: auto;
+  align-items: stretch;
+}
+
+body.tt-home-premium .tt-trust-item {
+  min-height: 84px;
+  padding: 14px clamp(10px, 1.8vw, 22px);
+  border: 0;
+  border-right: 1px solid color-mix(in srgb, var(--color-card-border, #F1E4E7) 80%, transparent);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+body.tt-home-premium .tt-trust-item:last-child { border-right: 0; }
+body.tt-home-premium .tt-trust-icon { margin-bottom: 8px; }
+body.tt-home-premium .tt-trust-title { font-size: .78rem; letter-spacing: .06em; }
+body.tt-home-premium .tt-trust-desc { font-size: .72rem; line-height: 1.45; }
+
+body.tt-home-premium .tt-collection-carousel {
+  padding-block: clamp(58px, 7vw, 96px);
+}
+
+body.tt-home-premium #look-section {
+  padding-block: clamp(54px, 7vw, 92px);
+  background: var(--color-background-surface, #FFFFFF) !important;
+  border-block: 1px solid color-mix(in srgb, var(--color-card-border, #F1E4E7) 70%, transparent);
+}
+
+body.tt-home-premium .tt-look-header,
+body.tt-home-premium .tt-reviews-header {
+  max-width: 680px;
+  margin-inline: auto;
+}
+
+body.tt-home-premium .tt-editorial,
+body.tt-home-premium .tt-watch-feature {
+  max-width: 1180px;
+  margin-inline: auto;
+  border: 1px solid var(--color-card-border, #F1E4E7);
+  border-radius: clamp(18px, 2vw, 28px);
+  overflow: hidden;
+  box-shadow: 0 16px 42px rgba(92, 37, 57, .07);
+}
+
+body.tt-home-premium .tt-home-random-products {
+  background: linear-gradient(180deg, rgba(252,240,245,.72), rgba(255,255,255,.96));
+  border-block: 1px solid color-mix(in srgb, var(--color-card-border, #F1E4E7) 70%, transparent);
+}
+
+body.tt-home-premium .tt-home-random-products-header { margin-bottom: clamp(22px, 3vw, 34px); }
+body.tt-home-premium .tt-home-random-products-header .tt-section-desc { margin: 0 auto; text-align: center; }
+body.tt-home-premium .tt-home-random-products-grid {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(220px, 1fr);
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: inline mandatory;
+  scrollbar-width: thin;
+  padding: 4px 4px 14px;
+}
+body.tt-home-premium .tt-home-random-products-grid > * { scroll-snap-align: start; min-width: 0; }
+body.tt-home-premium .tt-home-random-products-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+body.tt-home-premium .tt-editorial-content,
+body.tt-home-premium .tt-watch-feature-content {
+  padding: clamp(30px, 5vw, 72px);
+}
+
+body.tt-home-premium .tt-editorial-title,
+body.tt-home-premium .tt-watch-title {
+  max-width: 15ch;
+  text-wrap: balance;
+}
+
+body.tt-home-premium .tt-editorial-desc,
+body.tt-home-premium .tt-watch-desc {
+  max-width: 48ch;
+  line-height: 1.75;
+}
+
+body.tt-home-premium .tt-reviews-section {
+  padding-block: clamp(54px, 7vw, 90px);
+}
+
+@media (max-width: 900px) {
+  body.tt-home-premium .tt-trust-item {
+    border-right: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-card-border, #F1E4E7) 80%, transparent);
+  }
+  body.tt-home-premium .tt-trust-item:nth-last-child(-n+2) { border-bottom: 0; }
+}
+
+@media (min-width: 769px) and (max-width: 960px) {
+  body.tt-home-premium .tt-home-random-products-grid { grid-auto-columns: minmax(230px, 42vw); }
+}
+
+@media (max-width: 768px) {
+  body.tt-home-premium .tt-trust-bar { padding-block: 10px; }
+  body.tt-home-premium .tt-trust-grid { gap: 0; }
+  body.tt-home-premium .tt-trust-item { min-height: 72px; padding: 12px 8px; }
+  body.tt-home-premium .tt-trust-title { font-size: .7rem; }
+  body.tt-home-premium .tt-trust-desc { font-size: .66rem; }
+  body.tt-home-premium .tt-editorial,
+  body.tt-home-premium .tt-watch-feature { border-radius: 18px; }
+  body.tt-home-premium .tt-editorial-content,
+  body.tt-home-premium .tt-watch-feature-content { padding: 32px 22px; }
+  body.tt-home-premium .tt-editorial-desc,
+  body.tt-home-premium .tt-watch-desc { line-height: 1.65; }
+  body.tt-home-premium .tt-home-random-products-grid { grid-auto-columns: minmax(230px, 78vw); gap: 14px; }
+  body.tt-home-premium .tt-home-random-products-actions { margin-top: 18px; }
+}

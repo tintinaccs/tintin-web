@@ -82,7 +82,7 @@
        disponible desde el primer paint, sin depender de red externa.
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
        existe (ver js/components/images/imagenes.js). -->
-  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260827-hero-no-flicker-1">
+  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260908-home-hierarchy-3">
   <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/hero-apple-inicio.css?v=tintin-20260827-hero-no-flicker-1">
   <link rel="stylesheet" href="css/pages/home/carrusel-colecciones.css?v=tintin-20260826-collections-parallax-4">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -261,7 +261,29 @@
 </section>
 
 <!-- ══════════════════════════════════════
-     EDITORIAL — BAG
+     COMPLETÁ TU LOOK
+══════════════════════════════════════ -->
+<section class="section tt-look-section" id="look-section">
+  <div class="container">
+    <div class="tt-look-header">
+      <p class="tt-section-sub">Estilizate completa</p>
+      <h2 class="tt-section-title">COMPLETÁ TU LOOK</h2>
+      <p class="tt-section-desc" style="margin:0 auto;text-align:center;">Combinaciones elegidas para vos — cambian en cada visita.</p>
+    </div>
+
+    <div class="tt-look-grid" id="look-grid">
+      <!-- Rendered by JS -->
+    </div>
+
+    <div class="tt-look-actions" id="look-actions" style="display:none;">
+      <button type="button" class="tt-btn tt-btn-outline" id="btn-otra-combo">Otra combinación</button>
+      <button type="button" class="tt-btn" id="btn-add-combo">Agregar esta combinación al carrito</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SELECCIÓN DESTACADA — BOLSOS
 ══════════════════════════════════════ -->
 <section class="section-sm" data-tt-editable="index" data-tt-section="editorial_bag">
   <div class="tt-editorial">
@@ -293,23 +315,19 @@
 </section>
 
 <!-- ══════════════════════════════════════
-     COMPLETÁ TU LOOK
+     DESCUBRIMIENTO — PRODUCTOS ALEATORIOS ÚNICOS
 ══════════════════════════════════════ -->
-<section class="section tt-look-section" id="look-section">
+<section class="section tt-home-random-products" id="home-random-products" aria-labelledby="home-random-products-title">
   <div class="container">
-    <div class="tt-look-header">
-      <p class="tt-section-sub">Estilizate completa</p>
-      <h2 class="tt-section-title">COMPLETÁ TU LOOK</h2>
-      <p class="tt-section-desc" style="margin:0 auto;text-align:center;">Combinaciones elegidas para vos — cambian en cada visita.</p>
+    <div class="tt-products-header tt-home-random-products-header">
+      <p class="tt-section-sub">Una sorpresa para vos</p>
+      <h2 class="tt-section-title" id="home-random-products-title">PRODUCTOS PARA DESCUBRIR</h2>
+      <p class="tt-section-desc">Una selección diferente en cada visita, sin productos repetidos.</p>
     </div>
-
-    <div class="tt-look-grid" id="look-grid">
-      <!-- Rendered by JS -->
-    </div>
-
-    <div class="tt-look-actions" id="look-actions" style="display:none;">
-      <button type="button" class="tt-btn tt-btn-outline" id="btn-otra-combo">Otra combinación</button>
-      <button type="button" class="tt-btn" id="btn-add-combo">Agregar esta combinación al carrito</button>
+    <div class="tt-products-grid tt-home-random-products-grid" id="products-grid" aria-live="polite" aria-label="Productos destacados aleatorios"></div>
+    <div class="tt-home-random-products-actions">
+      <button type="button" class="tt-btn tt-btn-outline" id="btn-home-random-products">Ver otra selección</button>
+      <a href="/catalogo" class="tt-btn">Ver todo el catálogo</a>
     </div>
   </div>
 </section>

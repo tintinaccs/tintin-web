@@ -297,8 +297,7 @@ if (!window.TintinCollectionsPhase4Booted) {
       target,
       collectionNodesOrState(
         buildCollectionsPageCard,
-        'No hay colecciones disponibles todavía.',
-        true
+        'No hay colecciones disponibles todavía.'
       ),
       'collections-page'
     );

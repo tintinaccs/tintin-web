@@ -32,8 +32,8 @@ const manifest = JSON.parse(read('diagnostic-manifest.json'));
 
 forbid(
   html,
-  /(?:class=["'][^"']*tt-products-section|id=["']products-grid["'])/,
-  'Inicio conserva el carrusel/grid viejo de productos.'
+  /class=["'][^"']*tt-products-section/,
+  'Inicio conserva el bloque de productos legado.'
 );
 
 requireText(html, /<meta\s+name=["']viewport["']/i, 'Inicio no declara viewport.');
