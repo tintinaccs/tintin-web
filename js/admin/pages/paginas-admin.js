@@ -1,4 +1,4 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260907-appcheck-token-3';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { collection, doc, onSnapshot, setDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
@@ -109,8 +109,9 @@ async function removePage(slug) {
   try { await deleteDoc(doc(db, 'site_content', slug)); window.logAudit?.('eliminar_pagina', 'pagina', slug, slug, 'Página eliminada'); window.toast?.('Página eliminada'); } catch (error) { window.toast?.(`No se pudo eliminar: ${error?.message || error}`); }
 }
 
-function subscribe() {
+async function subscribe() {
   if (unsubscribe || !canUse()) return;
+  if (!await appCheckReady) return;
   unsubscribe = onSnapshot(collection(db, 'site_content'), snapshot => { customPages = snapshot.docs.map(item => ({ id:item.id, ...item.data() })).filter(page => page.pageType === 'custom').sort((a,b) => String(a.title || '').localeCompare(String(b.title || ''), 'es')); pages = [...BUILTIN_PAGES, ...customPages]; ready = true; render(); }, error => { ready = false; pages = [...BUILTIN_PAGES]; const host = root(); if (host) { render(); host.insertAdjacentHTML('afterbegin', `<div class="tt-pages-error is-visible">No se pudieron cargar las páginas personalizadas: ${esc(error?.message || error)}</div>`); } });
 }
 
