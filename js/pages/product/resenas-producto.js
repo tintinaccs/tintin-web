@@ -5,7 +5,11 @@ import { heartIconMarkup } from '../../components/favorites/icono-corazon.js?v=t
 import { isValidReviewRating, syncReviewPublishState, reportMissingReviewRating } from './validacion-puntuacion-resena.js?v=tintin-20260831-review-rating-required-1';
 
 const productId = String(new URLSearchParams(location.search).get('id') || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 180);
-let currentUser = null;
+// Toma el usuario ya restaurado cuando el módulo llega después de Firebase.
+// onAuthStateChanged sigue siendo la fuente que mantiene el estado al día,
+// pero este valor evita que un clic temprano confunda una sesión existente
+// con una cuenta anónima.
+let currentUser = auth.currentUser || null;
 let reviews = [];
 let likedReviewIds = new Set();
 let likedReplyIds = new Set();

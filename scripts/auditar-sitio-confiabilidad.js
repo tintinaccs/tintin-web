@@ -123,7 +123,8 @@ check('GitHub Pages usa el servicio geográfico de Cloudflare',
   functionOrigin.includes("hostname.endsWith('github.io')") &&
   !activity.includes('/.netlify/functions/'));
 check('Los previews de Cloudflare no escriben estadísticas',
-  activity.includes("const cloudflarePreview = /\\.tintinaccesorios\\.pages\\.dev$/i.test(hostname)") &&
+  activity.includes("const cloudflarePreview = /.+\\.tintinaccesorios\\.pages\\.dev$/i.test(hostname)") &&
+  !activity.includes("hostname === 'tintinaccesorios.pages.dev'") &&
   activity.includes('!netlifyPreview && !cloudflarePreview'));
 check('Las reglas limitan la escritura de sesiones y presencia',
   rules.includes('presenceIsValid(visitorId)') &&
@@ -291,7 +292,7 @@ for (const file of htmlFiles.concat(['tienda.js', 'js/cargador-pagina.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan la versión vigente de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260903-store-gate-fast-rest-1'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260908-public-activity-auth-1'"));
 
 check(
   'El runtime público liviano carga imágenes, colecciones, carrito, colores y el fix de auditoría de página (no solo admin-images)',
