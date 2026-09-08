@@ -82,7 +82,7 @@
        disponible desde el primer paint, sin depender de red externa.
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
        existe (ver js/components/images/imagenes.js). -->
-  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260908-home-hierarchy-1">
+  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260908-home-hierarchy-2">
   <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/hero-apple-inicio.css?v=tintin-20260827-hero-no-flicker-1">
   <link rel="stylesheet" href="css/pages/home/carrusel-colecciones.css?v=tintin-20260826-collections-parallax-4">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -283,8 +283,12 @@
 </section>
 
 <!-- ══════════════════════════════════════
-     EDITORIAL — BAG
+     SELECCIÓN DESTACADA — BOLSOS + RELOJES
+     Las dos editoriales forman una única decisión de compra: se presentan
+     juntas en pantallas amplias y se apilan en mobile, sin cambiar sus
+     enlaces, imágenes ni fuentes dinámicas del editor.
 ══════════════════════════════════════ -->
+<div class="tt-home-feature-pair" role="group" aria-label="Selección destacada">
 <section class="section-sm" data-tt-editable="index" data-tt-section="editorial_bag">
   <div class="tt-editorial">
     <div class="tt-editorial-img">
@@ -345,6 +349,7 @@
     </div>
   </div>
 </section>
+</div>
 
 <!-- ══════════════════════════════════════
      REVIEWS

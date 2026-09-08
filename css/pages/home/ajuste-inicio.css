@@ -317,6 +317,41 @@ body.tt-home-premium .tt-watch-feature {
   box-shadow: 0 16px 42px rgba(92, 37, 57, .07);
 }
 
+body.tt-home-premium .tt-home-feature-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 3vw, 42px);
+  width: min(100% - 32px, 1180px);
+  margin-inline: auto;
+  align-items: stretch;
+}
+
+body.tt-home-premium .tt-home-feature-pair > .section-sm {
+  min-width: 0;
+  padding-block: 0;
+}
+
+body.tt-home-premium .tt-home-feature-pair .tt-editorial,
+body.tt-home-premium .tt-home-feature-pair .tt-watch-feature {
+  height: 100%;
+  grid-template-columns: 1fr;
+}
+
+body.tt-home-premium .tt-home-feature-pair .tt-editorial-img,
+body.tt-home-premium .tt-home-feature-pair .tt-watch-feature-img {
+  min-height: clamp(220px, 28vw, 360px);
+}
+
+body.tt-home-premium .tt-home-feature-pair .tt-editorial-content,
+body.tt-home-premium .tt-home-feature-pair .tt-watch-feature-content {
+  padding: clamp(24px, 3vw, 42px);
+}
+
+body.tt-home-premium .tt-home-feature-pair .tt-editorial-title,
+body.tt-home-premium .tt-home-feature-pair .tt-watch-title {
+  font-size: clamp(1.45rem, 2.6vw, 2.35rem);
+}
+
 body.tt-home-premium .tt-editorial-content,
 body.tt-home-premium .tt-watch-feature-content {
   padding: clamp(30px, 5vw, 72px);
@@ -346,6 +381,13 @@ body.tt-home-premium .tt-reviews-section {
   body.tt-home-premium .tt-trust-item:nth-last-child(-n+2) { border-bottom: 0; }
 }
 
+@media (min-width: 769px) and (max-width: 960px) {
+  body.tt-home-premium .tt-home-feature-pair {
+    grid-template-columns: 1fr;
+    max-width: 700px;
+  }
+}
+
 @media (max-width: 768px) {
   body.tt-home-premium .tt-trust-bar { padding-block: 10px; }
   body.tt-home-premium .tt-trust-grid { gap: 0; }
@@ -358,4 +400,13 @@ body.tt-home-premium .tt-reviews-section {
   body.tt-home-premium .tt-watch-feature-content { padding: 32px 22px; }
   body.tt-home-premium .tt-editorial-desc,
   body.tt-home-premium .tt-watch-desc { line-height: 1.65; }
+  body.tt-home-premium .tt-home-feature-pair {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    width: min(100% - 24px, 560px);
+  }
+  body.tt-home-premium .tt-home-feature-pair > .section-sm { padding-block: 0; }
+  body.tt-home-premium .tt-home-feature-pair .tt-editorial-img,
+  body.tt-home-premium .tt-home-feature-pair .tt-watch-feature-img { min-height: 240px; }
 }

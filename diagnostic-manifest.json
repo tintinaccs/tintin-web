@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-08T19:45:18.448Z",
-  "sourceFingerprint": "d0caafd8b1bd5ce301bac75211d09c3a052bc469344286d5d8a7e7e35d76642e",
+  "generatedAt": "2026-09-08T19:51:52.833Z",
+  "sourceFingerprint": "8e457f945bbcd8c392c9373de731e046e58b2dcaf0ccbe14caba8bce08ccb7e6",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 818,
     "textFiles": 785,
-    "totalBytes": 10078528,
+    "totalBytes": 10080414,
     "pages": 18,
     "modules": 563
   },
@@ -11916,8 +11916,8 @@
         "guest",
         "client"
       ],
-      "bytes": 35993,
-      "sha256": "4703475e8e43ddd7f3967361f0f89724efe39aed47226994dcf92bac240ce16a",
+      "bytes": 36313,
+      "sha256": "d75d676d3041dc78c77140b7b7c7076464d1fb9e101aa10ba46c4574b02dbdeb",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11950,13 +11950,13 @@
           "error": ""
         },
         {
-          "line": 472,
+          "line": 477,
           "module": false,
           "ok": true,
           "error": ""
         },
         {
-          "line": 540,
+          "line": 545,
           "module": true,
           "ok": true,
           "error": ""
@@ -11987,52 +11987,52 @@
         {
           "raw": "tienda.js?v=tintin-20260907-session-preserved-5",
           "target": "tienda.js",
-          "line": 533
+          "line": 538
         },
         {
           "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20260908-collection-click-2",
           "target": "js/pages/home/carrusel-colecciones.js",
-          "line": 534
+          "line": 539
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3",
           "target": "js/components/contact/whatsapp.js",
-          "line": 535
+          "line": 540
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-3",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 536
+          "line": 541
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-3",
           "target": "js/analytics/analitica.js",
-          "line": 537
+          "line": 542
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 538
+          "line": 543
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20260716-cloudinary-fix-3",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 539
+          "line": 544
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260821-accounts-phase-a-3",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 544
+          "line": 549
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260826-carousel-order-3",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 580
+          "line": 585
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3",
           "target": "js/components/color/esquema-color.js",
-          "line": 581
+          "line": 586
         }
       ],
       "styles": [
@@ -12097,7 +12097,7 @@
           "line": 75
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260908-home-hierarchy-1",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260908-home-hierarchy-2",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 85
         },
@@ -12153,7 +12153,7 @@
           "target": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-mobile.webp",
           "alt": "",
           "hasAlt": false,
-          "line": 293
+          "line": 297
         },
         {
           "tag": "source",
@@ -12161,7 +12161,7 @@
           "target": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-tablet.webp",
           "alt": "",
           "hasAlt": false,
-          "line": 294
+          "line": 298
         },
         {
           "tag": "img",
@@ -12169,7 +12169,7 @@
           "target": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp",
           "alt": "Colección Bag Tintin",
           "hasAlt": true,
-          "line": 295
+          "line": 299
         },
         {
           "tag": "source",
@@ -12177,7 +12177,7 @@
           "target": "assets-tintin/images/home/editorial-relojes/editorial-relojes-mobile.webp",
           "alt": "",
           "hasAlt": false,
-          "line": 325
+          "line": 329
         },
         {
           "tag": "source",
@@ -12185,7 +12185,7 @@
           "target": "assets-tintin/images/home/editorial-relojes/editorial-relojes-tablet.webp",
           "alt": "",
           "hasAlt": false,
-          "line": 326
+          "line": 330
         },
         {
           "tag": "img",
@@ -12193,7 +12193,7 @@
           "target": "assets-tintin/images/home/editorial-relojes/editorial-relojes-desktop.webp",
           "alt": "Nueva colección de relojes Tintin",
           "hasAlt": true,
-          "line": 327
+          "line": 331
         },
         {
           "tag": "img",
@@ -12201,7 +12201,7 @@
           "target": "assets-tintin/images/general/logo.png",
           "alt": "TINTIN",
           "hasAlt": true,
-          "line": 405
+          "line": 410
         }
       ],
       "links": [
@@ -12233,7 +12233,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 312
+          "line": 316
         },
         {
           "raw": "/catalogo?cat=relojes",
@@ -12243,7 +12243,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 344
+          "line": 348
         },
         {
           "raw": "/",
@@ -12253,7 +12253,7 @@
           "ariaLabel": "Ir al inicio de TINTIN",
           "title": "",
           "imageAlt": "TINTIN",
-          "line": 404
+          "line": 409
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -12263,7 +12263,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 408
+          "line": 413
         },
         {
           "raw": "/catalogo",
@@ -12273,7 +12273,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 416
+          "line": 421
         },
         {
           "raw": "/collections",
@@ -12283,7 +12283,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 417
+          "line": 422
         },
         {
           "raw": "/catalogo?cat=relojes",
@@ -12293,7 +12293,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 418
+          "line": 423
         },
         {
           "raw": "/catalogo?cat=bolsos",
@@ -12303,7 +12303,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 419
+          "line": 424
         },
         {
           "raw": "/about",
@@ -12313,7 +12313,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 426
+          "line": 431
         },
         {
           "raw": "/envios",
@@ -12323,7 +12323,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 427
+          "line": 432
         },
         {
           "raw": "/cambios-devoluciones",
@@ -12333,7 +12333,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 428
+          "line": 433
         },
         {
           "raw": "/preguntas-frecuentes",
@@ -12343,7 +12343,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 429
+          "line": 434
         },
         {
           "raw": "/terminos",
@@ -12353,7 +12353,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 430
+          "line": 435
         },
         {
           "raw": "/privacidad",
@@ -12363,7 +12363,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 431
+          "line": 436
         },
         {
           "raw": "/sitemap.xml",
@@ -12373,7 +12373,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 432
+          "line": 437
         },
         {
           "raw": "/contact",
@@ -12383,7 +12383,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 439
+          "line": 444
         },
         {
           "raw": "tel:+595981299331",
@@ -12393,7 +12393,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 440
+          "line": 445
         },
         {
           "raw": "mailto:tintinaccs@gmail.com",
@@ -12403,7 +12403,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 441
+          "line": 446
         },
         {
           "raw": "https://instagram.com/tintinaccs",
@@ -12413,7 +12413,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 442
+          "line": 447
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -12423,7 +12423,7 @@
           "ariaLabel": "WhatsApp",
           "title": "Escribirnos por WhatsApp",
           "imageAlt": "",
-          "line": 454
+          "line": 459
         }
       ],
       "references": [
@@ -12454,61 +12454,61 @@
         {
           "raw": "tienda.js?v=tintin-20260907-session-preserved-5",
           "target": "tienda.js",
-          "line": 533,
+          "line": 538,
           "exists": true
         },
         {
           "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20260908-collection-click-2",
           "target": "js/pages/home/carrusel-colecciones.js",
-          "line": 534,
+          "line": 539,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3",
           "target": "js/components/contact/whatsapp.js",
-          "line": 535,
+          "line": 540,
           "exists": true
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-3",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 536,
+          "line": 541,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-3",
           "target": "js/analytics/analitica.js",
-          "line": 537,
+          "line": 542,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 538,
+          "line": 543,
           "exists": true
         },
         {
           "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20260716-cloudinary-fix-3",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 539,
+          "line": 544,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260821-accounts-phase-a-3",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 544,
+          "line": 549,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260826-carousel-order-3",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 580,
+          "line": 585,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3",
           "target": "js/components/color/esquema-color.js",
-          "line": 581,
+          "line": 586,
           "exists": true
         },
         {
@@ -12584,7 +12584,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260908-home-hierarchy-1",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260908-home-hierarchy-2",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 85,
           "exists": true
@@ -12616,43 +12616,43 @@
         {
           "raw": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-mobile.webp",
           "target": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-mobile.webp",
-          "line": 293,
+          "line": 297,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-tablet.webp",
           "target": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-tablet.webp",
-          "line": 294,
+          "line": 298,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp",
           "target": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp",
-          "line": 295,
+          "line": 299,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/editorial-relojes/editorial-relojes-mobile.webp",
           "target": "assets-tintin/images/home/editorial-relojes/editorial-relojes-mobile.webp",
-          "line": 325,
+          "line": 329,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/editorial-relojes/editorial-relojes-tablet.webp",
           "target": "assets-tintin/images/home/editorial-relojes/editorial-relojes-tablet.webp",
-          "line": 326,
+          "line": 330,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/editorial-relojes/editorial-relojes-desktop.webp",
           "target": "assets-tintin/images/home/editorial-relojes/editorial-relojes-desktop.webp",
-          "line": 327,
+          "line": 331,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/general/logo.png?v=tintin-20260715-15",
           "target": "assets-tintin/images/general/logo.png",
-          "line": 405,
+          "line": 410,
           "exists": true
         },
         {
@@ -12670,85 +12670,85 @@
         {
           "raw": "/catalogo?cat=bolsos",
           "target": "catalogo.html",
-          "line": 312,
+          "line": 316,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
           "target": "catalogo.html",
-          "line": 344,
+          "line": 348,
           "exists": true
         },
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 416,
+          "line": 421,
           "exists": true
         },
         {
           "raw": "/collections",
           "target": "collections.html",
-          "line": 417,
+          "line": 422,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
           "target": "catalogo.html",
-          "line": 418,
+          "line": 423,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
           "target": "catalogo.html",
-          "line": 419,
+          "line": 424,
           "exists": true
         },
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 426,
+          "line": 431,
           "exists": true
         },
         {
           "raw": "/envios",
           "target": "envios.html",
-          "line": 427,
+          "line": 432,
           "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
           "target": "cambios-devoluciones.html",
-          "line": 428,
+          "line": 433,
           "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
           "target": "preguntas-frecuentes.html",
-          "line": 429,
+          "line": 434,
           "exists": true
         },
         {
           "raw": "/terminos",
           "target": "terminos.html",
-          "line": 430,
+          "line": 435,
           "exists": true
         },
         {
           "raw": "/privacidad",
           "target": "privacidad.html",
-          "line": 431,
+          "line": 436,
           "exists": true
         },
         {
           "raw": "/sitemap.xml",
           "target": "sitemap.xml",
-          "line": 432,
+          "line": 437,
           "exists": true
         },
         {
           "raw": "/contact",
           "target": "contact.html",
-          "line": 439,
+          "line": 444,
           "exists": true
         }
       ],
@@ -33136,8 +33136,8 @@
     {
       "path": "css/pages/home/ajuste-inicio.css",
       "extension": ".css",
-      "bytes": 16331,
-      "sha256": "31afb535a1104203370a9395f9332cf2c86ee5efcae73dd76455899796db2e74"
+      "bytes": 17897,
+      "sha256": "3db8b18c614c80c9bf88a194408aa1bb257932959eb197ead07a9c1d07706183"
     },
     {
       "path": "css/pages/home/carrusel-colecciones.css",
@@ -34132,8 +34132,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 35993,
-      "sha256": "4703475e8e43ddd7f3967361f0f89724efe39aed47226994dcf92bac240ce16a"
+      "bytes": 36313,
+      "sha256": "d75d676d3041dc78c77140b7b7c7076464d1fb9e101aa10ba46c4574b02dbdeb"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -36479,7 +36479,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 38056,
-      "sha256": "f022b089956f9a3cf8eaffb50319877bb35a39070f046f160f5f1f29b08b6ebf"
+      "sha256": "6fd2a5c88347e71b0d8e032d39504f59161f4035f3bb1cf58f7ff590a18e4135"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -38803,7 +38803,7 @@
       "references": [
         {
           "file": "index.html",
-          "line": 558
+          "line": 563
         }
       ]
     },
