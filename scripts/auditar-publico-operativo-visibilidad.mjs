@@ -32,6 +32,10 @@ try {
     await page.setViewportSize(viewport);
     await page.goto(`${baseURL}/catalogo.html`, { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('#tt-catalog-sync-state', { state: 'attached' });
+    // El shell de navegación se monta de forma asíncrona después del loader;
+    // esperar sus tres superficies evita falsos negativos intermitentes en CI.
+    await page.waitForSelector('#btn-tienda,#btn-tablet-tienda,#tabbar-tienda', { state: 'attached', timeout: 10000 });
+    await page.waitForFunction(() => document.querySelector('#btn-tienda')?.getAttribute('aria-current') === 'page', null, { timeout: 10000 });
     check(await page.locator('#tt-catalog-sync-state').evaluate(node => getComputedStyle(node).display === 'none'), `Catálogo expone telemetría pública a ${viewport.width}px`);
     check(await page.locator('.tt-cart-sync-status').evaluate(node => getComputedStyle(node).display === 'none'), `Carrito expone telemetría pública a ${viewport.width}px`);
 
