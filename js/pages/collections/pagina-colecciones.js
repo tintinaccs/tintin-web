@@ -179,6 +179,13 @@ function completeCollectionsLoading() {
 }
 
 collectionsGrid?.addEventListener('click', event => {
+  const card = event.target.closest('.tt-coll-page-card');
+  const cardLink = card?.querySelector('.tt-coll-page-body > .tt-btn');
+  if (card && cardLink && !event.target.closest('a,button,input,select,textarea')) {
+    event.preventDefault();
+    window.location.assign(cardLink.href);
+    return;
+  }
   const image = event.target.closest('.tt-coll-page-img[data-collection-href]');
   if (!image) return;
   location.href = image.dataset.collectionHref;

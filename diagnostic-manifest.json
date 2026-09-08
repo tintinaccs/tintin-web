@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-08T17:15:51.030Z",
-  "sourceFingerprint": "e3e169ecd3a368967a53c6c5f40f81bc9c8ee794a42d1c88360ebdec3d40bd58",
+  "generatedAt": "2026-09-08T17:37:14.131Z",
+  "sourceFingerprint": "fa0a13f64c80ed2494ab42bb741f01d85fafc853300fb8b92a57612751fdf79c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 818,
     "textFiles": 785,
-    "totalBytes": 10070962,
+    "totalBytes": 10071718,
     "pages": 18,
     "modules": 563
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 189220,
-      "sha256": "00728783881c6cf76ac460999d4ad262878c2d60b66a05b37d0e8de0f04585d8",
+      "bytes": 189215,
+      "sha256": "b37a42cdc7912686e1603e760cfedc9edd5500972354debfca03dab6ef9d4ee8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2226,7 +2226,7 @@
           "line": 35
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20260817-margin-consistency-2",
+          "raw": "css/admin/admin.css?v=tintin-20260908-admin-minimal-1",
           "target": "css/admin/admin.css",
           "line": 36
         },
@@ -2490,7 +2490,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20260817-margin-consistency-2",
+          "raw": "css/admin/admin.css?v=tintin-20260908-admin-minimal-1",
           "target": "css/admin/admin.css",
           "line": 36,
           "exists": true
@@ -9924,7 +9924,7 @@
         "client"
       ],
       "bytes": 15071,
-      "sha256": "00cd43d064dd3f7a4f8bbc8e379aed6919ad251a5f72a61b9f2a30f94f933fca",
+      "sha256": "2a398e55f4bc437f116e6361b8c302e53c3b1b0e8db80be4738f0009f13f4f8c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9979,7 +9979,7 @@
           "line": 195
         },
         {
-          "raw": "js/pages/collections/pagina-colecciones.js?v=tintin-20260907-session-preserved-5",
+          "raw": "js/pages/collections/pagina-colecciones.js?v=tintin-20260908-collections-click-1",
           "target": "js/pages/collections/pagina-colecciones.js",
           "line": 196
         },
@@ -10335,7 +10335,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/collections/pagina-colecciones.js?v=tintin-20260907-session-preserved-5",
+          "raw": "js/pages/collections/pagina-colecciones.js?v=tintin-20260908-collections-click-1",
           "target": "js/pages/collections/pagina-colecciones.js",
           "line": 196,
           "exists": true
@@ -24849,8 +24849,8 @@
     },
     {
       "path": "js/pages/collections/pagina-colecciones.js",
-      "bytes": 10540,
-      "sha256": "70cbf53be3082c5a5f45e2b34bb613ed15a1dbc9b5b7696891ddb77957601313",
+      "bytes": 10843,
+      "sha256": "548f0e868ca42b75cc57c21da1beda4c292d19f43413c0824f011a23c88e9589",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32393,8 +32393,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 189220,
-      "sha256": "00728783881c6cf76ac460999d4ad262878c2d60b66a05b37d0e8de0f04585d8"
+      "bytes": 189215,
+      "sha256": "b37a42cdc7912686e1603e760cfedc9edd5500972354debfca03dab6ef9d4ee8"
     },
     {
       "path": "apple-touch-icon.png",
@@ -32820,7 +32820,7 @@
       "path": "collections.html",
       "extension": ".html",
       "bytes": 15071,
-      "sha256": "00cd43d064dd3f7a4f8bbc8e379aed6919ad251a5f72a61b9f2a30f94f933fca"
+      "sha256": "2a398e55f4bc437f116e6361b8c302e53c3b1b0e8db80be4738f0009f13f4f8c"
     },
     {
       "path": "config/account-contract.json",
@@ -32867,8 +32867,8 @@
     {
       "path": "css/admin/admin.css",
       "extension": ".css",
-      "bytes": 78591,
-      "sha256": "8a3083aa88dd1d987494c18321b2cab33f5f5728ada2e7890b155d6d1d80f0b4"
+      "bytes": 79054,
+      "sha256": "18852deed1f8116aee260a74cfd8655d1aee68396b33eeff46c52aef7ee4b903"
     },
     {
       "path": "css/admin/diagnostico-maestro.css",
@@ -35225,8 +35225,8 @@
     {
       "path": "js/pages/collections/pagina-colecciones.js",
       "extension": ".js",
-      "bytes": 10540,
-      "sha256": "70cbf53be3082c5a5f45e2b34bb613ed15a1dbc9b5b7696891ddb77957601313"
+      "bytes": 10843,
+      "sha256": "548f0e868ca42b75cc57c21da1beda4c292d19f43413c0824f011a23c88e9589"
     },
     {
       "path": "js/pages/collections/presentacion-colecciones.js",
@@ -36461,8 +36461,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 37879,
-      "sha256": "a70773abc65513f869d3e52f0b5ecf976e4a048c557bf4a3e1b34088aaf38d1d"
+      "bytes": 37874,
+      "sha256": "3102ac8d35134a97661cf08f69a4ecf14a2828d2c6e2d48131a287c1f7a35a51"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
