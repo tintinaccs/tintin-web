@@ -3,6 +3,7 @@ import {
   originIsAllowed,
   preflightResponse,
   requireSuperAdmin,
+  requireOrderStaff,
   statusFromError,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
@@ -23,10 +24,24 @@ export async function onRequest(context) {
   if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido.' }, 405, origin, requestUrl);
 
   try {
-    const actor = await requireSuperAdmin(request);
     const raw = await request.text();
     if (!raw || new TextEncoder().encode(raw).byteLength > 64 * 1024) throw new Error('Solicitud inválida.');
     const body = JSON.parse(raw);
+    const actor = body.action === 'updatePayment'
+      ? await requireOrderStaff(request, env)
+      : await requireSuperAdmin(request);
+    if (body.action === 'updatePayment') {
+      const result = await applyOrderAdminMutation(env, {
+        orderId: body.orderId,
+        paymentStatus: body.paymentStatus,
+        paymentMethod: body.paymentMethod,
+        baseChangeId: body.baseChangeId,
+        changeId: body.changeId,
+        source: 'admin-payment'
+      }, { uid: actor.uid, email: actor.email, role: actor.role, origin: 'admin-payment' });
+      const sheetsSync = await syncOrderToSheetsBestEffort(env, result);
+      return jsonResponse({ ok: true, result, sheetsSync }, 200, origin, requestUrl);
+    }
     const actorContext = {
       uid: actor.uid,
       email: actor.email,
