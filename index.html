@@ -82,7 +82,7 @@
        disponible desde el primer paint, sin depender de red externa.
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
        existe (ver js/components/images/imagenes.js). -->
-  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260827-hero-no-flicker-1">
+  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260908-home-hierarchy-1">
   <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/hero-apple-inicio.css?v=tintin-20260827-hero-no-flicker-1">
   <link rel="stylesheet" href="css/pages/home/carrusel-colecciones.css?v=tintin-20260826-collections-parallax-4">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -261,6 +261,28 @@
 </section>
 
 <!-- ══════════════════════════════════════
+     COMPLETÁ TU LOOK
+══════════════════════════════════════ -->
+<section class="section tt-look-section" id="look-section">
+  <div class="container">
+    <div class="tt-look-header">
+      <p class="tt-section-sub">Estilizate completa</p>
+      <h2 class="tt-section-title">COMPLETÁ TU LOOK</h2>
+      <p class="tt-section-desc" style="margin:0 auto;text-align:center;">Combinaciones elegidas para vos — cambian en cada visita.</p>
+    </div>
+
+    <div class="tt-look-grid" id="look-grid">
+      <!-- Rendered by JS -->
+    </div>
+
+    <div class="tt-look-actions" id="look-actions" style="display:none;">
+      <button type="button" class="tt-btn tt-btn-outline" id="btn-otra-combo">Otra combinación</button>
+      <button type="button" class="tt-btn" id="btn-add-combo">Agregar esta combinación al carrito</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
      EDITORIAL — BAG
 ══════════════════════════════════════ -->
 <section class="section-sm" data-tt-editable="index" data-tt-section="editorial_bag">
@@ -288,28 +310,6 @@
         Descubrí nuestra exclusiva colección de bags — el accesorio que transforma cualquier outfit en un look de revista. Diseños únicos pensados para la mujer moderna que quiere brillar sin esfuerzo.
       </p>
       <a href="/catalogo?cat=bolsos" class="tt-btn">LO QUIERO YA!</a>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════
-     COMPLETÁ TU LOOK
-══════════════════════════════════════ -->
-<section class="section tt-look-section" id="look-section">
-  <div class="container">
-    <div class="tt-look-header">
-      <p class="tt-section-sub">Estilizate completa</p>
-      <h2 class="tt-section-title">COMPLETÁ TU LOOK</h2>
-      <p class="tt-section-desc" style="margin:0 auto;text-align:center;">Combinaciones elegidas para vos — cambian en cada visita.</p>
-    </div>
-
-    <div class="tt-look-grid" id="look-grid">
-      <!-- Rendered by JS -->
-    </div>
-
-    <div class="tt-look-actions" id="look-actions" style="display:none;">
-      <button type="button" class="tt-btn tt-btn-outline" id="btn-otra-combo">Otra combinación</button>
-      <button type="button" class="tt-btn" id="btn-add-combo">Agregar esta combinación al carrito</button>
     </div>
   </div>
 </section>
