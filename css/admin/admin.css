@@ -1846,6 +1846,21 @@
   gap: 16px;
   flex-wrap: wrap;
 }
+
+/* Topbar limpio y centrado. */
+.adm-topbar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+}
+.adm-topbar-title { grid-column: 2; text-align: center; margin: 0; }
+.adm-topbar > :last-child { grid-column: 3; justify-self: end; }
+@media (max-width: 700px) {
+  .adm-topbar { display: flex; justify-content: space-between; }
+  .adm-topbar-title { text-align: left; }
+  .adm-topbar > :last-child { margin-left: auto; }
+}
 .adm-diagnostic-head p {
   max-width: 760px;
   margin: 5px 0 0;
