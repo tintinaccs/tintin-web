@@ -19,7 +19,7 @@ import {
   canDo, saveRolePermissions, buildDefaultRolePermissions
 } from "../core/auth/permisos-roles.js?v=tintin-20260821-accounts-phase-a-3";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260903-store-gate-fast-rest-4";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260909-store-gate-degraded-fix-1";
 import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260901-firestore-budget-3";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
@@ -950,6 +950,14 @@ async function startAdminAuthGuard() {
 
       const storeCfg = await getStoreAccessConfig();
       if (!isAccessAllowed(storeCfg, role, user.email)) {
+        // Una lectura no confirmada (red/degradada) no bloquea el panel con
+        // un cierre que no se comprobó — sólo un estado 'ok' confirma que
+        // la tienda está realmente cerrada para este rol.
+        if (storeCfg?.__storeConfigStatus !== 'ok') {
+          renderStoreConfigUnavailableOverlay(storeCfg);
+          hideOverlay();
+          return;
+        }
         renderStoreClosedOverlay();
         hideOverlay();
         return;

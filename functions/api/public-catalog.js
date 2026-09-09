@@ -68,10 +68,17 @@ function documentId(document) {
 async function buildPayload(env, resource, productId = '') {
   if (resource === 'storeGate') {
     const document = await firestoreAdminGet(env, 'settings/storeGate');
-    const data = decodeFirestoreFields(document?.fields || {});
+    // Documento inexistente no es "tienda cerrada confirmada" — firestore.rules
+    // falla abierto en ese caso (isStoreOpenOrAllowed). Se distingue con
+    // `exists` para que el cliente lo trate como no confirmado, no como cierre.
+    if (!document) {
+      return { ok: true, resource, exists: false, data: { storeOpen: false, maintenanceAccess: {} } };
+    }
+    const data = decodeFirestoreFields(document.fields || {});
     return {
       ok: true,
       resource,
+      exists: true,
       data: {
         storeOpen: data.storeOpen === true,
         maintenanceAccess: data.maintenanceAccess && typeof data.maintenanceAccess === 'object'

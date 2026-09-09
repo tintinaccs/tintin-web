@@ -230,7 +230,7 @@ import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260903-accounts-phase-a-4";
 import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260906-profile-complete-2";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260903-store-gate-fast-rest-4";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260909-store-gate-degraded-fix-1";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260906-profile-complete-1";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
 
@@ -333,6 +333,15 @@ function safeLocalRedirect(value) {
 async function redirectByRole(role, email, options = {}) {
   const cfg = options.storeAccessConfig || await getStoreAccessConfig();
   if (!isAccessAllowed(cfg, role, email)) {
+    // Cierre no confirmado (lectura degradada/sin red) nunca cierra la
+    // sesión — sólo un cierre confirmado (__storeConfigStatus === 'ok') lo
+    // hace. Cerrar sesión ante una lectura fallida era lo que dejaba a la
+    // cuenta afuera sin volver a aparecer tras un simple problema de red.
+    if (cfg?.__storeConfigStatus !== 'ok') {
+      hideLoginOverlay();
+      renderStoreConfigUnavailableOverlay(cfg);
+      return;
+    }
     await signOut(auth);
     hideLoginOverlay();
     renderStoreClosedOverlay();
