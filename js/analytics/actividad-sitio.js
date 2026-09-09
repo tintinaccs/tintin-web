@@ -340,7 +340,7 @@ if (
   // despliegues de vista previa; incluir la raíz aquí desactivaba toda la
   // actividad pública precisamente en el sitio que debe contabilizarla.
   const cloudflarePreview = /.+\.tintinaccesorios\.pages\.dev$/i.test(hostname);
-  const trackablePage = !adminPage;
+  const trackablePage = !isAdminPage();
   analyticsWritable = !localHost && !netlifyPreview && !cloudflarePreview;
 
   if (trackablePage && analyticsWritable) recordAggregateVisitOnce();
