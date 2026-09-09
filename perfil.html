@@ -334,7 +334,8 @@ import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v
 import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260908-public-activity-auth-2";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachLocationPicker } from "./js/components/location/selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
-import { toSavedLocation } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260906-profile-complete-1";
+import { toSavedLocation, splitFullName, isValidFullName } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260906-profile-complete-1";
+import { readAccountIdentity } from "./js/pages/profile/estado-canonico-perfil.mjs?v=tintin-20260908-profile-canonical-1";
 import { getRegisteredMethod, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260903-accounts-phase-a-4";
 import { DEFAULT_COUNTRY, phoneKey, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { changeReservedPhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260901-phone-py-only-1";
@@ -476,10 +477,15 @@ async function startProfileAuthGuard() {
 
     hideLoading();
 
+  // Una cuenta puede tener el nombre y la foto únicamente en users/{uid}
+  // (perfiles históricos y cambios hechos desde Mi cuenta). Auth identifica
+  // la sesión, pero Firestore es la proyección de perfil que se muestra.
+  const identity = readAccountIdentity(userData || {}, user);
+
   // Avatar
   const avatarEl = document.getElementById('perfil-avatar');
-  const avatarInitial = (user.displayName || user.email || '?')[0].toUpperCase();
-  const avatarUrl = sanitizeImageUrl(user.photoURL || '');
+  const avatarInitial = (identity.name || identity.email || '?')[0].toUpperCase();
+  const avatarUrl = sanitizeImageUrl(identity.photoURL || '');
   if (avatarUrl) {
     const avatarImg = document.createElement('img');
     avatarImg.src = avatarUrl;
@@ -492,8 +498,8 @@ async function startProfileAuthGuard() {
   } else {
     avatarEl.textContent = avatarInitial;
   }
-  document.getElementById('perfil-nombre-display').textContent = user.displayName || user.email;
-  document.getElementById('perfil-email-display').textContent  = user.email;
+  document.getElementById('perfil-nombre-display').textContent = identity.name || identity.email || 'Cuenta Tintin';
+  document.getElementById('perfil-email-display').textContent  = identity.email;
 
   // Sync cart
   await syncCartToFirestore(user.uid);
@@ -514,15 +520,15 @@ async function startProfileAuthGuard() {
 
   // Load Firestore user data (ya la trajimos arriba para el chequeo de bloqueo)
   if (userData) {
-    document.getElementById('perfil-nombre').value = userData.name    || user.displayName || '';
-    document.getElementById('perfil-tel').value    = userData.phone   || '';
-    document.getElementById('perfil-dir').value    = userData.address || '';
+    document.getElementById('perfil-nombre').value = identity.name;
+    document.getElementById('perfil-tel').value    = identity.phone;
+    document.getElementById('perfil-dir').value    = identity.address;
     document.getElementById('perfil-purchase-count').textContent = userData.purchaseCount || 0;
     document.getElementById('perfil-total-spent').textContent    = formatPrice(userData.totalSpent || 0);
 
     const usernameInput = document.getElementById('perfil-username');
     const usernameHint  = document.getElementById('perfil-username-hint');
-    usernameInput.value = userData.username || '';
+    usernameInput.value = identity.username;
     if (userData.usernameChangedAt) {
       usernameInput.disabled = true;
       usernameHint.textContent = 'Ya usaste tu único cambio de nombre de usuario.';
@@ -633,8 +639,18 @@ async function startProfileAuthGuard() {
         await changeReservedPhone(db, user.uid, claveAnterior, nuevoTelefono, country);
       }
 
+      const submittedName = document.getElementById('perfil-nombre').value.trim();
+      const { first, last } = splitFullName(submittedName);
+      if (!isValidFullName(first, last)) {
+        toast('❌ Escribí nombre y apellido reales');
+        release();
+        return;
+      }
+
       const updates = {
-        name:      document.getElementById('perfil-nombre').value.trim(),
+        name:      `${first} ${last}`,
+        firstName: first,
+        lastName:  last,
         phone:     nuevoTelefono,
         address:   document.getElementById('perfil-dir').value.trim(),
         email:     user.email,
@@ -651,6 +667,10 @@ async function startProfileAuthGuard() {
       }
 
       await setDoc(ref, updates, { merge: true });
+      userData = { ...(userData || {}), ...updates };
+      const savedIdentity = readAccountIdentity(userData, user);
+      document.getElementById('perfil-nombre-display').textContent = savedIdentity.name || savedIdentity.email || 'Cuenta Tintin';
+      document.getElementById('perfil-nombre').value = savedIdentity.name;
       if (userData) userData.phone = nuevoTelefono; // para que un segundo guardado no reintente la reserva
       if (cambioUsername && nuevoUsername) {
         userData.username = nuevoUsername;
