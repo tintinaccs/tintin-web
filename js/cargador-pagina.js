@@ -15,10 +15,18 @@
     root.scrollTop = 0;
     if (body) body.scrollTop = 0;
     requestAnimationFrame(function () {
-      window.scrollTo(0, 0);
-      root.scrollTop = 0;
-      if (document.body) document.body.scrollTop = 0;
-      root.style.scrollBehavior = previous;
+      try {
+        // Una navegación con View Transitions puede abortar el frame mientras
+        // cambia de documento. El scroll es accesorio y nunca debe producir
+        // una promesa rechazada ni ensuciar la consola.
+        window.scrollTo(0, 0);
+        root.scrollTop = 0;
+        if (document.body) document.body.scrollTop = 0;
+      } catch (error) {
+        if (error?.name !== 'AbortError') console.warn('[Tintin] No se pudo reiniciar el scroll:', error);
+      } finally {
+        root.style.scrollBehavior = previous;
+      }
     });
   }
   resetEntryScroll();
