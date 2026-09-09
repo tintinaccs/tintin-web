@@ -134,7 +134,11 @@
   "overrides": {
     "gaxios": {
       "uuid": "11.1.1"
-    }
+    },
+    "@opentelemetry/core": "^2.11.0",
+    "csv-parse": "^7.0.2",
+    "qs": "^6.16.0",
+    "stream-json": "^3.6.0"
   },
   "engines": {
     "node": ">=22"
