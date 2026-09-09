@@ -549,6 +549,7 @@
           </span>
           <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" id="bulk-delete-btn" onclick="bulkDelete()" title="Eliminar definitivamente" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>
           <button type="button" class="adm-btn adm-btn-sm" id="prod-bulk-export-btn" onclick="bulkExportProducts('selected')" title="Exportar seleccionados a CSV"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><line x1="4" y1="21" x2="20" y2="21"/></svg> Exportar CSV</button>
+          <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" id="bulk-delete-all-products-btn" onclick="window.tintinDeleteAllProducts?.()" title="Eliminar globalmente todos los productos actuales">Eliminar TODOS</button>
           <div class="adm-more-actions" id="prod-more-actions">
             <button class="adm-btn adm-btn-sm adm-btn-outline" onclick="toggleProdMoreActions()" type="button">⋯ Más acciones</button>
             <div class="adm-more-actions-panel" id="prod-more-actions-panel">
@@ -717,6 +718,7 @@
           </span>
           <button type="button" class="adm-btn adm-btn-sm" onclick="bulkExportCollections()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><line x1="4" y1="21" x2="20" y2="21"/></svg> Exportar CSV</button>
           <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" id="coll-bulk-delete-btn" onclick="bulkDeleteCollections()" style="display:none">Eliminar</button>
+          <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" id="coll-bulk-delete-all-btn" onclick="window.tintinDeleteAllCollections?.()" title="Eliminar globalmente todas las colecciones actuales">Eliminar TODAS</button>
           <button type="button" class="adm-btn adm-btn-sm" onclick="clearCollSelection()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-1px;margin-right:2px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Limpiar</button>
         </div>
         <div class="adm-card-body" style="padding:0">
