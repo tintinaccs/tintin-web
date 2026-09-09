@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-09T10:50:52.963Z",
-  "sourceFingerprint": "70918e8775830ba5287f8bd6176191179cc284fc5bf650fcb498bd8128f2a5dd",
+  "generatedAt": "2026-09-09T10:55:00.317Z",
+  "sourceFingerprint": "0cbcc1707dd15b9f46fcaa016a379953f1af7ce23903a9960a9f2250d7888c85",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 818,
     "textFiles": 785,
-    "totalBytes": 10087153,
+    "totalBytes": 10084535,
     "pages": 18,
     "modules": 563
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 189224,
-      "sha256": "e548a07ef22514fe3766a1da5d92706d8503bf3170eb25a8b120cdcd56c7e145",
+      "bytes": 189216,
+      "sha256": "3e012523fefbce5a41ad5278151dc36709c2215106d6d2006db8f869c1553d44",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2226,7 +2226,7 @@
           "line": 35
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20260909-admin-shell-alignment-1",
+          "raw": "css/admin/admin.css?v=tintin-20260908-admin-minimal-1",
           "target": "css/admin/admin.css",
           "line": 36
         },
@@ -2490,7 +2490,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20260909-admin-shell-alignment-1",
+          "raw": "css/admin/admin.css?v=tintin-20260908-admin-minimal-1",
           "target": "css/admin/admin.css",
           "line": 36,
           "exists": true
@@ -32441,8 +32441,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 189224,
-      "sha256": "e548a07ef22514fe3766a1da5d92706d8503bf3170eb25a8b120cdcd56c7e145"
+      "bytes": 189216,
+      "sha256": "3e012523fefbce5a41ad5278151dc36709c2215106d6d2006db8f869c1553d44"
     },
     {
       "path": "apple-touch-icon.png",
@@ -32915,8 +32915,8 @@
     {
       "path": "css/admin/admin.css",
       "extension": ".css",
-      "bytes": 81636,
-      "sha256": "7c2b8a6391cdbaf6f451ea216028e0b4cc1119f91b78d5f443ccccfafed98a1d"
+      "bytes": 79054,
+      "sha256": "18852deed1f8116aee260a74cfd8655d1aee68396b33eeff46c52aef7ee4b903"
     },
     {
       "path": "css/admin/diagnostico-maestro.css",
@@ -33690,13 +33690,13 @@
       "path": "firebase-cloud-functions-inactive/package-lock.json",
       "extension": ".json",
       "bytes": 131088,
-      "sha256": "97f935e0e1f457106b5de4536e1bed9f2464e571e8392310addf9cc54a505b06"
+      "sha256": "b1d682d9d60f7d211302a08a0801b39b766c40ec5c91ff4ee07fc4cb26b5772d"
     },
     {
       "path": "firebase-cloud-functions-inactive/package.json",
       "extension": ".json",
       "bytes": 382,
-      "sha256": "3ea5af1742a4caa342496b0b272708ff433f9d2d3443c34c0f5444128ce70573"
+      "sha256": "422b0f2bbfddf86616f79b3765a398f2bc5d11aab94f06cf680613076a4974e2"
     },
     {
       "path": "firebase-messaging-sw.js",
@@ -35681,8 +35681,8 @@
     {
       "path": "package-lock.json",
       "extension": ".json",
-      "bytes": 331597,
-      "sha256": "388ef29407ddd306e09133ccb5e26ec354fe4de5fd037f538e5b090a8311d261"
+      "bytes": 331569,
+      "sha256": "23ccbb9e6361f0e99a5102de10901409aed4c705f3f73ea3ccb1355e6d6256aa"
     },
     {
       "path": "package.json",
