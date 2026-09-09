@@ -1,0 +1,47 @@
+name: Regenerar manifiesto hero temporal
+
+on:
+  push:
+    branches:
+      - feat/hero-tintin-final-20260909
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout branch head
+        uses: actions/checkout@v5
+        with:
+          ref: feat/hero-tintin-final-20260909
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Remove this one-shot workflow before generating canonical state
+        run: rm -f .github/workflows/regenerar-manifiesto-hero-temporal.yml
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Regenerate exact public artifacts
+        run: npm run build:pages
+
+      - name: Commit canonical generated state and self-delete
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No generated changes to commit."
+            exit 0
+          fi
+          git commit -m "chore: regenerate diagnostic manifest for final hero"
+          git push origin HEAD:feat/hero-tintin-final-20260909
