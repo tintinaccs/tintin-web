@@ -1,4 +1,4 @@
-import { CATEGORIES, UI_ICONS, collectionImageUrl, svgIcon } from './iconos.js';
+import { CATEGORIES, UI_ICONS, collectionImageUrl, svgIcon } from './iconos.js?v=tintin-20260909-navigation-atomic-1';
 
 function renderSheetCategories() {
   return CATEGORIES.map(({ slug, label }) => `

@@ -1,5 +1,5 @@
-import { CATEGORIES, UI_ICONS, collectionImageUrl, svgIcon } from '../compartido/iconos.js';
-import { logoUrl } from '../compartido/configuracion.js';
+import { CATEGORIES, UI_ICONS, collectionImageUrl, svgIcon } from '../compartido/iconos.js?v=tintin-20260909-navigation-atomic-1';
+import { logoUrl } from '../compartido/configuracion.js?v=tintin-20260909-navigation-atomic-1';
 
 // Placeholder GIF 1x1 válido. La versión anterior estaba truncada y podía
 // disparar `error` antes de la hidratación del logo real.
