@@ -55,6 +55,14 @@
     #adm-sidebar, #adm-mobile-tabs, .adm-main,
     .adm-main .adm-section,
     .adm-main .adm-section > * { visibility: hidden !important; }
+    /* Gana a las reglas de estado (.adm-section.active) que pueda añadir
+       cualquier módulo después de cargar el shell. */
+    html:not(.adm-auth-ready) #section-dashboard,
+    html:not(.adm-auth-ready) .adm-shell,
+    html:not(.adm-auth-ready) [data-admin-panel] {
+      visibility: hidden !important;
+      display: none !important;
+    }
     html.adm-auth-ready #adm-sidebar,
     html.adm-auth-ready #adm-mobile-tabs,
     html.adm-auth-ready .adm-main,
