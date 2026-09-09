@@ -2025,6 +2025,7 @@ function updateUsersBulkToolbar() {
   const countEl = document.getElementById('users-bulk-count');
   const blockBtn = document.getElementById('users-bulk-block-btn');
   const restoreBtn = document.getElementById('users-bulk-restore-btn');
+  const deleteBtn = document.getElementById('users-bulk-delete-btn');
   // Todo el módulo Usuarios (individual y masivo) es exclusivo de Super
   // Admin — mismo permiso que ya gatea las acciones de a una (manageUsers).
   const allowed = can(currentRole, 'manageUsers');
@@ -2032,6 +2033,7 @@ function updateUsersBulkToolbar() {
   if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
   if (blockBtn) blockBtn.style.display = userStatusFilter === 'blocked' ? 'none' : '';
   if (restoreBtn) restoreBtn.style.display = userStatusFilter === 'blocked' ? '' : 'none';
+  if (deleteBtn) deleteBtn.style.display = userStatusFilter === 'blocked' ? 'none' : '';
 }
 
 window.clearUsersSelection = function() {
@@ -2142,6 +2144,24 @@ window.bulkRestoreUsers = async function() {
     clearUsersSelection();
     applyUserFilters();
   } catch (e) { toast('Error: ' + e.message); }
+};
+
+window.bulkDeleteUsers = async function() {
+  if (!_selectedUsers.size) return;
+  if (currentRole !== 'superadmin' || !can(currentRole, 'deleteUsers')) { toast('Solo el Super Admin puede eliminar cuentas'); return; }
+  const targets = [..._selectedUsers].map(uid => allUsers.find(u => u.uid === uid)).filter(u => u && u.email !== SUPER_ADMIN && u.deleted !== true);
+  if (!targets.length) { toast('No hay cuentas elegibles (el Super Admin está protegido)'); return; }
+  const phrase = 'ELIMINAR CUENTAS SELECCIONADAS';
+  if (!confirm(`Se revocará el acceso de ${targets.length} cuenta(s), se liberarán sus datos de contacto y se conservará la identidad histórica, pedidos y auditoría. ¿Continuar?`)) return;
+  if (prompt(`Escribí exactamente para confirmar:\n\n${phrase}`, '') !== phrase) { toast('Confirmación cancelada.'); return; }
+  let ok = 0, fail = 0;
+  for (const user of targets) {
+    try { await updateAccountStatusFromAdmin_(user.uid, 'softDelete', 'Eliminación masiva desde Super Admin'); ok++; }
+    catch { fail++; }
+  }
+  clearUsersSelection();
+  applyUserFilters();
+  toast(`${ok} cuenta(s) eliminadas${fail ? `; ${fail} fallaron` : ''}`);
 };
 
 function userRowsToCsv_(users) {
