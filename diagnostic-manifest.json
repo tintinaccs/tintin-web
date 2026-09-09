@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-09T10:50:52.963Z",
-  "sourceFingerprint": "70918e8775830ba5287f8bd6176191179cc284fc5bf650fcb498bd8128f2a5dd",
+  "generatedAt": "2026-09-09T11:59:49.990Z",
+  "sourceFingerprint": "0e5e6f52da345b2c4dd1b8b9220a3d864d332568715306f6505650ff0cf96ff8",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 818,
     "textFiles": 785,
-    "totalBytes": 10087153,
+    "totalBytes": 10087225,
     "pages": 18,
     "modules": 563
   },
@@ -22627,8 +22627,8 @@
     },
     {
       "path": "js/components/navigation/compartido/carga-colecciones.js",
-      "bytes": 10885,
-      "sha256": "c403a53a923881741c8bfc6937b7bda7fdf7e09927e8b58fab9d1fd53e585c53",
+      "bytes": 11329,
+      "sha256": "25a05b14be9f1ab747c302f0b5e5cad106620c48fa612aea6126022568748934",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22638,7 +22638,7 @@
           "raw": "../../../pages/collections/estado-colecciones.js?v=tintin-20260901-firestore-budget-3",
           "target": "js/pages/collections/estado-colecciones.js",
           "dynamic": true,
-          "line": 237
+          "line": 245
         }
       ],
       "endpoints": []
@@ -22675,8 +22675,8 @@
     },
     {
       "path": "js/components/navigation/compartido/compatibilidad-cuenta-movil.js",
-      "bytes": 5300,
-      "sha256": "16d475ecef63f163f0aa3bc29b9392d89b43c75903ffa21133ee28894d5884c6",
+      "bytes": 5307,
+      "sha256": "33d4d3439745c69b6944efeecdd51449bc2b75542ba14d95a16500641dacc700",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22697,8 +22697,8 @@
     },
     {
       "path": "js/components/navigation/compartido/configuracion.js",
-      "bytes": 732,
-      "sha256": "dd785468a3d6e486f16d517c749e710c55d2990fcafe485bf306902f3fc81856",
+      "bytes": 734,
+      "sha256": "8f92eabbdd36ae07d816deb085933502b92655f71cb795e6983f2f9c70150f16",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27910,8 +27910,8 @@
     },
     {
       "path": "scripts/auditar-preparacion-dominio.mjs",
-      "bytes": 4320,
-      "sha256": "840aa1fd4d57900a07cab9c8f59a82fdb9e5b0e8f27816d74c1d5bc0218b36c9",
+      "bytes": 4797,
+      "sha256": "09b90f343c66ecf221c9dfe9fc3db15bc344c9a2ff114f75fa5e7daedc22d27d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32891,8 +32891,8 @@
     {
       "path": "config/public-site.json",
       "extension": ".json",
-      "bytes": 359,
-      "sha256": "e061eac4684a99f3bb857022327fc51cc117333d060b1f1af2e4931e6006b4d8"
+      "bytes": 454,
+      "sha256": "8997dd28dead8130611cb8291f795f43ac75913761c1158f47b74f00cb257bfc"
     },
     {
       "path": "configuracion-cloudinary.md",
@@ -33323,8 +33323,8 @@
     {
       "path": "css/theme/superficies-marca-responsive-tintin.css",
       "extension": ".css",
-      "bytes": 11802,
-      "sha256": "81a1231cbd418d24dccde0438f3224a8af2bbd90e16ca1705e970f3c182891fd"
+      "bytes": 11772,
+      "sha256": "20f6a72a0078df021071f4b368eefd0e186d6ef9013f9242b9785763d1acd993"
     },
     {
       "path": "css/theme/superficies-solidas-interfaz.css",
@@ -33690,13 +33690,13 @@
       "path": "firebase-cloud-functions-inactive/package-lock.json",
       "extension": ".json",
       "bytes": 131088,
-      "sha256": "97f935e0e1f457106b5de4536e1bed9f2464e571e8392310addf9cc54a505b06"
+      "sha256": "b1d682d9d60f7d211302a08a0801b39b766c40ec5c91ff4ee07fc4cb26b5772d"
     },
     {
       "path": "firebase-cloud-functions-inactive/package.json",
       "extension": ".json",
       "bytes": 382,
-      "sha256": "3ea5af1742a4caa342496b0b272708ff433f9d2d3443c34c0f5444128ce70573"
+      "sha256": "422b0f2bbfddf86616f79b3765a398f2bc5d11aab94f06cf680613076a4974e2"
     },
     {
       "path": "firebase-messaging-sw.js",
@@ -34685,8 +34685,8 @@
     {
       "path": "js/components/navigation/compartido/carga-colecciones.js",
       "extension": ".js",
-      "bytes": 10885,
-      "sha256": "c403a53a923881741c8bfc6937b7bda7fdf7e09927e8b58fab9d1fd53e585c53"
+      "bytes": 11329,
+      "sha256": "25a05b14be9f1ab747c302f0b5e5cad106620c48fa612aea6126022568748934"
     },
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
@@ -34697,8 +34697,8 @@
     {
       "path": "js/components/navigation/compartido/compatibilidad-cuenta-movil.js",
       "extension": ".js",
-      "bytes": 5300,
-      "sha256": "16d475ecef63f163f0aa3bc29b9392d89b43c75903ffa21133ee28894d5884c6"
+      "bytes": 5307,
+      "sha256": "33d4d3439745c69b6944efeecdd51449bc2b75542ba14d95a16500641dacc700"
     },
     {
       "path": "js/components/navigation/compartido/compatibilidad-menus-desplegables.js",
@@ -34709,8 +34709,8 @@
     {
       "path": "js/components/navigation/compartido/configuracion.js",
       "extension": ".js",
-      "bytes": 732,
-      "sha256": "dd785468a3d6e486f16d517c749e710c55d2990fcafe485bf306902f3fc81856"
+      "bytes": 734,
+      "sha256": "8f92eabbdd36ae07d816deb085933502b92655f71cb795e6983f2f9c70150f16"
     },
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
@@ -35681,14 +35681,14 @@
     {
       "path": "package-lock.json",
       "extension": ".json",
-      "bytes": 331597,
-      "sha256": "388ef29407ddd306e09133ccb5e26ec354fe4de5fd037f538e5b090a8311d261"
+      "bytes": 330567,
+      "sha256": "4a85762fd927ec2676577d3fecef4aebd770ee4b3490771f475f68fca96eda46"
     },
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 12486,
-      "sha256": "95dcf8b8a921c474f193542678af03b8532ef88f565bfc0013f51fac4a1321b6"
+      "bytes": 12578,
+      "sha256": "5c96b9aecbc070bc6efe3d6291ad5f431fcf295254db038e6b9c5c5100617cf5"
     },
     {
       "path": "perfil.html",
@@ -36293,8 +36293,8 @@
     {
       "path": "scripts/auditar-preparacion-dominio.mjs",
       "extension": ".mjs",
-      "bytes": 4320,
-      "sha256": "840aa1fd4d57900a07cab9c8f59a82fdb9e5b0e8f27816d74c1d5bc0218b36c9"
+      "bytes": 4797,
+      "sha256": "09b90f343c66ecf221c9dfe9fc3db15bc344c9a2ff114f75fa5e7daedc22d27d"
     },
     {
       "path": "scripts/auditar-produccion-salud.mjs",
@@ -36509,8 +36509,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 38058,
-      "sha256": "56f102c2cbfa877860307b95fad016ac515016bd7d9050ce422506ed992cd554"
+      "bytes": 38073,
+      "sha256": "4bbac801e3c132ad02ea1b3f3381cf3124b5e63d7289253eff8a51662867803b"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",

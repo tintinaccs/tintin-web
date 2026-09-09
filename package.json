@@ -57,9 +57,9 @@
     "audit:cache-versioning": "node scripts/auditar-versionado-cache.mjs",
     "sync:monaco": "node scripts/sincronizar-monaco-local.mjs",
     "build": "npm run build:pages",
-  "build:decision-flows": "node scripts/generar-flujo-decisiones-acceso.mjs",
-  "verify:decision-flows": "node scripts/generar-flujo-decisiones-acceso.mjs --check",
-  "build:pages": "npm run sync:monaco && npm run sync:public-shell && npm run build:routes && npm run build:decision-flows && npm run build:csp && npm run build:diagnostics && npm run sync:public-origin && npm run verify:routes && npm run verify:decision-flows && npm run verify:csp && npm run verify:diagnostics && npm run audit:cache-versioning",
+    "build:decision-flows": "node scripts/generar-flujo-decisiones-acceso.mjs",
+    "verify:decision-flows": "node scripts/generar-flujo-decisiones-acceso.mjs --check",
+    "build:pages": "npm run sync:monaco && npm run sync:public-shell && npm run build:routes && npm run build:decision-flows && npm run build:csp && npm run build:diagnostics && npm run sync:public-origin && npm run verify:routes && npm run verify:decision-flows && npm run verify:csp && npm run verify:diagnostics && npm run audit:cache-versioning",
     "prepare:hosting": "node scripts/preparar-hosting.js",
     "audit:diagnostics": "node scripts/auditar-diagnostico.js",
     "audit:system-health": "node scripts/auditar-estado-ecosistema.mjs && node --test tests/system-health/*.test.mjs",
@@ -127,14 +127,17 @@
     "@firebase/rules-unit-testing": "5.0.1",
     "@playwright/test": "^1.62.1",
     "firebase": "^12.17.1",
-    "firebase-tools": "^15.26.0",
+    "firebase-tools": "^15.29.0",
     "monaco-editor": "0.52.2",
     "playwright": "^1.62.1"
   },
   "overrides": {
     "gaxios": {
       "uuid": "11.1.1"
-    }
+    },
+    "@opentelemetry/core": "^2.11.0",
+    "csv-parse": "^7.0.2",
+    "qs": "^6.16.0"
   },
   "engines": {
     "node": ">=22"

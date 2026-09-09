@@ -230,7 +230,15 @@ function renderAll(collections) {
 }
 
 export function initNavCollections(force = false) {
-  if (started && !force) return Promise.resolve();
+  // El shell público se desmonta y vuelve a montar al navegar sin recargar la
+  // página. Este módulo permanece cacheado, por lo que `started` puede seguir
+  // siendo true mientras el nuevo header todavía está vacío. Rehidratar aquí
+  // con el último snapshot evita que las imágenes/categorías desaparezcan en
+  // Nosotros, Contacto, Producto o cualquier otra ruta.
+  if (started && !force) {
+    if (lastCollections) renderAll(lastCollections);
+    return Promise.resolve();
+  }
   started = true;
   renderLoading();
 
