@@ -131,16 +131,17 @@ html body.tt-home-premium .tt-hero-final .tt-hero-title {
 }
 html body.tt-home-premium .tt-hero-final .tt-hero-welcome {
   display:block;
-  font-family:"Cormorant Garamond","Bodoni Moda",Didot,Georgia,serif;
+  font-family:"Montserrat";
   font-size:clamp(4.7rem,8.4vw,8.6rem);
-  font-weight:400;
+  font-weight:300;
   letter-spacing:-.055em;
   line-height:.76;
   white-space:nowrap;
 }
 html body.tt-home-premium .tt-hero-final .tt-hero-welcome::first-letter {
-  font-family:"Cormorant Garamond","Bodoni Moda",Didot,Georgia,serif;
+  font-family:"Montserrat";
   font-style:italic;
+  font-weight:300;
   font-size:1.34em;
 }
 html body.tt-home-premium .tt-hero-final .tt-hero-tintina {
@@ -148,13 +149,13 @@ html body.tt-home-premium .tt-hero-final .tt-hero-tintina {
   width:max-content;
   margin:-.03em 0 0 48%;
   color:var(--tt-final-hot);
-  font-family:"Allura","Parisienne","Brush Script MT",cursive;
+  font-family:"Montserrat";
   font-size:clamp(4.2rem,7vw,7.35rem);
   font-style:italic;
-  font-weight:400;
-  letter-spacing:-.04em;
+  font-weight:300;
+  letter-spacing:-.075em;
   line-height:.72;
-  transform:rotate(-2deg);
+  transform:rotate(-2deg) skewX(-7deg);
   transform-origin:left center;
 }
 html body.tt-home-premium .tt-hero-final .tt-hero-subtitle {
@@ -165,7 +166,7 @@ html body.tt-home-premium .tt-hero-final .tt-hero-subtitle {
   margin:0!important;
   padding:0!important;
   color:var(--tt-final-brown)!important;
-  font-family:Montserrat,Arial,sans-serif!important;
+  font-family:"Montserrat"!important;
   font-size:clamp(1rem,2.05vw,2rem)!important;
   font-weight:400!important;
   line-height:1.15!important;
@@ -196,7 +197,7 @@ html body.tt-home-premium .tt-hero-final .tt-hero-cta {
   background:rgba(255,249,252,.92)!important;
   color:var(--tt-final-hot)!important;
   box-shadow:none!important;
-  font-family:Montserrat,Arial,sans-serif!important;
+  font-family:"Montserrat"!important;
   font-size:clamp(.94rem,1.75vw,1.72rem)!important;
   font-weight:800!important;
   line-height:1!important;
@@ -230,7 +231,7 @@ html body.tt-home-premium .tt-hero-final .tt-hero-link {
   background:transparent!important;
   color:#715a54!important;
   box-shadow:none!important;
-  font-family:Arial,Helvetica,sans-serif!important;
+  font-family:"Montserrat"!important;
   font-size:clamp(.88rem,1.55vw,1.45rem)!important;
   font-weight:700!important;
   line-height:1.1!important;
@@ -248,13 +249,13 @@ html body.tt-home-premium .tt-hero-final :is(.tt-hero-cta,.tt-hero-link):focus-v
 /* Doodles editoriales recreados en DOM. */
 html body.tt-home-premium .tt-hero-final .tt-hero-doodle {
   position:absolute;z-index:4;margin:0;padding:0;pointer-events:none;user-select:none;
-  color:var(--tt-final-hot);font-family:"Allura","Parisienne","Brush Script MT",cursive;font-weight:400;line-height:.9;text-shadow:none;
+  color:var(--tt-final-hot);font-family:"Montserrat";font-style:italic;font-weight:300;line-height:.9;text-shadow:none;
 }
-html body.tt-home-premium .tt-hero-final .tt-hero-doodle--obsessed {right:5.35%;top:10.2%;font-size:clamp(1rem,2vw,2rem);transform:rotate(9deg);}
-html body.tt-home-premium .tt-hero-final .tt-hero-doodle--happy {right:30.5%;top:56.5%;max-width:12ch;font-size:clamp(.95rem,1.75vw,1.7rem);text-align:center;transform:rotate(-9deg);}
-html body.tt-home-premium .tt-hero-final .tt-hero-doodle--heart-one {right:18.1%;top:8.1%;font-family:Georgia,serif;font-size:clamp(1.5rem,2.3vw,2.45rem);transform:rotate(-8deg);}
-html body.tt-home-premium .tt-hero-final .tt-hero-doodle--heart-two {right:36.1%;top:35.2%;font-family:Georgia,serif;font-size:clamp(1.4rem,2.15vw,2.25rem);transform:rotate(-13deg);}
-html body.tt-home-premium .tt-hero-final .tt-hero-doodle--heart-three {right:28.2%;bottom:9.1%;font-family:Georgia,serif;font-size:clamp(1.5rem,2.15vw,2.3rem);transform:rotate(10deg);}
+html body.tt-home-premium .tt-hero-final .tt-hero-doodle--obsessed {right:5.35%;top:10.2%;font-size:clamp(1rem,2vw,2rem);letter-spacing:-.06em;transform:rotate(9deg) skewX(-8deg);}
+html body.tt-home-premium .tt-hero-final .tt-hero-doodle--happy {right:30.5%;top:56.5%;max-width:12ch;font-size:clamp(.95rem,1.75vw,1.7rem);letter-spacing:-.06em;text-align:center;transform:rotate(-9deg) skewX(-8deg);}
+html body.tt-home-premium .tt-hero-final .tt-hero-doodle--heart-one {right:18.1%;top:8.1%;font-family:"Montserrat";font-size:clamp(1.5rem,2.3vw,2.45rem);font-style:normal;font-weight:300;transform:rotate(-8deg);}
+html body.tt-home-premium .tt-hero-final .tt-hero-doodle--heart-two {right:36.1%;top:35.2%;font-family:"Montserrat";font-size:clamp(1.4rem,2.15vw,2.25rem);font-style:normal;font-weight:300;transform:rotate(-13deg);}
+html body.tt-home-premium .tt-hero-final .tt-hero-doodle--heart-three {right:28.2%;bottom:9.1%;font-family:"Montserrat";font-size:clamp(1.5rem,2.15vw,2.3rem);font-style:normal;font-weight:300;transform:rotate(10deg);}
 
 /* Reveal one-shot. La clase solo se agrega desde JS si IntersectionObserver existe. */
 html.js .tt-hero-final.tt-hero-reveal-ready {opacity:0;transform:translateY(18px);}
