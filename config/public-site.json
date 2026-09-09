@@ -1,6 +1,11 @@
 {
   "origin": "https://tintinaccesorios.pages.dev",
   "firebaseAuthDomain": "tintinaccesorios.pages.dev",
+  "appCheckDomains": [
+    "tintinaccesorios.pages.dev",
+    "localhost",
+    "127.0.0.1"
+  ],
   "cutover": {
     "origin": "https://tintinaccs.com",
     "firebaseAuthDomain": "tintinaccs.com",

@@ -26,6 +26,8 @@ try { targetUrl = new URL(targetOrigin); } catch {}
 check('Origen activo HTTPS válido', activeUrl?.protocol === 'https:', 'config.public-site.origin debe ser HTTPS.');
 check('Destino de cutover HTTPS válido', targetUrl?.protocol === 'https:', 'config.public-site.cutover.origin debe ser HTTPS.');
 check('Auth activo usa el host público activo', config.firebaseAuthDomain === activeUrl?.hostname, 'firebaseAuthDomain debe coincidir con el dominio que sirve la tienda.');
+check('App Check incluye dominio activo', Array.isArray(config.appCheckDomains) && config.appCheckDomains.includes(activeUrl?.hostname), 'La lista activa de dominios autorizados debe incluir el host pages.dev.');
+check('App Check incluye hosts locales', Array.isArray(config.appCheckDomains) && config.appCheckDomains.includes('localhost') && config.appCheckDomains.includes('127.0.0.1'), 'Las pruebas locales requieren localhost y 127.0.0.1 autorizados en Firebase App Check.');
 check('Auth de cutover usa el host público definitivo', target.firebaseAuthDomain === targetUrl?.hostname, 'cutover.firebaseAuthDomain debe coincidir con el dominio definitivo.');
 check('Redirect OAuth de cutover es exacto', target.oauthRedirectUri === `${targetOrigin}/__/auth/handler`, 'Debe ser https://<dominio>/__/auth/handler.');
 check('App Check incluye dominio definitivo', Array.isArray(target.appCheckDomains) && target.appCheckDomains.includes(targetUrl?.hostname), 'La lista de dominios a autorizar en reCAPTCHA Enterprise debe incluir el host definitivo.');
@@ -42,7 +44,7 @@ check('App Check usa reCAPTCHA Enterprise', firebase.includes('ReCaptchaEnterpri
 check('App Check expone estado comprobable', firebase.includes('window.TintinAppCheckStatus') && firebase.includes("'enabled'"), 'El smoke test del dominio definitivo necesita poder verificar App Check en navegador real.');
 
 const cspGenerator = read('scripts/generar-csp-cloudflare.js');
-check('CSP usa origen público central', cspGenerator.includes('config/public-site.json') && cspGenerator.includes('${publicOrigin}'), 'frame-src y hashes deben regenerarse a partir del dominio activo.');
+check('CSP usa origen público central', cspGenerator.includes('config/public-site.json') && cspGenerator.includes('publicOrigin'), 'frame-src y hashes deben regenerarse a partir del dominio activo.');
 check('SEO usa origen público central', read('scripts/auditar-fase-11-seo.js').includes("config/public-site.json"), 'La auditoría SEO no debe fijar pages.dev por separado.');
 check('Monitor usa origen público central', read('scripts/auditar-produccion-salud.mjs').includes("config/public-site.json"), 'El monitor debe cambiar de origen al mismo tiempo que la configuración pública.');
 
