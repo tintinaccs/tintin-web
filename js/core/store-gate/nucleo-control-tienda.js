@@ -700,6 +700,12 @@ export async function getStoreAccessConfigFromRest() {
     }
     const payload = await sharedRequest;
     if (payload?.ok === true && payload.resource === 'storeGate') {
+      // exists === false: el documento no existe todavía. No es un cierre
+      // confirmado — se deja como 'missing' para que el llamador lo trate
+      // como no confirmado en vez de "tienda cerrada".
+      if (payload.exists === false) {
+        return rememberConfig(normalizeStoreAccessConfig({}, 'missing'));
+      }
       return rememberConfig(normalizeStoreAccessConfig(payload.data, 'ok'));
     }
   } catch {}

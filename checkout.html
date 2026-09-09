@@ -404,8 +404,9 @@ import {
   isAccessAllowed,
   normalizeStoreAccessConfig,
   renderStoreClosedOverlay,
+  renderStoreConfigUnavailableOverlay,
   removeStoreClosedOverlay
-} from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260903-store-gate-fast-rest-4";
+} from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260909-store-gate-degraded-fix-1";
 import { cleanText } from "./js/core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
 import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260803-encomienda-1";
@@ -916,8 +917,11 @@ function storeClosedForCurrentUser_() {
 }
 function reevaluateStoreGate_() {
   if (!storeCfg) return;
-  if (storeClosedForCurrentUser_()) renderStoreClosedOverlay(storeCfg);
-  else removeStoreClosedOverlay();
+  if (!storeClosedForCurrentUser_()) { removeStoreClosedOverlay(); return; }
+  // Una lectura no confirmada (red/degradada) no tapa el checkout con un
+  // cierre que no se comprobó — sólo un estado 'ok' confirma el cierre real.
+  if (storeCfg.__storeConfigStatus !== 'ok') renderStoreConfigUnavailableOverlay(storeCfg);
+  else renderStoreClosedOverlay(storeCfg);
 }
 
 // Fase F: sin cuenta real y verificada no se puede avanzar del carrito en
