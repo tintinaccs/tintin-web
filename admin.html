@@ -49,10 +49,14 @@
        hay algo seguro para mostrar. No depende solo del timing del loader
        de marca (js/cargador-pagina.js) — si esa capa desaparece antes de tiempo
        en una conexión lenta, el panel real sigue sin poder verse. */
-    #adm-sidebar, #adm-mobile-tabs, .adm-main { visibility: hidden; }
+    #adm-sidebar, #adm-mobile-tabs, .adm-main,
+    .adm-main .adm-section,
+    .adm-main .adm-section > * { visibility: hidden !important; }
     html.adm-auth-ready #adm-sidebar,
     html.adm-auth-ready #adm-mobile-tabs,
-    html.adm-auth-ready .adm-main { visibility: visible; }
+    html.adm-auth-ready .adm-main,
+    html.adm-auth-ready .adm-main .adm-section,
+    html.adm-auth-ready .adm-main .adm-section > * { visibility: visible !important; }
   </style>
 </head>
 <body>
