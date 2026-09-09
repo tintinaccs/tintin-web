@@ -1,5 +1,5 @@
 import { currentPage } from './estado-ruta.js';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260907-auth-state-ready-public-routes-1';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260909-unified-navigation-assets-3';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;
@@ -24,7 +24,7 @@ function scheduleNonCritical(task) {
   window.setTimeout(task, 450);
 }
 
-function bindDemand(selector, loader) {
+function bindDemand(selector, loader, { prefetchOnPointer = true } = {}) {
   let started = false;
   const load = () => {
     if (started) return;
@@ -35,7 +35,7 @@ function bindDemand(selector, loader) {
     });
   };
   document.querySelectorAll(selector).forEach(control => {
-    control.addEventListener('pointerenter', load, { once: true, passive: true });
+    if (prefetchOnPointer) control.addEventListener('pointerenter', load, { once: true, passive: true });
     control.addEventListener('focus', load, { once: true });
     control.addEventListener('pointerdown', load, { once: true, passive: true });
     control.addEventListener('click', load, { once: true });
@@ -186,7 +186,10 @@ function attachLightweightCommerceDemand() {
   );
   bindDemand(
     '#btn-tienda,#btn-tablet-tienda,[data-collections-nav],#collections-sheet',
-    loadCollectionsRuntime
+    loadCollectionsRuntime,
+    // El menú ya ofrece enlaces e imágenes locales. En páginas informativas,
+    // un simple paso del puntero no debe generar una lectura remota.
+    { prefetchOnPointer: false }
   );
 }
 
@@ -224,15 +227,12 @@ export function loadSharedRuntime() {
   loadNavigationBehaviors();
 
   // Las páginas informativas resuelven Auth globalmente para que el header
-  // conozca la sesión en cualquier ruta. Catálogo completo, carrito y feed de
-  // notificaciones siguen bajo demanda; la configuración liviana de
-  // colecciones se precarga en idle para que el primer menú ya coincida con
-  // Inicio/Tienda y no dependa del momento en que el usuario lo abra.
+  // conozca la sesión en cualquier ruta. El menú ya tiene el mismo respaldo
+  // local de imágenes y enlaces en las tres superficies; actualizar datos
+  // remotos de colecciones queda bajo demanda, al abrir Tienda. Así no se
+  // convierte Contacto/Nosotros en una carga comercial completa.
   if (!FULL_COMMERCE_PAGES.has(page)) {
     attachLightweightCommerceDemand();
-    scheduleNonCritical(() => {
-      Promise.allSettled([loadCollectionsRuntime()]).then(reportRuntimeFailures);
-    });
     return;
   }
 

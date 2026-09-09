@@ -9,7 +9,14 @@ const { test, expect } = require('@playwright/test');
 // DOMContentLoaded en el runner de CI.
 
 test('TintinLoader.beginWait() retiene el ocultamiento hasta endWait()', async ({ page }) => {
-  await page.goto('/about.html', { waitUntil: 'domcontentloaded' });
+  // Catálogo se conserva también en la versión de producción anterior; las
+  // rutas institucionales limpias se validan en el entorno Pages del PR.
+  await page.goto('/catalogo.html', { waitUntil: 'domcontentloaded' });
+  // Aislamos el ciclo explícito que se prueba. El montaje inicial del shell
+  // mantiene su propia espera legítima hasta terminar encabezado y superficies;
+  // mezclarla con este `show()` haría que un solo `endWait()` pareciera no
+  // liberar el loader aunque pertenezca a otro ciclo.
+  await page.waitForSelector('body.tt-public-shell-mounted');
 
   const result = await page.evaluate(async () => {
     for (let i = 0; i < 50 && !window.TintinLoader; i += 1) {
@@ -31,7 +38,9 @@ test('TintinLoader.beginWait() retiene el ocultamiento hasta endWait()', async (
     const stillVisibleWithPendingWait = !isHidden();
 
     window.TintinLoader.endWait();
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // El shell global conserva una presencia mínima de 1s incluso en caché;
+    // liberamos la espera y comprobamos que se retire después de ese umbral.
+    await new Promise(resolve => setTimeout(resolve, 1200));
     const hiddenAfterEndWait = isHidden();
 
     return { stillVisibleWithPendingWait, hiddenAfterEndWait };
@@ -40,6 +49,24 @@ test('TintinLoader.beginWait() retiene el ocultamiento hasta endWait()', async (
   expect(result.error, result.error).toBeUndefined();
   expect(result.stillVisibleWithPendingWait, 'el loader no debe ocultarse mientras hay un beginWait() pendiente').toBe(true);
   expect(result.hiddenAfterEndWait, 'el loader debe ocultarse una vez que endWait() libera la espera').toBe(true);
+});
+
+test('las rutas limpias institucionales conservan el mismo loader global', async ({ page }) => {
+  await page.addInitScript(() => { window.TT_DISABLE_STORE_GATE = true; });
+
+  // Este contrato requiere Cloudflare Pages Functions (el servidor estático
+  // local no transforma /about a about.html). El job de preview debe marcar
+  // explícitamente que usa Pages Functions para activarlo.
+  test.skip(!process.env.TT_PAGES_FUNCTIONS_PREVIEW, 'requiere preview Cloudflare Pages Functions del cambio');
+  for (const route of ['/about', '/contact', '/envios', '/preguntas-frecuentes', '/terminos', '/privacidad']) {
+    await page.goto(route, { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#tt-loader', { state: 'attached', timeout: 5000 });
+    const visible = await page.evaluate(() => {
+      const loader = document.getElementById('tt-loader');
+      return Boolean(loader) && getComputedStyle(loader).display !== 'none' && !loader.classList.contains('tt-out');
+    });
+    expect(visible, `${route} debe usar el shell de carga global`).toBe(true);
+  }
 });
 
 async function installFirstFrameProbe(page) {

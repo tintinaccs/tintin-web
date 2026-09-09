@@ -1,4 +1,4 @@
-import { CATEGORIES, UI_ICONS, categoryIcon, svgIcon } from '../compartido/iconos.js';
+import { CATEGORIES, UI_ICONS, categoryIcon, collectionImageUrl, svgIcon } from '../compartido/iconos.js';
 import { logoUrl } from '../compartido/configuracion.js';
 
 // Placeholder GIF 1x1 válido. La versión anterior estaba truncada y algunos
@@ -9,7 +9,7 @@ const EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='
 function renderDesktopCategories() {
   return CATEGORIES.map(({ slug, label }) => `
     <a href="/catalogo?cat=${encodeURIComponent(slug)}" class="tt-dropdown-card">
-      <div class="tt-dropdown-icon"><img src="assets-tintin/images/collections/col-${slug === 'bolsos' ? 'bags' : slug}.webp" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode(''))">${categoryIcon(slug)}</div>
+      <div class="tt-dropdown-icon"><img data-tt-collection-image data-src="${collectionImageUrl(slug)}" alt="" loading="lazy">${categoryIcon(slug)}</div>
       <div class="tt-dropdown-label">${label.toUpperCase()}</div>
     </a>`).join('');
 }

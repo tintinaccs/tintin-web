@@ -116,14 +116,12 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260909-public-activity-auth-2';
-  // 120ms (fijado en #396 para matar esperas artificiales) resultó por
-  // debajo del umbral de percepción humana: en conexiones rápidas el logo y
-  // el texto de sección ("Página Principal", "Catálogo", "Producto") no
-  // llegan a registrarse visualmente. 400ms es el estándar habitual de
-  // splash/loading screens (suficiente para que se perciba la marca, sin
-  // reintroducir la espera artificial de 900ms que hubo antes de #396).
-  const MIN_SHOW_MS = 400;
+  const TT_CACHE_VERSION = 'tintin-20260909-global-shell-6';
+  // El shell es común a cada navegación: incluso cuando la página está en
+  // caché debe ser perceptible y no desaparecer antes de que el usuario vea
+  // qué superficie se está preparando. Un segundo es el mínimo acordado;
+  // nunca sustituye los gates reales de contenido, sesión o tienda.
+  const MIN_SHOW_MS = 1000;
   // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
   // emergencia "No pudimos comprobar el estado de la tienda" en un equipo
   // donde el propio loader ya llevaba ~6s arriba antes de que este tope se
@@ -135,8 +133,28 @@
   // que se le da más tiempo real a la conexión antes de decidir eso.
   const STORE_GATE_TIMEOUT_MS = 9000;
   const SAFETY_MS = 11000;
-  const START = Date.now();
+  let shownAt = Date.now();
   const SCRIPT_SRC = document.currentScript && document.currentScript.src;
+  const isLightweightPage = (() => {
+    try {
+      const current = new URL(SCRIPT_SRC || window.location.href, window.location.href);
+      if (current.searchParams.has('tt-lightweight')) return true;
+
+      // Las auditorías locales abren los HTML directamente (por ejemplo
+      // contact.html), mientras Pages los sirve como /contact y agrega el
+      // marcador anterior. Ambas entradas representan la misma superficie
+      // institucional: el shell compartido debe mantenerse liviano en las dos.
+      const page = window.location.pathname
+        .split('/').filter(Boolean).pop()
+        ?.replace(/\.html$/i, '').toLowerCase();
+      return new Set([
+        'about', 'contact', 'envios', 'cambios-devoluciones',
+        'preguntas-frecuentes', 'terminos', 'privacidad',
+      ]).has(page || '');
+    } catch {
+      return false;
+    }
+  })();
 
   let scrollLockCount = 0;
   let savedScrollY = 0;
@@ -591,9 +609,9 @@
     if (hidden) return;
     if (storeGateRequired && !gateResolved) return;
     if (pendingWaits > 0) return;
-    const enough = Date.now() - START >= MIN_SHOW_MS;
+    const enough = Date.now() - shownAt >= MIN_SHOW_MS;
     if (!enough) {
-      const wait = Math.max(0, MIN_SHOW_MS - (Date.now() - START));
+      const wait = Math.max(0, MIN_SHOW_MS - (Date.now() - shownAt));
       window.setTimeout(tryHideElegant, Math.max(wait, 32));
       return;
     }
@@ -610,6 +628,11 @@
   function show() {
     hideGen += 1;
     hidden = false;
+    // `show()` inicia un ciclo de navegación nuevo. No debe heredar una
+    // espera que ya pertenecía al ciclo anterior: de hacerlo, endWait() del
+    // consumidor actual nunca podría liberar el loader.
+    pendingWaits = 0;
+    shownAt = Date.now();
     contentReady = false;
     logoReady = !!(logo && logo.complete && logo.naturalWidth > 0);
     loader.dataset.state = 'show';
@@ -896,9 +919,17 @@
     bootHeaderAccountFix();
     bootHeaderScrollHide();
     bootAdminAndProfileFixes();
+    bootSiteActivity();
+    // Las páginas institucionales siguen mostrando el mismo loader y el
+    // mismo header, pero no necesitan montar el catálogo, favoritos, gestión
+    // de imágenes ni efectos propios de una superficie comercial.
+    if (isLightweightPage) {
+      documentElement.classList.remove('tt-initializing', 'tt-parity-guard');
+      documentElement.classList.add('tt-ui-ready', 'tt-parity-safe');
+      return;
+    }
     bootScrollReveal();
     bootImagePerformance();
-    bootSiteActivity();
     bootPhase8UiUx();
 
     documentElement.classList.remove('tt-initializing', 'tt-parity-guard');
@@ -913,9 +944,17 @@
     bootHeaderAccountFix();
     bootHeaderScrollHide();
     bootAdminAndProfileFixes();
+    bootSiteActivity();
+    // Mantiene el loader y el header idénticos en las páginas informativas,
+    // pero evita descargar módulos comerciales que no se usan allí. La
+    // navegación compartida conserva sus propios datos y fallback visual.
+    if (isLightweightPage) {
+      documentElement.classList.remove('tt-initializing', 'tt-parity-guard');
+      documentElement.classList.add('tt-ui-ready', 'tt-parity-safe');
+      return;
+    }
     bootScrollReveal();
     bootImagePerformance();
-    bootSiteActivity();
     bootImagesPhase5Public();
     bootCollectionsPhase4Public();
     bootCartSyncPublic();

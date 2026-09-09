@@ -5,7 +5,7 @@ import {
   BASE_ADMIN_SECTIONS,
   MAESTRO_MODULES,
   capabilityLabel
-} from './registro-maestro.js?v=tintin-20260906-superadmin-maestro-2';
+} from './registro-maestro.js?v=tintin-20260909-remove-ai-editor-1';
 
 (function () {
   'use strict';

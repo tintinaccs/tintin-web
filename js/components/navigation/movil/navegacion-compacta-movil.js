@@ -12,13 +12,15 @@
   const DIRECTION_THRESHOLD = 10;
   let lastY = Math.max(0, scrollY || 0);
   let frame = 0;
+  let initialized = false;
 
   const surfaceIsOpen = () => Boolean(document.querySelector(OPEN_SURFACE));
 
   function setCompact(compact) {
     const next = Boolean(compact && mobile.matches && !surfaceIsOpen());
-    if (nav.classList.toggle('tt-tabbar-compact', next)) {
-      nav.dataset.ttCompact = next ? 'true' : 'false';
+    const changed = nav.classList.toggle('tt-tabbar-compact', next);
+    nav.dataset.ttCompact = next ? 'true' : 'false';
+    if (changed) {
       nav.dispatchEvent(new CustomEvent('tintin:mobile-nav-size-change', {
         detail: { compact: next },
       }));
@@ -32,13 +34,14 @@
 
     if (!mobile.matches || y <= TOP_THRESHOLD || surfaceIsOpen()) {
       setCompact(false);
-    } else if (delta > DIRECTION_THRESHOLD) {
+    } else if (!initialized || delta > DIRECTION_THRESHOLD) {
       setCompact(true);
     } else if (delta < -DIRECTION_THRESHOLD) {
       setCompact(false);
     }
 
     if (Math.abs(delta) >= DIRECTION_THRESHOLD || y <= TOP_THRESHOLD) lastY = y;
+    initialized = true;
   }
 
   function schedule() {
