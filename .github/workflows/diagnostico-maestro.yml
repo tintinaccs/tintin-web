@@ -50,7 +50,7 @@ jobs:
         run: npm ci
 
       - name: Instalar Chromium para auditorías que lo requieran
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
 
       - name: Ejecutar suite de integridad
         id: suite
@@ -148,7 +148,7 @@ jobs:
         run: npm run build:pages
 
       - name: Instalar Chromium
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
 
       - name: Servir el árbol exacto auditado
         shell: bash
@@ -211,7 +211,7 @@ jobs:
         run: npm run build:pages
 
       - name: Instalar Chromium
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
 
       - name: Servir el árbol exacto auditado
         shell: bash
@@ -274,7 +274,7 @@ jobs:
         run: npm run build:pages
 
       - name: Instalar Chromium
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
 
       - name: Servir el árbol exacto auditado
         shell: bash
