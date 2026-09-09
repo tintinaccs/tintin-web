@@ -116,7 +116,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260909-global-shell-4';
+  const TT_CACHE_VERSION = 'tintin-20260909-global-shell-6';
   // El shell es común a cada navegación: incluso cuando la página está en
   // caché debe ser perceptible y no desaparecer antes de que el usuario vea
   // qué superficie se está preparando. Un segundo es el mínimo acordado;
@@ -137,8 +137,20 @@
   const SCRIPT_SRC = document.currentScript && document.currentScript.src;
   const isLightweightPage = (() => {
     try {
-      return new URL(SCRIPT_SRC || window.location.href, window.location.href)
-        .searchParams.has('tt-lightweight');
+      const current = new URL(SCRIPT_SRC || window.location.href, window.location.href);
+      if (current.searchParams.has('tt-lightweight')) return true;
+
+      // Las auditorías locales abren los HTML directamente (por ejemplo
+      // contact.html), mientras Pages los sirve como /contact y agrega el
+      // marcador anterior. Ambas entradas representan la misma superficie
+      // institucional: el shell compartido debe mantenerse liviano en las dos.
+      const page = window.location.pathname
+        .split('/').filter(Boolean).pop()
+        ?.replace(/\.html$/i, '').toLowerCase();
+      return new Set([
+        'about', 'contact', 'envios', 'cambios-devoluciones',
+        'preguntas-frecuentes', 'terminos', 'privacidad',
+      ]).has(page || '');
     } catch {
       return false;
     }
@@ -616,6 +628,10 @@
   function show() {
     hideGen += 1;
     hidden = false;
+    // `show()` inicia un ciclo de navegación nuevo. No debe heredar una
+    // espera que ya pertenecía al ciclo anterior: de hacerlo, endWait() del
+    // consumidor actual nunca podría liberar el loader.
+    pendingWaits = 0;
     shownAt = Date.now();
     contentReady = false;
     logoReady = !!(logo && logo.complete && logo.naturalWidth > 0);
@@ -928,9 +944,17 @@
     bootHeaderAccountFix();
     bootHeaderScrollHide();
     bootAdminAndProfileFixes();
+    bootSiteActivity();
+    // Mantiene el loader y el header idénticos en las páginas informativas,
+    // pero evita descargar módulos comerciales que no se usan allí. La
+    // navegación compartida conserva sus propios datos y fallback visual.
+    if (isLightweightPage) {
+      documentElement.classList.remove('tt-initializing', 'tt-parity-guard');
+      documentElement.classList.add('tt-ui-ready', 'tt-parity-safe');
+      return;
+    }
     bootScrollReveal();
     bootImagePerformance();
-    bootSiteActivity();
     bootImagesPhase5Public();
     bootCollectionsPhase4Public();
     bootCartSyncPublic();

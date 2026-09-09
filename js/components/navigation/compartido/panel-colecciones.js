@@ -3,7 +3,7 @@ import { CATEGORIES, UI_ICONS, collectionImageUrl, svgIcon } from './iconos.js';
 function renderSheetCategories() {
   return CATEGORIES.map(({ slug, label }) => `
     <a href="/catalogo?cat=${slug}" class="tt-sheet-item">
-      <span class="tt-sheet-item-img" aria-hidden="true"><img src="${collectionImageUrl(slug)}" alt="" loading="lazy"></span>
+      <span class="tt-sheet-item-img" aria-hidden="true"><img data-tt-collection-image data-src="${collectionImageUrl(slug)}" alt="" loading="lazy"></span>
       <span>${label.toUpperCase()}</span>
     </a>`).join('');
 }

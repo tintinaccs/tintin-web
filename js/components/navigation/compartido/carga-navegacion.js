@@ -1,5 +1,5 @@
 import { currentPage } from './estado-ruta.js';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260909-unified-navigation-assets-1';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260909-unified-navigation-assets-2';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;
@@ -224,15 +224,12 @@ export function loadSharedRuntime() {
   loadNavigationBehaviors();
 
   // Las páginas informativas resuelven Auth globalmente para que el header
-  // conozca la sesión en cualquier ruta. Catálogo completo, carrito y feed de
-  // notificaciones siguen bajo demanda; la configuración liviana de
-  // colecciones se precarga en idle para que el primer menú ya coincida con
-  // Inicio/Tienda y no dependa del momento en que el usuario lo abra.
+  // conozca la sesión en cualquier ruta. El menú ya tiene el mismo respaldo
+  // local de imágenes y enlaces en las tres superficies; actualizar datos
+  // remotos de colecciones queda bajo demanda, al abrir Tienda. Así no se
+  // convierte Contacto/Nosotros en una carga comercial completa.
   if (!FULL_COMMERCE_PAGES.has(page)) {
     attachLightweightCommerceDemand();
-    scheduleNonCritical(() => {
-      Promise.allSettled([loadCollectionsRuntime()]).then(reportRuntimeFailures);
-    });
     return;
   }
 

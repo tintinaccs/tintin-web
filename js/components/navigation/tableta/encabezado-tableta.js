@@ -8,7 +8,7 @@ const EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='
 function renderTabletCategories() {
   return CATEGORIES.map(({ slug, label }) => `
     <a href="/catalogo?cat=${slug}" class="tt-tablet-cat-card">
-      <div class="tt-tablet-cat-img"><img src="${collectionImageUrl(slug)}" alt="" loading="lazy"></div>
+      <div class="tt-tablet-cat-img"><img data-tt-collection-image data-src="${collectionImageUrl(slug)}" alt="" loading="lazy"></div>
       <span>${label}</span>
     </a>`).join('');
 }

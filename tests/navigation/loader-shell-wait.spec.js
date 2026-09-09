@@ -12,6 +12,11 @@ test('TintinLoader.beginWait() retiene el ocultamiento hasta endWait()', async (
   // Catálogo se conserva también en la versión de producción anterior; las
   // rutas institucionales limpias se validan en el entorno Pages del PR.
   await page.goto('/catalogo.html', { waitUntil: 'domcontentloaded' });
+  // Aislamos el ciclo explícito que se prueba. El montaje inicial del shell
+  // mantiene su propia espera legítima hasta terminar encabezado y superficies;
+  // mezclarla con este `show()` haría que un solo `endWait()` pareciera no
+  // liberar el loader aunque pertenezca a otro ciclo.
+  await page.waitForSelector('body.tt-public-shell-mounted');
 
   const result = await page.evaluate(async () => {
     for (let i = 0; i < 50 && !window.TintinLoader; i += 1) {

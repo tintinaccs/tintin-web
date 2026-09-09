@@ -36,7 +36,7 @@ async function expectNoHorizontalOverlap(locator) {
 async function expectHeaderBrandHealthy(page) {
   const shell = page.locator('#tt-header-desktop-tablet,#tt-header-tablet,#tt-tablet-menu');
   await expect(shell.locator('.tt-img-error-label')).toHaveCount(0);
-  const broken = await shell.locator('img').evaluateAll(images => images
+  const broken = await shell.locator('img:not([loading="lazy"])').evaluateAll(images => images
     .filter(image => !image.complete || image.naturalWidth === 0)
     .map(image => ({ alt: image.alt, src: image.currentSrc || image.src })));
   expect(broken).toEqual([]);
