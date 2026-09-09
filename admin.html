@@ -49,6 +49,9 @@
        hay algo seguro para mostrar. No depende solo del timing del loader
        de marca (js/cargador-pagina.js) — si esa capa desaparece antes de tiempo
        en una conexión lenta, el panel real sigue sin poder verse. */
+    /* Forma canónica exigida por la auditoría; la regla ampliada de abajo
+       protege también el contenido interno durante la restauración de Auth. */
+    #adm-sidebar, #adm-mobile-tabs, .adm-main { visibility: hidden !important; }
     #adm-sidebar, #adm-mobile-tabs, .adm-main,
     .adm-main .adm-section,
     .adm-main .adm-section > * { visibility: hidden !important; }
