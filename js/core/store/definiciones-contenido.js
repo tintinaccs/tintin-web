@@ -66,9 +66,8 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         root: '.tt-hero',
         allowVisibility: true,
         fields: [
-          field('eyebrow', 'Texto pequeño', '.tt-hero-eyebrow', 'Bienvenidas a TINTIN', { maxLength: 120 }),
-          field('title', 'Título', '.tt-hero-title', 'DETALLES QUE ELEVAN\nTU ESTILO', { type: 'multiline', rows: 3, maxLength: 220 }),
-          field('subtitle', 'Subtítulo', '.tt-hero-subtitle', '', { type: 'multiline', rows: 3, maxLength: 500 }),
+          field('title', 'Título', '.tt-hero-title', 'Bienvenida\ntintina', { type: 'multiline', rows: 3, maxLength: 220 }),
+          field('subtitle', 'Subtítulo', '.tt-hero-subtitle', 'Joyitas únicas, como vos.', { type: 'multiline', rows: 3, maxLength: 500 }),
           field('primaryText', 'Botón principal', '.tt-hero-actions a', 'Comprar ahora', { index: 0, maxLength: 80 }),
           field('primaryHref', 'Enlace del botón principal', '.tt-hero-actions a', '/catalogo', { index: 0, type: 'href', maxLength: 500 }),
           field('btnText', 'Botón secundario', '.tt-hero-actions a', '¿Quiénes somos? →', { index: 1, maxLength: 80 }),

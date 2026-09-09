@@ -74,6 +74,7 @@
 
   function hideForRepeat(element) {
     if (!element.classList.contains('tt-visible')) return;
+    if (element.closest('#hero')) return; // el hero se revela una sola vez y queda visible
     element.classList.remove('tt-visible', 'tt-reveal-settled');
   }
 
