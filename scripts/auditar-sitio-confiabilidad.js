@@ -206,9 +206,8 @@ check('Todos los controles de la barra móvil tienen nombre accesible',
     return ['tabbar-tienda', 'tabbar-search', 'tabbar-cart', 'tabbar-cuenta']
       .every(id => !html.includes(`id="${id}"`) || new RegExp(`id="${id}"[^>]*aria-label=`).test(html));
   }));
-check('La portada usa la forma correcta TU ESTILO incluso con contenido histórico',
-  home.includes('TU ESTILO</h1>') &&
-  !home.includes('TÚ ESTILO</h1>') &&
+check('La normalización de contenido histórico corrige "TÚ ESTILO" a la forma correcta',
+  !home.includes('TÚ ESTILO') &&
   contentSchema.includes("return text.replace(/\\bTÚ ESTILO\\b/g, 'TU ESTILO')") &&
   siteContent.includes('normalizeContentValue(pageId, sectionId, item.key, raw)'));
 check('El loader de la portada espera a que la foto del hero cargue antes de ocultarse',

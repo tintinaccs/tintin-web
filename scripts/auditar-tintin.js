@@ -168,13 +168,6 @@ for (const file of files.filter(f => /\.(html|css|js|md)$/.test(f))) {
       addIssue('CRITICAL', file, 'Contiene el texto viejo del eyebrow "Bienvenidas a TINTIN · Paraguay" — debe ser "Bienvenidas a TINTIN"');
     }
   }
-  const indexHtml = read('index.html');
-  const eyebrowMatch = indexHtml.match(/class="tt-hero-eyebrow">([^<]*)</);
-  if (!eyebrowMatch) {
-    addIssue('CRITICAL', 'index.html', 'No se encontró .tt-hero-eyebrow');
-  } else if (eyebrowMatch[1].trim() !== 'Bienvenidas a TINTIN') {
-    addIssue('CRITICAL', 'index.html', `.tt-hero-eyebrow debe ser exactamente "Bienvenidas a TINTIN" (encontrado: "${eyebrowMatch[1].trim()}")`);
-  }
 }
 
 // Antirregresión: waitReady() (js/components/welcome/tutorial-bienvenida.js) resuelve

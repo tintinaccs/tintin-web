@@ -82,8 +82,8 @@
        disponible desde el primer paint, sin depender de red externa.
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
        existe (ver js/components/images/imagenes.js). -->
-  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260908-home-hierarchy-3">
-  <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/hero-apple-inicio.css?v=tintin-20260827-hero-no-flicker-1">
+  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260909-home-hierarchy-4">
+  <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260909-hero-bienvenida-1">
   <link rel="stylesheet" href="css/pages/home/carrusel-colecciones.css?v=tintin-20260826-collections-parallax-4">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -160,15 +160,10 @@
     })();
   </script>
 
-  <!-- Overlay: keeps text readable over any image -->
-  <div class="tt-hero-overlay" aria-hidden="true"></div>
-
   <!-- Content -->
   <div class="tt-hero-content">
-    <p class="tt-hero-eyebrow">Bienvenidas a TINTIN</p>
-    <h1 class="tt-hero-title">DETALLES QUE ELEVAN<br>TU ESTILO</h1>
-    <div class="tt-hero-line" aria-hidden="true"></div>
-    <p class="tt-hero-subtitle"></p>
+    <h1 class="tt-hero-title">Bienvenida<br>tintina</h1>
+    <p class="tt-hero-subtitle">Joyitas únicas, como vos.</p>
     <div class="tt-hero-actions">
       <a href="/catalogo" class="tt-btn tt-btn-lg tt-hero-cta">
         Comprar ahora
@@ -177,23 +172,6 @@
       <a href="/about" class="tt-hero-link">¿Quiénes somos?</a>
     </div>
   </div>
-
-  <button type="button" class="tt-hero-scroll-hint" aria-label="Bajar a la siguiente sección" onclick="document.querySelector('.tt-trust-bar')?.scrollIntoView({behavior:'smooth'})">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-  </button>
-  <script>
-    // Se oculta apenas el usuario empieza a scrollear, sin volver a mostrarse.
-    (function () {
-      var hint = document.querySelector('.tt-hero-scroll-hint');
-      if (!hint) return;
-      window.addEventListener('scroll', function onScroll() {
-        if (window.scrollY > 40) {
-          hint.classList.add('tt-hero-scroll-hint-hidden');
-          window.removeEventListener('scroll', onScroll);
-        }
-      }, { passive: true });
-    })();
-  </script>
 
 </section>
 
