@@ -21,6 +21,17 @@ test.describe('Fase 8 — UI/UX global', () => {
         body: JSON.stringify({ config: { campaigns: [], popups: [] } }),
       });
     });
+    // El shell puede resolver las colecciones al recibir foco real en Tienda.
+    // El servidor estático del test no expone Pages Functions, por lo que se
+    // responde el contrato vacío de esa API sin convertirlo en un 404 ajeno a
+    // la capa UI que esta prueba verifica.
+    await page.route(/\/api\/public-catalog\?resource=collections$/, async route => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json; charset=utf-8',
+        body: JSON.stringify({ ok: true, resource: 'collections', items: [] })
+      });
+    });
     await page.addInitScript(() => {
       window.TT_DISABLE_STORE_GATE = true;
     });

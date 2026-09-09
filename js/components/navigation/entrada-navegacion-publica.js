@@ -7,8 +7,8 @@ import { renderAccountDrawer } from './compartido/panel-cuenta.js';
 import { renderCollectionsSheet } from './compartido/panel-colecciones.js';
 import { renderSurfaceLayer } from './compartido/capas-paneles.js';
 import { applyActiveState, currentPage } from './compartido/estado-ruta.js';
-import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20260909-unified-navigation-assets-2';
-import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260909-unified-navigation-assets-2';
+import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20260909-unified-navigation-assets-3';
+import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260909-unified-navigation-assets-3';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
 import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260817-footer-contrast-1';
@@ -33,6 +33,20 @@ const LEGACY_SHELL_IDS = Object.freeze([
 
 let mountPromise = null;
 let sharedLogoDataPromise = null;
+
+function bootGlobalUiUx() {
+  if (!document.getElementById('tt-phase8-ui-ux-css')) {
+    const link = document.createElement('link');
+    link.id = 'tt-phase8-ui-ux-css';
+    link.rel = 'stylesheet';
+    link.href = '/css/quality/experiencia-interfaz.css';
+    document.head.appendChild(link);
+  }
+  if (!window.TintinUX?.booted) {
+    import('../../quality/experiencia-interfaz.js?v=tintin-20260909-global-ui-ux-1')
+      .catch(error => console.warn('[PublicShell] No se pudo iniciar la capa UI global.', error));
+  }
+}
 
 function removeLegacyShell(root = document) {
   LEGACY_SHELL_IDS.forEach(id => root.getElementById(id)?.remove());
@@ -225,6 +239,10 @@ function mountPublicShell() {
     document.body.insertAdjacentHTML('afterbegin', renderTopShell());
     document.body.insertAdjacentHTML('beforeend', renderBottomShell());
     attachCollectionVisualFallback();
+    // Es una capa liviana de accesibilidad e interacción, compartida por
+    // todas las rutas. Mantenerla en el shell permite que las páginas
+    // institucionales sigan siendo ligeras sin perder sus mismos estados UI.
+    bootGlobalUiUx();
     await hydrateSharedLogos();
 
     const globalConfig = await globalConfigPromise;

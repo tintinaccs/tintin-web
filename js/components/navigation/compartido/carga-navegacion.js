@@ -1,5 +1,5 @@
 import { currentPage } from './estado-ruta.js';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260909-unified-navigation-assets-2';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260909-unified-navigation-assets-3';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;
@@ -24,7 +24,7 @@ function scheduleNonCritical(task) {
   window.setTimeout(task, 450);
 }
 
-function bindDemand(selector, loader) {
+function bindDemand(selector, loader, { prefetchOnPointer = true } = {}) {
   let started = false;
   const load = () => {
     if (started) return;
@@ -35,7 +35,7 @@ function bindDemand(selector, loader) {
     });
   };
   document.querySelectorAll(selector).forEach(control => {
-    control.addEventListener('pointerenter', load, { once: true, passive: true });
+    if (prefetchOnPointer) control.addEventListener('pointerenter', load, { once: true, passive: true });
     control.addEventListener('focus', load, { once: true });
     control.addEventListener('pointerdown', load, { once: true, passive: true });
     control.addEventListener('click', load, { once: true });
@@ -186,7 +186,10 @@ function attachLightweightCommerceDemand() {
   );
   bindDemand(
     '#btn-tienda,#btn-tablet-tienda,[data-collections-nav],#collections-sheet',
-    loadCollectionsRuntime
+    loadCollectionsRuntime,
+    // El menú ya ofrece enlaces e imágenes locales. En páginas informativas,
+    // un simple paso del puntero no debe generar una lectura remota.
+    { prefetchOnPointer: false }
   );
 }
 
