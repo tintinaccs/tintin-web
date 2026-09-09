@@ -424,7 +424,10 @@ function statusBadge(status) {
 async function waitForProfileUserAfterAuthRestore(user) {
   if (user) return user;
   const RETRY_DELAY_MS = 300;
-  const MAX_ATTEMPTS = 6;
+  // IndexedDB puede tardar varios segundos al volver desde otra ruta o tras
+  // reanudar el navegador. No redirigir ni pintar un perfil vacío durante esa
+  // ventana: esperar el mismo máximo robusto que usa el panel administrativo.
+  const MAX_ATTEMPTS = 30;
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
     await new Promise(resolve => window.setTimeout(resolve, RETRY_DELAY_MS));
     if (auth.currentUser) return auth.currentUser;
