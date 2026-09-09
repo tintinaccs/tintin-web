@@ -89,7 +89,7 @@ assert(createOrderClient.includes('EMAIL_WEBHOOK_URL'), 'Checkout: create-order-
 const secretKeys = [
   'EMAIL_PROVIDER_API_KEY','ORDER_WEBHOOK_SHARED_SECRET','PAYMENT_PRIVATE_KEY','PAYMENT_WEBHOOK_SECRET',
   'PAYPAL_CLIENT_SECRET','PAYPAL_WEBHOOK_ID','GITHUB_TOKEN','FIREBASE_SERVICE_ACCOUNT_JSON',
-  'TINTIN_PUSH_WEBHOOK_SECRET','CODE_STUDIO_GITHUB_APP_PRIVATE_KEY','CODE_STUDIO_GITHUB_WEBHOOK_SECRET','CODE_STUDIO_AI_TOKEN'
+  'TINTIN_PUSH_WEBHOOK_SECRET'
 ];
 for (const key of secretKeys) {
   const line = envExample.split(/\r?\n/).find(row => row.startsWith(`${key}=`));

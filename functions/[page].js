@@ -24,7 +24,11 @@ function pageName(request) {
 
 export function lightenHtml(html) {
   return String(html || '')
-    .replace(/\s*<script\s+src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>\s*/i, '\n')
+    // Las rutas limpias se resuelven como /contact, /about, etc. Un src
+    // relativo "js/..." apuntaría a /contact/js/... y, hasta ahora, se
+    // eliminaba el loader para evitar ese 404. Conservamos el mismo shell
+    // global que usan las rutas .html, pero con origen absoluto.
+    .replace(/(<script\s+src=["'])js\/(cargador-pagina\.js[^"']*["'][^>]*><\/script>)/i, '$1/js/$2')
     .replace(/\s*<link\s+rel=["']modulepreload["'][^>]*>\s*/gi, '\n');
 }
 
