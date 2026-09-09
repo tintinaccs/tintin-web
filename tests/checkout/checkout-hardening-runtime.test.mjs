@@ -17,6 +17,13 @@ test('hardening runtime waits for scoped cart and blocks empty protected flow', 
   assert.match(hardening, /forceCart/);
 });
 
+test('checkout espera la restauración de Auth antes de tratar al usuario como invitado', () => {
+  assert.match(checkoutPage, /checkoutAuthStateReady/);
+  assert.match(checkoutPage, /checkoutAuthStateReady\.then\(\(\) => onAuthStateChanged/);
+  assert.match(hardening, /const authStateReady = typeof auth\.authStateReady === 'function'/);
+  assert.match(hardening, /authStateReady\.then\(\(\) => onAuthStateChanged/);
+});
+
 test('cart controls use lineId so variants cannot mutate the wrong row', () => {
   assert.match(hardening, /row\.dataset\.lineId/);
   assert.match(hardening, /updateQty\(lineId/);
