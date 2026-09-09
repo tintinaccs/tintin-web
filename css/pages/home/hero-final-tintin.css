@@ -34,6 +34,18 @@ html body.tt-home-premium.tt-public-shell-mounted .tt-hero.tt-hero-final {
   background:linear-gradient(180deg,var(--tt-final-pink-top) 0%,var(--tt-final-pink-mid) 47%,var(--tt-final-pink-bottom) 100%)!important;
 }
 
+/* El header (styles.css) es position:fixed y queda fuera del flujo del
+   documento. El margin:0 de arriba anula el margin-top: var(--header-h) que
+   ajuste-inicio.css reserva para el hero en >=769px, así que el hero final
+   arranca en y=0 y su contenido (H1 incluido) queda debajo del header fijo.
+   Se restaura acá el mismo offset, con el mismo breakpoint y variable. */
+@media (min-width:769px) {
+  html body.tt-home-premium .tt-hero.tt-hero-final,
+  html body.tt-home-premium.tt-public-shell-mounted .tt-hero.tt-hero-final {
+    margin-top:var(--header-h)!important;
+  }
+}
+
 /* La UI visual anterior deja de existir dentro del nuevo lienzo. */
 html body.tt-home-premium .tt-hero-final .tt-hero-overlay,
 html body.tt-home-premium .tt-hero-final .tt-hero-line,
