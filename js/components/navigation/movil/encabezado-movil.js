@@ -1,4 +1,4 @@
-import { UI_ICONS, svgIcon } from '../compartido/iconos.js';
+import { UI_ICONS, svgIcon } from '../compartido/iconos.js?v=tintin-20260909-navigation-atomic-1';
 
 export function renderMobileTabbar() {
   return `

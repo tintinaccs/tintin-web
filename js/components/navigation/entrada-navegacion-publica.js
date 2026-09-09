@@ -1,18 +1,21 @@
-import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260909-unified-navigation-assets-2';
-import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260909-unified-navigation-assets-2';
-import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20260820-notifications-global-1';
-import { renderSearchPanel } from './compartido/panel-busqueda.js';
-import { renderCartDrawer } from './compartido/panel-carrito.js';
-import { renderAccountDrawer } from './compartido/panel-cuenta.js';
-import { renderCollectionsSheet } from './compartido/panel-colecciones.js';
-import { renderSurfaceLayer } from './compartido/capas-paneles.js';
-import { applyActiveState, currentPage } from './compartido/estado-ruta.js';
-import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20260909-unified-navigation-assets-3';
-import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260909-unified-navigation-assets-3';
-import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
-import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
-import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260817-footer-contrast-1';
-import { applyGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20260815-global-studio-10';
+// Las importaciones estáticas también deben ser versionadas. Cloudflare puede
+// servir el entry nuevo antes de evacuar una dependencia ESM vieja del caché;
+// un solo export faltante aborta el shell entero, incluido el restaurador Auth.
+import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260909-navigation-atomic-1';
+import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260909-navigation-atomic-1';
+import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20260909-navigation-atomic-1';
+import { renderSearchPanel } from './compartido/panel-busqueda.js?v=tintin-20260909-navigation-atomic-1';
+import { renderCartDrawer } from './compartido/panel-carrito.js?v=tintin-20260909-navigation-atomic-1';
+import { renderAccountDrawer } from './compartido/panel-cuenta.js?v=tintin-20260909-navigation-atomic-1';
+import { renderCollectionsSheet } from './compartido/panel-colecciones.js?v=tintin-20260909-navigation-atomic-1';
+import { renderSurfaceLayer } from './compartido/capas-paneles.js?v=tintin-20260909-navigation-atomic-1';
+import { applyActiveState, currentPage } from './compartido/estado-ruta.js?v=tintin-20260909-navigation-atomic-1';
+import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20260909-navigation-atomic-1';
+import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260909-navigation-atomic-1';
+import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js?v=tintin-20260909-navigation-atomic-1';
+import { registerNavigationSurfaces } from './compartido/registro-paneles.js?v=tintin-20260909-navigation-atomic-1';
+import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260909-navigation-atomic-1';
+import { applyGlobalVisualStudio } from '../../core/store/visual-studio-global-runtime.js?v=tintin-20260909-navigation-atomic-1';
 
 const LEGACY_SHELL_IDS = Object.freeze([
   'tt-header-desktop-tablet',

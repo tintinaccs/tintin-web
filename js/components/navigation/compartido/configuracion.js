@@ -1,4 +1,8 @@
-export const SHELL_VERSION = 'tintin-20260909-unified-navigation-assets-3';
+// Cada dependencia ESM del shell usa esta misma revisión. Sin ella, una
+// pestaña podía recibir el entry nuevo junto a un `iconos.js` cacheado de una
+// revisión anterior; el navegador aborta entonces todo el grafo de módulos y
+// Auth no llega a restaurar la sesión en la página de destino.
+export const SHELL_VERSION = 'tintin-20260909-navigation-atomic-1';
 
 export const BREAKPOINTS = Object.freeze({
   mobileMax: 767,

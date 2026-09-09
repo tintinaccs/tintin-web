@@ -1,4 +1,4 @@
-import { UI_ICONS, svgIcon } from './iconos.js';
+import { UI_ICONS, svgIcon } from './iconos.js?v=tintin-20260909-navigation-atomic-1';
 
 export function renderSearchPanel() {
   return `
