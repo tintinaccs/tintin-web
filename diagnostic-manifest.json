@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-09T17:01:31.743Z",
-  "sourceFingerprint": "74d122c9608a5555e41cd63feaba8413c633b7770e93e26401dfa9d7cf5bba5d",
+  "generatedAt": "2026-09-09T18:33:12.777Z",
+  "sourceFingerprint": "e0ab96cdd84f8c1ad25a125a9c6862db1d37645fd369f2c0f534d20e4bc1c16a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 803,
-    "textFiles": 770,
-    "totalBytes": 9899121,
+    "files": 804,
+    "textFiles": 771,
+    "totalBytes": 9921415,
     "pages": 18,
     "modules": 550
   },
@@ -24703,8 +24703,8 @@
     },
     {
       "path": "js/pages/home/inicio-premium.js",
-      "bytes": 401,
-      "sha256": "8eb1f75db4b15fb0df811384c01a4d675f320e793a8ecc1db68c61d0c7b36756",
+      "bytes": 4021,
+      "sha256": "2b4cd42081de604755f9b73712a67f6c53fef6a3987feb82ca168366d78acf7c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32834,6 +32834,12 @@
       "sha256": "3b42c73dec8e89d33748a24c6ff4830f40603720b333155a402585d0157f0a5f"
     },
     {
+      "path": "css/pages/home/hero-final-tintin.css",
+      "extension": ".css",
+      "bytes": 18674,
+      "sha256": "27b89ba2ad2425fa0163836cec19a869eb7fff539a5c2991e5838fabba88505d"
+    },
+    {
       "path": "css/pages/home/mantenimiento-inicio.css",
       "extension": ".css",
       "bytes": 10127,
@@ -34894,8 +34900,8 @@
     {
       "path": "js/pages/home/inicio-premium.js",
       "extension": ".js",
-      "bytes": 401,
-      "sha256": "8eb1f75db4b15fb0df811384c01a4d675f320e793a8ecc1db68c61d0c7b36756"
+      "bytes": 4021,
+      "sha256": "2b4cd42081de604755f9b73712a67f6c53fef6a3987feb82ca168366d78acf7c"
     },
     {
       "path": "js/pages/home/mantenimiento-inicio.js",
@@ -38175,7 +38181,7 @@
     },
     {
       "file": "js/pages/home/inicio-premium.js",
-      "line": 6,
+      "line": 8,
       "raw": "/index.html",
       "target": "index.html",
       "exists": true
