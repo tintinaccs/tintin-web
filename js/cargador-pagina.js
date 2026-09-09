@@ -116,7 +116,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260909-global-shell-3';
+  const TT_CACHE_VERSION = 'tintin-20260909-global-shell-4';
   // El shell es común a cada navegación: incluso cuando la página está en
   // caché debe ser perceptible y no desaparecer antes de que el usuario vea
   // qué superficie se está preparando. Un segundo es el mínimo acordado;
@@ -135,6 +135,14 @@
   const SAFETY_MS = 11000;
   let shownAt = Date.now();
   const SCRIPT_SRC = document.currentScript && document.currentScript.src;
+  const isLightweightPage = (() => {
+    try {
+      return new URL(SCRIPT_SRC || window.location.href, window.location.href)
+        .searchParams.has('tt-lightweight');
+    } catch {
+      return false;
+    }
+  })();
 
   let scrollLockCount = 0;
   let savedScrollY = 0;
@@ -895,9 +903,17 @@
     bootHeaderAccountFix();
     bootHeaderScrollHide();
     bootAdminAndProfileFixes();
+    bootSiteActivity();
+    // Las páginas institucionales siguen mostrando el mismo loader y el
+    // mismo header, pero no necesitan montar el catálogo, favoritos, gestión
+    // de imágenes ni efectos propios de una superficie comercial.
+    if (isLightweightPage) {
+      documentElement.classList.remove('tt-initializing', 'tt-parity-guard');
+      documentElement.classList.add('tt-ui-ready', 'tt-parity-safe');
+      return;
+    }
     bootScrollReveal();
     bootImagePerformance();
-    bootSiteActivity();
     bootPhase8UiUx();
 
     documentElement.classList.remove('tt-initializing', 'tt-parity-guard');
