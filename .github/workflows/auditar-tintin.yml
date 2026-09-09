@@ -81,7 +81,11 @@ jobs:
           npm run test:rules-username
 
       - name: Install Chromium once
-        run: npx playwright install --with-deps chromium
+        # ubuntu-24.04 de GitHub ya incluye las bibliotecas del navegador.
+        # `--with-deps` hace apt update sobre el repo externo de Google y
+        # puede fallar por un índice transitorio inconsistente antes de que
+        # Playwright siquiera descargue Chromium.
+        run: npx playwright install chromium
 
       - name: Super Admin master contracts
         run: |
