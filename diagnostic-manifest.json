@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-09T17:28:06.060Z",
-  "sourceFingerprint": "ef978d1f9c78bab22c3b4b4577931110b30f5d2d746179da719b541ae0cc5a3b",
+  "generatedAt": "2026-09-09T17:33:02.205Z",
+  "sourceFingerprint": "b05b15972435c7945ca2a0121b47a571aae462e0de761ac88d7a107d3b4574ad",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 804,
     "textFiles": 771,
-    "totalBytes": 9903165,
+    "totalBytes": 9903249,
     "pages": 18,
     "modules": 551
   },
@@ -27449,38 +27449,13 @@
     },
     {
       "path": "scripts/auditar-modular-arquitectura.js",
-      "bytes": 8768,
-      "sha256": "b80297b8720b304987a3918f292c475b161dfb6a72e98f5f3a6e152b4664bec8",
+      "bytes": 8852,
+      "sha256": "ea2304fa157f8e4b1d2af3490b3746b0094b5680aa0711c2cbd537e9d5b63750",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [
-        {
-          "raw": "./compartido/panel-busqueda.js",
-          "target": "scripts/compartido/panel-busqueda.js",
-          "dynamic": false,
-          "line": 60
-        },
-        {
-          "raw": "./compartido/panel-cuenta.js",
-          "target": "scripts/compartido/panel-cuenta.js",
-          "dynamic": false,
-          "line": 61
-        },
-        {
-          "raw": "./compartido/panel-carrito.js",
-          "target": "scripts/compartido/panel-carrito.js",
-          "dynamic": false,
-          "line": 62
-        },
-        {
-          "raw": "./compartido/registro-paneles.js",
-          "target": "scripts/compartido/registro-paneles.js",
-          "dynamic": false,
-          "line": 63
-        }
-      ],
+      "imports": [],
       "endpoints": []
     },
     {
@@ -35860,8 +35835,8 @@
     {
       "path": "scripts/auditar-modular-arquitectura.js",
       "extension": ".js",
-      "bytes": 8768,
-      "sha256": "b80297b8720b304987a3918f292c475b161dfb6a72e98f5f3a6e152b4664bec8"
+      "bytes": 8852,
+      "sha256": "ea2304fa157f8e4b1d2af3490b3746b0094b5680aa0711c2cbd537e9d5b63750"
     },
     {
       "path": "scripts/auditar-movil-correcciones.mjs",
