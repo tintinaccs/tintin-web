@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-09T15:37:50.107Z",
-  "sourceFingerprint": "f81c7c6646d58f9f4b5eb389abc03059affed1cb12fa0599d667f208d6be25a2",
+  "generatedAt": "2026-09-09T15:43:54.721Z",
+  "sourceFingerprint": "504b813d8562fb11c45b4a052e002c40916c3cb33832501527f3ce13633c5a8e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 802,
-    "textFiles": 769,
-    "totalBytes": 9895451,
+    "files": 803,
+    "textFiles": 770,
+    "totalBytes": 9895919,
     "pages": 18,
-    "modules": 549
+    "modules": 550
   },
   "viewports": [
     {
@@ -30248,6 +30248,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/functions/page-loader-route.test.mjs",
+      "bytes": 472,
+      "sha256": "8331bd8f5546c87cd93c4f3accbb5e3ebf258b8126c6a37b7a1e5b6870a79021",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../functions/[page].js",
+          "target": "functions/[page].js",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/import/phase9-import-normalization.test.mjs",
       "bytes": 2536,
       "sha256": "af18579fbb58c27ca297b49b65128073739cef569128973872aeb2770d354b1c",
@@ -30407,8 +30437,8 @@
     },
     {
       "path": "tests/navigation/loader-shell-wait.spec.js",
-      "bytes": 9335,
-      "sha256": "428b3e4d3efb738233fae58ce4a2f174929d47ec0c8346f2b1a2a0c134606d24",
+      "bytes": 9341,
+      "sha256": "4501386ad57762ac9242d8c77aaaa2a05b1918c62882c7321d7573c30d41993a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36076,8 +36106,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 37507,
-      "sha256": "476ad8eb27d7fe2cbc40310762f74ad2bbf32b1d7352fabd51b87a512b6d24c5"
+      "bytes": 37497,
+      "sha256": "5e8bffdaa1eda0e6049a0c9945eb88f1818721728bd2ee9bc8d075eb023788b6"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -36452,6 +36482,12 @@
       "sha256": "9a951434dd830a3c312df7d6eff03ea5ef87b04672631500f0b34fa840527ae6"
     },
     {
+      "path": "tests/functions/page-loader-route.test.mjs",
+      "extension": ".mjs",
+      "bytes": 472,
+      "sha256": "8331bd8f5546c87cd93c4f3accbb5e3ebf258b8126c6a37b7a1e5b6870a79021"
+    },
+    {
       "path": "tests/import/phase9-import-normalization.test.mjs",
       "extension": ".mjs",
       "bytes": 2536,
@@ -36484,8 +36520,8 @@
     {
       "path": "tests/navigation/loader-shell-wait.spec.js",
       "extension": ".js",
-      "bytes": 9335,
-      "sha256": "428b3e4d3efb738233fae58ce4a2f174929d47ec0c8346f2b1a2a0c134606d24"
+      "bytes": 9341,
+      "sha256": "4501386ad57762ac9242d8c77aaaa2a05b1918c62882c7321d7573c30d41993a"
     },
     {
       "path": "tests/operations/apps-script-fetch.test.mjs",
