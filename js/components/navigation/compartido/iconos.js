@@ -28,6 +28,15 @@ export const CATEGORIES = Object.freeze([
   Object.freeze({ slug: 'tobilleras', label: 'Tobilleras', background: 'linear-gradient(135deg,#d8a8c0,#b06888)' }),
 ]);
 
+// Fuente canónica del respaldo visual del menú. Las tres superficies del
+// header la usan antes de cualquier lectura remota, por lo que Inicio,
+// Contacto, Producto y las demás rutas se ven iguales aun sin red.
+export function collectionImageUrl(slug) {
+  const normalized = String(slug || '').replace(/[^a-z0-9_-]/gi, '').toLowerCase();
+  const file = normalized === 'bolsos' ? 'bags' : normalized;
+  return `/assets-tintin/images/collections/col-${file || 'placeholder'}.webp`;
+}
+
 export function svgIcon(paths, { size = 20, stroke = 'currentColor', className = '' } = {}) {
   const classAttribute = className ? ` class="${className}"` : '';
   return `<svg${classAttribute} width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${stroke}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;

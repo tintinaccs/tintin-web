@@ -1,5 +1,5 @@
 import { currentPage } from './estado-ruta.js';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260907-auth-state-ready-public-routes-1';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260909-unified-navigation-assets-1';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;

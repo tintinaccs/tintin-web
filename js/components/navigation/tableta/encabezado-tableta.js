@@ -1,4 +1,4 @@
-import { CATEGORIES, UI_ICONS, categoryIcon, svgIcon } from '../compartido/iconos.js';
+import { CATEGORIES, UI_ICONS, collectionImageUrl, svgIcon } from '../compartido/iconos.js';
 import { logoUrl } from '../compartido/configuracion.js';
 
 // Placeholder GIF 1x1 válido. La versión anterior estaba truncada y podía
@@ -6,9 +6,9 @@ import { logoUrl } from '../compartido/configuracion.js';
 const EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 
 function renderTabletCategories() {
-  return CATEGORIES.map(({ slug, label, background }) => `
+  return CATEGORIES.map(({ slug, label }) => `
     <a href="/catalogo?cat=${slug}" class="tt-tablet-cat-card">
-      <div class="tt-tablet-cat-img" style="background:${background}">${categoryIcon(slug, { size: 28, stroke: '#FFFFFF' })}</div>
+      <div class="tt-tablet-cat-img"><img src="${collectionImageUrl(slug)}" alt="" loading="lazy"></div>
       <span>${label}</span>
     </a>`).join('');
 }

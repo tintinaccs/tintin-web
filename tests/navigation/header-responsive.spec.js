@@ -222,3 +222,22 @@ test('desktop compacto 1025px reserva las cuatro acciones autenticadas', async (
   expect(geometry.scrollWidth).toBeLessThanOrEqual(geometry.clientWidth + 1);
   await expectNoHorizontalOverlap(header.locator('.tt-nav-desktop [data-desktop-nav-item],.tt-header-actions > button:not([hidden])'));
 });
+
+test('las imágenes de Tienda usan el mismo origen absoluto en desktop, tablet y mobile fuera de Inicio', async ({ page }) => {
+  const cases = [
+    { viewport: { width: 1440, height: 900 }, path: '/contact', open: '#btn-tienda', image: '#tt-tienda-dropdown-panel .tt-dropdown-icon img' },
+    { viewport: { width: 768, height: 1024 }, path: '/product', open: '#btn-tablet-tienda', image: '#tablet-cats .tt-tablet-cat-img img', beforeOpen: '#btn-menu-tablet' },
+    { viewport: { width: 390, height: 844 }, path: '/about', open: '#tabbar-tienda', image: '#collections-sheet .tt-sheet-item-img img' },
+  ];
+
+  for (const entry of cases) {
+    await openPublicPage(page, entry.viewport, entry.path);
+    if (entry.beforeOpen) await page.locator(entry.beforeOpen).click();
+    await page.locator(entry.open).click();
+    const images = page.locator(entry.image);
+    await expect(images.first()).toBeVisible();
+    const sources = await images.evaluateAll(nodes => nodes.map(node => new URL(node.getAttribute('src'), location.href).pathname));
+    expect(sources.length).toBeGreaterThan(0);
+    expect(sources.every(source => source.startsWith('/assets-tintin/images/collections/'))).toBe(true);
+  }
+});

@@ -1,4 +1,7 @@
-const COLL_IMG_BASE = 'assets-tintin/images/collections/';
+// Debe empezar en la raíz del sitio: el header vive también en /contact,
+// /product, /perfil, etc. Una ruta relativa haría que el navegador busque
+// /contact/assets-… y el mismo menú perdería sus imágenes fuera de Inicio.
+const COLL_IMG_BASE = '/assets-tintin/images/collections/';
 const COLL_PLACEHOLDER = `${COLL_IMG_BASE}col-placeholder.webp`;
 const SLUG_FILE_MAP = { bolsos: 'bags' };
 const MOBILE_GRADIENT = 'linear-gradient(135deg,#e8c5d0,#c48a9e)';

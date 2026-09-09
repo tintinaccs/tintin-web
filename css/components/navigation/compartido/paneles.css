@@ -88,6 +88,22 @@ html.tt-click-dropdown-ready .tt-dropdown.open,
   transition: opacity var(--motion-normal) ease, transform var(--motion-normal) var(--ease-tintin);
 }
 
+.tt-sheet-item-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--tintin-soft, #fff3f7);
+}
+
+.tt-sheet-item-img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .open .tt-dropdown-card,
 .tt-tablet-cats.open .tt-tablet-cat-card,
 .tt-collections-sheet.open .tt-sheet-item,

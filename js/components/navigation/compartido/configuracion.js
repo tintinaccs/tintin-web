@@ -1,4 +1,4 @@
-export const SHELL_VERSION = 'tintin-20260909-navigation-collections-rehydrate-1';
+export const SHELL_VERSION = 'tintin-20260909-unified-navigation-assets-1';
 
 export const BREAKPOINTS = Object.freeze({
   mobileMax: 767,
