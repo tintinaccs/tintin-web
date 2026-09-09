@@ -1894,7 +1894,18 @@ window.addEventListener('tintin:products-loaded', () => renderCart(), { once: tr
 // que alguna otra interacción (+/-) forzaba un renderCart() nuevo.
 window.addEventListener('tt_cart_updated', () => renderCart());
 
-onAuthStateChanged(auth, user => {
+// Firebase puede emitir un `null` transitorio mientras restaura la sesión
+// persistida al llegar desde otra página (por ejemplo, al abrir el carrito
+// desde el header). Esperamos a que el estado inicial se estabilice antes de
+// conectar el listener; así no convertimos una cuenta válida en invitado ni
+// mostramos el guard de login durante ese instante.
+const checkoutAuthStateReady = typeof auth.authStateReady === 'function'
+  ? auth.authStateReady().catch(error => {
+      console.warn('[Checkout] Auth initial state did not settle cleanly:', error);
+    })
+  : Promise.resolve();
+
+checkoutAuthStateReady.then(() => onAuthStateChanged(auth, user => {
   currentUser = user;
   currentUserProfile = null;
   authReady = true;
@@ -1926,7 +1937,7 @@ onAuthStateChanged(auth, user => {
       maybeApplySavedLocation();
     })
     .catch(e => console.error('No se pudo cargar el perfil del usuario:', e));
-});
+}));
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-3"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3"></script>

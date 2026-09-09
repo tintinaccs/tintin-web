@@ -266,16 +266,24 @@ function boot() {
     if (accessLink) mirrorResumeState();
   }, true);
 
-  onAuthStateChanged(auth, user => {
-    restoreResumeState();
-    profilePromise = loadProfile(user);
-    profilePromise.then(state => {
-      if (state.ok) {
-        restoreResumeState();
-        eventuallyClearResumeBackup();
-      }
-    });
-  });
+  // No observar el primer `null` antes de que Firebase restaure la sesión:
+  // ese pulso transitorio hacía que checkout tratara a una cuenta persistida
+  // como invitada al venir desde el carrito/header.
+  const authStateReady = typeof auth.authStateReady === 'function'
+    ? auth.authStateReady().catch(error => {
+        console.warn('[Checkout hardening] Auth initial state did not settle cleanly:', error);
+      })
+    : Promise.resolve();
+  authStateReady.then(() => onAuthStateChanged(auth, user => {
+      restoreResumeState();
+      profilePromise = loadProfile(user);
+      profilePromise.then(state => {
+        if (state.ok) {
+          restoreResumeState();
+          eventuallyClearResumeBackup();
+        }
+      });
+    }));
 
   document.addEventListener('click', event => {
     const cartButton = event.target?.closest?.('#ck-items .ck-qty-btn,#ck-items .ck-remove-btn');
