@@ -187,12 +187,14 @@ function installOverrides() {
     try { await executeProductDeletion({ scope: 'selected', productIds: ids }); }
     catch (error) { toast(error?.message || 'No se pudo completar la eliminación masiva.'); }
   };
+  window.tintinDeleteAllProducts = () => executeProductDeletion({ scope: 'all' });
   window.bulkDeleteCollections = async () => {
     const slugs = selectedCollectionSlugs();
     if (!slugs.length) { toast('Seleccioná al menos una colección.'); return; }
     try { await executeCollectionDeletion({ scope: 'selected', slugs }); }
     catch (error) { toast(error?.message || 'No se pudieron eliminar las colecciones.'); }
   };
+  window.tintinDeleteAllCollections = () => executeCollectionDeletion({ scope: 'all' });
   window.collEliminar = async (slug, count) => {
     try { await executeSingleCollectionDeletion(slug, count); }
     catch (error) { toast(error?.message || 'No se pudo eliminar la colección.'); }

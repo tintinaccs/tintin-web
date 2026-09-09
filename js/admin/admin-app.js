@@ -5634,9 +5634,11 @@ function updateCollBulkToolbar() {
   const toolbar = document.getElementById('coll-bulk-toolbar');
   const countEl = document.getElementById('coll-bulk-count');
   const delBtn = document.getElementById('coll-bulk-delete-btn');
+  const delAllBtn = document.getElementById('coll-bulk-delete-all-btn');
   if (toolbar) toolbar.classList.toggle('show', count > 0);
   if (countEl) countEl.textContent = `${count} seleccionada${count !== 1 ? 's' : ''}`;
   if (delBtn) delBtn.style.display = (can(currentRole, 'deleteCollections') && roleCanDo('colecciones', 'eliminar')) ? '' : 'none';
+  if (delAllBtn) delAllBtn.style.display = (currentRole === 'superadmin' && roleCanDo('colecciones', 'eliminar')) ? '' : 'none';
   const visBtns = document.getElementById('coll-bulk-visible-group');
   if (visBtns) visBtns.style.display = (can(currentRole, 'manageContent') && roleCanDo('colecciones', 'activarDesactivar')) ? 'contents' : 'none';
 }
@@ -6897,12 +6899,14 @@ function updateBulkToolbar() {
   const toolbar = document.getElementById('bulk-toolbar');
   const selCount = document.getElementById('bulk-sel-count');
   const delBtn = document.getElementById('bulk-delete-btn');
+  const delAllBtn = document.getElementById('bulk-delete-all-products-btn');
   if (toolbar) toolbar.style.display = count > 0 ? 'flex' : 'none';
   if (selCount) selCount.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
   // Antes esto era exclusivo de "superadmin" a mano; ahora sigue el mismo
   // permiso que ya gatea el botón de eliminar de a un producto (deleteProducts)
   // — si podés borrar uno, tiene sentido que también puedas borrar varios.
   if (delBtn) delBtn.style.display = (can(currentRole, 'deleteProducts') && roleCanDo('productos', 'eliminar')) ? '' : 'none';
+  if (delAllBtn) delAllBtn.style.display = (currentRole === 'superadmin' && roleCanDo('productos', 'eliminar')) ? '' : 'none';
   // Roles y Permisos: el grupo de acciones masivas (colección/categoría/
   // activar/desactivar/stock/precio/oferta/destacado) se oculta entero si el
   // rol no tiene habilitada "Acciones masivas" en Productos.
