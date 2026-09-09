@@ -78,6 +78,9 @@ function mountFinalHero() {
     return;
   }
 
+  // La hoja del hero usa html.js como guardia progresiva: la clase solo se
+  // agrega después de confirmar que JS e IntersectionObserver están activos.
+  document.documentElement.classList.add('js');
   hero.classList.add('tt-hero-reveal-ready');
   const observer = new IntersectionObserver((entries) => {
     const entry = entries[0];
