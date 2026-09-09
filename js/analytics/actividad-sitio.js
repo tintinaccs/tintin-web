@@ -22,16 +22,18 @@ import {
 import { isAdminPage } from '../admin/ruta-admin.js?v=tintin-20260722-level4-1';
 
 const appCheckAvailable = await appCheckReady;
+const adminPage = isAdminPage();
 
-if (window.TINTIN_ENABLE_PUBLIC_ACTIVITY !== true || !appCheckAvailable) {
+if (adminPage || window.TINTIN_ENABLE_PUBLIC_ACTIVITY !== true || !appCheckAvailable) {
   document.documentElement.dataset.ttActivityState = 'disabled-quota-protection';
   window.TintinSiteActivity = Object.freeze({
-    status: appCheckAvailable ? 'disabled-quota-protection' : 'disabled-app-check'
+    status: adminPage ? 'disabled-admin' : (appCheckAvailable ? 'disabled-quota-protection' : 'disabled-app-check')
   });
 }
 
 if (
   !window.TintinSiteActivityBooted &&
+  !adminPage &&
   window.TINTIN_ENABLE_PUBLIC_ACTIVITY === true &&
   appCheckAvailable
 ) {

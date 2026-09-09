@@ -1847,6 +1847,19 @@
   flex-wrap: wrap;
 }
 
+/* Auth gate: keep private chrome out of the render tree until the guard has
+   completed. This lives in the external admin stylesheet so CSP cannot block
+   the protection and late-loaded module styles cannot reveal active panels. */
+html:not(.adm-auth-ready) #adm-sidebar,
+html:not(.adm-auth-ready) #adm-mobile-tabs,
+html:not(.adm-auth-ready) .adm-main,
+html:not(.adm-auth-ready) #section-dashboard,
+html:not(.adm-auth-ready) .adm-shell,
+html:not(.adm-auth-ready) [data-admin-panel] {
+  visibility: hidden !important;
+  display: none !important;
+}
+
 /* Topbar limpio y centrado. */
 .adm-topbar {
   display: grid;

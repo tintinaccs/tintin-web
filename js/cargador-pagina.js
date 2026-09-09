@@ -15,10 +15,18 @@
     root.scrollTop = 0;
     if (body) body.scrollTop = 0;
     requestAnimationFrame(function () {
-      window.scrollTo(0, 0);
-      root.scrollTop = 0;
-      if (document.body) document.body.scrollTop = 0;
-      root.style.scrollBehavior = previous;
+      try {
+        // Una navegación con View Transitions puede abortar el frame mientras
+        // cambia de documento. El scroll es accesorio y nunca debe producir
+        // una promesa rechazada ni ensuciar la consola.
+        window.scrollTo(0, 0);
+        root.scrollTop = 0;
+        if (document.body) document.body.scrollTop = 0;
+      } catch (error) {
+        if (error?.name !== 'AbortError') console.warn('[Tintin] No se pudo reiniciar el scroll:', error);
+      } finally {
+        root.style.scrollBehavior = previous;
+      }
     });
   }
   resetEntryScroll();
@@ -108,7 +116,7 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260908-public-activity-auth-1';
+  const TT_CACHE_VERSION = 'tintin-20260909-public-activity-auth-2';
   // 120ms (fijado en #396 para matar esperas artificiales) resultó por
   // debajo del umbral de percepción humana: en conexiones rápidas el logo y
   // el texto de sección ("Página Principal", "Catálogo", "Producto") no

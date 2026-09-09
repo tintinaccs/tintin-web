@@ -856,14 +856,11 @@ async function waitForAdminUserAfterAuthRestore(user) {
   // varias veces para no rebotar al login por un estado pasajero en cualquiera
   // de los dos momentos.
   const RETRY_DELAY_MS = 300;
-  // Al llegar desde login.html con Google se registra un puente efímero en
-  // sessionStorage. Ese caso merece más margen: Firebase puede tardar varios
-  // segundos en exponer la misma sesión a admin.html, especialmente en Safari
-  // móvil. Sin este margen, un null transitorio se veía como un logout apenas
-  // después de entrar.
-  let handoffUid = '';
-  try { handoffUid = String(sessionStorage.getItem('tt_auth_handoff_uid') || ''); } catch {}
-  const MAX_ATTEMPTS = handoffUid ? 30 : 6;
+  // La sesión persistida también puede tardar en aparecer cuando se entra
+  // desde cualquier otra página (no sólo desde login). Esperar el mismo
+  // margen evita que el primer acceso a /admin interprete un null transitorio
+  // como un cierre de sesión real.
+  const MAX_ATTEMPTS = 30;
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
     await new Promise(resolve => window.setTimeout(resolve, RETRY_DELAY_MS));
     if (auth.currentUser) return auth.currentUser;
@@ -1788,7 +1785,7 @@ function renderUsersTable(users) {
     // se explicita acá en vez de omitirlo en silencio.
     const blockedDetail = u.blocked ? `
       <div style="margin-top:6px;font-size:11px;color:#888;line-height:1.6;max-width:230px">
-        ${u.phone ? `<div><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>${escapeHtmlAdmin(u.phone)}</div>` : ''}
+        ${u.phone ? `<div><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>${escapeHtmlAdmin(u.phone)}</div>` : ''}
         ${u.roleBeforeBlock ? `<div>Rol antes del bloqueo: <strong>${escapeHtmlAdmin(ROLE_LABELS[u.roleBeforeBlock] || u.roleBeforeBlock)}</strong></div>` : ''}
         ${u.blockedAt ? `<div>Bloqueado: ${formatDate(u.blockedAt)}</div>` : ''}
         ${u.blockedBy ? `<div>Por: ${escapeHtmlAdmin(u.blockedBy)}</div>` : ''}
@@ -1822,7 +1819,7 @@ function renderUsersTable(users) {
         ${can(currentRole,'deleteUsers') && !isSuperAdmin ? `
           <button type="button" class="adm-btn adm-btn-sm adm-btn-danger"
             onclick="window.deleteUser(${uidArg}, ${nameArg})">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;vertical-align:-2px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>Eliminar
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;vertical-align:-2px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>Eliminar
           </button>` : ''}
       </div>
     ` : '<span style="color:#ccc;font-size:12px">—</span>';
@@ -2028,6 +2025,7 @@ function updateUsersBulkToolbar() {
   const countEl = document.getElementById('users-bulk-count');
   const blockBtn = document.getElementById('users-bulk-block-btn');
   const restoreBtn = document.getElementById('users-bulk-restore-btn');
+  const deleteBtn = document.getElementById('users-bulk-delete-btn');
   // Todo el módulo Usuarios (individual y masivo) es exclusivo de Super
   // Admin — mismo permiso que ya gatea las acciones de a una (manageUsers).
   const allowed = can(currentRole, 'manageUsers');
@@ -2035,6 +2033,7 @@ function updateUsersBulkToolbar() {
   if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
   if (blockBtn) blockBtn.style.display = userStatusFilter === 'blocked' ? 'none' : '';
   if (restoreBtn) restoreBtn.style.display = userStatusFilter === 'blocked' ? '' : 'none';
+  if (deleteBtn) deleteBtn.style.display = userStatusFilter === 'blocked' ? 'none' : '';
 }
 
 window.clearUsersSelection = function() {
@@ -2145,6 +2144,24 @@ window.bulkRestoreUsers = async function() {
     clearUsersSelection();
     applyUserFilters();
   } catch (e) { toast('Error: ' + e.message); }
+};
+
+window.bulkDeleteUsers = async function() {
+  if (!_selectedUsers.size) return;
+  if (currentRole !== 'superadmin' || !can(currentRole, 'deleteUsers')) { toast('Solo el Super Admin puede eliminar cuentas'); return; }
+  const targets = [..._selectedUsers].map(uid => allUsers.find(u => u.uid === uid)).filter(u => u && u.email !== SUPER_ADMIN && u.deleted !== true);
+  if (!targets.length) { toast('No hay cuentas elegibles (el Super Admin está protegido)'); return; }
+  const phrase = 'ELIMINAR CUENTAS SELECCIONADAS';
+  if (!confirm(`Se revocará el acceso de ${targets.length} cuenta(s), se liberarán sus datos de contacto y se conservará la identidad histórica, pedidos y auditoría. ¿Continuar?`)) return;
+  if (prompt(`Escribí exactamente para confirmar:\n\n${phrase}`, '') !== phrase) { toast('Confirmación cancelada.'); return; }
+  let ok = 0, fail = 0;
+  for (const user of targets) {
+    try { await updateAccountStatusFromAdmin_(user.uid, 'softDelete', 'Eliminación masiva desde Super Admin'); ok++; }
+    catch { fail++; }
+  }
+  clearUsersSelection();
+  applyUserFilters();
+  toast(`${ok} cuenta(s) eliminadas${fail ? `; ${fail} fallaron` : ''}`);
 };
 
 function userRowsToCsv_(users) {
@@ -2261,7 +2278,7 @@ function renderOrdersTable(orders) {
           ${canEditFull ? `<button type="button" class="adm-btn adm-btn-sm" onclick="openOrderEdit(${orderArg})" title="Editar pedido completo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : '—'}
         </td>
         <td class="col-actions-sticky" data-label="Eliminar" onclick="event.stopPropagation()">
-          ${canDelete ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteOrder(${orderArg})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></button>` : '—'}
+          ${canDelete ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteOrder(${orderArg})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></button>` : '—'}
         </td>
       </tr>
       <tr id="${escapeHtmlAdmin(detailId)}" class="adm-order-detail-row" style="display:none">
@@ -5012,7 +5029,7 @@ function productRowHtml(p) {
       <td style="padding:10px 16px">
         ${imageUrl
           ? `<img src="${escapeHtmlAdmin(imageUrl)}" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:6px;border:1px solid var(--adm-border)">`
-          : `<div style="width:48px;height:48px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8a0b4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`}
+          : `<div style="width:48px;height:48px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8a0b4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`}
       </td>
       <td style="padding:10px 16px;font-weight:600;max-width:200px">${p.name && p.name.trim() ? escapeHtmlAdmin(p.name) : '<span style="color:#c62828;background:#fce4ec;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:800"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><path d="M12 2L2 21h20L12 2z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>SIN NOMBRE — revisar/eliminar</span>'}${
         p.name && p.name.length > 180
@@ -5036,7 +5053,7 @@ function productRowHtml(p) {
         <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
           ${canEditProd ? `<button type="button" class="adm-btn adm-btn-sm" onclick="prodEditar(${docIdArg})" title="Editar producto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : ''}
           ${canToggleProd ? `<button type="button" class="adm-btn adm-btn-sm" style="background:${p.active !== false ? '#fff3e0' : '#e8f5e9'};color:${p.active !== false ? '#bf360c' : '#2e7d32'}" onclick="prodToggleActive(${docIdArg}, ${p.active !== false})" title="${p.active !== false ? 'Desactivar — ocultar de la tienda' : 'Activar — mostrar en la tienda'}">${p.active !== false ? 'Desactivar' : 'Activar'}</button>` : ''}
-          ${canDeleteProd ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="prodEliminar(${docIdArg},${nameArg})" title="Eliminar definitivamente"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>` : ''}
+          ${canDeleteProd ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="prodEliminar(${docIdArg},${nameArg})" title="Eliminar definitivamente"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg> Eliminar</button>` : ''}
           ${!canEditProd && !canToggleProd && !canDeleteProd ? '—' : ''}
         </div>
       </td>
@@ -5637,9 +5654,11 @@ function updateCollBulkToolbar() {
   const toolbar = document.getElementById('coll-bulk-toolbar');
   const countEl = document.getElementById('coll-bulk-count');
   const delBtn = document.getElementById('coll-bulk-delete-btn');
+  const delAllBtn = document.getElementById('coll-bulk-delete-all-btn');
   if (toolbar) toolbar.classList.toggle('show', count > 0);
   if (countEl) countEl.textContent = `${count} seleccionada${count !== 1 ? 's' : ''}`;
   if (delBtn) delBtn.style.display = (can(currentRole, 'deleteCollections') && roleCanDo('colecciones', 'eliminar')) ? '' : 'none';
+  if (delAllBtn) delAllBtn.style.display = (currentRole === 'superadmin' && roleCanDo('colecciones', 'eliminar')) ? '' : 'none';
   const visBtns = document.getElementById('coll-bulk-visible-group');
   if (visBtns) visBtns.style.display = (can(currentRole, 'manageContent') && roleCanDo('colecciones', 'activarDesactivar')) ? 'contents' : 'none';
 }
@@ -6900,12 +6919,14 @@ function updateBulkToolbar() {
   const toolbar = document.getElementById('bulk-toolbar');
   const selCount = document.getElementById('bulk-sel-count');
   const delBtn = document.getElementById('bulk-delete-btn');
+  const delAllBtn = document.getElementById('bulk-delete-all-products-btn');
   if (toolbar) toolbar.style.display = count > 0 ? 'flex' : 'none';
   if (selCount) selCount.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
   // Antes esto era exclusivo de "superadmin" a mano; ahora sigue el mismo
   // permiso que ya gatea el botón de eliminar de a un producto (deleteProducts)
   // — si podés borrar uno, tiene sentido que también puedas borrar varios.
   if (delBtn) delBtn.style.display = (can(currentRole, 'deleteProducts') && roleCanDo('productos', 'eliminar')) ? '' : 'none';
+  if (delAllBtn) delAllBtn.style.display = (currentRole === 'superadmin' && roleCanDo('productos', 'eliminar')) ? '' : 'none';
   // Roles y Permisos: el grupo de acciones masivas (colección/categoría/
   // activar/desactivar/stock/precio/oferta/destacado) se oculta entero si el
   // rol no tiene habilitada "Acciones masivas" en Productos.
@@ -7193,7 +7214,7 @@ function renderOeItems() {
   const fmt = n => 'Gs. ' + Math.round(n).toLocaleString('es-PY');
   el.innerHTML = items.map((it, idx) => `
     <div style="display:flex;align-items:center;gap:10px;background:var(--adm-bg);border-radius:8px;padding:8px 12px" id="oe-item-${idx}">
-      ${sanitizeImageUrl(it.imgUrl||it.imageUrl||'') ? `<img src="${sanitizeImageUrl(it.imgUrl||it.imageUrl||'')}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0">` : `<div style="width:40px;height:40px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8a0b4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`}
+      ${sanitizeImageUrl(it.imgUrl||it.imageUrl||'') ? `<img src="${sanitizeImageUrl(it.imgUrl||it.imageUrl||'')}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0">` : `<div style="width:40px;height:40px;background:#fce4ec;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e8a0b4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`}
       <div style="flex:1;font-size:13px;font-weight:600">${escapeHtmlAdmin(it.name||'—')}${it.variant ? `<div style="font-size:11px;font-weight:400;color:var(--adm-muted)">${escapeHtmlAdmin(it.variant)}</div>` : ''}</div>
       <div style="font-size:12px;color:var(--adm-muted)">${fmt(it.price||0)} c/u</div>
       <input type="number" min="1" value="${it.qty||1}" style="width:56px;padding:4px 8px;border:1px solid var(--adm-border);border-radius:6px;font-size:13px;text-align:center"
