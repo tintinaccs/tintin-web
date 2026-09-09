@@ -1861,6 +1861,105 @@
   .adm-topbar-title { text-align: left; }
   .adm-topbar > :last-child { margin-left: auto; }
 }
+
+/* ======== SHELL ADMIN — alineación final responsive ========
+   La campana se inserta dinámicamente en el topbar. El layout anterior
+   dependía del auto-placement de CSS Grid y podía mandar “Nuevo pedido” a
+   una segunda fila. El título queda centrado de forma estable y las acciones
+   permanecen en una sola línea en desktop/tablet; en mobile se compactan sin
+   perder área táctil. */
+.adm-sidebar-logo {
+  padding: 24px 24px 22px;
+  border-bottom: 1px solid var(--admin-color-border);
+  background: var(--admin-color-background-sidebar);
+}
+.adm-sidebar-logo-text {
+  color: var(--admin-color-text-title);
+  font-size: 17px;
+  letter-spacing: .16em;
+  line-height: 1.1;
+}
+.adm-sidebar-logo-text svg { display: none; }
+.adm-sidebar-logo-sub {
+  color: var(--admin-color-text-secondary);
+  font-size: 9px;
+  letter-spacing: .12em;
+  margin-top: 7px;
+}
+.adm-user-info {
+  border-bottom: 1px solid var(--admin-color-border);
+  padding: 18px 24px;
+}
+.adm-topbar {
+  position: sticky;
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 28px;
+  isolation: isolate;
+}
+.adm-topbar-title {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  margin: 0;
+  text-align: center;
+  font-size: 19px;
+  line-height: 1;
+  z-index: 0;
+}
+.adm-topbar .adm-notifications-wrap,
+.adm-topbar .adm-topbar-btn {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+}
+.adm-topbar .adm-notifications-wrap { margin-left: auto; }
+.adm-topbar .adm-topbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 10px 18px;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .adm-sidebar-logo { padding: 20px 10px; text-align: center; }
+  .adm-sidebar-logo-sub { display: none; }
+  .adm-topbar { min-height: 70px; padding-inline: 18px; }
+  .adm-topbar-title { font-size: 17px; }
+}
+
+@media (max-width: 540px) {
+  .adm-topbar { min-height: 64px; padding: 9px 12px; gap: 8px; }
+  .adm-topbar-title {
+    position: static;
+    display: block;
+    min-width: 0;
+    margin-right: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    font-size: 15px;
+    line-height: 46px;
+  }
+  .adm-topbar .adm-notifications-wrap { margin-left: 0; }
+  .adm-notifications-button { width: 42px; height: 42px; }
+  .adm-topbar .adm-topbar-btn {
+    min-height: 42px;
+    max-width: 124px;
+    padding: 8px 11px;
+    font-size: 10px;
+    line-height: 1.15;
+    white-space: normal;
+  }
+}
 .adm-diagnostic-head p {
   max-width: 760px;
   margin: 5px 0 0;
