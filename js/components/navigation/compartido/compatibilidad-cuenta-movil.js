@@ -13,7 +13,7 @@ function ready(fn){
    que estas hojas terminen de cargar para mostrarse. */
 function loadResponsiveBrandStyles(){
  var files=[
-  ['tt-responsive-brand-surfaces-css','css/theme/superficies-marca-responsive-tintin.css?v=tintin-20260803-brand-surfaces-1'],
+  ['tt-responsive-brand-surfaces-css','css/theme/superficies-marca-responsive-tintin.css?v=tintin-20260909-account-drawer-polish-1'],
   ['tt-responsive-brand-polish-css','css/theme/pulido-marca-responsive-tintin.css?v=tintin-20260903-loader-white-brand-2'],
   ['tt-responsive-brand-safety-css','css/theme/seguridad-marca-responsive-tintin.css?v=tintin-20260803-brand-safety-1']
  ];
