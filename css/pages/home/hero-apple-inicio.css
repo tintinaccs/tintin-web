@@ -1,670 +1,273 @@
-/* ========================================================================== 
-   TINTIN — HERO FINAL 2026-09-09
-   --------------------------------------------------------------------------
-   Única implementación visual del hero de inicio.
-   - composición unificada: fotografía + copy + acciones en una sola superficie
-   - desktop, tablet horizontal, tablet vertical y mobile
-   - acciones HTML reales y accesibles
-   - sin tarjeta de texto separada, sin franja superior/inferior, sin scroll hint
-   - reveal one-shot: JS agrega .tt-hero-revealed y desconecta el observer
-   ========================================================================== */
+/* =============================================================
+   TINTIN — Hero editorial: texto plano sobre la fotografía, sin tarjeta.
 
-:root {
-  --tt-hero-pink-top: #ef87b8;
-  --tt-hero-pink-mid: #f6aed0;
-  --tt-hero-pink-bottom: #ffe4f0;
-  --tt-hero-hot-pink: #f24498;
-  --tt-hero-brown: #745b54;
-  --tt-hero-card: #fff5f8;
+   Desktop: la fotografía ocupa toda la sección y el texto se centra
+   verticalmente, pegado al lado izquierdo, apoyado en un degradado oscuro
+   (sin caja, sin blur, sin sombra).
+
+   Tablet y mobile: layout apilado (foto arriba, texto abajo) pero como una
+   sola superficie continua — el texto vive directo sobre el fondo plano de
+   la sección, sin tarjeta flotante ni separación visual.
+   ============================================================= */
+
+html body.tt-home-premium .tt-hero-content {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  color: #ffffff !important;
+  text-shadow: 0 2px 18px rgba(30, 8, 20, .38);
 }
 
-html body.tt-home-premium .tt-hero,
-html body.tt-home-premium.tt-public-shell-mounted .tt-hero {
-  position: relative !important;
-  isolation: isolate;
-  box-sizing: border-box !important;
-  display: block !important;
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
-  height: auto !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  overflow: hidden !important;
-  background:
-    linear-gradient(180deg,
-      var(--tt-hero-pink-top) 0%,
-      var(--tt-hero-pink-mid) 47%,
-      var(--tt-hero-pink-bottom) 100%) !important;
-  color: #fff;
-  aspect-ratio: 32 / 15;
-  contain: layout paint;
-}
-
-/* Ningún residuo visual del hero anterior puede reaparecer. */
-html body.tt-home-premium .tt-hero-overlay,
-html body.tt-home-premium .tt-hero-line,
-html body.tt-home-premium .tt-hero-scroll-hint,
-html body.tt-home-premium .tt-hero-eyebrow {
-  display: none !important;
-}
-
-/* --------------------------------------------------------------------------
-   Fotografía. La fuente continúa siendo el sistema de Imágenes/Super Panel,
-   pero la presentación ya no controla el layout del hero. La imagen vive en
-   el recuadro editorial de la nueva composición.
-   -------------------------------------------------------------------------- */
-html body.tt-home-premium .tt-hero-media,
-html body.tt-home-premium .tt-hero-media.tt-hero-pending,
-html body.tt-home-premium.tt-public-shell-mounted .tt-hero-media {
-  position: absolute !important;
-  z-index: 2;
-  inset: 4.8% 2.85% 5.2% auto !important;
-  width: 40.55% !important;
-  height: 90% !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: clamp(18px, 2vw, 34px) !important;
-  overflow: hidden !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: none !important;
-  background: var(--tt-hero-card) !important;
-  box-shadow: none !important;
-}
-
-html body.tt-home-premium .tt-hero-media picture {
-  display: block !important;
-  width: 100% !important;
-  height: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-html body.tt-home-premium .tt-hero-img,
-html body.tt-home-premium .tt-hero-media .tt-hero-img {
-  position: absolute !important;
-  inset: 0 !important;
-  display: block !important;
-  width: 100% !important;
-  height: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: inherit !important;
-  object-fit: cover !important;
-  object-position: center center !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: none !important;
-  filter: none !important;
-}
-
-/* Suave velo editorial: aclara bordes sin alterar el producto. */
-html body.tt-home-premium .tt-hero-media::after {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  pointer-events: none;
-  border-radius: inherit;
-  background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,246,250,.03));
-}
-
-/* --------------------------------------------------------------------------
-   Copy vivo. El JS de inicio sustituye definitivamente el copy heredado por:
-   Bienvenida / tintina / Joyitas únicas, como vos.
-   -------------------------------------------------------------------------- */
-html body.tt-home-premium .tt-hero-content,
-html body.tt-home-premium.tt-public-shell-mounted .tt-hero-content {
-  position: absolute !important;
-  z-index: 5;
-  left: 5.35% !important;
-  top: 8.6% !important;
-  width: 48.5% !important;
-  max-width: none !important;
-  height: 82% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  display: block !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
-  text-align: left !important;
-  color: #fff !important;
-  text-shadow: none !important;
+html body.tt-home-premium .tt-hero-content :is(
+  .tt-hero-eyebrow,
+  .tt-hero-title,
+  .tt-hero-subtitle
+) {
+  color: #ffffff !important;
+  text-shadow: 0 2px 18px rgba(30, 8, 20, .38);
 }
 
 html body.tt-home-premium .tt-hero-title {
-  position: absolute !important;
-  left: 0 !important;
-  top: 0 !important;
-  width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  color: #fff !important;
-  line-height: .78 !important;
-  letter-spacing: -.045em !important;
-  text-align: left !important;
-  text-transform: none !important;
-  text-shadow: none !important;
-  font-weight: 400 !important;
-  white-space: normal !important;
+  text-wrap: balance;
 }
 
-html body.tt-home-premium .tt-hero-welcome {
-  display: block;
-  font-family: "Cormorant Garamond", "Bodoni Moda", Didot, Georgia, serif;
-  font-size: clamp(4.7rem, 8.4vw, 8.6rem);
-  font-weight: 400;
-  letter-spacing: -.055em;
-  line-height: .76;
-  white-space: nowrap;
+html body.tt-home-premium .tt-hero-actions .tt-btn {
+  min-height: 52px;
+  border-radius: 999px;
+  box-shadow: none;
+  transition:
+    transform 180ms cubic-bezier(.2, .75, .25, 1),
+    box-shadow 180ms ease,
+    background-color 180ms ease;
 }
 
-html body.tt-home-premium .tt-hero-welcome::first-letter {
-  font-family: "Cormorant Garamond", "Bodoni Moda", Didot, Georgia, serif;
-  font-style: italic;
-  font-size: 1.34em;
+html body.tt-home-premium .tt-hero-actions .tt-btn:hover {
+  transform: translateY(-2px);
 }
 
-html body.tt-home-premium .tt-hero-tintina {
-  display: block;
-  width: max-content;
-  margin: -.03em 0 0 48%;
-  color: var(--tt-hero-hot-pink);
-  font-family: "Allura", "Parisienne", "Brush Script MT", cursive;
-  font-size: clamp(4.2rem, 7vw, 7.35rem);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -.04em;
-  line-height: .72;
-  transform: rotate(-2deg);
-  transform-origin: left center;
-}
-
-html body.tt-home-premium .tt-hero-subtitle {
-  position: absolute !important;
-  left: 4.6% !important;
-  top: 48.7% !important;
-  width: 78% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  color: var(--tt-hero-brown) !important;
-  font-family: Montserrat, Arial, sans-serif !important;
-  font-size: clamp(1rem, 2.05vw, 2rem) !important;
-  font-weight: 400 !important;
-  line-height: 1.15 !important;
-  letter-spacing: .19em !important;
-  text-align: left !important;
-  text-shadow: none !important;
-  white-space: nowrap;
-}
-
-/* --------------------------------------------------------------------------
-   Acciones reales. Se ubican exactamente dentro de la misma composición;
-   no existe bloque inferior separado.
-   -------------------------------------------------------------------------- */
-html body.tt-home-premium .tt-hero-actions {
-  position: static !important;
-  display: contents !important;
-}
-
-html body.tt-home-premium .tt-hero-actions .tt-btn,
-html body.tt-home-premium .tt-hero-actions .tt-hero-cta {
-  position: absolute !important;
-  z-index: 8;
-  left: 4.25% !important;
-  top: 58.1% !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: min(68%, 490px) !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  height: clamp(54px, 7.8%, 66px) !important;
-  margin: 0 !important;
-  padding: 0 clamp(18px, 2.4vw, 34px) !important;
-  border: 0 !important;
-  border-radius: 999px !important;
-  background: rgba(255, 249, 252, .91) !important;
-  color: var(--tt-hero-hot-pink) !important;
-  box-shadow: none !important;
-  font-family: Montserrat, Arial, sans-serif !important;
-  font-size: clamp(.94rem, 1.75vw, 1.72rem) !important;
-  font-weight: 800 !important;
-  line-height: 1 !important;
-  letter-spacing: .08em !important;
-  text-transform: uppercase !important;
-  text-decoration: none !important;
-  text-shadow: none !important;
-  white-space: nowrap !important;
-  cursor: pointer;
-  transition: transform 180ms cubic-bezier(.2,.75,.25,1), background-color 180ms ease, box-shadow 180ms ease !important;
-}
-
-html body.tt-home-premium .tt-hero-cta-arrow {
-  display: inline-block;
-  margin-left: .4em;
-  font-size: 1.15em;
-  line-height: .8;
-  transition: transform 180ms ease;
-}
-
-html body.tt-home-premium .tt-hero-actions .tt-btn:hover,
-html body.tt-home-premium .tt-hero-actions .tt-hero-cta:hover {
-  transform: translateY(-2px) !important;
-  background: #fff !important;
-  box-shadow: 0 10px 26px rgba(166, 57, 110, .14) !important;
-}
-
-html body.tt-home-premium .tt-hero-actions .tt-btn:hover .tt-hero-cta-arrow {
-  transform: translateX(4px);
-}
-
-html body.tt-home-premium .tt-hero-actions .tt-btn:focus-visible,
-html body.tt-home-premium .tt-hero-link:focus-visible {
-  outline: 3px solid rgba(112, 73, 82, .72) !important;
-  outline-offset: 4px !important;
-}
-
-html body.tt-home-premium .tt-hero-link {
-  position: absolute !important;
-  z-index: 8;
-  left: 23.8% !important;
-  top: 79.4% !important;
-  display: inline-block !important;
-  width: max-content !important;
-  margin: 0 !important;
-  padding: 0 0 .08em !important;
-  border: 0 !important;
-  border-bottom: 2px solid currentColor !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  color: #715a54 !important;
-  box-shadow: none !important;
-  font-family: Arial, Helvetica, sans-serif !important;
-  font-size: clamp(.88rem, 1.55vw, 1.45rem) !important;
-  font-weight: 700 !important;
-  line-height: 1.1 !important;
-  letter-spacing: -.035em !important;
-  text-decoration: none !important;
-  text-shadow: none !important;
-  white-space: nowrap !important;
-  transition: opacity 160ms ease, transform 160ms ease !important;
-}
-
-html body.tt-home-premium .tt-hero-link:hover {
-  opacity: .78;
-  transform: translateY(-1px);
-}
-
-/* --------------------------------------------------------------------------
-   Doodles editoriales — DOM no interactivo creado por inicio-carga-imagenes.js.
-   -------------------------------------------------------------------------- */
-html body.tt-home-premium .tt-hero-doodle {
-  position: absolute;
-  z-index: 4;
-  margin: 0;
-  padding: 0;
-  pointer-events: none;
-  user-select: none;
-  color: var(--tt-hero-hot-pink);
-  font-family: "Allura", "Parisienne", "Brush Script MT", cursive;
-  font-weight: 400;
-  line-height: .9;
-  text-shadow: none;
-}
-
-html body.tt-home-premium .tt-hero-doodle--obsessed {
-  right: 5.35%;
-  top: 10.2%;
-  font-size: clamp(1rem, 2vw, 2rem);
-  transform: rotate(9deg);
-}
-
-html body.tt-home-premium .tt-hero-doodle--happy {
-  right: 30.5%;
-  top: 56.5%;
-  max-width: 12ch;
-  font-size: clamp(.95rem, 1.75vw, 1.7rem);
-  text-align: center;
-  transform: rotate(-9deg);
-}
-
-html body.tt-home-premium .tt-hero-doodle--heart-one {
-  right: 18.1%;
-  top: 8.1%;
-  font-family: Georgia, serif;
-  font-size: clamp(1.5rem, 2.3vw, 2.45rem);
-  transform: rotate(-8deg);
-}
-
-html body.tt-home-premium .tt-hero-doodle--heart-two {
-  right: 36.1%;
-  top: 35.2%;
-  font-family: Georgia, serif;
-  font-size: clamp(1.4rem, 2.15vw, 2.25rem);
-  transform: rotate(-13deg);
-}
-
-html body.tt-home-premium .tt-hero-doodle--heart-three {
-  right: 28.2%;
-  bottom: 9.1%;
-  font-family: Georgia, serif;
-  font-size: clamp(1.5rem, 2.15vw, 2.3rem);
-  transform: rotate(10deg);
-}
-
-/* --------------------------------------------------------------------------
-   Reveal irreversible. Estado inicial solo se activa cuando JS confirmó que
-   existe IntersectionObserver; si JS falla, el hero queda visible por defecto.
-   -------------------------------------------------------------------------- */
-html.js .tt-hero.tt-hero-reveal-ready {
-  opacity: 0;
-  transform: translateY(18px);
-}
-
-html.js .tt-hero.tt-hero-reveal-ready.tt-hero-revealed {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 620ms cubic-bezier(.2,.75,.25,1), transform 720ms cubic-bezier(.2,.75,.25,1);
-}
-
-/* ========================================================================== 
-   TABLET HORIZONTAL — referencia 1536 × 1024 (3:2)
-   ========================================================================== */
-@media (min-width: 768px) and (max-width: 1120px) and (orientation: landscape) {
-  html body.tt-home-premium .tt-hero,
-  html body.tt-home-premium.tt-public-shell-mounted .tt-hero {
-    aspect-ratio: 3 / 2;
-  }
-
-  html body.tt-home-premium .tt-hero-media,
-  html body.tt-home-premium .tt-hero-media.tt-hero-pending {
-    left: 51.65% !important;
-    right: auto !important;
-    top: 4.35% !important;
-    bottom: auto !important;
-    width: 44.25% !important;
-    height: 90.25% !important;
-    border-radius: clamp(20px, 2.5vw, 34px) !important;
+/* Desktop: fotografía a pantalla completa, texto centrado verticalmente y
+   pegado al lado izquierdo, directamente sobre un degradado oscuro. */
+@media (min-width: 1024px) {
+  html body.tt-home-premium .tt-hero {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: clamp(620px, 82svh, 880px);
+    padding: clamp(28px, 4vw, 64px);
   }
 
   html body.tt-home-premium .tt-hero-content,
   html body.tt-home-premium.tt-public-shell-mounted .tt-hero-content {
-    left: 5.3% !important;
-    top: 16.2% !important;
-    width: 44.5% !important;
-    height: 71.5% !important;
+    width: min(620px, 46vw);
+    max-width: 620px;
+    margin: 0;
+    padding: 0;
   }
 
-  html body.tt-home-premium .tt-hero-welcome {
-    font-size: clamp(4rem, 10.2vw, 7.4rem);
-    line-height: .74;
+  html body.tt-home-premium .tt-hero-overlay {
+    background:
+      linear-gradient(90deg, rgba(45, 12, 27, .62) 0%, rgba(45, 12, 27, .34) 42%, transparent 72%),
+      linear-gradient(0deg, rgba(45, 12, 27, .28), transparent 55%) !important;
   }
-
-  html body.tt-home-premium .tt-hero-tintina {
-    margin-left: 47%;
-    font-size: clamp(3.8rem, 8.8vw, 6.7rem);
-  }
-
-  html body.tt-home-premium .tt-hero-subtitle {
-    left: 6.2% !important;
-    top: 52.8% !important;
-    width: 92% !important;
-    font-size: clamp(.9rem, 2.35vw, 1.72rem) !important;
-    letter-spacing: .17em !important;
-  }
-
-  html body.tt-home-premium .tt-hero-actions .tt-btn,
-  html body.tt-home-premium .tt-hero-actions .tt-hero-cta {
-    left: 4.8% !important;
-    top: 61.2% !important;
-    width: 82% !important;
-    height: clamp(48px, 10.2%, 68px) !important;
-    font-size: clamp(.88rem, 2.1vw, 1.52rem) !important;
-  }
-
-  html body.tt-home-premium .tt-hero-link {
-    left: 24.7% !important;
-    top: 88% !important;
-    font-size: clamp(.8rem, 1.9vw, 1.35rem) !important;
-  }
-
-  html body.tt-home-premium .tt-hero-doodle--obsessed { right: 5.9%; top: 11%; }
-  html body.tt-home-premium .tt-hero-doodle--happy { right: 29.8%; top: 68%; }
-  html body.tt-home-premium .tt-hero-doodle--heart-one { right: 26%; top: 7.5%; }
-  html body.tt-home-premium .tt-hero-doodle--heart-two { right: 36.5%; top: 39.5%; }
-  html body.tt-home-premium .tt-hero-doodle--heart-three { right: 27%; bottom: 8.2%; }
 }
 
-/* ========================================================================== 
-   TABLET VERTICAL — referencia 1080 × 1350 (4:5)
-   ========================================================================== */
-@media (min-width: 768px) and (max-width: 1120px) and (orientation: portrait) {
-  html body.tt-home-premium .tt-hero,
-  html body.tt-home-premium.tt-public-shell-mounted .tt-hero {
-    aspect-ratio: 4 / 5;
+/* Tablet y mobile: se mantiene el apilado (foto arriba, texto abajo) pero
+   como una sola superficie continua, sin tarjeta ni separación visible. */
+@media (max-width: 1023px) {
+  html body.tt-home-premium .tt-hero {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: clamp(350px, 52svh, 520px) auto;
+    align-items: stretch !important;
+    justify-content: stretch !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 0 clamp(24px, 5vw, 40px);
+    background:
+      linear-gradient(180deg, #f9c9d9 0%, #fff6fa 100%) !important;
+    overflow: hidden;
   }
 
-  html body.tt-home-premium .tt-hero-media,
-  html body.tt-home-premium .tt-hero-media.tt-hero-pending {
-    left: 14.35% !important;
-    right: auto !important;
-    top: 20.75% !important;
-    bottom: auto !important;
-    width: 66.3% !important;
-    height: 59.15% !important;
-    border-radius: clamp(18px, 2.3vw, 30px) !important;
+  html body.tt-home-premium .tt-hero-media {
+    position: relative !important;
+    inset: auto !important;
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  html body.tt-home-premium .tt-hero-overlay {
+    display: none !important;
   }
 
   html body.tt-home-premium .tt-hero-content,
   html body.tt-home-premium.tt-public-shell-mounted .tt-hero-content {
-    left: 15.4% !important;
-    top: 4.5% !important;
-    width: 69% !important;
-    height: 90.5% !important;
-    text-align: center !important;
+    position: relative;
+    grid-column: 1;
+    grid-row: 2;
+    align-self: start !important;
+    justify-self: center !important;
+    width: min(calc(100% - clamp(32px, 8vw, 56px)), 640px);
+    max-width: 640px !important;
+    margin: clamp(28px, 5.5vw, 44px) auto 0;
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  html body.tt-home-premium .tt-hero-content :is(
+    .tt-hero-eyebrow,
+    .tt-hero-title,
+    .tt-hero-subtitle
+  ) {
+    color: #2b2024 !important;
+    text-shadow: none !important;
+  }
+
+  html body.tt-home-premium .tt-hero-eyebrow {
+    justify-content: center;
+    margin-bottom: 12px;
+    color: #a0335b !important;
+    font-size: clamp(.68rem, 1.5vw, .78rem);
+    letter-spacing: .24em;
   }
 
   html body.tt-home-premium .tt-hero-title {
-    width: 100% !important;
-    text-align: center !important;
-  }
-
-  html body.tt-home-premium .tt-hero-welcome {
-    font-size: clamp(4.2rem, 11.8vw, 7.8rem);
-    line-height: .75;
+    width: 100%;
+    margin: 0 0 clamp(20px, 3vw, 28px);
+    font-size: clamp(2rem, 5.4vw, 3.15rem) !important;
+    line-height: 1.02;
+    letter-spacing: -.035em;
     text-align: center;
   }
 
-  html body.tt-home-premium .tt-hero-tintina {
-    margin: -.02em auto 0 48%;
-    font-size: clamp(4rem, 10.3vw, 6.8rem);
-  }
-
   html body.tt-home-premium .tt-hero-subtitle {
-    left: 1% !important;
-    top: 82.35% !important;
-    width: 98% !important;
-    font-size: clamp(1rem, 2.8vw, 1.72rem) !important;
-    letter-spacing: .21em !important;
-    text-align: center !important;
+    width: 100%;
+    text-align: center;
   }
 
-  html body.tt-home-premium .tt-hero-actions .tt-btn,
-  html body.tt-home-premium .tt-hero-actions .tt-hero-cta {
-    left: 20.5% !important;
-    top: 86.7% !important;
-    width: 61.5% !important;
-    height: clamp(48px, 5.5%, 62px) !important;
-    font-size: clamp(.9rem, 2.8vw, 1.55rem) !important;
+  html body.tt-home-premium .tt-hero-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    justify-content: center;
   }
 
-  html body.tt-home-premium .tt-hero-link {
-    left: 50% !important;
-    top: 94% !important;
-    transform: translateX(-50%) !important;
-    font-size: clamp(.86rem, 2.35vw, 1.35rem) !important;
+  html body.tt-home-premium .tt-hero-actions .tt-btn {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    justify-content: center;
+    padding-inline: clamp(16px, 3vw, 28px);
+    white-space: normal;
+    text-align: center;
   }
-
-  html body.tt-home-premium .tt-hero-link:hover {
-    transform: translateX(-50%) translateY(-1px) !important;
-  }
-
-  html body.tt-home-premium .tt-hero-doodle--obsessed { right: 19.5%; top: 26.5%; font-size: clamp(1.2rem, 3.2vw, 2rem); }
-  html body.tt-home-premium .tt-hero-doodle--happy { left: 19.5%; right: auto; top: 51%; font-size: clamp(1rem, 2.9vw, 1.85rem); }
-  html body.tt-home-premium .tt-hero-doodle--heart-one { right: 43%; top: 24.6%; }
-  html body.tt-home-premium .tt-hero-doodle--heart-two { left: 24.5%; right: auto; top: 42.5%; }
-  html body.tt-home-premium .tt-hero-doodle--heart-three { left: 26%; right: auto; bottom: 27%; }
 }
 
-/* ========================================================================== 
-   MOBILE — referencia 1080 × 1350 (4:5)
-   ========================================================================== */
-@media (max-width: 767px) {
-  html body.tt-home-premium .tt-hero,
-  html body.tt-home-premium.tt-public-shell-mounted .tt-hero {
-    aspect-ratio: 4 / 5;
-  }
-
-  html body.tt-home-premium .tt-hero-media,
-  html body.tt-home-premium .tt-hero-media.tt-hero-pending {
-    left: 14.8% !important;
-    right: auto !important;
-    top: 21.1% !important;
-    bottom: auto !important;
-    width: 70.4% !important;
-    height: 57.3% !important;
-    border-radius: clamp(16px, 4.1vw, 30px) !important;
+@media (max-width: 768px) {
+  html body.tt-home-premium .tt-hero {
+    grid-template-rows: clamp(326px, 51svh, 472px) auto;
+    padding-bottom: 22px;
   }
 
   html body.tt-home-premium .tt-hero-content,
   html body.tt-home-premium.tt-public-shell-mounted .tt-hero-content {
-    left: 14.4% !important;
-    top: 4.5% !important;
-    width: 71.2% !important;
-    height: 91% !important;
-    text-align: center !important;
+    width: calc(100% - 40px);
+    margin-top: 24px;
   }
 
   html body.tt-home-premium .tt-hero-title {
-    width: 100% !important;
-    text-align: center !important;
+    font-size: clamp(1.9rem, 8.8vw, 2.8rem) !important;
+    line-height: .98;
   }
 
-  html body.tt-home-premium .tt-hero-welcome {
-    font-size: clamp(2.72rem, 15.3vw, 6.25rem);
-    line-height: .76;
-    text-align: center;
+  html body.tt-home-premium .tt-hero-actions {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
   }
 
-  html body.tt-home-premium .tt-hero-tintina {
-    margin: -.025em auto 0 49%;
-    font-size: clamp(2.55rem, 13.3vw, 5.65rem);
+  html body.tt-home-premium .tt-hero-actions .tt-btn {
+    min-height: 52px;
+    font-size: clamp(.76rem, 3.5vw, .9rem);
   }
-
-  html body.tt-home-premium .tt-hero-subtitle {
-    left: -3% !important;
-    top: 81.4% !important;
-    width: 106% !important;
-    font-size: clamp(.67rem, 3.25vw, 1.32rem) !important;
-    letter-spacing: .205em !important;
-    text-align: center !important;
-  }
-
-  html body.tt-home-premium .tt-hero-actions .tt-btn,
-  html body.tt-home-premium .tt-hero-actions .tt-hero-cta {
-    left: 21% !important;
-    top: 86.2% !important;
-    width: 61% !important;
-    height: clamp(38px, 5.4%, 54px) !important;
-    padding-inline: 12px !important;
-    font-size: clamp(.68rem, 3.45vw, 1.22rem) !important;
-    letter-spacing: .055em !important;
-  }
-
-  html body.tt-home-premium .tt-hero-link {
-    left: 50% !important;
-    top: 93.65% !important;
-    transform: translateX(-50%) !important;
-    font-size: clamp(.66rem, 2.85vw, 1.03rem) !important;
-    border-bottom-width: 1.5px !important;
-  }
-
-  html body.tt-home-premium .tt-hero-link:hover {
-    transform: translateX(-50%) translateY(-1px) !important;
-  }
-
-  html body.tt-home-premium .tt-hero-doodle--obsessed { right: 16.5%; top: 26.7%; font-size: clamp(.82rem, 4.3vw, 1.55rem); }
-  html body.tt-home-premium .tt-hero-doodle--happy { left: 20%; right: auto; top: 51.8%; font-size: clamp(.72rem, 3.75vw, 1.35rem); }
-  html body.tt-home-premium .tt-hero-doodle--heart-one { right: 43%; top: 24.5%; font-size: clamp(1rem, 5vw, 1.8rem); }
-  html body.tt-home-premium .tt-hero-doodle--heart-two { left: 23%; right: auto; top: 43.5%; font-size: clamp(.9rem, 4.7vw, 1.7rem); }
-  html body.tt-home-premium .tt-hero-doodle--heart-three { left: 26%; right: auto; bottom: 26%; font-size: clamp(1rem, 4.7vw, 1.7rem); }
 }
 
-/* Pantallas móviles especialmente angostas: mantener todo dentro del lienzo. */
 @media (max-width: 380px) {
-  html body.tt-home-premium .tt-hero-welcome { font-size: clamp(2.4rem, 14.4vw, 3.4rem); }
-  html body.tt-home-premium .tt-hero-tintina { font-size: clamp(2.3rem, 12.8vw, 3.1rem); }
-  html body.tt-home-premium .tt-hero-subtitle { letter-spacing: .16em !important; }
-}
-
-/* Evitar que un landscape móvil muy bajo herede un viejo layout lateral. */
-@media (max-height: 520px) and (orientation: landscape) and (max-width: 767px) {
-  html body.tt-home-premium .tt-hero,
-  html body.tt-home-premium.tt-public-shell-mounted .tt-hero {
-    aspect-ratio: 3 / 2;
-    min-height: 100svh !important;
-  }
-
-  html body.tt-home-premium .tt-hero-media,
-  html body.tt-home-premium .tt-hero-media.tt-hero-pending {
-    left: 51.65% !important;
-    top: 4.35% !important;
-    width: 44.25% !important;
-    height: 90.25% !important;
+  html body.tt-home-premium .tt-hero {
+    grid-template-rows: clamp(290px, 51.5svh, 414px) auto;
   }
 
   html body.tt-home-premium .tt-hero-content,
   html body.tt-home-premium.tt-public-shell-mounted .tt-hero-content {
-    left: 5.3% !important;
-    top: 14% !important;
-    width: 44.5% !important;
-    height: 74% !important;
+    width: calc(100% - 32px);
+    margin-top: 20px;
   }
 
-  html body.tt-home-premium .tt-hero-welcome { font-size: clamp(2.8rem, 9vw, 5.1rem); }
-  html body.tt-home-premium .tt-hero-tintina { font-size: clamp(2.65rem, 8vw, 4.7rem); }
-  html body.tt-home-premium .tt-hero-subtitle { left: 3% !important; top: 53% !important; width: 96% !important; font-size: clamp(.66rem, 2vw, 1rem) !important; }
-  html body.tt-home-premium .tt-hero-actions .tt-btn,
-  html body.tt-home-premium .tt-hero-actions .tt-hero-cta { left: 3% !important; top: 62% !important; width: 88% !important; height: 17% !important; font-size: clamp(.65rem, 1.9vw, .95rem) !important; }
-  html body.tt-home-premium .tt-hero-link { left: 24% !important; top: 89% !important; transform: none !important; font-size: clamp(.62rem, 1.6vw, .82rem) !important; }
+  html body.tt-home-premium .tt-hero-eyebrow {
+    font-size: .64rem;
+    letter-spacing: .18em;
+  }
+
+  html body.tt-home-premium .tt-hero-title {
+    font-size: clamp(1.72rem, 9vw, 2.15rem) !important;
+    margin-bottom: 18px;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) and (max-width: 1023px) {
+  html body.tt-home-premium .tt-hero {
+    grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr);
+    grid-template-rows: minmax(420px, 100svh);
+    padding: 0;
+  }
+
+  html body.tt-home-premium .tt-hero-media {
+    grid-column: 1;
+    grid-row: 1;
+    border-radius: 0 28px 28px 0;
+  }
+
+  html body.tt-home-premium .tt-hero-content,
+  html body.tt-home-premium.tt-public-shell-mounted .tt-hero-content {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center !important;
+    width: calc(100% - 24px);
+    margin: 12px;
+    padding: 0 !important;
+  }
+
+  html body.tt-home-premium .tt-hero-content :is(
+    .tt-hero-eyebrow,
+    .tt-hero-title,
+    .tt-hero-subtitle
+  ) {
+    color: #2b2024 !important;
+    text-shadow: none !important;
+  }
+
+  html body.tt-home-premium .tt-hero-overlay {
+    display: none !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html.js .tt-hero.tt-hero-reveal-ready,
-  html.js .tt-hero.tt-hero-reveal-ready.tt-hero-revealed {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
-
-  html body.tt-home-premium .tt-hero-actions .tt-btn,
-  html body.tt-home-premium .tt-hero-actions .tt-hero-cta,
-  html body.tt-home-premium .tt-hero-link,
-  html body.tt-home-premium .tt-hero-cta-arrow {
+  html body.tt-home-premium .tt-hero-actions .tt-btn {
+    animation: none !important;
     transition: none !important;
   }
 }
