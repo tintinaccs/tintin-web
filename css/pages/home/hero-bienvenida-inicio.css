@@ -489,6 +489,14 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-cta:active {
   background-color: transparent !important;
   border-color: transparent !important;
   box-shadow: none !important;
+  color: #f24498 !important;
+  transform: none !important;
+}
+
+html body.tt-home-premium .tt-hero-actions .tt-hero-cta:hover *,
+html body.tt-home-premium .tt-hero-actions .tt-hero-cta:focus-visible *,
+html body.tt-home-premium .tt-hero-actions .tt-hero-cta:active * {
+  color: #f24498 !important;
 }
 
 html body.tt-home-premium .tt-hero-actions .tt-hero-link {
