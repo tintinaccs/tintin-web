@@ -408,6 +408,14 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-link {
   }
 }
 
+/* En teléfono el bloque inferior respira un poco más, sin cruzar el borde
+   del hero ni tocar la composición independiente de tablet vertical. */
+@media (max-width: 767px) {
+  html body.tt-home-premium .tt-hero-subtitle { top: 72% !important; }
+  html body.tt-home-premium .tt-hero-actions .tt-hero-cta { top: 78% !important; }
+  html body.tt-home-premium .tt-hero-actions .tt-hero-link { top: 88.5% !important; }
+}
+
 /* El encabezado tablet mide 84px y es fijo. A 768px exactos antes no se
    reservaba ese alto: la imagen arrancaba debajo del encabezado y parecía
    haber un hueco/corte. El hero empieza ahora justo al terminar el header. */
