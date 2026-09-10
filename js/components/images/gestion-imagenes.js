@@ -39,11 +39,12 @@ if (!window.TintinImagesPhase5Booted) {
       mobile: 'assets-tintin/images/nosotros/foto-principal/foto-principal-mobile.webp',
       alt: 'Tintin Accesorios y Relojes',
     },
-    // Última portada publicada: se muestra desde el primer parseo mientras
-    // Firestore resuelve la configuración y luego se reemplaza si cambió.
-    hero_bg_desktop: 'https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784309046/tintin_media_6ea5859c12554fa9b576a84de5ec53c1_full.webp',
-    hero_bg_tablet: 'https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784315346/tintin_media_9cef2bfbeb1149cd908fc7b1ed81ea1a_full.webp',
-    hero_bg_mobile: 'https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784313313/tintin_media_d4980e04509c435681c1bb5e23dcbfc9_full.webp',
+    // Hero nuevo único. No se permite que la configuración anterior de
+    // Firestore vuelva a reemplazarlo con el banner viejo.
+    hero_bg_desktop: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png',
+    hero_bg_tablet_landscape: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png',
+    hero_bg_tablet: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png',
+    hero_bg_mobile: 'assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png',
   });
 
   let images = {};
@@ -233,13 +234,13 @@ if (!window.TintinImagesPhase5Booted) {
       revealHeroWhenImageReady(image);
       return;
     }
-    // Cloudinary (subido desde Super Admin → Imágenes) es la fuente dinámica.
-    // Si Firestore no tiene una URL o tarda en responder, se conserva la última
-    // portada publicada embebida en HTML para que el primer paint sea inmediato.
-    const desktop = resolveSlotImage(images, 'hero_bg', 'desktop') || absolute(STATIC.hero_bg_desktop);
-    const tablet = resolveSlotImage(images, 'hero_bg', 'tablet') || absolute(STATIC.hero_bg_tablet);
-    const mobile = resolveSlotImage(images, 'hero_bg', 'mobile') || absolute(STATIC.hero_bg_mobile);
-    const signature = [desktop, tablet, mobile,
+    // El hero aprobado es fijo y local. Se ignoran las URLs heredadas del
+    // slot hero_bg para garantizar que el banner anterior no vuelva a salir.
+    const desktop = absolute(STATIC.hero_bg_desktop);
+    const tablet = absolute(STATIC.hero_bg_tablet);
+    const mobile = absolute(STATIC.hero_bg_mobile);
+    const tabletLandscape = absolute(STATIC.hero_bg_tablet_landscape);
+    const signature = [desktop, tablet, tabletLandscape, mobile,
       images.hero_bg_desktop_size, images.hero_bg_desktop_pos,
       images.hero_bg_tablet_size, images.hero_bg_tablet_pos,
       images.hero_bg_mobile_size, images.hero_bg_mobile_pos,
@@ -253,7 +254,8 @@ if (!window.TintinImagesPhase5Booted) {
     debugImageFlow('[images-phase5] applyHero: aplicando URLs nuevas', { desktop, tablet, mobile });
 
     let mobileSource = picture.querySelector('source[media*="767"]');
-    let tabletSource = picture.querySelector('source[data-tt-hero-device="tablet"],source[media*="1023"],source[media*="1120"]');
+    let tabletLandscapeSource = picture.querySelector('source[data-tt-hero-device="tablet-landscape"],source[media*="orientation: landscape"]');
+    let tabletSource = picture.querySelector('source[data-tt-hero-device="tablet-portrait"],source[media*="1023"],source[media*="1120"]:not([media*="orientation: landscape"])');
     if (!mobileSource) {
       mobileSource = document.createElement('source');
       mobileSource.media = '(max-width: 767px)';
@@ -262,15 +264,22 @@ if (!window.TintinImagesPhase5Booted) {
     }
     if (!tabletSource) {
       tabletSource = document.createElement('source');
-      tabletSource.dataset.ttHeroDevice = 'tablet';
+      tabletSource.dataset.ttHeroDevice = 'tablet-portrait';
       picture.insertBefore(tabletSource, image);
     }
+    if (!tabletLandscapeSource) {
+      tabletLandscapeSource = document.createElement('source');
+      tabletLandscapeSource.dataset.ttHeroDevice = 'tablet-landscape';
+      picture.insertBefore(tabletLandscapeSource, tabletSource);
+    }
+    tabletLandscapeSource.media = '(min-width: 768px) and (max-width: 1120px) and (orientation: landscape)';
     tabletSource.media = '(max-width: 1120px)';
     const yaVisible = image.currentSrc && image.complete && image.naturalWidth > 0;
     const cambiaFuente = yaVisible && desktop && image.currentSrc !== desktop;
 
     const aplicarFuentes = () => {
       if (mobile) mobileSource.srcset = mobile; else mobileSource.removeAttribute('srcset');
+      tabletLandscapeSource.srcset = tabletLandscape;
       if (tablet) tabletSource.srcset = tablet; else tabletSource.removeAttribute('srcset');
       if (desktop) image.src = desktop; else image.removeAttribute('src');
     };
@@ -299,6 +308,7 @@ if (!window.TintinImagesPhase5Booted) {
         // Si una URL dinámica falla, conserva la última portada válida en vez
         // de desmontar la imagen y revelar el fondo rosa.
         mobileSource.srcset = absolute(STATIC.hero_bg_mobile);
+        tabletLandscapeSource.srcset = tabletLandscape;
         tabletSource.srcset = absolute(STATIC.hero_bg_tablet);
         image.src = absolute(STATIC.hero_bg_desktop);
         media?.classList.remove('tt-hero-pending');

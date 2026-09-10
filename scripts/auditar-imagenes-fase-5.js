@@ -123,14 +123,17 @@ check(
 );
 
 check(
-  'El Hero usa Cloudinary y conserva la última portada publicada como respaldo',
+  'El Hero usa exclusivamente los cuatro fondos nuevos aprobados',
   files.runtime.includes('STATIC.hero_bg_desktop') &&
     files.runtime.includes('STATIC.hero_bg_tablet') &&
     files.runtime.includes('STATIC.hero_bg_mobile') &&
-    files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'desktop') || absolute(STATIC.hero_bg_desktop)") &&
-    files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'tablet') || absolute(STATIC.hero_bg_tablet)") &&
-    files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'mobile') || absolute(STATIC.hero_bg_mobile)"),
-  'el respaldo debe ser la última portada Cloudinary publicada, nunca un archivo local o placeholder'
+    files.runtime.includes('STATIC.hero_bg_tablet_landscape') &&
+    files.runtime.includes('hero-nuevo-desktop.png') &&
+    files.runtime.includes('hero-nuevo-tablet-horizontal.png') &&
+    files.runtime.includes('hero-nuevo-tablet-vertical.png') &&
+    files.runtime.includes('hero-nuevo-mobile.png') &&
+    !files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'desktop') || absolute(STATIC.hero_bg_desktop)"),
+  'el banner anterior no debe poder volver a reemplazar el hero nuevo desde Firestore'
 );
 
 check(
@@ -138,7 +141,7 @@ check(
   files.runtime.includes('if (!heroDataConfirmed) {') &&
     files.runtime.includes('revealHeroWhenImageReady(image);') &&
     !files.runtime.includes("media?.classList.add('tt-hero-pending');") &&
-    read('index.html').includes('src="https://res.cloudinary.com/') &&
+    read('index.html').includes('src="assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png"') &&
     files.homeCss.includes('.tt-home-premium .tt-hero-media.tt-hero-pending') &&
     files.homeCss.includes('visibility:hidden!important') &&
     files.homeCss.includes('opacity:0!important') &&
