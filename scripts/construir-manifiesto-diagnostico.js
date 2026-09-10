@@ -655,6 +655,18 @@ const sourceFingerprint = hash(Buffer.from(
   'utf8'
 ));
 
+function generatedAtForBuild() {
+  // El manifiesto se valida inmediatamente después del build en CI. Usar la
+  // hora actual lo vuelve diferente en cada ejecución aunque el contenido no
+  // haya cambiado. El timestamp del commit es estable para un mismo artefacto.
+  const result = childProcess.spawnSync('git', ['show', '-s', '--format=%cI', 'HEAD'], {
+    cwd: ROOT,
+    encoding: 'utf8'
+  });
+  const commitDate = String(result.stdout || '').trim();
+  return commitDate || new Date().toISOString();
+}
+
 let previousManifest = null;
 try {
   previousManifest = JSON.parse(fs.readFileSync(OUTPUT, 'utf8'));
@@ -662,9 +674,7 @@ try {
 
 const manifest = {
   schemaVersion: 2,
-  generatedAt: previousManifest?.sourceFingerprint === sourceFingerprint
-    ? previousManifest.generatedAt
-    : new Date().toISOString(),
+  generatedAt: generatedAtForBuild(),
   sourceFingerprint,
   safety: {
     mode: 'read-only',
