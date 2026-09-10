@@ -3835,6 +3835,17 @@ h1, h2, h3, h4, h5, h6 { font-family:Montserrat; font-weight: 600; line-height: 
 .tt-breadcrumb span#breadcrumb-product { color: var(--pink-dark); font-weight: 700; }
 
 /* ═══════════════════════════════════════════════
+   RESPONSIVE — 1025px (Desktop)
+═══════════════════════════════════════════════ */
+/* El header desktop (encabezado-escritorio.css, fuente de verdad >=1025px)
+   renderiza a 88px fijos. --header-h debe reflejar ese valor real para que
+   los offsets que dependen de la variable (hero, breadcrumb, checkout,
+   page-hero) no queden por debajo del header fijo. */
+@media (min-width: 1025px) {
+  :root { --header-h: 88px; }
+}
+
+/* ═══════════════════════════════════════════════
    RESPONSIVE — 1024px (Tablet)
 ═══════════════════════════════════════════════ */
 @media (max-width: 1024px) {
