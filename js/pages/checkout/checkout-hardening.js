@@ -18,6 +18,7 @@ let cartReady = false;
 let profilePromise = Promise.resolve({ ok: false, reason: 'signed_out' });
 let profileState = { ok: false, loading: true, user: null, profile: null, reason: 'loading' };
 let annotateQueued = false;
+const PROFILE_READ_TIMEOUT_MS = 5000;
 
 function activeStep() {
   return [...document.querySelectorAll('.ck-panel')].findIndex(panel => panel.classList.contains('active'));
@@ -104,7 +105,10 @@ async function loadProfile(user) {
   }
   profileState = { ok: false, loading: true, user, profile: null, reason: 'loading' };
   try {
-    const snap = await getDoc(doc(db, 'users', user.uid));
+    const timeout = new Promise((_, reject) => {
+      window.setTimeout(() => reject(new Error('profile_read_timeout')), PROFILE_READ_TIMEOUT_MS);
+    });
+    const snap = await Promise.race([getDoc(doc(db, 'users', user.uid)), timeout]);
     const profile = snap.exists() ? snap.data() : null;
     if (!profile) {
       profileState = { ok: false, loading: false, user, profile: null, reason: 'profile_missing' };
@@ -218,7 +222,10 @@ async function guardForwardClick(event, control) {
     // secundaria del perfil falla (red, reglas o timeout de Firestore), no
     // hay motivo para dejar el carrito inutilizable: el control de cuenta
     // bloqueada/login se mantiene en el flujo original y en la confirmación.
-    if (control.id === 'btn-step1-next' && state.reason === 'profile_error') {
+    if (
+      control.id === 'btn-step1-next' &&
+      (state.reason === 'profile_error' || state.reason === 'profile_missing')
+    ) {
       await replay(control);
       return;
     }

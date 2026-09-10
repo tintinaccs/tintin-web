@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-10T12:31:54.833Z",
-  "sourceFingerprint": "028c30b2c60850f1030a70756eb82023e585731992c8f3b997870dc415db3767",
+  "generatedAt": "2026-09-10T12:53:38.404Z",
+  "sourceFingerprint": "bdf2cf8aa0ddbb10931dd0be3ffacdc1138c3344e6c090af04c51ae06e3e4437",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 807,
     "textFiles": 770,
-    "totalBytes": 15861844,
+    "totalBytes": 15862926,
     "pages": 18,
     "modules": 550
   },
@@ -24411,8 +24411,8 @@
     },
     {
       "path": "js/pages/checkout/checkout-hardening.js",
-      "bytes": 11900,
-      "sha256": "e6128f7a0f4274ab1b52575c40e93635a706c1846af2b1bf0106129c4a9a7c78",
+      "bytes": 12177,
+      "sha256": "36fe6035da8542a3ee11e66615f48981c80b4cca1b440c4c1e4e46aadccb7690",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29889,8 +29889,8 @@
     },
     {
       "path": "tests/checkout/checkout-hardening-runtime.test.mjs",
-      "bytes": 5046,
-      "sha256": "b444c4e1572061cec264e8b3cd09510196e4aabfa3b7ce8e2ad9221a3000b8d9",
+      "bytes": 5851,
+      "sha256": "1abd3b164c5d7fcfc4e3133fab8a31d21174e68cc0dc9d3225303549fa56e1e2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34851,8 +34851,8 @@
     {
       "path": "js/pages/checkout/checkout-hardening.js",
       "extension": ".js",
-      "bytes": 11900,
-      "sha256": "e6128f7a0f4274ab1b52575c40e93635a706c1846af2b1bf0106129c4a9a7c78"
+      "bytes": 12177,
+      "sha256": "36fe6035da8542a3ee11e66615f48981c80b4cca1b440c4c1e4e46aadccb7690"
     },
     {
       "path": "js/pages/checkout/checkout-mantenimiento.js",
@@ -36453,8 +36453,8 @@
     {
       "path": "tests/checkout/checkout-hardening-runtime.test.mjs",
       "extension": ".mjs",
-      "bytes": 5046,
-      "sha256": "b444c4e1572061cec264e8b3cd09510196e4aabfa3b7ce8e2ad9221a3000b8d9"
+      "bytes": 5851,
+      "sha256": "1abd3b164c5d7fcfc4e3133fab8a31d21174e68cc0dc9d3225303549fa56e1e2"
     },
     {
       "path": "tests/checkout/documentos-py.test.mjs",
@@ -39990,7 +39990,7 @@
           },
           {
             "file": "js/pages/checkout/checkout-hardening.js",
-            "line": 107,
+            "line": 111,
             "operation": "doc"
           },
           {

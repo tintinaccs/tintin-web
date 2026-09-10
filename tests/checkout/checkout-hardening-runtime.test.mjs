@@ -40,7 +40,19 @@ test('profile must load and not be blocked before forward navigation', () => {
 test('profile read errors do not strand the cart before the shipping step', () => {
   assert.match(hardening, /control\.id === 'btn-step1-next'/);
   assert.match(hardening, /state\.reason === 'profile_error'/);
+  assert.match(hardening, /state\.reason === 'profile_missing'/);
+  assert.match(hardening, /PROFILE_READ_TIMEOUT_MS/);
+  assert.match(hardening, /Promise\.race\(\[getDoc\(doc\(db, 'users', user\.uid\)\), timeout\]\)/);
   assert.match(hardening, /await replay\(control\);\s*return;/);
+});
+
+test('los cinco pasos conservan validación y confirmación sin cerrar sesión', () => {
+  for (const id of ['btn-step1-next', 'btn-step2-next', 'btn-step3-next', 'btn-step4-next', 'ck-confirm-btn']) {
+    assert.match(checkoutPage, new RegExp(`id="${id}"`), `${id} debe existir`);
+  }
+  const secure = readFileSync(new URL('../../js/orders/pedido-checkout-seguro.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(secure, /signOut\s*\(/);
+  assert.match(secure, /const result = await createOrderOnServer\(draft\);[\s\S]*await clearCart\(\);[\s\S]*success\(result, draft\);/);
 });
 
 test('shipping step accepts a verified session while profile hydration is pending', () => {
