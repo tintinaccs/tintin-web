@@ -424,6 +424,16 @@ html body.tt-home-premium .tt-hero-media .tt-hero-img {
   transform: none !important;
 }
 
+html body.tt-home-premium .tt-hero-content,
+html body.tt-home-premium .tt-hero-actions {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
 html body.tt-home-premium .tt-hero-subtitle {
   display: block !important;
   position: absolute !important;

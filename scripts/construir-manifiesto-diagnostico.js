@@ -656,10 +656,15 @@ const sourceFingerprint = hash(Buffer.from(
 ));
 
 function generatedAtForBuild() {
-  // GitHub Actions construye una referencia de merge distinta en cada intento;
-  // por eso tampoco sirve la fecha del HEAD. El manifiesto debe ser idéntico
-  // cuando el contenido fuente es idéntico.
-  return '2000-01-01T00:00:00.000Z';
+  // El manifiesto se valida inmediatamente después del build en CI. Usar la
+  // hora actual o la fecha del último commit que tocó este archivo lo vuelve
+  // diferente después de cada actualización del propio artefacto. Usamos la
+  // fecha del HEAD, estable para todo build del mismo checkout.
+  const head = childProcess.spawnSync('git', ['show', '-s', '--format=%cI', 'HEAD'], {
+    cwd: ROOT,
+    encoding: 'utf8'
+  });
+  return String(head.stdout || '').trim() || new Date().toISOString();
 }
 
 let previousManifest = null;
