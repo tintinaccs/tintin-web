@@ -91,12 +91,13 @@ html body.tt-home-premium .tt-hero-actions {
 }
 
 html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
-  background: #fff9fc !important;
+  background: transparent !important;
+  background-color: transparent !important;
   color: #f24498 !important;
-  border: none !important;
+  border: 0 !important;
   min-height: 52px;
   border-radius: 999px;
-  box-shadow: 0 10px 26px rgba(45, 12, 27, .12) !important;
+  box-shadow: none !important;
   transition:
     transform 180ms cubic-bezier(.2, .75, .25, 1),
     box-shadow 180ms ease,
@@ -104,8 +105,10 @@ html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
 }
 
 html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta:hover {
-  background: #ffffff !important;
-  transform: translateY(-2px);
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  transform: none;
 }
 
 html body.tt-home-premium .tt-hero-link {
