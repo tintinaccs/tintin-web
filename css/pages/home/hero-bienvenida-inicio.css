@@ -12,6 +12,7 @@
 
 html body.tt-home-premium .tt-hero {
   display: grid;
+  position: relative;
   background: linear-gradient(180deg,
     #ed82b4 0%,
     #f39ac2 48%,
@@ -51,6 +52,14 @@ html body.tt-home-premium .tt-hero-content {
 html body.tt-home-premium .tt-hero-subtitle {
   color: #755d57 !important;
   text-shadow: none;
+}
+
+/* El título vive dibujado dentro del arte aprobado; este H1 conserva la
+   semántica accesible sin crear un segundo título visible ni interferir con
+   la comprobación de despeje del encabezado. */
+html body.tt-home-premium .tt-hero-title {
+  top: 100%;
+  left: 0;
 }
 
 html body.tt-home-premium .tt-hero-actions {
