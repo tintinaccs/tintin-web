@@ -141,7 +141,7 @@ check(
   files.runtime.includes('if (!heroDataConfirmed) {') &&
     files.runtime.includes('revealHeroWhenImageReady(image);') &&
     !files.runtime.includes("media?.classList.add('tt-hero-pending');") &&
-    read('index.html').includes('src="assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png"') &&
+    /src="assets-tintin\/images\/home\/hero-nuevo\/hero-nuevo-desktop\.png(?:\?[^\"]*)?"/.test(read('index.html')) &&
     files.homeCss.includes('.tt-home-premium .tt-hero-media.tt-hero-pending') &&
     files.homeCss.includes('visibility:hidden!important') &&
     files.homeCss.includes('opacity:0!important') &&
