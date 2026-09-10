@@ -16,7 +16,7 @@ import {
   normalizeContentValue,
   detectContentPageId,
 } from './esquema-contenido.js?v=tintin-20260826-carousel-order-3';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260826-carousel-order-3';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260910-hero-html-1';
 
 const subscriptions = new Map();
 const latestData = new Map();
@@ -79,6 +79,16 @@ function replaceLabelPreservingChildren(element, value) {
 
 function applyText(element, value, item) {
   const safe = sanitizeContentText(value, item.maxLength);
+  if (element.classList.contains('tt-hero-title')) {
+    const lines = String(safe).split('\n').filter(Boolean);
+    element.replaceChildren(...(lines.length ? lines : ['Bienvenida', 'tintina']).map((line, index) => {
+      const span = document.createElement('span');
+      span.className = `tt-hero-title-line${index ? ' tt-hero-title-line--accent' : ''}`;
+      span.textContent = line;
+      return span;
+    }));
+    return;
+  }
   const preserveChildren =
     element.id === 'form-success' ||
     element.classList.contains('tt-contact-wa-link') ||

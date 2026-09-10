@@ -1,8 +1,9 @@
 /* =============================================================
    TINTIN — Hero "Bienvenida tintina".
 
-   Las referencias nuevas ya contienen el título visual. Sólo el subtítulo y
-   las acciones se mantienen como HTML real, accesible y seleccionable.
+   La fotografía es sólo un apoyo visual. El título, el subtítulo y las
+   acciones viven en HTML real para que el hero siga funcionando aunque una
+   imagen tarde o no esté disponible.
 
    Desktop y tablet horizontal: layout en fila (texto a la izquierda,
    fotografía en tarjeta redondeada a la derecha).
@@ -54,12 +55,31 @@ html body.tt-home-premium .tt-hero-subtitle {
   text-shadow: none;
 }
 
-/* El título vive dibujado dentro del arte aprobado; este H1 conserva la
-   semántica accesible sin crear un segundo título visible ni interferir con
-   la comprobación de despeje del encabezado. */
 html body.tt-home-premium .tt-hero-title {
-  top: 100%;
-  left: 0;
+  position: relative;
+  width: 100%;
+  margin: 0 0 clamp(24px, 3vw, 42px);
+  color: #fff !important;
+  font-family: "Montserrat", sans-serif;
+  font-size: clamp(3.2rem, 7vw, 7.8rem);
+  font-weight: 300;
+  line-height: .82;
+  letter-spacing: -.055em;
+  text-align: left;
+  text-shadow: 0 4px 22px rgba(121, 35, 79, .16);
+}
+
+html body.tt-home-premium .tt-hero-title-line {
+  display: block;
+}
+
+html body.tt-home-premium .tt-hero-title-line--accent {
+  margin-left: clamp(56px, 10vw, 150px);
+  color: #f24498;
+  font-family: "Brush Script MT", "Segoe Script", cursive;
+  font-size: 1.02em;
+  font-weight: 400;
+  letter-spacing: -.08em;
 }
 
 html body.tt-home-premium .tt-hero-actions {
@@ -103,7 +123,7 @@ html body.tt-home-premium .tt-hero-link:hover {
 @media (min-width: 1121px),
        (min-width: 768px) and (max-width: 1120px) and (orientation: landscape) {
   html body.tt-home-premium .tt-hero {
-    grid-template-columns: minmax(0, 1.02fr) minmax(0, .82fr);
+    grid-template-columns: minmax(0, 1fr) minmax(360px, .92fr);
     grid-template-areas: "content media";
     align-items: center;
     justify-items: start;
@@ -122,7 +142,7 @@ html body.tt-home-premium .tt-hero-link:hover {
     grid-area: media;
     justify-self: end;
     align-self: center;
-    width: min(100%, 640px);
+    width: min(100%, 720px);
     aspect-ratio: 4 / 5;
     border-radius: 32px;
     box-shadow: 0 28px 64px rgba(45, 12, 27, .28);
@@ -141,7 +161,7 @@ html body.tt-home-premium .tt-hero-link:hover {
   }
 
   html body.tt-home-premium .tt-hero-media {
-    width: min(100%, 320px);
+    width: min(100%, 520px);
   }
 
 }
@@ -153,8 +173,8 @@ html body.tt-home-premium .tt-hero-link:hover {
        (max-width: 1120px) and (orientation: portrait) {
   html body.tt-home-premium .tt-hero {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: clamp(320px, 46svh, 620px) auto auto;
-    grid-template-areas: "media" "subtitle" "actions";
+    grid-template-rows: auto clamp(320px, 52svh, 680px) auto auto;
+    grid-template-areas: "title" "media" "subtitle" "actions";
     align-items: stretch;
     min-height: 0;
     padding: 0 0 clamp(32px, 6vw, 56px);
@@ -171,6 +191,18 @@ html body.tt-home-premium .tt-hero-link:hover {
 
   html body.tt-home-premium .tt-hero-content {
     display: contents;
+  }
+
+  html body.tt-home-premium .tt-hero-title {
+    grid-area: title;
+    width: min(calc(100% - 32px), 720px);
+    margin: clamp(24px, 6vw, 48px) auto clamp(14px, 3vw, 24px);
+    text-align: center;
+    font-size: clamp(3rem, 13vw, 6rem);
+  }
+
+  html body.tt-home-premium .tt-hero-title-line--accent {
+    margin-left: clamp(30px, 12vw, 100px);
   }
 
   html body.tt-home-premium .tt-hero-subtitle {
@@ -192,7 +224,7 @@ html body.tt-home-premium .tt-hero-link:hover {
 
 @media (max-width: 767px) {
   html body.tt-home-premium .tt-hero {
-    grid-template-rows: clamp(300px, 44svh, 520px) auto auto;
+    grid-template-rows: auto clamp(300px, 48svh, 560px) auto auto;
     padding-bottom: 28px;
   }
 
