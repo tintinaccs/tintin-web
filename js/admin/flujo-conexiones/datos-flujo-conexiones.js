@@ -25,7 +25,7 @@ export const ESTADOS = {
 // "Revalidar" del panel actualiza `lastLiveCheck` de los nodos que sí tienen
 // una prueba en vivo real (ver flujo-conexiones-admin.js); todo lo demás
 // conserva esta fecha como "última revisión de código".
-export const GENERATED_AT = '2026-09-06';
+export const GENERATED_AT = '2026-09-10';
 
 export const NODES = [
   { id: 'entrada-login', label: 'Login', category: 'entrada', state: ESTADOS.PROD,
@@ -47,7 +47,7 @@ export const NODES = [
     evidence: [{ file: 'js/core/auth/proteccion-sesion.js', line: 98 },
                { file: 'js/admin/admin-app.js', line: 876 },
                { file: 'js/core/auth/navegacion-autenticacion.js', line: 58 }],
-    notes: 'Tres listeners independientes (global, admin, perfil-gate), no uno centralizado.' },
+    notes: 'Las superficies críticas comparten coordinador-sesion.js; login y módulos especializados conservan listeners propios por su ciclo de vida.' },
   { id: 'firestore', label: 'Firestore', category: 'datos', state: ESTADOS.PROD,
     evidence: [{ file: 'firestore.rules' }] },
   { id: 'users-uid', label: 'users/{uid}', category: 'datos', state: ESTADOS.PROD,

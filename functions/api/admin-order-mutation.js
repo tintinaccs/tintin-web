@@ -39,8 +39,8 @@ export async function onRequest(context) {
         changeId: body.changeId,
         source: 'admin-payment'
       }, { uid: actor.uid, email: actor.email, role: actor.role, origin: 'admin-payment' });
-      const sheetsSync = await syncOrderToSheetsBestEffort(env, result);
-      return jsonResponse({ ok: true, result, sheetsSync }, 200, origin, requestUrl);
+      context.waitUntil?.(syncOrderToSheetsBestEffort(env, result));
+      return jsonResponse({ ok: true, result, sheetsSync: { ok: true, deferred: true } }, 200, origin, requestUrl);
     }
     const actorContext = {
       uid: actor.uid,
@@ -55,8 +55,8 @@ export async function onRequest(context) {
     // Firestore + inventario son la transacción comercial. Sheets se actualiza
     // después y en best-effort: una caída de Google nunca convierte en fallido
     // un pedido que ya fue confirmado por el dominio canónico.
-    const sheetsSync = await syncOrderToSheetsBestEffort(env, result);
-    return jsonResponse({ ok: true, result, sheetsSync }, 200, origin, requestUrl);
+    context.waitUntil?.(syncOrderToSheetsBestEffort(env, result));
+    return jsonResponse({ ok: true, result, sheetsSync: { ok: true, deferred: true } }, 200, origin, requestUrl);
   } catch (error) {
     console.error('[admin-order-mutation]', error?.code || '', error?.message || error);
     const message = safeText(error?.message, 300);

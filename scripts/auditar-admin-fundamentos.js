@@ -63,8 +63,10 @@ const sectionIds      = [...new Set([...adminHtml.matchAll(/id="section-([a-z-]+
 // ===========================================================================
 check(
   'El guard usa onAuthStateChanged como puerta de entrada',
-  /onAuthStateChanged\(auth,\s*async user/.test(adminApp),
-  'admin-app.js debe resolver la sesión con onAuthStateChanged antes de mostrar el panel.'
+  ( /onAuthStateChanged\(auth,\s*async user/.test(adminApp) ||
+    adminApp.includes('subscribeAuthState(async user') ) &&
+    adminApp.includes('coordinador-sesion.js'),
+  'admin-app.js debe resolver la sesión mediante el coordinador antes de mostrar el panel.'
 );
 check(
   'Sin sesión se redirige a login.html',
@@ -80,8 +82,9 @@ check(
 );
 check(
   'Las cuentas bloqueadas se expulsan con aviso',
-  adminApp.includes('login.html?blocked=1') && /\.blocked\b/.test(adminApp),
-  'Una cuenta con blocked=true debe cerrar sesión e ir a login.html?blocked=1.'
+  /\.blocked\b/.test(adminApp) &&
+    (adminApp.includes('login.html?blocked=1') || adminApp.includes('tintin:account-blocked')),
+  'Una cuenta con blocked=true debe perder acceso y mostrar el aviso sin destruir Auth.'
 );
 check(
   'El Super Admin nunca queda bloqueado ni pierde acceso',

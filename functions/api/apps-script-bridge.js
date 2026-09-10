@@ -185,11 +185,13 @@ export async function onRequest(context) {
       try { parsed = JSON.parse(body); } catch {}
       if (parsed?.ok === true) {
         const identity = await enforceCanonicalOrderIdentity(env, parsed.orderId, authenticatedUser);
-        const sheetsSync = await syncOrderToSheetsBestEffort(env, {
+        const sheetsSyncPromise = syncOrderToSheetsBestEffort(env, {
           orderId: parsed.orderId,
           order: identity.order,
         });
+        context.waitUntil?.(sheetsSyncPromise);
         parsed.customerId = identity.customerId;
+        const sheetsSync = { ok: true, deferred: true };
         parsed.sheetsSync = sheetsSync;
         if (parsed.order && typeof parsed.order === 'object') {
           parsed.order.customerId = identity.customerId;

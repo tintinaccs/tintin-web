@@ -1,8 +1,10 @@
 // cargador-pagina.js es el único responsable de iniciar los módulos globales de
 // interfaz. auth-nav solo administra sesión y navegación de la cuenta.
 import { auth } from '../firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from './coordinador-sesion.js?v=tintin-20260910-session-coordinator-1';
 import { getUserRole, can, SUPER_ADMIN } from './roles.js?v=tintin-20260821-accounts-phase-a-3';
+import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 
 const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');
@@ -36,6 +38,7 @@ function publishStaffVisibility(user,role){
  window.dispatchEvent(new CustomEvent('tintin:staff-visibility-ready',{detail:{staff}}));
 }
 function roleLabel(role){if(role==='superadmin')return 'Panel Super Admin';if(role==='admin')return 'Panel Admin';if(role==='agent')return 'Panel Agente';if(role==='viewer')return 'Panel Viewer';return 'Panel interno';}
+function initials(value){return String(value||'?').trim().split(/\s+/).filter(Boolean).slice(0,2).map(part=>part[0]).join('').toUpperCase()||'?';}
 
 const accountBtnDefaults=new Map();
 
@@ -59,11 +62,7 @@ window.addEventListener('tintin:login-failed',endSilentAuthTransition);
 // tiempo que se monta el header. Esperar el estado inicial evita pintar una
 // cuenta como visitante durante esa ventana y que la navegación parezca un
 // cierre de sesión.
-const authStateReady = typeof auth.authStateReady === 'function'
-  ? auth.authStateReady().catch(() => {})
-  : Promise.resolve();
-
-authStateReady.then(()=>onAuthStateChanged(auth,async user=>{
+subscribeAuthState(async user=>{
  // login.html es el único dueño del alta, bloqueo y destino posterior al
  // acceso. Evita dos redirecciones paralelas compitiendo por la misma sesión.
  if(IS_LOGIN_PAGE)return;
@@ -76,15 +75,16 @@ authStateReady.then(()=>onAuthStateChanged(auth,async user=>{
  window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated',{
   detail:{authenticated:Boolean(user),role}
  }));
-}));
+});
 
 function renderAccountButtonPhoto(user){
  document.querySelectorAll('[data-auth-account-button]').forEach(btn=>{
   if(!accountBtnDefaults.has(btn))accountBtnDefaults.set(btn,btn.innerHTML);
-  if(user&&user.photoURL){
+  const photoUrl = sanitizeImageUrl(user?.photoURL || '');
+  if(user&&photoUrl){
    const name=user.displayName||user.email||'Mi cuenta';
    const img=document.createElement('img');
-   img.className='tt-account-avatar-btn';img.src=user.photoURL;img.alt=name;img.referrerPolicy='no-referrer';img.width=26;img.height=26;
+   img.className='tt-account-avatar-btn';img.src=photoUrl;img.alt=name;img.referrerPolicy='no-referrer';img.width=26;img.height=26;
    img.style.cssText='width:26px;height:26px;max-width:none;max-height:none;flex-shrink:0;border-radius:50%;object-fit:cover;display:block';
    img.onerror=()=>{btn.innerHTML=accountBtnDefaults.get(btn);};
    btn.innerHTML='';btn.appendChild(img);
@@ -96,9 +96,10 @@ function renderMobileTabbarPhoto(user){
  const tab=document.getElementById('tabbar-cuenta');
  if(!tab)return;
  if(!tab.dataset.ttDefaultHtml)tab.dataset.ttDefaultHtml=tab.innerHTML;
- if(user&&user.photoURL){
+ const photoUrl = sanitizeImageUrl(user?.photoURL || '');
+ if(user&&photoUrl){
   const name=escapeHtmlNav(user.displayName||user.email||'Mi cuenta');
-  tab.innerHTML=`<img class="tt-tabbar-avatar" src="${user.photoURL}" alt="${name}" referrerpolicy="no-referrer" width="24" height="24"><span>Cuenta</span>`;
+  tab.innerHTML=`<img class="tt-tabbar-avatar" src="${photoUrl}" alt="${name}" referrerpolicy="no-referrer" width="24" height="24"><span>Cuenta</span>`;
   const img=tab.querySelector('img');
   if(img)img.onerror=()=>{tab.innerHTML=tab.dataset.ttDefaultHtml;};
  }else tab.innerHTML=tab.dataset.ttDefaultHtml;
@@ -109,7 +110,8 @@ function renderAccountPanel(user,role='client'){
  if(!panel)return;
  if(!user){panel.innerHTML=`<p class="tt-account-guest-copy">Ingresá para guardar favoritos, ver pedidos y comprar más rápido.</p><a class="tt-account-item" href="/login">Iniciar sesión</a><a class="tt-account-item" href="/login">Crear una cuenta</a>`;return;}
  const name=escapeHtmlNav(user.displayName||user.email||'Mi cuenta');
- const photo=user.photoURL?`<img class="tt-account-panel-avatar" src="${user.photoURL}" alt="${name}" referrerpolicy="no-referrer" width="32" height="32">`:'';
+ const photoUrl=sanitizeImageUrl(user.photoURL || '');
+ const photo=photoUrl?`<img class="tt-account-panel-avatar" src="${photoUrl}" alt="${name}" referrerpolicy="no-referrer" width="32" height="32">`:`<span class="tt-account-panel-avatar tt-account-panel-initials">${initials(user.displayName||user.email)}</span>`;
  const adminLink=hasAdminAccess(user,role)?`<a class="tt-account-item" href="/admin" data-internal-admin-link="true">${roleLabel(role)}</a>`:'';
  panel.innerHTML=`<div class="tt-account-header">${photo}<span>${name}</span></div>${adminLink}<a class="tt-account-item" href="/perfil">Mi cuenta</a><a class="tt-account-item" href="/perfil#mis-pedidos">Mis pedidos</a><div class="tt-account-divider"></div><button type="button" class="tt-account-item tt-account-logout" id="account-logout-btn">Cerrar sesión</button>`;
  wireLogout(panel);

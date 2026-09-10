@@ -80,7 +80,7 @@ check(
 );
 check(
   'El panel reconcilia inventario de forma transaccional',
-  inventory.includes("fetch('/api/admin-order-mutation'") &&
+  (inventory.includes("fetch('/api/admin-order-mutation'") || inventory.includes("authenticatedFetch('/api/admin-order-mutation'")) &&
     inventory.includes('async function updateEditedOrder') &&
     inventory.includes('async function transitionStatus') &&
     orderDomain.includes('computeInventoryDeltas') &&

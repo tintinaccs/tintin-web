@@ -130,7 +130,9 @@ const auth = getAuth(app);
 // páginas compite con la resolución de la sesión ya persistida: setPersistence
 // no es idempotente y puede pisar la sesión válida que ya vive en IndexedDB,
 // dejando a una pestaña nueva sin detectar que la cuenta sigue logueada.
-// La expiración de 30 minutos la controla proteccion-sesion.js.
+// La sesión no expira por inactividad desde la aplicación. Firebase renueva
+// sus tokens automáticamente; sólo una acción explícita de la persona o una
+// revocación real del proveedor puede cerrar Auth.
 const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');
 export const authPersistenceReady = IS_LOGIN_PAGE
   ? setPersistence(auth, browserLocalPersistence)
