@@ -116,16 +116,16 @@
     "sha256": "6fa87a8f948850ef32034ec3131014a8b2bce3c31ea29f5bb247ee7e36e63f0e"
   },
   "css/pages/home/ajuste-inicio.css": {
-    "version": "tintin-20260908-home-hierarchy-3",
-    "sha256": "84bc09b43f7e8ae3481851b9342e1f8ec79bf9c0cd9ed9c465759c0f9c61cbf9"
+    "version": "tintin-20260909-home-hierarchy-4",
+    "sha256": "9269b05635b3f281adf9ed900f37976197b2c20e9ed17246ce60b092fe3fca33"
   },
   "css/pages/home/carrusel-colecciones.css": {
     "version": "tintin-20260826-collections-parallax-4",
     "sha256": "5124eafa36448545ce269672b2094ca6ac4f4152a355821b52f97495039a4c44"
   },
-  "css/pages/home/hero-apple-inicio.css": {
-    "version": "tintin-20260827-hero-no-flicker-1",
-    "sha256": "3b42c73dec8e89d33748a24c6ff4830f40603720b333155a402585d0157f0a5f"
+  "css/pages/home/hero-bienvenida-inicio.css": {
+    "version": "tintin-20260909-hero-bienvenida-1",
+    "sha256": "053c7bfde6b604405dbde8e2d2db3d295126486ff5ef6e0157c9615a4f58d680"
   },
   "css/pages/institutional/about-maintenance.css": {
     "version": "tintin-20260809-loader-motion-fix-1",
@@ -220,8 +220,8 @@
     "sha256": "77f776d5b297ce973fe5ea432f318498d7e9f07a41f183525a79159c6686c12d"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20260909-admin-payment-sync-2",
-    "sha256": "245cbc42c7e573d2a1be45535521fefc97574394d457835833e4bcf0188b5c6e"
+    "version": "tintin-20260909-admin-payment-sync-3",
+    "sha256": "42989bf9e2094ff8e94cf73a9a30a2bf785729516e12c537d9baee33bdccb143"
   },
   "js/admin/appearance/editor-visual-admin.js": {
     "version": "tintin-20260903-pr427-cache-3",
@@ -572,12 +572,12 @@
     "sha256": "58ac387de91c5ac846ee05961de0c8cb041040e35006d7243b39024a3b42e8f3"
   },
   "js/core/store-gate/control-tienda.js": {
-    "version": "tintin-20260903-store-gate-fast-rest-4",
-    "sha256": "ec42e66b9bdca2c9f4ff650182582ddc2386c0482c7a41af3c031ee954d406b7"
+    "version": "tintin-20260909-store-gate-degraded-fix-1",
+    "sha256": "79c4674a0b0fee6da2195705a42fbd1dbfefd8f981972c408ec2b15ffcb5ec99"
   },
   "js/core/store-gate/nucleo-control-tienda.js": {
-    "version": "tintin-20260903-store-gate-fast-rest-4",
-    "sha256": "60a28d0a4b1ba512facb319588d535f712b1e3af9e7fcf8e24114158b7d4c705"
+    "version": "tintin-20260909-store-gate-degraded-fix-1",
+    "sha256": "2db46a72e2a938cc74bf627a15b7b10954d1979a0b739dbf9a3e3bd7187e3c17"
   },
   "js/core/store/configuracion-publica.js": {
     "version": "tintin-20260720-read-budget-3",
@@ -797,7 +797,7 @@
   },
   "styles.min.css": {
     "version": "tintin-20260903-css-shell-min-1",
-    "sha256": "78f899ccabbc8c2a128ef1f49cb490bc09bab040c2b72882bd009abca8e431fa"
+    "sha256": "727731bc73f6bce2c5f5cd2a7c1d23ace7582709f068de13679a3b0dfb9470d2"
   },
   "tienda.js": {
     "version": "tintin-20260907-session-preserved-5",
