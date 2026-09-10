@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c7b97fe617b978eba6c8de24514d6b272d4d18d199a85aba2e1d3e392808ebfc",
+  "sourceFingerprint": "b7b37d0d29f1465d11c06598920a72e28b13383347b62903246dd13fa31a099f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 810,
     "textFiles": 773,
-    "totalBytes": 15891941,
+    "totalBytes": 16209998,
     "pages": 18,
     "modules": 553
   },
@@ -11975,8 +11975,8 @@
         "guest",
         "client"
       ],
-      "bytes": 36021,
-      "sha256": "c821f0bcd02f726cb2b9b8b0d57f152d455dd7350fb056652e887872ac7df162",
+      "bytes": 36173,
+      "sha256": "a9e72f6305080456be592d9f38127880d5e587fdf80cd38ef349d65855938490",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12178,7 +12178,7 @@
       "images": [
         {
           "tag": "source",
-          "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png",
+          "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png?v=tintin-20260910-hero-button-clear-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png",
           "alt": "",
           "hasAlt": false,
@@ -12186,7 +12186,7 @@
         },
         {
           "tag": "source",
-          "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png",
+          "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png?v=tintin-20260910-hero-button-clear-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png",
           "alt": "",
           "hasAlt": false,
@@ -12194,7 +12194,7 @@
         },
         {
           "tag": "source",
-          "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png",
+          "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png?v=tintin-20260910-hero-button-clear-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png",
           "alt": "",
           "hasAlt": false,
@@ -12202,7 +12202,7 @@
         },
         {
           "tag": "img",
-          "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png",
+          "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png?v=tintin-20260910-hero-button-clear-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png",
           "alt": "",
           "hasAlt": true,
@@ -12685,25 +12685,25 @@
           "exists": true
         },
         {
-          "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png",
+          "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png?v=tintin-20260910-hero-button-clear-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png",
           "line": 105,
           "exists": true
         },
         {
-          "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png",
+          "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png?v=tintin-20260910-hero-button-clear-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png",
           "line": 106,
           "exists": true
         },
         {
-          "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png",
+          "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png?v=tintin-20260910-hero-button-clear-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png",
           "line": 107,
           "exists": true
         },
         {
-          "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png",
+          "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png?v=tintin-20260910-hero-button-clear-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png",
           "line": 108,
           "exists": true
@@ -32464,26 +32464,26 @@
     {
       "path": "assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png",
       "extension": ".png",
-      "bytes": 1469497,
-      "sha256": "47c4a88533db5bf48bf0d20afabfb5ab30a8bf5ec57e02fbc3b8461ea8f39259"
+      "bytes": 1537376,
+      "sha256": "9a8aa6d3d960806e178574d4b6f69989705576fa98edbccb1fe2350afdb8fa6f"
     },
     {
       "path": "assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png",
       "extension": ".png",
-      "bytes": 1449426,
-      "sha256": "3927fbdb17284214b940981fbe1725983341f71d94f144098ede56944c43823b"
+      "bytes": 1530960,
+      "sha256": "b07598a3d304e4070d4b4a50b6d2ace7dcd04e366096b4219d9e88f28382c51b"
     },
     {
       "path": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png",
       "extension": ".png",
-      "bytes": 1579331,
-      "sha256": "a6299c8443b49d1187f1136f1fa6a47017e37261c7a7135fe76ebb3ab35d6ded"
+      "bytes": 1681702,
+      "sha256": "ad5201bf43f270c8ff24d88ddc9fae4258d14558b3f8124ab11559f7a0907088"
     },
     {
       "path": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png",
       "extension": ".png",
-      "bytes": 1468437,
-      "sha256": "c4ee837bad9d65ec32d3b0cbaf025c2a653d3d72e2f5a66e1036e0cacdb4af07"
+      "bytes": 1534558,
+      "sha256": "992bca2399fdc5dd8401ce2eb74a2fb74cdb321527ec3a582090fd8a85aeb318"
     },
     {
       "path": "assets-tintin/images/nosotros/foto-principal/foto-principal-desktop.webp",
@@ -33940,8 +33940,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 36021,
-      "sha256": "c821f0bcd02f726cb2b9b8b0d57f152d455dd7350fb056652e887872ac7df162"
+      "bytes": 36173,
+      "sha256": "a9e72f6305080456be592d9f38127880d5e587fdf80cd38ef349d65855938490"
     },
     {
       "path": "js/admin/admin-app.js",
