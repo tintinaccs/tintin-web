@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-10T14:28:59.951Z",
-  "sourceFingerprint": "0254fecafe85702081fbbf0babf719c18ae55ae4758154c0b4aa006b931bfa9a",
+  "generatedAt": "2026-09-10T14:48:14.655Z",
+  "sourceFingerprint": "784645b1875a6e0587a2c3fb9f61d50fd55c65c0c419742a7cba21a27997d071",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 809,
     "textFiles": 772,
-    "totalBytes": 15873746,
+    "totalBytes": 15873792,
     "pages": 18,
     "modules": 552
   },
@@ -31334,8 +31334,8 @@
     },
     {
       "path": "tests/sync/order-surface-parity.test.mjs",
-      "bytes": 2357,
-      "sha256": "f17948266dd117c7d815c6bc358a74bda23e22ac7379eb6b6cfff24292e227dc",
+      "bytes": 2380,
+      "sha256": "c9fc5da884eb97774d75ce3ee9c47954730c698cdbb560681fdb3e629de02706",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31376,8 +31376,8 @@
     },
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
-      "bytes": 9688,
-      "sha256": "39e57effdb638604628859ab94d917c2f07feb8deea2f477e2ca2041ee38619d",
+      "bytes": 9711,
+      "sha256": "a09709ed379d30b290844b86de4b394d2ca902073890b7d16b97a3647ea26e5d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36814,14 +36814,14 @@
     {
       "path": "tests/sync/order-surface-parity.test.mjs",
       "extension": ".mjs",
-      "bytes": 2357,
-      "sha256": "f17948266dd117c7d815c6bc358a74bda23e22ac7379eb6b6cfff24292e227dc"
+      "bytes": 2380,
+      "sha256": "c9fc5da884eb97774d75ce3ee9c47954730c698cdbb560681fdb3e629de02706"
     },
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
       "extension": ".mjs",
-      "bytes": 9688,
-      "sha256": "39e57effdb638604628859ab94d917c2f07feb8deea2f477e2ca2041ee38619d"
+      "bytes": 9711,
+      "sha256": "a09709ed379d30b290844b86de4b394d2ca902073890b7d16b97a3647ea26e5d"
     },
     {
       "path": "tests/system-health/order-admin-domain.test.mjs",
