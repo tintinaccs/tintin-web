@@ -91,8 +91,8 @@ html body.tt-home-premium .tt-hero-actions {
 }
 
 html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
-  background: transparent !important;
-  background-color: transparent !important;
+  background: #fff9fc !important;
+  background-color: #fff9fc !important;
   color: #f24498 !important;
   border: 0 !important;
   min-height: 52px;
@@ -105,9 +105,9 @@ html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
 }
 
 html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta:hover {
-  background: transparent !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
+  background: #fff !important;
+  background-color: #fff !important;
+  box-shadow: 0 10px 26px rgba(45, 12, 27, .12) !important;
   transform: none;
 }
 
@@ -472,10 +472,10 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-cta {
   justify-content: center;
   padding: 0 .8em !important;
   color: #f24498 !important;
-  background: transparent !important;
-  background-color: transparent !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
+  background: #fff9fc !important;
+  background-color: #fff9fc !important;
+  border-color: #fff9fc !important;
+  box-shadow: 0 10px 26px rgba(45, 12, 27, .12) !important;
   font-size: clamp(.8rem, 1.85vw, 1.7rem) !important;
   font-weight: 800;
   line-height: 1;
@@ -488,10 +488,10 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-cta {
 html body.tt-home-premium .tt-hero-actions .tt-hero-cta:hover,
 html body.tt-home-premium .tt-hero-actions .tt-hero-cta:focus-visible,
 html body.tt-home-premium .tt-hero-actions .tt-hero-cta:active {
-  background: transparent !important;
-  background-color: transparent !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
+  background: #fff !important;
+  background-color: #fff !important;
+  border-color: #fff !important;
+  box-shadow: 0 10px 26px rgba(45, 12, 27, .12) !important;
   color: #f24498 !important;
   transform: none !important;
 }
