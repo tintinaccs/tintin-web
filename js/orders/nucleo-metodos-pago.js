@@ -49,7 +49,9 @@ export function paymentMethodId(value) {
 }
 
 export function paymentMethodKind(value) {
-  return value === 'transferencia' ? 'transferencia' : 'efectivo';
+  return ['transferencia', 'paypal'].includes(String(value || '').toLowerCase())
+    ? String(value).toLowerCase()
+    : 'efectivo';
 }
 
 function normalizeDetails(value) {
@@ -73,7 +75,7 @@ export function normalizePaymentMethod(raw, fallbackId = '', fallbackOrder = 0) 
     kind,
     title: cleanPaymentText(raw?.title || raw?.name || id, 100),
     description: cleanPaymentText(raw?.description || '', 240),
-    icon: cleanPaymentText(raw?.icon || (kind === 'transferencia' ? '🏦' : '💵'), 12),
+    icon: cleanPaymentText(raw?.icon || (kind === 'transferencia' ? '🏦' : kind === 'paypal' ? '🅿️' : '💵'), 12),
     enabled: raw?.enabled !== false,
     instructions: cleanPaymentMultiline(raw?.instructions || '', 1200),
     details: normalizeDetails(raw?.details),
@@ -144,6 +146,9 @@ export function legacyPaymentMirrors(methods) {
     bankAccounts: {
       ueno: details[0]?.value || '',
       atlas: details[1]?.value || '',
+    },
+    paypal: {
+      enabled: normalized.some(method => method.enabled && method.kind === 'paypal'),
     },
   };
 }

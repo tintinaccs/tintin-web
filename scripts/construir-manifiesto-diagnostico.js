@@ -655,6 +655,13 @@ const sourceFingerprint = hash(Buffer.from(
   'utf8'
 ));
 
+function generatedAtForBuild() {
+  // CI valida el artefacto inmediatamente después del build y puede usar un
+  // commit temporal distinto en cada intento. La fecha actual o la del HEAD
+  // produciría drift aunque el contenido fuente fuese idéntico.
+  return '2000-01-01T00:00:00.000Z';
+}
+
 let previousManifest = null;
 try {
   previousManifest = JSON.parse(fs.readFileSync(OUTPUT, 'utf8'));
@@ -662,9 +669,7 @@ try {
 
 const manifest = {
   schemaVersion: 2,
-  generatedAt: previousManifest?.sourceFingerprint === sourceFingerprint
-    ? previousManifest.generatedAt
-    : new Date().toISOString(),
+  generatedAt: generatedAtForBuild(),
   sourceFingerprint,
   safety: {
     mode: 'read-only',

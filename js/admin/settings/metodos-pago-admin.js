@@ -15,7 +15,7 @@ import {
   normalizePaymentMethod,
   paymentCatalogMap,
   paymentMethodId,
-} from '../../orders/nucleo-metodos-pago.js?v=tintin-20260720-payment-crud-1';
+} from '../../orders/nucleo-metodos-pago.js?v=tintin-20260910-paypal-methods-1';
 
 const ADMIN_PATH = /(^|\/)admin(?:\.html)?$/i;
 const SETTINGS_REF = doc(db, 'settings', 'general');
@@ -161,7 +161,7 @@ async function boot() {
         <div>
           <div class="tt-payment-admin-title">${escapeHtml(method.title)}</div>
           <div class="tt-payment-admin-description">${escapeHtml(method.description || 'Sin descripción')}</div>
-          <div class="tt-payment-admin-meta">ID: ${escapeHtml(method.id)} · ${method.kind === 'transferencia' ? 'Transferencia' : 'Efectivo'} · ${method.details.length} dato${method.details.length === 1 ? '' : 's'}</div>
+          <div class="tt-payment-admin-meta">ID: ${escapeHtml(method.id)} · ${method.kind === 'transferencia' ? 'Transferencia' : method.kind === 'paypal' ? 'PayPal' : 'Efectivo'} · ${method.details.length} dato${method.details.length === 1 ? '' : 's'}</div>
           <span class="tt-payment-admin-badge${disabledClass}">${method.enabled ? 'ACTIVO' : 'DESACTIVADO'}</span>
         </div>
         <div class="tt-payment-admin-actions">

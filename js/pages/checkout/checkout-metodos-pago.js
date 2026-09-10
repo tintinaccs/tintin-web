@@ -2,10 +2,21 @@ import { onPublicSettings } from '../../core/store/configuracion-publica.js?v=ti
 import {
   normalizePaymentCatalog,
   paymentMethodLabel,
-} from '../../orders/nucleo-metodos-pago.js?v=tintin-20260720-payment-crud-1';
+} from '../../orders/nucleo-metodos-pago.js?v=tintin-20260910-paypal-methods-1';
 
 const CHECKOUT_PATH = /(^|\/)checkout(?:\.html)?$/i;
 const VIEWPORTS = [1920, 1440, 1280, 1024, 768, 390, 320];
+
+async function paypalAvailability() {
+  try {
+    const response = await fetch('/api/paypal-config', { credentials: 'same-origin', cache: 'no-store' });
+    if (!response.ok) return null;
+    const data = await response.json();
+    return data?.enabled && data.clientId ? data : null;
+  } catch {
+    return null;
+  }
+}
 
 function escapeHtml(value) {
   return String(value == null ? '' : value)
@@ -110,7 +121,9 @@ function boot() {
     selectedMethodId = selected?.id || '';
     bridge.checked = Boolean(selected);
     bridge.value = selected?.kind || '';
-    bridge.id = selected ? (selected.kind === 'transferencia' ? 'pay-transferencia' : 'pay-efectivo') : 'tt-payment-method-bridge';
+    bridge.id = selected
+      ? (selected.kind === 'transferencia' ? 'pay-transferencia' : selected.kind === 'paypal' ? 'pay-paypal' : 'pay-efectivo')
+      : 'tt-payment-method-bridge';
     window.dispatchEvent(new CustomEvent('tintin:payment-method-selected', {
       detail: selected ? { id: selected.id, kind: selected.kind, title: selected.title } : null,
     }));
@@ -196,8 +209,19 @@ function boot() {
     viewports: VIEWPORTS.slice(),
   };
 
-  onPublicSettings(settings => {
-    render(normalizePaymentCatalog(settings || {}));
+  onPublicSettings(async settings => {
+    const configured = normalizePaymentCatalog(settings || {});
+    const paypal = await paypalAvailability();
+    const hasPaypal = configured.some(method => method.kind === 'paypal');
+    const paypalEnabledByStore = settings?.paypal?.enabled === true;
+    if (paypal && paypalEnabledByStore && !hasPaypal) {
+      configured.push({
+        id: 'paypal', kind: 'paypal', title: 'PayPal',
+        description: 'Pagá de forma segura con tu cuenta PayPal', icon: '🅿️',
+        enabled: true, instructions: 'El pago se confirma dentro de PayPal antes de finalizar tu pedido.', details: [], order: 90,
+      });
+    }
+    render(configured.filter(method => method.kind !== 'paypal' || (paypal && paypalEnabledByStore)));
   });
 }
 

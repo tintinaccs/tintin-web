@@ -8,13 +8,13 @@ const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260910-header-clearance-1';
 const TIENDA_VERSION = 'tintin-20260910-auth-retry-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260816-loader-shell-bridge-3';
-const LOADER_VERSION = 'tintin-20260909-global-shell-6';
+const LOADER_VERSION = 'tintin-20260910-global-shell-8';
 const STORE_GATE_VERSION = 'tintin-20260909-store-gate-degraded-fix-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260909-unified-navigation-assets-6';
 const NAV_ENTRY_VERSION = 'tintin-20260909-unified-navigation-assets-6';
 const NAV_BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
-const VISUAL_BUILDER_VERSION = 'tintin-20260910-hero-html-1';
+const VISUAL_BUILDER_VERSION = 'tintin-20260910-hero-html-2';
 const SESSION_PROTECTION_VERSION = 'tintin-20260906-no-auto-logout-3';
 const PROFILE_GATE_VERSION = 'tintin-20260906-profile-complete-2';
 const NAV_HEADER_VERSION = 'tintin-20260824-header-responsive-sync-1';
@@ -233,10 +233,10 @@ function ensureNavigationPreloads(html) {
 
 function ensureShellScript(html) {
   let out = html
-    .replace(/\s*<script\b[^>]*src=["']js\/(?:surface-controller|ui-navigation-controller)\.js[^"']*["'][^>]*><\/script>/gi, '')
-    .replace(/\s*<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^"']*["'][^>]*><\/script>/gi, '')
-    .replace(/\s*<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/(?:inicio-control-paneles|retencion-cargador-shell)\.js[^"']*["'][^>]*><\/script>/gi, '')
-    .replace(/\s*<script\b[^>]*data-tt-shell-startup-hold[^>]*>[\s\S]*?<\/script>/gi, '');
+    .replace(/\s*<script\b[^>]*src=["']js\/(?:surface-controller|ui-navigation-controller)\.js[^"']*["'][^>]*><\/script\s*>/gi, '')
+    .replace(/\s*<script\b[^>]*src=["']js\/inicio-navegacion-publica\.js[^"']*["'][^>]*><\/script\s*>/gi, '')
+    .replace(/\s*<script\b[^>]*src=["']js\/components\/navigation\/compatibilidad\/(?:inicio-control-paneles|retencion-cargador-shell)\.js[^"']*["'][^>]*><\/script\s*>/gi, '')
+    .replace(/\s*<script\b[^>]*data-tt-shell-startup-hold[^>]*>[\s\S]*?<\/script\s*>/gi, '');
   const loader = /(<script\b[^>]*src=["']js\/cargador-pagina\.js[^"']*["'][^>]*><\/script>)/i;
   if (!loader.test(out)) throw new Error('La pagina no carga js/cargador-pagina.js');
 
@@ -245,7 +245,7 @@ function ensureShellScript(html) {
 
 function centralizeRuntime(html) {
   let out = html.replace(
-    /\s*<script\b[^>]*src=["']js\/(?:auth-nav|nav-collections|products-store|cart-sync)\.js[^"']*["'][^>]*><\/script>/gi,
+    /\s*<script\b[^>]*src=["']js\/(?:auth-nav|nav-collections|products-store|cart-sync)\.js[^"']*["'][^>]*><\/script\s*>/gi,
     ''
   );
   if (!/<script\b[^>]*src=["']tienda\.js(?:\?|["'])/i.test(out)) {

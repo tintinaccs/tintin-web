@@ -32,16 +32,18 @@ const baseConnectOrigins = [
   'https://*.gstatic.com',
   'https://*.googleusercontent.com',
   'https://*.google-analytics.com',
-  'https://*.analytics.google.com'
+  'https://*.analytics.google.com',
+  'https://*.paypal.com'
 ];
-const globalScriptOrigins = [...baseScriptOrigins, 'https://unpkg.com'];
+const globalScriptOrigins = [...baseScriptOrigins, 'https://unpkg.com', 'https://*.paypal.com'];
 const frameOrigins = [
   publicOrigin,
   'https://*.google.com',
   'https://*.gstatic.com',
   'https://www.youtube.com',
   'https://www.youtube-nocookie.com',
-  'https://player.vimeo.com'
+  'https://player.vimeo.com',
+  'https://*.paypal.com'
 ];
 const CLOUDINARY_UPLOAD_PAGES = new Set(['admin.html', 'admin-images.html']);
 const VISUAL_BUILDER_PREVIEWABLE_PAGES = new Set([
@@ -57,7 +59,7 @@ function sha256Source(value) {
 function inlineHashes(file) {
   const html = fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n?/g, '\n');
   const hashes = new Set();
-  for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+  for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi)) {
     if (/\bsrc\s*=/.test(match[1])) continue;
     hashes.add(sha256Source(match[2]));
   }
@@ -155,7 +157,7 @@ function publicPolicy() {
 }
 
 function pageUsesUnpkg(file) {
-  return fs.readFileSync(path.join(root, file), 'utf8').includes('https://unpkg.com/');
+  return /https:\/\/unpkg\.com(?:\/|["'])/i.test(fs.readFileSync(path.join(root, file), 'utf8'));
 }
 
 function pagePolicy(file) {
@@ -261,7 +263,7 @@ function validateRuntimePolicies(policies) {
   if (policies.public.length > 120000) throw new Error(`CSP pública demasiado grande: ${policies.public.length} caracteres.`);
   const fallback = staticFallbackPolicy();
   if (fallback.length > 1900) throw new Error(`CSP fallback estática demasiado grande: ${fallback.length} caracteres.`);
-  if (fallback.includes('https://api.cloudinary.com') || fallback.includes("script-src 'self' 'unsafe-inline'")) {
+  if (/https:\/\/api\.cloudinary\.com(?:[ ;]|$)/i.test(fallback) || fallback.includes("script-src 'self' 'unsafe-inline'")) {
     throw new Error('CSP fallback estática abrió capacidades que solo corresponden al runtime específico.');
   }
   for (const hash of fallbackInlineHashes) {

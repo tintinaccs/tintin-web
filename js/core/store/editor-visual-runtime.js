@@ -161,6 +161,9 @@ function sanitizeRuntimeConfig(pageId, raw = {}) {
   const seen = new Set();
   const customBlocks = (Array.isArray(raw?.customBlocks) ? raw.customBlocks : []).slice(0, 40).map((item, index) => {
     if (!anchors.length && !topAllowed) return null;
+    // El Inicio ya posee un único hero canónico en index.html. Ignorar el
+    // bloque banner legado evita que el publicado vuelva a superponerse.
+    if (pageId === 'index' && item?.type === 'banner') return null;
     const type = BLOCK_TYPES.has(item?.type) ? item.type : 'section';
     const id = plain(item?.id || `${type}-${index + 1}`, 64).replace(/[^a-z0-9_-]/gi, '-').toLowerCase();
     const validAnchor = anchors.includes(item?.afterSection) || (topAllowed && item?.afterSection === TOP_ANCHOR);

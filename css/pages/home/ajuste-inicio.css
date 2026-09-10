@@ -27,6 +27,15 @@ html.tt-initializing body.tt-home-premium:has(>#tt-loader.tt-out){visibility:vis
   }
 }
 
+/* En tableta el header fijo ya queda reservado por el margen del hero.
+   No sumar también el padding global del body: dejaba una franja vacía
+   entre el header y el banner. */
+@media (min-width: 768px) and (max-width: 1024px) {
+  body.tt-home-premium {
+    padding-top: 0 !important;
+  }
+}
+
 /* Header y cookies de Inicio: fondos realmente sólidos. Estas reglas viven en
    la última hoja del home y usan selectores de alta especificidad para que ni
    el esquema publicado, ni estados de scroll, ni transparencias heredadas
@@ -390,4 +399,11 @@ body.tt-home-premium .tt-reviews-section {
   body.tt-home-premium .tt-watch-desc { line-height: 1.65; }
   body.tt-home-premium .tt-home-random-products-grid { grid-auto-columns: minmax(230px, 78vw); gap: 14px; }
   body.tt-home-premium .tt-home-random-products-actions { margin-top: 18px; }
+}
+/* El CTA del lienzo nuevo no agrega una segunda pastilla durante el arranque. */
+body.tt-home-premium .tt-hero-actions .tt-hero-cta {
+  background: transparent !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
 }

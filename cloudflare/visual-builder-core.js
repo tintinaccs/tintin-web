@@ -216,6 +216,12 @@ function sanitizeBlock(raw, index, pageSchema) {
   return block;
 }
 
+function isDeprecatedHomeHeroBlock(pageId, raw) {
+  // Inicio tiene un único hero canónico en index.html. Los banners visuales
+  // publicados antes de ese hero no deben volver a entrar por Firestore.
+  return pageId === 'index' && raw?.type === 'banner';
+}
+
 function sanitizeSectionOrder(raw, pageSchema) {
   const entries = structuralEntries(pageSchema);
   const canonical = entries.map(([id]) => id);
@@ -254,6 +260,7 @@ export function sanitizeVisualConfig(pageIdValue, raw = {}) {
   const seen = new Set();
   const customBlocks = (Array.isArray(migrated?.customBlocks) ? migrated.customBlocks : [])
     .slice(0, VISUAL_BUILDER_LIMITS.maxCustomBlocks)
+    .filter(block => !isDeprecatedHomeHeroBlock(pageId, block))
     .map((block, index) => sanitizeBlock(block, index, pageSchema))
     .filter(block => block && !seen.has(block.id) && seen.add(block.id));
   return { pageId, sections, sectionOrder: sanitizeSectionOrder(migrated?.sectionOrder, pageSchema), customBlocks };

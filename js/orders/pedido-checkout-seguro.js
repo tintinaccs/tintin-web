@@ -58,6 +58,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   let replayingForwardClick = false;
   let cartGuardTimer = 0;
   let lastProfilePrefillUid = '';
+  let pendingPaypal = null;
 
   const text = value => String(value == null ? '' : value).trim();
   const escapeHtml = value => text(value)
@@ -557,7 +558,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     const paymentMethod = text(document.querySelector('input[name="ck-pay"]:checked')?.value);
 
     if (name.length < 2) throw appError('name_required', 'Ingresá tu nombre completo.');
-    if (!['efectivo', 'transferencia'].includes(paymentMethod)) {
+    if (!['efectivo', 'transferencia', 'paypal'].includes(paymentMethod)) {
       throw appError('payment_required', 'Seleccioná un método de pago disponible.');
     }
     if (shipping.method === 'delivery' && (!shipping.mapLocation || !shipping.mapLocation.name)) {
@@ -634,12 +635,12 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     target.innerHTML = `
       <div class="ck-summary-items">${(quote.items || []).map(item => `
         <div class="ck-summary-item">
-          <span class="ck-summary-item-name">${item.qty}x ${escapeHtml(item.name)}</span>
-          <span style="font-weight:700">${formatPrice(item.price * item.qty)}</span>
+          <span class="ck-summary-item-name">${escapeHtml(item.qty)}x ${escapeHtml(item.name)}</span>
+          <span style="font-weight:700">${escapeHtml(formatPrice(item.price * item.qty))}</span>
         </div>`).join('')}</div>
-      <div class="ck-summary-total" style="margin-top:16px"><span>Subtotal</span><span class="ck-summary-total-val">${formatPrice(quote.subtotal)}</span></div>
-      <div class="ck-summary-total"><span>Costo de envío</span><span class="ck-summary-total-val">${quote.shippingPending ? 'A confirmar' : formatPrice(quote.shippingCost || 0)}</span></div>
-      <div class="ck-summary-total" style="font-size:18px"><span>TOTAL${quote.shippingPending ? ' (+ envío)' : ''}</span><span class="ck-summary-total-val">${formatPrice(quote.total)}</span></div>`;
+      <div class="ck-summary-total" style="margin-top:16px"><span>Subtotal</span><span class="ck-summary-total-val">${escapeHtml(formatPrice(quote.subtotal))}</span></div>
+      <div class="ck-summary-total"><span>Costo de envío</span><span class="ck-summary-total-val">${quote.shippingPending ? 'A confirmar' : escapeHtml(formatPrice(quote.shippingCost || 0))}</span></div>
+      <div class="ck-summary-total" style="font-size:18px"><span>${escapeHtml(`TOTAL${quote.shippingPending ? ' (+ envío)' : ''}`)}</span><span class="ck-summary-total-val">${escapeHtml(formatPrice(quote.total))}</span></div>`;
   }
 
   async function reserveCheckoutGuard(draft) {
@@ -708,6 +709,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     efectivo: 'Efectivo contra entrega',
     transferencia: 'Transferencia bancaria',
     tarjeta: 'Tarjeta',
+    paypal: 'PayPal',
   };
 
   function shippingSummary(draft) {
@@ -850,6 +852,15 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       }
       await reserveCheckoutGuard(draft);
       const result = await createOrderOnServer(draft);
+      if (draft.paymentMethod === 'paypal') {
+        pendingPaypal = { result, draft };
+        button.style.display = 'none';
+        document.getElementById('tt-paypal-checkout')?.style.setProperty('display', 'block');
+        window.dispatchEvent(new CustomEvent('tintin:paypal-order-ready', {
+          detail: { orderId: result.orderId, shortId: result.shortId, total: result.total, result, draft }
+        }));
+        return;
+      }
       orderCompleted = true;
       try {
         await clearCart();
@@ -901,6 +912,19 @@ if (!window.TintinSecureCheckoutOrderBooted) {
       submitting = false;
     }
   }
+
+  window.addEventListener('tintin:paypal-payment-completed', async event => {
+    if (orderCompleted || !pendingPaypal) return;
+    const { result, draft } = pendingPaypal;
+    if (event.detail?.orderId !== result.orderId) return;
+    orderCompleted = true;
+    pendingPaypal = null;
+    try { await clearCart(); } catch (error) { console.warn('[secure-checkout-order] No se pudo limpiar el carrito tras PayPal:', error); }
+    try { sessionStorage.removeItem(REQUEST_KEY); } catch {}
+    inMemoryRequestId = null;
+    document.getElementById('tt-paypal-checkout')?.style.setProperty('display', 'none');
+    success(result, draft);
+  });
 
   window.addEventListener('click', event => {
     const button = event.target?.closest?.('#ck-confirm-btn');

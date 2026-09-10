@@ -16,7 +16,7 @@ import {
   normalizeContentValue,
   detectContentPageId,
 } from './esquema-contenido.js?v=tintin-20260826-carousel-order-3';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260910-hero-html-1';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260910-hero-html-2';
 
 const subscriptions = new Map();
 const latestData = new Map();

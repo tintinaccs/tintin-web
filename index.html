@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-3"></script>
-  <script src="js/cargador-pagina.js?v=tintin-20260909-global-shell-6"></script>
+<script src="js/cargador-pagina.js?v=tintin-20260910-global-shell-8"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260909-unified-navigation-assets-6" defer></script>
   <!-- La señal de "página lista" (window.ttPageReady) ya NO se dispara desde
@@ -82,8 +82,8 @@
        disponible desde el primer paint, sin depender de red externa.
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
        existe (ver js/components/images/imagenes.js). -->
-  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260909-home-hierarchy-4">
-  <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260910-hero-responsive-7">
+  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260910-home-tablet-gap-2">
+  <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260910-hero-responsive-11">
   <link rel="stylesheet" href="css/pages/home/carrusel-colecciones.css?v=tintin-20260826-collections-parallax-4">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -102,13 +102,13 @@
        como zonas interactivas accesibles sobre ella. -->
   <div class="tt-hero-media tt-hero-pending" id="tt-hero-media">
     <picture>
-      <source media="(max-width: 767px)" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png">
-      <source media="(min-width: 768px) and (max-width: 1120px) and (orientation: landscape)" data-tt-hero-device="tablet-landscape" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png">
-      <source media="(max-width: 1120px)" data-tt-hero-device="tablet-portrait" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png">
+      <source media="(max-width: 767px)" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png?v=tintin-20260910-hero-button-clear-1">
+      <source media="(min-width: 768px) and (max-width: 1120px) and (orientation: landscape)" data-tt-hero-device="tablet-landscape" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png?v=tintin-20260910-hero-button-clear-1">
+      <source media="(max-width: 1120px)" data-tt-hero-device="tablet-portrait" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png?v=tintin-20260910-hero-button-clear-1">
       <img
         id="tt-hero-img"
         class="tt-hero-img"
-        src="assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png"
+        src="assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png?v=tintin-20260910-hero-button-clear-1"
         alt=""
         width="1920"
         height="1080"
@@ -473,7 +473,7 @@
   // seguridad ya tuvo su oportunidad de revelar el hero igual (con o sin
   // imagen real) — así nunca compiten entre sí ni el loader se queda
   // esperando más de lo que el propio hero está dispuesto a esperar.
-  var HERO_WAIT_CEILING_MS = 4500;
+  var HERO_WAIT_CEILING_MS = 0;
 
   function heroReady() {
     // Reusa la misma señal que ya decide cuándo se ve el hero (gestion-imagenes.js
@@ -488,11 +488,9 @@
 
   function waitForHeroImageThenRelease() {
     if (heroWaitStart === null) heroWaitStart = Date.now();
-    if (heroReady() || Date.now() - heroWaitStart >= HERO_WAIT_CEILING_MS) {
-      window.ttPageReady && window.ttPageReady();
-      return;
-    }
-    window.setTimeout(waitForHeroImageThenRelease, 80);
+    // La imagen del hero ya tiene espacio reservado por CSS. Mostrar la
+    // estructura no debe quedar pendiente de una descarga de 1.5 MB.
+    window.ttPageReady && window.ttPageReady();
   }
 
   function releaseHomeWhenStructurallyReady() {
@@ -510,7 +508,7 @@
     var hasScrollableHeight = root.scrollHeight > viewportHeight + 40;
 
     if (hasStaticStructure && hasScrollableHeight) {
-      waitForHeroImageThenRelease();
+      window.ttPageReady && window.ttPageReady();
       return;
     }
 
@@ -519,7 +517,7 @@
       return;
     }
 
-    waitForHeroImageThenRelease();
+    window.ttPageReady && window.ttPageReady();
   }
 
   requestAnimationFrame(releaseHomeWhenStructurallyReady);
@@ -533,7 +531,7 @@
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3"></script>
 <script type="module" src="js/components/images/inicio-carga-imagenes.js?v=tintin-20260908-home-random-lazy-1"></script>
 <script type="module">
-import { initSiteContent } from './js/core/store/contenido-sitio.js?v=tintin-20260910-hero-html-1';
+import { initSiteContent } from './js/core/store/contenido-sitio.js?v=tintin-20260910-hero-html-2';
 initSiteContent('index');
 </script>
 <script type="module" src="js/core/auth/insignia-edicion.js?v=tintin-20260821-accounts-phase-a-3"></script>
@@ -572,7 +570,7 @@ initSiteContent('index');
   ]
 }
 </script>
-<script type="module" src="js/visual-builder-bootstrap.js?v=tintin-20260910-hero-html-1"></script>
+<script type="module" src="js/visual-builder-bootstrap.js?v=tintin-20260910-hero-html-2"></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3"></script>
 </body>
 </html>
