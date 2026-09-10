@@ -658,13 +658,20 @@ const sourceFingerprint = hash(Buffer.from(
 function generatedAtForBuild() {
   // El manifiesto se valida inmediatamente después del build en CI. Usar la
   // hora actual lo vuelve diferente en cada ejecución aunque el contenido no
-  // haya cambiado. El timestamp del commit es estable para un mismo artefacto.
-  const result = childProcess.spawnSync('git', ['show', '-s', '--format=%cI', 'HEAD'], {
+  // haya cambiado. Usamos el commit que generó este manifiesto, que permanece
+  // estable incluso cuando el build se ejecuta varias veces sobre el mismo
+  // checkout.
+  const result = childProcess.spawnSync('git', ['log', '-1', '--format=%cI', '--', 'diagnostic-manifest.json'], {
     cwd: ROOT,
     encoding: 'utf8'
   });
   const commitDate = String(result.stdout || '').trim();
-  return commitDate || new Date().toISOString();
+  if (commitDate) return commitDate;
+  const head = childProcess.spawnSync('git', ['show', '-s', '--format=%cI', 'HEAD'], {
+    cwd: ROOT,
+    encoding: 'utf8'
+  });
+  return String(head.stdout || '').trim() || new Date().toISOString();
 }
 
 let previousManifest = null;
