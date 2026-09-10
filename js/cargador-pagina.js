@@ -85,6 +85,9 @@
   const isLoginPage =
     path.endsWith('/login.html') ||
     path.endsWith('/login');
+  const isCheckoutPage =
+    path.endsWith('/checkout.html') ||
+    path.endsWith('/checkout');
   const isAdminImagesPage =
     path.endsWith('/admin-images.html') ||
     path.endsWith('/admin-images');
@@ -116,12 +119,12 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260909-global-shell-6';
+  const TT_CACHE_VERSION = 'tintin-20260910-global-shell-7';
   // El shell es común a cada navegación: incluso cuando la página está en
   // caché debe ser perceptible y no desaparecer antes de que el usuario vea
   // qué superficie se está preparando. Un segundo es el mínimo acordado;
   // nunca sustituye los gates reales de contenido, sesión o tienda.
-  const MIN_SHOW_MS = 1000;
+  const MIN_SHOW_MS = 350;
   // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
   // emergencia "No pudimos comprobar el estado de la tienda" en un equipo
   // donde el propio loader ya llevaba ~6s arriba antes de que este tope se
@@ -607,7 +610,10 @@
 
   function tryHideElegant() {
     if (hidden) return;
-    if (storeGateRequired && !gateResolved) return;
+    // El gate de tienda sigue validando acceso en segundo plano; no debe
+    // bloquear la lectura de páginas públicas mientras responde la red.
+    // Checkout conserva el bloqueo hasta comprobar que se puede comprar.
+    if (storeGateRequired && !gateResolved && isCheckoutPage) return;
     if (pendingWaits > 0) return;
     const enough = Date.now() - shownAt >= MIN_SHOW_MS;
     if (!enough) {

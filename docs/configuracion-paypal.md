@@ -16,6 +16,7 @@ Estado: **preparado en backend y desactivado**. La tienda cobra en PYG, pero PYG
 2. Crear app Sandbox/Live y cargar en secretos de Cloudflare: `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET` y `PAYPAL_WEBHOOK_ID`.
 3. Registrar `https://<dominio>/api/paypal-webhook` para `PAYMENT.CAPTURE.COMPLETED`.
 4. Cargar `PAYPAL_PYG_PER_USD`, `PAYPAL_RATE_UPDATED_AT`, mantener `PAYPAL_SETTLEMENT_CURRENCY=USD` y recién entonces usar `PAYPAL_ENABLED=true`.
-5. Completar la UI de aprobación con JavaScript SDK y probar sandbox: aprobado, rechazado, cancelado, repetido, delivery, encomienda y retiro.
+5. En el panel de Super Admin crear/activar el método `PayPal` en el catálogo de métodos de pago. El checkout ya carga la UI oficial de aprobación, conserva efectivo/transferencia y no limpia el carrito hasta recibir la captura verificada.
+6. Probar Sandbox: aprobado, rechazado, cancelado, repetido, delivery, encomienda y retiro.
 
-No se publica un botón PayPal todavía: faltan credenciales y una decisión comercial, por lo que hacerlo aparentaría una integración operativa que aún no puede verificarse.
+El botón PayPal permanece oculto hasta que estén completas las credenciales, el webhook, la tasa vigente y la activación del método en el catálogo. Así nunca se presenta una opción que el backend no pueda cobrar.

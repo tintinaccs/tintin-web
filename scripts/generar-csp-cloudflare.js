@@ -32,16 +32,18 @@ const baseConnectOrigins = [
   'https://*.gstatic.com',
   'https://*.googleusercontent.com',
   'https://*.google-analytics.com',
-  'https://*.analytics.google.com'
+  'https://*.analytics.google.com',
+  'https://*.paypal.com'
 ];
-const globalScriptOrigins = [...baseScriptOrigins, 'https://unpkg.com'];
+const globalScriptOrigins = [...baseScriptOrigins, 'https://unpkg.com', 'https://*.paypal.com'];
 const frameOrigins = [
   publicOrigin,
   'https://*.google.com',
   'https://*.gstatic.com',
   'https://www.youtube.com',
   'https://www.youtube-nocookie.com',
-  'https://player.vimeo.com'
+  'https://player.vimeo.com',
+  'https://*.paypal.com'
 ];
 const CLOUDINARY_UPLOAD_PAGES = new Set(['admin.html', 'admin-images.html']);
 const VISUAL_BUILDER_PREVIEWABLE_PAGES = new Set([

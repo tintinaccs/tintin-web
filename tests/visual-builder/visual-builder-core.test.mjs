@@ -47,6 +47,15 @@ test('bloques están limitados, deduplicados y conectados a secciones reales', (
   assert.equal(blocks.at(-1).count, 12);
 });
 
+test('Inicio conserva un solo hero y descarta banners legados publicados', () => {
+  const clean = sanitizeVisualConfig('index', { customBlocks: [
+    { id: 'old-hero', type: 'banner', afterSection: VISUAL_TOP_ANCHOR, title: 'Banner viejo' },
+    { id: 'promo-1', type: 'promotion', afterSection: VISUAL_TOP_ANCHOR, title: 'Promoción vigente' },
+  ] });
+  assert.equal(clean.customBlocks.some(item => item.id === 'old-hero'), false);
+  assert.equal(clean.customBlocks.some(item => item.id === 'promo-1'), true);
+});
+
 test('imágenes y enlaces usan listas permitidas y rutas internas limpias', () => {
   assert.equal(safeVisualImage('assets-tintin/images/general/logo.png'), 'assets-tintin/images/general/logo.png');
   assert.equal(safeVisualImage('https://res.cloudinary.com/demo/image/upload/a.webp'), 'https://res.cloudinary.com/demo/image/upload/a.webp');

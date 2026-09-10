@@ -168,6 +168,11 @@ function completedCapture(provider) {
 }
 
 async function markPaid(env, mapping, capture) {
+  const captureId = clean(capture?.id, 100);
+  if (mapping.status === 'COMPLETED' && mapping.captureId && mapping.captureId === captureId) {
+    return { idempotent: true };
+  }
+  if (!captureId) throw new Error('PayPal no devolvió el identificador de captura');
   const currency = clean(capture?.amount?.currency_code, 3).toUpperCase();
   const cents = Math.round(Number(capture?.amount?.value) * 100);
   if (currency !== mapping.currency || cents !== Number(mapping.expectedCents)) {
@@ -183,13 +188,13 @@ async function markPaid(env, mapping, capture) {
   await firestoreAdminMerge(env, `orders/${mapping.orderId}`, {
     payment: { mapValue: { fields: {
       method: fsString('paypal'), status: fsString('pagado'), providerOrderId: fsString(mapping.id),
-      captureId: fsString(clean(capture.id, 100)), currency: fsString(currency),
+      captureId: fsString(captureId), currency: fsString(currency),
       amount: fsString((cents / 100).toFixed(2)), confirmedAt: fsTimestamp(confirmedAt),
     } } },
     paymentStatus: fsString('pagado'), updatedAt: fsTimestamp(confirmedAt),
   });
   await firestoreAdminMerge(env, `paypalOrders/${mapping.id}`, {
-    status: fsString('COMPLETED'), captureId: fsString(clean(capture.id, 100)), updatedAt: fsTimestamp(confirmedAt),
+    status: fsString('COMPLETED'), captureId: fsString(captureId), updatedAt: fsTimestamp(confirmedAt),
   });
 
   await notifyOrderConfirmed(env, mapping, cents, currency);
@@ -221,6 +226,9 @@ export async function capturePaypalOrder(env, { providerOrderId, uid }) {
   if (!config.enabled) throw new Error('PayPal no está habilitado');
   const mapping = await loadMapping(env, providerOrderId);
   if (mapping.uid !== uid) throw new Error('La orden PayPal no pertenece a la cuenta iniciada');
+  if (mapping.status === 'COMPLETED' && mapping.captureId) {
+    return { paid: true, orderId: mapping.orderId, captureId: mapping.captureId, idempotent: true };
+  }
   await assertAccountNotBlocked(env, uid);
   const provider = await paypalRequest(config, `/v2/checkout/orders/${encodeURIComponent(mapping.id)}/capture`, {
     method: 'POST', headers: { 'PayPal-Request-Id': `tintin-capture-${mapping.orderId}` }, body: '{}',
