@@ -83,7 +83,7 @@
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
        existe (ver js/components/images/imagenes.js). -->
   <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260909-home-hierarchy-4">
-  <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260909-hero-bienvenida-1">
+  <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260910-hero-responsive-4">
   <link rel="stylesheet" href="css/pages/home/carrusel-colecciones.css?v=tintin-20260826-collections-parallax-4">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -97,19 +97,17 @@
 ══════════════════════════════════════ -->
 <section class="tt-hero" id="hero" data-tt-editable="index" data-tt-section="hero">
 
-  <!-- Cloudinary (subida desde Super Admin → Imágenes) es la fuente dinámica
-       del hero. Se precarga la última portada publicada para que el primer
-       paint pase del loader directamente al banner; Firestore la reemplaza
-       cuando confirma una versión nueva. -->
+  <!-- Hero nuevo aprobado: el fondo es sólo visual. Los textos y enlaces
+       viven en HTML real debajo para que sean accesibles y seleccionables. -->
   <div class="tt-hero-media tt-hero-pending" id="tt-hero-media">
     <picture>
-      <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784313313/tintin_media_d4980e04509c435681c1bb5e23dcbfc9_full.webp">
-      <source media="(max-width: 1120px)" srcset="https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784315346/tintin_media_9cef2bfbeb1149cd908fc7b1ed81ea1a_full.webp">
+      <source media="(max-width: 767px)" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png">
+      <source media="(min-width: 768px) and (max-width: 1120px) and (orientation: landscape)" data-tt-hero-device="tablet-landscape" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png">
+      <source media="(max-width: 1120px)" data-tt-hero-device="tablet-portrait" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png">
       <img
         id="tt-hero-img"
         class="tt-hero-img"
-        data-dynamic-src="true"
-        src="https://res.cloudinary.com/qnputaic/image/upload/f_auto,q_auto/v1784309046/tintin_media_6ea5859c12554fa9b576a84de5ec53c1_full.webp"
+        src="assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png"
         alt="Tintin Accesorios y Relojes — boutique femenina Paraguay"
         width="1920"
         height="1080"
@@ -162,7 +160,7 @@
 
   <!-- Content -->
   <div class="tt-hero-content">
-    <h1 class="tt-hero-title">Bienvenida<br>tintina</h1>
+    <h1 class="tt-sr-only tt-hero-title">Bienvenida tintina</h1>
     <p class="tt-hero-subtitle">Joyitas únicas, como vos.</p>
     <div class="tt-hero-actions">
       <a href="/catalogo" class="tt-btn tt-btn-lg tt-hero-cta">
