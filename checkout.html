@@ -1463,22 +1463,22 @@ async function buildConfirmation() {
       <div class="ck-summary-items">
         ${cartItems.map(i => `
           <div class="ck-summary-item">
-            <span class="ck-summary-item-name">${i.qty}x ${escapeHtml(i.name)}</span>
-            <span style="font-weight:700">${formatPrice(i.price * i.qty)}</span>
+            <span class="ck-summary-item-name">${escapeHtml(i.qty)}x ${escapeHtml(i.name)}</span>
+            <span style="font-weight:700">${escapeHtml(formatPrice(i.price * i.qty))}</span>
           </div>
         `).join('')}
       </div>
       <div class="ck-summary-total">
         <span>Subtotal</span>
-        <span class="ck-summary-total-val">${formatPrice(subtotal)}</span>
+        <span class="ck-summary-total-val">${escapeHtml(formatPrice(subtotal))}</span>
       </div>
       <div class="ck-summary-total">
         <span>Costo de envío</span>
-        <span class="ck-summary-total-val">${orderData.shippingMethod === 'encomienda' ? 'Se paga al recibir' : shippingPending ? ICO.phone + 'A confirmar' : formatPrice(orderData.shippingCost)}</span>
+        <span class="ck-summary-total-val">${orderData.shippingMethod === 'encomienda' ? 'Se paga al recibir' : shippingPending ? escapeHtml(ICO.phone + 'A confirmar') : escapeHtml(formatPrice(orderData.shippingCost))}</span>
       </div>
       <div class="ck-summary-total" style="font-size:18px">
         <span>TOTAL${shippingPending ? ' (+ envío)' : ''}</span>
-        <span class="ck-summary-total-val">${formatPrice(total)}</span>
+        <span class="ck-summary-total-val">${escapeHtml(formatPrice(total))}</span>
       </div>
       ${shippingPending ? `
       <div style="margin-top:10px;padding:10px 12px;background:#fef5f8;border-radius:10px;font-size:13px;color:#b84c72">
@@ -1521,7 +1521,7 @@ async function buildConfirmation() {
       </div>` : ''}
       <div class="ck-summary-row">
         <span class="ck-summary-label">${ICO.truck}Envío</span>
-        <span class="ck-summary-val">${shipLabels[orderData.shippingMethod] || orderData.shippingMethod}${orderData.encomiendaMode ? ` — ${encomiendaModeLabel(orderData.encomiendaMode)}` : ''}</span>
+        <span class="ck-summary-val">${escapeHtml(shipLabels[orderData.shippingMethod] || orderData.shippingMethod)}${orderData.encomiendaMode ? ` — ${escapeHtml(encomiendaModeLabel(orderData.encomiendaMode))}` : ''}</span>
       </div>
       ${orderData.shippingMethod === 'retiro' ? `
       <div class="ck-summary-private-location" role="note">
@@ -1529,7 +1529,7 @@ async function buildConfirmation() {
       </div>` : ''}
       <div class="ck-summary-row">
         <span class="ck-summary-label">${ICO.card}Pago</span>
-        <span class="ck-summary-val">${payLabels[orderData.paymentMethod] || orderData.paymentMethod}</span>
+        <span class="ck-summary-val">${escapeHtml(payLabels[orderData.paymentMethod] || orderData.paymentMethod)}</span>
       </div>
       ${orderData.notes ? `
       <div class="ck-summary-row">

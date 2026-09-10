@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "99a8d188dea803f84952eb95fad3be665453819edb693085059bc97bae2308c2",
+  "sourceFingerprint": "c7b97fe617b978eba6c8de24514d6b272d4d18d199a85aba2e1d3e392808ebfc",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 810,
     "textFiles": 773,
-    "totalBytes": 15891833,
+    "totalBytes": 15891941,
     "pages": 18,
     "modules": 553
   },
@@ -8998,8 +8998,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 115507,
-      "sha256": "d032df303b364d129489574df1b37777a8d64dc3af5bbef33f775d3341165e88",
+      "bytes": 115615,
+      "sha256": "0b82da2337ec03b3ca521b3097705c70ffa8c4cb833618ba3773a96b8cdf068c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18152,7 +18152,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 344630,
-      "sha256": "03690e2f7f52dce0b22337dcd30b20d6c88972928bfac2b811939f26f0116d05",
+      "sha256": "1f26a1cebc768118556a57906f48c678f3451aa7ecccaf293e8828bfb5a55a7a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32524,8 +32524,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 115507,
-      "sha256": "d032df303b364d129489574df1b37777a8d64dc3af5bbef33f775d3341165e88"
+      "bytes": 115615,
+      "sha256": "0b82da2337ec03b3ca521b3097705c70ffa8c4cb833618ba3773a96b8cdf068c"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -32699,13 +32699,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 344630,
-      "sha256": "03690e2f7f52dce0b22337dcd30b20d6c88972928bfac2b811939f26f0116d05"
+      "sha256": "1f26a1cebc768118556a57906f48c678f3451aa7ecccaf293e8828bfb5a55a7a"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 344545,
-      "sha256": "d645606c52ba194353dadf657d1ee99028a37161c747326a602229639b212f3c"
+      "sha256": "544ad52a97f48533828160a03f8ba025edb428003f9d5472806246daaa1944bc"
     },
     {
       "path": "config/public-site.json",
