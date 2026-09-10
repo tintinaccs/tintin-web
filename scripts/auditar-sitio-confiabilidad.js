@@ -198,7 +198,7 @@ check('Las imágenes dinámicas reciben carga diferida y prioridad automática',
   loader.includes('bootImagePerformance();'));
 check('Todas las páginas declaran el tipo de sus botones estáticos',
   htmlFiles.every(file => !/<button\b(?![^>]*\btype\s*=)[^>]*>/i.test(
-    read(file).replace(/<script\b[\s\S]*?<\/script>/gi, '')
+    read(file).replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, '')
   )));
 check('Todos los controles de la barra móvil tienen nombre accesible',
   htmlFiles.every(file => {
@@ -291,7 +291,7 @@ for (const file of htmlFiles.concat(['tienda.js', 'js/cargador-pagina.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan la versión vigente de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260910-global-shell-7'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260910-global-shell-8'"));
 
 check(
   'El runtime público liviano carga imágenes, colecciones, carrito, colores y el fix de auditoría de página (no solo admin-images)',

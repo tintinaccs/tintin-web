@@ -1101,7 +1101,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-  import('../../orders/pedido-checkout-seguro.js?v=tintin-20260910-auth-retry-1').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20260910-paypal-order-flow-1').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

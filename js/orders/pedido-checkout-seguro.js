@@ -635,12 +635,12 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     target.innerHTML = `
       <div class="ck-summary-items">${(quote.items || []).map(item => `
         <div class="ck-summary-item">
-          <span class="ck-summary-item-name">${item.qty}x ${escapeHtml(item.name)}</span>
-          <span style="font-weight:700">${formatPrice(item.price * item.qty)}</span>
+          <span class="ck-summary-item-name">${escapeHtml(item.qty)}x ${escapeHtml(item.name)}</span>
+          <span style="font-weight:700">${escapeHtml(formatPrice(item.price * item.qty))}</span>
         </div>`).join('')}</div>
-      <div class="ck-summary-total" style="margin-top:16px"><span>Subtotal</span><span class="ck-summary-total-val">${formatPrice(quote.subtotal)}</span></div>
-      <div class="ck-summary-total"><span>Costo de envío</span><span class="ck-summary-total-val">${quote.shippingPending ? 'A confirmar' : formatPrice(quote.shippingCost || 0)}</span></div>
-      <div class="ck-summary-total" style="font-size:18px"><span>TOTAL${quote.shippingPending ? ' (+ envío)' : ''}</span><span class="ck-summary-total-val">${formatPrice(quote.total)}</span></div>`;
+      <div class="ck-summary-total" style="margin-top:16px"><span>Subtotal</span><span class="ck-summary-total-val">${escapeHtml(formatPrice(quote.subtotal))}</span></div>
+      <div class="ck-summary-total"><span>Costo de envío</span><span class="ck-summary-total-val">${quote.shippingPending ? 'A confirmar' : escapeHtml(formatPrice(quote.shippingCost || 0))}</span></div>
+      <div class="ck-summary-total" style="font-size:18px"><span>${escapeHtml(`TOTAL${quote.shippingPending ? ' (+ envío)' : ''}`)}</span><span class="ck-summary-total-val">${escapeHtml(formatPrice(quote.total))}</span></div>`;
   }
 
   async function reserveCheckoutGuard(draft) {

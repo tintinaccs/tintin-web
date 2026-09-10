@@ -320,8 +320,8 @@
     "sha256": "062d8c2023a265f173e8b71816c1a9ae52f80e1354943f0a7b5362993abfda23"
   },
   "js/admin/settings/metodos-pago-admin.js": {
-    "version": "tintin-20260821-accounts-phase-a-3",
-    "sha256": "ba61e0553f6e2f74404f2db7d0da1e1d875d17280f1ec28e68bb06735d41bd32"
+    "version": "tintin-20260910-paypal-admin-1",
+    "sha256": "2fe5caaab21fb3061b96d662ff3ef7b173654e356a6645b1c4ef51f856489db0"
   },
   "js/admin/settings/sincronizacion-correo-admin.js": {
     "version": "tintin-20260821-accounts-phase-a-3",
@@ -352,8 +352,8 @@
     "sha256": "e3414891032d94f4c63fff1d1ae51b7845790f12376ba12df860771f9ef2955a"
   },
   "js/cargador-pagina.js": {
-    "version": "tintin-20260910-global-shell-7",
-    "sha256": "8b1946de75b8943d17a17234bc8f1464ef16a324715453a06dadde8547409a77"
+    "version": "tintin-20260910-global-shell-8",
+    "sha256": "d8d4848b0e615bffbb53311e359bebe503b90509682f79eeb55349a07d4c7b4c"
   },
   "js/components/cart/politica-persistencia-carrito.js": {
     "version": "tintin-20260808-product-cart-1",
@@ -365,7 +365,7 @@
   },
   "js/components/cart/sincronizacion-carrito.js": {
     "version": "tintin-20260910-auth-retry-1",
-    "sha256": "18832ddc33aa60dd4f97ca666ac5fcaa75ba3c9dc2a786c419aef9f3ddd9eaea"
+    "sha256": "d197a16a6617572937db85527cdf5943abd90904bac838f231400566761224ad"
   },
   "js/components/color/esquema-color-catalogo.js": {
     "version": "tintin-20260716-cloudinary-fix-1",
@@ -668,12 +668,12 @@
     "sha256": "e72b4a621d1d5199980397d48f577d2d18e7a81d3a1848942bad20f33d3b90cc"
   },
   "js/orders/nucleo-metodos-pago.js": {
-    "version": "tintin-20260720-payment-crud-1",
+    "version": "tintin-20260910-paypal-methods-1",
     "sha256": "62c01be7d6af0b23f61ff23a5e9d0692ab91f4c04bafaf0d23ae8bce2cd5deaf"
   },
   "js/orders/pedido-checkout-seguro.js": {
-    "version": "tintin-20260910-auth-retry-1",
-    "sha256": "eb88427628865e8af0b5c8b56b32e4467c7ec9616367e3487732206784f2be89"
+    "version": "tintin-20260910-paypal-order-flow-1",
+    "sha256": "65092eecebc218a5b3d9d6f3960fc07e43d3415153ce91152cbec4f534f7711b"
   },
   "js/orders/politica-checkout.js": {
     "version": "tintin-20260822-checkout-hardening-2",
@@ -713,7 +713,7 @@
   },
   "js/pages/collections/estado-colecciones.js": {
     "version": "tintin-20260901-firestore-budget-3",
-    "sha256": "0bd296a71542edb56175dcf25080aae5f126da7531514b6300eca44e885b034e"
+    "sha256": "7322fc927eed21b486f62b198bf70da54f5fe41164d05cb0278e8b534491deaa"
   },
   "js/pages/collections/pagina-colecciones.js": {
     "version": "tintin-20260910-auth-retry-1",
