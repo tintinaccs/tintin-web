@@ -127,7 +127,7 @@
     "@firebase/rules-unit-testing": "5.0.1",
     "@playwright/test": "^1.62.1",
     "firebase": "^12.17.1",
-    "firebase-tools": "^15.29.0",
+    "firebase-tools": "^15.30.0",
     "monaco-editor": "0.52.2",
     "playwright": "^1.62.1"
   },
@@ -137,7 +137,8 @@
     },
     "@opentelemetry/core": "^2.11.0",
     "csv-parse": "^7.0.2",
-    "qs": "^6.16.0"
+    "qs": "^6.16.0",
+    "stream-json": "3.6.0"
   },
   "engines": {
     "node": ">=22"
