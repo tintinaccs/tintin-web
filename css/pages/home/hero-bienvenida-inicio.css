@@ -404,3 +404,136 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-link {
     height: 5%;
   }
 }
+
+/* =============================================================
+   COMPOSICIÓN RESPONSIVE FINAL
+   Las imágenes aprobadas ya contienen la marca, el producto y el fondo.
+   El subtítulo, las acciones y el enlace siguen siendo HTML accesible y se
+   ubican sobre las pastillas vacías que deja cada lienzo.
+   ============================================================= */
+html body.tt-home-premium .tt-hero {
+  min-height: 0 !important;
+  height: auto !important;
+  aspect-ratio: 1774 / 887;
+  overflow: hidden;
+}
+
+html body.tt-home-premium .tt-hero-media .tt-hero-img {
+  object-fit: fill !important;
+  object-position: center !important;
+  transform: none !important;
+}
+
+html body.tt-home-premium .tt-hero-subtitle {
+  display: block !important;
+  position: absolute !important;
+  left: 8.2%;
+  top: 48.5%;
+  width: 38% !important;
+  height: auto !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+  color: #755d57 !important;
+  font-size: clamp(1rem, 1.55vw, 1.45rem) !important;
+  line-height: 1.2 !important;
+  letter-spacing: .12em;
+  text-align: center;
+}
+
+html body.tt-home-premium .tt-hero-actions {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  pointer-events: none;
+}
+
+html body.tt-home-premium .tt-hero-actions .tt-hero-cta {
+  left: 7.1% !important;
+  top: 55.1% !important;
+  width: 36.5% !important;
+  height: 7.2% !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0 .8em !important;
+  color: #f24498 !important;
+  background: #fff9fc !important;
+  font-size: clamp(.8rem, 1.85vw, 1.7rem) !important;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: .08em;
+  white-space: nowrap;
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+html body.tt-home-premium .tt-hero-actions .tt-hero-link {
+  left: 14% !important;
+  top: 75.5% !important;
+  width: 21% !important;
+  height: auto !important;
+  color: #755d57 !important;
+  font-size: clamp(.85rem, 1.75vw, 1.6rem) !important;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: underline;
+  text-underline-offset: .18em;
+  white-space: nowrap;
+  pointer-events: auto;
+}
+
+@media (max-width: 1120px) and (orientation: landscape) {
+  html body.tt-home-premium .tt-hero {
+    aspect-ratio: 1536 / 1024;
+    height: auto !important;
+  }
+  html body.tt-home-premium .tt-hero-subtitle {
+    left: 7%;
+    top: 50%;
+    width: 39% !important;
+    font-size: clamp(.85rem, 1.9vw, 1.2rem) !important;
+  }
+  html body.tt-home-premium .tt-hero-actions .tt-hero-cta {
+    left: 6.8% !important;
+    top: 55.2% !important;
+    width: 38% !important;
+    font-size: clamp(.72rem, 1.7vw, 1.1rem) !important;
+  }
+  html body.tt-home-premium .tt-hero-actions .tt-hero-link {
+    left: 13% !important;
+    top: 76% !important;
+    font-size: clamp(.72rem, 1.6vw, 1rem) !important;
+  }
+}
+
+@media (max-width: 1120px) and (orientation: portrait),
+       (max-width: 767px) {
+  html body.tt-home-premium .tt-hero {
+    aspect-ratio: 1122 / 1402;
+    height: auto !important;
+  }
+  html body.tt-home-premium .tt-hero-subtitle {
+    left: 10%;
+    top: 83.4%;
+    width: 80% !important;
+    font-size: clamp(.82rem, 3.9vw, 1.2rem) !important;
+    letter-spacing: .08em;
+  }
+  html body.tt-home-premium .tt-hero-actions .tt-hero-cta {
+    left: 29.5% !important;
+    top: 87.1% !important;
+    width: 41% !important;
+    height: 5.2% !important;
+    font-size: clamp(.72rem, 3.3vw, 1.05rem) !important;
+    letter-spacing: .055em;
+  }
+  html body.tt-home-premium .tt-hero-actions .tt-hero-link {
+    left: 25% !important;
+    top: 95% !important;
+    width: 50% !important;
+    font-size: clamp(.78rem, 3.8vw, 1.1rem) !important;
+    text-align: center;
+  }
+}
