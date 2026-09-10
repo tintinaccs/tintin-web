@@ -1,7 +1,8 @@
 import { auth, db, appCheckReady, authPersistenceReady } from "../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1";
 import {
-  onAuthStateChanged, signOut
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { subscribeAuthState } from "../core/auth/coordinador-sesion.js?v=tintin-20260910-session-coordinator-1";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
   query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp
@@ -23,6 +24,7 @@ import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, render
 import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260901-firestore-budget-3";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
+import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20260910-auth-api-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260901-media-orphan-log-4";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260901-media-orphan-scan-3";
@@ -886,7 +888,7 @@ async function startAdminAuthGuard() {
     }
   }
 
-  onAuthStateChanged(auth, async user => {
+  subscribeAuthState(async user => {
     user = await waitForAdminUserAfterAuthRestore(user);
     // Si el panel ya reconoció una cuenta válida, un `null` posterior puede
     // ser solamente un instante de renovación/sincronización de Firebase.
@@ -929,14 +931,14 @@ async function startAdminAuthGuard() {
       const role = await getUserRole(user.uid, user.email);
       currentRole = role;
 
-      // Cuenta bloqueada: esta sí es una invalidación explícita de acceso y
-      // por eso cierra sesión antes de volver al login. Super Admin queda
-      // protegido por identidad y no entra en este chequeo.
+      // Una cuenta bloqueada pierde autorización, no su sesión de Firebase.
+      // Mantener la sesión permite recuperar el acceso sin forzar un login
+      // completo y evita que errores transitorios parezcan un logout.
       if (String(user.email || '').trim().toLowerCase() !== SUPER_ADMIN.toLowerCase()) {
         const selfSnap = await getDoc(doc(db, 'users', user.uid));
         if (selfSnap.exists() && selfSnap.data().blocked) {
-          await signOut(auth);
-          window.location.replace('login.html?blocked=1');
+          window.dispatchEvent(new CustomEvent('tintin:account-blocked', { detail: { uid: user.uid } }));
+          window.location.replace('perfil.html?blocked=1');
           return;
         }
       }
@@ -992,13 +994,14 @@ async function startAdminAuthGuard() {
 void startAdminAuthGuard();
 
 function setupUserInfo(user, role) {
+  const initials = value => String(value || '?').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase() || '?';
   const avatarEl = document.getElementById('adm-avatar');
   if (avatarEl) {
     const avatarUrl = sanitizeImageUrl(user.photoURL || '');
     if (avatarUrl) {
       avatarEl.innerHTML = `<img src="${avatarUrl}" alt="" />`;
     } else {
-      avatarEl.textContent = (user.displayName || user.email || '?')[0].toUpperCase();
+      avatarEl.textContent = initials(user.displayName || user.email);
     }
   }
   const nameEl = document.getElementById('adm-user-name');
@@ -1835,7 +1838,7 @@ function renderUsersTable(users) {
     const avatarUrl = sanitizeImageUrl(u.photoURL || '');
     const avatar = avatarUrl
       ? `<div class="adm-tbl-avatar"><img src="${escapeHtmlAdmin(avatarUrl)}" alt="" /></div>`
-      : `<div class="adm-tbl-avatar">${escapeHtmlAdmin((u.name || u.email || '?')[0].toUpperCase())}</div>`;
+      : `<div class="adm-tbl-avatar">${escapeHtmlAdmin(String(u.name || u.email || '?').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase() || '?')}</div>`;
 
     return `
       <tr>
@@ -1927,11 +1930,10 @@ async function updateAccountStatusFromAdmin_(uid, action, reason = '') {
   if (!currentUser || currentRole !== 'superadmin' || currentUser.email !== SUPER_ADMIN) {
     throw new Error('Solo el Super Admin puede cambiar el estado de una cuenta');
   }
-  const token = await currentUser.getIdToken();
-  const response = await fetch('/api/admin-delete-user', {
+  const response = await authenticatedFetch('/api/admin-delete-user', {
     method: 'POST',
     cache: 'no-store',
-    headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
+    headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ uid, action, reason })
   });
   const result = await response.json().catch(() => ({}));
@@ -2435,10 +2437,9 @@ window.updatePayStatus = async (orderId, status) => {
   try {
     const user = auth.currentUser;
     if (!user) throw new Error('La sesión administrativa ya no está disponible.');
-    const token = await user.getIdToken();
-    const response = await fetch('/api/admin-order-mutation', {
+    const response = await authenticatedFetch('/api/admin-order-mutation', {
       method: 'POST',
-      headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` },
+      headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ action: 'updatePayment', orderId, paymentStatus: status,
         paymentMethod: o?.payment?.method || o?.paymentMethod || 'efectivo',
         baseChangeId: o?.lastChangeId || '', changeId: `admin_payment_${crypto.randomUUID().replaceAll('-', '')}` })

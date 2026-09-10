@@ -1,5 +1,6 @@
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-3';
+import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20260910-auth-api-1';
 import {
   collection,
   deleteDoc,
@@ -371,12 +372,10 @@ function collectPatch_() {
 async function callCanonicalCreate_(patch) {
   const user = auth.currentUser;
   if (!user) throw new Error('La sesión administrativa ya no está disponible.');
-  const token = await user.getIdToken();
-  const response = await fetch('/api/admin-order-mutation', {
+  const response = await authenticatedFetch('/api/admin-order-mutation', {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      authorization: `Bearer ${token}`
     },
     body: JSON.stringify({
       action: 'createOrder',

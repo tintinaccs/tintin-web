@@ -38,7 +38,7 @@ test('Sheets crea pedidos por el webhook canónico y reconcilia cada minuto', ()
 });
 
 test('Superadmin crea por dominio canónico y el endpoint empuja el resultado a Sheets en best-effort', () => {
-  assert.match(superadminCrud, /fetch\('\/api\/admin-order-mutation'/);
+  assert.match(superadminCrud, /(?:authenticatedFetch|fetch)\('\/api\/admin-order-mutation'/);
   assert.match(superadminCrud, /action:\s*'createOrder'/);
   assert.match(adminEndpoint, /createOrderAdmin/);
   assert.match(adminEndpoint, /syncOrderToSheetsBestEffort/);

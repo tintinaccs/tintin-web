@@ -117,7 +117,14 @@ async function inspectBase(page, width) {
     const footer = document.querySelector('.tt-footer');
     const privacy = document.querySelector('.tt-privacy-consent');
     const whatsapp = document.querySelector('.tt-wa-float');
-    const firstHeading = [...document.querySelectorAll('h1')].find(node => visible(node) && !node.closest('header,[role="dialog"]'));
+    // Inicio conserva un h1 accesible oculto porque el hero aprobado lleva su
+    // composición completa dentro de la imagen. No debe medirse como si fuera
+    // un encabezado visual colocado debajo del header.
+    const firstHeading = [...document.querySelectorAll('h1')].find(node =>
+      visible(node) &&
+      !node.classList.contains('tt-sr-only') &&
+      !node.closest('header,[role="dialog"]')
+    );
 
     const rootWidth = Math.max(document.documentElement.scrollWidth, document.body?.scrollWidth || 0);
     if (rootWidth > width + 1) issues.push(`overflow horizontal raíz ${rootWidth}px`);

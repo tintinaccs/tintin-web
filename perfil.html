@@ -319,19 +319,20 @@
 
 
 <!-- Scripts -->
-<script src="tienda.js?v=tintin-20260907-session-preserved-5"></script>
+<script src="tienda.js?v=tintin-20260910-auth-retry-1"></script>
 
 <script type="module">
 import { auth, db, authPersistenceReady } from "./js/core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1";
 import {
-  signOut, onAuthStateChanged
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { subscribeAuthState } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260910-session-coordinator-1";
 import {
   doc, getDoc, getDocs, setDoc, serverTimestamp,
   collection, query, where, orderBy, limit
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getUserRole, ROLE_LABELS, SUPER_ADMIN } from "./js/core/auth/roles.js?v=tintin-20260821-accounts-phase-a-3";
-import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260908-public-activity-auth-2";
+import { syncCartToFirestore } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260910-auth-retry-1";
 import { sanitizeImageUrl } from "./js/components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachLocationPicker } from "./js/components/location/selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
 import { toSavedLocation, splitFullName, isValidFullName } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260906-profile-complete-1";
@@ -339,6 +340,7 @@ import { readAccountIdentity } from "./js/pages/profile/estado-canonico-perfil.m
 import { getRegisteredMethod, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260903-accounts-phase-a-4";
 import { DEFAULT_COUNTRY, phoneKey, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { changeReservedPhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260901-phone-py-only-1";
+import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
 import { changeReservedUsername } from "./js/components/forms/reserva-username.js?v=tintin-20260822-dob-username-onboarding-1";
 import { isValidUsernameFormat, isReservedUsername, usernameKey } from "./js/components/forms/utilidades-username.js?v=tintin-20260821-username-unique-1";
 
@@ -450,7 +452,7 @@ async function startProfileAuthGuard() {
     }
   }
 
-  onAuthStateChanged(auth, async user => {
+  subscribeAuthState(async user => {
     user = await waitForProfileUserAfterAuthRestore(user);
     if (!user) {
       window.location.href = 'login.html';
@@ -470,8 +472,8 @@ async function startProfileAuthGuard() {
       console.warn('[Perfil] No se pudo verificar el estado de bloqueo:', error);
     }
     if (userData?.blocked) {
-      await signOut(auth);
-      window.location.href = 'login.html?blocked=1';
+      window.dispatchEvent(new CustomEvent('tintin:account-blocked', { detail: { uid: user.uid } }));
+      showBlockedModal();
       return;
     }
 
@@ -484,7 +486,7 @@ async function startProfileAuthGuard() {
 
   // Avatar
   const avatarEl = document.getElementById('perfil-avatar');
-  const avatarInitial = (identity.name || identity.email || '?')[0].toUpperCase();
+  const avatarInitial = String(identity.name || identity.email || '?').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase() || '?';
   const avatarUrl = sanitizeImageUrl(identity.photoURL || '');
   if (avatarUrl) {
     const avatarImg = document.createElement('img');
@@ -757,7 +759,7 @@ async function loadUserOrders(user) {
 }
 </script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3"></script>
-<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260907-session-preserved-5"></script>
+<script type="module" src="js/components/favorites/sincronizacion-favoritos.js?v=tintin-20260910-auth-retry-1"></script>
 <script type="module" src="js/pages/profile/favoritos-perfil.js?v=tintin-20260905-auth-session-3"></script>
 <script type="module" src="js/pages/profile/pedidos-perfil.js?v=tintin-20260908-profile-canonical-1"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-3"></script>

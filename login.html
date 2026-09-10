@@ -342,7 +342,6 @@ async function redirectByRole(role, email, options = {}) {
       renderStoreConfigUnavailableOverlay(cfg);
       return;
     }
-    await signOut(auth);
     hideLoginOverlay();
     renderStoreClosedOverlay();
     return;
@@ -859,7 +858,6 @@ async function finishGoogleLogin(user) {
   ]);
   const { role, blocked, welcomePending } = profile;
   if (blocked) {
-    await signOut(auth);
     hideLoginOverlay();
     showBlockedModal();
     return;
@@ -875,7 +873,6 @@ async function finishOtpLogin(user) {
   ]);
   const { role, blocked, welcomePending } = profile;
   if (blocked) {
-    await signOut(auth);
     hideLoginOverlay();
     showBlockedModal();
     return;
@@ -969,7 +966,6 @@ onAuthStateChanged(auth, async user => {
   const profileSnapshot = profileResult.snapshot;
   const profileData = profileSnapshot?.exists() ? profileSnapshot.data() : {};
   if (!isSuperAdmin && profileData.blocked === true) {
-    await signOut(auth);
     hideLoginOverlay();
     showBlockedModal();
     return;
@@ -1325,7 +1321,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
 };
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260716-cloudinary-fix-3"></script>
-<script src="tienda.js?v=tintin-20260907-session-preserved-5" defer></script>
+<script src="tienda.js?v=tintin-20260910-auth-retry-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3"></script>
 </body>
 </html>

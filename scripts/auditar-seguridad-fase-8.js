@@ -105,7 +105,7 @@ check(
 
 check(
   'La eliminación revoca acceso y conserva identidad histórica auditada',
-  admin.includes("fetch('/api/admin-delete-user'") &&
+  (admin.includes("fetch('/api/admin-delete-user'") || admin.includes("authenticatedFetch('/api/admin-delete-user'")) &&
     deleteUserEndpoint.includes('applyUserLifecycle') &&
     lifecycle.includes("profileStatus: fsString('deleted')") &&
     lifecycle.includes("setFirebaseUserDisabled(env, uid, action === 'softDelete')") &&

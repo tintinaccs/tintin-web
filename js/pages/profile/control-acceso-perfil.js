@@ -20,7 +20,7 @@
 // sesión y la devuelve a la tienda, donde puede seguir mirando.
 
 import { auth, db } from "../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { subscribeAuthState } from "../../core/auth/coordinador-sesion.js?v=tintin-20260910-session-coordinator-1";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20260906-profile-complete-1";
 import { SUPER_ADMIN } from "../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-3";
@@ -149,7 +149,7 @@ async function enforceProfileComplete(user) {
 
 export function startProfileGate() {
   if (isExemptPage()) return;
-  onAuthStateChanged(auth, user => {
+  subscribeAuthState(user => {
     if (!user) clearProfileGateCache();
     enforceProfileComplete(user);
   });

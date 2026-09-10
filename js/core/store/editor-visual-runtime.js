@@ -234,6 +234,16 @@ function previewFields(sectionSchema) {
 }
 
 function setPlainText(element, value) {
+  if (element.classList.contains('tt-hero-title')) {
+    const lines = String(value).split('\n').filter(Boolean);
+    element.replaceChildren(...(lines.length ? lines : ['Bienvenida', 'tintina']).map((line, index) => {
+      const span = document.createElement('span');
+      span.className = `tt-hero-title-line${index ? ' tt-hero-title-line--accent' : ''}`;
+      span.textContent = line;
+      return span;
+    }));
+    return;
+  }
   const nodes = [];
   String(value).split('\n').forEach((line, index) => { if (index) nodes.push(document.createElement('br')); nodes.push(document.createTextNode(line)); });
   element.replaceChildren(...nodes);

@@ -210,7 +210,8 @@ check('admin-notifications-versioned', 'La autolectura Admin está servida con v
 
 // 7. Mutaciones sensibles deben conservar gobierno y trazabilidad.
 check('superadmin-auth', 'El panel conserva guard de autenticación y Super Admin real',
-  hasAll(adminApp, ['onAuthStateChanged', 'SUPER_ADMIN', 'adm-auth-ready']));
+  hasAny(adminApp, ['onAuthStateChanged', 'subscribeAuthState'])
+    && hasAll(adminApp, ['SUPER_ADMIN', 'adm-auth-ready']));
 check('permissions-map', 'Las secciones sensibles pasan por el mapa central de permisos', hasAll(adminApp, ['SECTION_PERMISSION', 'requiredPerm']));
 check('audit-immutable', 'Audit log sigue sin update/delete desde reglas',
   /auditLog/.test(firestoreRules) && /allow\s+(?:update|delete)\s*:\s*if\s*false/.test(firestoreRules));

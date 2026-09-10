@@ -6,6 +6,7 @@
  */
 import { EMAIL_WEBHOOK_URL } from './email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1';
 import { auth } from './core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
+import { authenticatedFetch } from './core/auth/cliente-api-autenticado.js?v=tintin-20260910-auth-api-1';
 
 const CREATE_ORDER_TIMEOUT_MS = 35000;
 
@@ -15,7 +16,9 @@ function phoneForOrderServer(value) {
 }
 
 export async function createOrderViaServer(draft) {
-  const idToken = await auth.currentUser?.getIdToken(true);
+  const user = auth.currentUser;
+  if (!user) return { ok: false, error: 'missing_id_token' };
+  const idToken = await user.getIdToken();
   if (!idToken) return { ok: false, error: 'missing_id_token' };
 
   const serverDraft = {
@@ -27,11 +30,18 @@ export async function createOrderViaServer(draft) {
   const timeout = window.setTimeout(() => controller.abort(), CREATE_ORDER_TIMEOUT_MS);
 
   try {
-    const response = await fetch(EMAIL_WEBHOOK_URL, {
+    const response = await authenticatedFetch(EMAIL_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action: 'createOrder', idToken, ...serverDraft }),
       signal: controller.signal
+    }, {
+      retryInit: refreshedToken => ({
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'createOrder', idToken: refreshedToken, ...serverDraft }),
+        signal: controller.signal
+      })
     });
 
     const body = await response.text();

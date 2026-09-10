@@ -110,7 +110,7 @@ test('Sheets y Superadmin comparten la autoridad de pedidos; auditoría sigue re
   assert.match(orderDomain, /currentDocument: precondition/);
   assert.match(orderDomain, /auditLog/);
 
-  assert.match(adminRuntime, /fetch\('\/api\/admin-order-mutation'/);
+  assert.match(adminRuntime, /(?:authenticatedFetch|fetch)\('\/api\/admin-order-mutation'/);
   assert.match(adminRuntime, /TintinInventoryIntegrity/);
   assert.match(snapshot, /ALLOWED_ENTITIES = new Set\(\['products', 'users', 'orders', 'audit'\]\)/);
   assert.match(snapshot, /reference:/);

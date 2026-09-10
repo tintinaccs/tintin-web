@@ -8,6 +8,7 @@
  */
 import { auth } from './core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import { apiUrl } from './core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
+import { authenticatedFetch } from './core/auth/cliente-api-autenticado.js?v=tintin-20260910-auth-api-1';
 
 const CREATE_ORDER_TIMEOUT_MS = 35000;
 const CREATE_ORDER_ENDPOINT = apiUrl('apps-script-bridge');
@@ -22,7 +23,9 @@ export async function createOrderViaServer(draft) {
   // Forzar la renovación en cada confirmación puede invalidar una sesión que
   // seguía siendo utilizable y hacer que el checkout parezca cerrar la cuenta
   // justo después de crear el pedido.
-  const idToken = await auth.currentUser?.getIdToken();
+  const user = auth.currentUser;
+  if (!user) return { ok: false, error: 'missing_id_token' };
+  const idToken = await user.getIdToken();
   if (!idToken) return { ok: false, error: 'missing_id_token' };
 
   const serverDraft = {
@@ -34,11 +37,18 @@ export async function createOrderViaServer(draft) {
   const timeout = window.setTimeout(() => controller.abort(), CREATE_ORDER_TIMEOUT_MS);
 
   try {
-    const response = await fetch(CREATE_ORDER_ENDPOINT, {
+    const response = await authenticatedFetch(CREATE_ORDER_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action: 'createOrder', idToken, ...serverDraft }),
       signal: controller.signal
+    }, {
+      retryInit: refreshedToken => ({
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'createOrder', idToken: refreshedToken, ...serverDraft }),
+        signal: controller.signal
+      })
     });
 
     const body = await response.text();

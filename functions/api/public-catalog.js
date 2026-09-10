@@ -3,6 +3,7 @@ import {
   firestoreAdminGet,
   firestoreAdminListAll
 } from '../../cloudflare/firebase-admin-ligero.js';
+import { rateLimit } from '../lib/operational-guard.js';
 
 const PRODUCT_FIELDS = new Set([
   'name', 'title', 'handle', 'category', 'collectionSlug', 'collection', 'cat', 'type',
@@ -15,30 +16,8 @@ const PRODUCT_FIELDS = new Set([
   'Variant Inventory Qty', 'Product Category', 'Category', 'Title', 'Handle', 'Body (HTML)'
 ]);
 const COLLECTION_FIELDS = new Set(['name', 'title', 'description', 'image', 'imageUrl', 'order', 'visible']);
-const RATE_WINDOW_MS = 10_000;
-const RATE_MAX_REQUESTS = 60;
-const requestCounters = new Map();
-
-function rateLimitKey(request) {
-  return String(request.headers.get('CF-Connecting-IP') || request.headers.get('x-forwarded-for') || 'unknown')
-    .split(',')[0].trim().slice(0, 80) || 'unknown';
-}
-
 function allowRequest(request) {
-  const now = Date.now();
-  if (requestCounters.size > 2000) {
-    for (const [key, value] of requestCounters) {
-      if (now - value.startedAt >= RATE_WINDOW_MS) requestCounters.delete(key);
-    }
-  }
-  const key = rateLimitKey(request);
-  const current = requestCounters.get(key);
-  if (!current || now - current.startedAt >= RATE_WINDOW_MS) {
-    requestCounters.set(key, { startedAt: now, count: 1 });
-    return true;
-  }
-  current.count += 1;
-  return current.count <= RATE_MAX_REQUESTS;
+  return rateLimit(request, { id: 'public-catalog', limit: 60, windowMs: 10_000 });
 }
 
 function pickKnownFields(data, allowed) {
@@ -121,12 +100,14 @@ export async function onRequest({ request, env, waitUntil }) {
     return new Response(null, { status: 405, headers: { allow: 'GET' } });
   }
 
-  if (!allowRequest(request)) {
+  const limiter = allowRequest(request);
+  if (!limiter.allowed) {
     return Response.json({ ok: false, error: 'rate_limited' }, {
       status: 429,
       headers: {
         'cache-control': 'no-store',
-        'retry-after': '10',
+        'retry-after': String(limiter.retryAfter),
+        ...limiter.headers,
         'x-content-type-options': 'nosniff'
       }
     });
