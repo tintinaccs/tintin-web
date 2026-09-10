@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-10T16:26:42-03:00",
-  "sourceFingerprint": "c25880ac7ae859436166cd15fe10594c7b3dc46a9a54677e406590df5d4e19c5",
+  "generatedAt": "2000-01-01T00:00:00.000Z",
+  "sourceFingerprint": "87b1cd78d7e46face8b1f94464064f724d337efc380fd8939fef53a28d5506f8",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 810,
     "textFiles": 773,
-    "totalBytes": 15891006,
+    "totalBytes": 15891536,
     "pages": 18,
     "modules": 553
   },
@@ -11975,8 +11975,8 @@
         "guest",
         "client"
       ],
-      "bytes": 36011,
-      "sha256": "41a7e759249322d883951c6209586cf99ad9d1ce17de52b20c486876f9de5f89",
+      "bytes": 36020,
+      "sha256": "27187f3fcf58204e785893bb25224191b0fe1bd71f55e61bae479f08eeebd258",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12150,7 +12150,7 @@
           "line": 75
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260909-home-hierarchy-4",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260910-home-button-transparent-1",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 85
         },
@@ -12655,7 +12655,7 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260909-home-hierarchy-4",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260910-home-button-transparent-1",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 85,
           "exists": true
@@ -28654,8 +28654,8 @@
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
-      "bytes": 26178,
-      "sha256": "9701157fb5039a92170433a2cbc8f4b575b3ca43a3e442c96ff2afeb68c2514e",
+      "bytes": 25935,
+      "sha256": "0da7445567a0bbff23279a45589781848ded5dd5b1aaf1dea5a62e9bb7087489",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32980,8 +32980,8 @@
     {
       "path": "css/pages/home/ajuste-inicio.css",
       "extension": ".css",
-      "bytes": 17456,
-      "sha256": "9269b05635b3f281adf9ed900f37976197b2c20e9ed17246ce60b092fe3fca33"
+      "bytes": 17746,
+      "sha256": "98051a5793da6870aca359af9cbf76a90cd7cb78967aad369adf392449e9ec09"
     },
     {
       "path": "css/pages/home/carrusel-colecciones.css",
@@ -32992,8 +32992,8 @@
     {
       "path": "css/pages/home/hero-bienvenida-inicio.css",
       "extension": ".css",
-      "bytes": 14606,
-      "sha256": "7cca40a9cc0b91eb0d9bdffee5f6e5422de690d15f1b8dd8e2a5e275847e0bf7"
+      "bytes": 15080,
+      "sha256": "b5714b08859533dbcbfc5d5a4b042373f2305f34683386169866f6bf6e5e4813"
     },
     {
       "path": "css/pages/home/mantenimiento-inicio.css",
@@ -33940,8 +33940,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 36011,
-      "sha256": "41a7e759249322d883951c6209586cf99ad9d1ce17de52b20c486876f9de5f89"
+      "bytes": 36020,
+      "sha256": "27187f3fcf58204e785893bb25224191b0fe1bd71f55e61bae479f08eeebd258"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -36298,8 +36298,8 @@
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
       "extension": ".js",
-      "bytes": 26178,
-      "sha256": "9701157fb5039a92170433a2cbc8f4b575b3ca43a3e442c96ff2afeb68c2514e"
+      "bytes": 25935,
+      "sha256": "0da7445567a0bbff23279a45589781848ded5dd5b1aaf1dea5a62e9bb7087489"
     },
     {
       "path": "scripts/corregir-fuente-tintin.js",

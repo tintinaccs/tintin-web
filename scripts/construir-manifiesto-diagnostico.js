@@ -656,15 +656,10 @@ const sourceFingerprint = hash(Buffer.from(
 ));
 
 function generatedAtForBuild() {
-  // El manifiesto se valida inmediatamente después del build en CI. Usar la
-  // hora actual o la fecha del último commit que tocó este archivo lo vuelve
-  // diferente después de cada actualización del propio artefacto. Usamos la
-  // fecha del HEAD, estable para todo build del mismo checkout.
-  const head = childProcess.spawnSync('git', ['show', '-s', '--format=%cI', 'HEAD'], {
-    cwd: ROOT,
-    encoding: 'utf8'
-  });
-  return String(head.stdout || '').trim() || new Date().toISOString();
+  // CI valida el artefacto inmediatamente después del build y puede usar un
+  // commit temporal distinto en cada intento. La fecha actual o la del HEAD
+  // produciría drift aunque el contenido fuente fuese idéntico.
+  return '2000-01-01T00:00:00.000Z';
 }
 
 let previousManifest = null;
