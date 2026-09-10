@@ -91,8 +91,8 @@ html body.tt-home-premium .tt-hero-actions {
 }
 
 html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
-  background: #fff9fc !important;
-  background-color: #fff9fc !important;
+  background: #fff !important;
+  background-color: #fff !important;
   color: #f24498 !important;
   border: 0 !important;
   min-height: 52px;
@@ -472,9 +472,9 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-cta {
   justify-content: center;
   padding: 0 .8em !important;
   color: #f24498 !important;
-  background: #fff9fc !important;
-  background-color: #fff9fc !important;
-  border-color: #fff9fc !important;
+  background: #fff !important;
+  background-color: #fff !important;
+  border-color: #fff !important;
   box-shadow: 0 10px 26px rgba(45, 12, 27, .12) !important;
   font-size: clamp(.8rem, 1.85vw, 1.7rem) !important;
   font-weight: 800;
@@ -549,14 +549,14 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-link {
   }
   html body.tt-home-premium .tt-hero-subtitle {
     left: 10%;
-    top: 83.4%;
+    top: 70%;
     width: 80% !important;
     font-size: clamp(.82rem, 3.9vw, 1.2rem) !important;
     letter-spacing: .08em;
   }
   html body.tt-home-premium .tt-hero-actions .tt-hero-cta {
     left: 29.5% !important;
-    top: 87.1% !important;
+    top: 76% !important;
     width: 41% !important;
     height: 5.2% !important;
     font-size: clamp(.72rem, 3.3vw, 1.05rem) !important;
@@ -564,7 +564,7 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-link {
   }
   html body.tt-home-premium .tt-hero-actions .tt-hero-link {
     left: 25% !important;
-    top: 95% !important;
+    top: 87% !important;
     width: 50% !important;
     font-size: clamp(.78rem, 3.8vw, 1.1rem) !important;
     text-align: center;
