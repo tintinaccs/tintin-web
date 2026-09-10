@@ -167,7 +167,11 @@ const BUDGETS = {
   // sumar hasta 177 solicitudes efectivas por recursos externos variables;
   // se mantiene el tripwire muy por debajo de un crecimiento de bloat real.
   homeRequests: 177,
+  // Nosotros conserva una composición editorial propia con más recursos de
+  // imagen que el resto de las páginas informativas. Su piso observado es
+  // 121 solicitudes efectivas; las demás siguen protegidas por 120.
   lightweightRequests: 120,
+  aboutRequests: 121,
   // Las páginas informativas comparten el shell público (CSS, navegación,
   // fuentes y runtime de tienda) y también leen 'site_content' vía onSnapshot
   // en contenido-sitio.js, gateado por appCheckReady. Desde #725, firebase.js

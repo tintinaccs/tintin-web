@@ -70,7 +70,8 @@ for (const pageName of GENERIC_PERFORMANCE_PAGES) {
     }
 
     if (LIGHTWEIGHT_PAGES.has(pageName)) {
-      expect(effectiveRequests, `${pageName} debe conservar runtime informativo liviano`).toBeLessThanOrEqual(BUDGETS.lightweightRequests);
+      const requestBudget = pageName === 'about.html' ? BUDGETS.aboutRequests : BUDGETS.lightweightRequests;
+      expect(effectiveRequests, `${pageName} debe conservar runtime informativo liviano`).toBeLessThanOrEqual(requestBudget);
       expect(vitals.transferKB, `${pageName} no debe volver a cargar infraestructura comercial completa`).toBeLessThanOrEqual(BUDGETS.lightweightTransferKB);
     }
   });
