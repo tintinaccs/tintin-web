@@ -27,6 +27,15 @@ html.tt-initializing body.tt-home-premium:has(>#tt-loader.tt-out){visibility:vis
   }
 }
 
+/* En tableta el header fijo ya queda reservado por el margen del hero.
+   No sumar también el padding global del body: dejaba una franja vacía
+   entre el header y el banner. */
+@media (min-width: 768px) and (max-width: 1024px) {
+  body.tt-home-premium {
+    padding-top: 0 !important;
+  }
+}
+
 /* Header y cookies de Inicio: fondos realmente sólidos. Estas reglas viven en
    la última hoja del home y usan selectores de alta especificidad para que ni
    el esquema publicado, ni estados de scroll, ni transparencias heredadas
