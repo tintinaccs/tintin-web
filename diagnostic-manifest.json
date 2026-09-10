@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-10T12:08:05.254Z",
-  "sourceFingerprint": "f8314b4a2f9e4278f9b21c0e320748e406de7d4b881fbf0409cd5eed111898e7",
+  "generatedAt": "2026-09-10T12:13:26.480Z",
+  "sourceFingerprint": "9985d53b3caff494f0aae59e5ed662f4195c9b935dc18c170379476684c46e2f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 815,
+    "files": 807,
     "textFiles": 770,
-    "totalBytes": 18634443,
+    "totalBytes": 15861484,
     "pages": 18,
     "modules": 550
   },
@@ -11964,8 +11964,8 @@
         "guest",
         "client"
       ],
-      "bytes": 35958,
-      "sha256": "5c0631b72353bd546721b8b51fa3e3abaa9e7d495ee6ae640d1b5517a9eb8a0d",
+      "bytes": 35957,
+      "sha256": "71864adc15d49f6ddb53a7dc9b5469f2c105a9b887b84492c357ae495e229ad7",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -32851,8 +32851,8 @@
     {
       "path": "css/pages/home/hero-bienvenida-inicio.css",
       "extension": ".css",
-      "bytes": 7317,
-      "sha256": "516d41c24dae2d7b99005da00d2da7109b714f9031889bdf68317aca4c39ccca"
+      "bytes": 6419,
+      "sha256": "47b157636e73a6d4b639a0788806c6a608f87d63ad41ea88d5d26e8944f18495"
     },
     {
       "path": "css/pages/home/mantenimiento-inicio.css",
@@ -33799,8 +33799,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 35958,
-      "sha256": "5c0631b72353bd546721b8b51fa3e3abaa9e7d495ee6ae640d1b5517a9eb8a0d"
+      "bytes": 35957,
+      "sha256": "71864adc15d49f6ddb53a7dc9b5469f2c105a9b887b84492c357ae495e229ad7"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -36134,7 +36134,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 37694,
-      "sha256": "814be4d39001b00469a60e5ad9999772bd4c6307a86ee38e9964c825d27cd0d9"
+      "sha256": "ba13e84903aaeb790b0b51facceec2a72a96677d94d5138adca327f737520da7"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -36831,54 +36831,6 @@
       "extension": ".js",
       "bytes": 96400,
       "sha256": "5839e358e499f3fd0b4262aab6ba83f8da48143577a2e411837ef906b12cec97"
-    },
-    {
-      "path": "work-desktop-new.png",
-      "extension": ".png",
-      "bytes": 615266,
-      "sha256": "c24d21c3abfffec02b8d8e24e98be21df77473265e9cb341200d56ff47100d0d"
-    },
-    {
-      "path": "work-desktop.png",
-      "extension": ".png",
-      "bytes": 262412,
-      "sha256": "487ff1e272c02987d398b8ec63dc11f4412a679aca497d8c8b0b0cdf254df806"
-    },
-    {
-      "path": "work-mobile-new.png",
-      "extension": ".png",
-      "bytes": 270297,
-      "sha256": "6feea75dc3f60a9c0e9b81d01f9d67fbc5b8c3f85d979eeb421d78f1037f2b60"
-    },
-    {
-      "path": "work-mobile.png",
-      "extension": ".png",
-      "bytes": 142467,
-      "sha256": "d884d467caa0d63fd9a946eac410147d9a2dcba6e215471f63d075fd225354c3"
-    },
-    {
-      "path": "work-tablet-landscape-new.png",
-      "extension": ".png",
-      "bytes": 318805,
-      "sha256": "3729cd435fb716f479491f111f104ae65bd58560370d55cbb65a4be47495da22"
-    },
-    {
-      "path": "work-tablet-landscape.png",
-      "extension": ".png",
-      "bytes": 159302,
-      "sha256": "2f982d60f0e50649a0efa8b4dab428207a5e5f4b8d605764539e6ab03d7086dd"
-    },
-    {
-      "path": "work-tablet-portrait-new.png",
-      "extension": ".png",
-      "bytes": 611910,
-      "sha256": "f54146803aa2c6fbd24aab88f8ad8d2c1146fdce6970f0611b95be9a138d7bc4"
-    },
-    {
-      "path": "work-tablet-portrait.png",
-      "extension": ".png",
-      "bytes": 391601,
-      "sha256": "52a89a6e0a48a5fa5360cbe3090881137ed2af79c3f15407ac324287024df908"
     }
   ],
   "sitemapRoutes": [],
