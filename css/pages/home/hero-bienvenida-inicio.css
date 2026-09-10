@@ -408,6 +408,15 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-link {
   }
 }
 
+/* El encabezado tablet mide 84px y es fijo. A 768px exactos antes no se
+   reservaba ese alto: la imagen arrancaba debajo del encabezado y parecía
+   haber un hueco/corte. El hero empieza ahora justo al terminar el header. */
+@media (min-width: 768px) and (max-width: 1024px) {
+  html body.tt-home-premium .tt-hero {
+    margin-top: 84px !important;
+  }
+}
+
 /* =============================================================
    COMPOSICIÓN RESPONSIVE FINAL
    Las imágenes aprobadas ya contienen la marca, el producto y el fondo.

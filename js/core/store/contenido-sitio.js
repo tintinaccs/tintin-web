@@ -78,7 +78,13 @@ function replaceLabelPreservingChildren(element, value) {
 }
 
 function applyText(element, value, item) {
-  const safe = sanitizeContentText(value, item.maxLength);
+  let safe = sanitizeContentText(value, item.maxLength);
+  // Un documento antiguo del editor puede contener un campo de hero vacío.
+  // No debe borrar el contenido publicado de respaldo: el hero es la primera
+  // impresión de la página y un subtítulo vacío rompe toda la composición.
+  if (!safe && element.classList.contains('tt-hero-subtitle')) {
+    safe = item.default || 'Joyitas únicas, como vos.';
+  }
   if (element.classList.contains('tt-hero-title')) {
     const lines = String(safe).split('\n').filter(Boolean);
     element.replaceChildren(...(lines.length ? lines : ['Bienvenida', 'tintina']).map((line, index) => {
