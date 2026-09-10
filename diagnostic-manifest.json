@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "a492eeac73734e9244ee2a93228511b430cd523cecb9d11c6ac013a94e7f3874",
+  "sourceFingerprint": "5e6e0164a77d62fd820f065461cfe7ddaf220aac83b9d247f039dbb5b0514058",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 810,
     "textFiles": 773,
-    "totalBytes": 16210095,
+    "totalBytes": 16210420,
     "pages": 18,
     "modules": 553
   },
@@ -11975,8 +11975,8 @@
         "guest",
         "client"
       ],
-      "bytes": 36173,
-      "sha256": "a9e72f6305080456be592d9f38127880d5e587fdf80cd38ef349d65855938490",
+      "bytes": 36162,
+      "sha256": "325dee8aae62912dcbe7aae1b3b650912e1e26bf1afc3b7c64e23391581038a8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12105,7 +12105,7 @@
           "line": 66
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260903-loader-white-brand-2",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260910-home-tablet-gap-1",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 67
         },
@@ -12150,12 +12150,12 @@
           "line": 75
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260910-home-button-transparent-1",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260910-home-tablet-gap-2",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 85
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260910-hero-responsive-10",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260910-hero-responsive-11",
           "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 86
         },
@@ -12601,7 +12601,7 @@
           "exists": true
         },
         {
-          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260903-loader-white-brand-2",
+          "raw": "css/theme/fondo-solido-cargador.css?v=tintin-20260910-home-tablet-gap-1",
           "target": "css/theme/fondo-solido-cargador.css",
           "line": 67,
           "exists": true
@@ -12655,13 +12655,13 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260910-home-button-transparent-1",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260910-home-tablet-gap-2",
           "target": "css/pages/home/ajuste-inicio.css",
           "line": 85,
           "exists": true
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260910-hero-responsive-10",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260910-hero-responsive-11",
           "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 86,
           "exists": true
@@ -22643,8 +22643,8 @@
     },
     {
       "path": "js/components/navigation/compartido/recursos-navegacion.js",
-      "bytes": 4657,
-      "sha256": "dcf7347cfa9610dd285db96c93f3e74e07ba7a3e4fc42c82463e707e7f4812d5",
+      "bytes": 4647,
+      "sha256": "14ffe665d11ff6b9a60b577f384f9fb23d2b9979da114f00387d2521e7287228",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32836,8 +32836,8 @@
     {
       "path": "css/components/navigation/compartido/paneles.css",
       "extension": ".css",
-      "bytes": 12457,
-      "sha256": "323af46c802f010e8c1f5f16321050ccc39bbe7690c6d2eb418dde5a5001c25c"
+      "bytes": 12480,
+      "sha256": "1000109f242051e9f058645fa0e19003cb89c288c0bcc3a128a0f9d7f7bbac28"
     },
     {
       "path": "css/components/navigation/compartido/superficie-notificaciones.css",
@@ -32980,8 +32980,8 @@
     {
       "path": "css/pages/home/ajuste-inicio.css",
       "extension": ".css",
-      "bytes": 17746,
-      "sha256": "98051a5793da6870aca359af9cbf76a90cd7cb78967aad369adf392449e9ec09"
+      "bytes": 18042,
+      "sha256": "0475548f1cd87f4b4732067fbab3a862a32fafa65d85c0c52e0ffa3d0e39f382"
     },
     {
       "path": "css/pages/home/carrusel-colecciones.css",
@@ -33112,8 +33112,8 @@
     {
       "path": "css/theme/fondo-solido-cargador.css",
       "extension": ".css",
-      "bytes": 5986,
-      "sha256": "66f54b13f35e631380ed9674bbc35775560e5fe83f1757037dcea84f3d157515"
+      "bytes": 6013,
+      "sha256": "3651c5fef477d66315434cd745bdea2def5ae46c3fc26447e7c12ca12df1eb84"
     },
     {
       "path": "css/theme/paridad-segura-tintin.css",
@@ -33940,8 +33940,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 36173,
-      "sha256": "7d17c1553f64f1a022c30ad1a88febb70beb25f4f3ecb1e1a20ea65c7603262f"
+      "bytes": 36162,
+      "sha256": "325dee8aae62912dcbe7aae1b3b650912e1e26bf1afc3b7c64e23391581038a8"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -34540,8 +34540,8 @@
     {
       "path": "js/components/navigation/compartido/recursos-navegacion.js",
       "extension": ".js",
-      "bytes": 4657,
-      "sha256": "dcf7347cfa9610dd285db96c93f3e74e07ba7a3e4fc42c82463e707e7f4812d5"
+      "bytes": 4647,
+      "sha256": "14ffe665d11ff6b9a60b577f384f9fb23d2b9979da114f00387d2521e7287228"
     },
     {
       "path": "js/components/navigation/compartido/registro-paneles.js",
