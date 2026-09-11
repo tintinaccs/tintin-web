@@ -526,6 +526,16 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-link {
   pointer-events: auto;
 }
 
+/* En tablet horizontal y desktop el enlace comparte el mismo eje óptico que
+   el subtítulo y la CTA. Antes su caja era mucho más angosta y arrancaba a
+   la izquierda, por eso se percibía desordenado aunque los otros dos sí
+   estaban centrados. */
+html body.tt-home-premium .tt-hero-actions .tt-hero-link {
+  left: 7.1% !important;
+  width: 36.5% !important;
+  text-align: center;
+}
+
 @media (max-width: 1120px) and (orientation: landscape) {
   html body.tt-home-premium .tt-hero {
     aspect-ratio: 1536 / 1024;
@@ -544,7 +554,8 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-link {
     font-size: clamp(.72rem, 1.7vw, 1.1rem) !important;
   }
   html body.tt-home-premium .tt-hero-actions .tt-hero-link {
-    left: 13% !important;
+    left: 6.8% !important;
+    width: 38% !important;
     top: 76% !important;
     font-size: clamp(.72rem, 1.6vw, 1rem) !important;
   }
