@@ -47,7 +47,11 @@ const accountBtnDefaults=new Map();
 document.addEventListener('click',event=>{
  const googleButton=event.target.closest?.('#btn-google');
  if(googleButton)beginSilentAuthTransition();
- const logoutButton=event.target.closest?.('#account-logout-btn,#tablet-user-logout-btn,#btn-logout');
+ // El perfil tiene su propio botón de cierre explícito. No lo capture el
+ // listener global: dos handlers sobre el mismo control podían ejecutar
+ // signOut en paralelo y hacer que la navegación pareciera un deslogueo
+ // provocado por el icono de cuenta.
+ const logoutButton=event.target.closest?.('#account-logout-btn,#tablet-user-logout-btn');
  if(logoutButton){
   event.preventDefault();
   event.stopImmediatePropagation();

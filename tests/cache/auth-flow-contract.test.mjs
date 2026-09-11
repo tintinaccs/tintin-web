@@ -6,6 +6,7 @@ const login = fs.readFileSync(new URL('../../login.html', import.meta.url), 'utf
 const session = fs.readFileSync(new URL('../../js/core/auth/proteccion-sesion.js', import.meta.url), 'utf8');
 const profile = fs.readFileSync(new URL('../../js/pages/profile/control-acceso-perfil.js', import.meta.url), 'utf8');
 const profileCode = profile.replace(/\/\/.*$/gm, '');
+const profilePage = fs.readFileSync(new URL('../../perfil.html', import.meta.url), 'utf8');
 const publicAuthNav = fs.readFileSync(new URL('../../js/core/auth/navegacion-autenticacion.js', import.meta.url), 'utf8');
 const publicCart = fs.readFileSync(new URL('../../js/components/cart/sincronizacion-carrito.js', import.meta.url), 'utf8');
 
@@ -98,4 +99,17 @@ test('rutas públicas esperan Auth antes de pintar visitante o activar carrito',
   assert.match(publicAuthNav, /authStateReady\.then\(\(\)=>subscribeAuthState/);
   assert.match(publicCart, /auth\.authStateReady\(\)/);
   assert.match(publicCart, /authStateReady\.then\(\(\) => onAuthStateChanged/);
+});
+
+test('el perfil no expone placeholders privados mientras Auth restaura la sesión', () => {
+  assert.match(profilePage, /profile-auth-pending/);
+  assert.match(profilePage, /html\.profile-auth-pending \.perfil-wrap/);
+  assert.match(profilePage, /if \(!user\) \{[\s\S]*?window\.location\.replace\('login\.html\?from=%2Fperfil'\)/);
+  assert.match(profilePage, /document\.documentElement\.classList\.remove\('profile-auth-pending'\)/);
+});
+
+test('el icono de cuenta no tiene ninguna ruta de logout implícita', () => {
+  assert.match(publicAuthNav, /data-auth-account-button/);
+  assert.doesNotMatch(publicAuthNav, /closest\?\.\('#account-logout-btn,#tablet-user-logout-btn,#btn-logout'\)/);
+  assert.match(publicAuthNav, /closest\?\.\('#account-logout-btn,#tablet-user-logout-btn'\)/);
 });

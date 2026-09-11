@@ -41,6 +41,7 @@
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/components/location/selector-ubicacion.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/contraste.css?v=tintin-20260811-cls-desktop-stable-2">
+  <script>document.documentElement.classList.add('profile-auth-pending');</script>
   <style>
     /* Alias variables para que los estilos de perfil funcionen con styles.css */
     :root {
@@ -53,6 +54,11 @@
     }
 
     body { background: var(--pink-pale); }
+
+    /* Los placeholders privados no deben verse durante la restauración de
+       Auth ni en una visita sin sesión. */
+    html.profile-auth-pending .perfil-wrap,
+    html.profile-auth-pending .perfil-toast { display: none !important; }
 
     /* Profile layout */
     .perfil-wrap {
@@ -452,7 +458,8 @@ async function startProfileAuthGuard() {
   subscribeAuthState(async user => {
     user = await waitForProfileUserAfterAuthRestore(user);
     if (!user) {
-      window.location.href = 'login.html';
+      // Proteger la ruta no implica cerrar ninguna sesión.
+      window.location.replace('login.html?from=%2Fperfil');
       return;
     }
     // Cuenta bloqueada (Fase E): afuera de Mi Cuenta antes de pintar nada, con
@@ -694,6 +701,10 @@ async function startProfileAuthGuard() {
   document.getElementById('btn-logout').onclick = () =>
     signOut(auth).then(() => { window.location.href = 'index.html'; })
       .catch(() => window.TintinReleaseProfileButton?.('btn-logout'));
+
+  // La sesión ya fue confirmada y el contenido fue hidratado con sus datos.
+  document.documentElement.classList.remove('profile-auth-pending');
+  hideLoading();
 
   });
 }
