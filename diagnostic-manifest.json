@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "1da18f7bc313fb0f2e14adad7a5aedced466800a73740c91a95b6b04a61ab837",
+  "sourceFingerprint": "2a9b0480bbd18b79f029af79f2a6f9c39409d0be4da568d2332d8e73248f6649",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 811,
     "textFiles": 774,
-    "totalBytes": 16216872,
+    "totalBytes": 16216802,
     "pages": 18,
     "modules": 553
   },
@@ -29347,8 +29347,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 14160,
-      "sha256": "4371769abba2aa4869651935d1aa0eb1806e02c071cdef3360478c5e39faf157",
+      "bytes": 14097,
+      "sha256": "b3d3f52a6253b42fe4b4985eda3f89038ce2ac9d85182b67a097d5b260d790b0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29357,11 +29357,11 @@
       "endpoints": [
         {
           "url": "https://wa.me/595981299331",
-          "line": 111
+          "line": 110
         },
         {
           "url": "https://instagram.com/tintinaccs",
-          "line": 145
+          "line": 144
         }
       ]
     },
@@ -29799,8 +29799,8 @@
     },
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
-      "bytes": 5895,
-      "sha256": "0b3d4b7764fd6624318281c24490c81489c8a72dc181dd56f2236b76b223d84b",
+      "bytes": 5888,
+      "sha256": "70ee2be89728a73ea85a2555404d342216e0fc5a1e718baa0f3108b3ef5a6963",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36465,8 +36465,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 14160,
-      "sha256": "4371769abba2aa4869651935d1aa0eb1806e02c071cdef3360478c5e39faf157"
+      "bytes": 14097,
+      "sha256": "b3d3f52a6253b42fe4b4985eda3f89038ce2ac9d85182b67a097d5b260d790b0"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -36585,8 +36585,8 @@
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 5895,
-      "sha256": "0b3d4b7764fd6624318281c24490c81489c8a72dc181dd56f2236b76b223d84b"
+      "bytes": 5888,
+      "sha256": "70ee2be89728a73ea85a2555404d342216e0fc5a1e718baa0f3108b3ef5a6963"
     },
     {
       "path": "tests/cache/cache-headers.test.mjs",
