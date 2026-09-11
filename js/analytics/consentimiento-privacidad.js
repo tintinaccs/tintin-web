@@ -1,5 +1,4 @@
-import '../components/cart/recuperacion-carrito.js?v=tintin-20260722-level4-1';
-import { isAdminPage } from '../admin/ruta-admin.js?v=tintin-20260722-level4-1';
+import { isAdminPage } from '../admin/ruta-admin.js?v=tintin-20260911-auth-cart-final-1';
 
 /**
  * Preferencias de privacidad del sitio.
