@@ -3,8 +3,8 @@ import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase
 import {
   hasStatisticsConsent,
   onPrivacyConsentChange
-} from './consentimiento-privacidad.js?v=tintin-20260716-cloudinary-fix-1';
-import { isAdminPage } from '../admin/ruta-admin.js?v=tintin-20260722-level4-1';
+} from './consentimiento-privacidad.js?v=tintin-20260911-auth-cart-final-1';
+import { isAdminPage } from '../admin/ruta-admin.js?v=tintin-20260911-auth-cart-final-1';
 
 const MEASUREMENT_ID_RE = /^G-[A-Z0-9]{6,20}$/i;
 const CONFIG_TTL_MS = 5 * 60 * 1000;
@@ -19,8 +19,7 @@ const ALLOWED_EVENTS = new Set([
   'add_to_cart',
   'remove_from_cart',
   'begin_checkout',
-  'purchase',
-  'restore_cart'
+  'purchase'
 ]);
 
 let state = 'idle';
@@ -291,16 +290,6 @@ function bindCommerceEvents() {
       }
     }
     previousCart = next;
-  }, { passive: true });
-
-  window.addEventListener('tintin:cart-restored', event => {
-    const detail = event?.detail || {};
-    track('restore_cart', {
-      currency: 'PYG',
-      value: safeNumber(detail.value, { min: 0 }) || 0,
-      quantity: safeNumber(detail.quantity, { integer: true, min: 0, max: 999 }) || 0,
-      line_count: safeNumber(detail.lines, { integer: true, min: 0, max: 100 }) || 0
-    }, { dedupeKey: 'returning-cart' });
   }, { passive: true });
 
   window.addEventListener('tintin:order-created', event => {
