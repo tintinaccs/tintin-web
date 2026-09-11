@@ -45,7 +45,7 @@ test('Últimos datos solo se ejecuta en la creación inicial y nunca para SuperA
   assert.match(completionFunction, /if \(!firstLogin\) return/);
 });
 
-test('el traspaso de Google al panel espera la restauración de la sesión del SuperAdmin', () => {
+test('el traspaso de cualquier cuenta interna al panel espera restaurar su sesión', () => {
   const admin = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
 
   assert.match(login, /tt_auth_handoff_uid/);
@@ -95,7 +95,7 @@ test('login conserva la sesión si falla transitoriamente la lectura del perfil'
 
 test('rutas públicas esperan Auth antes de pintar visitante o activar carrito', () => {
   assert.match(publicAuthNav, /auth\.authStateReady\(\)/);
-  assert.match(publicAuthNav, /authStateReady\.then\(\(\)=>onAuthStateChanged/);
+  assert.match(publicAuthNav, /authStateReady\.then\(\(\)=>subscribeAuthState/);
   assert.match(publicCart, /auth\.authStateReady\(\)/);
   assert.match(publicCart, /authStateReady\.then\(\(\) => onAuthStateChanged/);
 });
