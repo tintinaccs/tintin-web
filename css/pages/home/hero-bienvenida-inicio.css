@@ -583,8 +583,12 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-link {
 /* En teléfono el bloque inferior respira un poco más, sin cruzar el borde
    del hero ni tocar la composición independiente de tablet vertical. */
 @media (max-width: 767px) {
-  html body.tt-home-premium .tt-hero-subtitle { top: 77.5% !important; }
-  html body.tt-home-premium .tt-hero-actions .tt-hero-cta { top: 82.5% !important; }
+  html body.tt-home-premium .tt-hero-subtitle { top: 78.3% !important; }
+  html body.tt-home-premium .tt-hero-actions .tt-hero-cta {
+    top: 83.4% !important;
+    min-height: 48px !important;
+    height: 48px !important;
+  }
   html body.tt-home-premium .tt-hero-actions .tt-hero-link {
     top: 94% !important;
     min-height: 0 !important;
