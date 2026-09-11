@@ -607,3 +607,42 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-link {
     line-height: 22px !important;
   }
 }
+
+/* Tablet y desktop: un único eje para texto, CTA y enlace. El teléfono
+   conserva su composición aprobada en la regla anterior. */
+@media (min-width: 768px) {
+  html body.tt-home-premium .tt-hero-subtitle {
+    left: 7.1% !important;
+    width: 36.5% !important;
+    max-width: none !important;
+  }
+
+  html body.tt-home-premium .tt-hero-actions .tt-hero-link {
+    top: calc(55.1% + max(52px, 7.2%) + clamp(14px, 3%, 32px)) !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1120px) and (orientation: landscape) {
+  html body.tt-home-premium .tt-hero-subtitle {
+    left: 6.8% !important;
+    width: 38% !important;
+  }
+
+  html body.tt-home-premium .tt-hero-actions .tt-hero-link {
+    top: calc(55.2% + max(52px, 7.2%) + clamp(9px, 2%, 14px)) !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1120px) and (orientation: portrait) {
+  html body.tt-home-premium .tt-hero-subtitle,
+  html body.tt-home-premium .tt-hero-actions .tt-hero-cta,
+  html body.tt-home-premium .tt-hero-actions .tt-hero-link {
+    left: 29.5% !important;
+    width: 41% !important;
+    max-width: none !important;
+  }
+
+  html body.tt-home-premium .tt-hero-actions .tt-hero-link {
+    top: calc(76% + max(52px, 5.2%) + clamp(12px, 3.6%, 24px)) !important;
+  }
+}
