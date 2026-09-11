@@ -283,7 +283,11 @@ function dataKey(device, property) {
 
 function applyStyle(root, style) {
   root.classList.add('tt-visual-managed');
-  Object.entries({ spacing: style.spacing, width: style.width, align: style.align, radius: style.radius, shadow: style.shadow, animation: style.animation, variant: style.variant, imageFit: style.imageFit })
+  // El hero de Inicio ya está pintado desde el HTML. Aplicarle una animación
+  // cuando llega la configuración publicada lo escala y oculta una segunda
+  // vez, produciendo un parpadeo visible en todos los breakpoints.
+  const animation = root.matches('#hero.tt-hero') ? 'none' : style.animation;
+  Object.entries({ spacing: style.spacing, width: style.width, align: style.align, radius: style.radius, shadow: style.shadow, animation, variant: style.variant, imageFit: style.imageFit })
     .forEach(([key, value]) => { root.dataset[`ttVisual${key[0].toUpperCase()}${key.slice(1)}`] = value; });
   DEVICES.forEach(device => {
     const override = style.responsive[device];
