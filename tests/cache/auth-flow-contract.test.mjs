@@ -30,20 +30,22 @@ test('guard de perfil solo redirige checkout y no encadena from', () => {
   assert.match(profileCode, /const from = `\/\$\{page\}`/);
 });
 
-test('el destino post-login separa cuentas internas, clientes existentes y altas nuevas', () => {
+test('el destino post-login separa cuentas internas y valida el perfil por su estado real', () => {
   assert.match(login, /\['superadmin', 'admin', 'agent', 'viewer'\]\.includes/);
   assert.match(login, /if \(internalRole\) \{[\s\S]*?window\.location\.replace\('admin\.html'\)/);
   assert.match(login, /window\.location\.replace\(options\.welcomePending \? 'index\.html\?welcome=1' : 'index\.html'\)/);
-  assert.match(login, /firstLogin: profile\.isNew === true/);
-  assert.match(login, /firstLogin: false/);
+  assert.match(login, /async function ensureProfileComplete\(user, role\)/);
+  assert.match(login, /await ensureProfileComplete\(user, role\);/);
+  assert.doesNotMatch(login, /firstLogin/);
 });
 
-test('Últimos datos solo se ejecuta en la creación inicial y nunca para SuperAdmin', () => {
+test('Últimos datos depende del perfil incompleto y nunca del método de acceso', () => {
   const completionFunction = login.match(/async function ensureProfileComplete[\s\S]*?\n\}/)?.[0] || '';
 
   assert.match(completionFunction, /SUPER_ADMIN\.toLowerCase\(\)/);
   assert.match(completionFunction, /role[^\n]*superadmin/);
-  assert.match(completionFunction, /if \(!firstLogin\) return/);
+  assert.match(completionFunction, /getProfileCompletionPlan/);
+  assert.doesNotMatch(completionFunction, /firstLogin/);
 });
 
 test('el traspaso de cualquier cuenta interna al panel espera restaurar su sesión', () => {

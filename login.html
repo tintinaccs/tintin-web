@@ -383,19 +383,15 @@ function populateCountrySelect(selectEl) {
 // Solo solicita los campos que realmente faltan. El superadmin queda fuera
 // del onboarding y una cuenta completa pasa directo, sin volver a escribir
 // datos que ya existen. El nombre entregado por Google se confirma antes de
-// guardarse y siempre puede corregirse de forma explícita.
-async function ensureProfileComplete(user, role, { firstLogin = false } = {}) {
+// guardarse y siempre puede corregirse de forma explícita. La decisión se
+// toma siempre con el perfil persistido: no dependemos de metadata de Auth ni
+// de si este ingreso vino por Google, correo o una restauración de sesión.
+async function ensureProfileComplete(user, role) {
   // SuperAdmin jamás depende de un perfil comercial ni de Firestore para
   // entrar al panel. Esto también evita que una demora de lectura lo deje
   // detenido en el alta aunque Firebase ya lo haya autenticado.
   const normalizedEmail = String(user?.email || '').trim().toLowerCase();
   if (normalizedEmail === SUPER_ADMIN.toLowerCase() || String(role || '').toLowerCase() === 'superadmin') return;
-
-  // "Últimos datos" es exclusivamente el alta inicial. Una cuenta que ya
-  // existía antes de este ingreso continúa directamente; si necesita datos
-  // de entrega, checkout los valida en el momento correspondiente. Así una
-  // migración de campos antiguos nunca convierte un reingreso en registro.
-  if (!firstLogin) return;
 
   const ref = doc(db, 'users', user.uid);
   const snap = await getDoc(ref);
@@ -859,7 +855,7 @@ async function finishGoogleLogin(user) {
     showBlockedModal();
     return;
   }
-  await ensureProfileComplete(user, role, { firstLogin: profile.isNew === true });
+  await ensureProfileComplete(user, role);
   await redirectByRole(role, user.email, { welcomePending, storeAccessConfig, user });
 }
 
@@ -874,7 +870,7 @@ async function finishOtpLogin(user) {
     showBlockedModal();
     return;
   }
-  await ensureProfileComplete(user, role, { firstLogin: profile.isNew === true });
+  await ensureProfileComplete(user, role);
   await redirectByRole(role, user.email, { welcomePending, storeAccessConfig, user });
 }
 
@@ -977,7 +973,9 @@ onAuthStateChanged(auth, async user => {
     role === 'client' &&
     !profileData.welcomeTutorialSeen &&
     profileData.onboardingCompleted !== true;
-  await ensureProfileComplete(user, role, { firstLogin: false });
+  // La sesión restaurada usa exactamente la misma validación que Google y
+  // correo: un perfil incompleto termina el alta; uno completo entra directo.
+  await ensureProfileComplete(user, role);
   await redirectByRole(role, user.email, { welcomePending, storeAccessConfig, user });
 });
 
