@@ -484,7 +484,12 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-cta {
   background: #fff !important;
   background-color: #fff !important;
   border-color: #fff !important;
-  box-shadow: 0 10px 26px rgba(45, 12, 27, .12) !important;
+  box-shadow: none !important;
+  background-image: none !important;
+  animation: none !important;
+  transition: none !important;
+  isolation: isolate;
+  overflow: hidden;
   font-size: clamp(.8rem, 1.85vw, 1.7rem) !important;
   font-weight: 800;
   line-height: 1;
@@ -500,9 +505,18 @@ html body.tt-home-premium .tt-hero-actions .tt-hero-cta:active {
   background: #fff !important;
   background-color: #fff !important;
   border-color: #fff !important;
-  box-shadow: 0 10px 26px rgba(45, 12, 27, .12) !important;
+  box-shadow: none !important;
   color: #f24498 !important;
   transform: none !important;
+}
+
+/* El botón base tiene estados animados globales. En este hero el CTA ya es
+   una única capa posicionada sobre la composición final: ningún pseudo-
+   elemento, sombra o estado heredado debe dibujar una segunda pastilla. */
+html body.tt-home-premium .tt-hero-actions .tt-hero-cta::before,
+html body.tt-home-premium .tt-hero-actions .tt-hero-cta::after {
+  content: none !important;
+  display: none !important;
 }
 
 html body.tt-home-premium .tt-hero-actions .tt-hero-cta:hover *,
