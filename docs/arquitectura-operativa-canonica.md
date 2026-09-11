@@ -4,19 +4,21 @@ Este documento define una sola autoridad por responsabilidad. Si un servicio con
 
 ## Autoridades
 
-| Dominio | Autoridad | Rol |
-| --- | --- | --- |
-| Código y revisiones | GitHub `tintinaccs/tintin-web` | Fuente del código, PR y CI |
-| Gate de PR | `.github/workflows/auditar-tintin.yml` | Único workflow GitHub disparado por PR; mantiene el check requerido `Repository audit` |
-| Web y `/api/*` | Cloudflare Pages + Pages Functions | Entrega web y backend edge canónico |
-| Origen público | `config/public-site.json` | Host público, Auth domain y cutover |
-| Firebase | proyecto `tintin-accesorios` | Auth, Firestore, App Check y FCM; no Hosting ni Functions activos |
-| Reglas Firestore | `firestore.rules` + `firebase.json` | Autorización de datos |
-| Sheets / Apps Script | `cloudflare/sheets-sync-config.js` | Espejo/sincronización operativa; nunca autoridad del storefront |
-| Correo | Resend desde backend | Envío server-side; secretos fuera del frontend |
-| Multimedia | Cloudinary mediante endpoints firmados | Almacenamiento/media; secretos server-side |
-| Pagos | PayPal mediante Pages Functions | Creación/captura server-side |
-| Backups Firestore | `backup-firestore.yml` | Export programado y restauración explícita |
+| Dominio | Autoridad | Rol | Responsable | Estado verificado |
+| --- | --- | --- | --- | --- |
+| Código y revisiones | GitHub `tintinaccs/tintin-web` | Fuente del código, PR y CI | Propietaria de Tintin (repo) | Verificado — `main` y rama de trabajo sincronizadas, gate de PR activo |
+| Gate de PR | `.github/workflows/auditar-tintin.yml` | Único workflow GitHub disparado por PR; mantiene el check requerido `Repository audit` | CI (automatizado) | Verificado — `npm run audit:final` en verde, 0 fallas |
+| Web y `/api/*` | Cloudflare Pages + Pages Functions | Entrega web y backend edge canónico | Propietaria de Tintin (panel Cloudflare) | Verificado — CSP/CORS aplicados en `functions/_middleware.js`, rutas validan origen/método |
+| Origen público | `config/public-site.json` | Host público, Auth domain y cutover | Propietaria de Tintin | Verificado |
+| Firebase | proyecto `tintin-accesorios` | Auth, Firestore, App Check y FCM; no Hosting ni Functions activos | Propietaria de Tintin (consola Firebase) | Verificado — persistencia de sesión explícita en login, reglas Firestore activas, perfil bloqueado sin sesión |
+| Reglas Firestore | `firestore.rules` + `firebase.json` | Autorización de datos | Propietaria de Tintin | Verificado — respaldo probado (PITR 7 días + diario 30 días + semanal 84 días; restauración validada 2026-08-08) |
+| Sheets / Apps Script | `cloudflare/sheets-sync-config.js` | Espejo/sincronización operativa; nunca autoridad del storefront | Propietaria de Tintin (Cloudflare env vars) | Código preparado y seguro: sin `SHEETS_ENGAGEMENT_SECRET` responde `deferred:true` (no falsea éxito) y encola reintento con backoff. Presencia real del secreto en Cloudflare no verificable desde este entorno |
+| Correo | Resend desde backend | Envío server-side; secretos fuera del frontend | Propietaria de Tintin (Cloudflare env vars) | Código preparado y seguro: sin `RESEND_API_KEY` responde error explícito 500 y no envía nada; fallos parciales se encolan en `orderEmailQueue`. Presencia real del secreto no verificable desde este entorno |
+| Multimedia | Cloudinary mediante endpoints firmados | Almacenamiento/media; secretos server-side | Propietaria de Tintin (Cloudflare env vars) | Código preparado y seguro: `CLOUDINARY_CLOUD_NAME/API_KEY/API_SECRET` solo se leen server-side, firma de subida y borrado restringido por prefijo. Presencia real de los secretos no verificable desde este entorno |
+| Pagos | PayPal mediante Pages Functions | Creación/captura server-side | Propietaria de Tintin (Cloudflare env vars + cuenta PayPal) | Deshabilitado por diseño hasta configurar `PAYPAL_ENABLED=true` + credenciales completas; nunca simula pagos ni se muestra habilitado sin ellas |
+| Backups Firestore | `backup-firestore.yml` | Export programado y restauración explícita | CI (automatizado) + Propietaria de Tintin | Verificado — 960/960 documentos restaurados en prueba aislada `restauracion-prueba` (2026-08-08); copia externa cifrada en proveedor independiente pendiente |
+
+Esta columna se actualiza en cada auditoría integral (última: 2026-09-11). "Verificado" exige evidencia directa (código leído, prueba ejecutada o registro de auditoría); "preparado y seguro" indica que el código es correcto y falla de forma segura, pero la presencia del secreto en el entorno de producción no puede confirmarse desde este repositorio ni inventarse.
 
 ## GitHub Actions desfragmentado
 
