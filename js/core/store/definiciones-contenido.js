@@ -102,7 +102,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         fields: [
           field('eyebrow', 'Texto pequeño', '.tt-editorial-eyebrow', 'Colección Exclusiva', { maxLength: 120 }),
           field('title', 'Título', '.tt-editorial-title', 'EL COMPLEMENTO\nQUE LO CAMBIA TODO', { type: 'multiline', rows: 3, maxLength: 220 }),
-          field('body', 'Descripción', '.tt-editorial-desc', 'Descubrí nuestra exclusiva colección de bags — el accesorio que transforma cualquier outfit en un look de revista. Diseños únicos pensados para la mujer moderna que quiere brillar sin esfuerzo.', { type: 'multiline', rows: 5, maxLength: 1200 }),
+          field('body', 'Descripción', '.tt-editorial-desc', 'Diseños únicos que elevan cualquier look con un detalle pensado para brillar sin esfuerzo.', { type: 'multiline', rows: 5, maxLength: 1200 }),
           field('btnText', 'Texto del botón', 'a.tt-btn', 'LO QUIERO YA!', { maxLength: 80 }),
           field('btnHref', 'Enlace del botón', 'a.tt-btn', '/catalogo?cat=bolsos', { type: 'href', maxLength: 500 }),
         ],
@@ -120,7 +120,7 @@ export const SITE_CONTENT_SCHEMA = Object.freeze({
         fields: [
           field('eyebrow', 'Texto pequeño', '.tt-watch-eyebrow', 'Nueva colección', { maxLength: 120 }),
           field('title', 'Título', '.tt-watch-title', 'EL RELOJ DEL QUE\nTODAS SE ENAMORAN', { type: 'multiline', rows: 3, maxLength: 220 }),
-          field('body', 'Descripción', '.tt-watch-desc', 'Relojes de acero inoxidable de alta calidad. Diseños elegantes, modernos y femeninos que se adaptan a cada estilo — del casual al más sofisticado.', { type: 'multiline', rows: 5, maxLength: 1200 }),
+          field('body', 'Descripción', '.tt-watch-desc', 'Relojes de acero inoxidable, elegantes y femeninos, para acompañarte del día a la noche.', { type: 'multiline', rows: 5, maxLength: 1200 }),
           field('btnText', 'Texto del botón', 'a.tt-btn', 'VER RELOJES →', { maxLength: 80 }),
           field('btnHref', 'Enlace del botón', 'a.tt-btn', '/catalogo?cat=relojes', { type: 'href', maxLength: 500 }),
         ],
