@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "21fcac78adc62dc23040c0a402d6f9535c9a517d1d1f20293b7af9efe8f3a208",
+  "sourceFingerprint": "2c9c47b835a444fcbdd7404ef79073ecb2e22c1bfe831050398315f1e9589353",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 829,
+    "files": 810,
     "textFiles": 773,
-    "totalBytes": 25671448,
+    "totalBytes": 16212344,
     "pages": 18,
     "modules": 552
   },
@@ -12962,8 +12962,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 69585,
-      "sha256": "f0f606514b1d3c83e51b1d264ad5105fd20679707ba0e16e71fccad18c5489db",
+      "bytes": 69447,
+      "sha256": "5174f6d11210add47bd169860805d57313389fa6fcf83e082b0861c9f7d0243c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13021,17 +13021,17 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1",
           "target": "js/analytics/analitica.js",
-          "line": 1320
+          "line": 1318
         },
         {
           "raw": "tienda.js?v=tintin-20260910-auth-retry-1",
           "target": "tienda.js",
-          "line": 1321
+          "line": 1319
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3",
           "target": "js/components/color/esquema-color.js",
-          "line": 1322
+          "line": 1320
         }
       ],
       "styles": [
@@ -13201,19 +13201,19 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1",
           "target": "js/analytics/analitica.js",
-          "line": 1320,
+          "line": 1318,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20260910-auth-retry-1",
           "target": "tienda.js",
-          "line": 1321,
+          "line": 1319,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3",
           "target": "js/components/color/esquema-color.js",
-          "line": 1322,
+          "line": 1320,
           "exists": true
         },
         {
@@ -18169,7 +18169,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 344792,
-      "sha256": "713a72b203674c671d1c6fee73a336ff1e6b3a7eac7b8405adb4ea41e82ec602",
+      "sha256": "374d638da9e41c9f0044f434ab27a304d41e25712d7a81cad7a0e121be43fc6f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25565,8 +25565,8 @@
     },
     {
       "path": "scripts/auditar-acceso-perfil-incorporacion.js",
-      "bytes": 1629,
-      "sha256": "10193f359f5ff83778de7369242d8764038c2fbc2713717f1ccfb2a43feaebb8",
+      "bytes": 1688,
+      "sha256": "155d63c312a179c10348a25921239c163bb88d22b4d81456cc5b493afb583811",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29781,8 +29781,8 @@
     },
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
-      "bytes": 6771,
-      "sha256": "8541917d7bc5137de0c5266a6af2cdcdc2b628588529de77cff180af23fc3267",
+      "bytes": 6909,
+      "sha256": "c088f1a37b1e8f20393b18de162476befd4eb378eaee22302eef93931d66a957",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32692,13 +32692,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 344792,
-      "sha256": "713a72b203674c671d1c6fee73a336ff1e6b3a7eac7b8405adb4ea41e82ec602"
+      "sha256": "374d638da9e41c9f0044f434ab27a304d41e25712d7a81cad7a0e121be43fc6f"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 344707,
-      "sha256": "dc9b85ab941f40c7efc7a3d475c398b9d25671895f6a5a7913559c0b57f708cb"
+      "sha256": "fbb50b439a05d929aa4b8e741dd1948d4d3157d60cdcf493b92dac17148f2612"
     },
     {
       "path": "config/public-site.json",
@@ -35265,8 +35265,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 69585,
-      "sha256": "f0f606514b1d3c83e51b1d264ad5105fd20679707ba0e16e71fccad18c5489db"
+      "bytes": 69447,
+      "sha256": "5174f6d11210add47bd169860805d57313389fa6fcf83e082b0861c9f7d0243c"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -35517,8 +35517,8 @@
     {
       "path": "scripts/auditar-acceso-perfil-incorporacion.js",
       "extension": ".js",
-      "bytes": 1629,
-      "sha256": "10193f359f5ff83778de7369242d8764038c2fbc2713717f1ccfb2a43feaebb8"
+      "bytes": 1688,
+      "sha256": "155d63c312a179c10348a25921239c163bb88d22b4d81456cc5b493afb583811"
     },
     {
       "path": "scripts/auditar-admin-analitica-auditar.js",
@@ -36561,8 +36561,8 @@
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 6771,
-      "sha256": "8541917d7bc5137de0c5266a6af2cdcdc2b628588529de77cff180af23fc3267"
+      "bytes": 6909,
+      "sha256": "c088f1a37b1e8f20393b18de162476befd4eb378eaee22302eef93931d66a957"
     },
     {
       "path": "tests/cache/cache-headers.test.mjs",
@@ -36983,120 +36983,6 @@
       "extension": ".js",
       "bytes": 96370,
       "sha256": "f0002b624267b6b49eb96039ac7569153c4b7f8e4d97f51a61ac722984e11dd7"
-    },
-    {
-      "path": "work/clean-desktop.png",
-      "extension": ".png",
-      "bytes": 941700,
-      "sha256": "77e9874750a47c1ac1d8c8f44370afded7dca3e0b4a002508a811a86835238a7"
-    },
-    {
-      "path": "work/clean-mobile.png",
-      "extension": ".png",
-      "bytes": 47572,
-      "sha256": "fe09a3286f73942d2e59f41fb247e02b42863ae8eeb6b76ab7208287bc9a26b1"
-    },
-    {
-      "path": "work/clean-tablet.png",
-      "extension": ".png",
-      "bytes": 722457,
-      "sha256": "71eeee04298b27be5319da5451406127d1e56772e9484e36c8c87ec0eb50eba0"
-    },
-    {
-      "path": "work/editorial-desktop.png",
-      "extension": ".png",
-      "bytes": 916758,
-      "sha256": "e0c5cfac340ff33c35d28f0fad46ee76379e2bc54c61a8b19ad5893ba542569a"
-    },
-    {
-      "path": "work/editorial-mobile.png",
-      "extension": ".png",
-      "bytes": 238680,
-      "sha256": "7ecef053a0ee9241e8dbda0fd5bff45af42ab2d6d48b7ea6b7dc3ff53cfc92f1"
-    },
-    {
-      "path": "work/editorial-tablet.png",
-      "extension": ".png",
-      "bytes": 699147,
-      "sha256": "5f538a400e85407df0b91c270689228af478fc62f9475cb3f68840ce0facf2a7"
-    },
-    {
-      "path": "work/final-desktop.png",
-      "extension": ".png",
-      "bytes": 913146,
-      "sha256": "dbab206dc9b0da71966f4573361bcb00c4ce45dd6369625fe664cdaf06df45b5"
-    },
-    {
-      "path": "work/final-mobile.png",
-      "extension": ".png",
-      "bytes": 234738,
-      "sha256": "896622ad7347d0be5a9957ee6eb8bb4dd478c8a3338cd3eb7492a38cc9c82bac"
-    },
-    {
-      "path": "work/final-tablet.png",
-      "extension": ".png",
-      "bytes": 603503,
-      "sha256": "d3ecfb3887160e0f9500934f53ce1b99a8dabe7dfbbf3950ae1cbc70509bb520"
-    },
-    {
-      "path": "work/hero-desktop-ready.png",
-      "extension": ".png",
-      "bytes": 907537,
-      "sha256": "ea8fb16aeba4d437037f8bb82ce827e45894bfdb280648cd1c3dff561110d829"
-    },
-    {
-      "path": "work/hero-desktop.png",
-      "extension": ".png",
-      "bytes": 27049,
-      "sha256": "db6cb1c44fe6ae0a00a95eecfbff7eb925c6aa662455e7dedc1bd889acac96e2"
-    },
-    {
-      "path": "work/hero-mobile-lower.png",
-      "extension": ".png",
-      "bytes": 234741,
-      "sha256": "8e47131985401759555a9aec8802822b1c9db996397a152f8c85db011cc785cd"
-    },
-    {
-      "path": "work/hero-mobile.png",
-      "extension": ".png",
-      "bytes": 212192,
-      "sha256": "9a2dd2558e989e536d6368e6269ee6eaf84eca7cafcf0f82bd7e643f9773c58e"
-    },
-    {
-      "path": "work/hero-tablet.png",
-      "extension": ".png",
-      "bytes": 563620,
-      "sha256": "e594e14730d1ac2f355b601f18cac8a30d5db3edb9ce974c37de80269cff804f"
-    },
-    {
-      "path": "work/mobile-lower-copy.png",
-      "extension": ".png",
-      "bytes": 237108,
-      "sha256": "c759cb3777552da3d51ffad4a19c45a6a8b32fd63c65620c64d6634a0797a397"
-    },
-    {
-      "path": "work/mobile-lowered-verified.png",
-      "extension": ".png",
-      "bytes": 234549,
-      "sha256": "7e5ed09e10ba20d4988fd11b711a2871d84350cfa7fd7cfd4a7a08c9e3b2a497"
-    },
-    {
-      "path": "work/verified-desktop.png",
-      "extension": ".png",
-      "bytes": 905984,
-      "sha256": "751285a3a6953a303af25cecab11be6eb3841a5be152fc87c009550e02bf8f7f"
-    },
-    {
-      "path": "work/verified-mobile.png",
-      "extension": ".png",
-      "bytes": 232664,
-      "sha256": "cdec6b7855b7b8e53588994b3e13824b8a16ebb48e04cc4f8bfd28d107f21f6d"
-    },
-    {
-      "path": "work/verified-tablet.png",
-      "extension": ".png",
-      "bytes": 586018,
-      "sha256": "bf4275fb1e8690a0f0102693e311dbc4cdde67325fd5cffd0e1df528b7555e7c"
     }
   ],
   "sitemapRoutes": [],
@@ -38637,7 +38523,7 @@
     },
     {
       "file": "login.html",
-      "line": 471,
+      "line": 467,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -38842,25 +38728,25 @@
     },
     {
       "file": "login.html",
-      "line": 555,
+      "line": 551,
       "target": "/api/username-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 572,
+      "line": 568,
       "target": "/api/phone-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 726,
+      "line": 722,
       "target": "/api/username-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 822,
+      "line": 818,
       "target": "/api/username-availability",
       "method": "POST"
     }
@@ -40262,12 +40148,12 @@
           },
           {
             "file": "login.html",
-            "line": 400,
+            "line": 396,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 951,
+            "line": 947,
             "operation": "doc"
           },
           {
