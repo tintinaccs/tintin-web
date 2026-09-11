@@ -18,16 +18,11 @@ const VISUAL_BUILDER_VERSION = 'tintin-20260911-hero-no-entry-animation-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20260906-no-auto-logout-3';
 const PROFILE_GATE_VERSION = 'tintin-20260906-profile-complete-2';
 const NAV_HEADER_VERSION = 'tintin-20260824-header-responsive-sync-1';
-const NAV_SHARED_VERSION = 'tintin-20260825-responsive-css-budget-2';
-const NAV_PANEL_VERSION = 'tintin-20260909-unified-navigation-assets-1';
 const UNIFIED_THEME_VERSION = 'tintin-20260901-footer-light-1';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_HEADER_VERSION, '(min-width: 768px) and (max-width: 1024px)'],
   ['css/components/navigation/movil/encabezado-movil.css', NAV_HEADER_VERSION, '(max-width: 767px)'],
-  ['css/components/navigation/compartido/transiciones-navegacion.css', NAV_SHARED_VERSION, ''],
-  ['css/components/navigation/compartido/paneles.css', NAV_PANEL_VERSION, ''],
-  ['css/components/navigation/compartido/busqueda.css', NAV_SHARED_VERSION, ''],
 ];
 const PUBLIC_PAGES = [
   // 404.html se excluye a propósito: Cloudflare Pages la sirve verbatim en

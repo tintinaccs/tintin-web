@@ -829,6 +829,10 @@ document.getElementById('adm-logout').onclick = () => {
 // /admin después del login o de una recarga.
 function hideOverlay() { window.ttPageReady && window.ttPageReady(); }
 
+function hasPendingAdminAuthHandoff() {
+  try { return Boolean(sessionStorage.getItem('tt_auth_handoff_uid')); } catch { return false; }
+}
+
 function showAdminInitFailure() {
   document.documentElement.classList.remove('adm-auth-ready');
   let overlay = document.getElementById('adm-init-error');
@@ -858,11 +862,12 @@ async function waitForAdminUserAfterAuthRestore(user) {
   // varias veces para no rebotar al login por un estado pasajero en cualquiera
   // de los dos momentos.
   const RETRY_DELAY_MS = 300;
-  // La sesión persistida también puede tardar en aparecer cuando se entra
-  // desde cualquier otra página (no sólo desde login). Esperar el mismo
-  // margen evita que el primer acceso a /admin interprete un null transitorio
-  // como un cierre de sesión real.
-  const MAX_ATTEMPTS = 30;
+  // Al llegar desde login.html se registra un puente efímero en
+  // sessionStorage. Ese caso merece más margen: Firebase puede tardar varios
+  // segundos en exponer la misma sesión a admin.html. Sin este margen, un
+  // null transitorio se veía como un logout apenas después de entrar.
+  const handoffUid = hasPendingAdminAuthHandoff();
+  const MAX_ATTEMPTS = handoffUid ? 30 : 6;
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
     await new Promise(resolve => window.setTimeout(resolve, RETRY_DELAY_MS));
     if (auth.currentUser) return auth.currentUser;
@@ -897,6 +902,15 @@ async function startAdminAuthGuard() {
     // signOut() y navegan explícitamente al login por su propia ruta.
     if (!user && (currentUser?.uid || adminGuardInitializedUid)) {
       console.warn('[Admin] Estado de Auth transitorio ignorado; la sesión del panel se conserva.');
+      return;
+    }
+    // Después de un login recién completado, conservar admin.html mientras
+    // Firebase termina de propagar la sesión. Mandar a login en este punto
+    // convertía una restauración lenta en un aparente cierre de sesión. Si la
+    // identidad llega después, el mismo listener terminará de iniciar el panel.
+    if (!user && hasPendingAdminAuthHandoff()) {
+      console.warn('[Admin] Restauración de sesión pendiente; se conserva el panel sin cerrar la cuenta.');
+      showAdminInitFailure();
       return;
     }
     // Este es el único caso de sesión ausente que manda al login. replace()
