@@ -1,0 +1,231 @@
+/* Portada editorial: ordena el peso de los bloques existentes sin añadir
+   contenido ni animaciones costosas. La experiencia busca aire, precisión y
+   una lectura de joyería contemporánea en desktop, tablet y mobile. */
+
+body.tt-home-premium {
+  --tt-home-ink: #34282d;
+  --tt-home-muted: #806b73;
+  --tt-home-line: rgba(137, 77, 101, .16);
+  --tt-home-rose: #fff3f7;
+}
+
+body.tt-home-premium :is(.tt-collection-carousel, .tt-look-section, .tt-home-random-products, .tt-reviews-section) {
+  position: relative;
+}
+
+body.tt-home-premium .tt-section-sub,
+body.tt-home-premium .tt-editorial-eyebrow,
+body.tt-home-premium .tt-watch-eyebrow {
+  margin-bottom: 10px;
+  color: var(--tt-accent, #ad3f67) !important;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .19em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+body.tt-home-premium .tt-section-title {
+  color: var(--tt-home-ink) !important;
+  font-size: clamp(1.48rem, 2.45vw, 2.5rem);
+  font-weight: 650;
+  letter-spacing: -.045em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+body.tt-home-premium .tt-section-desc,
+body.tt-home-premium .tt-collection-carousel__description {
+  color: var(--tt-home-muted) !important;
+  font-size: clamp(.78rem, 1vw, .92rem);
+  letter-spacing: .015em;
+  line-height: 1.7;
+}
+
+/* La confianza acompaña al hero en vez de competir con él. */
+body.tt-home-premium .tt-trust-bar {
+  background: #fff !important;
+  border-bottom: 1px solid var(--tt-home-line);
+  padding-block: clamp(14px, 1.9vw, 22px);
+}
+
+body.tt-home-premium .tt-trust-grid { max-width: 1080px; }
+
+body.tt-home-premium .tt-trust-item {
+  min-height: 70px;
+  padding: 8px clamp(10px, 1.7vw, 20px);
+  justify-content: center;
+}
+
+body.tt-home-premium .tt-trust-icon {
+  margin-bottom: 6px;
+  opacity: .88;
+  transform: scale(.88);
+}
+
+body.tt-home-premium .tt-trust-title {
+  color: var(--tt-home-ink) !important;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .095em;
+  text-transform: uppercase;
+}
+
+body.tt-home-premium .tt-trust-desc {
+  color: var(--tt-home-muted) !important;
+  font-size: .68rem;
+  line-height: 1.45;
+}
+
+/* Colecciones y productos: superficies calmas, foco en imagen y producto. */
+body.tt-home-premium .tt-collection-carousel { padding-block: clamp(64px, 8vw, 116px); }
+body.tt-home-premium .tt-collection-carousel__heading { max-width: 580px; margin-inline: auto; }
+body.tt-home-premium .tt-collection-carousel__description { margin-top: 12px; }
+
+body.tt-home-premium #look-section {
+  padding-block: clamp(64px, 8vw, 112px);
+  background: #fff !important;
+}
+
+body.tt-home-premium .tt-look-header { margin-bottom: clamp(30px, 4vw, 48px); }
+
+body.tt-home-premium .tt-home-random-products {
+  padding-block: clamp(68px, 8vw, 118px);
+  background: linear-gradient(180deg, var(--tt-home-rose), #fff 72%) !important;
+}
+
+body.tt-home-premium .tt-home-random-products-header { max-width: 600px; margin-inline: auto; }
+body.tt-home-premium .tt-home-random-products-grid { padding-block: 8px 18px; }
+
+body.tt-home-premium .tt-product-card {
+  border: 0 !important;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(78, 40, 52, .07) !important;
+  overflow: hidden;
+}
+
+body.tt-home-premium .tt-product-card:hover { box-shadow: 0 18px 38px rgba(78, 40, 52, .11) !important; }
+
+/* Dos campañas editoriales, no dos tarjetas de catálogo. */
+body.tt-home-premium :is(.tt-editorial, .tt-watch-feature) {
+  max-width: min(1180px, calc(100% - 40px));
+  margin-block: clamp(16px, 3vw, 32px);
+  border: 1px solid var(--tt-home-line) !important;
+  border-radius: clamp(20px, 2.4vw, 32px);
+  box-shadow: 0 20px 56px rgba(77, 37, 50, .075) !important;
+}
+
+body.tt-home-premium :is(.tt-editorial-content, .tt-watch-feature-content) {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(38px, 6vw, 82px);
+}
+
+body.tt-home-premium :is(.tt-editorial-title, .tt-watch-title) {
+  margin-block: 0 18px;
+  color: var(--tt-home-ink) !important;
+  font-size: clamp(1.82rem, 3.3vw, 3.5rem);
+  font-weight: 620;
+  letter-spacing: -.06em;
+  line-height: .98;
+  text-wrap: balance;
+}
+
+body.tt-home-premium :is(.tt-editorial-desc, .tt-watch-desc) {
+  margin: 0 0 28px;
+  color: var(--tt-home-muted) !important;
+  font-size: clamp(.88rem, 1.18vw, 1rem);
+  line-height: 1.75;
+}
+
+/* Acciones con una misma silueta y un hover casi imperceptible. */
+body.tt-home-premium :is(.tt-editorial, .tt-watch-feature, .tt-home-random-products) .tt-btn {
+  min-height: 48px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  box-shadow: none;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .105em;
+  text-transform: uppercase;
+}
+
+body.tt-home-premium :is(.tt-editorial, .tt-watch-feature, .tt-home-random-products) .tt-btn:not(.tt-btn-outline) {
+  background: var(--tt-accent, #ad3f67) !important;
+  border-color: var(--tt-accent, #ad3f67) !important;
+  color: #fff !important;
+}
+
+body.tt-home-premium :is(.tt-editorial, .tt-watch-feature, .tt-home-random-products) .tt-btn-outline {
+  background: transparent !important;
+  border-color: rgba(173, 63, 103, .35) !important;
+  color: var(--tt-accent, #ad3f67) !important;
+}
+
+@media (hover: hover) {
+  body.tt-home-premium :is(.tt-editorial, .tt-watch-feature, .tt-home-random-products) .tt-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(173, 63, 103, .14);
+  }
+}
+
+/* Opiniones: prueba social refinada y más fácil de leer. */
+body.tt-home-premium .tt-reviews-section {
+  padding-block: clamp(68px, 8vw, 116px);
+  background: #fff !important;
+}
+
+body.tt-home-premium .tt-reviews-header { margin-bottom: clamp(30px, 4vw, 48px); }
+
+body.tt-home-premium .tt-review-card {
+  position: relative;
+  min-height: 100%;
+  border: 1px solid var(--tt-home-line) !important;
+  border-radius: 18px;
+  box-shadow: none !important;
+  padding: clamp(24px, 3vw, 34px);
+}
+
+body.tt-home-premium .tt-review-card::before {
+  content: "“";
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  color: rgba(173, 63, 103, .16);
+  font-size: 4.5rem;
+  line-height: 1;
+}
+
+body.tt-home-premium .tt-review-stars { font-size: .72rem; letter-spacing: .15em; }
+body.tt-home-premium .tt-review-text { color: var(--tt-home-ink) !important; font-size: .9rem; line-height: 1.78; }
+body.tt-home-premium .tt-review-avatar { background: var(--tt-home-rose) !important; }
+
+/* El pie sigue siendo completo, pero se lee como cierre de marca. */
+body.tt-home-premium .tt-footer { border-top: 1px solid var(--tt-home-line) !important; }
+body.tt-home-premium .tt-footer-tagline { max-width: 28ch; color: var(--tt-home-muted) !important; line-height: 1.7; }
+
+@media (max-width: 768px) {
+  body.tt-home-premium .tt-trust-bar { padding-block: 8px; }
+  body.tt-home-premium .tt-trust-item { min-height: 66px; padding: 8px 6px; }
+  body.tt-home-premium .tt-trust-icon { margin-bottom: 3px; transform: scale(.76); }
+  body.tt-home-premium .tt-trust-desc { display: none; }
+  body.tt-home-premium .tt-trust-title { font-size: .61rem; letter-spacing: .065em; }
+  body.tt-home-premium .tt-collection-carousel,
+  body.tt-home-premium #look-section,
+  body.tt-home-premium .tt-home-random-products,
+  body.tt-home-premium .tt-reviews-section { padding-block: 58px; }
+  body.tt-home-premium :is(.tt-editorial, .tt-watch-feature) { max-width: calc(100% - 28px); margin-block: 14px; }
+  body.tt-home-premium :is(.tt-editorial-content, .tt-watch-feature-content) { padding: 34px 24px 38px; }
+  body.tt-home-premium :is(.tt-editorial-title, .tt-watch-title) { font-size: clamp(1.75rem, 9vw, 2.35rem); margin-bottom: 14px; }
+  body.tt-home-premium :is(.tt-editorial-desc, .tt-watch-desc) { margin-bottom: 22px; line-height: 1.65; }
+  body.tt-home-premium .tt-home-random-products-actions { gap: 9px; }
+  body.tt-home-premium .tt-home-random-products-actions .tt-btn { min-width: min(100%, 210px); }
+  body.tt-home-premium .tt-review-card { padding: 24px 22px; }
+}
+
+@media (max-width: 380px) {
+  body.tt-home-premium .tt-trust-title { font-size: .56rem; letter-spacing: .035em; }
+  body.tt-home-premium :is(.tt-editorial, .tt-watch-feature) { max-width: calc(100% - 20px); }
+}
