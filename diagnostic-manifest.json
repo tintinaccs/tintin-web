@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "f716624e914d1aff09137bcd84626dcf227b5b01fb0f160a3eb899e37ddd999e",
+  "sourceFingerprint": "f6f5946367da5488a57c1595bfc11aa94727b645f0ccfdbd38c30bda5ee842c4",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 816,
     "textFiles": 779,
-    "totalBytes": 16257874,
+    "totalBytes": 16257895,
     "pages": 18,
     "modules": 558
   },
@@ -27611,8 +27611,8 @@
     },
     {
       "path": "scripts/auditar-modular-arquitectura.js",
-      "bytes": 8768,
-      "sha256": "b80297b8720b304987a3918f292c475b161dfb6a72e98f5f3a6e152b4664bec8",
+      "bytes": 8789,
+      "sha256": "213f65049841c4c11a91b2dce635340dc2d4106edcbfda9bb01ce4c03e8ca00a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27623,12 +27623,6 @@
           "target": "scripts/compartido/panel-busqueda.js",
           "dynamic": false,
           "line": 60
-        },
-        {
-          "raw": "./compartido/panel-cuenta.js",
-          "target": "scripts/compartido/panel-cuenta.js",
-          "dynamic": false,
-          "line": 61
         },
         {
           "raw": "./compartido/panel-carrito.js",
@@ -36206,8 +36200,8 @@
     {
       "path": "scripts/auditar-modular-arquitectura.js",
       "extension": ".js",
-      "bytes": 8768,
-      "sha256": "b80297b8720b304987a3918f292c475b161dfb6a72e98f5f3a6e152b4664bec8"
+      "bytes": 8789,
+      "sha256": "213f65049841c4c11a91b2dce635340dc2d4106edcbfda9bb01ce4c03e8ca00a"
     },
     {
       "path": "scripts/auditar-movil-correcciones.mjs",
