@@ -1,10 +1,7 @@
-/* Primera pintura de Inicio: mientras el loader todavía está activo, el body
-   queda oculto desde el primer frame. El loader puede sobrescribir visibility
-   aunque la herede del body; cuando pasa a .tt-out, :has() revela el contenido
-   en el mismo recálculo de estilos, sin un frame blanco/rosado intermedio. */
-html.tt-initializing body.tt-home-premium{visibility:hidden!important;background:#FFF6FA!important}
-html.tt-initializing body.tt-home-premium>#tt-loader{visibility:visible!important}
-html.tt-initializing body.tt-home-premium:has(>#tt-loader.tt-out){visibility:visible!important}
+/* La imagen aprobada vive en el HTML y se carga con prioridad alta. El loader
+   puede seguir protegiendo el estado de la tienda, pero no se deja una capa
+   rosa intermedia esperando una confirmación remota del hero. */
+html.tt-initializing body.tt-home-premium{background:#FFF6FA!important}
 
 .tt-home-premium{overflow-x:clip;background:#FFF6FA!important;min-height:100svh}
 .tt-home-premium .container{width:min(100%,1280px)}
@@ -94,15 +91,9 @@ html body.tt-home-premium #tt-privacy-consent .tt-privacy-btn-secondary{
 .tt-home-premium .tt-hero-media{
   background-image:none!important;
 }
-/* Nunca se pinta el hero procedente del caché local. La clase permanece desde
-   el HTML inicial hasta que Firestore confirma la URL publicada y esa imagen
-   termina de cargar. `visibility` evita que una foto anterior llegue a ocupar
-   un solo frame; no se usa transición para que el cambio sea directo. */
-.tt-home-premium .tt-hero-media.tt-hero-pending{
-  visibility:hidden!important;
-  opacity:0!important;
-}
-.tt-home-premium .tt-hero-media:not(.tt-hero-pending){
+/* El hero no tiene estados de entrada ni capas de respaldo visibles: la
+   portada estática del HTML es la primera y única composición que se pinta. */
+.tt-home-premium .tt-hero-media{
   visibility:visible!important;
   opacity:1!important;
 }
