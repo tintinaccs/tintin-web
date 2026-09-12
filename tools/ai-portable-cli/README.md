@@ -2,7 +2,7 @@
 
 Entorno portable para Windows que permite usar `claude` (Claude Code CLI) y
 `codex` (Codex CLI de OpenAI) desde un pendrive, sin instalacion permanente en
-el PC host, arrancando desde un unico `AI-Portable.exe`.
+el PC host, arrancando desde un unico `AI-Portable.cmd`.
 
 > Este directorio es una herramienta independiente, sin relacion con el sitio
 > e-commerce de `tintin-web`. Vive aqui porque el flujo de trabajo de esta
@@ -15,7 +15,6 @@ el PC host, arrancando desde un unico `AI-Portable.exe`.
 - [Que es portable y que no](#que-es-portable-y-que-no)
 - [Arquitectura](#arquitectura)
 - [Estructura de carpetas](#estructura-de-carpetas)
-- [Compilar AI-Portable.exe](#compilar-ai-portableexe)
 - [Preparar el pendrive](#preparar-el-pendrive)
 - [Primer uso (setup)](#primer-uso-setup)
 - [Uso normal](#uso-normal)
@@ -38,7 +37,7 @@ Es un lanzador que, en un PC Windows con el pendrive conectado:
 No es: un mecanismo para extraer o robar credenciales, evadir el
 almacenamiento seguro de Windows, ocultar procesos, o evadir politicas
 corporativas/antivirus. El login en ambas herramientas es siempre el flujo
-oficial del propio fabricante; no se hardcodea ningun secreto en el `.exe`
+oficial del propio fabricante; no se hardcodea ningun secreto en el `.cmd`
 ni en los scripts.
 
 ## Analisis tecnico: Claude Code CLI
@@ -107,13 +106,15 @@ ni en los scripts.
 
 ## Arquitectura
 
-- **`launcher/main.go`** — bootstrapper compilado a `AI-Portable.exe`.
-  Deliberadamente minimo: resuelve su propia ruta real (`os.Executable()` +
-  `EvalSymlinks`), calcula la raiz del pendrive como su carpeta padre, y
-  ejecuta `Scripts\launcher.ps1` con `-Root <esa carpeta>`, heredando
-  stdio/exit code. Toda la logica real (incluida cualquier logica cercana a
-  credenciales) esta en PowerShell, legible y auditable — nada sensible
-  vive oculto dentro del binario compilado.
+- **`AI-Portable.cmd`** — punto de entrada, archivo de texto plano (batch),
+  sin ningun paso de compilacion. Se autolocaliza dinamicamente via `%~dp0`
+  (nunca una letra de unidad fija), verifica que `Scripts\launcher.ps1`
+  exista junto a el, localiza `powershell.exe` (o `pwsh.exe` como
+  alternativa) y lo ejecuta pasando `-Root` con su propia carpeta,
+  propagando el codigo de salida. Toda la logica real (incluida cualquier
+  logica cercana a credenciales) esta en PowerShell — nada vive oculto en
+  un binario: el `.cmd` se puede abrir y leer con cualquier editor de
+  texto antes de ejecutarlo.
 - **`Scripts/common.ps1`** — helpers compartidos: construccion de rutas,
   aplicacion de entorno de proceso (`Set-SessionEnvironment`), lectura y
   escritura de estado de runtime.
@@ -133,7 +134,7 @@ ni en los scripts.
 
 ```
 PENDRIVE\
-  AI-Portable.exe
+  AI-Portable.cmd
   Claude\bin\claude.exe
   Codex\bin\codex.exe
   Config\Claude\            (CLAUDE_CONFIG_DIR: settings + .credentials.json)
@@ -152,28 +153,20 @@ portable de Node.js. No se incluye en el pendrive por defecto porque ninguna
 de las dos CLIs lo requiere para ejecutarse (solo, opcionalmente, para la
 adquisicion inicial via npm si falla la descarga directa de binarios).
 
-## Compilar AI-Portable.exe
-
-Requiere Go instalado en la maquina de build (no en el pendrive).
-
-```bash
-cd tools/ai-portable-cli/launcher
-GOOS=windows GOARCH=amd64 go build -o AI-Portable.exe .
-```
-
-Copiar el `AI-Portable.exe` resultante a la raiz del pendrive.
-
 ## Preparar el pendrive
 
-1. Copiar `AI-Portable.exe` a la raiz del pendrive.
-2. Copiar la carpeta `Scripts\` completa (los 4 `.ps1`) junto al `.exe`.
+No hay ningun paso de compilacion: `AI-Portable.cmd` es texto plano, listo
+para copiar y ejecutar.
+
+1. Copiar `AI-Portable.cmd` a la raiz del pendrive.
+2. Copiar la carpeta `Scripts\` completa (los 4 `.ps1`) junto al `.cmd`.
 3. Las carpetas `Claude\`, `Codex\`, `Config\`, `Runtime\` se crean solas en
    el primer arranque (`Ensure-PortableFolders`); no es necesario crearlas
    a mano.
 
 ## Primer uso (setup)
 
-Ejecutar `AI-Portable.exe` → opcion `[4] Configuracion inicial / Reconfigurar`
+Ejecutar `AI-Portable.cmd` → opcion `[4] Configuracion inicial / Reconfigurar`
 del menu principal, que abre:
 
 ```
@@ -207,7 +200,7 @@ Descargar el binario Windows desde
 
 ## Uso normal
 
-Ejecutar `AI-Portable.exe`:
+Ejecutar `AI-Portable.cmd` (doble clic, o desde una consola):
 
 ```
 ========================================
@@ -255,7 +248,7 @@ Al elegir `[6] Salir`, `Scripts\cleanup.ps1`:
 ## Seguridad y limites explicitos
 
 - Ningun password/token/credencial esta hardcodeado en ningun script ni en
-  el `.exe`. Todo login pasa por el flujo oficial de cada herramienta.
+  el `.cmd`. Todo login pasa por el flujo oficial de cada herramienta.
 - No se intenta leer, copiar ni exportar nada de Windows Credential
   Manager, DPAPI, TPM ni Keychain. Donde una herramienta puede usar esos
   mecanismos por defecto (Codex + keyring), se usa la alternativa oficial
@@ -269,11 +262,11 @@ Al elegir `[6] Salir`, `Scripts\cleanup.ps1`:
 
 ## Elementos no verificados
 
-Este desarrollo se realizo en un entorno Linux sin PowerShell (`pwsh`)
-disponible, por lo que:
-- Los 4 scripts `.ps1` fueron revisados manualmente linea por linea (llaves
-  balanceadas, sintaxis de funciones/here-strings, uso de cmdlets), pero
-  **no se ejecutaron ni se validaron con un interprete de PowerShell real**.
+Este desarrollo se realizo en un entorno Linux sin PowerShell (`pwsh`) ni
+`cmd.exe` disponibles, por lo que:
+- `AI-Portable.cmd` y los 4 scripts `.ps1` fueron revisados manualmente
+  linea por linea (sintaxis de batch, llaves balanceadas, here-strings, uso
+  de cmdlets), pero **no se ejecutaron en un Windows real**.
 - No fue posible probar el flujo completo (setup, login real de Claude
   Code y Codex, apertura/cierre de terminal, limpieza) en una maquina
   Windows real.
@@ -286,6 +279,6 @@ disponible, por lo que:
 
 **Paso manual pendiente para el usuario**: ejecutar el flujo completo en un
 PC Windows real (segunda PC, pendrive conectado) — preparar pendrive, correr
-`AI-Portable.exe`, completar setup con login real de ambas herramientas,
+`AI-Portable.cmd`, completar setup con login real de ambas herramientas,
 verificar `claude`/`codex` funcionando, cerrar y confirmar que no queda
 rastro en PATH/registro, y validar diagnostico y limpieza.
