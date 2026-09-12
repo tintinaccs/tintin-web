@@ -63,9 +63,8 @@ function fromButton(button) {
 }
 
 function loginForCurrentPage() {
-  const file = location.pathname.split('/').pop() || 'index.html';
-  const target = `${file}${location.search}`;
-  location.href = `login.html?from=${encodeURIComponent(target)}`;
+  const target = `${location.pathname || '/'}${location.search || ''}${location.hash || ''}`;
+  location.href = `/login?from=${encodeURIComponent(target)}`;
 }
 
 async function stableAuthUser() {
