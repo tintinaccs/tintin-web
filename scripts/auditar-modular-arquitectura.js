@@ -58,7 +58,7 @@ if (requiredFiles.every(exists)) {
   check(/from ['"]\.\/tableta\/encabezado-tableta\.js(?:\?v=[^'"]+)?['"]/.test(entry), 'entry: falta tableta');
   check(/from ['"]\.\/movil\/encabezado-movil\.js(?:\?v=[^'"]+)?['"]/.test(entry), 'entry: falta móvil');
   check(entry.includes("from './compartido/panel-busqueda.js'"), 'entry: falta buscador compartido');
-  check(entry.includes("from './compartido/panel-cuenta.js'"), 'entry: falta cuenta compartida');
+  check(/from ['"]\.\/compartido\/panel-cuenta\.js(?:\?v=[^'"]+)?['"]/.test(entry), 'entry: falta cuenta compartida');
   check(entry.includes("from './compartido/panel-carrito.js'"), 'entry: falta carrito compartido');
   check(entry.includes("from './compartido/registro-paneles.js'"), 'entry: falta registro modular de superficies');
   check(entry.includes('await registerNavigationSurfaces()'), 'entry: monta el runtime antes de registrar superficies');
