@@ -297,19 +297,17 @@ export function buildMissingProfilePatch({
   }
 
   const currentStatus = clean(currentProfile.profileStatus).toLowerCase();
-  const canPromote = currentStatus !== 'deleted' && currentProfile.deleted !== true;
+  const promotableStatus = currentStatus === 'incomplete' || currentStatus === '';
   const changedProfileData = Object.keys(patch).length > 0;
   const finalProfile = { ...currentProfile, ...patch };
 
-  // La completitud depende de los datos finales, no del nombre del estado con
-  // que llegó el documento. Esto cubre altas `incomplete`, perfiles `legacy`
-  // que terminan de migrarse y documentos recuperados sin profileStatus. Una
-  // cuenta completa queda marcada una sola vez como `active`, de modo que un
-  // login posterior nunca reabra "Últimos datos" por una diferencia histórica
-  // de esquema. Los perfiles deleted jamás se reactivan desde el onboarding.
+  // La completitud depende de los datos finales. Las altas nuevas usan
+  // `incomplete`; además aceptamos un documento sin profileStatus para poder
+  // recuperar una creación interrumpida sin condenar a la cuenta a repetir
+  // "Últimos datos" para siempre. `legacy` conserva su política histórica y
+  // `deleted` nunca se reactiva desde este formulario.
   if (
-    canPromote &&
-    currentStatus !== 'active' &&
+    promotableStatus &&
     (changedProfileData || currentStatus === 'incomplete') &&
     profileIsCompleteByFields(finalProfile, true)
   ) {
