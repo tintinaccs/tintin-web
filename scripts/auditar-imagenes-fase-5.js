@@ -137,16 +137,13 @@ check(
 );
 
 check(
-  'El Hero precarga la última portada y no muestra un frame rosa mientras confirma Firestore',
-  files.runtime.includes('if (!heroDataConfirmed) {') &&
-    files.runtime.includes('revealHeroWhenImageReady(image);') &&
-    !files.runtime.includes("media?.classList.add('tt-hero-pending');") &&
+  'El Hero pinta la portada estática desde el primer render, sin capa rosa intermedia',
+  !/<div[^>]*class=["'][^"']*tt-hero-pending/.test(files.indexHtml) &&
     /src="assets-tintin\/images\/home\/hero-nuevo\/hero-nuevo-desktop\.png(?:\?[^\"]*)?"/.test(read('index.html')) &&
-    files.homeCss.includes('.tt-home-premium .tt-hero-media.tt-hero-pending') &&
-    files.homeCss.includes('visibility:hidden!important') &&
-    files.homeCss.includes('opacity:0!important') &&
-    !files.homeCss.includes('.tt-hero-media.tt-hero-pending{\n  transition:'),
-  'el HTML debe iniciar con una portada válida y Firestore solo debe reemplazarla cuando confirma datos nuevos'
+    files.homeCss.includes('.tt-home-premium .tt-hero-media{') &&
+    files.homeCss.includes('visibility:visible!important') &&
+    files.homeCss.includes('opacity:1!important'),
+  'el HTML debe iniciar con una portada válida y el hero no debe ocultarse para esperar datos remotos'
 );
 
 check(
@@ -160,19 +157,10 @@ check(
 );
 
 check(
-  'La red de seguridad del Hero espera a la imagen en camino antes de revelar a ciegas',
-  /var loaded = img && img\.complete && img\.naturalWidth > 0;/.test(files.indexHtml) &&
-    files.indexHtml.includes('if (loaded) { reveal(); return; }') &&
-    files.indexHtml.includes('deadline') &&
-    /var deadline = Date\.now\(\) \+ 4000;/.test(files.indexHtml),
-  // No basta con "hay un src y no terminó de cargar": si el chequeo cae en
-  // el instante justo antes de que gestion-imagenes.js recién asigne el src
-  // (nunca llegó todavía, no que haya fallado), esa versión anterior
-  // revelaba igual sin esperar el tope de 4s — mismo parpadeo de fondo que
-  // se reportó, solo que en una ventana más angosta. Ahora solo revela
-  // cuando la imagen realmente terminó de cargar; si no, sigue reintentando
-  // hasta el tope sin importar si todavía no hay ningún src.
-  'con red lenta, revelar sin comprobar que la imagen realmente terminó de cargar muestra el mismo parpadeo de fondo que se reportó'
+  'El Hero no usa una red de seguridad que introduzca estados visuales extra',
+  !files.indexHtml.includes('var deadline = Date.now() + 4000') &&
+    !files.indexHtml.includes('function tick()'),
+  'la portada no debe pasar por un fondo temporal ni por varias fases de revelado'
 );
 
 check(

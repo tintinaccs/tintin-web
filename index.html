@@ -7,7 +7,7 @@
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-3"></script>
 <script src="js/cargador-pagina.js?v=tintin-20260911-hero-no-entry-animation-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20260912-login-checkout-e2e-6" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20260909-unified-navigation-assets-6" defer></script>
   <!-- La señal de "página lista" (window.ttPageReady) ya NO se dispara desde
        acá. cargador-pagina.js caía al fallback window.load si no se le avisaba
        — que espera a TODAS las imágenes de la página completa, no solo al
@@ -47,7 +47,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260816-loader-shell-atomic-1">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260912-login-checkout-e2e-5">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260909-unified-navigation-assets-6">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260824-header-responsive-sync-1">
@@ -79,7 +79,7 @@
        disponible desde el primer paint, sin depender de red externa.
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
        existe (ver js/components/images/imagenes.js). -->
-  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260910-home-cta-white-1">
+  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260912-hero-static-first-paint-1">
   <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260911-hero-single-layer-1">
   <link rel="stylesheet" href="css/pages/home/carrusel-colecciones.css?v=tintin-20260826-collections-parallax-4">
   <link rel="stylesheet" href="css/pages/home/edicion-editorial-inicio.css?v=tintin-20260911-home-editorial-2">
@@ -98,7 +98,7 @@
   <!-- Hero nuevo aprobado: cada dispositivo muestra su composición completa.
        El contenido visual pertenece a la imagen; los enlaces se conservan
        como zonas interactivas accesibles sobre ella. -->
-  <div class="tt-hero-media tt-hero-pending" id="tt-hero-media">
+  <div class="tt-hero-media" id="tt-hero-media">
     <picture>
       <source media="(max-width: 767px)" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png?v=tintin-20260910-hero-button-clear-1">
       <source media="(min-width: 768px) and (max-width: 1120px) and (orientation: landscape)" data-tt-hero-device="tablet-landscape" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png?v=tintin-20260910-hero-button-clear-1">
@@ -117,46 +117,6 @@
       >
     </picture>
   </div>
-  <script>
-    // Red de seguridad independiente de gestion-imagenes.js: si por lo que sea
-    // (bloqueador, red, error) nunca llega a confirmar la imagen, el hero no
-    // puede quedar invisible para siempre. Si a los 900ms ya hay una imagen
-    // en camino (gestion-imagenes.js le asignó un src real) pero todavía no
-    // terminó de descargarse, espera un poco más en vez de revelar el fondo
-    // oscuro antes de tiempo — hasta un tope duro de 4s, para no depender
-    // nunca de una red que jamás responda.
-    //
-    // Si al llegar el tope no hay ninguna imagen realmente cargada (nunca
-    // llegó un src — Firestore/Cloudinary bloqueados o inalcanzables por
-    // completo — o llegó y falló), NO se revela: revelar la etiqueta de
-    // imagen sin foto real muestra el ícono de "imagen rota" + el alt
-    // completo como texto visible (tiene width/height fijos, así que el
-    // navegador sí le reserva ese cuadro), mucho peor que dejar el fondo
-    // oscuro de .tt-hero-media a la vista, que es lo que el propio diseño
-    // ya prevé como respaldo.
-    (function () {
-      var media = document.getElementById('tt-hero-media');
-      var img = document.getElementById('tt-hero-img');
-      if (!media) return;
-      var deadline = Date.now() + 4000;
-      function reveal() { media.classList.remove('tt-hero-pending'); }
-      function tick() {
-        var loaded = img && img.complete && img.naturalWidth > 0;
-        if (loaded) { reveal(); return; }
-        if (Date.now() < deadline) {
-          window.setTimeout(tick, 150);
-          return;
-        }
-        // Tope alcanzado sin imagen real (nunca llegó un src, llegó y
-        // falló, o sigue a medio descargar): se deja el fondo oscuro. Si
-        // gestion-imagenes.js consigue la imagen más tarde igual,
-        // revealHeroWhenImageReady() en ese archivo saca la clase por su
-        // cuenta apenas esté lista.
-      }
-      window.setTimeout(tick, 900);
-    })();
-  </script>
-
   <!-- Content -->
   <div class="tt-hero-content">
     <h1 class="tt-sr-only tt-hero-title">Bienvenida tintina</h1>
@@ -473,12 +433,10 @@
   // esperando más de lo que el propio hero está dispuesto a esperar.
   var HERO_WAIT_CEILING_MS = 0;
 
+  // El HTML ya entrega la imagen aprobada en el primer render. Esta función
+  // conserva el contrato del loader para el caso de una imagen dinámica, sin
+  // introducir una clase de espera ni una composición intermedia en Inicio.
   function heroReady() {
-    // Reusa la misma señal que ya decide cuándo se ve el hero (gestion-imagenes.js
-    // o su propia red de seguridad): en vez de volver a adivinar si hay una
-    // imagen en camino, simplemente espera a que esa decisión ya se haya
-    // tomado — evita la carrera de creer "no hay imagen" solo porque
-    // gestion-imagenes.js todavía no tuvo tiempo de asignar el src.
     var media = document.getElementById('tt-hero-media');
     if (!media) return true;
     return !media.classList.contains('tt-hero-pending');
@@ -488,7 +446,7 @@
     if (heroWaitStart === null) heroWaitStart = Date.now();
     // La imagen del hero ya tiene espacio reservado por CSS. Mostrar la
     // estructura no debe quedar pendiente de una descarga de 1.5 MB.
-    window.ttPageReady && window.ttPageReady();
+    if (heroReady()) window.ttPageReady && window.ttPageReady();
   }
 
   function releaseHomeWhenStructurallyReady() {
