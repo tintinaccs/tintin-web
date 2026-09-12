@@ -75,7 +75,7 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
   async function repairCanonicalProfileIfNeeded() {
     const [{ auth, db }, profileModule, firestoreApi] = await Promise.all([
       import('../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1'),
-      import('../../core/store/perfil-usuario.js?v=tintin-20260912-login-profile-recovery-1'),
+      import('../../core/store/perfil-usuario.js?v=tintin-20260903-accounts-phase-a-4'),
       import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
     ]);
 
