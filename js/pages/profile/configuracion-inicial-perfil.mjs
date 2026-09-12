@@ -296,22 +296,13 @@ export function buildMissingProfilePatch({
     patch.dob = parseDob(submittedDob);
   }
 
-  const currentStatus = clean(currentProfile.profileStatus).toLowerCase();
-  const promotableStatus = currentStatus === 'incomplete' || currentStatus === '';
-  const changedProfileData = Object.keys(patch).length > 0;
-  const finalProfile = { ...currentProfile, ...patch };
-
-  // La completitud depende de los datos finales. Las altas nuevas usan
-  // `incomplete`; además aceptamos un documento sin profileStatus para poder
-  // recuperar una creación interrumpida sin condenar a la cuenta a repetir
-  // "Últimos datos" para siempre. `legacy` conserva su política histórica y
-  // `deleted` nunca se reactiva desde este formulario.
-  if (
-    promotableStatus &&
-    (changedProfileData || currentStatus === 'incomplete') &&
-    profileIsCompleteByFields(finalProfile, true)
-  ) {
-    patch.profileStatus = 'active';
+  // Firestore permite la transición protegida de onboarding únicamente desde
+  // `incomplete` a `active`. Perfiles legacy/deleted conservan sus contratos
+  // propios; un documento faltante se repara antes, en mantenimiento-acceso.js,
+  // usando ensureUserProfile() para que nazca correctamente como incomplete.
+  if (clean(currentProfile.profileStatus).toLowerCase() === 'incomplete') {
+    const finalProfile = { ...currentProfile, ...patch };
+    if (profileIsCompleteByFields(finalProfile, true)) patch.profileStatus = 'active';
   }
 
   return patch;
