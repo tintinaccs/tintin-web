@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5a89a1d12bbf7aa22a1b3c4626b5eac38a6e5900d9b503126aded20fafdd7b62",
+  "sourceFingerprint": "0fab01c7543094473f0344c2d2d24d0cd2b720dfc4be71f32027e2f0d3936e62",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 814,
     "textFiles": 777,
-    "totalBytes": 16235098,
+    "totalBytes": 16231199,
     "pages": 18,
     "modules": 556
   },
@@ -13759,8 +13759,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 45159,
-      "sha256": "3ffa7b34d96a8e833399c9982b1890861d1656371f49094899bec9b5baa08daa",
+      "bytes": 45155,
+      "sha256": "c15f8794657c62702df8cb68675728156c3ba7563ff7e4f83434992551fd9e53",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18163,7 +18163,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 336206,
-      "sha256": "f8ae8e7aa54b20987dc4a79693663a52b17509d14ee57b16d8e92b14f86c5a1e",
+      "sha256": "6dede0e643e3c332a349e25ce541cead54d6a92081c77175fb7fdccd4305babd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32264,8 +32264,8 @@
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 9756,
-      "sha256": "bb9f4e64c9b68126d4bd73fa9e9752ba226584880535662400dd4bd6ccfc7bcd"
+      "bytes": 5861,
+      "sha256": "364c415439a7fc3cbefe72debbf58ab2e08a746fabd579635cbfd9b17a5a78e6"
     },
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
@@ -32811,13 +32811,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 336206,
-      "sha256": "f8ae8e7aa54b20987dc4a79693663a52b17509d14ee57b16d8e92b14f86c5a1e"
+      "sha256": "6dede0e643e3c332a349e25ce541cead54d6a92081c77175fb7fdccd4305babd"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 336121,
-      "sha256": "71f64d28a2d9558f910ceb9081cbaa962bf0dec0acba3014e64d5ff64d0b1765"
+      "sha256": "eddf4010f843da676d43cf4145dfa200f4e0485cd3941ba1ad938ab4be55edce"
     },
     {
       "path": "config/public-site.json",
@@ -35594,8 +35594,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 45159,
-      "sha256": "3ffa7b34d96a8e833399c9982b1890861d1656371f49094899bec9b5baa08daa"
+      "bytes": 45155,
+      "sha256": "c15f8794657c62702df8cb68675728156c3ba7563ff7e4f83434992551fd9e53"
     },
     {
       "path": "playwright.config.js",
