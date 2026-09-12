@@ -11,6 +11,12 @@ const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathnam
 let silentLogoutStarted = false;
 
 function escapeHtmlNav(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+function loginHrefForCurrentLocation(){
+ const path=`${window.location.pathname||'/'}${window.location.search||''}${window.location.hash||''}`;
+ const onHome=/^\/(?:index(?:\.html)?)?\/?$/i.test(window.location.pathname||'/');
+ if(onHome||IS_LOGIN_PAGE)return '/login';
+ return `/login?from=${encodeURIComponent(path)}`;
+}
 function beginSilentAuthTransition(){
  document.documentElement.classList.add('tt-auth-silent-transition');
  window.TintinLoader?.show?.();
@@ -116,7 +122,11 @@ function renderMobileTabbarPhoto(user){
 function renderAccountPanel(user,role='client'){
  const panel=document.getElementById('account-panel');
  if(!panel)return;
- if(!user){panel.innerHTML=`<p class="tt-account-guest-copy">Ingresá para guardar favoritos, ver pedidos y comprar más rápido.</p><a class="tt-account-item" href="/login">Iniciar sesión</a><a class="tt-account-item" href="/login">Crear una cuenta</a>`;return;}
+ if(!user){
+  const loginHref=loginHrefForCurrentLocation();
+  panel.innerHTML=`<p class="tt-account-guest-copy">Ingresá para guardar favoritos, ver pedidos y comprar más rápido.</p><a class="tt-account-item" href="${loginHref}">Iniciar sesión</a><a class="tt-account-item" href="${loginHref}">Crear una cuenta</a>`;
+  return;
+ }
  const name=escapeHtmlNav(user.displayName||user.email||'Mi cuenta');
  const photoUrl=sanitizeImageUrl(user.photoURL || '');
  const photo=photoUrl?`<img class="tt-account-panel-avatar" src="${photoUrl}" alt="${name}" referrerpolicy="no-referrer" width="32" height="32">`:`<span class="tt-account-panel-avatar tt-account-panel-initials">${initials(user.displayName||user.email)}</span>`;

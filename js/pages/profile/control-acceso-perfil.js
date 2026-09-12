@@ -100,7 +100,7 @@ function goCompleteProfile() {
   const page = currentPageName();
   if (page === 'login') { location.replace('/login'); return; }
 
-  const from = `/${page}`;
+  const from = `${location.pathname || `/${page}`}${location.search || ''}${location.hash || ''}`;
   location.replace(`/login?from=${encodeURIComponent(from)}`);
 }
 

@@ -3,12 +3,12 @@ import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-table
 import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20260820-notifications-global-1';
 import { renderSearchPanel } from './compartido/panel-busqueda.js';
 import { renderCartDrawer } from './compartido/panel-carrito.js';
-import { renderAccountDrawer } from './compartido/panel-cuenta.js';
+import { renderAccountDrawer } from './compartido/panel-cuenta.js?v=tintin-20260912-ux-closure-1';
 import { renderCollectionsSheet } from './compartido/panel-colecciones.js';
 import { renderSurfaceLayer } from './compartido/capas-paneles.js';
 import { applyActiveState, currentPage } from './compartido/estado-ruta.js';
 import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20260909-unified-navigation-assets-3';
-import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260912-auth-closure-6';
+import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260912-ux-closure-1';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
 import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260817-footer-contrast-1';
