@@ -22,31 +22,10 @@ export const AUTH_METHOD = {
   EMAIL: 'emailOtp',
 };
 
-/**
- * Método con el que se registró un perfil ya guardado.
- *
- * Los perfiles creados por Google antes de este cambio no tienen el campo
- * `provider`, porque la versión vieja de guardarUsuario() nunca lo escribía.
- * Para esos, la ausencia del campo se interpreta como Google: es el único
- * método que podía crear un perfil sin marcarlo (el de correo siempre grabó
- * `emailOtp`).
- */
 export function getRegisteredMethod(profileData) {
   return profileData?.provider === AUTH_METHOD.EMAIL ? AUTH_METHOD.EMAIL : AUTH_METHOD.GOOGLE;
 }
 
-/**
- * Crea el perfil la primera vez, o sincroniza de forma confirmada los datos
- * canónicos de identidad en los ingresos siguientes.
- *
- * Nunca pisa datos ya guardados (nombre, teléfono, dirección, rol, bloqueo):
- * un login no es el lugar donde se editan. Google y PIN son métodos de acceso
- * de una misma identidad Firebase, no tipos de cuenta excluyentes.
- *
- * @param {object} db        Instancia de Firestore.
- * @param {object} user      Usuario de Firebase Auth ya autenticado.
- * @param {string} method    AUTH_METHOD.GOOGLE | AUTH_METHOD.EMAIL
- */
 export async function ensureUserProfile(db, user, method) {
   const ref = doc(db, 'users', user.uid);
   const snap = await getDoc(ref);
@@ -56,9 +35,6 @@ export async function ensureUserProfile(db, user, method) {
     const role = normalizedEmail === SUPER_ADMIN.toLowerCase() ? 'superadmin' : 'client';
     const welcomePending = role === 'client';
     await setDoc(ref, {
-      // Google entrega un nombre; el correo no entrega ninguno. En los dos
-      // casos el setup posterior lo confirma o lo pide antes de darlo por
-      // bueno — acá sólo se deja el valor de partida.
       name: method === AUTH_METHOD.GOOGLE ? (user.displayName || '') : '',
       email: user.email,
       customerId: customerIdForUid(user.uid),
@@ -91,14 +67,6 @@ export async function ensureUserProfile(db, user, method) {
   }
 
   if (normalizedEmail === SUPER_ADMIN.toLowerCase() && data.role !== 'superadmin') {
-    // firestore.rules nunca permite escribir `role` en el propio documento del
-    // Super Admin (isSuperAdminAccount(resource.data) siempre es true, así que
-    // tanto la rama de auto-actualización como la de isSuperAdmin() la
-    // rechazan) — es un bloqueo intencional contra manipular ese campo. La
-    // identidad elevada ya sale exclusivamente del email autenticado (ver
-    // roles.js), así que este intento es solo un best-effort informativo para
-    // que la ficha en Firestore quede prolija; si Firestore lo rechaza, el
-    // login no puede depender de esa escritura ni cortarse por su error.
     setDoc(ref, { role: 'superadmin', updatedAt: serverTimestamp(), lastLogin: serverTimestamp() }, { merge: true })
       .catch(error => console.warn('[user-profile] No se pudo reparar el rol del Super Admin en Firestore:', error));
     return { role: 'superadmin', blocked: false, isNew: false, welcomePending: false, method };
@@ -115,21 +83,18 @@ export async function ensureUserProfile(db, user, method) {
     lastAuthMethod: method,
     authMethods,
   };
-  // Migración progresiva: UID sigue siendo la clave de Auth y el customerId
-  // comercial se deriva una sola vez de ese identificador aleatorio. No se
-  // inventan username ni fecha de nacimiento para perfiles históricos.
-  if (!data.customerId) {
+
+  // Un login existente no puede cambiar el estado comercial del perfil.
+  // El bootstrap legacy sólo aplica a documentos realmente anteriores al
+  // contrato, es decir, cuando faltan customerId Y profileStatus. Si el perfil
+  // ya declara `active` o `incomplete`, preservamos ese estado y dejamos la
+  // migración de identidad fuera del login para no degradar onboarding.
+  if (!data.customerId && !data.profileStatus) {
     identityPatch.customerId = customerIdForUid(user.uid);
     identityPatch.identityVersion = ACCOUNT_CONTRACT.identityVersion;
     identityPatch.profileStatus = 'legacy';
   }
 
-  // Este write forma parte del contrato del ingreso: no se navega a otra
-  // pantalla antes de que Firestore confirme el método de acceso, lastLogin y,
-  // cuando corresponde, el bootstrap de identidad legacy. Antes se lanzaba
-  // fire-and-forget; un login podía considerarse terminado mientras este write
-  // seguía pendiente (o fallaba sólo en consola), dejando Auth y Firestore en
-  // estados distintos para la siguiente ruta.
   await setDoc(ref, identityPatch, { merge: true });
 
   const role = data.role || 'client';
@@ -137,7 +102,6 @@ export async function ensureUserProfile(db, user, method) {
   return { role, blocked: !!data.blocked, isNew: false, welcomePending, method, authMethods };
 }
 
-/** Mismo chequeo de cuenta bloqueada para los dos métodos de acceso. */
 export async function isBlockedAccount(db, uid, email) {
   if (email === SUPER_ADMIN) return false;
   try {
