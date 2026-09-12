@@ -23,6 +23,8 @@ const testEnv = await initializeTestEnvironment({
 const claims = {
   client1: { email: 'clienta1@example.com', email_verified: true },
   client2: { email: 'clienta2@example.com', email_verified: true },
+  clientIncomplete: { email: 'incomplete@example.com', email_verified: true },
+  clientActive: { email: 'active@example.com', email_verified: true },
   admin1: { email: 'admin@example.com', email_verified: true },
   agent1: { email: 'agent@example.com', email_verified: true },
   viewer1: { email: 'viewer@example.com', email_verified: true },
@@ -53,6 +55,14 @@ async function seed() {
     });
     await setDoc(doc(db, 'users', 'client2'), {
       email: claims.client2.email, role: 'client', blocked: false, name: 'Clienta Dos'
+    });
+    await setDoc(doc(db, 'users', 'clientIncomplete'), {
+      email: claims.clientIncomplete.email, role: 'client', blocked: false, name: 'Perfil Incompleto',
+      profileStatus: 'incomplete'
+    });
+    await setDoc(doc(db, 'users', 'clientActive'), {
+      email: claims.clientActive.email, role: 'client', blocked: false, name: 'Perfil Activo',
+      profileStatus: 'active'
     });
     await setDoc(doc(db, 'users', 'admin1'), {
       email: claims.admin1.email, role: 'admin', blocked: false, name: 'Admin'
@@ -207,6 +217,9 @@ try {
   await fails(updateDoc(doc(client1, 'users', 'client1'), { blocked: true }));
   await fails(updateDoc(doc(client1, 'users', 'client1'), { customerId: 'CUS_otro' }));
   await fails(deleteDoc(doc(client1, 'users', 'client1')));
+
+  // Un perfil realmente histórico, sin profileStatus ni customerId, puede
+  // recibir el bootstrap de identidad una sola vez y queda marcado legacy.
   await succeeds(updateDoc(doc(ctx('client2'), 'users', 'client2'), {
     customerId: 'CUS_client2',
     identityVersion: 1,
@@ -217,6 +230,38 @@ try {
     updatedAt: serverTimestamp()
   }));
   await fails(updateDoc(doc(ctx('client2'), 'users', 'client2'), { customerId: 'CUS_reasignado' }));
+
+  // Regresión 2026-09-12: un bootstrap tardío NO puede degradar el estado
+  // canónico de una cuenta que ya está en onboarding o ya quedó activa.
+  // Esta defensa vive en Firestore, así también bloquea clientes viejos en
+  // caché y elimina la carrera sin tocar la persistencia de Firebase Auth.
+  await fails(updateDoc(doc(ctx('clientIncomplete'), 'users', 'clientIncomplete'), {
+    customerId: 'CUS_clientIncomplete',
+    identityVersion: 1,
+    profileStatus: 'legacy',
+    lastAuthMethod: 'google',
+    authMethods: ['google'],
+    lastLogin: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  }));
+  await fails(updateDoc(doc(ctx('clientActive'), 'users', 'clientActive'), {
+    customerId: 'CUS_clientActive',
+    identityVersion: 1,
+    profileStatus: 'legacy',
+    lastAuthMethod: 'google',
+    authMethods: ['google'],
+    lastLogin: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  }));
+  const incompleteAfterDeniedBootstrap = await succeeds(getDoc(doc(ctx('clientIncomplete'), 'users', 'clientIncomplete')));
+  const activeAfterDeniedBootstrap = await succeeds(getDoc(doc(ctx('clientActive'), 'users', 'clientActive')));
+  if (incompleteAfterDeniedBootstrap.data()?.profileStatus !== 'incomplete') {
+    throw new Error('El bootstrap degradó profileStatus=incomplete.');
+  }
+  if (activeAfterDeniedBootstrap.data()?.profileStatus !== 'active') {
+    throw new Error('El bootstrap degradó profileStatus=active.');
+  }
+
   await fails(updateDoc(doc(client1, 'products', 'p1'), { price: 1 }));
   await fails(updateDoc(doc(client1, 'products', 'p1'), { stock: 999 }));
   await fails(setDoc(doc(client1, 'orders', 'client1_req_direct_123456'), directOrderPayload));
