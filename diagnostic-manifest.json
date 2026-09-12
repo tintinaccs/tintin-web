@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "0fab01c7543094473f0344c2d2d24d0cd2b720dfc4be71f32027e2f0d3936e62",
+  "sourceFingerprint": "76a2e62d97ba9877fefe5e5bd164afa62805be5fdbb6f0401f45c76a6cdb1099",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 814,
     "textFiles": 777,
-    "totalBytes": 16231199,
+    "totalBytes": 16246341,
     "pages": 18,
     "modules": 556
   },
@@ -18162,8 +18162,8 @@
     },
     {
       "path": "config/csp-runtime.js",
-      "bytes": 336206,
-      "sha256": "6dede0e643e3c332a349e25ce541cead54d6a92081c77175fb7fdccd4305babd",
+      "bytes": 344630,
+      "sha256": "b618f3b6e9b9a1c377f27b0f04d57e9246097e8f7f150f886ca0bf9fc09340d2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32264,8 +32264,8 @@
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 5861,
-      "sha256": "364c415439a7fc3cbefe72debbf58ab2e08a746fabd579635cbfd9b17a5a78e6"
+      "bytes": 4155,
+      "sha256": "4ba12d67cc25c9cf5efd3711af16817b38faeabb337a71eb99f58440ba578113"
     },
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
@@ -32810,14 +32810,14 @@
     {
       "path": "config/csp-runtime.js",
       "extension": ".js",
-      "bytes": 336206,
-      "sha256": "6dede0e643e3c332a349e25ce541cead54d6a92081c77175fb7fdccd4305babd"
+      "bytes": 344630,
+      "sha256": "b618f3b6e9b9a1c377f27b0f04d57e9246097e8f7f150f886ca0bf9fc09340d2"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
-      "bytes": 336121,
-      "sha256": "eddf4010f843da676d43cf4145dfa200f4e0485cd3941ba1ad938ab4be55edce"
+      "bytes": 344545,
+      "sha256": "05a8e87723efb967db4de2f6cdd98e8118389d1cfa99e4faf8b64d54a0fc4d58"
     },
     {
       "path": "config/public-site.json",
