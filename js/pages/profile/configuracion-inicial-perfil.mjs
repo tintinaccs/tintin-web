@@ -10,6 +10,10 @@ export function isSuperAdminProfile({ email = '', role = '' } = {}, superAdminEm
     clean(email).toLowerCase() === clean(superAdminEmail).toLowerCase();
 }
 
+// Valores que llegan cuando en realidad no hay un nombre: los manda Google
+// cuando el perfil está incompleto, o los escribe alguien para saltear el
+// formulario. Guardarlos como si fueran un nombre real ensucia el perfil y
+// después aparecen en los pedidos y en los correos al cliente.
 const PLACEHOLDER_NAMES = new Set([
   'undefined', 'null', 'nan', 'none', 'nil', 'na', 'n/a', 's/n',
   'usuario', 'user', 'cliente', 'client', 'invitado', 'guest', 'anonimo', 'anónimo',
@@ -19,20 +23,44 @@ const PLACEHOLDER_NAMES = new Set([
   'admin', 'administrador', 'asdf', 'asd', 'qwerty', 'aaa', 'xxx', 'abc',
 ]);
 
+// Letras de cualquier alfabeto + marcas de acento, más los signos que sí
+// aparecen en nombres reales: apóstrofe (D'Angelo), guion (García-López) y
+// espacio interno (De la Cruz). Nada de números, emojis ni otros símbolos.
 const NAME_ALLOWED = /^[\p{L}][\p{L}\p{M}'’\- ]*$/u;
 const LETTER = /\p{L}/gu;
 
+/**
+ * ¿Es un nombre o apellido real?
+ *
+ * Pide al menos dos letras — una sola inicial ("A", "J.") no identifica a
+ * nadie, que es justamente lo que devuelve Google cuando el perfil está a
+ * medias.
+ */
 export function isValidNamePart(value) {
   const name = clean(value);
-  if (!name || name.length > 60 || !NAME_ALLOWED.test(name)) return false;
+  if (!name) return false;
+  if (name.length > 60) return false;
+  if (!NAME_ALLOWED.test(name)) return false;
   if ((name.match(LETTER) || []).length < 2) return false;
-  return !PLACEHOLDER_NAMES.has(name.toLowerCase());
+  if (PLACEHOLDER_NAMES.has(name.toLowerCase())) return false;
+  return true;
 }
 
+/** Nombre y apellido juntos, sólo si los dos son válidos por separado. */
 export function isValidFullName(first, last) {
   return isValidNamePart(first) && isValidNamePart(last);
 }
 
+/**
+ * Separa en nombre y apellido lo que haya entregado Google (o lo que ya esté
+ * guardado en el campo `name` de perfiles creados antes de separar ambos
+ * campos).
+ *
+ * La primera palabra es el nombre y el resto el apellido: "María José Pérez
+ * Duarte" queda como "María" + "José Pérez Duarte". Puede no ser el corte
+ * ideal, pero el usuario lo ve en pantalla y lo corrige antes de guardar —
+ * nunca se guarda sin que lo confirme.
+ */
 export function splitFullName(value) {
   const parts = clean(value).split(' ').filter(Boolean);
   if (parts.length === 0) return { firstName: '', lastName: '' };
@@ -40,6 +68,7 @@ export function splitFullName(value) {
   return { firstName: parts[0], lastName: parts.slice(1).join(' ') };
 }
 
+/** Lee nombre/apellido de un perfil, tolerando los que sólo tienen `name`. */
 export function readProfileName(profile = {}) {
   const first = clean(profile.firstName || profile.first_name || profile.nombre);
   const last = clean(profile.lastName || profile.last_name || profile.apellido);
@@ -47,8 +76,27 @@ export function readProfileName(profile = {}) {
   return splitFullName(profile.name || profile.fullName || profile.nombreCompleto);
 }
 
+/**
+ * ¿Hay una ubicación que el checkout pueda reutilizar?
+ *
+ * El formato es el que el checkout ya venía guardando desde "Guardar esta
+ * ubicación en mi perfil": `savedLocation {lat, lng, name, address}`. El alta
+ * de la cuenta escribe exactamente ese campo, así que una ubicación cargada
+ * en cualquiera de los dos lados sirve en el otro y no se vuelve a pedir.
+ * `maybeApplySavedLocation()` del checkout además exige `name`.
+ */
+export function hasUsableAddress(profile = {}) {
+  return locationCandidates(profile).some(candidate => {
+    const saved = normalizeStoredLocation(candidate, profile);
+    if (!saved || !clean(saved.name)) return false;
+    const lat = Number(saved.lat);
+    const lng = Number(saved.lng);
+    return Number.isFinite(lat) && Number.isFinite(lng) && (lat !== 0 || lng !== 0);
+  });
+}
+
 function locationCandidates(profile = {}) {
-  return [
+  const candidates = [
     profile.savedLocation,
     profile.location,
     profile.mapLocation,
@@ -62,7 +110,8 @@ function locationCandidates(profile = {}) {
       name: profile.locationName ?? profile.addressName ?? profile.nombreUbicacion,
       address: profile.address ?? profile.direccion,
     },
-  ].filter(candidate => candidate && typeof candidate === 'object');
+  ];
+  return candidates.filter(candidate => candidate && typeof candidate === 'object');
 }
 
 function normalizeStoredLocation(candidate = {}, profile = {}) {
@@ -74,28 +123,16 @@ function normalizeStoredLocation(candidate = {}, profile = {}) {
     coordinates.lng ?? coordinates.longitude ?? geoPoint.longitude;
   const name = clean(candidate.name ?? candidate.locationName ?? candidate.addressName ??
     candidate.label ?? candidate.title ?? profile.locationName ?? profile.addressName);
-  const address = clean(candidate.address ?? candidate.formattedAddress ?? candidate.displayName ??
-    profile.address ?? profile.direccion);
+  const address = clean(candidate.address ?? candidate.formattedAddress ?? candidate.displayName ?? profile.address ?? profile.direccion);
   return { lat, lng, name, ...(address ? { address } : {}) };
 }
 
 function storedLocation(profile = {}) {
   const candidates = locationCandidates(profile);
-  return candidates
-    .map(candidate => normalizeStoredLocation(candidate, profile))
+  return candidates.map(candidate => normalizeStoredLocation(candidate, profile))
     .find(candidate => clean(candidate.name) && Number.isFinite(Number(candidate.lat)) &&
       Number.isFinite(Number(candidate.lng)) && (Number(candidate.lat) !== 0 || Number(candidate.lng) !== 0)) ||
     normalizeStoredLocation(candidates[0] || {}, profile);
-}
-
-export function hasUsableAddress(profile = {}) {
-  return locationCandidates(profile).some(candidate => {
-    const saved = normalizeStoredLocation(candidate, profile);
-    if (!saved || !clean(saved.name)) return false;
-    const lat = Number(saved.lat);
-    const lng = Number(saved.lng);
-    return Number.isFinite(lat) && Number.isFinite(lng) && (lat !== 0 || lng !== 0);
-  });
 }
 
 function asDate(value) {
@@ -109,25 +146,21 @@ function asDate(value) {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
+/** Acepta el campo canónico `dob` y los nombres históricos del panel. */
 export function hasUsableDob(profile = {}) {
-  const date = asDate(
-    profile.dob || profile.birthDate || profile.dateOfBirth ||
-    profile.fechaNacimiento || profile.fecha_nacimiento
-  );
+  const date = asDate(profile.dob || profile.birthDate || profile.dateOfBirth || profile.fechaNacimiento || profile.fecha_nacimiento);
   return !!date && isValidDob(date.toISOString().slice(0, 10));
 }
 
 function storedPhoneValue(profile = {}) {
-  return clean(
-    profile.phone || profile.phoneNumber || profile.whatsapp ||
-    profile.whatsappNumber || profile.telefono || profile.celular
-  );
+  return clean(profile.phone || profile.phoneNumber || profile.whatsapp || profile.whatsappNumber || profile.telefono || profile.celular);
 }
 
 function storedUsername(profile = {}) {
   return clean(profile.username || profile.userName || profile.nombreUsuario || profile.nombre_usuario);
 }
 
+/** Convierte un resultado del buscador al formato `savedLocation`. */
 export function toSavedLocation(place = {}) {
   const normalized = normalizeStoredLocation(place);
   const lat = Number(normalized.lat);
@@ -140,9 +173,10 @@ export function toSavedLocation(place = {}) {
 
 function exposeSavedLocationForOnboarding(profile = {}) {
   if (typeof globalThis === 'undefined') return;
-  globalThis.TintinOnboardingSavedLocation = hasUsableAddress(profile)
+  const savedLocation = hasUsableAddress(profile)
     ? toSavedLocation(storedLocation(profile))
     : null;
+  globalThis.TintinOnboardingSavedLocation = savedLocation;
 }
 
 function locationsAreEqual(first, second) {
@@ -153,61 +187,62 @@ function locationsAreEqual(first, second) {
     clean(first.address) === clean(second.address);
 }
 
-function hasPersistedCompletion(profile = {}) {
-  return profile.onboardingCompleted === true ||
-    profile.profileCompleted === true ||
-    Boolean(
-      profile.onboardingCompletedAt ||
-      profile.profileCompletedAt ||
-      profile.welcomeTutorialCompletedAt ||
-      profile.welcomeTutorialSeen
-    );
-}
-
-function profileIsCompleteByFields(profile = {}, requireAddress = true) {
-  const stored = readProfileName(profile);
-  return isValidFullName(stored.firstName, stored.lastName) &&
-    Boolean(storedPhoneValue(profile)) &&
-    isValidUsername(storedUsername(profile)) &&
-    hasUsableDob(profile) &&
-    (!requireAddress || hasUsableAddress(profile));
-}
-
-export function getProfileCompletionPlan({
-  profile = {},
-  user = {},
-  role = '',
-  superAdminEmail = '',
-  requireAddress = true,
-} = {}) {
+/**
+ * Qué le falta a este perfil para estar completo.
+ *
+ * Una cuenta client sólo queda completa cuando ya tiene TODOS los datos del
+ * formulario de alta: username, nombre, apellido, teléfono, fecha de
+ * nacimiento y ubicación reutilizable por checkout. El email no se vuelve a
+ * pedir acá porque ya lo garantiza Firebase Auth en `user.email`.
+ *
+ * Si falta un único dato, sólo ese campo vuelve a mostrarse. Los datos que ya
+ * están guardados no se solicitan otra vez.
+ */
+export function getProfileCompletionPlan({ profile = {}, user = {}, role = '', superAdminEmail = '', requireAddress = true } = {}) {
   if (isSuperAdminProfile({ email: user.email, role }, superAdminEmail)) {
     exposeSavedLocationForOnboarding({});
     return {
-      skip: true,
-      needsName: false,
-      needsPhone: false,
-      needsAddress: false,
-      needsUsername: false,
-      needsDob: false,
-      suggestedName: '',
-      suggestedFirstName: '',
-      suggestedLastName: '',
+      skip: true, needsName: false, needsPhone: false, needsAddress: false,
+      needsUsername: false, needsDob: false,
+      suggestedName: '', suggestedFirstName: '', suggestedLastName: '',
     };
   }
 
-  if (clean(profile.profileStatus).toLowerCase() === 'active' || hasPersistedCompletion(profile)) {
+  // `profileStatus: active` es la marca canónica que escribe el alta cuando
+  // ya validó nombre, teléfono, username, fecha y ubicación en una misma
+  // transición. No volver a inferir lo contrario en cada login: hacerlo
+  // reabría el formulario para perfiles históricos aunque sus campos ya
+  // estuvieran aprobados por Firestore.
+  if (clean(profile.profileStatus).toLowerCase() === 'active') {
     exposeSavedLocationForOnboarding(profile);
     return {
-      skip: true,
-      needsName: false,
-      needsPhone: false,
-      needsAddress: false,
-      needsUsername: false,
-      needsDob: false,
+      skip: true, needsName: false, needsPhone: false, needsAddress: false,
+      needsUsername: false, needsDob: false,
       addressAlreadySaved: hasUsableAddress(profile),
-      suggestedName: '',
-      suggestedFirstName: '',
-      suggestedLastName: '',
+      suggestedName: '', suggestedFirstName: '', suggestedLastName: '',
+    };
+  }
+
+  // Las cuentas creadas antes del formulario actual ya marcaban el alta como
+  // terminada con `onboardingCompleted`. Es una confirmación persistida de
+  // que no son cuentas nuevas: jamás se les debe reabrir "Últimos datos" por
+  // cambios posteriores de nombres internos de campos.
+  // Algunas cuentas existentes fueron confirmadas por la bienvenida antes de
+  // que existiera `profileStatus: active`. Todas estas marcas significan lo
+  // mismo: ya terminaron su alta. No se las puede tratar como altas nuevas
+  // ni volver a pedirles datos por haber cambiado la forma interna de
+  // guardarlos.
+  const hasPersistedCompletion = profile.onboardingCompleted === true ||
+    profile.profileCompleted === true ||
+    Boolean(profile.onboardingCompletedAt || profile.profileCompletedAt ||
+      profile.welcomeTutorialCompletedAt || profile.welcomeTutorialSeen);
+  if (hasPersistedCompletion) {
+    exposeSavedLocationForOnboarding(profile);
+    return {
+      skip: true, needsName: false, needsPhone: false, needsAddress: false,
+      needsUsername: false, needsDob: false,
+      addressAlreadySaved: hasUsableAddress(profile),
+      suggestedName: '', suggestedFirstName: '', suggestedLastName: '',
     };
   }
 
@@ -224,12 +259,11 @@ export function getProfileCompletionPlan({
 
   exposeSavedLocationForOnboarding(profile);
 
+  // Lo que sugerimos: primero lo guardado, y si no sirve, lo que dio Google.
   const fromProvider = splitFullName(user.displayName);
-  const suggestedFirstName = isValidNamePart(stored.firstName)
-    ? stored.firstName
+  const suggestedFirstName = isValidNamePart(stored.firstName) ? stored.firstName
     : (isValidNamePart(fromProvider.firstName) ? fromProvider.firstName : '');
-  const suggestedLastName = isValidNamePart(stored.lastName)
-    ? stored.lastName
+  const suggestedLastName = isValidNamePart(stored.lastName) ? stored.lastName
     : (isValidNamePart(fromProvider.lastName) ? fromProvider.lastName : '');
 
   return {
@@ -246,6 +280,9 @@ export function getProfileCompletionPlan({
   };
 }
 
+// Se ejecuta con el perfil vuelto a leer dentro de una transacción. Así un
+// dato que otro proceso completó mientras el formulario estaba abierto nunca
+// se pisa por accidente.
 export function buildMissingProfilePatch({
   currentProfile = {},
   submittedFirstName = '',
@@ -263,6 +300,7 @@ export function buildMissingProfilePatch({
   const currentPhone = storedPhoneValue(currentProfile);
   const currentUsername = storedUsername(currentProfile);
 
+  // Compatibilidad: quien todavía mande `submittedName` entero se separa acá.
   const fallback = splitFullName(submittedName);
   const firstName = clean(submittedFirstName) || fallback.firstName;
   const lastName = clean(submittedLastName) || fallback.lastName;
@@ -271,6 +309,8 @@ export function buildMissingProfilePatch({
     if (firstName !== current.firstName || lastName !== current.lastName) {
       patch.firstName = firstName;
       patch.lastName = lastName;
+      // `name` se mantiene porque el resto del sitio (pedidos, correos, admin)
+      // todavía lo lee.
       patch.name = `${firstName} ${lastName}`;
     }
   }
@@ -282,27 +322,43 @@ export function buildMissingProfilePatch({
     const currentSavedLocation = hasUsableAddress(currentProfile)
       ? toSavedLocation(storedLocation(currentProfile))
       : null;
+
     if (savedLocation && !locationsAreEqual(savedLocation, currentSavedLocation)) {
       patch.savedLocation = savedLocation;
+      // `address` es el texto que checkout usa para prellenar la dirección.
       patch.address = savedLocation.address || savedLocation.name;
     }
   }
 
+  // El username lo reserva login.html en `usernameReservations` ANTES de
+  // llamar acá (mismo patrón que el teléfono); esta función sólo decide si
+  // hace falta guardarlo, nunca lo reserva ni lo valida contra Firestore.
   if (!isValidUsername(currentUsername) && isValidUsername(submittedUsername)) {
     patch.username = normalizeUsername(submittedUsername);
   }
 
+  // La edad no se persiste calculada — sólo la fecha de nacimiento. Se
+  // recalcula desde `dob` cada vez que hace falta (ver validacion-nacimiento.js).
   if (!hasUsableDob(currentProfile) && isValidDob(submittedDob)) {
     patch.dob = parseDob(submittedDob);
   }
 
-  // Firestore permite la transición protegida de onboarding únicamente desde
-  // `incomplete` a `active`. Perfiles legacy/deleted conservan sus contratos
-  // propios; un documento faltante se repara antes, en mantenimiento-acceso.js,
-  // usando ensureUserProfile() para que nazca correctamente como incomplete.
-  if (clean(currentProfile.profileStatus).toLowerCase() === 'incomplete') {
-    const finalProfile = { ...currentProfile, ...patch };
-    if (profileIsCompleteByFields(finalProfile, true)) patch.profileStatus = 'active';
+  // Un perfil `incomplete` pasa a `active` sólo cuando ya reúne todos los
+  // datos obligatorios del alta. La misma definición se usa arriba para no
+  // crear estados contradictorios del tipo "active pero onboarding pendiente".
+  if (currentProfile.profileStatus === 'incomplete') {
+    const finalFirstName = patch.firstName || current.firstName;
+    const finalLastName = patch.lastName || current.lastName;
+    const finalPhone = patch.phone || currentPhone;
+    const finalUsername = patch.username || currentUsername;
+    const finalProfile = patch.savedLocation
+      ? { ...currentProfile, savedLocation: patch.savedLocation }
+      : currentProfile;
+    const finalDobProfile = patch.dob ? { ...finalProfile, dob: patch.dob } : finalProfile;
+    if (isValidFullName(finalFirstName, finalLastName) && finalPhone &&
+        isValidUsername(finalUsername) && hasUsableDob(finalDobProfile) && hasUsableAddress(finalProfile)) {
+      patch.profileStatus = 'active';
+    }
   }
 
   return patch;
