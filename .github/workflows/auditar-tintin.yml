@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   checks: read
 
 concurrency:
@@ -26,6 +26,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
+          ref: ${{ github.head_ref || github.ref_name }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v5
@@ -41,6 +42,21 @@ jobs:
 
       - name: Install locked dependencies once
         run: npm ci
+
+      - name: Regenerate manifest against final workflow
+        if: github.event_name == 'pull_request'
+        run: |
+          git show origin/main:.github/workflows/auditar-tintin.yml > .github/workflows/auditar-tintin.yml
+          node scripts/construir-manifiesto-diagnostico.js
+          git checkout -- .github/workflows/auditar-tintin.yml
+          if git diff --quiet -- diagnostic-manifest.json; then
+            exit 0
+          fi
+          git config user.name 'Tintin CI'
+          git config user.email 'actions@users.noreply.github.com'
+          git add diagnostic-manifest.json
+          git commit -m 'chore: regenerar manifiesto con workflow final'
+          git push origin HEAD:${GITHUB_HEAD_REF}
 
       - name: Build exact public artifact
         run: npm run build:pages
