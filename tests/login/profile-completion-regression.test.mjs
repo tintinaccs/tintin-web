@@ -26,26 +26,27 @@ function completeFrom(status) {
   });
 }
 
-test('un perfil legacy que termina sus datos queda active', () => {
+test('un perfil legacy conserva su política histórica', () => {
   const patch = completeFrom('legacy');
+  assert.equal(patch.username, 'maria_98');
+  assert.ok(patch.dob instanceof Date);
+  assert.equal('profileStatus' in patch, false);
+});
+
+test('un alta sin profileStatus que termina sus datos queda active', () => {
+  const patch = completeFrom(undefined);
   assert.equal(patch.username, 'maria_98');
   assert.ok(patch.dob instanceof Date);
   assert.equal(patch.profileStatus, 'active');
 });
 
-test('un perfil sin profileStatus que termina sus datos queda active', () => {
-  const patch = completeFrom(undefined);
-  assert.equal(patch.profileStatus, 'active');
-});
-
-test('el segundo login no vuelve a abrir Últimos datos después del guardado', () => {
+test('el segundo login no vuelve a abrir Últimos datos después de recuperar un alta sin marca', () => {
   const currentProfile = {
-    profileStatus: 'legacy',
     name: 'María González',
     phone: '+595981123456',
     savedLocation: LOCATION,
   };
-  const patch = completeFrom('legacy');
+  const patch = completeFrom(undefined);
   const persisted = { ...currentProfile, ...patch };
   const plan = getProfileCompletionPlan({
     profile: persisted,
