@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "50b97788b479848b659432836ef8192556eb6b778caebece9f5175ab3fcefe15",
+  "sourceFingerprint": "bbac02d1a965a6b6679a9e5256b015115380506dbe937be711a8bafe345910d0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 814,
     "textFiles": 777,
-    "totalBytes": 16247185,
+    "totalBytes": 16248235,
     "pages": 18,
     "modules": 556
   },
@@ -23911,8 +23911,8 @@
     },
     {
       "path": "js/core/store/perfil-usuario.js",
-      "bytes": 7103,
-      "sha256": "2511c31ce303554ac3e14eade286ae5b75790c959d6baaa08d3a4b91cece46a2",
+      "bytes": 7350,
+      "sha256": "97faa3f4bcdd9cdec37d883c240029c50edd09ba7aa3373b2b21a293880b4d06",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30535,8 +30535,8 @@
     },
     {
       "path": "tests/login/canonical-profile-recovery.test.mjs",
-      "bytes": 1393,
-      "sha256": "b6e4a597a99f29feb495784b55f10494629cf4145b77943a8141a6c58f96788e",
+      "bytes": 2196,
+      "sha256": "55b966e3ac37ae45f8560dd300ef87755f1e4ed00c710e562ae68b5e0e6d0ab3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34958,8 +34958,8 @@
     {
       "path": "js/core/store/perfil-usuario.js",
       "extension": ".js",
-      "bytes": 7103,
-      "sha256": "2511c31ce303554ac3e14eade286ae5b75790c959d6baaa08d3a4b91cece46a2"
+      "bytes": 7350,
+      "sha256": "97faa3f4bcdd9cdec37d883c240029c50edd09ba7aa3373b2b21a293880b4d06"
     },
     {
       "path": "js/core/store/visual-studio-global-runtime.js",
@@ -36812,8 +36812,8 @@
     {
       "path": "tests/login/canonical-profile-recovery.test.mjs",
       "extension": ".mjs",
-      "bytes": 1393,
-      "sha256": "b6e4a597a99f29feb495784b55f10494629cf4145b77943a8141a6c58f96788e"
+      "bytes": 2196,
+      "sha256": "55b966e3ac37ae45f8560dd300ef87755f1e4ed00c710e562ae68b5e0e6d0ab3"
     },
     {
       "path": "tests/login/location-picker.test.mjs",
@@ -40305,7 +40305,7 @@
           },
           {
             "file": "js/core/store/perfil-usuario.js",
-            "line": 144,
+            "line": 147,
             "operation": "doc"
           },
           {
