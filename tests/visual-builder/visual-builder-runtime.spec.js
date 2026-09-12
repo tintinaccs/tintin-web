@@ -183,7 +183,7 @@ test('la variante "Dividido" arma 2 columnas con imagen y no deja una columna va
       config: {
         sections: { hero: {} },
         customBlocks: [
-          { id: 'split-with-image', type: 'banner', afterSection: 'hero', title: 'Con imagen', image: 'https://res.cloudinary.com/demo/image/upload/sample.jpg', style: { variant: 'split' } },
+          { id: 'split-with-image', type: 'section', afterSection: 'hero', title: 'Con imagen', image: 'https://res.cloudinary.com/demo/image/upload/sample.jpg', style: { variant: 'split' } },
           { id: 'split-no-image', type: 'promotion', afterSection: 'hero', title: 'Sin imagen', style: { variant: 'split' } },
         ],
       },

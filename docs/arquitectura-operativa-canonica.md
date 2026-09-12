@@ -4,19 +4,22 @@ Este documento define una sola autoridad por responsabilidad. Si un servicio con
 
 ## Autoridades
 
-| Dominio | Autoridad | Rol |
-| --- | --- | --- |
-| Código y revisiones | GitHub `tintinaccs/tintin-web` | Fuente del código, PR y CI |
-| Gate de PR | `.github/workflows/auditar-tintin.yml` | Único workflow GitHub disparado por PR; mantiene el check requerido `Repository audit` |
-| Web y `/api/*` | Cloudflare Pages + Pages Functions | Entrega web y backend edge canónico |
-| Origen público | `config/public-site.json` | Host público, Auth domain y cutover |
-| Firebase | proyecto `tintin-accesorios` | Auth, Firestore, App Check y FCM; no Hosting ni Functions activos |
-| Reglas Firestore | `firestore.rules` + `firebase.json` | Autorización de datos |
-| Sheets / Apps Script | `cloudflare/sheets-sync-config.js` | Espejo/sincronización operativa; nunca autoridad del storefront |
-| Correo | Resend desde backend | Envío server-side; secretos fuera del frontend |
-| Multimedia | Cloudinary mediante endpoints firmados | Almacenamiento/media; secretos server-side |
-| Pagos | PayPal mediante Pages Functions | Creación/captura server-side |
-| Backups Firestore | `backup-firestore.yml` | Export programado y restauración explícita |
+| Dominio | Autoridad | Rol | Responsable | Estado verificado |
+| --- | --- | --- | --- | --- |
+| Código y revisiones | GitHub `tintinaccs/tintin-web` | Fuente del código, PR y CI | Propietaria de Tintin (repo) | 🟢 Verificado — `main` y rama de trabajo sincronizadas, gate de PR activo |
+| Gate de PR | `.github/workflows/auditar-tintin.yml` | Único workflow GitHub disparado por PR; mantiene el check requerido `Repository audit` | CI (automatizado) | 🟢 Verificado — `npm run audit:final` en verde, 0 fallas |
+| Web y `/api/*` | Cloudflare Pages + Pages Functions | Entrega web y backend edge canónico | Propietaria de Tintin (panel Cloudflare) | 🟢 Verificado en producción — `curl` directo a `https://tintinaccesorios.pages.dev/` confirma CSP con hashes `sha256-` por script, HSTS, COOP, `X-Tintin-CSP: edge-runtime`; assets versionados idénticos a la rama local |
+| Origen público | `config/public-site.json` | Host público, Auth domain y cutover | Propietaria de Tintin | 🟢 Verificado |
+| Firebase | proyecto `tintin-accesorios` | Auth, Firestore, App Check y FCM; no Hosting ni Functions activos | Propietaria de Tintin (consola Firebase) | 🟢 Config verificada en producción — `GET /api/health` confirma `FIREBASE_SERVICE_ACCOUNT_KEY` presente y runtime admin operativo. 🟡 Sesión interactiva (Google, email/password, onboarding, carrito, logout) no ejecutable desde este entorno: Chromium no logra conectar por el proxy del sandbox. Requiere prueba manual de la propietaria o ejecución en un runner sin esa restricción (workflow `diagnostico-maestro.yml`, job `production`/`commerce`) |
+| Reglas Firestore | `firestore.rules` + `firebase.json` | Autorización de datos | Propietaria de Tintin | 🟢 Verificado — respaldo probado (PITR 7 días + diario 30 días + semanal 84 días; restauración validada 2026-08-08) |
+| Sheets / Apps Script | `cloudflare/sheets-sync-config.js` | Espejo/sincronización operativa; nunca autoridad del storefront | Propietaria de Tintin (Cloudflare env vars + Apps Script) | 🟡 Código preparado: sin `SHEETS_ENGAGEMENT_SECRET` responde `deferred:true` (no falsea éxito) y encola reintento con backoff. `sameSecret()` falla igual (cerrado) con secreto ausente o incorrecto: su presencia y coincidencia exacta entre Cloudflare y Apps Script no son verificables desde este entorno sin credenciales de ambos paneles. Sincronización real de products/orders/users/engagement no probable sin ese secreto |
+| Correo | Resend desde backend | Envío server-side; secretos fuera del frontend | Propietaria de Tintin (Cloudflare env vars) | 🟢 Verificado en producción — `GET /api/health` confirma `RESEND_API_KEY` presente y funcional; código valida error explícito 500 y cola `orderEmailQueue` para fallos parciales |
+| Multimedia | Cloudinary mediante endpoints firmados | Almacenamiento/media; secretos server-side | Propietaria de Tintin (Cloudflare env vars) | 🟢 Verificado en producción — `GET /api/health` confirma `CLOUDINARY_CLOUD_NAME/API_KEY/API_SECRET` presentes y funcionales; firma de subida/borrado restringida por prefijo en el código |
+| Pagos | PayPal mediante Pages Functions | Creación/captura server-side | Propietaria de Tintin (Cloudflare env vars + cuenta PayPal) | 🟢 Config verificada en producción — `GET /api/paypal-config` responde `enabled:true`, sandbox, `unavailableReasons` vacío, tasa actualizada; nunca expone el client secret. 🟡 Ciclo completo crear+capturar+verificar webhook (`functions/api/paypal-webhook.js`, valida firma vía `/v1/notifications/verify-webhook-signature` de PayPal) requiere una orden real con sesión Firebase autenticada; no ejecutable sin esa sesión desde este entorno |
+| Analítica (GA4) | `settings/general.ga4MeasurementId` (Firestore) vía `js/analytics/analitica.js` | Carga condicionada a consentimiento y App Check | Propietaria de Tintin (Firestore) | 🟡 Código verificado — el measurement ID no está hardcodeado en el HTML/JS público (se lee de Firestore recién tras consentimiento + App Check listo); lectura en vivo del valor de `settings/general` no ejecutable desde este entorno sin credenciales/App Check |
+| Backups Firestore | `backup-firestore.yml` | Export programado y restauración explícita | CI (automatizado) + Propietaria de Tintin | 🟢 Verificado — 960/960 documentos restaurados en prueba aislada `restauracion-prueba` (2026-08-08); copia externa cifrada en proveedor independiente pendiente |
+
+Esta columna se actualiza en cada auditoría integral (última: 2026-09-11, con verificación directa contra `https://tintinaccesorios.pages.dev`). Leyenda: 🟢 verde = funciona en producción con evidencia directa (respuesta HTTP real, código leído y consistente); 🟡 amarillo = código preparado y seguro pero un dato externo (secreto, configuración, sesión interactiva) no es verificable desde este entorno; 🔴 rojo = falla reproducible. Ningún estado se basa solo en auditorías locales o suposiciones.
 
 ## GitHub Actions desfragmentado
 

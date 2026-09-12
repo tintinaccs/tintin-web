@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "2c9c47b835a444fcbdd7404ef79073ecb2e22c1bfe831050398315f1e9589353",
+  "sourceFingerprint": "b034a6e22603cff036b1b996189eff7c65e211270819678b05709f526c2bdd07",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 810,
     "textFiles": 773,
-    "totalBytes": 16212344,
+    "totalBytes": 16220046,
     "pages": 18,
     "modules": 552
   },
@@ -15851,8 +15851,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24519,
-      "sha256": "b665a4153e171627ff23b0e7f789f2f86e3b7c109b695513de71713dfc920be7",
+      "bytes": 24520,
+      "sha256": "0ec5bd1f11a590b0968fde1af4122f37b6c9447c1655f087e8f7ce9c05789ce0",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16028,8 +16028,8 @@
           "line": 56
         },
         {
-          "raw": "css/pages/product/reviews-cards-polish.css?v=tintin-20260902-product-review-cards-1",
-          "target": "css/pages/product/reviews-cards-polish.css",
+          "raw": "css/pages/product/reviews-cards-refined.css?v=tintin-20260902-product-review-cards-1",
+          "target": "css/pages/product/reviews-cards-refined.css",
           "line": 57
         },
         {
@@ -16467,8 +16467,8 @@
           "exists": true
         },
         {
-          "raw": "css/pages/product/reviews-cards-polish.css?v=tintin-20260902-product-review-cards-1",
-          "target": "css/pages/product/reviews-cards-polish.css",
+          "raw": "css/pages/product/reviews-cards-refined.css?v=tintin-20260902-product-review-cards-1",
+          "target": "css/pages/product/reviews-cards-refined.css",
           "line": 57,
           "exists": true
         },
@@ -31895,8 +31895,8 @@
     },
     {
       "path": "tests/visual-builder/visual-builder-runtime.spec.js",
-      "bytes": 12193,
-      "sha256": "b03b439faadba806b95dd06ac8bd3d44a3f878014567c0af715ad11fa20866ae",
+      "bytes": 12194,
+      "sha256": "563eb82318b1871f0db98658b2633da584fe4e8bae59a535d588e1785c1d0ee5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33055,7 +33055,7 @@
       "sha256": "74888904388d50de9dd9805bb005f2be206ca96ef8656e44815f51ac03cee67f"
     },
     {
-      "path": "css/pages/product/reviews-cards-polish.css",
+      "path": "css/pages/product/reviews-cards-refined.css",
       "extension": ".css",
       "bytes": 818,
       "sha256": "8c1c7731c80ca874c23350df9c0de2ff9580484ccc9d1c7542dd84bfb9b7dc1b"
@@ -33165,8 +33165,8 @@
     {
       "path": "docs/arquitectura-operativa-canonica.md",
       "extension": ".md",
-      "bytes": 5078,
-      "sha256": "65de6dab0a44946201247562fae7da4ab724138afc00975c49193f5a32ade78b"
+      "bytes": 8941,
+      "sha256": "75ab42db95f8eea5449b4c56b052f3e3f2bf4e96f5c68f9ebcf8e6e56c19131e"
     },
     {
       "path": "docs/arquitectura-tecnica.md",
@@ -33207,8 +33207,8 @@
     {
       "path": "docs/cierre-produccion-manual.md",
       "extension": ".md",
-      "bytes": 1551,
-      "sha256": "3572af62ea196f2eb8e350891289b872600b24bec0f5ab5a17dec97bddfdeacf"
+      "bytes": 5387,
+      "sha256": "46c428aa65f728d400e906a4f5cad2d49bf1b34076bcec7ccd5a046481bd94f1"
     },
     {
       "path": "docs/como-hacer-cambios.md",
@@ -35493,8 +35493,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 24519,
-      "sha256": "b665a4153e171627ff23b0e7f789f2f86e3b7c109b695513de71713dfc920be7"
+      "bytes": 24520,
+      "sha256": "0ec5bd1f11a590b0968fde1af4122f37b6c9447c1655f087e8f7ce9c05789ce0"
     },
     {
       "path": "robots.txt",
@@ -36285,8 +36285,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 38255,
-      "sha256": "d4245d4ecce2877a8261b5aad24b5d21d515ffaaaff1ead6bad8d8a03e473361"
+      "bytes": 38256,
+      "sha256": "ec3d92b5b6e822f98155e3ae124fdaec6cab37ffc8295479ab95f2afe5468c2c"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -36945,8 +36945,8 @@
     {
       "path": "tests/visual-builder/visual-builder-runtime.spec.js",
       "extension": ".js",
-      "bytes": 12193,
-      "sha256": "b03b439faadba806b95dd06ac8bd3d44a3f878014567c0af715ad11fa20866ae"
+      "bytes": 12194,
+      "sha256": "563eb82318b1871f0db98658b2633da584fe4e8bae59a535d588e1785c1d0ee5"
     },
     {
       "path": "tests/visual-builder/visual-builder-safe-zones.test.mjs",
