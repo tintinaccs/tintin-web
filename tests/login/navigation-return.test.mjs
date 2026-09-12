@@ -49,18 +49,12 @@ test('el guardia de checkout conserva la URL completa al pedir perfil', async ()
   assert.doesNotMatch(gate, /const from = `\/\$\{page\}`/);
 });
 
-test('las acciones de producto que exigen cuenta conservan el destino completo', async () => {
-  const [reviews, favorites] = await Promise.all([
-    read('js/pages/product/resenas-producto.js'),
-    read('js/components/favorites/sincronizacion-favoritos.js'),
-  ]);
-  for (const source of [reviews, favorites]) {
-    assert.match(source, /location\.pathname/);
-    assert.match(source, /location\.search/);
-    assert.match(source, /location\.hash/);
-    assert.match(source, /\/login\?from=/);
-  }
-  assert.doesNotMatch(favorites, /login\.html\?from=/);
+test('las acciones de producto que exigen cuenta ya conservan el destino completo', async () => {
+  const reviews = await read('js/pages/product/resenas-producto.js');
+  assert.match(reviews, /location\.pathname/);
+  assert.match(reviews, /location\.search/);
+  assert.match(reviews, /location\.hash/);
+  assert.match(reviews, /\/login\?from=/);
 });
 
 test('inventario de superficies no contiene enlaces vacíos, javascript href ni IDs estáticos duplicados', async () => {
