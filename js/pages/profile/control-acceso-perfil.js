@@ -22,7 +22,7 @@
 import { auth, db } from "../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1";
 import { subscribeAuthState } from "../../core/auth/coordinador-sesion.js?v=tintin-20260910-session-coordinator-1";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20260906-profile-complete-1";
+import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20260912-post-login-profile-1";
 import { SUPER_ADMIN } from "../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-3";
 
 // Evita releer el perfil en cada navegación de la misma sesión. Se guarda el

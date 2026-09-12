@@ -91,7 +91,7 @@
     "test:rules-username": "firebase emulators:exec --only firestore --project demo-tintin-username \"node scripts/probar-firestore-username-unico.mjs\"",
     "test:rules-critical": "firebase emulators:exec --only firestore --project demo-tintin-critical \"node scripts/probar-firestore-critico.mjs\"",
     "audit:login-isolation": "node scripts/auditar-acceso-aislamiento.js",
-    "audit:login-profile": "node scripts/auditar-acceso-perfil-incorporacion.js && node --test tests/login/profile-onboarding.test.mjs",
+    "audit:login-profile": "node scripts/auditar-acceso-perfil-incorporacion.js && node --test tests/login/*.test.mjs",
     "audit:hero-background-controls": "node scripts/auditar-hero-fondo-controles.js",
     "audit:storegate-deadlock": "node scripts/auditar-control-tienda-bloqueo.js",
     "audit:app-check-bootstrap": "node scripts/auditar-app-check-arranque.js",
