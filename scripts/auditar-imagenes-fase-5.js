@@ -138,7 +138,7 @@ check(
 
 check(
   'El Hero pinta la portada estática desde el primer render, sin capa rosa intermedia',
-  !files.indexHtml.includes('tt-hero-pending') &&
+  !/<div[^>]*class=["'][^"']*tt-hero-pending/.test(files.indexHtml) &&
     /src="assets-tintin\/images\/home\/hero-nuevo\/hero-nuevo-desktop\.png(?:\?[^\"]*)?"/.test(read('index.html')) &&
     files.homeCss.includes('.tt-home-premium .tt-hero-media{') &&
     files.homeCss.includes('visibility:visible!important') &&

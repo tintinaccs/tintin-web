@@ -433,11 +433,20 @@
   // esperando más de lo que el propio hero está dispuesto a esperar.
   var HERO_WAIT_CEILING_MS = 0;
 
+  // El HTML ya entrega la imagen aprobada en el primer render. Esta función
+  // conserva el contrato del loader para el caso de una imagen dinámica, sin
+  // introducir una clase de espera ni una composición intermedia en Inicio.
+  function heroReady() {
+    var media = document.getElementById('tt-hero-media');
+    if (!media) return true;
+    return !media.classList.contains('tt-hero-pending');
+  }
+
   function waitForHeroImageThenRelease() {
     if (heroWaitStart === null) heroWaitStart = Date.now();
     // La imagen del hero ya tiene espacio reservado por CSS. Mostrar la
     // estructura no debe quedar pendiente de una descarga de 1.5 MB.
-    window.ttPageReady && window.ttPageReady();
+    if (heroReady()) window.ttPageReady && window.ttPageReady();
   }
 
   function releaseHomeWhenStructurallyReady() {
