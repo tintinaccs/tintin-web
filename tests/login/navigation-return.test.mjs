@@ -7,7 +7,6 @@ import path from 'node:path';
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const read = relativePath => readFile(path.join(repoRoot, relativePath), 'utf8');
 
-// Regresión integral: este archivo cubre los contratos de retorno y el inventario UX del cierre final.
 async function listFilesRecursive(directory, extensions) {
   const output = [];
   async function walk(current) {
