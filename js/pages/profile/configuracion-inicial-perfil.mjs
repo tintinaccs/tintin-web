@@ -72,8 +72,18 @@ export function splitFullName(value) {
 export function readProfileName(profile = {}) {
   const first = clean(profile.firstName || profile.first_name || profile.nombre);
   const last = clean(profile.lastName || profile.last_name || profile.apellido);
-  if (first || last) return { firstName: first, lastName: last };
-  return splitFullName(profile.name || profile.fullName || profile.nombreCompleto);
+  const historical = splitFullName(profile.name || profile.fullName || profile.nombreCompleto);
+
+  // Perfiles migrados parcialmente pueden tener sólo uno de los campos
+  // separados y conservar el nombre completo histórico. No descartamos ese
+  // dato válido: completamos únicamente el lado que falta desde `name`.
+  if (first || last) {
+    return {
+      firstName: first || historical.firstName,
+      lastName: last || historical.lastName,
+    };
+  }
+  return historical;
 }
 
 /**
