@@ -16,14 +16,18 @@ export function loadPageMaintenance() {
   if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js');
   if (/\/checkout(?:\.html)?$/.test(path)) {
     const version = 'tintin-20260907-checkout-shipping-step-1';
+    const stateVersion = 'tintin-20260912-checkout-state-navigation-1';
     return Promise.allSettled([
       load('pages/checkout/checkout-hardening.js', version),
       load('pages/checkout/checkout-mantenimiento.js', version),
       load('pages/checkout/checkout-metodos-pago.js', version),
-      load('pages/checkout/checkout-control-cuota.js', version)
+      load('pages/checkout/checkout-control-cuota.js', version),
+      load('pages/checkout/estado-navegacion-checkout.js', stateVersion)
     ]);
   }
-  if (/\/login(?:\.html)?$/.test(path)) return load('pages/login/mantenimiento-acceso.js');
+  if (/\/login(?:\.html)?$/.test(path)) {
+    return load('pages/login/mantenimiento-acceso.js', 'tintin-20260912-login-profile-recovery-1');
+  }
   if (/\/perfil(?:\.html)?$/.test(path)) return load('pages/profile/mantenimiento-perfil.js', 'tintin-20260908-profile-canonical-2');
   if (/\/(?:about|nosotros)(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-nosotros.js');
   if (/\/contact(?:\.html)?$/.test(path)) return load('pages/institutional/mantenimiento-contacto.js');
