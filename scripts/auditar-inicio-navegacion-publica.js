@@ -95,7 +95,11 @@ check(
     || runtime.includes("import('./control-busqueda.js?v="),
   'runtime: falta el control modular de búsqueda'
 );
-check(runtime.includes("import(versionedJsModule('core/auth/navegacion-autenticacion.js'))"), 'runtime: falta cuenta compartida');
+check(
+  runtime.includes("import(versionedJsModule('core/auth/navegacion-autenticacion.js'))")
+    || /import\(['"]\.\.\/\.\.\/\.\.\/core\/auth\/navegacion-autenticacion\.js\?v=[^'"]+['"]\)/.test(runtime),
+  'runtime: falta cuenta compartida'
+);
 check(runtime.includes("import(versionedJsModule('components/cart/sincronizacion-carrito.js'))"), 'runtime: falta sincronización del carrito');
 
 const controllerBootstrap = read('js/components/navigation/compatibilidad/inicio-control-paneles.js');
