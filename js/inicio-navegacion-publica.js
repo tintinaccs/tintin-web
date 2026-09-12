@@ -6,7 +6,7 @@
   if (window.TintinPublicShellBootstrapStarted) return;
   window.TintinPublicShellBootstrapStarted = true;
 
-  const ENTRY_VERSION = 'tintin-20260912-login-checkout-e2e-5';
+  const ENTRY_VERSION = 'tintin-20260912-auth-closure-7';
   const BARRIER_VERSION = 'tintin-20260816-loader-shell-atomic-1';
   const scriptUrl = document.currentScript?.src
     || new URL('js/inicio-navegacion-publica.js', window.location.href).href;

@@ -36,7 +36,8 @@ export function getRegisteredMethod(profileData) {
 }
 
 /**
- * Crea el perfil la primera vez, o sólo refresca lastLogin las siguientes.
+ * Crea el perfil la primera vez, o sincroniza de forma confirmada los datos
+ * canónicos de identidad en los ingresos siguientes.
  *
  * Nunca pisa datos ya guardados (nombre, teléfono, dirección, rol, bloqueo):
  * un login no es el lugar donde se editan. Google y PIN son métodos de acceso
@@ -122,8 +123,14 @@ export async function ensureUserProfile(db, user, method) {
     identityPatch.identityVersion = ACCOUNT_CONTRACT.identityVersion;
     identityPatch.profileStatus = 'legacy';
   }
-  setDoc(ref, identityPatch, { merge: true })
-    .catch(error => console.warn('[user-profile] No se pudo actualizar lastLogin:', error));
+
+  // Este write forma parte del contrato del ingreso: no se navega a otra
+  // pantalla antes de que Firestore confirme el método de acceso, lastLogin y,
+  // cuando corresponde, el bootstrap de identidad legacy. Antes se lanzaba
+  // fire-and-forget; un login podía considerarse terminado mientras este write
+  // seguía pendiente (o fallaba sólo en consola), dejando Auth y Firestore en
+  // estados distintos para la siguiente ruta.
+  await setDoc(ref, identityPatch, { merge: true });
 
   const role = data.role || 'client';
   const welcomePending = role === 'client' && !data.welcomeTutorialSeen && data.onboardingCompleted !== true;

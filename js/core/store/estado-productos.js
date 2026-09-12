@@ -1,4 +1,4 @@
-import '../../cargador-mantenimiento-pagina.js?v=tintin-20260912-login-checkout-maintenance-1';
+import '../../cargador-mantenimiento-pagina.js?v=tintin-20260912-auth-closure-3';
 import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import { sanitizeImageUrl, uniqueSafeImageUrls } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { cleanText, cleanMultilineText, sanitizeVariantData } from '../auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1';
