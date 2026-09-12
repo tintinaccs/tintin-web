@@ -214,6 +214,10 @@ function mountPublicShell() {
   document.body.classList.add('tt-public-shell-mounting');
   window.TintinLoader?.beginWait?.();
 
+  // Producto y catálogo tienen una dependencia de datos crítica propia. Se
+  // inicia antes del montaje visual del shell para que una demora de logo,
+  // configuración o paneles no deje la ficha detrás del loader indefinido.
+  // `loadSharedRuntime()` reutiliza la misma promesa y no duplica lecturas.
   const pageDataPromise = currentPage() === 'shop'
     ? loadProductsRuntime().catch(error => {
       console.warn('[PublicShell] No se pudo iniciar el catálogo crítico.', error);
@@ -235,6 +239,9 @@ function mountPublicShell() {
     document.body.insertAdjacentHTML('afterbegin', renderTopShell());
     document.body.insertAdjacentHTML('beforeend', renderBottomShell());
     attachCollectionVisualFallback();
+    // Es una capa liviana de accesibilidad e interacción, compartida por
+    // todas las rutas. Mantenerla en el shell permite que las páginas
+    // institucionales sigan siendo ligeras sin perder sus mismos estados UI.
     bootGlobalUiUx();
     await hydrateSharedLogos();
 
