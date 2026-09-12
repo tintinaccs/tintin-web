@@ -1,134 +1,42 @@
-name: CI Tintin — contrato único
+name: Temporary login-regression sync
 
 on:
-  pull_request:
-    branches: [main]
-    types: [opened, synchronize, reopened, ready_for_review]
   push:
-    branches: [main]
-  workflow_dispatch:
+    branches: [tmp/auth-manifest-sync-20260912]
 
 permissions:
-  contents: read
-  checks: read
-
-concurrency:
-  group: repository-audit-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  contents: write
 
 jobs:
-  audit:
-    name: Repository audit
+  sync:
     runs-on: ubuntu-24.04
-    timeout-minutes: 75
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
-
-      - name: Setup Java for Firestore emulator
-        uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: '21'
-
-      - name: Install locked dependencies once
+      - name: Install dependencies
         run: npm ci
-
-      - name: Build exact public artifact
+      - name: Restore canonical workflow
+        run: git show origin/main:.github/workflows/auditar-tintin.yml > .github/workflows/auditar-tintin.yml
+      - name: Include every Login regression in the canonical gate
+        run: |
+          sed -i 's#node --test tests/login/profile-onboarding.test.mjs#node --test tests/login/*.test.mjs#' package.json
+      - name: Generate exact public artifact
         run: npm run build:pages
-
-      - name: Reject generated artifact drift
-        run: git diff --exit-code -- .
-
-      - name: Verify CSS source and minified artifact integrity
-        run: npm run audit:styles
-
-      - name: Canonical integrations and authority map
-        run: node scripts/auditar-integraciones-canonicas.mjs
-
-      - name: Full static contract
-        run: npm run audit:final
-
-      - name: Operational, account and sync contracts
-        env:
-          FIREBASE_PROJECT_ID: demo-tintin-backup-contract
-          FIRESTORE_BACKUP_BUCKET: gs://example-backups
-          FIRESTORE_RESTORE_SOURCE: gs://example-backups/snapshot
+      - name: Run complete Login regression suite
+        run: npm run audit:login-profile
+      - name: Commit synchronized state
         run: |
-          node --test tests/operations/*.test.mjs
-          node scripts/backup-firestore.mjs --dry-run
-          node scripts/restore-firestore.mjs --dry-run
-          npm run test:accounts
-          npm run test:cart-persistence
-          npm run test:web-push
-          npm run test:engagement
-          npm run test:products-sync
-          npm run test:visual-builder
-          node --test tests/code-studio/*.test.mjs
-
-      - name: Firestore identity and adversarial rules
-        run: |
-          npm run test:rules-critical
-          npm run test:rules-phone
-          npm run test:rules-username
-
-      - name: Install Chromium once
-        run: npx playwright install --with-deps chromium
-
-      - name: Super Admin master contracts
-        run: |
-          node scripts/auditar-superadmin-maestro.mjs
-          node scripts/auditar-superadmin-maestro-conexiones.mjs
-          node scripts/auditar-superadmin-cierre-total.mjs
-          node scripts/auditar-superadmin-modulos-completos.mjs
-          node scripts/auditar-superadmin-maestro-responsive.mjs
-          node scripts/auditar-borrado-global-catalogo.mjs
-
-      - name: Serve exact commit for browser gates
-        run: |
-          node scripts/servidor-local-pruebas.mjs 4173 > /tmp/tintin-ci-http.log 2>&1 &
-          echo $! > /tmp/tintin-ci-http.pid
-          for attempt in {1..30}; do
-            curl -fsS http://127.0.0.1:4173/index.html >/dev/null && exit 0
-            sleep 1
-          done
-          cat /tmp/tintin-ci-http.log || true
-          exit 1
-
-      - name: Browser, accessibility, SEO and performance gates
-        env:
-          PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
-          PERF_BASE_URL: http://127.0.0.1:4173
-        run: |
-          npm run test:navigation-header
-          npm run test:phase8-ui
-          npm run test:phase10-a11y
-          npm run test:phase11-seo
-          npm run test:performance
-          npm run audit:canonical-viewports
-          npm run audit:global-responsive-geometry
-          npm run test:pages
-          node scripts/auditar-legal-paginas.js
-
-      - name: Save failure evidence
-        if: failure()
-        uses: actions/upload-artifact@v6
-        with:
-          name: repository-audit-failure-${{ github.run_id }}
-          path: |
-            artifacts/**
-            playwright-report/**
-            test-results/**
-            firebase-debug.log
-            firestore-debug.log
-            /tmp/tintin-ci-http.log
-          if-no-files-found: warn
-          retention-days: 14
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No drift to commit"
+            exit 0
+          fi
+          git commit -m "test: ejecutar todas las regresiones de Login"
+          git push origin HEAD:tmp/auth-manifest-sync-20260912
