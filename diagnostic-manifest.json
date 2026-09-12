@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "bbac02d1a965a6b6679a9e5256b015115380506dbe937be711a8bafe345910d0",
+  "sourceFingerprint": "26fc0c564597db1401f9fd60e24e39826e2069aaf6451041ed6bd7fb7e8fed1e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 814,
-    "textFiles": 777,
-    "totalBytes": 16248235,
+    "files": 815,
+    "textFiles": 778,
+    "totalBytes": 16251344,
     "pages": 18,
-    "modules": 556
+    "modules": 557
   },
   "viewports": [
     {
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 11857,
-      "sha256": "822308dc3f258e2a75b77756d7560a0c6ca6b8ec6c3845de16b58ca55bfda319",
+      "bytes": 11861,
+      "sha256": "5c5f7b677d27c3aa409fbc1dee0b5306ada653685aed9d10efda10b7ddd7d96e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -129,7 +129,7 @@
           "line": 173
         },
         {
-          "raw": "/js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "/js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 174
         },
@@ -536,7 +536,7 @@
           "exists": true
         },
         {
-          "raw": "/js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "/js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 174,
           "exists": true
@@ -791,8 +791,8 @@
         "guest",
         "client"
       ],
-      "bytes": 21505,
-      "sha256": "89bec5b0871d10b617b06682bfdbd0dab7318fd7fc279ec70b84b43a47c682a2",
+      "bytes": 21509,
+      "sha256": "8e9eb099549cf5a1e7cd4806c5f6a36290405e608937ea96bb862cfda903a435",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -857,7 +857,7 @@
           "line": 265
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 266
         },
@@ -1258,7 +1258,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 266,
           "exists": true
@@ -1521,8 +1521,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 41005,
-      "sha256": "ae8c3cbfee0a19097de5c3807c408add7619d636463d2b4389574753c3aa702c",
+      "bytes": 41009,
+      "sha256": "76a295a9394c9d4fa3091fcda9a2b71fa15849ae566e316f514c1db6fb7f73a1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1567,7 +1567,7 @@
           "line": 752
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 753
         }
@@ -1682,7 +1682,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 753,
           "exists": true
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 190786,
-      "sha256": "d649292ff144e9cff1e92706c2f8933d2f3ddd6e1c331126a353212c0eae2002",
+      "bytes": 190790,
+      "sha256": "be87d9d306272df3de59db1200933b9e8ddcc328e3c482712df02fcfdfb7c877",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2144,7 +2144,7 @@
           "line": 2218
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 2219
         },
@@ -2394,7 +2394,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 2219,
           "exists": true
@@ -7638,8 +7638,8 @@
         "guest",
         "client"
       ],
-      "bytes": 12986,
-      "sha256": "f784df3b520be2d84f193fcf0280a898565b221fd73aec846aafc059c681f513",
+      "bytes": 12990,
+      "sha256": "41d0bed4507d3bce535c0d88dafa7837de440dfc05427e3550395ea3d812f628",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7698,7 +7698,7 @@
           "line": 174
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 175
         },
@@ -8041,7 +8041,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 175,
           "exists": true
@@ -8254,8 +8254,8 @@
         "guest",
         "client"
       ],
-      "bytes": 52842,
-      "sha256": "df0c358b1faea69d1fd16f97e87eb48e94682ea10c66d8063ee39dc882561641",
+      "bytes": 52846,
+      "sha256": "30ee174ab4898dc66d3ded4858bf0101de0ba6d0e25d119f3daaa3f76d170410",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8336,7 +8336,7 @@
           "line": 985
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 986
         },
@@ -8671,7 +8671,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 986,
           "exists": true
@@ -8998,8 +8998,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 115184,
-      "sha256": "664fd5c28432439ec96aefe3475bfb6fd8798d103cb90f9e7bef5511bf7b1712",
+      "bytes": 115188,
+      "sha256": "c91c9985f578fbc09e0ba7d3b2b11ec1e0d495b871d185900f2671522fa227ad",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9054,7 +9054,7 @@
           "line": 1948
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 1949
         },
@@ -9405,7 +9405,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 1949,
           "exists": true
@@ -9982,8 +9982,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14638,
-      "sha256": "0c6dde79def1e0a99a0d405db2ff41ea422855cfea36444570086a0f2a4d243e",
+      "bytes": 14642,
+      "sha256": "37a0c287cd91d77dbbeca4e9e78390f309d2cbb0b41d93686a755ee9b3ed6b80",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10053,7 +10053,7 @@
           "line": 195
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 196
         },
@@ -10412,7 +10412,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 196,
           "exists": true
@@ -10631,8 +10631,8 @@
         "guest",
         "client"
       ],
-      "bytes": 19170,
-      "sha256": "e59f2c0be29664de931f8873d8a385f9574b01e79f5782feb3ed40c00a11f4bc",
+      "bytes": 19174,
+      "sha256": "d7e05f6f6240b0e03100211ffd7d1e0400d5b7d5648e77a6299441e066c2d4de",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10697,7 +10697,7 @@
           "line": 246
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 247
         },
@@ -11080,7 +11080,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 247,
           "exists": true
@@ -11353,8 +11353,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16368,
-      "sha256": "eb7eb6628d61cf6f63f07729d106724e97b15af6460873bfe599f8bd6b0984f4",
+      "bytes": 16372,
+      "sha256": "987852adfb5f184b5b6cb2299109790016aa048aeca2565c290d15d72b66ab66",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11419,7 +11419,7 @@
           "line": 181
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 182
         },
@@ -11762,7 +11762,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 182,
           "exists": true
@@ -11975,8 +11975,8 @@
         "guest",
         "client"
       ],
-      "bytes": 36477,
-      "sha256": "7aa3ee1fff9fce23bbcb82487c78f83032deab3f372536f6ae8c407a9d13b07e",
+      "bytes": 36481,
+      "sha256": "70c5d7385989806d5d815e210bdd26f93a50c186c964420266992d8caf12a1a8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12057,7 +12057,7 @@
           "line": 500
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 501
         },
@@ -12552,7 +12552,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 501,
           "exists": true
@@ -12956,8 +12956,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 69674,
-      "sha256": "b6d9c130b9a3a766cbe0c40320bbcaa5b8b40bf81d24c875826f8c2c44b3e900",
+      "bytes": 69680,
+      "sha256": "83da75fdc312c1e461713b55751501751dc5e46304dbeff94d2a9da4c956f1d7",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13759,8 +13759,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 45155,
-      "sha256": "c15f8794657c62702df8cb68675728156c3ba7563ff7e4f83434992551fd9e53",
+      "bytes": 45161,
+      "sha256": "722278452e2129b4a164a88e3da44bb24c64845f125122543bf8e0cc82a982aa",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13846,7 +13846,7 @@
           "line": 773
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 774
         },
@@ -14237,7 +14237,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 774,
           "exists": true
@@ -14577,8 +14577,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14159,
-      "sha256": "90a71f6ed591c2bf205c4372b496230c828e7da7abfb3568032c47cfb11b179a",
+      "bytes": 14163,
+      "sha256": "fe4339a46813d902fe4509212891cc615ef1932cd1513b18c495d8d174c0f389",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14637,7 +14637,7 @@
           "line": 199
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 200
         },
@@ -14980,7 +14980,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 200,
           "exists": true
@@ -15193,8 +15193,8 @@
         "guest",
         "client"
       ],
-      "bytes": 16856,
-      "sha256": "b389e4cc1e7747f683adc269e7d01232c3e7454919255b4a2d1c8acc50b149ed",
+      "bytes": 16860,
+      "sha256": "ed17741ee2db09ee641f8c32012483ce24fae078c27782ef00e1db99987dd394",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15253,7 +15253,7 @@
           "line": 212
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 213
         },
@@ -15621,7 +15621,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 213,
           "exists": true
@@ -15845,8 +15845,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24494,
-      "sha256": "d296e646dfa213e72e55ff19f7a97721426b863714e932fad74059ca3e300d99",
+      "bytes": 24498,
+      "sha256": "4fc1b08637cedb731e3b4bb9570f07109fbaccb24e557d3dfad5f05603d311ae",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15910,7 +15910,7 @@
           "line": 347
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 348
         },
@@ -16329,7 +16329,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 348,
           "exists": true
@@ -16826,8 +16826,8 @@
         "guest",
         "client"
       ],
-      "bytes": 14650,
-      "sha256": "e744f27b73ada14575a8a7b0fbed3da29c75871ae49c17f87ced5f88f91d4101",
+      "bytes": 14654,
+      "sha256": "01c75859e93bc2f690db799b0c05099435e15115c9bdbf41dd7df5cd5985afda",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16879,7 +16879,7 @@
           "line": 193
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 194
         },
@@ -17257,7 +17257,7 @@
           "exists": true
         },
         {
-          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260906-no-auto-logout-3",
+          "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
           "line": 194,
           "exists": true
@@ -18163,7 +18163,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 344630,
-      "sha256": "b618f3b6e9b9a1c377f27b0f04d57e9246097e8f7f150f886ca0bf9fc09340d2",
+      "sha256": "4d9b277a1d0ff2a99ce668dda53dbceb73e3a2f07b77cb58f02aa4a3715606c5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23315,15 +23315,15 @@
     },
     {
       "path": "js/core/auth/proteccion-sesion.js",
-      "bytes": 746,
-      "sha256": "b91eadfdea2e831b4394b0e7aec2b170035f1613808726521be409c6be8110a5",
+      "bytes": 748,
+      "sha256": "22ebc7c491454aef2ba59a7d9106ebeaa8dd551f3768a00842dcf4803a10eae0",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../pages/profile/control-acceso-perfil.js?v=tintin-20260906-profile-complete-2",
+          "raw": "../../pages/profile/control-acceso-perfil.js?v=tintin-20260912-post-login-profile-2",
           "target": "js/pages/profile/control-acceso-perfil.js",
           "dynamic": false,
           "line": 12
@@ -25132,8 +25132,8 @@
     },
     {
       "path": "js/pages/profile/configuracion-inicial-perfil.mjs",
-      "bytes": 16405,
-      "sha256": "3e678782d36347a0246cb93c77147aa4e21a059d5c770abfb406f13f9ed7652d",
+      "bytes": 16737,
+      "sha256": "12dc5c7bebd45ebd1ce7f9f2514b2bb0950ce4aa3a97fd01a53ca1a7968dbcd7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25156,8 +25156,8 @@
     },
     {
       "path": "js/pages/profile/control-acceso-perfil.js",
-      "bytes": 5896,
-      "sha256": "32409c51d71d6d8de558a5b4e4418db9a3e744dbad504afb0fa3e536d2b36587",
+      "bytes": 5898,
+      "sha256": "e01eaf39b40a204027fc1855a72d26b62e1c2c55c324b824eee3faabef6d3e0d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25182,7 +25182,7 @@
           "line": 24
         },
         {
-          "raw": "./configuracion-inicial-perfil.mjs?v=tintin-20260906-profile-complete-1",
+          "raw": "./configuracion-inicial-perfil.mjs?v=tintin-20260912-post-login-profile-1",
           "target": "js/pages/profile/configuracion-inicial-perfil.mjs",
           "dynamic": false,
           "line": 25
@@ -29358,8 +29358,8 @@
     },
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
-      "bytes": 14071,
-      "sha256": "6160ce85a96306d1bc880e1bb0964cdd55356abdd5db5d95856fa0b3ebd2141d",
+      "bytes": 14077,
+      "sha256": "0859d3e067a530cca66004a0e07dee9e1e5ced2b7161b990558bc7adb05943b9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30640,6 +30640,36 @@
           "target": "js/components/forms/utilidades-telefono.js",
           "dynamic": false,
           "line": 9
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/login/post-login-profile-decision.test.mjs",
+      "bytes": 2695,
+      "sha256": "fc71d15e26bc0a6ec7fade92b45df9a27d78682c3980d09de801046319537559",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../js/pages/profile/configuracion-inicial-perfil.mjs",
+          "target": "js/pages/profile/configuracion-inicial-perfil.mjs",
+          "dynamic": false,
+          "line": 6
         }
       ],
       "endpoints": []
@@ -32330,8 +32360,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 11857,
-      "sha256": "822308dc3f258e2a75b77756d7560a0c6ca6b8ec6c3845de16b58ca55bfda319"
+      "bytes": 11861,
+      "sha256": "5c5f7b677d27c3aa409fbc1dee0b5306ada653685aed9d10efda10b7ddd7d96e"
     },
     {
       "path": "AGENTS.md",
@@ -32354,14 +32384,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 21505,
-      "sha256": "89bec5b0871d10b617b06682bfdbd0dab7318fd7fc279ec70b84b43a47c682a2"
+      "bytes": 21509,
+      "sha256": "8e9eb099549cf5a1e7cd4806c5f6a36290405e608937ea96bb862cfda903a435"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 41005,
-      "sha256": "ae8c3cbfee0a19097de5c3807c408add7619d636463d2b4389574753c3aa702c"
+      "bytes": 41009,
+      "sha256": "76a295a9394c9d4fa3091fcda9a2b71fa15849ae566e316f514c1db6fb7f73a1"
     },
     {
       "path": "admin-manifest.json",
@@ -32372,8 +32402,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 190786,
-      "sha256": "d649292ff144e9cff1e92706c2f8933d2f3ddd6e1c331126a353212c0eae2002"
+      "bytes": 190790,
+      "sha256": "be87d9d306272df3de59db1200933b9e8ddcc328e3c482712df02fcfdfb7c877"
     },
     {
       "path": "apple-touch-icon.png",
@@ -32624,20 +32654,20 @@
     {
       "path": "cambios-devoluciones.html",
       "extension": ".html",
-      "bytes": 12986,
-      "sha256": "f784df3b520be2d84f193fcf0280a898565b221fd73aec846aafc059c681f513"
+      "bytes": 12990,
+      "sha256": "41d0bed4507d3bce535c0d88dafa7837de440dfc05427e3550395ea3d812f628"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 52842,
-      "sha256": "df0c358b1faea69d1fd16f97e87eb48e94682ea10c66d8063ee39dc882561641"
+      "bytes": 52846,
+      "sha256": "30ee174ab4898dc66d3ded4858bf0101de0ba6d0e25d119f3daaa3f76d170410"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 115184,
-      "sha256": "664fd5c28432439ec96aefe3475bfb6fd8798d103cb90f9e7bef5511bf7b1712"
+      "bytes": 115188,
+      "sha256": "c91c9985f578fbc09e0ba7d3b2b11ec1e0d495b871d185900f2671522fa227ad"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -32798,8 +32828,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 14638,
-      "sha256": "0c6dde79def1e0a99a0d405db2ff41ea422855cfea36444570086a0f2a4d243e"
+      "bytes": 14642,
+      "sha256": "37a0c287cd91d77dbbeca4e9e78390f309d2cbb0b41d93686a755ee9b3ed6b80"
     },
     {
       "path": "config/account-contract.json",
@@ -32811,13 +32841,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 344630,
-      "sha256": "b618f3b6e9b9a1c377f27b0f04d57e9246097e8f7f150f886ca0bf9fc09340d2"
+      "sha256": "4d9b277a1d0ff2a99ce668dda53dbceb73e3a2f07b77cb58f02aa4a3715606c5"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 344545,
-      "sha256": "05a8e87723efb967db4de2f6cdd98e8118389d1cfa99e4faf8b64d54a0fc4d58"
+      "sha256": "749ecdaa74e0959e082bf29df5a58f73257a67a0a94944bd0ac4552044be7ac5"
     },
     {
       "path": "config/public-site.json",
@@ -32834,8 +32864,8 @@
     {
       "path": "contact.html",
       "extension": ".html",
-      "bytes": 19170,
-      "sha256": "e59f2c0be29664de931f8873d8a385f9574b01e79f5782feb3ed40c00a11f4bc"
+      "bytes": 19174,
+      "sha256": "d7e05f6f6240b0e03100211ffd7d1e0400d5b7d5648e77a6299441e066c2d4de"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -33548,8 +33578,8 @@
     {
       "path": "envios.html",
       "extension": ".html",
-      "bytes": 16368,
-      "sha256": "eb7eb6628d61cf6f63f07729d106724e97b15af6460873bfe599f8bd6b0984f4"
+      "bytes": 16372,
+      "sha256": "987852adfb5f184b5b6cb2299109790016aa048aeca2565c290d15d72b66ab66"
     },
     {
       "path": "favicon-16x16.png",
@@ -34058,8 +34088,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 36477,
-      "sha256": "7aa3ee1fff9fce23bbcb82487c78f83032deab3f372536f6ae8c407a9d13b07e"
+      "bytes": 36481,
+      "sha256": "70c5d7385989806d5d815e210bdd26f93a50c186c964420266992d8caf12a1a8"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -34814,8 +34844,8 @@
     {
       "path": "js/core/auth/proteccion-sesion.js",
       "extension": ".js",
-      "bytes": 746,
-      "sha256": "b91eadfdea2e831b4394b0e7aec2b170035f1613808726521be409c6be8110a5"
+      "bytes": 748,
+      "sha256": "22ebc7c491454aef2ba59a7d9106ebeaa8dd551f3768a00842dcf4803a10eae0"
     },
     {
       "path": "js/core/auth/roles.js",
@@ -35270,14 +35300,14 @@
     {
       "path": "js/pages/profile/configuracion-inicial-perfil.mjs",
       "extension": ".mjs",
-      "bytes": 16405,
-      "sha256": "3e678782d36347a0246cb93c77147aa4e21a059d5c770abfb406f13f9ed7652d"
+      "bytes": 16737,
+      "sha256": "12dc5c7bebd45ebd1ce7f9f2514b2bb0950ce4aa3a97fd01a53ca1a7968dbcd7"
     },
     {
       "path": "js/pages/profile/control-acceso-perfil.js",
       "extension": ".js",
-      "bytes": 5896,
-      "sha256": "32409c51d71d6d8de558a5b4e4418db9a3e744dbad504afb0fa3e536d2b36587"
+      "bytes": 5898,
+      "sha256": "e01eaf39b40a204027fc1855a72d26b62e1c2c55c324b824eee3faabef6d3e0d"
     },
     {
       "path": "js/pages/profile/estado-canonico-perfil.mjs",
@@ -35390,8 +35420,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 69674,
-      "sha256": "b6d9c130b9a3a766cbe0c40320bbcaa5b8b40bf81d24c875826f8c2c44b3e900"
+      "bytes": 69680,
+      "sha256": "83da75fdc312c1e461713b55751501751dc5e46304dbeff94d2a9da4c956f1d7"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -35594,8 +35624,8 @@
     {
       "path": "perfil.html",
       "extension": ".html",
-      "bytes": 45155,
-      "sha256": "c15f8794657c62702df8cb68675728156c3ba7563ff7e4f83434992551fd9e53"
+      "bytes": 45161,
+      "sha256": "722278452e2129b4a164a88e3da44bb24c64845f125122543bf8e0cc82a982aa"
     },
     {
       "path": "playwright.config.js",
@@ -35606,20 +35636,20 @@
     {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
-      "bytes": 14159,
-      "sha256": "90a71f6ed591c2bf205c4372b496230c828e7da7abfb3568032c47cfb11b179a"
+      "bytes": 14163,
+      "sha256": "fe4339a46813d902fe4509212891cc615ef1932cd1513b18c495d8d174c0f389"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
-      "bytes": 16856,
-      "sha256": "b389e4cc1e7747f683adc269e7d01232c3e7454919255b4a2d1c8acc50b149ed"
+      "bytes": 16860,
+      "sha256": "ed17741ee2db09ee641f8c32012483ce24fae078c27782ef00e1db99987dd394"
     },
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 24494,
-      "sha256": "d296e646dfa213e72e55ff19f7a97721426b863714e932fad74059ca3e300d99"
+      "bytes": 24498,
+      "sha256": "4fc1b08637cedb731e3b4bb9570f07109fbaccb24e557d3dfad5f05603d311ae"
     },
     {
       "path": "robots.txt",
@@ -36566,8 +36596,8 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 14071,
-      "sha256": "6160ce85a96306d1bc880e1bb0964cdd55356abdd5db5d95856fa0b3ebd2141d"
+      "bytes": 14077,
+      "sha256": "0859d3e067a530cca66004a0e07dee9e1e5ced2b7161b990558bc7adb05943b9"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -36644,8 +36674,8 @@
     {
       "path": "terminos.html",
       "extension": ".html",
-      "bytes": 14650,
-      "sha256": "e744f27b73ada14575a8a7b0fbed3da29c75871ae49c17f87ced5f88f91d4101"
+      "bytes": 14654,
+      "sha256": "01c75859e93bc2f690db799b0c05099435e15115c9bdbf41dd7df5cd5985afda"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -36826,6 +36856,12 @@
       "extension": ".mjs",
       "bytes": 2934,
       "sha256": "443b8c3d647b6b49b99acd2e26966ae500f2fca53b0fbf4de04d813629e136f4"
+    },
+    {
+      "path": "tests/login/post-login-profile-decision.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2695,
+      "sha256": "fc71d15e26bc0a6ec7fade92b45df9a27d78682c3980d09de801046319537559"
     },
     {
       "path": "tests/login/profile-onboarding.test.mjs",
