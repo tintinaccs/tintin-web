@@ -58,6 +58,9 @@ function attachNotificationsDemand() {
       return;
     }
 
+    // La campana se muestra solo después de registrar su superficie. Así un
+    // clic inmediato tras resolver Auth nunca cae en un trigger visible que
+    // todavía no tenga drawer/controlador disponible.
     void loadNotificationsRuntime()
       .then(() => setNotificationTriggersVisible(true))
       .catch(error => {
@@ -66,6 +69,9 @@ function attachNotificationsDemand() {
       });
   });
 
+  // Auth es una dependencia global del header incluso en páginas informativas.
+  // Resolver la sesión aquí no descarga el feed de notificaciones para un
+  // visitante: ese módulo y sus lecturas se activan solo cuando hay sesión.
   void loadAuthRuntime().catch(error => {
     console.warn('[PublicShell] No se pudo resolver la sesión global del header.', error);
   });
@@ -181,6 +187,8 @@ function attachLightweightCommerceDemand() {
   bindDemand(
     '#btn-tienda,#btn-tablet-tienda,[data-collections-nav],#collections-sheet',
     loadCollectionsRuntime,
+    // El menú ya ofrece enlaces e imágenes locales. En páginas informativas,
+    // un simple paso del puntero no debe generar una lectura remota.
     { prefetchOnPointer: false }
   );
 }
@@ -201,6 +209,8 @@ function loadNavigationBehaviors() {
       import('./control-busqueda.js?v=tintin-20260912-auth-closure-5'),
     ]))
     .then(results => {
+      // Dynamic imports are cached, but the shell DOM is remounted on every
+      // navigation. Re-run geometry-dependent indicators against that DOM.
       const desktop = results[0].status === 'fulfilled' ? results[0].value : null;
       const mobile = results[2].status === 'fulfilled' ? results[2].value : null;
       desktop?.initDesktopNavigationIndicator?.();
@@ -216,6 +226,11 @@ export function loadSharedRuntime() {
   attachNotificationsDemand();
   loadNavigationBehaviors();
 
+  // Las páginas informativas resuelven Auth globalmente para que el header
+  // conozca la sesión en cualquier ruta. El menú ya tiene el mismo respaldo
+  // local de imágenes y enlaces en las tres superficies; actualizar datos
+  // remotos de colecciones queda bajo demanda, al abrir Tienda. Así no se
+  // convierte Contacto/Nosotros en una carga comercial completa.
   if (!FULL_COMMERCE_PAGES.has(page)) {
     attachLightweightCommerceDemand();
     return;
