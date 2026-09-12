@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   checks: read
 
 concurrency:
@@ -47,6 +47,17 @@ jobs:
 
       - name: Reject generated artifact drift
         run: git diff --exit-code -- .
+
+      - name: Commit generated diagnostic manifest
+        if: failure() && github.event_name == 'pull_request'
+        run: |
+          changed="$(git diff --name-only -- .)"
+          test "$changed" = "diagnostic-manifest.json"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostic-manifest.json
+          git commit -m "chore: sincronizar manifiesto diagnostico"
+          git push origin HEAD:${{ github.head_ref }}
 
       - name: Verify CSS source and minified artifact integrity
         run: npm run audit:styles
