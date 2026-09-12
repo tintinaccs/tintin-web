@@ -1,6 +1,7 @@
 const CHECKOUT_PATH = /(^|\/)checkout(?:\.html)?\/?$/i;
 const DRAFT_KEY = 'tt_checkout_draft_v1';
 const MAX_STEP_KEY = 'tt_checkout_max_step_v1';
+const RESUME_BACKUP_KEY = 'tt_checkout_resume_step_backup_v2';
 const STEP_SELECTOR = '.ck-step[data-step]';
 const PANEL_SELECTOR = '.ck-panel';
 
@@ -38,6 +39,16 @@ function readJson(key, fallback) {
 
 function writeJson(key, value) {
   try { sessionStorage.setItem(key, JSON.stringify(value)); } catch {}
+}
+
+function readResumeBackup() {
+  try {
+    const raw = sessionStorage.getItem(RESUME_BACKUP_KEY);
+    const step = Number.parseInt(raw || '', 10);
+    return Number.isInteger(step) ? Math.max(0, Math.min(3, step)) : 0;
+  } catch {
+    return 0;
+  }
 }
 
 function activeStep() {
@@ -94,7 +105,6 @@ function restoreDraft() {
   if (!draft?.fields || typeof draft.fields !== 'object') return;
   restoring = true;
   try {
-    // Departamento primero: su change repuebla el selector de ciudades.
     restoreSimpleField('ck-departamento', draft.fields['ck-departamento']);
     DRAFT_FIELDS.filter(id => id !== 'ck-departamento' && id !== 'ck-city')
       .forEach(id => restoreSimpleField(id, draft.fields[id]));
@@ -112,8 +122,6 @@ function rememberValidatedStep() {
   const step = activeStep();
   if (step <= maxNavigableStep) return;
   maxNavigableStep = step;
-  // Confirmación depende de orderData en memoria. No se habilita como salto
-  // directo después de una navegación completa o recarga.
   writeJson(MAX_STEP_KEY, Math.min(maxNavigableStep, 3));
 }
 
@@ -126,12 +134,6 @@ function setVisualStep(target) {
     if (index === target) step.classList.add('active');
     if (index < target) step.classList.add('done');
   });
-  if (target === 2) {
-    // El checkout canónico decide si CI corresponde según el envío. Si volvemos
-    // desde Confirmación, conservamos el estado visual ya calculado.
-    const ci = document.getElementById('ck-ci-field');
-    if (ci && ci.dataset.ttPreviousDisplay) ci.style.display = ci.dataset.ttPreviousDisplay;
-  }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -153,10 +155,9 @@ function nativeNextButtonFor(step) {
 async function navigateBackward(target) {
   let current = activeStep();
   if (current === 4 && target <= 3) {
-    // El HTML original no tiene botón "Volver al pago" en Confirmación.
-    // Sólo retrocedemos visualmente un paso; el siguiente avance vuelve a pasar
-    // por btn-step4-next, que reconstruye el resumen y sincroniza el estado
-    // interno canónico antes de regresar a Confirmación.
+    // Confirmación no tiene botón volver en el HTML original. Volver visualmente
+    // a Pago es seguro porque cualquier avance posterior vuelve a ejecutar
+    // btn-step4-next y reconstruye el resumen canónico antes de confirmar.
     setVisualStep(3);
     current = 3;
   }
@@ -177,7 +178,7 @@ async function navigateForward(target) {
     next.click();
     await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     const nextActive = activeStep();
-    if (nextActive <= current) return; // validación nativa frenó el avance
+    if (nextActive <= current) return;
     current = nextActive;
     rememberValidatedStep();
   }
@@ -221,6 +222,7 @@ function clearCheckoutState() {
   try {
     sessionStorage.removeItem(DRAFT_KEY);
     sessionStorage.removeItem(MAX_STEP_KEY);
+    sessionStorage.removeItem(RESUME_BACKUP_KEY);
   } catch {}
   maxNavigableStep = 0;
 }
@@ -258,13 +260,34 @@ function bindDraftPersistence() {
   }, false);
 }
 
+function restoreResumeTarget() {
+  const target = Math.max(
+    Math.max(0, Math.min(3, Number(readJson(MAX_STEP_KEY, 0)) || 0)),
+    readResumeBackup()
+  );
+  if (target <= 0) return;
+  maxNavigableStep = Math.max(maxNavigableStep, target);
+  restoreDraft();
+  syncStepAccessibility();
+  void navigateForward(target);
+}
+
+function scheduleResumeTarget() {
+  [300, 700, 1400, 2400].forEach(delay => window.setTimeout(restoreResumeTarget, delay));
+}
+
 function boot() {
   if (!CHECKOUT_PATH.test(location.pathname)) return;
-  maxNavigableStep = Math.max(0, Math.min(3, Number(readJson(MAX_STEP_KEY, 0)) || 0));
+  maxNavigableStep = Math.max(
+    0,
+    Math.min(3, Number(readJson(MAX_STEP_KEY, 0)) || 0),
+    readResumeBackup()
+  );
   rememberValidatedStep();
   makeStepsInteractive();
   bindDraftPersistence();
   scheduleRestore();
+  scheduleResumeTarget();
   observeSuccess();
   syncStepAccessibility();
 
@@ -282,6 +305,16 @@ function boot() {
   }
 
   window.addEventListener('pagehide', persistDraft);
+  window.addEventListener('pageshow', () => {
+    scheduleRestore();
+    scheduleResumeTarget();
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      scheduleRestore();
+      scheduleResumeTarget();
+    }
+  });
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
