@@ -60,6 +60,27 @@ const unexpectedSignOutCallers = signOutCallers.filter(file => !allowedSignOutFi
 const persistenceCallers = productionFiles().filter(file => /\bsetPersistence\s*\(/.test(read(file)));
 const unexpectedPersistenceCallers = persistenceCallers.filter(file => file !== 'js/core/firebase/firebase.js');
 
+// Estos contratos se validan por semántica observable, no por una frase o
+// una forma sintáctica única. Así el gate sigue protegiendo Auth aunque el
+// copy del loader o la forma de encadenar una Promise cambien legítimamente.
+const googleHandoffKeepsOverlay =
+  login.includes('const cred = await signInWithPopup(auth, provider)') &&
+  login.includes('showOverlay()') &&
+  /setOverlayText\(['"](?:Entrando…|Redireccionando a tu cuenta…|Completando el inicio de sesión con Google…)['"]\)/.test(login) &&
+  login.includes('await finishGoogleLogin(cred.user)');
+
+const cartWaitsForAuthRestore =
+  /auth\.authStateReady\s*\(\)/.test(cartSync) &&
+  (
+    /await\s+auth\.authStateReady(?:\?\.)?\s*\(\)/.test(cartSync) ||
+    /authStateReady\.then\s*\(\s*\(\)\s*=>\s*onAuthStateChanged\s*\(/.test(cartSync)
+  );
+
+const persistenceScopedToLogin =
+  firebase.includes('browserLocalPersistence') &&
+  /const\s+IS_LOGIN_PAGE\s*=/.test(firebase) &&
+  /IS_LOGIN_PAGE\s*\?\s*setPersistence\s*\(\s*auth\s*,\s*browserLocalPersistence\s*\)/s.test(firebase);
+
 const checks = [
   ['Login mantiene su contenedor propio', login.includes('class="login-page"')],
   ['Header público oculto en Login', css.includes('body:has(.login-page) #tt-header-desktop-tablet')],
@@ -68,7 +89,7 @@ const checks = [
   ['Login no reserva espacio del shell', css.includes('body:has(.login-page).tt-public-shell-mounted') && css.includes('padding-top: 0 !important')],
   ['Loader de Login muestra la marca oficial completa', loginLoaderVisible && officialLogoImmediate],
   ['Google usa popup como camino principal', login.includes('const cred = await signInWithPopup(auth, provider)')],
-  ['Google mantiene loader hasta terminar el handoff', login.includes("setOverlayText('Entrando…')") && login.includes('await finishGoogleLogin(cred.user)')],
+  ['Google mantiene loader hasta terminar el handoff', googleHandoffKeepsOverlay],
   ['OTP mantiene loader hasta terminar el handoff', login.includes("setOverlayText('Verificando tu código…')") && login.includes('await finishOtpLogin(user)')],
   ['Popup bloqueado cambia automáticamente de camino', login.includes("if (e.code === 'auth/popup-blocked')") && login.includes('await signInWithRedirect(auth, provider)')],
   ['Retorno de Google se completa una sola vez y sin bucle', login.includes('getRedirectResult(auth)') && login.includes('GOOGLE_REDIRECT_PENDING_KEY') && login.includes('handleGoogleRedirectReturn(user)')],
@@ -80,8 +101,8 @@ const checks = [
   ['Firestore confirma la identidad antes de terminar un login', profileStore.includes('await setDoc(ref, identityPatch, { merge: true })')],
   ['Contacto no contiene lógica de cierre de sesión', !/\bsignOut\s*\(/.test(contactMaintenance)],
   ['El guard de perfil sólo protege checkout', profileGate.includes("const GUARDED_PAGES = ['checkout']")],
-  ['El carrito espera restauración Auth antes de observar sesión', cartSync.includes('await auth.authStateReady()') || cartSync.includes('await auth.authStateReady?.()')],
-  ['Firebase persiste sesión local sólo desde Login', firebase.includes('browserLocalPersistence') && firebase.includes('isLoginPage')],
+  ['El carrito espera restauración Auth antes de observar sesión', cartWaitsForAuthRestore],
+  ['Firebase persiste sesión local sólo desde Login', persistenceScopedToLogin],
 ];
 
 if (unexpectedSignOutCallers.length) {
