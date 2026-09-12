@@ -118,7 +118,10 @@ export async function ensureUserProfile(db, user, method) {
   // Migración progresiva: UID sigue siendo la clave de Auth y el customerId
   // comercial se deriva una sola vez de ese identificador aleatorio. No se
   // inventan username ni fecha de nacimiento para perfiles históricos.
-  if (!data.customerId) {
+  // IMPORTANTE: si el perfil ya tiene un estado explícito, un simple login no
+  // debe degradarlo. El bootstrap legacy sólo aplica a documentos realmente
+  // anteriores al contrato, sin customerId y sin profileStatus.
+  if (!data.customerId && !data.profileStatus) {
     identityPatch.customerId = customerIdForUid(user.uid);
     identityPatch.identityVersion = ACCOUNT_CONTRACT.identityVersion;
     identityPatch.profileStatus = 'legacy';
