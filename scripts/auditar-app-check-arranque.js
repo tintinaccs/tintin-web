@@ -5,7 +5,10 @@ const path = require('path');
 
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
-const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
+const htmlFiles = fs.readdirSync(root)
+  .filter(file => file.endsWith('.html'))
+  // Search Console sirve este archivo estático sin cargar el loader.
+  .filter(file => !/^google[a-f0-9]+\.html$/i.test(file));
 const moduleFiles = fs.readdirSync(path.join(root, 'js'))
   .filter(file => file.endsWith('.js'))
   .map(file => `js/${file}`);
