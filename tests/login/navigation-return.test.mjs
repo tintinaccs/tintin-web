@@ -24,6 +24,22 @@ function occurrences(source, regex) {
   return [...source.matchAll(regex)].length;
 }
 
+function withoutScriptBlocks(source) {
+  const lower = source.toLowerCase();
+  let output = '';
+  let cursor = 0;
+  while (true) {
+    const start = lower.indexOf('<script', cursor);
+    if (start < 0) return output + source.slice(cursor);
+    const openingEnd = lower.indexOf('>', start);
+    const closingStart = lower.indexOf('</script', openingEnd + 1);
+    const closingEnd = closingStart < 0 ? -1 : lower.indexOf('>', closingStart);
+    if (openingEnd < 0 || closingEnd < 0) return output + source.slice(cursor, start);
+    output += source.slice(cursor, start);
+    cursor = closingEnd + 1;
+  }
+}
+
 test('Mi cuenta conserva pathname, query y hash al entrar o crear cuenta', async () => {
   const [panel, authNav] = await Promise.all([
     read('js/components/navigation/compartido/panel-cuenta.js'),
@@ -79,7 +95,7 @@ test('inventario de superficies no contiene enlaces vacíos, javascript href ni 
 
   for (const file of htmlFiles) {
     const source = await readFile(file, 'utf8');
-    const staticMarkup = source.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
+    const staticMarkup = withoutScriptBlocks(source);
     inventory.sections += occurrences(staticMarkup, /<section\b/gi);
     inventory.articles += occurrences(staticMarkup, /<article\b/gi);
     inventory.anchors += occurrences(staticMarkup, /<a\b/gi);
