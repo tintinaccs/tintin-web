@@ -33,6 +33,9 @@ for (const viewport of canonicalViewports) {
 
 const pages = (manifest.pages || [])
   .map(page => ({ path: page.path, id: page.id, requiresAuth: page.requiresAuth === true, redirectsTo: page.metadata?.redirectsTo || '' }))
+  // Search Console sirve este archivo de texto estático; no es una página de
+  // la aplicación y no debe entrar en los gates visuales de Chromium.
+  .filter(page => !/^google[a-f0-9]+\.html$/i.test(page.path || ''))
   .filter(page => page.path && fs.existsSync(path.join(root, page.path)));
 const authShellPages = new Set(['admin.html', 'admin-images.html', 'login.html', 'perfil.html']);
 const expectsPublicShell = pageInfo => !authShellPages.has(pageInfo.path) && !pageInfo.redirectsTo;

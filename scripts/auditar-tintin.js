@@ -46,7 +46,11 @@ function isAllowedLegacyLogoReference(file) {
 }
 
 const files = walk(ROOT);
-const htmlFiles = files.filter(f => f.endsWith('.html'));
+const htmlFiles = files
+  .filter(f => f.endsWith('.html'))
+  // Los archivos de verificación de Search Console se sirven como texto
+  // estático y no forman parte del runtime de la aplicación.
+  .filter(f => !/^google[a-f0-9]+\.html$/i.test(f));
 const cssFiles = files.filter(f => f.endsWith('.css'));
 const jsFiles = files.filter(f => f.endsWith('.js') && !f.startsWith('functions/'));
 

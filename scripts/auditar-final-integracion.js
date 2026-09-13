@@ -27,7 +27,10 @@ function listJsFiles(dir) {
   });
 }
 const jsFiles = listJsFiles('js');
-const htmlFiles = fs.readdirSync(root).filter(file => file.endsWith('.html'));
+const htmlFiles = fs.readdirSync(root)
+  .filter(file => file.endsWith('.html'))
+  // Search Console sirve este archivo estático sin runtime ni middleware.
+  .filter(file => !/^google[a-f0-9]+\.html$/i.test(file));
 const firebaseInitFiles = [...jsFiles, ...htmlFiles].filter(file =>
   /initializeApp\s*\(/.test(read(file)) || /apiKey:\s*["']/.test(read(file))
 );

@@ -113,6 +113,9 @@ function escapeRegex(value) {
 
 const rootPages = fs.readdirSync(ROOT)
   .filter(name => name.toLowerCase().endsWith('.html'))
+  // Google Search Console sirve este archivo de texto tal cual; no es una
+  // página de la aplicación y no debe participar en el contrato tipográfico.
+  .filter(name => !/^google[a-f0-9]+\.html$/i.test(name))
   .sort();
 
 check(rootPages.length === 18, `Se esperaban 18 páginas HTML raíz y se encontraron ${rootPages.length}.`);

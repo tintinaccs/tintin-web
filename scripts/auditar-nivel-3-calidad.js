@@ -111,6 +111,8 @@ check(
 );
 
 const pages = manifest.pages || [];
+const verificationPages = pages.filter(page => /^google[a-f0-9]+\.html$/i.test(page.path || ''));
+const documentPages = pages.filter(page => !verificationPages.includes(page));
 check(
   'No existen IDs duplicados en las páginas inventariadas',
   pages.every(page => Array.isArray(page.duplicateIds) && page.duplicateIds.length === 0),
@@ -118,8 +120,8 @@ check(
 );
 check(
   'Todas las páginas declaran viewport e idioma español',
-  pages.every(page => page.metadata?.hasViewport === true && page.metadata?.htmlLang === 'es'),
-  pages.filter(page => !page.metadata?.hasViewport || page.metadata?.htmlLang !== 'es').map(page => page.path).join(', ')
+  documentPages.every(page => page.metadata?.hasViewport === true && page.metadata?.htmlLang === 'es'),
+  documentPages.filter(page => !page.metadata?.hasViewport || page.metadata?.htmlLang !== 'es').map(page => page.path).join(', ')
 );
 
 const seoPublicPages = [
@@ -224,8 +226,8 @@ check(
 );
 check(
   'Las páginas tienen exactamente un H1 cuando el manifiesto lo exige',
-  pages.filter(page => page.path !== 'nosotros.html').every(page => page.metadata?.redirectsTo || page.metadata?.h1Count === 1),
-  pages.filter(page => !page.metadata?.redirectsTo && page.path !== 'nosotros.html' && page.metadata?.h1Count !== 1).map(page => `${page.path}:${page.metadata?.h1Count}`).join(', ')
+  documentPages.filter(page => page.path !== 'nosotros.html').every(page => page.metadata?.redirectsTo || page.metadata?.h1Count === 1),
+  documentPages.filter(page => !page.metadata?.redirectsTo && page.path !== 'nosotros.html' && page.metadata?.h1Count !== 1).map(page => `${page.path}:${page.metadata?.h1Count}`).join(', ')
 );
 
 check(
