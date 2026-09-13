@@ -182,7 +182,11 @@ function auditJavascriptReferences() {
   }
 }
 
-const actualPages = fs.readdirSync(root).filter(name => name.endsWith('.html')).sort();
+const actualPages = fs.readdirSync(root)
+  .filter(name => name.endsWith('.html'))
+  // Search Console sirve este archivo de texto sin estructura HTML.
+  .filter(name => !/^google[a-f0-9]+\.html$/i.test(name))
+  .sort();
 const referenceParserProbe = extractTagReferences(`
   <img id="dynamic" data-dynamic-src="true" alt="Dinámica">
   <script src="js/inicio-navegacion-publica.js"></script>
