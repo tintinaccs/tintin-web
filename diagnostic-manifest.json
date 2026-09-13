@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c7f0b51dd35dd68f487339d287ff3c2e3cc1d79af2f4b20e84cfa515d42e6c27",
+  "sourceFingerprint": "685f6d7a2d6c075e62551a7a3005d4f495257131e806f69592ac8fdd72b1772d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,10 +9,10 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 816,
-    "textFiles": 779,
-    "totalBytes": 16260927,
-    "pages": 18,
+    "files": 817,
+    "textFiles": 780,
+    "totalBytes": 16295842,
+    "pages": 19,
     "modules": 558
   },
   "viewports": [
@@ -11963,6 +11963,46 @@
       "controls": []
     },
     {
+      "id": "googlef396be0b943aa3d1",
+      "path": "googlef396be0b943aa3d1.html",
+      "sourceFile": "googlef396be0b943aa3d1.html",
+      "label": "googlef396be0b943aa3d1.html",
+      "title": "",
+      "description": "",
+      "visibility": "public",
+      "requiresAuth": false,
+      "roles": [
+        "guest",
+        "client"
+      ],
+      "bytes": 53,
+      "sha256": "70f16309c8707471264740a596d7dd76234994711ea58f072f756a4605563df3",
+      "metadata": {
+        "hasViewport": false,
+        "hasDescription": false,
+        "noindex": false,
+        "redirectsTo": "",
+        "htmlLang": "",
+        "h1Count": 0,
+        "h1Lines": []
+      },
+      "duplicateIds": [],
+      "inlineScripts": [],
+      "ids": 0,
+      "scripts": [],
+      "styles": [],
+      "images": [],
+      "links": [],
+      "references": [],
+      "forms": [],
+      "tables": [],
+      "modals": [],
+      "tabs": [],
+      "sections": [],
+      "buttons": [],
+      "controls": []
+    },
+    {
       "id": "index",
       "path": "index.html",
       "sourceFile": "index.html",
@@ -18162,8 +18202,8 @@
     },
     {
       "path": "config/csp-runtime.js",
-      "bytes": 344630,
-      "sha256": "4d9b277a1d0ff2a99ce668dda53dbceb73e3a2f07b77cb58f02aa4a3715606c5",
+      "bytes": 362061,
+      "sha256": "d3151c756f7fc96abf47f323af58086d55ee46d1ae692bbc26a9f5782f49362b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32886,14 +32926,14 @@
     {
       "path": "config/csp-runtime.js",
       "extension": ".js",
-      "bytes": 344630,
-      "sha256": "4d9b277a1d0ff2a99ce668dda53dbceb73e3a2f07b77cb58f02aa4a3715606c5"
+      "bytes": 362061,
+      "sha256": "d3151c756f7fc96abf47f323af58086d55ee46d1ae692bbc26a9f5782f49362b"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
-      "bytes": 344545,
-      "sha256": "749ecdaa74e0959e082bf29df5a58f73257a67a0a94944bd0ac4552044be7ac5"
+      "bytes": 361976,
+      "sha256": "37907d1a0263e74692053ef5467e027f10721c9a79a42d14b03c1497f04dc41c"
     },
     {
       "path": "config/public-site.json",
@@ -34130,6 +34170,12 @@
       "extension": ".js",
       "bytes": 2309,
       "sha256": "610c64f917979efd307a5c6b3374eeb2db633cf9a69fa6acee942606eed76780"
+    },
+    {
+      "path": "googlef396be0b943aa3d1.html",
+      "extension": ".html",
+      "bytes": 53,
+      "sha256": "70f16309c8707471264740a596d7dd76234994711ea58f072f756a4605563df3"
     },
     {
       "path": "index.html",
