@@ -76,11 +76,20 @@ if (supported.has(page) && !window.TintinLegalMaintenanceBooted) {
       nav.id = 'tt-legal-nav';
       nav.className = 'tt-legal-nav';
       nav.setAttribute('aria-label', 'Índice de esta página');
-      const list = blocks.map(block => {
-        const title = block.querySelector('.tt-info-title')?.textContent?.trim() || 'Sección';
-        return `<li><a href="#${block.id}">${title}</a></li>`;
-      }).join('');
-      nav.innerHTML = `<p class="tt-legal-nav-title">Contenido</p><ul class="tt-legal-nav-list">${list}</ul>`;
+      const heading = document.createElement('p');
+      heading.className = 'tt-legal-nav-title';
+      heading.textContent = 'Contenido';
+      const list = document.createElement('ul');
+      list.className = 'tt-legal-nav-list';
+      blocks.forEach(block => {
+        const item = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = `#${block.id}`;
+        link.textContent = block.querySelector('.tt-info-title')?.textContent?.trim() || 'Sección';
+        item.appendChild(link);
+        list.appendChild(item);
+      });
+      nav.append(heading, list);
       updated?.insertAdjacentElement('afterend', nav);
     }
 

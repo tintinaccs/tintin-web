@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "44df1caa3a4102b0f59d05fc35a666ab59b3586877eade5e7a76647a9fbe0f93",
+  "sourceFingerprint": "c7f0b51dd35dd68f487339d287ff3c2e3cc1d79af2f4b20e84cfa515d42e6c27",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 816,
     "textFiles": 779,
-    "totalBytes": 16259213,
+    "totalBytes": 16260927,
     "pages": 18,
     "modules": 558
   },
@@ -15845,8 +15845,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24489,
-      "sha256": "da9c59a45cc2d78c5bee71226eecbf19ef2c3cfa1d5b16c35d1ae0929b7b78a8",
+      "bytes": 24488,
+      "sha256": "84146a212171df86b885fb1cb4f17834f6f498cf5d0bd4a619b3bdedf9d8d59c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15915,7 +15915,7 @@
           "line": 348
         },
         {
-          "raw": "js/pages/product/beneficios-producto.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/pages/product/beneficios-producto.js?v=tintin-20260913-xss-hardening-1",
           "target": "js/pages/product/beneficios-producto.js",
           "line": 349
         },
@@ -16335,7 +16335,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/product/beneficios-producto.js?v=tintin-20260716-cloudinary-fix-1",
+          "raw": "js/pages/product/beneficios-producto.js?v=tintin-20260913-xss-hardening-1",
           "target": "js/pages/product/beneficios-producto.js",
           "line": 349,
           "exists": true
@@ -18296,8 +18296,8 @@
     },
     {
       "path": "functions/[page].js",
-      "bytes": 4292,
-      "sha256": "161f8da65177e202af05cd543c8e52b0a9ca1809c8317c2e8bd35f089942e299",
+      "bytes": 4290,
+      "sha256": "715dbc5ba03eee83caafbc6826f1ba911aba3c09d086787baee7c4400f78f1c3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22360,8 +22360,8 @@
     },
     {
       "path": "js/components/navigation/compartido/acordeon-pie-pagina.js",
-      "bytes": 1457,
-      "sha256": "bcc388233a9d5ed262ee4bfffb64594b3d43ebf0e06aad39198a87af46d60221",
+      "bytes": 1644,
+      "sha256": "183c4dbc36a85ddbef97fc8befce34590b2c024d19f06256bff6c9b75d934cf0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24883,8 +24883,8 @@
     },
     {
       "path": "js/pages/institutional/mantenimiento-contacto.js",
-      "bytes": 12371,
-      "sha256": "4e272ad331bbe125c9262fd8d7d3d8a3037ea8552bb6ffc27cefb06172670891",
+      "bytes": 13446,
+      "sha256": "ae74492df13ad5d1b0ac31f2af4cc45db802d6d3639b667e7528f4592186c8e3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24917,15 +24917,19 @@
           "line": 135
         },
         {
+          "url": "http://www.w3.org/2000/svg",
+          "line": 143
+        },
+        {
           "url": "https://wa.me/$%7Bconfig.whatsapp%7D",
-          "line": 173
+          "line": 200
         }
       ]
     },
     {
       "path": "js/pages/institutional/mantenimiento-legal.js",
-      "bytes": 7910,
-      "sha256": "a2c1467e7db395a632bc39fb32b2eb6c598eb30bbe056a6de76a10a2d077585f",
+      "bytes": 8190,
+      "sha256": "ac00947b80eb3479e2bcc34abd2e2f0ee332f75d936a4f1ae9808c3a5dca846f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24935,23 +24939,23 @@
           "raw": "../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1",
           "target": "js/core/firebase/firebase.js",
           "dynamic": true,
-          "line": 138
+          "line": 147
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": true,
-          "line": 139
+          "line": 148
         }
       ],
       "endpoints": [
         {
           "url": "https://wa.me/$%7Bcontact.whatsapp%7D$%7Btext",
-          "line": 109
+          "line": 118
         },
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 139
+          "line": 148
         }
       ]
     },
@@ -25003,8 +25007,8 @@
     },
     {
       "path": "js/pages/product/beneficios-producto.js",
-      "bytes": 891,
-      "sha256": "705888ed8de0ef0ac70a3579d1dd68002ebaf95e7357c407b3ab36f9bfa36b32",
+      "bytes": 1068,
+      "sha256": "cb266eb7a814eb74bf5296d969f087530090d37baa74d92ed69bd96229e92f21",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26216,8 +26220,8 @@
     },
     {
       "path": "scripts/auditar-contacto-pagina.js",
-      "bytes": 2276,
-      "sha256": "f28848348e33b3ccc0063c97fe9933ba631b60525fa119b1b45cf36bf272a02a",
+      "bytes": 2272,
+      "sha256": "60b7e12b6c5d5e6a0688b0c3c9915b0725f09ce806fdffb8c87cae4d1e840345",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27535,8 +27539,8 @@
     },
     {
       "path": "scripts/auditar-legal-paginas.js",
-      "bytes": 2616,
-      "sha256": "e4055bf1246cdc95696aee8f8176df3f22d923563867253ed16fb54e4daea73b",
+      "bytes": 2618,
+      "sha256": "ed63cc038d91eeaeb98601bbef5f9af4677c277537f3c2144c9f77c761b3a020",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33716,8 +33720,8 @@
     {
       "path": "functions/[page].js",
       "extension": ".js",
-      "bytes": 4292,
-      "sha256": "161f8da65177e202af05cd543c8e52b0a9ca1809c8317c2e8bd35f089942e299"
+      "bytes": 4290,
+      "sha256": "715dbc5ba03eee83caafbc6826f1ba911aba3c09d086787baee7c4400f78f1c3"
     },
     {
       "path": "functions/__/auth/[[path]].js",
@@ -34610,8 +34614,8 @@
     {
       "path": "js/components/navigation/compartido/acordeon-pie-pagina.js",
       "extension": ".js",
-      "bytes": 1457,
-      "sha256": "bcc388233a9d5ed262ee4bfffb64594b3d43ebf0e06aad39198a87af46d60221"
+      "bytes": 1644,
+      "sha256": "183c4dbc36a85ddbef97fc8befce34590b2c024d19f06256bff6c9b75d934cf0"
     },
     {
       "path": "js/components/navigation/compartido/apariencia-global.js",
@@ -35282,14 +35286,14 @@
     {
       "path": "js/pages/institutional/mantenimiento-contacto.js",
       "extension": ".js",
-      "bytes": 12371,
-      "sha256": "4e272ad331bbe125c9262fd8d7d3d8a3037ea8552bb6ffc27cefb06172670891"
+      "bytes": 13446,
+      "sha256": "ae74492df13ad5d1b0ac31f2af4cc45db802d6d3639b667e7528f4592186c8e3"
     },
     {
       "path": "js/pages/institutional/mantenimiento-legal.js",
       "extension": ".js",
-      "bytes": 7910,
-      "sha256": "a2c1467e7db395a632bc39fb32b2eb6c598eb30bbe056a6de76a10a2d077585f"
+      "bytes": 8190,
+      "sha256": "ac00947b80eb3479e2bcc34abd2e2f0ee332f75d936a4f1ae9808c3a5dca846f"
     },
     {
       "path": "js/pages/institutional/mantenimiento-nosotros.js",
@@ -35306,8 +35310,8 @@
     {
       "path": "js/pages/product/beneficios-producto.js",
       "extension": ".js",
-      "bytes": 891,
-      "sha256": "705888ed8de0ef0ac70a3579d1dd68002ebaf95e7357c407b3ab36f9bfa36b32"
+      "bytes": 1068,
+      "sha256": "cb266eb7a814eb74bf5296d969f087530090d37baa74d92ed69bd96229e92f21"
     },
     {
       "path": "js/pages/product/mantenimiento-producto.js",
@@ -35690,8 +35694,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 24489,
-      "sha256": "da9c59a45cc2d78c5bee71226eecbf19ef2c3cfa1d5b16c35d1ae0929b7b78a8"
+      "bytes": 24488,
+      "sha256": "84146a212171df86b885fb1cb4f17834f6f498cf5d0bd4a619b3bdedf9d8d59c"
     },
     {
       "path": "robots.txt",
@@ -35888,8 +35892,8 @@
     {
       "path": "scripts/auditar-contacto-pagina.js",
       "extension": ".js",
-      "bytes": 2276,
-      "sha256": "f28848348e33b3ccc0063c97fe9933ba631b60525fa119b1b45cf36bf272a02a"
+      "bytes": 2272,
+      "sha256": "60b7e12b6c5d5e6a0688b0c3c9915b0725f09ce806fdffb8c87cae4d1e840345"
     },
     {
       "path": "scripts/auditar-contenido-fase-6.js",
@@ -36182,8 +36186,8 @@
     {
       "path": "scripts/auditar-legal-paginas.js",
       "extension": ".js",
-      "bytes": 2616,
-      "sha256": "e4055bf1246cdc95696aee8f8176df3f22d923563867253ed16fb54e4daea73b"
+      "bytes": 2618,
+      "sha256": "ed63cc038d91eeaeb98601bbef5f9af4677c277537f3c2144c9f77c761b3a020"
     },
     {
       "path": "scripts/auditar-limpiar-ramas.mjs",
@@ -40039,12 +40043,12 @@
           },
           {
             "file": "js/pages/institutional/mantenimiento-contacto.js",
-            "line": 198,
+            "line": 225,
             "operation": "doc"
           },
           {
             "file": "js/pages/institutional/mantenimiento-legal.js",
-            "line": 141,
+            "line": 150,
             "operation": "doc"
           },
           {

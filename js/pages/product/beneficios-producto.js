@@ -11,6 +11,11 @@ document.querySelectorAll('.tinben-card[data-icon-img]').forEach(function(card){
   var src = card.getAttribute('data-icon-img');
   var iconEl = card.querySelector('.tinben-icon');
   if (!src || !iconEl) return;
+  try {
+    var iconUrl = new URL(src, window.location.href);
+    if (!['http:', 'https:'].includes(iconUrl.protocol)) return;
+    src = iconUrl.href;
+  } catch (_) { return; }
   iconEl.innerHTML = '';
   var img = document.createElement('img');
   img.className = 'tinben-icon-img';
