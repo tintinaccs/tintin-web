@@ -102,7 +102,7 @@ async function collectVitals(page) {
     const out = {
       fcp: null, lcp: window.__ttVitals?.lcp ?? null, cls: 0,
       inp: window.__ttVitals?.inp ?? null, ttfb: null, dcl: null, load: null,
-      requests: 0, transferKB: 0, duplicateRequests: 0, duplicateUrls: [],
+      requests: 0, transferKB: 0, firstPartyTransferKB: 0, duplicateRequests: 0, duplicateUrls: [],
       thirdPartyDuplicateUrls: [], firestoreReads: 0,
       firestoreSources: {}, shifts: window.__ttVitals?.shifts || []
     };
@@ -116,6 +116,15 @@ async function collectVitals(page) {
       const resources = performance.getEntriesByType('resource');
       out.requests = resources.length;
       out.transferKB = Math.round(resources.reduce((sum, item) => sum + (item.transferSize || 0), 0) / 1024);
+      out.firstPartyTransferKB = Math.round(resources.reduce((sum, item) => {
+        try {
+          return new URL(item.name, location.href).origin === location.origin
+            ? sum + (item.transferSize || 0)
+            : sum;
+        } catch {
+          return sum;
+        }
+      }, 0) / 1024);
 
       // El presupuesto de duplicados debe medir solicitudes que Tintin puede
       // controlar. SDKs externos (por ejemplo reCAPTCHA Enterprise) pueden

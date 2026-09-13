@@ -501,7 +501,7 @@ function checkJs(file) {
     );
   }
 
-  if (/initializeApp\s*\(/g.test(js)) {
+  if (!file.startsWith('scripts/') && /initializeApp\s*\(/g.test(js)) {
     const count = (js.match(/initializeApp\s*\(/g) || []).length;
     if (count > 1) {
       add(

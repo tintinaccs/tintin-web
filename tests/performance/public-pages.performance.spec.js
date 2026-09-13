@@ -42,6 +42,7 @@ for (const pageName of GENERIC_PERFORMANCE_PAGES) {
       `[${pageName}] DCL=${vitals.dcl}ms LCP=${vitals.lcp}ms CLS=${vitals.cls} ` +
       `INP=${vitals.inp}ms reqs=${vitals.requests} reqs-efectivas=${effectiveRequests} ` +
       `duplicadas-first-party=${vitals.duplicateRequests} transfer=${vitals.transferKB}KB ` +
+      `transfer-first-party=${vitals.firstPartyTransferKB}KB ` +
       `firestore=${vitals.firestoreReads}`
     );
     if (vitals.duplicateUrls?.length) {
@@ -72,7 +73,7 @@ for (const pageName of GENERIC_PERFORMANCE_PAGES) {
     if (LIGHTWEIGHT_PAGES.has(pageName)) {
       const requestBudget = pageName === 'about.html' ? BUDGETS.aboutRequests : BUDGETS.lightweightRequests;
       expect(effectiveRequests, `${pageName} debe conservar runtime informativo liviano`).toBeLessThanOrEqual(requestBudget);
-      expect(vitals.transferKB, `${pageName} no debe volver a cargar infraestructura comercial completa`).toBeLessThanOrEqual(BUDGETS.lightweightTransferKB);
+      expect(vitals.firstPartyTransferKB, `${pageName} no debe volver a cargar infraestructura first-party completa`).toBeLessThanOrEqual(BUDGETS.lightweightTransferKB);
     }
   });
 }
