@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "1fad7a38fab1bcb64fe022e04f531240ab712ab0167d3472fd668d14eed5134c",
+  "sourceFingerprint": "aa38acf7039867b54f0cf559995721a79375741ca8b82ed6024f9739ab3a1b17",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 816,
     "textFiles": 779,
-    "totalBytes": 16258031,
+    "totalBytes": 16258199,
     "pages": 18,
     "modules": 558
   },
@@ -15845,8 +15845,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24498,
-      "sha256": "4fc1b08637cedb731e3b4bb9570f07109fbaccb24e557d3dfad5f05603d311ae",
+      "bytes": 24489,
+      "sha256": "da9c59a45cc2d78c5bee71226eecbf19ef2c3cfa1d5b16c35d1ae0929b7b78a8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15930,7 +15930,7 @@
           "line": 351
         },
         {
-          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260908-public-activity-auth-1",
+          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260913-return-path-1",
           "target": "js/pages/product/resenas-producto.js",
           "line": 352
         },
@@ -16353,7 +16353,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260908-public-activity-auth-1",
+          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260913-return-path-1",
           "target": "js/pages/product/resenas-producto.js",
           "line": 352,
           "exists": true
@@ -27968,8 +27968,8 @@
     },
     {
       "path": "scripts/auditar-puntuacion-resena-producto.mjs",
-      "bytes": 1621,
-      "sha256": "ab92d10223793dda53804f212561881395ed8f1c2b14cfe00365e7969adcf32a",
+      "bytes": 1612,
+      "sha256": "c0b9feda1255e091b9ec8f5e025d5ea8e8c197439c57fcab0b1419b0b3b1e49d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35690,8 +35690,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 24498,
-      "sha256": "4fc1b08637cedb731e3b4bb9570f07109fbaccb24e557d3dfad5f05603d311ae"
+      "bytes": 24489,
+      "sha256": "da9c59a45cc2d78c5bee71226eecbf19ef2c3cfa1d5b16c35d1ae0929b7b78a8"
     },
     {
       "path": "robots.txt",
@@ -36308,8 +36308,8 @@
     {
       "path": "scripts/auditar-puntuacion-resena-producto.mjs",
       "extension": ".mjs",
-      "bytes": 1621,
-      "sha256": "ab92d10223793dda53804f212561881395ed8f1c2b14cfe00365e7969adcf32a"
+      "bytes": 1612,
+      "sha256": "c0b9feda1255e091b9ec8f5e025d5ea8e8c197439c57fcab0b1419b0b3b1e49d"
     },
     {
       "path": "scripts/auditar-push-web.js",
@@ -36476,8 +36476,8 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 429,
-      "sha256": "8c2b485fe8efd29e1e06ec748db26682eead84b8182463456f8c5e05eb2273ad"
+      "bytes": 615,
+      "sha256": "37a23227b4e61935e7a2c7977fade0ca738abc231036078141dd6ca51d175c00"
     },
     {
       "path": "scripts/cache-version-baseline.json",
