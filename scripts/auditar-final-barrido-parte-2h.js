@@ -41,6 +41,7 @@ const expectedPages = [
 
 const actualPages = fs.readdirSync(root)
   .filter(file => file.endsWith('.html'))
+  .filter(file => !/^google[a-f0-9]+\.html$/i.test(file))
   .sort();
 
 check(
@@ -80,7 +81,7 @@ try {
 } catch {}
 check(
   'El diagnóstico final representa las 18 páginas',
-  diagnostics?.platform?.pages === 18 &&
+  diagnostics?.pages?.filter(item => !/^google[a-f0-9]+\.html$/i.test(item.path || '')).length === 18 &&
     expectedPages.every(page => diagnostics.pages?.some(item => item.path === page)),
   'El manifiesto de diagnóstico no coincide con las 18 páginas actuales.'
 );
