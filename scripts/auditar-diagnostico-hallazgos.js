@@ -48,8 +48,9 @@ const nosotros = read('nosotros.html');
 const productExtras = read('css/pages/product/product-extras.css');
 const usersCompat = read('js/admin/users/gestion-usuarios-admin.js');
 const userFicha = read('js/admin/users/ficha-usuario-admin.js');
+const applicationPages = manifest.pages.filter(page => !/^google[a-f0-9]+\.html$/i.test(page.path || ''));
 
-check('El inventario contiene las 18 rutas requeridas', manifest.pages.length === 18);
+check('El inventario contiene las 18 rutas de la aplicación requeridas', applicationPages.length === 18);
 check('El inventario contiene las siete resoluciones requeridas', manifest.viewports.length === 7);
 check(
   'El inventario contiene los seis roles requeridos',

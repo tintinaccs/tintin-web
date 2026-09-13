@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "685f6d7a2d6c075e62551a7a3005d4f495257131e806f69592ac8fdd72b1772d",
+  "sourceFingerprint": "03285a3f70e710cd0883bae9fa708fb82f64e013d4f645a1e8e24da2e1b3f224",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 817,
     "textFiles": 780,
-    "totalBytes": 16295842,
+    "totalBytes": 16297154,
     "pages": 19,
     "modules": 558
   },
@@ -26440,8 +26440,8 @@
     },
     {
       "path": "scripts/auditar-control-tienda.js",
-      "bytes": 13621,
-      "sha256": "76a84e316ff2d73feabe7a04a518ad9f37334b47f9313a2b474f55ac0019b1c0",
+      "bytes": 13827,
+      "sha256": "a65745619914ea638087d3e6dfe477ee8e4e23da7596f9398ac18b2aa1cade9d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26677,8 +26677,8 @@
     },
     {
       "path": "scripts/auditar-diagnostico-hallazgos.js",
-      "bytes": 8621,
-      "sha256": "f7c246a199f874e1ececd733b65abb7f9651f3b4206cbb533ea21dcbdd5bed82",
+      "bytes": 8748,
+      "sha256": "66ddb3bf96189f70f2ef02e16fcf019032d01d6cf572fa15b0b168f47fab803b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26807,8 +26807,8 @@
     },
     {
       "path": "scripts/auditar-esquema-color.js",
-      "bytes": 10392,
-      "sha256": "f21651abfa665ae90f729b429d364f1e34de195f62cfed9792cfd9e8a233017d",
+      "bytes": 10440,
+      "sha256": "c81273920e5f9e4b4a055ae838976b0b6ad2b47ee74d4ba0ab657d91a3356be9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27084,8 +27084,8 @@
     },
     {
       "path": "scripts/auditar-final-integracion.js",
-      "bytes": 10310,
-      "sha256": "397b6661d9fce875990058b53ba378ba59029688778e5bc6b1e64496eda65ef4",
+      "bytes": 10447,
+      "sha256": "711a2be33ceb9bda8f86e1b0534f665c6a3bf719cf9fca2a4a9087a5da1536c4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27095,17 +27095,17 @@
           "raw": "./nucleo-control-tienda.js",
           "target": "scripts/nucleo-control-tienda.js",
           "dynamic": false,
-          "line": 41
+          "line": 44
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 81
+          "line": 84
         },
         {
           "url": "https://api.cloudinary.com/",
-          "line": 149
+          "line": 152
         }
       ]
     },
@@ -27791,8 +27791,8 @@
     },
     {
       "path": "scripts/auditar-nivel-3-calidad.js",
-      "bytes": 10577,
-      "sha256": "7f55fae90862b64eda0b22cf32821e15cde31734a31f7b8a9d25778a0281ecb6",
+      "bytes": 10786,
+      "sha256": "5fbcd2a7d1d38c1809c0c8fae606cc6527149a425f5d17ee6cbd2ccc5f7cf21d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27943,8 +27943,8 @@
     },
     {
       "path": "scripts/auditar-profunda.js",
-      "bytes": 16340,
-      "sha256": "3064bdcaa339d73a0cf1c779111f691e269fcdfc9f8eb7f80e31469e85f64bb8",
+      "bytes": 16518,
+      "sha256": "343e0d702b833ad2aac5bd93804d8ae0ebca078f9955d5dca117c2d84a3f9f28",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28533,8 +28533,8 @@
     },
     {
       "path": "scripts/auditar-tintin.js",
-      "bytes": 12646,
-      "sha256": "9cbe1ae92dbbc8de62bf9e70b3fa5cc4b57388a96d1ce09e6bd47cd27d75a534",
+      "bytes": 12839,
+      "sha256": "9b8fc1037910db7b5ae43a7e5fa1cb0204f0e45c937e1f1699d9e5b59aa2d7f4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28544,8 +28544,8 @@
     },
     {
       "path": "scripts/auditar-tipografia.js",
-      "bytes": 13377,
-      "sha256": "689dddc811d65c3509d6e62ac8788954ab8fa0fd5dfad3915153327cba30c387",
+      "bytes": 13591,
+      "sha256": "368b4e3f7c64b17d66b4ab34c65c50c85287587f8f74d7b44ba1736206dde18e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35980,8 +35980,8 @@
     {
       "path": "scripts/auditar-control-tienda.js",
       "extension": ".js",
-      "bytes": 13621,
-      "sha256": "76a84e316ff2d73feabe7a04a518ad9f37334b47f9313a2b474f55ac0019b1c0"
+      "bytes": 13827,
+      "sha256": "a65745619914ea638087d3e6dfe477ee8e4e23da7596f9398ac18b2aa1cade9d"
     },
     {
       "path": "scripts/auditar-convenciones-nombres.mjs",
@@ -36028,8 +36028,8 @@
     {
       "path": "scripts/auditar-diagnostico-hallazgos.js",
       "extension": ".js",
-      "bytes": 8621,
-      "sha256": "f7c246a199f874e1ececd733b65abb7f9651f3b4206cbb533ea21dcbdd5bed82"
+      "bytes": 8748,
+      "sha256": "66ddb3bf96189f70f2ef02e16fcf019032d01d6cf572fa15b0b168f47fab803b"
     },
     {
       "path": "scripts/auditar-diagnostico.js",
@@ -36052,8 +36052,8 @@
     {
       "path": "scripts/auditar-esquema-color.js",
       "extension": ".js",
-      "bytes": 10392,
-      "sha256": "f21651abfa665ae90f729b429d364f1e34de195f62cfed9792cfd9e8a233017d"
+      "bytes": 10440,
+      "sha256": "c81273920e5f9e4b4a055ae838976b0b6ad2b47ee74d4ba0ab657d91a3356be9"
     },
     {
       "path": "scripts/auditar-estabilidad-final-v1.mjs",
@@ -36136,8 +36136,8 @@
     {
       "path": "scripts/auditar-final-integracion.js",
       "extension": ".js",
-      "bytes": 10310,
-      "sha256": "397b6661d9fce875990058b53ba378ba59029688778e5bc6b1e64496eda65ef4"
+      "bytes": 10447,
+      "sha256": "711a2be33ceb9bda8f86e1b0534f665c6a3bf719cf9fca2a4a9087a5da1536c4"
     },
     {
       "path": "scripts/auditar-firestore-lecturas-presupuesto.js",
@@ -36280,8 +36280,8 @@
     {
       "path": "scripts/auditar-nivel-3-calidad.js",
       "extension": ".js",
-      "bytes": 10577,
-      "sha256": "7f55fae90862b64eda0b22cf32821e15cde31734a31f7b8a9d25778a0281ecb6"
+      "bytes": 10786,
+      "sha256": "5fbcd2a7d1d38c1809c0c8fae606cc6527149a425f5d17ee6cbd2ccc5f7cf21d"
     },
     {
       "path": "scripts/auditar-nosotros-pagina.js",
@@ -36340,8 +36340,8 @@
     {
       "path": "scripts/auditar-profunda.js",
       "extension": ".js",
-      "bytes": 16340,
-      "sha256": "3064bdcaa339d73a0cf1c779111f691e269fcdfc9f8eb7f80e31469e85f64bb8"
+      "bytes": 16518,
+      "sha256": "343e0d702b833ad2aac5bd93804d8ae0ebca078f9955d5dca117c2d84a3f9f28"
     },
     {
       "path": "scripts/auditar-publico-operativo-contrato.js",
@@ -36472,14 +36472,14 @@
     {
       "path": "scripts/auditar-tintin.js",
       "extension": ".js",
-      "bytes": 12646,
-      "sha256": "9cbe1ae92dbbc8de62bf9e70b3fa5cc4b57388a96d1ce09e6bd47cd27d75a534"
+      "bytes": 12839,
+      "sha256": "9b8fc1037910db7b5ae43a7e5fa1cb0204f0e45c937e1f1699d9e5b59aa2d7f4"
     },
     {
       "path": "scripts/auditar-tipografia.js",
       "extension": ".js",
-      "bytes": 13377,
-      "sha256": "689dddc811d65c3509d6e62ac8788954ab8fa0fd5dfad3915153327cba30c387"
+      "bytes": 13591,
+      "sha256": "368b4e3f7c64b17d66b4ab34c65c50c85287587f8f74d7b44ba1736206dde18e"
     },
     {
       "path": "scripts/auditar-todas-navegacion-superficies-ci.mjs",
@@ -39499,7 +39499,7 @@
           },
           {
             "file": "scripts/auditar-diagnostico-hallazgos.js",
-            "line": 86,
+            "line": 87,
             "operation": "collection"
           }
         ]
@@ -39624,7 +39624,7 @@
           },
           {
             "file": "scripts/auditar-diagnostico-hallazgos.js",
-            "line": 84,
+            "line": 85,
             "operation": "collection"
           },
           {
@@ -40144,17 +40144,17 @@
           },
           {
             "file": "scripts/auditar-final-integracion.js",
-            "line": 42,
+            "line": 45,
             "operation": "doc"
           },
           {
             "file": "scripts/auditar-final-integracion.js",
-            "line": 48,
+            "line": 51,
             "operation": "doc"
           },
           {
             "file": "scripts/auditar-final-integracion.js",
-            "line": 55,
+            "line": 58,
             "operation": "doc"
           },
           {
@@ -40504,7 +40504,7 @@
           },
           {
             "file": "scripts/auditar-diagnostico-hallazgos.js",
-            "line": 85,
+            "line": 86,
             "operation": "collection"
           },
           {

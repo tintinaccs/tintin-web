@@ -140,7 +140,10 @@ check('La espera remota del esquema no vuelve a ocultar todo el contenido',
   !instantRuntime.includes('tt-color-scheme-pending body>*:not(#tt-loader):not(#tt-store-closed-overlay) { visibility: hidden'));
 
 const htmlFiles = fs.readdirSync(ROOT).filter(file => file.endsWith('.html'));
-const publicPages = htmlFiles.filter(file => !['admin.html', 'admin-images.html', 'nosotros.html'].includes(file));
+const publicPages = htmlFiles.filter(file =>
+  !['admin.html', 'admin-images.html', 'nosotros.html'].includes(file) &&
+  !/^google[a-f0-9]+\.html$/i.test(file)
+);
 const missingPublicAssets = publicPages.filter(file => {
   const html = read(file);
   return !html.includes('css/core/tokens-color.css') ||

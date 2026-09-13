@@ -536,7 +536,10 @@ function checkAssets(files) {
 }
 
 function checkImportantPages(files) {
-  const htmlFiles = files.filter(f => f.endsWith('.html'));
+  const htmlFiles = files
+    .filter(f => f.endsWith('.html'))
+    // Search Console verifica este archivo estático sin cargar el runtime.
+    .filter(f => !/^google[a-f0-9]+\.html$/i.test(f));
 
   const expected = [
     'index.html',
@@ -571,7 +574,7 @@ function main() {
   checkImportantPages(files);
 
   for (const file of files) {
-    if (file.endsWith('.html')) checkHtml(file);
+    if (file.endsWith('.html') && !/^google[a-f0-9]+\.html$/i.test(file)) checkHtml(file);
     if (file.endsWith('.css')) checkCss(file);
     if (file.endsWith('.js')) checkJs(file);
   }

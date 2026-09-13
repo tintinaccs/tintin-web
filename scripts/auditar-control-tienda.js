@@ -281,7 +281,10 @@ check(
 
 const htmlFiles = fs
   .readdirSync(ROOT)
-  .filter(file => file.toLowerCase().endsWith('.html'));
+  .filter(file => file.toLowerCase().endsWith('.html'))
+  // Google Search Console sirve este archivo de verificación sin runtime;
+  // no es una ruta de la aplicación que deba pasar por el store gate.
+  .filter(file => !/^google[a-f0-9]+\.html$/i.test(file));
 
 htmlFiles.forEach(file => {
   const html = read(file);
