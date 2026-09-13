@@ -15,7 +15,13 @@ export function enhanceMobileFooter(root = document) {
     toggle.type = 'button';
     toggle.className = 'tt-footer-accordion-toggle';
     toggle.setAttribute('aria-controls', panelId);
-    toggle.innerHTML = `<span>${label}</span><span class="tt-footer-accordion-icon" aria-hidden="true">+</span>`;
+    const labelEl = document.createElement('span');
+    labelEl.textContent = label;
+    const iconEl = document.createElement('span');
+    iconEl.className = 'tt-footer-accordion-icon';
+    iconEl.setAttribute('aria-hidden', 'true');
+    iconEl.textContent = '+';
+    toggle.append(labelEl, iconEl);
     title.appendChild(toggle);
 
     const sync = () => {

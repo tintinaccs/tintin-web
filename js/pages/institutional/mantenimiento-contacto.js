@@ -136,7 +136,34 @@ if (/(?:^|\/)contact(?:\.html)?$/.test(routePath) && !window.TintinContactMainte
     const scheduleItem = [...document.querySelectorAll('.tt-contact-info-item')].find(item => item.textContent.includes('Horario de atención'));
     if (scheduleItem) {
       const strong = scheduleItem.querySelector('strong');
-      scheduleItem.innerHTML = `<span class="tt-contact-info-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b84c72" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><div><strong>${strong?.textContent || 'Horario de atención'}</strong><br><span>${schedule}</span></div>`;
+      const icon = scheduleItem.querySelector('.tt-contact-info-icon') || document.createElement('span');
+      icon.className = 'tt-contact-info-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      icon.replaceChildren();
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('width', '20');
+      svg.setAttribute('height', '20');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('fill', 'none');
+      svg.setAttribute('stroke', '#b84c72');
+      svg.setAttribute('stroke-width', '1.8');
+      svg.setAttribute('stroke-linecap', 'round');
+      svg.setAttribute('stroke-linejoin', 'round');
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', '12');
+      circle.setAttribute('cy', '12');
+      circle.setAttribute('r', '10');
+      const hands = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+      hands.setAttribute('points', '12 6 12 12 16 14');
+      svg.append(circle, hands);
+      icon.appendChild(svg);
+      const content = document.createElement('div');
+      const heading = document.createElement('strong');
+      heading.textContent = strong?.textContent || 'Horario de atención';
+      const value = document.createElement('span');
+      value.textContent = schedule;
+      content.append(heading, document.createElement('br'), value);
+      scheduleItem.replaceChildren(icon, content);
     }
   }
 
