@@ -29,7 +29,7 @@ let publicReviewsHaveMore = false;
 let publicReviewsLoadingMore = false;
 
 function productReturnPath() {
-  return `/product?id=${encodeURIComponent(productId)}#product-reviews`;
+  return `${location.pathname || '/product'}${location.search || ''}${location.hash || ''}`;
 }
 
 function savePendingIntent(action, payload = {}) {

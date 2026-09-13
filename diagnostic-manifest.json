@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5bc600ab5c3db1962cf2b84ddde881b5c49b40f2603247407d02cfc601b1b05d",
+  "sourceFingerprint": "6cca4b2e975f373db41c8fb7be3685ec05fa4dfb072758b4e9f17ff1fd31e03b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 815,
-    "textFiles": 778,
-    "totalBytes": 16251327,
+    "files": 816,
+    "textFiles": 779,
+    "totalBytes": 16258774,
     "pages": 18,
-    "modules": 557
+    "modules": 558
   },
   "viewports": [
     {
@@ -15845,8 +15845,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24498,
-      "sha256": "4fc1b08637cedb731e3b4bb9570f07109fbaccb24e557d3dfad5f05603d311ae",
+      "bytes": 24489,
+      "sha256": "da9c59a45cc2d78c5bee71226eecbf19ef2c3cfa1d5b16c35d1ae0929b7b78a8",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15930,7 +15930,7 @@
           "line": 351
         },
         {
-          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260908-public-activity-auth-1",
+          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260913-return-path-1",
           "target": "js/pages/product/resenas-producto.js",
           "line": 352
         },
@@ -16353,7 +16353,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260908-public-activity-auth-1",
+          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260913-return-path-1",
           "target": "js/pages/product/resenas-producto.js",
           "line": 352,
           "exists": true
@@ -22422,8 +22422,8 @@
     },
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
-      "bytes": 9327,
-      "sha256": "e75044b2e91354984a675d48001b9d7b261210c381641e3381ac98c8a5d88031",
+      "bytes": 9348,
+      "sha256": "44eef82122c4b107270b2f63e7b020c52bed9fd72c4d5f1b6f1aa18be2b393a1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22440,6 +22440,12 @@
           "target": "js/components/navigation/compartido/configuracion.js",
           "dynamic": false,
           "line": 2
+        },
+        {
+          "raw": "../../../core/auth/navegacion-autenticacion.js?v=tintin-20260912-ux-closure-1",
+          "target": "js/core/auth/navegacion-autenticacion.js",
+          "dynamic": true,
+          "line": 112
         },
         {
           "raw": "./control-busqueda.js?v=tintin-20260912-auth-closure-5",
@@ -22612,8 +22618,8 @@
     },
     {
       "path": "js/components/navigation/compartido/panel-cuenta.js",
-      "bytes": 783,
-      "sha256": "460e0ad487b8e08cd97394986541ef43001f74e135b1a9a07a9fdbed28a16a5a",
+      "bytes": 1271,
+      "sha256": "e87b65a870c1344a6ec4b146a7c29c37f2cdefb54842a1b53ad4f90be2e8b350",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22761,8 +22767,8 @@
     },
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
-      "bytes": 10670,
-      "sha256": "da342de2e2a342ae554fa89033b07efd5bf542fcec553383fd40d5ba446c5804",
+      "bytes": 10699,
+      "sha256": "406ac4abbf1ebb3f420f1442c3c32c95a0a1c8dac08209230a856de06474e400",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22799,7 +22805,7 @@
           "line": 5
         },
         {
-          "raw": "./compartido/panel-cuenta.js",
+          "raw": "./compartido/panel-cuenta.js?v=tintin-20260912-ux-closure-1",
           "target": "js/components/navigation/compartido/panel-cuenta.js",
           "dynamic": false,
           "line": 6
@@ -22829,7 +22835,7 @@
           "line": 10
         },
         {
-          "raw": "./compartido/carga-navegacion.js?v=tintin-20260912-auth-closure-6",
+          "raw": "./compartido/carga-navegacion.js?v=tintin-20260912-ux-closure-1",
           "target": "js/components/navigation/compartido/carga-navegacion.js",
           "dynamic": false,
           "line": 11
@@ -23227,8 +23233,8 @@
     },
     {
       "path": "js/core/auth/navegacion-autenticacion.js",
-      "bytes": 7091,
-      "sha256": "c7e65f2d646627e7e72ce4d7c192b7c75b561c63e8fb1de91226013b15e31949",
+      "bytes": 7483,
+      "sha256": "cb2c5c0aa1495c88b8f3d559ad4da6a6f750b0ab4213b411084baa35db7fe91a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24287,8 +24293,8 @@
     },
     {
       "path": "js/inicio-navegacion-publica.js",
-      "bytes": 1870,
-      "sha256": "5340d4c44a3364f1ff6bf580af8a8b9e839728c6ad9a5e247e886a9822847fc7",
+      "bytes": 1868,
+      "sha256": "9c9d8ff5583dc45f96307be4f0a6f4f98425d888bf1c58bb3d6488064bb10bc5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25059,8 +25065,8 @@
     },
     {
       "path": "js/pages/product/resenas-producto.js",
-      "bytes": 37313,
-      "sha256": "b233fe4deb4a11a12b1f36c2c0d6ba6e604ffdf6be8ebfbf6074de61c3fac244",
+      "bytes": 37333,
+      "sha256": "5eb93ae35b58a9b81d9197dd6bb1afe40732df7a7c88b0a929c6e9aca7f6a85a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25156,8 +25162,8 @@
     },
     {
       "path": "js/pages/profile/control-acceso-perfil.js",
-      "bytes": 5898,
-      "sha256": "e01eaf39b40a204027fc1855a72d26b62e1c2c55c324b824eee3faabef6d3e0d",
+      "bytes": 5970,
+      "sha256": "43222d3c6631d41aaa64442eebc7287308cec07f6efc174a7c2a5fa0107aaada",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27287,8 +27293,8 @@
     },
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
-      "bytes": 9996,
-      "sha256": "506f459fc77f014375eae6d3c494c86b1dd6826beb9697f6f0fb1d42149dcf05",
+      "bytes": 10112,
+      "sha256": "a1daa4c4c11125bc1f2a47ed1f5d901bbd88f827b44da344b8255415344a9586",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27605,8 +27611,8 @@
     },
     {
       "path": "scripts/auditar-modular-arquitectura.js",
-      "bytes": 8768,
-      "sha256": "b80297b8720b304987a3918f292c475b161dfb6a72e98f5f3a6e152b4664bec8",
+      "bytes": 8789,
+      "sha256": "213f65049841c4c11a91b2dce635340dc2d4106edcbfda9bb01ce4c03e8ca00a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27617,12 +27623,6 @@
           "target": "scripts/compartido/panel-busqueda.js",
           "dynamic": false,
           "line": 60
-        },
-        {
-          "raw": "./compartido/panel-cuenta.js",
-          "target": "scripts/compartido/panel-cuenta.js",
-          "dynamic": false,
-          "line": 61
         },
         {
           "raw": "./compartido/panel-carrito.js",
@@ -27968,8 +27968,8 @@
     },
     {
       "path": "scripts/auditar-puntuacion-resena-producto.mjs",
-      "bytes": 1621,
-      "sha256": "ab92d10223793dda53804f212561881395ed8f1c2b14cfe00365e7969adcf32a",
+      "bytes": 1612,
+      "sha256": "c0b9feda1255e091b9ec8f5e025d5ea8e8c197439c57fcab0b1419b0b3b1e49d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30613,6 +30613,48 @@
           "line": 93
         }
       ]
+    },
+    {
+      "path": "tests/login/navigation-return.test.mjs",
+      "bytes": 5731,
+      "sha256": "ae385f8a095dad25f69040c6ba3fd63a977f5d10f0b22328f8ec75b945e2b25c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs/promises",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "tests/login/phone-utils.test.mjs",
@@ -34598,8 +34640,8 @@
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
       "extension": ".js",
-      "bytes": 9327,
-      "sha256": "e75044b2e91354984a675d48001b9d7b261210c381641e3381ac98c8a5d88031"
+      "bytes": 9348,
+      "sha256": "44eef82122c4b107270b2f63e7b020c52bed9fd72c4d5f1b6f1aa18be2b393a1"
     },
     {
       "path": "js/components/navigation/compartido/compatibilidad-cuenta-movil.js",
@@ -34676,8 +34718,8 @@
     {
       "path": "js/components/navigation/compartido/panel-cuenta.js",
       "extension": ".js",
-      "bytes": 783,
-      "sha256": "460e0ad487b8e08cd97394986541ef43001f74e135b1a9a07a9fdbed28a16a5a"
+      "bytes": 1271,
+      "sha256": "e87b65a870c1344a6ec4b146a7c29c37f2cdefb54842a1b53ad4f90be2e8b350"
     },
     {
       "path": "js/components/navigation/compartido/recursos-navegacion.js",
@@ -34736,8 +34778,8 @@
     {
       "path": "js/components/navigation/entrada-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 10670,
-      "sha256": "da342de2e2a342ae554fa89033b07efd5bf542fcec553383fd40d5ba446c5804"
+      "bytes": 10699,
+      "sha256": "406ac4abbf1ebb3f420f1442c3c32c95a0a1c8dac08209230a856de06474e400"
     },
     {
       "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
@@ -34832,8 +34874,8 @@
     {
       "path": "js/core/auth/navegacion-autenticacion.js",
       "extension": ".js",
-      "bytes": 7091,
-      "sha256": "c7e65f2d646627e7e72ce4d7c192b7c75b561c63e8fb1de91226013b15e31949"
+      "bytes": 7483,
+      "sha256": "cb2c5c0aa1495c88b8f3d559ad4da6a6f750b0ab4213b411084baa35db7fe91a"
     },
     {
       "path": "js/core/auth/permisos-roles.js",
@@ -35078,8 +35120,8 @@
     {
       "path": "js/inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 1870,
-      "sha256": "5340d4c44a3364f1ff6bf580af8a8b9e839728c6ad9a5e247e886a9822847fc7"
+      "bytes": 1868,
+      "sha256": "9c9d8ff5583dc45f96307be4f0a6f4f98425d888bf1c58bb3d6488064bb10bc5"
     },
     {
       "path": "js/orders/nucleo-metodos-pago.js",
@@ -35282,8 +35324,8 @@
     {
       "path": "js/pages/product/resenas-producto.js",
       "extension": ".js",
-      "bytes": 37313,
-      "sha256": "b233fe4deb4a11a12b1f36c2c0d6ba6e604ffdf6be8ebfbf6074de61c3fac244"
+      "bytes": 37333,
+      "sha256": "5eb93ae35b58a9b81d9197dd6bb1afe40732df7a7c88b0a929c6e9aca7f6a85a"
     },
     {
       "path": "js/pages/product/seleccion-producto.js",
@@ -35306,8 +35348,8 @@
     {
       "path": "js/pages/profile/control-acceso-perfil.js",
       "extension": ".js",
-      "bytes": 5898,
-      "sha256": "e01eaf39b40a204027fc1855a72d26b62e1c2c55c324b824eee3faabef6d3e0d"
+      "bytes": 5970,
+      "sha256": "43222d3c6631d41aaa64442eebc7287308cec07f6efc174a7c2a5fa0107aaada"
     },
     {
       "path": "js/pages/profile/estado-canonico-perfil.mjs",
@@ -35648,8 +35690,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 24498,
-      "sha256": "4fc1b08637cedb731e3b4bb9570f07109fbaccb24e557d3dfad5f05603d311ae"
+      "bytes": 24489,
+      "sha256": "da9c59a45cc2d78c5bee71226eecbf19ef2c3cfa1d5b16c35d1ae0929b7b78a8"
     },
     {
       "path": "robots.txt",
@@ -36092,8 +36134,8 @@
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 9996,
-      "sha256": "506f459fc77f014375eae6d3c494c86b1dd6826beb9697f6f0fb1d42149dcf05"
+      "bytes": 10112,
+      "sha256": "a1daa4c4c11125bc1f2a47ed1f5d901bbd88f827b44da344b8255415344a9586"
     },
     {
       "path": "scripts/auditar-inicio-pagina.js",
@@ -36158,8 +36200,8 @@
     {
       "path": "scripts/auditar-modular-arquitectura.js",
       "extension": ".js",
-      "bytes": 8768,
-      "sha256": "b80297b8720b304987a3918f292c475b161dfb6a72e98f5f3a6e152b4664bec8"
+      "bytes": 8789,
+      "sha256": "213f65049841c4c11a91b2dce635340dc2d4106edcbfda9bb01ce4c03e8ca00a"
     },
     {
       "path": "scripts/auditar-movil-correcciones.mjs",
@@ -36266,8 +36308,8 @@
     {
       "path": "scripts/auditar-puntuacion-resena-producto.mjs",
       "extension": ".mjs",
-      "bytes": 1621,
-      "sha256": "ab92d10223793dda53804f212561881395ed8f1c2b14cfe00365e7969adcf32a"
+      "bytes": 1612,
+      "sha256": "c0b9feda1255e091b9ec8f5e025d5ea8e8c197439c57fcab0b1419b0b3b1e49d"
     },
     {
       "path": "scripts/auditar-push-web.js",
@@ -36434,8 +36476,8 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 38,
-      "sha256": "dd9d3b46a69239cd812969333746634c254684c83bb0c9501af9d578669e38b8"
+      "bytes": 615,
+      "sha256": "37a23227b4e61935e7a2c7977fade0ca738abc231036078141dd6ca51d175c00"
     },
     {
       "path": "scripts/cache-version-baseline.json",
@@ -36850,6 +36892,12 @@
       "extension": ".mjs",
       "bytes": 4585,
       "sha256": "24a2d92b13774d815e88b39001777a5df81b059e6c8909ffd5ad7ddcf9283979"
+    },
+    {
+      "path": "tests/login/navigation-return.test.mjs",
+      "extension": ".mjs",
+      "bytes": 5731,
+      "sha256": "ae385f8a095dad25f69040c6ba3fd63a977f5d10f0b22328f8ec75b945e2b25c"
     },
     {
       "path": "tests/login/phone-utils.test.mjs",
