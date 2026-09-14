@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "eba1a232eb141653b08d19b3d2cf8f22a4f607d2944c6a23683e44eefb431b2a",
+  "sourceFingerprint": "6a3648abc9666d5c915985973bd4d475a794d31da31c6709205823ed80d6ac42",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 817,
     "textFiles": 780,
-    "totalBytes": 16301403,
+    "totalBytes": 16302218,
     "pages": 19,
     "modules": 558
   },
@@ -28953,8 +28953,8 @@
     },
     {
       "path": "scripts/generar-csp-cloudflare.js",
-      "bytes": 13121,
-      "sha256": "8f89521b457c5439ceafa0b97f1876bea117a670e9482a6383bad2c6d679575c",
+      "bytes": 13157,
+      "sha256": "e344b64dafc014928bab23e8b83af1e02f3428f88e36975636d5271bbba2c77d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29011,7 +29011,7 @@
         },
         {
           "url": "https://api.cloudinary.com/",
-          "line": 172
+          "line": 173
         }
       ]
     },
@@ -31364,8 +31364,8 @@
     },
     {
       "path": "tests/security/csp-cloudinary-upload.test.mjs",
-      "bytes": 3720,
-      "sha256": "0916b00eb76401fa2a2c0acc6f5f913e1f5e4e9f3045fcd62bd15ef45239ff7d",
+      "bytes": 4499,
+      "sha256": "6e87389738b7a1c19292f6ae7edf2fe7befc43348ebca9f4b16c5b9a5e6e9e6b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31388,12 +31388,18 @@
           "target": null,
           "dynamic": false,
           "line": 3
+        },
+        {
+          "raw": "node:crypto",
+          "target": null,
+          "dynamic": false,
+          "line": 4
         }
       ],
       "endpoints": [
         {
           "url": "https://api.cloudinary.com/",
-          "line": 45
+          "line": 58
         }
       ]
     },
@@ -36592,8 +36598,8 @@
     {
       "path": "scripts/generar-csp-cloudflare.js",
       "extension": ".js",
-      "bytes": 13121,
-      "sha256": "8f89521b457c5439ceafa0b97f1876bea117a670e9482a6383bad2c6d679575c"
+      "bytes": 13157,
+      "sha256": "e344b64dafc014928bab23e8b83af1e02f3428f88e36975636d5271bbba2c77d"
     },
     {
       "path": "scripts/generar-flujo-decisiones-acceso.mjs",
@@ -37090,8 +37096,8 @@
     {
       "path": "tests/security/csp-cloudinary-upload.test.mjs",
       "extension": ".mjs",
-      "bytes": 3720,
-      "sha256": "0916b00eb76401fa2a2c0acc6f5f913e1f5e4e9f3045fcd62bd15ef45239ff7d"
+      "bytes": 4499,
+      "sha256": "6e87389738b7a1c19292f6ae7edf2fe7befc43348ebca9f4b16c5b9a5e6e9e6b"
     },
     {
       "path": "tests/seo/phase11-seo.spec.js",
