@@ -507,8 +507,12 @@ async function startProfileAuthGuard() {
   document.getElementById('perfil-nombre-display').textContent = identity.name || identity.email || 'Cuenta Tintin';
   document.getElementById('perfil-email-display').textContent  = identity.email;
 
-  // Sync cart
-  await syncCartToFirestore(user.uid);
+  // La hidratación visual del perfil no depende de que Firestore o la
+  // sincronización del carrito respondan en este instante. El carrito se
+  // reconcilia en segundo plano y no puede dejar la cuenta en blanco.
+  syncCartToFirestore(user.uid).catch(error => {
+    console.warn('[Perfil] La sincronización del carrito quedó pendiente:', error);
+  });
 
   // Role
   const role = await getUserRole(user.uid, user.email);
@@ -524,23 +528,24 @@ async function startProfileAuthGuard() {
     document.getElementById('link-admin-panel').style.display = 'inline-flex';
   }
 
-  // Load Firestore user data (ya la trajimos arriba para el chequeo de bloqueo)
-  if (userData) {
-    document.getElementById('perfil-nombre').value = identity.name;
-    document.getElementById('perfil-tel').value    = identity.phone;
-    document.getElementById('perfil-dir').value    = identity.address;
-    document.getElementById('perfil-purchase-count').textContent = userData.purchaseCount || 0;
-    document.getElementById('perfil-total-spent').textContent    = formatPrice(userData.totalSpent || 0);
+  // Load Firestore user data (ya la trajimos arriba para el chequeo de bloqueo).
+  // Auth es el fallback inmediato: si App Check/red demora o la lectura de
+  // users falla, la cuenta igual muestra sus datos básicos y no parece
+  // desconectada. Firestore completa los campos en cuanto está disponible.
+  document.getElementById('perfil-nombre').value = identity.name || '';
+  document.getElementById('perfil-tel').value    = identity.phone || '';
+  document.getElementById('perfil-dir').value    = identity.address || '';
+  document.getElementById('perfil-purchase-count').textContent = userData?.purchaseCount || 0;
+  document.getElementById('perfil-total-spent').textContent    = formatPrice(userData?.totalSpent || 0);
 
-    const usernameInput = document.getElementById('perfil-username');
-    const usernameHint  = document.getElementById('perfil-username-hint');
-    usernameInput.value = identity.username;
-    if (userData.usernameChangedAt) {
-      usernameInput.disabled = true;
-      usernameHint.textContent = 'Ya usaste tu único cambio de nombre de usuario.';
-    } else {
-      usernameHint.textContent = 'Podés cambiarlo una sola vez. Solo minúsculas, números y guion bajo (3 a 20 caracteres).';
-    }
+  const usernameInput = document.getElementById('perfil-username');
+  const usernameHint  = document.getElementById('perfil-username-hint');
+  usernameInput.value = identity.username || '';
+  if (userData?.usernameChangedAt) {
+    usernameInput.disabled = true;
+    usernameHint.textContent = 'Ya usaste tu único cambio de nombre de usuario.';
+  } else {
+    usernameHint.textContent = 'Podés cambiarlo una sola vez. Solo minúsculas, números y guion bajo (3 a 20 caracteres).';
   }
 
   // Datos de la cuenta — se guardan desde el alta (js/core/store/perfil-usuario.js).
