@@ -1,5 +1,5 @@
 import { auth, db, appCheckReady, authPersistenceReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260910-session-coordinator-1';
 import { collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { heartIconMarkup } from './icono-corazon.js?v=tintin-20260817-heart-icon-1';
 
@@ -70,7 +70,6 @@ function loginForCurrentPage() {
 
 async function stableAuthUser() {
   try { await authPersistenceReady; } catch {}
-  try { await auth.authStateReady?.(); } catch {}
   const user = auth.currentUser || currentUser || null;
   if (user) currentUser = user;
   return user;
@@ -144,7 +143,7 @@ window.TintinFavorites = {
   refresh: publish,
 };
 
-onAuthStateChanged(auth, user => {
+subscribeAuthState(user => {
   unsubscribe?.();
   unsubscribe = null;
   currentUser = user || null;
