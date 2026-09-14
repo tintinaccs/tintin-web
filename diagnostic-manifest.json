@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "a145a7ec456748de729408e8652b940e5aeb19077d4fa69d93d5d3aaec3fb07b",
+  "sourceFingerprint": "6aa0f2223c008b9bba67e8e5b86622d5e1ed4efa2a1cba8f5eda7750cc713e1d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 819,
     "textFiles": 782,
-    "totalBytes": 16307306,
+    "totalBytes": 16308301,
     "pages": 19,
     "modules": 560
   },
@@ -17531,8 +17531,8 @@
     },
     {
       "path": "cloudflare/apps-script-fetch.js",
-      "bytes": 1316,
-      "sha256": "ed3941372870d4f485bb72d226647adb8745e2b951c32d4758527f870e960c80",
+      "bytes": 1440,
+      "sha256": "46e0579fd26f9ced05ddc1b6151b95bb716d41d9dd288cb787236aabbb21c27c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30833,8 +30833,8 @@
     },
     {
       "path": "tests/operations/apps-script-fetch.test.mjs",
-      "bytes": 1472,
-      "sha256": "e8e368805a4d2eb9bdc466a79bedddc5d53c99b9c2a8a230d840efd44f47f192",
+      "bytes": 2343,
+      "sha256": "1afe681c63b3eda7cda3b2a6f5f038d29b52cd155ae1534344789b3d7e329c9a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30870,7 +30870,7 @@
         },
         {
           "url": "https://example.com/no-permitido",
-          "line": 26
+          "line": 42
         }
       ]
     },
@@ -32783,8 +32783,8 @@
     {
       "path": "cloudflare/apps-script-fetch.js",
       "extension": ".js",
-      "bytes": 1316,
-      "sha256": "ed3941372870d4f485bb72d226647adb8745e2b951c32d4758527f870e960c80"
+      "bytes": 1440,
+      "sha256": "46e0579fd26f9ced05ddc1b6151b95bb716d41d9dd288cb787236aabbb21c27c"
     },
     {
       "path": "cloudflare/borrado-global-catalogo.js",
@@ -37013,8 +37013,8 @@
     {
       "path": "tests/operations/apps-script-fetch.test.mjs",
       "extension": ".mjs",
-      "bytes": 1472,
-      "sha256": "e8e368805a4d2eb9bdc466a79bedddc5d53c99b9c2a8a230d840efd44f47f192"
+      "bytes": 2343,
+      "sha256": "1afe681c63b3eda7cda3b2a6f5f038d29b52cd155ae1534344789b3d7e329c9a"
     },
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",
