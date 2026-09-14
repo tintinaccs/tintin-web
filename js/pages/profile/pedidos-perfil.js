@@ -1,5 +1,5 @@
 import { auth, db, authPersistenceReady, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260910-session-coordinator-1';
 import { collection, onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20260716-cloudinary-fix-3';
 import { reconcileAccountOrders } from './estado-canonico-perfil.mjs?v=tintin-20260908-profile-canonical-1';
@@ -157,7 +157,7 @@ export function startProfileOrders() {
   window.addEventListener('online',onOnline);
   document.addEventListener('visibilitychange',onVisible);
   window.addEventListener('pagehide',()=>{stopped=true;controller.stop();authStop?.();window.removeEventListener('online',onOnline);document.removeEventListener('visibilitychange',onVisible);},{once:true});
-  Promise.resolve(authPersistenceReady).then(()=>auth.authStateReady?.()).then(()=>{if(stopped)return;authStop=onAuthStateChanged(auth,user=>{currentUser=user;visible=5;void (async()=>{if(user)await appCheckReady;if(!stopped && auth.currentUser?.uid===user?.uid)controller.start(user);})();});}).catch(error=>{status.textContent='No pudimos restaurar el historial de pedidos.';console.warn('[profile-orders]',error);});
+  Promise.resolve(authPersistenceReady).then(()=>{if(stopped)return;authStop=subscribeAuthState(user=>{currentUser=user;visible=5;void (async()=>{if(user)await appCheckReady;if(!stopped && auth.currentUser?.uid===user?.uid)controller.start(user);})();});}).catch(error=>{status.textContent='No pudimos restaurar el historial de pedidos.';console.warn('[profile-orders]',error);});
   window.TintinProfileOrders={refresh:retry,stop:()=>controller.stop()};
 }
 if (typeof document !== 'undefined') {
