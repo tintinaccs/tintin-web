@@ -1905,11 +1905,14 @@ window.addEventListener('tt_cart_updated', () => renderCart());
 // desde el header). Esperamos a que el estado inicial se estabilice antes de
 // conectar el listener; así no convertimos una cuenta válida en invitado ni
 // mostramos el guard de login durante ese instante.
-const checkoutAuthStateReady = typeof auth.authStateReady === 'function'
-  ? auth.authStateReady().catch(error => {
-      console.warn('[Checkout] Auth initial state did not settle cleanly:', error);
-    })
-  : Promise.resolve();
+const checkoutAuthStateReady = Promise.race([
+  typeof auth.authStateReady === 'function'
+    ? auth.authStateReady().catch(error => {
+        console.warn('[Checkout] Auth initial state did not settle cleanly:', error);
+      })
+    : Promise.resolve(),
+  new Promise(resolve => window.setTimeout(resolve, 3500))
+]);
 
 checkoutAuthStateReady.then(() => onAuthStateChanged(auth, user => {
   currentUser = user;
