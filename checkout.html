@@ -754,9 +754,6 @@ function getCityPrice(cityName) {
 
 // ---- CART RENDERING ----
 async function renderCart() {
-  // Esperar a que Auth seleccione la clave local real evita leer el carrito
-  // invitado durante la transición desde el header al checkout.
-  await awaitCartIdentityReady();
   cartItems = getCartLocal();
 
   // Drop items whose product was deleted/deactivated and refresh price/name from
