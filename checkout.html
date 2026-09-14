@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260816-loader-shell-bridge-3"></script>
+  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260914-loader-shell-bridge-4"></script>
 <script src="js/cargador-pagina.js?v=tintin-20260911-hero-no-entry-animation-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260912-auth-closure-8" defer></script>
@@ -1889,15 +1889,25 @@ async function searchMapPlace(query) {
 subscribeStoreConfig().then(() => {
   populateCities();
 });
-renderCart();
+// activeCartKey en sincronizacion-carrito.js arranca en GUEST_CART_KEY hasta
+// que activateIdentity() resuelve la sesión real — auth.authStateReady() no
+// es instantáneo ni para una sesión ya persistida. Un renderCart() síncrono
+// acá leía esa key de invitada para una cuenta ya logueada y mostraba "Tu
+// carrito está vacío" por un instante al entrar por "Finalizar compra" desde
+// el header (recarga completa de página), dando la sensación de deslogueo.
+// activateIdentity() dispara tt_cart_updated siempre —invitada o cuenta—
+// apenas resuelve, así que se deja el primer render real para ese evento
+// (escuchado más abajo) en vez de arriesgar leer el carrito equivocado.
+document.getElementById('ck-items').innerHTML = '<div style="padding:32px 0;text-align:center;color:#C86B86;font-size:13px;">Cargando tu carrito…</div>';
 // Re-sync cart once real Firestore products arrive (in case they load after this page renders)
 window.addEventListener('tintin:products-loaded', () => renderCart(), { once: true });
 // sincronizacion-carrito.js dispara este evento cuando termina de migrar/traer el carrito
 // real de una cuenta recién logueada (ej. el carrito de invitada se mueve a
-// la cuenta al loguearse) — sin este listener, ese cambio llegaba después
-// del render inicial y el botón "Continuar con el envío" quedaba con el
-// estado viejo (a veces deshabilitado con productos ya en el carrito) hasta
-// que alguna otra interacción (+/-) forzaba un renderCart() nuevo.
+// la cuenta al loguearse), y también la primera vez que resuelve la
+// identidad (invitada o cuenta) — cubre tanto el primer render real como
+// los cambios posteriores; sin esto el botón "Continuar con el envío" podía
+// quedar con el estado viejo hasta que otra interacción forzara un
+// renderCart() nuevo.
 window.addEventListener('tt_cart_updated', () => renderCart());
 
 // Firebase puede emitir un `null` transitorio mientras restaura la sesión

@@ -13,11 +13,10 @@ import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/f
     guard.applyPreferredName(user?.displayName || '');
   }
 
+  // onAuthStateChanged siempre dispara con el estado actual apenas se
+  // suscribe (incluso si ya está resuelto), así que un apply(auth.currentUser)
+  // adicional acá era redundante y, peor, podía ejecutarse ANTES de que
+  // Firebase restaure una sesión persistida (auth.currentUser sigue null en
+  // ese instante), pisando el nombre real con '' por un instante.
   onAuthStateChanged(auth, apply);
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => apply(auth.currentUser), { once: true });
-  } else {
-    apply(auth.currentUser);
-  }
 })();
