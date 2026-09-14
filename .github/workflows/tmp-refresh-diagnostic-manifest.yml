@@ -1,0 +1,47 @@
+name: Temporary refresh diagnostic manifest
+
+on:
+  push:
+    branches:
+      - fix/checkout-resumen-svg-visible
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v5
+        with:
+          ref: fix/checkout-resumen-svg-visible
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Remove temporary workflow from final tree
+        run: git rm .github/workflows/tmp-refresh-diagnostic-manifest.yml
+
+      - name: Regenerate public artifacts
+        run: npm run build:pages
+
+      - name: Commit regenerated manifest and self-removal
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostic-manifest.json config/csp-runtime.json config/csp-runtime.js _headers
+          git add -u .github/workflows/tmp-refresh-diagnostic-manifest.yml
+          if git diff --cached --quiet; then
+            echo "Nothing to commit"
+            exit 0
+          fi
+          git commit -m "chore: refresh checkout generated artifacts"
+          git push origin HEAD:fix/checkout-resumen-svg-visible
