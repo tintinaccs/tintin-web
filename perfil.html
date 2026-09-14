@@ -325,7 +325,7 @@
 <script src="tienda.js?v=tintin-20260914-session-unified-1"></script>
 
 <script type="module">
-import { auth, db, authPersistenceReady } from "./js/core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1";
+import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1";
 import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -442,19 +442,8 @@ async function waitForProfileUserAfterAuthRestore(user) {
 }
 
 async function startProfileAuthGuard() {
-  try {
-    await authPersistenceReady;
-  } catch (error) {
-    console.warn('[Perfil] Auth persistence unavailable:', error);
-  }
-  if (typeof auth.authStateReady === 'function') {
-    try {
-      await auth.authStateReady();
-    } catch (error) {
-      console.warn('[Perfil] Auth initial state did not settle cleanly:', error);
-    }
-  }
-
+  // El coordinador ya espera la restauración inicial de Auth. Mantener otra
+  // espera acá duplicaba la barrera y retrasaba la hidratación visual.
   subscribeAuthState(async user => {
     user = await waitForProfileUserAfterAuthRestore(user);
     if (!user) {
