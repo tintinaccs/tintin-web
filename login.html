@@ -206,7 +206,6 @@ import {
   signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
-  onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
@@ -226,6 +225,7 @@ import { isValidDob } from "./js/components/forms/validacion-nacimiento.js?v=tin
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260912-auth-closure-1";
 import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260912-post-login-profile-2";
+import { subscribeAuthState } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260910-session-coordinator-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260909-store-gate-degraded-fix-1";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260912-post-login-profile-1";
@@ -910,7 +910,7 @@ async function handleGoogleRedirectReturn(observedUser) {
 
 // Si ya está logueada, redirige sin mostrar el botón. Con Google no existe
 // un estado "correo sin verificar" — Google ya lo entrega verificado.
-onAuthStateChanged(auth, async user => {
+subscribeAuthState(async user => {
   // Firebase puede emitir el primer estado antes de terminar de restaurar la
   // persistencia local. Esperar acá evita mostrar el login (y permitir que una
   // acción parezca una cuenta nueva) mientras la sesión existente todavía se
@@ -1316,7 +1316,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
 };
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1"></script>
-<script src="tienda.js?v=tintin-20260910-auth-retry-1" defer></script>
+<script src="tienda.js?v=tintin-20260914-session-unified-1" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 import { auth, db } from '../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-3';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260910-session-coordinator-1';
 import {
   doc,
   getDoc,
@@ -329,7 +329,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }, 0);
   });
 
-  onAuthStateChanged(auth, user => {
+  subscribeAuthState(user => {
     lastProfilePrefillUid = '';
     if (user && !user.isAnonymous) prefillCheckoutDefaults(user);
   });
