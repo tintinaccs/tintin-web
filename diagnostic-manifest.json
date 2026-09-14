@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "30b4c11b4401bad79182adda280664cb3bdeb2d24346d7e3c95a354f76f4f71f",
+  "sourceFingerprint": "a145a7ec456748de729408e8652b940e5aeb19077d4fa69d93d5d3aaec3fb07b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 819,
     "textFiles": 782,
-    "totalBytes": 16306871,
+    "totalBytes": 16307306,
     "pages": 19,
     "modules": 560
   },
@@ -24997,8 +24997,8 @@
     },
     {
       "path": "js/pages/login/mantenimiento-acceso.js",
-      "bytes": 6231,
-      "sha256": "2bd54221b874f85cdda408aaf2d4a352a87df7127de62309c871dd618a6dffc9",
+      "bytes": 6666,
+      "sha256": "89a7472d7ab577bb63a9b5b2129d78b9e0368e001e83b5fc293b7b4bcb144b42",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25021,6 +25021,12 @@
           "target": null,
           "dynamic": true,
           "line": 79
+        },
+        {
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260910-session-coordinator-1",
+          "target": "js/core/auth/coordinador-sesion.js",
+          "dynamic": true,
+          "line": 80
         }
       ],
       "endpoints": [
@@ -35369,8 +35375,8 @@
     {
       "path": "js/pages/login/mantenimiento-acceso.js",
       "extension": ".js",
-      "bytes": 6231,
-      "sha256": "2bd54221b874f85cdda408aaf2d4a352a87df7127de62309c871dd618a6dffc9"
+      "bytes": 6666,
+      "sha256": "89a7472d7ab577bb63a9b5b2129d78b9e0368e001e83b5fc293b7b4bcb144b42"
     },
     {
       "path": "js/pages/product/beneficios-producto.js",
@@ -40495,7 +40501,7 @@
           },
           {
             "file": "js/pages/login/mantenimiento-acceso.js",
-            "line": 86,
+            "line": 94,
             "operation": "doc"
           },
           {
