@@ -15,7 +15,7 @@ export function loadPageMaintenance() {
   if (/\/collections(?:\.html)?$/.test(path)) return load('pages/collections/mantenimiento-colecciones.js');
   if (/\/product(?:\.html)?$/.test(path)) return load('pages/product/mantenimiento-producto.js');
   if (/\/checkout(?:\.html)?$/.test(path)) {
-    const version = 'tintin-20260907-checkout-shipping-step-1';
+    const version = 'tintin-20260914-checkout-no-deadlock-1';
     const stateVersion = 'tintin-20260912-checkout-state-navigation-1';
     return Promise.allSettled([
       load('pages/checkout/checkout-hardening.js', version),

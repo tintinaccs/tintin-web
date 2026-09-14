@@ -19,6 +19,27 @@ let profilePromise = Promise.resolve({ ok: false, reason: 'signed_out' });
 let profileState = { ok: false, loading: true, user: null, profile: null, reason: 'loading' };
 let annotateQueued = false;
 const PROFILE_READ_TIMEOUT_MS = 5000;
+const CART_READY_TIMEOUT_MS = 2500;
+const AUTH_READY_TIMEOUT_MS = 3500;
+
+function waitForCheckoutCartReady() {
+  return Promise.race([
+    Promise.resolve().then(() => awaitCartReady()),
+    new Promise(resolve => window.setTimeout(resolve, CART_READY_TIMEOUT_MS))
+  ]);
+}
+
+function waitForCheckoutAuthReady() {
+  const authReady = typeof auth.authStateReady === 'function'
+    ? auth.authStateReady().catch(error => {
+        console.warn('[Checkout hardening] Auth initial state did not settle cleanly:', error);
+      })
+    : Promise.resolve();
+  return Promise.race([
+    authReady,
+    new Promise(resolve => window.setTimeout(resolve, AUTH_READY_TIMEOUT_MS))
+  ]);
+}
 
 function activeStep() {
   return [...document.querySelectorAll('.ck-panel')].findIndex(panel => panel.classList.contains('active'));
@@ -207,7 +228,9 @@ async function guardForwardClick(event, control) {
   event.stopImmediatePropagation();
   event.stopPropagation();
 
-  await awaitCartReady();
+  // El paso de envío usa la copia local del carrito. Si la sincronización
+  // remota o App Check no responden, no se debe congelar el botón inicial.
+  await waitForCheckoutCartReady();
   cartReady = true;
   scheduleAnnotations();
 
@@ -276,12 +299,7 @@ function boot() {
   // No observar el primer `null` antes de que Firebase restaure la sesión:
   // ese pulso transitorio hacía que checkout tratara a una cuenta persistida
   // como invitada al venir desde el carrito/header.
-  const authStateReady = typeof auth.authStateReady === 'function'
-    ? auth.authStateReady().catch(error => {
-        console.warn('[Checkout hardening] Auth initial state did not settle cleanly:', error);
-      })
-    : Promise.resolve();
-  authStateReady.then(() => onAuthStateChanged(auth, user => {
+  waitForCheckoutAuthReady().then(() => onAuthStateChanged(auth, user => {
       restoreResumeState();
       profilePromise = loadProfile(user);
       profilePromise.then(state => {
@@ -316,7 +334,7 @@ function boot() {
   window.addEventListener('tintin:products-loaded', scheduleAnnotations);
   window.addEventListener('tintin:checkout-quota-ended', syncConfirmCartGuard);
 
-  void awaitCartReady().then(() => {
+  void waitForCheckoutCartReady().then(() => {
     cartReady = true;
     scheduleAnnotations();
     if (!getCartLocal().length && activeStep() > 0) forceCart('Tu carrito está vacío.');

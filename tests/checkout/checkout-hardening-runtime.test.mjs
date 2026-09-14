@@ -20,8 +20,17 @@ test('hardening runtime waits for scoped cart and blocks empty protected flow', 
 test('checkout espera la restauración de Auth antes de tratar al usuario como invitado', () => {
   assert.match(checkoutPage, /checkoutAuthStateReady/);
   assert.match(checkoutPage, /checkoutAuthStateReady\.then\(\(\) => onAuthStateChanged/);
-  assert.match(hardening, /const authStateReady = typeof auth\.authStateReady === 'function'/);
-  assert.match(hardening, /authStateReady\.then\(\(\) => onAuthStateChanged/);
+  assert.match(hardening, /function waitForCheckoutAuthReady\(\)/);
+  assert.match(hardening, /waitForCheckoutAuthReady\(\)\.then\(\(\) => onAuthStateChanged/);
+  assert.match(hardening, /AUTH_READY_TIMEOUT_MS/);
+  assert.match(hardening, /Promise\.race\(\[\s*authReady/);
+});
+
+test('el avance al envío no queda bloqueado por una sincronización remota pendiente', () => {
+  assert.match(hardening, /CART_READY_TIMEOUT_MS/);
+  assert.match(hardening, /waitForCheckoutCartReady/);
+  assert.match(hardening, /Promise\.race\(\[\s*Promise\.resolve\(\)\.then\(\(\) => awaitCartReady\(\)\)/);
+  assert.match(hardening, /await waitForCheckoutCartReady\(\)/);
 });
 
 test('cart controls use lineId so variants cannot mutate the wrong row', () => {
