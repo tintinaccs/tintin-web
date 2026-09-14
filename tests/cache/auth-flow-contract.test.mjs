@@ -11,7 +11,8 @@ const publicAuthNav = fs.readFileSync(new URL('../../js/core/auth/navegacion-aut
 const publicCart = fs.readFileSync(new URL('../../js/components/cart/sincronizacion-carrito.js', import.meta.url), 'utf8');
 
 test('login mantiene un único dueño del listener de Auth y evita redirecciones repetidas', () => {
-  assert.equal((login.match(/onAuthStateChanged\(auth/g) || []).length, 1);
+  assert.equal((login.match(/onAuthStateChanged\(auth/g) || []).length, 0);
+  assert.match(login, /subscribeAuthState\(async user =>/);
   assert.match(login, /googleRedirectHandlingPromise/);
   assert.match(login, /explicitLoginInProgress/);
   assert.match(login, /clearGoogleRedirectPending\(\)/);
@@ -116,10 +117,10 @@ test('login conserva la sesión si falla transitoriamente la lectura del perfil'
 });
 
 test('rutas públicas esperan Auth antes de pintar visitante o activar carrito', () => {
-  assert.match(publicAuthNav, /auth\.authStateReady\(\)/);
-  assert.match(publicAuthNav, /authStateReady\.then\(\(\)=>subscribeAuthState/);
-  assert.match(publicCart, /auth\.authStateReady\(\)/);
-  assert.match(publicCart, /authStateReady\.then\(\(\) => onAuthStateChanged/);
+  assert.match(publicAuthNav, /subscribeAuthState\(async user=>/);
+  assert.doesNotMatch(publicAuthNav, /authStateReady\.then/);
+  assert.match(publicCart, /subscribeAuthState\(activateIdentity\)/);
+  assert.doesNotMatch(publicCart, /authStateReady\.then\(.*onAuthStateChanged/);
 });
 
 test('el perfil no expone placeholders privados mientras Auth restaura la sesión', () => {
