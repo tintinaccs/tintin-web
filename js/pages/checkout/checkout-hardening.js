@@ -6,7 +6,7 @@ import {
   removeFromCart,
 } from '../../components/cart/sincronizacion-carrito.js?v=tintin-20260910-auth-retry-1';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260910-session-coordinator-1';
 
 const CHECKOUT_PATH = /(^|\/)checkout(?:\.html)?\/?$/i;
 const RESUME_KEY = 'tt_checkout_resume_step';
@@ -299,7 +299,7 @@ function boot() {
   // No observar el primer `null` antes de que Firebase restaure la sesión:
   // ese pulso transitorio hacía que checkout tratara a una cuenta persistida
   // como invitada al venir desde el carrito/header.
-  waitForCheckoutAuthReady().then(() => onAuthStateChanged(auth, user => {
+  subscribeAuthState(user => {
       restoreResumeState();
       profilePromise = loadProfile(user);
       profilePromise.then(state => {
