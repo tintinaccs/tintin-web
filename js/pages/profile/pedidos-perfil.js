@@ -2,7 +2,7 @@ import { auth, db, authPersistenceReady, appCheckReady } from '../../core/fireba
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260910-session-coordinator-1';
 import { collection, onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20260716-cloudinary-fix-3';
-import { reconcileAccountOrders } from './estado-canonico-perfil.mjs?v=tintin-20260914-session-unified-1';
+import { reconcileAccountOrders } from './estado-canonico-perfil.mjs?v=tintin-20260908-profile-canonical-1';
 
 const PAGE = /(?:^|\/)perfil(?:\.html)?\/?$/i;
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
