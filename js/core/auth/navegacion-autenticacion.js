@@ -1,11 +1,10 @@
 // cargador-pagina.js es el único responsable de iniciar los módulos globales de
-// interfaz. auth-nav solo administra sesión y navegación de la cuenta.
+// interfaz. auth-nav sólo administra navegación y representación de la cuenta.
 import { auth } from '../firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import { signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { subscribeAuthState } from './coordinador-sesion.js?v=tintin-20260910-session-coordinator-1';
+import { subscribeAuthState } from './coordinador-sesion.js?v=tintin-20260914-session-authority-1';
 import { getUserRole, can, SUPER_ADMIN } from './roles.js?v=tintin-20260821-accounts-phase-a-3';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
-
 
 const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');
 let silentLogoutStarted = false;
@@ -48,15 +47,9 @@ function initials(value){return String(value||'?').trim().split(/\s+/).filter(Bo
 
 const accountBtnDefaults=new Map();
 
-/* Apenas se toca Google, la página de Login desaparece debajo de una superficie
-   sólida. Solo vuelve a mostrarse si el popup se cierra o el ingreso falla. */
 document.addEventListener('click',event=>{
  const googleButton=event.target.closest?.('#btn-google');
  if(googleButton)beginSilentAuthTransition();
- // El perfil tiene su propio botón de cierre explícito. No lo capture el
- // listener global: dos handlers sobre el mismo control podían ejecutar
- // signOut en paralelo y hacer que la navegación pareciera un deslogueo
- // provocado por el icono de cuenta.
  const logoutButton=event.target.closest?.('#account-logout-btn,#tablet-user-logout-btn');
  if(logoutButton){
   event.preventDefault();
@@ -68,17 +61,10 @@ document.addEventListener('click',event=>{
 window.addEventListener('tintin:login-cancelled',endSilentAuthTransition);
 window.addEventListener('tintin:login-failed',endSilentAuthTransition);
 
-// En rutas públicas Firebase puede estar restaurando IndexedDB al mismo
-// tiempo que se monta el header. Esperar el estado inicial evita pintar una
-// cuenta como visitante durante esa ventana y que la navegación parezca un
-// cierre de sesión.
-const authStateReady = typeof auth.authStateReady === 'function'
- ? auth.authStateReady().catch(() => {})
- : Promise.resolve();
-
-authStateReady.then(()=>subscribeAuthState(async user=>{
- // login.html es el único dueño del alta, bloqueo y destino posterior al
- // acceso. Evita dos redirecciones paralelas compitiendo por la misma sesión.
+// No se consulta authStateReady ni auth.currentUser acá. El coordinador es la
+// única autoridad que resuelve el estado inicial de Firebase y notifica cuando
+// ya puede distinguir invitado real de una sesión todavía restaurándose.
+subscribeAuthState(async user=>{
  if(IS_LOGIN_PAGE)return;
  let role='client';
  try{if(user)role=await getUserRole(user.uid,user.email);}catch(e){console.warn('[auth-nav] No se pudo leer rol:',e);}
@@ -89,7 +75,7 @@ authStateReady.then(()=>subscribeAuthState(async user=>{
  window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated',{
   detail:{authenticated:Boolean(user),role}
  }));
-}));
+});
 
 function renderAccountButtonPhoto(user){
  document.querySelectorAll('[data-auth-account-button]').forEach(btn=>{
