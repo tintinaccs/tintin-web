@@ -27,7 +27,7 @@ test('arranque global no vence ni cierra sesiones automáticamente', () => {
 
 test('guard de perfil solo redirige checkout y no encadena from', () => {
   assert.match(profile, /const GUARDED_PAGES = \['checkout'\]/);
-  assert.match(profileCode, /const from = `\/\$\{page\}`/);
+  assert.match(profileCode, /const from = `\$\{location\.pathname \|\| `\/\$\{page\}`\}\$\{location\.search \|\| ''\}\$\{location\.hash \|\| ''\}`/);
 });
 
 test('el destino post-login separa cuentas internas y valida el perfil por su estado real', () => {
@@ -63,6 +63,16 @@ test('el panel ya iniciado no expulsa al SuperAdmin por un null transitorio de F
 
   assert.match(admin, /if \(!user && \(currentUser\?\.uid \|\| adminGuardInitializedUid\)\)/);
   assert.match(admin, /Estado de Auth transitorio ignorado/);
+});
+
+test('el handoff pendiente conserva el loader y no muestra un falso error de inicio', () => {
+  const admin = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
+  const pendingBranch = admin.match(/if \(!user && hasPendingAdminAuthHandoff\(\)\) \{[\s\S]*?\n    \}/)?.[0] || '';
+
+  assert.ok(pendingBranch, 'debe existir la rama de restauración pendiente');
+  assert.doesNotMatch(pendingBranch, /showAdminInitFailure\(\)/);
+  assert.match(pendingBranch, /TintinLoader\?\.setText/);
+  assert.match(pendingBranch, /Restaurando tu sesión/);
 });
 
 test('los tres accesos conservan el mismo cierre de sesión y Google abre dentro del clic', () => {

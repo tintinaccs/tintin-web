@@ -910,7 +910,15 @@ async function startAdminAuthGuard() {
     // identidad llega después, el mismo listener terminará de iniciar el panel.
     if (!user && hasPendingAdminAuthHandoff()) {
       console.warn('[Admin] Restauración de sesión pendiente; se conserva el panel sin cerrar la cuenta.');
-      showAdminInitFailure();
+      // Este callback puede recibir el null inicial antes de que Firebase
+      // publique la identidad restaurada. Mantener el loader permite que el
+      // mismo listener continúe la inicialización cuando llegue el usuario;
+      // mostrar el overlay de error aquí convertía una espera normal en un
+      // fallo visible aunque la sesión siguiera siendo válida.
+      window.TintinLoader?.setText?.(
+        'Restaurando tu sesión…',
+        'El panel se abrirá automáticamente cuando termine la restauración.'
+      );
       return;
     }
     // Este es el único caso de sesión ausente que manda al login. replace()
