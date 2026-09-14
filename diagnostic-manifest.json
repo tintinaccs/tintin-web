@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "260b202c20cd9c267a146d6134a19ea05dc0401e5558a394f6a0a47e788791d5",
+  "sourceFingerprint": "6ec5402373a47e0f7a26cff4e0ae949992efe3946162288f5dff2193ae5c7e30",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 819,
     "textFiles": 782,
-    "totalBytes": 16305235,
+    "totalBytes": 16305053,
     "pages": 19,
     "modules": 560
   },
@@ -8998,8 +8998,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 115276,
-      "sha256": "344dba83d95e85ebb43fb633dc4a7bc08d5906f3b8205ff3ed31ee2f2a9f9bb0",
+      "bytes": 115280,
+      "sha256": "76aa5c9547a3e0aa02f9820587987b92510f8036421107ff39ac823137bc924a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9059,7 +9059,7 @@
           "line": 1952
         },
         {
-          "raw": "js/pages/checkout/paypal-checkout.js?v=tintin-20260910-paypal-flow-1",
+          "raw": "js/pages/checkout/paypal-checkout.js?v=tintin-20260914-summary-svg-fix-2",
           "target": "js/pages/checkout/paypal-checkout.js",
           "line": 1953
         },
@@ -9411,7 +9411,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/checkout/paypal-checkout.js?v=tintin-20260910-paypal-flow-1",
+          "raw": "js/pages/checkout/paypal-checkout.js?v=tintin-20260914-summary-svg-fix-2",
           "target": "js/pages/checkout/paypal-checkout.js",
           "line": 1953,
           "exists": true
@@ -32805,8 +32805,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 115276,
-      "sha256": "344dba83d95e85ebb43fb633dc4a7bc08d5906f3b8205ff3ed31ee2f2a9f9bb0"
+      "bytes": 115280,
+      "sha256": "76aa5c9547a3e0aa02f9820587987b92510f8036421107ff39ac823137bc924a"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -36585,8 +36585,8 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 1005,
-      "sha256": "262bda90de7cdadb0e0644a55fcaf457cd7d24909a0ab2773ac20126fabaf417"
+      "bytes": 819,
+      "sha256": "abd10e879db35576a8227b89d02dd7540c00dae65f2fe6ef2e2f2e5aac8afad7"
     },
     {
       "path": "scripts/cache-version-baseline.json",
