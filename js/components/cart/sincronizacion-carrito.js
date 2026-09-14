@@ -16,8 +16,8 @@
 
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260910-session-coordinator-1';
 import { GUEST_CART_TTL_MS, guestCartIsExpired } from './politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
   collection,
   doc,
@@ -1038,10 +1038,7 @@ function createRuntime() {
     });
     // No activar el carrito como invitado mientras Firebase todavía restaura
     // la sesión persistida al cambiar de catálogo/producto.
-    const authStateReady = typeof auth.authStateReady === 'function'
-      ? auth.authStateReady().catch(() => {})
-      : Promise.resolve();
-    authStateReady.then(() => onAuthStateChanged(auth, activateIdentity));
+    subscribeAuthState(activateIdentity);
   }
 
   const api = {
