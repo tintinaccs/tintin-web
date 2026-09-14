@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "6a3648abc9666d5c915985973bd4d475a794d31da31c6709205823ed80d6ac42",
+  "sourceFingerprint": "260b202c20cd9c267a146d6134a19ea05dc0401e5558a394f6a0a47e788791d5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 817,
-    "textFiles": 780,
-    "totalBytes": 16302218,
+    "files": 819,
+    "textFiles": 782,
+    "totalBytes": 16305235,
     "pages": 19,
-    "modules": 558
+    "modules": 560
   },
   "viewports": [
     {
@@ -24674,6 +24674,17 @@
       ]
     },
     {
+      "path": "js/pages/checkout/checkout-resumen-confirmacion.js",
+      "bytes": 1380,
+      "sha256": "03a94816a54fd52cac554ab310301f37cd70cd439930dc20630d624b34a931c7",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "js/pages/checkout/checkout-sincronizacion-nombre.js",
       "bytes": 717,
       "sha256": "5b15006749f46fb3ccab52a61e2e384847c4813efd790e465476a9132cd401dc",
@@ -24726,8 +24737,8 @@
     },
     {
       "path": "js/pages/checkout/paypal-checkout.js",
-      "bytes": 3460,
-      "sha256": "2a3af70f276737a50bd343210f1c0276b12d119f3c837c92ca98cb83562441f0",
+      "bytes": 3541,
+      "sha256": "7129db8ebd490a4af02fe3929675d49fb8a6db9d1a945d9c9ba877ec77780d88",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24737,13 +24748,19 @@
           "raw": "../../core/auth/cliente-api-autenticado.js?v=tintin-20260910-auth-api-1",
           "target": "js/core/auth/cliente-api-autenticado.js",
           "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "./checkout-resumen-confirmacion.js?v=tintin-20260914-summary-svg-fix-1",
+          "target": "js/pages/checkout/checkout-resumen-confirmacion.js",
+          "dynamic": false,
           "line": 1
         }
       ],
       "endpoints": [
         {
           "url": "https://${base}/sdk/js",
-          "line": 22
+          "line": 23
         }
       ]
     },
@@ -30159,6 +30176,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/checkout/confirmation-summary-rendering.test.mjs",
+      "bytes": 1166,
+      "sha256": "748b85a487d8c0f180a4d7ec71cf74f840c7ca0fe98fbb9e980f02a59e5494db",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../js/pages/checkout/checkout-resumen-confirmacion.js",
+          "target": "js/pages/checkout/checkout-resumen-confirmacion.js",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/checkout/documentos-py.test.mjs",
       "bytes": 1360,
       "sha256": "789da4ee305b96e34b590e69459f94556d96b6fdbbb3737c0097e8ec132f0cfb",
@@ -35264,6 +35311,12 @@
       "sha256": "93e3d441313b8d3f70d8ae3b045209bba30ae596ff8ccdd9a3f459d83803875d"
     },
     {
+      "path": "js/pages/checkout/checkout-resumen-confirmacion.js",
+      "extension": ".js",
+      "bytes": 1380,
+      "sha256": "03a94816a54fd52cac554ab310301f37cd70cd439930dc20630d624b34a931c7"
+    },
+    {
       "path": "js/pages/checkout/checkout-sincronizacion-nombre.js",
       "extension": ".js",
       "bytes": 717,
@@ -35284,8 +35337,8 @@
     {
       "path": "js/pages/checkout/paypal-checkout.js",
       "extension": ".js",
-      "bytes": 3460,
-      "sha256": "2a3af70f276737a50bd343210f1c0276b12d119f3c837c92ca98cb83562441f0"
+      "bytes": 3541,
+      "sha256": "7129db8ebd490a4af02fe3929675d49fb8a6db9d1a945d9c9ba877ec77780d88"
     },
     {
       "path": "js/pages/collections/estado-colecciones.js",
@@ -36532,8 +36585,8 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 615,
-      "sha256": "37a23227b4e61935e7a2c7977fade0ca738abc231036078141dd6ca51d175c00"
+      "bytes": 1005,
+      "sha256": "262bda90de7cdadb0e0644a55fcaf457cd7d24909a0ab2773ac20126fabaf417"
     },
     {
       "path": "scripts/cache-version-baseline.json",
@@ -36864,6 +36917,12 @@
       "extension": ".mjs",
       "bytes": 2196,
       "sha256": "f1a0d08762cda7658053f96903f130636ccc0aa989fe625e9c33d4a2339ca099"
+    },
+    {
+      "path": "tests/checkout/confirmation-summary-rendering.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1166,
+      "sha256": "748b85a487d8c0f180a4d7ec71cf74f840c7ca0fe98fbb9e980f02a59e5494db"
     },
     {
       "path": "tests/checkout/documentos-py.test.mjs",
@@ -39059,7 +39118,7 @@
     },
     {
       "file": "js/pages/checkout/paypal-checkout.js",
-      "line": 38,
+      "line": 39,
       "target": "/api/paypal-config",
       "method": "GET"
     },
