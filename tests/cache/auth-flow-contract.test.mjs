@@ -75,6 +75,15 @@ test('el handoff pendiente conserva el loader y no muestra un falso error de ini
   assert.match(pendingBranch, /Restaurando tu sesión/);
 });
 
+test('el handoff sin identidad no deja el panel bloqueado indefinidamente', () => {
+  const admin = fs.readFileSync(new URL('../../js/admin/admin-app.js', import.meta.url), 'utf8');
+
+  assert.match(admin, /scheduleAdminHandoffRecovery\(\)/);
+  assert.match(admin, /sessionStorage\.removeItem\('tt_auth_handoff_uid'\)/);
+  assert.match(admin, /window\.location\.replace\('login\.html\?from=%2Fadmin'\)/);
+  assert.match(admin, /if \(auth\.currentUser \|\| currentUser\?\.uid \|\| adminGuardInitializedUid\) return/);
+});
+
 test('los tres accesos conservan el mismo cierre de sesión y Google abre dentro del clic', () => {
   const emailAuth = fs.readFileSync(new URL('../../js/email/correo-autenticacion.js', import.meta.url), 'utf8');
   const popupIndex = login.indexOf('const cred = await signInWithPopup(auth, provider);');

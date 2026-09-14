@@ -833,6 +833,20 @@ function hasPendingAdminAuthHandoff() {
   try { return Boolean(sessionStorage.getItem('tt_auth_handoff_uid')); } catch { return false; }
 }
 
+let adminHandoffRecoveryTimer = 0;
+
+function scheduleAdminHandoffRecovery() {
+  if (adminHandoffRecoveryTimer) return;
+  adminHandoffRecoveryTimer = window.setTimeout(() => {
+    adminHandoffRecoveryTimer = 0;
+    // Si la identidad apareció mientras esperaba el fallback, el listener
+    // válido ya se encargará del panel y no se toca la navegación.
+    if (auth.currentUser || currentUser?.uid || adminGuardInitializedUid) return;
+    try { sessionStorage.removeItem('tt_auth_handoff_uid'); } catch {}
+    window.location.replace('login.html?from=%2Fadmin');
+  }, 1500);
+}
+
 function showAdminInitFailure() {
   document.documentElement.classList.remove('adm-auth-ready');
   let overlay = document.getElementById('adm-init-error');
@@ -895,6 +909,10 @@ async function startAdminAuthGuard() {
 
   subscribeAuthState(async user => {
     user = await waitForAdminUserAfterAuthRestore(user);
+    if (user && adminHandoffRecoveryTimer) {
+      window.clearTimeout(adminHandoffRecoveryTimer);
+      adminHandoffRecoveryTimer = 0;
+    }
     // Si el panel ya reconoció una cuenta válida, un `null` posterior puede
     // ser solamente un instante de renovación/sincronización de Firebase.
     // Nunca debe expulsar a SuperAdmin de un panel que ya estaba iniciado.
@@ -919,6 +937,7 @@ async function startAdminAuthGuard() {
         'Restaurando tu sesión…',
         'El panel se abrirá automáticamente cuando termine la restauración.'
       );
+      scheduleAdminHandoffRecovery();
       return;
     }
     // Este es el único caso de sesión ausente que manda al login. replace()
