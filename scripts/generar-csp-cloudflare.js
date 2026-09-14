@@ -110,7 +110,8 @@ const globalInlineHashes = allInlineScriptHashes();
 // reabrir 'unsafe-inline'.
 const fallbackInlineHashes = [...new Set([
   ...inlineHashes('catalogo.html'),
-  ...inlineHashes('login.html')
+  ...inlineHashes('login.html'),
+  ...inlineHashes('checkout.html')
 ])].sort();
 const scriptAttrDirective = handlerHashes.length
   ? `script-src-attr 'unsafe-hashes' ${handlerHashes.join(' ')}`
