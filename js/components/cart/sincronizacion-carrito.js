@@ -64,6 +64,10 @@ function createRuntime() {
   let status = 'guest';
   let readyResolve = null;
   let readyPromise = new Promise(resolve => { readyResolve = resolve; });
+  // La UI solo necesita saber qué identidad posee el carrito local. No debe
+  // esperar App Check/Firestore para mostrar productos ya guardados.
+  let identityReadyResolve = null;
+  let identityReadyPromise = Promise.resolve();
   let mutationChain = Promise.resolve();
   let feedbackTimer = 0;
   let guestExpiryTimer = 0;
@@ -714,6 +718,7 @@ readyResolve?.();
 
   function resetReady() {
     readyPromise = new Promise(resolve => { readyResolve = resolve; });
+    identityReadyPromise = new Promise(resolve => { identityReadyResolve = resolve; });
   }
 
   function activateIdentity(user) {
@@ -735,6 +740,7 @@ readyResolve?.();
       desiredProjection = projection(desiredCart);
       lastRemoteProjection = '[]';
       setStatus('guest');
+      identityReadyResolve?.();
       dispatchCartUpdated();
       scheduleGuestExpiry();
       readyResolve?.();
@@ -744,6 +750,7 @@ readyResolve?.();
     clearGuestExpiryTimer();
     guestAtLogin = normalizeCart(rawGet(GUEST_CART_KEY));
     activeCartKey = cartKeyForUser(currentUser);
+    identityReadyResolve?.();
     desiredCart = currentLocalCart();
     desiredProjection = projection(desiredCart);
     lastRemoteProjection = '[]';
@@ -1048,6 +1055,7 @@ readyResolve?.();
     syncCartToFirestore,
     flushCartSync,
     awaitCartReady: () => readyPromise,
+    awaitCartIdentityReady: () => identityReadyPromise,
     formatPrice,
     cartTotal,
     lineIdFor,
@@ -1091,6 +1099,7 @@ export const clearCart = (...args) => runtime.clearCart(...args);
 export const syncCartToFirestore = (...args) => runtime.syncCartToFirestore(...args);
 export const flushCartSync = (...args) => runtime.flushCartSync(...args);
 export const awaitCartReady = (...args) => runtime.awaitCartReady(...args);
+export const awaitCartIdentityReady = (...args) => runtime.awaitCartIdentityReady(...args);
 export const formatPrice = (...args) => runtime.formatPrice(...args);
 export const cartTotal = (...args) => runtime.cartTotal(...args);
 export const lineIdFor = (...args) => runtime.lineIdFor(...args);
