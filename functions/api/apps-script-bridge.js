@@ -278,11 +278,23 @@ export async function onRequest(context) {
         authenticatedUser = await verifyFirebaseIdToken(idToken);
       } catch (error) {
         const failure = authFailure(error);
+        // Sólo se registra el código/estado del error, nunca el idToken ni datos
+        // personales: es la única forma de distinguir en los logs de Cloudflare
+        // cuál de las validaciones (proyecto, firma, expiración, clave
+        // desconocida, etc.) rechazó un token dado.
+        console.error('[apps-script-bridge] verifyFirebaseIdToken failed', {
+          code: error?.code || 'unknown',
+          status: error?.status || null,
+        });
         return jsonResponse({ ok: false, error: failure.error }, failure.status, origin, requestUrl);
       }
       try {
         await assertPurchaseEligibleAccount(env, authenticatedUser);
       } catch (error) {
+        console.error('[apps-script-bridge] assertPurchaseEligibleAccount failed', {
+          code: error?.code || 'unknown',
+          status: error?.status || null,
+        });
         return jsonResponse({
           ok: false,
           error: clean(error?.code, 120) || 'profile_validation_failed'
