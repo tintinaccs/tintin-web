@@ -397,7 +397,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
-  removeFromCart, updateQty, clearCart, awaitCartReady
+  removeFromCart, updateQty, clearCart, awaitCartIdentityReady
 } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260910-auth-retry-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { isValidCi, normalizeCi, isValidRuc, normalizeRuc, isValidRazonSocial } from "./js/components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1";
@@ -756,7 +756,7 @@ function getCityPrice(cityName) {
 async function renderCart() {
   // Esperar a que Auth seleccione la clave local real evita leer el carrito
   // invitado durante la transición desde el header al checkout.
-  await awaitCartReady();
+  await awaitCartIdentityReady();
   cartItems = getCartLocal();
 
   // Drop items whose product was deleted/deactivated and refresh price/name from
