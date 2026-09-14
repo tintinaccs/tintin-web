@@ -136,7 +136,17 @@ document.addEventListener('click', async event => {
   await cart.addToCart({ ...item, qty: 1 });
 }, true);
 
-window.addEventListener('tintin:products-loaded', publish);
+// No pintar corazones antes de saber si hay sesión: auth.currentUser queda
+// null/obsoleto hasta que authStateReady() resuelve, y un publish() previo
+// muestra como "no favorito" un producto que sí lo es para un usuario con
+// sesión iniciada.
+let authResolved = false;
+function publishWhenReady() {
+  if (authResolved) { publish(); return; }
+  stableAuthUser().then(publish);
+}
+
+window.addEventListener('tintin:products-loaded', publishWhenReady);
 window.TintinFavorites = {
   getAll: () => [...items],
   has: id => items.some(item => item.id === String(id)),
@@ -145,6 +155,7 @@ window.TintinFavorites = {
 };
 
 onAuthStateChanged(auth, user => {
+  authResolved = true;
   unsubscribe?.();
   unsubscribe = null;
   currentUser = user || null;
@@ -152,4 +163,3 @@ onAuthStateChanged(auth, user => {
   publish();
   if (user) appCheckReady.then(() => currentUser?.uid === user.uid && subscribe(user));
 });
-publish();
