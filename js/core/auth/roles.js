@@ -176,7 +176,7 @@ export async function getUserRole(uid, email) {
   // La identidad elevada proviene exclusivamente de Firebase Authentication.
   // El campo email de users/{uid} es informativo y nunca concede permisos.
   const authenticatedEmail = String(email || auth.currentUser?.email || '').trim().toLowerCase();
-  if (authenticatedEmail === SUPER_ADMIN) return 'superadmin';
+  if (authenticatedEmail === SUPER_ADMIN.toLowerCase()) return 'superadmin';
   try {
     const snap = await getDoc(doc(db, 'users', uid));
     if (!snap.exists()) return 'client';
