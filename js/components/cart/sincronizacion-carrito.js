@@ -702,7 +702,7 @@ function createRuntime() {
           console.error('[cart-sync-v2] snapshot:', error);
           setStatus('error');
           dispatchCartUpdated();
-readyResolve?.();
+          readyResolve?.();
         });
       },
       error => {
