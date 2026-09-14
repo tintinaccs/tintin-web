@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "6aa0f2223c008b9bba67e8e5b86622d5e1ed4efa2a1cba8f5eda7750cc713e1d",
+  "sourceFingerprint": "c20c353e82a2c08cbe94f20b0662efac6f2a527c674519c7e4d2b943caf507f4",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 819,
     "textFiles": 782,
-    "totalBytes": 16308301,
+    "totalBytes": 16308773,
     "pages": 19,
     "modules": 560
   },
@@ -24028,8 +24028,8 @@
     },
     {
       "path": "js/create-order-public-client.js",
-      "bytes": 2842,
-      "sha256": "9aa5e16cf8cdf84892910b63bc97f36f26e20c61c9b1ef3a83a905a9aa0c7f2d",
+      "bytes": 3250,
+      "sha256": "1f8bccd75367c2ba6204d12a9379b89dbe131ab32dafedea428dca0e563ae128",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24343,8 +24343,8 @@
     },
     {
       "path": "js/orders/pedido-checkout-seguro.js",
-      "bytes": 38154,
-      "sha256": "ebb8154100e3fd1b9ac34a77f2210cf276c89a2f2585020b8c4da7e2480dede8",
+      "bytes": 38155,
+      "sha256": "80918e69051cc2679cf9f37c08b78a84d40ca9e148ca3fa1ea460713f560f852",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24387,7 +24387,7 @@
           "line": 36
         },
         {
-          "raw": "../create-order-public-client.js?v=tintin-20260910-auth-retry-1",
+          "raw": "../create-order-public-client.js?v=tintin-20260914-token-retry-1",
           "target": "js/create-order-public-client.js",
           "dynamic": false,
           "line": 37
@@ -30287,8 +30287,8 @@
     },
     {
       "path": "tests/checkout/order-routing-identity.test.mjs",
-      "bytes": 3413,
-      "sha256": "1465b629f9087c9950f2ac662744c1bf6984388432e14f49b994700d11214786",
+      "bytes": 3476,
+      "sha256": "8116b929b2c0df6f25c53e6c2faf41da96fdc7466b5badf05fe6d60c7658a9e9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35117,8 +35117,8 @@
     {
       "path": "js/create-order-public-client.js",
       "extension": ".js",
-      "bytes": 2842,
-      "sha256": "9aa5e16cf8cdf84892910b63bc97f36f26e20c61c9b1ef3a83a905a9aa0c7f2d"
+      "bytes": 3250,
+      "sha256": "1f8bccd75367c2ba6204d12a9379b89dbe131ab32dafedea428dca0e563ae128"
     },
     {
       "path": "js/diagnostic-shims/adaptador-almacenamiento.js",
@@ -35201,8 +35201,8 @@
     {
       "path": "js/orders/pedido-checkout-seguro.js",
       "extension": ".js",
-      "bytes": 38154,
-      "sha256": "ebb8154100e3fd1b9ac34a77f2210cf276c89a2f2585020b8c4da7e2480dede8"
+      "bytes": 38155,
+      "sha256": "80918e69051cc2679cf9f37c08b78a84d40ca9e148ca3fa1ea460713f560f852"
     },
     {
       "path": "js/orders/politica-checkout.js",
@@ -36911,8 +36911,8 @@
     {
       "path": "tests/checkout/order-routing-identity.test.mjs",
       "extension": ".mjs",
-      "bytes": 3413,
-      "sha256": "1465b629f9087c9950f2ac662744c1bf6984388432e14f49b994700d11214786"
+      "bytes": 3476,
+      "sha256": "8116b929b2c0df6f25c53e6c2faf41da96fdc7466b5badf05fe6d60c7658a9e9"
     },
     {
       "path": "tests/checkout/profile-purchase-eligibility.test.mjs",
