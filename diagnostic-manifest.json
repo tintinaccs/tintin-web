@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "965c75b6f885baad6d64d7db3ae5d654fe78291d86e47ccb8a67ad9204abd930",
+  "sourceFingerprint": "b118980b4e4bc9a15aa6839fbd548712dd1e351c91680c6a494b555b7106d04d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 819,
     "textFiles": 782,
-    "totalBytes": 16308294,
+    "totalBytes": 16308046,
     "pages": 19,
     "modules": 560
   },
@@ -36551,14 +36551,14 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 819,
-      "sha256": "abd10e879db35576a8227b89d02dd7540c00dae65f2fe6ef2e2f2e5aac8afad7"
+      "bytes": 38,
+      "sha256": "dd9d3b46a69239cd812969333746634c254684c83bb0c9501af9d578669e38b8"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 38256,
-      "sha256": "ec3d92b5b6e822f98155e3ae124fdaec6cab37ffc8295479ab95f2afe5468c2c"
+      "bytes": 38789,
+      "sha256": "22f7107e966661680e4b7d56cc2b4015e5e29b1b581c3a6cb43b5bdddc328576"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
