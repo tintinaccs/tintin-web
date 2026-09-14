@@ -75,20 +75,51 @@ function profileHasLocation(profile = {}) {
     profile.defaultLocation,
     profile.coordinates,
     profile.coords,
+    {
+      lat: profile.addressLat ?? profile.latitude,
+      lng: profile.addressLng ?? profile.longitude ?? profile.longitud,
+      name: profile.locationName ?? profile.addressName ?? profile.nombreUbicacion,
+      address: profile.address ?? profile.direccion,
+    },
   ].filter(value => value && typeof value === 'object');
-
-  candidates.push({
-    lat: profile.addressLat ?? profile.latitude,
-    lng: profile.addressLng ?? profile.longitude ?? profile.longitud,
-    name: profile.locationName ?? profile.addressName ?? profile.nombreUbicacion,
-  });
 
   return candidates.some(location => {
     const geoPoint = location?.geoPoint || location?.geopoint || location?.point || {};
     const coordinates = location?.coordinates || location?.coords || {};
-    const lat = Number(location?.lat ?? location?.latitude ?? location?.latitud ?? coordinates?.lat ?? coordinates?.latitude ?? geoPoint?.latitude);
-    const lng = Number(location?.lng ?? location?.longitude ?? coordinates?.lng ?? coordinates?.longitude ?? geoPoint?.longitude);
-    const name = clean(location?.name ?? location?.locationName ?? location?.addressName ?? location?.label ?? location?.title, 160);
+    const lat = Number(
+      location?.lat ??
+      location?.latitude ??
+      location?.latitud ??
+      location?.addressLat ??
+      coordinates?.lat ??
+      coordinates?.latitude ??
+      geoPoint?.latitude ??
+      profile.addressLat ??
+      profile.latitude
+    );
+    const lng = Number(
+      location?.lng ??
+      location?.longitude ??
+      location?.longitud ??
+      location?.addressLng ??
+      coordinates?.lng ??
+      coordinates?.longitude ??
+      geoPoint?.longitude ??
+      profile.addressLng ??
+      profile.longitude ??
+      profile.longitud
+    );
+    const name = clean(
+      location?.name ??
+      location?.locationName ??
+      location?.addressName ??
+      location?.label ??
+      location?.title ??
+      profile.locationName ??
+      profile.addressName ??
+      profile.nombreUbicacion,
+      160
+    );
     return name && Number.isFinite(lat) && Number.isFinite(lng) && (lat !== 0 || lng !== 0);
   });
 }
