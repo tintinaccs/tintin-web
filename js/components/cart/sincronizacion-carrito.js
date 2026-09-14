@@ -697,12 +697,16 @@ function createRuntime() {
         }).catch(error => {
           console.error('[cart-sync-v2] snapshot:', error);
           setStatus('error');
-          readyResolve?.();
+          dispatchCartUpdated();
+readyResolve?.();
         });
       },
       error => {
         console.error('[cart-sync-v2] listener:', error);
         setStatus(navigator.onLine === false ? 'offline' : 'error');
+        // El fallo remoto no invalida Auth ni el carrito local; repintar la
+        // clave de cuenta evita conservar el primer render de invitado.
+        dispatchCartUpdated();
         readyResolve?.();
       }
     );
