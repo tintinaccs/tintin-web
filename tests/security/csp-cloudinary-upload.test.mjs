@@ -18,6 +18,18 @@ test('checkout puede ejecutar sus scripts con la CSP estática y la de runtime',
   }
 });
 
+test('perfil puede ejecutar sus scripts con la CSP estática y la de runtime', () => {
+  const fallback = read('_headers').split(/\r?\n/).find(line => line.includes('Content-Security-Policy:'));
+  const html = read('perfil.html').replace(/\r\n?/g, '\n');
+  for (const [, attributes, source] of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\b[^>]*>/gi)) {
+    if (/\bsrc\s*=/.test(attributes)) continue;
+    const hash = `'sha256-${createHash('sha256').update(source).digest('base64')}'`;
+    for (const policy of [fallback, runtime.routes['/perfil'], runtime.routes['/perfil.html']]) {
+      assert.ok(policy.split(';').find(part => /script-src\s/.test(part)).includes(hash), `perfil bloqueado: ${hash}`);
+    }
+  }
+});
+
 function routeCsp(route) {
   const policy = runtime?.routes?.[route];
   assert.ok(policy, `no existe CSP runtime para ${route}`);
