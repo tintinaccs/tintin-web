@@ -14,6 +14,7 @@ import { firestoreAdminBatchCommit } from '../../cloudflare/firestore-admin-batc
 import { fetchAppsScript } from '../../cloudflare/apps-script-fetch.js';
 import { syncOrderToSheetsBestEffort } from '../../cloudflare/order-sheets-sync.js';
 import { createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
+import { syncOrderOwnerStats } from '../../cloudflare/sincronizacion-estadisticas-pedido.js';
 import { dispatchOrderPushEvent } from '../../cloudflare/servicio-push.js';
 import { sendOrderEmails } from './order-email.js';
 
@@ -356,6 +357,9 @@ export async function onRequest(context) {
         });
       }
       if (!created.duplicate) {
+        context.waitUntil?.(syncOrderOwnerStats(env, created.order).catch(error => {
+          console.error('[apps-script-bridge] order stats sync failed', error?.message || error);
+        }));
         // El checkout público canónico ya no pasa por el webhook antiguo de
         // Apps Script. Disparar aquí el mismo evento garantiza la push de
         // pedido nuevo sin duplicarla en reintentos idempotentes.
