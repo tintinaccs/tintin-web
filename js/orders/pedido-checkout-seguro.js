@@ -770,6 +770,14 @@ if (!window.TintinSecureCheckoutOrderBooted) {
 
   function success(result, draft) {
     window._lastOrderId = result.shortId;
+    window.TintinCheckoutOrderCompleted = true;
+    try {
+      window.history.pushState(
+        { ...(window.history.state || {}), tintinOrderCompleted: true },
+        '',
+        window.location.href,
+      );
+    } catch {}
     document.getElementById('ck-review-head')?.style.setProperty('display', 'none');
     document.getElementById('ck-success-head')?.style.setProperty('display', 'block');
     document.getElementById('ck-confirm-btn')?.style.setProperty('display', 'none');
@@ -786,6 +794,11 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  window.addEventListener('popstate', () => {
+    if (!window.TintinCheckoutOrderCompleted) return;
+    window.location.replace('/');
+  });
 
   function message(error) {
     const code = error?.details?.code || error?.code || error?.message;

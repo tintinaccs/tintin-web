@@ -29,3 +29,10 @@ test('los campos y errores del checkout exponen nombres y alertas accesibles', (
     assert.match(html, new RegExp(`id="${id}"[^>]+role="alert"`), `${id} debe anunciar errores`);
   }
 });
+
+test('después de confirmar, Atrás vuelve a la tienda sin resetear la sesión', () => {
+  const source = read('js/orders/pedido-checkout-seguro.js');
+  assert.match(source, /TintinCheckoutOrderCompleted\s*=\s*true/);
+  assert.match(source, /history\.pushState\([\s\S]*tintinOrderCompleted/);
+  assert.match(source, /addEventListener\('popstate',[\s\S]*TintinCheckoutOrderCompleted[\s\S]*location\.replace\('\/'\)/);
+});
