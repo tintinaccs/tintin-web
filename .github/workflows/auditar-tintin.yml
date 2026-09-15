@@ -53,13 +53,10 @@ jobs:
               'tintin-20260912-auth-closure-8': 'tintin-20260915-session-shell-2',
               'tintin-20260912-auth-closure-7': 'tintin-20260915-session-shell-2',
               'tintin-20260816-loader-shell-atomic-1': 'tintin-20260915-session-shell-2',
-              'tintin-20260910-session-coordinator-1': 'tintin-20260915-session-coordinator-2',
           }
           for rel in (
               'scripts/sincronizar-inicio-navegacion-publica.js',
               'js/inicio-navegacion-publica.js',
-              'js/core/auth/navegacion-autenticacion.js',
-              'checkout.html',
               '404.html',
           ):
               path = Path(rel)
@@ -67,6 +64,15 @@ jobs:
               for old, new in replacements.items():
                   text = text.replace(old, new)
               path.write_text(text, encoding='utf-8')
+
+          old_ref = 'coordinador-sesion.js?v=tintin-20260910-session-coordinator-1'
+          new_ref = 'coordinador-sesion.js?v=tintin-20260915-session-coordinator-2'
+          for root in (Path('.'),):
+              for path in root.rglob('*'):
+                  if path.is_file() and path.suffix in {'.js', '.mjs', '.html'}:
+                      text = path.read_text(encoding='utf-8')
+                      if old_ref in text:
+                          path.write_text(text.replace(old_ref, new_ref), encoding='utf-8')
           PY
           node scripts/sincronizar-inicio-navegacion-publica.js
           npm run build:pages
