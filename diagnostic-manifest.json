@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "691ab117ec31d92b360b6f4a618671d5cd548c7431160b6deccb30827a8ba29f",
+  "sourceFingerprint": "7ffe9af72c95370ab470abebb1fa2f3d036c31d40154c314c21033daff1011a8",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 812,
-    "textFiles": 775,
-    "totalBytes": 16147679,
+    "files": 813,
+    "textFiles": 776,
+    "totalBytes": 16153530,
     "pages": 19,
-    "modules": 557
+    "modules": 558
   },
   "viewports": [
     {
@@ -18058,6 +18058,24 @@
       ]
     },
     {
+      "path": "cloudflare/sincronizacion-estadisticas-pedido.js",
+      "bytes": 3981,
+      "sha256": "e399be8e98f3387daf2b85d7720c856cbb4dd12fab60b81a986040b077581f42",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 6
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "cloudflare/sincronizacion-participacion-sheets.js",
       "bytes": 1313,
       "sha256": "3db1288f66e71faad603f23383f45461d0ee1b89f85beb403f84c5b707b7c19f",
@@ -18513,8 +18531,8 @@
     },
     {
       "path": "functions/api/admin-order-mutation.js",
-      "bytes": 3655,
-      "sha256": "c20098a64d36c84508e95af4e14dfb529097d39ce911cefb81c4fe084db60fba",
+      "bytes": 3934,
+      "sha256": "9b1afbd50a89ced09cf9df5a8362240a84d6729848cdc42ee00bee46ecb6d668",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18537,6 +18555,12 @@
           "target": "cloudflare/order-sheets-sync.js",
           "dynamic": false,
           "line": 10
+        },
+        {
+          "raw": "../../cloudflare/sincronizacion-estadisticas-pedido.js",
+          "target": "cloudflare/sincronizacion-estadisticas-pedido.js",
+          "dynamic": false,
+          "line": 11
         }
       ],
       "endpoints": []
@@ -18567,8 +18591,8 @@
     },
     {
       "path": "functions/api/apps-script-bridge.js",
-      "bytes": 16996,
-      "sha256": "b0fe177db969ab12e37fb211676691a168315fbb70144c848696bb85fae51af7",
+      "bytes": 17286,
+      "sha256": "fc1500cf626d8880e936a75f2425f768907e15408cdc9edb8645b5c2e4f6da6e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18617,22 +18641,28 @@
           "line": 16
         },
         {
+          "raw": "../../cloudflare/sincronizacion-estadisticas-pedido.js",
+          "target": "cloudflare/sincronizacion-estadisticas-pedido.js",
+          "dynamic": false,
+          "line": 17
+        },
+        {
           "raw": "../../cloudflare/servicio-push.js",
           "target": "cloudflare/servicio-push.js",
           "dynamic": false,
-          "line": 17
+          "line": 18
         },
         {
           "raw": "./order-email.js",
           "target": "functions/api/order-email.js",
           "dynamic": false,
-          "line": 18
+          "line": 19
         }
       ],
       "endpoints": [
         {
           "url": "https://script.google.com/macros/s/AKfycbyh9I5aPp9d3lMSnYRNfrHcSCCobCoDOif9CqtXmMe4FgwSjzlKf4kjQZqvKDRmEY6S/exec",
-          "line": 24
+          "line": 25
         }
       ]
     },
@@ -19382,8 +19412,8 @@
     },
     {
       "path": "functions/api/sheets-admin-webhook.js",
-      "bytes": 8529,
-      "sha256": "61f09eaac57319743dbc6e2c8e6149bb2b2f501045f7600b34927b06d4dd4265",
+      "bytes": 8914,
+      "sha256": "ee668a37591da98613e3f941bbd3d1e472b09190ab3797e5dee965e221ecaaa6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19412,6 +19442,12 @@
           "target": "cloudflare/order-admin-domain.js",
           "dynamic": false,
           "line": 10
+        },
+        {
+          "raw": "../../cloudflare/sincronizacion-estadisticas-pedido.js",
+          "target": "cloudflare/sincronizacion-estadisticas-pedido.js",
+          "dynamic": false,
+          "line": 11
         }
       ],
       "endpoints": []
@@ -25707,8 +25743,8 @@
     },
     {
       "path": "scripts/auditar-admin-pedidos.js",
-      "bytes": 12252,
-      "sha256": "addf6c39428f417c7136c5c5ce3a94c238b4ecdf1ca55e785624738ebeb2f9a7",
+      "bytes": 13168,
+      "sha256": "5eff62755e18cd04cf294a7cfe8d22057b2c5aad916292546d4842538fc78e24",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32873,6 +32909,12 @@
       "sha256": "c1df12ea5ad4ff890ce3771fd67a93995890020745f2026fcd46c4ec80673ac7"
     },
     {
+      "path": "cloudflare/sincronizacion-estadisticas-pedido.js",
+      "extension": ".js",
+      "bytes": 3981,
+      "sha256": "e399be8e98f3387daf2b85d7720c856cbb4dd12fab60b81a986040b077581f42"
+    },
+    {
       "path": "cloudflare/sincronizacion-participacion-sheets.js",
       "extension": ".js",
       "bytes": 1313,
@@ -33763,8 +33805,8 @@
     {
       "path": "functions/api/admin-order-mutation.js",
       "extension": ".js",
-      "bytes": 3655,
-      "sha256": "c20098a64d36c84508e95af4e14dfb529097d39ce911cefb81c4fe084db60fba"
+      "bytes": 3934,
+      "sha256": "9b1afbd50a89ced09cf9df5a8362240a84d6729848cdc42ee00bee46ecb6d668"
     },
     {
       "path": "functions/api/admin-runtime-health.js",
@@ -33775,8 +33817,8 @@
     {
       "path": "functions/api/apps-script-bridge.js",
       "extension": ".js",
-      "bytes": 16996,
-      "sha256": "b0fe177db969ab12e37fb211676691a168315fbb70144c848696bb85fae51af7"
+      "bytes": 17286,
+      "sha256": "fc1500cf626d8880e936a75f2425f768907e15408cdc9edb8645b5c2e4f6da6e"
     },
     {
       "path": "functions/api/catalog-sheet-sync-drain.js",
@@ -33937,8 +33979,8 @@
     {
       "path": "functions/api/sheets-admin-webhook.js",
       "extension": ".js",
-      "bytes": 8529,
-      "sha256": "61f09eaac57319743dbc6e2c8e6149bb2b2f501045f7600b34927b06d4dd4265"
+      "bytes": 8914,
+      "sha256": "ee668a37591da98613e3f941bbd3d1e472b09190ab3797e5dee965e221ecaaa6"
     },
     {
       "path": "functions/api/sheets-engagement-webhook.js",
@@ -35761,8 +35803,8 @@
     {
       "path": "scripts/auditar-admin-pedidos.js",
       "extension": ".js",
-      "bytes": 12252,
-      "sha256": "addf6c39428f417c7136c5c5ce3a94c238b4ecdf1ca55e785624738ebeb2f9a7"
+      "bytes": 13168,
+      "sha256": "5eff62755e18cd04cf294a7cfe8d22057b2c5aad916292546d4842538fc78e24"
     },
     {
       "path": "scripts/auditar-admin-productos-multimedia.js",
