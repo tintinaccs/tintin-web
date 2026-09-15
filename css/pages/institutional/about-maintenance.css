@@ -11,8 +11,8 @@
 }
 .tt-about-maintained .tt-page-hero,
 .tt-about-maintained .tt-about-section,
-.tt-about-maintained .tt-trust-bar,
-.tt-about-maintained .tt-footer { background-color: var(--about-surface); }
+.tt-about-maintained .tt-trust-bar { background-color: var(--about-surface); }
+.tt-about-maintained .tt-footer { background-color: var(--color-background-page, #fff6fa) !important; }
 .tt-about-maintained .tt-page-hero { background: var(--about-soft); }
 .tt-about-maintained .tt-about-grid { gap: clamp(28px, 5vw, 72px); }
 /* Las imágenes "blob" (.tt-blob-media) traen su propia forma, tamaño por
