@@ -111,7 +111,10 @@ const globalInlineHashes = allInlineScriptHashes();
 const fallbackInlineHashes = [...new Set([
   ...inlineHashes('catalogo.html'),
   ...inlineHashes('login.html'),
-  ...inlineHashes('checkout.html')
+  ...inlineHashes('checkout.html'),
+  // Perfil necesita arrancar su guard de Auth y su hidratación aunque una
+  // respuesta HTML atraviese el fallback estático de Pages.
+  ...inlineHashes('perfil.html')
 ])].sort();
 const scriptAttrDirective = handlerHashes.length
   ? `script-src-attr 'unsafe-hashes' ${handlerHashes.join(' ')}`
