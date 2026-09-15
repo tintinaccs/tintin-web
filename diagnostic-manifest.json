@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c5cef6b9ee4acfb2654a6371ec6067e8feec08927a0ecd7888fab79be06aff52",
+  "sourceFingerprint": "fa31c2810b00a5261710414f12a1809b7a6dd2d51fdb4713134d09ae6a28c549",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 819,
     "textFiles": 782,
-    "totalBytes": 16313548,
+    "totalBytes": 16313517,
     "pages": 19,
     "modules": 560
   },
@@ -27010,8 +27010,8 @@
     },
     {
       "path": "scripts/auditar-fase-6-seguridad.js",
-      "bytes": 11817,
-      "sha256": "696ad754b354d0d4260063a772cb550f672664b05972e9f5e0ffa395c347da1f",
+      "bytes": 11786,
+      "sha256": "289df8c766bf811851621dabb7c43944cd425c5f35b903e9e9e255b4a8bc85bb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27020,15 +27020,15 @@
       "endpoints": [
         {
           "url": "https://api.cloudinary.com/",
-          "line": 100
+          "line": 12
         },
         {
           "url": "https://*.google.com/",
-          "line": 143
+          "line": 145
         },
         {
           "url": "https://*.googleusercontent.com/",
-          "line": 143
+          "line": 145
         }
       ]
     },
@@ -36149,8 +36149,8 @@
     {
       "path": "scripts/auditar-fase-6-seguridad.js",
       "extension": ".js",
-      "bytes": 11817,
-      "sha256": "696ad754b354d0d4260063a772cb550f672664b05972e9f5e0ffa395c347da1f"
+      "bytes": 11786,
+      "sha256": "289df8c766bf811851621dabb7c43944cd425c5f35b903e9e9e255b4a8bc85bb"
     },
     {
       "path": "scripts/auditar-fase-7-catalogo.js",

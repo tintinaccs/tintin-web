@@ -9,6 +9,8 @@ const exists = file => fs.existsSync(path.join(root, file));
 
 const rules = read('firestore.rules');
 const headers = read('_headers');
+const cloudinaryOrigin = 'https://api.cloudinary.com';
+const hasCloudinaryOrigin = policy => String(policy || '').split(/\s+/).some(token => token.replace(/[;,]+$/g, '') === cloudinaryOrigin);
 const runtime = JSON.parse(read('config/csp-runtime.json'));
 const middleware = read('functions/_middleware.js');
 const server = read('apps-script/CrearPedido.gs');
@@ -97,7 +99,7 @@ check(
     staticCsp.includes("default-src 'self'") &&
     staticCsp.includes("script-src-attr 'none'") &&
     staticCsp.includes("object-src 'none'") &&
-    !staticCsp.split(/\s+/).includes('https://api.cloudinary.com') &&
+    !hasCloudinaryOrigin(staticCsp) &&
     !staticCsp.includes("script-src 'self' 'unsafe-inline'"),
   'La CSP completa de páginas vive en middleware; el fallback estático debe seguir corto y sin capacidades Admin.'
 );
@@ -192,8 +194,6 @@ check('Ninguna CSP runtime reabre handlers con unsafe-inline', unsafeInlineAttrR
 check('Cada CSP runtime conserva protecciones estructurales', missingStructuralDirectives.length === 0, missingStructuralDirectives.join('; '));
 check("Cada CSP runtime bloquea clickjacking con 'none' o 'self'", unsafeFrameAncestorsRoutes.length === 0, unsafeFrameAncestorsRoutes.join(', '));
 
-const cloudinaryOrigin = 'https://api.cloudinary.com';
-const hasCloudinaryOrigin = policy => String(policy || '').split(/\s+/).some(token => token.replace(/[;,]+$/g, '') === cloudinaryOrigin);
 check(
   'Cloudinary upload existe solo en Admin y Perfil',
     hasCloudinaryOrigin(routePolicies.get('/admin')) &&
