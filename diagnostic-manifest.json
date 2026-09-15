@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "2f4d7b0bfd9ce9d48b3bd823bd9792c838fe06d346dfc52c679765d143436b99",
+  "sourceFingerprint": "94b16ffbfa18131a080a9b02ff29183280bf73a4ffac8b37f61b9eb4cf9ab691",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 819,
     "textFiles": 782,
-    "totalBytes": 16309042,
+    "totalBytes": 16312914,
     "pages": 19,
     "modules": 560
   },
@@ -17742,8 +17742,8 @@
     },
     {
       "path": "cloudflare/order-admin-domain.js",
-      "bytes": 20561,
-      "sha256": "6581e738c3db11eafa4b42e65e747687b989a7bbc2016a140da828676a78ef64",
+      "bytes": 21404,
+      "sha256": "f06472ffcea30e98c3bcd00f03666b2f6e9da1f31233bf708624a87f8d873614",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18613,8 +18613,8 @@
     },
     {
       "path": "functions/api/apps-script-bridge.js",
-      "bytes": 13492,
-      "sha256": "73397dc014b702f519158965ec7e43fccd364639b88fc3337a7d3ca66fe46b66",
+      "bytes": 16521,
+      "sha256": "48f6d072ae1b90d8428590704a0b00aee3689b2166777c36b598b354e351e32c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18655,12 +18655,24 @@
           "target": "cloudflare/order-sheets-sync.js",
           "dynamic": false,
           "line": 15
+        },
+        {
+          "raw": "../../cloudflare/order-admin-domain.js",
+          "target": "cloudflare/order-admin-domain.js",
+          "dynamic": false,
+          "line": 16
+        },
+        {
+          "raw": "./order-email.js",
+          "target": "functions/api/order-email.js",
+          "dynamic": false,
+          "line": 17
         }
       ],
       "endpoints": [
         {
           "url": "https://script.google.com/macros/s/AKfycbyh9I5aPp9d3lMSnYRNfrHcSCCobCoDOif9CqtXmMe4FgwSjzlKf4kjQZqvKDRmEY6S/exec",
-          "line": 21
+          "line": 23
         }
       ]
     },
@@ -32837,8 +32849,8 @@
     {
       "path": "cloudflare/order-admin-domain.js",
       "extension": ".js",
-      "bytes": 20561,
-      "sha256": "6581e738c3db11eafa4b42e65e747687b989a7bbc2016a140da828676a78ef64"
+      "bytes": 21404,
+      "sha256": "f06472ffcea30e98c3bcd00f03666b2f6e9da1f31233bf708624a87f8d873614"
     },
     {
       "path": "cloudflare/order-sheets-sync.js",
@@ -33845,8 +33857,8 @@
     {
       "path": "functions/api/apps-script-bridge.js",
       "extension": ".js",
-      "bytes": 13492,
-      "sha256": "73397dc014b702f519158965ec7e43fccd364639b88fc3337a7d3ca66fe46b66"
+      "bytes": 16521,
+      "sha256": "48f6d072ae1b90d8428590704a0b00aee3689b2166777c36b598b354e351e32c"
     },
     {
       "path": "functions/api/catalog-sheet-sync-drain.js",
