@@ -43,7 +43,7 @@ export const GLOBAL_TOKENS = [
   { key: 'bg-surface-soft', cssVar: '--color-background-surface-soft', label: 'Fondo de sección suave', category: 'fondos', default: '#FFF9FC' },
   { key: 'bg-elevated', cssVar: '--color-background-elevated', label: 'Fondo elevado (modales, dropdowns)', category: 'fondos', default: '#FFFFFF' },
   { key: 'bg-header', cssVar: '--color-background-header', label: 'Fondo del header', category: 'fondos', default: '#FFFFFF' },
-  { key: 'bg-footer', cssVar: '--color-background-footer', label: 'Fondo del footer', category: 'fondos', default: '#FFFFFF' },
+  { key: 'bg-footer', cssVar: '--color-background-footer', label: 'Fondo del footer', category: 'fondos', default: '#FFF6FA' },
   { key: 'bg-menu', cssVar: '--color-background-menu', label: 'Fondo de menús', category: 'fondos', default: '#FFFFFF' },
   { key: 'bg-submenu', cssVar: '--color-background-submenu', label: 'Fondo de submenús', category: 'fondos', default: '#FFF9FC' },
   { key: 'bg-table', cssVar: '--color-background-table', label: 'Fondo de tablas', category: 'fondos', default: '#FFFFFF' },
