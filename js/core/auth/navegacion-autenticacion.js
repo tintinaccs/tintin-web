@@ -4,7 +4,7 @@ import { auth, db } from '../firebase/firebase.js?v=tintin-20260908-admin-cache-
 import { signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { subscribeAuthState } from './coordinador-sesion.js?v=tintin-20260910-session-coordinator-1';
-import { getUserRole, can, SUPER_ADMIN } from './roles.js?v=tintin-20260915-final-polish-1';
+import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20260915-final-polish-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.mjs';
 
@@ -45,8 +45,14 @@ function publishStaffVisibility(user,role){
  document.documentElement.classList.toggle('tt-staff-session',staff);
  window.dispatchEvent(new CustomEvent('tintin:staff-visibility-ready',{detail:{staff}}));
 }
-function roleLabel(role){if(role==='superadmin')return 'Panel Super Admin';if(role==='admin')return 'Panel Admin';if(role==='agent')return 'Panel Agente';if(role==='viewer')return 'Panel Viewer';return 'Panel interno';}
+function roleLabel(role){if(role===ROLES.SUPERADMIN)return 'Panel Super Admin';if(role===ROLES.ADMIN)return 'Panel Admin';if(role===ROLES.AGENT)return 'Panel Agente';if(role===ROLES.VIEWER)return 'Panel Viewer';return 'Panel interno';}
 function initials(value){return String(value||'?').trim().split(/\s+/).filter(Boolean).slice(0,2).map(part=>part[0]).join('').toUpperCase()||'?';}
+function roleFromProfile(user,profile={}){
+ const authenticatedEmail=String(user?.email||'').trim().toLowerCase();
+ if(authenticatedEmail===SUPER_ADMIN)return ROLES.SUPERADMIN;
+ const role=String(profile?.role||ROLES.CLIENT).trim().toLowerCase();
+ return [ROLES.ADMIN,ROLES.AGENT,ROLES.VIEWER,ROLES.CLIENT].includes(role)?role:ROLES.CLIENT;
+}
 
 async function readNavigationProfile(user){
  if(!user?.uid)return {};
@@ -89,14 +95,14 @@ window.addEventListener('tintin:login-failed',endSilentAuthTransition);
 subscribeAuthState(async user=>{
  if(IS_LOGIN_PAGE)return;
  const generation=++authRenderGeneration;
- let role='client';
+ let role=ROLES.CLIENT;
  let profile={};
  try{
   if(user){
-   [role,profile]=await Promise.all([
-    getUserRole(user.uid,user.email),
-    readNavigationProfile(user),
-   ]);
+   // Una sola lectura de users/{uid} resuelve simultáneamente identidad y rol.
+   // El correo autenticado sigue siendo la única elevación a Super Admin.
+   profile=await readNavigationProfile(user);
+   role=roleFromProfile(user,profile);
   }
  }catch(error){
   console.warn('[auth-nav] No se pudo resolver la cuenta completa:',error);
@@ -143,7 +149,7 @@ function renderMobileTabbarPhoto(user,profile={}){
  }else tab.innerHTML=tab.dataset.ttDefaultHtml;
 }
 
-function renderAccountPanel(user,role='client',profile={}){
+function renderAccountPanel(user,role=ROLES.CLIENT,profile={}){
  const panel=document.getElementById('account-panel');
  if(!panel)return;
  if(!user){
