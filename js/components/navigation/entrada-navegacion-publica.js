@@ -32,7 +32,6 @@ const LEGACY_SHELL_IDS = Object.freeze([
 ]);
 
 let mountPromise = null;
-let sharedLogoDataPromise = null;
 
 function bootGlobalUiUx() {
   if (!document.getElementById('tt-phase8-ui-ux-css')) {
@@ -89,15 +88,6 @@ function attachCollectionVisualFallback(root = document) {
   });
 }
 
-function blobAsDataUrl(blob) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result || ''));
-    reader.onerror = () => reject(reader.error || new Error('No se pudo leer el logo.'));
-    reader.readAsDataURL(blob);
-  });
-}
-
 function resolveWithCeiling(promise, ceilingMs, fallbackValue = null) {
   return new Promise(resolve => {
     let settled = false;
@@ -126,7 +116,7 @@ function resolveWithCeiling(promise, ceilingMs, fallbackValue = null) {
 
 function waitForImageReady(image, ceilingMs = 1600) {
   if (!image) return Promise.resolve();
-  if (image.complete) return Promise.resolve();
+  if (image.complete && image.naturalWidth > 0) return Promise.resolve();
 
   return new Promise(resolve => {
     let settled = false;
@@ -149,53 +139,34 @@ function waitForImageReady(image, ceilingMs = 1600) {
 
 async function waitForShellBrandImages(root = document) {
   const images = [...root.querySelectorAll(
-    '#tt-header-desktop-tablet img, #tt-header-tablet img, #tt-tablet-menu img'
+    '#tt-header-desktop-tablet img.tt-logo-img, #tt-header-tablet img.tt-tablet-logo-img, #tt-tablet-menu img.tt-tablet-menu-logo-img'
   )];
-  await Promise.all(images.map(image => waitForImageReady(image)));
+  await Promise.all(images.map(image => waitForImageReady(image, 1200)));
 }
 
-function clearSharedLogoErrorState(image) {
-  if (!(image instanceof HTMLImageElement)) return;
-  image.classList.remove('tt-img-error');
-  const label = image.nextElementSibling;
-  if (label?.classList.contains('tt-img-error-label')) label.remove();
-}
+async function prepareHomeHeroAtomicReveal() {
+  if (currentPage() !== 'home') return 'not-home';
+  const image = document.getElementById('tt-hero-img');
+  if (!(image instanceof HTMLImageElement)) return 'missing';
 
-function hydrateSharedLogos(root = document) {
-  const images = [...root.querySelectorAll('img[data-tt-shared-logo]')];
-  const source = images.find(image => image.dataset.ttSharedLogo)?.dataset.ttSharedLogo;
-  if (!images.length || !source) return Promise.resolve();
+  document.body.classList.add('tt-hero-atomic-pending');
+  document.body.classList.remove('tt-hero-atomic-ready');
 
-  if (!sharedLogoDataPromise) {
-    const controller = typeof AbortController === 'function' ? new AbortController() : null;
-    const timer = window.setTimeout(() => controller?.abort(), 1800);
+  const decoded = (async () => {
+    try {
+      if (typeof image.decode === 'function') await image.decode();
+      else await waitForImageReady(image, 2200);
+      return true;
+    } catch {
+      await waitForImageReady(image, 650);
+      return image.complete && image.naturalWidth > 0;
+    }
+  })();
 
-    sharedLogoDataPromise = fetch(source, {
-      cache: 'force-cache',
-      credentials: 'same-origin',
-      ...(controller ? { signal: controller.signal } : {}),
-    })
-      .then(response => {
-        if (!response.ok) throw new Error(`Logo HTTP ${response.status}`);
-        return response.blob();
-      })
-      .then(blobAsDataUrl)
-      .catch(error => {
-        console.warn('[PublicShell] No se pudo compartir el logo en memoria.', error);
-        return source;
-      })
-      .finally(() => window.clearTimeout(timer));
-  }
-
-  return sharedLogoDataPromise.then(async value => {
-    images.forEach(image => {
-      clearSharedLogoErrorState(image);
-      image.src = value;
-      image.removeAttribute('data-tt-shared-logo');
-    });
-    await Promise.all(images.map(image => waitForImageReady(image)));
-    images.forEach(clearSharedLogoErrorState);
-  });
+  const ready = await resolveWithCeiling(decoded, 2400, false);
+  document.body.classList.remove('tt-hero-atomic-pending');
+  document.body.classList.add('tt-hero-atomic-ready');
+  return ready ? 'decoded' : 'ceiling';
 }
 
 async function loadFinalStability() {
@@ -215,9 +186,7 @@ function mountPublicShell() {
   window.TintinLoader?.beginWait?.();
 
   // Producto y catálogo tienen una dependencia de datos crítica propia. Se
-  // inicia antes del montaje visual del shell para que una demora de logo,
-  // configuración o paneles no deje la ficha detrás del loader indefinido.
-  // `loadSharedRuntime()` reutiliza la misma promesa y no duplica lecturas.
+  // inicia en paralelo; nunca bloquea el montaje visual del header.
   const pageDataPromise = currentPage() === 'shop'
     ? loadProductsRuntime().catch(error => {
       console.warn('[PublicShell] No se pudo iniciar el catálogo crítico.', error);
@@ -225,25 +194,30 @@ function mountPublicShell() {
     })
     : Promise.resolve(null);
 
+  // ensureNavigationAssets inserta los <link> de inmediato. El DOM del shell
+  // también se monta de inmediato, debajo del loader, para que al revelarse la
+  // página el header ya exista y no aparezca varios frames después.
   const navigationAssetsPromise = ensureNavigationAssets();
   const globalConfigPromise = resolveWithCeiling(
     fetchGlobalVisualStudioConfig(),
-    3500,
+    1400,
     null
   );
 
-  mountPromise = navigationAssetsPromise.then(async () => {
-    if (document.body.classList.contains('tt-public-shell-mounted')) return;
+  removeLegacyShell();
+  document.body.insertAdjacentHTML('afterbegin', renderTopShell());
+  document.body.insertAdjacentHTML('beforeend', renderBottomShell());
+  attachCollectionVisualFallback();
+  bootGlobalUiUx();
 
-    removeLegacyShell();
-    document.body.insertAdjacentHTML('afterbegin', renderTopShell());
-    document.body.insertAdjacentHTML('beforeend', renderBottomShell());
-    attachCollectionVisualFallback();
-    // Es una capa liviana de accesibilidad e interacción, compartida por
-    // todas las rutas. Mantenerla en el shell permite que las páginas
-    // institucionales sigan siendo ligeras sin perder sus mismos estados UI.
-    bootGlobalUiUx();
-    await hydrateSharedLogos();
+  // Auth y carrito empiezan apenas existen sus superficies. Antes se iniciaban
+  // después de logo/configuración/registro de paneles, lo que dejaba una
+  // ventana visible donde la cuenta parecía invitada y el carrito vacío.
+  loadSharedRuntime();
+  const heroReadyPromise = prepareHomeHeroAtomicReveal();
+
+  mountPromise = (async () => {
+    await navigationAssetsPromise;
 
     const globalConfig = await globalConfigPromise;
     if (globalConfig?.layout) applyGlobalLayout(globalConfig.layout);
@@ -251,7 +225,10 @@ function mountPublicShell() {
     if (globalConfig) applyGlobalVisualStudio(globalConfig);
     else document.documentElement.dataset.ttGlobalStudio = 'fallback';
 
-    await waitForShellBrandImages();
+    await Promise.all([
+      resolveWithCeiling(waitForShellBrandImages(), 1250, null),
+      heroReadyPromise,
+    ]);
 
     document.body.classList.add('tt-public-shell-mounted');
     document.body.classList.toggle('tt-public-shell-home', currentPage() === 'home');
@@ -259,21 +236,40 @@ function mountPublicShell() {
     applyActiveState();
     enhanceMobileFooter();
     await registerNavigationSurfaces();
-    loadSharedRuntime();
     void pageDataPromise;
-    const finalStability = await loadFinalStability();
 
-    document.dispatchEvent(new CustomEvent('tintin:public-shell-ready', {
-      detail: {
-        architecture: 'modular-navigation-v1',
-        socialNotifications: 'global',
-        globalConfigRequests: 1,
-        sharedLogoRequests: 1,
-        finalStability,
-      },
-    }));
-  }).catch(error => {
+    // La capa de estabilidad continúa cargando, pero ya no retiene el loader
+    // global: no forma parte del primer frame ni del contrato de sesión/header.
+    void loadFinalStability()
+      .then(finalStability => {
+        document.dispatchEvent(new CustomEvent('tintin:public-shell-ready', {
+          detail: {
+            architecture: 'modular-navigation-v1',
+            socialNotifications: 'global',
+            globalConfigRequests: 1,
+            sharedLogoRequests: 0,
+            heroReveal: currentPage() === 'home' ? 'atomic' : 'not-applicable',
+            finalStability,
+          },
+        }));
+      })
+      .catch(error => {
+        console.warn('[PublicShell] La estabilidad final no pudo cargarse.', error);
+        document.dispatchEvent(new CustomEvent('tintin:public-shell-ready', {
+          detail: {
+            architecture: 'modular-navigation-v1',
+            socialNotifications: 'global',
+            globalConfigRequests: 1,
+            sharedLogoRequests: 0,
+            heroReveal: currentPage() === 'home' ? 'atomic' : 'not-applicable',
+            finalStability: 'error',
+          },
+        }));
+      });
+  })().catch(error => {
     console.error('[PublicShell] No se pudo montar la navegación.', error);
+    document.body?.classList.remove('tt-hero-atomic-pending');
+    document.body?.classList.add('tt-hero-atomic-ready');
     document.dispatchEvent(new CustomEvent('tintin:public-shell-error', { detail: { error } }));
     throw error;
   }).finally(() => {
