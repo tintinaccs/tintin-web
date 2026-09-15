@@ -225,7 +225,7 @@ for (const route of publicRoutes) {
   const html = await response.text();
   assertStrongCsp(csp, route);
   assertCleanInternalRoutes(html, route);
-  if (csp.includes('https://api.cloudinary.com')) throw new Error(`${route}: la CSP pública no debe autorizar upload Cloudinary.`);
+  if (route !== '/perfil' && csp.includes('https://api.cloudinary.com')) throw new Error(`${route}: la CSP pública no debe autorizar upload Cloudinary.`);
   if (csp.includes("script-src-attr 'unsafe-inline'")) throw new Error(`${route}: la CSP pública no debe reabrir handlers inline.`);
   if (!expectedPolicy || csp !== expectedPolicy) throw new Error(`${route}: Cloudflare no entregó la CSP runtime exacta generada por este commit.`);
   console.log(`OK — ${preview}${route} — CSP runtime exacta y rutas limpias.`);
@@ -244,6 +244,18 @@ for (const route of ['/admin', '/admin-images']) {
   if (csp.includes("script-src-attr 'unsafe-inline'")) throw new Error(`${route}: Admin no debe reabrir handlers inline.`);
   if (csp !== expectedPolicy) throw new Error(`${route}: Cloudflare no entregó la CSP Admin exacta.`);
   console.log(`OK — ${preview}${route} — CSP Admin runtime exacta con upload aislado.`);
+}
+
+{
+  const route = '/perfil';
+  const expectedPolicy = runtime.routes?.[route];
+  const response = await fetchPreviewWithExpectedCsp(preview + route, expectedPolicy);
+  const csp = response.headers.get('content-security-policy') || '';
+  if (!response.ok || !(response.headers.get('content-type') || '').includes('text/html')) throw new Error(`${route}: preview inesperado HTTP ${response.status}.`);
+  if (response.headers.get('x-tintin-csp') !== 'edge-runtime') throw new Error(`${route}: no pasó por middleware CSP.`);
+  if (!csp.includes('https://api.cloudinary.com')) throw new Error(`${route}: el perfil necesita upload Cloudinary para cambiar la foto.`);
+  if (csp !== expectedPolicy) throw new Error(`${route}: Cloudflare no entregó la CSP de perfil exacta.`);
+  console.log(`OK — ${preview}${route} — CSP runtime exacta con upload de foto.`);
 }
 
 const notFoundRoute = `/__tintin-csp-404-probe-${sha.slice(0, 8)}__`;

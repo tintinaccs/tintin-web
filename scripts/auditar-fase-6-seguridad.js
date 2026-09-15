@@ -194,11 +194,11 @@ check("Cada CSP runtime bloquea clickjacking con 'none' o 'self'", unsafeFrameAn
 
 const cloudinaryOrigin = 'https://api.cloudinary.com';
 check(
-  'Cloudinary upload existe solo en Admin',
+  'Cloudinary upload existe solo en Admin y Perfil',
   routePolicies.get('/admin')?.includes(cloudinaryOrigin) &&
     routePolicies.get('/admin-images')?.includes(cloudinaryOrigin) &&
     [...routePolicies.entries()].every(([route, policy]) =>
-      route.startsWith('/admin') || !policy.includes(cloudinaryOrigin)
+      route.startsWith('/admin') || route === '/perfil' || route === '/perfil.html' || !policy.includes(cloudinaryOrigin)
     ) &&
     !staticCsp.includes(cloudinaryOrigin),
   'El endpoint de upload no debe aparecer en CSP públicas ni en el fallback estático.'
