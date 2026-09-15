@@ -22,7 +22,7 @@ import {
 // claim requiere el Admin SDK corriendo en un entorno privilegiado (una
 // Cloud Function) — hoy el proyecto está en plan Spark y no las despliega
 // (ver firebase-cloud-functions-inactive/README.md).
-export const SUPER_ADMIN = SUPER_ADMIN_EMAIL.toLowerCase();
+export const SUPER_ADMIN = SUPER_ADMIN_EMAIL;
 
 // El mensaje de cuenta bloqueada (con el enlace de WhatsApp) vive en
 // js/components/modals/modal-bloqueo.js — showBlockedModal() — para que login.html y
