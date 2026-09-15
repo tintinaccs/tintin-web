@@ -170,7 +170,7 @@
      bloquee sus clics de forma real (además de `inert`, no solo por z-index).
      Con la barra en 1480 (por encima de 1450/1460) quedaba visible y activa
      encima de la hoja abierta: root cause del "clic detrás del panel". */
-  #tt-tabbar { bottom:max(16px,env(safe-area-inset-bottom)); z-index:1400 !important; }
+  #tt-tabbar { bottom:max(16px,env(safe-area-inset-bottom)); z-index:var(--tt-z-tabbar) !important; }
   #tt-tabbar .tt-tabbar-btn { position:relative; z-index:3; }
   #tt-tabbar .tt-tabbar-btn.active svg,
   #tt-tabbar .tt-tabbar-btn.active .tt-tabbar-avatar,
