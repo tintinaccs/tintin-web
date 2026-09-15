@@ -52,6 +52,9 @@ const statsSync = read('cloudflare/sincronizacion-estadisticas-pedido.js');
 const adminOrderEndpoint = read('functions/api/admin-order-mutation.js');
 const publicOrderEndpoint = read('functions/api/apps-script-bridge.js');
 const sheetsOrderEndpoint = read('functions/api/sheets-admin-webhook.js');
+const authSurface = ['js/core/firebase/firebase.js', 'js/auth'].filter(file => {
+  try { return fs.existsSync(path.join(root, file)); } catch (_) { return false; }
+});
 
 // ===========================================================================
 // 1. EDICIÓN COMPLETA EN EL PANEL (saveOrderEdit)
@@ -254,6 +257,13 @@ check(
     /syncOrderOwnerStats/.test(publicOrderEndpoint) &&
     /syncOrderOwnerStats/.test(sheetsOrderEndpoint),
   'Cada origen de pedido debe actualizar el resumen de la cuenta afectada.'
+);
+check(
+  'El flujo de pedidos no modifica la superficie de autenticación',
+  authSurface.length >= 0 && !/signIn|signOut|onAuthStateChanged/.test(
+    `${adminOrderEndpoint}\n${publicOrderEndpoint}\n${sheetsOrderEndpoint}`
+  ),
+  'Login y sesión deben quedar fuera de los cambios de sincronización.'
 );
 
 // ---------------------------------------------------------------------------
