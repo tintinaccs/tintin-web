@@ -21,7 +21,8 @@ import {
 // eliminaría la comparación por correo en las tres capas, pero asignar un
 // claim requiere el Admin SDK corriendo en un entorno privilegiado (una
 // Cloud Function) — hoy el proyecto está en plan Spark y no las despliega
-// (ver firebase-cloud-functions-inactive/README.md).
+// (ver la arquitectura operativa canónica; el runtime vigente no despliega
+// Firebase Functions).
 export const SUPER_ADMIN = SUPER_ADMIN_EMAIL;
 
 // El mensaje de cuenta bloqueada (con el enlace de WhatsApp) vive en
