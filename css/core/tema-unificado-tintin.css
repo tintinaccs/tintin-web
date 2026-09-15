@@ -243,6 +243,26 @@ html body:not(:has(.adm-main)) .cat-filter-toggle{
 }
 
 body:not(:has(.adm-main)) :is(.tt-card,.tt-product-card,.tt-review-card,.tt-category-card,.perfil-card,.ck-panel,.login-box){border-color:var(--color-card-border);box-shadow:0 14px 38px var(--color-card-shadow)}
+
+/* Superficies canónicas: todas las tarjetas públicas parten de blanco sólido.
+   El esquema de color puede cambiar acentos y estados, pero nunca vuelve a
+   teñir una tarjeta con el fondo de página. */
+body:not(:has(.adm-main)) :is(
+  .tt-card,.tt-product-card,.tt-look-card,.tt-review-card,.tt-coll-page-card,
+  .tt-info-block,.tt-contact-info-item,.tt-trust-item,.tt-category-card,
+  .tt-quick-cat,.cat-sidebar,.cat-top,.cat-filter-option,.cat-product-card,
+  .tt-product-info-panel,.tt-product-actions-panel,.tt-specs-block,.tt-map-block,
+  .tinsel-box,.tinben-card,.correos-panel,.ship-tab-panel,
+  .perfil-card,.perfil-section,.perfil-wa-box,
+  .login-box,.login-exit-card,
+  .ck-panel,.ck-item,.ck-sug-card,.ck-ship-info,.ck-map-wrap,
+  .ck-bank-details,.ck-pay-note,.ck-post-confirm-card
+) {
+  background-color:#fff !important;
+  background-image:none !important;
+  border-color:var(--color-card-border) !important;
+  box-shadow:0 14px 38px var(--color-card-shadow) !important;
+}
 body:not(:has(.adm-main)) :is(hr,.divider,.tt-divider){border-color:var(--color-border-secondary)}
 body:not(:has(.adm-main)) :is(input,textarea,select,[tabindex]):focus-visible{border-color:var(--color-border-focus)!important}
 body:not(:has(.adm-main)) :is(.is-invalid,[aria-invalid="true"],.field-error){border-color:var(--color-border-error)}
