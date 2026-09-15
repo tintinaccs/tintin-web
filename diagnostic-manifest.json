@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "ffbd09710a4126f39cd69f77444e8e1d4e727e74f5cb3a7df8dc0eba0f32fd00",
+  "sourceFingerprint": "7a854ab610d85cfe111e051600bc5f1ceb2dd3ce6e8ed15b3ba0104328148f4d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 813,
     "textFiles": 776,
-    "totalBytes": 16154414,
+    "totalBytes": 16157842,
     "pages": 19,
     "modules": 558
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 190788,
-      "sha256": "fd34462b8c029e8d644182b6c0418d5710c40af7f3d633ebd8746dc5bf7de53c",
+      "bytes": 190796,
+      "sha256": "b52fd981eb98298369ec9e3e09a3272ce51e6eb82925e3c128b4b9277dfc8e54",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2129,7 +2129,7 @@
           "line": 2006
         },
         {
-          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260903-pr427-cache-3",
+          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260915-canonical-home-hero-2",
           "target": "js/admin/appearance/editor-visual-admin.js",
           "line": 2007
         },
@@ -2376,7 +2376,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260903-pr427-cache-3",
+          "raw": "js/admin/appearance/editor-visual-admin.js?v=tintin-20260915-canonical-home-hero-2",
           "target": "js/admin/appearance/editor-visual-admin.js",
           "line": 2007,
           "exists": true
@@ -12996,8 +12996,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 69760,
-      "sha256": "f9dfc0624d44d19c5d56363ecb2fa3c62be8500e241e8a50e1d8526a53c74e36",
+      "bytes": 70705,
+      "sha256": "d242156e4de2c30a43f55bc81bc464ee8de4854b29f42504b6528624578a90c7",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13055,17 +13055,17 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1",
           "target": "js/analytics/analitica.js",
-          "line": 1318
+          "line": 1341
         },
         {
           "raw": "tienda.js?v=tintin-20260915-token-retry-3",
           "target": "tienda.js",
-          "line": 1319
+          "line": 1342
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3",
           "target": "js/components/color/esquema-color.js",
-          "line": 1320
+          "line": 1343
         }
       ],
       "styles": [
@@ -13235,19 +13235,19 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1",
           "target": "js/analytics/analitica.js",
-          "line": 1318,
+          "line": 1341,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20260915-token-retry-3",
           "target": "tienda.js",
-          "line": 1319,
+          "line": 1342,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3",
           "target": "js/components/color/esquema-color.js",
-          "line": 1320,
+          "line": 1343,
           "exists": true
         },
         {
@@ -17698,8 +17698,8 @@
     },
     {
       "path": "cloudflare/notificaciones-sociales.js",
-      "bytes": 12652,
-      "sha256": "4546d61f0e8340545d4b669e01beb1105e3c757ac0c46e80806a55e24f0e1515",
+      "bytes": 12708,
+      "sha256": "21cf0966653f1d68797b61becf42d26fd5b3e63419c11b0f4c9af26dea48cd87",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17725,7 +17725,7 @@
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/$%7BencodeURIComponent(projectId",
-          "line": 268
+          "line": 269
         }
       ]
     },
@@ -18221,7 +18221,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 362115,
-      "sha256": "6469585a1d37703aa6a9274aa00757730f568e1e7791247ce9b407e257ad46d4",
+      "sha256": "50030b01a7258f21c0c3d83066f6f0f05dbef2a38c05267ad0d6e75c7675484e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18974,8 +18974,8 @@
     },
     {
       "path": "functions/api/notifications.js",
-      "bytes": 9949,
-      "sha256": "7ac8ee5b55e548150367282249893edae25960a99a49c65f27603de0bfba5130",
+      "bytes": 11601,
+      "sha256": "20e261fb3345b954b7baeac73a64ac05197332ab03916e1cd26e4d577d28c3ed",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20185,8 +20185,8 @@
     },
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
-      "bytes": 52988,
-      "sha256": "65e1eaa0a62751e274355b4240b8e6bfab179a02686faf21b1a851ca294d31d8",
+      "bytes": 53251,
+      "sha256": "df348144abb5ab26bea235bbbcfb9848ff30afed1de72d2ad64cfc64a413b3c9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32041,8 +32041,8 @@
     },
     {
       "path": "tests/visual-builder/visual-builder-core.test.mjs",
-      "bytes": 10578,
-      "sha256": "095ac8e804e07d3904aaa2b730d4063ee88cc6717ddf9a84a3e1ccb30aab0663",
+      "bytes": 11074,
+      "sha256": "c13799a78840c34f10d461cb9325d2541dac4eb73291930aa1b3346d1e3daad8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32061,44 +32061,56 @@
           "line": 2
         },
         {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
           "raw": "../../cloudflare/visual-builder-core.js",
           "target": "cloudflare/visual-builder-core.js",
           "dynamic": false,
-          "line": 6
+          "line": 8
         }
       ],
       "endpoints": [
         {
           "url": "https://evil.test/",
-          "line": 16
+          "line": 18
         },
         {
           "url": "https://evil.test/tracker.png",
-          "line": 38
+          "line": 40
         },
         {
           "url": "https://res.cloudinary.com/demo/image/upload/a.webp",
-          "line": 61
+          "line": 70
         },
         {
           "url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          "line": 78
+          "line": 87
         },
         {
           "url": "https://player.vimeo.com/video/76979871",
-          "line": 79
+          "line": 88
         },
         {
           "url": "https://res.cloudinary.com/demo/video/upload/dog.mp4",
-          "line": 80
+          "line": 89
         },
         {
           "url": "https://www.youtube.com/watch",
-          "line": 81
+          "line": 90
         },
         {
           "url": "https://evil.test/embed",
-          "line": 82
+          "line": 91
         }
       ]
     },
@@ -32515,8 +32527,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 190788,
-      "sha256": "fd34462b8c029e8d644182b6c0418d5710c40af7f3d633ebd8746dc5bf7de53c"
+      "bytes": 190796,
+      "sha256": "b52fd981eb98298369ec9e3e09a3272ce51e6eb82925e3c128b4b9277dfc8e54"
     },
     {
       "path": "apple-touch-icon.png",
@@ -32833,8 +32845,8 @@
     {
       "path": "cloudflare/notificaciones-sociales.js",
       "extension": ".js",
-      "bytes": 12652,
-      "sha256": "4546d61f0e8340545d4b669e01beb1105e3c757ac0c46e80806a55e24f0e1515"
+      "bytes": 12708,
+      "sha256": "21cf0966653f1d68797b61becf42d26fd5b3e63419c11b0f4c9af26dea48cd87"
     },
     {
       "path": "cloudflare/nucleo-push.js",
@@ -32960,13 +32972,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 362115,
-      "sha256": "6469585a1d37703aa6a9274aa00757730f568e1e7791247ce9b407e257ad46d4"
+      "sha256": "50030b01a7258f21c0c3d83066f6f0f05dbef2a38c05267ad0d6e75c7675484e"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 362030,
-      "sha256": "aa6c4fc792ff85b3d4ed4680c5cdaf2f6bc4bb03fec3b028dbde3e911a8269c7"
+      "sha256": "63640c5b67668b488a44c3a2b2ce5da8726cd8976e5dddd594696d741b4e50df"
     },
     {
       "path": "config/public-site.json",
@@ -33889,8 +33901,8 @@
     {
       "path": "functions/api/notifications.js",
       "extension": ".js",
-      "bytes": 9949,
-      "sha256": "7ac8ee5b55e548150367282249893edae25960a99a49c65f27603de0bfba5130"
+      "bytes": 11601,
+      "sha256": "20e261fb3345b954b7baeac73a64ac05197332ab03916e1cd26e4d577d28c3ed"
     },
     {
       "path": "functions/api/order-email-drain.js",
@@ -34189,8 +34201,8 @@
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
       "extension": ".js",
-      "bytes": 52988,
-      "sha256": "65e1eaa0a62751e274355b4240b8e6bfab179a02686faf21b1a851ca294d31d8"
+      "bytes": 53251,
+      "sha256": "df348144abb5ab26bea235bbbcfb9848ff30afed1de72d2ad64cfc64a413b3c9"
     },
     {
       "path": "js/admin/appearance/preview-dynamic-targets.js",
@@ -35509,8 +35521,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 69760,
-      "sha256": "f9dfc0624d44d19c5d56363ecb2fa3c62be8500e241e8a50e1d8526a53c74e36"
+      "bytes": 70705,
+      "sha256": "d242156e4de2c30a43f55bc81bc464ee8de4854b29f42504b6528624578a90c7"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -36529,8 +36541,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 38776,
-      "sha256": "06e649c3acb45d99d4d8db64827dc7b6060e52cf54b63e44a6ff923747921766"
+      "bytes": 38784,
+      "sha256": "b5835efcabe5ab2b0c6b457f6bf7352cefc8fd9bf5034cb3db40c890b16d7144"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -37213,8 +37225,8 @@
     {
       "path": "tests/visual-builder/visual-builder-core.test.mjs",
       "extension": ".mjs",
-      "bytes": 10578,
-      "sha256": "095ac8e804e07d3904aaa2b730d4063ee88cc6717ddf9a84a3e1ccb30aab0663"
+      "bytes": 11074,
+      "sha256": "c13799a78840c34f10d461cb9325d2541dac4eb73291930aa1b3346d1e3daad8"
     },
     {
       "path": "tests/visual-builder/visual-builder-routes.test.mjs",
@@ -38747,119 +38759,119 @@
     },
     {
       "file": "login.html",
-      "line": 325,
+      "line": 346,
       "raw": "/index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 325,
+      "line": 346,
       "raw": "/product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 325,
+      "line": 346,
       "raw": "/catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 325,
+      "line": 346,
       "raw": "/collections.html",
       "target": "collections.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 325,
+      "line": 346,
       "raw": "/perfil.html",
       "target": "perfil.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 325,
+      "line": 346,
       "raw": "/checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 325,
+      "line": 346,
       "raw": "/contact.html",
       "target": "contact.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 325,
+      "line": 346,
       "raw": "/about.html",
       "target": "about.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 325,
+      "line": 346,
       "raw": "/envios.html",
       "target": "envios.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 325,
+      "line": 346,
       "raw": "/cambios-devoluciones.html",
       "target": "cambios-devoluciones.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 325,
+      "line": 346,
       "raw": "/preguntas-frecuentes.html",
       "target": "preguntas-frecuentes.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 325,
+      "line": 346,
       "raw": "/privacidad.html",
       "target": "privacidad.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 325,
+      "line": 346,
       "raw": "/terminos.html",
       "target": "terminos.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 359,
+      "line": 380,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 367,
+      "line": 388,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 367,
+      "line": 388,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 467,
+      "line": 488,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -38929,7 +38941,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 367
+          "line": 388
         }
       ]
     },
@@ -39068,25 +39080,31 @@
     },
     {
       "file": "login.html",
-      "line": 551,
+      "line": 260,
+      "target": "/api/notifications",
+      "method": "POST"
+    },
+    {
+      "file": "login.html",
+      "line": 572,
       "target": "/api/username-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 568,
+      "line": 589,
       "target": "/api/phone-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 722,
+      "line": 743,
       "target": "/api/username-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 818,
+      "line": 839,
       "target": "/api/username-availability",
       "method": "POST"
     }
@@ -40483,12 +40501,12 @@
           },
           {
             "file": "login.html",
-            "line": 396,
+            "line": 417,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 947,
+            "line": 970,
             "operation": "doc"
           },
           {
