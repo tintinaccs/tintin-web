@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "94b16ffbfa18131a080a9b02ff29183280bf73a4ffac8b37f61b9eb4cf9ab691",
+  "sourceFingerprint": "a334e1e5fa3370ef3bc57c3b81ee6cb23a3591478bfc8d81e97cf2be0bc91869",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 819,
     "textFiles": 782,
-    "totalBytes": 16312914,
+    "totalBytes": 16314841,
     "pages": 19,
     "modules": 560
   },
@@ -21745,8 +21745,8 @@
     },
     {
       "path": "js/components/cart/sincronizacion-carrito.js",
-      "bytes": 41563,
-      "sha256": "59d9675aad9670eaef31aa419f90a0aa0f418f0d4fd07e52e9c7534378fb9fda",
+      "bytes": 41567,
+      "sha256": "ca95f1b9ac482ec1cb3413480b361c3f798ea03edba35d14b533cd6f4d5a17fc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21783,7 +21783,7 @@
           "line": 28
         },
         {
-          "raw": "../../orders/pedido-checkout-seguro.js?v=tintin-20260915-token-retry-2",
+          "raw": "../../orders/pedido-checkout-seguro.js?v=tintin-20260915-back-navigation-1",
           "target": "js/orders/pedido-checkout-seguro.js",
           "dynamic": true,
           "line": 1114
@@ -24355,8 +24355,8 @@
     },
     {
       "path": "js/orders/pedido-checkout-seguro.js",
-      "bytes": 38155,
-      "sha256": "80918e69051cc2679cf9f37c08b78a84d40ca9e148ca3fa1ea460713f560f852",
+      "bytes": 38757,
+      "sha256": "f515b2ef0ace2138fad80709dfa11591a562bc2e4b2004bd13f0d14ac052bbfd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24424,7 +24424,7 @@
         },
         {
           "url": "https://wa.me/$%7Bphone%7D",
-          "line": 785
+          "line": 796
         }
       ]
     },
@@ -28948,8 +28948,8 @@
     },
     {
       "path": "scripts/generar-csp-cloudflare.js",
-      "bytes": 13157,
-      "sha256": "e344b64dafc014928bab23e8b83af1e02f3428f88e36975636d5271bbba2c77d",
+      "bytes": 13329,
+      "sha256": "66da76a39344e6805c9d156206aabdf80ed6092751baad12148db2801b0285d2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29006,7 +29006,7 @@
         },
         {
           "url": "https://api.cloudinary.com/",
-          "line": 173
+          "line": 176
         }
       ]
     },
@@ -29975,8 +29975,8 @@
     },
     {
       "path": "tests/checkout/browser-resilience.test.mjs",
-      "bytes": 1589,
-      "sha256": "cdee6622802789fd4cc695e4ca057e2a74127ce84d470dd23615cbba8f9d420b",
+      "bytes": 2011,
+      "sha256": "87efca31e5b7cdb301e98b545b5cc03223cf9bfb2704d651928a0c92a51f6558",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31389,8 +31389,8 @@
     },
     {
       "path": "tests/security/csp-cloudinary-upload.test.mjs",
-      "bytes": 4499,
-      "sha256": "6e87389738b7a1c19292f6ae7edf2fe7befc43348ebca9f4b16c5b9a5e6e9e6b",
+      "bytes": 5226,
+      "sha256": "17e935df3b072b53d33163469d060a9e824532eb52e7138de69e7327cb7528bc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31424,7 +31424,7 @@
       "endpoints": [
         {
           "url": "https://api.cloudinary.com/",
-          "line": 58
+          "line": 70
         }
       ]
     },
@@ -34511,8 +34511,8 @@
     {
       "path": "js/components/cart/sincronizacion-carrito.js",
       "extension": ".js",
-      "bytes": 41563,
-      "sha256": "59d9675aad9670eaef31aa419f90a0aa0f418f0d4fd07e52e9c7534378fb9fda"
+      "bytes": 41567,
+      "sha256": "ca95f1b9ac482ec1cb3413480b361c3f798ea03edba35d14b533cd6f4d5a17fc"
     },
     {
       "path": "js/components/color/esquema-color-catalogo.js",
@@ -35213,8 +35213,8 @@
     {
       "path": "js/orders/pedido-checkout-seguro.js",
       "extension": ".js",
-      "bytes": 38155,
-      "sha256": "80918e69051cc2679cf9f37c08b78a84d40ca9e148ca3fa1ea460713f560f852"
+      "bytes": 38757,
+      "sha256": "f515b2ef0ace2138fad80709dfa11591a562bc2e4b2004bd13f0d14ac052bbfd"
     },
     {
       "path": "js/orders/politica-checkout.js",
@@ -36570,7 +36570,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 38789,
-      "sha256": "fb9bb97f2e6006cde7cbb85712ea25dd7f80b74732a01659171c2667f94fbf39"
+      "sha256": "82d9ad5bf78a472f3285b7787c2a1cd34a313e3a5f234f059ac80d70fbdc4f32"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -36629,8 +36629,8 @@
     {
       "path": "scripts/generar-csp-cloudflare.js",
       "extension": ".js",
-      "bytes": 13157,
-      "sha256": "e344b64dafc014928bab23e8b83af1e02f3428f88e36975636d5271bbba2c77d"
+      "bytes": 13329,
+      "sha256": "66da76a39344e6805c9d156206aabdf80ed6092751baad12148db2801b0285d2"
     },
     {
       "path": "scripts/generar-flujo-decisiones-acceso.mjs",
@@ -36869,8 +36869,8 @@
     {
       "path": "tests/checkout/browser-resilience.test.mjs",
       "extension": ".mjs",
-      "bytes": 1589,
-      "sha256": "cdee6622802789fd4cc695e4ca057e2a74127ce84d470dd23615cbba8f9d420b"
+      "bytes": 2011,
+      "sha256": "87efca31e5b7cdb301e98b545b5cc03223cf9bfb2704d651928a0c92a51f6558"
     },
     {
       "path": "tests/checkout/canonical-identity-backfill.test.mjs",
@@ -37133,8 +37133,8 @@
     {
       "path": "tests/security/csp-cloudinary-upload.test.mjs",
       "extension": ".mjs",
-      "bytes": 4499,
-      "sha256": "6e87389738b7a1c19292f6ae7edf2fe7befc43348ebca9f4b16c5b9a5e6e9e6b"
+      "bytes": 5226,
+      "sha256": "17e935df3b072b53d33163469d060a9e824532eb52e7138de69e7327cb7528bc"
     },
     {
       "path": "tests/seo/phase11-seo.spec.js",
