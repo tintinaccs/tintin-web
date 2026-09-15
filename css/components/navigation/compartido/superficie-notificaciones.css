@@ -3,7 +3,7 @@
    superficies del header; su geometría y transición por dispositivo siguen en
    css/components/notifications/notificaciones-sociales.css. */
 #notifications-drawer {
-  z-index: 1460 !important;
+  z-index: var(--tt-z-surface) !important;
   background: #FFFFFF !important;
   background-color: #FFFFFF !important;
   background-image: none !important;

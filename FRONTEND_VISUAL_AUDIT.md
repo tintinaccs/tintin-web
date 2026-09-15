@@ -74,3 +74,11 @@ HIGH: 0
 MEDIUM: 2
 LOW: 3
 TOTAL: 5
+
+## Estado de implementación — 2026-09-15
+
+- [PENDIENTE] [MEDIUM] Arquitectura CSS por capas de parches con alta densidad de `!important`: se verificó que las reglas forman parte de capas de compatibilidad y overrides deliberados; no se hizo una limpieza masiva sin pruebas de regresión.
+- [NO APLICA] [MEDIUM] Posicionamiento del CTA del hero: el patrón está confirmado, pero no se reprodujo desalineación en los breakpoints auditados; se conserva para mantener fidelidad con la composición actual.
+- [RESUELTO] [LOW] Ausencia de escala centralizada de `z-index`: se agregaron tokens semánticos conservando los valores y la jerarquía pública existente, y se migraron las superficies públicas principales.
+- [NO APLICA] [LOW] CSP report-only bloqueada en frame de Google: no se confirmó un defecto visual ni dependencia rota del embed; no se modificó CSP.
+- [NO APLICA] [LOW] Errores de permisos Firestore visibles en checkout: la evidencia corresponde al bloqueo de App Check del entorno de auditoría y el fallback visual funciona como diseñado; no se modificó Firebase/Firestore.
