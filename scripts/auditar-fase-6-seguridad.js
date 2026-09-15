@@ -97,7 +97,7 @@ check(
     staticCsp.includes("default-src 'self'") &&
     staticCsp.includes("script-src-attr 'none'") &&
     staticCsp.includes("object-src 'none'") &&
-    !staticCsp.includes('https://api.cloudinary.com') &&
+    !staticCsp.split(/\s+/).includes('https://api.cloudinary.com') &&
     !staticCsp.includes("script-src 'self' 'unsafe-inline'"),
   'La CSP completa de páginas vive en middleware; el fallback estático debe seguir corto y sin capacidades Admin.'
 );
@@ -193,14 +193,15 @@ check('Cada CSP runtime conserva protecciones estructurales', missingStructuralD
 check("Cada CSP runtime bloquea clickjacking con 'none' o 'self'", unsafeFrameAncestorsRoutes.length === 0, unsafeFrameAncestorsRoutes.join(', '));
 
 const cloudinaryOrigin = 'https://api.cloudinary.com';
+const hasCloudinaryOrigin = policy => String(policy || '').split(/\s+/).includes(cloudinaryOrigin);
 check(
   'Cloudinary upload existe solo en Admin y Perfil',
-  routePolicies.get('/admin')?.includes(cloudinaryOrigin) &&
-    routePolicies.get('/admin-images')?.includes(cloudinaryOrigin) &&
+    hasCloudinaryOrigin(routePolicies.get('/admin')) &&
+    hasCloudinaryOrigin(routePolicies.get('/admin-images')) &&
     [...routePolicies.entries()].every(([route, policy]) =>
-      route.startsWith('/admin') || route === '/perfil' || route === '/perfil.html' || !policy.includes(cloudinaryOrigin)
+      route.startsWith('/admin') || route === '/perfil' || route === '/perfil.html' || !hasCloudinaryOrigin(policy)
     ) &&
-    !staticCsp.includes(cloudinaryOrigin),
+    !hasCloudinaryOrigin(staticCsp),
   'El endpoint de upload no debe aparecer en CSP públicas ni en el fallback estático.'
 );
 check(
