@@ -8,6 +8,7 @@ import {
 import { jsonResponse, SUPERADMIN_EMAIL } from '../../cloudflare/seguridad-cloudinary.js';
 import { applyUserLifecycle } from '../../cloudflare/user-lifecycle-domain.js';
 import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
+import { syncOrderOwnerStats } from '../../cloudflare/sincronizacion-estadisticas-pedido.js';
 
 const MAX_BODY_BYTES = 64 * 1024;
 const ROLES = new Set(['client', 'viewer', 'agent', 'admin']);
@@ -191,7 +192,8 @@ async function handleOrder(env, input) {
   }, actor);
 }
 
-export async function onRequestPost({ request, env }) {
+export async function onRequestPost(context) {
+  const { request, env } = context;
   if (!sameSecret(request.headers.get('X-Tintin-Sheets-Secret'), env.SHEETS_ENGAGEMENT_SECRET)) {
     return jsonResponse({ ok: false, error: 'No autorizado', revision: ADMIN_SYNC_REVISION }, 401, '', request.url);
   }
@@ -218,6 +220,12 @@ export async function onRequestPost({ request, env }) {
     if (input.entity === 'user') result = await updateUser(env, input);
     else if (input.entity === 'order') result = await handleOrder(env, input);
     else throw new Error('Entidad no permitida');
+
+    if (input.entity === 'order' && result?.order) {
+      context.waitUntil?.(syncOrderOwnerStats(env, result.order).catch(syncError => {
+        console.error('[sheets-admin-webhook] order stats sync failed', syncError?.message || syncError);
+      }));
+    }
 
     return jsonResponse({ ok: true, result, revision: ADMIN_SYNC_REVISION }, 200, '', request.url);
   } catch (error) {
