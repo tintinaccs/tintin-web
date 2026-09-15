@@ -170,7 +170,8 @@ const cspLines = staticHeaders.split('\n').filter(line => line.includes('Content
 if (cspLines.length !== 1) throw new Error(`_headers debe contener exactamente una CSP fallback corta; encontradas: ${cspLines.length}.`);
 const fallbackPolicy = staticFallbackPolicy(staticHeaders);
 if (cspLines[0].length > 2000) throw new Error(`La CSP fallback de _headers supera 2000 caracteres (${cspLines[0].length}).`);
-if (fallbackPolicy.includes('https://api.cloudinary.com')) throw new Error('La CSP fallback estática no debe autorizar upload Cloudinary.');
+const hasCloudinaryOrigin = policy => String(policy || '').split(/\s+/).some(token => token.replace(/[;,]+$/g, '') === 'https://api.cloudinary.com');
+if (hasCloudinaryOrigin(fallbackPolicy)) throw new Error('La CSP fallback estática no debe autorizar upload Cloudinary.');
 if (fallbackPolicy.includes("script-src-attr 'unsafe-inline'")) throw new Error('La CSP fallback estática no debe reabrir handlers inline.');
 if (!fallbackPolicy.includes("script-src-attr 'none'")) throw new Error("La CSP fallback estática debe bloquear handlers con script-src-attr 'none'.");
 assertStrongCsp(fallbackPolicy, '/* fallback');
@@ -225,7 +226,7 @@ for (const route of publicRoutes) {
   const html = await response.text();
   assertStrongCsp(csp, route);
   assertCleanInternalRoutes(html, route);
-  if (csp.includes('https://api.cloudinary.com')) throw new Error(`${route}: la CSP pública no debe autorizar upload Cloudinary.`);
+  if (route !== '/perfil' && hasCloudinaryOrigin(csp)) throw new Error(`${route}: la CSP pública no debe autorizar upload Cloudinary.`);
   if (csp.includes("script-src-attr 'unsafe-inline'")) throw new Error(`${route}: la CSP pública no debe reabrir handlers inline.`);
   if (!expectedPolicy || csp !== expectedPolicy) throw new Error(`${route}: Cloudflare no entregó la CSP runtime exacta generada por este commit.`);
   console.log(`OK — ${preview}${route} — CSP runtime exacta y rutas limpias.`);
@@ -240,10 +241,22 @@ for (const route of ['/admin', '/admin-images']) {
   const html = await response.text();
   assertStrongCsp(csp, route);
   assertCleanInternalRoutes(html, route);
-  if (!csp.includes('https://api.cloudinary.com')) throw new Error(`${route}: Admin necesita upload Cloudinary.`);
+  if (!hasCloudinaryOrigin(csp)) throw new Error(`${route}: Admin necesita upload Cloudinary.`);
   if (csp.includes("script-src-attr 'unsafe-inline'")) throw new Error(`${route}: Admin no debe reabrir handlers inline.`);
   if (csp !== expectedPolicy) throw new Error(`${route}: Cloudflare no entregó la CSP Admin exacta.`);
   console.log(`OK — ${preview}${route} — CSP Admin runtime exacta con upload aislado.`);
+}
+
+{
+  const route = '/perfil';
+  const expectedPolicy = runtime.routes?.[route];
+  const response = await fetchPreviewWithExpectedCsp(preview + route, expectedPolicy);
+  const csp = response.headers.get('content-security-policy') || '';
+  if (!response.ok || !(response.headers.get('content-type') || '').includes('text/html')) throw new Error(`${route}: preview inesperado HTTP ${response.status}.`);
+  if (response.headers.get('x-tintin-csp') !== 'edge-runtime') throw new Error(`${route}: no pasó por middleware CSP.`);
+  if (!hasCloudinaryOrigin(csp)) throw new Error(`${route}: el perfil necesita upload Cloudinary para cambiar la foto.`);
+  if (csp !== expectedPolicy) throw new Error(`${route}: Cloudflare no entregó la CSP de perfil exacta.`);
+  console.log(`OK — ${preview}${route} — CSP runtime exacta con upload de foto.`);
 }
 
 const notFoundRoute = `/__tintin-csp-404-probe-${sha.slice(0, 8)}__`;

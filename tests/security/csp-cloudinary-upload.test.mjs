@@ -12,7 +12,7 @@ test('checkout puede ejecutar sus scripts con la CSP estática y la de runtime',
   for (const [, attributes, source] of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\b[^>]*>/gi)) {
     if (/\bsrc\s*=/.test(attributes)) continue;
     const hash = `'sha256-${createHash('sha256').update(source).digest('base64')}'`;
-    for (const policy of [fallback, runtime.routes['/perfil'], runtime.routes['/perfil.html']]) {
+    for (const policy of [fallback, runtime.routes['/checkout'], runtime.routes['/checkout.html']]) {
       assert.ok(policy.includes(hash), `checkout bloqueado: ${hash}`);
     }
   }
@@ -24,13 +24,13 @@ function routeCsp(route) {
   return policy;
 }
 
-test('Cloudinary upload solo queda permitido en superficies Admin', () => {
+test('Cloudinary upload queda permitido solo en las superficies que suben imágenes', () => {
   const signer = read('functions/api/cloudinary-sign-upload.js');
   const uploadUrlMatch = signer.match(/uploadUrl:\s*`(https:\/\/[^/`$]+)/);
   assert.ok(uploadUrlMatch, 'no se encontró el origen de uploadUrl en cloudinary-sign-upload.js');
   const uploadOrigin = uploadUrlMatch[1];
-  for (const route of ['/admin', '/admin-images']) assert.ok(routeCsp(route).includes(uploadOrigin), `${route} necesita ${uploadOrigin} para la biblioteca multimedia`);
-  for (const route of ['/', '/catalogo', '/collections', '/product', '/about', '/contact', '/checkout', '/login', '/perfil']) assert.ok(!routeCsp(route).includes(uploadOrigin), `${route} no debe autorizar el endpoint de upload de Cloudinary`);
+  for (const route of ['/admin', '/admin-images', '/perfil']) assert.ok(routeCsp(route).includes(uploadOrigin), `${route} necesita ${uploadOrigin} para subir imágenes`);
+  for (const route of ['/', '/catalogo', '/collections', '/product', '/about', '/contact', '/checkout', '/login']) assert.ok(!routeCsp(route).includes(uploadOrigin), `${route} no debe autorizar el endpoint de upload de Cloudinary`);
 });
 
 test('CSP no vuelve a abrir handlers inline de forma global', () => {

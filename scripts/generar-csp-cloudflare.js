@@ -45,7 +45,7 @@ const frameOrigins = [
   'https://player.vimeo.com',
   'https://*.paypal.com'
 ];
-const CLOUDINARY_UPLOAD_PAGES = new Set(['admin.html', 'admin-images.html']);
+const CLOUDINARY_UPLOAD_PAGES = new Set(['admin.html', 'admin-images.html', 'perfil.html']);
 const VISUAL_BUILDER_PREVIEWABLE_PAGES = new Set([
   'index.html', 'about.html', 'catalogo.html', 'collections.html',
   'contact.html', 'envios.html', 'preguntas-frecuentes.html', 'cambios-devoluciones.html',
