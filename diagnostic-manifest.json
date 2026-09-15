@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "2a4d89b89d507b02593d6d9c1bb323b1c7a5082a6b5697c51099fc9ec4a62c96",
+  "sourceFingerprint": "65d5533a93b4750f3b1ab555ac4e541bb669cf9ebdaf8255bd2d923fde68ac7a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 819,
     "textFiles": 782,
-    "totalBytes": 16309146,
+    "totalBytes": 16309122,
     "pages": 19,
     "modules": 560
   },
@@ -8998,8 +8998,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 115835,
-      "sha256": "87266f3218b37230dafdc2afa452f32932691e4837095207e803fda076fd4375",
+      "bytes": 115827,
+      "sha256": "44a1e01056ad3dae400e49e2df84b9266eeaa6afd4de400e56d9e521bad96742",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -24544,8 +24544,8 @@
     },
     {
       "path": "js/pages/checkout/checkout-hardening.js",
-      "bytes": 12764,
-      "sha256": "28fa26f7287af5a8a1c1628a25392287cd07368e4c1b7802720037fad987277a",
+      "bytes": 12760,
+      "sha256": "41e9285c5d8c47bc07e9e71eb6e31c68a69639aa3e3014ab882eb0283a25e4a8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24558,7 +24558,7 @@
           "line": 1
         },
         {
-          "raw": "../../components/cart/sincronizacion-carrito.js?v=tintin-20260914-session-unified-2",
+          "raw": "../../components/cart/sincronizacion-carrito.js?v=tintin-20260915-token-retry-3",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": false,
           "line": 7
@@ -32311,27 +32311,27 @@
     },
     {
       "path": "tienda.js",
-      "bytes": 96385,
-      "sha256": "fe742eb9d75460a078b5f66306936f7377bf966f28f154583393dd016c75328b",
+      "bytes": 96373,
+      "sha256": "7170e74de91195ef601c2af9d035a8b0c6aa66d01372e56126e9d1a441272216",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260914-session-unified-2",
+          "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260915-token-retry-3",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
           "line": 246
         },
         {
-          "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260914-session-unified-2",
+          "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260915-token-retry-3",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
           "line": 901
         },
         {
-          "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260914-session-unified-2",
+          "raw": "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260915-token-retry-3",
           "target": "js/components/cart/sincronizacion-carrito.js",
           "dynamic": true,
           "line": 1563
@@ -32771,8 +32771,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 115835,
-      "sha256": "87266f3218b37230dafdc2afa452f32932691e4837095207e803fda076fd4375"
+      "bytes": 115827,
+      "sha256": "44a1e01056ad3dae400e49e2df84b9266eeaa6afd4de400e56d9e521bad96742"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -35255,8 +35255,8 @@
     {
       "path": "js/pages/checkout/checkout-hardening.js",
       "extension": ".js",
-      "bytes": 12764,
-      "sha256": "28fa26f7287af5a8a1c1628a25392287cd07368e4c1b7802720037fad987277a"
+      "bytes": 12760,
+      "sha256": "41e9285c5d8c47bc07e9e71eb6e31c68a69639aa3e3014ab882eb0283a25e4a8"
     },
     {
       "path": "js/pages/checkout/checkout-mantenimiento.js",
@@ -37289,8 +37289,8 @@
     {
       "path": "tienda.js",
       "extension": ".js",
-      "bytes": 96385,
-      "sha256": "fe742eb9d75460a078b5f66306936f7377bf966f28f154583393dd016c75328b"
+      "bytes": 96373,
+      "sha256": "7170e74de91195ef601c2af9d035a8b0c6aa66d01372e56126e9d1a441272216"
     }
   ],
   "sitemapRoutes": [],
