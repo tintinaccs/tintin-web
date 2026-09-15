@@ -170,7 +170,7 @@ const cspLines = staticHeaders.split('\n').filter(line => line.includes('Content
 if (cspLines.length !== 1) throw new Error(`_headers debe contener exactamente una CSP fallback corta; encontradas: ${cspLines.length}.`);
 const fallbackPolicy = staticFallbackPolicy(staticHeaders);
 if (cspLines[0].length > 2000) throw new Error(`La CSP fallback de _headers supera 2000 caracteres (${cspLines[0].length}).`);
-const hasCloudinaryOrigin = policy => String(policy || '').split(/\s+/).includes('https://api.cloudinary.com');
+const hasCloudinaryOrigin = policy => String(policy || '').split(/\s+/).some(token => token.replace(/[;,]+$/g, '') === 'https://api.cloudinary.com');
 if (hasCloudinaryOrigin(fallbackPolicy)) throw new Error('La CSP fallback estática no debe autorizar upload Cloudinary.');
 if (fallbackPolicy.includes("script-src-attr 'unsafe-inline'")) throw new Error('La CSP fallback estática no debe reabrir handlers inline.');
 if (!fallbackPolicy.includes("script-src-attr 'none'")) throw new Error("La CSP fallback estática debe bloquear handlers con script-src-attr 'none'.");

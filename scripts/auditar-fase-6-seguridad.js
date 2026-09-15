@@ -193,7 +193,7 @@ check('Cada CSP runtime conserva protecciones estructurales', missingStructuralD
 check("Cada CSP runtime bloquea clickjacking con 'none' o 'self'", unsafeFrameAncestorsRoutes.length === 0, unsafeFrameAncestorsRoutes.join(', '));
 
 const cloudinaryOrigin = 'https://api.cloudinary.com';
-const hasCloudinaryOrigin = policy => String(policy || '').split(/\s+/).includes(cloudinaryOrigin);
+const hasCloudinaryOrigin = policy => String(policy || '').split(/\s+/).some(token => token.replace(/[;,]+$/g, '') === cloudinaryOrigin);
 check(
   'Cloudinary upload existe solo en Admin y Perfil',
     hasCloudinaryOrigin(routePolicies.get('/admin')) &&
