@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import {
   isRestorableVisualHistory, requireVisualPageId, safeVisualHref, safeVisualImage, safeVisualVideoUrl,
   sanitizeVisualConfig, sanitizeVisualContent, sanitizeVisualDraft, VISUAL_BUILDER_LIMITS, VISUAL_TOP_ANCHOR,
@@ -54,6 +56,13 @@ test('Inicio conserva un solo hero y descarta banners legados publicados', () =>
   ] });
   assert.equal(clean.customBlocks.some(item => item.id === 'old-hero'), false);
   assert.equal(clean.customBlocks.some(item => item.id === 'promo-1'), true);
+});
+
+test('el editor de Super Admin tampoco permite previsualizar un segundo hero en Inicio', () => {
+  const editor = fs.readFileSync(fileURLToPath(new URL('../../js/admin/appearance/editor-visual-admin.js', import.meta.url)), 'utf8');
+  assert.match(editor, /pageId === 'index' && item\.type === 'banner'/);
+  assert.match(editor, /pageId==='index'&&preset\.type==='banner'/);
+  assert.match(editor, /único hero canónico/);
 });
 
 test('imágenes y enlaces usan listas permitidas y rutas internas limpias', () => {

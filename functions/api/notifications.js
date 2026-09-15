@@ -15,6 +15,7 @@ import {
 
 const MAX_BODY_BYTES = 6 * 1024;
 const PROFILE_RECOVERY_WINDOW_MS = 24 * 60 * 60 * 1000;
+const LOGIN_ALERT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 async function markSourceSeen(env, notification) {
   const sourceType = clean(notification?.sourceType, 60);
@@ -56,6 +57,40 @@ async function registerProfileNotification(env, user) {
   }, `user_joined:${uid}`);
 
   return adminResult;
+}
+
+/**
+ * Registra un inicio de sesión sin enviar identidad ni datos personales en el
+ * push. El `auth_time` sólo viene del ID token verificado en el servidor: el
+ * navegador no puede inventarlo y también funciona como deduplicación entre
+ * reintentos, redirects de Google y recargas de la página de acceso.
+ */
+async function registerLoginNotification(env, user) {
+  const authTimeSeconds = Math.trunc(Number(user?.claims?.auth_time) || 0);
+  const authTimeMs = authTimeSeconds * 1000;
+  if (!authTimeSeconds || !Number.isFinite(authTimeMs)) {
+    return { created: false, skipped: true, reason: 'missing_auth_time' };
+  }
+  if (authTimeMs > Date.now() + 60 * 1000 || Date.now() - authTimeMs > LOGIN_ALERT_MAX_AGE_MS) {
+    return { created: false, skipped: true, reason: 'stale_auth_time' };
+  }
+
+  const uid = safeId(user.uid, 'Cuenta');
+  return notifyAdminIfAbsent(env, {
+    kind: 'user_login',
+    actorType: 'customer',
+    actorUid: uid,
+    // La campana interna puede conservar la cuenta de origen para auditoría,
+    // pero el texto visible y el push quedan deliberadamente genéricos.
+    actorName: 'Una cuenta',
+    title: 'Inicio de sesión',
+    body: 'Una cuenta ingresó a Tintin Accesorios.',
+    iconKey: 'user',
+    targetUrl: 'admin.html#section-usuarios',
+    sourceType: 'auth',
+    sourceId: uid,
+    createdAt: new Date(authTimeMs),
+  }, `user_login:${uid}:${authTimeSeconds}`);
 }
 
 async function registerOrderCreated(env, user, orderId) {
@@ -182,6 +217,10 @@ export async function onRequest(context) {
     }
     if (action === 'profileCreated') {
       const result = await registerProfileNotification(env, user);
+      return jsonResponse({ ok: true, result }, 200, origin, request.url);
+    }
+    if (action === 'loginObserved') {
+      const result = await registerLoginNotification(env, user);
       return jsonResponse({ ok: true, result }, 200, origin, request.url);
     }
     if (action === 'orderCreated') {

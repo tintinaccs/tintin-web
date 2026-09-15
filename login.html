@@ -248,6 +248,27 @@ function clearGoogleRedirectPending() {
   catch {}
 }
 
+// Este aviso no modifica Auth ni espera antes de navegar. Usa el token de la
+// sesión ya creada y el servidor toma `auth_time` del token verificado para
+// deduplicar popup, redirect, reintento o recarga. El contenido visible del
+// push es genérico: no expone nombre, correo ni datos de la clienta.
+function reportLoginToSuperAdmin(user) {
+  if (!user || String(user.email || '').trim().toLowerCase() === SUPER_ADMIN.toLowerCase()) return;
+  void (async () => {
+    try {
+      const token = await user.getIdToken();
+      await fetch('/api/notifications', {
+        method: 'POST',
+        keepalive: true,
+        headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'loginObserved' }),
+      });
+    } catch {
+      // Un aviso auxiliar jamás debe frenar ni invalidar el acceso real.
+    }
+  })();
+}
+
 // Se consulta siempre al cargar: normalmente devuelve null. Si el navegador
 // bloqueó el popup y Google tuvo que abrirse en esta misma pestaña, recupera
 // ese resultado antes de que el formulario de Login llegue a mostrarse.
@@ -855,6 +876,7 @@ async function finishGoogleLogin(user) {
     showBlockedModal();
     return;
   }
+  reportLoginToSuperAdmin(user);
   await ensureProfileComplete(user, role);
   await redirectByRole(role, user.email, { welcomePending, storeAccessConfig, user });
 }
@@ -870,6 +892,7 @@ async function finishOtpLogin(user) {
     showBlockedModal();
     return;
   }
+  reportLoginToSuperAdmin(user);
   await ensureProfileComplete(user, role);
   await redirectByRole(role, user.email, { welcomePending, storeAccessConfig, user });
 }
