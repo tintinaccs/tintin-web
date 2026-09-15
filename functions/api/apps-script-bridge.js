@@ -14,6 +14,7 @@ import { firestoreAdminBatchCommit } from '../../cloudflare/firestore-admin-batc
 import { fetchAppsScript } from '../../cloudflare/apps-script-fetch.js';
 import { syncOrderToSheetsBestEffort } from '../../cloudflare/order-sheets-sync.js';
 import { createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
+import { dispatchOrderPushEvent } from '../../cloudflare/servicio-push.js';
 import { sendOrderEmails } from './order-email.js';
 
 // Apps Script sigue ejecutando únicamente la transacción privilegiada heredada
@@ -355,6 +356,13 @@ export async function onRequest(context) {
         });
       }
       if (!created.duplicate) {
+        // El checkout público canónico ya no pasa por el webhook antiguo de
+        // Apps Script. Disparar aquí el mismo evento garantiza la push de
+        // pedido nuevo sin duplicarla en reintentos idempotentes.
+        context.waitUntil?.(
+          dispatchOrderPushEvent(env, 'order.created', created.orderId, `order.created:${created.orderId}`)
+            .catch(() => {})
+        );
         context.waitUntil?.(syncOrderToSheetsBestEffort(env, { orderId: created.orderId, order: created.order }));
       }
       return new Response(JSON.stringify({
