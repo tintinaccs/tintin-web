@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "4b4a5ebbce257566713c3343a034502763435d580aa2bcd4ca180f6c71df5a68",
+  "sourceFingerprint": "e058d4203b52d9ea31f5b153562640dabfb4944711ae7c4d70f9019fa9cf3aee",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 819,
     "textFiles": 782,
-    "totalBytes": 16308947,
+    "totalBytes": 16308678,
     "pages": 19,
     "modules": 560
   },
@@ -22454,8 +22454,8 @@
     },
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
-      "bytes": 9348,
-      "sha256": "44eef82122c4b107270b2f63e7b020c52bed9fd72c4d5f1b6f1aa18be2b393a1",
+      "bytes": 9351,
+      "sha256": "2ccd7a9710f53a3f0e9ad7a2266dc5bddbaeb27d1ba14186cec2e113748eee45",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22474,7 +22474,7 @@
           "line": 2
         },
         {
-          "raw": "../../../core/auth/navegacion-autenticacion.js?v=tintin-20260912-ux-closure-1",
+          "raw": "../../../core/auth/navegacion-autenticacion.js?v=tintin-20260914-auth-wait-fix-1",
           "target": "js/core/auth/navegacion-autenticacion.js",
           "dynamic": true,
           "line": 112
@@ -23261,8 +23261,8 @@
     },
     {
       "path": "js/core/auth/navegacion-autenticacion.js",
-      "bytes": 7483,
-      "sha256": "cb2c5c0aa1495c88b8f3d559ad4da6a6f750b0ab4213b411084baa35db7fe91a",
+      "bytes": 7459,
+      "sha256": "3a418a5739a159ebb66edfc33dfb52d3f6d51df3add38cfd74a58dc2660de92a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34709,8 +34709,8 @@
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
       "extension": ".js",
-      "bytes": 9348,
-      "sha256": "44eef82122c4b107270b2f63e7b020c52bed9fd72c4d5f1b6f1aa18be2b393a1"
+      "bytes": 9351,
+      "sha256": "2ccd7a9710f53a3f0e9ad7a2266dc5bddbaeb27d1ba14186cec2e113748eee45"
     },
     {
       "path": "js/components/navigation/compartido/compatibilidad-cuenta-movil.js",
@@ -34943,8 +34943,8 @@
     {
       "path": "js/core/auth/navegacion-autenticacion.js",
       "extension": ".js",
-      "bytes": 7483,
-      "sha256": "cb2c5c0aa1495c88b8f3d559ad4da6a6f750b0ab4213b411084baa35db7fe91a"
+      "bytes": 7459,
+      "sha256": "3a418a5739a159ebb66edfc33dfb52d3f6d51df3add38cfd74a58dc2660de92a"
     },
     {
       "path": "js/core/auth/permisos-roles.js",
@@ -36551,14 +36551,14 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 819,
-      "sha256": "abd10e879db35576a8227b89d02dd7540c00dae65f2fe6ef2e2f2e5aac8afad7"
+      "bytes": 38,
+      "sha256": "dd9d3b46a69239cd812969333746634c254684c83bb0c9501af9d578669e38b8"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 38256,
-      "sha256": "ec3d92b5b6e822f98155e3ae124fdaec6cab37ffc8295479ab95f2afe5468c2c"
+      "bytes": 38789,
+      "sha256": "fb9bb97f2e6006cde7cbb85712ea25dd7f80b74732a01659171c2667f94fbf39"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
