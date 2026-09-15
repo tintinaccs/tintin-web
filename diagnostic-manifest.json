@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "94b16ffbfa18131a080a9b02ff29183280bf73a4ffac8b37f61b9eb4cf9ab691",
+  "sourceFingerprint": "e770b53b0f9ba47caa881e1e8928308e7685e34023432bb958a6c86e73dd7919",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 819,
     "textFiles": 782,
-    "totalBytes": 16312914,
+    "totalBytes": 16313179,
     "pages": 19,
     "modules": 560
   },
@@ -8998,8 +8998,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 115823,
-      "sha256": "b47674ae0014021bf37c67870cd82327da90aaa4cb9ae0bf06f38d09232df839",
+      "bytes": 115613,
+      "sha256": "4c5c4b64c9f066c9229694dc754230004545999ffddb63df77df4cf41a31725d",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9020,7 +9020,7 @@
           "error": ""
         },
         {
-          "line": 389,
+          "line": 384,
           "module": true,
           "ok": true,
           "error": ""
@@ -9051,27 +9051,27 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1",
           "target": "js/analytics/analitica.js",
-          "line": 1950
+          "line": 1945
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 1951
+          "line": 1946
         },
         {
           "raw": "js/pages/checkout/paypal-checkout.js?v=tintin-20260914-summary-svg-fix-2",
           "target": "js/pages/checkout/paypal-checkout.js",
-          "line": 1952
+          "line": 1947
         },
         {
           "raw": "tienda.js?v=tintin-20260915-token-retry-3",
           "target": "tienda.js",
-          "line": 1953
+          "line": 1948
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3",
           "target": "js/components/color/esquema-color.js",
-          "line": 1954
+          "line": 1949
         }
       ],
       "styles": [
@@ -9168,7 +9168,7 @@
           "target": "assets-tintin/images/general/logo.png",
           "alt": "TINTIN",
           "hasAlt": true,
-          "line": 1961
+          "line": 1956
         }
       ],
       "links": [
@@ -9190,7 +9190,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 374
+          "line": 369
         },
         {
           "raw": "/",
@@ -9200,7 +9200,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 379
+          "line": 374
         },
         {
           "raw": "/",
@@ -9210,7 +9210,7 @@
           "ariaLabel": "Ir al inicio de TINTIN",
           "title": "",
           "imageAlt": "TINTIN",
-          "line": 1960
+          "line": 1955
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -9220,7 +9220,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1964
+          "line": 1959
         },
         {
           "raw": "/catalogo",
@@ -9230,7 +9230,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1972
+          "line": 1967
         },
         {
           "raw": "/collections",
@@ -9240,7 +9240,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1973
+          "line": 1968
         },
         {
           "raw": "/catalogo?cat=relojes",
@@ -9250,7 +9250,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1974
+          "line": 1969
         },
         {
           "raw": "/catalogo?cat=bolsos",
@@ -9260,7 +9260,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1975
+          "line": 1970
         },
         {
           "raw": "/about",
@@ -9270,7 +9270,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1982
+          "line": 1977
         },
         {
           "raw": "/envios",
@@ -9280,7 +9280,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1983
+          "line": 1978
         },
         {
           "raw": "/cambios-devoluciones",
@@ -9290,7 +9290,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1984
+          "line": 1979
         },
         {
           "raw": "/preguntas-frecuentes",
@@ -9300,7 +9300,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1985
+          "line": 1980
         },
         {
           "raw": "/terminos",
@@ -9310,7 +9310,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1986
+          "line": 1981
         },
         {
           "raw": "/privacidad",
@@ -9320,7 +9320,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1987
+          "line": 1982
         },
         {
           "raw": "/sitemap.xml",
@@ -9330,7 +9330,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1988
+          "line": 1983
         },
         {
           "raw": "/contact",
@@ -9340,7 +9340,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1995
+          "line": 1990
         },
         {
           "raw": "tel:+595981299331",
@@ -9350,7 +9350,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1996
+          "line": 1991
         },
         {
           "raw": "mailto:tintinaccs@gmail.com",
@@ -9360,7 +9360,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1997
+          "line": 1992
         },
         {
           "raw": "https://instagram.com/tintinaccs",
@@ -9370,7 +9370,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 1998
+          "line": 1993
         }
       ],
       "references": [
@@ -9401,31 +9401,31 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1",
           "target": "js/analytics/analitica.js",
-          "line": 1950,
+          "line": 1945,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260912-post-login-profile-3",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 1951,
+          "line": 1946,
           "exists": true
         },
         {
           "raw": "js/pages/checkout/paypal-checkout.js?v=tintin-20260914-summary-svg-fix-2",
           "target": "js/pages/checkout/paypal-checkout.js",
-          "line": 1952,
+          "line": 1947,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20260915-token-retry-3",
           "target": "tienda.js",
-          "line": 1953,
+          "line": 1948,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3",
           "target": "js/components/color/esquema-color.js",
-          "line": 1954,
+          "line": 1949,
           "exists": true
         },
         {
@@ -9527,79 +9527,79 @@
         {
           "raw": "assets-tintin/images/general/logo.png?v=tintin-20260715-15",
           "target": "assets-tintin/images/general/logo.png",
-          "line": 1961,
+          "line": 1956,
           "exists": true
         },
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 1972,
+          "line": 1967,
           "exists": true
         },
         {
           "raw": "/collections",
           "target": "collections.html",
-          "line": 1973,
+          "line": 1968,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
           "target": "catalogo.html",
-          "line": 1974,
+          "line": 1969,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
           "target": "catalogo.html",
-          "line": 1975,
+          "line": 1970,
           "exists": true
         },
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 1982,
+          "line": 1977,
           "exists": true
         },
         {
           "raw": "/envios",
           "target": "envios.html",
-          "line": 1983,
+          "line": 1978,
           "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
           "target": "cambios-devoluciones.html",
-          "line": 1984,
+          "line": 1979,
           "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
           "target": "preguntas-frecuentes.html",
-          "line": 1985,
+          "line": 1980,
           "exists": true
         },
         {
           "raw": "/terminos",
           "target": "terminos.html",
-          "line": 1986,
+          "line": 1981,
           "exists": true
         },
         {
           "raw": "/privacidad",
           "target": "privacidad.html",
-          "line": 1987,
+          "line": 1982,
           "exists": true
         },
         {
           "raw": "/sitemap.xml",
           "target": "sitemap.xml",
-          "line": 1988,
+          "line": 1983,
           "exists": true
         },
         {
           "raw": "/contact",
           "target": "contact.html",
-          "line": 1995,
+          "line": 1990,
           "exists": true
         }
       ],
@@ -9801,7 +9801,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 359
+          "line": 354
         }
       ],
       "controls": [
@@ -18613,8 +18613,8 @@
     },
     {
       "path": "functions/api/apps-script-bridge.js",
-      "bytes": 16521,
-      "sha256": "48f6d072ae1b90d8428590704a0b00aee3689b2166777c36b598b354e351e32c",
+      "bytes": 16996,
+      "sha256": "b0fe177db969ab12e37fb211676691a168315fbb70144c848696bb85fae51af7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18663,16 +18663,22 @@
           "line": 16
         },
         {
+          "raw": "../../cloudflare/servicio-push.js",
+          "target": "cloudflare/servicio-push.js",
+          "dynamic": false,
+          "line": 17
+        },
+        {
           "raw": "./order-email.js",
           "target": "functions/api/order-email.js",
           "dynamic": false,
-          "line": 17
+          "line": 18
         }
       ],
       "endpoints": [
         {
           "url": "https://script.google.com/macros/s/AKfycbyh9I5aPp9d3lMSnYRNfrHcSCCobCoDOif9CqtXmMe4FgwSjzlKf4kjQZqvKDRmEY6S/exec",
-          "line": 23
+          "line": 24
         }
       ]
     },
@@ -32783,8 +32789,8 @@
     {
       "path": "checkout.html",
       "extension": ".html",
-      "bytes": 115823,
-      "sha256": "b47674ae0014021bf37c67870cd82327da90aaa4cb9ae0bf06f38d09232df839"
+      "bytes": 115613,
+      "sha256": "4c5c4b64c9f066c9229694dc754230004545999ffddb63df77df4cf41a31725d"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -33857,8 +33863,8 @@
     {
       "path": "functions/api/apps-script-bridge.js",
       "extension": ".js",
-      "bytes": 16521,
-      "sha256": "48f6d072ae1b90d8428590704a0b00aee3689b2166777c36b598b354e351e32c"
+      "bytes": 16996,
+      "sha256": "b0fe177db969ab12e37fb211676691a168315fbb70144c848696bb85fae51af7"
     },
     {
       "path": "functions/api/catalog-sheet-sync-drain.js",
@@ -37317,7 +37323,7 @@
     },
     {
       "file": "checkout.html",
-      "line": 967,
+      "line": 962,
       "raw": "checkout.html",
       "target": "checkout.html",
       "exists": true
@@ -39018,7 +39024,7 @@
     },
     {
       "file": "checkout.html",
-      "line": 1810,
+      "line": 1805,
       "target": "https://overpass-api.de/api/interpreter",
       "method": "POST"
     },
@@ -39783,7 +39789,7 @@
         "references": [
           {
             "file": "checkout.html",
-            "line": 793,
+            "line": 788,
             "operation": "collection"
           },
           {
@@ -39948,12 +39954,12 @@
         "references": [
           {
             "file": "checkout.html",
-            "line": 489,
+            "line": 484,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 522,
+            "line": 517,
             "operation": "doc"
           },
           {
@@ -40353,12 +40359,12 @@
           },
           {
             "file": "checkout.html",
-            "line": 1676,
+            "line": 1671,
             "operation": "doc"
           },
           {
             "file": "checkout.html",
-            "line": 1933,
+            "line": 1928,
             "operation": "doc"
           },
           {
