@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "52d20ac0151a896559393be2179e474dda30092ccf3c65f2e493131388930ba6",
+  "sourceFingerprint": "2a4d89b89d507b02593d6d9c1bb323b1c7a5082a6b5697c51099fc9ec4a62c96",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 819,
     "textFiles": 782,
-    "totalBytes": 16309150,
+    "totalBytes": 16309146,
     "pages": 19,
     "modules": 560
   },
@@ -21733,8 +21733,8 @@
     },
     {
       "path": "js/components/cart/sincronizacion-carrito.js",
-      "bytes": 41567,
-      "sha256": "583f4fee9de706df29ee027299f6cf6a0337c8444d8edb31f1aaa519a996c8fa",
+      "bytes": 41563,
+      "sha256": "59d9675aad9670eaef31aa419f90a0aa0f418f0d4fd07e52e9c7534378fb9fda",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21771,7 +21771,7 @@
           "line": 28
         },
         {
-          "raw": "../../orders/pedido-checkout-seguro.js?v=tintin-20260914-session-unified-2",
+          "raw": "../../orders/pedido-checkout-seguro.js?v=tintin-20260915-token-retry-2",
           "target": "js/orders/pedido-checkout-seguro.js",
           "dynamic": true,
           "line": 1114
@@ -34499,8 +34499,8 @@
     {
       "path": "js/components/cart/sincronizacion-carrito.js",
       "extension": ".js",
-      "bytes": 41567,
-      "sha256": "583f4fee9de706df29ee027299f6cf6a0337c8444d8edb31f1aaa519a996c8fa"
+      "bytes": 41563,
+      "sha256": "59d9675aad9670eaef31aa419f90a0aa0f418f0d4fd07e52e9c7534378fb9fda"
     },
     {
       "path": "js/components/color/esquema-color-catalogo.js",
