@@ -524,8 +524,6 @@ async function startProfileAuthGuard() {
   document.getElementById('perfil-nombre').value = identity.name || '';
   document.getElementById('perfil-tel').value    = identity.phone || '';
   document.getElementById('perfil-dir').value    = identity.address || '';
-  document.getElementById('perfil-purchase-count').textContent = userData?.purchaseCount || 0;
-  document.getElementById('perfil-total-spent').textContent    = formatPrice(userData?.totalSpent || 0);
 
   const usernameInput = document.getElementById('perfil-username');
   const usernameHint  = document.getElementById('perfil-username-hint');
@@ -599,10 +597,6 @@ async function startProfileAuthGuard() {
     } catch (e) { toast('❌ Error al guardar la ubicación'); }
     finally { window.TintinReleaseProfileButton?.('btn-guardar-ubicacion'); }
   };
-
-  // Orders
-  document.getElementById('perfil-orders-card').style.display = 'block';
-  await loadUserOrders(user);
 
   // Save
   document.getElementById('btn-guardar-perfil').onclick = async () => {
