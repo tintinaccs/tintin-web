@@ -22,7 +22,7 @@ import {
 // claim requiere el Admin SDK corriendo en un entorno privilegiado (una
 // Cloud Function) — hoy el proyecto está en plan Spark y no las despliega
 // (ver firebase-cloud-functions-inactive/README.md).
-export const SUPER_ADMIN = SUPER_ADMIN_EMAIL;
+export const SUPER_ADMIN = SUPER_ADMIN_EMAIL.toLowerCase();
 
 // El mensaje de cuenta bloqueada (con el enlace de WhatsApp) vive en
 // js/components/modals/modal-bloqueo.js — showBlockedModal() — para que login.html y
@@ -176,7 +176,7 @@ export async function getUserRole(uid, email) {
   // La identidad elevada proviene exclusivamente de Firebase Authentication.
   // El campo email de users/{uid} es informativo y nunca concede permisos.
   const authenticatedEmail = String(email || auth.currentUser?.email || '').trim().toLowerCase();
-  if (authenticatedEmail === SUPER_ADMIN.toLowerCase()) return 'superadmin';
+  if (authenticatedEmail === SUPER_ADMIN) return 'superadmin';
   try {
     const snap = await getDoc(doc(db, 'users', uid));
     if (!snap.exists()) return 'client';
