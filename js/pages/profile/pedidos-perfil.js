@@ -1,5 +1,5 @@
 import { auth, db, authPersistenceReady, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 import { collection, onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20260716-cloudinary-fix-3';
 import { reconcileAccountOrders } from './estado-canonico-perfil.mjs?v=tintin-20260908-profile-canonical-1';
@@ -70,8 +70,8 @@ export function createProfileOrdersController({ subscribe, render, onStatus, onS
   let slices = [];
   let ready = [];
   let current = [];
-  let error = null;
-  const stop = () => { generation++; stops.forEach(fn => fn()); stops=[]; identity=null; slices=[]; ready=[]; current=[]; error=null; };
+  let failures = [];
+  const stop = () => { generation++; stops.forEach(fn => fn()); stops=[]; identity=null; slices=[]; ready=[]; current=[]; failures=[]; };
   function start(user) {
     stop();
     if (!user?.uid) { render([],{empty:true,reset:true}); onStats(null); onStatus('signed-out'); return; }
@@ -82,24 +82,33 @@ export function createProfileOrdersController({ subscribe, render, onStatus, onS
     if (identity.email && identity.email !== user.email) filters.push(['userEmail',identity.email]);
     slices = filters.map(() => []);
     ready = filters.map(() => false);
+    failures = filters.map(() => null);
     onStatus('loading');
+    render([],{loading:true});
     const callbacks = filters.map(([field,value],index) => ({
       next: rows => {
-        if (token !== generation || !identity || error) return;
+        if (token !== generation || !identity) return;
         slices[index] = rows;
         ready[index] = true;
-        if (!ready.every(Boolean)) return;
         current = reconcileAccountOrders(slices).sort((a,b) => timestamp(b)-timestamp(a));
         onStats(calculateOrderStats(current));
         render(current,{empty:current.length===0});
-        onStatus('ready');
+        onStatus('ready', failures.some(Boolean) ? failures.find(Boolean) : null);
       },
       fail: failure => {
         if (token !== generation) return;
-        error = failure;
-        stops.forEach(fn => fn()); stops=[];
-        onStatus('error',failure);
-        render(current,{error:failure,stale:current.length>0});
+        failures[index] = failure;
+        ready[index] = true;
+        // Una consulta secundaria (por correo) no debe ocultar los pedidos
+        // ya encontrados por UID ni cancelar su onSnapshot.
+        if (current.length || slices.some(rows => rows.length)) {
+          onStatus('ready', failure);
+          return;
+        }
+        if (ready.every(Boolean)) {
+          onStatus('error',failure);
+          render([], {error:failure});
+        }
       }, field, value
     }));
     for (const callback of callbacks) {
@@ -157,7 +166,7 @@ export function startProfileOrders() {
   window.addEventListener('online',onOnline);
   document.addEventListener('visibilitychange',onVisible);
   window.addEventListener('pagehide',()=>{stopped=true;controller.stop();authStop?.();window.removeEventListener('online',onOnline);document.removeEventListener('visibilitychange',onVisible);},{once:true});
-  Promise.resolve(authPersistenceReady).then(()=>auth.authStateReady?.()).then(()=>{if(stopped)return;authStop=onAuthStateChanged(auth,user=>{currentUser=user;visible=5;void (async()=>{if(user)await appCheckReady;if(!stopped && auth.currentUser?.uid===user?.uid)controller.start(user);})();});}).catch(error=>{status.textContent='No pudimos restaurar el historial de pedidos.';console.warn('[profile-orders]',error);});
+  Promise.resolve(authPersistenceReady).then(()=>{if(stopped)return;authStop=subscribeAuthState(user=>{currentUser=user;visible=5;void (async()=>{if(user)await appCheckReady;if(!stopped && auth.currentUser?.uid===user?.uid)controller.start(user);})();});}).catch(error=>{status.textContent='No pudimos restaurar el historial de pedidos.';console.warn('[profile-orders]',error);});
   window.TintinProfileOrders={refresh:retry,stop:()=>controller.stop()};
 }
 if (typeof document !== 'undefined') {

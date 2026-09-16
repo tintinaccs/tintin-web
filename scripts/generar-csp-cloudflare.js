@@ -45,7 +45,7 @@ const frameOrigins = [
   'https://player.vimeo.com',
   'https://*.paypal.com'
 ];
-const CLOUDINARY_UPLOAD_PAGES = new Set(['admin.html', 'admin-images.html']);
+const CLOUDINARY_UPLOAD_PAGES = new Set(['admin.html', 'admin-images.html', 'perfil.html']);
 const VISUAL_BUILDER_PREVIEWABLE_PAGES = new Set([
   'index.html', 'about.html', 'catalogo.html', 'collections.html',
   'contact.html', 'envios.html', 'preguntas-frecuentes.html', 'cambios-devoluciones.html',
@@ -110,7 +110,9 @@ const globalInlineHashes = allInlineScriptHashes();
 // reabrir 'unsafe-inline'.
 const fallbackInlineHashes = [...new Set([
   ...inlineHashes('catalogo.html'),
-  ...inlineHashes('login.html')
+  ...inlineHashes('login.html'),
+  ...inlineHashes('checkout.html'),
+  ...inlineHashes('perfil.html')
 ])].sort();
 const scriptAttrDirective = handlerHashes.length
   ? `script-src-attr 'unsafe-hashes' ${handlerHashes.join(' ')}`

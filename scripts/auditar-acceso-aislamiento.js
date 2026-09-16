@@ -70,11 +70,8 @@ const googleHandoffKeepsOverlay =
   login.includes('await finishGoogleLogin(cred.user)');
 
 const cartWaitsForAuthRestore =
-  /auth\.authStateReady\s*\(\)/.test(cartSync) &&
-  (
-    /await\s+auth\.authStateReady(?:\?\.)?\s*\(\)/.test(cartSync) ||
-    /authStateReady\.then\s*\(\s*\(\)\s*=>\s*onAuthStateChanged\s*\(/.test(cartSync)
-  );
+  /subscribeAuthState\(activateIdentity\)/.test(cartSync) &&
+  !/authStateReady\.then\s*\(\s*\(\)\s*=>\s*onAuthStateChanged/.test(cartSync);
 
 const persistenceScopedToLogin =
   firebase.includes('browserLocalPersistence') &&

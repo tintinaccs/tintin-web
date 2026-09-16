@@ -16,8 +16,8 @@
 
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 import { GUEST_CART_TTL_MS, guestCartIsExpired } from './politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
   collection,
   doc,
@@ -64,6 +64,10 @@ function createRuntime() {
   let status = 'guest';
   let readyResolve = null;
   let readyPromise = new Promise(resolve => { readyResolve = resolve; });
+  // La UI solo necesita saber qué identidad posee el carrito local. No debe
+  // esperar App Check/Firestore para mostrar productos ya guardados.
+  let identityReadyResolve = null;
+  let identityReadyPromise = Promise.resolve();
   let mutationChain = Promise.resolve();
   let feedbackTimer = 0;
   let guestExpiryTimer = 0;
@@ -697,12 +701,16 @@ function createRuntime() {
         }).catch(error => {
           console.error('[cart-sync-v2] snapshot:', error);
           setStatus('error');
+          dispatchCartUpdated();
           readyResolve?.();
         });
       },
       error => {
         console.error('[cart-sync-v2] listener:', error);
         setStatus(navigator.onLine === false ? 'offline' : 'error');
+        // El fallo remoto no invalida Auth ni el carrito local; repintar la
+        // clave de cuenta evita conservar el primer render de invitado.
+        dispatchCartUpdated();
         readyResolve?.();
       }
     );
@@ -710,6 +718,7 @@ function createRuntime() {
 
   function resetReady() {
     readyPromise = new Promise(resolve => { readyResolve = resolve; });
+    identityReadyPromise = new Promise(resolve => { identityReadyResolve = resolve; });
   }
 
   function activateIdentity(user) {
@@ -731,6 +740,7 @@ function createRuntime() {
       desiredProjection = projection(desiredCart);
       lastRemoteProjection = '[]';
       setStatus('guest');
+      identityReadyResolve?.();
       dispatchCartUpdated();
       scheduleGuestExpiry();
       readyResolve?.();
@@ -740,6 +750,7 @@ function createRuntime() {
     clearGuestExpiryTimer();
     guestAtLogin = normalizeCart(rawGet(GUEST_CART_KEY));
     activeCartKey = cartKeyForUser(currentUser);
+    identityReadyResolve?.();
     desiredCart = currentLocalCart();
     desiredProjection = projection(desiredCart);
     lastRemoteProjection = '[]';
@@ -1027,10 +1038,7 @@ function createRuntime() {
     });
     // No activar el carrito como invitado mientras Firebase todavía restaura
     // la sesión persistida al cambiar de catálogo/producto.
-    const authStateReady = typeof auth.authStateReady === 'function'
-      ? auth.authStateReady().catch(() => {})
-      : Promise.resolve();
-    authStateReady.then(() => onAuthStateChanged(auth, activateIdentity));
+    subscribeAuthState(activateIdentity);
   }
 
   const api = {
@@ -1044,6 +1052,7 @@ function createRuntime() {
     syncCartToFirestore,
     flushCartSync,
     awaitCartReady: () => readyPromise,
+    awaitCartIdentityReady: () => identityReadyPromise,
     formatPrice,
     cartTotal,
     lineIdFor,
@@ -1087,6 +1096,7 @@ export const clearCart = (...args) => runtime.clearCart(...args);
 export const syncCartToFirestore = (...args) => runtime.syncCartToFirestore(...args);
 export const flushCartSync = (...args) => runtime.flushCartSync(...args);
 export const awaitCartReady = (...args) => runtime.awaitCartReady(...args);
+export const awaitCartIdentityReady = (...args) => runtime.awaitCartIdentityReady(...args);
 export const formatPrice = (...args) => runtime.formatPrice(...args);
 export const cartTotal = (...args) => runtime.cartTotal(...args);
 export const lineIdFor = (...args) => runtime.lineIdFor(...args);
@@ -1101,7 +1111,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-    import('../../orders/pedido-checkout-seguro.js?v=tintin-20260910-paypal-order-flow-1').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20260915-session-shell-3').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

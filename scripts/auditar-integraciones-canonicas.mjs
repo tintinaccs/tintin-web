@@ -108,7 +108,7 @@ assert(prWorkflows.length === 1 && prWorkflows[0] === 'auditar-tintin.yml', `Git
 
 const workflowText = workflows.map(name => read(`.github/workflows/${name}`)).join('\n');
 assert(!/firebase\s+deploy[^\n]*--only\s+functions/i.test(workflowText), 'Arquitectura: no debe existir deploy activo de Firebase Functions.');
-assert(fs.existsSync(path.join(root, 'firebase-cloud-functions-inactive')), 'Archivo histórico: falta firebase-cloud-functions-inactive; no debe confundirse con runtime activo.');
+assert(!fs.existsSync(path.join(root, 'firebase-cloud-functions-inactive')), 'Limpieza: no debe existir el árbol histórico firebase-cloud-functions-inactive.');
 
 notes.push(`Firebase=${firebaserc.projects.default}`);
 notes.push(`Web=${primaryOrigin.origin}`);
