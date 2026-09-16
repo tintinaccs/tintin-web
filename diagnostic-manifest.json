@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "7caa0865018ea1f144603c9530c0187e6481071e8c7a0d51fd0c25cae5ff7695",
+  "sourceFingerprint": "bcc41e4973ee9d31407d1e6f57a0dce67bf578843160d47c05479d4cca19a012",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 816,
     "textFiles": 779,
-    "totalBytes": 16180143,
+    "totalBytes": 16181515,
     "pages": 19,
     "modules": 558
   },
@@ -18591,8 +18591,8 @@
     },
     {
       "path": "functions/api/apps-script-bridge.js",
-      "bytes": 17286,
-      "sha256": "fc1500cf626d8880e936a75f2425f768907e15408cdc9edb8645b5c2e4f6da6e",
+      "bytes": 17766,
+      "sha256": "94371140a14fda98db86cdcac9e52488d96fcb209234d7903c639e03543e6ebc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30353,8 +30353,8 @@
     },
     {
       "path": "tests/checkout/profile-purchase-eligibility.test.mjs",
-      "bytes": 2031,
-      "sha256": "a68418073ee58df0f4129e0c07c61517cc21914c67109b45d6070bc251031e1e",
+      "bytes": 2923,
+      "sha256": "8ee8def65430189f8cfee204bd22629d817e2bcea1d509017fcab8a87f667c71",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33863,8 +33863,8 @@
     {
       "path": "functions/api/apps-script-bridge.js",
       "extension": ".js",
-      "bytes": 17286,
-      "sha256": "fc1500cf626d8880e936a75f2425f768907e15408cdc9edb8645b5c2e4f6da6e"
+      "bytes": 17766,
+      "sha256": "94371140a14fda98db86cdcac9e52488d96fcb209234d7903c639e03543e6ebc"
     },
     {
       "path": "functions/api/catalog-sheet-sync-drain.js",
@@ -36935,8 +36935,8 @@
     {
       "path": "tests/checkout/profile-purchase-eligibility.test.mjs",
       "extension": ".mjs",
-      "bytes": 2031,
-      "sha256": "a68418073ee58df0f4129e0c07c61517cc21914c67109b45d6070bc251031e1e"
+      "bytes": 2923,
+      "sha256": "8ee8def65430189f8cfee204bd22629d817e2bcea1d509017fcab8a87f667c71"
     },
     {
       "path": "tests/checkout/saved-location.test.mjs",
