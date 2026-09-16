@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "9d9ce89b5e7cbd04d976a751287654c9ce4ec2319c3354e46042d970b1d9c35e",
+  "sourceFingerprint": "423cb469e8e22bca3651c84cdd20e94062819b170415a15d2a2b347d10e2fd12",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 817,
     "textFiles": 780,
-    "totalBytes": 16211372,
+    "totalBytes": 16211717,
     "pages": 19,
     "modules": 558
   },
@@ -27991,8 +27991,8 @@
     },
     {
       "path": "scripts/auditar-rendimiento-regresiones.js",
-      "bytes": 9880,
-      "sha256": "564f52b793ae96e55a9a814bc1dee08425509c766478af173e55e14615fcba41",
+      "bytes": 10225,
+      "sha256": "82def63421f8749aef9a9e5516425e7a293962712ab472623cb96c0b69b2088d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28002,13 +28002,13 @@
           "raw": "../../email/notificacion-pedido-resend.js",
           "target": null,
           "dynamic": false,
-          "line": 91
+          "line": 98
         },
         {
           "raw": "./nucleo-control-tienda.js",
           "target": "scripts/nucleo-control-tienda.js",
           "dynamic": false,
-          "line": 97
+          "line": 104
         }
       ],
       "endpoints": []
@@ -36329,8 +36329,8 @@
     {
       "path": "scripts/auditar-rendimiento-regresiones.js",
       "extension": ".js",
-      "bytes": 9880,
-      "sha256": "564f52b793ae96e55a9a814bc1dee08425509c766478af173e55e14615fcba41"
+      "bytes": 10225,
+      "sha256": "82def63421f8749aef9a9e5516425e7a293962712ab472623cb96c0b69b2088d"
     },
     {
       "path": "scripts/auditar-rendimiento-tiempo-real.js",
@@ -40125,12 +40125,12 @@
           },
           {
             "file": "scripts/auditar-rendimiento-regresiones.js",
-            "line": 95,
+            "line": 102,
             "operation": "doc"
           },
           {
             "file": "scripts/auditar-rendimiento-regresiones.js",
-            "line": 97,
+            "line": 104,
             "operation": "doc"
           }
         ]
