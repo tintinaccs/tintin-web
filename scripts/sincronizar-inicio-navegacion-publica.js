@@ -6,7 +6,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260910-header-clearance-1';
-const TIENDA_VERSION = 'tintin-20260915-session-shell-3';
+const TIENDA_VERSION = 'tintin-20260916-favorites-cart-badge-auth-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260915-session-shell-3';
 const LOADER_VERSION = 'tintin-20260911-hero-no-entry-animation-1';
 const STORE_GATE_VERSION = 'tintin-20260909-store-gate-degraded-fix-1';
