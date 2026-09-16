@@ -6,7 +6,7 @@
    ============================================================= */
 
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 import {
   doc,
   onSnapshot,
@@ -492,7 +492,7 @@ if (!window.TintinAdminContentPhase6Booted) {
 
   function boot() {
     injectStyles();
-    onAuthStateChanged(auth, user => {
+    subscribeAuthState(user => {
       pageUnsubscribe?.();
       pageUnsubscribe = null;
       unregisterUnsavedScope();

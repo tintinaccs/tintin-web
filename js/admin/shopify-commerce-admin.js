@@ -12,7 +12,7 @@
    ======================================================================== */
 
 import { auth, db, appCheckReady } from '../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 import {
   collection,
   onSnapshot
@@ -1159,7 +1159,7 @@ function boot() {
     if (event.key === 'Escape') { closeMenu(); closeDrawer(); }
   });
 
-  onAuthStateChanged(auth, user => {
+  subscribeAuthState(user => {
     if (user && !user.isAnonymous) bootForUser(user).catch(error => {
       console.error('[shopify-commerce] No se pudo iniciar:', error);
       toast('No se pudo iniciar la vista avanzada de comercio.', 5200);

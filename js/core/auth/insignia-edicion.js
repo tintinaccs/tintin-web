@@ -1,5 +1,5 @@
 import { auth } from '../firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from './coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 import { SUPER_ADMIN, getUserRole } from './roles.js?v=tintin-20260915-final-polish-1';
 import { EDITABLE_ROLES, loadRolePermissions, canDo } from './permisos-roles.js?v=tintin-20260915-final-polish-1';
 
@@ -128,7 +128,7 @@ function bootAuthorized() {
   placeBadges();
 }
 
-onAuthStateChanged(auth, async user => {
+subscribeAuthState(async user => {
   authorized = false;
   removeBadges();
   if (!user || user.isAnonymous) return;

@@ -5,7 +5,7 @@
    ============================================================= */
 
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 
 const API = '/api/admin-catalog-delete';
 const SUPER_ADMIN_EMAIL = 'tintinaccs@gmail.com';
@@ -225,7 +225,6 @@ function boot() {
   }, 125);
 }
 
-onAuthStateChanged(auth, user => {
+subscribeAuthState(user => {
   if (user && String(user.email || '').toLowerCase() === SUPER_ADMIN_EMAIL) boot();
 });
-if (auth.currentUser && String(auth.currentUser.email || '').toLowerCase() === SUPER_ADMIN_EMAIL) boot();

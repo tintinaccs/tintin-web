@@ -12,7 +12,7 @@
    ============================================================= */
 
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 import {
   collection,
   doc,
@@ -248,8 +248,8 @@ if (!window.TintinAdminUserFichaBooted) {
   window.closeClientFicha = closeClientFicha;
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => onAuthStateChanged(auth, bootForSuperAdmin), { once: true });
+    document.addEventListener('DOMContentLoaded', () => subscribeAuthState(bootForSuperAdmin), { once: true });
   } else {
-    onAuthStateChanged(auth, bootForSuperAdmin);
+    subscribeAuthState(bootForSuperAdmin);
   }
 }

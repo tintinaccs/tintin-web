@@ -1,5 +1,5 @@
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 import { collection, doc, limit, onSnapshot, query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const SUPER_ADMIN = 'tintinaccs@gmail.com';
@@ -1064,7 +1064,7 @@ bindEvents();
 renderSettings();
 initViews();
 
-onAuthStateChanged(auth, async current => {
+subscribeAuthState(async current => {
   if (current?.email?.toLowerCase() !== SUPER_ADMIN) return;
   user = current;
   await appCheckReady;

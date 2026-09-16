@@ -8,7 +8,7 @@
    ============================================================= */
 
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 import { onAllCollectionsUpdate } from '../../pages/collections/estado-colecciones.js?v=tintin-20260901-firestore-budget-3';
 
 if (!window.TintinAdminCollectionsPhase4Booted) {
@@ -224,7 +224,7 @@ if (!window.TintinAdminCollectionsPhase4Booted) {
     bootDom();
   }
 
-  onAuthStateChanged(auth, user => {
+  subscribeAuthState(user => {
     if (user && !user.isAnonymous) startCollectionSubscription();
   });
 }

@@ -1,5 +1,5 @@
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260915-final-polish-1';
 
 const clone = value => JSON.parse(JSON.stringify(value));
@@ -111,4 +111,4 @@ async function cancelDraft(){if(dirty&&!confirm('¿Descartar los cambios globale
 async function restoreVersion(historyId){if(!confirm('Esta versión se publicará de nuevo como una versión nueva. ¿Restaurar?'))return;loading=true;updateActions();try{await api('POST',{action:'restore',historyId,expectedVersion:version});dirty=false;await load();setStatus('Versión restaurada.','saved');}catch(error){setStatus(error.message,'error');}finally{loading=false;updateActions();}}
 
 function waitForStudio(){if(installLauncher())return;const observer=new MutationObserver(()=>{if(installLauncher())observer.disconnect();});observer.observe(document.documentElement,{subtree:true,childList:true});}
-onAuthStateChanged(auth,user=>{if(String(user?.email||'').trim().toLowerCase()===SUPER_ADMIN)waitForStudio();});
+subscribeAuthState(user=>{if(String(user?.email||'').trim().toLowerCase()===SUPER_ADMIN)waitForStudio();});
