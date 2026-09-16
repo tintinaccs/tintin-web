@@ -1914,15 +1914,22 @@ function initContactForm() {
 // recién cuando esa identidad quedó resuelta (para invitados, casi
 // inmediato); si el módulo no cargó en esta página, se pinta igual.
 function renderCartWhenReady() {
+  // Pintar el estado local de inmediato evita que el arranque del módulo de
+  // identidad cambie el layout de las páginas públicas. El drawer está oculto
+  // mientras tanto y vuelve a pintarse de forma completa justo antes de abrirse
+  // (ver beforeOpen de la superficie cart), así que no puede quedar con datos
+  // viejos para el usuario.
+  updateCartBadge();
+  renderCart();
+
   const ready = window.CartFirestoreSync?.ready?.();
-  if (!ready) {
-    updateCartBadge();
-    renderCart();
-    return;
-  }
+  if (!ready) return;
+
   Promise.resolve(ready).catch(() => {}).then(() => {
     updateCartBadge();
-    renderCart();
+    const drawer = document.getElementById('cart-drawer');
+    const isOpen = drawer?.classList.contains('open') && drawer.getAttribute('aria-hidden') === 'false';
+    if (isOpen) renderCart();
   });
 }
 
