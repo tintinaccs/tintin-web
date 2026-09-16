@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "423cb469e8e22bca3651c84cdd20e94062819b170415a15d2a2b347d10e2fd12",
+  "sourceFingerprint": "8ba594dc92a53ffc271f0b47f77f76bdcd4ab271b256017771374f83daacbb0e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 817,
-    "textFiles": 780,
-    "totalBytes": 16211717,
+    "files": 818,
+    "textFiles": 781,
+    "totalBytes": 16213666,
     "pages": 19,
-    "modules": 558
+    "modules": 559
   },
   "viewports": [
     {
@@ -20692,8 +20692,8 @@
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
-      "bytes": 26391,
-      "sha256": "aa1b56ecbead8b128423d64b7768c894fc4d7ecf89a4e4ccc20349d5a88318b9",
+      "bytes": 26281,
+      "sha256": "7edee691458b5223545f8d742890377eac8c9845cc1f63cda583c64a43ab0281",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20712,8 +20712,8 @@
           "line": 2
         },
         {
-          "raw": "../../core/auth/roles.js?v=tintin-20260915-final-polish-1",
-          "target": "js/core/auth/roles.js",
+          "raw": "../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-1",
+          "target": "js/core/auth/identidad-super-admin.js",
           "dynamic": false,
           "line": 3
         },
@@ -20927,8 +20927,8 @@
     },
     {
       "path": "js/admin/pages/paginas-admin.js",
-      "bytes": 14449,
-      "sha256": "2fd8cf63341d4446918d7459063964f306eeac3a9aba1a45ecb0552c74bac8d4",
+      "bytes": 14444,
+      "sha256": "201e4e6cca754f832ab872700106b9dea7e2169c6035e0a47da76e8c3a3f6890",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20947,23 +20947,29 @@
           "line": 2
         },
         {
+          "raw": "../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-1",
+          "target": "js/core/auth/identidad-super-admin.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 3
+          "line": 4
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 3
+          "line": 4
         }
       ]
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin-v2.js",
-      "bytes": 77222,
-      "sha256": "35de0f4d4f69c2c6ad202ed8498e2d197418fcfd6ca6235954e81295b9b2760d",
+      "bytes": 77268,
+      "sha256": "9d6e4620f27e7ad35fa07dc7fe29f46a9e60095e59de16eb93c5324334c2bd6d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20982,16 +20988,22 @@
           "line": 2
         },
         {
+          "raw": "../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-1",
+          "target": "js/core/auth/identidad-super-admin.js",
+          "dynamic": false,
+          "line": 3
+        },
+        {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 3
+          "line": 4
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 3
+          "line": 4
         }
       ]
     },
@@ -21033,8 +21045,8 @@
     },
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
-      "bytes": 11587,
-      "sha256": "547189786b6112f63df475797fe993b4ea38747cf556d97f6b76b1708972721f",
+      "bytes": 11550,
+      "sha256": "d26b5ced0fae55d7f84e3d7fab0c92ba785bae66b2784b7ffa98c37c73143a2e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21051,6 +21063,12 @@
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 8
+        },
+        {
+          "raw": "../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-1",
+          "target": "js/core/auth/identidad-super-admin.js",
+          "dynamic": false,
+          "line": 9
         }
       ],
       "endpoints": []
@@ -23137,6 +23155,24 @@
       ]
     },
     {
+      "path": "js/core/auth/identidad-super-admin.js",
+      "bytes": 340,
+      "sha256": "c7eaaf7da4ab7d2cceb89c8d52350a718120f03465b38489dc9fd7957c21e097",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1",
+          "target": "js/core/auth/contrato-cuentas-generado.js",
+          "dynamic": false,
+          "line": 1
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "js/core/auth/insignia-edicion.js",
       "bytes": 5246,
       "sha256": "cb0583087b3bdc4226ffb4f348243a01527817e757f73ba2879386c9e941d176",
@@ -23296,8 +23332,8 @@
     },
     {
       "path": "js/core/auth/roles.js",
-      "bytes": 6720,
-      "sha256": "83e0217c9ed11da7d6a30a283a18cbccf142d4e65beb438fdc4fcc436eff91c9",
+      "bytes": 6890,
+      "sha256": "b0636b25bda3c5aef1021c60c807d5ae338f220f0061363bcbbd1e67a9756c0c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23319,7 +23355,13 @@
           "raw": "./contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1",
           "target": "js/core/auth/contrato-cuentas-generado.js",
           "dynamic": false,
-          "line": 12
+          "line": 11
+        },
+        {
+          "raw": "./identidad-super-admin.js?v=tintin-20260916-superadmin-identity-1",
+          "target": "js/core/auth/identidad-super-admin.js",
+          "dynamic": false,
+          "line": 16
         }
       ],
       "endpoints": [
@@ -25684,8 +25726,8 @@
     },
     {
       "path": "scripts/auditar-admin-usuarios-roles.js",
-      "bytes": 8864,
-      "sha256": "858e5cf7dd3d6d045814730d06a254fc4bdadcd6674705e69784d12c60857636",
+      "bytes": 8869,
+      "sha256": "b0f5178a8e66a610d52687fc8e06edc6f269544ed7f7fa2888ecfe43fd57e23f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28307,8 +28349,8 @@
     },
     {
       "path": "scripts/auditar-superadmin-maestro.mjs",
-      "bytes": 8525,
-      "sha256": "ddb9c24420a33228c800dd63a796ea3f5f53c06f328c1746629610d560595435",
+      "bytes": 8725,
+      "sha256": "7455d355c88dc177fbf1ff723e71f8273aee385d7020bc53ea66d7943b82d88a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29753,8 +29795,8 @@
     },
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
-      "bytes": 9492,
-      "sha256": "25965e8fc3be44b313e07e1164162ea6ac8bf08e705196acef574b84303c0fe0",
+      "bytes": 10645,
+      "sha256": "a2be5dae2bce5c2980f7584585d7e7fb7b1c61bfa91bca52dcc1f8225f351cab",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29789,6 +29831,12 @@
           "target": null,
           "dynamic": false,
           "line": 5
+        },
+        {
+          "raw": "../../js/core/auth/identidad-super-admin.js",
+          "target": "js/core/auth/identidad-super-admin.js",
+          "dynamic": true,
+          "line": 14
         }
       ],
       "endpoints": []
@@ -34235,8 +34283,8 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "extension": ".js",
-      "bytes": 26391,
-      "sha256": "aa1b56ecbead8b128423d64b7768c894fc4d7ecf89a4e4ccc20349d5a88318b9"
+      "bytes": 26281,
+      "sha256": "7edee691458b5223545f8d742890377eac8c9845cc1f63cda583c64a43ab0281"
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
@@ -34283,14 +34331,14 @@
     {
       "path": "js/admin/pages/paginas-admin.js",
       "extension": ".js",
-      "bytes": 14449,
-      "sha256": "2fd8cf63341d4446918d7459063964f306eeac3a9aba1a45ecb0552c74bac8d4"
+      "bytes": 14444,
+      "sha256": "201e4e6cca754f832ab872700106b9dea7e2169c6035e0a47da76e8c3a3f6890"
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin-v2.js",
       "extension": ".js",
-      "bytes": 77222,
-      "sha256": "35de0f4d4f69c2c6ad202ed8498e2d197418fcfd6ca6235954e81295b9b2760d"
+      "bytes": 77268,
+      "sha256": "9d6e4620f27e7ad35fa07dc7fe29f46a9e60095e59de16eb93c5324334c2bd6d"
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin.js",
@@ -34307,8 +34355,8 @@
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
       "extension": ".js",
-      "bytes": 11587,
-      "sha256": "547189786b6112f63df475797fe993b4ea38747cf556d97f6b76b1708972721f"
+      "bytes": 11550,
+      "sha256": "d26b5ced0fae55d7f84e3d7fab0c92ba785bae66b2784b7ffa98c37c73143a2e"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -34863,6 +34911,12 @@
       "sha256": "5f88c712dee3c2af064e5b7e49a3ca5d16da479057c37452c7dedf8f7730fb94"
     },
     {
+      "path": "js/core/auth/identidad-super-admin.js",
+      "extension": ".js",
+      "bytes": 340,
+      "sha256": "c7eaaf7da4ab7d2cceb89c8d52350a718120f03465b38489dc9fd7957c21e097"
+    },
+    {
       "path": "js/core/auth/insignia-edicion.js",
       "extension": ".js",
       "bytes": 5246,
@@ -34889,8 +34943,8 @@
     {
       "path": "js/core/auth/roles.js",
       "extension": ".js",
-      "bytes": 6720,
-      "sha256": "83e0217c9ed11da7d6a30a283a18cbccf142d4e65beb438fdc4fcc436eff91c9"
+      "bytes": 6890,
+      "sha256": "b0636b25bda3c5aef1021c60c807d5ae338f220f0061363bcbbd1e67a9756c0c"
     },
     {
       "path": "js/core/auth/utilidades-seguridad.js",
@@ -35777,8 +35831,8 @@
     {
       "path": "scripts/auditar-admin-usuarios-roles.js",
       "extension": ".js",
-      "bytes": 8864,
-      "sha256": "858e5cf7dd3d6d045814730d06a254fc4bdadcd6674705e69784d12c60857636"
+      "bytes": 8869,
+      "sha256": "b0f5178a8e66a610d52687fc8e06edc6f269544ed7f7fa2888ecfe43fd57e23f"
     },
     {
       "path": "scripts/auditar-admin-visual-parte-2f-v3.mjs",
@@ -36395,8 +36449,8 @@
     {
       "path": "scripts/auditar-superadmin-maestro.mjs",
       "extension": ".mjs",
-      "bytes": 8525,
-      "sha256": "ddb9c24420a33228c800dd63a796ea3f5f53c06f328c1746629610d560595435"
+      "bytes": 8725,
+      "sha256": "7455d355c88dc177fbf1ff723e71f8273aee385d7020bc53ea66d7943b82d88a"
     },
     {
       "path": "scripts/auditar-superadmin-modulos-completos.mjs",
@@ -36485,8 +36539,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 38914,
-      "sha256": "8f89ce42bb709b9242291f7f9ef7000b2bcc950437dbe0d5899a4074a3823c1c"
+      "bytes": 39101,
+      "sha256": "14e17aaf9ee4119bbb082c17f079109331ac745cd46945f6de893afe65995b26"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -36761,8 +36815,8 @@
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 9492,
-      "sha256": "25965e8fc3be44b313e07e1164162ea6ac8bf08e705196acef574b84303c0fe0"
+      "bytes": 10645,
+      "sha256": "a2be5dae2bce5c2980f7584585d7e7fb7b1c61bfa91bca52dcc1f8225f351cab"
     },
     {
       "path": "tests/cache/cache-headers.test.mjs",
@@ -40375,12 +40429,12 @@
           },
           {
             "file": "js/core/auth/roles.js",
-            "line": 182,
+            "line": 187,
             "operation": "doc"
           },
           {
             "file": "js/core/auth/roles.js",
-            "line": 200,
+            "line": 205,
             "operation": "doc"
           },
           {

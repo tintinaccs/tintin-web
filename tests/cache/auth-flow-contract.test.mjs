@@ -11,6 +11,7 @@ const profileCode = profile.replace(/\/\/.*$/gm, '');
 const profilePage = fs.readFileSync(new URL('../../perfil.html', import.meta.url), 'utf8');
 const publicAuthNav = fs.readFileSync(new URL('../../js/core/auth/navegacion-autenticacion.js', import.meta.url), 'utf8');
 const publicCart = fs.readFileSync(new URL('../../js/components/cart/sincronizacion-carrito.js', import.meta.url), 'utf8');
+const superAdminIdentity = await import('../../js/core/auth/identidad-super-admin.js');
 
 function collectJavaScriptFiles(directory) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
@@ -46,6 +47,21 @@ test('los consumidores de aplicación delegan Auth al coordinador de sesión', (
   });
 
   assert.deepEqual(offenders, [], `listeners/imports directos fuera del coordinador: ${offenders.join(', ')}`);
+});
+
+test('la identidad privilegiada tiene una sola autoridad y conserva exclusividad por email', () => {
+  const identitySource = fs.readFileSync(new URL('../../js/core/auth/identidad-super-admin.js', import.meta.url), 'utf8');
+  const rolesSource = fs.readFileSync(new URL('../../js/core/auth/roles.js', import.meta.url), 'utf8');
+  const maestroSource = fs.readFileSync(new URL('../../js/admin/maestro/panel-maestro.js', import.meta.url), 'utf8');
+
+  assert.match(identitySource, /SUPER_ADMIN_EMAIL/);
+  assert.doesNotMatch(identitySource, /tintinaccs@gmail\.com/);
+  assert.match(rolesSource, /isSuperAdminEmail\(authenticatedEmail\)/);
+  assert.match(maestroSource, /import \{ isSuperAdmin \}/);
+  assert.equal(superAdminIdentity.isSuperAdminEmail('tintinaccs@gmail.com'), true);
+  assert.equal(superAdminIdentity.isSuperAdminEmail('otro@example.com'), false);
+  assert.equal(superAdminIdentity.isSuperAdmin({ email: ' TINTINACCS@GMAIL.COM ' }), true);
+  assert.equal(superAdminIdentity.isSuperAdmin({ email: 'otro@example.com', role: 'superadmin' }), false);
 });
 
 test('arranque global no vence ni cierra sesiones automáticamente', () => {

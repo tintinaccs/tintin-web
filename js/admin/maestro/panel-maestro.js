@@ -1,6 +1,6 @@
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260915-final-polish-1';
+import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-1';
 import {
   BASE_ADMIN_SECTIONS,
   MAESTRO_MODULES,
@@ -22,10 +22,6 @@ import {
     ['sync', 'Sync'], ['audit', 'Auditar'], ['permissions', 'Permisos']
   ];
   let latestChecks = [];
-
-  function isSuperAdmin(user = auth.currentUser) {
-    return String(user?.email || '').trim().toLowerCase() === String(SUPER_ADMIN || '').trim().toLowerCase();
-  }
 
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, char => ({
@@ -185,7 +181,7 @@ import {
       {
         id: 'auth',
         label: 'Super Admin autenticado y panel liberado',
-        ok: isSuperAdmin() && document.documentElement.classList.contains('adm-auth-ready'),
+        ok: isSuperAdmin(auth.currentUser) && document.documentElement.classList.contains('adm-auth-ready'),
         detail: 'Maestro solo se monta para el email Super Admin real y después del guard de autenticación.'
       },
       {
@@ -420,7 +416,7 @@ import {
       button.dataset.maestroWired = '1';
       button.addEventListener('click', event => {
         event.preventDefault();
-        if (!isSuperAdmin()) return;
+        if (!isSuperAdmin(auth.currentUser)) return;
         window.AdminUnsaved?.requestNavigation
           ? window.AdminUnsaved.requestNavigation(activateMaestro)
           : activateMaestro();

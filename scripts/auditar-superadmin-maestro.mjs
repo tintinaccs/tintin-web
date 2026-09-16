@@ -7,6 +7,7 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const adminHtml = read('admin.html');
 const registrySource = read('js/admin/maestro/registro-maestro.js');
 const panelSource = read('js/admin/maestro/panel-maestro.js');
+const identitySource = read('js/core/auth/identidad-super-admin.js');
 const bootstrapSource = read('js/admin/ajuste-barra-lateral-movil-admin.js');
 const ordersSource = read('js/admin/orders/pedidos-superadmin-crud.js');
 const collectionsSource = read('js/admin/collections/gestion-colecciones-admin.js');
@@ -76,7 +77,12 @@ check('Usuarios expone roles, bloqueo/restauración y exportación',
 check('Participación social tiene gestor dedicado para reseñas y likes', participationSource.length > 20000 && participationSource.includes('resenas') && participationSource.includes('me-gusta'));
 check('Auditoría se puede exportar sin exponer un botón de borrado propio', adminHtml.includes('bulkExportAuditLog') && !/section-auditoria[\s\S]{0,4000}(?:delete|eliminar).*audit/i.test(adminHtml));
 
-check('El panel Maestro es exclusivo del email Super Admin real', panelSource.includes('onAuthStateChanged') && panelSource.includes('SUPER_ADMIN') && panelSource.includes('isSuperAdmin'));
+check('El panel Maestro es exclusivo del email Super Admin real',
+  panelSource.includes('subscribeAuthState') &&
+  panelSource.includes('isSuperAdmin') &&
+  identitySource.includes('export function isSuperAdminEmail') &&
+  identitySource.includes('SUPER_ADMIN_EMAIL') &&
+  !panelSource.includes('onAuthStateChanged'));
 check('El panel Maestro no escribe directamente en Firestore', !/\b(?:setDoc|updateDoc|deleteDoc|addDoc|writeBatch|runTransaction)\s*\(/.test(panelSource));
 check('El panel Maestro usa la navegación nativa para abrir módulos existentes', panelSource.includes('nativeTrigger') && panelSource.includes('trigger.click()'));
 check('El panel Maestro verifica cobertura, paridad, CRUD crítico y guard de cambios', ['runtimeChecks','nav-parity','products','collections','users','orders','AdminUnsaved'].every(token => panelSource.includes(token)));

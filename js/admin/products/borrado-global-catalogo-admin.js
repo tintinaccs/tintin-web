@@ -6,9 +6,9 @@
 
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
+import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-1';
 
 const API = '/api/admin-catalog-delete';
-const SUPER_ADMIN_EMAIL = 'tintinaccs@gmail.com';
 const PRODUCT_CONFIRM = 'ELIMINAR DEFINITIVAMENTE';
 const ALL_PRODUCTS_CONFIRM = 'ELIMINAR TODOS LOS PRODUCTOS';
 const COLLECTION_CONFIRM = 'ELIMINAR COLECCIONES DEFINITIVAMENTE';
@@ -19,7 +19,7 @@ const toast = message => typeof window.toast === 'function' ? window.toast(messa
 
 async function postCatalogDelete(payload) {
   const user = auth.currentUser;
-  if (!user || String(user.email || '').toLowerCase() !== SUPER_ADMIN_EMAIL) throw new Error('Esta acción es exclusiva del Super Admin.');
+  if (!isSuperAdmin(user)) throw new Error('Esta acción es exclusiva del Super Admin.');
   const idToken = await user.getIdToken();
   const response = await fetch(API, {
     method: 'POST',
@@ -226,5 +226,5 @@ function boot() {
 }
 
 subscribeAuthState(user => {
-  if (user && String(user.email || '').toLowerCase() === SUPER_ADMIN_EMAIL) boot();
+  if (isSuperAdmin(user)) boot();
 });
