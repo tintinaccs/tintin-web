@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import path from 'node:path';
 
 const instant = fs.readFileSync('js/components/color/esquema-color-instantaneo.js', 'utf8');
 const pages = [
@@ -43,6 +44,33 @@ test('la navegación solo importa la superficie activa', () => {
   assert.match(navigation, /navigationSurfaceImportFactories/);
   assert.match(navigation, /navigationSurfaceImportFactories\[surface\]\?\.\(\)/);
   assert.doesNotMatch(navigation, /const imports = \{\s*desktop:\s*\[\s*import\(/s);
+});
+
+function navigationModules(directory) {
+  const output = [];
+  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    const file = path.join(directory, entry.name);
+    if (entry.isDirectory()) output.push(...navigationModules(file));
+    else if (/\.m?js$/i.test(entry.name)) output.push(file);
+  }
+  return output;
+}
+
+test('el árbol público de navegación no deja imports relativos JS sin versión', () => {
+  const root = path.join(process.cwd(), 'js', 'components', 'navigation');
+  const unversioned = [];
+  const relativeImport = /(?:\bfrom\s*|\bimport\s*\()(['"])(\.\.?\/[^'"]+\.m?js)\1/g;
+
+  for (const file of navigationModules(root)) {
+    const source = fs.readFileSync(file, 'utf8');
+    for (const match of source.matchAll(relativeImport)) {
+      if (!/[?&]v=[A-Za-z0-9._-]+(?:$|[#'"`])/i.test(match[2])) {
+        unversioned.push(`${path.relative(process.cwd(), file)} → ${match[2]}`);
+      }
+    }
+  }
+
+  assert.deepEqual(unversioned, [], `imports relativos JS/MJS sin ?v=:\n${unversioned.join('\n')}`);
 });
 
 test('todas las páginas públicas apuntan al bootstrap nuevo', () => {

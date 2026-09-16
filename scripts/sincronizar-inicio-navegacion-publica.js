@@ -6,13 +6,14 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260910-header-clearance-1';
+const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1';
 const TIENDA_VERSION = 'tintin-20260916-favorites-cart-badge-auth-3';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260915-session-shell-3';
 const LOADER_VERSION = 'tintin-20260916-premium-performance-loader-1';
 const STORE_GATE_VERSION = 'tintin-20260916-store-gate-degraded-fix-2';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
-const PUBLIC_SHELL_VERSION = 'tintin-20260915-session-shell-3';
-const NAV_ENTRY_VERSION = 'tintin-20260916-cache-bump-navigation-entry-2';
+const PUBLIC_SHELL_VERSION = 'tintin-20260916-final-production-stability-shell-1';
+const NAV_ENTRY_VERSION = 'tintin-20260916-final-production-stability-entry-module-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20260916-premium-performance-loader-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20260916-cache-bump-session-protection-1';
@@ -302,6 +303,13 @@ function versionUnifiedTheme(html) {
   );
 }
 
+function versionSecondaryLayout(html) {
+  return html.replace(
+    /(css\/pages\/secundarias-minimal\.css)(?:\?v=[A-Za-z0-9._-]+)?/gi,
+    `$1?v=${SECONDARY_LAYOUT_VERSION}`
+  );
+}
+
 function normalizeWhitespace(html) {
   return html
     .replace(/\n{4,}/g, '\n\n\n')
@@ -329,6 +337,7 @@ for (const page of PUBLIC_PAGES) {
   html = versionSessionProtection(html);
   html = versionProfileGate(html);
   html = versionUnifiedTheme(html);
+  html = versionSecondaryLayout(html);
   html = normalizeWhitespace(html);
 
   if (html !== before) {

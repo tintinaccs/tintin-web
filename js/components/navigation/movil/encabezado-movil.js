@@ -1,4 +1,4 @@
-import { UI_ICONS, svgIcon } from '../compartido/iconos.js';
+import { UI_ICONS, svgIcon } from '../compartido/iconos.js?v=tintin-20260916-final-production-stability-iconos-1';
 
 export function renderMobileTabbar() {
   return `

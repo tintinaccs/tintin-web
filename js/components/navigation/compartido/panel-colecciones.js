@@ -1,4 +1,4 @@
-import { CATEGORIES, UI_ICONS, collectionImageUrl, svgIcon } from './iconos.js';
+import { CATEGORIES, UI_ICONS, collectionImageUrl, svgIcon } from './iconos.js?v=tintin-20260916-final-production-stability-iconos-1';
 
 function renderSheetCategories() {
   return CATEGORIES.map(({ slug, label }) => `
