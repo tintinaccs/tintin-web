@@ -46,12 +46,14 @@ test('Mi cuenta conserva pathname, query y hash al entrar o crear cuenta', async
     read('js/core/auth/navegacion-autenticacion.js'),
   ]);
 
-  for (const source of [panel, authNav]) {
-    assert.match(source, /window\.location\.pathname/);
-    assert.match(source, /window\.location\.search/);
-    assert.match(source, /window\.location\.hash/);
-    assert.match(source, /`\/login\?from=\$\{encodeURIComponent\(path\)\}`/);
-  }
+  // El drawer arranca en estado de carga para no mostrar una cuenta visitante
+  // mientras Firebase restaura la sesión. La navegación final de Login queda
+  // centralizada en auth-nav, que sí conoce la URL completa de origen.
+  assert.match(panel, /tt-account-loading/);
+  assert.match(authNav, /window\.location\.pathname/);
+  assert.match(authNav, /window\.location\.search/);
+  assert.match(authNav, /window\.location\.hash/);
+  assert.match(authNav, /`\/login\?from=\$\{encodeURIComponent\(path\)\}`/);
 
   assert.doesNotMatch(authNav, /href="\/login">Iniciar sesión<\/a><a[^>]+href="\/login">Crear una cuenta/);
 });

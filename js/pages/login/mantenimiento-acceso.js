@@ -77,7 +77,7 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
       import('../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1'),
       import('../../core/store/perfil-usuario.js?v=tintin-20260912-auth-closure-1'),
       import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
-      import('../../core/auth/coordinador-sesion.js?v=tintin-20260910-session-coordinator-1'),
+      import('../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2'),
     ]);
 
     // Reutiliza la única suscripción canónica de sesión (coordinador-sesion.js)

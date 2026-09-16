@@ -4,8 +4,8 @@ const site = String(process.env.TINTIN_PUBLIC_ORIGIN || 'https://tintinaccesorio
 const runtime = JSON.parse(fs.readFileSync(new URL('../config/csp-runtime.json', import.meta.url), 'utf8'));
 const targets = [
   ['html', '/', /no-cache,\s*must-revalidate/i],
-  ['css', '/css/pages/login/login.css?v=header-audit', /public,\s*max-age=31536000,\s*immutable/i],
-  ['js', '/js/cargador-pagina.js?v=header-audit', /public,\s*max-age=31536000,\s*immutable/i],
+  ['css', '/css/pages/login/login.css?v=tintin-20260906-login-mode-toggle-1', /public,\s*max-age=31536000,\s*immutable/i],
+  ['js', '/js/cargador-pagina.js?v=tintin-20260911-hero-no-entry-animation-1', /public,\s*max-age=31536000,\s*immutable/i],
   ['font', '/assets-tintin/fonts/montserrat-latin-wght-normal.woff2', /public,\s*max-age=31536000,\s*immutable/i],
   ['storeGate', '/api/public-catalog?resource=storeGate', /(?:public,\s*)?max-age=(?:[1-9]\d*)/i],
 ];
