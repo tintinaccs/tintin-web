@@ -51,6 +51,21 @@
   --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
   --font-heading: "Montserrat";
   --font-body: "Montserrat";
+
+  /* Escala de apilamiento pública. Conserva la jerarquía existente. */
+  --tt-z-header: 1900;
+  --tt-z-effects: 1190;
+  --tt-z-campaign: 1200;
+  --tt-z-dropdown: 1450;
+  --tt-z-surface: 1460;
+  --tt-z-surface-active: 1470;
+  --tt-z-tabbar: 1400;
+  --tt-z-notification: 1550;
+  --tt-z-overlay: 4500;
+  --tt-z-drawer: 4501;
+  --tt-z-modal: 5000;
+  --tt-z-popup: 6000;
+  --tt-z-lightbox: 30000;
 }
 
 #tt-loader-line,
