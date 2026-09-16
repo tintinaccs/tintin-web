@@ -38,6 +38,13 @@ test('prefetch solo adelanta navegación interna y respeta ahorro de datos', () 
   assert.match(instant, /touchstart/);
 });
 
+test('la navegación solo importa la superficie activa', () => {
+  const navigation = fs.readFileSync('js/components/navigation/compartido/carga-navegacion.js', 'utf8');
+  assert.match(navigation, /navigationSurfaceImportFactories/);
+  assert.match(navigation, /navigationSurfaceImportFactories\[surface\]\?\.\(\)/);
+  assert.doesNotMatch(navigation, /const imports = \{\s*desktop:\s*\[\s*import\(/s);
+});
+
 test('todas las páginas públicas apuntan al bootstrap nuevo', () => {
   for (const page of pages) {
     const html = fs.readFileSync(page, 'utf8');

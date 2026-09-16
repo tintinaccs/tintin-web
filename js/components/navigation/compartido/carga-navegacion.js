@@ -197,6 +197,23 @@ function attachLightweightCommerceDemand() {
 let activeSurface = null;
 const surfaceLoads = new Map();
 
+// Keep import() behind a factory: object literals evaluate every property
+// before the selected surface is read, which defeated the viewport-only
+// loading contract and surfaced unrelated module failures as navigation
+// errors.
+const navigationSurfaceImportFactories = Object.freeze({
+  desktop: () => [
+    import(versionedJsModule('components/navigation/escritorio/indicador-navegacion-escritorio.js')),
+  ],
+  tablet: () => [
+    import(versionedJsModule('components/navigation/tableta/control-menu-tableta.js')),
+  ],
+  mobile: () => [
+    import(versionedJsModule('components/navigation/movil/indicador-navegacion-movil.js')),
+    import(versionedJsModule('components/navigation/movil/navegacion-compacta-movil.js')),
+  ],
+});
+
 function currentSurface() {
   if (window.matchMedia('(max-width: 767px)').matches) return 'mobile';
   if (window.matchMedia('(max-width: 1120px)').matches) return 'tablet';
@@ -205,18 +222,7 @@ function currentSurface() {
 
 function loadNavigationSurface(surface) {
   if (surfaceLoads.has(surface)) return surfaceLoads.get(surface);
-  const imports = {
-    desktop: [
-      import(versionedJsModule('components/navigation/escritorio/indicador-navegacion-escritorio.js')),
-    ],
-    tablet: [
-      import(versionedJsModule('components/navigation/tableta/control-menu-tableta.js')),
-    ],
-    mobile: [
-      import(versionedJsModule('components/navigation/movil/indicador-navegacion-movil.js')),
-      import(versionedJsModule('components/navigation/movil/navegacion-compacta-movil.js')),
-    ],
-  }[surface];
+  const imports = navigationSurfaceImportFactories[surface]?.() || [];
   const promise = Promise.allSettled(imports).then(results => {
     if (surface === 'desktop') {
       results[0].status === 'fulfilled' && results[0].value.initDesktopNavigationIndicator?.();
