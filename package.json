@@ -82,6 +82,7 @@
     "audit:aux-pages": "node scripts/auditar-auxiliares-paginas.js",
     "audit:final-integration": "node scripts/auditar-final-integracion.js",
     "audit:performance": "node scripts/auditar-rendimiento-tiempo-real.js",
+    "audit:premium-performance": "node scripts/auditar-performance-premium.mjs",
     "audit:performance-regressions": "node scripts/auditar-rendimiento-regresiones.js",
     "audit:page-loading": "node scripts/auditar-pagina-carga.js",
     "test:performance": "playwright test tests/performance",

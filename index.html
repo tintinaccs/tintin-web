@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260915-session-shell-3"></script>
-<script src="js/cargador-pagina.js?v=tintin-20260911-hero-no-entry-animation-1"></script>
+<script src="js/cargador-pagina.js?v=tintin-20260916-premium-performance-loader-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
   <script src="js/inicio-navegacion-publica.js?v=tintin-20260915-session-shell-3" defer></script>
   <!-- La señal de "página lista" (window.ttPageReady) ya NO se dispara desde
@@ -66,7 +66,7 @@
   <link rel="stylesheet" href="styles.min.css?v=tintin-20260903-css-shell-min-1">
   <link rel="stylesheet" href="css/quality/ajuste-global.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260811-cls-desktop-stable-2">
+  <link rel="stylesheet" href="css/quality/calidad-interfaz.css?v=tintin-20260916-premium-performance-cls-1">
   <link rel="stylesheet" href="css/core/tema-unificado-tintin.css?v=tintin-20260915-final-polish-1">
   <link rel="stylesheet" href="css/core/limpieza-tema-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/theme/paridad-segura-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -114,6 +114,10 @@
        como zonas interactivas accesibles sobre ella. -->
   <div class="tt-hero-media" id="tt-hero-media">
     <picture>
+      <source type="image/webp" media="(max-width: 767px)" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.webp?v=tintin-20260916-premium-hero-1">
+      <source type="image/webp" media="(min-width: 768px) and (max-width: 1120px) and (orientation: landscape)" data-tt-hero-device="tablet-landscape" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.webp?v=tintin-20260916-premium-hero-1">
+      <source type="image/webp" media="(max-width: 1120px)" data-tt-hero-device="tablet-portrait" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.webp?v=tintin-20260916-premium-hero-1">
+      <source type="image/webp" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.webp?v=tintin-20260916-premium-hero-1">
       <source media="(max-width: 767px)" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png?v=tintin-20260910-hero-button-clear-1">
       <source media="(min-width: 768px) and (max-width: 1120px) and (orientation: landscape)" data-tt-hero-device="tablet-landscape" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png?v=tintin-20260910-hero-button-clear-1">
       <source media="(max-width: 1120px)" data-tt-hero-device="tablet-portrait" srcset="assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png?v=tintin-20260910-hero-button-clear-1">
@@ -501,7 +505,7 @@
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260916-cache-bump-session-protection-1"></script>
 <script type="module" src="js/components/images/inicio-carga-imagenes.js?v=tintin-20260908-home-random-lazy-1"></script>
 <script type="module">
-import { initSiteContent } from './js/core/store/contenido-sitio.js?v=tintin-20260911-hero-no-entry-animation-1';
+import { initSiteContent } from './js/core/store/contenido-sitio.js?v=tintin-20260916-premium-performance-loader-1';
 initSiteContent('index');
 </script>
 <script type="module" src="js/core/auth/insignia-edicion.js?v=tintin-20260916-cache-bump-badge-1"></script>
@@ -540,7 +544,7 @@ initSiteContent('index');
   ]
 }
 </script>
-<script type="module" src="js/visual-builder-bootstrap.js?v=tintin-20260911-hero-no-entry-animation-1"></script>
+<script type="module" src="js/visual-builder-bootstrap.js?v=tintin-20260916-premium-performance-loader-1"></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3"></script>
 </body>
 </html>

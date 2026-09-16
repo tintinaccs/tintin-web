@@ -82,7 +82,16 @@ const server = http.createServer((request, response) => {
       response.end('{"ok":false,"error":"resource_invalid"}');
       return;
     }
+    const requestedId = url.searchParams.get('id');
     const items = resource === 'products' ? [SEO_PRODUCT_FIXTURE] : [];
+    if (resource === 'products' && requestedId) {
+      const item = requestedId === SEO_PRODUCT_FIXTURE.id
+        ? { id: SEO_PRODUCT_FIXTURE.id, data: SEO_PRODUCT_FIXTURE }
+        : null;
+      response.writeHead(200, { 'cache-control': 'no-store', 'content-type': 'application/json; charset=utf-8', 'x-tintin-cache': 'test' });
+      response.end(JSON.stringify({ ok: true, resource, item }));
+      return;
+    }
     response.writeHead(200, { 'cache-control': 'no-store', 'content-type': 'application/json; charset=utf-8', 'x-tintin-cache': 'test' });
     response.end(JSON.stringify({ ok: true, resource, items, count: items.length }));
     return;

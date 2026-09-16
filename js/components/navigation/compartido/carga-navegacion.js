@@ -1,11 +1,12 @@
 import { currentPage } from './estado-ruta.js';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260909-unified-navigation-assets-3';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260916-premium-performance-1';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;
 let cartRuntimePromise = null;
 let notificationsRuntimePromise = null;
 let collectionsRuntimePromise = null;
+let navigationBehaviorsPromise = null;
 
 const FULL_COMMERCE_PAGES = new Set(['home', 'shop', 'cart', 'account']);
 const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar-notifications';
@@ -193,31 +194,80 @@ function attachLightweightCommerceDemand() {
   );
 }
 
+let activeSurface = null;
+const surfaceLoads = new Map();
+
+function currentSurface() {
+  if (window.matchMedia('(max-width: 767px)').matches) return 'mobile';
+  if (window.matchMedia('(max-width: 1120px)').matches) return 'tablet';
+  return 'desktop';
+}
+
+function loadNavigationSurface(surface) {
+  if (surfaceLoads.has(surface)) return surfaceLoads.get(surface);
+  const imports = {
+    desktop: [
+      import(versionedJsModule('components/navigation/escritorio/indicador-navegacion-escritorio.js')),
+    ],
+    tablet: [
+      import(versionedJsModule('components/navigation/tableta/control-menu-tableta.js')),
+    ],
+    mobile: [
+      import(versionedJsModule('components/navigation/movil/indicador-navegacion-movil.js')),
+      import(versionedJsModule('components/navigation/movil/navegacion-compacta-movil.js')),
+    ],
+  }[surface];
+  const promise = Promise.allSettled(imports).then(results => {
+    if (surface === 'desktop') {
+      results[0].status === 'fulfilled' && results[0].value.initDesktopNavigationIndicator?.();
+    } else if (surface === 'mobile') {
+      results[0].status === 'fulfilled' && results[0].value.initMobileNavigationIndicator?.();
+    }
+    reportRuntimeFailures(results);
+    return results;
+  });
+  surfaceLoads.set(surface, promise);
+  return promise;
+}
+
 function loadNavigationBehaviors() {
+  if (navigationBehaviorsPromise) return navigationBehaviorsPromise;
+  // Start the viewport-specific behavior immediately. The shell can be visible
+  // before the shared controller resolves, so mobile scroll compaction must not
+  // depend on an unrelated readiness promise.
+  const initialSurface = currentSurface();
+  const initialSurfacePromise = loadNavigationSurface(initialSurface);
   const controllerReady = window.TintinSurfaceControllerReady || Promise.resolve(window.TintinSurfaceController);
-  return Promise.resolve(controllerReady)
+  navigationBehaviorsPromise = Promise.resolve(controllerReady)
     .catch(error => {
       console.warn('[PublicShell] El controlador de superficies no inició.', error);
       return null;
     })
     .then(() => Promise.allSettled([
-      import(versionedJsModule('components/navigation/escritorio/indicador-navegacion-escritorio.js')),
-      import(versionedJsModule('components/navigation/tableta/control-menu-tableta.js')),
-      import(versionedJsModule('components/navigation/movil/indicador-navegacion-movil.js')),
-      import(versionedJsModule('components/navigation/movil/navegacion-compacta-movil.js')),
+      initialSurfacePromise,
       import(versionedJsModule('components/navigation/compartido/enrutador.js')),
       import('./control-busqueda.js?v=tintin-20260916-cache-bump-search-control-1'),
     ]))
     .then(results => {
-      // Dynamic imports are cached, but the shell DOM is remounted on every
-      // navigation. Re-run geometry-dependent indicators against that DOM.
-      const desktop = results[0].status === 'fulfilled' ? results[0].value : null;
-      const mobile = results[2].status === 'fulfilled' ? results[2].value : null;
-      desktop?.initDesktopNavigationIndicator?.();
-      mobile?.initMobileNavigationIndicator?.();
-      return results;
+      reportRuntimeFailures(results);
+      activeSurface = initialSurface;
+      return loadNavigationSurface(activeSurface);
     })
-    .then(reportRuntimeFailures);
+    .then(() => {
+      const onViewportChange = () => {
+        const nextSurface = currentSurface();
+        if (nextSurface === activeSurface) return;
+        activeSurface = nextSurface;
+        void loadNavigationSurface(nextSurface);
+      };
+      window.addEventListener('resize', onViewportChange, { passive: true });
+      window.addEventListener('orientationchange', onViewportChange, { passive: true });
+    })
+    .catch(error => {
+      navigationBehaviorsPromise = null;
+      console.warn('[PublicShell] No se pudo iniciar navegación compartida.', error);
+    });
+  return navigationBehaviorsPromise;
 }
 
 export function loadSharedRuntime() {

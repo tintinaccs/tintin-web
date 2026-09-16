@@ -119,12 +119,16 @@
     documentElement.classList.add('tt-store-gate-pending');
   }
 
-  const TT_CACHE_VERSION = 'tintin-20260911-hero-no-entry-animation-1';
+  const TT_CACHE_VERSION = 'tintin-20260916-premium-performance-loader-1';
   // El shell es común a cada navegación: incluso cuando la página está en
   // caché debe ser perceptible y no desaparecer antes de que el usuario vea
   // qué superficie se está preparando. Un segundo es el mínimo acordado;
   // nunca sustituye los gates reales de contenido, sesión o tienda.
-  const MIN_SHOW_MS = 350;
+  // Mantiene una transición estable cuando el shell realmente necesita
+  // mostrar el loader, pero no convierte una respuesta cacheada en 350 ms de
+  // espera artificial. Los gates de store/checkout siguen siendo independientes
+  // y fail-closed cuando corresponde.
+  const MIN_SHOW_MS = 120;
   // Se reportó (con evidencia real, recurrente, no puntual) el aviso de
   // emergencia "No pudimos comprobar el estado de la tienda" en un equipo
   // donde el propio loader ya llevaba ~6s arriba antes de que este tope se
