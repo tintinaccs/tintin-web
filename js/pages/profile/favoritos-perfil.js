@@ -1,5 +1,5 @@
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 import { collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
@@ -42,7 +42,7 @@ document.getElementById('perfil-favorites-list')?.addEventListener('click', asyn
 let unsubscribe = null;
 let generation = 0;
 
-onAuthStateChanged(auth, async user => {
+subscribeAuthState(async user => {
   const myGeneration = ++generation;
   if (unsubscribe) { unsubscribe(); unsubscribe = null; }
   if (!user) return;

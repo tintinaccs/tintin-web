@@ -3,6 +3,7 @@ import { versionedSiteAsset } from './configuracion.js?v=tintin-20260909-unified
 const HEADER_RESPONSIVE_VERSION = 'tintin-20260824-header-responsive-sync-1';
 const NAVIGATION_SHARED_VERSION = 'tintin-20260825-responsive-css-budget-2';
 const NAVIGATION_PANEL_VERSION = 'tintin-20260910-home-tablet-gap-1';
+const NAVIGATION_COHERENCE_VERSION = 'tintin-20260915-shell-atomic-1';
 const MOBILE_SOLID_VERSION = 'tintin-20260817-cls-desktop-stable-3';
 const NOTIFICATIONS_VERSION = 'tintin-20260907-notifications-badge-anchor-1';
 
@@ -16,6 +17,7 @@ const NAVIGATION_STYLES = Object.freeze([
   ['tt-surface-controller-css', 'css/components/navigation/compartido/paneles.css', NAVIGATION_PANEL_VERSION],
   ['tt-navigation-notification-surface-css', 'css/components/navigation/compartido/superficie-notificaciones.css', HEADER_RESPONSIVE_VERSION],
   ['tt-navigation-search-css', 'css/components/navigation/compartido/busqueda.css', NAVIGATION_SHARED_VERSION],
+  ['tt-navigation-coherence-css', 'css/components/navigation/compartido/coherencia-visual.css', NAVIGATION_COHERENCE_VERSION],
 ]);
 
 function versionedStyleHref(path, version) {

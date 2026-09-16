@@ -13,6 +13,10 @@ import {
 import { firestoreAdminBatchCommit } from '../../cloudflare/firestore-admin-batch.js';
 import { fetchAppsScript } from '../../cloudflare/apps-script-fetch.js';
 import { syncOrderToSheetsBestEffort } from '../../cloudflare/order-sheets-sync.js';
+import { createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
+import { syncOrderOwnerStats } from '../../cloudflare/sincronizacion-estadisticas-pedido.js';
+import { dispatchOrderPushEvent } from '../../cloudflare/servicio-push.js';
+import { sendOrderEmails } from './order-email.js';
 
 // Apps Script sigue ejecutando únicamente la transacción privilegiada heredada
 // de creación de pedidos y las rutas de correo antiguas que aún puedan invocarse
@@ -33,6 +37,34 @@ const ALLOWED_ACTIONS = new Set([
 
 function clean(value, maxLength = 500) {
   return String(value == null ? '' : value).trim().slice(0, maxLength);
+}
+
+function publicOrderInput(payload, authenticatedUser) {
+  const requestId = clean(payload.requestId, 100);
+  return {
+    ...payload,
+    orderId: `public_${authenticatedUser.uid}_${requestId}`,
+    requestId,
+    items: Array.isArray(payload.cartLines)
+      ? payload.cartLines.map(line => ({ id: line?.id, qty: line?.qty, variant: typeof line?.variant === 'string' ? line.variant : '' }))
+      : [],
+    userId: authenticatedUser.uid,
+    userEmail: authenticatedUser.email,
+    userName: clean(payload.name, 120),
+    userPhone: clean(payload.phone, 40),
+    shippingCity: clean(payload.selectedCity, 120),
+    reference: clean(payload.referencia, 300),
+    shippingCost: payload.expectedShippingCost == null ? 0 : payload.expectedShippingCost,
+    shipping: {
+      method: clean(payload.shippingMethod, 40),
+      city: clean(payload.selectedCity, 120),
+      departamento: clean(payload.departamento, 120),
+      address: clean(payload.address, 300),
+      referencia: clean(payload.referencia, 300),
+      encomiendaMode: clean(payload.encomiendaMode, 20),
+    },
+    invoice: { wanted: payload.wantsInvoice === true, razonSocial: clean(payload.razonSocial, 180), ruc: clean(payload.ruc, 40) },
+  };
 }
 
 function authFailure(error) {
@@ -278,11 +310,23 @@ export async function onRequest(context) {
         authenticatedUser = await verifyFirebaseIdToken(idToken);
       } catch (error) {
         const failure = authFailure(error);
+        // Sólo se registra el código/estado del error, nunca el idToken ni datos
+        // personales: es la única forma de distinguir en los logs de Cloudflare
+        // cuál de las validaciones (proyecto, firma, expiración, clave
+        // desconocida, etc.) rechazó un token dado.
+        console.error('[apps-script-bridge] verifyFirebaseIdToken failed', {
+          code: error?.code || 'unknown',
+          status: error?.status || null,
+        });
         return jsonResponse({ ok: false, error: failure.error }, failure.status, origin, requestUrl);
       }
       try {
         await assertPurchaseEligibleAccount(env, authenticatedUser);
       } catch (error) {
+        console.error('[apps-script-bridge] assertPurchaseEligibleAccount failed', {
+          code: error?.code || 'unknown',
+          status: error?.status || null,
+        });
         return jsonResponse({
           ok: false,
           error: clean(error?.code, 120) || 'profile_validation_failed'
@@ -292,6 +336,52 @@ export async function onRequest(context) {
       delete forwardedPayload.customerId;
       delete forwardedPayload.userEmail;
       forwardedPayload.idToken = idToken;
+
+      // Cloudflare ya verificó la identidad. Revalidar el mismo token en
+      // Apps Script era la fuente del invalid_id_token; la transacción
+      // canónica vive aquí y es idempotente por usuario + requestId.
+      const created = await createOrderAdmin(
+        env,
+        publicOrderInput(forwardedPayload, authenticatedUser),
+        { uid: authenticatedUser.uid, email: authenticatedUser.email, role: 'client', origin: 'public-checkout' },
+      );
+      let emailResult = { success: false, adminSent: null, customerSent: null, error: 'RESEND_API_KEY no está configurada' };
+      if (!created.duplicate && env.RESEND_API_KEY) {
+        emailResult = await sendOrderEmails({
+          apiKey: env.RESEND_API_KEY,
+          orderId: created.orderId,
+          order: created.order,
+          isResend: false,
+          sendAdmin: true,
+          sendCustomer: true,
+        });
+      }
+      if (!created.duplicate) {
+        context.waitUntil?.(syncOrderOwnerStats(env, created.order).catch(error => {
+          console.error('[apps-script-bridge] order stats sync failed', error?.message || error);
+        }));
+        // El checkout público canónico ya no pasa por el webhook antiguo de
+        // Apps Script. Disparar aquí el mismo evento garantiza la push de
+        // pedido nuevo sin duplicarla en reintentos idempotentes.
+        context.waitUntil?.(
+          dispatchOrderPushEvent(env, 'order.created', created.orderId, `order.created:${created.orderId}`)
+            .catch(() => {})
+        );
+        context.waitUntil?.(syncOrderToSheetsBestEffort(env, { orderId: created.orderId, order: created.order }));
+      }
+      return new Response(JSON.stringify({
+        ok: true,
+        orderId: created.orderId,
+        orderNumber: created.orderNumber,
+        shortId: created.shortId,
+        order: created.order,
+        duplicate: created.duplicate === true,
+        adminSent: emailResult.adminSent,
+        customerSent: emailResult.customerSent,
+        notificationStatus: emailResult.success ? 'sent' : 'pending',
+        emailError: emailResult.error || '',
+        sheetsSync: { ok: true, deferred: true },
+      }), { status: 200, headers: { ...corsHeaders(origin, requestUrl), 'content-type': 'application/json; charset=utf-8' } });
     }
 
     const upstream = await fetchAppsScript(APPS_SCRIPT_ORDER_WEBHOOK_URL, {

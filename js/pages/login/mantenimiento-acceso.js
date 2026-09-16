@@ -73,14 +73,22 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
   }
 
   async function repairCanonicalProfileIfNeeded() {
-    const [{ auth, db }, profileModule, firestoreApi] = await Promise.all([
+    const [{ db }, profileModule, firestoreApi, { subscribeAuthState }] = await Promise.all([
       import('../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1'),
       import('../../core/store/perfil-usuario.js?v=tintin-20260912-auth-closure-1'),
       import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
+      import('../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2'),
     ]);
 
-    try { await auth.authStateReady?.(); } catch {}
-    const user = auth.currentUser;
+    // Reutiliza la única suscripción canónica de sesión (coordinador-sesion.js)
+    // en lugar de esperar authStateReady() por separado, para evitar una
+    // segunda restauración de Firebase desincronizada del resto de la app.
+    const user = await new Promise(resolve => {
+      const unsubscribe = subscribeAuthState(current => {
+        unsubscribe();
+        resolve(current);
+      });
+    });
     if (!user || user.isAnonymous) return { repaired: false, reason: 'signed_out' };
 
     const ref = firestoreApi.doc(db, 'users', user.uid);

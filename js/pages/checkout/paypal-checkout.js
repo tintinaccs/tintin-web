@@ -1,3 +1,4 @@
+import './checkout-resumen-confirmacion.js?v=tintin-20260914-summary-svg-fix-1';
 import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20260910-auth-api-1';
 
 const state = { config: null, pending: null, sdkPromise: null, providerOrderId: '' };
