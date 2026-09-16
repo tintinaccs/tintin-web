@@ -1,10 +1,6 @@
 import { CATEGORIES, UI_ICONS, collectionImageUrl, svgIcon } from '../compartido/iconos.js';
 import { logoUrl } from '../compartido/configuracion.js';
 
-// Placeholder GIF 1x1 válido. La versión anterior estaba truncada y podía
-// disparar `error` antes de la hidratación del logo real.
-const EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
-
 function renderTabletCategories() {
   return CATEGORIES.map(({ slug, label }) => `
     <a href="/catalogo?cat=${slug}" class="tt-tablet-cat-card">
@@ -14,7 +10,7 @@ function renderTabletCategories() {
 }
 
 function logoImage(className, alt, highPriority = false) {
-  return `<img loading="eager" decoding="async"${highPriority ? ' fetchpriority="high"' : ''} src="${EMPTY_IMAGE}" data-tt-shared-logo="${logoUrl()}" data-tt-ux-image="1" alt="${alt}" class="${className}">`;
+  return `<img loading="eager" decoding="async"${highPriority ? ' fetchpriority="high"' : ''} src="${logoUrl()}" data-tt-ux-image="1" alt="${alt}" class="${className}">`;
 }
 
 export function renderTabletHeader() {
