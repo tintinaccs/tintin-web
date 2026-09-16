@@ -115,7 +115,7 @@
 
 .tt-notifications-drawer {
   position: fixed;
-  z-index: 1550;
+  z-index: var(--tt-z-notification, 1550);
   top: 0;
   right: 0;
   width: min(440px, 100vw);
