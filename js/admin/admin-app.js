@@ -40,6 +40,7 @@ import {
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260716-cloudinary-fix-1";
 import './orders/pedidos-superadmin-crud.js?v=tintin-20260821-accounts-phase-a-3';
+import './products/integridad-inventario-admin.js?v=tintin-20260916-order-integrity-1';
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -2391,7 +2392,7 @@ window.toggleOrderDetail = (id) => {
 };
 
 window.updateOrderStatus = async (orderId, status) => {
-  if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'cambiarEstado')) { toast('No tenés permiso para cambiar el estado de pedidos'); return; }
+  if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'cambiarEstado')) { toast('No tenés permiso para cambiar el estado de pedidos'); return false; }
   const o = allOrders.find(o => o.id === orderId);
   const prevStatus = o?.status || 'pendiente';
   try {
@@ -2401,7 +2402,7 @@ window.updateOrderStatus = async (orderId, status) => {
       logAudit('mover_pedido_borrados', 'pedido', orderId, o?.orderNumber || o?.shortId || orderId, `Cancelado y movido a Borrados desde ${ORDER_STATUS_LABELS[prevStatus] || prevStatus}`);
       toast(`Pedido ${o?.orderNumber || o?.shortId || ''} movido a Borrados`);
       applyOrderFilters();
-      return;
+      return true;
     }
     await window.TintinInventoryIntegrity.transitionStatus(orderId, status);
     if (o) o.status = status;
@@ -2409,10 +2410,12 @@ window.updateOrderStatus = async (orderId, status) => {
     toast(`Estado actualizado: ${ORDER_STATUS_LABELS[status] || status}`);
     applyOrderFilters();
     if (o) maybeSendOrderStatusEmail_(o, 'status', status);
+    return true;
   } catch(e) {
     console.error('[orders] No se pudo cambiar el estado:', e);
     toast('No se pudo guardar el estado. Probá de nuevo.');
     applyOrderFilters();
+    return false;
   }
 };
 
@@ -2472,7 +2475,7 @@ window.resendOrderEmail = async (orderId) => {
 };
 
 window.updatePayStatus = async (orderId, status) => {
-  if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'cambiarPago')) { toast('No tenés permiso para cambiar el estado de pago'); return; }
+  if (!can(currentRole, 'manageOrders') || !roleCanDo('pedidos', 'cambiarPago')) { toast('No tenés permiso para cambiar el estado de pago'); return false; }
   const o = allOrders.find(o => o.id === orderId);
   const prevStatus = o?.paymentStatus || o?.payment?.status || 'pendiente';
   try {
@@ -2493,9 +2496,11 @@ window.updatePayStatus = async (orderId, status) => {
     toast(`Estado de pago: ${PAY_STATUS_LABELS[status] || status}`);
     applyOrderFilters();
     if (o) maybeSendOrderStatusEmail_(o, 'payment', status);
+    return true;
   } catch(e) {
     toast('No se pudo guardar el estado de pago. Probá de nuevo.');
     applyOrderFilters();
+    return false;
   }
 };
 

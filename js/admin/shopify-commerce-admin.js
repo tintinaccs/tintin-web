@@ -22,7 +22,7 @@ import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tin
 import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20260901-firestore-budget-3';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
-const VERSION = 'tintin-20260908-appcheck-ready-1';
+const VERSION = 'tintin-20260916-order-save-1';
 const CSS_HREF = `css/admin/shopify-commerce-admin.css?v=${VERSION}`;
 
 const ORDER_STATUS_LABELS = {
@@ -644,6 +644,15 @@ function closeDrawer() {
   renderDrawer();
 }
 
+function drawerOrderPending(orderId) {
+  if (state.drawer?.type !== 'order' || state.drawer.id !== orderId) return {};
+  return state.drawer.pending || {};
+}
+
+function drawerOrderHasPending(orderId) {
+  return Object.keys(drawerOrderPending(orderId)).length > 0;
+}
+
 function kvRow(label, value) {
   return `<dt>${esc(label)}</dt><dd>${value == null || value === '' ? '—' : esc(value)}</dd>`;
 }
@@ -697,6 +706,10 @@ function orderDrawer(order) {
   const canEditPay = perm('pedidos', 'cambiarPago', 'manageOrders');
   const canSensitive = state.role === 'superadmin' || canDo(state.role, 'pedidos', 'verDatosSensibles');
   const canAddress = state.role === 'superadmin' || canDo(state.role, 'pedidos', 'verDireccion');
+  const pending = drawerOrderPending(order.id);
+  const selectedStatus = Object.prototype.hasOwnProperty.call(pending, 'status') ? pending.status : status;
+  const selectedPay = Object.prototype.hasOwnProperty.call(pending, 'payment') ? pending.payment : pay;
+  const hasPending = drawerOrderHasPending(order.id);
   return {
     title: `#${orderDisplayId(order)}`,
     kicker: formatDate(order.createdAt),
@@ -706,16 +719,58 @@ function orderDrawer(order) {
       <div class="tt-commerce-drawer-section"><h4>Productos</h4>${items.map(item => `<div class="tt-commerce-lineitem">${thumbHtml(itemImage(item), item?.name || item?.title || 'Producto')}<div style="min-width:0"><div class="tt-commerce-maintext">${esc(item?.name || item?.title || 'Producto')}</div><div class="tt-commerce-subtext">${Number(item?.qty || item?.quantity || 1)} × ${formatMoney(item?.price)}</div></div><span class="tt-commerce-lineitem-price">${formatMoney(Number(item?.qty || item?.quantity || 1) * Number(item?.price || 0))}</span></div>`).join('') || '<div class="tt-commerce-subtext">Sin productos registrados.</div>'}</div>
       <div class="tt-commerce-drawer-section"><h4>Totales</h4><dl class="tt-commerce-kv">${kvRow('Subtotal', formatMoney(order.subtotal))}${kvRow('Envío', formatMoney(order.shippingCost ?? order.shipping?.cost ?? 0))}${kvRow('Total', formatMoney(order.total))}</dl></div>
       <div class="tt-commerce-drawer-section"><h4>Entrega</h4><dl class="tt-commerce-kv">${kvRow('Método', shipping.method)}${kvRow('Ciudad', shipping.city)}${canAddress ? kvRow('Dirección', shipping.address) + kvRow('Referencia', shipping.reference || shipping.agency || shipping.mode) : ''}</dl></div>
-      ${(canEditStatus || canEditPay) ? `<div class="tt-commerce-drawer-section"><h4>Actualizar</h4><div style="display:grid;gap:8px">${canEditStatus ? `<select class="tt-commerce-select" data-drawer-order-status="${esc(order.id)}">${ORDER_STATUS_VALUES.map(v => `<option value="${v}" ${status === v ? 'selected' : ''}>${esc(ORDER_STATUS_LABELS[v])}</option>`).join('')}</select>` : ''}${canEditPay ? `<select class="tt-commerce-select" data-drawer-order-pay="${esc(order.id)}">${PAY_STATUS_VALUES.map(v => `<option value="${v}" ${pay === v ? 'selected' : ''}>${esc(PAY_STATUS_LABELS[v])}</option>`).join('')}</select>` : ''}</div></div>` : ''}
+      ${(canEditStatus || canEditPay) ? `<div class="tt-commerce-drawer-section"><h4>Actualizar</h4><div style="display:grid;gap:8px">${canEditStatus ? `<select class="tt-commerce-select" data-drawer-order-status="${esc(order.id)}">${ORDER_STATUS_VALUES.map(v => `<option value="${v}" ${selectedStatus === v ? 'selected' : ''}>${esc(ORDER_STATUS_LABELS[v])}</option>`).join('')}</select>` : ''}${canEditPay ? `<select class="tt-commerce-select" data-drawer-order-pay="${esc(order.id)}">${PAY_STATUS_VALUES.map(v => `<option value="${v}" ${selectedPay === v ? 'selected' : ''}>${esc(PAY_STATUS_LABELS[v])}</option>`).join('')}</select>` : ''}</div>${hasPending ? '<div class="tt-commerce-subtext" style="margin-top:8px;color:var(--tt-commerce-brand);font-weight:700">Cambios pendientes de guardar.</div>' : '<div class="tt-commerce-subtext" style="margin-top:8px">Elegí un estado y después presioná Guardar cambios.</div>'}</div>` : ''}
       ${order.notes ? `<div class="tt-commerce-drawer-section"><h4>Notas</h4><div style="font-size:11px;line-height:1.6;color:var(--tt-commerce-muted)">${esc(order.notes)}</div></div>` : ''}
     `,
     actions: `
+      ${(canEditStatus || canEditPay) ? button('Guardar cambios', 'drawer-order-save', { primary: true, disabled: !hasPending, extra: `data-id="${esc(order.id)}"` }) : ''}
       ${perm('pedidos', 'editarCompleto', 'manageOrdersFull') ? button('Editar pedido', 'drawer-order-edit', { primary: true, extra: `data-id="${esc(order.id)}"` }) : ''}
       ${customer.phone ? button('WhatsApp', 'drawer-order-whatsapp', { extra: `data-id="${esc(order.id)}"` }) : ''}
       ${perm('pedidos', 'reenviarCorreo', 'manageOrders') ? button('Reenviar correo', 'drawer-order-resend', { extra: `data-id="${esc(order.id)}"` }) : ''}
       ${perm('pedidos', 'eliminar', 'deleteOrders') ? button('Eliminar', 'drawer-order-delete', { danger: true, extra: `data-id="${esc(order.id)}"` }) : ''}
     `
   };
+}
+
+async function saveDrawerOrder(id) {
+  const order = state.orders.find(item => item.id === id);
+  const pending = drawerOrderPending(id);
+  if (!order || !Object.keys(pending).length || state.busy) return;
+  const status = orderStatus(order);
+  const pay = payStatus(order);
+  const statusChanged = Object.prototype.hasOwnProperty.call(pending, 'status') && pending.status !== status;
+  const payChanged = Object.prototype.hasOwnProperty.call(pending, 'payment') && pending.payment !== pay;
+  if (!statusChanged && !payChanged) {
+    state.drawer.pending = {};
+    return renderDrawer();
+  }
+
+  setBusy(true);
+  try {
+    if (statusChanged) {
+      if (typeof window.updateOrderStatus !== 'function') throw new Error('La acción de estado todavía no está disponible.');
+      if (!await window.updateOrderStatus(id, pending.status)) throw new Error('No se pudo guardar el estado del pedido.');
+      order.status = pending.status;
+      delete pending.status;
+    }
+    if (payChanged) {
+      if (typeof window.updatePayStatus !== 'function') throw new Error('La acción de pago todavía no está disponible.');
+      if (!await window.updatePayStatus(id, pending.payment)) throw new Error('No se pudo guardar el estado de pago.');
+      order.paymentStatus = pending.payment;
+      if (order.payment) order.payment.status = pending.payment;
+      delete pending.payment;
+    }
+    state.drawer.pending = {};
+    toast('Cambios del pedido guardados.');
+    renderOrders();
+    renderDrawer();
+  } catch (error) {
+    console.error('[shopify-commerce] saveDrawerOrder:', error);
+    toast(error.message || 'No se pudieron guardar los cambios.', 5200);
+    renderDrawer();
+  } finally {
+    setBusy(false);
+  }
 }
 
 function renderDrawer() {
@@ -848,6 +903,7 @@ async function handleAction(action, element) {
   if (action === 'orders-bulk-delivered') return bulkOrders('entregado');
   if (action === 'orders-bulk-paid') return bulkOrders('pagado');
   if (action === 'order-edit' || action === 'drawer-order-edit') { closeDrawer(); return window.openOrderEdit?.(id); }
+  if (action === 'drawer-order-save') return saveDrawerOrder(id);
   if (action === 'order-resend' || action === 'drawer-order-resend') return window.resendOrderEmail?.(id);
   if (action === 'order-delete' || action === 'drawer-order-delete') { closeDrawer(); return window.deleteOrder?.(id); }
   if (action === 'drawer-order-whatsapp') { const order = state.orders.find(o => o.id === id); if (order) return openWhatsApp(order); }
@@ -934,11 +990,17 @@ function onChange(event) {
 
   if (target.matches('[data-drawer-order-status]')) {
     const id = target.dataset.drawerOrderStatus;
-    window.updateOrderStatus?.(id, target.value);
+    if (state.drawer?.type === 'order' && state.drawer.id === id) {
+      state.drawer.pending = { ...(state.drawer.pending || {}), status: target.value };
+      return renderDrawer();
+    }
   }
   if (target.matches('[data-drawer-order-pay]')) {
     const id = target.dataset.drawerOrderPay;
-    window.updatePayStatus?.(id, target.value);
+    if (state.drawer?.type === 'order' && state.drawer.id === id) {
+      state.drawer.pending = { ...(state.drawer.pending || {}), payment: target.value };
+      return renderDrawer();
+    }
   }
 }
 
