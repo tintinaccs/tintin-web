@@ -4,3 +4,16 @@ html{scroll-behavior:smooth;scrollbar-gutter:stable;background:#FFF6FA}html.tt-i
   body:has(.tt-page-hero) .tt-page-hero,
   body:has(.tt-page-hero) .section { content-visibility: visible; contain-intrinsic-size: auto; }
 }
+
+/* entrada-navegacion-publica.js inserta el header/menu del shell público en el
+   DOM de forma síncrona, antes de que su CSS (cargado async vía <link> en
+   ensureNavigationAssets) esté activo. Sin un valor por defecto siempre
+   disponible, ese <header> renderiza sin estilo con su altura natural del
+   navegador durante esa ventana y provoca CLS al colapsar cuando su hoja de
+   estilos carga. Se replica aquí el mismo valor por defecto que ya declaran
+   encabezado-escritorio.css/encabezado-tableta.css, para que nunca exista una
+   ventana sin regla; al cargar esas hojas (insertadas después en el <head>),
+   sus reglas de igual especificidad las sobrescriben normalmente. */
+.tt-header-desktop,
+.tt-header-tablet,
+.tt-tablet-menu { display: none !important; }
