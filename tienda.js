@@ -1906,14 +1906,40 @@ function initContactForm() {
 /* ──────────────────────────────────────
    MAIN INIT
 ────────────────────────────────────── */
+// El carrito real vive en tt_cart_guest/tt_cart_user_<uid> (ver
+// sincronizacion-carrito.js); activeCartKey arranca en la clave de invitado
+// y sólo cambia a la del usuario cuando auth.authStateReady() resuelve. Si
+// pintamos el badge/drawer antes de eso, un usuario con sesión ve su
+// carrito como vacío por un instante. CartFirestoreSync.ready() resuelve
+// recién cuando esa identidad quedó resuelta (para invitados, casi
+// inmediato); si el módulo no cargó en esta página, se pinta igual.
+function renderCartWhenReady() {
+  // Pintar el estado local de inmediato evita que el arranque del módulo de
+  // identidad cambie el layout de las páginas públicas. El drawer está oculto
+  // mientras tanto y vuelve a pintarse de forma completa justo antes de abrirse
+  // (ver beforeOpen de la superficie cart), así que no puede quedar con datos
+  // viejos para el usuario.
+  updateCartBadge();
+  renderCart();
+
+  const ready = window.CartFirestoreSync?.ready?.();
+  if (!ready) return;
+
+  Promise.resolve(ready).catch(() => {}).then(() => {
+    updateCartBadge();
+    const drawer = document.getElementById('cart-drawer');
+    const isOpen = drawer?.classList.contains('open') && drawer.getAttribute('aria-hidden') === 'false';
+    if (isOpen) renderCart();
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // Core functionality on all pages
   initHeaderScroll();
   initSurfaceController();
   initSearch();
   initCartEvents();
-  updateCartBadge();
-  renderCart();
+  renderCartWhenReady();
 
   // Homepage specific — show skeleton while Firebase loads, real error+retry
   // if it never responds. window.PRODUCTS may already be populated here: the
@@ -1981,8 +2007,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* expose for inline onclick usage and module re-render */
 window.addEventListener('tintin:products-loaded', () => {
-  renderCart();
-  updateCartBadge();
+  renderCartWhenReady();
   if (document.getElementById('products-grid')) {
     renderRandomHomeProducts();
   }
@@ -1998,8 +2023,6 @@ window.addEventListener('tintin:products-loaded', () => {
   if (document.getElementById('product-detail')) {
     initProductPage();
   }
-
-  renderCart();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
