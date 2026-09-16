@@ -4,7 +4,7 @@ import { auth, db } from '../firebase/firebase.js?v=tintin-20260908-admin-cache-
 import { signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { subscribeAuthState } from './coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
-import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20260915-final-polish-1';
+import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20260916-final-polish-2';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.mjs';
 

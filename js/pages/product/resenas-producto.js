@@ -1,5 +1,5 @@
 import { auth, db, appCheckReady, authPersistenceReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { getSessionUser, subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 import { collection, doc, getDocs, limit, onSnapshot, orderBy, query, startAfter } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { heartIconMarkup } from '../../components/favorites/icono-corazon.js?v=tintin-20260817-heart-icon-1';
 import { isValidReviewRating, syncReviewPublishState, reportMissingReviewRating } from './validacion-puntuacion-resena.js?v=tintin-20260831-review-rating-required-1';
@@ -9,7 +9,7 @@ const productId = String(new URLSearchParams(location.search).get('id') || '').r
 // onAuthStateChanged sigue siendo la fuente que mantiene el estado al día,
 // pero este valor evita que un clic temprano confunda una sesión existente
 // con una cuenta anónima.
-let currentUser = auth.currentUser || null;
+let currentUser = getSessionUser() || null;
 let reviews = [];
 let likedReviewIds = new Set();
 let likedReplyIds = new Set();
@@ -761,7 +761,7 @@ if (productId) {
   renderSummary();
   renderForm();
   appCheckReady.then(subscribePublic);
-  onAuthStateChanged(auth, user => {
+  subscribeAuthState(user => {
     currentUser = user || null;
     loadSocialState().then(() => resumePendingIntent()).catch(error => {
       console.warn('[reviews] No se pudo cargar el estado social.', error);

@@ -1,8 +1,8 @@
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
+import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 import { collection, doc, onSnapshot, setDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-const SUPER_ADMIN = 'tintinaccs@gmail.com';
 const ROOT_ID = 'tt-pages-admin-root';
 let pages = [];
 let customPages = [];
@@ -38,7 +38,7 @@ const BUILTIN_PAGES = [
 ].map(([title, slug, path]) => ({ id:`builtin:${slug}`, title, slug, path, pageType:'builtin', published:true, template:'Tintin', updatedAt:null }));
 
 function root() { return document.getElementById(ROOT_ID); }
-function canUse() { return String(auth.currentUser?.email || '').toLowerCase() === SUPER_ADMIN; }
+function canUse() { return isSuperAdmin(auth.currentUser); }
 function showError(message) { const el = document.getElementById('tt-pages-error'); if (el) { el.textContent = message; el.classList.add('is-visible'); } }
 function clearError() { document.getElementById('tt-pages-error')?.classList.remove('is-visible'); }
 
@@ -116,4 +116,4 @@ async function subscribe() {
 }
 
 window.TintinPagesAdminRefresh = () => { if (canUse()) { subscribe(); render(); } };
-onAuthStateChanged(auth, user => { if (String(user?.email || '').toLowerCase() === SUPER_ADMIN) { subscribe(); render(); } });
+subscribeAuthState(user => { if (isSuperAdmin(user)) { subscribe(); render(); } });

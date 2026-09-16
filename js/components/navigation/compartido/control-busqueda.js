@@ -244,7 +244,7 @@ async function ensureProducts(force = false) {
     results.replaceChildren(stateNode('Cargando catálogo…'));
   }
 
-  loadPromise = import('../../../core/store/estado-productos.js?v=tintin-20260912-auth-closure-4')
+  loadPromise = import('../../../core/store/estado-productos.js?v=tintin-20260916-cache-bump-product-state-1')
     .then(module => {
       const load = window.TintinProductsStore?.ensureSearch || module.ensureProductsForSearch || module.loadAllProducts;
       return typeof load === 'function' ? load({ force }) : window.PRODUCTS || [];

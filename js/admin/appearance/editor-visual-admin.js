@@ -1,7 +1,7 @@
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 import { collection, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260915-final-polish-1';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2';
 import {
   CONTENT_PAGE_IDS, getNested, getPageDefaults, getPageSchema,
   mergeContent, sanitizeContentHref, setNested,
@@ -283,4 +283,4 @@ function bind(){
   window.addEventListener('beforeunload',event=>{if(!dirty)return;event.preventDefault();event.returnValue='';});window.AdminUnsaved?.register?.('visual-builder',{hasChanges:()=>dirty,message:'CAMBIOS SIN PUBLICAR en el editor visual.'});
 }
 
-onAuthStateChanged(auth,user=>{const allowed=String(user?.email||'').trim().toLowerCase()===SUPER_ADMIN;$('visual-editor').hidden=!allowed;if(!allowed||initialized)return;initialized=true;ensureStudioUi();bind();loadPage();});
+subscribeAuthState(user=>{const allowed=String(user?.email||'').trim().toLowerCase()===SUPER_ADMIN;$('visual-editor').hidden=!allowed;if(!allowed||initialized)return;initialized=true;ensureStudioUi();bind();loadPage();});

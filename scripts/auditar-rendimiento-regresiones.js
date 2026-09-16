@@ -49,11 +49,18 @@ check(
   'Una lectura de Firestore/App Check volvió a convertirse en bloqueo visual global.'
 );
 check('El loader conserva salida de emergencia', /STORE_GATE_TIMEOUT_MS\s*=\s*\d{3,}/.test(read('js/cargador-pagina.js')) && /RELEASE_TIMEOUT_MS\s*=\s*\d{2,}/.test(instantColor), 'El loader puede quedar infinito.');
+const storeGate = read('js/core/store-gate/control-tienda.js');
+const adminApp = read('js/admin/admin-app.js');
+const sessionCoordinator = read('js/core/auth/coordinador-sesion.js');
+const canonicalAuthListenerCount = (sessionCoordinator.match(/onAuthStateChanged\s*\(\s*auth/g) || []).length;
 check('Autenticación pública y administrativa siguen activas',
-  read('js/core/store-gate/control-tienda.js').includes('onAuthStateChanged') &&
-    (read('js/admin/admin-app.js').includes('onAuthStateChanged') ||
-      (read('js/admin/admin-app.js').includes('subscribeAuthState') && read('js/core/auth/coordinador-sesion.js').includes('onAuthStateChanged'))),
-  'La sesión dejó de controlar el acceso.');
+  storeGate.includes('subscribeAuthState') &&
+    adminApp.includes('subscribeAuthState') &&
+    sessionCoordinator.includes('export function subscribeAuthState') &&
+    canonicalAuthListenerCount === 1 &&
+    !/onAuthStateChanged\s*\(\s*auth/.test(storeGate) &&
+    !/onAuthStateChanged\s*\(\s*auth/.test(adminApp),
+  'La sesión dejó de controlar el acceso mediante la autoridad canónica.');
 check('Super Admin conserva acceso total', read('js/admin/admin-app.js').includes("currentRole === 'superadmin' || canDo(currentRole, moduleKey, actionKey)"), 'El bypass total se perdió.');
 check(
   'Panel Admin mantiene arranque protegido',

@@ -75,5 +75,5 @@ async function subscribeToScheme(schemeId) {
 // admin-images.html comparte este motor de colores, pero no debe cargar ese
 // editor ni dejar observadores esperando una interfaz que allí no existe.
 if (document.getElementById('visual-editor')) {
-  import('../appearance/visual-studio-global-admin.js?v=tintin-20260821-accounts-phase-a-3');
+  import('../appearance/visual-studio-global-admin.js?v=tintin-20260916-cache-bump-visual-global-1');
 }

@@ -4,7 +4,7 @@ import {
   getCartLocal,
   updateQty,
   removeFromCart,
-} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20260915-session-shell-3';
+} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20260916-cache-bump-cart-sync-1';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 

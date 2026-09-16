@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const login = fs.readFileSync(new URL('../../login.html', import.meta.url), 'utf8');
 const session = fs.readFileSync(new URL('../../js/core/auth/proteccion-sesion.js', import.meta.url), 'utf8');
@@ -9,6 +11,15 @@ const profileCode = profile.replace(/\/\/.*$/gm, '');
 const profilePage = fs.readFileSync(new URL('../../perfil.html', import.meta.url), 'utf8');
 const publicAuthNav = fs.readFileSync(new URL('../../js/core/auth/navegacion-autenticacion.js', import.meta.url), 'utf8');
 const publicCart = fs.readFileSync(new URL('../../js/components/cart/sincronizacion-carrito.js', import.meta.url), 'utf8');
+const superAdminIdentity = await import('../../js/core/auth/identidad-super-admin.js');
+
+function collectJavaScriptFiles(directory) {
+  return fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
+    const entryPath = path.join(directory, entry.name);
+    if (entry.isDirectory()) return collectJavaScriptFiles(entryPath);
+    return entry.isFile() && entry.name.endsWith('.js') ? [entryPath] : [];
+  });
+}
 
 test('login mantiene un único dueño del listener de Auth y evita redirecciones repetidas', () => {
   assert.equal((login.match(/onAuthStateChanged\(auth/g) || []).length, 0);
@@ -17,6 +28,40 @@ test('login mantiene un único dueño del listener de Auth y evita redirecciones
   assert.match(login, /explicitLoginInProgress/);
   assert.match(login, /clearGoogleRedirectPending\(\)/);
   assert.match(login, /window\.location\.replace\(/);
+});
+
+test('los consumidores de aplicación delegan Auth al coordinador de sesión', () => {
+  const jsRoot = fileURLToPath(new URL('../../js/', import.meta.url));
+  const excluded = [
+    path.join('core', 'auth', 'coordinador-sesion.js'),
+    path.join('diagnostic-shims', 'adaptador-autenticacion.js')
+  ];
+  const offenders = collectJavaScriptFiles(jsRoot).filter(file => {
+    const relative = path.relative(jsRoot, file);
+    if (excluded.includes(relative)) return false;
+    const source = fs.readFileSync(file, 'utf8')
+      .replace(/\/\/.*$/gm, '')
+      .replace(/\/\*[\s\S]*?\*\//g, '');
+    return /onAuthStateChanged\s*\(/.test(source)
+      || /import\s*\{[^}]*\bonAuthStateChanged\b[^}]*\}\s*from\s*['"]https:\/\/www\.gstatic\.com\/firebase\/10\.14\.1\/firebase-auth\.js['"]/.test(source);
+  });
+
+  assert.deepEqual(offenders, [], `listeners/imports directos fuera del coordinador: ${offenders.join(', ')}`);
+});
+
+test('la identidad privilegiada tiene una sola autoridad y conserva exclusividad por email', () => {
+  const identitySource = fs.readFileSync(new URL('../../js/core/auth/identidad-super-admin.js', import.meta.url), 'utf8');
+  const rolesSource = fs.readFileSync(new URL('../../js/core/auth/roles.js', import.meta.url), 'utf8');
+  const maestroSource = fs.readFileSync(new URL('../../js/admin/maestro/panel-maestro.js', import.meta.url), 'utf8');
+
+  assert.match(identitySource, /SUPER_ADMIN_EMAIL/);
+  assert.doesNotMatch(identitySource, /tintinaccs@gmail\.com/);
+  assert.match(rolesSource, /isSuperAdminEmail\(authenticatedEmail\)/);
+  assert.match(maestroSource, /import \{ isSuperAdmin \}/);
+  assert.equal(superAdminIdentity.isSuperAdminEmail('tintinaccs@gmail.com'), true);
+  assert.equal(superAdminIdentity.isSuperAdminEmail('otro@example.com'), false);
+  assert.equal(superAdminIdentity.isSuperAdmin({ email: ' TINTINACCS@GMAIL.COM ' }), true);
+  assert.equal(superAdminIdentity.isSuperAdmin({ email: 'otro@example.com', role: 'superadmin' }), false);
 });
 
 test('arranque global no vence ni cierra sesiones automáticamente', () => {

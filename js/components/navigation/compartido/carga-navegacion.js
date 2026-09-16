@@ -109,7 +109,7 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
 
 function loadAuthRuntime() {
   if (!authRuntimePromise) {
-    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20260915-session-shell-1').catch(error => {
+    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20260916-cache-bump-auth-nav-1').catch(error => {
       authRuntimePromise = null;
       throw error;
     });
@@ -206,7 +206,7 @@ function loadNavigationBehaviors() {
       import(versionedJsModule('components/navigation/movil/indicador-navegacion-movil.js')),
       import(versionedJsModule('components/navigation/movil/navegacion-compacta-movil.js')),
       import(versionedJsModule('components/navigation/compartido/enrutador.js')),
-      import('./control-busqueda.js?v=tintin-20260912-auth-closure-5'),
+      import('./control-busqueda.js?v=tintin-20260916-cache-bump-search-control-1'),
     ]))
     .then(results => {
       // Dynamic imports are cached, but the shell DOM is remounted on every

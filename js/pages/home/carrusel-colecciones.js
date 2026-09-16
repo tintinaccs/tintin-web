@@ -1,4 +1,4 @@
-import { onCollectionsUpdate } from '../collections/estado-colecciones.js?v=tintin-20260901-firestore-budget-3';
+import { onCollectionsUpdate } from '../collections/estado-colecciones.js?v=tintin-20260916-cache-bump-collection-state-1';
 
 const IMAGE_BASE = '/assets-tintin/images/collections/';
 const PLACEHOLDER = `${IMAGE_BASE}col-placeholder.webp`;

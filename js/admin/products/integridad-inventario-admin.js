@@ -1,5 +1,5 @@
 import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20260915-final-polish-1';
+import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2';
 import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20260910-auth-api-1';
 import {
   collection,

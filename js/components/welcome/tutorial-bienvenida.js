@@ -1,7 +1,7 @@
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 import { doc, getDoc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { getUserRole, SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260915-final-polish-1';
+import { getUserRole, SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2';
 import {
   DEFAULT_WELCOME_STEPS,
   WELCOME_VERSION,
@@ -231,7 +231,7 @@ import {
   // show(), que borra el overlay actual para crear uno nuevo desde el
   // paso 1 — se veía como si "se cerrara solo" sin que nadie lo tocara.
   let handled = false;
-  onAuthStateChanged(auth, async user => {
+  subscribeAuthState(async user => {
     if (!user || handled) return;
     handled = true;
     try {

@@ -7,9 +7,13 @@ import {
   doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import {
-  SUPER_ADMIN_EMAIL,
   ASSIGNABLE_ROLES,
 } from './contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
+import {
+  SUPER_ADMIN_EMAIL,
+  isSuperAdmin,
+  isSuperAdminEmail,
+} from './identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 
 // Única fuente de verdad para el cliente (importada por todo lo demás en
 // js/ que necesita identificar al Super Admin). Cloudflare Pages Functions
@@ -24,6 +28,7 @@ import {
 // (ver la arquitectura operativa canónica; el runtime vigente no despliega
 // Firebase Functions).
 export const SUPER_ADMIN = SUPER_ADMIN_EMAIL;
+export { isSuperAdmin, isSuperAdminEmail };
 
 // El mensaje de cuenta bloqueada (con el enlace de WhatsApp) vive en
 // js/components/modals/modal-bloqueo.js — showBlockedModal() — para que login.html y
@@ -177,7 +182,7 @@ export async function getUserRole(uid, email) {
   // La identidad elevada proviene exclusivamente de Firebase Authentication.
   // El campo email de users/{uid} es informativo y nunca concede permisos.
   const authenticatedEmail = String(email || auth.currentUser?.email || '').trim().toLowerCase();
-  if (authenticatedEmail === SUPER_ADMIN) return 'superadmin';
+  if (isSuperAdminEmail(authenticatedEmail)) return 'superadmin';
   try {
     const snap = await getDoc(doc(db, 'users', uid));
     if (!snap.exists()) return 'client';

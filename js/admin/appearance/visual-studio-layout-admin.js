@@ -1,6 +1,6 @@
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260915-final-polish-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2';
 
 const clone = value => JSON.parse(JSON.stringify(value));
 const DEFAULT_LAYOUT = Object.freeze({
@@ -75,4 +75,4 @@ async function publishLayout(){if(!confirm('Se publicará el header, navegación
 async function discardDraft(){if(dirty&&!confirm('¿Descartar únicamente los cambios de header/footer? Los borradores de campañas no se tocarán.'))return;loading=true;updateActions();try{const data=await api('POST',{action:'discard-layout'});layout=normalize(data.layout||publishedLayout);publishedLayout=clone(layout);dirty=false;render();setStatus('Cambios de diseño descartados.','saved');}catch(error){setStatus(error.message,'error');}finally{loading=false;updateActions();}}
 
 function waitForStudio(){if(install())return;const observer=new MutationObserver(()=>{if(install())observer.disconnect();});observer.observe(document.documentElement,{subtree:true,childList:true});}
-onAuthStateChanged(auth,user=>{if(String(user?.email||'').trim().toLowerCase()===SUPER_ADMIN)waitForStudio();});
+subscribeAuthState(user=>{if(String(user?.email||'').trim().toLowerCase()===SUPER_ADMIN)waitForStudio();});

@@ -76,7 +76,7 @@ check(
 
 check(
   'Super Admin inicia la sincronización de correos',
-  adminStore.includes("import('./sincronizacion-correo-admin.js?v=tintin-20260821-accounts-phase-a-3')"),
+  adminStore.includes("import('./sincronizacion-correo-admin.js?v=tintin-20260916-cache-bump-mail-sync-1')"),
   'El documento mínimo debe crearse al entrar al panel autorizado.'
 );
 

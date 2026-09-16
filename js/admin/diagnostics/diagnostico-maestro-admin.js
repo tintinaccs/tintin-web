@@ -1,6 +1,6 @@
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260915-final-polish-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 
 const API_URL = '/api/master-diagnostics';
 const STYLE_URL = '/css/admin/diagnostico-maestro.css?v=tintin-20260817-master-diagnostics-3';
@@ -442,7 +442,7 @@ function startForSuperAdmin(user) {
   loadMaster();
 }
 
-onAuthStateChanged(auth, user => {
+subscribeAuthState(user => {
   if (!user) {
     clearTimeout(pollTimer);
     pollTimer = null;

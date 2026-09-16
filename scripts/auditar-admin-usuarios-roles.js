@@ -33,7 +33,7 @@ check(
   'El Super Admin se identifica por el correo oficial de Firebase Auth',
   /export const SUPER_ADMIN = SUPER_ADMIN_EMAIL/.test(roles) &&
     accountContract.superAdminEmail === 'tintinaccs@gmail.com' &&
-    /if \(authenticatedEmail === SUPER_ADMIN\) return 'superadmin'/.test(roles),
+    /if \(isSuperAdminEmail\(authenticatedEmail\)\) return 'superadmin'/.test(roles),
   'La identidad de Super Admin no debe depender de un campo editable en Firestore.'
 );
 check(
