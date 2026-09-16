@@ -4,3 +4,16 @@ html{scroll-behavior:smooth;scrollbar-gutter:stable;background:#FFF6FA}html.tt-i
   body:has(.tt-page-hero) .tt-page-hero,
   body:has(.tt-page-hero) .section { content-visibility: visible; contain-intrinsic-size: auto; }
 }
+
+/* The shell is mounted after the document. Keep its unstyled variants out of
+   flow while their responsive styles load, otherwise the visible page jumps
+   when the desktop/tablet/mobile shell is inserted. */
+html.tt-navigation-styles-loading #tt-header-desktop-tablet,
+html.tt-navigation-styles-loading #tt-header-tablet,
+html.tt-navigation-styles-loading .tt-search-panel,
+html.tt-navigation-styles-loading .tt-tablet-menu,
+html.tt-navigation-styles-loading .tt-tabbar,
+html.tt-navigation-styles-loading .tt-cart-drawer,
+html.tt-navigation-styles-loading .tt-account-panel,
+html.tt-navigation-styles-loading .tt-collections-sheet,
+html.tt-navigation-styles-loading .tt-surface-layer { display: none !important; }
