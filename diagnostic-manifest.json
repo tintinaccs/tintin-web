@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5890a6077f924a167f193be44b0ade75247a194b5ac8923d48460c2e1d9eef41",
+  "sourceFingerprint": "9d9ce89b5e7cbd04d976a751287654c9ce4ec2319c3354e46042d970b1d9c35e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 816,
-    "textFiles": 779,
-    "totalBytes": 16187314,
+    "files": 817,
+    "textFiles": 780,
+    "totalBytes": 16211372,
     "pages": 19,
     "modules": 558
   },
@@ -20191,8 +20191,8 @@
     },
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
-      "bytes": 53251,
-      "sha256": "df348144abb5ab26bea235bbbcfb9848ff30afed1de72d2ad64cfc64a413b3c9",
+      "bytes": 53264,
+      "sha256": "48c4fb0271f8c575ba351cad9c5f1e8e67b4035f7dfe870be868420f9f943990",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20205,8 +20205,8 @@
           "line": 1
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
         },
@@ -20243,10 +20243,6 @@
       ],
       "endpoints": [
         {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 2
-        },
-        {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "line": 3
         }
@@ -20265,8 +20261,8 @@
     },
     {
       "path": "js/admin/appearance/visual-studio-global-admin.js",
-      "bytes": 21912,
-      "sha256": "a9f88a0b7449fc93155aeaecc9a56c0f7f9fc1ac2474512de759746a6a5904e1",
+      "bytes": 21925,
+      "sha256": "9dab10a02389d5bc07eaaf248066e5b900d3291943be8aa3a8b14190d3687d79",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20279,8 +20275,8 @@
           "line": 1
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
         },
@@ -20291,17 +20287,12 @@
           "line": 3
         }
       ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 2
-        }
-      ]
+      "endpoints": []
     },
     {
       "path": "js/admin/appearance/visual-studio-layout-admin.js",
-      "bytes": 16959,
-      "sha256": "94ca4d64e269860a1f3ab50ebc2c0905d67b5a424493d2a05afc99203af04135",
+      "bytes": 16972,
+      "sha256": "1155bc04afaf7db4f61fa0e6e93647509477918730a0eb087488c1d862a0d49d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20314,8 +20305,8 @@
           "line": 1
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
         },
@@ -20326,12 +20317,7 @@
           "line": 3
         }
       ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 2
-        }
-      ]
+      "endpoints": []
     },
     {
       "path": "js/admin/appearance/workspace-splitters.js",
@@ -20346,8 +20332,8 @@
     },
     {
       "path": "js/admin/collections/gestion-colecciones-admin.js",
-      "bytes": 8866,
-      "sha256": "cc9ee090ec57f136289a98e133738f28a59f99e7e36d2b67ed8ad112719f6bdc",
+      "bytes": 8878,
+      "sha256": "bdf075711a6e546e1087f64b4520c0243299de8613af54f5eb0be89741a9565d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20360,8 +20346,8 @@
           "line": 10
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 11
         },
@@ -20372,17 +20358,12 @@
           "line": 12
         }
       ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 11
-        }
-      ]
+      "endpoints": []
     },
     {
       "path": "js/admin/content/control-bienvenida-admin.js",
-      "bytes": 30153,
-      "sha256": "52589a84b2b8fc2286ca5869eaa084e168dd9f1d0dea3d1c27beb877fefd0e60",
+      "bytes": 30165,
+      "sha256": "e5cbf60260a35b9e6641fb157005d7a6d5d44fffd684fd3cfd5fcb2885b61a79",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20395,8 +20376,8 @@
           "line": 8
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 9
         },
@@ -20427,10 +20408,6 @@
       ],
       "endpoints": [
         {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 9
-        },
-        {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "line": 10
         }
@@ -20438,8 +20415,8 @@
     },
     {
       "path": "js/admin/content/gestion-contenido-admin.js",
-      "bytes": 21991,
-      "sha256": "ae98cda8b85751fd89e78b7766642cf1b42052ce53b698abde6a23cf4a49d8aa",
+      "bytes": 22003,
+      "sha256": "6a3d526dc1e73b66f00b9272e2ea796a9bd4390f425fe872c9b95c1b9e5d5c4a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20452,8 +20429,8 @@
           "line": 8
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 9
         },
@@ -20484,10 +20461,6 @@
       ],
       "endpoints": [
         {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 9
-        },
-        {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "line": 16
         }
@@ -20495,8 +20468,8 @@
     },
     {
       "path": "js/admin/diagnostics/diagnostico-maestro-admin.js",
-      "bytes": 18249,
-      "sha256": "a6ed810d6230fdc11aebcc54b6a64d159eb093e831dc0a994248ca0a4f0a4325",
+      "bytes": 18261,
+      "sha256": "12540c6dd3f5ff259af268f603650978506b4cf9a697c17ea64f99477f28e6f4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20515,18 +20488,13 @@
           "line": 2
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 3
         }
       ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 3
-        }
-      ]
+      "endpoints": []
     },
     {
       "path": "js/admin/diagnostics/diagnostico-sitio-admin.js",
@@ -20595,8 +20563,8 @@
     },
     {
       "path": "js/admin/diagnostics/estado-ecosistema-admin.js",
-      "bytes": 12776,
-      "sha256": "312290cf27ac3f87d04587b2724f21c7c68414b786e07fcc90660f3a3a2f912a",
+      "bytes": 12788,
+      "sha256": "c726146a767af9c3d55b1c36ad12358ee124061b3680874b9b0f5dcb10a29550",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20615,18 +20583,13 @@
           "line": 2
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 3
         }
       ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 3
-        }
-      ]
+      "endpoints": []
     },
     {
       "path": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
@@ -20676,8 +20639,8 @@
     },
     {
       "path": "js/admin/importacion-admin.js",
-      "bytes": 33677,
-      "sha256": "90582da32ec820aed03611ff253a26fd9a5738981cff81837ca013f1f67d7523",
+      "bytes": 33686,
+      "sha256": "58c29e9b096e4b69b2825b65a11516e06272dae9e8e7b88f4b41277c7e0cf3e3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20690,8 +20653,8 @@
           "line": 9
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 10
         },
@@ -20722,10 +20685,6 @@
       ],
       "endpoints": [
         {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 10
-        },
-        {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "line": 16
         }
@@ -20733,8 +20692,8 @@
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
-      "bytes": 26379,
-      "sha256": "a88632a46267712ee020a218f4233fbcef49df4e901ce461297aea1573c89d5e",
+      "bytes": 26391,
+      "sha256": "aa1b56ecbead8b128423d64b7768c894fc4d7ecf89a4e4ccc20349d5a88318b9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20747,8 +20706,8 @@
           "line": 1
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
         },
@@ -20765,12 +20724,7 @@
           "line": 8
         }
       ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 2
-        }
-      ]
+      "endpoints": []
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
@@ -20796,8 +20750,8 @@
     },
     {
       "path": "js/admin/notifications/notificaciones-admin.js",
-      "bytes": 19922,
-      "sha256": "b7ea13992d4085dca2f154b1e556a07bcf657c76ed4cac6b210259929de3ba5d",
+      "bytes": 19934,
+      "sha256": "c0a15f15b527ded4d8333de2b454044634156e4f8d47505852dd5edb9f29f6b5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20816,8 +20770,8 @@
           "line": 2
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 3
         },
@@ -20830,10 +20784,6 @@
       ],
       "endpoints": [
         {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 3
-        },
-        {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "line": 6
         }
@@ -20841,8 +20791,8 @@
     },
     {
       "path": "js/admin/notifications/notificaciones-push-maestro.js",
-      "bytes": 13956,
-      "sha256": "3ab82c804ba42c2eb2b06aa980c7124151ec9453025368003bff7ac7f5b41902",
+      "bytes": 13968,
+      "sha256": "2a4fd3d0cf1fa2ec95e1c1c5c5eccf178cc363bae8cf953935bb00cdb32b642a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20855,8 +20805,8 @@
           "line": 2
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 3
         },
@@ -20873,17 +20823,12 @@
           "line": 5
         }
       ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 3
-        }
-      ]
+      "endpoints": []
     },
     {
       "path": "js/admin/notifications/notificaciones-push.js",
-      "bytes": 16268,
-      "sha256": "00e904289b7fdabea58925d1dc839afb4b3d9f33e1ebce38314132b5558eefc8",
+      "bytes": 16280,
+      "sha256": "509948b5099c176ac420082fa32d4f00e6d88d6abab90ac09fef3c190a70a483",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20896,8 +20841,8 @@
           "line": 13
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 14
         },
@@ -20915,10 +20860,6 @@
         }
       ],
       "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 14
-        },
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging.js",
           "line": 22
@@ -20986,8 +20927,8 @@
     },
     {
       "path": "js/admin/pages/paginas-admin.js",
-      "bytes": 14437,
-      "sha256": "b2f62c4b5fbed223a768d32ec98a87333238afa346da105421179b2b249463f0",
+      "bytes": 14449,
+      "sha256": "2fd8cf63341d4446918d7459063964f306eeac3a9aba1a45ecb0552c74bac8d4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21000,8 +20941,8 @@
           "line": 1
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
         },
@@ -21013,10 +20954,6 @@
         }
       ],
       "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 2
-        },
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "line": 3
@@ -21025,8 +20962,8 @@
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin-v2.js",
-      "bytes": 77210,
-      "sha256": "b1213bbf5695c4bfabcd0aa0856b2b59c8d3905f6a96432908987c6f0cc1f1f1",
+      "bytes": 77222,
+      "sha256": "35de0f4d4f69c2c6ad202ed8498e2d197418fcfd6ca6235954e81295b9b2760d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21039,8 +20976,8 @@
           "line": 1
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
         },
@@ -21052,10 +20989,6 @@
         }
       ],
       "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 2
-        },
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "line": 3
@@ -21100,8 +21033,8 @@
     },
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
-      "bytes": 11681,
-      "sha256": "2bef9ae1e69c7581a2dc512ce7659eb440dc7e53da23c0550d9f874dd8c943af",
+      "bytes": 11587,
+      "sha256": "547189786b6112f63df475797fe993b4ea38747cf556d97f6b76b1708972721f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21114,18 +21047,13 @@
           "line": 7
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 8
         }
       ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 8
-        }
-      ]
+      "endpoints": []
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -21227,8 +21155,8 @@
     },
     {
       "path": "js/admin/settings/control-tienda-admin.js",
-      "bytes": 11785,
-      "sha256": "74014d6f63b130946b45ce5ce3ec3c4dc239bdda598c3bd9ad9c5a77d50005f3",
+      "bytes": 11795,
+      "sha256": "6ea653ed650c4525a3d35575e057ce3330bcc3a45cd2811a2a2162cc84e5aa7a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21247,32 +21175,28 @@
           "line": 16
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
-          "line": 19
+          "line": 17
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 25
+          "line": 23
         },
         {
           "raw": "./sincronizacion-correo-admin.js?v=tintin-20260821-accounts-phase-a-3",
           "target": "js/admin/settings/sincronizacion-correo-admin.js",
           "dynamic": true,
-          "line": 414
+          "line": 412
         }
       ],
       "endpoints": [
         {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 19
-        },
-        {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 25
+          "line": 23
         }
       ]
     },
@@ -21319,8 +21243,8 @@
     },
     {
       "path": "js/admin/settings/metodos-pago-admin.js",
-      "bytes": 21294,
-      "sha256": "30af251681d69ff140e1a5185871e046ea405f79d2966daa1a4b147d32d2ab7d",
+      "bytes": 21306,
+      "sha256": "38e7906d06955f692a8cecbebc5b951a446814cb074e8438c24efc32ef68f614",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21339,8 +21263,8 @@
           "line": 2
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 3
         },
@@ -21359,10 +21283,6 @@
       ],
       "endpoints": [
         {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 3
-        },
-        {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "line": 9
         }
@@ -21370,8 +21290,8 @@
     },
     {
       "path": "js/admin/settings/sincronizacion-correo-admin.js",
-      "bytes": 13272,
-      "sha256": "a2159bcf3fd3dd4ec7b4a07c8c1d870d83031b938b0587f9b21da0b47370f75f",
+      "bytes": 13284,
+      "sha256": "676f76944b5ca8fd6fc9041073368fecfc4069b59c17cfbe880dcedc6c0eebad",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21396,8 +21316,8 @@
           "line": 3
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 4
         },
@@ -21410,10 +21330,6 @@
       ],
       "endpoints": [
         {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 4
-        },
-        {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "line": 12
         }
@@ -21421,8 +21337,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 71500,
-      "sha256": "d5ac22e09a42de63edc864f59af71f3377a26003db4d22fc0cc43c01c2104642",
+      "bytes": 71509,
+      "sha256": "c3c9476b185ad9643e3ab3a7954fc07f64102005ac15d55fe7700d6c0e2ec9dc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21435,8 +21351,8 @@
           "line": 14
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 15
         },
@@ -21473,10 +21389,6 @@
       ],
       "endpoints": [
         {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 15
-        },
-        {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "line": 19
         },
@@ -21488,8 +21400,8 @@
     },
     {
       "path": "js/admin/users/ficha-usuario-admin.js",
-      "bytes": 11559,
-      "sha256": "1420ef165ffd4ddbb1a5a6216f1716c7ccb838173de1d874b2d78ea874832699",
+      "bytes": 11565,
+      "sha256": "65c633c9502fee65201858d6113b78e01bf96f79275fb90c0c6ff9dba876ce4a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21502,8 +21414,8 @@
           "line": 14
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 15
         },
@@ -21527,10 +21439,6 @@
         }
       ],
       "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 15
-        },
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "line": 24
@@ -23125,8 +23033,8 @@
     },
     {
       "path": "js/components/welcome/tutorial-bienvenida.js",
-      "bytes": 15851,
-      "sha256": "d2289185f02b133a31fabb795bc5417ce327443d85b4d731088eb8e833332de8",
+      "bytes": 15863,
+      "sha256": "e1d135c6667847c0b06d763114bc3ea3b7f2fd8dd13b52e74c4e817404bd847b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23139,8 +23047,8 @@
           "line": 1
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
         },
@@ -23164,10 +23072,6 @@
         }
       ],
       "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 2
-        },
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "line": 3
@@ -23234,8 +23138,8 @@
     },
     {
       "path": "js/core/auth/insignia-edicion.js",
-      "bytes": 5248,
-      "sha256": "2dca5bd4feae2f7981d436ca30116621af4da0e1dca0e8bd01ed4b26f2632812",
+      "bytes": 5246,
+      "sha256": "cb0583087b3bdc4226ffb4f348243a01527817e757f73ba2879386c9e941d176",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23248,8 +23152,8 @@
           "line": 1
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "./coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
         },
@@ -23266,12 +23170,7 @@
           "line": 4
         }
       ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 2
-        }
-      ]
+      "endpoints": []
     },
     {
       "path": "js/core/auth/navegacion-autenticacion.js",
@@ -23577,8 +23476,8 @@
     },
     {
       "path": "js/core/store-gate/control-tienda.js",
-      "bytes": 5821,
-      "sha256": "f12b5aaba57c91de921c046b1ad4a0488bcd5dbcffeb01d42a6e2350b4967276",
+      "bytes": 5823,
+      "sha256": "c7e619c73b803ec42f8c96ebf5c1c95dfa48c94032697371c23872c2a47d792e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23591,38 +23490,34 @@
           "line": 10
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
-          "line": 13
+          "line": 11
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 17
+          "line": 15
         },
         {
           "raw": "../auth/roles.js?v=tintin-20260915-final-polish-1",
           "target": "js/core/auth/roles.js",
           "dynamic": false,
-          "line": 18
+          "line": 16
         },
         {
           "raw": "./nucleo-control-tienda.js?v=tintin-20260909-store-gate-degraded-fix-1",
           "target": "js/core/store-gate/nucleo-control-tienda.js",
           "dynamic": false,
-          "line": 27
+          "line": 25
         }
       ],
       "endpoints": [
         {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 13
-        },
-        {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 17
+          "line": 15
         }
       ]
     },
@@ -25079,8 +24974,8 @@
     },
     {
       "path": "js/pages/product/mantenimiento-producto.js",
-      "bytes": 11521,
-      "sha256": "d9a0af5d93457953bed5937be495eb131a274b0947d02efb7cec2e180bc98977",
+      "bytes": 11533,
+      "sha256": "7f3f9aabeb1efb527cb1995215fcf97521ba7a78e85e5ca800dcd1b4c60e2faf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25093,8 +24988,8 @@
           "line": 2
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 3
         },
@@ -25105,12 +25000,7 @@
           "line": 4
         }
       ],
-      "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 3
-        }
-      ]
+      "endpoints": []
     },
     {
       "path": "js/pages/product/productos-relacionados.js",
@@ -25130,8 +25020,8 @@
     },
     {
       "path": "js/pages/product/resenas-producto.js",
-      "bytes": 37333,
-      "sha256": "5eb93ae35b58a9b81d9197dd6bb1afe40732df7a7c88b0a929c6e9aca7f6a85a",
+      "bytes": 37361,
+      "sha256": "400c69020748031d8cb6952d6be07afb774750e322cced5c4fb328590deeec9b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25144,8 +25034,8 @@
           "line": 1
         },
         {
-          "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "target": null,
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2",
+          "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
         },
@@ -25169,10 +25059,6 @@
         }
       ],
       "endpoints": [
-        {
-          "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 2
-        },
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "line": 3
@@ -29867,8 +29753,8 @@
     },
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
-      "bytes": 8159,
-      "sha256": "243eee8a8b80d844868df99b6b2d0d5d4cb06a5b3a7d06752f5d045fc729f806",
+      "bytes": 9492,
+      "sha256": "25965e8fc3be44b313e07e1164162ea6ac8bf08e705196acef574b84303c0fe0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29891,6 +29777,18 @@
           "target": null,
           "dynamic": false,
           "line": 3
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 5
         }
       ],
       "endpoints": []
@@ -32529,6 +32427,12 @@
       "sha256": "4e9891bacd485960a19a98866479de93d1464950139eacab0b996a025aee5c5f"
     },
     {
+      "path": "FULL_JOURNEY_CODE_AUDIT.md",
+      "extension": ".md",
+      "bytes": 22614,
+      "sha256": "97952a75be4a9e68ea7da14964ba19b66a690a77432ed37bedd797dc620a3a07"
+    },
+    {
       "path": "README.md",
       "extension": ".md",
       "bytes": 1104,
@@ -34241,8 +34145,8 @@
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
       "extension": ".js",
-      "bytes": 53251,
-      "sha256": "df348144abb5ab26bea235bbbcfb9848ff30afed1de72d2ad64cfc64a413b3c9"
+      "bytes": 53264,
+      "sha256": "48c4fb0271f8c575ba351cad9c5f1e8e67b4035f7dfe870be868420f9f943990"
     },
     {
       "path": "js/admin/appearance/preview-dynamic-targets.js",
@@ -34253,14 +34157,14 @@
     {
       "path": "js/admin/appearance/visual-studio-global-admin.js",
       "extension": ".js",
-      "bytes": 21912,
-      "sha256": "a9f88a0b7449fc93155aeaecc9a56c0f7f9fc1ac2474512de759746a6a5904e1"
+      "bytes": 21925,
+      "sha256": "9dab10a02389d5bc07eaaf248066e5b900d3291943be8aa3a8b14190d3687d79"
     },
     {
       "path": "js/admin/appearance/visual-studio-layout-admin.js",
       "extension": ".js",
-      "bytes": 16959,
-      "sha256": "94ca4d64e269860a1f3ab50ebc2c0905d67b5a424493d2a05afc99203af04135"
+      "bytes": 16972,
+      "sha256": "1155bc04afaf7db4f61fa0e6e93647509477918730a0eb087488c1d862a0d49d"
     },
     {
       "path": "js/admin/appearance/workspace-splitters.js",
@@ -34271,26 +34175,26 @@
     {
       "path": "js/admin/collections/gestion-colecciones-admin.js",
       "extension": ".js",
-      "bytes": 8866,
-      "sha256": "cc9ee090ec57f136289a98e133738f28a59f99e7e36d2b67ed8ad112719f6bdc"
+      "bytes": 8878,
+      "sha256": "bdf075711a6e546e1087f64b4520c0243299de8613af54f5eb0be89741a9565d"
     },
     {
       "path": "js/admin/content/control-bienvenida-admin.js",
       "extension": ".js",
-      "bytes": 30153,
-      "sha256": "52589a84b2b8fc2286ca5869eaa084e168dd9f1d0dea3d1c27beb877fefd0e60"
+      "bytes": 30165,
+      "sha256": "e5cbf60260a35b9e6641fb157005d7a6d5d44fffd684fd3cfd5fcb2885b61a79"
     },
     {
       "path": "js/admin/content/gestion-contenido-admin.js",
       "extension": ".js",
-      "bytes": 21991,
-      "sha256": "ae98cda8b85751fd89e78b7766642cf1b42052ce53b698abde6a23cf4a49d8aa"
+      "bytes": 22003,
+      "sha256": "6a3d526dc1e73b66f00b9272e2ea796a9bd4390f425fe872c9b95c1b9e5d5c4a"
     },
     {
       "path": "js/admin/diagnostics/diagnostico-maestro-admin.js",
       "extension": ".js",
-      "bytes": 18249,
-      "sha256": "a6ed810d6230fdc11aebcc54b6a64d159eb093e831dc0a994248ca0a4f0a4325"
+      "bytes": 18261,
+      "sha256": "12540c6dd3f5ff259af268f603650978506b4cf9a697c17ea64f99477f28e6f4"
     },
     {
       "path": "js/admin/diagnostics/diagnostico-sitio-admin.js",
@@ -34301,8 +34205,8 @@
     {
       "path": "js/admin/diagnostics/estado-ecosistema-admin.js",
       "extension": ".js",
-      "bytes": 12776,
-      "sha256": "312290cf27ac3f87d04587b2724f21c7c68414b786e07fcc90660f3a3a2f912a"
+      "bytes": 12788,
+      "sha256": "c726146a767af9c3d55b1c36ad12358ee124061b3680874b9b0f5dcb10a29550"
     },
     {
       "path": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
@@ -34325,14 +34229,14 @@
     {
       "path": "js/admin/importacion-admin.js",
       "extension": ".js",
-      "bytes": 33677,
-      "sha256": "90582da32ec820aed03611ff253a26fd9a5738981cff81837ca013f1f67d7523"
+      "bytes": 33686,
+      "sha256": "58c29e9b096e4b69b2825b65a11516e06272dae9e8e7b88f4b41277c7e0cf3e3"
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "extension": ".js",
-      "bytes": 26379,
-      "sha256": "a88632a46267712ee020a218f4233fbcef49df4e901ce461297aea1573c89d5e"
+      "bytes": 26391,
+      "sha256": "aa1b56ecbead8b128423d64b7768c894fc4d7ecf89a4e4ccc20349d5a88318b9"
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
@@ -34349,20 +34253,20 @@
     {
       "path": "js/admin/notifications/notificaciones-admin.js",
       "extension": ".js",
-      "bytes": 19922,
-      "sha256": "b7ea13992d4085dca2f154b1e556a07bcf657c76ed4cac6b210259929de3ba5d"
+      "bytes": 19934,
+      "sha256": "c0a15f15b527ded4d8333de2b454044634156e4f8d47505852dd5edb9f29f6b5"
     },
     {
       "path": "js/admin/notifications/notificaciones-push-maestro.js",
       "extension": ".js",
-      "bytes": 13956,
-      "sha256": "3ab82c804ba42c2eb2b06aa980c7124151ec9453025368003bff7ac7f5b41902"
+      "bytes": 13968,
+      "sha256": "2a4fd3d0cf1fa2ec95e1c1c5c5eccf178cc363bae8cf953935bb00cdb32b642a"
     },
     {
       "path": "js/admin/notifications/notificaciones-push.js",
       "extension": ".js",
-      "bytes": 16268,
-      "sha256": "00e904289b7fdabea58925d1dc839afb4b3d9f33e1ebce38314132b5558eefc8"
+      "bytes": 16280,
+      "sha256": "509948b5099c176ac420082fa32d4f00e6d88d6abab90ac09fef3c190a70a483"
     },
     {
       "path": "js/admin/orders/eliminacion-pedidos-admin.js",
@@ -34379,14 +34283,14 @@
     {
       "path": "js/admin/pages/paginas-admin.js",
       "extension": ".js",
-      "bytes": 14437,
-      "sha256": "b2f62c4b5fbed223a768d32ec98a87333238afa346da105421179b2b249463f0"
+      "bytes": 14449,
+      "sha256": "2fd8cf63341d4446918d7459063964f306eeac3a9aba1a45ecb0552c74bac8d4"
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin-v2.js",
       "extension": ".js",
-      "bytes": 77210,
-      "sha256": "b1213bbf5695c4bfabcd0aa0856b2b59c8d3905f6a96432908987c6f0cc1f1f1"
+      "bytes": 77222,
+      "sha256": "35de0f4d4f69c2c6ad202ed8498e2d197418fcfd6ca6235954e81295b9b2760d"
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin.js",
@@ -34403,8 +34307,8 @@
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
       "extension": ".js",
-      "bytes": 11681,
-      "sha256": "2bef9ae1e69c7581a2dc512ce7659eb440dc7e53da23c0550d9f874dd8c943af"
+      "bytes": 11587,
+      "sha256": "547189786b6112f63df475797fe993b4ea38747cf556d97f6b76b1708972721f"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -34439,8 +34343,8 @@
     {
       "path": "js/admin/settings/control-tienda-admin.js",
       "extension": ".js",
-      "bytes": 11785,
-      "sha256": "74014d6f63b130946b45ce5ce3ec3c4dc239bdda598c3bd9ad9c5a77d50005f3"
+      "bytes": 11795,
+      "sha256": "6ea653ed650c4525a3d35575e057ce3330bcc3a45cd2811a2a2162cc84e5aa7a"
     },
     {
       "path": "js/admin/settings/esquema-color-admin.js",
@@ -34451,26 +34355,26 @@
     {
       "path": "js/admin/settings/metodos-pago-admin.js",
       "extension": ".js",
-      "bytes": 21294,
-      "sha256": "30af251681d69ff140e1a5185871e046ea405f79d2966daa1a4b147d32d2ab7d"
+      "bytes": 21306,
+      "sha256": "38e7906d06955f692a8cecbebc5b951a446814cb074e8438c24efc32ef68f614"
     },
     {
       "path": "js/admin/settings/sincronizacion-correo-admin.js",
       "extension": ".js",
-      "bytes": 13272,
-      "sha256": "a2159bcf3fd3dd4ec7b4a07c8c1d870d83031b938b0587f9b21da0b47370f75f"
+      "bytes": 13284,
+      "sha256": "676f76944b5ca8fd6fc9041073368fecfc4069b59c17cfbe880dcedc6c0eebad"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 71500,
-      "sha256": "d5ac22e09a42de63edc864f59af71f3377a26003db4d22fc0cc43c01c2104642"
+      "bytes": 71509,
+      "sha256": "c3c9476b185ad9643e3ab3a7954fc07f64102005ac15d55fe7700d6c0e2ec9dc"
     },
     {
       "path": "js/admin/users/ficha-usuario-admin.js",
       "extension": ".js",
-      "bytes": 11559,
-      "sha256": "1420ef165ffd4ddbb1a5a6216f1716c7ccb838173de1d874b2d78ea874832699"
+      "bytes": 11565,
+      "sha256": "65c633c9502fee65201858d6113b78e01bf96f79275fb90c0c6ff9dba876ce4a"
     },
     {
       "path": "js/admin/users/gestion-usuarios-admin.js",
@@ -34937,8 +34841,8 @@
     {
       "path": "js/components/welcome/tutorial-bienvenida.js",
       "extension": ".js",
-      "bytes": 15851,
-      "sha256": "d2289185f02b133a31fabb795bc5417ce327443d85b4d731088eb8e833332de8"
+      "bytes": 15863,
+      "sha256": "e1d135c6667847c0b06d763114bc3ea3b7f2fd8dd13b52e74c4e817404bd847b"
     },
     {
       "path": "js/core/auth/cliente-api-autenticado.js",
@@ -34961,8 +34865,8 @@
     {
       "path": "js/core/auth/insignia-edicion.js",
       "extension": ".js",
-      "bytes": 5248,
-      "sha256": "2dca5bd4feae2f7981d436ca30116621af4da0e1dca0e8bd01ed4b26f2632812"
+      "bytes": 5246,
+      "sha256": "cb0583087b3bdc4226ffb4f348243a01527817e757f73ba2879386c9e941d176"
     },
     {
       "path": "js/core/auth/navegacion-autenticacion.js",
@@ -35033,8 +34937,8 @@
     {
       "path": "js/core/store-gate/control-tienda.js",
       "extension": ".js",
-      "bytes": 5821,
-      "sha256": "f12b5aaba57c91de921c046b1ad4a0488bcd5dbcffeb01d42a6e2350b4967276"
+      "bytes": 5823,
+      "sha256": "c7e619c73b803ec42f8c96ebf5c1c95dfa48c94032697371c23872c2a47d792e"
     },
     {
       "path": "js/core/store-gate/nucleo-control-tienda.js",
@@ -35411,8 +35315,8 @@
     {
       "path": "js/pages/product/mantenimiento-producto.js",
       "extension": ".js",
-      "bytes": 11521,
-      "sha256": "d9a0af5d93457953bed5937be495eb131a274b0947d02efb7cec2e180bc98977"
+      "bytes": 11533,
+      "sha256": "7f3f9aabeb1efb527cb1995215fcf97521ba7a78e85e5ca800dcd1b4c60e2faf"
     },
     {
       "path": "js/pages/product/productos-relacionados.js",
@@ -35423,8 +35327,8 @@
     {
       "path": "js/pages/product/resenas-producto.js",
       "extension": ".js",
-      "bytes": 37333,
-      "sha256": "5eb93ae35b58a9b81d9197dd6bb1afe40732df7a7c88b0a929c6e9aca7f6a85a"
+      "bytes": 37361,
+      "sha256": "400c69020748031d8cb6952d6be07afb774750e322cced5c4fb328590deeec9b"
     },
     {
       "path": "js/pages/product/seleccion-producto.js",
@@ -36575,14 +36479,14 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 306,
-      "sha256": "11bac63256486bdb2a777ba037e1175951a1b19aaa3d4724403fd1423a69eb65"
+      "bytes": 38,
+      "sha256": "dd9d3b46a69239cd812969333746634c254684c83bb0c9501af9d578669e38b8"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 38722,
-      "sha256": "97d9ab4d8a7402203d8fe3238845189af7d0a56ba0e9727201b13668929ede7d"
+      "bytes": 38914,
+      "sha256": "8f89ce42bb709b9242291f7f9ef7000b2bcc950437dbe0d5899a4074a3823c1c"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -36857,8 +36761,8 @@
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 8159,
-      "sha256": "243eee8a8b80d844868df99b6b2d0d5d4cb06a5b3a7d06752f5d045fc729f806"
+      "bytes": 9492,
+      "sha256": "25965e8fc3be44b313e07e1164162ea6ac8bf08e705196acef574b84303c0fe0"
     },
     {
       "path": "tests/cache/cache-headers.test.mjs",
@@ -40076,12 +39980,12 @@
           },
           {
             "file": "js/admin/settings/control-tienda-admin.js",
-            "line": 27,
+            "line": 25,
             "operation": "doc"
           },
           {
             "file": "js/admin/settings/control-tienda-admin.js",
-            "line": 28,
+            "line": 26,
             "operation": "doc"
           },
           {
@@ -40111,12 +40015,12 @@
           },
           {
             "file": "js/core/store-gate/control-tienda.js",
-            "line": 42,
+            "line": 40,
             "operation": "doc"
           },
           {
             "file": "js/core/store-gate/control-tienda.js",
-            "line": 43,
+            "line": 41,
             "operation": "doc"
           },
           {
