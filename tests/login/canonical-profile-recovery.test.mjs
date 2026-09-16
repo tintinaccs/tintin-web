@@ -11,7 +11,7 @@ test('login repara una sesión Auth cuyo users/{uid} no existe usando ensureUser
   assert.match(source, /getDoc\(ref\)/);
   assert.match(source, /if \(snapshot\.exists\(\)\) return/);
   assert.match(source, /ensureUserProfile\(db, user, method\)/);
-  assert.match(source, /auth\.authStateReady/);
+  assert.match(source, /subscribeAuthState\(/);
 });
 
 test('guardar Últimos datos espera la reparación canónica y no hace signOut', () => {

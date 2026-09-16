@@ -9,7 +9,7 @@
  */
 import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { GLOBAL_TOKENS, DEVICE_BREAKPOINTS, buildDefaultTokenMap } from './esquema-color-catalogo.js?v=tintin-20260716-cloudinary-fix-1';
+import { GLOBAL_TOKENS, DEVICE_BREAKPOINTS, buildDefaultTokenMap } from './esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1';
 
 const CACHE_KEY = 'tt_color_scheme_global';
 const APPEARANCE_DOC = { col: 'settings', id: 'appearance' };

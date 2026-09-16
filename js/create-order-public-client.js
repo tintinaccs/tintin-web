@@ -19,10 +19,6 @@ function phoneForOrderServer(value) {
 }
 
 export async function createOrderViaServer(draft) {
-  // Firebase renueva automáticamente los ID tokens cuando hace falta.
-  // Forzar la renovación en cada confirmación puede invalidar una sesión que
-  // seguía siendo utilizable y hacer que el checkout parezca cerrar la cuenta
-  // justo después de crear el pedido.
   const user = auth.currentUser;
   if (!user) return { ok: false, error: 'missing_id_token' };
   const idToken = await user.getIdToken();
@@ -36,11 +32,11 @@ export async function createOrderViaServer(draft) {
   const controller = new AbortController();
   const timeout = window.setTimeout(() => controller.abort(), CREATE_ORDER_TIMEOUT_MS);
 
-  try {
+  const request = async token => {
     const response = await authenticatedFetch(CREATE_ORDER_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action: 'createOrder', idToken, ...serverDraft }),
+      body: JSON.stringify({ action: 'createOrder', idToken: token, ...serverDraft }),
       signal: controller.signal
     }, {
       retryInit: refreshedToken => ({
@@ -58,6 +54,20 @@ export async function createOrderViaServer(draft) {
       console.error('[create-order-public-client] El endpoint devolvió una respuesta no válida. HTTP', response.status);
       return { ok: false, error: 'invalid_response', status: response.status };
     }
+  };
+
+  try {
+    const result = await request(idToken);
+    // El bridge puede propagar la respuesta JSON de Apps Script con HTTP 200.
+    // En ese caso authenticatedFetch no ve el 401 y no llega a renovar el
+    // token. Reintentamos una sola vez con un token fresco; requestId mantiene
+    // la operación idempotente si el primer intento alcanzó a crear el pedido.
+    if (result?.ok === false && result.error === 'invalid_id_token') {
+      const refreshedToken = await user.getIdToken(true);
+      if (!refreshedToken) return { ok: false, error: 'missing_id_token' };
+      return await request(refreshedToken);
+    }
+    return result;
   } catch (error) {
     if (error?.name === 'AbortError') {
       return { ok: false, error: 'server_timeout' };

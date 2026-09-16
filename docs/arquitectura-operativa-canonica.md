@@ -29,7 +29,7 @@ GitHub Pages queda únicamente como fallback manual. No se publica en cada push 
 
 ## Firebase y Google Cloud
 
-`firebase.json` solo registra las reglas de Firestore. El directorio `firebase-cloud-functions-inactive/` es histórico y no forma parte del runtime. No debe existir un workflow que despliegue Firebase Functions.
+`firebase.json` solo registra las reglas de Firestore. El runtime no conserva copias históricas de Firebase Functions: el árbol inactivo fue retirado para evitar una segunda autoridad confundible. No debe existir un workflow que despliegue Firebase Functions.
 
 La cuenta de servicio Firebase permanece en el backend Cloudflare, donde ya se necesita para las operaciones administrativas. El scheduler de GitHub no debe duplicar esa clave privada en Actions: para tareas server-to-server se usa identidad federada OIDC de GitHub y el backend valida repositorio, rama, workflow, evento, audiencia, vigencia y firma antes de ejecutar.
 

@@ -1,5 +1,5 @@
 import { auth, db, appCheckReady, authPersistenceReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 import { collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { heartIconMarkup } from './icono-corazon.js?v=tintin-20260817-heart-icon-1';
 
@@ -70,7 +70,6 @@ function loginForCurrentPage() {
 
 async function stableAuthUser() {
   try { await authPersistenceReady; } catch {}
-  try { await auth.authStateReady?.(); } catch {}
   const user = auth.currentUser || currentUser || null;
   if (user) currentUser = user;
   return user;
@@ -132,21 +131,11 @@ document.addEventListener('click', async event => {
   if (!addButton) return;
   const item = items.find(entry => entry.id === String(addButton.dataset.favoriteAddCart || ''));
   if (!item) return;
-  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20260910-auth-retry-1');
+  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20260915-session-shell-3');
   await cart.addToCart({ ...item, qty: 1 });
 }, true);
 
-// No pintar corazones antes de saber si hay sesión: auth.currentUser queda
-// null/obsoleto hasta que authStateReady() resuelve, y un publish() previo
-// muestra como "no favorito" un producto que sí lo es para un usuario con
-// sesión iniciada.
-let authResolved = false;
-function publishWhenReady() {
-  if (authResolved) { publish(); return; }
-  stableAuthUser().then(publish);
-}
-
-window.addEventListener('tintin:products-loaded', publishWhenReady);
+window.addEventListener('tintin:products-loaded', publish);
 window.TintinFavorites = {
   getAll: () => [...items],
   has: id => items.some(item => item.id === String(id)),
@@ -154,8 +143,7 @@ window.TintinFavorites = {
   refresh: publish,
 };
 
-onAuthStateChanged(auth, user => {
-  authResolved = true;
+subscribeAuthState(user => {
   unsubscribe?.();
   unsubscribe = null;
   currentUser = user || null;
@@ -163,3 +151,4 @@ onAuthStateChanged(auth, user => {
   publish();
   if (user) appCheckReady.then(() => currentUser?.uid === user.uid && subscribe(user));
 });
+publish();

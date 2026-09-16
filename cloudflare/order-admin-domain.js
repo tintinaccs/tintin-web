@@ -238,11 +238,29 @@ async function createOrderAttempt(env, input, actor, { get, commit }) {
   if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) throw new Error('Correo de contacto inválido.');
 
   const { items, byProduct, documents } = await resolveCanonicalCreationItems(env, input.items, get);
+  const requestedOrderId = clean(input.orderId, 220);
+  if (requestedOrderId && ORDER_ID_PATTERN.test(requestedOrderId)) {
+    const existingDocument = await get(env, `orders/${encodeURIComponent(requestedOrderId)}`);
+    if (existingDocument) {
+      const existingOrder = decodeFirestoreFields(existingDocument.fields || {});
+      return {
+        orderId: requestedOrderId,
+        orderNumber: existingOrder.orderNumber || existingOrder.shortId || '',
+        shortId: existingOrder.shortId || existingOrder.orderNumber || '',
+        changeId: existingOrder.lastChangeId || '',
+        changedProducts: 0,
+        duplicate: true,
+        order: existingOrder,
+        ...auditSummary(existingOrder),
+      };
+    }
+  }
+
   const sequenceDocument = await get(env, 'settings/orderSequence');
   const sequence = sequenceDocument ? decodeFirestoreFields(sequenceDocument.fields || {}) : {};
   const sequenceNumber = Math.max(0, Math.floor(Number(sequence.lastNumber || 0))) + 1;
   const orderNumber = formatOrderNumber(sequenceNumber);
-  const orderId = `manual_${crypto.randomUUID().replaceAll('-', '')}`;
+  const orderId = requestedOrderId || `manual_${crypto.randomUUID().replaceAll('-', '')}`;
   const now = new Date();
   const changeId = clean(input.changeId, 120) || makeChangeId(context.origin.includes('sheets') ? 'sheet_create' : 'admin_create');
   const shippingCost = money(input.shippingCost ?? 0, 'Costo de envío');
@@ -261,7 +279,11 @@ async function createOrderAttempt(env, input, actor, { get, commit }) {
 
   const order = {
     requestId: orderId,
-    source: context.origin.includes('sheets') ? 'google-sheets-manual-v1' : 'superadmin-manual-v2',
+    source: context.origin.includes('public-checkout')
+      ? 'public-checkout-v1'
+      : context.origin.includes('sheets')
+        ? 'google-sheets-manual-v1'
+        : 'superadmin-manual-v2',
     shortId: orderNumber,
     orderNumber,
     orderSequenceNumber: sequenceNumber,
