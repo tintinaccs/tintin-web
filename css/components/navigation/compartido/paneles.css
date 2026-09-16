@@ -17,7 +17,7 @@
 .tt-shared-backdrop {
   position: fixed;
   inset: 0;
-  z-index: var(--tt-z-dropdown);
+  z-index: var(--tt-z-dropdown, 1450);
   display: block;
   border: 0;
   background: rgba(38, 12, 23, .34);
@@ -34,7 +34,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: calc(var(--tt-z-dropdown) + 5);
+  z-index: calc(var(--tt-z-dropdown, 1450) + 5);
   display: none;
   transform-origin: 0 0;
   pointer-events: none;
@@ -50,10 +50,10 @@
 .tt-search-panel,
 .tt-cart-drawer,
 .tt-account-drawer,
-.tt-collections-sheet { z-index: var(--tt-z-surface) !important; }
+.tt-collections-sheet { z-index: var(--tt-z-surface, 1460) !important; }
 
 #tt-header-desktop-tablet:has([data-tt-surface].open) {
-  z-index: var(--tt-z-surface-active) !important;
+  z-index: var(--tt-z-surface-active, 1470) !important;
   isolation: isolate;
 }
 

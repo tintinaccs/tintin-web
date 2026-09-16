@@ -1,20 +1,21 @@
 import { versionedSiteAsset } from './configuracion.js?v=tintin-20260909-unified-navigation-assets-3';
 
-const HEADER_RESPONSIVE_VERSION = 'tintin-20260824-header-responsive-sync-1';
+const HEADER_DESKTOP_VERSION = 'tintin-20260824-header-responsive-sync-1';
+const HEADER_RESPONSIVE_VERSION = 'tintin-20260916-z-index-fallback-1';
 const NAVIGATION_SHARED_VERSION = 'tintin-20260825-responsive-css-budget-2';
-const NAVIGATION_PANEL_VERSION = 'tintin-20260910-home-tablet-gap-1';
+const NAVIGATION_PANEL_VERSION = 'tintin-20260916-surface-z-index-fallback-1';
 const MOBILE_SOLID_VERSION = 'tintin-20260817-cls-desktop-stable-3';
 const NOTIFICATIONS_VERSION = 'tintin-20260907-notifications-badge-anchor-1';
 
 const NAVIGATION_STYLES = Object.freeze([
-  ['tt-navigation-desktop-css', 'css/components/navigation/escritorio/encabezado-escritorio.css', HEADER_RESPONSIVE_VERSION],
+  ['tt-navigation-desktop-css', 'css/components/navigation/escritorio/encabezado-escritorio.css', HEADER_DESKTOP_VERSION],
   ['tt-navigation-tablet-css', 'css/components/navigation/tableta/encabezado-tableta.css', HEADER_RESPONSIVE_VERSION],
   ['tt-navigation-mobile-css', 'css/components/navigation/movil/encabezado-movil.css', HEADER_RESPONSIVE_VERSION],
   ['tt-navigation-mobile-solid-css', 'css/components/navigation/movil/fondos-solidos-movil.css', MOBILE_SOLID_VERSION],
   ['tt-navigation-notifications-css', 'css/components/notifications/notificaciones-sociales.css', NOTIFICATIONS_VERSION],
   ['tt-navigation-shared-css', 'css/components/navigation/compartido/transiciones-navegacion.css', NAVIGATION_SHARED_VERSION],
   ['tt-surface-controller-css', 'css/components/navigation/compartido/paneles.css', NAVIGATION_PANEL_VERSION],
-  ['tt-navigation-notification-surface-css', 'css/components/navigation/compartido/superficie-notificaciones.css', HEADER_RESPONSIVE_VERSION],
+  ['tt-navigation-notification-surface-css', 'css/components/navigation/compartido/superficie-notificaciones.css', HEADER_DESKTOP_VERSION],
   ['tt-navigation-search-css', 'css/components/navigation/compartido/busqueda.css', NAVIGATION_SHARED_VERSION],
 ]);
 
