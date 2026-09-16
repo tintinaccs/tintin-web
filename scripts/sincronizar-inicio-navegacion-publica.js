@@ -12,17 +12,19 @@ const LOADER_VERSION = 'tintin-20260911-hero-no-entry-animation-1';
 const STORE_GATE_VERSION = 'tintin-20260909-store-gate-degraded-fix-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
 const PUBLIC_SHELL_VERSION = 'tintin-20260915-session-shell-3';
-const NAV_ENTRY_VERSION = 'tintin-20260915-session-shell-2';
+const NAV_ENTRY_VERSION = 'tintin-20260916-z-index-fallback-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20260911-hero-no-entry-animation-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20260915-session-shell-3';
 const PROFILE_GATE_VERSION = 'tintin-20260915-session-shell-3';
 const NAV_HEADER_VERSION = 'tintin-20260824-header-responsive-sync-1';
+const NAV_TABLET_VERSION = 'tintin-20260916-z-index-fallback-1';
+const NAV_MOBILE_VERSION = 'tintin-20260916-z-index-fallback-1';
 const UNIFIED_THEME_VERSION = 'tintin-20260915-final-polish-1';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
-  ['css/components/navigation/tableta/encabezado-tableta.css', NAV_HEADER_VERSION, '(min-width: 768px) and (max-width: 1024px)'],
-  ['css/components/navigation/movil/encabezado-movil.css', NAV_HEADER_VERSION, '(max-width: 767px)'],
+  ['css/components/navigation/tableta/encabezado-tableta.css', NAV_TABLET_VERSION, '(min-width: 768px) and (max-width: 1024px)'],
+  ['css/components/navigation/movil/encabezado-movil.css', NAV_MOBILE_VERSION, '(max-width: 767px)'],
 ];
 const PUBLIC_PAGES = [
   // 404.html se excluye a propósito: Cloudflare Pages la sirve verbatim en

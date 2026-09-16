@@ -7,7 +7,7 @@ import { renderAccountDrawer } from './compartido/panel-cuenta.js?v=tintin-20260
 import { renderCollectionsSheet } from './compartido/panel-colecciones.js';
 import { renderSurfaceLayer } from './compartido/capas-paneles.js';
 import { applyActiveState, currentPage } from './compartido/estado-ruta.js';
-import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20260915-session-shell-1';
+import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20260916-z-index-fallback-1';
 import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260915-session-shell-1';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js';
