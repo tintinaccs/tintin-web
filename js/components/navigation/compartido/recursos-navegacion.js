@@ -1,4 +1,4 @@
-import { versionedSiteAsset } from './configuracion.js?v=tintin-20260916-premium-performance-1';
+import { versionedSiteAsset } from './configuracion.js?v=tintin-20260916-final-production-stability-nav-1';
 
 const HEADER_DESKTOP_VERSION = 'tintin-20260824-header-responsive-sync-1';
 const HEADER_RESPONSIVE_VERSION = 'tintin-20260916-z-index-fallback-1';

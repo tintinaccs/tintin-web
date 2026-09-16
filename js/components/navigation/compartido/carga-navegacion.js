@@ -1,5 +1,5 @@
-import { currentPage } from './estado-ruta.js';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260916-premium-performance-1';
+import { currentPage } from './estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260916-final-production-stability-nav-1';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;
