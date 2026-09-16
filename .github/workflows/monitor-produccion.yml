@@ -20,6 +20,8 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v5
         with:
           node-version: 22
@@ -65,7 +67,7 @@ jobs:
           body="El monitor de producción detectó un fallo. Run: $RUN_URL"
           if [ -n "$issue" ]; then gh issue comment "$issue" --body "$body"; else gh issue create --title "$title" --body "$body"; fi
       - name: Cerrar alerta al recuperar
-        if: steps.monitor.outcome == 'success' && steps.catalog.outcome == 'success' && steps.auth_browser.outcome == 'success' && steps.smoke.outcome == 'success'
+        if: steps.monitor.outcome == 'success' && steps.catalog.outcome == 'success' && steps.auth_browser.outcome == 'success' && steps.smoke.outcome == 'success' && steps.headers.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
