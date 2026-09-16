@@ -13,7 +13,7 @@ import {
   SUPER_ADMIN_EMAIL,
   isSuperAdmin,
   isSuperAdminEmail,
-} from './identidad-super-admin.js?v=tintin-20260916-superadmin-identity-1';
+} from './identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 
 // Única fuente de verdad para el cliente (importada por todo lo demás en
 // js/ que necesita identificar al Super Admin). Cloudflare Pages Functions
