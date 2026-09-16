@@ -1,6 +1,6 @@
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-3';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260915-final-polish-1';
 
 const clone = value => JSON.parse(JSON.stringify(value));
 const PAGE_OPTIONS = [

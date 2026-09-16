@@ -192,6 +192,7 @@ function pushTypeForAdminNotification(record = {}) {
   if (kind === 'order_created' || kind === 'new_order') return 'order.created';
   if (kind === 'order_confirmed' || kind === 'payment_completed') return 'payment.completed';
   if (kind === 'user_joined' || kind === 'profile_created') return 'admin.user.joined';
+  if (kind === 'user_login') return 'admin.user.login';
   return 'admin.activity';
 }
 

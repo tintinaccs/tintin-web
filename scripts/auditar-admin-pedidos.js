@@ -48,6 +48,13 @@ const secureOrder = read('js/orders/pedido-checkout-seguro.js');
 const phase4Order = read('apps-script/CrearPedido.gs');
 const inventoryIntegrity = read('js/admin/products/integridad-inventario-admin.js');
 const deleteFix = read('js/admin/orders/eliminacion-pedidos-admin.js');
+const statsSync = read('cloudflare/sincronizacion-estadisticas-pedido.js');
+const adminOrderEndpoint = read('functions/api/admin-order-mutation.js');
+const publicOrderEndpoint = read('functions/api/apps-script-bridge.js');
+const sheetsOrderEndpoint = read('functions/api/sheets-admin-webhook.js');
+const authSurface = ['js/core/firebase/firebase.js', 'js/auth'].filter(file => {
+  try { return fs.existsSync(path.join(root, file)); } catch (_) { return false; }
+});
 
 // ===========================================================================
 // 1. EDICIÓN COMPLETA EN EL PANEL (saveOrderEdit)
@@ -237,6 +244,26 @@ check(
   'Las reglas acotan la cantidad de ítems distintos (1..4)',
   /items\.size\(\) >= 1 && items\.size\(\) <= 4/.test(rules),
   'El plan gratuito limita los ítems por pedido para no exceder lecturas.'
+);
+check(
+  'El resumen de cuenta se recalcula desde la fuente canónica de pedidos',
+  /firestoreAdminListAll\(env, 'orders'/.test(statsSync) &&
+    /totalSpent/.test(statsSync) && /orderStats/.test(statsSync),
+  'Los importes del perfil no deben depender de un contador escrito a mano.'
+);
+check(
+  'La sincronización de estadísticas cubre pedidos de Admin, checkout y Sheets',
+  /syncOrderOwnerStats/.test(adminOrderEndpoint) &&
+    /syncOrderOwnerStats/.test(publicOrderEndpoint) &&
+    /syncOrderOwnerStats/.test(sheetsOrderEndpoint),
+  'Cada origen de pedido debe actualizar el resumen de la cuenta afectada.'
+);
+check(
+  'El flujo de pedidos no modifica la superficie de autenticación',
+  authSurface.length >= 0 && !/signIn|signOut|onAuthStateChanged/.test(
+    `${adminOrderEndpoint}\n${publicOrderEndpoint}\n${sheetsOrderEndpoint}`
+  ),
+  'Login y sesión deben quedar fuera de los cambios de sincronización.'
 );
 
 // ---------------------------------------------------------------------------

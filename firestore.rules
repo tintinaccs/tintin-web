@@ -18,7 +18,7 @@ service cloud.firestore {
     // respectivos runtimes). Migrar a un custom claim de Firebase Auth
     // (admin=true) eliminaría la comparación por correo acá también, pero
     // requiere el Admin SDK en un entorno privilegiado — ver
-    // firebase-cloud-functions-inactive/README.md.
+    // El runtime vigente no despliega Firebase Functions.
     function isSuperAdmin() {
       return isSignedIn() &&
         request.auth.token.email != null &&

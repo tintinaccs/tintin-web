@@ -138,7 +138,7 @@
     .ck-panel.active { display: block; }
 
     .ck-panel-head {
-      background: var(--acc-pale);
+      background: #fff;
       padding: 20px 24px;
       border-bottom: 1.5px solid var(--border);
     }
@@ -359,7 +359,7 @@
 
     /* ---- SHIPPING INFO ---- */
     .ck-ship-info {
-      background: var(--acc-pale);
+      background: #fff;
       border: 1.5px solid var(--border);
       border-radius: var(--radius-sm);
       padding: 14px 16px;

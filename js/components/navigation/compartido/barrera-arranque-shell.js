@@ -40,12 +40,14 @@ function waitForPublicShell() {
     }
 
     let settled = false;
-    const timer = window.setTimeout(finish, 8500);
+    let observer = null;
+    const timer = window.setTimeout(finish, 5000);
 
     function finish() {
       if (settled) return;
       settled = true;
       window.clearTimeout(timer);
+      observer?.disconnect();
       document.removeEventListener('tintin:public-shell-ready', finish);
       document.removeEventListener('tintin:public-shell-error', finish);
       resolve();
@@ -53,6 +55,18 @@ function waitForPublicShell() {
 
     document.addEventListener('tintin:public-shell-ready', finish, { once: true });
     document.addEventListener('tintin:public-shell-error', finish, { once: true });
+
+    // El estado visual listo es la clase mounted, no la carga de módulos
+    // secundarios. Antes la barrera sólo miraba la clase una vez y después
+    // esperaba el evento "ready", que también incluía tareas no críticas;
+    // eso podía dejar el logo/loader varios segundos aunque el header ya
+    // estuviera completamente montado.
+    if (document.body && typeof MutationObserver === 'function') {
+      observer = new MutationObserver(() => {
+        if (document.body?.classList.contains('tt-public-shell-mounted')) finish();
+      });
+      observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    }
   });
 }
 

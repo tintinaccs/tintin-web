@@ -1,6 +1,6 @@
 import { auth, db } from '../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20260821-accounts-phase-a-3';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20260915-final-polish-1';
+import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 import {
   doc,
   getDoc,
@@ -34,7 +34,7 @@ import {
   normalizeRuc,
   isValidRazonSocial
 } from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1';
-import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20260910-auth-retry-1';
+import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20260914-token-retry-1';
 import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-checkout-hardening-2';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
@@ -329,7 +329,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }, 0);
   });
 
-  onAuthStateChanged(auth, user => {
+  subscribeAuthState(user => {
     lastProfilePrefillUid = '';
     if (user && !user.isAnonymous) prefillCheckoutDefaults(user);
   });
@@ -770,6 +770,14 @@ if (!window.TintinSecureCheckoutOrderBooted) {
 
   function success(result, draft) {
     window._lastOrderId = result.shortId;
+    window.TintinCheckoutOrderCompleted = true;
+    try {
+      window.history.pushState(
+        { ...(window.history.state || {}), tintinOrderCompleted: true },
+        '',
+        window.location.href,
+      );
+    } catch {}
     document.getElementById('ck-review-head')?.style.setProperty('display', 'none');
     document.getElementById('ck-success-head')?.style.setProperty('display', 'block');
     document.getElementById('ck-confirm-btn')?.style.setProperty('display', 'none');
@@ -786,6 +794,11 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  window.addEventListener('popstate', () => {
+    if (!window.TintinCheckoutOrderCompleted) return;
+    window.location.replace('/');
+  });
 
   function message(error) {
     const code = error?.details?.code || error?.code || error?.message;
