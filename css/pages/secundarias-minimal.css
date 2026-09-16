@@ -16,6 +16,14 @@
   text-align: center;
 }
 
+/* Las páginas institucionales son contenido visible desde el primer frame.
+   No deben entrar en la reserva genérica de content-visibility y luego
+   materializarse cuando el runtime legal agrega su índice y sus anclas. */
+:where(body:not(:has(.login-page)):not(:has(.adm-main))) :is(.tt-page-hero, .section) {
+  content-visibility: visible !important;
+  contain-intrinsic-size: auto !important;
+}
+
 :where(body:not(:has(.login-page)):not(:has(.adm-main))) .tt-page-hero-title,
 :where(body:not(:has(.login-page)):not(:has(.adm-main))) .tt-page-hero-sub {
   max-width: 780px;
