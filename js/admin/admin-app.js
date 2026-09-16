@@ -2,7 +2,7 @@ import { auth, db, appCheckReady, authPersistenceReady } from "../core/firebase/
 import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { subscribeAuthState } from "../core/auth/coordinador-sesion.js?v=tintin-20260910-session-coordinator-1";
+import { subscribeAuthState } from "../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
   query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp

@@ -49,7 +49,7 @@ check(
   'La carga condicional no puede depender de que la URL termine en .html.'
 );
 
-const staleShell = html.filter(([, source]) => source.includes('js/inicio-navegacion-publica.js?v=tintin-20260726-login-session-1'));
+const staleShell = html.filter(([, source]) => source.includes('js/inicio-navegacion-publica.js?v=tintin-20260915-session-shell-3'));
 const tiendaConsumers = html.filter(([, source]) => /(?:^|["'/])tienda\.js\?v=/.test(source));
 const staleTiendaConsumers = tiendaConsumers.filter(([, source]) => !source.includes(`tienda.js?v=${tiendaRuntimeVersion}`));
 const italicPreloads = html.filter(([, source]) => source.includes('montserrat-latin-wght-italic.woff2" as="font"'));

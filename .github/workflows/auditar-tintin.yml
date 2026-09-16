@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   checks: read
 
 concurrency:
@@ -25,7 +25,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          ref: fix/sesion-shell-drawers-20260915
           fetch-depth: 0
 
       - name: Setup Node.js
@@ -42,141 +41,6 @@ jobs:
 
       - name: Install locked dependencies once
         run: npm ci
-
-      - name: Regenerate immutable cache tags once
-        shell: bash
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          import hashlib
-          import json
-          import re
-
-          ROOT = Path('.').resolve()
-          BUMP = 'tintin-20260915-session-shell-2'
-
-          # The public-shell synchronizer is the source of truth for the
-          # bootstrap tag. Move that canonical tag first so build:pages cannot
-          # regenerate stale HTML after the cache cascade below.
-          canonical_replacements = {
-              'tintin-20260912-auth-closure-8': BUMP,
-              'tintin-20260912-auth-closure-7': BUMP,
-              'tintin-20260816-loader-shell-atomic-1': BUMP,
-          }
-          for rel in (
-              'scripts/sincronizar-inicio-navegacion-publica.js',
-              'js/inicio-navegacion-publica.js',
-              '404.html',
-          ):
-              path = ROOT / rel
-              text = path.read_text(encoding='utf-8')
-              for old, new in canonical_replacements.items():
-                  text = text.replace(old, new)
-              path.write_text(text, encoding='utf-8')
-          PY
-
-          node scripts/sincronizar-inicio-navegacion-publica.js
-
-          python3 - <<'PY'
-          from pathlib import Path
-          import hashlib
-          import json
-          import re
-
-          ROOT = Path('.').resolve()
-          BASELINE = json.loads((ROOT / 'scripts/cache-version-baseline.json').read_text(encoding='utf-8'))
-          BUMP = 'tintin-20260915-session-shell-2'
-          REF_RE = re.compile(r'(["\'])([^"\'?]+\.(?:css|js|mjs))\?v=([A-Za-z0-9._-]+)(["\'])')
-
-          def source_files():
-              files = list(ROOT.glob('*.html'))
-              for dirname in ('js', 'functions'):
-                  base = ROOT / dirname
-                  if base.exists():
-                      files.extend(p for p in base.rglob('*') if p.is_file() and p.suffix in {'.js', '.mjs'})
-              return files
-
-          def resolve_ref(source, ref):
-              if ref.startswith(('http://', 'https://')):
-                  return None
-              if source.suffix == '.html':
-                  candidate = (ROOT / ref.lstrip('./')).resolve()
-              elif ref.startswith('.'):
-                  candidate = (source.parent / ref).resolve()
-              else:
-                  candidate = (ROOT / ref.lstrip('./')).resolve()
-              try:
-                  return candidate.relative_to(ROOT).as_posix()
-              except ValueError:
-                  return None
-
-          def sha256_file(rel):
-              text = (ROOT / rel).read_text(encoding='utf-8').replace('\r\n', '\n')
-              return hashlib.sha256(text.encode('utf-8')).hexdigest()
-
-          # Every time a child module's literal ?v= changes, the importing JS
-          # file changes bytes too. Iterate until the entire immutable-cache
-          # dependency chain has a fresh URL, not merely the first layer.
-          for iteration in range(1, 30):
-              refs = []
-              tags_by_path = {}
-              inconsistent = set()
-              for source in source_files():
-                  text = source.read_text(encoding='utf-8')
-                  for match in REF_RE.finditer(text):
-                      rel = resolve_ref(source, match.group(2))
-                      if not rel or not (ROOT / rel).exists():
-                          continue
-                      tag = match.group(3)
-                      previous = tags_by_path.setdefault(rel, tag)
-                      if previous != tag:
-                          inconsistent.add(rel)
-                      refs.append((source, rel, tag))
-
-              changed_without_bump = set()
-              for rel, tag in tags_by_path.items():
-                  before = BASELINE.get(rel)
-                  if not before:
-                      continue
-                  if before.get('version') == tag and before.get('sha256') != sha256_file(rel):
-                      changed_without_bump.add(rel)
-
-              # If a path is already inconsistent because one consumer was
-              # manually bumped earlier, normalize every literal reference to
-              # the release tag as part of the same closure.
-              bump_paths = changed_without_bump | inconsistent
-              if not bump_paths:
-                  print(f'Immutable cache cascade converged after {iteration - 1} iteration(s).')
-                  break
-
-              touched = 0
-              for source in source_files():
-                  original = source.read_text(encoding='utf-8')
-                  def repl(match):
-                      nonlocal_dummy = None
-                      rel = resolve_ref(source, match.group(2))
-                      if rel not in bump_paths:
-                          return match.group(0)
-                      return f'{match.group(1)}{match.group(2)}?v={BUMP}{match.group(4)}'
-                  updated = REF_RE.sub(repl, original)
-                  if updated != original:
-                      source.write_text(updated, encoding='utf-8')
-                      touched += 1
-              print(f'Cache cascade iteration {iteration}: {len(bump_paths)} resource(s), {touched} source file(s) updated.')
-          else:
-              raise SystemExit('Immutable cache cascade did not converge.')
-          PY
-
-          npm run build:pages
-          if git diff --quiet; then
-            echo 'No cache artifacts changed.'
-          else
-            git config user.name 'tintin-shell-sync'
-            git config user.email 'tintin-shell-sync@users.noreply.github.com'
-            git add -A
-            git commit -m 'chore: regenerate shell cache versions [skip-shell-sync]'
-            git push origin HEAD:fix/sesion-shell-drawers-20260915
-          fi
 
       - name: Build exact public artifact
         run: npm run build:pages

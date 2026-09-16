@@ -4,9 +4,9 @@ import {
   getCartLocal,
   updateQty,
   removeFromCart,
-} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20260915-token-retry-3';
+} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20260915-session-shell-3';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260910-session-coordinator-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
 
 const CHECKOUT_PATH = /(^|\/)checkout(?:\.html)?\/?$/i;
 const RESUME_KEY = 'tt_checkout_resume_step';
