@@ -58,3 +58,35 @@ test('aliases históricos siguen la misma definición de perfil completo', () =>
     location: { latitude: -25.33, longitude: -57.52, name: 'Mi casa' }
   }), true);
 });
+
+test('checkout acepta la misma ubicación histórica que Login', () => {
+  assert.equal(isPurchaseEligibleProfile({
+    ...completeLegacyProfile,
+    savedLocation: {
+      addressLat: -27.0739,
+      addressLng: -55.6422,
+      address: 'Hohenau, Itapúa'
+    },
+    locationName: 'Hohenau (Itapúa)'
+  }), true);
+});
+
+test('checkout puede reutilizar coordenadas anidadas con nombre persistido a nivel perfil', () => {
+  assert.equal(isPurchaseEligibleProfile({
+    ...completeLegacyProfile,
+    savedLocation: {
+      coordinates: { latitude: -27.0739, longitude: -55.6422 }
+    },
+    addressName: 'Hohenau (Itapúa)'
+  }), true);
+});
+
+test('coordenadas históricas sin nombre siguen sin habilitar compra', () => {
+  assert.equal(isPurchaseEligibleProfile({
+    ...completeLegacyProfile,
+    savedLocation: {
+      addressLat: -27.0739,
+      addressLng: -55.6422
+    }
+  }), false);
+});
