@@ -1111,7 +1111,7 @@ if (
   !window.TintinSecureCheckoutOrderLoading
 ) {
   window.TintinSecureCheckoutOrderLoading = true;
-    import('../../orders/pedido-checkout-seguro.js?v=tintin-20260915-session-shell-3').catch(error => {
+    import('../../orders/pedido-checkout-seguro.js?v=tintin-20260916-cache-bump-secure-order-1').catch(error => {
     console.error('[cart-sync-v2] No se pudo cargar el guardado seguro del pedido:', error);
   });
 }

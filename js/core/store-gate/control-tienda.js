@@ -13,7 +13,7 @@ import {
   doc,
   onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { getUserRole } from '../auth/roles.js?v=tintin-20260915-final-polish-1';
+import { getUserRole } from '../auth/roles.js?v=tintin-20260916-final-polish-2';
 import {
   isAccessAllowed,
   renderStoreClosedOverlay,
@@ -22,7 +22,7 @@ import {
   getStoreAccessConfig,
   getStoreAccessConfigFromRest,
   normalizeStoreAccessConfig
-} from './nucleo-control-tienda.js?v=tintin-20260909-store-gate-degraded-fix-1';
+} from './nucleo-control-tienda.js?v=tintin-20260916-store-gate-degraded-fix-2';
 
 export {
   isAccessAllowed,

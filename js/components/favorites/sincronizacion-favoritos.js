@@ -131,7 +131,7 @@ document.addEventListener('click', async event => {
   if (!addButton) return;
   const item = items.find(entry => entry.id === String(addButton.dataset.favoriteAddCart || ''));
   if (!item) return;
-  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20260915-session-shell-3');
+  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20260916-cache-bump-cart-sync-1');
   await cart.addToCart({ ...item, qty: 1 });
 }, true);
 
