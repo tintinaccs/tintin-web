@@ -5,6 +5,39 @@
   margin: 12px 0 2px;
 }
 
+.tt-comment-menu {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tt-comment-menu summary {
+  cursor: pointer;
+  list-style: none;
+  padding: .2rem .45rem;
+  color: var(--tt-color-muted, #6f6a64);
+}
+
+.tt-comment-menu summary::-webkit-details-marker { display: none; }
+
+.tt-comment-menu[open] {
+  z-index: 2;
+}
+
+.tt-comment-menu button {
+  position: absolute;
+  right: 0;
+  top: calc(100% + .25rem);
+  min-width: 8rem;
+  padding: .55rem .7rem;
+  border: 1px solid var(--tt-color-border, #ddd5ce);
+  border-radius: .55rem;
+  background: var(--tt-color-surface, #fff);
+  color: var(--tt-color-text, #2b2927);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+  text-align: left;
+}
+
 .tt-review-like-button,
 .tt-review-like-count {
   min-height: 36px;
@@ -57,6 +90,25 @@
   color: #876b77;
 }
 
+.tt-review-thread-toggle {
+  margin: 4px 0 0 52px;
+  padding: 6px 0;
+  border: 0;
+  background: transparent;
+  color: #87425f;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tt-review-thread-toggle:hover,
+.tt-review-thread-toggle:focus-visible {
+  color: #b53f6d;
+  text-decoration: underline;
+  outline: none;
+}
+
 .tt-review-reply-row {
   margin-top: 12px;
 }
@@ -82,6 +134,7 @@
     min-height: 42px;
     padding: 9px 13px;
   }
+  .tt-review-thread-toggle { margin-left: 40px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

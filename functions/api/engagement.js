@@ -22,6 +22,7 @@ import {
   encodeFirestoreFields, firestoreAdminCommit, firestoreAdminGet,
 } from '../../cloudflare/firebase-admin-ligero.js';
 import { syncEngagementToSheets } from '../../cloudflare/sincronizacion-participacion-sheets.js';
+import { createCommentReport } from '../../cloudflare/comentarios-sociales.js';
 
 const MAX_BODY_BYTES = 8 * 1024;
 const REPLY_COOLDOWN_MS = 5000;
@@ -164,7 +165,9 @@ export async function onRequest(context) {
     let result = {};
     let privateReview = null;
 
-    if (input.action === 'createReview') {
+    if (input.action === 'reportComment') {
+      result = await createCommentReport(env, user, input);
+    } else if (input.action === 'createReview') {
       privateReview = await createReview(env, user, input);
       result = {
         review: engagementOwnReviewView(privateReview),

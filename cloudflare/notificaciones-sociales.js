@@ -14,6 +14,29 @@ const MAX_URL = 900;
 const MAX_MARK_ALL_DOCUMENTS = 3000;
 const FIRESTORE_SCOPE = 'https://www.googleapis.com/auth/datastore';
 
+// Contrato único de eventos sociales. Las funciones existentes conservan sus
+// `kind` históricos para compatibilidad, mientras `eventType` identifica el
+// evento canónico que alimenta web y push sin crear otro router.
+export const SOCIAL_EVENT_TYPES = Object.freeze([
+  'USER_REGISTERED', 'USER_LOGIN', 'ORDER_CREATED', 'PRODUCT_LIKED',
+  'COMMENT_CREATED', 'COMMENT_REPLIED', 'COMMENT_LIKED', 'COMMENT_REPORTED',
+  'REVIEW_CREATED',
+]);
+
+export function socialEventType(event = {}) {
+  if (SOCIAL_EVENT_TYPES.includes(event.eventType)) return event.eventType;
+  const kind = String(event.kind || '').replace(/^store_/, '');
+  if (kind === 'user_joined' || kind === 'profile_created') return 'USER_REGISTERED';
+  if (kind === 'user_login') return 'USER_LOGIN';
+  if (kind === 'order_created' || kind === 'new_order') return 'ORDER_CREATED';
+  if (kind === 'product_like') return 'PRODUCT_LIKED';
+  if (kind === 'review_created') return 'REVIEW_CREATED';
+  if (kind === 'review_reply') return 'COMMENT_REPLIED';
+  if (kind === 'review_like' || kind === 'reply_like') return 'COMMENT_LIKED';
+  if (kind === 'comment_reported') return 'COMMENT_REPORTED';
+  return 'COMMENT_CREATED';
+}
+
 const clean = (value, max = 180) => String(value ?? '')
   .replace(/[\u0000-\u001f\u007f<>]/g, ' ')
   .replace(/\s+/g, ' ')
@@ -62,6 +85,8 @@ function normalizeEvent(event = {}) {
   const now = event.createdAt instanceof Date ? event.createdAt : new Date();
   return {
     schemaVersion: 2,
+    eventType: socialEventType(event),
+    eventId: clean(event.eventId, 500),
     kind: clean(event.kind || 'activity', 60),
     actorType: ['customer', 'store', 'system'].includes(event.actorType) ? event.actorType : 'system',
     actorUid: clean(event.actorUid, 180),
@@ -154,6 +179,8 @@ export async function buildUserNotificationWrite(recipientUid, event, dedupeKey)
     audience: 'user',
     recipientUid: uid,
     dedupeKey: key,
+    eventId: clean(event.eventId || key, 500),
+    idempotencyKey: key,
   };
   return {
     id: notificationId,
@@ -173,6 +200,8 @@ export async function buildAdminNotificationWrite(event, dedupeKey) {
     audience: 'admin',
     recipientUid: '',
     dedupeKey: key,
+    eventId: clean(event.eventId || key, 500),
+    idempotencyKey: key,
   };
   return {
     id: notificationId,
@@ -193,6 +222,7 @@ function pushTypeForAdminNotification(record = {}) {
   if (kind === 'order_confirmed' || kind === 'payment_completed') return 'payment.completed';
   if (kind === 'user_joined' || kind === 'profile_created') return 'admin.user.joined';
   if (kind === 'user_login') return 'admin.user.login';
+  if (kind === 'comment_reported') return 'social.comment.reported';
   return 'admin.activity';
 }
 
@@ -223,6 +253,9 @@ async function persistIfAbsent(env, built) {
 }
 
 export async function notifyUserIfAbsent(env, recipientUid, event, dedupeKey) {
+  if (event?.actorUid && String(event.actorUid) === String(recipientUid) && event.actorType !== 'store') {
+    return { created: false, skipped: 'actor' };
+  }
   return persistIfAbsent(env, await buildUserNotificationWrite(recipientUid, event, dedupeKey));
 }
 

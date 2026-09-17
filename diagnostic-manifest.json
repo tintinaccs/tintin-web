@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e6c67528fa7e7fc6a8b6ef9c3a1fe747b13594c3013c5d2aaf4c52809426827b",
+  "sourceFingerprint": "4791d19d4c0f7b09e51bfcca85edca58af3cc7d9e92ed32c4a49c7d5e7dabc38",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 839,
-    "textFiles": 798,
-    "totalBytes": 16789974,
+    "files": 843,
+    "textFiles": 802,
+    "totalBytes": 16833333,
     "pages": 19,
-    "modules": 570
+    "modules": 572
   },
   "viewports": [
     {
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 190986,
-      "sha256": "09b1e5e540e0cc31c7756cdb84e1cff43faddb16d26d3a3a7c783d24aef2d791",
+      "bytes": 190978,
+      "sha256": "2839e46784db8f108d681332bb4877c369cd02981015227c9dc993fa4a9bb7c6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2124,7 +2124,7 @@
           "line": 2005
         },
         {
-          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260916-cache-bump-participacion-1",
+          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260917-comments-reports-2",
           "target": "js/admin/participacion/gestion-participacion-admin.js",
           "line": 2006
         },
@@ -2375,7 +2375,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260916-cache-bump-participacion-1",
+          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260917-comments-reports-2",
           "target": "js/admin/participacion/gestion-participacion-admin.js",
           "line": 2006,
           "exists": true
@@ -15952,8 +15952,8 @@
         "guest",
         "client"
       ],
-      "bytes": 24592,
-      "sha256": "8e65a2903b56733ad8204a091d12ccf82bf6550875dd9f492c269a64fb0a9f16",
+      "bytes": 24593,
+      "sha256": "721f9759b7e05eb701196296d76b74c08de3186ccd877163c6a4118f87b5f98e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16037,7 +16037,7 @@
           "line": 351
         },
         {
-          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260916-return-path-2",
+          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260917-comments-reports-2",
           "target": "js/pages/product/resenas-producto.js",
           "line": 352
         },
@@ -16134,7 +16134,7 @@
           "line": 57
         },
         {
-          "raw": "css/components/notifications/interacciones-sociales.css?v=tintin-20260814-social-notifications-1",
+          "raw": "css/components/notifications/interacciones-sociales.css?v=tintin-20260917-comments-reports-2",
           "target": "css/components/notifications/interacciones-sociales.css",
           "line": 58
         },
@@ -16460,7 +16460,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260916-return-path-2",
+          "raw": "js/pages/product/resenas-producto.js?v=tintin-20260917-comments-reports-2",
           "target": "js/pages/product/resenas-producto.js",
           "line": 352,
           "exists": true
@@ -16574,7 +16574,7 @@
           "exists": true
         },
         {
-          "raw": "css/components/notifications/interacciones-sociales.css?v=tintin-20260814-social-notifications-1",
+          "raw": "css/components/notifications/interacciones-sociales.css?v=tintin-20260917-comments-reports-2",
           "target": "css/components/notifications/interacciones-sociales.css",
           "line": 58,
           "exists": true
@@ -17647,6 +17647,30 @@
       ]
     },
     {
+      "path": "cloudflare/comentarios-sociales.js",
+      "bytes": 7483,
+      "sha256": "2a5cf6d7ab2591b6faa12c4480347c16901775d42c0a3bd4e8e61a5d8984cab3",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 7
+        },
+        {
+          "raw": "./notificaciones-sociales.js",
+          "target": "cloudflare/notificaciones-sociales.js",
+          "dynamic": false,
+          "line": 8
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "cloudflare/contrato-cuentas-generado.js",
       "bytes": 769,
       "sha256": "5f8b3140a95a0c686faa43b343098f31b4c9726eab814196f213153b4a1e5d70",
@@ -17765,8 +17789,8 @@
     },
     {
       "path": "cloudflare/notificaciones-sociales.js",
-      "bytes": 12708,
-      "sha256": "21cf0966653f1d68797b61becf42d26fd5b3e63419c11b0f4c9af26dea48cd87",
+      "bytes": 14349,
+      "sha256": "5b8b3502f4c903a3a29f8f1424aa84ba3c87abac5e410e8e8c03ce2b1ae58b17",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17792,7 +17816,7 @@
         },
         {
           "url": "https://firestore.googleapis.com/v1/projects/$%7BencodeURIComponent(projectId",
-          "line": 269
+          "line": 302
         }
       ]
     },
@@ -17893,8 +17917,8 @@
     },
     {
       "path": "cloudflare/participacion-clientes.js",
-      "bytes": 39089,
-      "sha256": "91ca39ede3be213ee4a3484c533c88c23fa8506535eaf51e51d528b798f44c5f",
+      "bytes": 46191,
+      "sha256": "310170f33cfc7df853d066b3891d713d71ee8f13d933396f3af398aa50f7479e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18568,8 +18592,8 @@
     },
     {
       "path": "functions/api/admin-engagement.js",
-      "bytes": 2421,
-      "sha256": "524f9b90b224866386ffd3956432ba3bc5b278d6c3801a88490f70c531ff241d",
+      "bytes": 3171,
+      "sha256": "c2d55feade731139d985998ccde15cfb9b0213c594d6452054596b601f28d0cf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18592,6 +18616,12 @@
           "target": "cloudflare/sincronizacion-participacion-sheets.js",
           "dynamic": false,
           "line": 5
+        },
+        {
+          "raw": "../../cloudflare/comentarios-sociales.js",
+          "target": "cloudflare/comentarios-sociales.js",
+          "dynamic": false,
+          "line": 6
         }
       ],
       "endpoints": []
@@ -18937,8 +18967,8 @@
     },
     {
       "path": "functions/api/engagement.js",
-      "bytes": 10034,
-      "sha256": "c719b5b46ba2e718de7b47ea3d4a71057d28e24d8a92f4b8891f20f45ecbed80",
+      "bytes": 10225,
+      "sha256": "843618bb441c52d3b4de084fa2fb61fed920eaded52e0ea822d3e83517a53d77",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18967,6 +18997,12 @@
           "target": "cloudflare/sincronizacion-participacion-sheets.js",
           "dynamic": false,
           "line": 24
+        },
+        {
+          "raw": "../../cloudflare/comentarios-sociales.js",
+          "target": "cloudflare/comentarios-sociales.js",
+          "dynamic": false,
+          "line": 25
         }
       ],
       "endpoints": []
@@ -21094,8 +21130,8 @@
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin-v2.js",
-      "bytes": 77268,
-      "sha256": "531ccca50209da7901bfec6a2246839b1883034f4c01f3e4f50be6308a12288e",
+      "bytes": 85158,
+      "sha256": "b074c92fd7b5c1e9ad6f750764fd9ac37d43768a5cb477b0cca443fbce2dfb50",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21136,14 +21172,14 @@
     {
       "path": "js/admin/participacion/gestion-participacion-admin.js",
       "bytes": 83,
-      "sha256": "50831009f5134442af0e3867a00fdd9e811253d7c094a613d8973759ab6c5fa1",
+      "sha256": "5d7ee95f97fb18578a0528d4d7ada0c09ba26860ad70535fa821362d4f2b832a",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./gestion-participacion-admin-v2.js?v=tintin-20260916-firestore-budget-4",
+          "raw": "./gestion-participacion-admin-v2.js?v=tintin-20260917-comments-reports-2",
           "target": "js/admin/participacion/gestion-participacion-admin-v2.js",
           "dynamic": false,
           "line": 1
@@ -25204,8 +25240,8 @@
     },
     {
       "path": "js/pages/product/resenas-producto.js",
-      "bytes": 37361,
-      "sha256": "400c69020748031d8cb6952d6be07afb774750e322cced5c4fb328590deeec9b",
+      "bytes": 40295,
+      "sha256": "e02d40e6c189fceb38aedcb73c75509ba5c43bbd591e2f022857c0e5295cf615",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28142,8 +28178,8 @@
     },
     {
       "path": "scripts/auditar-puntuacion-resena-producto.mjs",
-      "bytes": 1612,
-      "sha256": "607072252beb718365dd934e6fd588db272e491e43b4856b8aebf4624849ddcf",
+      "bytes": 1617,
+      "sha256": "5138a37b039be0495103ba76bc0989427d6798c2d1946b8dcfaa913b93dfb2d3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30642,6 +30678,48 @@
       "endpoints": []
     },
     {
+      "path": "tests/engagement/comments-reports.test.mjs",
+      "bytes": 3549,
+      "sha256": "8e20fec0c221b2946e0ec763e38a26c093984c1f156d0de9f50a7324850439e6",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs/promises",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../cloudflare/comentarios-sociales.js",
+          "target": "cloudflare/comentarios-sociales.js",
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "../../cloudflare/notificaciones-sociales.js",
+          "target": "cloudflare/notificaciones-sociales.js",
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/engagement/firebase-id-token.test.mjs",
       "bytes": 3019,
       "sha256": "0ef15d51d73ea8e0c8edc0d4e978a6f1f2b1ec9aaa7d34ab0e3e420356d8e008",
@@ -30709,7 +30787,7 @@
     {
       "path": "tests/engagement/participation-contract.test.mjs",
       "bytes": 12819,
-      "sha256": "6b8ed5f99c50ecd5093b55f03f0578b12cd4f7a946def914c71617182a0582d6",
+      "sha256": "6794dae8e08a8f1cb9289c80616d08bd7d9124049ee95b6a771bd5cfa3202643",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32841,6 +32919,18 @@
       "sha256": "de39f86bc016a2dc26a4430ab18132c618dabcaf160cf6b766110ea0f8f58484"
     },
     {
+      "path": "COMMENTS_AND_NOTIFICATIONS_ARCHITECTURE_2026-09-17.md",
+      "extension": ".md",
+      "bytes": 5299,
+      "sha256": "68001b5ea52655a4ae4a8dc9b975e0cbb52b75c00badc0cbd319ab268d30afa3"
+    },
+    {
+      "path": "COMMENTS_AND_NOTIFICATIONS_AUDIT_2026-09-17.md",
+      "extension": ".md",
+      "bytes": 4080,
+      "sha256": "b84cfeda362b1ceabb5f82935d515305b945ae8d21972e928e0af7e58f31fcbb"
+    },
+    {
       "path": "FINAL_PRODUCTION_CLOSURE_2026-09-17.md",
       "extension": ".md",
       "bytes": 8871,
@@ -32927,8 +33017,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 190986,
-      "sha256": "09b1e5e540e0cc31c7756cdb84e1cff43faddb16d26d3a3a7c783d24aef2d791"
+      "bytes": 190978,
+      "sha256": "2839e46784db8f108d681332bb4877c369cd02981015227c9dc993fa4a9bb7c6"
     },
     {
       "path": "apple-touch-icon.png",
@@ -33237,6 +33327,12 @@
       "sha256": "4073e136931d373ba87b833c0e51de46a131b98262df3ed9b4917b718f5b966d"
     },
     {
+      "path": "cloudflare/comentarios-sociales.js",
+      "extension": ".js",
+      "bytes": 7483,
+      "sha256": "2a5cf6d7ab2591b6faa12c4480347c16901775d42c0a3bd4e8e61a5d8984cab3"
+    },
+    {
       "path": "cloudflare/contrato-cuentas-generado.js",
       "extension": ".js",
       "bytes": 769,
@@ -33269,8 +33365,8 @@
     {
       "path": "cloudflare/notificaciones-sociales.js",
       "extension": ".js",
-      "bytes": 12708,
-      "sha256": "21cf0966653f1d68797b61becf42d26fd5b3e63419c11b0f4c9af26dea48cd87"
+      "bytes": 14349,
+      "sha256": "5b8b3502f4c903a3a29f8f1424aa84ba3c87abac5e410e8e8c03ce2b1ae58b17"
     },
     {
       "path": "cloudflare/nucleo-push.js",
@@ -33299,8 +33395,8 @@
     {
       "path": "cloudflare/participacion-clientes.js",
       "extension": ".js",
-      "bytes": 39089,
-      "sha256": "91ca39ede3be213ee4a3484c533c88c23fa8506535eaf51e51d528b798f44c5f"
+      "bytes": 46191,
+      "sha256": "310170f33cfc7df853d066b3891d713d71ee8f13d933396f3af398aa50f7479e"
     },
     {
       "path": "cloudflare/paypal-seguro.js",
@@ -33473,8 +33569,8 @@
     {
       "path": "css/admin/participacion-admin-v2.css",
       "extension": ".css",
-      "bytes": 21389,
-      "sha256": "234fbdb4de1680f94f851267e7173ac113cb4918dbf78fb7cbfb18d60878d4b7"
+      "bytes": 22382,
+      "sha256": "011ee2cf54506f015b59d614bd1f7ce5bb5034e5104e11e2a366af6358d34241"
     },
     {
       "path": "css/admin/participacion-admin.css",
@@ -33605,8 +33701,8 @@
     {
       "path": "css/components/notifications/interacciones-sociales.css",
       "extension": ".css",
-      "bytes": 1635,
-      "sha256": "72923a81f8e6d3920f1c57d0a7b58bbfa3c267e3d574deef78b848bba064494d"
+      "bytes": 2729,
+      "sha256": "35caa4b9e60d682b54ce68a15bce103dbffb5f630eb8cee43775b7ddce320bcd"
     },
     {
       "path": "css/components/notifications/notificaciones-sociales.css",
@@ -34187,8 +34283,8 @@
     {
       "path": "firestore.rules",
       "extension": ".rules",
-      "bytes": 64874,
-      "sha256": "9d11a66022e9587e54e04f5f067e300d759dc7163d0c7409606a5cd3ebe49598"
+      "bytes": 65151,
+      "sha256": "5e8c38ac349bb5c8977ec9cdad78db38fcec3a57013725ca529f2ffdc565312f"
     },
     {
       "path": "functions/[page].js",
@@ -34241,8 +34337,8 @@
     {
       "path": "functions/api/admin-engagement.js",
       "extension": ".js",
-      "bytes": 2421,
-      "sha256": "524f9b90b224866386ffd3956432ba3bc5b278d6c3801a88490f70c531ff241d"
+      "bytes": 3171,
+      "sha256": "c2d55feade731139d985998ccde15cfb9b0213c594d6452054596b601f28d0cf"
     },
     {
       "path": "functions/api/admin-import-job.js",
@@ -34307,8 +34403,8 @@
     {
       "path": "functions/api/engagement.js",
       "extension": ".js",
-      "bytes": 10034,
-      "sha256": "c719b5b46ba2e718de7b47ea3d4a71057d28e24d8a92f4b8891f20f45ecbed80"
+      "bytes": 10225,
+      "sha256": "843618bb441c52d3b4de084fa2fb61fed920eaded52e0ea822d3e83517a53d77"
     },
     {
       "path": "functions/api/geo-search.js",
@@ -34787,14 +34883,14 @@
     {
       "path": "js/admin/participacion/gestion-participacion-admin-v2.js",
       "extension": ".js",
-      "bytes": 77268,
-      "sha256": "531ccca50209da7901bfec6a2246839b1883034f4c01f3e4f50be6308a12288e"
+      "bytes": 85158,
+      "sha256": "b074c92fd7b5c1e9ad6f750764fd9ac37d43768a5cb477b0cca443fbce2dfb50"
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin.js",
       "extension": ".js",
       "bytes": 83,
-      "sha256": "50831009f5134442af0e3867a00fdd9e811253d7c094a613d8973759ab6c5fa1"
+      "sha256": "5d7ee95f97fb18578a0528d4d7ada0c09ba26860ad70535fa821362d4f2b832a"
     },
     {
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
@@ -35837,8 +35933,8 @@
     {
       "path": "js/pages/product/resenas-producto.js",
       "extension": ".js",
-      "bytes": 37361,
-      "sha256": "400c69020748031d8cb6952d6be07afb774750e322cced5c4fb328590deeec9b"
+      "bytes": 40295,
+      "sha256": "e02d40e6c189fceb38aedcb73c75509ba5c43bbd591e2f022857c0e5295cf615"
     },
     {
       "path": "js/pages/product/seleccion-producto.js",
@@ -36173,8 +36269,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 13091,
-      "sha256": "e13bbe52364944e7cc11b67fdff8ec616aa622072bae291b3a332203b74309ee"
+      "bytes": 13169,
+      "sha256": "a1ecfc71d700c275eaf4074be4dbd61d57b7282a340e1cbb645b8c5a7387a087"
     },
     {
       "path": "perfil.html",
@@ -36203,8 +36299,8 @@
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 24592,
-      "sha256": "8e65a2903b56733ad8204a091d12ccf82bf6550875dd9f492c269a64fb0a9f16"
+      "bytes": 24593,
+      "sha256": "721f9759b7e05eb701196296d76b74c08de3186ccd877163c6a4118f87b5f98e"
     },
     {
       "path": "robots.txt",
@@ -36833,8 +36929,8 @@
     {
       "path": "scripts/auditar-puntuacion-resena-producto.mjs",
       "extension": ".mjs",
-      "bytes": 1612,
-      "sha256": "607072252beb718365dd934e6fd588db272e491e43b4856b8aebf4624849ddcf"
+      "bytes": 1617,
+      "sha256": "5138a37b039be0495103ba76bc0989427d6798c2d1946b8dcfaa913b93dfb2d3"
     },
     {
       "path": "scripts/auditar-push-web.js",
@@ -37395,6 +37491,12 @@
       "sha256": "cd147ea0599730dc24b97a521aed18dac71d60a6733b79e4a8066b1af4afa8df"
     },
     {
+      "path": "tests/engagement/comments-reports.test.mjs",
+      "extension": ".mjs",
+      "bytes": 3549,
+      "sha256": "8e20fec0c221b2946e0ec763e38a26c093984c1f156d0de9f50a7324850439e6"
+    },
+    {
       "path": "tests/engagement/firebase-id-token.test.mjs",
       "extension": ".mjs",
       "bytes": 3019,
@@ -37410,7 +37512,7 @@
       "path": "tests/engagement/participation-contract.test.mjs",
       "extension": ".mjs",
       "bytes": 12819,
-      "sha256": "6b8ed5f99c50ecd5093b55f03f0578b12cd4f7a946def914c71617182a0582d6"
+      "sha256": "6794dae8e08a8f1cb9289c80616d08bd7d9124049ee95b6a771bd5cfa3202643"
     },
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
@@ -39529,7 +39631,7 @@
     },
     {
       "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
-      "line": 79,
+      "line": 81,
       "target": "/api/admin-engagement",
       "method": "POST"
     },
@@ -40024,7 +40126,7 @@
         "references": [
           {
             "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
-            "line": 1081,
+            "line": 1185,
             "operation": "collection"
           }
         ]
@@ -40189,7 +40291,7 @@
         "references": [
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 501,
+            "line": 528,
             "operation": "doc"
           }
         ]
@@ -40229,7 +40331,7 @@
           },
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 497,
+            "line": 524,
             "operation": "doc"
           }
         ]
@@ -40364,12 +40466,12 @@
           },
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 354,
+            "line": 381,
             "operation": "collection"
           },
           {
             "file": "js/pages/product/resenas-producto.js",
-            "line": 488,
+            "line": 515,
             "operation": "collection"
           },
           {
@@ -40389,7 +40491,7 @@
         "references": [
           {
             "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
-            "line": 1076,
+            "line": 1180,
             "operation": "collection"
           }
         ]
@@ -40499,22 +40601,22 @@
           },
           {
             "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
-            "line": 935,
+            "line": 1025,
             "operation": "doc"
           },
           {
             "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
-            "line": 937,
+            "line": 1027,
             "operation": "doc"
           },
           {
             "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
-            "line": 1086,
+            "line": 1191,
             "operation": "doc"
           },
           {
             "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
-            "line": 1090,
+            "line": 1195,
             "operation": "doc"
           },
           {
@@ -40864,7 +40966,7 @@
           },
           {
             "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
-            "line": 1072,
+            "line": 1176,
             "operation": "collection"
           },
           {
@@ -41038,6 +41140,7 @@
       "checkoutGuards",
       "collections",
       "colorSchemes",
+      "commentReports",
       "databases",
       "emailCampaigns",
       "emailLogs",
@@ -41080,6 +41183,7 @@
     "rulesWithoutDetectedClientUse": [
       "adminPushDevices",
       "cart",
+      "commentReports",
       "databases",
       "favorites",
       "history",
