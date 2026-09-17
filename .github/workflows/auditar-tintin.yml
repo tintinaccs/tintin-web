@@ -43,6 +43,9 @@ jobs:
       - name: Install locked dependencies once
         run: npm ci
 
+      - name: Install Chromium once
+        run: npx playwright install --with-deps chromium
+
       - name: Build exact public artifact
         run: npm run build:pages
 

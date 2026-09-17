@@ -13,7 +13,7 @@ const html = read('admin.html');
 const js = read('js/admin/shopify-commerce-admin.js');
 const css = read('css/admin/shopify-commerce-admin.css');
 
-expect(html.includes('js/admin/shopify-commerce-admin.js?v=tintin-20260916-order-save-1'), 'admin.html carga la nueva experiencia de comercio versionada.');
+expect(/js\/admin\/shopify-commerce-admin\.js\?v=[A-Za-z0-9._-]+/.test(html), 'admin.html carga la nueva experiencia de comercio versionada.');
 
 for (const section of ['productos', 'colecciones', 'pedidos']) {
   expect(html.includes(`id="section-${section}"`), `sigue existiendo el módulo ${section} original.`);
@@ -22,8 +22,13 @@ for (const section of ['productos', 'colecciones', 'pedidos']) {
 }
 
 for (const collectionName of ['products', 'collections', 'orders']) {
-  expect(new RegExp(`onSnapshot\\(collection\\(db, ['\"]${collectionName}['\"]\\)`).test(js), `${collectionName} se sincroniza en tiempo real.`);
+  const liveSync = collectionName === 'orders'
+    ? /const ordersPage = query\(collection\(db, ['"]orders['"]\), orderBy\(['"]createdAt['"], ['"]desc['"]\), limit\(ORDER_PAGE_SIZE\)\)[\s\S]*onSnapshot\(ordersPage/.test(js)
+    : new RegExp(`onSnapshot\\(collection\\(db, ['\"]${collectionName}['\"]\\)`).test(js);
+  expect(liveSync, `${collectionName} se sincroniza en tiempo real.`);
 }
+
+expect(/startAfter\(state\.ordersCursor\)[\s\S]*limit\(ORDER_PAGE_SIZE\)/.test(js), 'pedidos consulta páginas posteriores con cursor real.');
 
 for (const action of [
   'window.prodNuevo', 'window.prodEditar', 'window.prodToggleActive', 'window.prodEliminar',
