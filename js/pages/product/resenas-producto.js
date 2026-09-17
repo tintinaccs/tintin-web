@@ -27,6 +27,8 @@ const PUBLIC_REVIEWS_LIMIT = 100;
 let publicReviewCursor = null;
 let publicReviewsHaveMore = false;
 let publicReviewsLoadingMore = false;
+const expandedReplyThreads = new Set();
+const INITIAL_REPLY_LIMIT = 3;
 
 function productReturnPath() {
   return `${location.pathname || '/product'}${location.search || ''}${location.hash || ''}`;
@@ -303,7 +305,8 @@ function renderReply(reviewId, reply) {
       <div class="tt-review-thread-meta"><strong class="tt-review-thread-author">${escapeHtml(name)}</strong><time title="${escapeHtml(fullDateTitle(reply.createdAt))}">${escapeHtml(relativeDate(reply.createdAt))}</time></div>
       <p class="tt-review-thread-text">${escapeHtml(reply.text)}</p>
       <div class="tt-review-social-actions">
-        ${currentUser ? `<button type="button" class="tt-review-like-button${liked ? ' is-liked is-locked' : ''}" data-reply-like="${escapeHtml(replyId)}" data-review-id="${escapeHtml(reviewId)}" aria-pressed="${liked}" ${liked ? 'disabled' : ''}><span aria-hidden="true">${heartIconMarkup(liked)}</span><span>${liked ? 'Te gusta' : (count ? `${count} Me gusta` : 'Me gusta')}</span></button>` : `<span class="tt-review-like-count">${count ? `${heartIconMarkup(true)} ${count} Me gusta` : ''}</span>`}
+        ${currentUser ? `<button type="button" class="tt-review-like-button${liked ? ' is-liked' : ''}" data-reply-like="${escapeHtml(replyId)}" data-review-id="${escapeHtml(reviewId)}" aria-pressed="${liked}"><span aria-hidden="true">${heartIconMarkup(liked)}</span><span>${liked ? 'Te gusta' : (count ? `${count} Me gusta` : 'Me gusta')}</span></button>` : `<span class="tt-review-like-count">${count ? `${heartIconMarkup(true)} ${count} Me gusta` : ''}</span>`}
+        ${currentUser ? `<details class="tt-comment-menu"><summary aria-label="Acciones del comentario">•••</summary><button type="button" data-report-comment="${escapeHtml(replyId)}" data-thread-root="${escapeHtml(reviewId)}" data-comment-kind="reply">Denunciar</button></details>` : ''}
       </div>
     </div>
   </div>`;
@@ -314,6 +317,8 @@ function renderReview(review) {
   const liked = likedReviewIds.has(id);
   const likeCount = Math.max(0, Number(review.likeCount) || 0);
   const conversation = Array.isArray(review.conversation) ? review.conversation : [];
+  const expanded = expandedReplyThreads.has(id);
+  const visibleConversation = expanded ? conversation : conversation.slice(0, INITIAL_REPLY_LIMIT);
   const isStore = review.publicName === 'Tintin Accesorios';
   const name = displayPublicName(review.publicName, isStore ? 'store' : 'customer');
   return `<article class="tt-review-card" id="review-${escapeHtml(id)}" data-review-card="${escapeHtml(id)}">
@@ -324,9 +329,9 @@ function renderReview(review) {
     <p class="tt-review-comment">${escapeHtml(review.comment)}</p>
     ${review.storeLiked ? `<div class="tt-review-store-like">${heartIconMarkup(true)} A Tintin Accesorios le gustó esta reseña</div>` : ''}
     <div class="tt-review-social-actions">
-      ${currentUser ? `<button type="button" class="tt-review-like-button${liked ? ' is-liked is-locked' : ''}" data-review-like="${escapeHtml(id)}" aria-pressed="${liked}" ${liked ? 'disabled' : ''}><span aria-hidden="true">${heartIconMarkup(liked)}</span><span>${liked ? 'Te gusta' : (likeCount ? `${likeCount} Me gusta` : 'Me gusta')}</span></button><button type="button" class="tt-review-reply-toggle" data-reply-toggle="${escapeHtml(id)}">Responder</button>` : `<button type="button" class="tt-review-reply-login" data-reply-login="${escapeHtml(id)}">Iniciá sesión para responder</button>`}
+      ${currentUser ? `<button type="button" class="tt-review-like-button${liked ? ' is-liked' : ''}" data-review-like="${escapeHtml(id)}" aria-pressed="${liked}"><span aria-hidden="true">${heartIconMarkup(liked)}</span><span>${liked ? 'Te gusta' : (likeCount ? `${likeCount} Me gusta` : 'Me gusta')}</span></button><button type="button" class="tt-review-reply-toggle" data-reply-toggle="${escapeHtml(id)}">Responder</button><details class="tt-comment-menu"><summary aria-label="Acciones del comentario">•••</summary><button type="button" data-report-comment="${escapeHtml(id)}" data-thread-root="${escapeHtml(id)}" data-comment-kind="comment">Denunciar</button></details>` : `<button type="button" class="tt-review-reply-login" data-reply-login="${escapeHtml(id)}">Iniciá sesión para responder</button>`}
     </div>
-    ${conversation.length ? `<div class="tt-review-thread">${conversation.map(reply => renderReply(id, reply)).join('')}</div>` : ''}
+    ${conversation.length ? `<div class="tt-review-thread">${visibleConversation.map(reply => renderReply(id, reply)).join('')}</div>${conversation.length > INITIAL_REPLY_LIMIT ? `<button type="button" class="tt-review-thread-toggle" data-thread-toggle="${escapeHtml(id)}" aria-expanded="${expanded}">${expanded ? 'Ocultar respuestas' : `Ver ${conversation.length} respuestas`}</button>` : ''}` : ''}
     <form class="tt-review-reply-form" data-reply-form="${escapeHtml(id)}" hidden><textarea class="tt-review-reply-input" name="reply" maxlength="1200" required placeholder="Escribí una respuesta…"></textarea><div class="tt-review-reply-actions"><button type="button" data-reply-cancel="${escapeHtml(id)}">Cancelar</button><button type="submit" class="tt-btn">Responder</button></div><div role="alert" data-reply-error></div></form>
   </article>`;
 }
@@ -343,6 +348,28 @@ function renderReviews() {
   }
   document.querySelectorAll('[data-product-comment-count]').forEach(node => { node.textContent = String(reviews.length); });
   highlightDeepLink();
+}
+
+async function reportComment(commentId, threadRootId, trigger) {
+  if (!await stableAuthUser()) return requestCommunityLogin('report', { commentId, threadRootId });
+  const reason = window.prompt('Motivo: spam, offensive, harassment, inappropriate, misleading u other');
+  if (!reason) return;
+  const normalized = reason.trim().toLowerCase();
+  if (!['spam', 'offensive', 'harassment', 'inappropriate', 'misleading', 'other'].includes(normalized)) {
+    showCommunityNotice('Elegí un motivo válido para la denuncia.');
+    return;
+  }
+  const details = window.prompt('Detalle opcional (no incluyas datos personales)') || '';
+  if (trigger) { trigger.disabled = true; trigger.setAttribute('aria-busy', 'true'); }
+  try {
+    const result = await api({ action: 'reportComment', productId, commentId, threadRootId, reason: normalized, details });
+    showCommunityNotice(result.alreadyReported ? 'Ya habías denunciado este comentario.' : 'Recibimos la denuncia. La vamos a revisar.');
+  } catch (failure) {
+    if (failure.requiresLogin) return requestCommunityLogin('report', { commentId, threadRootId });
+    showCommunityNotice(failure.message || 'No pudimos enviar la denuncia.');
+  } finally {
+    if (trigger) { trigger.disabled = false; trigger.removeAttribute('aria-busy'); }
+  }
 }
 
 async function loadMorePublicReviews(button) {
@@ -558,12 +585,12 @@ document.addEventListener('click', async event => {
   if (reviewLike) {
     event.preventDefault();
     const reviewId = reviewLike.dataset.reviewLike;
-    if (likedReviewIds.has(reviewId)) return;
     if (!await stableAuthUser()) return requestCommunityLogin('reviewLike', { reviewId });
     reviewLike.disabled = true;
     try {
       const result = await api({ action: 'toggleReviewLike', productId, reviewId });
-      likedReviewIds.add(reviewId);
+      if (result.selected === false) likedReviewIds.delete(reviewId);
+      else likedReviewIds.add(reviewId);
       updateLocalReview(reviewId, review => { review.likeCount = result.likeCount; });
       renderReviews();
     } catch (failure) {
@@ -579,12 +606,12 @@ document.addEventListener('click', async event => {
     event.preventDefault();
     const replyId = replyLike.dataset.replyLike;
     const reviewId = replyLike.dataset.reviewId;
-    if (likedReplyIds.has(replyId)) return;
     if (!await stableAuthUser()) return requestCommunityLogin('replyLike', { reviewId, replyId });
     replyLike.disabled = true;
     try {
       const result = await api({ action: 'likeReply', productId, reviewId, replyId });
-      likedReplyIds.add(replyId);
+      if (result.selected === false) likedReplyIds.delete(replyId);
+      else likedReplyIds.add(replyId);
       updateLocalReview(reviewId, review => {
         const reply = (review.conversation || []).find(item => replyIdOf(item) === replyId);
         if (reply) reply.likeCount = result.likeCount;
@@ -595,6 +622,23 @@ document.addEventListener('click', async event => {
       showCommunityNotice(failure.message || 'No pudimos guardar este Me gusta.');
       replyLike.disabled = false;
     }
+    return;
+  }
+
+  const report = event.target.closest('[data-report-comment]');
+  if (report) {
+    event.preventDefault();
+    await reportComment(report.dataset.reportComment, report.dataset.threadRoot, report);
+    return;
+  }
+
+  const threadToggle = event.target.closest('[data-thread-toggle]');
+  if (threadToggle) {
+    event.preventDefault();
+    const threadRootId = threadToggle.dataset.threadToggle;
+    if (expandedReplyThreads.has(threadRootId)) expandedReplyThreads.delete(threadRootId);
+    else expandedReplyThreads.add(threadRootId);
+    renderReviews();
     return;
   }
 
@@ -699,7 +743,7 @@ document.addEventListener('submit', async event => {
     if (!await stableAuthUser()) return requestCommunityLogin('reply', { reviewId, text });
     submit.disabled = true;
     try {
-      const result = await api({ action: 'replyReview', productId, reviewId, text });
+      const result = await api({ action: 'replyReview', productId, reviewId, text, parentCommentId: reviewId, threadRootId: reviewId });
       updateLocalReview(reviewId, review => { review.conversation = result.review?.conversation || review.conversation || []; });
       renderReviews();
       showCommunityNotice('Tu respuesta se publicó correctamente.');
