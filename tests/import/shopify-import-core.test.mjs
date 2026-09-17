@@ -38,6 +38,10 @@ test('sanitiza Body HTML a la lista editorial permitida', () => {
   const result = sanitizeShopifyBodyHtml('<p onclick="alert(1)">Hola<script>alert(1)</script><strong>mundo</strong><img src="javascript:bad"></p>');
   assert.equal(result, '<p>Hola<strong>mundo</strong></p>');
   assert.doesNotMatch(result, /script|onclick|javascript|img/i);
+
+  const truncated = sanitizeShopifyBodyHtml('<p>Seguro</p><!-- comentario sin cierre <script>alert(1)');
+  assert.equal(truncated, '<p>Seguro</p>');
+  assert.doesNotMatch(truncated, /<!--|script/i);
 });
 
 test('ambiguous collection never becomes a silent garbage category', () => {

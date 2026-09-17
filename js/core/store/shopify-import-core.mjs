@@ -1,4 +1,5 @@
 const ALLOWED_BODY_TAGS = new Set(['p', 'br', 'strong', 'em', 'ul', 'ol', 'li']);
+const BLOCKED_BODY_TAGS = new Set(['script', 'iframe', 'object', 'embed', 'style', 'link', 'svg', 'math', 'template', 'form']);
 const SHOPIFY_STATUS = new Set(['active', 'draft', 'archived']);
 
 function asText(value) {
@@ -39,17 +40,45 @@ export function safeImportUrl(value) {
  * event handlers, javascript: URLs, embeds and scripts cannot survive.
  */
 export function sanitizeShopifyBodyHtml(value, max = 20000) {
-  let html = asText(value).replace(/<!--[\s\S]*?-->/g, '');
-  html = html.replace(/<\s*(script|iframe|object|embed|style|link|svg|math|template|form)[^>]*>[\s\S]*?<\s*\/\s*\1\s*>/gi, '');
-  html = html.replace(/<\s*(script|iframe|object|embed|style|link|svg|math|template|form)[^>]*\/?>/gi, '');
-  return html
-    .replace(/<([^>]+)>/g, (full, rawTag) => {
-      const match = /^\s*(\/?)\s*([a-z0-9]+)\b/i.exec(rawTag);
-      if (!match) return '';
+  // Project every markup-looking token onto the small editorial allowlist.
+  // A scanner is intentional here: partial multi-character regexes can leave
+  // truncated comments or script-like input behind.
+  const source = asText(value);
+  let html = '';
+  let cursor = 0;
+  while (cursor < source.length && html.length < max) {
+    const open = source.indexOf('<', cursor);
+    if (open < 0) {
+      html += source.slice(cursor);
+      break;
+    }
+    html += source.slice(cursor, open);
+    if (source.startsWith('<!--', open)) {
+      const commentEnd = source.indexOf('-->', open + 4);
+      cursor = commentEnd < 0 ? source.length : commentEnd + 3;
+      continue;
+    }
+    const close = source.indexOf('>', open + 1);
+    if (close < 0) break;
+    const rawTag = source.slice(open + 1, close);
+    const match = /^\s*(\/?)\s*([a-z0-9]+)\b/i.exec(rawTag);
+    if (match) {
       const name = match[2].toLowerCase();
-      if (!ALLOWED_BODY_TAGS.has(name)) return '';
-      return `<${match[1] ? '/' : ''}${name}>`;
-    })
+      if (BLOCKED_BODY_TAGS.has(name) && !match[1]) {
+        const closingStart = source.toLowerCase().indexOf(`</${name}`, close + 1);
+        if (closingStart < 0) {
+          cursor = source.length;
+          continue;
+        }
+        const closingEnd = source.indexOf('>', closingStart + name.length + 2);
+        cursor = closingEnd < 0 ? source.length : closingEnd + 1;
+        continue;
+      }
+      if (ALLOWED_BODY_TAGS.has(name)) html += `<${match[1] ? '/' : ''}${name}>`;
+    }
+    cursor = close + 1;
+  }
+  return html
     .replace(/\s{3,}/g, ' ')
     .trim()
     .slice(0, max);

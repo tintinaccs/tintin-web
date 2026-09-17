@@ -29,7 +29,7 @@ import {
   safeImportUrl,
   sanitizeShopifyBodyHtml,
   summarizeImportRecords,
-} from '../core/store/shopify-import-core.mjs?v=tintin-20260917-shopify-import-core-1';
+} from '../core/store/shopify-import-core.mjs?v=tintin-20260917-shopify-import-core-2';
 import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20260910-auth-api-1';
 
 if (!window.TintinAdminShopifyImportBooted) {
