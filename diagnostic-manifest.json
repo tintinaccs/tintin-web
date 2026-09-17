@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "6acc956b77187317deff0957c2dce31e203a816ecce7165291f3c7a341798363",
+  "sourceFingerprint": "ccfe0cb5753803ee090e48ce727b28b25c70ee7a3a6dc7b9e1df76d1a250d3e7",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 825,
-    "textFiles": 784,
-    "totalBytes": 16683347,
+    "files": 826,
+    "textFiles": 785,
+    "totalBytes": 16685371,
     "pages": 19,
-    "modules": 561
+    "modules": 562
   },
   "viewports": [
     {
@@ -29975,6 +29975,17 @@
       "endpoints": []
     },
     {
+      "path": "tests/cart/quantity-browser.spec.js",
+      "bytes": 1946,
+      "sha256": "381ea955ac9a31806ad9ea360d28de98a9a2530e95cabb3ab3836a1b410c819e",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/catalog/public-catalog-cache.test.mjs",
       "bytes": 1351,
       "sha256": "3e03e8ee118479dfb0492c7593da5fe646463e6bd51e6f13dbfda9ec2c8b1193",
@@ -35831,8 +35842,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 12642,
-      "sha256": "97cbd5b0bcad681f289c9285077143ccae0c5ee981cc3587a6a71ff23dd4b0f6"
+      "bytes": 12720,
+      "sha256": "0c98c2c0bc5d8bd5cbf29309f51bc10c86c37685c7e79cf8e9d79e8cce8d2225"
     },
     {
       "path": "perfil.html",
@@ -36949,6 +36960,12 @@
       "extension": ".mjs",
       "bytes": 2477,
       "sha256": "6291cb640bd159d1affd1bbbe65ed575ca5f11911e0920a0c5017e9152d44577"
+    },
+    {
+      "path": "tests/cart/quantity-browser.spec.js",
+      "extension": ".js",
+      "bytes": 1946,
+      "sha256": "381ea955ac9a31806ad9ea360d28de98a9a2530e95cabb3ab3836a1b410c819e"
     },
     {
       "path": "tests/catalog/public-catalog-cache.test.mjs",
