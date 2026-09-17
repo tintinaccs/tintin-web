@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "546301b12844b4806aad46e0efa367a2981fd64db5a8fdb23eb6377451e525de",
+  "sourceFingerprint": "cc1eb5e895fa0e7dbaae695f9d6d9c268fc9a3dff8e1c5bd75bcc70a542ac90c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 834,
     "textFiles": 793,
-    "totalBytes": 16743658,
+    "totalBytes": 16743716,
     "pages": 19,
     "modules": 566
   },
@@ -18598,8 +18598,8 @@
     },
     {
       "path": "functions/api/admin-import-job.js",
-      "bytes": 7278,
-      "sha256": "43d3449108eeeae90fef8c6bb04c267c953818f6093599ba22c488c0def12706",
+      "bytes": 7336,
+      "sha256": "0f51156dd532bf756eca2b6c078f8d850c53f365a1ce685c6a0aa9677ea0d7d1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18608,6 +18608,12 @@
         {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 5
+        },
+        {
+          "raw": "../../cloudflare/firestore-admin-batch.js",
+          "target": "cloudflare/firestore-admin-batch.js",
           "dynamic": false,
           "line": 6
         },
@@ -34100,8 +34106,8 @@
     {
       "path": "functions/api/admin-import-job.js",
       "extension": ".js",
-      "bytes": 7278,
-      "sha256": "43d3449108eeeae90fef8c6bb04c267c953818f6093599ba22c488c0def12706"
+      "bytes": 7336,
+      "sha256": "0f51156dd532bf756eca2b6c078f8d850c53f365a1ce685c6a0aa9677ea0d7d1"
     },
     {
       "path": "functions/api/admin-order-mutation.js",

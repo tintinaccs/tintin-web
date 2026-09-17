@@ -1,9 +1,9 @@
 import {
   decodeFirestoreFields,
   encodeFirestoreFields,
-  firestoreAdminBatchCommit,
   firestoreAdminGet,
 } from '../../cloudflare/firebase-admin-ligero.js';
+import { firestoreAdminBatchCommit } from '../../cloudflare/firestore-admin-batch.js';
 import {
   jsonResponse,
   originIsAllowed,
