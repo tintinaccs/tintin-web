@@ -6308,6 +6308,10 @@ document.querySelectorAll('[data-section="colecciones"]').forEach(btn => {
 
 // ======== IMPORT / EXPORT ========
 let csvProductos = [];
+// Legacy import markup remains in the historical HTML until the next template
+// cleanup, but every write-capable handler is deliberately inert. The mounted
+// canonical importer in importacion-admin.js is the only import authority.
+const LEGACY_IMPORT_DISABLED = true;
 let _importarInited = false;
 
 function loadImportar() {
@@ -6397,6 +6401,7 @@ function loadImportar() {
 
   // ── IMPORTAR JSON
   document.getElementById('btn-importar').onclick = async () => {
+    if (LEGACY_IMPORT_DISABLED) { toast('Este importador legacy está deshabilitado. Usá la superficie Shopify canónica.'); return; }
     const raw = document.getElementById('import-json').value.trim();
     const result = document.getElementById('import-result');
     try {
@@ -6621,6 +6626,7 @@ function loadImportar() {
   });
 
   function procesarCSV(file) {
+    if (LEGACY_IMPORT_DISABLED) { toast('Este importador legacy está deshabilitado. Usá la superficie Shopify canónica.'); return; }
     const reader = new FileReader();
     reader.onload = e => {
       try {
@@ -6670,6 +6676,7 @@ function loadImportar() {
   });
 
   async function importCsvProducts_(list) {
+    if (LEGACY_IMPORT_DISABLED) { toast('Este importador legacy está deshabilitado. Usá la superficie Shopify canónica.'); return; }
     if (!list.length) return;
     const progress=document.getElementById('csv-import-progress');
     const progressBar=document.getElementById('csv-progress-bar');

@@ -10,6 +10,9 @@ const pkg = JSON.parse(read('package.json'));
 const firebaseRc = JSON.parse(read('.firebaserc'));
 const firebaseJson = JSON.parse(read('firebase.json'));
 const phase9 = read('js/admin/importacion-admin.js');
+const importCore = read('js/core/store/shopify-import-core.mjs');
+const importJob = read('functions/api/admin-import-job.js');
+const adminHtml = read('admin.html');
 const normalization = read('js/core/store/normalizacion-importacion.mjs');
 const normalizationTests = read('tests/import/phase9-import-normalization.test.mjs');
 const quality = read('js/quality/calidad-interfaz.js');
@@ -61,7 +64,8 @@ check(
 
 check(
   'El CSV detecta coma, punto y coma o tabulador y conserva campos citados',
-  phase9.includes('parseDelimitedRows(textValue)') &&
+  phase9.includes('parseDelimitedRowsStream') &&
+    importCore.includes('groupShopifyRows') &&
     normalization.includes("const candidates = [',', ';', '\\t']") &&
     normalization.includes("char === '\"' && next === '\"'") &&
     normalization.includes("char === '\\n' || char === '\\r'") &&
@@ -71,7 +75,7 @@ check(
 
 check(
   'Los precios localizados se normalizan sin confundir miles y decimales',
-  phase9.includes('parseLocalizedNumber(value)') &&
+  phase9.includes('parseLocalizedNumber') &&
     normalization.includes('export function parseLocalizedNumber') &&
     normalizationTests.includes("parseLocalizedNumber('100.000'), 100000") &&
     normalizationTests.includes("parseLocalizedNumber('1.234,56'), 1234.56") &&
@@ -81,7 +85,7 @@ check(
 
 check(
   'El stock vacío queda ilimitado y los valores inválidos se rechazan',
-  phase9.includes('parseOptionalStock(raw?.stock)') &&
+  phase9.includes('parseOptionalStock') &&
     phase9.includes("record.product.stock == null ? 'Sin límite'") &&
     normalization.includes('export function parseOptionalStock') &&
     normalizationTests.includes("parseOptionalStock('Sin límite'), null") &&
@@ -100,61 +104,63 @@ check(
 );
 
 check(
-  'Una falla secundaria de Sheets no invalida productos ya confirmados en Firestore',
-  phase9.includes('await batch.commit();') &&
-    phase9.includes('sheetsSyncFailures += importedIds.length') &&
-    phase9.includes('Firestore quedó confirmado; Sheets se reintentará por separado') &&
-    phase9.indexOf('completed += chunk.length') < phase9.indexOf('window.tintinPushProductsToSheets(importedIds)'),
-  'La interfaz debe distinguir el commit principal de una sincronización secundaria'
+  'El preview no ejecuta migración ni escrituras de productos',
+  importJob.includes("catalogMigration: 'not-executed'") &&
+    importJob.includes('dryRun: true') &&
+    !phase9.includes("collection(db, 'products')"),
+  'La migración real de catálogo debe quedar fuera de esta fase y requerir autorización explícita.'
 );
 
 check(
-  'Los archivos tienen límites de seguridad',
-  phase9.includes('MAX_FILE_BYTES = 5 * 1024 * 1024') &&
-    phase9.includes('MAX_IMPORT_ROWS = 1000') &&
-    phase9.includes('BATCH_SIZE = 350'),
-  'Evita congelar el navegador o superar el límite de Firestore'
+  'Los archivos grandes usan streaming y checkpoint',
+  phase9.includes('MAX_FILE_BYTES = 250 * 1024 * 1024') &&
+    phase9.includes('parseDelimitedRowsStream') &&
+    !phase9.includes('MAX_IMPORT_ROWS') &&
+    importJob.includes('lastCheckpoint'),
+  'Evita congelar el navegador y permite preparar trabajos grandes sin una cota arbitraria de filas.'
 );
 
 check(
   'Las colecciones reales validan cada producto',
-  phase9.includes("getDocsPaginated(collection(db, 'collections')") &&
-    phase9.includes('currentCategorySlugs().has(product.category)') &&
+  phase9.includes("readCollection('collections', 5000)") &&
+    importCore.includes('resolveShopifyCollection') &&
+    importCore.includes('ambiguous') &&
     !phase9.includes("const CAT_MAP ="),
-  'No debe volver a una lista fija de categorías'
+  'No debe volver a una lista fija ni asignar colecciones ambiguas en silencio'
 );
 
 check(
   'La importación no sobrescribe ni repite productos',
-  phase9.includes('markDuplicates(records)') &&
-    phase9.includes('importFingerprint') &&
-    phase9.includes('!record.errors.length && !record.duplicate') &&
-    phase9.includes("doc(collection(db, 'products'))"),
-  'Solo se crean productos nuevos validados'
+  importCore.includes('buildImportFingerprint') &&
+    importCore.includes('stableProductDocumentId') &&
+    phase9.includes("strategy: 'SKIP'") &&
+    importJob.includes('currentDocument: { exists: false }') &&
+    !phase9.includes("collection(db, 'products')"),
+  'La identidad y estrategia deben ser deterministas; no se escribe el catálogo en el preview'
 );
 
 check(
-  'Cada lote importado queda auditado',
-  phase9.includes("batch.set(doc(collection(db, 'auditLog'))") &&
-    phase9.includes("action: 'importar_productos'") &&
-    phase9.includes('await batch.commit()'),
-  'Productos y auditoría deben confirmarse en el mismo batch'
+  'Cada preview queda auditado server-side',
+  importJob.includes("import_job_created") &&
+    importJob.includes('importJobs/${jobId}') &&
+    phase9.includes('JOB_ENDPOINT'),
+  'El job y su evento de auditoría deben persistirse juntos sin presentar migración ejecutada'
 );
 
 check(
   'La copia operativa excluye datos de clientas',
   phase9.includes("excludes: ['users', 'orders', 'carts', 'auditLog', 'emailLogs']") &&
     phase9.includes("readCollection('products')") &&
-    phase9.includes("readCollection('collections')") &&
-    phase9.includes("readCollection('site_content')"),
+    /readCollection\('collections'/.test(phase9) &&
+    /readCollection\('site_content'/.test(phase9),
   'El backup descargable no debe mezclar pedidos o usuarios'
 );
 
 check(
-  'La Fase 9 arranca en el panel',
-  quality.includes('bootAdminImportPhase9') &&
-    quality.includes("import(versioned('../admin/importacion-admin.js'))"),
-  'calidad-interfaz.js debe iniciar el módulo final'
+  'La superficie canónica de importación arranca en el panel',
+  adminHtml.includes('js/admin/importacion-admin.js?v=tintin-20260917-shopify-import-1') &&
+    phase9.includes('shopify-import-canonical-card'),
+  'admin.html debe montar el único módulo de importación validado'
 );
 
 check(

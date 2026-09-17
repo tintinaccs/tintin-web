@@ -130,6 +130,52 @@ export function parseDelimitedRows(value, delimiter = detectCsvDelimiter(value))
   return rows;
 }
 
+/**
+ * Incremental RFC4180 parser for File.stream()/ReadableStream chunks. It keeps
+ * only the current row, allowing the admin preview to ingest large Shopify
+ * exports without holding the original file and a second parsed copy at once.
+ */
+export async function* parseDelimitedRowsStream(chunks, delimiter = ',') {
+  if (![',', ';', '\t'].includes(delimiter)) throw new Error('El delimitador CSV no es compatible.');
+  let row = [];
+  let cell = '';
+  let quoted = false;
+  let ignoreLf = false;
+  for await (const chunk of chunks) {
+    const input = String(chunk || '');
+    for (let index = 0; index < input.length; index += 1) {
+      const char = input[index];
+      const next = input[index + 1];
+      if (quoted) {
+        if (char === '"' && next === '"') {
+          cell += '"';
+          index += 1;
+        } else if (char === '"') quoted = false;
+        else cell += char;
+        continue;
+      }
+      if (char === '"') quoted = true;
+      else if (char === delimiter) {
+        row.push(cell);
+        cell = '';
+      } else if (char === '\r' || char === '\n') {
+        if (char === '\n' && ignoreLf) {
+          ignoreLf = false;
+          continue;
+        }
+        row.push(cell);
+        cell = '';
+        if (row.some(item => rawText(item).trim())) yield row;
+        row = [];
+        ignoreLf = char === '\r';
+      } else cell += char;
+    }
+  }
+  if (quoted) throw new Error('El CSV termina dentro de un campo entre comillas.');
+  row.push(cell);
+  if (row.some(item => rawText(item).trim())) yield row;
+}
+
 export function validateOperationalBackupEnvelope(value, {
   projectId = 'tintin-accesorios',
   schemaVersion = 1,
