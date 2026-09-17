@@ -26,7 +26,9 @@ export async function onRequest({ request, env }) {
     return jsonResponse({ ok: true, report }, 200, origin, requestUrl);
   } catch (error) {
     console.error('[system-health]', error?.message || error);
-    const authFailure = /sesión|super admin|correo verificado/i.test(String(error?.message || ''));
+    const authFailure = Number(error?.status) === 401
+      || Number(error?.status) === 403
+      || /autenticaci[oó]n|sesi[oó]n|super admin|correo verificado/i.test(String(error?.message || ''));
     return jsonResponse({
       ok: false,
       error: authFailure

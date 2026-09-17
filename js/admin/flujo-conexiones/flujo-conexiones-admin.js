@@ -8,6 +8,7 @@
 // monitoreo nueva: reutiliza lo que ya prueba conectividad real sin escribir
 // datos. Nada de lo que hace este módulo crea, actualiza ni borra documentos.
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js';
+import { EVIDENCIA, resolveState, isAttentionState } from './estado-flujo.js';
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 
 const CATEGORY_LABELS = {
@@ -30,8 +31,18 @@ function slug(text) {
     .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
 
+const STALE_AFTER_MS = 24 * 60 * 60 * 1000;
+
 function nodeById(id) {
   return NODES.find(node => node.id === id) || null;
+}
+
+function edgeById(id) {
+  return EDGES.find(edge => edge.id === id) || null;
+}
+
+function edgeIdFor(from, to) {
+  return EDGES.find(edge => edge.from === from && edge.to === to)?.id || '';
 }
 
 function escapeHtml(value) {
@@ -40,33 +51,93 @@ function escapeHtml(value) {
   ));
 }
 
-// Mapa de nodos que sí tienen una prueba en vivo real disponible hoy, y cómo
-// leer esa prueba desde las dos respuestas de salud existentes. Un nodo que
-// no aparece acá se queda con su estado de evidencia de código — no se
-// inventa una verificación en vivo que no existe.
-function buildLiveChecks(systemHealth, adminHealth) {
+function buildLiveChecks({ publicHealth, systemHealth, adminHealth, headers }, checkedAt) {
   const out = {};
-  const setFrom = (id, ok, note) => { if (ok !== null) out[id] = { ok, note }; };
+  const setFrom = (id, ok, note, options = {}) => {
+    if (typeof ok !== 'boolean') return;
+    out[id] = {
+      ok,
+      note,
+      status: Number(options.status || 200),
+      evidenceLevel: options.evidenceLevel || EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
+      promote: options.promote === true,
+      authRequired: options.authRequired === true,
+      checkedAt,
+    };
+  };
+
+  const publicOk = publicHealth?.status === 200 && publicHealth.body?.ok === true;
+  const publicChecks = publicHealth?.body?.checks || {};
+  const publicAdmin = publicHealth?.body?.admin || {};
+  setFrom('cf-pages', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, { status: publicHealth?.status, promote: publicOk });
+  setFrom('cf-functions', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, { status: publicHealth?.status, promote: publicOk });
+  setFrom('apis-internas', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, { status: publicHealth?.status, promote: publicOk });
+  setFrom('firestore', publicChecks.firebase, `GET /api/health · checks.firebase=${publicChecks.firebase === true}`, { status: publicHealth?.status, promote: publicChecks.firebase === true });
+  Object.entries({
+    productos: 'products',
+    inventario: 'productInventory',
+    pedidos: 'orders',
+    'users-uid': 'users',
+    comentarios: 'reviews',
+    likes: 'likes',
+    correos: 'emailLogs',
+  }).forEach(([id, key]) => setFrom(id, typeof publicAdmin[key] === 'boolean' ? publicAdmin[key] : undefined,
+    `GET /api/health · admin.${key}=${publicAdmin[key] === true}`, { status: publicHealth?.status }));
 
   if (adminHealth && adminHealth.checks) {
     const c = adminHealth.checks;
-    setFrom('productos', c.products?.ok ?? null, 'admin-runtime-health: lectura products');
-    setFrom('inventario', c.productInventory?.ok ?? null, 'admin-runtime-health: lectura productInventory');
-    setFrom('pedidos', c.orders?.ok ?? null, 'admin-runtime-health: lectura orders');
-    setFrom('users-uid', c.users?.ok ?? null, 'admin-runtime-health: lectura users');
-    setFrom('comentarios', c.reviews?.ok ?? null, 'admin-runtime-health: lectura reviewRecords');
-    setFrom('likes', c.likes?.ok ?? null, 'admin-runtime-health: lectura likeRecords');
-    setFrom('correos', c.emailLogs?.ok ?? null, 'admin-runtime-health: lectura emailLogs');
+    Object.entries({
+      productos: 'products', inventario: 'productInventory', pedidos: 'orders', 'users-uid': 'users',
+      comentarios: 'reviews', likes: 'likes', correos: 'emailLogs',
+    }).forEach(([id, key]) => setFrom(id, c[key]?.ok, `GET /api/admin-runtime-health · lectura ${key}`, { status: adminHealth.status || 200 }));
   }
-  if (systemHealth) {
-    setFrom('firestore', systemHealth.integrations?.firebase ?? null, 'system-health: runtime admin (Firestore) responde');
-    setFrom('firestore-fuente-verdad', systemHealth.integrations?.firebase ?? null, 'system-health: runtime admin (Firestore) responde');
-    setFrom('apps-script', systemHealth.integrations?.appsScript?.reachable ?? null,
-      `system-health: Apps Script ${systemHealth.integrations?.appsScript?.reachable ? 'alcanzable' : 'no alcanzable'} (protocolo ${systemHealth.integrations?.appsScript?.protocolOk ? 'reconocido' : 'no confirmado'})`);
-    setFrom('google-sheets', systemHealth.integrations?.sheets ?? null, 'system-health: guardas de sincronización con Sheets configuradas y respondiendo');
-    if (systemHealth.deployment?.commitSha) {
-      setFrom('deployments', true, `system-health: commit desplegado ${systemHealth.deployment.commitSha.slice(0, 10)} (${systemHealth.deployment.branch || 'branch desconocida'})`);
+
+  if (systemHealth?.body?.report) {
+    const report = systemHealth.body.report;
+    const integrations = report.integrations || {};
+    setFrom('firestore', integrations.firebase, 'GET /api/system-health · runtime Firestore', { status: systemHealth.status, promote: integrations.firebase === true });
+    const appsScript = integrations.appsScript;
+    if (appsScript) setFrom('apps-script', appsScript.protocolOk === true,
+      `GET /api/system-health · Apps Script ${appsScript.protocolOk ? 'protocolo reconocido' : 'protocolo no confirmado'}`,
+      { status: appsScript.httpStatus || systemHealth.status, promote: appsScript.protocolOk === true });
+    setFrom('google-sheets', integrations.sheets === true,
+      'GET /api/system-health · protocolo de sincronización confirmado', { status: systemHealth.status, promote: integrations.sheets === true });
+    if (report.deployment?.commitSha) {
+      setFrom('deployments', true, `GET /api/system-health · commit ${report.deployment.commitSha.slice(0, 10)} (${report.deployment.branch || 'branch desconocida'})`, { promote: true });
     }
+  }
+  if (headers) {
+    setFrom('csp', headers.csp === true, `GET /admin.html · CSP ${headers.csp ? 'presente' : 'ausente'}`, { status: headers.status, promote: headers.csp === true });
+  }
+  return out;
+}
+
+function buildLiveEdges({ publicHealth, systemHealth, headers }, checkedAt) {
+  const out = {};
+  const set = (from, to, ok, note, status = 200) => {
+    if (typeof ok !== 'boolean') return;
+    out[edgeIdFor(from, to)] = {
+      ok, note, status, promote: ok, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION, checkedAt,
+    };
+  };
+  const publicOk = publicHealth?.status === 200 && publicHealth.body?.ok === true;
+  const checks = publicHealth?.body?.checks || {};
+  set('cf-pages', 'cf-functions', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, publicHealth?.status);
+  set('cf-functions', 'apis-internas', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, publicHealth?.status);
+  set('apis-internas', 'firestore', typeof checks.firebase === 'boolean' ? checks.firebase : undefined,
+    `GET /api/health · checks.firebase=${checks.firebase === true}`, publicHealth?.status);
+  const admin = publicHealth?.body?.admin || {};
+  set('firestore', 'users-uid', typeof admin.users === 'boolean' ? admin.users : undefined, `GET /api/health · admin.users=${admin.users === true}`, publicHealth?.status);
+  set('cf-functions', 'csp', headers ? headers.csp === true : undefined, `GET /admin.html · CSP ${headers?.csp ? 'presente' : 'ausente'}`, headers?.status);
+  const report = systemHealth?.body?.report;
+  if (report?.integrations?.appsScript) {
+    set('apis-internas', 'apps-script', report.integrations.appsScript.protocolOk === true,
+      `GET /api/system-health · Apps Script ${report.integrations.appsScript.protocolOk ? 'OK' : 'no confirmado'}`,
+      report.integrations.appsScript.httpStatus || systemHealth.status);
+  }
+  if (report?.integrations?.sheets !== undefined) {
+    set('apps-script', 'google-sheets', report.integrations.sheets === true,
+      'GET /api/system-health · protocolo Sheets', systemHealth.status);
   }
   return out;
 }
@@ -89,7 +160,7 @@ export function initConnectionsFlow({ role } = {}) {
   if (!root || root.dataset.tfcMounted === '1') return;
   root.dataset.tfcMounted = '1';
 
-  const liveState = { checkedAt: null, byId: {}, error: '' };
+  const liveState = { checkedAt: null, byId: {}, byEdgeId: {}, error: '', endpointStatus: {} };
 
   root.innerHTML = `
     <div class="adm-card tfc-card">
@@ -103,8 +174,9 @@ export function initConnectionsFlow({ role } = {}) {
       <div class="adm-card-body">
         <div class="adm-diagnostic-safety" role="note">
           <strong>Modo de solo lectura.</strong>
-          "Revalidar" solo ejecuta llamadas GET a endpoints de diagnóstico que ya existen
-          (<code>/api/system-health</code>, <code>/api/admin-runtime-health</code>). Ningún botón de este panel
+          "Revalidar" solo ejecuta lecturas GET de producción (<code>/api/health</code>,
+          <code>/api/system-health</code>, <code>/api/admin-runtime-health</code> y los headers de
+          <code>/admin.html</code>). Ningún botón de este panel
           crea, actualiza ni elimina pedidos, productos ni datos reales.
         </div>
         <div class="tfc-meta">
@@ -112,10 +184,13 @@ export function initConnectionsFlow({ role } = {}) {
           <span id="tfc-live-timestamp">Sin verificación en vivo todavía.</span>
         </div>
         <div id="tfc-live-error" class="tfc-live-error" hidden></div>
+        <div id="tfc-summary" class="tfc-summary" aria-label="Resumen del flujo"></div>
         <div class="tfc-toolbar">
-          <input type="search" id="tfc-search" class="adm-select" placeholder="Buscar nodo por nombre…">
+          <input type="search" id="tfc-search" class="adm-select" placeholder="Buscar nodo, conexión, servicio, archivo o estado…">
           <select id="tfc-filter-state" class="adm-select">
             <option value="">Todos los estados</option>
+            <option value="__attention">Solo requiere atención</option>
+            <option value="__no-green">No verdes</option>
             ${Object.values(ESTADOS).map(state => `<option value="${escapeHtml(state)}">${escapeHtml(state)}</option>`).join('')}
           </select>
         </div>
@@ -137,21 +212,50 @@ export function initConnectionsFlow({ role } = {}) {
   const stateFilterEl = root.querySelector('#tfc-filter-state');
   const liveTimestampEl = root.querySelector('#tfc-live-timestamp');
   const liveErrorEl = root.querySelector('#tfc-live-error');
+  const summaryEl = root.querySelector('#tfc-summary');
 
   let selectedNodeId = null;
+  let selectedEdgeId = null;
 
   function effectiveState(node) {
-    const live = liveState.byId[node.id];
-    if (!live) return node.state;
-    return live.ok ? ESTADOS.PROD : ESTADOS.ERROR;
+    return resolveState(node, liveState.byId[node.id], ESTADOS);
   }
 
-  function nodeMatchesFilters(node) {
+  function effectiveEdgeState(edge) {
+    return resolveState(edge, liveState.byEdgeId[edge.id], ESTADOS);
+  }
+
+  function searchableEvidence(record) {
+    return (record.evidence || []).flatMap(item => [item.file, item.note]).filter(Boolean).join(' ');
+  }
+
+  function matchesFilter(record, state, isEdge = false) {
     const term = searchEl.value.trim().toLowerCase();
     const stateFilter = stateFilterEl.value;
-    if (term && !node.label.toLowerCase().includes(term)) return false;
-    if (stateFilter && effectiveState(node) !== stateFilter) return false;
+    const from = isEdge ? nodeById(record.from)?.label || record.from : '';
+    const to = isEdge ? nodeById(record.to)?.label || record.to : '';
+    const haystack = [record.id, record.label, record.category, from, to, searchableEvidence(record), state, record.baselineState].filter(Boolean).join(' ').toLowerCase();
+    if (term && !haystack.includes(term)) return false;
+    if (stateFilter === '__attention' || stateFilter === '__no-green') return isAttentionState(state, ESTADOS);
+    if (stateFilter && state !== stateFilter) return false;
     return true;
+  }
+
+  function nodeMatchesFilters(node) { return matchesFilter(node, effectiveState(node)); }
+  function edgeMatchesFilters(edge) { return matchesFilter(edge, effectiveEdgeState(edge), true); }
+
+  function renderSummary() {
+    const nodeStates = NODES.map(effectiveState);
+    const edgeStates = EDGES.map(effectiveEdgeState);
+    const green = [...nodeStates, ...edgeStates].filter(state => state === ESTADOS.PROD).length;
+    const attention = nodeStates.length + edgeStates.length - green;
+    const checked = liveState.checkedAt ? `Última revalidación: ${escapeHtml(liveState.checkedAt)}${isStale(liveState.checkedAt) ? ' · STALE / requiere revalidación' : ''}` : 'Sin revalidación live en esta sesión.';
+    summaryEl.innerHTML = `<div class="tfc-summary-item"><strong>${NODES.length}</strong><span>nodos</span></div><div class="tfc-summary-item"><strong>${EDGES.length}</strong><span>conexiones</span></div><div class="tfc-summary-item is-green"><strong>${green}</strong><span>verificados</span></div><div class="tfc-summary-item is-attention"><strong>${attention}</strong><span>requieren atención</span></div><div class="tfc-summary-freshness">${checked}</div>`;
+  }
+
+  function isStale(checkedAt) {
+    const time = Date.parse(checkedAt || '');
+    return !Number.isFinite(time) || Date.now() - time > STALE_AFTER_MS;
   }
 
   function renderLanes() {
@@ -161,7 +265,7 @@ export function initConnectionsFlow({ role } = {}) {
       const pills = nodes.map(node => {
         const state = effectiveState(node);
         const live = liveState.byId[node.id];
-        const liveMark = live ? `<span class="tfc-live-dot" title="Verificado en vivo">${live.ok ? '●' : '✕'}</span>` : '';
+        const liveMark = live ? `<span class="tfc-live-dot" title="${escapeHtml(live.note)}">${live.ok ? '●' : '✕'}</span>` : '';
         const active = node.id === selectedNodeId ? ' tfc-pill-active' : '';
         return `<button type="button" class="tfc-pill tfc-state-${slug(state)}${active}" data-node-id="${escapeHtml(node.id)}">${liveMark}${escapeHtml(node.label)}</button>`;
       }).join('');
@@ -174,47 +278,61 @@ export function initConnectionsFlow({ role } = {}) {
     const rows = EDGES.filter(edge => {
       if (selectedNodeId) return edge.from === selectedNodeId || edge.to === selectedNodeId;
       return visibleIds.has(edge.from) || visibleIds.has(edge.to);
+    }).filter(edge => {
+      if (selectedNodeId) return true;
+      return edgeMatchesFilters(edge);
     }).map(edge => {
       const from = nodeById(edge.from);
       const to = nodeById(edge.to);
       const label = edge.label ? `<span class="tfc-edge-label">${escapeHtml(edge.label)}</span>` : '';
-      return `<div class="tfc-edge-row">
+      const state = effectiveEdgeState(edge);
+      const live = liveState.byEdgeId[edge.id];
+      const active = edge.id === selectedEdgeId ? ' is-selected' : '';
+      return `<button type="button" class="tfc-edge-row${active}" data-edge-id="${escapeHtml(edge.id)}">
         <span class="tfc-edge-node">${escapeHtml(from?.label || edge.from)}</span>
         <span class="tfc-edge-arrow">→</span>
         <span class="tfc-edge-node">${escapeHtml(to?.label || edge.to)}</span>
         ${label}
-        ${stateBadgeHtml(edge.state)}
-      </div>`;
+        ${stateBadgeHtml(state)}
+        ${live ? `<span class="tfc-edge-live" title="${escapeHtml(live.note)}">${live.ok ? '● live' : '✕ live'}</span>` : ''}
+      </button>`;
     });
     edgesEl.innerHTML = rows.join('') || '<p class="tfc-empty">Sin conexiones para este filtro.</p>';
   }
 
   function renderDetail() {
-    if (!selectedNodeId) { detailEl.hidden = true; detailEl.innerHTML = ''; return; }
-    const node = nodeById(selectedNodeId);
-    if (!node) { detailEl.hidden = true; return; }
-    const live = liveState.byId[node.id];
+    const record = selectedNodeId ? nodeById(selectedNodeId) : selectedEdgeId ? edgeById(selectedEdgeId) : null;
+    if (!record) { detailEl.hidden = true; detailEl.innerHTML = ''; return; }
+    const isEdge = Boolean(selectedEdgeId);
+    const live = isEdge ? liveState.byEdgeId[record.id] : liveState.byId[record.id];
+    const state = isEdge ? effectiveEdgeState(record) : effectiveState(record);
+    const from = isEdge ? nodeById(record.from)?.label || record.from : '';
+    const to = isEdge ? nodeById(record.to)?.label || record.to : '';
     const liveHtml = live
-      ? `<p class="tfc-detail-live"><strong>Verificación en vivo (${escapeHtml(liveState.checkedAt || '')}):</strong> ${live.ok ? 'OK' : 'FALLÓ'} — ${escapeHtml(live.note)}</p>`
-      : '<p class="tfc-detail-live tfc-detail-live-none">Sin prueba en vivo disponible para este nodo; el estado mostrado es evidencia de código.</p>';
+      ? `<p class="tfc-detail-live"><strong>Verificación en vivo (${escapeHtml(live.checkedAt || liveState.checkedAt || '')}):</strong> ${live.ok ? 'OK' : 'FALLÓ'} — ${escapeHtml(live.note)} <span class="tfc-evidence-level">${escapeHtml(live.evidenceLevel)}</span></p>`
+      : '<p class="tfc-detail-live tfc-detail-live-none">Sin prueba en vivo disponible; el estado mostrado es evidencia de código o contrato.</p>';
     detailEl.hidden = false;
     detailEl.innerHTML = `
       <div class="tfc-detail-head">
-        <strong>${escapeHtml(node.label)}</strong>
-        ${stateBadgeHtml(effectiveState(node))}
+        <strong>${escapeHtml(isEdge ? `${from} → ${to}` : record.label)}</strong>
+        ${stateBadgeHtml(state)}
         <button type="button" class="tfc-detail-close" id="tfc-detail-close" aria-label="Cerrar">×</button>
       </div>
-      ${node.notes ? `<p class="tfc-detail-notes">${escapeHtml(node.notes)}</p>` : ''}
+      ${record.label ? `<p class="tfc-detail-notes">${escapeHtml(record.label)}</p>` : ''}
+      <p class="tfc-detail-meta"><strong>Identificador:</strong> <code>${escapeHtml(record.id)}</code> · <strong>Nivel:</strong> ${escapeHtml(live?.evidenceLevel || record.evidenceLevel || 'DOCUMENTATION_ONLY')}</p>
       ${liveHtml}
-      <ul class="tfc-detail-evidence">${evidenceHtml(node.evidence)}</ul>
+      ${record.notes ? `<p class="tfc-detail-notes">${escapeHtml(record.notes)}</p>` : ''}
+      <ul class="tfc-detail-evidence">${evidenceHtml(record.evidence)}</ul>
     `;
     detailEl.querySelector('#tfc-detail-close').addEventListener('click', () => {
       selectedNodeId = null;
+      selectedEdgeId = null;
       renderAll();
     });
   }
 
   function renderAll() {
+    renderSummary();
     renderLanes();
     renderEdges();
     renderDetail();
@@ -225,6 +343,14 @@ export function initConnectionsFlow({ role } = {}) {
     if (!btn) return;
     const id = btn.dataset.nodeId;
     selectedNodeId = selectedNodeId === id ? null : id;
+    selectedEdgeId = null;
+    renderAll();
+  });
+  edgesEl.addEventListener('click', event => {
+    const row = event.target.closest('[data-edge-id]');
+    if (!row) return;
+    selectedEdgeId = selectedEdgeId === row.dataset.edgeId ? null : row.dataset.edgeId;
+    selectedNodeId = null;
     renderAll();
   });
   searchEl.addEventListener('input', renderAll);
@@ -237,37 +363,44 @@ export function initConnectionsFlow({ role } = {}) {
     liveErrorEl.hidden = true;
     liveErrorEl.textContent = '';
     try {
-      const user = auth.currentUser;
-      if (!user) throw new Error('La sesión de Super Admin no está disponible.');
-      const idToken = await user.getIdToken();
-      const headers = { authorization: `Bearer ${idToken}` };
-      const [systemHealthRes, adminHealthRes] = await Promise.allSettled([
-        fetch('/api/system-health', { credentials: 'same-origin', headers }),
-        fetch('/api/admin-runtime-health', { credentials: 'same-origin', headers }),
-      ]);
-      let systemHealth = null;
-      let adminHealth = null;
       const errors = [];
+      const readJson = async (url, options = {}) => {
+        try {
+          const response = await fetch(url, { credentials: 'same-origin', cache: 'no-store', ...options });
+          const body = await response.json().catch(() => null);
+          return { status: response.status, ok: response.ok, body };
+        } catch (error) {
+          return { status: 0, ok: false, body: null, error: error?.message || 'fallo de red' };
+        }
+      };
+      const publicHealth = await readJson('/api/health');
+      if (!publicHealth.ok || publicHealth.body?.ok !== true) errors.push(`/api/health respondió ${publicHealth.status || 'sin respuesta'}`);
 
-      if (systemHealthRes.status === 'fulfilled') {
-        const body = await systemHealthRes.value.json().catch(() => null);
-        if (body?.ok) systemHealth = body.report;
-        else errors.push(body?.error || `system-health respondió ${systemHealthRes.value.status}`);
+      let authHeaders = {};
+      const user = auth.currentUser;
+      if (user) {
+        const idToken = await user.getIdToken();
+        authHeaders = { authorization: `Bearer ${idToken}` };
       } else {
-        errors.push(`system-health: ${systemHealthRes.reason?.message || 'fallo de red'}`);
+        errors.push('No hay una sesión de Super Admin para probes protegidos.');
       }
+      const [systemHealth, adminHealth, pageProbe] = await Promise.all([
+        user ? readJson('/api/system-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
+        user ? readJson('/api/admin-runtime-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
+        fetch('/admin.html', { credentials: 'same-origin', cache: 'no-store' }).then(response => ({
+          status: response.status,
+          csp: Boolean(response.headers.get('content-security-policy')),
+        })).catch(error => ({ status: 0, csp: false, error: error?.message || 'fallo de red' })),
+      ]);
+      if (user && (!systemHealth.ok || systemHealth.body?.ok !== true)) errors.push(`/api/system-health respondió ${systemHealth.status || 'sin respuesta'}`);
+      if (user && (!adminHealth.ok || adminHealth.body?.ok !== true)) errors.push(`/api/admin-runtime-health respondió ${adminHealth.status || 'sin respuesta'}`);
 
-      if (adminHealthRes.status === 'fulfilled') {
-        const body = await adminHealthRes.value.json().catch(() => null);
-        if (body) adminHealth = body;
-        if (body?.ok === false && body?.error) errors.push(body.error);
-      } else {
-        errors.push(`admin-runtime-health: ${adminHealthRes.reason?.message || 'fallo de red'}`);
-      }
-
-      liveState.byId = buildLiveChecks(systemHealth, adminHealth);
-      liveState.checkedAt = new Date().toLocaleString('es-AR');
-      liveTimestampEl.textContent = `Última verificación en vivo: ${liveState.checkedAt} (${Object.keys(liveState.byId).length} nodos con prueba real).`;
+      const checkedAt = new Date().toISOString();
+      liveState.checkedAt = checkedAt;
+      liveState.endpointStatus = { health: publicHealth.status, systemHealth: systemHealth.status, adminHealth: adminHealth.status, adminPage: pageProbe.status };
+      liveState.byId = buildLiveChecks({ publicHealth, systemHealth, adminHealth: { ...adminHealth, checks: adminHealth.body?.checks }, headers: pageProbe }, checkedAt);
+      liveState.byEdgeId = buildLiveEdges({ publicHealth, systemHealth, headers: pageProbe }, checkedAt);
+      liveTimestampEl.textContent = `Última verificación en vivo: ${checkedAt} (${Object.keys(liveState.byId).length} nodos y ${Object.keys(liveState.byEdgeId).length} conexiones con probe).`;
 
       if (errors.length) {
         liveErrorEl.hidden = false;
