@@ -168,6 +168,19 @@ export function renderProductMetadataHtml(sourceHtml, id, data) {
     sku: firstValue(data, ['handle', 'Handle'])
   });
   const performanceHints = `<link rel="preload" as="image" href="${escapeHtml(mainImage)}" fetchpriority="high" id="tt-product-image-preload">`;
+  const serverPreviewImage = `<img data-tt-server-image="1" src="${escapeHtml(mainImage)}" alt="${escapeHtml(name)}" loading="eager" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:contain;background:transparent;display:block;">`;
+  html = html.replace(
+    'id="product-grid" style="display:none;">',
+    'id="product-grid" data-tt-server-preview="1">'
+  );
+  html = html.replace(
+    /(<button\s+type="button"[^>]*id="gallery-main"[^>]*>)[\s\S]*?(<\/button>)/i,
+    `$1${serverPreviewImage}$2`
+  );
+  html = html.replace(/<body(\s[^>]*)?>/i, match => {
+    if (/data-tt-product-server-preview=/i.test(match)) return match;
+    return match.replace(/>$/, ' data-tt-product-server-preview="1">');
+  });
   html = html.replace('</head>', `  ${performanceHints}\n  <script type="application/ld+json" id="tt-product-jsonld-server">${ld}</script>\n</head>`);
 
   return { html, canonical, image, mainImage };
