@@ -58,7 +58,7 @@ No se modificaron Firestore Rules, App Check, Auth, checkout, stock, precio, seg
 
 ## AFTER comparable
 
-Preview Pages del PR: `https://8d0db841.tintinaccesorios.pages.dev/product?id=Sy46ycLJOAOA5ZicgNRS`, commit runtime `77ff8eb5`.
+Preview Pages del PR: `https://1d115cba.tintinaccesorios.pages.dev/product?id=Sy46ycLJOAOA5ZicgNRS`, commit runtime `77ff8eb5`.
 
 ### Desktop 1440x900
 
@@ -70,7 +70,7 @@ Muestras LCP / TTFB / delay / duration / render / transfer:
 
 Medianas: LCP `652 ms`, TTFB `306 ms`, delay `94 ms`, duration `171 ms`, render `98 ms`, transfer `72730 bytes`.
 
-Resultado contra baseline: `-1328 ms` (`-67.1%`) de LCP; render delay `-741 ms` (`-88.3%`). El cambio no atribuye la mejora de TTFB a la optimización: es una variación de red del entorno.
+Mejora observada total contra baseline: LCP `1980 -> 652 ms`, `-1328 ms` (`-67.1%`). Mejora directamente atribuible al cambio: element render delay `839 -> 98 ms`, `-741 ms` (`-88.3%`). TTFB `977 -> 306 ms` queda excluido de la atribución: su variación pertenece a red/servidor del entorno y no es efecto demostrado de este cambio.
 
 ### Mobile 390x844
 
@@ -82,7 +82,7 @@ Muestras LCP / TTFB / delay / duration / render / transfer:
 
 Medianas: LCP `612 ms`, TTFB `278 ms`, delay `103 ms`, duration `165 ms`, render `79 ms`, transfer `72730 bytes`.
 
-Resultado contra baseline: `-2012 ms` (`-76.7%`) de LCP; render delay `-1073 ms` (`-93.1%`). El delay de recurso y la duración permanecen dentro de la variabilidad esperable; los bytes son idénticos.
+Mejora observada total contra baseline: LCP `2624 -> 612 ms`, `-2012 ms` (`-76.7%`). Mejora directamente atribuible al cambio: element render delay `1152 -> 79 ms`, `-1073 ms` (`-93.1%`). TTFB `1195 -> 278 ms` queda excluido de la atribución: su variación pertenece a red/servidor del entorno y no es efecto demostrado de este cambio. El delay de recurso y la duración permanecen dentro de la variabilidad esperable; los bytes son idénticos.
 
 El elemento LCP y la URL del recurso permanecieron iguales antes/después. La mejora comparable es, por tanto, la eliminación del bloqueo visual del render tardío.
 
@@ -91,6 +91,17 @@ El elemento LCP y la URL del recurso permanecieron iguales antes/después. La me
 Smoke real del preview: Home, catálogo, producto, galería, Add to Cart, carrito, control de cantidad, checkout, búsqueda y cuenta pasaron en desktop, tablet y mobile. El producto medido tiene stock límite 1; el control de cantidad respetó ese límite. Login cargó su formulario real. Refresh/back/forward del producto y catálogo pasaron.
 
 No hubo `pageerror` en el producto estable. El entorno headless produjo `requestStorageAccess: Permission denied` y un `403` en el intercambio de token reCAPTCHA Enterprise de App Check; son señales del navegador automatizado, no bloquean catálogo, producto, carrito ni checkout. No se observó un `permission-denied` de Firestore bloqueante.
+
+## Validación browser específica
+
+- Producto público consultado: `RELOJ ALLEGRA`, sin variantes públicas utilizables. Se usó un fixture determinista de navegador basado en el contrato existente: `Color = Dorado/Plateado`, `Talla = M`, precio base `Gs. 70.000`, stock `2`; no se alteraron datos comerciales.
+- Preview server: antes de hidratar `data-tt-product-server-preview=1`, `data-tt-server-preview=1`, imagen visible y panel informativo oculto. Después: ambos atributos removidos, panel visible, imagen hidratada visible y una sola entrada Resource Timing/una sola respuesta efectiva para la imagen de reemplazo.
+- Variantes: selección real por click `Plateado` + `M`; Add to Cart conservó `variant = Plateado / M`, precio `70000` y stock de fixture. El fixture comparte precio/stock entre opciones porque el contrato actual no modela overrides por variante; no se simuló una diferencia inexistente.
+- Refresh y back/forward: PASS con la ruta real del producto y el fixture interceptado en navegador.
+- Fallo controlado de hidratación: abortar únicamente la respuesta de catálogo dejó la preview server visible, un solo `data-tt-server-image`, panel oculto y sin precio/nombre parciales; degradación segura.
+- CLS: `0` en la navegación limpia del fixture sin imágenes duplicadas; la muestra retardada usada para inspeccionar el borde de hidratación se excluyó del valor representativo por introducir una espera artificial.
+- INP real mediante Event Timing y clicks Playwright: desktop `120 ms`, mobile `88 ms`; no hubo regresión observada. Se ejecutaron thumbnail, apertura/cierre de galería y Add to Cart.
+- Auth browser: no ejecutado con sesión autenticada. `AUTH_BROWSER = NOT_EXECUTABLE_SAFELY`: no había una cuenta QA autorizada disponible y no se usarían credenciales personales. Los contratos Auth existentes permanecen verdes.
 
 ## Validaciones
 
@@ -106,5 +117,7 @@ No hubo `pageerror` en el producto estable. El entorno headless produjo `request
 - Browser gates funcionales y responsive: PASS en 1440x900, 768x1024 y 390x844.
 - Cloudflare Pages preview: PASS.
 - CodeQL: PASS.
+
+La atribución queda separada: la mejora total observada de LCP incluye variabilidad de TTFB, mientras que la evidencia directamente atribuible es la reducción del element render delay; TTFB no se presenta como mejora causada por este cambio.
 
 Conclusión: la causa principal —imagen LCP correcta retenida detrás del render asíncrono del grid— fue eliminada con un cambio acotado y reversible. La mejora comparable quedó demostrada sin reducir controles de seguridad ni contratos de compra. El PR queda listo para revisión/merge cuando sus checks remotos estén completamente verdes; no se hace merge automático.
