@@ -1,7 +1,6 @@
 # Product LCP surgical audit
 
 Fecha: 2026-09-17  
-Rama: `codex/product-lcp-surgical-20260917`  
 PR: #831  
 Producto real: `RELOJ ALLEGRA` (`Sy46ycLJOAOA5ZicgNRS`)  
 Rutas comparadas: `/product?id=Sy46ycLJOAOA5ZicgNRS` en Pages producción antes y en el preview de PR después.
