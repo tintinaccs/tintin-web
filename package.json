@@ -36,6 +36,7 @@
     "audit:content": "node scripts/auditar-contenido-fase-6.js",
     "audit:cart": "node scripts/auditar-carrito-fase-7.js",
     "test:cart-persistence": "node --test tests/cart/*.test.mjs",
+    "test:cart-quantity-browser": "playwright test tests/cart/quantity-browser.spec.js --project=chromium",
     "test:engagement": "node --test tests/engagement/*.test.mjs",
     "test:products-sync": "node --test tests/sync/*.test.mjs",
     "test:visual-builder": "node --test tests/visual-builder/*.test.mjs",

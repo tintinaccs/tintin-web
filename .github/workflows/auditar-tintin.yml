@@ -110,6 +110,7 @@ jobs:
           PERF_BASE_URL: http://127.0.0.1:4173
         run: |
           npm run test:navigation-header
+          npm run test:cart-quantity-browser
           npm run test:phase8-ui
           npm run test:phase10-a11y
           npm run test:phase11-seo

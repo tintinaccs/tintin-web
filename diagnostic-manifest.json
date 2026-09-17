@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "6acc956b77187317deff0957c2dce31e203a816ecce7165291f3c7a341798363",
+  "sourceFingerprint": "b8810776244af9f9b06043ca8c6a4d1331525212a208879b9808ac5670f8d7aa",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 825,
-    "textFiles": 784,
-    "totalBytes": 16683347,
+    "files": 827,
+    "textFiles": 786,
+    "totalBytes": 16694317,
     "pages": 19,
-    "modules": 561
+    "modules": 562
   },
   "viewports": [
     {
@@ -29975,6 +29975,17 @@
       "endpoints": []
     },
     {
+      "path": "tests/cart/quantity-browser.spec.js",
+      "bytes": 1946,
+      "sha256": "381ea955ac9a31806ad9ea360d28de98a9a2530e95cabb3ab3836a1b410c819e",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": []
+    },
+    {
       "path": "tests/catalog/public-catalog-cache.test.mjs",
       "bytes": 1351,
       "sha256": "3e03e8ee118479dfb0492c7593da5fe646463e6bd51e6f13dbfda9ec2c8b1193",
@@ -32471,8 +32482,8 @@
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 4192,
-      "sha256": "871d5f1dc77b3afb2195d2191b83decea28a84e021213f315d80af2804bb0b17"
+      "bytes": 4237,
+      "sha256": "65221d63ecde9a483befba29d833f454a134909174436061fb119f5c0d714d79"
     },
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
@@ -32545,6 +32556,12 @@
       "extension": ".md",
       "bytes": 4544,
       "sha256": "de39f86bc016a2dc26a4430ab18132c618dabcaf160cf6b766110ea0f8f58484"
+    },
+    {
+      "path": "FINAL_PRODUCTION_CLOSURE_2026-09-17.md",
+      "extension": ".md",
+      "bytes": 8871,
+      "sha256": "082afcad4cff6c3786a1b52e29bb77635a2d0d5f15308becf503f150c012d033"
     },
     {
       "path": "FRONTEND_VISUAL_AUDIT.md",
@@ -35831,8 +35848,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 12642,
-      "sha256": "97cbd5b0bcad681f289c9285077143ccae0c5ee981cc3587a6a71ff23dd4b0f6"
+      "bytes": 12750,
+      "sha256": "43c5d2b8e75e7272e6f2374c926e227ccf106ef50668cb9afb715fcccc1f1d30"
     },
     {
       "path": "perfil.html",
@@ -36949,6 +36966,12 @@
       "extension": ".mjs",
       "bytes": 2477,
       "sha256": "6291cb640bd159d1affd1bbbe65ed575ca5f11911e0920a0c5017e9152d44577"
+    },
+    {
+      "path": "tests/cart/quantity-browser.spec.js",
+      "extension": ".js",
+      "bytes": 1946,
+      "sha256": "381ea955ac9a31806ad9ea360d28de98a9a2530e95cabb3ab3836a1b410c819e"
     },
     {
       "path": "tests/catalog/public-catalog-cache.test.mjs",
