@@ -8,6 +8,7 @@ import {
   runAdminRuntimeChecks,
 } from '../../cloudflare/admin-runtime-health.js';
 import { onRequest as adminRuntimeHealthRequest } from '../../functions/api/admin-runtime-health.js';
+import { onRequest as systemHealthRequest } from '../../functions/api/system-health.js';
 
 test('admin runtime health recorre todas las superficies sin devolver datos', async () => {
   const calls = [];
@@ -77,6 +78,17 @@ test('el health privado exige una sesión real de Super Admin', async () => {
   assert.equal(payload.ok, false);
   assert.equal(payload.code, 'authentication_required');
   assert.match(payload.requestId, /^admin-health-/);
+});
+
+test('system-health clasifica una petición sin token como autenticación requerida', async () => {
+  const request = new Request('https://tintinaccesorios.pages.dev/api/system-health', {
+    method: 'GET',
+    headers: { origin: 'https://tintinaccesorios.pages.dev' },
+  });
+  const response = await systemHealthRequest({ request, env: {} });
+  const payload = await response.json();
+  assert.equal(response.status, 401);
+  assert.equal(payload.ok, false);
 });
 
 test('el flujo de conexiones envía Bearer Firebase a sus probes protegidos', () => {

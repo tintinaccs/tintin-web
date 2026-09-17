@@ -25,9 +25,9 @@ export const ESTADOS = {
 // "Revalidar" del panel actualiza `lastLiveCheck` de los nodos que sí tienen
 // una prueba en vivo real (ver flujo-conexiones-admin.js); todo lo demás
 // conserva esta fecha como "última revisión de código".
-export const GENERATED_AT = '2026-09-10';
+export const GENERATED_AT = '2026-09-17';
 
-export const NODES = [
+const RAW_NODES = [
   { id: 'entrada-login', label: 'Login', category: 'entrada', state: ESTADOS.PROD,
     evidence: [{ file: 'login.html', note: 'Página única de acceso; renderiza Google, correo/usuario+código.' }] },
   { id: 'google-btn', label: 'Continuar con Google', category: 'entrada', state: ESTADOS.PROD,
@@ -122,7 +122,7 @@ export const NODES = [
     evidence: [{ file: 'docs/arquitectura-operativa-canonica.md' }] },
 ];
 
-export const EDGES = [
+const RAW_EDGES = [
   { from: 'entrada-login', to: 'google-btn', label: 'elige Google', state: ESTADOS.PROD },
   { from: 'entrada-login', to: 'login-codigo', label: 'elige correo/código', state: ESTADOS.NO_VERIFICADO },
   { from: 'google-btn', to: 'firebase-auth', label: 'signInWithPopup/Redirect', state: ESTADOS.PROD, evidence: [{ file: 'login.html', line: 1012 }] },
@@ -161,3 +161,21 @@ export const EDGES = [
   { from: 'apis-internas', to: 'correos', state: ESTADOS.DOCUMENTADO },
   { from: 'apis-internas', to: 'servicios-externos', state: ESTADOS.DOCUMENTADO },
 ];
+
+// La lista histórica conserva la intención del diagnóstico, pero una marca
+// verde está reservada a evidencia runtime. Hasta que el probe correspondiente
+// lo confirme, un PROD estático se expone como IMPLEMENTADO PERO NO VERIFICADO.
+export const NODES = RAW_NODES.map(node => ({
+  ...node,
+  baselineState: node.state,
+  state: node.state === ESTADOS.PROD ? ESTADOS.NO_VERIFICADO : node.state,
+  evidenceLevel: node.evidenceLevel || 'DOCUMENTATION_ONLY',
+}));
+
+export const EDGES = RAW_EDGES.map((edge, index) => ({
+  ...edge,
+  id: edge.id || `${edge.from}__${edge.to}__${index + 1}`,
+  baselineState: edge.state,
+  state: edge.state === ESTADOS.PROD ? ESTADOS.NO_VERIFICADO : edge.state,
+  evidenceLevel: edge.evidenceLevel || 'DOCUMENTATION_ONLY',
+}));
