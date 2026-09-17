@@ -25,11 +25,13 @@ const ENGAGEMENT_REALTIME_LIMIT = 250;
 let user = null;
 let reviews = [];
 let likes = [];
+let reports = [];
 let usersByUid = new Map();
 let quickReplies = [...DEFAULT_QUICK_REPLIES];
 let settings = { ...DEFAULT_SETTINGS };
 let reviewPage = 1;
 let likePage = 1;
+let reportPage = 1;
 let reviewView = 'inbox';
 let likeView = 'activity';
 let selectedReviews = new Set();
@@ -84,6 +86,24 @@ async function api(input) {
   const result = await response.json().catch(() => ({}));
   if (!response.ok || !result.ok) throw new Error(result.error || 'No se pudo guardar el cambio');
   return result;
+}
+
+async function loadReports() {
+  if (!user) return;
+  const token = await user.getIdToken();
+  const status = $('#reports-filter')?.value || '';
+  const search = $('#reports-search')?.value || '';
+  const params = new URLSearchParams({ action: 'commentReports' });
+  if (status) params.set('status', status);
+  if (search) params.set('search', search);
+  const response = await fetch(`/api/admin-engagement?${params}`, {
+    cache: 'no-store', headers: { Authorization: `Bearer ${token}` },
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok || !result.ok) throw new Error(result.error || 'No se pudieron cargar las denuncias');
+  reports = Array.isArray(result.reports) ? result.reports : [];
+  reportPage = 1;
+  renderReports();
 }
 
 function profileFor(uid) {
@@ -161,6 +181,7 @@ function hydrateSections() {
           <button type="button" data-eg-review-view="products">Productos</button>
           <button type="button" data-eg-review-view="clients">Clientas</button>
           <button type="button" data-eg-review-view="analytics">Analítica</button>
+          <button type="button" data-eg-review-view="reports">Denunciadas <span class="eg-segment-badge" id="reports-open-badge" hidden>0</span></button>
           <button type="button" data-eg-review-view="settings">Configuración</button>
         </nav>
 
@@ -211,6 +232,15 @@ function hydrateSections() {
         <section data-eg-review-panel="products" hidden><div id="eg-review-products"></div></section>
         <section data-eg-review-panel="clients" hidden><div id="eg-review-clients"></div></section>
         <section data-eg-review-panel="analytics" hidden><div id="eg-review-analytics"></div></section>
+        <section data-eg-review-panel="reports" hidden>
+          <div class="eg-toolbar">
+            <label class="eg-search"><span>Buscar</span><input class="adm-input" id="reports-search" type="search" placeholder="Comentario, producto, motivo…"></label>
+            <label><span>Estado</span><select class="adm-select" id="reports-filter"><option value="">Todos</option><option value="OPEN">Abiertas</option><option value="REVIEWING">En revisión</option><option value="RESOLVED">Resueltas</option><option value="DISMISSED">Desestimadas</option></select></label>
+          </div>
+          <div class="eg-callout"><strong>Moderación:</strong> una denuncia nunca elimina automáticamente el contenido. Revisá el contexto del hilo y resolvé la denuncia con una decisión explícita.</div>
+          <div id="reports-admin-list" class="eg-list"><div class="eg-empty">Cargando denuncias…</div></div>
+          <div class="eg-pagination" id="eg-report-pagination"></div>
+        </section>
         <section data-eg-review-panel="settings" hidden><div id="eg-review-settings"></div></section>
       </div>`;
   }
@@ -340,6 +370,7 @@ function switchReviewView(view) {
   $$('[data-eg-review-panel]').forEach(panel => { panel.hidden = panel.dataset.egReviewPanel !== view; });
   if (settings.rememberView) localStorage.setItem('tt-admin-review-view', view);
   if (view === 'settings') renderSettings();
+  if (view === 'reports') loadReports().catch(error => toast(error.message, 'error'));
 }
 function switchLikeView(view) {
   likeView = view;
@@ -522,6 +553,65 @@ function renderReviews() {
   renderReviewClients();
   renderReviewAnalytics();
   updateBulkBars();
+}
+
+function reportFiltered() {
+  const term = ($('#reports-search')?.value || '').trim().toLowerCase();
+  const status = $('#reports-filter')?.value || '';
+  return reports.filter(report => {
+    if (status && report.status !== status) return false;
+    if (!term) return true;
+    return [report.reportId, report.commentId, report.productId, report.reason, report.commentText]
+      .some(value => String(value || '').toLowerCase().includes(term));
+  });
+}
+
+function groupedReports() {
+  const groups = new Map();
+  reportFiltered().forEach(report => {
+    const key = `${report.productId || ''}:${report.threadRootId || report.commentId || ''}:${report.commentId || ''}`;
+    const group = groups.get(key) || { reports: [] };
+    group.reports.push(report);
+    groups.set(key, group);
+  });
+  return [...groups.values()].map(group => {
+    group.reports.sort((a, b) => timeValue(b.createdAt) - timeValue(a.createdAt));
+    const latest = group.reports[0];
+    return {
+      ...latest,
+      reportCount: group.reports.length,
+      reasons: [...new Set(group.reports.map(item => item.reason).filter(Boolean))],
+      reports: group.reports,
+    };
+  }).sort((a, b) => timeValue(b.createdAt) - timeValue(a.createdAt));
+}
+
+function reportStatusBadge(status) {
+  const tone = status === 'OPEN' ? 'danger' : status === 'REVIEWING' ? 'warning' : status === 'RESOLVED' ? 'success' : 'muted';
+  const label = { OPEN: 'Abierta', REVIEWING: 'En revisión', RESOLVED: 'Resuelta', DISMISSED: 'Desestimada' }[status] || status;
+  return badge(label, tone);
+}
+
+function renderReports() {
+  const root = $('#reports-admin-list');
+  if (!root) return;
+  const data = groupedReports();
+  const pageSize = 20;
+  const pages = Math.max(1, Math.ceil(data.length / pageSize));
+  reportPage = Math.min(reportPage, pages);
+  const slice = data.slice((reportPage - 1) * pageSize, reportPage * pageSize);
+  root.innerHTML = slice.length ? slice.map(report => `<article class="eg-card eg-report-card" data-report-id="${escapeHtml(report.reportId)}">
+    <div class="eg-card-main">
+      <div class="eg-card-top"><div><span class="eg-field-label">${report.reportCount} ${report.reportCount === 1 ? 'denuncia' : 'denuncias'} · ${escapeHtml(report.targetType === 'reply' ? 'respuesta' : 'comentario')}</span><strong>${escapeHtml(report.productId || 'Producto')}</strong></div><div class="eg-badges">${reportStatusBadge(report.status)}</div></div>
+      <p class="eg-comment">${escapeHtml(report.commentText || 'Contenido no disponible')}</p>
+      <div class="eg-mini-metrics"><span>Motivos: <b>${escapeHtml(report.reasons.join(', '))}</b></span><span>Comentario: <b>${escapeHtml(report.commentId)}</b></span><span>Última: ${formatDate(report.createdAt)}</span></div>
+      <details class="eg-report-details"><summary>Ver ${report.reportCount === 1 ? 'denuncia' : 'denuncias'} y contexto</summary><div class="eg-report-details-list">${report.reports.map(item => `<div><span>${escapeHtml(item.reason)} · ${formatDate(item.createdAt)}</span><code>reporter: ${escapeHtml(item.reporterUid || 'oculto')}</code>${item.details ? `<p>${escapeHtml(item.details)}</p>` : ''}</div>`).join('')}</div><p class="eg-report-author">Autor reportado: ${escapeHtml(report.reportedAuthorName || 'Usuario Tintin')}</p></details>
+      <div class="eg-actions"><label><span class="eg-field-label">Decisión</span><select class="adm-select" data-report-status="${escapeHtml(report.reportId)}"><option value="OPEN" ${report.status === 'OPEN' ? 'selected' : ''}>Abierta</option><option value="REVIEWING" ${report.status === 'REVIEWING' ? 'selected' : ''}>En revisión</option><option value="RESOLVED" ${report.status === 'RESOLVED' ? 'selected' : ''}>Resolver</option><option value="DISMISSED" ${report.status === 'DISMISSED' ? 'selected' : ''}>Desestimar</option></select></label><button type="button" class="adm-btn adm-btn-sm adm-btn-primary" data-report-save="${escapeHtml(report.reportId)}">Guardar decisión</button><a class="adm-btn adm-btn-sm adm-btn-outline" href="${productHref(report.productId, report.threadRootId)}" target="_blank" rel="noopener">Ver hilo ↗</a></div>
+    </div>
+  </article>`).join('') : '<div class="eg-empty"><strong>No hay denuncias</strong><span>Las nuevas denuncias aparecerán aquí para revisión.</span></div>';
+  const pagination = $('#eg-report-pagination');
+  if (pagination) pagination.innerHTML = `<span>${plural(data.length, 'denuncia')}</span><div><button type="button" class="adm-btn adm-btn-sm adm-btn-outline" data-eg-page="report" data-dir="-1" ${reportPage <= 1 ? 'disabled' : ''}>Anterior</button><strong>Página ${reportPage} de ${pages}</strong><button type="button" class="adm-btn adm-btn-sm adm-btn-outline" data-eg-page="report" data-dir="1" ${reportPage >= pages ? 'disabled' : ''}>Siguiente</button></div>`;
+  setBadge('reports-open-badge', reports.filter(report => report.status === 'OPEN').length);
 }
 function renderLikes() {
   renderLikeKpis();
@@ -957,6 +1047,7 @@ function bindEvents() {
       if (event.target.id === 'likes-sort') event.target.dataset.userChanged = '1';
       likePage = 1; renderLikes();
     }
+    if (event.target.matches('#reports-search,#reports-filter')) loadReports().catch(error => toast(error.message, 'error'));
   });
   document.addEventListener('change', event => {
     if (event.target.matches('[data-eg-select-review]')) {
@@ -1018,7 +1109,20 @@ function bindEvents() {
     const page = event.target.closest('[data-eg-page]');
     if (page) {
       if (page.dataset.egPage === 'review') { reviewPage += Number(page.dataset.dir); renderReviews(); }
+      else if (page.dataset.egPage === 'report') { reportPage += Number(page.dataset.dir); renderReports(); }
       else { likePage += Number(page.dataset.dir); renderLikes(); }
+      return;
+    }
+
+    const reportSave = event.target.closest('[data-report-save]');
+    if (reportSave) {
+      const report = reports.find(item => item.reportId === reportSave.dataset.reportSave);
+      const status = $(`[data-report-status="${CSS.escape(reportSave.dataset.reportSave)}"]`)?.value;
+      if (!report || !status) return;
+      reportSave.disabled = true;
+      try { await api({ action: 'commentReportStatus', reportId: report.reportId, status }); toast('Denuncia actualizada'); await loadReports(); }
+      catch (error) { toast(error.message, 'error'); }
+      finally { reportSave.disabled = false; }
       return;
     }
 
@@ -1055,7 +1159,7 @@ function initViews() {
     reviewView = localStorage.getItem('tt-admin-review-view') || 'inbox';
     likeView = localStorage.getItem('tt-admin-like-view') || 'activity';
   }
-  switchReviewView(['inbox','products','clients','analytics','settings'].includes(reviewView) ? reviewView : 'inbox');
+  switchReviewView(['inbox','products','clients','analytics','reports','settings'].includes(reviewView) ? reviewView : 'inbox');
   switchLikeView(['activity','products','clients','analytics','settings'].includes(likeView) ? likeView : 'activity');
 }
 
@@ -1083,6 +1187,7 @@ subscribeAuthState(async current => {
     setBadge('likes-unread-badge', likes.filter(item => item.unread).length);
     renderLikes(); refreshDrawer();
   });
+  loadReports().catch(error => toast(error.message, 'error'));
   onSnapshot(doc(db, 'settings', 'reviewQuickReplies'), snapshot => {
     if (Array.isArray(snapshot.data()?.items)) quickReplies = snapshot.data().items.map(value => String(value || '').trim()).filter(Boolean).slice(0,20);
     renderSettings(); refreshDrawer();

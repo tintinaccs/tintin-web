@@ -57,7 +57,7 @@ test('a social 401 never sends an authenticated customer back to login', async (
   assert.match(product, /auth\.authStateReady\?\./);
   assert.match(product, /preserved\.requiresLogin = false/);
   assert.match(product, /Tu cuenta sigue iniciada/);
-  assert.equal((product.match(/if \(!await stableAuthUser\(\)\)/g) || []).length, 4);
+  assert.equal((product.match(/if \(!await stableAuthUser\(\)\)/g) || []).length, 5);
   assert.match(product, /const user = await stableAuthUser\(\);[\s\S]*?requestCommunityLogin\('review'/);
   assert.match(favorites, /authPersistenceReady/);
   assert.match(favorites, /subscribeAuthState\(/);

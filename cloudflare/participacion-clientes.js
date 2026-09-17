@@ -113,6 +113,9 @@ function publicReply(message) {
   return {
     replyId,
     id: replyId,
+    parentCommentId: clean(message?.parentCommentId || message?.reviewId, 180),
+    threadRootId: clean(message?.threadRootId || message?.reviewId, 180),
+    replyToUserId: clean(message?.replyToUserId || message?.targetOwnerUid, 180),
     authorType: message?.authorType === 'store' ? 'store' : 'customer',
     publicName: clean(message?.actorPublicName || message?.publicName || (message?.authorType === 'store' ? 'Tintin Accesorios' : 'Clienta Tintin'), 160),
     publicPhotoUrl: clean(message?.actorPhotoUrl || message?.publicPhotoUrl, 1200),
@@ -125,6 +128,9 @@ function publicReply(message) {
 function reviewPublic(record) {
   return {
     schemaVersion: 4,
+    entityType: 'comment',
+    commentId: record.reviewId,
+    threadRootId: record.reviewId,
     reviewId: record.reviewId,
     productId: record.productId,
     productName: record.productName,
@@ -134,7 +140,9 @@ function reviewPublic(record) {
     publicPhotoUrl: clean(record.actorPhotoUrl, 1200),
     storeLiked: Boolean(record.storeLiked),
     likeCount: Math.max(0, Number(record.likeCount) || 0),
-    conversation: (Array.isArray(record.conversation) ? record.conversation : []).map(publicReply).filter(Boolean),
+    conversation: (Array.isArray(record.conversation) ? record.conversation : [])
+      .map(reply => publicReply({ ...reply, reviewId: record.reviewId, threadRootId: record.reviewId }))
+      .filter(Boolean),
     createdAt: record.createdAt,
     updatedAt: record.updatedAt,
   };
@@ -313,6 +321,9 @@ export async function createReview(env, user, input) {
     const record = {
       schemaVersion: 4,
       reviewId,
+      commentId: reviewId,
+      threadRootId: reviewId,
+      entityType: 'comment',
       ownerUid: uid,
       email: clean(user.email, 254).toLowerCase(),
       realName: context.realName,
@@ -351,6 +362,8 @@ export async function createReview(env, user, input) {
       });
       adminNotification = await buildAdminNotificationWrite({
         kind: 'review_created',
+        eventType: 'REVIEW_CREATED',
+        eventId: `review.created:${reviewId}`,
         actorType: 'customer',
         actorUid: uid,
         actorName: context.realName,
@@ -431,6 +444,16 @@ export async function addCustomerReply(env, user, input) {
     const reply = {
       replyId,
       id: replyId,
+      parentCommentId: reviewId,
+      threadRootId: reviewId,
+      replyToUserId: (() => {
+        const candidate = clean(input.replyToUserId, 180);
+        const participants = new Set([
+          clean(record.ownerUid, 180),
+          ...(Array.isArray(record.conversation) ? record.conversation : []).map(item => clean(item?.actorUid, 180)),
+        ].filter(Boolean));
+        return candidate && participants.has(candidate) ? candidate : '';
+      })(),
       authorType: context.isSuperAdmin ? 'store' : 'customer',
       actorUid: uid,
       actorEmail: clean(user.email, 254).toLowerCase(),
@@ -454,6 +477,7 @@ export async function addCustomerReply(env, user, input) {
     if (!context.isSuperAdmin) {
       adminNotification = await buildAdminNotificationWrite({
         kind: 'review_reply', actorType: 'customer', actorUid: uid, actorName: context.realName,
+        eventType: 'COMMENT_REPLIED', eventId: `comment.replied:${replyId}`,
         actorUsername: context.username, actorPhotoUrl: context.photoUrl,
         title: `${context.realName} respondió en ${record.productName}`,
         body: text, snippet: text, iconKey: 'comment',
@@ -474,6 +498,27 @@ export async function addCustomerReply(env, user, input) {
         productImageUrl: record.productImageUrl, reviewId, replyId, sourceType: 'reply', sourceId: replyId, createdAt: now,
       }, `store_review_reply:${reviewId}:${replyId}`);
       writes.push(adminNotification.write);
+    }
+
+    if (!context.isSuperAdmin) {
+      const recipients = new Set([
+        record.ownerUid,
+        ...conversation.map(item => clean(item?.actorUid, 180)),
+      ].filter(recipientUid => recipientUid && recipientUid !== uid));
+      for (const recipientUid of recipients) {
+        const userNotification = await buildUserNotificationWrite(recipientUid, {
+          kind: 'review_reply', actorType: 'customer', actorUid: uid,
+          eventType: 'COMMENT_REPLIED', eventId: `comment.replied:${replyId}`,
+          actorName: context.publicName, actorPhotoUrl: context.photoUrl,
+          title: `${context.publicName} respondió en un hilo que seguís`,
+          body: text, snippet: text, iconKey: 'comment',
+          targetUrl: `/product?id=${productId}#reply-${replyId}`,
+          targetType: 'reply', targetId: replyId, productId, productName: record.productName,
+          productImageUrl: record.productImageUrl, reviewId, replyId,
+          sourceType: 'reply', sourceId: replyId, createdAt: now,
+        }, `review_reply:${reviewId}:${replyId}:${recipientUid}`);
+        writes.push(userNotification.write);
+      }
     }
 
     if (record.ownerUid !== uid && context.isSuperAdmin) {
@@ -512,32 +557,55 @@ function addInteractionId(mapping, key, value) {
   return [...new Set([...values, value])].slice(-MAX_REVIEW_LIKES_PER_PRODUCT);
 }
 
+function removeInteractionId(mapping, key, value) {
+  const values = Array.isArray(mapping?.[key]) ? mapping[key].map(item => clean(item, 180)).filter(Boolean) : [];
+  return values.filter(item => item !== value).slice(-MAX_REVIEW_LIKES_PER_PRODUCT);
+}
+
 export async function toggleReviewLike(env, user, input) {
   const productId = safeId(input.productId, 'Producto');
   const reviewId = safeId(input.reviewId, 'Reseña');
   const context = await readContext(env, user, productId);
   const uid = safeId(user.uid, 'Cuenta');
   const likeId = await opaqueId('review_like', uid, reviewId);
-  const existingLike = decoded(await firestoreAdminGet(env, `likeRecords/${likeId}`));
-  if (existingLike) {
-    const record = decoded(await firestoreAdminGet(env, `reviewRecords/${reviewId}`));
-    return { selected: true, alreadyLiked: true, likeCount: Math.max(0, Number(record?.likeCount) || 0), review: record };
-  }
-
   for (let attempt = 0; attempt < MAX_COMMIT_RETRIES; attempt += 1) {
     const [privateDoc, mappingDoc, likeDoc] = await Promise.all([
       firestoreAdminGet(env, `reviewRecords/${reviewId}`),
       firestoreAdminGet(env, `users/${uid}/reviewLikeProducts/${productId}`),
       firestoreAdminGet(env, `likeRecords/${likeId}`),
     ]);
-    if (likeDoc) {
-      const current = decoded(privateDoc);
-      return { selected: true, alreadyLiked: true, likeCount: Math.max(0, Number(current?.likeCount) || 0), review: current };
-    }
     const record = decoded(privateDoc);
     if (!record || record.productId !== productId || record.deleted || !record.visible) throw new Error('No se encontró la reseña');
     const mapping = decoded(mappingDoc) || {};
     const now = new Date();
+    if (likeDoc) {
+      const updated = { ...record, schemaVersion: 4, likeCount: Math.max(0, Math.max(0, Number(record.likeCount) || 0) - 1), updatedAt: now };
+      const writes = [
+        { path: `likeRecords/${likeId}`, delete: true, currentDocument: { updateTime: likeDoc.updateTime } },
+        { path: `reviewRecords/${reviewId}`, fields: encodeFirestoreFields(updated), currentDocument: { updateTime: privateDoc.updateTime } },
+        { path: `products/${productId}/reviews/${reviewId}`, fields: encodeFirestoreFields(reviewPublic(updated)) },
+        { path: `users/${safeId(record.ownerUid, 'Cuenta propietaria')}/reviews/${reviewId}`, fields: encodeFirestoreFields(ownerReviewMapping(updated)) },
+      ];
+      if (mappingDoc) {
+        writes.push({
+          path: `users/${uid}/reviewLikeProducts/${productId}`,
+          fields: encodeFirestoreFields({
+            schemaVersion: 2, productId,
+            reviewIds: removeInteractionId(mapping, 'reviewIds', reviewId),
+            replyIds: Array.isArray(mapping.replyIds) ? mapping.replyIds : [],
+            updatedAt: now,
+          }),
+          currentDocument: { updateTime: mappingDoc.updateTime },
+        });
+      }
+      try {
+        await firestoreAdminCommit(env, writes);
+        return { selected: false, alreadyLiked: false, toggledOff: true, likeCount: updated.likeCount, review: updated };
+      } catch (error) {
+        if (error?.code === 'version_conflict' && attempt + 1 < MAX_COMMIT_RETRIES) continue;
+        throw error;
+      }
+    }
     const updated = { ...record, schemaVersion: 4, likeCount: Math.max(0, Number(record.likeCount) || 0) + 1, updatedAt: now };
     const likeRecord = {
       schemaVersion: 3,
@@ -571,6 +639,7 @@ export async function toggleReviewLike(env, user, input) {
     if (!context.isSuperAdmin) {
       adminNotification = await buildAdminNotificationWrite({
         kind: 'review_like', actorType: 'customer', actorUid: uid, actorName: context.realName,
+        eventType: 'COMMENT_LIKED', eventId: `comment.liked:${likeId}`,
         actorUsername: context.username, actorPhotoUrl: context.photoUrl,
         title: `${context.realName} dio Me gusta al comentario de ${record.realName} en ${record.productName}`,
         body: record.comment, snippet: record.comment, iconKey: 'heart',
@@ -594,6 +663,21 @@ export async function toggleReviewLike(env, user, input) {
         sourceType: 'review_like', sourceId: likeId, createdAt: now,
       }, `store_review_like:${reviewId}:${uid}`);
       writes.push(adminNotification.write);
+    }
+
+    if (!context.isSuperAdmin && record.ownerUid && record.ownerUid !== uid) {
+      const ownerNotification = await buildUserNotificationWrite(record.ownerUid, {
+        kind: 'review_like', actorType: 'customer', actorUid: uid,
+        eventType: 'COMMENT_LIKED', eventId: `comment.liked:${likeId}`,
+        actorName: context.publicName, actorPhotoUrl: context.photoUrl,
+        title: `${context.publicName} indicó que le gusta tu comentario`,
+        body: record.comment, snippet: record.comment, iconKey: 'heart',
+        targetUrl: `/product?id=${productId}#review-${reviewId}`,
+        targetType: 'review', targetId: reviewId, productId, productName: record.productName,
+        productImageUrl: record.productImageUrl, reviewId,
+        sourceType: 'review_like', sourceId: likeId, createdAt: now,
+      }, `review_like:${reviewId}:${uid}:${record.ownerUid}`);
+      writes.push(ownerNotification.write);
     }
 
     if (record.ownerUid !== uid && record.ownerUid && context.isSuperAdmin) {
@@ -645,11 +729,38 @@ export async function likeReply(env, user, input) {
     const replyIndex = conversation.findIndex(message => clean(message?.replyId || message?.id, 180) === replyId);
     if (replyIndex < 0) throw new Error('No se encontró la respuesta');
     const currentReply = conversation[replyIndex] || {};
-    if (likeDoc) {
-      return { selected: true, alreadyLiked: true, likeCount: Math.max(0, Number(currentReply.likeCount) || 0), replyId };
-    }
     const mapping = decoded(mappingDoc) || {};
     const now = new Date();
+    if (likeDoc) {
+      const updatedReply = { ...currentReply, replyId, id: replyId, likeCount: Math.max(0, Math.max(0, Number(currentReply.likeCount) || 0) - 1) };
+      conversation[replyIndex] = updatedReply;
+      const updated = { ...record, schemaVersion: 4, conversation, updatedAt: now };
+      const writes = [
+        { path: `likeRecords/${likeId}`, delete: true, currentDocument: { updateTime: likeDoc.updateTime } },
+        { path: `reviewRecords/${reviewId}`, fields: encodeFirestoreFields(updated), currentDocument: { updateTime: privateDoc.updateTime } },
+        { path: `products/${productId}/reviews/${reviewId}`, fields: encodeFirestoreFields(reviewPublic(updated)) },
+        { path: `users/${safeId(record.ownerUid, 'Cuenta propietaria')}/reviews/${reviewId}`, fields: encodeFirestoreFields(ownerReviewMapping(updated)) },
+      ];
+      if (mappingDoc) {
+        writes.push({
+          path: `users/${uid}/reviewLikeProducts/${productId}`,
+          fields: encodeFirestoreFields({
+            schemaVersion: 2, productId,
+            reviewIds: Array.isArray(mapping.reviewIds) ? mapping.reviewIds : [],
+            replyIds: removeInteractionId(mapping, 'replyIds', replyId),
+            updatedAt: now,
+          }),
+          currentDocument: { updateTime: mappingDoc.updateTime },
+        });
+      }
+      try {
+        await firestoreAdminCommit(env, writes);
+        return { selected: false, alreadyLiked: false, toggledOff: true, likeCount: updatedReply.likeCount, replyId, review: updated };
+      } catch (error) {
+        if (error?.code === 'version_conflict' && attempt + 1 < MAX_COMMIT_RETRIES) continue;
+        throw error;
+      }
+    }
     const updatedReply = { ...currentReply, replyId, id: replyId, likeCount: Math.max(0, Number(currentReply.likeCount) || 0) + 1 };
     conversation[replyIndex] = updatedReply;
     const updated = { ...record, schemaVersion: 4, conversation, updatedAt: now };
@@ -688,6 +799,7 @@ export async function likeReply(env, user, input) {
       const targetLabel = currentReply.authorType === 'store' ? 'la respuesta de Tintin' : `la respuesta de ${replyOwnerName}`;
       adminNotification = await buildAdminNotificationWrite({
         kind: 'reply_like', actorType: 'customer', actorUid: uid, actorName: context.realName,
+        eventType: 'COMMENT_LIKED', eventId: `comment.liked:${likeId}`,
         actorUsername: context.username, actorPhotoUrl: context.photoUrl,
         title: `${context.realName} dio Me gusta a ${targetLabel} en ${record.productName}`,
         body: currentReply.text, snippet: currentReply.text, iconKey: 'heart',
@@ -711,6 +823,21 @@ export async function likeReply(env, user, input) {
         sourceType: 'reply_like', sourceId: likeId, createdAt: now,
       }, `store_reply_like:${replyId}:${uid}`);
       writes.push(adminNotification.write);
+    }
+
+    if (!context.isSuperAdmin && replyOwnerUid && replyOwnerUid !== uid && currentReply.authorType !== 'store') {
+      const ownerNotification = await buildUserNotificationWrite(replyOwnerUid, {
+        kind: 'reply_like', actorType: 'customer', actorUid: uid,
+        eventType: 'COMMENT_LIKED', eventId: `comment.liked:${likeId}`,
+        actorName: context.publicName, actorPhotoUrl: context.photoUrl,
+        title: `${context.publicName} indicó que le gusta tu respuesta`,
+        body: currentReply.text, snippet: currentReply.text, iconKey: 'heart',
+        targetUrl: `/product?id=${productId}#reply-${replyId}`,
+        targetType: 'reply', targetId: replyId, productId, productName: record.productName,
+        productImageUrl: record.productImageUrl, reviewId, replyId,
+        sourceType: 'reply_like', sourceId: likeId, createdAt: now,
+      }, `reply_like:${replyId}:${uid}:${replyOwnerUid}`);
+      writes.push(ownerNotification.write);
     }
 
     if (replyOwnerUid && replyOwnerUid !== uid && currentReply.authorType !== 'store' && context.isSuperAdmin) {
