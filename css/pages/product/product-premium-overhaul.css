@@ -20,3 +20,4 @@ html body .tt-product-social-bar{justify-content:flex-start!important;text-align
 #btn-product-like[aria-pressed="true"] .tt-social-icon{fill:currentColor}
 .tt-product-name-row{display:block}.tt-product-favorite-icon{display:none!important}
 @media(max-width:767px){.tt-product-social-bar{justify-content:center!important;flex-wrap:wrap;overflow:visible}.tt-social-action,.tt-social-share{min-height:44px;padding-inline:12px}}
+body[data-tt-product-server-preview="1"] #product-loading{display:none!important}body[data-tt-product-server-preview="1"] #product-grid[data-tt-server-preview="1"]{display:grid!important}body[data-tt-product-server-preview="1"] #product-grid[data-tt-server-preview="1"] .tt-product-info-panel{visibility:hidden;pointer-events:none}body[data-tt-product-server-preview="1"] #product-grid[data-tt-server-preview="1"] .tt-gallery-main{cursor:default}

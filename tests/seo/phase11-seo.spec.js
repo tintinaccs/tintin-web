@@ -31,6 +31,8 @@ test('producto llega con canonical, social preview y JSON-LD server-side coheren
   expect(html).toContain('<meta property="og:type" content="product">');
   expect(html).toContain('<meta name="twitter:card" content="summary_large_image">');
   expect(html).toMatch(/<link rel="preload" as="image"[^>]*fetchpriority="high"[^>]*id="tt-product-image-preload">/);
+  expect(html).toMatch(/<body[^>]*data-tt-product-server-preview="1"/);
+  expect(html).toMatch(/<img[^>]*data-tt-server-image="1"[^>]*loading="eager"[^>]*fetchpriority="high"/);
 
   const jsonLdMatch = html.match(/<script type="application\/ld\+json" id="tt-product-jsonld-server">([\s\S]*?)<\/script>/);
   expect(jsonLdMatch, 'el HTML inicial debe incluir Product JSON-LD server-side').toBeTruthy();
