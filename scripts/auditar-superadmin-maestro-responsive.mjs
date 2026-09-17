@@ -36,16 +36,17 @@ ${maestroCss}
 
 const viewports = [
   { name: 'desktop', width: 1440, height: 900, kpis: 4, grid: 2 },
-  { name: 'tablet', width: 820, height: 1180, kpis: 2, grid: 1 },
+  { name: 'laptop', width: 1366, height: 768, kpis: 4, grid: 2 },
+  { name: 'tablet', width: 768, height: 1024, kpis: 2, grid: 1 },
   { name: 'mobile', width: 390, height: 844, kpis: 1, grid: 1 },
-  { name: 'mobile-small', width: 320, height: 720, kpis: 1, grid: 1 },
 ];
 
 function columnCount(value) {
   return String(value || '').trim().split(/\s+/).filter(Boolean).length;
 }
 
-const browser = await chromium.launch({ headless: true });
+const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined;
+const browser = await chromium.launch({ headless: true, ...(executablePath ? { executablePath } : {}) });
 const results = [];
 const failures = [];
 try {

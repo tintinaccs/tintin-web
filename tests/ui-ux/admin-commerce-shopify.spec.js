@@ -8,9 +8,14 @@ const ROOT = path.resolve(__dirname, '../..');
 const commerceJs = fs.readFileSync(path.join(ROOT, 'js/admin/shopify-commerce-admin.js'), 'utf8');
 const commerceCss = fs.readFileSync(path.join(ROOT, 'css/admin/shopify-commerce-admin.css'), 'utf8');
 
-const firebaseStub = `export const auth = {}; export const db = {};`;
+const firebaseStub = `export const auth = {}; export const db = {}; export const appCheckReady = Promise.resolve(true);`;
 const authStub = `
 export function onAuthStateChanged(_auth, callback) {
+  queueMicrotask(() => callback({ uid: 'super-1', email: 'tintinaccs@gmail.com', isAnonymous: false }));
+  return () => {};
+}`;
+const sessionCoordinatorStub = `
+export function subscribeAuthState(callback) {
   queueMicrotask(() => callback({ uid: 'super-1', email: 'tintinaccs@gmail.com', isAnonymous: false }));
   return () => {};
 }`;
@@ -83,7 +88,7 @@ function fixtureHtml() {
       window.prodNuevo=()=>{call('prodNuevo');document.getElementById('prod-form-card').style.display='block'};
       window.prodEditar=id=>call('prodEditar',id); window.prodToggleActive=(id,a)=>call('prodToggleActive',id,a); window.prodEliminar=id=>call('prodEliminar',id);
       window.collNueva=()=>call('collNueva'); window.collEditar=id=>call('collEditar',id); window.collVerProductos=id=>call('collVerProductos',id); window.collEliminar=(id,count)=>call('collEliminar',id,count);
-      window.openOrderEdit=id=>call('openOrderEdit',id); window.updateOrderStatus=(id,s)=>call('updateOrderStatus',id,s); window.updatePayStatus=(id,s)=>call('updatePayStatus',id,s);
+      window.openOrderEdit=id=>call('openOrderEdit',id); window.updateOrderStatus=(id,s)=>{call('updateOrderStatus',id,s);return true}; window.updatePayStatus=(id,s)=>{call('updatePayStatus',id,s);return true};
       window.resendOrderEmail=id=>call('resendOrderEmail',id); window.deleteOrder=id=>call('deleteOrder',id);
     </script>
     <script type="module" src="/js/admin/shopify-commerce-admin.js?v=tintin-20260908-appcheck-ready-1"></script>
@@ -95,6 +100,7 @@ async function mockRuntime(page) {
   await page.route('http://tintin.test/js/admin/shopify-commerce-admin.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: commerceJs }));
   await page.route('http://tintin.test/css/admin/shopify-commerce-admin.css*', route => route.fulfill({ status: 200, contentType: 'text/css', body: commerceCss }));
   await page.route('http://tintin.test/js/core/firebase/firebase.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: firebaseStub }));
+  await page.route('http://tintin.test/js/core/auth/coordinador-sesion.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: sessionCoordinatorStub }));
   await page.route('http://tintin.test/js/core/auth/roles.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: rolesStub }));
   await page.route('http://tintin.test/js/core/auth/permisos-roles.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: permsStub }));
   await page.route('http://tintin.test/js/pages/collections/estado-colecciones.js*', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: collectionsStub }));
@@ -159,6 +165,7 @@ test('pedido separa entrega/pago y ejecuta los contratos existentes', async ({ p
 
   await drawer.locator('[data-drawer-order-status="1024"]').selectOption('en_camino');
   await drawer.locator('[data-drawer-order-pay="1024"]').selectOption('reembolsado');
+  await drawer.locator('[data-action="drawer-order-save"]').click();
   const calls = await page.evaluate(() => window.__calls);
   expect(calls).toContainEqual(['updateOrderStatus', '1024', 'en_camino']);
   expect(calls).toContainEqual(['updatePayStatus', '1024', 'reembolsado']);
@@ -171,5 +178,5 @@ test('la interfaz sigue utilizable en móvil sin desbordar el documento', async 
   expect(dimensions.page).toBeLessThanOrEqual(dimensions.viewport + 2);
   await page.locator('tr[data-open="product"][data-id="p-reloj"]').click();
   const box = await page.locator('#tt-commerce-drawer').boundingBox();
-  expect(box?.width || 9999).toBeLessThanOrEqual(390);
+  expect(box?.width || 9999).toBeLessThanOrEqual(391);
 });

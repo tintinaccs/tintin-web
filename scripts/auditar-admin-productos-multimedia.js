@@ -44,6 +44,8 @@ const adminApp    = read('js/admin/admin-app.js');
 const adminHtml   = read('admin.html');
 const contentAdmin = read('js/admin/content/gestion-contenido-admin.js');
 const importJs    = read('js/admin/importacion-admin.js');
+const importCore  = read('js/core/store/shopify-import-core.mjs');
+const importJob   = read('functions/api/admin-import-job.js');
 const mediaLib    = read('js/components/images/biblioteca-multimedia.js');
 const imageProc   = read('js/components/images/procesamiento-imagenes.js');
 const imageUtils  = read('js/components/images/utilidades-imagenes.js');
@@ -112,7 +114,6 @@ check(
     /window\.tintinPushProductsToSheets = pushProductsToSheets/.test(adminApp) &&
     /await pushProductsToSheets\(\[docId\]\)/.test(adminApp) &&
     /await pushProductsToSheets\(ids0\)/.test(adminApp) &&
-    /window\.tintinPushProductsToSheets\(importedIds\)/.test(importJs) &&
     /APPS_SCRIPT_SYNC_URL/.test(sheetsSyncFunction) &&
     /idToken: String\(payload\.idToken\)/.test(sheetsSyncFunction),
   'Todo guardado individual, masivo o importado debe notificar al webhook autenticado de Sheets.'
@@ -176,13 +177,15 @@ check(
 );
 
 // ===========================================================================
-// 4. IMPORTACIÓN SEGURA (Fase 9)
+// 4. IMPORTACIÓN SEGURA (preview canónico; la migración real queda fuera de esta fase)
 // ===========================================================================
 check(
-  'La importación limita tamaño de archivo y cantidad de filas',
-  /MAX_FILE_BYTES = 5 \* 1024 \* 1024/.test(importJs) &&
-    /MAX_IMPORT_ROWS = 1000/.test(importJs),
-  'Debe haber un tope de 5 MB y 1.000 productos por importación.'
+  'La importación usa streaming y no impone un tope artificial de filas',
+  /MAX_FILE_BYTES = 250 \* 1024 \* 1024/.test(importJs) &&
+    /parseDelimitedRowsStream/.test(importJs) &&
+    !/MAX_IMPORT_ROWS/.test(importJs) &&
+    /groupShopifyRows/.test(importCore),
+  'El CSV debe procesarse incrementalmente; el límite operativo es de bytes y no una cantidad arbitraria de filas.'
 );
 check(
   'La importación y la exportación están reservadas al Super Admin',
@@ -192,39 +195,53 @@ check(
 );
 check(
   'La importación bloquea URLs que no sean http(s)',
-  /function safeUrl/.test(importJs) &&
-    /\['http:', 'https:'\]\.includes\(parsed\.protocol\)/.test(importJs),
-  'safeUrl debe rechazar esquemas peligrosos en las imágenes importadas.'
+  /safeImportUrl/.test(importCore) &&
+    /\['http:', 'https:'\]\.includes\(parsed\.protocol\)/.test(importCore),
+  'safeImportUrl debe rechazar esquemas peligrosos en las imágenes importadas.'
 );
 check(
-  'El CSV admite la columna Imagen URL de cualquier proveedor',
-  /'imagen url', 'url imagen', 'url de imagen'/.test(importJs) &&
-    /source: 'catalog-csv'/.test(importJs),
+  'El CSV admite encabezados de imagen de cualquier proveedor',
+  /'image src', 'variant image', 'imageurl', 'image url'/.test(importCore) &&
+    /shopify-csv/.test(importJs),
   'La importación no debe depender del encabezado ni del origen específico de Shopify.'
 );
 check(
-  'La importación detecta duplicados por huella y por nombre::categoría',
-  /function markDuplicates/.test(importJs) &&
-    /importFingerprint/.test(importJs),
-  'Los productos ya existentes deben marcarse como duplicados y omitirse.'
+  'La importación tiene identidad estable e idempotencia explícita',
+  /buildImportFingerprint/.test(importCore) &&
+    /stableProductDocumentId/.test(importCore) &&
+    /strategy: 'SKIP'/.test(importJs) &&
+    /dryRun: true/.test(importJob),
+  'La estrategia debe ser auditable y no sobrescribir productos silenciosamente.'
 );
 check(
-  'La importación valida que la colección exista antes de escribir',
-  /La colección no existe/.test(importJs) &&
-    /currentCategorySlugs\(\)\.has\(/.test(importJs),
-  'Una fila con una colección inexistente debe quedar inválida.'
+  'La importación resuelve colecciones explícitamente y marca ambigüedad',
+  /resolveShopifyCollection/.test(importCore) &&
+    /ambiguous/.test(importCore) &&
+    /readCollection\('collections', 5000\)/.test(importJs),
+  'Una colección inexistente o ambigua debe quedar pendiente de mapping, nunca asignarse en silencio.'
 );
 check(
-  'La importación confirma, escribe por lotes y registra en Auditoría sin sobrescribir',
-  /confirm\(`¿Importar \$\{ready\.length\}/.test(importJs) &&
-    /const reference = doc\(collection\(db, 'products'\)\)/.test(importJs) &&
-    /action: 'importar_productos'/.test(importJs),
-  'La importación debe pedir confirmación, crear documentos nuevos y auditar el lote.'
+  'La importación solo crea un preview dry-run auditado y no escribe productos',
+  /createDryRunJob/.test(importJs) &&
+    /import_job_created/.test(importJob) &&
+    /catalogMigration: 'not-executed'/.test(importJob) &&
+    !/collection\(db, 'products'\)/.test(importJs),
+  'La migración real requiere autorización posterior; esta fase solo debe persistir PREVIEW/READY.'
 );
 check(
-  'La importación reporta progreso real por lote',
-  /state\.ui\.progressBar\.style\.width = `\$\{Math\.round\(\(completed \/ ready\.length\) \* 100\)\}%`/.test(importJs),
-  'La barra de progreso debe reflejar los productos ya escritos.'
+  'El import job conserva checkpoint y progreso reanudable',
+  /lastCheckpoint/.test(importJob) &&
+    /processed/.test(importJob) &&
+    /progress/.test(importJob) &&
+    /chunkImportRecords/.test(importJs),
+  'El job debe conservar el punto de control y el progreso sin presentar una migración como completada.'
+);
+check(
+  'Los handlers de importación legacy quedan inertes',
+  /const LEGACY_IMPORT_DISABLED = true/.test(adminApp) &&
+    /Este importador legacy está deshabilitado/.test(adminApp) &&
+    !importJs.includes('MAX_IMPORT_ROWS'),
+  'La superficie histórica no debe conservar una vía de escritura accesible por manipulación del DOM.'
 );
 check(
   'La exportación de productos existe y respeta el permiso de exportar',
