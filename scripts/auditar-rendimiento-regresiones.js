@@ -54,8 +54,8 @@ const adminApp = read('js/admin/admin-app.js');
 const sessionCoordinator = read('js/core/auth/coordinador-sesion.js');
 const canonicalAuthListenerCount = (sessionCoordinator.match(/onAuthStateChanged\s*\(\s*auth/g) || []).length;
 check('Autenticación pública y administrativa siguen activas',
-  storeGate.includes('subscribeAuthState') &&
-    adminApp.includes('subscribeAuthState') &&
+  storeGate.includes('subscribeSession') &&
+    adminApp.includes('subscribeSession') &&
     sessionCoordinator.includes('export function subscribeAuthState') &&
     canonicalAuthListenerCount === 1 &&
     !/onAuthStateChanged\s*\(\s*auth/.test(storeGate) &&

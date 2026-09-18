@@ -18,12 +18,12 @@ test('hardening runtime waits for scoped cart and blocks empty protected flow', 
 });
 
 test('checkout espera la restauración de Auth antes de tratar al usuario como invitado', () => {
-  assert.match(checkoutPage, /subscribeAuthState\(user =>/);
+  assert.match(checkoutPage, /subscribeSession\(snapshot =>/);
   assert.doesNotMatch(checkoutPage, /checkoutAuthStateReady\.then/);
-  assert.match(hardening, /function waitForCheckoutAuthReady\(\)/);
-  assert.match(hardening, /subscribeAuthState\(user =>/);
-  assert.match(hardening, /AUTH_READY_TIMEOUT_MS/);
-  assert.match(hardening, /Promise\.race\(\[\s*authReady/);
+  assert.match(checkoutPage, /sessionReady/);
+  assert.match(hardening, /AUTH_STATES\.UNKNOWN/);
+  assert.match(hardening, /subscribeSession\(snapshot =>/);
+  assert.doesNotMatch(hardening, /AUTH_READY_TIMEOUT_MS|auth\.authStateReady/);
 });
 
 test('el avance al envío no queda bloqueado por una sincronización remota pendiente', () => {

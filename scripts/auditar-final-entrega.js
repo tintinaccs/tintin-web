@@ -158,7 +158,7 @@ check(
 
 check(
   'La superficie canónica de importación arranca en el panel',
-  adminHtml.includes('js/admin/importacion-admin.js?v=tintin-20260917-shopify-import-2') &&
+  adminHtml.includes('js/admin/importacion-admin.js?v=tintin-20260918-global-session-restore-1') &&
     phase9.includes('shopify-import-canonical-card'),
   'admin.html debe montar el único módulo de importación validado'
 );

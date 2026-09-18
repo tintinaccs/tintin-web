@@ -6,9 +6,8 @@
  * la URL privilegiada de Apps Script no forme parte del contrato público del
  * checkout.
  */
-import { auth } from './core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import { apiUrl } from './core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
-import { authenticatedFetch } from './core/auth/cliente-api-autenticado.js?v=tintin-20260910-auth-api-1';
+import { currentAuthenticatedUser, authenticatedFetch } from './core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2';
 
 const CREATE_ORDER_TIMEOUT_MS = 35000;
 const CREATE_ORDER_ENDPOINT = apiUrl('apps-script-bridge');
@@ -19,7 +18,9 @@ function phoneForOrderServer(value) {
 }
 
 export async function createOrderViaServer(draft) {
-  const user = auth.currentUser;
+  let user;
+  try { user = await currentAuthenticatedUser(); }
+  catch (error) { return { ok: false, error: error.code === 'auth/session-unknown' ? 'session_unknown' : 'missing_id_token' }; }
   if (!user) return { ok: false, error: 'missing_id_token' };
   const idToken = await user.getIdToken();
   if (!idToken) return { ok: false, error: 'missing_id_token' };

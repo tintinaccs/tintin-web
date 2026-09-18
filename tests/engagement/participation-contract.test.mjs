@@ -53,14 +53,14 @@ test('a social 401 never sends an authenticated customer back to login', async (
     read('js/pages/product/resenas-producto.js'),
     read('js/components/favorites/sincronizacion-favoritos.js'),
   ]);
-  assert.match(product, /authPersistenceReady/);
-  assert.match(product, /auth\.authStateReady\?\./);
+  assert.doesNotMatch(product, /auth\.authStateReady\?\./);
   assert.match(product, /preserved\.requiresLogin = false/);
   assert.match(product, /Tu cuenta sigue iniciada/);
   assert.equal((product.match(/if \(!await stableAuthUser\(\)\)/g) || []).length, 5);
   assert.match(product, /const user = await stableAuthUser\(\);[\s\S]*?requestCommunityLogin\('review'/);
-  assert.match(favorites, /authPersistenceReady/);
-  assert.match(favorites, /subscribeAuthState\(/);
+  assert.match(product, /waitForSession\(\)/);
+  assert.match(favorites, /subscribeSession\(/);
+  assert.match(favorites, /AUTH_STATES\.UNKNOWN/);
   assert.match(favorites, /for \(const forceRefresh of \[false, true\]\)/);
 });
 

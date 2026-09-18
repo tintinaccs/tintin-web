@@ -1,12 +1,12 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
+import { db } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import {
   awaitCartReady,
   getCartLocal,
   updateQty,
   removeFromCart,
-} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20260916-cache-bump-cart-sync-1';
+} from '../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
+import { AUTH_STATES, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20260918-global-session-restore-2';
 
 const CHECKOUT_PATH = /(^|\/)checkout(?:\.html)?\/?$/i;
 const RESUME_KEY = 'tt_checkout_resume_step';
@@ -15,29 +15,16 @@ const FORWARD_SELECTOR = '#btn-step1-next,#btn-step2-next,#btn-step3-next,#btn-s
 const replaying = new WeakSet();
 
 let cartReady = false;
-let profilePromise = Promise.resolve({ ok: false, reason: 'signed_out' });
+let profilePromise = Promise.resolve({ ok: false, reason: 'auth_unknown' });
 let profileState = { ok: false, loading: true, user: null, profile: null, reason: 'loading' };
 let annotateQueued = false;
 const PROFILE_READ_TIMEOUT_MS = 5000;
 const CART_READY_TIMEOUT_MS = 2500;
-const AUTH_READY_TIMEOUT_MS = 3500;
 
 function waitForCheckoutCartReady() {
   return Promise.race([
     Promise.resolve().then(() => awaitCartReady()),
     new Promise(resolve => window.setTimeout(resolve, CART_READY_TIMEOUT_MS))
-  ]);
-}
-
-function waitForCheckoutAuthReady() {
-  const authReady = typeof auth.authStateReady === 'function'
-    ? auth.authStateReady().catch(error => {
-        console.warn('[Checkout hardening] Auth initial state did not settle cleanly:', error);
-      })
-    : Promise.resolve();
-  return Promise.race([
-    authReady,
-    new Promise(resolve => window.setTimeout(resolve, AUTH_READY_TIMEOUT_MS))
   ]);
 }
 
@@ -146,6 +133,7 @@ async function loadProfile(user) {
 }
 
 function profileMessage(state) {
+  if (state.reason === 'auth_unknown') return 'No pudimos verificar tu sesión todavía. Esperá un momento y reintentá.';
   if (state.reason === 'blocked') return 'Tu cuenta está bloqueada para comprar. Contactanos por WhatsApp si necesitás ayuda.';
   if (state.reason === 'email_not_verified') return 'Verificá tu correo antes de continuar con la compra.';
   if (state.reason === 'profile_missing' || state.reason === 'profile_error') return 'No pudimos cargar los datos de tu cuenta. Recargá la página e intentá nuevamente.';
@@ -252,6 +240,10 @@ async function guardForwardClick(event, control) {
       await replay(control);
       return;
     }
+    if (state.reason === 'auth_unknown') {
+      showError(profileMessage(state), 0);
+      return;
+    }
     if (state.reason === 'signed_out') {
       // Dejar que el checkout original abra su modal de acceso, pero con el
       // carrito ya resuelto y sin permitir que una carga incompleta lo saltee.
@@ -299,16 +291,21 @@ function boot() {
   // No observar el primer `null` antes de que Firebase restaure la sesión:
   // ese pulso transitorio hacía que checkout tratara a una cuenta persistida
   // como invitada al venir desde el carrito/header.
-  subscribeAuthState(user => {
-      restoreResumeState();
-      profilePromise = loadProfile(user);
-      profilePromise.then(state => {
-        if (state.ok) {
-          restoreResumeState();
-          eventuallyClearResumeBackup();
-        }
-      });
-    }));
+  subscribeSession(snapshot => {
+    if (snapshot.status === AUTH_STATES.RESTORING) return;
+    restoreResumeState();
+    if (snapshot.status === AUTH_STATES.UNKNOWN) {
+      profilePromise = Promise.resolve({ ok: false, user: null, profile: null, reason: 'auth_unknown' });
+      return;
+    }
+    profilePromise = loadProfile(snapshot.user);
+    profilePromise.then(state => {
+      if (state.ok) {
+        restoreResumeState();
+        eventuallyClearResumeBackup();
+      }
+    });
+  });
 
   document.addEventListener('click', event => {
     const cartButton = event.target?.closest?.('#ck-items .ck-qty-btn,#ck-items .ck-remove-btn');

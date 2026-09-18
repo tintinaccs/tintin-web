@@ -8,7 +8,7 @@
  * Ante cualquier error queda bloqueada. Nunca supone que la tienda está abierta.
  */
 import { auth, db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { subscribeAuthState } from '../auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
+import { AUTH_STATES, subscribeSession } from '../auth/coordinador-sesion.js?v=tintin-20260918-global-session-restore-2';
 import {
   doc,
   onSnapshot
@@ -22,7 +22,7 @@ import {
   getStoreAccessConfig,
   getStoreAccessConfigFromRest,
   normalizeStoreAccessConfig
-} from './nucleo-control-tienda.js?v=tintin-20260916-store-gate-degraded-fix-2';
+} from './nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1';
 
 export {
   isAccessAllowed,
@@ -78,7 +78,13 @@ if (!window.TintinStoreGateRuntimeBooted) {
     publishState('closed');
   }
 
-  subscribeAuthState(async user => {
+  subscribeSession(async snapshot => {
+    if (snapshot.status === AUTH_STATES.RESTORING || snapshot.status === AUTH_STATES.UNKNOWN) {
+      role = '__unresolved__';
+      evaluate();
+      return;
+    }
+    const user = snapshot.user;
     if (!user) {
       role = 'guest';
       email = '';

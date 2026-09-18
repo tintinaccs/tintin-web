@@ -1,8 +1,8 @@
-import { auth, db, appCheckReady, authPersistenceReady } from "../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1";
+import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1";
 import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { subscribeAuthState } from "../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2";
+import { AUTH_STATES, subscribeSession, markExplicitLogout, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20260918-global-session-restore-2";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
   query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp
@@ -20,17 +20,17 @@ import {
   canDo, saveRolePermissions, buildDefaultRolePermissions
 } from "../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260916-store-gate-degraded-fix-2";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260916-cache-bump-collection-state-1";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260918-global-session-restore-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
-import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20260910-auth-api-1";
+import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260901-media-orphan-log-4";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260901-media-orphan-scan-3";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260916-cache-bump-diagnostico-sitio-1";
 import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260918-flow-connections-cache-fix-1";
-import "./pages/paginas-admin.js?v=tintin-20260916-pages-5";
+import "./pages/paginas-admin.js?v=tintin-20260918-global-session-restore-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
@@ -39,8 +39,8 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260716-cloudinary-fix-1";
-import './orders/pedidos-superadmin-crud.js?v=tintin-20260916-cache-bump-orders-superadmin-1';
-import './products/integridad-inventario-admin.js?v=tintin-20260916-order-integrity-2';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20260918-global-session-restore-1';
+import './products/integridad-inventario-admin.js?v=tintin-20260918-global-session-restore-1';
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -813,40 +813,20 @@ window.addEventListener('hashchange', () => {
 // ---- MOBILE TAB LOGOUT ----
 const mtabLogout = document.getElementById('mtab-logout');
 if (mtabLogout) mtabLogout.onclick = () => {
-  const leave = async () => { await signOut(auth); window.location.href = '/login'; };
+  const leave = async () => { markExplicitLogout(); await signOut(auth); window.location.href = '/login'; };
   window.AdminUnsaved ? window.AdminUnsaved.requestNavigation(leave) : leave();
 };
 
 // ---- LOGOUT ----
 document.getElementById('adm-logout').onclick = () => {
-  const leave = async () => { await signOut(auth); window.location.href = '/login'; };
+  const leave = async () => { markExplicitLogout(); await signOut(auth); window.location.href = '/login'; };
   window.AdminUnsaved ? window.AdminUnsaved.requestNavigation(leave) : leave();
 };
 
 // ======== AUTH GUARD ========
-// El panel no toma decisiones de navegación hasta que Firebase terminó de
-// restaurar la persistencia y resolvió el estado inicial de Auth. Esto evita
-// interpretar transitoriamente una sesión válida como user=null al entrar a
-// /admin después del login o de una recarga.
+// El coordinador distingue restauración, sesión confirmada y estado desconocido.
+// Ningún timer o reintento local puede decidir si una cuenta existe.
 function hideOverlay() { window.ttPageReady && window.ttPageReady(); }
-
-function hasPendingAdminAuthHandoff() {
-  try { return Boolean(sessionStorage.getItem('tt_auth_handoff_uid')); } catch { return false; }
-}
-
-let adminHandoffRecoveryTimer = 0;
-
-function scheduleAdminHandoffRecovery() {
-  if (adminHandoffRecoveryTimer) return;
-  adminHandoffRecoveryTimer = window.setTimeout(() => {
-    adminHandoffRecoveryTimer = 0;
-    // Si la identidad apareció mientras esperaba el fallback, el listener
-    // válido ya se encargará del panel y no se toca la navegación.
-    if (auth.currentUser || currentUser?.uid || adminGuardInitializedUid) return;
-    try { sessionStorage.removeItem('tt_auth_handoff_uid'); } catch {}
-    window.location.replace('login.html?from=%2Fadmin');
-  }, 1500);
-}
 
 function showAdminInitFailure() {
   document.documentElement.classList.remove('adm-auth-ready');
@@ -867,94 +847,42 @@ function showAdminInitFailure() {
   hideOverlay();
 }
 
-async function waitForAdminUserAfterAuthRestore(user) {
-  if (user) return user;
-  // authStateReady() ya se espera arriba, pero un null transitorio puede llegar
-  // en más de un momento: en la navegación inmediata desde el popup de Google
-  // (antes de copiar la sesión persistida a esta pestaña) o más tarde, ya con
-  // el panel cargado, por una renovación de token/sync de persistencia. Un
-  // único chequeo a los 1200ms sólo cubría el primer caso; acá se reintenta
-  // varias veces para no rebotar al login por un estado pasajero en cualquiera
-  // de los dos momentos.
-  const RETRY_DELAY_MS = 300;
-  // Al llegar desde login.html se registra un puente efímero en
-  // sessionStorage. Ese caso merece más margen: Firebase puede tardar varios
-  // segundos en exponer la misma sesión a admin.html. Sin este margen, un
-  // null transitorio se veía como un logout apenas después de entrar.
-  const handoffUid = hasPendingAdminAuthHandoff();
-  const MAX_ATTEMPTS = handoffUid ? 30 : 6;
-  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
-    await new Promise(resolve => window.setTimeout(resolve, RETRY_DELAY_MS));
-    if (auth.currentUser) return auth.currentUser;
+function showAdminAuthUnknown() {
+  document.documentElement.classList.remove('adm-auth-ready');
+  let overlay = document.getElementById('adm-auth-unknown');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'adm-auth-unknown';
+    overlay.setAttribute('role', 'status');
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#44222d';
+    overlay.innerHTML = '<div style="max-width:560px;text-align:center">' +
+      '<h1 style="font-size:22px;margin:0 0 10px">Verificando tu sesión</h1>' +
+      '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">No pudimos confirmar tu sesión todavía. No se cerró tu cuenta ni se borró ningún dato.</p>' +
+      '<button type="button" id="adm-auth-unknown-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#ad3f67;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    overlay.querySelector('#adm-auth-unknown-retry')?.addEventListener('click', () => window.location.reload());
   }
-  return null;
+  hideOverlay();
 }
 
 async function startAdminAuthGuard() {
-  try {
-    await authPersistenceReady;
-  } catch (error) {
-    // firebase.js ya intentó local -> session. Aunque ambos fallen, Auth puede
-    // seguir con persistencia en memoria; no convertimos un fallo de storage
-    // en un bucle de navegación.
-    console.warn('[Admin] Auth persistence unavailable:', error);
-  }
-
-  if (typeof auth.authStateReady === 'function') {
-    try {
-      await auth.authStateReady();
-    } catch (error) {
-      console.warn('[Admin] Auth initial state did not settle cleanly:', error);
-    }
-  }
-
-  subscribeAuthState(async user => {
-    user = await waitForAdminUserAfterAuthRestore(user);
-    if (user && adminHandoffRecoveryTimer) {
-      window.clearTimeout(adminHandoffRecoveryTimer);
-      adminHandoffRecoveryTimer = 0;
-    }
-    // Si el panel ya reconoció una cuenta válida, un `null` posterior puede
-    // ser solamente un instante de renovación/sincronización de Firebase.
-    // Nunca debe expulsar a SuperAdmin de un panel que ya estaba iniciado.
-    // El cierre voluntario sigue funcionando porque sus botones llaman a
-    // signOut() y navegan explícitamente al login por su propia ruta.
-    if (!user && (currentUser?.uid || adminGuardInitializedUid)) {
-      console.warn('[Admin] Estado de Auth transitorio ignorado; la sesión del panel se conserva.');
+  subscribeSession(async snapshot => {
+    if (snapshot.status === AUTH_STATES.RESTORING) {
+      window.TintinLoader?.setText?.('Restaurando tu sesión…', 'El panel se abrirá cuando termine la restauración.');
       return;
     }
-    // Después de un login recién completado, conservar admin.html mientras
-    // Firebase termina de propagar la sesión. Mandar a login en este punto
-    // convertía una restauración lenta en un aparente cierre de sesión. Si la
-    // identidad llega después, el mismo listener terminará de iniciar el panel.
-    if (!user && hasPendingAdminAuthHandoff()) {
-      console.warn('[Admin] Restauración de sesión pendiente; se conserva el panel sin cerrar la cuenta.');
-      // Este callback puede recibir el null inicial antes de que Firebase
-      // publique la identidad restaurada. Mantener el loader permite que el
-      // mismo listener continúe la inicialización cuando llegue el usuario;
-      // mostrar el overlay de error aquí convertía una espera normal en un
-      // fallo visible aunque la sesión siguiera siendo válida.
-      window.TintinLoader?.setText?.(
-        'Restaurando tu sesión…',
-        'El panel se abrirá automáticamente cuando termine la restauración.'
-      );
-      scheduleAdminHandoffRecovery();
+    if (snapshot.status === AUTH_STATES.UNKNOWN) {
+      showAdminAuthUnknown();
       return;
     }
-    // Este es el único caso de sesión ausente que manda al login. replace()
-    // evita dejar /admin en el historial y elimina el ping-pong con Atrás.
+    const user = snapshot.user;
     if (!user) {
+      clearAuthHandoff();
       window.location.replace('login.html');
       return;
     }
-
-    // La sesión sí llegó: el puente ya cumplió su función y no puede afectar
-    // futuros ingresos ni un cambio real de cuenta.
-    try {
-      if (sessionStorage.getItem('tt_auth_handoff_uid') === user.uid) {
-        sessionStorage.removeItem('tt_auth_handoff_uid');
-      }
-    } catch {}
+    clearAuthHandoff();
 
     currentUser = user;
 

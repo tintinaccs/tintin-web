@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260915-session-shell-3"></script>
+  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1"></script>
 <script src="js/cargador-pagina.js?v=tintin-20260916-premium-performance-loader-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20260916-final-production-stability-shell-2" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20260918-global-session-restore-1" defer></script>
   <title>Finalizar compra | Tintin Accesorios</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -22,7 +22,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260916-final-production-stability-entry-module-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260918-global-session-restore-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260916-z-index-fallback-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260916-z-index-fallback-1">
@@ -383,7 +383,7 @@
 
 <script type="module">
 import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1";
-import { subscribeAuthState } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2";
+import { AUTH_STATES, sessionReady, subscribeSession } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260918-global-session-restore-2";
 import {
   collection, addDoc, doc, getDoc, getDocs, query, limit, where,
   updateDoc, increment, serverTimestamp, setDoc, onSnapshot
@@ -391,7 +391,7 @@ import {
 import {
   getCartLocal, setCartLocal, formatPrice, cartTotal,
   removeFromCart, updateQty, clearCart, awaitCartIdentityReady
-} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260916-cache-bump-cart-sync-1";
+} from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { isValidCi, normalizeCi, isValidRuc, normalizeRuc, isValidRazonSocial } from "./js/components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
@@ -401,7 +401,7 @@ import {
   renderStoreClosedOverlay,
   renderStoreConfigUnavailableOverlay,
   removeStoreClosedOverlay
-} from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260916-store-gate-degraded-fix-2";
+} from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1";
 import { cleanText } from "./js/core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
 import { searchPlaces } from "./js/components/location/selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
 import { attachEncomiendaModes, encomiendaValidationError, encomiendaModeLabel, ENCOMIENDA_MODES } from "./js/pages/checkout/checkout-encomienda.js?v=tintin-20260803-encomienda-1";
@@ -595,7 +595,8 @@ let currentStep = 0;
 let cartItems = [];
 let currentUser = null;
 let currentUserProfile = null; // caché de users/{uid} (name, phone) para prellenar el paso 3
-let authReady = false; // true recién cuando el primer onAuthStateChanged ya disparó
+let authReady = false; // true sólo cuando el coordinador publicó un estado conocido
+let sessionStatus = AUTH_STATES.RESTORING;
 const CHECKOUT_RESUME_KEY = 'tt_checkout_resume_step';
 let orderData = {
   city: '',
@@ -832,7 +833,7 @@ async function renderCart() {
     container.querySelectorAll('.ck-sug-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const { id, name, cat, price, stock, img } = btn.dataset;
-        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260916-cache-bump-cart-sync-1');
+        const { addToCart } = await import('./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1');
         const result = await addToCart({ id, name, cat, price: Number(price), stock: stock === '' ? null : Number(stock), imgUrl: img || '', imageUrl: img || '', qty: 1 });
         if (!result?.item) {
           showCkToast(`"${name}" está sin stock`);
@@ -946,6 +947,10 @@ function canEnterShippingStep() {
   );
 }
 
+function sessionCanMakeCheckoutDecision() {
+  return sessionStatus === AUTH_STATES.AUTHENTICATED || sessionStatus === AUTH_STATES.UNAUTHENTICATED;
+}
+
 // Modal obligatorio (Fase F): no tiene "Continuar como invitada" a propósito.
 // Cerrarlo (X o click afuera) deja al carrito y al paso 1 completamente
 // intactos — no toca localStorage ni el estado del carrito para nada.
@@ -991,15 +996,7 @@ function closeLoginRequiredModal() {
 // (normalmente es casi instantáneo) en vez de asumir "no logueada" mientras
 // todavía está cargando — evita un falso modal para alguien que sí tiene
 // sesión pero hizo click justo antes de que onAuthStateChanged disparara.
-function waitForAuthReady(timeoutMs = 4000) {
-  if (authReady) return Promise.resolve();
-  return new Promise(resolve => {
-    const iv = setInterval(() => {
-      if (authReady) { clearInterval(iv); resolve(); }
-    }, 50);
-    setTimeout(() => { clearInterval(iv); resolve(); }, timeoutMs);
-  });
-}
+function waitForAuthReady() { return sessionReady; }
 
 // Después de loguearse/registrarse desde el modal, vuelve exactamente al
 // paso al que quería avanzar (Envío/Ciudad casi siempre) — no la deja de
@@ -1010,6 +1007,7 @@ function tryResumeCheckoutStep() {
   let raw = null;
   try { raw = sessionStorage.getItem(CHECKOUT_RESUME_KEY); } catch {}
   if (raw == null) return;
+  if (sessionStatus !== AUTH_STATES.AUTHENTICATED && sessionStatus !== AUTH_STATES.UNAUTHENTICATED) return;
   const parsed = parseInt(raw, 10);
   if (!Number.isInteger(parsed) || parsed < 1) {
     try { sessionStorage.removeItem(CHECKOUT_RESUME_KEY); } catch {}
@@ -1061,6 +1059,10 @@ document.getElementById('ck-items').addEventListener('click', async e => {
 // a propósito — así también corta el paso si alguien llama a goToStep(n) a
 // mano desde la consola para saltarse el paso 1, no solo con clicks reales.
 function goToStep(n) {
+  if (n >= 1 && !sessionCanMakeCheckoutDecision()) {
+    showError(0, 'No pudimos verificar tu sesión todavía. Esperá un momento y reintentá.');
+    return;
+  }
   if (n >= 1 && (n === 1 ? !canEnterShippingStep() : !isCheckoutAuthorized())) {
     showLoginRequiredModal(n);
     n = 0;
@@ -1908,8 +1910,16 @@ window.addEventListener('tt_cart_updated', () => renderCart());
 // desde el header). Esperamos a que el estado inicial se estabilice antes de
 // conectar el listener; así no convertimos una cuenta válida en invitado ni
 // mostramos el guard de login durante ese instante.
-subscribeAuthState(user => {
-  currentUser = user;
+subscribeSession(snapshot => {
+  sessionStatus = snapshot.status;
+  if (snapshot.status === AUTH_STATES.RESTORING) return;
+  if (snapshot.status === AUTH_STATES.UNKNOWN) {
+    authReady = false;
+    currentUser = null;
+    currentUserProfile = null;
+    return;
+  }
+  currentUser = snapshot.user;
   currentUserProfile = null;
   authReady = true;
   window.ttPageReady && window.ttPageReady(); // carrito ya renderizado + estado de sesión ya conocido
@@ -1943,9 +1953,9 @@ subscribeAuthState(user => {
 });
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1"></script>
-<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260916-cache-bump-session-protection-1"></script>
-<script type="module" src="js/pages/checkout/paypal-checkout.js?v=tintin-20260914-summary-svg-fix-2"></script>
-<script src="tienda.js?v=tintin-20260917-product-lcp-server-preview-1" defer></script>
+<script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260918-global-session-restore-1"></script>
+<script type="module" src="js/pages/checkout/paypal-checkout.js?v=tintin-20260918-global-session-restore-1"></script>
+<script src="tienda.js?v=tintin-20260918-global-session-restore-2" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3"></script>
 <!-- Footer público único: sincronizado por scripts/sincronizar-inicio-navegacion-publica.js -->
 <footer class="tt-footer" data-tt-footer="unified" aria-label="Pie de página">

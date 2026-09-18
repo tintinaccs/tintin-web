@@ -1,5 +1,5 @@
-import { auth, db, authPersistenceReady, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
+import { AUTH_STATES, getSessionUser, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20260918-global-session-restore-2';
 import { collection, onSnapshot, query, where } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { calculateOrderStats } from '../../core/store/estadisticas-pedidos.js?v=tintin-20260716-cloudinary-fix-3';
 import { reconcileAccountOrders } from './estado-canonico-perfil.mjs?v=tintin-20260908-profile-canonical-1';
@@ -159,14 +159,21 @@ export function startProfileOrders() {
     onStatus: (state,error) => { status.dataset.state=state; status.textContent=state==='ready'?'Pedidos sincronizados':state==='loading'?'Sincronizando pedidos…':state==='signed-out'?'':state==='error'?(navigator.onLine===false?'Sin conexión. Tus pedidos no se pudieron actualizar.':'No pudimos sincronizar tus pedidos. Se conservan los últimos datos confirmados.'):''; if(error) console.warn('[profile-orders]',error); },
     onStats: stats => { if(count)count.textContent=stats?String(stats.totalOrders):'—'; if(total)total.textContent=stats?money(stats.totalSpent):'—'; if(stats)window.dispatchEvent(new CustomEvent('tintin:profile-orders',{detail:{count:stats.totalOrders,total:stats.totalSpent}})); }
   });
-  const retry = async () => { if (!currentUser || stopped) return; status.textContent='Sincronizando pedidos…'; await appCheckReady; if (!stopped && auth.currentUser?.uid===currentUser.uid) controller.start(currentUser); };
+  const retry = async () => { if (!currentUser || stopped) return; status.textContent='Sincronizando pedidos…'; await appCheckReady; if (!stopped && getSessionUser()?.uid===currentUser.uid) controller.start(currentUser); };
   list.addEventListener('click',event=>{ if(event.target.closest('[data-profile-orders-more]')){visible+=10;render(lastOrders,lastOptions);} if(event.target.closest('[data-profile-orders-retry]'))void retry(); });
   const onOnline = () => void retry();
   const onVisible = () => { if(!document.hidden && status.dataset.state==='error')void retry(); };
   window.addEventListener('online',onOnline);
   document.addEventListener('visibilitychange',onVisible);
   window.addEventListener('pagehide',()=>{stopped=true;controller.stop();authStop?.();window.removeEventListener('online',onOnline);document.removeEventListener('visibilitychange',onVisible);},{once:true});
-  Promise.resolve(authPersistenceReady).then(()=>{if(stopped)return;authStop=subscribeAuthState(user=>{currentUser=user;visible=5;void (async()=>{if(user)await appCheckReady;if(!stopped && auth.currentUser?.uid===user?.uid)controller.start(user);})();});}).catch(error=>{status.textContent='No pudimos restaurar el historial de pedidos.';console.warn('[profile-orders]',error);});
+  authStop=subscribeSession(snapshot=>{
+    if(stopped || snapshot.status===AUTH_STATES.RESTORING) return;
+    if(snapshot.status===AUTH_STATES.UNKNOWN){ status.textContent='Verificando tu sesión…'; return; }
+    const user=snapshot.user;
+    currentUser=user;
+    visible=5;
+    void (async()=>{if(user)await appCheckReady;if(!stopped && getSessionUser()?.uid===user?.uid)controller.start(user);})();
+  });
   window.TintinProfileOrders={refresh:retry,stop:()=>controller.stop()};
 }
 if (typeof document !== 'undefined') {

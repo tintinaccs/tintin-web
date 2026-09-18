@@ -1,4 +1,15 @@
 {
-  "approved": {},
+  "approved": {
+    "js/admin/importacion-admin.js": {
+      "version": "tintin-20260918-global-session-restore-1",
+      "sha256": "20fd6293e52e6616275445d3bf21699af0cd6e0325943d9accd634f54fb164ba",
+      "gitBlobSha": "37f5b76037c9dd5b7e078c7792e7f331a2760212"
+    },
+    "js/core/store/shopify-import-core.mjs": {
+      "version": "tintin-20260917-shopify-import-core-2",
+      "sha256": "447cf63cc48991a4cc900033b8df9e8095636915cdef8a828c8bb5fb4a4d3286",
+      "gitBlobSha": "fd933bd1f5b10d08627a81c8be3da53e010c8398"
+    }
+  },
   "removed": []
 }
