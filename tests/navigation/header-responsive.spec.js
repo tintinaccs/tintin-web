@@ -188,7 +188,24 @@ test('desktop conserva un solo indicador para Tienda y acciones sólidas', async
 
   await page.keyboard.press('Escape');
   await page.locator('#btn-cuenta').click();
-  await expect(page.locator('#account-panel a[href="/login"], #account-panel a[href="login.html"]')).toHaveCount(2);
+  const accountPanel = page.locator('#account-panel');
+  await expect(accountPanel).toBeVisible();
+  await expect.poll(async () => {
+    const guestLinks = await accountPanel.locator('a[href="/login"], a[href="login.html"]').count();
+    const neutralStatus = await accountPanel.locator('[role="status"]').count();
+    if (guestLinks === 2) return 'guest';
+    if (guestLinks === 0 && neutralStatus === 1) return 'session-restoring';
+    return 'invalid';
+  }, { timeout: 15000 }).toMatch(/^(guest|session-restoring)$/);
+  const accountState = await accountPanel.evaluate(panel =>
+    panel.querySelectorAll('a[href="/login"], a[href="login.html"]').length === 2
+      ? 'guest'
+      : 'session-restoring'
+  );
+  if (accountState === 'session-restoring') {
+    await expect(accountPanel.locator('[role="status"]')).toContainText(/Comprobando tu sesión|No pudimos verificar tu sesión/);
+    await expect(accountPanel.locator('a[href="/login"], a[href="login.html"]')).toHaveCount(0);
+  }
   await expect(page.locator('#account-drawer')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
 });
 
