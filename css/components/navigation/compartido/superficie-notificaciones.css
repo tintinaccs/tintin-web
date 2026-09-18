@@ -3,7 +3,8 @@
    superficies del header; su geometría y transición por dispositivo siguen en
    css/components/notifications/notificaciones-sociales.css. */
 #notifications-drawer {
-  z-index: var(--tt-z-surface, 1460) !important;
+  /* Keep Alerts in the same top-level layer as the other shared surfaces. */
+  z-index: 1460 !important;
   background: #FFFFFF !important;
   background-color: #FFFFFF !important;
   background-image: none !important;

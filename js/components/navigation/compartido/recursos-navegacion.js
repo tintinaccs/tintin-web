@@ -1,4 +1,4 @@
-import { versionedSiteAsset } from './configuracion.js?v=tintin-20260916-final-production-stability-nav-1';
+import { versionedSiteAsset } from './configuracion.js?v=tintin-20260918-header-system-solid-surfaces-1';
 
 const HEADER_DESKTOP_VERSION = 'tintin-20260824-header-responsive-sync-1';
 const HEADER_RESPONSIVE_VERSION = 'tintin-20260916-z-index-fallback-1';
@@ -7,6 +7,7 @@ const NAVIGATION_PANEL_VERSION = 'tintin-20260916-surface-z-index-fallback-1';
 const NAVIGATION_COHERENCE_VERSION = 'tintin-20260915-shell-atomic-1';
 const MOBILE_SOLID_VERSION = 'tintin-20260817-cls-desktop-stable-3';
 const NOTIFICATIONS_VERSION = 'tintin-20260907-notifications-badge-anchor-1';
+const NOTIFICATION_SURFACE_VERSION = 'tintin-20260918-header-system-solid-surfaces-1';
 
 const NAVIGATION_STYLES = Object.freeze([
   ['tt-navigation-desktop-css', 'css/components/navigation/escritorio/encabezado-escritorio.css', HEADER_DESKTOP_VERSION],
@@ -16,7 +17,7 @@ const NAVIGATION_STYLES = Object.freeze([
   ['tt-navigation-notifications-css', 'css/components/notifications/notificaciones-sociales.css', NOTIFICATIONS_VERSION],
   ['tt-navigation-shared-css', 'css/components/navigation/compartido/transiciones-navegacion.css', NAVIGATION_SHARED_VERSION],
   ['tt-surface-controller-css', 'css/components/navigation/compartido/paneles.css', NAVIGATION_PANEL_VERSION],
-  ['tt-navigation-notification-surface-css', 'css/components/navigation/compartido/superficie-notificaciones.css', HEADER_DESKTOP_VERSION],
+  ['tt-navigation-notification-surface-css', 'css/components/navigation/compartido/superficie-notificaciones.css', NOTIFICATION_SURFACE_VERSION],
   ['tt-navigation-search-css', 'css/components/navigation/compartido/busqueda.css', NAVIGATION_SHARED_VERSION],
   ['tt-navigation-coherence-css', 'css/components/navigation/compartido/coherencia-visual.css', NAVIGATION_COHERENCE_VERSION],
 ]);

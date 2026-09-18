@@ -1,4 +1,4 @@
-export const SHELL_VERSION = 'tintin-20260916-final-production-stability-nav-1';
+export const SHELL_VERSION = 'tintin-20260918-header-system-solid-surfaces-1';
 
 export const BREAKPOINTS = Object.freeze({
   mobileMax: 767,
