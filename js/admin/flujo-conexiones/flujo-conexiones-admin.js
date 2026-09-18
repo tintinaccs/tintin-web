@@ -8,7 +8,8 @@
 // monitoreo nueva: reutiliza lo que ya prueba conectividad real sin escribir
 // datos. Nada de lo que hace este módulo crea, actualiza ni borra documentos.
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js';
-import { EVIDENCIA, resolveState, isAttentionState } from './estado-flujo.js';
+import { resolveState, isAttentionState } from './estado-flujo.js';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js';
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 
 const CATEGORY_LABELS = {
@@ -41,105 +42,10 @@ function edgeById(id) {
   return EDGES.find(edge => edge.id === id) || null;
 }
 
-function edgeIdFor(from, to) {
-  return EDGES.find(edge => edge.from === from && edge.to === to)?.id || '';
-}
-
 function escapeHtml(value) {
   return String(value == null ? '' : value).replace(/[&<>"']/g, ch => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
   ));
-}
-
-function buildLiveChecks({ publicHealth, systemHealth, adminHealth, headers }, checkedAt) {
-  const out = {};
-  const setFrom = (id, ok, note, options = {}) => {
-    if (typeof ok !== 'boolean') return;
-    out[id] = {
-      ok,
-      note,
-      status: Number(options.status || 200),
-      evidenceLevel: options.evidenceLevel || EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
-      promote: options.promote === true,
-      authRequired: options.authRequired === true,
-      checkedAt,
-    };
-  };
-
-  const publicOk = publicHealth?.status === 200 && publicHealth.body?.ok === true;
-  const publicChecks = publicHealth?.body?.checks || {};
-  const publicAdmin = publicHealth?.body?.admin || {};
-  setFrom('cf-pages', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, { status: publicHealth?.status, promote: publicOk });
-  setFrom('cf-functions', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, { status: publicHealth?.status, promote: publicOk });
-  setFrom('apis-internas', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, { status: publicHealth?.status, promote: publicOk });
-  setFrom('firestore', publicChecks.firebase, `GET /api/health · checks.firebase=${publicChecks.firebase === true}`, { status: publicHealth?.status, promote: publicChecks.firebase === true });
-  Object.entries({
-    productos: 'products',
-    inventario: 'productInventory',
-    pedidos: 'orders',
-    'users-uid': 'users',
-    comentarios: 'reviews',
-    likes: 'likes',
-    correos: 'emailLogs',
-  }).forEach(([id, key]) => setFrom(id, typeof publicAdmin[key] === 'boolean' ? publicAdmin[key] : undefined,
-    `GET /api/health · admin.${key}=${publicAdmin[key] === true}`, { status: publicHealth?.status }));
-
-  if (adminHealth && adminHealth.checks) {
-    const c = adminHealth.checks;
-    Object.entries({
-      productos: 'products', inventario: 'productInventory', pedidos: 'orders', 'users-uid': 'users',
-      comentarios: 'reviews', likes: 'likes', correos: 'emailLogs',
-    }).forEach(([id, key]) => setFrom(id, c[key]?.ok, `GET /api/admin-runtime-health · lectura ${key}`, { status: adminHealth.status || 200 }));
-  }
-
-  if (systemHealth?.body?.report) {
-    const report = systemHealth.body.report;
-    const integrations = report.integrations || {};
-    setFrom('firestore', integrations.firebase, 'GET /api/system-health · runtime Firestore', { status: systemHealth.status, promote: integrations.firebase === true });
-    const appsScript = integrations.appsScript;
-    if (appsScript) setFrom('apps-script', appsScript.protocolOk === true,
-      `GET /api/system-health · Apps Script ${appsScript.protocolOk ? 'protocolo reconocido' : 'protocolo no confirmado'}`,
-      { status: appsScript.httpStatus || systemHealth.status, promote: appsScript.protocolOk === true });
-    setFrom('google-sheets', integrations.sheets === true,
-      'GET /api/system-health · protocolo de sincronización confirmado', { status: systemHealth.status, promote: integrations.sheets === true });
-    if (report.deployment?.commitSha) {
-      setFrom('deployments', true, `GET /api/system-health · commit ${report.deployment.commitSha.slice(0, 10)} (${report.deployment.branch || 'branch desconocida'})`, { promote: true });
-    }
-  }
-  if (headers) {
-    setFrom('csp', headers.csp === true, `GET /admin.html · CSP ${headers.csp ? 'presente' : 'ausente'}`, { status: headers.status, promote: headers.csp === true });
-  }
-  return out;
-}
-
-function buildLiveEdges({ publicHealth, systemHealth, headers }, checkedAt) {
-  const out = {};
-  const set = (from, to, ok, note, status = 200) => {
-    if (typeof ok !== 'boolean') return;
-    out[edgeIdFor(from, to)] = {
-      ok, note, status, promote: ok, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION, checkedAt,
-    };
-  };
-  const publicOk = publicHealth?.status === 200 && publicHealth.body?.ok === true;
-  const checks = publicHealth?.body?.checks || {};
-  set('cf-pages', 'cf-functions', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, publicHealth?.status);
-  set('cf-functions', 'apis-internas', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, publicHealth?.status);
-  set('apis-internas', 'firestore', typeof checks.firebase === 'boolean' ? checks.firebase : undefined,
-    `GET /api/health · checks.firebase=${checks.firebase === true}`, publicHealth?.status);
-  const admin = publicHealth?.body?.admin || {};
-  set('firestore', 'users-uid', typeof admin.users === 'boolean' ? admin.users : undefined, `GET /api/health · admin.users=${admin.users === true}`, publicHealth?.status);
-  set('cf-functions', 'csp', headers ? headers.csp === true : undefined, `GET /admin.html · CSP ${headers?.csp ? 'presente' : 'ausente'}`, headers?.status);
-  const report = systemHealth?.body?.report;
-  if (report?.integrations?.appsScript) {
-    set('apis-internas', 'apps-script', report.integrations.appsScript.protocolOk === true,
-      `GET /api/system-health · Apps Script ${report.integrations.appsScript.protocolOk ? 'OK' : 'no confirmado'}`,
-      report.integrations.appsScript.httpStatus || systemHealth.status);
-  }
-  if (report?.integrations?.sheets !== undefined) {
-    set('apps-script', 'google-sheets', report.integrations.sheets === true,
-      'GET /api/system-health · protocolo Sheets', systemHealth.status);
-  }
-  return out;
 }
 
 function stateBadgeHtml(state) {
