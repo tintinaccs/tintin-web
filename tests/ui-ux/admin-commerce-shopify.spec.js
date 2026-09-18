@@ -37,9 +37,16 @@ const DATA = {
   ]
 };
 export const collection = (_db, name) => name;
+export const query = (ref) => ref;
+export const orderBy = () => null;
+export const limit = () => null;
+export const startAfter = () => null;
 export function onSnapshot(ref, success) {
   queueMicrotask(() => success({ docs: (DATA[ref] || []).map(entry => ({ id: entry.id, data: () => structuredClone(entry.data) })) }));
   return () => {};
+}
+export async function getDocs(ref) {
+  return { docs: (DATA[ref] || []).map(entry => ({ id: entry.id, data: () => structuredClone(entry.data) })) };
 }`;
 const rolesStub = `
 export function can() { return true; }
@@ -178,5 +185,5 @@ test('la interfaz sigue utilizable en móvil sin desbordar el documento', async 
   expect(dimensions.page).toBeLessThanOrEqual(dimensions.viewport + 2);
   await page.locator('tr[data-open="product"][data-id="p-reloj"]').click();
   const box = await page.locator('#tt-commerce-drawer').boundingBox();
-  expect(box?.width || 9999).toBeLessThanOrEqual(391);
+  expect(box?.width || 9999).toBeLessThanOrEqual(390.5);
 });
