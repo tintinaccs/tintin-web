@@ -167,7 +167,9 @@ function variantFromRow(row, parseNumber, parseStock) {
   if (priceRaw !== '') variant.price = Math.round(Math.max(0, numberValue(priceRaw, parseNumber)));
   if (stockRaw !== '') variant.stock = parseStock(stockRaw);
   if (image) variant.imageUrl = image;
-  const hasVariantData = Object.keys(variant).length > 0;
+  // Shopify may emit image-only rows when a product has a gallery. Those rows
+  // belong to the product media plan, not to a synthetic zero-price variant.
+  const hasVariantData = Object.keys(variant).some(key => key !== 'imageUrl');
   return { key: key === '||' ? '__default__' : key, variant: hasVariantData ? variant : null, stockRaw };
 }
 

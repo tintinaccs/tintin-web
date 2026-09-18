@@ -117,6 +117,8 @@
     "audit:phase8-ui": "node scripts/auditar-fase-8-ui-ux.js",
     "test:phase8-ui": "playwright test tests/ui-ux/phase8-ui-ux.spec.js --project=chromium",
     "test:phase9-import": "node --test tests/import/phase9-import-normalization.test.mjs",
+    "test:phase2-import": "node --test tests/import/shopify-phase2-pipeline.test.mjs tests/import/shopify-phase2-media-api.test.mjs tests/import/shopify-import-core.test.mjs tests/import/admin-import-job-contract.test.mjs",
+    "audit:phase2-contract": "node scripts/auditar-shopify-phase2-contract.mjs",
     "audit:phase10": "node scripts/auditar-fase-10-accessibility.js",
     "test:phase10-a11y": "playwright test tests/ui-ux/phase10-accessibility.spec.js --project=chromium",
     "audit:phase11": "node scripts/auditar-fase-11-seo.js",

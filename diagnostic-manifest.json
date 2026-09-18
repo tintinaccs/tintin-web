@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "54b2427aa2a45b8c3f4416190a78a1ca32456c7da1a9c95553d2cc597805c659",
+  "sourceFingerprint": "5754f532f5218dc1acb0c9fa51866743a0ae05ddcf5e3bc530ae1babb262f584",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 851,
-    "textFiles": 810,
-    "totalBytes": 16874546,
+    "files": 858,
+    "textFiles": 817,
+    "totalBytes": 16907646,
     "pages": 19,
-    "modules": 578
+    "modules": 583
   },
   "viewports": [
     {
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 190988,
-      "sha256": "866c414f46f44d43dd81a5585a964df92984afb80cb66bfc52d68517d9c3a953",
+      "bytes": 190985,
+      "sha256": "b4504b40c6e90a946df4ffde7d2dd97313e53dc3894113ee8c1b4e3bc269cc57",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2119,7 +2119,7 @@
           "line": 2004
         },
         {
-          "raw": "js/admin/importacion-admin.js?v=tintin-20260918-global-session-restore-1",
+          "raw": "js/admin/importacion-admin.js?v=tintin-20260918-shopify-phase2-safe-1",
           "target": "js/admin/importacion-admin.js",
           "line": 2005
         },
@@ -2369,7 +2369,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/importacion-admin.js?v=tintin-20260918-global-session-restore-1",
+          "raw": "js/admin/importacion-admin.js?v=tintin-20260918-shopify-phase2-safe-1",
           "target": "js/admin/importacion-admin.js",
           "line": 2005,
           "exists": true
@@ -18657,6 +18657,35 @@
       "endpoints": []
     },
     {
+      "path": "functions/api/admin-import-media.js",
+      "bytes": 5396,
+      "sha256": "1e7d48d452da7ee92fc618265dbb0190b9498bf2418cf66a94906108fdc587f2",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/seguridad-cloudinary.js",
+          "target": "cloudflare/seguridad-cloudinary.js",
+          "dynamic": false,
+          "line": 8
+        },
+        {
+          "raw": "../../js/core/store/shopify-phase2-pipeline.mjs",
+          "target": "js/core/store/shopify-phase2-pipeline.mjs",
+          "dynamic": false,
+          "line": 12
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://api.cloudinary.com/v1_1/$%7BencodeURIComponent(config.cloudName",
+          "line": 63
+        }
+      ]
+    },
+    {
       "path": "functions/api/admin-order-mutation.js",
       "bytes": 3934,
       "sha256": "9b1afbd50a89ced09cf9df5a8362240a84d6729848cdc42ee00bee46ecb6d668",
@@ -20825,8 +20854,8 @@
     },
     {
       "path": "js/admin/importacion-admin.js",
-      "bytes": 27141,
-      "sha256": "20fd6293e52e6616275445d3bf21699af0cd6e0325943d9accd634f54fb164ba",
+      "bytes": 28194,
+      "sha256": "7d75fd6a2bfda9d16d46febcc24caa9a296ce211fb28a86e03ba95e5963ec6ab",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20875,10 +20904,16 @@
           "line": 32
         },
         {
+          "raw": "../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260918-shopify-phase2-safe-1",
+          "target": "js/core/store/shopify-phase2-pipeline.mjs",
+          "dynamic": false,
+          "line": 33
+        },
+        {
           "raw": "../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2",
           "target": "js/core/auth/cliente-api-autenticado.js",
           "dynamic": false,
-          "line": 33
+          "line": 34
         }
       ],
       "endpoints": [
@@ -24196,8 +24231,8 @@
     },
     {
       "path": "js/core/store/shopify-import-core.mjs",
-      "bytes": 13635,
-      "sha256": "447cf63cc48991a4cc900033b8df9e8095636915cdef8a828c8bb5fb4a4d3286",
+      "bytes": 13813,
+      "sha256": "8c7ee97d6ade819582fc82e8c3c2da7a98ab0625b6afbead741a8cf6a78c5b8b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24209,6 +24244,24 @@
           "line": 30
         }
       ]
+    },
+    {
+      "path": "js/core/store/shopify-phase2-pipeline.mjs",
+      "bytes": 10801,
+      "sha256": "c7b712a72537aedc9a60308d055d065b0f2dcc681196af9aacfa376664b7e9ff",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./shopify-import-core.mjs",
+          "target": "js/core/store/shopify-import-core.mjs",
+          "dynamic": false,
+          "line": 9
+        }
+      ],
+      "endpoints": []
     },
     {
       "path": "js/core/store/visual-studio-global-runtime.js",
@@ -27279,8 +27332,8 @@
     },
     {
       "path": "scripts/auditar-final-entrega.js",
-      "bytes": 8263,
-      "sha256": "5c71e3bb761212982022158ddb8d753b5f5431797a61aa3630b3af4a88a76ed3",
+      "bytes": 8260,
+      "sha256": "b5b7ad72a6377fe39748d670e20cbbedbcecc093a785af00f5fb5888b69d6100",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28452,6 +28505,30 @@
         "error": ""
       },
       "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "scripts/auditar-shopify-phase2-contract.mjs",
+      "bytes": 1355,
+      "sha256": "1db3c9b064e248ed77a962623ddbe035c1566b65c8739ca9262afbda3223c87c",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        }
+      ],
       "endpoints": []
     },
     {
@@ -31145,6 +31222,101 @@
       ]
     },
     {
+      "path": "tests/import/shopify-phase2-media-api.test.mjs",
+      "bytes": 911,
+      "sha256": "b8d6bb47f5bd843a122b382b302fff0a528652902f207ab7e79ccefbd410fe08",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/import/shopify-phase2-pipeline.test.mjs",
+      "bytes": 6350,
+      "sha256": "3d539b340be7d8b7dc526e43390d97fc9f1110cddc419b7ff98c5418d7f3fd0b",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "../../js/core/store/shopify-phase2-pipeline.mjs",
+          "target": "js/core/store/shopify-phase2-pipeline.mjs",
+          "dynamic": false,
+          "line": 17
+        },
+        {
+          "raw": "../../js/core/store/normalizacion-importacion.mjs",
+          "target": "js/core/store/normalizacion-importacion.mjs",
+          "dynamic": false,
+          "line": 18
+        },
+        {
+          "raw": "../../js/core/store/shopify-import-core.mjs",
+          "target": "js/core/store/shopify-import-core.mjs",
+          "dynamic": false,
+          "line": 19
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://cdn.shopify.com/a.webp",
+          "line": 43
+        },
+        {
+          "url": "https://cdn.shopify.com/b.webp",
+          "line": 44
+        },
+        {
+          "url": "https://evil.example/a.webp",
+          "line": 51
+        },
+        {
+          "url": "http://cdn.shopify.com/a.webp",
+          "line": 52
+        }
+      ]
+    },
+    {
       "path": "tests/login/canonical-profile-recovery.test.mjs",
       "bytes": 2196,
       "sha256": "ba4f72b8bcd0e91789480f213883dd511a2ac25116b336c7ef2e7ac9512f86bc",
@@ -33150,6 +33322,18 @@
       "sha256": "ff9d8e0ad055b971eea891b8e364bf293e326ef34566be9dce042464638ae6f2"
     },
     {
+      "path": "SHOPIFY_MIGRATION_RUNBOOK_2026-09-18.md",
+      "extension": ".md",
+      "bytes": 1801,
+      "sha256": "632bc5d91a7159c54a9ab8f6342fbd7d1a1fb8c11bbc7c4c41f1d3378f9b55ef"
+    },
+    {
+      "path": "SHOPIFY_PHASE2_AUDIT_2026-09-18.md",
+      "extension": ".md",
+      "bytes": 5210,
+      "sha256": "9cd1ecbbb0440b5aae8cc3820a066edd5719f321edb6255791597d992fe997a9"
+    },
+    {
       "path": "SUPER_ADMIN_AUDIT_2026-09-17.md",
       "extension": ".md",
       "bytes": 10867,
@@ -33158,8 +33342,8 @@
     {
       "path": "_routes.json",
       "extension": ".json",
-      "bytes": 2367,
-      "sha256": "a5d066dbe1d97a4a3043f3b6c387919d35705bb9c7f81d6fe318ff3a497361e4"
+      "bytes": 2398,
+      "sha256": "558b0e3ce2a643857295d5b2796baaee19ab8d616085e0f7d3a7fe4e2074122f"
     },
     {
       "path": "about.html",
@@ -33182,8 +33366,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 190988,
-      "sha256": "866c414f46f44d43dd81a5585a964df92984afb80cb66bfc52d68517d9c3a953"
+      "bytes": 190985,
+      "sha256": "b4504b40c6e90a946df4ffde7d2dd97313e53dc3894113ee8c1b4e3bc269cc57"
     },
     {
       "path": "apple-touch-icon.png",
@@ -34512,6 +34696,12 @@
       "sha256": "0f51156dd532bf756eca2b6c078f8d850c53f365a1ce685c6a0aa9677ea0d7d1"
     },
     {
+      "path": "functions/api/admin-import-media.js",
+      "extension": ".js",
+      "bytes": 5396,
+      "sha256": "1e7d48d452da7ee92fc618265dbb0190b9498bf2418cf66a94906108fdc587f2"
+    },
+    {
       "path": "functions/api/admin-order-mutation.js",
       "extension": ".js",
       "bytes": 3934,
@@ -34994,8 +35184,8 @@
     {
       "path": "js/admin/importacion-admin.js",
       "extension": ".js",
-      "bytes": 27141,
-      "sha256": "20fd6293e52e6616275445d3bf21699af0cd6e0325943d9accd634f54fb164ba"
+      "bytes": 28194,
+      "sha256": "7d75fd6a2bfda9d16d46febcc24caa9a296ce211fb28a86e03ba95e5963ec6ab"
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
@@ -35822,8 +36012,14 @@
     {
       "path": "js/core/store/shopify-import-core.mjs",
       "extension": ".mjs",
-      "bytes": 13635,
-      "sha256": "447cf63cc48991a4cc900033b8df9e8095636915cdef8a828c8bb5fb4a4d3286"
+      "bytes": 13813,
+      "sha256": "8c7ee97d6ade819582fc82e8c3c2da7a98ab0625b6afbead741a8cf6a78c5b8b"
+    },
+    {
+      "path": "js/core/store/shopify-phase2-pipeline.mjs",
+      "extension": ".mjs",
+      "bytes": 10801,
+      "sha256": "c7b712a72537aedc9a60308d055d065b0f2dcc681196af9aacfa376664b7e9ff"
     },
     {
       "path": "js/core/store/visual-studio-global-runtime.js",
@@ -36458,8 +36654,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 13258,
-      "sha256": "28751f1d3652f29320321bf639ed24892b999cf64392dd668c14526fefa9f019"
+      "bytes": 13563,
+      "sha256": "09e1334f549f95d7cc1fd9952b3f2ecad86c768e7f1df149127cb4eafaffbd10"
     },
     {
       "path": "perfil.html",
@@ -36878,8 +37074,8 @@
     {
       "path": "scripts/auditar-final-entrega.js",
       "extension": ".js",
-      "bytes": 8263,
-      "sha256": "5c71e3bb761212982022158ddb8d753b5f5431797a61aa3630b3af4a88a76ed3"
+      "bytes": 8260,
+      "sha256": "b5b7ad72a6377fe39748d670e20cbbedbcecc093a785af00f5fb5888b69d6100"
     },
     {
       "path": "scripts/auditar-final-integracion.js",
@@ -37164,6 +37360,12 @@
       "sha256": "fbbcdf0940cb823453321e3eab132472d7c66b66b302b0969524cc015bdf457a"
     },
     {
+      "path": "scripts/auditar-shopify-phase2-contract.mjs",
+      "extension": ".mjs",
+      "bytes": 1355,
+      "sha256": "1db3c9b064e248ed77a962623ddbe035c1566b65c8739ca9262afbda3223c87c"
+    },
+    {
       "path": "scripts/auditar-shopify-redirects.mjs",
       "extension": ".mjs",
       "bytes": 3350,
@@ -37292,14 +37494,14 @@
     {
       "path": "scripts/cache-version-approvals.json",
       "extension": ".json",
-      "bytes": 553,
-      "sha256": "5cfa474840d0bf32c9f2aad47cff28be584bb0676d5cf473c71db741dc7ccfc7"
+      "bytes": 38,
+      "sha256": "dd9d3b46a69239cd812969333746634c254684c83bb0c9501af9d578669e38b8"
     },
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 43109,
-      "sha256": "fccbfbe0755b00166bf0e3bd4c0d8ba3a79dd7228a8b0b36ee9b6f741cc82d3f"
+      "bytes": 43339,
+      "sha256": "8f716a205a2cc32d2a62b3cb5fe336492ef8862a1f8995e9a84b5986aefad41b"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -37744,6 +37946,18 @@
       "extension": ".mjs",
       "bytes": 3766,
       "sha256": "88ae6a4232276ef34cb1a4add2a406f5090688e6f92687a8a990446651f4ee17"
+    },
+    {
+      "path": "tests/import/shopify-phase2-media-api.test.mjs",
+      "extension": ".mjs",
+      "bytes": 911,
+      "sha256": "b8d6bb47f5bd843a122b382b302fff0a528652902f207ab7e79ccefbd410fe08"
+    },
+    {
+      "path": "tests/import/shopify-phase2-pipeline.test.mjs",
+      "extension": ".mjs",
+      "bytes": 6350,
+      "sha256": "3d539b340be7d8b7dc526e43390d97fc9f1110cddc419b7ff98c5418d7f3fd0b"
     },
     {
       "path": "tests/login/canonical-profile-recovery.test.mjs",
