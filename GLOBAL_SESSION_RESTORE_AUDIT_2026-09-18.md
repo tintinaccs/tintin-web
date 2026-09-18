@@ -3,7 +3,7 @@
 ## Alcance
 
 - Rama: `global-session-restore-20260918` (rama de trabajo de esta entrega)
-- Base: `921666a101baba4bae96f3bb434ac00df2441d5e`
+- Base efectivo tras rebase sobre `origin/main`: `e0f75432`
 - Objetivo: eliminar falsos logout durante restauración en frío, refresh, handoff entre login y superficies protegidas, cambio de pestaña y routing por rol.
 - Autoridad de Pages para QA público: `https://tintinaccesorios.pages.dev`.
 
