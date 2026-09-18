@@ -87,8 +87,10 @@ test('mobile conserva etiquetas, admite Alertas y se compacta sin solaparse', as
   const expandedWidth = await nav.evaluate(node => node.getBoundingClientRect().width);
   await page.evaluate(() => window.scrollTo(0, 560));
   await expect(nav).toHaveClass(/tt-tabbar-compact/);
-  const compactWidth = await nav.evaluate(node => node.getBoundingClientRect().width);
-  expect(compactWidth).toBeLessThan(expandedWidth);
+  await expect.poll(
+    () => nav.evaluate(node => node.getBoundingClientRect().width),
+    { timeout: 1500 },
+  ).toBeLessThan(expandedWidth);
   await expect(visibleButtons.first()).toHaveCSS('min-height', '48px');
   await expectNoHorizontalOverlap(nav.locator('.tt-tabbar-btn:not([hidden])'));
 
