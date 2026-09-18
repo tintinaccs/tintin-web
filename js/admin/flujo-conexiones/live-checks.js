@@ -13,7 +13,7 @@ function edgeIdFor(from, to) {
   return EDGES.find(edge => edge.from === from && edge.to === to)?.id || '';
 }
 
-export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, headers }, checkedAt) {
+export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, headers, routeProbes = {} }, checkedAt) {
   const out = {};
   const setFrom = (id, ok, note, options = {}) => {
     if (typeof ok !== 'boolean') return;
@@ -31,10 +31,11 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
   // Nodos de infraestructura y de contrato único: la prueba live confirma
   // exactamente lo que el nodo afirma (alcanzabilidad, un campo específico,
   // un protocolo puntual). Ahí sí corresponde LIVE_PRODUCTION promovible.
-  // Los nodos de dominio (Productos, Inventario, Pedidos, Comentarios,
-  // Likes, Correos) solo tienen una lectura de colección como evidencia:
-  // eso NO prueba el contrato de escritura/mutación completo que describen,
-  // así que quedan LIVE_PRODUCTION_READ_ONLY (no promovibles) a propósito.
+  // El health público ejecuta lecturas server-side contra cada superficie con
+  // la cuenta de servicio y devuelve un booleano por dominio. Eso sí confirma
+  // disponibilidad operativa de la superficie en producción, aunque no
+  // pretende probar una mutación CRUD. El detalle del nodo conserva esa
+  // diferencia para no confundir disponibilidad con una prueba de escritura.
   const publicOk = publicHealth?.status === 200 && publicHealth.body?.ok === true;
   const publicChecks = publicHealth?.body?.checks || {};
   const publicAdmin = publicHealth?.body?.admin || {};
@@ -53,7 +54,11 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
     likes: 'likes',
     correos: 'emailLogs',
   }).forEach(([id, key]) => setFrom(id, typeof publicAdmin[key] === 'boolean' ? publicAdmin[key] : undefined,
-    `GET /api/health · admin.${key}=${publicAdmin[key] === true}`, { status: publicHealth?.status }));
+    `GET /api/health · superficie admin.${key}=${publicAdmin[key] === true} (lectura operativa)`, {
+      status: publicHealth?.status,
+      promote: publicAdmin[key] === true,
+      evidenceLevel: LP,
+    }));
 
   if (adminHealth && adminHealth.checks) {
     const c = adminHealth.checks;
@@ -81,6 +86,27 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
   if (headers) {
     setFrom('csp', headers.csp === true, `GET /admin.html · CSP ${headers.csp ? 'presente' : 'ausente'}`, { status: headers.status, promote: headers.csp === true, evidenceLevel: LP });
   }
+
+  // Las rutas públicas se prueban como navegación real. No se consideran
+  // equivalentes a una escritura ni se aceptan redirecciones silenciosas.
+  Object.entries({
+    'entrada-login': 'login',
+    'pagina-principal': 'home',
+    'pagina-perfil': 'profile',
+    'super-panel': 'admin',
+    'carrito': 'cart',
+  }).forEach(([id, probeKey]) => {
+    const probe = routeProbes[probeKey];
+    if (!probe) return;
+    const routeOk = probe.ok === true && probe.status >= 200 && probe.status < 400;
+    const contractOk = id === 'carrito' ? routeOk && probe.hasCartDrawer === true : routeOk;
+    setFrom(id, contractOk,
+      `GET ${probe.path || probeKey} → HTTP ${probe.status || 'sin respuesta'}`, {
+        status: probe.status,
+        promote: contractOk,
+        evidenceLevel: LP,
+      });
+  });
   return out;
 }
 

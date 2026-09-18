@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5754f532f5218dc1acb0c9fa51866743a0ae05ddcf5e3bc530ae1babb262f584",
+  "sourceFingerprint": "35031710d54d28adeb95abc69fef66a8ea9be5af4c086681fcc17fd32acb3b7c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 858,
     "textFiles": 817,
-    "totalBytes": 16907646,
+    "totalBytes": 16910775,
     "pages": 19,
     "modules": 583
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 190985,
-      "sha256": "b4504b40c6e90a946df4ffde7d2dd97313e53dc3894113ee8c1b4e3bc269cc57",
+      "bytes": 190991,
+      "sha256": "64d55865ad25e3e8a57619a0f012bd90ffb1d09af19d429aed6c4174e7f4b8a7",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2114,7 +2114,7 @@
           "line": 8
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260918-auth-incident-diagnostics-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20260918-flow-connections-green-evidence-1",
           "target": "js/admin/admin-app.js",
           "line": 2004
         },
@@ -2363,7 +2363,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260918-auth-incident-diagnostics-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20260918-flow-connections-green-evidence-1",
           "target": "js/admin/admin-app.js",
           "line": 2004,
           "exists": true
@@ -20135,8 +20135,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 435895,
-      "sha256": "0d7bc0d4dd061059b5e29ab462e1d36fb5a20aea8f407b0db7a6c6516486d924",
+      "bytes": 435900,
+      "sha256": "96b276577ff7e97e649204c01afab20cbfbffda411c4781f1f83fc1c86c332a3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20263,7 +20263,7 @@
           "line": 32
         },
         {
-          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260918-flow-connections-cache-fix-1",
+          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260918-flow-connections-green-evidence-1",
           "target": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
           "dynamic": false,
           "line": 33
@@ -20783,8 +20783,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 16881,
-      "sha256": "3b35c721d1768ed4b264b131d5a65bd36ea27dd6e61e89531c63027cdfc08e44",
+      "bytes": 18029,
+      "sha256": "9d4cd5b974d00331a8cc530fa7114dd782d256050ec67e3957f7c163ea0e39eb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20803,7 +20803,7 @@
           "line": 11
         },
         {
-          "raw": "./live-checks.js?v=tintin-20260918-flow-connections-cache-fix-1",
+          "raw": "./live-checks.js?v=tintin-20260918-flow-connections-green-evidence-1",
           "target": "js/admin/flujo-conexiones/live-checks.js",
           "dynamic": false,
           "line": 12
@@ -20819,8 +20819,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
-      "bytes": 7370,
-      "sha256": "d7a6c222bca7900557df358edec2c1fe81627bc82d0e034224345a9d4e8639d4",
+      "bytes": 8387,
+      "sha256": "2bf2205e7962911b17492f24ebed63aac23f51cda5c8bb3315c1828a3b51e8ce",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31046,8 +31046,8 @@
     },
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
-      "bytes": 4402,
-      "sha256": "6f0eabb85282c7a0d5d81aac1babb906f9fb7e8cdc570192cf7d9c1d57be7afb",
+      "bytes": 5029,
+      "sha256": "c39d37f84c0952579533d08226e6c47ff4364c7f5d079376deef81a2017c8227",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31537,8 +31537,8 @@
     },
     {
       "path": "tests/navigation/header-responsive.spec.js",
-      "bytes": 14603,
-      "sha256": "d7bbfc0b4fcdffdb47fcc2a16a2d519246feb3f79122122422ac2243be587677",
+      "bytes": 14929,
+      "sha256": "5dfee6056432d1e7175dc2f58dd239075b0c0102917925eaf472d518ec3a0aee",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33366,8 +33366,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 190985,
-      "sha256": "b4504b40c6e90a946df4ffde7d2dd97313e53dc3894113ee8c1b4e3bc269cc57"
+      "bytes": 190991,
+      "sha256": "64d55865ad25e3e8a57619a0f012bd90ffb1d09af19d429aed6c4174e7f4b8a7"
     },
     {
       "path": "apple-touch-icon.png",
@@ -35076,8 +35076,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 435895,
-      "sha256": "0d7bc0d4dd061059b5e29ab462e1d36fb5a20aea8f407b0db7a6c6516486d924"
+      "bytes": 435900,
+      "sha256": "96b276577ff7e97e649204c01afab20cbfbffda411c4781f1f83fc1c86c332a3"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -35166,14 +35166,14 @@
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 16881,
-      "sha256": "3b35c721d1768ed4b264b131d5a65bd36ea27dd6e61e89531c63027cdfc08e44"
+      "bytes": 18029,
+      "sha256": "9d4cd5b974d00331a8cc530fa7114dd782d256050ec67e3957f7c163ea0e39eb"
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
       "extension": ".js",
-      "bytes": 7370,
-      "sha256": "d7a6c222bca7900557df358edec2c1fe81627bc82d0e034224345a9d4e8639d4"
+      "bytes": 8387,
+      "sha256": "2bf2205e7962911b17492f24ebed63aac23f51cda5c8bb3315c1828a3b51e8ce"
     },
     {
       "path": "js/admin/flujo-decisiones/flujo-decisiones-admin.js",
@@ -37920,8 +37920,8 @@
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
       "extension": ".mjs",
-      "bytes": 4402,
-      "sha256": "6f0eabb85282c7a0d5d81aac1babb906f9fb7e8cdc570192cf7d9c1d57be7afb"
+      "bytes": 5029,
+      "sha256": "c39d37f84c0952579533d08226e6c47ff4364c7f5d079376deef81a2017c8227"
     },
     {
       "path": "tests/functions/page-loader-route.test.mjs",
@@ -37998,8 +37998,8 @@
     {
       "path": "tests/navigation/header-responsive.spec.js",
       "extension": ".js",
-      "bytes": 14603,
-      "sha256": "d7bbfc0b4fcdffdb47fcc2a16a2d519246feb3f79122122422ac2243be587677"
+      "bytes": 14929,
+      "sha256": "5dfee6056432d1e7175dc2f58dd239075b0c0102917925eaf472d518ec3a0aee"
     },
     {
       "path": "tests/navigation/loader-shell-wait.spec.js",

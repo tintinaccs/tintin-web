@@ -9,7 +9,7 @@
 // datos. Nada de lo que hace este módulo crea, actualiza ni borra documentos.
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260918-flow-connections-cache-fix-1';
 import { resolveState, isAttentionState } from './estado-flujo.js?v=tintin-20260918-flow-connections-cache-fix-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260918-flow-connections-cache-fix-1';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260918-flow-connections-green-evidence-1';
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 
 const CATEGORY_LABELS = {
@@ -290,21 +290,49 @@ export function initConnectionsFlow({ role } = {}) {
       } else {
         errors.push('No hay una sesión de Super Admin para probes protegidos.');
       }
-      const [systemHealth, adminHealth, pageProbe] = await Promise.all([
+      const [systemHealth, adminHealth, pageProbe, ...routeProbes] = await Promise.all([
         user ? readJson('/api/system-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/admin-runtime-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         fetch('/admin.html', { credentials: 'same-origin', cache: 'no-store' }).then(response => ({
           status: response.status,
           csp: Boolean(response.headers.get('content-security-policy')),
         })).catch(error => ({ status: 0, csp: false, error: error?.message || 'fallo de red' })),
+        ...[
+          ['home', '/'],
+          ['login', '/login'],
+          ['profile', '/perfil'],
+          ['admin', '/admin'],
+          ['checkout', '/checkout'],
+          ['cart', '/'],
+        ].map(async ([key, path]) => {
+          try {
+            const response = await fetch(path, { credentials: 'same-origin', cache: 'no-store' });
+            const body = key === 'cart' ? await response.text() : '';
+            return [key, {
+              path,
+              status: response.status,
+              ok: response.ok,
+              hasCartDrawer: key === 'cart' && /id=["']cart-drawer["']/.test(body),
+            }];
+          } catch (error) {
+            return [key, { path, status: 0, ok: false, error: error?.message || 'fallo de red' }];
+          }
+        }),
       ]);
       if (user && (!systemHealth.ok || systemHealth.body?.ok !== true)) errors.push(`/api/system-health respondió ${systemHealth.status || 'sin respuesta'}`);
       if (user && (!adminHealth.ok || adminHealth.body?.ok !== true)) errors.push(`/api/admin-runtime-health respondió ${adminHealth.status || 'sin respuesta'}`);
 
       const checkedAt = new Date().toISOString();
+      const routeProbeMap = Object.fromEntries(routeProbes);
       liveState.checkedAt = checkedAt;
       liveState.endpointStatus = { health: publicHealth.status, systemHealth: systemHealth.status, adminHealth: adminHealth.status, adminPage: pageProbe.status };
-      liveState.byId = buildLiveChecks({ publicHealth, systemHealth, adminHealth: { ...adminHealth, checks: adminHealth.body?.checks }, headers: pageProbe }, checkedAt);
+      liveState.byId = buildLiveChecks({
+        publicHealth,
+        systemHealth,
+        adminHealth: { ...adminHealth, checks: adminHealth.body?.checks },
+        headers: pageProbe,
+        routeProbes: routeProbeMap,
+      }, checkedAt);
       liveState.byEdgeId = buildLiveEdges({ publicHealth, systemHealth, headers: pageProbe }, checkedAt);
       liveTimestampEl.textContent = `Última verificación en vivo: ${checkedAt} (${Object.keys(liveState.byId).length} nodos y ${Object.keys(liveState.byEdgeId).length} conexiones con probe).`;
 
@@ -323,4 +351,8 @@ export function initConnectionsFlow({ role } = {}) {
   });
 
   renderAll();
+
+  // Abrir la sección debe mostrar el estado real de producción sin exigir un
+  // segundo clic. Sigue siendo un conjunto de GETs de solo lectura.
+  window.setTimeout(() => revalidateBtn.click(), 0);
 }

@@ -4,6 +4,11 @@ async function openPublicPage(page, viewport, path = '/index.html') {
   await page.setViewportSize(viewport);
   await page.goto(path, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('body.tt-public-shell-mounted');
+  // The shell mounts before the stylesheet graph necessarily finishes. Wait
+  // for the real CSS/font layout before taking geometry measurements; without
+  // this, compact-vs-expanded can race and both states report the same width.
+  await page.waitForLoadState('load');
+  await page.evaluate(() => document.fonts?.ready);
   await page.evaluate(() => {
     document.documentElement.classList.remove('tt-color-scheme-pending', 'tt-store-gate-pending');
     window.TintinLoader?.hide?.();
