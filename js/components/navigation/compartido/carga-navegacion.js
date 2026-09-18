@@ -110,7 +110,7 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
 
 function loadAuthRuntime() {
   if (!authRuntimePromise) {
-    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20260918-global-session-restore-1').catch(error => {
+    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20260918-auth-incident-diagnostics-1').catch(error => {
       authRuntimePromise = null;
       throw error;
     });

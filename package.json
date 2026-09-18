@@ -38,6 +38,7 @@
     "test:cart-persistence": "node --test tests/cart/*.test.mjs",
     "test:cart-quantity-browser": "playwright test tests/cart/quantity-browser.spec.js --project=chromium",
     "test:engagement": "node --test tests/engagement/*.test.mjs",
+    "test:site-activity": "node --test tests/analytics/site-activity-contract.test.mjs",
     "test:products-sync": "node --test tests/sync/*.test.mjs",
     "test:visual-builder": "node --test tests/visual-builder/*.test.mjs",
     "test:visual-builder-ui": "playwright test tests/visual-builder/visual-builder-ui.spec.js tests/visual-builder/visual-builder-runtime.spec.js --project=chromium",

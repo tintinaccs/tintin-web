@@ -9,6 +9,25 @@ test('null transitorio durante cold restore nunca se publica como logout', () =>
   assert.notEqual(machine.getSnapshot().status, AUTH_STATES.UNAUTHENTICATED);
 });
 
+test('ruta protegida permanece RESTORING hasta la resolución autoritativa', () => {
+  const machine = createSessionStateMachine();
+  const redirects = [];
+  const decideProtectedRoute = snapshot => {
+    if (snapshot.status === AUTH_STATES.RESTORING || snapshot.status === AUTH_STATES.UNKNOWN) return 'wait';
+    if (snapshot.status === AUTH_STATES.UNAUTHENTICATED) {
+      redirects.push(snapshot.reason);
+      return 'login';
+    }
+    return 'allow';
+  };
+
+  assert.equal(decideProtectedRoute(machine.getSnapshot()), 'wait');
+  assert.equal(decideProtectedRoute(machine.restorationResolved(null)), 'wait');
+  assert.deepEqual(redirects, []);
+  assert.equal(decideProtectedRoute(machine.restorationResolved({ uid: 'user-1' })), 'allow');
+  assert.deepEqual(redirects, []);
+});
+
 test('cold restore con usuario autenticado publica identidad y luego logout real', () => {
   const machine = createSessionStateMachine();
   const user = { uid: 'user-1', email: 'client@example.com' };

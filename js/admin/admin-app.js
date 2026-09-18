@@ -2,7 +2,8 @@ import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-2
 import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { AUTH_STATES, subscribeSession, markExplicitLogout, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20260918-global-session-restore-2";
+import { AUTH_STATES, subscribeSession, markExplicitLogout, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20260918-global-session-restore-2";
+import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
   query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp
@@ -71,6 +72,28 @@ let dashboardPresenceRestart = 0;
 let dashboardActivityDay = '';
 let dashboardActivityState = { sessions: [], presence: [], totalVisits: null };
 const SHEETS_PRODUCT_SYNC_URL = '/api/sheets-product-sync';
+let authReadyDiagnosticRecorded = false;
+let coordinatorReadyDiagnosticRecorded = false;
+
+recordAuthDiagnostic('AUTH_RESTORE_START', { source: 'admin-guard' });
+
+function clearAdminAuthHandoffWithDiagnostic() {
+  const handoff = readAuthHandoff();
+  if (handoff) recordAuthDiagnostic('HANDOFF_FOUND', { source: 'admin-guard', legacy: Boolean(handoff.legacy) });
+  clearAuthHandoff();
+  if (handoff) recordAuthDiagnostic('HANDOFF_CLEARED', { source: 'admin-guard' });
+}
+
+function recordAdminUnauthenticatedRedirect(snapshot) {
+  recordAuthDiagnostic('REDIRECT_REASON', {
+    source: 'admin-guard',
+    reason: 'known-unauthenticated',
+    authState: snapshot.status,
+    sessionCoordinatorState: snapshot.status,
+    handoffState: readAuthHandoff() ? 'present' : 'absent'
+  });
+  recordAuthDiagnostic('REDIRECT_REQUESTED', { source: 'admin-guard', destination: 'login' });
+}
 
 async function pushProductsToSheets(productIds) {
   const ids = [...new Set((productIds || []).map(id => String(id || '').trim()).filter(Boolean))];
@@ -813,13 +836,23 @@ window.addEventListener('hashchange', () => {
 // ---- MOBILE TAB LOGOUT ----
 const mtabLogout = document.getElementById('mtab-logout');
 if (mtabLogout) mtabLogout.onclick = () => {
-  const leave = async () => { markExplicitLogout(); await signOut(auth); window.location.href = '/login'; };
+  const leave = async () => {
+    recordAuthDiagnostic('EXPLICIT_LOGOUT', { source: 'admin-mobile-logout' });
+    markExplicitLogout();
+    await signOut(auth);
+    window.location.href = '/login';
+  };
   window.AdminUnsaved ? window.AdminUnsaved.requestNavigation(leave) : leave();
 };
 
 // ---- LOGOUT ----
 document.getElementById('adm-logout').onclick = () => {
-  const leave = async () => { markExplicitLogout(); await signOut(auth); window.location.href = '/login'; };
+  const leave = async () => {
+    recordAuthDiagnostic('EXPLICIT_LOGOUT', { source: 'admin-logout' });
+    markExplicitLogout();
+    await signOut(auth);
+    window.location.href = '/login';
+  };
   window.AdminUnsaved ? window.AdminUnsaved.requestNavigation(leave) : leave();
 };
 
@@ -868,6 +901,21 @@ function showAdminAuthUnknown() {
 
 async function startAdminAuthGuard() {
   subscribeSession(async snapshot => {
+    if (snapshot.status !== AUTH_STATES.RESTORING && !authReadyDiagnosticRecorded) {
+      authReadyDiagnosticRecorded = true;
+      recordAuthDiagnostic('AUTH_STATE_READY', {
+        source: 'admin-guard',
+        authState: snapshot.status,
+        reason: snapshot.reason || 'coordinator-resolution'
+      });
+    }
+    if (snapshot.status !== AUTH_STATES.RESTORING && !coordinatorReadyDiagnosticRecorded) {
+      coordinatorReadyDiagnosticRecorded = true;
+      recordAuthDiagnostic('COORDINATOR_READY', {
+        source: 'admin-guard',
+        sessionCoordinatorState: snapshot.status
+      });
+    }
     if (snapshot.status === AUTH_STATES.RESTORING) {
       window.TintinLoader?.setText?.('Restaurando tu sesión…', 'El panel se abrirá cuando termine la restauración.');
       return;
@@ -878,11 +926,17 @@ async function startAdminAuthGuard() {
     }
     const user = snapshot.user;
     if (!user) {
-      clearAuthHandoff();
+      recordAdminUnauthenticatedRedirect(snapshot);
+      clearAdminAuthHandoffWithDiagnostic();
       window.location.replace('login.html');
       return;
     }
-    clearAuthHandoff();
+    recordAuthDiagnostic('AUTH_USER_AVAILABLE', {
+      source: 'admin-guard',
+      authState: snapshot.status,
+      sessionCoordinatorState: snapshot.status
+    });
+    clearAdminAuthHandoffWithDiagnostic();
 
     currentUser = user;
 
@@ -908,6 +962,8 @@ async function startAdminAuthGuard() {
         const selfSnap = await getDoc(doc(db, 'users', user.uid));
         if (selfSnap.exists() && selfSnap.data().blocked) {
           window.dispatchEvent(new CustomEvent('tintin:account-blocked', { detail: { uid: user.uid } }));
+          recordAuthDiagnostic('REDIRECT_REASON', { source: 'admin-guard', reason: 'account-blocked', authState: snapshot.status });
+          recordAuthDiagnostic('REDIRECT_REQUESTED', { source: 'admin-guard', destination: 'profile-blocked' });
           window.location.replace('perfil.html?blocked=1');
           return;
         }
@@ -917,6 +973,8 @@ async function startAdminAuthGuard() {
       // va a su perfil, nunca al login.
       if (role === 'client' || !role) {
         window.location.replace('perfil.html');
+        recordAuthDiagnostic('REDIRECT_REASON', { source: 'admin-guard', reason: 'authenticated-without-admin-role', authState: snapshot.status });
+        recordAuthDiagnostic('REDIRECT_REQUESTED', { source: 'admin-guard', destination: 'profile' });
         return;
       }
 

@@ -363,6 +363,10 @@
     "version": "tintin-20260829-final-stability-1",
     "sha256": "ed39714d579741f7d4f7b4164c41dfe949846d5ab2d33cf6abd4c455e09a7833"
   },
+  "js/analytics/control-heartbeat.mjs": {
+    "version": "tintin-20260918-site-activity-dedupe-1",
+    "sha256": "88752a7c08d50d9c5f8bddff573a6b9070613fbd8d148cd6a07ef28e532ba962"
+  },
   "js/analytics/analitica.js": {
     "version": "tintin-20260911-auth-cart-final-1",
     "sha256": "86e7bb0163e01b4310226eba1086eced8ac1f118bb62cf2ea966d4b3eae1712a"
@@ -594,6 +598,10 @@
   "js/core/auth/coordinador-sesion.js": {
     "version": "tintin-20260918-global-session-restore-2",
     "sha256": "bbe084c53ec788364729bbcce49debdcecc4b49689c62f1e1091486e004e065c"
+  },
+  "js/core/auth/diagnostico-sesion.js": {
+    "version": "tintin-20260918-auth-diagnostics-1",
+    "sha256": "d845a674f1d4cbcab451e11fb394208fafcad3ad37b11e2c204b2289a9799781"
   },
   "js/core/auth/estado-sesion.mjs": {
     "version": "tintin-20260918-global-session-restore-2",
