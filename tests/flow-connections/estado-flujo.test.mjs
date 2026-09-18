@@ -62,12 +62,23 @@ test('un probe público 200 exitoso promueve los nodos de infraestructura a prod
   }
 });
 
-test('una lectura de colección de dominio no promueve por sí sola (evita falso verde de CRUD)', () => {
+test('la salud operativa explícita promueve disponibilidad, pero una lectura genérica no promueve CRUD', () => {
   const publicHealth = { status: 200, body: { ok: true, checks: { firebase: true }, admin: { products: true } } };
   const live = buildLiveChecks({ publicHealth, systemHealth: null, adminHealth: null, headers: null }, '2026-09-18T00:00:00.000Z');
-  assert.equal(live.productos.evidenceLevel, EVIDENCIA.LIVE_PRODUCTION_READ_ONLY);
+  assert.equal(live.productos.evidenceLevel, EVIDENCIA.LIVE_PRODUCTION);
   const productos = NODES.find(n => n.id === 'productos');
-  assert.notEqual(resolveState(productos, live.productos, ESTADOS), ESTADOS.PROD);
+  assert.equal(resolveState(productos, live.productos, ESTADOS), ESTADOS.PROD);
+  const genericRead = { ok: true, status: 200, promote: false, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY };
+  assert.notEqual(resolveState(productos, genericRead, ESTADOS), ESTADOS.PROD);
+});
+
+test('una ruta pública comprobada en producción promueve su nodo de destino', () => {
+  const live = buildLiveChecks({
+    publicHealth: { status: 200, body: { ok: true } },
+    routeProbes: { login: { path: '/login', status: 200, ok: true } },
+  }, '2026-09-18T00:00:00.000Z');
+  const login = NODES.find(node => node.id === 'entrada-login');
+  assert.equal(resolveState(login, live['entrada-login'], ESTADOS), ESTADOS.PROD);
 });
 
 test('buildLiveEdges promueve la cadena de infraestructura cuando /api/health responde 200', () => {
