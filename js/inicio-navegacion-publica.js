@@ -6,7 +6,7 @@
   if (window.TintinPublicShellBootstrapStarted) return;
   window.TintinPublicShellBootstrapStarted = true;
 
-  const ENTRY_VERSION = 'tintin-20260918-global-session-restore-1';
+  const ENTRY_VERSION = 'tintin-20260918-header-system-solid-surfaces-1';
   const BARRIER_VERSION = 'tintin-20260915-session-shell-2';
   const scriptUrl = document.currentScript?.src
     || new URL('js/inicio-navegacion-publica.js', window.location.href).href;

@@ -258,3 +258,29 @@ test('las imágenes de Tienda usan el mismo origen absoluto en desktop, tablet y
     expect(sources.every(source => source.startsWith('/assets-tintin/images/collections/'))).toBe(true);
   }
 });
+
+test('Alertas usa la superficie compartida sólida y conserva el foco', async ({ page }) => {
+  await openPublicPage(page, { width: 1440, height: 900 }, '/contact');
+
+  // El evento representa la resolución autenticada del coordinador sin
+  // depender de una cuenta ni de datos remotos para probar la superficie.
+  await page.evaluate(() => {
+    window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated', {
+      detail: { authenticated: true },
+    }));
+  });
+
+  const trigger = page.locator('#btn-notifications');
+  await expect(trigger).toBeVisible();
+  await trigger.click();
+
+  const drawer = page.locator('#notifications-drawer');
+  await expect(drawer).toHaveAttribute('aria-hidden', 'false');
+  await expect(drawer.locator('#btn-notifications-close')).toBeFocused();
+  await expect(drawer).toHaveCSS('z-index', '1460');
+  await expect(drawer).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  await expect(drawer).toHaveCSS('background-image', 'none');
+
+  await page.keyboard.press('Escape');
+  await expect(drawer).toHaveAttribute('aria-hidden', 'true');
+});
