@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "511fa6ce5174c95e43c7c228b4f3efca723143e9b9b0ae39905656a6a8f2f994",
+  "sourceFingerprint": "46902a4d7d2c8e806b00112bd296367c6eca8c646c58a085af0a2b4a3550ded5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 847,
     "textFiles": 806,
-    "totalBytes": 16843510,
+    "totalBytes": 16843512,
     "pages": 19,
     "modules": 575
   },
@@ -81,8 +81,8 @@
         "guest",
         "client"
       ],
-      "bytes": 11931,
-      "sha256": "6d49829c5b1e7f3f1af9434f1f80dfb3d6130774e05fc1061045d88a42e95394",
+      "bytes": 11927,
+      "sha256": "62057214457dd311ba9c9a7edd1330d6470930100923ea009716fb7fc6eadebd",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -134,7 +134,7 @@
           "line": 174
         },
         {
-          "raw": "/tienda.js?v=tintin-20260917-product-lcp-server-preview-1",
+          "raw": "/tienda.js?v=tintin-20260918-global-session-restore-2",
           "target": "tienda.js",
           "line": 175
         },
@@ -542,7 +542,7 @@
           "exists": true
         },
         {
-          "raw": "/tienda.js?v=tintin-20260917-product-lcp-server-preview-1",
+          "raw": "/tienda.js?v=tintin-20260918-global-session-restore-2",
           "target": "tienda.js",
           "line": 175,
           "exists": true
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 190979,
-      "sha256": "3aefac65012ea70068b2d31d2d6488a626f75deb4c3dd65b994aa0dbc03f5b2c",
+      "bytes": 190985,
+      "sha256": "ae50d854e2776fe835af03e4ba00df1b523665494fdd65d11b69fdb2558e0804",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2124,7 +2124,7 @@
           "line": 2005
         },
         {
-          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260917-comments-reports-2",
+          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260918-global-session-restore-2",
           "target": "js/admin/participacion/gestion-participacion-admin.js",
           "line": 2006
         },
@@ -2375,7 +2375,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260917-comments-reports-2",
+          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260918-global-session-restore-2",
           "target": "js/admin/participacion/gestion-participacion-admin.js",
           "line": 2006,
           "exists": true
@@ -32980,8 +32980,8 @@
     {
       "path": "404.html",
       "extension": ".html",
-      "bytes": 11931,
-      "sha256": "6d49829c5b1e7f3f1af9434f1f80dfb3d6130774e05fc1061045d88a42e95394"
+      "bytes": 11927,
+      "sha256": "62057214457dd311ba9c9a7edd1330d6470930100923ea009716fb7fc6eadebd"
     },
     {
       "path": "AGENTS.md",
@@ -33094,8 +33094,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 190979,
-      "sha256": "3aefac65012ea70068b2d31d2d6488a626f75deb4c3dd65b994aa0dbc03f5b2c"
+      "bytes": 190985,
+      "sha256": "ae50d854e2776fe835af03e4ba00df1b523665494fdd65d11b69fdb2558e0804"
     },
     {
       "path": "apple-touch-icon.png",
