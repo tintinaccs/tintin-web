@@ -188,13 +188,15 @@ async function enhanceProfile() {
       photoButton.disabled = true;
       photoButton.textContent = 'Subiendo…';
       try {
-        const [{ auth, db }, authApi, firestoreApi] = await Promise.all([
+        const [{ db }, authApi, firestoreApi, sessionApi] = await Promise.all([
           import('../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1'),
           import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),
           import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
+          import('../core/auth/coordinador-sesion.js?v=tintin-20260918-global-session-restore-2'),
         ]);
-        if (typeof auth.authStateReady === 'function') await auth.authStateReady();
-        const user = auth.currentUser;
+        const snapshot = await sessionApi.waitForSession();
+        if (snapshot.status === sessionApi.AUTH_STATES.UNKNOWN) throw new Error('No pudimos verificar tu sesión. Volvé a intentar en unos segundos.');
+        const user = snapshot.user;
         if (!user) throw new Error('Tu sesión ya no está disponible.');
         const token = await user.getIdToken(true);
         const signedResponse = await fetch('/api/profile-avatar-upload', {
@@ -323,7 +325,7 @@ async function enhanceProfile() {
   updateSummary();
   window.addEventListener('pagehide', () => summaryObserver.disconnect(), { once: true });
 
-  await import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20260829-final-stability-3');
+  await import('../pages/profile/estado-pedidos-perfil.js?v=tintin-20260918-global-session-restore-1');
   const initial = location.hash.replace('#', '');
   if (panels.has(initial)) activate(initial);
 }

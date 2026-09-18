@@ -62,9 +62,8 @@ const sectionIds      = [...new Set([...adminHtml.matchAll(/id="section-([a-z-]+
 // 1. AUTENTICACIÓN
 // ===========================================================================
 check(
-  'El guard usa onAuthStateChanged como puerta de entrada',
-  ( /onAuthStateChanged\(auth,\s*async user/.test(adminApp) ||
-    adminApp.includes('subscribeAuthState(async user') ) &&
+  'El guard usa el coordinador canónico como puerta de entrada',
+  adminApp.includes('subscribeSession(async snapshot') &&
     adminApp.includes('coordinador-sesion.js'),
   'admin-app.js debe resolver la sesión mediante el coordinador antes de mostrar el panel.'
 );

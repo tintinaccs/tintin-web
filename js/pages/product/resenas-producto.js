@@ -1,5 +1,5 @@
-import { auth, db, appCheckReady, authPersistenceReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { getSessionUser, subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
+import { AUTH_STATES, getSessionUser, waitForSession, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20260918-global-session-restore-2';
 import { collection, doc, getDocs, limit, onSnapshot, orderBy, query, startAfter } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { heartIconMarkup } from '../../components/favorites/icono-corazon.js?v=tintin-20260817-heart-icon-1';
 import { isValidReviewRating, syncReviewPublishState, reportMissingReviewRating } from './validacion-puntuacion-resena.js?v=tintin-20260831-review-rating-required-1';
@@ -52,21 +52,27 @@ function clearPendingIntent() {
   try { sessionStorage.removeItem(PENDING_INTENT_KEY); } catch {}
 }
 
+async function stableAuthSnapshot() {
+  const snapshot = await waitForSession();
+  if (snapshot.status === AUTH_STATES.AUTHENTICATED) currentUser = snapshot.user;
+  return snapshot;
+}
+
+// Compatibilidad para los handlers de interacción existentes. La decisión
+// sigue perteneciendo al snapshot canónico; UNKNOWN se mantiene como null
+// sólo para que el caller solicite un mensaje neutral, nunca un redirect.
 async function stableAuthUser() {
-  // La persistencia local y la restauración inicial de Firebase son
-  // asíncronas. Si la persona toca un control social durante esa ventana,
-  // `currentUser` todavía puede ser null aunque Firebase ya tenga la sesión.
-  // Esperamos el estado canónico antes de decidir que hay que ir al login.
-  try { await authPersistenceReady; } catch {}
-  try { await auth.authStateReady?.(); } catch {}
-  const user = auth.currentUser || currentUser || null;
-  if (user) currentUser = user;
-  return user;
+  const snapshot = await stableAuthSnapshot();
+  return snapshot.status === AUTH_STATES.AUTHENTICATED ? snapshot.user : null;
 }
 
 async function requestCommunityLogin(action, payload = {}) {
-  const user = await stableAuthUser();
-  if (user) {
+  const snapshot = await stableAuthSnapshot();
+  if (snapshot.status === AUTH_STATES.UNKNOWN) {
+    showCommunityNotice('No pudimos verificar tu sesión todavía. Volvé a intentar en unos segundos.');
+    return;
+  }
+  if (snapshot.status === AUTH_STATES.AUTHENTICATED) {
     showCommunityNotice('Tu sesión sigue activa. No pudimos validar esta acción todavía; volvé a intentar en unos segundos.');
     return;
   }
@@ -186,18 +192,23 @@ function ensureSection() {
 }
 
 async function requestApi(input, method = 'POST', action = 'reviewInteractions', forceRefresh = false) {
-  const user = await stableAuthUser();
-  if (!user) {
+  const snapshot = await stableAuthSnapshot();
+  if (snapshot.status === AUTH_STATES.UNKNOWN) {
+    const error = new Error('No pudimos verificar tu sesión. Volvé a intentar en unos segundos.');
+    error.retryable = true;
+    throw error;
+  }
+  const user = snapshot.user;
+  if (snapshot.status !== AUTH_STATES.AUTHENTICATED || !user) {
     const error = new Error('Iniciá sesión para participar');
     error.requiresLogin = true;
     throw error;
   }
   let token;
   try {
-    if (typeof auth.authStateReady === 'function') await auth.authStateReady();
     token = await user.getIdToken(forceRefresh);
   } catch {
-    try { token = await (auth.currentUser || user).getIdToken(true); }
+    try { token = await user.getIdToken(true); }
     catch {
       const error = new Error('Para confirmar esta acción necesitás volver a iniciar sesión. Conservamos lo que escribiste y te devolvemos aquí.');
       error.status = 401;
@@ -805,8 +816,9 @@ if (productId) {
   renderSummary();
   renderForm();
   appCheckReady.then(subscribePublic);
-  subscribeAuthState(user => {
-    currentUser = user || null;
+  subscribeSession(snapshot => {
+    if (snapshot.status === AUTH_STATES.RESTORING) return;
+    currentUser = snapshot.status === AUTH_STATES.AUTHENTICATED ? snapshot.user : null;
     loadSocialState().then(() => resumePendingIntent()).catch(error => {
       console.warn('[reviews] No se pudo cargar el estado social.', error);
       renderForm();

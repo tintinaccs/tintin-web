@@ -20,7 +20,8 @@
 // sesión y la devuelve a la tienda, donde puede seguir mirando.
 
 import { auth, db } from "../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1";
-import { subscribeAuthState } from "../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2";
+import { AUTH_STATES, subscribeSession } from "../../core/auth/coordinador-sesion.js?v=tintin-20260918-global-session-restore-2";
+import { recordAuthDiagnostic } from "../../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20260912-post-login-profile-1";
 import { SUPER_ADMIN } from "../../core/auth/roles.js?v=tintin-20260916-final-polish-2";
@@ -98,9 +99,16 @@ function goCompleteProfile() {
   // bucle histórico. Si el destino terminara siendo el propio login, se va
   // al login limpio sin parámetros para que el guardia nunca pueda colgarlo.
   const page = currentPageName();
-  if (page === 'login') { location.replace('/login'); return; }
+  if (page === 'login') {
+    recordAuthDiagnostic('REDIRECT_REASON', { source: 'profile-gate', reason: 'profile-incomplete' });
+    recordAuthDiagnostic('REDIRECT_REQUESTED', { source: 'profile-gate', destination: 'login' });
+    location.replace('/login');
+    return;
+  }
 
   const from = `${location.pathname || `/${page}`}${location.search || ''}${location.hash || ''}`;
+  recordAuthDiagnostic('REDIRECT_REASON', { source: 'profile-gate', reason: 'profile-incomplete' });
+  recordAuthDiagnostic('REDIRECT_REQUESTED', { source: 'profile-gate', destination: 'login' });
   location.replace(`/login?from=${encodeURIComponent(from)}`);
 }
 
@@ -149,8 +157,13 @@ async function enforceProfileComplete(user) {
 
 export function startProfileGate() {
   if (isExemptPage()) return;
-  subscribeAuthState(user => {
-    if (!user) clearProfileGateCache();
-    enforceProfileComplete(user);
+  recordAuthDiagnostic('AUTH_RESTORE_START', { source: 'profile-gate' });
+  subscribeSession(snapshot => {
+    if (snapshot.status === AUTH_STATES.RESTORING || snapshot.status === AUTH_STATES.UNKNOWN) return;
+    recordAuthDiagnostic('AUTH_STATE_READY', { source: 'profile-gate', authState: snapshot.status });
+    recordAuthDiagnostic('COORDINATOR_READY', { source: 'profile-gate', sessionCoordinatorState: snapshot.status });
+    if (snapshot.user) recordAuthDiagnostic('AUTH_USER_AVAILABLE', { source: 'profile-gate', authState: snapshot.status });
+    if (!snapshot.user) clearProfileGateCache();
+    enforceProfileComplete(snapshot.user);
   });
 }

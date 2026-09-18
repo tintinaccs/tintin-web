@@ -1,14 +1,17 @@
 // Cliente autenticado único para APIs de la tienda.
 // Nunca cierra la sesión ante errores HTTP, red, rate limiting o permisos.
-import { auth } from '../firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-
-const authReady = typeof auth.authStateReady === 'function'
-  ? auth.authStateReady().catch(() => {})
-  : Promise.resolve();
+import { AUTH_STATES, waitForSession } from './coordinador-sesion.js?v=tintin-20260918-global-session-restore-2';
 
 export async function currentAuthenticatedUser() {
-  await authReady;
-  return auth.currentUser || null;
+  const snapshot = await waitForSession();
+  if (snapshot.status === AUTH_STATES.AUTHENTICATED) return snapshot.user;
+  if (snapshot.status === AUTH_STATES.UNKNOWN) {
+    const error = new Error('No se pudo verificar la sesión.');
+    error.code = 'auth/session-unknown';
+    error.retryable = true;
+    throw error;
+  }
+  return null;
 }
 
 export async function currentAuthToken(forceRefresh = false) {

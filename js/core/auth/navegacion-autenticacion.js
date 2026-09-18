@@ -3,7 +3,8 @@
 import { auth, db } from '../firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import { signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { subscribeAuthState } from './coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
+import { AUTH_STATES, subscribeSession, getSessionUser, markExplicitLogout } from './coordinador-sesion.js?v=tintin-20260918-global-session-restore-2';
+import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
 import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20260916-final-polish-2';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.mjs';
@@ -11,6 +12,11 @@ import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.
 const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');
 let silentLogoutStarted = false;
 let authRenderGeneration = 0;
+let authReadyDiagnosticRecorded = false;
+let coordinatorReadyDiagnosticRecorded = false;
+
+if (!IS_LOGIN_PAGE) document.documentElement.classList.add('tt-auth-restoring');
+if (!IS_LOGIN_PAGE) recordAuthDiagnostic('AUTH_RESTORE_START', { source: 'public-auth-navigation' });
 
 function escapeHtmlNav(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
 function loginHrefForCurrentLocation(){
@@ -30,6 +36,8 @@ function endSilentAuthTransition(){
 function doLogout(){
  if(silentLogoutStarted)return;
  silentLogoutStarted=true;
+ recordAuthDiagnostic('EXPLICIT_LOGOUT', { source: 'public-account-menu' });
+ markExplicitLogout();
  beginSilentAuthTransition();
  signOut(auth)
   .then(()=>window.location.replace('/'))
@@ -92,8 +100,23 @@ window.addEventListener('tintin:login-failed',endSilentAuthTransition);
 // forma provisional. Además, cada render lleva generación para impedir que
 // una lectura lenta de rol/perfil de una sesión anterior pise un logout o un
 // cambio de cuenta más reciente.
-subscribeAuthState(async user=>{
+subscribeSession(async snapshot=>{
  if(IS_LOGIN_PAGE)return;
+ if(snapshot.status!==AUTH_STATES.RESTORING&&!authReadyDiagnosticRecorded){
+  authReadyDiagnosticRecorded=true;
+  recordAuthDiagnostic('AUTH_STATE_READY',{source:'public-auth-navigation',authState:snapshot.status,reason:snapshot.reason||'coordinator-resolution'});
+ }
+ if(snapshot.status!==AUTH_STATES.RESTORING&&!coordinatorReadyDiagnosticRecorded){
+  coordinatorReadyDiagnosticRecorded=true;
+  recordAuthDiagnostic('COORDINATOR_READY',{source:'public-auth-navigation',sessionCoordinatorState:snapshot.status});
+ }
+ if(snapshot.status===AUTH_STATES.RESTORING||snapshot.status===AUTH_STATES.UNKNOWN){
+  document.documentElement.classList.add('tt-auth-restoring');
+  return;
+ }
+ document.documentElement.classList.remove('tt-auth-restoring');
+ const user=snapshot.user;
+ if(user) recordAuthDiagnostic('AUTH_USER_AVAILABLE',{source:'public-auth-navigation',authState:snapshot.status});
  const generation=++authRenderGeneration;
  let role=ROLES.CLIENT;
  let profile={};
@@ -108,7 +131,7 @@ subscribeAuthState(async user=>{
   console.warn('[auth-nav] No se pudo resolver la cuenta completa:',error);
  }
  if(generation!==authRenderGeneration)return;
- const activeUid=auth.currentUser?.uid||null;
+ const activeUid=getSessionUser()?.uid||null;
  if(activeUid!==(user?.uid||null))return;
  publishStaffVisibility(user,role);
  renderAccountButtonPhoto(user,profile);

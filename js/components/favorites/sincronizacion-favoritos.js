@@ -1,5 +1,5 @@
-import { auth, db, appCheckReady, authPersistenceReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
+import { AUTH_STATES, waitForSession, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20260918-global-session-restore-2';
 import { collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { heartIconMarkup } from './icono-corazon.js?v=tintin-20260817-heart-icon-1';
 
@@ -68,18 +68,21 @@ function loginForCurrentPage() {
   location.href = `login.html?from=${encodeURIComponent(target)}`;
 }
 
-async function stableAuthUser() {
-  try { await authPersistenceReady; } catch {}
-  const user = auth.currentUser || currentUser || null;
-  if (user) currentUser = user;
-  return user;
+async function stableAuthSnapshot() {
+  const snapshot = await waitForSession();
+  if (snapshot.status === AUTH_STATES.AUTHENTICATED) currentUser = snapshot.user;
+  return snapshot;
 }
 
 async function toggle(raw) {
   const item = normalize(raw);
   if (!item) return { selected: false, changed: false };
-  const user = await stableAuthUser();
-  if (!user) {
+  const snapshot = await stableAuthSnapshot();
+  if (snapshot.status === AUTH_STATES.UNKNOWN) {
+    throw new Error('No pudimos verificar tu sesión en este momento. Tu cuenta sigue iniciada; volvé a intentar en unos segundos.');
+  }
+  const user = snapshot.user;
+  if (snapshot.status !== AUTH_STATES.AUTHENTICATED || !user) {
     loginForCurrentPage();
     return { selected: false, changed: false, loginRequired: true };
   }
@@ -131,7 +134,7 @@ document.addEventListener('click', async event => {
   if (!addButton) return;
   const item = items.find(entry => entry.id === String(addButton.dataset.favoriteAddCart || ''));
   if (!item) return;
-  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20260916-cache-bump-cart-sync-1');
+  const cart = await import('../cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1');
   await cart.addToCart({ ...item, qty: 1 });
 }, true);
 
@@ -143,12 +146,13 @@ window.TintinFavorites = {
   refresh: publish,
 };
 
-subscribeAuthState(user => {
+subscribeSession(snapshot => {
+  if (snapshot.status === AUTH_STATES.RESTORING) return;
   unsubscribe?.();
   unsubscribe = null;
-  currentUser = user || null;
+  currentUser = snapshot.status === AUTH_STATES.AUTHENTICATED ? snapshot.user : null;
   items = [];
   publish();
-  if (user) appCheckReady.then(() => currentUser?.uid === user.uid && subscribe(user));
+  if (currentUser) appCheckReady.then(() => currentUser?.uid === snapshot.user.uid && subscribe(snapshot.user));
 });
 publish();

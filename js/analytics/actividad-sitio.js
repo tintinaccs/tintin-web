@@ -20,6 +20,10 @@ import {
   onPrivacyConsentChange
 } from './consentimiento-privacidad.js?v=tintin-20260911-auth-cart-final-1';
 import { isAdminPage } from '../admin/ruta-admin.js?v=tintin-20260911-auth-cart-final-1';
+import {
+  heartbeatDecision,
+  MIN_HEARTBEAT_INTERVAL_MS
+} from './control-heartbeat.mjs?v=tintin-20260918-site-activity-dedupe-1';
 
 const appCheckAvailable = await appCheckReady;
 const adminPage = isAdminPage();
@@ -59,6 +63,24 @@ if (
   let sessionId = '';
   let geoPromise = null;
   let permanentWriteErrorCode = '';
+  let heartbeatInFlight = false;
+  let lastHeartbeatWriteAt = 0;
+
+  function recordActivityDiagnostic(code, detail = {}) {
+    const event = Object.freeze({
+      code: String(code),
+      at: new Date().toISOString(),
+      epochMs: Date.now(),
+      route: safePage(),
+      ...detail
+    });
+    const previous = Array.isArray(window.__TINTIN_SITE_ACTIVITY_DIAGNOSTICS__)
+      ? window.__TINTIN_SITE_ACTIVITY_DIAGNOSTICS__
+      : [];
+    window.__TINTIN_SITE_ACTIVITY_DIAGNOSTICS__ = [...previous, event].slice(-60);
+    try { console.info(`[SiteActivity] ${event.code}`, event); } catch {}
+    return event;
+  }
 
   function firestoreErrorCode(error) {
     return String(error?.code || '').replace(/^firestore\//, '');
@@ -73,6 +95,15 @@ if (
     stopActivity();
     document.documentElement.dataset.ttActivityState = `blocked-${code}`;
     window.TintinSiteActivity = Object.freeze({ status: `blocked-${code}` });
+    recordActivityDiagnostic('PERMISSION_DENIED', {
+      operation,
+      firestoreCode: code,
+      appCheckAvailable: true,
+      heartbeatInFlight,
+      lastHeartbeatAgeMs: lastHeartbeatWriteAt ? Date.now() - lastHeartbeatWriteAt : null,
+      ruleMinimumIntervalMs: MIN_HEARTBEAT_INTERVAL_MS,
+      visibility: document.visibilityState
+    });
     console.warn(`[SiteActivity] Analítica desactivada: Firestore rechazó ${operation} (${code}).`);
     return true;
   }
@@ -244,10 +275,29 @@ if (
 
   async function sendHeartbeat() {
     if (!analyticsWritable || !activityEnabled || !hasConsent() || document.visibilityState === 'hidden') return;
+    const decision = heartbeatDecision({
+      inFlight: heartbeatInFlight,
+      lastWriteAt: lastHeartbeatWriteAt
+    });
+    if (!decision.allowed) {
+      recordActivityDiagnostic('HEARTBEAT_SUPPRESSED', {
+        reason: decision.reason,
+        lastHeartbeatAgeMs: lastHeartbeatWriteAt ? Date.now() - lastHeartbeatWriteAt : null,
+        ruleMinimumIntervalMs: MIN_HEARTBEAT_INTERVAL_MS,
+        visibility: document.visibilityState
+      });
+      return;
+    }
     refreshIdentity();
+    heartbeatInFlight = true;
+    recordActivityDiagnostic('HEARTBEAT_WRITE_START', {
+      ruleMinimumIntervalMs: MIN_HEARTBEAT_INTERVAL_MS,
+      visibility: document.visibilityState
+    });
     try {
       const geo = await getGeo();
       if (!analyticsWritable || !activityEnabled || !hasConsent()) return;
+      lastHeartbeatWriteAt = Date.now();
       await setDoc(doc(db, 'sitePresence', visitorId), {
         visitorId,
         sessionId,
@@ -256,16 +306,26 @@ if (
         ...geo,
         lastSeen: serverTimestamp()
       }, { merge: true });
+      recordActivityDiagnostic('HEARTBEAT_WRITE_SUCCESS', {
+        ruleMinimumIntervalMs: MIN_HEARTBEAT_INTERVAL_MS,
+        visibility: document.visibilityState
+      });
     } catch (error) {
       if (!stopAfterPermanentWriteError(error, 'actualizar la presencia')) {
         console.warn('[SiteActivity] No se pudo actualizar la presencia:', error?.code || error);
       }
+    } finally {
+      heartbeatInFlight = false;
     }
   }
 
   function scheduleHeartbeat() {
     window.clearInterval(heartbeatTimer);
     if (!analyticsWritable || !activityEnabled || !hasConsent()) return;
+    recordActivityDiagnostic('HEARTBEAT_SCHEDULED', {
+      intervalMs: HEARTBEAT_MS,
+      ruleMinimumIntervalMs: MIN_HEARTBEAT_INTERVAL_MS
+    });
     sendHeartbeat();
     heartbeatTimer = window.setInterval(sendHeartbeat, HEARTBEAT_MS);
   }

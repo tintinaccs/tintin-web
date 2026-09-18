@@ -1,6 +1,6 @@
-import { auth, db } from '../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
+import { db } from '../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2';
-import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2';
+import { AUTH_STATES, getSessionUser, waitForSession, subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260918-global-session-restore-2';
 import {
   doc,
   getDoc,
@@ -34,7 +34,7 @@ import {
   normalizeRuc,
   isValidRazonSocial
 } from '../components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1';
-import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20260914-token-retry-1';
+import { createOrderViaServer } from '../create-order-public-client.js?v=tintin-20260918-global-session-restore-1';
 import { composeCheckoutDraft } from './politica-checkout.js?v=tintin-20260822-checkout-hardening-2';
 
 if (!window.TintinSecureCheckoutOrderBooted) {
@@ -145,7 +145,9 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   async function readyCartItems() {
     await awaitCartReady();
     let items = getCartLocal();
-    const user = auth.currentUser;
+    const snapshot = await waitForSession();
+    if (snapshot.status === AUTH_STATES.UNKNOWN) return items;
+    const user = snapshot.user;
     if (items.length || !user || user.isAnonymous) return items;
 
     const guestItems = readGuestCartForRecovery();
@@ -217,7 +219,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
     lastProfilePrefillUid = user.uid;
     try {
       const snapshot = await getDoc(doc(db, 'users', user.uid));
-      if (auth.currentUser?.uid !== user.uid || !snapshot.exists()) return;
+      if (getSessionUser()?.uid !== user.uid || !snapshot.exists()) return;
       const profile = snapshot.data() || {};
       const defaults = profile[CHECKOUT_DEFAULTS_FIELD] || {};
       const invoice = defaults.invoice || {};
@@ -246,7 +248,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   }
 
   async function persistCheckoutDefaults(draft) {
-    const user = auth.currentUser;
+    const user = getSessionUser();
     if (!user || user.isAnonymous || !user.uid) return;
     const userRef = doc(db, 'users', user.uid);
     let previous = {};
@@ -514,7 +516,11 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   }
 
   async function buildDraft() {
-    const user = auth.currentUser;
+    const snapshot = await waitForSession();
+    if (snapshot.status === AUTH_STATES.UNKNOWN) {
+      throw appError('session_unknown', 'No pudimos verificar tu sesión todavía. Esperá un momento y reintentá.');
+    }
+    const user = snapshot.user;
     if (!user || user.isAnonymous || !user.emailVerified) {
       throw appError('login_required', 'Necesitás iniciar sesión con un correo verificado.');
     }
@@ -644,7 +650,8 @@ if (!window.TintinSecureCheckoutOrderBooted) {
   }
 
   async function reserveCheckoutGuard(draft) {
-    const user = auth.currentUser;
+    const user = getSessionUser();
+    if (!user) throw appError('session_unknown', 'No pudimos verificar tu sesión todavía. Esperá un momento y reintentá.');
     const uid = user.uid;
     const email = text(user.email).toLowerCase();
     const orderId = `${uid}_${draft.requestId}`;

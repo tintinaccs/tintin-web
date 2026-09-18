@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260915-session-shell-3"></script>
+  <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1"></script>
 <script src="js/cargador-pagina.js?v=tintin-20260916-premium-performance-loader-1"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260811-cls-desktop-stable-2" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20260916-final-production-stability-shell-2" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20260918-global-session-restore-1" defer></script>
   <title>Ingresar | Tintin Accesorios &amp; Relojes</title>
   <meta name="robots" content="noindex, nofollow, noarchive"><link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -22,7 +22,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260916-final-production-stability-entry-module-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260918-global-session-restore-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260824-header-responsive-sync-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260916-z-index-fallback-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260916-z-index-fallback-1">
@@ -224,14 +224,17 @@ import { reserveUsername } from "./js/components/forms/reserva-username.js?v=tin
 import { isValidDob } from "./js/components/forms/validacion-nacimiento.js?v=tintin-20260822-dob-username-onboarding-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260916-cache-bump-profile-1";
-import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260916-cache-bump-profile-access-1";
-import { subscribeAuthState } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260915-session-coordinator-2";
+import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260918-auth-incident-diagnostics-1";
+import { AUTH_STATES, subscribeSession, createAuthHandoff } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260918-global-session-restore-2";
+import { recordAuthDiagnostic } from "./js/core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260916-store-gate-degraded-fix-2";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260912-post-login-profile-1";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
 
 const GOOGLE_REDIRECT_PENDING_KEY = 'tt_google_redirect_pending';
+
+recordAuthDiagnostic('AUTH_RESTORE_START', { source: 'login' });
 
 function hasGoogleRedirectPending() {
   try { return window.sessionStorage.getItem(GOOGLE_REDIRECT_PENDING_KEY) === '1'; }
@@ -376,15 +379,22 @@ async function redirectByRole(role, email, options = {}) {
     // una marca efímera (solo de esta pestaña) para que admin.html espere la
     // restauración real en vez de confundir ese instante con un cierre de
     // sesión y devolver a la persona al login.
-    try { sessionStorage.setItem('tt_auth_handoff_uid', String(options.user?.uid || '')); } catch {}
+    const handoffCreated = createAuthHandoff(options.user?.uid);
+    if (handoffCreated) recordAuthDiagnostic('HANDOFF_FOUND', { source: 'login', state: 'created-for-admin-handoff' });
+    recordAuthDiagnostic('REDIRECT_REASON', { source: 'login', reason: 'authenticated-internal-role' });
+    recordAuthDiagnostic('REDIRECT_REQUESTED', { source: 'login', destination: 'admin' });
     window.location.replace('admin.html');
     return;
   }
   const from = safeLocalRedirect(new URLSearchParams(window.location.search).get('from'));
   if (from) {
+    recordAuthDiagnostic('REDIRECT_REASON', { source: 'login', reason: 'authenticated-return-path' });
+    recordAuthDiagnostic('REDIRECT_REQUESTED', { source: 'login', destination: 'return-path' });
     window.location.replace(from);
     return;
   }
+  recordAuthDiagnostic('REDIRECT_REASON', { source: 'login', reason: 'authenticated-storefront' });
+  recordAuthDiagnostic('REDIRECT_REQUESTED', { source: 'login', destination: 'storefront' });
   window.location.replace(options.welcomePending ? 'index.html?welcome=1' : 'index.html');
 }
 
@@ -457,7 +467,7 @@ async function ensureProfileComplete(user, role) {
   // Intentar irse con el alta a medias abre una decisión explícita, no una
   // salida silenciosa: o completa, o cierra sesión y sigue mirando la tienda
   // sin cuenta. Sin esto quedaría encerrada — el guardia de
-  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260916-cache-bump-profile-access-1 la traería de vuelta acá desde cualquier página,
+  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260918-auth-incident-diagnostics-1 la traería de vuelta acá desde cualquier página,
   // porque su perfil sigue incompleto.
   const exitModal = document.getElementById('login-exit-modal');
 
@@ -933,13 +943,28 @@ async function handleGoogleRedirectReturn(observedUser) {
 
 // Si ya está logueada, redirige sin mostrar el botón. Con Google no existe
 // un estado "correo sin verificar" — Google ya lo entrega verificado.
-subscribeAuthState(async user => {
-  // Firebase puede emitir el primer estado antes de terminar de restaurar la
-  // persistencia local. Esperar acá evita mostrar el login (y permitir que una
-  // acción parezca una cuenta nueva) mientras la sesión existente todavía se
-  // está resolviendo.
+let loginAuthReadyDiagnosticRecorded = false;
+let loginCoordinatorReadyDiagnosticRecorded = false;
+subscribeSession(async snapshot => {
+  if (snapshot.status === AUTH_STATES.RESTORING) return;
+  if (!loginAuthReadyDiagnosticRecorded) {
+    loginAuthReadyDiagnosticRecorded = true;
+    recordAuthDiagnostic('AUTH_STATE_READY', { source: 'login', authState: snapshot.status, reason: snapshot.reason || 'coordinator-resolution' });
+  }
+  if (!loginCoordinatorReadyDiagnosticRecorded) {
+    loginCoordinatorReadyDiagnosticRecorded = true;
+    recordAuthDiagnostic('COORDINATOR_READY', { source: 'login', sessionCoordinatorState: snapshot.status });
+  }
+  if (snapshot.status === AUTH_STATES.UNKNOWN) {
+    hideLoginOverlay();
+    revealLoginSurface();
+    showError('No pudimos verificar tu sesión anterior. Podés reintentar el ingreso sin cerrar ni borrar tu cuenta.');
+    return;
+  }
+  const user = snapshot.user;
+  // La restauración ya está resuelta por el coordinador; no se agrega otra
+  // carrera independiente contra authStateReady en esta página.
   await authPersistenceReady.catch(() => {});
-  try { await auth.authStateReady?.(); } catch {}
   // OJO: ttPageReady() ya no se llama acá arriba a propósito — revela el
   // formulario "Continuar con Google" de abajo, y si esta persona en
   // realidad ya tiene sesión (o recién volvió de Google) eso se ve como un
@@ -961,6 +986,7 @@ subscribeAuthState(async user => {
     }
     return;
   }
+  recordAuthDiagnostic('AUTH_USER_AVAILABLE', { source: 'login', authState: snapshot.status });
   if (explicitLoginInProgress) return;
   const normalizedEmail = String(user.email || '').trim().toLowerCase();
   const isSuperAdmin = normalizedEmail === SUPER_ADMIN.toLowerCase();
@@ -1339,7 +1365,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
 };
 </script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1"></script>
-<script src="tienda.js?v=tintin-20260917-product-lcp-server-preview-1" defer></script>
+<script src="tienda.js?v=tintin-20260918-global-session-restore-2" defer></script>
   <script type="module" src="js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3"></script>
 </body>
 </html>
