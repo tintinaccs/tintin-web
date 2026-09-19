@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "11629dfad6e5343a7a198132f10972b2664c886f7f0ea7d13b23a0cdda5ab468",
+  "sourceFingerprint": "96cb067b9cbfc0489af99f045f6a25005c8dbd90ba5585d1933aed9f028ee97c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 858,
     "textFiles": 817,
-    "totalBytes": 16929901,
+    "totalBytes": 16930642,
     "pages": 19,
     "modules": 583
   },
@@ -9010,7 +9010,7 @@
         "viewer"
       ],
       "bytes": 116486,
-      "sha256": "89c4370201d9732fc82a6c993a0a3155172ef0e0b201e78a38698fe67023dd40",
+      "sha256": "412e0a15770d608c0317cb883c1a341c82d222e2aed0b5d56c222297c3e9f97e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13064,7 +13064,7 @@
         "viewer"
       ],
       "bytes": 73405,
-      "sha256": "2e1c4ee3bf9b47e2d65e2b7e0b5134d4168f6a530f099dc28fefdb539bdeabf6",
+      "sha256": "863dc88fd0670f1103e1ae3d30cbec286e43eed3e0637302d7b61762f5a4057e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13867,7 +13867,7 @@
         "viewer"
       ],
       "bytes": 43213,
-      "sha256": "9edd62c4aa08cedaeb37718ab56c950e8bbe52d692382302ff0b8fd3edaa3ac5",
+      "sha256": "e7f42f8d4401528254074caed8a5499194cc52e9d6c037dc6172eb83229edf13",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18312,7 +18312,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 362115,
-      "sha256": "84ef1c50eda8e77ab93cd8bab196b5a1c5b1e4983339c2a098c449357684b4fe",
+      "sha256": "f1519f1e80288c88f92bb097ef70ebe687666ec5761c7f3e648080d4bd40d59e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20136,7 +20136,7 @@
     {
       "path": "js/admin/admin-app.js",
       "bytes": 436324,
-      "sha256": "1f55cff473e49afadfa3679ae6cc4fd3cb38d4b363738e822d5103e966358cb5",
+      "sha256": "f0a196991767aa1b41a3903bb566177d723023c5350fa49a56f58d75ff1c2ba4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20155,7 +20155,7 @@
           "line": 4
         },
         {
-          "raw": "../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 5
@@ -20360,7 +20360,7 @@
     {
       "path": "js/admin/appearance/editor-visual-admin.js",
       "bytes": 53332,
-      "sha256": "72988b442a05c34e5f1aaa1295d19b69046a49e0678fda4785d92d83392d06db",
+      "sha256": "36db07a366dfe488731b26b45b1ded3ad2ea8225fcf9cc7750df74417087b29f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20373,7 +20373,7 @@
           "line": 1
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
@@ -20430,7 +20430,7 @@
     {
       "path": "js/admin/appearance/visual-studio-global-admin.js",
       "bytes": 21993,
-      "sha256": "d36881144177d2a676c0b38ec84fca0e4cd124be60b8a0d73e19a13411a25b61",
+      "sha256": "0e0bebc0f64954311f8bf38a680e8e5794f65b351b9e1a9b00f384a1a2c054ce",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20443,7 +20443,7 @@
           "line": 1
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
@@ -20460,7 +20460,7 @@
     {
       "path": "js/admin/appearance/visual-studio-layout-admin.js",
       "bytes": 17040,
-      "sha256": "9224da75c8d025f2c13e3b9d556b5355b0072dac66843b37d7b495289ec8d67e",
+      "sha256": "dca745c1da64e005fa736f4e9e0df4ca0d4dae83f19ee086511d997b6c963538",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20473,7 +20473,7 @@
           "line": 1
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
@@ -20501,7 +20501,7 @@
     {
       "path": "js/admin/collections/gestion-colecciones-admin.js",
       "bytes": 8952,
-      "sha256": "aa848bd2d1b7175433be6917809cfd500227752cf25d2f09c8905ff7065074be",
+      "sha256": "3996b24a3fd3355043cd60130de6d974ac6cd2a40f52c40117a3c850cee6a915",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20514,7 +20514,7 @@
           "line": 10
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 11
@@ -20531,7 +20531,7 @@
     {
       "path": "js/admin/content/control-bienvenida-admin.js",
       "bytes": 30233,
-      "sha256": "939283044054b138b851e8e549f1fee45f67947eddcb942e8d5bdf8e1ec3f705",
+      "sha256": "9614c5f990c7f61d973f5b54a44a0a7bd537857fb28c9b0c5dfc4a9f29d04531",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20544,7 +20544,7 @@
           "line": 8
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 9
@@ -20584,7 +20584,7 @@
     {
       "path": "js/admin/content/gestion-contenido-admin.js",
       "bytes": 22099,
-      "sha256": "8956c097f7ce29450144023db760a0989e5c44a0111fc69cd60d2cf67348b496",
+      "sha256": "89f83ddf29069f2d771c274b8961ed4547057d2e136e7e13fdff07929c2f1a9d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20597,7 +20597,7 @@
           "line": 8
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 9
@@ -20637,7 +20637,7 @@
     {
       "path": "js/admin/diagnostics/diagnostico-maestro-admin.js",
       "bytes": 18329,
-      "sha256": "78669f45297db2994c66e2b09bd311661a91255c3ea1b95ec4bb73ebefee1e7d",
+      "sha256": "932a22a498a6a6c5c1c1b7a5b6e1898f086b844c3ed9347ae6ed75b4611ad619",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20656,7 +20656,7 @@
           "line": 2
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 3
@@ -20732,7 +20732,7 @@
     {
       "path": "js/admin/diagnostics/estado-ecosistema-admin.js",
       "bytes": 12856,
-      "sha256": "a2c46e23c7614d6b15e832191324dc1af4f6e33ba7b6da4d1eb5219464d4924d",
+      "sha256": "ca0f6c238252d3225d0353308aa3e5b934c1038d3eae1caa6b77b8d5619b42e1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20751,7 +20751,7 @@
           "line": 2
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 3
@@ -20855,7 +20855,7 @@
     {
       "path": "js/admin/importacion-admin.js",
       "bytes": 28287,
-      "sha256": "be131a139db1d8911b9d525086fe01a5a82ba2e5a3b4f20a1711c836934e55d1",
+      "sha256": "672a094d5323600ea572f68fd2bf5b96623ff73a3d3e36ab9b324244bd5a3327",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20868,7 +20868,7 @@
           "line": 10
         },
         {
-          "raw": "../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 11
@@ -20926,7 +20926,7 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "bytes": 26321,
-      "sha256": "a42d60c083653b251fa4811af8d415f524719a1ed7fe41918a3b966bd67fe556",
+      "sha256": "baa6f3f43a9560c33b3fa59069ae6f63e2493be542500104f4591078fbcc1bd8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20939,7 +20939,7 @@
           "line": 1
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
@@ -20984,7 +20984,7 @@
     {
       "path": "js/admin/notifications/notificaciones-admin.js",
       "bytes": 20002,
-      "sha256": "1e947f88c00eb5537b859f64aefbd654bb816489aa496fc02ea80d8bacec4d9a",
+      "sha256": "fb8a85b93b21e25f1c11d3f9cdb085966b806e3f511dbf6c8b45f918e7e21dca",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21003,7 +21003,7 @@
           "line": 2
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 3
@@ -21025,7 +21025,7 @@
     {
       "path": "js/admin/notifications/notificaciones-push-maestro.js",
       "bytes": 14036,
-      "sha256": "28637275ad8708c233f9837c1c69c5dd79243c42d25ead1a4adf9bf9bf164cd3",
+      "sha256": "cd5908ee7bfb3b4d6b47dcf2789a22efad48925ebd72436b73fd1c5650f91297",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21038,7 +21038,7 @@
           "line": 2
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 3
@@ -21061,7 +21061,7 @@
     {
       "path": "js/admin/notifications/notificaciones-push.js",
       "bytes": 16348,
-      "sha256": "4e205739bd06ac0886d6ea03b494b8cca6278f871513f133fa9d25ac09f42e98",
+      "sha256": "2edc531be41a7f29d5c64bfeb5633b390e6addc9939acadf64cdf83fe48cabbd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21074,7 +21074,7 @@
           "line": 13
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 14
@@ -21161,7 +21161,7 @@
     {
       "path": "js/admin/pages/paginas-admin.js",
       "bytes": 14484,
-      "sha256": "f75bee330bedf285455ece2cb3ddabd9157cfd35d3362d9f5243ccd00177e742",
+      "sha256": "f1a57dac9ed8340d88d25ab223b3c23b5bc3f43f2b6b8a9d43a62d38eec2e3df",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21174,7 +21174,7 @@
           "line": 1
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
@@ -21202,7 +21202,7 @@
     {
       "path": "js/admin/participacion/gestion-participacion-admin-v2.js",
       "bytes": 85198,
-      "sha256": "9e6ddacdf335a11e887f0aaa72142e1e8c9835aabc6af15982c4c565e8025ec1",
+      "sha256": "fd8cd4b3e1926c00debc2eba412806274c886f6e63bfd27683a407c79eabe990",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21215,7 +21215,7 @@
           "line": 1
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
@@ -21279,7 +21279,7 @@
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
       "bytes": 11590,
-      "sha256": "c5ddf0014118a8db5cbc7c074c80e33955eeb7dd83cd5261184bf221248a7206",
+      "sha256": "44735d39c5480c4c0108ba3a57f255476a1db70de81c0ccc05d20bef9f9e644c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21292,7 +21292,7 @@
           "line": 7
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 8
@@ -21407,7 +21407,7 @@
     {
       "path": "js/admin/settings/control-tienda-admin.js",
       "bytes": 11897,
-      "sha256": "b18c1af103e598b3c9318e2ed45185e7d5ce9653106514a3cf47157e8a983b63",
+      "sha256": "7eb7672356d536c4a642524c2b4563368d1fb28cdbe5eb0ed5562c1629cf959c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21426,7 +21426,7 @@
           "line": 16
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 17
@@ -21495,7 +21495,7 @@
     {
       "path": "js/admin/settings/metodos-pago-admin.js",
       "bytes": 21374,
-      "sha256": "f3c7b9f6f1b9b1502eb0fbd4e32ff660c323b6f0b8762ce4bc2cc85cfa01cea4",
+      "sha256": "94706ba62774135962676ae985f9b4d390afece0ea51eaa9a1a69fc5533ff1d0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21514,7 +21514,7 @@
           "line": 2
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 3
@@ -21542,7 +21542,7 @@
     {
       "path": "js/admin/settings/sincronizacion-correo-admin.js",
       "bytes": 13352,
-      "sha256": "f3de0ba35bcc948edba7fccab63411849599a72046f64e0ac32ef6159c648eff",
+      "sha256": "4726ded47082c13ff0c6292815b6af9cd5c9cc0092223cc321a221937b5c6b64",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21567,7 +21567,7 @@
           "line": 3
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 4
@@ -21589,7 +21589,7 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "bytes": 74545,
-      "sha256": "bebefc16247115918841255a062e58cefe650a7b8fa01dff978c1cf2b3417cb2",
+      "sha256": "9fc4eb440b6858ea14658dae82e38fc1b004deb706220edcb2acf32bdce4a7e9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21602,7 +21602,7 @@
           "line": 14
         },
         {
-          "raw": "../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 15
@@ -21652,7 +21652,7 @@
     {
       "path": "js/admin/users/ficha-usuario-admin.js",
       "bytes": 11633,
-      "sha256": "d03f7a13285a83bef8cf0474a0db03661c986a441c6e82af5b12b74bf0a02d45",
+      "sha256": "cfb68e8c477b4cae174238801cbf1c0087bdcac6a7ba1ba0cd2284f4cc681fbd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21665,7 +21665,7 @@
           "line": 14
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 15
@@ -21924,7 +21924,7 @@
     {
       "path": "js/components/cart/sincronizacion-carrito.js",
       "bytes": 41642,
-      "sha256": "51b5079851c4fd0c378ceb6ff1fbd9804b7ccddfb1a1981507584ce4fea16837",
+      "sha256": "94161d4813a1595e77f661ea48bcb0b3f6f802df367fb6933cb245a7148a01b3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21943,7 +21943,7 @@
           "line": 18
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 19
@@ -22112,7 +22112,7 @@
     {
       "path": "js/components/favorites/sincronizacion-favoritos.js",
       "bytes": 6313,
-      "sha256": "915374a10938cadf7ab82593d256deb06cf84d2e014a733cdfaf9894ef74fd6a",
+      "sha256": "f5de6b690f96d7a3c897781fc8df07b96c0f6e22953a7b392bd464b95542a9b4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22125,7 +22125,7 @@
           "line": 1
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
@@ -23220,7 +23220,7 @@
     {
       "path": "js/components/notifications/notificaciones-clientes.js",
       "bytes": 15345,
-      "sha256": "6c90ae8401874509a309c5f85d8a12f12f9194d11bab6a952f0af75612e8b70d",
+      "sha256": "07587689ab9dc31a8ae5283684ac1127532fc907906559df65c5fffc7ceb51b6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23233,7 +23233,7 @@
           "line": 1
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
@@ -23302,7 +23302,7 @@
     {
       "path": "js/components/welcome/tutorial-bienvenida.js",
       "bytes": 15931,
-      "sha256": "679464c286c7d64f0faa1f57badd34b0798dbf3c4c280788c4524b445a45af62",
+      "sha256": "5ccd17eb61def927651adb287ce059d879238b2ee76b237021ea163a8035ea02",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23315,7 +23315,7 @@
           "line": 1
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
@@ -23349,14 +23349,14 @@
     {
       "path": "js/core/auth/cliente-api-autenticado.js",
       "bytes": 2576,
-      "sha256": "6547ff857df2821d20dd8b505acd10923aa5e713bab3f1ea06f5bd024b720b3c",
+      "sha256": "dc7f796cf6cea753c5293dd4b2afaa7e9795d23ea0d567c1b1848172c4a0adbb",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "./coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 3
@@ -23377,8 +23377,8 @@
     },
     {
       "path": "js/core/auth/coordinador-sesion.js",
-      "bytes": 7951,
-      "sha256": "33575941a5ec4ba55ff2646e2a2a20637acd8e7605ebb8923834de5e429260cb",
+      "bytes": 8588,
+      "sha256": "0d74afd74c0535ccb10a73e805d213a34f6c9d2c6da9ee144e1f2af553bdd248",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23388,31 +23388,31 @@
           "raw": "../firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
           "target": "js/core/firebase/firebase.js",
           "dynamic": false,
-          "line": 7
+          "line": 8
         },
         {
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
           "target": null,
           "dynamic": false,
-          "line": 8
+          "line": 9
         },
         {
           "raw": "./estado-sesion.mjs?v=tintin-20260919-auth-persistence-authoritative-restore-1",
           "target": "js/core/auth/estado-sesion.mjs",
           "dynamic": false,
-          "line": 9
+          "line": 10
         },
         {
           "raw": "./diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1",
           "target": "js/core/auth/diagnostico-sesion.js",
           "dynamic": false,
-          "line": 10
+          "line": 11
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
-          "line": 8
+          "line": 9
         }
       ]
     },
@@ -23459,7 +23459,7 @@
     {
       "path": "js/core/auth/insignia-edicion.js",
       "bytes": 5342,
-      "sha256": "36aa799082141b40d0fc31b5a95c22af9a0bfe631c187ba5ddadf9c04ab4fd5f",
+      "sha256": "3888eab73ed16665f6ef30a952901a64750c06b0b3c8c3089384dd5c646a689a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23472,7 +23472,7 @@
           "line": 1
         },
         {
-          "raw": "./coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "./coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
@@ -23495,7 +23495,7 @@
     {
       "path": "js/core/auth/navegacion-autenticacion.js",
       "bytes": 10879,
-      "sha256": "811d8d90d59d63714b79901c68e58e9111ff6cd6a6f04d444967dbe74822ce52",
+      "sha256": "479f578d0ddccafb6cdfa8a1bc055e57f83d6633e4c4610952a1532414f92cb4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23520,7 +23520,7 @@
           "line": 5
         },
         {
-          "raw": "./coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "./coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 6
@@ -23815,7 +23815,7 @@
     {
       "path": "js/core/store-gate/control-tienda.js",
       "bytes": 6128,
-      "sha256": "4ae0b0b19259ff15be2fa5fc4606f01c1343e88bb313f7412938d4f9af0c84db",
+      "sha256": "815329def056d8f0355062de28ec87bb90c84c652a5e8fdf29513ea7613d19d8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23828,7 +23828,7 @@
           "line": 10
         },
         {
-          "raw": "../auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 11
@@ -24629,7 +24629,7 @@
     {
       "path": "js/orders/pedido-checkout-seguro.js",
       "bytes": 39146,
-      "sha256": "5aa13c71b4fb1697876e9fb6743fd44236b587469db1d629d0463e26ab46da64",
+      "sha256": "346aa92f8e22e8d6cd3866a5f922805bde484e5505a233e69e00a7f5bc6fe2e2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24648,7 +24648,7 @@
           "line": 2
         },
         {
-          "raw": "../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 3
@@ -24830,7 +24830,7 @@
     {
       "path": "js/pages/checkout/checkout-hardening.js",
       "bytes": 12867,
-      "sha256": "5f575025a216cf1c792cdccceb0622836a058a38201a29dd78bdad385b45dc68",
+      "sha256": "d28445ee6447d1cbc7791730d7af975cf558e33ec039766129e3a3ad09fd1a7f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24855,7 +24855,7 @@
           "line": 8
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 9
@@ -24952,7 +24952,7 @@
     {
       "path": "js/pages/checkout/checkout-sincronizacion-nombre.js",
       "bytes": 956,
-      "sha256": "5055534ebeeb9ee7d979eb22543a14e9b235c77bee2f2f4bfafafd1ae7b2df48",
+      "sha256": "f9b28bb44cd9d9bf512f7d8fb3b1f38131a3921470b5f728435df08ddcafd2e4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -24965,7 +24965,7 @@
           "line": 1
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
@@ -25283,7 +25283,7 @@
     {
       "path": "js/pages/login/mantenimiento-acceso.js",
       "bytes": 6740,
-      "sha256": "22ed817625869c8c61b855bc8d873264099e881e931fd8e507e626c26a10d9ec",
+      "sha256": "567fd4d1ecaf2c4434b460ec75d0742459dde4274c731f6e92a70a38e9c21b17",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25308,7 +25308,7 @@
           "line": 79
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": true,
           "line": 80
@@ -25335,7 +25335,7 @@
     {
       "path": "js/pages/product/mantenimiento-producto.js",
       "bytes": 11601,
-      "sha256": "863687783836c3bbefef471fc461b92e6d3f12125beadf2dc4de61fe89ab8612",
+      "sha256": "8a16aef31467e8e226f74d71426e586f654e0479df4c773688862cfbdc13cbf7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25348,7 +25348,7 @@
           "line": 2
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 3
@@ -25381,7 +25381,7 @@
     {
       "path": "js/pages/product/resenas-producto.js",
       "bytes": 40892,
-      "sha256": "8d14841990669748ad9f1083dc5be5393e3adfebff2a02c53b780502c2375425",
+      "sha256": "3fb85812d850ffa94595e7f488dcc7334e961d1f7800f70fab20c5ca7a1b419b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25394,7 +25394,7 @@
           "line": 1
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
@@ -25474,7 +25474,7 @@
     {
       "path": "js/pages/profile/control-acceso-perfil.js",
       "bytes": 7107,
-      "sha256": "ad296cff151419a7fbcb0506b07872dd3a08e06ea5bc538e0622578575b2926a",
+      "sha256": "1f7d1137950129e3db0fc533f4cb0ca5c155dd5656e5280c25c3d097a507005f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25487,7 +25487,7 @@
           "line": 22
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 23
@@ -25538,14 +25538,14 @@
     {
       "path": "js/pages/profile/estado-pedidos-perfil.js",
       "bytes": 2632,
-      "sha256": "f05378a0eb5cf91042dab14071614b49b151ee26e01246a35bc5056a32560c8f",
+      "sha256": "7347f2838995673ac1d7894cd494f2173dd21fdabc9b9db96275a93c97830a4a",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": true,
           "line": 9
@@ -25556,7 +25556,7 @@
     {
       "path": "js/pages/profile/favoritos-perfil.js",
       "bytes": 3396,
-      "sha256": "bf9df227b4a396dc11a401ad40246731d96fb280bc1282b7fcbe94b506f58cd8",
+      "sha256": "65df96754cc36f4b04cb6800c683c1d04e54182e82f71f2e2532e59dd9e9275e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25569,7 +25569,7 @@
           "line": 1
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
@@ -25602,7 +25602,7 @@
     {
       "path": "js/pages/profile/pedidos-perfil.js",
       "bytes": 12638,
-      "sha256": "9f9156dcca3f94debe964b163ac4873125cade28237513a995f612e1cab39e33",
+      "sha256": "d95133416df537de4e13377658fc477cc740fbfa09cd7e68c2f0395f0edb9e79",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25615,7 +25615,7 @@
           "line": 1
         },
         {
-          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": false,
           "line": 2
@@ -25693,7 +25693,7 @@
     {
       "path": "js/quality/estabilidad-final-publica.js",
       "bytes": 19430,
-      "sha256": "2923f3e53dd9a27cf6b045339e282314c48c927d64a49a71812ac04da7e90238",
+      "sha256": "bddde39246be31d7c41c22c9798face852c4ff08c571c9eaa9e9924df36624da",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25718,7 +25718,7 @@
           "line": 194
         },
         {
-          "raw": "../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1",
+          "raw": "../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2",
           "target": "js/core/auth/coordinador-sesion.js",
           "dynamic": true,
           "line": 195
@@ -30298,8 +30298,8 @@
     },
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
-      "bytes": 6681,
-      "sha256": "5dabe2a5f8896cc49d0b2ca1d60b50905db35e20e7f04110735e1ba8a86ee6a4",
+      "bytes": 6785,
+      "sha256": "c373330301a7f81974c07ce3d3f2942ecfd0f03ee0689f9ac43ea75426b45b6c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33667,7 +33667,7 @@
       "path": "checkout.html",
       "extension": ".html",
       "bytes": 116486,
-      "sha256": "89c4370201d9732fc82a6c993a0a3155172ef0e0b201e78a38698fe67023dd40"
+      "sha256": "412e0a15770d608c0317cb883c1a341c82d222e2aed0b5d56c222297c3e9f97e"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -33853,13 +33853,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 362115,
-      "sha256": "84ef1c50eda8e77ab93cd8bab196b5a1c5b1e4983339c2a098c449357684b4fe"
+      "sha256": "f1519f1e80288c88f92bb097ef70ebe687666ec5761c7f3e648080d4bd40d59e"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 362030,
-      "sha256": "27d6d92bc1c254fdca7794cf7bcae2d9cdbd41b519ba7a87c53963a4cdc14ffb"
+      "sha256": "e9cd86bd73f3f1c3b4636ae194e2d4f2d63065e6e544d80122d20c15a5c749c1"
     },
     {
       "path": "config/public-site.json",
@@ -35089,7 +35089,7 @@
       "path": "js/admin/admin-app.js",
       "extension": ".js",
       "bytes": 436324,
-      "sha256": "1f55cff473e49afadfa3679ae6cc4fd3cb38d4b363738e822d5103e966358cb5"
+      "sha256": "f0a196991767aa1b41a3903bb566177d723023c5350fa49a56f58d75ff1c2ba4"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -35101,7 +35101,7 @@
       "path": "js/admin/appearance/editor-visual-admin.js",
       "extension": ".js",
       "bytes": 53332,
-      "sha256": "72988b442a05c34e5f1aaa1295d19b69046a49e0678fda4785d92d83392d06db"
+      "sha256": "36db07a366dfe488731b26b45b1ded3ad2ea8225fcf9cc7750df74417087b29f"
     },
     {
       "path": "js/admin/appearance/preview-dynamic-targets.js",
@@ -35113,13 +35113,13 @@
       "path": "js/admin/appearance/visual-studio-global-admin.js",
       "extension": ".js",
       "bytes": 21993,
-      "sha256": "d36881144177d2a676c0b38ec84fca0e4cd124be60b8a0d73e19a13411a25b61"
+      "sha256": "0e0bebc0f64954311f8bf38a680e8e5794f65b351b9e1a9b00f384a1a2c054ce"
     },
     {
       "path": "js/admin/appearance/visual-studio-layout-admin.js",
       "extension": ".js",
       "bytes": 17040,
-      "sha256": "9224da75c8d025f2c13e3b9d556b5355b0072dac66843b37d7b495289ec8d67e"
+      "sha256": "dca745c1da64e005fa736f4e9e0df4ca0d4dae83f19ee086511d997b6c963538"
     },
     {
       "path": "js/admin/appearance/workspace-splitters.js",
@@ -35131,25 +35131,25 @@
       "path": "js/admin/collections/gestion-colecciones-admin.js",
       "extension": ".js",
       "bytes": 8952,
-      "sha256": "aa848bd2d1b7175433be6917809cfd500227752cf25d2f09c8905ff7065074be"
+      "sha256": "3996b24a3fd3355043cd60130de6d974ac6cd2a40f52c40117a3c850cee6a915"
     },
     {
       "path": "js/admin/content/control-bienvenida-admin.js",
       "extension": ".js",
       "bytes": 30233,
-      "sha256": "939283044054b138b851e8e549f1fee45f67947eddcb942e8d5bdf8e1ec3f705"
+      "sha256": "9614c5f990c7f61d973f5b54a44a0a7bd537857fb28c9b0c5dfc4a9f29d04531"
     },
     {
       "path": "js/admin/content/gestion-contenido-admin.js",
       "extension": ".js",
       "bytes": 22099,
-      "sha256": "8956c097f7ce29450144023db760a0989e5c44a0111fc69cd60d2cf67348b496"
+      "sha256": "89f83ddf29069f2d771c274b8961ed4547057d2e136e7e13fdff07929c2f1a9d"
     },
     {
       "path": "js/admin/diagnostics/diagnostico-maestro-admin.js",
       "extension": ".js",
       "bytes": 18329,
-      "sha256": "78669f45297db2994c66e2b09bd311661a91255c3ea1b95ec4bb73ebefee1e7d"
+      "sha256": "932a22a498a6a6c5c1c1b7a5b6e1898f086b844c3ed9347ae6ed75b4611ad619"
     },
     {
       "path": "js/admin/diagnostics/diagnostico-sitio-admin.js",
@@ -35161,7 +35161,7 @@
       "path": "js/admin/diagnostics/estado-ecosistema-admin.js",
       "extension": ".js",
       "bytes": 12856,
-      "sha256": "a2c46e23c7614d6b15e832191324dc1af4f6e33ba7b6da4d1eb5219464d4924d"
+      "sha256": "ca0f6c238252d3225d0353308aa3e5b934c1038d3eae1caa6b77b8d5619b42e1"
     },
     {
       "path": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
@@ -35197,13 +35197,13 @@
       "path": "js/admin/importacion-admin.js",
       "extension": ".js",
       "bytes": 28287,
-      "sha256": "be131a139db1d8911b9d525086fe01a5a82ba2e5a3b4f20a1711c836934e55d1"
+      "sha256": "672a094d5323600ea572f68fd2bf5b96623ff73a3d3e36ab9b324244bd5a3327"
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "extension": ".js",
       "bytes": 26321,
-      "sha256": "a42d60c083653b251fa4811af8d415f524719a1ed7fe41918a3b966bd67fe556"
+      "sha256": "baa6f3f43a9560c33b3fa59069ae6f63e2493be542500104f4591078fbcc1bd8"
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
@@ -35221,19 +35221,19 @@
       "path": "js/admin/notifications/notificaciones-admin.js",
       "extension": ".js",
       "bytes": 20002,
-      "sha256": "1e947f88c00eb5537b859f64aefbd654bb816489aa496fc02ea80d8bacec4d9a"
+      "sha256": "fb8a85b93b21e25f1c11d3f9cdb085966b806e3f511dbf6c8b45f918e7e21dca"
     },
     {
       "path": "js/admin/notifications/notificaciones-push-maestro.js",
       "extension": ".js",
       "bytes": 14036,
-      "sha256": "28637275ad8708c233f9837c1c69c5dd79243c42d25ead1a4adf9bf9bf164cd3"
+      "sha256": "cd5908ee7bfb3b4d6b47dcf2789a22efad48925ebd72436b73fd1c5650f91297"
     },
     {
       "path": "js/admin/notifications/notificaciones-push.js",
       "extension": ".js",
       "bytes": 16348,
-      "sha256": "4e205739bd06ac0886d6ea03b494b8cca6278f871513f133fa9d25ac09f42e98"
+      "sha256": "2edc531be41a7f29d5c64bfeb5633b390e6addc9939acadf64cdf83fe48cabbd"
     },
     {
       "path": "js/admin/orders/eliminacion-pedidos-admin.js",
@@ -35251,13 +35251,13 @@
       "path": "js/admin/pages/paginas-admin.js",
       "extension": ".js",
       "bytes": 14484,
-      "sha256": "f75bee330bedf285455ece2cb3ddabd9157cfd35d3362d9f5243ccd00177e742"
+      "sha256": "f1a57dac9ed8340d88d25ab223b3c23b5bc3f43f2b6b8a9d43a62d38eec2e3df"
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin-v2.js",
       "extension": ".js",
       "bytes": 85198,
-      "sha256": "9e6ddacdf335a11e887f0aaa72142e1e8c9835aabc6af15982c4c565e8025ec1"
+      "sha256": "fd8cd4b3e1926c00debc2eba412806274c886f6e63bfd27683a407c79eabe990"
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin.js",
@@ -35275,7 +35275,7 @@
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
       "extension": ".js",
       "bytes": 11590,
-      "sha256": "c5ddf0014118a8db5cbc7c074c80e33955eeb7dd83cd5261184bf221248a7206"
+      "sha256": "44735d39c5480c4c0108ba3a57f255476a1db70de81c0ccc05d20bef9f9e644c"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -35311,7 +35311,7 @@
       "path": "js/admin/settings/control-tienda-admin.js",
       "extension": ".js",
       "bytes": 11897,
-      "sha256": "b18c1af103e598b3c9318e2ed45185e7d5ce9653106514a3cf47157e8a983b63"
+      "sha256": "7eb7672356d536c4a642524c2b4563368d1fb28cdbe5eb0ed5562c1629cf959c"
     },
     {
       "path": "js/admin/settings/esquema-color-admin.js",
@@ -35323,25 +35323,25 @@
       "path": "js/admin/settings/metodos-pago-admin.js",
       "extension": ".js",
       "bytes": 21374,
-      "sha256": "f3c7b9f6f1b9b1502eb0fbd4e32ff660c323b6f0b8762ce4bc2cc85cfa01cea4"
+      "sha256": "94706ba62774135962676ae985f9b4d390afece0ea51eaa9a1a69fc5533ff1d0"
     },
     {
       "path": "js/admin/settings/sincronizacion-correo-admin.js",
       "extension": ".js",
       "bytes": 13352,
-      "sha256": "f3de0ba35bcc948edba7fccab63411849599a72046f64e0ac32ef6159c648eff"
+      "sha256": "4726ded47082c13ff0c6292815b6af9cd5c9cc0092223cc321a221937b5c6b64"
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
       "bytes": 74545,
-      "sha256": "bebefc16247115918841255a062e58cefe650a7b8fa01dff978c1cf2b3417cb2"
+      "sha256": "9fc4eb440b6858ea14658dae82e38fc1b004deb706220edcb2acf32bdce4a7e9"
     },
     {
       "path": "js/admin/users/ficha-usuario-admin.js",
       "extension": ".js",
       "bytes": 11633,
-      "sha256": "d03f7a13285a83bef8cf0474a0db03661c986a441c6e82af5b12b74bf0a02d45"
+      "sha256": "cfb68e8c477b4cae174238801cbf1c0087bdcac6a7ba1ba0cd2284f4cc681fbd"
     },
     {
       "path": "js/admin/users/gestion-usuarios-admin.js",
@@ -35401,7 +35401,7 @@
       "path": "js/components/cart/sincronizacion-carrito.js",
       "extension": ".js",
       "bytes": 41642,
-      "sha256": "51b5079851c4fd0c378ceb6ff1fbd9804b7ccddfb1a1981507584ce4fea16837"
+      "sha256": "94161d4813a1595e77f661ea48bcb0b3f6f802df367fb6933cb245a7148a01b3"
     },
     {
       "path": "js/components/color/esquema-color-catalogo.js",
@@ -35455,7 +35455,7 @@
       "path": "js/components/favorites/sincronizacion-favoritos.js",
       "extension": ".js",
       "bytes": 6313,
-      "sha256": "915374a10938cadf7ab82593d256deb06cf84d2e014a733cdfaf9894ef74fd6a"
+      "sha256": "f5de6b690f96d7a3c897781fc8df07b96c0f6e22953a7b392bd464b95542a9b4"
     },
     {
       "path": "js/components/forms/entrada-codigo-otp.js",
@@ -35797,7 +35797,7 @@
       "path": "js/components/notifications/notificaciones-clientes.js",
       "extension": ".js",
       "bytes": 15345,
-      "sha256": "6c90ae8401874509a309c5f85d8a12f12f9194d11bab6a952f0af75612e8b70d"
+      "sha256": "07587689ab9dc31a8ae5283684ac1127532fc907906559df65c5fffc7ceb51b6"
     },
     {
       "path": "js/components/reviews/valoraciones-catalogo.js",
@@ -35815,13 +35815,13 @@
       "path": "js/components/welcome/tutorial-bienvenida.js",
       "extension": ".js",
       "bytes": 15931,
-      "sha256": "679464c286c7d64f0faa1f57badd34b0798dbf3c4c280788c4524b445a45af62"
+      "sha256": "5ccd17eb61def927651adb287ce059d879238b2ee76b237021ea163a8035ea02"
     },
     {
       "path": "js/core/auth/cliente-api-autenticado.js",
       "extension": ".js",
       "bytes": 2576,
-      "sha256": "6547ff857df2821d20dd8b505acd10923aa5e713bab3f1ea06f5bd024b720b3c"
+      "sha256": "dc7f796cf6cea753c5293dd4b2afaa7e9795d23ea0d567c1b1848172c4a0adbb"
     },
     {
       "path": "js/core/auth/contrato-cuentas-generado.js",
@@ -35832,8 +35832,8 @@
     {
       "path": "js/core/auth/coordinador-sesion.js",
       "extension": ".js",
-      "bytes": 7951,
-      "sha256": "33575941a5ec4ba55ff2646e2a2a20637acd8e7605ebb8923834de5e429260cb"
+      "bytes": 8588,
+      "sha256": "0d74afd74c0535ccb10a73e805d213a34f6c9d2c6da9ee144e1f2af553bdd248"
     },
     {
       "path": "js/core/auth/diagnostico-sesion.js",
@@ -35857,13 +35857,13 @@
       "path": "js/core/auth/insignia-edicion.js",
       "extension": ".js",
       "bytes": 5342,
-      "sha256": "36aa799082141b40d0fc31b5a95c22af9a0bfe631c187ba5ddadf9c04ab4fd5f"
+      "sha256": "3888eab73ed16665f6ef30a952901a64750c06b0b3c8c3089384dd5c646a689a"
     },
     {
       "path": "js/core/auth/navegacion-autenticacion.js",
       "extension": ".js",
       "bytes": 10879,
-      "sha256": "811d8d90d59d63714b79901c68e58e9111ff6cd6a6f04d444967dbe74822ce52"
+      "sha256": "479f578d0ddccafb6cdfa8a1bc055e57f83d6633e4c4610952a1532414f92cb4"
     },
     {
       "path": "js/core/auth/permisos-roles.js",
@@ -35929,7 +35929,7 @@
       "path": "js/core/store-gate/control-tienda.js",
       "extension": ".js",
       "bytes": 6128,
-      "sha256": "4ae0b0b19259ff15be2fa5fc4606f01c1343e88bb313f7412938d4f9af0c84db"
+      "sha256": "815329def056d8f0355062de28ec87bb90c84c652a5e8fdf29513ea7613d19d8"
     },
     {
       "path": "js/core/store-gate/nucleo-control-tienda.js",
@@ -36133,7 +36133,7 @@
       "path": "js/orders/pedido-checkout-seguro.js",
       "extension": ".js",
       "bytes": 39146,
-      "sha256": "5aa13c71b4fb1697876e9fb6743fd44236b587469db1d629d0463e26ab46da64"
+      "sha256": "346aa92f8e22e8d6cd3866a5f922805bde484e5505a233e69e00a7f5bc6fe2e2"
     },
     {
       "path": "js/orders/politica-checkout.js",
@@ -36187,7 +36187,7 @@
       "path": "js/pages/checkout/checkout-hardening.js",
       "extension": ".js",
       "bytes": 12867,
-      "sha256": "5f575025a216cf1c792cdccceb0622836a058a38201a29dd78bdad385b45dc68"
+      "sha256": "d28445ee6447d1cbc7791730d7af975cf558e33ec039766129e3a3ad09fd1a7f"
     },
     {
       "path": "js/pages/checkout/checkout-mantenimiento.js",
@@ -36217,7 +36217,7 @@
       "path": "js/pages/checkout/checkout-sincronizacion-nombre.js",
       "extension": ".js",
       "bytes": 956,
-      "sha256": "5055534ebeeb9ee7d979eb22543a14e9b235c77bee2f2f4bfafafd1ae7b2df48"
+      "sha256": "f9b28bb44cd9d9bf512f7d8fb3b1f38131a3921470b5f728435df08ddcafd2e4"
     },
     {
       "path": "js/pages/checkout/checkout-ubicacion-guardada.js",
@@ -36307,7 +36307,7 @@
       "path": "js/pages/login/mantenimiento-acceso.js",
       "extension": ".js",
       "bytes": 6740,
-      "sha256": "22ed817625869c8c61b855bc8d873264099e881e931fd8e507e626c26a10d9ec"
+      "sha256": "567fd4d1ecaf2c4434b460ec75d0742459dde4274c731f6e92a70a38e9c21b17"
     },
     {
       "path": "js/pages/product/beneficios-producto.js",
@@ -36319,7 +36319,7 @@
       "path": "js/pages/product/mantenimiento-producto.js",
       "extension": ".js",
       "bytes": 11601,
-      "sha256": "863687783836c3bbefef471fc461b92e6d3f12125beadf2dc4de61fe89ab8612"
+      "sha256": "8a16aef31467e8e226f74d71426e586f654e0479df4c773688862cfbdc13cbf7"
     },
     {
       "path": "js/pages/product/productos-relacionados.js",
@@ -36331,7 +36331,7 @@
       "path": "js/pages/product/resenas-producto.js",
       "extension": ".js",
       "bytes": 40892,
-      "sha256": "8d14841990669748ad9f1083dc5be5393e3adfebff2a02c53b780502c2375425"
+      "sha256": "3fb85812d850ffa94595e7f488dcc7334e961d1f7800f70fab20c5ca7a1b419b"
     },
     {
       "path": "js/pages/product/seleccion-producto.js",
@@ -36355,7 +36355,7 @@
       "path": "js/pages/profile/control-acceso-perfil.js",
       "extension": ".js",
       "bytes": 7107,
-      "sha256": "ad296cff151419a7fbcb0506b07872dd3a08e06ea5bc538e0622578575b2926a"
+      "sha256": "1f7d1137950129e3db0fc533f4cb0ca5c155dd5656e5280c25c3d097a507005f"
     },
     {
       "path": "js/pages/profile/estado-canonico-perfil.mjs",
@@ -36367,13 +36367,13 @@
       "path": "js/pages/profile/estado-pedidos-perfil.js",
       "extension": ".js",
       "bytes": 2632,
-      "sha256": "f05378a0eb5cf91042dab14071614b49b151ee26e01246a35bc5056a32560c8f"
+      "sha256": "7347f2838995673ac1d7894cd494f2173dd21fdabc9b9db96275a93c97830a4a"
     },
     {
       "path": "js/pages/profile/favoritos-perfil.js",
       "extension": ".js",
       "bytes": 3396,
-      "sha256": "bf9df227b4a396dc11a401ad40246731d96fb280bc1282b7fcbe94b506f58cd8"
+      "sha256": "65df96754cc36f4b04cb6800c683c1d04e54182e82f71f2e2532e59dd9e9275e"
     },
     {
       "path": "js/pages/profile/mantenimiento-perfil.js",
@@ -36385,7 +36385,7 @@
       "path": "js/pages/profile/pedidos-perfil.js",
       "extension": ".js",
       "bytes": 12638,
-      "sha256": "9f9156dcca3f94debe964b163ac4873125cade28237513a995f612e1cab39e33"
+      "sha256": "d95133416df537de4e13377658fc477cc740fbfa09cd7e68c2f0395f0edb9e79"
     },
     {
       "path": "js/quality/accesibilidad-global.js",
@@ -36415,7 +36415,7 @@
       "path": "js/quality/estabilidad-final-publica.js",
       "extension": ".js",
       "bytes": 19430,
-      "sha256": "2923f3e53dd9a27cf6b045339e282314c48c927d64a49a71812ac04da7e90238"
+      "sha256": "bddde39246be31d7c41c22c9798face852c4ff08c571c9eaa9e9924df36624da"
     },
     {
       "path": "js/quality/estabilidad-producto.js",
@@ -36469,7 +36469,7 @@
       "path": "login.html",
       "extension": ".html",
       "bytes": 73405,
-      "sha256": "2e1c4ee3bf9b47e2d65e2b7e0b5134d4168f6a530f099dc28fefdb539bdeabf6"
+      "sha256": "863dc88fd0670f1103e1ae3d30cbec286e43eed3e0637302d7b61762f5a4057e"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -36673,7 +36673,7 @@
       "path": "perfil.html",
       "extension": ".html",
       "bytes": 43213,
-      "sha256": "9edd62c4aa08cedaeb37718ab56c950e8bbe52d692382302ff0b8fd3edaa3ac5"
+      "sha256": "e7f42f8d4401528254074caed8a5499194cc52e9d6c037dc6172eb83229edf13"
     },
     {
       "path": "playwright.config.js",
@@ -37800,8 +37800,8 @@
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 6681,
-      "sha256": "5dabe2a5f8896cc49d0b2ca1d60b50905db35e20e7f04110735e1ba8a86ee6a4"
+      "bytes": 6785,
+      "sha256": "c373330301a7f81974c07ce3d3f2942ecfd0f03ee0689f9ac43ea75426b45b6c"
     },
     {
       "path": "tests/cache/cache-headers.test.mjs",
