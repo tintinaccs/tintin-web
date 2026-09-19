@@ -5,8 +5,8 @@
    incluidos en esquema-contenido.js. No acepta HTML ni selectores desde Firestore.
    ============================================================= */
 
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260918-global-session-restore-2';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
 import {
   doc,
   onSnapshot,
@@ -14,8 +14,8 @@ import {
   serverTimestamp,
   increment,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN, getUserRole } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2';
-import { loadRolePermissions, canDo } from '../../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2';
+import { SUPER_ADMIN, getUserRole } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
+import { loadRolePermissions, canDo } from '../../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
 import {
   CONTENT_PAGE_IDS,
   SITE_CONTENT_SCHEMA,

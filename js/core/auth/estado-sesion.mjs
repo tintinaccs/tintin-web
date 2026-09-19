@@ -30,13 +30,21 @@ export function createSessionStateMachine() {
     markExplicitLogout: () => { explicitLogoutRequested = true; },
     restorationResolved(user, source = 'auth-restore') {
       return user
-        ? next(AUTH_STATES.AUTHENTICATED, user, 'RESTORED', null, source)
-        : next(AUTH_STATES.UNKNOWN, null, 'RESTORE_EMPTY', null, source);
+        ? next(AUTH_STATES.AUTHENTICATED, user, 'RESTORE_AUTHENTICATED', null, source)
+        : next(AUTH_STATES.UNAUTHENTICATED, null, 'AUTHORITATIVE_EMPTY', null, source);
     },
     authChanged(user, source = 'auth-observer') {
       if (user) {
         explicitLogoutRequested = false;
         return next(AUTH_STATES.AUTHENTICATED, user, 'AUTH_CHANGED', null, source);
+      }
+      // Firebase puede emitir el primer null mientras IndexedDB todavía está
+      // restaurando Auth. El coordinador conserva RESTORING hasta que
+      // authStateReady() resuelva; sólo entonces un null puede ser una
+      // ausencia autoritativa. Un logout explícito sí tiene autoridad
+      // inmediata porque fue solicitado por la persona.
+      if (snapshot.status === AUTH_STATES.RESTORING && !explicitLogoutRequested) {
+        return snapshot;
       }
       const reason = explicitLogoutRequested ? 'EXPLICIT_LOGOUT' : 'AUTH_REVOKED_OR_SIGNED_OUT';
       explicitLogoutRequested = false;

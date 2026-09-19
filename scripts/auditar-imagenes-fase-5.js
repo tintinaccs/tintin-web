@@ -196,7 +196,7 @@ check(
   files.resolver.includes('export function resolveDeviceImage') &&
     files.resolver.includes('export function resolveCollectionImage') &&
     files.resolver.includes('export function firstEligibleProductImage') &&
-    files.runtime.includes("from './imagenes.js?v=tintin-20260716-cloudinary-fix-3'") &&
+    files.runtime.includes("from './imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1'") &&
     files.runtime.includes('resolveSlotImage'),
   'ninguna página debe reimplementar la prioridad responsive'
 );

@@ -1,5 +1,5 @@
-import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { AUTH_STATES, getSessionUser, waitForSession, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20260918-global-session-restore-2';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
+import { AUTH_STATES, getSessionUser, waitForSession, subscribeSession } from '../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
 import { collection, doc, getDocs, limit, onSnapshot, orderBy, query, startAfter } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { heartIconMarkup } from '../../components/favorites/icono-corazon.js?v=tintin-20260817-heart-icon-1';
 import { isValidReviewRating, syncReviewPublishState, reportMissingReviewRating } from './validacion-puntuacion-resena.js?v=tintin-20260831-review-rating-required-1';

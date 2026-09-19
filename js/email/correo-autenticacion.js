@@ -9,13 +9,13 @@
 // Functions) — Firebase Auth solo entra al final, para firmar la sesión real
 // con el Custom Token que devuelve la verificación.
 // =============================================================
-import { auth, db, authPersistenceReady } from "../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1";
+import { auth, db, authPersistenceReady } from "../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1";
 import {
   signInWithCustomToken
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
   ensureUserProfile, isBlockedAccount, AUTH_METHOD
-} from "../core/store/perfil-usuario.js?v=tintin-20260916-cache-bump-profile-1";
+} from "../core/store/perfil-usuario.js?v=tintin-20260916-cache-bump-profile-1-auth-persistence-20260919-1";
 import { apiUrl } from "../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1";
 
 const LOCAL_FUNCTIONS_ORIGIN = 'https://tintinaccesorios.pages.dev';
