@@ -51,6 +51,13 @@ test('persistencia Auth se instrumenta sin exponer identidad y el login espera s
   assert.doesNotMatch(firebase, /console\.(log|info|debug).*\b(uid|email|token|credential)\b/i);
 });
 
+test('cold restore no emite login ni reconfigura persistencia en cada pestaña', () => {
+  assert.equal((coordinator.match(/onAuthStateChanged\(auth/g) || []).length, 1);
+  assert.match(coordinator, /RESTORE_AUTHENTICATED/);
+  assert.doesNotMatch(coordinator, /USER_LOGIN/);
+  assert.match(firebase, /const IS_LOGIN_PAGE[\s\S]*const configuredPersistence = IS_LOGIN_PAGE\s*\n\s*\? setPersistence/);
+});
+
 test('redirect, OTP y handoff conservan contratos de persistencia sin ser autoridad de Auth', () => {
   assert.match(login, /authPersistenceReady\.then\(\(\) => getRedirectResult\(auth\)\)/);
   assert.match(login, /await authPersistenceReady/);
