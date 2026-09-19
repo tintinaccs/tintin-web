@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "0c11bf45277429deaf2be90874961d23c3b6563536cfc83fc83d55dde7de5020",
+  "sourceFingerprint": "11629dfad6e5343a7a198132f10972b2664c886f7f0ea7d13b23a0cdda5ab468",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 858,
     "textFiles": 817,
-    "totalBytes": 16929115,
+    "totalBytes": 16929901,
     "pages": 19,
     "modules": 583
   },
@@ -30202,8 +30202,8 @@
     },
     {
       "path": "tests/auth/global-session-restore.test.mjs",
-      "bytes": 2796,
-      "sha256": "cbe00d42b2965992c4dab0c9abcea8809cf0a6d22885b00e6943f4c5ad055d3d",
+      "bytes": 3178,
+      "sha256": "11c2ff53fc41b25929ba092d48a54ad86f0d27b5bb0306d0b8947a41a87c1eb0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30298,8 +30298,8 @@
     },
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
-      "bytes": 6277,
-      "sha256": "bb1a5ce4c8c4f7fa92df333149c270251c68f11180d48458eb36eefebce8be50",
+      "bytes": 6681,
+      "sha256": "5dabe2a5f8896cc49d0b2ca1d60b50905db35e20e7f04110735e1ba8a86ee6a4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37788,8 +37788,8 @@
     {
       "path": "tests/auth/global-session-restore.test.mjs",
       "extension": ".mjs",
-      "bytes": 2796,
-      "sha256": "cbe00d42b2965992c4dab0c9abcea8809cf0a6d22885b00e6943f4c5ad055d3d"
+      "bytes": 3178,
+      "sha256": "11c2ff53fc41b25929ba092d48a54ad86f0d27b5bb0306d0b8947a41a87c1eb0"
     },
     {
       "path": "tests/branches/auditar-limpiar-ramas.test.mjs",
@@ -37800,8 +37800,8 @@
     {
       "path": "tests/cache/auth-flow-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 6277,
-      "sha256": "bb1a5ce4c8c4f7fa92df333149c270251c68f11180d48458eb36eefebce8be50"
+      "bytes": 6681,
+      "sha256": "5dabe2a5f8896cc49d0b2ca1d60b50905db35e20e7f04110735e1ba8a86ee6a4"
     },
     {
       "path": "tests/cache/cache-headers.test.mjs",
