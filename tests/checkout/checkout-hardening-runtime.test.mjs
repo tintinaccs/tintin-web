@@ -26,6 +26,14 @@ test('checkout espera la restauración de Auth antes de tratar al usuario como i
   assert.doesNotMatch(hardening, /AUTH_READY_TIMEOUT_MS|auth\.authStateReady/);
 });
 
+test('el listener del checkout deriva la identidad local del snapshot resuelto', () => {
+  const listener = checkoutPage.match(/subscribeSession\(snapshot => \{[\s\S]*?\n\}\);/);
+  assert.ok(listener, 'falta el listener canónico del checkout');
+  assert.match(listener[0], /const user = snapshot\.user;/);
+  assert.match(listener[0], /if \(!user \|\| user\.isAnonymous\)/);
+  assert.match(listener[0], /getDoc\(doc\(db, 'users', user\.uid\)\)/);
+});
+
 test('el avance al envío no queda bloqueado por una sincronización remota pendiente', () => {
   assert.match(hardening, /CART_READY_TIMEOUT_MS/);
   assert.match(hardening, /waitForCheckoutCartReady/);

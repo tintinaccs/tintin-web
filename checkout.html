@@ -1919,7 +1919,11 @@ subscribeSession(snapshot => {
     currentUserProfile = null;
     return;
   }
-  currentUser = snapshot.user;
+  // El coordinador entrega la identidad resuelta en el snapshot. Mantener una
+  // referencia local hace que las comprobaciones de invitado y la hidratación
+  // de perfil usen la misma identidad, sin depender de una variable global.
+  const user = snapshot.user;
+  currentUser = user;
   currentUserProfile = null;
   authReady = true;
   window.ttPageReady && window.ttPageReady(); // carrito ya renderizado + estado de sesión ya conocido
