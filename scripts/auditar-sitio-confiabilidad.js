@@ -291,16 +291,16 @@ for (const file of htmlFiles.concat(['tienda.js', 'js/cargador-pagina.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan la versión vigente de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260916-premium-performance-loader-1'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260919-runtime-cache-dedupe-1'"));
 
 check(
-  'El runtime público liviano carga imágenes, colecciones, carrito, colores y el fix de auditoría de página (no solo admin-images)',
+  'El runtime público liviano carga imágenes, colecciones, colores y el fix de auditoría de página; el carrito queda en la navegación como única autoridad',
   loader.includes('function bootImagesPhase5Public()') &&
     loader.includes('function bootCollectionsPhase4Public()') &&
-    loader.includes('function bootCartSyncPublic()') &&
     loader.includes('function bootThemeColorSanitizerPublic()') &&
     loader.includes('function bootPageAuditFixPublic()') &&
-    /function bootPublicRuntime\(\) \{[\s\S]*?bootImagesPhase5Public\(\);[\s\S]*?bootCollectionsPhase4Public\(\);[\s\S]*?bootCartSyncPublic\(\);[\s\S]*?bootThemeColorSanitizerPublic\(\);[\s\S]*?bootPageAuditFixPublic\(\);[\s\S]*?\n  \}/.test(loader)
+    !loader.includes("importSibling('components/cart/sincronizacion-carrito.js', 'Cart Sync')") &&
+    /function bootPublicRuntime\(\) \{[\s\S]*?bootImagesPhase5Public\(\);[\s\S]*?bootCollectionsPhase4Public\(\);[\s\S]*?bootThemeColorSanitizerPublic\(\);[\s\S]*?bootPageAuditFixPublic\(\);[\s\S]*?\n  \}/.test(loader)
 );
 
 if (failures.length) {

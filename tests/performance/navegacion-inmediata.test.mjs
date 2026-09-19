@@ -9,7 +9,12 @@ const pages = [
   'about.html', 'envios.html', 'cambios-devoluciones.html', 'preguntas-frecuentes.html',
   'terminos.html', 'privacidad.html', '404.html', 'login.html', 'perfil.html', 'checkout.html'
 ];
-const version = 'tintin-20260915-session-shell-3';
+const publicShellSync = fs.readFileSync('scripts/sincronizar-inicio-navegacion-publica.js', 'utf8');
+const version = publicShellSync.match(/const NAV_ENTRY_VERSION = '([^']+)'/)?.[1];
+const colorVersion = publicShellSync.match(/const COLOR_FIRST_PAINT_VERSION = '([^']+)'/)?.[1];
+
+assert.ok(version, 'La versión canónica de entrada de navegación debe existir en el sincronizador público.');
+assert.ok(colorVersion, 'La versión canónica de primer paint debe existir en el sincronizador público.');
 
 test('la primera pintura se libera en <=250 ms sin esperar Firestore', () => {
   const release = Number(instant.match(/RELEASE_TIMEOUT_MS\s*=\s*(\d+)/)?.[1]);
@@ -78,8 +83,22 @@ test('todas las páginas públicas apuntan al bootstrap nuevo', () => {
     const html = fs.readFileSync(page, 'utf8');
     assert.match(
       html,
-      new RegExp(`js/components/color/esquema-color-instantaneo\\.js\\?v=${version}`),
+      new RegExp(`js/components/color/esquema-color-instantaneo\\.js\\?v=${colorVersion}`),
       page
     );
   }
+});
+
+test('el adaptador y el preload comparten una sola identidad de navegación', () => {
+  const adapter = fs.readFileSync('js/inicio-navegacion-publica.js', 'utf8');
+  assert.match(adapter, new RegExp(`const ENTRY_VERSION = '${version}'`));
+});
+
+test('el carrito se inicia únicamente desde la navegación modular', () => {
+  const loader = fs.readFileSync('js/cargador-pagina.js', 'utf8');
+  const quality = fs.readFileSync('js/quality/calidad-interfaz.js', 'utf8');
+  const navigation = fs.readFileSync('js/components/navigation/compartido/carga-navegacion.js', 'utf8');
+  assert.doesNotMatch(loader, /importSibling\('components\/cart\/sincronizacion-carrito\.js', 'Cart Sync'\)/);
+  assert.doesNotMatch(quality, /bootCartPhase7/);
+  assert.match(navigation, /CART_RUNTIME_URL = '\.\.\/\.\.\/\.\.\/components\/cart\/sincronizacion-carrito\.js\?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1'/);
 });
