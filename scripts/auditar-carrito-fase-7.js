@@ -6,7 +6,7 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
 const cart = read('js/components/cart/sincronizacion-carrito.js');
 const classic = read('tienda.js');
-const quality = read('js/quality/calidad-interfaz.js');
+const navigationRuntime = read('js/components/navigation/compartido/carga-navegacion.js');
 const checkout = read('js/orders/pedido-checkout-seguro.js');
 const checkoutPolicy = read('js/orders/politica-checkout.js');
 const phase4 = read('apps-script/CrearPedido.gs');
@@ -140,11 +140,13 @@ check(
 );
 
 check(
-  'El carrito se carga en todas las páginas públicas',
-  quality.includes('function bootCartPhase7()') &&
-    quality.includes("import(versioned('../components/cart/sincronizacion-carrito.js'))") &&
-    quality.includes('bootCartPhase7();'),
-  'No debe depender de que cada HTML recuerde importar el módulo'
+  'El carrito tiene un único dueño y queda disponible en todas las páginas públicas',
+  navigationRuntime.includes("const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1'") &&
+    navigationRuntime.includes('function loadCartRuntime()') &&
+    navigationRuntime.includes('import(CART_RUNTIME_URL)') &&
+    navigationRuntime.includes('attachLightweightCommerceDemand()') &&
+    navigationRuntime.includes('const critical = [loadAuthRuntime(), loadCartRuntime()]'),
+  'El shell modular debe iniciar el carrito en comercio y cargarlo bajo demanda en el resto'
 );
 
 check(

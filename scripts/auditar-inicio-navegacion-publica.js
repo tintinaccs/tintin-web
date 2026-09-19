@@ -100,7 +100,11 @@ check(
     || /import\(['"]\.\.\/\.\.\/\.\.\/core\/auth\/navegacion-autenticacion\.js\?v=[^'"]+['"]\)/.test(runtime),
   'runtime: falta cuenta compartida'
 );
-check(runtime.includes("import(versionedJsModule('components/cart/sincronizacion-carrito.js'))"), 'runtime: falta sincronización del carrito');
+check(
+  runtime.includes("CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1'")
+    && runtime.includes('import(CART_RUNTIME_URL)'),
+  'runtime: falta sincronización versionada y compartida del carrito'
+);
 
 const controllerBootstrap = read('js/components/navigation/compatibilidad/inicio-control-paneles.js');
 check(controllerBootstrap.includes('../compartido/control-paneles.js'), 'inicio-control-paneles.js no apunta al controlador modular');

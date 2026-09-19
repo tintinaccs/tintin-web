@@ -10,6 +10,8 @@ let navigationBehaviorsPromise = null;
 
 const FULL_COMMERCE_PAGES = new Set(['home', 'shop', 'cart', 'account']);
 const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar-notifications';
+// Debe compartir identidad con los imports estáticos de catálogo/checkout.
+const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -120,7 +122,7 @@ function loadAuthRuntime() {
 
 function loadCartRuntime() {
   if (!cartRuntimePromise) {
-    cartRuntimePromise = import(versionedJsModule('components/cart/sincronizacion-carrito.js')).catch(error => {
+    cartRuntimePromise = import(CART_RUNTIME_URL).catch(error => {
       cartRuntimePromise = null;
       throw error;
     });
