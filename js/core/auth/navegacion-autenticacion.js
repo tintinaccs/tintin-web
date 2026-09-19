@@ -3,7 +3,7 @@
 import { auth, db } from '../firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
 import { signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { AUTH_STATES, subscribeSession, getSessionUser, markExplicitLogout } from './coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
+import { AUTH_STATES, subscribeSession, getSessionUser, markExplicitLogout } from './coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2';
 import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
 import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';

@@ -2,6 +2,7 @@
 // RESTORING/UNKNOWN nunca se interpretan como una sesión ausente.
 import {
   auth,
+  authPersistenceReady,
   getAuthPersistenceBackend,
   inspectAuthPersistenceStorage
 } from '../firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
@@ -72,9 +73,18 @@ function start() {
     publish(machine.authChanged(user || null));
   });
 
-  const authReady = typeof auth.authStateReady === 'function'
-    ? auth.authStateReady()
-    : Promise.resolve();
+  // En login.html Firebase elige explícitamente la persistencia local. Esa
+  // configuración y authStateReady() son dos promesas independientes; si se
+  // las inicia al mismo tiempo, authStateReady() puede resolver con null antes
+  // de que la configuración termine de adoptar el backend local. En una
+  // navegación inmediata a admin.html esa falsa ausencia se convierte en un
+  // redirect al login. La persistencia debe quedar lista antes de tomar la
+  // frontera autoritativa de restauración; no se usa un timeout ni un retry
+  // como autoridad.
+  const authReady = Promise.resolve(authPersistenceReady)
+    .then(() => typeof auth.authStateReady === 'function'
+      ? auth.authStateReady()
+      : undefined);
   authReady.then(() => {
     initialSettled = true;
     // authStateReady() es la frontera autoritativa de la restauración inicial.
