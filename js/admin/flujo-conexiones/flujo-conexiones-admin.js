@@ -10,7 +10,7 @@
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260918-flow-connections-cache-fix-1';
 import { resolveState, isAttentionState } from './estado-flujo.js?v=tintin-20260918-flow-connections-cache-fix-1';
 import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260918-flow-connections-green-evidence-1';
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
 
 const CATEGORY_LABELS = {
   entrada: 'Entrada',

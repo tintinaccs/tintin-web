@@ -1,7 +1,7 @@
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260918-global-session-restore-2';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
 import { doc, getDoc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { getUserRole, SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2';
+import { getUserRole, SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
 import {
   DEFAULT_WELCOME_STEPS,
   WELCOME_VERSION,

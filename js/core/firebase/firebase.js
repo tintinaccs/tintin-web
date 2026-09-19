@@ -10,6 +10,7 @@ import {
   ReCaptchaEnterpriseProvider,
   getToken as getAppCheckToken
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js";
+import { recordAuthDiagnostic } from "../auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 
 // El dominio de autenticación es el mismo dominio público de la tienda.
 // functions/__/auth/[[path]].js reexpone ahí los helpers oficiales de
@@ -133,8 +134,78 @@ const auth = getAuth(app);
 // La sesión no expira por inactividad desde la aplicación. Firebase renueva
 // sus tokens automáticamente; sólo una acción explícita de la persona o una
 // revocación real del proveedor puede cerrar Auth.
+function authPersistenceType(authInstance = auth) {
+  // Firebase no expone el backend elegido como API pública. Esta lectura es
+  // sólo diagnóstica, tolera cambios internos del SDK y nunca devuelve datos
+  // de identidad, tokens ni credenciales.
+  const manager = authInstance?.persistenceManager || authInstance?._persistenceManager;
+  const persistence = manager?.persistence || manager?._persistence;
+  return String(
+    persistence?.type || persistence?._type || persistence?.constructor?.name || 'unknown'
+  ).slice(0, 80);
+}
+
+export function getAuthPersistenceBackend() {
+  return authPersistenceType(auth);
+}
+
+export async function inspectAuthPersistenceStorage() {
+  const databaseName = 'firebaseLocalStorageDb';
+  const storageBackend = 'indexedDB';
+  if (typeof indexedDB === 'undefined') {
+    return { databaseExists: false, recordPresent: null, storageBackend: 'unavailable', objectStores: [] };
+  }
+
+  let databases;
+  try {
+    databases = typeof indexedDB.databases === 'function' ? await indexedDB.databases() : null;
+  } catch {
+    databases = null;
+  }
+  if (!Array.isArray(databases)) {
+    return { databaseExists: null, recordPresent: null, storageBackend, objectStores: [] };
+  }
+  if (!databases.some(database => database?.name === databaseName)) {
+    return { databaseExists: false, recordPresent: false, storageBackend, objectStores: [] };
+  }
+
+  return new Promise(resolve => {
+    let request;
+    try { request = indexedDB.open(databaseName); }
+    catch { resolve({ databaseExists: true, recordPresent: null, storageBackend, objectStores: [] }); return; }
+    request.onerror = () => resolve({ databaseExists: true, recordPresent: null, storageBackend, objectStores: [] });
+    request.onsuccess = () => {
+      const database = request.result;
+      const objectStores = Array.from(database.objectStoreNames || []);
+      const storeName = 'firebaseLocalStorage';
+      if (!objectStores.includes(storeName)) {
+        database.close();
+        resolve({ databaseExists: true, recordPresent: false, storageBackend, objectStores });
+        return;
+      }
+      try {
+        const transaction = database.transaction(storeName, 'readonly');
+        const key = `firebase:authUser:${app.options.apiKey}:[DEFAULT]`;
+        const read = transaction.objectStore(storeName).get(key);
+        read.onsuccess = () => {
+          const recordPresent = Boolean(read.result);
+          database.close();
+          resolve({ databaseExists: true, recordPresent, storageBackend, objectStores });
+        };
+        read.onerror = () => {
+          database.close();
+          resolve({ databaseExists: true, recordPresent: null, storageBackend, objectStores });
+        };
+      } catch {
+        database.close();
+        resolve({ databaseExists: true, recordPresent: null, storageBackend, objectStores });
+      }
+    };
+  });
+}
+
 const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');
-export const authPersistenceReady = IS_LOGIN_PAGE
+const configuredPersistence = IS_LOGIN_PAGE
   ? setPersistence(auth, browserLocalPersistence)
       .catch(error => {
         console.warn('[firebase-auth] No se pudo establecer persistencia local; se usa la de pestaña:', error?.code || error);
@@ -145,6 +216,21 @@ export const authPersistenceReady = IS_LOGIN_PAGE
         throw error;
       })
   : Promise.resolve(true);
+
+export const authPersistenceReady = configuredPersistence.then(async () => {
+  recordAuthDiagnostic('PERSISTENCE_READY', {
+    source: 'firebase',
+    persistenceBackend: authPersistenceType(auth),
+    route: window.location.pathname || '/'
+  });
+  return true;
+}, error => {
+  recordAuthDiagnostic('PERSISTENCE_ERROR', {
+    source: 'firebase',
+    errorCode: error?.code || 'unknown'
+  });
+  throw error;
+});
 // Idioma para cualquier mensaje/UI de Firebase Auth — se fija una sola vez
 auth.languageCode = "es";
 const provider = new GoogleAuthProvider();

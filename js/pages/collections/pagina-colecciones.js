@@ -3,7 +3,7 @@ const collectionsGrid = document.getElementById('colls-page-grid');
 const featuredGrid = document.getElementById('collections-featured-grid');
 const collectionsStatus = document.getElementById('collections-grid-status');
 const featuredStatus = document.getElementById('collections-featured-status');
-// El carrito público usa el mismo coordinador de identidad que checkout y perfil.\nconst cartSyncPromise = import('../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1');
+// El carrito público usa el mismo coordinador de identidad que checkout y perfil.\nconst cartSyncPromise = import('../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1');
 let liveProducts = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
 let collectionsReady = false;
 let productsReady = false;

@@ -1,8 +1,13 @@
 // Autoridad única del estado de sesión para toda la tienda y el panel.
 // RESTORING/UNKNOWN nunca se interpretan como una sesión ausente.
-import { auth } from '../firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
+import {
+  auth,
+  getAuthPersistenceBackend,
+  inspectAuthPersistenceStorage
+} from '../firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { AUTH_STATES, createSessionStateMachine } from './estado-sesion.mjs?v=tintin-20260918-global-session-restore-2';
+import { AUTH_STATES, createSessionStateMachine } from './estado-sesion.mjs?v=tintin-20260919-auth-persistence-authoritative-restore-1';
+import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
 
 export { AUTH_STATES };
 export const SESSION_HANDOFF_KEY = 'tt_auth_handoff_v2';
@@ -58,6 +63,9 @@ function start() {
   onAuthStateChanged(auth, user => {
     if (!initialSettled) {
       initialObserverSeen = true;
+      // Conservar el último valor observado evita convertir un null histórico
+      // en la decisión final si Firebase publicó luego una identidad antes de
+      // que authStateReady() terminara.
       initialObserverUser = user || null;
       return;
     }
@@ -69,19 +77,60 @@ function start() {
     : Promise.resolve();
   authReady.then(() => {
     initialSettled = true;
-    if (initialObserverSeen) {
-      publish(machine.restorationResolved(initialObserverUser));
-    } else if (auth.currentUser) {
-      publish(machine.restorationResolved(auth.currentUser, 'auth-current-user'));
+    // authStateReady() es la frontera autoritativa de la restauración inicial.
+    // Al resolver, currentUser tiene prioridad sobre cualquier null temprano
+    // que haya emitido el observer durante la lectura de IndexedDB.
+    const restoredUser = auth.currentUser || (initialObserverSeen ? initialObserverUser : null);
+    const source = auth.currentUser ? 'auth-current-user' : 'auth-state-ready-empty';
+    recordAuthDiagnostic('PERSISTENCE_BACKEND', {
+      source: 'session-coordinator',
+      persistenceBackend: getAuthPersistenceBackend()
+    });
+    void inspectAuthPersistenceStorage().then(storage => {
+      recordAuthDiagnostic('PERSISTENCE_RECORD_PRESENT', {
+        source: 'session-coordinator',
+        databaseExists: storage.databaseExists,
+        recordPresent: storage.recordPresent,
+        storageBackend: storage.storageBackend,
+        objectStoreCount: storage.objectStores?.length || 0
+      });
+    }).catch(() => {
+      recordAuthDiagnostic('PERSISTENCE_RECORD_PRESENT', {
+        source: 'session-coordinator',
+        databaseExists: null,
+        recordPresent: null,
+        storageBackend: 'unavailable',
+        objectStoreCount: 0
+      });
+    });
+    if (restoredUser) {
+      recordAuthDiagnostic('RESTORE_AUTHENTICATED', {
+        source: 'session-coordinator',
+        authState: AUTH_STATES.AUTHENTICATED
+      });
+      publish(machine.restorationResolved(restoredUser, source));
     } else {
-      // Sin una confirmación positiva de Firebase, el resultado es UNKNOWN,
-      // nunca UNAUTHENTICATED. Así no hay redirects/clear-cart prematuros.
-      publish(machine.restorationResolved(null));
+      recordAuthDiagnostic('AUTHORITATIVE_EMPTY', {
+        source: 'session-coordinator',
+        authState: AUTH_STATES.UNAUTHENTICATED,
+        reason: 'AUTH_STATE_READY_EMPTY'
+      });
+      recordAuthDiagnostic('RESTORE_UNAUTHENTICATED', {
+        source: 'session-coordinator',
+        authState: AUTH_STATES.UNAUTHENTICATED
+      });
+      publish(machine.restorationResolved(null, source));
     }
   }).catch(error => {
     initialSettled = true;
-    if (initialObserverSeen && initialObserverUser) {
-      publish(machine.restorationResolved(initialObserverUser, 'auth-observer-after-error'));
+    const recoveredUser = auth.currentUser || (initialObserverSeen ? initialObserverUser : null);
+    if (recoveredUser) {
+      recordAuthDiagnostic('RESTORE_AUTHENTICATED', {
+        source: 'session-coordinator',
+        authState: AUTH_STATES.AUTHENTICATED,
+        reason: 'AUTH_RESTORE_ERROR_WITH_USER'
+      });
+      publish(machine.restorationResolved(recoveredUser, 'auth-observer-after-error'));
     } else {
       publish(machine.authError(error));
     }

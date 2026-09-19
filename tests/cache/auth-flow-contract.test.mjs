@@ -15,6 +15,7 @@ const publicCart = read('js/components/cart/sincronizacion-carrito.js');
 const admin = read('js/admin/admin-app.js');
 const coordinator = read('js/core/auth/coordinador-sesion.js');
 const pureState = read('js/core/auth/estado-sesion.mjs');
+const firebase = read('js/core/firebase/firebase.js');
 
 function collectJavaScriptFiles(directory) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
@@ -31,8 +32,38 @@ test('la autoridad global expone estados explícitos y no convierte null inicial
   assert.match(pureState, /UNKNOWN/);
   assert.match(coordinator, /sessionReady/);
   assert.match(coordinator, /subscribeSession/);
-  assert.match(coordinator, /machine\.restorationResolved\(null\)/);
+  assert.match(coordinator, /machine\.restorationResolved\(null,\s*source\)/);
   assert.doesNotMatch(coordinator, /publish\(auth\.currentUser \|\| null/);
+});
+
+test('persistencia Auth se instrumenta sin exponer identidad y el login espera su configuración', () => {
+  assert.match(firebase, /browserLocalPersistence/);
+  assert.match(firebase, /authPersistenceReady/);
+  assert.match(firebase, /inspectAuthPersistenceStorage/);
+  for (const code of ['PERSISTENCE_READY', 'PERSISTENCE_ERROR']) {
+    assert.match(firebase, new RegExp(code));
+  }
+  for (const code of ['PERSISTENCE_BACKEND', 'PERSISTENCE_RECORD_PRESENT']) {
+    assert.match(coordinator, new RegExp(code));
+  }
+  assert.match(login, /if \(!loginPersistenceReady\)/);
+  assert.match(login, /await authPersistenceReady\.catch\(\(\) => \{\}\)/);
+  assert.doesNotMatch(firebase, /console\.(log|info|debug).*\b(uid|email|token|credential)\b/i);
+});
+
+test('cold restore no emite login ni reconfigura persistencia en cada pestaña', () => {
+  assert.equal((coordinator.match(/onAuthStateChanged\(auth/g) || []).length, 1);
+  assert.match(coordinator, /RESTORE_AUTHENTICATED/);
+  assert.doesNotMatch(coordinator, /USER_LOGIN/);
+  assert.match(firebase, /const IS_LOGIN_PAGE[\s\S]*const configuredPersistence = IS_LOGIN_PAGE\s*\n\s*\? setPersistence/);
+});
+
+test('redirect, OTP y handoff conservan contratos de persistencia sin ser autoridad de Auth', () => {
+  assert.match(login, /authPersistenceReady\.then\(\(\) => getRedirectResult\(auth\)\)/);
+  assert.match(login, /await authPersistenceReady/);
+  assert.match(login, /createAuthHandoff\(options\.user\?\.uid\)/);
+  assert.match(coordinator, /authStateReady\(\)/);
+  assert.doesNotMatch(coordinator, /readAuthHandoff\(\).*restorationResolved/);
 });
 
 test('login mantiene un único dueño del listener de Auth y no redirige en UNKNOWN', () => {

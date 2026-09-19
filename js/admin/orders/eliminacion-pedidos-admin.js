@@ -7,7 +7,7 @@
 
 import {
   recalculateOrderOwnerStats
-} from '../../core/store/estadisticas-pedidos.js?v=tintin-20260716-cloudinary-fix-3';
+} from '../../core/store/estadisticas-pedidos.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1';
 
 (function () {
   'use strict';

@@ -1,6 +1,6 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260908-admin-cache-reset-1';
-import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2';
-import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
+import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
+import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1';
 import {
   collection,
   doc,
