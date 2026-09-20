@@ -55,7 +55,8 @@ test('cold restore no emite login ni reconfigura persistencia en cada pestaña',
   assert.equal((coordinator.match(/onAuthStateChanged\(auth/g) || []).length, 1);
   assert.match(coordinator, /RESTORE_AUTHENTICATED/);
   assert.doesNotMatch(coordinator, /USER_LOGIN/);
-  assert.match(firebase, /const IS_LOGIN_PAGE[\s\S]*const configuredPersistence = IS_LOGIN_PAGE\s*\n\s*\? setPersistence/);
+  assert.match(firebase, /AUTH_PERSISTENCE_PROMISE_KEY/);
+  assert.match(firebase, /window\[AUTH_PERSISTENCE_PROMISE_KEY\]/);
   assert.match(coordinator, /Promise\.resolve\(authPersistenceReady\)[\s\S]*auth\.authStateReady\(\)/);
 });
 
@@ -88,10 +89,12 @@ test('ningún consumidor instala un listener directo de Firebase Auth', () => {
   assert.deepEqual(offenders, [], `listeners directos fuera del coordinador: ${offenders.join(', ')}`);
 });
 
-test('admin conserva UNKNOWN y sólo redirige una ausencia confirmada', () => {
+test('admin conserva UNKNOWN y ofrece recuperación ante una ausencia de sesión', () => {
   assert.match(admin, /AUTH_STATES\.RESTORING/);
   assert.match(admin, /AUTH_STATES\.UNKNOWN/);
   assert.match(admin, /function showAdminAuthUnknown/);
+  assert.match(admin, /AUTH_SESSION_RECOVERY_REQUIRED/);
+  assert.match(admin, /adm-auth-login/);
   assert.match(admin, /clearAuthHandoff\(\)/);
   assert.match(admin, /window\.location\.replace\('login\.html'\)/);
   assert.match(admin, /showAdminAuthUnknown\(\)/);

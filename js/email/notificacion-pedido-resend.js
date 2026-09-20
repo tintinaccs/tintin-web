@@ -1,4 +1,4 @@
-import { db, auth } from '../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
+import { db, auth } from '../core/firebase/firebase.js?v=tintin-20260920-auth-persistence-all-users-1';
 import { apiUrl } from '../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   collection,

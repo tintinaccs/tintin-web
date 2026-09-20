@@ -1,4 +1,4 @@
-import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1";
+import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-20260920-auth-persistence-all-users-1";
 import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -82,17 +82,6 @@ function clearAdminAuthHandoffWithDiagnostic() {
   if (handoff) recordAuthDiagnostic('HANDOFF_FOUND', { source: 'admin-guard', legacy: Boolean(handoff.legacy) });
   clearAuthHandoff();
   if (handoff) recordAuthDiagnostic('HANDOFF_CLEARED', { source: 'admin-guard' });
-}
-
-function recordAdminUnauthenticatedRedirect(snapshot) {
-  recordAuthDiagnostic('REDIRECT_REASON', {
-    source: 'admin-guard',
-    reason: 'known-unauthenticated',
-    authState: snapshot.status,
-    sessionCoordinatorState: snapshot.status,
-    handoffState: readAuthHandoff() ? 'present' : 'absent'
-  });
-  recordAuthDiagnostic('REDIRECT_REQUESTED', { source: 'admin-guard', destination: 'login' });
 }
 
 async function pushProductsToSheets(productIds) {
@@ -893,9 +882,12 @@ function showAdminAuthUnknown() {
     overlay.setAttribute('role', 'status');
     overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#44222d';
     overlay.innerHTML = '<div style="max-width:560px;text-align:center">' +
-      '<h1 style="font-size:22px;margin:0 0 10px">Verificando tu sesión</h1>' +
-      '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">No pudimos confirmar tu sesión todavía. No se cerró tu cuenta ni se borró ningún dato.</p>' +
+      '<h1 style="font-size:22px;margin:0 0 10px">No pudimos restaurar tu sesión</h1>' +
+      '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">La sesión de Firebase no se confirmó en este momento. No se cerró tu cuenta ni se borró ningún dato.</p>' +
+      '<div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">' +
       '<button type="button" id="adm-auth-unknown-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#ad3f67;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
+      '<a href="login.html" id="adm-auth-login" style="display:inline-flex;align-items:center;border:1px solid #ad3f67;border-radius:10px;padding:10px 17px;color:#ad3f67;font:inherit;font-weight:700;text-decoration:none">Ingresar nuevamente</a>' +
+      '</div>' +
       '</div>';
     document.body.appendChild(overlay);
     overlay.querySelector('#adm-auth-unknown-retry')?.addEventListener('click', () => window.location.reload());
@@ -950,9 +942,13 @@ async function startAdminAuthGuard() {
       user = await recoverAdminUserFromHandoff();
     }
     if (!user) {
-      recordAdminUnauthenticatedRedirect(snapshot);
+      recordAuthDiagnostic('AUTH_SESSION_RECOVERY_REQUIRED', {
+        source: 'admin-guard',
+        authState: snapshot.status,
+        reason: snapshot.reason || 'session-not-restored'
+      });
       clearAdminAuthHandoffWithDiagnostic();
-      window.location.replace('login.html');
+      showAdminAuthUnknown();
       return;
     }
     recordAuthDiagnostic('AUTH_USER_AVAILABLE', {

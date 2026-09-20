@@ -9,7 +9,7 @@
    reimplementar esta cascada — todas deben importar de acá.
    ============================================================= */
 
-import { db } from '../../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
+import { db } from '../../core/firebase/firebase.js?v=tintin-20260920-auth-persistence-all-users-1';
 import {
   doc,
   getDoc,

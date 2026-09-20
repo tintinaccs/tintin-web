@@ -1,4 +1,4 @@
-import { db } from '../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
+import { db } from '../core/firebase/firebase.js?v=tintin-20260920-auth-persistence-all-users-1';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
 import { AUTH_STATES, getSessionUser, waitForSession, subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260920-auth-handoff-header-1';
 import {
