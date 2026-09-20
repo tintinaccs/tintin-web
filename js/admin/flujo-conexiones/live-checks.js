@@ -7,7 +7,7 @@
 // de Firebase: solo de los cuerpos JSON ya obtenidos, para que sea probable
 // con node --test sin red ni navegador.
 import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20260920-safe-live-probes-1';
-import { EVIDENCIA } from './estado-flujo.js?v=tintin-20260920-safe-live-probes-1';
+import { EVIDENCIA } from './estado-flujo.js?v=tintin-20260920-admin-status-fixes-1';
 
 function edgeIdFor(from, to) {
   return EDGES.find(edge => edge.from === from && edge.to === to)?.id || '';
@@ -15,6 +15,16 @@ function edgeIdFor(from, to) {
 
 function ciCheckPassed(currentEvidence, key) {
   return Boolean(currentEvidence?.commit && currentEvidence?.checks?.[key]?.state === 'PASS');
+}
+
+function ciCheckFailed(currentEvidence, key) {
+  return Boolean(currentEvidence?.commit && currentEvidence?.checks?.[key]?.state === 'FAIL');
+}
+
+// "Pendiente" = ni pasó ni falló: en curso, en cola, omitido o aún sin
+// reportar por GitHub. Solo un FAIL real debe verse como error.
+function ciCheckPending(currentEvidence, key) {
+  return Boolean(currentEvidence?.commit) && !ciCheckPassed(currentEvidence, key) && !ciCheckFailed(currentEvidence, key);
 }
 
 function ciNote(currentEvidence, key, label) {
@@ -34,6 +44,7 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
       evidenceLevel: options.evidenceLevel || EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
       promote: options.promote === true,
       authRequired: options.authRequired === true,
+      pending: options.pending === true,
       checkedAt,
     };
   };
@@ -129,19 +140,28 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
   // CI verificable, distinta de un probe HTTP de producción.
   const auditPassed = ciCheckPassed(currentEvidence, 'repositoryAudit');
   const deploymentPassed = ciCheckPassed(currentEvidence, 'cloudflarePages');
+  const auditPending = ciCheckPending(currentEvidence, 'repositoryAudit');
+  const deploymentPending = ciCheckPending(currentEvidence, 'cloudflarePages');
   if (currentEvidence?.commit) {
     setFrom('github-actions', auditPassed, ciNote(currentEvidence, 'repositoryAudit', 'Repository audit'), {
       promote: auditPassed,
+      pending: auditPending,
       evidenceLevel: EVIDENCIA.CI_VERIFIED,
     });
     setFrom('pruebas-automatizadas', auditPassed, ciNote(currentEvidence, 'repositoryAudit', 'suite automatizada'), {
       promote: auditPassed,
+      pending: auditPending,
       evidenceLevel: EVIDENCIA.CI_VERIFIED,
     });
-    setFrom('deployments', deploymentPassed, ciNote(currentEvidence, 'cloudflarePages', 'Cloudflare Pages'), {
-      promote: deploymentPassed,
-      evidenceLevel: EVIDENCIA.CI_VERIFIED,
-    });
+    // Si el CI de Cloudflare Pages aún no terminó, no se pisa la evidencia
+    // runtime ya obtenida de /api/system-health (commit realmente desplegado).
+    if (!(deploymentPending && out.deployments?.ok === true)) {
+      setFrom('deployments', deploymentPassed, ciNote(currentEvidence, 'cloudflarePages', 'Cloudflare Pages'), {
+        promote: deploymentPassed,
+        pending: deploymentPending,
+        evidenceLevel: EVIDENCIA.CI_VERIFIED,
+      });
+    }
   }
 
   // Las rutas públicas se prueban como navegación real. No se consideran
@@ -176,6 +196,7 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
       note,
       status,
       promote: ok,
+      pending: options.pending === true,
       evidenceLevel: options.evidenceLevel || EVIDENCIA.LIVE_PRODUCTION,
       checkedAt,
     };
@@ -222,14 +243,19 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
   const auditPassed = ciCheckPassed(currentEvidence, 'repositoryAudit');
   const deploymentPassed = ciCheckPassed(currentEvidence, 'cloudflarePages');
   if (currentEvidence?.commit) {
+    const anyFailed = ciCheckFailed(currentEvidence, 'repositoryAudit') || ciCheckFailed(currentEvidence, 'cloudflarePages');
     set('github-actions', 'pruebas-automatizadas', auditPassed,
       ciNote(currentEvidence, 'repositoryAudit', 'suite automatizada'), 200, {
         evidenceLevel: EVIDENCIA.CI_VERIFIED,
+        pending: ciCheckPending(currentEvidence, 'repositoryAudit'),
       });
     set('github-actions', 'deployments', auditPassed && deploymentPassed,
       `${ciNote(currentEvidence, 'repositoryAudit', 'Repository audit')} · ${ciNote(currentEvidence, 'cloudflarePages', 'Cloudflare Pages')}`,
       200,
-      { evidenceLevel: EVIDENCIA.CI_VERIFIED });
+      {
+        evidenceLevel: EVIDENCIA.CI_VERIFIED,
+        pending: !anyFailed && !(auditPassed && deploymentPassed),
+      });
   }
   return out;
 }

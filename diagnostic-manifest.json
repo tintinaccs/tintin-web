@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "16ed23e6579a4d3635e1593106b74226484f794244cfee18381eec81f144a7c7",
+  "sourceFingerprint": "116881fd8f00994a4680ef2f7a32f36297a1ece8d7eb9535241d2db006d61c9a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 859,
     "textFiles": 818,
-    "totalBytes": 16949752,
+    "totalBytes": 16956285,
     "pages": 19,
     "modules": 584
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 191330,
-      "sha256": "d31459701b6adb31e50cf3a80b0a1aeffdb03545ff21b50ccb3b09d3d10cbe36",
+      "bytes": 191298,
+      "sha256": "8808b22b521f71223802412d306ed152837cf8de56c727f66404b00eaa3af417",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2179,7 +2179,7 @@
           "line": 2225
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260920-admin-status-fixes-1",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2226
         }
@@ -2441,7 +2441,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260920-admin-status-fixes-1",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2226,
           "exists": true
@@ -20135,8 +20135,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 436992,
-      "sha256": "791cff6da6a6c4122b096f593255e8c37aa18afed15ad45e6e67e22aacd54977",
+      "bytes": 436956,
+      "sha256": "bc04649907fc57276af9710540731e850019dc728a326886cfb1b719226b087e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20263,7 +20263,7 @@
           "line": 32
         },
         {
-          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260918-flow-connections-cache-fix-1-auth-persistence-20260919-1",
+          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260920-admin-status-fixes-1",
           "target": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
           "dynamic": false,
           "line": 33
@@ -20772,8 +20772,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/estado-flujo.js",
-      "bytes": 1661,
-      "sha256": "0bd3878c2ca3a542e0467cc0ecd89fb37e5f91a3651dac338b6dbdf59ae437fe",
+      "bytes": 1839,
+      "sha256": "e7cb25fcc31a45207505ff8b030182bc14f4c87eaff4110d35b4dd2d4ca11c51",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20783,8 +20783,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 21610,
-      "sha256": "d814a88fc6c59d27a827c1f61b106418ccd6945670010e4a82a55fac9354cb61",
+      "bytes": 22005,
+      "sha256": "1ec88e7b9afd4626ce0be8d8ddbfe6d9b0c15cf8874db59fa1bafc648fcf4643",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20797,13 +20797,13 @@
           "line": 10
         },
         {
-          "raw": "./estado-flujo.js?v=tintin-20260920-safe-live-probes-1",
+          "raw": "./estado-flujo.js?v=tintin-20260920-admin-status-fixes-1",
           "target": "js/admin/flujo-conexiones/estado-flujo.js",
           "dynamic": false,
           "line": 11
         },
         {
-          "raw": "./live-checks.js?v=tintin-20260920-safe-live-probes-1",
+          "raw": "./live-checks.js?v=tintin-20260920-admin-status-fixes-1",
           "target": "js/admin/flujo-conexiones/live-checks.js",
           "dynamic": false,
           "line": 12
@@ -20830,8 +20830,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
-      "bytes": 13917,
-      "sha256": "bf30845d8582da060b08ca96527856a425559a5ba66cdc2c21d26b3893d6c41f",
+      "bytes": 15222,
+      "sha256": "bc94e8165cb47d9195ee182783ef4ea634c1880e22b8615092e26ed054ef7e97",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20844,7 +20844,7 @@
           "line": 9
         },
         {
-          "raw": "./estado-flujo.js?v=tintin-20260920-safe-live-probes-1",
+          "raw": "./estado-flujo.js?v=tintin-20260920-admin-status-fixes-1",
           "target": "js/admin/flujo-conexiones/estado-flujo.js",
           "dynamic": false,
           "line": 10
@@ -20936,8 +20936,8 @@
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
-      "bytes": 26302,
-      "sha256": "b831e5e31fa56b99bd39ee891027892195f2c05cb22db1c4df8d3921a32ff3fd",
+      "bytes": 27976,
+      "sha256": "4fbbf0660bda7ffdabd5458dcb65eb816856218537dc417843da718a1650f335",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20962,7 +20962,7 @@
           "line": 3
         },
         {
-          "raw": "./registro-maestro.js?v=tintin-20260909-remove-ai-editor-1",
+          "raw": "./registro-maestro.js?v=tintin-20260920-admin-status-fixes-1",
           "target": "js/admin/maestro/registro-maestro.js",
           "dynamic": false,
           "line": 8
@@ -20972,8 +20972,8 @@
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
-      "bytes": 8935,
-      "sha256": "0d0135b3005c596a84ab20be5755e6799481eeb2035d8890fafd81172801257a",
+      "bytes": 9116,
+      "sha256": "8442d81aa3fc9d78dbc43c4664cd234eec6b9a26a3744f431916016ef5656e76",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28731,8 +28731,8 @@
     },
     {
       "path": "scripts/auditar-superadmin-maestro-conexiones.mjs",
-      "bytes": 7544,
-      "sha256": "b1df56be34439d8ee94c30694c826d26ba8c782c2c8dfe927c6457c74ce0ab7f",
+      "bytes": 7480,
+      "sha256": "dbf08d33fe7276250c5fc5eb681705212043d978574cd7f2e5d86a2a87fd0530",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28797,8 +28797,8 @@
     },
     {
       "path": "scripts/auditar-superadmin-maestro.mjs",
-      "bytes": 8757,
-      "sha256": "97c367bf533399b7567c19ef1404a15b9d32296a70c5f595d56bc6a7395dc210",
+      "bytes": 8725,
+      "sha256": "5547959f9765a21c26956780e93b35cbf3fee81283b0fdcf460361015d813ee3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31108,8 +31108,8 @@
     },
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
-      "bytes": 8191,
-      "sha256": "0eb16dd35f049b4b44b43afb785aca6413f6fec6b13c219262d19d82f64208de",
+      "bytes": 11155,
+      "sha256": "83a512ae0daf94c4ba82311b299667bf12c1391012f417fad24cfcbd1e6580d9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31144,6 +31144,12 @@
           "target": "js/admin/flujo-conexiones/live-checks.js",
           "dynamic": false,
           "line": 5
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": true,
+          "line": 206
         }
       ],
       "endpoints": []
@@ -33428,8 +33434,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 191330,
-      "sha256": "d31459701b6adb31e50cf3a80b0a1aeffdb03545ff21b50ccb3b09d3d10cbe36"
+      "bytes": 191298,
+      "sha256": "8808b22b521f71223802412d306ed152837cf8de56c727f66404b00eaa3af417"
     },
     {
       "path": "apple-touch-icon.png",
@@ -35138,8 +35144,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 436992,
-      "sha256": "791cff6da6a6c4122b096f593255e8c37aa18afed15ad45e6e67e22aacd54977"
+      "bytes": 436956,
+      "sha256": "bc04649907fc57276af9710540731e850019dc728a326886cfb1b719226b087e"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -35222,20 +35228,20 @@
     {
       "path": "js/admin/flujo-conexiones/estado-flujo.js",
       "extension": ".js",
-      "bytes": 1661,
-      "sha256": "0bd3878c2ca3a542e0467cc0ecd89fb37e5f91a3651dac338b6dbdf59ae437fe"
+      "bytes": 1839,
+      "sha256": "e7cb25fcc31a45207505ff8b030182bc14f4c87eaff4110d35b4dd2d4ca11c51"
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 21610,
-      "sha256": "d814a88fc6c59d27a827c1f61b106418ccd6945670010e4a82a55fac9354cb61"
+      "bytes": 22005,
+      "sha256": "1ec88e7b9afd4626ce0be8d8ddbfe6d9b0c15cf8874db59fa1bafc648fcf4643"
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
       "extension": ".js",
-      "bytes": 13917,
-      "sha256": "bf30845d8582da060b08ca96527856a425559a5ba66cdc2c21d26b3893d6c41f"
+      "bytes": 15222,
+      "sha256": "bc94e8165cb47d9195ee182783ef4ea634c1880e22b8615092e26ed054ef7e97"
     },
     {
       "path": "js/admin/flujo-decisiones/flujo-decisiones-admin.js",
@@ -35252,14 +35258,14 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "extension": ".js",
-      "bytes": 26302,
-      "sha256": "b831e5e31fa56b99bd39ee891027892195f2c05cb22db1c4df8d3921a32ff3fd"
+      "bytes": 27976,
+      "sha256": "4fbbf0660bda7ffdabd5458dcb65eb816856218537dc417843da718a1650f335"
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
       "extension": ".js",
-      "bytes": 8935,
-      "sha256": "0d0135b3005c596a84ab20be5755e6799481eeb2035d8890fafd81172801257a"
+      "bytes": 9116,
+      "sha256": "8442d81aa3fc9d78dbc43c4664cd234eec6b9a26a3744f431916016ef5656e76"
     },
     {
       "path": "js/admin/notifications/enlace-pedido-push.js",
@@ -37460,8 +37466,8 @@
     {
       "path": "scripts/auditar-superadmin-maestro-conexiones.mjs",
       "extension": ".mjs",
-      "bytes": 7544,
-      "sha256": "b1df56be34439d8ee94c30694c826d26ba8c782c2c8dfe927c6457c74ce0ab7f"
+      "bytes": 7480,
+      "sha256": "dbf08d33fe7276250c5fc5eb681705212043d978574cd7f2e5d86a2a87fd0530"
     },
     {
       "path": "scripts/auditar-superadmin-maestro-responsive.mjs",
@@ -37472,8 +37478,8 @@
     {
       "path": "scripts/auditar-superadmin-maestro.mjs",
       "extension": ".mjs",
-      "bytes": 8757,
-      "sha256": "97c367bf533399b7567c19ef1404a15b9d32296a70c5f595d56bc6a7395dc210"
+      "bytes": 8725,
+      "sha256": "5547959f9765a21c26956780e93b35cbf3fee81283b0fdcf460361015d813ee3"
     },
     {
       "path": "scripts/auditar-superadmin-modulos-completos.mjs",
@@ -37988,8 +37994,8 @@
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
       "extension": ".mjs",
-      "bytes": 8191,
-      "sha256": "0eb16dd35f049b4b44b43afb785aca6413f6fec6b13c219262d19d82f64208de"
+      "bytes": 11155,
+      "sha256": "83a512ae0daf94c4ba82311b299667bf12c1391012f417fad24cfcbd1e6580d9"
     },
     {
       "path": "tests/functions/page-loader-route.test.mjs",
@@ -38691,7 +38697,7 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 362,
+      "line": 366,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
@@ -40083,7 +40089,7 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 362,
+      "line": 366,
       "target": "/admin.html",
       "method": "GET"
     },
@@ -40205,7 +40211,7 @@
         "references": [
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 119,
+            "line": 122,
             "operation": "collection"
           },
           {
@@ -41435,7 +41441,7 @@
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 116,
+            "line": 119,
             "operation": "collection"
           },
           {

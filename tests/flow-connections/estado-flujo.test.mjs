@@ -154,3 +154,57 @@ test('buildLiveEdges promueve la cadena de infraestructura cuando /api/health re
   assert.equal(resolveState(edge, live[edge.id], ESTADOS), ESTADOS.PROD);
 });
 
+
+// Regresión: un check de CI en curso (RUNNING/QUEUED) o aún sin reportar se
+// mostraba como "CON ERROR" porque ok=false + status 200 caía en la rama de
+// error. Solo un FAIL real debe ser rojo.
+test('CI en curso o sin reportar no es error; solo un FAIL real lo es', () => {
+  const at = '2026-09-20T00:00:00.000Z';
+  const base = { publicHealth: { status: 200, body: { ok: true } } };
+  const ids = ['github-actions', 'pruebas-automatizadas', 'deployments'];
+  const cases = {
+    RUNNING: false,
+    QUEUED: false,
+    SKIPPED: false,
+    NOT_VERIFIED: false,
+    FAIL: true,
+  };
+  for (const [state, isError] of Object.entries(cases)) {
+    const currentEvidence = {
+      commit: 'abcdef1234567890',
+      checks: { repositoryAudit: { state }, cloudflarePages: { state } },
+    };
+    const live = buildLiveChecks({ ...base, currentEvidence }, at);
+    const edges = buildLiveEdges({ ...base, currentEvidence }, at);
+    for (const id of ids) {
+      const node = NODES.find(item => item.id === id);
+      const resolved = resolveState(node, live[id], ESTADOS);
+      assert.notEqual(resolved, ESTADOS.PROD, `${id}/${state} no puede ser verde`);
+      assert.equal(resolved === ESTADOS.ERROR, isError, `${id}/${state} → ${resolved}`);
+    }
+    for (const edge of EDGES.filter(item => item.from === 'github-actions')) {
+      const resolved = resolveState(edge, edges[edge.id], ESTADOS);
+      assert.equal(resolved === ESTADOS.ERROR, isError, `${edge.id}/${state} → ${resolved}`);
+    }
+  }
+});
+
+test('un deploy de CI pendiente no pisa la evidencia runtime del commit desplegado', () => {
+  const live = buildLiveChecks({
+    publicHealth: { status: 200, body: { ok: true } },
+    systemHealth: { status: 200, body: { report: { integrations: {}, deployment: { commitSha: 'abcdef1234567890', branch: 'main' } } } },
+    currentEvidence: { commit: 'abcdef1234567890', checks: { repositoryAudit: { state: 'RUNNING' }, cloudflarePages: { state: 'RUNNING' } } },
+  }, '2026-09-20T00:00:00.000Z');
+  const deployments = NODES.find(item => item.id === 'deployments');
+  assert.equal(live.deployments.ok, true);
+  assert.equal(resolveState(deployments, live.deployments, ESTADOS), ESTADOS.PROD);
+});
+
+// Regresión: probeClientFirestoreRules devolvía promesas sin esperar, así que
+// `.ok` era undefined y las Rules se reportaban siempre como "no confirmadas".
+test('probeClientFirestoreRules espera ambas lecturas antes de devolver', async () => {
+  const src = (await import('node:fs')).readFileSync(new URL('../../js/admin/flujo-conexiones/flujo-conexiones-admin.js', import.meta.url), 'utf8');
+  const body = src.slice(src.indexOf('async function probeClientFirestoreRules'), src.indexOf('export function initConnectionsFlow'));
+  assert.match(body, /await Promise\.all\(\[/, 'debe esperar ambas lecturas con Promise.all');
+  assert.doesNotMatch(body, /return \{\s*favorites: probeClientFirestoreRead/, 'no debe devolver promesas sin resolver');
+});

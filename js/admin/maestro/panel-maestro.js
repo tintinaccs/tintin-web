@@ -5,7 +5,7 @@ import {
   BASE_ADMIN_SECTIONS,
   MAESTRO_MODULES,
   capabilityLabel
-} from './registro-maestro.js?v=tintin-20260909-remove-ai-editor-1';
+} from './registro-maestro.js?v=tintin-20260920-admin-status-fixes-1';
 
 (function () {
   'use strict';
@@ -170,7 +170,12 @@ import {
 
   function runtimeChecks() {
     const desktop = discoverSections('#adm-nav').filter(id => id !== 'maestro');
-    const mobile = discoverSections('#adm-mobile-tabs').filter(id => id !== 'maestro');
+    // En móvil las pestañas secundarias se mueven a la hoja "Más opciones"
+    // (#adm-mobile-more-grid), fuera de #adm-mobile-tabs. Ambas son navegación móvil.
+    const mobile = [...new Set([
+      ...discoverSections('#adm-mobile-tabs'),
+      ...discoverSections('#adm-mobile-more-grid')
+    ])].filter(id => id !== 'maestro');
     const registryIds = new Set(MAESTRO_MODULES.map(item => item.id));
     const basePresent = BASE_ADMIN_SECTIONS.filter(id => document.getElementById(`section-${id}`));
     const missingRegistry = [...new Set([...desktop, ...mobile])].filter(id => !registryIds.has(id));
@@ -237,7 +242,9 @@ import {
       {
         id: 'diagnostic',
         label: 'Diagnóstico integral de solo lectura disponible',
-        ok: Boolean(document.getElementById('btn-run-site-diagnostics')),
+        // diagnostico-maestro-admin.js retira la tarjeta antigua (con #btn-run-site-diagnostics)
+        // y monta la del Diagnóstico Maestro; cualquiera de las dos cuenta como disponible.
+        ok: Boolean(document.getElementById('btn-run-site-diagnostics') || document.getElementById('btn-refresh-master-diagnostics')),
         detail: 'Permite revisar el ecosistema sin mutar datos reales.'
       },
       {
@@ -424,6 +431,28 @@ import {
     });
   }
 
+  // La primera evaluación ocurre apenas se monta Maestro, antes de que el panel
+  // marque `adm-auth-ready` y de que otros módulos (Diagnóstico Maestro) monten su
+  // UI. Se re-evalúa mientras esos cambios ocurren y se deja de observar al llegar
+  // a 100% o pasado un tiempo prudente. Solo lee el DOM; no toca datos.
+  function recheckWhenAdminSettles(timeoutMs = 20000) {
+    if (typeof MutationObserver !== 'function') return;
+    let timer = 0;
+    const observer = new MutationObserver(() => {
+      if (timer) return;
+      timer = window.setTimeout(() => {
+        timer = 0;
+        if (runAndRenderChecks().percent === 100) stop();
+      }, 250);
+    });
+    const stop = () => { observer.disconnect(); window.clearTimeout(timer); window.clearTimeout(giveUp); };
+    const giveUp = window.setTimeout(stop, timeoutMs);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    const diagnostics = document.getElementById('section-diagnostico');
+    if (diagnostics) observer.observe(diagnostics, { childList: true });
+    if (runAndRenderChecks().percent === 100) stop();
+  }
+
   async function waitForAdminDom(timeoutMs = 12000) {
     const started = Date.now();
     while (Date.now() - started < timeoutMs) {
@@ -444,6 +473,7 @@ import {
     ensureSection();
     wireNavigation();
     renderShell();
+    recheckWhenAdminSettles();
     document.documentElement.dataset.ttSuperadminMaestroReady = '1';
     document.dispatchEvent(new CustomEvent('tintin:superadmin-maestro-ready', { detail: { version: VERSION } }));
   }
