@@ -125,12 +125,9 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 // La sesión sobrevive al cierre, duplicado y reapertura de pestañas gracias a
 // la jerarquía de persistencia por defecto del SDK (indexedDB primero). Fijar
-// explícitamente setPersistence solo es necesario en login.html, justo antes
-// de completar un inicio de sesión (popup, OTP o link por correo) — es el uso
-// que documenta Firebase. Llamarlo en cada carga de pestaña en el resto de
-// páginas compite con la resolución de la sesión ya persistida: setPersistence
-// no es idempotente y puede pisar la sesión válida que ya vive en IndexedDB,
-// dejando a una pestaña nueva sin detectar que la cuenta sigue logueada.
+// explícitamente setPersistence debe coordinarse una sola vez por documento,
+// antes de que cada consumidor consulte Auth. Llamarlo sin coordinación desde
+// varios imports versionados puede competir con la restauración ya persistida.
 // La sesión no expira por inactividad desde la aplicación. Firebase renueva
 // sus tokens automáticamente; sólo una acción explícita de la persona o una
 // revocación real del proveedor puede cerrar Auth.
@@ -204,18 +201,17 @@ export async function inspectAuthPersistenceStorage() {
   });
 }
 
-const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');
-const configuredPersistence = IS_LOGIN_PAGE
-  ? setPersistence(auth, browserLocalPersistence)
-      .catch(error => {
-        console.warn('[firebase-auth] No se pudo establecer persistencia local; se usa la de pestaña:', error?.code || error);
-        return setPersistence(auth, browserSessionPersistence);
-      })
-      .catch(error => {
-        console.warn('[firebase-auth] No se pudo establecer persistencia de pestaña:', error?.code || error);
-        throw error;
-      })
-  : Promise.resolve(true);
+const AUTH_PERSISTENCE_PROMISE_KEY = '__TINTIN_AUTH_PERSISTENCE_READY__';
+const configuredPersistence = window[AUTH_PERSISTENCE_PROMISE_KEY] || (window[AUTH_PERSISTENCE_PROMISE_KEY] =
+  setPersistence(auth, browserLocalPersistence)
+    .catch(error => {
+      console.warn('[firebase-auth] No se pudo establecer persistencia local; se usa la de pestaña:', error?.code || error);
+      return setPersistence(auth, browserSessionPersistence);
+    })
+    .catch(error => {
+      console.warn('[firebase-auth] No se pudo establecer persistencia de pestaña:', error?.code || error);
+      throw error;
+    }));
 
 export const authPersistenceReady = configuredPersistence.then(async () => {
   recordAuthDiagnostic('PERSISTENCE_READY', {
