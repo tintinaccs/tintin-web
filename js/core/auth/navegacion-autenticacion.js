@@ -80,7 +80,7 @@ const accountBtnDefaults=new Map();
 document.addEventListener('click',event=>{
  const googleButton=event.target.closest?.('#btn-google');
  if(googleButton)beginSilentAuthTransition();
- const adminLink=event.target.closest?.('a[data-internal-admin-link],a[href="/admin"],a[href="/admin.html"]');
+ const adminLink=event.target.closest?.('a[data-internal-admin-link],a[href="/admin"]');
  if(adminLink){
   const user=getSessionUser();
   if(user?.uid){
