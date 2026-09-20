@@ -94,6 +94,9 @@ test('admin conserva UNKNOWN y sólo redirige una ausencia confirmada', () => {
   assert.match(admin, /function showAdminAuthUnknown/);
   assert.match(admin, /clearAuthHandoff\(\)/);
   assert.match(admin, /window\.location\.replace\('login\.html'\)/);
+  assert.match(admin, /showAdminAuthUnknown\(\)/);
+  assert.match(admin, /function dismissAdminAuthUnknown/);
+  assert.match(admin, /dismissAdminAuthUnknown\(\);[\s\S]*clearAdminAuthHandoffWithDiagnostic/);
   assert.match(admin, /recoverAdminUserFromHandoff/);
   assert.match(admin, /HANDOFF_WAIT_START/);
   assert.match(admin, /HANDOFF_RECOVERED/);

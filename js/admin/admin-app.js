@@ -861,6 +861,10 @@ document.getElementById('adm-logout').onclick = () => {
 // Ningún timer o reintento local puede decidir si una cuenta existe.
 function hideOverlay() { window.ttPageReady && window.ttPageReady(); }
 
+function dismissAdminAuthUnknown() {
+  document.getElementById('adm-auth-unknown')?.remove();
+}
+
 function showAdminInitFailure() {
   document.documentElement.classList.remove('adm-auth-ready');
   let overlay = document.getElementById('adm-init-error');
@@ -956,6 +960,10 @@ async function startAdminAuthGuard() {
       authState: snapshot.status,
       sessionCoordinatorState: snapshot.status
     });
+    // UNKNOWN puede haberse pintado por un snapshot transitorio antes de que
+    // Firebase confirmara la identidad. Una sesión ya autenticada debe quitar
+    // ese bloqueo visual para que el panel pueda continuar con su arranque.
+    dismissAdminAuthUnknown();
     clearAdminAuthHandoffWithDiagnostic();
 
     currentUser = user;
