@@ -3,7 +3,7 @@
 import { auth, db } from '../firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
 import { signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { AUTH_STATES, subscribeSession, getSessionUser, markExplicitLogout } from './coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2';
+import { AUTH_STATES, subscribeSession, getSessionUser, markExplicitLogout, createAuthHandoff } from './coordinador-sesion.js?v=tintin-20260920-auth-handoff-header-1';
 import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
 import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
@@ -80,6 +80,14 @@ const accountBtnDefaults=new Map();
 document.addEventListener('click',event=>{
  const googleButton=event.target.closest?.('#btn-google');
  if(googleButton)beginSilentAuthTransition();
+ const adminLink=event.target.closest?.('a[data-internal-admin-link],a[href="/admin"]');
+ if(adminLink){
+  const user=getSessionUser();
+  if(user?.uid){
+   createAuthHandoff(user.uid);
+   recordAuthDiagnostic('HANDOFF_FOUND',{source:'public-account-menu',state:'created-for-admin-navigation'});
+  }
+ }
  // El perfil tiene su propio botón de cierre explícito. No lo capture el
  // listener global: dos handlers sobre el mismo control podían ejecutar
  // signOut en paralelo y hacer que la navegación pareciera un deslogueo

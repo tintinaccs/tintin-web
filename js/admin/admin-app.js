@@ -2,7 +2,7 @@ import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-2
 import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { AUTH_STATES, subscribeSession, markExplicitLogout, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2";
+import { AUTH_STATES, subscribeSession, markExplicitLogout, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20260920-auth-handoff-header-1";
 import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
@@ -899,6 +899,23 @@ function showAdminAuthUnknown() {
   hideOverlay();
 }
 
+async function recoverAdminUserFromHandoff() {
+  const handoff = readAuthHandoff();
+  if (!handoff?.uid) return null;
+  recordAuthDiagnostic('HANDOFF_WAIT_START', { source: 'admin-guard' });
+  const deadline = Date.now() + 5000;
+  while (Date.now() < deadline) {
+    const restored = auth.currentUser;
+    if (restored?.uid === handoff.uid) {
+      recordAuthDiagnostic('HANDOFF_RECOVERED', { source: 'admin-guard' });
+      return restored;
+    }
+    await new Promise(resolve => window.setTimeout(resolve, 150));
+  }
+  recordAuthDiagnostic('HANDOFF_RECOVERY_EXPIRED', { source: 'admin-guard' });
+  return null;
+}
+
 async function startAdminAuthGuard() {
   subscribeSession(async snapshot => {
     if (snapshot.status !== AUTH_STATES.RESTORING && !authReadyDiagnosticRecorded) {
@@ -924,7 +941,10 @@ async function startAdminAuthGuard() {
       showAdminAuthUnknown();
       return;
     }
-    const user = snapshot.user;
+    let user = snapshot.user;
+    if (!user) {
+      user = await recoverAdminUserFromHandoff();
+    }
     if (!user) {
       recordAdminUnauthenticatedRedirect(snapshot);
       clearAdminAuthHandoffWithDiagnostic();
