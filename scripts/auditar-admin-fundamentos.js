@@ -68,9 +68,11 @@ check(
   'admin-app.js debe resolver la sesión mediante el coordinador antes de mostrar el panel.'
 );
 check(
-  'Sin sesión se redirige a login.html',
-  /if \(!user\)\s*\{[^}]*login\.html/.test(adminApp),
-  'Un usuario no autenticado debe terminar en login.html, nunca dentro del panel.'
+  'Sin sesión muestra recuperación sin expulsión silenciosa',
+  /AUTH_SESSION_RECOVERY_REQUIRED/.test(adminApp) &&
+    /showAdminAuthUnknown\(\)/.test(adminApp) &&
+    /adm-auth-login/.test(adminApp),
+  'Una sesión no restaurada debe mostrar reintento e ingreso explícito, sin redirección automática.'
 );
 check(
   'Un rol de cliente/sin rol se saca del panel a perfil.html',

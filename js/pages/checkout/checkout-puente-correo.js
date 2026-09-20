@@ -1,4 +1,4 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260920-auth-persistence-all-users-1';
 import {
   collection,
   query,

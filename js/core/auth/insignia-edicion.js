@@ -1,4 +1,4 @@
-import { auth } from '../firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
+import { auth } from '../firebase/firebase.js?v=tintin-20260920-auth-persistence-all-users-1';
 import { subscribeAuthState } from './coordinador-sesion.js?v=tintin-20260920-auth-handoff-header-1';
 import { SUPER_ADMIN, getUserRole } from './roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
 import { EDITABLE_ROLES, loadRolePermissions, canDo } from './permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';

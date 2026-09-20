@@ -74,7 +74,7 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
 
   async function repairCanonicalProfileIfNeeded() {
     const [{ db }, profileModule, firestoreApi, { subscribeAuthState }] = await Promise.all([
-      import('../../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1'),
+      import('../../core/firebase/firebase.js?v=tintin-20260920-auth-persistence-all-users-1'),
       import('../../core/store/perfil-usuario.js?v=tintin-20260916-cache-bump-profile-1-auth-persistence-20260919-1'),
       import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
       import('../../core/auth/coordinador-sesion.js?v=tintin-20260920-auth-handoff-header-1'),
