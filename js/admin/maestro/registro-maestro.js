@@ -115,7 +115,9 @@ export const MAESTRO_MODULES = Object.freeze([
   moduleDef('diagnostico', 'Diagnóstico', 'read-only-action', 'Inspección de plataforma en modo de solo lectura con exportación de evidencia.', {
     read: YES, search: YES, export: YES
   }, {
-    quickAction: { type: 'selector', selector: '#btn-run-site-diagnostics', label: 'Ejecutar diagnóstico' },
+    // Solo lectura: refresca el último Diagnóstico Maestro. No usamos el botón "Ejecutar"
+    // porque este dispara un workflow de GitHub (acción con efecto externo).
+    quickAction: { type: 'selector', selector: '#btn-refresh-master-diagnostics', label: 'Actualizar diagnóstico' },
     evidence: ['btn-run-site-diagnostics', 'Modo de solo lectura']
   }),
 

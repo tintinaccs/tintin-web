@@ -28,6 +28,9 @@ export function resolveState(record, live, estados) {
   const initial = baselineState(record?.state, estados);
   if (!live) return initial;
   if (live.status === 401 || live.status === 403 || live.authRequired) return initial;
+  // Una comprobación de CI aún en curso (RUNNING/QUEUED) o sin reportar no es
+  // un fallo: se conserva el estado base hasta que termine.
+  if (live.pending) return initial;
   if (!live.ok) return classifyProbe(live, estados);
   if ((live.evidenceLevel === EVIDENCIA.LIVE_PRODUCTION || live.evidenceLevel === EVIDENCIA.CI_VERIFIED) && live.promote === true) return estados.PROD;
   if (live.evidenceLevel === EVIDENCIA.LIVE_PRODUCTION_READ_ONLY) return initial;

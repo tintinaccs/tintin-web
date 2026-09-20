@@ -8,8 +8,8 @@
 // monitoreo nueva: reutiliza lo que ya prueba conectividad real sin escribir
 // datos. Nada de lo que hace este módulo crea, actualiza ni borra documentos.
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260920-safe-live-probes-1';
-import { resolveState, isAttentionState } from './estado-flujo.js?v=tintin-20260920-safe-live-probes-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260920-safe-live-probes-1';
+import { resolveState, isAttentionState } from './estado-flujo.js?v=tintin-20260920-admin-status-fixes-1';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260920-admin-status-fixes-1';
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
 import { collection, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
@@ -111,14 +111,18 @@ async function probeClientFirestoreRules(user) {
     const unavailable = { ok: false, status: 0, authRequired: true, error: 'App Check o sesión no disponible' };
     return { favorites: { label: 'Favoritos', ...unavailable }, notifications: { label: 'Notificaciones', ...unavailable } };
   }
-  return {
-    favorites: probeClientFirestoreRead('Favoritos', () => getDocs(query(
+  // Hay que esperar ambas lecturas: devolver las promesas sin resolver hacía
+  // que `favorites.ok` / `notifications.ok` fueran siempre undefined y el flujo
+  // reportara "no confirmado" aunque las Rules permitieran la lectura.
+  const [favorites, notifications] = await Promise.all([
+    probeClientFirestoreRead('Favoritos', () => getDocs(query(
       collection(db, 'users', user.uid, 'favorites'), limit(1),
     ))),
-    notifications: probeClientFirestoreRead('Notificaciones', () => getDocs(query(
+    probeClientFirestoreRead('Notificaciones', () => getDocs(query(
       collection(db, 'adminNotifications'), limit(1),
     ))),
-  };
+  ]);
+  return { favorites, notifications };
 }
 
 export function initConnectionsFlow({ role } = {}) {
@@ -233,7 +237,7 @@ export function initConnectionsFlow({ role } = {}) {
       const pills = nodes.map(node => {
         const state = effectiveState(node);
         const live = liveState.byId[node.id];
-        const liveMark = live ? `<span class="tfc-live-dot" title="${escapeHtml(live.note)}">${live.ok ? '●' : '✕'}</span>` : '';
+        const liveMark = live ? `<span class="tfc-live-dot" title="${escapeHtml(live.note)}">${live.pending ? '◌' : live.ok ? '●' : '✕'}</span>` : '';
         const active = node.id === selectedNodeId ? ' tfc-pill-active' : '';
         return `<button type="button" class="tfc-pill tfc-state-${slug(state)}${active}" data-node-id="${escapeHtml(node.id)}">${liveMark}${escapeHtml(node.label)}</button>`;
       }).join('');
@@ -262,7 +266,7 @@ export function initConnectionsFlow({ role } = {}) {
         <span class="tfc-edge-node">${escapeHtml(to?.label || edge.to)}</span>
         ${label}
         ${stateBadgeHtml(state)}
-        ${live ? `<span class="tfc-edge-live" title="${escapeHtml(live.note)}">${live.ok ? '● live' : '✕ live'}</span>` : ''}
+        ${live ? `<span class="tfc-edge-live" title="${escapeHtml(live.note)}">${live.pending ? '◌ en curso' : live.ok ? '● live' : '✕ live'}</span>` : ''}
       </button>`;
     });
     edgesEl.innerHTML = rows.join('') || '<p class="tfc-empty">Sin conexiones para este filtro.</p>';
@@ -277,7 +281,7 @@ export function initConnectionsFlow({ role } = {}) {
     const from = isEdge ? nodeById(record.from)?.label || record.from : '';
     const to = isEdge ? nodeById(record.to)?.label || record.to : '';
     const liveHtml = live
-      ? `<p class="tfc-detail-live"><strong>Verificación en vivo (${escapeHtml(live.checkedAt || liveState.checkedAt || '')}):</strong> ${live.ok ? 'OK' : 'FALLÓ'} — ${escapeHtml(live.note)} <span class="tfc-evidence-level">${escapeHtml(live.evidenceLevel)}</span></p>`
+      ? `<p class="tfc-detail-live"><strong>Verificación en vivo (${escapeHtml(live.checkedAt || liveState.checkedAt || '')}):</strong> ${live.pending ? 'EN CURSO / SIN CONFIRMAR' : live.ok ? 'OK' : 'FALLÓ'} — ${escapeHtml(live.note)} <span class="tfc-evidence-level">${escapeHtml(live.evidenceLevel)}</span></p>`
       : '<p class="tfc-detail-live tfc-detail-live-none">Sin prueba en vivo disponible; el estado mostrado es evidencia de código o contrato.</p>';
     detailEl.hidden = false;
     detailEl.innerHTML = `
