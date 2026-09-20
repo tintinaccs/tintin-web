@@ -29,7 +29,7 @@ export function resolveState(record, live, estados) {
   if (!live) return initial;
   if (live.status === 401 || live.status === 403 || live.authRequired) return initial;
   if (!live.ok) return classifyProbe(live, estados);
-  if (live.evidenceLevel === EVIDENCIA.LIVE_PRODUCTION && live.promote === true) return estados.PROD;
+  if ((live.evidenceLevel === EVIDENCIA.LIVE_PRODUCTION || live.evidenceLevel === EVIDENCIA.CI_VERIFIED) && live.promote === true) return estados.PROD;
   if (live.evidenceLevel === EVIDENCIA.LIVE_PRODUCTION_READ_ONLY) return initial;
   return initial;
 }

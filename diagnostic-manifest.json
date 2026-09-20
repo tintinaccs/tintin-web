@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "d01083adff62cb639c0a8e297b5a931368a74b4c9f4f0c9ff23d4053edc3eb6d",
+  "sourceFingerprint": "ece26999ab870b31364de2492e2c09d9c305ac6d2ef2a43d4a948d14724f3a5c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 858,
-    "textFiles": 817,
-    "totalBytes": 16933710,
+    "files": 859,
+    "textFiles": 818,
+    "totalBytes": 16941870,
     "pages": 19,
-    "modules": 583
+    "modules": 584
   },
   "viewports": [
     {
@@ -19109,8 +19109,8 @@
     },
     {
       "path": "functions/api/master-diagnostics.js",
-      "bytes": 12618,
-      "sha256": "36a3b3bb020e9f78ec5e5f8353df3f7238891b85bd282929677f7f7e38c6d850",
+      "bytes": 13889,
+      "sha256": "7fd1991357df14d9c1bc18d2b35e707089128ad726e56789534b5e41441778ce",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20761,8 +20761,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
-      "bytes": 16390,
-      "sha256": "6d02834ea8c8a5aed8213a2a1f16037745b5f3f113fce4a02ca243b6143544bd",
+      "bytes": 16419,
+      "sha256": "f5bfa034b1a57e230f7e145fbb618f63d888df7fb2464e789f1509174d8384da",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20772,8 +20772,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/estado-flujo.js",
-      "bytes": 1611,
-      "sha256": "e224316c5b95228deedde08fd960211ed062d628c3eb8a9b20b6fce660672648",
+      "bytes": 1661,
+      "sha256": "0bd3878c2ca3a542e0467cc0ecd89fb37e5f91a3651dac338b6dbdf59ae437fe",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20783,27 +20783,27 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 18050,
-      "sha256": "c2fe4edb949bac7ca5e45756d69af4a544f8956314b61c73bb97fb6961cb6c0f",
+      "bytes": 19577,
+      "sha256": "c4f82eba673068578403d5845847f465fcd91f0b767af8c06e06c902c8750a59",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./datos-flujo-conexiones.js?v=tintin-20260918-flow-connections-cache-fix-1",
+          "raw": "./datos-flujo-conexiones.js?v=tintin-20260920-flow-connections-evidence-1",
           "target": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
           "dynamic": false,
           "line": 10
         },
         {
-          "raw": "./estado-flujo.js?v=tintin-20260918-flow-connections-cache-fix-1",
+          "raw": "./estado-flujo.js?v=tintin-20260920-flow-connections-evidence-1",
           "target": "js/admin/flujo-conexiones/estado-flujo.js",
           "dynamic": false,
           "line": 11
         },
         {
-          "raw": "./live-checks.js?v=tintin-20260918-flow-connections-green-evidence-1",
+          "raw": "./live-checks.js?v=tintin-20260920-flow-connections-evidence-1",
           "target": "js/admin/flujo-conexiones/live-checks.js",
           "dynamic": false,
           "line": 12
@@ -20819,21 +20819,21 @@
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
-      "bytes": 8387,
-      "sha256": "2bf2205e7962911b17492f24ebed63aac23f51cda5c8bb3315c1828a3b51e8ce",
+      "bytes": 10573,
+      "sha256": "e06045d8a1004af8a8c93a4c8cbdc4d088ac956cdb409af83d034be4c7819d99",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./datos-flujo-conexiones.js?v=tintin-20260918-flow-connections-cache-fix-1",
+          "raw": "./datos-flujo-conexiones.js?v=tintin-20260920-flow-connections-evidence-1",
           "target": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
           "dynamic": false,
           "line": 9
         },
         {
-          "raw": "./estado-flujo.js?v=tintin-20260918-flow-connections-cache-fix-1",
+          "raw": "./estado-flujo.js?v=tintin-20260920-flow-connections-evidence-1",
           "target": "js/admin/flujo-conexiones/estado-flujo.js",
           "dynamic": false,
           "line": 10
@@ -30914,6 +30914,45 @@
       "endpoints": []
     },
     {
+      "path": "tests/diagnostics/master-current-evidence.test.mjs",
+      "bytes": 1022,
+      "sha256": "93fe32d0645ddbab5ceacdfbf02183fff62b5b429bd4d25f1e6d48cc61c6b532",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../functions/api/master-diagnostics.js",
+          "target": "functions/api/master-diagnostics.js",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://github.com/tintinaccs/tintin-web/actions/runs/1",
+          "line": 12
+        },
+        {
+          "url": "https://dash.cloudflare.com/pages/deployments/1",
+          "line": 19
+        }
+      ]
+    },
+    {
       "path": "tests/engagement/comments-reports.test.mjs",
       "bytes": 3549,
       "sha256": "8e20fec0c221b2946e0ec763e38a26c093984c1f156d0de9f50a7324850439e6",
@@ -31058,8 +31097,8 @@
     },
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
-      "bytes": 5029,
-      "sha256": "c39d37f84c0952579533d08226e6c47ff4364c7f5d079376deef81a2017c8227",
+      "bytes": 7104,
+      "sha256": "c27debd575f13917b78a07bfd60ef3374e212ac2e3a771ae456bf9f46a72b75e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34794,8 +34833,8 @@
     {
       "path": "functions/api/master-diagnostics.js",
       "extension": ".js",
-      "bytes": 12618,
-      "sha256": "36a3b3bb020e9f78ec5e5f8353df3f7238891b85bd282929677f7f7e38c6d850"
+      "bytes": 13889,
+      "sha256": "7fd1991357df14d9c1bc18d2b35e707089128ad726e56789534b5e41441778ce"
     },
     {
       "path": "functions/api/notifications.js",
@@ -35166,26 +35205,26 @@
     {
       "path": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
       "extension": ".js",
-      "bytes": 16390,
-      "sha256": "6d02834ea8c8a5aed8213a2a1f16037745b5f3f113fce4a02ca243b6143544bd"
+      "bytes": 16419,
+      "sha256": "f5bfa034b1a57e230f7e145fbb618f63d888df7fb2464e789f1509174d8384da"
     },
     {
       "path": "js/admin/flujo-conexiones/estado-flujo.js",
       "extension": ".js",
-      "bytes": 1611,
-      "sha256": "e224316c5b95228deedde08fd960211ed062d628c3eb8a9b20b6fce660672648"
+      "bytes": 1661,
+      "sha256": "0bd3878c2ca3a542e0467cc0ecd89fb37e5f91a3651dac338b6dbdf59ae437fe"
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 18050,
-      "sha256": "c2fe4edb949bac7ca5e45756d69af4a544f8956314b61c73bb97fb6961cb6c0f"
+      "bytes": 19577,
+      "sha256": "c4f82eba673068578403d5845847f465fcd91f0b767af8c06e06c902c8750a59"
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
       "extension": ".js",
-      "bytes": 8387,
-      "sha256": "2bf2205e7962911b17492f24ebed63aac23f51cda5c8bb3315c1828a3b51e8ce"
+      "bytes": 10573,
+      "sha256": "e06045d8a1004af8a8c93a4c8cbdc4d088ac956cdb409af83d034be4c7819d99"
     },
     {
       "path": "js/admin/flujo-decisiones/flujo-decisiones-admin.js",
@@ -37906,6 +37945,12 @@
       "sha256": "cd147ea0599730dc24b97a521aed18dac71d60a6733b79e4a8066b1af4afa8df"
     },
     {
+      "path": "tests/diagnostics/master-current-evidence.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1022,
+      "sha256": "93fe32d0645ddbab5ceacdfbf02183fff62b5b429bd4d25f1e6d48cc61c6b532"
+    },
+    {
       "path": "tests/engagement/comments-reports.test.mjs",
       "extension": ".mjs",
       "bytes": 3549,
@@ -37932,8 +37977,8 @@
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
       "extension": ".mjs",
-      "bytes": 5029,
-      "sha256": "c39d37f84c0952579533d08226e6c47ff4364c7f5d079376deef81a2017c8227"
+      "bytes": 7104,
+      "sha256": "c27debd575f13917b78a07bfd60ef3374e212ac2e3a771ae456bf9f46a72b75e"
     },
     {
       "path": "tests/functions/page-loader-route.test.mjs",
@@ -38635,7 +38680,7 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 296,
+      "line": 331,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
@@ -40021,7 +40066,13 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 296,
+      "line": 65,
+      "target": "/",
+      "method": "GET"
+    },
+    {
+      "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
+      "line": 331,
       "target": "/admin.html",
       "method": "GET"
     },

@@ -59,6 +59,18 @@ async function loadRunJobs(runId,token){const{data}=await githubRequest(`/repos/
 async function loadCommitChecks(sha,token){if(!sha)return[];const{data}=await githubRequest(`/repos/${REPOSITORY}/commits/${encodeURIComponent(sha)}/check-runs?filter=latest&per_page=100`,{token});return Array.isArray(data?.check_runs)?data.check_runs:[];}
 function isMasterAreaCheck(name){return/^\s*[1-9]\s*·\s*/.test(String(name||''));}
 function compactBlockingChecks(checkRuns){return checkRuns.filter(c=>c?.status==='completed'&&BLOCKING_CONCLUSIONS.has(String(c?.conclusion||''))&&!isMasterAreaCheck(c?.name)).map(c=>({name:String(c.name||'Check sin nombre'),conclusion:String(c.conclusion||'failure'),app:String(c.app?.name||''),detailsUrl:c.details_url||null,completedAt:c.completed_at||null})).sort((a,b)=>a.name.localeCompare(b.name,'es'));}
+function compactCurrentCheck(check,key,label){
+  if(!check)return{key,label,state:'NOT_VERIFIED',status:'not_reported',conclusion:null,completedAt:null,detailsUrl:null};
+  return{key,label,state:stateFor(check.status,check.conclusion),status:String(check.status||''),conclusion:check.conclusion||null,completedAt:check.completed_at||null,detailsUrl:check.details_url||null};
+}
+export function buildCurrentEvidence(commit,checkRuns=[]){
+  const find=name=>checkRuns.find(check=>String(check?.name||'')===name)||null;
+  return{commit,checks:{
+    repositoryAudit:compactCurrentCheck(find('Repository audit'),'repositoryAudit','Repository audit'),
+    cloudflarePages:compactCurrentCheck(find('Cloudflare Pages'),'cloudflarePages','Cloudflare Pages'),
+    productionHealth:compactCurrentCheck(find('Producción real'),'productionHealth','Producción real')
+  }};
+}
 function findJob(jobs,prefix){return jobs.find(job=>String(job.name||'').trim().startsWith(prefix))||null;}
 function buildLatest(run,jobs,currentCommit,checkRuns=[],availability={}){
   if(!run)return null;
@@ -88,10 +100,16 @@ async function handleGet(env){
   const token=cleanToken(env);
   const runs=await listMasterRuns(token);
   const latestRun=runs[0]||null;
-  const[jobsResult,commitResult,checksResult]=await Promise.allSettled([latestRun?loadRunJobs(latestRun.id,token):Promise.resolve([]),loadCurrentCommit(token),latestRun?.head_sha?loadCommitChecks(latestRun.head_sha,token):Promise.resolve([])]);
-  const jobs=settledValue(jobsResult,[]),currentCommit=settledValue(commitResult,latestRun?.head_sha||null),checks=settledValue(checksResult,[]);
-  const availability={runs:true,jobs:jobsResult.status==='fulfilled',currentCommit:commitResult.status==='fulfilled',checks:checksResult.status==='fulfilled'};
-  return{ok:true,repository:REPOSITORY,branch:BASE_BRANCH,workflow:WORKFLOW_FILE,triggerConfigured:Boolean(token),currentCommit,latest:buildLatest(latestRun,jobs,currentCommit,checks,availability),history:runs.map(compactRun),availability,checkedAt:new Date().toISOString()};
+  const[jobsResult,commitResult]=await Promise.allSettled([latestRun?loadRunJobs(latestRun.id,token):Promise.resolve([]),loadCurrentCommit(token)]);
+  const currentCommit=settledValue(commitResult,latestRun?.head_sha||null);
+  const[checksResult,currentChecksResult]=await Promise.allSettled([
+    latestRun?.head_sha?loadCommitChecks(latestRun.head_sha,token):Promise.resolve([]),
+    currentCommit?loadCommitChecks(currentCommit,token):Promise.resolve([])
+  ]);
+  const jobs=settledValue(jobsResult,[]),checks=settledValue(checksResult,[]),currentChecks=settledValue(currentChecksResult,[]);
+  const availability={runs:true,jobs:jobsResult.status==='fulfilled',currentCommit:commitResult.status==='fulfilled',checks:checksResult.status==='fulfilled',currentChecks:currentChecksResult.status==='fulfilled'};
+  const currentEvidence=availability.currentCommit&&availability.currentChecks?buildCurrentEvidence(currentCommit,currentChecks):null;
+  return{ok:true,repository:REPOSITORY,branch:BASE_BRANCH,workflow:WORKFLOW_FILE,triggerConfigured:Boolean(token),currentCommit,currentEvidence,latest:buildLatest(latestRun,jobs,currentCommit,checks,availability),history:runs.map(compactRun),availability,checkedAt:new Date().toISOString()};
 }
 async function handlePost(request,env){
   const token=cleanToken(env);

@@ -17,6 +17,12 @@ test('200 con evidencia live promovible es verde', () => {
   }, ESTADOS), ESTADOS.PROD);
 });
 
+test('evidencia CI del commit actual también puede promover un estado verificado', () => {
+  assert.equal(resolveState({ state: ESTADOS.NO_VERIFICADO }, {
+    ok: true, status: 200, promote: true, evidenceLevel: EVIDENCIA.CI_VERIFIED,
+  }, ESTADOS), ESTADOS.PROD);
+});
+
 test('500 es rojo, timeout queda pendiente y falta de implementación es gris', () => {
   assert.equal(classifyProbe({ ok: false, status: 500 }, ESTADOS), ESTADOS.ERROR);
   assert.equal(classifyProbe({ ok: false, timeout: true }, ESTADOS), ESTADOS.NO_VERIFICADO);
@@ -79,6 +85,41 @@ test('una ruta pública comprobada en producción promueve su nodo de destino', 
   }, '2026-09-18T00:00:00.000Z');
   const login = NODES.find(node => node.id === 'entrada-login');
   assert.equal(resolveState(login, live['entrada-login'], ESTADOS), ESTADOS.PROD);
+});
+
+test('el carrito exige que el panel ya se haya renderizado, no solo un HTTP 200', () => {
+  const withoutDrawer = buildLiveChecks({
+    publicHealth: { status: 200, body: { ok: true } },
+    routeProbes: { cart: { path: '/', status: 200, ok: true, hasCartDrawer: false } },
+  }, '2026-09-20T00:00:00.000Z');
+  const withDrawer = buildLiveChecks({
+    publicHealth: { status: 200, body: { ok: true } },
+    routeProbes: { cart: { path: '/', status: 200, ok: true, hasCartDrawer: true } },
+  }, '2026-09-20T00:00:00.000Z');
+  const cart = NODES.find(node => node.id === 'carrito');
+  assert.equal(resolveState(cart, withoutDrawer.carrito, ESTADOS), ESTADOS.ERROR);
+  assert.equal(resolveState(cart, withDrawer.carrito, ESTADOS), ESTADOS.PROD);
+});
+
+test('CI y Cloudflare del commit actual promueven las evidencias de integración', () => {
+  const currentEvidence = {
+    commit: '1212c8a8d7d98dd8db30356c97539a4a8d857971',
+    checks: {
+      repositoryAudit: { state: 'PASS' },
+      cloudflarePages: { state: 'PASS' },
+    },
+  };
+  const live = buildLiveChecks({ publicHealth: { status: 200, body: { ok: true } }, currentEvidence }, '2026-09-20T00:00:00.000Z');
+  for (const id of ['github-actions', 'pruebas-automatizadas', 'deployments']) {
+    const node = NODES.find(item => item.id === id);
+    assert.equal(live[id].evidenceLevel, EVIDENCIA.CI_VERIFIED);
+    assert.equal(resolveState(node, live[id], ESTADOS), ESTADOS.PROD);
+  }
+  const edges = buildLiveEdges({ publicHealth: { status: 200, body: { ok: true } }, currentEvidence }, '2026-09-20T00:00:00.000Z');
+  for (const edge of EDGES.filter(item => item.from === 'github-actions')) {
+    assert.equal(edges[edge.id].evidenceLevel, EVIDENCIA.CI_VERIFIED);
+    assert.equal(resolveState(edge, edges[edge.id], ESTADOS), ESTADOS.PROD);
+  }
 });
 
 test('buildLiveEdges promueve la cadena de infraestructura cuando /api/health responde 200', () => {
