@@ -122,6 +122,31 @@ test('CI y Cloudflare del commit actual promueven las evidencias de integración
   }
 });
 
+test('lecturas autenticadas verifican favoritos, notificaciones y Rules sin mutarlas', () => {
+  const protectedProbes = {
+    favoriteApi: { ok: true, status: 200 },
+    notificationApi: { ok: true, status: 200 },
+    firestoreRules: {
+      favorites: { ok: true, status: 200 },
+      notifications: { ok: true, status: 200 },
+    },
+  };
+  const checkedAt = '2026-09-20T00:00:00.000Z';
+  const live = buildLiveChecks({ protectedProbes }, checkedAt);
+  for (const id of ['favoritos', 'notificaciones', 'reglas-firestore']) {
+    const node = NODES.find(item => item.id === id);
+    assert.equal(live[id].evidenceLevel, EVIDENCIA.LIVE_PRODUCTION);
+    assert.equal(resolveState(node, live[id], ESTADOS), ESTADOS.PROD);
+  }
+  const edges = buildLiveEdges({ protectedProbes }, checkedAt);
+  for (const edge of EDGES.filter(item => (
+    (item.from === 'apis-internas' && ['favoritos', 'notificaciones'].includes(item.to))
+    || (item.from === 'cf-functions' && item.to === 'reglas-firestore')
+  ))) {
+    assert.equal(resolveState(edge, edges[edge.id], ESTADOS), ESTADOS.PROD);
+  }
+});
+
 test('buildLiveEdges promueve la cadena de infraestructura cuando /api/health responde 200', () => {
   const publicHealth = { status: 200, body: { ok: true, checks: { firebase: true }, admin: { users: true } } };
   const live = buildLiveEdges({ publicHealth, systemHealth: null, headers: null }, '2026-09-18T00:00:00.000Z');

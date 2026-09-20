@@ -171,10 +171,20 @@ export async function onRequest(context) {
   const { request, env } = context;
   const origin = request.headers.get('origin') || '';
   if (!originIsAllowed(origin, request.url)) return jsonResponse({ ok: false, error: 'Origen no permitido' }, 403, origin, request.url);
-  if (request.method === 'OPTIONS') return preflightResponse(origin, request.url, 'POST, OPTIONS');
-  if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido' }, 405, origin, request.url);
+  if (request.method === 'OPTIONS') return preflightResponse(origin, request.url, 'GET, POST, OPTIONS');
+  if (!['GET', 'POST'].includes(request.method)) return jsonResponse({ ok: false, error: 'Método no permitido' }, 405, origin, request.url);
 
   try {
+    // Sonda privada, estrictamente de lectura. Comprueba Firebase Auth y el
+    // acceso server-side a la colección propia sin devolver ni cambiar una
+    // notificación; se usa desde Flujo de conexiones.
+    if (request.method === 'GET') {
+      const user = await requireFirebaseUser(request);
+      const action = new URL(request.url).searchParams.get('action');
+      if (action !== 'health') throw Object.assign(new Error('Acción no permitida'), { status: 400 });
+      await firestoreAdminGet(env, `users/${safeId(user.uid, 'Cuenta')}/notifications/__tfc_health_probe__`);
+      return jsonResponse({ ok: true, mode: 'read_only' }, 200, origin, request.url);
+    }
     const raw = await request.text();
     if (!raw || new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) throw new Error('Solicitud vacía o demasiado grande');
     const input = JSON.parse(raw);
