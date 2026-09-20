@@ -1,5 +1,5 @@
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260920-auth-handoff-header-1';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 import { collection, doc, limit, onSnapshot, query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 

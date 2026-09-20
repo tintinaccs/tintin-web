@@ -1,6 +1,6 @@
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260919-auth-persistence-authoritative-restore-2';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260920-auth-handoff-header-1';
 import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
