@@ -73,10 +73,12 @@ const cartWaitsForAuthRestore =
   /subscribeAuthState\(activateIdentity\)/.test(cartSync) &&
   !/authStateReady\.then\s*\(\s*\(\)\s*=>\s*onAuthStateChanged/.test(cartSync);
 
-const persistenceScopedToLogin =
+const persistenceAvailableToEverySurface =
   firebase.includes('browserLocalPersistence') &&
-  /const\s+IS_LOGIN_PAGE\s*=/.test(firebase) &&
-  /IS_LOGIN_PAGE\s*\?\s*setPersistence\s*\(\s*auth\s*,\s*browserLocalPersistence\s*\)/s.test(firebase);
+  firebase.includes('browserSessionPersistence') &&
+  firebase.includes("const AUTH_PERSISTENCE_PROMISE_KEY = '__TINTIN_AUTH_PERSISTENCE_READY__'") &&
+  /setPersistence\s*\(\s*auth\s*,\s*browserLocalPersistence\s*\)/s.test(firebase) &&
+  /catch\s*\(\s*error\s*=>[\s\S]*?setPersistence\s*\(\s*auth\s*,\s*browserSessionPersistence\s*\)/s.test(firebase);
 
 const checks = [
   ['Login mantiene su contenedor propio', login.includes('class="login-page"')],
@@ -99,7 +101,7 @@ const checks = [
   ['Contacto no contiene lógica de cierre de sesión', !/\bsignOut\s*\(/.test(contactMaintenance)],
   ['El guard de perfil sólo protege checkout', profileGate.includes("const GUARDED_PAGES = ['checkout']")],
   ['El carrito espera restauración Auth antes de observar sesión', cartWaitsForAuthRestore],
-  ['Firebase persiste sesión local sólo desde Login', persistenceScopedToLogin],
+  ['Firebase persiste sesión local para todas las superficies autenticadas', persistenceAvailableToEverySurface],
 ];
 
 if (unexpectedSignOutCallers.length) {
