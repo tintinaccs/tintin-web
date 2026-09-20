@@ -6,8 +6,8 @@
 // nodo/conexión que estado-flujo.js puede resolver. No depende del DOM ni
 // de Firebase: solo de los cuerpos JSON ya obtenidos, para que sea probable
 // con node --test sin red ni navegador.
-import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20260920-flow-connections-evidence-1';
-import { EVIDENCIA } from './estado-flujo.js?v=tintin-20260920-flow-connections-evidence-1';
+import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20260920-safe-live-probes-1';
+import { EVIDENCIA } from './estado-flujo.js?v=tintin-20260920-safe-live-probes-1';
 
 function edgeIdFor(from, to) {
   return EDGES.find(edge => edge.from === from && edge.to === to)?.id || '';
@@ -23,7 +23,7 @@ function ciNote(currentEvidence, key, label) {
   return `GitHub CI · ${label}=${check.state || 'NOT_VERIFIED'} · commit ${commit}`;
 }
 
-export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, headers, routeProbes = {}, currentEvidence }, checkedAt) {
+export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, headers, routeProbes = {}, protectedProbes = {}, currentEvidence }, checkedAt) {
   const out = {};
   const setFrom = (id, ok, note, options = {}) => {
     if (typeof ok !== 'boolean') return;
@@ -97,6 +97,33 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
     setFrom('csp', headers.csp === true, `GET /admin.html · CSP ${headers.csp ? 'presente' : 'ausente'}`, { status: headers.status, promote: headers.csp === true, evidenceLevel: LP });
   }
 
+  // Estas cuatro lecturas no mutan datos: dos pasan por las APIs reales y
+  // dos por el SDK cliente. Juntas comprueban endpoint, Firebase Auth, Rules
+  // desplegadas y la colección correspondiente, sin marcar favoritos ni
+  // notificaciones como leídos.
+  const favoriteApi = protectedProbes.favoriteApi;
+  const notificationApi = protectedProbes.notificationApi;
+  const favoriteRules = protectedProbes.firestoreRules?.favorites;
+  const notificationRules = protectedProbes.firestoreRules?.notifications;
+  const favoriteOk = favoriteApi?.ok === true && favoriteRules?.ok === true;
+  const notificationsOk = notificationApi?.ok === true && notificationRules?.ok === true;
+  if (favoriteApi || favoriteRules) {
+    setFrom('favoritos', favoriteOk,
+      `GET /api/engagement=200 · SDK Firestore favorites=${favoriteRules?.ok === true ? 'permitido' : 'no confirmado'}`,
+      { status: favoriteApi?.status || favoriteRules?.status, promote: favoriteOk, evidenceLevel: LP, authRequired: favoriteApi?.status === 401 || favoriteRules?.authRequired === true });
+  }
+  if (notificationApi || notificationRules) {
+    setFrom('notificaciones', notificationsOk,
+      `GET /api/notifications?health=200 · SDK Firestore adminNotifications=${notificationRules?.ok === true ? 'permitido' : 'no confirmado'}`,
+      { status: notificationApi?.status || notificationRules?.status, promote: notificationsOk, evidenceLevel: LP, authRequired: notificationApi?.status === 401 || notificationRules?.authRequired === true });
+  }
+  const rulesOk = favoriteRules?.ok === true && notificationRules?.ok === true;
+  if (favoriteRules || notificationRules) {
+    setFrom('reglas-firestore', rulesOk,
+      `SDK Firestore autenticado · favorites=${favoriteRules?.ok === true ? 'permitido' : 'no confirmado'} · adminNotifications=${notificationRules?.ok === true ? 'permitido' : 'no confirmado'}`,
+      { status: rulesOk ? 200 : (favoriteRules?.status || notificationRules?.status), promote: rulesOk, evidenceLevel: LP, authRequired: favoriteRules?.authRequired === true || notificationRules?.authRequired === true });
+  }
+
   // GitHub Actions y el deployment se validan contra el commit actual, no
   // contra la última corrida histórica del Diagnóstico Maestro. Es evidencia
   // CI verificable, distinta de un probe HTTP de producción.
@@ -140,7 +167,7 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
   return out;
 }
 
-export function buildLiveEdges({ publicHealth, systemHealth, headers, currentEvidence }, checkedAt) {
+export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedProbes = {}, currentEvidence }, checkedAt) {
   const out = {};
   const set = (from, to, ok, note, status = 200, options = {}) => {
     if (typeof ok !== 'boolean') return;
@@ -171,6 +198,26 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, currentEvi
   if (report?.integrations?.sheets !== undefined) {
     set('apps-script', 'google-sheets', report.integrations.sheets === true,
       'GET /api/system-health · protocolo Sheets', systemHealth.status);
+  }
+  const favoriteApi = protectedProbes.favoriteApi;
+  const notificationApi = protectedProbes.notificationApi;
+  const favoriteRules = protectedProbes.firestoreRules?.favorites;
+  const notificationRules = protectedProbes.firestoreRules?.notifications;
+  if (favoriteApi) {
+    set('apis-internas', 'favoritos', favoriteApi.ok === true,
+      `GET /api/engagement?action=ownFavorite → HTTP ${favoriteApi.status || 'sin respuesta'}`,
+      favoriteApi.status || 0, { evidenceLevel: EVIDENCIA.LIVE_PRODUCTION });
+  }
+  if (notificationApi) {
+    set('apis-internas', 'notificaciones', notificationApi.ok === true,
+      `GET /api/notifications?action=health → HTTP ${notificationApi.status || 'sin respuesta'}`,
+      notificationApi.status || 0, { evidenceLevel: EVIDENCIA.LIVE_PRODUCTION });
+  }
+  const rulesOk = favoriteRules?.ok === true && notificationRules?.ok === true;
+  if (favoriteRules || notificationRules) {
+    set('cf-functions', 'reglas-firestore', rulesOk,
+      `SDK Firestore autenticado · paths protegidos=${rulesOk ? 'permitidos' : 'no confirmados'}`,
+      rulesOk ? 200 : (favoriteRules?.status || notificationRules?.status || 0), { evidenceLevel: EVIDENCIA.LIVE_PRODUCTION });
   }
   const auditPassed = ciCheckPassed(currentEvidence, 'repositoryAudit');
   const deploymentPassed = ciCheckPassed(currentEvidence, 'cloudflarePages');

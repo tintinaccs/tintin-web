@@ -7,10 +7,11 @@
 // (system-health, admin-runtime-health). No inventa infraestructura de
 // monitoreo nueva: reutiliza lo que ya prueba conectividad real sin escribir
 // datos. Nada de lo que hace este módulo crea, actualiza ni borra documentos.
-import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260920-flow-connections-evidence-1';
-import { resolveState, isAttentionState } from './estado-flujo.js?v=tintin-20260920-flow-connections-evidence-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260920-flow-connections-evidence-1';
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
+import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260920-safe-live-probes-1';
+import { resolveState, isAttentionState } from './estado-flujo.js?v=tintin-20260920-safe-live-probes-1';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260920-safe-live-probes-1';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
+import { collection, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const CATEGORY_LABELS = {
   entrada: 'Entrada',
@@ -94,6 +95,32 @@ async function probeRenderedCart() {
   return ['cart', { ...route, hasCartDrawer }];
 }
 
+async function probeClientFirestoreRead(label, read) {
+  try {
+    const snapshot = await read();
+    return { label, ok: true, status: 200, count: snapshot.size };
+  } catch (error) {
+    const code = String(error?.code || '');
+    const status = /permission-denied|unauthenticated/i.test(code) ? 403 : 0;
+    return { label, ok: false, status, authRequired: status === 403, error: code || error?.message || 'fallo de Firestore' };
+  }
+}
+
+async function probeClientFirestoreRules(user) {
+  if (!user || !await appCheckReady) {
+    const unavailable = { ok: false, status: 0, authRequired: true, error: 'App Check o sesión no disponible' };
+    return { favorites: { label: 'Favoritos', ...unavailable }, notifications: { label: 'Notificaciones', ...unavailable } };
+  }
+  return {
+    favorites: probeClientFirestoreRead('Favoritos', () => getDocs(query(
+      collection(db, 'users', user.uid, 'favorites'), limit(1),
+    ))),
+    notifications: probeClientFirestoreRead('Notificaciones', () => getDocs(query(
+      collection(db, 'adminNotifications'), limit(1),
+    ))),
+  };
+}
+
 export function initConnectionsFlow({ role } = {}) {
   const root = document.getElementById('section-flujo-conexiones');
   if (!root || root.dataset.tfcMounted === '1') return;
@@ -114,9 +141,10 @@ export function initConnectionsFlow({ role } = {}) {
         <div class="adm-diagnostic-safety" role="note">
           <strong>Modo de solo lectura.</strong>
           "Revalidar" solo ejecuta lecturas GET de producción (<code>/api/health</code>,
-          <code>/api/system-health</code>, <code>/api/admin-runtime-health</code> y los headers de
-          <code>/admin.html</code>) y carga temporalmente la portada aislada para comprobar el panel de
-          carrito ya renderizado. Ningún botón de este panel invoca una mutación de negocio ni
+          <code>/api/system-health</code>, <code>/api/admin-runtime-health</code>, los endpoints de lectura
+          de participación y los headers de <code>/admin.html</code>). También hace dos lecturas mínimas con
+          el SDK de Firestore para comprobar Rules ya desplegadas y carga temporalmente la portada aislada
+          para comprobar el panel de carrito ya renderizado. Ningún botón de este panel invoca una mutación de negocio ni
           crea, actualiza ni elimina pedidos, productos ni datos reales.
         </div>
         <div class="tfc-meta">
@@ -324,10 +352,13 @@ export function initConnectionsFlow({ role } = {}) {
       } else {
         errors.push('No hay una sesión de Super Admin para probes protegidos.');
       }
-      const [systemHealth, adminHealth, masterDiagnostics, pageProbe, ...routeProbes] = await Promise.all([
+      const [systemHealth, adminHealth, masterDiagnostics, favoriteApi, notificationApi, firestoreRules, pageProbe, ...routeProbes] = await Promise.all([
         user ? readJson('/api/system-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/admin-runtime-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/master-diagnostics', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
+        user ? readJson('/api/engagement?action=ownFavorite&productId=__tfc_health_probe__', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
+        user ? readJson('/api/notifications?action=health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
+        probeClientFirestoreRules(user),
         fetch('/admin.html', { credentials: 'same-origin', cache: 'no-store' }).then(response => ({
           status: response.status,
           csp: Boolean(response.headers.get('content-security-policy')),
@@ -358,16 +389,17 @@ export function initConnectionsFlow({ role } = {}) {
       const checkedAt = new Date().toISOString();
       const routeProbeMap = Object.fromEntries(routeProbes);
       liveState.checkedAt = checkedAt;
-      liveState.endpointStatus = { health: publicHealth.status, systemHealth: systemHealth.status, adminHealth: adminHealth.status, masterDiagnostics: masterDiagnostics.status, adminPage: pageProbe.status };
+      liveState.endpointStatus = { health: publicHealth.status, systemHealth: systemHealth.status, adminHealth: adminHealth.status, masterDiagnostics: masterDiagnostics.status, favoriteApi: favoriteApi.status, notificationApi: notificationApi.status, adminPage: pageProbe.status };
       liveState.byId = buildLiveChecks({
         publicHealth,
         systemHealth,
         adminHealth: { ...adminHealth, checks: adminHealth.body?.checks },
         headers: pageProbe,
         routeProbes: routeProbeMap,
+        protectedProbes: { favoriteApi, notificationApi, firestoreRules },
         currentEvidence: masterDiagnostics.body?.currentEvidence,
       }, checkedAt);
-      liveState.byEdgeId = buildLiveEdges({ publicHealth, systemHealth, headers: pageProbe, currentEvidence: masterDiagnostics.body?.currentEvidence }, checkedAt);
+      liveState.byEdgeId = buildLiveEdges({ publicHealth, systemHealth, headers: pageProbe, protectedProbes: { favoriteApi, notificationApi, firestoreRules }, currentEvidence: masterDiagnostics.body?.currentEvidence }, checkedAt);
       liveTimestampEl.textContent = `Última verificación en vivo: ${checkedAt} (${Object.keys(liveState.byId).length} nodos y ${Object.keys(liveState.byEdgeId).length} conexiones con probe).`;
 
       if (errors.length) {
