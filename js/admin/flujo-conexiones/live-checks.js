@@ -6,14 +6,24 @@
 // nodo/conexión que estado-flujo.js puede resolver. No depende del DOM ni
 // de Firebase: solo de los cuerpos JSON ya obtenidos, para que sea probable
 // con node --test sin red ni navegador.
-import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20260918-flow-connections-cache-fix-1';
-import { EVIDENCIA } from './estado-flujo.js?v=tintin-20260918-flow-connections-cache-fix-1';
+import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20260920-flow-connections-evidence-1';
+import { EVIDENCIA } from './estado-flujo.js?v=tintin-20260920-flow-connections-evidence-1';
 
 function edgeIdFor(from, to) {
   return EDGES.find(edge => edge.from === from && edge.to === to)?.id || '';
 }
 
-export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, headers, routeProbes = {} }, checkedAt) {
+function ciCheckPassed(currentEvidence, key) {
+  return Boolean(currentEvidence?.commit && currentEvidence?.checks?.[key]?.state === 'PASS');
+}
+
+function ciNote(currentEvidence, key, label) {
+  const check = currentEvidence?.checks?.[key] || {};
+  const commit = String(currentEvidence?.commit || '').slice(0, 10) || 'commit desconocido';
+  return `GitHub CI · ${label}=${check.state || 'NOT_VERIFIED'} · commit ${commit}`;
+}
+
+export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, headers, routeProbes = {}, currentEvidence }, checkedAt) {
   const out = {};
   const setFrom = (id, ok, note, options = {}) => {
     if (typeof ok !== 'boolean') return;
@@ -87,6 +97,26 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
     setFrom('csp', headers.csp === true, `GET /admin.html · CSP ${headers.csp ? 'presente' : 'ausente'}`, { status: headers.status, promote: headers.csp === true, evidenceLevel: LP });
   }
 
+  // GitHub Actions y el deployment se validan contra el commit actual, no
+  // contra la última corrida histórica del Diagnóstico Maestro. Es evidencia
+  // CI verificable, distinta de un probe HTTP de producción.
+  const auditPassed = ciCheckPassed(currentEvidence, 'repositoryAudit');
+  const deploymentPassed = ciCheckPassed(currentEvidence, 'cloudflarePages');
+  if (currentEvidence?.commit) {
+    setFrom('github-actions', auditPassed, ciNote(currentEvidence, 'repositoryAudit', 'Repository audit'), {
+      promote: auditPassed,
+      evidenceLevel: EVIDENCIA.CI_VERIFIED,
+    });
+    setFrom('pruebas-automatizadas', auditPassed, ciNote(currentEvidence, 'repositoryAudit', 'suite automatizada'), {
+      promote: auditPassed,
+      evidenceLevel: EVIDENCIA.CI_VERIFIED,
+    });
+    setFrom('deployments', deploymentPassed, ciNote(currentEvidence, 'cloudflarePages', 'Cloudflare Pages'), {
+      promote: deploymentPassed,
+      evidenceLevel: EVIDENCIA.CI_VERIFIED,
+    });
+  }
+
   // Las rutas públicas se prueban como navegación real. No se consideran
   // equivalentes a una escritura ni se aceptan redirecciones silenciosas.
   Object.entries({
@@ -110,12 +140,17 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
   return out;
 }
 
-export function buildLiveEdges({ publicHealth, systemHealth, headers }, checkedAt) {
+export function buildLiveEdges({ publicHealth, systemHealth, headers, currentEvidence }, checkedAt) {
   const out = {};
-  const set = (from, to, ok, note, status = 200) => {
+  const set = (from, to, ok, note, status = 200, options = {}) => {
     if (typeof ok !== 'boolean') return;
     out[edgeIdFor(from, to)] = {
-      ok, note, status, promote: ok, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION, checkedAt,
+      ok,
+      note,
+      status,
+      promote: ok,
+      evidenceLevel: options.evidenceLevel || EVIDENCIA.LIVE_PRODUCTION,
+      checkedAt,
     };
   };
   const publicOk = publicHealth?.status === 200 && publicHealth.body?.ok === true;
@@ -136,6 +171,18 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers }, checkedA
   if (report?.integrations?.sheets !== undefined) {
     set('apps-script', 'google-sheets', report.integrations.sheets === true,
       'GET /api/system-health · protocolo Sheets', systemHealth.status);
+  }
+  const auditPassed = ciCheckPassed(currentEvidence, 'repositoryAudit');
+  const deploymentPassed = ciCheckPassed(currentEvidence, 'cloudflarePages');
+  if (currentEvidence?.commit) {
+    set('github-actions', 'pruebas-automatizadas', auditPassed,
+      ciNote(currentEvidence, 'repositoryAudit', 'suite automatizada'), 200, {
+        evidenceLevel: EVIDENCIA.CI_VERIFIED,
+      });
+    set('github-actions', 'deployments', auditPassed && deploymentPassed,
+      `${ciNote(currentEvidence, 'repositoryAudit', 'Repository audit')} · ${ciNote(currentEvidence, 'cloudflarePages', 'Cloudflare Pages')}`,
+      200,
+      { evidenceLevel: EVIDENCIA.CI_VERIFIED });
   }
   return out;
 }

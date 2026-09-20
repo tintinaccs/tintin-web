@@ -7,9 +7,9 @@
 // (system-health, admin-runtime-health). No inventa infraestructura de
 // monitoreo nueva: reutiliza lo que ya prueba conectividad real sin escribir
 // datos. Nada de lo que hace este módulo crea, actualiza ni borra documentos.
-import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260918-flow-connections-cache-fix-1';
-import { resolveState, isAttentionState } from './estado-flujo.js?v=tintin-20260918-flow-connections-cache-fix-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260918-flow-connections-green-evidence-1';
+import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260920-flow-connections-evidence-1';
+import { resolveState, isAttentionState } from './estado-flujo.js?v=tintin-20260920-flow-connections-evidence-1';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260920-flow-connections-evidence-1';
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260919-auth-persistence-authoritative-restore-1';
 
 const CATEGORY_LABELS = {
@@ -61,6 +61,39 @@ function evidenceHtml(evidence) {
   }).join('');
 }
 
+async function probeRenderedCart() {
+  const routeProbe = fetch('/', { credentials: 'same-origin', cache: 'no-store' })
+    .then(async response => {
+      await response.body?.cancel?.();
+      return { path: '/', status: response.status, ok: response.ok };
+    })
+    .catch(error => ({ path: '/', status: 0, ok: false, error: error?.message || 'fallo de red' }));
+
+  const drawerProbe = new Promise(resolve => {
+    const frame = document.createElement('iframe');
+    let settled = false;
+    const cleanup = value => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeoutId);
+      frame.remove();
+      resolve(value);
+    };
+    const timeoutId = window.setTimeout(() => cleanup(false), 10_000);
+    frame.hidden = true;
+    frame.tabIndex = -1;
+    frame.setAttribute('aria-hidden', 'true');
+    frame.addEventListener('load', () => {
+      cleanup(Boolean(frame.contentDocument?.getElementById('cart-drawer')));
+    }, { once: true });
+    frame.src = `/?tfc-cart-probe=${Date.now()}`;
+    document.body.append(frame);
+  });
+
+  const [route, hasCartDrawer] = await Promise.all([routeProbe, drawerProbe]);
+  return ['cart', { ...route, hasCartDrawer }];
+}
+
 export function initConnectionsFlow({ role } = {}) {
   const root = document.getElementById('section-flujo-conexiones');
   if (!root || root.dataset.tfcMounted === '1') return;
@@ -82,7 +115,8 @@ export function initConnectionsFlow({ role } = {}) {
           <strong>Modo de solo lectura.</strong>
           "Revalidar" solo ejecuta lecturas GET de producción (<code>/api/health</code>,
           <code>/api/system-health</code>, <code>/api/admin-runtime-health</code> y los headers de
-          <code>/admin.html</code>). Ningún botón de este panel
+          <code>/admin.html</code>) y carga temporalmente la portada aislada para comprobar el panel de
+          carrito ya renderizado. Ningún botón de este panel invoca una mutación de negocio ni
           crea, actualiza ni elimina pedidos, productos ni datos reales.
         </div>
         <div class="tfc-meta">
@@ -290,9 +324,10 @@ export function initConnectionsFlow({ role } = {}) {
       } else {
         errors.push('No hay una sesión de Super Admin para probes protegidos.');
       }
-      const [systemHealth, adminHealth, pageProbe, ...routeProbes] = await Promise.all([
+      const [systemHealth, adminHealth, masterDiagnostics, pageProbe, ...routeProbes] = await Promise.all([
         user ? readJson('/api/system-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/admin-runtime-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
+        user ? readJson('/api/master-diagnostics', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         fetch('/admin.html', { credentials: 'same-origin', cache: 'no-store' }).then(response => ({
           status: response.status,
           csp: Boolean(response.headers.get('content-security-policy')),
@@ -303,21 +338,19 @@ export function initConnectionsFlow({ role } = {}) {
           ['profile', '/perfil'],
           ['admin', '/admin'],
           ['checkout', '/checkout'],
-          ['cart', '/'],
         ].map(async ([key, path]) => {
           try {
             const response = await fetch(path, { credentials: 'same-origin', cache: 'no-store' });
-            const body = key === 'cart' ? await response.text() : '';
             return [key, {
               path,
               status: response.status,
               ok: response.ok,
-              hasCartDrawer: key === 'cart' && /id=["']cart-drawer["']/.test(body),
             }];
           } catch (error) {
             return [key, { path, status: 0, ok: false, error: error?.message || 'fallo de red' }];
           }
         }),
+        probeRenderedCart(),
       ]);
       if (user && (!systemHealth.ok || systemHealth.body?.ok !== true)) errors.push(`/api/system-health respondió ${systemHealth.status || 'sin respuesta'}`);
       if (user && (!adminHealth.ok || adminHealth.body?.ok !== true)) errors.push(`/api/admin-runtime-health respondió ${adminHealth.status || 'sin respuesta'}`);
@@ -325,15 +358,16 @@ export function initConnectionsFlow({ role } = {}) {
       const checkedAt = new Date().toISOString();
       const routeProbeMap = Object.fromEntries(routeProbes);
       liveState.checkedAt = checkedAt;
-      liveState.endpointStatus = { health: publicHealth.status, systemHealth: systemHealth.status, adminHealth: adminHealth.status, adminPage: pageProbe.status };
+      liveState.endpointStatus = { health: publicHealth.status, systemHealth: systemHealth.status, adminHealth: adminHealth.status, masterDiagnostics: masterDiagnostics.status, adminPage: pageProbe.status };
       liveState.byId = buildLiveChecks({
         publicHealth,
         systemHealth,
         adminHealth: { ...adminHealth, checks: adminHealth.body?.checks },
         headers: pageProbe,
         routeProbes: routeProbeMap,
+        currentEvidence: masterDiagnostics.body?.currentEvidence,
       }, checkedAt);
-      liveState.byEdgeId = buildLiveEdges({ publicHealth, systemHealth, headers: pageProbe }, checkedAt);
+      liveState.byEdgeId = buildLiveEdges({ publicHealth, systemHealth, headers: pageProbe, currentEvidence: masterDiagnostics.body?.currentEvidence }, checkedAt);
       liveTimestampEl.textContent = `Última verificación en vivo: ${checkedAt} (${Object.keys(liveState.byId).length} nodos y ${Object.keys(liveState.byEdgeId).length} conexiones con probe).`;
 
       if (errors.length) {

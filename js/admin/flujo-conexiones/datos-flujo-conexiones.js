@@ -113,7 +113,7 @@ const RAW_NODES = [
   { id: 'csp', label: 'CSP', category: 'infra', state: ESTADOS.PROD,
     evidence: [{ file: 'functions/_middleware.js', note: 'CSP dinámico por ruta desde config/csp-runtime.js' }, { file: '_headers', note: 'Fallback corto solo para estático/404' }] },
   { id: 'github-actions', label: 'GitHub Actions', category: 'infra', state: ESTADOS.PROD,
-    evidence: [{ file: '.github/workflows/auditar-tintin.yml', note: 'Gate único de PR' }] },
+    evidence: [{ file: '.github/workflows/auditar-tintin.yml', note: 'Gate de integración para pull requests y main' }] },
   { id: 'deployments', label: 'Deployments', category: 'infra', state: ESTADOS.DOCUMENTADO,
     evidence: [{ file: 'docs/arquitectura-operativa-canonica.md' }], notes: 'Cloudflare Pages despliega desde GitHub; sin verificación de un deploy real ejecutado en esta sesión.' },
   { id: 'pruebas-automatizadas', label: 'Pruebas automatizadas', category: 'infra', state: ESTADOS.NO_VERIFICADO,
