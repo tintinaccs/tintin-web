@@ -1,4 +1,4 @@
-import { db } from '../../core/firebase/firebase.js?v=tintin-20260920-auth-persistence-all-users-1';
+import { db } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
 import {
   collection,
   getDocs,

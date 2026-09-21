@@ -5,7 +5,7 @@
  * La configuración completa permanece en settings/general y no se entrega
  * cuando la tienda está cerrada.
  */
-import { db } from '../firebase/firebase.js?v=tintin-20260920-auth-persistence-all-users-1';
+import { db } from '../firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
 import {
   doc,
   getDoc

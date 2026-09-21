@@ -51,7 +51,11 @@ export function createSessionStateMachine() {
       return next(AUTH_STATES.UNAUTHENTICATED, null, reason, null, source);
     },
     authError(error, source = 'auth-restore-error') {
-      return next(AUTH_STATES.UNKNOWN, null, 'AUTH_RESTORE_ERROR', error, source);
+      // Un fallo de almacenamiento/restauración no prueba que exista una
+      // cuenta. Resolver como visitante permite que el panel redirija al
+      // ingreso y que la tienda pública continúe; UNKNOWN no debe bloquear
+      // toda la aplicación ni presentarse como una cuenta perdida.
+      return next(AUTH_STATES.UNAUTHENTICATED, null, 'AUTH_RESTORE_FALLBACK', error, source);
     },
   };
 }

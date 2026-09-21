@@ -7,8 +7,8 @@
  *
  * Ante cualquier error queda bloqueada. Nunca supone que la tienda está abierta.
  */
-import { auth, db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260920-auth-persistence-all-users-1';
-import { AUTH_STATES, subscribeSession } from '../auth/coordinador-sesion.js?v=tintin-20260920-auth-handoff-header-1';
+import { auth, db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
+import { AUTH_STATES, subscribeSession } from '../auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3';
 import {
   doc,
   onSnapshot
