@@ -2,7 +2,7 @@ import { versionedSiteAsset } from './configuracion.js?v=tintin-20260921-documen
 
 const HEADER_DESKTOP_VERSION = 'tintin-20260824-header-responsive-sync-1';
 const HEADER_RESPONSIVE_VERSION = 'tintin-20260916-z-index-fallback-1';
-const NAVIGATION_SHARED_VERSION = 'tintin-20260825-responsive-css-budget-2';
+const NAVIGATION_SHARED_VERSION = 'tintin-20260921-document-navigation-no-view-transition-css-1';
 const NAVIGATION_PANEL_VERSION = 'tintin-20260916-surface-z-index-fallback-1';
 const NAVIGATION_COHERENCE_VERSION = 'tintin-20260915-shell-atomic-1';
 const MOBILE_SOLID_VERSION = 'tintin-20260817-cls-desktop-stable-3';

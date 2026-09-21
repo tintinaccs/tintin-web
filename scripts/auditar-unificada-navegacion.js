@@ -65,7 +65,8 @@ check(
   navigation.includes('const navigateSafely = navigate =>') &&
     navigation.includes('navigate();') &&
     navigation.includes('location.assign') &&
-    !navigation.includes('document.startViewTransition'),
+    !navigation.includes('document.startViewTransition') &&
+    !styles.includes('@view-transition { navigation: auto; }'),
   'navegación no tiene View Transition segura con fallback'
 );
 

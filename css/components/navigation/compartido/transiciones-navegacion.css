@@ -1,6 +1,7 @@
 /* Header surfaces bundle 2026-08-27: shared cache invalidation marker. */
-/* Shared navigation transitions. Device layout lives in its own component. */
-@view-transition { navigation: auto; }
+/* Shared navigation layout. Document View Transitions are deliberately not
+   opted in here: Chromium can abort a cross-document transition after a
+   regular location.assign() and emit a console InvalidStateError. */
 ::view-transition-old(root) { animation: tt-page-out var(--motion-fast,160ms) ease both; }
 ::view-transition-new(root) { animation: tt-page-in var(--motion-normal,280ms) var(--ease-tintin,ease) both; }
 @keyframes tt-page-out { to { opacity: 0; transform: translateY(-4px); } }
