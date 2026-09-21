@@ -33,7 +33,7 @@ function ciNote(currentEvidence, key, label) {
   return `GitHub CI · ${label}=${check.state || 'NOT_VERIFIED'} · commit ${commit}`;
 }
 
-export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, headers, routeProbes = {}, protectedProbes = {}, sessionProbe = {}, currentEvidence }, checkedAt) {
+export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, headers, routeProbes = {}, protectedProbes = {}, sessionProbe = {}, paypalConfig, currentEvidence }, checkedAt) {
   const out = {};
   const setFrom = (id, ok, note, options = {}) => {
     if (typeof ok !== 'boolean') return;
@@ -117,6 +117,13 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
       'GET /api/system-health · protocolo de sincronización confirmado', { status: systemHealth.status, promote: integrations.sheets === true, evidenceLevel: LP });
     if (report.deployment?.commitSha) {
       setFrom('deployments', true, `GET /api/system-health · commit ${report.deployment.commitSha.slice(0, 10)} (${report.deployment.branch || 'branch desconocida'})`, { promote: true, evidenceLevel: LP });
+    }
+    const paypalOk = paypalConfig?.status === 200 && paypalConfig.body?.enabled === true;
+    const externalServicesOk = integrations.resend === true && integrations.cloudinary === true && paypalOk;
+    if (externalServicesOk) {
+      setFrom('servicios-externos', true,
+        'GET /api/system-health + GET /api/paypal-config · Resend, Cloudinary y PayPal configurados',
+        { status: 200, promote: true, evidenceLevel: LP });
     }
   }
   if (headers) {
@@ -203,12 +210,35 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
         status: probe.status,
         promote: contractOk,
         evidenceLevel: LP,
-      });
+    });
   });
+  const loginProbe = routeProbes.login;
+  const loginPageOk = loginProbe?.ok === true && loginProbe.status >= 200 && loginProbe.status < 400;
+  if (loginProbe) {
+    setFrom('google-btn', loginPageOk && loginProbe.hasGoogleAuth === true,
+      `GET /login · Google popup + redirect ${loginProbe.hasGoogleAuth ? 'presentes' : 'no confirmados'}`,
+      { status: loginProbe.status, promote: loginPageOk && loginProbe.hasGoogleAuth === true, evidenceLevel: LP });
+    setFrom('login-codigo', loginPageOk && loginProbe.hasEmailOtp === true,
+      `GET /login · OTP por correo/usuario ${loginProbe.hasEmailOtp ? 'conectado a sus endpoints' : 'no confirmado'}`,
+      { status: loginProbe.status, promote: loginPageOk && loginProbe.hasEmailOtp === true, evidenceLevel: LP });
+    setFrom('redirect-result', loginPageOk && loginProbe.hasRedirectResult === true,
+      `GET /login · getRedirectResult ${loginProbe.hasRedirectResult ? 'presente' : 'no confirmado'}`,
+      { status: loginProbe.status, promote: loginPageOk && loginProbe.hasRedirectResult === true, evidenceLevel: LP });
+  }
+  if (sessionProbe.role === true && routeProbes.admin?.ok === true) {
+    setFrom('admin-guard', true,
+      'GET /admin + sesión actual · rol superadmin autorizado por el guard del panel',
+      { status: routeProbes.admin.status, promote: true, evidenceLevel: LP });
+  }
+  if (sessionProbe.profileComplete === true) {
+    setFrom('ultimos-datos', true,
+      'SDK Firestore + contrato de onboarding · perfil actual no requiere Últimos datos',
+      { status: sessionProbe.status || 200, promote: true, evidenceLevel: LP });
+  }
   return out;
 }
 
-export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedProbes = {}, sessionProbe = {}, currentEvidence }, checkedAt) {
+export function buildLiveEdges({ publicHealth, systemHealth, headers, routeProbes = {}, protectedProbes = {}, sessionProbe = {}, paypalConfig, currentEvidence }, checkedAt) {
   const out = {};
   const set = (from, to, ok, note, status = 200, options = {}) => {
     if (typeof ok !== 'boolean') return;
@@ -245,6 +275,26 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
       `Destino actual · ${sessionProbe.role === true ? 'Super Panel autorizado' : 'no confirmado'}`,
       sessionProbe.status || 0);
   }
+  const loginProbe = routeProbes.login;
+  const loginPageOk = loginProbe?.ok === true && loginProbe.status >= 200 && loginProbe.status < 400;
+  if (loginProbe) {
+    set('entrada-login', 'google-btn', loginPageOk && loginProbe.hasGoogleAuth === true,
+      `GET /login · Google ${loginProbe.hasGoogleAuth ? 'conectado' : 'no confirmado'}`, loginProbe.status);
+    set('entrada-login', 'login-codigo', loginPageOk && loginProbe.hasEmailOtp === true,
+      `GET /login · OTP ${loginProbe.hasEmailOtp ? 'conectado' : 'no confirmado'}`, loginProbe.status);
+    set('login-codigo', 'firebase-auth', loginPageOk && loginProbe.hasEmailOtp === true,
+      `GET /login · endpoint OTP ${loginProbe.hasEmailOtp ? 'presente' : 'no confirmado'}`, loginProbe.status);
+    set('firebase-auth', 'redirect-result', loginPageOk && loginProbe.hasRedirectResult === true,
+      `GET /login · redirect ${loginProbe.hasRedirectResult ? 'resuelto por contrato' : 'no confirmado'}`, loginProbe.status);
+  }
+  if (sessionProbe.role === true && routeProbes.admin?.ok === true) {
+    set('super-panel', 'admin-guard', true,
+      'GET /admin + sesión actual · guard autorizado para superadmin', routeProbes.admin.status);
+  }
+  if (sessionProbe.profileComplete === true) {
+    set('ultimos-datos', 'perfil', true,
+      'SDK Firestore + contrato de onboarding · perfil completo', sessionProbe.status || 200);
+  }
   set('cf-functions', 'csp', headers ? headers.csp === true : undefined, `GET /admin.html · CSP ${headers?.csp ? 'presente' : 'ausente'}`, headers?.status);
   const report = systemHealth?.body?.report;
   if (report?.integrations?.appsScript) {
@@ -255,6 +305,14 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
   if (report?.integrations?.sheets !== undefined) {
     set('apps-script', 'google-sheets', report.integrations.sheets === true,
       'GET /api/system-health · protocolo Sheets', systemHealth.status);
+  }
+  const externalServicesOk = report?.integrations?.resend === true
+    && report?.integrations?.cloudinary === true
+    && paypalConfig?.status === 200
+    && paypalConfig.body?.enabled === true;
+  if (externalServicesOk) {
+    set('apis-internas', 'servicios-externos', true,
+      'GET /api/system-health + GET /api/paypal-config · servicios externos configurados', 200);
   }
   const favoriteApi = protectedProbes.favoriteApi;
   const notificationApi = protectedProbes.notificationApi;

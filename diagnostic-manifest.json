@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "3cc83298b3497e86ee1e608765144625a7f4a93bd390c941bfefc0dc1e760e42",
+  "sourceFingerprint": "6491247cddb06b2cf0b460ac1df5222a95e59776681efa0e50100b889b6c86f9",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 859,
-    "textFiles": 818,
-    "totalBytes": 16965337,
+    "files": 860,
+    "textFiles": 819,
+    "totalBytes": 16974900,
     "pages": 19,
     "modules": 584
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 191293,
-      "sha256": "73e6bac058e98fab9b81d267b3aa6ffb5218df22ccf05cf34284c534e9fb3cc7",
+      "bytes": 191288,
+      "sha256": "04dca7bf95730534341a9df6605e3aa6525ef1866a9e91bcc1ec1892861945d2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2114,7 +2114,7 @@
           "line": 8
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260921-auth-session-never-unknown-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20260921-login-contract-probes-1",
           "target": "js/admin/admin-app.js",
           "line": 2004
         },
@@ -2363,7 +2363,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260921-auth-session-never-unknown-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20260921-login-contract-probes-1",
           "target": "js/admin/admin-app.js",
           "line": 2004,
           "exists": true
@@ -20136,7 +20136,7 @@
     {
       "path": "js/admin/admin-app.js",
       "bytes": 437656,
-      "sha256": "1535bd76fef623dd8050e14f609de1690c6af9529027445aa53f1ac3d55afd9d",
+      "sha256": "040b21d621fa13814cb9476cd7f836d2d2c07c006edcce20f29c490ac512b56d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20263,7 +20263,7 @@
           "line": 32
         },
         {
-          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260921-cart-probe-visibility-1",
+          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260921-login-contract-probes-1",
           "target": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
           "dynamic": false,
           "line": 33
@@ -20783,8 +20783,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 23906,
-      "sha256": "1958b690ddd25973476c48521f85c63a2b9b3c7e04cce2216a1ae52e66923d35",
+      "bytes": 25285,
+      "sha256": "6ab62f8aceed2ccb3fc046a73d77016cbc068b2e8d8d84737c470b0fd8f1665c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20803,7 +20803,7 @@
           "line": 11
         },
         {
-          "raw": "./live-checks.js?v=tintin-20260921-session-evidence-1",
+          "raw": "./live-checks.js?v=tintin-20260921-login-contract-probes-1",
           "target": "js/admin/flujo-conexiones/live-checks.js",
           "dynamic": false,
           "line": 12
@@ -20819,6 +20819,12 @@
           "target": null,
           "dynamic": false,
           "line": 14
+        },
+        {
+          "raw": "../../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260912-post-login-profile-1",
+          "target": "js/pages/profile/configuracion-inicial-perfil.mjs",
+          "dynamic": false,
+          "line": 15
         }
       ],
       "endpoints": [
@@ -20830,8 +20836,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
-      "bytes": 17997,
-      "sha256": "328765eca5b4fa4743d5ca126bc5273c4a89e78169bb9d864e6312abdd534c6f",
+      "bytes": 21872,
+      "sha256": "982e1e14a03682ef8caed9f65b1529a987670f00214752d89e790010153da320",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27807,8 +27813,8 @@
     },
     {
       "path": "scripts/auditar-integraciones-canonicas.mjs",
-      "bytes": 8514,
-      "sha256": "5a2e0ef3973812c5ad262c3769731a1c1223ed6a796e6e5f001e49d8608de62f",
+      "bytes": 8681,
+      "sha256": "62dc1fdebb4c74a9a9d449439597071754ae408111fa8ff9fabb8815c40715ec",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31108,8 +31114,8 @@
     },
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
-      "bytes": 12156,
-      "sha256": "f319e3b6e2c29b2b137d0e609905917a5184220d6e0451b81389b6a674e2f0ab",
+      "bytes": 14311,
+      "sha256": "eaca27ee07a2e5312c045eac3def53677e34d8a57e6a9db71aa72769dac96404",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31149,7 +31155,7 @@
           "raw": "node:fs",
           "target": null,
           "dynamic": true,
-          "line": 222
+          "line": 259
         }
       ],
       "endpoints": []
@@ -33294,6 +33300,12 @@
       "sha256": "a828b9ee2817103863e11f21f5532749046a81b2081b5b48d13d801bdc12a163"
     },
     {
+      "path": ".github/workflows/regenerar-manifiesto-dependabot.yml",
+      "extension": ".yml",
+      "bytes": 1992,
+      "sha256": "66631b9e73cb8e4d402c4f1ffd5225dac3e516176a6235796501af7f3fc0875c"
+    },
+    {
       "path": ".github/workflows/respaldo-repositorio.yml",
       "extension": ".yml",
       "bytes": 1171,
@@ -33434,8 +33446,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 191293,
-      "sha256": "73e6bac058e98fab9b81d267b3aa6ffb5218df22ccf05cf34284c534e9fb3cc7"
+      "bytes": 191288,
+      "sha256": "04dca7bf95730534341a9df6605e3aa6525ef1866a9e91bcc1ec1892861945d2"
     },
     {
       "path": "apple-touch-icon.png",
@@ -35145,7 +35157,7 @@
       "path": "js/admin/admin-app.js",
       "extension": ".js",
       "bytes": 437656,
-      "sha256": "1535bd76fef623dd8050e14f609de1690c6af9529027445aa53f1ac3d55afd9d"
+      "sha256": "040b21d621fa13814cb9476cd7f836d2d2c07c006edcce20f29c490ac512b56d"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -35234,14 +35246,14 @@
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 23906,
-      "sha256": "1958b690ddd25973476c48521f85c63a2b9b3c7e04cce2216a1ae52e66923d35"
+      "bytes": 25285,
+      "sha256": "6ab62f8aceed2ccb3fc046a73d77016cbc068b2e8d8d84737c470b0fd8f1665c"
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
       "extension": ".js",
-      "bytes": 17997,
-      "sha256": "328765eca5b4fa4743d5ca126bc5273c4a89e78169bb9d864e6312abdd534c6f"
+      "bytes": 21872,
+      "sha256": "982e1e14a03682ef8caed9f65b1529a987670f00214752d89e790010153da320"
     },
     {
       "path": "js/admin/flujo-decisiones/flujo-decisiones-admin.js",
@@ -37232,8 +37244,8 @@
     {
       "path": "scripts/auditar-integraciones-canonicas.mjs",
       "extension": ".mjs",
-      "bytes": 8514,
-      "sha256": "5a2e0ef3973812c5ad262c3769731a1c1223ed6a796e6e5f001e49d8608de62f"
+      "bytes": 8681,
+      "sha256": "62dc1fdebb4c74a9a9d449439597071754ae408111fa8ff9fabb8815c40715ec"
     },
     {
       "path": "scripts/auditar-integral-plataforma.js",
@@ -37994,8 +38006,8 @@
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
       "extension": ".mjs",
-      "bytes": 12156,
-      "sha256": "f319e3b6e2c29b2b137d0e609905917a5184220d6e0451b81389b6a674e2f0ab"
+      "bytes": 14311,
+      "sha256": "eaca27ee07a2e5312c045eac3def53677e34d8a57e6a9db71aa72769dac96404"
     },
     {
       "path": "tests/functions/page-loader-route.test.mjs",
@@ -38711,7 +38723,7 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 412,
+      "line": 417,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
@@ -40097,14 +40109,20 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 66,
+      "line": 67,
       "target": "/",
       "method": "GET"
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 412,
+      "line": 417,
       "target": "/admin.html",
+      "method": "GET"
+    },
+    {
+      "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
+      "line": 440,
+      "target": "/login",
       "method": "GET"
     },
     {
@@ -40225,7 +40243,7 @@
         "references": [
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 133,
+            "line": 134,
             "operation": "collection"
           },
           {
@@ -41455,12 +41473,12 @@
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 130,
+            "line": 131,
             "operation": "collection"
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 150,
+            "line": 151,
             "operation": "doc"
           },
           {

@@ -103,8 +103,9 @@ const sheetsScheduler = read('.github/workflows/drenar-cola-sync-catalogo.yml');
 assert(!fs.existsSync(path.join(root, 'scripts/drenar-cola-sync-catalogo.mjs')), 'Sheets: no debe existir un drenador local alternativo con secretos estáticos.');
 assert(/id-token:\s*write/.test(sheetsScheduler) && /catalog-sheet-sync-drain/.test(sheetsScheduler), 'Sheets: el scheduler debe usar OIDC y el endpoint Cloudflare canónico.');
 assert(!/FIREBASE_SERVICE_ACCOUNT_(?:JSON|KEY)|SHEETS_ENGAGEMENT_SECRET/.test(sheetsScheduler), 'Sheets: el scheduler no debe transportar secretos estáticos.');
-assert(workflows.length <= 12, `GitHub Actions: hay ${workflows.length} workflows; el presupuesto de desfragmentación es 12.`);
-assert(prWorkflows.length === 1 && prWorkflows[0] === 'auditar-tintin.yml', `GitHub Actions: solo auditar-tintin.yml debe dispararse en PR; encontrados: ${prWorkflows.join(', ') || 'ninguno'}.`);
+assert(workflows.length <= 13, `GitHub Actions: hay ${workflows.length} workflows; el presupuesto de desfragmentación es 13.`);
+const expectedPrWorkflows = new Set(['auditar-tintin.yml', 'regenerar-manifiesto-dependabot.yml']);
+assert(prWorkflows.length === expectedPrWorkflows.size && prWorkflows.every(name => expectedPrWorkflows.has(name)), `GitHub Actions: los workflows de PR esperados son ${[...expectedPrWorkflows].join(', ')}; encontrados: ${prWorkflows.join(', ') || 'ninguno'}.`);
 
 const workflowText = workflows.map(name => read(`.github/workflows/${name}`)).join('\n');
 assert(!/firebase\s+deploy[^\n]*--only\s+functions/i.test(workflowText), 'Arquitectura: no debe existir deploy activo de Firebase Functions.');

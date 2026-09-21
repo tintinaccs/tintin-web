@@ -87,6 +87,43 @@ test('una ruta pública comprobada en producción promueve su nodo de destino', 
   assert.equal(resolveState(login, live['entrada-login'], ESTADOS), ESTADOS.PROD);
 });
 
+test('el probe de login confirma Google, OTP, redirect, guard y perfil sin mutaciones', () => {
+  const routeProbes = {
+    login: {
+      path: '/login', status: 200, ok: true,
+      hasGoogleAuth: true, hasEmailOtp: true, hasRedirectResult: true,
+    },
+    admin: { path: '/admin', status: 200, ok: true },
+  };
+  const sessionProbe = {
+    authenticated: true, token: true, role: true, profile: true,
+    profileComplete: true, status: 200,
+  };
+  const live = buildLiveChecks({ routeProbes, sessionProbe }, '2026-09-21T00:00:00.000Z');
+  for (const id of ['google-btn', 'login-codigo', 'redirect-result', 'admin-guard', 'ultimos-datos']) {
+    const node = NODES.find(item => item.id === id);
+    assert.equal(resolveState(node, live[id], ESTADOS), ESTADOS.PROD, `${id} debe promoverse con el contrato live`);
+  }
+  const edges = buildLiveEdges({ routeProbes, sessionProbe }, '2026-09-21T00:00:00.000Z');
+  for (const edge of EDGES.filter(item => [
+    ['entrada-login', 'google-btn'], ['entrada-login', 'login-codigo'],
+    ['login-codigo', 'firebase-auth'], ['firebase-auth', 'redirect-result'],
+    ['super-panel', 'admin-guard'], ['ultimos-datos', 'perfil'],
+  ].some(([from, to]) => item.from === from && item.to === to))) {
+    assert.equal(resolveState(edge, edges[edge.id], ESTADOS), ESTADOS.PROD, `${edge.from} → ${edge.to} debe promoverse`);
+  }
+});
+
+test('servicios externos solo se promueven cuando las tres configuraciones están disponibles', () => {
+  const systemHealth = { status: 200, body: { report: { integrations: { resend: true, cloudinary: true } } } };
+  const paypalConfig = { status: 200, body: { enabled: true } };
+  const live = buildLiveChecks({ systemHealth, paypalConfig }, '2026-09-21T00:00:00.000Z');
+  const node = NODES.find(item => item.id === 'servicios-externos');
+  assert.equal(resolveState(node, live['servicios-externos'], ESTADOS), ESTADOS.PROD);
+  const notReady = buildLiveChecks({ systemHealth, paypalConfig: { status: 200, body: { enabled: false } } }, '2026-09-21T00:00:00.000Z');
+  assert.equal(notReady['servicios-externos'], undefined, 'PayPal deshabilitado no debe maquillarse como verde');
+});
+
 test('la sesión autenticada actual promueve solo Firebase, sesión, rol y perfil comprobados', () => {
   const sessionProbe = { authenticated: true, token: true, role: true, profile: true, status: 200 };
   const live = buildLiveChecks({ sessionProbe }, '2026-09-21T00:00:00.000Z');
