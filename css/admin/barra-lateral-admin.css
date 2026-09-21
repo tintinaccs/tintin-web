@@ -1,0 +1,279 @@
+/* Tintin — rail colapsable del Super Panel Admin.
+   Solo desktop/tablet (>=541px). Mobile conserva el shell existente. */
+
+@media (min-width: 541px) {
+  html[data-adm-sidebar="expanded"] {
+    --sidebar-w: 260px;
+  }
+
+  html[data-adm-sidebar="collapsed"] {
+    --sidebar-w: 72px;
+  }
+
+  .adm-sidebar,
+  .adm-main {
+    transition:
+      width .22s ease,
+      margin-left .22s ease,
+      transform .3s ease;
+  }
+
+  .adm-sidebar-rail-toggle {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 2;
+    width: 44px;
+    height: 44px;
+    display: inline-grid;
+    place-items: center;
+    padding: 0;
+    border: 1px solid var(--admin-color-border);
+    border-radius: 12px;
+    background: var(--admin-color-background-card);
+    color: var(--admin-color-text-title);
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+  }
+
+  .adm-sidebar-rail-toggle:hover {
+    background: var(--admin-color-background-hover, rgba(184, 76, 114, .08));
+  }
+
+  .adm-sidebar-rail-toggle:focus-visible {
+    outline: 3px solid var(--adm-accent);
+    outline-offset: 2px;
+  }
+
+  .adm-sidebar-rail-toggle svg {
+    width: 22px;
+    height: 22px;
+    transition: transform .2s ease;
+  }
+
+  html[data-adm-sidebar="collapsed"] .adm-sidebar-rail-toggle svg {
+    transform: rotate(180deg);
+  }
+
+  html[data-adm-sidebar="expanded"] .adm-sidebar-logo {
+    padding-right: 70px;
+  }
+
+  html[data-adm-sidebar="collapsed"] .adm-sidebar-logo {
+    min-height: 64px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  html[data-adm-sidebar="collapsed"] .adm-sidebar-logo-text,
+  html[data-adm-sidebar="collapsed"] .adm-sidebar-logo-sub {
+    display: none;
+  }
+
+  html[data-adm-sidebar="collapsed"] .adm-sidebar-rail-toggle {
+    top: 10px;
+    left: 12px;
+    right: auto;
+    width: 48px;
+    height: 44px;
+  }
+
+  html[data-adm-sidebar="collapsed"] .adm-user-info {
+    justify-content: center;
+    padding: 12px 6px;
+  }
+
+  html[data-adm-sidebar="collapsed"] .adm-user-info > div:not(.adm-user-avatar) {
+    display: none;
+  }
+
+  html[data-adm-sidebar="collapsed"] .adm-user-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  html[data-adm-sidebar="collapsed"] .adm-nav {
+    padding: 8px 0;
+  }
+
+  html[data-adm-sidebar="collapsed"] .adm-nav-divider {
+    display: block;
+    width: 36px;
+    margin: 8px auto;
+  }
+
+  html[data-adm-sidebar="collapsed"] .adm-nav-item {
+    position: relative;
+    width: 48px;
+    min-width: 48px;
+    max-width: 48px;
+    height: 48px;
+    min-height: 48px;
+    margin: 2px auto;
+    padding: 0;
+    gap: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    overflow: visible;
+    white-space: nowrap;
+    font-size: 0;
+    line-height: 1;
+    text-transform: none;
+    border-radius: 12px;
+  }
+
+  html[data-adm-sidebar="collapsed"] .adm-nav-item .adm-nav-icon {
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    font-size: 20px;
+  }
+
+  html[data-adm-sidebar="collapsed"] .adm-nav-item .adm-nav-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  html[data-adm-sidebar="collapsed"] .adm-nav-item.active,
+  html[data-adm-sidebar="collapsed"] .adm-nav-item[aria-current="page"] {
+    box-shadow: inset 3px 0 0 var(--adm-accent);
+  }
+
+  html[data-adm-sidebar="collapsed"] .adm-nav-item .adm-notification-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    line-height: 18px;
+    z-index: 1;
+  }
+
+  html[data-adm-sidebar="collapsed"] .adm-nav-item .adm-notification-badge[hidden] {
+    display: none;
+  }
+
+  html[data-adm-sidebar="collapsed"] .adm-nav-bottom {
+    padding: 8px 0 16px;
+  }
+
+  .adm-sidebar-tooltip {
+    position: fixed;
+    z-index: 260;
+    max-width: min(260px, calc(100vw - 100px));
+    padding: 9px 12px;
+    border: 1px solid var(--admin-color-border);
+    border-radius: 10px;
+    background: var(--admin-color-background-card);
+    color: var(--admin-color-text-title);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .16);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.3;
+    white-space: normal;
+    pointer-events: none;
+  }
+
+  .adm-sidebar-tooltip[hidden] {
+    display: none;
+  }
+}
+
+@media (min-width: 541px) and (max-width: 900px) {
+  html[data-adm-sidebar="expanded"] {
+    --sidebar-w: 240px;
+  }
+
+  html[data-adm-sidebar="expanded"] .adm-sidebar {
+    width: var(--sidebar-w);
+  }
+
+  html[data-adm-sidebar="expanded"] .adm-sidebar-logo {
+    display: block;
+    padding: 20px 70px 18px 20px;
+    text-align: left;
+  }
+
+  html[data-adm-sidebar="expanded"] .adm-sidebar-logo-text {
+    display: block;
+  }
+
+  html[data-adm-sidebar="expanded"] .adm-sidebar-logo-sub {
+    display: block;
+  }
+
+  html[data-adm-sidebar="expanded"] .adm-user-info {
+    justify-content: flex-start;
+    padding: 16px 20px;
+  }
+
+  html[data-adm-sidebar="expanded"] .adm-user-info .adm-user-name,
+  html[data-adm-sidebar="expanded"] .adm-user-info .adm-live-clock {
+    display: block;
+  }
+
+  html[data-adm-sidebar="expanded"] .adm-user-info .adm-user-role-badge {
+    display: inline-block;
+  }
+
+  html[data-adm-sidebar="expanded"] .adm-nav-divider {
+    display: block;
+    margin: 8px 16px;
+  }
+
+  html[data-adm-sidebar="expanded"] .adm-nav-item {
+    width: 100%;
+    max-width: 100%;
+    min-height: 44px;
+    padding: 11px 20px;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    text-align: left;
+    white-space: normal;
+    font-size: 13px;
+    line-height: 1.25;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+
+  html[data-adm-sidebar="expanded"] .adm-nav-icon {
+    width: 24px;
+    min-width: 24px;
+    height: 24px;
+  }
+
+  html[data-adm-sidebar="expanded"] .adm-nav-bottom {
+    padding: 12px 0 20px;
+  }
+}
+
+@media (max-width: 540px) {
+  .adm-sidebar-rail-toggle,
+  .adm-sidebar-tooltip {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (min-width: 541px) {
+  .adm-sidebar,
+  .adm-main,
+  .adm-sidebar-rail-toggle svg {
+    transition: none !important;
+  }
+}\n

@@ -7,6 +7,10 @@
     "version": "tintin-20260909-admin-shell-alignment-2",
     "sha256": "4821679cabbb1a0811a1fb6b0020c5e31734aa7cfa9fb6518898e02615e20575"
   },
+  "css/admin/barra-lateral-admin.css": {
+    "version": "tintin-20260921-superadmin-sidebar-rail-1",
+    "sha256": "7300ecd6f6ad4ad86574d557783348b58971d799c4dcb32e465d43473340d47e"
+  },
   "css/admin/diagnostico-maestro.css": {
     "version": "tintin-20260817-master-diagnostics-3",
     "sha256": "6735067cdec2721210b0f0cf3f6fac6766016022296bc3da071e2a0e411c485a"
@@ -246,6 +250,10 @@
   "js/admin/appearance/workspace-splitters.js": {
     "version": "tintin-20260813-apariencia-splitters-1",
     "sha256": "482f5dbc943a2aba11a1926e54670a155c3a7db732b5f2f385def7829e18ebfd"
+  },
+  "js/admin/barra-lateral-admin.js": {
+    "version": "tintin-20260921-superadmin-sidebar-rail-1",
+    "sha256": "eaf183871d36b8b03421308f403898b2c7e6bfe9fecd50e96064e859555c4a4d"
   },
   "js/admin/diagnostics/diagnostico-maestro-admin.js": {
     "version": "tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
@@ -907,4 +915,4 @@
     "version": "tintin-20260918-global-session-restore-2",
     "sha256": "f3d3c38a4d78b24ab32c10b6e1ce7cecbf59a648c98d91ff8c7c5e245f44d329"
   }
-}
+}\n

@@ -78,7 +78,7 @@
     "audit:admin-foundation": "node scripts/auditar-admin-fundamentos.js",
     "audit:products-media": "node scripts/auditar-admin-productos-multimedia.js",
     "audit:admin-orders": "node scripts/auditar-admin-pedidos.js",
-    "audit:admin-responsive": "node scripts/auditar-super-admin-responsive.mjs",
+    "audit:admin-responsive": "node scripts/auditar-super-admin-responsive.mjs",\n    "audit:admin-sidebar": "node scripts/auditar-superadmin-barra-lateral.mjs",
     "audit:users-roles": "node scripts/auditar-admin-usuarios-roles.js",
     "audit:content-appearance": "node scripts/auditar-admin-contenido-apariencia.js",
     "audit:email-messaging": "node scripts/auditar-admin-correo-mensajeria.js",

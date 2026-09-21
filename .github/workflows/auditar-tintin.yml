@@ -118,7 +118,7 @@ jobs:
           npm run test:phase10-a11y
           npm run test:phase11-seo
           npm run test:performance
-          npm run audit:canonical-viewports
+          npm run audit:canonical-viewports\n          npm run audit:admin-sidebar
           npm run audit:global-responsive-geometry
           npm run test:pages
           node scripts/auditar-legal-paginas.js
