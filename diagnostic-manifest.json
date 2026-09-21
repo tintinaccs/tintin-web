@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "f4a2c7c5e5966162b80de119a02e0a9bb60b9d1d826668bdd4499663451a0262",
+  "sourceFingerprint": "9c7eb0a7a6d8795c288f93af450ff2c1fa5089eb245ac15eb460ca4e61047718",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 859,
     "textFiles": 818,
-    "totalBytes": 16962367,
+    "totalBytes": 16964086,
     "pages": 19,
     "modules": 584
   },
@@ -22655,8 +22655,8 @@
     },
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
-      "bytes": 11916,
-      "sha256": "ffc0ccbb78aa9aaf3cf86217581ae6193fa5ef69658e4b5f387c6f937c33c8c5",
+      "bytes": 11926,
+      "sha256": "ddce83b392fa56f3b8427afd15d3f3ea8bab2684389d14cc07d41ca65c9abf66",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22669,7 +22669,7 @@
           "line": 1
         },
         {
-          "raw": "./configuracion.js?v=tintin-20260918-header-system-solid-surfaces-1",
+          "raw": "./configuracion.js?v=tintin-20260921-document-navigation-no-view-transition-1",
           "target": "js/components/navigation/compartido/configuracion.js",
           "dynamic": false,
           "line": 2
@@ -22713,8 +22713,8 @@
     },
     {
       "path": "js/components/navigation/compartido/configuracion.js",
-      "bytes": 730,
-      "sha256": "a5795ca625bed747d432a61d87088b6da83a09a12daa798d5a84fde45bc96149",
+      "bytes": 740,
+      "sha256": "9f08ffe5f3a4cd28f306a4d64507c6fff76519e8183cdf9b64182c960e7d2cc3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22753,8 +22753,8 @@
     },
     {
       "path": "js/components/navigation/compartido/enrutador.js",
-      "bytes": 1660,
-      "sha256": "4f2d22b9369bfff2ed30bcb218168161b997d666bad03b878415505e3b2297ed",
+      "bytes": 1418,
+      "sha256": "9b170ab793f62798a549923cc73a967a6170b93b2a7da27cd1cd788eb94610c0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22869,15 +22869,15 @@
     },
     {
       "path": "js/components/navigation/compartido/recursos-navegacion.js",
-      "bytes": 5013,
-      "sha256": "a20cdea21866bd2cdd43f0655baa1dd12652447f4da2540b35e3bf3a8dcf267f",
+      "bytes": 5023,
+      "sha256": "f08deea1862d0d0cbe00764b88a7d78cae3c90a1047a5d9b082187513da6fb32",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./configuracion.js?v=tintin-20260918-header-system-solid-surfaces-1",
+          "raw": "./configuracion.js?v=tintin-20260921-document-navigation-no-view-transition-1",
           "target": "js/components/navigation/compartido/configuracion.js",
           "dynamic": false,
           "line": 1
@@ -23120,8 +23120,8 @@
     },
     {
       "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
-      "bytes": 3421,
-      "sha256": "32aa44249be46771d1ad8b7e5d9853be4119bbcc64e64c3eb791b3cb78a0380d",
+      "bytes": 3431,
+      "sha256": "8ca2631e1a028040f42139b7d1592ba49f19ad5e9df79d51d50138c5b2f19c55",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23134,7 +23134,7 @@
           "line": 1
         },
         {
-          "raw": "../compartido/configuracion.js?v=tintin-20260918-header-system-solid-surfaces-1",
+          "raw": "../compartido/configuracion.js?v=tintin-20260921-document-navigation-no-view-transition-1",
           "target": "js/components/navigation/compartido/configuracion.js",
           "dynamic": false,
           "line": 2
@@ -23206,8 +23206,8 @@
     },
     {
       "path": "js/components/navigation/tableta/encabezado-tableta.js",
-      "bytes": 4388,
-      "sha256": "38384f33927e39c41a891b39489b1cd2aee2d322b7d404ff21547c164f205102",
+      "bytes": 4398,
+      "sha256": "fbb1de4b0f33c6737e9d00e19752cd4cc9715f16b6a046a8209dc90c966dd691",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23220,7 +23220,7 @@
           "line": 1
         },
         {
-          "raw": "../compartido/configuracion.js?v=tintin-20260918-header-system-solid-surfaces-1",
+          "raw": "../compartido/configuracion.js?v=tintin-20260921-document-navigation-no-view-transition-1",
           "target": "js/components/navigation/compartido/configuracion.js",
           "dynamic": false,
           "line": 2
@@ -29022,8 +29022,8 @@
     },
     {
       "path": "scripts/auditar-unificada-navegacion.js",
-      "bytes": 8977,
-      "sha256": "4cfd22f5beed3078834d5107d7c99d87b4139043bbda091608c946457600d1b0",
+      "bytes": 8961,
+      "sha256": "44d99382fc8d983a0c979b1c0dbf7cb730c24d9cd410b69c35daea2906bda2d0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35666,8 +35666,8 @@
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
       "extension": ".js",
-      "bytes": 11916,
-      "sha256": "ffc0ccbb78aa9aaf3cf86217581ae6193fa5ef69658e4b5f387c6f937c33c8c5"
+      "bytes": 11926,
+      "sha256": "ddce83b392fa56f3b8427afd15d3f3ea8bab2684389d14cc07d41ca65c9abf66"
     },
     {
       "path": "js/components/navigation/compartido/compatibilidad-cuenta-movil.js",
@@ -35684,8 +35684,8 @@
     {
       "path": "js/components/navigation/compartido/configuracion.js",
       "extension": ".js",
-      "bytes": 730,
-      "sha256": "a5795ca625bed747d432a61d87088b6da83a09a12daa798d5a84fde45bc96149"
+      "bytes": 740,
+      "sha256": "9f08ffe5f3a4cd28f306a4d64507c6fff76519e8183cdf9b64182c960e7d2cc3"
     },
     {
       "path": "js/components/navigation/compartido/control-busqueda.js",
@@ -35702,8 +35702,8 @@
     {
       "path": "js/components/navigation/compartido/enrutador.js",
       "extension": ".js",
-      "bytes": 1660,
-      "sha256": "4f2d22b9369bfff2ed30bcb218168161b997d666bad03b878415505e3b2297ed"
+      "bytes": 1418,
+      "sha256": "9b170ab793f62798a549923cc73a967a6170b93b2a7da27cd1cd788eb94610c0"
     },
     {
       "path": "js/components/navigation/compartido/estado-ruta.js",
@@ -35750,8 +35750,8 @@
     {
       "path": "js/components/navigation/compartido/recursos-navegacion.js",
       "extension": ".js",
-      "bytes": 5013,
-      "sha256": "a20cdea21866bd2cdd43f0655baa1dd12652447f4da2540b35e3bf3a8dcf267f"
+      "bytes": 5023,
+      "sha256": "f08deea1862d0d0cbe00764b88a7d78cae3c90a1047a5d9b082187513da6fb32"
     },
     {
       "path": "js/components/navigation/compartido/registro-paneles.js",
@@ -35810,8 +35810,8 @@
     {
       "path": "js/components/navigation/escritorio/encabezado-escritorio.js",
       "extension": ".js",
-      "bytes": 3421,
-      "sha256": "32aa44249be46771d1ad8b7e5d9853be4119bbcc64e64c3eb791b3cb78a0380d"
+      "bytes": 3431,
+      "sha256": "8ca2631e1a028040f42139b7d1592ba49f19ad5e9df79d51d50138c5b2f19c55"
     },
     {
       "path": "js/components/navigation/escritorio/indicador-navegacion-escritorio.js",
@@ -35846,8 +35846,8 @@
     {
       "path": "js/components/navigation/tableta/encabezado-tableta.js",
       "extension": ".js",
-      "bytes": 4388,
-      "sha256": "38384f33927e39c41a891b39489b1cd2aee2d322b7d404ff21547c164f205102"
+      "bytes": 4398,
+      "sha256": "fbb1de4b0f33c6737e9d00e19752cd4cc9715f16b6a046a8209dc90c966dd691"
     },
     {
       "path": "js/components/notifications/notificaciones-clientes.js",
@@ -37532,8 +37532,8 @@
     {
       "path": "scripts/auditar-unificada-navegacion.js",
       "extension": ".js",
-      "bytes": 8977,
-      "sha256": "4cfd22f5beed3078834d5107d7c99d87b4139043bbda091608c946457600d1b0"
+      "bytes": 8961,
+      "sha256": "44d99382fc8d983a0c979b1c0dbf7cb730c24d9cd410b69c35daea2906bda2d0"
     },
     {
       "path": "scripts/auditar-unificada-tienda-logica.js",
@@ -37568,8 +37568,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 43339,
-      "sha256": "8f716a205a2cc32d2a62b3cb5fe336492ef8862a1f8995e9a84b5986aefad41b"
+      "bytes": 45266,
+      "sha256": "f9f20026f526ef58281399fbc42ae020d3bf8b6f65331f615ccbe23bf9a6a6d0"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
