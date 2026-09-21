@@ -175,10 +175,18 @@ export function getSessionUser() {
 export function waitForSession() { start(); return sessionReady; }
 export function markExplicitLogout() { machine.markExplicitLogout(); }
 
-export function createAuthHandoff(uid) {
+export function createAuthHandoff(uid, visual = {}) {
   const cleanUid = String(uid || '').trim();
   if (!cleanUid) return false;
-  const value = JSON.stringify({ uid: cleanUid, createdAt: Date.now() });
+  // Este handoff sólo sirve para conservar la apariencia del header durante
+  // una navegación de documento. Nunca se usa para autorizar operaciones:
+  // Firebase Auth sigue siendo la única fuente de identidad válida.
+  const value = JSON.stringify({
+    uid: cleanUid,
+    photoURL: String(visual.photoURL || '').slice(0, 1200),
+    displayName: String(visual.displayName || '').slice(0, 160),
+    createdAt: Date.now()
+  });
   try {
     sessionStorage.setItem(SESSION_HANDOFF_KEY, value);
     // Compatibilidad con una pestaña vieja durante el despliegue escalonado.
@@ -193,7 +201,12 @@ export function readAuthHandoff() {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (parsed?.uid && Number.isFinite(parsed.createdAt) && Date.now() - parsed.createdAt <= HANDOFF_TTL_MS) {
-        return { uid: String(parsed.uid), createdAt: parsed.createdAt };
+        return {
+          uid: String(parsed.uid),
+          photoURL: String(parsed.photoURL || ''),
+          displayName: String(parsed.displayName || ''),
+          createdAt: parsed.createdAt
+        };
       }
       sessionStorage.removeItem(SESSION_HANDOFF_KEY);
     }

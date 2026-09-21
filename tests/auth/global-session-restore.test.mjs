@@ -1,6 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import { AUTH_STATES, createSessionStateMachine } from '../../js/core/auth/estado-sesion.mjs';
+
+const authNavigationSource = fs.readFileSync(
+  new URL('../../js/core/auth/navegacion-autenticacion.js', import.meta.url),
+  'utf8'
+);
+const sessionCoordinatorSource = fs.readFileSync(
+  new URL('../../js/core/auth/coordinador-sesion.js', import.meta.url),
+  'utf8'
+);
 
 test('null transitorio durante cold restore nunca se publica como logout', () => {
   const machine = createSessionStateMachine();
@@ -62,4 +72,12 @@ test('revocación posterior a una sesión restaurada es una ausencia no explíci
   const revoked = machine.authChanged(null);
   assert.equal(revoked.status, AUTH_STATES.UNAUTHENTICATED);
   assert.equal(revoked.reason, 'AUTH_REVOKED_OR_SIGNED_OUT');
+});
+
+test('la navegación conserva la identidad visual sin usar el handoff como autorización', () => {
+  assert.match(sessionCoordinatorSource, /photoURL/);
+  assert.match(sessionCoordinatorSource, /displayName/);
+  assert.match(authNavigationSource, /captureNavigationHandoff/);
+  assert.match(authNavigationSource, /PROFILE_READ_TIMEOUT_MS = 1800/);
+  assert.match(authNavigationSource, /provisional:Boolean\(user\)/);
 });
