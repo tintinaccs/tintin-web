@@ -33,7 +33,7 @@ function ciNote(currentEvidence, key, label) {
   return `GitHub CI · ${label}=${check.state || 'NOT_VERIFIED'} · commit ${commit}`;
 }
 
-export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, headers, routeProbes = {}, protectedProbes = {}, currentEvidence }, checkedAt) {
+export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, headers, routeProbes = {}, protectedProbes = {}, sessionProbe = {}, currentEvidence }, checkedAt) {
   const out = {};
   const setFrom = (id, ok, note, options = {}) => {
     if (typeof ok !== 'boolean') return;
@@ -61,6 +61,21 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
   const publicChecks = publicHealth?.body?.checks || {};
   const publicAdmin = publicHealth?.body?.admin || {};
   const LP = EVIDENCIA.LIVE_PRODUCTION;
+  const sessionOk = sessionProbe.authenticated === true && sessionProbe.token === true;
+  if (sessionProbe.status !== undefined || sessionOk) {
+    setFrom('firebase-auth', sessionOk,
+      `SDK Firebase Auth · token de la sesión actual ${sessionOk ? 'válido' : 'no confirmado'}`,
+      { status: sessionProbe.status, promote: sessionOk, evidenceLevel: LP, authRequired: sessionProbe.authRequired === true });
+    setFrom('sesion-estado', sessionOk,
+      `onAuthStateChanged · usuario actual ${sessionOk ? 'disponible' : 'no confirmado'}`,
+      { status: sessionProbe.status, promote: sessionOk, evidenceLevel: LP, authRequired: sessionProbe.authRequired === true });
+    setFrom('roles', sessionProbe.role === true,
+      `Rol efectivo del panel · ${sessionProbe.role === true ? 'superadmin confirmado' : 'no confirmado'}`,
+      { status: sessionProbe.status, promote: sessionProbe.role === true, evidenceLevel: LP, authRequired: sessionProbe.authRequired === true });
+    setFrom('perfil', sessionProbe.profile === true,
+      `SDK Firestore · perfil de la sesión actual ${sessionProbe.profile === true ? 'disponible' : 'no confirmado'}`,
+      { status: sessionProbe.status, promote: sessionProbe.profile === true, evidenceLevel: LP, authRequired: sessionProbe.authRequired === true });
+  }
   setFrom('cf-pages', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, { status: publicHealth?.status, promote: publicOk, evidenceLevel: LP });
   setFrom('cf-functions', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, { status: publicHealth?.status, promote: publicOk, evidenceLevel: LP });
   setFrom('apis-internas', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, { status: publicHealth?.status, promote: publicOk, evidenceLevel: LP });
@@ -134,6 +149,12 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
       `SDK Firestore autenticado · favorites=${favoriteRules?.ok === true ? 'permitido' : 'no confirmado'} · adminNotifications=${notificationRules?.ok === true ? 'permitido' : 'no confirmado'}`,
       { status: rulesOk ? 200 : (favoriteRules?.status || notificationRules?.status), promote: rulesOk, evidenceLevel: LP, authRequired: favoriteRules?.authRequired === true || notificationRules?.authRequired === true });
   }
+  const firestoreAuthorityOk = publicChecks.firebase === true && rulesOk;
+  if (publicChecks.firebase !== undefined || favoriteRules || notificationRules) {
+    setFrom('firestore-fuente-verdad', firestoreAuthorityOk,
+      `Firebase runtime=${publicChecks.firebase === true} · Rules protegidas=${rulesOk}`,
+      { status: publicHealth?.status || (rulesOk ? 200 : 0), promote: firestoreAuthorityOk, evidenceLevel: LP, authRequired: favoriteRules?.authRequired === true || notificationRules?.authRequired === true });
+  }
 
   // GitHub Actions y el deployment se validan contra el commit actual, no
   // contra la última corrida histórica del Diagnóstico Maestro. Es evidencia
@@ -187,7 +208,7 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
   return out;
 }
 
-export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedProbes = {}, currentEvidence }, checkedAt) {
+export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedProbes = {}, sessionProbe = {}, currentEvidence }, checkedAt) {
   const out = {};
   const set = (from, to, ok, note, status = 200, options = {}) => {
     if (typeof ok !== 'boolean') return;
@@ -203,12 +224,27 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
   };
   const publicOk = publicHealth?.status === 200 && publicHealth.body?.ok === true;
   const checks = publicHealth?.body?.checks || {};
+  const sessionOk = sessionProbe.authenticated === true && sessionProbe.token === true;
   set('cf-pages', 'cf-functions', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, publicHealth?.status);
   set('cf-functions', 'apis-internas', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, publicHealth?.status);
   set('apis-internas', 'firestore', typeof checks.firebase === 'boolean' ? checks.firebase : undefined,
     `GET /api/health · checks.firebase=${checks.firebase === true}`, publicHealth?.status);
   const admin = publicHealth?.body?.admin || {};
   set('firestore', 'users-uid', typeof admin.users === 'boolean' ? admin.users : undefined, `GET /api/health · admin.users=${admin.users === true}`, publicHealth?.status);
+  if (sessionProbe.status !== undefined || sessionOk) {
+    set('sesion-estado', 'firestore', sessionOk,
+      `Sesión actual · lectura Firestore ${sessionOk ? 'habilitada' : 'no confirmada'}`,
+      sessionProbe.status || 0);
+    set('users-uid', 'roles', sessionProbe.role === true,
+      `Rol efectivo de la sesión · ${sessionProbe.role === true ? 'superadmin confirmado' : 'no confirmado'}`,
+      sessionProbe.status || 0);
+    set('roles', 'perfil', sessionProbe.profile === true,
+      `Perfil de la sesión · ${sessionProbe.profile === true ? 'disponible' : 'no confirmado'}`,
+      sessionProbe.status || 0);
+    set('roles', 'super-panel', sessionProbe.role === true,
+      `Destino actual · ${sessionProbe.role === true ? 'Super Panel autorizado' : 'no confirmado'}`,
+      sessionProbe.status || 0);
+  }
   set('cf-functions', 'csp', headers ? headers.csp === true : undefined, `GET /admin.html · CSP ${headers?.csp ? 'presente' : 'ausente'}`, headers?.status);
   const report = systemHealth?.body?.report;
   if (report?.integrations?.appsScript) {

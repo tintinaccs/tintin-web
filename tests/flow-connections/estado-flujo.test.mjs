@@ -87,6 +87,22 @@ test('una ruta pública comprobada en producción promueve su nodo de destino', 
   assert.equal(resolveState(login, live['entrada-login'], ESTADOS), ESTADOS.PROD);
 });
 
+test('la sesión autenticada actual promueve solo Firebase, sesión, rol y perfil comprobados', () => {
+  const sessionProbe = { authenticated: true, token: true, role: true, profile: true, status: 200 };
+  const live = buildLiveChecks({ sessionProbe }, '2026-09-21T00:00:00.000Z');
+  for (const id of ['firebase-auth', 'sesion-estado', 'roles', 'perfil']) {
+    const node = NODES.find(item => item.id === id);
+    assert.equal(resolveState(node, live[id], ESTADOS), ESTADOS.PROD, `${id} debe promoverse con la sesión actual comprobada`);
+  }
+  const edges = buildLiveEdges({ sessionProbe }, '2026-09-21T00:00:00.000Z');
+  for (const edge of [
+    ['sesion-estado', 'firestore'], ['users-uid', 'roles'], ['roles', 'perfil'], ['roles', 'super-panel'],
+  ]) {
+    const record = EDGES.find(item => item.from === edge[0] && item.to === edge[1]);
+    assert.equal(resolveState(record, edges[record.id], ESTADOS), ESTADOS.PROD, `${edge.join(' → ')} debe promoverse con evidencia de sesión`);
+  }
+});
+
 test('el carrito exige que el panel ya se haya renderizado, no solo un HTTP 200', () => {
   const withoutDrawer = buildLiveChecks({
     publicHealth: { status: 200, body: { ok: true } },
