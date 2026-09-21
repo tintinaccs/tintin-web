@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "44112e37da417d2e52499d43e13213453e39f11880d8e2b049cd4213dbf7ecf5",
+  "sourceFingerprint": "621aa95db660a3b37403cb9b891e630d5f8e7a411617ec4807f51dee26c9dfa6",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 859,
     "textFiles": 818,
-    "totalBytes": 16956398,
+    "totalBytes": 16956676,
     "pages": 19,
     "modules": 584
   },
@@ -19136,8 +19136,8 @@
     },
     {
       "path": "functions/api/notifications.js",
-      "bytes": 12299,
-      "sha256": "17355d1f2e43afb1ccc2ebacc7e0305ab6a5ef4f4588258c55d95c6480866b3b",
+      "bytes": 12528,
+      "sha256": "50b834c03b97c58a86d4bef2f6afbc7b29b14a3dc5e02d4bbb061bf8a6e2df84",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31042,8 +31042,8 @@
     },
     {
       "path": "tests/engagement/notificaciones-sociales.test.mjs",
-      "bytes": 10138,
-      "sha256": "e78db4aeaabf7dbbbac78dd7206726e4f19a58c59052250100e349e6db558487",
+      "bytes": 10187,
+      "sha256": "6958b84ea3ff72e3a0e42bc825dc7fbf1cb5ef6ddac5d8d5c05ec84ac04237d9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34856,8 +34856,8 @@
     {
       "path": "functions/api/notifications.js",
       "extension": ".js",
-      "bytes": 12299,
-      "sha256": "17355d1f2e43afb1ccc2ebacc7e0305ab6a5ef4f4588258c55d95c6480866b3b"
+      "bytes": 12528,
+      "sha256": "50b834c03b97c58a86d4bef2f6afbc7b29b14a3dc5e02d4bbb061bf8a6e2df84"
     },
     {
       "path": "functions/api/order-email-drain.js",
@@ -37982,8 +37982,8 @@
     {
       "path": "tests/engagement/notificaciones-sociales.test.mjs",
       "extension": ".mjs",
-      "bytes": 10138,
-      "sha256": "e78db4aeaabf7dbbbac78dd7206726e4f19a58c59052250100e349e6db558487"
+      "bytes": 10187,
+      "sha256": "6958b84ea3ff72e3a0e42bc825dc7fbf1cb5ef6ddac5d8d5c05ec84ac04237d9"
     },
     {
       "path": "tests/engagement/participation-contract.test.mjs",
