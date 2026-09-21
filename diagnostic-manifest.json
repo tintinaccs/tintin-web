@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "d7d2e072771216a7c5251ed7cc8fdc801419c47de2cdcf80f9fadbd518ec949c",
+  "sourceFingerprint": "cfcb3e12c454bf5e413c9238488fe8c143a7a8cb1bd140ea43b8dbeb19fd547a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 859,
     "textFiles": 818,
-    "totalBytes": 16961704,
+    "totalBytes": 16962003,
     "pages": 19,
     "modules": 584
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 191283,
-      "sha256": "ecd21841428c25efa84a1b68a447f831f256c34ac7b767bf291054273927202c",
+      "bytes": 191282,
+      "sha256": "4d6a6b193a53c7ecaeb538a1760f3968446357a6f22fecb7cf28dc8dce6e9b59",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2114,7 +2114,7 @@
           "line": 8
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260921-session-evidence-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20260921-cart-probe-race-1",
           "target": "js/admin/admin-app.js",
           "line": 2004
         },
@@ -2363,7 +2363,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260921-session-evidence-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20260921-cart-probe-race-1",
           "target": "js/admin/admin-app.js",
           "line": 2004,
           "exists": true
@@ -20135,8 +20135,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 437403,
-      "sha256": "ec31f8ffc305e45186fd9584f9aae0d4bd76b1b40ec52fb0608123e724a7bfec",
+      "bytes": 437402,
+      "sha256": "ef476939a0b96c38a12f8759db626985a172ce60c90873624d41147b0d267338",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20263,7 +20263,7 @@
           "line": 32
         },
         {
-          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260921-session-evidence-1",
+          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260921-cart-probe-race-1",
           "target": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
           "dynamic": false,
           "line": 33
@@ -20783,8 +20783,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 23253,
-      "sha256": "32299fb7c33f45d8e3d9f7eb50677d7939b612007edccbd88a87dbf46183643c",
+      "bytes": 23554,
+      "sha256": "657d68fc068869f2860fb0be4c09436a2f5185bf729cfd609fbbbc588d8eff61",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33434,8 +33434,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 191283,
-      "sha256": "ecd21841428c25efa84a1b68a447f831f256c34ac7b767bf291054273927202c"
+      "bytes": 191282,
+      "sha256": "4d6a6b193a53c7ecaeb538a1760f3968446357a6f22fecb7cf28dc8dce6e9b59"
     },
     {
       "path": "apple-touch-icon.png",
@@ -35144,8 +35144,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 437403,
-      "sha256": "ec31f8ffc305e45186fd9584f9aae0d4bd76b1b40ec52fb0608123e724a7bfec"
+      "bytes": 437402,
+      "sha256": "ef476939a0b96c38a12f8759db626985a172ce60c90873624d41147b0d267338"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -35234,8 +35234,8 @@
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 23253,
-      "sha256": "32299fb7c33f45d8e3d9f7eb50677d7939b612007edccbd88a87dbf46183643c"
+      "bytes": 23554,
+      "sha256": "657d68fc068869f2860fb0be4c09436a2f5185bf729cfd609fbbbc588d8eff61"
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
@@ -38697,7 +38697,7 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 401,
+      "line": 409,
       "raw": "/admin.html",
       "target": "admin.html",
       "exists": true
@@ -40089,7 +40089,7 @@
     },
     {
       "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "line": 401,
+      "line": 409,
       "target": "/admin.html",
       "method": "GET"
     },
@@ -40211,7 +40211,7 @@
         "references": [
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 122,
+            "line": 130,
             "operation": "collection"
           },
           {
@@ -41441,12 +41441,12 @@
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 119,
+            "line": 127,
             "operation": "collection"
           },
           {
             "file": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-            "line": 139,
+            "line": 147,
             "operation": "doc"
           },
           {

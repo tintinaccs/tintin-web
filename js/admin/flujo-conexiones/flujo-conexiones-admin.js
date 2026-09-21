@@ -77,15 +77,23 @@ async function probeRenderedCart() {
       if (settled) return;
       settled = true;
       window.clearTimeout(timeoutId);
+      observer?.disconnect();
       frame.remove();
       resolve(value);
     };
+    let observer;
     const timeoutId = window.setTimeout(() => cleanup(false), 10_000);
     frame.hidden = true;
     frame.tabIndex = -1;
     frame.setAttribute('aria-hidden', 'true');
     frame.addEventListener('load', () => {
-      cleanup(Boolean(frame.contentDocument?.getElementById('cart-drawer')));
+      const doc = frame.contentDocument;
+      if (!doc) return;
+      if (doc.getElementById('cart-drawer')) return cleanup(true);
+      observer = new MutationObserver(() => {
+        if (doc.getElementById('cart-drawer')) cleanup(true);
+      });
+      observer.observe(doc.documentElement, { childList: true, subtree: true });
     }, { once: true });
     frame.src = `/?tfc-cart-probe=${Date.now()}`;
     document.body.append(frame);
