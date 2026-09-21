@@ -1,5 +1,5 @@
 import { currentPage } from './estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260921-document-navigation-no-view-transition-1';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260921-document-navigation-no-view-transition-2';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;
@@ -112,7 +112,7 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
 
 function loadAuthRuntime() {
   if (!authRuntimePromise) {
-    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20260921-auth-session-handoff-1').catch(error => {
+    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20260921-auth-session-handoff-2').catch(error => {
       authRuntimePromise = null;
       throw error;
     });

@@ -1,4 +1,4 @@
-export const SHELL_VERSION = 'tintin-20260921-document-navigation-no-view-transition-1';
+export const SHELL_VERSION = 'tintin-20260921-document-navigation-no-view-transition-2';
 
 export const BREAKPOINTS = Object.freeze({
   mobileMax: 767,
