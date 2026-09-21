@@ -62,10 +62,10 @@ check(styles.includes('@media (min-width: 768px) and (max-width: 1024px)'), 'fal
 check(controller.includes('if (innerWidth < 768)') && controller.includes('if (innerWidth <= 1024)'), 'faltan los límites exactos móvil/tableta/escritorio');
 check(collections.includes('buildTabletCard') && collections.includes('createCollectionImage(collection)'), 'tableta no consume las imágenes reales compartidas de categorías');
 check(
-  navigation.includes('document.startViewTransition') &&
-    navigation.includes('transition.finished?.catch') &&
-    navigation.includes('transition.updateCallbackDone?.catch') &&
-    navigation.includes('location.assign'),
+  navigation.includes('const navigateSafely = navigate =>') &&
+    navigation.includes('navigate();') &&
+    navigation.includes('location.assign') &&
+    !navigation.includes('document.startViewTransition'),
   'navegación no tiene View Transition segura con fallback'
 );
 

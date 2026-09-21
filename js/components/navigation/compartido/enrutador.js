@@ -3,19 +3,12 @@
   if (window.TintinNavigationSharedBooted) return;
   window.TintinNavigationSharedBooted = true;
 
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let leaving = false;
 
   const navigateSafely = navigate => {
-    if (!reduced.matches && typeof document.startViewTransition === 'function') {
-      try {
-        const transition = document.startViewTransition(() => navigate());
-        transition.ready?.catch(() => {});
-        transition.finished?.catch(() => {});
-        transition.updateCallbackDone?.catch(() => {});
-        return;
-      } catch {}
-    }
+    // A document navigation is not a View Transition update callback. Some
+    // Chromium builds abort it and emit an InvalidStateError in the console
+    // even though location.assign() eventually succeeds.
     navigate();
   };
 
@@ -36,8 +29,6 @@
 
     if (target.origin !== location.origin || target.protocol === 'mailto:' || target.protocol === 'tel:') return;
     if (target.pathname === location.pathname && target.search === location.search && target.hash) return;
-    if (reduced.matches) return;
-
     event.preventDefault();
     leaving = true;
     navigateSafely(() => location.assign(target.href));
