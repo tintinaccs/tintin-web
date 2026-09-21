@@ -1,5 +1,5 @@
-import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260921-document-navigation-no-view-transition-1';
-import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260921-document-navigation-no-view-transition-1';
+import { renderDesktopHeader } from './escritorio/encabezado-escritorio.js?v=tintin-20260921-document-navigation-no-view-transition-3';
+import { renderTabletHeader, renderTabletMenu } from './tableta/encabezado-tableta.js?v=tintin-20260921-document-navigation-no-view-transition-3';
 import { renderMobileTabbar } from './movil/encabezado-movil.js?v=tintin-20260916-final-production-stability-mobile-1';
 import { renderSearchPanel } from './compartido/panel-busqueda.js?v=tintin-20260916-final-production-stability-search-panel-1';
 import { renderCartDrawer } from './compartido/panel-carrito.js?v=tintin-20260916-final-production-stability-cart-panel-1';
@@ -8,7 +8,7 @@ import { renderCollectionsSheet } from './compartido/panel-colecciones.js?v=tint
 import { renderSurfaceLayer } from './compartido/capas-paneles.js?v=tintin-20260916-final-production-stability-surface-layer-1';
 import { applyActiveState, currentPage } from './compartido/estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
 import { ensureNavigationAssets } from './compartido/recursos-navegacion.js?v=tintin-20260921-document-navigation-no-view-transition-css-1';
-import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260921-document-navigation-no-view-transition-1';
+import { loadProductsRuntime, loadSharedRuntime } from './compartido/carga-navegacion.js?v=tintin-20260921-document-navigation-no-view-transition-3';
 import { enhanceMobileFooter } from './compartido/acordeon-pie-pagina.js?v=tintin-20260916-final-production-stability-footer-1';
 import { registerNavigationSurfaces } from './compartido/registro-paneles.js?v=tintin-20260916-final-production-stability-registry-1';
 import { fetchGlobalVisualStudioConfig, applyGlobalLayout } from './compartido/apariencia-global.js?v=tintin-20260817-footer-contrast-1';
