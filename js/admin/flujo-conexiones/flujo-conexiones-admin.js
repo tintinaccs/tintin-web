@@ -9,9 +9,9 @@
 // datos. Nada de lo que hace este módulo crea, actualiza ni borra documentos.
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260920-safe-live-probes-1';
 import { resolveState, isAttentionState } from './estado-flujo.js?v=tintin-20260920-admin-status-fixes-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260920-admin-status-fixes-1';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260921-session-evidence-1';
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260920-auth-persistence-all-users-1';
-import { collection, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { collection, doc, getDoc, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const CATEGORY_LABELS = {
   entrada: 'Entrada',
@@ -123,6 +123,40 @@ async function probeClientFirestoreRules(user) {
     ))),
   ]);
   return { favorites, notifications };
+}
+
+// Comprueba únicamente la identidad que ya está autenticada en este panel.
+// No inicia un proveedor, no renueva el perfil ni escribe en Firestore: sirve
+// para distinguir una sesión/rol/perfil realmente disponibles de evidencia
+// estática que antes quedaba amarilla aunque el Super Admin estuviera usando
+// el panel con normalidad.
+async function probeCurrentSession(user, role) {
+  if (!user) {
+    return { authenticated: false, token: false, role: false, profile: false, status: 401, authRequired: true };
+  }
+  try {
+    await user.getIdToken();
+    const profile = await getDoc(doc(db, 'users', user.uid));
+    return {
+      authenticated: true,
+      token: true,
+      role: role === 'superadmin',
+      profile: profile.exists(),
+      status: 200,
+    };
+  } catch (error) {
+    const code = String(error?.code || '');
+    const status = /permission-denied|unauthenticated/i.test(code) ? 403 : 0;
+    return {
+      authenticated: false,
+      token: false,
+      role: false,
+      profile: false,
+      status,
+      authRequired: status === 403,
+      error: code || error?.message || 'no se pudo leer la sesión actual',
+    };
+  }
 }
 
 export function initConnectionsFlow({ role } = {}) {
@@ -356,13 +390,14 @@ export function initConnectionsFlow({ role } = {}) {
       } else {
         errors.push('No hay una sesión de Super Admin para probes protegidos.');
       }
-      const [systemHealth, adminHealth, masterDiagnostics, favoriteApi, notificationApi, firestoreRules, pageProbe, ...routeProbes] = await Promise.all([
+      const [systemHealth, adminHealth, masterDiagnostics, favoriteApi, notificationApi, firestoreRules, sessionProbe, pageProbe, ...routeProbes] = await Promise.all([
         user ? readJson('/api/system-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/admin-runtime-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/master-diagnostics', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/engagement?action=ownFavorite&productId=__tfc_health_probe__', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/notifications?action=health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         probeClientFirestoreRules(user),
+        probeCurrentSession(user, role),
         fetch('/admin.html', { credentials: 'same-origin', cache: 'no-store' }).then(response => ({
           status: response.status,
           csp: Boolean(response.headers.get('content-security-policy')),
@@ -401,9 +436,10 @@ export function initConnectionsFlow({ role } = {}) {
         headers: pageProbe,
         routeProbes: routeProbeMap,
         protectedProbes: { favoriteApi, notificationApi, firestoreRules },
+        sessionProbe,
         currentEvidence: masterDiagnostics.body?.currentEvidence,
       }, checkedAt);
-      liveState.byEdgeId = buildLiveEdges({ publicHealth, systemHealth, headers: pageProbe, protectedProbes: { favoriteApi, notificationApi, firestoreRules }, currentEvidence: masterDiagnostics.body?.currentEvidence }, checkedAt);
+      liveState.byEdgeId = buildLiveEdges({ publicHealth, systemHealth, headers: pageProbe, protectedProbes: { favoriteApi, notificationApi, firestoreRules }, sessionProbe, currentEvidence: masterDiagnostics.body?.currentEvidence }, checkedAt);
       liveTimestampEl.textContent = `Última verificación en vivo: ${checkedAt} (${Object.keys(liveState.byId).length} nodos y ${Object.keys(liveState.byEdgeId).length} conexiones con probe).`;
 
       if (errors.length) {
