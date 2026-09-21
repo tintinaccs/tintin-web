@@ -354,6 +354,8 @@ import {
     if (health) health.innerHTML = healthMarkup(latestChecks);
     const kpis = document.querySelectorAll('#section-maestro .tt-maestro-kpi strong');
     if (kpis[0]) kpis[0].textContent = `${score.percent}%`;
+    const kpiDetail = document.querySelector('#section-maestro .tt-maestro-kpi small');
+    if (kpiDetail) kpiDetail.textContent = `${score.pass}/${score.total} comprobaciones runtime correctas`;
     const status = document.querySelector('#section-maestro .tt-maestro-status');
     if (status) {
       status.className = `tt-maestro-status ${score.percent === 100 ? '' : score.percent >= 85 ? 'warn' : 'fail'}`;

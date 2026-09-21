@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "70eedd230abe8d9cf4498b069eaeaaa2a0a9b66d0db6414844c365b9a20f9772",
+  "sourceFingerprint": "44112e37da417d2e52499d43e13213453e39f11880d8e2b049cd4213dbf7ecf5",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 859,
     "textFiles": 818,
-    "totalBytes": 16956202,
+    "totalBytes": 16956398,
     "pages": 19,
     "modules": 584
   },
@@ -2080,7 +2080,7 @@
         "viewer"
       ],
       "bytes": 191289,
-      "sha256": "9aa30a9dc5d1a210218290810feecbc5eb93ec6ff37d552bf26bbd12e3bffc7c",
+      "sha256": "1a9928e13f59d0f023eba51f28647f8920d82d957df3bf3d066709479f429cae",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2179,7 +2179,7 @@
           "line": 2225
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260920-admin-status-fixes-1",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260920-admin-status-fixes-2",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2226
         }
@@ -2441,7 +2441,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260920-admin-status-fixes-1",
+          "raw": "js/admin/maestro/panel-maestro.js?v=tintin-20260920-admin-status-fixes-2",
           "target": "js/admin/maestro/panel-maestro.js",
           "line": 2226,
           "exists": true
@@ -20936,8 +20936,8 @@
     },
     {
       "path": "js/admin/maestro/panel-maestro.js",
-      "bytes": 27964,
-      "sha256": "a91ed1bd16d0fe9c80d258f1dc795dc28d2f14da595e4233db45895a024cf203",
+      "bytes": 28160,
+      "sha256": "f3d5688dc27f148919aadc7b4829d1948e09d2b054387698b0dbed356e24c65d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28732,7 +28732,7 @@
     {
       "path": "scripts/auditar-superadmin-maestro-conexiones.mjs",
       "bytes": 7480,
-      "sha256": "dbf08d33fe7276250c5fc5eb681705212043d978574cd7f2e5d86a2a87fd0530",
+      "sha256": "95c4aa80a1508d27e70345cf425b477d8daedf779ee961f6f1cf764efbcb5b8b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28798,7 +28798,7 @@
     {
       "path": "scripts/auditar-superadmin-maestro.mjs",
       "bytes": 8725,
-      "sha256": "5547959f9765a21c26956780e93b35cbf3fee81283b0fdcf460361015d813ee3",
+      "sha256": "fdf2bc044355e998ea7d290839091ecc3add86f0c4db27dcdc6306ea0cdfbef6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33435,7 +33435,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 191289,
-      "sha256": "9aa30a9dc5d1a210218290810feecbc5eb93ec6ff37d552bf26bbd12e3bffc7c"
+      "sha256": "1a9928e13f59d0f023eba51f28647f8920d82d957df3bf3d066709479f429cae"
     },
     {
       "path": "apple-touch-icon.png",
@@ -35258,8 +35258,8 @@
     {
       "path": "js/admin/maestro/panel-maestro.js",
       "extension": ".js",
-      "bytes": 27964,
-      "sha256": "a91ed1bd16d0fe9c80d258f1dc795dc28d2f14da595e4233db45895a024cf203"
+      "bytes": 28160,
+      "sha256": "f3d5688dc27f148919aadc7b4829d1948e09d2b054387698b0dbed356e24c65d"
     },
     {
       "path": "js/admin/maestro/registro-maestro.js",
@@ -37467,7 +37467,7 @@
       "path": "scripts/auditar-superadmin-maestro-conexiones.mjs",
       "extension": ".mjs",
       "bytes": 7480,
-      "sha256": "dbf08d33fe7276250c5fc5eb681705212043d978574cd7f2e5d86a2a87fd0530"
+      "sha256": "95c4aa80a1508d27e70345cf425b477d8daedf779ee961f6f1cf764efbcb5b8b"
     },
     {
       "path": "scripts/auditar-superadmin-maestro-responsive.mjs",
@@ -37479,7 +37479,7 @@
       "path": "scripts/auditar-superadmin-maestro.mjs",
       "extension": ".mjs",
       "bytes": 8725,
-      "sha256": "5547959f9765a21c26956780e93b35cbf3fee81283b0fdcf460361015d813ee3"
+      "sha256": "fdf2bc044355e998ea7d290839091ecc3add86f0c4db27dcdc6306ea0cdfbef6"
     },
     {
       "path": "scripts/auditar-superadmin-modulos-completos.mjs",
