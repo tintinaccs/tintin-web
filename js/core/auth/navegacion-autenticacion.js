@@ -3,7 +3,7 @@
 import { auth, db } from '../firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
 import { signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { AUTH_STATES, subscribeSession, getSessionUser, markExplicitLogout, createAuthHandoff } from './coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3';
+import { AUTH_STATES, subscribeSession, getSessionUser, markExplicitLogout, createAuthHandoff, readAuthHandoff, clearAuthHandoff } from './coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3';
 import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
 import { ROLES, can, SUPER_ADMIN } from './roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
 import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
@@ -14,6 +14,8 @@ let silentLogoutStarted = false;
 let authRenderGeneration = 0;
 let authReadyDiagnosticRecorded = false;
 let coordinatorReadyDiagnosticRecorded = false;
+const PROFILE_READ_TIMEOUT_MS = 1800;
+const initialAuthHandoff = readAuthHandoff();
 
 if (!IS_LOGIN_PAGE) document.documentElement.classList.add('tt-auth-restoring');
 if (!IS_LOGIN_PAGE) recordAuthDiagnostic('AUTH_RESTORE_START', { source: 'public-auth-navigation' });
@@ -65,8 +67,9 @@ function roleFromProfile(user,profile={}){
 async function readNavigationProfile(user){
  if(!user?.uid)return {};
  try{
-  const snap=await getDoc(doc(db,'users',user.uid));
-  return snap.exists()?snap.data():{};
+   const timeout=new Promise((_,reject)=>window.setTimeout(()=>reject(new Error('navigation_profile_timeout')),PROFILE_READ_TIMEOUT_MS));
+   const snap=await Promise.race([getDoc(doc(db,'users',user.uid)),timeout]);
+   return snap.exists()?snap.data():{};
  }catch(error){
   console.warn('[auth-nav] No se pudo leer el perfil de la cuenta:',error?.code||error);
   return {};
@@ -74,6 +77,35 @@ async function readNavigationProfile(user){
 }
 
 const accountBtnDefaults=new Map();
+
+// La identidad ya restaurada en la página anterior se usa sólo como pintura
+// provisional. Así el header no salta a "visitante" mientras Firebase y
+// Firestore terminan de confirmar la sesión en el documento nuevo.
+if(initialAuthHandoff?.uid){
+ queueMicrotask(()=>renderAccountButtonPhoto({
+  uid:initialAuthHandoff.uid,
+  photoURL:initialAuthHandoff.photoURL,
+  displayName:initialAuthHandoff.displayName
+ },{}));
+}
+
+function captureNavigationHandoff(anchor){
+ const user=getSessionUser();
+ if(!user?.uid||!anchor||anchor.target&&anchor.target!=='_self')return;
+ if(anchor.hasAttribute('download'))return;
+ const href=anchor.getAttribute('href');
+ if(!href||href.startsWith('#'))return;
+ let url;
+ try{url=new URL(href,window.location.href);}catch{return;}
+ if(url.origin!==window.location.origin)return;
+ if(url.href===window.location.href)return;
+ const currentButton=document.querySelector('[data-auth-account-button]');
+ const currentAvatar=currentButton?.querySelector('img');
+ createAuthHandoff(user.uid,{
+  photoURL:currentAvatar?.currentSrc||currentAvatar?.src||user.photoURL||'',
+  displayName:currentAvatar?.alt||user.displayName||''
+ });
+}
 
 /* Apenas se toca Google, la página de Login desaparece debajo de una superficie
    sólida. Solo vuelve a mostrarse si el popup se cierra o el ingreso falla. */
@@ -88,6 +120,7 @@ document.addEventListener('click',event=>{
    recordAuthDiagnostic('HANDOFF_FOUND',{source:'public-account-menu',state:'created-for-admin-navigation'});
   }
  }
+ captureNavigationHandoff(event.target.closest?.('a[href]'));
  // El perfil tiene su propio botón de cierre explícito. No lo capture el
  // listener global: dos handlers sobre el mismo control podían ejecutar
  // signOut en paralelo y hacer que la navegación pareciera un deslogueo
@@ -125,6 +158,13 @@ subscribeSession(async snapshot=>{
  document.documentElement.classList.remove('tt-auth-restoring');
  const user=snapshot.user;
  if(user) recordAuthDiagnostic('AUTH_USER_AVAILABLE',{source:'public-auth-navigation',authState:snapshot.status});
+ // Firebase ya confirmó la identidad: actualizamos el botón inmediatamente,
+ // sin esperar la lectura secundaria del perfil/rol.
+ renderAccountButtonPhoto(user,{});
+ renderMobileTabbarPhoto(user,{});
+ window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated',{
+  detail:{authenticated:Boolean(user),role:ROLES.CLIENT,provisional:Boolean(user)}
+ }));
  const generation=++authRenderGeneration;
  let role=ROLES.CLIENT;
  let profile={};
@@ -145,6 +185,7 @@ subscribeSession(async snapshot=>{
  renderAccountButtonPhoto(user,profile);
  renderMobileTabbarPhoto(user,profile);
  renderAccountPanel(user,role,profile);
+ clearAuthHandoff();
  window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated',{
   detail:{authenticated:Boolean(user),role}
  }));

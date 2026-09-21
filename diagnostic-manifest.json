@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "3cc83298b3497e86ee1e608765144625a7f4a93bd390c941bfefc0dc1e760e42",
+  "sourceFingerprint": "2a3c3708e53b5984d8c25af6c9480bed5cfd49a621b84709d9949a0328fdea6d",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 859,
     "textFiles": 818,
-    "totalBytes": 16965337,
+    "totalBytes": 16968438,
     "pages": 19,
     "modules": 584
   },
@@ -22655,8 +22655,8 @@
     },
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
-      "bytes": 11933,
-      "sha256": "52bed03bf0c6162c0fdac194ec120317ea2dbe48866bbf196d49298c1cd4081d",
+      "bytes": 11927,
+      "sha256": "151429da484585c5db606a53e0b408d1e033cf7b0eb4110bf3a3a6a0b7231d0f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22675,7 +22675,7 @@
           "line": 2
         },
         {
-          "raw": "../../../core/auth/navegacion-autenticacion.js?v=tintin-20260921-auth-session-never-unknown-3",
+          "raw": "../../../core/auth/navegacion-autenticacion.js?v=tintin-20260921-auth-session-handoff-1",
           "target": "js/core/auth/navegacion-autenticacion.js",
           "dynamic": true,
           "line": 115
@@ -23388,8 +23388,8 @@
     },
     {
       "path": "js/core/auth/coordinador-sesion.js",
-      "bytes": 8564,
-      "sha256": "9bcaa00063edaa19296d315d2c21e62f709b0fd33837a37dea772c5c0fe2b8f1",
+      "bytes": 9073,
+      "sha256": "0de28e64305103cd1425ddd086465227227a43d8b4a8c43ca2b9fec10b8ef730",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23505,8 +23505,8 @@
     },
     {
       "path": "js/core/auth/navegacion-autenticacion.js",
-      "bytes": 11176,
-      "sha256": "5e3af888ff497f341f19ccfa03c55e196d3cc197345f4078b6793980d5e0aca9",
+      "bytes": 13061,
+      "sha256": "821f7650787612ac5fe41eb7a75bbbe5352e4389a2479a89620930bd2db9a04f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30213,8 +30213,8 @@
     },
     {
       "path": "tests/auth/global-session-restore.test.mjs",
-      "bytes": 3190,
-      "sha256": "7079f289aff4593cc990a5e5b1d0a278f0bd3dbb7c716187ac79a0da179570dc",
+      "bytes": 3909,
+      "sha256": "7c71dce156bb59f97c8243835f8175e479e248e1a3d8dad739b75ed9a017cc8f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30233,10 +30233,16 @@
           "line": 2
         },
         {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
           "raw": "../../js/core/auth/estado-sesion.mjs",
           "target": "js/core/auth/estado-sesion.mjs",
           "dynamic": false,
-          "line": 3
+          "line": 4
         }
       ],
       "endpoints": []
@@ -35666,8 +35672,8 @@
     {
       "path": "js/components/navigation/compartido/carga-navegacion.js",
       "extension": ".js",
-      "bytes": 11933,
-      "sha256": "52bed03bf0c6162c0fdac194ec120317ea2dbe48866bbf196d49298c1cd4081d"
+      "bytes": 11927,
+      "sha256": "151429da484585c5db606a53e0b408d1e033cf7b0eb4110bf3a3a6a0b7231d0f"
     },
     {
       "path": "js/components/navigation/compartido/compatibilidad-cuenta-movil.js",
@@ -35888,8 +35894,8 @@
     {
       "path": "js/core/auth/coordinador-sesion.js",
       "extension": ".js",
-      "bytes": 8564,
-      "sha256": "9bcaa00063edaa19296d315d2c21e62f709b0fd33837a37dea772c5c0fe2b8f1"
+      "bytes": 9073,
+      "sha256": "0de28e64305103cd1425ddd086465227227a43d8b4a8c43ca2b9fec10b8ef730"
     },
     {
       "path": "js/core/auth/diagnostico-sesion.js",
@@ -35918,8 +35924,8 @@
     {
       "path": "js/core/auth/navegacion-autenticacion.js",
       "extension": ".js",
-      "bytes": 11176,
-      "sha256": "5e3af888ff497f341f19ccfa03c55e196d3cc197345f4078b6793980d5e0aca9"
+      "bytes": 13061,
+      "sha256": "821f7650787612ac5fe41eb7a75bbbe5352e4389a2479a89620930bd2db9a04f"
     },
     {
       "path": "js/core/auth/permisos-roles.js",
@@ -37568,8 +37574,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 45308,
-      "sha256": "d9038bb022bad40b8fb10871ccbe0053b866e8dcad47c2f960901d72f84a4e8a"
+      "bytes": 45302,
+      "sha256": "c9963c69a471b5507d361a711a6c3cd1400e32a007ce19a4a9ac56fd8a74d744"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -37844,8 +37850,8 @@
     {
       "path": "tests/auth/global-session-restore.test.mjs",
       "extension": ".mjs",
-      "bytes": 3190,
-      "sha256": "7079f289aff4593cc990a5e5b1d0a278f0bd3dbb7c716187ac79a0da179570dc"
+      "bytes": 3909,
+      "sha256": "7c71dce156bb59f97c8243835f8175e479e248e1a3d8dad739b75ed9a017cc8f"
     },
     {
       "path": "tests/branches/auditar-limpiar-ramas.test.mjs",
@@ -41510,7 +41516,7 @@
           },
           {
             "file": "js/core/auth/navegacion-autenticacion.js",
-            "line": 68,
+            "line": 71,
             "operation": "doc"
           },
           {
