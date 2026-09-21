@@ -20,8 +20,8 @@ function check(name, ok) {
 }
 
 const globalChecks = [
-  ['admin referencia CSS del rail', admin.includes('css/admin/barra-lateral-admin.css?v=tintin-20260921-superadmin-sidebar-rail-1')],
-  ['admin referencia JS del rail', admin.includes('js/admin/barra-lateral-admin.js?v=tintin-20260921-superadmin-sidebar-rail-1')],
+  ['admin referencia CSS del rail', admin.includes('css/admin/barra-lateral-admin.css?v=tintin-20260921-superadmin-sidebar-rail-3')],
+  ['admin referencia JS del rail', admin.includes('js/admin/barra-lateral-admin.js?v=tintin-20260921-superadmin-sidebar-rail-3')],
   ['script del rail carga en head', admin.indexOf('js/admin/barra-lateral-admin.js') < admin.indexOf('</head>')],
   ['toggle existe', admin.includes('id="adm-sidebar-rail-toggle"')],
   ['toggle es button', /<button[^>]+id="adm-sidebar-rail-toggle"/.test(admin)],
