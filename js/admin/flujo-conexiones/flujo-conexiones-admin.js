@@ -83,7 +83,10 @@ async function probeRenderedCart() {
     };
     let observer;
     const timeoutId = window.setTimeout(() => cleanup(false), 10_000);
-    frame.hidden = true;
+    // El sitio evita inicializar algunos componentes cuando el documento queda
+    // fuera del árbol de renderizado. Lo mantenemos imperceptible y fuera de la
+    // pantalla, pero renderizable, para observar el mismo panel que ve un cliente.
+    frame.style.cssText = 'position:fixed;left:-10000px;top:-10000px;width:1px;height:1px;opacity:0;pointer-events:none;border:0';
     frame.tabIndex = -1;
     frame.setAttribute('aria-hidden', 'true');
     frame.addEventListener('load', () => {
