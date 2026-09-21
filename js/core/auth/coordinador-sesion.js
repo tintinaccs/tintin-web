@@ -5,9 +5,9 @@ import {
   authPersistenceReady,
   getAuthPersistenceBackend,
   inspectAuthPersistenceStorage
-} from '../firebase/firebase.js?v=tintin-20260920-auth-persistence-all-users-1';
+} from '../firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { AUTH_STATES, createSessionStateMachine } from './estado-sesion.mjs?v=tintin-20260920-auth-persistence-all-users-1';
+import { AUTH_STATES, createSessionStateMachine } from './estado-sesion.mjs?v=tintin-20260921-auth-session-never-unknown-4';
 import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
 
 export { AUTH_STATES };

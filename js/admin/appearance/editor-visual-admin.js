@@ -1,5 +1,5 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260920-auth-persistence-all-users-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260920-auth-handoff-header-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3';
 import { collection, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
 import {

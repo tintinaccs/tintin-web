@@ -108,9 +108,9 @@ test('admin conserva UNKNOWN y ofrece recuperación ante una ausencia de sesión
 test('los headers marcan el handoff antes de abrir el panel y todos usan el runtime actualizado', () => {
   assert.match(publicAuthNav, /createAuthHandoff\(user\.uid\)/);
   assert.match(publicAuthNav, /data-internal-admin-link/);
-  assert.match(publicAuthNav, /tintin-20260920-auth-handoff-header-1/);
-  assert.match(admin, /tintin-20260920-auth-handoff-header-1/);
-  assert.match(login, /tintin-20260920-auth-handoff-header-1/);
+  assert.match(publicAuthNav, /tintin-20260921-auth-session-never-unknown-3/);
+  assert.match(admin, /tintin-20260921-auth-session-never-unknown-3/);
+  assert.match(login, /tintin-20260921-auth-session-never-unknown-3/);
 });
 
 test('checkout, navegación pública y carrito nunca deciden Auth con timeouts locales', () => {
