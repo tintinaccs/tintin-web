@@ -210,7 +210,11 @@ const configuredPersistence = window[AUTH_PERSISTENCE_PROMISE_KEY] || (window[AU
     })
     .catch(error => {
       console.warn('[firebase-auth] No se pudo establecer persistencia de pestaña:', error?.code || error);
-      throw error;
+      // La persistencia es una mejora de continuidad, no la autoridad de
+      // identidad. Si el navegador bloquea IndexedDB y sessionStorage, Auth
+      // todavía puede resolver la sesión en memoria y los consumidores deben
+      // seguir ese resultado en vez de quedar en UNKNOWN para siempre.
+      return false;
     }));
 
 export const authPersistenceReady = configuredPersistence.then(async () => {
@@ -225,7 +229,7 @@ export const authPersistenceReady = configuredPersistence.then(async () => {
     source: 'firebase',
     errorCode: error?.code || 'unknown'
   });
-  throw error;
+    return false;
 });
 // Idioma para cualquier mensaje/UI de Firebase Auth — se fija una sola vez
 auth.languageCode = "es";

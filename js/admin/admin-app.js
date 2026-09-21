@@ -934,7 +934,11 @@ async function startAdminAuthGuard() {
       return;
     }
     if (snapshot.status === AUTH_STATES.UNKNOWN) {
-      showAdminAuthUnknown();
+      // UNKNOWN no es una cuenta: ante una restauración que no pudo
+      // confirmarse, el panel vuelve al ingreso y nunca deja un bloqueo
+      // visual permanente.
+      clearAuthHandoffWithDiagnostic();
+      window.location.replace('login.html');
       return;
     }
     let user = snapshot.user;
@@ -948,7 +952,7 @@ async function startAdminAuthGuard() {
         reason: snapshot.reason || 'session-not-restored'
       });
       clearAdminAuthHandoffWithDiagnostic();
-      showAdminAuthUnknown();
+      window.location.replace('login.html');
       return;
     }
     recordAuthDiagnostic('AUTH_USER_AVAILABLE', {
