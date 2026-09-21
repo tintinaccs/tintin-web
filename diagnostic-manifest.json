@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "318a6baf611520dd9665860775246aad92b382846412b74e6bd6c742b9663394",
+  "sourceFingerprint": "d7d2e072771216a7c5251ed7cc8fdc801419c47de2cdcf80f9fadbd518ec949c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 859,
     "textFiles": 818,
-    "totalBytes": 16961710,
+    "totalBytes": 16961704,
     "pages": 19,
     "modules": 584
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 191289,
-      "sha256": "1a9928e13f59d0f023eba51f28647f8920d82d957df3bf3d066709479f429cae",
+      "bytes": 191283,
+      "sha256": "ecd21841428c25efa84a1b68a447f831f256c34ac7b767bf291054273927202c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2114,7 +2114,7 @@
           "line": 8
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260920-admin-session-recovery-3",
+          "raw": "js/admin/admin-app.js?v=tintin-20260921-session-evidence-1",
           "target": "js/admin/admin-app.js",
           "line": 2004
         },
@@ -2363,7 +2363,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260920-admin-session-recovery-3",
+          "raw": "js/admin/admin-app.js?v=tintin-20260921-session-evidence-1",
           "target": "js/admin/admin-app.js",
           "line": 2004,
           "exists": true
@@ -33434,8 +33434,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 191289,
-      "sha256": "1a9928e13f59d0f023eba51f28647f8920d82d957df3bf3d066709479f429cae"
+      "bytes": 191283,
+      "sha256": "ecd21841428c25efa84a1b68a447f831f256c34ac7b767bf291054273927202c"
     },
     {
       "path": "apple-touch-icon.png",
