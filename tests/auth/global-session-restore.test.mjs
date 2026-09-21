@@ -17,12 +17,12 @@ test('authStateReady vacío resuelve ausencia autoritativa sin UNKNOWN permanent
   assert.equal(machine.getSnapshot().status, AUTH_STATES.UNAUTHENTICATED);
 });
 
-test('un error de restauración conserva UNKNOWN y nunca se interpreta como logout', () => {
+test('un error de restauración cae a visitante y no bloquea la aplicación', () => {
   const machine = createSessionStateMachine();
   const failed = machine.authError(new Error('restore failed'));
-  assert.equal(failed.status, AUTH_STATES.UNKNOWN);
-  assert.equal(failed.reason, 'AUTH_RESTORE_ERROR');
-  assert.equal(machine.getSnapshot().status, AUTH_STATES.UNKNOWN);
+  assert.equal(failed.status, AUTH_STATES.UNAUTHENTICATED);
+  assert.equal(failed.reason, 'AUTH_RESTORE_FALLBACK');
+  assert.equal(machine.getSnapshot().status, AUTH_STATES.UNAUTHENTICATED);
 });
 
 test('ruta protegida espera durante restoring y sólo redirige ante ausencia autoritativa', () => {

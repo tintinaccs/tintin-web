@@ -1,8 +1,8 @@
-import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-20260920-auth-persistence-all-users-1";
+import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1";
 import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { AUTH_STATES, subscribeSession, markExplicitLogout, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20260920-auth-handoff-header-1";
+import { AUTH_STATES, subscribeSession, markExplicitLogout, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3";
 import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
@@ -30,7 +30,7 @@ import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tin
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260901-media-orphan-log-4-auth-persistence-20260919-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260901-media-orphan-scan-3-auth-persistence-20260919-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260916-cache-bump-diagnostico-sitio-1-auth-persistence-20260919-1";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260921-cart-probe-visibility-1";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260921-login-contract-probes-1";
 import "./pages/paginas-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
@@ -934,7 +934,11 @@ async function startAdminAuthGuard() {
       return;
     }
     if (snapshot.status === AUTH_STATES.UNKNOWN) {
-      showAdminAuthUnknown();
+      // UNKNOWN no es una cuenta: ante una restauración que no pudo
+      // confirmarse, el panel vuelve al ingreso y nunca deja un bloqueo
+      // visual permanente.
+      clearAuthHandoffWithDiagnostic();
+      window.location.replace('login.html');
       return;
     }
     let user = snapshot.user;
@@ -948,7 +952,7 @@ async function startAdminAuthGuard() {
         reason: snapshot.reason || 'session-not-restored'
       });
       clearAdminAuthHandoffWithDiagnostic();
-      showAdminAuthUnknown();
+      window.location.replace('login.html');
       return;
     }
     recordAuthDiagnostic('AUTH_USER_AVAILABLE', {

@@ -9,9 +9,10 @@
 // datos. Nada de lo que hace este módulo crea, actualiza ni borra documentos.
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260920-safe-live-probes-1';
 import { resolveState, isAttentionState } from './estado-flujo.js?v=tintin-20260920-admin-status-fixes-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260921-session-evidence-1';
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260920-auth-persistence-all-users-1';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260921-login-contract-probes-1';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
 import { collection, doc, getDoc, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { getProfileCompletionPlan } from '../../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260912-post-login-profile-1';
 
 const CATEGORY_LABELS = {
   entrada: 'Entrada',
@@ -148,11 +149,14 @@ async function probeCurrentSession(user, role) {
   try {
     await user.getIdToken();
     const profile = await getDoc(doc(db, 'users', user.uid));
+    const profileData = profile.exists() ? profile.data() : {};
+    const profileComplete = getProfileCompletionPlan({ profile: profileData, user, role }).skip === true;
     return {
       authenticated: true,
       token: true,
       role: role === 'superadmin',
       profile: profile.exists(),
+      profileComplete,
       status: 200,
     };
   } catch (error) {
@@ -401,7 +405,7 @@ export function initConnectionsFlow({ role } = {}) {
       } else {
         errors.push('No hay una sesión de Super Admin para probes protegidos.');
       }
-      const [systemHealth, adminHealth, masterDiagnostics, favoriteApi, notificationApi, firestoreRules, sessionProbe, pageProbe, ...routeProbes] = await Promise.all([
+      const [systemHealth, adminHealth, masterDiagnostics, favoriteApi, notificationApi, firestoreRules, sessionProbe, paypalConfig, pageProbe, ...routeProbes] = await Promise.all([
         user ? readJson('/api/system-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/admin-runtime-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/master-diagnostics', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
@@ -409,13 +413,13 @@ export function initConnectionsFlow({ role } = {}) {
         user ? readJson('/api/notifications?action=health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         probeClientFirestoreRules(user),
         probeCurrentSession(user, role),
+        readJson('/api/paypal-config'),
         fetch('/admin.html', { credentials: 'same-origin', cache: 'no-store' }).then(response => ({
           status: response.status,
           csp: Boolean(response.headers.get('content-security-policy')),
         })).catch(error => ({ status: 0, csp: false, error: error?.message || 'fallo de red' })),
         ...[
           ['home', '/'],
-          ['login', '/login'],
           ['profile', '/perfil'],
           ['admin', '/admin'],
           ['checkout', '/checkout'],
@@ -431,6 +435,22 @@ export function initConnectionsFlow({ role } = {}) {
             return [key, { path, status: 0, ok: false, error: error?.message || 'fallo de red' }];
           }
         }),
+        (async () => {
+          try {
+            const response = await fetch('/login', { credentials: 'same-origin', cache: 'no-store' });
+            const body = await response.text();
+            return ['login', {
+              path: '/login',
+              status: response.status,
+              ok: response.ok,
+              hasGoogleAuth: body.includes('signInWithPopup(auth, provider)') && body.includes('signInWithRedirect(auth, provider)'),
+              hasEmailOtp: body.includes('sendOtp(') && body.includes('/api/email-otp-send') && body.includes('/api/email-otp-verify'),
+              hasRedirectResult: body.includes('getRedirectResult(auth)') && body.includes('authPersistenceReady'),
+            }];
+          } catch (error) {
+            return ['login', { path: '/login', status: 0, ok: false, hasGoogleAuth: false, hasEmailOtp: false, hasRedirectResult: false, error: error?.message || 'fallo de red' }];
+          }
+        })(),
         probeRenderedCart(),
       ]);
       if (user && (!systemHealth.ok || systemHealth.body?.ok !== true)) errors.push(`/api/system-health respondió ${systemHealth.status || 'sin respuesta'}`);
@@ -448,9 +468,10 @@ export function initConnectionsFlow({ role } = {}) {
         routeProbes: routeProbeMap,
         protectedProbes: { favoriteApi, notificationApi, firestoreRules },
         sessionProbe,
+        paypalConfig,
         currentEvidence: masterDiagnostics.body?.currentEvidence,
       }, checkedAt);
-      liveState.byEdgeId = buildLiveEdges({ publicHealth, systemHealth, headers: pageProbe, protectedProbes: { favoriteApi, notificationApi, firestoreRules }, sessionProbe, currentEvidence: masterDiagnostics.body?.currentEvidence }, checkedAt);
+      liveState.byEdgeId = buildLiveEdges({ publicHealth, systemHealth, headers: pageProbe, routeProbes: routeProbeMap, protectedProbes: { favoriteApi, notificationApi, firestoreRules }, sessionProbe, paypalConfig, currentEvidence: masterDiagnostics.body?.currentEvidence }, checkedAt);
       liveTimestampEl.textContent = `Última verificación en vivo: ${checkedAt} (${Object.keys(liveState.byId).length} nodos y ${Object.keys(liveState.byEdgeId).length} conexiones con probe).`;
 
       if (errors.length) {
