@@ -87,6 +87,9 @@ if(initialAuthHandoff?.uid){
   photoURL:initialAuthHandoff.photoURL,
   displayName:initialAuthHandoff.displayName
  },{}));
+ queueMicrotask(()=>window.dispatchEvent(new CustomEvent('tintin:auth-nav-updated',{
+  detail:{authenticated:true,role:ROLES.CLIENT,provisional:true}
+ })));
 }
 
 function captureNavigationHandoff(anchor){

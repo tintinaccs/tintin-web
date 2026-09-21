@@ -64,8 +64,8 @@ function attachNotificationsDemand() {
     // La campana se muestra solo después de registrar su superficie. Así un
     // clic inmediato tras resolver Auth nunca cae en un trigger visible que
     // todavía no tenga drawer/controlador disponible.
+    setNotificationTriggersVisible(true);
     void loadNotificationsRuntime()
-      .then(() => setNotificationTriggersVisible(true))
       .catch(error => {
         setNotificationTriggersVisible(false);
         console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
