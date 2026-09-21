@@ -79,7 +79,6 @@
     "audit:products-media": "node scripts/auditar-admin-productos-multimedia.js",
     "audit:admin-orders": "node scripts/auditar-admin-pedidos.js",
     "audit:admin-responsive": "node scripts/auditar-super-admin-responsive.mjs",
-    "audit:admin-sidebar": "node scripts/auditar-superadmin-barra-lateral.mjs",
     "audit:users-roles": "node scripts/auditar-admin-usuarios-roles.js",
     "audit:content-appearance": "node scripts/auditar-admin-contenido-apariencia.js",
     "audit:email-messaging": "node scripts/auditar-admin-correo-mensajeria.js",
@@ -130,13 +129,14 @@
     "audit:headers:production": "node scripts/auditar-headers-produccion.mjs",
     "audit:contraste": "node scripts/auditar-contraste.mjs",
     "audit:names": "node scripts/auditar-convenciones-nombres.mjs",
-    "audit:appearance-unified": "node scripts/auditar-admin-apariencia-unificada.js"
+    "audit:appearance-unified": "node scripts/auditar-admin-apariencia-unificada.js",
+    "audit:admin-sidebar": "node scripts/auditar-superadmin-barra-lateral.mjs"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "5.0.2",
     "@playwright/test": "^1.63.0",
     "firebase": "^12.19.0",
-    "firebase-tools": "^15.30.0",
+    "firebase-tools": "^15.30.2",
     "monaco-editor": "0.52.2",
     "playwright": "^1.62.1"
   },
