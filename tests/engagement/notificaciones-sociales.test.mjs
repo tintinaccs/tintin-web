@@ -49,7 +49,8 @@ test('la API cubre altas, pedidos, recuperación y lectura para clienta y supera
     'adminNotificationSeen', 'adminNotificationsSeenAll', 'adminOrderStatusChanged',
   ]) assert.match(api, new RegExp(action));
   assert.match(api, /action !== 'health'/);
-  assert.match(api, /notifications\/__tfc_health_probe__/);
+  assert.match(api, /notifications\/tfc-health-probe/);
+  assert.doesNotMatch(api, /notifications\/__.*__/);
   assert.match(api, /mode: 'read_only'/);
   assert.match(api, /requireFirebaseUser/);
   assert.match(api, /requireSuperAdmin/);

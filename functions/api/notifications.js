@@ -182,7 +182,10 @@ export async function onRequest(context) {
       const user = await requireFirebaseUser(request);
       const action = new URL(request.url).searchParams.get('action');
       if (action !== 'health') throw Object.assign(new Error('Acción no permitida'), { status: 400 });
-      await firestoreAdminGet(env, `users/${safeId(user.uid, 'Cuenta')}/notifications/__tfc_health_probe__`);
+      // Los IDs Firestore con el formato __.*__ están reservados. Esta sonda
+      // no crea documentos, pero el GET a ese ID reservado respondía 400 y
+      // hacía que una integración sana se viera como fallida en el panel.
+      await firestoreAdminGet(env, `users/${safeId(user.uid, 'Cuenta')}/notifications/tfc-health-probe`);
       return jsonResponse({ ok: true, mode: 'read_only' }, 200, origin, request.url);
     }
     const raw = await request.text();
