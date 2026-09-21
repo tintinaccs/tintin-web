@@ -96,7 +96,10 @@ test('admin conserva UNKNOWN y ofrece recuperación ante una ausencia de sesión
   assert.match(admin, /AUTH_SESSION_RECOVERY_REQUIRED/);
   assert.match(admin, /adm-auth-login/);
   assert.match(admin, /clearAuthHandoff\(\)/);
+  assert.match(admin, /window\.location\.replace\('login\.html'\)/);
   assert.match(admin, /showAdminAuthUnknown\(\)/);
+  assert.match(admin, /function dismissAdminAuthUnknown/);
+  assert.match(admin, /dismissAdminAuthUnknown\(\);[\s\S]*clearAdminAuthHandoffWithDiagnostic/);
   assert.match(admin, /recoverAdminUserFromHandoff/);
   assert.match(admin, /HANDOFF_WAIT_START/);
   assert.match(admin, /HANDOFF_RECOVERED/);
