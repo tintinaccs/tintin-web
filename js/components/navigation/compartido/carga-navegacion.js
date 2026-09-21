@@ -1,5 +1,5 @@
 import { currentPage } from './estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260921-document-navigation-no-view-transition-2';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260921-document-navigation-no-view-transition-3';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;
@@ -66,6 +66,7 @@ function attachNotificationsDemand() {
     // todavía no tenga drawer/controlador disponible.
     setNotificationTriggersVisible(true);
     void loadNotificationsRuntime()
+      .then(() => setNotificationTriggersVisible(true))
       .catch(error => {
         setNotificationTriggersVisible(false);
         console.warn('[PublicShell] No se pudieron iniciar las notificaciones.', error);
