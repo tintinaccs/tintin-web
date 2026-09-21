@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "cbb7aabc038c3e5282d39e82d0279f169e9e172d7b74a5b95e9165a9241f2a1a",
+  "sourceFingerprint": "e796d54ef98474186299ecd489546aba0aa8bdb0031da44cd1cb7a3577c6ec39",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 859,
-    "textFiles": 818,
-    "totalBytes": 16964081,
+    "files": 860,
+    "textFiles": 819,
+    "totalBytes": 16966073,
     "pages": 19,
     "modules": 584
   },
@@ -33292,6 +33292,12 @@
       "extension": ".yml",
       "bytes": 3384,
       "sha256": "a828b9ee2817103863e11f21f5532749046a81b2081b5b48d13d801bdc12a163"
+    },
+    {
+      "path": ".github/workflows/regenerar-manifiesto-dependabot.yml",
+      "extension": ".yml",
+      "bytes": 1992,
+      "sha256": "66631b9e73cb8e4d402c4f1ffd5225dac3e516176a6235796501af7f3fc0875c"
     },
     {
       "path": ".github/workflows/respaldo-repositorio.yml",
