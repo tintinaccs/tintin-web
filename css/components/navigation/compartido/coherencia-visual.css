@@ -3,12 +3,13 @@
    cuenta y notificaciones compartan la misma jerarquía sin reescribir sus
    componentes ni sus reglas de acceso. */
 :root {
-  --tt-drawer-accent: var(--primary, #ad3f67);
-  --tt-drawer-accent-strong: #8f244a;
-  --tt-drawer-soft: #fff4f8;
-  --tt-drawer-border: #f0d5df;
-  --tt-drawer-text: #281c21;
-  --tt-drawer-muted: #78676e;
+  /* Rosa Tintin estable: evita heredar violetas de temas legacy. */
+  --tt-drawer-accent: #c64273;
+  --tt-drawer-accent-strong: #9e2451;
+  --tt-drawer-soft: #fff0f5;
+  --tt-drawer-border: #edbfd0;
+  --tt-drawer-text: #2b1b23;
+  --tt-drawer-muted: #6e5962;
 }
 
 /* El hero se mantiene reservado en layout, pero la imagen no se revela por
@@ -246,6 +247,54 @@ body.tt-home-premium .tt-hero-media {
 .tt-account-drawer .tt-account-primary:focus-visible {
   border-color: var(--tt-drawer-accent-strong) !important;
   background: var(--tt-drawer-accent-strong) !important;
+}
+
+/* Cuenta: el CTA debe tener contraste real incluso si una hoja legacy declara
+   colores de enlace sobre la superficie. La misma regla sirve para invitadas,
+   clientes y cuentas internas sin alterar sus permisos o destinos. */
+html body .tt-account-drawer .tt-account-primary,
+html body .tt-account-drawer .tt-account-primary:visited {
+  background: var(--tt-drawer-accent) !important;
+  background-color: var(--tt-drawer-accent) !important;
+  border: 1px solid var(--tt-drawer-accent) !important;
+  color: #fff !important;
+  font-weight: 800 !important;
+  letter-spacing: .01em;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+html body .tt-account-drawer .tt-account-primary:hover,
+html body .tt-account-drawer .tt-account-primary:focus-visible {
+  background: var(--tt-drawer-accent-strong) !important;
+  background-color: var(--tt-drawer-accent-strong) !important;
+  border-color: var(--tt-drawer-accent-strong) !important;
+  color: #fff !important;
+}
+
+html body .tt-account-drawer .tt-account-item {
+  color: var(--tt-drawer-accent-strong) !important;
+}
+html body .tt-account-drawer .tt-account-primary,
+html body .tt-account-drawer .tt-account-primary:hover,
+html body .tt-account-drawer .tt-account-primary:focus-visible {
+  color: #fff !important;
+}
+html body .tt-account-drawer .tt-account-internal {
+  background: var(--tt-drawer-soft) !important;
+  border-color: var(--tt-drawer-border) !important;
+  color: var(--tt-drawer-accent-strong) !important;
+}
+
+@media (min-width: 1025px) {
+  html body .tt-account-drawer {
+    width: min(430px, calc(100vw - 32px)) !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  html body .tt-account-drawer {
+    width: min(560px, calc(100vw - 24px)) !important;
+  }
 }
 
 .tt-account-loading {
