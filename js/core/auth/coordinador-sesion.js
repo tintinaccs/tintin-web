@@ -20,6 +20,7 @@ const sessionListeners = new Set();
 const machine = createSessionStateMachine();
 let currentSnapshot = machine.getSnapshot();
 let started = false;
+let transientNullTimer = 0;
 let readySettled = false;
 let readyResolve;
 export const sessionReady = new Promise(resolve => { readyResolve = resolve; });
@@ -68,6 +69,23 @@ function start() {
       // en la decisión final si Firebase publicó luego una identidad antes de
       // que authStateReady() terminara.
       initialObserverUser = user || null;
+      return;
+    }
+    if (user) {
+      if (transientNullTimer) window.clearTimeout(transientNullTimer);
+      transientNullTimer = 0;
+      publish(machine.authChanged(user || null));
+      return;
+    }
+    // Un null posterior a una sesión autenticada puede ser una lectura
+    // transitoria de IndexedDB/red. Confirmarlo antes de degradar el panel a
+    // visitante evita el logout aparente que provoca el rebote admin/login.
+    if (currentSnapshot.status === AUTH_STATES.AUTHENTICATED) {
+      if (transientNullTimer) window.clearTimeout(transientNullTimer);
+      transientNullTimer = window.setTimeout(() => {
+        transientNullTimer = 0;
+        publish(machine.authChanged(auth.currentUser || null));
+      }, 2500);
       return;
     }
     publish(machine.authChanged(user || null));
