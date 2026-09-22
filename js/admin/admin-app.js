@@ -5729,7 +5729,10 @@ function loadColecciones() {
       '<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="reintentarCargaColecciones()">Reintentar</button>';
   }, 12000);
   _collectionsUnsub = onSnapshot(
-    collection(db, 'collections'),
+    // Firestore rules require an explicit bounded list for admin/agent roles.
+    // Superadmin remains allowed, while this avoids an unbounded listener
+    // being rejected as "Missing or insufficient permissions".
+    query(collection(db, 'collections'), limit(200)),
     snap => {
       clearTimeout(_collectionsSlowTimer);
       _collectionsReady = true;

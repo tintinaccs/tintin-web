@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "fd874b0f77cf19093b0f39e6a7ba61b3592b7434763aed451855a2e820aa0e57",
+  "sourceFingerprint": "86418a53aa3abaad066a68c1fc80f80e0820d7e71481214183419b3bb1cc484c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 859,
-    "textFiles": 818,
-    "totalBytes": 16999089,
+    "files": 864,
+    "textFiles": 823,
+    "totalBytes": 17006446,
     "pages": 19,
-    "modules": 584
+    "modules": 589
   },
   "viewports": [
     {
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 194966,
-      "sha256": "ea9629091cfb5c75b9ed134a8d5bdd572e9653992d22bf04ea7df00684267484",
+      "bytes": 194929,
+      "sha256": "7a905af1816bbb867edac1b9fc67b5fdea8a8b28f2a3e3c45e2edf62162f4aed",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2129,7 +2129,7 @@
           "line": 2030
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260922-bulk-products-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2031
         },
@@ -2381,7 +2381,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260922-bulk-products-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2031,
           "exists": true
@@ -17609,8 +17609,8 @@
     },
     {
       "path": "cloudflare/borrado-global-catalogo.js",
-      "bytes": 14049,
-      "sha256": "4073e136931d373ba87b833c0e51de46a131b98262df3ed9b4917b718f5b966d",
+      "bytes": 14510,
+      "sha256": "978af81a34b11e006d27d005af589fcf2aa52a12f6e0f6a8829feb6204dc8e8c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20135,8 +20135,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 441305,
-      "sha256": "6ad96d9e6dacaef8e58171a18e64c71093839c5c5825b87804ec5c1eb883c111",
+      "bytes": 441542,
+      "sha256": "2983b6e876361d4be15020319daea169c897882238af94205dcb945e968377d3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20338,11 +20338,11 @@
         },
         {
           "url": "https://via.placeholder.com/400x400/fce4ec/ea7ea3",
-          "line": 6496
+          "line": 6499
         },
         {
           "url": "https://maps.google.com/",
-          "line": 7319
+          "line": 7322
         }
       ]
     },
@@ -20761,8 +20761,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
-      "bytes": 16249,
-      "sha256": "144a1bf37fd9f70f3ff86b0fc98a13213729592535e6dddac1fd227ca1f3c338",
+      "bytes": 16394,
+      "sha256": "f1b09cf3b52ff8e6f8739878fc28c5d3980def1d6064ba9e190248f05f9dcd9f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21599,8 +21599,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 74521,
-      "sha256": "c4b27d16d6ab6f05efccb5cb99865e1bf12aed24822dcff0b2f3b3dd1cca70ea",
+      "bytes": 75257,
+      "sha256": "3510b29db98b8bf57b01e9fab9f31df0672786ef416261793416d9577d3408e6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21656,7 +21656,7 @@
         },
         {
           "url": "https://wa.me/$%7Bnormalized%7D",
-          "line": 909
+          "line": 919
         }
       ]
     },
@@ -22869,8 +22869,8 @@
     },
     {
       "path": "js/components/navigation/compartido/recursos-navegacion.js",
-      "bytes": 5044,
-      "sha256": "0ec4c4d496e013ba45dbfcd6f89c6e6df422284953f96f1594a888fba2e161af",
+      "bytes": 5053,
+      "sha256": "d471d770e98ec2c97d5615609172f3a36d680b7b21bcdee2638d67a06def802f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -25148,8 +25148,8 @@
     },
     {
       "path": "js/pages/home/carrusel-colecciones.js",
-      "bytes": 15025,
-      "sha256": "ea811591aa10c1a89d1ac8f1f1243fa5b76728e1c6d189ecbc008d65ce6216ed",
+      "bytes": 14986,
+      "sha256": "8d74f77394c13fea9fd7afc7c8f65652d05468b26c722192b65b83e390d06a0a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30433,6 +30433,66 @@
       "endpoints": []
     },
     {
+      "path": "tests/catalog/admin-collection-query.test.mjs",
+      "bytes": 509,
+      "sha256": "a4bce395a6bd60d82777acbad9c5fb2bfc71b6ada77be28a97871da8428eb549",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
+      "path": "tests/catalog/bulk-product-delete-contract.test.mjs",
+      "bytes": 461,
+      "sha256": "01b45b01445a5b37107017a1d6042c96c0c5da608d02ee1af9542b57befc2982",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/catalog/public-catalog-cache.test.mjs",
       "bytes": 1351,
       "sha256": "3e03e8ee118479dfb0492c7593da5fe646463e6bd51e6f13dbfda9ec2c8b1193",
@@ -31161,6 +31221,48 @@
       "endpoints": []
     },
     {
+      "path": "tests/flow-connections/pedidos-authority.test.mjs",
+      "bytes": 1105,
+      "sha256": "676b24cbf392a73eeec825f2a8815436bca071998511a55b9b1a61c36487ac93",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/functions/page-loader-route.test.mjs",
       "bytes": 541,
       "sha256": "e94bd70268f012462fbdbc295a866308e8bea882d1e2ba6870ce025e4f404fe7",
@@ -31610,6 +31712,48 @@
       "endpoints": []
     },
     {
+      "path": "tests/navigation/account-panel-contract.test.mjs",
+      "bytes": 1084,
+      "sha256": "5745adceabc29ae28425da813b6e1a710b13f474a7218303bd77e19b151ad44a",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/navigation/header-responsive.spec.js",
       "bytes": 14935,
       "sha256": "c57bf08495cb821bf7bb239fed1140de3f9b5ff8ee97925d3022c25d11a023cf",
@@ -31618,6 +31762,48 @@
         "error": ""
       },
       "imports": [],
+      "endpoints": []
+    },
+    {
+      "path": "tests/navigation/home-collection-links.test.mjs",
+      "bytes": 923,
+      "sha256": "150d649287965a10b44e0e7a1cc99713d73380df8970ffea8980bf2065eb9723",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": false,
+          "line": 5
+        }
+      ],
       "endpoints": []
     },
     {
@@ -33440,8 +33626,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 194966,
-      "sha256": "ea9629091cfb5c75b9ed134a8d5bdd572e9653992d22bf04ea7df00684267484"
+      "bytes": 194929,
+      "sha256": "7a905af1816bbb867edac1b9fc67b5fdea8a8b28f2a3e3c45e2edf62162f4aed"
     },
     {
       "path": "apple-touch-icon.png",
@@ -33746,8 +33932,8 @@
     {
       "path": "cloudflare/borrado-global-catalogo.js",
       "extension": ".js",
-      "bytes": 14049,
-      "sha256": "4073e136931d373ba87b833c0e51de46a131b98262df3ed9b4917b718f5b966d"
+      "bytes": 14510,
+      "sha256": "978af81a34b11e006d27d005af589fcf2aa52a12f6e0f6a8829feb6204dc8e8c"
     },
     {
       "path": "cloudflare/comentarios-sociales.js",
@@ -34046,8 +34232,8 @@
     {
       "path": "css/components/navigation/compartido/coherencia-visual.css",
       "extension": ".css",
-      "bytes": 8262,
-      "sha256": "f91887667ea575653be106e794d9e8eab7e7bb355c323b07fafa5a76aa6959b9"
+      "bytes": 10062,
+      "sha256": "ee2122544d1b8c1dca222c083c3def5402d6de8a8b18f9b4f5b3aee77adaa3c8"
     },
     {
       "path": "css/components/navigation/compartido/control-paneles.css",
@@ -35150,8 +35336,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 441305,
-      "sha256": "6ad96d9e6dacaef8e58171a18e64c71093839c5c5825b87804ec5c1eb883c111"
+      "bytes": 441542,
+      "sha256": "2983b6e876361d4be15020319daea169c897882238af94205dcb945e968377d3"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -35228,8 +35414,8 @@
     {
       "path": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
       "extension": ".js",
-      "bytes": 16249,
-      "sha256": "144a1bf37fd9f70f3ff86b0fc98a13213729592535e6dddac1fd227ca1f3c338"
+      "bytes": 16394,
+      "sha256": "f1b09cf3b52ff8e6f8739878fc28c5d3980def1d6064ba9e190248f05f9dcd9f"
     },
     {
       "path": "js/admin/flujo-conexiones/estado-flujo.js",
@@ -35396,8 +35582,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 74521,
-      "sha256": "c4b27d16d6ab6f05efccb5cb99865e1bf12aed24822dcff0b2f3b3dd1cca70ea"
+      "bytes": 75257,
+      "sha256": "3510b29db98b8bf57b01e9fab9f31df0672786ef416261793416d9577d3408e6"
     },
     {
       "path": "js/admin/users/ficha-usuario-admin.js",
@@ -35756,8 +35942,8 @@
     {
       "path": "js/components/navigation/compartido/recursos-navegacion.js",
       "extension": ".js",
-      "bytes": 5044,
-      "sha256": "0ec4c4d496e013ba45dbfcd6f89c6e6df422284953f96f1594a888fba2e161af"
+      "bytes": 5053,
+      "sha256": "d471d770e98ec2c97d5615609172f3a36d680b7b21bcdee2638d67a06def802f"
     },
     {
       "path": "js/components/navigation/compartido/registro-paneles.js",
@@ -36326,8 +36512,8 @@
     {
       "path": "js/pages/home/carrusel-colecciones.js",
       "extension": ".js",
-      "bytes": 15025,
-      "sha256": "ea811591aa10c1a89d1ac8f1f1243fa5b76728e1c6d189ecbc008d65ce6216ed"
+      "bytes": 14986,
+      "sha256": "8d74f77394c13fea9fd7afc7c8f65652d05468b26c722192b65b83e390d06a0a"
     },
     {
       "path": "js/pages/home/inicio-premium.js",
@@ -37574,8 +37760,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 45239,
-      "sha256": "0a01813361ce84de0eacf39694ff025e4c0054317d262d6756482468983afa09"
+      "bytes": 45202,
+      "sha256": "af82a3fce0e37697a62854a68415b18d1c8439a5e201c2076b2bbbd33300826b"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -37884,6 +38070,18 @@
       "sha256": "381ea955ac9a31806ad9ea360d28de98a9a2530e95cabb3ab3836a1b410c819e"
     },
     {
+      "path": "tests/catalog/admin-collection-query.test.mjs",
+      "extension": ".mjs",
+      "bytes": 509,
+      "sha256": "a4bce395a6bd60d82777acbad9c5fb2bfc71b6ada77be28a97871da8428eb549"
+    },
+    {
+      "path": "tests/catalog/bulk-product-delete-contract.test.mjs",
+      "extension": ".mjs",
+      "bytes": 461,
+      "sha256": "01b45b01445a5b37107017a1d6042c96c0c5da608d02ee1af9542b57befc2982"
+    },
+    {
       "path": "tests/catalog/public-catalog-cache.test.mjs",
       "extension": ".mjs",
       "bytes": 1351,
@@ -38004,6 +38202,12 @@
       "sha256": "57f1b2fef12fd9f88f984211ae7494d06d9ad13f07cd58067bf046f2a210f11a"
     },
     {
+      "path": "tests/flow-connections/pedidos-authority.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1105,
+      "sha256": "676b24cbf392a73eeec825f2a8815436bca071998511a55b9b1a61c36487ac93"
+    },
+    {
       "path": "tests/functions/page-loader-route.test.mjs",
       "extension": ".mjs",
       "bytes": 541,
@@ -38076,10 +38280,22 @@
       "sha256": "c02c32cdd1cd5e3fa358f5a6832cdc3ebf9f395d093a11f8db3262459ef52371"
     },
     {
+      "path": "tests/navigation/account-panel-contract.test.mjs",
+      "extension": ".mjs",
+      "bytes": 1084,
+      "sha256": "5745adceabc29ae28425da813b6e1a710b13f474a7218303bd77e19b151ad44a"
+    },
+    {
       "path": "tests/navigation/header-responsive.spec.js",
       "extension": ".js",
       "bytes": 14935,
       "sha256": "c57bf08495cb821bf7bb239fed1140de3f9b5ff8ee97925d3022c25d11a023cf"
+    },
+    {
+      "path": "tests/navigation/home-collection-links.test.mjs",
+      "extension": ".mjs",
+      "bytes": 923,
+      "sha256": "150d649287965a10b44e0e7a1cc99713d73380df8970ffea8980bf2065eb9723"
     },
     {
       "path": "tests/navigation/loader-shell-wait.spec.js",
@@ -38661,28 +38877,21 @@
     },
     {
       "file": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
-      "line": 128,
+      "line": 129,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
-      "line": 130,
+      "line": 131,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
     },
     {
       "file": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
-      "line": 135,
-      "raw": "login.html",
-      "target": "login.html",
-      "exists": true
-    },
-    {
-      "file": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
-      "line": 137,
+      "line": 136,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
@@ -38696,7 +38905,14 @@
     },
     {
       "file": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
-      "line": 141,
+      "line": 139,
+      "raw": "login.html",
+      "target": "login.html",
+      "exists": true
+    },
+    {
+      "file": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
+      "line": 142,
       "raw": "login.html",
       "target": "login.html",
       "exists": true
@@ -40277,52 +40493,52 @@
         "references": [
           {
             "file": "js/admin/admin-app.js",
-            "line": 5732,
+            "line": 5735,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 5868,
+            "line": 5871,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6299,
+            "line": 6302,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6306,
+            "line": 6309,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6313,
+            "line": 6316,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6318,
+            "line": 6321,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6359,
+            "line": 6362,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6370,
+            "line": 6373,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6389,
+            "line": 6392,
             "operation": "doc"
           },
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1135,
+            "line": 1150,
             "operation": "collection"
           },
           {
@@ -40347,33 +40563,28 @@
         "references": [
           {
             "file": "js/admin/admin-app.js",
-            "line": 7801,
+            "line": 7804,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8122,
+            "line": 8125,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8142,
+            "line": 8145,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8330,
+            "line": 8333,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8350,
+            "line": 8353,
             "operation": "collection"
-          },
-          {
-            "file": "js/admin/admin-app.js",
-            "line": 7741,
-            "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
@@ -40382,42 +40593,47 @@
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7809,
+            "line": 7747,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8186,
+            "line": 7812,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8234,
+            "line": 8189,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8246,
+            "line": 8237,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8267,
+            "line": 8249,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8302,
+            "line": 8270,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8374,
+            "line": 8305,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8388,
+            "line": 8377,
+            "operation": "doc"
+          },
+          {
+            "file": "js/admin/admin-app.js",
+            "line": 8391,
             "operation": "doc"
           },
           {
@@ -40622,7 +40838,7 @@
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6437,
+            "line": 6440,
             "operation": "collection"
           },
           {
@@ -40637,7 +40853,7 @@
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7475,
+            "line": 7478,
             "operation": "doc"
           },
           {
@@ -40662,12 +40878,12 @@
           },
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1147,
+            "line": 1162,
             "operation": "collection"
           },
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1178,
+            "line": 1193,
             "operation": "collection"
           },
           {
@@ -40742,7 +40958,7 @@
         "references": [
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1203,
+            "line": 1218,
             "operation": "collection"
           },
           {
@@ -40837,17 +41053,17 @@
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6421,
+            "line": 6424,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6522,
+            "line": 6525,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6794,
+            "line": 6797,
             "operation": "collection"
           },
           {
@@ -40872,22 +41088,22 @@
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6139,
+            "line": 6142,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6151,
+            "line": 6154,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6162,
+            "line": 6165,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7172,
+            "line": 7175,
             "operation": "doc"
           },
           {
@@ -40907,7 +41123,7 @@
           },
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1123,
+            "line": 1137,
             "operation": "collection"
           },
           {
@@ -41052,22 +41268,22 @@
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7734,
+            "line": 7737,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7753,
+            "line": 7756,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7762,
+            "line": 7765,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8317,
+            "line": 8320,
             "operation": "doc"
           },
           {
@@ -41402,7 +41618,7 @@
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 6472,
+            "line": 6475,
             "operation": "collection"
           },
           {

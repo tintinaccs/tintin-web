@@ -417,6 +417,7 @@ function renderProducts() {
         <span class="tt-commerce-bulkcount">${state.productSelected.size} seleccionado${state.productSelected.size === 1 ? '' : 's'}</span>
         ${canToggle ? button('Activar', 'products-bulk-activate') : ''}
         ${canToggle ? button('Desactivar', 'products-bulk-deactivate') : ''}
+        ${canDelete && canBulk ? button('Eliminar seleccionados', 'products-bulk-delete', { danger: true }) : ''}
         ${canExport ? button('Exportar selección', 'products-export-selected') : ''}
         ${button('Limpiar', 'products-clear-selection')}
       </div>
@@ -900,6 +901,15 @@ function clickSection(section) {
   if (nav) nav.click();
 }
 
+function callLegacyAction(name, ...args) {
+  const action = window[name];
+  if (typeof action !== 'function') {
+    toast('La acción todavía está cargando. Volvé a intentarlo en un momento.', 4500);
+    return undefined;
+  }
+  return action(...args);
+}
+
 function openWhatsApp(order) {
   const customer = orderCustomer(order);
   const digits = String(customer.phone || '').replace(/\D/g, '');
@@ -919,12 +929,16 @@ async function handleAction(action, element) {
   if (action === 'products-clear-selection') { state.productSelected.clear(); return renderProducts(); }
   if (action === 'products-bulk-activate') return bulkProducts(true);
   if (action === 'products-bulk-deactivate') return bulkProducts(false);
-  if (action === 'product-edit' || action === 'drawer-product-edit') { closeDrawer(); return window.prodEditar?.(id); }
+  if (action === 'products-bulk-delete') {
+    if (typeof window.bulkDelete !== 'function') return toast('La eliminación masiva todavía no está disponible.');
+    return window.bulkDelete();
+  }
+  if (action === 'product-edit' || action === 'drawer-product-edit') { closeDrawer(); return callLegacyAction('prodEditar', id); }
   if (action === 'product-toggle' || action === 'drawer-product-toggle') {
     const p = state.products.find(x => x._docId === id); if (!p) return;
     return window.prodToggleActive?.(id, p.active !== false);
   }
-  if (action === 'product-delete' || action === 'drawer-product-delete') { closeDrawer(); return window.prodEliminar?.(id); }
+  if (action === 'product-delete' || action === 'drawer-product-delete') { closeDrawer(); return callLegacyAction('prodEliminar', id, state.products.find(p => p._docId === id)?.name || id); }
   if (action === 'drawer-product') return openDrawer('product', id);
 
   if (action === 'collection-new') { closeDrawer(); return window.collNueva?.(); }
@@ -1132,7 +1146,8 @@ function subscribeData() {
     renderProducts();
   }));
 
-  state.unsubscribers.push(onSnapshot(collection(db, 'collections'), snapshot => {
+  // Firestore rules require a bounded list for non-superadmin roles.
+  state.unsubscribers.push(onSnapshot(query(collection(db, 'collections'), limit(200)), snapshot => {
     state.collections = snapshot.docs.map(snap => normalizeCollectionDoc(snap.id, snap.data())).filter(Boolean);
     state.collectionsReady = true;
     state.collectionSelected = new Set([...state.collectionSelected].filter(slug => state.collections.some(c => c.slug === slug)));

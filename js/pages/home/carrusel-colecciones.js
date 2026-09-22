@@ -86,6 +86,11 @@ function createCard(collection, accessible, collectionIndex) {
 
   link.className = 'tt-collection-card';
   link.href = collectionHref(collection.slug);
+  // Dejamos que el navegador ejecute la navegación nativa del enlace. El
+  // router compartido ya excluye `data-no-transition`, evitando que el
+  // carrusel tenga que cancelar el click y competir con listeners globales.
+  // Esto es más estable en mouse, touch, teclado y elementos transformados.
+  link.dataset.noTransition = 'true';
   link.dataset.collectionSlug = clean(collection.slug);
   link.dataset.collectionIndex = String(collectionIndex);
   link.setAttribute('aria-label', `Ver colección ${label}`);
@@ -152,17 +157,9 @@ class InfiniteCollectionCarousel {
     this.viewport.addEventListener('pointercancel', event => this.onPointerUp(event));
     this.viewport.addEventListener('click', event => {
       const card = event.target instanceof Element ? event.target.closest('.tt-collection-card') : null;
-      if (card && Date.now() >= this.suppressClickUntil && !event.defaultPrevented) {
-        // GSAP transforma el track y algunos navegadores móviles pueden
-        // entregar el click a la capa transformada sin ejecutar el default
-        // nativo del <a>. Forzamos la navegación canónica para que todas las
-        // copias visibles del carrusel funcionen igual en touch, mouse y teclado.
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        window.location.assign(card.href);
-        return;
-      }
-      if (Date.now() < this.suppressClickUntil) event.preventDefault();
+      // Un arrastre termina con un click sintético en algunos navegadores.
+      // Solo ese click se cancela; el click normal queda en manos del <a>.
+      if (card && Date.now() < this.suppressClickUntil) event.preventDefault();
     }, true);
     this.viewport.addEventListener('mouseenter', () => { this.paused = true; });
     this.viewport.addEventListener('mouseleave', () => { this.paused = false; });
