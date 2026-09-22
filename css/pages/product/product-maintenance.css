@@ -673,3 +673,34 @@ body.tt-product-maintenance .tt-trust-badge-item { margin: 0 !important; min-wid
   body.tt-product-maintenance .tt-product-info-panel { padding: 18px 16px; border-radius: 16px !important; }
   body.tt-product-maintenance .tt-gallery-main { border-radius: 10px !important; }
 }
+
+
+/* Responsive card fit: desktop, laptop, tablet and mobile. */
+body.tt-product-maintenance .tt-product-gallery,
+body.tt-product-maintenance .tt-product-info-panel { box-sizing: border-box; padding: clamp(18px, 2.4vw, 30px) !important; }
+
+@media (min-width: 1280px) {
+  body.tt-product-maintenance .tt-product-detail-grid { grid-template-columns: minmax(0, 1.08fr) minmax(420px, .92fr); max-width: 1360px; margin-inline: auto; }
+}
+@media (min-width: 1025px) and (max-width: 1279px) {
+  body.tt-product-maintenance .tt-product-detail-grid { grid-template-columns: minmax(0, 1fr) minmax(380px, .9fr); gap: 24px; }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  body.tt-product-maintenance .tt-product-detail-grid { grid-template-columns: minmax(0, 1fr) minmax(320px, .92fr); gap: 20px; padding: 16px; }
+  body.tt-product-maintenance .tt-product-gallery,
+  body.tt-product-maintenance .tt-product-info-panel { padding: 20px !important; border-radius: 18px !important; }
+  body.tt-product-maintenance .tt-product-actions-panel .tt-btn { min-width: 0; white-space: normal; }
+}
+@media (max-width: 767px) {
+  body.tt-product-maintenance .tt-product-detail-grid { display: grid; grid-template-columns: minmax(0, 1fr); width: 100%; }
+  body.tt-product-maintenance .tt-product-gallery,
+  body.tt-product-maintenance .tt-product-info-panel { width: 100%; padding: 18px 16px !important; }
+  body.tt-product-maintenance .tt-gallery-main img { max-height: min(68vh, 520px); }
+  body.tt-product-maintenance .tt-product-actions-panel .tt-btn { width: 100%; min-width: 0; white-space: normal; }
+  body.tt-product-maintenance .tt-product-wa-link { white-space: normal; }
+}
+@media (max-width: 380px) {
+  body.tt-product-maintenance .tt-product-gallery,
+  body.tt-product-maintenance .tt-product-info-panel { padding: 16px 12px !important; }
+  body.tt-product-maintenance .tt-product-detail-grid { gap: 12px; }
+}
