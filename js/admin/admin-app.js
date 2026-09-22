@@ -5066,6 +5066,39 @@ let _productosUnsub = null;
 let _productInventoryUnsub = null;
 const _productInventoryById = new Map();
 
+// Combina las opciones curadas de cada <datalist> de ficha técnica con los
+// valores que ya se usaron en productos reales, para que las sugerencias
+// crezcan solas sin dejar de aceptar texto libre.
+const SPEC_DATALIST_FIELDS = [
+  ['material', 'dl-prod-material'],
+  ['measurements', 'dl-prod-measurements'],
+  ['colorFinish', 'dl-prod-color-finish'],
+  ['care', 'dl-prod-care'],
+  ['waterResistance', 'dl-prod-water-resistance'],
+  ['warranty', 'dl-prod-warranty'],
+  ['sizeFit', 'dl-prod-size-fit'],
+  ['packageContents', 'dl-prod-package-contents'],
+];
+function syncSpecDatalists(products) {
+  SPEC_DATALIST_FIELDS.forEach(([field, datalistId]) => {
+    const datalist = document.getElementById(datalistId);
+    if (!datalist) return;
+    datalist.querySelectorAll('option[data-dynamic="1"]').forEach(o => o.remove());
+    const existing = new Set([...datalist.options].map(o => o.value.trim().toLowerCase()));
+    products.forEach(p => {
+      const value = String(p[field] || '').trim();
+      if (!value) return;
+      const key = value.toLowerCase();
+      if (existing.has(key)) return;
+      existing.add(key);
+      const option = document.createElement('option');
+      option.value = value;
+      option.dataset.dynamic = '1';
+      datalist.appendChild(option);
+    });
+  });
+}
+
 // Live listener: any create/edit/delete/activate/deactivate — from this session
 // or another admin's — updates the table immediately, no manual refresh needed.
 let _productosSlowTimer = null;
@@ -5108,6 +5141,7 @@ function loadProductos() {
         return { _docId: d.id, ...data, variants: sanitizeVariantData(data.variants || null) };
       });
       adminRealtimeReady.products = true;
+      syncSpecDatalists(_allProducts);
       applyProductFilters();
       renderGeneralStatistics();
     },

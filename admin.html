@@ -675,14 +675,38 @@
               <label style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Tags (separados por coma)</label>
               <input id="prod-tags" type="text" class="adm-input" placeholder="reloj, dorado, regalo, mujer">
             </div>
-            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Material</label><input id="prod-material" class="adm-input" maxlength="240" placeholder="Ej: acero inoxidable"></div>
-            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Medidas</label><input id="prod-measurements" class="adm-input" maxlength="240" placeholder="Ej: cadena de 45 cm"></div>
-            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Color / acabado</label><input id="prod-color-finish" class="adm-input" maxlength="240" placeholder="Ej: dorado pulido"></div>
-            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Cuidados</label><input id="prod-care" class="adm-input" maxlength="500" placeholder="Limpieza y conservaci&oacute;n"></div>
-            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Resistencia al agua</label><input id="prod-water-resistance" class="adm-input" maxlength="240" placeholder="Ej: IPX4"></div>
-            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Garant&iacute;a</label><input id="prod-warranty" class="adm-input" maxlength="240" placeholder="Cobertura y plazo"></div>
-            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Talle / ajuste</label><input id="prod-size-fit" class="adm-input" maxlength="240" placeholder="Ej: ajustable"></div>
-            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Contenido del paquete</label><input id="prod-package-contents" class="adm-input" maxlength="500" placeholder="Ej: producto, estuche y certificado"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Material</label><input id="prod-material" class="adm-input" maxlength="240" placeholder="Ej: acero inoxidable" list="dl-prod-material" autocomplete="off"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Medidas</label><input id="prod-measurements" class="adm-input" maxlength="240" placeholder="Ej: cadena de 45 cm" list="dl-prod-measurements" autocomplete="off"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Color / acabado</label><input id="prod-color-finish" class="adm-input" maxlength="240" placeholder="Ej: dorado pulido" list="dl-prod-color-finish" autocomplete="off"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Cuidados</label><input id="prod-care" class="adm-input" maxlength="500" placeholder="Limpieza y conservaci&oacute;n" list="dl-prod-care" autocomplete="off"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Resistencia al agua</label><input id="prod-water-resistance" class="adm-input" maxlength="240" placeholder="Ej: IPX4" list="dl-prod-water-resistance" autocomplete="off"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Garant&iacute;a</label><input id="prod-warranty" class="adm-input" maxlength="240" placeholder="Cobertura y plazo" list="dl-prod-warranty" autocomplete="off"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Talle / ajuste</label><input id="prod-size-fit" class="adm-input" maxlength="240" placeholder="Ej: ajustable" list="dl-prod-size-fit" autocomplete="off"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Contenido del paquete</label><input id="prod-package-contents" class="adm-input" maxlength="500" placeholder="Ej: producto, estuche y certificado" list="dl-prod-package-contents" autocomplete="off"></div>
+            <datalist id="dl-prod-material">
+              <option value="Acero inoxidable"><option value="Acero quirúrgico"><option value="Plata 925"><option value="Oro laminado"><option value="Chapado en oro"><option value="Oro rosa laminado"><option value="Bronce"><option value="Titanio"><option value="Aleación metálica"><option value="Cuero genuino"><option value="Cuero sintético"><option value="Tela / textil"><option value="Vidrio templado"><option value="Acrílico"><option value="Cerámica"><option value="Resina">
+            </datalist>
+            <datalist id="dl-prod-measurements">
+              <option value="Cadena ajustable 40-45 cm"><option value="Cadena de 40 cm"><option value="Cadena de 45 cm"><option value="Cadena de 50 cm"><option value="Diámetro 3 cm"><option value="Ajustable a la muñeca"><option value="Talla única"><option value="Largo 18 cm"><option value="Ancho 2 cm">
+            </datalist>
+            <datalist id="dl-prod-color-finish">
+              <option value="Dorado"><option value="Dorado pulido"><option value="Dorado mate"><option value="Plateado"><option value="Plateado pulido"><option value="Plateado mate"><option value="Negro"><option value="Negro mate"><option value="Oro rosa"><option value="Bicolor (oro y plata)"><option value="Bronce envejecido"><option value="Transparente"><option value="Multicolor">
+            </datalist>
+            <datalist id="dl-prod-care">
+              <option value="Evitar contacto con agua y perfumes"><option value="Limpiar con paño suave y seco"><option value="Guardar en lugar seco, alejado de la luz solar"><option value="No usar productos químicos de limpieza"><option value="Evitar contacto con cremas y perfumes"><option value="Quitar antes de bañarse, nadar o hacer ejercicio">
+            </datalist>
+            <datalist id="dl-prod-water-resistance">
+              <option value="No resistente al agua"><option value="Resistente a salpicaduras"><option value="IPX4 (resistente a salpicaduras)"><option value="IPX7 (resistente a inmersión breve)"><option value="3 ATM (30 m)"><option value="5 ATM (50 m)"><option value="10 ATM (100 m)"><option value="Sumergible">
+            </datalist>
+            <datalist id="dl-prod-warranty">
+              <option value="Sin garantía"><option value="30 días por defectos de fábrica"><option value="3 meses por defectos de fábrica"><option value="6 meses por defectos de fábrica"><option value="1 año por defectos de fábrica"><option value="Garantía de por vida contra defectos de fabricación">
+            </datalist>
+            <datalist id="dl-prod-size-fit">
+              <option value="Talla única"><option value="Ajustable"><option value="Regulable con extensor"><option value="Cierre de broche"><option value="Cierre de mosquetón"><option value="XS"><option value="S"><option value="M"><option value="L"><option value="XL">
+            </datalist>
+            <datalist id="dl-prod-package-contents">
+              <option value="Producto"><option value="Producto + estuche"><option value="Producto + estuche + certificado"><option value="Producto + bolsa de regalo"><option value="Producto + tarjeta de autenticidad"><option value="Producto + paño de limpieza"><option value="Producto + caja Tintin + tarjeta de regalo">
+            </datalist>
             <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1"><label style="font-size:12px;font-weight:700;text-transform:uppercase">Im&aacute;genes extra (una URL por l&iacute;nea)</label><textarea id="prod-images-extra" class="adm-input" rows="3" maxlength="6000" placeholder="https://..." style="resize:vertical"></textarea></div>
             <div id="prod-inventory-fields" style="display:contents">
             <div style="grid-column:1/-1;border-top:1px solid var(--adm-border);padding-top:14px;font-size:12px;font-weight:800;text-transform:uppercase;color:var(--adm-muted)">Inventario interno (solo superadmin)</div>
