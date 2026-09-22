@@ -901,6 +901,15 @@ function clickSection(section) {
   if (nav) nav.click();
 }
 
+function callLegacyAction(name, ...args) {
+  const action = window[name];
+  if (typeof action !== 'function') {
+    toast('La acción todavía está cargando. Volvé a intentarlo en un momento.', 4500);
+    return undefined;
+  }
+  return action(...args);
+}
+
 function openWhatsApp(order) {
   const customer = orderCustomer(order);
   const digits = String(customer.phone || '').replace(/\D/g, '');
@@ -924,12 +933,12 @@ async function handleAction(action, element) {
     if (typeof window.bulkDelete !== 'function') return toast('La eliminación masiva todavía no está disponible.');
     return window.bulkDelete();
   }
-  if (action === 'product-edit' || action === 'drawer-product-edit') { closeDrawer(); return window.prodEditar?.(id); }
+  if (action === 'product-edit' || action === 'drawer-product-edit') { closeDrawer(); return callLegacyAction('prodEditar', id); }
   if (action === 'product-toggle' || action === 'drawer-product-toggle') {
     const p = state.products.find(x => x._docId === id); if (!p) return;
     return window.prodToggleActive?.(id, p.active !== false);
   }
-  if (action === 'product-delete' || action === 'drawer-product-delete') { closeDrawer(); return window.prodEliminar?.(id); }
+  if (action === 'product-delete' || action === 'drawer-product-delete') { closeDrawer(); return callLegacyAction('prodEliminar', id, state.products.find(p => p._docId === id)?.name || id); }
   if (action === 'drawer-product') return openDrawer('product', id);
 
   if (action === 'collection-new') { closeDrawer(); return window.collNueva?.(); }

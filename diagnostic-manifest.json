@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e91130a73676eed9b7ba15cfdbb8e39832c24fff717a81a234fcc719203bab15",
+  "sourceFingerprint": "96c726885fe30149fa0998ed6203de0e9ea33e735913a9d9d0441e30de3f3da1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 864,
     "textFiles": 823,
-    "totalBytes": 17006185,
+    "totalBytes": 17006446,
     "pages": 19,
     "modules": 589
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 194966,
-      "sha256": "ea9629091cfb5c75b9ed134a8d5bdd572e9653992d22bf04ea7df00684267484",
+      "bytes": 194892,
+      "sha256": "83060313a1b784fc45ebf38b11bb706c97dd79b41c8420e1c00d78cd0652aa9f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2129,7 +2129,7 @@
           "line": 2030
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260922-bulk-products-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2031
         },
@@ -2174,7 +2174,7 @@
           "line": 2248
         },
         {
-          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260922-bulk-products-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
           "line": 2249
         },
@@ -2381,7 +2381,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260922-bulk-products-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2031,
           "exists": true
@@ -2435,7 +2435,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260922-bulk-products-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
           "line": 2249,
           "exists": true
@@ -21599,8 +21599,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 74922,
-      "sha256": "e7795ed9e88b5b9c9dbbf496944a847070454e01384ba65619fce2e00afa273b",
+      "bytes": 75257,
+      "sha256": "3510b29db98b8bf57b01e9fab9f31df0672786ef416261793416d9577d3408e6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21656,7 +21656,7 @@
         },
         {
           "url": "https://wa.me/$%7Bnormalized%7D",
-          "line": 910
+          "line": 919
         }
       ]
     },
@@ -33626,8 +33626,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 194966,
-      "sha256": "ea9629091cfb5c75b9ed134a8d5bdd572e9653992d22bf04ea7df00684267484"
+      "bytes": 194892,
+      "sha256": "83060313a1b784fc45ebf38b11bb706c97dd79b41c8420e1c00d78cd0652aa9f"
     },
     {
       "path": "apple-touch-icon.png",
@@ -35582,8 +35582,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 74922,
-      "sha256": "e7795ed9e88b5b9c9dbbf496944a847070454e01384ba65619fce2e00afa273b"
+      "bytes": 75257,
+      "sha256": "3510b29db98b8bf57b01e9fab9f31df0672786ef416261793416d9577d3408e6"
     },
     {
       "path": "js/admin/users/ficha-usuario-admin.js",
@@ -40538,7 +40538,7 @@
           },
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1141,
+            "line": 1150,
             "operation": "collection"
           },
           {
@@ -40878,12 +40878,12 @@
           },
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1153,
+            "line": 1162,
             "operation": "collection"
           },
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1184,
+            "line": 1193,
             "operation": "collection"
           },
           {
@@ -40958,7 +40958,7 @@
         "references": [
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1209,
+            "line": 1218,
             "operation": "collection"
           },
           {
@@ -41123,7 +41123,7 @@
           },
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1128,
+            "line": 1137,
             "operation": "collection"
           },
           {
