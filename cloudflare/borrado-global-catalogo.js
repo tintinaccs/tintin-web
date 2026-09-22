@@ -87,9 +87,9 @@ async function collectSocialReferences(env, productIds) {
     return [];
   });
   const [privateReviews, reviewCopies, likes, interactionMappings] = await Promise.all([
-    runProductIdQuery(env, 'reviewRecords', productIds),
-    runProductIdQuery(env, 'reviews', productIds, { allDescendants: true }),
-    runProductIdQuery(env, 'likeRecords', productIds),
+    optionalReferences('reviewRecords', runProductIdQuery(env, 'reviewRecords', productIds)),
+    optionalReferences('reviews', runProductIdQuery(env, 'reviews', productIds, { allDescendants: true })),
+    optionalReferences('likeRecords', runProductIdQuery(env, 'likeRecords', productIds)),
     optionalReferences('reviewLikeProducts', runProductIdQuery(env, 'reviewLikeProducts', productIds, { allDescendants: true })),
   ]);
   return { privateReviews, reviewCopies, likes, interactionMappings };
