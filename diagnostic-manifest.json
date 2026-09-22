@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "89fc20ec9f5e020e5914a7a44d356180fddf2e14cf49cf883d112508b6fe927a",
+  "sourceFingerprint": "ce84e765058fb6511ca52979369a2bb2aed0c8b1aecceee62c136d346061a39b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 859,
     "textFiles": 818,
-    "totalBytes": 16989787,
+    "totalBytes": 16991190,
     "pages": 19,
     "modules": 584
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 191277,
-      "sha256": "033c8a2e47ffc61bfbac6220de190e34fcc947e012a51f278f402490e92c9c73",
+      "bytes": 191283,
+      "sha256": "22d61a6db983f03aa7baf9e01d11a6dadf3d4af773b8a8336e2c826175736bbe",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2114,7 +2114,7 @@
           "line": 8
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260922-green-flow-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20260922-admin-guard-live-1",
           "target": "js/admin/admin-app.js",
           "line": 2004
         },
@@ -2363,7 +2363,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260922-green-flow-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20260922-admin-guard-live-1",
           "target": "js/admin/admin-app.js",
           "line": 2004,
           "exists": true
@@ -20135,8 +20135,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 439866,
-      "sha256": "70e9d8f04662d51b339bb1a2dd851a16029fc137503eadb14d9a2609874e5d4c",
+      "bytes": 439872,
+      "sha256": "c47070f96b436931c173899f782738f9af2f969d7e952e5679d30bb0d3bbbac4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20263,7 +20263,7 @@
           "line": 32
         },
         {
-          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260922-green-flow-1",
+          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260922-admin-guard-live-1",
           "target": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
           "dynamic": false,
           "line": 33
@@ -20783,8 +20783,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 23894,
-      "sha256": "717b7f6404623498e1f84f971fc64a13ebb89ba2acfce7ed1a69af576aefcd2b",
+      "bytes": 23900,
+      "sha256": "d48564df56051008d2101e9ff5dfb464d87c62d7bb33e27cd7d6ce167e93cb6b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20803,7 +20803,7 @@
           "line": 11
         },
         {
-          "raw": "./live-checks.js?v=tintin-20260922-green-flow-1",
+          "raw": "./live-checks.js?v=tintin-20260922-admin-guard-live-1",
           "target": "js/admin/flujo-conexiones/live-checks.js",
           "dynamic": false,
           "line": 12
@@ -20830,8 +20830,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
-      "bytes": 17991,
-      "sha256": "ae9e1e5a9634e80947d2250548429dfdc99eac3e3382edf29da8505f2851e3a5",
+      "bytes": 19358,
+      "sha256": "188ff6bfafe876e5d610b0f3189c75616331ff153dfb68ad2560a409ad07074c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33440,8 +33440,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 191277,
-      "sha256": "033c8a2e47ffc61bfbac6220de190e34fcc947e012a51f278f402490e92c9c73"
+      "bytes": 191283,
+      "sha256": "22d61a6db983f03aa7baf9e01d11a6dadf3d4af773b8a8336e2c826175736bbe"
     },
     {
       "path": "apple-touch-icon.png",
@@ -35150,8 +35150,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 439866,
-      "sha256": "70e9d8f04662d51b339bb1a2dd851a16029fc137503eadb14d9a2609874e5d4c"
+      "bytes": 439872,
+      "sha256": "c47070f96b436931c173899f782738f9af2f969d7e952e5679d30bb0d3bbbac4"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -35240,14 +35240,14 @@
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 23894,
-      "sha256": "717b7f6404623498e1f84f971fc64a13ebb89ba2acfce7ed1a69af576aefcd2b"
+      "bytes": 23900,
+      "sha256": "d48564df56051008d2101e9ff5dfb464d87c62d7bb33e27cd7d6ce167e93cb6b"
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
       "extension": ".js",
-      "bytes": 17991,
-      "sha256": "ae9e1e5a9634e80947d2250548429dfdc99eac3e3382edf29da8505f2851e3a5"
+      "bytes": 19358,
+      "sha256": "188ff6bfafe876e5d610b0f3189c75616331ff153dfb68ad2560a409ad07074c"
     },
     {
       "path": "js/admin/flujo-decisiones/flujo-decisiones-admin.js",
@@ -37574,8 +37574,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 45221,
-      "sha256": "9e63cdab4b5f8820ed89038f578fc726f61367a2681ea656cecb606da0adc434"
+      "bytes": 45239,
+      "sha256": "000d88903ea4e8096609808d4f36e108effc4d8111f3b8982b2c25e19c810416"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
