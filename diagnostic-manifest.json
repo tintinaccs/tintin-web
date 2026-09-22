@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "7358d2968359e0800239b93e831cf8c9f4be6ac9b8419c547aa5aed0472c349f",
+  "sourceFingerprint": "5f97a533b18de89d8ef9502325efd70ecbc9acf740716460c287a9bb3b80b29f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 864,
     "textFiles": 823,
-    "totalBytes": 17006684,
+    "totalBytes": 17008952,
     "pages": 19,
     "modules": 589
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 194903,
-      "sha256": "5f01205e5e6bc3dea9af87458922c72b4729785f8cc3f98f4c0ce9c3d38ffbeb",
+      "bytes": 194902,
+      "sha256": "fc36da6b5be67a584bb6cfaae87a48da346a8373f1f7616e8461ed2b4ed2e62f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2174,7 +2174,7 @@
           "line": 2248
         },
         {
-          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260922-bulk-delete-explicit-ids-1",
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260922-bulk-delete-batch-chunk-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
           "line": 2249
         },
@@ -2435,7 +2435,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260922-bulk-delete-explicit-ids-1",
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260922-bulk-delete-batch-chunk-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
           "line": 2249,
           "exists": true
@@ -17609,8 +17609,8 @@
     },
     {
       "path": "cloudflare/borrado-global-catalogo.js",
-      "bytes": 14568,
-      "sha256": "765aa16b3ba1c68c210a7a36bc4ebc791927f00904fbb8ee478c374c578cbc55",
+      "bytes": 14584,
+      "sha256": "cf190956b123443e1fa8995d920519a7bdbbd5055007064179632ebccab14cce",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21289,8 +21289,8 @@
     },
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
-      "bytes": 11719,
-      "sha256": "14d6d39becb55c225bc2315062923db82f680736fc0895013d42bedcfe74589d",
+      "bytes": 13972,
+      "sha256": "111667112872f1c9c6b81454b4b63348a27a3971b6e304aa38de5bfc9fd74803",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33626,8 +33626,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 194903,
-      "sha256": "5f01205e5e6bc3dea9af87458922c72b4729785f8cc3f98f4c0ce9c3d38ffbeb"
+      "bytes": 194902,
+      "sha256": "fc36da6b5be67a584bb6cfaae87a48da346a8373f1f7616e8461ed2b4ed2e62f"
     },
     {
       "path": "apple-touch-icon.png",
@@ -33932,8 +33932,8 @@
     {
       "path": "cloudflare/borrado-global-catalogo.js",
       "extension": ".js",
-      "bytes": 14568,
-      "sha256": "765aa16b3ba1c68c210a7a36bc4ebc791927f00904fbb8ee478c374c578cbc55"
+      "bytes": 14584,
+      "sha256": "cf190956b123443e1fa8995d920519a7bdbbd5055007064179632ebccab14cce"
     },
     {
       "path": "cloudflare/comentarios-sociales.js",
@@ -35522,8 +35522,8 @@
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
       "extension": ".js",
-      "bytes": 11719,
-      "sha256": "14d6d39becb55c225bc2315062923db82f680736fc0895013d42bedcfe74589d"
+      "bytes": 13972,
+      "sha256": "111667112872f1c9c6b81454b4b63348a27a3971b6e304aa38de5bfc9fd74803"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",

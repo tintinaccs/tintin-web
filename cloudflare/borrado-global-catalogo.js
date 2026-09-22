@@ -228,9 +228,11 @@ async function previewProductDeletion(env, products) {
 export async function deleteProductsGlobally(env, { scope = 'selected', productIds = [], dryRun = true, idToken = '', actor = null } = {}) {
   const products = await resolveProducts(env, scope, productIds);
   const ids = products.map(product => product.id);
-  const impact = await previewProductDeletion(env, products);
-  if (dryRun) return { dryRun: true, productIds: ids, impact };
-  if (!ids.length) return { dryRun: false, deletedProducts: 0, impact, sheets: { products: true, social: true } };
+  if (dryRun) {
+    const impact = await previewProductDeletion(env, products);
+    return { dryRun: true, productIds: ids, impact };
+  }
+  if (!ids.length) return { dryRun: false, deletedProducts: 0, sheets: { products: true, social: true } };
 
   const social = await collectSocialReferences(env, ids);
   // Primero se eliminan/sanitizan las referencias del producto en las hojas
@@ -299,8 +301,10 @@ export async function deleteCollectionsGlobally(env, {
     targetCollection: target,
     preservedHistory: ['orders', 'auditLog'],
   };
-  if (productMode === 'delete') impact.productDeletion = await previewProductDeletion(env, affectedProducts);
-  if (dryRun) return { dryRun: true, slugs: selectedSlugs, productIds: affectedIds, impact };
+  if (dryRun) {
+    if (productMode === 'delete') impact.productDeletion = await previewProductDeletion(env, affectedProducts);
+    return { dryRun: true, slugs: selectedSlugs, productIds: affectedIds, impact };
+  }
 
   let productDeleteResult = null;
   if (productMode === 'delete' && affectedIds.length) {

@@ -17,6 +17,28 @@ const ALL_COLLECTIONS_CONFIRM = 'ELIMINAR TODAS LAS COLECCIONES';
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const toast = message => typeof window.toast === 'function' ? window.toast(message) : window.alert(message);
 
+// Cloudflare corta cada invocación del Worker al superar su límite de
+// subrequests. Un borrado masivo de todo el catálogo genera, por producto,
+// varias consultas a Firestore + Sheets; sin trocear, cientos de productos
+// en un solo POST superan ese límite y el navegador recibe el error crudo
+// de la plataforma ("Too many subrequests..."). Se envía en lotes chicos
+// para que cada invocación del servidor se mantenga muy por debajo del tope.
+const DELETE_BATCH_SIZE = 30;
+
+function chunkIds(ids, size) {
+  const batches = [];
+  for (let i = 0; i < ids.length; i += size) batches.push(ids.slice(i, i + size));
+  return batches;
+}
+
+function mergeDeleteResults(target, part) {
+  target.deletedProducts += Number(part?.deletedProducts) || 0;
+  target.deletedFirestoreDocuments += Number(part?.deletedFirestoreDocuments) || 0;
+  if (part?.partial) target.partial = true;
+  if (Array.isArray(part?.errors)) target.errors.push(...part.errors.filter(Boolean));
+  return target;
+}
+
 async function postCatalogDelete(payload) {
   const user = auth.currentUser;
   if (!isSuperAdmin(user)) throw new Error('Esta acción es exclusiva del Super Admin.');
@@ -64,7 +86,8 @@ function partialMessage(result) {
 
 async function executeProductDeletion({ scope, productIds = [], label = '' }) {
   const preview = await postCatalogDelete({ action: 'deleteProducts', scope, productIds, dryRun: true });
-  const n = preview?.impact?.products || 0;
+  const canonicalIds = Array.isArray(preview?.productIds) ? preview.productIds : [];
+  const n = canonicalIds.length;
   if (!n) { toast('No hay productos para eliminar.'); return false; }
   const phrase = scope === 'all' ? ALL_PRODUCTS_CONFIRM : PRODUCT_CONFIRM;
   const heading = scope === 'all' ? `Vas a eliminar TODOS los ${n} productos actuales.` : `Vas a eliminar ${n} producto(s)${label ? `: ${label}` : ''}.`;
@@ -72,14 +95,38 @@ async function executeProductDeletion({ scope, productIds = [], label = '' }) {
   const typed = window.prompt(`Confirmación irreversible. Escribí exactamente:\n\n${phrase}`, '');
   if (typed !== phrase) { toast('Confirmación cancelada. No se eliminó nada.'); return false; }
 
-  const result = await postCatalogDelete({ action: 'deleteProducts', scope, productIds, dryRun: false, confirmation: phrase });
-  if (result.partial) {
-    window.alert(partialMessage(result));
-  } else {
-    toast(`${result.deletedProducts || n} producto(s) eliminados globalmente`);
+  // La lista canónica de IDs ya viene confirmada por el servidor (preview).
+  // Se envía troceada en varios POST secuenciales para que cada invocación
+  // del Worker se mantenga bien por debajo del límite de subrequests de
+  // Cloudflare, sin importar cuántos productos tenga el catálogo.
+  const batches = chunkIds(canonicalIds, DELETE_BATCH_SIZE);
+  const aggregate = { deletedProducts: 0, deletedFirestoreDocuments: 0, partial: false, errors: [] };
+  let stoppedEarly = false;
+  for (let i = 0; i < batches.length; i += 1) {
+    if (batches.length > 1) toast(`Eliminando productos… (${i + 1}/${batches.length})`);
+    try {
+      const result = await postCatalogDelete({
+        action: 'deleteProducts', scope: 'selected', productIds: batches[i],
+        dryRun: false, confirmation: PRODUCT_CONFIRM,
+      });
+      mergeDeleteResults(aggregate, result);
+    } catch (error) {
+      aggregate.partial = true;
+      aggregate.errors.push(error?.message || 'Error desconocido en un lote de eliminación.');
+      stoppedEarly = true;
+      break;
+    }
   }
-  window.setTimeout(() => window.location.reload(), 700);
-  return !result.partial;
+
+  if (aggregate.partial) {
+    window.alert(stoppedEarly
+      ? `Se eliminaron ${aggregate.deletedProducts} de ${n} producto(s) antes de encontrar un error. Volvé a intentar para completar el resto.\n\n${aggregate.errors.join('\n')}`
+      : partialMessage(aggregate));
+  } else {
+    toast(`${aggregate.deletedProducts || n} producto(s) eliminados globalmente`);
+  }
+  if (aggregate.deletedProducts > 0) window.setTimeout(() => window.location.reload(), 700);
+  return !aggregate.partial;
 }
 
 function chooseCollectionProductMode(affectedProducts) {
