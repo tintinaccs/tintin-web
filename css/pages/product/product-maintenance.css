@@ -531,3 +531,21 @@ body.tt-product-maintenance .tt-product-trust-badges {
     width: 100%;
   }
 }
+/* Mobile: keep the product panel centered and fully inside the viewport. */
+@media (max-width: 767px) {
+  body.tt-product-maintenance .tt-product-page > .container,
+  body.tt-product-maintenance #product-grid,
+  body.tt-product-maintenance .tt-product-detail-grid {
+    width: 100% !important;
+    max-width: none !important;
+    margin-inline: 0 !important;
+  }
+  body.tt-product-maintenance .tt-product-detail-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  body.tt-product-maintenance .tt-product-info-panel {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+}
