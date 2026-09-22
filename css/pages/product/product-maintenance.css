@@ -514,3 +514,7 @@ body.tt-product-maintenance .tt-related-card {
   border-radius: 16px;
   box-shadow: none !important;
 }
+/* White minimal surface for the benefits band. */
+body.tt-product-maintenance .tinben {
+  background: #fff !important;
+}
