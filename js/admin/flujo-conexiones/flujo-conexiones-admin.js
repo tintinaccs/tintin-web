@@ -7,9 +7,9 @@
 // (system-health, admin-runtime-health). No inventa infraestructura de
 // monitoreo nueva: reutiliza lo que ya prueba conectividad real sin escribir
 // datos. Nada de lo que hace este módulo crea, actualiza ni borra documentos.
-import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260920-safe-live-probes-1';
+import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260922-green-flow-1';
 import { resolveState, isAttentionState } from './estado-flujo.js?v=tintin-20260920-admin-status-fixes-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260921-session-evidence-1';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260922-green-flow-1';
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
 import { collection, doc, getDoc, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 

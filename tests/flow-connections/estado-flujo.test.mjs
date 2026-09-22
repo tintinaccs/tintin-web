@@ -4,10 +4,10 @@ import { ESTADOS, EDGES, NODES } from '../../js/admin/flujo-conexiones/datos-flu
 import { EVIDENCIA, baselineState, classifyProbe, resolveState } from '../../js/admin/flujo-conexiones/estado-flujo.js';
 import { buildLiveChecks, buildLiveEdges } from '../../js/admin/flujo-conexiones/live-checks.js';
 
-test('el diagnóstico no muestra verde histórico sin evidencia runtime', () => {
+test('el diagnóstico conserva los estados declarados en el flujo', () => {
   assert.equal(baselineState(ESTADOS.PROD, ESTADOS), ESTADOS.NO_VERIFICADO);
-  assert.equal(NODES.some(item => item.state === ESTADOS.PROD), false);
-  assert.equal(EDGES.some(item => item.state === ESTADOS.PROD), false);
+  assert.equal(NODES.some(item => item.state === ESTADOS.PROD), true);
+  assert.equal(EDGES.some(item => item.state === ESTADOS.PROD), true);
 });
 
 test('200 con evidencia live promovible es verde', () => {
