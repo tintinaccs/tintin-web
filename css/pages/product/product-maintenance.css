@@ -590,3 +590,7 @@ body.tt-product-maintenance .tt-product-gallery {
 body.tt-product-maintenance .tt-gallery-main {
   border-radius: 0 !important;
 }
+/* Final alignment: remove the extra lateral padding from the product info panel. */
+body.tt-product-maintenance .tt-product-info-panel {
+  padding-inline: 0 !important;
+}
