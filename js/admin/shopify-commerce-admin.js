@@ -931,7 +931,7 @@ async function handleAction(action, element) {
   if (action === 'products-bulk-deactivate') return bulkProducts(false);
   if (action === 'products-bulk-delete') {
     if (typeof window.bulkDelete !== 'function') return toast('La eliminación masiva todavía no está disponible.');
-    return window.bulkDelete([...state.productSelected]);
+    return window.bulkDelete();
   }
   if (action === 'product-edit' || action === 'drawer-product-edit') { closeDrawer(); return callLegacyAction('prodEditar', id); }
   if (action === 'product-toggle' || action === 'drawer-product-toggle') {

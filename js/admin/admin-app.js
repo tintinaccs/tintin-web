@@ -1816,9 +1816,9 @@ function loadDashboard() {
 }
 
 // ======== USUARIOS ========
-// Ahora son dos pestañas ('active' | 'blocked'), no un dropdown Todos/Activos/
-// Bloqueados — un usuario bloqueado desaparece de "Usuarios" y solo aparece
-// en "Bloqueados", nunca en las dos a la vez.
+// Estados separados: una cuenta eliminada conserva un tombstone histórico,
+// pero no es un usuario bloqueado. La interfaz debe mostrarla en Eliminados,
+// nunca mezclarla con Bloqueados.
 let userStatusFilter = 'active';
 let userSortMode = 'recent';
 
@@ -1841,9 +1841,11 @@ function applyUserFilters() {
     (u.name||'').toLowerCase().includes(q) ||
     (u.email||'').toLowerCase().includes(q)
   );
-  filtered = userStatusFilter === 'blocked'
-    ? filtered.filter(u => u.blocked)
-    : filtered.filter(u => !u.blocked);
+  filtered = userStatusFilter === 'deleted'
+    ? filtered.filter(u => u.deleted === true || u.profileStatus === 'deleted')
+    : userStatusFilter === 'blocked'
+      ? filtered.filter(u => u.blocked && u.deleted !== true && u.profileStatus !== 'deleted')
+      : filtered.filter(u => !u.blocked && u.deleted !== true && u.profileStatus !== 'deleted');
   filtered = userSortMode === 'totalSpent'
     ? [...filtered].sort((a, b) => (b.totalSpent || 0) - (a.totalSpent || 0))
     : userSortMode === 'purchaseCount'
@@ -1856,13 +1858,21 @@ function applyUserFilters() {
   [..._selectedUsers].forEach(uid => { if (!visibleIds.has(uid)) _selectedUsers.delete(uid); });
   renderUsersTable(filtered);
   updateBlockedCount();
+  updateDeletedCount();
   updateUsersBulkToolbar();
 }
 
 function updateBlockedCount() {
   const el = document.getElementById('users-blocked-count');
   if (!el) return;
-  const n = allUsers.filter(u => u.blocked).length;
+  const n = allUsers.filter(u => u.blocked && u.deleted !== true && u.profileStatus !== 'deleted').length;
+  el.textContent = n ? `(${n})` : '';
+}
+
+function updateDeletedCount() {
+  const el = document.getElementById('users-deleted-count');
+  if (!el) return;
+  const n = allUsers.filter(u => u.deleted === true || u.profileStatus === 'deleted').length;
   el.textContent = n ? `(${n})` : '';
 }
 
@@ -1875,7 +1885,9 @@ window.filterUsersByStatus = (status) => {
 function renderUsersTable(users) {
   const tbody = document.getElementById('users-tbody');
   if (!users.length) {
-    const emptyMsg = userStatusFilter === 'blocked' ? 'No hay usuarios bloqueados' : 'Sin usuarios';
+    const emptyMsg = userStatusFilter === 'deleted'
+      ? 'No hay usuarios eliminados'
+      : userStatusFilter === 'blocked' ? 'No hay usuarios bloqueados' : 'Sin usuarios';
     tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:#aaa;padding:24px">${emptyMsg}</td></tr>`;
     return;
   }
@@ -1891,15 +1903,18 @@ function renderUsersTable(users) {
     // la matriz de permisos, esta línea sigue siendo correcta sin tocarla.
     const canEdit = can(currentRole, 'manageUsers') && !isSuperAdmin;
     const roleBadge = `<span class="adm-badge role-${safeRole}">${escapeHtmlAdmin(ROLE_LABELS[safeRole] || 'Cliente')}</span>`;
-    const blockedBadge = u.blocked
-      ? '<span class="adm-badge badge-cancelado">Bloqueado</span>'
+    const deleted = u.deleted === true || u.profileStatus === 'deleted';
+    const blockedBadge = deleted
+      ? '<span class="adm-badge badge-cancelado">Eliminado</span>'
+      : u.blocked
+        ? '<span class="adm-badge badge-cancelado">Bloqueado</span>'
       : '<span class="adm-badge badge-entregado">Activo</span>';
 
     // Ficha ampliada de la Fase E: solo se arma para usuarios bloqueados, para
     // no recargar la tabla en el caso normal. IP de registro deliberadamente
     // NO se captura (no hay backend seguro en este proyecto sin facturación) —
     // se explicita acá en vez de omitirlo en silencio.
-    const blockedDetail = u.blocked ? `
+    const blockedDetail = u.blocked && !deleted ? `
       <div style="margin-top:6px;font-size:11px;color:#888;line-height:1.6;max-width:230px">
         ${u.phone ? `<div><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>${escapeHtmlAdmin(u.phone)}</div>` : ''}
         ${u.roleBeforeBlock ? `<div>Rol antes del bloqueo: <strong>${escapeHtmlAdmin(ROLE_LABELS[u.roleBeforeBlock] || u.roleBeforeBlock)}</strong></div>` : ''}
@@ -1914,7 +1929,7 @@ function renderUsersTable(users) {
     // Mientras está bloqueado el rol no se edita a mano — cambiar el rol de
     // una cuenta bloqueada pasa exclusivamente por "Restaurar", para que
     // nunca quede el estado inconsistente blocked:true + role:'agent'/'admin'.
-    const roleSelect = canEdit && can(currentRole, 'assignRoles') && !u.blocked ? `
+    const roleSelect = canEdit && can(currentRole, 'assignRoles') && !u.blocked && !deleted ? `
       <select class="adm-select" style="width:auto;font-size:11px;padding:4px 8px"
         onchange="window.updateUserRole(${uidArg}, this.value, ${emailArg})"
         ${isSuperAdmin ? 'disabled' : ''}>
@@ -1928,7 +1943,9 @@ function renderUsersTable(users) {
 
     const actions = canEdit ? `
       <div style="display:flex;gap:6px;flex-wrap:wrap">
-        ${!isSuperAdmin ? (u.blocked
+        ${!isSuperAdmin ? (deleted
+          ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.restoreUser(${uidArg})">Reactivar</button>`
+          : u.blocked
           ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.restoreUser(${uidArg})">Restaurar</button>`
           : `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.blockUser(${uidArg}, ${emailArg})">Bloquear</button>`
         ) : ''}
@@ -2101,6 +2118,7 @@ window.deleteUser = async (uid, name) => {
   )) return;
   try {
     await updateAccountStatusFromAdmin_(uid, 'softDelete', reason);
+    if (_target) Object.assign(_target, { deleted: true, blocked: true, profileStatus: 'deleted', role: 'client' });
     toast('Acceso revocado; identidad histórica conservada y auditada');
     applyUserFilters();
   } catch(e) {
@@ -2146,9 +2164,9 @@ function updateUsersBulkToolbar() {
   const allowed = can(currentRole, 'manageUsers');
   if (toolbar) toolbar.classList.toggle('show', allowed && count > 0);
   if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
-  if (blockBtn) blockBtn.style.display = userStatusFilter === 'blocked' ? 'none' : '';
-  if (restoreBtn) restoreBtn.style.display = userStatusFilter === 'blocked' ? '' : 'none';
-  if (deleteBtn) deleteBtn.style.display = userStatusFilter === 'blocked' ? 'none' : '';
+  if (blockBtn) blockBtn.style.display = userStatusFilter === 'active' ? '' : 'none';
+  if (restoreBtn) restoreBtn.style.display = userStatusFilter === 'blocked' || userStatusFilter === 'deleted' ? '' : 'none';
+  if (deleteBtn) deleteBtn.style.display = userStatusFilter === 'active' ? '' : 'none';
 }
 
 window.clearUsersSelection = function() {
@@ -2225,14 +2243,16 @@ window.bulkBlockUsers = async function() {
 window.bulkRestoreUsers = async function() {
   if (!_selectedUsers.size) return;
   if (!can(currentRole, 'manageUsers')) { toast('No tenés permiso para restaurar usuarios'); return; }
-  const ids = [..._selectedUsers].filter(uid => {
-    const u = allUsers.find(x => x.uid === uid);
-    return u && u.email !== SUPER_ADMIN && u.blocked;
-  });
-  if (!ids.length) { toast('No hay usuarios elegibles en la selección'); return; }
-  const n = ids.length;
-  if (!confirm(`¿Restaurar ${n} usuario(s) con el rol que tenían antes del bloqueo?`)) return;
+  const selected = [..._selectedUsers].map(uid => allUsers.find(x => x.uid === uid)).filter(Boolean);
+  const deletedTargets = selected.filter(u => u.email !== SUPER_ADMIN && (u.deleted === true || u.profileStatus === 'deleted'));
+  const ids = selected.filter(u => {
+    return u && u.email !== SUPER_ADMIN && u.blocked && u.deleted !== true && u.profileStatus !== 'deleted';
+  }).map(u => u.uid);
+  if (!ids.length && !deletedTargets.length) { toast('No hay usuarios elegibles en la selección'); return; }
+  const n = ids.length + deletedTargets.length;
+  if (!confirm(`¿Restaurar ${n} usuario(s)? Los bloqueados recuperarán su rol anterior y los eliminados volverán como Cliente.`)) return;
   try {
+    for (const u of deletedTargets) await updateAccountStatusFromAdmin_(u.uid, 'reactivate', 'Reactivación masiva desde Super Admin');
     const CHUNK = 450;
     for (let i = 0; i < ids.length; i += CHUNK) {
       const batch = writeBatch(db);
@@ -2254,25 +2274,29 @@ window.bulkRestoreUsers = async function() {
         delete u.blockedAt; delete u.blockedBy; delete u.blockReason; delete u.roleBeforeBlock;
       }
     });
+    deletedTargets.forEach(u => Object.assign(u, { blocked: false, deleted: false, profileStatus: 'incomplete', role: 'client' }));
     logAudit('restaurar_usuario', 'usuario', '', '', 'Roles anteriores restaurados', { bulk: true, count: n });
-    toast(`${n} usuario(s) restaurados con su rol anterior`);
+    toast(`${n} usuario(s) restaurados correctamente`);
     clearUsersSelection();
     applyUserFilters();
-  } catch (e) { toast('Error: ' + e.message); }
+  } catch (e) { toast('Error al restaurar: ' + e.message); }
 };
 
 window.bulkDeleteUsers = async function() {
   if (!_selectedUsers.size) return;
   if (currentRole !== 'superadmin' || !can(currentRole, 'deleteUsers')) { toast('Solo el Super Admin puede eliminar cuentas'); return; }
-  const targets = [..._selectedUsers].map(uid => allUsers.find(u => u.uid === uid)).filter(u => u && u.email !== SUPER_ADMIN && u.deleted !== true);
+  const targets = [..._selectedUsers].map(uid => allUsers.find(u => u.uid === uid)).filter(u => u && u.email !== SUPER_ADMIN && u.deleted !== true && u.profileStatus !== 'deleted' && !u.blocked);
   if (!targets.length) { toast('No hay cuentas elegibles (el Super Admin está protegido)'); return; }
   const phrase = 'ELIMINAR CUENTAS SELECCIONADAS';
   if (!confirm(`Se revocará el acceso de ${targets.length} cuenta(s), se liberarán sus datos de contacto y se conservará la identidad histórica, pedidos y auditoría. ¿Continuar?`)) return;
   if (prompt(`Escribí exactamente para confirmar:\n\n${phrase}`, '') !== phrase) { toast('Confirmación cancelada.'); return; }
   let ok = 0, fail = 0;
   for (const user of targets) {
-    try { await updateAccountStatusFromAdmin_(user.uid, 'softDelete', 'Eliminación masiva desde Super Admin'); ok++; }
-    catch { fail++; }
+    try {
+      await updateAccountStatusFromAdmin_(user.uid, 'softDelete', 'Eliminación masiva desde Super Admin');
+      Object.assign(user, { deleted: true, blocked: true, profileStatus: 'deleted', role: 'client' });
+      ok++;
+    } catch { fail++; }
   }
   clearUsersSelection();
   applyUserFilters();
