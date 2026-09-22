@@ -572,3 +572,13 @@ body.tt-product-maintenance .tt-product-trust-badges,
 body.tt-product-maintenance .tt-trust-badge-item {
   border-radius: 0 !important;
 }
+/* Gallery cleanup: the product surface stays white; only selection controls keep state borders. */
+body.tt-product-maintenance .tt-gallery-main {
+  border: 0 !important;
+  box-shadow: none !important;
+  background: #fff !important;
+}
+body.tt-product-maintenance .tt-gallery-thumb {
+  background: #fff !important;
+  box-shadow: none !important;
+}
