@@ -6,7 +6,7 @@
 // nodo/conexión que estado-flujo.js puede resolver. No depende del DOM ni
 // de Firebase: solo de los cuerpos JSON ya obtenidos, para que sea probable
 // con node --test sin red ni navegador.
-import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20260920-safe-live-probes-1';
+import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20260922-green-flow-1';
 import { EVIDENCIA } from './estado-flujo.js?v=tintin-20260920-admin-status-fixes-1';
 
 function edgeIdFor(from, to) {
