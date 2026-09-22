@@ -358,3 +358,27 @@ body.tt-product-maintenance .tt-footer-tagline {
     animation-iteration-count: infinite !important;
   }
 }
+
+
+/* Product surface v2 */
+body.tt-product-maintenance .tt-product-page{background:#fff!important;background-image:none!important}
+body.tt-product-maintenance .tt-product-detail-grid{align-items:start;gap:clamp(24px,4vw,64px);padding:clamp(18px,3vw,42px);background:#fff!important;border:1px solid #eee7ea;border-radius:28px;box-shadow:0 18px 55px rgba(69,38,50,.08);overflow:visible}
+body.tt-product-maintenance .tt-product-gallery,body.tt-product-maintenance .tt-product-info-panel,body.tt-product-maintenance .tt-specs-block,body.tt-product-maintenance #product-specifications,body.tt-product-maintenance #product-specifications>div,body.tt-product-maintenance .tt-product-detail-desc,body.tt-product-maintenance .tt-product-variants,body.tt-product-maintenance .tt-product-social-bar,body.tt-product-maintenance .tt-reviews-product,body.tt-product-maintenance .tt-reviews-product .tt-reviews-layout,body.tt-product-maintenance .tt-review-form,body.tt-product-maintenance .tt-review-card{background:#fff!important}
+body.tt-product-maintenance .tt-product-info-panel{width:100%;max-width:none;min-width:0;padding:clamp(6px,1vw,14px) clamp(4px,1vw,18px) 0}
+body.tt-product-maintenance .tt-gallery-main{width:100%;height:auto;min-height:0;aspect-ratio:auto;padding:clamp(12px,2vw,28px);border:1px solid #eee7ea!important;border-radius:22px;background:#fff!important;box-shadow:none!important;overflow:hidden}
+body.tt-product-maintenance .tt-gallery-main img{position:static;inset:auto;width:100%;height:auto;max-height:min(72vh,760px);object-fit:contain;background:#fff!important;mix-blend-mode:normal}
+body.tt-product-maintenance .tt-gallery-thumbs{display:flex;align-items:stretch;gap:10px;padding:14px 2px 2px;background:#fff!important;overflow-x:auto;scrollbar-width:thin}
+body.tt-product-maintenance .tt-gallery-thumb{width:clamp(72px,11vw,112px);height:clamp(72px,11vw,112px);flex:0 0 clamp(72px,11vw,112px);aspect-ratio:1;padding:5px;border:1px solid #e9dfe4!important;border-radius:14px;background:#fff!important;box-shadow:none!important}
+body.tt-product-maintenance .tt-gallery-thumb.active{border:2px solid var(--pink-dark)!important;box-shadow:0 0 0 3px rgba(173,63,103,.1)!important}
+body.tt-product-maintenance .tt-gallery-thumb-img{width:100%;height:100%;object-fit:contain;background:#fff!important;mix-blend-mode:normal}
+body.tt-product-maintenance .tt-product-detail-desc{margin-bottom:20px;padding:18px 0;border-top:1px solid #eee7ea;border-bottom:1px solid #eee7ea;color:#5f5358}
+body.tt-product-maintenance .tt-product-specifications{margin-top:0;border-top:0}
+body.tt-product-maintenance .tt-product-specifications>div{min-width:0;grid-template-columns:minmax(120px,150px) minmax(0,1fr);padding:12px 0;border-bottom:1px solid #eee7ea}
+body.tt-product-maintenance .tt-product-specifications dd{min-width:0;overflow-wrap:anywhere}
+body.tt-product-maintenance .tt-lightbox{position:fixed!important;inset:0!important;z-index:30000!important;padding:clamp(58px,8vh,96px) clamp(16px,6vw,96px) clamp(54px,8vh,90px);background:rgba(24,15,20,.82)!important;backdrop-filter:blur(14px) saturate(1.05);-webkit-backdrop-filter:blur(14px) saturate(1.05)}
+body.tt-product-maintenance .tt-lightbox-stage{width:min(92vw,1180px);height:min(84vh,820px);display:grid;place-items:center;overflow:hidden;border-radius:24px;background:#fff;box-shadow:0 24px 90px rgba(0,0,0,.28);touch-action:none}
+body.tt-product-maintenance .tt-lightbox-img{width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;border-radius:14px;background:#fff;mix-blend-mode:normal;cursor:grab}
+body.tt-product-maintenance .tt-lightbox-img.is-panning{cursor:grabbing}
+body.tt-product-maintenance .tt-lightbox-zoom,body.tt-product-maintenance .tt-lightbox-close,body.tt-product-maintenance .tt-lightbox-nav,body.tt-product-maintenance .tt-lightbox-counter{z-index:2}
+body.tt-product-maintenance .tt-gallery-image-fallback{display:grid;place-items:center;min-height:240px;width:100%;color:#8a7b81;background:#fff}
+@media(max-width:767px){body.tt-product-maintenance .tt-product-detail-grid{gap:18px;padding:12px;border-radius:20px}body.tt-product-maintenance .tt-product-info-panel{padding-inline:4px}body.tt-product-maintenance .tt-gallery-main{border-radius:16px}body.tt-product-maintenance .tt-product-specifications>div{grid-template-columns:1fr;gap:4px}body.tt-product-maintenance .tt-lightbox{padding:64px 10px 54px}body.tt-product-maintenance .tt-lightbox-stage{width:100%;height:min(78vh,680px);border-radius:18px}}
