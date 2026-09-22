@@ -7185,14 +7185,15 @@ window.bulkSetCategory = async function() {
   } catch(e) { toast('Error: ' + e.message); }
 };
 
-window.bulkDelete = async function() {
-  if (!_selectedProducts.size) return;
+window.bulkDelete = async function(explicitIds) {
+  const ids1 = Array.isArray(explicitIds) && explicitIds.length ? [...new Set(explicitIds)] : [..._selectedProducts];
+  if (!ids1.length) return;
   if (!can(currentRole, 'deleteProducts') || !roleCanDo('productos', 'eliminar')) { toast('No tenés permiso para eliminar productos'); return; }
-  const n = _selectedProducts.size;
+  const n = ids1.length;
   if (!confirm(`¿ELIMINAR DEFINITIVAMENTE ${n} producto(s)? Esta acción NO se puede deshacer.`)) return;
   if (!confirm(`Segunda confirmación: ¿confirmar la eliminación de ${n} productos?`)) return;
   try {
-    const ids0 = [..._selectedProducts];
+    const ids0 = ids1;
     const CHUNK = 450;
     for (let i = 0; i < ids0.length; i += CHUNK) {
       const batch = writeBatch(db);
@@ -7200,7 +7201,7 @@ window.bulkDelete = async function() {
       await batch.commit();
     }
     await pushProductsToSheets(ids0);
-    const ids = new Set(_selectedProducts);
+    const ids = new Set(ids1);
     _allProducts = _allProducts.filter(p => !ids.has(p._docId));
     logAudit('eliminar_producto', 'producto', '', '', `${n} productos eliminados`, { bulk: true, count: n });
     toast(`${n} productos eliminados definitivamente`);
