@@ -973,18 +973,10 @@ async function startAdminAuthGuard() {
       return;
     }
     if (snapshot.status === AUTH_STATES.UNKNOWN) {
-      // UNKNOWN no es una cuenta: ante una restauración que no pudo
-      // confirmarse, el panel vuelve al ingreso y nunca deja un bloqueo
-      // visual permanente. Si esto ya se repitió en esta pestaña (rebote
-      // admin<->login), se corta el ciclo con el aviso manual en vez de
-      // redirigir de nuevo.
-      if (registerAdminLoginBounceAndShouldBreakLoop()) {
-        recordAuthDiagnostic('REDIRECT_LOOP_BROKEN', { source: 'admin-guard', reason: 'auth-state-unknown' });
-        showAdminAuthUnknown();
-        return;
-      }
-      clearAdminAuthHandoffWithDiagnostic();
-      window.location.replace('login.html');
+      // UNKNOWN no confirma una cuenta y tampoco autoriza navegar a login.
+      // Mantener el documento evita el circuito Admin -> login -> Admin.
+      recordAuthDiagnostic('REDIRECT_LOOP_BROKEN', { source: 'admin-guard', reason: 'auth-state-unknown' });
+      showAdminAuthUnknown();
       return;
     }
     let user = snapshot.user;
@@ -997,15 +989,10 @@ async function startAdminAuthGuard() {
         authState: snapshot.status,
         reason: snapshot.reason || 'session-not-restored'
       });
-      // Mismo corta-ciclo que en UNKNOWN: si el handoff ya venció y volvió a
-      // vencer en esta pestaña, no se sigue rebotando hacia login.html.
-      if (registerAdminLoginBounceAndShouldBreakLoop()) {
-        recordAuthDiagnostic('REDIRECT_LOOP_BROKEN', { source: 'admin-guard', reason: 'handoff-recovery-timeout' });
-        showAdminAuthUnknown();
-        return;
-      }
-      clearAdminAuthHandoffWithDiagnostic();
-      window.location.replace('login.html');
+      // La ausencia no confirmada se resuelve con acción explícita desde el
+      // overlay, nunca con otra navegación automática.
+      recordAuthDiagnostic('REDIRECT_LOOP_BROKEN', { source: 'admin-guard', reason: 'handoff-recovery-timeout' });
+      showAdminAuthUnknown();
       return;
     }
     recordAuthDiagnostic('AUTH_USER_AVAILABLE', {
