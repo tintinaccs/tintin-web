@@ -601,3 +601,33 @@ body.tt-product-maintenance .tt-product-trust-badges {
 body.tt-product-maintenance .tt-product-wa-link {
   margin-bottom: 0 !important;
 }
+/* Tablet and mobile: one compact handoff below the fixed header and flush actions. */
+@media (min-width: 768px) and (max-width: 1024px) {
+  html body.tt-product-maintenance {
+    padding-top: 0 !important;
+  }
+  body.tt-product-maintenance .tt-breadcrumb {
+    margin-top: calc(var(--header-h) + 12px) !important;
+    padding-block: 10px !important;
+  }
+  body.tt-product-maintenance .tt-product-page {
+    padding-top: 8px !important;
+  }
+}
+@media (max-width: 1024px) {
+  body.tt-product-maintenance .tt-product-info-panel,
+  body.tt-product-maintenance .tt-product-actions-panel {
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+  }
+  body.tt-product-maintenance .tt-product-actions-panel > div:last-child {
+    margin-top: 0 !important;
+  }
+  body.tt-product-maintenance .tt-product-trust-badges {
+    margin-top: 0 !important;
+    padding: 0 !important;
+  }
+  body.tt-product-maintenance .tt-trust-badge-item {
+    margin: 0 !important;
+  }
+}
