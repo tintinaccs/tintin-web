@@ -181,8 +181,10 @@ function installOverrides() {
     try { await executeProductDeletion({ scope: 'selected', productIds: [docId], label: name || docId }); }
     catch (error) { toast(error?.message || 'No se pudo eliminar el producto.'); }
   };
-  window.bulkDelete = async () => {
-    const ids = selectedProductIds();
+  window.bulkDelete = async (explicitIds) => {
+    const ids = Array.isArray(explicitIds) && explicitIds.length
+      ? [...new Set(explicitIds.map(id => String(id || '').trim()).filter(Boolean))]
+      : selectedProductIds();
     if (!ids.length) { toast('Seleccioná al menos un producto.'); return; }
     try { await executeProductDeletion({ scope: 'selected', productIds: ids }); }
     catch (error) { toast(error?.message || 'No se pudo completar la eliminación masiva.'); }
