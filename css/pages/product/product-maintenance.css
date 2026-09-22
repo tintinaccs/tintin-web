@@ -559,3 +559,16 @@ body.tt-product-maintenance .tt-trust-badge-item {
   background: #fff !important;
   background-image: none !important;
 }
+/* Product card cleanup: one white surface, no nested pink frames. */
+body.tt-product-maintenance #product-grid,
+body.tt-product-maintenance .tt-product-detail-grid,
+body.tt-product-maintenance .tt-product-info-panel,
+body.tt-product-maintenance .tt-product-trust-badges,
+body.tt-product-maintenance .tt-trust-badge-item {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+body.tt-product-maintenance .tt-product-trust-badges,
+body.tt-product-maintenance .tt-trust-badge-item {
+  border-radius: 0 !important;
+}
