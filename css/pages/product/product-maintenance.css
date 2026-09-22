@@ -406,3 +406,84 @@ body.tt-product-maintenance #product-grid > * {
   animation: none !important;
   transition: none !important;
 }
+
+
+/* Product spacing + minimal surfaces: una sola lectura visual, sin cajas anidadas. */
+body.tt-product-maintenance .tt-product-page {
+  padding: clamp(16px, 2.5vw, 30px) 0 0 !important;
+}
+body.tt-product-maintenance .tt-product-page > .container,
+body.tt-product-maintenance .tinben-wrap,
+body.tt-product-maintenance .tt-related-section > .container {
+  width: min(100% - clamp(28px, 5vw, 64px), 1220px);
+  padding-inline: 0;
+}
+body.tt-product-maintenance .tt-product-detail-grid {
+  gap: clamp(22px, 3.2vw, 48px);
+  padding: clamp(16px, 2.4vw, 30px);
+  border-radius: 22px;
+  box-shadow: 0 12px 34px rgba(69, 38, 50, .055);
+}
+body.tt-product-maintenance .tt-product-info-panel {
+  border: 0 !important;
+  border-radius: 0;
+  box-shadow: none !important;
+  padding: clamp(4px, 1vw, 10px) clamp(2px, 1vw, 12px) 0;
+}
+body.tt-product-maintenance .tt-product-trust-badges {
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin-top: 20px;
+  background: transparent !important;
+}
+body.tt-product-maintenance .tt-trust-badge-item {
+  min-height: 48px;
+  padding: 11px 0;
+  border: 0;
+  border-top: 1px solid #eee7ea;
+  border-radius: 0;
+  background: transparent !important;
+}
+body.tt-product-maintenance .tt-trust-badge-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  color: var(--pink-dark);
+  flex: 0 0 24px;
+}
+body.tt-product-maintenance .tt-product-social-bar {
+  margin-top: 18px;
+  padding: 12px 0 16px;
+  border-top: 1px solid #eee7ea;
+  border-bottom: 0;
+}
+body.tt-product-maintenance .tinben { background: #fff !important; }
+body.tt-product-maintenance .tinben-wrap { padding-block: clamp(26px, 4vw, 44px); }
+body.tt-product-maintenance .tinben-heading { margin-bottom: clamp(16px, 2vw, 24px); }
+body.tt-product-maintenance .tinben-card {
+  gap: 9px;
+  padding: 20px 16px;
+  border: 1px solid #eee7ea;
+  border-radius: 14px;
+  box-shadow: none !important;
+}
+body.tt-product-maintenance .tinben-card::before,
+body.tt-product-maintenance .tinben-card:hover::before { display: none; }
+body.tt-product-maintenance .tinben-card:hover { transform: none; border-color: #e6d9de; }
+body.tt-product-maintenance .tinben-icon {
+  width: 42px;
+  height: 42px;
+  background: #fff6fa;
+}
+body.tt-product-maintenance .tt-related-section { padding-top: clamp(24px, 3.5vw, 42px); }
+@media (max-width: 767px) {
+  body.tt-product-maintenance .tt-product-page > .container,
+  body.tt-product-maintenance .tinben-wrap,
+  body.tt-product-maintenance .tt-related-section > .container {
+    width: min(100% - 28px, 620px);
+  }
+  body.tt-product-maintenance .tt-product-detail-grid { padding: 12px; border-radius: 18px; }
+  body.tt-product-maintenance .tt-product-info-panel { padding-inline: 4px; }
+  body.tt-product-maintenance .tinben-card { padding: 16px 12px; }
+}
