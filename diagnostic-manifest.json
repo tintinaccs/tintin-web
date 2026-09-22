@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "86418a53aa3abaad066a68c1fc80f80e0820d7e71481214183419b3bb1cc484c",
+  "sourceFingerprint": "86e8a2007d2fc1b55be47b59ea8f6c558024a50f02d0425d4cfb9d6675748646",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 864,
     "textFiles": 823,
-    "totalBytes": 17006446,
+    "totalBytes": 17006626,
     "pages": 19,
     "modules": 589
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 194929,
-      "sha256": "7a905af1816bbb867edac1b9fc67b5fdea8a8b28f2a3e3c45e2edf62162f4aed",
+      "bytes": 194903,
+      "sha256": "5f01205e5e6bc3dea9af87458922c72b4729785f8cc3f98f4c0ce9c3d38ffbeb",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2114,7 +2114,7 @@
           "line": 8
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260922-admin-guard-live-3",
+          "raw": "js/admin/admin-app.js?v=tintin-20260922-admin-guard-live-4",
           "target": "js/admin/admin-app.js",
           "line": 2028
         },
@@ -2129,7 +2129,7 @@
           "line": 2030
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260922-bulk-products-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260922-bulk-products-2",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2031
         },
@@ -2174,7 +2174,7 @@
           "line": 2248
         },
         {
-          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260922-bulk-delete-explicit-ids-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
           "line": 2249
         },
@@ -2363,7 +2363,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260922-admin-guard-live-3",
+          "raw": "js/admin/admin-app.js?v=tintin-20260922-admin-guard-live-4",
           "target": "js/admin/admin-app.js",
           "line": 2028,
           "exists": true
@@ -2381,7 +2381,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260922-bulk-products-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260922-bulk-products-2",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2031,
           "exists": true
@@ -2435,7 +2435,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260922-bulk-delete-explicit-ids-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
           "line": 2249,
           "exists": true
@@ -20135,8 +20135,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 441542,
-      "sha256": "2983b6e876361d4be15020319daea169c897882238af94205dcb945e968377d3",
+      "bytes": 441618,
+      "sha256": "0bad416733897805c6a443f930b28e8c8369e444304e16dd537a33d02e1fb4f5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20342,7 +20342,7 @@
         },
         {
           "url": "https://maps.google.com/",
-          "line": 7322
+          "line": 7323
         }
       ]
     },
@@ -21289,8 +21289,8 @@
     },
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
-      "bytes": 11566,
-      "sha256": "7d33f82173fee26aeffa76d3fd077aa5f9428ba5f0760ada4d6bab34735773cb",
+      "bytes": 11719,
+      "sha256": "14d6d39becb55c225bc2315062923db82f680736fc0895013d42bedcfe74589d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21599,8 +21599,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 75257,
-      "sha256": "3510b29db98b8bf57b01e9fab9f31df0672786ef416261793416d9577d3408e6",
+      "bytes": 75283,
+      "sha256": "ea842a44315a7c8cd61bcb8d00883845557c01e3c99d72147108152b9347c724",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26258,8 +26258,8 @@
     },
     {
       "path": "scripts/auditar-borrado-global-catalogo.mjs",
-      "bytes": 6609,
-      "sha256": "bbd0df3640bb9d2dbeb4f857f2497578388ab3855f44c3965023f4098604f4e9",
+      "bytes": 6554,
+      "sha256": "da49f94fa2c3f0d12d3b142d4e71f1601ef8c7fa47b8d3b7db41574aed7fcdcb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30464,8 +30464,8 @@
     },
     {
       "path": "tests/catalog/bulk-product-delete-contract.test.mjs",
-      "bytes": 461,
-      "sha256": "01b45b01445a5b37107017a1d6042c96c0c5da608d02ee1af9542b57befc2982",
+      "bytes": 493,
+      "sha256": "8c31300d1ccf200ded6572d678360a96171bdd4d2af83492c0048a29936ce6ae",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33626,8 +33626,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 194929,
-      "sha256": "7a905af1816bbb867edac1b9fc67b5fdea8a8b28f2a3e3c45e2edf62162f4aed"
+      "bytes": 194903,
+      "sha256": "5f01205e5e6bc3dea9af87458922c72b4729785f8cc3f98f4c0ce9c3d38ffbeb"
     },
     {
       "path": "apple-touch-icon.png",
@@ -35336,8 +35336,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 441542,
-      "sha256": "2983b6e876361d4be15020319daea169c897882238af94205dcb945e968377d3"
+      "bytes": 441618,
+      "sha256": "0bad416733897805c6a443f930b28e8c8369e444304e16dd537a33d02e1fb4f5"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -35522,8 +35522,8 @@
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
       "extension": ".js",
-      "bytes": 11566,
-      "sha256": "7d33f82173fee26aeffa76d3fd077aa5f9428ba5f0760ada4d6bab34735773cb"
+      "bytes": 11719,
+      "sha256": "14d6d39becb55c225bc2315062923db82f680736fc0895013d42bedcfe74589d"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -35582,8 +35582,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 75257,
-      "sha256": "3510b29db98b8bf57b01e9fab9f31df0672786ef416261793416d9577d3408e6"
+      "bytes": 75283,
+      "sha256": "ea842a44315a7c8cd61bcb8d00883845557c01e3c99d72147108152b9347c724"
     },
     {
       "path": "js/admin/users/ficha-usuario-admin.js",
@@ -37070,8 +37070,8 @@
     {
       "path": "scripts/auditar-borrado-global-catalogo.mjs",
       "extension": ".mjs",
-      "bytes": 6609,
-      "sha256": "bbd0df3640bb9d2dbeb4f857f2497578388ab3855f44c3965023f4098604f4e9"
+      "bytes": 6554,
+      "sha256": "da49f94fa2c3f0d12d3b142d4e71f1601ef8c7fa47b8d3b7db41574aed7fcdcb"
     },
     {
       "path": "scripts/auditar-canonicos-viewports.mjs",
@@ -37760,8 +37760,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 45202,
-      "sha256": "af82a3fce0e37697a62854a68415b18d1c8439a5e201c2076b2bbbd33300826b"
+      "bytes": 45176,
+      "sha256": "eaae0903cced826c0654dd38b64da97f51b3fa98baae36785548ce3fa7eb8dda"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -38078,8 +38078,8 @@
     {
       "path": "tests/catalog/bulk-product-delete-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 461,
-      "sha256": "01b45b01445a5b37107017a1d6042c96c0c5da608d02ee1af9542b57befc2982"
+      "bytes": 493,
+      "sha256": "8c31300d1ccf200ded6572d678360a96171bdd4d2af83492c0048a29936ce6ae"
     },
     {
       "path": "tests/catalog/public-catalog-cache.test.mjs",
@@ -40563,77 +40563,77 @@
         "references": [
           {
             "file": "js/admin/admin-app.js",
-            "line": 7804,
+            "line": 7805,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8125,
+            "line": 8126,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8145,
+            "line": 8146,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8333,
+            "line": 8334,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8353,
+            "line": 8354,
             "operation": "collection"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7744,
+            "line": 7745,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7747,
+            "line": 7748,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7812,
+            "line": 7813,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8189,
+            "line": 8190,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8237,
+            "line": 8238,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8249,
+            "line": 8250,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8270,
+            "line": 8271,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8305,
+            "line": 8306,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8377,
+            "line": 8378,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8391,
+            "line": 8392,
             "operation": "doc"
           },
           {
@@ -40853,7 +40853,7 @@
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7478,
+            "line": 7479,
             "operation": "doc"
           },
           {
@@ -41103,7 +41103,7 @@
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7175,
+            "line": 7176,
             "operation": "doc"
           },
           {
@@ -41268,22 +41268,22 @@
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7737,
+            "line": 7738,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7756,
+            "line": 7757,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 7765,
+            "line": 7766,
             "operation": "doc"
           },
           {
             "file": "js/admin/admin-app.js",
-            "line": 8320,
+            "line": 8321,
             "operation": "doc"
           },
           {
