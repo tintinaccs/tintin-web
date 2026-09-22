@@ -549,3 +549,13 @@ body.tt-product-maintenance .tt-product-trust-badges {
     margin: 0 !important;
   }
 }
+/* White product detail surface: no pink layer behind actions or guarantees. */
+body.tt-product-maintenance #product-grid,
+body.tt-product-maintenance .tt-product-info-panel,
+body.tt-product-maintenance .tt-product-actions-panel,
+body.tt-product-maintenance .tt-product-wa-link,
+body.tt-product-maintenance .tt-product-trust-badges,
+body.tt-product-maintenance .tt-trust-badge-item {
+  background: #fff !important;
+  background-image: none !important;
+}
