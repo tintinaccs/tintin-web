@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "cc25b72eeb553c87f590916090076b4da3e9976608e1d1baf0a16984adb1f009",
+  "sourceFingerprint": "86418a53aa3abaad066a68c1fc80f80e0820d7e71481214183419b3bb1cc484c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 865,
-    "textFiles": 824,
-    "totalBytes": 17007085,
+    "files": 864,
+    "textFiles": 823,
+    "totalBytes": 17006446,
     "pages": 19,
-    "modules": 590
+    "modules": 589
   },
   "viewports": [
     {
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 194892,
-      "sha256": "83060313a1b784fc45ebf38b11bb706c97dd79b41c8420e1c00d78cd0652aa9f",
+      "bytes": 194929,
+      "sha256": "7a905af1816bbb867edac1b9fc67b5fdea8a8b28f2a3e3c45e2edf62162f4aed",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2174,7 +2174,7 @@
           "line": 2248
         },
         {
-          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260922-bulk-products-1",
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
           "line": 2249
         },
@@ -2435,7 +2435,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260922-bulk-products-1",
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
           "line": 2249,
           "exists": true
@@ -17609,8 +17609,8 @@
     },
     {
       "path": "cloudflare/borrado-global-catalogo.js",
-      "bytes": 14613,
-      "sha256": "f38e4582055f777a08954adf012565b808e2cb80794af248b076d360c843c2cb",
+      "bytes": 14510,
+      "sha256": "978af81a34b11e006d27d005af589fcf2aa52a12f6e0f6a8829feb6204dc8e8c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30493,36 +30493,6 @@
       "endpoints": []
     },
     {
-      "path": "tests/catalog/catalog-delete-reference-resilience.test.mjs",
-      "bytes": 610,
-      "sha256": "86f6e4a0d06f697c2dbb80fe8a9ea4398bff1812588a4c1a139b2b99868fd660",
-      "syntax": {
-        "ok": true,
-        "error": ""
-      },
-      "imports": [
-        {
-          "raw": "node:test",
-          "target": null,
-          "dynamic": false,
-          "line": 1
-        },
-        {
-          "raw": "node:assert/strict",
-          "target": null,
-          "dynamic": false,
-          "line": 2
-        },
-        {
-          "raw": "node:fs",
-          "target": null,
-          "dynamic": false,
-          "line": 3
-        }
-      ],
-      "endpoints": []
-    },
-    {
       "path": "tests/catalog/public-catalog-cache.test.mjs",
       "bytes": 1351,
       "sha256": "3e03e8ee118479dfb0492c7593da5fe646463e6bd51e6f13dbfda9ec2c8b1193",
@@ -33656,8 +33626,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 194892,
-      "sha256": "83060313a1b784fc45ebf38b11bb706c97dd79b41c8420e1c00d78cd0652aa9f"
+      "bytes": 194929,
+      "sha256": "7a905af1816bbb867edac1b9fc67b5fdea8a8b28f2a3e3c45e2edf62162f4aed"
     },
     {
       "path": "apple-touch-icon.png",
@@ -33962,8 +33932,8 @@
     {
       "path": "cloudflare/borrado-global-catalogo.js",
       "extension": ".js",
-      "bytes": 14613,
-      "sha256": "f38e4582055f777a08954adf012565b808e2cb80794af248b076d360c843c2cb"
+      "bytes": 14510,
+      "sha256": "978af81a34b11e006d27d005af589fcf2aa52a12f6e0f6a8829feb6204dc8e8c"
     },
     {
       "path": "cloudflare/comentarios-sociales.js",
@@ -37790,8 +37760,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 45165,
-      "sha256": "9764f6c53840969a02366a41fd371b7d5518da3e26893db249d6130c20938597"
+      "bytes": 45202,
+      "sha256": "af82a3fce0e37697a62854a68415b18d1c8439a5e201c2076b2bbbd33300826b"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -38110,12 +38080,6 @@
       "extension": ".mjs",
       "bytes": 461,
       "sha256": "01b45b01445a5b37107017a1d6042c96c0c5da608d02ee1af9542b57befc2982"
-    },
-    {
-      "path": "tests/catalog/catalog-delete-reference-resilience.test.mjs",
-      "extension": ".mjs",
-      "bytes": 610,
-      "sha256": "86f6e4a0d06f697c2dbb80fe8a9ea4398bff1812588a4c1a139b2b99868fd660"
     },
     {
       "path": "tests/catalog/public-catalog-cache.test.mjs",
