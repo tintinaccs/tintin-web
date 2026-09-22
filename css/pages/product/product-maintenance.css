@@ -518,3 +518,16 @@ body.tt-product-maintenance .tt-related-card {
 body.tt-product-maintenance .tinben {
   background: #fff !important;
 }
+/* Mobile action spacing: preserve breathing room inside the white card. */
+body.tt-product-maintenance .tt-product-trust-badges {
+  padding-bottom: 14px;
+}
+@media (max-width: 767px) {
+  body.tt-product-maintenance .tt-product-info-panel {
+    padding-inline: 14px !important;
+    padding-bottom: 18px !important;
+  }
+  body.tt-product-maintenance .tt-product-actions-panel .tt-btn {
+    width: 100%;
+  }
+}
