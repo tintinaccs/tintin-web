@@ -487,3 +487,30 @@ body.tt-product-maintenance .tt-related-section { padding-top: clamp(24px, 3.5vw
   body.tt-product-maintenance .tt-product-info-panel { padding-inline: 4px; }
   body.tt-product-maintenance .tinben-card { padding: 16px 12px; }
 }
+
+
+body.tt-product-maintenance .tinsel,
+body.tt-product-maintenance .tt-related-section {
+  background: #fff !important;
+}
+body.tt-product-maintenance .tinsel-wrap {
+  padding-block: 0 clamp(28px, 4vw, 44px);
+}
+body.tt-product-maintenance .tinsel-box {
+  padding: clamp(18px, 2.4vw, 28px);
+  border: 1px solid #eee7ea;
+  border-radius: 18px;
+  box-shadow: none !important;
+}
+body.tt-product-maintenance .tinsel-box::before { display: none; }
+body.tt-product-maintenance .tt-related-section {
+  padding-bottom: clamp(28px, 4vw, 52px);
+}
+body.tt-product-maintenance .tt-related-grid {
+  gap: clamp(12px, 2vw, 20px);
+}
+body.tt-product-maintenance .tt-related-card {
+  border-color: #eee7ea !important;
+  border-radius: 16px;
+  box-shadow: none !important;
+}
