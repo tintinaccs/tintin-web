@@ -382,3 +382,27 @@ body.tt-product-maintenance .tt-lightbox-img.is-panning{cursor:grabbing}
 body.tt-product-maintenance .tt-lightbox-zoom,body.tt-product-maintenance .tt-lightbox-close,body.tt-product-maintenance .tt-lightbox-nav,body.tt-product-maintenance .tt-lightbox-counter{z-index:2}
 body.tt-product-maintenance .tt-gallery-image-fallback{display:grid;place-items:center;min-height:240px;width:100%;color:#8a7b81;background:#fff}
 @media(max-width:767px){body.tt-product-maintenance .tt-product-detail-grid{gap:18px;padding:12px;border-radius:20px}body.tt-product-maintenance .tt-product-info-panel{padding-inline:4px}body.tt-product-maintenance .tt-gallery-main{border-radius:16px}body.tt-product-maintenance .tt-product-specifications>div{grid-template-columns:1fr;gap:4px}body.tt-product-maintenance .tt-lightbox{padding:64px 10px 54px}body.tt-product-maintenance .tt-lightbox-stage{width:100%;height:min(78vh,680px);border-radius:18px}}
+
+
+/* Single loading surface: el cargador global es la unica capa visible mientras se resuelve el producto. */
+body.tt-product-maintenance #product-loading {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* El loader global ya tiene su propio fondo; quitamos el pseudo-fondo duplicado. */
+body.tt-product-maintenance #tt-loader::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* Una unica entrada estable para ficha, hero y superficies del producto. */
+body.tt-product-maintenance .tt-product-page,
+body.tt-product-maintenance .tt-product-page > .container,
+body.tt-product-maintenance #product-grid,
+body.tt-product-maintenance #product-grid > * {
+  animation: none !important;
+  transition: none !important;
+}
