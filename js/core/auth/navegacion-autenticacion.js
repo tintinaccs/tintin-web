@@ -14,7 +14,7 @@ let silentLogoutStarted = false;
 let authRenderGeneration = 0;
 let authReadyDiagnosticRecorded = false;
 let coordinatorReadyDiagnosticRecorded = false;
-const PROFILE_READ_TIMEOUT_MS = 1800;
+const PROFILE_READ_TIMEOUT_MS = 5000;
 const initialAuthHandoff = readAuthHandoff();
 
 if (!IS_LOGIN_PAGE) document.documentElement.classList.add('tt-auth-restoring');

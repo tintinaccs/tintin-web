@@ -75,6 +75,14 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
     setFrom('perfil', sessionProbe.profile === true,
       `SDK Firestore · perfil de la sesión actual ${sessionProbe.profile === true ? 'disponible' : 'no confirmado'}`,
       { status: sessionProbe.status, promote: sessionProbe.profile === true, evidenceLevel: LP, authRequired: sessionProbe.authRequired === true });
+    // El guard client-side de admin-app.js ya se ejecutó antes de montar este
+    // panel: solo llega aquí una sesión con role=superadmin verificado. Que
+    // este código corra es en sí la prueba en vivo de que el guard dejó pasar
+    // a esta sesión — no es una inferencia, es la precondición real de ejecución.
+    const guardOk = sessionOk && sessionProbe.role === true;
+    setFrom('admin-guard', guardOk,
+      `Guard client-side (admin-app.js) · sesión actual ${guardOk ? 'superadmin verificado' : 'no confirmado'}`,
+      { status: sessionProbe.status, promote: guardOk, evidenceLevel: LP, authRequired: sessionProbe.authRequired === true });
   }
   setFrom('cf-pages', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, { status: publicHealth?.status, promote: publicOk, evidenceLevel: LP });
   setFrom('cf-functions', publicOk, `GET /api/health → ${publicHealth?.status || 'sin respuesta'}`, { status: publicHealth?.status, promote: publicOk, evidenceLevel: LP });
@@ -244,6 +252,10 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
     set('roles', 'super-panel', sessionProbe.role === true,
       `Destino actual · ${sessionProbe.role === true ? 'Super Panel autorizado' : 'no confirmado'}`,
       sessionProbe.status || 0);
+    const guardOk = sessionOk && sessionProbe.role === true;
+    set('super-panel', 'admin-guard', guardOk,
+      `Guard client-side · sesión actual ${guardOk ? 'superadmin verificado' : 'no confirmado'}`,
+      sessionProbe.status || 0);
   }
   set('cf-functions', 'csp', headers ? headers.csp === true : undefined, `GET /admin.html · CSP ${headers?.csp ? 'presente' : 'ausente'}`, headers?.status);
   const report = systemHealth?.body?.report;
@@ -275,6 +287,12 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
     set('cf-functions', 'reglas-firestore', rulesOk,
       `SDK Firestore autenticado · paths protegidos=${rulesOk ? 'permitidos' : 'no confirmados'}`,
       rulesOk ? 200 : (favoriteRules?.status || notificationRules?.status || 0), { evidenceLevel: EVIDENCIA.LIVE_PRODUCTION });
+  }
+  if (typeof checks.firebase === 'boolean' && (favoriteRules || notificationRules)) {
+    const firestoreAuthorityOk = checks.firebase === true && rulesOk;
+    set('admin-guard', 'firestore-fuente-verdad', firestoreAuthorityOk,
+      `Firebase runtime=${checks.firebase === true} · Rules protegidas=${rulesOk}`,
+      firestoreAuthorityOk ? 200 : (favoriteRules?.status || notificationRules?.status || 0), { evidenceLevel: EVIDENCIA.LIVE_PRODUCTION });
   }
   const auditPassed = ciCheckPassed(currentEvidence, 'repositoryAudit');
   const deploymentPassed = ciCheckPassed(currentEvidence, 'cloudflarePages');

@@ -78,6 +78,6 @@ test('la navegación conserva la identidad visual sin usar el handoff como autor
   assert.match(sessionCoordinatorSource, /photoURL/);
   assert.match(sessionCoordinatorSource, /displayName/);
   assert.match(authNavigationSource, /captureNavigationHandoff/);
-  assert.match(authNavigationSource, /PROFILE_READ_TIMEOUT_MS = 1800/);
+  assert.match(authNavigationSource, /PROFILE_READ_TIMEOUT_MS = 5000/);
   assert.match(authNavigationSource, /provisional:Boolean\(user\)/);
 });
