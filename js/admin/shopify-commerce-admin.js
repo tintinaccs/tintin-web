@@ -1132,7 +1132,8 @@ function subscribeData() {
     renderProducts();
   }));
 
-  state.unsubscribers.push(onSnapshot(collection(db, 'collections'), snapshot => {
+  // Firestore rules require a bounded list for non-superadmin roles.
+  state.unsubscribers.push(onSnapshot(query(collection(db, 'collections'), limit(200)), snapshot => {
     state.collections = snapshot.docs.map(snap => normalizeCollectionDoc(snap.id, snap.data())).filter(Boolean);
     state.collectionsReady = true;
     state.collectionSelected = new Set([...state.collectionSelected].filter(slug => state.collections.some(c => c.slug === slug)));
