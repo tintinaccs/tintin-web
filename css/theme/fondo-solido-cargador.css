@@ -181,3 +181,10 @@ html body:has(.login-page) .login-page {
   position: relative;
   z-index: 1;
 }
+
+
+/* Single global loader surface: the loader background is the only visual layer. */
+html body #tt-loader::before {
+  content: none !important;
+  display: none !important;
+}
