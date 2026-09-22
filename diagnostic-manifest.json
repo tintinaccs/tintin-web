@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5095ccc8d02a2788f6da763f05ebcaffaa6a67680a0f9b6d6d557375ae5ad569",
+  "sourceFingerprint": "86418a53aa3abaad066a68c1fc80f80e0820d7e71481214183419b3bb1cc484c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 864,
     "textFiles": 823,
-    "totalBytes": 17006372,
+    "totalBytes": 17006446,
     "pages": 19,
     "modules": 589
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 194892,
-      "sha256": "83060313a1b784fc45ebf38b11bb706c97dd79b41c8420e1c00d78cd0652aa9f",
+      "bytes": 194929,
+      "sha256": "7a905af1816bbb867edac1b9fc67b5fdea8a8b28f2a3e3c45e2edf62162f4aed",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2174,7 +2174,7 @@
           "line": 2248
         },
         {
-          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260922-bulk-products-1",
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
           "line": 2249
         },
@@ -2435,7 +2435,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260922-bulk-products-1",
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
           "line": 2249,
           "exists": true
@@ -33626,8 +33626,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 194892,
-      "sha256": "83060313a1b784fc45ebf38b11bb706c97dd79b41c8420e1c00d78cd0652aa9f"
+      "bytes": 194929,
+      "sha256": "7a905af1816bbb867edac1b9fc67b5fdea8a8b28f2a3e3c45e2edf62162f4aed"
     },
     {
       "path": "apple-touch-icon.png",
@@ -37760,8 +37760,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 45165,
-      "sha256": "9764f6c53840969a02366a41fd371b7d5518da3e26893db249d6130c20938597"
+      "bytes": 45202,
+      "sha256": "af82a3fce0e37697a62854a68415b18d1c8439a5e201c2076b2bbbd33300826b"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
