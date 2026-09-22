@@ -4377,7 +4377,8 @@ async function runPromoCampaign_(tpl, recipients) {
   }
 
   if (campaignId) {
-    try { await updateDoc(doc(db, 'emailCampaigns', campaignId), { status: 'completed' }); } catch (e) {}
+    try { await updateDoc(doc(db, 'emailCampaigns', campaignId), { status: 'completed' }); }
+    catch (e) { console.error('No se pudo marcar la campaña como completada:', e); }
   }
 
   progressText.textContent = `Listo: ${sent} enviados, ${failed} fallidos.`;

@@ -519,3 +519,11 @@ jobs:
         run: |
           test "${{ steps.download.outcome }}" = "success"
           test "${{ steps.report.outcome }}" = "success"
+          test "${{ needs.static.result }}" = "success"
+          test "${{ needs.commerce.result }}" = "success"
+          test "${{ needs.public-ui.result }}" = "success"
+          test "${{ needs.admin-ui.result }}" = "success"
+          test "${{ needs.performance.result }}" = "success"
+          test "${{ needs.security.result }}" = "success"
+          test "${{ needs.rules.result }}" = "success"
+          test "${{ needs.production.result }}" = "success"
