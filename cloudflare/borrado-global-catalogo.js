@@ -79,11 +79,18 @@ async function runProductIdQuery(env, collectionId, productIds, { allDescendants
 }
 
 async function collectSocialReferences(env, productIds) {
+  const optionalReferences = (label, promise) => promise.catch(error => {
+    // Some older projects do not expose the reviewLikeProducts collection
+    // group to the Firestore REST query surface. It is auxiliary cleanup;
+    // do not block the canonical product deletion when that index is absent.
+    console.warn(`[borrado-global-catalogo] ${label} no disponible:`, error?.message || error);
+    return [];
+  });
   const [privateReviews, reviewCopies, likes, interactionMappings] = await Promise.all([
     runProductIdQuery(env, 'reviewRecords', productIds),
     runProductIdQuery(env, 'reviews', productIds, { allDescendants: true }),
     runProductIdQuery(env, 'likeRecords', productIds),
-    runProductIdQuery(env, 'reviewLikeProducts', productIds, { allDescendants: true }),
+    optionalReferences('reviewLikeProducts', runProductIdQuery(env, 'reviewLikeProducts', productIds, { allDescendants: true })),
   ]);
   return { privateReviews, reviewCopies, likes, interactionMappings };
 }

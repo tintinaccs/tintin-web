@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "bf73e5df557a5a719aceedd65406685cdbde882046df6faf9879e70d930e7e66",
+  "sourceFingerprint": "e91130a73676eed9b7ba15cfdbb8e39832c24fff717a81a234fcc719203bab15",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 863,
-    "textFiles": 822,
-    "totalBytes": 17004951,
+    "files": 864,
+    "textFiles": 823,
+    "totalBytes": 17006185,
     "pages": 19,
-    "modules": 588
+    "modules": 589
   },
   "viewports": [
     {
@@ -17609,8 +17609,8 @@
     },
     {
       "path": "cloudflare/borrado-global-catalogo.js",
-      "bytes": 14049,
-      "sha256": "4073e136931d373ba87b833c0e51de46a131b98262df3ed9b4917b718f5b966d",
+      "bytes": 14510,
+      "sha256": "978af81a34b11e006d27d005af589fcf2aa52a12f6e0f6a8829feb6204dc8e8c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21599,8 +21599,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 74610,
-      "sha256": "e27a31262a9ea2e10effcc620b2034c7fb20f03730b05b6368b4b4f2870b8a9c",
+      "bytes": 74922,
+      "sha256": "e7795ed9e88b5b9c9dbbf496944a847070454e01384ba65619fce2e00afa273b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21656,7 +21656,7 @@
         },
         {
           "url": "https://wa.me/$%7Bnormalized%7D",
-          "line": 909
+          "line": 910
         }
       ]
     },
@@ -30463,6 +30463,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/catalog/bulk-product-delete-contract.test.mjs",
+      "bytes": 461,
+      "sha256": "01b45b01445a5b37107017a1d6042c96c0c5da608d02ee1af9542b57befc2982",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/catalog/public-catalog-cache.test.mjs",
       "bytes": 1351,
       "sha256": "3e03e8ee118479dfb0492c7593da5fe646463e6bd51e6f13dbfda9ec2c8b1193",
@@ -33902,8 +33932,8 @@
     {
       "path": "cloudflare/borrado-global-catalogo.js",
       "extension": ".js",
-      "bytes": 14049,
-      "sha256": "4073e136931d373ba87b833c0e51de46a131b98262df3ed9b4917b718f5b966d"
+      "bytes": 14510,
+      "sha256": "978af81a34b11e006d27d005af589fcf2aa52a12f6e0f6a8829feb6204dc8e8c"
     },
     {
       "path": "cloudflare/comentarios-sociales.js",
@@ -35552,8 +35582,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 74610,
-      "sha256": "e27a31262a9ea2e10effcc620b2034c7fb20f03730b05b6368b4b4f2870b8a9c"
+      "bytes": 74922,
+      "sha256": "e7795ed9e88b5b9c9dbbf496944a847070454e01384ba65619fce2e00afa273b"
     },
     {
       "path": "js/admin/users/ficha-usuario-admin.js",
@@ -37731,7 +37761,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 45239,
-      "sha256": "69c1dea831cf320dfcccc772d8337309da31623c7a578b8cdf743af3ab0f9579"
+      "sha256": "01d511b50a2d3fa7784d934325689553e84e3e0dc2d88d6b14c4b4224a0d4513"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -38044,6 +38074,12 @@
       "extension": ".mjs",
       "bytes": 509,
       "sha256": "a4bce395a6bd60d82777acbad9c5fb2bfc71b6ada77be28a97871da8428eb549"
+    },
+    {
+      "path": "tests/catalog/bulk-product-delete-contract.test.mjs",
+      "extension": ".mjs",
+      "bytes": 461,
+      "sha256": "01b45b01445a5b37107017a1d6042c96c0c5da608d02ee1af9542b57befc2982"
     },
     {
       "path": "tests/catalog/public-catalog-cache.test.mjs",
@@ -40502,7 +40538,7 @@
           },
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1136,
+            "line": 1141,
             "operation": "collection"
           },
           {
@@ -40842,12 +40878,12 @@
           },
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1148,
+            "line": 1153,
             "operation": "collection"
           },
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1179,
+            "line": 1184,
             "operation": "collection"
           },
           {
@@ -40922,7 +40958,7 @@
         "references": [
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1204,
+            "line": 1209,
             "operation": "collection"
           },
           {
@@ -41087,7 +41123,7 @@
           },
           {
             "file": "js/admin/shopify-commerce-admin.js",
-            "line": 1123,
+            "line": 1128,
             "operation": "collection"
           },
           {

@@ -417,6 +417,7 @@ function renderProducts() {
         <span class="tt-commerce-bulkcount">${state.productSelected.size} seleccionado${state.productSelected.size === 1 ? '' : 's'}</span>
         ${canToggle ? button('Activar', 'products-bulk-activate') : ''}
         ${canToggle ? button('Desactivar', 'products-bulk-deactivate') : ''}
+        ${canDelete && canBulk ? button('Eliminar seleccionados', 'products-bulk-delete', { danger: true }) : ''}
         ${canExport ? button('Exportar selección', 'products-export-selected') : ''}
         ${button('Limpiar', 'products-clear-selection')}
       </div>
@@ -919,6 +920,10 @@ async function handleAction(action, element) {
   if (action === 'products-clear-selection') { state.productSelected.clear(); return renderProducts(); }
   if (action === 'products-bulk-activate') return bulkProducts(true);
   if (action === 'products-bulk-deactivate') return bulkProducts(false);
+  if (action === 'products-bulk-delete') {
+    if (typeof window.bulkDelete !== 'function') return toast('La eliminación masiva todavía no está disponible.');
+    return window.bulkDelete();
+  }
   if (action === 'product-edit' || action === 'drawer-product-edit') { closeDrawer(); return window.prodEditar?.(id); }
   if (action === 'product-toggle' || action === 'drawer-product-toggle') {
     const p = state.products.find(x => x._docId === id); if (!p) return;
