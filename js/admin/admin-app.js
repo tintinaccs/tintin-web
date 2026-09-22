@@ -47,6 +47,11 @@ import './products/integridad-inventario-admin.js?v=tintin-20260918-global-sessi
 let currentUser = null;
 let currentRole = null;
 let adminGuardInitializedUid = '';
+// Firebase puede publicar más de una confirmación durante una navegación
+// mientras otros módulos terminan de restaurarse. No arrancar dos veces la
+// carga pesada del panel para el mismo usuario: las carreras duplicaban
+// listeners, probes y overlays, y podían parecer un logout intermitente.
+let adminGuardInitializingUid = '';
 let allUsers = [];
 let allOrders = [];
 let adminOrdersUnsubscribe = null;
@@ -1025,6 +1030,10 @@ async function startAdminAuthGuard() {
     if (adminGuardInitializedUid === user.uid && document.documentElement.classList.contains('adm-auth-ready')) {
       return;
     }
+    if (adminGuardInitializingUid === user.uid) {
+      return;
+    }
+    adminGuardInitializingUid = user.uid;
 
     try {
       await appCheckReady;
@@ -1092,6 +1101,10 @@ async function startAdminAuthGuard() {
       // terminaba en login.html y podía crear /admin <-> /login infinito.
       console.error('[Admin] Init error; authenticated session preserved:', error);
       showAdminInitFailure();
+    } finally {
+      if (adminGuardInitializedUid !== user.uid) {
+        adminGuardInitializingUid = '';
+      }
     }
   });
 }

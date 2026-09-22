@@ -105,6 +105,13 @@ test('admin conserva UNKNOWN y ofrece recuperación ante una ausencia de sesión
   assert.match(admin, /HANDOFF_RECOVERED/);
 });
 
+test('admin serializa la inicialización para no duplicar cargas durante la restauración', () => {
+  assert.match(admin, /adminGuardInitializingUid/);
+  assert.match(admin, /if \(adminGuardInitializingUid === user\.uid\) \{/);
+  assert.match(admin, /adminGuardInitializingUid = user\.uid;/);
+  assert.match(admin, /finally \{[\s\S]*adminGuardInitializingUid = '';/);
+});
+
 test('los headers marcan el handoff antes de abrir el panel y todos usan el runtime actualizado', () => {
   assert.match(publicAuthNav, /createAuthHandoff\(user\.uid\)/);
   assert.match(publicAuthNav, /data-internal-admin-link/);
