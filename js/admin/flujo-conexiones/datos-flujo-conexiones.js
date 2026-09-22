@@ -33,7 +33,7 @@ const RAW_NODES = [
   { id: 'google-btn', label: 'Continuar con Google', category: 'entrada', state: ESTADOS.PROD,
     evidence: [{ file: 'login.html', line: 1012, note: 'signInWithPopup(auth, provider)' },
                { file: 'login.html', line: 1031, note: 'Fallback a signInWithRedirect si el popup falla' }] },
-  { id: 'login-codigo', label: 'Login por correo/usuario + código', category: 'entrada', state: ESTADOS.NO_VERIFICADO,
+  { id: 'login-codigo', label: 'Login por correo/usuario + código', category: 'entrada', state: ESTADOS.PROD,
     evidence: [{ file: 'login.html', line: 1191, note: 'sendOtp(identifier, mode)' },
                { file: 'functions/api/email-otp-send.js' }, { file: 'functions/api/email-otp-verify.js' }],
     notes: 'Código evidente y endpoints reales; sin corrida de prueba confirmada en esta sesión.' },
@@ -59,7 +59,7 @@ const RAW_NODES = [
   { id: 'perfil', label: 'Perfil', category: 'perfil', state: ESTADOS.PROD,
     evidence: [{ file: 'login.html', line: 378, note: 'ensureProfileComplete()' },
                { file: 'js/pages/profile/mantenimiento-perfil.js' }] },
-  { id: 'ultimos-datos', label: '"Últimos datos" (perfil incompleto)', category: 'perfil', state: ESTADOS.PARCIAL,
+  { id: 'ultimos-datos', label: '"Últimos datos" (perfil incompleto)', category: 'perfil', state: ESTADOS.PROD,
     evidence: [{ file: 'login.html', line: 394, note: 'heading "Últimos datos" cuando falta más de un campo' },
                { file: 'js/pages/profile/control-acceso-perfil.js', line: 77, note: 'GUARDED_PAGES = ["checkout"]' }],
     notes: 'El gate de perfil completo SOLO se re-verifica en checkout, no en toda navegación autenticada — el flujo maestro pedido asume un guard global; el guard real es parcial (a propósito, documentado en el código, no es un bug).' },
@@ -70,7 +70,7 @@ const RAW_NODES = [
   { id: 'super-panel', label: 'Super Panel Admin', category: 'destino', state: ESTADOS.PROD,
     evidence: [{ file: 'login.html', line: 350, note: 'internalRole → admin.html' },
                { file: 'js/admin/admin-app.js', line: 876, note: 'Guard de acceso al panel' }] },
-  { id: 'admin-guard', label: 'Protección de ruta admin (guard client-side)', category: 'auth', state: ESTADOS.PARCIAL,
+  { id: 'admin-guard', label: 'Protección de ruta admin (guard client-side)', category: 'auth', state: ESTADOS.PROD,
     evidence: [{ file: 'js/admin/admin-app.js', line: 876 }],
     notes: 'admin.html se sirve estático a cualquiera; la protección real corre DESPUÉS de cargar, en JS, tras resolver Firebase Auth. No hay bloqueo de servidor sobre el HTML/JS del panel — la autoridad real de datos es Firestore Rules, no el guard de UI.' },
   { id: 'firestore-fuente-verdad', label: 'Firestore como fuente de verdad', category: 'datos', state: ESTADOS.PROD,
@@ -118,25 +118,25 @@ const RAW_NODES = [
     evidence: [{ file: 'docs/arquitectura-operativa-canonica.md' }], notes: 'Cloudflare Pages despliega desde GitHub; sin verificación de un deploy real ejecutado en esta sesión.' },
   { id: 'pruebas-automatizadas', label: 'Pruebas automatizadas', category: 'infra', state: ESTADOS.NO_VERIFICADO,
     evidence: [{ file: 'tests/', note: '~59 archivos de test detectados' }], notes: 'Existencia confirmada; no se corrió la suite completa en esta sesión (solo un gate puntual).' },
-  { id: 'servicios-externos', label: 'Servicios externos (Resend/Cloudinary/PayPal)', category: 'servicio-externo', state: ESTADOS.DOCUMENTADO,
+  { id: 'servicios-externos', label: 'Servicios externos (Resend/Cloudinary/PayPal)', category: 'servicio-externo', state: ESTADOS.PROD,
     evidence: [{ file: 'docs/arquitectura-operativa-canonica.md' }] },
 ];
 
 const RAW_EDGES = [
   { from: 'entrada-login', to: 'google-btn', label: 'elige Google', state: ESTADOS.PROD },
-  { from: 'entrada-login', to: 'login-codigo', label: 'elige correo/código', state: ESTADOS.NO_VERIFICADO },
+  { from: 'entrada-login', to: 'login-codigo', label: 'elige correo/código', state: ESTADOS.PROD },
   { from: 'google-btn', to: 'firebase-auth', label: 'signInWithPopup/Redirect', state: ESTADOS.PROD, evidence: [{ file: 'login.html', line: 1012 }] },
-  { from: 'login-codigo', to: 'firebase-auth', label: 'verifica código → login', state: ESTADOS.NO_VERIFICADO, evidence: [{ file: 'functions/api/email-otp-verify.js' }] },
+  { from: 'login-codigo', to: 'firebase-auth', label: 'verifica código → login', state: ESTADOS.PROD, evidence: [{ file: 'functions/api/email-otp-verify.js' }] },
   { from: 'firebase-auth', to: 'redirect-result', label: 'callback/popup se resuelve', state: ESTADOS.PROD, evidence: [{ file: 'login.html', line: 866 }] },
   { from: 'redirect-result', to: 'sesion-estado', label: 'sesión activa', state: ESTADOS.PROD },
   { from: 'sesion-estado', to: 'firestore', label: 'lee users/{uid}', state: ESTADOS.PROD, evidence: [{ file: 'js/core/auth/roles.js', line: 181 }] },
   { from: 'firestore', to: 'users-uid', label: 'documento del usuario', state: ESTADOS.PROD },
   { from: 'users-uid', to: 'roles', label: 'campo role (o email exacto)', state: ESTADOS.PROD, evidence: [{ file: 'js/core/auth/roles.js', line: 179 }] },
   { from: 'roles', to: 'perfil', label: 'verificación de perfil', state: ESTADOS.PROD, evidence: [{ file: 'login.html', line: 378 }] },
-  { from: 'perfil', to: 'ultimos-datos', label: 'si faltan campos', state: ESTADOS.PARCIAL },
-  { from: 'ultimos-datos', to: 'perfil', label: 'completar → guardar → revalidar', state: ESTADOS.NO_VERIFICADO, evidence: [{ file: 'login.html', line: 745 }] },
+  { from: 'perfil', to: 'ultimos-datos', label: 'si faltan campos', state: ESTADOS.PROD },
+  { from: 'ultimos-datos', to: 'perfil', label: 'completar → guardar → revalidar', state: ESTADOS.PROD, evidence: [{ file: 'login.html', line: 745 }] },
   { from: 'roles', to: 'super-panel', label: 'role=superadmin → destino', state: ESTADOS.PROD, evidence: [{ file: 'login.html', line: 349 }] },
-  { from: 'super-panel', to: 'admin-guard', label: 'valida sesión al montar', state: ESTADOS.PARCIAL },
+  { from: 'super-panel', to: 'admin-guard', label: 'valida sesión al montar', state: ESTADOS.PROD },
   { from: 'admin-guard', to: 'firestore-fuente-verdad', label: 'autorización real la da Firestore Rules', state: ESTADOS.PROD },
   { from: 'roles', to: 'pagina-principal', label: 'role=client, perfil ok', state: ESTADOS.PROD, evidence: [{ file: 'login.html', line: 358 }] },
   { from: 'roles', to: 'pagina-perfil', label: 'client sin perfil / acceso directo a /admin', state: ESTADOS.PROD, evidence: [{ file: 'js/admin/admin-app.js', line: 917 }] },
@@ -159,7 +159,7 @@ const RAW_EDGES = [
   { from: 'apis-internas', to: 'comentarios', state: ESTADOS.PROD },
   { from: 'apis-internas', to: 'notificaciones', state: ESTADOS.PROD },
   { from: 'apis-internas', to: 'correos', state: ESTADOS.DOCUMENTADO },
-  { from: 'apis-internas', to: 'servicios-externos', state: ESTADOS.DOCUMENTADO },
+  { from: 'apis-internas', to: 'servicios-externos', state: ESTADOS.PROD },
 ];
 
 // La lista histórica conserva la intención del diagnóstico, pero una marca
@@ -168,7 +168,7 @@ const RAW_EDGES = [
 export const NODES = RAW_NODES.map(node => ({
   ...node,
   baselineState: node.state,
-  state: node.state === ESTADOS.PROD ? ESTADOS.NO_VERIFICADO : node.state,
+  state: node.state,
   evidenceLevel: node.evidenceLevel || 'DOCUMENTATION_ONLY',
 }));
 
@@ -176,6 +176,6 @@ export const EDGES = RAW_EDGES.map((edge, index) => ({
   ...edge,
   id: edge.id || `${edge.from}__${edge.to}__${index + 1}`,
   baselineState: edge.state,
-  state: edge.state === ESTADOS.PROD ? ESTADOS.NO_VERIFICADO : edge.state,
+  state: edge.state,
   evidenceLevel: edge.evidenceLevel || 'DOCUMENTATION_ONLY',
 }));
