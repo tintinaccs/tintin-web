@@ -84,6 +84,40 @@ function clearAdminAuthHandoffWithDiagnostic() {
   if (handoff) recordAuthDiagnostic('HANDOFF_CLEARED', { source: 'admin-guard' });
 }
 
+// admin.html <-> login.html se navegan como documentos completos: cada carga
+// reinicia el coordinador de sesión desde cero. Si la restauración de Firebase
+// no confirma la identidad a tiempo en cargas sucesivas, cada página redirige
+// a la otra sin memoria del intento anterior y el resultado es un rebote
+// infinito. Este contador (por pestaña, vía sessionStorage) detecta esa
+// repetición y corta el ciclo mostrando el aviso manual en vez de seguir
+// redirigiendo solo.
+const ADMIN_LOGIN_BOUNCE_KEY = 'tt_admin_login_bounce_v1';
+const ADMIN_LOGIN_BOUNCE_WINDOW_MS = 15000;
+const ADMIN_LOGIN_BOUNCE_LIMIT = 2;
+
+function registerAdminLoginBounceAndShouldBreakLoop() {
+  let record = null;
+  try {
+    const raw = sessionStorage.getItem(ADMIN_LOGIN_BOUNCE_KEY);
+    record = raw ? JSON.parse(raw) : null;
+  } catch { record = null; }
+  const now = Date.now();
+  if (!record || !Number.isFinite(record.firstAt) || now - record.firstAt > ADMIN_LOGIN_BOUNCE_WINDOW_MS) {
+    record = { count: 0, firstAt: now };
+  }
+  record.count += 1;
+  const shouldBreak = record.count > ADMIN_LOGIN_BOUNCE_LIMIT;
+  try {
+    if (shouldBreak) sessionStorage.removeItem(ADMIN_LOGIN_BOUNCE_KEY);
+    else sessionStorage.setItem(ADMIN_LOGIN_BOUNCE_KEY, JSON.stringify(record));
+  } catch {}
+  return shouldBreak;
+}
+
+function clearAdminLoginBounceGuard() {
+  try { sessionStorage.removeItem(ADMIN_LOGIN_BOUNCE_KEY); } catch {}
+}
+
 async function pushProductsToSheets(productIds) {
   const ids = [...new Set((productIds || []).map(id => String(id || '').trim()).filter(Boolean))];
   if (!ids.length || currentRole !== 'superadmin' || currentUser?.email !== SUPER_ADMIN) return false;
@@ -936,8 +970,15 @@ async function startAdminAuthGuard() {
     if (snapshot.status === AUTH_STATES.UNKNOWN) {
       // UNKNOWN no es una cuenta: ante una restauración que no pudo
       // confirmarse, el panel vuelve al ingreso y nunca deja un bloqueo
-      // visual permanente.
-      clearAuthHandoffWithDiagnostic();
+      // visual permanente. Si esto ya se repitió en esta pestaña (rebote
+      // admin<->login), se corta el ciclo con el aviso manual en vez de
+      // redirigir de nuevo.
+      if (registerAdminLoginBounceAndShouldBreakLoop()) {
+        recordAuthDiagnostic('REDIRECT_LOOP_BROKEN', { source: 'admin-guard', reason: 'auth-state-unknown' });
+        showAdminAuthUnknown();
+        return;
+      }
+      clearAdminAuthHandoffWithDiagnostic();
       window.location.replace('login.html');
       return;
     }
@@ -951,6 +992,13 @@ async function startAdminAuthGuard() {
         authState: snapshot.status,
         reason: snapshot.reason || 'session-not-restored'
       });
+      // Mismo corta-ciclo que en UNKNOWN: si el handoff ya venció y volvió a
+      // vencer en esta pestaña, no se sigue rebotando hacia login.html.
+      if (registerAdminLoginBounceAndShouldBreakLoop()) {
+        recordAuthDiagnostic('REDIRECT_LOOP_BROKEN', { source: 'admin-guard', reason: 'handoff-recovery-timeout' });
+        showAdminAuthUnknown();
+        return;
+      }
       clearAdminAuthHandoffWithDiagnostic();
       window.location.replace('login.html');
       return;
@@ -965,6 +1013,7 @@ async function startAdminAuthGuard() {
     // ese bloqueo visual para que el panel pueda continuar con su arranque.
     dismissAdminAuthUnknown();
     clearAdminAuthHandoffWithDiagnostic();
+    clearAdminLoginBounceGuard();
 
     currentUser = user;
 
