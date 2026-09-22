@@ -594,3 +594,10 @@ body.tt-product-maintenance .tt-gallery-main {
 body.tt-product-maintenance .tt-product-info-panel {
   padding-inline: 0 !important;
 }
+/* Keep trust guarantees directly under the WhatsApp help link. */
+body.tt-product-maintenance .tt-product-trust-badges {
+  margin-top: 0 !important;
+}
+body.tt-product-maintenance .tt-product-wa-link {
+  margin-bottom: 0 !important;
+}
