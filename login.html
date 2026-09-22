@@ -201,7 +201,7 @@
 </div>
 
 <script type="module">
-import { auth, db, provider, authPersistenceReady } from "./js/core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1";
+import { auth, db, provider, authPersistenceReady, inspectAuthPersistenceStorage } from "./js/core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1";
 import {
   signInWithPopup,
   signInWithRedirect,
@@ -351,6 +351,25 @@ function safeLocalRedirect(value) {
   } catch { return ''; }
 }
 
+// El popup de Google puede resolver antes de que Firebase termine de
+// escribir la sesión en IndexedDB. Navegar a admin.html con esa escritura
+// todavía en vuelo puede perderla (la pestaña se destruye por el
+// location.replace) y admin.html arranca sin sesión persistida, aunque el
+// handoff visual sí exista. Este chequeo confirma con evidencia real
+// (no una suposición de tiempo) que el registro ya está en IndexedDB antes
+// de navegar; si no se confirma dentro del límite, se navega de todos
+// modos y quedan como red de contención el handoff y el corta-rebotes de
+// admin-app.js.
+async function waitForPersistedAuthRecord(timeoutMs = 1500, intervalMs = 120) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    const storage = await inspectAuthPersistenceStorage().catch(() => null);
+    if (storage?.recordPresent) return true;
+    await new Promise(resolve => window.setTimeout(resolve, intervalMs));
+  }
+  return false;
+}
+
 async function redirectByRole(role, email, options = {}) {
   const cfg = options.storeAccessConfig || await getStoreAccessConfig();
   if (!isAccessAllowed(cfg, role, email)) {
@@ -381,6 +400,8 @@ async function redirectByRole(role, email, options = {}) {
     // sesión y devolver a la persona al login.
     const handoffCreated = createAuthHandoff(options.user?.uid);
     if (handoffCreated) recordAuthDiagnostic('HANDOFF_FOUND', { source: 'login', state: 'created-for-admin-handoff' });
+    const persisted = await waitForPersistedAuthRecord();
+    recordAuthDiagnostic('PERSISTENCE_WAIT_BEFORE_ADMIN', { source: 'login', persisted });
     recordAuthDiagnostic('REDIRECT_REASON', { source: 'login', reason: 'authenticated-internal-role' });
     recordAuthDiagnostic('REDIRECT_REQUESTED', { source: 'login', destination: 'admin' });
     window.location.replace('admin.html');
