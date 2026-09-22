@@ -582,3 +582,8 @@ body.tt-product-maintenance .tt-gallery-thumb {
   background: #fff !important;
   box-shadow: none !important;
 }
+body.tt-product-maintenance .tt-product-detail-grid,
+body.tt-product-maintenance .tt-product-gallery {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
