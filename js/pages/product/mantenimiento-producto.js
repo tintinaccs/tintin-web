@@ -312,3 +312,57 @@ if (isProductPage() && !window.TintinProductMaintenanceBooted) {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
   else boot();
 }
+
+
+/* Elimina medios inexistentes de la galería antes de que dejen miniaturas o errores visibles. */
+(function enforceGalleryImageIntegrity() {
+  const getGallery = (element) => element instanceof HTMLImageElement
+    ? element.closest('.tt-product-gallery')
+    : null;
+
+  const hideGalleryWhenEmpty = (gallery) => {
+    if (!gallery) return;
+    const images = Array.from(gallery.querySelectorAll('#gallery-main img, .tt-gallery-thumb img'));
+    const hasUsableImage = images.some((image) => image.complete && image.naturalWidth > 0);
+    const hasPendingImage = images.some((image) => !image.complete);
+
+    if (hasUsableImage || hasPendingImage) return;
+
+    gallery.hidden = true;
+    gallery.replaceChildren();
+  };
+
+  document.addEventListener('error', (event) => {
+    const image = event.target;
+    const gallery = getGallery(image);
+    if (!gallery) return;
+
+    // Evita que los manejadores previos creen un fallback o un mensaje de error.
+    event.stopImmediatePropagation();
+
+    const thumb = image.closest('.tt-gallery-thumb');
+    if (thumb) {
+      thumb.remove();
+      hideGalleryWhenEmpty(gallery);
+      return;
+    }
+
+    if (image.closest('#gallery-main')) {
+      gallery.dataset.mainImageFailed = 'true';
+      image.remove();
+      hideGalleryWhenEmpty(gallery);
+    }
+  }, true);
+
+  document.addEventListener('load', (event) => {
+    const image = event.target;
+    if (!(image instanceof HTMLImageElement)) return;
+
+    const thumb = image.closest('.tt-gallery-thumb');
+    const gallery = getGallery(image);
+    if (!thumb || !gallery || gallery.dataset.mainImageFailed !== 'true') return;
+
+    delete gallery.dataset.mainImageFailed;
+    thumb.click();
+  }, true);
+})();
