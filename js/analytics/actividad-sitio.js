@@ -46,6 +46,7 @@ if (
   const VISITOR_KEY = 'tt_activity_visitor_v2';
   const SESSION_KEY = 'tt_activity_session_v2';
   const GEO_KEY = 'tt_activity_geo_v1';
+  const LAST_HEARTBEAT_KEY = 'tt_activity_heartbeat_v1';
   const SESSION_RECORDED_PREFIX = 'tt_activity_recorded_';
   const AGGREGATE_RECORDED_PREFIX = 'tt_aggregate_recorded_';
   const HEARTBEAT_MS = 60000;
@@ -159,12 +160,29 @@ if (
     return id;
   }
 
+  function readLastHeartbeatWriteAt(dayKey, vId) {
+    try {
+      const saved = JSON.parse(storageGet(window.localStorage, LAST_HEARTBEAT_KEY) || '{}');
+      if (saved.day === dayKey && saved.visitorId === vId && Number.isFinite(saved.ts)) return saved.ts;
+    } catch {}
+    return 0;
+  }
+
+  function writeLastHeartbeatWriteAt(dayKey, vId, ts) {
+    storageSet(window.localStorage, LAST_HEARTBEAT_KEY, JSON.stringify({ day: dayKey, visitorId: vId, ts }));
+  }
+
   function refreshIdentity() {
     const dayKey = paraguayDayKey();
     if (identityDay === dayKey && visitorId && sessionId) return dayKey;
     identityDay = dayKey;
     visitorId = dailyId(window.localStorage, VISITOR_KEY, 'v_', dayKey);
     sessionId = dailyId(window.sessionStorage, SESSION_KEY, 's_', dayKey);
+    // El documento sitePresence/{visitorId} es compartido por día/navegador (no por
+    // pestaña ni por carga de página). Restaurar aquí el último envío evita que una
+    // navegación completa "olvide" el throttle de 20s que la regla de Firestore sí
+    // recuerda, lo que antes producía permission-denied al cambiar de página.
+    lastHeartbeatWriteAt = readLastHeartbeatWriteAt(dayKey, visitorId);
     geoPromise = null;
     return dayKey;
   }
@@ -298,6 +316,7 @@ if (
       const geo = await getGeo();
       if (!analyticsWritable || !activityEnabled || !hasConsent()) return;
       lastHeartbeatWriteAt = Date.now();
+      writeLastHeartbeatWriteAt(identityDay, visitorId, lastHeartbeatWriteAt);
       await setDoc(doc(db, 'sitePresence', visitorId), {
         visitorId,
         sessionId,
