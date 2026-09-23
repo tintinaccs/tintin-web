@@ -15,12 +15,25 @@
 import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { SUPER_ADMIN } from "../auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1";
 import { customerIdForUid, ACCOUNT_CONTRACT } from '../auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
+import { apiUrl } from '../firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
 
 /** Métodos de acceso válidos, tal como quedan guardados en `users.provider`. */
 export const AUTH_METHOD = {
   GOOGLE: 'google',
   EMAIL: 'emailOtp',
 };
+
+async function claimHistoricalCommerce(user) {
+  const token = await user.getIdToken();
+  const response = await fetch(apiUrl('claim-commerce-history'), {
+    method: 'POST',
+    headers: { authorization: `Bearer ${token}` },
+    cache: 'no-store',
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo recuperar el historial comercial.');
+  return result;
+}
 
 /**
  * Método con el que se registró un perfil ya guardado.
@@ -81,6 +94,15 @@ export async function ensureUserProfile(db, user, method) {
       updatedAt: serverTimestamp(),
       lastLogin: serverTimestamp(),
     });
+    // La eliminación borra Firebase Auth; este UID es necesariamente nuevo.
+    // El servidor vincula sólo compras/métricas tras verificar el mismo email.
+    try {
+      await claimHistoricalCommerce(user);
+    } catch (error) {
+      // La creación limpia nunca depende de una consulta histórica: queda
+      // pendiente y se reintenta en el siguiente ingreso autenticado.
+      console.warn('[user-profile] Historial comercial pendiente de recuperar:', error);
+    }
     return { role, blocked: false, isNew: true, welcomePending, method };
   }
 
@@ -88,6 +110,11 @@ export async function ensureUserProfile(db, user, method) {
 
   if (data.profileStatus === 'deleted' || data.deleted === true) {
     return { role: 'client', blocked: true, deleted: true, isNew: false, welcomePending: false, method };
+  }
+
+  if (normalizedEmail !== SUPER_ADMIN.toLowerCase() && data.commerceHistoryClaimed !== true) {
+    try { await claimHistoricalCommerce(user); }
+    catch (error) { console.warn('[user-profile] Historial comercial pendiente de recuperar:', error); }
   }
 
   if (normalizedEmail === SUPER_ADMIN.toLowerCase() && data.role !== 'superadmin') {
