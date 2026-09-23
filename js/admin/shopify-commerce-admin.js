@@ -993,8 +993,8 @@ async function handleAction(action, element) {
   if (action === 'products-export') return exportProducts(false);
   if (action === 'products-export-selected') return exportProducts(true);
   if (action === 'products-clear-selection') { state.productSelected.clear(); return renderProducts(); }
-  if (action === 'products-page-prev') { state.productPage = Math.max(0, state.productPage - 1); return renderProducts(); }
-  if (action === 'products-page-next') { state.productPage += 1; return renderProducts(); }
+  if (action === 'products-page-prev') { state.productPage = Math.max(0, state.productPage - 1); state.productSelected.clear(); return renderProducts(); }
+  if (action === 'products-page-next') { state.productPage += 1; state.productSelected.clear(); return renderProducts(); }
   if (action === 'products-bulk-activate') return bulkProducts(true);
   if (action === 'products-bulk-deactivate') return bulkProducts(false);
   if (action === 'products-bulk-delete') {
@@ -1131,9 +1131,9 @@ function onChange(event) {
   }
 
   const filter = target.dataset.filter;
-  if (filter === 'product-category') { state.productCategory = target.value; state.productPage = 0; return renderProducts(); }
-  if (filter === 'product-stock') { state.productStock = target.value; state.productPage = 0; return renderProducts(); }
-  if (filter === 'product-sort') { state.productSort = target.value; state.productPage = 0; return renderProducts(); }
+  if (filter === 'product-category') { state.productCategory = target.value; state.productPage = 0; state.productSelected.clear(); return renderProducts(); }
+  if (filter === 'product-stock') { state.productStock = target.value; state.productPage = 0; state.productSelected.clear(); return renderProducts(); }
+  if (filter === 'product-sort') { state.productSort = target.value; state.productPage = 0; state.productSelected.clear(); return renderProducts(); }
   if (filter === 'collection-visibility') { state.collectionVisibility = target.value; state.collectionPage = 0; return renderCollections(); }
   if (filter === 'collection-sort') { state.collectionSort = target.value; state.collectionPage = 0; return renderCollections(); }
   if (filter === 'order-status') { state.orderStatus = target.value; state.orderPage = 0; return renderOrders(); }
@@ -1163,7 +1163,7 @@ function onInput(event) {
   clearTimeout(searchTimer);
   const value = event.target.value;
   searchTimer = setTimeout(() => {
-    if (filter === 'product-search') { state.productSearch = value; state.productPage = 0; renderProducts(); }
+    if (filter === 'product-search') { state.productSearch = value; state.productPage = 0; state.productSelected.clear(); renderProducts(); }
     if (filter === 'collection-search') { state.collectionSearch = value; state.collectionPage = 0; renderCollections(); }
     if (filter === 'order-search') { state.orderSearch = value; state.orderPage = 0; renderOrders(); }
   }, 120);

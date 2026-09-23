@@ -1,6 +1,17 @@
 (function () {
   'use strict';
 
+  // El editor visual carga páginas públicas en un iframe del mismo origen. Esa
+  // superficie sólo renderiza el diseño: no puede competir por la persistencia
+  // de Firebase ni iniciar telemetría. La promesa se publica antes de cualquier
+  // import dinámico para que firebase.js conserve intacta la sesión del panel.
+  const isVisualPreviewFrame = new URLSearchParams(window.location.search).get('ttVisualPreview') === '1'
+    && window.parent !== window;
+  if (isVisualPreviewFrame) {
+    window.__TINTIN_AUTH_PERSISTENCE_READY__ = Promise.resolve(false);
+    window.TINTIN_ENABLE_PUBLIC_ACTIVITY = false;
+  }
+
   // Cada entrada de una página comienza arriba. El navegador puede restaurar
   // el scroll anterior incluso en una navegación normal o desde bfcache;
   // forzarlo aquí (en head, antes de pintar contenido) evita que cualquier
@@ -122,7 +133,7 @@
   // Una única versión para los módulos que este loader importa dinámicamente.
   // Cambiarla junto con el loader evita reutilizar una URL immutable cuando
   // cambia su plan de arranque.
-  const TT_CACHE_VERSION = 'tintin-20260919-runtime-cache-dedupe-1';
+  const TT_CACHE_VERSION = 'tintin-20260923-auth-preview-isolation-1';
   // El shell es común a cada navegación: incluso cuando la página está en
   // caché debe ser perceptible y no desaparecer antes de que el usuario vea
   // qué superficie se está preparando. Un segundo es el mínimo acordado;
@@ -844,6 +855,7 @@
   }
 
   function bootSiteActivity() {
+    if (isVisualPreviewFrame) return;
     if (!window.TintinSiteActivityBooted) {
       window.TINTIN_ENABLE_PUBLIC_ACTIVITY = true;
       importSibling('analytics/actividad-sitio.js', 'Site Activity');

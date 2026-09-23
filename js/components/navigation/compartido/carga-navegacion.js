@@ -10,6 +10,8 @@ let navigationBehaviorsPromise = null;
 
 const FULL_COMMERCE_PAGES = new Set(['home', 'shop', 'cart', 'account']);
 const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar-notifications';
+const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get('ttVisualPreview') === '1'
+  && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
 const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1';
 
@@ -112,8 +114,9 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
 }
 
 function loadAuthRuntime() {
+  if (IS_VISUAL_PREVIEW_FRAME) return Promise.resolve(null);
   if (!authRuntimePromise) {
-    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20260922-profile-timeout-fix-1').catch(error => {
+    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20260923-auth-preview-isolation-1').catch(error => {
       authRuntimePromise = null;
       throw error;
     });
@@ -288,8 +291,14 @@ function loadNavigationBehaviors() {
 export function loadSharedRuntime() {
   const page = currentPage();
   attachProductsDemand();
-  attachNotificationsDemand();
   loadNavigationBehaviors();
+
+  // La previsualización usa el shell y los estilos reales, pero no necesita
+  // sesión, carrito, perfil ni notificaciones. Evitar esos runtimes elimina
+  // listeners de Firestore y conserva aislada la autenticación del administrador.
+  if (IS_VISUAL_PREVIEW_FRAME) return;
+
+  attachNotificationsDemand();
 
   // Las páginas informativas resuelven Auth globalmente para que el header
   // conozca la sesión en cualquier ruta. El menú ya tiene el mismo respaldo

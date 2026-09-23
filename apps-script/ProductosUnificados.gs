@@ -924,6 +924,7 @@ function doPost(e) {
     if (orderSyncResponse) return orderSyncResponse;
   }
   if (body.action === 'syncEngagement' && typeof tintinHandleEngagement_ === 'function') return tintinHandleEngagement_(body);
+  if (body.action === 'syncEngagementBatch' && typeof tintinHandleEngagementBatch_ === 'function') return tintinHandleEngagementBatch_(body);
   return ContentService.createTextOutput(JSON.stringify({ ok: false, error: 'Acción no permitida' })).setMimeType(ContentService.MimeType.JSON);
 }
 
