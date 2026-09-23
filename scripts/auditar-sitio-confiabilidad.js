@@ -7,6 +7,21 @@ const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n?/g, '\n');
 const failures = [];
 
+function stripScriptBlocks(html) {
+  let out = '';
+  let rest = html;
+  for (;;) {
+    const open = /<script\b[^>]*>/i.exec(rest);
+    if (!open) { out += rest; break; }
+    out += rest.slice(0, open.index);
+    const afterOpen = rest.slice(open.index + open[0].length);
+    const close = /<\/script\s*>/i.exec(afterOpen);
+    if (!close) break;
+    rest = afterOpen.slice(close.index + close[0].length);
+  }
+  return out;
+}
+
 function check(label, ok) {
   console.log(`${ok ? 'OK' : 'FALTA'} — ${label}`);
   if (!ok) failures.push(label);
@@ -198,7 +213,7 @@ check('Las imágenes dinámicas reciben carga diferida y prioridad automática',
   loader.includes('bootImagePerformance();'));
 check('Todas las páginas declaran el tipo de sus botones estáticos',
   htmlFiles.every(file => !/<button\b(?![^>]*\btype\s*=)[^>]*>/i.test(
-    read(file).replace(/<script\b[^>]*>[\s\S]*?<\/script\b[^>]*>/gi, '')
+    stripScriptBlocks(read(file))
   )));
 check('Todos los controles de la barra móvil tienen nombre accesible',
   htmlFiles.every(file => {
