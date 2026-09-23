@@ -7,14 +7,13 @@ import {
   getGoogleAccessToken,
   parseServiceAccount,
 } from './firebase-admin-ligero.js';
-import { APPS_SCRIPT_SYNC_URL, SHEETS_TIMEOUT_MS } from './sheets-sync-config.js';
 import { syncEngagementToSheets } from './sincronizacion-participacion-sheets.js';
+import { syncProductsPayloadWithRetry } from './resiliencia-sync-catalogo.js';
 
 const FIRESTORE_SCOPE = 'https://www.googleapis.com/auth/datastore';
 const MAX_PRODUCTS = 5000;
 const QUERY_CHUNK = 30;
 const COMMIT_CHUNK = 20;
-const PRODUCT_SYNC_CHUNK = 100;
 const SOCIAL_SYNC_CONCURRENCY = 8;
 
 const clean = (value, max = 180) => String(value ?? '').trim().slice(0, max);
@@ -95,31 +94,10 @@ async function collectSocialReferences(env, productIds) {
   return { privateReviews, reviewCopies, likes, interactionMappings };
 }
 
-async function syncProductsToSheets(idToken, productIds) {
+async function syncProductsToSheets(env, productIds) {
   const ids = unique(productIds);
   if (!ids.length) return { ok: true, batches: 0 };
-  let batches = 0;
-  for (let i = 0; i < ids.length; i += PRODUCT_SYNC_CHUNK) {
-    const response = await fetch(APPS_SCRIPT_SYNC_URL, {
-      method: 'POST',
-      redirect: 'follow',
-      signal: AbortSignal.timeout(SHEETS_TIMEOUT_MS),
-      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-      body: JSON.stringify({
-        action: 'syncProducts',
-        sheetName: 'Productos',
-        schemaVersion: 2,
-        productIds: ids.slice(i, i + PRODUCT_SYNC_CHUNK),
-        idToken,
-      }),
-    });
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok || data.ok !== true) {
-      throw new Error(data.error || `Sheets Productos respondió ${response.status}`);
-    }
-    batches += 1;
-  }
-  return { ok: true, batches };
+  return syncProductsPayloadWithRetry(env, ids, { attempts: 4 });
 }
 
 async function runSocialEvents(env, events) {
@@ -227,9 +205,11 @@ async function previewProductDeletion(env, products) {
 export async function deleteProductsGlobally(env, { scope = 'selected', productIds = [], dryRun = true, idToken = '', actor = null } = {}) {
   const products = await resolveProducts(env, scope, productIds);
   const ids = products.map(product => product.id);
-  const impact = await previewProductDeletion(env, products);
-  if (dryRun) return { dryRun: true, productIds: ids, impact };
-  if (!ids.length) return { dryRun: false, deletedProducts: 0, impact, sheets: { products: true, social: true } };
+  if (dryRun) {
+    const impact = await previewProductDeletion(env, products);
+    return { dryRun: true, productIds: ids, impact };
+  }
+  if (!ids.length) return { dryRun: false, deletedProducts: 0, sheets: { products: true, social: true } };
 
   const social = await collectSocialReferences(env, ids);
   // Primero se eliminan/sanitizan las referencias del producto en las hojas
@@ -264,7 +244,7 @@ export async function deleteProductsGlobally(env, { scope = 'selected', productI
 
   let productsSheets = false;
   const errors = [];
-  try { await syncProductsToSheets(idToken, ids); productsSheets = true; }
+  try { await syncProductsToSheets(env, ids); productsSheets = true; }
   catch (error) { errors.push(clean(error?.message, 500)); }
   result.sheets = { products: productsSheets, social: true };
   result.partial = errors.length > 0;
@@ -298,8 +278,10 @@ export async function deleteCollectionsGlobally(env, {
     targetCollection: target,
     preservedHistory: ['orders', 'auditLog'],
   };
-  if (productMode === 'delete') impact.productDeletion = await previewProductDeletion(env, affectedProducts);
-  if (dryRun) return { dryRun: true, slugs: selectedSlugs, productIds: affectedIds, impact };
+  if (dryRun) {
+    if (productMode === 'delete') impact.productDeletion = await previewProductDeletion(env, affectedProducts);
+    return { dryRun: true, slugs: selectedSlugs, productIds: affectedIds, impact };
+  }
 
   let productDeleteResult = null;
   if (productMode === 'delete' && affectedIds.length) {
@@ -323,7 +305,7 @@ export async function deleteCollectionsGlobally(env, {
   let productsSheets = productDeleteResult?.sheets?.products === true;
   const errors = [...(productDeleteResult?.errors || [])];
   if (productMode !== 'delete' && affectedIds.length) {
-    try { await syncProductsToSheets(idToken, affectedIds); productsSheets = true; }
+    try { await syncProductsToSheets(env, affectedIds); productsSheets = true; }
     catch (error) { errors.push(clean(error?.message, 500)); }
   }
 

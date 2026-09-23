@@ -49,11 +49,11 @@ jobs:
       - name: Build exact public artifact
         run: npm run build:pages
 
-      - name: Install Chromium once
-        run: npx playwright install --with-deps chromium
-
       - name: Reject generated artifact drift
         run: git diff --exit-code -- .
+
+      - name: Validate non-destructive domain migration preflight
+        run: node scripts/auditar-preparacion-dominio.mjs
 
       - name: Verify CSS source and minified artifact integrity
         run: npm run audit:styles

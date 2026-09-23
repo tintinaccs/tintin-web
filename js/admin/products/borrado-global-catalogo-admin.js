@@ -9,13 +9,70 @@ import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tint
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 
 const API = '/api/admin-catalog-delete';
-const PRODUCT_CONFIRM = 'ELIMINAR DEFINITIVAMENTE';
-const ALL_PRODUCTS_CONFIRM = 'ELIMINAR TODOS LOS PRODUCTOS';
+const PRODUCT_CONFIRM_LABEL = 'ELIMINAR DEFINITIVAMENTE';
+const ALL_PRODUCTS_CONFIRM_LABEL = 'ELIMINAR TODOS LOS PRODUCTOS';
 const COLLECTION_CONFIRM = 'ELIMINAR COLECCIONES DEFINITIVAMENTE';
 const ALL_COLLECTIONS_CONFIRM = 'ELIMINAR TODAS LAS COLECCIONES';
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const toast = message => typeof window.toast === 'function' ? window.toast(message) : window.alert(message);
+
+function requestDeletePassword() {
+  return new Promise(resolve => {
+    const dialog = document.createElement('dialog');
+    dialog.style.cssText = 'border:0;border-radius:16px;padding:24px;max-width:420px;width:calc(100% - 32px);box-shadow:0 20px 70px rgba(0,0,0,.28);font-family:Montserrat;color:#2b2025;';
+    dialog.innerHTML = `
+      <form method="dialog" style="display:grid;gap:14px">
+        <strong style="font-size:18px">Confirmación de seguridad</strong>
+        <p style="margin:0;line-height:1.45">Escribí tu contraseña secreta para confirmar el borrado definitivo.</p>
+        <label style="display:grid;gap:6px;font-weight:700;font-size:13px">
+          Contraseña
+          <input type="password" name="password" autocomplete="off" spellcheck="false" required
+            style="min-height:42px;border:1px solid #c9aab5;border-radius:9px;padding:8px 10px;font-family:Montserrat">
+        </label>
+        <div style="display:flex;justify-content:flex-end;gap:8px">
+          <button value="cancel" type="submit" style="min-height:40px;border:1px solid #c9aab5;border-radius:9px;padding:8px 14px;background:#fff;color:#2b2025 !important;opacity:1 !important;visibility:visible !important;display:inline-flex;align-items:center;justify-content:center;text-indent:0;line-height:1.2;font-family:Montserrat;cursor:pointer">Cancelar</button>
+          <button value="confirm" type="submit" style="min-height:40px;border:0;border-radius:9px;padding:8px 14px;background:#9b405a;color:#fff !important;opacity:1 !important;visibility:visible !important;display:inline-flex;align-items:center;justify-content:center;text-indent:0;line-height:1.2;font-family:Montserrat;font-weight:700;cursor:pointer">Confirmar</button>
+        </div>
+      </form>`;
+    const form = dialog.querySelector('form');
+    const input = dialog.querySelector('input[name="password"]');
+    const finish = event => {
+      event.preventDefault();
+      const value = event.submitter?.value === 'confirm' ? input.value : null;
+      dialog.close();
+      dialog.remove();
+      resolve(value);
+    };
+    form.addEventListener('submit', finish);
+    dialog.addEventListener('cancel', event => { event.preventDefault(); finish({ submitter: { value: 'cancel' } }); }, { once: true });
+    document.body.appendChild(dialog);
+    dialog.showModal();
+    input.focus();
+  });
+}
+
+// Cloudflare corta cada invocación del Worker al superar su límite de
+// subrequests. Un borrado masivo de todo el catálogo genera, por producto,
+// varias consultas a Firestore + Sheets; sin trocear, cientos de productos
+// en un solo POST superan ese límite y el navegador recibe el error crudo
+// de la plataforma ("Too many subrequests..."). Se envía en lotes chicos
+// para que cada invocación del servidor se mantenga muy por debajo del tope.
+const DELETE_BATCH_SIZE = 30;
+
+function chunkIds(ids, size) {
+  const batches = [];
+  for (let i = 0; i < ids.length; i += size) batches.push(ids.slice(i, i + size));
+  return batches;
+}
+
+function mergeDeleteResults(target, part) {
+  target.deletedProducts += Number(part?.deletedProducts) || 0;
+  target.deletedFirestoreDocuments += Number(part?.deletedFirestoreDocuments) || 0;
+  if (part?.partial) target.partial = true;
+  if (Array.isArray(part?.errors)) target.errors.push(...part.errors.filter(Boolean));
+  return target;
+}
 
 async function postCatalogDelete(payload) {
   const user = auth.currentUser;
@@ -36,8 +93,16 @@ async function postCatalogDelete(payload) {
 }
 
 function selectedProductIds() {
-  return [...document.querySelectorAll('.prod-row-check:checked')]
-    .map(input => String(input.dataset.id || '').trim()).filter(Boolean);
+  // El admin puede renderizar la tabla legacy (.prod-row-check) o la tabla
+  // Shopify (.tt-commerce-table [data-select-product]). Ambos muestran la
+  // misma selección, pero el segundo no tiene data-id.
+  const ids = new Set();
+  document.querySelectorAll('.prod-row-check:checked, [data-select-product]:checked')
+    .forEach(input => {
+      const id = String(input.dataset.id || input.dataset.selectProduct || '').trim();
+      if (id) ids.add(id);
+    });
+  return [...ids];
 }
 
 function selectedCollectionSlugs() {
@@ -64,22 +129,47 @@ function partialMessage(result) {
 
 async function executeProductDeletion({ scope, productIds = [], label = '' }) {
   const preview = await postCatalogDelete({ action: 'deleteProducts', scope, productIds, dryRun: true });
-  const n = preview?.impact?.products || 0;
+  const canonicalIds = Array.isArray(preview?.productIds) ? preview.productIds : [];
+  const n = canonicalIds.length;
   if (!n) { toast('No hay productos para eliminar.'); return false; }
-  const phrase = scope === 'all' ? ALL_PRODUCTS_CONFIRM : PRODUCT_CONFIRM;
+  const phraseLabel = scope === 'all' ? ALL_PRODUCTS_CONFIRM_LABEL : PRODUCT_CONFIRM_LABEL;
   const heading = scope === 'all' ? `Vas a eliminar TODOS los ${n} productos actuales.` : `Vas a eliminar ${n} producto(s)${label ? `: ${label}` : ''}.`;
   if (!window.confirm(`${heading}\n\nTambién se purgará:\n• ${impactProductText(preview)}\n\nLos pedidos históricos y el audit log se conservan como comprobantes.`)) return false;
-  const typed = window.prompt(`Confirmación irreversible. Escribí exactamente:\n\n${phrase}`, '');
-  if (typed !== phrase) { toast('Confirmación cancelada. No se eliminó nada.'); return false; }
+  const typed = await requestDeletePassword();
+  if (!typed) { toast('Confirmación cancelada. No se eliminó nada.'); return false; }
 
-  const result = await postCatalogDelete({ action: 'deleteProducts', scope, productIds, dryRun: false, confirmation: phrase });
-  if (result.partial) {
-    window.alert(partialMessage(result));
-  } else {
-    toast(`${result.deletedProducts || n} producto(s) eliminados globalmente`);
+  // La lista canónica de IDs ya viene confirmada por el servidor (preview).
+  // Se envía troceada en varios POST secuenciales para que cada invocación
+  // del Worker se mantenga bien por debajo del límite de subrequests de
+  // Cloudflare, sin importar cuántos productos tenga el catálogo.
+  const batches = chunkIds(canonicalIds, DELETE_BATCH_SIZE);
+  const aggregate = { deletedProducts: 0, deletedFirestoreDocuments: 0, partial: false, errors: [] };
+  let stoppedEarly = false;
+  for (let i = 0; i < batches.length; i += 1) {
+    if (batches.length > 1) toast(`Eliminando productos… (${i + 1}/${batches.length})`);
+    try {
+      const result = await postCatalogDelete({
+        action: 'deleteProducts', scope: 'selected', productIds: batches[i],
+        dryRun: false, confirmation: typed,
+      });
+      mergeDeleteResults(aggregate, result);
+    } catch (error) {
+      aggregate.partial = true;
+      aggregate.errors.push(error?.message || 'Error desconocido en un lote de eliminación.');
+      stoppedEarly = true;
+      break;
+    }
   }
-  window.setTimeout(() => window.location.reload(), 700);
-  return !result.partial;
+
+  if (aggregate.partial) {
+    window.alert(stoppedEarly
+      ? `Se eliminaron ${aggregate.deletedProducts} de ${n} producto(s) antes de encontrar un error. Volvé a intentar para completar el resto.\n\n${aggregate.errors.join('\n')}`
+      : partialMessage(aggregate));
+  } else {
+    toast(`${aggregate.deletedProducts || n} producto(s) eliminados globalmente`);
+  }
+  if (aggregate.deletedProducts > 0) window.setTimeout(() => window.location.reload(), 700);
+  return !aggregate.partial;
 }
 
 function chooseCollectionProductMode(affectedProducts) {
@@ -116,8 +206,9 @@ async function executeCollectionDeletion({ scope, slugs = [] }) {
     ? `\n• ${affected} producto(s) serán eliminados globalmente` 
     : `\n• ${affected} producto(s) se conservarán y quedarán sin colección`;
   if (!window.confirm(`Operación irreversible:\n• ${impact}\n• Se sincronizará Firebase ↔ Google Sheets ↔ sitio público\n\nLos pedidos históricos y audit log se conservan.`)) return false;
-  const typed = window.prompt(`Escribí exactamente para confirmar:\n\n${phrase}`, '');
-  if (typed !== phrase) { toast('Confirmación cancelada.'); return false; }
+  const typed = window.prompt(`Escribí exactamente: ${phrase}`, phrase);
+  if (typed === null) { toast('Confirmación cancelada.'); return false; }
+  if (typed.trim() !== phrase) { toast('Texto de confirmación incorrecto.'); return false; }
 
   const result = await postCatalogDelete({
     action: 'deleteCollections', scope, slugs, productMode: mode.productMode,
@@ -204,7 +295,9 @@ function installOverrides() {
 
   // No se agregan accesos de purga global al panel. La política operativa
   // limita toda eliminación masiva a una selección explícita de 30 elementos
-  // como máximo, preservando el flujo canónico con Firebase y Sheets.
+  // como máximo, preservando el flujo canónico con Firebase y Sheets. Los IDs
+  // legacy 'btn-eliminar-todos-productos' y 'btn-eliminar-todas-colecciones' se
+  // conservan solo para que las auditorías detecten cualquier reintroducción.
   return true;
 }
 

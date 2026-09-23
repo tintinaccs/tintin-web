@@ -99,10 +99,10 @@ export async function syncProductsWithRetry(idToken, productIds, { attempts = MA
  * producto que todavía existe. Esto valida token, Apps Script, permisos del
  * spreadsheet y acceso a la hoja Productos antes de tocar Firestore.
  */
-export async function preflightProductsSheet(idToken, productIds) {
+export async function preflightProductsSheet(env, productIds) {
   const ids = unique(productIds);
   if (!ids.length) return { ok: true, skipped: true };
-  const result = await syncProductsWithRetry(idToken, [ids[0]], { attempts: 2 });
+  const result = await syncProductsPayloadWithRetry(env, [ids[0]], { attempts: 2 });
   return { ok: true, sampleProductId: ids[0], attempts: result.attempts };
 }
 
@@ -137,7 +137,7 @@ export async function finalizeProductsSheet(env, idToken, productIds, actor = nu
   const ids = unique(productIds);
   if (!ids.length) return { ok: true, attempts: 0, queued: false };
   try {
-    const result = await syncProductsWithRetry(idToken, ids, { attempts: MAX_ATTEMPTS });
+    const result = await syncProductsPayloadWithRetry(env, ids, { attempts: MAX_ATTEMPTS });
     return { ok: true, attempts: result.attempts, queued: false };
   } catch (error) {
     const queueId = await queuePendingSync(env, ids, error, actor);
