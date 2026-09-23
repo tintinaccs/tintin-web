@@ -216,14 +216,14 @@ import { ASSIGNABLE_ROLES } from './js/core/auth/contrato-cuentas-generado.js?v=
 import {
   isValidEmailFormat, requestOtpCode, verifyOtpCode,
   ensureUserDocForEmailLogin, otpErrorMessage
-} from "./js/email/correo-autenticacion.js?v=tintin-20260916-cache-bump-auth-mail-1-auth-persistence-20260919-1";
+} from "./js/email/correo-autenticacion.js?v=tintin-20260923-user-reentry-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, isRealisticPhone } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { reservePhone } from "./js/components/forms/reserva-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { isValidUsernameFormat, isReservedUsername, normalizeUsername } from "./js/components/forms/utilidades-username.js?v=tintin-20260821-username-unique-1";
 import { reserveUsername } from "./js/components/forms/reserva-username.js?v=tintin-20260822-dob-username-onboarding-1";
 import { isValidDob } from "./js/components/forms/validacion-nacimiento.js?v=tintin-20260822-dob-username-onboarding-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
-import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260916-cache-bump-profile-1-auth-persistence-20260919-1";
+import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260923-user-reentry-2";
 import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260918-auth-incident-diagnostics-1-auth-persistence-20260919-1";
 import { AUTH_STATES, subscribeSession, createAuthHandoff } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3";
 import { recordAuthDiagnostic } from "./js/core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
