@@ -202,20 +202,9 @@ function installOverrides() {
     catch (error) { toast(error?.message || 'No se pudo eliminar la colección.'); }
   };
 
-  injectDangerButton(
-    document.getElementById('btn-nuevo-producto'),
-    'btn-eliminar-todos-productos',
-    'Eliminar TODOS',
-    () => executeProductDeletion({ scope: 'all' }).catch(error => toast(error?.message || 'No se pudieron eliminar todos los productos.')),
-    'Purga global irreversible de todos los productos actuales'
-  );
-  injectDangerButton(
-    document.getElementById('btn-nueva-coleccion'),
-    'btn-eliminar-todas-colecciones',
-    'Eliminar TODAS',
-    () => executeCollectionDeletion({ scope: 'all' }).catch(error => toast(error?.message || 'No se pudieron eliminar todas las colecciones.')),
-    'Eliminar globalmente todas las colecciones actuales'
-  );
+  // No se agregan accesos de purga global al panel. La política operativa
+  // limita toda eliminación masiva a una selección explícita de 30 elementos
+  // como máximo, preservando el flujo canónico con Firebase y Sheets.
   return true;
 }
 
