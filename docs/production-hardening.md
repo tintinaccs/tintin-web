@@ -74,14 +74,15 @@ El editor visual ya conserva snapshots versionados y usa escrituras transacciona
 
 ## 6. Gate de cambios críticos
 
-`.github/workflows/e2e-critical.yml` ejecuta en cada PR a `main`:
+`.github/workflows/auditar-tintin.yml` ejecuta en cada PR a `main` (workflow vigente; `e2e-critical.yml` no existe en el repositorio):
 
 - sanitización y rate limit;
 - contrato de backup/restauración en modo dry-run;
 - cuentas, login y aislamiento de sesión;
 - carrito, checkout e inventario;
 - Web Push y participación;
-- seguridad, App Check y roles;
+- seguridad, App Check y roles, incluidas pruebas adversariales de `firestore.rules` contra el emulador real;
+- preflight no destructivo de la configuración de migración de dominio;
 - navegación responsive;
 - accesibilidad;
 - SEO;
