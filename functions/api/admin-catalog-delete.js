@@ -11,7 +11,6 @@ import {
 } from '../../cloudflare/borrado-global-catalogo.js';
 import {
   finalizeProductsSheet,
-  preflightProductsSheet,
   retryPendingCatalogSheets,
 } from '../../cloudflare/resiliencia-sync-catalogo.js';
 
@@ -111,11 +110,10 @@ export async function onRequest(context) {
     const serverPreview = await runCatalogAction(action, env, body, scope, true, idToken, actorContext);
     const affectedProductIds = productIdsFromPreview(serverPreview);
 
-    // Preflight no destructivo: mientras los productos todavía existen,
-    // valida Apps Script + token + permisos + spreadsheet real. Si falla,
-    // la operación aborta y Firestore queda intacto.
-    await preflightProductsSheet(env, affectedProductIds);
-
+    // Firestore es la fuente canónica: una indisponibilidad temporal del
+    // espejo de Sheets no puede impedir que el superadmin elimine el lote.
+    // El resultado devuelve una sincronización pendiente para que la cola
+    // persistente la recupere después, sin dejar una operación ambigua.
     const result = await runCatalogAction(action, env, body, scope, false, idToken, actorContext);
 
     // La capa de dominio ya sincroniza Productos una vez. Si justo en ese

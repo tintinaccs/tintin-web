@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "3b19d935db9e5b6555f396e137aa86479cce67cf8c3a9921de8aebc914b95e04",
+  "sourceFingerprint": "860c0d700c5ebd709a5728f0518c55b80ecf7007a82444064ddf310b72c7dfcc",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 869,
     "textFiles": 828,
-    "totalBytes": 17035724,
+    "totalBytes": 17035997,
     "pages": 19,
     "modules": 594
   },
@@ -17655,8 +17655,8 @@
     },
     {
       "path": "cloudflare/borrado-global-catalogo.js",
-      "bytes": 13884,
-      "sha256": "90c16d1e2fd2ddda84f86ce686bc13ae33b875b38330faf486773cdc74038fb2",
+      "bytes": 14145,
+      "sha256": "e7339a8345687d62cf1734feb0026725d33331d51fc7b065d36a9847d58381a9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18584,8 +18584,8 @@
     },
     {
       "path": "functions/api/admin-catalog-delete.js",
-      "bytes": 6178,
-      "sha256": "333ee2f8ea81c90dda05f1faff798b8939fe7729b9fede30924bc12f892a0390",
+      "bytes": 6190,
+      "sha256": "d6d750e2b20d980d81c1eb872d011be84c712af7f529838cb38e6f0b8f83b16e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18607,7 +18607,7 @@
           "raw": "../../cloudflare/resiliencia-sync-catalogo.js",
           "target": "cloudflare/resiliencia-sync-catalogo.js",
           "dynamic": false,
-          "line": 16
+          "line": 15
         }
       ],
       "endpoints": []
@@ -34109,8 +34109,8 @@
     {
       "path": "cloudflare/borrado-global-catalogo.js",
       "extension": ".js",
-      "bytes": 13884,
-      "sha256": "90c16d1e2fd2ddda84f86ce686bc13ae33b875b38330faf486773cdc74038fb2"
+      "bytes": 14145,
+      "sha256": "e7339a8345687d62cf1734feb0026725d33331d51fc7b065d36a9847d58381a9"
     },
     {
       "path": "cloudflare/comentarios-sociales.js",
@@ -35111,8 +35111,8 @@
     {
       "path": "functions/api/admin-catalog-delete.js",
       "extension": ".js",
-      "bytes": 6178,
-      "sha256": "333ee2f8ea81c90dda05f1faff798b8939fe7729b9fede30924bc12f892a0390"
+      "bytes": 6190,
+      "sha256": "d6d750e2b20d980d81c1eb872d011be84c712af7f529838cb38e6f0b8f83b16e"
     },
     {
       "path": "functions/api/admin-delete-user.js",
