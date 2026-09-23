@@ -47,7 +47,19 @@ FIRESTORE_RESTORE_SOURCE=gs://bucket/ruta/snapshot \
 node scripts/restore-firestore.mjs --dry-run
 ```
 
-Restauración real:
+Prueba de restauración **aislada** en una base de prueba que ya exista (no modifica `(default)`):
+
+```bash
+FIREBASE_PROJECT_ID=tintin-accesorios \
+FIRESTORE_RESTORE_DATABASE=restauracion-prueba \
+FIRESTORE_RESTORE_SOURCE=gs://bucket/ruta/snapshot \
+TINTIN_RESTORE_CONFIRM=RESTORE:tintin-accesorios \
+node scripts/restore-firestore.mjs
+```
+
+El comando espera a que termine `gcloud firestore import`. Verificar conteos y muestras antes de considerar recuperable el snapshot. **No crear ni restaurar automáticamente una base de prueba en CI.**
+
+Restauración real de la base productiva `(default)` (solo durante un incidente autorizado):
 
 ```bash
 FIREBASE_PROJECT_ID=tintin-accesorios \
