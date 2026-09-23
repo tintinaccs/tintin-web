@@ -79,17 +79,7 @@ async function updateUser(env, input) {
     });
   }
   if (action === 'reactivateUser') {
-    return applyUserLifecycle(env, {
-      uid,
-      action: 'reactivate',
-      actorId: 'google-sheets',
-      actorEmail: 'google-sheets@tintin.internal',
-      actorRole: 'sheets-sync',
-      reason: 'Reactivación administrativa desde Usuarios web',
-      origin,
-      changeId: nextChangeId,
-      baseChangeId,
-    });
+    throw new Error('Una cuenta eliminada debe registrarse nuevamente; no se reactiva desde Sheets.');
   }
   if (action !== 'updateUser') throw new Error('Acción de usuario no permitida');
 

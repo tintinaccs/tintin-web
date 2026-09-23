@@ -76,6 +76,7 @@ let dashboardActivityClock = 0;
 let dashboardPresenceRestart = 0;
 let dashboardActivityDay = '';
 let dashboardActivityState = { sessions: [], presence: [], totalVisits: null };
+let adminSettingsUnsubscribers = [];
 const SHEETS_PRODUCT_SYNC_URL = '/api/sheets-product-sync';
 let authReadyDiagnosticRecorded = false;
 let coordinatorReadyDiagnosticRecorded = false;
@@ -1074,6 +1075,7 @@ async function startAdminAuthGuard() {
         initSiteDiagnostics({ role });
         initConnectionsFlow({ role });
       }
+      startAdminSettingsRealtime();
       startAdminRealtimeData();
       loadDashboard();
       loadProductos();
@@ -1481,6 +1483,59 @@ function stopAdminRealtimeData() {
   adminOrdersUnsubscribe = null;
   adminUsersUnsubscribe = null;
   _auditUnsubscribe = null;
+}
+
+function stopAdminSettingsRealtime() {
+  adminSettingsUnsubscribers.forEach(unsubscribe => {
+    try { unsubscribe(); } catch {}
+  });
+  adminSettingsUnsubscribers = [];
+}
+
+// Estos listeners necesitan sesión autorizada y App Check listo. Antes se
+// abrían al evaluar el módulo, durante la restauración inicial de Auth; en
+// ese breve intervalo Firestore los rechazaba y el panel quedaba con una
+// mezcla de datos cargados y pantallas vacías.
+function startAdminSettingsRealtime() {
+  stopAdminSettingsRealtime();
+  adminSettingsUnsubscribers.push(onSnapshot(doc(db, 'settings', 'general'), snap => {
+    if (!snap.exists()) return;
+    const d = snap.data();
+    const waLink = document.getElementById('mensajes-wa-link');
+    const digits = String(d.whatsappNumber || '').replace(/\D/g, '');
+    if (waLink && digits) waLink.href = 'https://wa.me/' + digits;
+    if (d.waConfirmMessage) waConfirmMessageTemplate = d.waConfirmMessage;
+  }, error => console.warn('[admin-settings] No se pudo cargar settings/general:', error?.code || error)));
+
+  adminSettingsUnsubscribers.push(onSnapshot(doc(db, 'settings', 'shippingRates'), async snap => {
+    const d = snap.exists() ? snap.data() : {};
+    if (Array.isArray(d.deliveryCities) || Array.isArray(d.encomiendaCities)) {
+      shipCities.delivery = Array.isArray(d.deliveryCities) ? d.deliveryCities : [];
+      shipCities.encomienda = Array.isArray(d.encomiendaCities) ? d.encomiendaCities : [];
+      renderShipList('delivery');
+      renderShipList('encomienda');
+      return;
+    }
+    try {
+      const legacySnap = await getDoc(doc(db, 'settings', 'general'));
+      const legacy = legacySnap.exists() ? legacySnap.data() : {};
+      if (!Array.isArray(legacy.deliveryCities) && !Array.isArray(legacy.encomiendaCities)) return;
+      await setDoc(doc(db, 'settings', 'shippingRates'), {
+        deliveryCities: legacy.deliveryCities || [],
+        encomiendaCities: legacy.encomiendaCities || [],
+        deliveryCost: legacy.deliveryCost || 0,
+        encomiendaCost: legacy.encomiendaCost || 0,
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      await setDoc(doc(db, 'settings', 'general'), {
+        deliveryCities: deleteField(),
+        encomiendaCities: deleteField()
+      }, { merge: true });
+      console.log('[envios] Ciudades migradas de settings/general a settings/shippingRates.');
+    } catch (error) {
+      console.warn('[envios] No se pudo migrar la configuración de envíos:', error?.code || error);
+    }
+  }, error => console.warn('[admin-settings] No se pudo cargar shippingRates:', error?.code || error)));
 }
 
 function startAdminRealtimeData() {
@@ -1944,7 +1999,7 @@ function renderUsersTable(users) {
     const actions = canEdit ? `
       <div style="display:flex;gap:6px;flex-wrap:wrap">
         ${!isSuperAdmin ? (deleted
-          ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.restoreUser(${uidArg})">Reactivar</button>`
+          ? `<span class="adm-badge" title="La persona debe registrarse nuevamente; se recuperará solo su historial comercial.">Historial protegido</span>`
           : u.blocked
           ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.restoreUser(${uidArg})">Restaurar</button>`
           : `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.blockUser(${uidArg}, ${emailArg})">Bloquear</button>`
@@ -2070,13 +2125,7 @@ window.restoreUser = async (uid) => {
   const u = allUsers.find(x => x.uid === uid);
   if (!u) return;
   if (u.deleted === true || u.profileStatus === 'deleted') {
-    if (!confirm(`¿Reactivar la identidad histórica de "${u.name || u.email}" como Cliente?`)) return;
-    try {
-      await updateAccountStatusFromAdmin_(uid, 'reactivate', 'Reactivación desde Super Admin');
-      toast('Cuenta reactivada y auditada');
-    } catch (e) {
-      toast(e.message || 'Error al reactivar usuario');
-    }
+    toast('Esta cuenta fue eliminada. Debe registrarse otra vez para crear un perfil nuevo; sus compras se recuperarán automáticamente.');
     return;
   }
   const targetRole = ASSIGNABLE_ROLES.includes(u.roleBeforeBlock) ? u.roleBeforeBlock : 'client';
@@ -2113,13 +2162,12 @@ window.deleteUser = async (uid, name) => {
   if (reason === null) return;
   if (!confirm(
     `¿Eliminar la cuenta de "${name}"?\n\n` +
-    `Se revocará el acceso y se liberará el teléfono, pero se conservarán customerId, email, pedidos y auditoría ` +
-    `como identidad histórica. Super Admin podrá reactivarla.`
+    `Se eliminarán los datos del perfil y el acceso. Solo quedará el historial comercial sin datos personales; si vuelve a registrarse, tendrá un perfil totalmente nuevo.`
   )) return;
   try {
     await updateAccountStatusFromAdmin_(uid, 'softDelete', reason);
     if (_target) Object.assign(_target, { deleted: true, blocked: true, profileStatus: 'deleted', role: 'client' });
-    toast('Acceso revocado; identidad histórica conservada y auditada');
+    toast('Cuenta eliminada. El perfil fue borrado y el historial comercial quedó protegido.');
     applyUserFilters();
   } catch(e) {
     toast('Error al eliminar usuario');
@@ -2166,7 +2214,7 @@ function updateUsersBulkToolbar() {
   if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
   if (blockBtn) blockBtn.style.display = userStatusFilter === 'active' ? '' : 'none';
   if (restoreBtn) restoreBtn.style.display = userStatusFilter === 'blocked' || userStatusFilter === 'deleted' ? '' : 'none';
-  if (deleteBtn) deleteBtn.style.display = userStatusFilter === 'active' ? '' : 'none';
+  if (deleteBtn) deleteBtn.style.display = userStatusFilter !== 'deleted' ? '' : 'none';
 }
 
 window.clearUsersSelection = function() {
@@ -2244,15 +2292,13 @@ window.bulkRestoreUsers = async function() {
   if (!_selectedUsers.size) return;
   if (!can(currentRole, 'manageUsers')) { toast('No tenés permiso para restaurar usuarios'); return; }
   const selected = [..._selectedUsers].map(uid => allUsers.find(x => x.uid === uid)).filter(Boolean);
-  const deletedTargets = selected.filter(u => u.email !== SUPER_ADMIN && (u.deleted === true || u.profileStatus === 'deleted'));
   const ids = selected.filter(u => {
     return u && u.email !== SUPER_ADMIN && u.blocked && u.deleted !== true && u.profileStatus !== 'deleted';
   }).map(u => u.uid);
-  if (!ids.length && !deletedTargets.length) { toast('No hay usuarios elegibles en la selección'); return; }
-  const n = ids.length + deletedTargets.length;
-  if (!confirm(`¿Restaurar ${n} usuario(s)? Los bloqueados recuperarán su rol anterior y los eliminados volverán como Cliente.`)) return;
+  if (!ids.length) { toast('No hay bloqueados elegibles. Las cuentas eliminadas deben registrarse otra vez con un perfil nuevo.'); return; }
+  const n = ids.length;
+  if (!confirm(`¿Restaurar ${n} usuario(s)? Recuperarán su rol anterior.`)) return;
   try {
-    for (const u of deletedTargets) await updateAccountStatusFromAdmin_(u.uid, 'reactivate', 'Reactivación masiva desde Super Admin');
     const CHUNK = 450;
     for (let i = 0; i < ids.length; i += CHUNK) {
       const batch = writeBatch(db);
@@ -2274,7 +2320,6 @@ window.bulkRestoreUsers = async function() {
         delete u.blockedAt; delete u.blockedBy; delete u.blockReason; delete u.roleBeforeBlock;
       }
     });
-    deletedTargets.forEach(u => Object.assign(u, { blocked: false, deleted: false, profileStatus: 'incomplete', role: 'client' }));
     logAudit('restaurar_usuario', 'usuario', '', '', 'Roles anteriores restaurados', { bulk: true, count: n });
     toast(`${n} usuario(s) restaurados correctamente`);
     clearUsersSelection();
@@ -2285,7 +2330,7 @@ window.bulkRestoreUsers = async function() {
 window.bulkDeleteUsers = async function() {
   if (!_selectedUsers.size) return;
   if (currentRole !== 'superadmin' || !can(currentRole, 'deleteUsers')) { toast('Solo el Super Admin puede eliminar cuentas'); return; }
-  const targets = [..._selectedUsers].map(uid => allUsers.find(u => u.uid === uid)).filter(u => u && u.email !== SUPER_ADMIN && u.deleted !== true && u.profileStatus !== 'deleted' && !u.blocked);
+  const targets = [..._selectedUsers].map(uid => allUsers.find(u => u.uid === uid)).filter(u => u && u.email !== SUPER_ADMIN && u.deleted !== true && u.profileStatus !== 'deleted');
   if (!targets.length) { toast('No hay cuentas elegibles (el Super Admin está protegido)'); return; }
   const phrase = 'ELIMINAR CUENTAS SELECCIONADAS';
   if (!confirm(`Se revocará el acceso de ${targets.length} cuenta(s), se liberarán sus datos de contacto y se conservará la identidad histórica, pedidos y auditoría. ¿Continuar?`)) return;
@@ -4867,7 +4912,10 @@ function resetShipForm(type) {
   });
 });
 
-// Tiempo real: si se edita desde otra pestaña/dispositivo, la lista se refresca sola
+// Tiempo real: si se edita desde otra pestaña/dispositivo, la lista se refresca sola.
+// Se inicia desde el guard, después de Auth + App Check.
+function startAdminSettingsRealtimeLegacy() {
+/*
 onSnapshot(doc(db, 'settings', 'general'), snap => {
   if (!snap.exists()) return;
   const d = snap.data();
@@ -4918,6 +4966,8 @@ onSnapshot(doc(db, 'settings', 'shippingRates'), async snap => {
     console.error('[envios] No se pudo migrar deliveryCities/encomiendaCities a settings/shippingRates:', e);
   }
 });
+*/
+}
 
 // Pestañas Delivery / Encomienda dentro de Envíos
 document.querySelectorAll('.ship-tab-btn').forEach(btn => {

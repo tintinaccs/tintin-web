@@ -72,9 +72,17 @@
     }
 
     .adm-sidebar-logo {
+      position: relative;
       padding: 28px 24px 20px;
       border-bottom: 1px solid rgba(255,255,255,.15);
     }
+    .adm-sidebar-toggle {
+      position:absolute; right:12px; top:12px; display:grid; place-items:center;
+      width:34px; min-width:34px; height:34px; min-height:34px; padding:0;
+      border:1px solid color-mix(in srgb, var(--adm-sidebar-text) 22%, transparent);
+      border-radius:10px; background:transparent; color:var(--adm-sidebar-text); cursor:pointer;
+    }
+    .adm-sidebar-toggle:hover,.adm-sidebar-toggle:focus-visible { background:var(--adm-sidebar-hover); color:var(--adm-accent); outline:0; }
     .adm-sidebar-logo-text {
       font-size: 18px;
       font-weight: 900;
@@ -215,6 +223,43 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+    }
+
+    /* Modo fijo compacto: deja una rail de iconos y recupera ancho para el
+       panel. En dispositivos con mouse, hover abre un overlay sin mover main. */
+    @media (min-width: 541px) {
+      html.adm-sidebar-is-collapsed { --sidebar-w: 76px; }
+      html.adm-sidebar-is-collapsed .adm-sidebar { width:76px; transition:width .2s ease, box-shadow .2s ease; }
+      html.adm-sidebar-is-collapsed .adm-sidebar-logo { height:64px; padding:10px; border-bottom:1px solid rgba(255,255,255,.15); }
+      html.adm-sidebar-is-collapsed .adm-sidebar-logo-text,
+      html.adm-sidebar-is-collapsed .adm-sidebar-logo-sub,
+      html.adm-sidebar-is-collapsed .adm-user-info > div:not(.adm-user-avatar),
+      html.adm-sidebar-is-collapsed .adm-nav-divider { display:none; }
+      html.adm-sidebar-is-collapsed .adm-sidebar-toggle { right:21px; top:15px; }
+      html.adm-sidebar-is-collapsed .adm-sidebar-toggle svg { transform:rotate(180deg); }
+      html.adm-sidebar-is-collapsed .adm-user-info { justify-content:center; padding:12px 6px; }
+      html.adm-sidebar-is-collapsed .adm-nav-item { justify-content:center; gap:0; padding-inline:8px; font-size:0; }
+      html.adm-sidebar-is-collapsed .adm-nav-icon { width:24px; min-width:24px; height:24px; }
+      @media (hover:hover) and (pointer:fine) {
+        html.adm-sidebar-is-collapsed .adm-sidebar:hover,
+        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within { width:260px; box-shadow:16px 0 32px rgba(37,23,30,.18); }
+        html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-sidebar-logo,
+        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-sidebar-logo { height:auto; padding:28px 24px 20px; }
+        html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-sidebar-logo-text,
+        html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-sidebar-logo-sub,
+        html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-user-info > div:not(.adm-user-avatar),
+        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-sidebar-logo-text,
+        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-sidebar-logo-sub,
+        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-user-info > div:not(.adm-user-avatar) { display:block; }
+        html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-nav-divider,
+        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-nav-divider { display:block; }
+        html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-user-info,
+        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-user-info { justify-content:flex-start; padding:16px 24px; }
+        html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-nav-item,
+        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-nav-item { justify-content:flex-start; gap:12px; padding-inline:24px; font-size:13px; }
+        html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-sidebar-toggle,
+        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-sidebar-toggle { right:12px; top:12px; }
+      }
     }
 
     /* ======== TOPBAR ======== */
@@ -1511,6 +1556,7 @@
       .adm-user-info .adm-user-role-badge,
       .adm-user-info .adm-live-clock,
       .adm-nav-divider { display: none; }
+      .adm-sidebar-toggle { display:none; }
 
       .adm-user-info {
         justify-content: center;

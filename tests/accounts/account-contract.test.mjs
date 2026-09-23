@@ -47,7 +47,7 @@ test('el login por correo y username usa Pages Functions también desde localhos
   assert.match(auth, /hostname/);
 });
 
-test('la eliminación administrativa es tombstone y la auditoría es append-only', () => {
+test('la eliminación administrativa borra la identidad, conserva solo comercio y la auditoría es append-only', () => {
   const endpoint = read('functions/api/admin-delete-user.js');
   const lifecycle = read('cloudflare/user-lifecycle-domain.js');
   const rules = read('firestore.rules');
@@ -55,9 +55,9 @@ test('la eliminación administrativa es tombstone y la auditoría es append-only
   assert.match(lifecycle, /profileStatus: fsString\('deleted'\)/);
   assert.match(lifecycle, /deleted: fsBoolean\(true\)/);
   assert.match(lifecycle, /setFirebaseUserDisabled\(env, uid, action === 'softDelete'\)/);
+  assert.match(lifecycle, /deleteFirebaseUser\(env, uid\)/);
+  assert.match(lifecycle, /deletedEmailHash/);
   assert.match(lifecycle, /auditLog\/\$\{eventId\}/);
-  assert.doesNotMatch(endpoint, /deleteFirebaseUser/);
-  assert.doesNotMatch(lifecycle, /deleteFirebaseUser/);
   assert.match(rules, /match \/auditLog\/\{logId\}[\s\S]*?allow update, delete: if false/);
   assert.match(rules, /match \/users\/\{userId\}[\s\S]*?allow delete: if false/);
 });

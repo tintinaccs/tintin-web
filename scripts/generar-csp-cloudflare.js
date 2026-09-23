@@ -112,7 +112,11 @@ const fallbackInlineHashes = [...new Set([
   ...inlineHashes('catalogo.html'),
   ...inlineHashes('login.html'),
   ...inlineHashes('checkout.html'),
-  ...inlineHashes('perfil.html')
+  ...inlineHashes('perfil.html'),
+  // El editor visual usa el inicio como preview por defecto. `_headers` puede
+  // ser el fallback que reciba ese iframe; autorizar sus hashes exactos evita
+  // bloquear scripts legítimos sin abrir `unsafe-inline`.
+  ...inlineHashes('index.html')
 ])].sort();
 const scriptAttrDirective = handlerHashes.length
   ? `script-src-attr 'unsafe-hashes' ${handlerHashes.join(' ')}`

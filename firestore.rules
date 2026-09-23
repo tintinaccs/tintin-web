@@ -336,7 +336,8 @@ service cloud.firestore {
         'roleBeforeBlock', 'purchaseCount', 'orderCount', 'totalOrders',
         'totalSpent', 'completedOrders', 'pendingOrders', 'cancelledOrders',
         'lastOrderAt', 'lastOrderId', 'lastPurchaseAt', 'lastPurchaseOrderId',
-        'profileStatsUpdatedAt', 'orderStats', 'lastCheckoutAt', 'lastCheckoutOrderId'
+        'profileStatsUpdatedAt', 'orderStats', 'lastCheckoutAt', 'lastCheckoutOrderId',
+        'commerceHistoryClaimed', 'commerceHistorySourceUid'
       ]);
     }
 
