@@ -30,7 +30,6 @@ const FCM_SCOPE = 'https://www.googleapis.com/auth/firebase.messaging';
 
 const PROCESSING_TAKEOVER_MS = 60 * 1000;
 const MAX_EVENT_ATTEMPTS = 5;
-const MAX_DEVICES_PER_SEND = 20;
 const PUSH_SETTINGS_PATH = 'pushSettings/global';
 
 export function pushEnabled(env) {
@@ -157,8 +156,7 @@ export async function listActiveDevices(env) {
     from: [{ collectionId: PUSH_DEVICES_COLLECTION }],
     where: {
       fieldFilter: { field: { fieldPath: 'enabled' }, op: 'EQUAL', value: { booleanValue: true } }
-    },
-    limit: MAX_DEVICES_PER_SEND
+    }
   });
   return devices.filter(device => cleanText(device.token, 400).length > 20);
 }
@@ -228,6 +226,12 @@ export async function savePushSettings(env, { enabled, foregroundSound, foregrou
 }
 
 function soundForType(settings, type) {
+  if (String(type || '') === 'admin.broadcast') {
+    return {
+      mode: settings.foregroundSound || 'default',
+      url: settings.foregroundSoundUrl || ''
+    };
+  }
   const prefix = String(type || '').startsWith('social.review') ? 'Review'
     : String(type || '').startsWith('social.like') ? 'Like'
       : String(type || '').startsWith('admin.') ? 'Review' : 'Order';
@@ -588,4 +592,49 @@ export async function sendTestPush(env, { onlyToken }) {
   // Una prueba sólo se considera exitosa si FCM llegó a por lo menos un
   // dispositivo activo.
   return { ok: result.successCount > 0, ...result, lastError: sanitizeError(result.lastError, 120) };
+}
+
+/** Mensaje administrativo explícito para todos los dispositivos activos. */
+export async function dispatchAdminBroadcast(env, { title, body, updatedBy = '' }) {
+  if (!pushEnabled(env)) return { ok: false, error: 'push_disabled' };
+  const settings = await readPushSettings(env);
+  if (!settings.enabled) return { ok: false, error: 'push_paused_by_superadmin' };
+
+  const eventId = `admin.broadcast:${crypto.randomUUID()}`;
+  const claim = await claimEvent(env, { eventId, type: 'admin.broadcast', orderId: '' });
+  const sound = soundForType(settings, 'admin.broadcast');
+  const safeTitle = cleanText(title, 90) || 'Mensaje de Tintin';
+  const safeBody = cleanText(body, 220);
+  const content = {
+    title: safeTitle,
+    body: safeBody,
+    foregroundSound: sound.mode,
+    data: {
+      type: 'admin.broadcast',
+      orderId: '',
+      shortId: '',
+      url: '/admin.html?section=notificaciones-push',
+      eventId,
+      tag: eventId,
+      title: safeTitle,
+      body: safeBody,
+      foregroundSound: sound.mode,
+      foregroundSoundUrl: sound.url
+    }
+  };
+  const devices = await listActiveDevices(env);
+  const result = devices.length
+    ? await sendToDevices(env, devices, content)
+    : { attempted: 0, successCount: 0, failureCount: 0, disabledCount: 0, lastError: '' };
+  const status = await closeEvent(env, claim.path, result);
+  return {
+    ok: status === 'sent' || status === 'partial' || status === 'no_devices',
+    status,
+    attempted: result.attempted,
+    successCount: result.successCount,
+    failureCount: result.failureCount,
+    disabledCount: result.disabledCount,
+    lastError: sanitizeError(result.lastError, 120),
+    updatedBy: cleanText(updatedBy, 160)
+  };
 }

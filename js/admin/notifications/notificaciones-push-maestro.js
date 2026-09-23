@@ -163,6 +163,21 @@ async function sendGlobalTest() {
   }
 }
 
+async function sendGlobalMessage() {
+  const title = $('push-master-message-title')?.value.trim();
+  const body = $('push-master-message-body')?.value.trim();
+  if (!title || !body) { notice('Completá el título y el mensaje.', true); return; }
+  const button = $('btn-push-master-message'); button.disabled = true;
+  notice('Enviando mensaje a todos los dispositivos activos...');
+  try {
+    const data = await call('broadcast', { method: 'POST', body: JSON.stringify({ action: 'broadcast', title, body }) });
+    notice(`Mensaje enviado: ${data.successCount} de ${data.attempted} dispositivo(s).`);
+    $('push-master-message-body').value = '';
+    await refresh();
+  } catch (error) { notice(error.message, true); }
+  finally { button.disabled = false; }
+}
+
 async function save() {
   const sound = $('push-master-sound').value;
   const url = $('push-master-sound-url').value.trim();
@@ -211,6 +226,7 @@ function boot() {
   $('push-master-sound-file')?.addEventListener('change', () => uploadTone().catch(error => notice(error.message, true)));
   $('btn-push-master-save')?.addEventListener('click', () => save().catch(error => notice(error.message, true)));
   $('btn-push-master-test')?.addEventListener('click', sendGlobalTest);
+  $('btn-push-master-message')?.addEventListener('click', sendGlobalMessage);
   $('btn-push-master-revoke-all')?.addEventListener('click', async () => {
     if (!window.confirm('¿Revocar TODOS los dispositivos push? Ninguno recibirá pedidos hasta volver a autorizarlo.')) return;
     const button = $('btn-push-master-revoke-all'); button.disabled = true;

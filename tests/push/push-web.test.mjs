@@ -352,6 +352,18 @@ test('el endpoint de prueba no acepta título ni cuerpo del navegador', () => {
   assert.ok(source.includes('buildTestPushContent') || source.includes('sendTestPush'));
 });
 
+test('el mensaje global queda reservado al Super Admin y cubre todos los dispositivos activos', () => {
+  const endpoint = read('functions/api/push-admin.js');
+  const service = read('cloudflare/servicio-push.js');
+  assert.match(endpoint, /requireSuperAdmin/);
+  assert.match(endpoint, /action === 'broadcast'/);
+  assert.match(endpoint, /body\.title/);
+  assert.match(endpoint, /body\.body/);
+  assert.match(service, /export async function dispatchAdminBroadcast/);
+  assert.match(service, /const devices = await listActiveDevices\(env\);/);
+  assert.doesNotMatch(service, /MAX_DEVICES_PER_SEND/);
+});
+
 test('los Me gusta agrupados conservan el nombre y reemplazan el aviso anterior', () => {
   const presentation = adminNotificationPushPresentation({
     kind: 'product_like', actorName: 'María López', productName: 'Bag Noir',
