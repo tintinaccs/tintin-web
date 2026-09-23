@@ -133,7 +133,7 @@
   // Una única versión para los módulos que este loader importa dinámicamente.
   // Cambiarla junto con el loader evita reutilizar una URL immutable cuando
   // cambia su plan de arranque.
-  const TT_CACHE_VERSION = 'tintin-20260919-runtime-cache-dedupe-1';
+  const TT_CACHE_VERSION = 'tintin-20260923-auth-preview-isolation-1';
   // El shell es común a cada navegación: incluso cuando la página está en
   // caché debe ser perceptible y no desaparecer antes de que el usuario vea
   // qué superficie se está preparando. Un segundo es el mínimo acordado;
