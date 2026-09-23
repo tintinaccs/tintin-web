@@ -76,6 +76,7 @@ let dashboardActivityClock = 0;
 let dashboardPresenceRestart = 0;
 let dashboardActivityDay = '';
 let dashboardActivityState = { sessions: [], presence: [], totalVisits: null };
+let adminSettingsUnsubscribers = [];
 const SHEETS_PRODUCT_SYNC_URL = '/api/sheets-product-sync';
 let authReadyDiagnosticRecorded = false;
 let coordinatorReadyDiagnosticRecorded = false;
@@ -1074,6 +1075,7 @@ async function startAdminAuthGuard() {
         initSiteDiagnostics({ role });
         initConnectionsFlow({ role });
       }
+      startAdminSettingsRealtime();
       startAdminRealtimeData();
       loadDashboard();
       loadProductos();
@@ -1481,6 +1483,59 @@ function stopAdminRealtimeData() {
   adminOrdersUnsubscribe = null;
   adminUsersUnsubscribe = null;
   _auditUnsubscribe = null;
+}
+
+function stopAdminSettingsRealtime() {
+  adminSettingsUnsubscribers.forEach(unsubscribe => {
+    try { unsubscribe(); } catch {}
+  });
+  adminSettingsUnsubscribers = [];
+}
+
+// Estos listeners necesitan sesión autorizada y App Check listo. Antes se
+// abrían al evaluar el módulo, durante la restauración inicial de Auth; en
+// ese breve intervalo Firestore los rechazaba y el panel quedaba con una
+// mezcla de datos cargados y pantallas vacías.
+function startAdminSettingsRealtime() {
+  stopAdminSettingsRealtime();
+  adminSettingsUnsubscribers.push(onSnapshot(doc(db, 'settings', 'general'), snap => {
+    if (!snap.exists()) return;
+    const d = snap.data();
+    const waLink = document.getElementById('mensajes-wa-link');
+    const digits = String(d.whatsappNumber || '').replace(/\D/g, '');
+    if (waLink && digits) waLink.href = 'https://wa.me/' + digits;
+    if (d.waConfirmMessage) waConfirmMessageTemplate = d.waConfirmMessage;
+  }, error => console.warn('[admin-settings] No se pudo cargar settings/general:', error?.code || error)));
+
+  adminSettingsUnsubscribers.push(onSnapshot(doc(db, 'settings', 'shippingRates'), async snap => {
+    const d = snap.exists() ? snap.data() : {};
+    if (Array.isArray(d.deliveryCities) || Array.isArray(d.encomiendaCities)) {
+      shipCities.delivery = Array.isArray(d.deliveryCities) ? d.deliveryCities : [];
+      shipCities.encomienda = Array.isArray(d.encomiendaCities) ? d.encomiendaCities : [];
+      renderShipList('delivery');
+      renderShipList('encomienda');
+      return;
+    }
+    try {
+      const legacySnap = await getDoc(doc(db, 'settings', 'general'));
+      const legacy = legacySnap.exists() ? legacySnap.data() : {};
+      if (!Array.isArray(legacy.deliveryCities) && !Array.isArray(legacy.encomiendaCities)) return;
+      await setDoc(doc(db, 'settings', 'shippingRates'), {
+        deliveryCities: legacy.deliveryCities || [],
+        encomiendaCities: legacy.encomiendaCities || [],
+        deliveryCost: legacy.deliveryCost || 0,
+        encomiendaCost: legacy.encomiendaCost || 0,
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      await setDoc(doc(db, 'settings', 'general'), {
+        deliveryCities: deleteField(),
+        encomiendaCities: deleteField()
+      }, { merge: true });
+      console.log('[envios] Ciudades migradas de settings/general a settings/shippingRates.');
+    } catch (error) {
+      console.warn('[envios] No se pudo migrar la configuración de envíos:', error?.code || error);
+    }
+  }, error => console.warn('[admin-settings] No se pudo cargar shippingRates:', error?.code || error)));
 }
 
 function startAdminRealtimeData() {
@@ -4867,7 +4922,10 @@ function resetShipForm(type) {
   });
 });
 
-// Tiempo real: si se edita desde otra pestaña/dispositivo, la lista se refresca sola
+// Tiempo real: si se edita desde otra pestaña/dispositivo, la lista se refresca sola.
+// Se inicia desde el guard, después de Auth + App Check.
+function startAdminSettingsRealtimeLegacy() {
+/*
 onSnapshot(doc(db, 'settings', 'general'), snap => {
   if (!snap.exists()) return;
   const d = snap.data();
@@ -4918,6 +4976,8 @@ onSnapshot(doc(db, 'settings', 'shippingRates'), async snap => {
     console.error('[envios] No se pudo migrar deliveryCities/encomiendaCities a settings/shippingRates:', e);
   }
 });
+*/
+}
 
 // Pestañas Delivery / Encomienda dentro de Envíos
 document.querySelectorAll('.ship-tab-btn').forEach(btn => {
