@@ -30,10 +30,14 @@ function safeMessage(error) {
   return String(error?.message || 'No se pudo completar la operación.').replace(/[<>\u0000-\u001f]/g, ' ').slice(0, 400);
 }
 
-function validConfirmation(action, scope, confirmation, dryRun) {
+function validConfirmation(action, scope, confirmation, dryRun, env) {
   if (dryRun || action === 'retryPending') return true;
   const exact = String(confirmation || '').trim();
-  if (action === 'deleteProducts') return exact === (scope === 'all' ? ALL_PRODUCTS_CONFIRM : PRODUCT_CONFIRM);
+  if (action === 'deleteProducts') {
+    const secret = String(env?.CATALOG_DELETE_PASSWORD || '').trim();
+    if (!secret) throw new Error('La contraseña secreta de borrado no está configurada en Cloudflare.');
+    return exact === secret;
+  }
   if (action === 'deleteCollections') return exact === (scope === 'all' ? ALL_COLLECTIONS_CONFIRM : COLLECTION_CONFIRM);
   return false;
 }
@@ -82,7 +86,7 @@ export async function onRequest(context) {
     const scope = body.scope === 'all' ? 'all' : 'selected';
     const dryRun = body.dryRun !== false;
     if (!['deleteProducts', 'deleteCollections', 'retryPending'].includes(action)) throw new Error('Acción de catálogo inválida.');
-    if (!validConfirmation(action, scope, body.confirmation, dryRun)) throw new Error('Confirmación exacta inválida.');
+    if (!validConfirmation(action, scope, body.confirmation, dryRun, env)) throw new Error('Contraseña secreta inválida.');
 
     const idToken = tokenFromRequest(request);
     const actorContext = { uid: actor.uid, email: actor.email, role: 'superadmin' };
@@ -110,7 +114,7 @@ export async function onRequest(context) {
     // Preflight no destructivo: mientras los productos todavía existen,
     // valida Apps Script + token + permisos + spreadsheet real. Si falla,
     // la operación aborta y Firestore queda intacto.
-    await preflightProductsSheet(idToken, affectedProductIds);
+    await preflightProductsSheet(env, affectedProductIds);
 
     const result = await runCatalogAction(action, env, body, scope, false, idToken, actorContext);
 
