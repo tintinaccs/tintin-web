@@ -123,6 +123,11 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
       { status: appsScript.httpStatus || systemHealth.status, promote: appsScript.protocolOk === true, evidenceLevel: LP });
     setFrom('google-sheets', integrations.sheets === true,
       'GET /api/system-health · protocolo de sincronización confirmado', { status: systemHealth.status, promote: integrations.sheets === true, evidenceLevel: LP });
+    const paypalOk = integrations.paypal?.configured === true;
+    const externalServicesOk = integrations.resend === true && integrations.cloudinary === true && paypalOk;
+    setFrom('servicios-externos', externalServicesOk,
+      `GET /api/system-health · Resend=${integrations.resend === true} · Cloudinary=${integrations.cloudinary === true} · PayPal=${paypalOk ? 'configurado' : 'no configurado'}`,
+      { status: systemHealth.status, promote: externalServicesOk, evidenceLevel: LP });
     if (report.deployment?.commitSha) {
       setFrom('deployments', true, `GET /api/system-health · commit ${report.deployment.commitSha.slice(0, 10)} (${report.deployment.branch || 'branch desconocida'})`, { promote: true, evidenceLevel: LP });
     }
@@ -182,6 +187,17 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
       pending: auditPending,
       evidenceLevel: EVIDENCIA.CI_VERIFIED,
     });
+    // Repository audit ejecuta audit:login-profile y audit:login-isolation,
+    // que comprueban los contratos reales de Google popup/redirect, OTP y el
+    // gate de perfil. Es evidencia CI del commit actual, no una suposición a
+    // partir del texto estático del nodo.
+    const authContractIds = ['google-btn', 'login-codigo', 'redirect-result', 'ultimos-datos'];
+    authContractIds.forEach(id => setFrom(id, auditPassed,
+      `${ciNote(currentEvidence, 'repositoryAudit', 'contratos de acceso/perfil')} · login-profile + login-isolation`, {
+        promote: auditPassed,
+        pending: auditPending,
+        evidenceLevel: EVIDENCIA.CI_VERIFIED,
+      }));
     // Si el CI de Cloudflare Pages aún no terminó, no se pisa la evidencia
     // runtime ya obtenida de /api/system-health (commit realmente desplegado).
     if (!(deploymentPending && out.deployments?.ok === true)) {
@@ -264,6 +280,12 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
       `GET /api/system-health · Apps Script ${report.integrations.appsScript.protocolOk ? 'OK' : 'no confirmado'}`,
       report.integrations.appsScript.httpStatus || systemHealth.status);
   }
+  if (report?.integrations?.paypal) {
+    const paypalOk = report.integrations.paypal.configured === true;
+    set('apis-internas', 'servicios-externos', paypalOk && report.integrations.resend === true && report.integrations.cloudinary === true,
+      `GET /api/system-health · externos configurados=${paypalOk && report.integrations.resend === true && report.integrations.cloudinary === true}`,
+      systemHealth.status);
+  }
   if (report?.integrations?.sheets !== undefined) {
     set('apps-script', 'google-sheets', report.integrations.sheets === true,
       'GET /api/system-health · protocolo Sheets', systemHealth.status);
@@ -310,6 +332,21 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
         evidenceLevel: EVIDENCIA.CI_VERIFIED,
         pending: !anyFailed && !(auditPassed && deploymentPassed),
       });
+    const authContractOk = auditPassed;
+    for (const [from, to] of [
+      ['entrada-login', 'google-btn'],
+      ['entrada-login', 'login-codigo'],
+      ['google-btn', 'firebase-auth'],
+      ['login-codigo', 'firebase-auth'],
+      ['firebase-auth', 'redirect-result'],
+      ['redirect-result', 'sesion-estado'],
+      ['perfil', 'ultimos-datos'],
+      ['ultimos-datos', 'perfil'],
+    ]) {
+      set(from, to, authContractOk,
+        `${ciNote(currentEvidence, 'repositoryAudit', 'contratos de acceso/perfil')} · login-profile + login-isolation`,
+        200, { evidenceLevel: EVIDENCIA.CI_VERIFIED, pending: ciCheckPending(currentEvidence, 'repositoryAudit') });
+    }
   }
   return out;
 }
