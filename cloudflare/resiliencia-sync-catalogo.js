@@ -13,7 +13,7 @@ import { APPS_SCRIPT_SYNC_URL, SHEETS_TIMEOUT_MS } from './sheets-sync-config.js
 import { notifyAdminIfAbsent } from './notificaciones-sociales.js';
 import { fetchAppsScript } from './apps-script-fetch.js';
 
-const PRODUCT_SYNC_CHUNK = 100;
+const PRODUCT_SYNC_CHUNK = 20;
 const MAX_ATTEMPTS = 4;
 const QUEUE_COLLECTION = 'catalogSheetSyncQueue';
 const MAX_PENDING = 200;
@@ -108,25 +108,32 @@ export async function preflightProductsSheet(env, productIds) {
 
 async function queuePendingSync(env, productIds, error, actor = null) {
   const ids = unique(productIds);
-  if (!ids.length) return null;
-  const id = `catalog_sync_${Date.now()}_${crypto.randomUUID().replace(/-/g, '').slice(0, 12)}`;
-  await firestoreAdminCommit(env, [{
-    path: `${QUEUE_COLLECTION}/${id}`,
-    fields: encodeFirestoreFields({
-      schemaVersion: 2,
-      status: 'pending',
-      productIds: ids,
-      lastError: clean(error?.message || error),
-      actorEmail: clean(actor?.email, 254),
-      attempts: 0,
-      nextAttemptAt: new Date(),
-      claimedAt: null,
-      claimedBy: '',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }),
-  }]);
-  return id;
+  if (!ids.length) return [];
+  const now = new Date();
+  const queueIds = [];
+  const writes = [];
+  for (let i = 0; i < ids.length; i += PRODUCT_SYNC_CHUNK) {
+    const id = `catalog_sync_${Date.now()}_${crypto.randomUUID().replace(/-/g, '').slice(0, 12)}`;
+    queueIds.push(id);
+    writes.push({
+      path: `${QUEUE_COLLECTION}/${id}`,
+      fields: encodeFirestoreFields({
+        schemaVersion: 2,
+        status: 'pending',
+        productIds: ids.slice(i, i + PRODUCT_SYNC_CHUNK),
+        lastError: clean(error?.message || error),
+        actorEmail: clean(actor?.email, 254),
+        attempts: 0,
+        nextAttemptAt: now,
+        claimedAt: null,
+        claimedBy: '',
+        createdAt: now,
+        updatedAt: now,
+      }),
+    });
+  }
+  await firestoreAdminCommit(env, writes);
+  return queueIds;
 }
 
 /**
@@ -137,11 +144,13 @@ export async function finalizeProductsSheet(env, idToken, productIds, actor = nu
   const ids = unique(productIds);
   if (!ids.length) return { ok: true, attempts: 0, queued: false };
   try {
-    const result = await syncProductsPayloadWithRetry(env, ids, { attempts: MAX_ATTEMPTS });
+    const result = idToken
+      ? await syncProductsWithRetry(idToken, ids, { attempts: MAX_ATTEMPTS })
+      : await syncProductsPayloadWithRetry(env, ids, { attempts: MAX_ATTEMPTS });
     return { ok: true, attempts: result.attempts, queued: false };
   } catch (error) {
-    const queueId = await queuePendingSync(env, ids, error, actor);
-    return { ok: false, attempts: MAX_ATTEMPTS, queued: true, queueId, error: clean(error?.message || error) };
+    const queueIds = await queuePendingSync(env, ids, error, actor);
+    return { ok: false, attempts: MAX_ATTEMPTS, queued: true, queueIds, error: clean(error?.message || error) };
   }
 }
 
@@ -209,7 +218,7 @@ async function transitionDeadLetter(env, item, error, deps = REAL_QUEUE_DEPS) {
  * Cada nueva operación administrativa intenta cerrar primero reconciliaciones
  * pendientes. Así una caída temporal de Google no puede quedar olvidada.
  */
-export async function retryPendingCatalogSheets(env, idToken) {
+export async function retryPendingCatalogSheets(env, idToken, { limit = 1 } = {}) {
   const pending = (await firestoreAdminListAll(env, QUEUE_COLLECTION, MAX_PENDING))
     .filter(document => {
       const item = decoded(document);
@@ -220,7 +229,7 @@ export async function retryPendingCatalogSheets(env, idToken) {
 
   let resolved = 0;
   const deleteWrites = [];
-  for (const document of pending) {
+  for (const document of pending.slice(0, Math.max(1, Math.min(5, Number(limit) || 1)))) {
     const claimed = await claimQueueItem(env, document);
     if (!claimed) continue;
     try {
@@ -312,7 +321,7 @@ export async function syncProductsPayloadWithRetry(env, productIds, { attempts =
  * MAX_QUEUE_ATTEMPTS, pasa a dead_letter y dispara una alerta idempotente en
  * vez de reintentar para siempre en silencio.
  */
-export async function drainCatalogSheetSyncQueueScheduled(env, { limit = 25, deps = REAL_QUEUE_DEPS } = {}) {
+export async function drainCatalogSheetSyncQueueScheduled(env, { limit = 1, deps = REAL_QUEUE_DEPS } = {}) {
   const now = Date.now();
   const documents = await deps.firestoreAdminListAll(env, QUEUE_COLLECTION, MAX_PENDING);
   const eligible = documents.filter(document => {

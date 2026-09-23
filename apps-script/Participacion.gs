@@ -188,6 +188,35 @@ function tintinHandleEngagement_(payload) {
   }
 }
 
+function tintinHandleEngagementBatch_(payload) {
+  var expectedSecret = PropertiesService.getScriptProperties().getProperty('SHEETS_ENGAGEMENT_SECRET');
+  if (!expectedSecret || String(payload.syncSecret || '') !== expectedSecret) {
+    return tintinJson_({ ok: false, error: 'unauthorized_source' });
+  }
+  var events = Array.isArray(payload.events) ? payload.events : [];
+  if (!events.length) return tintinJson_({ ok: true, processed: 0 });
+
+  var lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    events.forEach(function(event) {
+      var record = event && event.record || {};
+      if (event.type === 'review' && record.reviewId) {
+        var reviews = tintinSheet_(TINTIN_REVIEWS_SHEET_, TINTIN_REVIEW_HEADERS_);
+        tintinMoveRowToTop_(reviews, tintinUpsert_(reviews, tintinReviewRow_(record)), TINTIN_REVIEW_HEADERS_.length);
+      } else if (event.type === 'like' && record.likeId) {
+        var likes = tintinSheet_(TINTIN_LIKES_SHEET_, TINTIN_LIKE_HEADERS_);
+        var row = tintinFindRow_(likes, record.likeId);
+        if ((event.operation === 'delete' || event.operation === 'trash') && row) likes.deleteRow(row);
+        else if (event.operation !== 'delete' && event.operation !== 'trash') tintinMoveRowToTop_(likes, tintinUpsert_(likes, tintinLikeRow_(record)), TINTIN_LIKE_HEADERS_.length);
+      }
+    });
+    return tintinJson_({ ok: true, processed: events.length });
+  } finally {
+    lock.releaseLock();
+  }
+}
+
 function tintinSetupEngagement() {
   var reviews = tintinSheet_(TINTIN_REVIEWS_SHEET_, TINTIN_REVIEW_HEADERS_);
   var likes = tintinSheet_(TINTIN_LIKES_SHEET_, TINTIN_LIKE_HEADERS_);
