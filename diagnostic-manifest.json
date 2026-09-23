@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "6fc5c0ee28c875653c6d4adc13cfa291581b45824b13d87ff9ce3ad4bf4dfc0b",
+  "sourceFingerprint": "9505d69d5a4c63a698971fa2bafc866d58245171b3a1faca0ab86c7f66562c75",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 871,
     "textFiles": 830,
-    "totalBytes": 17055668,
+    "totalBytes": 17060188,
     "pages": 19,
     "modules": 596
   },
@@ -2079,8 +2079,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 195666,
-      "sha256": "fb46e51394e9058b6044900405765e888cb5949a12dc30ce97daacbe95f72a63",
+      "bytes": 195653,
+      "sha256": "d8744808d06141d043b17b81ecc55d8e233dbba7687769541f4823158d077dce",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2114,7 +2114,7 @@
           "line": 8
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260923-admin-page-size-30-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20260923-admin-page-size-30-2-canonical-tinped-reset-1",
           "target": "js/admin/admin-app.js",
           "line": 2033
         },
@@ -2129,12 +2129,12 @@
           "line": 2035
         },
         {
-          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1",
+          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260923-review-purge-1",
           "target": "js/admin/participacion/gestion-participacion-admin.js",
           "line": 2036
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260923-admin-page-size-30-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260923-admin-page-size-30-2",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2037
         },
@@ -2368,7 +2368,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260923-admin-page-size-30-2",
+          "raw": "js/admin/admin-app.js?v=tintin-20260923-admin-page-size-30-2-canonical-tinped-reset-1",
           "target": "js/admin/admin-app.js",
           "line": 2033,
           "exists": true
@@ -2386,13 +2386,13 @@
           "exists": true
         },
         {
-          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1",
+          "raw": "js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260923-review-purge-1",
           "target": "js/admin/participacion/gestion-participacion-admin.js",
           "line": 2036,
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260923-admin-page-size-30-1",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260923-admin-page-size-30-2",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2037,
           "exists": true
@@ -17655,8 +17655,8 @@
     },
     {
       "path": "cloudflare/borrado-global-catalogo.js",
-      "bytes": 13884,
-      "sha256": "90c16d1e2fd2ddda84f86ce686bc13ae33b875b38330faf486773cdc74038fb2",
+      "bytes": 14145,
+      "sha256": "e7339a8345687d62cf1734feb0026725d33331d51fc7b065d36a9847d58381a9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17879,8 +17879,8 @@
     },
     {
       "path": "cloudflare/order-admin-domain.js",
-      "bytes": 21404,
-      "sha256": "f06472ffcea30e98c3bcd00f03666b2f6e9da1f31233bf708624a87f8d873614",
+      "bytes": 22842,
+      "sha256": "1df413d69f6a56afe18f495e9db9b69acce096ce3b87c92b26b8d69be5fc4e35",
       "syntax": {
         "ok": true,
         "error": ""
@@ -17933,8 +17933,8 @@
     },
     {
       "path": "cloudflare/participacion-admin.js",
-      "bytes": 13042,
-      "sha256": "cd351f5694a147ec6c4840ed47afa2d02461868ac93765676e3da92e19f5b8c3",
+      "bytes": 14334,
+      "sha256": "3083fc4278cd7602e50a0b8f2a8669882e967513b87b84440f35976d8d1cd7ed",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18584,8 +18584,8 @@
     },
     {
       "path": "functions/api/admin-catalog-delete.js",
-      "bytes": 6178,
-      "sha256": "333ee2f8ea81c90dda05f1faff798b8939fe7729b9fede30924bc12f892a0390",
+      "bytes": 6797,
+      "sha256": "7f7f81cfe64d7b0b6d436f4fb4e22af16dc8f02d1b480fd8b058f136a3656583",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18638,8 +18638,8 @@
     },
     {
       "path": "functions/api/admin-engagement.js",
-      "bytes": 3171,
-      "sha256": "c2d55feade731139d985998ccde15cfb9b0213c594d6452054596b601f28d0cf",
+      "bytes": 3544,
+      "sha256": "087441c63414f730f01a18ecb6e162d49a20fb268dec25cdcc0980fd507e6e3d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18733,8 +18733,8 @@
     },
     {
       "path": "functions/api/admin-order-mutation.js",
-      "bytes": 3934,
-      "sha256": "9b1afbd50a89ced09cf9df5a8362240a84d6729848cdc42ee00bee46ecb6d668",
+      "bytes": 4295,
+      "sha256": "3adf466ed350a8bc3631bafc713adea1b88eb4bcf66ae982bd7f10c44e982520",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20205,8 +20205,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 448923,
-      "sha256": "f0ecec969bb1f2dcaefc0d0dd55b8aff097608208c7327407ae9024f9128f821",
+      "bytes": 448895,
+      "sha256": "4e50113bc964e8fd229ffe33f401f8c6f11eec55b28ec59b557c31e7102689da",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20369,7 +20369,7 @@
           "line": 34
         },
         {
-          "raw": "./orders/pedidos-superadmin-crud.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
+          "raw": "./orders/pedidos-superadmin-crud.js?v=tintin-20260923-canonical-tinped-reset-1",
           "target": "js/admin/orders/pedidos-superadmin-crud.js",
           "dynamic": false,
           "line": 43
@@ -21200,8 +21200,8 @@
     },
     {
       "path": "js/admin/orders/pedidos-superadmin-crud.js",
-      "bytes": 24322,
-      "sha256": "2bd1f72295ef9cf8b74c604ace0cbc8e5db073028d389458779c696130fa3b2a",
+      "bytes": 24545,
+      "sha256": "d9bdfee93bd16632f1c539dd212fb195df1445d6ff74c0f2039f5a2667b41c00",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21229,13 +21229,13 @@
           "raw": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
           "target": null,
           "dynamic": false,
-          "line": 15
+          "line": 14
         }
       ],
       "endpoints": [
         {
           "url": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
-          "line": 15
+          "line": 14
         }
       ]
     },
@@ -21282,8 +21282,8 @@
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin-v2.js",
-      "bytes": 85174,
-      "sha256": "0d8bca315c81b006b872ff242ad6a9fb584adc0a520dc152e7d57b357909ad3f",
+      "bytes": 84930,
+      "sha256": "b074bb129c6d27fca2f9d5fde13835e5baa3e0e224029f8b8e97a558f225f954",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21323,15 +21323,15 @@
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin.js",
-      "bytes": 117,
-      "sha256": "4dcfc07e01425e1c9384ee169658ec290c5f273099353aa62d626022302489ad",
+      "bytes": 79,
+      "sha256": "a283b54e95b0c2f82dd99cee18f13a8932852fc62c4fb9e3901f0df6d31d7ed0",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./gestion-participacion-admin-v2.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1",
+          "raw": "./gestion-participacion-admin-v2.js?v=tintin-20260923-review-purge-1",
           "target": "js/admin/participacion/gestion-participacion-admin-v2.js",
           "dynamic": false,
           "line": 1
@@ -21669,8 +21669,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 79362,
-      "sha256": "792083de92ca923849504b12d2d201d9e913106ee32e09386a67056795780470",
+      "bytes": 79548,
+      "sha256": "5eba9f0a6a8d949f3f2fdbf370ffb27ab0d87e463b07b97c370435e61e77f731",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33887,8 +33887,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 195666,
-      "sha256": "fb46e51394e9058b6044900405765e888cb5949a12dc30ce97daacbe95f72a63"
+      "bytes": 195653,
+      "sha256": "d8744808d06141d043b17b81ecc55d8e233dbba7687769541f4823158d077dce"
     },
     {
       "path": "apple-touch-icon.png",
@@ -34193,8 +34193,8 @@
     {
       "path": "cloudflare/borrado-global-catalogo.js",
       "extension": ".js",
-      "bytes": 13884,
-      "sha256": "90c16d1e2fd2ddda84f86ce686bc13ae33b875b38330faf486773cdc74038fb2"
+      "bytes": 14145,
+      "sha256": "e7339a8345687d62cf1734feb0026725d33331d51fc7b065d36a9847d58381a9"
     },
     {
       "path": "cloudflare/comentarios-sociales.js",
@@ -34247,8 +34247,8 @@
     {
       "path": "cloudflare/order-admin-domain.js",
       "extension": ".js",
-      "bytes": 21404,
-      "sha256": "f06472ffcea30e98c3bcd00f03666b2f6e9da1f31233bf708624a87f8d873614"
+      "bytes": 22842,
+      "sha256": "1df413d69f6a56afe18f495e9db9b69acce096ce3b87c92b26b8d69be5fc4e35"
     },
     {
       "path": "cloudflare/order-sheets-sync.js",
@@ -34259,8 +34259,8 @@
     {
       "path": "cloudflare/participacion-admin.js",
       "extension": ".js",
-      "bytes": 13042,
-      "sha256": "cd351f5694a147ec6c4840ed47afa2d02461868ac93765676e3da92e19f5b8c3"
+      "bytes": 14334,
+      "sha256": "3083fc4278cd7602e50a0b8f2a8669882e967513b87b84440f35976d8d1cd7ed"
     },
     {
       "path": "cloudflare/participacion-clientes.js",
@@ -34451,8 +34451,8 @@
     {
       "path": "css/admin/shopify-commerce-admin.css",
       "extension": ".css",
-      "bytes": 28504,
-      "sha256": "d3e37d38c283ee058e5864f4c71771efb0457b5d2dc9d7397800ca971392b5d2"
+      "bytes": 28594,
+      "sha256": "111392e71aa48612dd00092b3769bd7e0f0bcc9fa9d20c00aca0166317a41ae4"
     },
     {
       "path": "css/admin/visual-studio-global-admin.css",
@@ -35195,8 +35195,8 @@
     {
       "path": "functions/api/admin-catalog-delete.js",
       "extension": ".js",
-      "bytes": 6178,
-      "sha256": "333ee2f8ea81c90dda05f1faff798b8939fe7729b9fede30924bc12f892a0390"
+      "bytes": 6797,
+      "sha256": "7f7f81cfe64d7b0b6d436f4fb4e22af16dc8f02d1b480fd8b058f136a3656583"
     },
     {
       "path": "functions/api/admin-delete-user.js",
@@ -35207,8 +35207,8 @@
     {
       "path": "functions/api/admin-engagement.js",
       "extension": ".js",
-      "bytes": 3171,
-      "sha256": "c2d55feade731139d985998ccde15cfb9b0213c594d6452054596b601f28d0cf"
+      "bytes": 3544,
+      "sha256": "087441c63414f730f01a18ecb6e162d49a20fb268dec25cdcc0980fd507e6e3d"
     },
     {
       "path": "functions/api/admin-import-job.js",
@@ -35225,8 +35225,8 @@
     {
       "path": "functions/api/admin-order-mutation.js",
       "extension": ".js",
-      "bytes": 3934,
-      "sha256": "9b1afbd50a89ced09cf9df5a8362240a84d6729848cdc42ee00bee46ecb6d668"
+      "bytes": 4295,
+      "sha256": "3adf466ed350a8bc3631bafc713adea1b88eb4bcf66ae982bd7f10c44e982520"
     },
     {
       "path": "functions/api/admin-runtime-health.js",
@@ -35603,8 +35603,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 448923,
-      "sha256": "f0ecec969bb1f2dcaefc0d0dd55b8aff097608208c7327407ae9024f9128f821"
+      "bytes": 448895,
+      "sha256": "4e50113bc964e8fd229ffe33f401f8c6f11eec55b28ec59b557c31e7102689da"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -35759,8 +35759,8 @@
     {
       "path": "js/admin/orders/pedidos-superadmin-crud.js",
       "extension": ".js",
-      "bytes": 24322,
-      "sha256": "2bd1f72295ef9cf8b74c604ace0cbc8e5db073028d389458779c696130fa3b2a"
+      "bytes": 24545,
+      "sha256": "d9bdfee93bd16632f1c539dd212fb195df1445d6ff74c0f2039f5a2667b41c00"
     },
     {
       "path": "js/admin/pages/paginas-admin.js",
@@ -35771,14 +35771,14 @@
     {
       "path": "js/admin/participacion/gestion-participacion-admin-v2.js",
       "extension": ".js",
-      "bytes": 85174,
-      "sha256": "0d8bca315c81b006b872ff242ad6a9fb584adc0a520dc152e7d57b357909ad3f"
+      "bytes": 84930,
+      "sha256": "b074bb129c6d27fca2f9d5fde13835e5baa3e0e224029f8b8e97a558f225f954"
     },
     {
       "path": "js/admin/participacion/gestion-participacion-admin.js",
       "extension": ".js",
-      "bytes": 117,
-      "sha256": "4dcfc07e01425e1c9384ee169658ec290c5f273099353aa62d626022302489ad"
+      "bytes": 79,
+      "sha256": "a283b54e95b0c2f82dd99cee18f13a8932852fc62c4fb9e3901f0df6d31d7ed0"
     },
     {
       "path": "js/admin/products/biblioteca-multimedia-admin.js",
@@ -35849,8 +35849,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 79362,
-      "sha256": "792083de92ca923849504b12d2d201d9e913106ee32e09386a67056795780470"
+      "bytes": 79548,
+      "sha256": "5eba9f0a6a8d949f3f2fdbf370ffb27ab0d87e463b07b97c370435e61e77f731"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -40626,7 +40626,7 @@
     },
     {
       "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
-      "line": 81,
+      "line": 82,
       "target": "/api/admin-engagement",
       "method": "POST"
     },
@@ -41126,7 +41126,7 @@
         "references": [
           {
             "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
-            "line": 1185,
+            "line": 1183,
             "operation": "collection"
           }
         ]
@@ -41416,7 +41416,7 @@
           },
           {
             "file": "js/admin/orders/pedidos-superadmin-crud.js",
-            "line": 204,
+            "line": 203,
             "operation": "collection"
           },
           {
@@ -41491,7 +41491,7 @@
         "references": [
           {
             "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
-            "line": 1180,
+            "line": 1178,
             "operation": "collection"
           }
         ]
@@ -41621,12 +41621,7 @@
           },
           {
             "file": "js/admin/orders/pedidos-superadmin-crud.js",
-            "line": 17,
-            "operation": "doc"
-          },
-          {
-            "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
-            "line": 1025,
+            "line": 16,
             "operation": "doc"
           },
           {
@@ -41636,12 +41631,17 @@
           },
           {
             "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
-            "line": 1191,
+            "line": 1029,
             "operation": "doc"
           },
           {
             "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
-            "line": 1195,
+            "line": 1189,
+            "operation": "doc"
+          },
+          {
+            "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
+            "line": 1193,
             "operation": "doc"
           },
           {
@@ -42001,7 +42001,7 @@
           },
           {
             "file": "js/admin/participacion/gestion-participacion-admin-v2.js",
-            "line": 1176,
+            "line": 1174,
             "operation": "collection"
           },
           {

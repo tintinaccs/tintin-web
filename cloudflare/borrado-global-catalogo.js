@@ -101,10 +101,15 @@ async function syncProductsToSheets(env, productIds) {
 }
 
 async function runSocialEvents(env, events) {
+  const failed = [];
   for (let i = 0; i < events.length; i += SOCIAL_SYNC_CONCURRENCY) {
-    const results = await Promise.all(events.slice(i, i + SOCIAL_SYNC_CONCURRENCY).map(event => syncEngagementToSheets(env, event)));
-    if (results.some(ok => ok !== true)) throw new Error('Una o más filas sociales no pudieron sincronizarse con Google Sheets.');
+    const chunk = events.slice(i, i + SOCIAL_SYNC_CONCURRENCY);
+    const results = await Promise.all(chunk.map(event => syncEngagementToSheets(env, event)));
+    results.forEach((ok, index) => {
+      if (ok !== true) failed.push(chunk[index]);
+    });
   }
+  return { ok: failed.length === 0, failed };
 }
 
 // Participacion.gs desplegado ya soporta:
@@ -147,8 +152,13 @@ async function syncSocialPurgeToSheets(env, social) {
       record: { likeId: clean(record.likeId || record.id) },
     };
   }).filter(event => event.record.likeId);
-  await runSocialEvents(env, [...reviewEvents, ...likeEvents]);
-  return { ok: true, reviews: reviewEvents.length, likes: likeEvents.length };
+  const outcome = await runSocialEvents(env, [...reviewEvents, ...likeEvents]);
+  return {
+    ok: outcome.ok,
+    reviews: reviewEvents.length,
+    likes: likeEvents.length,
+    failed: outcome.failed.length,
+  };
 }
 
 async function appendAudit(env, actor, action, result) {
@@ -212,10 +222,10 @@ export async function deleteProductsGlobally(env, { scope = 'selected', productI
   if (!ids.length) return { dryRun: false, deletedProducts: 0, sheets: { products: true, social: true } };
 
   const social = await collectSocialReferences(env, ids);
-  // Primero se eliminan/sanitizan las referencias del producto en las hojas
-  // sociales usando datos que todavía existen. Si Google falla, NO se toca
-  // Firestore y la operación se puede reintentar sin quedar a medias.
-  await syncSocialPurgeToSheets(env, social);
+  // Se intenta limpiar el espejo social antes de borrar. Si Google Sheets
+  // está caído, Firestore sigue siendo canónico y se completa el borrado;
+  // el resultado marca explícitamente la sincronización pendiente.
+  const socialSheet = await syncSocialPurgeToSheets(env, social);
 
   const deletePaths = new Set();
   social.privateReviews.forEach(document => deletePaths.add(firestorePathFromName(document.name)));
@@ -246,7 +256,8 @@ export async function deleteProductsGlobally(env, { scope = 'selected', productI
   const errors = [];
   try { await syncProductsToSheets(env, ids); productsSheets = true; }
   catch (error) { errors.push(clean(error?.message, 500)); }
-  result.sheets = { products: productsSheets, social: true };
+  if (!socialSheet.ok) errors.push('Algunas filas sociales no pudieron sincronizarse con Google Sheets.');
+  result.sheets = { products: productsSheets, social: socialSheet.ok };
   result.partial = errors.length > 0;
   result.errors = errors;
   await appendAudit(env, actor, 'eliminar_producto_global', result);

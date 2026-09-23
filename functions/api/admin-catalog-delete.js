@@ -111,12 +111,26 @@ export async function onRequest(context) {
     const serverPreview = await runCatalogAction(action, env, body, scope, true, idToken, actorContext);
     const affectedProductIds = productIdsFromPreview(serverPreview);
 
-    // Preflight no destructivo: mientras los productos todavía existen,
-    // valida Apps Script + token + permisos + spreadsheet real. Si falla,
-    // la operación aborta y Firestore queda intacto.
-    await preflightProductsSheet(env, affectedProductIds);
+    // El preflight continúa comprobando Apps Script, permisos y spreadsheet
+    // antes del borrado. Firestore sigue siendo la fuente canónica: una
+    // caída temporal del espejo no puede impedir una eliminación autorizada.
+    // Se informa en el resultado para que el cierre persistente la recupere.
+    let preflightError = '';
+    try {
+      await preflightProductsSheet(env, affectedProductIds);
+    } catch (error) {
+      preflightError = safeMessage(error);
+      console.warn('[admin-catalog-delete] preflight de Sheets pendiente:', preflightError);
+    }
 
     const result = await runCatalogAction(action, env, body, scope, false, idToken, actorContext);
+
+    if (preflightError) {
+      result.partial = true;
+      result.errors = [...(Array.isArray(result.errors) ? result.errors : []), `Preflight de Google Sheets pendiente: ${preflightError}`];
+      result.sheets = { ...(result.sheets || {}), products: false };
+      result.pendingSheetSync = true;
+    }
 
     // La capa de dominio ya sincroniza Productos una vez. Si justo en ese
     // instante Google tuvo una caída transitoria, se hacen cuatro intentos

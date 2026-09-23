@@ -444,10 +444,12 @@
 .tt-commerce-pagination {
   display: inline-flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 8px;
   margin-left: auto;
   white-space: nowrap;
 }
+.tt-commerce-pagination .tt-commerce-btn { margin-left: 0; }
 .tt-commerce-pagination > span {
   min-width: 92px;
   text-align: center;

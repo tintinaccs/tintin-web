@@ -420,6 +420,50 @@ export async function createOrderAdmin(
   throw lastError || new Error('No se pudo crear el pedido.');
 }
 
+// La secuencia es autoridad de Firestore. Nunca se reinicia desde el
+// navegador: el siguiente pedido (web o Sheets) leerá este mismo documento y
+// su espejo de Sheets recibirá el TINPED canónico al crearse.
+export async function resetOrderSequenceAdmin(
+  env,
+  actor = {},
+  { get = firestoreAdminGet, commit = firestoreAdminBatchCommit } = {},
+) {
+  const context = actorContext({ source: 'superadmin-sequence-reset' }, actor);
+  const document = await get(env, 'settings/orderSequence');
+  const now = new Date();
+  const eventId = makeChangeId('order_sequence_reset');
+  const patch = {
+    lastNumber: 0,
+    lastCode: '',
+    resetAt: now,
+    resetBy: context.email,
+    updatedAt: now,
+    updatedBy: context.email,
+    syncOrigin: context.origin,
+  };
+  await commit(env, [
+    {
+      path: 'settings/orderSequence',
+      fields: encodeFirestoreFields(patch),
+      mergeFields: Object.keys(patch),
+      currentDocument: precondition(document),
+    },
+    {
+      path: `auditLog/${eventId}`,
+      fields: encodeFirestoreFields({
+        eventId,
+        action: 'reset_order_sequence',
+        entity: 'settings/orderSequence',
+        actorUid: context.uid,
+        actorEmail: context.email,
+        createdAt: now,
+        details: 'Secuencia TINPED reiniciada; los pedidos históricos no se modifican.',
+      }),
+    },
+  ]);
+  return { reset: true, nextOrderNumber: formatOrderNumber(1), sequence: patch };
+}
+
 export async function applyOrderAdminMutation(
   env,
   input = {},

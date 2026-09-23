@@ -10,8 +10,7 @@ import {
   limit,
   query,
   runTransaction,
-  serverTimestamp,
-  setDoc
+  serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const SEQUENCE_REF = doc(db, 'settings', 'orderSequence');
@@ -115,15 +114,15 @@ async function resetOrderSequence() {
   assertSuperAdmin();
   const typed = window.prompt('Esto hará que el PRÓXIMO pedido vuelva a TINPED01. Los pedidos históricos conservan su código. Escribí REINICIAR TINPED para continuar:');
   if (typed !== 'REINICIAR TINPED') return { reset: false, cancelled: true };
-  await setDoc(SEQUENCE_REF, {
-    lastNumber: 0,
-    lastCode: '',
-    resetAt: serverTimestamp(),
-    resetBy: auth.currentUser?.email || SUPER_ADMIN,
-    updatedAt: serverTimestamp()
-  }, { merge: true });
-  toast('Secuencia reiniciada. El próximo pedido será TINPED01.');
-  return { reset: true };
+  const response = await authenticatedFetch('/api/admin-order-mutation', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ action: 'resetOrderSequence' }),
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok || body.ok !== true) throw new Error(body.error || 'No se pudo reiniciar la secuencia TINPED.');
+  toast('Secuencia reiniciada en Firestore. El próximo pedido será TINPED01 y se sincronizará a Sheets.');
+  return body.result || { reset: true };
 }
 
 async function trashOrder(orderId, reason = '') {
