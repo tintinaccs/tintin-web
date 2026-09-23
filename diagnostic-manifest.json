@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "f55f1b3385c3bf1f61a93687dc294249a82bc28b80fee07607af1c12ba8c5315",
+  "sourceFingerprint": "2f12644e418654c00dc70494800dca4fa2e8c62279c4cff5d155ceabdf922304",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 866,
     "textFiles": 825,
-    "totalBytes": 17014170,
+    "totalBytes": 17014522,
     "pages": 19,
     "modules": 591
   },
@@ -18156,7 +18156,7 @@
     {
       "path": "cloudflare/sheets-sync-config.js",
       "bytes": 462,
-      "sha256": "c1df12ea5ad4ff890ce3771fd67a93995890020745f2026fcd46c4ec80673ac7",
+      "sha256": "e1e21933de235925bdb7d2349c3666a364aa0a6b18afc16a1495090de186657c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18164,7 +18164,7 @@
       "imports": [],
       "endpoints": [
         {
-          "url": "https://script.google.com/macros/s/AKfycbyh9I5aPp9d3lMSnYRNfrHcSCCobCoDOif9CqtXmMe4FgwSjzlKf4kjQZqvKDRmEY6S/exec",
+          "url": "https://script.google.com/macros/s/AKfycbwwfwHrcI3ncwIxvoKuUULjDjBhrmkC-MAiwmbj6wZbCBer72C9r1UThfcXhh_7GUqD/exec",
           "line": 1
         }
       ]
@@ -21310,8 +21310,8 @@
     },
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
-      "bytes": 16357,
-      "sha256": "4a129dbe705deb4d3176002f1980db293192725c8400046d4108006058d4286d",
+      "bytes": 16709,
+      "sha256": "1a230151583bac1805cd6b0f91fbb5842102a098bdcc81fd363866db59f36f32",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34128,7 +34128,7 @@
       "path": "cloudflare/sheets-sync-config.js",
       "extension": ".js",
       "bytes": 462,
-      "sha256": "c1df12ea5ad4ff890ce3771fd67a93995890020745f2026fcd46c4ec80673ac7"
+      "sha256": "e1e21933de235925bdb7d2349c3666a364aa0a6b18afc16a1495090de186657c"
     },
     {
       "path": "cloudflare/sincronizacion-estadisticas-pedido.js",
@@ -35603,8 +35603,8 @@
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
       "extension": ".js",
-      "bytes": 16357,
-      "sha256": "4a129dbe705deb4d3176002f1980db293192725c8400046d4108006058d4286d"
+      "bytes": 16709,
+      "sha256": "1a230151583bac1805cd6b0f91fbb5842102a098bdcc81fd363866db59f36f32"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",

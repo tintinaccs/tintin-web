@@ -31,8 +31,8 @@ function requestDeletePassword() {
             style="min-height:42px;border:1px solid #c9aab5;border-radius:9px;padding:8px 10px;font-family:Montserrat">
         </label>
         <div style="display:flex;justify-content:flex-end;gap:8px">
-          <button value="cancel" type="submit" style="min-height:40px;border:1px solid #c9aab5;border-radius:9px;padding:8px 14px;background:#fff;font-family:Montserrat">Cancelar</button>
-          <button value="confirm" type="submit" style="min-height:40px;border:0;border-radius:9px;padding:8px 14px;background:#9b405a;color:#fff;font-family:Montserrat;font-weight:700">Confirmar</button>
+          <button value="cancel" type="submit" style="min-height:40px;border:1px solid #c9aab5;border-radius:9px;padding:8px 14px;background:#fff;color:#2b2025 !important;opacity:1 !important;visibility:visible !important;display:inline-flex;align-items:center;justify-content:center;text-indent:0;line-height:1.2;font-family:Montserrat;cursor:pointer">Cancelar</button>
+          <button value="confirm" type="submit" style="min-height:40px;border:0;border-radius:9px;padding:8px 14px;background:#9b405a;color:#fff !important;opacity:1 !important;visibility:visible !important;display:inline-flex;align-items:center;justify-content:center;text-indent:0;line-height:1.2;font-family:Montserrat;font-weight:700;cursor:pointer">Confirmar</button>
         </div>
       </form>`;
     const form = dialog.querySelector('form');
