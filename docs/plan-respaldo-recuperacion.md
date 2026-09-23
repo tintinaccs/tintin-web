@@ -83,12 +83,14 @@ Cada ejecución genera:
 
 > **Estado real y procedimiento ejecutable: `docs/recuperacion-firestore.md`.**
 >
-> La exportación periódica hacia un bucket **requiere plan Blaze**, y el proyecto está
-> deliberadamente en Spark. Los objetivos de abajo describen la meta, no algo que se
-> pueda ejecutar hoy sin decidir antes cómo cerrar ese hueco.
+> La documentación de agosto describía el plan Spark como limitación. No utilizar esa
+> afirmación histórica como estado actual: el workflow `Backup Firestore` completó su
+> paso de exportación el 2026-09-23. Aun así, un job exitoso no reemplaza comprobar
+> el snapshot en el bucket, su retención ni su restauración. Verificar el plan y los
+> permisos vigentes directamente en Firebase/Google Cloud.
 
-- Objetivo: exportaciones periódicas hacia un bucket separado de producción. **Requiere
-  Blaze**; ver las opciones A, B y C del documento de recuperación.
+- Objetivo: exportaciones periódicas hacia un bucket separado de producción.
+  Verificar que el workflow activo, sus permisos y su política de retención estén vigentes.
 - Conservar una política de retención y acceso mínimo.
 - Probar una restauración en un proyecto o base de datos no productiva.
 - Comparar conteos y muestras de productos, pedidos, usuarios, configuraciones y permisos.
@@ -102,9 +104,10 @@ diario** con 30 días y otro **semanal** con 84. `orders`, `users`, `auditLog` y
 El panel exporta además `products`, `collections`, `site_content`, `settings` y
 `rolePermissions` a un archivo descargable.
 
-Lo que falta no es cobertura sino **prueba y externalización**: la restauración nunca se
-ensayó, y todos esos respaldos viven dentro de la misma cuenta de Google que la base de
-producción. Detalle en `docs/recuperacion-firestore.md`.
+Una restauración aislada de **960/960 documentos sí fue verificada el 2026-08-08**, según
+`docs/recuperacion-firestore.md`. Falta repetir periódicamente la prueba con un snapshot
+reciente, confirmar la cobertura actual y conservar una copia cifrada fuera de la cuenta
+principal de Google. La ejecución del backup diario en CI por sí sola no prueba esos puntos.
 
 ## Imágenes
 
