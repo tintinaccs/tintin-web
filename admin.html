@@ -1705,7 +1705,7 @@
       <button type="button" class="adm-btn adm-btn-primary" id="btn-save-config" style="font-size:14px;padding:12px 28px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:-2px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar toda la configuración</button>
     </div>
 
-      <div class="adm-card" id="push-master-card" style="margin-bottom:20px;display:none">
+          <div class="adm-card" id="push-master-card" style="margin-bottom:20px;display:none">
         <div class="adm-card-head" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap"><div class="adm-card-title">🛡️ Centro maestro de notificaciones push</div><span class="adm-badge" id="push-master-status">Cargando…</span></div>
         <div class="adm-card-body">
           <p style="font-size:12px;color:var(--adm-muted);margin:0 0 16px">Sólo <strong style="color:var(--adm-text)">tintinaccs@gmail.com</strong> puede revocar dispositivos o pausar todos los avisos. Revocar elimina el token del servidor.</p>
@@ -1722,6 +1722,7 @@
             <div class="push-tone-row"><strong>Me gusta</strong><select class="adm-select" id="push-tone-like"><option value="default">Predeterminado</option><option value="none">Silencioso</option><option value="custom">Personalizado</option></select><input type="url" class="adm-input" id="push-tone-like-url" placeholder="URL HTTPS del MP3" style="display:none"><input type="file" id="push-tone-like-file" accept="audio/mpeg,audio/ogg,audio/wav,.mp3,.ogg,.wav" style="display:none"><button type="button" class="adm-btn adm-btn-outline adm-btn-sm" data-push-tone-upload="like" style="display:none">Subir tono</button></div>
           </div>
           <p id="push-master-notice" style="display:none;font-size:12px;margin:10px 0;color:var(--adm-muted)"></p>
+          <div style="display:grid;grid-template-columns:minmax(180px,.7fr) minmax(260px,1.3fr) auto;gap:10px;align-items:end;margin:14px 0"><label class="adm-label">Título del mensaje<input class="adm-input" id="push-master-message-title" maxlength="90" placeholder="Mensaje de Tintin"></label><label class="adm-label">Mensaje para todos los dispositivos<input class="adm-input" id="push-master-message-body" maxlength="220" placeholder="Escribí el aviso que querés enviar"></label><button type="button" class="adm-btn adm-btn-primary adm-btn-sm" id="btn-push-master-message">Enviar mensaje</button></div>
           <div style="overflow:auto;border:1px solid var(--adm-border);border-radius:10px"><table style="width:100%;border-collapse:collapse;font-size:12px;min-width:600px"><thead><tr><th style="text-align:left;padding:9px">Dispositivo</th><th style="text-align:left;padding:9px">Cuenta</th><th style="text-align:left;padding:9px">Última actividad</th><th style="text-align:left;padding:9px">Estado</th><th style="padding:9px"></th></tr></thead><tbody id="push-master-devices"><tr><td colspan="5" style="padding:14px;color:var(--adm-muted)">Cargando dispositivos…</td></tr></tbody></table></div>
 
           <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--adm-border)">
@@ -2250,7 +2251,7 @@
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1"></script>
     <script type="module" src="js/admin/notifications/notificaciones-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1"></script>
 <script type="module" src="js/admin/notifications/notificaciones-push.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1"></script>
-<script type="module" src="js/admin/notifications/notificaciones-push-maestro.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1"></script>
+<script type="module" src="js/admin/notifications/notificaciones-push-maestro.js?v=tintin-20260923-push-broadcast-all-1"></script>
 <script type="module" src="js/admin/notifications/enlace-pedido-push.js?v=tintin-20260825-web-push-2"></script>
 <script type="module" src="js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260923-admin-page-size-30-2"></script>
 <script type="module" src="js/admin/maestro/panel-maestro.js?v=tintin-20260920-admin-status-fixes-2"></script>

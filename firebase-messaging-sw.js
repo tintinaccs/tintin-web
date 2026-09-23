@@ -21,7 +21,7 @@
 // Cambiar esta versión fuerza a los navegadores a tratar el archivo como
 // nuevo. Junto con la regla no-cache de _headers y skipWaiting/clients.claim
 // de abajo, ningún dispositivo queda atrapado en una versión vieja.
-const TINTIN_SW_VERSION = '2026-09-02-1';
+const TINTIN_SW_VERSION = '2026-09-23-push-broadcast-all-1';
 
 importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js');
@@ -81,6 +81,7 @@ messaging.onBackgroundMessage(payload => {
     body,
     tag,
     renotify: false,
+    silent: false,
     icon: NOTIFICATION_ICON,
     badge: NOTIFICATION_BADGE,
     lang: 'es-PY',
