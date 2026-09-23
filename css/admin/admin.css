@@ -2072,6 +2072,37 @@ html:not(.adm-auth-ready) [data-admin-panel] {
     white-space: normal;
   }
 }
+
+/* Rail compacta: la flecha conserva una zona propia y los iconos creados
+   dinámicamente (como Maestro) no heredan font-size:0 del botón compacto. */
+@media (min-width: 541px) {
+  html.adm-sidebar-is-collapsed .adm-sidebar-logo {
+    height: 82px;
+    min-height: 82px;
+    flex-basis: 82px;
+    padding: 12px 10px;
+  }
+  html.adm-sidebar-is-collapsed .adm-sidebar-toggle {
+    top: 13px;
+    right: 21px;
+    z-index: 2;
+  }
+  html.adm-sidebar-is-collapsed .adm-user-info {
+    padding-top: 16px;
+  }
+  html.adm-sidebar-is-collapsed .adm-nav-icon {
+    font-size: 16px;
+    line-height: 1;
+  }
+  @media (hover:hover) and (pointer:fine) {
+    html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-sidebar-logo,
+    html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-sidebar-logo {
+      height: auto;
+      min-height: 0;
+      flex-basis: auto;
+    }
+  }
+}
 .adm-diagnostic-head p {
   max-width: 760px;
   margin: 5px 0 0;

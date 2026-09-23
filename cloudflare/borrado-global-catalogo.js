@@ -7,14 +7,13 @@ import {
   getGoogleAccessToken,
   parseServiceAccount,
 } from './firebase-admin-ligero.js';
-import { syncEngagementToSheets } from './sincronizacion-participacion-sheets.js';
-import { syncProductsPayloadWithRetry } from './resiliencia-sync-catalogo.js';
+import { syncEngagementBatchToSheets } from './sincronizacion-participacion-sheets.js';
+import { finalizeProductsSheet } from './resiliencia-sync-catalogo.js';
 
 const FIRESTORE_SCOPE = 'https://www.googleapis.com/auth/datastore';
 const MAX_PRODUCTS = 5000;
 const QUERY_CHUNK = 30;
 const COMMIT_CHUNK = 20;
-const SOCIAL_SYNC_CONCURRENCY = 8;
 
 const clean = (value, max = 180) => String(value ?? '').trim().slice(0, max);
 const docId = document => String(document?.name || '').split('/').pop();
@@ -94,22 +93,12 @@ async function collectSocialReferences(env, productIds) {
   return { privateReviews, reviewCopies, likes, interactionMappings };
 }
 
-async function syncProductsToSheets(env, productIds) {
+async function syncProductsToSheets(env, idToken, productIds, actor) {
   const ids = unique(productIds);
   if (!ids.length) return { ok: true, batches: 0 };
-  return syncProductsPayloadWithRetry(env, ids, { attempts: 4 });
-}
-
-async function runSocialEvents(env, events) {
-  const failed = [];
-  for (let i = 0; i < events.length; i += SOCIAL_SYNC_CONCURRENCY) {
-    const chunk = events.slice(i, i + SOCIAL_SYNC_CONCURRENCY);
-    const results = await Promise.all(chunk.map(event => syncEngagementToSheets(env, event)));
-    results.forEach((ok, index) => {
-      if (ok !== true) failed.push(chunk[index]);
-    });
-  }
-  return { ok: failed.length === 0, failed };
+  const result = await finalizeProductsSheet(env, idToken, ids, actor);
+  if (!result.ok) throw new Error(result.error || 'La sincronización de Productos quedó en cola para reintento.');
+  return result;
 }
 
 // Participacion.gs desplegado ya soporta:
@@ -152,12 +141,13 @@ async function syncSocialPurgeToSheets(env, social) {
       record: { likeId: clean(record.likeId || record.id) },
     };
   }).filter(event => event.record.likeId);
-  const outcome = await runSocialEvents(env, [...reviewEvents, ...likeEvents]);
+  const events = [...reviewEvents, ...likeEvents];
+  const ok = await syncEngagementBatchToSheets(env, events);
   return {
-    ok: outcome.ok,
+    ok,
     reviews: reviewEvents.length,
     likes: likeEvents.length,
-    failed: outcome.failed.length,
+    failed: ok ? 0 : events.length,
   };
 }
 
@@ -254,7 +244,7 @@ export async function deleteProductsGlobally(env, { scope = 'selected', productI
 
   let productsSheets = false;
   const errors = [];
-  try { await syncProductsToSheets(env, ids); productsSheets = true; }
+  try { await syncProductsToSheets(env, idToken, ids, actor); productsSheets = true; }
   catch (error) { errors.push(clean(error?.message, 500)); }
   if (!socialSheet.ok) errors.push('Algunas filas sociales no pudieron sincronizarse con Google Sheets.');
   result.sheets = { products: productsSheets, social: socialSheet.ok };
@@ -316,7 +306,7 @@ export async function deleteCollectionsGlobally(env, {
   let productsSheets = productDeleteResult?.sheets?.products === true;
   const errors = [...(productDeleteResult?.errors || [])];
   if (productMode !== 'delete' && affectedIds.length) {
-    try { await syncProductsToSheets(env, affectedIds); productsSheets = true; }
+    try { await syncProductsToSheets(env, idToken, affectedIds, actor); productsSheets = true; }
     catch (error) { errors.push(clean(error?.message, 500)); }
   }
 
