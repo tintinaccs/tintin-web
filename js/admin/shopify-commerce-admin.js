@@ -27,9 +27,13 @@ import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tin
 import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
-const VERSION = 'tintin-20260917-responsive-1';
+const VERSION = 'tintin-20260923-products-page-30-1';
 const CSS_HREF = `css/admin/shopify-commerce-admin.css?v=${VERSION}`;
 const ORDER_PAGE_SIZE = 50;
+// Productos se pagina en el navegador porque el snapshot ya es en tiempo real.
+// La selección nunca cruza de página: así una acción masiva conserva un alcance
+// humano, visible y seguro de como máximo 30 productos.
+const PRODUCT_PAGE_SIZE = 30;
 
 const ORDER_STATUS_LABELS = {
   pendiente: 'Pendiente',
@@ -78,6 +82,7 @@ const state = {
   productCategory: '',
   productStock: '',
   productSort: 'name-asc',
+  productPage: 1,
   collectionVisibility: '',
   collectionSort: 'order-asc',
   orderStatus: '',
@@ -300,6 +305,26 @@ function filteredProducts() {
   return list;
 }
 
+function productPageSlice(list) {
+  const totalPages = Math.max(1, Math.ceil(list.length / PRODUCT_PAGE_SIZE));
+  state.productPage = Math.min(Math.max(1, state.productPage), totalPages);
+  const from = (state.productPage - 1) * PRODUCT_PAGE_SIZE;
+  return {
+    items: list.slice(from, from + PRODUCT_PAGE_SIZE),
+    from,
+    totalPages,
+  };
+}
+
+function productPagination(totalPages) {
+  if (totalPages <= 1) return '';
+  return `<div class="tt-commerce-pagination" aria-label="Paginación de productos">
+    ${button('Anterior', 'products-page-prev', { disabled: state.productPage <= 1 })}
+    <span>Página ${state.productPage} de ${totalPages} · 30 por página</span>
+    ${button('Siguiente', 'products-page-next', { disabled: state.productPage >= totalPages })}
+  </div>`;
+}
+
 function filteredCollections() {
   let list = [...state.collections];
   const q = normalizeText(state.collectionSearch);
@@ -361,7 +386,9 @@ function renderProducts() {
   const root = document.getElementById('tt-commerce-products');
   if (!root) return;
   const counts = productTabCounts();
-  const list = filteredProducts();
+  const filtered = filteredProducts();
+  const page = productPageSlice(filtered);
+  const list = page.items;
   const selectedVisible = list.filter(p => state.productSelected.has(p._docId)).length;
   const allVisibleSelected = list.length > 0 && selectedVisible === list.length;
   const canCreate = perm('productos', 'crear', 'addProducts');
@@ -446,7 +473,7 @@ function renderProducts() {
           }).join('')}</tbody>
         </table>
       </div>` : '<div class="tt-commerce-empty">No hay productos que coincidan con esta vista.</div>'}
-      <div class="tt-commerce-footer"><span>Mostrando ${list.length} de ${state.products.length} productos</span><span>Los cambios se sincronizan automáticamente.</span></div>
+      <div class="tt-commerce-footer"><span>Mostrando ${list.length ? page.from + 1 : 0}–${page.from + list.length} de ${filtered.length} productos filtrados</span><span>Selección máxima: 30 productos de esta página.</span>${productPagination(page.totalPages)}</div>
     </div>`;
 }
 
@@ -927,11 +954,19 @@ async function handleAction(action, element) {
   if (action === 'products-export') return exportProducts(false);
   if (action === 'products-export-selected') return exportProducts(true);
   if (action === 'products-clear-selection') { state.productSelected.clear(); return renderProducts(); }
+  if (action === 'products-page-prev' || action === 'products-page-next') {
+    const filtered = filteredProducts();
+    const next = action === 'products-page-next' ? state.productPage + 1 : state.productPage - 1;
+    const pages = Math.max(1, Math.ceil(filtered.length / PRODUCT_PAGE_SIZE));
+    state.productPage = Math.min(Math.max(1, next), pages);
+    state.productSelected.clear();
+    return renderProducts();
+  }
   if (action === 'products-bulk-activate') return bulkProducts(true);
   if (action === 'products-bulk-deactivate') return bulkProducts(false);
   if (action === 'products-bulk-delete') {
     if (typeof window.bulkDelete !== 'function') return toast('La eliminación masiva todavía no está disponible.');
-    return window.bulkDelete();
+    return window.bulkDelete([...state.productSelected]);
   }
   if (action === 'product-edit' || action === 'drawer-product-edit') { closeDrawer(); return callLegacyAction('prodEditar', id); }
   if (action === 'product-toggle' || action === 'drawer-product-toggle') {
@@ -999,7 +1034,7 @@ function onClick(event) {
   const tab = event.target.closest('[data-tab-module]');
   if (tab) {
     const module = tab.dataset.tabModule;
-    if (module === 'products') { state.productTab = tab.dataset.tab; state.productSelected.clear(); renderProducts(); }
+    if (module === 'products') { state.productTab = tab.dataset.tab; state.productPage = 1; state.productSelected.clear(); renderProducts(); }
     if (module === 'collections') { state.collectionTab = tab.dataset.tab; state.collectionSelected.clear(); renderCollections(); }
     if (module === 'orders') {
       state.orderTab = tab.dataset.tab;
@@ -1017,6 +1052,10 @@ function onClick(event) {
 function onChange(event) {
   const target = event.target;
   if (target.matches('[data-select-product]')) {
+    if (target.checked && !state.productSelected.has(target.dataset.selectProduct) && state.productSelected.size >= PRODUCT_PAGE_SIZE) {
+      toast('Cada operación masiva admite hasta 30 productos de la página actual.');
+      return renderProducts();
+    }
     target.checked ? state.productSelected.add(target.dataset.selectProduct) : state.productSelected.delete(target.dataset.selectProduct);
     return renderProducts();
   }
@@ -1029,7 +1068,8 @@ function onChange(event) {
     return renderOrders();
   }
   if (target.matches('[data-check-all="products"]')) {
-    filteredProducts().forEach(p => target.checked ? state.productSelected.add(p._docId) : state.productSelected.delete(p._docId));
+    const page = productPageSlice(filteredProducts());
+    page.items.forEach(p => target.checked ? state.productSelected.add(p._docId) : state.productSelected.delete(p._docId));
     return renderProducts();
   }
   if (target.matches('[data-check-all="collections"]')) {
@@ -1042,9 +1082,9 @@ function onChange(event) {
   }
 
   const filter = target.dataset.filter;
-  if (filter === 'product-category') { state.productCategory = target.value; return renderProducts(); }
-  if (filter === 'product-stock') { state.productStock = target.value; return renderProducts(); }
-  if (filter === 'product-sort') { state.productSort = target.value; return renderProducts(); }
+  if (filter === 'product-category') { state.productCategory = target.value; state.productPage = 1; state.productSelected.clear(); return renderProducts(); }
+  if (filter === 'product-stock') { state.productStock = target.value; state.productPage = 1; state.productSelected.clear(); return renderProducts(); }
+  if (filter === 'product-sort') { state.productSort = target.value; state.productPage = 1; state.productSelected.clear(); return renderProducts(); }
   if (filter === 'collection-visibility') { state.collectionVisibility = target.value; return renderCollections(); }
   if (filter === 'collection-sort') { state.collectionSort = target.value; return renderCollections(); }
   if (filter === 'order-status') { state.orderStatus = target.value; return renderOrders(); }
@@ -1074,7 +1114,7 @@ function onInput(event) {
   clearTimeout(searchTimer);
   const value = event.target.value;
   searchTimer = setTimeout(() => {
-    if (filter === 'product-search') { state.productSearch = value; renderProducts(); }
+    if (filter === 'product-search') { state.productSearch = value; state.productPage = 1; state.productSelected.clear(); renderProducts(); }
     if (filter === 'collection-search') { state.collectionSearch = value; renderCollections(); }
     if (filter === 'order-search') { state.orderSearch = value; renderOrders(); }
   }, 120);

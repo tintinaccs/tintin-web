@@ -40,7 +40,7 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260716-cloudinary-fix-1";
-import './orders/pedidos-superadmin-crud.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20260923-canonical-tinped-reset-1';
 import './products/integridad-inventario-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1';
 
 // ---- GLOBALS ----

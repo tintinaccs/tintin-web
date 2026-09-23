@@ -199,6 +199,29 @@ export async function adminReviewAction(env, actor, input) {
   return saveReview(env, document, updated, extraWrites);
 }
 
+// Eliminar desde Super Admin no es una ocultación. Borra todas las copias
+// navegables de la reseña y sus interacciones asociadas; los pedidos no se
+// tocan porque son comprobantes comerciales independientes.
+export async function adminDeleteReviewPermanently(env, actor, reviewId) {
+  const { id, record } = await loadReview(env, reviewId);
+  const likes = (await firestoreAdminList(env, 'likeRecords', 3000))
+    .map(decoded)
+    .filter(item => item && String(item.reviewId || '') === id);
+  const writes = [
+    { path: `reviewRecords/${id}`, delete: true },
+    { path: `users/${safeId(record.ownerUid, 'Cuenta')}/reviews/${id}`, delete: true },
+    { path: `products/${safeId(record.productId, 'Producto')}/reviews/${id}`, delete: true },
+    ...likes.map(item => ({ path: `likeRecords/${safeId(item.likeId, 'Me gusta')}`, delete: true })),
+  ];
+  // Firestore limita el tamaño de cada commit. Trocear conserva la purga
+  // completa incluso para una reseña con muchas reacciones.
+  for (let index = 0; index < writes.length; index += 400) {
+    await firestoreAdminCommit(env, writes.slice(index, index + 400));
+  }
+  await updateReviewStats(env, record.productId);
+  return { ...record, reviewId: id, deleted: true, permanentlyDeleted: true, lastAdminEmail: actor.email };
+}
+
 async function loadLike(env, likeId) {
   const id = safeId(likeId, 'Me gusta');
   const document = await firestoreAdminGet(env, `likeRecords/${id}`);
