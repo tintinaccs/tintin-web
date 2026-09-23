@@ -104,16 +104,18 @@ check(
 );
 
 check(
-  'La eliminación revoca acceso y conserva identidad histórica auditada',
+  'La eliminación permite un reingreso limpio y conserva únicamente historial comercial',
   (admin.includes("fetch('/api/admin-delete-user'") || admin.includes("authenticatedFetch('/api/admin-delete-user'")) &&
     deleteUserEndpoint.includes('applyUserLifecycle') &&
     lifecycle.includes("profileStatus: fsString('deleted')") &&
     lifecycle.includes("setFirebaseUserDisabled(env, uid, action === 'softDelete')") &&
+    lifecycle.includes('deleteFirebaseUser(env, uid)') &&
+    lifecycle.includes('deletedEmailHash') &&
     lifecycle.includes('auditLog/${eventId}') &&
     lifecycle.includes('phoneReservations/') &&
-    !deleteUserEndpoint.includes('deleteFirebaseUser') &&
-    !lifecycle.includes('deleteFirebaseUser'),
-  'La cuenta debe quedar como tombstone y no borrarse físicamente'
+    fs.existsSync('functions/api/claim-commerce-history.js') &&
+    fs.readFileSync('functions/api/claim-commerce-history.js', 'utf8').includes('requireFirebaseUser(request)'),
+  'Debe borrar la identidad de acceso, anonimizar el perfil eliminado y recuperar solo las compras tras verificar el nuevo registro'
 );
 
 check(
