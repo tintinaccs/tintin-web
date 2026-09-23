@@ -1,8 +1,14 @@
 # Recuperación de Firestore
 
-Estado real de las copias de Firestore, qué está cubierto hoy y qué no. Complementa
-`docs/plan-respaldo-recuperacion.md`, que describe el objetivo; este documento describe
-lo que el proyecto **puede ejecutar hoy**.
+Registro histórico de respaldos y recuperación de Firestore. Complementa
+`docs/plan-respaldo-recuperacion.md`. La verificación de PITR, retención y restauración
+corresponde al **2026-08-08** y no certifica por sí sola su estado actual.
+
+**Actualización 2026-09-23:** el workflow `Backup Firestore` terminó correctamente,
+incluido el paso `Exportar Firestore`. Eso confirma la ejecución reportada por GitHub
+Actions, pero no sustituye verificar el snapshot y su retención en Google Cloud, ni
+realizar una nueva restauración aislada. El plan de facturación actual tampoco puede
+deducirse de este repositorio.
 
 No debe contener secretos, claves ni credenciales.
 
@@ -111,32 +117,31 @@ los cubren igual, como se detalla en el resumen. Lo que la exclusión sí implic
 `orders` y `users` no entran en el archivo descargable del panel, que es la única copia
 que hoy se puede sacar de Google sin usar la exportación administrada.
 
-## Por qué no se puede resolver con un script
+## Límites de un script cliente y estado del backup gestionado
 
-La salida obvia sería un script que lea Firestore con el SDK y vuelque JSON. **No
-funciona en este proyecto**, por dos restricciones reales:
+No extraer pedidos ni usuarios a JSON desde el navegador: la copia operativa excluye
+deliberadamente datos personales y transaccionales. Con App Check Enforcement, un
+script Node que se conecte como cliente normal tampoco constituye una ruta de backup.
 
-1. **Plan Spark.** La exportación administrada de Firestore (`gcloud firestore export`)
-   escribe en un bucket de Cloud Storage y **requiere plan Blaze**. El proyecto está
-   deliberadamente en Spark: `scripts/auditar-imagenes-fase-5.js` verifica que
-   `npm run deploy:rules` no intente activar Storage.
-2. **App Check con Enforcement.** `js/core/firebase/firebase.js` registra App Check con
-   reCAPTCHA Enterprise. Con Enforcement activo en Firestore, las llamadas que no vienen
-   de la web legítima quedan rechazadas — que es exactamente lo que cortó el agotamiento
-   de cuota que motivó activarlo. Un script Node con el SDK cliente cae en esa categoría.
+El workflow `.github/workflows/backup-firestore.yml` ejecuta la exportación con
+`gcloud firestore export` y credenciales de infraestructura, sin pasar por el navegador
+ni por el runtime de Cloudflare Workers. Su ejecución del 2026-09-23 fue correcta.
+Aun así, comprobar el snapshot almacenado y probar la importación en una base aislada
+sigue siendo obligatorio. No asumir Spark, Blaze, permisos o cobertura actual sin
+consultar la consola de Firebase/Google Cloud.
 
-`firebase-admin` tampoco es una salida: no está entre las dependencias, y las Pages
-Functions corren sobre el runtime de Workers, donde ese paquete no funciona.
+## Controles y alternativas de recuperación
 
-Cualquier procedimiento que ignore estas dos restricciones no se va a poder ejecutar.
+Verificar primero qué está habilitado actualmente en Google Cloud. Los pasos siguientes
+son opciones operativas; no recrear infraestructura existente ni cambiar el plan de
+facturación desde una auditoría.
 
-## Opciones para cerrar el hueco
+### Opción A — mantener y verificar exportación administrada
 
-Requieren una decisión de la propietaria. Ninguna se puede tomar desde el repositorio.
-
-### Opción A — Subir a Blaze y usar exportación administrada
-
-La única ruta que da respaldo **completo y programado** de todas las colecciones.
+Ya existe un workflow de exportación diaria, pero debe verificarse que los objetos
+persisten en el bucket, respetan la retención prevista y pueden importarse. Los
+comandos siguientes son una guía de preparación histórica: crear recursos **solo**
+si se confirmó que faltan, nunca duplicarlos por ejecutar el checklist.
 
 No hace falta instalar nada: **Cloud Shell** (<https://shell.cloud.google.com>) ya trae
 `gcloud` autenticado en el navegador.
@@ -160,8 +165,8 @@ gcloud storage buckets create gs://tintin-accesorios-respaldos \
 gcloud firestore export gs://tintin-accesorios-respaldos/$(date +%Y-%m-%d) \
   --project=tintin-accesorios
 
-# 3. La exportación no bloquea: se corre en segundo plano.
-#    Esperar a que aparezca "done: true" antes de intentar restaurar.
+# 3. Sin --async, gcloud espera a que termine la exportación.
+#    Confirmar que la operación terminó correctamente antes de restaurar.
 gcloud firestore operations list --project=tintin-accesorios
 gcloud storage ls gs://tintin-accesorios-respaldos/
 
@@ -209,7 +214,8 @@ Consideraciones antes de decidir:
 - Habilitar Blaze **no** obliga a activar Firebase Storage. La verificación de
   `audit:images` seguiría pasando mientras `firebase.json` no declare `storage` ni exista
   `storage.rules`.
-- Programar la exportación periódica requiere Cloud Scheduler.
+- La exportación periódica puede programarse mediante GitHub Actions (como en el
+  workflow actual) o Cloud Scheduler; Cloud Scheduler no es obligatorio.
 
 ### Opción B — Extender la copia operativa a pedidos
 
