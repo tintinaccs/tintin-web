@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "493aaadd2b74e5471a1fa37bfef4352a95f54bc7bd79dc963981a186772746c4",
+  "sourceFingerprint": "dada9a3fc65c10adb1372f33dd75af99cf30e57476452113c0c5e0ab2cf28f5f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 872,
     "textFiles": 831,
-    "totalBytes": 17071057,
+    "totalBytes": 17071444,
     "pages": 19,
     "modules": 597
   },
@@ -28711,8 +28711,8 @@
     },
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
-      "bytes": 19059,
-      "sha256": "be965693249cfa61ac50299357d59dc8ee89c8d101200686c9561e192802d6b6",
+      "bytes": 19446,
+      "sha256": "cab04142a0fb47e904d72d90f7b4552a4192b1c0e3ecf483badd5552713f28b2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28722,37 +28722,37 @@
           "raw": "./consentimiento-privacidad.js?v=tintin-20260911-auth-cart-final-1",
           "target": "scripts/consentimiento-privacidad.js",
           "dynamic": false,
-          "line": 109
+          "line": 124
         },
         {
           "raw": "./consentimiento-privacidad.js?v=tintin-20260911-auth-cart-final-1",
           "target": "scripts/consentimiento-privacidad.js",
           "dynamic": false,
-          "line": 111
+          "line": 126
         },
         {
           "raw": "../core/firebase/origen-funciones.js",
           "target": "core/firebase/origen-funciones.js",
           "dynamic": false,
-          "line": 120
+          "line": 135
         },
         {
           "raw": "./configuracion-bienvenida.js?v=tintin-20260812-welcome-media-1",
           "target": "scripts/configuracion-bienvenida.js",
           "dynamic": false,
-          "line": 167
+          "line": 182
         },
         {
           "raw": "../../components/welcome/configuracion-bienvenida.js?v=tintin-20260812-welcome-media-1",
           "target": null,
           "dynamic": false,
-          "line": 168
+          "line": 183
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 122
+          "line": 137
         }
       ]
     },
@@ -37949,8 +37949,8 @@
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
       "extension": ".js",
-      "bytes": 19059,
-      "sha256": "be965693249cfa61ac50299357d59dc8ee89c8d101200686c9561e192802d6b6"
+      "bytes": 19446,
+      "sha256": "cab04142a0fb47e904d72d90f7b4552a4192b1c0e3ecf483badd5552713f28b2"
     },
     {
       "path": "scripts/auditar-super-admin-responsive.mjs",
@@ -41293,7 +41293,7 @@
           },
           {
             "file": "scripts/auditar-sitio-confiabilidad.js",
-            "line": 150,
+            "line": 165,
             "operation": "collection"
           }
         ]
@@ -42203,7 +42203,7 @@
           },
           {
             "file": "scripts/auditar-sitio-confiabilidad.js",
-            "line": 151,
+            "line": 166,
             "operation": "collection"
           }
         ]
