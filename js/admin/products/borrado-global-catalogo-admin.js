@@ -58,8 +58,16 @@ async function postCatalogDelete(payload) {
 }
 
 function selectedProductIds() {
-  return [...document.querySelectorAll('.prod-row-check:checked')]
-    .map(input => String(input.dataset.id || '').trim()).filter(Boolean);
+  // El admin puede renderizar la tabla legacy (.prod-row-check) o la tabla
+  // Shopify (.tt-commerce-table [data-select-product]). Ambos muestran la
+  // misma selección, pero el segundo no tiene data-id.
+  const ids = new Set();
+  document.querySelectorAll('.prod-row-check:checked, [data-select-product]:checked')
+    .forEach(input => {
+      const id = String(input.dataset.id || input.dataset.selectProduct || '').trim();
+      if (id) ids.add(id);
+    });
+  return [...ids];
 }
 
 function selectedCollectionSlugs() {
