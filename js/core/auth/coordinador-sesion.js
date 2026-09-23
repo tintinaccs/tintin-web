@@ -190,6 +190,13 @@ export function getSessionStatus() { return currentSnapshot.status; }
 export function getSessionUser() {
   return currentSnapshot.status === AUTH_STATES.AUTHENTICATED ? currentSnapshot.user : null;
 }
+
+// El observador es la fuente de estados publicada. Esta lectura sólo es un
+// respaldo para guards críticos si una copia previa del coordinador quedó en
+// caché durante un despliegue: nunca autoriza una operación por sí misma.
+export function getRestoredFirebaseUser() {
+  return auth.currentUser || null;
+}
 export function waitForSession() { start(); return sessionReady; }
 export function markExplicitLogout() { machine.markExplicitLogout(); }
 

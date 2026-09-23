@@ -348,7 +348,7 @@
       helper.id = 'tt-checkout-name-auth-sync';
       helper.type = 'module';
       helper.src = new URL(
-        '../../pages/checkout/checkout-sincronizacion-nombre.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1',
+        '../../pages/checkout/checkout-sincronizacion-nombre.js?v=tintin-20260923-auth-cache-coherence-1',
         scriptUrl || window.location.href
       ).href;
       document.head.appendChild(helper);

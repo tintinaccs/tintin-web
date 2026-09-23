@@ -2,7 +2,7 @@ import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-2
 import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { AUTH_STATES, subscribeSession, markExplicitLogout, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3";
+import { AUTH_STATES, subscribeSession, markExplicitLogout, readAuthHandoff, clearAuthHandoff, getRestoredFirebaseUser } from "../core/auth/coordinador-sesion.js?v=tintin-20260923-auth-cache-coherence-1";
 import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
@@ -22,16 +22,16 @@ import {
 } from "../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260923-auth-cache-coherence-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
-import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1";
+import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20260923-auth-cache-coherence-1";
 import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260901-media-orphan-log-4-auth-persistence-20260919-1";
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260901-media-orphan-scan-3-auth-persistence-20260919-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260916-cache-bump-diagnostico-sitio-1-auth-persistence-20260919-1";
 import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260923-flow-evidence-2";
-import "./pages/paginas-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1";
+import "./pages/paginas-admin.js?v=tintin-20260923-auth-cache-coherence-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
@@ -40,8 +40,8 @@ import {
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1";
 import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260716-cloudinary-fix-1";
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260716-cloudinary-fix-1";
-import './orders/pedidos-superadmin-crud.js?v=tintin-20260923-canonical-tinped-reset-1';
-import './products/integridad-inventario-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1';
+import './orders/pedidos-superadmin-crud.js?v=tintin-20260923-auth-cache-coherence-1';
+import './products/integridad-inventario-admin.js?v=tintin-20260923-auth-cache-coherence-1';
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -970,7 +970,8 @@ async function recoverAdminUserFromHandoff() {
 }
 
 async function startAdminAuthGuard() {
-  subscribeSession(async snapshot => {
+  subscribeSession(async initialSnapshot => {
+    let snapshot = initialSnapshot;
     if (snapshot.status !== AUTH_STATES.RESTORING && !authReadyDiagnosticRecorded) {
       authReadyDiagnosticRecorded = true;
       recordAuthDiagnostic('AUTH_STATE_READY', {
@@ -992,10 +993,18 @@ async function startAdminAuthGuard() {
     }
     if (snapshot.status === AUTH_STATES.UNKNOWN) {
       // UNKNOWN no confirma una cuenta y tampoco autoriza navegar a login.
-      // Mantener el documento evita el circuito Admin -> login -> Admin.
-      recordAuthDiagnostic('REDIRECT_LOOP_BROKEN', { source: 'admin-guard', reason: 'auth-state-unknown' });
-      showAdminAuthUnknown();
-      return;
+      // Un módulo previo que quedó en caché puede publicar UNKNOWN aunque la
+      // instancia compartida de Firebase ya tenga una identidad restaurada.
+      // Recuperarla evita el falso "sesión perdida" sin convertir UNKNOWN en
+      // acceso para una persona no autenticada.
+      const restoredUser = getRestoredFirebaseUser();
+      if (!restoredUser) {
+        recordAuthDiagnostic('REDIRECT_LOOP_BROKEN', { source: 'admin-guard', reason: 'auth-state-unknown' });
+        showAdminAuthUnknown();
+        return;
+      }
+      snapshot = { ...snapshot, status: AUTH_STATES.AUTHENTICATED, user: restoredUser, reason: 'AUTH_CURRENT_USER_RECOVERY' };
+      recordAuthDiagnostic('AUTH_CURRENT_USER_RECOVERY', { source: 'admin-guard' });
     }
     let user = snapshot.user;
     if (!user) {

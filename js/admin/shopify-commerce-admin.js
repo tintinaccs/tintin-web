@@ -12,7 +12,7 @@
    ======================================================================== */
 
 import { auth, db, appCheckReady } from '../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
-import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3';
+import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260923-auth-cache-coherence-1';
 import {
   collection,
   getDocs,
@@ -24,7 +24,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
 import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
-import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1';
+import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20260923-auth-cache-coherence-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 const VERSION = 'tintin-20260923-admin-page-size-30-2';

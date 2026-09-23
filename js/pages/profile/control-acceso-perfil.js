@@ -20,7 +20,7 @@
 // sesión y la devuelve a la tienda, donde puede seguir mirando.
 
 import { auth, db } from "../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1";
-import { AUTH_STATES, subscribeSession } from "../../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3";
+import { AUTH_STATES, subscribeSession } from "../../core/auth/coordinador-sesion.js?v=tintin-20260923-auth-cache-coherence-1";
 import { recordAuthDiagnostic } from "../../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getProfileCompletionPlan } from "./configuracion-inicial-perfil.mjs?v=tintin-20260912-post-login-profile-1";

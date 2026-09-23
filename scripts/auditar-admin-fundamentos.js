@@ -63,7 +63,7 @@ const sectionIds      = [...new Set([...adminHtml.matchAll(/id="section-([a-z-]+
 // ===========================================================================
 check(
   'El guard usa el coordinador canónico como puerta de entrada',
-  adminApp.includes('subscribeSession(async snapshot') &&
+  adminApp.includes('subscribeSession(async initialSnapshot') &&
     adminApp.includes('coordinador-sesion.js'),
   'admin-app.js debe resolver la sesión mediante el coordinador antes de mostrar el panel.'
 );
