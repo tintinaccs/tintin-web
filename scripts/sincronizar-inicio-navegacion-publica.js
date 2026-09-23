@@ -8,13 +8,13 @@ const ROOT = path.resolve(__dirname, '..');
 const VERSION = 'tintin-20260910-header-clearance-1';
 const SECONDARY_LAYOUT_VERSION = 'tintin-20260916-final-production-stability-secondary-layout-1';
 const QUALITY_INTERFACE_VERSION = 'tintin-20260916-final-production-stability-quality-2';
-const TIENDA_VERSION = 'tintin-20260918-global-session-restore-2';
+const TIENDA_VERSION = 'tintin-20260923-dedupe-1';
 const COLOR_FIRST_PAINT_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1';
 const LOADER_VERSION = 'tintin-20260919-runtime-cache-dedupe-1';
 const STORE_GATE_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1';
 const PANEL_COMPAT_VERSION = 'tintin-20260811-cls-desktop-stable-2';
-const PUBLIC_SHELL_VERSION = 'tintin-20260919-runtime-cache-dedupe-1';
-const NAV_ENTRY_VERSION = 'tintin-20260922-profile-timeout-fix-1';
+const PUBLIC_SHELL_VERSION = 'tintin-20260923-dedupe-2';
+const NAV_ENTRY_VERSION = 'tintin-20260923-dedupe-1';
 const NAV_BARRIER_VERSION = 'tintin-20260915-session-shell-2';
 const VISUAL_BUILDER_VERSION = 'tintin-20260916-premium-performance-loader-1';
 const SESSION_PROTECTION_VERSION = 'tintin-20260918-global-session-restore-1-auth-persistence-20260919-1';
@@ -22,7 +22,7 @@ const PROFILE_GATE_VERSION = 'tintin-20260918-auth-incident-diagnostics-1-auth-p
 const NAV_HEADER_VERSION = 'tintin-20260824-header-responsive-sync-1';
 const NAV_TABLET_VERSION = 'tintin-20260916-z-index-fallback-1';
 const NAV_MOBILE_VERSION = 'tintin-20260916-z-index-fallback-1';
-const UNIFIED_THEME_VERSION = 'tintin-20260915-final-polish-1';
+const UNIFIED_THEME_VERSION = 'tintin-20260923-contrast-aa-1';
 const NAVIGATION_PRELOAD_STYLES = [
   ['css/components/navigation/escritorio/encabezado-escritorio.css', NAV_HEADER_VERSION, '(min-width: 1025px)'],
   ['css/components/navigation/tableta/encabezado-tableta.css', NAV_TABLET_VERSION, '(min-width: 768px) and (max-width: 1024px)'],
