@@ -10,6 +10,7 @@ import {
 import { getCatalogSheetSyncQueueStatus } from './resiliencia-sync-catalogo.js';
 import { getOrderEmailQueueStatus } from './resiliencia-correo-pedido.js';
 import { fetchAppsScript } from './apps-script-fetch.js';
+import { paypalConfig } from './paypal-seguro.js';
 
 const REQUIRED_CONFIG = Object.freeze([
   'FIREBASE_SERVICE_ACCOUNT_KEY',
@@ -136,10 +137,19 @@ export async function runSystemHealth(env, {
     code: 'probe_failed',
   }));
   const admin = compactAdminRuntimeChecks(runtimeReport);
+  const paypal = paypalConfig(env);
   const integrations = {
     firebase: runtimeReport?.ok === true,
     resend: configured(env, 'RESEND_API_KEY'),
     cloudinary: configured(env, 'CLOUDINARY_CLOUD_NAME') && configured(env, 'CLOUDINARY_API_KEY') && configured(env, 'CLOUDINARY_API_SECRET'),
+    // No ejecuta OAuth ni crea pedidos: solamente hace visible el contrato de
+    // configuración que usa /api/paypal-config y el checkout.
+    paypal: {
+      configured: paypal.enabled === true,
+      enabled: paypal.enabled === true,
+      environment: paypal.mode,
+      missing: paypal.missing,
+    },
     sheets: configured(env, 'SHEETS_ENGAGEMENT_SECRET') && sheets.protocolOk === true,
     appsScript: sheets,
     catalogSheetQueue,
