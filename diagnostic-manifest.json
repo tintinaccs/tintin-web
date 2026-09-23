@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "15f7266e2cad1e217aa6e1b9bb3dc3791c334634fa271b24aad49d78e875bdcb",
+  "sourceFingerprint": "29ffd43f29e38fbca6c7b725903591027e7aee2bf646bae5427d26f4d64ed0c6",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 872,
     "textFiles": 831,
-    "totalBytes": 17073734,
+    "totalBytes": 17073585,
     "pages": 19,
     "modules": 597
   },
@@ -26468,8 +26468,8 @@
     },
     {
       "path": "scripts/auditar-carrito-fase-7.js",
-      "bytes": 6729,
-      "sha256": "40cd01122e26e4dd21265623aba7824f9c14c1ffc867d80b7231906e3c7a81f0",
+      "bytes": 6699,
+      "sha256": "1120925dbb98fd3b963907efc790f931b625440f4e4c7b34b34983ad537aa33e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26890,15 +26890,15 @@
     },
     {
       "path": "scripts/auditar-correo-fase-3.js",
-      "bytes": 5213,
-      "sha256": "10534d2f097030199ffc41ff5c59c29c080f66b9ea75bfc8a9f9c2f345e28022",
+      "bytes": 5183,
+      "sha256": "7bef60d150ec649c105804a33de9de17dbfbf5d1383dd9b67e3b9f965e8990dd",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./sincronizacion-correo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
+          "raw": "./sincronizacion-correo-admin.js?v=tintin-20260923-auth-cache-coherence-1",
           "target": "scripts/sincronizacion-correo-admin.js",
           "dynamic": true,
           "line": 79
@@ -27227,8 +27227,8 @@
     },
     {
       "path": "scripts/auditar-estabilidad-final-v1.mjs",
-      "bytes": 9619,
-      "sha256": "1f38619092e6266f050929a165ed3e033fb57a274bb168e6db4b564e5407bd41",
+      "bytes": 9553,
+      "sha256": "2b86046a0c44e427e66c67e90a888f22df676167465c861b1100f8fc8578e067",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27482,8 +27482,8 @@
     },
     {
       "path": "scripts/auditar-final-entrega.js",
-      "bytes": 8260,
-      "sha256": "b5b7ad72a6377fe39748d670e20cbbedbcecc093a785af00f5fb5888b69d6100",
+      "bytes": 8261,
+      "sha256": "ce6ae54a5121dbcd09d0985c431c886cd37c7c6e1fe851f0c761437f9612ef12",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27782,8 +27782,8 @@
     },
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
-      "bytes": 10266,
-      "sha256": "b1180ef60037ca80b28d3fc6dabd8faa36ab2efde49f93ace105e2bb6abe2454",
+      "bytes": 10236,
+      "sha256": "d81fe9cd527ed4d929587efebd7de5a07f5a48efae46295d9c7d74b4c3c3c1bf",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28858,8 +28858,8 @@
     },
     {
       "path": "scripts/auditar-superadmin-maestro-conexiones.mjs",
-      "bytes": 7480,
-      "sha256": "95c4aa80a1508d27e70345cf425b477d8daedf779ee961f6f1cf764efbcb5b8b",
+      "bytes": 7484,
+      "sha256": "5558724fb0a96047ca5932c47fd191bd0077e5b3b295e692f597c29c0ab0022e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28924,8 +28924,8 @@
     },
     {
       "path": "scripts/auditar-superadmin-maestro.mjs",
-      "bytes": 8725,
-      "sha256": "fdf2bc044355e998ea7d290839091ecc3add86f0c4db27dcdc6306ea0cdfbef6",
+      "bytes": 8727,
+      "sha256": "6fab2733e046f424930db1ce209549db877bd841e0e311bd7e761b2fb523ceae",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37431,8 +37431,8 @@
     {
       "path": "scripts/auditar-carrito-fase-7.js",
       "extension": ".js",
-      "bytes": 6729,
-      "sha256": "40cd01122e26e4dd21265623aba7824f9c14c1ffc867d80b7231906e3c7a81f0"
+      "bytes": 6699,
+      "sha256": "1120925dbb98fd3b963907efc790f931b625440f4e4c7b34b34983ad537aa33e"
     },
     {
       "path": "scripts/auditar-catalogo-navegador-produccion.mjs",
@@ -37539,8 +37539,8 @@
     {
       "path": "scripts/auditar-correo-fase-3.js",
       "extension": ".js",
-      "bytes": 5213,
-      "sha256": "10534d2f097030199ffc41ff5c59c29c080f66b9ea75bfc8a9f9c2f345e28022"
+      "bytes": 5183,
+      "sha256": "7bef60d150ec649c105804a33de9de17dbfbf5d1383dd9b67e3b9f965e8990dd"
     },
     {
       "path": "scripts/auditar-critico-recuperacion.js",
@@ -37605,8 +37605,8 @@
     {
       "path": "scripts/auditar-estabilidad-final-v1.mjs",
       "extension": ".mjs",
-      "bytes": 9619,
-      "sha256": "1f38619092e6266f050929a165ed3e033fb57a274bb168e6db4b564e5407bd41"
+      "bytes": 9553,
+      "sha256": "2b86046a0c44e427e66c67e90a888f22df676167465c861b1100f8fc8578e067"
     },
     {
       "path": "scripts/auditar-estado-ecosistema.mjs",
@@ -37677,8 +37677,8 @@
     {
       "path": "scripts/auditar-final-entrega.js",
       "extension": ".js",
-      "bytes": 8260,
-      "sha256": "b5b7ad72a6377fe39748d670e20cbbedbcecc093a785af00f5fb5888b69d6100"
+      "bytes": 8261,
+      "sha256": "ce6ae54a5121dbcd09d0985c431c886cd37c7c6e1fe851f0c761437f9612ef12"
     },
     {
       "path": "scripts/auditar-final-integracion.js",
@@ -37737,8 +37737,8 @@
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 10266,
-      "sha256": "b1180ef60037ca80b28d3fc6dabd8faa36ab2efde49f93ace105e2bb6abe2454"
+      "bytes": 10236,
+      "sha256": "d81fe9cd527ed4d929587efebd7de5a07f5a48efae46295d9c7d74b4c3c3c1bf"
     },
     {
       "path": "scripts/auditar-inicio-pagina.js",
@@ -38001,8 +38001,8 @@
     {
       "path": "scripts/auditar-superadmin-maestro-conexiones.mjs",
       "extension": ".mjs",
-      "bytes": 7480,
-      "sha256": "95c4aa80a1508d27e70345cf425b477d8daedf779ee961f6f1cf764efbcb5b8b"
+      "bytes": 7484,
+      "sha256": "5558724fb0a96047ca5932c47fd191bd0077e5b3b295e692f597c29c0ab0022e"
     },
     {
       "path": "scripts/auditar-superadmin-maestro-responsive.mjs",
@@ -38013,8 +38013,8 @@
     {
       "path": "scripts/auditar-superadmin-maestro.mjs",
       "extension": ".mjs",
-      "bytes": 8725,
-      "sha256": "fdf2bc044355e998ea7d290839091ecc3add86f0c4db27dcdc6306ea0cdfbef6"
+      "bytes": 8727,
+      "sha256": "6fab2733e046f424930db1ce209549db877bd841e0e311bd7e761b2fb523ceae"
     },
     {
       "path": "scripts/auditar-superadmin-modulos-completos.mjs",
