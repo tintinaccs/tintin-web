@@ -8,5 +8,7 @@ test('productos muestra eliminaci√≥n masiva solo con permisos y conecta la acci√
   const admin = read('js/admin/shopify-commerce-admin.js');
   assert.match(admin, /products-bulk-delete/);
   assert.match(admin, /canDelete && canBulk/);
-  assert.match(admin, /window\.bulkDelete\(\)/);
+  assert.match(admin, /window\.bulkDelete\(\[\.\.\.state\.productSelected\]\)/);
+  assert.match(admin, /ADMIN_PAGE_SIZE\s*=\s*30/);
+  assert.match(admin, /MAX_BULK_SELECTION\s*=\s*30/);
 });

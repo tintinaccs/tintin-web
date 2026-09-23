@@ -60,6 +60,23 @@ let adminUsersUnsubscribe = null;
 // debe trabajar con la ventana operativa reciente; las fichas y exportaciones
 // consultan el documento o la página concreta que se necesita.
 const ADMIN_REALTIME_LIMIT = 250;
+const MAX_ADMIN_BULK_SELECTION = 30;
+
+function rejectOversizedAdminBulkSelection(values, label = 'elementos') {
+  const count = Array.isArray(values) ? values.length : values?.size || 0;
+  if (count <= MAX_ADMIN_BULK_SELECTION) return false;
+  toast(`Solo se pueden procesar ${MAX_ADMIN_BULK_SELECTION} ${label} por vez.`);
+  return true;
+}
+function addAdminBulkSelection(set, id, checked, label = 'elementos') {
+  if (!checked) { set.delete(id); return true; }
+  if (set.size >= MAX_ADMIN_BULK_SELECTION && !set.has(id)) {
+    toast(`Solo se pueden seleccionar ${MAX_ADMIN_BULK_SELECTION} ${label} por vez.`);
+    return false;
+  }
+  set.add(id);
+  return true;
+}
 // Cada bandera indica si esa consulta ya resolvió al menos una vez con éxito.
 // Sirve para NO mostrar "0" cuando en realidad la consulta está cargando o
 // falló (permisos/conexión) — en ese caso el indicador muestra "—", igual que
@@ -1876,6 +1893,8 @@ function loadDashboard() {
 // nunca mezclarla con Bloqueados.
 let userStatusFilter = 'active';
 let userSortMode = 'recent';
+let usersPage = 0;
+const ADMIN_PAGE_SIZE = 30;
 
 function loadUsers() {
   const tbody = document.getElementById('users-tbody');
@@ -1909,6 +1928,7 @@ function applyUserFilters() {
         ? [...filtered].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'es'))
         : [...filtered].sort((a, b) => activityTimestampMillis(b.createdAt || b.updatedAt || b.lastAccess) - activityTimestampMillis(a.createdAt || a.updatedAt || a.lastAccess) || String(a.uid || '').localeCompare(String(b.uid || '')));
   _lastFilteredUsers = filtered;
+  usersPage = Math.min(usersPage, Math.max(0, Math.ceil(filtered.length / ADMIN_PAGE_SIZE) - 1));
   const visibleIds = new Set(filtered.map(u => u.uid));
   [..._selectedUsers].forEach(uid => { if (!visibleIds.has(uid)) _selectedUsers.delete(uid); });
   renderUsersTable(filtered);
@@ -1939,6 +1959,13 @@ window.filterUsersByStatus = (status) => {
 
 function renderUsersTable(users) {
   const tbody = document.getElementById('users-tbody');
+  const totalPages = Math.max(1, Math.ceil(users.length / ADMIN_PAGE_SIZE));
+  usersPage = Math.min(usersPage, totalPages - 1);
+  const pageUsers = users.slice(usersPage * ADMIN_PAGE_SIZE, (usersPage + 1) * ADMIN_PAGE_SIZE);
+  const pager = document.getElementById('users-pagination');
+  if (pager) {
+    pager.innerHTML = totalPages > 1 ? `<button type="button" class="adm-btn adm-btn-sm" onclick="window.setUsersPage(${usersPage - 1})" ${usersPage <= 0 ? 'disabled' : ''}>Anterior</button><span>Página ${usersPage + 1} de ${totalPages}</span><button type="button" class="adm-btn adm-btn-sm" onclick="window.setUsersPage(${usersPage + 1})" ${usersPage >= totalPages - 1 ? 'disabled' : ''}>Siguiente</button>` : '';
+  }
   if (!users.length) {
     const emptyMsg = userStatusFilter === 'deleted'
       ? 'No hay usuarios eliminados'
@@ -1946,7 +1973,7 @@ function renderUsersTable(users) {
     tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:#aaa;padding:24px">${emptyMsg}</td></tr>`;
     return;
   }
-  tbody.innerHTML = users.map(u => {
+  tbody.innerHTML = pageUsers.map(u => {
     const isSuperAdmin = u.email === SUPER_ADMIN;
     const safeUid = escapeHtmlAdmin(u.uid);
     const uidArg = inlineArgumentAdmin(u.uid);
@@ -2033,6 +2060,11 @@ function renderUsersTable(users) {
     `;
   }).join('');
 }
+
+window.setUsersPage = function(page) {
+  usersPage = Math.max(0, Number(page) || 0);
+  renderUsersTable(_lastFilteredUsers);
+};
 
 // Búsqueda y pestañas Usuarios/Bloqueados — comparten applyUserFilters()
 document.getElementById('user-search').oninput = applyUserFilters;
@@ -2180,22 +2212,35 @@ window.deleteUser = async (uid, name) => {
 let _selectedUsers = new Set();
 
 window.toggleSelectAllUsers = function(masterCb) {
+  const pageIds = new Set(_lastFilteredUsers.slice(usersPage * ADMIN_PAGE_SIZE, (usersPage + 1) * ADMIN_PAGE_SIZE).map(user => user.uid));
   document.querySelectorAll('.user-row-check').forEach(cb => {
-    cb.checked = masterCb.checked;
-    if (masterCb.checked) _selectedUsers.add(cb.dataset.id);
-    else _selectedUsers.delete(cb.dataset.id);
+    if (!pageIds.has(cb.dataset.id)) return;
+    if (masterCb.checked) {
+      if (_selectedUsers.size < MAX_ADMIN_BULK_SELECTION || _selectedUsers.has(cb.dataset.id)) {
+        _selectedUsers.add(cb.dataset.id);
+        cb.checked = true;
+      } else cb.checked = false;
+    } else {
+      _selectedUsers.delete(cb.dataset.id);
+      cb.checked = false;
+    }
   });
+  if (masterCb.checked && _selectedUsers.size >= MAX_ADMIN_BULK_SELECTION) toast(`La selección está limitada a ${MAX_ADMIN_BULK_SELECTION} usuarios.`);
   updateUsersBulkToolbar();
 };
 
 window.toggleUserSelect = function(cb) {
-  if (cb.checked) _selectedUsers.add(cb.dataset.id);
+  if (cb.checked && _selectedUsers.size >= MAX_ADMIN_BULK_SELECTION && !_selectedUsers.has(cb.dataset.id)) {
+    cb.checked = false;
+    toast(`Solo se pueden seleccionar ${MAX_ADMIN_BULK_SELECTION} usuarios por vez.`);
+  } else if (cb.checked) _selectedUsers.add(cb.dataset.id);
   else _selectedUsers.delete(cb.dataset.id);
   const master = document.getElementById('check-all-users');
   if (master) {
     const total = document.querySelectorAll('.user-row-check').length;
-    master.indeterminate = _selectedUsers.size > 0 && _selectedUsers.size < total;
-    master.checked = _selectedUsers.size === total && total > 0;
+    const currentPageSelected = [...document.querySelectorAll('.user-row-check')].filter(cb => _selectedUsers.has(cb.dataset.id)).length;
+    master.indeterminate = currentPageSelected > 0 && currentPageSelected < total;
+    master.checked = currentPageSelected === total && total > 0;
   }
   updateUsersBulkToolbar();
 };
@@ -2329,6 +2374,7 @@ window.bulkRestoreUsers = async function() {
 
 window.bulkDeleteUsers = async function() {
   if (!_selectedUsers.size) return;
+  if (rejectOversizedAdminBulkSelection(_selectedUsers, 'usuarios')) return;
   if (currentRole !== 'superadmin' || !can(currentRole, 'deleteUsers')) { toast('Solo el Super Admin puede eliminar cuentas'); return; }
   const targets = [..._selectedUsers].map(uid => allUsers.find(u => u.uid === uid)).filter(u => u && u.email !== SUPER_ADMIN && u.deleted !== true && u.profileStatus !== 'deleted');
   if (!targets.length) { toast('No hay cuentas elegibles (el Super Admin está protegido)'); return; }
@@ -2730,16 +2776,14 @@ let _selectedOrders = new Set();
 
 window.toggleSelectAllOrders = function(masterCb) {
   document.querySelectorAll('.order-row-check').forEach(cb => {
-    cb.checked = masterCb.checked;
-    if (masterCb.checked) _selectedOrders.add(cb.dataset.id);
-    else _selectedOrders.delete(cb.dataset.id);
+    if (masterCb.checked) cb.checked = addAdminBulkSelection(_selectedOrders, cb.dataset.id, true, 'pedidos');
+    else { cb.checked = false; _selectedOrders.delete(cb.dataset.id); }
   });
   updateOrdersBulkToolbar();
 };
 
 window.toggleOrderSelect = function(cb) {
-  if (cb.checked) _selectedOrders.add(cb.dataset.id);
-  else _selectedOrders.delete(cb.dataset.id);
+  cb.checked = addAdminBulkSelection(_selectedOrders, cb.dataset.id, cb.checked, 'pedidos');
   const master = document.getElementById('check-all-orders');
   if (master) {
     const total = document.querySelectorAll('.order-row-check').length;
@@ -2862,6 +2906,7 @@ window.bulkResendOrderEmails = async function() {
 
 window.bulkDeleteOrders = async function() {
   if (!_selectedOrders.size) return { movedOrders: [], failed: [] };
+  if (rejectOversizedAdminBulkSelection(_selectedOrders, 'pedidos')) return { movedOrders: [], failed: [] };
   if (currentRole !== 'superadmin') { toast('Solo Super Admin puede mover pedidos a Borrados en lote'); return { movedOrders: [], failed: [] }; }
   const n = _selectedOrders.size;
   if (!confirm(`¿Mover ${n} pedido(s) a Borrados? Se podrán restaurar después.`)) return { movedOrders: [], failed: [], cancelled: true };
@@ -3954,16 +3999,14 @@ let _selectedTemplates = new Set();
 
 window.toggleSelectAllTemplates = function(masterCb) {
   document.querySelectorAll('.tpl-row-check').forEach(cb => {
-    cb.checked = masterCb.checked;
-    if (masterCb.checked) _selectedTemplates.add(cb.dataset.id);
-    else _selectedTemplates.delete(cb.dataset.id);
+    if (masterCb.checked) cb.checked = addAdminBulkSelection(_selectedTemplates, cb.dataset.id, true, 'plantillas');
+    else { cb.checked = false; _selectedTemplates.delete(cb.dataset.id); }
   });
   updateTemplatesBulkToolbar();
 };
 
 window.toggleTemplateSelect = function(cb) {
-  if (cb.checked) _selectedTemplates.add(cb.dataset.id);
-  else _selectedTemplates.delete(cb.dataset.id);
+  cb.checked = addAdminBulkSelection(_selectedTemplates, cb.dataset.id, cb.checked, 'plantillas');
   updateTemplatesBulkToolbar();
 };
 
@@ -4006,6 +4049,7 @@ window.bulkArchiveTemplates = async function(archived) {
 // —con `key`— nunca se eliminan, ni de a una ni en lote, solo se archivan).
 window.bulkDeleteTemplates = async function() {
   if (!_selectedTemplates.size) return;
+  if (rejectOversizedAdminBulkSelection(_selectedTemplates, 'plantillas')) return;
   const ids = [..._selectedTemplates].filter(id => { const t = allEmailTemplates.find(x => x.id === id); return t && !t.key; });
   if (!ids.length) { toast('La selección solo tiene plantillas de sistema — esas no se pueden eliminar, solo archivar.'); return; }
   const n = ids.length;
@@ -4790,8 +4834,7 @@ function renderShipList(type) {
 }
 
 window.toggleShipCitySelect = function(type, cb) {
-  if (cb.checked) _selectedShipCities[type].add(cb.dataset.name);
-  else _selectedShipCities[type].delete(cb.dataset.name);
+  cb.checked = addAdminBulkSelection(_selectedShipCities[type], cb.dataset.name, cb.checked, 'ciudades');
   updateShipBulkToolbar(type);
 };
 
@@ -4812,6 +4855,7 @@ window.clearShipSelection = function(type) {
 window.bulkDeleteShipCities = async function(type) {
   const names = [..._selectedShipCities[type]];
   if (!names.length) return;
+  if (rejectOversizedAdminBulkSelection(names, 'ciudades')) return;
   const n = names.length;
   if (!confirm(`¿Eliminar ${n} ciudad(es) de ${type === 'delivery' ? 'Delivery' : 'Encomienda'}?`)) return;
   const prevList = shipCities[type].slice();
@@ -5874,8 +5918,7 @@ document.getElementById('coll-search').addEventListener('input', () => renderCol
 let _selectedCollections = new Set();
 
 window.toggleCollectionSelect = function(cb) {
-  if (cb.checked) _selectedCollections.add(cb.dataset.slug);
-  else _selectedCollections.delete(cb.dataset.slug);
+  cb.checked = addAdminBulkSelection(_selectedCollections, cb.dataset.slug, cb.checked, 'colecciones');
   updateCollBulkToolbar();
 };
 
@@ -5888,7 +5931,9 @@ function updateCollBulkToolbar() {
   if (toolbar) toolbar.classList.toggle('show', count > 0);
   if (countEl) countEl.textContent = `${count} seleccionada${count !== 1 ? 's' : ''}`;
   if (delBtn) delBtn.style.display = (can(currentRole, 'deleteCollections') && roleCanDo('colecciones', 'eliminar')) ? '' : 'none';
-  if (delAllBtn) delAllBtn.style.display = (currentRole === 'superadmin' && roleCanDo('colecciones', 'eliminar')) ? '' : 'none';
+  // La eliminación global queda fuera del flujo operativo: todas las bajas
+  // deben pasar por una selección explícita de hasta 30 elementos.
+  if (delAllBtn) delAllBtn.style.display = 'none';
   const visBtns = document.getElementById('coll-bulk-visible-group');
   if (visBtns) visBtns.style.display = (can(currentRole, 'manageContent') && roleCanDo('colecciones', 'activarDesactivar')) ? 'contents' : 'none';
 }
@@ -5923,6 +5968,7 @@ window.bulkSetCollVisible = async function(visible) {
 // pide a dónde mover los productos).
 window.bulkDeleteCollections = async function() {
   if (!_selectedCollections.size) return;
+  if (rejectOversizedAdminBulkSelection(_selectedCollections, 'colecciones')) return;
   if (!can(currentRole, 'deleteCollections') || !roleCanDo('colecciones', 'eliminar')) { toast('No tenés permiso para eliminar colecciones'); return; }
   const slugs = [..._selectedCollections];
   const empty = [], withProducts = [];
@@ -7133,15 +7179,14 @@ let _selectedProducts = new Set();
 window.toggleSelectAll = function(masterCb) {
   _selectedProducts.clear();
   document.querySelectorAll('.prod-row-check').forEach(cb => {
-    cb.checked = masterCb.checked;
-    if (masterCb.checked) _selectedProducts.add(cb.dataset.id);
+    if (masterCb.checked) cb.checked = addAdminBulkSelection(_selectedProducts, cb.dataset.id, true, 'productos');
+    else cb.checked = false;
   });
   updateBulkToolbar();
 };
 
 window.toggleProductSelect = function(cb) {
-  if (cb.checked) _selectedProducts.add(cb.dataset.id);
-  else _selectedProducts.delete(cb.dataset.id);
+  cb.checked = addAdminBulkSelection(_selectedProducts, cb.dataset.id, cb.checked, 'productos');
   const master = document.getElementById('check-all-prods');
   if (master) {
     const total = document.querySelectorAll('.prod-row-check').length;
@@ -7163,7 +7208,9 @@ function updateBulkToolbar() {
   // permiso que ya gatea el botón de eliminar de a un producto (deleteProducts)
   // — si podés borrar uno, tiene sentido que también puedas borrar varios.
   if (delBtn) delBtn.style.display = (can(currentRole, 'deleteProducts') && roleCanDo('productos', 'eliminar')) ? '' : 'none';
-  if (delAllBtn) delAllBtn.style.display = (currentRole === 'superadmin' && roleCanDo('productos', 'eliminar')) ? '' : 'none';
+  // La eliminación global queda fuera del flujo operativo: todas las bajas
+  // deben pasar por una selección explícita de hasta 30 elementos.
+  if (delAllBtn) delAllBtn.style.display = 'none';
   // Roles y Permisos: el grupo de acciones masivas (colección/categoría/
   // activar/desactivar/stock/precio/oferta/destacado) se oculta entero si el
   // rol no tiene habilitada "Acciones masivas" en Productos.
@@ -7238,6 +7285,7 @@ window.bulkSetCategory = async function() {
 window.bulkDelete = async function(explicitIds) {
   const ids1 = Array.isArray(explicitIds) && explicitIds.length ? [...new Set(explicitIds)] : [..._selectedProducts];
   if (!ids1.length) return;
+  if (rejectOversizedAdminBulkSelection(ids1, 'productos')) return;
   if (!can(currentRole, 'deleteProducts') || !roleCanDo('productos', 'eliminar')) { toast('No tenés permiso para eliminar productos'); return; }
   const n = ids1.length;
   if (!confirm(`¿ELIMINAR DEFINITIVAMENTE ${n} producto(s)? Esta acción NO se puede deshacer.`)) return;

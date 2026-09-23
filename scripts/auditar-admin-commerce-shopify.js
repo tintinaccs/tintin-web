@@ -24,7 +24,7 @@ for (const section of ['productos', 'colecciones', 'pedidos']) {
 for (const collectionName of ['products', 'collections', 'orders']) {
   const liveSync = collectionName === 'orders'
     ? /const ordersPage = query\(collection\(db, ['"]orders['"]\), orderBy\(['"]createdAt['"], ['"]desc['"]\), limit\(ORDER_PAGE_SIZE\)\)[\s\S]*onSnapshot\(ordersPage/.test(js)
-    : new RegExp(`onSnapshot\\(collection\\(db, ['\"]${collectionName}['\"]\\)`).test(js);
+    : new RegExp(`onSnapshot\\((?:query\\()?collection\\(db, ['\"]${collectionName}['\"]\\)`).test(js);
   expect(liveSync, `${collectionName} se sincroniza en tiempo real.`);
 }
 
@@ -36,7 +36,9 @@ for (const action of [
   'window.openOrderEdit', 'window.updateOrderStatus', 'window.updatePayStatus',
   'window.resendOrderEmail', 'window.deleteOrder'
 ]) {
-  expect(js.includes(action), `reutiliza el contrato existente ${action}.`);
+  const legacyName = action.replace('window.', '');
+  const delegated = new RegExp(`callLegacyAction\\(['\"]${legacyName}['\"]`).test(js);
+  expect(js.includes(action) || delegated, `reutiliza el contrato existente ${action}.`);
 }
 
 for (const forbiddenWrite of ['updateDoc', 'setDoc', 'addDoc', 'deleteDoc', 'writeBatch', 'runTransaction']) {
