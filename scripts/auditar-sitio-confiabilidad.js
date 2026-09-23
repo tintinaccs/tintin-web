@@ -198,7 +198,7 @@ check('Las imágenes dinámicas reciben carga diferida y prioridad automática',
   loader.includes('bootImagePerformance();'));
 check('Todas las páginas declaran el tipo de sus botones estáticos',
   htmlFiles.every(file => !/<button\b(?![^>]*\btype\s*=)[^>]*>/i.test(
-    read(file).replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, '')
+    read(file).replace(/<script\b[^>]*>[\s\S]*?<\/script\b[^>]*>/gi, '')
   )));
 check('Todos los controles de la barra móvil tienen nombre accesible',
   htmlFiles.every(file => {

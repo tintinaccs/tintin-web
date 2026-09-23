@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "f08a8aa1ad30b23ae1736c470adf2785d8da5dda11894b5e71050eb0bba82cf1",
+  "sourceFingerprint": "493aaadd2b74e5471a1fa37bfef4352a95f54bc7bd79dc963981a186772746c4",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 872,
     "textFiles": 831,
-    "totalBytes": 17066152,
+    "totalBytes": 17071057,
     "pages": 19,
     "modules": 597
   },
@@ -18237,8 +18237,8 @@
     },
     {
       "path": "cloudflare/system-health.js",
-      "bytes": 6197,
-      "sha256": "de0dfd8be5dce816e810abe19fdf22adbb45309ad31066259eeca603a7791441",
+      "bytes": 6594,
+      "sha256": "dabd37a85fbf8435172c3e11b8382eb5cd818376147f76fc218a1fcc5d065555",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18273,6 +18273,12 @@
           "target": "cloudflare/apps-script-fetch.js",
           "dynamic": false,
           "line": 12
+        },
+        {
+          "raw": "./paypal-seguro.js",
+          "target": "cloudflare/paypal-seguro.js",
+          "dynamic": false,
+          "line": 13
         }
       ],
       "endpoints": []
@@ -20205,8 +20211,8 @@
     },
     {
       "path": "js/admin/admin-app.js",
-      "bytes": 448895,
-      "sha256": "4e50113bc964e8fd229ffe33f401f8c6f11eec55b28ec59b557c31e7102689da",
+      "bytes": 448892,
+      "sha256": "af9b5e8599e6beea3adbe2f9ee8166ebd6c5bfe7345052518847946b810c2200",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20333,7 +20339,7 @@
           "line": 32
         },
         {
-          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260922-admin-guard-live-1",
+          "raw": "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260923-flow-evidence-2",
           "target": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
           "dynamic": false,
           "line": 33
@@ -20853,8 +20859,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
-      "bytes": 23900,
-      "sha256": "d48564df56051008d2101e9ff5dfb464d87c62d7bb33e27cd7d6ce167e93cb6b",
+      "bytes": 23897,
+      "sha256": "e7bcc1a2f3d93db3e443f91059928dde9ebcc4368a2ab98ffacdc3fe05256bc7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20873,7 +20879,7 @@
           "line": 11
         },
         {
-          "raw": "./live-checks.js?v=tintin-20260922-admin-guard-live-1",
+          "raw": "./live-checks.js?v=tintin-20260923-flow-evidence-2",
           "target": "js/admin/flujo-conexiones/live-checks.js",
           "dynamic": false,
           "line": 12
@@ -20900,8 +20906,8 @@
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
-      "bytes": 19358,
-      "sha256": "188ff6bfafe876e5d610b0f3189c75616331ff153dfb68ad2560a409ad07074c",
+      "bytes": 21634,
+      "sha256": "51fdd95df78d69bf853d1da3dbc803d9ae1a439085fbbcb845756c014b4bf90d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28705,8 +28711,8 @@
     },
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
-      "bytes": 19055,
-      "sha256": "0a1c20b1f7373e7afb0336d30fe0fded328a204821bcfa100db9c2811b938498",
+      "bytes": 19059,
+      "sha256": "be965693249cfa61ac50299357d59dc8ee89c8d101200686c9561e192802d6b6",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31411,8 +31417,8 @@
     },
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
-      "bytes": 12148,
-      "sha256": "57f1b2fef12fd9f88f984211ae7494d06d9ad13f07cd58067bf046f2a210f11a",
+      "bytes": 14143,
+      "sha256": "16c689022015fbd6376b9ae229c604c6993cecbfc334c8d9cc16678ffb618460",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31452,7 +31458,7 @@
           "raw": "node:fs",
           "target": null,
           "dynamic": true,
-          "line": 222
+          "line": 259
         }
       ],
       "endpoints": []
@@ -33024,8 +33030,8 @@
     },
     {
       "path": "tests/system-health/system-health.test.mjs",
-      "bytes": 3163,
-      "sha256": "82d8bd86f77024cac71ce5f360efffb4eda1e7cd15086613569a7efeb2a25a36",
+      "bytes": 3408,
+      "sha256": "b05a76d0a2f087dced723224738f637029047de4f429aee66e63d92bce23bc31",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34355,8 +34361,8 @@
     {
       "path": "cloudflare/system-health.js",
       "extension": ".js",
-      "bytes": 6197,
-      "sha256": "de0dfd8be5dce816e810abe19fdf22adbb45309ad31066259eeca603a7791441"
+      "bytes": 6594,
+      "sha256": "dabd37a85fbf8435172c3e11b8382eb5cd818376147f76fc218a1fcc5d065555"
     },
     {
       "path": "cloudflare/user-lifecycle-domain.js",
@@ -35633,8 +35639,8 @@
     {
       "path": "js/admin/admin-app.js",
       "extension": ".js",
-      "bytes": 448895,
-      "sha256": "4e50113bc964e8fd229ffe33f401f8c6f11eec55b28ec59b557c31e7102689da"
+      "bytes": 448892,
+      "sha256": "af9b5e8599e6beea3adbe2f9ee8166ebd6c5bfe7345052518847946b810c2200"
     },
     {
       "path": "js/admin/ajuste-barra-lateral-movil-admin.js",
@@ -35723,14 +35729,14 @@
     {
       "path": "js/admin/flujo-conexiones/flujo-conexiones-admin.js",
       "extension": ".js",
-      "bytes": 23900,
-      "sha256": "d48564df56051008d2101e9ff5dfb464d87c62d7bb33e27cd7d6ce167e93cb6b"
+      "bytes": 23897,
+      "sha256": "e7bcc1a2f3d93db3e443f91059928dde9ebcc4368a2ab98ffacdc3fe05256bc7"
     },
     {
       "path": "js/admin/flujo-conexiones/live-checks.js",
       "extension": ".js",
-      "bytes": 19358,
-      "sha256": "188ff6bfafe876e5d610b0f3189c75616331ff153dfb68ad2560a409ad07074c"
+      "bytes": 21634,
+      "sha256": "51fdd95df78d69bf853d1da3dbc803d9ae1a439085fbbcb845756c014b4bf90d"
     },
     {
       "path": "js/admin/flujo-decisiones/flujo-decisiones-admin.js",
@@ -37943,8 +37949,8 @@
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
       "extension": ".js",
-      "bytes": 19055,
-      "sha256": "0a1c20b1f7373e7afb0336d30fe0fded328a204821bcfa100db9c2811b938498"
+      "bytes": 19059,
+      "sha256": "be965693249cfa61ac50299357d59dc8ee89c8d101200686c9561e192802d6b6"
     },
     {
       "path": "scripts/auditar-super-admin-responsive.mjs",
@@ -38063,8 +38069,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 45264,
-      "sha256": "74685efcee074117ae3c059719a6e9107a9756ff65377e93179658e51929bfb3"
+      "bytes": 45258,
+      "sha256": "c0e51d4e4cbaff575de979d831ce94ab8b972485df4bfd9814cb6bf437bf9910"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -38531,8 +38537,8 @@
     {
       "path": "tests/flow-connections/estado-flujo.test.mjs",
       "extension": ".mjs",
-      "bytes": 12148,
-      "sha256": "57f1b2fef12fd9f88f984211ae7494d06d9ad13f07cd58067bf046f2a210f11a"
+      "bytes": 14143,
+      "sha256": "16c689022015fbd6376b9ae229c604c6993cecbfc334c8d9cc16678ffb618460"
     },
     {
       "path": "tests/flow-connections/pedidos-authority.test.mjs",
@@ -38819,8 +38825,8 @@
     {
       "path": "tests/system-health/system-health.test.mjs",
       "extension": ".mjs",
-      "bytes": 3163,
-      "sha256": "82d8bd86f77024cac71ce5f360efffb4eda1e7cd15086613569a7efeb2a25a36"
+      "bytes": 3408,
+      "sha256": "b05a76d0a2f087dced723224738f637029047de4f429aee66e63d92bce23bc31"
     },
     {
       "path": "tests/ui-ux/admin-commerce-shopify.spec.js",
