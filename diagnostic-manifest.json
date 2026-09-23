@@ -1,7 +1,11 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
+<<<<<<< HEAD
   "sourceFingerprint": "29ffd43f29e38fbca6c7b725903591027e7aee2bf646bae5427d26f4d64ed0c6",
+=======
+  "sourceFingerprint": "74226b3c454991d2b7fc1385dbdfa64383fc0e4e57a91d6b27b2c79d5bf7ec61",
+>>>>>>> 763c2b5b (fix: preserve notifications-auto-read marker in cache version)
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +15,11 @@
   "platform": {
     "files": 872,
     "textFiles": 831,
+<<<<<<< HEAD
     "totalBytes": 17073585,
+=======
+    "totalBytes": 17073613,
+>>>>>>> 763c2b5b (fix: preserve notifications-auto-read marker in cache version)
     "pages": 19,
     "modules": 597
   },
@@ -2079,8 +2087,13 @@
         "agent",
         "viewer"
       ],
+<<<<<<< HEAD
       "bytes": 196027,
       "sha256": "fd55b50ba415502efb9e3ef27becd04225594f61164b0be063e3880feacf9ff6",
+=======
+      "bytes": 196055,
+      "sha256": "88830973c0272495115f60f7c4753db4e55482d854173eed03826bd76fc2c7cb",
+>>>>>>> 763c2b5b (fix: preserve notifications-auto-read marker in cache version)
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2159,7 +2172,7 @@
           "line": 2251
         },
         {
-          "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20260923-auth-cache-coherence-1",
+          "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20260923-auth-cache-coherence-1-notifications-auto-read-1",
           "target": "js/admin/notifications/notificaciones-admin.js",
           "line": 2252
         },
@@ -2422,7 +2435,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20260923-auth-cache-coherence-1",
+          "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20260923-auth-cache-coherence-1-notifications-auto-read-1",
           "target": "js/admin/notifications/notificaciones-admin.js",
           "line": 2252,
           "exists": true
@@ -33957,8 +33970,13 @@
     {
       "path": "admin.html",
       "extension": ".html",
+<<<<<<< HEAD
       "bytes": 196027,
       "sha256": "fd55b50ba415502efb9e3ef27becd04225594f61164b0be063e3880feacf9ff6"
+=======
+      "bytes": 196055,
+      "sha256": "88830973c0272495115f60f7c4753db4e55482d854173eed03826bd76fc2c7cb"
+>>>>>>> 763c2b5b (fix: preserve notifications-auto-read marker in cache version)
     },
     {
       "path": "apple-touch-icon.png",
