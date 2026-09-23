@@ -20,7 +20,7 @@ const toast = message => typeof window.toast === 'function' ? window.toast(messa
 function requestDeletePassword() {
   return new Promise(resolve => {
     const dialog = document.createElement('dialog');
-    dialog.style.cssText = 'border:0;border-radius:16px;padding:24px;max-width:420px;width:calc(100% - 32px);box-shadow:0 20px 70px rgba(0,0,0,.28);font:inherit;color:#2b2025;';
+    dialog.style.cssText = 'border:0;border-radius:16px;padding:24px;max-width:420px;width:calc(100% - 32px);box-shadow:0 20px 70px rgba(0,0,0,.28);font-family:Montserrat;color:#2b2025;';
     dialog.innerHTML = `
       <form method="dialog" style="display:grid;gap:14px">
         <strong style="font-size:18px">Confirmación de seguridad</strong>
@@ -28,11 +28,11 @@ function requestDeletePassword() {
         <label style="display:grid;gap:6px;font-weight:700;font-size:13px">
           Contraseña
           <input type="password" name="password" autocomplete="off" spellcheck="false" required
-            style="min-height:42px;border:1px solid #c9aab5;border-radius:9px;padding:8px 10px;font:inherit">
+            style="min-height:42px;border:1px solid #c9aab5;border-radius:9px;padding:8px 10px;font-family:Montserrat">
         </label>
         <div style="display:flex;justify-content:flex-end;gap:8px">
-          <button value="cancel" type="submit" style="min-height:40px;border:1px solid #c9aab5;border-radius:9px;padding:8px 14px;background:#fff;font:inherit">Cancelar</button>
-          <button value="confirm" type="submit" style="min-height:40px;border:0;border-radius:9px;padding:8px 14px;background:#9b405a;color:#fff;font:inherit;font-weight:700">Confirmar</button>
+          <button value="cancel" type="submit" style="min-height:40px;border:1px solid #c9aab5;border-radius:9px;padding:8px 14px;background:#fff;font-family:Montserrat">Cancelar</button>
+          <button value="confirm" type="submit" style="min-height:40px;border:0;border-radius:9px;padding:8px 14px;background:#9b405a;color:#fff;font-family:Montserrat;font-weight:700">Confirmar</button>
         </div>
       </form>`;
     const form = dialog.querySelector('form');
