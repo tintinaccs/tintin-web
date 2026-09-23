@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e34f63c82d2d01938c71e42561e95f45141a71baad003d88befa7ef15b763e3e",
+  "sourceFingerprint": "6fc5c0ee28c875653c6d4adc13cfa291581b45824b13d87ff9ce3ad4bf4dfc0b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 871,
     "textFiles": 830,
-    "totalBytes": 17054790,
+    "totalBytes": 17055668,
     "pages": 19,
     "modules": 596
   },
@@ -12072,8 +12072,8 @@
         "guest",
         "client"
       ],
-      "bytes": 37586,
-      "sha256": "65a6722b532d3a8a38f987d85cae896396f74f93f262d663ed8b23dd4f7623b4",
+      "bytes": 37563,
+      "sha256": "76f72363946ea21d979af8fb126565b5e8952ecbb973c4a4bd7a73862f22d384",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12134,7 +12134,7 @@
           "line": 500
         },
         {
-          "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
+          "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20260923-collection-click-navigation-1",
           "target": "js/pages/home/carrusel-colecciones.js",
           "line": 501
         },
@@ -12657,7 +12657,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
+          "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20260923-collection-click-navigation-1",
           "target": "js/pages/home/carrusel-colecciones.js",
           "line": 501,
           "exists": true
@@ -25235,8 +25235,8 @@
     },
     {
       "path": "js/pages/home/carrusel-colecciones.js",
-      "bytes": 14986,
-      "sha256": "8d74f77394c13fea9fd7afc7c8f65652d05468b26c722192b65b83e390d06a0a",
+      "bytes": 15773,
+      "sha256": "c18f700ad7e411959e0a7760534136e898e813a49ce689d57ea55ecbb78bd1f9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31973,8 +31973,8 @@
     },
     {
       "path": "tests/navigation/home-collection-links.test.mjs",
-      "bytes": 923,
-      "sha256": "150d649287965a10b44e0e7a1cc99713d73380df8970ffea8980bf2065eb9723",
+      "bytes": 1060,
+      "sha256": "5c731551ae14c8e82476e5da797faa4ccb88a457896a0c2c5c220cbb3ea4d5e2",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35597,8 +35597,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 37586,
-      "sha256": "65a6722b532d3a8a38f987d85cae896396f74f93f262d663ed8b23dd4f7623b4"
+      "bytes": 37563,
+      "sha256": "76f72363946ea21d979af8fb126565b5e8952ecbb973c4a4bd7a73862f22d384"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -36785,8 +36785,8 @@
     {
       "path": "js/pages/home/carrusel-colecciones.js",
       "extension": ".js",
-      "bytes": 14986,
-      "sha256": "8d74f77394c13fea9fd7afc7c8f65652d05468b26c722192b65b83e390d06a0a"
+      "bytes": 15773,
+      "sha256": "c18f700ad7e411959e0a7760534136e898e813a49ce689d57ea55ecbb78bd1f9"
     },
     {
       "path": "js/pages/home/inicio-premium.js",
@@ -38033,8 +38033,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 45287,
-      "sha256": "69b6f7ab7b454db1fdeaf6d7c829e89666081723419d244621fc68f64f273136"
+      "bytes": 45264,
+      "sha256": "74685efcee074117ae3c059719a6e9107a9756ff65377e93179658e51929bfb3"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -38591,8 +38591,8 @@
     {
       "path": "tests/navigation/home-collection-links.test.mjs",
       "extension": ".mjs",
-      "bytes": 923,
-      "sha256": "150d649287965a10b44e0e7a1cc99713d73380df8970ffea8980bf2065eb9723"
+      "bytes": 1060,
+      "sha256": "5c731551ae14c8e82476e5da797faa4ccb88a457896a0c2c5c220cbb3ea4d5e2"
     },
     {
       "path": "tests/navigation/loader-shell-wait.spec.js",
