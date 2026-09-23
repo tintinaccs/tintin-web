@@ -13,7 +13,7 @@
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
-import { apiUrl } from '../../core/firebase/origen-funciones.js';
+import { apiUrl } from '../../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
 
 const DEVICE_ID_KEY = 'tt_push_device_id';
 const DEVICE_LABEL_KEY = 'tt_push_device_label';

@@ -383,7 +383,7 @@ body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-col a{
 body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-col a:hover,
 body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-col a:focus-visible{color:var(--tt-footer-ink)!important;text-decoration:underline}
 body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-bottom{
-  background:transparent!important;color:#a56680!important;border:0!important;
+  background:transparent!important;color:#8a4a66!important;border:0!important;
   padding:18px max(20px,env(safe-area-inset-right)) calc(18px + env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left));
   font-size:.68rem;letter-spacing:.07em;
 }

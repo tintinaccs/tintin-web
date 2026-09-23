@@ -48,3 +48,38 @@ a.perfil-wa-box {
 .login-box .login-muted {
   color: #6b5a63;
 }
+
+/* F-A11Y-03: texto oscuro sobre fondos de marca (2.48:1) y blanco perdido por
+   la regla genérica de spans. Especificidad alta para ganar a esas capas. */
+html body .tt-footer-wa,
+html body .tt-footer-wa span,
+html body .tt-footer-wa svg {
+  color: var(--color-button-whatsapp-text, #fff) !important;
+}
+html body a.adm-auth-login {
+  color: #fff !important;
+}
+body:has(.adm-main) .adm-main :is(.user-tab-btn, .correos-tab-btn, .ship-tab-btn).active,
+body:has(.adm-main) .adm-main .adm-diagnostic-view-tabs button.active,
+html body button.tt-connectivity-retry.tt-interactive-control {
+  color: #fff !important;
+}
+
+/* Subtítulo del login: 4.48:1 con el token global; este tono da >=5:1. */
+body:not(:has(.adm-main)) p.login-heading-sub {
+  color: #6f6266 !important;
+}
+
+/* Hero del inicio: texto sobre la imagen rosa (2.7-3.1:1 con #755d57). #3d2530 da >=6:1. */
+html body.tt-home-premium .tt-hero .tt-hero-subtitle,
+html body.tt-home-premium .tt-hero .tt-hero-actions a.tt-hero-link:not(#tt-hero-contraste) {
+  color: #3d2530 !important;
+  opacity: 1 !important;
+}
+/* CTA en móvil: el texto rosa #f24498 sobre blanco da 3.47:1 con tamaño no "grande". */
+@media (max-width: 767px) {
+  html body.tt-home-premium .tt-hero .tt-hero-actions .tt-hero-cta,
+  html body.tt-home-premium .tt-hero .tt-hero-actions .tt-hero-cta * {
+    color: #d6237d !important;
+  }
+}

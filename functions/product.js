@@ -217,6 +217,19 @@ export function resolveProductMetadataWithin(promise, ceilingMs = PRODUCT_METADA
   });
 }
 
+/**
+ * La ficha base (sin id, con id inexistente o de un producto inactivo) responde
+ * 200 con robots "index, follow": un soft-404 indexable. El estado definitivo
+ * "no existe / no está publicado" se marca noindex; los timeouts y errores
+ * transitorios siguen entregando la ficha base sin tocar la indexación.
+ */
+function withNoindex(asset) {
+  const headers = new Headers(asset.headers);
+  headers.set('x-robots-tag', 'noindex, nofollow');
+  headers.set('cache-control', 'no-store');
+  return new Response(asset.body, { status: asset.status, statusText: asset.statusText, headers });
+}
+
 export async function onRequest(context) {
   const { request, env } = context;
   if (!['GET', 'HEAD'].includes(request.method)) {
@@ -232,15 +245,15 @@ export async function onRequest(context) {
 
   const url = new URL(request.url);
   const id = String(url.searchParams.get('id') || '').trim();
-  if (!id || !/^[A-Za-z0-9_-]{1,180}$/.test(id)) return asset;
+  if (!id || !/^[A-Za-z0-9_-]{1,180}$/.test(id)) return withNoindex(asset);
 
   try {
     const document = await resolveProductMetadataWithin(
       firestoreAdminGet(env, `products/${id}`)
     );
-    if (!document?.fields) return asset;
+    if (!document?.fields) return withNoindex(asset);
     const data = decodeFirestoreFields(document.fields);
-    if (data.active === false) return asset;
+    if (data.active === false) return withNoindex(asset);
 
     const rendered = renderProductMetadataHtml(await asset.text(), id, data);
     const headers = new Headers(asset.headers);
