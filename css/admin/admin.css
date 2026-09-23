@@ -1906,6 +1906,59 @@ html:not(.adm-auth-ready) [data-admin-panel] {
   display: none !important;
 }
 
+/* En tablet/laptop compactos la marca no desaparece detrás del bloque de
+   cuenta. El logo conserva una celda propia y el avatar queda debajo, sin
+   superposición ni desplazamiento del primer ítem del menú. */
+@media (min-width: 541px) and (max-width: 900px) {
+  .adm-sidebar-logo {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-height: 72px;
+    padding: 12px 6px;
+    text-align: center;
+    flex: 0 0 72px;
+    position: relative;
+    z-index: 1;
+  }
+  .adm-sidebar-logo-text {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--admin-color-brand);
+    color: #fff;
+    font-size: 0;
+    letter-spacing: 0;
+    line-height: 1;
+  }
+  .adm-sidebar-logo-text::before {
+    content: 'TT';
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: .08em;
+  }
+  .adm-user-info {
+    min-height: 68px;
+    flex: 0 0 68px;
+    padding: 12px 6px;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.adm-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 16px 4px;
+  color: var(--adm-muted);
+  font-size: 12px;
+}
+.adm-pagination .adm-btn:disabled { opacity: .45; cursor: not-allowed; }
+
 /* Topbar limpio y centrado. */
 .adm-topbar {
   display: grid;
