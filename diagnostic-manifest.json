@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "17dfda510e1a358bc6916e743cceeaa5e605b3cb4dfd7fc19c4d3990c66c80ad",
+  "sourceFingerprint": "7486dfa444a7d62a1c252464f23cf1d815a1315efa4d51c28aca9cc28dcfead0",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 870,
     "textFiles": 829,
-    "totalBytes": 17036858,
+    "totalBytes": 17036890,
     "pages": 19,
     "modules": 595
   },
@@ -30611,8 +30611,8 @@
     },
     {
       "path": "tests/catalog/bulk-product-delete-contract.test.mjs",
-      "bytes": 461,
-      "sha256": "01b45b01445a5b37107017a1d6042c96c0c5da608d02ee1af9542b57befc2982",
+      "bytes": 493,
+      "sha256": "8c31300d1ccf200ded6572d678360a96171bdd4d2af83492c0048a29936ce6ae",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38333,8 +38333,8 @@
     {
       "path": "tests/catalog/bulk-product-delete-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 461,
-      "sha256": "01b45b01445a5b37107017a1d6042c96c0c5da608d02ee1af9542b57befc2982"
+      "bytes": 493,
+      "sha256": "8c31300d1ccf200ded6572d678360a96171bdd4d2af83492c0048a29936ce6ae"
     },
     {
       "path": "tests/catalog/catalog-delete-reference-resilience.test.mjs",
