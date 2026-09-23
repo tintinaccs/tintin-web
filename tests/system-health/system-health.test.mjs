@@ -47,6 +47,12 @@ test('estado integral pasa solo con runtime y puente Sheets confirmados', async 
   assert.equal(report.admin.auditLog, true);
   assert.equal(report.admin.settings, true);
   assert.equal(report.integrations.sheets, true);
+  assert.deepEqual(report.integrations.paypal, {
+    configured: false,
+    enabled: false,
+    environment: 'sandbox',
+    missing: ['feature_disabled', 'client_id', 'client_secret', 'webhook_id', 'exchange_rate', 'stale_exchange_rate'],
+  });
   assert.equal(report.deployment.commitSha, COMPLETE_ENV.CF_PAGES_COMMIT_SHA);
   assert.equal(SYSTEM_AUTHORITIES.orders.mode, 'admin-parity');
   assert.equal(SYSTEM_AUTHORITIES.products.mode, 'bidirectional');
