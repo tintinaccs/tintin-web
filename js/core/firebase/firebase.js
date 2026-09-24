@@ -48,6 +48,7 @@ if (FIREBASE_APP_CHECK_SITE_KEY) {
   const sharedAppCheck = window.__TINTIN_APP_CHECK_STATE__ || {
     appCheck: null,
     ready: Promise.resolve(false),
+    tokenSettled: null,
     initialized: false
   };
   window.__TINTIN_APP_CHECK_STATE__ = sharedAppCheck;
@@ -89,6 +90,8 @@ if (FIREBASE_APP_CHECK_SITE_KEY) {
       }));
       return false;
     });
+    sharedAppCheck.tokenSettled = appCheckTokenSettled;
+
   // Si reCAPTCHA/App Check nunca resuelve (script bloqueado, red lenta o
   // caída justo en el momento de la verificación — más común en wifi de
   // tablet/mobile que en una conexión de escritorio estable), la promesa de
@@ -110,6 +113,50 @@ if (FIREBASE_APP_CHECK_SITE_KEY) {
   window.TintinAppCheckStatus = 'configuration-required';
 }
 window.TintinAppCheckReady = appCheckReady;
+
+/**
+ * Verificación fuerte para superficies privadas. appCheckReady conserva un
+ * timeout corto para que la tienda pública pueda degradarse sin quedar
+ * bloqueada; el panel privado, en cambio, no debe abrir Firestore hasta
+ * confirmar un token real. Esta función vuelve a pedir el token si el timeout
+ * público resolvió false y permite recuperarse sin recargar cuando reCAPTCHA
+ * terminó unos segundos más tarde.
+ */
+export async function ensureAppCheckReady({ timeoutMs = 15000, forceRefresh = false } = {}) {
+  const state = window.__TINTIN_APP_CHECK_STATE__ || null;
+  const deadlineMs = Math.max(1000, Math.min(30000, Number(timeoutMs) || 15000));
+  const timeout = () => new Promise(resolve => window.setTimeout(() => resolve(false), deadlineMs));
+
+  const settledPromise = state?.tokenSettled;
+  if (settledPromise) {
+    const settled = await Promise.race([Promise.resolve(settledPromise), timeout()]);
+    if (settled === true) return true;
+  }
+
+  const instance = state?.appCheck || appCheck;
+  if (!instance) return false;
+
+  try {
+    const tokenReady = getAppCheckToken(instance, forceRefresh)
+      .then(() => true)
+      .catch(error => {
+        window.TintinAppCheckStatus = 'error';
+        window.dispatchEvent(new CustomEvent('tintin:app-check-ready', {
+          detail: { ready: false, code: error?.code || 'appCheck/unknown' }
+        }));
+        return false;
+      });
+    const ready = await Promise.race([tokenReady, timeout()]);
+    if (ready === true) {
+      window.TintinAppCheckStatus = 'enabled';
+      window.dispatchEvent(new CustomEvent('tintin:app-check-ready', { detail: { ready: true } }));
+      return true;
+    }
+    return false;
+  } catch {
+    return false;
+  }
+}
 
 // Firestore en memoria (sin caché persistente en IndexedDB). Se probó con
 // persistentLocalCache + persistentMultipleTabManager para que los listeners
