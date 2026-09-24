@@ -10,7 +10,8 @@
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260922-green-flow-1';
 import { resolveState, isAttentionState } from './estado-flujo.js?v=tintin-20260920-admin-status-fixes-1';
 import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260923-flow-evidence-2';
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1';
 import { collection, doc, getDoc, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const CATEGORY_LABELS = {
@@ -118,7 +119,7 @@ async function probeClientFirestoreRead(label, read) {
 }
 
 async function probeClientFirestoreRules(user) {
-  if (!user || !await appCheckReady) {
+  if (!user || !await waitForAdminAppCheck(12000)) {
     const unavailable = { ok: false, status: 0, authRequired: true, error: 'App Check o sesión no disponible' };
     return { favorites: { label: 'Favoritos', ...unavailable }, notifications: { label: 'Notificaciones', ...unavailable } };
   }
