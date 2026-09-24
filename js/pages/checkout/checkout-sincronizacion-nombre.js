@@ -1,4 +1,4 @@
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-stable-2';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1';
 
 (function () {
