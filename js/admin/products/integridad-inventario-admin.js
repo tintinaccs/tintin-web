@@ -1,4 +1,4 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
+import { auth, db, ensureAppCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-private-gate-1';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
 import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1';
 import {
@@ -61,6 +61,7 @@ async function transitionStatus(orderId, status) {
 }
 
 async function deleteOrder(orderId) {
+  if (!await ensureAppCheckReady({ timeoutMs: 15000 })) throw new Error('No se pudo verificar App Check para modificar Firestore.');
   const safeOrderId = String(orderId || '').trim();
   if (!safeOrderId) throw new Error('Pedido inválido.');
   if (actorEmail() !== SUPER_ADMIN_EMAIL) {
@@ -145,6 +146,7 @@ async function deleteOrder(orderId) {
 }
 
 async function cleanupStalePendingOrders(hoursOld = 2) {
+  if (!await ensureAppCheckReady({ timeoutMs: 15000 })) throw new Error('No se pudo verificar App Check para modificar Firestore.');
   if (actorEmail() !== SUPER_ADMIN_EMAIL) {
     throw new Error('Solo Super Admin puede limpiar pedidos abandonados.');
   }
