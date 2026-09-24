@@ -27,6 +27,13 @@ test('authStateReady vacío resuelve ausencia autoritativa sin UNKNOWN permanent
   assert.equal(machine.getSnapshot().status, AUTH_STATES.UNAUTHENTICATED);
 });
 
+test('la restauración nunca convierte un observer obsoleto en sesión válida', () => {
+  assert.match(sessionCoordinatorSource, /const restoredUser = auth\.currentUser \|\| null;/);
+  assert.match(sessionCoordinatorSource, /const recoveredUser = auth\.currentUser \|\| null;/);
+  assert.doesNotMatch(sessionCoordinatorSource, /initialObserver(User|Seen)/);
+  assert.doesNotMatch(sessionCoordinatorSource, /auth-observer-after-error/);
+});
+
 test('un error de restauración cae a visitante y no bloquea la aplicación', () => {
   const machine = createSessionStateMachine();
   const failed = machine.authError(new Error('restore failed'));
