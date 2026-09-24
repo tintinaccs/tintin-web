@@ -11,7 +11,7 @@
    solicitado bajo demanda.
    ============================================================= */
 
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
+import { auth, db, ensureAppCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-private-gate-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1';
 import {
   collection,
@@ -98,6 +98,10 @@ if (!window.TintinAdminUserFichaBooted) {
     const body = document.getElementById('client-ficha-body');
     if (!overlay || !body) return;
     if (!auth.currentUser || lower(auth.currentUser.email) !== SUPER_ADMIN) return;
+    if (!await ensureAppCheckReady({ timeoutMs: 15000 })) {
+      body.replaceChildren(el('div', 'adm-empty', 'No se pudo verificar la seguridad de Firebase. Reintentá en unos segundos.'));
+      return;
+    }
 
     body.replaceChildren(el('div', 'adm-loading', 'Cargando ficha…'));
     overlay.style.display = 'block';
