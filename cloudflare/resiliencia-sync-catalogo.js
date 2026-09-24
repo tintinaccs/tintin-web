@@ -2,6 +2,7 @@ import {
   decodeFirestoreFields,
   encodeFirestoreFields,
   firestoreAdminCommit,
+  firestoreAdminBatchGet,
   firestoreAdminGet,
   firestoreAdminListAll,
   firestoreAdminMerge,
@@ -43,6 +44,7 @@ function decoded(document) {
 // (camino manual preexistente) sigue llamando los imports directamente.
 const REAL_QUEUE_DEPS = {
   firestoreAdminGet,
+  firestoreAdminBatchGet,
   firestoreAdminCommit,
   firestoreAdminListAll,
   firestoreAdminMerge,
@@ -259,6 +261,35 @@ async function fetchProductPayloadItem(env, id, deps = REAL_QUEUE_DEPS) {
   };
 }
 
+async function fetchProductPayloadItems(env, ids, deps = REAL_QUEUE_DEPS) {
+  const productIds = unique(ids);
+  if (!productIds.length) return [];
+  if (typeof deps.firestoreAdminBatchGet !== 'function') {
+    return Promise.all(productIds.map(id => fetchProductPayloadItem(env, id, deps)));
+  }
+
+  const paths = productIds.flatMap(id => {
+    const safeId = encodeURIComponent(id);
+    return [`products/${safeId}`, `productInventory/${safeId}`];
+  });
+  const documents = await deps.firestoreAdminBatchGet(env, paths);
+  const byPath = new Map(documents.map(document => [
+    String(document?.name || '').split('/documents/').pop(),
+    document,
+  ]));
+  return productIds.map(id => {
+    const safeId = encodeURIComponent(id);
+    const productDoc = byPath.get(`products/${safeId}`) || null;
+    const inventoryDoc = byPath.get(`productInventory/${safeId}`) || null;
+    return {
+      id,
+      exists: Boolean(productDoc),
+      product: productDoc ? decodeFirestoreFields(productDoc.fields || {}) : null,
+      inventory: inventoryDoc ? decodeFirestoreFields(inventoryDoc.fields || {}) : null,
+    };
+  });
+}
+
 async function syncProductsPayloadOnce(env, productIds, deps = REAL_QUEUE_DEPS) {
   const ids = unique(productIds);
   if (!ids.length) return { ok: true, batches: 0 };
@@ -267,7 +298,7 @@ async function syncProductsPayloadOnce(env, productIds, deps = REAL_QUEUE_DEPS) 
   let batches = 0;
   for (let i = 0; i < ids.length; i += PRODUCT_SYNC_CHUNK) {
     const chunk = ids.slice(i, i + PRODUCT_SYNC_CHUNK);
-    const items = await Promise.all(chunk.map(id => fetchProductPayloadItem(env, id, deps)));
+    const items = await fetchProductPayloadItems(env, chunk, deps);
     const response = await deps.fetchImpl(APPS_SCRIPT_SYNC_URL, {
       method: 'POST',
       redirect: 'follow',

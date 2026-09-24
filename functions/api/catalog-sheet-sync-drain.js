@@ -47,7 +47,10 @@ export async function onRequestPost(context) {
   }
 
   try {
-    const result = await drainCatalogSheetSyncQueueScheduled(env, { limit: 25 });
+    // Una invocación procesa una sola tarea: junto con batchGet mantiene el
+    // drenaje muy por debajo de las 50 subrequests del plan gratuito.
+    // El scheduler cada 15 minutos continúa la cola sin perder reintentos.
+    const result = await drainCatalogSheetSyncQueueScheduled(env, { limit: 1 });
     const payload = {
       ok: true,
       checked: Number(result?.checked || 0),

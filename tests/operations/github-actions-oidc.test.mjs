@@ -139,5 +139,5 @@ test('el scheduler de Sheets usa OIDC y no duplica la cuenta de servicio Firebas
   const routeConfig = JSON.parse(routes);
   assert.ok(routeConfig.include.includes('/api/catalog-sheet-sync-drain'));
   assert.match(endpoint, /verifyGitHubActionsOidc/);
-  assert.match(endpoint, /drainCatalogSheetSyncQueueScheduled/);
+  assert.match(endpoint, /drainCatalogSheetSyncQueueScheduled\(env, \{ limit: 1 \}\)/);
 });
