@@ -1,4 +1,4 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
+import { auth, db, ensureAppCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-private-gate-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
 import {
   collection,
@@ -1605,6 +1605,10 @@ async function runDiagnostics() {
     return;
   }
   try {
+    if (!await ensureAppCheckReady({ timeoutMs: 15000 })) {
+      setStatus('No se pudo verificar App Check. No se abrirán lecturas privadas hasta recuperar la verificación.');
+      return;
+    }
     await prepareDiagnostics();
   } catch (error) {
     setStatus(`La prueba no pudo completarse: ${error.message}.`);
