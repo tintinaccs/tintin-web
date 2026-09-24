@@ -11,6 +11,10 @@ const sessionCoordinatorSource = fs.readFileSync(
   new URL('../../js/core/auth/coordinador-sesion.js', import.meta.url),
   'utf8'
 );
+const firebaseSource = fs.readFileSync(
+  new URL('../../js/core/firebase/firebase.js', import.meta.url),
+  'utf8'
+);
 
 test('null transitorio durante cold restore nunca se publica como logout', () => {
   const machine = createSessionStateMachine();
@@ -32,6 +36,11 @@ test('la restauración nunca convierte un observer obsoleto en sesión válida',
   assert.match(sessionCoordinatorSource, /const recoveredUser = auth\.currentUser \|\| null;/);
   assert.doesNotMatch(sessionCoordinatorSource, /initialObserver(User|Seen)/);
   assert.doesNotMatch(sessionCoordinatorSource, /auth-observer-after-error/);
+});
+
+test('Firebase Auth initializes persistence before restoration', () => {
+  assert.match(firebaseSource, /initializeAuth\(app, \{ persistence: browserLocalPersistence \}\)/);
+  assert.match(firebaseSource, /persistenceWasConfiguredAtInitialization/);
 });
 
 test('un error de restauración cae a visitante y no bloquea la aplicación', () => {
