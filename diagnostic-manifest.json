@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "9e9e9b1fb5e788a195c1aec744c5693b4b4ad8010d26a567cdac1b85ed0f69c4",
+  "sourceFingerprint": "6ebb7667da03753aab8b2da21a26f798fb6147641c97b3a245450bfe6f51f3a8",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 877,
     "textFiles": 836,
-    "totalBytes": 17119761,
+    "totalBytes": 17119785,
     "pages": 19,
     "modules": 601
   },
@@ -2112,8 +2112,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 196448,
-      "sha256": "862c6d3f1836f1c8d4d31399f714429dcb0f9339f95b763456a0957181f55978",
+      "bytes": 196472,
+      "sha256": "ffab72699403186d1f6d230a6dc333835ae79120c4903075737c4c706281f8f4",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2197,7 +2197,7 @@
           "line": 2255
         },
         {
-          "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20260924-topbar-appcheck-2",
+          "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20260924-topbar-appcheck-notifications-auto-read-2",
           "target": "js/admin/notifications/notificaciones-admin.js",
           "line": 2256
         },
@@ -2471,7 +2471,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20260924-topbar-appcheck-2",
+          "raw": "js/admin/notifications/notificaciones-admin.js?v=tintin-20260924-topbar-appcheck-notifications-auto-read-2",
           "target": "js/admin/notifications/notificaciones-admin.js",
           "line": 2256,
           "exists": true
@@ -34315,8 +34315,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 196448,
-      "sha256": "862c6d3f1836f1c8d4d31399f714429dcb0f9339f95b763456a0957181f55978"
+      "bytes": 196472,
+      "sha256": "ffab72699403186d1f6d230a6dc333835ae79120c4903075737c4c706281f8f4"
     },
     {
       "path": "apple-touch-icon.png",
