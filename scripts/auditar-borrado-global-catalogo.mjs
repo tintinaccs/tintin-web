@@ -38,7 +38,7 @@ expect(domain.includes("runProductIdQuery(env, 'reviewLikeProducts'"), 'La purga
 expect(domain.includes("type: 'review'") && domain.includes("productId: ''") && domain.includes("productName: ''"), 'Las reseñas de Sheets no se anonimizan al purgar producto.');
 expect(domain.includes("type: 'like'") && domain.includes("operation: 'delete'"), 'Los likes de Sheets no se eliminan al purgar producto.');
 expect(domain.includes('syncEngagementBatchToSheets(env, events)'), 'Las filas sociales deben sincronizarse en un único lote para no agotar subrequests.');
-expect(domain.includes('finalizeProductsSheet(env, idToken, ids, actor)'), 'Falta sincronización canónica server-side hacia la hoja Productos.');
+expect(domain.includes('syncDeletedProductsPayloadWithRetry(env, ids, { attempts: 2 })'), 'Falta sincronización por tombstones server-side hacia la hoja Productos después del borrado.');
 expect(appsScript.includes('if (!productResult.ok)') && appsScript.includes('sheet.deleteRow(rowNumber)'), 'Apps Script Productos no elimina la fila cuando el producto ya no existe.');
 expect(engagement.includes("event.operation === 'delete'") && engagement.includes('likes.deleteRow(row)'), 'Apps Script social no soporta borrado de likes.');
 expect(domain.includes("preservedHistory: ['orders', 'auditLog']"), 'La política de preservación histórica no está explícita.');
@@ -47,17 +47,17 @@ expect(!domain.includes("deletePaths.add(`auditLog/"), 'La purga no debe borrar 
 expect(domain.includes("['unassign', 'reassign', 'delete'].includes(productMode)") && domain.includes("productMode === 'delete'") && domain.includes("productMode === 'reassign'"), 'Colecciones no cubre eliminar/reasignar/desasignar productos.');
 expect(domain.includes("mergeFields: ['category', 'collection', 'updatedAt']"), 'La eliminación de colección no limpia ambas referencias category/collection.');
 
-// Garantías de resiliencia entre sistemas: no hay transacción distribuida real
-// entre Firestore y Google Sheets, así que se exige preflight antes del delete,
-// reintentos posteriores y una cola persistente para no esconder un fallo.
-expect(api.includes('preflightProductsSheet(env, affectedProductIds)'), 'La API no hace preflight real de Google Sheets antes del borrado.');
-expect(api.indexOf('await preflightProductsSheet(env, affectedProductIds);') < api.indexOf('const result = await runCatalogAction(action, env, body, scope, false'), 'El preflight de Sheets debe ocurrir antes de la destrucción real.');
+// Firestore es canónico; una falla de preflight no cancela el borrado,
+// pero debe registrarse y poder recuperarse por el cierre/reintento persistente.
+expect(api.includes('preflightProductsSheet(env, affectedProductIds)'), 'La API debe sondear Sheets antes de una purga autorizada.');
+expect(api.includes('applyCatalogPreflightOutcome(result, preflightError)'), 'El resultado final debe resolver un preflight transitorio de Sheets.');
 expect(api.includes('retryPendingCatalogSheets(env, idToken)'), 'La API no reconcilia tareas pendientes de Sheets.');
-expect(resilience.includes('syncProductsPayloadWithRetry(env, [ids[0]]'), 'El preflight no usa el payload autenticado server-side de Google Sheets.');
+expect(resilience.includes('syncProductsPayloadWithRetry(env, [ids[0]]'), 'La utilidad conserva el payload autenticado server-side de Google Sheets.');
 expect(resilience.includes('const MAX_ATTEMPTS = 4'), 'La resiliencia no conserva cuatro intentos de cierre.');
 expect(resilience.includes("const QUEUE_COLLECTION = 'catalogSheetSyncQueue'"), 'Falta cola persistente de reconciliación de catálogo.');
 expect(resilience.includes("status: 'pending'"), 'La cola de Sheets no registra estado pendiente explícito.');
-expect(resilience.includes('syncProductsPayloadWithRetry(env, [ids[0]], { attempts: 2 })'), 'El preflight no prueba el Apps Script real con un producto canónico.');
+expect(resilience.includes('export async function queueCatalogSheetSync'), 'La ruta de borrado no puede guardar fallos en la cola persistente.');
+expect(resilience.includes('export async function syncDeletedProductsPayloadWithRetry'), 'La purga no transmite tombstones sin releer productos borrados.');
 expect(resilience.includes('syncProductsWithRetry(idToken, ids, { attempts: MAX_ATTEMPTS })'), 'El cierre no reintenta la sincronización completa.');
 expect(resilience.includes('firestoreAdminListAll(env, QUEUE_COLLECTION, MAX_PENDING)'), 'Las reconciliaciones pendientes no se vuelven a leer para su cierre.');
 expect(resilience.includes('const PRODUCT_SYNC_CHUNK = 20'), 'La cola no limita cada trabajo a un lote apto para Workers Free.');

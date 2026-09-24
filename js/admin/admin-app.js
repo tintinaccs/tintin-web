@@ -1,8 +1,9 @@
-import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-20260924-app-check-retry-1-app-check-retry-cascade-1";
+import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1-app-check-retry-1";
+import { waitForAdminAppCheck } from "./auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1";
 import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { AUTH_STATES, subscribeSession, markExplicitLogout, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3-app-check-retry-cascade-1";
+import { AUTH_STATES, subscribeSession, markExplicitLogout, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-session-never-unknown-3";
 import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
@@ -31,7 +32,7 @@ import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?
 import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260901-media-orphan-scan-3-auth-persistence-20260919-1-app-check-retry-cascade-1";
 import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260916-cache-bump-diagnostico-sitio-1-auth-persistence-20260919-1";
 import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260923-flow-evidence-2";
-import "./pages/paginas-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1";
+import "./pages/paginas-admin.js?v=tintin-20260924-realtime-teardown-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
@@ -930,6 +931,36 @@ function showAdminInitFailure() {
   hideOverlay();
 }
 
+function dismissAdminAppCheckUnavailable() {
+  document.getElementById('adm-appcheck-unavailable')?.remove();
+}
+
+function showAdminAppCheckUnavailable() {
+  document.documentElement.classList.remove('adm-auth-ready');
+  let overlay = document.getElementById('adm-appcheck-unavailable');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'adm-appcheck-unavailable';
+    overlay.setAttribute('role', 'status');
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#44222d';
+    overlay.innerHTML = '<div style="max-width:580px;text-align:center">' +
+      '<h1 style="font-size:22px;margin:0 0 10px">Verificación de seguridad no disponible</h1>' +
+      '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">Tu sesión sigue activa. Firebase App Check no pudo confirmar este navegador todavía, así que el panel no abrirá lecturas privadas hasta que la verificación esté disponible.</p>' +
+      '<button type="button" id="adm-appcheck-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#ad3f67;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    overlay.querySelector('#adm-appcheck-retry')?.addEventListener('click', () => window.location.reload());
+  }
+  hideOverlay();
+}
+
+window.addEventListener('tintin:app-check-ready', event => {
+  if (event?.detail?.ready !== true || !document.getElementById('adm-appcheck-unavailable')) return;
+  // El token llegó después del timeout de arranque. Una única recarga ya parte
+  // con App Check listo y evita montar listeners con credenciales incompletas.
+  window.location.reload();
+});
+
 function showAdminAuthUnknown() {
   document.documentElement.classList.remove('adm-auth-ready');
   let overlay = document.getElementById('adm-auth-unknown');
@@ -969,6 +1000,26 @@ async function recoverAdminUserFromHandoff() {
   return null;
 }
 
+// Sin esto, los listeners en tiempo real ya arrancados (pedidos, usuarios,
+// auditoría, configuración, email, dashboard) seguían corriendo cuando la
+// sesión pasaba a UNKNOWN o a "sin usuario" de verdad, y cada uno chocaba
+// por separado contra Firestore con "Missing or insufficient permissions"
+// apenas el token dejaba de ser válido. pagehide no alcanza: ese evento sólo
+// cubre cerrar la pestaña, no una sesión que se invalida mientras sigue abierta.
+function teardownAdminRealtimeOnSessionLoss() {
+  stopAdminRealtimeData();
+  stopAdminSettingsRealtime();
+  stopDashboardActivityMetrics();
+  if (_productosUnsub) { try { _productosUnsub(); } catch {} _productosUnsub = null; }
+  if (_productInventoryUnsub) { try { _productInventoryUnsub(); } catch {} _productInventoryUnsub = null; }
+  if (_productosSlowTimer) { window.clearTimeout(_productosSlowTimer); _productosSlowTimer = null; }
+  adminRealtimeReady.products = false;
+  document.documentElement.classList.remove('adm-auth-ready');
+  adminGuardInitializedUid = '';
+  adminGuardInitializingUid = '';
+  currentUser = null;
+}
+
 async function startAdminAuthGuard() {
   subscribeSession(async snapshot => {
     if (snapshot.status !== AUTH_STATES.RESTORING && !authReadyDiagnosticRecorded) {
@@ -994,6 +1045,7 @@ async function startAdminAuthGuard() {
       // UNKNOWN no confirma una cuenta y tampoco autoriza navegar a login.
       // Mantener el documento evita el circuito Admin -> login -> Admin.
       recordAuthDiagnostic('REDIRECT_LOOP_BROKEN', { source: 'admin-guard', reason: 'auth-state-unknown' });
+      teardownAdminRealtimeOnSessionLoss();
       showAdminAuthUnknown();
       return;
     }
@@ -1010,6 +1062,7 @@ async function startAdminAuthGuard() {
       // La ausencia no confirmada se resuelve con acción explícita desde el
       // overlay, nunca con otra navegación automática.
       recordAuthDiagnostic('REDIRECT_LOOP_BROKEN', { source: 'admin-guard', reason: 'handoff-recovery-timeout' });
+      teardownAdminRealtimeOnSessionLoss();
       showAdminAuthUnknown();
       return;
     }
@@ -1041,7 +1094,23 @@ async function startAdminAuthGuard() {
     adminGuardInitializingUid = user.uid;
 
     try {
-      await appCheckReady;
+      const appCheckAvailable = await waitForAdminAppCheck(12000);
+      if (!appCheckAvailable) {
+        // No abrir ninguna consulta privada sin App Check cuando Enforcement
+        // está activo. Esto conserva Auth y evita la cascada de
+        // permission-denied que antes parecía un logout.
+        currentUser = user;
+        teardownAdminRealtimeOnSessionLoss();
+        currentUser = user;
+        showAdminAppCheckUnavailable();
+        recordAuthDiagnostic('APP_CHECK_ADMIN_BLOCKED', {
+          source: 'admin-guard',
+          authState: snapshot.status,
+          reason: 'app-check-token-unavailable'
+        });
+        return;
+      }
+      dismissAdminAppCheckUnavailable();
 
       const role = await getUserRole(user.uid, user.email);
       currentRole = role;

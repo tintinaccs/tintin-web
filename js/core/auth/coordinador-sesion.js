@@ -5,7 +5,7 @@ import {
   authPersistenceReady,
   getAuthPersistenceBackend,
   inspectAuthPersistenceStorage
-} from '../firebase/firebase.js?v=tintin-20260924-app-check-retry-1-app-check-retry-cascade-1';
+} from '../firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1-app-check-retry-1';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { AUTH_STATES, createSessionStateMachine } from './estado-sesion.mjs?v=tintin-20260921-auth-session-never-unknown-4';
 import { recordAuthDiagnostic } from './diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1';
@@ -56,19 +56,12 @@ function publish(snapshot) {
 function start() {
   if (started) return;
   started = true;
-  let initialObserverSeen = false;
-  let initialObserverUser = null;
   let initialSettled = false;
 
-  // Firebase puede emitir null antes de terminar IndexedDB. Se observa desde
-  // el principio, pero se publica sólo cuando authStateReady resolvió.
+  // Firebase puede emitir valores durante el arranque, pero la autoridad de
+  // la restauración inicial es auth.currentUser después de authStateReady().
   onAuthStateChanged(auth, user => {
     if (!initialSettled) {
-      initialObserverSeen = true;
-      // Conservar el último valor observado evita convertir un null histórico
-      // en la decisión final si Firebase publicó luego una identidad antes de
-      // que authStateReady() terminara.
-      initialObserverUser = user || null;
       return;
     }
     if (user) {
@@ -106,9 +99,10 @@ function start() {
   authReady.then(() => {
     initialSettled = true;
     // authStateReady() es la frontera autoritativa de la restauración inicial.
-    // Al resolver, currentUser tiene prioridad sobre cualquier null temprano
-    // que haya emitido el observer durante la lectura de IndexedDB.
-    const restoredUser = auth.currentUser || (initialObserverSeen ? initialObserverUser : null);
+    // No se puede usar un valor previo del observer como respaldo: puede ser
+    // una identidad que Firebase ya descartó. Hacerlo iniciaría Firestore sin
+    // token de Auth y lo convertiría en falsos permission-denied.
+    const restoredUser = auth.currentUser || null;
     const source = auth.currentUser ? 'auth-current-user' : 'auth-state-ready-empty';
     recordAuthDiagnostic('PERSISTENCE_BACKEND', {
       source: 'session-coordinator',
@@ -151,14 +145,14 @@ function start() {
     }
   }).catch(error => {
     initialSettled = true;
-    const recoveredUser = auth.currentUser || (initialObserverSeen ? initialObserverUser : null);
+    const recoveredUser = auth.currentUser || null;
     if (recoveredUser) {
       recordAuthDiagnostic('RESTORE_AUTHENTICATED', {
         source: 'session-coordinator',
         authState: AUTH_STATES.AUTHENTICATED,
         reason: 'AUTH_RESTORE_ERROR_WITH_USER'
       });
-      publish(machine.restorationResolved(recoveredUser, 'auth-observer-after-error'));
+      publish(machine.restorationResolved(recoveredUser, 'auth-current-user-after-error'));
     } else {
       publish(machine.authError(error));
     }

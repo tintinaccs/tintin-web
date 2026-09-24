@@ -1,5 +1,5 @@
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260924-app-check-retry-1-app-check-retry-cascade-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3-app-check-retry-cascade-1';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1-app-check-retry-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-session-never-unknown-3';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 import {
   BASE_ADMIN_SECTIONS,

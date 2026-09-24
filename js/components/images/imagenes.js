@@ -6,7 +6,7 @@
    collections/{slug}.image; esos dos sistemas ya no se duplican acá.
    ============================================================ */
 
-import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-app-check-retry-1-app-check-retry-cascade-1';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1-app-check-retry-1';
 import {
   doc,
   getDoc,

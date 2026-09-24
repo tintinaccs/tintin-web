@@ -9,7 +9,7 @@
 // Functions) — Firebase Auth solo entra al final, para firmar la sesión real
 // con el Custom Token que devuelve la verificación.
 // =============================================================
-import { auth, db, authPersistenceReady } from "../core/firebase/firebase.js?v=tintin-20260924-app-check-retry-1-app-check-retry-cascade-1";
+import { auth, db, authPersistenceReady } from "../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1-app-check-retry-1";
 import {
   signInWithCustomToken
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";

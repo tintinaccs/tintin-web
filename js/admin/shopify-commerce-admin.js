@@ -11,8 +11,9 @@
    vistas, filtros, selección, panel lateral, búsqueda y navegación rápida.
    ======================================================================== */
 
-import { auth, db, appCheckReady } from '../core/firebase/firebase.js?v=tintin-20260924-app-check-retry-1-app-check-retry-cascade-1';
-import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3-app-check-retry-cascade-1';
+import { auth, db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1-app-check-retry-1';
+import { waitForAdminAppCheck } from './auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1';
+import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-session-never-unknown-3';
 import {
   collection,
   getDocs,
@@ -27,7 +28,7 @@ import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tin
 import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-app-check-retry-cascade-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
-const VERSION = 'tintin-20260923-admin-page-size-30-2';
+const VERSION = 'tintin-20260924-products-description-1';
 const CSS_HREF = `css/admin/shopify-commerce-admin.css?v=${VERSION}`;
 const ADMIN_PAGE_SIZE = 30;
 const MAX_BULK_SELECTION = 30;
@@ -773,7 +774,7 @@ function productDrawer(product) {
     body: `
       <div class="tt-commerce-drawer-section" style="display:flex;gap:12px;align-items:center">${thumbHtml(productImage(product), product.name || 'Producto')}<div><span class="tt-commerce-badge ${status.cls}">${status.label}</span><div style="margin-top:7px;font-size:16px;font-weight:780">${formatMoney(product.price)}</div></div></div>
       <div class="tt-commerce-drawer-section"><h4>Información</h4><dl class="tt-commerce-kv">${kvRow('Colección', collectionItem?.name || product.category || 'Sin colección')}${kvRow('Stock', product.stock == null ? 'Sin control' : String(product.stock))}${kvRow('Variantes', variants ? String(variants) : 'Sin variantes')}${kvRow('Oferta', product.oferta ? 'Sí' : 'No')}${kvRow('Destacado', product.destacado ? 'Sí' : 'No')}</dl></div>
-      ${product.description ? `<div class="tt-commerce-drawer-section"><h4>Descripción</h4><div style="font-size:11px;line-height:1.6;color:var(--tt-commerce-muted)">${esc(product.description)}</div></div>` : ''}
+      <div class="tt-commerce-drawer-section"><h4>Descripción</h4><div class="tt-commerce-description">${product.description ? esc(product.description) : '<span class="tt-commerce-subtext">Este producto todavía no tiene descripción.</span>'}</div></div>
     `,
     actions: `
       ${perm('productos', 'editar', 'editProducts') ? button('Editar', 'drawer-product-edit', { primary: true, extra: `data-id="${esc(product._docId)}"` }) : ''}
@@ -1329,7 +1330,7 @@ async function bootForUser(user) {
   state.ready = true;
   mountShells();
   observeLegacyForms();
-  if (!await appCheckReady) return;
+  if (!await waitForAdminAppCheck(12000)) return;
   subscribeData();
 }
 
@@ -1348,10 +1349,19 @@ function boot() {
   });
 
   subscribeAuthState(user => {
-    if (user && !user.isAnonymous) bootForUser(user).catch(error => {
-      console.error('[shopify-commerce] No se pudo iniciar:', error);
-      toast('No se pudo iniciar la vista avanzada de comercio.', 5200);
-    });
+    if (user && !user.isAnonymous) {
+      bootForUser(user).catch(error => {
+        console.error('[shopify-commerce] No se pudo iniciar:', error);
+        toast('No se pudo iniciar la vista avanzada de comercio.', 5200);
+      });
+      return;
+    }
+    // Sin esto, los listeners de products/collections/orders/orderTrash
+    // seguían corriendo tras una pérdida real de sesión y cada uno chocaba
+    // por separado con "Missing or insufficient permissions" en Firestore.
+    state.unsubscribers.forEach(unsub => { try { unsub(); } catch {} });
+    state.unsubscribers = [];
+    if (state.trashUnsubscribe) { try { state.trashUnsubscribe(); } catch {} state.trashUnsubscribe = null; }
   });
 }
 

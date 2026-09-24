@@ -1,1 +1,1 @@
-import './gestion-participacion-admin-v2.js?v=tintin-20260923-review-purge-1';
+import './gestion-participacion-admin-v2.js?v=tintin-20260924-appcheck-gate-2';

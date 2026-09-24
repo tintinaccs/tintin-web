@@ -1,4 +1,4 @@
-import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260924-app-check-retry-1-app-check-retry-cascade-1';
+import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1-app-check-retry-1';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { readStaleCached, recordFirestoreRead, writeCached } from '../firebase/cache-lecturas-firestore.js?v=tintin-20260720-read-budget-1';
 

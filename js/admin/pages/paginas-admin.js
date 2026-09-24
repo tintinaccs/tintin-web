@@ -1,5 +1,5 @@
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-app-check-retry-1-app-check-retry-cascade-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3-app-check-retry-cascade-1';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1-app-check-retry-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-session-never-unknown-3';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 import { collection, doc, onSnapshot, setDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
@@ -115,5 +115,14 @@ async function subscribe() {
   unsubscribe = onSnapshot(collection(db, 'site_content'), snapshot => { customPages = snapshot.docs.map(item => ({ id:item.id, ...item.data() })).filter(page => page.pageType === 'custom').sort((a,b) => String(a.title || '').localeCompare(String(b.title || ''), 'es')); pages = [...BUILTIN_PAGES, ...customPages]; ready = true; render(); }, error => { ready = false; pages = [...BUILTIN_PAGES]; const host = root(); if (host) { render(); host.insertAdjacentHTML('afterbegin', `<div class="tt-pages-error is-visible">No se pudieron cargar las páginas personalizadas: ${esc(error?.message || error)}</div>`); } });
 }
 
+function teardown() {
+  if (unsubscribe) { try { unsubscribe(); } catch {} unsubscribe = null; }
+}
+
 window.TintinPagesAdminRefresh = () => { if (canUse()) { subscribe(); render(); } };
-subscribeAuthState(user => { if (isSuperAdmin(user)) { subscribe(); render(); } });
+subscribeAuthState(user => {
+  if (isSuperAdmin(user)) { subscribe(); render(); return; }
+  // Sin esto, el listener de site_content seguía corriendo tras una pérdida
+  // real de sesión y chocaba con "Missing or insufficient permissions".
+  teardown();
+});
