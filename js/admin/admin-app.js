@@ -1,4 +1,5 @@
-import { auth, db, waitForAppCheckToken } from "../core/firebase/firebase-admin-estable.js?v=tintin-20260924-admin-auth-stable-1";
+import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1";
+import { waitForAdminAppCheck } from "./auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1";
 import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -1093,7 +1094,7 @@ async function startAdminAuthGuard() {
     adminGuardInitializingUid = user.uid;
 
     try {
-      const appCheckAvailable = await waitForAppCheckToken(12000);
+      const appCheckAvailable = await waitForAdminAppCheck(12000);
       if (!appCheckAvailable) {
         // No abrir ninguna consulta privada sin App Check cuando Enforcement
         // está activo. Esto conserva Auth y evita la cascada de
