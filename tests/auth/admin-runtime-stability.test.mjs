@@ -10,6 +10,13 @@ const admin = read('js/admin/admin-app.js');
 const welcome = read('js/admin/content/control-bienvenida-admin.js');
 const engagement = read('js/admin/participacion/gestion-participacion-admin-v2.js');
 const notifications = read('js/admin/notifications/notificaciones-admin.js');
+const commerce = read('js/admin/shopify-commerce-admin.js');
+const colorSettings = read('js/admin/settings/esquema-color-admin.js');
+const storeSettings = read('js/admin/settings/control-tienda-admin.js');
+const paymentSettings = read('js/admin/settings/metodos-pago-admin.js');
+const contentAdmin = read('js/admin/content/gestion-contenido-admin.js');
+const emailSync = read('js/admin/settings/sincronizacion-correo-admin.js');
+const flowConnections = read('js/admin/flujo-conexiones/flujo-conexiones-admin.js');
 const html = read('admin.html');
 const css = read('css/admin/admin.css');
 
@@ -34,6 +41,11 @@ test('Admin no abre Firestore privado hasta confirmar App Check', () => {
   assert.match(welcome, /if \(!await waitForAdminAppCheck\(12000\)\)/);
   assert.match(engagement, /if \(!await waitForAdminAppCheck\(12000\)\) return/);
   assert.equal((notifications.match(/await waitForAdminAppCheck\(12000\)/g) || []).length, 2);
+
+  for (const source of [commerce, colorSettings, storeSettings, paymentSettings, contentAdmin, emailSync, flowConnections]) {
+    assert.match(source, /waitForAdminAppCheck\(12000\)/);
+    assert.doesNotMatch(source, /\bappCheckReady\b/);
+  }
 });
 
 test('App Check lento o caído no se interpreta como logout', () => {
