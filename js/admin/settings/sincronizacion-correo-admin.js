@@ -1,4 +1,5 @@
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1';
 import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
 import { apiUrl } from '../../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1';
@@ -320,7 +321,7 @@ if (!window.TintinAdminEmailGateSyncBooted) {
 
   async function start() {
     if (unsubPrivate || unsubPublic) return;
-    if (!await appCheckReady) return;
+    if (!await waitForAdminAppCheck(12000)) return;
 
     unsubPrivate = onSnapshot(
       PRIVATE_REF,
