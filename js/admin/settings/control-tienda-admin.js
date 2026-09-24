@@ -410,6 +410,6 @@ boot();
 
 // El mismo panel ya está protegido para Super Admin. Desde acá se carga el
 // sincronizador del documento público mínimo de correos.
-import('./sincronizacion-correo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1').catch(error => {
+import('./sincronizacion-correo-admin.js?v=tintin-20260924-appcheck-gate-2').catch(error => {
   console.error('[admin-store-control] No se pudo iniciar la sincronización de correos:', error);
 });
