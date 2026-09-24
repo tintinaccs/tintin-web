@@ -25,10 +25,11 @@ for (const required of ['@media(max-width:1050px)', '@media(max-width:600px)', '
   }
 }
 
-const fixture = `<!doctype html><html><head><meta charset="utf-8"><style>
-*{box-sizing:border-box}html,body{margin:0;max-width:100%;overflow-x:hidden}body{font-family:Montserrat;background:#faf8f9;color:#2b2b2b}.adm-content{width:100%;padding:24px;--adm-muted:#786d72;--adm-border:#eadde2}.adm-btn{min-height:42px;border:1px solid #ded2d7;background:#fff;border-radius:12px;padding:9px 13px;font:inherit}.adm-btn-primary{background:#AD3F67;color:#fff}.adm-input{min-height:42px;width:100%;border:1px solid #ded2d7;border-radius:10px;padding:8px 10px}
+const fixture = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+*{box-sizing:border-box}html,body{margin:0;max-width:100%;overflow-x:hidden}body{font-family:Montserrat;background:#faf8f9;color:#2b2b2b}.adm-sidebar{position:fixed;left:0;top:0;width:260px;height:100vh;overflow:visible}.adm-sidebar-logo{position:relative;padding:24px 24px 22px}.adm-sidebar-toggle{position:absolute;right:12px;top:12px;display:grid;place-items:center;width:42px;min-width:42px;height:42px;min-height:42px}.adm-sidebar-logo-text{font-size:17px}.adm-content{width:100%;padding:24px;--adm-muted:#786d72;--adm-border:#eadde2}.adm-btn{min-height:42px;border:1px solid #ded2d7;background:#fff;border-radius:12px;padding:9px 13px;font:inherit}.adm-btn-primary{background:#AD3F67;color:#fff}.adm-input{min-height:42px;width:100%;border:1px solid #ded2d7;border-radius:10px;padding:8px 10px}
 ${maestroCss}
-</style></head><body><main class="adm-content"><section id="section-maestro" class="adm-section active"><div class="tt-maestro-shell">
+.adm-sidebar-toggle{display:none}@media(min-width:541px){.adm-sidebar-toggle{display:grid}}
+</style></head><body><aside class="adm-sidebar"><div class="adm-sidebar-logo"><button class="adm-sidebar-toggle" type="button" aria-label="Contraer barra lateral">⇤</button><div class="adm-sidebar-logo-text">Tintin</div></div></aside><main class="adm-content"><section id="section-maestro" class="adm-section active"><div class="tt-maestro-shell">
 <div class="tt-maestro-hero"><div class="tt-maestro-eyebrow">Super Admin · Control integral</div><h1>Maestro Tintin</h1><p>Centro maestro para gobernar módulos, CRUD, permisos, sincronización y estado general.</p><div class="tt-maestro-actions"><button class="adm-btn adm-btn-primary">Ejecutar comprobación</button><button class="adm-btn">Nuevo pedido</button><button class="adm-btn">Nuevo producto</button><button class="adm-btn">Nueva colección</button></div></div>
 <div class="tt-maestro-kpis"><div class="tt-maestro-kpi"><span>Módulos</span><strong>20</strong><small>Cobertura total</small></div><div class="tt-maestro-kpi"><span>Salud</span><strong>100%</strong><small>Contratos activos</small></div><div class="tt-maestro-kpi"><span>CRUD</span><strong>OK</strong><small>Política segura</small></div><div class="tt-maestro-kpi"><span>Sync</span><strong>Full</strong><small>Admin ↔ Público</small></div></div>
 <div class="tt-maestro-grid"><article class="tt-maestro-card"><div class="tt-maestro-card-head"><h2>Matriz de gobierno</h2><input class="adm-input tt-maestro-search" placeholder="Buscar módulo"></div><div class="tt-maestro-table-wrap"><table class="tt-maestro-table"><thead><tr><th>Módulo</th><th>C</th><th>R</th><th>U</th><th>Arch.</th><th>D</th><th>Buscar</th><th>Exportar</th><th>Sync</th><th>Auditar</th><th>Permisos</th></tr></thead><tbody>${Array.from({length:8},(_,i)=>`<tr><td><div class="tt-maestro-module-name">Módulo ${i+1} con nombre administrable</div><div class="tt-maestro-module-policy">Política segura y conectada</div></td>${Array.from({length:10},()=>'<td><span class="tt-maestro-cap yes">Sí</span></td>').join('')}</tr>`).join('')}</tbody></table></div></article><aside class="tt-maestro-card"><div class="tt-maestro-card-head"><h2>Salud de conexiones</h2></div><div class="tt-maestro-card-body"><div class="tt-maestro-health">${Array.from({length:6},(_,i)=>`<div class="tt-maestro-check" data-ok="true"><div class="tt-maestro-check-icon">✓</div><div><strong>Conexión ${i+1}</strong><small>Interconexión operativa verificada.</small></div></div>`).join('')}</div></div></aside></div>
@@ -39,6 +40,7 @@ const viewports = [
   { name: 'laptop', width: 1366, height: 768, kpis: 4, grid: 2 },
   { name: 'tablet', width: 768, height: 1024, kpis: 2, grid: 1 },
   { name: 'mobile', width: 390, height: 844, kpis: 1, grid: 1 },
+  { name: 'small-mobile', width: 320, height: 700, kpis: 1, grid: 1 },
 ];
 
 function columnCount(value) {
@@ -60,6 +62,10 @@ try {
       const head = getComputedStyle(document.querySelector('.tt-maestro-card-head')).flexDirection;
       const tableWrap = document.querySelector('.tt-maestro-table-wrap');
       const actions = document.querySelector('.tt-maestro-actions');
+      const sidebarToggle = document.querySelector('.adm-sidebar-toggle');
+      const sidebarLogo = document.querySelector('.adm-sidebar-logo');
+      const toggleRect = sidebarToggle.getBoundingClientRect();
+      const logoRect = sidebarLogo.getBoundingClientRect();
       const buttons = [...actions.querySelectorAll('.adm-btn')].map(button => button.getBoundingClientRect().width);
       return {
         docWidth: document.documentElement.scrollWidth,
@@ -72,6 +78,9 @@ try {
         tableOverflowX: getComputedStyle(tableWrap).overflowX,
         tableClientWidth: tableWrap.clientWidth,
         tableScrollWidth: tableWrap.scrollWidth,
+        sidebarButtonVisible: getComputedStyle(sidebarToggle).display !== 'none',
+        sidebarButton: {left: toggleRect.left, top: toggleRect.top, right: toggleRect.right, bottom: toggleRect.bottom, width: toggleRect.width, height: toggleRect.height},
+        sidebarLogo: {left: logoRect.left, top: logoRect.top, right: logoRect.right, bottom: logoRect.bottom},
       };
     });
     const kpiCount = columnCount(state.kpis);
@@ -85,6 +94,11 @@ try {
     if (viewport.width <= 600) {
       if (state.head !== 'column') issues.push(`cabecera mobile no apila: ${state.head}`);
       if (state.buttons.some(width => width < state.actionsWidth * 0.92)) issues.push('acciones mobile no ocupan el ancho disponible');
+      if (state.sidebarButtonVisible) issues.push('control de colapso visible en mobile sobre la marca del sidebar');
+    } else {
+      if (!state.sidebarButtonVisible) issues.push('botón de colapso oculto en desktop/tablet');
+      if (state.sidebarButton.width < 40 || state.sidebarButton.height < 40) issues.push(`área táctil insuficiente: ${state.sidebarButton.width}x${state.sidebarButton.height}`);
+      if (state.sidebarButton.left < state.sidebarLogo.left || state.sidebarButton.right > state.sidebarLogo.right || state.sidebarButton.top < state.sidebarLogo.top || state.sidebarButton.bottom > state.sidebarLogo.bottom) issues.push('botón de colapso fuera del encabezado lateral');
     }
     const result = { viewport, state, issues, ok: issues.length === 0 };
     results.push(result);
@@ -100,4 +114,4 @@ fs.writeFileSync(path.join(artifactDir, 'superadmin-maestro-responsive.json'), J
 
 for (const result of results) console.log(`${result.ok ? 'OK' : 'FAIL'} — Maestro ${result.viewport.name} ${result.viewport.width}x${result.viewport.height}${result.issues.length ? ` · ${result.issues.join('; ')}` : ''}`);
 if (failures.length) process.exit(1);
-console.log('\nResponsive Maestro: CORRECTO · Desktop + Tablet + Mobile sin overflow global y con matriz segura.');
+console.log(`\nResponsive Maestro: CORRECTO · ${results.length} tamaños sin overflow global y matriz segura.`);

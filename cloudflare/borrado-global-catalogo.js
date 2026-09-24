@@ -8,7 +8,7 @@ import {
   parseServiceAccount,
 } from './firebase-admin-ligero.js';
 import { syncEngagementBatchToSheets } from './sincronizacion-participacion-sheets.js';
-import { finalizeProductsSheet } from './resiliencia-sync-catalogo.js';
+import { queueCatalogSheetSync, syncDeletedProductsPayloadWithRetry } from './resiliencia-sync-catalogo.js';
 
 const FIRESTORE_SCOPE = 'https://www.googleapis.com/auth/datastore';
 const MAX_PRODUCTS = 5000;
@@ -96,7 +96,16 @@ async function collectSocialReferences(env, productIds) {
 async function syncProductsToSheets(env, idToken, productIds, actor) {
   const ids = unique(productIds);
   if (!ids.length) return { ok: true, batches: 0 };
-  const result = await finalizeProductsSheet(env, idToken, ids, actor);
+  // La colección canónica ya está borrada: el Apps Script necesita recibir
+  // tombstones (exists:false), no volver a leer los documentos desaparecidos.
+  // El payload server-side además evita depender de una sesión admin en Sheets.
+  let result;
+  try {
+    result = await syncDeletedProductsPayloadWithRetry(env, ids, { attempts: 2 });
+  } catch (error) {
+    const queued = await queueCatalogSheetSync(env, ids, error, actor);
+    return { ok: false, queued: true, queueIds: queued, error: clean(error?.message || error) };
+  }
   if (!result.ok) throw new Error(result.error || 'La sincronización de Productos quedó en cola para reintento.');
   return result;
 }

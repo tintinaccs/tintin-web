@@ -4,8 +4,8 @@
     "sha256": "57766f334dd8a160efc73f8b5585de884c0649a76561be7a6745711a82fd29d5"
   },
   "css/admin/admin.css": {
-    "version": "tintin-20260923-auth-preview-and-sidebar-1",
-    "sha256": "0f445a4eee3badc4bc2070fd06ad4ba0d3f445a0919be5e9f14c5aaba8806242"
+    "version": "tintin-20260924-admin-shell-final-1",
+    "sha256": "e0f5fd102af77e3bddd870da95132848bad65b314094a76b38ef40284b9c1eb3"
   },
   "css/admin/diagnostico-maestro.css": {
     "version": "tintin-20260817-master-diagnostics-3",
@@ -229,7 +229,7 @@
   },
   "js/admin/admin-app.js": {
     "version": "tintin-20260924-auth-diagnostic-persistence-1",
-    "sha256": "68fe5cf2a50a16ff9a12963dc46659910c39ced407ad9ccdb7f2cd3eba973e18"
+    "sha256": "b2e00c228cc6748d798cd2c32ca05980f3c96545c9bfb78c5c596802106c5e63"
   },
   "js/admin/appearance/editor-visual-admin.js": {
     "version": "tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
@@ -250,6 +250,14 @@
   "js/admin/appearance/workspace-splitters.js": {
     "version": "tintin-20260813-apariencia-splitters-1",
     "sha256": "482f5dbc943a2aba11a1926e54670a155c3a7db732b5f2f385def7829e18ebfd"
+  },
+  "js/admin/auth/app-check-admin.js": {
+    "version": "tintin-20260924-admin-appcheck-gate-1",
+    "sha256": "1d217dbccdc6874286fa4d85172257143e215c25a235fb1f8fc915d5961b30cd"
+  },
+  "js/admin/content/control-bienvenida-admin.js": {
+    "version": "tintin-20260924-appcheck-gate-2",
+    "sha256": "4d3ec72d0d33c041177ebe695f31f879e4061bbfcc163747ff87faf998679ed6"
   },
   "js/admin/diagnostics/diagnostico-maestro-admin.js": {
     "version": "tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
@@ -292,8 +300,8 @@
     "sha256": "fdb83fb5b8505ed43cc257f8b83e103971b3e799ca259f9441c7957bc6b9a03c"
   },
   "js/admin/notifications/notificaciones-admin.js": {
-    "version": "tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
-    "sha256": "94fda25012ce8270d7a98be3c2dc51b01c0589a2e8db89eb602bb9f34692417f"
+    "version": "tintin-20260924-topbar-appcheck-notifications-auto-read-2",
+    "sha256": "c891897b22147cd016ad97b73a469a3a61ec9eeae0565d32f0ed17e6f86949e3"
   },
   "js/admin/notifications/notificaciones-push-maestro.js": {
     "version": "tintin-20260923-push-broadcast-all-1",
@@ -312,20 +320,20 @@
     "sha256": "ab2e6a0227963fe71c7d63b666b82d452b665c5cc88610df11d5a3bfb1a81618"
   },
   "js/admin/participacion/gestion-participacion-admin-v2.js": {
-    "version": "tintin-20260924-realtime-teardown-1",
-    "sha256": "5a989c1aa16281f3e74705ac7e139ec7f2ebca64fa5e7d9666345a302f3b9315"
+    "version": "tintin-20260924-appcheck-gate-2",
+    "sha256": "b6b73f8d36616d35245eb32d996cf16b47bf1e10d851a2e04eb19938472852f3"
   },
   "js/admin/participacion/gestion-participacion-admin.js": {
-    "version": "tintin-20260924-realtime-teardown-1",
-    "sha256": "cbf7de191414590367a1d9b2bdc461e97dbace2fabdec76796f3cea760aefe5a"
+    "version": "tintin-20260924-appcheck-gate-2",
+    "sha256": "ac487da69e1b7aee147f16f8eb4462656d920b3816a1f44d6421fe6ce79ee317"
   },
   "js/admin/products/biblioteca-multimedia-admin.js": {
     "version": "tintin-20260901-media-orphan-scan-3-auth-persistence-20260919-1",
     "sha256": "8421a9177df8f81473a8b8eedd8ea98db19c35e339c3d2af3a1c5688811fb302"
   },
   "js/admin/products/borrado-global-catalogo-admin.js": {
-    "version": "tintin-20260923-admin-page-size-30-2",
-    "sha256": "a2235e5707348e477af6be18a3997c44a4990eca216b8096ce4b43d93bf371db"
+    "version": "tintin-20260924-catalog-delete-flow-1",
+    "sha256": "2a079ff61559bb6644dac05d2ea5a11ce4077bb00631f406458eed3b6a0d38d3"
   },
   "js/admin/products/integridad-inventario-admin.js": {
     "version": "tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
@@ -356,8 +364,8 @@
     "sha256": "b872cb0c4ca40709f9c1f704aeff9726b87b0e8833dadf71a94716247149397b"
   },
   "js/admin/shopify-commerce-admin.js": {
-    "version": "tintin-20260924-realtime-teardown-1",
-    "sha256": "35d23538510844b1c80e5a8479a202004f3cc6d15f88ebe7f3866f0aeba1caa2"
+    "version": "tintin-20260924-products-description-1",
+    "sha256": "39b5bb91e7d8b8eaf5ec6c2724a14320834169fa7165b0110bb6d7750b700121"
   },
   "js/admin/sidebar-expandible-admin.js": {
     "version": "tintin-20260923-sidebar-recovery-1",
