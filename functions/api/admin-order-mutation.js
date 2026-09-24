@@ -6,7 +6,7 @@ import {
   requireOrderStaff,
   statusFromError,
 } from '../../cloudflare/seguridad-cloudinary.js';
-import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
+import { applyOrderAdminMutation, createOrderAdmin, resetOrderSequenceAdmin } from '../../cloudflare/order-admin-domain.js';
 import { syncOrderToSheetsBestEffort } from '../../cloudflare/order-sheets-sync.js';
 import { syncOrderOwnerStats } from '../../cloudflare/sincronizacion-estadisticas-pedido.js';
 
@@ -49,6 +49,10 @@ export async function onRequest(context) {
       role: 'superadmin',
       origin: 'superadmin',
     };
+    if (body.action === 'resetOrderSequence') {
+      const result = await resetOrderSequenceAdmin(env, actorContext);
+      return jsonResponse({ ok: true, result, sheetsSync: { ok: true, deferred: true, note: 'El próximo pedido se creará con la secuencia canónica y se sincronizará a Sheets.' } }, 200, origin, requestUrl);
+    }
     const result = body.action === 'createOrder'
       ? await createOrderAdmin(env, body, actorContext)
       : await applyOrderAdminMutation(env, body, actorContext);

@@ -442,12 +442,20 @@
 }
 
 .tt-commerce-pagination {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-}
-.tt-commerce-pageindicator {
+  justify-content: flex-end;
+  gap: 8px;
+  margin-left: auto;
   white-space: nowrap;
+}
+.tt-commerce-pagination .tt-commerce-btn { margin-left: 0; }
+.tt-commerce-pagination > span {
+  min-width: 92px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tt-commerce-text);
 }
 
 /* Menú contextual */

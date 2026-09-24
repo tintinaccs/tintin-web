@@ -1,7 +1,7 @@
 import {
   jsonResponse, originIsAllowed, preflightResponse, requireSuperAdmin, statusFromError,
 } from '../../cloudflare/seguridad-cloudinary.js';
-import { adminDeleteLike, adminLikeAction, adminReviewAction } from '../../cloudflare/participacion-admin.js';
+import { adminDeleteLike, adminDeleteReviewPermanently, adminLikeAction, adminReviewAction } from '../../cloudflare/participacion-admin.js';
 import { syncEngagementToSheets } from '../../cloudflare/sincronizacion-participacion-sheets.js';
 import { listCommentReports, updateCommentReport } from '../../cloudflare/comentarios-sociales.js';
 
@@ -40,6 +40,14 @@ export async function onRequest(context) {
       const record = await adminDeleteLike(env, actor, input.likeId);
       context.waitUntil?.(syncEngagementToSheets(env, actor.idToken, {
         type: 'like', operation: 'trash', record,
+      }));
+      return jsonResponse({ ok: true, record }, 200, origin, request.url);
+    }
+
+    if (input.action === 'reviewPurge') {
+      const record = await adminDeleteReviewPermanently(env, actor, input.reviewId);
+      context.waitUntil?.(syncEngagementToSheets(env, actor.idToken, {
+        type: 'review', operation: 'trash', record,
       }));
       return jsonResponse({ ok: true, record }, 200, origin, request.url);
     }

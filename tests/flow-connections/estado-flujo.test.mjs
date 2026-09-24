@@ -138,6 +138,43 @@ test('CI y Cloudflare del commit actual promueven las evidencias de integración
   }
 });
 
+test('CI del commit actual verifica los flujos de acceso que antes quedaban amarillos', () => {
+  const currentEvidence = {
+    commit: '1212c8a8d7d98dd8db30356c97539a4a8d857971',
+    checks: { repositoryAudit: { state: 'PASS' } },
+  };
+  const live = buildLiveChecks({ currentEvidence }, '2026-09-23T00:00:00.000Z');
+  for (const id of ['google-btn', 'login-codigo', 'redirect-result', 'ultimos-datos']) {
+    const node = NODES.find(item => item.id === id);
+    assert.equal(live[id].evidenceLevel, EVIDENCIA.CI_VERIFIED);
+    assert.equal(resolveState(node, live[id], ESTADOS), ESTADOS.PROD, `${id} debe quedar verde con el audit del commit`);
+  }
+  const edges = buildLiveEdges({ currentEvidence }, '2026-09-23T00:00:00.000Z');
+  for (const edge of EDGES.filter(item => [
+    'google-btn', 'login-codigo', 'redirect-result', 'ultimos-datos',
+  ].includes(item.from) || ['google-btn', 'login-codigo', 'redirect-result', 'ultimos-datos'].includes(item.to))) {
+    assert.equal(resolveState(edge, edges[edge.id], ESTADOS), ESTADOS.PROD, `${edge.id} debe quedar verde con el audit del commit`);
+  }
+});
+
+test('servicios externos solo quedan verdes si Resend, Cloudinary y PayPal están configurados', () => {
+  const complete = {
+    status: 200,
+    body: { report: { integrations: {
+      resend: true,
+      cloudinary: true,
+      paypal: { configured: true, enabled: true },
+    } } },
+  };
+  const live = buildLiveChecks({ systemHealth: complete }, '2026-09-23T00:00:00.000Z');
+  assert.equal(resolveState(NODES.find(item => item.id === 'servicios-externos'), live['servicios-externos'], ESTADOS), ESTADOS.PROD);
+  const disabled = buildLiveChecks({ systemHealth: {
+    status: 200,
+    body: { report: { integrations: { resend: true, cloudinary: true, paypal: { configured: false, enabled: false } } } },
+  } }, '2026-09-23T00:00:00.000Z');
+  assert.notEqual(resolveState(NODES.find(item => item.id === 'servicios-externos'), disabled['servicios-externos'], ESTADOS), ESTADOS.PROD);
+});
+
 test('lecturas autenticadas verifican favoritos, notificaciones y Rules sin mutarlas', () => {
   const protectedProbes = {
     favoriteApi: { ok: true, status: 200 },

@@ -15,6 +15,7 @@ import { cleanText, sanitizeError } from '../../cloudflare/nucleo-push.js';
 import {
   listAdminDevices,
   listRecentEvents,
+  dispatchAdminBroadcast,
   readPushSettings,
   revokeAllDevices,
   revokeDeviceByDocumentId,
@@ -22,13 +23,13 @@ import {
 } from '../../cloudflare/servicio-push.js';
 
 const MAX_BODY_BYTES = 4000;
-const ALLOWED_ACTIONS = ['list', 'revoke', 'revoke-all', 'save-settings'];
+const ALLOWED_ACTIONS = ['list', 'revoke', 'revoke-all', 'save-settings', 'broadcast'];
 
 function parseBody(raw) {
   if (raw.length > MAX_BODY_BYTES) throw new Error('Solicitud demasiado grande.');
   const body = raw ? JSON.parse(raw) : {};
   if (!body || typeof body !== 'object' || Array.isArray(body)) throw new Error('Solicitud inválida.');
-  if (Object.keys(body).some(key => !['action', 'deviceId', 'enabled', 'foregroundSound', 'foregroundSoundUrl', 'foregroundSoundOrder', 'foregroundSoundOrderUrl', 'foregroundSoundReview', 'foregroundSoundReviewUrl', 'foregroundSoundLike', 'foregroundSoundLikeUrl'].includes(key))) {
+  if (Object.keys(body).some(key => !['action', 'deviceId', 'enabled', 'foregroundSound', 'foregroundSoundUrl', 'foregroundSoundOrder', 'foregroundSoundOrderUrl', 'foregroundSoundReview', 'foregroundSoundReviewUrl', 'foregroundSoundLike', 'foregroundSoundLikeUrl', 'title', 'body'].includes(key))) {
     throw new Error('La solicitud tiene campos no permitidos.');
   }
   return body;
@@ -58,6 +59,13 @@ export async function onRequest(context) {
     if (action === 'revoke-all') {
       const result = await revokeAllDevices(env);
       return jsonResponse({ success: true, ...result }, 200, origin, requestUrl);
+    }
+    if (action === 'broadcast') {
+      const title = cleanText(body.title, 90);
+      const message = cleanText(body.body, 220);
+      if (!title || !message) throw new Error('El mensaje necesita título y contenido.');
+      const result = await dispatchAdminBroadcast(env, { title, body: message, updatedBy: user.email });
+      return jsonResponse({ success: result.ok, ...result }, result.ok ? 200 : 502, origin, requestUrl);
     }
     const settings = await savePushSettings(env, {
       enabled: body.enabled !== false,

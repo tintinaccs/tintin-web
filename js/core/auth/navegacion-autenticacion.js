@@ -10,6 +10,11 @@ import { sanitizeImageUrl } from '../../components/images/utilidades-imagenes.js
 import { readAccountIdentity } from '../../pages/profile/estado-canonico-perfil.mjs';
 
 const IS_LOGIN_PAGE = /(^|\/)login(?:\.html)?\/?$/i.test(window.location.pathname || '');
+// La vista previa embebida es sólo visual: no debe suscribirse a Auth ni leer
+// perfiles. Así no agrega listeners de Firestore ni disputa la persistencia de
+// la pestaña administrativa que la contiene.
+const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get('ttVisualPreview') === '1'
+  && window.parent !== window;
 let silentLogoutStarted = false;
 let authRenderGeneration = 0;
 let authReadyDiagnosticRecorded = false;
@@ -17,8 +22,8 @@ let coordinatorReadyDiagnosticRecorded = false;
 const PROFILE_READ_TIMEOUT_MS = 5000;
 const initialAuthHandoff = readAuthHandoff();
 
-if (!IS_LOGIN_PAGE) document.documentElement.classList.add('tt-auth-restoring');
-if (!IS_LOGIN_PAGE) recordAuthDiagnostic('AUTH_RESTORE_START', { source: 'public-auth-navigation' });
+if (!IS_LOGIN_PAGE && !IS_VISUAL_PREVIEW_FRAME) document.documentElement.classList.add('tt-auth-restoring');
+if (!IS_LOGIN_PAGE && !IS_VISUAL_PREVIEW_FRAME) recordAuthDiagnostic('AUTH_RESTORE_START', { source: 'public-auth-navigation' });
 
 function escapeHtmlNav(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
 function loginHrefForCurrentLocation(){
@@ -145,7 +150,7 @@ window.addEventListener('tintin:login-failed',endSilentAuthTransition);
 // una lectura lenta de rol/perfil de una sesión anterior pise un logout o un
 // cambio de cuenta más reciente.
 subscribeSession(async snapshot=>{
- if(IS_LOGIN_PAGE)return;
+ if(IS_LOGIN_PAGE||IS_VISUAL_PREVIEW_FRAME)return;
  if(snapshot.status!==AUTH_STATES.RESTORING&&!authReadyDiagnosticRecorded){
   authReadyDiagnosticRecorded=true;
   recordAuthDiagnostic('AUTH_STATE_READY',{source:'public-auth-navigation',authState:snapshot.status,reason:snapshot.reason||'coordinator-resolution'});

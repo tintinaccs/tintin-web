@@ -27,10 +27,11 @@ import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tin
 import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-app-check-retry-cascade-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
-const VERSION = 'tintin-20260923-products-pagination-1';
+const VERSION = 'tintin-20260923-admin-page-size-30-2';
 const CSS_HREF = `css/admin/shopify-commerce-admin.css?v=${VERSION}`;
-const ORDER_PAGE_SIZE = 50;
-const PRODUCTS_PAGE_SIZE = 30;
+const ADMIN_PAGE_SIZE = 30;
+const MAX_BULK_SELECTION = 30;
+const ORDER_PAGE_SIZE = ADMIN_PAGE_SIZE;
 
 const ORDER_STATUS_LABELS = {
   pendiente: 'Pendiente',
@@ -71,7 +72,6 @@ const state = {
   ordersLoadingMore: false,
   ordersError: '',
   productTab: 'all',
-  productsPage: 1,
   collectionTab: 'all',
   orderTab: 'all',
   productSearch: '',
@@ -85,6 +85,9 @@ const state = {
   orderStatus: '',
   orderPay: '',
   orderSort: 'date-desc',
+  productPage: 0,
+  collectionPage: 0,
+  orderPage: 0,
   productSelected: new Set(),
   collectionSelected: new Set(),
   orderSelected: new Set(),
@@ -302,14 +305,6 @@ function filteredProducts() {
   return list;
 }
 
-function paginate(list, page, pageSize) {
-  const total = list.length;
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  const clampedPage = Math.min(Math.max(1, Number(page) || 1), totalPages);
-  const start = (clampedPage - 1) * pageSize;
-  return { pageItems: list.slice(start, start + pageSize), page: clampedPage, totalPages, total };
-}
-
 function filteredCollections() {
   let list = [...state.collections];
   const q = normalizeText(state.collectionSearch);
@@ -367,15 +362,62 @@ function tabButton(module, key, label, count, activeKey) {
   return `<button type="button" class="tt-commerce-tab${activeKey === key ? ' active' : ''}" data-tab-module="${module}" data-tab="${key}">${esc(label)}<span class="n">${count}</span></button>`;
 }
 
+function pageSlice(list, page) {
+  const total = list.length;
+  const pages = Math.max(1, Math.ceil(total / ADMIN_PAGE_SIZE));
+  const safePage = Math.min(Math.max(0, Number(page) || 0), pages - 1);
+  return {
+    items: list.slice(safePage * ADMIN_PAGE_SIZE, (safePage + 1) * ADMIN_PAGE_SIZE),
+    page: safePage,
+    pages,
+    total,
+  };
+}
+
+function pageControls(actionPrefix, page, pages, { hasMore = false, loading = false } = {}) {
+  const canNext = page < pages - 1 || hasMore;
+  if (pages <= 1 && !hasMore) return '';
+  return `<div class="tt-commerce-pagination" aria-label="Paginación">
+    <button type="button" class="tt-commerce-btn" data-action="${actionPrefix}-prev" ${page <= 0 ? 'disabled' : ''}>Anterior</button>
+    <span>Página ${page + 1}${hasMore && page >= pages - 1 ? '+' : ` de ${pages}`}</span>
+    <button type="button" class="tt-commerce-btn" data-action="${actionPrefix}-next" ${!canNext || loading ? 'disabled' : ''}>${loading ? 'Cargando…' : 'Siguiente'}</button>
+  </div>`;
+}
+
+function addToLimitedSelection(set, id, checked) {
+  if (!checked) {
+    set.delete(id);
+    return true;
+  }
+  if (set.has(id)) return true;
+  if (set.size >= MAX_BULK_SELECTION) {
+    toast(`Solo se pueden seleccionar ${MAX_BULK_SELECTION} elementos por vez.`);
+    return false;
+  }
+  set.add(id);
+  return true;
+}
+
+function selectPageOnly(set, ids, checked) {
+  if (!checked) {
+    ids.forEach(id => set.delete(id));
+    return;
+  }
+  const missing = ids.filter(id => !set.has(id));
+  const available = Math.max(0, MAX_BULK_SELECTION - set.size);
+  missing.slice(0, available).forEach(id => set.add(id));
+  if (missing.length > available) toast(`La selección está limitada a ${MAX_BULK_SELECTION} elementos.`);
+}
+
 function renderProducts() {
   const root = document.getElementById('tt-commerce-products');
   if (!root) return;
   const counts = productTabCounts();
-  const filtered = filteredProducts();
-  const { pageItems: list, page, totalPages } = paginate(filtered, state.productsPage, PRODUCTS_PAGE_SIZE);
-  state.productsPage = page;
-  const selectedVisible = list.filter(p => state.productSelected.has(p._docId)).length;
-  const allVisibleSelected = list.length > 0 && selectedVisible === list.length;
+  const list = filteredProducts();
+  const page = pageSlice(list, state.productPage);
+  state.productPage = page.page;
+  const selectedVisible = page.items.filter(p => state.productSelected.has(p._docId)).length;
+  const allVisibleSelected = page.items.length > 0 && selectedVisible === page.items.length;
   const canCreate = perm('productos', 'crear', 'addProducts');
   const canEdit = perm('productos', 'editar', 'editProducts');
   const canToggle = perm('productos', 'activarDesactivar', 'editProducts');
@@ -433,14 +475,14 @@ function renderProducts() {
         ${canExport ? button('Exportar selección', 'products-export-selected') : ''}
         ${button('Limpiar', 'products-clear-selection')}
       </div>
-      ${!state.productsReady ? '<div class="tt-commerce-loading">Cargando productos…</div>' : list.length ? `
+      ${!state.productsReady ? '<div class="tt-commerce-loading">Cargando productos…</div>' : page.items.length ? `
       <div class="tt-commerce-tablewrap">
         <table class="tt-commerce-table">
           <thead><tr>
             <th class="checkcol"><input type="checkbox" data-check-all="products" ${allVisibleSelected ? 'checked' : ''} aria-label="Seleccionar todos los productos visibles"></th>
             <th>Producto</th><th>Estado</th><th>Inventario</th><th>Precio</th><th>Colección</th><th></th>
           </tr></thead>
-          <tbody>${list.map(product => {
+          <tbody>${page.items.map(product => {
             const status = productStatus(product);
             const stock = product.stock == null ? 'Sin límite' : Number(product.stock);
             const stockCls = product.stock == null ? 'ok' : Number(product.stock) <= 0 ? 'out' : Number(product.stock) <= 5 ? 'low' : 'ok';
@@ -458,14 +500,7 @@ function renderProducts() {
           }).join('')}</tbody>
         </table>
       </div>` : '<div class="tt-commerce-empty">No hay productos que coincidan con esta vista.</div>'}
-      <div class="tt-commerce-footer">
-        <span>Mostrando ${list.length} de ${filtered.length} producto${filtered.length === 1 ? '' : 's'}${filtered.length !== state.products.length ? ` (catálogo total: ${state.products.length})` : ''}</span>
-        ${totalPages > 1 ? `<div class="tt-commerce-pagination">
-          ${button('‹ Anterior', 'products-page-prev', { disabled: page <= 1 })}
-          <span class="tt-commerce-pageindicator">Página ${page} de ${totalPages}</span>
-          ${button('Siguiente ›', 'products-page-next', { disabled: page >= totalPages })}
-        </div>` : '<span>Los cambios se sincronizan automáticamente.</span>'}
-      </div>
+      <div class="tt-commerce-footer"><span>Mostrando ${page.page * ADMIN_PAGE_SIZE + 1}–${page.page * ADMIN_PAGE_SIZE + page.items.length} de ${page.total} productos</span><span>Los cambios se sincronizan automáticamente.</span>${pageControls('products-page', page.page, page.pages)}</div>
     </div>`;
 }
 
@@ -474,8 +509,10 @@ function renderCollections() {
   if (!root) return;
   const counts = collectionTabCounts();
   const list = filteredCollections();
-  const selectedVisible = list.filter(c => state.collectionSelected.has(c.slug)).length;
-  const allVisibleSelected = list.length > 0 && selectedVisible === list.length;
+  const page = pageSlice(list, state.collectionPage);
+  state.collectionPage = page.page;
+  const selectedVisible = page.items.filter(c => state.collectionSelected.has(c.slug)).length;
+  const allVisibleSelected = page.items.length > 0 && selectedVisible === page.items.length;
   const canCreate = perm('colecciones', 'crear', 'manageContent');
   const canEdit = perm('colecciones', 'editar', 'manageContent');
   const canToggle = perm('colecciones', 'activarDesactivar', 'manageContent');
@@ -515,11 +552,11 @@ function renderCollections() {
         ${button('Exportar selección', 'collections-export-selected')}
         ${button('Limpiar', 'collections-clear-selection')}
       </div>
-      ${!state.collectionsReady ? '<div class="tt-commerce-loading">Cargando colecciones…</div>' : list.length ? `
+      ${!state.collectionsReady ? '<div class="tt-commerce-loading">Cargando colecciones…</div>' : page.items.length ? `
       <div class="tt-commerce-tablewrap">
         <table class="tt-commerce-table">
           <thead><tr><th class="checkcol"><input type="checkbox" data-check-all="collections" ${allVisibleSelected ? 'checked' : ''}></th><th>Colección</th><th>Visibilidad</th><th>Productos</th><th>Orden</th><th></th></tr></thead>
-          <tbody>${list.map(collectionItem => {
+          <tbody>${page.items.map(collectionItem => {
             const count = collectionProductCount(collectionItem.slug);
             const selected = state.collectionSelected.has(collectionItem.slug);
             return `<tr data-open="collection" data-id="${esc(collectionItem.slug)}" class="${selected ? 'is-selected' : ''}">
@@ -533,7 +570,7 @@ function renderCollections() {
           }).join('')}</tbody>
         </table>
       </div>` : '<div class="tt-commerce-empty">No hay colecciones que coincidan con esta vista.</div>'}
-      <div class="tt-commerce-footer"><span>Mostrando ${list.length} de ${state.collections.length} colecciones</span><span>El orden y la visibilidad impactan la tienda pública.</span></div>
+      <div class="tt-commerce-footer"><span>Mostrando ${page.page * ADMIN_PAGE_SIZE + 1}–${page.page * ADMIN_PAGE_SIZE + page.items.length} de ${page.total} colecciones</span><span>El orden y la visibilidad impactan la tienda pública.</span>${pageControls('collections-page', page.page, page.pages)}</div>
     </div>`;
 }
 
@@ -555,14 +592,16 @@ function renderOrders() {
   const counts = orderTabCounts(), list = filteredOrders(), showingTrash = state.orderTab === 'deleted';
   const metrics = orderMetrics();
   const sourceTotal = showingTrash ? state.trashOrders.length : state.orders.length;
-  const selectedVisible = showingTrash ? 0 : list.filter(o => state.orderSelected.has(o.id)).length;
-  const allVisibleSelected = !showingTrash && list.length > 0 && selectedVisible === list.length;
+  const page = pageSlice(list, state.orderPage);
+  state.orderPage = page.page;
+  const selectedVisible = showingTrash ? 0 : page.items.filter(o => state.orderSelected.has(o.id)).length;
+  const allVisibleSelected = !showingTrash && page.items.length > 0 && selectedVisible === page.items.length;
   const canBulk = !showingTrash && perm('pedidos', 'accionesMasivas', 'manageOrders');
   const canExport = perm('pedidos', 'exportar', 'manageOrders') || state.role === 'viewer';
   const canUpdate = !showingTrash && perm('pedidos', 'cambiarEstado', 'manageOrders');
   const canUpdatePay = !showingTrash && perm('pedidos', 'cambiarPago', 'manageOrders');
   const isSuper = state.role === 'superadmin';
-  const tableRows = list.map(order => {
+  const tableRows = page.items.map(order => {
     const customer = orderCustomer(order);
     const shipping = orderShipping(order);
     const status = orderStatus(order);
@@ -593,16 +632,16 @@ function renderOrders() {
       ? '<div class="tt-commerce-loading">Cargando pedidos…</div>'
       : state.ordersError && !list.length
         ? `<div class="tt-commerce-error" role="alert">${esc(state.ordersError)} <button type="button" class="tt-commerce-btn" data-action="orders-retry">Reintentar</button></div>`
-        : list.length
+        : page.items.length
           ? `<div class="tt-commerce-tablewrap"><table class="tt-commerce-table tt-commerce-orders-table"><thead><tr><th class="checkcol">${showingTrash ? '' : `<input type="checkbox" data-check-all="orders" ${allVisibleSelected ? 'checked' : ''}>`}</th><th>Pedido</th><th>Fecha</th><th>Cliente</th><th>Canal</th><th>Pago</th><th>Preparación</th><th>Artículos</th><th>Entrega</th><th>Total</th><th></th></tr></thead><tbody>${tableRows}</tbody></table></div>`
           : `<div class="tt-commerce-empty">${showingTrash ? 'No hay pedidos en Borrados.' : 'No hay pedidos para estos filtros.'}</div>`;
   const canLoadMore = !showingTrash && state.ordersHasMore && !state.ordersError;
-  const pagination = canLoadMore ? button(state.ordersLoadingMore ? 'Cargando…' : 'Cargar más pedidos', 'orders-load-more', { disabled: state.ordersLoadingMore }) : '';
-  const loadedHint = !showingTrash && state.ordersHasMore ? 'La vista está paginada para no descargar toda la colección.' : '';
+  const pagination = !showingTrash ? pageControls('orders-page', page.page, page.pages, { hasMore: canLoadMore, loading: state.ordersLoadingMore }) : '';
+  const loadedHint = !showingTrash && (state.ordersHasMore || page.pages > 1) ? 'La vista está paginada en bloques de 30.' : '';
   root.innerHTML = `
     <div class="tt-commerce-pagehead"><div class="tt-commerce-titlegroup"><h1 class="tt-commerce-title">Pedidos <span class="tt-commerce-count">${sourceTotal}</span></h1><div class="tt-commerce-subtitle">${showingTrash ? 'Pedidos retirados de la lista activa. Podés restaurarlos o eliminarlos definitivamente.' : 'Pago, preparación, entrega y datos del pedido en una sola vista.'}</div></div><div class="tt-commerce-actions">${isSuper ? button('Reiniciar TINPED', 'orders-reset-sequence') + button('+ Nuevo pedido', 'orders-manual-new', { primary: true }) : ''}${canExport ? button('Exportar', 'orders-export') : ''}</div></div>
     ${!showingTrash ? `<div class="tt-commerce-order-metrics" aria-label="Resumen del grupo cargado de pedidos"><div><strong>${metrics.today}</strong><span>Pedidos hoy</span></div><div><strong>${formatMoney(metrics.revenue)}</strong><span>Ventas de hoy</span></div><div><strong>${metrics.pending}</strong><span>Pagos pendientes</span></div><div><strong>${metrics.unfulfilled}</strong><span>Sin preparar</span></div><div><strong>${metrics.delivered}</strong><span>Entregados</span></div><div><strong>${metrics.items}</strong><span>Artículos hoy</span></div></div>` : ''}
-    <div class="tt-commerce-card"><div class="tt-commerce-tabs">${tabButton('orders', 'all', 'Todos', counts.all, state.orderTab)}${tabButton('orders', 'unpaid', 'Sin pagar', counts.unpaid, state.orderTab)}${tabButton('orders', 'unfulfilled', 'Sin entregar', counts.unfulfilled, state.orderTab)}${tabButton('orders', 'delivered', 'Entregados', counts.delivered, state.orderTab)}${tabButton('orders', 'canceled', 'Cancelados', counts.canceled, state.orderTab)}${tabButton('orders', 'refunded', 'Reembolsados', counts.refunded, state.orderTab)}${isSuper ? tabButton('orders', 'deleted', 'Borrados', counts.deleted, state.orderTab) : ''}</div><div class="tt-commerce-toolbar"><label class="tt-commerce-search"><input class="tt-commerce-input" data-filter="order-search" type="search" value="${esc(state.orderSearch)}" placeholder="TINPED, cliente, email o producto"></label><select class="tt-commerce-select" data-filter="order-status"><option value="">Todos los estados</option>${ORDER_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderStatus === v ? 'selected' : ''}>${esc(ORDER_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-pay"><option value="">Todos los pagos</option>${PAY_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderPay === v ? 'selected' : ''}>${esc(PAY_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-sort"><option value="date-desc" ${state.orderSort === 'date-desc' ? 'selected' : ''}>Más recientes</option><option value="date-asc" ${state.orderSort === 'date-asc' ? 'selected' : ''}>Más antiguos</option></select></div><div class="tt-commerce-bulkbar" ${state.orderSelected.size && canBulk ? '' : 'hidden'}><span class="tt-commerce-bulkcount">${state.orderSelected.size} seleccionado${state.orderSelected.size === 1 ? '' : 's'}</span>${canUpdate ? button('En preparación', 'orders-bulk-preparing') + button('En camino', 'orders-bulk-way') + button('Entregado', 'orders-bulk-delivered') : ''}${canUpdatePay ? button('Marcar pagado', 'orders-bulk-paid') : ''}${canExport ? button('Exportar selección', 'orders-export-selected') : ''}${button('Limpiar', 'orders-clear-selection')}</div>${loading}<div class="tt-commerce-footer"><span>Mostrando ${list.length} de ${sourceTotal} pedidos cargados</span><span>${esc(loadedHint || (showingTrash ? 'Restaurar no reutiliza ni altera el contador TINPED.' : 'El código TINPED es correlativo y no se reutiliza al borrar.'))}</span>${pagination}</div></div>`;
+    <div class="tt-commerce-card"><div class="tt-commerce-tabs">${tabButton('orders', 'all', 'Todos', counts.all, state.orderTab)}${tabButton('orders', 'unpaid', 'Sin pagar', counts.unpaid, state.orderTab)}${tabButton('orders', 'unfulfilled', 'Sin entregar', counts.unfulfilled, state.orderTab)}${tabButton('orders', 'delivered', 'Entregados', counts.delivered, state.orderTab)}${tabButton('orders', 'canceled', 'Cancelados', counts.canceled, state.orderTab)}${tabButton('orders', 'refunded', 'Reembolsados', counts.refunded, state.orderTab)}${isSuper ? tabButton('orders', 'deleted', 'Borrados', counts.deleted, state.orderTab) : ''}</div><div class="tt-commerce-toolbar"><label class="tt-commerce-search"><input class="tt-commerce-input" data-filter="order-search" type="search" value="${esc(state.orderSearch)}" placeholder="TINPED, cliente, email o producto"></label><select class="tt-commerce-select" data-filter="order-status"><option value="">Todos los estados</option>${ORDER_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderStatus === v ? 'selected' : ''}>${esc(ORDER_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-pay"><option value="">Todos los pagos</option>${PAY_STATUS_VALUES.map(v => `<option value="${v}" ${state.orderPay === v ? 'selected' : ''}>${esc(PAY_STATUS_LABELS[v])}</option>`).join('')}</select><select class="tt-commerce-select" data-filter="order-sort"><option value="date-desc" ${state.orderSort === 'date-desc' ? 'selected' : ''}>Más recientes</option><option value="date-asc" ${state.orderSort === 'date-asc' ? 'selected' : ''}>Más antiguos</option></select></div><div class="tt-commerce-bulkbar" ${state.orderSelected.size && canBulk ? '' : 'hidden'}><span class="tt-commerce-bulkcount">${state.orderSelected.size} seleccionado${state.orderSelected.size === 1 ? '' : 's'}</span>${canUpdate ? button('En preparación', 'orders-bulk-preparing') + button('En camino', 'orders-bulk-way') + button('Entregado', 'orders-bulk-delivered') : ''}${canUpdatePay ? button('Marcar pagado', 'orders-bulk-paid') : ''}${canExport ? button('Exportar selección', 'orders-export-selected') : ''}${button('Limpiar', 'orders-clear-selection')}</div>${loading}<div class="tt-commerce-footer"><span>Mostrando ${page.page * ADMIN_PAGE_SIZE + 1}–${page.page * ADMIN_PAGE_SIZE + page.items.length} de ${page.total} pedidos cargados</span><span>${esc(loadedHint || (showingTrash ? 'Restaurar no reutiliza ni altera el contador TINPED.' : 'El código TINPED es correlativo y no se reutiliza al borrar.'))}</span>${pagination}</div></div>`;
 }
 
 function renderAll() {
@@ -874,6 +913,10 @@ function setBusy(value) {
 async function bulkProducts(active) {
   const ids = [...state.productSelected];
   if (!ids.length || state.busy) return;
+  if (ids.length > MAX_BULK_SELECTION) {
+    toast(`Solo se pueden procesar ${MAX_BULK_SELECTION} productos por vez.`);
+    return;
+  }
   setBusy(true);
   try {
     let changed = 0;
@@ -898,6 +941,10 @@ async function bulkProducts(active) {
 async function bulkOrders(kind) {
   const ids = [...state.orderSelected];
   if (!ids.length || state.busy) return;
+  if (ids.length > MAX_BULK_SELECTION) {
+    toast(`Solo se pueden procesar ${MAX_BULK_SELECTION} pedidos por vez.`);
+    return;
+  }
   setBusy(true);
   const isPay = kind === 'pagado';
   try {
@@ -946,21 +993,13 @@ async function handleAction(action, element) {
   if (action === 'products-export') return exportProducts(false);
   if (action === 'products-export-selected') return exportProducts(true);
   if (action === 'products-clear-selection') { state.productSelected.clear(); return renderProducts(); }
+  if (action === 'products-page-prev') { state.productPage = Math.max(0, state.productPage - 1); state.productSelected.clear(); return renderProducts(); }
+  if (action === 'products-page-next') { state.productPage += 1; state.productSelected.clear(); return renderProducts(); }
   if (action === 'products-bulk-activate') return bulkProducts(true);
   if (action === 'products-bulk-deactivate') return bulkProducts(false);
   if (action === 'products-bulk-delete') {
     if (typeof window.bulkDelete !== 'function') return toast('La eliminación masiva todavía no está disponible.');
     return window.bulkDelete([...state.productSelected]);
-  }
-  if (action === 'products-page-prev') {
-    state.productsPage = Math.max(1, state.productsPage - 1);
-    state.productSelected.clear();
-    return renderProducts();
-  }
-  if (action === 'products-page-next') {
-    state.productsPage = state.productsPage + 1;
-    state.productSelected.clear();
-    return renderProducts();
   }
   if (action === 'product-edit' || action === 'drawer-product-edit') { closeDrawer(); return callLegacyAction('prodEditar', id); }
   if (action === 'product-toggle' || action === 'drawer-product-toggle') {
@@ -973,6 +1012,8 @@ async function handleAction(action, element) {
   if (action === 'collection-new') { closeDrawer(); return window.collNueva?.(); }
   if (action === 'collections-export-selected') return exportCollections(true);
   if (action === 'collections-clear-selection') { state.collectionSelected.clear(); return renderCollections(); }
+  if (action === 'collections-page-prev') { state.collectionPage = Math.max(0, state.collectionPage - 1); return renderCollections(); }
+  if (action === 'collections-page-next') { state.collectionPage += 1; return renderCollections(); }
   if (action === 'collection-edit' || action === 'drawer-collection-edit') { closeDrawer(); return window.collEditar?.(id); }
   if (action === 'collection-products' || action === 'drawer-collection-products') { closeDrawer(); return window.collVerProductos?.(id); }
   if (action === 'collection-delete' || action === 'drawer-collection-delete') {
@@ -983,6 +1024,16 @@ async function handleAction(action, element) {
   if (action === 'orders-manual-new') return window.TintinOrderAdmin?.openManualOrder();
   if (action === 'orders-reset-sequence') return window.TintinOrderAdmin?.resetOrderSequence();
   if (action === 'orders-load-more') return loadMoreOrders();
+  if (action === 'orders-page-prev') { state.orderPage = Math.max(0, state.orderPage - 1); return renderOrders(); }
+  if (action === 'orders-page-next') {
+    const loadedPages = Math.max(1, Math.ceil(filteredOrders().length / ADMIN_PAGE_SIZE));
+    if (state.orderPage >= loadedPages - 1 && state.ordersHasMore) {
+      state.orderPage += 1;
+      return loadMoreOrders();
+    }
+    state.orderPage += 1;
+    return renderOrders();
+  }
   if (action === 'orders-retry') return subscribeData();
   if (action === 'order-edit-advanced') { closeDrawer(); return window.TintinOrderAdmin?.openAdvancedOrderEditor(id); }
   if (action === 'order-restore') return window.TintinOrderAdmin?.restoreOrder(id).then(() => toast('Pedido restaurado en estado Cancelado; podés reactivarlo desde CRUD completo.'));
@@ -1028,7 +1079,7 @@ function onClick(event) {
   const tab = event.target.closest('[data-tab-module]');
   if (tab) {
     const module = tab.dataset.tabModule;
-    if (module === 'products') { state.productTab = tab.dataset.tab; state.productSelected.clear(); state.productsPage = 1; renderProducts(); }
+    if (module === 'products') { state.productTab = tab.dataset.tab; state.productSelected.clear(); renderProducts(); }
     if (module === 'collections') { state.collectionTab = tab.dataset.tab; state.collectionSelected.clear(); renderCollections(); }
     if (module === 'orders') {
       state.orderTab = tab.dataset.tab;
@@ -1046,40 +1097,48 @@ function onClick(event) {
 function onChange(event) {
   const target = event.target;
   if (target.matches('[data-select-product]')) {
-    target.checked ? state.productSelected.add(target.dataset.selectProduct) : state.productSelected.delete(target.dataset.selectProduct);
+    const id = target.dataset.selectProduct;
+    addToLimitedSelection(state.productSelected, id, target.checked);
+    target.checked = state.productSelected.has(id);
     return renderProducts();
   }
   if (target.matches('[data-select-collection]')) {
-    target.checked ? state.collectionSelected.add(target.dataset.selectCollection) : state.collectionSelected.delete(target.dataset.selectCollection);
+    const id = target.dataset.selectCollection;
+    addToLimitedSelection(state.collectionSelected, id, target.checked);
+    target.checked = state.collectionSelected.has(id);
     return renderCollections();
   }
   if (target.matches('[data-select-order]')) {
-    target.checked ? state.orderSelected.add(target.dataset.selectOrder) : state.orderSelected.delete(target.dataset.selectOrder);
+    const id = target.dataset.selectOrder;
+    addToLimitedSelection(state.orderSelected, id, target.checked);
+    target.checked = state.orderSelected.has(id);
     return renderOrders();
   }
   if (target.matches('[data-check-all="products"]')) {
-    const { pageItems } = paginate(filteredProducts(), state.productsPage, PRODUCTS_PAGE_SIZE);
-    pageItems.forEach(p => target.checked ? state.productSelected.add(p._docId) : state.productSelected.delete(p._docId));
+    const page = pageSlice(filteredProducts(), state.productPage);
+    selectPageOnly(state.productSelected, page.items.map(p => p._docId), target.checked);
     return renderProducts();
   }
   if (target.matches('[data-check-all="collections"]')) {
-    filteredCollections().forEach(c => target.checked ? state.collectionSelected.add(c.slug) : state.collectionSelected.delete(c.slug));
+    const page = pageSlice(filteredCollections(), state.collectionPage);
+    selectPageOnly(state.collectionSelected, page.items.map(c => c.slug), target.checked);
     return renderCollections();
   }
   if (target.matches('[data-check-all="orders"]')) {
-    filteredOrders().forEach(o => target.checked ? state.orderSelected.add(o.id) : state.orderSelected.delete(o.id));
+    const page = pageSlice(filteredOrders(), state.orderPage);
+    selectPageOnly(state.orderSelected, page.items.map(o => o.id), target.checked);
     return renderOrders();
   }
 
   const filter = target.dataset.filter;
-  if (filter === 'product-category') { state.productCategory = target.value; state.productsPage = 1; return renderProducts(); }
-  if (filter === 'product-stock') { state.productStock = target.value; state.productsPage = 1; return renderProducts(); }
-  if (filter === 'product-sort') { state.productSort = target.value; return renderProducts(); }
-  if (filter === 'collection-visibility') { state.collectionVisibility = target.value; return renderCollections(); }
-  if (filter === 'collection-sort') { state.collectionSort = target.value; return renderCollections(); }
-  if (filter === 'order-status') { state.orderStatus = target.value; return renderOrders(); }
-  if (filter === 'order-pay') { state.orderPay = target.value; return renderOrders(); }
-  if (filter === 'order-sort') { state.orderSort = target.value; return renderOrders(); }
+  if (filter === 'product-category') { state.productCategory = target.value; state.productPage = 0; state.productSelected.clear(); return renderProducts(); }
+  if (filter === 'product-stock') { state.productStock = target.value; state.productPage = 0; state.productSelected.clear(); return renderProducts(); }
+  if (filter === 'product-sort') { state.productSort = target.value; state.productPage = 0; state.productSelected.clear(); return renderProducts(); }
+  if (filter === 'collection-visibility') { state.collectionVisibility = target.value; state.collectionPage = 0; return renderCollections(); }
+  if (filter === 'collection-sort') { state.collectionSort = target.value; state.collectionPage = 0; return renderCollections(); }
+  if (filter === 'order-status') { state.orderStatus = target.value; state.orderPage = 0; return renderOrders(); }
+  if (filter === 'order-pay') { state.orderPay = target.value; state.orderPage = 0; return renderOrders(); }
+  if (filter === 'order-sort') { state.orderSort = target.value; state.orderPage = 0; return renderOrders(); }
 
   if (target.matches('[data-drawer-order-status]')) {
     const id = target.dataset.drawerOrderStatus;
@@ -1104,9 +1163,9 @@ function onInput(event) {
   clearTimeout(searchTimer);
   const value = event.target.value;
   searchTimer = setTimeout(() => {
-    if (filter === 'product-search') { state.productSearch = value; state.productsPage = 1; renderProducts(); }
-    if (filter === 'collection-search') { state.collectionSearch = value; renderCollections(); }
-    if (filter === 'order-search') { state.orderSearch = value; renderOrders(); }
+    if (filter === 'product-search') { state.productSearch = value; state.productPage = 0; state.productSelected.clear(); renderProducts(); }
+    if (filter === 'collection-search') { state.collectionSearch = value; state.collectionPage = 0; renderCollections(); }
+    if (filter === 'order-search') { state.orderSearch = value; state.orderPage = 0; renderOrders(); }
   }, 120);
 }
 

@@ -93,7 +93,7 @@ const checks = [
   ['Popup bloqueado cambia automáticamente de camino', login.includes("if (e.code === 'auth/popup-blocked')") && login.includes('await signInWithRedirect(auth, provider)')],
   ['Retorno de Google se completa una sola vez y sin bucle', login.includes('getRedirectResult(auth)') && login.includes('GOOGLE_REDIRECT_PENDING_KEY') && login.includes('handleGoogleRedirectReturn(user)')],
   ['Solo el correo oficial entra automáticamente al panel', login.includes("normalizedEmail === SUPER_ADMIN.toLowerCase()") && login.includes("window.location.replace('admin.html')")],
-  ['Auth compartido no compite con el Login', authNav.includes('if(IS_LOGIN_PAGE)return;') && !authNav.includes('redirectAuthenticatedLogin')],
+  ['Auth compartido no compite con el Login', /if\(IS_LOGIN_PAGE(?:\|\|IS_VISUAL_PREVIEW_FRAME)?\)return;/.test(authNav) && !authNav.includes('redirectAuthenticatedLogin')],
   ['Ningún rol vence la sesión automáticamente', !session.includes('signOut(') && !/INACTIVITY|inactividad|expired/i.test(session)],
   ['Solo superficies explícitas pueden cerrar Firebase Auth', unexpectedSignOutCallers.length === 0],
   ['La persistencia de Auth tiene una sola autoridad', unexpectedPersistenceCallers.length === 0 && persistenceCallers.length === 1],

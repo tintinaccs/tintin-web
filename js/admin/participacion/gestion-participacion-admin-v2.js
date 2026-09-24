@@ -30,6 +30,7 @@ let usersByUid = new Map();
 let quickReplies = [...DEFAULT_QUICK_REPLIES];
 let settings = { ...DEFAULT_SETTINGS };
 let reviewPage = 1;
+let reviewQuickFilter = '';
 let likePage = 1;
 let reportPage = 1;
 let reviewView = 'inbox';
@@ -437,6 +438,8 @@ function reviewFiltered() {
       .some(value => String(value || '').toLowerCase().includes(term))) return false;
     return true;
   });
+  if (reviewQuickFilter === 'low') data = data.filter(review => Number(review.rating) <= 2);
+  if (reviewQuickFilter === 'storeLiked') data = data.filter(review => review.storeLiked);
   data.sort((a, b) => {
     if (sort === 'oldest') return timeValue(a.createdAt) - timeValue(b.createdAt);
     if (sort === 'rating-desc') return Number(b.rating) - Number(a.rating);
@@ -499,9 +502,7 @@ function reviewCard(review) {
             <button type="button" data-eg-action="reviewArchive" data-id="${escapeHtml(review.reviewId)}">${review.adminArchived ? 'Desarchivar' : 'Archivar en admin'}</button>
             <button type="button" data-eg-action="reviewSeenToggle" data-id="${escapeHtml(review.reviewId)}">${review.unread ? 'Marcar como leída' : 'Marcar como nueva'}</button>
             <button type="button" data-eg-action="reviewEdit" data-id="${escapeHtml(review.reviewId)}">Editar reseña</button>
-            ${review.deleted
-              ? `<button type="button" data-eg-action="reviewRestore" data-id="${escapeHtml(review.reviewId)}">Restaurar reseña</button>`
-              : `<button type="button" class="is-danger" data-eg-action="reviewDelete" data-id="${escapeHtml(review.reviewId)}">Eliminar reseña</button>`}
+            <button type="button" class="is-danger" data-eg-action="reviewPurge" data-id="${escapeHtml(review.reviewId)}">Eliminar definitivamente</button>
           </div></details>
         </div>
       </div>
@@ -818,7 +819,7 @@ function openReviewDrawer(reviewId, focusReply = false) {
         <button type="button" class="adm-btn adm-btn-outline" data-eg-action="reviewLike" data-id="${escapeHtml(review.reviewId)}">${review.storeLiked ? 'Quitar Me gusta' : 'Me gusta como Tintin'}</button>
         <button type="button" class="adm-btn adm-btn-outline" data-eg-action="reviewPin" data-id="${escapeHtml(review.reviewId)}">${review.adminPinned ? 'Quitar destacado' : 'Destacar'}</button>
         <button type="button" class="adm-btn adm-btn-outline" data-eg-action="reviewArchive" data-id="${escapeHtml(review.reviewId)}">${review.adminArchived ? 'Desarchivar' : 'Archivar'}</button>
-        ${review.deleted ? `<button type="button" class="adm-btn adm-btn-primary" data-eg-action="reviewRestore" data-id="${escapeHtml(review.reviewId)}">Restaurar</button>` : `<button type="button" class="adm-btn adm-btn-danger" data-eg-action="reviewDelete" data-id="${escapeHtml(review.reviewId)}">Eliminar reseña</button>`}
+        <button type="button" class="adm-btn adm-btn-danger" data-eg-action="reviewPurge" data-id="${escapeHtml(review.reviewId)}">Eliminar definitivamente</button>
       </div></section>
     </div>
   </aside>`;
@@ -886,11 +887,12 @@ async function performReviewAction(action, reviewId, trigger = null) {
       toast('Reseña actualizada');
       return;
     }
-    if (action === 'reviewDelete') {
-      const ok = await confirmDialog({ title:'Eliminar reseña', message:'La reseña dejará de verse públicamente. Podrás restaurarla desde Eliminadas.', confirmText:'Eliminar reseña', danger:true });
+    if (action === 'reviewPurge') {
+      const ok = await confirmDialog({ title:'Eliminar reseña definitivamente', message:'Se borrará la reseña, sus copias públicas y sus interacciones. Esta acción no se puede deshacer.', confirmText:'Eliminar definitivamente', danger:true });
       if (!ok) return;
-      await api({ action:'reviewDelete', reviewId });
-      toast('Reseña eliminada');
+      await api({ action:'reviewPurge', reviewId });
+      closeDrawer();
+      toast('Reseña eliminada definitivamente');
       return;
     }
     if (action === 'reviewRestore') { await api({ action:'reviewRestore', reviewId }); toast('Reseña restaurada'); return; }
@@ -954,11 +956,11 @@ async function bulkReviews(action, trigger) {
   const ids = [...selectedReviews];
   if (!ids.length) return;
   if (action === 'delete') {
-    const ok = await confirmDialog({ title:'Eliminar reseñas seleccionadas', message:`Se eliminarán ${ids.length} reseñas y dejarán de verse públicamente.`, confirmText:'Eliminar seleccionadas', danger:true });
+    const ok = await confirmDialog({ title:'Eliminar reseñas definitivamente', message:`Se borrarán ${ids.length} reseñas, sus copias públicas y sus interacciones. Esta acción no se puede deshacer.`, confirmText:'Eliminar definitivamente', danger:true });
     if (!ok) return;
   }
   trigger.disabled = true;
-  const actionMap = { seen:'reviewSeen', publish:'reviewVisibility', hide:'reviewVisibility', archive:'reviewArchive', delete:'reviewDelete' };
+  const actionMap = { seen:'reviewSeen', publish:'reviewVisibility', hide:'reviewVisibility', archive:'reviewArchive', delete:'reviewPurge' };
   const results = await Promise.allSettled(ids.map(id => {
     const input = { action: actionMap[action], reviewId:id };
     if (action === 'publish') input.visible = true;
@@ -1071,19 +1073,15 @@ function bindEvents() {
     const quick = event.target.closest('[data-review-quick]');
     if (quick) {
       const mode = quick.dataset.reviewQuick;
+      reviewQuickFilter = mode;
+      reviewPage = 1;
       if (mode === 'unread') $('#reviews-filter').value = 'unread';
       if (mode === 'pending') $('#reviews-reply').value = 'pending';
       if (mode === 'hidden') $('#reviews-filter').value = 'hidden';
       if (mode === 'low') { $('#reviews-rating').value = 'all'; $('#reviews-search').value = ''; }
       if (mode === 'storeLiked') { $('#reviews-search').value = ''; }
       $$('#eg-review-quick-filters button').forEach(btn => btn.classList.toggle('is-active', btn === quick));
-      if (mode === 'low' || mode === 'storeLiked') {
-        const original = reviews;
-        if (mode === 'low') reviews = original.filter(item => Number(item.rating) <= 2);
-        else reviews = original.filter(item => item.storeLiked);
-        renderReviews();
-        reviews = original;
-      } else renderReviews();
+      renderReviews();
       return;
     }
 

@@ -11,8 +11,9 @@ test('las tarjetas de colecciones de inicio son enlaces nativos y apuntan al fil
   const carousel = read('js/pages/home/carrusel-colecciones.js');
 
   assert.match(carousel, /link\.href = collectionHref\(collection\.slug\)/);
-  assert.match(carousel, /link\.dataset\.noTransition = ['"]true['"]/);
-  assert.match(carousel, /function collectionHref\(slug\) \{[\s\S]*?\/catalogo\?cat=/);
-  assert.doesNotMatch(carousel, /window\.location\.assign\(card\.href\)/);
+  assert.doesNotMatch(carousel, /link\.dataset\.noTransition = ['"]true['"]/);
+  assert.match(carousel, /function collectionHref\(slug\) \{[\s\S]*?\.replace\(\/\^bags\?\$\/, ['"]bolsos['"]\)[\s\S]*?\/catalogo\?cat=/);
+  assert.match(carousel, /this\.pointerDownCard = event\.target instanceof Element/);
+  assert.match(carousel, /window\.location\.assign\(card\.href\)/);
   assert.match(carousel, /Date\.now\(\) < this\.suppressClickUntil\) event\.preventDefault\(\)/);
 });

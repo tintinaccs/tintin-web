@@ -26,7 +26,18 @@ function clean(value) {
 }
 
 function collectionHref(slug) {
-  return `/catalogo?cat=${encodeURIComponent(clean(slug))}`;
+  const normalized = clean(slug)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/^bags?$/, 'bolsos')
+    .replace(/^ear-cuffs?$/, 'earcuff')
+    .replace(/^arm-cuffs?$/, 'armcuff')
+    .replace(/^jewelry-box$/, 'joyeros');
+  return `/catalogo?cat=${encodeURIComponent(normalized)}`;
 }
 
 function optimizedImage(url) {
@@ -86,11 +97,6 @@ function createCard(collection, accessible, collectionIndex) {
 
   link.className = 'tt-collection-card';
   link.href = collectionHref(collection.slug);
-  // Dejamos que el navegador ejecute la navegación nativa del enlace. El
-  // router compartido ya excluye `data-no-transition`, evitando que el
-  // carrusel tenga que cancelar el click y competir con listeners globales.
-  // Esto es más estable en mouse, touch, teclado y elementos transformados.
-  link.dataset.noTransition = 'true';
   link.dataset.collectionSlug = clean(collection.slug);
   link.dataset.collectionIndex = String(collectionIndex);
   link.setAttribute('aria-label', `Ver colección ${label}`);
@@ -130,6 +136,7 @@ class InfiniteCollectionCarousel {
     this.lastPointerX = 0;
     this.lastPointerTime = 0;
     this.dragDistance = 0;
+    this.pointerDownCard = null;
     this.velocity = 0;
     this.paused = false;
     this.suppressClickUntil = 0;
@@ -355,6 +362,9 @@ class InfiniteCollectionCarousel {
 
   onPointerDown(event) {
     if (this.reducedMotion.matches || !this.gsap || event.pointerType === 'mouse' && event.button !== 0) return;
+    this.pointerDownCard = event.target instanceof Element
+      ? event.target.closest('.tt-collection-card')
+      : null;
     this.dragging = true;
     this.pointerId = event.pointerId;
     this.lastPointerX = event.clientX;
@@ -381,11 +391,26 @@ class InfiniteCollectionCarousel {
 
   onPointerUp(event) {
     if (!this.dragging || event.pointerId !== this.pointerId) return;
+    const card = this.pointerDownCard;
+    const wasTap = event.type === 'pointerup' && this.dragDistance <= 7;
     this.dragging = false;
     this.pointerId = null;
+    this.pointerDownCard = null;
     this.viewport.classList.remove('is-dragging');
     if (this.viewport.hasPointerCapture(event.pointerId)) this.viewport.releasePointerCapture(event.pointerId);
-    if (this.dragDistance > 7) this.suppressClickUntil = Date.now() + 260;
+    if (!wasTap) {
+      if (this.dragDistance > 7) this.suppressClickUntil = Date.now() + 260;
+      return;
+    }
+
+    // El track puede avanzar entre pointerdown y click. Si eso ocurre, el
+    // click sintético cae sobre el viewport y el <a> nunca recibe activación.
+    // Conservamos la tarjeta original para que mouse, touch y pen naveguen
+    // de forma determinista; el teclado sigue usando la navegación nativa.
+    if (card?.href) {
+      this.suppressClickUntil = Date.now() + 260;
+      window.location.assign(card.href);
+    }
   }
 }
 

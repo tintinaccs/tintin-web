@@ -10,7 +10,6 @@ import {
   deleteProductsGlobally,
 } from '../../cloudflare/borrado-global-catalogo.js';
 import {
-  finalizeProductsSheet,
   preflightProductsSheet,
   retryPendingCatalogSheets,
 } from '../../cloudflare/resiliencia-sync-catalogo.js';
@@ -96,10 +95,6 @@ export async function onRequest(context) {
       return jsonResponse({ ok: result.remaining === 0, partial: result.remaining > 0, result }, result.remaining > 0 ? 207 : 200, origin, requestUrl);
     }
 
-    // Antes de cualquier operación nueva intenta cerrar reconciliaciones
-    // pendientes de una caída anterior de Google Sheets.
-    await retryPendingCatalogSheets(env, idToken);
-
     if (dryRun) {
       const result = await runCatalogAction(action, env, body, scope, true, idToken, actorContext);
       return jsonResponse({ ok: true, partial: false, result }, 200, origin, requestUrl);
@@ -111,27 +106,25 @@ export async function onRequest(context) {
     const serverPreview = await runCatalogAction(action, env, body, scope, true, idToken, actorContext);
     const affectedProductIds = productIdsFromPreview(serverPreview);
 
-    // Preflight no destructivo: mientras los productos todavía existen,
-    // valida Apps Script + token + permisos + spreadsheet real. Si falla,
-    // la operación aborta y Firestore queda intacto.
-    await preflightProductsSheet(env, affectedProductIds);
+    // El preflight continúa comprobando Apps Script, permisos y spreadsheet
+    // antes del borrado. Firestore sigue siendo la fuente canónica: una
+    // caída temporal del espejo no puede impedir una eliminación autorizada.
+    // Se informa en el resultado para que el cierre persistente la recupere.
+    let preflightError = '';
+    try {
+      await preflightProductsSheet(env, affectedProductIds);
+    } catch (error) {
+      preflightError = safeMessage(error);
+      console.warn('[admin-catalog-delete] preflight de Sheets pendiente:', preflightError);
+    }
 
     const result = await runCatalogAction(action, env, body, scope, false, idToken, actorContext);
 
-    // La capa de dominio ya sincroniza Productos una vez. Si justo en ese
-    // instante Google tuvo una caída transitoria, se hacen cuatro intentos
-    // adicionales. Si aun así falla, queda una cola persistente explícita.
-    if (result?.partial && result?.sheets?.products === false && affectedProductIds.length) {
-      const recovery = await finalizeProductsSheet(env, idToken, affectedProductIds, actorContext);
-      result.sheetRecovery = recovery;
-      if (recovery.ok) {
-        result.sheets.products = true;
-        result.partial = false;
-        result.errors = [];
-        result.recoveredProductsSheet = true;
-      } else {
-        result.pendingSheetSync = true;
-      }
+    if (preflightError) {
+      result.partial = true;
+      result.errors = [...(Array.isArray(result.errors) ? result.errors : []), `Preflight de Google Sheets pendiente: ${preflightError}`];
+      result.sheets = { ...(result.sheets || {}), products: false };
+      result.pendingSheetSync = true;
     }
 
     const status = result?.partial ? 207 : 200;
