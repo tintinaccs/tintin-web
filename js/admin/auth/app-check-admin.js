@@ -21,12 +21,15 @@ function waitForReadyEvent(timeoutMs) {
     const onReady = event => done(event?.detail?.ready === true);
     const timer = window.setTimeout(() => done(false), Math.max(0, Number(timeoutMs) || 0));
     window.addEventListener('tintin:app-check-ready', onReady, { once: true });
+    // Cierra la carrera en la que el evento llegó justo antes de registrar
+    // este listener pero después del chequeo previo.
+    if (window.TintinAppCheckStatus === 'enabled') done(true);
   });
 }
 
-export async function waitForAdminAppCheck(timeoutMs = 12000) {
-  if (window.TintinAppCheckStatus === 'enabled') return true;
+const ADMIN_APP_CHECK_GATE_KEY = '__TINTIN_ADMIN_APP_CHECK_GATE__';
 
+async function resolveAdminAppCheck(timeoutMs) {
   const initial = await Promise.resolve(appCheckReady).catch(() => false);
   if (initial || window.TintinAppCheckStatus === 'enabled') return true;
 
@@ -52,5 +55,25 @@ export async function waitForAdminAppCheck(timeoutMs = 12000) {
     return Boolean(ok);
   } catch {
     return false;
+  }
+}
+
+export async function waitForAdminAppCheck(timeoutMs = 12000) {
+  if (window.TintinAppCheckStatus === 'enabled') return true;
+
+  // Todos los módulos del Admin comparten una sola verificación/reintento.
+  // Evita que 6-10 listeners privados disparen getToken al mismo tiempo.
+  const existing = window[ADMIN_APP_CHECK_GATE_KEY];
+  if (existing) return existing;
+
+  const gate = resolveAdminAppCheck(timeoutMs);
+  window[ADMIN_APP_CHECK_GATE_KEY] = gate;
+  try {
+    return await gate;
+  } finally {
+    // Un resultado negativo se puede reintentar más tarde sin recargar Auth.
+    if (window.TintinAppCheckStatus !== 'enabled') {
+      window[ADMIN_APP_CHECK_GATE_KEY] = null;
+    }
   }
 }
