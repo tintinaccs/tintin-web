@@ -1,4 +1,4 @@
-import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1";
+import { auth, db, ensureAppCheckReady } from "../core/firebase/firebase.js?v=tintin-20260924-auth-private-gate-1";
 import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -930,6 +930,29 @@ function showAdminInitFailure() {
   hideOverlay();
 }
 
+function showAdminAppCheckUnavailable() {
+  document.documentElement.classList.remove('adm-auth-ready');
+  let overlay = document.getElementById('adm-app-check-error');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'adm-app-check-error';
+    overlay.setAttribute('role', 'alert');
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#44222d';
+    overlay.innerHTML = '<div style="max-width:600px;text-align:center">' +
+      '<h1 style="font-size:22px;margin:0 0 10px">No se pudo verificar la seguridad del panel</h1>' +
+      '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">Tu sesión sigue activa. La verificación de seguridad de Firebase no terminó correctamente, así que el panel no abrirá datos privados hasta confirmarla.</p>' +
+      '<button type="button" id="adm-app-check-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#ad3f67;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    overlay.querySelector('#adm-app-check-retry')?.addEventListener('click', () => window.location.reload());
+  }
+  hideOverlay();
+}
+
+function dismissAdminAppCheckUnavailable() {
+  document.getElementById('adm-app-check-error')?.remove();
+}
+
 function showAdminAuthUnknown() {
   document.documentElement.classList.remove('adm-auth-ready');
   let overlay = document.getElementById('adm-auth-unknown');
@@ -1059,7 +1082,17 @@ async function startAdminAuthGuard() {
     adminGuardInitializingUid = user.uid;
 
     try {
-      await appCheckReady;
+      const appCheckAvailable = await ensureAppCheckReady({ timeoutMs: 15000 });
+      if (!appCheckAvailable) {
+        recordAuthDiagnostic('APP_CHECK_REQUIRED', {
+          source: 'admin-guard',
+          authState: snapshot.status,
+          reason: 'app-check-token-unavailable'
+        });
+        showAdminAppCheckUnavailable();
+        return;
+      }
+      dismissAdminAppCheckUnavailable();
 
       const role = await getUserRole(user.uid, user.email);
       currentRole = role;
