@@ -4,7 +4,7 @@
 
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { getAuth, initializeAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getAuth, initializeAuth, GoogleAuthProvider, indexedDBLocalPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
   initializeAppCheck,
   ReCaptchaEnterpriseProvider,
@@ -48,8 +48,10 @@ if (FIREBASE_APP_CHECK_SITE_KEY) {
   const sharedAppCheck = window.__TINTIN_APP_CHECK_STATE__ || {
     appCheck: null,
     ready: Promise.resolve(false),
+    tokenReady: Promise.resolve(false),
     initialized: false
   };
+  if (!sharedAppCheck.tokenReady) sharedAppCheck.tokenReady = sharedAppCheck.ready;
   window.__TINTIN_APP_CHECK_STATE__ = sharedAppCheck;
   appCheck = sharedAppCheck.appCheck;
   appCheckReady = sharedAppCheck.ready;
@@ -103,6 +105,7 @@ if (FIREBASE_APP_CHECK_SITE_KEY) {
   const appCheckTimeout = new Promise(resolve => {
     setTimeout(() => resolve(false), 8000);
   });
+    sharedAppCheck.tokenReady = appCheckTokenSettled;
     sharedAppCheck.ready = Promise.race([appCheckTokenSettled, appCheckTimeout]);
     appCheckReady = sharedAppCheck.ready;
   }
@@ -122,29 +125,28 @@ window.TintinAppCheckReady = appCheckReady;
 // no depende de IndexedDB para nada, así que no tiene ese riesgo.
 const db = getFirestore(app);
 
-// getAuth() inicia la restauraciÃ³n con la persistencia por defecto antes de
-// que setPersistence() pueda terminar. En un documento con una sesiÃ³n
-// existente eso abrÃ­a una ventana de carrera: Firebase emitÃ­a al usuario,
-// migraba/rehidrataba el backend y unos segundos despuÃ©s emitÃ­a null aunque
-// accounts:lookup acabara de validar la misma cuenta. Inicializar Auth con la
-// persistencia elegida elimina esa segunda restauraciÃ³n.
+// Auth se inicializa con la misma jerarquía de persistencia que recomienda
+// Firebase para navegador: IndexedDB -> localStorage -> sessionStorage. Es
+// importante NO ejecutar setPersistence() después de que otra copia versionada
+// del módulo haya inicializado Auth: esa llamada migra el usuario entre stores
+// y puede disparar un storage event con null durante la restauración, que era
+// exactamente el patrón que terminaba en AUTH_REVOKED_OR_SIGNED_OUT.
 let auth;
 let persistenceWasConfiguredAtInitialization = false;
 try {
-  auth = initializeAuth(app, { persistence: browserLocalPersistence });
+  auth = initializeAuth(app, {
+    persistence: [indexedDBLocalPersistence, browserLocalPersistence, browserSessionPersistence]
+  });
   persistenceWasConfiguredAtInitialization = true;
 } catch (error) {
-  // Otro importador puede haber inicializado Auth antes que este mÃ³dulo. En
-  // ese caso conservamos el objeto existente y aplicamos el fallback legado
-  // una sola vez; no se reemplaza ni se borra la sesiÃ³n en memoria.
+  // Si otra URL versionada llegó primero, usamos esa misma instancia y NO
+  // migramos su persistencia en caliente. getAuth() ya usa la jerarquía de
+  // navegador equivalente, por lo que conservarla es más seguro que copiar
+  // una sesión activa entre backends de almacenamiento.
   if (error?.code !== 'auth/already-initialized') throw error;
   auth = getAuth(app);
+  persistenceWasConfiguredAtInitialization = true;
 }
-// La sesión sobrevive al cierre, duplicado y reapertura de pestañas gracias a
-// la jerarquía de persistencia por defecto del SDK (indexedDB primero). Fijar
-// explícitamente setPersistence debe coordinarse una sola vez por documento,
-// antes de que cada consumidor consulte Auth. Llamarlo sin coordinación desde
-// varios imports versionados puede competir con la restauración ya persistida.
 // La sesión no expira por inactividad desde la aplicación. Firebase renueva
 // sus tokens automáticamente; sólo una acción explícita de la persona o una
 // revocación real del proveedor puede cerrar Auth.
@@ -219,22 +221,12 @@ export async function inspectAuthPersistenceStorage() {
 }
 
 const AUTH_PERSISTENCE_PROMISE_KEY = '__TINTIN_AUTH_PERSISTENCE_READY__';
+// No hay una migración post-init: initializeAuth ya eligió el primer backend
+// disponible. Si Auth venía inicializado por otra copia del módulo, conservar
+// ese backend evita borrar/copiar el registro mientras onAuthStateChanged está
+// activo en otras superficies.
 const configuredPersistence = window[AUTH_PERSISTENCE_PROMISE_KEY] || (window[AUTH_PERSISTENCE_PROMISE_KEY] =
-  (persistenceWasConfiguredAtInitialization
-    ? Promise.resolve(true)
-    : setPersistence(auth, browserLocalPersistence))
-    .catch(error => {
-      console.warn('[firebase-auth] No se pudo establecer persistencia local; se usa la de pestaña:', error?.code || error);
-      return setPersistence(auth, browserSessionPersistence);
-    })
-    .catch(error => {
-      console.warn('[firebase-auth] No se pudo establecer persistencia de pestaña:', error?.code || error);
-      // La persistencia es una mejora de continuidad, no la autoridad de
-      // identidad. Si el navegador bloquea IndexedDB y sessionStorage, Auth
-      // todavía puede resolver la sesión en memoria y los consumidores deben
-      // seguir ese resultado en vez de quedar en UNKNOWN para siempre.
-      return false;
-    }));
+  Promise.resolve(persistenceWasConfiguredAtInitialization));
 
 export const authPersistenceReady = configuredPersistence.then(async () => {
   recordAuthDiagnostic('PERSISTENCE_READY', {
@@ -250,6 +242,38 @@ export const authPersistenceReady = configuredPersistence.then(async () => {
   });
     return false;
 });
+export async function waitForAppCheckToken(timeoutMs = 12000) {
+  if (!FIREBASE_APP_CHECK_SITE_KEY) return false;
+  if (window.TintinAppCheckStatus === 'enabled') return true;
+
+  const shared = window.__TINTIN_APP_CHECK_STATE__;
+  const tokenPromise = Promise.resolve(shared?.tokenReady ?? appCheckReady)
+    .then(Boolean)
+    .catch(() => false);
+  const timeout = new Promise(resolve => {
+    window.setTimeout(() => resolve(false), Math.max(0, Number(timeoutMs) || 0));
+  });
+
+  const ready = await Promise.race([tokenPromise, timeout]);
+  if (ready) return true;
+
+  // Si la inicialización terminó pero la primera emisión falló, una llamada
+  // explícita permite recuperarse de una caída temporal de red/reCAPTCHA sin
+  // reiniciar Auth ni tocar la sesión persistida.
+  const instance = shared?.appCheck || appCheck;
+  if (!instance) return false;
+  try {
+    await Promise.race([
+      getAppCheckToken(instance, false).then(() => true),
+      timeout
+    ]);
+    window.TintinAppCheckStatus = 'enabled';
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 // Idioma para cualquier mensaje/UI de Firebase Auth — se fija una sola vez
 auth.languageCode = "es";
 const provider = new GoogleAuthProvider();
