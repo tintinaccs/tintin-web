@@ -25,8 +25,9 @@ test('admin inicia Firebase estable antes de permitir imports legacy del loader'
 });
 
 test('bootstrap protegido no migra persistencia de una sesión activa', () => {
+  const executable = stableFirebase.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
   assert.match(stableFirebase, /persistence:\s*\[indexedDBLocalPersistence, browserLocalPersistence, browserSessionPersistence\]/);
-  assert.doesNotMatch(stableFirebase, /\bsetPersistence\s*\(/);
+  assert.doesNotMatch(executable, /\bsetPersistence\s*\(/);
   assert.match(stableFirebase, /waitForAppCheckToken/);
 });
 
