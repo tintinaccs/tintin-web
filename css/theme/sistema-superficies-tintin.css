@@ -1,0 +1,293 @@
+/*
+ * TINTIN — Sistema de superficies 2026
+ *
+ * Capa visual compartida para la tienda y Super Admin. No modifica contratos
+ * de datos, rutas ni eventos: sólo ordena superficies, jerarquía, contraste
+ * y comportamiento responsive. Se carga al final de cada shell para que sea
+ * la última autoridad visual sin depender de estilos inline de cada módulo.
+ */
+:root {
+  --tt-ui-canvas: #fff8fb;
+  --tt-ui-surface: #ffffff;
+  --tt-ui-surface-soft: #fff1f6;
+  --tt-ui-ink: #241d22;
+  --tt-ui-muted: #71636b;
+  --tt-ui-pink: #c43f70;
+  --tt-ui-pink-deep: #96244f;
+  --tt-ui-pink-soft: #fbe0ea;
+  --tt-ui-line: #efd6e1;
+  --tt-ui-shadow: 0 18px 48px rgba(125, 38, 77, .11);
+  --tt-ui-radius-xl: 28px;
+  --tt-ui-radius-lg: 20px;
+  --tt-ui-radius-md: 14px;
+}
+
+/* Public surfaces ------------------------------------------------------- */
+html body:not(:has(.adm-main)) {
+  background: var(--tt-ui-canvas) !important;
+  color: var(--tt-ui-ink) !important;
+}
+
+html body:not(:has(.adm-main)) :is(
+  .tt-hero, .tt-trust-bar, .tt-collection-carousel, .tt-look-section,
+  .tt-editorial, .tt-home-random-products, .tt-watch-feature,
+  .tt-products-section, .tt-related-section, .tt-colls-page-section,
+  .tt-product-page, .section
+) {
+  background: transparent !important;
+}
+
+html body:not(:has(.adm-main)) :is(
+  .tt-collection-carousel, .tt-look-section, .tt-home-random-products,
+  .tt-related-section, .tt-colls-page-section, .tt-reviews-product
+) {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 520px;
+}
+
+html body:not(:has(.adm-main)) :is(
+  .tt-trust-item, .tt-look-card, .tt-editorial, .tt-watch-feature,
+  .tt-product-card, .tt-coll-card, .tt-coll-page-card, .tt-review-card,
+  .tt-product-info-panel, .tt-product-actions-panel, .tt-specs-block,
+  .tt-reviews-summary, .tt-review-form, .tt-review-thread-message
+) {
+  border: 1px solid var(--tt-ui-line) !important;
+  border-radius: var(--tt-ui-radius-lg) !important;
+  box-shadow: 0 10px 30px rgba(125, 38, 77, .07) !important;
+}
+
+html body:not(:has(.adm-main)) :is(
+  .tt-product-card, .tt-coll-card, .tt-coll-page-card
+) {
+  overflow: hidden;
+  background: var(--tt-ui-surface) !important;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+html body:not(:has(.adm-main)) :is(
+  .tt-product-card, .tt-coll-card, .tt-coll-page-card
+):hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--tt-ui-pink) 45%, white) !important;
+  box-shadow: var(--tt-ui-shadow) !important;
+}
+
+html body:not(:has(.adm-main)) :is(
+  .tt-section-title, .tt-page-hero-title, .tt-related-heading,
+  .tt-editorial-title, .tt-watch-title
+) {
+  color: var(--tt-ui-pink-deep) !important;
+  letter-spacing: -.025em;
+}
+
+html body:not(:has(.adm-main)) :is(
+  .tt-collection-carousel__heading, .tt-look-header, .tt-products-header,
+  .tt-related-header, .tt-products-intro
+) {
+  max-width: 1180px;
+  margin-inline: auto;
+}
+
+html body:not(:has(.adm-main)) :is(
+  .tt-collection-carousel__description, .tt-section-desc,
+  .tt-page-hero-sub, .tt-section-sub, .tt-review-date,
+  .tt-review-thread-meta time
+) {
+  color: var(--tt-ui-muted) !important;
+}
+
+html body:not(:has(.adm-main)) :is(
+  .tt-coll-card-label, .tt-product-badge, .tt-product-status,
+  .tt-review-store-like
+) {
+  background: var(--tt-ui-pink-soft) !important;
+  color: var(--tt-ui-pink-deep) !important;
+  border-color: var(--tt-ui-line) !important;
+}
+
+html body:not(:has(.adm-main)) :is(
+  .tt-review-comment, .tt-review-thread-text, .tt-review-textarea,
+  .tt-review-reply-input
+) {
+  color: var(--tt-ui-ink) !important;
+  line-height: 1.65;
+}
+
+html body:not(:has(.adm-main)) :is(
+  .tt-review-form, .tt-review-card, .tt-review-thread-message
+) {
+  background: var(--tt-ui-surface) !important;
+}
+
+html body:not(:has(.adm-main)) :is(
+  .tt-btn, .tt-btn-primary-full, .tt-cart-checkout-btn,
+  .login-email-btn, .login-google, .ck-btn
+) {
+  min-height: 44px;
+  border-radius: 999px !important;
+  font-weight: 800;
+  letter-spacing: .01em;
+}
+
+html body:not(:has(.adm-main)) :is(
+  .tt-btn, .tt-btn-primary-full, .tt-cart-checkout-btn,
+  .login-email-btn, .login-google, .ck-btn
+):not(.tt-btn-outline):not(.tt-btn-outline-full) {
+  background: var(--tt-ui-pink) !important;
+  border-color: var(--tt-ui-pink) !important;
+  color: #fff !important;
+}
+
+/* Super Admin: panel hierarchy, menu and engagement modules ------------- */
+html body:has(.adm-main) {
+  background: #fff8fb !important;
+  color: #241d22 !important;
+}
+
+html body:has(.adm-main) .adm-sidebar {
+  background: #fff !important;
+  border-right: 1px solid #efd6e1 !important;
+  box-shadow: 10px 0 28px rgba(125, 38, 77, .06) !important;
+  z-index: 20;
+}
+
+html body:has(.adm-main) .adm-sidebar-logo {
+  min-height: 104px;
+  padding: 24px 24px 18px !important;
+  border-bottom: 1px solid #f2dfe7 !important;
+  background: linear-gradient(180deg, #fff 0%, #fff8fb 100%) !important;
+}
+
+html body:has(.adm-main) .adm-sidebar-toggle {
+  z-index: 3;
+  box-shadow: 0 6px 16px rgba(125, 38, 77, .12);
+}
+
+html body:has(.adm-main) .adm-main {
+  min-width: 0;
+  background: #fff8fb !important;
+}
+
+html body:has(.adm-main) .adm-topbar {
+  min-height: 76px;
+  background: #fff !important;
+  border-bottom: 1px solid #efd6e1 !important;
+  box-shadow: 0 5px 20px rgba(125, 38, 77, .05);
+}
+
+html body:has(.adm-main) .adm-content {
+  max-width: 1600px;
+  margin-inline: auto;
+  padding: clamp(20px, 3vw, 42px) clamp(16px, 3vw, 44px) 64px !important;
+}
+
+html body:has(.adm-main) :is(.adm-card, .adm-table-wrap, .adm-modal, .adm-img-card) {
+  border: 1px solid #efd6e1 !important;
+  border-radius: var(--tt-ui-radius-lg) !important;
+  box-shadow: 0 12px 36px rgba(125, 38, 77, .07) !important;
+}
+
+html body:has(.adm-main) .adm-card-head {
+  min-height: 64px;
+  padding: 18px 22px !important;
+  background: linear-gradient(180deg, #fff 0%, #fffafc 100%) !important;
+  border-bottom: 1px solid #f2dfe7 !important;
+}
+
+html body:has(.adm-main) .adm-card-body {
+  padding: clamp(18px, 2.2vw, 28px) !important;
+}
+
+html body:has(.adm-main) :is(.adm-engagement-toolbar, .adm-engagement-list,
+  .adm-notification-card, .adm-section-header, .adm-bulk-toolbar) {
+  border-radius: var(--tt-ui-radius-md) !important;
+}
+
+html body:has(.adm-main) :is(.adm-engagement-toolbar, .adm-bulk-toolbar) {
+  background: #fff1f6 !important;
+  border: 1px solid #efd6e1 !important;
+  padding: 12px !important;
+}
+
+html body:has(.adm-main) .adm-table-wrap {
+  overflow-x: auto;
+  background: #fff !important;
+}
+
+html body:has(.adm-main) :is(.adm-table, .adm-table th, .adm-table td) {
+  border-color: #f2dfe7 !important;
+}
+
+html body:has(.adm-main) .adm-table thead th {
+  background: #fbe0ea !important;
+  color: #5a2038 !important;
+  font-size: 11px;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+}
+
+html body:has(.adm-main) .adm-nav-item {
+  min-height: 44px;
+  margin: 3px 12px;
+  border-radius: 12px;
+}
+
+html body:has(.adm-main) .adm-nav-item.active {
+  background: #fbe0ea !important;
+  color: #96244f !important;
+  box-shadow: inset 3px 0 0 #c43f70;
+}
+
+html body:has(.adm-main) :is(.adm-btn-primary, .adm-btn-save) {
+  min-height: 42px;
+  border-radius: 999px !important;
+  background: #c43f70 !important;
+  border-color: #c43f70 !important;
+  color: #fff !important;
+  font-weight: 800;
+}
+
+html body:has(.adm-main) :is(.adm-btn, .adm-btn-outline) {
+  min-height: 42px;
+  border-radius: 999px !important;
+}
+
+html body:has(.adm-main) :is(.adm-input, .adm-select, .adm-textarea) {
+  min-height: 42px;
+  border-radius: 12px !important;
+  border-color: #e9cbd8 !important;
+}
+
+html body:has(.adm-main) :is(.adm-input, .adm-select, .adm-textarea):focus {
+  border-color: #c43f70 !important;
+  box-shadow: 0 0 0 3px rgba(196, 63, 112, .17) !important;
+}
+
+/* Responsive contract: menu never occupies the logo zone and toolbars can
+   wrap/scroll without forcing the page wider than the viewport. */
+@media (max-width: 900px) {
+  html body:has(.adm-main) .adm-content { padding: 18px 16px 48px !important; }
+  html body:has(.adm-main) .adm-card-head { align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+  html body:has(.adm-main) :is(.adm-engagement-toolbar, .adm-bulk-toolbar) { overflow-x: auto; }
+}
+
+@media (max-width: 760px) {
+  html body:not(:has(.adm-main)) :is(.tt-product-card, .tt-coll-card, .tt-coll-page-card,
+    .tt-review-card, .tt-review-form) { border-radius: 16px !important; }
+  html body:has(.adm-main) .adm-sidebar-logo { min-height: 76px; padding: 16px 14px 12px !important; }
+  html body:has(.adm-main) .adm-content { padding: 14px 12px 38px !important; }
+  html body:has(.adm-main) .adm-card { border-radius: 16px !important; }
+  html body:has(.adm-main) .adm-card-body { padding: 16px !important; }
+  html body:has(.adm-main) .adm-nav-item { margin-inline: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body:not(:has(.adm-main)) :is(.tt-product-card, .tt-coll-card, .tt-coll-page-card) {
+    transition: none !important;
+  }
+}
+
+:is(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid rgba(196, 63, 112, .45) !important;
+  outline-offset: 2px;
+}
