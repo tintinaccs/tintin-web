@@ -12,7 +12,7 @@ const sessionCoordinatorSource = fs.readFileSync(
   'utf8'
 );
 const firebaseSource = fs.readFileSync(
-  new URL('../../js/core/firebase/firebase.js', import.meta.url),
+  new URL('../../js/core/firebase/firebase-admin-estable.js', import.meta.url),
   'utf8'
 );
 
