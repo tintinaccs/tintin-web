@@ -76,7 +76,7 @@ check(
 
 check(
   'Super Admin inicia la sincronización de correos',
-  adminStore.includes("import('./sincronizacion-correo-admin.js?v=tintin-20260924-appcheck-gate-2')"),
+  adminStore.includes("import('./sincronizacion-correo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1')"),
   'El documento mínimo debe crearse al entrar al panel autorizado.'
 );
 
