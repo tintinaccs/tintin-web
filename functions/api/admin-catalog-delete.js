@@ -9,10 +9,7 @@ import {
   deleteCollectionsGlobally,
   deleteProductsGlobally,
 } from '../../cloudflare/borrado-global-catalogo.js';
-import {
-  preflightProductsSheet,
-  retryPendingCatalogSheets,
-} from '../../cloudflare/resiliencia-sync-catalogo.js';
+import { preflightProductsSheet, retryPendingCatalogSheets } from '../../cloudflare/resiliencia-sync-catalogo.js';
 
 const MAX_BODY_BYTES = 96 * 1024;
 const PRODUCT_CONFIRM = 'ELIMINAR DEFINITIVAMENTE';
@@ -127,10 +124,9 @@ export async function onRequest(context) {
     const serverPreview = await runCatalogAction(action, env, body, scope, true, idToken, actorContext);
     const affectedProductIds = productIdsFromPreview(serverPreview);
 
-    // El preflight continúa comprobando Apps Script, permisos y spreadsheet
-    // antes del borrado. Firestore sigue siendo la fuente canónica: una
-    // caída temporal del espejo no puede impedir una eliminación autorizada.
-    // Se informa en el resultado para que el cierre persistente la recupere.
+    // La sonda valida Sheets antes de mutar. Si falla transitoriamente, la
+    // eliminación autorizada continúa y el resultado final decide si quedó
+    // pendiente o si la sincronización posterior logró recuperarse.
     let preflightError = '';
     try {
       await preflightProductsSheet(env, affectedProductIds);
@@ -142,7 +138,6 @@ export async function onRequest(context) {
     const result = await runCatalogAction(action, env, body, scope, false, idToken, actorContext);
 
     applyCatalogPreflightOutcome(result, preflightError);
-
     const status = result?.partial ? 207 : 200;
     return jsonResponse({ ok: result?.partial !== true, partial: result?.partial === true, result }, status, origin, requestUrl);
   } catch (error) {

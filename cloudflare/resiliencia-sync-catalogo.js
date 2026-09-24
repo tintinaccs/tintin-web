@@ -108,7 +108,7 @@ export async function preflightProductsSheet(env, productIds) {
   return { ok: true, sampleProductId: ids[0], attempts: result.attempts };
 }
 
-async function queuePendingSync(env, productIds, error, actor = null) {
+export async function queueCatalogSheetSync(env, productIds, error, actor = null) {
   const ids = unique(productIds);
   if (!ids.length) return [];
   const now = new Date();
@@ -151,7 +151,7 @@ export async function finalizeProductsSheet(env, idToken, productIds, actor = nu
       : await syncProductsPayloadWithRetry(env, ids, { attempts: MAX_ATTEMPTS });
     return { ok: true, attempts: result.attempts, queued: false };
   } catch (error) {
-    const queueIds = await queuePendingSync(env, ids, error, actor);
+    const queueIds = await queueCatalogSheetSync(env, ids, error, actor);
     return { ok: false, attempts: MAX_ATTEMPTS, queued: true, queueIds, error: clean(error?.message || error) };
   }
 }
@@ -319,6 +319,46 @@ async function syncProductsPayloadOnce(env, productIds, deps = REAL_QUEUE_DEPS) 
     batches += 1;
   }
   return { ok: true, batches };
+}
+
+/**
+ * En borrado no se deben releer IDs después de borrar: esas lecturas están
+ * sujetas al contrato normal de la cola y no aportan nada; enviamos tombstones
+ * explícitos para que Apps Script quite la fila del espejo. Mantiene lotes
+ * pequeños para no superar tamaño de request ni presupuesto del Worker.
+ */
+export async function syncDeletedProductsPayloadWithRetry(env, productIds, { attempts = 2 } = {}, deps = REAL_QUEUE_DEPS) {
+  const ids = unique(productIds);
+  if (!ids.length) return { ok: true, attempts: 0, batches: 0 };
+  const secret = clean(env?.SHEETS_ENGAGEMENT_SECRET, 500);
+  if (!secret) throw new Error('SHEETS_ENGAGEMENT_SECRET no está configurado.');
+  const limit = Math.max(1, Math.min(MAX_ATTEMPTS, Number(attempts) || 2));
+  let lastError = null;
+  for (let attempt = 1; attempt <= limit; attempt += 1) {
+    try {
+      let batches = 0;
+      for (let i = 0; i < ids.length; i += PRODUCT_SYNC_CHUNK) {
+        const items = ids.slice(i, i + PRODUCT_SYNC_CHUNK).map(id => ({ id, exists: false, product: null, inventory: null }));
+        const response = await deps.fetchImpl(APPS_SCRIPT_SYNC_URL, {
+          method: 'POST',
+          redirect: 'follow',
+          signal: AbortSignal.timeout(SHEETS_TIMEOUT_MS),
+          headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+          body: JSON.stringify({ action: 'syncProductsPayload', sheetName: 'Productos', schemaVersion: 2, secret, items }),
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || data.ok !== true) {
+          throw new Error(clean(data.error || `Sheets Productos (payload) respondió ${response.status}`));
+        }
+        batches += 1;
+      }
+      return { ok: true, batches, attempts: attempt };
+    } catch (error) {
+      lastError = error;
+      if (attempt < limit) await sleep(250 * (2 ** (attempt - 1)));
+    }
+  }
+  throw lastError || new Error('No se pudieron eliminar los productos de Google Sheets.');
 }
 
 /**

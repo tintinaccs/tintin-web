@@ -2042,6 +2042,8 @@ html:not(.adm-auth-ready) [data-admin-panel] {
 .adm-topbar .adm-notifications-wrap,
 .adm-topbar .adm-topbar-btn {
   position: relative;
+  grid-column: 3;
+  justify-self: end;
   z-index: 1;
   flex: 0 0 auto;
 }
@@ -2084,6 +2086,7 @@ html:not(.adm-auth-ready) [data-admin-panel] {
   }
   .adm-notifications-button { width: 42px; height: 42px; }
   .adm-topbar .adm-topbar-btn {
+    grid-column: 3;
     min-height: 42px;
     max-width: 118px;
     padding: 8px 10px;

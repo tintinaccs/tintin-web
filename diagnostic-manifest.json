@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "6ebb7667da03753aab8b2da21a26f798fb6147641c97b3a245450bfe6f51f3a8",
+  "sourceFingerprint": "e7fd1e2d094c34fa10cb435dd0a344e78018803208442e2b48b19b01bf117889",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 877,
     "textFiles": 836,
-    "totalBytes": 17119785,
+    "totalBytes": 17123912,
     "pages": 19,
     "modules": 601
   },
@@ -2112,8 +2112,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 196472,
-      "sha256": "ffab72699403186d1f6d230a6dc333835ae79120c4903075737c4c706281f8f4",
+      "bytes": 196475,
+      "sha256": "507cf410d3d36f59baec04de9d36adba78c029b18218f5ad59068b9189225401",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2172,7 +2172,7 @@
           "line": 2041
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260924-appcheck-gate-2",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260924-products-description-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2042
         },
@@ -2217,7 +2217,7 @@
           "line": 2259
         },
         {
-          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260923-admin-page-size-30-2",
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260924-catalog-delete-flow-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
           "line": 2260
         },
@@ -2274,7 +2274,7 @@
           "line": 35
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20260924-admin-shell-responsive-2",
+          "raw": "css/admin/admin.css?v=tintin-20260924-admin-shell-final-1",
           "target": "css/admin/admin.css",
           "line": 36
         },
@@ -2441,7 +2441,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260924-appcheck-gate-2",
+          "raw": "js/admin/shopify-commerce-admin.js?v=tintin-20260924-products-description-1",
           "target": "js/admin/shopify-commerce-admin.js",
           "line": 2042,
           "exists": true
@@ -2495,7 +2495,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260923-admin-page-size-30-2",
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260924-catalog-delete-flow-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
           "line": 2260,
           "exists": true
@@ -2561,7 +2561,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20260924-admin-shell-responsive-2",
+          "raw": "css/admin/admin.css?v=tintin-20260924-admin-shell-final-1",
           "target": "css/admin/admin.css",
           "line": 36,
           "exists": true
@@ -17898,8 +17898,8 @@
     },
     {
       "path": "cloudflare/borrado-global-catalogo.js",
-      "bytes": 13874,
-      "sha256": "1b6c4435c08e153af67f4f3643da96f4f2258cc2f25d31a408affdeefdc85a86",
+      "bytes": 14378,
+      "sha256": "f802f3e2dd511a05f65f36a4b4e937911a90091539338f49902a097441eab7ea",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18293,8 +18293,8 @@
     },
     {
       "path": "cloudflare/resiliencia-sync-catalogo.js",
-      "bytes": 17458,
-      "sha256": "1162a9f7c016bc763dd7f7aa9d8757565bbf0a573f0ba3a2da98f1efc22fa4ff",
+      "bytes": 19460,
+      "sha256": "6a09e77743b1c77caca6efe370768ae1153532d4a310281a63a2e08734f51b1e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18833,8 +18833,8 @@
     },
     {
       "path": "functions/api/admin-catalog-delete.js",
-      "bytes": 6415,
-      "sha256": "be99cb2ffd41face84e89289550b25593d658063c2137f3f9482a70e6f0bdcf0",
+      "bytes": 6325,
+      "sha256": "7beff0d454afd135ac3b6775fabbc22d59a5afaa18705b834a65bd95271fb4a9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18856,7 +18856,7 @@
           "raw": "../../cloudflare/resiliencia-sync-catalogo.js",
           "target": "cloudflare/resiliencia-sync-catalogo.js",
           "dynamic": false,
-          "line": 15
+          "line": 12
         }
       ],
       "endpoints": []
@@ -21661,8 +21661,8 @@
     },
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
-      "bytes": 16416,
-      "sha256": "a2235e5707348e477af6be18a3997c44a4990eca216b8096ce4b43d93bf371db",
+      "bytes": 14570,
+      "sha256": "2a079ff61559bb6644dac05d2ea5a11ce4077bb00631f406458eed3b6a0d38d3",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21971,8 +21971,8 @@
     },
     {
       "path": "js/admin/shopify-commerce-admin.js",
-      "bytes": 80117,
-      "sha256": "06ac086e8d79e9257bc529f9e690d8ae711858c9d961d7f4740835c930aa73ea",
+      "bytes": 80162,
+      "sha256": "39b5bb91e7d8b8eaf5ec6c2724a14320834169fa7165b0110bb6d7750b700121",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26654,7 +26654,7 @@
     {
       "path": "scripts/auditar-borrado-global-catalogo.mjs",
       "bytes": 6831,
-      "sha256": "525827970697aceb23f44e20ca1f927a5456119caf93c92996992a4d95ea380d",
+      "sha256": "00393e4877bf2706fee54fda8725909c3827c4cdfae7846933333c480eadd39d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29156,8 +29156,8 @@
     },
     {
       "path": "scripts/auditar-superadmin-maestro-responsive.mjs",
-      "bytes": 7709,
-      "sha256": "76b781d832b283c43e2fbbf69d48a6b9548955a08db8632c634bd9bbeae88f43",
+      "bytes": 9807,
+      "sha256": "ba967195460c7c26e057377c48bc430ce480c32c09b0da25716aaecbe12d953b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31009,8 +31009,8 @@
     },
     {
       "path": "tests/catalog/bulk-product-delete-contract.test.mjs",
-      "bytes": 598,
-      "sha256": "3e46e635deac18ee380d6bfc1e10c849e5ba2be1b9c38894e2cbe71a4b833e00",
+      "bytes": 942,
+      "sha256": "b86df0462cfd68ca68f8ff32edddba7cb72cbecc0e86ef5e0da6e00ec3f75ca0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33141,8 +33141,8 @@
     },
     {
       "path": "tests/sync/catalog-sheet-sync-queue.test.mjs",
-      "bytes": 9908,
-      "sha256": "14fbd3d4e7506c741cc5ddb523e1dd6d6d0aa7cc0d29e61f9ca70c4435f27e14",
+      "bytes": 10916,
+      "sha256": "47c179001bf7c85124e30f850dff0c2a2591806df2ea4b326e587de938fdcb7e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33164,13 +33164,13 @@
           "raw": "../../cloudflare/resiliencia-sync-catalogo.js",
           "target": "cloudflare/resiliencia-sync-catalogo.js",
           "dynamic": false,
-          "line": 6
+          "line": 7
         },
         {
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 7
+          "line": 8
         }
       ],
       "endpoints": []
@@ -34315,8 +34315,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 196472,
-      "sha256": "ffab72699403186d1f6d230a6dc333835ae79120c4903075737c4c706281f8f4"
+      "bytes": 196475,
+      "sha256": "507cf410d3d36f59baec04de9d36adba78c029b18218f5ad59068b9189225401"
     },
     {
       "path": "apple-touch-icon.png",
@@ -34621,8 +34621,8 @@
     {
       "path": "cloudflare/borrado-global-catalogo.js",
       "extension": ".js",
-      "bytes": 13874,
-      "sha256": "1b6c4435c08e153af67f4f3643da96f4f2258cc2f25d31a408affdeefdc85a86"
+      "bytes": 14378,
+      "sha256": "f802f3e2dd511a05f65f36a4b4e937911a90091539338f49902a097441eab7ea"
     },
     {
       "path": "cloudflare/comentarios-sociales.js",
@@ -34711,8 +34711,8 @@
     {
       "path": "cloudflare/resiliencia-sync-catalogo.js",
       "extension": ".js",
-      "bytes": 17458,
-      "sha256": "1162a9f7c016bc763dd7f7aa9d8757565bbf0a573f0ba3a2da98f1efc22fa4ff"
+      "bytes": 19460,
+      "sha256": "6a09e77743b1c77caca6efe370768ae1153532d4a310281a63a2e08734f51b1e"
     },
     {
       "path": "cloudflare/seguridad-cloudinary.js",
@@ -34825,8 +34825,8 @@
     {
       "path": "css/admin/admin.css",
       "extension": ".css",
-      "bytes": 88562,
-      "sha256": "0dd1a302798b4c68ffcf6c892ce6a5e144df2c99b55edbb5102e8a2b4cb85875"
+      "bytes": 88621,
+      "sha256": "e0f5fd102af77e3bddd870da95132848bad65b314094a76b38ef40284b9c1eb3"
     },
     {
       "path": "css/admin/diagnostico-maestro.css",
@@ -35629,8 +35629,8 @@
     {
       "path": "functions/api/admin-catalog-delete.js",
       "extension": ".js",
-      "bytes": 6415,
-      "sha256": "be99cb2ffd41face84e89289550b25593d658063c2137f3f9482a70e6f0bdcf0"
+      "bytes": 6325,
+      "sha256": "7beff0d454afd135ac3b6775fabbc22d59a5afaa18705b834a65bd95271fb4a9"
     },
     {
       "path": "functions/api/admin-delete-user.js",
@@ -36229,8 +36229,8 @@
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
       "extension": ".js",
-      "bytes": 16416,
-      "sha256": "a2235e5707348e477af6be18a3997c44a4990eca216b8096ce4b43d93bf371db"
+      "bytes": 14570,
+      "sha256": "2a079ff61559bb6644dac05d2ea5a11ce4077bb00631f406458eed3b6a0d38d3"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
@@ -36289,8 +36289,8 @@
     {
       "path": "js/admin/shopify-commerce-admin.js",
       "extension": ".js",
-      "bytes": 80117,
-      "sha256": "06ac086e8d79e9257bc529f9e690d8ae711858c9d961d7f4740835c930aa73ea"
+      "bytes": 80162,
+      "sha256": "39b5bb91e7d8b8eaf5ec6c2724a14320834169fa7165b0110bb6d7750b700121"
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
@@ -37784,7 +37784,7 @@
       "path": "scripts/auditar-borrado-global-catalogo.mjs",
       "extension": ".mjs",
       "bytes": 6831,
-      "sha256": "525827970697aceb23f44e20ca1f927a5456119caf93c92996992a4d95ea380d"
+      "sha256": "00393e4877bf2706fee54fda8725909c3827c4cdfae7846933333c480eadd39d"
     },
     {
       "path": "scripts/auditar-canonicos-viewports.mjs",
@@ -38377,8 +38377,8 @@
     {
       "path": "scripts/auditar-superadmin-maestro-responsive.mjs",
       "extension": ".mjs",
-      "bytes": 7709,
-      "sha256": "76b781d832b283c43e2fbbf69d48a6b9548955a08db8632c634bd9bbeae88f43"
+      "bytes": 9807,
+      "sha256": "ba967195460c7c26e057377c48bc430ce480c32c09b0da25716aaecbe12d953b"
     },
     {
       "path": "scripts/auditar-superadmin-maestro.mjs",
@@ -38821,8 +38821,8 @@
     {
       "path": "tests/catalog/bulk-product-delete-contract.test.mjs",
       "extension": ".mjs",
-      "bytes": 598,
-      "sha256": "3e46e635deac18ee380d6bfc1e10c849e5ba2be1b9c38894e2cbe71a4b833e00"
+      "bytes": 942,
+      "sha256": "b86df0462cfd68ca68f8ff32edddba7cb72cbecc0e86ef5e0da6e00ec3f75ca0"
     },
     {
       "path": "tests/catalog/catalog-delete-reference-resilience.test.mjs",
@@ -39199,8 +39199,8 @@
     {
       "path": "tests/sync/catalog-sheet-sync-queue.test.mjs",
       "extension": ".mjs",
-      "bytes": 9908,
-      "sha256": "14fbd3d4e7506c741cc5ddb523e1dd6d6d0aa7cc0d29e61f9ca70c4435f27e14"
+      "bytes": 10916,
+      "sha256": "47c179001bf7c85124e30f850dff0c2a2591806df2ea4b326e587de938fdcb7e"
     },
     {
       "path": "tests/sync/firestore-admin-batch-get-parser.test.mjs",
