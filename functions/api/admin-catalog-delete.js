@@ -120,11 +120,19 @@ export async function onRequest(context) {
 
     const result = await runCatalogAction(action, env, body, scope, false, idToken, actorContext);
 
-    if (preflightError) {
+    // El preflight es una comprobación preventiva, no la autoridad del estado
+    // final. Si el cierre posterior confirmó Productos en Sheets, una falla
+    // transitoria del preflight ya quedó recuperada y no debe convertir una
+    // eliminación correcta en HTTP 207 / "sincronización pendiente".
+    const productsSheetConfirmed = result?.sheets?.products === true;
+    if (preflightError && !productsSheetConfirmed) {
       result.partial = true;
       result.errors = [...(Array.isArray(result.errors) ? result.errors : []), `Preflight de Google Sheets pendiente: ${preflightError}`];
       result.sheets = { ...(result.sheets || {}), products: false };
       result.pendingSheetSync = true;
+    } else if (productsSheetConfirmed) {
+      result.pendingSheetSync = false;
+      if (preflightError) result.preflightRecovered = true;
     }
 
     const status = result?.partial ? 207 : 200;
