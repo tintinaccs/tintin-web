@@ -251,6 +251,75 @@ export async function firestoreAdminGet(env, path) {
  * importante en Workers: dos GET por producto agotan rápido el presupuesto
  * de subrequests cuando una cola debe reconstruir productos e inventario.
  */
+export function parseFirestoreBatchGetBody(body) {
+  const source = String(body ?? '').trim();
+  if (!source) return [];
+
+  let rows = null;
+  try {
+    const parsed = JSON.parse(source);
+    rows = Array.isArray(parsed) ? parsed : [parsed];
+  } catch {
+    // Google puede entregar métodos streaming como varios objetos JSON
+    // consecutivos (con o sin saltos de línea y con objetos formateados en
+    // múltiples líneas). Dividir por "\n" rompe en cuanto un objeto ocupa
+    // más de una línea, así que extraemos valores JSON completos respetando
+    // strings/escapes y profundidad de llaves.
+    rows = [];
+    let start = -1;
+    let depth = 0;
+    let inString = false;
+    let escaped = false;
+
+    for (let index = 0; index < source.length; index += 1) {
+      const char = source[index];
+
+      if (start < 0) {
+        if (/\s|\[|\]|,/.test(char)) continue;
+        if (char !== '{') throw new Error('Firestore BATCH GET devolvió una respuesta inválida.');
+        start = index;
+        depth = 1;
+        inString = false;
+        escaped = false;
+        continue;
+      }
+
+      if (inString) {
+        if (escaped) {
+          escaped = false;
+        } else if (char === '\\') {
+          escaped = true;
+        } else if (char === '"') {
+          inString = false;
+        }
+        continue;
+      }
+
+      if (char === '"') {
+        inString = true;
+      } else if (char === '{') {
+        depth += 1;
+      } else if (char === '}') {
+        depth -= 1;
+        if (depth === 0) {
+          try {
+            rows.push(JSON.parse(source.slice(start, index + 1)));
+          } catch {
+            throw new Error('Firestore BATCH GET devolvió una respuesta inválida.');
+          }
+          start = -1;
+        }
+      }
+    }
+
+    if (start >= 0 || depth !== 0 || inString || rows.length === 0) {
+      throw new Error('Firestore BATCH GET devolvió una respuesta inválida.');
+    }
+  }
+
+  return rows.flatMap(row => row?.found ? [row.found] : []);
+}
+
 export async function firestoreAdminBatchGet(env, paths) {
   const sa = parseServiceAccount(env);
   const uniquePaths = [...new Set((Array.isArray(paths) ? paths : [])
@@ -268,16 +337,7 @@ export async function firestoreAdminBatchGet(env, paths) {
   });
   if (!response.ok) throw new Error(`Firestore BATCH GET falló (${response.status})`);
 
-  const body = await response.text();
-  return body.split(/\r?\n/).flatMap(line => {
-    if (!line.trim()) return [];
-    try {
-      const row = JSON.parse(line);
-      return row?.found ? [row.found] : [];
-    } catch {
-      throw new Error('Firestore BATCH GET devolvió una respuesta inválida.');
-    }
-  });
+  return parseFirestoreBatchGetBody(await response.text());
 }
 
 /**
