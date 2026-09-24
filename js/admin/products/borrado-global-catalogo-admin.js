@@ -168,7 +168,11 @@ async function executeProductDeletion({ scope, productIds = [], label = '' }) {
   } else {
     toast(`${aggregate.deletedProducts || n} producto(s) eliminados globalmente`);
   }
-  if (aggregate.deletedProducts > 0) window.setTimeout(() => window.location.reload(), 700);
+  // Sin reload: el listener onSnapshot de productos (admin-app.js) ya refleja
+  // el borrado en la tabla en tiempo real. Forzar un reload aquí reiniciaba
+  // toda la secuencia de arranque de sesión (Auth + App Check) sin necesidad,
+  // exponiéndola de nuevo a condiciones de red inestables justo después de
+  // una operación pesada.
   return !aggregate.partial;
 }
 
@@ -216,7 +220,7 @@ async function executeCollectionDeletion({ scope, slugs = [] }) {
   });
   if (result.partial) window.alert(partialMessage(result));
   else toast(`${result.deletedCollections || collectionCount} colección(es) eliminadas globalmente`);
-  window.setTimeout(() => window.location.reload(), 700);
+  // Sin reload: ver comentario equivalente en executeProductDeletion.
   return !result.partial;
 }
 
@@ -246,7 +250,7 @@ async function executeSingleCollectionDeletion(slug, count) {
   });
   if (result.partial) window.alert(partialMessage(result));
   else toast(`Colección "${label}" eliminada globalmente`);
-  window.setTimeout(() => window.location.reload(), 700);
+  // Sin reload: ver comentario equivalente en executeProductDeletion.
   return !result.partial;
 }
 
