@@ -1,4 +1,4 @@
-import { auth, db, waitForAppCheckToken } from "../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1";
+import { auth, db, waitForAppCheckToken } from "../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-stable-2";
 import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
