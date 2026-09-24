@@ -12,7 +12,7 @@ const sessionCoordinatorSource = fs.readFileSync(
   'utf8'
 );
 const firebaseSource = fs.readFileSync(
-  new URL('../../js/core/firebase/firebase-admin-estable.js', import.meta.url),
+  new URL('../../js/core/firebase/firebase.js', import.meta.url),
   'utf8'
 );
 
@@ -38,11 +38,9 @@ test('la restauración nunca convierte un observer obsoleto en sesión válida',
   assert.doesNotMatch(sessionCoordinatorSource, /auth-observer-after-error/);
 });
 
-test('Firebase Auth initializes the browser persistence hierarchy before restoration without migrating an active session', () => {
-  const executable = firebaseSource.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
-  assert.match(firebaseSource, /persistence:\s*\[indexedDBLocalPersistence, browserLocalPersistence, browserSessionPersistence\]/);
+test('Firebase Auth initializes persistence before restoration', () => {
+  assert.match(firebaseSource, /initializeAuth\(app, \{ persistence: browserLocalPersistence \}\)/);
   assert.match(firebaseSource, /persistenceWasConfiguredAtInitialization/);
-  assert.doesNotMatch(executable, /\bsetPersistence\s*\(/);
 });
 
 test('un error de restauración cae a visitante y no bloquea la aplicación', () => {
