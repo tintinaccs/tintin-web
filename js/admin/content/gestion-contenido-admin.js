@@ -5,8 +5,7 @@
    incluidos en esquema-contenido.js. No acepta HTML ni selectores desde Firestore.
    ============================================================= */
 
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1';
 import {
   doc,
@@ -327,7 +326,7 @@ if (!window.TintinAdminContentPhase6Booted) {
 
   async function subscribePage(pageId) {
     pageUnsubscribe?.();
-    if (!await waitForAdminAppCheck(12000)) return;
+    if (!await appCheckReady) return;
     pageUnsubscribe = onSnapshot(
       doc(db, 'site_content', pageId),
       snapshot => {
