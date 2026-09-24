@@ -14,7 +14,7 @@
 // - Precio/nombre/imagen son solo datos visuales; checkout vuelve a validarlos.
 // =============================================================
 
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
 import { sanitizeImageUrl } from '../images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1';
 import { GUEST_CART_TTL_MS, guestCartIsExpired } from './politica-persistencia-carrito.js?v=tintin-20260808-product-cart-1';
