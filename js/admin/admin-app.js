@@ -1,4 +1,4 @@
-import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1";
+import { auth, db, waitForAppCheckToken } from "../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1";
 import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -930,6 +930,36 @@ function showAdminInitFailure() {
   hideOverlay();
 }
 
+function dismissAdminAppCheckUnavailable() {
+  document.getElementById('adm-appcheck-unavailable')?.remove();
+}
+
+function showAdminAppCheckUnavailable() {
+  document.documentElement.classList.remove('adm-auth-ready');
+  let overlay = document.getElementById('adm-appcheck-unavailable');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'adm-appcheck-unavailable';
+    overlay.setAttribute('role', 'status');
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#44222d';
+    overlay.innerHTML = '<div style="max-width:580px;text-align:center">' +
+      '<h1 style="font-size:22px;margin:0 0 10px">Verificación de seguridad no disponible</h1>' +
+      '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">Tu sesión sigue activa. Firebase App Check no pudo confirmar este navegador todavía, así que el panel no abrirá lecturas privadas hasta que la verificación esté disponible.</p>' +
+      '<button type="button" id="adm-appcheck-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#ad3f67;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    overlay.querySelector('#adm-appcheck-retry')?.addEventListener('click', () => window.location.reload());
+  }
+  hideOverlay();
+}
+
+window.addEventListener('tintin:app-check-ready', event => {
+  if (event?.detail?.ready !== true || !document.getElementById('adm-appcheck-unavailable')) return;
+  // El token llegó después del timeout de arranque. Una única recarga ya parte
+  // con App Check listo y evita montar listeners con credenciales incompletas.
+  window.location.reload();
+});
+
 function showAdminAuthUnknown() {
   document.documentElement.classList.remove('adm-auth-ready');
   let overlay = document.getElementById('adm-auth-unknown');
@@ -979,6 +1009,10 @@ function teardownAdminRealtimeOnSessionLoss() {
   stopAdminRealtimeData();
   stopAdminSettingsRealtime();
   stopDashboardActivityMetrics();
+  if (_productosUnsub) { try { _productosUnsub(); } catch {} _productosUnsub = null; }
+  if (_productInventoryUnsub) { try { _productInventoryUnsub(); } catch {} _productInventoryUnsub = null; }
+  if (_productosSlowTimer) { window.clearTimeout(_productosSlowTimer); _productosSlowTimer = null; }
+  adminRealtimeReady.products = false;
   document.documentElement.classList.remove('adm-auth-ready');
   adminGuardInitializedUid = '';
   adminGuardInitializingUid = '';
@@ -1059,7 +1093,23 @@ async function startAdminAuthGuard() {
     adminGuardInitializingUid = user.uid;
 
     try {
-      await appCheckReady;
+      const appCheckAvailable = await waitForAppCheckToken(12000);
+      if (!appCheckAvailable) {
+        // No abrir ninguna consulta privada sin App Check cuando Enforcement
+        // está activo. Esto conserva Auth y evita la cascada de
+        // permission-denied que antes parecía un logout.
+        currentUser = user;
+        teardownAdminRealtimeOnSessionLoss();
+        currentUser = user;
+        showAdminAppCheckUnavailable();
+        recordAuthDiagnostic('APP_CHECK_ADMIN_BLOCKED', {
+          source: 'admin-guard',
+          authState: snapshot.status,
+          reason: 'app-check-token-unavailable'
+        });
+        return;
+      }
+      dismissAdminAppCheckUnavailable();
 
       const role = await getUserRole(user.uid, user.email);
       currentRole = role;
