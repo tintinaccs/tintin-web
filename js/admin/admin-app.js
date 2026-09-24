@@ -5264,7 +5264,7 @@ function loadProductos() {
       '<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="reintentarCargaProductos()">Reintentar</button>';
   }, 12000);
   _productosUnsub = onSnapshot(
-    query(collection(db, 'products'), orderBy('name')),
+    query(collection(db, 'products'), orderBy('name'), limit(ADMIN_REALTIME_LIMIT)),
     snap => {
       clearTimeout(_productosSlowTimer);
       // A diferencia de la tienda pública (estado-productos.js), esto no
