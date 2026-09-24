@@ -39,9 +39,10 @@ test('la restauración nunca convierte un observer obsoleto en sesión válida',
 });
 
 test('Firebase Auth initializes the browser persistence hierarchy before restoration without migrating an active session', () => {
+  const executable = firebaseSource.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
   assert.match(firebaseSource, /persistence:\s*\[indexedDBLocalPersistence, browserLocalPersistence, browserSessionPersistence\]/);
   assert.match(firebaseSource, /persistenceWasConfiguredAtInitialization/);
-  assert.doesNotMatch(firebaseSource, /\bsetPersistence\s*\(/);
+  assert.doesNotMatch(executable, /\bsetPersistence\s*\(/);
 });
 
 test('un error de restauración cae a visitante y no bloquea la aplicación', () => {
