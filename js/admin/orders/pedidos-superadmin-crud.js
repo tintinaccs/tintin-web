@@ -1,4 +1,4 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
+import { auth, db, ensureAppCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-private-gate-1';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
 import { authenticatedFetch } from '../../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1';
 import {
@@ -22,6 +22,12 @@ let catalogCache = [];
 
 function isSuperAdmin() {
   return String(auth.currentUser?.email || '').trim().toLowerCase() === String(SUPER_ADMIN || '').trim().toLowerCase();
+}
+
+async function requirePrivateFirestore() {
+  if (!await ensureAppCheckReady({ timeoutMs: 15000 })) {
+    throw new Error('No se pudo verificar App Check para acceder a Firestore.');
+  }
 }
 
 function assertSuperAdmin() {
@@ -74,6 +80,7 @@ async function allocateSequence_(transaction) {
 
 async function ensureOrderNumber(orderId) {
   assertSuperAdmin();
+  await requirePrivateFirestore();
   const safeId = clean(orderId, 220);
   if (!safeId || safeId.includes('/')) return null;
   return runTransaction(db, async transaction => {
@@ -127,6 +134,7 @@ async function resetOrderSequence() {
 
 async function trashOrder(orderId, reason = '') {
   assertSuperAdmin();
+  await requirePrivateFirestore();
   const safeId = clean(orderId, 220);
   if (!safeId || safeId.includes('/')) throw new Error('Pedido inválido.');
   const activeRef = doc(db, ACTIVE_COLLECTION, safeId);
@@ -165,6 +173,7 @@ async function trashOrder(orderId, reason = '') {
 
 async function restoreOrder(orderId) {
   assertSuperAdmin();
+  await requirePrivateFirestore();
   const safeId = clean(orderId, 220);
   if (!safeId || safeId.includes('/')) throw new Error('Pedido inválido.');
   return runTransaction(db, async transaction => {
@@ -190,6 +199,7 @@ async function restoreOrder(orderId) {
 
 async function deleteTrashPermanently(orderId) {
   assertSuperAdmin();
+  await requirePrivateFirestore();
   const safeId = clean(orderId, 220);
   if (!safeId || safeId.includes('/')) throw new Error('Pedido inválido.');
   const typed = window.prompt(`Eliminar definitivamente ${safeId} de Borrados. Esta copia ya no se podrá recuperar. Escribí ELIMINAR para continuar:`);
@@ -200,6 +210,7 @@ async function deleteTrashPermanently(orderId) {
 }
 
 async function loadCatalog_() {
+  await requirePrivateFirestore();
   const snap = await getDocs(query(collection(db, 'products'), limit(1000)));
   catalogCache = snap.docs.map(item => ({ id: item.id, ...item.data() }))
     .filter(product => product.active !== false)
@@ -461,6 +472,7 @@ async function openManualOrder() {
 
 async function openAdvancedOrderEditor(orderId) {
   assertSuperAdmin();
+  await requirePrivateFirestore();
   const safeId = clean(orderId, 220);
   const [orderSnap] = await Promise.all([getDoc(doc(db, ACTIVE_COLLECTION, safeId)), loadCatalog_()]);
   if (!orderSnap.exists()) throw new Error('El pedido ya no existe.');
