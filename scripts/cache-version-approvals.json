@@ -1,16 +1,12 @@
 {
   "approved": {
-    "js/core/firebase/firebase-admin-estable.js": {
-      "version": "tintin-20260924-admin-auth-stable-1",
-      "gitBlobSha": "25df422099721a8a932a77b5d14f51ec30503695"
-    },
-    "js/admin/admin-bootstrap.js": {
-      "version": "tintin-20260924-admin-bootstrap-1",
-      "gitBlobSha": "aacd94fdf37d669f1cd1d5d1eeccfcc56fad4e72"
-    },
     "js/admin/content/control-bienvenida-admin.js": {
       "version": "tintin-20260924-appcheck-gate-2",
-      "gitBlobSha": "788405d037e7b99a8c84f4f0fa30872284608af7"
+      "gitBlobSha": "fdfae4c8f9f72a5b324c6f7a28cf2925bcdbb13d"
+    },
+    "js/admin/auth/app-check-admin.js": {
+      "version": "tintin-20260924-admin-appcheck-gate-1",
+      "gitBlobSha": "34a1728494b900c74019cf834091dcd9a6ea71b4"
     }
   },
   "removed": []
