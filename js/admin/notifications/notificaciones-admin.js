@@ -97,8 +97,9 @@ function ensureUi() {
       <div class="adm-notifications-header"><div><span class="adm-notifications-kicker">Actividad en vivo</span><h3>Notificaciones</h3></div><span class="adm-notifications-auto-read">Al abrir, las novedades quedan vistas</span></div>
       <div class="adm-notifications-list" id="adm-notifications-list" aria-live="polite"><div class="adm-notifications-empty">Cargando actividad…</div></div>
     </section>`;
-  const newOrder = topbar.querySelector('.adm-topbar-btn');
-  topbar.insertBefore(wrap, newOrder || null);
+  const actions = topbar.querySelector('.adm-topbar-actions') || topbar;
+  const newOrder = actions.querySelector('.adm-topbar-btn');
+  actions.insertBefore(wrap, newOrder || null);
   return wrap;
 }
 
