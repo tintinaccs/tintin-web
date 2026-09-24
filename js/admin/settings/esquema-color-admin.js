@@ -7,8 +7,7 @@
  * admin.html y admin-images.html. Un esquema del panel nunca toca
  * --color-* (el esquema público), así que jamás se "filtra" hacia afuera.
  */
-import { db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { ADMIN_TOKENS, buildDefaultTokenMap } from '../../components/color/esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1';
 
@@ -49,7 +48,7 @@ function applyScheme(schemeData) {
 
 async function subscribeToScheme(schemeId) {
   if (unsubScheme) { unsubScheme(); unsubScheme = null; }
-  if (!await waitForAdminAppCheck(12000)) return;
+  if (!await appCheckReady) return;
   unsubScheme = onSnapshot(
     doc(db, 'colorSchemes', schemeId || DEFAULT_SCHEME_ID),
     snap => { if (snap.exists()) applyScheme(snap.data()); },
@@ -58,7 +57,7 @@ async function subscribeToScheme(schemeId) {
 }
 
 (async () => {
-  if (!await waitForAdminAppCheck(12000)) return;
+  if (!await appCheckReady) return;
   onSnapshot(
     doc(db, APPEARANCE_DOC.col, APPEARANCE_DOC.id),
     snap => {
