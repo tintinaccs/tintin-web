@@ -12,8 +12,8 @@ const LIGHTWEIGHT_PAGES = new Set([
 ]);
 
 const ABOUT_CANONICAL_GUARD = '/js/pages/institutional/about-canonical-clean-v1.js';
-const CONTACT_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-contacto.js?v=tintin-20260913-xss-hardening-1-auth-persistence-20260919-1';
-const LEGAL_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-legal.js?v=tintin-20260913-xss-hardening-1-auth-persistence-20260919-1';
+const CONTACT_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-contacto.js?v=tintin-20260913-xss-hardening-1-auth-persistence-20260919-1-app-check-retry-cascade-1';
+const LEGAL_MAINTENANCE_RUNTIME = '/js/pages/institutional/mantenimiento-legal.js?v=tintin-20260913-xss-hardening-1-auth-persistence-20260919-1-app-check-retry-cascade-1';
 const MASTER_DIAGNOSTICS_RUNTIME = '/js/admin/diagnostics/diagnostico-maestro-admin.js?v=tintin-20260923-auth-cache-coherence-1';
 const VISUAL_LAYOUT_GUARD = '<style id="tt-vb-layout-guard">html.tt-vb-layout-pending body>section,html.tt-vb-layout-pending body>main{visibility:hidden;animation:tt-vb-layout-release 0s linear 3.5s forwards}@keyframes tt-vb-layout-release{to{visibility:visible}}</style>';
 

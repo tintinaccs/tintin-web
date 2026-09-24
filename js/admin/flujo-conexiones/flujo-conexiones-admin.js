@@ -10,7 +10,7 @@
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260922-green-flow-1';
 import { resolveState, isAttentionState } from './estado-flujo.js?v=tintin-20260920-admin-status-fixes-1';
 import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260923-flow-evidence-2';
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-app-check-retry-1';
 import { collection, doc, getDoc, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const CATEGORY_LABELS = {

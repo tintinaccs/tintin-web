@@ -6,7 +6,7 @@
    HTML recibido desde la base.
    ============================================================= */
 
-import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
+import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260924-app-check-retry-1';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import {
   getPageSchema,

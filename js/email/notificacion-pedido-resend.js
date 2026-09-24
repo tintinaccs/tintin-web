@@ -1,4 +1,4 @@
-import { db, auth } from '../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
+import { db, auth } from '../core/firebase/firebase.js?v=tintin-20260924-app-check-retry-1';
 import { apiUrl } from '../core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   collection,

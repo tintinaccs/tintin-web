@@ -1,5 +1,5 @@
-import { db } from '../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
-import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
+import { db } from '../core/firebase/firebase.js?v=tintin-20260924-app-check-retry-1';
+import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-app-check-retry-cascade-1';
 import { AUTH_STATES, getSessionUser, waitForSession, subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260923-auth-cache-coherence-1';
 import {
   doc,
@@ -42,7 +42,7 @@ if (!window.TintinSecureCheckoutOrderBooted) {
 
   if (!window.TintinCheckoutEmailBridgeLoading) {
     window.TintinCheckoutEmailBridgeLoading = true;
-    import('../pages/checkout/checkout-puente-correo.js?v=tintin-20260814-social-notifications-3-auth-persistence-20260919-1').catch(error => {
+    import('../pages/checkout/checkout-puente-correo.js?v=tintin-20260814-social-notifications-3-auth-persistence-20260919-1-app-check-retry-cascade-1').catch(error => {
       console.error('[secure-checkout-order] No se pudo cargar el puente de correo del pedido:', error);
     });
   }

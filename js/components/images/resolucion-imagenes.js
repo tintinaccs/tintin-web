@@ -9,7 +9,7 @@
    reimplementar esta cascada — todas deben importar de acá.
    ============================================================= */
 
-import { db } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
+import { db } from '../../core/firebase/firebase.js?v=tintin-20260924-app-check-retry-1';
 import {
   doc,
   getDoc,
