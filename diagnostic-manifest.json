@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "4a44df6d7e2baef19d9838ed3f51772a2d194cc181c3bf07816b148fa35a3443",
+  "sourceFingerprint": "f1f2b9f951ecbf5bbbd1ed1ad9fdc8aa28d5a7a850650ed5d87babc469be2ed3",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 873,
     "textFiles": 832,
-    "totalBytes": 17093079,
+    "totalBytes": 17094507,
     "pages": 19,
     "modules": 597
   },
@@ -24026,8 +24026,8 @@
     },
     {
       "path": "js/core/firebase/firebase.js",
-      "bytes": 11471,
-      "sha256": "2cc86d51bb5401ea3c5057c5d93987b27397c1056d7c3a3125a509b5857fbec7",
+      "bytes": 12523,
+      "sha256": "e6c30391d2a6f5f64a3342a435b4540ac9d483ae3b1645062a2c04b629227205",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30598,8 +30598,8 @@
     },
     {
       "path": "tests/auth/global-session-restore.test.mjs",
-      "bytes": 4351,
-      "sha256": "10b93f8dd93e66346d9150eaed35d54681c10679e12923206f3697f4c066ce5e",
+      "bytes": 4724,
+      "sha256": "e0d6100e05e0d5aee438bfd67d75e5bf1cbcb748386658f5def3f42112e6ac42",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36699,8 +36699,8 @@
     {
       "path": "js/core/firebase/firebase.js",
       "extension": ".js",
-      "bytes": 11471,
-      "sha256": "2cc86d51bb5401ea3c5057c5d93987b27397c1056d7c3a3125a509b5857fbec7"
+      "bytes": 12523,
+      "sha256": "e6c30391d2a6f5f64a3342a435b4540ac9d483ae3b1645062a2c04b629227205"
     },
     {
       "path": "js/core/firebase/origen-funciones.js",
@@ -38307,8 +38307,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 45294,
-      "sha256": "7e5067193ee036b5c0dbef098a07e78b6237205585dee4b795587e2396d0a407"
+      "bytes": 45297,
+      "sha256": "39a076d35f5b3662388b88532c3463c6783b618578ec549b9e631fd9095d9f25"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -38595,8 +38595,8 @@
     {
       "path": "tests/auth/global-session-restore.test.mjs",
       "extension": ".mjs",
-      "bytes": 4351,
-      "sha256": "10b93f8dd93e66346d9150eaed35d54681c10679e12923206f3697f4c066ce5e"
+      "bytes": 4724,
+      "sha256": "e0d6100e05e0d5aee438bfd67d75e5bf1cbcb748386658f5def3f42112e6ac42"
     },
     {
       "path": "tests/auth/visual-preview-session-isolation.test.mjs",
