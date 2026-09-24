@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "555760bb0c5fc888a20a3f397147afd897b03b9df7efdde377ad0c0d504b1a31",
+  "sourceFingerprint": "812c3681eac1cb06b337c140c3054459b9e00b185819f34babc0b3b81d39dc8f",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 877,
     "textFiles": 836,
-    "totalBytes": 17126245,
+    "totalBytes": 17126815,
     "pages": 19,
     "modules": 601
   },
@@ -19119,8 +19119,8 @@
     },
     {
       "path": "functions/api/catalog-sheet-sync-drain.js",
-      "bytes": 3050,
-      "sha256": "8dfb641b9afb831e70e04ed1b9ca0ccc191833a714b1ae199beb7bd8cbac7668",
+      "bytes": 3416,
+      "sha256": "7f29f6c7ee2039d6f6c75a7fc9671480aee6735a7596c13f087f8c65517186f5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32491,8 +32491,8 @@
     },
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",
-      "bytes": 4863,
-      "sha256": "3af2a7744d05843ab221e9b3db0d4f41827209f385518b72e1362da2218c7a22",
+      "bytes": 5067,
+      "sha256": "9735829e71cc7d00edf04b53256297a22c94eb34067198520fa88f0c04be60d7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35677,8 +35677,8 @@
     {
       "path": "functions/api/catalog-sheet-sync-drain.js",
       "extension": ".js",
-      "bytes": 3050,
-      "sha256": "8dfb641b9afb831e70e04ed1b9ca0ccc191833a714b1ae199beb7bd8cbac7668"
+      "bytes": 3416,
+      "sha256": "7f29f6c7ee2039d6f6c75a7fc9671480aee6735a7596c13f087f8c65517186f5"
     },
     {
       "path": "functions/api/claim-commerce-history.js",
@@ -39067,8 +39067,8 @@
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",
       "extension": ".mjs",
-      "bytes": 4863,
-      "sha256": "3af2a7744d05843ab221e9b3db0d4f41827209f385518b72e1362da2218c7a22"
+      "bytes": 5067,
+      "sha256": "9735829e71cc7d00edf04b53256297a22c94eb34067198520fa88f0c04be60d7"
     },
     {
       "path": "tests/operations/integration-router-security.test.mjs",
