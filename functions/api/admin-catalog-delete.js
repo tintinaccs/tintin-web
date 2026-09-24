@@ -45,6 +45,27 @@ function productIdsFromPreview(preview) {
   return Array.isArray(preview?.productIds) ? preview.productIds : [];
 }
 
+export function applyCatalogPreflightOutcome(result, preflightError) {
+  if (!result || typeof result !== 'object' || !preflightError) return result;
+
+  // El preflight ocurre ANTES de la mutación y sólo es una sonda preventiva.
+  // Si el cierre canónico posterior ya confirmó Productos en Sheets, ese
+  // resultado final tiene más autoridad que un fallo transitorio anterior.
+  if (result?.sheets?.products === true) {
+    result.preflightRecovered = true;
+    return result;
+  }
+
+  result.partial = true;
+  result.errors = [
+    ...(Array.isArray(result.errors) ? result.errors : []),
+    `Preflight de Google Sheets pendiente: ${preflightError}`,
+  ];
+  result.sheets = { ...(result.sheets || {}), products: false };
+  result.pendingSheetSync = true;
+  return result;
+}
+
 async function runCatalogAction(action, env, body, scope, dryRun, idToken, actorContext) {
   if (action === 'deleteProducts') {
     return deleteProductsGlobally(env, {
@@ -120,12 +141,7 @@ export async function onRequest(context) {
 
     const result = await runCatalogAction(action, env, body, scope, false, idToken, actorContext);
 
-    if (preflightError) {
-      result.partial = true;
-      result.errors = [...(Array.isArray(result.errors) ? result.errors : []), `Preflight de Google Sheets pendiente: ${preflightError}`];
-      result.sheets = { ...(result.sheets || {}), products: false };
-      result.pendingSheetSync = true;
-    }
+    applyCatalogPreflightOutcome(result, preflightError);
 
     const status = result?.partial ? 207 : 200;
     return jsonResponse({ ok: result?.partial !== true, partial: result?.partial === true, result }, status, origin, requestUrl);
