@@ -263,10 +263,14 @@ export async function waitForAppCheckToken(timeoutMs = 12000) {
   const instance = shared?.appCheck || appCheck;
   if (!instance) return false;
   try {
-    await Promise.race([
+    const retryTimeout = new Promise(resolve => {
+      window.setTimeout(() => resolve(false), Math.max(0, Number(timeoutMs) || 0));
+    });
+    const refreshed = await Promise.race([
       getAppCheckToken(instance, false).then(() => true),
-      timeout
+      retryTimeout
     ]);
+    if (!refreshed) return false;
     window.TintinAppCheckStatus = 'enabled';
     return true;
   } catch {
