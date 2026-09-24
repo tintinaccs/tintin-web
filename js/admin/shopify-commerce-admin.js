@@ -11,7 +11,8 @@
    vistas, filtros, selección, panel lateral, búsqueda y navegación rápida.
    ======================================================================== */
 
-import { auth, db, appCheckReady } from '../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
+import { auth, db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
+import { waitForAdminAppCheck } from './auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1';
 import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1';
 import {
   collection,
@@ -1329,7 +1330,7 @@ async function bootForUser(user) {
   state.ready = true;
   mountShells();
   observeLegacyForms();
-  if (!await appCheckReady) return;
+  if (!await waitForAdminAppCheck(12000)) return;
   subscribeData();
 }
 
