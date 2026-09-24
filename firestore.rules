@@ -212,6 +212,30 @@ service cloud.firestore {
       allow delete: if isSuperAdmin();
     }
 
+    // Se guarda solo cuando admin.html no logra confirmar la sesión y muestra
+    // el overlay "No pudimos restaurar tu sesión" a cualquier usuario con
+    // acceso al panel, no solo Super Admin — por eso no puede exigir
+    // isStoreOpenOrAllowed() ni un rol: en ese momento la sesión puede estar
+    // rota o ausente. Nunca guarda uid, email ni token; solo el código fijo,
+    // la razón interna y datos de diagnóstico ya sanitizados en el cliente.
+    function authDiagnosticFailureIsValid() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['code', 'reason', 'source', 'route', 'createdAt']) &&
+        data.keys().hasOnly(['code', 'reason', 'source', 'route', 'userAgent', 'createdAt']) &&
+        data.code is string && data.code == 'REDIRECT_LOOP_BROKEN' &&
+        data.reason is string && data.reason.matches('^[a-z0-9-]{1,60}$') &&
+        data.source is string && data.source.size() <= 40 &&
+        data.route is string && data.route.size() <= 220 &&
+        data.get('userAgent', '') is string && data.get('userAgent', '').size() <= 200 &&
+        data.createdAt == request.time;
+    }
+
+    match /authDiagnosticFailures/{eventId} {
+      allow read: if isSuperAdmin();
+      allow create: if !isBlockedUser() && authDiagnosticFailureIsValid();
+      allow update, delete: if false;
+    }
+
     function rolePermAllows(role, moduleKey, actionKey) {
       return exists(/databases/$(database)/documents/rolePermissions/main) &&
         get(/databases/$(database)/documents/rolePermissions/main).data

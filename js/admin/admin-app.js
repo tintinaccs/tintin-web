@@ -985,6 +985,25 @@ function teardownAdminRealtimeOnSessionLoss() {
   currentUser = null;
 }
 
+// Best-effort: deja rastro en Firestore de que a este usuario (no solo Super
+// Admin, cualquiera con acceso a admin.html) se le mostró el overlay "No
+// pudimos restaurar tu sesión", para poder detectar si vuelve a pasar sin
+// depender de que alguien capture la consola en el momento. Nunca debe
+// demorar ni romper el guard: no se espera (no await en la llamada) y
+// cualquier falla de red o de permisos se descarta en silencio.
+async function persistAuthDiagnosticFailure(reason) {
+  try {
+    await addDoc(collection(db, 'authDiagnosticFailures'), {
+      code: 'REDIRECT_LOOP_BROKEN',
+      reason,
+      source: 'admin-guard',
+      route: `${window.location.pathname || '/'}${window.location.search || ''}`.slice(0, 220),
+      userAgent: (navigator.userAgent || '').slice(0, 200),
+      createdAt: serverTimestamp()
+    });
+  } catch {}
+}
+
 async function startAdminAuthGuard() {
   subscribeSession(async snapshot => {
     if (snapshot.status !== AUTH_STATES.RESTORING && !authReadyDiagnosticRecorded) {
@@ -1010,6 +1029,7 @@ async function startAdminAuthGuard() {
       // UNKNOWN no confirma una cuenta y tampoco autoriza navegar a login.
       // Mantener el documento evita el circuito Admin -> login -> Admin.
       recordAuthDiagnostic('REDIRECT_LOOP_BROKEN', { source: 'admin-guard', reason: 'auth-state-unknown' });
+      persistAuthDiagnosticFailure('auth-state-unknown');
       teardownAdminRealtimeOnSessionLoss();
       showAdminAuthUnknown();
       return;
@@ -1027,6 +1047,7 @@ async function startAdminAuthGuard() {
       // La ausencia no confirmada se resuelve con acción explícita desde el
       // overlay, nunca con otra navegación automática.
       recordAuthDiagnostic('REDIRECT_LOOP_BROKEN', { source: 'admin-guard', reason: 'handoff-recovery-timeout' });
+      persistAuthDiagnosticFailure('handoff-recovery-timeout');
       teardownAdminRealtimeOnSessionLoss();
       showAdminAuthUnknown();
       return;
