@@ -7,6 +7,11 @@ import {
 import { jsonResponse, rateLimit, sanitizeText } from '../lib/operational-guard.js';
 
 const MAX_PER_MINUTE = 6;
+// Una tarea puede contener hasta 20 productos. El drenaje obtiene producto e
+// inventario por cada uno, por lo que procesar varias tareas en la misma
+// invocación excede el límite de subsolicitudes de Cloudflare. El workflow se
+// ejecuta cada 15 minutos y avanza la cola de forma segura, una tarea por vez.
+const SCHEDULED_DRAIN_LIMIT = 1;
 
 function bearerToken(request) {
   const authorization = String(request.headers.get('authorization') || '');
@@ -47,7 +52,7 @@ export async function onRequestPost(context) {
   }
 
   try {
-    const result = await drainCatalogSheetSyncQueueScheduled(env, { limit: 25 });
+    const result = await drainCatalogSheetSyncQueueScheduled(env, { limit: SCHEDULED_DRAIN_LIMIT });
     const payload = {
       ok: true,
       checked: Number(result?.checked || 0),
