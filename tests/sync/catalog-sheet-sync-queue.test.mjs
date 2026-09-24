@@ -4,7 +4,7 @@ import {
   drainCatalogSheetSyncQueueScheduled,
   getCatalogSheetSyncQueueStatus,
 } from '../../cloudflare/resiliencia-sync-catalogo.js';
-import { encodeFirestoreFields, decodeFirestoreFields, fsTimestamp } from '../../cloudflare/firebase-admin-ligero.js';
+import { encodeFirestoreFields, decodeFirestoreFields, fsTimestamp, parseFirestoreBatchGetBody } from '../../cloudflare/firebase-admin-ligero.js';
 
 const QUEUE_COLLECTION = 'catalogSheetSyncQueue';
 const MAX_QUEUE_ATTEMPTS = 8;
@@ -151,6 +151,46 @@ function buildDeps(fs, fetchImpl, notify) {
 }
 
 const env = { SHEETS_ENGAGEMENT_SECRET: 'secreto-de-prueba' };
+
+test('batchGet parser acepta respuesta JSON array y omite documentos missing', () => {
+  const found = { name: 'projects/test/databases/(default)/documents/products/p1', fields: { name: { stringValue: 'Uno' } } };
+  const parsed = parseFirestoreBatchGetBody(JSON.stringify([
+    { found, readTime: '2026-09-24T00:00:00Z' },
+    { missing: 'projects/test/databases/(default)/documents/products/p2', readTime: '2026-09-24T00:00:00Z' },
+  ]));
+  assert.deepEqual(parsed, [found]);
+});
+
+test('batchGet parser acepta streaming JSON con objetos multilínea consecutivos', () => {
+  const body = `
+{
+  "found": {
+    "name": "projects/test/databases/(default)/documents/products/p1",
+    "fields": {"name":{"stringValue":"Uno"}}
+  }
+}
+{
+  "missing": "projects/test/databases/(default)/documents/products/p2"
+}
+{
+  "found": {
+    "name": "projects/test/databases/(default)/documents/productInventory/p1",
+    "fields": {"stock":{"integerValue":"5"}}
+  }
+}
+`;
+  const parsed = parseFirestoreBatchGetBody(body);
+  assert.equal(parsed.length, 2);
+  assert.match(parsed[0].name, /products\/p1$/);
+  assert.match(parsed[1].name, /productInventory\/p1$/);
+});
+
+test('batchGet parser rechaza cuerpo truncado en vez de fingir una lectura vacía', () => {
+  assert.throws(
+    () => parseFirestoreBatchGetBody('{"found":{"name":"x"}'),
+    /respuesta inválida/
+  );
+});
 
 test('duplicados: dos corridas concurrentes del worker no procesan la misma tarea dos veces', async () => {
   const fs = makeFakeFirestore();
