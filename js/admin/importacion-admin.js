@@ -8,9 +8,9 @@
  */
 
 import { db, ensureAppCheckReady } from '../core/firebase/firebase.js?v=tintin-20260924-auth-private-gate-1';
-import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1';
+import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-private-gate-1';
 import { collection } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
+import { SUPER_ADMIN } from '../core/auth/roles.js?v=tintin-20260924-auth-private-gate-1';
 import { getDocsPaginated } from '../core/firebase/paginacion-firestore.js?v=tintin-20260716-cloudinary-fix-1';
 import {
   detectCsvDelimiter,
@@ -31,7 +31,7 @@ import {
   summarizeImportRecords,
 } from '../core/store/shopify-import-core.mjs?v=tintin-20260917-shopify-import-core-2';
 import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260918-shopify-phase2-safe-1';
-import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1';
+import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20260924-auth-private-gate-1';
 
 if (!window.TintinAdminShopifyImportBooted) {
   window.TintinAdminShopifyImportBooted = true;
