@@ -7,13 +7,13 @@
  *
  * Ante cualquier error queda bloqueada. Nunca supone que la tienda está abierta.
  */
-import { auth, db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
-import { AUTH_STATES, subscribeSession } from '../auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3';
+import { auth, db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260924-app-check-retry-1-app-check-retry-cascade-1';
+import { AUTH_STATES, subscribeSession } from '../auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3-app-check-retry-cascade-1';
 import {
   doc,
   onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { getUserRole } from '../auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
+import { getUserRole } from '../auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-app-check-retry-cascade-1';
 import {
   isAccessAllowed,
   renderStoreClosedOverlay,
@@ -22,7 +22,7 @@ import {
   getStoreAccessConfig,
   getStoreAccessConfigFromRest,
   normalizeStoreAccessConfig
-} from './nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1';
+} from './nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-app-check-retry-cascade-1';
 
 export {
   isAccessAllowed,

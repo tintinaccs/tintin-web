@@ -11,7 +11,7 @@ let navigationBehaviorsPromise = null;
 const FULL_COMMERCE_PAGES = new Set(['home', 'shop', 'cart', 'account']);
 const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar-notifications';
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
-const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1';
+const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-app-check-retry-cascade-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -113,7 +113,7 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
 
 function loadAuthRuntime() {
   if (!authRuntimePromise) {
-    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20260922-profile-timeout-fix-1').catch(error => {
+    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20260922-profile-timeout-fix-1-app-check-retry-cascade-1').catch(error => {
       authRuntimePromise = null;
       throw error;
     });
@@ -261,7 +261,7 @@ function loadNavigationBehaviors() {
     .then(() => Promise.allSettled([
       initialSurfacePromise,
       import(versionedJsModule('components/navigation/compartido/enrutador.js')),
-      import('./control-busqueda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1'),
+      import('./control-busqueda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-app-check-retry-cascade-1'),
     ]))
     .then(results => {
       reportRuntimeFailures(results);

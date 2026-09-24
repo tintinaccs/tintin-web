@@ -6,7 +6,7 @@
    collections/{slug}.image; esos dos sistemas ya no se duplican acá.
    ============================================================ */
 
-import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
+import { db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-app-check-retry-1-app-check-retry-cascade-1';
 import {
   doc,
   getDoc,
@@ -15,7 +15,7 @@ import {
   serverTimestamp,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { sanitizeImageUrl } from './utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
-import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1';
+import { resolveDeviceImage } from './resolucion-imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-app-check-retry-cascade-1';
 
 // Se mantienen estas inicializaciones porque históricamente dependían de la
 // primera importación de imagenes.js. Ambas son idempotentes.
