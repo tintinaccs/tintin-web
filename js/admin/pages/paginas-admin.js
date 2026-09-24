@@ -115,5 +115,14 @@ async function subscribe() {
   unsubscribe = onSnapshot(collection(db, 'site_content'), snapshot => { customPages = snapshot.docs.map(item => ({ id:item.id, ...item.data() })).filter(page => page.pageType === 'custom').sort((a,b) => String(a.title || '').localeCompare(String(b.title || ''), 'es')); pages = [...BUILTIN_PAGES, ...customPages]; ready = true; render(); }, error => { ready = false; pages = [...BUILTIN_PAGES]; const host = root(); if (host) { render(); host.insertAdjacentHTML('afterbegin', `<div class="tt-pages-error is-visible">No se pudieron cargar las páginas personalizadas: ${esc(error?.message || error)}</div>`); } });
 }
 
+function teardown() {
+  if (unsubscribe) { try { unsubscribe(); } catch {} unsubscribe = null; }
+}
+
 window.TintinPagesAdminRefresh = () => { if (canUse()) { subscribe(); render(); } };
-subscribeAuthState(user => { if (isSuperAdmin(user)) { subscribe(); render(); } });
+subscribeAuthState(user => {
+  if (isSuperAdmin(user)) { subscribe(); render(); return; }
+  // Sin esto, el listener de site_content seguía corriendo tras una pérdida
+  // real de sesión y chocaba con "Missing or insufficient permissions".
+  teardown();
+});
