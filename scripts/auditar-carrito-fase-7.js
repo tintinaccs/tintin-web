@@ -141,7 +141,7 @@ check(
 
 check(
   'El carrito tiene un único dueño y queda disponible en todas las páginas públicas',
-  navigationRuntime.includes("const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1'") &&
+  navigationRuntime.includes("const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1'") &&
     navigationRuntime.includes('function loadCartRuntime()') &&
     navigationRuntime.includes('import(CART_RUNTIME_URL)') &&
     navigationRuntime.includes('attachLightweightCommerceDemand()') &&

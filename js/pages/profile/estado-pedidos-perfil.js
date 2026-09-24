@@ -6,7 +6,7 @@ const STORAGE_PREFIX = 'tt_profile_orders_seen_v1_';
 
 async function currentUserKey() {
   try {
-    const { AUTH_STATES, waitForSession } = await import('../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1');
+    const { AUTH_STATES, waitForSession } = await import('../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1');
     const snapshot = await waitForSession();
     if (snapshot.status === AUTH_STATES.AUTHENTICATED && snapshot.user?.uid) return `${STORAGE_PREFIX}${snapshot.user.uid}`;
     if (snapshot.status === AUTH_STATES.UNKNOWN) return `${STORAGE_PREFIX}session-unknown`;

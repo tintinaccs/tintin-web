@@ -1,4 +1,4 @@
-import { onPublicSettings } from '../../core/store/configuracion-publica.js?v=tintin-20260720-read-budget-3-auth-persistence-20260919-1';
+import { onPublicSettings } from '../../core/store/configuracion-publica.js?v=tintin-20260720-read-budget-3-auth-persistence-20260919-1-auth-popup-resolver-1';
 
 function safeUrl(value, handleBase = '') {
   let candidate = String(value || '').trim();
