@@ -9,10 +9,7 @@ import {
   deleteCollectionsGlobally,
   deleteProductsGlobally,
 } from '../../cloudflare/borrado-global-catalogo.js';
-import {
-  preflightProductsSheet,
-  retryPendingCatalogSheets,
-} from '../../cloudflare/resiliencia-sync-catalogo.js';
+import { preflightProductsSheet, retryPendingCatalogSheets } from '../../cloudflare/resiliencia-sync-catalogo.js';
 
 const MAX_BODY_BYTES = 96 * 1024;
 const PRODUCT_CONFIRM = 'ELIMINAR DEFINITIVAMENTE';
@@ -43,6 +40,27 @@ function validConfirmation(action, scope, confirmation, dryRun, env) {
 
 function productIdsFromPreview(preview) {
   return Array.isArray(preview?.productIds) ? preview.productIds : [];
+}
+
+export function applyCatalogPreflightOutcome(result, preflightError) {
+  if (!result || typeof result !== 'object' || !preflightError) return result;
+
+  // El preflight ocurre ANTES de la mutación y sólo es una sonda preventiva.
+  // Si el cierre canónico posterior ya confirmó Productos en Sheets, ese
+  // resultado final tiene más autoridad que un fallo transitorio anterior.
+  if (result?.sheets?.products === true) {
+    result.preflightRecovered = true;
+    return result;
+  }
+
+  result.partial = true;
+  result.errors = [
+    ...(Array.isArray(result.errors) ? result.errors : []),
+    `Preflight de Google Sheets pendiente: ${preflightError}`,
+  ];
+  result.sheets = { ...(result.sheets || {}), products: false };
+  result.pendingSheetSync = true;
+  return result;
 }
 
 async function runCatalogAction(action, env, body, scope, dryRun, idToken, actorContext) {
@@ -106,10 +124,9 @@ export async function onRequest(context) {
     const serverPreview = await runCatalogAction(action, env, body, scope, true, idToken, actorContext);
     const affectedProductIds = productIdsFromPreview(serverPreview);
 
-    // El preflight continúa comprobando Apps Script, permisos y spreadsheet
-    // antes del borrado. Firestore sigue siendo la fuente canónica: una
-    // caída temporal del espejo no puede impedir una eliminación autorizada.
-    // Se informa en el resultado para que el cierre persistente la recupere.
+    // La sonda valida Sheets antes de mutar. Si falla transitoriamente, la
+    // eliminación autorizada continúa y el resultado final decide si quedó
+    // pendiente o si la sincronización posterior logró recuperarse.
     let preflightError = '';
     try {
       await preflightProductsSheet(env, affectedProductIds);
@@ -120,13 +137,7 @@ export async function onRequest(context) {
 
     const result = await runCatalogAction(action, env, body, scope, false, idToken, actorContext);
 
-    if (preflightError) {
-      result.partial = true;
-      result.errors = [...(Array.isArray(result.errors) ? result.errors : []), `Preflight de Google Sheets pendiente: ${preflightError}`];
-      result.sheets = { ...(result.sheets || {}), products: false };
-      result.pendingSheetSync = true;
-    }
-
+    applyCatalogPreflightOutcome(result, preflightError);
     const status = result?.partial ? 207 : 200;
     return jsonResponse({ ok: result?.partial !== true, partial: result?.partial === true, result }, status, origin, requestUrl);
   } catch (error) {

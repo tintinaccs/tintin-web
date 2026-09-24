@@ -3,6 +3,7 @@ import test from 'node:test';
 import {
   drainCatalogSheetSyncQueueScheduled,
   getCatalogSheetSyncQueueStatus,
+  syncDeletedProductsPayloadWithRetry,
 } from '../../cloudflare/resiliencia-sync-catalogo.js';
 import { encodeFirestoreFields, decodeFirestoreFields, fsTimestamp } from '../../cloudflare/firebase-admin-ligero.js';
 
@@ -248,4 +249,22 @@ test('diagnóstico: getCatalogSheetSyncQueueStatus reporta pendientes, dead-lett
   assert.equal(status.deadLetterCount, 1);
   assert.ok(status.oldestPendingAgeMs >= 59 * 60 * 1000, 'toma la tarea pendiente más antigua, no la más reciente');
   assert.equal(status.lastSuccessAt, lastSuccessAt.toISOString());
+});
+
+test('borrado de lote: Sheets recibe tombstones sin releer productos eliminados', async () => {
+  const fs = makeFakeFirestore();
+  const payloads = [];
+  const deps = buildDeps(fs, async (_url, request) => {
+    payloads.push(JSON.parse(request.body));
+    return { ok: true, status: 200, json: async () => ({ ok: true }) };
+  }, makeFakeNotify());
+  const ids = Array.from({ length: 30 }, (_, index) => `deleted-${index}`);
+
+  const result = await syncDeletedProductsPayloadWithRetry(env, ids, { attempts: 1 }, deps);
+
+  assert.equal(result.ok, true);
+  assert.deepEqual(payloads.map(payload => payload.items.length), [20, 10], 'límite de chunk del worker se respeta');
+  assert.ok(payloads.every(payload => payload.action === 'syncProductsPayload'));
+  assert.ok(payloads.flatMap(payload => payload.items).every(item => item.exists === false && item.product === null));
+  assert.deepEqual(payloads.flatMap(payload => payload.items).map(item => item.id), ids);
 });

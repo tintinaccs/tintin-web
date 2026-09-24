@@ -12,3 +12,9 @@ test('productos muestra eliminación masiva solo con permisos y conecta la acci�
   assert.match(admin, /ADMIN_PAGE_SIZE\s*=\s*30/);
   assert.match(admin, /MAX_BULK_SELECTION\s*=\s*30/);
 });
+
+test('el borrado de productos confirma y ejecuta en una sola operación global', () => {
+  const admin = read('js/admin/products/borrado-global-catalogo-admin.js');
+  assert.match(admin, /scope, productIds: canonicalIds,[\s\S]*dryRun: false, confirmation: typed/);
+  assert.doesNotMatch(admin, /DELETE_BATCH_SIZE|chunkIds\(canonicalIds/);
+});

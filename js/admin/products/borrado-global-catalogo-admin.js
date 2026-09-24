@@ -52,28 +52,6 @@ function requestDeletePassword() {
   });
 }
 
-// Cloudflare corta cada invocación del Worker al superar su límite de
-// subrequests. Un borrado masivo de todo el catálogo genera, por producto,
-// varias consultas a Firestore + Sheets; sin trocear, cientos de productos
-// en un solo POST superan ese límite y el navegador recibe el error crudo
-// de la plataforma ("Too many subrequests..."). Se envía en lotes chicos
-// para que cada invocación del servidor se mantenga muy por debajo del tope.
-const DELETE_BATCH_SIZE = 30;
-
-function chunkIds(ids, size) {
-  const batches = [];
-  for (let i = 0; i < ids.length; i += size) batches.push(ids.slice(i, i + size));
-  return batches;
-}
-
-function mergeDeleteResults(target, part) {
-  target.deletedProducts += Number(part?.deletedProducts) || 0;
-  target.deletedFirestoreDocuments += Number(part?.deletedFirestoreDocuments) || 0;
-  if (part?.partial) target.partial = true;
-  if (Array.isArray(part?.errors)) target.errors.push(...part.errors.filter(Boolean));
-  return target;
-}
-
 async function postCatalogDelete(payload) {
   const user = auth.currentUser;
   if (!isSuperAdmin(user)) throw new Error('Esta acción es exclusiva del Super Admin.');
@@ -138,38 +116,18 @@ async function executeProductDeletion({ scope, productIds = [], label = '' }) {
   const typed = await requestDeletePassword();
   if (!typed) { toast('Confirmación cancelada. No se eliminó nada.'); return false; }
 
-  // La lista canónica de IDs ya viene confirmada por el servidor (preview).
-  // Se envía troceada en varios POST secuenciales para que cada invocación
-  // del Worker se mantenga bien por debajo del límite de subrequests de
-  // Cloudflare, sin importar cuántos productos tenga el catálogo.
-  const batches = chunkIds(canonicalIds, DELETE_BATCH_SIZE);
-  const aggregate = { deletedProducts: 0, deletedFirestoreDocuments: 0, partial: false, errors: [] };
-  let stoppedEarly = false;
-  for (let i = 0; i < batches.length; i += 1) {
-    if (batches.length > 1) toast(`Eliminando productos… (${i + 1}/${batches.length})`);
-    try {
-      const result = await postCatalogDelete({
-        action: 'deleteProducts', scope: 'selected', productIds: batches[i],
-        dryRun: false, confirmation: typed,
-      });
-      mergeDeleteResults(aggregate, result);
-    } catch (error) {
-      aggregate.partial = true;
-      aggregate.errors.push(error?.message || 'Error desconocido en un lote de eliminación.');
-      stoppedEarly = true;
-      break;
-    }
-  }
-
-  if (aggregate.partial) {
-    window.alert(stoppedEarly
-      ? `Se eliminaron ${aggregate.deletedProducts} de ${n} producto(s) antes de encontrar un error. Volvé a intentar para completar el resto.\n\n${aggregate.errors.join('\n')}`
-      : partialMessage(aggregate));
-  } else {
-    toast(`${aggregate.deletedProducts || n} producto(s) eliminados globalmente`);
-  }
-  if (aggregate.deletedProducts > 0) window.setTimeout(() => window.location.reload(), 700);
-  return !aggregate.partial;
+  // Una única operación de servidor vuelve a resolver los IDs canónicos,
+  // limpia referencias y elimina Firestore en commits limitados. Dividirlo
+  // en POST independientes repetía lecturas sociales y sondas Sheets, y
+  // podía dejar productos solo parcialmente eliminados.
+  const result = await postCatalogDelete({
+    action: 'deleteProducts', scope, productIds: canonicalIds,
+    dryRun: false, confirmation: typed,
+  });
+  if (result.partial) window.alert(partialMessage(result));
+  else toast(`${result.deletedProducts || n} producto(s) eliminados globalmente`);
+  if (result.deletedProducts > 0) window.setTimeout(() => window.location.reload(), 700);
+  return !result.partial;
 }
 
 function chooseCollectionProductMode(affectedProducts) {
