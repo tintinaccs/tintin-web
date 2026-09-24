@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c279b947c692a7b57a44d825037b8dac9122695b2db9bc85752b9ed04a122e23",
+  "sourceFingerprint": "62e075795a23477c37e9c66237750f4b7c32ad924a4168d225d6e21014881a52",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 870,
     "textFiles": 829,
-    "totalBytes": 17048435,
+    "totalBytes": 17048461,
     "pages": 19,
     "modules": 595
   },
@@ -26850,15 +26850,15 @@
     },
     {
       "path": "scripts/auditar-correo-fase-3.js",
-      "bytes": 5213,
-      "sha256": "10534d2f097030199ffc41ff5c59c29c080f66b9ea75bfc8a9f9c2f345e28022",
+      "bytes": 5239,
+      "sha256": "5adc324369cac01f2ad076ae292773f40108d393c0c8fe18c3eb0b0093c8edab",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./sincronizacion-correo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1",
+          "raw": "./sincronizacion-correo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-app-check-retry-cascade-1",
           "target": "scripts/sincronizacion-correo-admin.js",
           "dynamic": true,
           "line": 79
@@ -37439,8 +37439,8 @@
     {
       "path": "scripts/auditar-correo-fase-3.js",
       "extension": ".js",
-      "bytes": 5213,
-      "sha256": "10534d2f097030199ffc41ff5c59c29c080f66b9ea75bfc8a9f9c2f345e28022"
+      "bytes": 5239,
+      "sha256": "5adc324369cac01f2ad076ae292773f40108d393c0c8fe18c3eb0b0093c8edab"
     },
     {
       "path": "scripts/auditar-critico-recuperacion.js",
