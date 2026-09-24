@@ -1,7 +1,7 @@
-import { auth } from '../firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
-import { subscribeAuthState } from './coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1';
-import { SUPER_ADMIN, getUserRole } from './roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
-import { EDITABLE_ROLES, loadRolePermissions, canDo } from './permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
+import { auth } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
+import { subscribeAuthState } from './coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1';
+import { SUPER_ADMIN, getUserRole } from './roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1';
+import { EDITABLE_ROLES, loadRolePermissions, canDo } from './permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1';
 
 const BADGE_Z = 1250;
 const tracked = new Map();

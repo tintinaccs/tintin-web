@@ -4,7 +4,7 @@
 
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { getAuth, initializeAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getAuth, initializeAuth, GoogleAuthProvider, browserPopupRedirectResolver, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
   initializeAppCheck,
   ReCaptchaEnterpriseProvider,
@@ -131,7 +131,10 @@ const db = getFirestore(app);
 let auth;
 let persistenceWasConfiguredAtInitialization = false;
 try {
-  auth = initializeAuth(app, { persistence: browserLocalPersistence });
+  auth = initializeAuth(app, {
+    persistence: browserLocalPersistence,
+    popupRedirectResolver: browserPopupRedirectResolver
+  });
   persistenceWasConfiguredAtInitialization = true;
 } catch (error) {
   // Otro importador puede haber inicializado Auth antes que este mÃ³dulo. En
