@@ -30,6 +30,15 @@ function makeFakeFirestore() {
     return doc ? { name: path, fields: doc.fields, updateTime: doc.updateTime } : null;
   }
 
+  let batchGetCalls = 0;
+  async function firestoreAdminBatchGet(env, paths) {
+    batchGetCalls += 1;
+    return Promise.all((Array.isArray(paths) ? paths : []).map(async path => {
+      const doc = await firestoreAdminGet(env, path);
+      return doc ? { ...doc, name: `projects/test/databases/(default)/documents/${path}` } : null;
+    })).then(documents => documents.filter(Boolean));
+  }
+
   async function firestoreAdminListAll(env, collectionPath) {
     await new Promise(resolve => setTimeout(resolve, 5));
     const prefix = `${collectionPath}/`;
@@ -77,7 +86,11 @@ function makeFakeFirestore() {
     return doc ? decodeFirestoreFields(doc.fields) : null;
   }
 
-  return { store, put, readDecoded, firestoreAdminGet, firestoreAdminListAll, firestoreAdminCommit, firestoreAdminMerge };
+  return {
+    store, put, readDecoded, firestoreAdminGet, firestoreAdminBatchGet,
+    batchGetCallCount: () => batchGetCalls,
+    firestoreAdminListAll, firestoreAdminCommit, firestoreAdminMerge,
+  };
 }
 
 function makeFakeNotify() {
@@ -128,6 +141,7 @@ function seedPendingItem(fs, id, overrides = {}) {
 function buildDeps(fs, fetchImpl, notify) {
   return {
     firestoreAdminGet: fs.firestoreAdminGet,
+    firestoreAdminBatchGet: fs.firestoreAdminBatchGet,
     firestoreAdminCommit: fs.firestoreAdminCommit,
     firestoreAdminListAll: fs.firestoreAdminListAll,
     firestoreAdminMerge: fs.firestoreAdminMerge,
@@ -153,6 +167,25 @@ test('duplicados: dos corridas concurrentes del worker no procesan la misma tare
   assert.equal(r1.drained + r2.drained, 1, 'la tarea debe drenarse exactamente una vez entre ambas corridas');
   assert.equal(fetch1.callCount(), 1, 'Apps Script solo debe recibir una sincronización, sin duplicados');
   assert.equal(fs.store.has(`${QUEUE_COLLECTION}/dup1`), false, 'la tarea completada se elimina de la cola');
+});
+
+test('el drenaje agrupa producto e inventario en una sola lectura Firestore', async () => {
+  const fs = makeFakeFirestore();
+  const notify = makeFakeNotify();
+  const synced = makeSuccessFetch();
+  const productIds = Array.from({ length: 20 }, (_, index) => `p${index + 1}`);
+  seedPendingItem(fs, 'batch-read', { productIds });
+  for (const id of productIds.slice(1)) {
+    fs.put(`products/${id}`, { name: `Producto ${id}` });
+    fs.put(`productInventory/${id}`, { stock: 1 });
+  }
+
+  const result = await drainCatalogSheetSyncQueueScheduled(env, {
+    deps: buildDeps(fs, synced.fetchImpl, notify),
+  });
+
+  assert.equal(result.drained, 1);
+  assert.equal(fs.batchGetCallCount(), 1, 'los 40 documentos se leen con un batchGet');
 });
 
 test('timeout: un fallo de Apps Script reintenta con backoff sin reprocesar de inmediato', async () => {

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "f67013f9fd3dbc4c7cafad87622ba80030faa9fecd1fff056dfa91f83e8ce9c4",
+  "sourceFingerprint": "4a44df6d7e2baef19d9838ed3f51772a2d194cc181c3bf07816b148fa35a3443",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 873,
     "textFiles": 832,
-    "totalBytes": 17088962,
+    "totalBytes": 17093079,
     "pages": 19,
     "modules": 597
   },
@@ -17961,8 +17961,8 @@
     },
     {
       "path": "cloudflare/firebase-admin-ligero.js",
-      "bytes": 21878,
-      "sha256": "07bf4c38b764d5f461eed5ecd95cb7a62942a1c94cff32e240075f2b82ada7a3",
+      "bytes": 23336,
+      "sha256": "2077f79985bf57f4f6582f29970c4adace13b02c385c0b66f33c03d651c25a26",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18282,8 +18282,8 @@
     },
     {
       "path": "cloudflare/resiliencia-sync-catalogo.js",
-      "bytes": 16315,
-      "sha256": "1fe1fae386779fd10b62e7a6f28ceb6df2baa6e9fd5e4b96e12cbbff699b0d41",
+      "bytes": 17458,
+      "sha256": "1162a9f7c016bc763dd7f7aa9d8757565bbf0a573f0ba3a2da98f1efc22fa4ff",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18293,25 +18293,25 @@
           "raw": "./firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 11
+          "line": 12
         },
         {
           "raw": "./sheets-sync-config.js",
           "target": "cloudflare/sheets-sync-config.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         },
         {
           "raw": "./notificaciones-sociales.js",
           "target": "cloudflare/notificaciones-sociales.js",
           "dynamic": false,
-          "line": 13
+          "line": 14
         },
         {
           "raw": "./apps-script-fetch.js",
           "target": "cloudflare/apps-script-fetch.js",
           "dynamic": false,
-          "line": 14
+          "line": 15
         }
       ],
       "endpoints": []
@@ -19108,8 +19108,8 @@
     },
     {
       "path": "functions/api/catalog-sheet-sync-drain.js",
-      "bytes": 2825,
-      "sha256": "06dba307a91722d79d034899ff18cbb14da779f2720e705b374a67b79ae1e790",
+      "bytes": 3050,
+      "sha256": "8dfb641b9afb831e70e04ed1b9ca0ccc191833a714b1ae199beb7bd8cbac7668",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32391,8 +32391,8 @@
     },
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",
-      "bytes": 4840,
-      "sha256": "221d5c5f2b388601235041005839d1f10d8e8f825a1c47824c88b09ac4ffa07d",
+      "bytes": 4863,
+      "sha256": "3af2a7744d05843ab221e9b3db0d4f41827209f385518b72e1362da2218c7a22",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33011,8 +33011,8 @@
     },
     {
       "path": "tests/sync/catalog-sheet-sync-queue.test.mjs",
-      "bytes": 8640,
-      "sha256": "1222634a5729e844873a13a5e9313d63d522ce5168a46fb992f0fdeac90d71ea",
+      "bytes": 9908,
+      "sha256": "14fbd3d4e7506c741cc5ddb523e1dd6d6d0aa7cc0d29e61f9ca70c4435f27e14",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34479,8 +34479,8 @@
     {
       "path": "cloudflare/firebase-admin-ligero.js",
       "extension": ".js",
-      "bytes": 21878,
-      "sha256": "07bf4c38b764d5f461eed5ecd95cb7a62942a1c94cff32e240075f2b82ada7a3"
+      "bytes": 23336,
+      "sha256": "2077f79985bf57f4f6582f29970c4adace13b02c385c0b66f33c03d651c25a26"
     },
     {
       "path": "cloudflare/firebase-id-token.js",
@@ -34551,8 +34551,8 @@
     {
       "path": "cloudflare/resiliencia-sync-catalogo.js",
       "extension": ".js",
-      "bytes": 16315,
-      "sha256": "1fe1fae386779fd10b62e7a6f28ceb6df2baa6e9fd5e4b96e12cbbff699b0d41"
+      "bytes": 17458,
+      "sha256": "1162a9f7c016bc763dd7f7aa9d8757565bbf0a573f0ba3a2da98f1efc22fa4ff"
     },
     {
       "path": "cloudflare/seguridad-cloudinary.js",
@@ -35517,8 +35517,8 @@
     {
       "path": "functions/api/catalog-sheet-sync-drain.js",
       "extension": ".js",
-      "bytes": 2825,
-      "sha256": "06dba307a91722d79d034899ff18cbb14da779f2720e705b374a67b79ae1e790"
+      "bytes": 3050,
+      "sha256": "8dfb641b9afb831e70e04ed1b9ca0ccc191833a714b1ae199beb7bd8cbac7668"
     },
     {
       "path": "functions/api/claim-commerce-history.js",
@@ -38895,8 +38895,8 @@
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",
       "extension": ".mjs",
-      "bytes": 4840,
-      "sha256": "221d5c5f2b388601235041005839d1f10d8e8f825a1c47824c88b09ac4ffa07d"
+      "bytes": 4863,
+      "sha256": "3af2a7744d05843ab221e9b3db0d4f41827209f385518b72e1362da2218c7a22"
     },
     {
       "path": "tests/operations/integration-router-security.test.mjs",
@@ -39021,8 +39021,8 @@
     {
       "path": "tests/sync/catalog-sheet-sync-queue.test.mjs",
       "extension": ".mjs",
-      "bytes": 8640,
-      "sha256": "1222634a5729e844873a13a5e9313d63d522ce5168a46fb992f0fdeac90d71ea"
+      "bytes": 9908,
+      "sha256": "14fbd3d4e7506c741cc5ddb523e1dd6d6d0aa7cc0d29e61f9ca70c4435f27e14"
     },
     {
       "path": "tests/sync/order-admin-domain.test.mjs",

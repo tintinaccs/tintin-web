@@ -247,6 +247,40 @@ export async function firestoreAdminGet(env, path) {
 }
 
 /**
+ * Lee varios documentos Firestore en una sola subrequest. Es especialmente
+ * importante en Workers: dos GET por producto agotan rápido el presupuesto
+ * de subrequests cuando una cola debe reconstruir productos e inventario.
+ */
+export async function firestoreAdminBatchGet(env, paths) {
+  const sa = parseServiceAccount(env);
+  const uniquePaths = [...new Set((Array.isArray(paths) ? paths : [])
+    .map(path => String(path || '').trim())
+    .filter(path => /^(?:[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+)(?:\/[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+)*$/.test(path)))]
+    .slice(0, 100);
+  if (!uniquePaths.length) return [];
+
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const prefix = `projects/${sa.project_id}/databases/(default)/documents/`;
+  const response = await fetch(`${firestoreDatabaseUrl(sa)}/documents:batchGet`, {
+    method: 'POST',
+    headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify({ documents: uniquePaths.map(path => prefix + path) }),
+  });
+  if (!response.ok) throw new Error(`Firestore BATCH GET falló (${response.status})`);
+
+  const body = await response.text();
+  return body.split(/\r?\n/).flatMap(line => {
+    if (!line.trim()) return [];
+    try {
+      const row = JSON.parse(line);
+      return row?.found ? [row.found] : [];
+    } catch {
+      throw new Error('Firestore BATCH GET devolvió una respuesta inválida.');
+    }
+  });
+}
+
+/**
  * Busca el primer documento cuyo campo coincida exactamente con `value`.
  * Hace una consulta index-free de igualdad por cada nombre de campo legado
  * indicado. Se usa en el cutover de Shopify para resolver handles antiguos
