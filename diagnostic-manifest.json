@@ -1,7 +1,11 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
+<<<<<<< HEAD
   "sourceFingerprint": "724d66bc280f08b043ff764195a19305acbf4158575127016c6a608d80c9f597",
+=======
+  "sourceFingerprint": "4b82f857929468e6b7f958da43ef832e1672f6493fdb71d86d3bff6a6e712c31",
+>>>>>>> 25d30436 (fix: regenerar diagnostic-manifest.json tras actualizar literales de version en scripts de auditoria)
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +15,11 @@
   "platform": {
     "files": 872,
     "textFiles": 831,
+<<<<<<< HEAD
     "totalBytes": 17075894,
+=======
+    "totalBytes": 17076000,
+>>>>>>> 25d30436 (fix: regenerar diagnostic-manifest.json tras actualizar literales de version en scripts de auditoria)
     "pages": 19,
     "modules": 597
   },
@@ -26115,8 +26123,8 @@
     },
     {
       "path": "scripts/auditar-admin-correo-mensajeria.js",
-      "bytes": 9188,
-      "sha256": "6aa9e0e246586342af5dcd60eb67a4c0f5cc7dad9ab52b63fe6e0fe51c12f3a6",
+      "bytes": 9214,
+      "sha256": "d84a565f348d2b2dd7bdeb2eb2810f6dd7192dfae87c556a5b90fe1cd4eb591f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26135,7 +26143,7 @@
           "line": 51
         },
         {
-          "raw": "../../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-3-auth-persistence-20260919-1",
+          "raw": "../../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-3-auth-persistence-20260919-1-app-check-retry-cascade-1",
           "target": null,
           "dynamic": false,
           "line": 58
@@ -26669,8 +26677,8 @@
     },
     {
       "path": "scripts/auditar-contacto-pagina.js",
-      "bytes": 2300,
-      "sha256": "586f93389c7e19ce005a8e9262f9442c1ea0d3860a64842f8b9ad0807dbcc7f0",
+      "bytes": 2326,
+      "sha256": "1a44378c25ebf8d6505ac14813067a6c657cb53811b3412ae0eb609b36692b49",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27731,15 +27739,15 @@
     },
     {
       "path": "scripts/auditar-imagenes-fase-5.js",
-      "bytes": 25491,
-      "sha256": "919b1a5c76982a56ab05072b6687461aa4b0ae0d8f3339d272bad6c52e4c40f0",
+      "bytes": 25517,
+      "sha256": "05672eb6ee61dda086d15de9b57d862f635c1cffc1659e0894e2a56f1af71556",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1",
+          "raw": "./imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-app-check-retry-cascade-1",
           "target": "scripts/imagenes.js",
           "dynamic": false,
           "line": 199
@@ -28024,8 +28032,8 @@
     },
     {
       "path": "scripts/auditar-legal-paginas.js",
-      "bytes": 2646,
-      "sha256": "d44354e431b1525f745bc2d73b7f54639e836ae041326132dd0a35a55dd88017",
+      "bytes": 2672,
+      "sha256": "612e4d65a154bad79cc0e25883c253384796ab3b3dbb86bfbed4edb3d9013cd4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -37341,8 +37349,8 @@
     {
       "path": "scripts/auditar-admin-correo-mensajeria.js",
       "extension": ".js",
-      "bytes": 9188,
-      "sha256": "6aa9e0e246586342af5dcd60eb67a4c0f5cc7dad9ab52b63fe6e0fe51c12f3a6"
+      "bytes": 9214,
+      "sha256": "d84a565f348d2b2dd7bdeb2eb2810f6dd7192dfae87c556a5b90fe1cd4eb591f"
     },
     {
       "path": "scripts/auditar-admin-fundamentos.js",
@@ -37485,8 +37493,8 @@
     {
       "path": "scripts/auditar-contacto-pagina.js",
       "extension": ".js",
-      "bytes": 2300,
-      "sha256": "586f93389c7e19ce005a8e9262f9442c1ea0d3860a64842f8b9ad0807dbcc7f0"
+      "bytes": 2326,
+      "sha256": "1a44378c25ebf8d6505ac14813067a6c657cb53811b3412ae0eb609b36692b49"
     },
     {
       "path": "scripts/auditar-contenido-fase-6.js",
@@ -37731,8 +37739,8 @@
     {
       "path": "scripts/auditar-imagenes-fase-5.js",
       "extension": ".js",
-      "bytes": 25491,
-      "sha256": "919b1a5c76982a56ab05072b6687461aa4b0ae0d8f3339d272bad6c52e4c40f0"
+      "bytes": 25517,
+      "sha256": "05672eb6ee61dda086d15de9b57d862f635c1cffc1659e0894e2a56f1af71556"
     },
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
@@ -37785,8 +37793,8 @@
     {
       "path": "scripts/auditar-legal-paginas.js",
       "extension": ".js",
-      "bytes": 2646,
-      "sha256": "d44354e431b1525f745bc2d73b7f54639e836ae041326132dd0a35a55dd88017"
+      "bytes": 2672,
+      "sha256": "612e4d65a154bad79cc0e25883c253384796ab3b3dbb86bfbed4edb3d9013cd4"
     },
     {
       "path": "scripts/auditar-limpiar-ramas.mjs",
