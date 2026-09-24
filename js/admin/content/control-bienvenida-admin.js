@@ -5,7 +5,8 @@
    Se inserta solo en admin.html y solo para la cuenta Super Admin real.
    ============================================================= */
 
-import { auth, db, waitForAppCheckToken } from '../../core/firebase/firebase-admin-estable.js?v=tintin-20260924-admin-auth-stable-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1';
 import { collection, doc, getDoc, setDoc, serverTimestamp, writeBatch } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
@@ -399,7 +400,7 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
   async function boot(user) {
     if (!user || String(user.email || '').toLowerCase() !== SUPER_ADMIN) return;
     injectStyles(); ensureNav(); ensureSection(); wireNavigation();
-    if (!await waitForAppCheckToken(12000)) {
+    if (!await waitForAdminAppCheck(12000)) {
       const section = document.getElementById('section-welcome');
       if (section) section.innerHTML = '<div class="adm-empty">La verificación de seguridad todavía no está disponible. El módulo se cargará al reintentar cuando App Check esté listo.</div>';
       return;
