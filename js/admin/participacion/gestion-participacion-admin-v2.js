@@ -1,4 +1,5 @@
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 import { collection, doc, limit, onSnapshot, query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
@@ -1167,9 +1168,28 @@ bindEvents();
 renderSettings();
 initViews();
 
+let engagementRealtimeErrorNotified = false;
+
 function stopEngagementRealtime() {
   realtimeUnsubscribers.forEach(unsub => { try { unsub(); } catch {} });
   realtimeUnsubscribers = [];
+}
+
+function engagementRealtimeError(label) {
+  return error => {
+    const code = String(error?.code || '');
+    console.warn(`[admin-engagement] ${label} no disponible:`, code || error?.message || error);
+    if (!engagementRealtimeErrorNotified) {
+      engagementRealtimeErrorNotified = true;
+      toast('La actividad en vivo está temporalmente no disponible. Tu sesión no se cerró; reintentá cuando vuelva la conexión.', 'error');
+    }
+    if (code === 'permission-denied' || code === 'unauthenticated') {
+      // Un rechazo de credenciales no se reintenta en bucle. El guard global
+      // decide el estado de sesión/App Check y montará listeners nuevos sólo
+      // cuando vuelva a existir autorización confirmada.
+      stopEngagementRealtime();
+    }
+  };
 }
 
 subscribeAuthState(async current => {
@@ -1181,29 +1201,30 @@ subscribeAuthState(async current => {
   stopEngagementRealtime();
   if (!isSuperAdmin(current)) { user = null; return; }
   user = current;
-  await appCheckReady;
+  engagementRealtimeErrorNotified = false;
+  if (!await waitForAdminAppCheck(12000)) return;
 
   realtimeUnsubscribers.push(onSnapshot(query(collection(db, 'users'), limit(ENGAGEMENT_REALTIME_LIMIT)), snapshot => {
     usersByUid = new Map(snapshot.docs.map(item => [item.id, item.data()]));
     renderReviews(); renderLikes(); refreshDrawer();
-  }));
+  }, engagementRealtimeError('usuarios')));
   realtimeUnsubscribers.push(onSnapshot(query(collection(db, 'reviewRecords'), limit(ENGAGEMENT_REALTIME_LIMIT)), snapshot => {
     reviews = snapshot.docs.map(item => ({ ...item.data(), reviewId: item.data().reviewId || item.id })).sort((a,b) => timeValue(b.createdAt) - timeValue(a.createdAt));
     setBadge('reviews-unread-badge', reviews.filter(item => item.unread).length);
     renderReviews(); refreshDrawer();
-  }));
+  }, engagementRealtimeError('reseñas')));
   realtimeUnsubscribers.push(onSnapshot(query(collection(db, 'likeRecords'), limit(ENGAGEMENT_REALTIME_LIMIT)), snapshot => {
     likes = snapshot.docs.map(item => ({ ...item.data(), likeId: item.data().likeId || item.id })).sort((a,b) => timeValue(b.createdAt) - timeValue(a.createdAt));
     setBadge('likes-unread-badge', likes.filter(item => item.unread).length);
     renderLikes(); refreshDrawer();
-  }));
+  }, engagementRealtimeError('favoritos')));
   loadReports().catch(error => toast(error.message, 'error'));
   realtimeUnsubscribers.push(onSnapshot(doc(db, 'settings', 'reviewQuickReplies'), snapshot => {
     if (Array.isArray(snapshot.data()?.items)) quickReplies = snapshot.data().items.map(value => String(value || '').trim()).filter(Boolean).slice(0,20);
     renderSettings(); refreshDrawer();
-  }));
+  }, engagementRealtimeError('respuestas rápidas')));
   realtimeUnsubscribers.push(onSnapshot(doc(db, 'settings', 'engagementAdmin'), snapshot => {
     settings = { ...DEFAULT_SETTINGS, ...(snapshot.data() || {}) };
     applySettings();
-  }));
+  }, engagementRealtimeError('configuración de participación')));
 });
