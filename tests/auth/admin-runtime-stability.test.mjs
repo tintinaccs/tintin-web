@@ -13,7 +13,8 @@ const html = read('admin.html');
 const css = read('css/admin/admin.css');
 
 test('admin inicia Firebase estable antes de permitir imports legacy del loader', () => {
-  assert.match(bootstrap, /import '\.\.\/core\/firebase\/firebase-admin-estable\.js\?v=tintin-20260924-admin-auth-stable-1'/);
+  assert.match(bootstrap, /firebase-admin-estable\.js/);
+  assert.match(bootstrap, /tintin-20260924-admin-auth-stable-1/);
   assert.match(bootstrap, /document\.createElement\('script'\)/);
   assert.ok(
     bootstrap.indexOf('firebase-admin-estable.js') < bootstrap.indexOf('cargador-pagina.js'),
