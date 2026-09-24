@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "bc248d91d5188bd9f97a185f971030ef016098cc70b00a795b2542c0bd496d28",
+  "sourceFingerprint": "c2948c9b1a8f24db9ee0b0db67493e5f2d9d6ac8c14178195e53ebbb7a891bea",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 873,
     "textFiles": 832,
-    "totalBytes": 17089156,
+    "totalBytes": 17089436,
     "pages": 19,
     "modules": 597
   },
@@ -2112,8 +2112,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 196329,
-      "sha256": "e5b9e78273be8093bb37d6c544f842a70fc55a383f2884495ab0ff9f6340bfcd",
+      "bytes": 196333,
+      "sha256": "ab931c9e64042a9d9a2f56211912eae577ca44d6eb644fe2a2878933320b30ea",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2212,7 +2212,7 @@
           "line": 2256
         },
         {
-          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260923-admin-page-size-30-2",
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260924-no-reload-tras-borrado-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
           "line": 2257
         },
@@ -2484,7 +2484,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260923-admin-page-size-30-2",
+          "raw": "js/admin/products/borrado-global-catalogo-admin.js?v=tintin-20260924-no-reload-tras-borrado-1",
           "target": "js/admin/products/borrado-global-catalogo-admin.js",
           "line": 2257,
           "exists": true
@@ -21597,8 +21597,8 @@
     },
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
-      "bytes": 16427,
-      "sha256": "e665a2da98180f91fd2194bb43a429e0e36d5a7fe6c6bbd588bef2275ab3eabe",
+      "bytes": 16703,
+      "sha256": "693c72be9fbca7f96dc2c1e050266e7125243bf92df4b19a8dec9ac56826ba7f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34155,8 +34155,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 196329,
-      "sha256": "e5b9e78273be8093bb37d6c544f842a70fc55a383f2884495ab0ff9f6340bfcd"
+      "bytes": 196333,
+      "sha256": "ab931c9e64042a9d9a2f56211912eae577ca44d6eb644fe2a2878933320b30ea"
     },
     {
       "path": "apple-touch-icon.png",
@@ -36063,8 +36063,8 @@
     {
       "path": "js/admin/products/borrado-global-catalogo-admin.js",
       "extension": ".js",
-      "bytes": 16427,
-      "sha256": "e665a2da98180f91fd2194bb43a429e0e36d5a7fe6c6bbd588bef2275ab3eabe"
+      "bytes": 16703,
+      "sha256": "693c72be9fbca7f96dc2c1e050266e7125243bf92df4b19a8dec9ac56826ba7f"
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
