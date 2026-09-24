@@ -7,7 +7,7 @@
  * cutover require a separately authorized phase.
  */
 
-import { db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
+import { db, ensureAppCheckReady } from '../core/firebase/firebase.js?v=tintin-20260924-auth-private-gate-1';
 import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1';
 import { collection } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { SUPER_ADMIN } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
@@ -91,6 +91,9 @@ if (!window.TintinAdminShopifyImportBooted) {
   }
 
   async function readCollection(name, maxDocs = 20000) {
+    if (!await ensureAppCheckReady({ timeoutMs: 15000 })) {
+      throw new Error('No se pudo verificar App Check antes de leer datos privados.');
+    }
     const snapshot = await getDocsPaginated(collection(db, name), { pageSize: 500, maxDocs });
     if (snapshot.truncated) throw new Error(`La colección ${name} supera el límite seguro de referencia (${maxDocs}).`);
     return snapshot.docs.map(item => ({ id: item.id, ...toPlain(item.data()) }));
