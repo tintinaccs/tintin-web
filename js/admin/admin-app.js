@@ -969,6 +969,22 @@ async function recoverAdminUserFromHandoff() {
   return null;
 }
 
+// Sin esto, los listeners en tiempo real ya arrancados (pedidos, usuarios,
+// auditoría, configuración, email, dashboard) seguían corriendo cuando la
+// sesión pasaba a UNKNOWN o a "sin usuario" de verdad, y cada uno chocaba
+// por separado contra Firestore con "Missing or insufficient permissions"
+// apenas el token dejaba de ser válido. pagehide no alcanza: ese evento sólo
+// cubre cerrar la pestaña, no una sesión que se invalida mientras sigue abierta.
+function teardownAdminRealtimeOnSessionLoss() {
+  stopAdminRealtimeData();
+  stopAdminSettingsRealtime();
+  stopDashboardActivityMetrics();
+  document.documentElement.classList.remove('adm-auth-ready');
+  adminGuardInitializedUid = '';
+  adminGuardInitializingUid = '';
+  currentUser = null;
+}
+
 async function startAdminAuthGuard() {
   subscribeSession(async snapshot => {
     if (snapshot.status !== AUTH_STATES.RESTORING && !authReadyDiagnosticRecorded) {
@@ -994,6 +1010,7 @@ async function startAdminAuthGuard() {
       // UNKNOWN no confirma una cuenta y tampoco autoriza navegar a login.
       // Mantener el documento evita el circuito Admin -> login -> Admin.
       recordAuthDiagnostic('REDIRECT_LOOP_BROKEN', { source: 'admin-guard', reason: 'auth-state-unknown' });
+      teardownAdminRealtimeOnSessionLoss();
       showAdminAuthUnknown();
       return;
     }
@@ -1010,6 +1027,7 @@ async function startAdminAuthGuard() {
       // La ausencia no confirmada se resuelve con acción explícita desde el
       // overlay, nunca con otra navegación automática.
       recordAuthDiagnostic('REDIRECT_LOOP_BROKEN', { source: 'admin-guard', reason: 'handoff-recovery-timeout' });
+      teardownAdminRealtimeOnSessionLoss();
       showAdminAuthUnknown();
       return;
     }

@@ -1348,10 +1348,19 @@ function boot() {
   });
 
   subscribeAuthState(user => {
-    if (user && !user.isAnonymous) bootForUser(user).catch(error => {
-      console.error('[shopify-commerce] No se pudo iniciar:', error);
-      toast('No se pudo iniciar la vista avanzada de comercio.', 5200);
-    });
+    if (user && !user.isAnonymous) {
+      bootForUser(user).catch(error => {
+        console.error('[shopify-commerce] No se pudo iniciar:', error);
+        toast('No se pudo iniciar la vista avanzada de comercio.', 5200);
+      });
+      return;
+    }
+    // Sin esto, los listeners de products/collections/orders/orderTrash
+    // seguían corriendo tras una pérdida real de sesión y cada uno chocaba
+    // por separado con "Missing or insufficient permissions" en Firestore.
+    state.unsubscribers.forEach(unsub => { try { unsub(); } catch {} });
+    state.unsubscribers = [];
+    if (state.trashUnsubscribe) { try { state.trashUnsubscribe(); } catch {} state.trashUnsubscribe = null; }
   });
 }
 
