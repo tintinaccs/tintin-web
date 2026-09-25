@@ -272,8 +272,24 @@
       gap: 16px;
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 200;
     }
+
+    /* La navegación lateral debe quedar por encima de la barra superior,
+       también cuando está contraída o se abre por hover/foco. */
+    .adm-sidebar { z-index: 300 !important; }
+
+    #tt-admin-bulk-progress {
+      position: fixed; top: 88px; right: 20px; z-index: 10000; width: min(360px, calc(100vw - 40px));
+      padding: 13px 15px; border: 1px solid #efd6e1; border-radius: 13px; background: rgba(255,255,255,.97);
+      box-shadow: 0 14px 38px rgba(72,25,45,.16); color: #382c31; font: 12px/1.4 Montserrat, sans-serif;
+    }
+    #tt-admin-bulk-progress[hidden] { display: none; }
+    .tt-admin-bulk-progress__head { display:flex; justify-content:space-between; gap:12px; margin-bottom:8px; }
+    .tt-admin-bulk-progress__head span { color:#8a6876; font-variant-numeric:tabular-nums; }
+    .tt-admin-bulk-progress__track { height:7px; overflow:hidden; border-radius:999px; background:#f3e5eb; }
+    .tt-admin-bulk-progress__track i { display:block; width:0; height:100%; border-radius:inherit; background:linear-gradient(90deg,#b6426d,#e18ca9); transition:width .18s ease; }
+    #tt-admin-bulk-progress p { margin:8px 0 0; color:#796872; font-size:11px; }
     .adm-topbar-title {
       font-size: 18px;
       font-weight: 800;
