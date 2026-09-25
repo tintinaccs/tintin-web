@@ -129,9 +129,11 @@ html body:not(:has(.adm-main)) :is(
   letter-spacing: .01em;
 }
 
+/* .login-google queda fuera: login-maintenance.css lo define blanco con texto
+   de marca (y la G en su caja); pintarlo rosa dejaba la etiqueta en 1.6:1. */
 html body:not(:has(.adm-main)) :is(
   .tt-btn, .tt-btn-primary-full, .tt-cart-checkout-btn,
-  .login-email-btn, .login-google, .ck-btn
+  .login-email-btn, .ck-btn
 ):not(.tt-btn-outline):not(.tt-btn-outline-full) {
   background: var(--tt-ui-pink) !important;
   border-color: var(--tt-ui-pink) !important;
