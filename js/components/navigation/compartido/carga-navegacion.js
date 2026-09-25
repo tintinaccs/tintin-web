@@ -1,5 +1,5 @@
 import { currentPage } from './estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260921-document-navigation-no-view-transition-3';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260925-cache-converge-1';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;
@@ -264,7 +264,7 @@ function loadNavigationBehaviors() {
     .then(() => Promise.allSettled([
       initialSurfacePromise,
       import(versionedJsModule('components/navigation/compartido/enrutador.js')),
-      import('./control-busqueda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1'),
+      import('./control-busqueda.js?v=tintin-20260925-cache-converge-1'),
     ]))
     .then(results => {
       reportRuntimeFailures(results);

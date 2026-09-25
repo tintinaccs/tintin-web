@@ -18,7 +18,7 @@ import {
   modeIncludes,
   stableHash,
   summarizeReport
-} from '../../diagnostics/nucleo-diagnostico.js?v=tintin-20260716-cloudinary-fix-1';
+} from '../../diagnostics/nucleo-diagnostico.js?v=tintin-20260925-cache-converge-1';
 
 const MANIFEST_URL = './diagnostic-manifest.json';
 const HISTORY_DB = 'tintin-diagnostics-readonly';

@@ -3,7 +3,7 @@ import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-202609
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 import { collection, doc, limit, onSnapshot, query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { runAdminBulk } from '../utilidades-progreso-admin.js?v=tintin-20260924-bulk-progress-1';
+import { runAdminBulk } from '../utilidades-progreso-admin.js?v=tintin-20260925-admin-ops-1';
 
 const DEFAULT_SETTINGS = {
   autoMarkSeenReviews: true,
@@ -314,6 +314,8 @@ function setBadge(id, count) {
   el.hidden = count === 0;
 }
 function toast(message, tone = 'success') {
+  // Misma pila de avisos que el resto del panel (abajo a la derecha, sin taparse).
+  if (window.toast?.__tintinOps) { window.toast(message, { type: tone }); return; }
   const root = $('#eg-toast-root');
   if (!root) return;
   const node = document.createElement('div');
@@ -971,11 +973,11 @@ async function bulkReviews(action, trigger) {
     if (action === 'hide') input.visible = false;
     if (action === 'archive') input.archived = true;
     return api(input);
-  }, { title: action === 'delete' ? 'Eliminando reseñas' : 'Actualizando reseñas', concurrency: 3 });
+  }, { title: action === 'delete' ? 'Eliminando reseñas' : 'Actualizando reseñas', name: 'ReseñasEnLote', module: 'Participación · reseñas', concurrency: 3 });
   trigger.disabled = false;
   selectedReviews.clear();
   const okCount = results.filter(item => item.status === 'fulfilled').length;
-  toast(`${okCount} reseña${okCount === 1 ? '' : 's'} actualizada${okCount === 1 ? '' : 's'}`);
+  toast(`${okCount} de ${ids.length} reseña${ids.length === 1 ? '' : 's'} actualizada${ids.length === 1 ? '' : 's'}`, okCount === ids.length ? 'success' : okCount ? 'warning' : 'error');
 }
 async function bulkLikes(action, trigger) {
   if (action === 'clear') { selectedLikes.clear(); renderLikes(); return; }
@@ -990,11 +992,11 @@ async function bulkLikes(action, trigger) {
     if (action === 'seen') return api({ action:'likeSeen', likeId:id });
     if (action === 'delete') return api({ action:'likeDelete', likeId:id });
     return api({ action:'likeArchive', likeId:id, archived: action === 'archive' });
-  }, { title: action === 'delete' ? 'Eliminando favoritos' : 'Actualizando favoritos', concurrency: 3 });
+  }, { title: action === 'delete' ? 'Eliminando favoritos' : 'Actualizando favoritos', name: 'FavoritosEnLote', module: 'Participación · me gusta', concurrency: 3 });
   trigger.disabled = false;
   selectedLikes.clear();
   const okCount = results.filter(item => item.status === 'fulfilled').length;
-  toast(`${okCount} registro${okCount === 1 ? '' : 's'} actualizado${okCount === 1 ? '' : 's'}`);
+  toast(`${okCount} de ${ids.length} registro${ids.length === 1 ? '' : 's'} actualizado${ids.length === 1 ? '' : 's'}`, okCount === ids.length ? 'success' : okCount ? 'warning' : 'error');
 }
 
 function viewProfile(ownerUid, email) {

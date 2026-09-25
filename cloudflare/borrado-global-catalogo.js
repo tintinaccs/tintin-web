@@ -8,7 +8,7 @@ import {
   parseServiceAccount,
 } from './firebase-admin-ligero.js';
 import { syncEngagementBatchToSheets } from './sincronizacion-participacion-sheets.js';
-import { queueCatalogSheetSync, syncDeletedProductsPayloadWithRetry } from './resiliencia-sync-catalogo.js';
+import { queueCatalogSheetSync, syncDeletedProductsPayloadWithRetry, syncProductsPayloadWithRetry } from './resiliencia-sync-catalogo.js';
 
 const FIRESTORE_SCOPE = 'https://www.googleapis.com/auth/datastore';
 const MAX_PRODUCTS = 5000;
@@ -93,18 +93,27 @@ async function collectSocialReferences(env, productIds) {
   return { privateReviews, reviewCopies, likes, interactionMappings };
 }
 
-async function syncProductsToSheets(env, idToken, productIds, actor) {
+async function syncProductsToSheets(env, idToken, productIds, actor, { deleted = true } = {}) {
   const ids = unique(productIds);
   if (!ids.length) return { ok: true, batches: 0 };
-  // La colección canónica ya está borrada: el Apps Script necesita recibir
-  // tombstones (exists:false), no volver a leer los documentos desaparecidos.
+  // Productos borrados: tombstones (exists:false), sin releer documentos que
+  // ya no existen. Productos conservados (colección quitada o reasignada):
+  // payload con su estado actual; un tombstone borraría su fila de Sheets.
   // El payload server-side además evita depender de una sesión admin en Sheets.
   let result;
   try {
-    result = await syncDeletedProductsPayloadWithRetry(env, ids, { attempts: 2 });
+    result = deleted
+      ? await syncDeletedProductsPayloadWithRetry(env, ids, { attempts: 2 })
+      : await syncProductsPayloadWithRetry(env, ids, { attempts: 2 });
   } catch (error) {
-    const queued = await queueCatalogSheetSync(env, ids, error, actor);
-    return { ok: false, queued: true, queueIds: queued, error: clean(error?.message || error) };
+    // Encolar no es sincronizar: quien llama debe informar la etapa como
+    // pendiente, no como correcta.
+    const reason = clean(error?.message || error, 300);
+    try { await queueCatalogSheetSync(env, ids, error, actor); }
+    catch (queueError) {
+      throw new Error(`Google Sheets (Productos) no confirmó la sincronización y no se pudo encolar el reintento: ${reason} / ${clean(queueError?.message || queueError, 200)}`);
+    }
+    throw new Error(`Google Sheets (Productos) no confirmó la sincronización; quedó en cola para reintento automático. Detalle: ${reason}`);
   }
   if (!result.ok) throw new Error(result.error || 'La sincronización de Productos quedó en cola para reintento.');
   return result;
@@ -315,7 +324,7 @@ export async function deleteCollectionsGlobally(env, {
   let productsSheets = productDeleteResult?.sheets?.products === true;
   const errors = [...(productDeleteResult?.errors || [])];
   if (productMode !== 'delete' && affectedIds.length) {
-    try { await syncProductsToSheets(env, idToken, affectedIds, actor); productsSheets = true; }
+    try { await syncProductsToSheets(env, idToken, affectedIds, actor, { deleted: false }); productsSheets = true; }
     catch (error) { errors.push(clean(error?.message, 500)); }
   }
 

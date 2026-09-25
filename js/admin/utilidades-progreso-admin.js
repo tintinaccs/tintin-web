@@ -1,65 +1,69 @@
 /* Utilidades compartidas para operaciones masivas del Super Admin.
- * Mantiene la interfaz viva mientras se procesan lotes y nunca bloquea el
- * hilo principal con esperas artificiales o renders completos.
+ * Cada lote es una operación del sistema central: progreso real por
+ * elemento, resultado parcial como advertencia, fallo total como error y
+ * detalle por elemento en la ventana de diagnóstico. Sin esperas
+ * artificiales ni renders completos durante el proceso.
  */
-let progressRoot = null;
+import { runOperation } from './operaciones/sistema-operaciones-admin.js?v=tintin-20260925-admin-ops-1';
 
-function ensureProgressRoot() {
-  if (progressRoot?.isConnected) return progressRoot;
-  progressRoot = document.createElement('section');
-  progressRoot.id = 'tt-admin-bulk-progress';
-  progressRoot.setAttribute('role', 'status');
-  progressRoot.setAttribute('aria-live', 'polite');
-  progressRoot.hidden = true;
-  progressRoot.innerHTML = `
-    <div class="tt-admin-bulk-progress__head"><strong data-progress-title></strong><span data-progress-count></span></div>
-    <div class="tt-admin-bulk-progress__track"><i data-progress-fill></i></div>
-    <p data-progress-detail></p>`;
-  document.body.appendChild(progressRoot);
-  return progressRoot;
-}
+const MAX_LISTED_FAILURES = 20;
 
-export function updateAdminBulkProgress(title, done, total, detail = '') {
-  const root = ensureProgressRoot();
-  const safeTotal = Math.max(0, Number(total) || 0);
-  const safeDone = Math.min(safeTotal, Math.max(0, Number(done) || 0));
-  root.hidden = false;
-  root.querySelector('[data-progress-title]').textContent = title || 'Procesando…';
-  root.querySelector('[data-progress-count]').textContent = safeTotal ? `${safeDone}/${safeTotal}` : '';
-  root.querySelector('[data-progress-fill]').style.width = safeTotal ? `${Math.round((safeDone / safeTotal) * 100)}%` : '24%';
-  root.querySelector('[data-progress-detail]').textContent = detail || 'La página sigue disponible mientras se confirma cada operación.';
-}
-
-export function finishAdminBulkProgress(detail = '') {
-  if (!progressRoot?.isConnected) return;
-  if (detail) progressRoot.querySelector('[data-progress-detail]').textContent = detail;
-  window.setTimeout(() => { if (progressRoot) progressRoot.hidden = true; }, detail ? 900 : 0);
+function itemLabel(item, index) {
+  if (typeof item === 'string' || typeof item === 'number') return String(item);
+  return String(item?.id || item?.uid || `#${index + 1}`);
 }
 
 export async function runAdminBulk(items, worker, {
-  title = 'Procesando…', concurrency = 3, onProgress,
+  title = 'Procesando…', concurrency = 3, onProgress, name, module = 'Panel admin', label = itemLabel,
+  // Resultados que no son error pero tampoco un cambio (p. ej. ya no existía).
+  isSkipped = null, skippedText = 'omitidos',
 } = {}) {
   const queue = [...items];
   const total = queue.length;
-  let cursor = 0;
-  let done = 0;
   const results = [];
-  const report = () => {
-    updateAdminBulkProgress(title, done, total);
-    onProgress?.(done, total);
-  };
-  report();
-  const consume = async () => {
-    while (cursor < total) {
-      const index = cursor++;
-      try { results[index] = { status: 'fulfilled', value: await worker(queue[index], index) }; }
-      catch (error) { results[index] = { status: 'rejected', reason: error }; }
-      done += 1;
+  await runOperation({
+    name: name || title,
+    title,
+    module,
+    // Quien llama ya informa el resultado final con sus propios números.
+    notifySuccess: false,
+    stages: [{ id: 'items', label: `Procesar ${total} elemento${total === 1 ? '' : 's'}`, expected: `${total} correctos` }],
+    run: async ctx => {
+      let cursor = 0;
+      let done = 0;
+      const report = () => {
+        ctx.progress('items', done, total);
+        onProgress?.(done, total);
+      };
+      ctx.start('items');
       report();
-    }
-  };
-  await Promise.all(Array.from({ length: Math.min(Math.max(1, concurrency), Math.max(1, total)) }, consume));
-  finishAdminBulkProgress('Operación finalizada. Actualizando los datos confirmados…');
+      const consume = async () => {
+        while (cursor < total) {
+          const index = cursor++;
+          try { results[index] = { status: 'fulfilled', value: await worker(queue[index], index) }; }
+          catch (error) { results[index] = { status: 'rejected', reason: error }; }
+          done += 1;
+          report();
+        }
+      };
+      await Promise.all(Array.from({ length: Math.min(Math.max(1, concurrency), Math.max(1, total)) }, consume));
+
+      const failures = [];
+      results.forEach((result, index) => { if (result.status === 'rejected') failures.push({ index, error: result.reason }); });
+      const skipped = typeof isSkipped === 'function'
+        ? results.filter(result => result.status === 'fulfilled' && isSkipped(result.value)).length : 0;
+      const okCount = total - failures.length;
+      const received = `${okCount - skipped} de ${total} correctos`
+        + (skipped ? `; ${skipped} ${skippedText}` : '')
+        + (failures.length ? `; ${failures.length} con error` : '');
+      if (!failures.length) { ctx.ok('items', { received }); return; }
+      const listed = failures.slice(0, MAX_LISTED_FAILURES)
+        .map(({ index, error }) => `${label(queue[index], index)}: ${error?.message || error}`);
+      if (failures.length > listed.length) listed.push(`… y ${failures.length - listed.length} más`);
+      const info = { received, affected: listed.join('\n'), error: failures[0].error };
+      if (okCount > 0) ctx.warn('items', info);
+      else ctx.fail('items', info);
+    },
+  });
   return results;
 }
-

@@ -7,7 +7,7 @@
 
 import {
   recalculateOrderOwnerStats
-} from '../../core/store/estadisticas-pedidos.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1';
+} from '../../core/store/estadisticas-pedidos.js?v=tintin-20260925-cache-converge-1';
 
 (function () {
   'use strict';
@@ -18,6 +18,8 @@ import {
   if (!isAdminPage) return;
 
   function toast(msg, duration = 3500) {
+    // Avisos centrales del panel (apilados, sin taparse); el resto es respaldo.
+    if (window.toast?.__tintinOps) { window.toast(msg, duration); return; }
     const el = document.getElementById('adm-toast');
     if (!el) { console.log('[Tintin Admin]', msg); return; }
     el.textContent = msg;

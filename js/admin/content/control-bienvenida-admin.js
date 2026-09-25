@@ -10,7 +10,7 @@ import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-202609
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1';
 import { collection, doc, getDoc, setDoc, serverTimestamp, writeBatch } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1';
-import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=tintin-20260716-cloudinary-fix-1';
+import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';
 import {
   defaultWelcomeSteps,
   normalizeWelcomeConfig,
@@ -55,6 +55,8 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
   }
 
   function toast(msg, duration = 2800) {
+    // Avisos centrales del panel (apilados, sin taparse); el resto es respaldo.
+    if (window.toast?.__tintinOps) { window.toast(msg, duration); return; }
     const el = document.getElementById('adm-toast');
     if (!el) { console.log('[Welcome]', msg); return; }
     el.textContent = msg;

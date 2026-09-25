@@ -1,5 +1,5 @@
-import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-20260826-carousel-order-3';
-import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20260916-premium-performance-loader-1';
+import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-20260925-cache-converge-1';
+import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20260925-cache-converge-1';
 
 const VISUAL_SETTLE_CEILING_MS = 3500;
 

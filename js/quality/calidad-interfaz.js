@@ -2,8 +2,8 @@
 'use strict';
 if(window.TintinUIQualityBooted)return;
 window.TintinUIQualityBooted=1;
-var TT_CACHE_VERSION='tintin-20260827-navigation-top-1';
-function versioned(url){try{var u=new URL(url,import.meta.url);u.searchParams.set('v',TT_CACHE_VERSION);return u.href}catch(e){return url+(url.indexOf('?')>-1?'&':'?')+'v='+TT_CACHE_VERSION}}
+var TT_CACHE_VERSION='tintin-20260925-cache-converge-1';
+function versioned(url,tag){var v=tag||TT_CACHE_VERSION;try{var u=new URL(url,import.meta.url);u.searchParams.set('v',v);return u.href}catch(e){return url+(url.indexOf('?')>-1?'&':'?')+'v='+v}}
 function isOldLogo(url){return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url||''))}
 var HOME_LOADER_IMAGE='assets-tintin/images/general/logo.png';
 var INNER_LOADER_IMAGE='assets-tintin/images/general/logo.png';
@@ -11,12 +11,13 @@ function isHomePage(){var path=(location.pathname||'').toLowerCase();return path
 var DEFAULT_LOGO=(isHomePage()?HOME_LOADER_IMAGE:INNER_LOADER_IMAGE)+'?v='+TT_CACHE_VERSION;
 function realLogo(){try{var data=JSON.parse(localStorage.getItem('tt_images')||'{}');var url=data&&data.logo_main;if(url&&!isOldLogo(url))return url}catch(e){}return DEFAULT_LOGO}
 function css(){
- var files=[['tt-ui-quality-css','quality/calidad-interfaz.css'],['tt-unified-theme-css','core/tema-unificado-tintin.css'],['tt-theme-cleanup-css','core/limpieza-tema-tintin.css'],['tt-parity-safe-css','theme/paridad-segura-tintin.css']];
+ // Mismo ?v= que los <link> literales del HTML: una sola URL por archivo en todo el sitio.
+ var files=[['tt-ui-quality-css','quality/calidad-interfaz.css','tintin-20260916-final-production-stability-quality-2'],['tt-unified-theme-css','core/tema-unificado-tintin.css','tintin-20260925-contrast-1'],['tt-theme-cleanup-css','core/limpieza-tema-tintin.css','tintin-20260811-cls-desktop-stable-2'],['tt-parity-safe-css','theme/paridad-segura-tintin.css','tintin-20260811-cls-desktop-stable-2']];
  files.forEach(function(f){
   var id=f[0],file=f[1];
   if(document.getElementById(id))return;
   if(document.querySelector('link[href*="'+file+'"]'))return;
-  var l=document.createElement('link');l.id=id;l.rel='stylesheet';l.href=versioned('../../css/'+file);document.head.appendChild(l);
+  var l=document.createElement('link');l.id=id;l.rel='stylesheet';l.href=versioned('../../css/'+file,f[2]);document.head.appendChild(l);
  });
 }
 function bootThemeSanitizer(){import(versioned('../components/color/normalizador-color-tema.js')).catch(function(e){console.warn('[ui-quality] No se pudo cargar Theme Color Sanitizer:',e)})}

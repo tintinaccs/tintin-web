@@ -10,7 +10,7 @@ import { db } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolve
 import {
   collection, doc, getDoc, getDocs, query, where, setDoc, writeBatch, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { getDocsPaginated } from '../firebase/paginacion-firestore.js?v=tintin-20260716-cloudinary-fix-1';
+import { getDocsPaginated } from '../firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';
 
 const ZERO_STATS = Object.freeze({
   orderCount: 0,

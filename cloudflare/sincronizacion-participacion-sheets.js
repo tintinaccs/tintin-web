@@ -1,6 +1,7 @@
-const APPS_SCRIPT_SYNC_URL =
-  'https://script.google.com/macros/s/AKfycbwiBvdkkEeWMHLnj57st2nBKwx9Xci88J0hAMlkkJ1j7vkpzn0A0f4DhPDqh8KkL947/exec';
-const SYNC_TIMEOUT_MS = 12_000;
+// Reseñas y "me gusta" viajan al mismo Web App que productos y pedidos: es el
+// único despliegue cuyo doPost enruta syncEngagement/syncEngagementBatch. Un
+// deployment propio quedaba desactualizado y respondía "Acción no permitida".
+import { APPS_SCRIPT_SYNC_URL, SHEETS_TIMEOUT_MS as SYNC_TIMEOUT_MS } from './sheets-sync-config.js';
 import { fetchAppsScript } from './apps-script-fetch.js';
 
 // Compatibilidad temporal: acepta la firma vieja (env, idToken, event) y la
