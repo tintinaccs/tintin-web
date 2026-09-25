@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "99f78cf725fe14e6ed42cd74791e2d0aa4ae8e4646f76dda9f240c236c83b92c",
+  "sourceFingerprint": "5d136884b81a4ab8d17239529e089ae8e4f1422422883fdedb8ba9cb5415fb72",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 878,
     "textFiles": 837,
-    "totalBytes": 17156961,
+    "totalBytes": 17161175,
     "pages": 19,
     "modules": 602
   },
@@ -2112,8 +2112,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 197144,
-      "sha256": "dedc7aaf4b442f09e1ec4bbb85c2071b05df3a563c8fd81b60b7b84acdaaa1d1",
+      "bytes": 197229,
+      "sha256": "18e0e2dcc1153fa27a12236aba4619fa78b412461e0a241effe7b6f7af7d3153",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2157,7 +2157,7 @@
           "line": 2042
         },
         {
-          "raw": "js/admin/sidebar-expandible-admin.js?v=tintin-20260925-sidebar-touch-expansion-1",
+          "raw": "js/admin/sidebar-expandible-admin.js?v=tintin-20260925-sidebar-all-viewports-2",
           "target": "js/admin/sidebar-expandible-admin.js",
           "line": 2043
         },
@@ -2274,7 +2274,7 @@
           "line": 35
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20260925-admin-tablet-sidebar-toggle-1",
+          "raw": "css/admin/admin.css?v=tintin-20260925-admin-sidebar-all-viewports-1",
           "target": "css/admin/admin.css",
           "line": 36
         },
@@ -2423,7 +2423,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/sidebar-expandible-admin.js?v=tintin-20260925-sidebar-touch-expansion-1",
+          "raw": "js/admin/sidebar-expandible-admin.js?v=tintin-20260925-sidebar-all-viewports-2",
           "target": "js/admin/sidebar-expandible-admin.js",
           "line": 2043,
           "exists": true
@@ -2561,7 +2561,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20260925-admin-tablet-sidebar-toggle-1",
+          "raw": "css/admin/admin.css?v=tintin-20260925-admin-sidebar-all-viewports-1",
           "target": "css/admin/admin.css",
           "line": 36,
           "exists": true
@@ -3685,7 +3685,7 @@
           ],
           "type": "button",
           "text": "",
-          "ariaLabel": "",
+          "ariaLabel": "Abrir menú de módulos",
           "title": "",
           "inlineHandler": false,
           "dataAction": {},
@@ -22058,8 +22058,8 @@
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
-      "bytes": 1185,
-      "sha256": "1994ae58130f0887f317f78dfeeaeecc7ad135602107b7b643f538e98a053fdc",
+      "bytes": 3351,
+      "sha256": "f9a61d7676b5c4821d7057b6c3f47f305d551cf536199df48c60501accf7d1b4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29089,8 +29089,8 @@
     },
     {
       "path": "scripts/auditar-super-admin-responsive.mjs",
-      "bytes": 16327,
-      "sha256": "5fe9e90df20a6af591b47d489039f555c8e49144d8c7eb262a4788d3841bbb99",
+      "bytes": 18959,
+      "sha256": "c4241ec1ff9c748640981e19a9d87641145ecda7607acc5e2225c5f82609b338",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34344,8 +34344,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 197144,
-      "sha256": "dedc7aaf4b442f09e1ec4bbb85c2071b05df3a563c8fd81b60b7b84acdaaa1d1"
+      "bytes": 197229,
+      "sha256": "18e0e2dcc1153fa27a12236aba4619fa78b412461e0a241effe7b6f7af7d3153"
     },
     {
       "path": "apple-touch-icon.png",
@@ -34854,8 +34854,8 @@
     {
       "path": "css/admin/admin.css",
       "extension": ".css",
-      "bytes": 99591,
-      "sha256": "438eb579066b0ac375d3c605b0a70221a45932550d50346279260df372cf6c8f"
+      "bytes": 98924,
+      "sha256": "f2b81c146b53161d42a4f63c4ddd995e872304e54e73ab04351bed540723318a"
     },
     {
       "path": "css/admin/diagnostico-maestro.css",
@@ -36324,8 +36324,8 @@
     {
       "path": "js/admin/sidebar-expandible-admin.js",
       "extension": ".js",
-      "bytes": 1185,
-      "sha256": "1994ae58130f0887f317f78dfeeaeecc7ad135602107b7b643f538e98a053fdc"
+      "bytes": 3351,
+      "sha256": "f9a61d7676b5c4821d7057b6c3f47f305d551cf536199df48c60501accf7d1b4"
     },
     {
       "path": "js/admin/users/ficha-usuario-admin.js",
@@ -38394,8 +38394,8 @@
     {
       "path": "scripts/auditar-super-admin-responsive.mjs",
       "extension": ".mjs",
-      "bytes": 16327,
-      "sha256": "5fe9e90df20a6af591b47d489039f555c8e49144d8c7eb262a4788d3841bbb99"
+      "bytes": 18959,
+      "sha256": "c4241ec1ff9c748640981e19a9d87641145ecda7607acc5e2225c5f82609b338"
     },
     {
       "path": "scripts/auditar-superadmin-cierre-total.mjs",
@@ -38508,8 +38508,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 47447,
-      "sha256": "6e584ddd71b573c17f000253cf38d95389928aa8bf067f07d2d3a2da20103598"
+      "bytes": 47445,
+      "sha256": "16a3f4bb176d4b9f211cc6b43308ab184389600085ffd57049954ce437f76651"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
