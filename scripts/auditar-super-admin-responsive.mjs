@@ -96,8 +96,8 @@ console.log(`\nResponsive Super Admin: CORRECTO · ${results.length}/${results.l
 const adminShellCss = fs.readFileSync(path.join(root, 'css/admin/admin.css'), 'utf8');
 const sidebarRuntime = fs.readFileSync(path.join(root, 'js/admin/sidebar-expandible-admin.js'), 'utf8');
 const shellViewports = [
-  [1920, 1080], [1440, 900], [1280, 800], [1024, 768],
-  [900, 900], [820, 1180], [768, 1024], [600, 900],
+  [1920, 1080], [1440, 900], [1280, 800], [1024, 768], [901, 768],
+  [900, 900], [820, 1180], [768, 1024], [600, 900], [541, 900],
   [540, 900], [430, 932], [390, 844], [375, 812], [360, 800], [320, 720]
 ];
 
@@ -106,6 +106,7 @@ const shellFixture = `<!doctype html><html class="adm-auth-ready"><head><meta ch
 :root{--admin-color-background-sidebar:#fff;--admin-color-background-sidebar-active:#FDECF2;--admin-color-text-sidebar:#2B2B2B;--admin-color-background-page:#FFF6FA;--admin-color-background-surface:#fff;--admin-color-brand:#AD3F67;--admin-color-text-primary:#2B2B2B;--admin-color-text-secondary:#7B6F72;--admin-color-text-title:#2B2B2B;--admin-color-border:#F1E4E7;--admin-color-table-row-hover:#FFF9FC;--rose:#8B2642}
 .adm-notifications-button{width:46px;height:46px;border:0;border-radius:50%}
 </style><style>${adminShellCss}</style></head><body>
+<div class="adm-overlay" id="adm-overlay"></div>
 <aside class="adm-sidebar" id="adm-sidebar">
   <div class="adm-sidebar-logo"><div class="adm-sidebar-logo-text">TINTIN</div><div class="adm-sidebar-logo-sub">Panel de administración</div><button class="adm-sidebar-toggle" id="adm-sidebar-toggle" type="button" aria-pressed="false">‹</button></div>
   <div class="adm-user-info"><div class="adm-user-avatar">TT</div><div><div class="adm-user-name">Tintin Accesorios y Relojes</div><span class="adm-user-role-badge role-superadmin">SUPER ADMIN</span><div class="adm-live-clock">24/09/2026 · 14:30</div></div></div>
@@ -113,6 +114,7 @@ const shellFixture = `<!doctype html><html class="adm-auth-ready"><head><meta ch
 </aside>
 <main class="adm-main">
   <header class="adm-topbar">
+    <button class="adm-hamburger" id="adm-hamburger" type="button" aria-label="Abrir menú de módulos" aria-controls="adm-sidebar" aria-expanded="false">☰</button>
     <div class="adm-topbar-title">Productos</div>
     <div class="adm-topbar-actions"><div class="adm-notifications-wrap"><button class="adm-notifications-button" type="button">○</button></div><a class="adm-topbar-btn" href="#">+ Nuevo pedido</a></div>
   </header>
@@ -128,21 +130,36 @@ try {
     const context = await shellBrowser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' });
     const page = await context.newPage();
     await page.setContent(shellFixture, { waitUntil: 'load' });
-    let tabletToggleWidths = null;
-    if (width >= 541 && width <= 900) {
-      await page.addScriptTag({ content: sidebarRuntime });
-      const toggle = page.locator('#adm-sidebar-toggle');
-      const visible = await toggle.isVisible();
+    await page.addScriptTag({ content: sidebarRuntime });
+    const toggle = page.locator('#adm-sidebar-toggle');
+    let toggleState = null;
+    if (width > 540) {
       const target = await toggle.boundingBox();
       await toggle.click();
-      await page.waitForFunction(() => !document.documentElement.classList.contains('adm-sidebar-is-collapsed'));
       await page.waitForTimeout(250);
-      const expandedWidth = await page.locator('.adm-sidebar').evaluate(element => element.getBoundingClientRect().width);
+      const toggledWidth = await page.locator('.adm-sidebar').evaluate(element => element.getBoundingClientRect().width);
+      const toggledClass = await page.evaluate(() => document.documentElement.classList.contains('adm-sidebar-is-collapsed'));
+      const toggledNavDirection = await page.locator('.adm-nav-item').first().evaluate(element => getComputedStyle(element).flexDirection);
+      const brandFontSize = await page.locator('.adm-sidebar-logo-text').evaluate(element => Number.parseFloat(getComputedStyle(element).fontSize));
       await toggle.click();
-      await page.waitForFunction(() => document.documentElement.classList.contains('adm-sidebar-is-collapsed'));
       await page.waitForTimeout(250);
-      tabletToggleWidths = { visible, targetWidth: target?.width || 0, targetHeight: target?.height || 0, expandedWidth };
-      await page.hover('.adm-sidebar');
+      toggleState = { targetWidth: target?.width || 0, targetHeight: target?.height || 0, toggledWidth, toggledClass, toggledNavDirection, brandFontSize };
+    } else {
+      const hamburger = page.locator('#adm-hamburger');
+      const target = await hamburger.boundingBox();
+      await hamburger.click();
+      await page.waitForTimeout(250);
+      const open = await page.evaluate(() => ({
+        sidebarVisible: getComputedStyle(document.querySelector('.adm-sidebar')).visibility,
+        sidebarWidth: document.querySelector('.adm-sidebar').getBoundingClientRect().width,
+        overlayDisplay: getComputedStyle(document.querySelector('.adm-overlay')).display,
+        navDirection: getComputedStyle(document.querySelector('.adm-nav-item')).flexDirection,
+        brandFontSize: Number.parseFloat(getComputedStyle(document.querySelector('.adm-sidebar-logo-text')).fontSize),
+        expanded: document.querySelector('#adm-hamburger').getAttribute('aria-expanded'),
+      }));
+      await toggle.click();
+      await page.waitForTimeout(250);
+      toggleState = { targetWidth: target?.width || 0, targetHeight: target?.height || 0, open };
     }
     const state = await page.evaluate(() => {
       const box = selector => document.querySelector(selector)?.getBoundingClientRect() || null;
@@ -158,6 +175,7 @@ try {
         docWidth: document.documentElement.scrollWidth,
         bodyWidth: document.body.scrollWidth,
         sidebarDisplay: sidebar ? getComputedStyle(sidebar).display : 'missing',
+        sidebarVisibility: sidebar ? getComputedStyle(sidebar).visibility : 'missing',
         sidebarWidth: side?.width || 0,
         mainLeft: main?.left || 0,
         mobileTabsDisplay: tabs ? getComputedStyle(tabs).display : 'missing',
@@ -172,19 +190,28 @@ try {
     const issues = [];
     if (state.docWidth > width + 2 || state.bodyWidth > width + 2) issues.push(`overflow global ${state.docWidth}/${state.bodyWidth} > ${width}`);
     if (width > 900) {
+      if (Math.abs((toggleState?.toggledWidth || 0) - 74) > 2 || !toggleState?.toggledClass) issues.push(`botón desktop no contrae: ${toggleState?.toggledWidth}px`);
+      if (toggleState?.targetWidth < 34 || toggleState?.targetHeight < 44) issues.push('botón desktop demasiado pequeño');
       if (Math.abs(state.sidebarWidth - 260) > 2) issues.push(`sidebar desktop ${state.sidebarWidth}px, esperado 260px`);
       if (state.mainLeft < 258) issues.push(`main desktop invade sidebar: left=${state.mainLeft}`);
       if (state.mobileTabsDisplay !== 'none') issues.push('tabs móviles visibles en desktop');
     } else if (width >= 541) {
-      if (!tabletToggleWidths?.visible) issues.push('botón táctil de expansión oculto en tablet');
-      if ((tabletToggleWidths?.targetWidth || 0) < 44 || (tabletToggleWidths?.targetHeight || 0) < 44) issues.push(`botón tablet menor que 44×44px: ${tabletToggleWidths?.targetWidth}×${tabletToggleWidths?.targetHeight}`);
-      if (Math.abs((tabletToggleWidths?.expandedWidth || 0) - 260) > 2) issues.push(`barra tablet no expande a 260px: ${tabletToggleWidths?.expandedWidth}`);
+      if ((toggleState?.targetWidth || 0) < 44 || (toggleState?.targetHeight || 0) < 44) issues.push(`botón tablet menor que 44×44px: ${toggleState?.targetWidth}×${toggleState?.targetHeight}`);
+      if (Math.abs((toggleState?.toggledWidth || 0) - 260) > 2 || toggleState?.toggledClass) issues.push(`barra tablet no expande a 260px: ${toggleState?.toggledWidth}`);
+      if (toggleState?.toggledNavDirection !== 'row') issues.push(`menú tablet expandido conserva formato compacto: ${toggleState?.toggledNavDirection}`);
+      if ((toggleState?.brandFontSize || 0) < 13) issues.push('marca tablet expandida queda comprimida');
       if (Math.abs(state.sidebarWidth - 84) > 2) issues.push(`rail tablet ${state.sidebarWidth}px, esperado 84px`);
       if (state.mainLeft < 82) issues.push(`main tablet invade rail: left=${state.mainLeft}`);
       if (state.logoBottom > state.userTop + 1) issues.push(`logo y usuario se pisan: ${state.logoBottom} > ${state.userTop}`);
       if (state.mobileTabsDisplay !== 'none') issues.push('tabs móviles visibles en tablet');
     } else {
-      if (state.sidebarDisplay !== 'none') issues.push(`sidebar visible en mobile: ${state.sidebarDisplay}`);
+      if ((toggleState?.targetWidth || 0) < 44 || (toggleState?.targetHeight || 0) < 44) issues.push('botón móvil menor que 44×44px');
+      if (toggleState?.open?.sidebarVisible !== 'visible' || toggleState?.open?.expanded !== 'true') issues.push('menú móvil no abre');
+      if (toggleState?.open?.sidebarWidth > width - 46) issues.push(`menú móvil demasiado ancho: ${toggleState?.open?.sidebarWidth}px`);
+      if (toggleState?.open?.overlayDisplay === 'none') issues.push('menú móvil sin fondo de cierre');
+      if (toggleState?.open?.navDirection !== 'row') issues.push(`menú móvil conserva formato compacto: ${toggleState?.open?.navDirection}`);
+      if ((toggleState?.open?.brandFontSize || 0) < 13) issues.push('marca móvil queda comprimida');
+      if (state.sidebarVisibility !== 'hidden') issues.push(`menú móvil no cierra: ${state.sidebarVisibility}`);
       if (Math.abs(state.mainLeft) > 1) issues.push(`main mobile desplazado: left=${state.mainLeft}`);
       if (state.mobileTabsDisplay === 'none') issues.push('tabs móviles ocultas');
     }
