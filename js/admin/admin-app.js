@@ -2580,7 +2580,7 @@ function renderOrdersTable(orders) {
           ${canEditFull ? `<button type="button" class="adm-btn adm-btn-sm" onclick="openOrderEdit(${orderArg})" title="Editar pedido completo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : '—'}
         </td>
         <td class="col-actions-sticky" data-label="Eliminar" onclick="event.stopPropagation()">
-          ${canDelete ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteOrder(${orderArg})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></button>` : '—'}
+          ${canDelete ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteOrder(${orderArg})" title="Mover pedido a Borrados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 011 1v1h4V4a1 1 0 011 1v1"/></svg><span> Borrar</span></button>` : '—'}
         </td>
       </tr>
       <tr id="${escapeHtmlAdmin(detailId)}" class="adm-order-detail-row" style="display:none">
@@ -2779,6 +2779,7 @@ window.deleteOrder = async (orderId) => {
       toast(`Pedido ${orderBefore?.orderNumber || orderBefore?.shortId || ''} movido a Borrados`);
     } else toast('El pedido ya no estaba en la lista activa.');
     applyOrderFilters();
+    result.deleted = Boolean(result.moved);
     return { ...result, orderBefore };
   } catch(e) {
     console.error('[orders] No se pudo mover el pedido a Borrados:', e);
@@ -3004,7 +3005,7 @@ window.bulkDeleteOrders = async function() {
   if (movedOrders.length) logAudit('mover_pedido_borrados', 'pedido', '', '', `${movedOrders.length} pedidos movidos a Borrados`, { bulk: true, count: movedOrders.length, failed: failed.length });
   applyOrderFilters();
   toast(failed.length ? `${movedOrders.length} movidos; ${failed.length} fallaron.` : `${movedOrders.length} pedido(s) movidos a Borrados`, 7000);
-  return { movedOrders, failed };
+  return { movedOrders, deletedOrders: movedOrders, failed };
 };
 
 function orderRowsToCsv_(orders) {
