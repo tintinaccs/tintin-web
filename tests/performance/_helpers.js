@@ -181,8 +181,9 @@ const BUDGETS = {
   // se mantiene el tripwire muy por debajo de un crecimiento de bloat real.
   homeRequests: 177,
   // Nosotros conserva una composición editorial propia con más recursos de
-  // imagen que el resto de las páginas informativas. Su piso observado es
-  // 121 solicitudes efectivas; las demás siguen protegidas por 120.
+  // imagen. Su presupuesto de 121 se aplica a requests first-party para que
+  // reCAPTCHA/otros terceros variables no conviertan el gate en flaky; las
+  // demás páginas informativas mantienen el límite total efectivo de 120.
   lightweightRequests: 120,
   aboutRequests: 121,
   // Las páginas informativas comparten el shell público (CSS, navegación,

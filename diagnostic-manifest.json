@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "415c15a84753a27558d6d24c3b5cb8fd306c641447e55a1bcbc74d3087a9dd14",
+  "sourceFingerprint": "38b6e56dc3db4ce1591c0534dca7cb2e201976fdeb0d194735e5c22df46bbfbe",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 878,
     "textFiles": 837,
-    "totalBytes": 17150380,
+    "totalBytes": 17150681,
     "pages": 19,
     "modules": 602
   },
@@ -32780,8 +32780,8 @@
     },
     {
       "path": "tests/performance/_helpers.js",
-      "bytes": 9706,
-      "sha256": "21d2c7ace600460eee2c4e94d6249df41f12805a02a184058c09452d0da4607c",
+      "bytes": 9791,
+      "sha256": "4202b437dd47cd93222719a84eb864501442274c28b26d60d65c74998ee614ba",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32865,8 +32865,8 @@
     },
     {
       "path": "tests/performance/public-pages.performance.spec.js",
-      "bytes": 4750,
-      "sha256": "657ecda480d0e7e50e0ce4946b91dddd9f3e4db0835842da9b873d1d7206eef1",
+      "bytes": 4966,
+      "sha256": "afa72f77d1b99d899d2b19be8b66dcdd845d9db60ebbbf1612fb2faedb6559d8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -39144,8 +39144,8 @@
     {
       "path": "tests/performance/_helpers.js",
       "extension": ".js",
-      "bytes": 9706,
-      "sha256": "21d2c7ace600460eee2c4e94d6249df41f12805a02a184058c09452d0da4607c"
+      "bytes": 9791,
+      "sha256": "4202b437dd47cd93222719a84eb864501442274c28b26d60d65c74998ee614ba"
     },
     {
       "path": "tests/performance/admin.performance.spec.js",
@@ -39174,8 +39174,8 @@
     {
       "path": "tests/performance/public-pages.performance.spec.js",
       "extension": ".js",
-      "bytes": 4750,
-      "sha256": "657ecda480d0e7e50e0ce4946b91dddd9f3e4db0835842da9b873d1d7206eef1"
+      "bytes": 4966,
+      "sha256": "afa72f77d1b99d899d2b19be8b66dcdd845d9db60ebbbf1612fb2faedb6559d8"
     },
     {
       "path": "tests/performance/realtime-sync.spec.js",
