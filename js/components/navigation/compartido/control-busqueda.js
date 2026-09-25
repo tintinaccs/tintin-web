@@ -1,3 +1,7 @@
+// Misma URL que carga-navegacion.js: una sola instancia del catálogo aunque
+// la búsqueda se abra antes de que termine de cargar.
+import { versionedJsModule } from './configuracion.js?v=tintin-20260925-cache-converge-1';
+
 const MAX_RESULTS = 10;
 const INPUT_DELAY_MS = 120;
 
@@ -244,7 +248,7 @@ async function ensureProducts(force = false) {
     results.replaceChildren(stateNode('Cargando catálogo…'));
   }
 
-  loadPromise = import('../../../core/store/estado-productos.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1')
+  loadPromise = import(versionedJsModule('core/store/estado-productos.js'))
     .then(module => {
       const load = window.TintinProductsStore?.ensureSearch || module.ensureProductsForSearch || module.loadAllProducts;
       return typeof load === 'function' ? load({ force }) : window.PRODUCTS || [];

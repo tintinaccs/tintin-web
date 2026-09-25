@@ -36,7 +36,7 @@ if (!runtime.includes("new URL('/contact', location.origin)")) missing.push('man
 if (!pageFunction.includes('mantenimiento-contacto.js?v=tintin-20260913-xss-hardening-1-auth-persistence-20260919-1')) missing.push('functions/[page].js: versioned contact runtime injection');
 if (!pageFunction.includes('page === \'contact\'')) missing.push('functions/[page].js: contact-only runtime guard');
 if (!pageFunction.includes('type="module"')) missing.push('functions/[page].js: Contact runtime must be loaded as ES module');
-if (!/contact[\s\S]*load\('pages\/institutional\/mantenimiento-contacto\.js'\)/.test(loader)) missing.push('cargador-mantenimiento-pagina.js: contact maintenance fallback import');
+if (!/contact[\s\S]*load\('pages\/institutional\/mantenimiento-contacto\.js'(?:,\s*\w+)?\)/.test(loader)) missing.push('cargador-mantenimiento-pagina.js: contact maintenance fallback import');
 if (/alert\('Por favor completá/.test(runtime)) missing.push('runtime must not use alert validation');
 if (missing.length) {
   console.error('Contact audit failed:\n- ' + missing.join('\n- '));
