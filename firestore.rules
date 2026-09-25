@@ -212,6 +212,33 @@ service cloud.firestore {
       allow delete: if isSuperAdmin();
     }
 
+    // Se guarda solo cuando admin.html prueba un fallo real de restauración
+    // (handoff de login.html sin sesión, o Firebase no pudo leer la sesión
+    // guardada) y muestra el overlay "No pudimos restaurar tu sesión". Puede
+    // pasarle a cualquier usuario con acceso al panel, no solo Super Admin —
+    // por eso no puede exigir isStoreOpenOrAllowed() ni un rol: en ese momento
+    // la sesión puede estar rota o ausente. Los valores de reason y source son
+    // fijos y deben coincidir con classifyAdminSessionFailure() en
+    // js/admin/admin-app.js. Nunca guarda uid, email ni token.
+    function authDiagnosticFailureIsValid() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['code', 'reason', 'source', 'route', 'createdAt']) &&
+        data.keys().hasOnly(['code', 'reason', 'source', 'route', 'userAgent', 'createdAt']) &&
+        data.code is string && data.code == 'REDIRECT_LOOP_BROKEN' &&
+        data.reason is string &&
+        data.reason in ['handoff-recovery-timeout', 'handoff-restore-error', 'auth-restore-fallback'] &&
+        data.source is string && data.source == 'admin-guard' &&
+        data.route is string && data.route.size() <= 220 &&
+        data.get('userAgent', '') is string && data.get('userAgent', '').size() <= 200 &&
+        data.createdAt == request.time;
+    }
+
+    match /authDiagnosticFailures/{eventId} {
+      allow read: if isSuperAdmin();
+      allow create: if !isBlockedUser() && authDiagnosticFailureIsValid();
+      allow update, delete: if false;
+    }
+
     function rolePermAllows(role, moduleKey, actionKey) {
       return exists(/databases/$(database)/documents/rolePermissions/main) &&
         get(/databases/$(database)/documents/rolePermissions/main).data
