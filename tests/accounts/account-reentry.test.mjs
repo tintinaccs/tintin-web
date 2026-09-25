@@ -35,4 +35,8 @@ test('la barra lateral compacta se conserva, se expande en hover y no mueve el c
   assert.match(css, /adm-sidebar-is-collapsed/);
   assert.match(css, /\.adm-sidebar:hover/);
   assert.match(css, /--sidebar-w: 76px/);
+  assert.match(css, /@media \(min-width: 541px\) and \(max-width: 900px\)[\s\S]*?\.adm-sidebar-toggle\s*\{\s*display:\s*grid;/);
+  assert.match(css, /html:not\(\.adm-sidebar-is-collapsed\) body:has\(\.adm-main\) \.adm-sidebar \{[\s\S]*?width: 260px/);
+  assert.match(runtime, /savedPreference === null \? tabletLayout/);
+  assert.match(runtime, /matchMedia\?\.\('\(min-width: 541px\) and \(max-width: 900px\)'\)/);
 });
