@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "0737e1829db9b1e1bcce69daa0f0487985f5cf93ddcb1a2912b24d1461e08da7",
+  "sourceFingerprint": "415c15a84753a27558d6d24c3b5cb8fd306c641447e55a1bcbc74d3087a9dd14",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 878,
     "textFiles": 837,
-    "totalBytes": 17150212,
+    "totalBytes": 17150380,
     "pages": 19,
     "modules": 602
   },
@@ -30469,8 +30469,8 @@
     },
     {
       "path": "tests/accounts/account-reentry.test.mjs",
-      "bytes": 1685,
-      "sha256": "78edce9429647bc28a32983412ebeb552817a8ff4a05812ca120956419e95cdb",
+      "bytes": 1853,
+      "sha256": "0fdd870797bb12c4f81e4b141a0cf0fb069f6c93bda35d8a695ac928879fa16d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38754,8 +38754,8 @@
     {
       "path": "tests/accounts/account-reentry.test.mjs",
       "extension": ".mjs",
-      "bytes": 1685,
-      "sha256": "78edce9429647bc28a32983412ebeb552817a8ff4a05812ca120956419e95cdb"
+      "bytes": 1853,
+      "sha256": "0fdd870797bb12c4f81e4b141a0cf0fb069f6c93bda35d8a695ac928879fa16d"
     },
     {
       "path": "tests/accounts/admin-user-state-separation.test.mjs",
