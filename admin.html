@@ -33,7 +33,7 @@
   <link rel="stylesheet" href="css/quality/estados-especiales-sistema.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/admin/admin-color-tokens.css?v=tintin-20260811-cls-desktop-stable-2">
   <link rel="stylesheet" href="css/core/tokens-tintin.css?v=tintin-20260811-cls-desktop-stable-2">
-  <link rel="stylesheet" href="css/admin/admin.css?v=tintin-20260924-admin-shell-final-3">
+  <link rel="stylesheet" href="css/admin/admin.css?v=tintin-20260924-admin-shell-final-4-user-feedback">
   <link rel="stylesheet" href="css/admin/editor-visual.css?v=tintin-20260812-apariencia-responsive-1">
   <link rel="stylesheet" href="css/admin/participacion-admin.css?v=tintin-20260817-engagement-master-1">
   <link rel="stylesheet" href="css/admin/paginas-admin.css?v=tintin-20260825-pages-1">
@@ -396,6 +396,10 @@
             <button type="button" class="user-tab-btn" data-user-tab="blocked"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Bloqueados <span id="users-blocked-count" class="user-tab-count"></span></button>
             <button type="button" class="user-tab-btn" data-user-tab="deleted">Eliminados <span id="users-deleted-count" class="user-tab-count"></span></button>
           </div>
+          <div id="users-deleted-guidance" class="users-deleted-guidance" hidden>
+            <strong>Estas cuentas no se pueden reactivar desde el panel.</strong>
+            <span>La persona debe registrarse nuevamente con su correo para crear un perfil nuevo; el historial de compras se recupera en ese registro.</span>
+          </div>
           <div class="adm-filter-row">
             <div class="adm-search-wrap" style="margin-bottom:0;flex:2">
               <span class="adm-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
@@ -419,7 +423,7 @@
             <option value="viewer">Viewer</option>
             <option value="client">Cliente</option>
           </select>
-          <button type="button" class="adm-btn adm-btn-sm" onclick="bulkChangeUserRole()">Aplicar rol</button>
+          <button type="button" class="adm-btn adm-btn-sm" id="users-bulk-role-apply-btn" onclick="bulkChangeUserRole()">Aplicar rol</button>
           <button type="button" class="adm-btn adm-btn-sm adm-btn-outline" id="users-bulk-block-btn" onclick="bulkBlockUsers()">Bloquear</button>
           <button type="button" class="adm-btn adm-btn-sm adm-btn-outline" id="users-bulk-restore-btn" onclick="bulkRestoreUsers()" style="display:none">Restaurar</button>
           <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" id="users-bulk-delete-btn" onclick="bulkDeleteUsers()" title="Revocar y eliminar las cuentas seleccionadas">Eliminar cuentas</button>
@@ -2032,10 +2036,10 @@
   </div><!-- /adm-content -->
 </main>
 
-<div class="adm-toast" id="adm-toast"></div>
+<div class="adm-toast" id="adm-toast" role="status" aria-live="polite"></div>
 
 <script type="module" src="js/admin/content/control-bienvenida-admin.js?v=tintin-20260924-appcheck-gate-2-auth-popup-resolver-1"></script>
-<script type="module" src="js/admin/admin-app.js?v=tintin-20260924-auth-appcheck-shell-3-orders-delete-fix"></script>
+<script type="module" src="js/admin/admin-app.js?v=tintin-20260924-auth-appcheck-shell-4-user-restore-feedback"></script>
 <script type="module" src="js/admin/sidebar-expandible-admin.js?v=tintin-20260923-sidebar-recovery-1"></script>
 <script type="module" src="js/admin/importacion-admin.js?v=tintin-20260918-shopify-phase2-safe-1-auth-persistence-20260919-1-auth-popup-resolver-1"></script>
 <script type="module" src="js/admin/participacion/gestion-participacion-admin.js?v=tintin-20260924-appcheck-gate-2"></script>
