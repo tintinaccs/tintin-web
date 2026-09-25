@@ -133,7 +133,7 @@
   // Una única versión para los módulos que este loader importa dinámicamente.
   // Cambiarla junto con el loader evita reutilizar una URL immutable cuando
   // cambia su plan de arranque.
-  const TT_CACHE_VERSION = 'tintin-20260923-auth-preview-isolation-1';
+  const TT_CACHE_VERSION = 'tintin-20260925-cache-converge-1';
   // El shell es común a cada navegación: incluso cuando la página está en
   // caché debe ser perceptible y no desaparecer antes de que el usuario vea
   // qué superficie se está preparando. Un segundo es el mínimo acordado;
@@ -862,6 +862,19 @@
     }
   }
 
+  // Avisa (sin recargar ni borrar datos) si se publicó una versión nueva mientras
+  // la pestaña seguía abierta. No corre en vistas previas embebidas ni en el
+  // checkout, donde recargar a mitad del pago haría perder lo escrito.
+  function bootVersionWatch() {
+    let framed = false;
+    try { framed = window.top !== window; } catch { framed = true; }
+    if (isVisualPreviewFrame || framed) return;
+    if (/\/checkout(?:\.html)?$/.test(currentPath())) return;
+    if (!window.TintinVersionWatchBooted) {
+      importSibling('quality/vigilancia-version.js', 'Version Watch');
+    }
+  }
+
   function bootHeaderScrollHide() {
     if (!window.TintinHeaderScrollHideBooted) {
       importSibling('components/navigation/compartido/ocultar-encabezado-al-desplazar.js', 'Header Scroll Hide');
@@ -941,6 +954,7 @@
     bootHeaderScrollHide();
     bootAdminAndProfileFixes();
     bootSiteActivity();
+    bootVersionWatch();
     // Las páginas institucionales siguen mostrando el mismo loader y el
     // mismo header, pero no necesitan montar el catálogo, favoritos, gestión
     // de imágenes ni efectos propios de una superficie comercial.
@@ -966,6 +980,7 @@
     bootHeaderScrollHide();
     bootAdminAndProfileFixes();
     bootSiteActivity();
+    bootVersionWatch();
     // Mantiene el loader y el header idénticos en las páginas informativas,
     // pero evita descargar módulos comerciales que no se usan allí. La
     // navegación compartida conserva sus propios datos y fallback visual.
