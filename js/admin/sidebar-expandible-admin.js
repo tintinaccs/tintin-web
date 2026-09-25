@@ -10,8 +10,16 @@ function setCompact(compact, { persist = true } = {}) {
   const label = compact ? 'Expandir barra lateral' : 'Contraer barra lateral';
   toggle?.setAttribute('aria-label', label);
   toggle?.setAttribute('title', label);
-  if (persist) localStorage.setItem(STORAGE_KEY, compact ? '1' : '0');
+  if (persist) {
+    try { localStorage.setItem(STORAGE_KEY, compact ? '1' : '0'); } catch {}
+  }
 }
 
-try { setCompact(localStorage.getItem(STORAGE_KEY) === '1', { persist: false }); } catch { setCompact(false, { persist: false }); }
+const tabletLayout = window.matchMedia?.('(min-width: 541px) and (max-width: 900px)').matches === true;
+try {
+  const savedPreference = localStorage.getItem(STORAGE_KEY);
+  setCompact(savedPreference === null ? tabletLayout : savedPreference === '1', { persist: false });
+} catch {
+  setCompact(tabletLayout, { persist: false });
+}
 toggle?.addEventListener('click', () => setCompact(!root.classList.contains('adm-sidebar-is-collapsed')));

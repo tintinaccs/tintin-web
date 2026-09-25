@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "38b6e56dc3db4ce1591c0534dca7cb2e201976fdeb0d194735e5c22df46bbfbe",
+  "sourceFingerprint": "a18a74e22424612cd4f0b0fb1002bf7c6ad68231af4720a071721914f7f4e1e9",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 878,
     "textFiles": 837,
-    "totalBytes": 17150681,
+    "totalBytes": 17136871,
     "pages": 19,
     "modules": 602
   },
@@ -2112,8 +2112,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 197111,
-      "sha256": "f031a3457f9e4313fea0e5be37ea1ba31cfb278457979b13754f0d453061ce48",
+      "bytes": 197114,
+      "sha256": "6c633a808dfd84be6981264834730d4b3b458f1db11efd7200b823c26e48c903",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2157,7 +2157,7 @@
           "line": 2042
         },
         {
-          "raw": "js/admin/sidebar-expandible-admin.js?v=tintin-20260923-sidebar-recovery-1",
+          "raw": "js/admin/sidebar-expandible-admin.js?v=tintin-20260925-sidebar-touch-expansion-1",
           "target": "js/admin/sidebar-expandible-admin.js",
           "line": 2043
         },
@@ -2274,7 +2274,7 @@
           "line": 35
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20260924-admin-shell-final-4-user-feedback",
+          "raw": "css/admin/admin.css?v=tintin-20260925-admin-tablet-sidebar-toggle-1",
           "target": "css/admin/admin.css",
           "line": 36
         },
@@ -2423,7 +2423,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/sidebar-expandible-admin.js?v=tintin-20260923-sidebar-recovery-1",
+          "raw": "js/admin/sidebar-expandible-admin.js?v=tintin-20260925-sidebar-touch-expansion-1",
           "target": "js/admin/sidebar-expandible-admin.js",
           "line": 2043,
           "exists": true
@@ -2561,7 +2561,7 @@
           "exists": true
         },
         {
-          "raw": "css/admin/admin.css?v=tintin-20260924-admin-shell-final-4-user-feedback",
+          "raw": "css/admin/admin.css?v=tintin-20260925-admin-tablet-sidebar-toggle-1",
           "target": "css/admin/admin.css",
           "line": 36,
           "exists": true
@@ -18606,8 +18606,8 @@
     },
     {
       "path": "config/csp-runtime.js",
-      "bytes": 366543,
-      "sha256": "ef305d8092e03451c4c4b04342efb5739eb8b76816b32525dd2a66691f04a3a3",
+      "bytes": 357687,
+      "sha256": "69375f777e5abffa822535efe16f72e3302e5df8188e3edd982766d4875f9ecc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22058,8 +22058,8 @@
     },
     {
       "path": "js/admin/sidebar-expandible-admin.js",
-      "bytes": 958,
-      "sha256": "0371445fa7e494daea53758d4b66051258b51bfae3a6cc0e21d278c4367a5669",
+      "bytes": 1185,
+      "sha256": "1994ae58130f0887f317f78dfeeaeecc7ad135602107b7b643f538e98a053fdc",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29089,8 +29089,8 @@
     },
     {
       "path": "scripts/auditar-super-admin-responsive.mjs",
-      "bytes": 14938,
-      "sha256": "df55c282e98c4f6d3811a6aba7c99684b2a9f639d3d1c5b6f6986bb6bdc2bdfa",
+      "bytes": 16327,
+      "sha256": "5fe9e90df20a6af591b47d489039f555c8e49144d8c7eb262a4788d3841bbb99",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30469,8 +30469,8 @@
     },
     {
       "path": "tests/accounts/account-reentry.test.mjs",
-      "bytes": 1853,
-      "sha256": "0fdd870797bb12c4f81e4b141a0cf0fb069f6c93bda35d8a695ac928879fa16d",
+      "bytes": 2268,
+      "sha256": "603becea19a022098000a41efb1a6c4ed109318458798b3c03a62941cc25b424",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34344,8 +34344,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 197111,
-      "sha256": "f031a3457f9e4313fea0e5be37ea1ba31cfb278457979b13754f0d453061ce48"
+      "bytes": 197114,
+      "sha256": "6c633a808dfd84be6981264834730d4b3b458f1db11efd7200b823c26e48c903"
     },
     {
       "path": "apple-touch-icon.png",
@@ -34818,14 +34818,14 @@
     {
       "path": "config/csp-runtime.js",
       "extension": ".js",
-      "bytes": 366543,
-      "sha256": "ef305d8092e03451c4c4b04342efb5739eb8b76816b32525dd2a66691f04a3a3"
+      "bytes": 357687,
+      "sha256": "69375f777e5abffa822535efe16f72e3302e5df8188e3edd982766d4875f9ecc"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
-      "bytes": 366458,
-      "sha256": "0868ae1f471b8a91549ee7625bdbeb5225672191e222630e8d542a3071f12f0a"
+      "bytes": 357602,
+      "sha256": "2819dcbefaa609011c25f5d40532e841061277adf21c8adc1947d06529f211c6"
     },
     {
       "path": "config/public-site.json",
@@ -34854,8 +34854,8 @@
     {
       "path": "css/admin/admin.css",
       "extension": ".css",
-      "bytes": 97726,
-      "sha256": "a8acc4652376117f84f3fd0411426d65919456b75e7b06a15dc8bf4978ae9616"
+      "bytes": 99591,
+      "sha256": "438eb579066b0ac375d3c605b0a70221a45932550d50346279260df372cf6c8f"
     },
     {
       "path": "css/admin/diagnostico-maestro.css",
@@ -36324,8 +36324,8 @@
     {
       "path": "js/admin/sidebar-expandible-admin.js",
       "extension": ".js",
-      "bytes": 958,
-      "sha256": "0371445fa7e494daea53758d4b66051258b51bfae3a6cc0e21d278c4367a5669"
+      "bytes": 1185,
+      "sha256": "1994ae58130f0887f317f78dfeeaeecc7ad135602107b7b643f538e98a053fdc"
     },
     {
       "path": "js/admin/users/ficha-usuario-admin.js",
@@ -38394,8 +38394,8 @@
     {
       "path": "scripts/auditar-super-admin-responsive.mjs",
       "extension": ".mjs",
-      "bytes": 14938,
-      "sha256": "df55c282e98c4f6d3811a6aba7c99684b2a9f639d3d1c5b6f6986bb6bdc2bdfa"
+      "bytes": 16327,
+      "sha256": "5fe9e90df20a6af591b47d489039f555c8e49144d8c7eb262a4788d3841bbb99"
     },
     {
       "path": "scripts/auditar-superadmin-cierre-total.mjs",
@@ -38508,8 +38508,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 47414,
-      "sha256": "d072de09cb48534dd0e492e8759ad0304ed1bdb4913b71ef8bcf62e8d275c1c6"
+      "bytes": 47417,
+      "sha256": "bee1f0a654e0a6b9aef30da030b891b1222bc91f78d400551b75e8464a98630f"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -38754,8 +38754,8 @@
     {
       "path": "tests/accounts/account-reentry.test.mjs",
       "extension": ".mjs",
-      "bytes": 1853,
-      "sha256": "0fdd870797bb12c4f81e4b141a0cf0fb069f6c93bda35d8a695ac928879fa16d"
+      "bytes": 2268,
+      "sha256": "603becea19a022098000a41efb1a6c4ed109318458798b3c03a62941cc25b424"
     },
     {
       "path": "tests/accounts/admin-user-state-separation.test.mjs",

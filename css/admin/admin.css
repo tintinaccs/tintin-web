@@ -1571,8 +1571,6 @@
       .adm-user-info .adm-user-role-badge,
       .adm-user-info .adm-live-clock,
       .adm-nav-divider { display: none; }
-      .adm-sidebar-toggle { display:none; }
-
       .adm-user-info {
         justify-content: center;
         padding: 12px 6px;
@@ -2141,6 +2139,60 @@ html:not(.adm-auth-ready) [data-admin-panel] {
       min-height: 0;
       flex-basis: auto;
     }
+  }
+}
+
+/* En tablet, la barra parte compacta pero conserva un control táctil para
+   abrirla. Expandirla superpone el panel sobre el contenido sin comprimirlo. */
+@media (min-width: 541px) and (max-width: 900px) {
+  .adm-sidebar-toggle {
+    display: grid;
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+  }
+  html.adm-sidebar-is-collapsed .adm-sidebar-toggle { top: 12px; right: 20px; }
+  html:not(.adm-sidebar-is-collapsed) .adm-sidebar-toggle { top: 12px; right: 12px; }
+
+  html:not(.adm-sidebar-is-collapsed) body:has(.adm-main) .adm-sidebar {
+    width: 260px;
+    box-shadow: 16px 0 32px rgba(37,23,30,.18);
+    transition: width .2s ease, box-shadow .2s ease;
+  }
+
+  html:not(.adm-sidebar-is-collapsed) .adm-sidebar-logo {
+    padding: 24px 24px 22px;
+    text-align: left;
+  }
+  html:not(.adm-sidebar-is-collapsed) .adm-sidebar-logo-text {
+    display: block;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background: transparent;
+    color: var(--admin-color-text-title);
+    font-size: 17px;
+    letter-spacing: .16em;
+    white-space: nowrap;
+  }
+  html:not(.adm-sidebar-is-collapsed) .adm-sidebar-logo-text::before { content: none; }
+  html:not(.adm-sidebar-is-collapsed) .adm-sidebar-logo-sub { display: block; }
+
+  html:not(.adm-sidebar-is-collapsed) .adm-user-info .adm-user-name,
+  html:not(.adm-sidebar-is-collapsed) .adm-user-info .adm-user-role-badge,
+  html:not(.adm-sidebar-is-collapsed) .adm-user-info .adm-live-clock,
+  html:not(.adm-sidebar-is-collapsed) .adm-nav-divider { display: block; }
+  html:not(.adm-sidebar-is-collapsed) .adm-user-info { justify-content: flex-start; padding: 16px 24px; }
+  html:not(.adm-sidebar-is-collapsed) .adm-nav-item {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 11px 24px;
+    font-size: 13px;
+    line-height: 1.3;
+    text-align: left;
+    white-space: nowrap;
   }
 }
 .adm-diagnostic-head p {

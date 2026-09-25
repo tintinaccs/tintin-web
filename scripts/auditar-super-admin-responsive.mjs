@@ -94,6 +94,7 @@ console.log(`\nResponsive Super Admin: CORRECTO · ${results.length}/${results.l
 // una regla responsive posterior vuelva a pisar otra sin que el fixture de
 // tablas de comercio lo detecte.
 const adminShellCss = fs.readFileSync(path.join(root, 'css/admin/admin.css'), 'utf8');
+const sidebarRuntime = fs.readFileSync(path.join(root, 'js/admin/sidebar-expandible-admin.js'), 'utf8');
 const shellViewports = [
   [1920, 1080], [1440, 900], [1280, 800], [1024, 768],
   [900, 900], [820, 1180], [768, 1024], [600, 900],
@@ -106,7 +107,7 @@ const shellFixture = `<!doctype html><html class="adm-auth-ready"><head><meta ch
 .adm-notifications-button{width:46px;height:46px;border:0;border-radius:50%}
 </style><style>${adminShellCss}</style></head><body>
 <aside class="adm-sidebar" id="adm-sidebar">
-  <div class="adm-sidebar-logo"><div class="adm-sidebar-logo-text">TINTIN</div><div class="adm-sidebar-logo-sub">Panel de administración</div><button class="adm-sidebar-toggle" type="button">‹</button></div>
+  <div class="adm-sidebar-logo"><div class="adm-sidebar-logo-text">TINTIN</div><div class="adm-sidebar-logo-sub">Panel de administración</div><button class="adm-sidebar-toggle" id="adm-sidebar-toggle" type="button" aria-pressed="false">‹</button></div>
   <div class="adm-user-info"><div class="adm-user-avatar">TT</div><div><div class="adm-user-name">Tintin Accesorios y Relojes</div><span class="adm-user-role-badge role-superadmin">SUPER ADMIN</span><div class="adm-live-clock">24/09/2026 · 14:30</div></div></div>
   <nav class="adm-nav">${Array.from({length:12},(_,i)=>`<button class="adm-nav-item${i===2?' active':''}" type="button"><span class="adm-nav-icon">◆</span><span>Sección ${i+1}</span></button>`).join('')}</nav>
 </aside>
@@ -127,8 +128,20 @@ try {
     const context = await shellBrowser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' });
     const page = await context.newPage();
     await page.setContent(shellFixture, { waitUntil: 'load' });
+    let tabletToggleWidths = null;
     if (width >= 541 && width <= 900) {
-      await page.evaluate(() => document.documentElement.classList.add('adm-sidebar-is-collapsed'));
+      await page.addScriptTag({ content: sidebarRuntime });
+      const toggle = page.locator('#adm-sidebar-toggle');
+      const visible = await toggle.isVisible();
+      const target = await toggle.boundingBox();
+      await toggle.click();
+      await page.waitForFunction(() => !document.documentElement.classList.contains('adm-sidebar-is-collapsed'));
+      await page.waitForTimeout(250);
+      const expandedWidth = await page.locator('.adm-sidebar').evaluate(element => element.getBoundingClientRect().width);
+      await toggle.click();
+      await page.waitForFunction(() => document.documentElement.classList.contains('adm-sidebar-is-collapsed'));
+      await page.waitForTimeout(250);
+      tabletToggleWidths = { visible, targetWidth: target?.width || 0, targetHeight: target?.height || 0, expandedWidth };
       await page.hover('.adm-sidebar');
     }
     const state = await page.evaluate(() => {
@@ -163,6 +176,9 @@ try {
       if (state.mainLeft < 258) issues.push(`main desktop invade sidebar: left=${state.mainLeft}`);
       if (state.mobileTabsDisplay !== 'none') issues.push('tabs móviles visibles en desktop');
     } else if (width >= 541) {
+      if (!tabletToggleWidths?.visible) issues.push('botón táctil de expansión oculto en tablet');
+      if ((tabletToggleWidths?.targetWidth || 0) < 44 || (tabletToggleWidths?.targetHeight || 0) < 44) issues.push(`botón tablet menor que 44×44px: ${tabletToggleWidths?.targetWidth}×${tabletToggleWidths?.targetHeight}`);
+      if (Math.abs((tabletToggleWidths?.expandedWidth || 0) - 260) > 2) issues.push(`barra tablet no expande a 260px: ${tabletToggleWidths?.expandedWidth}`);
       if (Math.abs(state.sidebarWidth - 84) > 2) issues.push(`rail tablet ${state.sidebarWidth}px, esperado 84px`);
       if (state.mainLeft < 82) issues.push(`main tablet invade rail: left=${state.mainLeft}`);
       if (state.logoBottom > state.userTop + 1) issues.push(`logo y usuario se pisan: ${state.logoBottom} > ${state.userTop}`);
