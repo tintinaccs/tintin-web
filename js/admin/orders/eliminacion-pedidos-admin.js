@@ -7,7 +7,7 @@
 
 import {
   recalculateOrderOwnerStats
-} from '../../core/store/estadisticas-pedidos.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1';
+} from '../../core/store/estadisticas-pedidos.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1';
 
 (function () {
   'use strict';
@@ -56,7 +56,9 @@ import {
     const original = window.bulkDeleteOrders;
     const wrapped = async function() {
       const result = await original.apply(this, arguments);
-      const deletedOrders = Array.isArray(result?.deletedOrders) ? result.deletedOrders : [];
+      const deletedOrders = Array.isArray(result?.deletedOrders)
+        ? result.deletedOrders
+        : (Array.isArray(result?.movedOrders) ? result.movedOrders : []);
       if (!deletedOrders.length) return result;
 
       // Recalcular solo las cuentas afectadas evita volver a leer y escribir

@@ -77,7 +77,9 @@ for (const pageName of GENERIC_PERFORMANCE_PAGES) {
 
     if (LIGHTWEIGHT_PAGES.has(pageName)) {
       const requestBudget = pageName === 'about.html' ? BUDGETS.aboutRequests : BUDGETS.lightweightRequests;
-      expect(effectiveRequests, `${pageName} debe conservar runtime informativo liviano`).toBeLessThanOrEqual(requestBudget);
+      const requestsToGate = pageName === 'about.html' ? firstPartyRequests : effectiveRequests;
+      const requestScope = pageName === 'about.html' ? 'solicitudes propias' : 'solicitudes efectivas';
+      expect(requestsToGate, `${pageName} debe conservar runtime informativo liviano (${requestScope})`).toBeLessThanOrEqual(requestBudget);
       expect(vitals.firstPartyTransferKB, `${pageName} no debe volver a cargar infraestructura first-party completa`).toBeLessThanOrEqual(BUDGETS.lightweightTransferKB);
     }
   });

@@ -1,8 +1,9 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
-import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1-auth-popup-resolver-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 import { collection, doc, limit, onSnapshot, query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { runAdminBulk } from '../utilidades-progreso-admin.js?v=tintin-20260924-bulk-progress-1';
 
 const DEFAULT_SETTINGS = {
   autoMarkSeenReviews: true,
@@ -289,6 +290,7 @@ function hydrateSections() {
             <button type="button" class="adm-btn adm-btn-sm" data-eg-like-bulk="seen">Marcar leídos</button>
             <button type="button" class="adm-btn adm-btn-sm" data-eg-like-bulk="archive">Archivar actividad</button>
             <button type="button" class="adm-btn adm-btn-sm" data-eg-like-bulk="restore">Desarchivar</button>
+            <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" data-eg-like-bulk="delete">Eliminar seleccionados</button>
             <button type="button" class="eg-link-btn" data-eg-like-bulk="clear">Limpiar selección</button>
           </div>
           <div class="eg-callout"><strong>Importante:</strong> Archivar solo organiza este panel. “Quitar de favoritos” sí modifica la lista de la clienta y está separado dentro de las acciones avanzadas.</div>
@@ -963,13 +965,13 @@ async function bulkReviews(action, trigger) {
   }
   trigger.disabled = true;
   const actionMap = { seen:'reviewSeen', publish:'reviewVisibility', hide:'reviewVisibility', archive:'reviewArchive', delete:'reviewPurge' };
-  const results = await Promise.allSettled(ids.map(id => {
+  const results = await runAdminBulk(ids, id => {
     const input = { action: actionMap[action], reviewId:id };
     if (action === 'publish') input.visible = true;
     if (action === 'hide') input.visible = false;
     if (action === 'archive') input.archived = true;
     return api(input);
-  }));
+  }, { title: action === 'delete' ? 'Eliminando reseñas' : 'Actualizando reseñas', concurrency: 3 });
   trigger.disabled = false;
   selectedReviews.clear();
   const okCount = results.filter(item => item.status === 'fulfilled').length;
@@ -979,11 +981,16 @@ async function bulkLikes(action, trigger) {
   if (action === 'clear') { selectedLikes.clear(); renderLikes(); return; }
   const ids = [...selectedLikes];
   if (!ids.length) return;
+  if (action === 'delete') {
+    const ok = await confirmDialog({ title:'Eliminar favoritos seleccionados', message:`Se quitarán ${ids.length} favoritos de sus cuentas. Esta acción no se puede deshacer.`, confirmText:'Eliminar seleccionados', danger:true });
+    if (!ok) return;
+  }
   trigger.disabled = true;
-  const results = await Promise.allSettled(ids.map(id => {
+  const results = await runAdminBulk(ids, id => {
     if (action === 'seen') return api({ action:'likeSeen', likeId:id });
+    if (action === 'delete') return api({ action:'likeDelete', likeId:id });
     return api({ action:'likeArchive', likeId:id, archived: action === 'archive' });
-  }));
+  }, { title: action === 'delete' ? 'Eliminando favoritos' : 'Actualizando favoritos', concurrency: 3 });
   trigger.disabled = false;
   selectedLikes.clear();
   const okCount = results.filter(item => item.status === 'fulfilled').length;

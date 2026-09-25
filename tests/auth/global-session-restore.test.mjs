@@ -39,7 +39,7 @@ test('la restauración nunca convierte un observer obsoleto en sesión válida',
 });
 
 test('Firebase Auth initializes persistence before restoration', () => {
-  assert.match(firebaseSource, /initializeAuth\(app, \{ persistence: browserLocalPersistence \}\)/);
+  assert.match(firebaseSource, /initializeAuth\(app,\s*\{[\s\S]*?persistence:\s*browserLocalPersistence[\s\S]*?popupRedirectResolver:\s*browserPopupRedirectResolver[\s\S]*?\}\)/);
   assert.match(firebaseSource, /persistenceWasConfiguredAtInitialization/);
 });
 

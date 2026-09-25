@@ -11,9 +11,9 @@
    vistas, filtros, selección, panel lateral, búsqueda y navegación rápida.
    ======================================================================== */
 
-import { auth, db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1';
-import { waitForAdminAppCheck } from './auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1';
-import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1';
+import { auth, db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
+import { waitForAdminAppCheck } from './auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1-auth-popup-resolver-1';
+import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1';
 import {
   collection,
   getDocs,
@@ -23,9 +23,9 @@ import {
   query,
   startAfter
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
-import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
-import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1';
+import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1';
+import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1';
+import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
 const VERSION = 'tintin-20260924-products-description-1';
@@ -518,6 +518,7 @@ function renderCollections() {
   const canEdit = perm('colecciones', 'editar', 'manageContent');
   const canToggle = perm('colecciones', 'activarDesactivar', 'manageContent');
   const canDelete = perm('colecciones', 'eliminar', 'deleteCollections');
+  const canBulk = perm('colecciones', 'accionesMasivas', 'manageContent');
 
   root.innerHTML = `
     <div class="tt-commerce-pagehead">
@@ -550,6 +551,7 @@ function renderCollections() {
       </div>
       <div class="tt-commerce-bulkbar" ${state.collectionSelected.size ? '' : 'hidden'}>
         <span class="tt-commerce-bulkcount">${state.collectionSelected.size} seleccionada${state.collectionSelected.size === 1 ? '' : 's'}</span>
+        ${canDelete && canBulk ? button('Eliminar seleccionadas', 'collections-bulk-delete', { danger: true }) : ''}
         ${button('Exportar selección', 'collections-export-selected')}
         ${button('Limpiar', 'collections-clear-selection')}
       </div>
@@ -1012,6 +1014,10 @@ async function handleAction(action, element) {
 
   if (action === 'collection-new') { closeDrawer(); return window.collNueva?.(); }
   if (action === 'collections-export-selected') return exportCollections(true);
+  if (action === 'collections-bulk-delete') {
+    if (typeof window.bulkDeleteCollections !== 'function') return toast('La eliminación masiva todavía no está disponible.');
+    return window.bulkDeleteCollections([...state.collectionSelected]);
+  }
   if (action === 'collections-clear-selection') { state.collectionSelected.clear(); return renderCollections(); }
   if (action === 'collections-page-prev') { state.collectionPage = Math.max(0, state.collectionPage - 1); return renderCollections(); }
   if (action === 'collections-page-next') { state.collectionPage += 1; return renderCollections(); }
@@ -1344,6 +1350,12 @@ function boot() {
   }, true);
   window.addEventListener('resize', closeMenu, { passive: true });
   window.addEventListener('scroll', closeMenu, { passive: true, capture: true });
+  window.addEventListener('tintin:catalog-mutated', () => {
+    state.productSelected.clear();
+    state.collectionSelected.clear();
+    renderProducts();
+    renderCollections();
+  }, { passive: true });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape') { closeMenu(); closeDrawer(); }
   });

@@ -18,7 +18,9 @@ test('un nuevo registro reclama solo el historial comercial por ID token y hash 
 
 test('el perfil eliminado no se reactiva desde el panel: vuelve por un registro nuevo', () => {
   const admin = read('js/admin/admin-app.js');
-  assert.match(admin, /deben registrarse otra vez con un perfil nuevo/);
+  assert.match(admin, /debe registrarse nuevamente/);
+  assert.match(admin, /userStatusFilter === 'deleted'[\s\S]*?no se reactivan/);
+  assert.match(read('login.html'), /Si figura como Eliminada, registrate nuevamente con el mismo correo/);
   assert.doesNotMatch(admin, /onclick="window\.restoreUser\(\$\{uidArg\}\)">Reactivar/);
   assert.match(admin, /bulkDeleteUsers/);
   assert.match(admin, /toggleSelectAllUsers/);

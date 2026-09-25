@@ -272,8 +272,24 @@
       gap: 16px;
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 200;
     }
+
+    /* La navegación lateral debe quedar por encima de la barra superior,
+       también cuando está contraída o se abre por hover/foco. */
+    .adm-sidebar { z-index: 300 !important; }
+
+    #tt-admin-bulk-progress {
+      position: fixed; top: 88px; right: 20px; z-index: 10000; width: min(360px, calc(100vw - 40px));
+      padding: 13px 15px; border: 1px solid #efd6e1; border-radius: 13px; background: rgba(255,255,255,.97);
+      box-shadow: 0 14px 38px rgba(72,25,45,.16); color: #382c31; font: 12px/1.4 Montserrat, sans-serif;
+    }
+    #tt-admin-bulk-progress[hidden] { display: none; }
+    .tt-admin-bulk-progress__head { display:flex; justify-content:space-between; gap:12px; margin-bottom:8px; }
+    .tt-admin-bulk-progress__head span { color:#8a6876; font-variant-numeric:tabular-nums; }
+    .tt-admin-bulk-progress__track { height:7px; overflow:hidden; border-radius:999px; background:#f3e5eb; }
+    .tt-admin-bulk-progress__track i { display:block; width:0; height:100%; border-radius:inherit; background:linear-gradient(90deg,#b6426d,#e18ca9); transition:width .18s ease; }
+    #tt-admin-bulk-progress p { margin:8px 0 0; color:#796872; font-size:11px; }
     .adm-topbar-title {
       font-size: 18px;
       font-weight: 800;
@@ -2495,4 +2511,255 @@ html:not(.adm-auth-ready) [data-admin-panel] {
     flex: 1 1 150px;
     max-width: none !important;
   }
+}
+
+/* ======== SHELL FINAL — una sola composición fluida ========
+   El panel usa el mismo eje visual en desktop, laptop, tablet y mobile:
+   rail lateral estable, contenido centrado y controles que envuelven sin
+   empujar la página. La regla queda al final para ganar a los estilos
+   históricos sin reescribir cada módulo. */
+html:has(.adm-main),
+body:has(.adm-main) {
+  overflow-x: hidden;
+}
+
+body:has(.adm-main) .adm-main {
+  min-width: 0;
+}
+
+body:has(.adm-main) .adm-content {
+  width: min(100%, 1320px) !important;
+  max-width: 1320px !important;
+  margin-inline: auto !important;
+  padding-inline: clamp(14px, 2.8vw, 34px) !important;
+}
+
+body:has(.adm-main) .adm-topbar {
+  min-height: 68px;
+  padding-inline: clamp(14px, 2.8vw, 34px);
+}
+
+body:has(.adm-main) .adm-card {
+  box-shadow: 0 4px 18px rgba(86, 42, 58, .045) !important;
+}
+
+body:has(.adm-main) .adm-card-head,
+body:has(.adm-main) .adm-card-body {
+  min-width: 0;
+}
+
+body:has(.adm-main) :is(.adm-filter-row, .adm-bulk-toolbar, .adm-section-head) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+body:has(.adm-main) :is(.adm-filter-row > *, .adm-bulk-toolbar > *) {
+  min-width: 0;
+}
+
+body:has(.adm-main) .adm-table-wrap {
+  max-width: 100%;
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: stable;
+}
+
+@media (min-width: 901px) {
+  body:has(.adm-main) .adm-sidebar { width: 260px; }
+  body:has(.adm-main) .adm-main { margin-left: 260px; }
+  html.adm-sidebar-is-collapsed { --sidebar-w: 74px; }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar { width: 74px; }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-main { margin-left: 74px; }
+}
+
+@media (min-width: 541px) and (max-width: 900px) {
+  body:has(.adm-main) .adm-sidebar { width: 84px; }
+  body:has(.adm-main) .adm-main { margin-left: 84px; }
+  body:has(.adm-main) .adm-content { padding-block: 18px 40px !important; }
+  body:has(.adm-main) .adm-nav-item { min-height: 54px; }
+}
+
+@media (max-width: 540px) {
+  body:has(.adm-main) .adm-content { padding: 12px 10px 34px !important; }
+  body:has(.adm-main) .adm-topbar { min-height: 60px; padding-block: 8px; }
+  body:has(.adm-main) .adm-topbar-title { font-size: 14px; }
+  body:has(.adm-main) .adm-card { border-radius: 14px !important; }
+  body:has(.adm-main) .adm-card-head { padding: 14px !important; }
+  body:has(.adm-main) .adm-card-body { padding: 12px !important; }
+  body:has(.adm-main) :is(.adm-filter-row, .adm-bulk-toolbar) { align-items: stretch; }
+  body:has(.adm-main) :is(.adm-filter-row > *, .adm-bulk-toolbar > *) { flex: 1 1 100%; }
+  body:has(.adm-main) .adm-bulk-toolbar .adm-bulk-count { flex: 1 1 100%; }
+  body:has(.adm-main) .adm-table-pedidos td.col-actions-sticky .adm-btn { width: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:has(.adm-main) *,
+  body:has(.adm-main) *::before,
+  body:has(.adm-main) *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+}
+
+/* Usuarios: conservar proporciones de tabla y explicar la diferencia entre
+   desbloquear una cuenta y volver a registrar una cuenta eliminada. */
+#section-usuarios .user-tabs { flex-wrap: wrap; }
+#section-usuarios .adm-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+#section-usuarios .adm-table {
+  width: 100%;
+  min-width: 1260px;
+  table-layout: auto;
+}
+#section-usuarios .adm-table th:nth-child(4),
+#section-usuarios .adm-table td:nth-child(4) {
+  min-width: 230px;
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
+}
+#section-usuarios .adm-table th:nth-child(3),
+#section-usuarios .adm-table td:nth-child(3) { min-width: 150px; }
+#section-usuarios .adm-table th:last-child,
+#section-usuarios .adm-table td:last-child { min-width: 180px; }
+.users-deleted-guidance {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 14px;
+  padding: 12px 16px;
+  border: 1px solid color-mix(in srgb, var(--adm-accent) 24%, white);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--adm-accent) 6%, white);
+  color: var(--adm-text);
+  font-size: 12px;
+  line-height: 1.55;
+}
+.users-deleted-guidance strong { color: var(--adm-accent); }
+.users-deleted-guidance[hidden] { display: none !important; }
+
+/* Mensajes largos: ajustan su ancho y se colocan encima de la navegación
+   inferior en móviles, sin desbordarse ni ocultar controles. */
+.adm-toast {
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: max(20px, env(safe-area-inset-bottom, 0px));
+  width: max-content;
+  max-width: min(600px, calc(100vw - 32px));
+  padding: 14px 18px;
+  border-radius: 14px;
+  line-height: 1.5;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+/* La marca no se imprime en columna en el rail comprimido. La flecha ocupa
+   su propia línea y el monograma queda centrado por debajo. */
+@media (min-width: 541px) and (max-width: 900px) {
+  body:has(.adm-main) .adm-sidebar-logo {
+    display: flex !important;
+    flex: 0 0 106px;
+    height: 106px;
+    min-height: 106px;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 8px 6px 10px;
+  }
+  body:has(.adm-main) .adm-sidebar-toggle {
+    top: 8px;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  body:has(.adm-main) .adm-sidebar-logo-text {
+    flex: 0 0 42px;
+  }
+  body:has(.adm-main) .adm-sidebar-logo-sub { display: none !important; }
+}
+
+@media (min-width: 901px) {
+  html.adm-sidebar-is-collapsed .adm-sidebar-logo {
+    display: flex;
+    height: 106px;
+    min-height: 106px;
+    flex-basis: 106px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 8px 6px 10px;
+  }
+  html.adm-sidebar-is-collapsed .adm-sidebar-toggle {
+    top: 8px;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  html.adm-sidebar-is-collapsed .adm-sidebar-logo-text {
+    display: grid !important;
+    flex: 0 0 42px;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--admin-color-brand);
+    color: #fff;
+    font-size: 0;
+    letter-spacing: 0;
+    line-height: 1;
+  }
+  html.adm-sidebar-is-collapsed .adm-sidebar-logo-text::before {
+    content: 'TT';
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: .08em;
+  }
+  html.adm-sidebar-is-collapsed .adm-sidebar-logo-sub { display: none; }
+  html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-sidebar-logo,
+  html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-sidebar-logo {
+    display: block;
+    height: auto;
+    min-height: 0;
+    flex-basis: auto;
+    padding: 24px 24px 22px;
+  }
+  html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-sidebar-toggle,
+  html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-sidebar-toggle {
+    top: 12px;
+    right: 12px;
+    left: auto;
+    transform: none;
+  }
+  html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-sidebar-logo-text,
+  html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-sidebar-logo-text {
+    display: block !important;
+    width: auto;
+    height: auto;
+    background: transparent;
+    color: var(--admin-color-text-title);
+    font-size: 17px;
+    letter-spacing: .16em;
+  }
+  html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-sidebar-logo-text::before,
+  html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-sidebar-logo-text::before { content: none; }
+  html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-sidebar-logo-sub,
+  html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-sidebar-logo-sub { display: block; }
+}
+
+@media (max-width: 540px) {
+  .adm-toast {
+    right: 12px;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    max-width: calc(100vw - 24px);
+    padding: 12px 14px;
+    font-size: 12px;
+  }
+  .users-deleted-guidance { padding: 11px 12px; }
 }
