@@ -12,7 +12,7 @@ import {
   deleteMediaByUrlIfUnused,
   deleteMediaItem,
   uploadImageToLibrary
-} from './biblioteca-multimedia.js?v=tintin-20260901-media-orphan-log-3-auth-persistence-20260919-1-app-check-retry-cascade-1';
+} from './biblioteca-multimedia.js?v=tintin-20260901-media-orphan-log-3-auth-persistence-20260919-1-app-check-retry-cascade-1-auth-popup-resolver-1';
 
 const STAGE_LABELS = {
   validating: 'Validando archivo…',

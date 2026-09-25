@@ -245,7 +245,7 @@ export function initNavCollections(force = false) {
   started = true;
   renderLoading();
 
-  return import('../../../pages/collections/estado-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-app-check-retry-cascade-1')
+  return import('../../../pages/collections/estado-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-app-check-retry-cascade-1-auth-popup-resolver-1')
     .then(({ onCollectionsUpdate, loadCollections }) => {
       unsubscribe?.();
       unsubscribe = onCollectionsUpdate(collections => {

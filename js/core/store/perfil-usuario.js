@@ -13,7 +13,7 @@
 // pedidos. Google Sheets en este proyecto sincroniza productos, no usuarios.
 
 import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { SUPER_ADMIN } from "../auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-app-check-retry-cascade-1";
+import { SUPER_ADMIN } from "../auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-app-check-retry-cascade-1-auth-popup-resolver-1";
 import { customerIdForUid, ACCOUNT_CONTRACT } from '../auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 import { apiUrl } from '../firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
 

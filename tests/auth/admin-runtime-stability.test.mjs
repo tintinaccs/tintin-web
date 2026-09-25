@@ -14,13 +14,13 @@ const html = read('admin.html');
 const css = read('css/admin/admin.css');
 
 test('Admin usa el inicializador Firebase canónico y no crea un segundo runtime', () => {
-  assert.match(html, /js\/core\/firebase\/firebase\.js\?v=tintin-20260924-auth-persistence-init-1/);
+  assert.match(html, /js\/core\/firebase\/firebase\.js\?v=tintin-20260924-auth-popup-resolver-1/);
   assert.doesNotMatch(html, /firebase-admin-estable|admin-bootstrap/);
   for (const source of [admin, welcome, engagement, notifications, appCheckGate]) {
-    assert.match(source, /core\/firebase\/firebase\.js\?v=tintin-20260924-auth-persistence-init-1/);
+    assert.match(source, /core\/firebase\/firebase\.js\?v=tintin-20260924-auth-popup-resolver-1/);
     assert.doesNotMatch(source, /firebase-admin-estable/);
   }
-  assert.match(firebase, /initializeAuth\(app, \{ persistence: browserLocalPersistence \}\)/);
+  assert.match(firebase, /initializeAuth\(app,\s*\{[\s\S]*?persistence:\s*browserLocalPersistence[\s\S]*?popupRedirectResolver:\s*browserPopupRedirectResolver[\s\S]*?\}\)/);
   assert.doesNotMatch(appCheckGate, /initializeApp\(|initializeAuth\(|initializeAppCheck\(/);
 });
 

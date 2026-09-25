@@ -100,5 +100,5 @@ test('el carrito se inicia únicamente desde la navegación modular', () => {
   const navigation = fs.readFileSync('js/components/navigation/compartido/carga-navegacion.js', 'utf8');
   assert.doesNotMatch(loader, /importSibling\('components\/cart\/sincronizacion-carrito\.js', 'Cart Sync'\)/);
   assert.doesNotMatch(quality, /bootCartPhase7/);
-  assert.match(navigation, /CART_RUNTIME_URL = '\.\.\/\.\.\/\.\.\/components\/cart\/sincronizacion-carrito\.js\?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-app-check-retry-cascade-1'/);
+  assert.match(navigation, /CART_RUNTIME_URL = '\.\.\/\.\.\/\.\.\/components\/cart\/sincronizacion-carrito\.js\?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-app-check-retry-cascade-1-auth-popup-resolver-1'/);
 });

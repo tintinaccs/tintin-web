@@ -6,7 +6,7 @@
    Nunca resta manualmente: vuelve a contar desde los pedidos existentes.
    ============================================================= */
 
-import { db } from '../firebase/firebase.js?v=tintin-20260924-auth-persistence-init-1-app-check-retry-1';
+import { db } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
 import {
   collection, doc, getDoc, getDocs, query, where, setDoc, writeBatch, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';

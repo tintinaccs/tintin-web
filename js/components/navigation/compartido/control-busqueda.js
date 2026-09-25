@@ -244,7 +244,7 @@ async function ensureProducts(force = false) {
     results.replaceChildren(stateNode('Cargando catálogo…'));
   }
 
-  loadPromise = import('../../../core/store/estado-productos.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-app-check-retry-cascade-1')
+  loadPromise = import('../../../core/store/estado-productos.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-app-check-retry-cascade-1-auth-popup-resolver-1')
     .then(module => {
       const load = window.TintinProductsStore?.ensureSearch || module.ensureProductsForSearch || module.loadAllProducts;
       return typeof load === 'function' ? load({ force }) : window.PRODUCTS || [];
