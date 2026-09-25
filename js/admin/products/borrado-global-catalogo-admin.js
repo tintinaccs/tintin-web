@@ -7,6 +7,7 @@
 import { auth } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
 import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
+import { updateAdminBulkProgress, finishAdminBulkProgress } from '../utilidades-progreso-admin.js?v=tintin-20260924-bulk-progress-1';
 
 const API = '/api/admin-catalog-delete';
 const PRODUCT_CONFIRM_LABEL = 'ELIMINAR DEFINITIVAMENTE';
@@ -120,13 +121,17 @@ async function executeProductDeletion({ scope, productIds = [], label = '' }) {
   // limpia referencias y elimina Firestore en commits limitados. Dividirlo
   // en POST independientes repetía lecturas sociales y sondas Sheets, y
   // podía dejar productos solo parcialmente eliminados.
-  const result = await postCatalogDelete({
-    action: 'deleteProducts', scope, productIds: canonicalIds,
-    dryRun: false, confirmation: typed,
-  });
+  updateAdminBulkProgress('Eliminando productos', 0, n, 'Firebase se procesa primero; Sheets se confirma después sin bloquear la pantalla.');
+  let result;
+  try {
+    result = await postCatalogDelete({
+      action: 'deleteProducts', scope, productIds: canonicalIds,
+      dryRun: false, confirmation: typed,
+    });
+  } finally { finishAdminBulkProgress(); }
   if (result.partial) window.alert(partialMessage(result));
   else toast(`${result.deletedProducts || n} producto(s) eliminados globalmente`);
-  if (result.deletedProducts > 0) window.setTimeout(() => window.location.reload(), 700);
+  if (result.deletedProducts > 0) window.dispatchEvent(new CustomEvent('tintin:catalog-mutated', { detail: { type: 'products', result } }));
   return !result.partial;
 }
 
@@ -168,13 +173,17 @@ async function executeCollectionDeletion({ scope, slugs = [] }) {
   if (typed === null) { toast('Confirmación cancelada.'); return false; }
   if (typed.trim() !== phrase) { toast('Texto de confirmación incorrecto.'); return false; }
 
-  const result = await postCatalogDelete({
-    action: 'deleteCollections', scope, slugs, productMode: mode.productMode,
-    dryRun: false, confirmation: phrase,
-  });
+  updateAdminBulkProgress('Eliminando colecciones', 0, collectionCount, 'Actualizando productos afectados y confirmando la sincronización.');
+  let result;
+  try {
+    result = await postCatalogDelete({
+      action: 'deleteCollections', scope, slugs, productMode: mode.productMode,
+      dryRun: false, confirmation: phrase,
+    });
+  } finally { finishAdminBulkProgress(); }
   if (result.partial) window.alert(partialMessage(result));
   else toast(`${result.deletedCollections || collectionCount} colección(es) eliminadas globalmente`);
-  window.setTimeout(() => window.location.reload(), 700);
+  window.dispatchEvent(new CustomEvent('tintin:catalog-mutated', { detail: { type: 'collections', result } }));
   return !result.partial;
 }
 
@@ -198,13 +207,17 @@ async function executeSingleCollectionDeletion(slug, count) {
   const preview = await postCatalogDelete({ action: 'deleteCollections', scope: 'selected', slugs: [slug], productMode, targetCollection, dryRun: true });
   const affected = preview?.impact?.affectedProducts || 0;
   if (!window.confirm(`¿Eliminar definitivamente la colección "${label}"?\nProductos afectados: ${affected}.`)) return false;
-  const result = await postCatalogDelete({
-    action: 'deleteCollections', scope: 'selected', slugs: [slug], productMode, targetCollection,
-    dryRun: false, confirmation: COLLECTION_CONFIRM,
-  });
+  updateAdminBulkProgress('Eliminando colección', 0, 1, 'Confirmando Firebase y el espejo de Sheets.');
+  let result;
+  try {
+    result = await postCatalogDelete({
+      action: 'deleteCollections', scope: 'selected', slugs: [slug], productMode, targetCollection,
+      dryRun: false, confirmation: COLLECTION_CONFIRM,
+    });
+  } finally { finishAdminBulkProgress(); }
   if (result.partial) window.alert(partialMessage(result));
   else toast(`Colección "${label}" eliminada globalmente`);
-  window.setTimeout(() => window.location.reload(), 700);
+  window.dispatchEvent(new CustomEvent('tintin:catalog-mutated', { detail: { type: 'collections', result } }));
   return !result.partial;
 }
 
@@ -239,8 +252,10 @@ function installOverrides() {
     catch (error) { toast(error?.message || 'No se pudo completar la eliminación masiva.'); }
   };
   window.tintinDeleteAllProducts = () => executeProductDeletion({ scope: 'all' });
-  window.bulkDeleteCollections = async () => {
-    const slugs = selectedCollectionSlugs();
+  window.bulkDeleteCollections = async (explicitSlugs) => {
+    const slugs = Array.isArray(explicitSlugs) && explicitSlugs.length
+      ? [...new Set(explicitSlugs.map(slug => String(slug || '').trim()).filter(Boolean))]
+      : selectedCollectionSlugs();
     if (!slugs.length) { toast('Seleccioná al menos una colección.'); return; }
     try { await executeCollectionDeletion({ scope: 'selected', slugs }); }
     catch (error) { toast(error?.message || 'No se pudieron eliminar las colecciones.'); }

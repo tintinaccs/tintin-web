@@ -43,6 +43,7 @@ import { contrastRatio, passesWcag } from "../components/color/utilidades-contra
 import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260716-cloudinary-fix-1";
 import './orders/pedidos-superadmin-crud.js?v=tintin-20260923-canonical-tinped-reset-1-auth-popup-resolver-1';
 import './products/integridad-inventario-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1';
+import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20260924-bulk-progress-1';
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -2450,14 +2451,16 @@ window.bulkDeleteUsers = async function() {
   const phrase = 'ELIMINAR CUENTAS SELECCIONADAS';
   if (!confirm(`Se revocará el acceso de ${targets.length} cuenta(s), se liberarán sus datos de contacto y se conservará la identidad histórica, pedidos y auditoría. ¿Continuar?`)) return;
   if (prompt(`Escribí exactamente para confirmar:\n\n${phrase}`, '') !== phrase) { toast('Confirmación cancelada.'); return; }
+  const results = await runAdminBulk(targets, user => updateAccountStatusFromAdmin_(user.uid, 'softDelete', 'Eliminación masiva desde Super Admin'), {
+    title: 'Eliminando cuentas', concurrency: 3,
+  });
   let ok = 0, fail = 0;
-  for (const user of targets) {
-    try {
-      await updateAccountStatusFromAdmin_(user.uid, 'softDelete', 'Eliminación masiva desde Super Admin');
-      Object.assign(user, { deleted: true, blocked: true, profileStatus: 'deleted', role: 'client' });
+  results.forEach((result, index) => {
+    if (result.status === 'fulfilled') {
+      Object.assign(targets[index], { deleted: true, blocked: true, profileStatus: 'deleted', role: 'client' });
       ok++;
-    } catch { fail++; }
-  }
+    } else fail++;
+  });
   clearUsersSelection();
   applyUserFilters();
   toast(`${ok} cuenta(s) eliminadas${fail ? `; ${fail} fallaron` : ''}`);
@@ -2983,14 +2986,18 @@ window.bulkDeleteOrders = async function() {
   const ordersById = new Map(allOrders.map(order => [order.id, order]));
   const movedOrders = [], removedIds = new Set(), failed = [];
   toast(`Moviendo 0 de ${n} a Borrados…`, 60000);
-  for (let index = 0; index < ids.length; index++) {
+  const results = await runAdminBulk(ids, id => window.TintinOrderAdmin.trashOrder(id, 'Eliminación masiva por Super Admin'), {
+    title: 'Moviendo pedidos a Borrados', concurrency: 3,
+  });
+  results.forEach((result, index) => {
     const id = ids[index];
-    try {
-      const result = await window.TintinOrderAdmin.trashOrder(id, 'Eliminación masiva por Super Admin');
-      if (result.moved) { removedIds.add(id); movedOrders.push(ordersById.get(id) || { id }); }
-    } catch (error) { console.error(`[orders] No se pudo mover el pedido ${id}:`, error); failed.push({ id, error }); }
-    toast(`Moviendo ${index + 1} de ${n} a Borrados…`, 60000);
-  }
+    if (result.status === 'fulfilled' && result.value?.moved) {
+      removedIds.add(id); movedOrders.push(ordersById.get(id) || { id });
+    } else if (result.status === 'rejected') {
+      console.error(`[orders] No se pudo mover el pedido ${id}:`, result.reason);
+      failed.push({ id, error: result.reason });
+    }
+  });
   allOrders = allOrders.filter(order => !removedIds.has(order.id));
   _selectedOrders.clear();
   failed.forEach(item => _selectedOrders.add(item.id));

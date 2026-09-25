@@ -518,6 +518,7 @@ function renderCollections() {
   const canEdit = perm('colecciones', 'editar', 'manageContent');
   const canToggle = perm('colecciones', 'activarDesactivar', 'manageContent');
   const canDelete = perm('colecciones', 'eliminar', 'deleteCollections');
+  const canBulk = perm('colecciones', 'accionesMasivas', 'manageContent');
 
   root.innerHTML = `
     <div class="tt-commerce-pagehead">
@@ -550,6 +551,7 @@ function renderCollections() {
       </div>
       <div class="tt-commerce-bulkbar" ${state.collectionSelected.size ? '' : 'hidden'}>
         <span class="tt-commerce-bulkcount">${state.collectionSelected.size} seleccionada${state.collectionSelected.size === 1 ? '' : 's'}</span>
+        ${canDelete && canBulk ? button('Eliminar seleccionadas', 'collections-bulk-delete', { danger: true }) : ''}
         ${button('Exportar selección', 'collections-export-selected')}
         ${button('Limpiar', 'collections-clear-selection')}
       </div>
@@ -1012,6 +1014,10 @@ async function handleAction(action, element) {
 
   if (action === 'collection-new') { closeDrawer(); return window.collNueva?.(); }
   if (action === 'collections-export-selected') return exportCollections(true);
+  if (action === 'collections-bulk-delete') {
+    if (typeof window.bulkDeleteCollections !== 'function') return toast('La eliminación masiva todavía no está disponible.');
+    return window.bulkDeleteCollections([...state.collectionSelected]);
+  }
   if (action === 'collections-clear-selection') { state.collectionSelected.clear(); return renderCollections(); }
   if (action === 'collections-page-prev') { state.collectionPage = Math.max(0, state.collectionPage - 1); return renderCollections(); }
   if (action === 'collections-page-next') { state.collectionPage += 1; return renderCollections(); }
@@ -1344,6 +1350,12 @@ function boot() {
   }, true);
   window.addEventListener('resize', closeMenu, { passive: true });
   window.addEventListener('scroll', closeMenu, { passive: true, capture: true });
+  window.addEventListener('tintin:catalog-mutated', () => {
+    state.productSelected.clear();
+    state.collectionSelected.clear();
+    renderProducts();
+    renderCollections();
+  }, { passive: true });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape') { closeMenu(); closeDrawer(); }
   });
