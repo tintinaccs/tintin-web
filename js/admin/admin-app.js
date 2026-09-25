@@ -2024,6 +2024,8 @@ function updateDeletedCount() {
 window.filterUsersByStatus = (status) => {
   userStatusFilter = status;
   document.querySelectorAll('.user-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.userTab === status));
+  const deletedGuidance = document.getElementById('users-deleted-guidance');
+  if (deletedGuidance) deletedGuidance.hidden = status !== 'deleted';
   applyUserFilters();
 };
 
@@ -2322,14 +2324,18 @@ function updateUsersBulkToolbar() {
   const blockBtn = document.getElementById('users-bulk-block-btn');
   const restoreBtn = document.getElementById('users-bulk-restore-btn');
   const deleteBtn = document.getElementById('users-bulk-delete-btn');
+  const roleSelect = document.getElementById('users-bulk-role');
+  const roleApplyBtn = document.getElementById('users-bulk-role-apply-btn');
   // Todo el módulo Usuarios (individual y masivo) es exclusivo de Super
   // Admin — mismo permiso que ya gatea las acciones de a una (manageUsers).
   const allowed = can(currentRole, 'manageUsers');
   if (toolbar) toolbar.classList.toggle('show', allowed && count > 0);
   if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
   if (blockBtn) blockBtn.style.display = userStatusFilter === 'active' ? '' : 'none';
-  if (restoreBtn) restoreBtn.style.display = userStatusFilter === 'blocked' || userStatusFilter === 'deleted' ? '' : 'none';
+  if (restoreBtn) restoreBtn.style.display = userStatusFilter === 'blocked' ? '' : 'none';
   if (deleteBtn) deleteBtn.style.display = userStatusFilter !== 'deleted' ? '' : 'none';
+  if (roleSelect) roleSelect.style.display = userStatusFilter === 'deleted' ? 'none' : '';
+  if (roleApplyBtn) roleApplyBtn.style.display = userStatusFilter === 'deleted' ? 'none' : '';
 }
 
 window.clearUsersSelection = function() {
@@ -2406,11 +2412,15 @@ window.bulkBlockUsers = async function() {
 window.bulkRestoreUsers = async function() {
   if (!_selectedUsers.size) return;
   if (!can(currentRole, 'manageUsers')) { toast('No tenés permiso para restaurar usuarios'); return; }
+  if (userStatusFilter === 'deleted') {
+    toast('Las cuentas eliminadas no se reactivan. La persona debe registrarse nuevamente; su historial comercial se recupera en el nuevo perfil.');
+    return;
+  }
   const selected = [..._selectedUsers].map(uid => allUsers.find(x => x.uid === uid)).filter(Boolean);
   const ids = selected.filter(u => {
     return u && u.email !== SUPER_ADMIN && u.blocked && u.deleted !== true && u.profileStatus !== 'deleted';
   }).map(u => u.uid);
-  if (!ids.length) { toast('No hay bloqueados elegibles. Las cuentas eliminadas deben registrarse otra vez con un perfil nuevo.'); return; }
+  if (!ids.length) { toast('No hay cuentas bloqueadas seleccionadas para restaurar.'); return; }
   const n = ids.length;
   if (!confirm(`¿Restaurar ${n} usuario(s)? Recuperarán su rol anterior.`)) return;
   try {
