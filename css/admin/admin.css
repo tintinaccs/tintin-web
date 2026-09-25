@@ -2512,3 +2512,93 @@ html:not(.adm-auth-ready) [data-admin-panel] {
     max-width: none !important;
   }
 }
+
+/* ======== SHELL FINAL — una sola composición fluida ========
+   El panel usa el mismo eje visual en desktop, laptop, tablet y mobile:
+   rail lateral estable, contenido centrado y controles que envuelven sin
+   empujar la página. La regla queda al final para ganar a los estilos
+   históricos sin reescribir cada módulo. */
+html:has(.adm-main),
+body:has(.adm-main) {
+  overflow-x: hidden;
+}
+
+body:has(.adm-main) .adm-main {
+  min-width: 0;
+}
+
+body:has(.adm-main) .adm-content {
+  width: min(100%, 1320px) !important;
+  max-width: 1320px !important;
+  margin-inline: auto !important;
+  padding-inline: clamp(14px, 2.8vw, 34px) !important;
+}
+
+body:has(.adm-main) .adm-topbar {
+  min-height: 68px;
+  padding-inline: clamp(14px, 2.8vw, 34px);
+}
+
+body:has(.adm-main) .adm-card {
+  box-shadow: 0 4px 18px rgba(86, 42, 58, .045) !important;
+}
+
+body:has(.adm-main) .adm-card-head,
+body:has(.adm-main) .adm-card-body {
+  min-width: 0;
+}
+
+body:has(.adm-main) :is(.adm-filter-row, .adm-bulk-toolbar, .adm-section-head) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+body:has(.adm-main) :is(.adm-filter-row > *, .adm-bulk-toolbar > *) {
+  min-width: 0;
+}
+
+body:has(.adm-main) .adm-table-wrap {
+  max-width: 100%;
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: stable;
+}
+
+@media (min-width: 901px) {
+  body:has(.adm-main) .adm-sidebar { width: 260px; }
+  body:has(.adm-main) .adm-main { margin-left: 260px; }
+  html.adm-sidebar-is-collapsed { --sidebar-w: 74px; }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar { width: 74px; }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-main { margin-left: 74px; }
+}
+
+@media (min-width: 541px) and (max-width: 900px) {
+  body:has(.adm-main) .adm-sidebar { width: 84px; }
+  body:has(.adm-main) .adm-main { margin-left: 84px; }
+  body:has(.adm-main) .adm-content { padding-block: 18px 40px !important; }
+  body:has(.adm-main) .adm-nav-item { min-height: 54px; }
+}
+
+@media (max-width: 540px) {
+  body:has(.adm-main) .adm-content { padding: 12px 10px 34px !important; }
+  body:has(.adm-main) .adm-topbar { min-height: 60px; padding-block: 8px; }
+  body:has(.adm-main) .adm-topbar-title { font-size: 14px; }
+  body:has(.adm-main) .adm-card { border-radius: 14px !important; }
+  body:has(.adm-main) .adm-card-head { padding: 14px !important; }
+  body:has(.adm-main) .adm-card-body { padding: 12px !important; }
+  body:has(.adm-main) :is(.adm-filter-row, .adm-bulk-toolbar) { align-items: stretch; }
+  body:has(.adm-main) :is(.adm-filter-row > *, .adm-bulk-toolbar > *) { flex: 1 1 100%; }
+  body:has(.adm-main) .adm-bulk-toolbar .adm-bulk-count { flex: 1 1 100%; }
+  body:has(.adm-main) .adm-table-pedidos td.col-actions-sticky .adm-btn { width: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:has(.adm-main) *,
+  body:has(.adm-main) *::before,
+  body:has(.adm-main) *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+}
