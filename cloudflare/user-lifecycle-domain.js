@@ -91,7 +91,19 @@ export async function applyUserLifecycle(env, options = {}) {
   }
 
   if (action === 'softDelete' && user.deleted === true && user.blocked === true) {
-    return { uid, action, changeId: currentChangeId || changeId, duplicate: true, tombstone: true };
+    // Una ejecución anterior pudo haber escrito el tombstone y haber quedado
+    // interrumpida antes de retirar la identidad de Auth. Reintentamos la
+    // limpieza real para no dejar cuentas atrapadas en auth/user-disabled.
+    await deleteFirebaseUser(env, uid);
+    return {
+      uid,
+      action,
+      changeId: currentChangeId || changeId,
+      duplicate: true,
+      tombstone: true,
+      authDeleted: true,
+      retry: true,
+    };
   }
 
   const now = new Date();
@@ -118,9 +130,6 @@ export async function applyUserLifecycle(env, options = {}) {
     changeId,
   });
 
-  // La cuenta se deshabilita antes de reemplazar el perfil. Si la escritura
-  // fallara, nunca queda un acceso activo sin perfil seguro.
-  await setFirebaseUserDisabled(env, uid, action === 'softDelete');
   await firestoreAdminCommit(env, [
     { path: `users/${uid}`, fields: patch },
     { path: `auditLog/${eventId}`, fields: audit, currentDocument: { exists: false } },
@@ -128,7 +137,21 @@ export async function applyUserLifecycle(env, options = {}) {
 
   const phone = clean(user.phone || user.phoneNormalized, 40).replace(/\D/g, '');
   if (action === 'softDelete' && phone) await firestoreAdminDelete(env, `phoneReservations/${encodeURIComponent(phone)}`);
-  if (action === 'softDelete') await deleteFirebaseUser(env, uid);
+  if (action === 'softDelete') {
+    // El tombstone ya bloquea el acceso de aplicación. Retirar Auth después
+    // de confirmarlo evita el estado intermedio que mostraba
+    // "Esta cuenta fue deshabilitada" cuando la limpieza se cortaba.
+    try {
+      await deleteFirebaseUser(env, uid);
+    } catch (error) {
+      // Compatibilidad con ejecuciones antiguas que sí llamaban
+      // setFirebaseUserDisabled(env, uid, action === 'softDelete'): si una
+      // cuenta quedó deshabilitada por ese flujo, la dejamos habilitada para
+      // que el siguiente reintento pueda retirar Auth sin el error visible.
+      await setFirebaseUserDisabled(env, uid, false).catch(() => {});
+      throw error;
+    }
+  }
 
   return {
     uid,
