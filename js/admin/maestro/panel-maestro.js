@@ -30,6 +30,8 @@ import {
   }
 
   function toast(message, duration = 3600) {
+    // Avisos centrales del panel (apilados, sin taparse); el resto es respaldo.
+    if (window.toast?.__tintinOps) { window.toast(message, duration); return; }
     const el = document.getElementById('adm-toast');
     if (!el) { console.info('[Maestro]', message); return; }
     el.textContent = message;
