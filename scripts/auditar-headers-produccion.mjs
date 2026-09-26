@@ -5,7 +5,7 @@ const runtime = JSON.parse(fs.readFileSync(new URL('../config/csp-runtime.json',
 const targets = [
   ['html', '/', /no-cache,\s*must-revalidate/i],
   ['css', '/css/pages/login/login.css?v=tintin-20260906-login-mode-toggle-1', /public,\s*max-age=31536000,\s*immutable/i],
-  ['js', '/js/cargador-pagina.js?v=tintin-20260925-cache-converge-1', /public,\s*max-age=31536000,\s*immutable/i],
+  ['js', '/js/cargador-pagina.js?v=tintin-20260926-loader-contrast-b-1', /public,\s*max-age=31536000,\s*immutable/i],
   ['font', '/assets-tintin/fonts/montserrat-latin-wght-normal.woff2', /public,\s*max-age=31536000,\s*immutable/i],
   ['storeGate', '/api/public-catalog?resource=storeGate', /(?:public,\s*)?max-age=(?:[1-9]\d*)/i],
 ];
