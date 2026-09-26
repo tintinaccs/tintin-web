@@ -1,4 +1,4 @@
-import { getGoogleAccessToken, parseServiceAccount } from './firebase-admin-ligero.js';
+import { firestoreAdminQueryByField, getGoogleAccessToken, parseServiceAccount } from './firebase-admin-ligero.js';
 
 const FIRESTORE_SCOPE = 'https://www.googleapis.com/auth/datastore';
 export const MAX_ADMIN_BATCH_WRITES = 120;
@@ -60,4 +60,24 @@ export async function firestoreAdminBatchCommit(env, writes, { fetchImpl = fetch
     );
   }
   return response.json();
+}
+
+/**
+ * Borra, por tandas, todos los documentos de una colección cuyo campo string
+ * coincide con `value`. Si tras `maxRounds` tandas siguen quedando, falla
+ * para que un reintento continúe desde donde quedó.
+ */
+export async function firestoreAdminDeleteWhere(env, collectionId, fieldPath, value, { maxRounds = 10 } = {}) {
+  let deleted = 0;
+  for (let round = 0; round < maxRounds; round += 1) {
+    const documents = await firestoreAdminQueryByField(env, collectionId, fieldPath, value, MAX_ADMIN_BATCH_WRITES);
+    const writes = documents
+      .map(document => String(document?.name || '').split('/documents/')[1] || '')
+      .filter(validPath)
+      .map(path => ({ path, delete: true }));
+    if (writes.length) await firestoreAdminBatchCommit(env, writes);
+    deleted += writes.length;
+    if (documents.length < MAX_ADMIN_BATCH_WRITES) return deleted;
+  }
+  throw new Error('Quedan documentos por borrar; reintentá la operación.');
 }

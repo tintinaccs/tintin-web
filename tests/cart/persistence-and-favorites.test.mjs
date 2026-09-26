@@ -27,7 +27,7 @@ test('el carrito agrega líneas sin reemplazar las existentes', async () => {
   assert.match(runtime, /GUEST_CART_TTL_MS/);
 });
 
-test('favoritos está conectado y se conserva al desactivar una cuenta', async () => {
+test('favoritos está conectado y solo se borra con la eliminación definitiva de la cuenta', async () => {
   const [favorites, product, cart, rules, deletion, lifecycle] = await Promise.all([
     read('js/components/favorites/sincronizacion-favoritos.js'),
     read('product.html'),
@@ -44,8 +44,9 @@ test('favoritos está conectado y se conserva al desactivar una cuenta', async (
   assert.match(cart, /tt-cart-favorites/);
   assert.match(rules, /match \/favorites\/\{productId\}/);
   assert.match(deletion, /applyUserLifecycle/);
-  assert.match(lifecycle, /tombstone/);
-  assert.match(lifecycle, /deleted:\s*fsBoolean\(true\)/);
+  // El endpoint no borra favoritos por su cuenta: la baja completa vive en el
+  // dominio de ciclo de vida, que incluye la subcolección entre las que purga.
   assert.doesNotMatch(deletion, /favoriteDocs|favorites\//);
-  assert.doesNotMatch(lifecycle, /favoriteDocs|favorites\//);
+  assert.match(lifecycle, /USER_SUBCOLLECTIONS = \[[^\]]*'favorites'/);
+  assert.doesNotMatch(lifecycle, /deleted:\s*fsBoolean\(true\)/);
 });

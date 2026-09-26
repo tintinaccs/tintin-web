@@ -758,11 +758,13 @@ function tintinHandleUserEdit_(e) {
   try {
     tintinCallInternalWebhook_(TINTIN_ADMIN_WEBHOOK_PATH, payload);
     if (payload.action === 'softDeleteUser') {
-      sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.blocked).setValue('Sí');
-      sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.action).clearContent();
+      // Baja definitiva: se repinta el espejo y la fila desaparece.
+      tintinPullUsersFromWeb_();
+      tintinRecordSyncSafely_('SYNCED', sheet.getName(), e.range.getA1Notation(), 'Cuenta web eliminada por completo.');
+      return;
     }
     sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.lastChangeId).setValue(changeId);
-    tintinRecordSyncSafely_('SYNCED', sheet.getName(), e.range.getA1Notation(), 'Cuenta web sincronizada sin eliminar su identidad histórica.');
+    tintinRecordSyncSafely_('SYNCED', sheet.getName(), e.range.getA1Notation(), 'Cuenta web sincronizada.');
   } catch (error) {
     tintinRecordSyncSafely_('ERROR', sheet.getName(), e.range.getA1Notation(), String(error && error.message || error));
     throw error;

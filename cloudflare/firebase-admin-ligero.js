@@ -170,6 +170,32 @@ async function lookupUserByEmail(accessToken, email) {
   return Array.isArray(lookupData.users) ? lookupData.users[0] : null;
 }
 
+/**
+ * Busca una identidad de Firebase Auth por UID o por email, sin crear nada.
+ * Devuelve sólo lo necesario para decidir una baja: uid, email y si está
+ * deshabilitada. null cuando no existe.
+ */
+export async function lookupFirebaseUser(env, { uid = '', email = '' } = {}) {
+  const safeUid = String(uid || '').trim();
+  const safeEmail = String(email || '').trim().toLowerCase();
+  if (!safeUid && !safeEmail) return null;
+  if (safeUid && !/^[A-Za-z0-9_-]{6,128}$/.test(safeUid)) throw new Error('UID inválido');
+  const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
+  const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:lookup', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify(safeUid ? { localId: [safeUid] } : { email: [safeEmail] })
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    if (data?.error?.message === 'USER_NOT_FOUND') return null;
+    throw new Error('No se pudo buscar la cuenta de acceso: ' + (data?.error?.message || response.status));
+  }
+  const user = Array.isArray(data.users) ? data.users[0] : null;
+  if (!user?.localId) return null;
+  return { uid: user.localId, email: String(user.email || '').toLowerCase(), disabled: user.disabled === true };
+}
+
 /** Busca una cuenta de Firebase Auth por email; si no existe, la crea (ya verificada). */
 export async function findOrCreateUserByEmail(env, email) {
   const accessToken = await getGoogleAccessToken(env, ['https://www.googleapis.com/auth/identitytoolkit']);
@@ -401,6 +427,40 @@ export async function firestoreAdminFindFirstByFields(env, collectionId, fieldPa
     if (document) return document;
   }
   return null;
+}
+
+/**
+ * Todos los documentos (hasta `maxDocuments`) de una colección cuyo campo
+ * string coincide exactamente con `value`. Consulta de un solo campo: usa el
+ * índice automático de Firestore, sin índices compuestos.
+ */
+export async function firestoreAdminQueryByField(env, collectionId, fieldPath, value, maxDocuments = 500) {
+  const safeCollection = String(collectionId || '').trim();
+  if (!/^[A-Za-z0-9_-]{1,120}$/.test(safeCollection)) throw new Error('Colección inválida para query Firestore');
+  const field = String(fieldPath || '').trim();
+  if (!/^[A-Za-z0-9_.]{1,120}$/.test(field)) throw new Error('Campo inválido para query Firestore');
+  const expected = String(value ?? '');
+  if (!expected) return [];
+
+  const sa = parseServiceAccount(env);
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const response = await fetch(`${firestoreDatabaseUrl(sa)}/documents:runQuery`, {
+    method: 'POST',
+    headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
+    body: JSON.stringify({
+      structuredQuery: {
+        from: [{ collectionId: safeCollection }],
+        where: { fieldFilter: { field: { fieldPath: field }, op: 'EQUAL', value: { stringValue: expected } } },
+        limit: Math.max(1, Math.min(1000, Number(maxDocuments) || 500))
+      }
+    })
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(`Firestore RUN QUERY falló (${response.status}): ${data?.error?.message || ''}`);
+  }
+  const rows = await response.json().catch(() => []);
+  return (Array.isArray(rows) ? rows : []).map(row => row?.document).filter(Boolean);
 }
 
 /**

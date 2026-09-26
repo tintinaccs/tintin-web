@@ -9,6 +9,7 @@ import { jsonResponse, SUPERADMIN_EMAIL } from '../../cloudflare/seguridad-cloud
 import { applyUserLifecycle } from '../../cloudflare/user-lifecycle-domain.js';
 import { applyOrderAdminMutation, createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
 import { syncOrderOwnerStats } from '../../cloudflare/sincronizacion-estadisticas-pedido.js';
+import { syncEngagementBatchToSheets } from '../../cloudflare/sincronizacion-participacion-sheets.js';
 
 const MAX_BODY_BYTES = 64 * 1024;
 const ROLES = new Set(['client', 'viewer', 'agent', 'admin']);
@@ -68,7 +69,7 @@ async function updateUser(env, input) {
   if (action === 'deleteUser' || action === 'softDeleteUser') {
     return applyUserLifecycle(env, {
       uid,
-      action: 'softDelete',
+      action: 'delete',
       actorId: 'google-sheets',
       actorEmail: 'google-sheets@tintin.internal',
       actorRole: 'sheets-sync',
@@ -196,7 +197,7 @@ export async function onRequestPost(context) {
       return jsonResponse({
         ok: true,
         authenticated: true,
-        destructiveUserDelete: false,
+        destructiveUserDelete: true,
         writableEntities: ['user', 'order'],
         readOnlyMirrors: ['audit'],
         orderMutationsUseInventoryDomain: true,
@@ -210,6 +211,16 @@ export async function onRequestPost(context) {
     if (input.entity === 'user') result = await updateUser(env, input);
     else if (input.entity === 'order') result = await handleOrder(env, input);
     else throw new Error('Entidad no permitida');
+
+    if (input.entity === 'user' && Array.isArray(result?.sheetEvents)) {
+      const { sheetEvents, ...userResult } = result;
+      result = userResult;
+      if (sheetEvents.length) {
+        context.waitUntil?.(syncEngagementBatchToSheets(env, sheetEvents).catch(syncError => {
+          console.error('[sheets-admin-webhook] engagement sync failed', syncError?.message || syncError);
+        }));
+      }
+    }
 
     if (input.entity === 'order' && result?.order) {
       context.waitUntil?.(syncOrderOwnerStats(env, result.order).catch(syncError => {

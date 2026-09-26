@@ -59,6 +59,9 @@ let allUsers = [];
 let allOrders = [];
 let adminOrdersUnsubscribe = null;
 let adminUsersUnsubscribe = null;
+let adminLegacyDeletedUsersLoadToken = 0;
+let adminUsersLive = [];
+let adminLegacyDeletedUsers = [];
 // Nunca volver a descargar miles de documentos al abrir el panel. El panel
 // debe trabajar con la ventana operativa reciente; las fichas y exportaciones
 // consultan el documento o la página concreta que se necesita.
@@ -1612,6 +1615,7 @@ function stopAdminRealtimeData() {
   statisticsTrafficLoadToken += 1;
   adminOrdersUnsubscribe = null;
   adminUsersUnsubscribe = null;
+  adminLegacyDeletedUsersLoadToken += 1;
   _auditUnsubscribe = null;
 }
 
@@ -1687,9 +1691,28 @@ function startAdminRealtimeData() {
     adminRealtimeReady.orders = true;
   }
   if (currentRole === 'superadmin') {
-    adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT)), snapshot => {
-      allUsers = snapshot.docs.map(item => ({ uid: item.id, ...item.data() }))
+    // Las bajas del sistema anterior reemplazaban el perfil sin `createdAt` y
+    // quedaban fuera del orden principal: invisibles e imposibles de borrar.
+    // Ya no se generan (la baja actual borra el perfil), así que alcanza con
+    // leerlas una vez al abrir el panel para que Superadmin pueda eliminarlas.
+    const mergeAdminUsers = () => {
+      const byUid = new Map();
+      [...adminLegacyDeletedUsers, ...adminUsersLive].forEach(user => byUid.set(user.uid, user));
+      allUsers = [...byUid.values()]
         .sort((a, b) => activityTimestampMillis(b.createdAt || b.updatedAt || b.lastAccess) - activityTimestampMillis(a.createdAt || a.updatedAt || a.lastAccess) || String(a.uid || '').localeCompare(String(b.uid || '')));
+    };
+    const legacyLoadToken = ++adminLegacyDeletedUsersLoadToken;
+    getDocs(query(collection(db, 'users'), where('deleted', '==', true), limit(ADMIN_REALTIME_LIMIT))).then(snapshot => {
+      if (legacyLoadToken !== adminLegacyDeletedUsersLoadToken) return;
+      adminLegacyDeletedUsers = snapshot.docs.map(item => ({ uid: item.id, ...item.data() }));
+      mergeAdminUsers();
+      if (adminRealtimeReady.users) refreshRealtimeConsumers();
+    }).catch(error => {
+      console.error('Bajas anteriores no disponibles:', error);
+    });
+    adminUsersUnsubscribe = onSnapshot(query(collection(db, 'users'), orderBy('createdAt', 'desc'), limit(ADMIN_REALTIME_LIMIT)), snapshot => {
+      adminUsersLive = snapshot.docs.map(item => ({ uid: item.id, ...item.data() }));
+      mergeAdminUsers();
       adminRealtimeReady.users = true;
       refreshRealtimeConsumers();
     }, error => {
@@ -2141,7 +2164,7 @@ function renderUsersTable(users) {
     const actions = canEdit ? `
       <div style="display:flex;gap:6px;flex-wrap:wrap">
         ${!isSuperAdmin ? (deleted
-          ? `<span class="adm-badge" title="La persona debe registrarse nuevamente; se recuperará solo su historial comercial.">Historial protegido</span>`
+          ? `<span class="adm-badge" title="Baja incompleta del sistema anterior: el correo sigue ocupado hasta eliminarla.">Baja incompleta</span>`
           : u.blocked
           ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.restoreUser(${uidArg})">Restaurar</button>`
           : `<button type="button" class="adm-btn adm-btn-sm adm-btn-outline" onclick="window.blockUser(${uidArg}, ${emailArg})">Bloquear</button>`
@@ -2272,7 +2295,7 @@ window.restoreUser = async (uid) => {
   const u = allUsers.find(x => x.uid === uid);
   if (!u) return;
   if (u.deleted === true || u.profileStatus === 'deleted') {
-    toast('Esta cuenta fue eliminada. Debe registrarse otra vez para crear un perfil nuevo; sus compras se recuperarán automáticamente.');
+    toast('Esta cuenta quedó con una baja incompleta. Eliminala para liberar el correo; la persona podrá registrarse de nuevo.');
     return;
   }
   const targetRole = ASSIGNABLE_ROLES.includes(u.roleBeforeBlock) ? u.roleBeforeBlock : 'client';
@@ -2308,16 +2331,65 @@ window.deleteUser = async (uid, name) => {
   const reason = window.prompt('Motivo de la eliminación (queda en auditoría):', '') ?? null;
   if (reason === null) return;
   if (!confirm(
-    `¿Eliminar la cuenta de "${name}"?\n\n` +
-    `Se eliminarán los datos del perfil y el acceso. Solo quedará el historial comercial sin datos personales; si vuelve a registrarse, tendrá un perfil totalmente nuevo.`
+    `¿Eliminar DEFINITIVAMENTE la cuenta de "${name}"?\n\n` +
+    `Se borran el acceso, el perfil, el carrito, los favoritos, las reseñas, los likes y los avisos, como si nunca se hubiera registrado. ` +
+    `Los pedidos se conservan como registro de ventas de la tienda. Esta acción no se puede deshacer.`
   )) return;
   try {
-    await updateAccountStatusFromAdmin_(uid, 'softDelete', reason);
-    if (_target) Object.assign(_target, { deleted: true, blocked: true, profileStatus: 'deleted', role: 'client' });
-    toast('Cuenta eliminada. El perfil fue borrado y el historial comercial quedó protegido.');
-    applyUserFilters();
+    await updateAccountStatusFromAdmin_(uid, 'delete', reason);
+    removeAdminUsersLocally_([uid]);
+    toast('Cuenta eliminada por completo. El correo queda libre para un registro nuevo.');
   } catch(e) {
-    toast('Error al eliminar usuario');
+    toast(`No se pudo eliminar la cuenta: ${e.message}`);
+  }
+};
+
+// La baja borra el perfil en el servidor; el listener lo quita solo, pero se
+// saca ya de la vista para no mostrar una fila que dejó de existir.
+function removeAdminUsersLocally_(uids) {
+  const removed = new Set(uids);
+  allUsers = allUsers.filter(user => !removed.has(user.uid));
+  adminUsersLive = adminUsersLive.filter(user => !removed.has(user.uid));
+  adminLegacyDeletedUsers = adminLegacyDeletedUsers.filter(user => !removed.has(user.uid));
+  removed.forEach(uid => _selectedUsers.delete(uid));
+  applyUserFilters();
+}
+
+// Para cuentas que no aparecen en la lista (por ejemplo, un acceso que quedó
+// deshabilitado sin perfil). El servidor borra una cuenta por llamada y avisa
+// cuántas quedan con ese correo.
+window.deleteUserByEmail = async () => {
+  if (currentRole !== 'superadmin' || !can(currentRole, 'deleteUsers')) { toast('Solo el Super Admin puede eliminar cuentas'); return; }
+  const email = String(window.prompt('Correo de la cuenta a eliminar por completo:', '') || '').trim().toLowerCase();
+  if (!email) return;
+  if (email === SUPER_ADMIN) { toast('La cuenta Super Admin está protegida'); return; }
+  if (!/^[^\s@/]+@[^\s@/]+\.[^\s@/]{2,}$/.test(email)) { toast('Correo inválido'); return; }
+  if (!confirm(
+    `¿Eliminar DEFINITIVAMENTE todo lo asociado a ${email}?\n\n` +
+    `Se borran el acceso, el perfil y su participación, como si nunca se hubiera registrado. Los pedidos se conservan. No se puede deshacer.`
+  )) return;
+  let deleted = 0;
+  try {
+    for (let attempt = 0; attempt < 6; attempt++) {
+      const response = await authenticatedFetch('/api/admin-delete-user', {
+        method: 'POST',
+        cache: 'no-store',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email, reason: 'Eliminación por correo desde Super Admin' })
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || result.ok !== true) throw new Error(result.error || 'No se pudo eliminar la cuenta');
+      if (result.result?.uid) {
+        deleted++;
+        removeAdminUsersLocally_([result.result.uid]);
+      }
+      if (!(result.remainingAccounts > 0)) break;
+    }
+    toast(deleted
+      ? `Se eliminó por completo ${deleted === 1 ? 'la cuenta' : `${deleted} cuentas`} de ${email}.`
+      : `No había ninguna cuenta con ${email}. El correo está libre.`);
+  } catch (e) {
+    toast(`No se pudo terminar la eliminación${deleted ? ` (${deleted} ya eliminada(s))` : ''}: ${e.message}`);
   }
 };
 
@@ -2376,7 +2448,7 @@ function updateUsersBulkToolbar() {
   if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
   if (blockBtn) blockBtn.style.display = userStatusFilter === 'active' ? '' : 'none';
   if (restoreBtn) restoreBtn.style.display = userStatusFilter === 'blocked' ? '' : 'none';
-  if (deleteBtn) deleteBtn.style.display = userStatusFilter !== 'deleted' ? '' : 'none';
+  if (deleteBtn) deleteBtn.style.display = '';
   if (roleSelect) roleSelect.style.display = userStatusFilter === 'deleted' ? 'none' : '';
   if (roleApplyBtn) roleApplyBtn.style.display = userStatusFilter === 'deleted' ? 'none' : '';
 }
@@ -2456,7 +2528,7 @@ window.bulkRestoreUsers = async function() {
   if (!_selectedUsers.size) return;
   if (!can(currentRole, 'manageUsers')) { toast('No tenés permiso para restaurar usuarios'); return; }
   if (userStatusFilter === 'deleted') {
-    toast('Las cuentas eliminadas no se reactivan. La persona debe registrarse nuevamente; su historial comercial se recupera en el nuevo perfil.');
+    toast('Las cuentas eliminadas no se reactivan. Eliminalas por completo para liberar el correo; la persona debe registrarse nuevamente.');
     return;
   }
   const selected = [..._selectedUsers].map(uid => allUsers.find(x => x.uid === uid)).filter(Boolean);
@@ -2499,24 +2571,25 @@ window.bulkDeleteUsers = async function() {
   if (!_selectedUsers.size) return;
   if (rejectOversizedAdminBulkSelection(_selectedUsers, 'usuarios')) return;
   if (currentRole !== 'superadmin' || !can(currentRole, 'deleteUsers')) { toast('Solo el Super Admin puede eliminar cuentas'); return; }
-  const targets = [..._selectedUsers].map(uid => allUsers.find(u => u.uid === uid)).filter(u => u && u.email !== SUPER_ADMIN && u.deleted !== true && u.profileStatus !== 'deleted');
+  const targets = [..._selectedUsers].map(uid => allUsers.find(u => u.uid === uid)).filter(u => u && u.email !== SUPER_ADMIN);
   if (!targets.length) { toast('No hay cuentas elegibles (el Super Admin está protegido)'); return; }
   const phrase = 'ELIMINAR CUENTAS SELECCIONADAS';
-  if (!confirm(`Se revocará el acceso de ${targets.length} cuenta(s), se liberarán sus datos de contacto y se conservará la identidad histórica, pedidos y auditoría. ¿Continuar?`)) return;
+  if (!confirm(`Se eliminarán DEFINITIVAMENTE ${targets.length} cuenta(s): acceso, perfil, carrito, favoritos, reseñas, likes y avisos, como si nunca se hubieran registrado. Los pedidos se conservan como registro de ventas. ¿Continuar?`)) return;
   if (prompt(`Escribí exactamente para confirmar:\n\n${phrase}`, '') !== phrase) { toast('Confirmación cancelada.'); return; }
-  const results = await runAdminBulk(targets, user => updateAccountStatusFromAdmin_(user.uid, 'softDelete', 'Eliminación masiva desde Super Admin'), {
-    title: 'Eliminando cuentas', name: 'EliminarCuentas', module: 'Usuarios', concurrency: 3,
+  // Concurrencia 1: cada baja recorre la participación social y dos bajas en
+  // paralelo competirían por las mismas estadísticas de producto.
+  const results = await runAdminBulk(targets, user => updateAccountStatusFromAdmin_(user.uid, 'delete', 'Eliminación masiva desde Super Admin'), {
+    title: 'Eliminando cuentas', name: 'EliminarCuentas', module: 'Usuarios', concurrency: 1,
   });
-  let ok = 0, fail = 0;
+  const removed = [];
+  let fail = 0;
   results.forEach((result, index) => {
-    if (result.status === 'fulfilled') {
-      Object.assign(targets[index], { deleted: true, blocked: true, profileStatus: 'deleted', role: 'client' });
-      ok++;
-    } else fail++;
+    if (result.status === 'fulfilled') removed.push(targets[index].uid);
+    else fail++;
   });
   clearUsersSelection();
-  applyUserFilters();
-  toast(`${ok} cuenta(s) eliminadas${fail ? `; ${fail} fallaron` : ''}`);
+  removeAdminUsersLocally_(removed);
+  toast(`${removed.length} cuenta(s) eliminadas por completo${fail ? `; ${fail} fallaron (reintentá)` : ''}`);
 };
 
 function userRowsToCsv_(users) {
