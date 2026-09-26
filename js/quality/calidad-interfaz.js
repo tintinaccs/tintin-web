@@ -2,7 +2,7 @@
 'use strict';
 if(window.TintinUIQualityBooted)return;
 window.TintinUIQualityBooted=1;
-var TT_CACHE_VERSION='tintin-20260925-cache-converge-1';
+var TT_CACHE_VERSION='tintin-20260925-cache-converge-1-launch-20260926-1';
 function versioned(url,tag){var v=tag||TT_CACHE_VERSION;try{var u=new URL(url,import.meta.url);u.searchParams.set('v',v);return u.href}catch(e){return url+(url.indexOf('?')>-1?'&':'?')+'v='+v}}
 function isOldLogo(url){return /logo-splash|logo-tintin|tt-splash-line|tt-intro-fallback/i.test(String(url||''))}
 var HOME_LOADER_IMAGE='assets-tintin/images/general/logo.png';

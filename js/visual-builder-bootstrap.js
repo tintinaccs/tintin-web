@@ -1,5 +1,5 @@
 import { detectContentPageId } from './core/store/esquema-contenido.js?v=tintin-20260925-cache-converge-1';
-import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20260925-cache-converge-1';
+import { initVisualBuilderRuntime } from './core/store/editor-visual-runtime.js?v=tintin-20260925-cache-converge-1-launch-20260926-1';
 
 const VISUAL_SETTLE_CEILING_MS = 3500;
 

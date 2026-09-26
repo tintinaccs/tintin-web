@@ -1,6 +1,6 @@
 // Misma URL que carga-navegacion.js: una sola instancia del catálogo aunque
 // la búsqueda se abra antes de que termine de cargar.
-import { versionedJsModule } from './configuracion.js?v=tintin-20260925-cache-converge-1';
+import { versionedJsModule } from './configuracion.js?v=tintin-20260925-cache-converge-1-launch-20260926-1';
 
 const MAX_RESULTS = 10;
 const INPUT_DELAY_MS = 120;

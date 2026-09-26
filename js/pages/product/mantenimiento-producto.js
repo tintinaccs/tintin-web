@@ -1,8 +1,8 @@
 
 /* TINTIN — Runtime integral de product.html */
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
 
 const PRODUCT_PATH_RE = /(?:^|\/)product(?:\.html)?\/?$/i;
 

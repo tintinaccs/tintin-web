@@ -12,9 +12,9 @@
    completos dejan de ser públicos.
    ============================================================= */
 
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
-import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
+import { SUPER_ADMIN as SUPER_ADMIN_EMAIL } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
 import {
   doc,
   onSnapshot,
@@ -409,6 +409,6 @@ boot();
 
 // El mismo panel ya está protegido para Super Admin. Desde acá se carga el
 // sincronizador del documento público mínimo de correos.
-import('./sincronizacion-correo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1').catch(error => {
+import('./sincronizacion-correo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1').catch(error => {
   console.error('[admin-store-control] No se pudo iniciar la sincronización de correos:', error);
 });

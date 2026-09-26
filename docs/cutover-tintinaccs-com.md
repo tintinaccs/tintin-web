@@ -11,13 +11,43 @@ Este procedimiento es el único orden aprobado para mover la tienda desde Shopif
 - Redirect OAuth esperado: `https://tintinaccs.com/__/auth/handler`.
 - El monitor horario debe seguir apuntando a `pages.dev` hasta terminar el corte.
 
-## A. Preflight obligatorio antes de tocar DNS
+## A. Preflight obligatorio antes del cambio de tráfico
+
+### Traslado del DNS a Cloudflare
+
+Cloudflare Pages exige que el dominio apex sea una zona de la misma cuenta de Cloudflare que el proyecto Pages y use nameservers de Cloudflare ([documentación oficial](https://developers.cloudflare.com/pages/configuration/custom-domains/)). Trasladar el DNS conservando los registros de Shopify no cambia la tienda que ven los clientes.
+
+Estado verificado al 26/09/2026: nameservers `ns-cloud-d1.googledomains.com`, `ns-cloud-d2.googledomains.com`, `ns-cloud-d3.googledomains.com` y `ns-cloud-d4.googledomains.com`; registrador Tucows; estados `clientTransferProhibited` y `clientUpdateProhibited`; vencimiento `2027-02-24`. Esto es compatible con un dominio comprado en Shopify, pero debe confirmarse en la cuenta del dueño. Si Shopify no permite cambiar los nameservers, hay que transferir el dominio fuera de Shopify antes del traslado DNS.
+
+Antes de cambiar los NS, guardar el export completo y replicar exactamente estos registros en la nueva zona de Cloudflare:
+
+| Tipo | Nombre | Valor | Proxy / prioridad |
+| --- | --- | --- | --- |
+| A | `@` | `23.227.38.65` | DNS only |
+| AAAA | `@` | `2620:127:f00f:5::` | DNS only |
+| CNAME | `www` | `shops.myshopify.com` | DNS only |
+| TXT | `resend._domainkey` | Copiar el valor exacto de Resend y contrastarlo con el export DNS; no inventarlo ni sustituirlo por este texto | No aplica |
+| MX | `send` | `feedback-smtp.sa-east-1.amazonses.com` | Prioridad 10 |
+| TXT | `send` | `v=spf1 include:amazonses.com ~all` | No aplica |
+| TXT | `_dmarc` | `v=DMARC1; p=none;` | No aplica |
+
+El apex no tiene MX. Conservar también cualquier registro adicional del export; la importación automática debe contrastarse con la zona original.
+
+Orden operativo, a cargo del dueño:
+
+1. Crear la zona de Cloudflare, replicar los registros y cambiar los NS. Con los registros web de Shopify intactos y en DNS only, este paso es invisible para los clientes.
+2. Completar las autorizaciones de Firebase Authentication, OAuth, reCAPTCHA Enterprise/App Check y Search Console indicadas abajo.
+3. Preparar y aprobar el commit exclusivo de cutover de C.
+4. Con ese commit desplegado y verde, agregar `tintinaccs.com` como Custom Domain de Pages (D): **este es el cambio de tráfico**, no el traslado previo de NS.
+5. Configurar `www` → apex mediante una Redirect Rule 301, conservando path y query. Activar el proxy de `www` al habilitar la regla para que Cloudflare pueda ejecutarla.
+
+No cancelar Shopify hasta que el dominio esté fuera de Shopify y el sitio nuevo esté estable. Las verificaciones de navegador, TLS y SEO del dominio nuevo se completan después del cambio de tráfico, antes del anuncio.
 
 ### Cloudflare Pages
 
-- [ ] Agregar `tintinaccs.com` como Custom Domain del proyecto Pages.
+- [ ] Preparar el Custom Domain `tintinaccs.com`; agregarlo recién en D, después del commit de cutover.
 - [ ] Decidir el host canónico: `tintinaccs.com`.
-- [ ] Agregar `www.tintinaccs.com` y redirigirlo de forma permanente al host canónico.
+- [ ] Preparar la Redirect Rule 301 de `www.tintinaccs.com` al host canónico para activarla en D.
 - [ ] Confirmar certificado TLS válido antes de anunciar la migración.
 - [ ] Guardar captura/export de los registros DNS actuales antes de que Cloudflare modifique los registros web.
 
@@ -72,15 +102,22 @@ Cloudflare Pages Functions conserva enlaces históricos sin una tabla manual de 
 
 Los productos se resuelven por ID/handle/slug Shopify y, como compatibilidad final, por slug del nombre. Una URL de producto que no tenga equivalente real devuelve 404; **no se redirige todo al Inicio**, para evitar soft-404 y asociaciones SEO falsas.
 
-El gate `scripts/auditar-shopify-redirects.mjs` prueba estas reglas sobre el preview real de Cloudflare antes de permitir el merge.
+`scripts/auditar-shopify-redirects.mjs` prueba estas reglas sobre un origen indicado, pero ningún workflow lo ejecuta directamente como gate antes del merge. Lo invocan `auditar-cloudflare-entrega-real.mjs` y `auditar-cutover-live.mjs`. Ejecutarlo manualmente y adjuntar el resultado cuando haya un producto real cargado:
+
+```sh
+TINTIN_MIGRATION_ORIGIN=https://tintinaccs.com TINTIN_SHOPIFY_PRODUCT_CANARY=<handle-real-existente> node scripts/auditar-shopify-redirects.mjs
+```
+
+Para una comprobación previa, usar como origen el preview que se esté verificando. Con el catálogo vacío intencional, el canary por defecto `anillo-liso-dorado` devuelve 404 y el gate falla; no restaurar productos para forzarlo a pasar.
 
 ## C. Preparar el commit de cutover
 
-Solo después de completar A:
+Solo cuando el dueño confirme el traslado DNS y las autorizaciones de A; las comprobaciones del dominio servido por Pages quedan para D/E:
 
 1. Cambiar en `config/public-site.json`:
    - `origin` → `https://tintinaccs.com`.
    - `firebaseAuthDomain` → `tintinaccs.com`.
+   - Sumar `tintinaccs.com` y `www.tintinaccs.com` a `appCheckDomains`, conservando `tintinaccesorios.pages.dev`, `localhost` y `127.0.0.1`. Sin el dominio activo en esa lista falla el check «App Check incluye dominio activo» de `node scripts/auditar-preparacion-dominio.mjs`.
 2. Mantener `cutover` como referencia del destino aprobado.
 3. Ejecutar el build normal. `scripts/sincronizar-origen-publico.js` propaga la fuente única a canonical, OG, JSON-LD, robots, sitemaps, Firebase Auth, Functions y auditorías.
 4. Regenerar CSP. `scripts/generar-csp-cloudflare.js` incorpora el origen público activo antes de calcular hashes.
@@ -89,7 +126,7 @@ Solo después de completar A:
 ## D. Cambio de tráfico
 
 1. Confirmar que el último commit de cutover está desplegado y verde en Cloudflare Pages.
-2. Reemplazar **solo** los registros DNS web de Shopify por los necesarios para Cloudflare Pages.
+2. Agregar `tintinaccs.com` como Custom Domain de Pages y reemplazar **solo** los registros DNS web de Shopify por los necesarios para Pages en la zona de Cloudflare. Activar la Redirect Rule 301 de `www` al apex, con proxy habilitado para `www`.
 3. Confirmar que MX/SPF/DKIM/DMARC permanecieron iguales a la captura previa.
 4. Esperar resolución DNS y certificado TLS válido observando el dominio definitivo, sin anunciar todavía.
 5. Ejecutar la matriz de aceptación del punto E.
@@ -172,7 +209,7 @@ Disparadores de rollback inmediato:
 Procedimiento:
 
 1. **No borrar datos ni “arreglar” pedidos manualmente durante el rollback.** Registrar qué pedidos entraron durante la ventana.
-2. Restaurar únicamente los registros DNS web a la captura previa de Shopify. No tocar MX/SPF/DKIM/DMARC.
+2. Con los NS ya en Cloudflare, restaurar **en el DNS de Cloudflare** solo los A/AAAA/CNAME web de Shopify de la captura previa (`A @ 23.227.38.65`, `AAAA @ 2620:127:f00f:5::`, `CNAME www shops.myshopify.com`, DNS only). No volver a cambiar los NS ni tocar MX/SPF/DKIM/DMARC.
 3. Revertir el commit de `config/public-site.json` a `https://tintinaccesorios.pages.dev` y desplegar nuevamente el origen técnico si fue necesario.
 4. Verificar Shopify/origen anterior antes de redirigir tráfico de vuelta.
 5. Mantener el nuevo deployment de Cloudflare accesible por su preview/pages.dev para diagnosticar sin afectar clientes.

@@ -72,7 +72,11 @@ if (FIREBASE_APP_CHECK_SITE_KEY) {
         // Firestore puede iniciar listeners inmediatamente después de Auth.
         // Resolver sólo cuando existe un token evita que App Check en modo
         // enforcement convierta el primer lote de lecturas en permission-denied.
-        await getAppCheckToken(sharedAppCheck.appCheck, false);
+        try {
+          await getAppCheckToken(sharedAppCheck.appCheck, false);
+        } catch (firstTokenError) {
+          await getAppCheckToken(sharedAppCheck.appCheck, true);
+        }
         return true;
       })
     .then(() => {

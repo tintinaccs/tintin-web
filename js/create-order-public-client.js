@@ -7,7 +7,7 @@
  * checkout.
  */
 import { apiUrl } from './core/firebase/origen-funciones.js?v=tintin-20260716-cloudinary-fix-1';
-import { currentAuthenticatedUser, authenticatedFetch } from './core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1';
+import { currentAuthenticatedUser, authenticatedFetch } from './core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
 
 const CREATE_ORDER_TIMEOUT_MS = 35000;
 const CREATE_ORDER_ENDPOINT = apiUrl('apps-script-bridge');

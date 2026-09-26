@@ -1,5 +1,5 @@
 import { CATEGORIES, UI_ICONS, categoryIcon, collectionImageUrl, svgIcon } from '../compartido/iconos.js?v=tintin-20260916-final-production-stability-iconos-1';
-import { logoUrl } from '../compartido/configuracion.js?v=tintin-20260925-cache-converge-1';
+import { logoUrl } from '../compartido/configuracion.js?v=tintin-20260925-cache-converge-1-launch-20260926-1';
 
 function renderDesktopCategories() {
   return CATEGORIES.map(({ slug, label }) => `
