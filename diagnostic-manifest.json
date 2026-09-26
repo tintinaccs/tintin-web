@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "d33053a0161392a13004e54fbbdc6629de710c11e5259ebe4e49ecdfe475c3ee",
+  "sourceFingerprint": "2d6f198e536adb6cba62729073ada3852e1f3958daaafc92d375220cc358c65b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 890,
     "textFiles": 849,
-    "totalBytes": 17404572,
+    "totalBytes": 17407912,
     "pages": 19,
     "modules": 613
   },
@@ -20470,8 +20470,8 @@
     },
     {
       "path": "functions/product.js",
-      "bytes": 10120,
-      "sha256": "d80b5e81e574a5a09ba9900e5b5ecc7b36352426c8cffcd47531d728c3f30da2",
+      "bytes": 10755,
+      "sha256": "731b72cd1ec1f1c978111a6b11e71ef86f6946b309106d5f1a10772291ea2c4b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33482,8 +33482,8 @@
     },
     {
       "path": "tests/seo/phase11-seo.spec.js",
-      "bytes": 4410,
-      "sha256": "7aa3dd7baa653863e2e0bdf7d2609d7df8f3a497ed7c7514230db2f1f6f75b67",
+      "bytes": 7115,
+      "sha256": "7966b1dda87a19d9a4591221979c834d59b2bc857b3287261b8b1cc6a36aa79d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33494,6 +33494,12 @@
           "target": "functions/product.js",
           "dynamic": true,
           "line": 50
+        },
+        {
+          "raw": "../../functions/product.js",
+          "target": "functions/product.js",
+          "dynamic": true,
+          "line": 58
         }
       ],
       "endpoints": [
@@ -33508,6 +33514,14 @@
         {
           "url": "https://schema.org/OutOfStock",
           "line": 46
+        },
+        {
+          "url": "https://oauth2.googleapis.com/token",
+          "line": 82
+        },
+        {
+          "url": "https://tintin.test/product",
+          "line": 90
         }
       ]
     },
@@ -36517,8 +36531,8 @@
     {
       "path": "functions/product.js",
       "extension": ".js",
-      "bytes": 10120,
-      "sha256": "d80b5e81e574a5a09ba9900e5b5ecc7b36352426c8cffcd47531d728c3f30da2"
+      "bytes": 10755,
+      "sha256": "731b72cd1ec1f1c978111a6b11e71ef86f6946b309106d5f1a10772291ea2c4b"
     },
     {
       "path": "functions/products/[handle].js",
@@ -39751,8 +39765,8 @@
     {
       "path": "tests/seo/phase11-seo.spec.js",
       "extension": ".js",
-      "bytes": 4410,
-      "sha256": "7aa3dd7baa653863e2e0bdf7d2609d7df8f3a497ed7c7514230db2f1f6f75b67"
+      "bytes": 7115,
+      "sha256": "7966b1dda87a19d9a4591221979c834d59b2bc857b3287261b8b1cc6a36aa79d"
     },
     {
       "path": "tests/sync/admin-catalog-delete-preflight.test.mjs",
