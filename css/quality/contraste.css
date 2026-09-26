@@ -48,3 +48,10 @@ a.perfil-wa-box {
 .login-box .login-muted {
   color: #6b5a63;
 }
+
+/* Pie público "© … TINTIN ACCESORIOS": #a56680 sobre #fff6fa daba 4.12:1 con
+   texto de ~10px. #995f77 es el tono más cercano que llega a 4.65:1. Misma
+   especificidad que la regla del tema; gana por cargarse después. */
+body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-bottom {
+  color: #995f77 !important;
+}

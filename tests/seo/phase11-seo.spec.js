@@ -53,6 +53,62 @@ test('metadata de producto no puede bloquear indefinidamente la respuesta HTML',
   expect(Date.now() - started).toBeLessThan(800);
 });
 
+test('ficha sin producto válido no es indexable; los errores transitorios no tocan la indexación', async () => {
+  const { generateKeyPairSync } = require('node:crypto');
+  const { onRequest } = await import('../../functions/product.js');
+  const { privateKey } = generateKeyPairSync('rsa', { modulusLength: 2048 });
+  const env = {
+    FIREBASE_SERVICE_ACCOUNT_JSON: JSON.stringify({
+      project_id: 'seo-test',
+      client_email: 'seo-test@seo-test.iam.gserviceaccount.com',
+      private_key: privateKey.export({ type: 'pkcs8', format: 'pem' })
+    }),
+    ASSETS: {
+      fetch: async () => new Response('<html><head><title>Producto</title></head><body></body></html>', {
+        status: 200,
+        headers: { 'content-type': 'text/html; charset=utf-8' }
+      })
+    }
+  };
+  const firestore = {
+    'products/inexistente': { status: 404, body: {} },
+    'products/inactivo': { status: 200, body: { fields: { active: { booleanValue: false }, name: { stringValue: 'Oculto' } } } },
+    'products/activo': { status: 200, body: { fields: { active: { booleanValue: true }, name: { stringValue: 'Reloj Test' } } } },
+    'products/transitorio': { status: 503, body: {} }
+  };
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async input => {
+    const url = String(input);
+    if (url === 'https://oauth2.googleapis.com/token') {
+      return new Response(JSON.stringify({ access_token: 'test-token', expires_in: 3600 }), { status: 200 });
+    }
+    const docPath = url.split('/documents/')[1];
+    const entry = firestore[docPath];
+    if (!entry) throw new Error('fetch inesperado en prueba: ' + url);
+    return new Response(JSON.stringify(entry.body), { status: entry.status });
+  };
+  const productRequest = query => onRequest({ request: new Request('https://tintin.test/product' + query), env });
+  try {
+    for (const query of ['', '?id=', '?id=..%2Fetc%2Fpasswd', '?id=inexistente', '?id=inactivo']) {
+      const response = await productRequest(query);
+      expect(response.status, query).toBe(200);
+      expect(response.headers.get('x-robots-tag'), query).toBe('noindex, nofollow');
+      expect(response.headers.get('cache-control'), query).toBe('no-store');
+    }
+
+    const active = await productRequest('?id=activo');
+    expect(active.headers.get('x-robots-tag')).toBeNull();
+    expect(active.headers.get('x-tintin-product-meta')).toBe('server');
+    expect(await active.text()).toContain('Reloj Test | Tintin Accesorios &amp; Relojes');
+
+    const transient = await productRequest('?id=transitorio');
+    expect(transient.status).toBe(200);
+    expect(transient.headers.get('x-robots-tag')).toBeNull();
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
 test('ruta limpia de producto con id siempre entrega el documento navegable', async ({ request }) => {
   // Este contrato es de routing/HTML, no de hidratación. La funcionalidad de la
   // ficha se cubre en sus pruebas específicas; aquí protegemos que Cloudflare
