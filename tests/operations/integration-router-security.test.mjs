@@ -4,6 +4,8 @@ import { resolve } from 'node:path';
 import test from 'node:test';
 import vm from 'node:vm';
 
+const { origin: PUBLIC_ORIGIN } = JSON.parse(await readFile(resolve(process.cwd(), 'config/public-site.json'), 'utf8'));
+
 const routerPath = resolve(process.cwd(), 'js/quality/integration-router.js');
 const source = await readFile(routerPath, 'utf8');
 
@@ -28,11 +30,11 @@ function routeFrom(hostname) {
 test('github.io y netlify.app se reconocen solo por límites DNS completos', () => {
   assert.equal(
     routeFrom('tienda.github.io'),
-    'https://tintinaccesorios.pages.dev/api/apps-script-bridge',
+    `${PUBLIC_ORIGIN}/api/apps-script-bridge`,
   );
   assert.equal(
     routeFrom('preview.netlify.app'),
-    'https://tintinaccesorios.pages.dev/api/apps-script-bridge',
+    `${PUBLIC_ORIGIN}/api/apps-script-bridge`,
   );
 
   assert.equal(routeFrom('evilgithub.io'), '/api/apps-script-bridge');
