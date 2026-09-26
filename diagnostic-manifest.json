@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "9e5e81ecf0d2ac80d41caaf188a1fd83de5ee36b72224f02f2e1364cd7c05a71",
+  "sourceFingerprint": "4d0eaed4bb234f5494170aa7b7722039ba05b5f84741beffbd8ee5a606f9e03c",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 886,
     "textFiles": 845,
-    "totalBytes": 17297012,
+    "totalBytes": 17299840,
     "pages": 19,
     "modules": 609
   },
@@ -30178,8 +30178,8 @@
     },
     {
       "path": "scripts/restore-firestore.mjs",
-      "bytes": 1594,
-      "sha256": "77027bb74f5e9e59a9065f09cf4b114bcb7fe3e2d1d25254cf9921e2d903c2b0",
+      "bytes": 2274,
+      "sha256": "a1deb30f5ceba24c57c60d60e953242802e0d0f25667e8be4a783c112634a9c7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32578,8 +32578,8 @@
     },
     {
       "path": "tests/operations/firestore-restore-cli.test.mjs",
-      "bytes": 3152,
-      "sha256": "57001e035bbb6c013b10bffee65ff2342d3918dedeb0cfde2ee520ce4b92c070",
+      "bytes": 4146,
+      "sha256": "0786963bf3b1131687eb1684cd9f6aabaea0086985027eb202fe96ff9f7e8a4e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35753,8 +35753,8 @@
     {
       "path": "docs/production-hardening.md",
       "extension": ".md",
-      "bytes": 6132,
-      "sha256": "aa68316be55963701cfe8596cea67b106b502ea1cd72e398ef83ead297f253d2"
+      "bytes": 7138,
+      "sha256": "4f774ef6a7d6f3d19d8bcef869ad7f20d8cc7191236fced080c3ff0afb764a24"
     },
     {
       "path": "docs/prueba-compra-real.md",
@@ -35771,8 +35771,8 @@
     {
       "path": "docs/recuperacion-firestore.md",
       "extension": ".md",
-      "bytes": 12127,
-      "sha256": "2788934e07e3fb224752031a52be7a17ac7c41a59606e3e318e5652aa4933d8f"
+      "bytes": 12277,
+      "sha256": "0fd371a097b95865a7ac2aac9a80a7a4763e1a829318b26e28ee71eb0eac7b03"
     },
     {
       "path": "docs/respaldo-recuperacion.md",
@@ -36197,8 +36197,8 @@
     {
       "path": "functions/configuracion-correo.md",
       "extension": ".md",
-      "bytes": 55715,
-      "sha256": "5938b80121bf3c4da9bf52c8b9ca6fdf094fbbb2ab630913d51761a39eca4186"
+      "bytes": 55713,
+      "sha256": "81b74680de6169af40dfb7c97d69853589384e403356f9733fd42d2b7fd5f24c"
     },
     {
       "path": "functions/configuracion-validacion-pedidos.md",
@@ -38897,8 +38897,8 @@
     {
       "path": "scripts/restore-firestore.mjs",
       "extension": ".mjs",
-      "bytes": 1594,
-      "sha256": "77027bb74f5e9e59a9065f09cf4b114bcb7fe3e2d1d25254cf9921e2d903c2b0"
+      "bytes": 2274,
+      "sha256": "a1deb30f5ceba24c57c60d60e953242802e0d0f25667e8be4a783c112634a9c7"
     },
     {
       "path": "scripts/resumir-auditoria-dependencias.mjs",
@@ -39359,8 +39359,8 @@
     {
       "path": "tests/operations/firestore-restore-cli.test.mjs",
       "extension": ".mjs",
-      "bytes": 3152,
-      "sha256": "57001e035bbb6c013b10bffee65ff2342d3918dedeb0cfde2ee520ce4b92c070"
+      "bytes": 4146,
+      "sha256": "0786963bf3b1131687eb1684cd9f6aabaea0086985027eb202fe96ff9f7e8a4e"
     },
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",

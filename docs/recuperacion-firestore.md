@@ -170,7 +170,9 @@ gcloud firestore export gs://tintin-accesorios-respaldos/$(date +%Y-%m-%d) \
 gcloud firestore operations list --project=tintin-accesorios
 gcloud storage ls gs://tintin-accesorios-respaldos/
 
-# Exportación de colecciones puntuales, si solo interesan esas
+# Exportación de colecciones puntuales, si solo interesan esas.
+# Solo una exportación hecha con --collection-ids permite después importar
+# colecciones sueltas; la copia diaria es completa y se importa entera.
 gcloud firestore export gs://tintin-accesorios-respaldos/$(date +%Y-%m-%d) \
   --project=tintin-accesorios \
   --collection-ids=orders,users,auditLog,emailLogs

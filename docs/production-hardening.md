@@ -53,9 +53,11 @@ Prueba de restauración **aislada** en una base de prueba que ya exista (no modi
 FIREBASE_PROJECT_ID=tintin-accesorios \
 FIRESTORE_RESTORE_DATABASE=restauracion-prueba \
 FIRESTORE_RESTORE_SOURCE=gs://bucket/ruta/snapshot \
-TINTIN_RESTORE_CONFIRM=RESTORE:tintin-accesorios \
+TINTIN_RESTORE_CONFIRM='RESTORE:tintin-accesorios:restauracion-prueba' \
 node scripts/restore-firestore.mjs
 ```
+
+La confirmación incluye la base de destino (`RESTORE:<proyecto>:<base>`). La de la base de prueba no autoriza restaurar `(default)`: si se copia este comando sin `FIRESTORE_RESTORE_DATABASE`, el script se bloquea en lugar de escribir en producción. El `--dry-run` muestra la confirmación exacta que corresponde.
 
 El comando espera a que termine `gcloud firestore import`. Verificar conteos y muestras antes de considerar recuperable el snapshot. **No crear ni restaurar automáticamente una base de prueba en CI.**
 
@@ -64,9 +66,11 @@ Restauración real de la base productiva `(default)` (solo durante un incidente 
 ```bash
 FIREBASE_PROJECT_ID=tintin-accesorios \
 FIRESTORE_RESTORE_SOURCE=gs://bucket/ruta/snapshot \
-TINTIN_RESTORE_CONFIRM=RESTORE:tintin-accesorios \
+TINTIN_RESTORE_CONFIRM='RESTORE:tintin-accesorios:(default)' \
 node scripts/restore-firestore.mjs
 ```
+
+**Alcance de la importación.** El respaldo diario es una exportación completa, así que la importación trae **todas** las colecciones: cada documento del snapshot reemplaza al actual con el mismo ID (pedidos, usuarios y stock incluidos) y los documentos creados después del snapshot quedan como están. Firestore no permite importar colecciones sueltas desde una exportación completa. Para recuperar solo una parte, importar en la base de prueba y copiar desde ahí lo necesario, o, si solo hace falta el catálogo, reimportar los productos desde una copia operativa descargada antes en el panel de administración (`js/admin/importacion-admin.js`).
 
 Antes de restaurar producción:
 
