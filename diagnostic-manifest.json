@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "47d4b4be495b9adde4605bd24d2235823e9a541904b85ffe696d71f80bee1c8d",
+  "sourceFingerprint": "2420efbb92c3d5814412c97171ac091374d0b84593dcbaf078176a9a56e6d66a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 888,
     "textFiles": 847,
-    "totalBytes": 17353679,
+    "totalBytes": 17353787,
     "pages": 19,
     "modules": 611
   },
@@ -26548,8 +26548,8 @@
     },
     {
       "path": "scripts/auditar-admin-correo-mensajeria.js",
-      "bytes": 9210,
-      "sha256": "2ea208cf29a6f5b77d5c56ec98d32d04c5f27d4c64dc4c2e7a90c0b10626a84a",
+      "bytes": 9228,
+      "sha256": "3b1e6c50bde29f7a1d79eabe028b93cdccfe4f1c41ba4e42d310c2e3ae241f28",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26568,7 +26568,7 @@
           "line": 51
         },
         {
-          "raw": "../../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-3-auth-persistence-20260919-1-auth-popup-resolver-1",
+          "raw": "../../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": null,
           "dynamic": false,
           "line": 58
@@ -26901,8 +26901,8 @@
     },
     {
       "path": "scripts/auditar-carrito-fase-7.js",
-      "bytes": 6751,
-      "sha256": "f0b3843be8326be9337175cb06fab7632eba41c11928589b4e0fe68ea897cb2c",
+      "bytes": 6769,
+      "sha256": "6ccd3b76f553229b35edd0d7870941eabc56c155664862cb00b06c8fef53e1dd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27323,15 +27323,15 @@
     },
     {
       "path": "scripts/auditar-correo-fase-3.js",
-      "bytes": 5235,
-      "sha256": "264fcf6d446a489bc985e8f242fc024bab51266ecd3d52636e6e2f574b038c42",
+      "bytes": 5253,
+      "sha256": "858626e523612cf70f311203231025d97c23b536b29922febfb83c9df3c29207",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./sincronizacion-correo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1",
+          "raw": "./sincronizacion-correo-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "scripts/sincronizacion-correo-admin.js",
           "dynamic": true,
           "line": 79
@@ -28164,15 +28164,15 @@
     },
     {
       "path": "scripts/auditar-imagenes-fase-5.js",
-      "bytes": 25513,
-      "sha256": "33bc62ee7aa2cd62afcac26c3f1f1f159ac6d2f902a1081d57d8bfa5a1e320ab",
+      "bytes": 25531,
+      "sha256": "41a33cfdd16583a89802fe333cd8fb3292306a6c6ec7c001d3fdbb63486cb0f4",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1",
+          "raw": "./imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "scripts/imagenes.js",
           "dynamic": false,
           "line": 199
@@ -28215,8 +28215,8 @@
     },
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
-      "bytes": 10288,
-      "sha256": "94c814ce17a5fe60c165fe3ff2946a68080fedfb53bcc52b335469ea80c72b9c",
+      "bytes": 10306,
+      "sha256": "13f9a8742ab81a01a4e93f6f1bf3485ddd93837f5aa8ed250ff4380b247e1904",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29178,8 +29178,8 @@
     },
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
-      "bytes": 19438,
-      "sha256": "8e8503d9093cf7f21357adc946993a77e506e0147b3def3a30c8440165f221bd",
+      "bytes": 19456,
+      "sha256": "b0bfe0e01d2e5f9c6685203f19d8aa120a97306b3bf6c2216269042d7e279339",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38105,8 +38105,8 @@
     {
       "path": "scripts/auditar-admin-correo-mensajeria.js",
       "extension": ".js",
-      "bytes": 9210,
-      "sha256": "2ea208cf29a6f5b77d5c56ec98d32d04c5f27d4c64dc4c2e7a90c0b10626a84a"
+      "bytes": 9228,
+      "sha256": "3b1e6c50bde29f7a1d79eabe028b93cdccfe4f1c41ba4e42d310c2e3ae241f28"
     },
     {
       "path": "scripts/auditar-admin-fundamentos.js",
@@ -38195,8 +38195,8 @@
     {
       "path": "scripts/auditar-carrito-fase-7.js",
       "extension": ".js",
-      "bytes": 6751,
-      "sha256": "f0b3843be8326be9337175cb06fab7632eba41c11928589b4e0fe68ea897cb2c"
+      "bytes": 6769,
+      "sha256": "6ccd3b76f553229b35edd0d7870941eabc56c155664862cb00b06c8fef53e1dd"
     },
     {
       "path": "scripts/auditar-catalogo-navegador-produccion.mjs",
@@ -38303,8 +38303,8 @@
     {
       "path": "scripts/auditar-correo-fase-3.js",
       "extension": ".js",
-      "bytes": 5235,
-      "sha256": "264fcf6d446a489bc985e8f242fc024bab51266ecd3d52636e6e2f574b038c42"
+      "bytes": 5253,
+      "sha256": "858626e523612cf70f311203231025d97c23b536b29922febfb83c9df3c29207"
     },
     {
       "path": "scripts/auditar-critico-recuperacion.js",
@@ -38495,14 +38495,14 @@
     {
       "path": "scripts/auditar-imagenes-fase-5.js",
       "extension": ".js",
-      "bytes": 25513,
-      "sha256": "33bc62ee7aa2cd62afcac26c3f1f1f159ac6d2f902a1081d57d8bfa5a1e320ab"
+      "bytes": 25531,
+      "sha256": "41a33cfdd16583a89802fe333cd8fb3292306a6c6ec7c001d3fdbb63486cb0f4"
     },
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
       "extension": ".js",
-      "bytes": 10288,
-      "sha256": "94c814ce17a5fe60c165fe3ff2946a68080fedfb53bcc52b335469ea80c72b9c"
+      "bytes": 10306,
+      "sha256": "13f9a8742ab81a01a4e93f6f1bf3485ddd93837f5aa8ed250ff4380b247e1904"
     },
     {
       "path": "scripts/auditar-inicio-pagina.js",
@@ -38747,8 +38747,8 @@
     {
       "path": "scripts/auditar-sitio-confiabilidad.js",
       "extension": ".js",
-      "bytes": 19438,
-      "sha256": "8e8503d9093cf7f21357adc946993a77e506e0147b3def3a30c8440165f221bd"
+      "bytes": 19456,
+      "sha256": "b0bfe0e01d2e5f9c6685203f19d8aa120a97306b3bf6c2216269042d7e279339"
     },
     {
       "path": "scripts/auditar-super-admin-responsive.mjs",
