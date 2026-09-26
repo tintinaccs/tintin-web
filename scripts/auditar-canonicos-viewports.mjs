@@ -159,8 +159,11 @@ async function inspect(page, width, pageInfo) {
   }, { width, pageInfo, shellExpected:expectsPublicShell(pageInfo) });
 }
 
-async function settleAuthRedirect(page, pageInfo, startUrl) {
-  if (!pageInfo.requiresAuth) return;
+// Las páginas con auth y las de redirección declarada (nosotros.html usa
+// meta refresh 0) navegan solas tras cargar; evaluarlas antes de que termine
+// esa navegación destruye el contexto de page.evaluate de forma intermitente.
+async function settleRedirect(page, pageInfo, startUrl) {
+  if (!pageInfo.requiresAuth && !pageInfo.redirectsTo) return;
   try { await page.waitForURL(url => url.toString() !== startUrl, { timeout:2200 }); await page.waitForLoadState('domcontentloaded', { timeout:3000 }).catch(() => {}); } catch {}
 }
 
@@ -169,7 +172,7 @@ async function navigateWithRetry(page, url, width, pageInfo) {
   for (let attempt = 1; attempt <= 2; attempt += 1) {
     try {
       await page.goto(url, { waitUntil:'domcontentloaded', timeout:8000 });
-      await settleAuthRedirect(page, pageInfo, page.url());
+      await settleRedirect(page, pageInfo, page.url());
       await prepare(page, width, pageInfo);
       return;
     } catch (error) { lastError = error; if (attempt < 2) await page.waitForTimeout(250); }
