@@ -43,6 +43,9 @@ test('dry-run muestra proyecto, base y snapshot sin ejecutar gcloud', () => {
   assert.equal(report.database, 'restauracion-prueba');
   assert.equal(report.source, 'gs://example-backups/snapshot-001');
   assert.equal(report.dryRun, true);
+  assert.equal(report.scope, 'all-collections');
+  assert.equal(report.overwritesSameIdDocuments, true);
+  assert.equal(report.requiredConfirmation, 'RESTORE:demo-tintin-restore:restauracion-prueba');
 });
 
 test('restauración rechaza origen incompleto o base inválida', () => {
@@ -58,12 +61,29 @@ test('sin confirmación explícita no invoca gcloud', () => {
   });
 });
 
+test('la confirmación de una base de prueba no autoriza restaurar (default)', () => {
+  withFakeGcloud(({ env, argsFile }) => {
+    const result = run([], { ...env, TINTIN_RESTORE_CONFIRM: 'RESTORE:demo-tintin-restore:restauracion-prueba' });
+    assert.equal(result.status, 3, result.stderr);
+    assert.match(result.stderr, /RESTORE:demo-tintin-restore:\(default\)/);
+    assert.equal(existsSync(argsFile), false);
+  });
+});
+
+test('la confirmación anterior sin base ya no autoriza ninguna restauración', () => {
+  withFakeGcloud(({ env, argsFile }) => {
+    const result = run([], { ...env, TINTIN_RESTORE_CONFIRM: 'RESTORE:demo-tintin-restore' });
+    assert.equal(result.status, 3, result.stderr);
+    assert.equal(existsSync(argsFile), false);
+  });
+});
+
 test('importa en base aislada y no pasa --async=false', () => {
   withFakeGcloud(({ env, argsFile }) => {
     const result = run([], {
       ...env,
       FIRESTORE_RESTORE_DATABASE: 'restauracion-prueba',
-      TINTIN_RESTORE_CONFIRM: 'RESTORE:demo-tintin-restore'
+      TINTIN_RESTORE_CONFIRM: 'RESTORE:demo-tintin-restore:restauracion-prueba'
     });
     assert.equal(result.status, 0, result.stderr);
     assert.deepEqual(readFileSync(argsFile, 'utf8').trim().split('\n'), [
@@ -75,7 +95,7 @@ test('importa en base aislada y no pasa --async=false', () => {
 
 test('un fallo de gcloud no se informa como restauración correcta', () => {
   withFakeGcloud(({ env }) => {
-    const result = run([], { ...env, GCLOUD_EXIT: '37', TINTIN_RESTORE_CONFIRM: 'RESTORE:demo-tintin-restore' });
+    const result = run([], { ...env, GCLOUD_EXIT: '37', TINTIN_RESTORE_CONFIRM: 'RESTORE:demo-tintin-restore:(default)' });
     assert.equal(result.status, 37);
   });
 });

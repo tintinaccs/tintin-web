@@ -1,6 +1,6 @@
-import { auth } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3';
+import { auth } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1';
 
 const HEALTH_URL = '/api/system-health';
 let mounted = false;
@@ -113,6 +113,7 @@ function renderMeta(payload) {
   const syncAvailable = sync.available === true;
   const queue = payload?.integrations?.catalogSheetQueue || null;
   const emailQueue = payload?.integrations?.orderEmailQueue || null;
+  const engagementQueue = payload?.integrations?.engagementSheetQueue || null;
   node.hidden = false;
   node.innerHTML = `
     <div class="adm-master-meta-item"><span>Commit desplegado</span><strong title="${escapeHtml(deployment.commitSha || '')}">${escapeHtml(shortSha(deployment.commitSha))}</strong></div>
@@ -122,6 +123,8 @@ function renderMeta(payload) {
     <div class="adm-master-meta-item"><span>Cola Sheets pendiente</span><strong>${escapeHtml(queue ? `${Number(queue.pendingCount ?? 0)} (dead-letter: ${Number(queue.deadLetterCount ?? 0)})` : 'no verificado')}</strong></div>
     <div class="adm-master-meta-item"><span>Tarea más antigua en cola</span><strong>${escapeHtml(queue ? formatAgeMs(queue.oldestPendingAgeMs) : '—')}</strong></div>
     <div class="adm-master-meta-item"><span>Último éxito de cola</span><strong>${escapeHtml(queue?.lastSuccessAt ? formatDate(queue.lastSuccessAt) : 'no verificado')}</strong></div>
+    <div class="adm-master-meta-item"><span>Cola Sheets reseñas/me gusta</span><strong>${escapeHtml(engagementQueue ? `${Number(engagementQueue.pendingCount ?? 0)} (dead-letter: ${Number(engagementQueue.deadLetterCount ?? 0)})` : 'no verificado')}</strong></div>
+    <div class="adm-master-meta-item"><span>Reseña/me gusta más antiguo en cola</span><strong>${escapeHtml(engagementQueue ? formatAgeMs(engagementQueue.oldestPendingAgeMs) : '—')}</strong></div>
     <div class="adm-master-meta-item"><span>Cola de correos pendiente</span><strong>${escapeHtml(emailQueue ? `${Number(emailQueue.pendingCount ?? 0)} (dead-letter: ${Number(emailQueue.deadLetterCount ?? 0)})` : 'no verificado')}</strong></div>
     <div class="adm-master-meta-item"><span>Tarea más antigua en cola de correos</span><strong>${escapeHtml(emailQueue ? formatAgeMs(emailQueue.oldestPendingAgeMs) : '—')}</strong></div>
     <div class="adm-master-meta-item"><span>Último éxito de reintento de correo</span><strong>${escapeHtml(emailQueue?.lastSuccessAt ? formatDate(emailQueue.lastSuccessAt) : 'no verificado')}</strong></div>`;

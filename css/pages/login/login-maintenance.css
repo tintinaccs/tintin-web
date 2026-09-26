@@ -5,7 +5,7 @@ body:has(.login-page) {
   --login-brand: #CA0169;
   --login-brand-deep: #A00055;
   --login-copy: #8A2756;
-  --login-muted: #A85B7C;
+  --login-muted: #A35576; /* #A85B7C quedaba en 4.48:1 sobre el fondo del login */
   --login-soft: #FFF0F7;
   --login-border: #F1BDD4;
   --header-h: 0px;

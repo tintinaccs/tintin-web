@@ -1,11 +1,11 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1';
 import { collection, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1';
 import {
   CONTENT_PAGE_IDS, getNested, getPageDefaults, getPageSchema,
   mergeContent, sanitizeContentHref, setNested,
-} from '../../core/store/esquema-contenido.js?v=tintin-20260826-carousel-order-3';
+} from '../../core/store/esquema-contenido.js?v=tintin-20260925-cache-converge-1';
 import { chooseRandomPreviewProduct, productPreviewTarget } from './preview-dynamic-targets.js?v=tintin-20260812-preview-dinamico-1';
 import { installWorkspaceSplitters } from './workspace-splitters.js?v=tintin-20260813-apariencia-splitters-1';
 

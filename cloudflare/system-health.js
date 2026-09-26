@@ -9,6 +9,7 @@ import {
 } from './sheets-sync-config.js';
 import { getCatalogSheetSyncQueueStatus } from './resiliencia-sync-catalogo.js';
 import { getOrderEmailQueueStatus } from './resiliencia-correo-pedido.js';
+import { getEngagementSheetSyncQueueStatus } from './resiliencia-sync-participacion.js';
 import { fetchAppsScript } from './apps-script-fetch.js';
 import { paypalConfig } from './paypal-seguro.js';
 
@@ -99,6 +100,7 @@ export async function runSystemHealth(env, {
   sheetsProbe = probeAppsScript,
   catalogSheetQueueStatus = getCatalogSheetSyncQueueStatus,
   orderEmailQueueStatus = getOrderEmailQueueStatus,
+  engagementSheetQueueStatus = getEngagementSheetSyncQueueStatus,
 } = {}) {
   const missingConfig = REQUIRED_CONFIG.filter(key => !configured(env, key));
   let runtimeReport = null;
@@ -123,6 +125,14 @@ export async function runSystemHealth(env, {
       orderEmailQueue = await orderEmailQueueStatus(env);
     } catch (error) {
       console.error('[system-health] Estado de orderEmailQueue no disponible:', error?.message || error);
+    }
+  }
+  let engagementSheetQueue = null;
+  if (!missingConfig.includes('FIREBASE_SERVICE_ACCOUNT_KEY')) {
+    try {
+      engagementSheetQueue = await engagementSheetQueueStatus(env);
+    } catch (error) {
+      console.error('[system-health] Estado de engagementSheetSyncQueue no disponible:', error?.message || error);
     }
   }
 
@@ -154,6 +164,7 @@ export async function runSystemHealth(env, {
     appsScript: sheets,
     catalogSheetQueue,
     orderEmailQueue,
+    engagementSheetQueue,
   };
   const ok = missingConfig.length === 0 && runtimeReport?.ok === true && integrations.sheets === true;
 

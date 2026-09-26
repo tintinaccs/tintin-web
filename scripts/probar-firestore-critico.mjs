@@ -5,6 +5,8 @@ import {
   assertSucceeds
 } from '@firebase/rules-unit-testing';
 import {
+  addDoc,
+  collection,
   deleteDoc,
   doc,
   getDoc,
@@ -27,7 +29,8 @@ const claims = {
   agent1: { email: 'agent@example.com', email_verified: true },
   viewer1: { email: 'viewer@example.com', email_verified: true },
   super1: { email: 'tintinaccs@gmail.com', email_verified: true },
-  superCase: { email: 'TintinAccs@Gmail.com', email_verified: true }
+  superCase: { email: 'TintinAccs@Gmail.com', email_verified: true },
+  blocked1: { email: 'bloqueada@example.com', email_verified: true }
 };
 
 async function seed() {
@@ -68,6 +71,9 @@ async function seed() {
     });
     await setDoc(doc(db, 'users', 'superCase'), {
       email: claims.superCase.email, role: 'superadmin', blocked: false, name: 'Super Admin Case'
+    });
+    await setDoc(doc(db, 'users', 'blocked1'), {
+      email: claims.blocked1.email, role: 'client', blocked: true, name: 'Bloqueada'
     });
     await setDoc(doc(db, 'rolePermissions', 'main'), {
       admin: {
@@ -277,6 +283,40 @@ try {
   await succeeds(deleteDoc(doc(superCaseDb, 'orderTrash', 'super_case_trash_test')));
   await succeeds(deleteDoc(doc(superDb, 'orders', 'client2_order1')));
   await fails(deleteDoc(doc(superDb, 'users', 'super1')));
+
+  // authDiagnosticFailures: sólo altas con forma fija desde admin-guard, sin
+  // datos personales; nadie edita ni borra y sólo Super Admin lee.
+  const authFailure = {
+    code: 'REDIRECT_LOOP_BROKEN',
+    reason: 'handoff-recovery-timeout',
+    source: 'admin-guard',
+    route: '/admin.html',
+    userAgent: 'test-agent',
+    createdAt: serverTimestamp()
+  };
+  await succeeds(addDoc(collection(anon, 'authDiagnosticFailures'), authFailure));
+  await succeeds(addDoc(collection(anon, 'authDiagnosticFailures'), { ...authFailure, reason: 'auth-restore-fallback' }));
+  await succeeds(addDoc(collection(client1, 'authDiagnosticFailures'), { ...authFailure, reason: 'handoff-restore-error' }));
+  const { userAgent: _omitUserAgent, ...authFailureNoAgent } = authFailure;
+  await succeeds(addDoc(collection(anon, 'authDiagnosticFailures'), authFailureNoAgent));
+  await fails(addDoc(collection(anon, 'authDiagnosticFailures'), { ...authFailure, reason: 'auth-state-unknown' }));
+  await fails(addDoc(collection(anon, 'authDiagnosticFailures'), { ...authFailure, reason: 'cualquier-texto' }));
+  await fails(addDoc(collection(anon, 'authDiagnosticFailures'), { ...authFailure, code: 'OTRO_CODIGO' }));
+  await fails(addDoc(collection(anon, 'authDiagnosticFailures'), { ...authFailure, source: 'otra-fuente' }));
+  await fails(addDoc(collection(anon, 'authDiagnosticFailures'), { ...authFailure, uid: 'client1' }));
+  await fails(addDoc(collection(anon, 'authDiagnosticFailures'), { ...authFailure, route: 'x'.repeat(221) }));
+  await fails(addDoc(collection(anon, 'authDiagnosticFailures'), { ...authFailure, userAgent: 'x'.repeat(201) }));
+  await fails(addDoc(collection(anon, 'authDiagnosticFailures'), { ...authFailure, createdAt: new Date() }));
+  await fails(addDoc(collection(ctx('blocked1'), 'authDiagnosticFailures'), authFailure));
+  await succeeds(setDoc(doc(anon, 'authDiagnosticFailures', 'fixed_event'), authFailure));
+  await fails(getDoc(doc(anon, 'authDiagnosticFailures', 'fixed_event')));
+  await fails(getDoc(doc(client1, 'authDiagnosticFailures', 'fixed_event')));
+  await fails(getDoc(doc(admin, 'authDiagnosticFailures', 'fixed_event')));
+  await succeeds(getDoc(doc(superDb, 'authDiagnosticFailures', 'fixed_event')));
+  await fails(updateDoc(doc(anon, 'authDiagnosticFailures', 'fixed_event'), { reason: 'auth-restore-fallback' }));
+  await fails(updateDoc(doc(superDb, 'authDiagnosticFailures', 'fixed_event'), { reason: 'auth-restore-fallback' }));
+  await fails(deleteDoc(doc(anon, 'authDiagnosticFailures', 'fixed_event')));
+  await fails(deleteDoc(doc(superDb, 'authDiagnosticFailures', 'fixed_event')));
 
   console.log('Reglas Fase 6: ' + checks + ' ataques/controles verificados.');
 } finally {

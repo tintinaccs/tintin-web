@@ -5,11 +5,12 @@
    Se inserta solo en admin.html y solo para la cuenta Super Admin real.
    ============================================================= */
 
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1-auth-popup-resolver-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1';
 import { collection, doc, getDoc, setDoc, serverTimestamp, writeBatch } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
-import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=tintin-20260716-cloudinary-fix-1';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1';
+import { getDocsPaginated } from '../../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';
 import {
   defaultWelcomeSteps,
   normalizeWelcomeConfig,
@@ -54,6 +55,8 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
   }
 
   function toast(msg, duration = 2800) {
+    // Avisos centrales del panel (apilados, sin taparse); el resto es respaldo.
+    if (window.toast?.__tintinOps) { window.toast(msg, duration); return; }
     const el = document.getElementById('adm-toast');
     if (!el) { console.log('[Welcome]', msg); return; }
     el.textContent = msg;
@@ -399,6 +402,11 @@ const REF = doc(db, 'settings', 'welcomeTutorial');
   async function boot(user) {
     if (!user || String(user.email || '').toLowerCase() !== SUPER_ADMIN) return;
     injectStyles(); ensureNav(); ensureSection(); wireNavigation();
+    if (!await waitForAdminAppCheck(12000)) {
+      const section = document.getElementById('section-welcome');
+      if (section) section.innerHTML = '<div class="adm-empty">La verificación de seguridad todavía no está disponible. El módulo se cargará al reintentar cuando App Check esté listo.</div>';
+      return;
+    }
     try { await loadConfig(); render(); }
     catch (e) { console.error('[admin-welcome-control] No se pudo cargar configuración:', e); const section = document.getElementById('section-welcome'); if (section) section.innerHTML = '<div class="adm-empty">No se pudo cargar el módulo de bienvenida.</div>'; }
   }

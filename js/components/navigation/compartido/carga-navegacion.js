@@ -1,5 +1,5 @@
 import { currentPage } from './estado-ruta.js?v=tintin-20260916-final-production-stability-state-1';
-import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260921-document-navigation-no-view-transition-3';
+import { versionedJsModule, versionedSiteAsset } from './configuracion.js?v=tintin-20260925-cache-converge-1';
 
 let productsRuntimePromise = null;
 let authRuntimePromise = null;
@@ -13,7 +13,7 @@ const NOTIFICATION_TRIGGER_SELECTOR = '[data-nav-action="notifications"],#tabbar
 const IS_VISUAL_PREVIEW_FRAME = new URLSearchParams(window.location.search).get('ttVisualPreview') === '1'
   && window.parent !== window;
 // Debe compartir identidad con los imports estáticos de catálogo/checkout.
-const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1';
+const CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1';
 
 function reportRuntimeFailures(results) {
   const failed = results.filter(result => result.status === 'rejected');
@@ -116,7 +116,7 @@ export function loadProductsRuntime({ forSearch = false } = {}) {
 function loadAuthRuntime() {
   if (IS_VISUAL_PREVIEW_FRAME) return Promise.resolve(null);
   if (!authRuntimePromise) {
-    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20260923-auth-preview-isolation-1').catch(error => {
+    authRuntimePromise = import('../../../core/auth/navegacion-autenticacion.js?v=tintin-20260923-auth-preview-isolation-1-auth-popup-resolver-1').catch(error => {
       authRuntimePromise = null;
       throw error;
     });
@@ -264,7 +264,7 @@ function loadNavigationBehaviors() {
     .then(() => Promise.allSettled([
       initialSurfacePromise,
       import(versionedJsModule('components/navigation/compartido/enrutador.js')),
-      import('./control-busqueda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1'),
+      import('./control-busqueda.js?v=tintin-20260925-cache-converge-1'),
     ]))
     .then(results => {
       reportRuntimeFailures(results);

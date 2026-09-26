@@ -88,3 +88,143 @@ try {
 for (const result of results) console.log(`${result.ok ? 'OK' : 'FAIL'} — Admin responsive ${result.width}x${result.height}${result.issues.length ? ` · ${result.issues.join('; ')}` : ''}`);
 if (results.some(result => !result.ok)) process.exit(1);
 console.log(`\nResponsive Super Admin: CORRECTO · ${results.length}/${results.length} viewports.`);
+
+
+// Shell real del panel: sidebar/topbar/content. Esta segunda matriz evita que
+// una regla responsive posterior vuelva a pisar otra sin que el fixture de
+// tablas de comercio lo detecte.
+const adminShellCss = fs.readFileSync(path.join(root, 'css/admin/admin.css'), 'utf8');
+const sidebarRuntime = fs.readFileSync(path.join(root, 'js/admin/sidebar-expandible-admin.js'), 'utf8');
+const shellViewports = [
+  [1920, 1080], [1440, 900], [1280, 800], [1024, 768], [901, 768],
+  [900, 900], [820, 1180], [768, 1024], [600, 900], [541, 900],
+  [540, 900], [430, 932], [390, 844], [375, 812], [360, 800], [320, 720]
+];
+
+const shellFixture = `<!doctype html><html class="adm-auth-ready"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;max-width:100%;overflow-x:hidden}
+:root{--admin-color-background-sidebar:#fff;--admin-color-background-sidebar-active:#FDECF2;--admin-color-text-sidebar:#2B2B2B;--admin-color-background-page:#FFF6FA;--admin-color-background-surface:#fff;--admin-color-brand:#AD3F67;--admin-color-text-primary:#2B2B2B;--admin-color-text-secondary:#7B6F72;--admin-color-text-title:#2B2B2B;--admin-color-border:#F1E4E7;--admin-color-table-row-hover:#FFF9FC;--rose:#8B2642}
+.adm-notifications-button{width:46px;height:46px;border:0;border-radius:50%}
+</style><style>${adminShellCss}</style></head><body>
+<div class="adm-overlay" id="adm-overlay"></div>
+<aside class="adm-sidebar" id="adm-sidebar">
+  <div class="adm-sidebar-logo"><div class="adm-sidebar-logo-text">TINTIN</div><div class="adm-sidebar-logo-sub">Panel de administración</div><button class="adm-sidebar-toggle" id="adm-sidebar-toggle" type="button" aria-pressed="false">‹</button></div>
+  <div class="adm-user-info"><div class="adm-user-avatar">TT</div><div><div class="adm-user-name">Tintin Accesorios y Relojes</div><span class="adm-user-role-badge role-superadmin">SUPER ADMIN</span><div class="adm-live-clock">24/09/2026 · 14:30</div></div></div>
+  <nav class="adm-nav">${Array.from({length:12},(_,i)=>`<button class="adm-nav-item${i===2?' active':''}" type="button"><span class="adm-nav-icon">◆</span><span>Sección ${i+1}</span></button>`).join('')}</nav>
+</aside>
+<main class="adm-main">
+  <header class="adm-topbar">
+    <button class="adm-hamburger" id="adm-hamburger" type="button" aria-label="Abrir menú de módulos" aria-controls="adm-sidebar" aria-expanded="false">☰</button>
+    <div class="adm-topbar-title">Productos</div>
+    <div class="adm-topbar-actions"><div class="adm-notifications-wrap"><button class="adm-notifications-button" type="button">○</button></div><a class="adm-topbar-btn" href="#">+ Nuevo pedido</a></div>
+  </header>
+  <div class="adm-content"><section class="adm-section active"><div class="adm-card"><div class="adm-card-body"><h1>Productos</h1><p>Contenido del panel sin superposición.</p></div></div></section></div>
+</main>
+<nav class="adm-mobile-tabs" id="adm-mobile-tabs"><button class="adm-mobile-tab" data-mobile-primary>Inicio</button><button class="adm-mobile-tab" data-mobile-primary>Productos</button><button class="adm-mobile-tab" id="adm-mobile-more-toggle">Más</button></nav>
+</body></html>`;
+
+const shellBrowser = await chromium.launch({ headless: true, ...(process.env.PLAYWRIGHT_EXECUTABLE_PATH ? { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH } : {}) });
+const shellResults = [];
+try {
+  for (const [width, height] of shellViewports) {
+    const context = await shellBrowser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' });
+    const page = await context.newPage();
+    await page.setContent(shellFixture, { waitUntil: 'load' });
+    await page.addScriptTag({ content: sidebarRuntime });
+    const toggle = page.locator('#adm-sidebar-toggle');
+    let toggleState = null;
+    if (width > 540) {
+      const target = await toggle.boundingBox();
+      await toggle.click();
+      await page.waitForTimeout(250);
+      const toggledWidth = await page.locator('.adm-sidebar').evaluate(element => element.getBoundingClientRect().width);
+      const toggledClass = await page.evaluate(() => document.documentElement.classList.contains('adm-sidebar-is-collapsed'));
+      const toggledNavDirection = await page.locator('.adm-nav-item').first().evaluate(element => getComputedStyle(element).flexDirection);
+      const brandFontSize = await page.locator('.adm-sidebar-logo-text').evaluate(element => Number.parseFloat(getComputedStyle(element).fontSize));
+      await toggle.click();
+      await page.waitForTimeout(250);
+      toggleState = { targetWidth: target?.width || 0, targetHeight: target?.height || 0, toggledWidth, toggledClass, toggledNavDirection, brandFontSize };
+    } else {
+      const hamburger = page.locator('#adm-hamburger');
+      const target = await hamburger.boundingBox();
+      await hamburger.click();
+      await page.waitForTimeout(250);
+      const open = await page.evaluate(() => ({
+        sidebarVisible: getComputedStyle(document.querySelector('.adm-sidebar')).visibility,
+        sidebarWidth: document.querySelector('.adm-sidebar').getBoundingClientRect().width,
+        overlayDisplay: getComputedStyle(document.querySelector('.adm-overlay')).display,
+        navDirection: getComputedStyle(document.querySelector('.adm-nav-item')).flexDirection,
+        brandFontSize: Number.parseFloat(getComputedStyle(document.querySelector('.adm-sidebar-logo-text')).fontSize),
+        expanded: document.querySelector('#adm-hamburger').getAttribute('aria-expanded'),
+      }));
+      await toggle.click();
+      await page.waitForTimeout(250);
+      toggleState = { targetWidth: target?.width || 0, targetHeight: target?.height || 0, open };
+    }
+    const state = await page.evaluate(() => {
+      const box = selector => document.querySelector(selector)?.getBoundingClientRect() || null;
+      const sidebar = document.querySelector('.adm-sidebar');
+      const tabs = document.querySelector('.adm-mobile-tabs');
+      const main = box('.adm-main');
+      const side = box('.adm-sidebar');
+      const logo = box('.adm-sidebar-logo');
+      const user = box('.adm-user-info');
+      const title = box('.adm-topbar-title');
+      const actions = box('.adm-topbar-actions');
+      return {
+        docWidth: document.documentElement.scrollWidth,
+        bodyWidth: document.body.scrollWidth,
+        sidebarDisplay: sidebar ? getComputedStyle(sidebar).display : 'missing',
+        sidebarVisibility: sidebar ? getComputedStyle(sidebar).visibility : 'missing',
+        sidebarWidth: side?.width || 0,
+        mainLeft: main?.left || 0,
+        mobileTabsDisplay: tabs ? getComputedStyle(tabs).display : 'missing',
+        logoBottom: logo?.bottom || 0,
+        userTop: user?.top || 0,
+        titleRight: title?.right || 0,
+        titleLeft: title?.left || 0,
+        actionsLeft: actions?.left || 0,
+        actionsRight: actions?.right || 0,
+      };
+    });
+    const issues = [];
+    if (state.docWidth > width + 2 || state.bodyWidth > width + 2) issues.push(`overflow global ${state.docWidth}/${state.bodyWidth} > ${width}`);
+    if (width > 900) {
+      if (Math.abs((toggleState?.toggledWidth || 0) - 74) > 2 || !toggleState?.toggledClass) issues.push(`botón desktop no contrae: ${toggleState?.toggledWidth}px`);
+      if (toggleState?.targetWidth < 34 || toggleState?.targetHeight < 44) issues.push('botón desktop demasiado pequeño');
+      if (Math.abs(state.sidebarWidth - 260) > 2) issues.push(`sidebar desktop ${state.sidebarWidth}px, esperado 260px`);
+      if (state.mainLeft < 258) issues.push(`main desktop invade sidebar: left=${state.mainLeft}`);
+      if (state.mobileTabsDisplay !== 'none') issues.push('tabs móviles visibles en desktop');
+    } else if (width >= 541) {
+      if ((toggleState?.targetWidth || 0) < 44 || (toggleState?.targetHeight || 0) < 44) issues.push(`botón tablet menor que 44×44px: ${toggleState?.targetWidth}×${toggleState?.targetHeight}`);
+      if (Math.abs((toggleState?.toggledWidth || 0) - 260) > 2 || toggleState?.toggledClass) issues.push(`barra tablet no expande a 260px: ${toggleState?.toggledWidth}`);
+      if (toggleState?.toggledNavDirection !== 'row') issues.push(`menú tablet expandido conserva formato compacto: ${toggleState?.toggledNavDirection}`);
+      if ((toggleState?.brandFontSize || 0) < 13) issues.push('marca tablet expandida queda comprimida');
+      if (Math.abs(state.sidebarWidth - 84) > 2) issues.push(`rail tablet ${state.sidebarWidth}px, esperado 84px`);
+      if (state.mainLeft < 82) issues.push(`main tablet invade rail: left=${state.mainLeft}`);
+      if (state.logoBottom > state.userTop + 1) issues.push(`logo y usuario se pisan: ${state.logoBottom} > ${state.userTop}`);
+      if (state.mobileTabsDisplay !== 'none') issues.push('tabs móviles visibles en tablet');
+    } else {
+      if ((toggleState?.targetWidth || 0) < 44 || (toggleState?.targetHeight || 0) < 44) issues.push('botón móvil menor que 44×44px');
+      if (toggleState?.open?.sidebarVisible !== 'visible' || toggleState?.open?.expanded !== 'true') issues.push('menú móvil no abre');
+      if (toggleState?.open?.sidebarWidth > width - 46) issues.push(`menú móvil demasiado ancho: ${toggleState?.open?.sidebarWidth}px`);
+      if (toggleState?.open?.overlayDisplay === 'none') issues.push('menú móvil sin fondo de cierre');
+      if (toggleState?.open?.navDirection !== 'row') issues.push(`menú móvil conserva formato compacto: ${toggleState?.open?.navDirection}`);
+      if ((toggleState?.open?.brandFontSize || 0) < 13) issues.push('marca móvil queda comprimida');
+      if (state.sidebarVisibility !== 'hidden') issues.push(`menú móvil no cierra: ${state.sidebarVisibility}`);
+      if (Math.abs(state.mainLeft) > 1) issues.push(`main mobile desplazado: left=${state.mainLeft}`);
+      if (state.mobileTabsDisplay === 'none') issues.push('tabs móviles ocultas');
+    }
+    if (state.titleRight > state.actionsLeft + 1 && state.titleLeft < state.actionsRight - 1) {
+      issues.push(`título y acciones se superponen: titleRight=${state.titleRight}, actionsLeft=${state.actionsLeft}`);
+    }
+    shellResults.push({ width, height, state, issues, ok: issues.length === 0 });
+    await context.close();
+  }
+} finally {
+  await shellBrowser.close();
+}
+
+for (const result of shellResults) console.log(`${result.ok ? 'OK' : 'FAIL'} — Admin shell ${result.width}x${result.height}${result.issues.length ? ` · ${result.issues.join('; ')}` : ''}`);
+if (shellResults.some(result => !result.ok)) process.exit(1);
+console.log(`\nShell responsive Super Admin: CORRECTO · ${shellResults.length}/${shellResults.length} viewports.`);

@@ -32,7 +32,8 @@ body.tt-home-premium .tt-collection-carousel .tt-collection-carousel__heading .t
 }
 
 body.tt-home-premium .tt-collection-carousel .tt-collection-carousel__description {
-  color: #c66b8c !important;
+  /* #c66b8c daba 3.3:1 sobre #fff2f6; este tono de la misma familia da 4.7:1. */
+  color: #a35576 !important;
   font-size: clamp(0.58rem, 0.63vw, 0.72rem);
   font-weight: 700;
   letter-spacing: 0.16em;

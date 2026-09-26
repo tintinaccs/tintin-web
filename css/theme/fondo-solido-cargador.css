@@ -102,14 +102,18 @@ html body #tt-loader-brand-subtitle {
 }
 
 /* El cargador usa una sola marca blanca, sin corazones decorativos ni tonos
-   rosas mezclados: así conserva contraste sobre el fondo de marca en cada
-   página y en todos los tamaños. */
+   rosas mezclados. */
 html body #tt-loader-wordmark,
-html body #tt-loader-wordmark .tt-loader-wordmark-i,
+html body #tt-loader-wordmark .tt-loader-wordmark-i {
+  color: #fff !important;
+}
+
+/* Los textos que hay que leer (sección y mensajes de estado) van en gris
+   oscuro: blanco sobre #F7BFD3 da 1.57:1; #2b2b2b da 9:1 (WCAG AA). */
 html body #tt-loader-brand-subtitle,
 html body #tt-loader-title,
 html body #tt-loader-subtitle {
-  color: #fff !important;
+  color: #2b2b2b !important;
 }
 
 html body #tt-loader-wordmark .tt-loader-wordmark-i::before,

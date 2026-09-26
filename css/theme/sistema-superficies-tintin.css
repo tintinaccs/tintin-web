@@ -129,9 +129,11 @@ html body:not(:has(.adm-main)) :is(
   letter-spacing: .01em;
 }
 
+/* .login-google queda fuera: login-maintenance.css lo define blanco con texto
+   de marca (y la G en su caja); pintarlo rosa dejaba la etiqueta en 1.6:1. */
 html body:not(:has(.adm-main)) :is(
   .tt-btn, .tt-btn-primary-full, .tt-cart-checkout-btn,
-  .login-email-btn, .login-google, .ck-btn
+  .login-email-btn, .ck-btn
 ):not(.tt-btn-outline):not(.tt-btn-outline-full) {
   background: var(--tt-ui-pink) !important;
   border-color: var(--tt-ui-pink) !important;
@@ -148,7 +150,7 @@ html body:has(.adm-main) .adm-sidebar {
   background: #fff !important;
   border-right: 1px solid #efd6e1 !important;
   box-shadow: 10px 0 28px rgba(125, 38, 77, .06) !important;
-  z-index: 20;
+  z-index: 300 !important;
 }
 
 html body:has(.adm-main) .adm-sidebar-logo {
@@ -173,6 +175,7 @@ html body:has(.adm-main) .adm-topbar {
   background: #fff !important;
   border-bottom: 1px solid #efd6e1 !important;
   box-shadow: 0 5px 20px rgba(125, 38, 77, .05);
+  z-index: 200;
 }
 
 html body:has(.adm-main) .adm-content {

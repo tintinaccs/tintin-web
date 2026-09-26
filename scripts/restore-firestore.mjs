@@ -14,15 +14,32 @@ if (!database || !/^(?:\(default\)|[a-z][a-z0-9-]{3,61}[a-z0-9])$/.test(database
   console.error('FIRESTORE_RESTORE_DATABASE debe ser (default) o un ID de base válido.');
   process.exit(2);
 }
-if (!dryRun && confirmation !== `RESTORE:${project}`) {
-  console.error(`Restauración bloqueada. Define TINTIN_RESTORE_CONFIRM=RESTORE:${project}`);
+// La confirmación nombra también la base de destino. Con la misma frase para
+// todas las bases, un comando de prueba copiado sin FIRESTORE_RESTORE_DATABASE
+// caía en (default) y sobrescribía producción con la confirmación del ensayo.
+const requiredConfirmation = `RESTORE:${project}:${database}`;
+if (!dryRun && confirmation !== requiredConfirmation) {
+  console.error(`Restauración bloqueada. Define TINTIN_RESTORE_CONFIRM='${requiredConfirmation}'`);
   process.exit(3);
 }
 
 // gcloud firestore import espera a que termine por defecto. --async es un flag
 // sin valor: --async=false no es válido y bloqueaba la restauración.
 const args = ['firestore', 'import', source, '--project', project, `--database=${database}`];
-console.log(JSON.stringify({ operation: 'restore', project, database, source, dryRun }, null, 2));
+// La copia diaria es una exportación completa: se importan todas las
+// colecciones y cada documento con el mismo ID vuelve al estado del snapshot
+// (pedidos y usuarios incluidos). Firestore no permite importar colecciones
+// sueltas desde una exportación completa.
+console.log(JSON.stringify({
+  operation: 'restore',
+  project,
+  database,
+  source,
+  scope: 'all-collections',
+  overwritesSameIdDocuments: true,
+  requiredConfirmation,
+  dryRun
+}, null, 2));
 if (dryRun) process.exit(0);
 
 const result = spawnSync('gcloud', args, { stdio: 'inherit', shell: false });

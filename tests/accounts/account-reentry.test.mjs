@@ -18,7 +18,9 @@ test('un nuevo registro reclama solo el historial comercial por ID token y hash 
 
 test('el perfil eliminado no se reactiva desde el panel: vuelve por un registro nuevo', () => {
   const admin = read('js/admin/admin-app.js');
-  assert.match(admin, /deben registrarse otra vez con un perfil nuevo/);
+  assert.match(admin, /debe registrarse nuevamente/);
+  assert.match(admin, /userStatusFilter === 'deleted'[\s\S]*?no se reactivan/);
+  assert.match(read('login.html'), /Si figura como Eliminada, registrate nuevamente con el mismo correo/);
   assert.doesNotMatch(admin, /onclick="window\.restoreUser\(\$\{uidArg\}\)">Reactivar/);
   assert.match(admin, /bulkDeleteUsers/);
   assert.match(admin, /toggleSelectAllUsers/);
@@ -33,4 +35,8 @@ test('la barra lateral compacta se conserva, se expande en hover y no mueve el c
   assert.match(css, /adm-sidebar-is-collapsed/);
   assert.match(css, /\.adm-sidebar:hover/);
   assert.match(css, /--sidebar-w: 76px/);
+  assert.match(css, /@media \(min-width: 541px\) and \(max-width: 900px\)[\s\S]*?\.adm-sidebar-toggle\s*\{\s*display:\s*grid;/);
+  assert.match(css, /html:not\(\.adm-sidebar-is-collapsed\) body:has\(\.adm-main\) \.adm-sidebar \{[\s\S]*?width: 260px/);
+  assert.match(runtime, /savedPreference === null \? tabletLayout/);
+  assert.match(runtime, /matchMedia\?\.\('\(min-width: 541px\) and \(max-width: 900px\)'\)/);
 });

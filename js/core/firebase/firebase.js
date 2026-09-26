@@ -4,7 +4,7 @@
 
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getAuth, initializeAuth, GoogleAuthProvider, browserPopupRedirectResolver, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
   initializeAppCheck,
   ReCaptchaEnterpriseProvider,
@@ -122,7 +122,27 @@ window.TintinAppCheckReady = appCheckReady;
 // no depende de IndexedDB para nada, así que no tiene ese riesgo.
 const db = getFirestore(app);
 
-const auth = getAuth(app);
+// getAuth() inicia la restauraciÃ³n con la persistencia por defecto antes de
+// que setPersistence() pueda terminar. En un documento con una sesiÃ³n
+// existente eso abrÃ­a una ventana de carrera: Firebase emitÃ­a al usuario,
+// migraba/rehidrataba el backend y unos segundos despuÃ©s emitÃ­a null aunque
+// accounts:lookup acabara de validar la misma cuenta. Inicializar Auth con la
+// persistencia elegida elimina esa segunda restauraciÃ³n.
+let auth;
+let persistenceWasConfiguredAtInitialization = false;
+try {
+  auth = initializeAuth(app, {
+    persistence: browserLocalPersistence,
+    popupRedirectResolver: browserPopupRedirectResolver
+  });
+  persistenceWasConfiguredAtInitialization = true;
+} catch (error) {
+  // Otro importador puede haber inicializado Auth antes que este mÃ³dulo. En
+  // ese caso conservamos el objeto existente y aplicamos el fallback legado
+  // una sola vez; no se reemplaza ni se borra la sesiÃ³n en memoria.
+  if (error?.code !== 'auth/already-initialized') throw error;
+  auth = getAuth(app);
+}
 // La sesión sobrevive al cierre, duplicado y reapertura de pestañas gracias a
 // la jerarquía de persistencia por defecto del SDK (indexedDB primero). Fijar
 // explícitamente setPersistence debe coordinarse una sola vez por documento,
@@ -203,7 +223,9 @@ export async function inspectAuthPersistenceStorage() {
 
 const AUTH_PERSISTENCE_PROMISE_KEY = '__TINTIN_AUTH_PERSISTENCE_READY__';
 const configuredPersistence = window[AUTH_PERSISTENCE_PROMISE_KEY] || (window[AUTH_PERSISTENCE_PROMISE_KEY] =
-  setPersistence(auth, browserLocalPersistence)
+  (persistenceWasConfiguredAtInitialization
+    ? Promise.resolve(true)
+    : setPersistence(auth, browserLocalPersistence))
     .catch(error => {
       console.warn('[firebase-auth] No se pudo establecer persistencia local; se usa la de pestaña:', error?.code || error);
       return setPersistence(auth, browserSessionPersistence);

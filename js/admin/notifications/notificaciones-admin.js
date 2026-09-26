@@ -1,11 +1,12 @@
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1-auth-popup-resolver-1';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1';
 import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-const ASSET_VERSION = 'tintin-20260831-notifications-auto-read-1';
+const ASSET_VERSION = 'tintin-20260925-cache-converge-notifications-auto-read-1';
 const PROFILE_AVATAR_FALLBACK = '/assets-tintin/images/general/logo.png';
 const ORDER_RECOVERY_WINDOW_MS = 2 * 60 * 60 * 1000;
 const ORDER_NOTIFY_RETRY_DELAYS_MS = [700, 1800];
@@ -97,8 +98,9 @@ function ensureUi() {
       <div class="adm-notifications-header"><div><span class="adm-notifications-kicker">Actividad en vivo</span><h3>Notificaciones</h3></div><span class="adm-notifications-auto-read">Al abrir, las novedades quedan vistas</span></div>
       <div class="adm-notifications-list" id="adm-notifications-list" aria-live="polite"><div class="adm-notifications-empty">Cargando actividad…</div></div>
     </section>`;
-  const newOrder = topbar.querySelector('.adm-topbar-btn');
-  topbar.insertBefore(wrap, newOrder || null);
+  const actions = topbar.querySelector('.adm-topbar-actions') || topbar;
+  const newOrder = actions.querySelector('.adm-topbar-btn');
+  actions.insertBefore(wrap, newOrder || null);
   return wrap;
 }
 
@@ -280,7 +282,7 @@ function closePanel() {
 
 async function subscribeNotifications() {
   unsubscribeNotifications?.();
-  if (!await appCheckReady) return;
+  if (!await waitForAdminAppCheck(12000)) return;
   const source = query(collection(db, 'adminNotifications'), orderBy('createdAt', 'desc'), limit(100));
   if (notificationsRetryTimer) window.clearTimeout(notificationsRetryTimer);
   notificationsRetryTimer = 0;
@@ -346,7 +348,7 @@ async function subscribeOrderStatusChanges() {
   ordersPrimed = false;
   if (ordersRetryTimer) window.clearTimeout(ordersRetryTimer);
   ordersRetryTimer = 0;
-  if (!await appCheckReady) return;
+  if (!await waitForAdminAppCheck(12000)) return;
   const source = query(collection(db, 'orders'), orderBy('updatedAt', 'desc'), limit(150));
   unsubscribeOrders = onSnapshot(source, snapshot => {
     const next = new Map();

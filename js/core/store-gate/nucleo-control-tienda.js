@@ -5,12 +5,12 @@
  * La configuración completa permanece en settings/general y no se entrega
  * cuando la tienda está cerrada.
  */
-import { db } from '../firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
+import { db } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
 import {
   doc,
   getDoc
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN } from '../auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
+import { SUPER_ADMIN } from '../auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1';
 import { getPublicDocumentRest } from '../firebase/respaldo-rest-firestore.js?v=tintin-20260726-browser-fallback-1';
 
 const OVERLAY_ID = 'tt-store-closed-overlay';

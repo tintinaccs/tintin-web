@@ -133,7 +133,7 @@
   // Una única versión para los módulos que este loader importa dinámicamente.
   // Cambiarla junto con el loader evita reutilizar una URL immutable cuando
   // cambia su plan de arranque.
-  const TT_CACHE_VERSION = 'tintin-20260923-auth-preview-isolation-1';
+  const TT_CACHE_VERSION = 'tintin-20260925-cache-converge-1';
   // El shell es común a cada navegación: incluso cuando la página está en
   // caché debe ser perceptible y no desaparecer antes de que el usuario vea
   // qué superficie se está preparando. Un segundo es el mínimo acordado;
@@ -413,7 +413,7 @@
     '#tt-loader-wordmark{position:relative;z-index:1;margin-top:clamp(-2px,-.2vw,0px);font-family:Montserrat;font-weight:400;font-size:clamp(28px,3.5vw,46px);line-height:.9;letter-spacing:.045em;color:#fff!important;white-space:nowrap;opacity:0;transform:scale(1.09)}',
     '#tt-loader-spin-wrap.tt-ready #tt-loader-wordmark{animation:tt-logo-fade-scale-in .6s cubic-bezier(.22,.61,.36,1) both}',
     '#tt-loader-wordmark .tt-loader-wordmark-i{position:relative;display:inline-block;color:#fff!important}#tt-loader-wordmark .tt-loader-wordmark-i::before,#tt-loader-wordmark .tt-loader-wordmark-i::after{content:none!important;display:none!important}',
-    '#tt-loader-brand-subtitle{margin-top:clamp(6px,1vw,9px);max-width:100%;padding:0 6px;box-sizing:border-box;color:#fff!important;font-family:Montserrat;font-size:clamp(12px,1.3vw,14px);font-weight:500;line-height:1.25;letter-spacing:.055em;text-align:center;opacity:0;transform:scale(1.09);white-space:normal}',
+    '#tt-loader-brand-subtitle{margin-top:clamp(6px,1vw,9px);max-width:100%;padding:0 6px;box-sizing:border-box;color:#2b2b2b!important;font-family:Montserrat;font-size:clamp(12px,1.3vw,14px);font-weight:500;line-height:1.25;letter-spacing:.055em;text-align:center;opacity:0;transform:scale(1.09);white-space:normal}',
     '#tt-loader-spin-wrap.tt-ready #tt-loader-brand-subtitle{animation:tt-logo-fade-scale-in .6s cubic-bezier(.22,.61,.36,1) both}',
     '.tt-loader-spinner{width:var(--tt-loader-spinner-size);height:var(--tt-loader-spinner-size);display:grid;margin-top:clamp(24px,2.8vw,34px);opacity:0;transform:scale(1.09);animation:tt-loader-spinner-shell 3s infinite}',
     '#tt-loader-spin-wrap.tt-ready .tt-loader-spinner{animation:tt-logo-fade-scale-in .6s cubic-bezier(.22,.61,.36,1) both,tt-loader-spinner-shell 3s infinite}',
@@ -423,8 +423,8 @@
     '@keyframes tt-loader-spinner-ring{100%{transform:rotate(1turn)}}',
     '#tt-loader-status{display:flex;flex-direction:column;align-items:center;max-width:min(86vw,440px);margin-top:clamp(15px,2vw,22px);padding:0 12px;box-sizing:border-box}',
     '#tt-loader-status:empty{display:none}',
-    '#tt-loader-title{font-family:Montserrat;font-size:clamp(11px,1.5vw,13px);font-weight:750;line-height:1.35;letter-spacing:.04em;color:#fff!important;text-align:center;overflow-wrap:anywhere}',
-    '#tt-loader-subtitle{margin-top:5px;font-family:Montserrat;font-size:clamp(10px,1.35vw,12px);font-weight:600;line-height:1.45;color:#fff!important;text-align:center;opacity:.88;overflow-wrap:anywhere}',
+    '#tt-loader-title{font-family:Montserrat;font-size:clamp(11px,1.5vw,13px);font-weight:750;line-height:1.35;letter-spacing:.04em;color:#2b2b2b!important;text-align:center;overflow-wrap:anywhere}',
+    '#tt-loader-subtitle{margin-top:5px;font-family:Montserrat;font-size:clamp(10px,1.35vw,12px);font-weight:600;line-height:1.45;color:#2b2b2b!important;text-align:center;opacity:.88;overflow-wrap:anywhere}',
     '@media (min-width:601px) and (max-width:1024px){#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(178px,29vw,220px);--tt-loader-spinner-size:38px;--tt-loader-spinner-border:7px;width:min(100%,310px)}#tt-loader-brand-subtitle{font-size:clamp(12px,1.8vw,15px);margin-top:11px}.tt-loader-spinner{margin-top:25px}}',
     '@media (max-width:600px){#tt-loader{padding:max(16px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(120px,43vw,158px);--tt-loader-spinner-size:30px;--tt-loader-spinner-border:5px;width:min(100%,230px);max-width:calc(100vw - 28px)}#tt-loader-brand-subtitle{font-size:clamp(10px,3.2vw,12px);margin-top:8px;letter-spacing:.045em}.tt-loader-spinner{margin-top:20px}#tt-loader-status{margin-top:14px;padding:0 8px}#tt-loader-title{font-size:clamp(10px,3.1vw,12px)}#tt-loader-subtitle{font-size:clamp(9px,2.8vw,11px)}}',
     '@media (max-width:360px){#tt-loader-spin-wrap{--tt-loader-brand-width:clamp(112px,42vw,140px);--tt-loader-spinner-size:27px;--tt-loader-spinner-border:4px}#tt-loader-brand-subtitle{font-size:10px}.tt-loader-spinner{margin-top:17px}}',
@@ -862,6 +862,19 @@
     }
   }
 
+  // Avisa (sin recargar ni borrar datos) si se publicó una versión nueva mientras
+  // la pestaña seguía abierta. No corre en vistas previas embebidas ni en el
+  // checkout, donde recargar a mitad del pago haría perder lo escrito.
+  function bootVersionWatch() {
+    let framed = false;
+    try { framed = window.top !== window; } catch { framed = true; }
+    if (isVisualPreviewFrame || framed) return;
+    if (/\/checkout(?:\.html)?$/.test(currentPath())) return;
+    if (!window.TintinVersionWatchBooted) {
+      importSibling('quality/vigilancia-version.js', 'Version Watch');
+    }
+  }
+
   function bootHeaderScrollHide() {
     if (!window.TintinHeaderScrollHideBooted) {
       importSibling('components/navigation/compartido/ocultar-encabezado-al-desplazar.js', 'Header Scroll Hide');
@@ -941,6 +954,7 @@
     bootHeaderScrollHide();
     bootAdminAndProfileFixes();
     bootSiteActivity();
+    bootVersionWatch();
     // Las páginas institucionales siguen mostrando el mismo loader y el
     // mismo header, pero no necesitan montar el catálogo, favoritos, gestión
     // de imágenes ni efectos propios de una superficie comercial.
@@ -966,6 +980,7 @@
     bootHeaderScrollHide();
     bootAdminAndProfileFixes();
     bootSiteActivity();
+    bootVersionWatch();
     // Mantiene el loader y el header idénticos en las páginas informativas,
     // pero evita descargar módulos comerciales que no se usan allí. La
     // navegación compartida conserva sus propios datos y fallback visual.

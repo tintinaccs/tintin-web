@@ -5,8 +5,8 @@
    incluidos en esquema-contenido.js. No acepta HTML ni selectores desde Firestore.
    ============================================================= */
 
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3';
+import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1';
 import {
   doc,
   onSnapshot,
@@ -14,8 +14,8 @@ import {
   serverTimestamp,
   increment,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN, getUserRole } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
-import { loadRolePermissions, canDo } from '../../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
+import { SUPER_ADMIN, getUserRole } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1';
+import { loadRolePermissions, canDo } from '../../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1';
 import {
   CONTENT_PAGE_IDS,
   SITE_CONTENT_SCHEMA,
@@ -29,7 +29,7 @@ import {
   sanitizeSection,
   sanitizeContentHref,
   normalizeContentValue,
-} from '../../core/store/esquema-contenido.js?v=tintin-20260826-carousel-order-3';
+} from '../../core/store/esquema-contenido.js?v=tintin-20260925-cache-converge-1';
 
 if (!window.TintinAdminContentPhase6Booted) {
   window.TintinAdminContentPhase6Booted = true;

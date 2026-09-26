@@ -6,7 +6,7 @@
    HTML recibido desde la base.
    ============================================================= */
 
-import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
+import { db, appCheckReady } from '../firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
 import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import {
   getPageSchema,
@@ -15,8 +15,8 @@ import {
   sanitizeContentHref,
   normalizeContentValue,
   detectContentPageId,
-} from './esquema-contenido.js?v=tintin-20260826-carousel-order-3';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260916-premium-performance-loader-1';
+} from './esquema-contenido.js?v=tintin-20260925-cache-converge-1';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260925-cache-converge-1';
 
 const subscriptions = new Map();
 const latestData = new Map();

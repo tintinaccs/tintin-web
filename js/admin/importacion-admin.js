@@ -7,11 +7,11 @@
  * cutover require a separately authorized phase.
  */
 
-import { db } from '../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
-import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3';
+import { db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
+import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1';
 import { collection } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
-import { getDocsPaginated } from '../core/firebase/paginacion-firestore.js?v=tintin-20260716-cloudinary-fix-1';
+import { SUPER_ADMIN } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1';
+import { getDocsPaginated } from '../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';
 import {
   detectCsvDelimiter,
   parseDelimitedRowsStream,
@@ -29,9 +29,9 @@ import {
   safeImportUrl,
   sanitizeShopifyBodyHtml,
   summarizeImportRecords,
-} from '../core/store/shopify-import-core.mjs?v=tintin-20260917-shopify-import-core-2';
+} from '../core/store/shopify-import-core.mjs?v=tintin-20260925-cache-converge-1';
 import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260918-shopify-phase2-safe-1';
-import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1';
+import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1';
 
 if (!window.TintinAdminShopifyImportBooted) {
   window.TintinAdminShopifyImportBooted = true;
@@ -69,6 +69,8 @@ if (!window.TintinAdminShopifyImportBooted) {
   }
 
   function toast(message, error = false) {
+    // Avisos centrales del panel (apilados, sin taparse); el resto es respaldo.
+    if (window.toast?.__tintinOps) { window.toast(message, { type: error ? 'error' : undefined, duration: 5000 }); return; }
     const element = document.getElementById('adm-toast');
     if (!element) return;
     element.textContent = message;

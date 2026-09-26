@@ -1,47 +1,50 @@
-import { auth, db, appCheckReady } from "../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1";
+import { auth, db } from "../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1";
+import { waitForAdminAppCheck } from "./auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1-auth-popup-resolver-1";
 import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { AUTH_STATES, subscribeSession, markExplicitLogout, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3";
+import { AUTH_STATES, subscribeSession, markExplicitLogout, readAuthHandoff, clearAuthHandoff } from "../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1";
 import { recordAuthDiagnostic } from "../core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, deleteField, addDoc,
   query, orderBy, limit, where, writeBatch, serverTimestamp, increment, onSnapshot, Timestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/notificaciones-correo.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1";
+import { sendTestCustomerEmail, sendTemplatedEmail, sendBulkTemplatedEmail } from "../email/notificaciones-correo.js?v=tintin-20260925-cache-converge-1";
 // El reenvío de correos de pedido usa el mismo camino por Resend que el envío
 // automático del checkout (js/pages/checkout/checkout-puente-correo.js), no el webhook viejo
 // de Apps Script de notificaciones-correo.js — evita reenviar por un canal que ya no
 // se usa para pedidos reales.
-import { sendOrderNotification } from "../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-3-auth-persistence-20260919-1";
-import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1";
+import { sendOrderNotification } from "../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-3-auth-persistence-20260919-1-auth-popup-resolver-1";
+import { getUserRole, SUPER_ADMIN, ROLE_LABELS, can } from "../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1";
 import { ASSIGNABLE_ROLES } from '../core/auth/contrato-cuentas-generado.js?v=tintin-20260821-account-contract-1';
 import {
   PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
   canDo, saveRolePermissions, buildDefaultRolePermissions
-} from "../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1";
-import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260716-cloudinary-fix-1";
-import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1";
-import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1";
+} from "../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1";
+import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260925-cache-converge-1";
+import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1";
+import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260925-cache-converge-1";
 import { sanitizeImageUrl } from "../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1";
 import { sanitizeVariantData } from "../core/auth/utilidades-seguridad.js?v=tintin-20260716-cloudinary-fix-1";
-import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1";
-import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260716-cloudinary-fix-1";
-import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260901-media-orphan-log-4-auth-persistence-20260919-1";
-import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260901-media-orphan-scan-3-auth-persistence-20260919-1";
-import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260916-cache-bump-diagnostico-sitio-1-auth-persistence-20260919-1";
-import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260923-flow-evidence-2";
-import "./pages/paginas-admin.js?v=tintin-20260924-realtime-teardown-1";
+import { authenticatedFetch } from "../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1";
+import { getDocsPaginated } from "../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1";
+import { attachImageUploadWidget } from "../components/images/carga-imagenes.js?v=tintin-20260901-media-orphan-log-4-auth-persistence-20260919-1-auth-popup-resolver-1";
+import { openMediaLibraryPicker } from "./products/biblioteca-multimedia-admin.js?v=tintin-20260901-media-orphan-scan-3-auth-persistence-20260919-1-auth-popup-resolver-1";
+import { initSiteDiagnostics } from "./diagnostics/diagnostico-sitio-admin.js?v=tintin-20260925-cache-converge-1";
+import { initConnectionsFlow } from "./flujo-conexiones/flujo-conexiones-admin.js?v=tintin-20260925-cache-converge-1";
+import "./pages/paginas-admin.js?v=tintin-20260924-realtime-teardown-1-auth-popup-resolver-1";
 import { PARAGUAY_LOCATIONS, FITOXPRESS_DELIVERY_CITIES } from "../components/location/ubicaciones-paraguay.js?v=tintin-20260725-paraguay-locations-1";
 import {
   GLOBAL_TOKENS, GLOBAL_CATEGORIES, ADMIN_TOKENS, ADMIN_CATEGORIES,
   GLOBAL_CONTRAST_PAIRS, ADMIN_CONTRAST_PAIRS, DEVICE_BREAKPOINTS,
   findTokenByKey, buildDefaultTokenMap
 } from "../components/color/esquema-color-catalogo.js?v=tintin-20260915-footer-surface-1";
-import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260716-cloudinary-fix-1";
-import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260716-cloudinary-fix-1";
-import './orders/pedidos-superadmin-crud.js?v=tintin-20260923-canonical-tinped-reset-1';
-import './products/integridad-inventario-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1';
+import { contrastRatio, passesWcag } from "../components/color/utilidades-contraste-color.js?v=tintin-20260925-cache-converge-1";
+import { attachColorPicker } from "../components/color/selector-color.js?v=tintin-20260925-cache-converge-1";
+import './orders/pedidos-superadmin-crud.js?v=tintin-20260923-canonical-tinped-reset-1-auth-popup-resolver-1';
+import './products/integridad-inventario-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1';
+import { runAdminBulk } from './utilidades-progreso-admin.js?v=tintin-20260925-admin-ops-1';
+import { setOperationsViewerRole } from './operaciones/sistema-operaciones-admin.js?v=tintin-20260925-admin-ops-1';
 
 // ---- GLOBALS ----
 let currentUser = null;
@@ -294,7 +297,10 @@ getDoc(doc(db, 'settings', 'general')).then(snap => {
 }).catch(() => {});
 
 // ---- TOAST ----
+// Los avisos van al sistema de operaciones (se apilan sin taparse y los
+// errores duran más). #adm-toast queda como respaldo si ese módulo no cargó.
 function toast(msg, duration = 3000) {
+  if (window.toast?.__tintinOps) { window.toast(msg, duration); return; }
   const el = document.getElementById('adm-toast');
   el.textContent = msg;
   el.classList.add('show');
@@ -930,6 +936,36 @@ function showAdminInitFailure() {
   hideOverlay();
 }
 
+function dismissAdminAppCheckUnavailable() {
+  document.getElementById('adm-appcheck-unavailable')?.remove();
+}
+
+function showAdminAppCheckUnavailable() {
+  document.documentElement.classList.remove('adm-auth-ready');
+  let overlay = document.getElementById('adm-appcheck-unavailable');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'adm-appcheck-unavailable';
+    overlay.setAttribute('role', 'status');
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;padding:24px;font-family:Montserrat;color:#44222d';
+    overlay.innerHTML = '<div style="max-width:580px;text-align:center">' +
+      '<h1 style="font-size:22px;margin:0 0 10px">Verificación de seguridad no disponible</h1>' +
+      '<p style="margin:0 0 18px;line-height:1.5;color:#6f5960">Tu sesión sigue activa. Firebase App Check no pudo confirmar este navegador todavía, así que el panel no abrirá lecturas privadas hasta que la verificación esté disponible.</p>' +
+      '<button type="button" id="adm-appcheck-retry" style="border:0;border-radius:10px;padding:11px 18px;background:#ad3f67;color:#fff;font:inherit;font-weight:700;cursor:pointer">Reintentar</button>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    overlay.querySelector('#adm-appcheck-retry')?.addEventListener('click', () => window.location.reload());
+  }
+  hideOverlay();
+}
+
+window.addEventListener('tintin:app-check-ready', event => {
+  if (event?.detail?.ready !== true || !document.getElementById('adm-appcheck-unavailable')) return;
+  // El token llegó después del timeout de arranque. Una única recarga ya parte
+  // con App Check listo y evita montar listeners con credenciales incompletas.
+  window.location.reload();
+});
+
 function showAdminAuthUnknown() {
   document.documentElement.classList.remove('adm-auth-ready');
   let overlay = document.getElementById('adm-auth-unknown');
@@ -979,10 +1015,46 @@ function teardownAdminRealtimeOnSessionLoss() {
   stopAdminRealtimeData();
   stopAdminSettingsRealtime();
   stopDashboardActivityMetrics();
+  if (_productosUnsub) { try { _productosUnsub(); } catch {} _productosUnsub = null; }
+  if (_productInventoryUnsub) { try { _productInventoryUnsub(); } catch {} _productInventoryUnsub = null; }
+  if (_productosSlowTimer) { window.clearTimeout(_productosSlowTimer); _productosSlowTimer = null; }
+  adminRealtimeReady.products = false;
   document.documentElement.classList.remove('adm-auth-ready');
   adminGuardInitializedUid = '';
   adminGuardInitializingUid = '';
   currentUser = null;
+}
+
+// El overlay "No pudimos restaurar tu sesión" también lo ve cualquier
+// visitante sin sesión (AUTHORITATIVE_EMPTY sin handoff) o quien cerró sesión
+// en otra pestaña; eso no es un fallo y no se guarda. Sólo dos situaciones
+// prueban que la restauración falló: login.html dejó un handoff (la persona
+// acababa de ingresar) y aun así la sesión no apareció, o Firebase no pudo
+// leer la sesión guardada (AUTH_RESTORE_FALLBACK). Devuelve null si no hay
+// que registrar nada. Los valores deben coincidir con firestore.rules.
+function classifyAdminSessionFailure(authReason, handoffPending) {
+  const restoreError = authReason === 'AUTH_RESTORE_FALLBACK';
+  if (handoffPending) return restoreError ? 'handoff-restore-error' : 'handoff-recovery-timeout';
+  return restoreError ? 'auth-restore-fallback' : null;
+}
+
+// Best-effort: deja rastro en Firestore de un fallo real de restauración
+// (ver classifyAdminSessionFailure) a cualquier usuario con acceso a
+// admin.html, no solo Super Admin, para poder detectar si vuelve a pasar sin
+// depender de que alguien capture la consola en el momento. Nunca debe
+// demorar ni romper el guard: no se espera (no await en la llamada) y
+// cualquier falla de red o de permisos se descarta en silencio.
+async function persistAuthDiagnosticFailure(reason) {
+  try {
+    await addDoc(collection(db, 'authDiagnosticFailures'), {
+      code: 'REDIRECT_LOOP_BROKEN',
+      reason,
+      source: 'admin-guard',
+      route: `${window.location.pathname || '/'}${window.location.search || ''}`.slice(0, 220),
+      userAgent: (navigator.userAgent || '').slice(0, 200),
+      createdAt: serverTimestamp()
+    });
+  } catch {}
 }
 
 async function startAdminAuthGuard() {
@@ -1015,6 +1087,9 @@ async function startAdminAuthGuard() {
       return;
     }
     let user = snapshot.user;
+    // Se lee antes de esperar: recoverAdminUserFromHandoff() puede tardar
+    // hasta 5 s y el handoff vence por TTL.
+    const handoffPending = !user && Boolean(readAuthHandoff()?.uid);
     if (!user) {
       user = await recoverAdminUserFromHandoff();
     }
@@ -1027,6 +1102,8 @@ async function startAdminAuthGuard() {
       // La ausencia no confirmada se resuelve con acción explícita desde el
       // overlay, nunca con otra navegación automática.
       recordAuthDiagnostic('REDIRECT_LOOP_BROKEN', { source: 'admin-guard', reason: 'handoff-recovery-timeout' });
+      const failureReason = classifyAdminSessionFailure(snapshot.reason, handoffPending);
+      if (failureReason) persistAuthDiagnosticFailure(failureReason);
       teardownAdminRealtimeOnSessionLoss();
       showAdminAuthUnknown();
       return;
@@ -1059,10 +1136,28 @@ async function startAdminAuthGuard() {
     adminGuardInitializingUid = user.uid;
 
     try {
-      await appCheckReady;
+      const appCheckAvailable = await waitForAdminAppCheck(12000);
+      if (!appCheckAvailable) {
+        // No abrir ninguna consulta privada sin App Check cuando Enforcement
+        // está activo. Esto conserva Auth y evita la cascada de
+        // permission-denied que antes parecía un logout.
+        currentUser = user;
+        teardownAdminRealtimeOnSessionLoss();
+        currentUser = user;
+        showAdminAppCheckUnavailable();
+        recordAuthDiagnostic('APP_CHECK_ADMIN_BLOCKED', {
+          source: 'admin-guard',
+          authState: snapshot.status,
+          reason: 'app-check-token-unavailable'
+        });
+        return;
+      }
+      dismissAdminAppCheckUnavailable();
 
       const role = await getUserRole(user.uid, user.email);
       currentRole = role;
+      // El detalle técnico de las operaciones solo se muestra a Super Admin/Admin.
+      setOperationsViewerRole(role);
 
       // Una cuenta bloqueada pierde autorización, no su sesión de Firebase.
       // Mantener la sesión permite recuperar el acceso sin forzar un login
@@ -1972,6 +2067,8 @@ function updateDeletedCount() {
 window.filterUsersByStatus = (status) => {
   userStatusFilter = status;
   document.querySelectorAll('.user-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.userTab === status));
+  const deletedGuidance = document.getElementById('users-deleted-guidance');
+  if (deletedGuidance) deletedGuidance.hidden = status !== 'deleted';
   applyUserFilters();
 };
 
@@ -2270,14 +2367,18 @@ function updateUsersBulkToolbar() {
   const blockBtn = document.getElementById('users-bulk-block-btn');
   const restoreBtn = document.getElementById('users-bulk-restore-btn');
   const deleteBtn = document.getElementById('users-bulk-delete-btn');
+  const roleSelect = document.getElementById('users-bulk-role');
+  const roleApplyBtn = document.getElementById('users-bulk-role-apply-btn');
   // Todo el módulo Usuarios (individual y masivo) es exclusivo de Super
   // Admin — mismo permiso que ya gatea las acciones de a una (manageUsers).
   const allowed = can(currentRole, 'manageUsers');
   if (toolbar) toolbar.classList.toggle('show', allowed && count > 0);
   if (countEl) countEl.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
   if (blockBtn) blockBtn.style.display = userStatusFilter === 'active' ? '' : 'none';
-  if (restoreBtn) restoreBtn.style.display = userStatusFilter === 'blocked' || userStatusFilter === 'deleted' ? '' : 'none';
+  if (restoreBtn) restoreBtn.style.display = userStatusFilter === 'blocked' ? '' : 'none';
   if (deleteBtn) deleteBtn.style.display = userStatusFilter !== 'deleted' ? '' : 'none';
+  if (roleSelect) roleSelect.style.display = userStatusFilter === 'deleted' ? 'none' : '';
+  if (roleApplyBtn) roleApplyBtn.style.display = userStatusFilter === 'deleted' ? 'none' : '';
 }
 
 window.clearUsersSelection = function() {
@@ -2354,11 +2455,15 @@ window.bulkBlockUsers = async function() {
 window.bulkRestoreUsers = async function() {
   if (!_selectedUsers.size) return;
   if (!can(currentRole, 'manageUsers')) { toast('No tenés permiso para restaurar usuarios'); return; }
+  if (userStatusFilter === 'deleted') {
+    toast('Las cuentas eliminadas no se reactivan. La persona debe registrarse nuevamente; su historial comercial se recupera en el nuevo perfil.');
+    return;
+  }
   const selected = [..._selectedUsers].map(uid => allUsers.find(x => x.uid === uid)).filter(Boolean);
   const ids = selected.filter(u => {
     return u && u.email !== SUPER_ADMIN && u.blocked && u.deleted !== true && u.profileStatus !== 'deleted';
   }).map(u => u.uid);
-  if (!ids.length) { toast('No hay bloqueados elegibles. Las cuentas eliminadas deben registrarse otra vez con un perfil nuevo.'); return; }
+  if (!ids.length) { toast('No hay cuentas bloqueadas seleccionadas para restaurar.'); return; }
   const n = ids.length;
   if (!confirm(`¿Restaurar ${n} usuario(s)? Recuperarán su rol anterior.`)) return;
   try {
@@ -2399,14 +2504,16 @@ window.bulkDeleteUsers = async function() {
   const phrase = 'ELIMINAR CUENTAS SELECCIONADAS';
   if (!confirm(`Se revocará el acceso de ${targets.length} cuenta(s), se liberarán sus datos de contacto y se conservará la identidad histórica, pedidos y auditoría. ¿Continuar?`)) return;
   if (prompt(`Escribí exactamente para confirmar:\n\n${phrase}`, '') !== phrase) { toast('Confirmación cancelada.'); return; }
+  const results = await runAdminBulk(targets, user => updateAccountStatusFromAdmin_(user.uid, 'softDelete', 'Eliminación masiva desde Super Admin'), {
+    title: 'Eliminando cuentas', name: 'EliminarCuentas', module: 'Usuarios', concurrency: 3,
+  });
   let ok = 0, fail = 0;
-  for (const user of targets) {
-    try {
-      await updateAccountStatusFromAdmin_(user.uid, 'softDelete', 'Eliminación masiva desde Super Admin');
-      Object.assign(user, { deleted: true, blocked: true, profileStatus: 'deleted', role: 'client' });
+  results.forEach((result, index) => {
+    if (result.status === 'fulfilled') {
+      Object.assign(targets[index], { deleted: true, blocked: true, profileStatus: 'deleted', role: 'client' });
       ok++;
-    } catch { fail++; }
-  }
+    } else fail++;
+  });
   clearUsersSelection();
   applyUserFilters();
   toast(`${ok} cuenta(s) eliminadas${fail ? `; ${fail} fallaron` : ''}`);
@@ -2526,7 +2633,7 @@ function renderOrdersTable(orders) {
           ${canEditFull ? `<button type="button" class="adm-btn adm-btn-sm" onclick="openOrderEdit(${orderArg})" title="Editar pedido completo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar</button>` : '—'}
         </td>
         <td class="col-actions-sticky" data-label="Eliminar" onclick="event.stopPropagation()">
-          ${canDelete ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteOrder(${orderArg})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></button>` : '—'}
+          ${canDelete ? `<button type="button" class="adm-btn adm-btn-sm adm-btn-danger" onclick="window.deleteOrder(${orderArg})" title="Mover pedido a Borrados"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 011 1v1h4V4a1 1 0 011 1v1"/></svg><span> Borrar</span></button>` : '—'}
         </td>
       </tr>
       <tr id="${escapeHtmlAdmin(detailId)}" class="adm-order-detail-row" style="display:none">
@@ -2725,6 +2832,7 @@ window.deleteOrder = async (orderId) => {
       toast(`Pedido ${orderBefore?.orderNumber || orderBefore?.shortId || ''} movido a Borrados`);
     } else toast('El pedido ya no estaba en la lista activa.');
     applyOrderFilters();
+    result.deleted = Boolean(result.moved);
     return { ...result, orderBefore };
   } catch(e) {
     console.error('[orders] No se pudo mover el pedido a Borrados:', e);
@@ -2892,29 +3000,31 @@ window.bulkResendOrderEmails = async function() {
   const ids = [..._selectedOrders];
   const n = ids.length;
   if (!confirm(`¿Reenviar el correo de confirmación a ${n} pedido(s)?`)) return;
-  let ok = 0, fail = 0, skipped = 0;
-  toast(`Reenviando 0 de ${n}…`, 60000);
-  for (let i = 0; i < ids.length; i++) {
-    const o = allOrders.find(x => x.id === ids[i]);
-    try {
-      if (!o) throw new Error('no encontrado');
-      // Protección anti-spam: si este pedido puntual se reenvió hace menos
-      // de RESEND_COOLDOWN_SECONDS, se omite (no cuenta como fallo) en vez
-      // de forzar el reenvío — el tope diario global lo aplica Apps Script.
-      if (resendCooldownRemaining_(o) > 0) { skipped++; continue; }
-      const orderForEmail = { ...o, createdAt: o.createdAt?.toDate ? o.createdAt.toDate().toISOString() : o.createdAt };
-      const result = await sendOrderNotification(ids[i], orderForEmail, true);
-      if (!result.success) throw new Error(result.error || 'error desconocido');
-      await updateDoc(doc(db, 'orders', ids[i]), {
-        resendCount: increment(1), lastResendAt: serverTimestamp(), notificationStatus: 'sent', updatedAt: serverTimestamp()
-      });
-      o.resendCount = (o.resendCount || 0) + 1;
-      o.notificationStatus = 'sent';
-      o.lastResendAt = { toDate: () => new Date() };
-      ok++;
-    } catch (e) { fail++; }
-    toast(`Reenviando ${i + 1} de ${n}…`, 60000);
-  }
+  const results = await runAdminBulk(ids, async id => {
+    const o = allOrders.find(x => x.id === id);
+    if (!o) throw new Error('no encontrado');
+    // Protección anti-spam: si este pedido puntual se reenvió hace menos
+    // de RESEND_COOLDOWN_SECONDS, se omite (no cuenta como fallo) en vez
+    // de forzar el reenvío — el tope diario global lo aplica Apps Script.
+    if (resendCooldownRemaining_(o) > 0) return 'skipped';
+    const orderForEmail = { ...o, createdAt: o.createdAt?.toDate ? o.createdAt.toDate().toISOString() : o.createdAt };
+    const result = await sendOrderNotification(id, orderForEmail, true);
+    if (!result.success) throw new Error(result.error || 'error desconocido');
+    await updateDoc(doc(db, 'orders', id), {
+      resendCount: increment(1), lastResendAt: serverTimestamp(), notificationStatus: 'sent', updatedAt: serverTimestamp()
+    });
+    o.resendCount = (o.resendCount || 0) + 1;
+    o.notificationStatus = 'sent';
+    o.lastResendAt = { toDate: () => new Date() };
+    return 'sent';
+  }, {
+    // De a uno, como antes: cada envío pasa por el tope diario de Apps Script.
+    title: 'Reenviando correos de pedido', name: 'ReenviarCorreosPedido', module: 'Pedidos', concurrency: 1,
+    isSkipped: value => value === 'skipped', skippedText: 'omitidos por cooldown anti-spam',
+  });
+  const ok = results.filter(result => result.value === 'sent').length;
+  const skipped = results.filter(result => result.value === 'skipped').length;
+  const fail = results.filter(result => result.status === 'rejected').length;
   logAudit('reenviar_correo_pedido', 'pedido', '', '', `${ok} enviados, ${fail} fallaron${skipped ? `, ${skipped} omitidos por cooldown` : ''}`, { bulk: true, count: n });
   const summary = `${ok} correo(s) reenviados` + (fail ? `, ${fail} fallaron` : '') + (skipped ? `, ${skipped} omitidos (cooldown anti-spam)` : '');
   toast(fail || skipped ? summary : `${ok} correo(s) reenviados correctamente`, 6000);
@@ -2931,22 +3041,26 @@ window.bulkDeleteOrders = async function() {
   const ids = [..._selectedOrders];
   const ordersById = new Map(allOrders.map(order => [order.id, order]));
   const movedOrders = [], removedIds = new Set(), failed = [];
-  toast(`Moviendo 0 de ${n} a Borrados…`, 60000);
-  for (let index = 0; index < ids.length; index++) {
+  const results = await runAdminBulk(ids, id => window.TintinOrderAdmin.trashOrder(id, 'Eliminación masiva por Super Admin'), {
+    title: 'Moviendo pedidos a Borrados', name: 'MoverPedidosABorrados', module: 'Pedidos', concurrency: 3,
+    isSkipped: value => value?.moved === false, skippedText: 'ya no existían',
+  });
+  results.forEach((result, index) => {
     const id = ids[index];
-    try {
-      const result = await window.TintinOrderAdmin.trashOrder(id, 'Eliminación masiva por Super Admin');
-      if (result.moved) { removedIds.add(id); movedOrders.push(ordersById.get(id) || { id }); }
-    } catch (error) { console.error(`[orders] No se pudo mover el pedido ${id}:`, error); failed.push({ id, error }); }
-    toast(`Moviendo ${index + 1} de ${n} a Borrados…`, 60000);
-  }
+    if (result.status === 'fulfilled' && result.value?.moved) {
+      removedIds.add(id); movedOrders.push(ordersById.get(id) || { id });
+    } else if (result.status === 'rejected') {
+      console.error(`[orders] No se pudo mover el pedido ${id}:`, result.reason);
+      failed.push({ id, error: result.reason });
+    }
+  });
   allOrders = allOrders.filter(order => !removedIds.has(order.id));
   _selectedOrders.clear();
   failed.forEach(item => _selectedOrders.add(item.id));
   if (movedOrders.length) logAudit('mover_pedido_borrados', 'pedido', '', '', `${movedOrders.length} pedidos movidos a Borrados`, { bulk: true, count: movedOrders.length, failed: failed.length });
   applyOrderFilters();
   toast(failed.length ? `${movedOrders.length} movidos; ${failed.length} fallaron.` : `${movedOrders.length} pedido(s) movidos a Borrados`, 7000);
-  return { movedOrders, failed };
+  return { movedOrders, deletedOrders: movedOrders, failed };
 };
 
 function orderRowsToCsv_(orders) {

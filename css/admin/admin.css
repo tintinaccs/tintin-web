@@ -225,8 +225,7 @@
       flex-direction: column;
     }
 
-    /* Modo fijo compacto: deja una rail de iconos y recupera ancho para el
-       panel. En dispositivos con mouse, hover abre un overlay sin mover main. */
+    /* Modo compacto controlado por el botón: conserva una barra de iconos. */
     @media (min-width: 541px) {
       html.adm-sidebar-is-collapsed { --sidebar-w: 76px; }
       html.adm-sidebar-is-collapsed .adm-sidebar { width:76px; transition:width .2s ease, box-shadow .2s ease; }
@@ -240,26 +239,6 @@
       html.adm-sidebar-is-collapsed .adm-user-info { justify-content:center; padding:12px 6px; }
       html.adm-sidebar-is-collapsed .adm-nav-item { justify-content:center; gap:0; padding-inline:8px; font-size:0; }
       html.adm-sidebar-is-collapsed .adm-nav-icon { width:24px; min-width:24px; height:24px; }
-      @media (hover:hover) and (pointer:fine) {
-        html.adm-sidebar-is-collapsed .adm-sidebar:hover,
-        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within { width:260px; box-shadow:16px 0 32px rgba(37,23,30,.18); }
-        html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-sidebar-logo,
-        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-sidebar-logo { height:auto; padding:28px 24px 20px; }
-        html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-sidebar-logo-text,
-        html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-sidebar-logo-sub,
-        html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-user-info > div:not(.adm-user-avatar),
-        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-sidebar-logo-text,
-        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-sidebar-logo-sub,
-        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-user-info > div:not(.adm-user-avatar) { display:block; }
-        html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-nav-divider,
-        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-nav-divider { display:block; }
-        html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-user-info,
-        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-user-info { justify-content:flex-start; padding:16px 24px; }
-        html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-nav-item,
-        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-nav-item { justify-content:flex-start; gap:12px; padding-inline:24px; font-size:13px; }
-        html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-sidebar-toggle,
-        html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-sidebar-toggle { right:12px; top:12px; }
-      }
     }
 
     /* ======== TOPBAR ======== */
@@ -272,8 +251,12 @@
       gap: 16px;
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 200;
     }
+
+    /* La navegación lateral queda por encima de la barra superior. */
+    .adm-sidebar { z-index: 300 !important; }
+
     .adm-topbar-title {
       font-size: 18px;
       font-weight: 800;
@@ -1551,13 +1534,10 @@
         overflow-y: auto;
         overflow-x: hidden;
       }
-      .adm-sidebar-logo,
       .adm-user-info .adm-user-name,
       .adm-user-info .adm-user-role-badge,
       .adm-user-info .adm-live-clock,
       .adm-nav-divider { display: none; }
-      .adm-sidebar-toggle { display:none; }
-
       .adm-user-info {
         justify-content: center;
         padding: 12px 6px;
@@ -1910,6 +1890,22 @@ html:not(.adm-auth-ready) [data-admin-panel] {
    cuenta. El logo conserva una celda propia y el avatar queda debajo, sin
    superposición ni desplazamiento del primer ítem del menú. */
 @media (min-width: 541px) and (max-width: 900px) {
+  html.adm-sidebar-is-collapsed { --sidebar-w: 84px; }
+  html.adm-sidebar-is-collapsed .adm-sidebar,
+  html.adm-sidebar-is-collapsed .adm-sidebar:hover,
+  html.adm-sidebar-is-collapsed .adm-sidebar:focus-within {
+    width: 84px;
+    box-shadow: none;
+  }
+  html.adm-sidebar-is-collapsed .adm-nav-item,
+  html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-nav-item,
+  html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-nav-item {
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    padding: 9px 6px;
+    font-size: 8px;
+  }
   .adm-sidebar-logo {
     display: flex !important;
     align-items: center;
@@ -1921,7 +1917,10 @@ html:not(.adm-auth-ready) [data-admin-panel] {
     position: relative;
     z-index: 1;
   }
-  .adm-sidebar-logo-text {
+  .adm-sidebar-logo-text,
+  html.adm-sidebar-is-collapsed .adm-sidebar-logo-text,
+  html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-sidebar-logo-text,
+  html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-sidebar-logo-text {
     display: grid;
     place-items: center;
     width: 42px;
@@ -1959,21 +1958,6 @@ html:not(.adm-auth-ready) [data-admin-panel] {
 }
 .adm-pagination .adm-btn:disabled { opacity: .45; cursor: not-allowed; }
 
-/* Topbar limpio y centrado. */
-.adm-topbar {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 16px;
-}
-.adm-topbar-title { grid-column: 2; text-align: center; margin: 0; }
-.adm-topbar > :last-child { grid-column: 3; justify-self: end; }
-@media (max-width: 700px) {
-  .adm-topbar { display: flex; justify-content: space-between; }
-  .adm-topbar-title { text-align: left; }
-  .adm-topbar > :last-child { margin-left: auto; }
-}
-
 /* ======== SHELL ADMIN — alineación final responsive ========
    La campana se inserta dinámicamente en el topbar. El layout anterior
    dependía del auto-placement de CSS Grid y podía mandar “Nuevo pedido” a
@@ -2004,33 +1988,47 @@ html:not(.adm-auth-ready) [data-admin-panel] {
 }
 .adm-topbar {
   position: sticky;
+  top: 0;
+  z-index: 100;
   min-height: 78px;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: flex-end;
   gap: 12px;
   padding: 16px 28px;
   isolation: isolate;
 }
 .adm-topbar-title {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  pointer-events: none;
+  position: static;
+  grid-column: 2;
+  min-width: 0;
+  max-width: min(52vw, 680px);
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   text-align: center;
   font-size: 19px;
-  line-height: 1;
-  z-index: 0;
+  line-height: 1.2;
+}
+.adm-topbar-actions {
+  grid-column: 3;
+  justify-self: end;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
 }
 .adm-topbar .adm-notifications-wrap,
 .adm-topbar .adm-topbar-btn {
   position: relative;
+  grid-column: 3;
+  justify-self: end;
   z-index: 1;
   flex: 0 0 auto;
 }
-.adm-topbar .adm-notifications-wrap { margin-left: auto; }
+.adm-topbar .adm-notifications-wrap { margin-left: 0; }
 .adm-topbar .adm-topbar-btn {
   display: inline-flex;
   align-items: center;
@@ -2041,35 +2039,42 @@ html:not(.adm-auth-ready) [data-admin-panel] {
 }
 
 @media (max-width: 900px) {
-  .adm-sidebar-logo { padding: 20px 10px; text-align: center; }
+  .adm-sidebar-logo { padding: 12px 6px; text-align: center; }
   .adm-sidebar-logo-sub { display: none; }
   .adm-topbar { min-height: 70px; padding-inline: 18px; }
-  .adm-topbar-title { font-size: 17px; }
+  .adm-topbar-title { max-width: min(46vw, 420px); font-size: 17px; }
+  .adm-topbar-actions { gap: 8px; }
 }
 
 @media (max-width: 540px) {
-  .adm-topbar { min-height: 64px; padding: 9px 12px; gap: 8px; }
+  .adm-topbar {
+    min-height: 64px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 9px 12px;
+  }
   .adm-topbar-title {
-    position: static;
-    display: block;
-    min-width: 0;
-    margin-right: auto;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    grid-column: 1;
+    justify-self: stretch;
+    max-width: 100%;
     text-align: left;
     font-size: 15px;
-    line-height: 46px;
+    line-height: 1.2;
   }
-  .adm-topbar .adm-notifications-wrap { margin-left: 0; }
+  .adm-topbar-actions {
+    grid-column: 2;
+    gap: 6px;
+  }
   .adm-notifications-button { width: 42px; height: 42px; }
   .adm-topbar .adm-topbar-btn {
+    grid-column: 3;
     min-height: 42px;
-    max-width: 124px;
-    padding: 8px 11px;
+    max-width: 118px;
+    padding: 8px 10px;
     font-size: 10px;
     line-height: 1.15;
     white-space: normal;
+    text-align: center;
   }
 }
 
@@ -2094,13 +2099,63 @@ html:not(.adm-auth-ready) [data-admin-panel] {
     font-size: 16px;
     line-height: 1;
   }
-  @media (hover:hover) and (pointer:fine) {
-    html.adm-sidebar-is-collapsed .adm-sidebar:hover .adm-sidebar-logo,
-    html.adm-sidebar-is-collapsed .adm-sidebar:focus-within .adm-sidebar-logo {
-      height: auto;
-      min-height: 0;
-      flex-basis: auto;
-    }
+}
+
+/* En tablet, la barra parte compacta pero conserva un control táctil para
+   abrirla. Expandirla superpone el panel sobre el contenido sin comprimirlo. */
+@media (min-width: 541px) and (max-width: 900px) {
+  .adm-sidebar-toggle {
+    display: grid;
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+  }
+  html.adm-sidebar-is-collapsed .adm-sidebar-toggle { top: 12px; right: 20px; }
+  html:not(.adm-sidebar-is-collapsed) .adm-sidebar-toggle { top: 12px; right: 12px; }
+
+  html:not(.adm-sidebar-is-collapsed) body:has(.adm-main) .adm-sidebar {
+    width: 260px;
+    box-shadow: 16px 0 32px rgba(37,23,30,.18);
+    transition: width .2s ease, box-shadow .2s ease;
+  }
+
+  html:not(.adm-sidebar-is-collapsed) .adm-sidebar-logo {
+    display: block !important;
+    height: auto;
+    min-height: 80px;
+    flex-basis: auto;
+    padding: 24px 24px 22px;
+    text-align: left;
+  }
+  html:not(.adm-sidebar-is-collapsed) .adm-sidebar-logo-text {
+    display: block;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background: transparent;
+    color: var(--admin-color-text-title);
+    font-size: 17px;
+    letter-spacing: .16em;
+    white-space: nowrap;
+  }
+  html:not(.adm-sidebar-is-collapsed) .adm-sidebar-logo-text::before { content: none; }
+  html:not(.adm-sidebar-is-collapsed) .adm-sidebar-logo-sub { display: block; }
+
+  html:not(.adm-sidebar-is-collapsed) .adm-user-info .adm-user-name,
+  html:not(.adm-sidebar-is-collapsed) .adm-user-info .adm-user-role-badge,
+  html:not(.adm-sidebar-is-collapsed) .adm-user-info .adm-live-clock,
+  html:not(.adm-sidebar-is-collapsed) .adm-nav-divider { display: block; }
+  html:not(.adm-sidebar-is-collapsed) .adm-user-info { justify-content: flex-start; padding: 16px 24px; }
+  html:not(.adm-sidebar-is-collapsed) .adm-nav-item {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 11px 24px;
+    font-size: 13px;
+    line-height: 1.3;
+    text-align: left;
+    white-space: nowrap;
   }
 }
 .adm-diagnostic-head p {
@@ -2470,5 +2525,308 @@ html:not(.adm-auth-ready) [data-admin-panel] {
   #apar-scheme-bar .adm-select {
     flex: 1 1 150px;
     max-width: none !important;
+  }
+}
+
+/* ======== SHELL FINAL — una sola composición fluida ========
+   El panel usa el mismo eje visual en desktop, laptop, tablet y mobile:
+   rail lateral estable, contenido centrado y controles que envuelven sin
+   empujar la página. La regla queda al final para ganar a los estilos
+   históricos sin reescribir cada módulo. */
+html:has(.adm-main),
+body:has(.adm-main) {
+  overflow-x: hidden;
+}
+
+body:has(.adm-main) .adm-main {
+  min-width: 0;
+}
+
+body:has(.adm-main) .adm-content {
+  width: min(100%, 1320px) !important;
+  max-width: 1320px !important;
+  margin-inline: auto !important;
+  padding-inline: clamp(14px, 2.8vw, 34px) !important;
+}
+
+body:has(.adm-main) .adm-topbar {
+  min-height: 68px;
+  padding-inline: clamp(14px, 2.8vw, 34px);
+}
+
+body:has(.adm-main) .adm-card {
+  box-shadow: 0 4px 18px rgba(86, 42, 58, .045) !important;
+}
+
+body:has(.adm-main) .adm-card-head,
+body:has(.adm-main) .adm-card-body {
+  min-width: 0;
+}
+
+body:has(.adm-main) :is(.adm-filter-row, .adm-bulk-toolbar, .adm-section-head) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+body:has(.adm-main) :is(.adm-filter-row > *, .adm-bulk-toolbar > *) {
+  min-width: 0;
+}
+
+body:has(.adm-main) .adm-table-wrap {
+  max-width: 100%;
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: stable;
+}
+
+@media (min-width: 901px) {
+  body:has(.adm-main) .adm-sidebar { width: 260px; }
+  body:has(.adm-main) .adm-main { margin-left: 260px; }
+  html.adm-sidebar-is-collapsed { --sidebar-w: 74px; }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar { width: 74px; }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-main { margin-left: 74px; }
+}
+
+@media (min-width: 541px) and (max-width: 900px) {
+  body:has(.adm-main) .adm-sidebar { width: 84px; }
+  body:has(.adm-main) .adm-main { margin-left: 84px; }
+  body:has(.adm-main) .adm-content { padding-block: 18px 40px !important; }
+  body:has(.adm-main) .adm-nav-item { min-height: 54px; }
+}
+
+@media (max-width: 540px) {
+  body:has(.adm-main) .adm-content { padding: 12px 10px 34px !important; }
+  body:has(.adm-main) .adm-topbar { min-height: 60px; padding-block: 8px; }
+  body:has(.adm-main) .adm-topbar-title { font-size: 14px; }
+  body:has(.adm-main) .adm-card { border-radius: 14px !important; }
+  body:has(.adm-main) .adm-card-head { padding: 14px !important; }
+  body:has(.adm-main) .adm-card-body { padding: 12px !important; }
+  body:has(.adm-main) :is(.adm-filter-row, .adm-bulk-toolbar) { align-items: stretch; }
+  body:has(.adm-main) :is(.adm-filter-row > *, .adm-bulk-toolbar > *) { flex: 1 1 100%; }
+  body:has(.adm-main) .adm-bulk-toolbar .adm-bulk-count { flex: 1 1 100%; }
+  body:has(.adm-main) .adm-table-pedidos td.col-actions-sticky .adm-btn { width: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:has(.adm-main) *,
+  body:has(.adm-main) *::before,
+  body:has(.adm-main) *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+}
+
+/* Usuarios: conservar proporciones de tabla y explicar la diferencia entre
+   desbloquear una cuenta y volver a registrar una cuenta eliminada. */
+#section-usuarios .user-tabs { flex-wrap: wrap; }
+#section-usuarios .adm-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+#section-usuarios .adm-table {
+  width: 100%;
+  min-width: 1260px;
+  table-layout: auto;
+}
+#section-usuarios .adm-table th:nth-child(4),
+#section-usuarios .adm-table td:nth-child(4) {
+  min-width: 230px;
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
+}
+#section-usuarios .adm-table th:nth-child(3),
+#section-usuarios .adm-table td:nth-child(3) { min-width: 150px; }
+#section-usuarios .adm-table th:last-child,
+#section-usuarios .adm-table td:last-child { min-width: 180px; }
+.users-deleted-guidance {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 14px;
+  padding: 12px 16px;
+  border: 1px solid color-mix(in srgb, var(--adm-accent) 24%, white);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--adm-accent) 6%, white);
+  color: var(--adm-text);
+  font-size: 12px;
+  line-height: 1.55;
+}
+.users-deleted-guidance strong { color: var(--adm-accent); }
+.users-deleted-guidance[hidden] { display: none !important; }
+
+/* Mensajes largos: ajustan su ancho y se colocan encima de la navegación
+   inferior en móviles, sin desbordarse ni ocultar controles. */
+.adm-toast {
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: max(20px, env(safe-area-inset-bottom, 0px));
+  width: max-content;
+  max-width: min(600px, calc(100vw - 32px));
+  padding: 14px 18px;
+  border-radius: 14px;
+  line-height: 1.5;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+/* La marca no se imprime en columna en el rail comprimido. La flecha ocupa
+   su propia línea y el monograma queda centrado por debajo. */
+@media (min-width: 541px) and (max-width: 900px) {
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar-logo {
+    display: flex !important;
+    flex: 0 0 106px;
+    height: 106px;
+    min-height: 106px;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 8px 6px 10px;
+  }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar-toggle {
+    top: 8px;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar-logo-text {
+    flex: 0 0 42px;
+  }
+  html.adm-sidebar-is-collapsed body:has(.adm-main) .adm-sidebar-logo-sub { display: none !important; }
+}
+
+@media (min-width: 901px) {
+  html.adm-sidebar-is-collapsed .adm-sidebar-logo {
+    display: flex;
+    height: 106px;
+    min-height: 106px;
+    flex-basis: 106px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 8px 6px 10px;
+  }
+  html.adm-sidebar-is-collapsed .adm-sidebar-toggle {
+    top: 8px;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  html.adm-sidebar-is-collapsed .adm-sidebar-logo-text {
+    display: grid !important;
+    flex: 0 0 42px;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--admin-color-brand);
+    color: #fff;
+    font-size: 0;
+    letter-spacing: 0;
+    line-height: 1;
+  }
+  html.adm-sidebar-is-collapsed .adm-sidebar-logo-text::before {
+    content: 'TT';
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: .08em;
+  }
+  html.adm-sidebar-is-collapsed .adm-sidebar-logo-sub { display: none; }
+}
+
+@media (max-width: 540px) {
+  .adm-toast {
+    right: 12px;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    max-width: calc(100vw - 24px);
+    padding: 12px 14px;
+    font-size: 12px;
+  }
+  .users-deleted-guidance { padding: 11px 12px; }
+}
+
+/* En móvil, las pestañas inferiores siguen disponibles y el menú completo
+   se abre desde la barra superior sin quitar ancho al contenido. */
+@media (max-width: 540px) {
+  html.adm-mobile-sidebar-open body { overflow: hidden; }
+  body:has(.adm-main) .adm-main { width: 100%; margin-left: 0; }
+  body:has(.adm-main) .adm-sidebar {
+    display: flex;
+    width: min(320px, calc(100vw - 48px));
+    max-width: calc(100vw - 48px);
+    transform: translateX(-105%);
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform .22s ease, visibility .22s ease;
+    z-index: 320 !important;
+  }
+  html.adm-mobile-sidebar-open body:has(.adm-main) .adm-sidebar.open {
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+    box-shadow: 16px 0 32px rgba(37, 23, 30, .18);
+  }
+  html.adm-mobile-sidebar-open .adm-overlay.show { display: block; z-index: 310; }
+  body:has(.adm-main) .adm-topbar {
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+  body:has(.adm-main) .adm-hamburger {
+    display: grid;
+    grid-column: 1;
+    place-items: center;
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--adm-border);
+    border-radius: 10px;
+    background: var(--adm-card);
+    color: var(--adm-text);
+    cursor: pointer;
+  }
+  body:has(.adm-main) .adm-topbar-title { grid-column: 2; }
+  body:has(.adm-main) .adm-topbar-actions { grid-column: 3; }
+  body:has(.adm-main) .adm-sidebar-logo {
+    display: block !important;
+    min-height: 84px;
+    padding: 20px 64px 16px 20px;
+    text-align: left;
+  }
+  body:has(.adm-main) .adm-sidebar-logo-text { white-space: nowrap; }
+  body:has(.adm-main) .adm-sidebar-logo-sub { display: block; }
+  body:has(.adm-main) .adm-sidebar-toggle {
+    top: 12px;
+    right: 12px;
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+  }
+  body:has(.adm-main) .adm-user-info {
+    justify-content: flex-start;
+    padding: 16px 20px;
+  }
+  body:has(.adm-main) .adm-user-info .adm-user-name,
+  body:has(.adm-main) .adm-user-info .adm-user-role-badge,
+  body:has(.adm-main) .adm-user-info .adm-live-clock,
+  body:has(.adm-main) .adm-nav-divider { display: block; }
+  body:has(.adm-main) .adm-nav-item {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    min-height: 48px;
+    padding: 10px 20px;
+    font-size: 13px;
+    line-height: 1.3;
+    text-align: left;
+    text-transform: none;
+    white-space: normal;
+    overflow-wrap: normal;
   }
 }

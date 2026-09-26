@@ -101,7 +101,7 @@ check(
   'runtime: falta cuenta compartida'
 );
 check(
-  runtime.includes("CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1'")
+  runtime.includes("CART_RUNTIME_URL = '../../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1'")
     && runtime.includes('import(CART_RUNTIME_URL)'),
   'runtime: falta sincronización versionada y compartida del carrito'
 );

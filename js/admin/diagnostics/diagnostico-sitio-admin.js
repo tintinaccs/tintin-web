@@ -1,5 +1,5 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
-import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
+import { SUPER_ADMIN } from '../../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1';
 import {
   collection,
   doc,
@@ -18,7 +18,7 @@ import {
   modeIncludes,
   stableHash,
   summarizeReport
-} from '../../diagnostics/nucleo-diagnostico.js?v=tintin-20260716-cloudinary-fix-1';
+} from '../../diagnostics/nucleo-diagnostico.js?v=tintin-20260925-cache-converge-1';
 
 const MANIFEST_URL = './diagnostic-manifest.json';
 const HISTORY_DB = 'tintin-diagnostics-readonly';

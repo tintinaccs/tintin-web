@@ -227,6 +227,12 @@ body:not(:has(.adm-main)) :is(.tt-btn-transparent,[data-button-variant="transpar
 html body:not(:has(.adm-main)) :is(.tt-btn:not(.tt-btn-outline):not(.tt-btn-outline-full),.tt-btn-primary,.tt-btn-primary-full,.tt-cart-checkout-btn,.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link,.ck-btn,.login-google,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn,.tt-home-runtime-state-link,.perfil-btn-primary){
   color:var(--color-button-primary-text,#FFFFFF)!important;
 }
+/* Los hijos (span, small…) los alcanza el selector global de texto, que gana
+   por especificidad a ".tt-btn *": heredan el color del botón que los contiene.
+   .login-google queda fuera porque su superficie es blanca (login-maintenance). */
+html body:not(:has(.adm-main)) :is(.tt-btn:not(.tt-btn-outline):not(.tt-btn-outline-full),.tt-btn-primary,.tt-btn-primary-full,.tt-cart-checkout-btn,.tt-wa-float,.tt-footer-wa,.tt-contact-wa-link,.ck-btn,.login-email-btn,.tt-welcome-primary,.tt-welcome-test-btn,.tt-home-runtime-state-link,.perfil-btn-primary) :is(span,small,strong,b,em,i){
+  color:inherit!important;
+}
 
 /* Las etiquetas de colecciones viven sobre fotografías: la pastilla oscura
    mantiene legibilidad estable aunque cambie la imagen o su recorte. */

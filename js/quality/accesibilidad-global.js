@@ -177,6 +177,10 @@ function activateDialog(dialog) {
   labelDialog(dialog);
   requestAnimationFrame(() => {
     if (activeDialog !== dialog || !isVisible(dialog)) return;
+    // Si quien abrió el diálogo ya puso el foco en un control interno
+    // (autofocus o la acción principal), se respeta.
+    const current = document.activeElement;
+    if (current !== dialog && dialog.contains(current)) return;
     const target = focusables(dialog)[0] || dialog;
     target.focus({ preventScroll: true });
   });

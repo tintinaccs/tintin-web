@@ -1,10 +1,10 @@
-import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1';
 import {
   collection, limit, onSnapshot, orderBy, query,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-const ASSET_VERSION = 'tintin-20260902-customer-notification-audience-1';
+const ASSET_VERSION = 'tintin-20260925-cache-converge-1';
 const API_RETRY_DELAYS_MS = [450, 1200];
 let initialized = false;
 let currentUser = null;

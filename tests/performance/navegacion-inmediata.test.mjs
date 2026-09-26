@@ -100,5 +100,10 @@ test('el carrito se inicia únicamente desde la navegación modular', () => {
   const navigation = fs.readFileSync('js/components/navigation/compartido/carga-navegacion.js', 'utf8');
   assert.doesNotMatch(loader, /importSibling\('components\/cart\/sincronizacion-carrito\.js', 'Cart Sync'\)/);
   assert.doesNotMatch(quality, /bootCartPhase7/);
-  assert.match(navigation, /CART_RUNTIME_URL = '\.\.\/\.\.\/\.\.\/components\/cart\/sincronizacion-carrito\.js\?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1'/);
+  const cartRuntimeUrl = navigation.match(/const CART_RUNTIME_URL = '([^']+)'/)?.[1];
+  assert.ok(cartRuntimeUrl, 'La navegación modular debe declarar la URL del runtime del carrito.');
+  assert.ok(
+    cartRuntimeUrl.endsWith(`?v=${colorVersion}`),
+    'El runtime del carrito debe conservar la versión canónica compartida de primer paint.'
+  );
 });

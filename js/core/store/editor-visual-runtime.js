@@ -1,7 +1,7 @@
 import {
   detectContentPageId, getNested, getPageSchema, normalizeContentValue,
   sanitizeContentHref, sanitizeContentText,
-} from './esquema-contenido.js?v=tintin-20260826-carousel-order-3';
+} from './esquema-contenido.js?v=tintin-20260925-cache-converge-1';
 import {
   VISUAL_BLOCK_TYPES, VISUAL_STYLE_OPTIONS,
 } from './contratos-visual-builder.js?v=tintin-20260810-visual-studio-v2-1';

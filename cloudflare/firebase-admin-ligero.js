@@ -247,6 +247,113 @@ export async function firestoreAdminGet(env, path) {
 }
 
 /**
+ * Lee varios documentos Firestore en una sola subrequest. Es especialmente
+ * importante en Workers: dos GET por producto agotan rápido el presupuesto
+ * de subrequests cuando una cola debe reconstruir productos e inventario.
+ */
+export function parseFirestoreBatchGetResponseText(body) {
+  // Firestore batchGet es una respuesta *streamed*. Según el adaptador HTTP de
+  // Google puede llegar como un array JSON formateado en varias líneas o como
+  // varios objetos JSON consecutivos/NDJSON. No se puede asumir "una línea =
+  // un JSON": un documento con maps/arrays puede ocupar muchas líneas.
+  let source = String(body ?? '').trim();
+  if (!source) return [];
+
+  // Algunos proxies de Google anteponen el prefijo anti-XSSI. No forma parte
+  // de la carga útil y debe retirarse antes de parsear.
+  if (source.startsWith(")]}'")) {
+    source = source.replace(/^\)\]\}'(?:\r?\n)?/, '').trim();
+  }
+
+  const rows = [];
+  try {
+    const parsed = JSON.parse(source);
+    if (Array.isArray(parsed)) rows.push(...parsed);
+    else if (parsed && typeof parsed === 'object') rows.push(parsed);
+  } catch {
+    // Fallback para streaming HTTP: extrae valores JSON completos respetando
+    // strings escapados y estructuras anidadas. Así no depende de saltos de
+    // línea ni del pretty-print del backend.
+    let start = -1;
+    let depth = 0;
+    let inString = false;
+    let escaped = false;
+
+    for (let index = 0; index < source.length; index += 1) {
+      const char = source[index];
+
+      if (start < 0) {
+        if (char === '{') {
+          start = index;
+          depth = 1;
+          inString = false;
+          escaped = false;
+        }
+        continue;
+      }
+
+      if (inString) {
+        if (escaped) {
+          escaped = false;
+        } else if (char === '\\') {
+          escaped = true;
+        } else if (char === '"') {
+          inString = false;
+        }
+        continue;
+      }
+
+      if (char === '"') {
+        inString = true;
+        continue;
+      }
+      if (char === '{' || char === '[') depth += 1;
+      else if (char === '}' || char === ']') depth -= 1;
+
+      if (depth === 0) {
+        try {
+          const row = JSON.parse(source.slice(start, index + 1));
+          if (row && typeof row === 'object') rows.push(row);
+        } catch {
+          throw new Error('Firestore BATCH GET devolvió una respuesta inválida.');
+        }
+        start = -1;
+      }
+    }
+
+    if (start >= 0 || rows.length === 0) {
+      throw new Error('Firestore BATCH GET devolvió una respuesta inválida.');
+    }
+  }
+
+  return rows.flatMap(row => row?.found ? [row.found] : []);
+}
+
+export async function firestoreAdminBatchGet(env, paths) {
+  const sa = parseServiceAccount(env);
+  const uniquePaths = [...new Set((Array.isArray(paths) ? paths : [])
+    .map(path => String(path || '').trim())
+    .filter(path => /^(?:[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+)(?:\/[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+)*$/.test(path)))]
+    .slice(0, 100);
+  if (!uniquePaths.length) return [];
+
+  const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
+  const prefix = `projects/${sa.project_id}/databases/(default)/documents/`;
+  const response = await fetch(`${firestoreDatabaseUrl(sa)}/documents:batchGet`, {
+    method: 'POST',
+    headers: {
+      authorization: `Bearer ${accessToken}`,
+      'content-type': 'application/json',
+      accept: 'application/json',
+    },
+    body: JSON.stringify({ documents: uniquePaths.map(path => prefix + path) }),
+  });
+  if (!response.ok) throw new Error(`Firestore BATCH GET falló (${response.status})`);
+
+  return parseFirestoreBatchGetResponseText(await response.text());
+}
+
+/**
  * Busca el primer documento cuyo campo coincida exactamente con `value`.
  * Hace una consulta index-free de igualdad por cada nombre de campo legado
  * indicado. Se usa en el cutover de Shopify para resolver handles antiguos

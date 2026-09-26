@@ -1,7 +1,9 @@
-import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1';
-import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3';
+import { auth, db } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1';
+import { waitForAdminAppCheck } from '../auth/app-check-admin.js?v=tintin-20260924-admin-appcheck-gate-1-auth-popup-resolver-1';
+import { subscribeAuthState } from '../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1';
 import { isSuperAdmin } from '../../core/auth/identidad-super-admin.js?v=tintin-20260916-superadmin-identity-2';
 import { collection, doc, limit, onSnapshot, query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { runAdminBulk } from '../utilidades-progreso-admin.js?v=tintin-20260925-admin-ops-1';
 
 const DEFAULT_SETTINGS = {
   autoMarkSeenReviews: true,
@@ -288,6 +290,7 @@ function hydrateSections() {
             <button type="button" class="adm-btn adm-btn-sm" data-eg-like-bulk="seen">Marcar leídos</button>
             <button type="button" class="adm-btn adm-btn-sm" data-eg-like-bulk="archive">Archivar actividad</button>
             <button type="button" class="adm-btn adm-btn-sm" data-eg-like-bulk="restore">Desarchivar</button>
+            <button type="button" class="adm-btn adm-btn-sm adm-btn-danger" data-eg-like-bulk="delete">Eliminar seleccionados</button>
             <button type="button" class="eg-link-btn" data-eg-like-bulk="clear">Limpiar selección</button>
           </div>
           <div class="eg-callout"><strong>Importante:</strong> Archivar solo organiza este panel. “Quitar de favoritos” sí modifica la lista de la clienta y está separado dentro de las acciones avanzadas.</div>
@@ -311,6 +314,8 @@ function setBadge(id, count) {
   el.hidden = count === 0;
 }
 function toast(message, tone = 'success') {
+  // Misma pila de avisos que el resto del panel (abajo a la derecha, sin taparse).
+  if (window.toast?.__tintinOps) { window.toast(message, { type: tone }); return; }
   const root = $('#eg-toast-root');
   if (!root) return;
   const node = document.createElement('div');
@@ -962,31 +967,36 @@ async function bulkReviews(action, trigger) {
   }
   trigger.disabled = true;
   const actionMap = { seen:'reviewSeen', publish:'reviewVisibility', hide:'reviewVisibility', archive:'reviewArchive', delete:'reviewPurge' };
-  const results = await Promise.allSettled(ids.map(id => {
+  const results = await runAdminBulk(ids, id => {
     const input = { action: actionMap[action], reviewId:id };
     if (action === 'publish') input.visible = true;
     if (action === 'hide') input.visible = false;
     if (action === 'archive') input.archived = true;
     return api(input);
-  }));
+  }, { title: action === 'delete' ? 'Eliminando reseñas' : 'Actualizando reseñas', name: 'ReseñasEnLote', module: 'Participación · reseñas', concurrency: 3 });
   trigger.disabled = false;
   selectedReviews.clear();
   const okCount = results.filter(item => item.status === 'fulfilled').length;
-  toast(`${okCount} reseña${okCount === 1 ? '' : 's'} actualizada${okCount === 1 ? '' : 's'}`);
+  toast(`${okCount} de ${ids.length} reseña${ids.length === 1 ? '' : 's'} actualizada${ids.length === 1 ? '' : 's'}`, okCount === ids.length ? 'success' : okCount ? 'warning' : 'error');
 }
 async function bulkLikes(action, trigger) {
   if (action === 'clear') { selectedLikes.clear(); renderLikes(); return; }
   const ids = [...selectedLikes];
   if (!ids.length) return;
+  if (action === 'delete') {
+    const ok = await confirmDialog({ title:'Eliminar favoritos seleccionados', message:`Se quitarán ${ids.length} favoritos de sus cuentas. Esta acción no se puede deshacer.`, confirmText:'Eliminar seleccionados', danger:true });
+    if (!ok) return;
+  }
   trigger.disabled = true;
-  const results = await Promise.allSettled(ids.map(id => {
+  const results = await runAdminBulk(ids, id => {
     if (action === 'seen') return api({ action:'likeSeen', likeId:id });
+    if (action === 'delete') return api({ action:'likeDelete', likeId:id });
     return api({ action:'likeArchive', likeId:id, archived: action === 'archive' });
-  }));
+  }, { title: action === 'delete' ? 'Eliminando favoritos' : 'Actualizando favoritos', name: 'FavoritosEnLote', module: 'Participación · me gusta', concurrency: 3 });
   trigger.disabled = false;
   selectedLikes.clear();
   const okCount = results.filter(item => item.status === 'fulfilled').length;
-  toast(`${okCount} registro${okCount === 1 ? '' : 's'} actualizado${okCount === 1 ? '' : 's'}`);
+  toast(`${okCount} de ${ids.length} registro${ids.length === 1 ? '' : 's'} actualizado${ids.length === 1 ? '' : 's'}`, okCount === ids.length ? 'success' : okCount ? 'warning' : 'error');
 }
 
 function viewProfile(ownerUid, email) {
@@ -1167,9 +1177,28 @@ bindEvents();
 renderSettings();
 initViews();
 
+let engagementRealtimeErrorNotified = false;
+
 function stopEngagementRealtime() {
   realtimeUnsubscribers.forEach(unsub => { try { unsub(); } catch {} });
   realtimeUnsubscribers = [];
+}
+
+function engagementRealtimeError(label) {
+  return error => {
+    const code = String(error?.code || '');
+    console.warn(`[admin-engagement] ${label} no disponible:`, code || error?.message || error);
+    if (!engagementRealtimeErrorNotified) {
+      engagementRealtimeErrorNotified = true;
+      toast('La actividad en vivo está temporalmente no disponible. Tu sesión no se cerró; reintentá cuando vuelva la conexión.', 'error');
+    }
+    if (code === 'permission-denied' || code === 'unauthenticated') {
+      // Un rechazo de credenciales no se reintenta en bucle. El guard global
+      // decide el estado de sesión/App Check y montará listeners nuevos sólo
+      // cuando vuelva a existir autorización confirmada.
+      stopEngagementRealtime();
+    }
+  };
 }
 
 subscribeAuthState(async current => {
@@ -1181,29 +1210,30 @@ subscribeAuthState(async current => {
   stopEngagementRealtime();
   if (!isSuperAdmin(current)) { user = null; return; }
   user = current;
-  await appCheckReady;
+  engagementRealtimeErrorNotified = false;
+  if (!await waitForAdminAppCheck(12000)) return;
 
   realtimeUnsubscribers.push(onSnapshot(query(collection(db, 'users'), limit(ENGAGEMENT_REALTIME_LIMIT)), snapshot => {
     usersByUid = new Map(snapshot.docs.map(item => [item.id, item.data()]));
     renderReviews(); renderLikes(); refreshDrawer();
-  }));
+  }, engagementRealtimeError('usuarios')));
   realtimeUnsubscribers.push(onSnapshot(query(collection(db, 'reviewRecords'), limit(ENGAGEMENT_REALTIME_LIMIT)), snapshot => {
     reviews = snapshot.docs.map(item => ({ ...item.data(), reviewId: item.data().reviewId || item.id })).sort((a,b) => timeValue(b.createdAt) - timeValue(a.createdAt));
     setBadge('reviews-unread-badge', reviews.filter(item => item.unread).length);
     renderReviews(); refreshDrawer();
-  }));
+  }, engagementRealtimeError('reseñas')));
   realtimeUnsubscribers.push(onSnapshot(query(collection(db, 'likeRecords'), limit(ENGAGEMENT_REALTIME_LIMIT)), snapshot => {
     likes = snapshot.docs.map(item => ({ ...item.data(), likeId: item.data().likeId || item.id })).sort((a,b) => timeValue(b.createdAt) - timeValue(a.createdAt));
     setBadge('likes-unread-badge', likes.filter(item => item.unread).length);
     renderLikes(); refreshDrawer();
-  }));
+  }, engagementRealtimeError('favoritos')));
   loadReports().catch(error => toast(error.message, 'error'));
   realtimeUnsubscribers.push(onSnapshot(doc(db, 'settings', 'reviewQuickReplies'), snapshot => {
     if (Array.isArray(snapshot.data()?.items)) quickReplies = snapshot.data().items.map(value => String(value || '').trim()).filter(Boolean).slice(0,20);
     renderSettings(); refreshDrawer();
-  }));
+  }, engagementRealtimeError('respuestas rápidas')));
   realtimeUnsubscribers.push(onSnapshot(doc(db, 'settings', 'engagementAdmin'), snapshot => {
     settings = { ...DEFAULT_SETTINGS, ...(snapshot.data() || {}) };
     applySettings();
-  }));
+  }, engagementRealtimeError('configuración de participación')));
 });

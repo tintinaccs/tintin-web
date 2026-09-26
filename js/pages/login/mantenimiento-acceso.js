@@ -18,7 +18,7 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
   function loadStyles() {
     ensureStyle(
       'link[data-tt-login-maintenance]',
-      '../../../css/pages/login/login-maintenance.css?v=tintin-20260811-cls-desktop-stable-2',
+      '../../../css/pages/login/login-maintenance.css?v=tintin-20260925-contrast-1',
       'ttLoginMaintenance'
     );
     ensureStyle(
@@ -74,10 +74,10 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
 
   async function repairCanonicalProfileIfNeeded() {
     const [{ db }, profileModule, firestoreApi, { subscribeAuthState }] = await Promise.all([
-      import('../../core/firebase/firebase.js?v=tintin-20260921-auth-session-never-unknown-1'),
-      import('../../core/store/perfil-usuario.js?v=tintin-20260923-user-reentry-2'),
+      import('../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1'),
+      import('../../core/store/perfil-usuario.js?v=tintin-20260923-user-reentry-2-auth-popup-resolver-1'),
       import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
-      import('../../core/auth/coordinador-sesion.js?v=tintin-20260921-auth-session-never-unknown-3'),
+      import('../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1'),
     ]);
 
     // Reutiliza la única suscripción canónica de sesión (coordinador-sesion.js)
