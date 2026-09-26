@@ -208,3 +208,15 @@
     animation: none !important;
   }
 }
+
+/* El aviso de conexión y el banner de privacidad comparten la esquina inferior
+   derecha y el aviso tapaba "Personalizar". Mientras hay un aviso de conexión,
+   el banner inicial espera (no se decide nada por la persona y vuelve al
+   reconectar); si la persona ya está personalizando, cede el aviso hasta que
+   guarde o cierre. */
+body:has(#tt-store-gate-network-notice) #tt-privacy-consent:not(.is-customizing),
+body:has(#tt-connectivity-status:not([hidden])) #tt-privacy-consent:not(.is-customizing),
+body:has(#tt-privacy-consent.is-customizing:not([hidden])) #tt-store-gate-network-notice,
+body:has(#tt-privacy-consent.is-customizing:not([hidden])) #tt-connectivity-status {
+  display: none !important;
+}
