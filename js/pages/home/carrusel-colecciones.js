@@ -1,4 +1,4 @@
-import { onCollectionsUpdate } from '../collections/estado-colecciones.js?v=tintin-20260925-cache-converge-1';
+import { onCollectionsUpdate } from '../collections/estado-colecciones.js?v=tintin-20260925-cache-converge-1-launch-20260926-1';
 
 const IMAGE_BASE = '/assets-tintin/images/collections/';
 const PLACEHOLDER = `${IMAGE_BASE}col-placeholder.webp`;
