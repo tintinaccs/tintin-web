@@ -7,6 +7,7 @@ const read = relative => fs.readFileSync(new URL('../../' + relative, import.met
 const SYNC_MODULES = [
   'cloudflare/order-sheets-sync.js',
   'cloudflare/sincronizacion-participacion-sheets.js',
+  'cloudflare/resiliencia-sync-participacion.js',
   'cloudflare/system-health.js',
 ];
 
@@ -21,7 +22,8 @@ test('Toda sincronización servidor→Sheets usa el único Web App canónico', (
 test('El doPost canónico enruta cada acción que envía Cloudflare', () => {
   const doPost = read('apps-script/ProductosUnificados.gs').match(/function doPost\(e\) \{[\s\S]*?\n\}/)?.[0];
   assert.ok(doPost, 'doPost de ProductosUnificados.gs no encontrado');
-  const engagement = read('cloudflare/sincronizacion-participacion-sheets.js');
+  const engagement = read('cloudflare/sincronizacion-participacion-sheets.js')
+    + read('cloudflare/resiliencia-sync-participacion.js');
   const sent = [...engagement.matchAll(/action: '([A-Za-z]+)'/g)].map(match => match[1]);
   assert.deepEqual(sent.sort(), ['syncEngagement', 'syncEngagementBatch']);
   for (const action of sent) {

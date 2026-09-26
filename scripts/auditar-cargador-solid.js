@@ -7,7 +7,8 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const read = relative => fs.readFileSync(path.join(ROOT, relative), 'utf8');
 const failures = [];
-const OFFICIAL_LOADER_BACKGROUND = '#FFADD1';
+// Color oficial del loader desde #649 (css/theme/fondo-solido-cargador.css).
+const OFFICIAL_LOADER_BACKGROUND = '#F7BFD3';
 
 function check(condition, message) {
   if (!condition) failures.push(message);
@@ -18,7 +19,7 @@ const solidCss = read('css/theme/fondo-solido-cargador.css');
 const loaderBrand = read('assets-tintin/images/general/tintin-loader-brand.svg');
 
 check(
-  /#tt-loader\{[^}]*background:#FFADD1/i.test(loaderRuntime),
+  /#tt-loader\{[^}]*background:#F7BFD3/i.test(loaderRuntime),
   `js/cargador-pagina.js debe conservar el fondo sólido oficial ${OFFICIAL_LOADER_BACKGROUND} desde la primera pintura.`
 );
 // Antes esto se cargaba con un @import dentro de tokens-color.css y la
@@ -46,11 +47,11 @@ pagesWithTokens.forEach(({ name, source }) => {
   );
 });
 check(
-  /html body #tt-loader\s*\{[^}]*background:\s*#FFADD1\s*!important[^}]*background-color:\s*#FFADD1\s*!important/is.test(solidCss),
+  /html body #tt-loader\s*\{[^}]*background:\s*#F7BFD3\s*!important[^}]*background-color:\s*#F7BFD3\s*!important/is.test(solidCss),
   `El contenedor del loader debe forzar fondo y background-color sólidos en ${OFFICIAL_LOADER_BACKGROUND}.`
 );
 check(
-  /html body #tt-loader::before\s*\{[^}]*background:\s*#FFADD1\s*!important[^}]*opacity:\s*1\s*!important/is.test(solidCss),
+  /html body #tt-loader::before\s*\{[^}]*background:\s*#F7BFD3\s*!important[^}]*opacity:\s*1\s*!important/is.test(solidCss),
   `El loader debe conservar una capa sólida ${OFFICIAL_LOADER_BACKGROUND} independiente detrás del logo.`
 );
 check(

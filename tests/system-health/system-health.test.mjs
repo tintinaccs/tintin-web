@@ -79,6 +79,36 @@ test('configuración faltante o protocolo Sheets no verificado mantiene FAIL', a
   assert.ok(report.missingConfig.includes('SHEETS_ENGAGEMENT_SECRET'));
 });
 
+test('la cola de participación se informa en integraciones sin alterar ok', async () => {
+  const status = {
+    pendingCount: 2,
+    deadLetterCount: 1,
+    oldestPendingAgeMs: 60_000,
+    lastRunAt: '',
+    lastSuccessAt: '',
+    lastError: 'Acción no permitida',
+  };
+  const report = await runSystemHealth(COMPLETE_ENV, {
+    runtimeRunner: async () => runtimeReport(true),
+    sheetsProbe: async () => ({
+      reachable: true,
+      httpStatus: 200,
+      protocolOk: true,
+      revision: 'apps-script-products-guard-v1',
+      service: 'google-apps-script',
+      summary: {},
+      ms: 10,
+      code: '',
+    }),
+    catalogSheetQueueStatus: async () => null,
+    orderEmailQueueStatus: async () => null,
+    engagementSheetQueueStatus: async () => status,
+  });
+
+  assert.deepEqual(report.integrations.engagementSheetQueue, status);
+  assert.equal(report.ok, true);
+});
+
 test('probe Apps Script confirma el guard canónico sin token y sin escritura', async () => {
   let request = null;
   const result = await probeAppsScript({

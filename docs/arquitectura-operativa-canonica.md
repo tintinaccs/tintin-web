@@ -39,6 +39,8 @@ La URL de Apps Script vive del lado servidor en `cloudflare/sheets-sync-config.j
 
 La cola `catalogSheetSyncQueue` se drena cada 15 minutos desde `.github/workflows/drenar-cola-sync-catalogo.yml`, pero GitHub actúa únicamente como reloj. El workflow obtiene un token OIDC efímero y llama a `/api/catalog-sheet-sync-drain`; Cloudflare verifica la identidad de GitHub y ejecuta el drenaje con sus propias credenciales Firebase y `SHEETS_ENGAGEMENT_SECRET`.
 
+Las reseñas y los "me gusta" que no llegan a Sheets se guardan en `engagementSheetSyncQueue` (`cloudflare/resiliencia-sync-participacion.js`), un documento por registro con su última versión. El mismo endpoint drena hasta 3 por corrida después del catálogo y corta la corrida en el primer fallo. Tras 8 intentos la tarea pasa a `dead_letter`, se crea un aviso diario para el admin y se sigue reintentando cada 6 horas: Apps Script no tiene otra vía para reenviar participación desde Firestore. El borrado global de catálogo reconcilia la cola: descarta las versiones encoladas de los registros que purga o, si Sheets no confirmó el lote, las reemplaza por el tombstone, para que un reintento no restaure en Sheets una reseña borrada. La colección guarda datos personales de la reseña y solo la accede la cuenta de servicio (la regla general de `firestore.rules` niega el acceso de cliente). Diagnóstico muestra pendientes y bloqueadas.
+
 Esto evita mantener una segunda copia de `FIREBASE_SERVICE_ACCOUNT_JSON`/`FIREBASE_SERVICE_ACCOUNT_KEY` en GitHub Actions y elimina los fallos programados causados por secretos Firebase ausentes en GitHub.
 
 ## Correos

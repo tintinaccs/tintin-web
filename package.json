@@ -89,7 +89,7 @@
     "audit:performance": "node scripts/auditar-rendimiento-tiempo-real.js",
     "audit:premium-performance": "node scripts/auditar-performance-premium.mjs",
     "audit:performance-regressions": "node scripts/auditar-rendimiento-regresiones.js",
-    "audit:page-loading": "node scripts/auditar-pagina-carga.js",
+    "audit:page-loading": "node scripts/auditar-pagina-carga.js && node scripts/auditar-cargador-solid.js",
     "test:performance": "playwright test tests/performance",
     "test:pages": "node scripts/smoke-todas-paginas.mjs",
     "audit:critical-healing": "node scripts/auditar-critico-recuperacion.js && node scripts/probar-modelo-inventario.mjs",
