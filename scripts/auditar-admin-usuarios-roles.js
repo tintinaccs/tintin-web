@@ -136,7 +136,7 @@ check(
     /logAudit\('restaurar_usuario'/.test(adminApp) &&
     /applyUserLifecycle/.test(accountStatusFunction) &&
     /auditLog\/\$\{eventId\}/.test(userLifecycle),
-  'Rol, bloqueo, restauración y soft-delete deben quedar trazados desde su autoridad canónica.'
+  'Rol, bloqueo, restauración y eliminación deben quedar trazados desde su autoridad canónica.'
 );
 check(
   'La tabla escapa nombre, email y avatar',
