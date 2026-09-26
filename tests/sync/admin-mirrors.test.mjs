@@ -4,7 +4,7 @@ import test from 'node:test';
 
 const read = path => fs.readFileSync(path, 'utf8');
 
-test('Sheets nunca elimina físicamente identidades de usuario', () => {
+test('Sheets elimina cuentas solo a través del dominio canónico de baja', () => {
   const webhook = read('functions/api/sheets-admin-webhook.js');
   const lifecycle = read('cloudflare/user-lifecycle-domain.js');
   const parity = read('apps-script/AdminParity.gs');
@@ -12,9 +12,11 @@ test('Sheets nunca elimina físicamente identidades de usuario', () => {
   assert.doesNotMatch(webhook, /deleteFirebaseUser/);
   assert.doesNotMatch(webhook, /path:\s*`users\/\$\{uid\}`\s*,\s*delete:\s*true/);
   assert.match(webhook, /action === 'deleteUser' \|\| action === 'softDeleteUser'/);
-  assert.match(lifecycle, /deleted:\s*fsBoolean\(true\)/);
-  assert.match(lifecycle, /setFirebaseUserDisabled\(env, uid, action === 'softDelete'\)/);
+  assert.match(webhook, /applyUserLifecycle\(env, \{[\s\S]*?action: 'delete'/);
+  assert.match(lifecycle, /deleteFirebaseUser\(env, uid\)/);
+  assert.doesNotMatch(lifecycle, /deleted:\s*fsBoolean\(true\)/);
   assert.match(parity, /'ELIMINAR' \? 'softDeleteUser'/);
+  assert.match(parity, /tintinPullUsersFromWeb_\(\)/);
   assert.match(parity, /'REACTIVAR' \? 'reactivateUser'/);
   assert.doesNotMatch(parity, /sheet\.deleteRow/);
 });

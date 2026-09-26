@@ -249,8 +249,14 @@ function tintinHandleUserParityEdit_(e) {
   try {
     var response = tintinParityCallWebhook_(TINTIN_ADMIN_WEBHOOK_PATH, payload);
     var result = response.result || {};
+    if (action === 'softDeleteUser') {
+      // La baja es definitiva: el espejo se repinta desde Firestore y la fila
+      // desaparece. No se escribe sobre la fila porque cambian las posiciones.
+      tintinPullUsersFromWeb_();
+      tintinRecordSyncSafely_('SYNCED', sheet.getName(), e.range.getA1Notation(), 'Cuenta web eliminada por completo.');
+      return;
+    }
     sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.lastChangeId).setValue(result.changeId || changeId);
-    if (action === 'softDeleteUser') sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.blocked).setValue('Sí');
     if (action === 'reactivateUser') sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.blocked).setValue('No');
     if (action !== 'updateUser') sheet.getRange(e.range.getRow(), TINTIN_USERS_COL.action).clearContent();
     tintinRecordSyncSafely_('SYNCED', sheet.getName(), e.range.getA1Notation(), 'Cuenta web sincronizada por lifecycle canónico.');

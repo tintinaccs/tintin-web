@@ -228,7 +228,7 @@ import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.j
 import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260918-auth-incident-diagnostics-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { AUTH_STATES, subscribeSession, createAuthHandoff } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
 import { recordAuthDiagnostic } from "./js/core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
-import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
+import { showBlockedModal, accountProblemHtml } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260926-account-problem-whatsapp-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "./js/core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { getProfileCompletionPlan, buildMissingProfilePatch, isValidNamePart } from "./js/pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260912-post-login-profile-1";
 import { createLocationMap } from "./js/components/location/mapa-ubicacion.js?v=tintin-20260905-location-search-recovery-1";
@@ -324,14 +324,16 @@ function hideMessages() {
   document.getElementById("login-success").classList.remove("show");
 }
 
-function errMsg(code) {
+function errMsg(code, email = '') {
+  // Acceso deshabilitado: la persona solo ve el aviso corto con el enlace a
+  // WhatsApp; el estado real de la cuenta se consulta en el panel.
+  if (code === "auth/user-disabled") return accountProblemHtml(email);
   const msgs = {
     "auth/popup-closed-by-user":      "Cerraste la ventana de Google antes de terminar.",
     "auth/cancelled-popup-request":   "Cerraste la ventana de Google antes de terminar.",
     "auth/popup-blocked":             "El navegador bloqueó la ventana de Google — permití ventanas emergentes para este sitio e intentá de nuevo.",
     "auth/network-request-failed":    "Sin conexión — revisá tu internet e intentá de nuevo.",
     "auth/too-many-requests":         "Demasiados intentos. Esperá un momento e intentá de nuevo.",
-    "auth/user-disabled":             "Tu acceso está desactivado. Si tu cuenta figura como Bloqueada, el Super Admin puede restaurarla desde el panel. Si figura como Eliminada, registrate nuevamente con el mismo correo para crear un perfil nuevo y recuperar tu historial de compras. Si no reconocés el bloqueo, escribinos por WhatsApp.",
     "auth/unauthorized-domain":       "Este dominio todavía no está autorizado para entrar con Google. Usá el acceso por correo o avisá al equipo de Tintin.",
     "auth/operation-not-allowed":     "El acceso con Google está temporalmente deshabilitado. Usá el acceso por correo e intentá más tarde.",
     "auth/internal-error":            "Google no pudo completar el ingreso. Recargá la página e intentá de nuevo.",
@@ -905,7 +907,7 @@ async function finishGoogleLogin(user) {
   const { role, blocked, welcomePending } = profile;
   if (blocked) {
     hideLoginOverlay();
-    showBlockedModal();
+    showBlockedModal({ email: user.email });
     return;
   }
   reportLoginToSuperAdmin(user);
@@ -921,7 +923,7 @@ async function finishOtpLogin(user) {
   const { role, blocked, welcomePending } = profile;
   if (blocked) {
     hideLoginOverlay();
-    showBlockedModal();
+    showBlockedModal({ email: user.email });
     return;
   }
   reportLoginToSuperAdmin(user);
@@ -944,7 +946,7 @@ async function handleGoogleRedirectReturn(observedUser) {
       explicitLoginInProgress = false;
       hideLoginOverlay();
       revealLoginSurface();
-      showError(errMsg(finishError.code));
+      showError(errMsg(finishError.code, redirectUser.email));
     }
     return true;
   }
@@ -958,7 +960,7 @@ async function handleGoogleRedirectReturn(observedUser) {
   hideLoginOverlay();
   revealLoginSurface();
   showError(error
-    ? errMsg(error.code)
+    ? errMsg(error.code, error.customData?.email)
     : 'Google no pudo completar el ingreso en este navegador. Probá otra vez o usá el acceso por correo.');
   return true;
 }
@@ -1044,7 +1046,7 @@ subscribeSession(async snapshot => {
   const profileData = profileSnapshot?.exists() ? profileSnapshot.data() : {};
   if (!isSuperAdmin && profileData.blocked === true) {
     hideLoginOverlay();
-    showBlockedModal();
+    showBlockedModal({ email: user.email });
     return;
   }
   const storedRole = profileData.role || 'client';
@@ -1148,7 +1150,7 @@ const loginConGoogle = async () => {
         ? 'tintin:login-cancelled'
         : 'tintin:login-failed'
     ));
-    showError(errMsg(e.code));
+    showError(errMsg(e.code, e.customData?.email));
   }
 };
 document.getElementById("btn-google").onclick = loginConGoogle;
@@ -1399,7 +1401,7 @@ document.getElementById('btn-verify-otp').onclick = async () => {
     explicitLoginInProgress = false;
     btn.disabled = false;
     hideLoginOverlay();
-    showError(otpErrorMessage(e.code));
+    showError(e.code === 'auth/user-disabled' ? errMsg(e.code, otpEmail) : otpErrorMessage(e.code));
   }
 };
 </script>

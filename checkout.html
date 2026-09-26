@@ -395,7 +395,7 @@ import {
 } from "./js/components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { COUNTRIES, DEFAULT_COUNTRY, findCountryByCode, normalizePhone, isValidPhone, detectCountryFromDigits } from "./js/components/forms/utilidades-telefono.js?v=tintin-20260901-phone-py-only-1";
 import { isValidCi, normalizeCi, isValidRuc, normalizeRuc, isValidRazonSocial } from "./js/components/forms/validacion-documentos-py.js?v=tintin-20260822-facturacion-1";
-import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260818-blocked-icon-svg-1";
+import { showBlockedModal } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260926-account-problem-whatsapp-1";
 import {
   isAccessAllowed,
   normalizeStoreAccessConfig,
@@ -896,7 +896,7 @@ function showCkToast(message) {
 // usa login.html (js/components/modals/modal-bloqueo.js) y bloquea la interacción (no se saca
 // hasta recargar/loguearse con otra cuenta).
 function showBlockedOverlay() {
-  showBlockedModal();
+  showBlockedModal({ email: auth.currentUser?.email || '' });
 }
 
 // Super Admin → Configuración → "Tienda abierta" — si lo apaga, el checkout

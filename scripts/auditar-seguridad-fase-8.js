@@ -104,18 +104,17 @@ check(
 );
 
 check(
-  'La eliminación permite un reingreso limpio y conserva únicamente historial comercial',
+  'La eliminación borra la cuenta por completo y permite un registro nuevo con el mismo correo',
   (admin.includes("fetch('/api/admin-delete-user'") || admin.includes("authenticatedFetch('/api/admin-delete-user'")) &&
     deleteUserEndpoint.includes('applyUserLifecycle') &&
-    lifecycle.includes("profileStatus: fsString('deleted')") &&
-    lifecycle.includes("setFirebaseUserDisabled(env, uid, action === 'softDelete')") &&
+    deleteUserEndpoint.includes('purgeUserByEmail') &&
     lifecycle.includes('deleteFirebaseUser(env, uid)') &&
+    lifecycle.includes('adminPurgeUserEngagement(env, uid)') &&
     lifecycle.includes('deletedEmailHash') &&
     lifecycle.includes('auditLog/${eventId}') &&
     lifecycle.includes('phoneReservations/') &&
-    fs.existsSync('functions/api/claim-commerce-history.js') &&
-    fs.readFileSync('functions/api/claim-commerce-history.js', 'utf8').includes('requireFirebaseUser(request)'),
-  'Debe borrar la identidad de acceso, anonimizar el perfil eliminado y recuperar solo las compras tras verificar el nuevo registro'
+    !lifecycle.includes('setFirebaseUserDisabled'),
+  'Debe borrar acceso, perfil, reservas, participación y restos de bajas anteriores, conservando solo pedidos y auditoría sin datos personales'
 );
 
 check(

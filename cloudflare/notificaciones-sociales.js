@@ -190,6 +190,21 @@ export async function buildUserNotificationWrite(recipientUid, event, dedupeKey)
   };
 }
 
+/** Ruta determinística de la notificación de usuario para una clave de deduplicación. */
+export async function userNotificationPath(recipientUid, dedupeKey) {
+  const uid = safeId(recipientUid, 'Cuenta destinataria');
+  const key = normalizeDedupeKey(dedupeKey);
+  if (!key) return '';
+  return `users/${uid}/notifications/${await hashId(`user:${uid}:${key}`)}`;
+}
+
+/** Ruta determinística de la notificación del panel para una clave de deduplicación. */
+export async function adminNotificationPath(dedupeKey) {
+  const key = normalizeDedupeKey(dedupeKey);
+  if (!key) return '';
+  return `adminNotifications/${await hashId(`admin:${key}`)}`;
+}
+
 export async function buildAdminNotificationWrite(event, dedupeKey) {
   const key = normalizeDedupeKey(dedupeKey);
   if (!key) throw new Error('La notificación requiere clave de deduplicación');

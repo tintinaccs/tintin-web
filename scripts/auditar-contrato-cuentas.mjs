@@ -22,14 +22,16 @@ check('customerId queda inmutable y ligado al UID', rules.includes("'customerId'
 check('La auditoría continúa append-only', /match \/auditLog\/\{logId\}[\s\S]{0,260}allow update, delete: if false/.test(rules));
 check('PIN ya no excluye cuentas Google', !otp.includes('google_account_exists') && !otp.includes("providers.includes('google.com')"));
 check(
-  'Eliminar cuenta borra acceso y conserva solo un historial comercial reclamable',
+  'Eliminar cuenta la borra por completo (acceso, perfil y participación) y conserva solo los pedidos',
   deletion.includes('applyUserLifecycle') &&
-    lifecycle.includes("profileStatus: fsString('deleted')") &&
-    lifecycle.includes("deleted: fsBoolean(true)") &&
-    lifecycle.includes("setFirebaseUserDisabled(env, uid, action === 'softDelete')") &&
+    deletion.includes('purgeUserByEmail') &&
     lifecycle.includes('deleteFirebaseUser(env, uid)') &&
+    lifecycle.includes('adminPurgeUserEngagement(env, uid)') &&
+    lifecycle.includes('{ path: `users/${uid}`, delete: true }') &&
     lifecycle.includes('deletedEmailHash') &&
-    read('functions/api/claim-commerce-history.js').includes('requireFirebaseUser(request)')
+    !lifecycle.includes('setFirebaseUserDisabled') &&
+    !lifecycle.includes('deleted: fsBoolean(true)') &&
+    !lifecycle.includes('orders/')
 );
 check('Participación usa el email del contrato de cuentas', participation.includes(`const SUPER_ADMIN_EMAIL = '${superAdminLiteral}';`));
 check('Firestore Rules usa el email del contrato de cuentas', rules.includes(`== "${superAdminLiteral}"`));
