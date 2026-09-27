@@ -101,11 +101,11 @@ html body #tt-loader-brand-subtitle {
   visibility: visible !important;
 }
 
-/* El cargador usa una sola marca blanca, sin corazones decorativos ni tonos
-   rosas mezclados. */
+/* La palabra de marca usa ciruela oscuro para mantener contraste AA sobre
+   el fondo rosa del cargador. */
 html body #tt-loader-wordmark,
 html body #tt-loader-wordmark .tt-loader-wordmark-i {
-  color: #fff !important;
+  color: #7d173a !important;
 }
 
 /* Los textos que hay que leer (sección y mensajes de estado) van en gris
