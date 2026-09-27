@@ -38,12 +38,11 @@ test('fallo de catálogo termina en error recuperable sin convertirlo en vacío'
   assert.match(catalogRuntime, /history\.replaceState/);
 });
 
-test('colecciones publicadas conservan vacío y excluyen productos inactivos', () => {
-  assert.match(collectionsPresentation, /function categoryCount[\s\S]{0,260}product\?\.active !== false/);
+test('colecciones públicas conservan vacío, visibilidad y productos comprables', () => {
+  assert.match(productStore, /product\.active !== false[\s\S]{0,180}Number\(product\.price\) > 0/);
+  assert.match(collectionsState, /collections\.filter\(item => item\.visible !== false\)/);
   assert.match(collectionsPresentation, /No hay colecciones disponibles todavía/);
-  assert.match(collectionsState, /function uniquePublishedCollections/);
-  assert.match(collectionsState, /Slug publicado duplicado ignorado/);
-  assert.match(collectionsState, /latestVisibleCollections = uniquePublishedCollections\(collections\)/);
+  assert.match(collectionsPresentation, /encodeURIComponent\(clean\(slug\)\)/);
 });
 
 test('checkout expone conciliación operativa sin PII y con runbook', () => {
