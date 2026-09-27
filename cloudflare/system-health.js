@@ -2,6 +2,7 @@ import {
   compactAdminRuntimeChecks,
   runAdminRuntimeChecks,
 } from './admin-runtime-health.js';
+import { inspectCheckoutOperationalHealth } from './checkout-operational-health.js';
 import {
   APPS_SCRIPT_SYNC_URL,
   SHEETS_HEALTH_REVISION,
@@ -46,6 +47,19 @@ function emptySyncSummary() {
     errors24h: null,
     rejected24h: null,
     syncing24h: null,
+  };
+}
+
+function emptyCheckoutSummary() {
+  return {
+    available: false,
+    ok: null,
+    sampledOrders: 0,
+    paidOrders: 0,
+    paidWithoutEmail: null,
+    paidAtRiskSheets: null,
+    alerts: [],
+    truncated: false,
   };
 }
 
@@ -101,6 +115,7 @@ export async function runSystemHealth(env, {
   catalogSheetQueueStatus = getCatalogSheetSyncQueueStatus,
   orderEmailQueueStatus = getOrderEmailQueueStatus,
   engagementSheetQueueStatus = getEngagementSheetSyncQueueStatus,
+  checkoutInspector = inspectCheckoutOperationalHealth,
 } = {}) {
   const missingConfig = REQUIRED_CONFIG.filter(key => !configured(env, key));
   let runtimeReport = null;
@@ -166,13 +181,28 @@ export async function runSystemHealth(env, {
     orderEmailQueue,
     engagementSheetQueue,
   };
-  const ok = missingConfig.length === 0 && runtimeReport?.ok === true && integrations.sheets === true;
+
+  let checkout = emptyCheckoutSummary();
+  if (!missingConfig.includes('FIREBASE_SERVICE_ACCOUNT_KEY')) {
+    try {
+      checkout = {
+        available: true,
+        ...(await checkoutInspector(env, { sheetsAvailable: integrations.sheets })),
+      };
+    } catch (error) {
+      console.error('[system-health] Conciliación checkout no disponible:', error?.message || error);
+    }
+  }
+
+  const checkoutHealthy = checkout.available !== true || checkout.ok === true;
+  const ok = missingConfig.length === 0 && runtimeReport?.ok === true && integrations.sheets === true && checkoutHealthy;
 
   return {
     ok,
     missingConfig,
     admin,
     integrations,
+    checkout,
     authorities: SYSTEM_AUTHORITIES,
     deployment: {
       commitSha: String(env?.CF_PAGES_COMMIT_SHA || '').slice(0, 64),
