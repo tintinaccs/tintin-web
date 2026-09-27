@@ -27,9 +27,9 @@ Si dos documentos normativos se contradicen, no elegir silenciosamente. Verifica
 Solicitudes que solo pidan analizar, revisar, inspeccionar, diagnosticar, comparar o planificar son de solo lectura.
 
 ### Reparación
-Cuando la solicitud incluya reparar, corregir, implementar o ejecutar reparación integral, seguir `AUTONOMOUS_REPAIR.md`.
+Cuando la solicitud incluya reparar, corregir o implementar, seguir el ciclo de reparación pertinente de `AUTONOMOUS_REPAIR.md` para los criterios afectados. La matriz completa se recorre únicamente cuando el usuario pide explícitamente la frase exacta "reparación integral".
 
-La frase "reparación integral" significa continuar por todos los criterios aplicables de `ACCEPTANCE_MATRIX.md`; no significa ejecutar cambios destructivos, merge ni deploy.
+La frase exacta "reparación integral" significa continuar por todos los criterios aplicables de `ACCEPTANCE_MATRIX.md`; no significa ejecutar cambios destructivos, merge ni deploy.
 
 ## Estado persistente
 

@@ -17,7 +17,7 @@
 
 ## Agent operating protocol
 - Before substantial repository-wide work, read `docs/agent/README.md`.
-- When the user explicitly requests "reparación integral", autonomous repair, or asks to fix/correct everything in scope, follow `docs/agent/AUTONOMOUS_REPAIR.md` and evaluate the applicable rows of `docs/agent/ACCEPTANCE_MATRIX.md`.
+- For any requested fix or implementation, follow the relevant repair cycle in `docs/agent/AUTONOMOUS_REPAIR.md`. Run the full applicable `docs/agent/ACCEPTANCE_MATRIX.md` sweep only when the user explicitly requests the exact phrase "reparación integral"; an ordinary fix request does not trigger a repository-wide sweep.
 - Persist evidence and remaining work in `docs/agent/CURRENT_STATE.md`; do not inherit PASS from dated audit reports.
 - Historical audit/closure documents are evidence of their dated run, not authority for the current commit.
 - This protocol does not authorize merge, deploy, destructive production writes, real purchases/orders/emails, force-pushes, or secret handling.

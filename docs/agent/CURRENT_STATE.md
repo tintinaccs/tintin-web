@@ -1,6 +1,7 @@
 # Estado actual de reparación
 
 > Este archivo es un registro operativo, no una certificación permanente. Debe actualizarse con el SHA/rama que realmente se verificó. No heredar PASS de auditorías históricas.
+> Antes de reutilizar este archivo para una tarea o rama distinta a la indicada en Baseline, reemplazar Baseline y Estado de la matriz con los de la nueva tarea/commit; no acumular estados de tareas no relacionadas en el mismo bloque. Si hay trabajo concurrente, cada rama debe mantener su propio registro hasta integrar cambios.
 
 ## Baseline
 

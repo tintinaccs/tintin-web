@@ -31,7 +31,11 @@ Para cada criterio no cerrado:
 - `BLOCKED`: dependencia externa concreta impide continuar.
 - `FAIL`: falla reproducible vigente.
 
+Los estados avanzan por evidencia del mismo criterio: `PASS_CI` requiere `PASS_LOCAL`, y `PASS_PRODUCTION` requiere `PASS_CI`. Excepción: una verificación directa, no destructiva, en producción puede justificar `PASS_PRODUCTION` sin esos estados previos únicamente si la excepción, el criterio y la evidencia quedan documentados explícitamente.
+
 Nunca convertir `NOT_VERIFIED` o `BLOCKED` en PASS por inferencia. Un PASS de un informe histórico tampoco es evidencia del commit actual.
+
+Para una corrección puntual de un dominio, limitar el ciclo a los criterios afectados; el skill `fix-bug`, cuando esté disponible en el entorno, puede guiar ese ciclo pero no cambia este alcance ni prevalece sobre este protocolo. Actualizar `CURRENT_STATE.md` y recorrer la matriz completa cuando la tarea cruce dominios o el usuario solicite explícitamente "reparación integral".
 
 ## Estrategia de pruebas
 
