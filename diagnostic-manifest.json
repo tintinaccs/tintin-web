@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "920e3d37b857ad29ff10403cc97575cba1c5319afad08cbcbf8a12490d61519a",
+  "sourceFingerprint": "22acf6cd8bf636ea42ec73541bfed50e96fc6954e2f0dba128cf0fff01c90ec7",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 896,
     "textFiles": 855,
-    "totalBytes": 17626290,
+    "totalBytes": 17633893,
     "pages": 19,
     "modules": 616
   },
@@ -9205,7 +9205,7 @@
         "viewer"
       ],
       "bytes": 117290,
-      "sha256": "ad0a71689f9229f1c03b1969d4ec599c6a5547c3b81e543f86b1046045d23055",
+      "sha256": "4f3dd9db0a61f8e6e9a801260c62fe74738f3dd681d6fb1b39fda7a50c69d810",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13313,8 +13313,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 75384,
-      "sha256": "e5f6bdce859fab13ca4bb4aefdd4b89b8cf3481843a5131248a7c22715db6df6",
+      "bytes": 75420,
+      "sha256": "a5ac01d2f8d48f617f65d9b19d03e48499dc243c2a5c01e8f1380aec94d60430",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14139,7 +14139,7 @@
         "viewer"
       ],
       "bytes": 43750,
-      "sha256": "d036e22f0f5eef2ff8b3230bf410b68f600ca7a162e741d2bb03c39c950440a1",
+      "sha256": "029c3a861dc4499e924ccf3bd08dea8d3296069c2f1cddbe5036bccf30f13a35",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -18736,7 +18736,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 368757,
-      "sha256": "d80e72e1d5c6b2d64d200e9da61216ade63b9c4f6c2efed8a4ac21319f16a269",
+      "sha256": "60658b431e25da0a81d802e13619e7e365c61a647ac448e5497d775ff408b384",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19432,8 +19432,8 @@
     },
     {
       "path": "functions/api/email-otp-verify.js",
-      "bytes": 9517,
-      "sha256": "cd0530f9fbac370b896c2f4857228aa4285976a350e2fcae3daf310ceae17225",
+      "bytes": 11368,
+      "sha256": "453f377cbb363636d88fba1731c4aa268f38b0569e563c1e36412d5ec1ea2d9d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19449,13 +19449,13 @@
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 18
+          "line": 20
         },
         {
           "raw": "../../js/components/forms/utilidades-username.js",
           "target": "js/components/forms/utilidades-username.js",
           "dynamic": false,
-          "line": 19
+          "line": 21
         }
       ],
       "endpoints": []
@@ -23219,8 +23219,8 @@
     },
     {
       "path": "js/components/modals/modal-bloqueo.js",
-      "bytes": 3462,
-      "sha256": "65e311f3276994619b000e98a24cf7044995852fd4d2cb9ee0682c1732a67885",
+      "bytes": 3217,
+      "sha256": "3f6338b63c165cb63d32e917bb786f918c30239acc7c76bc06656238633d244f",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30801,8 +30801,8 @@
     },
     {
       "path": "tests/accounts/blocked-account-message.test.mjs",
-      "bytes": 2306,
-      "sha256": "62eb798fe450b1938c3ead3440c4c7e2abf6d7202957fdacd2c3ad6becbf9d8d",
+      "bytes": 2539,
+      "sha256": "cd75da002154fdcf88653ff4227895e41030f97feea4d983b4f713ad215ebb19",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30837,13 +30837,17 @@
         {
           "url": "https://wa.me/",
           "line": 10
+        },
+        {
+          "url": "https://wa.me/595981299331",
+          "line": 20
         }
       ]
     },
     {
       "path": "tests/accounts/email-otp-verify.test.mjs",
-      "bytes": 6179,
-      "sha256": "5ea3ebff87df788faca97766167376d835df5c86b84347485187ea707b9e7b4f",
+      "bytes": 8435,
+      "sha256": "8fcbf737569ac0a4ecf79996a7e16efb39c1b3b95879f2527c4f17579b986a99",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35312,7 +35316,7 @@
       "path": "checkout.html",
       "extension": ".html",
       "bytes": 117290,
-      "sha256": "ad0a71689f9229f1c03b1969d4ec599c6a5547c3b81e543f86b1046045d23055"
+      "sha256": "4f3dd9db0a61f8e6e9a801260c62fe74738f3dd681d6fb1b39fda7a50c69d810"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -35510,13 +35514,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 368757,
-      "sha256": "d80e72e1d5c6b2d64d200e9da61216ade63b9c4f6c2efed8a4ac21319f16a269"
+      "sha256": "60658b431e25da0a81d802e13619e7e365c61a647ac448e5497d775ff408b384"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 368672,
-      "sha256": "42161a3e38c2a72c47db5d42ca424228bff5ce774ac80b0c0264f1d23787736b"
+      "sha256": "a1cf1b820102663add6d8afc8802765af677c725e2cadbdd7e02d68bf6f53882"
     },
     {
       "path": "config/public-site.json",
@@ -36013,8 +36017,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 3033,
-      "sha256": "3516277e5693bb8abe0593561a485f36b8dd74134f0bf0b1ab6941e33b511fac"
+      "bytes": 6349,
+      "sha256": "ba573442dd1e430565c0baf7215e5a84ec0ff0e37582e4328b1806ea47b0ec30"
     },
     {
       "path": "docs/agent/README.md",
@@ -36463,8 +36467,8 @@
     {
       "path": "functions/api/email-otp-verify.js",
       "extension": ".js",
-      "bytes": 9517,
-      "sha256": "cd0530f9fbac370b896c2f4857228aa4285976a350e2fcae3daf310ceae17225"
+      "bytes": 11368,
+      "sha256": "453f377cbb363636d88fba1731c4aa268f38b0569e563c1e36412d5ec1ea2d9d"
     },
     {
       "path": "functions/api/engagement.js",
@@ -37297,8 +37301,8 @@
     {
       "path": "js/components/modals/modal-bloqueo.js",
       "extension": ".js",
-      "bytes": 3462,
-      "sha256": "65e311f3276994619b000e98a24cf7044995852fd4d2cb9ee0682c1732a67885"
+      "bytes": 3217,
+      "sha256": "3f6338b63c165cb63d32e917bb786f918c30239acc7c76bc06656238633d244f"
     },
     {
       "path": "js/components/navigation/compartido/acordeon-pie-pagina.js",
@@ -38197,8 +38201,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 75384,
-      "sha256": "e5f6bdce859fab13ca4bb4aefdd4b89b8cf3481843a5131248a7c22715db6df6"
+      "bytes": 75420,
+      "sha256": "a5ac01d2f8d48f617f65d9b19d03e48499dc243c2a5c01e8f1380aec94d60430"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -38389,8 +38393,8 @@
     {
       "path": "package-lock.json",
       "extension": ".json",
-      "bytes": 330501,
-      "sha256": "2f1bb0dc6962c7417e29cf19c6ac8354b220858bdbf555c0227f19e8536f9067"
+      "bytes": 330657,
+      "sha256": "9da22a7b2e370f18c19560f86396e5d6a7518684d783701079e97a9743e3e59f"
     },
     {
       "path": "package.json",
@@ -38402,7 +38406,7 @@
       "path": "perfil.html",
       "extension": ".html",
       "bytes": 43750,
-      "sha256": "d036e22f0f5eef2ff8b3230bf410b68f600ca7a162e741d2bb03c39c950440a1"
+      "sha256": "029c3a861dc4499e924ccf3bd08dea8d3296069c2f1cddbe5036bccf30f13a35"
     },
     {
       "path": "playwright.config.js",
@@ -39242,7 +39246,7 @@
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
       "bytes": 60117,
-      "sha256": "314efd3bccc1ea3c561d3a72e59f4d9322b58415d8369b25c0696e26c8603d42"
+      "sha256": "7f08ba6f965e42b59659a1f2d900b20b6598edb46acfae4ace9667d8bafb9bc6"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -39499,14 +39503,14 @@
     {
       "path": "tests/accounts/blocked-account-message.test.mjs",
       "extension": ".mjs",
-      "bytes": 2306,
-      "sha256": "62eb798fe450b1938c3ead3440c4c7e2abf6d7202957fdacd2c3ad6becbf9d8d"
+      "bytes": 2539,
+      "sha256": "cd75da002154fdcf88653ff4227895e41030f97feea4d983b4f713ad215ebb19"
     },
     {
       "path": "tests/accounts/email-otp-verify.test.mjs",
       "extension": ".mjs",
-      "bytes": 6179,
-      "sha256": "5ea3ebff87df788faca97766167376d835df5c86b84347485187ea707b9e7b4f"
+      "bytes": 8435,
+      "sha256": "8fcbf737569ac0a4ecf79996a7e16efb39c1b3b95879f2527c4f17579b986a99"
     },
     {
       "path": "tests/accounts/username-login.test.mjs",

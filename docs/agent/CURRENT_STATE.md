@@ -1,57 +1,65 @@
-# Estado actual de reparación
+# Estado actual de reparación — independencia de Shopify
 
-> Este archivo es un registro operativo, no una certificación permanente. Debe actualizarse con el SHA/rama que realmente se verificó. No heredar PASS de auditorías históricas.
-> Antes de reutilizar este archivo para una tarea o rama distinta a la indicada en Baseline, reemplazar Baseline y Estado de la matriz con los de la nueva tarea/commit; no acumular estados de tareas no relacionadas en el mismo bloque. Si hay trabajo concurrente, cada rama debe mantener su propio registro hasta integrar cambios.
+> Registro actualizado para esta tarea y rama. La evidencia de cada estado corresponde al commit indicado y no se hereda de auditorías históricas.
 
 ## Baseline
 
-- Rama: `chore/agent-repair-protocol`
-- Base inicial: `main`
-- Baseline observado al crear esta fase: `53eb4d8f4bfb672345b55b44e355c9f80ca507da`
-- Objetivo actual: instalar el protocolo de agentes y la matriz de aceptación.
-- Producción: no modificada.
-- Merge: no realizado.
+- Rama de trabajo: `codex/shopify-independence-audit`
+- Commit base observado: `0d060922bdc17eb99ef4ce7fcdeb0acf86cd858c` (main, 2026-09-27)
+- Objetivo: dejar el sitio preparado para migrar el catálogo desde Shopify y operar sin la cuenta ni los servicios de Shopify.
+- Producción: no modificada por esta rama.
+- DNS, cuenta Shopify y publicación: sin cambios.
 
-## Estado de la matriz
+## Evidencia observada
 
-Todas las áreas funcionales comienzan en `PENDING` para este protocolo hasta que sean verificadas contra el commit correspondiente. Los estados verdes de documentos fechados anteriores son evidencia histórica, no PASS automático.
+- `https://tintinaccs.com/`: HTTP 200.
+- `https://tintinaccs.com/sitemap-products.xml`: HTTP 404.
+- `https://tintinaccesorios.pages.dev/`: HTTP 200.
+- `https://tintinaccesorios.pages.dev/sitemap-products.xml`: HTTP 200 con 0 `<loc>`.
+- `https://tintinaccesorios.pages.dev/api/public-catalog?resource=products`: HTTP 200, `ok: true`, `count: 0`.
+- Check de salud de producción del commit `0d060922`: falla porque el sitemap y la API no encuentran productos y no hay producto canary. App Check para el browser runner se limitó por reCAPTCHA de CI.
+- `npm run audit:final`: PASS en la rama de preparación, tras regenerar los manifiestos y CSP canónicos.
+- `npm run build:pages`: PASS (rutas, CSP y manifiesto reproducibles; 38 rutas HTML, 149 handlers con hash).
+- `npm run test:accounts`: PASS, 32/32; incluye bloqueo por identidad deshabilitada/perfil bloqueado, reingreso con UID nuevo tras eliminación y aviso WhatsApp.
+- `npm audit --audit-level=moderate`: PASS, 0 vulnerabilidades tras actualizar `firebase-tools` y sus dependencias transitivas compatibles.
+- Responsive, arquitectura, contratos de checkout/pedidos, roles, medios, sincronización, importación y SEO estático pasan las comprobaciones incluidas en `audit:final`.
+- La auditoría local del emulador de Firestore no es ejecutable en este equipo: Java no está instalado. CI debe confirmar esas pruebas antes de integrar.
+- Las funciones de importación son CSV y no requieren Shopify Admin API para operar. La fase de medios todavía puede copiar imágenes desde Shopify CDN a Cloudinary bajo una bandera de escritura explícita; hay que completar esa copia y verificar cero URLs Shopify antes de cerrar la cuenta.
+
+## Estado de aceptación (commit base)
 
 | Dominio | Estado | Evidencia / siguiente paso |
 | --- | --- | --- |
-| Protocolo de agentes | PASS_LOCAL | Documentos creados; AGENTS/CLAUDE enlazados; diff contra main revisado: solo 6 archivos documentales |
-| Build y estructura | PENDING | Verificar en fase de reparación |
-| Home/shell | PENDING | Verificar |
-| Catálogo/colecciones/producto | PENDING | Verificar |
-| Carrito/checkout/pedidos/pagos | PENDING | Verificar |
-| Login/sesión/perfil | PENDING | Verificar |
-| Roles/Super Admin | PENDING | Verificar |
-| Firestore/App Check | PENDING | Verificar |
-| Integraciones | PENDING | Verificar |
-| CSP/rutas/caché/diagnóstico | PENDING | Verificar |
-| Responsive/a11y/performance/SEO | PENDING | Verificar |
-| Correos/notificaciones | PENDING | Verificar |
-| Producción | NOT_VERIFIED | No se modifica ni se asume sana por esta fase |
-| Recuperación | PENDING | Verificar contratos/workflows |
+| Build y estructura | PASS | `build:pages` y `audit:final` correctos en esta rama. |
+| Home y shell público | PASS_WITH_LIMIT | Contratos, responsive y auditorías locales correctos; el browser de producción no pudo completar el flujo de catálogo vacío. |
+| Catálogo y colecciones | FAIL | Producción Pages devuelve catálogo `count: 0` y sitemap de productos vacío. |
+| Producto | BLOCKED | No existe producto público con el que verificar ficha, precio, stock, medios o metadata. |
+| Carrito | PASS | `audit:final` y contratos de checkout verifican identidad, variantes, sincronización y recuperación. |
+| Checkout, pedidos, stock y pagos | PASS_WITH_LIMIT | Contratos server-side y pagos simulados pasan; falta validar el runtime con catálogo real y los emuladores en CI. |
+| Login, sesión y perfil | PASS_WITH_LIMIT | Tests locales 32/32 y auditorías pasan; navegador CI quedó limitado por reCAPTCHA. |
+| Roles y Super Admin | PASS_WITH_LIMIT | Auditorías estáticas/contractuales pasan; las reglas del emulador requieren Java en CI. |
+| Firestore y App Check | PASS_WITH_LIMIT | Reglas y bootstrap revisados por auditoría; no se ejecutaron emuladores localmente por falta de Java. |
+| Integraciones | PASS_WITH_LIMIT | Contratos de Firebase, Cloudinary, Resend, PayPal y Sheets pasan; credenciales/servicios reales y migración de medios siguen por comprobar en producción. |
+| CSP, rutas, caché y diagnóstico | PASS | `build:pages`, CSP, rutas limpias, manifiestos y 286 recursos versionados verificados. |
+| Responsive y accesibilidad | PASS_WITH_LIMIT | Matrices responsive, contraste y accesibilidad del gate pasan; los flujos reales de compra requieren catálogo. |
+| Performance y SEO | PASS_WITH_LIMIT | SEO estático, metadata, robots, canonicals y sitemaps pasan; sitemap de productos sigue vacío hasta importar catálogo. |
+| Correos y notificaciones | PASS_WITH_LIMIT | Contratos de correo y colas pasan; entrega depende de credenciales y verificación runtime. |
+| Producción | FAIL | Gate de producción encontró catálogo vacío; no se realizó ningún cambio. |
+| Recuperación | IN_PROGRESS | Hay contratos de copias/importación y checkpoint; falta ejecutar un ensayo completo con exportación real y documentar aceptación del catálogo importado. |
 
-## Hallazgos estructurales de Fase 1
+## Límites de esta fase
 
-- Existe amplia cobertura automática; no crear suites paralelas sin demostrar un hueco.
-- `audit:final` debe ser gate amplio, no bucle de edición.
-- Los informes fechados de raíz y cierres anteriores son históricos.
-- La documentación vigente contiene algunas referencias operativas antiguas; corregir deriva documental de forma quirúrgica cuando se confirme.
-- El protocolo debe mantener separados PASS local, CI y producción.
+- La migración real de productos, compras/cobros, DNS, cierre de cuenta Shopify y deploy del dominio final no se ejecutan desde esta auditoría.
+- Los requisitos de datos reales que solo el dueño puede validar (precio, variantes, stock, imágenes y política de envío/devolución) deben quedar marcados como bloqueo hasta verificarse.
+- No declarar independencia de Shopify mientras las URLs de imágenes u otra infraestructura sigan sirviendo contenido desde Shopify.
 
-## Bloqueos
+## Bloqueos para declarar lista la migración
 
-Ninguno para instalar este protocolo.
+1. Importar el catálogo real de Shopify mediante el flujo CSV de preview, validar errores y aplicar solo después de revisar productos y colecciones.
+2. Copiar todas las imágenes a un proveedor bajo control propio y confirmar que ningún producto, CSS, contenido o metadata depende de `cdn.shopify.com`.
+3. Verificar en producción productos, colecciones, sitemaps, ficha, precio/stock, carrito, checkout y correos con datos reales y medios accesibles.
+4. Instalar Java en el runner de CI (o usar CI existente) y conseguir PASS de emulator rules/account purge y de los checks del commit.
+5. Cambiar DNS del dominio propio de Shopify a Cloudflare Pages, esperar propagación y validar HTTPS, rutas limpias, headers, robots y Search Console.
+6. Mantener Shopify accesible hasta confirmar la migración de CSV e imágenes; desactivar/cerrar la tienda solo cuando dominios, activos y datos estén verificados fuera de Shopify.
 
-## Resultado de Fase 2
-
-- Protocolo instalado en esta rama.
-- Diff revisado contra `main`: solo documentación e instrucciones de agentes.
-- No se modificó código de la tienda ni configuración de producción.
-- No se hizo merge ni deploy.
-
-## Próximo paso
-
-Revisión independiente del protocolo y, una vez aprobado, integración controlada antes de usar la matriz para una reparación integral. La reparación funcional debe ejecutarse en una rama de trabajo y no autoriza merge/deploy automático.
+Las modificaciones de esta rama son de código, documentación y dependencias de desarrollo. No cambiaron el sitio publicado, DNS, cuentas, clientes ni catálogo real.

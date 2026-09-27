@@ -12,6 +12,8 @@ import {
   decodeFirestoreFields,
   createFirebaseCustomToken,
   findOrCreateUserByEmail,
+  lookupFirebaseUser,
+  firestoreAdminQueryByField,
   resolveEmailFromUsernameKey,
   fsInteger,
   fsString
@@ -29,6 +31,8 @@ const defaultDeps = {
   remove: firestoreAdminDelete,
   resolveEmailFromUsernameKey,
   findOrCreateUserByEmail,
+  lookupUser: lookupFirebaseUser,
+  findProfilesByEmail: firestoreAdminQueryByField,
   createFirebaseCustomToken
 };
 
@@ -215,13 +219,41 @@ export async function handleEmailOtpVerify(context, deps = defaultDeps) {
       }, 400, origin, requestUrl);
     }
 
-    // El código es correcto y de un solo uso, pero recién se borra después de
-    // completar el login (cuenta + token): si Identity Toolkit falla de forma
-    // transitoria acá, la clienta puede reintentar con el mismo código en vez
-    // de perderlo y tener que pedir uno nuevo.
+    // Confirmar el código acredita el control del email. Consultar cuentas
+    // bloqueadas en Firestore aun cuando la identidad de Firebase haya sido
+    // borrada manualmente evita que un OTP cree una identidad nueva para el
+    // mismo cliente bloqueado. Los perfiles eliminados sí pueden reingresar.
+    let matchingProfiles;
+    try {
+      matchingProfiles = await deps.findProfilesByEmail(env, 'users', 'email', email, 20);
+    } catch (error) {
+      console.error('[email-otp-verify] No se pudo comprobar el estado de la cuenta:', error?.message || error);
+      return jsonResponse({ success: false, error: 'storage_unavailable' }, 503, origin, requestUrl);
+    }
+    const hasBlockedProfile = (Array.isArray(matchingProfiles) ? matchingProfiles : []).some(profileDoc => {
+      const profile = decodeFirestoreFields(profileDoc?.fields || {});
+      const deleted = profile.deleted === true || profile.profileStatus === 'deleted';
+      return !deleted && profile.blocked === true;
+    });
+    if (hasBlockedProfile) {
+      await deps.remove(env, path).catch(() => {});
+      return jsonResponse({ success: false, error: 'account_blocked' }, 403, origin, requestUrl);
+    }
+
+    // El código correcto se consume al completar el login. Si alguna escritura
+    // de identidad falla transitoriamente, la clienta puede reintentar el mismo
+    // código dentro de su vigencia.
     let uid, isNewUser, customToken;
     try {
       ({ uid, isNewUser } = await deps.findOrCreateUserByEmail(env, email));
+      const authIdentity = await deps.lookupUser(env, { uid });
+      const profileDoc = await deps.get(env, 'users/' + encodeURIComponent(uid));
+      const profile = decodeFirestoreFields(profileDoc?.fields || {});
+      if (!authIdentity || authIdentity.uid !== uid) throw new Error('identity_unavailable');
+      if (authIdentity.disabled === true || profile.blocked === true || profile.deleted === true || profile.profileStatus === 'deleted') {
+        await deps.remove(env, path).catch(() => {});
+        return jsonResponse({ success: false, error: 'account_blocked' }, 403, origin, requestUrl);
+      }
       customToken = await deps.createFirebaseCustomToken(env, uid);
     } catch (error) {
       console.error('[email-otp-verify] Fallo creando la sesion:', error?.message || error);

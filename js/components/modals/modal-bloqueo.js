@@ -11,7 +11,7 @@ const WHATSAPP_SUPPORT_NUMBER = '595981299331';
 
 // Único texto visible para la persona: no explica el motivo ni el estado
 // interno de la cuenta; el detalle queda solo en el panel de Super Admin.
-export const ACCOUNT_PROBLEM_TEXT = 'Tu cuenta tiene problemas, por favor contáctanos por';
+export const ACCOUNT_PROBLEM_TEXT = 'Comunícate con nosotros por';
 
 export function accountSupportUrl(email = '') {
   const text = `Hola, tengo problemas con mi cuenta, mi correo es: ${String(email || '').trim()}`;
@@ -24,7 +24,7 @@ function escapeAttribute(value) {
 
 /** Mensaje corto con "WhatsApp" como enlace, listo para insertar como HTML. */
 export function accountProblemHtml(email = '') {
-  return `${ACCOUNT_PROBLEM_TEXT} <a href="${escapeAttribute(accountSupportUrl(email))}" target="_blank" rel="noopener" style="color:inherit;font-weight:800;text-decoration:underline">WhatsApp</a>.`;
+  return `${ACCOUNT_PROBLEM_TEXT} <a href="${escapeAttribute(accountSupportUrl(email))}" target="_blank" rel="noopener noreferrer" style="color:#005fcc;font-weight:800;text-decoration:underline">WhatsApp</a>.`;
 }
 
 const OVERLAY_ID = 'tt-blocked-overlay';
@@ -58,12 +58,6 @@ export function showBlockedModal({ email = '' } = {}) {
         <h2 class="tt-blocked-title" id="tt-blocked-title">No podés ingresar</h2>
         <p class="tt-blocked-message" id="tt-blocked-message">${accountProblemHtml(email)}</p>
         <div class="tt-blocked-actions">
-          <a
-            class="tt-blocked-action tt-blocked-action-secondary"
-            href="${escapeAttribute(accountSupportUrl(email))}"
-            target="_blank"
-            rel="noopener"
-          >Contactar soporte</a>
           <a class="tt-blocked-action tt-blocked-action-primary" href="/">Volver al inicio</a>
         </div>
       </section>`;

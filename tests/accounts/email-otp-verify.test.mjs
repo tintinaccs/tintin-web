@@ -22,6 +22,9 @@ function fakeFirestore() {
   const put = (path, data) => docs.set(path, { fields: encodeFirestoreFields(data), updateTime: String(++version) });
   const deps = {
     logins: 0,
+    tokenCreations: 0,
+    lookupUser: async (_env, { uid }) => ({ uid, email: EMAIL, disabled: false }),
+    findProfilesByEmail: async () => [],
     get: async (_env, path) => {
       await tick();
       const doc = docs.get(path);
@@ -48,7 +51,7 @@ function fakeFirestore() {
       deps.logins += 1;
       return { uid: 'uid_clienta', isNewUser: false };
     },
-    createFirebaseCustomToken: async () => 'custom-token',
+    createFirebaseCustomToken: async () => { deps.tokenCreations += 1; return 'custom-token'; },
   };
   return { deps, docs, put, read: path => (docs.has(path) ? decodeFirestoreFields(docs.get(path).fields) : null) };
 }
@@ -91,6 +94,50 @@ test('el código correcto inicia sesión, reserva el intento y se borra', async 
   assert.equal(result.success, true);
   assert.equal(result.customToken, 'custom-token');
   assert.equal(store.read(CODE_PATH), null);
+});
+
+test('una cuenta deshabilitada no recibe token OTP y devuelve el estado bloqueado', async () => {
+  const store = fakeFirestore();
+  seedCode(store);
+  store.deps.lookupUser = async (_env, { uid }) => ({ uid, email: EMAIL, disabled: true });
+  const result = await verify(store, { email: EMAIL, code: CODE });
+  assert.equal(result.status, 403);
+  assert.equal(result.error, 'account_blocked');
+  assert.equal(store.deps.tokenCreations, 0);
+  assert.equal(store.read(CODE_PATH), null);
+});
+
+test('un perfil bloqueado impide crear otra identidad para el mismo email', async () => {
+  const store = fakeFirestore();
+  seedCode(store);
+  store.deps.findProfilesByEmail = async () => [{ fields: encodeFirestoreFields({ email: EMAIL, blocked: true }) }];
+  const result = await verify(store, { email: EMAIL, code: CODE });
+  assert.equal(result.status, 403);
+  assert.equal(result.error, 'account_blocked');
+  assert.equal(store.deps.logins, 0);
+  assert.equal(store.deps.tokenCreations, 0);
+});
+
+test('un perfil bloqueado en Firestore tampoco recibe un token OTP', async () => {
+  const store = fakeFirestore();
+  seedCode(store);
+  store.put('users/uid_clienta', { blocked: true });
+  const result = await verify(store, { email: EMAIL, code: CODE });
+  assert.equal(result.status, 403);
+  assert.equal(result.error, 'account_blocked');
+  assert.equal(store.deps.tokenCreations, 0);
+});
+
+test('un registro posterior a una baja recibe una identidad nueva y puede iniciar sesión', async () => {
+  const store = fakeFirestore();
+  seedCode(store);
+  store.deps.findProfilesByEmail = async () => [{ fields: encodeFirestoreFields({ email: EMAIL, deleted: true, profileStatus: 'deleted' }) }];
+  store.deps.findOrCreateUserByEmail = async () => ({ uid: 'uid_cliente_nuevo', isNewUser: true });
+  store.deps.lookupUser = async (_env, { uid }) => ({ uid, email: EMAIL, disabled: false });
+  const result = await verify(store, { email: EMAIL, code: CODE });
+  assert.equal(result.status, 200);
+  assert.equal(result.success, true);
+  assert.equal(store.deps.tokenCreations, 1);
 });
 
 test('un código incorrecto descuenta intentos y el sexto queda bloqueado', async () => {
