@@ -55,3 +55,41 @@ a.perfil-wa-box {
 body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] .tt-footer-bottom {
   color: #995f77 !important;
 }
+
+/* Superficies blancas: el pie y las tarjetas públicas usaban el rosa de
+   página (#fff6fa) o fondos transparentes sobre rosa. Blanco con un borde
+   suave las separa del fondo sin cambiar tipografía ni colores de texto
+   (tinta 9.69:1, secundario 5.64:1 y pie 4.93:1 sobre blanco). */
+body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"],
+html[data-tt-footer-bg-custom] body:not(:has(.adm-main)) .tt-footer[data-tt-footer="unified"] {
+  --tt-footer-surface: #fff;
+  background: #fff !important;
+  border-top: 1px solid rgba(173, 63, 103, 0.14) !important;
+}
+
+/* El contenedor .tt-editorial queda transparente por sistema-superficies;
+   el panel que se ve rosado es el de texto. */
+body.tt-home-premium :is(.tt-editorial-content, .tt-watch-feature-content),
+html body.tt-catalog-maintenance .cat-hero,
+.tt-profile-hero,
+.tt-about-date,
+.tt-legal-note {
+  background: #fff !important;
+}
+
+/* "obligatoria" en el formulario de reseñas: 4.43:1 con ~11px. Mismo gris
+   de apoyo que login (6.43:1 sobre blanco). */
+.tt-rating-label em {
+  color: #6b5a63;
+}
+
+/* Indicador "+" del acordeón del pie: solo donde el acordeón pliega
+   (≤480px, mismo corte que acordeon-pie-pagina.js). Arriba de eso quedaba
+   pegado al título ("Tienda+") sin hacer nada. Abierto, gira a "×". */
+@media (min-width: 481px) {
+  .tt-footer .tt-footer-accordion-icon { display: none; }
+}
+@media (max-width: 480px) {
+  .tt-footer .tt-footer-accordion-icon { display: inline-block; transition: transform .2s ease; }
+  .tt-footer .tt-footer-accordion-toggle[aria-expanded="true"] .tt-footer-accordion-icon { transform: rotate(45deg); }
+}

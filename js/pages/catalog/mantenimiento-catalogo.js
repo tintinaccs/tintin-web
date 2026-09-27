@@ -176,7 +176,7 @@ if (CATALOG_PATH_RE.test(location.pathname || '') && !window.TintinCatalogMainte
 
   function normalizeMetadata() {
     const base = `${location.origin}/`;
-    const page = `${base}catalogo.html`;
+    const page = `${base}catalogo`;
     document.querySelector('link[rel="canonical"]')?.setAttribute('href', page);
     document.querySelector('meta[property="og:url"]')?.setAttribute('content', page);
     const image = `${base}assets/og-cover.jpg`;

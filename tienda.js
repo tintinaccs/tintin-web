@@ -824,7 +824,11 @@ function renderRandomHomeProducts() {
     seen.add(key);
     return true;
   });
-  renderProductsGrid('products-grid', pickRandom(pool, Math.min(5, pool.length)));
+  const shown = Math.min(5, pool.length);
+  renderProductsGrid('products-grid', pickRandom(pool, shown));
+  // "Ver otra selección" solo tiene sentido si quedan productos sin mostrar.
+  const refresh = document.getElementById('btn-home-random-products');
+  if (refresh) refresh.style.display = pool.length > shown ? '' : 'none';
 }
 window.renderRandomHomeProducts = renderRandomHomeProducts;
 

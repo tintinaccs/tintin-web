@@ -210,6 +210,9 @@ class InfiniteCollectionCarousel {
     state.setAttribute('role', kind);
     state.textContent = message;
     this.track.replaceChildren(state);
+    // Sin tarjetas no hay nada que recorrer: se ocultan las flechas y el
+    // aviso queda centrado en lugar de pegado a la izquierda.
+    this.viewport.closest('.tt-collection-carousel')?.classList.add('tt-collection-carousel--state');
   }
 
   render() {
@@ -219,6 +222,7 @@ class InfiniteCollectionCarousel {
       return;
     }
 
+    this.viewport.closest('.tt-collection-carousel')?.classList.remove('tt-collection-carousel--state');
     const reduced = this.reducedMotion.matches;
     const fragment = document.createDocumentFragment();
     const copyCount = reduced || this.collections.length === 1 ? 1 : COPIES;

@@ -62,7 +62,7 @@ if (COLLECTIONS_PATH_RE.test(location.pathname || '') && !window.TintinCollectio
 
   function normalizeMetadata() {
     const base = `${location.origin}/`;
-    const page = `${base}collections.html`;
+    const page = `${base}collections`;
     document.querySelector('link[rel="canonical"]')?.setAttribute('href', page);
     document.querySelector('meta[property="og:url"]')?.setAttribute('content', page);
     const image = `${base}assets/og-cover.jpg`;

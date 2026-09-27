@@ -216,6 +216,21 @@ html body:not(:has(.adm-main)) .tt-collection-card * { color: #e875a0 !important
   width: min(640px, calc(100vw - (var(--tt-carousel-gutter) * 2)));
 }
 
+/* Sin colecciones (vacío o error): aviso compacto y centrado, sin flechas. */
+.tt-collection-carousel--state .tt-collection-carousel__controls { display: none; }
+.tt-collection-carousel--state .tt-collection-carousel__viewport { cursor: auto; }
+.tt-collection-carousel--state .tt-collection-carousel__track {
+  justify-content: center;
+  min-height: 0;
+  width: 100%;
+}
+.tt-collection-carousel--state .tt-collection-carousel__state {
+  background: #fff;
+  min-height: 0;
+  padding: 28px 24px;
+  width: min(560px, 100%);
+}
+
 .tt-collection-carousel__pagination {
   align-items: center;
   display: flex;
