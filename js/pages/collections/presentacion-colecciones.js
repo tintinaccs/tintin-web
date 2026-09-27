@@ -194,6 +194,7 @@ if (!window.TintinCollectionsPhase4Booted) {
   function categoryCount(slug) {
     const normalized = normalizeSlug(slug);
     return products.filter(product =>
+      product?.active !== false &&
       normalizeSlug(product?.category || product?.cat) === normalized &&
       clean(product?.name)
     ).length;
