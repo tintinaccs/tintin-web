@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "9acb53584c73e370fa1c5f804983b42c3698a890742aee9121ae945ec2ff309b",
+  "sourceFingerprint": "920e3d37b857ad29ff10403cc97575cba1c5319afad08cbcbf8a12490d61519a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 892,
-    "textFiles": 851,
-    "totalBytes": 17611308,
+    "files": 896,
+    "textFiles": 855,
+    "totalBytes": 17626290,
     "pages": 19,
     "modules": 616
   },
@@ -34897,8 +34897,8 @@
     {
       "path": "AGENTS.md",
       "extension": ".md",
-      "bytes": 4544,
-      "sha256": "de39f86bc016a2dc26a4430ab18132c618dabcaf160cf6b766110ea0f8f58484"
+      "bytes": 5340,
+      "sha256": "a522599c625e5847c89736134cb97f72a015869022663d85cb0976a87ff4b46d"
     },
     {
       "path": "COMMENTS_AND_NOTIFICATIONS_ARCHITECTURE_2026-09-17.md",
@@ -35997,6 +35997,30 @@
       "extension": ".md",
       "bytes": 411,
       "sha256": "f503cfee692f5564f67853c5632db3f58bac5c9f8226930b8efb80b04f48cce9"
+    },
+    {
+      "path": "docs/agent/ACCEPTANCE_MATRIX.md",
+      "extension": ".md",
+      "bytes": 4308,
+      "sha256": "9a31effc3e2b03461d9899cd853682497a5f3a75b19e249e24650e42fc6e1eb4"
+    },
+    {
+      "path": "docs/agent/AUTONOMOUS_REPAIR.md",
+      "extension": ".md",
+      "bytes": 4269,
+      "sha256": "22793ae9ed2f1d8412c82ba4cfcf53f6b0f040e0a37ba00e74f288382626ef0c"
+    },
+    {
+      "path": "docs/agent/CURRENT_STATE.md",
+      "extension": ".md",
+      "bytes": 3033,
+      "sha256": "3516277e5693bb8abe0593561a485f36b8dd74134f0bf0b1ab6941e33b511fac"
+    },
+    {
+      "path": "docs/agent/README.md",
+      "extension": ".md",
+      "bytes": 2576,
+      "sha256": "f4fefcb982f76e2f31529fc326ef7480b2549e18cd4a47b15e103501ac273e0a"
     },
     {
       "path": "docs/arquitectura-operativa-canonica.md",
