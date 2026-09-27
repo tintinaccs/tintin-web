@@ -14,9 +14,12 @@
 
 - `https://tintinaccs.com/`: HTTP 200.
 - `https://tintinaccs.com/sitemap-products.xml`: HTTP 404.
+- `https://tintinaccs.com/api/health` and `/api/public-catalog?resource=products`: HTTP 404, consistente con que el dominio todavía sirve el storefront de Shopify y no está cortado hacia Pages.
 - `https://tintinaccesorios.pages.dev/`: HTTP 200.
 - `https://tintinaccesorios.pages.dev/sitemap-products.xml`: HTTP 200 con 0 `<loc>`.
 - `https://tintinaccesorios.pages.dev/api/public-catalog?resource=products`: HTTP 200, `ok: true`, `count: 0`.
+- `https://tintinaccesorios.pages.dev/api/health`: HTTP 200, `ok: true`; configuration, Firebase, runtime administrativo y Visual Builder están en verde, igual que los 12 probes de Admin/Firestore.
+- Preview del PR `#937`: home, login, perfil, checkout, robots y los tres sitemaps responden HTTP 200; el catálogo está vacío. El health del preview responde 503 con `configuration: false` (Firebase y runtime administrativo responden OK), por secretos que no están configurados para previews; el health de producción Pages está verde.
 - Check de salud de producción del commit `0d060922`: falla porque el sitemap y la API no encuentran productos y no hay producto canary. App Check para el browser runner se limitó por reCAPTCHA de CI.
 - `npm run audit:final`: PASS en la rama de preparación, tras regenerar los manifiestos y CSP canónicos.
 - `npm run build:pages`: PASS (rutas, CSP y manifiesto reproducibles; 38 rutas HTML, 149 handlers con hash).
@@ -44,7 +47,7 @@
 | Responsive y accesibilidad | PASS_WITH_LIMIT | Matrices responsive, contraste y accesibilidad del gate pasan; los flujos reales de compra requieren catálogo. |
 | Performance y SEO | PASS_WITH_LIMIT | SEO estático, metadata, robots, canonicals y sitemaps pasan; sitemap de productos sigue vacío hasta importar catálogo. |
 | Correos y notificaciones | PASS_WITH_LIMIT | Contratos de correo y colas pasan; entrega depende de credenciales y verificación runtime. |
-| Producción | FAIL | Gate de producción encontró catálogo vacío; no se realizó ningún cambio. |
+| Producción | FAIL | Health Pages y 12 probes conectados están verdes, pero el catálogo está vacío y el dominio propio no apunta a Pages; no se realizó ningún cambio de producción. |
 | Recuperación | IN_PROGRESS | Hay contratos de copias/importación y checkpoint; falta ejecutar un ensayo completo con exportación real y documentar aceptación del catálogo importado. |
 
 ## Límites de esta fase
@@ -58,7 +61,7 @@
 1. Importar el catálogo real de Shopify mediante el flujo CSV de preview, validar errores y aplicar solo después de revisar productos y colecciones.
 2. Copiar todas las imágenes a un proveedor bajo control propio y confirmar que ningún producto, CSS, contenido o metadata depende de `cdn.shopify.com`.
 3. Verificar en producción productos, colecciones, sitemaps, ficha, precio/stock, carrito, checkout y correos con datos reales y medios accesibles.
-4. Instalar Java en el runner de CI (o usar CI existente) y conseguir PASS de emulator rules/account purge y de los checks del commit.
+4. Conseguir PASS de emulator rules/account purge y de los checks del commit en CI; la máquina local no tiene Java.
 5. Cambiar DNS del dominio propio de Shopify a Cloudflare Pages, esperar propagación y validar HTTPS, rutas limpias, headers, robots y Search Console.
 6. Mantener Shopify accesible hasta confirmar la migración de CSV e imágenes; desactivar/cerrar la tienda solo cuando dominios, activos y datos estén verificados fuera de Shopify.
 
