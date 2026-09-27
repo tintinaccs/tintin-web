@@ -23,8 +23,8 @@ if (!window.TintinImagesPhase5Booted) {
     placeholder: 'assets-tintin/images/general/placeholder-section.webp',
     edit_bolsos: {
       desktop: 'assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp',
-      tablet: 'assets-tintin/images/home/editorial-bolsos/editorial-bolsos-tablet.webp',
-      mobile: 'assets-tintin/images/home/editorial-bolsos/editorial-bolsos-mobile.webp',
+      tablet: 'assets-tintin/images/home/editorial-bolsos/editorial-bolsos-tablet.webp?v=tintin-20260927-visual-1',
+      mobile: 'assets-tintin/images/home/editorial-bolsos/editorial-bolsos-mobile.webp?v=tintin-20260927-visual-1',
       alt: 'Colección Bags Tintin',
     },
     edit_relojes: {

@@ -8,7 +8,7 @@ function pathName() {
 // Mismo ?v= que inyecta functions/[page].js: una sola instancia del módulo por página.
 const INSTITUTIONAL_RUNTIME_VERSION = 'tintin-20260913-xss-hardening-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
 
-function load(file, version = 'tintin-20260925-cache-converge-1-launch-20260926-1') {
+function load(file, version = 'tintin-20260927-visual-1') {
   return import(`./${file}?v=${version}`);
 }
 
