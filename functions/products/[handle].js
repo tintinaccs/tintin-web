@@ -22,6 +22,20 @@ function slugify(value) {
     .slice(0, 180);
 }
 
+export function legacyProductHandleAliases(data) {
+  return [...new Set([
+    data?.handle,
+    data?.Handle,
+    data?.slug,
+    data?.shopifyHandle,
+    data?.sourceMetadata?.handle,
+    data?.source_metadata?.handle,
+    data?.name,
+    data?.title,
+    data?.Title
+  ].map(slugify).filter(Boolean))];
+}
+
 function documentId(document) {
   return String(document?.name || '').split('/').pop() || '';
 }
@@ -35,15 +49,7 @@ async function legacyFallbackMap(env) {
           const id = documentId(document);
           if (!id) continue;
           const data = decodeFirestoreFields(document?.fields || {});
-          const keys = [
-            data.handle,
-            data.Handle,
-            data.slug,
-            data.shopifyHandle,
-            data.name,
-            data.title,
-            data.Title
-          ].map(slugify).filter(Boolean);
+          const keys = legacyProductHandleAliases(data);
           keys.forEach(key => { if (!map.has(key)) map.set(key, document); });
         }
         return map;
