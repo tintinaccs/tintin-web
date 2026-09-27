@@ -55,7 +55,18 @@ jobs:
           fi
       - name: Cache versioning
         run: npm run audit:cache-versioning
-      - name: Build idempotency
+      - name: Finalize generated artifacts and remove temporary CI
         run: |
+          git rm .github/workflows/verify-public-commerce-closeout.yml
+          npm run build:pages
+          git add _headers config/csp-runtime.js config/csp-runtime.json diagnostic-manifest.json .github/workflows/verify-public-commerce-closeout.yml
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "build: refresh generated artifacts for public commerce closeout"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
           npm run build:pages
           git diff --exit-code
+      - name: Final release audit
+        run: npm run audit:final
