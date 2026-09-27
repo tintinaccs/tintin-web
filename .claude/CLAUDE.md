@@ -15,6 +15,13 @@
 - Fix root causes rather than masking symptoms.
 - Ask only when a real product/business decision is missing or an irreversible high-risk action cannot be safely inferred.
 
+## Agent operating protocol
+- Before substantial repository-wide work, read `docs/agent/README.md`.
+- When the user explicitly requests "reparación integral", autonomous repair, or asks to fix/correct everything in scope, follow `docs/agent/AUTONOMOUS_REPAIR.md` and evaluate the applicable rows of `docs/agent/ACCEPTANCE_MATRIX.md`.
+- Persist evidence and remaining work in `docs/agent/CURRENT_STATE.md`; do not inherit PASS from dated audit reports.
+- Historical audit/closure documents are evidence of their dated run, not authority for the current commit.
+- This protocol does not authorize merge, deploy, destructive production writes, real purchases/orders/emails, force-pushes, or secret handling.
+
 ## Project priorities
 When applicable, prioritize in this order:
 1. Correct business behavior
