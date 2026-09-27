@@ -16,7 +16,7 @@ import {
   normalizeContentValue,
   detectContentPageId,
 } from './esquema-contenido.js?v=tintin-20260925-cache-converge-1';
-import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1';
+import { initVisualBuilderRuntime } from './editor-visual-runtime.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1';
 
 const subscriptions = new Map();
 const latestData = new Map();

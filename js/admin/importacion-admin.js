@@ -1,10 +1,10 @@
 /*
  * Tintin Admin — Shopify catalog preparation.
  *
- * This is the single import surface for admin.html. It deliberately stops at
- * PREVIEW/READY: this phase prepares and validates a resumable job but does
- * not migrate the production catalog. Product writes, media downloads and
- * cutover require a separately authorized phase.
+ * This is the single import surface for admin.html. This file only reads,
+ * previews and persists a resumable job (PREVIEW/READY); it never writes the
+ * catalog. Applying a READY Shopify job to the real catalog lives in
+ * aplicar-importacion-admin.js: create-only, never overwrites or deletes.
  */
 
 import { db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
@@ -29,9 +29,10 @@ import {
   safeImportUrl,
   sanitizeShopifyBodyHtml,
   summarizeImportRecords,
-} from '../core/store/shopify-import-core.mjs?v=tintin-20260925-cache-converge-1';
+} from '../core/store/shopify-import-core.mjs?v=tintin-20260927-shopify-apply-1';
 import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260918-shopify-phase2-safe-1';
 import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
+import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20260927-shopify-apply-1';
 
 if (!window.TintinAdminShopifyImportBooted) {
   window.TintinAdminShopifyImportBooted = true;
@@ -55,6 +56,7 @@ if (!window.TintinAdminShopifyImportBooted) {
     job: null,
     plan: null,
     busy: false,
+    backupAt: 0,
     ui: null,
   };
 
@@ -127,6 +129,7 @@ if (!window.TintinAdminShopifyImportBooted) {
         counts: { products: products.length, collections: collectionsData.length, siteContent: siteContent.length, settings: settings.length, rolePermissions: rolePermissions.length },
         data: { products, collections: collectionsData, siteContent, settings, rolePermissions },
       });
+      state.backupAt = Date.now();
       toast('Copia operativa descargada.');
     } catch (error) {
       console.error('[admin-import] backup failed', error);
@@ -345,8 +348,8 @@ if (!window.TintinAdminShopifyImportBooted) {
     if (state.ui.phase2Meta) {
       const plan = state.plan;
       state.ui.phase2Meta.textContent = plan
-        ? `Fase 2: ${plan.summary.collections} colección(es) · ${plan.summary.images} media planificada(s) · ${plan.summary.warnings} advertencia(s) · ${plan.summary.errors} bloqueo(s) · staging preparado, activación bloqueada`
-        : 'Fase 2: media server-side, mapping de colecciones, staging y rollback preparados; activación comercial bloqueada.';
+        ? `Archivo: ${plan.summary.collections} colección(es) · ${plan.summary.images} imagen(es) · ${plan.summary.warnings} advertencia(s) · ${plan.summary.errors} bloqueo(s)`
+        : 'Cargá el archivo para ver colecciones, imágenes y advertencias.';
     }
     state.ui.tableBody.replaceChildren();
     state.ui.preview.hidden = !state.records.length;
@@ -361,6 +364,8 @@ if (!window.TintinAdminShopifyImportBooted) {
       ? `Vista acotada a ${PREVIEW_ROWS}; el job conserva los ${state.records.length} productos. No se descartan filas.`
       : 'La vista previa no escribe productos ni descarga media.';
     state.ui.jobStatus.textContent = state.job ? `${state.job.status} · ${state.job.jobId || state.jobId}` : 'Sin import job persistido';
+    state.ui.badge.textContent = state.job?.status === 'COMPLETED' ? 'APLICADO' : state.job?.status === 'RUNNING' ? 'APLICANDO' : 'SIN ESCRIBIR';
+    catalogApply.render(totals);
   }
 
   async function apiJob(payload) {
@@ -369,6 +374,8 @@ if (!window.TintinAdminShopifyImportBooted) {
     if (!response.ok || result.ok !== true) throw new Error(result.error || apiFailureMessage(response));
     return result.job;
   }
+
+  const catalogApply = createCatalogApply({ state, isSuperAdmin, apiJob, saveLocalJob, renderPreview, toast, node });
 
   async function createDryRunJob() {
     if (!isSuperAdmin() || state.busy || !state.records.length) return;
@@ -382,7 +389,7 @@ if (!window.TintinAdminShopifyImportBooted) {
       state.job = await apiJob({ action: 'create', jobId: state.jobId, source: state.source, fileName: state.fileName, fileBytes: state.fileBytes, fileChecksum: state.fileChecksum, total: state.records.length, strategy: 'SKIP', batchCount: chunkImportRecords(state.records, 50).length, summary: totals });
       await saveLocalJob();
       renderPreview();
-      toast(`Preview persistido como ${state.jobId}. La migración de catálogo sigue deshabilitada.`);
+      toast(`Preview persistido como ${state.jobId}. Todavía no se escribió el catálogo.`);
     } catch (error) {
       console.error('[admin-import] job create failed', error);
       state.jobId = ''; state.job = null;
@@ -447,27 +454,27 @@ if (!window.TintinAdminShopifyImportBooted) {
     hideLegacyImporters(section);
     const card = node('div', 'adm-card phase10-card'); card.id = 'shopify-import-canonical-card';
     const head = node('div', 'adm-card-head phase10-head'); const titleWrap = node('div');
-    titleWrap.append(node('div', 'adm-card-title', 'Shopify · migración controlada'), node('p', 'phase10-subtitle', 'Auditoría, preview y job reanudable. Esta fase no escribe el catálogo real.'));
-    head.append(titleWrap, node('span', 'phase10-badge', 'DRY-RUN'));
+    titleWrap.append(node('div', 'adm-card-title', 'Shopify · migración controlada'), node('p', 'phase10-subtitle', 'Preview, colecciones y job reanudable. «Aplicar al catálogo» solo crea productos nuevos: nunca pisa ni borra.'));
+    const badge = node('span', 'phase10-badge', 'SIN ESCRIBIR'); head.append(titleWrap, badge);
     const body = node('div', 'adm-card-body'); const statusGrid = node('div', 'phase10-grid');
-    [['Fuente', 'Shopify CSV / JSON'], ['Agrupación', 'Handle → producto'], ['Media', 'validación server-side · Cloudinary'], ['Catálogo', 'staging · activación bloqueada']].forEach(([label, value]) => { const item = node('div', 'phase10-item'); item.append(node('strong', '', label), node('span', '', value)); statusGrid.appendChild(item); });
+    [['Fuente', 'Shopify CSV / JSON'], ['Agrupación', 'Handle → producto'], ['Imágenes', 'URLs de cdn.shopify.com'], ['Catálogo', 'solo crea · id estable por Handle']].forEach(([label, value]) => { const item = node('div', 'phase10-item'); item.append(node('strong', '', label), node('span', '', value)); statusGrid.appendChild(item); });
     const backupWrap = node('div', 'phase10-backup-wrap'); const backup = node('button', 'adm-btn adm-btn-outline', 'Descargar copia operativa'); backup.type = 'button'; backup.addEventListener('click', exportOperationalBackup); backupWrap.append(node('div', '', 'Copia operativa sin usuarios, pedidos ni auditoría.'), backup);
     const drop = node('div', 'phase10-drop'); drop.tabIndex = 0; drop.setAttribute('role', 'button'); drop.setAttribute('aria-label', 'Seleccionar exportación Shopify CSV o JSON');
     drop.append(node('strong', '', 'Arrastrá un CSV Shopify o JSON'), node('span', '', 'Parser incremental; sin tope artificial de filas. Se conserva Handle, Body HTML permitido, variantes, tags, estado y media detectada.'));
     const input = document.createElement('input'); input.type = 'file'; input.accept = '.csv,.json,application/json,text/csv'; input.hidden = true; drop.appendChild(input);
     drop.addEventListener('click', () => input.click()); drop.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); input.click(); } });
     drop.addEventListener('dragover', event => { event.preventDefault(); drop.classList.add('is-dragging'); }); drop.addEventListener('dragleave', () => drop.classList.remove('is-dragging')); drop.addEventListener('drop', event => { event.preventDefault(); drop.classList.remove('is-dragging'); processFile(event.dataTransfer.files?.[0]); }); input.addEventListener('change', () => processFile(input.files?.[0]));
-    const summaryEl = node('div', 'phase10-summary', 'Seleccioná un archivo CSV o JSON para comenzar.'); const phase2Meta = node('div', 'phase10-phase2-meta', 'Fase 2: media server-side, mapping de colecciones, staging y rollback preparados; activación comercial bloqueada.'); const jobStatus = node('div', 'phase10-job-status', 'Sin import job persistido');
+    const summaryEl = node('div', 'phase10-summary', 'Seleccioná un archivo CSV o JSON para comenzar.'); const phase2Meta = node('div', 'phase10-phase2-meta', 'Cargá el archivo para ver colecciones, imágenes y advertencias.'); const jobStatus = node('div', 'phase10-job-status', 'Sin import job persistido');
     const preview = node('div', 'phase10-preview'); preview.hidden = true; const tableWrap = node('div', 'adm-table-wrap'); const table = node('table', 'adm-table phase10-table'); const tableHead = document.createElement('thead'); const headRow = document.createElement('tr'); ['#', 'Producto', 'Colección', 'Precio', 'Stock', 'Estado'].forEach(label => headRow.appendChild(node('th', '', label))); tableHead.appendChild(headRow); const tableBody = document.createElement('tbody'); table.append(tableHead, tableBody); tableWrap.appendChild(table); const previewNote = node('small', 'phase10-note');
-    const actions = node('div', 'phase10-actions'); const clear = node('button', 'adm-btn adm-btn-outline', 'Limpiar preview'); clear.type = 'button'; clear.addEventListener('click', clearPreview); const createJob = node('button', 'adm-btn adm-btn-primary', 'Crear import job (dry-run)'); createJob.type = 'button'; createJob.addEventListener('click', createDryRunJob); const ready = node('button', 'adm-btn adm-btn-outline', 'Marcar READY'); ready.type = 'button'; ready.addEventListener('click', markReady); const restore = node('button', 'adm-btn adm-btn-outline'); restore.type = 'button'; restore.hidden = true; actions.append(clear, createJob, ready, restore); preview.append(tableWrap, previewNote, actions);
+    const actions = node('div', 'phase10-actions'); const clear = node('button', 'adm-btn adm-btn-outline', 'Limpiar preview'); clear.type = 'button'; clear.addEventListener('click', clearPreview); const createJob = node('button', 'adm-btn adm-btn-primary', 'Crear import job (dry-run)'); createJob.type = 'button'; createJob.addEventListener('click', createDryRunJob); const ready = node('button', 'adm-btn adm-btn-outline', 'Marcar READY'); ready.type = 'button'; ready.addEventListener('click', markReady); const restore = node('button', 'adm-btn adm-btn-outline'); restore.type = 'button'; restore.hidden = true; actions.append(clear, createJob, ready, restore); preview.append(tableWrap, previewNote, actions); catalogApply.mount(preview, tableWrap);
     body.append(statusGrid, backupWrap, drop, summaryEl, phase2Meta, jobStatus, preview); card.append(head, body); section.insertBefore(card, section.firstChild);
-    state.ui = { section, card, backup, drop, input, summary: summaryEl, phase2Meta, jobStatus, preview, tableBody, previewNote, createJob, ready, restore }; renderPreview(); offerLocalResume();
+    state.ui = { section, card, badge, backup, drop, input, summary: summaryEl, phase2Meta, jobStatus, preview, tableBody, previewNote, createJob, ready, restore }; renderPreview(); offerLocalResume();
   }
 
   function injectStyles() {
     if (document.getElementById('phase10-import-styles')) return;
     const style = document.createElement('style'); style.id = 'phase10-import-styles'; style.textContent = `
-      .phase10-card{border:1.5px solid #e6b6c7}.phase10-head{align-items:flex-start;gap:12px}.phase10-subtitle{font-size:12px;color:var(--adm-muted);margin:5px 0 0}.phase10-badge{font:800 10px Montserrat;background:#fff3cd;color:#805e00;border-radius:999px;padding:6px 10px}.phase10-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}.phase10-item{display:flex;flex-direction:column;gap:4px;padding:12px;background:#fafafa;border:1px solid var(--adm-border);border-radius:10px}.phase10-item strong{font-size:11px;text-transform:uppercase;letter-spacing:.04em}.phase10-item span,.phase10-note,.phase10-job-status,.phase10-phase2-meta{font-size:11px;color:var(--adm-muted);line-height:1.5}.phase10-phase2-meta{padding:10px 0}.phase10-backup-wrap{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px;border:1px solid var(--adm-border);border-radius:12px;margin-bottom:16px;font-size:12px}.phase10-drop{display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center;padding:30px 18px;border:2px dashed #d9a2b7;border-radius:14px;background:#fff8fa;cursor:pointer}.phase10-drop span{font-size:11px;color:var(--adm-muted);max-width:720px}.phase10-drop.is-dragging,.phase10-drop.is-loading{background:#fce7ef;border-color:#b84c72}.phase10-summary{font-size:12px;font-weight:700;margin:14px 0 4px}.phase10-job-status{margin-bottom:8px}.phase10-preview{margin-top:10px}.phase10-table td{vertical-align:middle}.phase10-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:14px}.adm-toast.phase10-error{background:#a52828!important}@media(max-width:850px){.phase10-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.phase10-grid{grid-template-columns:1fr}.phase10-backup-wrap{align-items:stretch;flex-direction:column}.phase10-backup-wrap button,.phase10-actions button{width:100%}}
+      .phase10-card{border:1.5px solid #e6b6c7}.phase10-head{align-items:flex-start;gap:12px}.phase10-subtitle{font-size:12px;color:var(--adm-muted);margin:5px 0 0}.phase10-badge{font:800 10px Montserrat;background:#fff3cd;color:#805e00;border-radius:999px;padding:6px 10px}.phase10-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}.phase10-item{display:flex;flex-direction:column;gap:4px;padding:12px;background:#fafafa;border:1px solid var(--adm-border);border-radius:10px}.phase10-item strong{font-size:11px;text-transform:uppercase;letter-spacing:.04em}.phase10-item span,.phase10-note,.phase10-job-status,.phase10-phase2-meta{font-size:11px;color:var(--adm-muted);line-height:1.5}.phase10-phase2-meta{padding:10px 0}.phase10-backup-wrap{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px;border:1px solid var(--adm-border);border-radius:12px;margin-bottom:16px;font-size:12px}.phase10-drop{display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center;padding:30px 18px;border:2px dashed #d9a2b7;border-radius:14px;background:#fff8fa;cursor:pointer}.phase10-drop span{font-size:11px;color:var(--adm-muted);max-width:720px}.phase10-drop.is-dragging,.phase10-drop.is-loading{background:#fce7ef;border-color:#b84c72}.phase10-summary{font-size:12px;font-weight:700;margin:14px 0 4px}.phase10-job-status{margin-bottom:8px}.phase10-preview{margin-top:10px}.phase10-table td{vertical-align:middle}.phase10-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:14px}.adm-toast.phase10-error{background:#a52828!important}.phase10-map,.phase10-apply{display:flex;flex-direction:column;gap:8px;padding:12px;border:1px solid var(--adm-border);border-radius:12px;margin:0 0 14px}.phase10-apply{margin:14px 0 0}.phase10-map-title{font-size:12px}.phase10-map-list{display:flex;flex-direction:column;gap:8px}.phase10-map-row{display:flex;align-items:center;justify-content:space-between;gap:12px}.phase10-map-label{display:flex;flex-direction:column;gap:2px;font-size:12px;min-width:0}.phase10-map-label span{font-size:11px;color:var(--adm-muted);overflow-wrap:anywhere}.phase10-map-select{max-width:240px}.phase10-apply-row{display:flex;align-items:center;justify-content:space-between;gap:12px}@media(max-width:850px){.phase10-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.phase10-grid{grid-template-columns:1fr}.phase10-backup-wrap,.phase10-map-row,.phase10-apply-row{align-items:stretch;flex-direction:column}.phase10-backup-wrap button,.phase10-actions button,.phase10-apply-row button{width:100%}.phase10-map-select{max-width:none}}
     `; document.head.appendChild(style);
   }
 

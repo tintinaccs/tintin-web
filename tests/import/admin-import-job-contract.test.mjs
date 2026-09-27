@@ -17,3 +17,10 @@ test('admin import job conserva estados, ownership y dry-run server-side', () =>
   assert.doesNotMatch(source, /collection\(db, ['"]products['"]\)/);
 });
 
+test('admin import job solo deja aplicar un CSV de Shopify sin errores y registra el resultado', () => {
+  assert.match(source, /next === 'RUNNING' && \(job\.source !== 'shopify-csv' \|\| Number\(job\.errors \|\| 0\) !== 0\)/);
+  assert.match(source, /RUNNING: 'running', COMPLETED: 'completed', FAILED: 'failed'/);
+  assert.match(source, /next === 'COMPLETED' \? \{ created, skipped \}/);
+  assert.match(source, /dryRun: next === 'RUNNING' \? false : job\.dryRun !== false/);
+});
+

@@ -15,7 +15,8 @@ const checks = [
   ['media exige Super Admin', /requireSuperAdmin\(request\)/.test(media)],
   ['media copy exige guard explícito', /SHOPIFY_PHASE2_MEDIA_WRITE/.test(media)],
   ['media no usa cliente', !/window\.|document\./.test(media)],
-  ['job production sigue dry-run', /catalogMigration: 'not-executed'/.test(job) && /dryRun: true/.test(job)],
+  ['job nace dry-run', /catalogMigration: 'not-executed'/.test(job) && /dryRun: true/.test(job)],
+  ['aplicar exige CSV Shopify sin errores', /next === 'RUNNING' && \(job\.source !== 'shopify-csv' \|\| Number\(job\.errors \|\| 0\) !== 0\)/.test(job)],
   ['documentación declara migración no ejecutada', /REAL COMMERCIAL MIGRATION.*NOT STARTED/s.test(audit)],
 ];
 const failed = checks.filter(([, ok]) => !ok);

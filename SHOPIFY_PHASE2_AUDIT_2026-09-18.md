@@ -49,8 +49,18 @@ Todas las mutaciones críticas del endpoint requieren Super Admin server-side. A
 
 `tests/fixtures/shopify-phase2-fixture.csv` cubre producto simple, una/múltiples/sin imágenes, variantes, media duplicada, UTF-8, sale price, stock cero y HTML inseguro. Los tests cubren 1k/10k records sintéticos por chunks, idempotencia, interrupción/reanudación, diffs, mapping, media 200/404/HTML/timeout/5xx/oversize, XSS, activation fallida y rollback.
 
+## Aplicación controlada al catálogo (2026-09-27)
+
+Para el cutover a `tintinaccs.com` el catálogo de producción está vacío a propósito, así que no hace falta staging ni activation: el panel Importar suma un paso explícito «Aplicar al catálogo» (`js/admin/aplicar-importacion-admin.js`).
+
+- Solo Super Admin, solo `source: 'shopify-csv'`, 0 productos con error, copia operativa descargada en la sesión, job READY (o FAILED para reintentar) y confirmación explícita.
+- Las filas cuya colección no se reconoce se agrupan por título y el Super Admin elige la colección real de cada grupo antes de crear el job; sin elección quedan como error y bloquean la aplicación.
+- Cada lote de 50 es una transacción que lee primero y crea solo los ids ausentes (`stableProductDocumentId` por Handle). Reintentar no duplica, nunca pisa un producto ya editado y nunca borra. No escribe `productInventory`.
+- El endpoint rechaza `RUNNING` si el job no es un CSV de Shopify sin errores, y registra en el job y en `auditLog` la cantidad creada y omitida.
+- Las imágenes quedan apuntando a `cdn.shopify.com`; copiarlas a Cloudinary sigue siendo el paso de media de esta fase.
+
 ## Estado operativo
 
 - `SHOPIFY PHASE 2 CODE`: implementable y verificable en TEST/fixture.
-- `REAL COMMERCIAL MIGRATION`: NOT STARTED; requiere autorización explícita posterior.
+- `REAL COMMERCIAL MIGRATION`: NOT STARTED; la ejecuta el Super Admin con el CSV exportado desde Shopify y «Aplicar al catálogo».
 - No se usó CSV comercial, no se escribieron productos comerciales, no cambió el catálogo activo y no se ejecutó activation en producción.
