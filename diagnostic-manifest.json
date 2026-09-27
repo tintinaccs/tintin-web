@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "69b7330a602ee1ba14a88a1685f226c49674bcc8f2eacd5dac6fc2d037744bd9",
+  "sourceFingerprint": "422d670b3dd2f831585c3c06e6154cf64def88274b317eedb3baeb79a1361dca",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 891,
-    "textFiles": 850,
-    "totalBytes": 17568258,
+    "files": 897,
+    "textFiles": 856,
+    "totalBytes": 17588007,
     "pages": 19,
-    "modules": 615
+    "modules": 618
   },
   "viewports": [
     {
@@ -8449,8 +8449,8 @@
         "guest",
         "client"
       ],
-      "bytes": 53695,
-      "sha256": "83b3c28ba65e17c5e9a7fa65b9fc19444175396b16ce580737f120530355cba2",
+      "bytes": 54137,
+      "sha256": "fa2c4c1c226359b6b61c7be0968cd82d84f03f512850fe841fd896d33c1c138b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8518,32 +8518,32 @@
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 984
+          "line": 995
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 985
+          "line": 996
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 986
+          "line": 997
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 987
+          "line": 998
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 988
+          "line": 999
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 989
+          "line": 1000
         }
       ],
       "styles": [
@@ -8855,37 +8855,37 @@
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 984,
+          "line": 995,
           "exists": true
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 985,
+          "line": 996,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 986,
+          "line": 997,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 987,
+          "line": 998,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 988,
+          "line": 999,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 989,
+          "line": 1000,
           "exists": true
         },
         {
@@ -17974,6 +17974,24 @@
       ]
     },
     {
+      "path": "cloudflare/checkout-operational-health.js",
+      "bytes": 2939,
+      "sha256": "dc72013ae9c2d7784f7fdd6aab3cc61cee7e34a67819060b6622f8850a722c4f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "./firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "cloudflare/comentarios-sociales.js",
       "bytes": 7483,
       "sha256": "2a5cf6d7ab2591b6faa12c4480347c16901775d42c0a3bd4e8e61a5d8984cab3",
@@ -18105,8 +18123,8 @@
     },
     {
       "path": "cloudflare/inyectar-diagnostico-maestro-admin.js",
-      "bytes": 2096,
-      "sha256": "63823e6ad3669ec6fcdb6b84aaf94405badf3f1d54bc4c1835d7526f32dae172",
+      "bytes": 2085,
+      "sha256": "55616c43cc44b10030d1ab64007257141d05665d4129c4c910767636f151bf7b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18591,8 +18609,8 @@
     },
     {
       "path": "cloudflare/system-health.js",
-      "bytes": 7100,
-      "sha256": "166728a8547f32607a6c9c777358c839fd9d9705eabbfee90b9887a1967eeae7",
+      "bytes": 7968,
+      "sha256": "ffc8a47510a8e697f2a9fe83e170ca5aa4915136c81e6c75c5c6102d80481fbb",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18605,40 +18623,46 @@
           "line": 4
         },
         {
+          "raw": "./checkout-operational-health.js",
+          "target": "cloudflare/checkout-operational-health.js",
+          "dynamic": false,
+          "line": 5
+        },
+        {
           "raw": "./sheets-sync-config.js",
           "target": "cloudflare/sheets-sync-config.js",
           "dynamic": false,
-          "line": 9
+          "line": 10
         },
         {
           "raw": "./resiliencia-sync-catalogo.js",
           "target": "cloudflare/resiliencia-sync-catalogo.js",
           "dynamic": false,
-          "line": 10
+          "line": 11
         },
         {
           "raw": "./resiliencia-correo-pedido.js",
           "target": "cloudflare/resiliencia-correo-pedido.js",
           "dynamic": false,
-          "line": 11
+          "line": 12
         },
         {
           "raw": "./resiliencia-sync-participacion.js",
           "target": "cloudflare/resiliencia-sync-participacion.js",
           "dynamic": false,
-          "line": 12
+          "line": 13
         },
         {
           "raw": "./apps-script-fetch.js",
           "target": "cloudflare/apps-script-fetch.js",
           "dynamic": false,
-          "line": 13
+          "line": 14
         },
         {
           "raw": "./paypal-seguro.js",
           "target": "cloudflare/paypal-seguro.js",
           "dynamic": false,
-          "line": 14
+          "line": 15
         }
       ],
       "endpoints": []
@@ -18736,7 +18760,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 368757,
-      "sha256": "8bdba3bb9ffc03444af1ba624e54241f5318d4e4a2d7086b2dc667778297e8c1",
+      "sha256": "e96472cbe0f35b8aea9640edf0c3742acb5e593952f1152a94cc5c3115f1e022",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21245,8 +21269,8 @@
     },
     {
       "path": "js/admin/diagnostics/estado-ecosistema-admin.js",
-      "bytes": 13460,
-      "sha256": "69cdb21be98c632aeb574b10d38b6d7562bd6eafc84f3fc0b26753378ffc3547",
+      "bytes": 14774,
+      "sha256": "82ced0107b5008ecd6da3b8aa57f3f392ddf863f18875054254681ff7086138a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -31632,6 +31656,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/checkout/checkout-operational-health.test.mjs",
+      "bytes": 2226,
+      "sha256": "df4fd5f63d473797df134579e493e1003c977b6adde0e834b1c69badd9db6fa8",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../cloudflare/checkout-operational-health.js",
+          "target": "cloudflare/checkout-operational-health.js",
+          "dynamic": false,
+          "line": 7
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/checkout/checkout-state-navigation.test.mjs",
       "bytes": 2196,
       "sha256": "f1a0d08762cda7658053f96903f130636ccc0aa989fe625e9c33d4a2339ca099",
@@ -33468,6 +33522,42 @@
       ]
     },
     {
+      "path": "tests/public-commerce/closeout-contracts.test.mjs",
+      "bytes": 3620,
+      "sha256": "6929e16be8e29ece63ac8d827d688fa76bfaaf16e58c29527e6116f7fa39c285",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 4
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/push/push-web.test.mjs",
       "bytes": 17503,
       "sha256": "0909398e98ba754b6637b22c6295d9d7839a17368c868db6c9e1dbed1659b34d",
@@ -35248,8 +35338,8 @@
     {
       "path": "catalogo.html",
       "extension": ".html",
-      "bytes": 53695,
-      "sha256": "83b3c28ba65e17c5e9a7fa65b9fc19444175396b16ce580737f120530355cba2"
+      "bytes": 54137,
+      "sha256": "fa2c4c1c226359b6b61c7be0968cd82d84f03f512850fe841fd896d33c1c138b"
     },
     {
       "path": "checkout.html",
@@ -35274,6 +35364,12 @@
       "extension": ".js",
       "bytes": 15031,
       "sha256": "095e97d008366820aac7ee3348481695f70f223d8766f07e4aa4483040348d31"
+    },
+    {
+      "path": "cloudflare/checkout-operational-health.js",
+      "extension": ".js",
+      "bytes": 2939,
+      "sha256": "dc72013ae9c2d7784f7fdd6aab3cc61cee7e34a67819060b6622f8850a722c4f"
     },
     {
       "path": "cloudflare/comentarios-sociales.js",
@@ -35308,8 +35404,8 @@
     {
       "path": "cloudflare/inyectar-diagnostico-maestro-admin.js",
       "extension": ".js",
-      "bytes": 2096,
-      "sha256": "63823e6ad3669ec6fcdb6b84aaf94405badf3f1d54bc4c1835d7526f32dae172"
+      "bytes": 2085,
+      "sha256": "55616c43cc44b10030d1ab64007257141d05665d4129c4c910767636f151bf7b"
     },
     {
       "path": "cloudflare/notificaciones-sociales.js",
@@ -35416,8 +35512,8 @@
     {
       "path": "cloudflare/system-health.js",
       "extension": ".js",
-      "bytes": 7100,
-      "sha256": "166728a8547f32607a6c9c777358c839fd9d9705eabbfee90b9887a1967eeae7"
+      "bytes": 7968,
+      "sha256": "ffc8a47510a8e697f2a9fe83e170ca5aa4915136c81e6c75c5c6102d80481fbb"
     },
     {
       "path": "cloudflare/user-lifecycle-domain.js",
@@ -35453,13 +35549,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 368757,
-      "sha256": "8bdba3bb9ffc03444af1ba624e54241f5318d4e4a2d7086b2dc667778297e8c1"
+      "sha256": "e96472cbe0f35b8aea9640edf0c3742acb5e593952f1152a94cc5c3115f1e022"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 368672,
-      "sha256": "13b63d4d7f1da9811e33d42fce8a2cce54483851b300ab09bbaf15f0d9b7d6b7"
+      "sha256": "5f46c9a7aa7f08bc69c8a2c6c0abcef5157cc2dcfc44ff59f721a9cf74f81526"
     },
     {
       "path": "config/public-site.json",
@@ -36152,6 +36248,18 @@
       "sha256": "8453cbfd67d15111d2916cadb81f46a214078374159d9218191118fd74e0d2c4"
     },
     {
+      "path": "docs/politica-colecciones-publicas.md",
+      "extension": ".md",
+      "bytes": 1738,
+      "sha256": "3d84b3c1441ef041efe27c63498bfad208524a22015fbca2afb3a471328f556c"
+    },
+    {
+      "path": "docs/politica-escalado-catalogo.md",
+      "extension": ".md",
+      "bytes": 1893,
+      "sha256": "ebbedaae6945e55cdd74b9254076579f8b2e182a3d054cccadc65ae38ab2262f"
+    },
+    {
       "path": "docs/production-hardening.md",
       "extension": ".md",
       "bytes": 7138,
@@ -36180,6 +36288,12 @@
       "extension": ".md",
       "bytes": 5008,
       "sha256": "a04cff49bb13d6216a982a43f8d58918147324d7732c95949f99427d504a5f91"
+    },
+    {
+      "path": "docs/runbook-conciliacion-checkout.md",
+      "extension": ".md",
+      "bytes": 4731,
+      "sha256": "d9b7cda60e8227b97e2ad29f59824392f4dfc1516740641ae472118a713d9b8f"
     },
     {
       "path": "docs/seo-publicacion-fase-11.md",
@@ -36772,8 +36886,8 @@
     {
       "path": "js/admin/diagnostics/estado-ecosistema-admin.js",
       "extension": ".js",
-      "bytes": 13460,
-      "sha256": "69cdb21be98c632aeb574b10d38b6d7562bd6eafc84f3fc0b26753378ffc3547"
+      "bytes": 14774,
+      "sha256": "82ced0107b5008ecd6da3b8aa57f3f392ddf863f18875054254681ff7086138a"
     },
     {
       "path": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
@@ -39154,8 +39268,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 59425,
-      "sha256": "4cb7a93b3e2c005d396348184b096c7c0e7bb953a9ce8b5e8ba5f46549a2c8c9"
+      "bytes": 59414,
+      "sha256": "caa77c72cba42e682bf8ed464782f313b5fb05b22bf78e918a4d9fc13e4c6eeb"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -39560,6 +39674,12 @@
       "sha256": "2a68047f87d4963b563527f9672e6536a5ec4efd54a7cd20bdf8cbdb35c6692e"
     },
     {
+      "path": "tests/checkout/checkout-operational-health.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2226,
+      "sha256": "df4fd5f63d473797df134579e493e1003c977b6adde0e834b1c69badd9db6fa8"
+    },
+    {
       "path": "tests/checkout/checkout-state-navigation.test.mjs",
       "extension": ".mjs",
       "bytes": 2196,
@@ -39882,6 +40002,12 @@
       "extension": ".mjs",
       "bytes": 2333,
       "sha256": "6226c83674256ca26f9eb08bca37634ae36aa9d5fe594c13373ea10d66bb7d21"
+    },
+    {
+      "path": "tests/public-commerce/closeout-contracts.test.mjs",
+      "extension": ".mjs",
+      "bytes": 3620,
+      "sha256": "6929e16be8e29ece63ac8d827d688fa76bfaaf16e58c29527e6116f7fa39c285"
     },
     {
       "path": "tests/push/push-web.test.mjs",
