@@ -17,7 +17,7 @@ Este procedimiento es el único orden aprobado para mover la tienda desde Shopif
 
 Cloudflare Pages exige que el dominio apex sea una zona de la misma cuenta de Cloudflare que el proyecto Pages y use nameservers de Cloudflare ([documentación oficial](https://developers.cloudflare.com/pages/configuration/custom-domains/)). Trasladar el DNS conservando los registros de Shopify no cambia la tienda que ven los clientes.
 
-Estado verificado al 26/09/2026: nameservers `ns-cloud-d1.googledomains.com`, `ns-cloud-d2.googledomains.com`, `ns-cloud-d3.googledomains.com` y `ns-cloud-d4.googledomains.com`; registrador Tucows; estados `clientTransferProhibited` y `clientUpdateProhibited`; vencimiento `2027-02-24`. Esto es compatible con un dominio comprado en Shopify, pero debe confirmarse en la cuenta del dueño. Si Shopify no permite cambiar los nameservers, hay que transferir el dominio fuera de Shopify antes del traslado DNS.
+Estado verificado al 26/09/2026 y confirmado por DoH el 27/09/2026: nameservers `ns-cloud-d1.googledomains.com`, `ns-cloud-d2.googledomains.com`, `ns-cloud-d3.googledomains.com` y `ns-cloud-d4.googledomains.com`; registrador Tucows; estados `clientTransferProhibited` y `clientUpdateProhibited`; vencimiento `2027-02-24`. Esto es compatible con un dominio comprado en Shopify, pero debe confirmarse en la cuenta del dueño. Si Shopify no permite cambiar los nameservers, hay que transferir el dominio fuera de Shopify antes del traslado DNS.
 
 Antes de cambiar los NS, guardar el export completo y replicar exactamente estos registros en la nueva zona de Cloudflare:
 
@@ -26,6 +26,8 @@ Antes de cambiar los NS, guardar el export completo y replicar exactamente estos
 | A | `@` | `23.227.38.65` | DNS only |
 | AAAA | `@` | `2620:127:f00f:5::` | DNS only |
 | CNAME | `www` | `shops.myshopify.com` | DNS only |
+| CNAME | `account` | `shops.myshopify.com` | DNS only |
+| TXT | `@` | `google-site-verification=j4SPj_LtKR2UWZJ_ZOioI3KVdt4yIOS5an0YUSvrAKE` (verificación existente de Search Console; se conserva y la nueva se agrega aparte) | No aplica |
 | TXT | `resend._domainkey` | Copiar el valor exacto de Resend y contrastarlo con el export DNS; no inventarlo ni sustituirlo por este texto | No aplica |
 | MX | `send` | `feedback-smtp.sa-east-1.amazonses.com` | Prioridad 10 |
 | TXT | `send` | `v=spf1 include:amazonses.com ~all` | No aplica |
@@ -120,6 +122,10 @@ Solo cuando el dueño confirme el traslado DNS y las autorizaciones de A; las co
    - Sumar `tintinaccs.com` y `www.tintinaccs.com` a `appCheckDomains`, conservando `tintinaccesorios.pages.dev`, `localhost` y `127.0.0.1`. Sin el dominio activo en esa lista falla el check «App Check incluye dominio activo» de `node scripts/auditar-preparacion-dominio.mjs`.
 2. Mantener `cutover` como referencia del destino aprobado.
 3. Ejecutar el build normal. `scripts/sincronizar-origen-publico.js` propaga la fuente única a canonical, OG, JSON-LD, robots, sitemaps, Firebase Auth, Functions y auditorías.
+   - Ese primer build **falla a propósito** en `audit:cache-versioning`: cambiar el origen modifica los bytes de muchos JS publicados y cada uno necesita un `?v=` nuevo. Converger con un tag único (por ejemplo `tintin-AAAAMMDD-domain-cutover-1`) en cascada hasta que la auditoría solo informe «SIN REGISTRAR»: subir las referencias literales `?v=` de cada archivo marcado «CONTENIDO CAMBIÓ SIN BUMP» y, en cada conflicto «tags distintos», subir también la carga dinámica equivalente (`TT_CACHE_VERSION` de `js/cargador-pagina.js`, las constantes de `js/cargador-mantenimiento-pagina.js` y de `js/components/navigation/compartido/configuracion.js`, y las `*_VERSION` de `scripts/sincronizar-inicio-navegacion-publica.js`, que regeneran el shell público).
+   - Registrar con `npm run cache-versioning:write`.
+   - Actualizar auditorías y pruebas que citan literalmente una versión que dejó de existir (incluida la regex del prefijo de `TT_CACHE_VERSION` en `scripts/auditar-fase-8-ui-ux.js`). `scripts/auditar-superadmin-cierre-total.mjs` exige que la versión de `notificaciones-admin.js` pertenezca a una familia de tags conocida: si el tag nuevo no contiene `domain-cutover`, sumarlo a esa regex. Conservar los finales de línea originales: el sync normaliza a LF los archivos que reescribe.
+   - Correr `npm run build:pages` dos veces sin drift (`git diff --exit-code`), luego `npm run audit:final` y `node scripts/auditar-preparacion-dominio.mjs`.
 4. Regenerar CSP. `scripts/generar-csp-cloudflare.js` incorpora el origen público activo antes de calcular hashes.
 5. No mezclar este commit con cambios visuales o comerciales no relacionados.
 

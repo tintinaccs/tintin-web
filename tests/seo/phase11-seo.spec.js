@@ -1,5 +1,6 @@
 'use strict';
 const { test, expect } = require('@playwright/test');
+const { origin: PUBLIC_ORIGIN } = require('../../config/public-site.json');
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => { window.TT_DISABLE_STORE_GATE = true; });
@@ -7,11 +8,11 @@ test.beforeEach(async ({ page }) => {
 
 test('inicio publica canonical, OG y Store JSON-LD consistentes', async ({ page }) => {
   await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://tintinaccesorios.pages.dev/');
-  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', 'https://tintinaccesorios.pages.dev/');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `${PUBLIC_ORIGIN}/`);
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', `${PUBLIC_ORIGIN}/`);
   const store = JSON.parse(await page.locator('#tt-store-jsonld').textContent());
   expect(store['@type']).toBe('Store');
-  expect(store.url).toBe('https://tintinaccesorios.pages.dev/');
+  expect(store.url).toBe(`${PUBLIC_ORIGIN}/`);
 });
 
 test('producto llega con canonical, social preview y JSON-LD server-side coherentes', async ({ request }) => {
@@ -24,7 +25,7 @@ test('producto llega con canonical, social preview y JSON-LD server-side coheren
   expect(response.headers()['x-tintin-product-meta']).toBe('server-test');
 
   const html = await response.text();
-  const canonical = 'https://tintinaccesorios.pages.dev/product?id=seo-prueba';
+  const canonical = `${PUBLIC_ORIGIN}/product?id=seo-prueba`;
   expect(html).toContain(`<link rel="canonical" href="${canonical}">`);
   expect(html).toContain(`<meta property="og:url" content="${canonical}">`);
   expect(html).toContain('<meta property="og:title" content="Reloj SEO Prueba | Tintin Accesorios &amp; Relojes">');

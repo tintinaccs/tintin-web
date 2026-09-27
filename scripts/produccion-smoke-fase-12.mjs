@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const origin = String(process.env.TINTIN_PUBLIC_ORIGIN || 'https://tintinaccesorios.pages.dev').replace(/\/$/, '');
+const origin = String(process.env.TINTIN_PUBLIC_ORIGIN || 'https://tintinaccs.com').replace(/\/$/, '');
 const publicOrigin = new URL(origin).origin;
 const timeoutMs = Number(process.env.TINTIN_PHASE12_TIMEOUT_MS || 20000);
 const attempts = 3;
@@ -15,7 +15,7 @@ async function request(relative) {
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     const started = Date.now();
     try {
-      const response = await fetch(url, { redirect: 'follow', headers: { 'user-agent': 'TintinPhase12Smoke/2.0 (+https://tintinaccesorios.pages.dev/)' }, signal: AbortSignal.timeout(timeoutMs) });
+      const response = await fetch(url, { redirect: 'follow', headers: { 'user-agent': 'TintinPhase12Smoke/2.0 (+https://tintinaccs.com/)' }, signal: AbortSignal.timeout(timeoutMs) });
       const body = await response.text();
       const result = { relative, requestedUrl: url, url: response.url, redirected: response.redirected, status: response.status, ok: response.ok, ms: Date.now() - started, type: response.headers.get('content-type') || '', bytes: body.length, headers: Object.fromEntries(['content-security-policy','strict-transport-security','x-content-type-options','x-frame-options','referrer-policy','cache-control'].map(name => [name, response.headers.get(name) || ''])) };
       if (response.status >= 500) throw new Error('HTTP ' + response.status);

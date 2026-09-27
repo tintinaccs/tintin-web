@@ -49,13 +49,13 @@ check(
   // comparten la misma resolución de origen.
   resendNotify.includes("import { apiUrl } from '../core/firebase/origen-funciones.js") &&
     adminSync.includes("import { apiUrl } from '../../core/firebase/origen-funciones.js") &&
-    functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'") &&
+    functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccs.com'") &&
     functionOrigin.includes("hostname.endsWith('github.io')"),
   'Toda ruta /api/* del cliente debe resolverse con js/core/firebase/origen-funciones.js, no con una constante relativa suelta.'
 );
 check(
   'El puente del checkout, si se carga, usa el MISMO canal Resend',
-  bridge.includes("from '../../email/notificacion-pedido-resend.js?v=tintin-20260814-social-notifications-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1'") &&
+  bridge.includes("from '../../email/notificacion-pedido-resend.js?v=tintin-20260927-domain-cutover-2'") &&
     !bridge.includes('notificaciones-correo.js'),
   'El puente no debe introducir un segundo backend de correo distinto al del checkout.'
 );

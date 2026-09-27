@@ -1,6 +1,8 @@
 'use strict';
 
-const BASE_URL = (process.env.PERF_BASE_URL || 'https://tintinaccesorios.pages.dev').replace(/\/+$/, '');
+const { origin: PUBLIC_ORIGIN } = require('../../config/public-site.json');
+
+const BASE_URL = (process.env.PERF_BASE_URL || PUBLIC_ORIGIN).replace(/\/+$/, '');
 
 const VIEWPORTS = [
   { name: '1920 Desktop grande', width: 1920, height: 1080 },

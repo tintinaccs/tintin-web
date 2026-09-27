@@ -9,7 +9,7 @@
      completos de Google Maps sin reemplazar la validación original del checkout.
    ============================================================= */
 
-import { parseLocationSearchInput, searchPlaces } from '../../components/location/selector-ubicacion.js?v=tintin-20260905-location-search-recovery-1';
+import { parseLocationSearchInput, searchPlaces } from '../../components/location/selector-ubicacion.js?v=tintin-20260927-domain-cutover-2';
 
 const BAG_ICON_SVG = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>';
 const PIN_ICON_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-2px"><path d="M12 2C7.6 2 4 5.6 4 10c0 5.5 7 12 8 12s8-6.5 8-12c0-4.4-3.6-8-8-8z"/><circle cx="12" cy="10" r="3" fill="#fff"/></svg>';

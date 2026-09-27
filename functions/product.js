@@ -3,7 +3,7 @@ import {
   firestoreAdminGet
 } from '../cloudflare/firebase-admin-ligero.js';
 
-const PUBLIC_ORIGIN = 'https://tintinaccesorios.pages.dev';
+const PUBLIC_ORIGIN = 'https://tintinaccs.com';
 const CLOUDINARY_HOST = 'res.cloudinary.com';
 const CLOUDINARY_UPLOAD = '/upload/';
 const PRODUCT_METADATA_CEILING_MS = 1400;

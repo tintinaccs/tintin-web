@@ -7,10 +7,10 @@
  * aplicar-importacion-admin.js: create-only, never overwrites or deletes.
  */
 
-import { db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
-import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1';
+import { db } from '../core/firebase/firebase.js?v=tintin-20260927-domain-cutover-2';
+import { subscribeAuthState } from '../core/auth/coordinador-sesion.js?v=tintin-20260927-domain-cutover-2';
 import { collection } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-import { SUPER_ADMIN } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
+import { SUPER_ADMIN } from '../core/auth/roles.js?v=tintin-20260927-domain-cutover-2';
 import { getDocsPaginated } from '../core/firebase/paginacion-firestore.js?v=tintin-20260925-cache-converge-1';
 import {
   detectCsvDelimiter,
@@ -31,8 +31,8 @@ import {
   summarizeImportRecords,
 } from '../core/store/shopify-import-core.mjs?v=tintin-20260927-shopify-apply-1';
 import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260918-shopify-phase2-safe-1';
-import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
-import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20260927-shopify-apply-1';
+import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20260927-domain-cutover-2';
+import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20260927-domain-cutover-2';
 
 if (!window.TintinAdminShopifyImportBooted) {
   window.TintinAdminShopifyImportBooted = true;

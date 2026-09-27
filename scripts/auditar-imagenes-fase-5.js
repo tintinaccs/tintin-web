@@ -196,7 +196,7 @@ check(
   files.resolver.includes('export function resolveDeviceImage') &&
     files.resolver.includes('export function resolveCollectionImage') &&
     files.resolver.includes('export function firstEligibleProductImage') &&
-    files.runtime.includes("from './imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1'") &&
+    files.runtime.includes("from './imagenes.js?v=tintin-20260927-domain-cutover-2'") &&
     files.runtime.includes('resolveSlotImage'),
   'ninguna página debe reimplementar la prioridad responsive'
 );
@@ -238,7 +238,7 @@ check(
 
 check(
   'La biblioteca usa Cloudinary mediante Cloudflare Pages Functions',
-  // El origen /api (relativo en Cloudflare, https://tintinaccesorios.pages.dev
+  // El origen /api (relativo en Cloudflare, https://tintinaccs.com
   // en GitHub Pages/Netlify) vive en js/core/firebase/origen-funciones.js, compartido con
   // actividad-sitio.js, notificacion-pedido-resend.js y sincronizacion-correo-admin.js para
   // que ningún llamador nuevo lo reinvente (y lo olvide) por separado.
@@ -502,9 +502,9 @@ check(
 );
 
 const PROCESSING_VERSION_QUERY = 'v=tintin-20260716-cloudinary-fix-1';
-const MEDIA_LIBRARY_VERSION_QUERY = 'v=tintin-20260901-media-orphan-log-3';
-const MEDIA_LIBRARY_ADMIN_VERSION_QUERY = 'v=tintin-20260901-media-orphan-scan-3';
-const CARGA_IMAGENES_VERSION_QUERY = 'v=tintin-20260901-media-orphan-log-4';
+const MEDIA_LIBRARY_VERSION_QUERY = 'v=tintin-20260927-domain-cutover-2';
+const MEDIA_LIBRARY_ADMIN_VERSION_QUERY = 'v=tintin-20260927-domain-cutover-2';
+const CARGA_IMAGENES_VERSION_QUERY = 'v=tintin-20260927-domain-cutover-2';
 check(
   'Los archivos del flujo de subida se importan con versión de caché, no sin ella',
   files.uploadWidget.includes(`./procesamiento-imagenes.js?${PROCESSING_VERSION_QUERY}`) &&

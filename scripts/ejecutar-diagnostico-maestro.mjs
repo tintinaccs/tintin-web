@@ -8,7 +8,7 @@ import { spawnSync } from 'node:child_process';
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(?:[A-Za-z]:)/, match => match.slice(1))), '..');
 const requestedSuite = process.argv[2] || '';
 const artifactsRoot = path.resolve(root, process.env.MASTER_ARTIFACTS_DIR || 'artifacts/master');
-const productionOrigin = String(process.env.TINTIN_PUBLIC_ORIGIN || 'https://tintinaccesorios.pages.dev').replace(/\/$/, '');
+const productionOrigin = String(process.env.TINTIN_PUBLIC_ORIGIN || 'https://tintinaccs.com').replace(/\/$/, '');
 
 const suites = {
   static: {

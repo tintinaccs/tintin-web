@@ -11,9 +11,9 @@ const FIREBASE_WEB_API_KEY = 'AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0';
 const FIREBASE_PROJECT_ID = 'tintin-accesorios';
 const ADMIN_EMAIL = SUPERADMIN_EMAIL;
 const FROM_EMAIL = 'No Reply · Tintin <noreply@tintinaccs.com>';
-const EMAIL_MARK = 'https://tintinaccesorios.pages.dev/assets-tintin/images/general/logo.png';
+const EMAIL_MARK = 'https://tintinaccs.com/assets-tintin/images/general/logo.png';
 const REPLY_TO = ADMIN_EMAIL;
-const ADMIN_PANEL = 'https://tintinaccesorios.pages.dev/admin';
+const ADMIN_PANEL = 'https://tintinaccs.com/admin';
 const STORE_NAME = 'Tintin Accesorios';
 
 function clean(value, maxLength = 1000) {

@@ -134,7 +134,7 @@ check('La ubicación aproximada se obtiene sin guardar IP ni coordenadas',
 check('GitHub Pages usa el servicio geográfico de Cloudflare',
   activity.includes("import { apiUrl } from '../core/firebase/origen-funciones.js") &&
   activity.includes('function geoEndpoint() {\n    return apiUrl(') &&
-  functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev'") &&
+  functionOrigin.includes("CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccs.com'") &&
   functionOrigin.includes("hostname.endsWith('github.io')") &&
   !activity.includes('/.netlify/functions/'));
 check('Los previews de Cloudflare no escriben estadísticas',
@@ -306,7 +306,7 @@ for (const file of htmlFiles.concat(['tienda.js', 'js/cargador-pagina.js'])) {
   if (/tintin-20260715-(?:[2-9]|1[01])(?!\d)/.test(read(file))) staleVersions.push(file);
 }
 check('Los recursos críticos usan la versión vigente de caché',
-  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1'"));
+  staleVersions.length === 0 && loader.includes("const TT_CACHE_VERSION = 'tintin-20260927-domain-cutover-2'"));
 
 check(
   'El runtime público liviano carga imágenes, colecciones, colores y el fix de auditoría de página; el carrito queda en la navegación como única autoridad',
