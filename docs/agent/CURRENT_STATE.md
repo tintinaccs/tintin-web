@@ -17,7 +17,7 @@ Todas las áreas funcionales comienzan en `PENDING` para este protocolo hasta qu
 
 | Dominio | Estado | Evidencia / siguiente paso |
 | --- | --- | --- |
-| Protocolo de agentes | IN_PROGRESS | Crear documentos, enlazar AGENTS/CLAUDE y revisar diff |
+| Protocolo de agentes | PASS_LOCAL | Documentos creados; AGENTS/CLAUDE enlazados; diff contra main revisado: solo 6 archivos documentales |
 | Build y estructura | PENDING | Verificar en fase de reparación |
 | Home/shell | PENDING | Verificar |
 | Catálogo/colecciones/producto | PENDING | Verificar |
@@ -44,6 +44,13 @@ Todas las áreas funcionales comienzan en `PENDING` para este protocolo hasta qu
 
 Ninguno para instalar este protocolo.
 
+## Resultado de Fase 2
+
+- Protocolo instalado en esta rama.
+- Diff revisado contra `main`: solo documentación e instrucciones de agentes.
+- No se modificó código de la tienda ni configuración de producción.
+- No se hizo merge ni deploy.
+
 ## Próximo paso
 
-Terminar esta fase, revisar el diff y luego usar esta matriz para una reparación integral en una rama de trabajo, sin merge/deploy automático.
+Revisión independiente del protocolo y, una vez aprobado, integración controlada antes de usar la matriz para una reparación integral. La reparación funcional debe ejecutarse en una rama de trabajo y no autoriza merge/deploy automático.
