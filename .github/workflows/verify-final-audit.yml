@@ -1,0 +1,42 @@
+name: Verify final audit with runner Chrome
+
+on:
+  push:
+    branches:
+      - fix/public-commerce-closeout-20260926
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Remove temporary verifier from audited tree
+        run: git rm .github/workflows/verify-final-audit.yml
+      - name: Reuse runner Chrome for Playwright
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          test -n "$CHROME_BIN"
+          mkdir -p "$HOME/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64"
+          ln -sf "$CHROME_BIN" "$HOME/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell"
+          "$CHROME_BIN" --version
+      - name: Final release audit
+        run: npm run audit:final
+      - name: Remove temporary workflow from branch
+        if: always()
+        run: |
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "ci: remove temporary final audit verifier"
+          git push origin HEAD:${GITHUB_REF_NAME}
