@@ -19,7 +19,7 @@ if (isHome && !window.TintinHomeMaintenanceBooted) {
   }
 
   function currentBaseUrl() {
-    return 'https://tintinaccesorios.pages.dev/';
+    return 'https://tintinaccs.com/';
   }
 
   function normalizePublicMetadata() {
@@ -46,8 +46,8 @@ if (isHome && !window.TintinHomeMaintenanceBooted) {
         const serialized = JSON.stringify(value);
         if (!serialized.includes('tintinaccesorios.pages.dev')) return;
         const normalized = JSON.parse(serialized
-          .replaceAll('https://tintinaccesorios.pages.dev/', base)
-          .replaceAll('https://tintinaccesorios.pages.dev', base.replace(/\/$/, '')));
+          .replaceAll('https://tintinaccs.com/', base)
+          .replaceAll('https://tintinaccs.com', base.replace(/\/$/, '')));
         if (normalized?.['@graph']) {
           normalized['@graph'].forEach(node => {
             if (node?.['@type'] === 'Organization') node.logo = logoUrl;

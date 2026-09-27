@@ -4,7 +4,7 @@
  * Configuración compartida de Playwright para rendimiento y UI/UX.
  *
  * Rendimiento:
- *   PERF_BASE_URL="https://tintinaccesorios.pages.dev" npx playwright test tests/performance
+ *   PERF_BASE_URL="https://tintinaccs.com" npx playwright test tests/performance
  *
  * UI/UX local:
  *   PLAYWRIGHT_BASE_URL="http://127.0.0.1:4173" npx playwright test tests/ui-ux
@@ -24,7 +24,7 @@ module.exports = defineConfig({
     baseURL:
       process.env.PLAYWRIGHT_BASE_URL ||
       process.env.PERF_BASE_URL ||
-      'https://tintinaccesorios.pages.dev',
+      'https://tintinaccs.com',
     launchOptions: executablePath
       ? { executablePath, args: ['--no-sandbox'] }
       : { args: ['--no-sandbox'] }

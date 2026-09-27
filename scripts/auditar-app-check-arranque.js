@@ -32,7 +32,7 @@ const checks = [
     'GitHub Pages redirige al origen público antes de inicializar la aplicación',
     loader.indexOf("window.location.hostname === 'tintinaccs.github.io'") <
       loader.indexOf('if (window.TintinLoader) return') &&
-      loader.includes("'https://tintinaccesorios.pages.dev'") &&
+      loader.includes("'https://tintinaccs.com'") &&
       loader.includes('window.location.replace(')
   ],
   [
@@ -113,12 +113,12 @@ const checks = [
     'Todos los consumidores usan una sola versión de Firebase',
     !allRuntime.includes('firebase.js?v=tintin-20260716-cloudinary-fix-1') &&
       !allRuntime.includes('firebase.js?v=tintin-20260903-app-check-singleton-5') &&
-      allRuntime.includes('firebase.js?v=tintin-20260924-auth-popup-resolver-1')
+      allRuntime.includes('firebase.js?v=tintin-20260927-domain-cutover-2')
   ],
   [
     'Todas las páginas fuerzan el loader corregido',
     htmlFiles.every(file =>
-      read(file).includes('cargador-pagina.js?v=tintin-20260926-loader-contrast-b-1')
+      read(file).includes('cargador-pagina.js?v=tintin-20260927-domain-cutover-2')
     )
   ],
   [

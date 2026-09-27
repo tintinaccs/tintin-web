@@ -1,4 +1,4 @@
-export const SHELL_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-visual-1';
+export const SHELL_VERSION = 'tintin-20260927-domain-cutover-2';
 
 export const BREAKPOINTS = Object.freeze({
   mobileMax: 767,

@@ -115,9 +115,9 @@ test('admin serializa la inicialización para no duplicar cargas durante la rest
 test('los headers marcan el handoff antes de abrir el panel y todos usan el runtime actualizado', () => {
   assert.match(publicAuthNav, /createAuthHandoff\(user\.uid\)/);
   assert.match(publicAuthNav, /data-internal-admin-link/);
-  assert.match(publicAuthNav, /tintin-20260924-auth-state-authority-1/);
-  assert.match(admin, /tintin-20260924-auth-state-authority-1/);
-  assert.match(login, /tintin-20260924-auth-state-authority-1/);
+  assert.match(publicAuthNav, /tintin-20260927-domain-cutover-2/);
+  assert.match(admin, /tintin-20260927-domain-cutover-2/);
+  assert.match(login, /tintin-20260927-domain-cutover-2/);
 });
 
 test('checkout, navegación pública y carrito nunca deciden Auth con timeouts locales', () => {

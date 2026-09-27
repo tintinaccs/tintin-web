@@ -16,7 +16,7 @@ import {
 import { usernameKey } from '../../js/components/forms/utilidades-username.js';
 
 const FROM_EMAIL = 'No Reply · Tintin <noreply@tintinaccs.com>';
-const EMAIL_MARK = 'https://tintinaccesorios.pages.dev/assets-tintin/images/general/logo.png';
+const EMAIL_MARK = 'https://tintinaccs.com/assets-tintin/images/general/logo.png';
 const CODE_TTL_MS = 5 * 60 * 1000;
 const RESEND_COOLDOWN_MS = 45 * 1000;
 const MAX_CODES_PER_DAY = 8;

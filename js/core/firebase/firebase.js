@@ -17,11 +17,11 @@ import { recordAuthDiagnostic } from "../auth/diagnostico-sesion.js?v=tintin-202
 // Firebase Auth. Esto permite que signInWithRedirect vuelva por la misma
 // pestaña y el mismo origen, sin depender de ventanas emergentes ni del
 // almacenamiento entre tintinaccesorios.pages.dev y firebaseapp.com.
-// La URI https://tintinaccesorios.pages.dev/__/auth/handler debe permanecer
+// La URI https://tintinaccs.com/__/auth/handler debe permanecer
 // autorizada en el cliente OAuth web del proyecto tintin-accesorios.
 const firebaseConfig = {
   apiKey: "AIzaSyDMD_-656XR3WHJpGikMxKHMMkJV_re5t0",
-  authDomain: "tintinaccesorios.pages.dev",
+  authDomain: "tintinaccs.com",
   projectId: "tintin-accesorios",
   messagingSenderId: "207918562502",
   appId: "1:207918562502:web:c2ebe4f8d96dad3a50abc7",

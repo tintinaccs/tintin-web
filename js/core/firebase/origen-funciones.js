@@ -9,7 +9,7 @@
 // cada llamador no tenga que reinventarla (y olvidarla, como pasaba antes).
 // =============================================================
 
-const CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccesorios.pages.dev';
+const CLOUDFLARE_FALLBACK_ORIGIN = 'https://tintinaccs.com';
 
 export function functionOrigin() {
   // Fuera del navegador —los tests— no hay `window`, y leerlo directamente

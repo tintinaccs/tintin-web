@@ -51,7 +51,7 @@
     try {
       const strippedPath = window.location.pathname.replace(/^\/tintin-web\/?/, '/');
       window.location.replace(
-        'https://tintinaccesorios.pages.dev' +
+        'https://tintinaccs.com' +
         strippedPath +
         window.location.search +
         window.location.hash
@@ -133,7 +133,7 @@
   // Una única versión para los módulos que este loader importa dinámicamente.
   // Cambiarla junto con el loader evita reutilizar una URL immutable cuando
   // cambia su plan de arranque.
-  const TT_CACHE_VERSION = 'tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1';
+  const TT_CACHE_VERSION = 'tintin-20260927-domain-cutover-2';
   // El shell es común a cada navegación: incluso cuando la página está en
   // caché debe ser perceptible y no desaparecer antes de que el usuario vea
   // qué superficie se está preparando. Un segundo es el mínimo acordado;

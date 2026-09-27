@@ -8,7 +8,7 @@
  * producto ya editado y nunca borra nada. No escribe el inventario privado.
  */
 
-import { db } from '../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
+import { db } from '../core/firebase/firebase.js?v=tintin-20260927-domain-cutover-2';
 import { doc, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import {
   assignGroupCollection,

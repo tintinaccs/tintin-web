@@ -26,7 +26,7 @@ const SEO_PRODUCT_FIXTURE = Object.freeze({
   stock: 0,
   active: true,
   handle: 'reloj-seo-prueba',
-  imageUrl: 'https://tintinaccesorios.pages.dev/assets/og-cover.jpg',
+  imageUrl: 'https://tintinaccs.com/assets/og-cover.jpg',
 });
 
 function serveSeoProductFixture(url, response) {
