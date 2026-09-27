@@ -20,7 +20,7 @@ import { ASSIGNABLE_ROLES } from '../core/auth/contrato-cuentas-generado.js?v=ti
 import {
   PERMISSION_MODULES, EDITABLE_ROLES, loadRolePermissions, getRolePermissionsCache,
   canDo, saveRolePermissions, buildDefaultRolePermissions
-} from "../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
+} from "../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-sec-fix-1";
 import { EMAIL_WEBHOOK_URL } from "../email/configuracion-correo.js?v=tintin-20260925-cache-converge-1";
 import { getStoreAccessConfig, isAccessAllowed, renderStoreClosedOverlay, renderStoreConfigUnavailableOverlay } from "../core/store-gate/nucleo-control-tienda.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
 import { normalizeCollectionDoc } from "../pages/collections/estado-colecciones.js?v=tintin-20260925-cache-converge-1-launch-20260926-1";

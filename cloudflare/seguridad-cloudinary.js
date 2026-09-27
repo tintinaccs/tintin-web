@@ -107,6 +107,43 @@ export async function requireOrderStaff(request, env) {
   return { ...user, role };
 }
 
+// Espejo en servidor de js/core/auth/permisos-roles.js para las acciones de
+// pedidos que pasan por Functions: el valor que el Super Admin guardó en
+// rolePermissions/main manda y, si no guardó nada, rige el predeterminado del
+// rol (manageOrders en roles.js, activo para admin y agent).
+const ORDER_STAFF_ACTION_DEFAULTS = {
+  pedidos: { cambiarPago: true },
+};
+
+export function orderStaffPermissionAllows(role, savedPermissions, moduleKey, actionKey) {
+  if (role === 'superadmin') return true;
+  if (!['admin', 'agent'].includes(role)) return false;
+  const saved = savedPermissions?.[role]?.[moduleKey]?.[actionKey];
+  if (saved === undefined) return ORDER_STAFF_ACTION_DEFAULTS[moduleKey]?.[actionKey] === true;
+  return saved === true;
+}
+
+export async function assertOrderStaffPermission(env, actor, moduleKey, actionKey, get = firestoreAdminGet) {
+  if (actor?.role === 'superadmin') return actor;
+  let savedPermissions;
+  try {
+    const document = await get(env, 'rolePermissions/main');
+    savedPermissions = decodeFirestoreFields(document?.fields || {});
+  } catch {
+    const error = new Error('No se pudieron verificar los permisos del rol. Probá de nuevo en un momento.');
+    error.status = 503;
+    error.code = 'auth/role-permissions-unavailable';
+    throw error;
+  }
+  if (!orderStaffPermissionAllows(actor?.role, savedPermissions, moduleKey, actionKey)) {
+    const error = new Error('Tu rol no tiene permiso para esta acción');
+    error.status = 403;
+    error.code = 'auth/role-permission-denied';
+    throw error;
+  }
+  return actor;
+}
+
 /** Conserva códigos HTTP ya clasificados por autenticación o dominio. */
 export function statusFromError(error, fallback = 500) {
   const status = Number(error?.status);

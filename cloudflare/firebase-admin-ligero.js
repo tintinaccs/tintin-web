@@ -507,18 +507,26 @@ export async function firestoreAdminReplace(env, path, fields) {
   return response.json();
 }
 
-/** Actualiza solo los campos listados en `fields` (merge parcial vía updateMask). */
-export async function firestoreAdminMerge(env, path, fields) {
+/**
+ * Actualiza solo los campos listados en `fields` (merge parcial vía updateMask).
+ * Con `updateTime` la escritura sólo se aplica si el documento no cambió desde
+ * esa lectura; si cambió, lanza status 409 / code version_conflict.
+ */
+export async function firestoreAdminMerge(env, path, fields, { updateTime = '' } = {}) {
   const sa = parseServiceAccount(env);
   const accessToken = await getGoogleAccessToken(env, [FIRESTORE_SCOPE]);
   const mask = Object.keys(fields).map(key => `updateMask.fieldPaths=${encodeURIComponent(key)}`).join('&');
-  const response = await fetch(`${firestoreDocUrl(sa, path)}?${mask}`, {
+  const precondition = updateTime ? `&currentDocument.updateTime=${encodeURIComponent(updateTime)}` : '';
+  const response = await fetch(`${firestoreDocUrl(sa, path)}?${mask}${precondition}`, {
     method: 'PATCH',
     headers: { authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' },
     body: JSON.stringify({ fields })
   });
   if (!response.ok) {
     const data = await response.json().catch(() => ({}));
+    if (updateTime && (data?.error?.status === 'FAILED_PRECONDITION' || response.status === 409)) {
+      throw Object.assign(new Error('Conflicto de versión en Firestore.'), { status: 409, code: 'version_conflict' });
+    }
     throw new Error(`Firestore PATCH falló (${response.status}): ${data?.error?.message || ''}`);
   }
   return response.json();

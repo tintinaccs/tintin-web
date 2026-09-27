@@ -67,7 +67,10 @@ export const PERMISSION_MODULES = {
       editarCompleto:    { label: 'Editar pedido completo',      defaultFrom: 'manageOrdersFull', rolesEditable: ['admin','agent'] },
       cambiarEstado:     { label: 'Cambiar estado de pedido',    defaultFrom: 'manageOrders',     rolesEditable: ['admin','agent'] },
       cambiarPago:       { label: 'Cambiar estado de pago',      defaultFrom: 'manageOrders',     rolesEditable: ['admin','agent'] },
-      reenviarCorreo:    { label: 'Reenviar correo',             defaultFrom: 'manageOrders',     rolesEditable: ['admin','agent'] },
+      // /api/order-email solo acepta reenvíos del Super Admin (ver
+      // scripts/auditar-admin-correo-mensajeria.js). No se ofrece como toggle a
+      // otros roles para no mostrar un botón que el servidor siempre rechaza.
+      reenviarCorreo:    { label: 'Reenviar correo',             defaultFrom: 'manageOrders',     rolesEditable: [] },
       exportar:          { label: 'Exportar pedidos',            defaultFrom: 'manageOrders',     rolesEditable: ['admin','agent','viewer'] },
       eliminar:          { label: 'Eliminar pedido',             defaultFrom: 'manageOrdersFull', rolesEditable: ['admin'], dangerous: true },
       accionesMasivas:   { label: 'Acciones masivas',            defaultFrom: 'manageOrders',     rolesEditable: ['admin','agent'], dangerous: true },

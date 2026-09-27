@@ -1,4 +1,5 @@
 import {
+  assertOrderStaffPermission,
   jsonResponse,
   originIsAllowed,
   preflightResponse,
@@ -32,6 +33,7 @@ export async function onRequest(context) {
       ? await requireOrderStaff(request, env)
       : await requireSuperAdmin(request);
     if (body.action === 'updatePayment') {
+      await assertOrderStaffPermission(env, actor, 'pedidos', 'cambiarPago');
       const result = await applyOrderAdminMutation(env, {
         orderId: body.orderId,
         paymentStatus: body.paymentStatus,
@@ -68,7 +70,7 @@ export async function onRequest(context) {
   } catch (error) {
     console.error('[admin-order-mutation]', error?.code || '', error?.message || error);
     const message = safeText(error?.message, 300);
-    const allowed = /^(Solicitud inválida|Pedido inválido|El pedido ya no existe|No hay cambios administrativos permitidos|Estado de pedido no permitido|Estado de pago no permitido|Método de pago no permitido|Método de entrega no permitido|Correo de contacto inválido|Costo de envío inválido|Subtotal inválido|Ingresá el nombre del cliente|El producto .* (ya no existe|no está activo)|Precio inválido|El pedido contiene|El pedido debe|El pedido tiene demasiados|Stock inválido|Stock insuficiente|No se puede reconciliar el stock|El pedido cambió después de la última sincronización|Conflicto de versión)/i.test(message);
+    const allowed = /^(Solicitud inválida|Pedido inválido|El pedido ya no existe|No hay cambios administrativos permitidos|Estado de pedido no permitido|Estado de pago no permitido|Método de pago no permitido|Método de entrega no permitido|Correo de contacto inválido|Costo de envío inválido|Subtotal inválido|Ingresá el nombre del cliente|El producto .* (ya no existe|no está activo)|Precio inválido|El pedido contiene|El pedido debe|El pedido tiene demasiados|Stock inválido|Stock insuficiente|No se puede reconciliar el stock|El pedido cambió después de la última sincronización|Conflicto de versión|Tu rol no tiene permiso|No se pudieron verificar los permisos)/i.test(message);
     const status = statusFromError(error, 400);
     return jsonResponse({ ok: false, error: allowed ? message : 'No se pudo actualizar el pedido.' }, status, origin, requestUrl);
   }

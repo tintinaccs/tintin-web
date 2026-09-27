@@ -16,6 +16,10 @@ function allowedContentType(value) {
   return ['image/jpeg', 'image/png', 'image/webp'].includes(String(value || '').toLowerCase());
 }
 
+// Va dentro de la firma: Cloudinary rechaza cualquier archivo que no sea uno
+// de estos formatos aunque alguien reutilice la firma fuera del perfil.
+const AVATAR_ALLOWED_FORMATS = 'jpg,png,webp';
+
 async function shortHash(value) {
   const bytes = new TextEncoder().encode(String(value || ''));
   const digest = await crypto.subtle.digest('SHA-256', bytes);
@@ -50,6 +54,7 @@ export async function onRequest(context) {
     const publicId = `tintin_profile_${userKey}`;
     const timestamp = Math.floor(Date.now() / 1000);
     const signedParameters = {
+      allowed_formats: AVATAR_ALLOWED_FORMATS,
       overwrite: 'true',
       public_id: publicId,
       timestamp,
@@ -63,6 +68,7 @@ export async function onRequest(context) {
       publicId,
       timestamp,
       signature,
+      allowedFormats: AVATAR_ALLOWED_FORMATS,
       overwrite: true,
       uploadUrl: `https://api.cloudinary.com/v1_1/${encodeURIComponent(cloudName)}/image/upload`,
     }, 200, origin, requestUrl);
