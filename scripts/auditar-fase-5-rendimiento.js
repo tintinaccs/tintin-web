@@ -66,7 +66,8 @@ check('Montserrat italic conserva el preload contractual', italicPreloads.length
 const perfHelpers = read('tests/performance/_helpers.js');
 check(
   'La medición apunta al origen canónico de Cloudflare',
-  perfHelpers.includes('https://tintinaccesorios.pages.dev'),
+  perfHelpers.includes("require('../../config/public-site.json')") &&
+    perfHelpers.includes('process.env.PERF_BASE_URL || PUBLIC_ORIGIN'),
   'Las pruebas no deben medir la redirección antigua de GitHub Pages.'
 );
 check(
