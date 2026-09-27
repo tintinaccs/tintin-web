@@ -84,7 +84,7 @@ for (const file of fs.readdirSync(root).filter(file => file.endsWith('.html'))) 
 }
 
 const pkg = JSON.parse(read('package.json'));
-check('Fase 11 forma parte del cierre', pkg.scripts['audit:phase11'] === 'node scripts/auditar-fase-11-seo.js' && pkg.scripts['test:phase11-seo'] === 'playwright test tests/seo/phase11-seo.spec.js --project=chromium' && pkg.scripts['audit:final'].includes('audit:phase11'), 'Las verificaciones SEO deben quedar permanentes.');
+check('Fase 11 forma parte del cierre', pkg.scripts['audit:phase11'] === 'node scripts/auditar-fase-11-seo.js' && pkg.scripts['test:phase11-seo'] === 'playwright test tests/seo/phase11-seo.spec.js --project=chromium' && pkg.scripts['audit:final'].includes('audit:phase11') && pkg.scripts['audit:final'].includes('test:shopify-product-redirect'), 'SEO y redirecciones de handles de Shopify deben quedar permanentes.');
 
 // La Fase 11 ya no posee un workflow de PR separado. El monitoreo de producción
 // quedó consolidado en monitor-produccion.yml; aquí se verifica la cobertura real
