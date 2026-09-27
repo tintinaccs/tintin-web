@@ -5,6 +5,7 @@
 ## Baseline
 
 - Rama de trabajo: `codex/shopify-independence-audit`
+- Último commit verificado: `1edffe420f452736498972437a7d6926bab64c56` (`test: follow configured public origin in audits`)
 - Commit base observado: `0d060922bdc17eb99ef4ce7fcdeb0acf86cd858c` (main, 2026-09-27)
 - Objetivo: dejar el sitio preparado para migrar el catálogo desde Shopify y operar sin la cuenta ni los servicios de Shopify.
 - Producción: no modificada por esta rama.
@@ -19,23 +20,26 @@
 - `https://tintinaccesorios.pages.dev/sitemap-products.xml`: HTTP 200 con 0 `<loc>`.
 - `https://tintinaccesorios.pages.dev/api/public-catalog?resource=products`: HTTP 200, `ok: true`, `count: 0`.
 - `https://tintinaccesorios.pages.dev/api/health`: HTTP 200, `ok: true`; configuration, Firebase, runtime administrativo y Visual Builder están en verde, igual que los 12 probes de Admin/Firestore.
-- Preview del PR `#937`: home, login, perfil, checkout, robots y los tres sitemaps responden HTTP 200; el catálogo está vacío. El health del preview responde 503 con `configuration: false` (Firebase y runtime administrativo responden OK), por secretos que no están configurados para previews; el health de producción Pages está verde.
+- Preview del PR `#937` para el último commit: home, login, sitemaps y robots responden HTTP 200; el catálogo está vacío. El health del preview responde 503 con `configuration: false` porque los secretos de producción no están configurados para previews; esto no altera el health verde de Pages en producción.
 - Check de salud de producción del commit `0d060922`: falla porque el sitemap y la API no encuentran productos y no hay producto canary. App Check para el browser runner se limitó por reCAPTCHA de CI.
 - `npm run audit:final`: PASS en la rama de preparación, tras regenerar los manifiestos y CSP canónicos.
 - `npm run build:pages`: PASS (rutas, CSP y manifiesto reproducibles; 38 rutas HTML, 149 handlers con hash).
+- CI del commit `1edffe420f452736498972437a7d6926bab64c56`: PASS; build y drift de artefactos, preflight de dominio, contratos estáticos y operativos, emuladores/reglas Firestore, pruebas de navegador, accesibilidad, SEO, rendimiento y responsive.
+- `npm run test:phase11-seo` contra servidor local: PASS, 6/6.
+- `npm run audit:canonical-viewports` contra servidor local: PASS, 126/126 combinaciones (18 páginas, 7 tamaños).
 - `npm run test:accounts`: PASS, 32/32; incluye bloqueo por identidad deshabilitada/perfil bloqueado, reingreso con UID nuevo tras eliminación y aviso WhatsApp.
 - Redirect SEO de productos heredados: agregado soporte para `sourceMetadata.handle` (y su alias legacy), con 2 tests automatizados en `audit:final`.
 - Loader: wordmark oscuro con contraste AA medido por la auditoría contra el fondo rosa; cache tags renovados en las páginas.
 - `npm audit --audit-level=moderate`: PASS, 0 vulnerabilidades tras actualizar `firebase-tools` y sus dependencias transitivas compatibles.
 - Responsive, arquitectura, contratos de checkout/pedidos, roles, medios, sincronización, importación y SEO estático pasan las comprobaciones incluidas en `audit:final`.
-- La auditoría local del emulador de Firestore no es ejecutable en este equipo: Java no está instalado. CI debe confirmar esas pruebas antes de integrar.
+- La auditoría local del emulador de Firestore no es ejecutable en este equipo: Java no está instalado. CI sí confirmó las reglas e identidad para el commit actual.
 - Las funciones de importación son CSV y no requieren Shopify Admin API para operar. La fase de medios todavía puede copiar imágenes desde Shopify CDN a Cloudinary bajo una bandera de escritura explícita; hay que completar esa copia y verificar cero URLs Shopify antes de cerrar la cuenta.
 
 ## Estado de aceptación (commit base)
 
 | Dominio | Estado | Evidencia / siguiente paso |
 | --- | --- | --- |
-| Build y estructura | PASS | `build:pages` y `audit:final` correctos en esta rama. |
+| Build y estructura | PASS | `build:pages`, `audit:final` y CI del commit actual correctos. |
 | Home y shell público | PASS_WITH_LIMIT | Contratos, responsive y auditorías locales correctos; el browser de producción no pudo completar el flujo de catálogo vacío. |
 | Catálogo y colecciones | FAIL | Producción Pages devuelve catálogo `count: 0` y sitemap de productos vacío. |
 | Producto | BLOCKED | No existe producto público con el que verificar ficha, precio, stock, medios o metadata. |
@@ -43,7 +47,7 @@
 | Checkout, pedidos, stock y pagos | PASS_WITH_LIMIT | Contratos server-side y pagos simulados pasan; falta validar el runtime con catálogo real y los emuladores en CI. |
 | Login, sesión y perfil | PASS_WITH_LIMIT | Tests locales 32/32 y auditorías pasan; navegador CI quedó limitado por reCAPTCHA. |
 | Roles y Super Admin | PASS_WITH_LIMIT | Auditorías estáticas/contractuales pasan; las reglas del emulador requieren Java en CI. |
-| Firestore y App Check | PASS_WITH_LIMIT | Reglas y bootstrap revisados por auditoría; no se ejecutaron emuladores localmente por falta de Java. |
+| Firestore y App Check | PASS_WITH_LIMIT | CI ejecutó y aprobó reglas e identidad con emuladores; falta validar flujos de compra autenticados con catálogo real. |
 | Integraciones | PASS_WITH_LIMIT | Contratos de Firebase, Cloudinary, Resend, PayPal y Sheets pasan; credenciales/servicios reales y migración de medios siguen por comprobar en producción. |
 | CSP, rutas, caché y diagnóstico | PASS | `build:pages`, CSP, rutas limpias, manifiestos y 286 recursos versionados verificados. |
 | Responsive y accesibilidad | PASS_WITH_LIMIT | Matrices responsive, contraste y accesibilidad del gate pasan; los flujos reales de compra requieren catálogo. |
