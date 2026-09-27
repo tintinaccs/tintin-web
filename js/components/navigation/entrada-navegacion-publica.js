@@ -42,7 +42,7 @@ function bootGlobalUiUx() {
     document.head.appendChild(link);
   }
   if (!window.TintinUX?.booted) {
-    import('../../quality/experiencia-interfaz.js?v=tintin-20260925-cache-converge-1-launch-20260926-1')
+    import('../../quality/experiencia-interfaz.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1')
       .catch(error => console.warn('[PublicShell] No se pudo iniciar la capa UI global.', error));
   }
 }
@@ -174,7 +174,7 @@ async function loadFinalStability() {
     await import('../../quality/estabilidad-producto.js?v=tintin-20260831-product-stability-2');
     return 'tintin-20260831-product-stability-2';
   }
-  await import('../../quality/estabilidad-final-publica.js?v=tintin-20260918-header-system-solid-surfaces-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1');
+  await import('../../quality/estabilidad-final-publica.js?v=tintin-20260918-header-system-solid-surfaces-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-sec-fix-1');
   return 'tintin-20260829-final-stability-1';
 }
 

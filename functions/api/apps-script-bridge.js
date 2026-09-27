@@ -14,6 +14,7 @@ import { firestoreAdminBatchCommit } from '../../cloudflare/firestore-admin-batc
 import { fetchAppsScript } from '../../cloudflare/apps-script-fetch.js';
 import { syncOrderToSheetsBestEffort } from '../../cloudflare/order-sheets-sync.js';
 import { createOrderAdmin } from '../../cloudflare/order-admin-domain.js';
+import { preparePublicCheckoutOrder } from '../../cloudflare/politica-checkout-publico.js';
 import { syncOrderOwnerStats } from '../../cloudflare/sincronizacion-estadisticas-pedido.js';
 import { dispatchOrderPushEvent } from '../../cloudflare/servicio-push.js';
 import { sendOrderEmails } from './order-email.js';
@@ -37,34 +38,6 @@ const ALLOWED_ACTIONS = new Set([
 
 function clean(value, maxLength = 500) {
   return String(value == null ? '' : value).trim().slice(0, maxLength);
-}
-
-function publicOrderInput(payload, authenticatedUser) {
-  const requestId = clean(payload.requestId, 100);
-  return {
-    ...payload,
-    orderId: `public_${authenticatedUser.uid}_${requestId}`,
-    requestId,
-    items: Array.isArray(payload.cartLines)
-      ? payload.cartLines.map(line => ({ id: line?.id, qty: line?.qty, variant: typeof line?.variant === 'string' ? line.variant : '' }))
-      : [],
-    userId: authenticatedUser.uid,
-    userEmail: authenticatedUser.email,
-    userName: clean(payload.name, 120),
-    userPhone: clean(payload.phone, 40),
-    shippingCity: clean(payload.selectedCity, 120),
-    reference: clean(payload.referencia, 300),
-    shippingCost: payload.expectedShippingCost == null ? 0 : payload.expectedShippingCost,
-    shipping: {
-      method: clean(payload.shippingMethod, 40),
-      city: clean(payload.selectedCity, 120),
-      departamento: clean(payload.departamento, 120),
-      address: clean(payload.address, 300),
-      referencia: clean(payload.referencia, 300),
-      encomiendaMode: clean(payload.encomiendaMode, 20),
-    },
-    invoice: { wanted: payload.wantsInvoice === true, razonSocial: clean(payload.razonSocial, 180), ruc: clean(payload.ruc, 40) },
-  };
 }
 
 function authFailure(error) {
@@ -370,11 +343,15 @@ export async function onRequest(context) {
 
       // Cloudflare ya verificó la identidad. Revalidar el mismo token en
       // Apps Script era la fuente del invalid_id_token; la transacción
-      // canónica vive aquí y es idempotente por usuario + requestId.
+      // canónica vive aquí y es idempotente por usuario + requestId. El
+      // borrador del navegador nunca decide estado, pago, envío ni correo de
+      // la cuenta: la política los recalcula desde Firestore.
+      const checkout = await preparePublicCheckoutOrder(env, forwardedPayload, authenticatedUser);
       const created = await createOrderAdmin(
         env,
-        publicOrderInput(forwardedPayload, authenticatedUser),
+        checkout.input,
         { uid: authenticatedUser.uid, email: authenticatedUser.email, role: 'client', origin: 'public-checkout' },
+        { inspect: checkout.inspect },
       );
       let emailResult = { success: false, adminSent: null, customerSent: null, error: 'RESEND_API_KEY no está configurada' };
       if (!created.duplicate && env.RESEND_API_KEY) {
@@ -455,9 +432,13 @@ export async function onRequest(context) {
     });
   } catch (error) {
     console.error('[apps-script-bridge]', clean(error?.code, 120), clean(error?.message, 200));
-    return jsonResponse({
-      ok: false,
-      error: clean(error?.code, 120) || 'upstream_unavailable'
-    }, Number(error?.status) || 502, origin, requestUrl);
+    // Sólo datos que el checkout necesita para corregir el carrito; nunca
+    // mensajes internos ni trazas.
+    const failure = { ok: false, error: clean(error?.code, 120) || 'upstream_unavailable' };
+    if (error?.quote && typeof error.quote === 'object') failure.quote = error.quote;
+    if (error?.productId) failure.productId = clean(error.productId, 180);
+    if (Number.isFinite(error?.available)) failure.available = error.available;
+    if (Number.isFinite(error?.requested)) failure.requested = error.requested;
+    return jsonResponse(failure, Number(error?.status) || 502, origin, requestUrl);
   }
 }

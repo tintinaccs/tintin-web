@@ -129,6 +129,7 @@ export function otpErrorMessage(code) {
 
     // Envío
     'cooldown_active': 'Esperá unos segundos antes de pedir otro código.',
+    'rate_limit_exceeded': 'Hubo demasiados intentos desde esta conexión. Esperá un momento y probá de nuevo, o entrá con Google.',
     'daily_limit_exceeded': 'Se alcanzó el límite de códigos por hoy para este correo. Probá más tarde o entrá con Google.',
     'resend_not_configured': 'El envío de correos no está disponible en este momento. Entrá con "Continuar con Google".',
     'send_failed': 'No pudimos enviar el código a tu correo. Revisá que esté bien escrito e intentá de nuevo.',

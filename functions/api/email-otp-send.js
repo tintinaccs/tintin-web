@@ -212,6 +212,12 @@ export async function onRequest(context) {
       }
     }
 
+    // La cuenta Super Admin entra sólo con Google (email-otp-verify también
+    // la rechaza): no se le envían códigos de acceso por correo.
+    if (email === SUPERADMIN_EMAIL) {
+      return jsonResponse({ success: false, error: 'email_not_allowed' }, 403, origin, requestUrl);
+    }
+
     const path = docPath(email);
     const existingDoc = await firestoreAdminGet(env, path);
     const existing = existingDoc ? decodeFirestoreFields(existingDoc.fields) : null;

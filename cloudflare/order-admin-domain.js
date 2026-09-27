@@ -38,6 +38,11 @@ function money(value, label) {
   return Math.round(parsed);
 }
 
+function creationError(message, code, details = {}) {
+  // 422: el reintento de createOrderAdmin sólo aplica a 409 (concurrencia).
+  return Object.assign(new Error(message), { code, status: 422, ...details });
+}
+
 function makeChangeId(prefix = 'admin') {
   return `${prefix}_${crypto.randomUUID().replaceAll('-', '')}`;
 }
@@ -203,15 +208,15 @@ async function resolveCanonicalCreationItems(env, rawItems, get) {
   const documents = new Map();
   for (const productId of byProduct.keys()) {
     const document = await get(env, `products/${encodeURIComponent(productId)}`);
-    if (!document) throw new Error(`El producto ${productId} ya no existe.`);
+    if (!document) throw creationError(`El producto ${productId} ya no existe.`, 'product_not_found', { productId });
     documents.set(productId, document);
   }
 
   const items = lines.map(line => {
     const product = decodeFirestoreFields(documents.get(line.id)?.fields || {});
-    if (product.active === false) throw new Error(`El producto ${line.id} no está activo.`);
+    if (product.active === false) throw creationError(`El producto ${line.id} no está activo.`, 'product_inactive', { productId: line.id });
     const price = Number(product.price);
-    if (!Number.isFinite(price) || price < 0) throw new Error(`Precio inválido para ${line.id}.`);
+    if (!Number.isFinite(price) || price < 0) throw creationError(`Precio inválido para ${line.id}.`, 'invalid_price', { productId: line.id });
     return {
       id: line.id,
       name: clean(product.name || product.title || line.id, 180),
@@ -226,7 +231,7 @@ async function resolveCanonicalCreationItems(env, rawItems, get) {
   return { items, byProduct, documents };
 }
 
-async function createOrderAttempt(env, input, actor, { get, commit }) {
+async function createOrderAttempt(env, input, actor, { get, commit, inspect }) {
   const context = actorContext(input, actor);
   const status = normalizedStatus(input.status || 'pendiente');
   const paymentStatus = normalizedPaymentStatus(input.paymentStatus || input.payment?.status || 'pendiente');
@@ -267,6 +272,9 @@ async function createOrderAttempt(env, input, actor, { get, commit }) {
   const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
   const total = subtotal + shippingCost;
   const reserves = statusReservesInventory(status);
+  // Validaciones propias del llamador (checkout público: variantes y total
+  // visto por la clienta) con los productos y montos canónicos, antes de escribir.
+  if (inspect) await inspect({ items, documents, subtotal, shippingCost, total });
 
   const shipping = {
     ...(input.shipping && typeof input.shipping === 'object' ? input.shipping : {}),
@@ -289,7 +297,8 @@ async function createOrderAttempt(env, input, actor, { get, commit }) {
     orderSequenceNumber: sequenceNumber,
     customerId: clean(input.customerId, 180),
     userId: clean(input.userId, 180),
-    userEmail: contactEmail,
+    // userEmail identifica la cuenta; contactEmail es a dónde escribir.
+    userEmail: clean(input.accountEmail, 254).toLowerCase() || contactEmail,
     contactEmail,
     userName,
     userPhone: clean(input.userPhone, 40),
@@ -297,7 +306,7 @@ async function createOrderAttempt(env, input, actor, { get, commit }) {
     items,
     subtotal,
     shippingCost,
-    shippingPending: false,
+    shippingPending: input.shippingPending === true,
     total,
     shipping,
     shippingMethod,
@@ -331,7 +340,13 @@ async function createOrderAttempt(env, input, actor, { get, commit }) {
       if (stock === null) continue;
       if (!Number.isFinite(stock) || stock < 0) throw new Error(`Stock inválido para ${productId}.`);
       const nextStock = Math.floor(stock) - requestedQty;
-      if (nextStock < 0) throw new Error(`Stock insuficiente para ${productId}. Disponible: ${Math.floor(stock)}.`);
+      if (nextStock < 0) {
+        throw creationError(`Stock insuficiente para ${productId}. Disponible: ${Math.floor(stock)}.`, 'insufficient_stock', {
+          productId,
+          available: Math.floor(stock),
+          requested: requestedQty,
+        });
+      }
       const productPatch = {
         stock: nextStock,
         lastInventoryOrderId: orderId,
@@ -406,12 +421,12 @@ export async function createOrderAdmin(
   env,
   input = {},
   actor = {},
-  { get = firestoreAdminGet, commit = firestoreAdminBatchCommit } = {},
+  { get = firestoreAdminGet, commit = firestoreAdminBatchCommit, inspect = null } = {},
 ) {
   let lastError = null;
   for (let attempt = 1; attempt <= MAX_CREATE_ATTEMPTS; attempt += 1) {
     try {
-      return await createOrderAttempt(env, input, actor, { get, commit });
+      return await createOrderAttempt(env, input, actor, { get, commit, inspect });
     } catch (error) {
       lastError = error;
       if (Number(error?.status) !== 409 || attempt === MAX_CREATE_ATTEMPTS) throw error;

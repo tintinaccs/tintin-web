@@ -24,7 +24,7 @@ import {
   startAfter
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { can, getUserRole } from '../core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
-import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
+import { canDo, loadRolePermissions } from '../core/auth/permisos-roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-sec-fix-1';
 import { normalizeCollectionDoc } from '../pages/collections/estado-colecciones.js?v=tintin-20260925-cache-converge-1-launch-20260926-1';
 import { sanitizeImageUrl } from '../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1';
 
@@ -655,7 +655,11 @@ function renderAll() {
 }
 
 function csvEscape(value) {
-  const text = String(value ?? '');
+  let text = String(value ?? '');
+  // Igual que toCsvValue en admin-app.js: un texto que empieza con =, +, -, @
+  // (o tab/CR) se abriría como fórmula en Excel/Sheets. Nombres, correos y
+  // ciudades vienen de clientas, así que se neutralizan con un apóstrofe.
+  if (typeof value !== 'number' && /^[=+\-@\t\r]/.test(text)) text = `'${text}`;
   return /[",\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 }
 

@@ -212,6 +212,7 @@ async function enhanceProfile() {
         form.append('timestamp', String(signed.timestamp));
         form.append('signature', signed.signature);
         form.append('public_id', signed.publicId);
+        form.append('allowed_formats', signed.allowedFormats);
         form.append('overwrite', 'true');
         const upload = await fetch(signed.uploadUrl, { method: 'POST', body: form });
         const uploaded = await upload.json().catch(() => ({}));
