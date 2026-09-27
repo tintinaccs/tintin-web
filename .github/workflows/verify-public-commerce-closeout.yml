@@ -1,0 +1,51 @@
+name: Verify public commerce closeout
+
+on:
+  push:
+    branches:
+      - fix/public-commerce-closeout-20260926
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Syntax
+        run: |
+          node --check cloudflare/checkout-operational-health.js
+          node --check cloudflare/system-health.js
+          node --check js/pages/collections/estado-colecciones.js
+          node --check js/pages/collections/presentacion-colecciones.js
+          node --check js/admin/diagnostics/estado-ecosistema-admin.js
+      - name: Closeout contracts
+        run: node --test tests/public-commerce/closeout-contracts.test.mjs tests/checkout/checkout-operational-health.test.mjs
+      - name: Catalog
+        run: |
+          node scripts/auditar-catalogo-pagina.js
+          npm run audit:phase7-catalog
+      - name: Collections
+        run: |
+          node scripts/auditar-colecciones-pagina.js
+          npm run audit:collections
+      - name: Checkout
+        run: |
+          npm run audit:secure-orders
+          npm run audit:checkout-delivery
+      - name: System health
+        run: npm run audit:system-health
+      - name: Cache versioning
+        run: npm run audit:cache-versioning
+      - name: Build idempotency
+        run: |
+          npm run build:pages
+          git diff --exit-code
