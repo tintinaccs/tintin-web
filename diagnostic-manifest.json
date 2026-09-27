@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "69b7330a602ee1ba14a88a1685f226c49674bcc8f2eacd5dac6fc2d037744bd9",
+  "sourceFingerprint": "9d55b2b34a848f346e1ec4ac78d5bc83f9e206ded998a7973c0ccc783657377b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 891,
     "textFiles": 850,
-    "totalBytes": 17568258,
+    "totalBytes": 17570150,
     "pages": 19,
     "modules": 615
   },
@@ -26913,8 +26913,8 @@
     },
     {
       "path": "scripts/auditar-canonicos-viewports.mjs",
-      "bytes": 13960,
-      "sha256": "9f6167f132002477b4ad510b0f4da4d3b65d9a03ce2810d567bfffca8c657914",
+      "bytes": 14211,
+      "sha256": "abfae37202c6da3b76341bbdf13eb41d08c3071a1d4aa74523945c64926ae0fd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27584,8 +27584,8 @@
     },
     {
       "path": "scripts/auditar-diagnostico-hallazgos.js",
-      "bytes": 8748,
-      "sha256": "66ddb3bf96189f70f2ef02e16fcf019032d01d6cf572fa15b0b168f47fab803b",
+      "bytes": 8905,
+      "sha256": "d4ccc1902fecde5b2e96f9546df98fce1b22b816ecabc643ac590f6846987dc5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27900,19 +27900,14 @@
     },
     {
       "path": "scripts/auditar-fase-5-rendimiento.js",
-      "bytes": 4362,
-      "sha256": "1e1f97fe88cd4e7ad3e59572ae3c1a15fe9f2a67ca47eba48d50d3153cb51d2b",
+      "bytes": 4442,
+      "sha256": "f1a88c2a6516096557ec4ee46b500962f83a0244e942f54171de8117871c3f07",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [],
-      "endpoints": [
-        {
-          "url": "https://tintinaccesorios.pages.dev/",
-          "line": 69
-        }
-      ]
+      "endpoints": []
     },
     {
       "path": "scripts/auditar-fase-6-seguridad.js",
@@ -32976,8 +32971,8 @@
     },
     {
       "path": "tests/operations/integration-router-security.test.mjs",
-      "bytes": 1743,
-      "sha256": "417d42ed1eacda25d70c10c11e3cefec6741b57f4943d6f020730d2ca12612c3",
+      "bytes": 1829,
+      "sha256": "f1ab5319678bf62e2c18128ac5e74cc634fbe87160580253e5c399392a3b0958",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33017,15 +33012,11 @@
       "endpoints": [
         {
           "url": "https://${hostname}/",
-          "line": 16
+          "line": 18
         },
         {
           "url": "https://script.google.com/macros/s/test-deployment/exec",
-          "line": 24
-        },
-        {
-          "url": "https://tintinaccesorios.pages.dev/api/apps-script-bridge",
-          "line": 31
+          "line": 26
         }
       ]
     },
@@ -33316,19 +33307,14 @@
     },
     {
       "path": "tests/performance/_helpers.js",
-      "bytes": 9791,
-      "sha256": "4202b437dd47cd93222719a84eb864501442274c28b26d60d65c74998ee614ba",
+      "bytes": 9845,
+      "sha256": "d0d210283f389dbd928ece115b58d60ea3d5939191a635d2fb407912a516f1f6",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [],
-      "endpoints": [
-        {
-          "url": "https://tintinaccesorios.pages.dev/",
-          "line": 3
-        }
-      ]
+      "endpoints": []
     },
     {
       "path": "tests/performance/admin.performance.spec.js",
@@ -33615,8 +33601,8 @@
     },
     {
       "path": "tests/seo/phase11-seo.spec.js",
-      "bytes": 7115,
-      "sha256": "7966b1dda87a19d9a4591221979c834d59b2bc857b3287261b8b1cc6a36aa79d",
+      "bytes": 7119,
+      "sha256": "01af629e12d3ac102e3048e8a82dcb9672b97b651f123a0e02436e79b45a1a7a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33626,35 +33612,27 @@
           "raw": "../../functions/product.js",
           "target": "functions/product.js",
           "dynamic": true,
-          "line": 50
+          "line": 51
         },
         {
           "raw": "../../functions/product.js",
           "target": "functions/product.js",
           "dynamic": true,
-          "line": 58
+          "line": 59
         }
       ],
       "endpoints": [
         {
-          "url": "https://tintinaccesorios.pages.dev/",
-          "line": 10
-        },
-        {
-          "url": "https://tintinaccesorios.pages.dev/product",
-          "line": 27
-        },
-        {
           "url": "https://schema.org/OutOfStock",
-          "line": 46
+          "line": 47
         },
         {
           "url": "https://oauth2.googleapis.com/token",
-          "line": 82
+          "line": 83
         },
         {
           "url": "https://tintin.test/product",
-          "line": 90
+          "line": 91
         }
       ]
     },
@@ -36046,8 +36024,8 @@
     {
       "path": "docs/cutover-tintinaccs-com.md",
       "extension": ".md",
-      "bytes": 14270,
-      "sha256": "313401926ee5140f53187b1228364f98718c23ae5068404adf290b370a566e95"
+      "bytes": 15530,
+      "sha256": "88fdd4418b5a543aa242f236e61ccb6ba0dc0a88a74309685dce68e68620e542"
     },
     {
       "path": "docs/diagnostico-maestro.md",
@@ -38470,8 +38448,8 @@
     {
       "path": "scripts/auditar-canonicos-viewports.mjs",
       "extension": ".mjs",
-      "bytes": 13960,
-      "sha256": "9f6167f132002477b4ad510b0f4da4d3b65d9a03ce2810d567bfffca8c657914"
+      "bytes": 14211,
+      "sha256": "abfae37202c6da3b76341bbdf13eb41d08c3071a1d4aa74523945c64926ae0fd"
     },
     {
       "path": "scripts/auditar-cargador-solid.js",
@@ -38626,8 +38604,8 @@
     {
       "path": "scripts/auditar-diagnostico-hallazgos.js",
       "extension": ".js",
-      "bytes": 8748,
-      "sha256": "66ddb3bf96189f70f2ef02e16fcf019032d01d6cf572fa15b0b168f47fab803b"
+      "bytes": 8905,
+      "sha256": "d4ccc1902fecde5b2e96f9546df98fce1b22b816ecabc643ac590f6846987dc5"
     },
     {
       "path": "scripts/auditar-diagnostico.js",
@@ -38698,8 +38676,8 @@
     {
       "path": "scripts/auditar-fase-5-rendimiento.js",
       "extension": ".js",
-      "bytes": 4362,
-      "sha256": "1e1f97fe88cd4e7ad3e59572ae3c1a15fe9f2a67ca47eba48d50d3153cb51d2b"
+      "bytes": 4442,
+      "sha256": "f1a88c2a6516096557ec4ee46b500962f83a0244e942f54171de8117871c3f07"
     },
     {
       "path": "scripts/auditar-fase-6-seguridad.js",
@@ -39778,8 +39756,8 @@
     {
       "path": "tests/operations/integration-router-security.test.mjs",
       "extension": ".mjs",
-      "bytes": 1743,
-      "sha256": "417d42ed1eacda25d70c10c11e3cefec6741b57f4943d6f020730d2ca12612c3"
+      "bytes": 1829,
+      "sha256": "f1ab5319678bf62e2c18128ac5e74cc634fbe87160580253e5c399392a3b0958"
     },
     {
       "path": "tests/operations/nucleo-operaciones.test.mjs",
@@ -39832,8 +39810,8 @@
     {
       "path": "tests/performance/_helpers.js",
       "extension": ".js",
-      "bytes": 9791,
-      "sha256": "4202b437dd47cd93222719a84eb864501442274c28b26d60d65c74998ee614ba"
+      "bytes": 9845,
+      "sha256": "d0d210283f389dbd928ece115b58d60ea3d5939191a635d2fb407912a516f1f6"
     },
     {
       "path": "tests/performance/admin.performance.spec.js",
@@ -39904,8 +39882,8 @@
     {
       "path": "tests/seo/phase11-seo.spec.js",
       "extension": ".js",
-      "bytes": 7115,
-      "sha256": "7966b1dda87a19d9a4591221979c834d59b2bc857b3287261b8b1cc6a36aa79d"
+      "bytes": 7119,
+      "sha256": "01af629e12d3ac102e3048e8a82dcb9672b97b651f123a0e02436e79b45a1a7a"
     },
     {
       "path": "tests/sync/admin-catalog-delete-preflight.test.mjs",
@@ -42325,7 +42303,7 @@
           },
           {
             "file": "scripts/auditar-diagnostico-hallazgos.js",
-            "line": 87,
+            "line": 89,
             "operation": "collection"
           }
         ]
@@ -42445,7 +42423,7 @@
           },
           {
             "file": "scripts/auditar-diagnostico-hallazgos.js",
-            "line": 85,
+            "line": 87,
             "operation": "collection"
           },
           {
@@ -43365,7 +43343,7 @@
           },
           {
             "file": "scripts/auditar-diagnostico-hallazgos.js",
-            "line": 86,
+            "line": 88,
             "operation": "collection"
           },
           {
