@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "20e4c83fb138100b262c4b093ca0fedd70f53fdbbecc538a3e37ee90421ce099",
+  "sourceFingerprint": "1e9ca08b17240a188c4a62d60b8fcd8480decf86d5888eeb37299237b4489694",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 904,
-    "textFiles": 863,
-    "totalBytes": 17756518,
+    "files": 906,
+    "textFiles": 865,
+    "totalBytes": 17767966,
     "pages": 19,
-    "modules": 621
+    "modules": 622
   },
   "viewports": [
     {
@@ -18274,8 +18274,8 @@
     },
     {
       "path": "cloudflare/paypal-seguro.js",
-      "bytes": 12214,
-      "sha256": "6c65a9f8e8656a7eaa14e58e38d43190f171708a7b561bc104e830f59138437e",
+      "bytes": 14171,
+      "sha256": "494131a0513e4ff4ef6e9b78ba9e74d0b3d1a15319539393e7bc89f788bed209",
       "syntax": {
         "ok": true,
         "error": ""
@@ -18297,11 +18297,11 @@
       "endpoints": [
         {
           "url": "https://api-m.paypal.com/",
-          "line": 44
+          "line": 46
         },
         {
           "url": "https://api-m.sandbox.paypal.com/",
-          "line": 44
+          "line": 46
         }
       ]
     },
@@ -18857,8 +18857,8 @@
     },
     {
       "path": "functions/_middleware.js",
-      "bytes": 5389,
-      "sha256": "27c0b61556abe91b99378e69122c442be3602c4026aa69b242016461fcc36d76",
+      "bytes": 5459,
+      "sha256": "b3201a8caa39bd9d8dc8e220c6f1a024ad73c266edad72216ae36f6e40c49890",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19741,8 +19741,8 @@
     },
     {
       "path": "functions/api/paypal-config.js",
-      "bytes": 571,
-      "sha256": "f610214119ad9f2f5b9cb678c3e4dfae7afc2792c95ef6aa1d35ba6d0094d8a5",
+      "bytes": 637,
+      "sha256": "333c10bfb5b6765f8b5d784fa6d79381e49db0f87c0b1812ac97483fca06bef5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19786,6 +19786,41 @@
         }
       ],
       "endpoints": []
+    },
+    {
+      "path": "functions/api/paypal-rate-refresh.js",
+      "bytes": 4193,
+      "sha256": "41e4117e3c5a2cffb28465d645c704539fce635698130c8fff7da45abf76315f",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "../../cloudflare/firebase-admin-ligero.js",
+          "target": "cloudflare/firebase-admin-ligero.js",
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "../lib/github-actions-oidc.js",
+          "target": "functions/lib/github-actions-oidc.js",
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../lib/operational-guard.js",
+          "target": "functions/lib/operational-guard.js",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://www.bcp.gov.py/webapps/web/cotizacion/monedas",
+          "line": 5
+        }
+      ]
     },
     {
       "path": "functions/api/paypal-webhook.js",
@@ -33088,8 +33123,8 @@
     },
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",
-      "bytes": 5203,
-      "sha256": "6e0fc47cb6f4c3dd321f8b8406de4e73901382abcd9ee73d2586d87e1acce7b1",
+      "bytes": 7121,
+      "sha256": "2b75b7fd056ccbb8a78605e68e5c23f67d1fce8f737483f4c5849c7f52f0f377",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33130,6 +33165,24 @@
           "target": null,
           "dynamic": true,
           "line": 122
+        },
+        {
+          "raw": "node:fs/promises",
+          "target": null,
+          "dynamic": true,
+          "line": 167
+        },
+        {
+          "raw": "node:url",
+          "target": null,
+          "dynamic": true,
+          "line": 168
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": true,
+          "line": 169
         }
       ],
       "endpoints": [
@@ -33447,8 +33500,8 @@
     },
     {
       "path": "tests/payments/paypal-seguro.test.mjs",
-      "bytes": 1520,
-      "sha256": "bee6900e247bde5b694201f30da897225fa3ab843359fe90a71ac45bd54ba4e7",
+      "bytes": 2965,
+      "sha256": "a8d5698a7e1ab65d00a9164030c693df99fbd2c8ee35e39619dc914411265cf4",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33471,9 +33524,20 @@
           "target": "cloudflare/paypal-seguro.js",
           "dynamic": false,
           "line": 3
+        },
+        {
+          "raw": "../../functions/api/paypal-rate-refresh.js",
+          "target": "functions/api/paypal-rate-refresh.js",
+          "dynamic": false,
+          "line": 4
         }
       ],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://tintinaccesorios.pages.dev/api/paypal-rate-refresh",
+          "line": 40
+        }
+      ]
     },
     {
       "path": "tests/performance/_helpers.js",
@@ -35001,6 +35065,12 @@
       "sha256": "d008c5817e008af8ffaa08493bd5ad4244d7d10505958f30c0f91f14706b1a80"
     },
     {
+      "path": ".github/workflows/actualizar-tasa-paypal-bcp.yml",
+      "extension": ".yml",
+      "bytes": 1767,
+      "sha256": "f321a3ef28a131e3745beff47688e9ffe3a612c1916285f70d2abe2a1b1d6a23"
+    },
+    {
       "path": ".github/workflows/auditar-limpiar-ramas.yml",
       "extension": ".yml",
       "bytes": 2452,
@@ -35183,8 +35253,8 @@
     {
       "path": "_routes.json",
       "extension": ".json",
-      "bytes": 2433,
-      "sha256": "16059801d9ed7672621db6f7a6b2ba4b1ee03699815dc97f80a691e8f7d4409f"
+      "bytes": 2465,
+      "sha256": "2d1b1fc9167389e1b9cf5af25907773c5ea21bf2b2e2857f808327daa459a2b1"
     },
     {
       "path": "about.html",
@@ -35591,8 +35661,8 @@
     {
       "path": "cloudflare/paypal-seguro.js",
       "extension": ".js",
-      "bytes": 12214,
-      "sha256": "6c65a9f8e8656a7eaa14e58e38d43190f171708a7b561bc104e830f59138437e"
+      "bytes": 14171,
+      "sha256": "494131a0513e4ff4ef6e9b78ba9e74d0b3d1a15319539393e7bc89f788bed209"
     },
     {
       "path": "cloudflare/politica-checkout-publico.js",
@@ -36557,8 +36627,8 @@
     {
       "path": "functions/_middleware.js",
       "extension": ".js",
-      "bytes": 5389,
-      "sha256": "27c0b61556abe91b99378e69122c442be3602c4026aa69b242016461fcc36d76"
+      "bytes": 5459,
+      "sha256": "b3201a8caa39bd9d8dc8e220c6f1a024ad73c266edad72216ae36f6e40c49890"
     },
     {
       "path": "functions/admin-images.js",
@@ -36725,14 +36795,20 @@
     {
       "path": "functions/api/paypal-config.js",
       "extension": ".js",
-      "bytes": 571,
-      "sha256": "f610214119ad9f2f5b9cb678c3e4dfae7afc2792c95ef6aa1d35ba6d0094d8a5"
+      "bytes": 637,
+      "sha256": "333c10bfb5b6765f8b5d784fa6d79381e49db0f87c0b1812ac97483fca06bef5"
     },
     {
       "path": "functions/api/paypal-create-order.js",
       "extension": ".js",
       "bytes": 1249,
       "sha256": "7f47b24a3c98e3f2bdae0faf8fb0e041049d048197b9cc2361b7d8ca3b242211"
+    },
+    {
+      "path": "functions/api/paypal-rate-refresh.js",
+      "extension": ".js",
+      "bytes": 4193,
+      "sha256": "41e4117e3c5a2cffb28465d645c704539fce635698130c8fff7da45abf76315f"
     },
     {
       "path": "functions/api/paypal-webhook.js",
@@ -40079,8 +40155,8 @@
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",
       "extension": ".mjs",
-      "bytes": 5203,
-      "sha256": "6e0fc47cb6f4c3dd321f8b8406de4e73901382abcd9ee73d2586d87e1acce7b1"
+      "bytes": 7121,
+      "sha256": "2b75b7fd056ccbb8a78605e68e5c23f67d1fce8f737483f4c5849c7f52f0f377"
     },
     {
       "path": "tests/operations/integration-router-security.test.mjs",
@@ -40127,8 +40203,8 @@
     {
       "path": "tests/payments/paypal-seguro.test.mjs",
       "extension": ".mjs",
-      "bytes": 1520,
-      "sha256": "bee6900e247bde5b694201f30da897225fa3ab843359fe90a71ac45bd54ba4e7"
+      "bytes": 2965,
+      "sha256": "a8d5698a7e1ab65d00a9164030c693df99fbd2c8ee35e39619dc914411265cf4"
     },
     {
       "path": "tests/performance/README.md",
