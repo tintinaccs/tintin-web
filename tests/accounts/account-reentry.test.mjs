@@ -21,7 +21,9 @@ test('el perfil eliminado no se reactiva desde el panel: vuelve por un registro 
   assert.match(admin, /debe registrarse nuevamente/);
   assert.match(admin, /userStatusFilter === 'deleted'[\s\S]*?no se reactivan/);
   const login = read('login.html');
-  assert.match(login, /code === "auth\/user-disabled"\) return accountProblemHtml\(email\)/);
+  assert.match(login, /code === "auth\/user-disabled"\)[\s\S]*?Verificar por correo/);
+  assert.match(login, /data-login-email-recovery/);
+  assert.match(login, /sendOtp\(email, 'email'\)/);
   assert.doesNotMatch(login, /figura como Eliminada|Tu acceso está desactivado/);
   assert.doesNotMatch(admin, /onclick="window\.restoreUser\(\$\{uidArg\}\)">Reactivar/);
   assert.match(admin, /bulkDeleteUsers/);

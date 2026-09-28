@@ -35,7 +35,8 @@ test('un correo con caracteres especiales no puede romper el enlace', () => {
 test('login, perfil y checkout muestran solo el mensaje corto con el correo de la persona', () => {
   const login = read('login.html');
   assert.match(login, /import \{[^}]*accountProblemHtml[^}]*\} from ['"]\.\/js\/components\/modals\/modal-bloqueo\.js/);
-  assert.match(login, /code === "auth\/user-disabled"\) return accountProblemHtml\(email\)/);
+  assert.match(login, /code === "auth\/user-disabled"\)[\s\S]*?accountProblemHtml\(safeEmail\) \+ emailRecovery/);
+  assert.match(login, /data-login-email-recovery/);
   assert.match(login, /e\.code === 'auth\/user-disabled' \|\| e\.code === 'account_blocked' \? accountProblemHtml\(otpEmail\)/);
   for (const page of ['perfil.html', 'checkout.html']) {
     assert.match(read(page), /showBlockedModal\(\{ email: [^}]+\}\)/, `${page} debe pasar el correo al aviso`);
