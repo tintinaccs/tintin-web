@@ -325,9 +325,17 @@ function hideMessages() {
 }
 
 function errMsg(code, email = '') {
-  // Acceso deshabilitado: la persona solo ve el aviso corto con el enlace a
-  // WhatsApp; el estado real de la cuenta se consulta en el panel.
-  if (code === "auth/user-disabled") return accountProblemHtml(email);
+  // Firebase no permite saber desde el navegador si quedó una identidad
+  // residual de una baja o si la cuenta está bloqueada. Ofrecer el OTP permite
+  // verificar el correo: el servidor habilita una identidad nueva si fue dada
+  // de baja y conserva el rechazo genérico si existe un bloqueo en Firestore.
+  if (code === "auth/user-disabled") {
+    const safeEmail = String(email || '').trim();
+    const emailRecovery = isValidEmailFormat(safeEmail)
+      ? ` <button type="button" class="login-email-resend" data-login-email-recovery="${escapeHtml(safeEmail)}">Verificar por correo</button>`
+      : '';
+    return accountProblemHtml(safeEmail) + emailRecovery;
+  }
   const msgs = {
     "auth/popup-closed-by-user":      "Cerraste la ventana de Google antes de terminar.",
     "auth/cancelled-popup-request":   "Cerraste la ventana de Google antes de terminar.",
@@ -1291,6 +1299,16 @@ function setIdentifierMode(mode) {
 document.getElementById('btn-toggle-identifier').onclick = () => {
   setIdentifierMode(loginIdentifierMode === 'email' ? 'username' : 'email');
 };
+
+document.getElementById('login-error').addEventListener('click', event => {
+  const recovery = event.target.closest('[data-login-email-recovery]');
+  if (!recovery) return;
+  const email = recovery.getAttribute('data-login-email-recovery') || '';
+  if (!isValidEmailFormat(email)) return;
+  showEmailStep();
+  document.getElementById('login-email-input').value = email;
+  sendOtp(email, 'email');
+});
 
 async function sendOtp(identifier, mode) {
   hideMessages();

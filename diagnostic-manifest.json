@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "02fd500ecd04bcceb5b03054dd30f7725e491335671004afc2fc48dac51acc96",
+  "sourceFingerprint": "20e4c83fb138100b262c4b093ca0fedd70f53fdbbecc538a3e37ee90421ce099",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 904,
     "textFiles": 863,
-    "totalBytes": 17753126,
+    "totalBytes": 17756518,
     "pages": 19,
     "modules": 621
   },
@@ -13313,8 +13313,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 75370,
-      "sha256": "f2283fe166ba571ac35d4ed5a32f4bcedd362a6eb1956e81b735bf7c6ab81f4e",
+      "bytes": 76232,
+      "sha256": "ebf4d56c73f8ca08963aeafd937c349fbc48c870b1659ee9c50af0a938262b66",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13372,17 +13372,17 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 1408
+          "line": 1426
         },
         {
           "raw": "tienda.js?v=tintin-20260927-visual-1",
           "target": "tienda.js",
-          "line": 1409
+          "line": 1427
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1410
+          "line": 1428
         }
       ],
       "styles": [
@@ -13557,19 +13557,19 @@
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 1408,
+          "line": 1426,
           "exists": true
         },
         {
           "raw": "tienda.js?v=tintin-20260927-visual-1",
           "target": "tienda.js",
-          "line": 1409,
+          "line": 1427,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 1410,
+          "line": 1428,
           "exists": true
         },
         {
@@ -18736,7 +18736,7 @@
     {
       "path": "config/csp-runtime.js",
       "bytes": 368757,
-      "sha256": "60658b431e25da0a81d802e13619e7e365c61a647ac448e5497d775ff408b384",
+      "sha256": "7eb82bdb013555a8467ba4422da75eb2a943575960869838d951cf4ade0dae80",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19432,8 +19432,8 @@
     },
     {
       "path": "functions/api/email-otp-verify.js",
-      "bytes": 11368,
-      "sha256": "453f377cbb363636d88fba1731c4aa268f38b0569e563c1e36412d5ec1ea2d9d",
+      "bytes": 12490,
+      "sha256": "1441994aab90ab29995cecfeead7970204fc3f650a3283289415991d139e4c83",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19449,13 +19449,13 @@
           "raw": "../../cloudflare/firebase-admin-ligero.js",
           "target": "cloudflare/firebase-admin-ligero.js",
           "dynamic": false,
-          "line": 20
+          "line": 21
         },
         {
           "raw": "../../js/components/forms/utilidades-username.js",
           "target": "js/components/forms/utilidades-username.js",
           "dynamic": false,
-          "line": 21
+          "line": 22
         }
       ],
       "endpoints": []
@@ -30795,8 +30795,8 @@
     },
     {
       "path": "tests/accounts/account-reentry.test.mjs",
-      "bytes": 2374,
-      "sha256": "b35eda0eef3a442bdb6c02607773f45bab437b16e5e77b950b1d244ea2378b9f",
+      "bytes": 2471,
+      "sha256": "567a595205fe94b50b998cd7777947eeeb506a4430d7a42822dc9eadaddcfc34",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30855,8 +30855,8 @@
     },
     {
       "path": "tests/accounts/blocked-account-message.test.mjs",
-      "bytes": 2539,
-      "sha256": "cd75da002154fdcf88653ff4227895e41030f97feea4d983b4f713ad215ebb19",
+      "bytes": 2612,
+      "sha256": "0f61b1d5ea87badf828b49ee25e5c285e61937c1448fbe9866a4c693a2e26fad",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30900,8 +30900,8 @@
     },
     {
       "path": "tests/accounts/email-otp-verify.test.mjs",
-      "bytes": 8435,
-      "sha256": "8fcbf737569ac0a4ecf79996a7e16efb39c1b3b95879f2527c4f17579b986a99",
+      "bytes": 9673,
+      "sha256": "3735294eb2a1ce71ac73b97d844a6d37bc6f23eda000084931bbcf8fda17b4f0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35694,13 +35694,13 @@
       "path": "config/csp-runtime.js",
       "extension": ".js",
       "bytes": 368757,
-      "sha256": "60658b431e25da0a81d802e13619e7e365c61a647ac448e5497d775ff408b384"
+      "sha256": "7eb82bdb013555a8467ba4422da75eb2a943575960869838d951cf4ade0dae80"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
       "bytes": 368672,
-      "sha256": "a1cf1b820102663add6d8afc8802765af677c725e2cadbdd7e02d68bf6f53882"
+      "sha256": "6b4fbe75262d1521e387fe5fd507d9360ea8b43274d7e0f694dc52ccabaf5beb"
     },
     {
       "path": "config/public-site.json",
@@ -36665,8 +36665,8 @@
     {
       "path": "functions/api/email-otp-verify.js",
       "extension": ".js",
-      "bytes": 11368,
-      "sha256": "453f377cbb363636d88fba1731c4aa268f38b0569e563c1e36412d5ec1ea2d9d"
+      "bytes": 12490,
+      "sha256": "1441994aab90ab29995cecfeead7970204fc3f650a3283289415991d139e4c83"
     },
     {
       "path": "functions/api/engagement.js",
@@ -38399,8 +38399,8 @@
     {
       "path": "login.html",
       "extension": ".html",
-      "bytes": 75370,
-      "sha256": "f2283fe166ba571ac35d4ed5a32f4bcedd362a6eb1956e81b735bf7c6ab81f4e"
+      "bytes": 76232,
+      "sha256": "ebf4d56c73f8ca08963aeafd937c349fbc48c870b1659ee9c50af0a938262b66"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -39701,8 +39701,8 @@
     {
       "path": "tests/accounts/account-reentry.test.mjs",
       "extension": ".mjs",
-      "bytes": 2374,
-      "sha256": "b35eda0eef3a442bdb6c02607773f45bab437b16e5e77b950b1d244ea2378b9f"
+      "bytes": 2471,
+      "sha256": "567a595205fe94b50b998cd7777947eeeb506a4430d7a42822dc9eadaddcfc34"
     },
     {
       "path": "tests/accounts/admin-user-state-separation.test.mjs",
@@ -39713,14 +39713,14 @@
     {
       "path": "tests/accounts/blocked-account-message.test.mjs",
       "extension": ".mjs",
-      "bytes": 2539,
-      "sha256": "cd75da002154fdcf88653ff4227895e41030f97feea4d983b4f713ad215ebb19"
+      "bytes": 2612,
+      "sha256": "0f61b1d5ea87badf828b49ee25e5c285e61937c1448fbe9866a4c693a2e26fad"
     },
     {
       "path": "tests/accounts/email-otp-verify.test.mjs",
       "extension": ".mjs",
-      "bytes": 8435,
-      "sha256": "8fcbf737569ac0a4ecf79996a7e16efb39c1b3b95879f2527c4f17579b986a99"
+      "bytes": 9673,
+      "sha256": "3735294eb2a1ce71ac73b97d844a6d37bc6f23eda000084931bbcf8fda17b4f0"
     },
     {
       "path": "tests/accounts/username-login.test.mjs",
@@ -41881,119 +41881,119 @@
     },
     {
       "file": "login.html",
-      "line": 352,
+      "line": 360,
       "raw": "/index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 352,
+      "line": 360,
       "raw": "/product.html",
       "target": "product.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 352,
+      "line": 360,
       "raw": "/catalogo.html",
       "target": "catalogo.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 352,
+      "line": 360,
       "raw": "/collections.html",
       "target": "collections.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 352,
+      "line": 360,
       "raw": "/perfil.html",
       "target": "perfil.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 352,
+      "line": 360,
       "raw": "/checkout.html",
       "target": "checkout.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 352,
+      "line": 360,
       "raw": "/contact.html",
       "target": "contact.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 352,
+      "line": 360,
       "raw": "/about.html",
       "target": "about.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 352,
+      "line": 360,
       "raw": "/envios.html",
       "target": "envios.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 352,
+      "line": 360,
       "raw": "/cambios-devoluciones.html",
       "target": "cambios-devoluciones.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 352,
+      "line": 360,
       "raw": "/preguntas-frecuentes.html",
       "target": "preguntas-frecuentes.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 352,
+      "line": 360,
       "raw": "/privacidad.html",
       "target": "privacidad.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 352,
+      "line": 360,
       "raw": "/terminos.html",
       "target": "terminos.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 410,
+      "line": 418,
       "raw": "admin.html",
       "target": "admin.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 422,
+      "line": 430,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 422,
+      "line": 430,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
     },
     {
       "file": "login.html",
-      "line": 522,
+      "line": 530,
       "raw": "index.html",
       "target": "index.html",
       "exists": true
@@ -42063,7 +42063,7 @@
       "references": [
         {
           "file": "login.html",
-          "line": 422
+          "line": 430
         }
       ]
     },
@@ -42204,25 +42204,25 @@
     },
     {
       "file": "login.html",
-      "line": 606,
+      "line": 614,
       "target": "/api/username-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 623,
+      "line": 631,
       "target": "/api/phone-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 777,
+      "line": 785,
       "target": "/api/username-availability",
       "method": "POST"
     },
     {
       "file": "login.html",
-      "line": 873,
+      "line": 881,
       "target": "/api/username-availability",
       "method": "POST"
     }
@@ -43664,12 +43664,12 @@
           },
           {
             "file": "login.html",
-            "line": 451,
+            "line": 459,
             "operation": "doc"
           },
           {
             "file": "login.html",
-            "line": 1033,
+            "line": 1041,
             "operation": "doc"
           },
           {

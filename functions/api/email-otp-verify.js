@@ -11,6 +11,7 @@ import {
   firestoreAdminDelete,
   decodeFirestoreFields,
   createFirebaseCustomToken,
+  deleteFirebaseUser,
   findOrCreateUserByEmail,
   lookupFirebaseUser,
   firestoreAdminQueryByField,
@@ -33,7 +34,8 @@ const defaultDeps = {
   findOrCreateUserByEmail,
   lookupUser: lookupFirebaseUser,
   findProfilesByEmail: firestoreAdminQueryByField,
-  createFirebaseCustomToken
+  createFirebaseCustomToken,
+  deleteUser: deleteFirebaseUser
 };
 
 function clean(value, maxLength = 254) {
@@ -246,11 +248,28 @@ export async function handleEmailOtpVerify(context, deps = defaultDeps) {
     let uid, isNewUser, customToken;
     try {
       ({ uid, isNewUser } = await deps.findOrCreateUserByEmail(env, email));
-      const authIdentity = await deps.lookupUser(env, { uid });
-      const profileDoc = await deps.get(env, 'users/' + encodeURIComponent(uid));
-      const profile = decodeFirestoreFields(profileDoc?.fields || {});
+      let authIdentity = await deps.lookupUser(env, { uid });
+      let profileDoc = await deps.get(env, 'users/' + encodeURIComponent(uid));
+      let profile = decodeFirestoreFields(profileDoc?.fields || {});
       if (!authIdentity || authIdentity.uid !== uid) throw new Error('identity_unavailable');
-      if (authIdentity.disabled === true || profile.blocked === true || profile.deleted === true || profile.profileStatus === 'deleted') {
+      if (profile.blocked === true) {
+        await deps.remove(env, path).catch(() => {});
+        return jsonResponse({ success: false, error: 'account_blocked' }, 403, origin, requestUrl);
+      }
+      if (authIdentity.disabled === true) {
+        // Un perfil bloqueado ya se rechazó consultando por correo arriba. Si
+        // no hay bloqueo pero quedó una identidad Auth deshabilitada de una
+        // baja anterior, el correo verificado permite limpiar ese residuo y
+        // crear una identidad nueva, igual que un registro desde cero.
+        if (typeof deps.deleteUser !== 'function') throw new Error('identity_unavailable');
+        await deps.deleteUser(env, uid);
+        ({ uid, isNewUser } = await deps.findOrCreateUserByEmail(env, email));
+        authIdentity = await deps.lookupUser(env, { uid });
+        profileDoc = await deps.get(env, 'users/' + encodeURIComponent(uid));
+        profile = decodeFirestoreFields(profileDoc?.fields || {});
+        if (!authIdentity || authIdentity.uid !== uid || authIdentity.disabled === true) throw new Error('identity_unavailable');
+      }
+      if (profile.blocked === true || profile.deleted === true || profile.profileStatus === 'deleted') {
         await deps.remove(env, path).catch(() => {});
         return jsonResponse({ success: false, error: 'account_blocked' }, 403, origin, requestUrl);
       }

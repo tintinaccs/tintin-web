@@ -23,6 +23,7 @@ function fakeFirestore() {
   const deps = {
     logins: 0,
     tokenCreations: 0,
+    deletedIdentities: [],
     lookupUser: async (_env, { uid }) => ({ uid, email: EMAIL, disabled: false }),
     findProfilesByEmail: async () => [],
     get: async (_env, path) => {
@@ -51,6 +52,7 @@ function fakeFirestore() {
       deps.logins += 1;
       return { uid: 'uid_clienta', isNewUser: false };
     },
+    deleteUser: async (_env, uid) => { deps.deletedIdentities.push(uid); },
     createFirebaseCustomToken: async () => { deps.tokenCreations += 1; return 'custom-token'; },
   };
   return { deps, docs, put, read: path => (docs.has(path) ? decodeFirestoreFields(docs.get(path).fields) : null) };
@@ -96,9 +98,10 @@ test('el código correcto inicia sesión, reserva el intento y se borra', async 
   assert.equal(store.read(CODE_PATH), null);
 });
 
-test('una cuenta deshabilitada no recibe token OTP y devuelve el estado bloqueado', async () => {
+test('una cuenta deshabilitada con perfil bloqueado no recibe token OTP', async () => {
   const store = fakeFirestore();
   seedCode(store);
+  store.deps.findProfilesByEmail = async () => [{ fields: encodeFirestoreFields({ email: EMAIL, blocked: true }) }];
   store.deps.lookupUser = async (_env, { uid }) => ({ uid, email: EMAIL, disabled: true });
   const result = await verify(store, { email: EMAIL, code: CODE });
   assert.equal(result.status, 403);
@@ -137,6 +140,32 @@ test('un registro posterior a una baja recibe una identidad nueva y puede inicia
   const result = await verify(store, { email: EMAIL, code: CODE });
   assert.equal(result.status, 200);
   assert.equal(result.success, true);
+  assert.equal(store.deps.tokenCreations, 1);
+});
+
+test('una identidad Auth residual deshabilitada se reemplaza tras verificar el correo si no hay perfil bloqueado', async () => {
+  const store = fakeFirestore();
+  seedCode(store);
+  let currentUid = 'uid_cliente_anterior';
+  store.deps.findOrCreateUserByEmail = async () => {
+    store.deps.logins += 1;
+    if (currentUid === 'uid_cliente_anterior') return { uid: currentUid, isNewUser: false };
+    return { uid: currentUid, isNewUser: true };
+  };
+  store.deps.lookupUser = async (_env, { uid }) => ({
+    uid,
+    email: EMAIL,
+    disabled: uid === 'uid_cliente_anterior',
+  });
+  store.deps.deleteUser = async (_env, uid) => {
+    store.deps.deletedIdentities.push(uid);
+    currentUid = 'uid_cliente_nuevo';
+  };
+  const result = await verify(store, { email: EMAIL, code: CODE });
+  assert.equal(result.status, 200);
+  assert.equal(result.success, true);
+  assert.deepEqual(store.deps.deletedIdentities, ['uid_cliente_anterior']);
+  assert.equal(store.deps.logins, 2);
   assert.equal(store.deps.tokenCreations, 1);
 });
 
