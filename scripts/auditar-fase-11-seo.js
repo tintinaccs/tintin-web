@@ -63,7 +63,7 @@ check('Sitemaps estáticos no publican URLs .html', ![...sitemapIndexLocations, 
 check('Existen generadores dinámicos de catálogo', fs.existsSync(path.join(root, 'functions/sitemap-products.xml.js')) && fs.existsSync(path.join(root, 'functions/sitemap-collections.xml.js')), 'Productos y colecciones deben generarse desde Firestore.');
 
 const routes = JSON.parse(read('_routes.json'));
-check('Pages Functions sirve SEO y sitemaps dinámicos', ['/product', '/sitemap-products.xml', '/sitemap-collections.xml'].every(route => routes.include?.includes(route)), '_routes.json debe enviar Producto y sitemaps dinámicos al runtime de Cloudflare.');
+check('Pages Functions sirve SEO, robots.txt y sitemaps dinámicos', ['/product', '/robots.txt', '/sitemap-products.xml', '/sitemap-collections.xml'].every(route => routes.include?.includes(route)), '_routes.json debe enviar Producto, robots.txt y sitemaps dinámicos al runtime de Cloudflare.');
 check('robots enlaza el sitemap vigente', robots.includes('Sitemap: ' + origin + '/sitemap.xml'), 'robots.txt debe enlazar el sitemap de producción.');
 check('robots contempla rutas privadas limpias', ['/admin','/admin-images','/checkout','/login','/perfil'].every(route => robots.includes('Disallow: ' + route + '\n')), 'robots.txt debe reflejar la arquitectura limpia real.');
 

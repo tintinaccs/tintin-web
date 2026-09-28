@@ -59,3 +59,12 @@ Esta revalidación se hizo después de integrar el informe y de ejecutar manualm
 - La corrección todavía no está integrada ni desplegada; no atribuirle efecto al sitio en vivo hasta un despliegue verificado. Tras publicarla, revisar `X-Robots-Tag` en `pages.dev`, mantener el host comercial sin `noindex` y validar la respuesta de Googlebot en Search Console.
 
 **Decisión del dominio sin cambio: NO-GO para cutover.** El catálogo sigue vacío, falta asociar el dominio a Pages y todavía se necesita completar la aceptación de compra y datos reales.
+
+## Revalidación de host técnico y cobertura de middleware — 2026-09-28 20:46 UTC
+
+- El PR #946 se integró en `main` como `bd34687b599d51285ea0077138caedbd183d99cd`, después de que su CI completo terminara correctamente. La portada pública de Pages ya entrega `X-Robots-Tag: noindex`; `tintinaccs.com` continúa fuera de la regla y sirve Shopify.
+- La prueba HTTP directa a `https://tintinaccesorios.pages.dev/robots.txt?audit=20260928-2045` reveló que el recurso seguía estático: sin `X-Robots-Tag` y con `Sitemap: https://tintinaccesorios.pages.dev/sitemap.xml`. La causa fue que `/robots.txt` no figuraba en `include` de `_routes.json`, así que la prueba unitaria de middleware no representaba el enrutamiento real de Pages.
+- Se está corrigiendo la configuración y se añadió un contrato que exige enrutar `robots.txt` al middleware. En esta rama, las 5 pruebas de `tests/seo/pages-dev-indexing-middleware.test.mjs`, las 832 comprobaciones de `npm run audit:phase11`, las 22 de `npm run audit:final-integration` y `npm run verify:diagnostics` pasan. El segundo arreglo aún no está integrado ni publicado; repetir la comprobación HTTP después de desplegarlo.
+- Producción observada a las 20:40 UTC: API de salud 200; catálogo público con cero productos y cero colecciones; PayPal activo solo en Sandbox con tasa BCP fechada 2026-09-25; apex A `23.227.38.65`, `www` y `account` CNAME a Shopify.
+
+**Decisión vigente: NO-GO para cutover.** Además del enrutamiento de `robots.txt` pendiente de despliegue, faltan el catálogo comercial, las pruebas autenticadas de extremo a extremo y asociar el dominio a Cloudflare Pages.

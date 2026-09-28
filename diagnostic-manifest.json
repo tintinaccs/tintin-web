@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "bfaf3406f6af3714febab39457f20de38a61899e0196f164effc042159759cda",
+  "sourceFingerprint": "1abdd0f9106a8b2b0d54cd6a9b736346a1f53bdb23ad80b7d8b1b3903019a074",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 908,
     "textFiles": 867,
-    "totalBytes": 17784596,
+    "totalBytes": 17786847,
     "pages": 19,
     "modules": 623
   },
@@ -27972,8 +27972,8 @@
     },
     {
       "path": "scripts/auditar-fase-11-seo.js",
-      "bytes": 10638,
-      "sha256": "8d3f463ff41abc5fa5245d71f1f934f254ccab9f4ca1e9f243f1e86f75698e01",
+      "bytes": 10677,
+      "sha256": "52aefd7614527b83e68df268d729ad1f9a4a3ed34ef502516743850ce407cb22",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28099,8 +28099,8 @@
     },
     {
       "path": "scripts/auditar-final-integracion.js",
-      "bytes": 10447,
-      "sha256": "711a2be33ceb9bda8f86e1b0534f665c6a3bf719cf9fca2a4a9087a5da1536c4",
+      "bytes": 10462,
+      "sha256": "10bff59d1bb72e7df0ac1e85287ed330a2c5b862f90e7dfc4726ef4082ea1e5b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33835,8 +33835,8 @@
     },
     {
       "path": "tests/seo/pages-dev-indexing-middleware.test.mjs",
-      "bytes": 2834,
-      "sha256": "1f182f0d6cc84b47c74a1a9fe7bb26934d2309364698e7151038d800bf60bd90",
+      "bytes": 3171,
+      "sha256": "0293af75520e9e132a8c553ff39e49c93187336597038ebc94bc687639b353a5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33855,40 +33855,46 @@
           "line": 2
         },
         {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        },
+        {
           "raw": "../../functions/_middleware.js",
           "target": "functions/_middleware.js",
           "dynamic": false,
-          "line": 3
+          "line": 4
         }
       ],
       "endpoints": [
         {
           "url": "https://pr-123.tintinaccesorios.pages.dev/",
-          "line": 14
-        },
-        {
-          "url": "https://tintinaccs.com/",
           "line": 15
         },
         {
+          "url": "https://tintinaccs.com/",
+          "line": 16
+        },
+        {
           "url": "https://tintinaccesorios.pages.dev/sitemap.xml",
-          "line": 28
+          "line": 29
         },
         {
           "url": "https://tintinaccesorios.pages.dev/robots.txt",
-          "line": 31
+          "line": 32
         },
         {
           "url": "https://tintinaccs.com/sitemap.xml/n",
-          "line": 41
-        },
-        {
-          "url": "https://tintinaccs.com/robots.txt",
           "line": 42
         },
         {
-          "url": "https://tintinaccesorios.pages.dev/__/auth/handler",
+          "url": "https://tintinaccs.com/robots.txt",
           "line": 43
+        },
+        {
+          "url": "https://tintinaccesorios.pages.dev/__/auth/handler",
+          "line": 44
         }
       ]
     },
@@ -35306,8 +35312,8 @@
     {
       "path": "_routes.json",
       "extension": ".json",
-      "bytes": 2465,
-      "sha256": "2d1b1fc9167389e1b9cf5af25907773c5ea21bf2b2e2857f808327daa459a2b1"
+      "bytes": 2484,
+      "sha256": "55581d1098092fc867d1bf73a7dfe28c1af16ef15b7b38a8ec12d8c86ecaf997"
     },
     {
       "path": "about.html",
@@ -36470,8 +36476,8 @@
     {
       "path": "docs/estado-produccion-2026-09-28.md",
       "extension": ".md",
-      "bytes": 10642,
-      "sha256": "196723266d24a32c78862ccd117c49d7a7e6fe17e04ef0e5e1390566945d292f"
+      "bytes": 12288,
+      "sha256": "841235f14907015ce1b280d2bc7fa2160c6ef166bfee3bd745ca419865cc29e6"
     },
     {
       "path": "docs/estilo-codigo.md",
@@ -36602,8 +36608,8 @@
     {
       "path": "docs/seo/pages-dev-indexing.md",
       "extension": ".md",
-      "bytes": 1621,
-      "sha256": "2075aeefbd0ab06e680f1256a991dffbd5e9b6b9db3517c43ae67403132cda38"
+      "bytes": 1816,
+      "sha256": "305bec98c561e2dbb4ebfacacfc00e59fcb67c8a65ca79fe0396443c1a3abcd5"
     },
     {
       "path": "docs/sincronizacion-carrito-fase-7.md",
@@ -39122,8 +39128,8 @@
     {
       "path": "scripts/auditar-fase-11-seo.js",
       "extension": ".js",
-      "bytes": 10638,
-      "sha256": "8d3f463ff41abc5fa5245d71f1f934f254ccab9f4ca1e9f243f1e86f75698e01"
+      "bytes": 10677,
+      "sha256": "52aefd7614527b83e68df268d729ad1f9a4a3ed34ef502516743850ce407cb22"
     },
     {
       "path": "scripts/auditar-fase-12-entrega.mjs",
@@ -39170,8 +39176,8 @@
     {
       "path": "scripts/auditar-final-integracion.js",
       "extension": ".js",
-      "bytes": 10447,
-      "sha256": "711a2be33ceb9bda8f86e1b0534f665c6a3bf719cf9fca2a4a9087a5da1536c4"
+      "bytes": 10462,
+      "sha256": "10bff59d1bb72e7df0ac1e85287ed330a2c5b862f90e7dfc4726ef4082ea1e5b"
     },
     {
       "path": "scripts/auditar-firestore-lecturas-presupuesto.js",
@@ -40352,8 +40358,8 @@
     {
       "path": "tests/seo/pages-dev-indexing-middleware.test.mjs",
       "extension": ".mjs",
-      "bytes": 2834,
-      "sha256": "1f182f0d6cc84b47c74a1a9fe7bb26934d2309364698e7151038d800bf60bd90"
+      "bytes": 3171,
+      "sha256": "0293af75520e9e132a8c553ff39e49c93187336597038ebc94bc687639b353a5"
     },
     {
       "path": "tests/seo/phase11-seo.spec.js",
