@@ -86,3 +86,13 @@ Read-only GSC Wizard queries against the connected Google Search Console account
 | Search performance | 1 impression, 0 clicks over 2026-08-29 through 2026-09-25 | Current GSC evidence is sparse and limited to the Pages property. |
 
 No new Search Console property or sitemap was created or submitted in this check. Domain property verification and product URL indexing remain post-catalog/cutover requirements.
+
+## Production smoke recheck — 2026-09-28 06:57 UTC
+
+Ran `npm run monitor:production` against the configured Pages origin (`https://tintinaccesorios.pages.dev`). The script uses public GET requests only; it does not create orders, accounts, emails, or catalog records. Its JSON evidence was emitted at `artifacts/phase11-production-health.json` (ignored local artifact).
+
+- **15 endpoint probes** returned expected statuses and content types. The six clean core routes, required security headers, canonical origin, robots restrictions, sitemap index/pages, manifest, `/api/health`, and the unauthenticated `/api/admin-runtime-health` guard passed.
+- The monitor exited 1 on three readiness gates tied to missing catalog data: `/sitemap-products.xml` contains no product URLs; `/api/public-catalog?resource=products` returns `count: 0`; therefore no product URL exists for server-rendered product metadata/canonical/JSON-LD canary validation.
+- This run confirms Pages and its public/admin-health surfaces are reachable; it does **not** certify authentication, payment, email delivery, an order, or product metadata for a real listing.
+
+The business/catalog gates remain the reason the Pages deployment cannot replace the populated Shopify storefront yet.
