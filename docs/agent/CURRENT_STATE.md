@@ -113,3 +113,10 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - Lectura HTTP de Pages a las 08:16 UTC: `/api/health` 200 con `ok: true`; catálogo público con 0 productos y 0 colecciones; `sitemap-products.xml` 200 con 0 `<loc>`; PayPal deshabilitado por `stale_exchange_rate`. `tintinaccs.com` y `www.tintinaccs.com` respondieron con markup de Shopify.
 - Decisión: **NO-GO para cambiar la URL a producción**. Catálogo, dominio y validaciones posimportación siguen bloqueando. No se modificaron DNS, Shopify, datos productivos ni pagos.
 - Actualización CI del HEAD `dc0af46539deb374c9cb371223417a17a4a8e8f8`: la primera ejecución (`36396665394`) detectó manifiesto desactualizado tras cambiar estos documentos. Se regeneró `diagnostic-manifest.json`, `npm run build:pages` terminó correctamente y la ejecución integral siguiente (`36397057805`) pasó todas las etapas, incluidas navegador, accesibilidad, SEO, rendimiento y emulador de Firestore; no hubo pasos fallidos.
+
+## Reparación del test CRUD local — 2026-09-28 08:51 UTC
+
+- Síntoma reproducido previamente: `npm run test:admin-operations-browser` heredaba el `baseURL` general de producción (`pages.dev`), por lo que importaba el módulo antiguo publicado y fallaba antes de probar el loader del checkout actual.
+- Causa corregida: el test ahora usa `playwright.operations.config.js`, establece `http://127.0.0.1:4173` como origen y arranca/reutiliza `scripts/servidor-local-pruebas.mjs`, el servidor de pruebas canónico ya usado por CI.
+- Verificación local: el comando normal `npm run test:admin-operations-browser` terminó PASS, 2/2 (éxito centrado y error central). No requirió definir variables de entorno ni acceder a producción.
+- Impacto acotado a configuración de pruebas y script npm; no cambió checkout de producción, configuración Firebase, clientes, pedidos ni DNS. El cambio aún necesita CI del nuevo HEAD.

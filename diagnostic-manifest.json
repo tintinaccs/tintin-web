@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "b66e7f6770a28cb178ca0f3f99937c18ea84bc09092c2290c38de2f6083738c8",
+  "sourceFingerprint": "7ea8abd9002f35fd4fffb6ada416e43ce1e85025970847583fcceb1f8318c57b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 902,
-    "textFiles": 861,
-    "totalBytes": 17708644,
+    "files": 903,
+    "textFiles": 862,
+    "totalBytes": 17710095,
     "pages": 19,
-    "modules": 620
+    "modules": 621
   },
   "viewports": [
     {
@@ -26580,6 +26580,26 @@
       ]
     },
     {
+      "path": "playwright.operations.config.js",
+      "bytes": 486,
+      "sha256": "557b92db0d9a777f1197ff90202903234c745e46a819f10281ee746fa2598739",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [],
+      "endpoints": [
+        {
+          "url": "http://127.0.0.1:4173/",
+          "line": 12
+        },
+        {
+          "url": "http://127.0.0.1:4173/index.html",
+          "line": 16
+        }
+      ]
+    },
+    {
       "path": "scripts/auditar-acceso-aislamiento.js",
       "bytes": 6887,
       "sha256": "111e3f347f69148bfd54d7f0bd0ea6cfe497bb6ec05a189ac0d85ec1a073bf7f",
@@ -36183,8 +36203,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 17232,
-      "sha256": "3df8fd7c2c6a225133acbd4605f59b6c0c1f3270d42bd3e54e8a7f354fbe1da2"
+      "bytes": 18156,
+      "sha256": "2a56f8978243d3c0394081c0c739bdce00ef65bbb51193616209c78a4fb8c817"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
@@ -38571,8 +38591,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 14044,
-      "sha256": "7f51fc71e61fc5161aa6167edeaef5dca8501d01eff9c32ae93d2ad3d39f9417"
+      "bytes": 14085,
+      "sha256": "41f4601c04745e8442c3da380410ad8881788579d6367de5386c3a1ca7dc0382"
     },
     {
       "path": "perfil.html",
@@ -38585,6 +38605,12 @@
       "extension": ".js",
       "bytes": 972,
       "sha256": "6d67da620afa93e67e91afebde78b6fbf7383cdccca3baca1189b094592e6ab3"
+    },
+    {
+      "path": "playwright.operations.config.js",
+      "extension": ".js",
+      "bytes": 486,
+      "sha256": "557b92db0d9a777f1197ff90202903234c745e46a819f10281ee746fa2598739"
     },
     {
       "path": "preguntas-frecuentes.html",
