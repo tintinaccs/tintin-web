@@ -96,3 +96,15 @@ Ran `npm run monitor:production` against the configured Pages origin (`https://t
 - This run confirms Pages and its public/admin-health surfaces are reachable; it does **not** certify authentication, payment, email delivery, an order, or product metadata for a real listing.
 
 The business/catalog gates remain the reason the Pages deployment cannot replace the populated Shopify storefront yet.
+
+## Pull request preview recheck — 2026-09-28 07:04 UTC
+
+Read-only GET against the deployed branch preview `https://codex-shopify-independence-a.tintinaccesorios.pages.dev` (commit `1e0ff35e0e5672981223a180b4d56f78682b4f1c`).
+
+| Probe | Result | Interpretation |
+| --- | --- | --- |
+| `/admin.html` | HTTP 200; HTML includes the CRUD feedback stylesheet and versioned operations/admin modules | The preview deployment contains the central CRUD loader and result dialog changes. This confirms deployment of static assets, not authenticated mutations against Firestore. |
+| `/api/health` | HTTP 503; `runtime`, `firebase`, `adminRuntime`, and `visualBuilder` true; `configuration` false | The preview environment is missing one or more required runtime configuration values. `functions/api/health.js` reports a boolean only and intentionally does not disclose which secret is missing. |
+| `/` | HTTP 200 | Public shell responds on the preview hostname. |
+
+This is a preview-environment configuration finding, not evidence that the production Pages environment is unhealthy: the configured production Pages health endpoint returned HTTP 200 and `ok: true` in the 06:14 UTC probe above. The preview cannot be used for full authenticated acceptance until its required runtime configuration is supplied through the deployment environment; do not copy production secrets into preview casually. The commercial domain and empty catalog remain independent cutover blockers.
