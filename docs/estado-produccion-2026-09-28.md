@@ -95,3 +95,12 @@ Esta captura reemplaza los estados anteriores únicamente donde indica evidencia
 - La corrección del monitor está en una rama/PR aparte y aún requiere CI. No cambia Workers, DNS ni datos de clientes.
 
 **Decisión vigente: NO-GO para cutover.** La infraestructura y el smoke de rutas están respondiendo; la tienda aún no puede validar catálogo, fichas ni checkout por falta de productos públicos y de evidencia de escritura Sheets→Firestore. El host técnico debe conservar `noindex`; la política de sitemap indexable se validará en el dominio comercial después de asociarlo a Pages.
+
+## Auditoría de medios Shopify — 2026-09-28 21:59 UTC
+
+- Lectura de solo lectura de `Productos!T7:T739` en la hoja de inventario: 136 de 136 filas con `Imagen URL`; las 136 apuntan a `cdn.shopify.com`.
+- La API pública de Firestore sigue devolviendo 0 productos. Los datos de la hoja no están sincronizados al catálogo público.
+- El repositorio ya contiene el preflight autenticado y el copiador por lotes a Cloudinary (`functions/api/admin-import-media.js`), con escritura desactivada hasta habilitar su variable protegida. Esta revalidación no cambió ni copió imágenes.
+- Antes de declarar independencia total de Shopify, habrá que ejecutar el preflight, copiar las imágenes a Cloudinary, confirmar que Firestore y Sheets referencien las URL nuevas, y repetir una auditoría sin referencias `cdn.shopify.com`. Conservar Shopify mientras esas imágenes sean el único original accesible.
+
+**Decisión: NO-GO para cerrar Shopify o cortar el dominio.** El sitio y los datos de productos aún requieren el catálogo en Firestore y la migración de esas 136 imágenes.
