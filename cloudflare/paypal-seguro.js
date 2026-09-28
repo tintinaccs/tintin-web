@@ -10,6 +10,8 @@ import {
 import { notifyAdminIfAbsent } from './notificaciones-sociales.js';
 
 const MAX_RATE_AGE_MS = 7 * 24 * 60 * 60 * 1000;
+const MIN_PYG_PER_USD = 1000;
+const MAX_PYG_PER_USD = 50000;
 const ORDER_ID_RE = /^[A-Za-z0-9_-]{12,220}$/;
 const PROVIDER_ID_RE = /^[A-Za-z0-9_-]{8,80}$/;
 
@@ -30,7 +32,7 @@ export function paypalConfig(env = {}, now = Date.now()) {
   if (!secret) missing.push('client_secret');
   if (!webhookId) missing.push('webhook_id');
   if (currency !== 'USD') missing.push('unsupported_settlement_currency');
-  if (!Number.isFinite(rate) || rate <= 0) missing.push('exchange_rate');
+  if (!Number.isFinite(rate) || rate < MIN_PYG_PER_USD || rate > MAX_PYG_PER_USD) missing.push('exchange_rate');
   if (!Number.isFinite(rateAt) || Math.abs(now - rateAt) > MAX_RATE_AGE_MS) missing.push('stale_exchange_rate');
   return {
     enabled: missing.length === 0,
@@ -54,6 +56,49 @@ export function publicPaypalConfig(env = {}, now = Date.now()) {
     currency: config.currency,
     clientId: config.enabled ? config.clientId : '',
     rateUpdatedAt: config.rateAt,
+    unavailableReasons: config.enabled ? [] : config.missing,
+  };
+}
+
+// La tasa diaria publicada por el BCP se mantiene en Firestore mediante un
+// workflow firmado de GitHub. El valor de entorno sigue siendo respaldo para
+// instalaciones anteriores, pero nunca se habilitan pagos desde este dato.
+export async function resolvedPaypalConfig(env = {}, now = Date.now()) {
+  let rateDocument = null;
+  try {
+    rateDocument = await firestoreAdminGet(env, 'settings/paymentFx');
+  } catch (error) {
+    console.warn('[paypal] No se pudo leer la tasa diaria de Firestore:', error?.message || error);
+  }
+  const stored = rateDocument ? decodeFirestoreFields(rateDocument.fields || {}) : {};
+  const sourceDate = clean(stored.sourceDate, 10);
+  const sourceDateAt = Date.parse(`${sourceDate}T12:00:00Z`);
+  const useStored = Number.isFinite(Number(stored.pygPerUsd))
+    && Number(stored.pygPerUsd) >= MIN_PYG_PER_USD
+    && Number(stored.pygPerUsd) <= MAX_PYG_PER_USD
+    && stored.source === 'BCP'
+    && /^\d{4}-\d{2}-\d{2}$/.test(sourceDate)
+    && Number.isFinite(sourceDateAt)
+    && sourceDateAt <= now + 86_400_000
+    && now - sourceDateAt <= MAX_RATE_AGE_MS
+    && Date.parse(stored.updatedAt || '') > 0;
+  const config = paypalConfig(useStored ? {
+    ...env,
+    PAYPAL_PYG_PER_USD: String(stored.pygPerUsd),
+    PAYPAL_RATE_UPDATED_AT: stored.updatedAt,
+  } : env, now);
+  return { ...config, rateSource: useStored ? 'BCP' : 'manual', rateSourceDate: useStored ? sourceDate : '' };
+}
+
+export function publicResolvedPaypalConfig(config) {
+  return {
+    enabled: config.enabled,
+    environment: config.mode,
+    currency: config.currency,
+    clientId: config.enabled ? config.clientId : '',
+    rateUpdatedAt: config.rateAt,
+    rateSource: config.rateSource,
+    rateSourceDate: config.rateSourceDate,
     unavailableReasons: config.enabled ? [] : config.missing,
   };
 }
@@ -121,7 +166,7 @@ function validatePayableOrder(order, uid) {
 }
 
 export async function createPaypalOrder(env, { orderId, uid }) {
-  const config = paypalConfig(env);
+  const config = await resolvedPaypalConfig(env);
   if (!config.enabled) throw new Error(`PayPal no está habilitado: ${config.missing.join(',')}`);
   await assertAccountNotBlocked(env, uid);
   const order = await loadOrder(env, orderId);
@@ -222,7 +267,7 @@ async function notifyOrderConfirmed(env, mapping, cents, currency) {
 }
 
 export async function capturePaypalOrder(env, { providerOrderId, uid }) {
-  const config = paypalConfig(env);
+  const config = await resolvedPaypalConfig(env);
   if (!config.enabled) throw new Error('PayPal no está habilitado');
   const mapping = await loadMapping(env, providerOrderId);
   if (mapping.uid !== uid) throw new Error('La orden PayPal no pertenece a la cuenta iniciada');
@@ -240,7 +285,7 @@ export async function capturePaypalOrder(env, { providerOrderId, uid }) {
 }
 
 export async function processPaypalWebhook(env, request, rawBody) {
-  const config = paypalConfig(env);
+  const config = await resolvedPaypalConfig(env);
   if (!config.enabled) throw new Error('PayPal no está habilitado');
   const event = JSON.parse(rawBody || '{}');
   const verification = await paypalRequest(config, '/v1/notifications/verify-webhook-signature', {

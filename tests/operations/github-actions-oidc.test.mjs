@@ -146,3 +146,40 @@ test('el scheduler de Sheets usa OIDC y no duplica la cuenta de servicio Firebas
   assert.match(endpoint, /result\?\.failureCode\s*\?\s*502\s*:\s*200/);
   assert.match(endpoint, /failureCode:\s*result\.failureCode/);
 });
+
+test('el refresco de tasa solo acepta OIDC del workflow BCP de main', async () => {
+  const { fetchImpl, token } = await fixture();
+  const audience = 'tintin-paypal-fx-refresh';
+  const workflowRef = `${REPOSITORY}/.github/workflows/monitor-produccion.yml@${REF}`;
+  const claims = await verifyGitHubActionsOidc(await token({ aud: audience, workflow_ref: workflowRef }), {
+    fetchImpl, nowSeconds: NOW, audience, workflowRef,
+  });
+  assert.equal(claims.workflow_ref, workflowRef);
+  await assert.rejects(
+    verifyGitHubActionsOidc(await token({ aud: audience, workflow_ref: WORKFLOW_REF }), {
+      fetchImpl, nowSeconds: NOW, audience, workflowRef,
+    }),
+    error => error instanceof GitHubActionsOidcError && error.code === 'invalid_workflow_ref',
+  );
+});
+
+test('el workflow BCP actualiza desde la URL canónica de Pages sin guardar secretos en GitHub', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const { fileURLToPath } = await import('node:url');
+  const { dirname, resolve } = await import('node:path');
+  const here = dirname(fileURLToPath(import.meta.url));
+  const root = resolve(here, '..', '..');
+  const [workflow, route, endpoint] = await Promise.all([
+    readFile(resolve(root, '.github/workflows/monitor-produccion.yml'), 'utf8'),
+    readFile(resolve(root, '_routes.json'), 'utf8'),
+    readFile(resolve(root, 'functions/api/paypal-rate-refresh.js'), 'utf8'),
+  ]);
+  assert.match(workflow, /id-token:\s*write/);
+  assert.match(workflow, /tintin-paypal-fx-refresh/);
+  assert.match(workflow, /\/api\/paypal-rate-refresh/);
+  assert.match(workflow, /config\/public-site\.json/);
+  assert.doesNotMatch(workflow, /secrets\.(?:FIREBASE_SERVICE_ACCOUNT|PAYPAL_)/);
+  assert.ok(JSON.parse(route).include.includes('/api/paypal-rate-refresh'));
+  assert.match(endpoint, /workflowRef:\s*WORKFLOW_REF/);
+  assert.match(endpoint, /pygPerUsd:\s*rate/);
+});

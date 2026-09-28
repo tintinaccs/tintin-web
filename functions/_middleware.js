@@ -14,6 +14,7 @@ const MUTATION_LIMITS = Object.freeze([
   [/^\/api\/email-otp-(send|verify)$/, 10, 60_000, 'auth'],
   [/^\/api\/engagement$/, 45, 60_000, 'engagement'],
   [/^\/api\/(order-email|apps-script-bridge|paypal-create-order|paypal-capture-order)$/, 12, 60_000, 'checkout'],
+  [/^\/api\/paypal-rate-refresh$/, 4, 60_000, 'paypal-rate-refresh'],
   [/^\/api\/push-(subscription|order-event|test|admin)$/, 20, 60_000, 'push'],
   [/^\/api\/(profile-avatar-upload|cloudinary-sign-upload|cloudinary-sign-audio-upload)$/, 20, 60_000, 'upload'],
   [/^\/api\/admin-/, 60, 60_000, 'admin']
