@@ -116,8 +116,25 @@ Variables requeridas, solo nombres:
    conservando su URL `/exec`.
 7. Ejecutar `tintinInstalarDispatcherUnificado()` una vez.
 8. Ejecutar `tintinDiagnosticarWebhookProductos()`.
-9. Ejecutar `tintinProbarEdicionCatalogo()`.
+9. Crear primero la fila canary descrita abajo y luego ejecutar `tintinProbarEdicionCatalogo()`.
 10. Ejecutar los refresh Firestore → `Productos` y Firestore → `Usuarios web`.
+
+### Canary seguro de Sheets → Firestore
+
+`tintinProbarEdicionCatalogo()` solo puede enviar la fila cuyo ID sea
+`CANARY-SHEETS-FIRESTORE` y nombre `PRUEBA QA · NO VENDER`. Debe tener
+`Activo = No`, `Stock actual = 0`, categoría y precio válidos, URL de imagen
+vacía y la columna `Acción` vacía.
+Si no existe, el verificador devuelve `canary-not-found` sin seleccionar ni
+modificar ningún producto real. Si su ID/estado no coincide, también se niega a
+enviarlo. Nunca se debe reutilizar una fila comercial como prueba: Apps Script
+puede escribir sus campos en Firestore.
+
+El canary debe crearse en la planilla oficial con los datos exactos anteriores,
+y después hay que actualizar/desplegar el proyecto Apps Script con el código
+versionado. El producto queda inactivo y sin stock; la prueba valida el webhook
+y la escritura de `products`/`productInventory`, no disponibilidad pública ni
+checkout.
 
 ## Criterio para borrar `Catálogo web`
 

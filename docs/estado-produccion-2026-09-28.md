@@ -112,3 +112,12 @@ Esta captura reemplaza los estados anteriores únicamente donde indica evidencia
 - La respuesta es la esperada para esta prueba deliberadamente no autenticada. No se envió ningún producto ni se modificó dato alguno.
 
 **Siguiente evidencia necesaria:** ejecutar `tintinDiagnosticarWebhookProductos()` desde el Apps Script conectado a la planilla, verificar `products-canonical-v3` con autenticación y después sincronizar un canary oculto/inactivo para confirmar la escritura real en Firestore. Mientras no se complete, Sheets→Firestore sigue sin comprobarse y la migración permanece en NO-GO.
+
+## Protección del canary Sheets → Firestore — 2026-09-28 22:23 UTC
+
+- Búsqueda de solo lectura en `Productos!A6:AI739`: no existe una fila `PRUEBA QA`.
+- Auditoría del código encontró que la versión anterior de `tintinProbarEdicionCatalogo()` escogía la primera fila no vacía y la reenviaba a Firestore. Con la planilla actual, eso habría usado un producto comercial; no ejecuté la función.
+- La versión versionada ahora exige ID `CANARY-SHEETS-FIRESTORE`, nombre `PRUEBA QA · NO VENDER`, estado inactivo, stock cero, categoría/precio válidos, sin URL de imagen y sin acción pendiente. Si falta, está duplicado o no cumple esas condiciones, no envía ninguna fila.
+- Contrato local del Apps Script ejecutado en VM con escrituras sustituidas por un espía: producto comercial no seleccionado; canary seguro aceptado; canary activo, duplicado, con stock, ID incorrecto o imagen Shopify rechazado. `tests/sync/productos-canonicos.test.mjs` pasó **16/16**; `npm run test:products-sync` pasó **74/74**.
+
+El cambio protege el próximo despliegue del Apps Script; no modifica el proyecto Apps Script remoto ni crea el canary en la hoja. Primero se debe desplegar el código canónico y luego crear el registro canary con esos valores exactos. Hasta entonces, la prueba de escritura real sigue pendiente.
