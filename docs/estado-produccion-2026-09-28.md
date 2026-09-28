@@ -121,3 +121,14 @@ Esta captura reemplaza los estados anteriores únicamente donde indica evidencia
 - Contrato local del Apps Script ejecutado en VM con escrituras sustituidas por un espía: producto comercial no seleccionado; canary seguro aceptado; canary activo, duplicado, con stock, ID incorrecto o imagen Shopify rechazado. `tests/sync/productos-canonicos.test.mjs` pasó **16/16**; `npm run test:products-sync` pasó **74/74**.
 
 El cambio protege el próximo despliegue del Apps Script; no modifica el proyecto Apps Script remoto ni crea el canary en la hoja. Primero se debe desplegar el código canónico y luego crear el registro canary con esos valores exactos. Hasta entonces, la prueba de escritura real sigue pendiente.
+
+## Revalidación de Apps Script y canary — 2026-09-28 22:56 UTC
+
+- En la consola de Apps Script, la cuenta de producción abrió el proyecto **Tintin Sync — Motor**. En `Código.gs`, `tintinProbarEdicionCatalogo()` todavía elegía la primera fila con nombre, contrario al contrato del repositorio.
+- Guardé en ese proyecto solo la protección del canary: busca exactamente `PRUEBA QA · NO VENDER`, exige ID `CANARY-SHEETS-FIRESTORE`, inactivo, stock cero, categoría/precio válidos, sin imagen ni acción pendiente, y se niega ante ausencia, duplicado o estado inseguro. La fuente persistió tras recargar el editor.
+- En `Productos!B7:B739`, búsqueda acotada de `PRUEBA QA` devolvió 0 filas. Ejecuté la función nueva desde el editor; el registro de Apps Script mostró que terminó sin error. Según la rama verificada del código y la búsqueda actual, salió por `canary-not-found` antes de llamar al webhook; el editor no expone el objeto de retorno en el registro. No se creó ningún canary ni se escribió en Firestore.
+- Esta edición **no actualizó el deployment `/exec`**, no instaló triggers y no sincronizó productos. El proyecto remoto sigue requiriendo reconciliar sus demás archivos con los `.gs` canónicos versionados; la fuente guardada no prueba que el Web App publicado use el código actual.
+- El monitor de producción, ejecutado de nuevo desde el repositorio, conserva exactamente tres bloqueos: sitemap de productos vacío, catálogo público sin producto y ausencia de un producto para validar metadata. Las demás rutas públicas y políticas de indexación pasan.
+- `npm run test:accounts`: **33/33**. La prueba confirma que bloquear impide el acceso/reingreso y que eliminar permite un registro nuevo; sigue siendo evidencia automatizada, no una sesión cliente real en producción.
+
+**Decisión vigente: NO-GO para cutover y para cerrar Shopify.** Se corrigió la selección insegura de la fila de prueba y se verificó su guardia en la fuente conectada. Aún falta reconciliar y desplegar el Apps Script canónico, crear el canary, demostrar Sheets→Firestore con una escritura autenticada, cargar el catálogo real, migrar sus imágenes y completar checkout/host/Search Console sobre el dominio comercial.
