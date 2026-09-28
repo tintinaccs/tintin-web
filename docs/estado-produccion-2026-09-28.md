@@ -68,3 +68,20 @@ Esta revalidación se hizo después de integrar el informe y de ejecutar manualm
 - Producción observada a las 20:40 UTC: API de salud 200; catálogo público con cero productos y cero colecciones; PayPal activo solo en Sandbox con tasa BCP fechada 2026-09-25; apex A `23.227.38.65`, `www` y `account` CNAME a Shopify.
 
 **Decisión vigente: NO-GO para cutover.** Además del enrutamiento de `robots.txt` pendiente de despliegue, faltan el catálogo comercial, las pruebas autenticadas de extremo a extremo y asociar el dominio a Cloudflare Pages.
+
+## Revalidación posterior — 2026-09-28 21:18 UTC
+
+Esta captura reemplaza los estados anteriores únicamente donde indica evidencia nueva. Se verificaron los endpoints públicos, Search Console y la hoja de inventario; las lecturas de Google fueron de solo lectura.
+
+| Área | Evidencia nueva | Resultado |
+| --- | --- | --- |
+| Noindex del host Pages | `GET https://tintinaccesorios.pages.dev/robots.txt` responde HTTP 200 con `X-Robots-Tag: noindex`; la portada y las APIs públicas también entregan esa cabecera. El cuerpo de `robots.txt` no anuncia el sitemap técnico. | La corrección que faltaba para enrutar `robots.txt` quedó desplegada y verificada. No aplicar esta regla al dominio comercial. |
+| Catálogo público | `GET /api/public-catalog?resource=products` y `?resource=collections` responden HTTP 200; ambos devuelven `count: 0` e `items: []`. | Firestore público sigue sin productos ni colecciones; bloquea la prueba de compra e indexación de fichas. |
+| Hoja Productos | La hoja `Productos` contiene 136 filas con ID Firestore, 106 marcadas activas y 87 con stock positivo. Algunas filas consultadas tienen campos de foto vacíos. | La planilla contiene registros, pero no se reflejan en el catálogo público. No se importaron ni alteraron registros en esta revalidación. |
+| Historial de sincronización | La cabecera indica `SINCRONIZADO`, pero las últimas entradas observadas son `Google Sheets / Sistema / web→sheets`. | Ese indicador demuestra el espejo web→Sheets, no Sheets→Firestore. La dirección requerida por la tienda sigue sin verificación de extremo a extremo. |
+| Google Search Console | La cuenta conectada tiene solo la propiedad URL-prefix `https://tintinaccesorios.pages.dev/`. Su sitemap `https://tintinaccesorios.pages.dev/sitemap.xml` figura enviado el 2026-09-28, con 0 advertencias y 0 errores, pero `isPending=true`. No hay Indexing Tracker configurado. | La propiedad temporal está conectada; no hay datos que prueben cobertura/indexación final, ni está conectada la propiedad del dominio comercial `tintinaccs.com`. El host Pages permanece deliberadamente en noindex. |
+| Dominio comercial | `https://tintinaccs.com/robots.txt` devuelve HTTP 200 con contenido de Shopify. | El dominio comercial todavía no sirve Pages; no hacer cutover hasta vincularlo y validar TLS, canonical, robots y sitemap en el dominio objetivo. |
+| Cuentas | `npm run test:accounts` pasó 74/74; `npm run audit:login-profile` terminó correctamente. | Contrato automatizado de eliminación/reingreso y bloqueo pasa; no sustituye una prueba con sesión autenticada en navegador. |
+| Acceso operativo | La conexión a la pestaña autenticada del Admin falló al solicitar foco CDP (`Emulation.setFocusEmulationEnabled`). | No se ejecutaron acciones ni mutaciones en Admin; la publicación del Apps Script y el canary real siguen sin evidencia directa. |
+
+**Decisión actual: NO-GO para cutover.** La protección anti-indexación del host técnico ya está confirmada. Los bloqueos operativos principales son catálogo Firestore vacío, sincronización Sheets→Firestore no demostrada, pruebas de compra/autenticación en runtime pendientes, dominio sin vincular a Pages y Search Console del dominio comercial aún no conectada/verificada. La sincronización de Google Sheets debe permanecer orientada a Firestore; Shopify no es el destino.
