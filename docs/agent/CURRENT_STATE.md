@@ -5,7 +5,7 @@
 ## Baseline
 
 - Rama de trabajo: `codex/shopify-independence-audit`
-- Último commit de código verificado localmente: `12895b0c` (`build: refresh diagnostic manifest after media hardening`); build y pruebas focalizadas completados.
+- Último commit de código verificado localmente: `f207206a` (`feat: preflight Shopify media imports safely`); pruebas focalizadas completadas.
 - Commit base observado: `0d060922bdc17eb99ef4ce7fcdeb0acf86cd858c` (main, 2026-09-27)
 - Objetivo: dejar el sitio preparado para migrar el catálogo desde Shopify y operar sin la cuenta ni los servicios de Shopify.
 - Producción: no modificada por esta rama.
@@ -39,7 +39,7 @@
 - Las funciones de importación son CSV y no requieren Shopify Admin API para operar. La fase de medios todavía puede copiar imágenes desde Shopify CDN a Cloudinary bajo una bandera de escritura explícita; hay que completar esa copia y verificar cero URLs Shopify antes de cerrar la cuenta.
 - La carga de medios ahora lee el body en streaming, cancela al superar 15 MiB y aplica timeout de 20 s al origen. `npm run test:phase2-import` (24/24), `npm run audit:phase2-contract`, `npm run audit:products-media` (39 comprobaciones) y `npm run build:pages` pasan en `12895b0c`; el manifiesto diagnóstico generado incluye los nuevos hashes.
 - Se confirmó en vivo en esta continuación: `tintinaccs.com/` y su sitemap responden 200, pero `/api/health` responde 404; Pages `/api/health` responde 200, el catálogo devuelve `count: 0` y el sitemap de productos contiene 0 ubicaciones. El dominio comercial sigue atendido por Shopify.
-- Feedback CRUD central: los CRUD individuales y masivos de productos, colecciones, clientes y pedidos usan el cargador central centrado, etapas de progreso y diálogo de resultado de éxito o error. Dos pruebas Playwright cubren resultado y centrado. El cambio está publicado en el HEAD del PR #937 (`5bd5431fe661826459bd659034541c5bc9852b34`), pero todavía no integrado en `main` ni en producción.
+- Feedback CRUD central: los CRUD individuales y masivos de productos, colecciones, clientes y pedidos usan el cargador central centrado, etapas de progreso y diálogo de resultado de éxito o error. Dos pruebas Playwright cubren resultado y centrado. Verificado otra vez en local el 2026-09-28 (2/2); está en el PR #937, aún no integrado en `main` ni en producción.
 
 ## Seguimiento actual — 2026-09-28
 
@@ -127,3 +127,12 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - Antes de copiar cualquier URL de Shopify CDN, el importador consulta ese preflight. Una configuración incompleta detiene la aplicación antes de descargar imágenes o escribir productos. Si no hay URLs de Shopify CDN en el preview, no hace falta el copiado.
 - `tests/import/shopify-phase2-media-api.test.mjs` comprueba los dos estados y que la respuesta no incluya credenciales; `scripts/auditar-shopify-phase2-contract.mjs` exige que el preflight ocurra antes de la copia/catalog write.
 - Se añadió [importacion-shopify-media.md](../importacion-shopify-media.md) con el paso de configuración temporal en Cloudflare Pages Production, la desactivación al terminar y la aceptación posterior. No se activó ninguna variable ni se escribieron medios/catálogo reales.
+
+## Revalidación preflight y panel CRUD — 2026-09-28 09:20 UTC
+
+- HEAD local/remoto: `f207206a` en `codex/shopify-independence-audit`, commit enviado al PR #937. El cambio no se ha mergeado ni desplegado.
+- Verificación local: `npm run test:phase2-import` PASS 28/28; `npm run audit:phase2-contract` PASS; `npm run audit:products-media` PASS 41 comprobaciones; `npm run audit:cache-versioning` PASS; `npm run verify:diagnostics` PASS; `npm run test:admin-operations-browser` PASS 2/2 (éxito/error y loader centrado).
+- CI para `f207206a`: Cloudflare Pages PASS, CodeQL actions PASS y Repository audit + CodeQL JavaScript/TypeScript todavía en curso al 09:20 UTC.
+- El panel central está implementado para CRUD individual y masivo de productos, colecciones, clientes y pedidos. No equivale a decir que cada acción administrativa de todos los demás módulos use ese panel.
+- Preparación de catálogo/CDN documentada en `docs/importacion-shopify-media.md`; el preflight autenticado solo comprueba disponibilidad, nunca copia medios ni escribe productos.
+- Estado producción sigue **NO-GO** para empezar importación/cambiar la URL: catálogo Pages vacío y DNS del dominio todavía apunta al storefront Shopify, según el último sondeo en vivo de 08:16 UTC. La copia real de catálogo/media, pagos, pedido/email con datos reales, Search Console del dominio y aceptación DNS siguen pendientes.
