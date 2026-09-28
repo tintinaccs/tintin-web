@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "bb32dace620418296919329c96345812c1770cee204caad7c1e90c55f0a4e629",
+  "sourceFingerprint": "bfaf3406f6af3714febab39457f20de38a61899e0196f164effc042159759cda",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 906,
-    "textFiles": 865,
-    "totalBytes": 17776895,
+    "files": 908,
+    "textFiles": 867,
+    "totalBytes": 17784596,
     "pages": 19,
-    "modules": 622
+    "modules": 623
   },
   "viewports": [
     {
@@ -18857,8 +18857,8 @@
     },
     {
       "path": "functions/_middleware.js",
-      "bytes": 5459,
-      "sha256": "b3201a8caa39bd9d8dc8e220c6f1a024ad73c266edad72216ae36f6e40c49890",
+      "bytes": 6971,
+      "sha256": "45057e468ba4f6f42c39640b1457ab5d76481db09713879e6e793630c1f41ab0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33834,6 +33834,65 @@
       ]
     },
     {
+      "path": "tests/seo/pages-dev-indexing-middleware.test.mjs",
+      "bytes": 2834,
+      "sha256": "1f182f0d6cc84b47c74a1a9fe7bb26934d2309364698e7151038d800bf60bd90",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "../../functions/_middleware.js",
+          "target": "functions/_middleware.js",
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": [
+        {
+          "url": "https://pr-123.tintinaccesorios.pages.dev/",
+          "line": 14
+        },
+        {
+          "url": "https://tintinaccs.com/",
+          "line": 15
+        },
+        {
+          "url": "https://tintinaccesorios.pages.dev/sitemap.xml",
+          "line": 28
+        },
+        {
+          "url": "https://tintinaccesorios.pages.dev/robots.txt",
+          "line": 31
+        },
+        {
+          "url": "https://tintinaccs.com/sitemap.xml/n",
+          "line": 41
+        },
+        {
+          "url": "https://tintinaccs.com/robots.txt",
+          "line": 42
+        },
+        {
+          "url": "https://tintinaccesorios.pages.dev/__/auth/handler",
+          "line": 43
+        }
+      ]
+    },
+    {
       "path": "tests/seo/phase11-seo.spec.js",
       "bytes": 7119,
       "sha256": "01af629e12d3ac102e3048e8a82dcb9672b97b651f123a0e02436e79b45a1a7a",
@@ -35073,8 +35132,8 @@
     {
       "path": ".github/workflows/auditar-tintin.yml",
       "extension": ".yml",
-      "bytes": 4632,
-      "sha256": "9eeda95a214b9f2a5aaa613535a8b4214c6cfbe5af60ca89cbc6648f18a2e8e6"
+      "bytes": 4703,
+      "sha256": "7e115a00f126f571f23d3f82570c5e7efa8ce4ef4d1ca8a2bf2e87ba704716b6"
     },
     {
       "path": ".github/workflows/auditoria-dependencias.yml",
@@ -36411,8 +36470,8 @@
     {
       "path": "docs/estado-produccion-2026-09-28.md",
       "extension": ".md",
-      "bytes": 8979,
-      "sha256": "f2dfff02ce1ed21b8dcee528b8ee76938698361a141881a90172dad0eef71e41"
+      "bytes": 10642,
+      "sha256": "196723266d24a32c78862ccd117c49d7a7e6fe17e04ef0e5e1390566945d292f"
     },
     {
       "path": "docs/estilo-codigo.md",
@@ -36541,6 +36600,12 @@
       "sha256": "43fffc12754c2dae593d4f46f0eef54a7e9e46034261cf410262a593cc8964ba"
     },
     {
+      "path": "docs/seo/pages-dev-indexing.md",
+      "extension": ".md",
+      "bytes": 1621,
+      "sha256": "2075aeefbd0ab06e680f1256a991dffbd5e9b6b9db3517c43ae67403132cda38"
+    },
+    {
       "path": "docs/sincronizacion-carrito-fase-7.md",
       "extension": ".md",
       "bytes": 3225,
@@ -36627,8 +36692,8 @@
     {
       "path": "functions/_middleware.js",
       "extension": ".js",
-      "bytes": 5459,
-      "sha256": "b3201a8caa39bd9d8dc8e220c6f1a024ad73c266edad72216ae36f6e40c49890"
+      "bytes": 6971,
+      "sha256": "45057e468ba4f6f42c39640b1457ab5d76481db09713879e6e793630c1f41ab0"
     },
     {
       "path": "functions/admin-images.js",
@@ -40283,6 +40348,12 @@
       "extension": ".mjs",
       "bytes": 5121,
       "sha256": "dce72241ef626d8b5fb7b1056fbfa8f0853bee0f2e412ea951575a8b098966cd"
+    },
+    {
+      "path": "tests/seo/pages-dev-indexing-middleware.test.mjs",
+      "extension": ".mjs",
+      "bytes": 2834,
+      "sha256": "1f182f0d6cc84b47c74a1a9fe7bb26934d2309364698e7151038d800bf60bd90"
     },
     {
       "path": "tests/seo/phase11-seo.spec.js",
