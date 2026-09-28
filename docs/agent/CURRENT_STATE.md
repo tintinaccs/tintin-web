@@ -136,3 +136,10 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - El panel central está implementado para CRUD individual y masivo de productos, colecciones, clientes y pedidos. No equivale a decir que cada acción administrativa de todos los demás módulos use ese panel.
 - Preparación de catálogo/CDN documentada en `docs/importacion-shopify-media.md`; el preflight autenticado solo comprueba disponibilidad, nunca copia medios ni escribe productos.
 - Estado producción sigue **NO-GO** para empezar importación/cambiar la URL: catálogo Pages vacío y DNS del dominio todavía apunta al storefront Shopify, según el último sondeo en vivo de 08:16 UTC. La copia real de catálogo/media, pagos, pedido/email con datos reales, Search Console del dominio y aceptación DNS siguen pendientes.
+
+## Corrección de build exacto del loader — 2026-09-28
+
+- CI del commit `b7884cc5` encontró que `Build exact public artifact` fallaba en `audit:cache-versioning`: el generador `scripts/sincronizar-inicio-navegacion-publica.js` reconstruía 14 páginas con `shopify-media-loader-1`, mientras las demás usaban `shopify-media-loader-2`.
+- Se actualizó la versión en la fuente canónica del shell y en las tres auditorías que exigían el número anterior. `npm run build:pages` ahora termina PASS, sin drift en la segunda ejecución; versionado consistente: 286 archivos y 79 imports dinámicos.
+- Regresiones: `npm run audit:app-check-bootstrap`, `npm run audit:phase8-ui` (15/15), `npm run audit:phase10` (12/12), `git diff --check` PASS.
+- El arreglo está local y requiere un commit nuevo y una nueva ejecución CI; no se cambiaron DNS, producción ni catálogo.
