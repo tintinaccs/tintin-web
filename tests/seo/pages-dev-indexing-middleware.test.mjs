@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import { onRequest } from '../../functions/_middleware.js';
 
 async function invoke(url, body, { method = 'GET', contentType = 'text/html; charset=utf-8' } = {}) {
@@ -53,4 +54,10 @@ test('HEAD robots response has no body and retains the Pages.dev noindex policy'
   const response = await invoke('https://tintinaccesorios.pages.dev/robots.txt','', {method:'HEAD',contentType:'text/plain'});
   assert.equal(response.headers.get('x-robots-tag'), 'noindex');
   assert.equal(await response.text(), '');
+});
+
+test('Cloudflare Pages routes robots.txt through middleware so host-specific indexing policy applies', () => {
+  const routes = JSON.parse(fs.readFileSync(new URL('../../_routes.json', import.meta.url), 'utf8'));
+  assert.ok(routes.include.includes('/robots.txt'));
+  assert.deepEqual(routes.exclude, []);
 });
