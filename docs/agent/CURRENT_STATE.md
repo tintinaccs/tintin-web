@@ -16,22 +16,22 @@
 
 Todas las áreas funcionales comienzan en `PENDING` para este protocolo hasta que sean verificadas contra el commit correspondiente. Los estados verdes de documentos fechados anteriores son evidencia histórica, no PASS automático.
 
-| Dominio | Estado | Evidencia / siguiente paso |
-| --- | --- | --- |
-| Protocolo de agentes | PASS_LOCAL | Documentos creados; AGENTS/CLAUDE enlazados; diff contra main revisado: solo 6 archivos documentales |
-| Build y estructura | PENDING | Verificar en fase de reparación |
-| Home/shell | PENDING | Verificar |
-| Catálogo/colecciones/producto | PENDING | Verificar |
-| Carrito/checkout/pedidos/pagos | PENDING | Verificar |
-| Login/sesión/perfil | PENDING | Verificar |
-| Roles/Super Admin | PENDING | Verificar |
-| Firestore/App Check | PENDING | Verificar |
-| Integraciones | PENDING | Verificar |
-| CSP/rutas/caché/diagnóstico | PENDING | Verificar |
-| Responsive/a11y/performance/SEO | PENDING | Verificar |
-| Correos/notificaciones | PENDING | Verificar |
-| Producción | NOT_VERIFIED | No se modifica ni se asume sana por esta fase |
-| Recuperación | PENDING | Verificar contratos/workflows |
+| Dominio | Estado | Agente | Evidencia / siguiente paso |
+| --- | --- | --- | --- |
+| Protocolo de agentes | PASS_LOCAL | Claude | Documentos creados; AGENTS/CLAUDE enlazados; diff contra main revisado: solo 6 archivos documentales |
+| Build y estructura | PENDING | — | Verificar en fase de reparación |
+| Home/shell | PENDING | — | Verificar |
+| Catálogo/colecciones/producto | PENDING | — | Verificar |
+| Carrito/checkout/pedidos/pagos | PENDING | — | Verificar |
+| Login/sesión/perfil | PENDING | — | Verificar |
+| Roles/Super Admin | PENDING | — | Verificar |
+| Firestore/App Check | PENDING | — | Verificar |
+| Integraciones | PENDING | — | Verificar |
+| CSP/rutas/caché/diagnóstico | PENDING | — | Verificar |
+| Responsive/a11y/performance/SEO | PENDING | — | Verificar |
+| Correos/notificaciones | PENDING | — | Verificar |
+| Producción | NOT_VERIFIED | — | No se modifica ni se asume sana por esta fase |
+| Recuperación | PENDING | — | Verificar contratos/workflows |
 
 ## Hallazgos estructurales de Fase 1
 
@@ -55,3 +55,11 @@ Ninguno para instalar este protocolo.
 ## Próximo paso
 
 Revisión independiente del protocolo y, una vez aprobado, integración controlada antes de usar la matriz para una reparación integral. La reparación funcional debe ejecutarse en una rama de trabajo y no autoriza merge/deploy automático.
+
+## Aprobaciones
+
+| Fecha | Alcance aprobado | Aprobado por |
+| --- | --- | --- |
+| — | — | — |
+
+Registrar aquí cada aprobación explícita (integración, merge, excepción de estado) antes de ejecutarla; no inferir aprobación de un mensaje ambiguo.
