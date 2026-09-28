@@ -20,6 +20,9 @@
 - `https://tintinaccesorios.pages.dev/sitemap-products.xml`: HTTP 200 con 0 `<loc>`.
 - `https://tintinaccesorios.pages.dev/api/public-catalog?resource=products`: HTTP 200, `ok: true`, `count: 0`.
 - `https://tintinaccesorios.pages.dev/api/health`: HTTP 200, `ok: true`; configuration, Firebase, runtime administrativo y Visual Builder están en verde, igual que los 12 probes de Admin/Firestore.
+- Search Console solo tiene conectada la propiedad `https://tintinaccesorios.pages.dev/`; no aparece una propiedad para `tintinaccs.com`. El sitemap principal figura enviado el 2026-09-14, todavía `pending`, sin errores ni advertencias. Los datos asentados hasta el 2026-09-25 muestran 1 impresión y 0 clics.
+- La auditoría SEO en vivo de Search Console encontró que la imagen principal de portada no tenía texto alternativo; se corrigió en la rama con una descripción de los relojes, sin duplicar el H1. El chequeo de imágenes ya exige este texto y pasa localmente; falta que la corrección llegue al despliegue y vuelva a rastrearse.
+- La URL genérica `/product` que se auditó sin ID devuelve `noindex` y sin H1; es la ruta de plantilla sin un producto, no una ficha importada. Las fichas públicas con ID cuentan con su suite separada de canonical, JSON-LD y metadata.
 - Preview del PR `#937` para el último commit: home, login, sitemaps y robots responden HTTP 200; el catálogo está vacío. El health del preview responde 503 con `configuration: false` porque los secretos de producción no están configurados para previews; esto no altera el health verde de Pages en producción.
 - Check de salud de producción del commit `0d060922`: falla porque el sitemap y la API no encuentran productos y no hay producto canary. App Check para el browser runner se limitó por reCAPTCHA de CI.
 - `npm run audit:final`: PASS en la rama de preparación, tras regenerar los manifiestos y CSP canónicos.
@@ -54,6 +57,7 @@
 | Performance y SEO | PASS_WITH_LIMIT | SEO estático, metadata, robots, canonicals y sitemap pasan; redirects de handles Shopify importados cubiertos; sitemap de productos sigue vacío hasta importar catálogo. |
 | Correos y notificaciones | PASS_WITH_LIMIT | Contratos de correo y colas pasan; entrega depende de credenciales y verificación runtime. |
 | Producción | FAIL | Health Pages y 12 probes conectados están verdes, pero el catálogo está vacío y el dominio propio no apunta a Pages; no se realizó ningún cambio de producción. |
+| Search Console | PASS_WITH_LIMIT | Solo está conectada Pages; el sitemap sigue pendiente y hay tráfico orgánico casi nulo. Tras importar el catálogo y cambiar DNS, registrar/verificar el dominio propio, enviar sus sitemaps y comprobar indexación. |
 | Recuperación | IN_PROGRESS | Hay contratos de copias/importación y checkpoint; falta ejecutar un ensayo completo con exportación real y documentar aceptación del catálogo importado. |
 
 ## Límites de esta fase

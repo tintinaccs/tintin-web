@@ -147,6 +147,12 @@ check(
 );
 
 check(
+  'La imagen principal del Hero tiene texto alternativo descriptivo',
+  /id="tt-hero-img"[\s\S]*?alt="Varios relojes dorados exhibidos sobre una base rosa"/.test(files.indexHtml),
+  'La fotografía del hero muestra los relojes del catálogo y no es decorativa; su descripción no debe duplicar el texto del H1.'
+);
+
+check(
   'El Hero se revela recién cuando la imagen real terminó de cargar y un error no muestra placeholder',
   files.runtime.includes('function revealHeroWhenImageReady(image)') &&
     files.runtime.includes("image.addEventListener('load', onLoad, { once: true });") &&

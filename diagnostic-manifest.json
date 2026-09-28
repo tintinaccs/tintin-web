@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5f42ab5f4260d99a784f2f7d66ae0d9c1155b41ce7e42287e26e49a84515637f",
+  "sourceFingerprint": "a72dbe93386399e3ae425b36de8bef93687676fc1727467606e3252616114707",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 897,
     "textFiles": 856,
-    "totalBytes": 17638077,
+    "totalBytes": 17639590,
     "pages": 19,
     "modules": 617
   },
@@ -12265,8 +12265,8 @@
         "guest",
         "client"
       ],
-      "bytes": 38185,
-      "sha256": "272440d199f319dc21e794a32fc07977e134804e1d2665c913cc3b669094798d",
+      "bytes": 38237,
+      "sha256": "81e097230b057bda66bb067ab6a0186834b260a1bb699c112722e1a32a4ead74",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12530,7 +12530,7 @@
           "tag": "img",
           "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png?v=tintin-20260910-hero-button-clear-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png",
-          "alt": "",
+          "alt": "Varios relojes dorados exhibidos sobre una base rosa",
           "hasAlt": true,
           "line": 125
         },
@@ -28265,8 +28265,8 @@
     },
     {
       "path": "scripts/auditar-imagenes-fase-5.js",
-      "bytes": 25531,
-      "sha256": "41a33cfdd16583a89802fe333cd8fb3292306a6c6ec7c001d3fdbb63486cb0f4",
+      "bytes": 25854,
+      "sha256": "53599fc717b4671219c19a49770caa208cf4355b5ea906ca2342b1b9909616c1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28276,31 +28276,31 @@
           "raw": "./imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "scripts/imagenes.js",
           "dynamic": false,
-          "line": 199
+          "line": 205
         },
         {
           "raw": "./procesamiento-imagenes.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "scripts/procesamiento-imagenes.js",
           "dynamic": false,
-          "line": 232
+          "line": 238
         },
         {
           "raw": "../../core/firebase/origen-funciones.js",
           "target": null,
           "dynamic": false,
-          "line": 246
+          "line": 252
         },
         {
           "raw": "./firebase-id-token.js",
           "target": "scripts/firebase-id-token.js",
           "dynamic": false,
-          "line": 294
+          "line": 300
         },
         {
           "raw": "../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1",
           "target": null,
           "dynamic": false,
-          "line": 401
+          "line": 407
         }
       ],
       "endpoints": [
@@ -28310,7 +28310,7 @@
         },
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 241
+          "line": 247
         }
       ]
     },
@@ -36025,8 +36025,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 8051,
-      "sha256": "a83d8b847579de56680d0c3b9bc04824b2291bcdbb97206fc85df7127938bf5c"
+      "bytes": 9189,
+      "sha256": "68d8bd84ab26239b584cc017344ef22544dee43ea2925b71b1326d819fc89daf"
     },
     {
       "path": "docs/agent/README.md",
@@ -36781,8 +36781,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 38185,
-      "sha256": "272440d199f319dc21e794a32fc07977e134804e1d2665c913cc3b669094798d"
+      "bytes": 38237,
+      "sha256": "81e097230b057bda66bb067ab6a0186834b260a1bb699c112722e1a32a4ead74"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -38881,8 +38881,8 @@
     {
       "path": "scripts/auditar-imagenes-fase-5.js",
       "extension": ".js",
-      "bytes": 25531,
-      "sha256": "41a33cfdd16583a89802fe333cd8fb3292306a6c6ec7c001d3fdbb63486cb0f4"
+      "bytes": 25854,
+      "sha256": "53599fc717b4671219c19a49770caa208cf4355b5ea906ca2342b1b9909616c1"
     },
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
