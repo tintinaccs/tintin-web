@@ -58,7 +58,7 @@ async function inspect(relative, expectedType, requestHeaders = {}) {
     const response = await fetchWithRetry(requestedUrl, { headers: requestHeaders });
     const body = await response.text();
     const type = response.headers.get('content-type') || '';
-    const headers = Object.fromEntries(['content-security-policy','strict-transport-security','x-content-type-options','x-frame-options','referrer-policy','cache-control','x-tintin-product-meta'].map(name => [name, response.headers.get(name) || '']));
+    const headers = Object.fromEntries(['content-security-policy','strict-transport-security','x-content-type-options','x-frame-options','referrer-policy','cache-control','x-robots-tag','x-tintin-product-meta'].map(name => [name, response.headers.get(name) || '']));
     const ok = response.ok && (!expectedType || type.includes(expectedType));
     results.push({ requestedUrl, finalUrl: response.url, redirected: response.redirected, status: response.status, ms: Date.now() - started, type, ok, bytes: body.length, headers });
     if (!ok) throw new Error('Respuesta inesperada: ' + response.status + ' ' + type);
@@ -123,7 +123,15 @@ await check('home-canonical', async () => {
 
 await check('robots', async () => {
   const robots = await inspect('/robots.txt', 'text/plain');
-  if (!robots.body.includes('Sitemap: ' + origin + '/sitemap.xml')) throw new Error('robots.txt no apunta al sitemap vigente.');
+  const technicalHost = new URL(origin).hostname.toLowerCase().endsWith('.pages.dev');
+  const hasCurrentSitemap = robots.body.includes('Sitemap: ' + origin + '/sitemap.xml');
+  if (technicalHost) {
+    if (hasCurrentSitemap || /^\s*Sitemap\s*:/im.test(robots.body)) throw new Error('El host técnico pages.dev no debe anunciar su sitemap.');
+    if (robots.headers['x-robots-tag'].toLowerCase() !== 'noindex') throw new Error('El host técnico pages.dev debe entregar X-Robots-Tag: noindex.');
+  } else {
+    if (!hasCurrentSitemap) throw new Error('robots.txt no apunta al sitemap vigente.');
+    if (/noindex/i.test(robots.headers['x-robots-tag'])) throw new Error('El dominio comercial no debe recibir noindex global.');
+  }
   for (const route of ['/admin', '/admin-images', '/checkout', '/login', '/perfil']) {
     if (!robots.body.includes('Disallow: ' + route + '\n')) throw new Error('robots.txt no bloquea la ruta limpia ' + route + '.');
   }
@@ -185,12 +193,15 @@ await check('api-health', async () => {
 await check('paypal-public-configuration', async () => {
   const probe = await inspect('/api/paypal-config', 'application/json', { origin });
   const payload = JSON.parse(probe.body || '{}');
-  const allowedKeys = new Set(['enabled', 'environment', 'currency', 'clientId', 'rateUpdatedAt', 'unavailableReasons']);
+  const allowedKeys = new Set(['enabled', 'environment', 'currency', 'clientId', 'rateUpdatedAt', 'rateSource', 'rateSourceDate', 'unavailableReasons']);
   if (
     typeof payload?.enabled !== 'boolean'
     || !['sandbox', 'live'].includes(payload?.environment)
     || typeof payload?.currency !== 'string'
     || typeof payload?.clientId !== 'string'
+    || !['BCP', 'manual'].includes(payload?.rateSource)
+    || typeof payload?.rateSourceDate !== 'string'
+    || (payload.rateSource === 'BCP' && !/^\d{4}-\d{2}-\d{2}$/.test(payload.rateSourceDate))
     || !Array.isArray(payload?.unavailableReasons)
     || Object.keys(payload).some(key => !allowedKeys.has(key))
   ) {
@@ -209,6 +220,8 @@ await check('paypal-public-configuration', async () => {
       environment: payload.environment,
       currency: payload.currency,
       rateUpdatedAt: payload.rateUpdatedAt || '',
+      rateSource: payload.rateSource,
+      rateSourceDate: payload.rateSourceDate,
       unavailableReasons: payload.unavailableReasons,
     };
   }

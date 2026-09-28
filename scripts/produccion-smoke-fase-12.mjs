@@ -17,7 +17,7 @@ async function request(relative) {
     try {
       const response = await fetch(url, { redirect: 'follow', headers: { 'user-agent': 'TintinPhase12Smoke/2.0 (+https://tintinaccesorios.pages.dev/)' }, signal: AbortSignal.timeout(timeoutMs) });
       const body = await response.text();
-      const result = { relative, requestedUrl: url, url: response.url, redirected: response.redirected, status: response.status, ok: response.ok, ms: Date.now() - started, type: response.headers.get('content-type') || '', bytes: body.length, headers: Object.fromEntries(['content-security-policy','strict-transport-security','x-content-type-options','x-frame-options','referrer-policy','cache-control'].map(name => [name, response.headers.get(name) || ''])) };
+  const result = { relative, requestedUrl: url, url: response.url, redirected: response.redirected, status: response.status, ok: response.ok, ms: Date.now() - started, type: response.headers.get('content-type') || '', bytes: body.length, headers: Object.fromEntries(['content-security-policy','strict-transport-security','x-content-type-options','x-frame-options','referrer-policy','cache-control','x-robots-tag'].map(name => [name, response.headers.get(name) || ''])) };
       if (response.status >= 500) throw new Error('HTTP ' + response.status);
       results.push(result);
       return { response, body, result };
@@ -57,7 +57,15 @@ try {
   assert(/name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(notFound.body), '404 no declara noindex.');
   const robots = await request('/robots.txt');
   assert(robots.response.ok && robots.result.type.includes('text/plain'), 'robots.txt no está disponible como texto.');
-  assert(robots.body.includes('Sitemap: ' + origin + '/sitemap.xml'), 'robots.txt no apunta al sitemap de producción.');
+  const technicalHost = new URL(origin).hostname.toLowerCase().endsWith('.pages.dev');
+  const hasCurrentSitemap = robots.body.includes('Sitemap: ' + origin + '/sitemap.xml');
+  if (technicalHost) {
+    assert(!/^\s*Sitemap\s*:/im.test(robots.body), 'pages.dev no debe anunciar su sitemap técnico.');
+    assert(robots.result.headers['x-robots-tag'] === 'noindex', 'pages.dev debe entregar X-Robots-Tag: noindex.');
+  } else {
+    assert(hasCurrentSitemap, 'robots.txt no apunta al sitemap comercial.');
+    assert(!/noindex/i.test(robots.result.headers['x-robots-tag']), 'El dominio comercial no debe recibir noindex global.');
+  }
   const sitemap = await request('/sitemap.xml');
   assert(sitemap.response.ok && /xml/.test(sitemap.result.type), 'sitemap.xml no está disponible como XML.');
   let sitemapUrls = [...sitemap.body.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);

@@ -85,3 +85,13 @@ Esta captura reemplaza los estados anteriores únicamente donde indica evidencia
 | Acceso operativo | La conexión a la pestaña autenticada del Admin falló al solicitar foco CDP (`Emulation.setFocusEmulationEnabled`). | No se ejecutaron acciones ni mutaciones en Admin; la publicación del Apps Script y el canary real siguen sin evidencia directa. |
 
 **Decisión actual: NO-GO para cutover.** La protección anti-indexación del host técnico ya está confirmada. Los bloqueos operativos principales son catálogo Firestore vacío, sincronización Sheets→Firestore no demostrada, pruebas de compra/autenticación en runtime pendientes, dominio sin vincular a Pages y Search Console del dominio comercial aún no conectada/verificada. La sincronización de Google Sheets debe permanecer orientada a Firestore; Shopify no es el destino.
+
+## Revalidación del monitor integral — 2026-09-28 21:42 UTC
+
+- `npm run monitor:production` volvió a consultar las rutas públicas de `pages.dev`: inicio, catálogo, colecciones, producto, login, perfil, robots, sitemaps, `/api/health`, PayPal y contenido del editor respondieron. El rechazo `401` de `/api/admin-runtime-health` es el comportamiento esperado sin autenticación.
+- Se corrigieron dos contratos obsoletos del monitor: ya reconoce la política `noindex`/sin sitemap para `*.pages.dev` y acepta los campos públicos `rateSource`/`rateSourceDate` de PayPal sin permitir campos secretos.
+- Tras el ajuste, los controles de `robots` y `paypal-public-configuration` pasaron. El monitor conserva tres fallos relacionados con la misma ausencia real: sitemap de productos vacío, catálogo público sin producto y falta de producto para validar metadata.
+- `node scripts/produccion-smoke-fase-12.mjs` pasó las 17 rutas públicas con HTTPS/CSP y URLs limpias en el host de Pages. Esta prueba no valida inicio de sesión real, pago ni compra.
+- La corrección del monitor está en una rama/PR aparte y aún requiere CI. No cambia Workers, DNS ni datos de clientes.
+
+**Decisión vigente: NO-GO para cutover.** La infraestructura y el smoke de rutas están respondiendo; la tienda aún no puede validar catálogo, fichas ni checkout por falta de productos públicos y de evidencia de escritura Sheets→Firestore. El host técnico debe conservar `noindex`; la política de sitemap indexable se validará en el dominio comercial después de asociarlo a Pages.

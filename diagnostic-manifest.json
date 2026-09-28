@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "c3d46b8ef6d5d655e2c26089dbf7f0c2550d333e7669d6c58c75a160dd51e5cb",
+  "sourceFingerprint": "b9a23e69b36d27f700321476ef083f6f9d3a69f78af101ec8765b0aad6bdbf45",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 908,
     "textFiles": 867,
-    "totalBytes": 17790228,
+    "totalBytes": 17793249,
     "pages": 19,
     "modules": 623
   },
@@ -28948,8 +28948,8 @@
     },
     {
       "path": "scripts/auditar-produccion-salud.mjs",
-      "bytes": 16225,
-      "sha256": "596bf3c127673effaf7ea0e52dd313564da2eec4e1bef34fcbf29304ea68fb8a",
+      "bytes": 17156,
+      "sha256": "9380d525df1fa4384b7959327591e80a4e4d6ee70e9126e467e6a937f7250b17",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30428,8 +30428,8 @@
     },
     {
       "path": "scripts/produccion-smoke-fase-12.mjs",
-      "bytes": 6934,
-      "sha256": "aba8ccb0ae521eddc43228e09248ef8911ce37355166e75fa1175572a7732ac9",
+      "bytes": 7457,
+      "sha256": "c4ba2b94258ed7d3e8deae0d24d6a48267927b0e37c3a497b4d1181184040a1c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36476,8 +36476,8 @@
     {
       "path": "docs/estado-produccion-2026-09-28.md",
       "extension": ".md",
-      "bytes": 15669,
-      "sha256": "878c9845c6e4e0c085fbdb7d29bf4bad711da6f27752faf8042291815eda7f1f"
+      "bytes": 17236,
+      "sha256": "98172cfd9c0987ee9b49c3a3c8885e8ad334eadb9495ae371eeacc2539e2d3b7"
     },
     {
       "path": "docs/estilo-codigo.md",
@@ -39374,8 +39374,8 @@
     {
       "path": "scripts/auditar-produccion-salud.mjs",
       "extension": ".mjs",
-      "bytes": 16225,
-      "sha256": "596bf3c127673effaf7ea0e52dd313564da2eec4e1bef34fcbf29304ea68fb8a"
+      "bytes": 17156,
+      "sha256": "9380d525df1fa4384b7959327591e80a4e4d6ee70e9126e467e6a937f7250b17"
     },
     {
       "path": "scripts/auditar-producto-cloudflare-preview.mjs",
@@ -39728,8 +39728,8 @@
     {
       "path": "scripts/produccion-smoke-fase-12.mjs",
       "extension": ".mjs",
-      "bytes": 6934,
-      "sha256": "aba8ccb0ae521eddc43228e09248ef8911ce37355166e75fa1175572a7732ac9"
+      "bytes": 7457,
+      "sha256": "c4ba2b94258ed7d3e8deae0d24d6a48267927b0e37c3a497b4d1181184040a1c"
     },
     {
       "path": "scripts/restore-firestore.mjs",
