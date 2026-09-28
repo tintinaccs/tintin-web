@@ -204,3 +204,19 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - Sondeo de Production renovado: Pages `/api/health` 200 con configuration/Firebase/Admin runtime true; productos 0, colecciones 0, sitemap-products 0 URLs. El módulo publicado `aplicar-importacion-admin.js?v=tintin-20260927-shopify-apply-1` no contiene preflight. PayPal continúa `enabled:false` por `stale_exchange_rate`. `tintinaccs.com/api/health` y `www.tintinaccs.com/api/health` responden 404 y la portada comercial contiene markup Shopify.
 - El test de loader contra Preview solo comprueba la interfaz estática con operaciones de fixture; no certifica configuración de runtime ni un preflight autenticado. Preview `/api/health` sigue en 503 por `configuration:false`.
 - Decisión: **NO-GO** para empezar la importación desde la publicación actual y para el cutover. Mantener Shopify y DNS como están. PR #937 no se integró; PR #929 permanece aparte por su condición de catálogo/Sección D y por el conflicto ya documentado.
+
+## Revalidación de Search Console — 2026-09-28 11:25 UTC
+
+- Después de más de una hora desde que registré la propiedad existente `sc-domain:tintinaccs.com` y la dejé visible, repetí `list_sites`: todavía devuelve solo `https://tintinaccesorios.pages.dev/`. Repetí `set_dashboard_visibility` para el dominio y la herramienta devolvió `visible:true`, `unchanged:["sc-domain:tintinaccs.com"]`, 2/10 espacios usados y la nota de que los MCP deberían ver la propiedad inmediatamente; `list_sites` siguió omitiéndola.
+- Una consulta directa `list_sitemaps({siteUrl:"sc-domain:tintinaccs.com"})` funciona y devuelve lista vacía. La propiedad `pages.dev` aún tiene `sitemap.xml` pendiente, con 0 errores y 0 advertencias. No se envió ni se creó otro sitemap.
+- Esto confirma una discrepancia persistente en el listado/dashboard del conector; no es evidencia de pérdida de la propiedad GSC. Sigue sin ser posible validar URLs de producto ni la cobertura/indexación del dominio final porque el catálogo está vacío y el dominio aún sirve Shopify.
+- La decisión del cutover no cambia: **NO-GO**.
+
+## Revalidación del feedback CRUD — 2026-09-28 11:44 UTC
+
+- HEAD de la rama de preparación: `a4f839e8b6d24f6e5f7076c1e13e4d883b128d6c`; PR #937 sigue abierto y GitHub lo marca mergeable/clean. Se detectaron además los PR #938, #934, #933, #932 y #929 abiertos. No se combinaron ramas ni se integró ningún PR.
+- `npm run test:admin-operations-browser`: **2/2 PASS** en Chromium. La prueba confirma loader centrado y resultado central de éxito, y cierre del loader con resultado central de error. Son operaciones fixture/mocked: no realizan escrituras de negocio.
+- Lectura estática del código vigente: el helper `runAdminCrudOperation` se invoca en 18 puntos de `admin-app.js` y el helper `runAdminBulk` cubre acciones masivas de clientes y pedidos; productos también tienen flujos bulk dedicados. Las notificaciones CRUD se convierten a resultados centrales para producto, colección, cliente/cuenta y pedido. Esto verifica la conexión de las entidades principales; no prueba que cada acción de todos los módulos secundarios del Super Admin use idéntico panel.
+- `npm run build:diagnostics` regeneró el manifiesto con **19 páginas, 621 módulos y 904 archivos**. `npm run audit:diagnostics` terminó exit 0: pasó los contratos de solo lectura, el inventario completo y su reproducibilidad.
+- La prueba remota contra el Preview ya anotada en la sección anterior también fue 2/2; el Preview conserva health 503 por configuración incompleta y ese test no representa operaciones autenticadas ni estado de producción.
+- La decisión operativa sigue **NO-GO**: producción aún no publica el importador seguro, faltan verificación autenticada del preflight en Production, catálogo real y aceptación comercial, y el dominio todavía sirve Shopify. No se modificaron datos de negocio, DNS, despliegue ni merge.

@@ -171,3 +171,9 @@ GitHub Actions run #3455 on current HEAD `4c298cbc78053316f1227a3929292ef3b0919e
 At 11:13 UTC, production Pages still returned `/api/health` 200 with configuration true, but both public catalogs returned `count: 0`, `sitemap-products.xml` had 0 URLs, and `/api/paypal-config` remained disabled for `stale_exchange_rate`. The deployed Admin import module still points to `shopify-apply-1` and lacks the media preflight. Both custom-domain health URLs return 404 and the apex storefront still contains Shopify markup. The branch preview continues to return 503 for health (`configuration: false`), so this remote UI test does not stand in for the authenticated Production media preflight.
 
 Result: code, local gates, GitHub audit, preview deployment, and preview CRUD feedback are verified. Catalog import, Production preflight, payments and full checkout, domain routing, and custom-domain Search Console acceptance remain open. Migration is **NO-GO**.
+
+## Search Console dashboard recheck — 2026-09-28 11:25 UTC
+
+After more than one hour since registering and showing the already-existing `sc-domain:tintinaccs.com` property, `list_sites` still returns only `https://tintinaccesorios.pages.dev/`. A repeated `set_dashboard_visibility({siteUrls:["sc-domain:tintinaccs.com"], visible:true})` returned `visible:true`, `unchanged:["sc-domain:tintinaccs.com"]`, and 2/10 dashboard slots used. Its note says property-scoped MCP tools should see it immediately, yet the subsequent list call still omitted it.
+
+Direct `list_sitemaps` for `sc-domain:tintinaccs.com` succeeds and returns `sitemaps: []`. The Pages property has its existing `sitemap.xml` submission pending with zero warnings and zero errors. No sitemap was created or submitted in this recheck. The domain sitemap should be sent after Pages serves the custom host; product indexing still depends on a real imported catalog.
