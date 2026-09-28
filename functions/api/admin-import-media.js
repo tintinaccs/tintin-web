@@ -13,6 +13,7 @@ import {
 
 const MAX_ITEMS = 25;
 const MAX_BYTES = 15 * 1024 * 1024;
+const SOURCE_FETCH_TIMEOUT_MS = 20_000;
 
 function clean(value, max = 500) {
   return String(value == null ? '' : value).replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max);
@@ -29,15 +30,66 @@ async function sha256(bytes) {
   return [...new Uint8Array(digest)].map(value => value.toString(16).padStart(2, '0')).join('');
 }
 
+function mediaError(code, message) {
+  return Object.assign(new Error(message), { code });
+}
+
+export async function readBoundedMediaBody(response, maxBytes = MAX_BYTES) {
+  const declaredBytes = Number(response.headers.get('content-length'));
+  if (Number.isFinite(declaredBytes) && declaredBytes > maxBytes) {
+    await response.body?.cancel().catch(() => {});
+    throw mediaError('MEDIA_TOO_LARGE', 'La imagen supera el límite permitido.');
+  }
+
+  if (!response.body) return new ArrayBuffer(0);
+  const reader = response.body.getReader();
+  const chunks = [];
+  let total = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = value instanceof Uint8Array ? value : new Uint8Array(value);
+      total += chunk.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel().catch(() => {});
+        throw mediaError('MEDIA_TOO_LARGE', 'La imagen supera el límite permitido.');
+      }
+      chunks.push(chunk);
+    }
+  } finally {
+    try { reader.releaseLock(); } catch {}
+  }
+
+  const result = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    result.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return result.buffer;
+}
+
 async function fetchSource(sourceUrl) {
   const validated = validateMediaSourceUrl(sourceUrl);
   if (!validated.ok) return { state: 'FAILED', errorCode: validated.code, sourceUrl };
-  const response = await fetch(validated.url, {
-    method: 'GET', redirect: 'manual', headers: { accept: 'image/avif,image/webp,image/png,image/jpeg,image/gif' },
-  });
+  let response;
+  try {
+    response = await fetch(validated.url, {
+      method: 'GET', redirect: 'manual', signal: AbortSignal.timeout(SOURCE_FETCH_TIMEOUT_MS),
+      headers: { accept: 'image/avif,image/webp,image/png,image/jpeg,image/gif' },
+    });
+  } catch (error) {
+    const timedOut = error?.name === 'TimeoutError' || error?.name === 'AbortError';
+    return { state: 'FAILED', errorCode: timedOut ? 'MEDIA_TIMEOUT' : 'MEDIA_NETWORK_ERROR', sourceUrl: validated.url };
+  }
   const contentLength = Number(response.headers.get('content-length'));
-  if (Number.isFinite(contentLength) && contentLength > MAX_BYTES) return { state: 'FAILED', errorCode: 'MEDIA_TOO_LARGE', sourceUrl: validated.url };
-  const bytes = await response.arrayBuffer();
+  let bytes;
+  try {
+    bytes = await readBoundedMediaBody(response, MAX_BYTES);
+  } catch (error) {
+    return { state: 'FAILED', errorCode: error?.code || 'MEDIA_READ_FAILED', sourceUrl: validated.url };
+  }
   const classification = classifyMediaResponse({
     status: response.status,
     contentType: response.headers.get('content-type'),
