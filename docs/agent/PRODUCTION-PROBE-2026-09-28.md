@@ -71,3 +71,18 @@ Read-only probe from the current continuation. No DNS records or production data
 | `https://tintinaccesorios.pages.dev/sitemap-products.xml` | HTTP 200; empty URL set | No product pages are available for indexing from Pages. |
 
 The Pages health endpoint is operational, but the domain still routes to Shopify and the Pages catalog is empty. The migration decision remains **not ready**.
+
+## Search Console recheck — 2026-09-28 06:45 UTC
+
+Read-only GSC Wizard queries against the connected Google Search Console account; the URL Inspection quota was checked first and showed 2,000 remaining before these two inspections.
+
+| Check | Result | Interpretation |
+| --- | --- | --- |
+| Connected Search Console properties | Only `https://tintinaccesorios.pages.dev/`; permission `siteOwner`, readable and active | No property for `tintinaccs.com` is connected yet. |
+| Submitted sitemap | `https://tintinaccesorios.pages.dev/sitemap.xml`; last submitted 2026-09-28 01:58 UTC; pending, 0 warnings, 0 errors | Google accepted the sitemap submission, but crawling/processing is not complete. |
+| Homepage URL Inspection | PASS; “Submitted and indexed”; fetch successful, robots allowed, mobile crawl on 2026-09-13 | Pages homepage is indexed on the preview hostname. This does not establish indexing on the custom domain. |
+| `/catalogo` URL Inspection | PASS; “Submitted and indexed”; fetch successful, robots allowed, mobile crawl on 2026-09-21 | The catalog shell is indexed, but contains no real product URLs. |
+| Pages product sitemap | HTTP 200, empty `<urlset>` | There are no product URLs available for Google to crawl/index yet. |
+| Search performance | 1 impression, 0 clicks over 2026-08-29 through 2026-09-25 | Current GSC evidence is sparse and limited to the Pages property. |
+
+No new Search Console property or sitemap was created or submitted in this check. Domain property verification and product URL indexing remain post-catalog/cutover requirements.

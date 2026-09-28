@@ -96,3 +96,9 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - La interfaz CRUD usa el panel central para el progreso y el resultado final. Las pruebas Playwright locales verifican centrado, cierre del loader y diálogos de éxito/error (2/2); los tags de caché del cargador y de las operaciones se auditan como URLs únicas.
 - `test:phase2-import` (27/27), `audit:phase2-contract` (15/15), el detector de dependencias de medios Shopify (3/3), el audit de App Check y `npm audit --audit-level=moderate` (0 vulnerabilidades) pasan en esta revisión local.
 - Estos cambios están publicados en el preview del PR #937, no integrados en `main` ni en producción. Catálogo Pages vacío, dominio propio servido por Shopify y medios/catálogo real pendientes; por eso la migración aún no está lista.
+
+## Search Console recheck — 2026-09-28
+
+- Solo está conectada la propiedad `https://tintinaccesorios.pages.dev/`; no hay propiedad conectada para `tintinaccs.com`.
+- El sitemap `sitemap.xml` de Pages continúa `pending` en Google, sin errores ni advertencias. Las inspecciones de Google dan PASS/indexed para la portada y `/catalogo`, rastreadas como móvil; el sitemap de productos sigue vacío, así que no existe evidencia de indexación de productos.
+- Rendimiento de GSC para 2026-08-29–2026-09-25: 1 impresión y 0 clics. Ver [PRODUCTION-PROBE-2026-09-28.md](PRODUCTION-PROBE-2026-09-28.md) para la captura y estados de inspección.
