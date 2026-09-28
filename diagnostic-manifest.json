@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "7e3708e9cb5cade7dec235379fa4ff39432b364217d82789b8b760996091b534",
+  "sourceFingerprint": "49977a662965357069314b57074138647405062f6c678fa71d907799a33c3879",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 897,
     "textFiles": 856,
-    "totalBytes": 17643976,
+    "totalBytes": 17647426,
     "pages": 19,
     "modules": 617
   },
@@ -19088,8 +19088,8 @@
     },
     {
       "path": "functions/api/admin-import-media.js",
-      "bytes": 7010,
-      "sha256": "a0b752b9c7e6bc83b8007d56b194933f08a8acc5b6cd74107fa0db33480ae31b",
+      "bytes": 9325,
+      "sha256": "b0bd318e5f7585d6d8df8cef784b2fc59c6b9d29ca3f50c95ec3182833430c63",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19111,7 +19111,7 @@
       "endpoints": [
         {
           "url": "https://api.cloudinary.com/v1_1/$%7BencodeURIComponent(config.cloudName",
-          "line": 115
+          "line": 164
         }
       ]
     },
@@ -32462,8 +32462,8 @@
     },
     {
       "path": "tests/import/shopify-phase2-media-api.test.mjs",
-      "bytes": 2231,
-      "sha256": "84b9e94e87f16b8d9576ade8378d58f3325555b41eb5c5ffe042c72075b3ff49",
+      "bytes": 3366,
+      "sha256": "a4a5c0880d7304bf476d2771af64060a7abc0b93ffe2fb19cc53883db1d1c2da",
       "syntax": {
         "ok": true,
         "error": ""
@@ -32494,7 +32494,12 @@
           "line": 4
         }
       ],
-      "endpoints": []
+      "endpoints": [
+        {
+          "url": "https://example.test/",
+          "line": 65
+        }
+      ]
     },
     {
       "path": "tests/import/shopify-phase2-pipeline.test.mjs",
@@ -36421,8 +36426,8 @@
     {
       "path": "functions/api/admin-import-media.js",
       "extension": ".js",
-      "bytes": 7010,
-      "sha256": "a0b752b9c7e6bc83b8007d56b194933f08a8acc5b6cd74107fa0db33480ae31b"
+      "bytes": 9325,
+      "sha256": "b0bd318e5f7585d6d8df8cef784b2fc59c6b9d29ca3f50c95ec3182833430c63"
     },
     {
       "path": "functions/api/admin-order-mutation.js",
@@ -39793,8 +39798,8 @@
     {
       "path": "tests/import/shopify-phase2-media-api.test.mjs",
       "extension": ".mjs",
-      "bytes": 2231,
-      "sha256": "84b9e94e87f16b8d9576ade8378d58f3325555b41eb5c5ffe042c72075b3ff49"
+      "bytes": 3366,
+      "sha256": "a4a5c0880d7304bf476d2771af64060a7abc0b93ffe2fb19cc53883db1d1c2da"
     },
     {
       "path": "tests/import/shopify-phase2-pipeline.test.mjs",

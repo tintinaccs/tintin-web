@@ -13,7 +13,26 @@ import {
 
 const MAX_ITEMS = 25;
 const MAX_BYTES = 15 * 1024 * 1024;
+const MAX_BODY_BYTES = 96 * 1024;
 const SOURCE_FETCH_TIMEOUT_MS = 20_000;
+const MEDIA_COPY_EXTERNAL_SUBREQUESTS = 2;
+const EXTERNAL_SUBREQUEST_RESERVE = 10;
+const WORKER_FREE_SUBREQUEST_LIMIT = 50;
+
+export function mediaCopyBatchLimit({
+  limit = WORKER_FREE_SUBREQUEST_LIMIT,
+  reserve = EXTERNAL_SUBREQUEST_RESERVE,
+  requestsPerItem = MEDIA_COPY_EXTERNAL_SUBREQUESTS,
+} = {}) {
+  const safeLimit = Number(limit);
+  const safeReserve = Number(reserve);
+  const safeRequestsPerItem = Number(requestsPerItem);
+  if (!Number.isInteger(safeLimit) || !Number.isInteger(safeReserve) || !Number.isInteger(safeRequestsPerItem)
+    || safeLimit < 0 || safeReserve < 0 || safeRequestsPerItem < 1) return 0;
+  return Math.max(0, Math.floor((safeLimit - safeReserve) / safeRequestsPerItem));
+}
+
+const MAX_COPY_ITEMS = mediaCopyBatchLimit();
 
 function clean(value, max = 500) {
   return String(value == null ? '' : value).replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max);
@@ -68,6 +87,36 @@ export async function readBoundedMediaBody(response, maxBytes = MAX_BYTES) {
     offset += chunk.byteLength;
   }
   return result.buffer;
+}
+
+export async function readBoundedRequestText(request, maxBytes = MAX_BODY_BYTES) {
+  const declaredBytes = Number(request.headers.get('content-length'));
+  if (Number.isFinite(declaredBytes) && declaredBytes > maxBytes) {
+    await request.body?.cancel().catch(() => {});
+    throw Object.assign(new Error('Solicitud de medios demasiado grande.'), { status: 413 });
+  }
+  if (!request.body) return '';
+  const reader = request.body.getReader();
+  const chunks = [];
+  let total = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel().catch(() => {});
+        throw Object.assign(new Error('Solicitud de medios demasiado grande.'), { status: 413 });
+      }
+      chunks.push(value);
+    }
+  } finally {
+    try { reader.releaseLock(); } catch {}
+  }
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+  return new TextDecoder().decode(bytes);
 }
 
 async function fetchSource(sourceUrl) {
@@ -126,27 +175,37 @@ export async function onRequest(context) {
   if (request.method !== 'POST') return jsonResponse({ ok: false, error: 'Método no permitido.' }, 405, origin, request.url);
   try {
     const actor = await requireSuperAdmin(request);
-    const body = await request.json();
+    const raw = await readBoundedRequestText(request);
+    if (!raw) throw new Error('La solicitud está vacía.');
+    const body = JSON.parse(raw);
     const action = clean(body?.action, 20).toLowerCase();
     const items = Array.isArray(body?.media) ? body.media.slice(0, MAX_ITEMS) : [];
     if (!items.length) throw new Error('Se requiere al menos un media source.');
-    const validated = [];
-    for (const item of items) {
-      const result = await fetchSource(item?.sourceUrl);
-      validated.push({ mediaId: mediaId(item?.mediaId || item?.sourceUrl), position: Number(item?.position) || 0, featured: item?.featured === true, ...result, bytes: undefined });
-    }
     if (action === 'validate' || action === 'dry-run') {
+      const validated = [];
+      for (const item of items) {
+        const result = await fetchSource(item?.sourceUrl);
+        validated.push({ mediaId: mediaId(item?.mediaId || item?.sourceUrl), position: Number(item?.position) || 0, featured: item?.featured === true, ...result, bytes: undefined });
+      }
       return jsonResponse({ ok: true, action: 'validate', actorUid: actor.uid, media: validated, migration: 'not-executed' }, 200, origin, request.url);
     }
     if (action !== 'copy') throw new Error('Acción media inválida. Usá validate, dry-run o copy.');
     if (env.SHOPIFY_PHASE2_MEDIA_WRITE !== '1') throw Object.assign(new Error('Media copy bloqueado: requiere guard explícito de staging.'), { status: 409 });
+    if (items.length > MAX_COPY_ITEMS) {
+      throw Object.assign(new Error(`La copia admite hasta ${MAX_COPY_ITEMS} imágenes por lote.`), { status: 400 });
+    }
     const copied = [];
     for (const item of items) {
       const fetched = await fetchSource(item?.sourceUrl);
-      if (!fetched.ok) { copied.push({ mediaId: mediaId(item?.mediaId || item?.sourceUrl), state: 'FAILED', errorCode: fetched.errorCode }); continue; }
-      copied.push({ mediaId: mediaId(item?.mediaId || item?.sourceUrl), ...(await uploadToCloudinary({ ...fetched, mediaId: item?.mediaId || item?.sourceUrl }, env)) });
+      const identity = mediaId(item?.mediaId || item?.sourceUrl);
+      if (!fetched.ok) { copied.push({ mediaId: identity, state: 'FAILED', errorCode: fetched.errorCode }); continue; }
+      try {
+        copied.push({ mediaId: identity, ...(await uploadToCloudinary({ ...fetched, mediaId: identity }, env)) });
+      } catch {
+        copied.push({ mediaId: identity, state: 'FAILED', errorCode: 'CLOUDINARY_UPLOAD_FAILED' });
+      }
     }
-    return jsonResponse({ ok: true, action: 'copy', actorUid: actor.uid, media: copied, migration: 'staging-only' }, 200, origin, request.url);
+    return jsonResponse({ ok: copied.every(item => item.state === 'COPIED'), action: 'copy', actorUid: actor.uid, media: copied, migration: 'staging-only' }, 200, origin, request.url);
   } catch (error) {
     return jsonResponse({ ok: false, error: clean(error?.message || 'Media migration failed.') }, Number(error?.status) || 400, origin, request.url);
   }
