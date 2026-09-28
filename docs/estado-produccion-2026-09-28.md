@@ -104,3 +104,11 @@ Esta captura reemplaza los estados anteriores únicamente donde indica evidencia
 - Antes de declarar independencia total de Shopify, habrá que ejecutar el preflight, copiar las imágenes a Cloudinary, confirmar que Firestore y Sheets referencien las URL nuevas, y repetir una auditoría sin referencias `cdn.shopify.com`. Conservar Shopify mientras esas imágenes sean el único original accesible.
 
 **Decisión: NO-GO para cerrar Shopify o cortar el dominio.** El sitio y los datos de productos aún requieren el catálogo en Firestore y la migración de esas 136 imágenes.
+
+## Verificación no destructiva del webhook de Productos — 2026-09-28 22:15 UTC
+
+- `POST /api/sheets-products-webhook` en el host Pages, sin encabezado secreto, respondió **401** con `x-tintin-products-webhook: products-canonical-v3` y `x-tintin-auth-state: missing-header`.
+- El resultado confirma que la versión canónica del endpoint está desplegada y que exige autenticación. No revela ni prueba el secreto de producción, el despliegue del proyecto Apps Script, una edición real de una fila ni escritura en Firestore.
+- La respuesta es la esperada para esta prueba deliberadamente no autenticada. No se envió ningún producto ni se modificó dato alguno.
+
+**Siguiente evidencia necesaria:** ejecutar `tintinDiagnosticarWebhookProductos()` desde el Apps Script conectado a la planilla, verificar `products-canonical-v3` con autenticación y después sincronizar un canary oculto/inactivo para confirmar la escritura real en Firestore. Mientras no se complete, Sheets→Firestore sigue sin comprobarse y la migración permanece en NO-GO.
