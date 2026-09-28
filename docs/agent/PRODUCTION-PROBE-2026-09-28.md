@@ -153,3 +153,13 @@ Read-only checks from the current continuation. No catalog writes, account/order
 `npm run audit:final` completed locally with exit 0 on branch HEAD `4462d541`. The focused browser test for the central CRUD loader/result panel passed 2/2 in this continuation. GitHub Actions run #3453 for PR #937 was observed in progress; CI is not recorded as green for HEAD until that run completes successfully.
 
 The migration remains **not ready**. Keep Shopify and the commercial DNS intact until the importer with media preflight is deployed, a real catalog is imported and inspected (including every media URL), authenticated account/order/payment/email acceptance is completed, Search Console is validated on the custom domain, and the cutover runbook is carried out. PR #929 is explicitly titled “NO MERGEAR hasta cargar el catálogo y hacer la sección D en la misma sesión”; keep it separate while these prerequisites are open.
+
+## CI and updated branch preview — 2026-09-28 10:58 UTC
+
+Commit `a1d85cfcdd8345b201e83f8377f009dc297173fe` has successful `Repository audit`, `Cloudflare Pages`, `CodeQL`, and JavaScript/TypeScript and Actions analyses. Its branch preview is `https://codex-shopify-independence-a.tintinaccesorios.pages.dev`.
+
+The branch preview serves `admin.html` with `tintin-20260928-shopify-media-preflight-1`; its import module calls `/api/admin-import-media`. This confirms the safe static importer is deployed to the preview. However, preview `/api/health` returns HTTP 503 with `configuration: false` at `2026-09-28T10:58:33.596Z`. The health endpoint does not disclose which runtime setting is absent. Preview `/api/paypal-config` returns disabled with `client_id`, `client_secret`, `webhook_id`, `exchange_rate`, `stale_exchange_rate`, and `feature_disabled`; no credentials were exposed.
+
+In the same recheck, production Pages `/api/health` returned HTTP 200 with all reported checks true at `2026-09-28T10:58:36.173Z`. Production catalog APIs still return zero products and zero collections; its product sitemap is empty, and its deployed importer remains on `shopify-apply-1`. Production health being green does not verify Cloudinary preflight authorization or success for a Super Admin session. Do not copy Production secrets into the preview just to make its health endpoint green; verify preflight in the correct protected Production workflow when authorized and ready to import.
+
+At this check, PR #937 was open and mergeable with all checks green on `a1d85cfc`; PR #929 remained open and `dirty` (not mergeable), with its explicit catalog/Section D hold. The domain migration remains **NO-GO**.
