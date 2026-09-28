@@ -143,4 +143,6 @@ test('el scheduler de Sheets usa OIDC y no duplica la cuenta de servicio Firebas
   assert.match(endpoint, /drainCatalogSheetSyncQueueScheduled\(env, \{ limit: SCHEDULED_DRAIN_LIMIT \}\)/);
   assert.match(endpoint, /SCHEDULED_DRAIN_LIMIT\s*=\s*1/);
   assert.match(endpoint, /limit:\s*SCHEDULED_DRAIN_LIMIT/);
+  assert.match(endpoint, /result\?\.failureCode\s*\?\s*502\s*:\s*200/);
+  assert.match(endpoint, /failureCode:\s*result\.failureCode/);
 });
