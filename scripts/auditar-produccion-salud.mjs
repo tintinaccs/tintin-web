@@ -182,6 +182,41 @@ await check('api-health', async () => {
   }
 });
 
+await check('paypal-public-configuration', async () => {
+  const probe = await inspect('/api/paypal-config', 'application/json', { origin });
+  const payload = JSON.parse(probe.body || '{}');
+  const allowedKeys = new Set(['enabled', 'environment', 'currency', 'clientId', 'rateUpdatedAt', 'unavailableReasons']);
+  if (
+    typeof payload?.enabled !== 'boolean'
+    || !['sandbox', 'live'].includes(payload?.environment)
+    || typeof payload?.currency !== 'string'
+    || typeof payload?.clientId !== 'string'
+    || !Array.isArray(payload?.unavailableReasons)
+    || Object.keys(payload).some(key => !allowedKeys.has(key))
+  ) {
+    throw new Error('/api/paypal-config no cumple su contrato público mínimo o expone campos no permitidos.');
+  }
+  if (payload.enabled && (!payload.clientId || payload.unavailableReasons.length)) {
+    throw new Error('PayPal se anuncia como habilitado sin client ID público o con motivos de indisponibilidad.');
+  }
+  if (!payload.enabled && (payload.clientId || !payload.unavailableReasons.length)) {
+    throw new Error('PayPal deshabilitado debe ocultar el client ID y explicar su indisponibilidad.');
+  }
+  const recorded = results.find(item => item.requestedUrl === origin + '/api/paypal-config');
+  if (recorded) {
+    recorded.capability = {
+      enabled: payload.enabled,
+      environment: payload.environment,
+      currency: payload.currency,
+      rateUpdatedAt: payload.rateUpdatedAt || '',
+      unavailableReasons: payload.unavailableReasons,
+    };
+  }
+  if (!payload.enabled) {
+    console.log(`INFO — PayPal deshabilitado en ${payload.environment}: ${payload.unavailableReasons.join(', ')}. El medio de pago debe confirmarse aparte en el checkout.`);
+  }
+});
+
 await check('admin-runtime-auth-guard', async () => {
   const guarded = await inspectExpectedStatus('/api/admin-runtime-health', [401, 403], 'application/json');
   const payload = JSON.parse(guarded.body || '{}');
