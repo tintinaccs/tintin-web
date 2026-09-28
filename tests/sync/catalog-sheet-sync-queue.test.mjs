@@ -186,6 +186,7 @@ test('el drenaje agrupa producto e inventario en una sola lectura Firestore', as
   });
 
   assert.equal(result.drained, 1);
+  assert.equal(result.failureCode, '');
   assert.equal(fs.batchGetCallCount(), 1, 'los 40 documentos se leen con un batchGet');
 });
 
@@ -200,6 +201,7 @@ test('timeout: un fallo de Apps Script reintenta con backoff sin reprocesar de i
   assert.equal(first.checked, 1);
   assert.equal(first.drained, 0);
   assert.equal(first.deadLettered, 0);
+  assert.equal(first.failureCode, 'apps_script_timeout');
 
   const afterFirst = fs.readDecoded(`${QUEUE_COLLECTION}/timeout1`);
   assert.equal(afterFirst.status, 'pending');

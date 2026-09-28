@@ -24,6 +24,15 @@ const CLAIM_STALE_MS = 10 * 60 * 1000;
 const SYNC_META_PATH = 'syncMeta/catalogSheetSyncQueue';
 
 const clean = (value, max = 500) => String(value ?? '').trim().slice(0, max);
+function syncFailureCode(error) {
+  const message = clean(error?.message || error, 500).toLowerCase();
+  if (/no autorizado|unauthorized|secret mismatch/.test(message)) return 'apps_script_auth_rejected';
+  if (/sheets_engagement_secret/.test(message)) return 'sheets_secret_missing';
+  if (/no existe la hoja productos/.test(message)) return 'products_sheet_missing';
+  if (/timeout|timed out|tiempo de espera/.test(message)) return 'apps_script_timeout';
+  if (/firestore|batchget|service account|permission denied/.test(message)) return 'firestore_read_failed';
+  return 'products_sync_failed';
+}
 const docId = document => String(document?.name || '').split('/').pop();
 const unique = values => [...new Set((Array.isArray(values) ? values : []).map(value => clean(value, 180)).filter(Boolean))];
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -407,6 +416,7 @@ export async function drainCatalogSheetSyncQueueScheduled(env, { limit = 1, deps
   let drained = 0;
   let deadLettered = 0;
   let lastError = '';
+  let failureCode = '';
   for (const document of eligible) {
     const claimed = await claimQueueItem(env, document, deps);
     if (!claimed) continue;
@@ -417,6 +427,7 @@ export async function drainCatalogSheetSyncQueueScheduled(env, { limit = 1, deps
     } catch (error) {
       const attempts = Number(claimed.attempts || 0) + 1;
       lastError = clean(error?.message || error);
+      failureCode = syncFailureCode(error);
       if (attempts >= MAX_QUEUE_ATTEMPTS) {
         await transitionDeadLetter(env, { ...claimed, attempts }, error, deps);
         deadLettered += 1;
@@ -444,7 +455,13 @@ export async function drainCatalogSheetSyncQueueScheduled(env, { limit = 1, deps
     console.error('[resiliencia-sync-catalogo] No se pudo actualizar syncMeta:', error?.message || error);
   }
 
-  return { checked: eligible.length, drained, deadLettered, remaining: eligible.length - drained - deadLettered };
+  return {
+    checked: eligible.length,
+    drained,
+    deadLettered,
+    remaining: eligible.length - drained - deadLettered,
+    failureCode,
+  };
 }
 
 /** Métrica de solo lectura para el panel de Diagnóstico (Estado del ecosistema). */

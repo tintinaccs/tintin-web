@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "caa38f3b42fd67b73052620866ac1c70ba376c454ef0e50827c6d9d68642d3fd",
+  "sourceFingerprint": "02fd500ecd04bcceb5b03054dd30f7725e491335671004afc2fc48dac51acc96",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 904,
     "textFiles": 863,
-    "totalBytes": 17751279,
+    "totalBytes": 17753126,
     "pages": 19,
     "modules": 621
   },
@@ -18361,8 +18361,8 @@
     },
     {
       "path": "cloudflare/resiliencia-sync-catalogo.js",
-      "bytes": 19460,
-      "sha256": "6a09e77743b1c77caca6efe370768ae1153532d4a310281a63a2e08734f51b1e",
+      "bytes": 20164,
+      "sha256": "a6f846b2e0ba5965dddfb334fabe70ce3f2640045062145969e1fedaa6f7f0b5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -19260,8 +19260,8 @@
     },
     {
       "path": "functions/api/catalog-sheet-sync-drain.js",
-      "bytes": 4142,
-      "sha256": "c2390652201565a9b455e4a8ca1e0e3c173d1b10020951db4f1b6cab61224f2c",
+      "bytes": 4297,
+      "sha256": "c1863b0b12e6fc7a342e8b0e431278249bb2408b3caeb12d3a6a3f5d0bdc8a89",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33088,8 +33088,8 @@
     },
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",
-      "bytes": 5067,
-      "sha256": "9735829e71cc7d00edf04b53256297a22c94eb34067198520fa88f0c04be60d7",
+      "bytes": 5203,
+      "sha256": "6e0fc47cb6f4c3dd321f8b8406de4e73901382abcd9ee73d2586d87e1acce7b1",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33991,8 +33991,8 @@
     },
     {
       "path": "tests/sync/catalog-sheet-sync-queue.test.mjs",
-      "bytes": 10916,
-      "sha256": "47c179001bf7c85124e30f850dff0c2a2591806df2ea4b326e587de938fdcb7e",
+      "bytes": 11014,
+      "sha256": "5cd7c735f38c68a924c085e13007aad10acb9821176b3aa1528537d177f4d1c5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35609,8 +35609,8 @@
     {
       "path": "cloudflare/resiliencia-sync-catalogo.js",
       "extension": ".js",
-      "bytes": 19460,
-      "sha256": "6a09e77743b1c77caca6efe370768ae1153532d4a310281a63a2e08734f51b1e"
+      "bytes": 20164,
+      "sha256": "a6f846b2e0ba5965dddfb334fabe70ce3f2640045062145969e1fedaa6f7f0b5"
     },
     {
       "path": "cloudflare/resiliencia-sync-participacion.js",
@@ -36221,8 +36221,8 @@
     {
       "path": "docs/arquitectura-operativa-canonica.md",
       "extension": ".md",
-      "bytes": 9940,
-      "sha256": "4adff02dbed3039db683cb8bc1cb200f004a2eaba96f4f8781fb7acab70cc6da"
+      "bytes": 10532,
+      "sha256": "8a5670b5a610569394a3a31aeb77621e11137b1dacc693bf9fdb8a563b6528e1"
     },
     {
       "path": "docs/arquitectura-tecnica.md",
@@ -36263,8 +36263,8 @@
     {
       "path": "docs/cierre-produccion-manual.md",
       "extension": ".md",
-      "bytes": 5387,
-      "sha256": "46c428aa65f728d400e906a4f5cad2d49bf1b34076bcec7ccd5a046481bd94f1"
+      "bytes": 5549,
+      "sha256": "512bda1ec40060769158507bd16e4c39e7154be335a562ad3c2bcf23832aa4a9"
     },
     {
       "path": "docs/como-hacer-cambios.md",
@@ -36629,8 +36629,8 @@
     {
       "path": "functions/api/catalog-sheet-sync-drain.js",
       "extension": ".js",
-      "bytes": 4142,
-      "sha256": "c2390652201565a9b455e4a8ca1e0e3c173d1b10020951db4f1b6cab61224f2c"
+      "bytes": 4297,
+      "sha256": "c1863b0b12e6fc7a342e8b0e431278249bb2408b3caeb12d3a6a3f5d0bdc8a89"
     },
     {
       "path": "functions/api/claim-commerce-history.js",
@@ -40079,8 +40079,8 @@
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",
       "extension": ".mjs",
-      "bytes": 5067,
-      "sha256": "9735829e71cc7d00edf04b53256297a22c94eb34067198520fa88f0c04be60d7"
+      "bytes": 5203,
+      "sha256": "6e0fc47cb6f4c3dd321f8b8406de4e73901382abcd9ee73d2586d87e1acce7b1"
     },
     {
       "path": "tests/operations/integration-router-security.test.mjs",
@@ -40247,8 +40247,8 @@
     {
       "path": "tests/sync/catalog-sheet-sync-queue.test.mjs",
       "extension": ".mjs",
-      "bytes": 10916,
-      "sha256": "47c179001bf7c85124e30f850dff0c2a2591806df2ea4b326e587de938fdcb7e"
+      "bytes": 11014,
+      "sha256": "5cd7c735f38c68a924c085e13007aad10acb9821176b3aa1528537d177f4d1c5"
     },
     {
       "path": "tests/sync/engagement-sheet-sync-queue.test.mjs",
