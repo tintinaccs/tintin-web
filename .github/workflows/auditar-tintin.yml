@@ -71,6 +71,9 @@ jobs:
           FIRESTORE_RESTORE_SOURCE: gs://example-backups/snapshot
         run: |
           node --test tests/operations/*.test.mjs
+          npm run test:phase2-import
+          npm run audit:phase2-contract
+          node --test tests/seo/shopify-independent-media.test.mjs
           node scripts/backup-firestore.mjs --dry-run
           node scripts/restore-firestore.mjs --dry-run
           npm run test:accounts
@@ -114,6 +117,7 @@ jobs:
           PLAYWRIGHT_BASE_URL: http://127.0.0.1:4173
           PERF_BASE_URL: http://127.0.0.1:4173
         run: |
+          npm run test:admin-operations-browser
           npm run test:navigation-header
           npm run test:cart-quantity-browser
           npm run test:phase8-ui

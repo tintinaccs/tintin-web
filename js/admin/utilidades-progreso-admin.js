@@ -4,7 +4,7 @@
  * detalle por elemento en la ventana de diagnóstico. Sin esperas
  * artificiales ni renders completos durante el proceso.
  */
-import { runOperation } from './operaciones/sistema-operaciones-admin.js?v=tintin-20260925-admin-ops-1';
+import { runOperation } from './operaciones/sistema-operaciones-admin.js?v=tintin-20260928-admin-crud-feedback-3-domain-cutover-2';
 
 const MAX_LISTED_FAILURES = 20;
 
@@ -25,6 +25,7 @@ export async function runAdminBulk(items, worker, {
     name: name || title,
     title,
     module,
+    centerLoader: true,
     // Quien llama ya informa el resultado final con sus propios números.
     notifySuccess: false,
     stages: [{ id: 'items', label: `Procesar ${total} elemento${total === 1 ? '' : 's'}`, expected: `${total} correctos` }],
