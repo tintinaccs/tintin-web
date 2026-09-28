@@ -71,6 +71,23 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedF
   async function copyShopifyMedia(records) {
     const candidates = mediaCandidates(records);
     if (!candidates.length) return records;
+    ui.reason.textContent = 'Comprobando que la copia de imágenes esté preparada…';
+    const preflightResponse = await authenticatedFetch('/api/admin-import-media', {
+      method: 'POST',
+      cache: 'no-store',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'preflight' }),
+    });
+    const preflight = await preflightResponse.json().catch(() => ({}));
+    if (!preflightResponse.ok || preflight?.ready !== true) {
+      const reasons = Array.isArray(preflight?.reasons) ? preflight.reasons : [];
+      const message = reasons.includes('MEDIA_COPY_DISABLED')
+        ? 'La copia de imágenes está desactivada. Habilitá temporalmente SHOPIFY_PHASE2_MEDIA_WRITE=1 en Cloudflare Pages para esta importación.'
+        : reasons.includes('CLOUDINARY_NOT_CONFIGURED')
+          ? 'Cloudinary no está configurado en Cloudflare Pages; no se modificó el catálogo.'
+          : preflight?.error || `No se pudo preparar la copia de imágenes (HTTP ${preflightResponse.status}).`;
+      throw new Error(message);
+    }
     const copiedBySourceUrl = new Map();
     for (let offset = 0; offset < candidates.length; offset += MEDIA_COPY_BATCH_SIZE) {
       const batch = candidates.slice(offset, offset + MEDIA_COPY_BATCH_SIZE);

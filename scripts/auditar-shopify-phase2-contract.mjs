@@ -10,6 +10,7 @@ const apply = read('js/admin/aplicar-importacion-admin.js');
 const mediaPipeline = read('js/core/store/shopify-phase2-pipeline.mjs');
 const audit = read('SHOPIFY_PHASE2_AUDIT_2026-09-18.md');
 const mediaCopyIndex = apply.indexOf('await copyShopifyMedia(records)');
+const mediaPreflightIndex = apply.indexOf("JSON.stringify({ action: 'preflight' })");
 const catalogWriteIndex = apply.indexOf('runTransaction(db');
 const checks = [
   ['pipeline es side-effect free', !/setDoc\(|addDoc\(|deleteDoc\(|fetch\(/.test(core)],
@@ -20,6 +21,7 @@ const checks = [
   ['media copy exige guard explícito', /SHOPIFY_PHASE2_MEDIA_WRITE/.test(media)],
   ['media no usa cliente', !/window\.|document\./.test(media)],
   ['el importador copia imágenes antes de escribir productos', mediaCopyIndex >= 0 && catalogWriteIndex > mediaCopyIndex],
+  ['preflight autenticado comprueba la preparación antes de cualquier copia', mediaPreflightIndex >= 0 && mediaPreflightIndex < apply.indexOf('for (let offset') && /action === 'preflight'/.test(media) && /mediaCopyPreflight\(env\)/.test(media)],
   ['la copia del catálogo requiere sesión autenticada', /authenticatedFetch\('\/api\/admin-import-media'/.test(apply)],
   ['cada producto usa URLs HTTPS confirmadas por Cloudinary', /rewriteImportedShopifyMedia\(records, copiedBySourceUrl\)/.test(apply) && /state !== 'COPIED'/.test(apply)],
   ['cualquier lote fallido detiene la importación antes de escribir el catálogo', /result\?\.ok !== true/.test(apply) && /No se escribió el catálogo/.test(apply) && mediaCopyIndex < catalogWriteIndex],

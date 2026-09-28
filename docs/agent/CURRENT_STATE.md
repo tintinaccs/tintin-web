@@ -120,3 +120,10 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - Causa corregida: el test ahora usa `playwright.operations.config.js`, establece `http://127.0.0.1:4173` como origen y arranca/reutiliza `scripts/servidor-local-pruebas.mjs`, el servidor de pruebas canónico ya usado por CI.
 - Verificación local: el comando normal `npm run test:admin-operations-browser` terminó PASS, 2/2 (éxito centrado y error central). No requirió definir variables de entorno ni acceder a producción.
 - Impacto acotado a configuración de pruebas y script npm; no cambió checkout de producción, configuración Firebase, clientes, pedidos ni DNS. El cambio aún necesita CI del nuevo HEAD.
+
+## Preflight de preparación de medios Shopify — 2026-09-28
+
+- El API de copia ahora ofrece `action: preflight`, únicamente tras autenticar Super Admin. Devuelve solo `ready`, booleanos y reason codes; comprueba que la bandera temporal `SHOPIFY_PHASE2_MEDIA_WRITE` esté activa y que Cloudinary tenga configuración completa, sin revelar valores ni transferir archivos.
+- Antes de copiar cualquier URL de Shopify CDN, el importador consulta ese preflight. Una configuración incompleta detiene la aplicación antes de descargar imágenes o escribir productos. Si no hay URLs de Shopify CDN en el preview, no hace falta el copiado.
+- `tests/import/shopify-phase2-media-api.test.mjs` comprueba los dos estados y que la respuesta no incluya credenciales; `scripts/auditar-shopify-phase2-contract.mjs` exige que el preflight ocurra antes de la copia/catalog write.
+- Se añadió [importacion-shopify-media.md](../importacion-shopify-media.md) con el paso de configuración temporal en Cloudflare Pages Production, la desactivación al terminar y la aceptación posterior. No se activó ninguna variable ni se escribieron medios/catálogo reales.

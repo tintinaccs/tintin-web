@@ -34,6 +34,16 @@ export function mediaCopyBatchLimit({
 
 const MAX_COPY_ITEMS = mediaCopyBatchLimit();
 
+export function mediaCopyPreflight(env = {}) {
+  const reasons = [];
+  const mediaWriteEnabled = env.SHOPIFY_PHASE2_MEDIA_WRITE === '1';
+  if (!mediaWriteEnabled) reasons.push('MEDIA_COPY_DISABLED');
+  let cloudinaryConfigured = true;
+  try { getCloudinaryConfig(env); } catch { cloudinaryConfigured = false; }
+  if (!cloudinaryConfigured) reasons.push('CLOUDINARY_NOT_CONFIGURED');
+  return { ready: reasons.length === 0, mediaWriteEnabled, cloudinaryConfigured, reasons };
+}
+
 function clean(value, max = 500) {
   return String(value == null ? '' : value).replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max);
 }
@@ -179,6 +189,15 @@ export async function onRequest(context) {
     if (!raw) throw new Error('La solicitud está vacía.');
     const body = JSON.parse(raw);
     const action = clean(body?.action, 20).toLowerCase();
+    if (action === 'preflight') {
+      return jsonResponse({
+        ok: true,
+        action,
+        ...mediaCopyPreflight(env),
+        maxCopyItems: MAX_COPY_ITEMS,
+        migration: 'not-executed',
+      }, 200, origin, request.url);
+    }
     const items = Array.isArray(body?.media) ? body.media.slice(0, MAX_ITEMS) : [];
     if (!items.length) throw new Error('Se requiere al menos un media source.');
     if (action === 'validate' || action === 'dry-run') {
@@ -190,7 +209,13 @@ export async function onRequest(context) {
       return jsonResponse({ ok: true, action: 'validate', actorUid: actor.uid, media: validated, migration: 'not-executed' }, 200, origin, request.url);
     }
     if (action !== 'copy') throw new Error('Acción media inválida. Usá validate, dry-run o copy.');
-    if (env.SHOPIFY_PHASE2_MEDIA_WRITE !== '1') throw Object.assign(new Error('Media copy bloqueado: requiere guard explícito de staging.'), { status: 409 });
+    const readiness = mediaCopyPreflight(env);
+    if (!readiness.ready) {
+      const messages = [];
+      if (readiness.reasons.includes('MEDIA_COPY_DISABLED')) messages.push('La copia de imágenes está desactivada en Cloudflare. Habilitá SHOPIFY_PHASE2_MEDIA_WRITE=1 durante la sesión de importación.');
+      if (readiness.reasons.includes('CLOUDINARY_NOT_CONFIGURED')) messages.push('Cloudinary no está configurado en Cloudflare para copiar las imágenes.');
+      throw Object.assign(new Error(messages.join(' ')), { status: 409 });
+    }
     if (items.length > MAX_COPY_ITEMS) {
       throw Object.assign(new Error(`La copia admite hasta ${MAX_COPY_ITEMS} imágenes por lote.`), { status: 400 });
     }

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { mediaCopyBatchLimit, readBoundedMediaBody, readBoundedRequestText } from '../../functions/api/admin-import-media.js';
+import { mediaCopyBatchLimit, mediaCopyPreflight, readBoundedMediaBody, readBoundedRequestText } from '../../functions/api/admin-import-media.js';
 
 const source = fs.readFileSync(new URL('../../functions/api/admin-import-media.js', import.meta.url), 'utf8');
 
@@ -31,6 +31,32 @@ test('media copy batch stays below the free Worker external subrequest cap', () 
   assert.equal(mediaCopyBatchLimit({ limit: 50, reserve: 40, requestsPerItem: 2 }), 5);
   assert.equal(mediaCopyBatchLimit({ limit: 50, reserve: 60, requestsPerItem: 2 }), 0);
   assert.equal(mediaCopyBatchLimit({ limit: 50, reserve: 10, requestsPerItem: 0 }), 0);
+});
+
+test('preflight de medios no expone credenciales y exige guardia más Cloudinary', () => {
+  assert.deepEqual(mediaCopyPreflight({}), {
+    ready: false,
+    mediaWriteEnabled: false,
+    cloudinaryConfigured: false,
+    reasons: ['MEDIA_COPY_DISABLED', 'CLOUDINARY_NOT_CONFIGURED'],
+  });
+  assert.deepEqual(mediaCopyPreflight({
+    SHOPIFY_PHASE2_MEDIA_WRITE: '1',
+    CLOUDINARY_CLOUD_NAME: 'cloud',
+    CLOUDINARY_API_KEY: 'public-key',
+    CLOUDINARY_API_SECRET: 'private-secret',
+  }), {
+    ready: true,
+    mediaWriteEnabled: true,
+    cloudinaryConfigured: true,
+    reasons: [],
+  });
+  assert.doesNotMatch(JSON.stringify(mediaCopyPreflight({
+    SHOPIFY_PHASE2_MEDIA_WRITE: '1',
+    CLOUDINARY_CLOUD_NAME: 'cloud',
+    CLOUDINARY_API_KEY: 'public-key',
+    CLOUDINARY_API_SECRET: 'private-secret',
+  })), /private-secret|public-key|"cloud"/);
 });
 
 test('media corta la lectura al superar el máximo y cancela la descarga', async () => {
