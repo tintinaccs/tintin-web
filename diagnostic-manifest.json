@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "1e9ca08b17240a188c4a62d60b8fcd8480decf86d5888eeb37299237b4489694",
+  "sourceFingerprint": "e8a0883b3bdfcff85d6c37e653f1a456064fe65a0e2221f4d9fffd46711ccb82",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 906,
-    "textFiles": 865,
-    "totalBytes": 17767966,
+    "files": 905,
+    "textFiles": 864,
+    "totalBytes": 17767916,
     "pages": 19,
     "modules": 622
   },
@@ -19789,8 +19789,8 @@
     },
     {
       "path": "functions/api/paypal-rate-refresh.js",
-      "bytes": 4193,
-      "sha256": "41e4117e3c5a2cffb28465d645c704539fce635698130c8fff7da45abf76315f",
+      "bytes": 4185,
+      "sha256": "dc6fd1f0a09d02ba2e6f5f6f2b27acbd1bca9a59ac997187e0361110f3156727",
       "syntax": {
         "ok": true,
         "error": ""
@@ -33123,8 +33123,8 @@
     },
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",
-      "bytes": 7121,
-      "sha256": "2b75b7fd056ccbb8a78605e68e5c23f67d1fce8f737483f4c5849c7f52f0f377",
+      "bytes": 7105,
+      "sha256": "9b697a01b0177059710386ea2073be55700fa95ebf00ff7c0d3cd26aea298296",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35065,12 +35065,6 @@
       "sha256": "d008c5817e008af8ffaa08493bd5ad4244d7d10505958f30c0f91f14706b1a80"
     },
     {
-      "path": ".github/workflows/actualizar-tasa-paypal-bcp.yml",
-      "extension": ".yml",
-      "bytes": 1767,
-      "sha256": "f321a3ef28a131e3745beff47688e9ffe3a612c1916285f70d2abe2a1b1d6a23"
-    },
-    {
       "path": ".github/workflows/auditar-limpiar-ramas.yml",
       "extension": ".yml",
       "bytes": 2452,
@@ -35133,8 +35127,8 @@
     {
       "path": ".github/workflows/monitor-produccion.yml",
       "extension": ".yml",
-      "bytes": 3384,
-      "sha256": "a828b9ee2817103863e11f21f5532749046a81b2081b5b48d13d801bdc12a163"
+      "bytes": 5125,
+      "sha256": "72646be160845d133005f27e7de4f7777ec33430891a0f1b999d1cfad845d0c7"
     },
     {
       "path": ".github/workflows/respaldo-repositorio.yml",
@@ -36807,8 +36801,8 @@
     {
       "path": "functions/api/paypal-rate-refresh.js",
       "extension": ".js",
-      "bytes": 4193,
-      "sha256": "41e4117e3c5a2cffb28465d645c704539fce635698130c8fff7da45abf76315f"
+      "bytes": 4185,
+      "sha256": "dc6fd1f0a09d02ba2e6f5f6f2b27acbd1bca9a59ac997187e0361110f3156727"
     },
     {
       "path": "functions/api/paypal-webhook.js",
@@ -40155,8 +40149,8 @@
     {
       "path": "tests/operations/github-actions-oidc.test.mjs",
       "extension": ".mjs",
-      "bytes": 7121,
-      "sha256": "2b75b7fd056ccbb8a78605e68e5c23f67d1fce8f737483f4c5849c7f52f0f377"
+      "bytes": 7105,
+      "sha256": "9b697a01b0177059710386ea2073be55700fa95ebf00ff7c0d3cd26aea298296"
     },
     {
       "path": "tests/operations/integration-router-security.test.mjs",
