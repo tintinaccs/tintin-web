@@ -55,3 +55,19 @@ Read-only recheck during the current continuation. DNS still routes the commerci
 | `https://tintinaccesorios.pages.dev/sitemap-products.xml` | HTTP 200; no `<loc>` entries | Product sitemap is still empty. |
 
 This recheck supersedes the 04:12 HTTP status for the custom host. Domain routing and empty catalog still prevent the cutover; decision remains **not ready**.
+
+## Follow-up recheck — 2026-09-28 06:14 UTC
+
+Read-only probe from the current continuation. No DNS records or production data were changed.
+
+| Probe | Result | Interpretation |
+| --- | --- | --- |
+| `tintinaccs.com` A record | `23.227.38.65` | Apex still resolves to Shopify. |
+| `www.tintinaccs.com` CNAME | `shops.myshopify.com` | `www` still routes to Shopify. |
+| `https://tintinaccs.com/api/health` | HTTP 404 | Pages Functions are not active on the commercial domain. |
+| `https://tintinaccesorios.pages.dev/` | HTTP 200 | Pages deployment is responding. |
+| `https://tintinaccesorios.pages.dev/api/health` | HTTP 200; `ok: true`; `checkedAt: 2026-09-28T06:14:05.169Z` | The service health endpoint is green, but does not prove a full purchase, payment, mail or authenticated customer flow. |
+| `https://tintinaccesorios.pages.dev/api/public-catalog?resource=products` | HTTP 200; `count: 0` | Real catalog import and validation are still prerequisites for transaction testing. |
+| `https://tintinaccesorios.pages.dev/sitemap-products.xml` | HTTP 200; empty URL set | No product pages are available for indexing from Pages. |
+
+The Pages health endpoint is operational, but the domain still routes to Shopify and the Pages catalog is empty. The migration decision remains **not ready**.
