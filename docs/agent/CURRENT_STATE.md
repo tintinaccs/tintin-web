@@ -39,7 +39,17 @@
 - Las funciones de importación son CSV y no requieren Shopify Admin API para operar. La fase de medios todavía puede copiar imágenes desde Shopify CDN a Cloudinary bajo una bandera de escritura explícita; hay que completar esa copia y verificar cero URLs Shopify antes de cerrar la cuenta.
 - La carga de medios ahora lee el body en streaming, cancela al superar 15 MiB y aplica timeout de 20 s al origen. `npm run test:phase2-import` (24/24), `npm run audit:phase2-contract`, `npm run audit:products-media` (39 comprobaciones) y `npm run build:pages` pasan en `12895b0c`; el manifiesto diagnóstico generado incluye los nuevos hashes.
 - Se confirmó en vivo en esta continuación: `tintinaccs.com/` y su sitemap responden 200, pero `/api/health` responde 404; Pages `/api/health` responde 200, el catálogo devuelve `count: 0` y el sitemap de productos contiene 0 ubicaciones. El dominio comercial sigue atendido por Shopify.
-- Feedback CRUD central: el contraste del wordmark del loader se corrigió a WCAG AA en esta rama. El panel central de operaciones/progreso ya existe y se utiliza en operaciones masivas y algunas purgas, pero no está conectado a todo el CRUD individual. En productos, colecciones, clientes y pedidos todavía hay flujos con toast discreto y/o `window.confirm`; la cobertura central uniforme solicitada sigue pendiente. Los principales consumidores coinciden con archivos modificados por el PR paralelo #929 de Claude; integrarlos requiere coordinar el rebase para no perder cambios.
+- Feedback CRUD central (actualización 2026-09-28; cambios locales posteriores a la evidencia del commit base): los CRUD individuales de productos, colecciones, clientes y pedidos ya usan el cargador central centrado, etapas de progreso y diálogo de resultado en éxito o fallo. Se agregaron dos pruebas Playwright reales para comportamiento de éxito/fallo y centrado geométrico. `npm run test:admin-operations-browser` y `npm run audit:final` pasan localmente. Estos cambios siguen sin publicar y no se han integrado al PR #937 porque comparten `admin.html`, `admin-app.js` y manifiestos de caché con el PR #929; revisar y coordinar la integración antes de publicar.
+
+## Seguimiento actual — 2026-09-28
+
+- Estado de código local: rama `codex/shopify-independence-audit`, HEAD `306e910a`; hay cambios locales sin commit en el CRUD central, su prueba de navegador y documentación/manifiestos. No se modificaron DNS, cuentas, catálogo ni producción.
+- Verificación local posterior a estos cambios: `npm run test:admin-operations-browser` PASS (2/2), `npm run build:pages` PASS (19 páginas, 618 módulos, 900 archivos, 286 recursos versionados y 79 imports dinámicos resueltos), `npm run audit:final` PASS, `npm audit --audit-level=moderate` PASS (0 vulnerabilidades), `git diff --check` PASS.
+- Se agregó un gate post-cutover de solo lectura (`scripts/auditar-cutover-live.mjs`) para rechazar URLs Shopify residuales en HTML, productos, variantes, descripciones y colecciones del catálogo público. El detector tiene 3 pruebas unitarias; no se ejecuta como gate general antes de importar porque el catálogo actual está vacío.
+- GitHub PR #937 sigue abierto; sus cinco checks publicados en el HEAD `306e910a` están en verde y Cloudflare Pages desplegó su preview. Los cambios locales de CRUD y prueba todavía no están incluidos en ese HEAD ni desplegados.
+- Estado de producción observado de nuevo: DNS `tintinaccs.com` → `23.227.38.65`; `www` → `shops.myshopify.com`. La portada `tintinaccs.com` responde HTTP 200 con storefront de Shopify, `www` redirige a apex. Pages `/api/health` responde HTTP 200 (`ok: true`), mientras que `/api/public-catalog?resource=products` devuelve cero productos y `sitemap-products.xml` tiene cero ubicaciones.
+- Decisión: **no está listo el cutover**. Mantener Shopify activo. Próximos bloqueos: importar y revisar catálogo real, copiar/verificar todas las imágenes fuera de Shopify CDN, aceptar con datos reales los flujos de catálogo, cuenta, compra, pago/correo y búsqueda, completar D/E del runbook con dominio y App Check, y verificar Search Console del dominio final.
+- Límites de la prueba nueva: confirma el comportamiento visible del componente contra un servidor local; no simula escritura en Firestore ni reemplaza la aceptación autenticada de cada operación en la tienda de producción.
 
 ## Estado de aceptación (commit base)
 
@@ -79,3 +89,10 @@
 6. Mantener Shopify accesible hasta confirmar la migración de CSV e imágenes; desactivar/cerrar la tienda solo cuando dominios, activos y datos estén verificados fuera de Shopify.
 
 Las modificaciones de esta rama son de código, documentación y dependencias de desarrollo. No cambiaron el sitio publicado, DNS, cuentas, clientes ni catálogo real.
+
+## Avance local — 2026-09-28
+
+- El importador de Shopify ahora solicita, antes de escribir cualquier producto, la copia autenticada de todas las imágenes Shopify CDN a Cloudinary. Solo sustituye URLs cuando el endpoint confirma una copia HTTPS válida; un medio fallido cancela la escritura del catálogo. El endpoint conserva su guardia explícita `SHOPIFY_PHASE2_MEDIA_WRITE=1`, que todavía debe habilitarse durante la sesión real de importación.
+- La interfaz CRUD usa el panel central para el progreso y el resultado final. Las pruebas Playwright locales verifican centrado, cierre del loader y diálogos de éxito/error (2/2); los tags de caché del cargador y de las operaciones se auditan como URLs únicas.
+- `test:phase2-import` (27/27), `audit:phase2-contract` (15/15), el detector de dependencias de medios Shopify (3/3), el audit de App Check y `npm audit --audit-level=moderate` (0 vulnerabilidades) pasan en esta revisión local.
+- Estos cambios siguen sin desplegarse ni publicarse. Catálogo Pages vacío, dominio propio servido por Shopify y medios/catálogo real pendientes; por eso la migración aún no está lista.

@@ -30,9 +30,9 @@ import {
   sanitizeShopifyBodyHtml,
   summarizeImportRecords,
 } from '../core/store/shopify-import-core.mjs?v=tintin-20260927-shopify-apply-1';
-import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260918-shopify-phase2-safe-1';
+import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260928-shopify-media-migrate-1';
 import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
-import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20260927-shopify-apply-1';
+import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20260928-shopify-media-apply-1';
 
 if (!window.TintinAdminShopifyImportBooted) {
   window.TintinAdminShopifyImportBooted = true;
@@ -375,7 +375,7 @@ if (!window.TintinAdminShopifyImportBooted) {
     return result.job;
   }
 
-  const catalogApply = createCatalogApply({ state, isSuperAdmin, apiJob, saveLocalJob, renderPreview, toast, node });
+  const catalogApply = createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedFetch, saveLocalJob, renderPreview, toast, node });
 
   async function createDryRunJob() {
     if (!isSuperAdmin() || state.busy || !state.records.length) return;
@@ -457,7 +457,7 @@ if (!window.TintinAdminShopifyImportBooted) {
     titleWrap.append(node('div', 'adm-card-title', 'Shopify · migración controlada'), node('p', 'phase10-subtitle', 'Preview, colecciones y job reanudable. «Aplicar al catálogo» solo crea productos nuevos: nunca pisa ni borra.'));
     const badge = node('span', 'phase10-badge', 'SIN ESCRIBIR'); head.append(titleWrap, badge);
     const body = node('div', 'adm-card-body'); const statusGrid = node('div', 'phase10-grid');
-    [['Fuente', 'Shopify CSV / JSON'], ['Agrupación', 'Handle → producto'], ['Imágenes', 'URLs de cdn.shopify.com'], ['Catálogo', 'solo crea · id estable por Handle']].forEach(([label, value]) => { const item = node('div', 'phase10-item'); item.append(node('strong', '', label), node('span', '', value)); statusGrid.appendChild(item); });
+    [['Fuente', 'Shopify CSV / JSON'], ['Agrupación', 'Handle → producto'], ['Imágenes', 'Shopify CDN → Cloudinary antes de guardar'], ['Catálogo', 'solo crea · id estable por Handle']].forEach(([label, value]) => { const item = node('div', 'phase10-item'); item.append(node('strong', '', label), node('span', '', value)); statusGrid.appendChild(item); });
     const backupWrap = node('div', 'phase10-backup-wrap'); const backup = node('button', 'adm-btn adm-btn-outline', 'Descargar copia operativa'); backup.type = 'button'; backup.addEventListener('click', exportOperationalBackup); backupWrap.append(node('div', '', 'Copia operativa sin usuarios, pedidos ni auditoría.'), backup);
     const drop = node('div', 'phase10-drop'); drop.tabIndex = 0; drop.setAttribute('role', 'button'); drop.setAttribute('aria-label', 'Seleccionar exportación Shopify CSV o JSON');
     drop.append(node('strong', '', 'Arrastrá un CSV Shopify o JSON'), node('span', '', 'Parser incremental; sin tope artificial de filas. Se conserva Handle, Body HTML permitido, variantes, tags, estado y media detectada.'));

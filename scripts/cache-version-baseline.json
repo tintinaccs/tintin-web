@@ -24,8 +24,8 @@
     "sha256": "35e5c928307eddfea2e36b9dc4aba618759baa4d0a98c767db5f8fde92300aa5"
   },
   "css/admin/operaciones-admin.css": {
-    "version": "tintin-20260925-admin-ops-1",
-    "sha256": "6a1920dadf76f7bf0a141fa336ca0fdd63aaa1a2c32e40827e174eee274319a3"
+    "version": "tintin-20260928-admin-crud-feedback-1",
+    "sha256": "8fbafb337093b6c4f1c1de90f6a4bf19fc7cca0c28c4a9fe3969f71104106eec"
   },
   "css/admin/paginas-admin.css": {
     "version": "tintin-20260825-pages-1",
@@ -268,16 +268,16 @@
     "sha256": "77f776d5b297ce973fe5ea432f318498d7e9f07a41f183525a79159c6686c12d"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20260926-user-purge-1-sec-fix-1",
-    "sha256": "119728bc4c2f311331d449f0141f5c71bdc40f72d77d139730848b97ffc7e0d0"
+    "version": "tintin-20260928-admin-crud-feedback-7-domain-cutover-2",
+    "sha256": "136d81cc09e3f54b93f90d3fa22874dc32e8cfe034d06206f997fcf980f2c8c0"
   },
   "js/admin/ajuste-barra-lateral-movil-admin.js": {
     "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
     "sha256": "4f3f88ff7718d2bcc9882ddd07e087cd6d7ed0161828e5955acd763b1ca8dae0"
   },
   "js/admin/aplicar-importacion-admin.js": {
-    "version": "tintin-20260927-shopify-apply-1",
-    "sha256": "d68586b3267bbe4a4c7de2fce25c5d6cf54b8f07a9321375e7b0835d0eebac94"
+    "version": "tintin-20260928-shopify-media-apply-1",
+    "sha256": "3b0e15005c823a29021177845a250d0208d961a3babac2c4f264d8932a87626e"
   },
   "js/admin/appearance/editor-visual-admin.js": {
     "version": "tintin-20260925-cache-converge-1-launch-20260926-1",
@@ -344,8 +344,8 @@
     "sha256": "17612eada59cce32efd0ab7c8c9f810ac47e5baf07b59256edc3fcd38813c40a"
   },
   "js/admin/importacion-admin.js": {
-    "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
-    "sha256": "7972a2099fc1df1121d6c01e34f2b10fb7e36c7c46fe2081cc47b53953b20dfb"
+    "version": "tintin-20260928-shopify-media-import-1",
+    "sha256": "0e2a56935c06c1e116b55d1eae80f30fb3ac6410a44e47c615969e3f19b74240"
   },
   "js/admin/maestro/panel-maestro.js": {
     "version": "tintin-20260920-admin-status-fixes-2-auth-popup-resolver-1-admin-ops-1-launch-20260926-1",
@@ -376,8 +376,8 @@
     "sha256": "fbbf8058fbfd94c3eac9ac98101ec17c4c62aadb84f90cfaed664786d5731daf"
   },
   "js/admin/operaciones/sistema-operaciones-admin.js": {
-    "version": "tintin-20260925-admin-ops-1",
-    "sha256": "5337239debd3665a71a155a52d89a048eadcd30ce89ecb71f938ff3d085c32b1"
+    "version": "tintin-20260928-admin-crud-feedback-3-domain-cutover-2",
+    "sha256": "0882770a3590056739c4cc934221bb526ea19a9c18c1cb70252199dbada3eed5"
   },
   "js/admin/orders/eliminacion-pedidos-admin.js": {
     "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
@@ -392,20 +392,20 @@
     "sha256": "f06b3ed7a998f1cabc274f3b01f6e4770adeb084cbedfd3ace705d4d7ae7013e"
   },
   "js/admin/participacion/gestion-participacion-admin-v2.js": {
-    "version": "tintin-20260924-appcheck-gate-2-admin-ops-1-launch-20260926-1",
-    "sha256": "83d788a47d43a9430756506fdf2414faa06c2ba6b68e79980c40e4cf2ae6690b"
+    "version": "tintin-20260928-admin-crud-feedback-4",
+    "sha256": "52451598a68c8afc92da4e5b80a7658e100250f45855fc23161cee618e58b3dd"
   },
   "js/admin/participacion/gestion-participacion-admin.js": {
-    "version": "tintin-20260924-appcheck-gate-2-admin-ops-1-launch-20260926-1",
-    "sha256": "4d26c32b4e50cbfae3973239f7d2211b312cb41a96d2e7fd4fa419fb802931fc"
+    "version": "tintin-20260928-admin-crud-feedback-4",
+    "sha256": "461cea3b4b4babe7e2776eac6ca44bc51ab1ed1a770c04d3ba72f46a0d3ec0b9"
   },
   "js/admin/products/biblioteca-multimedia-admin.js": {
     "version": "tintin-20260901-media-orphan-scan-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
     "sha256": "204b61be950587a13a421b03ebc5f7b795d7c7fa369f50df6dbc4ce51f4439f1"
   },
   "js/admin/products/borrado-global-catalogo-admin.js": {
-    "version": "tintin-20260924-catalog-delete-flow-1-admin-ops-1-launch-20260926-1",
-    "sha256": "8b07f2a402f7cd7136f78e5fb04a9b2989d9a8e8fc9f267db37ceae4c2885ebb"
+    "version": "tintin-20260928-admin-crud-feedback-3",
+    "sha256": "8bf26576d4dc7569f03e406403dfaf97b5f0e836c19bed78aa6b26f29e134d47"
   },
   "js/admin/products/gestion-imagenes-admin.js": {
     "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
@@ -464,8 +464,8 @@
     "sha256": "ed39714d579741f7d4f7b4164c41dfe949846d5ab2d33cf6abd4c455e09a7833"
   },
   "js/admin/utilidades-progreso-admin.js": {
-    "version": "tintin-20260925-admin-ops-1",
-    "sha256": "9476446d3b85aa6672c07e4ba0a850df3bc33adfbb616ec0862dad3b84001e80"
+    "version": "tintin-20260928-admin-crud-feedback-4",
+    "sha256": "89c2b026675759e868b983cd11720eb6f6f94969f570623740e069f5ee679273"
   },
   "js/analytics/actividad-sitio.js": {
     "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
@@ -488,8 +488,8 @@
     "sha256": "c32c4c3ca8f96a0a2827fccf835490d09b4ff419bae2632c7490bc9a87f8a37f"
   },
   "js/cargador-pagina.js": {
-    "version": "tintin-20260927-loader-contrast-c-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
-    "sha256": "22eb0ff047bcde607ca74cee35b5354d6e4c3fdafe1213001900798070ef8da5"
+    "version": "tintin-20260928-shopify-media-loader-1",
+    "sha256": "bb33a4c57d8bc5fcfe25e3c93eafebabef68e1e49489f7a274c80ad4e5270d19"
   },
   "js/components/cart/politica-persistencia-carrito.js": {
     "version": "tintin-20260808-product-cart-1",
@@ -880,8 +880,8 @@
     "sha256": "7a76bc6685b1fc52dac34d28e162198d73d2d8148aa3c066faa2cf9028279f93"
   },
   "js/core/store/shopify-phase2-pipeline.mjs": {
-    "version": "tintin-20260918-shopify-phase2-safe-1",
-    "sha256": "c7b712a72537aedc9a60308d055d065b0f2dcc681196af9aacfa376664b7e9ff"
+    "version": "tintin-20260928-shopify-media-migrate-1",
+    "sha256": "16c4f19c77b604b7a2288318e0afd6335d75131c5784feb75fcd9fed6bb78fa7"
   },
   "js/core/store/visual-studio-global-runtime.js": {
     "version": "tintin-20260815-global-studio-10",
@@ -1092,8 +1092,8 @@
     "sha256": "d765782bb4eb36dff36b4e96992281d5de78a726e77ff664dea1b587dd2b663f"
   },
   "js/quality/calidad-interfaz.js": {
-    "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
-    "sha256": "630367b71adee360432eb7c8da341cf0317311753b804cbe48a7db1268cea70c"
+    "version": "tintin-20260928-shopify-media-quality-1",
+    "sha256": "218a3dbb9cde3d5909b780579eaba84466f557bb1636ebe860e3b9df5c988efc"
   },
   "js/quality/correccion-auditoria-pagina.js": {
     "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",

@@ -198,13 +198,13 @@
   let pendingWaits = 0;
   let runtimeBooted = false;
 
-  function versionUrl(url) {
+  function versionUrl(url, version = TT_CACHE_VERSION) {
     try {
       const parsed = new URL(url, window.location.href);
-      parsed.searchParams.set('v', TT_CACHE_VERSION);
+      parsed.searchParams.set('v', version);
       return parsed.href;
     } catch {
-      return url + (url.includes('?') ? '&' : '?') + 'v=' + TT_CACHE_VERSION;
+      return url + (url.includes('?') ? '&' : '?') + 'v=' + version;
     }
   }
 
@@ -810,12 +810,12 @@
       .finally(() => window.clearTimeout(timer));
   }
 
-  function importSibling(fileName, label, onError) {
+  function importSibling(fileName, label, onError, version = TT_CACHE_VERSION) {
     let url = 'js/' + fileName;
     try {
       if (SCRIPT_SRC) url = new URL(fileName, SCRIPT_SRC).href;
     } catch {}
-    url = versionUrl(url);
+    url = versionUrl(url, version);
     return import(url).catch(error => {
       console.warn('[PageLoader] No se pudo cargar ' + label + ':', error);
       if (typeof onError === 'function') onError(error);
@@ -825,7 +825,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20260928-shopify-media-quality-1');
     }
   }
 

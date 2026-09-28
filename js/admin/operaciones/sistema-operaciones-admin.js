@@ -206,8 +206,11 @@ function createSystem() {
 
   function renderLoader() {
     state.renderQueued = false;
-    const operation = state.active[state.active.length - 1];
+    const operation = [...state.active].reverse().find(item => item.centerLoader) || state.active[state.active.length - 1];
     const loader = ensureLoader();
+    const centered = state.active.some(item => item.centerLoader);
+    loader.root.classList.toggle('tt-ops-loader--centered', centered);
+    document.body?.classList.toggle('tt-ops-centered-active', centered);
     if (!operation) { loader.root.hidden = true; return; }
     const progress = computeProgress(operation);
     const { previous, current, next } = stageWindow(operation);
@@ -529,6 +532,7 @@ function createSystem() {
       retryOf: config.retryOf || null,
       now: new Date(),
     });
+    operation.centerLoader = config.centerLoader === true;
     const update = () => { queueRender(); renderIndicator(); };
     let retryAllowed = true;
     const ctx = {
@@ -544,6 +548,11 @@ function createSystem() {
       disableRetry: () => { retryAllowed = false; },
     };
     state.active.push(operation);
+    // El modo centrado es parte del feedback inmediato de la operación; no
+    // debe esperar al siguiente frame de animación para bloquear el fondo.
+    const loader = ensureLoader();
+    loader.root.classList.toggle('tt-ops-loader--centered', state.active.some(item => item.centerLoader));
+    document.body?.classList.toggle('tt-ops-centered-active', state.active.some(item => item.centerLoader));
     update();
     let value;
     let cancelled = null;
@@ -560,6 +569,9 @@ function createSystem() {
     }
     finishOperation(operation, new Date(), cancelled ? { cancelled: true, cancelReason: cancelled.message } : {});
     state.active = state.active.filter(item => item !== operation);
+    const centered = state.active.some(item => item.centerLoader);
+    ensureLoader().root.classList.toggle('tt-ops-loader--centered', centered);
+    document.body?.classList.toggle('tt-ops-centered-active', centered);
     queueRender();
     record(operation);
     if (retryAllowed && typeof config.retry === 'function' && operation.status !== GLOBAL_STATUS.GREEN && !cancelled) {
@@ -568,7 +580,8 @@ function createSystem() {
     renderIndicator();
     if (operation.status === GLOBAL_STATUS.GREEN) {
       // notifySuccess:false cuando quien llama ya informa el resultado con sus propios números.
-      if (config.notifySuccess !== false) notify(config.successMessage || `${operation.title}: completado.`, { type: 'success' });
+      if (config.showSuccessDialog === true) openOperation(operation);
+      else if (config.notifySuccess !== false) notify(config.successMessage || `${operation.title}: completado.`, { type: 'success' });
     } else if (operation.status === GLOBAL_STATUS.YELLOW || operation.status === GLOBAL_STATUS.RED) {
       openOperation(operation);
     }

@@ -17,11 +17,16 @@ import {
   pendingCollectionGroups,
   stableProductDocumentId,
 } from '../core/store/shopify-import-core.mjs?v=tintin-20260927-shopify-apply-1';
+import {
+  isShopifyMediaUrl,
+  rewriteImportedShopifyMedia,
+} from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260928-shopify-media-migrate-1';
 
 const BATCH_SIZE = 50;
+const MEDIA_COPY_BATCH_SIZE = 5;
 const APPLY_STATES = new Set(['READY', 'RUNNING', 'FAILED']);
 
-export function createCatalogApply({ state, isSuperAdmin, apiJob, saveLocalJob, renderPreview, toast, node }) {
+export function createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedFetch, saveLocalJob, renderPreview, toast, node }) {
   let ui = null;
   let totals = { invalid: 0 };
 
@@ -34,6 +39,67 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, saveLocalJob, 
 
   function applicableRecords() {
     return state.records.filter(record => !record.errors?.length && !record.duplicate);
+  }
+
+  function mediaCandidates(records) {
+    const candidates = new Map();
+    for (const record of records) {
+      const product = record?.product || record;
+      const urls = [product?.imageUrl, ...(Array.isArray(product?.imagesExtra) ? product.imagesExtra : []),
+        ...(Array.isArray(product?.variants) ? product.variants.map(variant => variant?.imageUrl) : [])];
+      for (const sourceValue of urls.filter(value => typeof value === 'string' && isShopifyMediaUrl(value))) {
+        let parsed;
+        try { parsed = new URL(sourceValue, location.href); } catch { throw new Error('Una URL de imagen de Shopify no es válida.'); }
+        if (parsed.protocol === 'http:') parsed.protocol = 'https:';
+        if (parsed.protocol !== 'https:') throw new Error('Las imágenes de Shopify deben usar HTTPS.');
+        const sourceUrl = parsed.href;
+        let candidate = candidates.get(sourceUrl);
+        if (!candidate) {
+          candidate = {
+            mediaId: stableProductDocumentId(`shopify-media:${sourceUrl}`),
+            sourceUrl,
+            sourceValues: new Set(),
+          };
+          candidates.set(sourceUrl, candidate);
+        }
+        candidate.sourceValues.add(sourceValue);
+      }
+    }
+    return [...candidates.values()];
+  }
+
+  async function copyShopifyMedia(records) {
+    const candidates = mediaCandidates(records);
+    if (!candidates.length) return records;
+    const copiedBySourceUrl = new Map();
+    for (let offset = 0; offset < candidates.length; offset += MEDIA_COPY_BATCH_SIZE) {
+      const batch = candidates.slice(offset, offset + MEDIA_COPY_BATCH_SIZE);
+      ui.reason.textContent = `Copiando imágenes fuera de Shopify… ${Math.min(offset + batch.length, candidates.length)}/${candidates.length}`;
+      const response = await authenticatedFetch('/api/admin-import-media', {
+        method: 'POST',
+        cache: 'no-store',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'copy',
+          media: batch.map((item, index) => ({ mediaId: item.mediaId, sourceUrl: item.sourceUrl, position: offset + index, featured: offset + index === 0 })),
+        }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || result?.ok !== true || !Array.isArray(result?.media)) {
+        throw new Error(result?.error || `No se pudieron copiar las imágenes a Cloudinary (HTTP ${response.status}).`);
+      }
+      const byId = new Map(result.media.map(item => [item.mediaId, item]));
+      for (const candidate of batch) {
+        const copied = byId.get(candidate.mediaId);
+        if (copied?.state !== 'COPIED' || !copied.canonicalUrl) {
+          throw new Error(`No se pudo copiar una imagen de Shopify (${copied?.errorCode || 'sin confirmación'}). No se escribió el catálogo.`);
+        }
+        for (const sourceValue of candidate.sourceValues) copiedBySourceUrl.set(sourceValue, copied);
+      }
+    }
+    const rewritten = rewriteImportedShopifyMedia(records, copiedBySourceUrl);
+    ui.reason.textContent = `${candidates.length} imagen(es) copiadas y verificadas en Cloudinary. Guardando el catálogo…`;
+    return rewritten;
   }
 
   function blockReason() {
@@ -108,7 +174,7 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, saveLocalJob, 
     state.busy = true;
     ui.button.textContent = 'Aplicando…';
     renderPreview();
-    const batches = chunkImportRecords(records, BATCH_SIZE);
+    let batches = [];
     const seen = new Set();
     const createdIds = [];
     let processed = 0;
@@ -119,6 +185,8 @@ export function createCatalogApply({ state, isSuperAdmin, apiJob, saveLocalJob, 
       if (state.job.status === 'FAILED') state.job = await apiJob({ action: 'transition', jobId: state.jobId, status: 'READY' });
       if (state.job.status === 'READY') state.job = await apiJob({ action: 'transition', jobId: state.jobId, status: 'RUNNING', processed: 0, lastCheckpoint: 0 });
       await saveLocalJob();
+      const independentRecords = await copyShopifyMedia(records);
+      batches = chunkImportRecords(independentRecords, BATCH_SIZE);
       for (const batch of batches) {
         const entries = [];
         batch.forEach(record => {
