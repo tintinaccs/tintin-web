@@ -49,3 +49,13 @@ Esta revalidación se hizo después de integrar el informe y de ejecutar manualm
 | Search Console — revalidación de cuenta | Se abrió la propiedad de dominio `sc-domain:tintinaccs.com`. El informe de Sitemaps muestra `0-0 de 0` sitemaps enviados. En la vista general, el informe de indexación indica que Google aún procesa los datos y que el total de clics de búsqueda web es 0 en la ventana mostrada. | La propiedad es accesible con la cuenta conectada; no hay sitemap presentado para el dominio. Presentarlo queda para después de vincular Pages y cambiar el host, para que Google lea el sitemap del sitio correcto. |
 
 **Estado actualizado: NO-GO para cutover.** El refresco BCP sí quedó solucionado. Siguen siendo necesarios: importar catálogo real y medios fuera de Shopify, convertir el canario actual en prueba pública controlada o crear uno dedicado para preview, verificar los recorridos con el catálogo cargado, y completar la asociación de dominio en la sesión de cutover. El pedido de prueba preexistente permanece sin cobro; no se creó otro.
+
+## Revisión de indexación del host técnico — 2026-09-28 20:22 UTC
+
+- En vivo, `https://tintinaccesorios.pages.dev/robots.txt` permite rastrear `/` y anuncia el sitemap de `pages.dev`. La portada responde con canonical `https://tintinaccesorios.pages.dev/` y no declara `noindex`.
+- Cloudflare Pages sigue mostrando solo `tintinaccesorios.pages.dev` en Dominios personalizados; el dominio comercial todavía apunta a Shopify. Por lo tanto, el host técnico público podía indexarse antes del cutover.
+- En la rama local `codex/continued-audit-20260928`, se añadió a `functions/_middleware.js` `X-Robots-Tag: noindex` para las respuestas públicas de `*.pages.dev`; `/__/auth/*` conserva el proxy transparente de Firebase. El `robots.txt` mantiene las rutas privadas bloqueadas, permite rastrear páginas públicas para que Google lea la directiva y deja de anunciar el sitemap técnico. Los dominios comerciales quedan fuera de esa regla.
+- Verificación local: `tests/seo/pages-dev-indexing-middleware.test.mjs` **4/4**; `npm run audit:phase11` **832 comprobaciones**; `npm run audit:headers:production` PASS; `npm run verify:diagnostics` PASS; `npm run audit:diagnostics` PASS.
+- La corrección todavía no está integrada ni desplegada; no atribuirle efecto al sitio en vivo hasta un despliegue verificado. Tras publicarla, revisar `X-Robots-Tag` en `pages.dev`, mantener el host comercial sin `noindex` y validar la respuesta de Googlebot en Search Console.
+
+**Decisión del dominio sin cambio: NO-GO para cutover.** El catálogo sigue vacío, falta asociar el dominio a Pages y todavía se necesita completar la aceptación de compra y datos reales.
