@@ -133,3 +133,23 @@ Read-only GETs repeated after the latest repository commit:
 | `https://tintinaccs.com/` and `https://www.tintinaccs.com/` | HTTP 200; Shopify markup remains present. |
 
 This confirms the current cutover blockers, not checkout acceptance: no catalog records exist to exercise an order, stock change, product metadata, or migration redirect. No payment, order, DNS, or production data was changed.
+
+## Recheck — 2026-09-28 10:33 UTC
+
+Read-only checks from the current continuation. No catalog writes, account/order activity, DNS edits, or production configuration changes were made.
+
+| Probe | Result | Interpretation |
+| --- | --- | --- |
+| `https://tintinaccesorios.pages.dev/api/health` | HTTP 200 | Pages runtime is healthy. |
+| Public product catalog | HTTP 200, `count: 0` | No imported listing exists for launch acceptance. |
+| Public collection catalog | HTTP 200, `count: 0` | No imported collection exists for launch acceptance. |
+| `https://tintinaccesorios.pages.dev/sitemap-products.xml` | HTTP 200, empty URL set | Product indexing cannot be validated yet. |
+| `https://tintinaccs.com/api/health` | HTTP 404 | Commercial host still does not serve Pages Functions. |
+| `https://tintinaccesorios.pages.dev/api/paypal-config` | `enabled: false`, `stale_exchange_rate`; timestamp `2026-09-10T18:59:53Z` | PayPal is unavailable until an authorized current exchange rate is configured; do not invent or reuse a stale rate. |
+| Deployed import module | `js/admin/importacion-admin.js` imports `aplicar-importacion-admin.js?v=tintin-20260927-shopify-apply-1`; the published module has no media-preflight call | Do not apply Shopify catalog CSV through the current deployment; it can preserve Shopify CDN image dependencies. The safe preflight/import path is in PR #937 and is not yet deployed. |
+
+`npm run monitor:production` completed its public GET-only checks at `2026-09-28T10:33:22Z`. Route, header/CSP, robots/sitemap, health, authentication-guard, public-catalog endpoint, Visual Builder, and global-configuration probes passed. It exits 1 only for the three catalog canaries: empty product sitemap, no product in the public API, and no product page to check server metadata/canonical/JSON-LD. This is an expected not-ready result, not a failure of the responding Pages endpoints.
+
+`npm run audit:final` completed locally with exit 0 on branch HEAD `4462d541`. The focused browser test for the central CRUD loader/result panel passed 2/2 in this continuation. GitHub Actions run #3453 for PR #937 was observed in progress; CI is not recorded as green for HEAD until that run completes successfully.
+
+The migration remains **not ready**. Keep Shopify and the commercial DNS intact until the importer with media preflight is deployed, a real catalog is imported and inspected (including every media URL), authenticated account/order/payment/email acceptance is completed, Search Console is validated on the custom domain, and the cutover runbook is carried out. PR #929 is explicitly titled “NO MERGEAR hasta cargar el catálogo y hacer la sección D en la misma sesión”; keep it separate while these prerequisites are open.
