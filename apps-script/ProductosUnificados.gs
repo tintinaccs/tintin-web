@@ -3,6 +3,8 @@ var TINTIN_PRODUCTS_SHEET = 'Productos';
 var TINTIN_PRODUCTS_HEADER_ROW = 6;
 var TINTIN_PRODUCTS_FIRST_ROW = 7;
 var TINTIN_PRODUCTS_SPREADSHEET_ID = '106Z1A8veL9fGMc4U7R10NVNMsJiEYt9wiGr4YFAav1U';
+var TINTIN_PRODUCTS_CANARY_ID = 'CANARY-SHEETS-FIRESTORE';
+var TINTIN_PRODUCTS_CANARY_NAME = 'PRUEBA QA · NO VENDER';
 var TINTIN_USERS_SHEET = 'Usuarios web';
 var TINTIN_USERS_HEADER_ROW = 6;
 var TINTIN_USERS_FIRST_ROW = 7;
@@ -684,30 +686,54 @@ function tintinProbarConfiguracionCompleta() {
 
 function tintinProbarEdicionCatalogo() {
   var sheet = tintinProductsSpreadsheet_().getSheetByName(TINTIN_PRODUCTS_SHEET);
-  if (!sheet || sheet.getLastRow() < TINTIN_PRODUCTS_FIRST_ROW) {
-    throw new Error('Productos no tiene una fila existente para la prueba segura.');
-  }
-  var rowNumber = 0;
+  if (!sheet || sheet.getLastRow() < TINTIN_PRODUCTS_FIRST_ROW) return {
+    ok: false, destructive: false, error: 'canary-not-found'
+  };
+  var canaryRows = [];
   var names = sheet.getRange(TINTIN_PRODUCTS_FIRST_ROW, 2, sheet.getLastRow() - TINTIN_PRODUCTS_FIRST_ROW + 1, 1).getDisplayValues();
   for (var index = 0; index < names.length; index += 1) {
-    if (String(names[index][0] || '').trim()) {
-      rowNumber = TINTIN_PRODUCTS_FIRST_ROW + index;
-      break;
+    if (String(names[index][0] || '').trim() === TINTIN_PRODUCTS_CANARY_NAME) {
+      canaryRows.push(TINTIN_PRODUCTS_FIRST_ROW + index);
     }
   }
-  if (!rowNumber) throw new Error('No existe un producto válido para la prueba segura.');
+  if (!canaryRows.length) return {
+    ok: false, destructive: false, error: 'canary-not-found', requiredProductId: TINTIN_PRODUCTS_CANARY_ID,
+    requiredProductName: TINTIN_PRODUCTS_CANARY_NAME
+  };
+  if (canaryRows.length !== 1) return {
+    ok: false, destructive: false, error: 'canary-duplicate', rows: canaryRows
+  };
+  var rowNumber = canaryRows[0];
   var before = sheet.getRange(rowNumber, 1, 1, 35).getValues()[0];
-  if (String(before[34] || '').trim()) throw new Error('La fila de prueba tiene una acción pendiente; elegí otra fila.');
+  if (String(before[0] || '').trim() !== TINTIN_PRODUCTS_CANARY_ID) return {
+    ok: false, destructive: false, error: 'canary-id-mismatch', row: rowNumber
+  };
+  if (tintinBool_(before[14]) || Number(before[10] || 0) !== 0 || String(before[34] || '').trim()) return {
+    ok: false, destructive: false, error: 'canary-must-be-inactive-zero-stock-and-action-clear', row: rowNumber
+  };
+  if (!String(before[3] || '').trim() || !(Number(before[5]) > 0) || String(before[19] || '').trim()) return {
+    ok: false, destructive: false, error: 'canary-needs-category-price-and-no-image', row: rowNumber
+  };
   tintinSendProductRow_(sheet, rowNumber);
   var after = sheet.getRange(rowNumber, 1, 1, 35).getValues()[0];
+  var sameName = String(before[1] || '') === String(after[1] || '');
+  var samePrice = Number(before[5] || 0) === Number(after[5] || 0);
+  var sameStock = Number(before[10] || 0) === Number(after[10] || 0);
   return {
-    ok: true,
+    ok: String(after[0] || '').trim() === TINTIN_PRODUCTS_CANARY_ID &&
+      String(after[1] || '').trim() === TINTIN_PRODUCTS_CANARY_NAME && !tintinBool_(after[14]) &&
+      Number(after[10] || 0) === 0 && String(after[19] || '').trim() === '' &&
+      sameName && samePrice && sameStock && String(after[34] || '').trim() === '',
+    destructive: false,
+    writesFirestore: true,
+    publicCatalogVisible: false,
     productId: String(after[0] || ''),
     row: rowNumber,
-    sameName: String(before[1] || '') === String(after[1] || ''),
-    samePrice: Number(before[5] || 0) === Number(after[5] || 0),
-    sameStock: Number(before[10] || 0) === Number(after[10] || 0),
-    actionCleared: String(after[34] || '') === ''
+    sameName: sameName,
+    samePrice: samePrice,
+    inactive: !tintinBool_(after[14]),
+    zeroStock: sameStock && Number(after[10] || 0) === 0,
+    actionCleared: String(after[34] || '').trim() === ''
   };
 }
 

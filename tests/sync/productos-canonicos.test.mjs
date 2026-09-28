@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
+import vm from 'node:vm';
 import {
   PRODUCTS_WEBHOOK_REVISION,
   classifySheetsWebhookAuth,
@@ -10,6 +11,39 @@ import {
 
 const root = path.resolve(import.meta.dirname, '../..');
 const read = relative => fs.readFileSync(path.join(root, relative), 'utf8');
+
+function runAppsScriptCanary(rows) {
+  const source = read('apps-script/ProductosUnificados.gs');
+  const sendCalls = [];
+  const sheet = {
+    getLastRow: () => 6 + rows.length,
+    getRange(row, column, rowCount) {
+      const offset = row - 7;
+      const selected = rows.slice(offset, offset + rowCount);
+      return {
+        getDisplayValues: () => selected.map(values => [String(values[column - 1] ?? '')]),
+        getValues: () => selected.map(values => [...values]),
+      };
+    },
+  };
+  const context = {
+    SpreadsheetApp: { openById: () => ({ getSheetByName: name => name === 'Productos' ? sheet : null }) },
+  };
+  vm.runInNewContext(source, context);
+  context.tintinSendProductRow_ = (_sheet, rowNumber) => sendCalls.push(rowNumber);
+  return { result: context.tintinProbarEdicionCatalogo(), sendCalls };
+}
+
+function canaryRow({ active = 'No', stock = 0 } = {}) {
+  const row = Array(35).fill('');
+  row[0] = 'CANARY-SHEETS-FIRESTORE';
+  row[1] = 'PRUEBA QA · NO VENDER';
+  row[3] = 'Canary de integración';
+  row[5] = 1000;
+  row[10] = stock;
+  row[14] = active;
+  return row;
+}
 
 function request(body, secret = '') {
   const headers = { 'content-type': 'application/json' };
@@ -29,6 +63,61 @@ test('clasifica fallos de autenticación sin devolver el secreto', async () => {
   assert.equal(response.headers.get('x-tintin-auth-state'), 'missing-header');
   assert.equal(response.headers.get('x-tintin-products-webhook'), PRODUCTS_WEBHOOK_REVISION);
   assert.doesNotMatch(await response.text(), /server-value/);
+});
+
+test('la prueba Sheets→Firestore nunca selecciona un producto real como canary', () => {
+  const activeProduct = Array(35).fill('');
+  activeProduct[0] = 'real-product-id';
+  activeProduct[1] = 'ANILLO mojojo';
+  activeProduct[5] = 55000;
+  activeProduct[10] = 1;
+  activeProduct[14] = 'Sí';
+  const { result, sendCalls } = runAppsScriptCanary([activeProduct]);
+
+  assert.equal(result.ok, false);
+  assert.equal(result.error, 'canary-not-found');
+  assert.equal(result.requiredProductId, 'CANARY-SHEETS-FIRESTORE');
+  assert.deepEqual(sendCalls, []);
+});
+
+test('la prueba Sheets→Firestore solo envía el canary inactivo y sin stock', () => {
+  const { result, sendCalls } = runAppsScriptCanary([canaryRow()]);
+
+  assert.equal(result.ok, true);
+  assert.equal(result.destructive, false);
+  assert.equal(result.writesFirestore, true);
+  assert.equal(result.publicCatalogVisible, false);
+  assert.equal(result.productId, 'CANARY-SHEETS-FIRESTORE');
+  assert.deepEqual(sendCalls, [7]);
+});
+
+test('la prueba Sheets→Firestore no elige entre canaries duplicados', () => {
+  const { result, sendCalls } = runAppsScriptCanary([canaryRow(), canaryRow()]);
+  assert.equal(result.ok, false);
+  assert.equal(result.error, 'canary-duplicate');
+  assert.deepEqual([...result.rows], [7, 8]);
+  assert.deepEqual(sendCalls, []);
+});
+
+test('la prueba Sheets→Firestore rechaza un canary activo, con stock o con ID incorrecto', () => {
+  for (const row of [canaryRow({ active: 'Sí' }), canaryRow({ stock: 1 })]) {
+    const { result, sendCalls } = runAppsScriptCanary([row]);
+    assert.equal(result.ok, false);
+    assert.equal(result.error, 'canary-must-be-inactive-zero-stock-and-action-clear');
+    assert.deepEqual(sendCalls, []);
+  }
+
+  const wrongId = canaryRow();
+  wrongId[0] = 'real-product-id';
+  const mismatch = runAppsScriptCanary([wrongId]);
+  assert.equal(mismatch.result.error, 'canary-id-mismatch');
+  assert.deepEqual(mismatch.sendCalls, []);
+
+  const withShopifyImage = canaryRow();
+  withShopifyImage[19] = 'https://cdn.shopify.com/test.png';
+  const media = runAppsScriptCanary([withShopifyImage]);
+  assert.equal(media.result.error, 'canary-needs-category-price-and-no-image');
+  assert.deepEqual(media.sendCalls, []);
 });
 
 test('diagnóstico autenticado es no destructivo y distingue el deployment', async () => {
