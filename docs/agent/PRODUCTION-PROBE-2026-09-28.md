@@ -108,3 +108,9 @@ Read-only GET against the deployed branch preview `https://codex-shopify-indepen
 | `/` | HTTP 200 | Public shell responds on the preview hostname. |
 
 This is a preview-environment configuration finding, not evidence that the production Pages environment is unhealthy: the configured production Pages health endpoint returned HTTP 200 and `ok: true` in the 06:14 UTC probe above. The preview cannot be used for full authenticated acceptance until its required runtime configuration is supplied through the deployment environment; do not copy production secrets into preview casually. The commercial domain and empty catalog remain independent cutover blockers.
+
+## Shopify media independence scan — 2026-09-28 07:31 UTC
+
+Extended `npm run monitor:production` to inspect public product and collection records, all 12 public Visual Builder configurations, and the public Visual Studio global configuration for Shopify-hosted URLs. The scan uses the existing exact-host parser in `scripts/lib/referencias-shopify.mjs`; it rejects Shopify CDN and store-hosted URLs while ignoring misleading lookalike domains.
+
+The live recheck returned HTTP 200 for all inspected data/configuration endpoints and found no Shopify-hosted URLs in the returned public records. Products and collections both currently return `count: 0`, so the absence of URLs is not evidence about the yet-to-be-imported catalog. The monitor still exits 1 on the three expected catalog canary gates (empty product sitemap, no sample product, and therefore no server-rendered product metadata canary). After import, rerun this scan against the actual products, collection images, descriptions, variants, and public page content before cutover.

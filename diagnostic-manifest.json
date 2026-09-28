@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "85f24e7db6afa3352ca143f695d0ae1c69d0e6d585eda58957afde1a3cb25ce8",
+  "sourceFingerprint": "07336c99366b3ee27808f850a12a07d911ef807d4b5f1dd535037cc2f3944417",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 902,
     "textFiles": 861,
-    "totalBytes": 17698386,
+    "totalBytes": 17702667,
     "pages": 19,
     "modules": 620
   },
@@ -28893,8 +28893,8 @@
     },
     {
       "path": "scripts/auditar-produccion-salud.mjs",
-      "bytes": 11465,
-      "sha256": "1d165925e1b61d0e50cd15343cab62504926edfe563dde7b72d9cb132bfaa469",
+      "bytes": 14506,
+      "sha256": "ccbb43fa0fb2a5db13564041233f8054fa9929c0e6002f741743dfbdb5105839",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28917,6 +28917,12 @@
           "target": null,
           "dynamic": false,
           "line": 3
+        },
+        {
+          "raw": "./lib/referencias-shopify.mjs",
+          "target": "scripts/lib/referencias-shopify.mjs",
+          "dynamic": false,
+          "line": 4
         }
       ],
       "endpoints": []
@@ -36177,14 +36183,14 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 15042,
-      "sha256": "0622489b6ab928631b3b0808c2c7698c0d9be153008ebce127dc412c0286a336"
+      "bytes": 15238,
+      "sha256": "4221f00af651f6d46ea1976896517513bbccaddda6f30c2cb4a81d9811a5226b"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
       "extension": ".md",
-      "bytes": 11031,
-      "sha256": "2b0b708cb2a384afe580db582279b31c77461750e506f3be30f29e8e699b77a2"
+      "bytes": 12075,
+      "sha256": "00e78c4d0bf4dba2c43d6bbad487ef184eb73dd2304cfb514c7b4ead3a7f00bf"
     },
     {
       "path": "docs/agent/README.md",
@@ -39189,8 +39195,8 @@
     {
       "path": "scripts/auditar-produccion-salud.mjs",
       "extension": ".mjs",
-      "bytes": 11465,
-      "sha256": "1d165925e1b61d0e50cd15343cab62504926edfe563dde7b72d9cb132bfaa469"
+      "bytes": 14506,
+      "sha256": "ccbb43fa0fb2a5db13564041233f8054fa9929c0e6002f741743dfbdb5105839"
     },
     {
       "path": "scripts/auditar-producto-cloudflare-preview.mjs",
