@@ -3,7 +3,7 @@ import { GitHubActionsOidcError, verifyGitHubActionsOidc } from '../lib/github-a
 import { jsonResponse, rateLimit } from '../lib/operational-guard.js';
 
 const BCP_URL = 'https://www.bcp.gov.py/webapps/web/cotizacion/monedas';
-const WORKFLOW_REF = 'tintinaccs/tintin-web/.github/workflows/actualizar-tasa-paypal-bcp.yml@refs/heads/main';
+const WORKFLOW_REF = 'tintinaccs/tintin-web/.github/workflows/monitor-produccion.yml@refs/heads/main';
 const AUDIENCE = 'tintin-paypal-fx-refresh';
 
 export function parseBcpUsdRate(html) {

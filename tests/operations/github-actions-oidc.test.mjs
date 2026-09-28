@@ -150,7 +150,7 @@ test('el scheduler de Sheets usa OIDC y no duplica la cuenta de servicio Firebas
 test('el refresco de tasa solo acepta OIDC del workflow BCP de main', async () => {
   const { fetchImpl, token } = await fixture();
   const audience = 'tintin-paypal-fx-refresh';
-  const workflowRef = `${REPOSITORY}/.github/workflows/actualizar-tasa-paypal-bcp.yml@${REF}`;
+  const workflowRef = `${REPOSITORY}/.github/workflows/monitor-produccion.yml@${REF}`;
   const claims = await verifyGitHubActionsOidc(await token({ aud: audience, workflow_ref: workflowRef }), {
     fetchImpl, nowSeconds: NOW, audience, workflowRef,
   });
@@ -170,7 +170,7 @@ test('el workflow BCP actualiza desde la URL canónica de Pages sin guardar secr
   const here = dirname(fileURLToPath(import.meta.url));
   const root = resolve(here, '..', '..');
   const [workflow, route, endpoint] = await Promise.all([
-    readFile(resolve(root, '.github/workflows/actualizar-tasa-paypal-bcp.yml'), 'utf8'),
+    readFile(resolve(root, '.github/workflows/monitor-produccion.yml'), 'utf8'),
     readFile(resolve(root, '_routes.json'), 'utf8'),
     readFile(resolve(root, 'functions/api/paypal-rate-refresh.js'), 'utf8'),
   ]);
