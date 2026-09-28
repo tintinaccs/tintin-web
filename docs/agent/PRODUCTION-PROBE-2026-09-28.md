@@ -118,3 +118,18 @@ The live recheck returned HTTP 200 for all inspected data/configuration endpoint
 ## Checkout payment configuration — 2026-09-28 07:47 UTC
 
 Read-only GET of `https://tintinaccesorios.pages.dev/api/paypal-config` returned `enabled: false`, `environment: sandbox`, `currency: USD`, and only `stale_exchange_rate` in `unavailableReasons`; the reported rate timestamp is `2026-09-10T18:59:53Z`. This endpoint intentionally blanks `clientId` while disabled, so it does not establish that the credential is absent. The PayPal guide records the owner decision on whether to refresh and use PayPal or launch with other configured methods. No payment or order was attempted.
+
+## Direct recheck — 2026-09-28 08:16 UTC
+
+Read-only GETs repeated after the latest repository commit:
+
+| Probe | Result |
+| --- | --- |
+| Pages `/api/health` | HTTP 200, `ok: true`. |
+| Pages `/api/public-catalog?resource=products` | HTTP 200, `count: 0`. |
+| Pages `/api/public-catalog?resource=collections` | HTTP 200, `count: 0`. |
+| Pages `/sitemap-products.xml` | HTTP 200, 0 `<loc>` entries. |
+| Pages `/api/paypal-config` | HTTP 200, disabled; `stale_exchange_rate`. |
+| `https://tintinaccs.com/` and `https://www.tintinaccs.com/` | HTTP 200; Shopify markup remains present. |
+
+This confirms the current cutover blockers, not checkout acceptance: no catalog records exist to exercise an order, stock change, product metadata, or migration redirect. No payment, order, DNS, or production data was changed.
