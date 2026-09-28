@@ -5,7 +5,7 @@
 ## Baseline
 
 - Rama de trabajo: `codex/shopify-independence-audit`
-- Último commit verificado: `1edffe420f452736498972437a7d6926bab64c56` (`test: follow configured public origin in audits`)
+- Último commit de código verificado localmente: `12895b0c` (`build: refresh diagnostic manifest after media hardening`); build y pruebas focalizadas completados.
 - Commit base observado: `0d060922bdc17eb99ef4ce7fcdeb0acf86cd858c` (main, 2026-09-27)
 - Objetivo: dejar el sitio preparado para migrar el catálogo desde Shopify y operar sin la cuenta ni los servicios de Shopify.
 - Producción: no modificada por esta rama.
@@ -37,6 +37,9 @@
 - Responsive, arquitectura, contratos de checkout/pedidos, roles, medios, sincronización, importación y SEO estático pasan las comprobaciones incluidas en `audit:final`.
 - La auditoría local del emulador de Firestore no es ejecutable en este equipo: Java no está instalado. CI sí confirmó las reglas e identidad para el commit actual.
 - Las funciones de importación son CSV y no requieren Shopify Admin API para operar. La fase de medios todavía puede copiar imágenes desde Shopify CDN a Cloudinary bajo una bandera de escritura explícita; hay que completar esa copia y verificar cero URLs Shopify antes de cerrar la cuenta.
+- La carga de medios ahora lee el body en streaming, cancela al superar 15 MiB y aplica timeout de 20 s al origen. `npm run test:phase2-import` (24/24), `npm run audit:phase2-contract`, `npm run audit:products-media` (39 comprobaciones) y `npm run build:pages` pasan en `12895b0c`; el manifiesto diagnóstico generado incluye los nuevos hashes.
+- Se confirmó en vivo en esta continuación: `tintinaccs.com/` y su sitemap responden 200, pero `/api/health` responde 404; Pages `/api/health` responde 200, el catálogo devuelve `count: 0` y el sitemap de productos contiene 0 ubicaciones. El dominio comercial sigue atendido por Shopify.
+- Feedback CRUD central: el contraste del wordmark del loader se corrigió a WCAG AA en esta rama. El panel central de operaciones/progreso ya existe y se utiliza en operaciones masivas y algunas purgas, pero no está conectado a todo el CRUD individual. En productos, colecciones, clientes y pedidos todavía hay flujos con toast discreto y/o `window.confirm`; la cobertura central uniforme solicitada sigue pendiente. Los principales consumidores coinciden con archivos modificados por el PR paralelo #929 de Claude; integrarlos requiere coordinar el rebase para no perder cambios.
 
 ## Estado de aceptación (commit base)
 
