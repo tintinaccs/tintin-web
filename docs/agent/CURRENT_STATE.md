@@ -258,3 +258,9 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - La mejora para identidad Firebase residual deshabilitada tras borrar una cuenta sigue en `codex/account-reentry` (`6a4e22bf`), aún sin PR/integración; sus pruebas focalizadas pasaron 18/18. No se usó una cuenta real de cliente.
 - Decisión vigente: **NO-GO para migrar**. Los gates que faltan son: integrar y desplegar el importador validado; verificar su preflight autenticado en producción; cargar un catálogo real y validar medios, precios, checkout y pedido; confirmar la sincronización Google Sheets → Firestore con un canary; y completar en una misma sesión la conexión del dominio a Pages y la validación de Search Console. Mantener Shopify/DNS actuales hasta cerrar esas pruebas.
 - Esta anotación toca `docs/agent/CURRENT_STATE.md`, que también aparece en el PR #938. No se editó ni integró la rama del otro PR; revisar ese solapamiento al reconciliar.
+
+### Revalidación pública y CI — 2026-09-29 09:01 UTC
+
+- GitHub Actions CI #3526 del HEAD `269d0419dc159daa486d7c0445f25024c9190c02`: **SUCCESS**. PR #957 sigue abierto, Draft, mergeable y sin merge.
+- El `npm run monitor:production` recién ejecutado obtuvo respuestas esperadas para las 31 rutas/APIs observadas. Exit 1 únicamente por sitemap de productos vacío, catálogo sin producto canary SEO y ausencia de ficha para comprobar metadata.
+- **NO-GO vigente**: no hay catálogo real/SEO público, la transferencia canaria Sheets→Firestore no está demostrada, PayPal Live no se probó, y el dominio/GSC comercial no está preparado para el corte. No se mutaron servicios productivos.

@@ -150,3 +150,9 @@ Lectura pública paralela de `/api/paypal-config` respondió `enabled=true`, ent
 El CI #3525 del HEAD `e49dcb3c` había terminado SUCCESS y el preview Pages seguía separado de producción. El resultado vigente de Preview y sus variables faltantes está descrito en la sección 08:43. Ninguna mutación productiva, cambio DNS, ejecución Apps Script ni escritura en Firestore.
 
 **NO-GO para cutover.** Persisten canary Sheets→Firestore sin ejecutar/verificar, producto público/SEO vacío, flujo de pago Live sin probar, 12 conexiones que requieren atención y DNS/GSC del dominio comercial.
+
+### Monitor público y CI verificados — 2026-09-29 09:01 UTC
+
+`npm run monitor:production` completó 31 probes de rutas/APIs del Pages host: páginas principales, login/perfil, robots, sitemap index y sitemap-pages, configuración PayPal, APIs de catálogo/health, protecciones administrativas sin sesión y páginas de Visual Builder respondieron con los códigos esperados. El monitor terminó con exit 1 únicamente por los tres gates de catálogo SEO: sitemap de productos sin URLs válidas, ningún producto disponible para el canary SEO y falta de una ficha para probar metadata. No se hicieron escrituras ni acciones de compra.
+
+El CI #3526 del HEAD `269d0419dc159daa486d7c0445f25024c9190c02` terminó **SUCCESS** a las 09:00:37 UTC. El PR #957 permanece abierto, Draft, mergeable y sin merge; el worktree sigue limpio. El resultado CI verifica el HEAD actual, pero no resuelve los gates operativos: catálogo y sitemap vacíos, canary Sheets→Firestore no acreditado, PayPal Live no probado y dominio/GSC comercial aún pendientes. **NO-GO para cutover.**
