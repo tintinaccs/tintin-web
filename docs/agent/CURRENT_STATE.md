@@ -2,7 +2,20 @@
 
 > Registro actualizado para esta tarea y rama. La evidencia de cada estado corresponde al commit indicado y no se hereda de auditorías históricas.
 
-## Revalidación vigente — 2026-09-29 08:49 UTC
+## Revalidación vigente — 2026-09-29 11:05 UTC (main `3299651`)
+
+- PR #957 está integrado en `main` mediante squash commit `329965117f7de513a74c533602d7305d5140f9e3`. Su CI previo al merge terminó SUCCESS, incluidos tests de navegador, accesibilidad, SEO, rendimiento, reglas Firestore y seguridad.
+- Tras cargar la versión nueva de Pages y revalidar desde el panel autenticado, el grafo muestra 36 nodos, 37 conexiones, 63 comprobaciones aprobadas y 10 que requieren atención. Apps Script y Google Sheets ahora confirman el protocolo por `GET /api/system-health`; esto acredita disponibilidad/guard, no una escritura real de producto.
+- La hoja canónica conserva `CANARY-SHEETS-FIRESTORE` en `Productos!710`, inactivo y con stock 0. Una búsqueda acotada de `Historial sync!A8:J532` no encontró ese ID. No se confirmó el documento correspondiente en Firestore.
+- La implementación de Apps Script que aparece conectada es la versión 16, del 22-sep-2026; el proyecto muestra modificaciones del 28-sep. Debe reconciliarse y publicarse la fuente canónica, con su versión desplegada identificable, antes de repetir el canary.
+- Producción: `/api/public-catalog?resource=products` devuelve 0 productos; `/api/paypal-config` indica Sandbox. `www.tintinaccs.com` sigue como CNAME a `shops.myshopify.com`; no se alteró DNS.
+- Search Console contiene solo la propiedad verificada `https://tintinaccesorios.pages.dev/`. Su `sitemap.xml` sigue `pending`, con 0 errores y 0 advertencias. No se conectó la propiedad comercial.
+- Sigue pendiente rotar las credenciales que aparecieron en la inspección previa (clave de cuenta de servicio, tokens OAuth y secreto compartido de sincronización). El titular debe cambiarlas directamente en Google/Cloudflare; no se deben leer, copiar ni registrar en este repo.
+- **NO-GO para cutover/cierre de Shopify.** Gates: rotación de credenciales; reconciliar y desplegar Apps Script; repetir el canary y comprobar ambos documentos Firestore; cargar/revisar el catálogo real y su metadata; configurar PayPal Live; verificar dominio comercial, sitemap y Search Console. El usuario migrará los productos cuando decida.
+
+La sección siguiente es la revalidación previa del mismo día y queda como evidencia histórica; las diferencias de estado están supersedidas por la lectura de las 11:05 UTC.
+
+## Revalidación anterior — 2026-09-29 08:49 UTC
 
 > Actualización de ejecución: 2026-09-29 10:02 UTC. El Actions run `36551900975` para HEAD `343f5ebcf2efa8a14509f534bb100e51c952a33c` terminó **SUCCESS** a las 10:01:31 UTC; Cloudflare Pages preview, CodeQL, ambos análisis y auditoría completa (incluidos navegadores, accesibilidad, SEO y rendimiento) pasaron. Suite de sincronización local 77/77 y `build:pages` PASS. La prueba autorizada de canary anterior alcanzó el endpoint pero falló antes de escritura por `changedFields` vacío; el arreglo ya está en el PR y aún no está desplegado en Apps Script ni Pages Production. La fila sigue inactiva/sin stock, sin sincronización acreditada. No repetir hasta que ambos lados estén desplegados con versiones compatibles. PR #957 sigue abierto, Draft y sin merge; NO-GO para cutover continúa por catálogo/SEO, PayPal Live, dominio/GSC y canary pendiente.
 
