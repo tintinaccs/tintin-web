@@ -237,6 +237,33 @@ test('servicios externos requieren PayPal Live además de Resend y Cloudinary', 
   assert.notEqual(resolveState(NODES.find(item => item.id === 'servicios-externos'), disabled['servicios-externos'], ESTADOS), ESTADOS.PROD);
 });
 
+test('el probe de Apps Script no pinta Google Sheets verde sin probar la escritura de catálogo', () => {
+  const systemHealth = {
+    status: 200,
+    body: { report: { integrations: {
+      appsScript: { reachable: true, protocolOk: true, httpStatus: 200 },
+      sheets: true,
+    } } },
+  };
+  const at = '2026-09-29T16:00:00.000Z';
+  const live = buildLiveChecks({ systemHealth }, at);
+  const sheets = NODES.find(node => node.id === 'google-sheets');
+  assert.equal(live['google-sheets'].partial, true);
+  assert.equal(live['google-sheets'].promote, false);
+  assert.equal(resolveState(sheets, live['google-sheets'], ESTADOS), ESTADOS.PARCIAL);
+
+  const edges = buildLiveEdges({ systemHealth }, at);
+  const edge = EDGES.find(item => item.from === 'apps-script' && item.to === 'google-sheets');
+  assert.equal(edges[edge.id].partial, true);
+  assert.equal(edges[edge.id].promote, false);
+  assert.equal(resolveState(edge, edges[edge.id], ESTADOS), ESTADOS.PARCIAL);
+  for (const [from, to] of [
+    ['google-sheets', 'apps-script'],
+    ['apps-script', 'sheets-products-webhook'],
+    ['sheets-products-webhook', 'firestore'],
+  ]) assert.ok(EDGES.some(item => item.from === from && item.to === to), `${from} → ${to} debe estar dibujada`);
+});
+
 test('lecturas autenticadas verifican favoritos, notificaciones y Rules sin mutarlas', () => {
   const protectedProbes = {
     favoriteApi: { ok: true, status: 200 },
