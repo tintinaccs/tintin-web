@@ -6,7 +6,7 @@
 // nodo/conexión que estado-flujo.js puede resolver. No depende del DOM ni
 // de Firebase: solo de los cuerpos JSON ya obtenidos, para que sea probable
 // con node --test sin red ni navegador.
-import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20260925-cache-converge-1';
+import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20260929-sheets-firestore-flow-1';
 import { EVIDENCIA } from './estado-flujo.js?v=tintin-20260929-flow-edge-filter-1';
 
 function edgeIdFor(from, to) {
@@ -123,7 +123,12 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
       `GET /api/system-health · Apps Script ${appsScript.protocolOk ? 'protocolo reconocido' : 'protocolo no confirmado'}`,
       { status: appsScript.httpStatus || systemHealth.status, promote: appsScript.protocolOk === true, evidenceLevel: LP });
     setFrom('google-sheets', integrations.sheets === true,
-      'GET /api/system-health · protocolo de sincronización confirmado', { status: systemHealth.status, promote: integrations.sheets === true, evidenceLevel: LP });
+      'GET /api/system-health · configuración y guard de Apps Script confirmados; sync de catálogo no probado por este probe', {
+        status: systemHealth.status,
+        promote: false,
+        partial: integrations.sheets === true,
+        evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
+      });
     const paypalOk = integrations.paypal?.productionReady === true;
     const externalServicesOk = integrations.resend === true && integrations.cloudinary === true && paypalOk;
     setFrom('servicios-externos', externalServicesOk,
@@ -305,7 +310,12 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
   }
   if (report?.integrations?.sheets !== undefined) {
     set('apps-script', 'google-sheets', report.integrations.sheets === true,
-      'GET /api/system-health · protocolo Sheets', systemHealth.status);
+      'GET /api/system-health · guard HTTP reconocido; escritura Sheets → Firestore no probada por este probe',
+      systemHealth.status, {
+        promote: false,
+        partial: report.integrations.sheets === true,
+        evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
+      });
   }
   const favoriteApi = protectedProbes.favoriteApi;
   const notificationApi = protectedProbes.notificationApi;
