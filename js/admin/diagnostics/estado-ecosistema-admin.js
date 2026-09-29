@@ -161,6 +161,13 @@ function render(payload) {
   const integrations = payload?.integrations || {};
   const appsScript = integrations?.appsScript || {};
   const paypal = integrations?.paypal || {};
+  const paypalProductionReady = paypal.productionReady === true;
+  const paypalMissing = paypalMissingLabels(paypal.missing);
+  const paypalDetail = paypalProductionReady
+    ? `Activo · entorno Live · tasa ${paypal.rateSource || 'manual'}${paypal.rateSourceDate ? ` · ${paypal.rateSourceDate}` : ''}`
+    : paypal.enabled === true
+      ? `Sandbox habilitado · requiere entorno Live${paypal.rateSourceDate ? ` · tasa ${paypal.rateSource || 'manual'} ${paypal.rateSourceDate}` : ''}`
+      : `Deshabilitado${paypalMissing.length ? ` · falta ${paypalMissing.join(', ')}` : ''}`;
   const areas = document.getElementById('system-health-areas');
   if (!areas) return;
 
@@ -177,10 +184,7 @@ function render(payload) {
     ['Visual Builder', admin.visualBuilder, 'Páginas, borradores e historial'],
     ['Resend', integrations.resend, 'Configuración privada de correo presente'],
     ['Cloudinary', integrations.cloudinary, 'Configuración privada de multimedia presente'],
-    ['PayPal', paypal.enabled === true,
-      paypal.enabled === true
-        ? `Activo · entorno ${paypal.environment || 'no informado'}`
-        : `Deshabilitado${paypalMissingLabels(paypal.missing).length ? ` · falta ${paypalMissingLabels(paypal.missing).join(', ')}` : ''}`],
+    ['PayPal', paypalProductionReady, paypalDetail],
     ['Google Sheets', integrations.sheets, 'Secreto del puente + protocolo de Apps Script verificado'],
     ['Apps Script', appsScript.protocolOk, appsScript.protocolOk
       ? `Protocolo ${appsScript.revision || 'actual'} · ${Number(appsScript.ms || 0)} ms`
