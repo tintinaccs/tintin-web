@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "35ef7028d0991451a51bc17fb4ab1bd029bbc59dc2b393f92cb6824b1b663f8d",
+  "sourceFingerprint": "548c079b2bc09bbf05f7f3dd261358f4dd6876e808ab3da2d1d95620e0a602e1",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 911,
     "textFiles": 870,
-    "totalBytes": 17854278,
+    "totalBytes": 17855455,
     "pages": 19,
     "modules": 625
   },
@@ -19432,8 +19432,8 @@
     },
     {
       "path": "functions/api/email-otp-verify.js",
-      "bytes": 12490,
-      "sha256": "1441994aab90ab29995cecfeead7970204fc3f650a3283289415991d139e4c83",
+      "bytes": 12546,
+      "sha256": "80efa546a16c0163d9b8c8c62280e4ae6f1dd70848b640b6cd8b51e088e2fdfd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30959,8 +30959,8 @@
     },
     {
       "path": "tests/accounts/email-otp-verify.test.mjs",
-      "bytes": 9673,
-      "sha256": "3735294eb2a1ce71ac73b97d844a6d37bc6f23eda000084931bbcf8fda17b4f0",
+      "bytes": 10794,
+      "sha256": "73d390dc834b6158d7a8c3a151288051949ec81c8272adca9f18931f887da16e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36888,8 +36888,8 @@
     {
       "path": "functions/api/email-otp-verify.js",
       "extension": ".js",
-      "bytes": 12490,
-      "sha256": "1441994aab90ab29995cecfeead7970204fc3f650a3283289415991d139e4c83"
+      "bytes": 12546,
+      "sha256": "80efa546a16c0163d9b8c8c62280e4ae6f1dd70848b640b6cd8b51e088e2fdfd"
     },
     {
       "path": "functions/api/engagement.js",
@@ -39954,8 +39954,8 @@
     {
       "path": "tests/accounts/email-otp-verify.test.mjs",
       "extension": ".mjs",
-      "bytes": 9673,
-      "sha256": "3735294eb2a1ce71ac73b97d844a6d37bc6f23eda000084931bbcf8fda17b4f0"
+      "bytes": 10794,
+      "sha256": "73d390dc834b6158d7a8c3a151288051949ec81c8272adca9f18931f887da16e"
     },
     {
       "path": "tests/accounts/username-login.test.mjs",
