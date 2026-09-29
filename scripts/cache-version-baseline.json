@@ -344,8 +344,8 @@
     "sha256": "17612eada59cce32efd0ab7c8c9f810ac47e5baf07b59256edc3fcd38813c40a"
   },
   "js/admin/importacion-admin.js": {
-    "version": "tintin-20260928-shopify-media-preflight-1",
-    "sha256": "5d0d56027fb7a2e381e1edd907c1a3f387d8c7522aa0e272a7e31dfe44387dd8"
+    "version": "tintin-20260929-shopify-identity-3",
+    "sha256": "944dbf269c96d84e7080ac8b49ef173a6b49e9a04e8e4e39fa66cad152644710"
   },
   "js/admin/maestro/panel-maestro.js": {
     "version": "tintin-20260920-admin-status-fixes-2-auth-popup-resolver-1-admin-ops-1-launch-20260926-1",
@@ -488,8 +488,8 @@
     "sha256": "c32c4c3ca8f96a0a2827fccf835490d09b4ff419bae2632c7490bc9a87f8a37f"
   },
   "js/cargador-pagina.js": {
-    "version": "tintin-20260928-shopify-media-loader-2",
-    "sha256": "952ad5ca895f7b87b671b1642ce13cd695c9f325a15b9ec6212ec455c526ff69"
+    "version": "tintin-20260929-shopify-identity-loader-1",
+    "sha256": "0143563ac8afbfcbeb5bd6c48af5c157a73eee8b7e2455914d97cf5c8978cf55"
   },
   "js/components/cart/politica-persistencia-carrito.js": {
     "version": "tintin-20260808-product-cart-1",
@@ -879,6 +879,10 @@
     "version": "tintin-20260927-shopify-apply-1",
     "sha256": "7a76bc6685b1fc52dac34d28e162198d73d2d8148aa3c066faa2cf9028279f93"
   },
+  "js/core/store/shopify-import-identity.mjs": {
+    "version": "tintin-20260929-shopify-identity-2",
+    "sha256": "5bb75632ef1ce710b465fff587a29636d626fcc8904c084508bd0b6a216a7570"
+  },
   "js/core/store/shopify-phase2-pipeline.mjs": {
     "version": "tintin-20260928-shopify-media-migrate-1",
     "sha256": "16c4f19c77b604b7a2288318e0afd6335d75131c5784feb75fcd9fed6bb78fa7"
@@ -1092,8 +1096,8 @@
     "sha256": "d765782bb4eb36dff36b4e96992281d5de78a726e77ff664dea1b587dd2b663f"
   },
   "js/quality/calidad-interfaz.js": {
-    "version": "tintin-20260928-shopify-media-quality-2",
-    "sha256": "c521d0bf58bcce75b5fecb238209126dc970f36ee0347563c9f9cc9c847b69b3"
+    "version": "tintin-20260929-shopify-identity-quality-1",
+    "sha256": "28f2e37e3a8fca820036b39bc80b9a9f712cb0e1825203aa19eb0af8cf1ed678"
   },
   "js/quality/correccion-auditoria-pagina.js": {
     "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
