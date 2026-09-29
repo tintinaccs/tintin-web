@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "ba73caf5ec8ec23b0a1666e35af6c3362b3b1649e69e93e399d9049c974769f5",
+  "sourceFingerprint": "44b2a6698b314a9f2600f8171082df42b5d211f586ac50ae19b596a11769bfbe",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 912,
     "textFiles": 871,
-    "totalBytes": 17877128,
+    "totalBytes": 17879807,
     "pages": 19,
     "modules": 626
   },
@@ -34444,8 +34444,8 @@
     },
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
-      "bytes": 14337,
-      "sha256": "0dbef6017dd73b24487fd9fdb477890bef9785cc2422546539236dd15d49d801",
+      "bytes": 17016,
+      "sha256": "38b0db93d4b713c862e5e01fe89180bc381295fea8e245e34139519ecf164a11",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34458,44 +34458,54 @@
           "line": 1
         },
         {
-          "raw": "node:fs",
+          "raw": "node:crypto",
           "target": null,
           "dynamic": false,
           "line": 2
         },
         {
-          "raw": "node:path",
+          "raw": "node:fs",
           "target": null,
           "dynamic": false,
           "line": 3
         },
         {
-          "raw": "node:test",
+          "raw": "node:path",
           "target": null,
           "dynamic": false,
           "line": 4
         },
         {
-          "raw": "node:vm",
+          "raw": "node:test",
           "target": null,
           "dynamic": false,
           "line": 5
         },
         {
+          "raw": "node:vm",
+          "target": null,
+          "dynamic": false,
+          "line": 6
+        },
+        {
           "raw": "../../functions/api/sheets-products-webhook.js",
           "target": "functions/api/sheets-products-webhook.js",
           "dynamic": false,
-          "line": 10
+          "line": 11
         }
       ],
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/api/sheets-products-webhook",
-          "line": 62
+          "line": 63
         },
         {
           "url": "https://cdn.shopify.com/test.png",
-          "line": 141
+          "line": 142
+        },
+        {
+          "url": "https://oauth2.googleapis.com/token",
+          "line": 194
         }
       ]
     },
@@ -40566,8 +40576,8 @@
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
       "extension": ".mjs",
-      "bytes": 14337,
-      "sha256": "0dbef6017dd73b24487fd9fdb477890bef9785cc2422546539236dd15d49d801"
+      "bytes": 17016,
+      "sha256": "38b0db93d4b713c862e5e01fe89180bc381295fea8e245e34139519ecf164a11"
     },
     {
       "path": "tests/system-health/order-admin-domain.test.mjs",
