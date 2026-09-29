@@ -71,3 +71,16 @@ La prueba Sheets → Firestore no está acreditada: no hay registro de canary en
 ## Google Search Console — 2026-09-29 06:09 UTC
 
 La única propiedad GSC conectada y verificada en la cuenta es `https://tintinaccesorios.pages.dev/` (`siteOwner`). No aparece una propiedad URL-prefix ni Domain para `tintinaccs.com`. `https://tintinaccesorios.pages.dev/sitemap.xml` fue enviado el 2026-09-28 01:58 UTC y figura pendiente, con cero advertencias y cero errores. Rendimiento GSC de los últimos 28 días disponibles (hasta 2026-09-26): 0 clics, 1 impresión. La inspección URL de Google da PASS, `Submitted and indexed`, robots ALLOWED, `INDEXING_ALLOWED`, fetch SUCCESSFUL y rastreo móvil para `/` (último rastreo 2026-09-13) y `/catalogo` (2026-09-21). Esto confirma indexación de páginas en el hostname técnico, no propiedad/indexación en el dominio comercial ni URLs de productos; el sitemap de productos y el catálogo dinámico siguen vacíos.
+
+## Apps Script conectado — 2026-09-29 06:44 UTC
+
+Revisión visible del proyecto `Tintin Sync — Motor` en la cuenta de producción, en modo lectura:
+
+- El proyecto contiene `Código.gs`, `ReorganizacionSheets.gs`, `AdminParity.gs`, `Participacion.gs` y `BorradoCatalogoPayload.gs`; no contiene el archivo versionado `ProductosUnificados.gs` del repositorio. Por ello, el canary específico y la implementación vigente en Git no están acreditados como parte de la fuente conectada.
+- La implementación web activa seleccionada muestra la versión 16, fechada el 22 de septiembre de 2026. El formulario indica que se ejecuta como la cuenta propietaria y permite acceso a cualquiera. No se registran aquí el ID ni la URL de implementación.
+- Hay tres activadores instalados: `onOpen`, `tintinReconciliarAdminParidad` (basado en tiempo) y `tintinDespacharEdicionParidad` (al editar). Las ejecuciones recientes observadas del reconciliador terminaron completadas; estas son pruebas de sincronización administrativa, no de productos.
+- La fila `Productos!720` sigue como `CANARY-SHEETS-FIRESTORE` / `PRUEBA QA · NO VENDER`; una lectura de `A720:V720` conserva el ID, el nombre y `Activo = No`. Una búsqueda exacta en `Historial sync!A1:J600` devuelve cero filas para el canary.
+
+La inspección solo abrió el editor, la lista de activadores, ejecuciones y detalles de despliegue; no editó ni guardó código, no ejecutó funciones, no creó activadores y no cambió la implementación. El estado del proyecto explica por qué aún no hay evidencia de ejecución canaria. Seguir el runbook después de integrar el PR: sincronizar cuidadosamente el código con el proyecto conectado, conservar la URL de webhook, revisar la autorización del endpoint para la implementación “cualquiera” y validar el despliegue antes de invocar únicamente el canary inactivo. No actualizar manualmente ni publicar una implementación parcial.
+
+**Decisión: NO-GO para cutover.** Se mantienen además los gates ya registrados: catálogo/sitemap de productos vacíos, dominio comercial todavía en Shopify, ausencia de propiedad GSC verificada para ese dominio y falta de aceptación de pago en producción.

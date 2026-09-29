@@ -2,6 +2,18 @@
 
 > Registro actualizado para esta tarea y rama. La evidencia de cada estado corresponde al commit indicado y no se hereda de auditorías históricas.
 
+## Revalidación vigente — 2026-09-29 06:44 UTC
+
+- Rama: `codex/shopify-import-identity-reconciliation`; HEAD `2580a9bbac2236457ab1c1393e00d70a6e31f95f`. PR #957 está abierto, draft, no merged y `mergeable: true` (snapshot GitHub 06:38 UTC).
+- CI run `3513` / Actions `36531327753` para el HEAD terminó `success`; `npm audit` y `npm audit --omit=dev` muestran cero vulnerabilidades; las suites/build locales recientes están detalladas en el cuerpo del PR. El catálogo público continúa vacío y sus tres probes de muestra/sitemap/metadata siguen en NO-GO.
+- La planilla oficial mantiene el canary inactivo `CANARY-SHEETS-FIRESTORE` / `PRUEBA QA · NO VENDER`; la búsqueda exacta en `Historial sync!A1:J600` devuelve cero filas. Por tanto, Sheets → Firestore no está probado.
+- Nueva evidencia Apps Script visible: el proyecto conectado enumera cinco fuentes, pero no `ProductosUnificados.gs`; la implementación web seleccionada es versión 16 (2026-09-22), ejecuta como propietaria y tiene acceso configurado para cualquiera. Se observan tres activadores: `onOpen`, el reconciliador de paridad administrativa y el dispatcher de edición; las últimas ejecuciones visibles del reconciliador aparecen completadas. No se editó ni ejecutó el proyecto.
+- La configuración de acceso “cualquiera” requiere revisar el handler y su autenticación antes de publicar código, porque la app web ejecuta con permisos de propietaria. La URL y el ID de implementación no se copian al repositorio.
+- La evidencia ampliada de producción queda en `PRODUCTION-PROBE-2026-09-29.md`. No se cambió DNS, deployment, Apps Script, catálogo/Firestore, pagos ni estado de PRs.
+- **NO-GO para cutover.** No integrar ni desplegar todavía: primero alinear y revisar el Apps Script canónico después de integrar el PR; desplegar conservando la URL existente; probar webhook autenticado y canary con lectura autoritativa de `products` y `productInventory`. Persisten además dominio en Shopify, falta de catálogo comercial, pago real no aceptado y propiedad/indexación del dominio final pendiente.
+
+Las secciones históricas inferiores conservan el estado registrado en sus fechas y ramas; para la decisión vigente, prevalece esta revalidación y `PRODUCTION-PROBE-2026-09-29.md`.
+
 ## Baseline
 
 - Rama de trabajo: `codex/shopify-independence-audit`
