@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5426c1f34a002acf8e7055491860ebe7ed7c36c6f5824e7999b767e389e8ef5c",
+  "sourceFingerprint": "40e2f90382da43320d40ec190df61b383303c906dbc2493f9256a4850388176e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 913,
-    "textFiles": 872,
-    "totalBytes": 17924652,
+    "files": 915,
+    "textFiles": 874,
+    "totalBytes": 18111605,
     "pages": 19,
     "modules": 627
   },
@@ -27986,7 +27986,7 @@
     {
       "path": "scripts/auditar-fase-10-accessibility.js",
       "bytes": 4656,
-      "sha256": "64a590f827c553cd7df133cb6aef55b09fa323f7e2de6ee207e3edacc17a2911",
+      "sha256": "dea5492ac01281d0d594ec7039afc5c54938f361d344a987f729e2665a4ca4a7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28091,7 +28091,7 @@
     {
       "path": "scripts/auditar-fase-8-ui-ux.js",
       "bytes": 6459,
-      "sha256": "17663879e9087f1af534545ce4e024331844978229a6c60c2c62415ca18dc9a6",
+      "sha256": "ec1ad3d2d9b651ff6aaa96493ca4cf9f2657f17f769ef50c549515d6a9c82d86",
       "syntax": {
         "ok": true,
         "error": ""
@@ -38944,6 +38944,18 @@
       "sha256": "557b92db0d9a777f1197ff90202903234c745e46a819f10281ee746fa2598739"
     },
     {
+      "path": "pnpm-lock.yaml",
+      "extension": ".yaml",
+      "bytes": 186821,
+      "sha256": "8954596e20c334127a4b252969c588a616d4233dd984825aa597c2c4443b0ff6"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "extension": ".yaml",
+      "bytes": 132,
+      "sha256": "f70046d27308428761d2acd8be818fac96f4e43d8bf1d334df7fc1c04126785c"
+    },
+    {
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
       "bytes": 14818,
@@ -39301,7 +39313,7 @@
       "path": "scripts/auditar-fase-10-accessibility.js",
       "extension": ".js",
       "bytes": 4656,
-      "sha256": "64a590f827c553cd7df133cb6aef55b09fa323f7e2de6ee207e3edacc17a2911"
+      "sha256": "dea5492ac01281d0d594ec7039afc5c54938f361d344a987f729e2665a4ca4a7"
     },
     {
       "path": "scripts/auditar-fase-11-seo.js",
@@ -39337,7 +39349,7 @@
       "path": "scripts/auditar-fase-8-ui-ux.js",
       "extension": ".js",
       "bytes": 6459,
-      "sha256": "17663879e9087f1af534545ce4e024331844978229a6c60c2c62415ca18dc9a6"
+      "sha256": "ec1ad3d2d9b651ff6aaa96493ca4cf9f2657f17f769ef50c549515d6a9c82d86"
     },
     {
       "path": "scripts/auditar-final-barrido-parte-2h.js",
