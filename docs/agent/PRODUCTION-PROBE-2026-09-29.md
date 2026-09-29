@@ -33,3 +33,13 @@ Read-only revalidation of the live storefront and Pages deployment. The probe ma
 6. Only after the catalog is present, follow the same-session constraint recorded in PR #929: merge the domain cutover and attach the Pages Custom Domain together, then validate canonical, TLS, OAuth/App Check, redirects, sitemaps, and rollback on the live host.
 
 Keep Shopify available until those gates pass. This recheck did not change the migration decision and does not certify real payment, authenticated CRUD, Apps Script deployment, or Google indexing.
+
+## Observación directa de Apps Script — 2026-09-29
+
+Se revisó en modo lectura el proyecto `Tintin Sync — Motor` y su panel de ejecuciones, sin publicar código ni ejecutar funciones manuales. El historial de los últimos siete días mostraba 9.153 ejecuciones y una tasa de error de 0,32%. Entre los fallos visibles del 28/9, una ejecución de `tintinReconciliarAdminParidad` registró `Address unavailable` al consultar el endpoint de snapshot `sheets-sync-snapshot`; otra ejecución larga terminó con un error temporal genérico del servidor de Google. El listado reciente del 29/9 mostró ejecuciones consecutivas completadas de la reconciliación programada.
+
+El hallazgo es compatible con fallos transitorios de transporte al leer el snapshot, no demuestra pérdida ni divergencia de datos. El PR #956 contiene reintentos acotados para ese caso y permanece draft; su código no se debe considerar desplegado en Apps Script hasta verificar la versión publicada. `npm run test:products-sync` en el HEAD evaluado pasó 76/76; esa prueba no equivale a una escritura real Sheets → Firestore.
+
+La pestaña autenticada del panel de Admin en Pages abrió sin errores pendientes y sirvió el importador con la ruta de preflight de medios (`shopify-media-preflight-1`). La reconciliación de identidad del importador del PR #957 no aparece en el código publicado. No se cargó un CSV ni se ejecutó preflight, sincronización o escritura.
+
+El proyecto de Apps Script registraba 0,32% de errores en la ventana de siete días, pero las últimas ejecuciones automáticas visibles ya estaban completadas. Mantener el gate operativo: desplegar/verificar el código con reintentos en la versión de Apps Script, ejecutar el canary inactivo `CANARY-SHEETS-FIRESTORE` y confirmar Firestore/cola/estado final. No reutilizar productos comerciales para esa prueba.
