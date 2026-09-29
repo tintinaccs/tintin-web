@@ -66,18 +66,48 @@ Debe quedar una sola definición global.
 
 ## Dispatcher instalable
 
-Ejecutar una vez `tintinInstalarDispatcherUnificado()`. El instalador es
-idempotente: retira los triggers de edición de esa planilla y crea exactamente
-uno con el handler `tintinDespacharEdicionInstalable`.
+Con los archivos canónicos `ProductosUnificados.gs` y `AdminParity.gs`
+desplegados, ejecutar una vez `tintinInstalarParidadAdministrativa()`. Es el
+instalador de referencia: prepara las hojas, retira triggers de edición viejos,
+instala exactamente un dispatcher `tintinDespacharEdicionParidad` y un
+reconciliador `tintinReconciliarAdminParidad` cada minuto. El segundo importa
+usuarios, pedidos y auditoría desde Firestore; **no sincroniza productos**.
 
-El dispatcher enruta:
+`tintinInstalarDispatcherUnificado()` es el instalador de productos compatible
+con proyectos antiguos. Si `AdminParity.gs` está presente, también elige
+`tintinDespacharEdicionParidad` y `tintinReconciliarAdminParidad`; no esperar el
+handler heredado `tintinDespacharEdicionInstalable` en el proyecto completo.
+
+El dispatcher canónico enruta:
 
 - `Productos` → `tintinHandleProductEdit_`.
-- `Usuarios web` → `alEditarClientas`.
+- `Usuarios web` → `tintinHandleUserParityEdit_`.
+- `Pedidos web` → `tintinHandleOrderParityEdit_`.
+- `Nuevo pedido web` → `tintinHandleNewOrderParityEdit_`.
 - `Resenas` → `tintinEngagementOnEdit`.
 
-Los refresh temporales de usuarios y productos no son eliminados. Debe existir
-como máximo uno de cada uno.
+El instalador canónico retira el trigger antiguo `tintinReconciliarEspejosWeb`
+y crea un único `tintinReconciliarAdminParidad` cada minuto para usuarios,
+pedidos y auditoría. No existe un trigger Apps Script de Firestore →
+`Productos`: el espejo inverso de catálogo usa `catalogSheetSyncQueue` en
+Cloudflare y `syncProductsPayload` en Apps Script. No instales triggers
+temporales para refrescar productos.
+
+### Ediciones hechas por API y prueba de producto
+
+La escritura de una celda mediante Google Sheets API, `Range.setValue()` o una
+ejecución de Apps Script **no dispara** triggers simples ni instalables `onEdit`.
+Por eso editar `Productos!A720:V720` desde una integración no genera por sí solo
+una fila en `Historial sync` ni demuestra que Firestore se actualizó. Es el
+comportamiento documentado por Google en [Restricciones de triggers](https://developers.google.com/apps-script/guides/triggers#restrictions).
+
+La prueba de productos se ejecuta explícitamente desde el proyecto Apps Script,
+después de desplegar el código canónico y confirmar el endpoint autenticado:
+`tintinProbarEdicionCatalogo()`. Esta función valida exactamente el canary
+seguro y llama a `tintinSendProductRow_`; no se debe cambiar `Activo`, stock ni
+la columna `Acción` para intentar provocar el envío. Tras la ejecución, comprobar
+su resultado, `Historial sync` y Firestore (`products` y `productInventory`).
+El reconciliador periódico de paridad no sustituye esta prueba.
 
 ## Diagnóstico seguro del 401
 
@@ -114,10 +144,10 @@ Variables requeridas, solo nombres:
 5. Editar las funciones heredadas en lugar de duplicarlas.
 6. Actualizar el deployment existente de Apps Script como versión nueva,
    conservando su URL `/exec`.
-7. Ejecutar `tintinInstalarDispatcherUnificado()` una vez.
-8. Ejecutar `tintinDiagnosticarWebhookProductos()`.
-9. Crear primero la fila canary descrita abajo y luego ejecutar `tintinProbarEdicionCatalogo()`.
-10. Ejecutar los refresh Firestore → `Productos` y Firestore → `Usuarios web`.
+7. Ejecutar `tintinInstalarParidadAdministrativa()` y confirmar exactamente un dispatcher y un reconciliador en su resultado.
+8. Ejecutar `tintinDiagnosticarWebhookProductos()`; debe devolver HTTP 200 y revisión `products-canonical-v3`.
+9. Crear/verificar la fila canary descrita abajo y ejecutar manualmente `tintinProbarEdicionCatalogo()` desde Apps Script.
+10. Confirmar `ok: true`, estados `SYNCING` y `SYNCED` en `Historial sync` y la fila en `products` y `productInventory`. Verificar que `catalogSheetSyncQueue` drene para el espejo Firestore → Sheets y que `tintinReconciliarAdminParidad` mantenga usuarios, pedidos y auditoría; no ejecutar un refresh manual inexistente de productos.
 
 ### Canary seguro de Sheets → Firestore
 

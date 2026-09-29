@@ -714,27 +714,37 @@ function tintinProbarEdicionCatalogo() {
   if (!String(before[3] || '').trim() || !(Number(before[5]) > 0) || String(before[19] || '').trim()) return {
     ok: false, destructive: false, error: 'canary-needs-category-price-and-no-image', row: rowNumber
   };
-  tintinSendProductRow_(sheet, rowNumber);
-  var after = sheet.getRange(rowNumber, 1, 1, 35).getValues()[0];
-  var sameName = String(before[1] || '') === String(after[1] || '');
-  var samePrice = Number(before[5] || 0) === Number(after[5] || 0);
-  var sameStock = Number(before[10] || 0) === Number(after[10] || 0);
-  return {
-    ok: String(after[0] || '').trim() === TINTIN_PRODUCTS_CANARY_ID &&
-      String(after[1] || '').trim() === TINTIN_PRODUCTS_CANARY_NAME && !tintinBool_(after[14]) &&
-      Number(after[10] || 0) === 0 && String(after[19] || '').trim() === '' &&
-      sameName && samePrice && sameStock && String(after[34] || '').trim() === '',
-    destructive: false,
-    writesFirestore: true,
-    publicCatalogVisible: false,
-    productId: String(after[0] || ''),
-    row: rowNumber,
-    sameName: sameName,
-    samePrice: samePrice,
-    inactive: !tintinBool_(after[14]),
-    zeroStock: sameStock && Number(after[10] || 0) === 0,
-    actionCleared: String(after[34] || '').trim() === ''
-  };
+  var cell = sheet.getRange(rowNumber, 1, 1, 35).getA1Notation();
+  tintinRecordSyncSafely_('SYNCING', TINTIN_PRODUCTS_SHEET, cell, 'Ejecutando prueba controlada Sheets → Firestore para el canary inactivo.');
+  try {
+    tintinSendProductRow_(sheet, rowNumber);
+    var after = sheet.getRange(rowNumber, 1, 1, 35).getValues()[0];
+    var sameName = String(before[1] || '') === String(after[1] || '');
+    var samePrice = Number(before[5] || 0) === Number(after[5] || 0);
+    var sameStock = Number(before[10] || 0) === Number(after[10] || 0);
+    var result = {
+      ok: String(after[0] || '').trim() === TINTIN_PRODUCTS_CANARY_ID &&
+        String(after[1] || '').trim() === TINTIN_PRODUCTS_CANARY_NAME && !tintinBool_(after[14]) &&
+        Number(after[10] || 0) === 0 && String(after[19] || '').trim() === '' &&
+        sameName && samePrice && sameStock && String(after[34] || '').trim() === '',
+      destructive: false,
+      writesFirestore: true,
+      publicCatalogVisible: false,
+      productId: String(after[0] || ''),
+      row: rowNumber,
+      sameName: sameName,
+      samePrice: samePrice,
+      inactive: !tintinBool_(after[14]),
+      zeroStock: sameStock && Number(after[10] || 0) === 0,
+      actionCleared: String(after[34] || '').trim() === ''
+    };
+    tintinRecordSyncSafely_(result.ok ? 'SYNCED' : 'ERROR', TINTIN_PRODUCTS_SHEET, cell,
+      result.ok ? 'Prueba canary Sheets → Firestore confirmada; producto inactivo y sin stock.' : 'La escritura terminó, pero falló la verificación posterior del canary.');
+    return result;
+  } catch (error) {
+    tintinRecordSyncSafely_('ERROR', TINTIN_PRODUCTS_SHEET, cell, 'Falló la prueba canary Sheets → Firestore: ' + String(error && error.message || error));
+    throw error;
+  }
 }
 
 function tintinWebhookSecret_() {

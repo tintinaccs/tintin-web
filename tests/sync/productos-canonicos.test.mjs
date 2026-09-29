@@ -12,9 +12,10 @@ import {
 const root = path.resolve(import.meta.dirname, '../..');
 const read = relative => fs.readFileSync(path.join(root, relative), 'utf8');
 
-function runAppsScriptCanary(rows) {
+function runAppsScriptCanary(rows, { sendError = '' } = {}) {
   const source = read('apps-script/ProductosUnificados.gs');
   const sendCalls = [];
+  const historyEvents = [];
   const sheet = {
     getLastRow: () => 6 + rows.length,
     getRange(row, column, rowCount) {
@@ -23,15 +24,25 @@ function runAppsScriptCanary(rows) {
       return {
         getDisplayValues: () => selected.map(values => [String(values[column - 1] ?? '')]),
         getValues: () => selected.map(values => [...values]),
+        getA1Notation: () => `A${row}:${column}`,
       };
     },
   };
   const context = {
     SpreadsheetApp: { openById: () => ({ getSheetByName: name => name === 'Productos' ? sheet : null }) },
   };
+  context.sendError = sendError;
   vm.runInNewContext(source, context);
-  context.tintinSendProductRow_ = (_sheet, rowNumber) => sendCalls.push(rowNumber);
-  return { result: context.tintinProbarEdicionCatalogo(), sendCalls };
+  context.tintinSendProductRow_ = (_sheet, rowNumber) => {
+    sendCalls.push(rowNumber);
+    if (context.sendError) throw new Error(context.sendError);
+  };
+  context.tintinRecordSyncSafely_ = (...event) => historyEvents.push(event);
+  let result;
+  let error = '';
+  try { result = context.tintinProbarEdicionCatalogo(); }
+  catch (caught) { error = String(caught && caught.message || caught); }
+  return { result, sendCalls, historyEvents, error };
 }
 
 function canaryRow({ active = 'No', stock = 0 } = {}) {
@@ -81,7 +92,7 @@ test('la prueba Sheets→Firestore nunca selecciona un producto real como canary
 });
 
 test('la prueba Sheets→Firestore solo envía el canary inactivo y sin stock', () => {
-  const { result, sendCalls } = runAppsScriptCanary([canaryRow()]);
+  const { result, sendCalls, historyEvents } = runAppsScriptCanary([canaryRow()]);
 
   assert.equal(result.ok, true);
   assert.equal(result.destructive, false);
@@ -89,6 +100,16 @@ test('la prueba Sheets→Firestore solo envía el canary inactivo y sin stock', 
   assert.equal(result.publicCatalogVisible, false);
   assert.equal(result.productId, 'CANARY-SHEETS-FIRESTORE');
   assert.deepEqual(sendCalls, [7]);
+  assert.deepEqual(historyEvents.map(event => event[0]), ['SYNCING', 'SYNCED']);
+  assert.equal(historyEvents[0][1], 'Productos');
+  assert.match(historyEvents[1][3], /confirmada/);
+});
+
+test('la prueba canary registra ERROR en Historial sync cuando falla el webhook', () => {
+  const failing = runAppsScriptCanary([canaryRow()], { sendError: 'simulated webhook failure' });
+  assert.equal(failing.error, 'simulated webhook failure');
+  assert.deepEqual(failing.historyEvents.map(event => event[0]), ['SYNCING', 'ERROR']);
+  assert.match(failing.historyEvents[1][3], /simulated webhook failure/);
 });
 
 test('la prueba Sheets→Firestore no elige entre canaries duplicados', () => {

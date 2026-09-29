@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "581e90257173ec0bcf79002134714b34f69310bb1993d69a4b2a17b7346eddfc",
+  "sourceFingerprint": "039575e7867b5f333066e4df0c9a5b35738387c54aa996396e96406be3bb1844",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 911,
     "textFiles": 870,
-    "totalBytes": 17835484,
+    "totalBytes": 17840372,
     "pages": 19,
     "modules": 625
   },
@@ -34444,8 +34444,8 @@
     },
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
-      "bytes": 13076,
-      "sha256": "ece6a017d77473a299b6a6d179d39c5b6aaf824e1ece822f1b66d38e8100ea84",
+      "bytes": 14121,
+      "sha256": "b232376bc575f31aa1ea8ff48fb1699121291e122cbf32383a58840bb88f7179",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34491,11 +34491,11 @@
       "endpoints": [
         {
           "url": "https://tintinaccesorios.pages.dev/api/sheets-products-webhook",
-          "line": 51
+          "line": 62
         },
         {
           "url": "https://cdn.shopify.com/test.png",
-          "line": 117
+          "line": 138
         }
       ]
     },
@@ -35448,8 +35448,8 @@
     {
       "path": "apps-script/ProductosUnificados.gs",
       "extension": ".gs",
-      "bytes": 47120,
-      "sha256": "b0f2e2fa64d57d4faf7fbb4f01d7275064c170513ef6abfb1efe99c1d277f1e5"
+      "bytes": 47873,
+      "sha256": "7302b845ad41236f2fc88d0d4143693167ab8a707a173f9c3b1819c46fd693c7"
     },
     {
       "path": "apps-script/ReorganizacionSheets.gs",
@@ -36420,8 +36420,8 @@
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-29.md",
       "extension": ".md",
-      "bytes": 8751,
-      "sha256": "a13ea80830f8a3d5a29a68ae56f5d3f791663ebb250ef5c251f14dcdb7df02f3"
+      "bytes": 9376,
+      "sha256": "8986ae42cee8955e50553a000b3400787c6b6ef8ebe63a02bfb5cd2344f583f6"
     },
     {
       "path": "docs/agent/README.md",
@@ -36702,8 +36702,8 @@
     {
       "path": "docs/sincronizacion-productos-canonica.md",
       "extension": ".md",
-      "bytes": 6845,
-      "sha256": "e01aadc0b679fd1d30d12827c98eff5d9c37a413557389ffe400ed833b9d630d"
+      "bytes": 9310,
+      "sha256": "5b3241989e686534b333fdfcdd0fd4f2bf78014cb1359676683e5eba6d098187"
     },
     {
       "path": "docs/system-health.md",
@@ -40536,8 +40536,8 @@
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
       "extension": ".mjs",
-      "bytes": 13076,
-      "sha256": "ece6a017d77473a299b6a6d179d39c5b6aaf824e1ece822f1b66d38e8100ea84"
+      "bytes": 14121,
+      "sha256": "b232376bc575f31aa1ea8ff48fb1699121291e122cbf32383a58840bb88f7179"
     },
     {
       "path": "tests/system-health/order-admin-domain.test.mjs",
