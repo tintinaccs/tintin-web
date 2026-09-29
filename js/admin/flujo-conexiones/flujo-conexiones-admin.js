@@ -8,8 +8,8 @@
 // monitoreo nueva: reutiliza lo que ya prueba conectividad real sin escribir
 // datos. Nada de lo que hace este módulo crea, actualiza ni borra documentos.
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260925-cache-converge-1';
-import { resolveState, isAttentionState } from './estado-flujo.js?v=tintin-20260920-admin-status-fixes-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260929-paypal-live-gate-2';
+import { resolveState, isAttentionState } from './estado-flujo.js?v=tintin-20260929-partial-evidence-1';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260929-partial-evidence-2';
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { collection, doc, getDoc, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
@@ -120,20 +120,61 @@ async function probeClientFirestoreRead(label, read) {
 async function probeClientFirestoreRules(user) {
   if (!user || !await appCheckReady) {
     const unavailable = { ok: false, status: 0, authRequired: true, error: 'App Check o sesión no disponible' };
-    return { favorites: { label: 'Favoritos', ...unavailable }, notifications: { label: 'Notificaciones', ...unavailable } };
+    return {
+      favorites: { label: 'Favoritos', ...unavailable },
+      notifications: { label: 'Notificaciones', ...unavailable },
+      cart: { label: 'Carrito', ...unavailable },
+    };
   }
-  // Hay que esperar ambas lecturas: devolver las promesas sin resolver hacía
+  // Hay que esperar las lecturas: devolver promesas sin resolver hacía
   // que `favorites.ok` / `notifications.ok` fueran siempre undefined y el flujo
   // reportara "no confirmado" aunque las Rules permitieran la lectura.
-  const [favorites, notifications] = await Promise.all([
+  const [favorites, notifications, cart] = await Promise.all([
     probeClientFirestoreRead('Favoritos', () => getDocs(query(
       collection(db, 'users', user.uid, 'favorites'), limit(1),
     ))),
     probeClientFirestoreRead('Notificaciones', () => getDocs(query(
       collection(db, 'adminNotifications'), limit(1),
     ))),
+    probeClientFirestoreRead('Carrito', () => getDocs(query(
+      collection(db, 'users', user.uid, 'cart'), limit(1),
+    ))),
   ]);
-  return { favorites, notifications };
+  return { favorites, notifications, cart };
+}
+
+// Comprueba únicamente la lectura de estadísticas públicas de engagement para
+// un producto existente. Son GETs sin mutación: no dejan likes/reseñas de prueba.
+async function probeEngagementStats(user) {
+  const unavailable = { ok: false, status: 0, error: 'sin sesión o App Check' };
+  if (!user || !await appCheckReady) return { likes: unavailable, reviews: unavailable };
+  try {
+    const products = await getDocs(query(collection(db, 'products'), limit(1)));
+    const productId = products.docs[0]?.id;
+    if (!productId) {
+      const noProduct = { ok: false, status: 0, error: 'no hay producto para probar engagement' };
+      return { likes: noProduct, reviews: noProduct };
+    }
+    const readStats = async action => {
+      try {
+        const response = await fetch(`/api/engagement?action=${action}&productId=${encodeURIComponent(productId)}`, {
+          credentials: 'same-origin', cache: 'no-store',
+        });
+        const payload = await response.json().catch(() => null);
+        const shapeOk = action === 'productLikes'
+          ? payload?.productId === productId && Number.isFinite(Number(payload?.likeCount))
+          : payload?.stats && typeof payload.stats === 'object';
+        return { ok: response.ok && payload?.ok === true && shapeOk, status: response.status };
+      } catch {
+        return { ok: false, status: 0 };
+      }
+    };
+    const [likes, reviews] = await Promise.all([readStats('productLikes'), readStats('reviewStats')]);
+    return { likes, reviews };
+  } catch {
+    const unreadable = { ok: false, status: 0, error: 'no se pudo leer un producto para el probe' };
+    return { likes: unreadable, reviews: unreadable };
+  }
 }
 
 // Comprueba únicamente la identidad que ya está autenticada en este panel.
@@ -401,13 +442,14 @@ export function initConnectionsFlow({ role } = {}) {
       } else {
         errors.push('No hay una sesión de Super Admin para probes protegidos.');
       }
-      const [systemHealth, adminHealth, masterDiagnostics, favoriteApi, notificationApi, firestoreRules, sessionProbe, pageProbe, ...routeProbes] = await Promise.all([
+      const [systemHealth, adminHealth, masterDiagnostics, favoriteApi, notificationApi, firestoreRules, engagementStats, sessionProbe, pageProbe, ...routeProbes] = await Promise.all([
         user ? readJson('/api/system-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/admin-runtime-health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/master-diagnostics', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/engagement?action=ownFavorite&productId=__tfc_health_probe__', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         user ? readJson('/api/notifications?action=health', { headers: authHeaders }) : Promise.resolve({ status: 401, ok: false, body: { code: 'authentication_required' } }),
         probeClientFirestoreRules(user),
+        probeEngagementStats(user),
         probeCurrentSession(user, role),
         fetch('/admin.html', { credentials: 'same-origin', cache: 'no-store' }).then(response => ({
           status: response.status,
@@ -446,11 +488,11 @@ export function initConnectionsFlow({ role } = {}) {
         adminHealth: { ...adminHealth, checks: adminHealth.body?.checks },
         headers: pageProbe,
         routeProbes: routeProbeMap,
-        protectedProbes: { favoriteApi, notificationApi, firestoreRules },
+        protectedProbes: { favoriteApi, notificationApi, firestoreRules, engagementStats },
         sessionProbe,
         currentEvidence: masterDiagnostics.body?.currentEvidence,
       }, checkedAt);
-      liveState.byEdgeId = buildLiveEdges({ publicHealth, systemHealth, headers: pageProbe, protectedProbes: { favoriteApi, notificationApi, firestoreRules }, sessionProbe, currentEvidence: masterDiagnostics.body?.currentEvidence }, checkedAt);
+      liveState.byEdgeId = buildLiveEdges({ publicHealth, systemHealth, headers: pageProbe, protectedProbes: { favoriteApi, notificationApi, firestoreRules, engagementStats }, sessionProbe, currentEvidence: masterDiagnostics.body?.currentEvidence }, checkedAt);
       liveTimestampEl.textContent = `Última verificación en vivo: ${checkedAt} (${Object.keys(liveState.byId).length} nodos y ${Object.keys(liveState.byEdgeId).length} conexiones con probe).`;
 
       if (errors.length) {

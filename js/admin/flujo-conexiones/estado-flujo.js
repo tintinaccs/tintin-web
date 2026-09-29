@@ -32,6 +32,10 @@ export function resolveState(record, live, estados) {
   // un fallo: se conserva el estado base hasta que termine.
   if (live.pending) return initial;
   if (!live.ok) return classifyProbe(live, estados);
+  // Una lectura correcta puede demostrar una parte del flujo sin demostrar
+  // su mutación. Exponerla como parcial evita perder evidencia útil o pintar
+  // de verde una conexión que todavía requiere prueba de escritura.
+  if (live.partial === true) return classifyProbe(live, estados);
   if ((live.evidenceLevel === EVIDENCIA.LIVE_PRODUCTION || live.evidenceLevel === EVIDENCIA.CI_VERIFIED) && live.promote === true) return estados.PROD;
   if (live.evidenceLevel === EVIDENCIA.LIVE_PRODUCTION_READ_ONLY) return initial;
   return initial;

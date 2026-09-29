@@ -34,6 +34,39 @@ test('evidencia parcial permanece naranja y lectura no promueve una mutación', 
   assert.equal(resolveState({ state: ESTADOS.PARCIAL }, {
     ok: true, status: 200, promote: false, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
   }, ESTADOS), ESTADOS.PARCIAL);
+  assert.equal(resolveState({ state: ESTADOS.NO_VERIFICADO }, {
+    ok: true, partial: true, status: 200, promote: false, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
+  }, ESTADOS), ESTADOS.PARCIAL, 'una lectura útil debe explicitarse como parcial aunque el estado base estuviera sin verificar');
+});
+
+test('lecturas de engagement y carrito muestran evidencia parcial sin certificar mutaciones', () => {
+  const at = '2026-09-29T00:00:00.000Z';
+  const protectedProbes = {
+    firestoreRules: { cart: { ok: true, status: 200 } },
+    engagementStats: {
+      likes: { ok: true, status: 200 },
+      reviews: { ok: true, status: 200 },
+    },
+  };
+  const live = buildLiveChecks({ protectedProbes }, at);
+  const edges = buildLiveEdges({ protectedProbes }, at);
+  for (const id of ['likes', 'comentarios', 'carrito']) {
+    assert.equal(live[id].promote, false, `${id}: lectura sola no certifica escritura`);
+    assert.equal(resolveState(NODES.find(node => node.id === id), live[id], ESTADOS), ESTADOS.PARCIAL);
+  }
+  for (const [from, to] of [['apis-internas', 'likes'], ['apis-internas', 'comentarios'], ['firestore', 'carrito']]) {
+    const edge = EDGES.find(item => item.from === from && item.to === to);
+    assert.equal(edges[edge.id].promote, false, `${from} → ${to}: lectura sola no certifica mutación`);
+    assert.equal(resolveState(edge, edges[edge.id], ESTADOS), ESTADOS.PARCIAL);
+  }
+});
+
+test('un probe sin respuesta conserva el estado no verificado y no se convierte en 200', () => {
+  const live = buildLiveChecks({
+    protectedProbes: { engagementStats: { likes: { ok: false, status: 0 } } },
+  }, '2026-09-29T00:00:00.000Z');
+  assert.equal(live.likes.status, 0);
+  assert.equal(resolveState(NODES.find(node => node.id === 'likes'), live.likes, ESTADOS), ESTADOS.NO_VERIFICADO);
 });
 
 test('401/403 es falta de evidencia autenticada, no un fallo de producción', () => {
@@ -260,11 +293,12 @@ test('un deploy de CI pendiente no pisa la evidencia runtime del commit desplega
   assert.equal(resolveState(deployments, live.deployments, ESTADOS), ESTADOS.PROD);
 });
 
-// Regresión: probeClientFirestoreRules devolvía promesas sin esperar, así que
-// `.ok` era undefined y las Rules se reportaban siempre como "no confirmadas".
-test('probeClientFirestoreRules espera ambas lecturas antes de devolver', async () => {
+// Regresión: probeClientFirestoreRules debe esperar todas las lecturas.
+test('probeClientFirestoreRules espera las lecturas antes de devolver', async () => {
   const src = (await import('node:fs')).readFileSync(new URL('../../js/admin/flujo-conexiones/flujo-conexiones-admin.js', import.meta.url), 'utf8');
   const body = src.slice(src.indexOf('async function probeClientFirestoreRules'), src.indexOf('export function initConnectionsFlow'));
   assert.match(body, /await Promise\.all\(\[/, 'debe esperar ambas lecturas con Promise.all');
+  assert.match(body, /collection\(db, 'users', user\.uid, 'cart'\)/, 'debe consultar solo el carrito propio');
+  assert.match(body, /async function probeEngagementStats\(user\)/, 'debe incluir la comprobación de lectura pública de engagement');
   assert.doesNotMatch(body, /return \{\s*favorites: probeClientFirestoreRead/, 'no debe devolver promesas sin resolver');
 });

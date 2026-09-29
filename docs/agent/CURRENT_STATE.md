@@ -2,6 +2,16 @@
 
 > Registro actualizado para esta tarea y rama. La evidencia de cada estado corresponde al commit indicado y no se hereda de auditorías históricas.
 
+## Continuación verificada — 2026-09-29
+
+- `origin/main` es `99bcfc67c6bcb89cd8149b071849566ac30d2eec`. GitHub CI `36561713937` y la auditoría visual consolidada `36562089565` terminaron SUCCESS para ese commit. Una revalidación autenticada en Pages a las 11:39 UTC confirmó 36 nodos, 37 conexiones, 63 verificadas y 10 que requieren atención.
+- La auditoría pública de Pages encontró todas las rutas base, robots, sitemaps de páginas y APIs de salud con HTTP esperado. Permanecen sin ficha pública: catálogo productos=0 y colecciones=0. Por eso fallan específicamente sitemap de productos, producto de muestra para SEO y metadata server-side de ficha; no se habilitó ningún artículo ficticio al público.
+- En el panel autenticado ya existe un producto `PRUEBA QA · NO VENDER` inactivo, una colección `PRUEBA QA · NO PUBLICAR` oculta y un pedido `Cliente QA · prueba técnica (no real)` cancelado. No se crearon duplicados ni se hicieron mutaciones productivas. Usuarios activos: ninguno en la vista revisada; las vistas de bloqueados/eliminados conservan 1 y 19 registros.
+- `/api/health` devuelve `ok=true` y confirma runtime, configuración, Firebase y superficies administrativas; `/api/paypal-config` confirma Sandbox. `/api/system-health` sin token devuelve 401, como corresponde. Ninguna de estas lecturas demuestra una compra, envío de correo, mutación de pedido/inventario o escritura real Sheets→Firestore.
+- En la rama `codex/flow-diagnostics-partial-evidence-20260929` se está mejorando el panel de conexiones: GET de estadísticas públicas de likes/reseñas y lectura del carrito propio se exponen como evidencia **parcial** y nunca promueven mutaciones a verde; una solicitud sin respuesta conserva estado sin verificar. Prueba del dominio: `npm run test:flow-connections` PASS (28/28); auditoría responsive del flujo PASS; auditoría de versionado de caché y verificación del manifiesto PASS. El cambio todavía no tiene CI ni está desplegado.
+- Los gates externos siguen vigentes: rotación manual de credenciales por el titular, reconciliar/desplegar Apps Script y probar el canary con escritura real hacia Firestore, catálogo y medios reales (cuando el usuario los importe), PayPal Live si se usará, DNS comercial aún dirigido a Shopify y propiedad/sitemap de dominio comercial en Search Console.
+- **Decisión actual: NO-GO para cortar el dominio comercial o cerrar Shopify.** Esta conclusión no bloquea la preparación del código ni el ingreso posterior del catálogo; requiere cerrar los gates externos y verificar el dominio antes del cutover.
+
 ## Revalidación vigente — 2026-09-29 11:05 UTC (main `3299651`)
 
 - PR #957 está integrado en `main` mediante squash commit `329965117f7de513a74c533602d7305d5140f9e3`. Su CI previo al merge terminó SUCCESS, incluidos tests de navegador, accesibilidad, SEO, rendimiento, reglas Firestore y seguridad.
