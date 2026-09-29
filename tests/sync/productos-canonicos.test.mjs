@@ -38,7 +38,7 @@ function runAppsScriptCanary(rows, { sendError = '' } = {}) {
     sendCalls.push({ rowNumber, changedFields: Array.from(changedFields || []) });
     if (context.sendError) throw new Error(context.sendError);
   };
-  context.tintinRecordSyncSafely_ = (...event) => historyEvents.push(event);
+  context.tintinRecordSyncSafely_ = (...event) => { historyEvents.push(event); return { recorded: true }; };
   let result;
   let error = '';
   try { result = context.tintinProbarEdicionCatalogo(); }
@@ -114,6 +114,52 @@ test('la prueba canary registra ERROR en Historial sync cuando falla el webhook'
   assert.equal(failing.error, 'simulated webhook failure');
   assert.deepEqual(failing.historyEvents.map(event => event[0]), ['SYNCING', 'ERROR']);
   assert.match(failing.historyEvents[1][3], /simulated webhook failure/);
+});
+
+test('la prueba canary informa si Historial sync no registró el evento', () => {
+  const ok = runAppsScriptCanary([canaryRow()]);
+  assert.equal(ok.result.historyRecorded, true);
+  assert.equal(ok.result.historyError, undefined);
+});
+
+function runHistoryRecorder({ historySheet, headers }) {
+  const source = read('apps-script/ProductosUnificados.gs');
+  const inserted = [];
+  const errors = [];
+  const sheet = historySheet === null ? null : {
+    getLastColumn: () => headers.length,
+    getLastRow: () => 8,
+    getRange: (row, _column, _rows, cols) => ({
+      getDisplayValues: () => [headers],
+      setValues: values => inserted.push({ row, values, cols }),
+    }),
+    insertRowBefore: () => {},
+    deleteRows: () => {},
+  };
+  const context = {
+    SpreadsheetApp: { openById: () => ({ getSheetByName: () => sheet }) },
+    LockService: { getScriptLock: () => ({ tryLock: () => true, releaseLock: () => {} }) },
+    console: { error: message => errors.push(message) },
+  };
+  vm.runInNewContext(source, context);
+  const outcome = context.tintinRecordSyncSafely_('SYNCED', 'Productos', 'A710:AI710', 'detalle');
+  return { outcome, inserted, errors };
+}
+
+test('Historial sync informa en vez de silenciar hoja o columna Estado ausente', () => {
+  const good = runHistoryRecorder({ headers: ['Fecha', 'Origen', 'Hoja', 'Celda', 'Estado', 'Detalle'] });
+  assert.equal(good.outcome.recorded, true);
+  assert.equal(good.inserted.length, 1);
+
+  const noStatus = runHistoryRecorder({ headers: ['Fecha', 'Origen', 'Hoja', 'Celda', 'Detalle'] });
+  assert.equal(noStatus.outcome.recorded, false);
+  assert.match(noStatus.outcome.reason, /columna Estado/);
+  assert.equal(noStatus.inserted.length, 0);
+  assert.equal(noStatus.errors.length, 1);
+
+  const missing = runHistoryRecorder({ historySheet: null, headers: [] });
+  assert.equal(missing.outcome.recorded, false);
+  assert.match(missing.outcome.reason, /No existe la hoja Historial sync/);
 });
 
 test('la prueba Sheets→Firestore no elige entre canaries duplicados', () => {
