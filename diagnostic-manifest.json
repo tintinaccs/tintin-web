@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "55eac60804ed2a2611a6dc10d0b05ec0ff211ce234a90819c91f1e37663cfe15",
+  "sourceFingerprint": "1d8d2fd52a8f2b04fa63a18ed792b369e738cab5c3ca50b1b7779673b72ad256",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 912,
     "textFiles": 871,
-    "totalBytes": 17898533,
+    "totalBytes": 17903808,
     "pages": 19,
     "modules": 626
   },
@@ -20177,8 +20177,8 @@
     },
     {
       "path": "functions/api/sheets-products-webhook.js",
-      "bytes": 8970,
-      "sha256": "a0be1574970e6fbfb76d03e35fe720fe7adc6356f8f605cabeb6acb977aa5a41",
+      "bytes": 10278,
+      "sha256": "51de732450405ab76782a0fb70123ac842ddcf72103dd4d01de06a7392a17db8",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34444,8 +34444,8 @@
     },
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
-      "bytes": 17016,
-      "sha256": "38b0db93d4b713c862e5e01fe89180bc381295fea8e245e34139519ecf164a11",
+      "bytes": 20512,
+      "sha256": "7f5bcf1d5b9402b694ed3519f4b21a6b61c27ee39ff1be47078f45c72de8faf0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34506,6 +34506,26 @@
         {
           "url": "https://oauth2.googleapis.com/token",
           "line": 194
+        },
+        {
+          "url": "https://res.cloudinary.com/tintin/image/upload/canary.webp",
+          "line": 219
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/product.png",
+          "line": 251
+        },
+        {
+          "url": "https://store.myshopify.com/cdn/product.png",
+          "line": 253
+        },
+        {
+          "url": "https://shopify.com/producto",
+          "line": 254
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/old.png",
+          "line": 314
         }
       ]
     },
@@ -36496,8 +36516,8 @@
     {
       "path": "docs/autoridades-sincronizacion.md",
       "extension": ".md",
-      "bytes": 2291,
-      "sha256": "6f76102da118ec6371966c571466eb470973a553ca258dffdf45a0d928094a36"
+      "bytes": 2762,
+      "sha256": "8973ccfd5490238fe8522d89aae739ac73ff4451f7fb7f797efbda857bb420fc"
     },
     {
       "path": "docs/capas-css.md",
@@ -37078,8 +37098,8 @@
     {
       "path": "functions/api/sheets-products-webhook.js",
       "extension": ".js",
-      "bytes": 8970,
-      "sha256": "a0be1574970e6fbfb76d03e35fe720fe7adc6356f8f605cabeb6acb977aa5a41"
+      "bytes": 10278,
+      "sha256": "51de732450405ab76782a0fb70123ac842ddcf72103dd4d01de06a7392a17db8"
     },
     {
       "path": "functions/api/sheets-sync-snapshot.js",
@@ -40576,8 +40596,8 @@
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
       "extension": ".mjs",
-      "bytes": 17016,
-      "sha256": "38b0db93d4b713c862e5e01fe89180bc381295fea8e245e34139519ecf164a11"
+      "bytes": 20512,
+      "sha256": "7f5bcf1d5b9402b694ed3519f4b21a6b61c27ee39ff1be47078f45c72de8faf0"
     },
     {
       "path": "tests/system-health/order-admin-domain.test.mjs",
