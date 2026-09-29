@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "9ac938ef6f7a027a7bac058bb087c458571225fced94c9bd15bb248ef6b323c6",
+  "sourceFingerprint": "1d8d2fd52a8f2b04fa63a18ed792b369e738cab5c3ca50b1b7779673b72ad256",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 912,
     "textFiles": 871,
-    "totalBytes": 17903582,
+    "totalBytes": 17903808,
     "pages": 19,
     "modules": 626
   },
@@ -34444,8 +34444,8 @@
     },
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
-      "bytes": 20286,
-      "sha256": "76198f0b81a27db61d613f926189bddaf8389254c79bf35acc7ca50ac64ace35",
+      "bytes": 20512,
+      "sha256": "7f5bcf1d5b9402b694ed3519f4b21a6b61c27ee39ff1be47078f45c72de8faf0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34508,20 +34508,24 @@
           "line": 194
         },
         {
-          "url": "https://cdn.shopify.com/s/files/1/product.png",
-          "line": 249
+          "url": "https://res.cloudinary.com/tintin/image/upload/canary.webp",
+          "line": 219
         },
         {
-          "url": "https://store.myshopify.com/cdn/product.png",
+          "url": "https://cdn.shopify.com/s/files/1/product.png",
           "line": 251
         },
         {
+          "url": "https://store.myshopify.com/cdn/product.png",
+          "line": 253
+        },
+        {
           "url": "https://shopify.com/producto",
-          "line": 252
+          "line": 254
         },
         {
           "url": "https://cdn.shopify.com/s/files/1/old.png",
-          "line": 312
+          "line": 314
         }
       ]
     },
@@ -40592,8 +40596,8 @@
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
       "extension": ".mjs",
-      "bytes": 20286,
-      "sha256": "76198f0b81a27db61d613f926189bddaf8389254c79bf35acc7ca50ac64ace35"
+      "bytes": 20512,
+      "sha256": "7f5bcf1d5b9402b694ed3519f4b21a6b61c27ee39ff1be47078f45c72de8faf0"
     },
     {
       "path": "tests/system-health/order-admin-domain.test.mjs",
