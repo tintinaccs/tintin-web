@@ -228,4 +228,3 @@ Se corrigió en la rama de preparación el mapa de conexiones: el `POST /api/sys
 **No verificado en esta sesión:** despliegue/fuente de Apps Script, lecturas Firestore, registro de la ejecución de `syncProducts`, favoritos/carrito/perfil autenticados en producción, cuentas reales, Search Console (propiedades, propiedad, sitemap), redondeo BCP en producción (cubierto sólo por tests locales), y CI/preview de este PR (pendiente).
 
 **Decisión: NO-GO** para migrar dominio o cerrar Shopify: falta catálogo real, verificación Sheets→Firestore con inventario/auditoría, aceptación autenticada de compra/perfil, decisión sobre PayPal Live y propiedad/sitemap del dominio comercial.
-
