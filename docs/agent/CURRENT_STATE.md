@@ -356,3 +356,10 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - Google tras una baja: causa de código identificada, no reproducida contra Firebase real. Si la identidad quedó deshabilitada (bajas anteriores), Firebase rechaza Google con `auth/user-disabled`; sólo el código por correo (prueba de propiedad del correo) puede recrear la identidad en el servidor, y luego Google funciona. Cambio: Google no siempre informa el correo en ese error, así que el botón "Verificar por correo" se mostraba sólo si había correo; ahora aparece siempre y, sin correo, abre el paso de correo para escribirlo. Las cuentas bloqueadas siguen rechazadas por el servidor.
 - Verificación: `node --test` accounts/login/auth/cache/flow-connections/checkout 271/271; `auditar-acceso-aislamiento` 21/21; `auditar-acceso-perfil-incorporacion` sin fallos; `audit:cache-versioning`, `verify:diagnostics`, `verify:decision-flows`, `verify:csp`, `verify:routes` OK tras subir tags de caché y regenerar CSP/manifiesto. No probado en navegador real ni en producción.
 - Decisión sin cambios: **NO-GO** para migración de dominio/cierre de Shopify.
+
+## Cuentas: perfil `incomplete` no debe saltarse por banderas del tutorial — 2026-09-29
+- Causa: el tutorial de bienvenida escribía `onboardingCompleted/welcomeTutorialSeen` en altas nuevas (`profileStatus:'incomplete'`) y `getProfileCompletionPlan` las leía como "ya completó", saltándose el paso de datos obligatorios.
+- Cambio: el plan ignora esas banderas si `profileStatus==='incomplete'`; el tutorial no se muestra a perfiles `incomplete`. Tag de caché `tintin-20260929-incomplete-flags-1`.
+- Probado localmente: `tests/accounts/incomplete-profile-flags.test.mjs` y pruebas dirigidas; `npm run build:pages`.
+- NO probado en producción. La cuenta de ejemplo solo se vuelve a pedir si su `profileStatus` guardado es `incomplete` (no verificable desde aquí).
+- NO-GO de migración/cierre Shopify sin cambios.
