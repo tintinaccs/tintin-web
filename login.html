@@ -225,7 +225,7 @@ import { reserveUsername } from "./js/components/forms/reserva-username.js?v=tin
 import { isValidDob } from "./js/components/forms/validacion-nacimiento.js?v=tintin-20260822-dob-username-onboarding-1";
 import { attachOtpCodeInput } from "./js/components/forms/entrada-codigo-otp.js?v=tintin-20260803-otp-input-1";
 import { ensureUserProfile, AUTH_METHOD } from "./js/core/store/perfil-usuario.js?v=tintin-20260923-user-reentry-2-auth-popup-resolver-1-launch-20260926-1";
-import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260918-auth-incident-diagnostics-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
+import { clearProfileGateCache } from "./js/pages/profile/control-acceso-perfil.js?v=tintin-20260929-profile-gate-all-pages-1";
 import { AUTH_STATES, subscribeSession, createAuthHandoff } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
 import { recordAuthDiagnostic } from "./js/core/auth/diagnostico-sesion.js?v=tintin-20260918-auth-diagnostics-1";
 import { showBlockedModal, accountProblemHtml } from "./js/components/modals/modal-bloqueo.js?v=tintin-20260927-account-problem-whatsapp-2";
@@ -331,9 +331,10 @@ function errMsg(code, email = '') {
   // de baja y conserva el rechazo genérico si existe un bloqueo en Firestore.
   if (code === "auth/user-disabled") {
     const safeEmail = String(email || '').trim();
-    const emailRecovery = isValidEmailFormat(safeEmail)
-      ? ` <button type="button" class="login-email-resend" data-login-email-recovery="${escapeHtml(safeEmail)}">Verificar por correo</button>`
-      : '';
+    // Google no siempre informa el correo en este error. Sin correo conocido
+    // el botón abre el paso de correo para que la persona lo escriba, en vez
+    // de dejarla sin salida.
+    const emailRecovery = ` <button type="button" class="login-email-resend" data-login-email-recovery="${isValidEmailFormat(safeEmail) ? escapeHtml(safeEmail) : ''}">Verificar por correo</button>`;
     return accountProblemHtml(safeEmail) + emailRecovery;
   }
   const msgs = {
@@ -499,7 +500,7 @@ async function ensureProfileComplete(user, role) {
   // Intentar irse con el alta a medias abre una decisión explícita, no una
   // salida silenciosa: o completa, o cierra sesión y sigue mirando la tienda
   // sin cuenta. Sin esto quedaría encerrada — el guardia de
-  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260918-auth-incident-diagnostics-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1 la traería de vuelta acá desde cualquier página,
+  // js/pages/profile/control-acceso-perfil.js?v=tintin-20260929-profile-gate-all-pages-1 la traería de vuelta acá desde cualquier página,
   // porque su perfil sigue incompleto.
   const exitModal = document.getElementById('login-exit-modal');
 
@@ -1304,9 +1305,13 @@ document.getElementById('login-error').addEventListener('click', event => {
   const recovery = event.target.closest('[data-login-email-recovery]');
   if (!recovery) return;
   const email = recovery.getAttribute('data-login-email-recovery') || '';
-  if (!isValidEmailFormat(email)) return;
   showEmailStep();
-  document.getElementById('login-email-input').value = email;
+  const emailInput = document.getElementById('login-email-input');
+  if (!isValidEmailFormat(email)) {
+    emailInput.focus();
+    return;
+  }
+  emailInput.value = email;
   sendOtp(email, 'email');
 });
 
