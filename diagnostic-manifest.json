@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "7f2b0b1d256b351aecb69c6e39f7bb276fd3d624bfa3df19590572fe038b4575",
+  "sourceFingerprint": "dd12c573063299688bc54f9da98b3a02ca02c65f1074a9678ba3d06f57c79b00",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 912,
     "textFiles": 871,
-    "totalBytes": 17874072,
+    "totalBytes": 17876901,
     "pages": 19,
     "modules": 626
   },
@@ -34444,8 +34444,8 @@
     },
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
-      "bytes": 14121,
-      "sha256": "b232376bc575f31aa1ea8ff48fb1699121291e122cbf32383a58840bb88f7179",
+      "bytes": 14337,
+      "sha256": "0dbef6017dd73b24487fd9fdb477890bef9785cc2422546539236dd15d49d801",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34495,7 +34495,7 @@
         },
         {
           "url": "https://cdn.shopify.com/test.png",
-          "line": 138
+          "line": 141
         }
       ]
     },
@@ -35478,8 +35478,8 @@
     {
       "path": "apps-script/ProductosUnificados.gs",
       "extension": ".gs",
-      "bytes": 47873,
-      "sha256": "7302b845ad41236f2fc88d0d4143693167ab8a707a173f9c3b1819c46fd693c7"
+      "bytes": 48229,
+      "sha256": "4cc7b8726a86a4a8d6310ab49e67158971b77dc401e2984693f5387cc6188827"
     },
     {
       "path": "apps-script/ReorganizacionSheets.gs",
@@ -36438,8 +36438,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 50115,
-      "sha256": "2eefa3b2b068f742458fecd72b506d844dd4d2ff3e95c5c67597437ac7940018"
+      "bytes": 50977,
+      "sha256": "cba0d515276e7cdf39f2c01740a61f4f678aee023a803015b8e60bb98bbc293c"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
@@ -36450,8 +36450,8 @@
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-29.md",
       "extension": ".md",
-      "bytes": 32053,
-      "sha256": "8edad73611f70167bd26eff24102c69ad89ba5683f0b6dd733bf4293af36038b"
+      "bytes": 33448,
+      "sha256": "a0ceaec065253dd53260510e953dac958da4944a4cfce7b013a5afc832841268"
     },
     {
       "path": "docs/agent/README.md",
@@ -40566,8 +40566,8 @@
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
       "extension": ".mjs",
-      "bytes": 14121,
-      "sha256": "b232376bc575f31aa1ea8ff48fb1699121291e122cbf32383a58840bb88f7179"
+      "bytes": 14337,
+      "sha256": "0dbef6017dd73b24487fd9fdb477890bef9785cc2422546539236dd15d49d801"
     },
     {
       "path": "tests/system-health/order-admin-domain.test.mjs",
