@@ -264,3 +264,10 @@ Las modificaciones de esta rama son de código, documentación y dependencias de
 - GitHub Actions CI #3526 del HEAD `269d0419dc159daa486d7c0445f25024c9190c02`: **SUCCESS**. PR #957 sigue abierto, Draft, mergeable y sin merge.
 - El `npm run monitor:production` recién ejecutado obtuvo respuestas esperadas para las 31 rutas/APIs observadas. Exit 1 únicamente por sitemap de productos vacío, catálogo sin producto canary SEO y ausencia de ficha para comprobar metadata.
 - **NO-GO vigente**: no hay catálogo real/SEO público, la transferencia canaria Sheets→Firestore no está demostrada, PayPal Live no se probó, y el dominio/GSC comercial no está preparado para el corte. No se mutaron servicios productivos.
+
+### Revalidación de Sheets, Apps Script y GSC — 2026-09-29 09:25 UTC
+
+- Hoja activa de inventario: canario único en `Productos!710`, inactivo, sin stock, sin imagen y sin acción. No existe historial de sincronización para `CANARY-SHEETS-FIRESTORE` en `Historial sync`; la escritura Sheets→Firestore sigue sin verificar.
+- Apps Script `Tintin Sync — Motor`: guardado del proyecto el 28-sep, pero el log actual muestra llamadas `doPost` en la versión desplegada 16 (22-sep). Hay cuatro despliegues activos (versiones 11, 12, 15 y 16), una ejecución reciente de reconciliación fallida por error genérico de servidor y tasa de error de 0,34% en siete días. No se ejecutó código ni se desplegó.
+- GSC: propiedad verificada disponible solo para `https://tintinaccesorios.pages.dev/`; sitemap pendiente, 0 errores y 0 advertencias. El resumen GSC de los últimos 28 días asentados da 0 clics y 1 impresión, mientras la consulta por páginas devuelve 1 impresión para inicio y 1 para catálogo (totales incompatibles); tratar como discrepancia de agregación y no como conteo exacto. No está conectada aquí la propiedad del dominio comercial.
+- **NO-GO**: verificar cuál despliegue de Apps Script atiende el webhook, incorporar la versión correcta, correr el canario y comprobar la escritura Firestore; además faltan catálogo y SEO reales, PayPal Live y cutover de dominio/GSC.
