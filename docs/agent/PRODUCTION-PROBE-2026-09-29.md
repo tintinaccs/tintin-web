@@ -130,3 +130,23 @@ Este parche aún no está desplegado. La evidencia sandbox solo describe el host
 ### Monitor público repetido — 2026-09-29 08:25 UTC
 
 `npm run monitor:production` volvió a confirmar que las páginas principales, login/perfil, robots, sitemaps, salud, configuración PayPal, APIs públicas, Visual Builder y las rutas administrativas sin sesión responden como se espera. El proceso conserva código 1 solo por los tres gates conocidos: sitemap dinámico de productos sin URLs válidas, catálogo público sin producto de canary SEO y ausencia de muestra de producto para metadata. No hubo cambios de catálogo, Firestore, DNS ni pagos. El CI del commit `4e80239` detectó drift porque esta evidencia documental cambió después del último manifiesto; se regenerará y se volverá a ejecutar CI.
+
+### Preview de la rama y CI vigente — 2026-09-29 08:43 UTC
+
+GitHub Actions run `36542842963` (CI #3525) para el HEAD `e49dcb3c` terminó **SUCCESS** en 10m48s, incluidas auditorías de navegador, accesibilidad, SEO y rendimiento. El PR #957 sigue abierto y Draft, sin merge. Cloudflare creó el preview de rama `https://codex-shopify-import-identit.tintinaccesorios.pages.dev`; esto no modifica la URL comercial ni constituye despliegue de producción.
+
+`npm run monitor:production` ejecutado contra ese host de Preview confirmó respuestas para las páginas principales, login/perfil, robots, sitemaps, las APIs públicas y Visual Builder. El `/api/health` de Preview respondió 503 con `configuration=false`, aunque Firebase, runtime de Admin y Visual Builder aparecieron disponibles; `api/paypal-config` indicó sandbox deshabilitado por faltantes de configuración. El monitor marcó además canonical, sitemaps y catálogo vacíos/sin muestra SEO. Son condiciones del entorno Preview; no se copiaron secretos de producción. El monitor del Pages host de producción a las 08:25 UTC no tuvo 503, pero mantuvo exactamente los tres bloqueos de catálogo/SEO.
+
+Validación local del mismo HEAD: `npm run build:pages` PASS (19 páginas, 626 módulos, 912 archivos); flow-connections 26/26, system-health 6/6, vista system-health 1/1, cuentas 34/34, importación Shopify Phase 2 34/34, PayPal 6/6 y checkout 99/99. La prueba de cuenta cubre eliminación, alta/reingreso posterior, bloqueo y enlace WhatsApp.
+
+Los bloqueos operativos no cambiaron: Apps Script conectado sigue en v16 y no se ha reconciliado con la fuente canónica/desplegada; la fila canaria no tiene historial ni evidencia de escritura en Firestore; el health productivo previo mostró 18 tareas pendientes y 2 dead-letter; PayPal sigue en sandbox; no hay productos públicos ni propiedad GSC para el dominio comercial, que sigue apuntando a Shopify. **NO-GO para migración/cutover.** No se cambiaron datos productivos, DNS, Apps Script, cuentas ni pagos.
+
+### Revalidación productiva del grafo y configuración PayPal — 2026-09-29 08:49 UTC
+
+El panel autenticado de producción ejecutó `REVALIDAR EN VIVO` a las 08:46:12.706 UTC en modo GET/solo lectura, incluido runtime de Admin/Firestore, Rules y probes de favoritos/notificaciones. Reportó 36 nodos, 37 conexiones, 61 verificadas y 12 que requieren atención. Dos rutas de cliente desde Roles a home/perfil y conexiones comerciales de pedidos↔inventario, Admin↔productos/pedidos y Firestore↔carrito siguen implementadas pero sin verificación runtime de flujo/mutación; Likes, reseñas y correo tampoco tienen arista runtime confirmada. Servicios externos permanece en error.
+
+Lectura pública paralela de `/api/paypal-config` respondió `enabled=true`, entorno `sandbox`, USD, tasa BCP fechada 2026-09-25 y `unavailableReasons=[]`. La tarjeta de grafo recibe del `/api/system-health` actualmente desplegado `Resend=true`, `Cloudinary=true`, `PayPal=no configurado`, evidencia del desajuste anterior entre ambos resolvers. El parche en PR #957 hace que system-health use el resolver compartido de Checkout y exige Live para el estado de preparación productiva; no se hizo pago ni se cambió configuración.
+
+El CI #3525 del HEAD `e49dcb3c` había terminado SUCCESS y el preview Pages seguía separado de producción. El resultado vigente de Preview y sus variables faltantes está descrito en la sección 08:43. Ninguna mutación productiva, cambio DNS, ejecución Apps Script ni escritura en Firestore.
+
+**NO-GO para cutover.** Persisten canary Sheets→Firestore sin ejecutar/verificar, producto público/SEO vacío, flujo de pago Live sin probar, 12 conexiones que requieren atención y DNS/GSC del dominio comercial.
