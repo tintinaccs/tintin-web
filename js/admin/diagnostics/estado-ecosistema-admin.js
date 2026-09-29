@@ -49,6 +49,18 @@ function formatAgeMs(ms) {
   return `${Math.floor(hours / 24)} d`;
 }
 
+function paypalMissingLabels(missing = []) {
+  const labels = {
+    feature_disabled: 'activar PayPal',
+    client_id: 'Client ID de PayPal',
+    client_secret: 'Client Secret de PayPal',
+    webhook_id: 'Webhook ID de PayPal',
+    exchange_rate: 'tasa de cambio',
+    stale_exchange_rate: 'actualizar la tasa de cambio',
+  };
+  return [...new Set((Array.isArray(missing) ? missing : []).map(code => labels[code] || String(code)))];
+}
+
 function item(labelText, value, detail = '') {
   const itemState = state(value);
   return `
@@ -148,6 +160,7 @@ function render(payload) {
   const admin = payload?.admin || {};
   const integrations = payload?.integrations || {};
   const appsScript = integrations?.appsScript || {};
+  const paypal = integrations?.paypal || {};
   const areas = document.getElementById('system-health-areas');
   if (!areas) return;
 
@@ -164,6 +177,10 @@ function render(payload) {
     ['Visual Builder', admin.visualBuilder, 'Páginas, borradores e historial'],
     ['Resend', integrations.resend, 'Configuración privada de correo presente'],
     ['Cloudinary', integrations.cloudinary, 'Configuración privada de multimedia presente'],
+    ['PayPal', paypal.enabled === true,
+      paypal.enabled === true
+        ? `Activo · entorno ${paypal.environment || 'no informado'}`
+        : `Deshabilitado${paypalMissingLabels(paypal.missing).length ? ` · falta ${paypalMissingLabels(paypal.missing).join(', ')}` : ''}`],
     ['Google Sheets', integrations.sheets, 'Secreto del puente + protocolo de Apps Script verificado'],
     ['Apps Script', appsScript.protocolOk, appsScript.protocolOk
       ? `Protocolo ${appsScript.revision || 'actual'} · ${Number(appsScript.ms || 0)} ms`

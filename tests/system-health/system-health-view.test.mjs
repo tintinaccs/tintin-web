@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import test from 'node:test';
+
+const view = fs.readFileSync(new URL('../../js/admin/diagnostics/estado-ecosistema-admin.js', import.meta.url), 'utf8');
+
+test('el estado del ecosistema explica PayPal deshabilitado sin mostrar credenciales', () => {
+  assert.match(view, /\['PayPal', paypal\.enabled === true/);
+  assert.match(view, /Client ID de PayPal/);
+  assert.match(view, /Client Secret de PayPal/);
+  assert.match(view, /Webhook ID de PayPal/);
+  assert.match(view, /actualizar la tasa de cambio/);
+  assert.doesNotMatch(view, /paypal\.(?:clientSecret|clientId|webhookSecret)/i);
+});

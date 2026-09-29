@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5a0e067f8c099e08713a596ddc8cca84127ee9b86bca2d4980bc659aafd63423",
+  "sourceFingerprint": "5d56930fd940bd39a9f96c58ade41e8e46b6849f5b6be7eb8c77882b6ab25963",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 911,
-    "textFiles": 870,
-    "totalBytes": 17859775,
+    "files": 912,
+    "textFiles": 871,
+    "totalBytes": 17861168,
     "pages": 19,
-    "modules": 625
+    "modules": 626
   },
   "viewports": [
     {
@@ -18105,8 +18105,8 @@
     },
     {
       "path": "cloudflare/inyectar-diagnostico-maestro-admin.js",
-      "bytes": 2096,
-      "sha256": "63823e6ad3669ec6fcdb6b84aaf94405badf3f1d54bc4c1835d7526f32dae172",
+      "bytes": 2083,
+      "sha256": "1f74484d04c96fe92240279f9b3d18da722efefc63711bcd03f1bd5aabd2552c",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21321,8 +21321,8 @@
     },
     {
       "path": "js/admin/diagnostics/estado-ecosistema-admin.js",
-      "bytes": 13460,
-      "sha256": "69cdb21be98c632aeb574b10d38b6d7562bd6eafc84f3fc0b26753378ffc3547",
+      "bytes": 14223,
+      "sha256": "bf8581e35b9b9446d962bdf22eb944f57dcafbef0330c8deb9ffd5dfcd0400b7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34518,6 +34518,36 @@
       "endpoints": []
     },
     {
+      "path": "tests/system-health/system-health-view.test.mjs",
+      "bytes": 656,
+      "sha256": "a55f6f05143e21ea3a624de3ece591d910a30541189f49e0ab4045d8d86365df",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:assert/strict",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        },
+        {
+          "raw": "node:test",
+          "target": null,
+          "dynamic": false,
+          "line": 3
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "tests/system-health/system-health.test.mjs",
       "bytes": 4292,
       "sha256": "0d74b06492d66714dba2b12dd1b95ea3f83644d1df48739ab2dcda46634a73d2",
@@ -35754,8 +35784,8 @@
     {
       "path": "cloudflare/inyectar-diagnostico-maestro-admin.js",
       "extension": ".js",
-      "bytes": 2096,
-      "sha256": "63823e6ad3669ec6fcdb6b84aaf94405badf3f1d54bc4c1835d7526f32dae172"
+      "bytes": 2083,
+      "sha256": "1f74484d04c96fe92240279f9b3d18da722efefc63711bcd03f1bd5aabd2552c"
     },
     {
       "path": "cloudflare/notificaciones-sociales.js",
@@ -37290,8 +37320,8 @@
     {
       "path": "js/admin/diagnostics/estado-ecosistema-admin.js",
       "extension": ".js",
-      "bytes": 13460,
-      "sha256": "69cdb21be98c632aeb574b10d38b6d7562bd6eafc84f3fc0b26753378ffc3547"
+      "bytes": 14223,
+      "sha256": "bf8581e35b9b9446d962bdf22eb944f57dcafbef0330c8deb9ffd5dfcd0400b7"
     },
     {
       "path": "js/admin/flujo-conexiones/datos-flujo-conexiones.js",
@@ -39684,8 +39714,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 60160,
-      "sha256": "5833525d2bf46db92646398e7a41137680f11b4c7e0d8cf426aebacde60053bf"
+      "bytes": 60147,
+      "sha256": "f5725b2f0fc83fdd84e55b203799b0bc22a167d301310c794dd00edf2e587d5a"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -40544,6 +40574,12 @@
       "extension": ".mjs",
       "bytes": 371,
       "sha256": "ef67dd00516c6b653952e84283e6ffe1c4de02bd98eae995d39aaaaabbe75eb8"
+    },
+    {
+      "path": "tests/system-health/system-health-view.test.mjs",
+      "extension": ".mjs",
+      "bytes": 656,
+      "sha256": "a55f6f05143e21ea3a624de3ece591d910a30541189f49e0ab4045d8d86365df"
     },
     {
       "path": "tests/system-health/system-health.test.mjs",
