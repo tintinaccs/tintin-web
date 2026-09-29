@@ -228,3 +228,11 @@ Se corrigió en la rama de preparación el mapa de conexiones: el `POST /api/sys
 **No verificado en esta sesión:** despliegue/fuente de Apps Script, lecturas Firestore, registro de la ejecución de `syncProducts`, favoritos/carrito/perfil autenticados en producción, cuentas reales, Search Console (propiedades, propiedad, sitemap), redondeo BCP en producción (cubierto sólo por tests locales), y CI/preview de este PR (pendiente).
 
 **Decisión: NO-GO** para migrar dominio o cerrar Shopify: falta catálogo real, verificación Sheets→Firestore con inventario/auditoría, aceptación autenticada de compra/perfil, decisión sobre PayPal Live y propiedad/sitemap del dominio comercial.
+
+### Cierre de implementación y despliegue — 2026-09-29 20:40 UTC
+
+El PR #968 (`feat(home): hero editable desde Super Admin`) pasó la CI completa del contrato único (run 3578: artefactos, contratos estáticos/operativos, emulador Firestore, navegador, accesibilidad, SEO y performance) y se integró a `main` como `aa23fbb2057d7845af997fdbe6c28de4297352f3`. La corrección incluida en CI fue alinear las auditorías de cache del loader con la versión vigente `tintin-20260929-shopify-identity-loader-3` y regenerar los artefactos derivados sin incluir archivos auxiliares locales.
+
+La verificación pública posterior a la integración cargó `https://tintinaccesorios.pages.dev/` y mostró la portada con el hero editable, CTA y navegación; el recurso visual publicado fue `assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.webp` (imagen cargada, 1774 px). Cloudflare Pages sirve el commit integrado. Esto verifica despliegue del sitio Pages, no un corte del dominio comercial: `tintinaccs.com`/Shopify no se tocó.
+
+El estado de producción sigue siendo **NO-GO**: la implementación y el despliegue Pages están confirmados, pero permanecen sin evidencia directa las lecturas Firestore de producto/inventario/auditoría, el registro de Historial sync, la equivalencia de la fuente Apps Script v16 con el código actualizado, las mutaciones autenticadas de cuenta/perfil/carrito/checkout, PayPal Live y Search Console/catálogo comercial. Los tres fallos de `monitor:production` continúan siendo los esperados mientras el catálogo público real esté vacío; el canary permanece inactivo y no vendible.
