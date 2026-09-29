@@ -33,8 +33,8 @@ function runAppsScriptCanary(rows, { sendError = '' } = {}) {
   };
   context.sendError = sendError;
   vm.runInNewContext(source, context);
-  context.tintinSendProductRow_ = (_sheet, rowNumber) => {
-    sendCalls.push(rowNumber);
+  context.tintinSendProductRow_ = (_sheet, rowNumber, changedFields) => {
+    sendCalls.push({ rowNumber, changedFields: Array.from(changedFields || []) });
     if (context.sendError) throw new Error(context.sendError);
   };
   context.tintinRecordSyncSafely_ = (...event) => historyEvents.push(event);
@@ -99,7 +99,10 @@ test('la prueba Sheets→Firestore solo envía el canary inactivo y sin stock', 
   assert.equal(result.writesFirestore, true);
   assert.equal(result.publicCatalogVisible, false);
   assert.equal(result.productId, 'CANARY-SHEETS-FIRESTORE');
-  assert.deepEqual(sendCalls, [7]);
+  assert.deepEqual(sendCalls, [{
+    rowNumber: 7,
+    changedFields: ['name', 'category', 'price', 'active', 'stock', 'costUnit', 'purchased', 'stockMinimum', 'internalNotes'],
+  }]);
   assert.deepEqual(historyEvents.map(event => event[0]), ['SYNCING', 'SYNCED']);
   assert.equal(historyEvents[0][1], 'Productos');
   assert.match(historyEvents[1][3], /confirmada/);

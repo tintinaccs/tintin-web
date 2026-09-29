@@ -717,7 +717,13 @@ function tintinProbarEdicionCatalogo() {
   var cell = sheet.getRange(rowNumber, 1, 1, 35).getA1Notation();
   tintinRecordSyncSafely_('SYNCING', TINTIN_PRODUCTS_SHEET, cell, 'Ejecutando prueba controlada Sheets → Firestore para el canary inactivo.');
   try {
-    tintinSendProductRow_(sheet, rowNumber);
+    // El webhook trata changedFields vacío como una actualización parcial sin
+    // campos y la rechaza. La prueba explícita declara el conjunto mínimo que
+    // valida ambos documentos Firestore sin tocar otros productos.
+    tintinSendProductRow_(sheet, rowNumber, [
+      'name', 'category', 'price', 'active', 'stock',
+      'costUnit', 'purchased', 'stockMinimum', 'internalNotes'
+    ]);
     var after = sheet.getRange(rowNumber, 1, 1, 35).getValues()[0];
     var sameName = String(before[1] || '') === String(after[1] || '');
     var samePrice = Number(before[5] || 0) === Number(after[5] || 0);
