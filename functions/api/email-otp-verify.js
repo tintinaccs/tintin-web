@@ -252,15 +252,16 @@ export async function handleEmailOtpVerify(context, deps = defaultDeps) {
       let profileDoc = await deps.get(env, 'users/' + encodeURIComponent(uid));
       let profile = decodeFirestoreFields(profileDoc?.fields || {});
       if (!authIdentity || authIdentity.uid !== uid) throw new Error('identity_unavailable');
-      if (profile.blocked === true) {
+      const deletedProfile = profile.deleted === true || profile.profileStatus === 'deleted';
+      if (profile.blocked === true && !deletedProfile) {
         await deps.remove(env, path).catch(() => {});
         return jsonResponse({ success: false, error: 'account_blocked' }, 403, origin, requestUrl);
       }
-      if (authIdentity.disabled === true) {
-        // Un perfil bloqueado ya se rechazó consultando por correo arriba. Si
-        // no hay bloqueo pero quedó una identidad Auth deshabilitada de una
-        // baja anterior, el correo verificado permite limpiar ese residuo y
-        // crear una identidad nueva, igual que un registro desde cero.
+      if (deletedProfile || authIdentity.disabled === true) {
+        // Una baja legacy puede haber dejado el perfil tombstone mientras la
+        // identidad Auth sigue habilitada. Si el correo fue verificado y no
+        // hay un perfil bloqueado vigente, ambas formas de residuo deben
+        // empezar con un UID nuevo igual que un registro desde cero.
         if (typeof deps.deleteUser !== 'function') throw new Error('identity_unavailable');
         await deps.deleteUser(env, uid);
         ({ uid, isNewUser } = await deps.findOrCreateUserByEmail(env, email));
@@ -269,7 +270,7 @@ export async function handleEmailOtpVerify(context, deps = defaultDeps) {
         profile = decodeFirestoreFields(profileDoc?.fields || {});
         if (!authIdentity || authIdentity.uid !== uid || authIdentity.disabled === true) throw new Error('identity_unavailable');
       }
-      if (profile.blocked === true || profile.deleted === true || profile.profileStatus === 'deleted') {
+      if (profile.blocked === true) {
         await deps.remove(env, path).catch(() => {});
         return jsonResponse({ success: false, error: 'account_blocked' }, 403, origin, requestUrl);
       }

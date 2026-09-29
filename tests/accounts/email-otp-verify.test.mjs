@@ -143,6 +143,31 @@ test('un registro posterior a una baja recibe una identidad nueva y puede inicia
   assert.equal(store.deps.tokenCreations, 1);
 });
 
+test('un perfil legado eliminado no bloquea el reingreso aunque su identidad Auth siga habilitada', async () => {
+  const store = fakeFirestore();
+  seedCode(store);
+  const oldUid = 'uid_cliente_anterior';
+  const newUid = 'uid_cliente_nuevo';
+  store.put(`users/${oldUid}`, { email: EMAIL, deleted: true, profileStatus: 'deleted', blocked: true });
+  store.deps.findProfilesByEmail = async () => [{ fields: encodeFirestoreFields({
+    email: EMAIL, deleted: true, profileStatus: 'deleted', blocked: true
+  }) }];
+  let currentUid = oldUid;
+  store.deps.findOrCreateUserByEmail = async () => ({ uid: currentUid, isNewUser: currentUid === newUid });
+  store.deps.deleteUser = async (_env, uid) => {
+    store.deps.deletedIdentities.push(uid);
+    currentUid = newUid;
+  };
+  store.deps.lookupUser = async (_env, { uid }) => ({ uid, email: EMAIL, disabled: false });
+
+  const result = await verify(store, { email: EMAIL, code: CODE });
+
+  assert.equal(result.status, 200);
+  assert.equal(result.success, true);
+  assert.deepEqual(store.deps.deletedIdentities, [oldUid]);
+  assert.equal(store.deps.tokenCreations, 1);
+});
+
 test('una identidad Auth residual deshabilitada se reemplaza tras verificar el correo si no hay perfil bloqueado', async () => {
   const store = fakeFirestore();
   seedCode(store);
