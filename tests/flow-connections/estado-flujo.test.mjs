@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { ESTADOS, EDGES, NODES } from '../../js/admin/flujo-conexiones/datos-flujo-conexiones.js';
-import { EVIDENCIA, baselineState, classifyProbe, resolveState, shouldShowFlowEdge } from '../../js/admin/flujo-conexiones/estado-flujo.js';
+import { EVIDENCIA, baselineState, classifyProbe, liveMarker, resolveState, shouldShowFlowEdge } from '../../js/admin/flujo-conexiones/estado-flujo.js';
 import { buildLiveChecks, buildLiveEdges } from '../../js/admin/flujo-conexiones/live-checks.js';
 
 test('el diagnóstico conserva los estados declarados en el flujo', () => {
@@ -235,6 +235,18 @@ test('servicios externos requieren PayPal Live además de Resend y Cloudinary', 
     body: { report: { integrations: { resend: true, cloudinary: true, paypal: { configured: false, enabled: false, productionReady: false } } } },
   } }, '2026-09-23T00:00:00.000Z');
   assert.notEqual(resolveState(NODES.find(item => item.id === 'servicios-externos'), disabled['servicios-externos'], ESTADOS), ESTADOS.PROD);
+});
+
+test('marcador live nunca muestra verde para una evidencia parcial o no promovida', () => {
+  assert.deepEqual(liveMarker({ ok: true }, ESTADOS.PARCIAL, ESTADOS), {
+    symbol: '◐', label: 'parcial', kind: 'partial',
+  });
+  assert.deepEqual(liveMarker({ ok: true }, ESTADOS.NO_VERIFICADO, ESTADOS), {
+    symbol: '◌', label: 'lectura', kind: 'unconfirmed',
+  });
+  assert.deepEqual(liveMarker({ ok: true }, ESTADOS.PROD, ESTADOS), {
+    symbol: '●', label: 'live', kind: 'live',
+  });
 });
 
 test('el probe de Apps Script no pinta Google Sheets verde sin probar la escritura de catálogo', () => {

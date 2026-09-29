@@ -8,8 +8,8 @@
 // monitoreo nueva: reutiliza lo que ya prueba conectividad real sin escribir
 // datos. Nada de lo que hace este módulo crea, actualiza ni borra documentos.
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260929-sheets-firestore-flow-1';
-import { resolveState, isAttentionState, shouldShowFlowEdge } from './estado-flujo.js?v=tintin-20260929-flow-edge-filter-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260929-sheets-firestore-flow-1';
+import { resolveState, isAttentionState, liveMarker, shouldShowFlowEdge } from './estado-flujo.js?v=tintin-20260929-partial-live-markers-1';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260929-partial-live-markers-1';
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { collection, doc, getDoc, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
@@ -323,7 +323,8 @@ export function initConnectionsFlow({ role } = {}) {
       const pills = nodes.map(node => {
         const state = effectiveState(node);
         const live = liveState.byId[node.id];
-        const liveMark = live ? `<span class="tfc-live-dot" title="${escapeHtml(live.note)}">${live.pending ? '◌' : live.ok ? '●' : '✕'}</span>` : '';
+        const marker = liveMarker(live, state, ESTADOS);
+        const liveMark = marker ? `<span class="tfc-live-dot is-${marker.kind}" title="${escapeHtml(live.note)}" aria-label="Evidencia ${marker.label}">${marker.symbol}</span>` : '';
         const active = node.id === selectedNodeId ? ' tfc-pill-active' : '';
         return `<button type="button" class="tfc-pill tfc-state-${slug(state)}${active}" data-node-id="${escapeHtml(node.id)}">${liveMark}${escapeHtml(node.label)}</button>`;
       }).join('');
@@ -345,6 +346,7 @@ export function initConnectionsFlow({ role } = {}) {
       const label = edge.label ? `<span class="tfc-edge-label">${escapeHtml(edge.label)}</span>` : '';
       const state = effectiveEdgeState(edge);
       const live = liveState.byEdgeId[edge.id];
+      const marker = liveMarker(live, state, ESTADOS);
       const active = edge.id === selectedEdgeId ? ' is-selected' : '';
       return `<button type="button" class="tfc-edge-row${active}" data-edge-id="${escapeHtml(edge.id)}">
         <span class="tfc-edge-node">${escapeHtml(from?.label || edge.from)}</span>
@@ -352,7 +354,7 @@ export function initConnectionsFlow({ role } = {}) {
         <span class="tfc-edge-node">${escapeHtml(to?.label || edge.to)}</span>
         ${label}
         ${stateBadgeHtml(state)}
-        ${live ? `<span class="tfc-edge-live" title="${escapeHtml(live.note)}">${live.pending ? '◌ en curso' : live.ok ? '● live' : '✕ live'}</span>` : ''}
+        ${marker ? `<span class="tfc-edge-live is-${marker.kind}" title="${escapeHtml(live.note)}">${marker.symbol} ${marker.label}</span>` : ''}
       </button>`;
     });
     edgesEl.innerHTML = rows.join('') || '<p class="tfc-empty">Sin conexiones para este filtro.</p>';

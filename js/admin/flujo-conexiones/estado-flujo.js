@@ -45,6 +45,18 @@ export function isAttentionState(state, estados) {
   return state !== estados.PROD;
 }
 
+// El pulso de una lectura HTTP exitosa no significa que el flujo esté verde.
+// El marcador visible sigue el estado ya resuelto, que incorpora evidencia,
+// partial y promote en lugar de mirar únicamente live.ok.
+export function liveMarker(live, state, estados) {
+  if (!live) return null;
+  if (live.pending) return { symbol: '◌', label: 'en curso', kind: 'pending' };
+  if (state === estados.PARCIAL) return { symbol: '◐', label: 'parcial', kind: 'partial' };
+  if (state === estados.PROD) return { symbol: '●', label: 'live', kind: 'live' };
+  if (live.ok) return { symbol: '◌', label: 'lectura', kind: 'unconfirmed' };
+  return { symbol: '✕', label: 'live', kind: 'error' };
+}
+
 // Los filtros de estado/búsqueda se aplican a la conexión misma. Limitar esas
 // filas a los nodos visibles ocultaba conexiones parciales entre nodos verdes.
 export function shouldShowFlowEdge(edge, {
