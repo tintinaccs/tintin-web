@@ -123,10 +123,10 @@ export function buildLiveChecks({ publicHealth, systemHealth, adminHealth, heade
       { status: appsScript.httpStatus || systemHealth.status, promote: appsScript.protocolOk === true, evidenceLevel: LP });
     setFrom('google-sheets', integrations.sheets === true,
       'GET /api/system-health · protocolo de sincronización confirmado', { status: systemHealth.status, promote: integrations.sheets === true, evidenceLevel: LP });
-    const paypalOk = integrations.paypal?.configured === true;
+    const paypalOk = integrations.paypal?.productionReady === true;
     const externalServicesOk = integrations.resend === true && integrations.cloudinary === true && paypalOk;
     setFrom('servicios-externos', externalServicesOk,
-      `GET /api/system-health · Resend=${integrations.resend === true} · Cloudinary=${integrations.cloudinary === true} · PayPal=${paypalOk ? 'configurado' : 'no configurado'}`,
+      `GET /api/system-health · Resend=${integrations.resend === true} · Cloudinary=${integrations.cloudinary === true} · PayPal=${integrations.paypal?.environment || 'no configurado'}${paypalOk ? '' : ' · requiere Live'}`,
       { status: systemHealth.status, promote: externalServicesOk, evidenceLevel: LP });
     if (report.deployment?.commitSha) {
       setFrom('deployments', true, `GET /api/system-health · commit ${report.deployment.commitSha.slice(0, 10)} (${report.deployment.branch || 'branch desconocida'})`, { promote: true, evidenceLevel: LP });
@@ -281,9 +281,9 @@ export function buildLiveEdges({ publicHealth, systemHealth, headers, protectedP
       report.integrations.appsScript.httpStatus || systemHealth.status);
   }
   if (report?.integrations?.paypal) {
-    const paypalOk = report.integrations.paypal.configured === true;
+    const paypalOk = report.integrations.paypal.productionReady === true;
     set('apis-internas', 'servicios-externos', paypalOk && report.integrations.resend === true && report.integrations.cloudinary === true,
-      `GET /api/system-health · externos configurados=${paypalOk && report.integrations.resend === true && report.integrations.cloudinary === true}`,
+      `GET /api/system-health · PayPal ${report.integrations.paypal.environment || 'no configurado'}${paypalOk ? '' : ' · requiere Live'} · externos listos=${paypalOk && report.integrations.resend === true && report.integrations.cloudinary === true}`,
       systemHealth.status);
   }
   if (report?.integrations?.sheets !== undefined) {

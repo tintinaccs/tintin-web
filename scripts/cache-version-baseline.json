@@ -268,16 +268,16 @@
     "sha256": "77f776d5b297ce973fe5ea432f318498d7e9f07a41f183525a79159c6686c12d"
   },
   "js/admin/admin-app.js": {
-    "version": "tintin-20260928-admin-crud-feedback-7-domain-cutover-2",
-    "sha256": "136d81cc09e3f54b93f90d3fa22874dc32e8cfe034d06206f997fcf980f2c8c0"
+    "version": "tintin-20260929-paypal-health-diagnostics-4",
+    "sha256": "d48772ccb4254586dbaffa37503162ba9de6e584b0eeea9896d6e8fe3d56c3c3"
   },
   "js/admin/ajuste-barra-lateral-movil-admin.js": {
     "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
     "sha256": "4f3f88ff7718d2bcc9882ddd07e087cd6d7ed0161828e5955acd763b1ca8dae0"
   },
   "js/admin/aplicar-importacion-admin.js": {
-    "version": "tintin-20260928-shopify-media-preflight-1",
-    "sha256": "440ee07c6475541a83dc1052a7b5ef2339620ec29b9dadef9c95969c184d005d"
+    "version": "tintin-20260929-shopify-identity-apply-1",
+    "sha256": "517b2f712722c10fb46f88f5375a2ce38f9b6e3c9d248200bcf257868465c402"
   },
   "js/admin/appearance/editor-visual-admin.js": {
     "version": "tintin-20260925-cache-converge-1-launch-20260926-1",
@@ -324,8 +324,8 @@
     "sha256": "ccfec967b1abf0db40df74264ddfff59146f6132a7cf6d272ca9f474ef926159"
   },
   "js/admin/diagnostics/estado-ecosistema-admin.js": {
-    "version": "tintin-20260926-engagement-queue-1-launch-20260926-1",
-    "sha256": "69cdb21be98c632aeb574b10d38b6d7562bd6eafc84f3fc0b26753378ffc3547"
+    "version": "tintin-20260929-paypal-live-readiness-3",
+    "sha256": "a8fe580f80389415b3289da92381c3a6e1b3702c1cfcfd5a895686d3c59076af"
   },
   "js/admin/flujo-conexiones/datos-flujo-conexiones.js": {
     "version": "tintin-20260925-cache-converge-1",
@@ -336,16 +336,16 @@
     "sha256": "e7cb25fcc31a45207505ff8b030182bc14f4c87eaff4110d35b4dd2d4ca11c51"
   },
   "js/admin/flujo-conexiones/flujo-conexiones-admin.js": {
-    "version": "tintin-20260925-cache-converge-1-launch-20260926-1",
-    "sha256": "666792fecdc5c716cfe6fcde7e34b858776e4315a537325b50692df4c3884953"
+    "version": "tintin-20260929-paypal-live-gate-3",
+    "sha256": "898a8bf377b463acb8a3a5379f492e0103e1cf38d00bdfebd9a42b77cd3bd9e8"
   },
   "js/admin/flujo-conexiones/live-checks.js": {
-    "version": "tintin-20260925-cache-converge-1",
-    "sha256": "17612eada59cce32efd0ab7c8c9f810ac47e5baf07b59256edc3fcd38813c40a"
+    "version": "tintin-20260929-paypal-live-gate-2",
+    "sha256": "8be8abbfc062e0131a89199896c256e30a8830eb0036c9b87a4e19d17e895749"
   },
   "js/admin/importacion-admin.js": {
-    "version": "tintin-20260928-shopify-media-preflight-1",
-    "sha256": "5d0d56027fb7a2e381e1edd907c1a3f387d8c7522aa0e272a7e31dfe44387dd8"
+    "version": "tintin-20260929-shopify-identity-4",
+    "sha256": "dbf65a92e07eb6fed3cfee27446e41c4a9ee19941fa6aee8f6be3ae0750fdfa5"
   },
   "js/admin/maestro/panel-maestro.js": {
     "version": "tintin-20260920-admin-status-fixes-2-auth-popup-resolver-1-admin-ops-1-launch-20260926-1",
@@ -488,8 +488,8 @@
     "sha256": "c32c4c3ca8f96a0a2827fccf835490d09b4ff419bae2632c7490bc9a87f8a37f"
   },
   "js/cargador-pagina.js": {
-    "version": "tintin-20260928-shopify-media-loader-2",
-    "sha256": "952ad5ca895f7b87b671b1642ce13cd695c9f325a15b9ec6212ec455c526ff69"
+    "version": "tintin-20260929-shopify-identity-loader-2",
+    "sha256": "1d54d8480d0a9b36ca0b94c1769e770b590e9a30777a06b98b43c87909ee4aa7"
   },
   "js/components/cart/politica-persistencia-carrito.js": {
     "version": "tintin-20260808-product-cart-1",
@@ -879,6 +879,10 @@
     "version": "tintin-20260927-shopify-apply-1",
     "sha256": "7a76bc6685b1fc52dac34d28e162198d73d2d8148aa3c066faa2cf9028279f93"
   },
+  "js/core/store/shopify-import-identity.mjs": {
+    "version": "tintin-20260929-shopify-identity-2",
+    "sha256": "5bb75632ef1ce710b465fff587a29636d626fcc8904c084508bd0b6a216a7570"
+  },
   "js/core/store/shopify-phase2-pipeline.mjs": {
     "version": "tintin-20260928-shopify-media-migrate-1",
     "sha256": "16c4f19c77b604b7a2288318e0afd6335d75131c5784feb75fcd9fed6bb78fa7"
@@ -1092,8 +1096,8 @@
     "sha256": "d765782bb4eb36dff36b4e96992281d5de78a726e77ff664dea1b587dd2b663f"
   },
   "js/quality/calidad-interfaz.js": {
-    "version": "tintin-20260928-shopify-media-quality-2",
-    "sha256": "c521d0bf58bcce75b5fecb238209126dc970f36ee0347563c9f9cc9c847b69b3"
+    "version": "tintin-20260929-shopify-identity-quality-2",
+    "sha256": "a575a8b84e09d431d5916f893aab79cee85cc2d21e0c4e651e097498f7d34767"
   },
   "js/quality/correccion-auditoria-pagina.js": {
     "version": "tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",

@@ -157,20 +157,27 @@ test('CI del commit actual verifica los flujos de acceso que antes quedaban amar
   }
 });
 
-test('servicios externos solo quedan verdes si Resend, Cloudinary y PayPal están configurados', () => {
+test('servicios externos requieren PayPal Live además de Resend y Cloudinary', () => {
   const complete = {
     status: 200,
     body: { report: { integrations: {
       resend: true,
       cloudinary: true,
-      paypal: { configured: true, enabled: true },
+      paypal: { configured: true, enabled: true, productionReady: true, mode: 'live' },
     } } },
   };
   const live = buildLiveChecks({ systemHealth: complete }, '2026-09-23T00:00:00.000Z');
   assert.equal(resolveState(NODES.find(item => item.id === 'servicios-externos'), live['servicios-externos'], ESTADOS), ESTADOS.PROD);
+  const sandbox = buildLiveChecks({ systemHealth: {
+    status: 200,
+    body: { report: { integrations: { resend: true, cloudinary: true, paypal: {
+      configured: true, enabled: true, productionReady: false, mode: 'sandbox',
+    } } } },
+  } }, '2026-09-23T00:00:00.000Z');
+  assert.notEqual(resolveState(NODES.find(item => item.id === 'servicios-externos'), sandbox['servicios-externos'], ESTADOS), ESTADOS.PROD);
   const disabled = buildLiveChecks({ systemHealth: {
     status: 200,
-    body: { report: { integrations: { resend: true, cloudinary: true, paypal: { configured: false, enabled: false } } } },
+    body: { report: { integrations: { resend: true, cloudinary: true, paypal: { configured: false, enabled: false, productionReady: false } } } },
   } }, '2026-09-23T00:00:00.000Z');
   assert.notEqual(resolveState(NODES.find(item => item.id === 'servicios-externos'), disabled['servicios-externos'], ESTADOS), ESTADOS.PROD);
 });
