@@ -391,3 +391,260 @@ body.tt-home-premium .tt-reviews-section {
   body.tt-home-premium .tt-home-random-products-grid { grid-auto-columns: minmax(230px, 78vw); gap: 14px; }
   body.tt-home-premium .tt-home-random-products-actions { margin-top: 18px; }
 }
+
+/* Hero editorial Tintin. La imagen sigue siendo la elegida y recortada en
+   Super Admin para desktop/laptop, tablet y mobile (variables --tt-hero-*). */
+html body.tt-home-premium .tt-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  grid-template-areas: "content media";
+  align-items: center;
+  gap: clamp(28px, 5vw, 76px);
+  min-height: clamp(520px, 70svh, 760px);
+  height: auto !important;
+  padding: clamp(32px, 5vw, 72px) clamp(24px, 7vw, 104px);
+  overflow: clip;
+  color: #2B2B2B;
+  background: #FFF6FA !important;
+}
+
+html body.tt-home-premium .tt-hero-content {
+  grid-area: content;
+  position: relative !important;
+  inset: auto !important;
+  display: flex !important;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  max-width: 590px;
+  margin: 0;
+  padding: 0;
+  color: #2B2B2B !important;
+  pointer-events: auto;
+}
+
+html body.tt-home-premium .tt-hero-eyebrow {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  margin: 0 0 clamp(16px, 2vw, 24px);
+  color: #AD3F67;
+  font-size: .76rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  line-height: 1.4;
+}
+
+html body.tt-home-premium .tt-hero-title {
+  position: static !important;
+  width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  color: #2B2B2B !important;
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(3rem, 6.3vw, 6.3rem);
+  font-weight: 650;
+  letter-spacing: -.065em;
+  line-height: .98;
+  text-align: left;
+  text-shadow: none;
+  text-wrap: balance;
+  clip: auto !important;
+  white-space: normal !important;
+  border: 0 !important;
+}
+
+html body.tt-home-premium .tt-hero-title-line--accent {
+  display: block;
+  margin: .08em 0 0;
+  color: #AD3F67;
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+html body.tt-home-premium .tt-hero-subtitle {
+  position: static !important;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 40ch;
+  padding: 0 !important;
+  overflow: visible !important;
+  margin: clamp(20px, 2.5vw, 30px) 0 0;
+  color: #7B6F72 !important;
+  font-size: clamp(1.02rem, 1.35vw, 1.2rem);
+  line-height: 1.7;
+  clip: auto !important;
+  white-space: normal !important;
+  border: 0 !important;
+}
+
+html body.tt-home-premium .tt-hero-actions {
+  display: flex !important;
+  position: static !important;
+  align-items: center;
+  gap: clamp(16px, 2vw, 24px);
+  width: auto !important;
+  height: auto !important;
+  margin: clamp(26px, 3vw, 36px) 0 0 !important;
+  pointer-events: auto;
+}
+
+html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
+  display: inline-flex !important;
+  position: static !important;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  min-width: 190px;
+  min-height: 54px;
+  padding: 0 26px !important;
+  border: 1px solid #AD3F67 !important;
+  border-radius: 999px;
+  color: #FFFFFF !important;
+  background: #AD3F67 !important;
+  box-shadow: 0 10px 24px rgba(173, 63, 103, .16) !important;
+  font-size: .98rem !important;
+  font-weight: 650;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta:hover,
+html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta:focus-visible {
+  color: #FFFFFF !important;
+  background: #923454 !important;
+  box-shadow: 0 12px 28px rgba(173, 63, 103, .24) !important;
+}
+
+html body.tt-home-premium .tt-hero-actions .tt-hero-link {
+  display: inline-flex !important;
+  position: static !important;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  min-height: 44px;
+  color: #AD3F67 !important;
+  font-size: .94rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: #E8B9C9;
+  text-underline-offset: 5px;
+  white-space: nowrap;
+  opacity: 1 !important;
+}
+
+html body.tt-home-premium .tt-hero-media {
+  grid-area: media;
+  position: relative !important;
+  inset: auto !important;
+  justify-self: stretch;
+  align-self: center;
+  width: 100% !important;
+  min-width: 0;
+  min-height: 0;
+  height: auto !important;
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+  border: 1px solid rgba(173, 63, 103, .1);
+  border-radius: clamp(24px, 3vw, 40px);
+  background: #FDECF2 !important;
+  box-shadow: 0 24px 56px rgba(92, 37, 57, .12);
+}
+
+html body.tt-home-premium .tt-hero-media picture,
+html body.tt-home-premium .tt-hero-media .tt-hero-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+html body.tt-home-premium .tt-hero-media .tt-hero-img {
+  object-fit: var(--tt-hero-fit-desktop, cover) !important;
+  object-position: var(--tt-hero-pos-desktop, center center) !important;
+  transform: scale(var(--tt-hero-scale-desktop, 1)) !important;
+  transform-origin: var(--tt-hero-pos-desktop, center center) !important;
+}
+
+@media (min-width: 768px) and (max-width: 1120px) {
+  html body.tt-home-premium .tt-hero {
+    grid-template-columns: minmax(0, .92fr) minmax(0, 1fr);
+    gap: clamp(22px, 3vw, 38px);
+    min-height: 0;
+    height: auto !important;
+    padding: 36px clamp(24px, 4vw, 48px);
+  }
+  html body.tt-home-premium .tt-hero-title { font-size: clamp(2.8rem, 6vw, 4.8rem); }
+  html body.tt-home-premium .tt-hero-media {
+    min-height: 0;
+    aspect-ratio: 3 / 2;
+  }
+  html body.tt-home-premium .tt-hero-media .tt-hero-img {
+    object-fit: var(--tt-hero-fit-tablet, cover) !important;
+    object-position: var(--tt-hero-pos-tablet, center center) !important;
+    transform: scale(var(--tt-hero-scale-tablet, 1)) !important;
+    transform-origin: var(--tt-hero-pos-tablet, center center) !important;
+  }
+}
+
+@media (max-width: 767px), (max-width: 1120px) and (orientation: portrait) {
+  html body.tt-home-premium .tt-hero {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "content" "media";
+    gap: 26px;
+    min-height: 0;
+    height: auto !important;
+    padding: clamp(32px, 8vw, 54px) 20px clamp(36px, 8vw, 56px);
+  }
+  html body.tt-home-premium .tt-hero-content { max-width: 720px; }
+  html body.tt-home-premium .tt-hero-eyebrow { margin-bottom: 14px; font-size: .68rem; }
+  html body.tt-home-premium .tt-hero-title {
+    font-size: clamp(2.8rem, 11vw, 5.2rem);
+    line-height: .99;
+  }
+  html body.tt-home-premium .tt-hero-subtitle {
+    max-width: 36ch;
+    margin-top: 17px;
+    font-size: 1rem;
+  }
+  html body.tt-home-premium .tt-hero-actions {
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    margin-top: 23px !important;
+  }
+  html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta {
+    min-width: 176px;
+    min-height: 50px;
+  }
+  html body.tt-home-premium .tt-hero-media {
+    width: 100% !important;
+    min-height: 0;
+    height: auto !important;
+    aspect-ratio: 4 / 5;
+    border-radius: 24px;
+  }
+  html body.tt-home-premium .tt-hero-media .tt-hero-img {
+    object-fit: var(--tt-hero-fit-mobile, cover) !important;
+    object-position: var(--tt-hero-pos-mobile, center center) !important;
+    transform: scale(var(--tt-hero-scale-mobile, 1)) !important;
+    transform-origin: var(--tt-hero-pos-mobile, center center) !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1120px) and (orientation: portrait) {
+  html body.tt-home-premium .tt-hero-media {
+    justify-self: center;
+    width: min(100%, 560px) !important;
+    aspect-ratio: 3 / 4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body.tt-home-premium .tt-hero-actions .tt-btn.tt-hero-cta { transition: none !important; }
+}

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "8e92e0e8e67bcdb5292fe5a52174e4bd2d4efd90767544432f3718bd5844c4a9",
+  "sourceFingerprint": "b78046420f22c61a41075324019f88c25b64224d36a9cf0f1cec4bf3b2db928a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 913,
     "textFiles": 872,
-    "totalBytes": 17930045,
+    "totalBytes": 17924652,
     "pages": 19,
     "modules": 627
   },
@@ -82,7 +82,7 @@
         "client"
       ],
       "bytes": 12450,
-      "sha256": "370fa837c22c77d6fb920b4413c59be0d9f88e13dff3c188b4e1c4319b1c9198",
+      "sha256": "a8b61842a0e0664c9c210cb002c3fe16d20fafba66fde3eb931a8f0cf7d621c1",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -104,7 +104,7 @@
           "line": 6
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "/js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -511,7 +511,7 @@
           "exists": true
         },
         {
-          "raw": "/js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "/js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -802,8 +802,8 @@
         "guest",
         "client"
       ],
-      "bytes": 22232,
-      "sha256": "7071ef8e5ad53abd8cac2b4c8fe22869364e7726a0d1991db7892c31cca64265",
+      "bytes": 22174,
+      "sha256": "42697d08100ed27ad18ec7eb88be916d897f18a59b226a9c8a8d47505fb261bb",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -838,7 +838,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -1238,7 +1238,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -1543,8 +1543,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 41621,
-      "sha256": "b13d44a7aab2f982d5c1c8e595470bcf7d0d8639eee2d7a1d049265ee4439972",
+      "bytes": 43692,
+      "sha256": "5f595b01d2b605135516d94ebbf1d28ca6544ae2e4f1a66f208fc21b1c886c8c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1574,7 +1574,7 @@
       "ids": 17,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -1586,12 +1586,12 @@
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 753
+          "line": 799
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 754
+          "line": 800
         }
       ],
       "styles": [
@@ -1691,7 +1691,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -1705,13 +1705,13 @@
         {
           "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/admin/settings/esquema-color-admin.js",
-          "line": 753,
+          "line": 799,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 754,
+          "line": 800,
           "exists": true
         },
         {
@@ -2113,7 +2113,7 @@
         "viewer"
       ],
       "bytes": 197750,
-      "sha256": "2007b92c3f3f278566a9ff9058c4f97729785319d3a081560fbaf96762a541a4",
+      "sha256": "a57a19b96ef84088eddd13501f402b7f80a4c8a799cac2f1f98b9343979ac023",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2137,7 +2137,7 @@
       "ids": 561,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -2409,7 +2409,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -7823,7 +7823,7 @@
         "client"
       ],
       "bytes": 13645,
-      "sha256": "a185da48cb619f016035a7b002dbd8f6c42613c0f82e324773a723a26df719de",
+      "sha256": "8643a521497d7a627b2e0e33d9f60df82c5ae8e5601a721fc4d42adb2f93efcd",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -7852,7 +7852,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -8194,7 +8194,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -8450,7 +8450,7 @@
         "client"
       ],
       "bytes": 53660,
-      "sha256": "40a61b274f9fed6c80b725c9fa98a3b786adc1841c78a5f18179bba9b7da382f",
+      "sha256": "da57994766f138673ce7194573b2fb6f0645560ed88810be9cd9fd69b71ea31a",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -8491,7 +8491,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -8823,7 +8823,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -9205,7 +9205,7 @@
         "viewer"
       ],
       "bytes": 117175,
-      "sha256": "3271dd191ff6dd370691dd642320b248270dfa5973fef1997b6bf594fd7942f2",
+      "sha256": "cc541b2ee30fc8936f59a894451dbf7f9268770b7ec88fbca1a6cf327fd23a3e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -9240,7 +9240,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -9592,7 +9592,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -10200,7 +10200,7 @@
         "client"
       ],
       "bytes": 15372,
-      "sha256": "c4abcfe89e1d3b0b9746bcf42589a11a063be17a88ddacd82455d5f3e5a420e3",
+      "sha256": "1993b40a552c6955724ec001aa1cfcb51eaef695de25e3f63a8a176a030a794f",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10235,7 +10235,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -10592,7 +10592,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -10860,7 +10860,7 @@
         "client"
       ],
       "bytes": 19829,
-      "sha256": "62ae79290b70455ee95ca14d889344cbeaa8614479279bde015651544a54df73",
+      "sha256": "ce27e40da133b52c218659eb852e4bd23caccd3c209f2019bfb07dd18f4f96bb",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10895,7 +10895,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -11277,7 +11277,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -11593,7 +11593,7 @@
         "client"
       ],
       "bytes": 17047,
-      "sha256": "b05b857f7c8aed1349e4a5d695c7d756f6305e18a95bafd771ee25f83bd1b485",
+      "sha256": "25afa5d6d655f4639ab1c1d6105e6a4869d3a39da02fabab4e3a6b8cadc67793",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -11628,7 +11628,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -11970,7 +11970,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -12265,8 +12265,8 @@
         "guest",
         "client"
       ],
-      "bytes": 38122,
-      "sha256": "babe3cd264eda27fff872425c70a26d2cabd0114087b647013075ae117cbcd8f",
+      "bytes": 35164,
+      "sha256": "68285b1fa2a580f3ec11918a06e6486481362e7c77416f67796a49fe91806016",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -12275,7 +12275,7 @@
         "htmlLang": "es",
         "h1Count": 1,
         "h1Lines": [
-          141
+          127
         ]
       },
       "duplicateIds": [],
@@ -12287,19 +12287,19 @@
           "error": ""
         },
         {
-          "line": 444,
+          "line": 430,
           "module": false,
           "ok": true,
           "error": ""
         },
         {
-          "line": 508,
+          "line": 494,
           "module": true,
           "ok": true,
           "error": ""
         }
       ],
-      "ids": 17,
+      "ids": 16,
       "scripts": [
         {
           "raw": "js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
@@ -12307,7 +12307,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -12324,52 +12324,52 @@
         {
           "raw": "tienda.js?v=tintin-20260927-visual-1",
           "target": "tienda.js",
-          "line": 501
+          "line": 487
         },
         {
           "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20260927-visual-1",
           "target": "js/pages/home/carrusel-colecciones.js",
-          "line": 502
+          "line": 488
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 503
+          "line": 489
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 504
+          "line": 490
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 505
+          "line": 491
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 506
+          "line": 492
         },
         {
-          "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20260908-home-random-lazy-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20260929-superadmin-hero-editable-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 507
+          "line": 493
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-sec-fix-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 512
+          "line": 498
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 548
+          "line": 534
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 549
+          "line": 535
         }
       ],
       "styles": [
@@ -12434,13 +12434,13 @@
           "line": 72
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260912-hero-static-first-paint-1",
-          "target": "css/pages/home/ajuste-inicio.css",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260911-hero-single-layer-1",
+          "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 82
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260911-hero-single-layer-1",
-          "target": "css/pages/home/hero-bienvenida-inicio.css",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260929-superadmin-hero-layout-3",
+          "target": "css/pages/home/ajuste-inicio.css",
           "line": 83
         },
         {
@@ -12476,7 +12476,7 @@
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.webp",
           "alt": "",
           "hasAlt": false,
-          "line": 118
+          "line": 103
         },
         {
           "tag": "source",
@@ -12484,7 +12484,7 @@
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.webp",
           "alt": "",
           "hasAlt": false,
-          "line": 119
+          "line": 104
         },
         {
           "tag": "source",
@@ -12492,7 +12492,7 @@
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.webp",
           "alt": "",
           "hasAlt": false,
-          "line": 120
+          "line": 105
         },
         {
           "tag": "source",
@@ -12500,7 +12500,7 @@
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.webp",
           "alt": "",
           "hasAlt": false,
-          "line": 121
+          "line": 106
         },
         {
           "tag": "source",
@@ -12508,7 +12508,7 @@
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png",
           "alt": "",
           "hasAlt": false,
-          "line": 122
+          "line": 107
         },
         {
           "tag": "source",
@@ -12516,7 +12516,7 @@
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png",
           "alt": "",
           "hasAlt": false,
-          "line": 123
+          "line": 108
         },
         {
           "tag": "source",
@@ -12524,15 +12524,15 @@
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png",
           "alt": "",
           "hasAlt": false,
-          "line": 124
+          "line": 109
         },
         {
           "tag": "img",
           "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png?v=tintin-20260910-hero-button-clear-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png",
-          "alt": "Varios relojes dorados exhibidos sobre una base rosa",
+          "alt": "",
           "hasAlt": true,
-          "line": 125
+          "line": 110
         },
         {
           "tag": "source",
@@ -12540,7 +12540,7 @@
           "target": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-mobile.webp",
           "alt": "",
           "hasAlt": false,
-          "line": 247
+          "line": 233
         },
         {
           "tag": "source",
@@ -12548,7 +12548,7 @@
           "target": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-tablet.webp",
           "alt": "",
           "hasAlt": false,
-          "line": 248
+          "line": 234
         },
         {
           "tag": "img",
@@ -12556,7 +12556,7 @@
           "target": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp",
           "alt": "Colección Bag Tintin",
           "hasAlt": true,
-          "line": 249
+          "line": 235
         },
         {
           "tag": "source",
@@ -12564,7 +12564,7 @@
           "target": "assets-tintin/images/home/editorial-relojes/editorial-relojes-mobile.webp",
           "alt": "",
           "hasAlt": false,
-          "line": 297
+          "line": 283
         },
         {
           "tag": "source",
@@ -12572,7 +12572,7 @@
           "target": "assets-tintin/images/home/editorial-relojes/editorial-relojes-tablet.webp",
           "alt": "",
           "hasAlt": false,
-          "line": 298
+          "line": 284
         },
         {
           "tag": "img",
@@ -12580,7 +12580,7 @@
           "target": "assets-tintin/images/home/editorial-relojes/editorial-relojes-desktop.webp",
           "alt": "Nueva colección de relojes Tintin",
           "hasAlt": true,
-          "line": 299
+          "line": 285
         },
         {
           "tag": "img",
@@ -12588,19 +12588,19 @@
           "target": "assets-tintin/images/general/logo.png",
           "alt": "TINTIN",
           "hasAlt": true,
-          "line": 377
+          "line": 363
         }
       ],
       "links": [
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "text": "Comprar ahora →",
+          "text": "Descubrir Tintin →",
           "id": "",
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 144
+          "line": 130
         },
         {
           "raw": "/about",
@@ -12610,7 +12610,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 148
+          "line": 134
         },
         {
           "raw": "/catalogo?cat=bolsos",
@@ -12620,7 +12620,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 266
+          "line": 252
         },
         {
           "raw": "/catalogo",
@@ -12630,7 +12630,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 284
+          "line": 270
         },
         {
           "raw": "/catalogo?cat=relojes",
@@ -12640,7 +12640,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 316
+          "line": 302
         },
         {
           "raw": "/",
@@ -12650,7 +12650,7 @@
           "ariaLabel": "Ir al inicio de TINTIN",
           "title": "",
           "imageAlt": "TINTIN",
-          "line": 376
+          "line": 362
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -12660,7 +12660,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 380
+          "line": 366
         },
         {
           "raw": "/catalogo",
@@ -12670,7 +12670,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 388
+          "line": 374
         },
         {
           "raw": "/collections",
@@ -12680,7 +12680,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 389
+          "line": 375
         },
         {
           "raw": "/catalogo?cat=relojes",
@@ -12690,7 +12690,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 390
+          "line": 376
         },
         {
           "raw": "/catalogo?cat=bolsos",
@@ -12700,7 +12700,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 391
+          "line": 377
         },
         {
           "raw": "/about",
@@ -12710,7 +12710,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 398
+          "line": 384
         },
         {
           "raw": "/envios",
@@ -12720,7 +12720,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 399
+          "line": 385
         },
         {
           "raw": "/cambios-devoluciones",
@@ -12730,7 +12730,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 400
+          "line": 386
         },
         {
           "raw": "/preguntas-frecuentes",
@@ -12740,7 +12740,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 401
+          "line": 387
         },
         {
           "raw": "/terminos",
@@ -12750,7 +12750,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 402
+          "line": 388
         },
         {
           "raw": "/privacidad",
@@ -12760,7 +12760,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 403
+          "line": 389
         },
         {
           "raw": "/sitemap.xml",
@@ -12770,7 +12770,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 404
+          "line": 390
         },
         {
           "raw": "/contact",
@@ -12780,7 +12780,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 411
+          "line": 397
         },
         {
           "raw": "tel:+595981299331",
@@ -12790,7 +12790,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 412
+          "line": 398
         },
         {
           "raw": "mailto:tintinaccs@gmail.com",
@@ -12800,7 +12800,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 413
+          "line": 399
         },
         {
           "raw": "https://instagram.com/tintinaccs",
@@ -12810,7 +12810,7 @@
           "ariaLabel": "",
           "title": "",
           "imageAlt": "",
-          "line": 414
+          "line": 400
         },
         {
           "raw": "https://wa.me/595981299331",
@@ -12820,7 +12820,7 @@
           "ariaLabel": "WhatsApp",
           "title": "Escribirnos por WhatsApp",
           "imageAlt": "",
-          "line": 426
+          "line": 412
         }
       ],
       "references": [
@@ -12831,7 +12831,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -12851,61 +12851,61 @@
         {
           "raw": "tienda.js?v=tintin-20260927-visual-1",
           "target": "tienda.js",
-          "line": 501,
+          "line": 487,
           "exists": true
         },
         {
           "raw": "js/pages/home/carrusel-colecciones.js?v=tintin-20260927-visual-1",
           "target": "js/pages/home/carrusel-colecciones.js",
-          "line": 502,
+          "line": 488,
           "exists": true
         },
         {
           "raw": "js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/contact/whatsapp.js",
-          "line": 503,
+          "line": 489,
           "exists": true
         },
         {
           "raw": "js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/reviews/valoraciones-catalogo.js",
-          "line": 504,
+          "line": 490,
           "exists": true
         },
         {
           "raw": "js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/analytics/analitica.js",
-          "line": 505,
+          "line": 491,
           "exists": true
         },
         {
           "raw": "js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1",
           "target": "js/core/auth/proteccion-sesion.js",
-          "line": 506,
+          "line": 492,
           "exists": true
         },
         {
-          "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20260908-home-random-lazy-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20260929-superadmin-hero-editable-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
-          "line": 507,
+          "line": 493,
           "exists": true
         },
         {
           "raw": "js/core/auth/insignia-edicion.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-sec-fix-1",
           "target": "js/core/auth/insignia-edicion.js",
-          "line": 512,
+          "line": 498,
           "exists": true
         },
         {
           "raw": "js/visual-builder-bootstrap.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1",
           "target": "js/visual-builder-bootstrap.js",
-          "line": 548,
+          "line": 534,
           "exists": true
         },
         {
           "raw": "js/components/color/esquema-color.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
           "target": "js/components/color/esquema-color.js",
-          "line": 549,
+          "line": 535,
           "exists": true
         },
         {
@@ -12981,14 +12981,14 @@
           "exists": true
         },
         {
-          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260912-hero-static-first-paint-1",
-          "target": "css/pages/home/ajuste-inicio.css",
+          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260911-hero-single-layer-1",
+          "target": "css/pages/home/hero-bienvenida-inicio.css",
           "line": 82,
           "exists": true
         },
         {
-          "raw": "css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260911-hero-single-layer-1",
-          "target": "css/pages/home/hero-bienvenida-inicio.css",
+          "raw": "css/pages/home/ajuste-inicio.css?v=tintin-20260929-superadmin-hero-layout-3",
+          "target": "css/pages/home/ajuste-inicio.css",
           "line": 83,
           "exists": true
         },
@@ -13025,193 +13025,193 @@
         {
           "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.webp?v=tintin-20260916-premium-hero-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.webp",
-          "line": 118,
+          "line": 103,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.webp?v=tintin-20260916-premium-hero-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.webp",
-          "line": 119,
+          "line": 104,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.webp?v=tintin-20260916-premium-hero-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.webp",
-          "line": 120,
+          "line": 105,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.webp?v=tintin-20260916-premium-hero-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.webp",
-          "line": 121,
+          "line": 106,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png?v=tintin-20260910-hero-button-clear-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-mobile.png",
-          "line": 122,
+          "line": 107,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png?v=tintin-20260910-hero-button-clear-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-horizontal.png",
-          "line": 123,
+          "line": 108,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png?v=tintin-20260910-hero-button-clear-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-tablet-vertical.png",
-          "line": 124,
+          "line": 109,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png?v=tintin-20260910-hero-button-clear-1",
           "target": "assets-tintin/images/home/hero-nuevo/hero-nuevo-desktop.png",
-          "line": 125,
+          "line": 110,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-mobile.webp?v=tintin-20260927-visual-1",
           "target": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-mobile.webp",
-          "line": 247,
+          "line": 233,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-tablet.webp?v=tintin-20260927-visual-1",
           "target": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-tablet.webp",
-          "line": 248,
+          "line": 234,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp",
           "target": "assets-tintin/images/home/editorial-bolsos/editorial-bolsos-desktop.webp",
-          "line": 249,
+          "line": 235,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/editorial-relojes/editorial-relojes-mobile.webp",
           "target": "assets-tintin/images/home/editorial-relojes/editorial-relojes-mobile.webp",
-          "line": 297,
+          "line": 283,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/editorial-relojes/editorial-relojes-tablet.webp",
           "target": "assets-tintin/images/home/editorial-relojes/editorial-relojes-tablet.webp",
-          "line": 298,
+          "line": 284,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/home/editorial-relojes/editorial-relojes-desktop.webp",
           "target": "assets-tintin/images/home/editorial-relojes/editorial-relojes-desktop.webp",
-          "line": 299,
+          "line": 285,
           "exists": true
         },
         {
           "raw": "assets-tintin/images/general/logo.png?v=tintin-20260715-15",
           "target": "assets-tintin/images/general/logo.png",
-          "line": 377,
+          "line": 363,
           "exists": true
         },
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 144,
+          "line": 130,
           "exists": true
         },
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 148,
+          "line": 134,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
           "target": "catalogo.html",
-          "line": 266,
+          "line": 252,
           "exists": true
         },
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 284,
+          "line": 270,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
           "target": "catalogo.html",
-          "line": 316,
+          "line": 302,
           "exists": true
         },
         {
           "raw": "/catalogo",
           "target": "catalogo.html",
-          "line": 388,
+          "line": 374,
           "exists": true
         },
         {
           "raw": "/collections",
           "target": "collections.html",
-          "line": 389,
+          "line": 375,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=relojes",
           "target": "catalogo.html",
-          "line": 390,
+          "line": 376,
           "exists": true
         },
         {
           "raw": "/catalogo?cat=bolsos",
           "target": "catalogo.html",
-          "line": 391,
+          "line": 377,
           "exists": true
         },
         {
           "raw": "/about",
           "target": "about.html",
-          "line": 398,
+          "line": 384,
           "exists": true
         },
         {
           "raw": "/envios",
           "target": "envios.html",
-          "line": 399,
+          "line": 385,
           "exists": true
         },
         {
           "raw": "/cambios-devoluciones",
           "target": "cambios-devoluciones.html",
-          "line": 400,
+          "line": 386,
           "exists": true
         },
         {
           "raw": "/preguntas-frecuentes",
           "target": "preguntas-frecuentes.html",
-          "line": 401,
+          "line": 387,
           "exists": true
         },
         {
           "raw": "/terminos",
           "target": "terminos.html",
-          "line": 402,
+          "line": 388,
           "exists": true
         },
         {
           "raw": "/privacidad",
           "target": "privacidad.html",
-          "line": 403,
+          "line": 389,
           "exists": true
         },
         {
           "raw": "/sitemap.xml",
           "target": "sitemap.xml",
-          "line": 404,
+          "line": 390,
           "exists": true
         },
         {
           "raw": "/contact",
           "target": "contact.html",
-          "line": 411,
+          "line": 397,
           "exists": true
         }
       ],
@@ -13233,7 +13233,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 194
+          "line": 180
         },
         {
           "id": "",
@@ -13247,7 +13247,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": "",
-          "line": 197
+          "line": 183
         },
         {
           "id": "btn-otra-combo",
@@ -13262,7 +13262,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 233
+          "line": 219
         },
         {
           "id": "btn-add-combo",
@@ -13276,7 +13276,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 234
+          "line": 220
         },
         {
           "id": "btn-home-random-products",
@@ -13291,7 +13291,7 @@
           "inlineHandler": false,
           "dataAction": {},
           "hasSourceReference": true,
-          "line": 283
+          "line": 269
         }
       ],
       "controls": []
@@ -13314,7 +13314,7 @@
         "viewer"
       ],
       "bytes": 76335,
-      "sha256": "40fef3fa10c44c4ca99c52fe515c81d853808f12e59951739efc30e831102e82",
+      "sha256": "333a481e1216ec15841db02c8c13f920f9ebdfe731ed6bf57b2717ab8b16f4e2",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -13355,7 +13355,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -13537,7 +13537,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -14008,7 +14008,7 @@
         "client"
       ],
       "bytes": 1838,
-      "sha256": "ae31f4ed9f546e1ffb5e95a6ce0267485d99b60c580dd49be01f1c14da1d6ab9",
+      "sha256": "1da4dda46e406f094d50570b6eb5916dcad758af5b84c3b2854c4fef5a1998f6",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14025,7 +14025,7 @@
       "ids": 0,
       "scripts": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 23
         }
@@ -14072,7 +14072,7 @@
       ],
       "references": [
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 23,
           "exists": true
@@ -14139,7 +14139,7 @@
         "viewer"
       ],
       "bytes": 43635,
-      "sha256": "f05a5da0b3ed7b3d849c40914bedaa530b675d647004031665dcfe35dc1dde4d",
+      "sha256": "9457ed6220cc421463467d8d7c1ea644a9094f0780c9591efbc28c4795781091",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14180,7 +14180,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -14567,7 +14567,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -14968,7 +14968,7 @@
         "client"
       ],
       "bytes": 14818,
-      "sha256": "79dc8dc777a7805be4026f3c6cba755e20a6c0d293fe60fa9b769a7198ea1e5b",
+      "sha256": "70e38feb06cfc3725598e4fd792a63e4a8c197e9473fdcbb7125e2195f4a9bb4",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -14997,7 +14997,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -15339,7 +15339,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -15595,7 +15595,7 @@
         "client"
       ],
       "bytes": 17387,
-      "sha256": "8ac1f9f4f96c4777f7bda84fc69f558dddda45e2e5fdc470cd334201b242bc3c",
+      "sha256": "976e3ca608b28a71b77b7cc61012b09e1c1884a1421d6eb661e9e0cc3282cb1e",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -15624,7 +15624,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -15991,7 +15991,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -16257,8 +16257,8 @@
         "guest",
         "client"
       ],
-      "bytes": 25189,
-      "sha256": "6118402c39cd0dc6f24f360ad9214f2a6ce01cc0d2824312fd8e7faea6f45aa8",
+      "bytes": 25129,
+      "sha256": "c0519f14859fa760ccc893ebd1b5b8faaaac30bd0829ca8e51b34f98475b1f1c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -16287,7 +16287,7 @@
           "line": 7
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 8
         },
@@ -16307,7 +16307,7 @@
           "line": 345
         },
         {
-          "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20260908-home-random-lazy-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20260929-superadmin-hero-editable-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
           "line": 346
         },
@@ -16704,7 +16704,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 8,
           "exists": true
@@ -16728,7 +16728,7 @@
           "exists": true
         },
         {
-          "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20260908-home-random-lazy-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "js/components/images/inicio-carga-imagenes.js?v=tintin-20260929-superadmin-hero-editable-1",
           "target": "js/components/images/inicio-carga-imagenes.js",
           "line": 346,
           "exists": true
@@ -17250,7 +17250,7 @@
         "client"
       ],
       "bytes": 15181,
-      "sha256": "ace011e03378c8c572e39b2a4edfb846600f72bc06133e1de408f0897215769b",
+      "sha256": "3b317cd4ead8fb8549b7b95884f00ab3d45837cd2714aad105c4afde7a9b7f6b",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -17272,7 +17272,7 @@
           "line": 6
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7
         },
@@ -17649,7 +17649,7 @@
           "exists": true
         },
         {
-          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-2",
+          "raw": "js/cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3",
           "target": "js/cargador-pagina.js",
           "line": 7,
           "exists": true
@@ -18735,8 +18735,8 @@
     },
     {
       "path": "config/csp-runtime.js",
-      "bytes": 368757,
-      "sha256": "6044b40372dacc7462b09baf27824ecaeb65aafc70112ce7e2deae63b5ae111e",
+      "bytes": 359901,
+      "sha256": "35c060b8d1a60c0a77019828afa6da0e1a8091f24e0d38e223689a7e1775216e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21980,15 +21980,15 @@
     },
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
-      "bytes": 2438,
-      "sha256": "dffe6469a9b0e1bfacd7393e25dec073b2694d30a7e66662da8ec7877ce9639e",
+      "bytes": 2380,
+      "sha256": "17b3c339bdfb719981cdcbdcefbe1fb300ff102a98a7c422a7d6e294ad0ff50b",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "../../components/images/imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "../../components/images/imagenes.js?v=tintin-20260929-superadmin-hero-editable-1",
           "target": "js/components/images/imagenes.js",
           "dynamic": false,
           "line": 11
@@ -22591,8 +22591,8 @@
     },
     {
       "path": "js/cargador-pagina.js",
-      "bytes": 45600,
-      "sha256": "1d54d8480d0a9b36ca0b94c1769e770b590e9a30777a06b98b43c87909ee4aa7",
+      "bytes": 45657,
+      "sha256": "42a05f471f2a045c2517304b14ce49e1b313bc9cc94db22de00a97d34e1748c7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23043,15 +23043,15 @@
     },
     {
       "path": "js/components/images/gestion-imagenes.js",
-      "bytes": 19572,
-      "sha256": "b581439bde4a41f025fc46934cdf35fe2cb80141e469ab192956a2fa0f56f2b7",
+      "bytes": 20063,
+      "sha256": "1508d2212fa3e1c24aac60c372083ad424f38d46756ef0da766b3cd0a4b871b2",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "./imagenes.js?v=tintin-20260929-superadmin-hero-editable-1",
           "target": "js/components/images/imagenes.js",
           "dynamic": false,
           "line": 9
@@ -23067,8 +23067,8 @@
     },
     {
       "path": "js/components/images/imagenes.js",
-      "bytes": 21277,
-      "sha256": "508f6decd54dff4535b478232e298fa652289e20ef46932fbf8d19a7f351a8b2",
+      "bytes": 23139,
+      "sha256": "19f954ea824c083c9c6f89f43de2cd0dc0c3dce294a93dc92d26ab8734cdd704",
       "syntax": {
         "ok": true,
         "error": ""
@@ -23120,15 +23120,15 @@
     },
     {
       "path": "js/components/images/inicio-carga-imagenes.js",
-      "bytes": 1847,
-      "sha256": "c499d6b8b9125e3801e5941e87e3151c181a7fe255ea7a5aafb0896904288ddd",
+      "bytes": 1789,
+      "sha256": "80f3913f6dad648cb4eb202985c2a040db6ac03e447e765e4dd5610f350125ae",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "./imagenes.js?v=tintin-20260929-superadmin-hero-editable-1",
           "target": "js/components/images/imagenes.js",
           "dynamic": false,
           "line": 10
@@ -26395,8 +26395,8 @@
     },
     {
       "path": "js/quality/calidad-interfaz.js",
-      "bytes": 9560,
-      "sha256": "a575a8b84e09d431d5916f893aab79cee85cc2d21e0c4e651e097498f7d34767",
+      "bytes": 9650,
+      "sha256": "2088e64df7d9451a47c7e1c5599dd3d1c7ca5f81f5fe32e735c2092d94544909",
       "syntax": {
         "ok": true,
         "error": ""
@@ -26897,7 +26897,7 @@
     {
       "path": "scripts/auditar-app-check-arranque.js",
       "bytes": 6291,
-      "sha256": "b8ec7500a41c58497aad83ccebc899944ca9395a2afa1d74f4ebfa7d5ca52303",
+      "sha256": "581676b31775082095f78c8fdbb3afa4b676d59212a0535c046db9f5e037cb0a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -27986,7 +27986,7 @@
     {
       "path": "scripts/auditar-fase-10-accessibility.js",
       "bytes": 4656,
-      "sha256": "64a590f827c553cd7df133cb6aef55b09fa323f7e2de6ee207e3edacc17a2911",
+      "sha256": "dea5492ac01281d0d594ec7039afc5c54938f361d344a987f729e2665a4ca4a7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28091,7 +28091,7 @@
     {
       "path": "scripts/auditar-fase-8-ui-ux.js",
       "bytes": 6459,
-      "sha256": "17663879e9087f1af534545ce4e024331844978229a6c60c2c62415ca18dc9a6",
+      "sha256": "ec1ad3d2d9b651ff6aaa96493ca4cf9f2657f17f769ef50c549515d6a9c82d86",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28361,42 +28361,42 @@
     },
     {
       "path": "scripts/auditar-imagenes-fase-5.js",
-      "bytes": 25854,
-      "sha256": "53599fc717b4671219c19a49770caa208cf4355b5ea906ca2342b1b9909616c1",
+      "bytes": 26638,
+      "sha256": "160d7f53b272375cc7e96995832cfe62a1bf4cada006704c71ef09c639b5a8bf",
       "syntax": {
         "ok": true,
         "error": ""
       },
       "imports": [
         {
-          "raw": "./imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "./imagenes.js?v=tintin-20260929-superadmin-hero-editable-1",
           "target": "scripts/imagenes.js",
           "dynamic": false,
-          "line": 205
+          "line": 217
         },
         {
           "raw": "./procesamiento-imagenes.js?v=tintin-20260716-cloudinary-fix-1",
           "target": "scripts/procesamiento-imagenes.js",
           "dynamic": false,
-          "line": 238
+          "line": 250
         },
         {
           "raw": "../../core/firebase/origen-funciones.js",
           "target": null,
           "dynamic": false,
-          "line": 252
+          "line": 264
         },
         {
           "raw": "./firebase-id-token.js",
           "target": "scripts/firebase-id-token.js",
           "dynamic": false,
-          "line": 300
+          "line": 312
         },
         {
           "raw": "../../components/images/utilidades-imagenes.js?v=tintin-20260716-cloudinary-fix-1",
           "target": null,
           "dynamic": false,
-          "line": 407
+          "line": 419
         }
       ],
       "endpoints": [
@@ -28406,7 +28406,7 @@
         },
         {
           "url": "https://tintinaccesorios.pages.dev/",
-          "line": 247
+          "line": 259
         }
       ]
     },
@@ -30105,8 +30105,8 @@
     },
     {
       "path": "scripts/generar-csp-cloudflare.js",
-      "bytes": 13457,
-      "sha256": "b15a95671f24a833f4d31e0ad13dbfa5c55984bb6262b8b729b0307c7f075930",
+      "bytes": 13776,
+      "sha256": "469fafb06815f7ee1a47618018290b8a0c9f2f7f46879c7dac6ce169029237cd",
       "syntax": {
         "ok": true,
         "error": ""
@@ -30163,7 +30163,7 @@
         },
         {
           "url": "https://api.cloudinary.com/",
-          "line": 178
+          "line": 182
         }
       ]
     },
@@ -30601,7 +30601,7 @@
     {
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "bytes": 15113,
-      "sha256": "127e37d4bab5f3cc0ee7fd57b0dd2a63c82d5ef4ed9f9d2669f38e664863ca7e",
+      "sha256": "f7c4871832ef7d67b4ce638e0eacca842be6c22a3d1f89b3a5d290ca3426312d",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35371,7 +35371,7 @@
       "path": "404.html",
       "extension": ".html",
       "bytes": 12450,
-      "sha256": "370fa837c22c77d6fb920b4413c59be0d9f88e13dff3c188b4e1c4319b1c9198"
+      "sha256": "a8b61842a0e0664c9c210cb002c3fe16d20fafba66fde3eb931a8f0cf7d621c1"
     },
     {
       "path": "AGENTS.md",
@@ -35484,14 +35484,14 @@
     {
       "path": "about.html",
       "extension": ".html",
-      "bytes": 22232,
-      "sha256": "7071ef8e5ad53abd8cac2b4c8fe22869364e7726a0d1991db7892c31cca64265"
+      "bytes": 22174,
+      "sha256": "42697d08100ed27ad18ec7eb88be916d897f18a59b226a9c8a8d47505fb261bb"
     },
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 41621,
-      "sha256": "b13d44a7aab2f982d5c1c8e595470bcf7d0d8639eee2d7a1d049265ee4439972"
+      "bytes": 43692,
+      "sha256": "5f595b01d2b605135516d94ebbf1d28ca6544ae2e4f1a66f208fc21b1c886c8c"
     },
     {
       "path": "admin-manifest.json",
@@ -35503,7 +35503,7 @@
       "path": "admin.html",
       "extension": ".html",
       "bytes": 197750,
-      "sha256": "2007b92c3f3f278566a9ff9058c4f97729785319d3a081560fbaf96762a541a4"
+      "sha256": "a57a19b96ef84088eddd13501f402b7f80a4c8a799cac2f1f98b9343979ac023"
     },
     {
       "path": "apple-touch-icon.png",
@@ -35779,19 +35779,19 @@
       "path": "cambios-devoluciones.html",
       "extension": ".html",
       "bytes": 13645,
-      "sha256": "a185da48cb619f016035a7b002dbd8f6c42613c0f82e324773a723a26df719de"
+      "sha256": "8643a521497d7a627b2e0e33d9f60df82c5ae8e5601a721fc4d42adb2f93efcd"
     },
     {
       "path": "catalogo.html",
       "extension": ".html",
       "bytes": 53660,
-      "sha256": "40a61b274f9fed6c80b725c9fa98a3b786adc1841c78a5f18179bba9b7da382f"
+      "sha256": "da57994766f138673ce7194573b2fb6f0645560ed88810be9cd9fd69b71ea31a"
     },
     {
       "path": "checkout.html",
       "extension": ".html",
       "bytes": 117175,
-      "sha256": "3271dd191ff6dd370691dd642320b248270dfa5973fef1997b6bf594fd7942f2"
+      "sha256": "cc541b2ee30fc8936f59a894451dbf7f9268770b7ec88fbca1a6cf327fd23a3e"
     },
     {
       "path": "cloudflare/admin-runtime-health.js",
@@ -35977,7 +35977,7 @@
       "path": "collections.html",
       "extension": ".html",
       "bytes": 15372,
-      "sha256": "c4abcfe89e1d3b0b9746bcf42589a11a063be17a88ddacd82455d5f3e5a420e3"
+      "sha256": "1993b40a552c6955724ec001aa1cfcb51eaef695de25e3f63a8a176a030a794f"
     },
     {
       "path": "config/account-contract.json",
@@ -35988,14 +35988,14 @@
     {
       "path": "config/csp-runtime.js",
       "extension": ".js",
-      "bytes": 368757,
-      "sha256": "6044b40372dacc7462b09baf27824ecaeb65aafc70112ce7e2deae63b5ae111e"
+      "bytes": 359901,
+      "sha256": "35c060b8d1a60c0a77019828afa6da0e1a8091f24e0d38e223689a7e1775216e"
     },
     {
       "path": "config/csp-runtime.json",
       "extension": ".json",
-      "bytes": 368672,
-      "sha256": "341f18e2cbb6d5967673dece7eab65543bba23ac4acd42815054288b21548fc1"
+      "bytes": 359816,
+      "sha256": "3df8ea79cd8c248bb08b61d0f362f6b02d84fb377b60bb95989d462131282243"
     },
     {
       "path": "config/public-site.json",
@@ -36013,7 +36013,7 @@
       "path": "contact.html",
       "extension": ".html",
       "bytes": 19829,
-      "sha256": "62ae79290b70455ee95ca14d889344cbeaa8614479279bde015651544a54df73"
+      "sha256": "ce27e40da133b52c218659eb852e4bd23caccd3c209f2019bfb07dd18f4f96bb"
     },
     {
       "path": "css/admin/admin-color-tokens.css",
@@ -36282,8 +36282,8 @@
     {
       "path": "css/pages/home/ajuste-inicio.css",
       "extension": ".css",
-      "bytes": 17166,
-      "sha256": "a917a253ed257026fced252d7c35ac6988bcfadf2546dd6de4aa30791138e5f3"
+      "bytes": 24753,
+      "sha256": "264cc2fe8101aae0b77e0d3b921020ff3086d91e2d9015b2b02f1c4169a98a49"
     },
     {
       "path": "css/pages/home/carrusel-colecciones.css",
@@ -36498,8 +36498,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 68164,
-      "sha256": "72161d4d9080ac9ce73d346cb673bf4e158eefad3e4799b78f946cbc0707fbfe"
+      "bytes": 70619,
+      "sha256": "7ab1a103abc78021357a3fc22b1ae69c20f5f0babd0d082c3be9708206695399"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
@@ -36805,7 +36805,7 @@
       "path": "envios.html",
       "extension": ".html",
       "bytes": 17047,
-      "sha256": "b05b857f7c8aed1349e4a5d695c7d756f6305e18a95bafd771ee25f83bd1b485"
+      "sha256": "25afa5d6d655f4639ab1c1d6105e6a4869d3a39da02fabab4e3a6b8cadc67793"
     },
     {
       "path": "favicon-16x16.png",
@@ -37290,8 +37290,8 @@
     {
       "path": "index.html",
       "extension": ".html",
-      "bytes": 38122,
-      "sha256": "babe3cd264eda27fff872425c70a26d2cabd0114087b647013075ae117cbcd8f"
+      "bytes": 35164,
+      "sha256": "68285b1fa2a580f3ec11918a06e6486481362e7c77416f67796a49fe91806016"
     },
     {
       "path": "js/admin/admin-app.js",
@@ -37512,8 +37512,8 @@
     {
       "path": "js/admin/products/gestion-imagenes-admin.js",
       "extension": ".js",
-      "bytes": 2438,
-      "sha256": "dffe6469a9b0e1bfacd7393e25dec073b2694d30a7e66662da8ec7877ce9639e"
+      "bytes": 2380,
+      "sha256": "17b3c339bdfb719981cdcbdcefbe1fb300ff102a98a7c422a7d6e294ad0ff50b"
     },
     {
       "path": "js/admin/products/integridad-inventario-admin.js",
@@ -37632,8 +37632,8 @@
     {
       "path": "js/cargador-pagina.js",
       "extension": ".js",
-      "bytes": 45600,
-      "sha256": "1d54d8480d0a9b36ca0b94c1769e770b590e9a30777a06b98b43c87909ee4aa7"
+      "bytes": 45657,
+      "sha256": "42a05f471f2a045c2517304b14ce49e1b313bc9cc94db22de00a97d34e1748c7"
     },
     {
       "path": "js/components/cart/politica-persistencia-carrito.js",
@@ -37758,20 +37758,20 @@
     {
       "path": "js/components/images/gestion-imagenes.js",
       "extension": ".js",
-      "bytes": 19572,
-      "sha256": "b581439bde4a41f025fc46934cdf35fe2cb80141e469ab192956a2fa0f56f2b7"
+      "bytes": 20063,
+      "sha256": "1508d2212fa3e1c24aac60c372083ad424f38d46756ef0da766b3cd0a4b871b2"
     },
     {
       "path": "js/components/images/imagenes.js",
       "extension": ".js",
-      "bytes": 21277,
-      "sha256": "508f6decd54dff4535b478232e298fa652289e20ef46932fbf8d19a7f351a8b2"
+      "bytes": 23139,
+      "sha256": "19f954ea824c083c9c6f89f43de2cd0dc0c3dce294a93dc92d26ab8734cdd704"
     },
     {
       "path": "js/components/images/inicio-carga-imagenes.js",
       "extension": ".js",
-      "bytes": 1847,
-      "sha256": "c499d6b8b9125e3801e5941e87e3151c181a7fe255ea7a5aafb0896904288ddd"
+      "bytes": 1789,
+      "sha256": "80f3913f6dad648cb4eb202985c2a040db6ac03e447e765e4dd5610f350125ae"
     },
     {
       "path": "js/components/images/procesamiento-imagenes.js",
@@ -38646,8 +38646,8 @@
     {
       "path": "js/quality/calidad-interfaz.js",
       "extension": ".js",
-      "bytes": 9560,
-      "sha256": "a575a8b84e09d431d5916f893aab79cee85cc2d21e0c4e651e097498f7d34767"
+      "bytes": 9650,
+      "sha256": "2088e64df7d9451a47c7e1c5599dd3d1c7ca5f81f5fe32e735c2092d94544909"
     },
     {
       "path": "js/quality/correccion-auditoria-pagina.js",
@@ -38725,7 +38725,7 @@
       "path": "login.html",
       "extension": ".html",
       "bytes": 76335,
-      "sha256": "40fef3fa10c44c4ca99c52fe515c81d853808f12e59951739efc30e831102e82"
+      "sha256": "333a481e1216ec15841db02c8c13f920f9ebdfe731ed6bf57b2717ab8b16f4e2"
     },
     {
       "path": "maintenance/00-cronograma-general.txt",
@@ -38911,7 +38911,7 @@
       "path": "nosotros.html",
       "extension": ".html",
       "bytes": 1838,
-      "sha256": "ae31f4ed9f546e1ffb5e95a6ce0267485d99b60c580dd49be01f1c14da1d6ab9"
+      "sha256": "1da4dda46e406f094d50570b6eb5916dcad758af5b84c3b2854c4fef5a1998f6"
     },
     {
       "path": "package-lock.json",
@@ -38929,7 +38929,7 @@
       "path": "perfil.html",
       "extension": ".html",
       "bytes": 43635,
-      "sha256": "f05a5da0b3ed7b3d849c40914bedaa530b675d647004031665dcfe35dc1dde4d"
+      "sha256": "9457ed6220cc421463467d8d7c1ea644a9094f0780c9591efbc28c4795781091"
     },
     {
       "path": "playwright.config.js",
@@ -38947,19 +38947,19 @@
       "path": "preguntas-frecuentes.html",
       "extension": ".html",
       "bytes": 14818,
-      "sha256": "79dc8dc777a7805be4026f3c6cba755e20a6c0d293fe60fa9b769a7198ea1e5b"
+      "sha256": "70e38feb06cfc3725598e4fd792a63e4a8c197e9473fdcbb7125e2195f4a9bb4"
     },
     {
       "path": "privacidad.html",
       "extension": ".html",
       "bytes": 17387,
-      "sha256": "8ac1f9f4f96c4777f7bda84fc69f558dddda45e2e5fdc470cd334201b242bc3c"
+      "sha256": "976e3ca608b28a71b77b7cc61012b09e1c1884a1421d6eb661e9e0cc3282cb1e"
     },
     {
       "path": "product.html",
       "extension": ".html",
-      "bytes": 25189,
-      "sha256": "6118402c39cd0dc6f24f360ad9214f2a6ce01cc0d2824312fd8e7faea6f45aa8"
+      "bytes": 25129,
+      "sha256": "c0519f14859fa760ccc893ebd1b5b8faaaac30bd0829ca8e51b34f98475b1f1c"
     },
     {
       "path": "robots.txt",
@@ -39055,7 +39055,7 @@
       "path": "scripts/auditar-app-check-arranque.js",
       "extension": ".js",
       "bytes": 6291,
-      "sha256": "b8ec7500a41c58497aad83ccebc899944ca9395a2afa1d74f4ebfa7d5ca52303"
+      "sha256": "581676b31775082095f78c8fdbb3afa4b676d59212a0535c046db9f5e037cb0a"
     },
     {
       "path": "scripts/auditar-auth-navegador-produccion.mjs",
@@ -39301,7 +39301,7 @@
       "path": "scripts/auditar-fase-10-accessibility.js",
       "extension": ".js",
       "bytes": 4656,
-      "sha256": "64a590f827c553cd7df133cb6aef55b09fa323f7e2de6ee207e3edacc17a2911"
+      "sha256": "dea5492ac01281d0d594ec7039afc5c54938f361d344a987f729e2665a4ca4a7"
     },
     {
       "path": "scripts/auditar-fase-11-seo.js",
@@ -39337,7 +39337,7 @@
       "path": "scripts/auditar-fase-8-ui-ux.js",
       "extension": ".js",
       "bytes": 6459,
-      "sha256": "17663879e9087f1af534545ce4e024331844978229a6c60c2c62415ca18dc9a6"
+      "sha256": "ec1ad3d2d9b651ff6aaa96493ca4cf9f2657f17f769ef50c549515d6a9c82d86"
     },
     {
       "path": "scripts/auditar-final-barrido-parte-2h.js",
@@ -39402,8 +39402,8 @@
     {
       "path": "scripts/auditar-imagenes-fase-5.js",
       "extension": ".js",
-      "bytes": 25854,
-      "sha256": "53599fc717b4671219c19a49770caa208cf4355b5ea906ca2342b1b9909616c1"
+      "bytes": 26638,
+      "sha256": "160d7f53b272375cc7e96995832cfe62a1bf4cada006704c71ef09c639b5a8bf"
     },
     {
       "path": "scripts/auditar-inicio-navegacion-publica.js",
@@ -39774,8 +39774,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 60001,
-      "sha256": "42760eec58a86c34137a2c6990ee21bb2d7526a76641cf3b44bfa042ec36a579"
+      "bytes": 59796,
+      "sha256": "6d7d1a3930bc77292c1b5954d45bb0066f3b1c39646da136889de1273cd8dc20"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
@@ -39834,8 +39834,8 @@
     {
       "path": "scripts/generar-csp-cloudflare.js",
       "extension": ".js",
-      "bytes": 13457,
-      "sha256": "b15a95671f24a833f4d31e0ad13dbfa5c55984bb6262b8b729b0307c7f075930"
+      "bytes": 13776,
+      "sha256": "469fafb06815f7ee1a47618018290b8a0c9f2f7f46879c7dac6ce169029237cd"
     },
     {
       "path": "scripts/generar-flujo-decisiones-acceso.mjs",
@@ -39937,7 +39937,7 @@
       "path": "scripts/sincronizar-inicio-navegacion-publica.js",
       "extension": ".js",
       "bytes": 15113,
-      "sha256": "127e37d4bab5f3cc0ee7fd57b0dd2a63c82d5ef4ed9f9d2669f38e664863ca7e"
+      "sha256": "f7c4871832ef7d67b4ce638e0eacca842be6c22a3d1f89b3a5d290ca3426312d"
     },
     {
       "path": "scripts/sincronizar-monaco-local.mjs",
@@ -40015,7 +40015,7 @@
       "path": "terminos.html",
       "extension": ".html",
       "bytes": 15181,
-      "sha256": "ace011e03378c8c572e39b2a4edfb846600f72bc06133e1de408f0897215769b"
+      "sha256": "3b317cd4ead8fb8549b7b95884f00ab3d45837cd2714aad105c4afde7a9b7f6b"
     },
     {
       "path": "tests/accounts/account-contract.test.mjs",
@@ -42403,7 +42403,7 @@
       "references": [
         {
           "file": "index.html",
-          "line": 526
+          "line": 512
         }
       ]
     },
@@ -43813,7 +43813,7 @@
         "references": [
           {
             "file": "admin-images.html",
-            "line": 729,
+            "line": 775,
             "operation": "doc"
           },
           {
