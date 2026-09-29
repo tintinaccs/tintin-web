@@ -8,8 +8,8 @@
 // monitoreo nueva: reutiliza lo que ya prueba conectividad real sin escribir
 // datos. Nada de lo que hace este módulo crea, actualiza ni borra documentos.
 import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260925-cache-converge-1';
-import { resolveState, isAttentionState } from './estado-flujo.js?v=tintin-20260929-partial-evidence-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260929-partial-evidence-2';
+import { resolveState, isAttentionState, shouldShowFlowEdge } from './estado-flujo.js?v=tintin-20260929-flow-edge-filter-1';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260929-flow-edge-filter-1';
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
 import { collection, doc, getDoc, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
@@ -333,13 +333,13 @@ export function initConnectionsFlow({ role } = {}) {
 
   function renderEdges() {
     const visibleIds = new Set(NODES.filter(nodeMatchesFilters).map(node => node.id));
-    const rows = EDGES.filter(edge => {
-      if (selectedNodeId) return edge.from === selectedNodeId || edge.to === selectedNodeId;
-      return visibleIds.has(edge.from) || visibleIds.has(edge.to);
-    }).filter(edge => {
-      if (selectedNodeId) return true;
-      return edgeMatchesFilters(edge);
-    }).map(edge => {
+    const hasExplicitFilter = Boolean(stateFilterEl.value || searchEl.value.trim());
+    const rows = EDGES.filter(edge => shouldShowFlowEdge(edge, {
+      selectedNodeId,
+      visibleNodeIds: visibleIds,
+      hasExplicitFilter,
+      matchesEdge: edgeMatchesFilters,
+    })).map(edge => {
       const from = nodeById(edge.from);
       const to = nodeById(edge.to);
       const label = edge.label ? `<span class="tfc-edge-label">${escapeHtml(edge.label)}</span>` : '';
@@ -390,6 +390,8 @@ export function initConnectionsFlow({ role } = {}) {
   }
 
   function renderAll() {
+    if (selectedNodeId && !nodeMatchesFilters(nodeById(selectedNodeId))) selectedNodeId = null;
+    if (selectedEdgeId && !edgeMatchesFilters(edgeById(selectedEdgeId))) selectedEdgeId = null;
     renderSummary();
     renderLanes();
     renderEdges();

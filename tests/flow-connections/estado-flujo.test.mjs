@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { ESTADOS, EDGES, NODES } from '../../js/admin/flujo-conexiones/datos-flujo-conexiones.js';
-import { EVIDENCIA, baselineState, classifyProbe, resolveState } from '../../js/admin/flujo-conexiones/estado-flujo.js';
+import { EVIDENCIA, baselineState, classifyProbe, resolveState, shouldShowFlowEdge } from '../../js/admin/flujo-conexiones/estado-flujo.js';
 import { buildLiveChecks, buildLiveEdges } from '../../js/admin/flujo-conexiones/live-checks.js';
 
 test('el diagnóstico conserva los estados declarados en el flujo', () => {
@@ -37,6 +37,28 @@ test('evidencia parcial permanece naranja y lectura no promueve una mutación', 
   assert.equal(resolveState({ state: ESTADOS.NO_VERIFICADO }, {
     ok: true, partial: true, status: 200, promote: false, evidenceLevel: EVIDENCIA.LIVE_PRODUCTION_READ_ONLY,
   }, ESTADOS), ESTADOS.PARCIAL, 'una lectura útil debe explicitarse como parcial aunque el estado base estuviera sin verificar');
+});
+
+test('el filtro explícito de atención muestra conexiones aunque sus nodos estén verdes', () => {
+  const edge = { id: 'inventory-sync', from: 'sheets', to: 'inventario' };
+  const visibleNodeIds = new Set(); // ambos extremos pueden quedar fuera del filtro de nodos
+  const matchesEdge = candidate => candidate.id === edge.id;
+  assert.equal(shouldShowFlowEdge(edge, {
+    visibleNodeIds,
+    hasExplicitFilter: true,
+    matchesEdge,
+  }), true);
+  assert.equal(shouldShowFlowEdge(edge, {
+    visibleNodeIds,
+    hasExplicitFilter: false,
+    matchesEdge,
+  }), false, 'sin filtro explícito se conserva el contexto de los nodos visibles');
+  assert.equal(shouldShowFlowEdge(edge, {
+    selectedNodeId: 'sheets',
+    visibleNodeIds,
+    hasExplicitFilter: true,
+    matchesEdge: () => false,
+  }), true, 'al seleccionar un nodo deben mostrarse sus conexiones relacionadas');
 });
 
 test('lecturas de engagement y carrito muestran evidencia parcial sin certificar mutaciones', () => {

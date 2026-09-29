@@ -45,3 +45,16 @@ export function isAttentionState(state, estados) {
   return state !== estados.PROD;
 }
 
+// Los filtros de estado/búsqueda se aplican a la conexión misma. Limitar esas
+// filas a los nodos visibles ocultaba conexiones parciales entre nodos verdes.
+export function shouldShowFlowEdge(edge, {
+  selectedNodeId = null,
+  visibleNodeIds = new Set(),
+  hasExplicitFilter = false,
+  matchesEdge = () => true,
+} = {}) {
+  if (selectedNodeId) return edge.from === selectedNodeId || edge.to === selectedNodeId;
+  if (hasExplicitFilter) return matchesEdge(edge);
+  return matchesEdge(edge) && (visibleNodeIds.has(edge.from) || visibleNodeIds.has(edge.to));
+}
+

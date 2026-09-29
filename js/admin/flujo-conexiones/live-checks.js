@@ -7,7 +7,7 @@
 // de Firebase: solo de los cuerpos JSON ya obtenidos, para que sea probable
 // con node --test sin red ni navegador.
 import { EDGES } from './datos-flujo-conexiones.js?v=tintin-20260925-cache-converge-1';
-import { EVIDENCIA } from './estado-flujo.js?v=tintin-20260929-partial-evidence-1';
+import { EVIDENCIA } from './estado-flujo.js?v=tintin-20260929-flow-edge-filter-1';
 
 function edgeIdFor(from, to) {
   return EDGES.find(edge => edge.from === from && edge.to === to)?.id || '';
