@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "2dfc5a699cc4823aad64070d8e7dec7d9f2a35bb13bbffb2122d418eb1e60088",
+  "sourceFingerprint": "b773db6cba33e57bad6bdb2c400a1b1a033980a576e950c8f98454ea00691f41",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,9 +9,9 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 910,
-    "textFiles": 869,
-    "totalBytes": 17824728,
+    "files": 911,
+    "textFiles": 870,
+    "totalBytes": 17829095,
     "pages": 19,
     "modules": 625
   },
@@ -36416,6 +36416,12 @@
       "extension": ".md",
       "bytes": 23212,
       "sha256": "7a4931df1dcd2f9c237c8a93182e3157bd6a22d87aecfd6de5316a02ae92a422"
+    },
+    {
+      "path": "docs/agent/PRODUCTION-PROBE-2026-09-29.md",
+      "extension": ".md",
+      "bytes": 4367,
+      "sha256": "4d69251d05c92b59bb0c67fe33e7fdf8e01c9af1d19b6d48fb51644c1891c6c2"
     },
     {
       "path": "docs/agent/README.md",
