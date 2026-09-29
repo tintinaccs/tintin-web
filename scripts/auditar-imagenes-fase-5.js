@@ -123,17 +123,29 @@ check(
 );
 
 check(
-  'El Hero usa exclusivamente los cuatro fondos nuevos aprobados',
-  files.runtime.includes('STATIC.hero_bg_desktop') &&
+  'El Hero usa artes Tintin por defecto y permite reemplazarlos desde Super Admin',
+    files.runtime.includes('STATIC.hero_bg_desktop') &&
     files.runtime.includes('STATIC.hero_bg_tablet') &&
     files.runtime.includes('STATIC.hero_bg_mobile') &&
     files.runtime.includes('STATIC.hero_bg_tablet_landscape') &&
-    files.runtime.includes('hero-nuevo-desktop.png') &&
-    files.runtime.includes('hero-nuevo-tablet-horizontal.png') &&
-    files.runtime.includes('hero-nuevo-tablet-vertical.png') &&
-    files.runtime.includes('hero-nuevo-mobile.png') &&
-    !files.runtime.includes("resolveSlotImage(images, 'hero_bg', 'desktop') || absolute(STATIC.hero_bg_desktop)"),
-  'el banner anterior no debe poder volver a reemplazar el hero nuevo desde Firestore'
+    files.images.includes('HERO_IMAGE_FALLBACKS') &&
+    files.images.includes('hero-nuevo-desktop.png') &&
+    files.images.includes('hero-nuevo-tablet-horizontal.png') &&
+    files.images.includes('hero-nuevo-tablet-vertical.png') &&
+    files.images.includes('hero-nuevo-mobile.png') &&
+    files.runtime.includes("resolveSlotImage(heroSettings, 'hero_bg', 'desktop')") &&
+    files.runtime.includes("resolveSlotImage(heroSettings, 'hero_bg', 'tablet')") &&
+    files.runtime.includes("resolveSlotImage(heroSettings, 'hero_bg', 'mobile')") &&
+    files.adminHtml.includes('(heroConfigActive && getImg(slot.id)) || slot.defaultUrl ||') &&
+    files.adminHtml.includes('hero_bg_autoReuseDesktop') &&
+    files.adminHtml.includes("if (slot.id === 'hero_bg_desktop')") &&
+    files.adminHtml.includes('prepareHeroPatch') &&
+    files.adminHtml.includes('hero_bg_configVersion: HERO_IMAGE_CONFIG_VERSION') &&
+    files.images.includes('normalizeBoolean(source[HERO_GROUP_AUTOREUSE_KEY], false)') &&
+    files.images.includes('HERO_GROUP_CONFIG_KEY') &&
+    files.images.includes('return tablet || (autoReuseDesktop ? desktop : \'\')') &&
+    files.images.includes('return mobile || (autoReuseDesktop ? desktop : \'\')'),
+  'las imágenes por defecto se previsualizan y los guardados manuales activan solo las variantes elegidas, sin heredar URLs antiguas'
 );
 
 check(
@@ -147,9 +159,9 @@ check(
 );
 
 check(
-  'La imagen principal del Hero tiene texto alternativo descriptivo',
-  /id="tt-hero-img"[\s\S]*?alt="Varios relojes dorados exhibidos sobre una base rosa"/.test(files.indexHtml),
-  'La fotografía del hero muestra los relojes del catálogo y no es decorativa; su descripción no debe duplicar el texto del H1.'
+  'La imagen configurable del Hero es decorativa para lectores de pantalla',
+  /id="tt-hero-img"[\s\S]*?alt=""/.test(files.indexHtml),
+  'el H1 HTML comunica el mensaje y la imagen del hero puede cambiar desde Super Admin.'
 );
 
 check(
@@ -202,7 +214,7 @@ check(
   files.resolver.includes('export function resolveDeviceImage') &&
     files.resolver.includes('export function resolveCollectionImage') &&
     files.resolver.includes('export function firstEligibleProductImage') &&
-    files.runtime.includes("from './imagenes.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1'") &&
+    files.runtime.includes("from './imagenes.js?v=tintin-20260929-superadmin-hero-editable-1'") &&
     files.runtime.includes('resolveSlotImage'),
   'ninguna página debe reimplementar la prioridad responsive'
 );
