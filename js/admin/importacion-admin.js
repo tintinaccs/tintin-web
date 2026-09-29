@@ -33,7 +33,7 @@ import {
 import { createPhase2Plan } from '../core/store/shopify-phase2-pipeline.mjs?v=tintin-20260928-shopify-media-migrate-1';
 import { reconcileShopifyImportIdentities } from '../core/store/shopify-import-identity.mjs?v=tintin-20260929-shopify-identity-2';
 import { authenticatedFetch, apiFailureMessage } from '../core/auth/cliente-api-autenticado.js?v=tintin-20260918-global-session-restore-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1';
-import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20260928-shopify-media-preflight-1';
+import { createCatalogApply } from './aplicar-importacion-admin.js?v=tintin-20260929-shopify-identity-apply-1';
 
 if (!window.TintinAdminShopifyImportBooted) {
   window.TintinAdminShopifyImportBooted = true;
@@ -382,7 +382,20 @@ if (!window.TintinAdminShopifyImportBooted) {
     return result.job;
   }
 
-  const catalogApply = createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedFetch, saveLocalJob, renderPreview, toast, node });
+  async function refreshCatalogIdentitySnapshot() {
+    if (state.source !== 'shopify-csv') return;
+    const existingProducts = await readCollection('products');
+    state.existingProducts = existingProducts;
+    state.records = reconcileShopifyImportIdentities(state.records, existingProducts);
+    state.plan = state.records.length
+      ? createPhase2Plan({ records: state.records, collections: state.collections, existingProducts, environment: 'TEST', chunkSize: 50 })
+      : null;
+    const totals = summary();
+    renderPreview();
+    return totals;
+  }
+
+  const catalogApply = createCatalogApply({ state, isSuperAdmin, apiJob, authenticatedFetch, saveLocalJob, renderPreview, refreshCatalogIdentitySnapshot, toast, node });
 
   async function createDryRunJob() {
     if (!isSuperAdmin() || state.busy || !state.records.length) return;

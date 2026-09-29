@@ -79,4 +79,9 @@ test('el preview Admin concilia el catálogo de Firestore y las filas reconocida
   assert.match(importer, /existingProducts: state\.existingProducts/);
   assert.match(importer, /records = reconcileShopifyImportIdentities\(saved\.records, existingProducts\)/);
   assert.match(apply, /state\.records\.filter\(record => !record\.errors\?\.length && !record\.duplicate\)/);
+  assert.match(importer, /async function refreshCatalogIdentitySnapshot\(\)[\s\S]*?await readCollection\('products'\)/);
+  assert.match(apply, /await refreshCatalogIdentitySnapshot\(\)/);
+  assert.ok(apply.indexOf('await refreshCatalogIdentitySnapshot()') < apply.indexOf("action: 'transition', jobId: state.jobId, status: 'RUNNING'"), 'la verificación fresca debe ocurrir antes de marcar el job RUNNING');
+  assert.ok(apply.indexOf('await refreshCatalogIdentitySnapshot()') < apply.indexOf('await copyShopifyMedia(records)'), 'la verificación fresca debe ocurrir antes de copiar imágenes o escribir el catálogo');
+  assert.match(apply, /El catálogo cambió desde que cargaste el CSV/);
 });
