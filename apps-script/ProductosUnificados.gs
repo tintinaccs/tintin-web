@@ -809,7 +809,21 @@ function tintinHandleOrderEdit_(e) {
 }
 
 function tintinSnapshot_(entity) {
-  return tintinCallInternalWebhook_(TINTIN_SNAPSHOT_PATH, { action: 'snapshot', entity: entity }).records || [];
+  var attempt = 0;
+  while (true) {
+    try {
+      return tintinCallInternalWebhook_(TINTIN_SNAPSHOT_PATH, { action: 'snapshot', entity: entity }).records || [];
+    } catch (error) {
+      var message = String(error && error.message || error);
+      // Apps Script sometimes fails before receiving an HTTP response when its
+      // outbound connection cannot resolve/reach Pages. Snapshot POSTs are
+      // strictly read-only, so retry only these transport failures; never
+      // retry an HTTP/API rejection or a mutating webhook here.
+      if (attempt >= 2 || !/address unavailable|dns lookup failed|name resolution/i.test(message)) throw error;
+      Utilities.sleep(attempt === 0 ? 250 : 750);
+      attempt += 1;
+    }
+  }
 }
 
 // Convierte un índice de columna 1-based a su letra A1 (1 → 'A', 27 → 'AA').
