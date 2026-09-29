@@ -187,7 +187,8 @@ function render(payload) {
       : `Estado ${appsScript.code || 'no_verificado'} · HTTP ${appsScript.httpStatus || 0}`],
   ];
   areas.innerHTML = rows.map(([name, value, detail]) => item(name, value, detail)).join('');
-  setOverall(payload?.ok === true ? 'PASS' : 'FAIL', payload?.checkedAt || '');
+  const allGreen = payload?.ok === true && rows.every(([, value]) => value === true);
+  setOverall(allGreen ? 'PASS' : 'FAIL', payload?.checkedAt || '');
   renderMeta(payload);
   renderAuthorities(payload?.authorities || {});
 
@@ -200,8 +201,8 @@ function render(payload) {
       : sync.available === true && Number(sync.syncing24h || 0) > 0
         ? ` Hay ${Number(sync.syncing24h)} registro(s) SYNCING en las últimas 24 h para revisar.`
         : '';
-    notice.className = `adm-master-notice ${payload?.ok === true ? 'notice-info' : 'notice-error'}`;
-    notice.textContent = payload?.ok === true
+    notice.className = `adm-master-notice ${allGreen ? 'notice-info' : 'notice-error'}`;
+    notice.textContent = allGreen
       ? `Las autoridades operativas y el puente de sincronización respondieron correctamente.${syncSuffix}`
       : `Hay componentes que requieren revisión: ${failures.join(', ') || 'estado general'}.${syncSuffix}`;
   }

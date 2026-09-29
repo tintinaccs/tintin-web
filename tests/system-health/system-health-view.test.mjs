@@ -10,5 +10,8 @@ test('el estado del ecosistema explica PayPal deshabilitado sin mostrar credenci
   assert.match(view, /Client Secret de PayPal/);
   assert.match(view, /Webhook ID de PayPal/);
   assert.match(view, /actualizar la tasa de cambio/);
+  assert.match(view, /const allGreen = payload\?\.ok === true && rows\.every\(\(\[, value\]\) => value === true\)/);
+  assert.match(view, /setOverall\(allGreen \? 'PASS' : 'FAIL'/);
+  assert.match(view, /Hay componentes que requieren revisión: \$\{failures\.join\(', '\)/);
   assert.doesNotMatch(view, /paypal\.(?:clientSecret|clientId|webhookSecret)/i);
 });
