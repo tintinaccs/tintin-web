@@ -216,7 +216,8 @@ test('el payload mínimo del canary escribe catálogo e inventario por webhook a
       purchased: 0,
       stockMinimum: 0,
       internalNotes: '',
-      changedFields: ['name', 'category', 'price', 'active', 'stock', 'costUnit', 'purchased', 'stockMinimum', 'internalNotes'],
+      imageUrl: 'https://res.cloudinary.com/tintin/image/upload/canary.webp',
+      changedFields: ['name', 'category', 'price', 'active', 'stock', 'costUnit', 'purchased', 'stockMinimum', 'internalNotes', 'imageUrl'],
     }, 'test-only-shared-secret'), env });
     const body = await response.json();
     assert.equal(response.status, 200);
@@ -230,7 +231,94 @@ test('el payload mínimo del canary escribe catálogo e inventario por webhook a
     assert.equal(writes[0].writes[0].update.fields.name.stringValue, 'PRUEBA QA · NO VENDER');
     assert.equal(writes[0].writes[0].update.fields.active.booleanValue, false);
     assert.equal(writes[0].writes[0].update.fields.stock.integerValue, '0');
+    assert.equal(writes[0].writes[0].update.fields.imageUrl.stringValue, 'https://res.cloudinary.com/tintin/image/upload/canary.webp');
     assert.equal(writes[0].writes[1].update.fields.purchased.integerValue, '0');
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test('Sheets→Firestore rechaza URLs Shopify en campos públicos antes de escribir', async () => {
+  const originalFetch = globalThis.fetch;
+  const requests = [];
+  globalThis.fetch = async input => {
+    requests.push(String(input));
+    throw new Error('No se esperaba acceso a Firestore para un medio rechazado.');
+  };
+
+  try {
+    for (const [field, value] of [
+      ['imageUrl', 'https://cdn.shopify.com/s/files/1/product.png'],
+      ['imagesExtra', ['//cdn.shopify.com/s/files/1/alternate.png']],
+      ['imageUrl', 'https://store.myshopify.com/cdn/product.png'],
+      ['description', 'Ver detalles en https://shopify.com/producto.'],
+    ]) {
+      const response = await onRequestPost({ request: request({
+        action: 'saveProduct',
+        productId: 'product-1',
+        name: 'Producto',
+        category: 'relojes',
+        price: 100,
+        imageUrl: field === 'imageUrl' ? value : '',
+        imagesExtra: field === 'imagesExtra' ? value : [],
+        description: field === 'description' ? value : '',
+        changedFields: [field],
+      }, 'test-only-shared-secret'), env: { SHEETS_ENGAGEMENT_SECRET: 'test-only-shared-secret' } });
+      assert.equal(response.status, 400);
+      assert.match((await response.json()).error, /URLs de Shopify/);
+    }
+    assert.deepEqual(requests, []);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test('una imagen Shopify antigua no bloquea ni se reescribe en una edicion de precio parcial', async () => {
+  const { privateKey } = generateKeyPairSync('rsa', {
+    modulusLength: 2048,
+    privateKeyEncoding: { type: 'pkcs8', format: 'pem' },
+    publicKeyEncoding: { type: 'spki', format: 'pem' },
+  });
+  const env = {
+    SHEETS_ENGAGEMENT_SECRET: 'test-only-shared-secret',
+    FIREBASE_SERVICE_ACCOUNT_JSON: JSON.stringify({
+      project_id: 'test-project',
+      client_email: 'test@test-project.iam.gserviceaccount.com',
+      private_key: privateKey,
+    }),
+  };
+  const writes = [];
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input, init = {}) => {
+    const url = String(input);
+    if (url === 'https://oauth2.googleapis.com/token') {
+      return new Response(JSON.stringify({ access_token: 'test-only-access-token', expires_in: 3600 }), {
+        status: 200, headers: { 'content-type': 'application/json' },
+      });
+    }
+    if (url.endsWith('/documents:commit')) {
+      writes.push(JSON.parse(init.body));
+      return new Response('{}', { status: 200, headers: { 'content-type': 'application/json' },
+      });
+    }
+    throw new Error(`Unexpected network request: ${url}`);
+  };
+
+  try {
+    const response = await onRequestPost({ request: request({
+      action: 'saveProduct',
+      productId: 'product-1',
+      name: 'Producto',
+      category: 'relojes',
+      price: 125,
+      imageUrl: 'https://cdn.shopify.com/s/files/1/old.png',
+      changedFields: ['price'],
+    }, 'test-only-shared-secret'), env });
+    assert.equal(response.status, 200);
+    assert.equal(writes.length, 1);
+    const productFields = writes[0].writes[0].update.fields;
+    assert.equal(productFields.price.integerValue, '125');
+    assert.equal(Object.hasOwn(productFields, 'imageUrl'), false);
   } finally {
     globalThis.fetch = originalFetch;
   }
