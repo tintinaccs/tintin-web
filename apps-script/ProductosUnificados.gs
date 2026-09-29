@@ -125,7 +125,7 @@ function tintinAppendSyncHistory_(status, sheetName, cell, detail) {
   var allowed = { SYNCED: true, SYNCING: true, ERROR: true, REJECTED: true, LOCAL: true };
   if (!allowed[status]) throw new Error('Estado de sincronizacion invalido.');
   var history = tintinProductsSpreadsheet_().getSheetByName(TINTIN_SYNC_HISTORY_SHEET);
-  if (!history) return false;
+  if (!history) throw new Error('No existe la hoja Historial sync.');
   var width = Math.max(history.getLastColumn(), 1);
   var headers = history.getRange(TINTIN_SYNC_HISTORY_HEADER_ROW, 1, 1, width).getDisplayValues()[0];
   var values = new Array(width).fill('');
@@ -139,8 +139,11 @@ function tintinAppendSyncHistory_(status, sheetName, cell, detail) {
     else if (/^(celda|rango|cell)$/.test(key)) { values[index] = cell; matched += 1; }
     else if (/^(detalle|mensaje|descripcion|resultado|error)$/.test(key)) { values[index] = String(detail || '').slice(0, 500); matched += 1; }
   });
-  // No adivina columnas: si la fila 7 no expone estado, conserva el historial intacto.
-  if (!headers.some(function(header) { return /^(estado|status)$/.test(tintinSyncHeaderKey_(header)); })) return false;
+  // No adivina columnas: si la fila 7 no expone estado, conserva el historial intacto
+  // y lo informa; un retorno silencioso ocultaba que el evento no se registró.
+  if (!headers.some(function(header) { return /^(estado|status)$/.test(tintinSyncHeaderKey_(header)); })) {
+    throw new Error('Historial sync no expone una columna Estado en la fila ' + TINTIN_SYNC_HISTORY_HEADER_ROW + '.');
+  }
   // insertRowBefore/deleteRows desplazan filas. Un lock evita que dos onEdit
   // concurrentes calculen límites incompatibles y pierdan el registro.
   var lock = LockService.getScriptLock();
@@ -228,9 +231,18 @@ function tintinClaimProductEdit_(event) {
   return true;
 }
 
+// Nunca interrumpe la sincronización, pero devuelve si el evento quedó
+// registrado para que las pruebas explícitas no lo den por supuesto.
 function tintinRecordSyncSafely_(status, sheetName, cell, detail) {
-  try { tintinAppendSyncHistory_(status, sheetName, cell, detail); }
-  catch (historyError) { console.error('No se pudo registrar Historial sync: ' + historyError.message); }
+  try {
+    if (tintinAppendSyncHistory_(status, sheetName, cell, detail)) return { recorded: true };
+    console.error('Historial sync no registró el evento ' + status + ': ninguna columna reconocida.');
+    return { recorded: false, reason: 'no-recognized-columns' };
+  } catch (historyError) {
+    var reason = String(historyError && historyError.message || historyError);
+    console.error('No se pudo registrar Historial sync: ' + reason);
+    return { recorded: false, reason: reason };
+  }
 }
 
 function tintinCallProductsWebhook_(payload) {
@@ -715,7 +727,7 @@ function tintinProbarEdicionCatalogo() {
     ok: false, destructive: false, error: 'canary-needs-category-price-and-no-image', row: rowNumber
   };
   var cell = sheet.getRange(rowNumber, 1, 1, 35).getA1Notation();
-  tintinRecordSyncSafely_('SYNCING', TINTIN_PRODUCTS_SHEET, cell, 'Ejecutando prueba controlada Sheets → Firestore para el canary inactivo.');
+  var historyStart = tintinRecordSyncSafely_('SYNCING', TINTIN_PRODUCTS_SHEET, cell, 'Ejecutando prueba controlada Sheets → Firestore para el canary inactivo.') || {};
   try {
     // El webhook trata changedFields vacío como una actualización parcial sin
     // campos y la rechaza. La prueba explícita declara el conjunto mínimo que
@@ -744,8 +756,11 @@ function tintinProbarEdicionCatalogo() {
       zeroStock: sameStock && Number(after[10] || 0) === 0,
       actionCleared: String(after[34] || '').trim() === ''
     };
-    tintinRecordSyncSafely_(result.ok ? 'SYNCED' : 'ERROR', TINTIN_PRODUCTS_SHEET, cell,
-      result.ok ? 'Prueba canary Sheets → Firestore confirmada; producto inactivo y sin stock.' : 'La escritura terminó, pero falló la verificación posterior del canary.');
+    var historyEnd = tintinRecordSyncSafely_(result.ok ? 'SYNCED' : 'ERROR', TINTIN_PRODUCTS_SHEET, cell,
+      result.ok ? 'Prueba canary Sheets → Firestore confirmada; producto inactivo y sin stock.' : 'La escritura terminó, pero falló la verificación posterior del canary.') || {};
+    // La escritura de negocio y el registro de auditoría son evidencias distintas.
+    result.historyRecorded = historyStart.recorded === true && historyEnd.recorded === true;
+    if (!result.historyRecorded) result.historyError = String(historyEnd.reason || historyStart.reason || 'unknown');
     return result;
   } catch (error) {
     tintinRecordSyncSafely_('ERROR', TINTIN_PRODUCTS_SHEET, cell, 'Falló la prueba canary Sheets → Firestore: ' + String(error && error.message || error));

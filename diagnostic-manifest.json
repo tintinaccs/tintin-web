@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "f211a386ff7f18a9b31c6676f46d7e93cf6c89bd89c7aa28a2a9f8d806e9a707",
+  "sourceFingerprint": "33d3071cdd496eb1001f3f36cbb28371e3d2f46b38a025712fbcd7079ef8f1ec",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 912,
     "textFiles": 871,
-    "totalBytes": 17916930,
+    "totalBytes": 17928625,
     "pages": 19,
     "modules": 626
   },
@@ -34444,8 +34444,8 @@
     },
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
-      "bytes": 20512,
-      "sha256": "7f5bcf1d5b9402b694ed3519f4b21a6b61c27ee39ff1be47078f45c72de8faf0",
+      "bytes": 22498,
+      "sha256": "c431e80bd8485360c94bf780dda18557e478857892b20c48f6a34a687fdbe27e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -34501,31 +34501,31 @@
         },
         {
           "url": "https://cdn.shopify.com/test.png",
-          "line": 142
+          "line": 188
         },
         {
           "url": "https://oauth2.googleapis.com/token",
-          "line": 194
+          "line": 240
         },
         {
           "url": "https://res.cloudinary.com/tintin/image/upload/canary.webp",
-          "line": 219
+          "line": 265
         },
         {
           "url": "https://cdn.shopify.com/s/files/1/product.png",
-          "line": 251
+          "line": 297
         },
         {
           "url": "https://store.myshopify.com/cdn/product.png",
-          "line": 253
+          "line": 299
         },
         {
           "url": "https://shopify.com/producto",
-          "line": 254
+          "line": 300
         },
         {
           "url": "https://cdn.shopify.com/s/files/1/old.png",
-          "line": 314
+          "line": 360
         }
       ]
     },
@@ -35508,8 +35508,8 @@
     {
       "path": "apps-script/ProductosUnificados.gs",
       "extension": ".gs",
-      "bytes": 48229,
-      "sha256": "4cc7b8726a86a4a8d6310ab49e67158971b77dc401e2984693f5387cc6188827"
+      "bytes": 49272,
+      "sha256": "1d663c1575c1dc023d3872e6ccf180294ac0ea397360662a9ad2981f95e298a3"
     },
     {
       "path": "apps-script/ReorganizacionSheets.gs",
@@ -36468,8 +36468,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 61851,
-      "sha256": "30d5a6548a25e73437237187061be41a1222fd1ebb58cc9fa6b5022f990a6233"
+      "bytes": 66209,
+      "sha256": "face6820932c12c940cdb0f2d68b62e63d500110c3fe39bee4ca0114246af10f"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
@@ -36480,8 +36480,8 @@
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-29.md",
       "extension": ".md",
-      "bytes": 41781,
-      "sha256": "7ba545bfe6ea3e5c040ec62587e61ea5acf99c8424fecf0a496a5ec54278f5ef"
+      "bytes": 46089,
+      "sha256": "508df557ddfe3e353daf2239a7bdb3979aae9170699c8b454cc14c90e5b796c7"
     },
     {
       "path": "docs/agent/README.md",
@@ -40596,8 +40596,8 @@
     {
       "path": "tests/sync/productos-canonicos.test.mjs",
       "extension": ".mjs",
-      "bytes": 20512,
-      "sha256": "7f5bcf1d5b9402b694ed3519f4b21a6b61c27ee39ff1be47078f45c72de8faf0"
+      "bytes": 22498,
+      "sha256": "c431e80bd8485360c94bf780dda18557e478857892b20c48f6a34a687fdbe27e"
     },
     {
       "path": "tests/system-health/order-admin-domain.test.mjs",
@@ -42415,7 +42415,7 @@
   "apiCalls": [
     {
       "file": "apps-script/ProductosUnificados.gs",
-      "line": 189,
+      "line": 192,
       "target": "https://identitytoolkit.googleapis.com/v1/accounts:lookup",
       "method": "POST"
     },
