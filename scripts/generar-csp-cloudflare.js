@@ -71,10 +71,6 @@ function walkRuntimeFiles(directory) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
     if (entry.name.startsWith('.') || ['node_modules', 'artifacts', 'maintenance', 'tests'].includes(entry.name)) return [];
     const absolute = path.join(directory, entry.name);
-    // Monaco es un bundle de terceros reproducido desde node_modules. Sus
-    // cadenas minificadas pueden parecer atributos `on*`, pero no son
-    // handlers del HTML de Tintin ni deben hacer variar la CSP entre entornos.
-    if (path.relative(root, absolute).replace(/\\/g, '/') === 'js/vendor/monaco') return [];
     if (entry.isDirectory()) return walkRuntimeFiles(absolute);
     return /\.(?:html|js)$/i.test(entry.name) ? [absolute] : [];
   });

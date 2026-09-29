@@ -1,14 +1,5 @@
 # Estado actual de reparación — independencia de Shopify
 
-## Hero responsive con imágenes administradas — 2026-09-29
-
-- En la rama local `codex/tintin-home-taste-refresh`, se actualizó el hero de Inicio a una composición editorial en HTML/CSS. Se conservaron sin modificación las fuentes `<picture>`, las URLs predeterminadas, los atributos `data-tt-hero-device` y los slots que Super Admin administra (desktop/laptop, tablet horizontal/vertical y mobile). No se agregaron assets gráficos ni se cambiaron imágenes o ajustes publicados en el panel.
-- El texto y CTAs ya no dependen de texto incrustado como zonas transparentes sobre la imagen: ahora son contenido visible y accesible. Las proporciones del contenedor respetan los artes actuales de cada slot y se siguen leyendo las variables independientes `--tt-hero-fit-*`, `--tt-hero-pos-*` y `--tt-hero-scale-*`.
-- Verificación visual local con viewport de 1440×900, 1366×768, 1024×768, 820×1180 y 390×844: fuente esperada por dispositivo, título y CTA visibles en los cinco tamaños, sin overflow horizontal. Auditoría de controles del hero: 7/7 PASS; integridad de estilos y auditoría de versionado de caché PASS; `git diff --check` PASS.
-- npm no está disponible en este entorno; se invocaron directamente los scripts de auditoría con el Node.js incluido. Este cambio aún es local: no se abrió PR, no se desplegó Pages y no se hizo ninguna mutación productiva.
-- Continuación solicitada: los PNG/WebP existentes del hero ahora son los valores de inicio y aparecen como previsualizaciones en Super Admin para desktop/laptop, tablet y móvil. Se detectó que el runtime ignoraba los slots de Firestore; se corrigió para aplicar una selección manual guardada desde el panel. El tablet manual sirve ambas orientaciones, mientras que los cuatro artes responsive actuales siguen siendo los valores iniciales.
-- Salvaguarda de migración: los valores antiguos de `settings/images` no se activan automáticamente. El primer guardado desde Super Admin elimina esos campos heredados y marca la configuración nueva; desde entonces cada variante que se guarde controla su propio dispositivo. La reutilización de Desktop es opcional y desactivada por defecto. No se cargó ni cambió ningún documento productivo ni se subió asset a Cloudinary. El guardado manual real en Firestore queda sin probar porque el preview local no pudo conectar con el backend; el código pasa auditoría estática, no es evidencia de escritura de producción.
-
 > Registro actualizado para esta tarea y rama. La evidencia de cada estado corresponde al commit indicado y no se hereda de auditorías históricas.
 
 ## Continuación vigente — 2026-09-29 17:30 UTC
