@@ -8,6 +8,7 @@ import {
   SHEETS_TIMEOUT_MS,
 } from '../../cloudflare/sheets-sync-config.js';
 import { fetchAppsScript } from '../../cloudflare/apps-script-fetch.js';
+import { queueCatalogSheetSync } from '../../cloudflare/resiliencia-sync-catalogo.js';
 
 const MAX_BODY_BYTES = 64 * 1024;
 
@@ -71,9 +72,18 @@ export async function onRequest(context) {
     }
     return jsonResponse(result, 200, origin, requestUrl);
   } catch (error) {
+    // Never leave Sheets stale without a durable recovery path.
+    let queueIds = [];
+    try {
+      queueIds = await queueCatalogSheetSync(context.env, productIds, error);
+    } catch (queueError) {
+      console.error('[sheets-product-sync] no se pudo encolar la reconciliación:', queueError);
+    }
     return jsonResponse({
       ok: false,
+      queued: queueIds.length > 0,
+      queueIds,
       error: error instanceof Error ? error.message : 'No se pudo contactar el motor de Sheets.',
-    }, 502, origin, requestUrl);
+    }, queueIds.length > 0 ? 202 : 502, origin, requestUrl);
   }
 }

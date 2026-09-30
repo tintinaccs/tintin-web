@@ -152,7 +152,9 @@ async function pushProductsToSheets(productIds) {
   if (!ids.length || currentRole !== 'superadmin' || currentUser?.email !== SUPER_ADMIN) return false;
   try {
     const idToken = await currentUser.getIdToken();
-    for (let i = 0; i < ids.length; i += 100) {
+    // Keep browser pushes aligned with the durable queue chunk size. Apps
+    // Script writes several product columns and can time out on large batches.
+    for (let i = 0; i < ids.length; i += 20) {
       await fetch(SHEETS_PRODUCT_SYNC_URL, {
         method: 'POST',
         cache: 'no-store',
