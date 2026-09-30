@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "ce8693babc19c63d96a8f709aa958d85599042e435e2ef1192aadf195ebc5be2",
+  "sourceFingerprint": "31527abd3875c320f865c8b659d36ea91e4e031119ad247b685e34ea69930a7b",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 913,
     "textFiles": 872,
-    "totalBytes": 17929569,
+    "totalBytes": 17931020,
     "pages": 19,
     "modules": 627
   },
@@ -18527,8 +18527,8 @@
     },
     {
       "path": "cloudflare/sheets-sync-config.js",
-      "bytes": 462,
-      "sha256": "e1e21933de235925bdb7d2349c3666a364aa0a6b18afc16a1495090de186657c",
+      "bytes": 705,
+      "sha256": "8042ad81d6a231b3d8575d71a2a4b70757a5049f15817783fe2cacf451fab6a5",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20147,8 +20147,8 @@
     },
     {
       "path": "functions/api/sheets-product-sync.js",
-      "bytes": 3191,
-      "sha256": "8ced5a40a8575a1ab3b05c6f9cf092ba0ec5ddcb76ed6bd1939f2e7beeb9a435",
+      "bytes": 3308,
+      "sha256": "1240ca2dcd711570dd5655cb34199ecb033e7127e9c16510fca4833e101c1000",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20158,25 +20158,13 @@
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 5
-        },
-        {
-          "raw": "../../cloudflare/sheets-sync-config.js",
-          "target": "cloudflare/sheets-sync-config.js",
-          "dynamic": false,
-          "line": 9
-        },
-        {
-          "raw": "../../cloudflare/apps-script-fetch.js",
-          "target": "cloudflare/apps-script-fetch.js",
-          "dynamic": false,
-          "line": 10
+          "line": 6
         },
         {
           "raw": "../../cloudflare/resiliencia-sync-catalogo.js",
           "target": "cloudflare/resiliencia-sync-catalogo.js",
           "dynamic": false,
-          "line": 11
+          "line": 10
         }
       ],
       "endpoints": []
@@ -26807,8 +26795,8 @@
     },
     {
       "path": "scripts/auditar-admin-productos-multimedia.js",
-      "bytes": 19863,
-      "sha256": "3a5f1fab5bcdae68e93f1c747e0c0e9182f23f83b7f9a9cd18a53c5103eac859",
+      "bytes": 19955,
+      "sha256": "6542b4e9bfeea43f6e5bdcc60df7f64e03e8926d507a34b6b5e3ecbba037f4e9",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28078,8 +28066,8 @@
     },
     {
       "path": "scripts/auditar-fase-7-catalogo.js",
-      "bytes": 7140,
-      "sha256": "dae27b8582c29f354bf18e80403a2c258c0b596ed06ceca37f65f2c1b602745c",
+      "bytes": 7396,
+      "sha256": "7a1fea5ff3570fe5450cdffd37c44ef96a3dc85027ee1da01e0b786391861121",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28089,7 +28077,7 @@
           "raw": "\\.\\/pages\\/catalog\\/politica-visibilidad-catalogo\\.js/.test(loader),\n  ",
           "target": "scripts/\\.\\/pages\\/catalog\\/politica-visibilidad-catalogo\\.js/.test(loader),",
           "dynamic": false,
-          "line": 151
+          "line": 155
         }
       ],
       "endpoints": []
@@ -35544,8 +35532,8 @@
     {
       "path": "apps-script/ProductosUnificados.gs",
       "extension": ".gs",
-      "bytes": 49272,
-      "sha256": "1d663c1575c1dc023d3872e6ccf180294ac0ea397360662a9ad2981f95e298a3"
+      "bytes": 50015,
+      "sha256": "cfd4539b7c0d06b54bb3248ae12dcef056029db80fa53392e63a8a602f94870e"
     },
     {
       "path": "apps-script/ReorganizacionSheets.gs",
@@ -35940,8 +35928,8 @@
     {
       "path": "cloudflare/sheets-sync-config.js",
       "extension": ".js",
-      "bytes": 462,
-      "sha256": "e1e21933de235925bdb7d2349c3666a364aa0a6b18afc16a1495090de186657c"
+      "bytes": 705,
+      "sha256": "8042ad81d6a231b3d8575d71a2a4b70757a5049f15817783fe2cacf451fab6a5"
     },
     {
       "path": "cloudflare/sincronizacion-estadisticas-pedido.js",
@@ -37128,8 +37116,8 @@
     {
       "path": "functions/api/sheets-product-sync.js",
       "extension": ".js",
-      "bytes": 3191,
-      "sha256": "8ced5a40a8575a1ab3b05c6f9cf092ba0ec5ddcb76ed6bd1939f2e7beeb9a435"
+      "bytes": 3308,
+      "sha256": "1240ca2dcd711570dd5655cb34199ecb033e7127e9c16510fca4833e101c1000"
     },
     {
       "path": "functions/api/sheets-products-webhook.js",
@@ -39036,8 +39024,8 @@
     {
       "path": "scripts/auditar-admin-productos-multimedia.js",
       "extension": ".js",
-      "bytes": 19863,
-      "sha256": "3a5f1fab5bcdae68e93f1c747e0c0e9182f23f83b7f9a9cd18a53c5103eac859"
+      "bytes": 19955,
+      "sha256": "6542b4e9bfeea43f6e5bdcc60df7f64e03e8926d507a34b6b5e3ecbba037f4e9"
     },
     {
       "path": "scripts/auditar-admin-publico-sincronizar.js",
@@ -39336,8 +39324,8 @@
     {
       "path": "scripts/auditar-fase-7-catalogo.js",
       "extension": ".js",
-      "bytes": 7140,
-      "sha256": "dae27b8582c29f354bf18e80403a2c258c0b596ed06ceca37f65f2c1b602745c"
+      "bytes": 7396,
+      "sha256": "7a1fea5ff3570fe5450cdffd37c44ef96a3dc85027ee1da01e0b786391861121"
     },
     {
       "path": "scripts/auditar-fase-8-ui-ux.js",

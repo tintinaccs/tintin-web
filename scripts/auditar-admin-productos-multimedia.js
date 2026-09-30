@@ -136,9 +136,10 @@ check(
     /window\.tintinPushProductsToSheets = pushProductsToSheets/.test(adminApp) &&
     /await pushProductsToSheets\(\[docId\]\)/.test(adminApp) &&
     /await pushProductsToSheets\(ids0\)/.test(adminApp) &&
-    /APPS_SCRIPT_SYNC_URL/.test(sheetsSyncFunction) &&
-    /idToken: String\(payload\.idToken\)/.test(sheetsSyncFunction),
-  'Todo guardado individual, masivo o importado debe notificar al webhook autenticado de Sheets.'
+    /syncProductsPayloadWithRetry/.test(sheetsSyncFunction) &&
+    /appScriptChunkSize:\s*5/.test(sheetsSyncFunction) &&
+    /queueCatalogSheetSync/.test(sheetsSyncFunction),
+  'Todo guardado individual, masivo o importado debe avisar al sincronizador server-side de Sheets y conservar la cola de recuperación.'
 );
 
 // ===========================================================================
