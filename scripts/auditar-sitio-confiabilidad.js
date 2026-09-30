@@ -69,8 +69,10 @@ check('El menú de cuenta arranca también en el runtime público',
 check('La capa visual oculta el panel según el contenedor y permite abrirlo',
   parity.includes('#account-dropdown:not(.open):not(.tt-account-open)>.tt-account-panel') &&
   !parity.includes('.tt-account-panel:not(.open):not(.tt-account-open)'));
-check('El click de cuenta no se duplica con el manejador antiguo',
-  accountFix.includes('stopImmediatePropagation()'));
+check('El menú de cuenta no tiene un segundo manejador: sólo SurfaceController abre paneles',
+  !accountFix.includes('accountDropdown') && !accountFix.includes('stopImmediatePropagation()') &&
+  !loader.includes('compatibilidad-menus-desplegables') &&
+  !fs.existsSync(path.join(root, 'js/components/navigation/compartido/compatibilidad-menus-desplegables.js')));
 check('Los dropdowns del header son blancos en desktop, tablet y mobile',
   solidSurfaces.indexOf('html body .tt-dropdown,') >= 0 &&
   solidSurfaces.indexOf('html body .tt-dropdown,') < solidSurfaces.indexOf('@media (min-width: 769px)') &&

@@ -825,7 +825,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20260930-sheets-reconcile-quality-3');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20260930-sheets-reconcile-quality-4');
     }
   }
 
@@ -840,17 +840,13 @@
     }
   }
 
-  function bootHeaderDropdownFix() {
-    if (window.TintinSurfaceController) return;
-    if (!window.TintinHeaderDropdownFixBooted) {
-      importSibling('components/navigation/compartido/compatibilidad-menus-desplegables.js', 'Header Dropdown Fix');
-    }
-  }
-
+  // Hojas de marca y avatar de la barra inferior. No abre paneles: los menús
+  // los maneja únicamente SurfaceController. Antes se omitía según si el
+  // controlador ya había cargado (carrera) y, en /login y /admin, arrancaba un
+  // segundo sistema de menús.
   function bootHeaderAccountFix() {
-    if (window.TintinSurfaceController) return;
     if (!window.TintinAccountMobileFixBooted) {
-      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix');
+      importSibling('components/navigation/compartido/compatibilidad-cuenta-movil.js', 'Header Account Fix', undefined, 'tintin-20260930-shell-canonical-1');
     }
   }
 
@@ -949,7 +945,6 @@
     runtimeBooted = true;
     bootGlobalQuality();
     bootHeaderMode();
-    bootHeaderDropdownFix();
     bootHeaderAccountFix();
     bootHeaderScrollHide();
     bootAdminAndProfileFixes();
@@ -975,7 +970,6 @@
     if (runtimeBooted) return;
     runtimeBooted = true;
     bootHeaderMode();
-    bootHeaderDropdownFix();
     bootHeaderAccountFix();
     bootHeaderScrollHide();
     bootAdminAndProfileFixes();
