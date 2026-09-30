@@ -139,59 +139,9 @@ body.tt-home-premium #look-grid {
   align-content: start;
 }
 
-.tt-home-runtime-state {
-  grid-column: 1 / -1;
-  width: 100%;
-  min-height: 220px;
-  display: grid;
-  place-items: center;
-  padding: 28px 20px;
-  border: 1.5px solid var(--color-card-border, #F1E4E7);
-  border-radius: 20px;
-  background: var(--color-background-surface, #FFFFFF);
-  color: var(--color-text-secondary, #7B6F72);
-  text-align: center;
-  font: 600 13px/1.6 Montserrat;
-}
-
-.tt-home-runtime-state-inner {
-  max-width: 430px;
-}
-
-.tt-home-runtime-state strong {
-  display: block;
-  margin-bottom: 6px;
-  color: var(--color-text-title, #2B2B2B);
-  font-size: 15px;
-}
-
-.tt-home-runtime-state-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+/* Control de recuperación del error de carga: objetivo táctil mínimo. */
+body.tt-home-premium #products-grid [data-products-retry] {
   min-height: 44px;
-  margin-top: 14px;
-  padding: 10px 22px;
-  border-radius: 999px;
-  background: var(--color-button-primary-background, #AD3F67);
-  color: var(--color-button-primary-text, #FFFFFF) !important;
-  font-weight: 800;
-  text-decoration: none;
-}
-
-.tt-home-runtime-state[data-state="loading"]::before {
-  content: "";
-  width: 28px;
-  height: 28px;
-  margin-bottom: 12px;
-  border: 3px solid var(--color-progress-track, #F1E4E7);
-  border-top-color: var(--color-progress-fill, #AD3F67);
-  border-radius: 50%;
-  animation: tt-home-spin .8s linear infinite;
-}
-
-@keyframes tt-home-spin {
-  to { transform: rotate(360deg); }
 }
 
 body.tt-home-premium .tt-img-placeholder,
@@ -263,12 +213,6 @@ body.tt-home-premium .tt-wa-float * {
   body.tt-home-premium #products-grid,
   body.tt-home-premium #look-grid {
     min-height: 210px;
-  }
-
-  .tt-home-runtime-state {
-    min-height: 190px;
-    padding: 24px 16px;
-    border-radius: 16px;
   }
 }
 

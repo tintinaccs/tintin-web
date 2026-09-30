@@ -7,7 +7,7 @@
   <script src="js/components/color/esquema-color-instantaneo.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
 <script src="js/cargador-pagina.js?v=tintin-20260930-sheets-reconcile-loader-4"></script>
   <script src="js/components/navigation/compatibilidad/inicio-control-paneles.js?v=tintin-20260925-cache-converge-1" defer></script>
-  <script src="js/inicio-navegacion-publica.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1" defer></script>
+  <script src="js/inicio-navegacion-publica.js?v=tintin-20260930-home-canonical-1" defer></script>
   <!-- La señal de "página lista" (window.ttPageReady) ya NO se dispara desde
        acá. cargador-pagina.js caía al fallback window.load si no se le avisaba
        — que espera a TODAS las imágenes de la página completa, no solo al
@@ -47,7 +47,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js" crossorigin>
   <link rel="modulepreload" href="js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1">
   <link rel="modulepreload" href="js/components/navigation/compartido/barrera-arranque-shell.js?v=tintin-20260915-session-shell-2">
-  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1">
+  <link rel="modulepreload" href="js/components/navigation/entrada-navegacion-publica.js?v=tintin-20260930-home-canonical-1">
   <link rel="preload" as="style" media="(min-width: 1025px)" href="css/components/navigation/escritorio/encabezado-escritorio.css?v=tintin-20260925-cache-converge-1">
   <link rel="preload" as="style" media="(min-width: 768px) and (max-width: 1024px)" href="css/components/navigation/tableta/encabezado-tableta.css?v=tintin-20260916-z-index-fallback-1">
   <link rel="preload" as="style" media="(max-width: 767px)" href="css/components/navigation/movil/encabezado-movil.css?v=tintin-20260916-z-index-fallback-1">
@@ -80,7 +80,7 @@
        injectHomeFit() sigue existiendo como fallback no-op si este link ya
        existe (ver js/components/images/imagenes.js). -->
   <link id="tt-home-hero-apple-css" rel="stylesheet" href="css/pages/home/hero-bienvenida-inicio.css?v=tintin-20260911-hero-single-layer-1">
-  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260929-superadmin-hero-layout-3">
+  <link id="tt-home-fit-css" rel="stylesheet" href="css/pages/home/ajuste-inicio.css?v=tintin-20260930-home-canonical-1">
   <link rel="stylesheet" href="css/pages/home/carrusel-colecciones.css?v=tintin-20260927-visual-1">
   <link rel="stylesheet" href="css/pages/home/edicion-editorial-inicio.css?v=tintin-20260911-home-editorial-2">
   <link rel="stylesheet" href="css/quality/movimiento.css?v=tintin-20260811-cls-desktop-stable-2">
@@ -420,39 +420,14 @@
      requestAnimationFrame() del <head>, que podía dispararse con el <body>
      todavía sin terminar de parsearse (medido con document.readyState
      todavía en 'loading' en ese punto). Acá abajo, después de todas las
-     secciones estáticas, la condición depende de que existan de verdad, de
-     que el documento ya tenga un rango desplazable real, y de que la foto
-     del hero (si hay una configurada) ya haya terminado de cargar — así el
-     loader nunca se oculta mostrando el fondo oscuro del hero un instante
-     antes de que aparezca la imagen real, ni de golpe "transforma" el
-     diseño frente a quien mira. No depende de otros recursos remotos
-     (productos, Firebase, fuentes). -->
+     secciones estáticas, la condición depende de que existan de verdad y de
+     que el documento ya tenga un rango desplazable real. No espera la foto
+     del hero (tiene espacio reservado por CSS) ni otros recursos remotos
+     (productos, Firebase, fuentes). Es la única fuente que libera el loader
+     en Inicio. -->
 <script>
 (function () {
   var attempts = 0;
-  var heroWaitStart = null;
-  // Un poco más que el tope duro de 4s de la red de seguridad del propio
-  // hero (ver más abajo): para cuando este tope se cumple, esa red de
-  // seguridad ya tuvo su oportunidad de revelar el hero igual (con o sin
-  // imagen real) — así nunca compiten entre sí ni el loader se queda
-  // esperando más de lo que el propio hero está dispuesto a esperar.
-  var HERO_WAIT_CEILING_MS = 0;
-
-  // El HTML ya entrega la imagen aprobada en el primer render. Esta función
-  // conserva el contrato del loader para el caso de una imagen dinámica, sin
-  // introducir una clase de espera ni una composición intermedia en Inicio.
-  function heroReady() {
-    var media = document.getElementById('tt-hero-media');
-    if (!media) return true;
-    return !media.classList.contains('tt-hero-pending');
-  }
-
-  function waitForHeroImageThenRelease() {
-    if (heroWaitStart === null) heroWaitStart = Date.now();
-    // La imagen del hero ya tiene espacio reservado por CSS. Mostrar la
-    // estructura no debe quedar pendiente de una descarga de 1.5 MB.
-    if (heroReady()) window.ttPageReady && window.ttPageReady();
-  }
 
   function releaseHomeWhenStructurallyReady() {
     attempts += 1;
@@ -484,13 +459,13 @@
   requestAnimationFrame(releaseHomeWhenStructurallyReady);
 })();
 </script>
-<script src="tienda.js?v=tintin-20260927-visual-1" defer></script>
+<script src="tienda.js?v=tintin-20260930-home-canonical-1" defer></script>
 <script type="module" src="js/pages/home/carrusel-colecciones.js?v=tintin-20260927-visual-1"></script>
 <script type="module" src="js/components/contact/whatsapp.js?v=tintin-20260716-cloudinary-fix-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
 <script type="module" src="js/components/reviews/valoraciones-catalogo.js?v=tintin-20260813-reviews-3-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
 <script type="module" src="js/analytics/analitica.js?v=tintin-20260911-auth-cart-final-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1"></script>
 <script type="module" src="js/core/auth/proteccion-sesion.js?v=tintin-20260929-profile-gate-all-pages-1"></script>
-<script type="module" src="js/components/images/inicio-carga-imagenes.js?v=tintin-20260929-superadmin-hero-editable-1"></script>
+<script type="module" src="js/components/images/inicio-carga-imagenes.js?v=tintin-20260930-home-canonical-1"></script>
 <script type="module">
 import { initSiteContent } from './js/core/store/contenido-sitio.js?v=tintin-20260925-cache-converge-1-launch-20260926-1-sec-fix-1-visual-1-shopify-apply-1';
 initSiteContent('index');
