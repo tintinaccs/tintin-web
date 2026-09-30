@@ -59,6 +59,8 @@ export async function onRequest(context) {
     // servicio y envía sublotes pequeños mediante el secreto server-to-server.
     // Así el lote queda dentro del presupuesto de Apps Script/Cloudflare y es
     // exactamente el mismo protocolo que usa la cola de recuperación.
+    // El helper comparte APPS_SCRIPT_SYNC_URL y el contrato de
+    // sheets-sync-config.js con el health check; no se duplica aquí.
     const result = await syncProductsPayloadWithRetry(context.env, productIds, {
       attempts: 2,
       appScriptChunkSize: 5,
