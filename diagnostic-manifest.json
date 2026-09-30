@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "e998526b35490585724c97548aaadcd454dd5119dde089291736001b44006c9d",
+  "sourceFingerprint": "77a8cf6d32f376f4671a002e3c1df2f8db22863ab6f274a419914ab2d6f482d4",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 914,
     "textFiles": 873,
-    "totalBytes": 17931759,
+    "totalBytes": 17932969,
     "pages": 19,
     "modules": 628
   },
@@ -27533,8 +27533,8 @@
     },
     {
       "path": "scripts/auditar-critico-recuperacion.js",
-      "bytes": 7136,
-      "sha256": "295ff60ef56fb564983721c7223f9e0851c5eb7f680bd9f28859092b90ec2f75",
+      "bytes": 7417,
+      "sha256": "f89d1b4e78280d7625c6a3fe79ed10054f13fad9cee4e550c61d69ab4f8b240b",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28033,8 +28033,8 @@
     },
     {
       "path": "scripts/auditar-fase-5-rendimiento.js",
-      "bytes": 4442,
-      "sha256": "f1a88c2a6516096557ec4ee46b500962f83a0244e942f54171de8117871c3f07",
+      "bytes": 4580,
+      "sha256": "bb34a1a89f1564ce48306e5ad59f6e0036328def2c2590cfa6c7fb295e774ad7",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28843,8 +28843,8 @@
     },
     {
       "path": "scripts/auditar-nivel-3-calidad.js",
-      "bytes": 10786,
-      "sha256": "5fbcd2a7d1d38c1809c0c8fae606cc6527149a425f5d17ee6cbd2ccc5f7cf21d",
+      "bytes": 10837,
+      "sha256": "59de24b5cbb2468f6a8519d1f339ff1e042a1cb28b63675cd3d8b3295b6f6993",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29180,8 +29180,8 @@
     },
     {
       "path": "scripts/auditar-rendimiento-regresiones.js",
-      "bytes": 10221,
-      "sha256": "e11673dea8b2f53cb9260a2503bec19c9e1b746fa404f2cc9e72eea70929d82d",
+      "bytes": 10242,
+      "sha256": "ecb3773c4021bda53fe8a42c73915413218f70b582394ee1fc7cd675161b2171",
       "syntax": {
         "ok": true,
         "error": ""
@@ -29204,8 +29204,8 @@
     },
     {
       "path": "scripts/auditar-rendimiento-tiempo-real.js",
-      "bytes": 10732,
-      "sha256": "f477d3de543e99a41c78e223d95c53a513c3fbfd715433593bb156a8aeb2a05a",
+      "bytes": 10806,
+      "sha256": "2fc281a48a9810ed1a4c6f6332d658596035e324c7d58bf93899052d7dd1dfb0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -36530,8 +36530,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 78490,
-      "sha256": "dadfb0cf60cb22507fb95a23fed18d217391a2bdec7b86efff5c310932b99c84"
+      "bytes": 79135,
+      "sha256": "e1b3a6db3c1e4d29df7bfc32e6aeb636ab1f30694a976b554c8e50702fea434b"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
@@ -39248,8 +39248,8 @@
     {
       "path": "scripts/auditar-critico-recuperacion.js",
       "extension": ".js",
-      "bytes": 7136,
-      "sha256": "295ff60ef56fb564983721c7223f9e0851c5eb7f680bd9f28859092b90ec2f75"
+      "bytes": 7417,
+      "sha256": "f89d1b4e78280d7625c6a3fe79ed10054f13fad9cee4e550c61d69ab4f8b240b"
     },
     {
       "path": "scripts/auditar-css-cascada.mjs",
@@ -39350,8 +39350,8 @@
     {
       "path": "scripts/auditar-fase-5-rendimiento.js",
       "extension": ".js",
-      "bytes": 4442,
-      "sha256": "f1a88c2a6516096557ec4ee46b500962f83a0244e942f54171de8117871c3f07"
+      "bytes": 4580,
+      "sha256": "bb34a1a89f1564ce48306e5ad59f6e0036328def2c2590cfa6c7fb295e774ad7"
     },
     {
       "path": "scripts/auditar-fase-6-seguridad.js",
@@ -39536,8 +39536,8 @@
     {
       "path": "scripts/auditar-nivel-3-calidad.js",
       "extension": ".js",
-      "bytes": 10786,
-      "sha256": "5fbcd2a7d1d38c1809c0c8fae606cc6527149a425f5d17ee6cbd2ccc5f7cf21d"
+      "bytes": 10837,
+      "sha256": "59de24b5cbb2468f6a8519d1f339ff1e042a1cb28b63675cd3d8b3295b6f6993"
     },
     {
       "path": "scripts/auditar-nosotros-pagina.js",
@@ -39638,14 +39638,14 @@
     {
       "path": "scripts/auditar-rendimiento-regresiones.js",
       "extension": ".js",
-      "bytes": 10221,
-      "sha256": "e11673dea8b2f53cb9260a2503bec19c9e1b746fa404f2cc9e72eea70929d82d"
+      "bytes": 10242,
+      "sha256": "ecb3773c4021bda53fe8a42c73915413218f70b582394ee1fc7cd675161b2171"
     },
     {
       "path": "scripts/auditar-rendimiento-tiempo-real.js",
       "extension": ".js",
-      "bytes": 10732,
-      "sha256": "f477d3de543e99a41c78e223d95c53a513c3fbfd715433593bb156a8aeb2a05a"
+      "bytes": 10806,
+      "sha256": "2fc281a48a9810ed1a4c6f6332d658596035e324c7d58bf93899052d7dd1dfb0"
     },
     {
       "path": "scripts/auditar-responsive-navegacion.mjs",
