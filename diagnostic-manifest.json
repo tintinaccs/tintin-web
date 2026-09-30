@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "31527abd3875c320f865c8b659d36ea91e4e031119ad247b685e34ea69930a7b",
+  "sourceFingerprint": "f7e0b77b097b207607a854cf59bf7b78584bd5bb91b80f0f1939f404e034cb21",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 913,
     "textFiles": 872,
-    "totalBytes": 17931020,
+    "totalBytes": 17931101,
     "pages": 19,
     "modules": 627
   },
@@ -1543,8 +1543,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 43692,
-      "sha256": "b552297c4b6a9a96adab1853f3f5937d4a264150f34646032b2143d2200f6c76",
+      "bytes": 43621,
+      "sha256": "3d216ad189818c7f63330db6ff689657d4ea8a2269d43f31dac7e04dfecec464",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -1584,7 +1584,7 @@
           "line": 8
         },
         {
-          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260930-semantic-main-cache-1",
           "target": "js/admin/settings/esquema-color-admin.js",
           "line": 799
         },
@@ -1703,7 +1703,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260930-semantic-main-cache-1",
           "target": "js/admin/settings/esquema-color-admin.js",
           "line": 799,
           "exists": true
@@ -2112,8 +2112,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 197744,
-      "sha256": "4989b1e0c49e273b6d6183d87e664ae3c8668fe195874a711887739a47831ca5",
+      "bytes": 197602,
+      "sha256": "978d64487ebd441b4340c29b89968af0505b2e4c8f59bba1b8d6e1c7bb134c70",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2187,12 +2187,12 @@
           "line": 2050
         },
         {
-          "raw": "js/admin/appearance/visual-studio-layout-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "js/admin/appearance/visual-studio-layout-admin.js?v=tintin-20260930-semantic-main-cache-1",
           "target": "js/admin/appearance/visual-studio-layout-admin.js",
           "line": 2260
         },
         {
-          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260930-semantic-main-cache-1",
           "target": "js/admin/settings/esquema-color-admin.js",
           "line": 2261
         },
@@ -2469,13 +2469,13 @@
           "exists": true
         },
         {
-          "raw": "js/admin/appearance/visual-studio-layout-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "js/admin/appearance/visual-studio-layout-admin.js?v=tintin-20260930-semantic-main-cache-1",
           "target": "js/admin/appearance/visual-studio-layout-admin.js",
           "line": 2260,
           "exists": true
         },
         {
-          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "js/admin/settings/esquema-color-admin.js?v=tintin-20260930-semantic-main-cache-1",
           "target": "js/admin/settings/esquema-color-admin.js",
           "line": 2261,
           "exists": true
@@ -20978,8 +20978,8 @@
     },
     {
       "path": "js/admin/appearance/visual-studio-global-admin.js",
-      "bytes": 22054,
-      "sha256": "c6c384c014e9844ce9208373824e16e00f4e0777ad9b62f172f9bb99646f23e3",
+      "bytes": 22062,
+      "sha256": "1a2f961f2d10c67e2545f230af9ef6ee2cc432e81c7bbe7b4c993c8a005a9f6e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -21008,8 +21008,8 @@
     },
     {
       "path": "js/admin/appearance/visual-studio-layout-admin.js",
-      "bytes": 17101,
-      "sha256": "a901c7a1cc28873cbdc7b6dbceac71856b3d3e61f802c982fb9639aea15da259",
+      "bytes": 17112,
+      "sha256": "6376fbe1ed04a87d085e473554479e5c9157b84ecc2900aee9999935c995cfc0",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22119,8 +22119,8 @@
     },
     {
       "path": "js/admin/settings/esquema-color-admin.js",
-      "bytes": 3172,
-      "sha256": "e05cda41ffd204b6fb433e2ffd36949658adb791d70bca46f116f2bb8240f434",
+      "bytes": 3101,
+      "sha256": "11e74c4e79b9a6ff3c175cd75746aff22e0dabc2db4659cdbbc05973f65b316a",
       "syntax": {
         "ok": true,
         "error": ""
@@ -22145,7 +22145,7 @@
           "line": 12
         },
         {
-          "raw": "../appearance/visual-studio-global-admin.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "../appearance/visual-studio-global-admin.js?v=tintin-20260930-semantic-main-cache-1",
           "target": "js/admin/appearance/visual-studio-global-admin.js",
           "dynamic": true,
           "line": 78
@@ -26773,8 +26773,8 @@
     },
     {
       "path": "scripts/auditar-admin-fundamentos.js",
-      "bytes": 15902,
-      "sha256": "aba2fec7ef57201173e56afd8b2179b8309a810193c0d2f02552becf599aed3a",
+      "bytes": 16461,
+      "sha256": "bbf4d1ddb04b1deeff28199c69a40e183620415f16a6f62b5a35371e3e652700",
       "syntax": {
         "ok": true,
         "error": ""
@@ -35484,8 +35484,8 @@
     {
       "path": "admin-images.html",
       "extension": ".html",
-      "bytes": 43692,
-      "sha256": "b552297c4b6a9a96adab1853f3f5937d4a264150f34646032b2143d2200f6c76"
+      "bytes": 43621,
+      "sha256": "3d216ad189818c7f63330db6ff689657d4ea8a2269d43f31dac7e04dfecec464"
     },
     {
       "path": "admin-manifest.json",
@@ -35496,8 +35496,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 197744,
-      "sha256": "4989b1e0c49e273b6d6183d87e664ae3c8668fe195874a711887739a47831ca5"
+      "bytes": 197602,
+      "sha256": "978d64487ebd441b4340c29b89968af0505b2e4c8f59bba1b8d6e1c7bb134c70"
     },
     {
       "path": "apple-touch-icon.png",
@@ -37320,14 +37320,14 @@
     {
       "path": "js/admin/appearance/visual-studio-global-admin.js",
       "extension": ".js",
-      "bytes": 22054,
-      "sha256": "c6c384c014e9844ce9208373824e16e00f4e0777ad9b62f172f9bb99646f23e3"
+      "bytes": 22062,
+      "sha256": "1a2f961f2d10c67e2545f230af9ef6ee2cc432e81c7bbe7b4c993c8a005a9f6e"
     },
     {
       "path": "js/admin/appearance/visual-studio-layout-admin.js",
       "extension": ".js",
-      "bytes": 17101,
-      "sha256": "a901c7a1cc28873cbdc7b6dbceac71856b3d3e61f802c982fb9639aea15da259"
+      "bytes": 17112,
+      "sha256": "6376fbe1ed04a87d085e473554479e5c9157b84ecc2900aee9999935c995cfc0"
     },
     {
       "path": "js/admin/appearance/workspace-splitters.js",
@@ -37542,8 +37542,8 @@
     {
       "path": "js/admin/settings/esquema-color-admin.js",
       "extension": ".js",
-      "bytes": 3172,
-      "sha256": "e05cda41ffd204b6fb433e2ffd36949658adb791d70bca46f116f2bb8240f434"
+      "bytes": 3101,
+      "sha256": "11e74c4e79b9a6ff3c175cd75746aff22e0dabc2db4659cdbbc05973f65b316a"
     },
     {
       "path": "js/admin/settings/metodos-pago-admin.js",
@@ -39012,8 +39012,8 @@
     {
       "path": "scripts/auditar-admin-fundamentos.js",
       "extension": ".js",
-      "bytes": 15902,
-      "sha256": "aba2fec7ef57201173e56afd8b2179b8309a810193c0d2f02552becf599aed3a"
+      "bytes": 16461,
+      "sha256": "bbf4d1ddb04b1deeff28199c69a40e183620415f16a6f62b5a35371e3e652700"
     },
     {
       "path": "scripts/auditar-admin-pedidos.js",
@@ -39768,8 +39768,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 59790,
-      "sha256": "80f6dc07bda1b12825e8bcf453fe3e5e5fa8667d2e603cc1931112b1f2262f7e"
+      "bytes": 59577,
+      "sha256": "39ca4920f6066958cce929bda1705be87512f33977c280b8f2c41cf93f9944b1"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
