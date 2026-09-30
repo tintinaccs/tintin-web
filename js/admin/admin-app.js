@@ -162,7 +162,7 @@ async function pushProductsToSheets(productIds) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'syncProducts',
-          productIds: ids.slice(i, i + 100),
+        productIds: ids.slice(i, i + 20),
           idToken,
         }),
       }).then(async response => {
