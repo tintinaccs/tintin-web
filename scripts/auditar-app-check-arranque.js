@@ -118,7 +118,7 @@ const checks = [
   [
     'Todas las páginas fuerzan el loader corregido',
     htmlFiles.every(file =>
-      read(file).includes('cargador-pagina.js?v=tintin-20260929-shopify-identity-loader-3')
+      read(file).includes('cargador-pagina.js?v=tintin-20260930-import-backup-refresh-loader-1')
     )
   ],
   [

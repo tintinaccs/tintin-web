@@ -140,6 +140,7 @@ if (!window.TintinAdminShopifyImportBooted) {
       state.busy = false;
       state.ui.backup.disabled = false;
       state.ui.backup.textContent = 'Descargar copia operativa';
+      renderPreview();
     }
   }
 

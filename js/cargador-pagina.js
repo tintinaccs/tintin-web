@@ -825,7 +825,7 @@
 
   function bootGlobalQuality() {
     if (!window.TintinUIQualityBooted) {
-      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20260929-shopify-identity-quality-3');
+      importSibling('quality/calidad-interfaz.js', 'UI Quality', undefined, 'tintin-20260930-import-backup-refresh-quality-1');
     }
   }
 
