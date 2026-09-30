@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "ce8693babc19c63d96a8f709aa958d85599042e435e2ef1192aadf195ebc5be2",
+  "sourceFingerprint": "27d39137e1602aac25e2a896cd12713ffccfe9dd9d2d4226769a2a8897c9608e",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 913,
     "textFiles": 872,
-    "totalBytes": 17929569,
+    "totalBytes": 17929551,
     "pages": 19,
     "modules": 627
   },
@@ -20147,8 +20147,8 @@
     },
     {
       "path": "functions/api/sheets-product-sync.js",
-      "bytes": 3191,
-      "sha256": "8ced5a40a8575a1ab3b05c6f9cf092ba0ec5ddcb76ed6bd1939f2e7beeb9a435",
+      "bytes": 3173,
+      "sha256": "59e933cd7a36ef29457a7bbc7793a5125185248272959a7cd45f98b44102296e",
       "syntax": {
         "ok": true,
         "error": ""
@@ -20158,25 +20158,13 @@
           "raw": "../../cloudflare/seguridad-cloudinary.js",
           "target": "cloudflare/seguridad-cloudinary.js",
           "dynamic": false,
-          "line": 5
-        },
-        {
-          "raw": "../../cloudflare/sheets-sync-config.js",
-          "target": "cloudflare/sheets-sync-config.js",
-          "dynamic": false,
-          "line": 9
-        },
-        {
-          "raw": "../../cloudflare/apps-script-fetch.js",
-          "target": "cloudflare/apps-script-fetch.js",
-          "dynamic": false,
-          "line": 10
+          "line": 6
         },
         {
           "raw": "../../cloudflare/resiliencia-sync-catalogo.js",
           "target": "cloudflare/resiliencia-sync-catalogo.js",
           "dynamic": false,
-          "line": 11
+          "line": 10
         }
       ],
       "endpoints": []
@@ -37128,8 +37116,8 @@
     {
       "path": "functions/api/sheets-product-sync.js",
       "extension": ".js",
-      "bytes": 3191,
-      "sha256": "8ced5a40a8575a1ab3b05c6f9cf092ba0ec5ddcb76ed6bd1939f2e7beeb9a435"
+      "bytes": 3173,
+      "sha256": "59e933cd7a36ef29457a7bbc7793a5125185248272959a7cd45f98b44102296e"
     },
     {
       "path": "functions/api/sheets-products-webhook.js",
