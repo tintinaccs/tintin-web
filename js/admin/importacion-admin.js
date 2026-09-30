@@ -482,6 +482,24 @@ if (!window.TintinAdminShopifyImportBooted) {
     });
   }
 
+  async function reconcileProductsToSheets() {
+    const button = state.ui?.reconcile;
+    if (button) { button.disabled = true; button.textContent = 'Sincronizando Productos…'; }
+    try {
+      const productsCollection = 'products';
+      const snapshot = await getDocsPaginated(collection(db, productsCollection), { pageSize: 250, maxDocs: 20000 });
+      const ids = snapshot.docs.map(product => product.id).filter(Boolean);
+      if (!ids.length) throw new Error('No hay productos en Firestore para sincronizar.');
+      const ok = await window.tintinPushProductsToSheets?.(ids);
+      if (!ok) throw new Error('Sheets no confirmó todos los lotes; quedaron en la cola persistente de reintento.');
+      toast(`Productos sincronizados con Google Sheets: ${ids.length}.`);
+    } catch (error) {
+      toast(error?.message || 'No se pudo reconciliar Productos con Sheets.', true);
+    } finally {
+      if (button) { button.disabled = false; button.textContent = 'Reconciliar Productos → Sheets'; }
+    }
+  }
+
   function buildPanel() {
     const section = document.getElementById('section-importar');
     if (!section || document.getElementById('shopify-import-canonical-card')) return;
@@ -492,7 +510,7 @@ if (!window.TintinAdminShopifyImportBooted) {
     const badge = node('span', 'phase10-badge', 'SIN ESCRIBIR'); head.append(titleWrap, badge);
     const body = node('div', 'adm-card-body'); const statusGrid = node('div', 'phase10-grid');
     [['Fuente', 'Shopify CSV / JSON'], ['Agrupación', 'Handle → producto'], ['Imágenes', 'Shopify CDN → Cloudinary antes de guardar'], ['Catálogo', 'solo crea · id estable por Handle']].forEach(([label, value]) => { const item = node('div', 'phase10-item'); item.append(node('strong', '', label), node('span', '', value)); statusGrid.appendChild(item); });
-    const backupWrap = node('div', 'phase10-backup-wrap'); const backup = node('button', 'adm-btn adm-btn-outline', 'Descargar copia operativa'); backup.type = 'button'; backup.addEventListener('click', exportOperationalBackup); backupWrap.append(node('div', '', 'Copia operativa sin usuarios, pedidos ni auditoría.'), backup);
+    const backupWrap = node('div', 'phase10-backup-wrap'); const backup = node('button', 'adm-btn adm-btn-outline', 'Descargar copia operativa'); backup.type = 'button'; backup.addEventListener('click', exportOperationalBackup); const reconcile = node('button', 'adm-btn adm-btn-outline', 'Reconciliar Productos → Sheets'); reconcile.type = 'button'; reconcile.addEventListener('click', reconcileProductsToSheets); backupWrap.append(node('div', '', 'Copia operativa sin usuarios, pedidos ni auditoría.'), backup, reconcile);
     const drop = node('div', 'phase10-drop'); drop.tabIndex = 0; drop.setAttribute('role', 'button'); drop.setAttribute('aria-label', 'Seleccionar exportación Shopify CSV o JSON');
     drop.append(node('strong', '', 'Arrastrá un CSV Shopify o JSON'), node('span', '', 'Parser incremental; sin tope artificial de filas. Se conserva Handle, Body HTML permitido, variantes, tags, estado y media detectada.'));
     const input = document.createElement('input'); input.type = 'file'; input.accept = '.csv,.json,application/json,text/csv'; input.hidden = true; drop.appendChild(input);
@@ -502,7 +520,7 @@ if (!window.TintinAdminShopifyImportBooted) {
     const preview = node('div', 'phase10-preview'); preview.hidden = true; const tableWrap = node('div', 'adm-table-wrap'); const table = node('table', 'adm-table phase10-table'); const tableHead = document.createElement('thead'); const headRow = document.createElement('tr'); ['#', 'Producto', 'Colección', 'Precio', 'Stock', 'Estado'].forEach(label => headRow.appendChild(node('th', '', label))); tableHead.appendChild(headRow); const tableBody = document.createElement('tbody'); table.append(tableHead, tableBody); tableWrap.appendChild(table); const previewNote = node('small', 'phase10-note');
     const actions = node('div', 'phase10-actions'); const clear = node('button', 'adm-btn adm-btn-outline', 'Limpiar preview'); clear.type = 'button'; clear.addEventListener('click', clearPreview); const createJob = node('button', 'adm-btn adm-btn-primary', 'Crear import job (dry-run)'); createJob.type = 'button'; createJob.addEventListener('click', createDryRunJob); const ready = node('button', 'adm-btn adm-btn-outline', 'Marcar READY'); ready.type = 'button'; ready.addEventListener('click', markReady); const restore = node('button', 'adm-btn adm-btn-outline'); restore.type = 'button'; restore.hidden = true; const restoreActions = node('div', 'phase10-actions'); restoreActions.appendChild(restore); actions.append(clear, createJob, ready); preview.append(tableWrap, previewNote, actions); catalogApply.mount(preview, tableWrap);
     body.append(statusGrid, backupWrap, drop, summaryEl, phase2Meta, jobStatus, restoreActions, preview); card.append(head, body); section.insertBefore(card, section.firstChild);
-    state.ui = { section, card, badge, backup, drop, input, summary: summaryEl, phase2Meta, jobStatus, preview, tableBody, previewNote, createJob, ready, restore }; renderPreview(); offerLocalResume();
+    state.ui = { section, card, badge, backup, reconcile, drop, input, summary: summaryEl, phase2Meta, jobStatus, preview, tableBody, previewNote, createJob, ready, restore }; renderPreview(); offerLocalResume();
   }
 
   function injectStyles() {
