@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "2f35578e1355e6af35a49f7ce9e306c2e3cc82db5db4f970238dcf6544abc01c",
+  "sourceFingerprint": "508d7376ba3e06b8fc773ceb3b1eb1cc78d90b78870644ee089ca4c5f575c594",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 913,
     "textFiles": 872,
-    "totalBytes": 17929778,
+    "totalBytes": 17930034,
     "pages": 19,
     "modules": 627
   },
@@ -28066,8 +28066,8 @@
     },
     {
       "path": "scripts/auditar-fase-7-catalogo.js",
-      "bytes": 7140,
-      "sha256": "dae27b8582c29f354bf18e80403a2c258c0b596ed06ceca37f65f2c1b602745c",
+      "bytes": 7396,
+      "sha256": "7a1fea5ff3570fe5450cdffd37c44ef96a3dc85027ee1da01e0b786391861121",
       "syntax": {
         "ok": true,
         "error": ""
@@ -28077,7 +28077,7 @@
           "raw": "\\.\\/pages\\/catalog\\/politica-visibilidad-catalogo\\.js/.test(loader),\n  ",
           "target": "scripts/\\.\\/pages\\/catalog\\/politica-visibilidad-catalogo\\.js/.test(loader),",
           "dynamic": false,
-          "line": 151
+          "line": 155
         }
       ],
       "endpoints": []
@@ -39324,8 +39324,8 @@
     {
       "path": "scripts/auditar-fase-7-catalogo.js",
       "extension": ".js",
-      "bytes": 7140,
-      "sha256": "dae27b8582c29f354bf18e80403a2c258c0b596ed06ceca37f65f2c1b602745c"
+      "bytes": 7396,
+      "sha256": "7a1fea5ff3570fe5450cdffd37c44ef96a3dc85027ee1da01e0b786391861121"
     },
     {
       "path": "scripts/auditar-fase-8-ui-ux.js",

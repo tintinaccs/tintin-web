@@ -141,9 +141,13 @@ check(
   /productIds\.map/.test(sheets) &&
     /slice\(0, 100\)/.test(sheets) &&
     /payload\.idToken/.test(sheets) &&
-    /action: 'syncProducts'/.test(sheets) &&
+    /payload\.action !== 'syncProducts'/.test(sheets) &&
+    /requireSuperAdmin\(request\)/.test(sheets) &&
+    /syncProductsPayloadWithRetry/.test(sheets) &&
+    /appScriptChunkSize:\s*5/.test(sheets) &&
+    /queueCatalogSheetSync/.test(sheets) &&
     /await pushProductsToSheets\(\[docId\]\)/.test(admin),
-  'Cada cambio debe notificar al motor de Sheets con token y lotes limitados.'
+  'Cada cambio debe entrar por el endpoint autenticado, delegar el payload acotado al servidor y conservar cola de recuperación.'
 );
 
 check(
