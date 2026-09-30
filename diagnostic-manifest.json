@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "851ef91b4fc3310685c61a8659d429103052929c07d2c265e7a9126aa26daed2",
+  "sourceFingerprint": "82ea45105210c3456c69ecd39ed2c7e5861238b5d53437b155831e2865dd5b23",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 914,
     "textFiles": 873,
-    "totalBytes": 18115541,
+    "totalBytes": 18115547,
     "pages": 19,
     "modules": 627
   },
@@ -2112,8 +2112,8 @@
         "agent",
         "viewer"
       ],
-      "bytes": 197750,
-      "sha256": "9da5616a195fc87168826a8a05e4bc6208ee15d9c09c5287c733573cebc8d19d",
+      "bytes": 197744,
+      "sha256": "7bdbb946bde5be39267739e2da097bb59ef3042a2c81a97e292daf6b8bef6d3c",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -2157,7 +2157,7 @@
           "line": 2044
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20260930-sheets-reconcile-1",
           "target": "js/admin/admin-app.js",
           "line": 2045
         },
@@ -2433,7 +2433,7 @@
           "exists": true
         },
         {
-          "raw": "js/admin/admin-app.js?v=tintin-20260929-profile-gate-all-pages-1",
+          "raw": "js/admin/admin-app.js?v=tintin-20260930-sheets-reconcile-1",
           "target": "js/admin/admin-app.js",
           "line": 2045,
           "exists": true
@@ -35508,8 +35508,8 @@
     {
       "path": "admin.html",
       "extension": ".html",
-      "bytes": 197738,
-      "sha256": "a0eaf068bb14bad4d1fc446e942f35b5ced60ce7fa3c3b53c3d107cee74cc477"
+      "bytes": 197744,
+      "sha256": "7bdbb946bde5be39267739e2da097bb59ef3042a2c81a97e292daf6b8bef6d3c"
     },
     {
       "path": "apple-touch-icon.png",
