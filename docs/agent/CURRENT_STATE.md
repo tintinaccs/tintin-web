@@ -1,4 +1,14 @@
 # Estado actual de reparación — independencia de Shopify
+## Auditoría de autenticación / perfil incompleto — 2026-09-30 (rama `claude/funny-keller-205w4v`)
+
+**Causa raíz (confirmada leyendo código y `firestore.rules`):** una cuenta con sesión Firebase Auth pero sin `users/{uid}` (alta abandonada) restauraba sesión en `login.html`, `ensureProfileComplete` leía el documento como `{}` y mostraba el formulario "Últimos datos"; el guardado hacía `set` sobre un documento inexistente, que las reglas rechazan (create sólo vía `userCreateValid`) → `permission-denied`, usuario atascado con un mensaje engañoso. Además, un error en la lectura del perfil durante la restauración dejaba el loader sin salida.
+
+**Cambios:** módulo puro `js/core/auth/estado-perfil-sesion.mjs` (estados MISSING/INCOMPLETE/COMPLETE/ERROR, acción por estado, error ≠ MISSING, rol nulo/desconocido → client, SuperAdmin siempre COMPLETE); `login.html` repara el documento faltante con el creador canónico `ensureUserProfile` (perfil `incomplete`) antes del alta, no hace `set` sobre documento inexistente, clasifica errores de lectura, pone un límite de 15 s como salvaguarda secundaria y, ante error, muestra mensaje con la sesión activa (sin `signOut`, sin loader colgado); `admin-images.html` usa el coordinador de sesión (`subscribeAuthState`) en vez de un segundo `onAuthStateChanged`. Artefactos regenerados con sus generadores canónicos: `_headers`/`config/csp-runtime.*` (hash CSP del script inline de login), `diagnostic-manifest.json`, `scripts/cache-version-baseline.json`.
+
+**Verificación local (PASS_LOCAL):** `node --test` sobre todos los `tests/**/*.test.{mjs,js}`: 681/681 (incluye 15 nuevos en `tests/auth/estado-perfil-sesion.test.mjs`); audit:login-isolation, login-profile, app-check-bootstrap, storegate-deadlock, users-roles, diagnostics, diagnostic-findings, page-loading, critical-healing, security, admin-foundation, public-shell, release, cache-versioning, verify:csp/routes/diagnostics, superadmin cierre total 74/74. No se ejecutó `audit:final`.
+
+**NOT_VERIFIED:** comportamiento contra Firebase real/producción y navegador real (sin credenciales ni emulador en esta sesión): popup cancelado, dos pestañas, red lenta, sesión expirada, deep links reales. **Pendiente conocido:** el guardia `control-acceso-perfil.js` trata roles desconocidos como exentos y su `getDoc` no tiene límite (cambiarlo arrastra el versionado de caché de todas las páginas); `UNKNOWN` del coordinador es inalcanzable (ramas muertas sin efecto).
+
 
 ## Hero responsive con imágenes administradas — 2026-09-29
 
