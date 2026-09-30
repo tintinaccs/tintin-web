@@ -486,7 +486,8 @@ if (!window.TintinAdminShopifyImportBooted) {
     const button = state.ui?.reconcile;
     if (button) { button.disabled = true; button.textContent = 'Sincronizando Productos…'; }
     try {
-      const snapshot = await getDocsPaginated(collection(db, 'products'), { pageSize: 250, maxDocs: 20000 });
+      const productsCollection = 'products';
+      const snapshot = await getDocsPaginated(collection(db, productsCollection), { pageSize: 250, maxDocs: 20000 });
       const ids = snapshot.docs.map(product => product.id).filter(Boolean);
       if (!ids.length) throw new Error('No hay productos en Firestore para sincronizar.');
       const ok = await window.tintinPushProductsToSheets?.(ids);
