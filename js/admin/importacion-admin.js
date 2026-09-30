@@ -490,7 +490,22 @@ if (!window.TintinAdminShopifyImportBooted) {
       const snapshot = await getDocsPaginated(collection(db, productsCollection), { pageSize: 250, maxDocs: 20000 });
       const ids = snapshot.docs.map(product => product.id).filter(Boolean);
       if (!ids.length) throw new Error('No hay productos en Firestore para sincronizar.');
-      const ok = await window.tintinPushProductsToSheets?.(ids);
+      const pushProducts = window.tintinPushProductsToSheets || (async productIds => {
+        if (!isSuperAdmin()) return false;
+        const idToken = await state.user.getIdToken();
+        for (let index = 0; index < productIds.length; index += 20) {
+          const response = await authenticatedFetch('/api/sheets-product-sync', {
+            method: 'POST',
+            cache: 'no-store',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'syncProducts', productIds: productIds.slice(index, index + 20), idToken }),
+          });
+          const result = await response.json().catch(() => ({}));
+          if (!response.ok || result.ok !== true) throw new Error(result.error || apiFailureMessage(response));
+        }
+        return true;
+      });
+      const ok = await pushProducts(ids);
       if (!ok) throw new Error('Sheets no confirmó todos los lotes; quedaron en la cola persistente de reintento.');
       toast(`Productos sincronizados con Google Sheets: ${ids.length}.`);
     } catch (error) {
