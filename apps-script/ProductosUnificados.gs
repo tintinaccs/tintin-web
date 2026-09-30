@@ -470,12 +470,21 @@ function tintinDiagnosticarActivadores() {
   });
 }
 
-function tintinFindProductRow_(sheet, productId) {
+function tintinBuildProductRowIndex_(sheet) {
   var lastRow = Math.max(sheet.getLastRow(), TINTIN_PRODUCTS_FIRST_ROW);
   var ids = sheet.getRange(TINTIN_PRODUCTS_FIRST_ROW, 1, lastRow - TINTIN_PRODUCTS_FIRST_ROW + 1, 1).getDisplayValues();
+  var rows = {};
   for (var index = 0; index < ids.length; index += 1) {
-    if (String(ids[index][0] || '').trim() === productId) return TINTIN_PRODUCTS_FIRST_ROW + index;
+    var id = String(ids[index][0] || '').trim();
+    if (id) rows[id] = TINTIN_PRODUCTS_FIRST_ROW + index;
   }
+  return rows;
+}
+
+function tintinFindProductRow_(sheet, productId, rowIndex) {
+  if (rowIndex && rowIndex[productId]) return rowIndex[productId];
+  if (!rowIndex) rowIndex = tintinBuildProductRowIndex_(sheet);
+  if (rowIndex[productId]) return rowIndex[productId];
   return sheet.getLastRow() + 1;
 }
 
@@ -593,18 +602,27 @@ function tintinSyncProductsFromPayload_(body) {
   var items = Array.isArray(body.items) ? body.items.slice(0, 100) : [];
   var sheet = tintinProductsSpreadsheet_().getSheetByName(TINTIN_PRODUCTS_SHEET);
   if (!sheet) throw new Error('No existe la hoja Productos.');
+  // Un POST puede traer cinco productos. Construir el índice una vez evita
+  // leer toda la columna A por cada ítem, que era el costo dominante y hacía
+  // que los lotes legítimos excedieran el timeout de Cloudflare.
+  var rowIndex = tintinBuildProductRowIndex_(sheet);
 
   items.forEach(function(item) {
     var id = String((item && item.id) || '').trim();
     if (!/^[A-Za-z0-9_-]{1,128}$/.test(id)) return;
-    var rowNumber = tintinFindProductRow_(sheet, id);
+    var rowNumber = tintinFindProductRow_(sheet, id, rowIndex);
     if (!item.exists) {
-      if (rowNumber <= sheet.getLastRow()) sheet.deleteRow(rowNumber);
+      if (rowNumber <= sheet.getLastRow()) {
+        sheet.deleteRow(rowNumber);
+        // Al borrar, los números de fila posteriores se desplazan.
+        rowIndex = tintinBuildProductRowIndex_(sheet);
+      }
       return;
     }
     var product = item.product || {};
     sheet.getRange(rowNumber, 1, 1, 2).setValues([[id, product.name || '']]);
     tintinWriteProductRow_(sheet, rowNumber, product, item.inventory || {});
+    rowIndex[id] = rowNumber;
   });
 
   return ContentService.createTextOutput(JSON.stringify({ ok: true, sheetName: TINTIN_PRODUCTS_SHEET, synced: items.length }))
