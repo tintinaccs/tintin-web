@@ -1,14 +1,13 @@
 import {
   jsonResponse,
   originIsAllowed,
-  preflightResponse
+  preflightResponse,
+  requireSuperAdmin,
 } from '../../cloudflare/seguridad-cloudinary.js';
 import {
-  APPS_SCRIPT_SYNC_URL,
-  SHEETS_TIMEOUT_MS,
-} from '../../cloudflare/sheets-sync-config.js';
-import { fetchAppsScript } from '../../cloudflare/apps-script-fetch.js';
-import { queueCatalogSheetSync } from '../../cloudflare/resiliencia-sync-catalogo.js';
+  queueCatalogSheetSync,
+  syncProductsPayloadWithRetry,
+} from '../../cloudflare/resiliencia-sync-catalogo.js';
 
 const MAX_BODY_BYTES = 64 * 1024;
 
@@ -25,6 +24,13 @@ export async function onRequest(context) {
   }
   if (request.method !== 'POST') {
     return jsonResponse({ ok: false, error: 'Método no permitido.' }, 405, origin, requestUrl);
+  }
+
+  let actor;
+  try {
+    actor = await requireSuperAdmin(request);
+  } catch (error) {
+    return jsonResponse({ ok: false, error: error?.message || 'Solo el Super Admin puede realizar esta acción.' }, error?.status || 401, origin, requestUrl);
   }
 
   const raw = await request.text();
@@ -47,35 +53,22 @@ export async function onRequest(context) {
   }
 
   try {
-    const response = await fetchAppsScript(APPS_SCRIPT_SYNC_URL, {
-      method: 'POST',
-      redirect: 'follow',
-      signal: AbortSignal.timeout(SHEETS_TIMEOUT_MS),
-      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-      body: JSON.stringify({
-        action: 'syncProducts',
-        sheetName: 'Productos',
-        schemaVersion: 2,
-        productIds,
-        idToken: String(payload.idToken),
-      }),
+    // El navegador ya autenticó al administrador, pero el camino de
+    // sincronización no debe hacer que Apps Script vuelva a leer Firestore
+    // producto por producto. Cloudflare lee el catálogo con su credencial de
+    // servicio y envía sublotes pequeños mediante el secreto server-to-server.
+    // Así el lote queda dentro del presupuesto de Apps Script/Cloudflare y es
+    // exactamente el mismo protocolo que usa la cola de recuperación.
+    const result = await syncProductsPayloadWithRetry(context.env, productIds, {
+      attempts: 2,
+      appScriptChunkSize: 5,
     });
-    const text = await response.text();
-    let result;
-    try {
-      result = JSON.parse(text);
-    } catch {
-      throw new Error(`El motor de Sheets devolvió una respuesta inválida (${response.status}).`);
-    }
-    if (!response.ok || result.ok !== true) {
-      throw new Error(result.error || `El motor de Sheets respondió ${response.status}.`);
-    }
-    return jsonResponse(result, 200, origin, requestUrl);
+    return jsonResponse({ ...result, ok: true, sheetName: 'Productos' }, 200, origin, requestUrl);
   } catch (error) {
     // Never leave Sheets stale without a durable recovery path.
     let queueIds = [];
     try {
-      queueIds = await queueCatalogSheetSync(context.env, productIds, error);
+      queueIds = await queueCatalogSheetSync(context.env, productIds, error, actor);
     } catch (queueError) {
       console.error('[sheets-product-sync] no se pudo encolar la reconciliación:', queueError);
     }
