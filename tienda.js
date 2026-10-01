@@ -1249,6 +1249,24 @@ function _updateProductMeta(product, mainImgUrl) {
   setMeta('link-canonical', 'href', url);
 }
 
+function productSpecDisplayValue(label, value) {
+  const text = sanitizePlainText(value, 500).trim();
+  if (label !== 'Material' || !text) return text;
+  const materialKey = text.toLowerCase().replace(/\s+/g, '-').replace(/_/g, '-');
+  const knownMaterials = {
+    'acero-inoxidable': 'Acero inoxidable',
+    'acero-quirurgico': 'Acero quirúrgico',
+    'plata-925': 'Plata 925',
+    'enchapado-en-oro': 'Enchapado en oro',
+  };
+  if (knownMaterials[materialKey]) return knownMaterials[materialKey];
+  if (/^[a-z0-9]+(?:[-_][a-z0-9]+)+$/i.test(text)) {
+    const readable = text.replace(/[-_]+/g, ' ').toLowerCase();
+    return readable.charAt(0).toUpperCase() + readable.slice(1);
+  }
+  return text;
+}
+
 function _renderProductDetail(product) {
   const catalogPolicy = window.TintinCatalogPolicy;
   const isVisible = catalogPolicy?.isCatalogVisible
@@ -1314,7 +1332,7 @@ function _renderProductDetail(product) {
       ['Contenido del paquete', product.packageContents],
     ].filter(([, value]) => value && String(value).trim());
     specsEl.hidden = specs.length === 0;
-    specsEl.innerHTML = specs.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(sanitizePlainText(value, 500))}</dd></div>`).join('');
+    specsEl.innerHTML = specs.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(productSpecDisplayValue(label, value))}</dd></div>`).join('');
     const specsTrigger = document.getElementById('specs-trigger');
     if (specsTrigger) specsTrigger.hidden = specs.length === 0;
   }
