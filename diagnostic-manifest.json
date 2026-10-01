@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "5329c4f7bc3d05541c802eb0a3ebdd6364a0a1e1fa86b5dd76f3050deaa0c4c5",
+  "sourceFingerprint": "c59031e4e99d0b65e85d1f5f104ed094839b5ad867d3cedb010c137882a5ad2a",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -11,7 +11,7 @@
   "platform": {
     "files": 916,
     "textFiles": 875,
-    "totalBytes": 17946311,
+    "totalBytes": 17947123,
     "pages": 19,
     "modules": 629
   },
@@ -10199,8 +10199,8 @@
         "guest",
         "client"
       ],
-      "bytes": 15268,
-      "sha256": "149bd0505ef65d1f373762c66c373c310f8dd5c3cc8110eb11aeb9d4a3ecb483",
+      "bytes": 15293,
+      "sha256": "4d464727e50f225c5b752d8f8c3df6b0013f9ae10005d05d66c51f54d422ae44",
       "metadata": {
         "hasViewport": true,
         "hasDescription": true,
@@ -10255,7 +10255,7 @@
           "line": 193
         },
         {
-          "raw": "js/pages/collections/pagina-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "js/pages/collections/pagina-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-coll-cart-fix-20261001-1",
           "target": "js/pages/collections/pagina-colecciones.js",
           "line": 194
         },
@@ -10616,7 +10616,7 @@
           "exists": true
         },
         {
-          "raw": "js/pages/collections/pagina-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "raw": "js/pages/collections/pagina-colecciones.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1-coll-cart-fix-20261001-1",
           "target": "js/pages/collections/pagina-colecciones.js",
           "line": 194,
           "exists": true
@@ -25845,13 +25845,20 @@
     },
     {
       "path": "js/pages/collections/pagina-colecciones.js",
-      "bytes": 10998,
-      "sha256": "43449b4952e701ed12dc7e4a84a61c5e84d4139d95382847023cee40b2b5e9ca",
+      "bytes": 10997,
+      "sha256": "74017d54679c357cbc9b6fd866d3a03f7929c2a2cb307f8f80bb002a6e4be7ad",
       "syntax": {
         "ok": true,
         "error": ""
       },
-      "imports": [],
+      "imports": [
+        {
+          "raw": "../../components/cart/sincronizacion-carrito.js?v=tintin-20260918-global-session-restore-1-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1",
+          "target": "js/components/cart/sincronizacion-carrito.js",
+          "dynamic": true,
+          "line": 7
+        }
+      ],
       "endpoints": []
     },
     {
@@ -36056,8 +36063,8 @@
     {
       "path": "collections.html",
       "extension": ".html",
-      "bytes": 15268,
-      "sha256": "149bd0505ef65d1f373762c66c373c310f8dd5c3cc8110eb11aeb9d4a3ecb483"
+      "bytes": 15293,
+      "sha256": "4d464727e50f225c5b752d8f8c3df6b0013f9ae10005d05d66c51f54d422ae44"
     },
     {
       "path": "config/account-contract.json",
@@ -36578,8 +36585,8 @@
     {
       "path": "docs/agent/CURRENT_STATE.md",
       "extension": ".md",
-      "bytes": 85628,
-      "sha256": "73cd7c52f28bc387accfcc306b326c94843cb7e57ebed97acb8a7a32b274fa82"
+      "bytes": 86391,
+      "sha256": "c202152f0364060bb04f702c993cf9acc897883f080242c44520ce492e0c9610"
     },
     {
       "path": "docs/agent/PRODUCTION-PROBE-2026-09-28.md",
@@ -38588,8 +38595,8 @@
     {
       "path": "js/pages/collections/pagina-colecciones.js",
       "extension": ".js",
-      "bytes": 10998,
-      "sha256": "43449b4952e701ed12dc7e4a84a61c5e84d4139d95382847023cee40b2b5e9ca"
+      "bytes": 10997,
+      "sha256": "74017d54679c357cbc9b6fd866d3a03f7929c2a2cb307f8f80bb002a6e4be7ad"
     },
     {
       "path": "js/pages/collections/presentacion-colecciones.js",
@@ -39860,8 +39867,8 @@
     {
       "path": "scripts/cache-version-baseline.json",
       "extension": ".json",
-      "bytes": 59123,
-      "sha256": "4f705bf189e3c59f4b19669c4f8e1927b2c6eb3678ce664dd1de9eb2ab8765ec"
+      "bytes": 59148,
+      "sha256": "5aa2cbf985a507b61504d7b84a08a974d8409f5e1811b86786064dfa720ecf25"
     },
     {
       "path": "scripts/construir-manifiesto-diagnostico.js",
