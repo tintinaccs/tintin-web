@@ -6,8 +6,8 @@ const roles = read('js/core/auth/roles.js');
 const cloudflare = read('cloudflare/seguridad-cloudinary.js');
 const rules = read('firestore.rules');
 const otp = read('functions/api/email-otp-send.js');
-const deletion = read('functions/api/admin-delete-user.js');
-const lifecycle = read('cloudflare/user-lifecycle-domain.js');
+const exists = file => fs.existsSync(new URL(`../${file}`, import.meta.url));
+const sheetsAdmin = read('functions/api/sheets-admin-webhook.js');
 const participation = read('cloudflare/participacion-clientes.js');
 const superAdminLiteral = contract.superAdminEmail;
 const checks = [];
@@ -22,16 +22,11 @@ check('customerId queda inmutable y ligado al UID', rules.includes("'customerId'
 check('La auditoría continúa append-only', /match \/auditLog\/\{logId\}[\s\S]{0,260}allow update, delete: if false/.test(rules));
 check('PIN ya no excluye cuentas Google', !otp.includes('google_account_exists') && !otp.includes("providers.includes('google.com')"));
 check(
-  'Eliminar cuenta la borra por completo (acceso, perfil y participación) y conserva solo los pedidos',
-  deletion.includes('applyUserLifecycle') &&
-    deletion.includes('purgeUserByEmail') &&
-    lifecycle.includes('deleteFirebaseUser(env, uid)') &&
-    lifecycle.includes('adminPurgeUserEngagement(env, uid)') &&
-    lifecycle.includes('{ path: `users/${uid}`, delete: true }') &&
-    lifecycle.includes('deletedEmailHash') &&
-    !lifecycle.includes('setFirebaseUserDisabled') &&
-    !lifecycle.includes('deleted: fsBoolean(true)') &&
-    !lifecycle.includes('orders/')
+  'La eliminación de cuentas fue retirada: sólo existen cuentas activas o bloqueadas',
+  !exists('functions/api/admin-delete-user.js') &&
+    !exists('cloudflare/user-lifecycle-domain.js') &&
+    sheetsAdmin.includes('La eliminación de cuentas fue retirada') &&
+    !sheetsAdmin.includes('applyUserLifecycle')
 );
 check('Participación usa el email del contrato de cuentas', participation.includes(`const SUPER_ADMIN_EMAIL = '${superAdminLiteral}';`));
 check('Firestore Rules usa el email del contrato de cuentas', rules.includes(`== "${superAdminLiteral}"`));

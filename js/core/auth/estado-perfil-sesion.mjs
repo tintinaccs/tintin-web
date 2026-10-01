@@ -15,7 +15,7 @@
 // ni en un cierre de sesión. MISSING sólo sale de una lectura exitosa que dice
 // que el documento no existe.
 
-import { getProfileCompletionPlan } from '../../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20260929-incomplete-flags-1';
+import { getProfileCompletionPlan } from '../../pages/profile/configuracion-inicial-perfil.mjs?v=tintin-20261001-ultimos-datos-1';
 
 export const PROFILE_STATE = Object.freeze({
   NOT_REQUESTED: 'NOT_REQUESTED',

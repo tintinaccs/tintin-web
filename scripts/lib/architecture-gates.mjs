@@ -4,10 +4,8 @@ export const DEFAULT_PATHS = Object.freeze({
   visualContract: 'js/core/store/contratos-visual-builder.js',
   visualRuntime: 'js/core/store/editor-visual-runtime.js',
   orderDomain: 'cloudflare/order-admin-domain.js',
-  userLifecycle: 'cloudflare/user-lifecycle-domain.js',
   adminOrderCrud: 'js/admin/orders/pedidos-superadmin-crud.js',
   inventoryAdmin: 'js/admin/products/integridad-inventario-admin.js',
-  adminDeleteUser: 'functions/api/admin-delete-user.js',
   sheetsAdminWebhook: 'functions/api/sheets-admin-webhook.js',
   sheetsProductsWebhook: 'functions/api/sheets-products-webhook.js',
   appsScriptParity: 'apps-script/AdminParity.gs',
@@ -111,8 +109,6 @@ export function auditDomainConsumerSources(sources) {
   const adminOrderCrud = sources.adminOrderCrud || '';
   const inventoryAdmin = sources.inventoryAdmin || '';
   const sheetsWebhook = sources.sheetsAdminWebhook || '';
-  const adminDeleteUser = sources.adminDeleteUser || '';
-  const userLifecycle = sources.userLifecycle || '';
   const orderDomain = sources.orderDomain || '';
 
   check(/\/api\/admin-order-mutation/.test(adminOrderCrud) && /action:\s*['"]createOrder['"]/.test(adminOrderCrud),
@@ -121,12 +117,10 @@ export function auditDomainConsumerSources(sources) {
     'Superadmin debe editar/transicionar pedidos mediante /api/admin-order-mutation.');
   check(/createOrderAdmin/.test(sheetsWebhook) && /applyOrderAdminMutation/.test(sheetsWebhook),
     'Sheets debe delegar altas y ediciones de pedidos al dominio canónico.');
-  check(/applyUserLifecycle/.test(adminDeleteUser) && /applyUserLifecycle/.test(sheetsWebhook),
-    'Superadmin y Sheets deben compartir applyUserLifecycle para bajas/reactivaciones.');
+  check(!/applyUserLifecycle/.test(sheetsWebhook) && /La eliminación de cuentas fue retirada/.test(sheetsWebhook),
+    'Sheets no puede eliminar cuentas: sólo existen cuentas activas o bloqueadas.');
   check(/export\s+async\s+function\s+createOrderAdmin/.test(orderDomain) && /export\s+async\s+function\s+applyOrderAdminMutation/.test(orderDomain),
     'El dominio canónico de pedidos debe exponer creación y mutación administrativa.');
-  check(/export\s+async\s+function\s+applyUserLifecycle/.test(userLifecycle),
-    'El lifecycle canónico de usuarios debe seguir siendo la autoridad de bajas/reactivaciones.');
   return errors;
 }
 

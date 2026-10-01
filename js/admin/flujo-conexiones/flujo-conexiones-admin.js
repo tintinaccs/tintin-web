@@ -6,12 +6,14 @@
 // endpoints de solo lectura que ya existen para diagnóstico operativo
 // (system-health, admin-runtime-health). No inventa infraestructura de
 // monitoreo nueva: reutiliza lo que ya prueba conectividad real sin escribir
-// datos. Nada de lo que hace este módulo crea, actualiza ni borra documentos.
-import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20260929-profile-gate-all-pages-1';
+// datos. La única escritura es "Sellar verdes", que guarda sólo los sellos
+// del propio panel en settings/flowSeals (nunca pedidos, productos ni cuentas).
+import { ESTADOS, GENERATED_AT, NODES, EDGES } from './datos-flujo-conexiones.js?v=tintin-20261001-bloqueo-1';
 import { resolveState, isAttentionState, liveMarker, shouldShowFlowEdge } from './estado-flujo.js?v=tintin-20260929-partial-live-markers-1';
-import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20260929-profile-gate-all-pages-1';
+import { buildLiveChecks, buildLiveEdges } from './live-checks.js?v=tintin-20261001-bloqueo-1';
+import { recordFiles, fingerprint, checkSeal, applySeal, buildSeal, shaMapFromManifest } from './sellos-flujo.js?v=tintin-20261001-sellos-1';
 import { auth, db, appCheckReady } from '../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1';
-import { collection, doc, getDoc, getDocs, limit, query } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { collection, doc, getDoc, getDocs, limit, query, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const CATEGORY_LABELS = {
   entrada: 'Entrada',
@@ -34,6 +36,9 @@ function slug(text) {
 }
 
 const STALE_AFTER_MS = 24 * 60 * 60 * 1000;
+const NODES_BY_ID = Object.fromEntries(NODES.map(node => [node.id, node]));
+// Sellos en verde: settings/* es sólo del Super Admin en firestore.rules.
+const SEALS_DOC = ['settings', 'flowSeals'];
 
 function nodeById(id) {
   return NODES.find(node => node.id === id) || null;
@@ -217,6 +222,7 @@ export function initConnectionsFlow({ role } = {}) {
   root.dataset.tfcMounted = '1';
 
   const liveState = { checkedAt: null, byId: {}, byEdgeId: {}, error: '', endpointStatus: {} };
+  const sealState = { loaded: false, shaByPath: {}, entries: {}, error: '' };
 
   root.innerHTML = `
     <div class="adm-card tfc-card">
@@ -225,7 +231,10 @@ export function initConnectionsFlow({ role } = {}) {
           <div class="adm-card-title">Flujo real de decisiones y conexiones</div>
           <p>Muestra únicamente conexiones que existen hoy en el código, la configuración y los servicios — nunca un diseño ideal. Lo desconectado, incompleto o sin confirmar se marca así.</p>
         </div>
-        <button type="button" class="adm-btn adm-btn-primary" id="tfc-btn-revalidate">Revalidar en vivo</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button type="button" class="adm-btn adm-btn-primary" id="tfc-btn-revalidate">Revalidar en vivo</button>
+          <button type="button" class="adm-btn adm-btn-outline" id="tfc-btn-seal" title="Fija en verde lo que hoy está verde. Si después cambia su código, vuelve a amarillo hasta que lo vuelvas a sellar.">🔒 Sellar verdes</button>
+        </div>
       </div>
       <div class="adm-card-body">
         <div class="adm-diagnostic-safety" role="note">
@@ -235,11 +244,13 @@ export function initConnectionsFlow({ role } = {}) {
           de participación y los headers de <code>/admin.html</code>). También hace dos lecturas mínimas con
           el SDK de Firestore para comprobar Rules ya desplegadas y carga temporalmente la portada aislada
           para comprobar el panel de carrito ya renderizado. Ningún botón de este panel invoca una mutación de negocio ni
-          crea, actualiza ni elimina pedidos, productos ni datos reales.
+          crea, actualiza ni elimina pedidos, productos ni datos reales. El único que guarda algo es
+          "Sellar verdes", y sólo guarda los sellos de este panel.
         </div>
         <div class="tfc-meta">
           <span>Evidencia de código generada: <strong>${escapeHtml(GENERATED_AT)}</strong></span>
           <span id="tfc-live-timestamp">Sin verificación en vivo todavía.</span>
+          <span id="tfc-seal-status">Cargando sellos…</span>
         </div>
         <div id="tfc-live-error" class="tfc-live-error" hidden></div>
         <div id="tfc-summary" class="tfc-summary" aria-label="Resumen del flujo"></div>
@@ -271,16 +282,49 @@ export function initConnectionsFlow({ role } = {}) {
   const liveTimestampEl = root.querySelector('#tfc-live-timestamp');
   const liveErrorEl = root.querySelector('#tfc-live-error');
   const summaryEl = root.querySelector('#tfc-summary');
+  const sealStatusEl = root.querySelector('#tfc-seal-status');
+  const sealBtn = root.querySelector('#tfc-btn-seal');
 
   let selectedNodeId = null;
   let selectedEdgeId = null;
 
+  function sealCheckFor(record) {
+    if (!sealState.loaded) return null;
+    const seal = sealState.entries[record.id];
+    if (!seal) return null;
+    return checkSeal(seal, fingerprint(recordFiles(record, NODES_BY_ID), sealState.shaByPath));
+  }
+
+  // Estado sólo por evidencia en vivo/código, sin el candado (para sellar).
+  function liveOnlyState(record, isEdge = false) {
+    return resolveState(record, isEdge ? liveState.byEdgeId[record.id] : liveState.byId[record.id], ESTADOS);
+  }
+
   function effectiveState(node) {
-    return resolveState(node, liveState.byId[node.id], ESTADOS);
+    const live = liveState.byId[node.id];
+    return applySeal(resolveState(node, live, ESTADOS), sealCheckFor(node), live, ESTADOS);
   }
 
   function effectiveEdgeState(edge) {
-    return resolveState(edge, liveState.byEdgeId[edge.id], ESTADOS);
+    const live = liveState.byEdgeId[edge.id];
+    return applySeal(resolveState(edge, live, ESTADOS), sealCheckFor(edge), live, ESTADOS);
+  }
+
+  function sealHtml(record) {
+    const check = sealCheckFor(record);
+    if (!check) return '<p class="tfc-detail-live tfc-detail-live-none">Sin sello: el color depende de la revalidación en vivo.</p>';
+    const when = escapeHtml(check.sealedAt ? check.sealedAt.replace('T', ' ').slice(0, 16) : '');
+    if (check.intact) return `<p class="tfc-detail-live"><strong>🔒 Sellado en verde</strong> el ${when}${check.sealedBy ? ` por ${escapeHtml(check.sealedBy)}` : ''}. Su código no cambió desde entonces.</p>`;
+    return `<p class="tfc-detail-live"><strong>⚠ Cambió desde el sello</strong> (${when}). Archivos tocados: ${check.changed.map(file => `<code>${escapeHtml(file)}</code>`).join(', ')}. Revalidá y, si queda verde, volvé a sellar.</p>`;
+  }
+
+  function renderSealStatus() {
+    if (sealState.error) { sealStatusEl.textContent = `Sellos no disponibles: ${sealState.error}`; return; }
+    if (!sealState.loaded) { sealStatusEl.textContent = 'Cargando sellos…'; return; }
+    const records = [...NODES, ...EDGES];
+    const checks = records.map(sealCheckFor).filter(Boolean);
+    const broken = checks.filter(check => !check.intact).length;
+    sealStatusEl.textContent = `Sellados en verde: ${checks.length - broken}${broken ? ` · ${broken} cambiaron desde el sello (amarillo)` : ''}`;
   }
 
   function searchableEvidence(record) {
@@ -381,6 +425,7 @@ export function initConnectionsFlow({ role } = {}) {
       ${record.label ? `<p class="tfc-detail-notes">${escapeHtml(record.label)}</p>` : ''}
       <p class="tfc-detail-meta"><strong>Identificador:</strong> <code>${escapeHtml(record.id)}</code> · <strong>Nivel:</strong> ${escapeHtml(live?.evidenceLevel || record.evidenceLevel || 'DOCUMENTATION_ONLY')}</p>
       ${liveHtml}
+      ${sealHtml(record)}
       ${record.notes ? `<p class="tfc-detail-notes">${escapeHtml(record.notes)}</p>` : ''}
       <ul class="tfc-detail-evidence">${evidenceHtml(record.evidence)}</ul>
     `;
@@ -395,6 +440,7 @@ export function initConnectionsFlow({ role } = {}) {
     if (selectedNodeId && !nodeMatchesFilters(nodeById(selectedNodeId))) selectedNodeId = null;
     if (selectedEdgeId && !edgeMatchesFilters(edgeById(selectedEdgeId))) selectedEdgeId = null;
     renderSummary();
+    renderSealStatus();
     renderLanes();
     renderEdges();
     renderDetail();
@@ -512,6 +558,45 @@ export function initConnectionsFlow({ role } = {}) {
       renderAll();
     }
   });
+
+  sealBtn.addEventListener('click', async () => {
+    if (!liveState.checkedAt) { window.alert('Primero revalidá en vivo: sólo se sella lo que hoy está verde.'); return; }
+    if (!sealState.loaded) { window.alert('Los sellos todavía no cargaron. Probá de nuevo en unos segundos.'); return; }
+    const sealedAt = new Date().toISOString();
+    const sealedBy = auth.currentUser?.email || '';
+    const entries = {};
+    for (const node of NODES) if (liveOnlyState(node) === ESTADOS.PROD) entries[node.id] = buildSeal(recordFiles(node, NODES_BY_ID), sealState.shaByPath, { sealedAt, sealedBy });
+    for (const edge of EDGES) if (liveOnlyState(edge, true) === ESTADOS.PROD) entries[edge.id] = buildSeal(recordFiles(edge, NODES_BY_ID), sealState.shaByPath, { sealedAt, sealedBy });
+    const count = Object.keys(entries).length;
+    if (!count) { window.alert('No hay nada en verde para sellar.'); return; }
+    if (!window.confirm(`Se van a sellar ${count} nodo(s)/conexión(es) en verde.\n\nSi después cambia el código de alguno, va a volver a amarillo hasta que lo revalides y lo vuelvas a sellar.`)) return;
+    sealBtn.disabled = true;
+    try {
+      await setDoc(doc(db, ...SEALS_DOC), { entries, updatedAt: sealedAt, updatedBy: sealedBy }, { merge: true });
+      sealState.entries = { ...sealState.entries, ...entries };
+      renderAll();
+    } catch (error) {
+      window.alert(`No se pudieron guardar los sellos: ${error?.message || error}`);
+    } finally {
+      sealBtn.disabled = false;
+    }
+  });
+
+  // Huella actual de cada archivo (se regenera en cada build) + sellos guardados.
+  Promise.all([
+    fetch('/diagnostic-manifest.json', { credentials: 'same-origin', cache: 'no-store' }).then(response => {
+      if (!response.ok) throw new Error(`manifiesto ${response.status}`);
+      return response.json();
+    }),
+    getDoc(doc(db, ...SEALS_DOC)),
+  ]).then(([manifest, snapshot]) => {
+    sealState.shaByPath = shaMapFromManifest(manifest);
+    const data = snapshot.exists() ? snapshot.data() : {};
+    sealState.entries = data && typeof data.entries === 'object' && data.entries ? data.entries : {};
+    sealState.loaded = true;
+  }).catch(error => {
+    sealState.error = error?.message || String(error);
+  }).finally(renderAll);
 
   renderAll();
 

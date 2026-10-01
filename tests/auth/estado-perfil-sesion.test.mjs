@@ -15,7 +15,8 @@ const resolve = (result, extra = {}) => resolveProfileState({ read: read(result)
 
 const COMPLETE_PROFILE = {
   role: 'client', profileStatus: 'active', firstName: 'Ana', lastName: 'Gómez', name: 'Ana Gómez',
-  phone: '+595981123456', username: 'ana_g',
+  phone: '+595981123456', username: 'ana_g', dob: new Date('1995-03-10'),
+  savedLocation: { lat: -25.29, lng: -57.63, name: 'Casa' },
 };
 
 test('CASO CRÍTICO: Auth sin documento => MISSING => crear y completar perfil (no loader, no login)', () => {
@@ -45,8 +46,23 @@ test('perfil activo => COMPLETE => entra y nunca reabre "Últimos datos"', () =>
   assert.equal(resolveProfileAction(state.state), PROFILE_ACTION.ENTER);
 });
 
-test('perfil legacy con marca de alta terminada => COMPLETE', () => {
-  assert.equal(resolve({ snapshot: snap({ role: 'client', onboardingCompleted: true }) }).state, PROFILE_STATE.COMPLETE);
+test('perfil legacy con marca de alta terminada pero sin datos => INCOMPLETE', () => {
+  assert.equal(resolve({ snapshot: snap({ role: 'client', onboardingCompleted: true }) }).state, PROFILE_STATE.INCOMPLETE);
+});
+
+test('perfil activo al que le falta un dato => INCOMPLETE (decide por datos, no por la marca)', () => {
+  const { dob, ...withoutDob } = COMPLETE_PROFILE;
+  const state = resolve({ snapshot: snap(withoutDob) });
+  assert.equal(state.state, PROFILE_STATE.INCOMPLETE);
+  assert.equal(state.plan.needsDob, true);
+  assert.equal(state.plan.needsUsername, false);
+});
+
+test('personal (admin/agente/viewer) con clientOnly entra al panel sin alta de clienta', () => {
+  for (const role of ['admin', 'agent', 'viewer']) {
+    const state = resolve({ snapshot: snap({ role }) }, { clientOnly: true });
+    assert.equal(state.state, PROFILE_STATE.COMPLETE);
+  }
 });
 
 test('un error de lectura NUNCA es MISSING ni incompleto: es ERROR clasificado y no navega', () => {

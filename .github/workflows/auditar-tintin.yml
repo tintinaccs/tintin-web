@@ -91,7 +91,6 @@ jobs:
           npm run test:rules-critical
           npm run test:rules-phone
           npm run test:rules-username
-          npm run test:account-purge
 
       - name: Super Admin master contracts
         run: |

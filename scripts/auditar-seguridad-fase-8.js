@@ -10,8 +10,6 @@ const quality = read('js/quality/calidad-interfaz.js');
 const roles = read('js/core/auth/roles.js');
 const rules = read('firestore.rules');
 const pkg = read('package.json');
-const deleteUserEndpoint = read('functions/api/admin-delete-user.js');
-const lifecycle = read('cloudflare/user-lifecycle-domain.js');
 const accountContract = JSON.parse(read('config/account-contract.json'));
 
 let failures = 0;
@@ -27,7 +25,7 @@ check(
   'El Super Admin se reconoce por el correo oficial',
   roles.includes('export const SUPER_ADMIN = SUPER_ADMIN_EMAIL') &&
     accountContract.superAdminEmail === 'tintinaccs@gmail.com' &&
-    admin.includes("currentUser.email !== SUPER_ADMIN"),
+    admin.includes("currentUser?.email !== SUPER_ADMIN"),
   'La identidad protegida no debe depender de un rol editable en Firestore'
 );
 
@@ -97,24 +95,17 @@ check(
   'Cambios sensibles de usuario mantienen registro de auditoría',
   admin.includes("logAudit('cambiar_rol'") &&
     admin.includes("logAudit('bloquear_usuario'") &&
-    admin.includes("logAudit('restaurar_usuario'") &&
-    deleteUserEndpoint.includes('applyUserLifecycle') &&
-    lifecycle.includes('auditLog/${eventId}'),
-  'Rol, bloqueo, restauración y eliminación deben seguir dejando rastro'
+    admin.includes("logAudit('restaurar_usuario'"),
+  'Rol, bloqueo y desbloqueo deben seguir dejando rastro'
 );
 
 check(
-  'La eliminación borra la cuenta por completo y permite un registro nuevo con el mismo correo',
-  (admin.includes("fetch('/api/admin-delete-user'") || admin.includes("authenticatedFetch('/api/admin-delete-user'")) &&
-    deleteUserEndpoint.includes('applyUserLifecycle') &&
-    deleteUserEndpoint.includes('purgeUserByEmail') &&
-    lifecycle.includes('deleteFirebaseUser(env, uid)') &&
-    lifecycle.includes('adminPurgeUserEngagement(env, uid)') &&
-    lifecycle.includes('deletedEmailHash') &&
-    lifecycle.includes('auditLog/${eventId}') &&
-    lifecycle.includes('phoneReservations/') &&
-    !lifecycle.includes('setFirebaseUserDisabled'),
-  'Debe borrar acceso, perfil, reservas, participación y restos de bajas anteriores, conservando solo pedidos y auditoría sin datos personales'
+  'La eliminación de cuentas no existe: para sacar a alguien se lo bloquea',
+  !admin.includes('/api/admin-delete-user') &&
+    !admin.includes('window.deleteUser') &&
+    !admin.includes('bulkDeleteUsers') &&
+    !admin.includes('deleteUserByEmail'),
+  'Sólo existen cuentas activas o bloqueadas; el desbloqueo es manual del Super Admin'
 );
 
 check(
