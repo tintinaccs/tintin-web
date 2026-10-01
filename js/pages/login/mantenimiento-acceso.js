@@ -75,7 +75,7 @@ if (LOGIN_RE.test(location.pathname || '') && !window.TintinLoginMaintenanceBoot
   async function repairCanonicalProfileIfNeeded() {
     const [{ db }, profileModule, firestoreApi, { subscribeAuthState }] = await Promise.all([
       import('../../core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1'),
-      import('../../core/store/perfil-usuario.js?v=tintin-20261001-reentry-timeout-1'),
+      import('../../core/store/perfil-usuario.js?v=tintin-20261001-reentry-timeout-2-active-session-1'),
       import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js'),
       import('../../core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1'),
     ]);
