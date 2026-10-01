@@ -124,8 +124,8 @@ check(
     featuredLimit <= 5 &&
     files.checkout.includes("limit(5)") &&
     files.checkout.includes('.slice(0, 5)') &&
-    files.productsStore.includes("featuredProducts.slice(0, 5)") &&
-    files.imageInit.includes("featuredProducts.slice(0, 5)"),
+    files.script.includes("pickStable(pool, 5, homeSelectionKeys") &&
+    files.imageInit.includes("renderRandomHomeProducts"),
   'catálogo y búsquedas quedan excluidos porque son superficies completas'
 );
 

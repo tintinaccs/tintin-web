@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>window.TT_PAGE_LOADER_WAIT = true;</script>
-<script src="js/cargador-pagina.js?v=tintin-20260930-sheets-reconcile-loader-3"></script>
+<script src="js/cargador-pagina.js?v=tintin-20260930-sheets-reconcile-loader-4"></script>
   <script src="js/admin/proteccion-cambios-pendientes-admin.js?v=tintin-20260716-cloudinary-fix-1" defer></script>
   <title>Tintin — Gestión de Imágenes</title>
   <meta name="robots" content="noindex, nofollow, noarchive">
@@ -403,7 +403,7 @@
 <script type="module">
 import { auth, db } from "./js/core/firebase/firebase.js?v=tintin-20260924-auth-popup-resolver-1-launch-20260926-1";
 import { SUPER_ADMIN as SUPERADMIN_EMAIL } from "./js/core/auth/roles.js?v=tintin-20260916-final-polish-2-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { subscribeAuthState } from "./js/core/auth/coordinador-sesion.js?v=tintin-20260924-auth-state-authority-1-auth-popup-resolver-1-launch-20260926-1";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { IMAGE_SLOTS, DEVICE_VARIANT_SLOT_IDS, HERO_IMAGE_CONFIG_VERSION, loadImages, getImg, getAllImages, saveImages, resolveSlotImage } from "./js/components/images/imagenes.js?v=tintin-20260929-superadmin-hero-editable-1";
 import { attachImageUploadWidget } from "./js/components/images/carga-imagenes.js?v=tintin-20260901-media-orphan-log-4-auth-persistence-20260919-1-auth-popup-resolver-1-launch-20260926-1";
@@ -759,7 +759,7 @@ document.getElementById('adm-overlay').addEventListener('click', () => {
 });
 
 // ── Auth guard ──
-onAuthStateChanged(auth, async (user) => {
+subscribeAuthState(async (user) => {
   const denied = document.getElementById('auth-denied');
 
   if (!user) {

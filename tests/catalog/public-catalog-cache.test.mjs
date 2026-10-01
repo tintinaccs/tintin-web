@@ -18,7 +18,7 @@ test('catálogo público pasa por caché edge y usa lista blanca', () => {
 
 test('clientes usan edge sin fallback Firestore de colección completa', () => {
   assert.match(products, /fetchPublicCatalogResource\('products'\)/);
-  assert.match(products, /fetchAllProductsFromSdk\(\)/);
+  assert.doesNotMatch(products, /fetchAllProductsFromSdk|fetchHomeProductsFromSdk/);
   assert.doesNotMatch(products, /fetchAllProductsFromRest\(\)/);
   assert.match(collections, /fetchPublicCatalogResource\('collections'\)/);
   assert.doesNotMatch(collections, /listPublicCollectionRest\('collections'/);

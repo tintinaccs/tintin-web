@@ -186,14 +186,6 @@ body.tt-home-premium .tt-hero-actions .tt-btn-outline:focus-visible{
    PARTE 2B — continuidad visual completa del Inicio
    ============================================================= */
 
-/* El combinador se oculta inline durante la primera carga de productos. Cuando
-   Firestore responde, el contenido ya se renderiza, pero ese display:none podía
-   quedar pegado para siempre. El Inicio conserva ahora la sección visible y deja
-   que su estado de carga/vacío o sus tarjetas comuniquen la situación real. */
-body.tt-home-premium #look-section{
-  display:block!important;
-}
-
 /* Mientras la fuente real de colecciones responde, no dejamos un texto pequeño
    flotando dentro de una sección prácticamente vacía. El estado ocupa una
    superficie estable y legible; cuando llegan las colecciones, el renderer lo
@@ -234,19 +226,8 @@ body.tt-home-premium .tt-collections-grid > .tt-phase4-collections-state--error{
 }
 @keyframes tt-home-collections-spin{to{transform:rotate(360deg)}}
 
-/* Las superficies remotas de Inicio mantienen el mismo ancho, radio y altura
-   mínima para que Colecciones, Completá tu look y Productos no produzcan saltos
-   bruscos cuando cambian de loading a contenido real. */
-body.tt-home-premium #look-grid > .tt-home-runtime-state,
-body.tt-home-premium #products-grid > .tt-home-runtime-state{
-  min-height:clamp(190px,24vw,280px);
-  box-shadow:0 12px 34px rgba(173,63,103,.07);
-}
-
 @media(max-width:768px){
-  body.tt-home-premium .tt-collections-grid > .tt-phase4-collections-state,
-  body.tt-home-premium #look-grid > .tt-home-runtime-state,
-  body.tt-home-premium #products-grid > .tt-home-runtime-state{
+  body.tt-home-premium .tt-collections-grid > .tt-phase4-collections-state{
     min-height:180px;
     border-radius:18px;
   }
