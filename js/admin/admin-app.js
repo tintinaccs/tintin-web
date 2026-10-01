@@ -6092,6 +6092,7 @@ window.prodToggleActive = async (docId, currentlyActive) => {
       ctx.start('write');
       await updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() });
       if (p) p.active = !currentlyActive;
+      await logAudit('editar_producto', 'producto', docId, p?.name || docId, `Activo: ${currentlyActive} → ${!currentlyActive}`);
       ctx.ok('write');
       ctx.start('sync');
       await pushProductsToSheets([docId]);
@@ -6638,6 +6639,7 @@ window.collToggleActive = async function(docId, currentlyActive) {
       ctx.start('write');
       await updateDoc(doc(db, 'products', docId), { active: !currentlyActive, updatedAt: serverTimestamp() });
       if (p) p.active = !currentlyActive;
+      await logAudit('editar_producto', 'producto', docId, p?.name || docId, `Activo: ${currentlyActive} → ${!currentlyActive}`);
       ctx.ok('write');
       ctx.start('sync');
       await pushProductsToSheets([docId]);

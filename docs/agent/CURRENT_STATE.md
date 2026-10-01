@@ -1,5 +1,19 @@
 # Estado actual de reparación — independencia de Shopify
 
+## Cierre del cuestionario del dueño — 2026-10-01 (rama `feat/cuestionario-cierre`)
+
+**Comprobación respuesta por respuesta, sólo en código y tests locales; nada probado en producción.** El detalle está en `docs/agent/DECISIONES_CUESTIONARIO.md`. Lo que estaba marcado FALTA/REVISAR quedó implementado en #991-#998 o confirmado ya existente: botón de pago del admin, sin pago preseleccionado, sin aviso de poco stock, archivado por `active:false`, horario en el pie, sesión persistente sin límite de inactividad del admin, push a todos los dispositivos con sonido, y la clienta sin permiso para editar pedidos.
+
+**Cambio de esta rama:** activar/desactivar un producto desde el botón rápido del admin (`prodToggleActive` y el de colecciones) ahora escribe en `auditLog`, igual que la edición completa, que ya registraba precio, stock y activo.
+
+**Límites abiertos, sin implementar a propósito:**
+- WhatsApp automático al admin: requiere una cuenta de WhatsApp Business API.
+- Sheets "solo espejo": la hoja `Productos` todavía escribe el catálogo vía webhook; cortarla requiere confirmación del dueño.
+- Eliminar cuenta: diferido por el dueño.
+- Cancelar un pedido no devuelve el uso del cupón.
+- El correo de estado no tiene reintento.
+- Las reglas de Firestore (cupones, direcciones) hay que publicarlas a mano.
+
 ## Verificación PR #978 en preview real — 2026-09-30 (base `f84c51b`, rama `claude/funny-keller-205w4v`)
 
 **HOME — probado en preview real, parcialmente funcional.** Chromium sin interceptar respuestas normales: `/` HTTP 200 en 390×844, 768×1024 y 1280×900; un solo hero y shell montado, sin overflow horizontal, loader retirado, sin `tt-surface-locked` ni elementos `inert` al quedar estable. Se observaron dos solicitudes distintas a `/api/public-catalog`, una para `collections` y una para `products` (una por recurso; no afirmar una sola solicitud total). La consola emitió `requestStorageAccess: Permission denied` y una respuesta 403 en las tres pantallas; no hubo excepciones `pageerror`. Prueba de fallo de catálogo: primer request de products abortado → `#products-grid` en `error`, botón Reintentar y look oculto; segundo request permitido → `ready`, sin navegación adicional. El preview conserva la versión anterior del CSS mientras este PR no se publique.
