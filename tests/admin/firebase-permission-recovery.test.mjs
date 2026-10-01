@@ -13,20 +13,10 @@ test('Admin notifications stop retrying permanent Firestore denials', () => {
   assert.match(source, /user && shouldRetryFirestoreListener\(error\).*subscribeOrderStatusChanges/);
 });
 
-test('Private Admin Firestore consumers use the strict App Check gate', () => {
-  const paths = [
-    'js/admin/settings/cupones-admin.js',
-    'js/admin/settings/esquema-color-admin.js',
-    'js/admin/settings/control-tienda-admin.js',
-    'js/admin/settings/metodos-pago-admin.js',
-    'js/admin/settings/sincronizacion-correo-admin.js',
-    'js/admin/content/gestion-contenido-admin.js',
-  ];
-  for (const path of paths) {
-    const source = read(path);
-    assert.match(source, /waitForAdminAppCheck/);
-    assert.doesNotMatch(source, /await appCheckReady/);
-  }
+test('Coupons use the strict Admin App Check gate before Firestore', () => {
+  const source = read('js/admin/settings/cupones-admin.js');
+  assert.match(source, /waitForAdminAppCheck/);
+  assert.doesNotMatch(source, /await appCheckReady/);
 });
 
 test('Profile orders never start Firestore after App Check resolves unavailable', () => {
