@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2000-01-01T00:00:00.000Z",
-  "sourceFingerprint": "9dd879c55b143613c448f6ae1472fca424b75499f44f12d23be44ff307582fe7",
+  "sourceFingerprint": "7833fe7ded2d5ed1a02acb098667e17d5a6f78f42526f6d3b8baa5e8bff33085",
   "safety": {
     "mode": "read-only",
     "runtimeScriptsExecuted": false,
@@ -9,11 +9,11 @@
     "historyStorage": "indexeddb-local"
   },
   "platform": {
-    "files": 923,
-    "textFiles": 882,
-    "totalBytes": 17980416,
+    "files": 924,
+    "textFiles": 883,
+    "totalBytes": 17983185,
     "pages": 19,
-    "modules": 633
+    "modules": 634
   },
   "viewports": [
     {
@@ -26938,6 +26938,30 @@
       ]
     },
     {
+      "path": "scripts/auditar-artefacto-produccion.mjs",
+      "bytes": 2541,
+      "sha256": "58b2f2effea9feb9c19446b3a7f07efb6ebbf5ff87478e4df943e27cafe5f981",
+      "syntax": {
+        "ok": true,
+        "error": ""
+      },
+      "imports": [
+        {
+          "raw": "node:fs",
+          "target": null,
+          "dynamic": false,
+          "line": 1
+        },
+        {
+          "raw": "node:path",
+          "target": null,
+          "dynamic": false,
+          "line": 2
+        }
+      ],
+      "endpoints": []
+    },
+    {
       "path": "scripts/auditar-auth-navegador-produccion.mjs",
       "bytes": 3866,
       "sha256": "99d8e1cdc2fa6b4c703b70c7f6e9b5ed9f5a6d31bb527a58a66e05107279812e",
@@ -35576,8 +35600,8 @@
     {
       "path": ".github/workflows/monitor-produccion.yml",
       "extension": ".yml",
-      "bytes": 5125,
-      "sha256": "72646be160845d133005f27e7de4f7777ec33430891a0f1b999d1cfad845d0c7"
+      "bytes": 5271,
+      "sha256": "5d9de4b51ef41fa815a81093c5274174482b01dae73f307ff8e5b1dd1f589e43"
     },
     {
       "path": ".github/workflows/respaldo-repositorio.yml",
@@ -39170,8 +39194,8 @@
     {
       "path": "package.json",
       "extension": ".json",
-      "bytes": 14131,
-      "sha256": "ffe8ec902277cac089041bc8c4f10a458e015fb7a9703f67b5134ad4f8d5e21c"
+      "bytes": 14213,
+      "sha256": "15e42416a60d39c0a9f5d2cc17655cbbfb48a12e5952d73952e2b253c46174d7"
     },
     {
       "path": "perfil.html",
@@ -39304,6 +39328,12 @@
       "extension": ".js",
       "bytes": 6291,
       "sha256": "1d54c13331b46fc8d6a2a8ccd97b732b76762b724f4736b9071743062bd7aaa1"
+    },
+    {
+      "path": "scripts/auditar-artefacto-produccion.mjs",
+      "extension": ".mjs",
+      "bytes": 2541,
+      "sha256": "58b2f2effea9feb9c19446b3a7f07efb6ebbf5ff87478e4df943e27cafe5f981"
     },
     {
       "path": "scripts/auditar-auth-navegador-produccion.mjs",
